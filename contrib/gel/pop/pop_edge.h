@@ -16,7 +16,7 @@
 
 class pop_vertex;
 #include<pop/pop_transform.h>
-#include<vcl_list.h>
+#include<std::list.h>
 
 //: A parameter that can be optimized
 class pop_edge
@@ -38,7 +38,7 @@ class pop_edge
   pop_transform* get_transform();
 
   //: help search to find a destination vertex
-  bool search(pop_vertex* destination, vcl_list<pop_edge*> &path);
+  bool search(pop_vertex* destination, std::list<pop_edge*> &path);
 
  private:
   // the source vertex

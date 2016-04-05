@@ -111,13 +111,13 @@ bool brec_bg_pair_density::generate_mixture_image()
       vil_image_view<vxl_byte> outf_b(ni_, nj_, 1);
       float minv, maxv;
       vil_math_value_range(outf, minv, maxv);
-      vcl_cout << "minv: " << minv << " maxv: " << maxv << vcl_endl;
+      std::cout << "minv: " << minv << " maxv: " << maxv << std::endl;
       vil_convert_stretch_range_limited(outf, outf_b, 0.0f, 4.0f);
       vil_save(outf_b, "./mixture_expected_img_likelihood_map.png");
     }
   }
   else {
-    vcl_cout << "In brec_normalize_image_process::execute() -- input appearance model: " << voxel_type_ << " is not supported\n";
+    std::cout << "In brec_normalize_image_process::execute() -- input appearance model: " << voxel_type_ << " is not supported\n";
     return false;
   }
 
@@ -196,10 +196,10 @@ brec_bg_pair_density::initialize_bg_map(vil_image_view<float>& prob_density, vil
   float val = -1e38f; // dummy initialisation (min float), to avoid compiler warning
   vil_math_value_range_percentile(prob_density, double(1.0-top_percentile), val);
 #if 1
-  vcl_cout << "1-" << top_percentile << "= " << 1-top_percentile << " percentile value of prob density is: " << val << vcl_endl;
+  std::cout << "1-" << top_percentile << "= " << 1-top_percentile << " percentile value of prob density is: " << val << std::endl;
   float min = +1e38f, max = -1e38f;
   vil_math_value_range(prob_density, min, max);
-  vcl_cout << "same prob density min is: " << min << " max is: " << max << vcl_endl;
+  std::cout << "same prob density min is: " << min << " max is: " << max << std::endl;
 #endif
 
   //: set p(x in bg|y) = 0.9 when p(y|x in bg) is high, i.e. when p(y|x in bg) = val

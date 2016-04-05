@@ -4,12 +4,14 @@
 // \file
 // \brief  boxm2_vecf_ocl_head_model static model of human head (no eyes)
 //
+#include <iostream>
+#include <string>
+#include <vector>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include "../boxm2_vecf_articulated_scene.h"
 #include "../boxm2_vecf_articulated_params.h"
 #include "boxm2_vecf_ocl_transform_scene.h"
@@ -18,7 +20,8 @@ typedef vnl_vector_fixed<float,4> float4;
 class boxm2_vecf_ocl_head_model : public boxm2_vecf_articulated_scene
 {
  public:
-  boxm2_vecf_ocl_head_model(vcl_string const& scene_file,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,bool optimize = false, vcl_string color_apm_ident = "frontalized");
+  boxm2_vecf_ocl_head_model(std::string const& scene_file,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache, bool optimize = false, std::string color_apm_ident = "frontalized");
+
 
   //: map eye data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);

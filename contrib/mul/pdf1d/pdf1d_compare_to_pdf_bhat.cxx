@@ -5,9 +5,11 @@
 // \author Tim Cootes
 // \brief Test if data from a given distribution using Bhattacharyya overlap
 
+#include <iostream>
+#include <string>
 #include "pdf1d_compare_to_pdf_bhat.h"
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
@@ -152,16 +154,16 @@ double pdf1d_compare_to_pdf_bhat::bootstrap_compare_form(vnl_vector<double>& B,
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_compare_to_pdf_bhat::is_a() const
+std::string pdf1d_compare_to_pdf_bhat::is_a() const
 {
-  return vcl_string("pdf1d_compare_to_pdf_bhat");
+  return std::string("pdf1d_compare_to_pdf_bhat");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_compare_to_pdf_bhat::is_class(vcl_string const& s) const
+bool pdf1d_compare_to_pdf_bhat::is_class(std::string const& s) const
 {
   return pdf1d_compare_to_pdf::is_class(s) || s==pdf1d_compare_to_pdf_bhat::is_a();
 }
@@ -188,7 +190,7 @@ pdf1d_compare_to_pdf* pdf1d_compare_to_pdf_bhat::clone() const
 // Method: print
 //=======================================================================
 
-void pdf1d_compare_to_pdf_bhat::print_summary(vcl_ostream& os) const
+void pdf1d_compare_to_pdf_bhat::print_summary(std::ostream& os) const
 {
   os << "Builder: "<<builder_<<'\n';
 }
@@ -221,9 +223,9 @@ void pdf1d_compare_to_pdf_bhat::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,n_per_point_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_bhat &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_bhat &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

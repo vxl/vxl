@@ -5,9 +5,11 @@
 // \author Ian Scott
 // \date 10 Jan 2008
 
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mbl_progress_hierarchy.h"
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_log.h>
 
 
@@ -21,10 +23,10 @@ inline mbl_logger& logger()
 //: Called when set_estimate_iterations() is called for a given identifier.
 //  Derived classes may take some action here.
 //  \param identifier The operation being monitored.
-void mbl_progress_hierarchy::on_set_estimated_iterations(const vcl_string& identifier,
+void mbl_progress_hierarchy::on_set_estimated_iterations(const std::string& identifier,
   const int total_iterations)
 {
-  if (vcl_find(identifier_stack_.begin(), identifier_stack_.end(), identifier) !=
+  if (std::find(identifier_stack_.begin(), identifier_stack_.end(), identifier) !=
     identifier_stack_.end())
   {
     MBL_LOG(WARN, logger(), "Trying to reset estimated_iterations "
@@ -43,7 +45,7 @@ void mbl_progress_hierarchy::on_set_estimated_iterations(const vcl_string& ident
 //  Derived classes may take some action here.
 //  \param identifier The operation being monitored.
 //  \param progress The new progress status.
-void mbl_progress_hierarchy::on_set_progress(const vcl_string& identifier,
+void mbl_progress_hierarchy::on_set_progress(const std::string& identifier,
                                const int progress)
 {
   just_ended_=false;
@@ -53,7 +55,7 @@ void mbl_progress_hierarchy::on_set_progress(const vcl_string& identifier,
       "\" rather than most recently created identifier \"" << identifier_stack_.back() << '"');
 
   double a=0.0, b=1.0; // The lower and upper bound on the current value
-  for (vcl_vector<vcl_string>::const_iterator it=identifier_stack_.begin(),
+  for (std::vector<std::string>::const_iterator it=identifier_stack_.begin(),
     end=identifier_stack_.end(); it!=end; ++it)
   {
     int n_its = this->estimated_iterations(*it)+1;
@@ -65,7 +67,7 @@ void mbl_progress_hierarchy::on_set_progress(const vcl_string& identifier,
       b=a+width;
     }
     else
-      a = b - width*vcl_exp(1.0 - its/(n_its-0.5));
+      a = b - width*std::exp(1.0 - its/(n_its-0.5));
   }
   on_changed_progress(a);
 }
@@ -73,13 +75,13 @@ void mbl_progress_hierarchy::on_set_progress(const vcl_string& identifier,
 //: Called when end_progress() is called for a given identifier.
 //  Derived classes may take some action here.
 //  \param identifier The operation being monitored.
-void mbl_progress_hierarchy::on_end_progress(const vcl_string& identifier)
+void mbl_progress_hierarchy::on_end_progress(const std::string& identifier)
 {
   just_ended_ = true;
 
 
   double a=0.0, b=1.0; // The lower and upper bound on the current value
-  for (vcl_vector<vcl_string>::const_iterator it=identifier_stack_.begin(),
+  for (std::vector<std::string>::const_iterator it=identifier_stack_.begin(),
     end=identifier_stack_.end(); it!=end; ++it)
   {
     int n_its = estimated_iterations(*it)+1;
@@ -91,7 +93,7 @@ void mbl_progress_hierarchy::on_end_progress(const vcl_string& identifier)
       b=a+width;
     }
     else
-      a = b - width*vcl_exp(1.0 - its/(n_its-0.5));
+      a = b - width*std::exp(1.0 - its/(n_its-0.5));
 
   }
   on_changed_progress(0.1*a+0.9*b);

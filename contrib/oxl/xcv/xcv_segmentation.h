@@ -14,8 +14,10 @@
 //   K.Y.McGaul     27-JAN-2000    Initial version.
 // \endverbatim
 
-#include <vcl_list.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <list>
+#include <vector>
+#include <vcl_compiler.h>
 
 class vgui_menu;
 class osl_harris_params;
@@ -33,11 +35,11 @@ class xcv_segmentation
   static void harris();
 
   //: Draw the given edges onto the given location.
-  static void draw_edges(vcl_list<osl_edge*> detected_edges,
+  static void draw_edges(std::list<osl_edge*> detected_edges,
                          unsigned col, unsigned row);
   //: Draw straight lines onto the given location.
-  static void draw_straight_lines(vcl_vector<float>, vcl_vector<float>,
-                                  vcl_vector<float>, vcl_vector<float>,
+  static void draw_straight_lines(std::vector<float>, std::vector<float>,
+                                  std::vector<float>, std::vector<float>,
                                   unsigned, unsigned);
   //: Display a dialog box to get the parameters needed for Oxford Canny.
   static bool get_canny_ox_params(osl_canny_ox_params*);
@@ -46,7 +48,7 @@ class xcv_segmentation
   //: Get parameters from the user for break_lines_ox.
   static bool get_break_lines_ox_params(double* bk_thresh);
   //: Get a list of broken edges from the current image.
-  static void get_broken_edges(double bk_thresh, vcl_list<osl_edge*>*);
+  static void get_broken_edges(double bk_thresh, std::list<osl_edge*>*);
   //: Break edges at points of extreme "bentness".
   static void break_lines_ox();
   //: Get parameters from user required for detect_lines_ox.
@@ -60,7 +62,7 @@ class xcv_segmentation
 
  private:
   //: List of edges detected by Oxford canny.
-  static vcl_list<osl_edge*> detected_edges;
+  static std::list<osl_edge*> detected_edges;
 };
 
 #endif // xcv_segmentation_h_

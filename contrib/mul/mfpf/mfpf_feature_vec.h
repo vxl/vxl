@@ -5,11 +5,12 @@
 // \brief Container for set of poses and associated fit values
 // \author Martin Roberts
 
+#include <iostream>
+#include <cstdlib>
 #include <mfpf/mfpf_pose.h>
 #include <mfpf/mfpf_pose_set.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 
 //As well as pose_set, it can be helpful to think of vector combined pose/fit
@@ -21,7 +22,7 @@ struct mfpf_feature
     mfpf_feature(const mfpf_pose& p,double f):pose(p),fit(f) {}
 
 };
-typedef vcl_vector<mfpf_feature > mfpf_feature_vec ;
+typedef std::vector<mfpf_feature > mfpf_feature_vec ;
 
 
 
@@ -45,17 +46,17 @@ inline void vsl_b_read(vsl_b_istream& bfs,
       vsl_b_read(bfs,f.fit);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,mfpf_feature): "
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "vsl_b_read(bfs,mfpf_feature): "
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 
 inline void mfpf_pose_set_to_feature_vec(const mfpf_pose_set& pose_set, mfpf_feature_vec& feature_vec)
 {
-    vcl_vector<mfpf_pose>::const_iterator posesIter=pose_set.poses.begin();
-    vcl_vector<mfpf_pose>::const_iterator posesIterEnd=pose_set.poses.end();
-    vcl_vector<double >::const_iterator fitsIter=pose_set.fits.begin();
+    std::vector<mfpf_pose>::const_iterator posesIter=pose_set.poses.begin();
+    std::vector<mfpf_pose>::const_iterator posesIterEnd=pose_set.poses.end();
+    std::vector<double >::const_iterator fitsIter=pose_set.fits.begin();
 
     feature_vec.clear();
     feature_vec.reserve(pose_set.poses.size());

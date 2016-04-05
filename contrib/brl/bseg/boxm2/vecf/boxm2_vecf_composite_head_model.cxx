@@ -1,7 +1,7 @@
 #include "boxm2_vecf_composite_head_model.h"
 // #include "boxm2_vecf_eye_params.h"
 
-boxm2_vecf_composite_head_model::boxm2_vecf_composite_head_model( vcl_string const& head_model_path, vcl_string const& eye_model_path)
+boxm2_vecf_composite_head_model::boxm2_vecf_composite_head_model( std::string const& head_model_path, std::string const& eye_model_path)
   : boxm2_vecf_head_model(head_model_path),
   params_()
 {
@@ -15,7 +15,7 @@ bool boxm2_vecf_composite_head_model::set_params(boxm2_vecf_articulated_params c
     boxm2_vecf_composite_head_parameters const& params_ref = dynamic_cast<boxm2_vecf_composite_head_parameters const &>(params);
     params_ =boxm2_vecf_composite_head_parameters(params_ref);
   }catch(std::exception e){
-    vcl_cout<<" Can't downcast to composite head parameters! PARAMATER ASSIGNMENT PHAILED!"<<vcl_endl;
+    std::cout<<" Can't downcast to composite head parameters! PARAMATER ASSIGNMENT PHAILED!"<<std::endl;
     return false;
   }
 
@@ -52,7 +52,7 @@ bool boxm2_vecf_composite_head_model::set_params(boxm2_vecf_articulated_params c
 
 void boxm2_vecf_composite_head_model::map_to_target(boxm2_scene_sptr target)
 {
-  //  vcl_cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << vcl_endl;
+  //  std::cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << std::endl;
   // clear target
 
   if (boxm2_vecf_head_model::intrinsic_change_){

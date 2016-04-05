@@ -1,8 +1,10 @@
 // This is brl/bseg/sdet/sdet_harris_detector.cxx
+#include <iostream>
+#include <cstdlib>
 #include "sdet_harris_detector.h"
 //:
 // \file
-#include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_qsort()
+#include <vcl_compiler.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
@@ -46,8 +48,8 @@ static int compare(sdet_harris_point*  pa,
 sdet_harris_detector::sdet_harris_detector(sdet_harris_detector_params& rpp)
   : sdet_harris_detector_params(rpp)
 {
-  image_ = 0;
-  vimage_ = 0;
+  image_ = VXL_NULLPTR;
+  vimage_ = VXL_NULLPTR;
   //don't really know but have to pick one
   use_vil_image_ = true;
 }
@@ -64,7 +66,7 @@ void sdet_harris_detector::set_image(vil1_image const& image)
 {
   if (!image)
   {
-    vcl_cout <<"In sdet_harris_detector::set_image(.) - null input\n";
+    std::cout <<"In sdet_harris_detector::set_image(.) - null input\n";
     return;
   }
   points_valid_ = false;
@@ -79,7 +81,7 @@ void sdet_harris_detector::set_image_resource(vil_image_resource_sptr const& ima
 {
   if (!image)
   {
-    vcl_cout <<"In sdet_harris_detector::set_image(.) - null input\n";
+    std::cout <<"In sdet_harris_detector::set_image(.) - null input\n";
     return;
   }
   points_valid_ = false;
@@ -89,19 +91,19 @@ void sdet_harris_detector::set_image_resource(vil_image_resource_sptr const& ima
 //------------------------------------------------------------------------
 // : extract corners using vil1 code
 //
-bool sdet_harris_detector::extract_corners_vil1(vcl_vector<float>& x_pos,
-                                                vcl_vector<float>& y_pos,
-                                                vcl_vector<float>& val)
+bool sdet_harris_detector::extract_corners_vil1(std::vector<float>& x_pos,
+                                                std::vector<float>& y_pos,
+                                                std::vector<float>& val)
 {
 // Check the image
   if (!image_)
   {
-    vcl_cout << "In sdet_harris_detector::extract_corners() - no image\n";
+    std::cout << "In sdet_harris_detector::extract_corners() - no image\n";
     return false;
   }
   int w = image_.width(), h = image_.height();
-  vcl_cout << "sdet_harris_detector::extract_corners(): width = "
-           << w << " height = " << h << vcl_endl;
+  std::cout << "sdet_harris_detector::extract_corners(): width = "
+           << w << " height = " << h << std::endl;
 
   vil1_memory_image_of<float> inputf = brip_vil1_float_ops::convert_to_float(image_);
   vil1_memory_image_of<float> smooth = brip_vil1_float_ops::gaussian(inputf, sigma_);
@@ -116,21 +118,21 @@ bool sdet_harris_detector::extract_corners_vil1(vcl_vector<float>& x_pos,
 //------------------------------------------------------------------------
 // : extract corners using vil code
 //
-bool sdet_harris_detector::extract_corners_vil(vcl_vector<float>& x_pos,
-                                               vcl_vector<float>& y_pos,
-                                               vcl_vector<float>& val)
+bool sdet_harris_detector::extract_corners_vil(std::vector<float>& x_pos,
+                                               std::vector<float>& y_pos,
+                                               std::vector<float>& val)
 {
 // Check the image
   if (!vimage_||vimage_->nplanes()!=1)
   {
-    vcl_cout << "In sdet_harris_detector::extract_corners() - "
+    std::cout << "In sdet_harris_detector::extract_corners() - "
              << "no image or not exactly one component\n";
     return false;
   }
 
   int w = vimage_->ni(), h = vimage_->nj();
-  vcl_cout << "sdet_harris_detector::extract_corners(): width = "
-           << w << " height = " << h << vcl_endl;
+  std::cout << "sdet_harris_detector::extract_corners(): width = "
+           << w << " height = " << h << std::endl;
 
   vil_image_view<float> base_view = vimage_->get_view();
 
@@ -159,16 +161,16 @@ void sdet_harris_detector::extract_corners()
 
   //Process the image to extract the Harris corners
   points_.clear();
-  vcl_vector<float> x_pos, y_pos, val;
+  std::vector<float> x_pos, y_pos, val;
   if (!use_vil_image_)
   { if (!extract_corners_vil1(x_pos, y_pos, val)) return; }
   else
   { if (!extract_corners_vil(x_pos, y_pos, val)) return; }
   int n_corners = x_pos.size();
-  vcl_cout << "Found " << n_corners << " above the threshold\n";
+  std::cout << "Found " << n_corners << " above the threshold\n";
   if (!n_corners)
   {
-    vcl_cout << "sdet_harris_detector::extract_corners() - "
+    std::cout << "sdet_harris_detector::extract_corners() - "
              << "no corners found\n";
     return;
   }
@@ -180,7 +182,7 @@ void sdet_harris_detector::extract_corners()
     point_array[i].set_point(p);
     point_array[i].set_strength(val[i]);
   }
-  vcl_qsort(point_array, n_corners, sizeof(sdet_harris_point),
+  std::qsort(point_array, n_corners, sizeof(sdet_harris_point),
             (int (*)(const void *, const void *))&compare);
   //output the corners (limit by maximum number of corners)
   int num = (int)(percent_corners_/100.0*n_corners);
@@ -189,7 +191,7 @@ void sdet_harris_detector::extract_corners()
   for (int i=0; i<num; i++)
   {
     points_.push_back(point_array[i].point());
-    // vcl_cout <<"s[" << i << "]=" << point_array[i].strength() << '\n';
+    // std::cout <<"s[" << i << "]=" << point_array[i].strength() << '\n';
   }
   delete [] point_array;
   points_valid_ = true;

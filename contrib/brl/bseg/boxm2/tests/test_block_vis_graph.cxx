@@ -1,3 +1,8 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include "test_utils.h"
@@ -7,16 +12,12 @@
 #include <boxm2/boxm2_blocks_vis_graph.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vpgl/vpgl_generic_camera.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 void create_scene(boxm2_scene_sptr & scene)
 {
   //create block metadata
   double big_block_side = 2.0;
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks;
   for (int i=0; i<5; i++) {
     for (int j=0; j<5; j++) {
             for (int k=0; k<2; k++) {
@@ -53,11 +54,11 @@ void test_block_vis_graph()
   boxm2_scene_sptr  scene = new boxm2_scene();
   create_scene(scene);
   boxm2_block_vis_graph g(scene->blocks(),gcam);
-  vcl_vector<boxm2_block_id> ids = g.get_ordered_ids();
-  vcl_cout<<"Order is "<<vcl_endl;
+  std::vector<boxm2_block_id> ids = g.get_ordered_ids();
+  std::cout<<"Order is "<<std::endl;
   for (unsigned i = 0; i < ids.size(); i++)
   {
-      vcl_cout<<ids[i]<<vcl_endl;
+      std::cout<<ids[i]<<std::endl;
   }
 }
 TESTMAIN( test_block_vis_graph );

@@ -23,18 +23,18 @@ namespace vil_grey_to_rgb_process_globals
   const unsigned  n_inputs_ = 2;
   const unsigned n_outputs_ = 1;
 
-  vcl_map<float, vil_rgb<vxl_byte> > get_color_id(vcl_string color_text)
+  std::map<float, vil_rgb<vxl_byte> > get_color_id(std::string color_text)
   {
-    vcl_map<float, vil_rgb<vxl_byte> > color_map;
+    std::map<float, vil_rgb<vxl_byte> > color_map;
     unsigned id;
     unsigned r, g, b;
-    vcl_ifstream ifs(color_text.c_str());
-    vcl_string header;
-    vcl_getline(ifs, header);
+    std::ifstream ifs(color_text.c_str());
+    std::string header;
+    std::getline(ifs, header);
     while (!ifs.eof()) {
       ifs >> id;  ifs >> r;  ifs >> g;  ifs >> b;
       vil_rgb<vxl_byte> color(r,g,b);
-      color_map.insert(vcl_pair<float, vil_rgb<vxl_byte> >((float)id, color));
+      color_map.insert(std::pair<float, vil_rgb<vxl_byte> >((float)id, color));
     }
     ifs.close();
     return color_map;
@@ -47,11 +47,11 @@ bool vil_grey_to_rgb_process_cons(bprb_func_process& pro)
 {
   using namespace vil_grey_to_rgb_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";   // input grey image
   input_types_[1] = "vcl_string";                 // color code text file
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // output rgb image
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -61,24 +61,24 @@ bool vil_grey_to_rgb_process(bprb_func_process& pro)
   using namespace vil_grey_to_rgb_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_ << std::endl;
     return false;
   }
 
   // get the input
   unsigned i = 0;
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string color_text = pro.get_input<vcl_string>(i++);
+  std::string color_text = pro.get_input<std::string>(i++);
 
   // load the color test
   if (!vul_file::exists(color_text)) {
-    vcl_cout << pro.name() << ": can not find file: " << color_text << vcl_endl;
+    std::cout << pro.name() << ": can not find file: " << color_text << std::endl;
     return false;
   }
-  vcl_map<float, vil_rgb<vxl_byte> > color_map = get_color_id(color_text);
+  std::map<float, vil_rgb<vxl_byte> > color_map = get_color_id(color_text);
 
-  for (vcl_map<float, vil_rgb<vxl_byte> >::iterator mit = color_map.begin(); mit != color_map.end(); ++mit)
-    vcl_cout << " id = " << mit->first << " --> color = " << mit->second << vcl_endl;
+  for (std::map<float, vil_rgb<vxl_byte> >::iterator mit = color_map.begin(); mit != color_map.end(); ++mit)
+    std::cout << " id = " << mit->first << " --> color = " << mit->second << std::endl;
 
   // load the input image and transfer it to type float
   unsigned ni, nj;
@@ -91,7 +91,7 @@ bool vil_grey_to_rgb_process(bprb_func_process& pro)
     if (!img_view_int) {
       vil_image_view<vxl_byte>* img_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img.ptr());
       if (!img_view_byte) {
-        vcl_cerr << pro.name() << ": The image pixel format: " << img->pixel_format() << " is not supported!\n";
+        std::cerr << pro.name() << ": The image pixel format: " << img->pixel_format() << " is not supported!\n";
         return false;
       }
       else

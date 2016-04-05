@@ -11,11 +11,13 @@
 //   <None yet>
 // \endverbatim
 
+#include <vector>
+#include <iostream>
+#include <utility>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 class bvpl_kernel_dispatch
 {
@@ -28,15 +30,15 @@ class bvpl_kernel_dispatch
 class bvpl_kernel_iterator: public vbl_ref_count
 {
  public:
-  typedef vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> kernel_pair;
+  typedef std::pair<vgl_point_3d<int>, bvpl_kernel_dispatch> kernel_pair;
 
   bvpl_kernel_iterator() : cur_index_(0) {}
 
-  bvpl_kernel_iterator(vcl_vector<kernel_pair> kernel_vals):kernel_vals_(kernel_vals), cur_index_(0) {}
+  bvpl_kernel_iterator(std::vector<kernel_pair> kernel_vals):kernel_vals_(kernel_vals), cur_index_(0) {}
 
   ~bvpl_kernel_iterator(){}
 
-  void insert(vgl_point_3d<int> index, bvpl_kernel_dispatch val) {kernel_vals_.push_back(vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch>(index,val)); }
+  void insert(vgl_point_3d<int> index, bvpl_kernel_dispatch val) {kernel_vals_.push_back(std::pair<vgl_point_3d<int>, bvpl_kernel_dispatch>(index,val)); }
 
   vgl_point_3d<int> index() const { return kernel_vals_[cur_index_].first; }
 
@@ -51,7 +53,7 @@ class bvpl_kernel_iterator: public vbl_ref_count
   bool isDone() { if (cur_index_ == kernel_vals_.size()) return true; return false; }
 
  private:
-  vcl_vector<vcl_pair<vgl_point_3d<int>, bvpl_kernel_dispatch> > kernel_vals_;
+  std::vector<std::pair<vgl_point_3d<int>, bvpl_kernel_dispatch> > kernel_vals_;
   unsigned cur_index_;
 };
 

@@ -1,5 +1,6 @@
 // This is core/vgui/tests/test_drawpix_speed.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vpl/vpl.h>
 
@@ -205,7 +206,7 @@ static const int ft_size = sizeof(ft_tab)/sizeof(ft_tab[0]) - 1;
 int main()
 {
   // GLX window code straight out of http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
-  vcl_cerr << "Opening double-buffered, RGBA GLX context...\n\n";
+  std::cerr << "Opening double-buffered, RGBA GLX context...\n\n";
   Display* display = XOpenDisplay(0);
   XVisualInfo* visualinfo = glXChooseVisual (display, DefaultScreen(display), attribs);
   GLXContext context = glXCreateContext (display, visualinfo, 0, GL_TRUE);
@@ -224,43 +225,43 @@ int main()
   glXMakeCurrent(display, window, context);
 
   bool little_endian = (ImageByteOrder(display) == LSBFirst);
-  vcl_cerr << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n'
+  std::cerr << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n'
            << "GL_RENDERER : " << (const char*) glGetString(GL_RENDERER)<< "\n\n"
            << "X Display -\n"
            << "      byte-order : " << (little_endian ? "little" : "big") << "-endian\n\n"
            << "XVisualInfo -\n"
-           << "           depth : " << visualinfo->depth << vcl_endl
-           << "        red-mask : " << vcl_hex << visualinfo->red_mask << '\n'
-           << "      green-mask : " << vcl_hex << visualinfo->green_mask << '\n'
-           << "       blue-mask : " << vcl_hex << visualinfo->blue_mask << "\n\n"
+           << "           depth : " << visualinfo->depth << std::endl
+           << "        red-mask : " << std::hex << visualinfo->red_mask << '\n'
+           << "      green-mask : " << std::hex << visualinfo->green_mask << '\n'
+           << "       blue-mask : " << std::hex << visualinfo->blue_mask << "\n\n"
            << "GL Gets -\n";
   GLint data_int;
   glGetIntegerv(GL_RED_BITS, &data_int);
-  vcl_cerr << "        red-bits : " << data_int << vcl_endl;
+  std::cerr << "        red-bits : " << data_int << std::endl;
   glGetIntegerv(GL_GREEN_BITS, &data_int);
-  vcl_cerr << "      green-bits : " << data_int << vcl_endl;
+  std::cerr << "      green-bits : " << data_int << std::endl;
   glGetIntegerv(GL_BLUE_BITS, &data_int);
-  vcl_cerr << "       blue-bits : " << data_int << vcl_endl;
+  std::cerr << "       blue-bits : " << data_int << std::endl;
   glGetIntegerv(GL_ALPHA_BITS, &data_int);
-  vcl_cerr << "      alpha-bits : " << data_int << vcl_endl;
+  std::cerr << "      alpha-bits : " << data_int << std::endl;
 
 #if VGUI_MESA
   {
-    vcl_cerr << vcl_endl;
+    std::cerr << std::endl;
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
     Pixmap p;
     XImage* backbuffer;
     XMesaGetBackBuffer(mesabuf, &p, &backbuffer);
 
     bool little_endian = (backbuffer->byte_order == LSBFirst);
-    vcl_cerr << "Mesa backbuffer XImage -\n"
-             << "           depth : " << backbuffer->depth << vcl_endl
-             << "  bits-per-pixel : " << backbuffer->bits_per_pixel << vcl_endl
+    std::cerr << "Mesa backbuffer XImage -\n"
+             << "           depth : " << backbuffer->depth << std::endl
+             << "  bits-per-pixel : " << backbuffer->bits_per_pixel << std::endl
              << "      byte_order : " << (little_endian ? "little" : "big") << "-endian\n"
-             << "  bytes-per-line : " << backbuffer->bytes_per_line << vcl_endl
-             << "        red-mask : " << vcl_hex << backbuffer->red_mask << '\n'
-             << "      green-mask : " << vcl_hex << backbuffer->green_mask << '\n'
-             << "       blue-mask : " << vcl_hex << backbuffer->blue_mask << '\n';
+             << "  bytes-per-line : " << backbuffer->bytes_per_line << std::endl
+             << "        red-mask : " << std::hex << backbuffer->red_mask << '\n'
+             << "      green-mask : " << std::hex << backbuffer->green_mask << '\n'
+             << "       blue-mask : " << std::hex << backbuffer->blue_mask << '\n';
   }
 #endif
 
@@ -290,24 +291,24 @@ int main()
   XMapWindow(display, window);
   XEvent event;
   XIfEvent(display, &event, WaitForNotify, (char*)window);
-  vcl_cerr << "Rendering from 8-bit grey-level...\n";
+  std::cerr << "Rendering from 8-bit grey-level...\n";
   pattern_grey(global_data);
   glDrawPixels(512,512,GL_LUMINANCE,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 #if defined(GL_VERSION_1_2)
-  vcl_cerr << "Rendering from 16-bit 565 RGB...\n";
+  std::cerr << "Rendering from 16-bit 565 RGB...\n";
   pattern_RGB16(global_data, little_endian);
   glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_SHORT_5_6_5,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 #endif
-  vcl_cerr << "Rendering from 24-bit 888 RGB...\n";
+  std::cerr << "Rendering from 24-bit 888 RGB...\n";
   pattern_RGB24(global_data, little_endian);
   glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  vcl_cerr << "Rendering from 32-bit 8888 RGBA...\n";
+  std::cerr << "Rendering from 32-bit 8888 RGBA...\n";
   pattern_RGB32(global_data, little_endian);
   glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
@@ -315,7 +316,7 @@ int main()
 #endif // end commented out
 
   {
-    vcl_cerr << "\nglClear - ";
+    std::cerr << "\nglClear - ";
     int draws=0;
     int elapsed;
     vul_timer timer;
@@ -324,34 +325,34 @@ int main()
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 5000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
+    std::cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
   {
-    vcl_cerr << "\nglDrawPixels -\n";
+    std::cerr << "\nglDrawPixels -\n";
     double fps;
-    vcl_cerr << "source -";
+    std::cerr << "source -";
     for (int i=0; i<ft_size; ++i)
-      vcl_cerr << "    " << ft_tab[i].nfixed;
-    vcl_cerr << vcl_endl
+      std::cerr << "    " << ft_tab[i].nfixed;
+    std::cerr << std::endl
              << "source -    LUM       RGB565    RGB       BGR       RGBA      BGRA      ABGR\n"
              << "zoom 1.00x  ";
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
-      vcl_cerr << 512*512*fps << "   ";
+      std::cerr << 512*512*fps << "   ";
     }
-    vcl_cerr << "\nzoom 1.90x  ";
+    std::cerr << "\nzoom 1.90x  ";
     glPixelZoom(1.9f, 1.9f);
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
-      vcl_cerr << 512*512*fps << "   ";
+      std::cerr << 512*512*fps << "   ";
     }
-    vcl_cerr << "\nzoom 0.51x  ";
+    std::cerr << "\nzoom 0.51x  ";
     glPixelZoom(0.51f, 0.51f);
     for (int i=0; i<ft_size; ++i) {
       fps = fps_gl(ft_tab[i].format, ft_tab[i].type);
-      vcl_cerr << 0.51*0.51*512*512*fps << "   ";
+      std::cerr << 0.51*0.51*512*512*fps << "   ";
     }
-    vcl_cerr << vcl_endl;
+    std::cerr << std::endl;
   }
 
 #if defined(HAS_HERMES) && VGUI_MESA
@@ -365,7 +366,7 @@ int main()
   HermesFormat* dest_format =
     Hermes_FormatNew(backbuffer->bits_per_pixel, backbuffer->red_mask, backbuffer->green_mask, backbuffer->blue_mask, 0, 0);
   {
-    vcl_cerr << "\nHermesClear - ";
+    std::cerr << "\nHermesClear - ";
     HermesHandle clearer = Hermes_ClearerInstance();
     Hermes_ClearerRequest (clearer, dest_format);
     int draws=0;
@@ -376,74 +377,74 @@ int main()
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << (512*512*draws) / (elapsed / 1000.0) << " pixels per second\n";
+    std::cerr << (512*512*draws) / (elapsed / 1000.0) << " pixels per second\n";
     Hermes_ClearerReturn(clearer);
   }
   {
-    vcl_cerr << "\nHermesConverter -\n";
+    std::cerr << "\nHermesConverter -\n";
     HermesFormat* src_format;
     double fps;
-    vcl_cerr <<"source -    LUM      OxRGB565 OxRGB    OxBGR    Ox_RGB   0x_BGR\n";
+    std::cerr <<"source -    LUM      OxRGB565 OxRGB    OxBGR    Ox_RGB   0x_BGR\n";
 
-    vcl_cerr << "zoom 1.00x  ";
+    std::cerr << "zoom 1.00x  ";
     fps = fps_hermes_grey(1.0, 1.0, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
 
     src_format = Hermes_FormatNew(16, 0xf800, 0x07e0, 0x001f, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << '\n';
+    std::cerr << 12*512*fps << '\n';
 
-    vcl_cerr << "zoom 1.90x  ";
+    std::cerr << "zoom 1.90x  ";
     fps = fps_hermes_grey(0.526, 1.0, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
 
     src_format = Hermes_FormatNew(16, 0xf800, 0x07e0, 0x001f, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << "  ";
+    std::cerr << 12*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(0.526, 1.0, src_format, backbuffer);
-    vcl_cerr << 12*512*fps << '\n';
+    std::cerr << 12*512*fps << '\n';
 
-    vcl_cerr << "zoom 0.51x  ";
+    std::cerr << "zoom 0.51x  ";
     fps = fps_hermes_grey(1.0, 0.51, backbuffer);
-    vcl_cerr << .51*0.51*512*512*fps << "  ";
+    std::cerr << .51*0.51*512*512*fps << "  ";
 
     src_format = Hermes_FormatNew(16, 0xf800, 0x07e0, 0x001f, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vcl_cerr << .51*0.51*512*512*fps << "  ";
+    std::cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vcl_cerr << .51*0.51*512*512*fps << "  ";
+    std::cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(24, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vcl_cerr << .51*0.51*512*512*fps << "  ";
+    std::cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff0000, 0xff00, 0xff, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vcl_cerr << .51*0.51*512*512*fps << "  ";
+    std::cerr << .51*0.51*512*512*fps << "  ";
     src_format = Hermes_FormatNew(32, 0xff, 0xff00, 0xff0000, 0, 0);
     fps = fps_hermes(1.0, 0.51, src_format, backbuffer);
-    vcl_cerr << .51*0.51*512*512*fps << '\n';
+    std::cerr << .51*0.51*512*512*fps << '\n';
   }
   Hermes_Done();
   }

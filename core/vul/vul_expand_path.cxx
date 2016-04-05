@@ -6,20 +6,23 @@
 // \file
 // \author fsm
 
+#include <vector>
+#include <functional>
+#include <map>
+#include <cstdlib>
 #include "vul_expand_path.h"
-#include <vcl_vector.h>
 
 #if defined(VCL_WIN32)
 
 //:
 // \note This Windows version only performs some of the operations done by the Unix version.
-vcl_string vul_expand_path_internal(vcl_string path)
+std::string vul_expand_path_internal(std::string path)
 {
   if (path == "/")
     return path; // FIXME: without this something breaks; not sure why.
 
   { // main processing and reduction goes here.
-    vcl_vector<vcl_string> bits;
+    std::vector<std::string> bits;
 
     // split the path into bits. a "bit" is either a single slash or a
     // sequence of non-slash characters.
@@ -32,7 +35,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
         unsigned int j=i;
         while (j<path.size() && path[j]!='/')
           ++j;
-        bits.push_back(vcl_string(path.c_str()+i, path.c_str()+j));
+        bits.push_back(std::string(path.c_str()+i, path.c_str()+j));
         i = j;
       }
     }
@@ -78,7 +81,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
     for (unsigned int i=0; i<bits.size(); ++i)
       path += bits[i];
 #ifdef DEBUG
-    vcl_cerr << "recomposed : " << path << '\n';
+    std::cerr << "recomposed : " << path << '\n';
 #endif
   }
 
@@ -88,7 +91,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
 
 //:
 // Note: this Windows version in similar to the uncached Unix version
-vcl_string vul_expand_path(vcl_string path)
+std::string vul_expand_path(std::string path)
 {
   return vul_expand_path_internal(path);
 }
@@ -103,7 +106,7 @@ std::wstring vul_expand_path_internal(std::wstring path)
     return path; // FIXME: without this something breaks; not sure why.
 
   { // main processing and reduction goes here.
-    vcl_vector<std::wstring> bits;
+    std::vector<std::wstring> bits;
 
     // split the path into bits. a "bit" is either a single slash or a
     // sequence of non-slash characters.
@@ -162,7 +165,7 @@ std::wstring vul_expand_path_internal(std::wstring path)
     for (unsigned int i=0; i<bits.size(); ++i)
       path += bits[i];
 #ifdef DEBUG
-    vcl_cerr << "recomposed : " << path << '\n';
+    std::cerr << "recomposed : " << path << '\n';
 #endif
   }
 
@@ -181,34 +184,32 @@ std::wstring vul_expand_path(std::wstring path)
 
 #else // #if defined(VCL_WIN32)
 
-#include <vcl_functional.h>
-#include <vcl_map.h>
-#include <vcl_cstdlib.h> // for getenv()
+#include <vcl_compiler.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
 #include <unistd.h>
 
 static
-vcl_string vul_expand_path_internal(vcl_string path)
+std::string vul_expand_path_internal(std::string path)
 {
   if (path == "/")
     return path; // FIXME: without this something breaks; not sure why.
 
   // expand ~/ or just ~
   if ((path.size()>=2 && path[0] == '~' && path[1] == '/') || path == "~") {
-    char const *HOME = vcl_getenv("HOME");
+    char const *HOME = std::getenv("HOME");
     if (! HOME) {
       // urgh!
       HOME = "/HOME";
     }
-    path = vcl_string(HOME) + vcl_string(path.c_str() + 1);
+    path = std::string(HOME) + std::string(path.c_str() + 1);
   }
 
   // if the path doesn't begin with a / then it must be relative to the
   // current directory.
   if (path.size()>=1 && path[0] != '/')
-    path = vcl_string("./") + path;
+    path = std::string("./") + path;
 
   // expand ./ or just .
   if ((path.size()>=2 && path[0] == '.' && path[1] == '/') || path == ".") {
@@ -216,12 +217,12 @@ vcl_string vul_expand_path_internal(vcl_string path)
     if( getcwd(cwd, sizeof cwd) == VXL_NULLPTR ) {
       path = "<error: current working directory path > 4096 characters>";
     } else {
-      path = vcl_string(cwd) + path.substr(1);
+      path = std::string(cwd) + path.substr(1);
     }
   }
 
   { // main processing and reduction goes here.
-    vcl_vector<vcl_string> bits;
+    std::vector<std::string> bits;
 
     // split the path into bits. a "bit" is either a single slash or a
     // sequence of non-slash characters.
@@ -234,7 +235,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
         unsigned int j=i;
         while (j<path.size() && path[j]!='/')
           ++j;
-        bits.push_back(vcl_string(path.c_str()+i, path.c_str()+j));
+        bits.push_back(std::string(path.c_str()+i, path.c_str()+j));
         i = j;
       }
     }
@@ -280,7 +281,7 @@ vcl_string vul_expand_path_internal(vcl_string path)
     for (unsigned int i=0; i<bits.size(); ++i)
       path += bits[i];
 #ifdef DEBUG
-    vcl_cerr << "recomposed : " << path << '\n';
+    std::cerr << "recomposed : " << path << '\n';
 #endif
   }
 
@@ -289,19 +290,19 @@ vcl_string vul_expand_path_internal(vcl_string path)
   {
     if (i==path.size() || path[i] == '/')
     {
-      vcl_string sub(path.c_str(), path.c_str() + i);
+      std::string sub(path.c_str(), path.c_str() + i);
       char buf[4096];
       int len = readlink(sub.c_str(), buf, sizeof buf);
       if (len != -1)
       {
         // it's a symlink. we should expand it and recurse.
 #ifdef DEBUG
-        vcl_cerr << "before expansion : " << path << '\n';
+        std::cerr << "before expansion : " << path << '\n';
 #endif
         if (buf[0] == '/') {
           // the target of the link starts with '/' so must be an
           // absolute path : ...foo/bar/etc... => buf/etc...
-          path = vcl_string(buf, buf+len) + vcl_string(path.c_str() + i);
+          path = std::string(buf, buf+len) + std::string(path.c_str() + i);
         }
         else
         {
@@ -311,22 +312,22 @@ vcl_string vul_expand_path_internal(vcl_string path)
             --j;
           if (j>=0) {
             // found another slash :   ...foo/bar/etc... where bar is the symlink.
-            vcl_string a = vcl_string(path.c_str(), path.c_str()+j+1);
-            vcl_string b = vcl_string(buf, buf+len);
-            vcl_string c = vcl_string(path.c_str() + i, path.c_str() + path.size());
+            std::string a = std::string(path.c_str(), path.c_str()+j+1);
+            std::string b = std::string(buf, buf+len);
+            std::string c = std::string(path.c_str() + i, path.c_str() + path.size());
 #ifdef DEBUG
-            vcl_cerr << "a = " << a << "\nb = " << b << "\nc = " << c << '\n';
+            std::cerr << "a = " << a << "\nb = " << b << "\nc = " << c << '\n';
 #endif
             path = a + b + c;
           }
           else {
             // gurgle. only one slash. must be : /bar/etc where bar is the symlink.
-            path = vcl_string(buf, buf+len) + vcl_string(path.c_str() + i);
+            path = std::string(buf, buf+len) + std::string(path.c_str() + i);
           }
         }
 
 #ifdef DEBUG
-        vcl_cerr << "after expansion : " << path << '\n';
+        std::cerr << "after expansion : " << path << '\n';
 #endif
         return vul_expand_path_internal(path);
       }
@@ -337,9 +338,9 @@ vcl_string vul_expand_path_internal(vcl_string path)
   return path;
 }
 
-typedef vcl_map<vcl_string, vcl_string, vcl_less<vcl_string> > map_t;
+typedef std::map<std::string, std::string, std::less<std::string> > map_t;
 
-vcl_string vul_expand_path(vcl_string path)
+std::string vul_expand_path(std::string path)
 {
   // create the cache.
   static map_t the_map;
@@ -349,7 +350,7 @@ vcl_string vul_expand_path(vcl_string path)
 
   if (i == the_map.end()) {
     // not in the map, so compute it :
-    vcl_string mapped = vul_expand_path_internal(path);
+    std::string mapped = vul_expand_path_internal(path);
     // cache it :
     i = the_map.insert(map_t::value_type(path, mapped)).first;
   }
@@ -358,7 +359,7 @@ vcl_string vul_expand_path(vcl_string path)
   return (*i).second;
 }
 
-vcl_string vul_expand_path_uncached(vcl_string path)
+std::string vul_expand_path_uncached(std::string path)
 {
   return vul_expand_path_internal(path);
 }

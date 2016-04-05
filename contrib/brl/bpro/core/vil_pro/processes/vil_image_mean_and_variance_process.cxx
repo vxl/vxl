@@ -20,8 +20,8 @@ bool vil_image_mean_and_variance_process_cons(bprb_func_process& pro)
 {
     using namespace vil_image_mean_and_variance_process_globals;
 
-    vcl_vector<vcl_string> input_types_(n_inputs_);
-    vcl_vector<vcl_string> output_types_(n_outputs_);
+    std::vector<std::string> input_types_(n_inputs_);
+    std::vector<std::string> output_types_(n_outputs_);
 
     input_types_[0] = "vil_image_view_base_sptr";
     input_types_[1] = "unsigned";//the image plane
@@ -39,8 +39,8 @@ bool vil_image_mean_and_variance_process(bprb_func_process& pro)
     using namespace vil_image_mean_and_variance_process_globals;
 
     if (pro.n_inputs() < n_inputs_) {
-        vcl_cout << "vil_set_float_image_pixel_process: "
-                 << "The number of inputs should be " << n_inputs_ << vcl_endl;
+        std::cout << "vil_set_float_image_pixel_process: "
+                 << "The number of inputs should be " << n_inputs_ << std::endl;
         return false;
     }
 
@@ -51,9 +51,9 @@ bool vil_image_mean_and_variance_process(bprb_func_process& pro)
 
     if( targetPlane > baseSptr->nplanes() )
     {
-        vcl_cerr << "Specified plane not valid: " << vcl_endl
-                 << "target plane = " << targetPlane << vcl_endl
-                 << "img.nplanes() = " << baseSptr->nplanes() << vcl_endl;
+        std::cerr << "Specified plane not valid: " << std::endl
+                 << "target plane = " << targetPlane << std::endl
+                 << "img.nplanes() = " << baseSptr->nplanes() << std::endl;
 
         return false;
     }
@@ -82,8 +82,8 @@ bool vil_mean_and_variance_image_process_cons(bprb_func_process& pro)
 {
     using namespace vil_mean_and_variance_image_process_globals;
 
-    vcl_vector<vcl_string> input_types_(n_inputs_);
-    vcl_vector<vcl_string> output_types_(n_outputs_);
+    std::vector<std::string> input_types_(n_inputs_);
+    std::vector<std::string> output_types_(n_outputs_);
 
     input_types_[0] = "vil_image_view_base_sptr";
     input_types_[1] = "unsigned";//neighborhood size, e.g. pass 5 for a 5x5 neighborhood around each pixel
@@ -101,15 +101,15 @@ bool vil_mean_and_variance_image_process(bprb_func_process& pro)
     using namespace vil_mean_and_variance_image_process_globals;
 
     if (pro.n_inputs() < n_inputs_) {
-        vcl_cout << "vil_set_float_image_pixel_process: "
-                 << "The number of inputs should be " << n_inputs_ << vcl_endl;
+        std::cout << "vil_set_float_image_pixel_process: "
+                 << "The number of inputs should be " << n_inputs_ << std::endl;
         return false;
     }
 
     vil_image_view_base_sptr baseSptr = pro.get_input<vil_image_view_base_sptr>(0);
     unsigned n = pro.get_input<unsigned>(1);
     int n_half = int((double)n/2.0);
-    vcl_cout << "using n_half: " << n_half << vcl_endl;
+    std::cout << "using n_half: " << n_half << std::endl;
 
     //assume can convert to float
     vil_image_view<float> fview = *vil_convert_cast(float(), baseSptr);

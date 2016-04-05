@@ -6,9 +6,11 @@
 // \brief Least recently used cache.
 // \author Ian Scott
 
-#include <vcl_list.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <iostream>
+#include <list>
+#include <map>
+#include <utility>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Least recently used cache
@@ -19,12 +21,12 @@ template <class I, class V>
 class mbl_lru_cache
 {
   //: Allow least recently used item to be found quickly $O(1)$.
-  typedef vcl_list<I> list_type;
+  typedef std::list<I> list_type;
   //: Allow least recently used item to be found quickly $O(1)$.
   list_type l_;
 
   //: Allow value to be looked up quickly $O(\log(n))$ given index.
-  typedef vcl_map<I, vcl_pair<V, typename list_type::iterator> > map_type;
+  typedef std::map<I, std::pair<V, typename list_type::iterator> > map_type;
   map_type m_;
   //: Limit of cache size.
   unsigned long n_;
@@ -77,14 +79,14 @@ public:
     if (m_.size() < n_)
     {
       l_.push_front(index);
-      m_[index] = vcl_make_pair(value, l_.begin());
+      m_[index] = std::make_pair(value, l_.begin());
     }
     else
     {
       if (!dont_if_full)
       {
         l_.push_front(index);
-        m_[index] = vcl_make_pair(value, l_.begin()) ;
+        m_[index] = std::make_pair(value, l_.begin()) ;
         m_.erase( m_.find(l_.back()));
         l_.pop_back();
       }

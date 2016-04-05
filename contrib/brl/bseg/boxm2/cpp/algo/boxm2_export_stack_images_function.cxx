@@ -13,7 +13,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 
-void boxm2_export_stack_images_function  ::export_opacity_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, vcl_string outdir)
+void boxm2_export_stack_images_function  ::export_opacity_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, std::string outdir)
 {
   boxm2_scene_sptr& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
   vgl_point_3d<int> min_index;
@@ -41,13 +41,13 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
   vil_image_view<unsigned char> img(img_x,img_y);
   for (int k = 0; k < img_z; ++k)
   {
-    vcl_stringstream ss;
-    ss<<outdir<<"/img_"<<vcl_setw(5) << vcl_setfill('0') << k<<".png";
-    vcl_cout<<"Filename : "<<ss.str()<<vcl_endl;
+    std::stringstream ss;
+    ss<<outdir<<"/img_"<<std::setw(5) << std::setfill('0') << k<<".png";
+    std::cout<<"Filename : "<<ss.str()<<std::endl;
     vil_save(img,ss.str().c_str());
   }
-  vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
   int index_x = 0;
   int index_y = 0;
@@ -55,7 +55,7 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
 
   for (blk_iter= blocks.begin(); blk_iter!=blocks.end(); ++blk_iter)
   {
-    vcl_cout<<"Block id "<<blk_iter->first<<vcl_endl;
+    std::cout<<"Block id "<<blk_iter->first<<std::endl;
     boxm2_block  * blk = cache->get_block(nc_scene,blk_iter->first);
     boxm2_data_base *  alpha_base  = cache->get_data_base(nc_scene,blk_iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
@@ -71,9 +71,9 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
     for (unsigned k = 0; k < nk; ++k,++index_z)
       for (int sk = 0; sk < maxcells; ++sk)
       {
-        vcl_stringstream ss;
-        ss<<outdir<<"/img_"<<vcl_setw(5) << vcl_setfill('0') << k*maxcells+sk<<".png";
-        //vcl_cout<<"Filename : "<<ss.str()<<vcl_endl;
+        std::stringstream ss;
+        ss<<outdir<<"/img_"<<std::setw(5) << std::setfill('0') << k*maxcells+sk<<".png";
+        //std::cout<<"Filename : "<<ss.str()<<std::endl;
         vil_image_view_base_sptr img_sptr = vil_load(ss.str().c_str());
         if ( vil_image_view<unsigned char> * cimg = dynamic_cast<vil_image_view<unsigned char> *>(img_sptr.ptr()))
         {
@@ -97,7 +97,7 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
                   int index = curr_tree.get_data_index(ti);
                   vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
                   float prob =alpha_data->data()[index];
-                  prob =  1.0f - (float)vcl_exp(-prob* side_len *sub_blk_dims.x());
+                  prob =  1.0f - (float)std::exp(-prob* side_len *sub_blk_dims.x());
                   int factor = 1<<(blk_iter->second.max_level_-depth-1);
 
                   for (int subi = 0; subi < factor; ++subi)
@@ -117,15 +117,15 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
             }
           }
 
-          vcl_stringstream ss;
-          ss<<outdir<<"/img_"<<vcl_setw(5) << vcl_setfill('0') <<  k*maxcells+sk<<".png";
-          //vcl_cout<<"Filename : "<<ss.str()<<vcl_endl;
+          std::stringstream ss;
+          ss<<outdir<<"/img_"<<std::setw(5) << std::setfill('0') <<  k*maxcells+sk<<".png";
+          //std::cout<<"Filename : "<<ss.str()<<std::endl;
           vil_save((*cimg),ss.str().c_str());
         }
       }
   }
-  vcl_cout<<"Scene varies from "<<min_index<<" to "<<max_index<<'\n'
-          <<"Volume Dimensions are "<<img_x<<' '<<img_y<<' '<<img_z<<vcl_endl;
+  std::cout<<"Scene varies from "<<min_index<<" to "<<max_index<<'\n'
+          <<"Volume Dimensions are "<<img_x<<' '<<img_y<<' '<<img_z<<std::endl;
 }
 
 void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, vil3d_image_view<unsigned char> & img3d)
@@ -159,8 +159,8 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
 #if 0
   double side_len = blk_mdata.sub_block_dim_.x() / (1 << blk_mdata.max_level_);
 #endif
-  vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
   int index_x = 0;
   int index_y = 0;
@@ -206,7 +206,7 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
               int index = curr_tree.get_data_index(ti);
               vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
               float prob =alpha_data->data()[index];
-              prob =  1.0f - (float)vcl_exp(-prob* side_len *sub_blk_dims.x());
+              prob =  1.0f - (float)std::exp(-prob* side_len *sub_blk_dims.x());
               int factor = 1<<(blk_iter->second.max_level_-depth-1);
               unsigned char intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(int_data->data()[index]) * 255);
 
@@ -233,8 +233,8 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
       }
     }
   }
-  vcl_cout<<"Scene varies from "<<min_index<<" to "<<max_index<<'\n'
-          <<"Volume Dimensions are "<<img_x<<' '<<img_y<<' '<<img_z<<vcl_endl;
+  std::cout<<"Scene varies from "<<min_index<<" to "<<max_index<<'\n'
+          <<"Volume Dimensions are "<<img_x<<' '<<img_y<<' '<<img_z<<std::endl;
 }
 
 
@@ -270,8 +270,8 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
 #if 0
   double side_len = blk_mdata.sub_block_dim_.x() / (1 << blk_mdata.max_level_);
 #endif
-  vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
   int index_x = 0;
   int index_y = 0;
@@ -317,7 +317,7 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
               int index = curr_tree.get_data_index(ti);
               vgl_point_3d<double> cc = curr_tree.cell_box(ti).min_point();
               float prob =alpha_data->data()[index];
-              prob =  1.0f - (float)vcl_exp(-prob* side_len *sub_blk_dims.x());
+              prob =  1.0f - (float)std::exp(-prob* side_len *sub_blk_dims.x());
               int factor = 1<<(blk_iter->second.max_level_-depth-1);
 
               vnl_vector_fixed<float,3> color = boxm2_gauss_rgb_processor::expected_color(int_data->data()[index]);
@@ -348,6 +348,6 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
       }
     }
   }
-  vcl_cout<<"Scene varies from "<<min_index<<" to "<<max_index<<'\n'
-          <<"Volume Dimensions are "<<img_x<<' '<<img_y<<' '<<img_z<<vcl_endl;
+  std::cout<<"Scene varies from "<<min_index<<" to "<<max_index<<'\n'
+          <<"Volume Dimensions are "<<img_x<<' '<<img_y<<' '<<img_z<<std::endl;
 }

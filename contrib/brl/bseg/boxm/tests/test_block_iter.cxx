@@ -31,7 +31,7 @@ static void test_block_iter()
     scene.load_block(iter.index());
     boxm_block<tree_type> *block = scene.get_active_block();
     block->set_tree(new tree_type(5,3));
-    vcl_cout << block->bounding_box() << vcl_endl;
+    std::cout << block->bounding_box() << std::endl;
     ++num_blocks;
     scene.write_active_block();
   }
@@ -39,7 +39,7 @@ static void test_block_iter()
   scene.block_num(x,y,z);
   TEST("Number of blocks iterator visits", num_blocks, x*y*z);
 #ifdef DEBUG_LEAKS
-  vcl_cerr << "Leaks in test_block_iter: " << boct_tree_cell<short,vgl_point_3d<double> >::nleaks() << '\n';
+  std::cerr << "Leaks in test_block_iter: " << boct_tree_cell<short,vgl_point_3d<double> >::nleaks() << '\n';
 #endif
   clean_up();
 }

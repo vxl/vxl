@@ -1,7 +1,8 @@
+#include <iostream>
+#include <string>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
 #include <vgl/vgl_vector_3d.h>
@@ -26,7 +27,7 @@ static void test_ekf_camera_optimizer()
   START("breg3d_ekf_camera_optimizer test");
 
   // create the directory under build to put the intermediate files and the generated images
-  vcl_string model_dir("./test_ekf_camera_optimizer");
+  std::string model_dir("./test_ekf_camera_optimizer");
   vul_file::make_directory(model_dir);
 
   unsigned nx = 200;
@@ -121,9 +122,9 @@ static void test_ekf_camera_optimizer()
   vpgl_camera_double_sptr cam1 = new vpgl_perspective_camera<double>(K,center1,rot1);
   vpgl_camera_double_sptr cam2 = new vpgl_perspective_camera<double>(K,center2,rot2);
 
-  bvxm_image_metadata meta0(vil_image_view_base_sptr(0),cam0);
-  bvxm_image_metadata meta1(vil_image_view_base_sptr(0),cam1);
-  bvxm_image_metadata meta2(vil_image_view_base_sptr(0),cam2);
+  bvxm_image_metadata meta0(vil_image_view_base_sptr(VXL_NULLPTR),cam0);
+  bvxm_image_metadata meta1(vil_image_view_base_sptr(VXL_NULLPTR),cam1);
+  bvxm_image_metadata meta2(vil_image_view_base_sptr(VXL_NULLPTR),cam2);
 
   vil_image_view<float> mask(640,480,1);
   vil_image_view_base_sptr img0 = new vil_image_view<unsigned char>(640,480);
@@ -145,12 +146,12 @@ static void test_ekf_camera_optimizer()
   vgl_point_3d<double> center1_est = end_state.get_point();
   vgl_rotation_3d<double> rot1_est = end_state.get_rotation();
 
-  vcl_cout << "camera0 center   : " << center0 << vcl_endl
-           << "camera0 rotation : " << vcl_endl << rot0.as_rodrigues() << vcl_endl
-           << "camera1 center   : " << center1 << vcl_endl
-           << "camera1 rotation : " << vcl_endl << rot1.as_rodrigues() << vcl_endl
-           << "est. center      : " << center1_est << vcl_endl
-           << "est. rotation    : " << vcl_endl << rot1_est.as_rodrigues() << vcl_endl;
+  std::cout << "camera0 center   : " << center0 << std::endl
+           << "camera0 rotation : " << std::endl << rot0.as_rodrigues() << std::endl
+           << "camera1 center   : " << center1 << std::endl
+           << "camera1 rotation : " << std::endl << rot1.as_rodrigues() << std::endl
+           << "est. center      : " << center1_est << std::endl
+           << "est. rotation    : " << std::endl << rot1_est.as_rodrigues() << std::endl;
 
   vgl_vector_3d<double> center_off = center1_est - center1;
   vgl_rotation_3d<double> rot_off(rot1_est.as_rodrigues() - rot1.as_rodrigues());
@@ -167,12 +168,12 @@ static void test_ekf_camera_optimizer()
   vgl_point_3d<double> center2_est = end_state.get_point();
   vgl_rotation_3d<double> rot2_est = end_state.get_rotation();
 
-  vcl_cout << "camera1 center   : " << center1 << vcl_endl
-           << "camera1 rotation : " << vcl_endl << rot1.as_rodrigues() << vcl_endl
-           << "camera2 center   : " << center2 << vcl_endl
-           << "camera2 rotation : " << vcl_endl << rot2.as_rodrigues() << vcl_endl
-           << "est. center      : " << center2_est << vcl_endl
-           << "est. rotation    : " << vcl_endl << rot2_est.as_rodrigues() << vcl_endl;
+  std::cout << "camera1 center   : " << center1 << std::endl
+           << "camera1 rotation : " << std::endl << rot1.as_rodrigues() << std::endl
+           << "camera2 center   : " << center2 << std::endl
+           << "camera2 rotation : " << std::endl << rot2.as_rodrigues() << std::endl
+           << "est. center      : " << center2_est << std::endl
+           << "est. rotation    : " << std::endl << rot2_est.as_rodrigues() << std::endl;
 
   center_off = center2_est - center2;
   rot_off = vgl_rotation_3d<double>(rot2_est.as_rodrigues() - rot2.as_rodrigues());

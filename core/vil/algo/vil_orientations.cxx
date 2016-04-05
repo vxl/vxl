@@ -1,3 +1,4 @@
+#include <cmath>
 #include "vil_orientations.h"
 //:
 // \file
@@ -5,7 +6,7 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 //: Compute orientation (in radians) and gradient magnitude at each pixel
 void vil_orientations(const vil_image_view<float>& grad_i,
@@ -19,10 +20,10 @@ void vil_orientations(const vil_image_view<float>& grad_i,
   orient_im.set_size(ni,nj,1);
   grad_mag.set_size(ni,nj,1);
 
-  const vcl_ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
-  const vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
-  const vcl_ptrdiff_t o_istep = orient_im.istep(), o_jstep = orient_im.jstep();
-  const vcl_ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep();
+  const std::ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
+  const std::ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
+  const std::ptrdiff_t o_istep = orient_im.istep(), o_jstep = orient_im.jstep();
+  const std::ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep();
 
   const float * gi_row = &grad_i(0,0);
   const float * gj_row = &grad_j(0,0);
@@ -39,8 +40,8 @@ void vil_orientations(const vil_image_view<float>& grad_i,
     for (unsigned i=0;i<ni;++i, pgi+=gi_istep, pgj+=gj_istep,
                                 po+=o_istep, pgm+=gm_istep)
     {
-      *po  = vcl_atan2(*pgj,*pgi);
-      *pgm = vcl_sqrt(pgi[0]*pgi[0] + pgj[0]*pgj[0]);
+      *po  = std::atan2(*pgj,*pgi);
+      *pgm = std::sqrt(pgi[0]*pgi[0] + pgj[0]*pgj[0]);
     }
   }
 }
@@ -63,10 +64,10 @@ void vil_orientations(const vil_image_view<float>& grad_i,
   orient_im.set_size(ni,nj,1);
   grad_mag.set_size(ni,nj,1);
 
-  const vcl_ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
-  const vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
-  const vcl_ptrdiff_t o_istep = orient_im.istep(), o_jstep = orient_im.jstep();
-  const vcl_ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep();
+  const std::ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
+  const std::ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
+  const std::ptrdiff_t o_istep = orient_im.istep(), o_jstep = orient_im.jstep();
+  const std::ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep();
 
   const float * gi_row = &grad_i(0,0);
   const float * gj_row = &grad_j(0,0);
@@ -87,9 +88,9 @@ void vil_orientations(const vil_image_view<float>& grad_i,
     {
       // In order to ensure bins are centred at k*2pi/n_orientation points,
       // compute position in twice angle range, then adjust.
-      int A2 = int((vcl_atan2(*pgj,*pgi)+3.14159)*scale);
+      int A2 = int((std::atan2(*pgj,*pgi)+3.14159)*scale);
       *po  = vxl_byte(((A2+1)/2)%n_orientations);
-      *pgm = vcl_sqrt(pgi[0]*pgi[0] + pgj[0]*pgj[0]);
+      *pgm = std::sqrt(pgi[0]*pgi[0] + pgj[0]*pgj[0]);
     }
   }
 }
@@ -117,10 +118,10 @@ void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
   orient_im.set_size(ni,nj,1);
   grad_mag.set_size(ni,nj,1);
 
-  const vcl_ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
-  const vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
-  const vcl_ptrdiff_t o_istep = orient_im.istep(), o_jstep = orient_im.jstep();
-  const vcl_ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep();
+  const std::ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
+  const std::ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
+  const std::ptrdiff_t o_istep = orient_im.istep(), o_jstep = orient_im.jstep();
+  const std::ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep();
 
   const float * gi_row = &grad_i(0,0);
   const float * gj_row = &grad_j(0,0);
@@ -139,13 +140,13 @@ void vil_orientations_at_edges(const vil_image_view<float>& grad_i,
     for (unsigned i=0;i<ni;++i, pgi+=gi_istep, pgj+=gj_istep,
                                 po+=o_istep, pgm+=gm_istep)
     {
-      *pgm = vcl_sqrt(pgi[0]*pgi[0] + pgj[0]*pgj[0]);
+      *pgm = std::sqrt(pgi[0]*pgi[0] + pgj[0]*pgj[0]);
       if (*pgm<grad_threshold) *po=0;
       else
       {
         // In order to ensure bins are centred at k*2pi/n_orientation points,
         // compute position in twice angle range, then adjust.
-        int A2 = int((vcl_atan2(*pgj,*pgi)+3.14159)*scale);
+        int A2 = int((std::atan2(*pgj,*pgi)+3.14159)*scale);
         *po  = vxl_byte(1+((A2+1)/2)%n_orientations);
       }
     }

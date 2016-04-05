@@ -12,7 +12,7 @@
 // the Euler angle r1 r2 r2 and the translation t1 t2 t3
 
 
-pop_rigid_3d::pop_rigid_3d(vcl_vector<pop_parameter*> params,
+pop_rigid_3d::pop_rigid_3d(std::vector<pop_parameter*> params,
                            pop_vertex *cs1, pop_vertex *cs2) :
   pop_transform(params,cs1,cs2)
 {

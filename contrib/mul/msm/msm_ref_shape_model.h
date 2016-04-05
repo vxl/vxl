@@ -7,9 +7,11 @@
 // - see msm_shape_model for that.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <msm/msm_points.h>
 #include <vnl/vnl_matrix.h>
@@ -91,10 +93,10 @@ class msm_ref_shape_model
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -115,9 +117,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_ref_shape_model& pts);
 void vsl_b_read(vsl_b_istream& bfs, msm_ref_shape_model& pts);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_ref_shape_model& pts);
+std::ostream& operator<<(std::ostream& os,const msm_ref_shape_model& pts);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_ref_shape_model& pts);
+void vsl_print_summary(std::ostream& os,const msm_ref_shape_model& pts);
 
 #endif // msm_ref_shape_model_h_

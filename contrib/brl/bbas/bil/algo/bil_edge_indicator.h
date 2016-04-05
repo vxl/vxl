@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vnl/vnl_math.h>
 
 #include <vil/vil_image_view.h>
@@ -20,7 +21,7 @@
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_sobel_3x3.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Functor class to compute malladi image force function
 class bil_malladi_scale_functor
@@ -53,8 +54,8 @@ class bil_power_functor
   int p_;
  public:
   bil_power_functor(int p):p_(p) {}
-  float operator()(float x) const {return vcl_pow(x, (float)p_); }
-  double operator()(double x) const {return vcl_pow(x, p_); }
+  float operator()(float x) const {return std::pow(x, (float)p_); }
+  double operator()(double x) const {return std::pow(x, p_); }
 };
 
 
@@ -67,12 +68,12 @@ class bil_gaussian_functor
   bil_gaussian_functor(double mu, double sigma): mu_(mu), sigma_(sigma) {}
   double operator()(double x) const
   {
-    return vcl_exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) /
+    return std::exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) /
       (sigma_ * vnl_math::two_over_sqrtpi * vnl_math::sqrt1_2 / 2);
   }
   float operator()(float x) const
   {
-    return float(vcl_exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) /
+    return float(std::exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) /
       (sigma_ * vnl_math::two_over_sqrtpi * vnl_math::sqrt1_2 / 2));
   }
 };
@@ -241,7 +242,7 @@ inline void bil_normalized_inverse_gradient(
   const vil_image_view<inT >& src_image,
   double gauss_sigma,
   vil_image_view<outT >& out_image,
-  const vcl_string& option = "quadratic")
+  const std::string& option = "quadratic")
 {
   // smooth image
   vil_image_view<float > float_image;
@@ -288,7 +289,7 @@ inline void bil_normalized_inverse_gradient(
   }
   else
   {
-    vcl_cerr << "ERROR: Only 'quadratic' mapping is currently implemented.\n";
+    std::cerr << "ERROR: Only 'quadratic' mapping is currently implemented.\n";
     return;
   }
 }

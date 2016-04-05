@@ -112,9 +112,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(FMatrixComputeRobust.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-add_library(mvl ${mvl_sources})
-install_targets(/lib mvl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oxl/mvl ${mvl_sources})
+vxl_add_library(LIBRARY_NAME mvl LIBRARY_SOURCES ${mvl_sources})
 target_link_libraries(mvl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vul)
 
 if(BUILD_EXAMPLES)

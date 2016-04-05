@@ -65,8 +65,8 @@ bool vsph_utils::azimuth_in_interval(double phi, double a_phi, double b_phi,
 
 double vsph_utils::arc_len(double min_ph, double max_ph, double c_ph)
 {
-  double dif = vcl_fabs(vsph_utils::azimuth_diff(min_ph, c_ph, true));
-  dif += vcl_fabs(vsph_utils::azimuth_diff(c_ph, max_ph, true));
+  double dif = std::fabs(vsph_utils::azimuth_diff(min_ph, c_ph, true));
+  dif += std::fabs(vsph_utils::azimuth_diff(c_ph, max_ph, true));
   return dif;
 }
 
@@ -83,7 +83,7 @@ double vsph_utils::sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d con
   // empty box.
   if (theta_max <= theta_min)
     return 0.0;
-  double a = vcl_fabs(vcl_cos(theta_min)-vcl_cos(theta_max));
+  double a = std::fabs(std::cos(theta_min)-std::cos(theta_max));
 
   double b1_a_phi = b1.a_phi(in_radians), b1_b_phi = b1.b_phi(in_radians),
     b1_c_phi = b1.c_phi(in_radians);
@@ -159,7 +159,7 @@ double vsph_utils::sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d con
       return a*(dph+dph2);
     }
     default:
-      vcl_cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
+      std::cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
       assert(false); //shouldn't happen
       return 0.0;
   }
@@ -168,8 +168,8 @@ double vsph_utils::sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d con
 double vsph_utils::distance_on_usphere(vsph_sph_point_2d const& a,
                                        vsph_sph_point_2d const& b)
 {
-  double dist = vcl_fabs(vsph_utils::azimuth_diff(a.phi_, b.phi_));
-  dist += vcl_fabs(a.theta_-b.theta_);
+  double dist = std::fabs(vsph_utils::azimuth_diff(a.phi_, b.phi_));
+  dist += std::fabs(a.theta_-b.theta_);
   return dist;
 }
 
@@ -197,27 +197,27 @@ void vsph_utils::
 ray_spherical_coordinates(vpgl_perspective_camera<double> const& cam,
                           double u, double v,
                           double& elevation, double& azimuth,
-                          vcl_string units)
+                          std::string units)
 {
   vgl_ray_3d<double> ray = cam.backproject_ray(u, v);
   vgl_vector_3d<double> dir = ray.direction();
   vgl_vector_3d<double> dirn = normalized(dir);
   double x = dirn.x(), y = dirn.y(), z = dirn.z();
-  if (vcl_fabs(z-1.0)<1e-8) {//essentially at the North Pole
+  if (std::fabs(z-1.0)<1e-8) {//essentially at the North Pole
     azimuth = 0.0;
     elevation = 0.0;
     return;
   }
-  if (vcl_fabs(z + 1.0)<1e-8) {//essentially at the South Pole
+  if (std::fabs(z + 1.0)<1e-8) {//essentially at the South Pole
     azimuth = 0.0;
     elevation = 180.0;
     if (units == "radians")
       elevation = vnl_math::pi;
     return;
   }
-  elevation = vcl_acos(z);
+  elevation = std::acos(z);
   // azimuth is zero pointing along x with positive angle rotating towards y
-  azimuth = vcl_atan2(y, x);//returns angles with +-180 branch cut
+  azimuth = std::atan2(y, x);//returns angles with +-180 branch cut
   if (units == "degrees") {
     elevation = vnl_math::deg_per_rad*elevation;
     azimuth = vnl_math::deg_per_rad*azimuth;
@@ -227,13 +227,13 @@ ray_spherical_coordinates(vpgl_perspective_camera<double> const& cam,
 vgl_polygon<double> vsph_utils::
 project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
                               vgl_polygon<double> const& image_poly,
-                              vcl_string units)
+                              std::string units)
 {
-  vcl_vector<vcl_vector<vgl_point_2d<double> > > sph_sheets;
+  std::vector<std::vector<vgl_point_2d<double> > > sph_sheets;
   unsigned n_sh = image_poly.num_sheets();
   for (unsigned sh_idx = 0; sh_idx<n_sh; ++sh_idx) {
-    vcl_vector<vgl_point_2d<double> > sheet = image_poly[sh_idx];
-    vcl_vector<vgl_point_2d<double> > sph_sheet;
+    std::vector<vgl_point_2d<double> > sheet = image_poly[sh_idx];
+    std::vector<vgl_point_2d<double> > sph_sheet;
     unsigned n_vert = sheet.size();
     for (unsigned vidx = 0; vidx<n_vert; ++vidx) {
       vgl_point_2d<double> vert = sheet[vidx];
@@ -250,9 +250,9 @@ project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
   return vgl_polygon<double>(sph_sheets);
 }
 
-bool vsph_utils::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data)
+bool vsph_utils::read_ray_index_data(std::string path, std::vector<unsigned char>& data)
 {
-  vcl_ifstream is(path.c_str());
+  std::ifstream is(path.c_str());
   if (!is.is_open())
     return false;
   int nrays;
@@ -268,7 +268,7 @@ bool vsph_utils::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>&
   return true;
 }
 
-vsph_sph_box_2d vsph_utils::box_from_camera(vpgl_perspective_camera<double> const& cam, vcl_string units)
+vsph_sph_box_2d vsph_utils::box_from_camera(vpgl_perspective_camera<double> const& cam, std::string units)
 {
   bool in_radians = true;
   if (units == "degrees")

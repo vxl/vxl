@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_batch_probability_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -26,10 +28,10 @@ namespace boxm2_ocl_batch_probability_process_globals
 {
   const unsigned n_inputs_ =  3;
   const unsigned n_outputs_ = 0;
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -40,12 +42,12 @@ namespace boxm2_ocl_batch_probability_process_globals
     //compilation options
 
     bocl_kernel* update_prob = new bocl_kernel();
-    vcl_string prob_opts = " -D UPDATE_PROB ";
+    std::string prob_opts = " -D UPDATE_PROB ";
 
     update_prob->create_kernel(&device->context(), device->device_id(), src_paths, "update_prob_main", prob_opts, "update::update_prob");
     vec_kernels.push_back(update_prob);
   }
-  static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<cl_device_id*,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_batch_probability_process_cons(bprb_func_process& pro)
@@ -53,13 +55,13 @@ bool boxm2_ocl_batch_probability_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_batch_probability_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
 
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -69,7 +71,7 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
   using namespace boxm2_ocl_batch_probability_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -89,8 +91,8 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
   // compile the kernel
   if (kernels.find((device->device_id()))==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
     kernels[(device->device_id())]=ks;
   }
@@ -110,8 +112,8 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
   //2. set workgroup size
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     //choose correct render kernel
@@ -120,8 +122,8 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
     //write the image values to the buffer
     vul_timer transfer;
     bocl_mem * blk       = opencl_cache->get_block(scene,*id);
-    vcl_cout<<" Block Num: "<<(*id)<<vcl_endl;
-    vcl_cout.flush();
+    std::cout<<" Block Num: "<<(*id)<<std::endl;
+    std::cout.flush();
     bocl_mem * blk_info  = opencl_cache->loaded_block_info();
     bocl_mem * alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
     bocl_mem * hist      = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(scene,*id);
@@ -137,7 +139,7 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
     kern->set_arg( intensity );
     kern->set_arg( hist );
     kern->set_arg( cl_output.ptr() );
-    vcl_size_t lThreads[] = {1, 1};
+    std::size_t lThreads[] = {1, 1};
 
     //local tree , cumsum buffer
     kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
@@ -146,10 +148,10 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
     // TOFIX:::note that this for fixed grid.
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
 
-    vcl_size_t numtrees = info_buffer->scene_dims[0]*
+    std::size_t numtrees = info_buffer->scene_dims[0]*
                           info_buffer->scene_dims[1]*
                           info_buffer->scene_dims[2];
-    vcl_size_t gThreads[] = {numtrees,1};
+    std::size_t gThreads[] = {numtrees,1};
     //execute kernel
     kern->execute(queue, 2, lThreads, gThreads);
     clFinish(queue);

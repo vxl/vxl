@@ -26,7 +26,7 @@ bool brec_learner_layer0_update_stats_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brec_part_hierarchy_learner_sptr");      // learner instance
   input_types.push_back("vil_image_view_base_sptr");      // a training image, byte image
   input_types.push_back("vil_image_view_base_sptr");      // a foreground probability img for the input training image, float img with values in [0,1] range
@@ -38,7 +38,7 @@ bool brec_learner_layer0_update_stats_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -58,7 +58,7 @@ bool brec_learner_layer0_update_stats_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 5) {
-    vcl_cerr << "  brec_learner_layer0_update_stats_process - invalid inputs\n";
+    std::cerr << "  brec_learner_layer0_update_stats_process - invalid inputs\n";
     return false;
   }
 
@@ -77,9 +77,9 @@ bool brec_learner_layer0_update_stats_process(bprb_func_process& pro)
     // just a check to make sure conversion went well
     float min, max;
     vil_math_value_range(prob, min, max);
-    vcl_cout << " input prob map was a byte image, after conversion min value: " << min << " max value: " << max << vcl_endl;
+    std::cout << " input prob map was a byte image, after conversion min value: " << min << " max value: " << max << std::endl;
   } else if (inp_prob->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-    vcl_cout << "In brec_learner_update_stats_process::execute() -- ERROR: input prob image is neither BOOL img nor FLOAT img!!\n";
+    std::cout << "In brec_learner_update_stats_process::execute() -- ERROR: input prob image is neither BOOL img nor FLOAT img!!\n";
     return false;
   }
 
@@ -89,13 +89,13 @@ bool brec_learner_layer0_update_stats_process(bprb_func_process& pro)
     mask_img.fill(true);
   } else {
     if (inp_mask->pixel_format() != VIL_PIXEL_FORMAT_BOOL) {
-      vcl_cout << "In brec_learner_update_stats_process::execute() -- ERROR: input mask image is not of type BOOL!!\n";
+      std::cout << "In brec_learner_update_stats_process::execute() -- ERROR: input mask image is not of type BOOL!!\n";
       return false;
     }
     mask_img = inp_mask;
   }
 
-  vcl_string output_file = pro.get_input<vcl_string>(i++);
+  std::string output_file = pro.get_input<std::string>(i++);
 
   hl->layer0_collect_stats(img, prob, mask_img);
   hl->print_to_m_file_layer0(output_file);
@@ -108,7 +108,7 @@ bool brec_learner_layer0_update_posterior_stats_process_cons(bprb_func_process& 
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brec_part_hierarchy_learner_sptr");  // learner instance, assumes the foreground response distribution's parameters have already been fit
   input_types.push_back("vil_image_view_base_sptr");      // a training image, byte image
   input_types.push_back("vil_image_view_base_sptr");      // a foreground probability img for the input training image, float img with values in [0,1] range
@@ -122,7 +122,7 @@ bool brec_learner_layer0_update_posterior_stats_process_cons(bprb_func_process& 
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -141,7 +141,7 @@ bool brec_learner_layer0_update_posterior_stats_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 6) {
-    vcl_cerr << "  brec_learner_layer0_update_stats_process - invalid inputs\n";
+    std::cerr << "  brec_learner_layer0_update_stats_process - invalid inputs\n";
     return false;
   }
 
@@ -162,9 +162,9 @@ bool brec_learner_layer0_update_posterior_stats_process(bprb_func_process& pro)
     // just a check to make sure conversion went well
     float min, max;
     vil_math_value_range(prob, min, max);
-    vcl_cout << " input prob map was a byte image, after conversion min value: " << min << " max value: " << max << vcl_endl;
+    std::cout << " input prob map was a byte image, after conversion min value: " << min << " max value: " << max << std::endl;
   } else if (inp_prob->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-    vcl_cout << "In brec_learner_update_posterior_stats_process::execute() -- ERROR: input prob image is neither BOOL img nor FLOAT img!!\n";
+    std::cout << "In brec_learner_update_posterior_stats_process::execute() -- ERROR: input prob image is neither BOOL img nor FLOAT img!!\n";
     return false;
   }
 
@@ -175,7 +175,7 @@ bool brec_learner_layer0_update_posterior_stats_process(bprb_func_process& pro)
     mask_img.fill(true);
   } else {
     if (inp_mask->pixel_format() != VIL_PIXEL_FORMAT_BOOL) {
-      vcl_cout << "In brec_learner_update_posterior_stats_process::execute() -- ERROR: input mask image is not of type BOOL!!\n";
+      std::cout << "In brec_learner_update_posterior_stats_process::execute() -- ERROR: input mask image is not of type BOOL!!\n";
       return false;
     }
     mask_img = inp_mask;
@@ -204,7 +204,7 @@ bool brec_learner_layer_n_update_stats_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brec_part_hierarchy_learner_sptr");      // learner instance
   input_types.push_back("brec_part_hierarchy_detector_sptr");      // a detector instance
   input_types.push_back("unsigned");      // n: layer id
@@ -214,7 +214,7 @@ bool brec_learner_layer_n_update_stats_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -223,7 +223,7 @@ bool brec_learner_layer_n_update_stats_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 4){
-    vcl_cerr << "  brec_learner_layer_n_update_stats_process - invalid inputs\n";
+    std::cerr << "  brec_learner_layer_n_update_stats_process - invalid inputs\n";
     return false;
   }
 
@@ -233,7 +233,7 @@ bool brec_learner_layer_n_update_stats_process(bprb_func_process& pro)
   brec_part_hierarchy_detector_sptr hd = pro.get_input<brec_part_hierarchy_detector_sptr>(i++);
   unsigned n = pro.get_input<unsigned>(i++);
   unsigned k = pro.get_input<unsigned>(i++);
-  vcl_string output_file = pro.get_input<vcl_string>(i++);
+  std::string output_file = pro.get_input<std::string>(i++);
 
   hl->layer_n_collect_stats(hd, n, k);
   hl->print_to_m_file_layer_n(output_file, k, false);

@@ -1,6 +1,7 @@
 // This is tbl/vepl/vepl_threshold.cxx
+#include <iostream>
 #include "vepl_threshold.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_threshold.h>
 #include <vil/vil_image_view.h>
@@ -28,7 +29,7 @@ vil_image_resource_sptr vepl_threshold(vil_image_resource_sptr image, double thr
       img_out->put_view(out);
     }
     else
-      vcl_cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
+      std::cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
   }
 
   // byte greyscale
@@ -93,7 +94,7 @@ vil_image_resource_sptr vepl_threshold(vil_image_resource_sptr image, double thr
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_threshold() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_threshold() not implemented for " << image << '\n';
 
   return img_out;
 }

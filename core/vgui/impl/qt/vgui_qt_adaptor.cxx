@@ -1,10 +1,11 @@
+#include <iostream>
 #include "vgui_qt_adaptor.h"
 #include "vgui_qt_menu.h"
 
 #include <vgui/vgui_popup_params.h>
 
 #include <qgl.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent, const char* name)
    : QGLWidget(QGLFormat(DoubleBuffer|DepthBuffer|Rgba|AlphaChannel|
@@ -23,16 +24,16 @@ vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent, const char* name)
    QGLFormat format = this-> format ();
 
    if (!format. doubleBuffer ())
-     vcl_cerr << "vgui_qt_adaptor: got single buffer\n";
+     std::cerr << "vgui_qt_adaptor: got single buffer\n";
 
    if (!format. depth ())
-     vcl_cerr << "vgui_qt_adaptor: no depth buffer\n";
+     std::cerr << "vgui_qt_adaptor: no depth buffer\n";
 
    if (!format. rgba ())
-     vcl_cerr << "vgui_qt_adaptor: index color\n";
+     std::cerr << "vgui_qt_adaptor: index color\n";
 
    if (!format. directRendering ())
-     vcl_cerr << "vgui_qt_adaptor: no direct rendering\n";
+     std::cerr << "vgui_qt_adaptor: no direct rendering\n";
 
    // Set up idle time
    idle_timer_ = new QTimer (this, "vgui_qt_adaptor_idle_timer");

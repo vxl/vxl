@@ -133,11 +133,11 @@ vgui_slider_tableau::set_value_no_callbacks( float v )
 
 
 void
-vgui_slider_tableau::call_callbacks( vcl_list< callback_info > const& cbs )
+vgui_slider_tableau::call_callbacks( std::list< callback_info > const& cbs )
 {
   if( ! cbs.empty() ) {
-    vcl_list< callback_info >::const_iterator it = cbs.begin();
-    vcl_list< callback_info >::const_iterator end = cbs.end();
+    std::list< callback_info >::const_iterator it = cbs.begin();
+    std::list< callback_info >::const_iterator end = cbs.end();
     for( ; it != end; ++it ) {
       (it->func_)( this, it->data_ );
     }

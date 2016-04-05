@@ -1,14 +1,16 @@
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <brad/brad_sun_dir_index.h>
-#include <vcl_cstdlib.h> // for rand()
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 
 #if 0 // currently unused
 // illumination directions for longitude = 33.331465, latitude =44.376970 deg
 // for images taken over a 7 year period at roughly 07:30Z
-static vcl_vector<vnl_double_3> illum_dirs()
+static std::vector<vnl_double_3> illum_dirs()
 {
   vnl_double_3 ill_dirs[]={
     vnl_double_3(0.344759944,-0.307169525,0.887010408),
@@ -43,13 +45,13 @@ static vcl_vector<vnl_double_3> illum_dirs()
     vnl_double_3(0.200950347,-0.171021944,0.964557128),
     vnl_double_3(0.181560261,-0.207394314,0.961261395)
   };
-  vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
+  std::vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
   return illumination_dirs;
 }
 #endif // 0
 
 // azimuth and elevation angles taken directly from IMD files
-static vcl_vector<vnl_double_2> illum_angles()
+static std::vector<vnl_double_2> illum_angles()
 {
   vnl_double_2 ill_angs[]={
   vnl_double_2(62.5, 131.7),
@@ -85,7 +87,7 @@ static vcl_vector<vnl_double_2> illum_angles()
   vnl_double_2(74.7, 130.4),
   vnl_double_2(74,   138.8)};
 
-  vcl_vector<vnl_double_2> illumination_angs(ill_angs, ill_angs+32);
+  std::vector<vnl_double_2> illumination_angs(ill_angs, ill_angs+32);
   return illumination_angs;
 }
 
@@ -98,23 +100,23 @@ static void test_sun_dir_index()
   brad_sun_dir_index diridx(longitude, latitude,oyear, ohour, omin,
                             orange, inter_years, 1);
 
-  vcl_cout << diridx << '\n';
+  std::cout << diridx << '\n';
   double x0 = diridx.cone_axis(0)[0], y0 = diridx.cone_axis(0)[1];
-  double er = vcl_fabs(x0-0.302867)+ vcl_fabs(y0 + 0.236176);
+  double er = std::fabs(x0-0.302867)+ std::fabs(y0 + 0.236176);
   TEST_NEAR("test constructor", er, 0.0, 0.001);
-  vcl_vector<vnl_double_2> ill_angs = illum_angles();
+  std::vector<vnl_double_2> ill_angs = illum_angles();
   double min_angle;
   int index = diridx.index(ill_angs[2][1], ill_angs[2][0], min_angle);
   TEST("bin index", index, 2);
 #if 0
-  vcl_ofstream os("c:/images/BaghdadBoxm2/sun_index.wrl");
+  std::ofstream os("c:/images/BaghdadBoxm2/sun_index.wrl");
   diridx.print_to_vrml(os);
   os.close();
 
-  vcl_cout << "Dirs from metadata\n";
-  vcl_vector<vnl_double_2> ill_angs = illum_angles();
+  std::cout << "Dirs from metadata\n";
+  std::vector<vnl_double_2> ill_angs = illum_angles();
   for (unsigned int i=0; i<ill_angs.size(); ++i)
-    vcl_cout << '(' << ill_angs[i][1] << ' ' << ill_angs[i][0] << ")->"
+    std::cout << '(' << ill_angs[i][1] << ' ' << ill_angs[i][0] << ")->"
              << diridx.index(ill_angs[i][1], ill_angs[i][0])<< '\n';
 #endif
 }

@@ -22,7 +22,7 @@ inline void vimt_reflect_x(vimt_image_2d_of<T>& img)
   img.image() = vil_flip_lr(img.image());
 
   // Compose the transform with a translation about the world origin.
-  vcl_vector<double> bboxmin, bboxmax;
+  std::vector<double> bboxmin, bboxmax;
   img.world_bounds(bboxmin, bboxmax);
   vimt_transform_2d transl;
   transl.set_translation(bboxmin[0]+bboxmax[0], 0);
@@ -38,7 +38,7 @@ inline void vimt_reflect_y(vimt_image_2d_of<T>& img)
   img.image() = vil_flip_ud(img.image());
 
   // Compose the transform with a translation about the world origin.
-  vcl_vector<double> bboxmin, bboxmax;
+  std::vector<double> bboxmin, bboxmax;
   img.world_bounds(bboxmin, bboxmax);
   vimt_transform_2d transl;
   transl.set_translation(0, bboxmin[1]+bboxmax[1]);

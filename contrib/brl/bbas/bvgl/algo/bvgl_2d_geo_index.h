@@ -69,41 +69,41 @@ public:
   //: create a tree from text file.  Note even if a child has zero pointer, it's order in the children array remains same such that the children
   //  have consistent clockwise geographic sequence
   template <class Type>
-  static bvgl_2d_geo_index_node_sptr read_and_construct(vcl_string const& file_name, double& min_size);
+  static bvgl_2d_geo_index_node_sptr read_and_construct(std::string const& file_name, double& min_size);
 
   //: prune the children which do not intersect with given polygon
   static bool prune_tree(bvgl_2d_geo_index_node_sptr root, vgl_polygon<double> const& poly);
   static bool prune_tree(bvgl_2d_geo_index_node_sptr root, vgl_polygon<float> const& poly);
 
   //: write out kml file at given depth of the tree
-  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vcl_string explanation="location");
+  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, std::string const& kml_file, std::string explanation="location");
   //: write out kml file for quadtree with non geo coordinates using given lvcs
-  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vpgl_lvcs_sptr const& lvcs, vcl_string explanation="location");
+  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, std::string const& kml_file, vpgl_lvcs_sptr const& lvcs, std::string explanation="location");
   //: write out kml file for the given node and its children
-  static void write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vcl_string explanation="location");
-  static void write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth,
-                                vpgl_lvcs_sptr const& lvcs, vcl_string explanation="location");
+  static void write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, std::string explanation="location");
+  static void write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth,
+                                vpgl_lvcs_sptr const& lvcs, std::string explanation="location");
 
   //: write the quadtree structure into a text file, only the tree structure and not the content on the node
-  static void write(bvgl_2d_geo_index_node_sptr root, vcl_string const& file_name, double const& min_size);
+  static void write(bvgl_2d_geo_index_node_sptr root, std::string const& file_name, double const& min_size);
 
   //: write the quadtree structure into a text file, the local coordinates inside the quadtree will be transferred to lon/lat using given lvcs
-  static void write(bvgl_2d_geo_index_node_sptr root, vcl_string const& file_name, double const& min_size, vpgl_lvcs_sptr const& lvcs);
+  static void write(bvgl_2d_geo_index_node_sptr root, std::string const& file_name, double const& min_size, vpgl_lvcs_sptr const& lvcs);
 
   //: return all leaves of the quadtree
-  static void get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves);
+  static void get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves);
 
   //: return all leaves that intersect with given rectangular area
-  static void get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_box_2d<double> const& region);
-  static void get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_box_2d<float>  const& region);
+  static void get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_box_2d<double> const& region);
+  static void get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_box_2d<float>  const& region);
 
   //: return all leaves that intersect with given polygon
-  static void get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_polygon<double> const& poly);
-  static void get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_polygon<float>  const& poly);
+  static void get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_polygon<double> const& poly);
+  static void get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_polygon<float>  const& poly);
 
   //: return all leaves that intersect with a line (vector of points)
-  static void get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vcl_vector<vgl_point_2d<double> > const& line);
-  static void get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vcl_vector<vgl_point_2d<float> >  const& line);
+  static void get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, std::vector<vgl_point_2d<double> > const& line);
+  static void get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, std::vector<vgl_point_2d<float> >  const& line);
 
   //: locate the leave given a point
   static void get_leaf(bvgl_2d_geo_index_node_sptr root, bvgl_2d_geo_index_node_sptr& leaf, vgl_point_2d<double> const& point);
@@ -121,6 +121,6 @@ public:
 };
 
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
-#define BVGL_2D_GEO_INDEX_INSTANTIATE(T) extern "Please #include <bvgl/algo/bvgl_2d_geo_index.txx>"
+#define BVGL_2D_GEO_INDEX_INSTANTIATE(T) extern "Please #include <bvgl/algo/bvgl_2d_geo_index.hxx>"
 
 #endif // bvgl_2d_geo_index_h_

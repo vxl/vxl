@@ -49,18 +49,18 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<vxl_byte>& src_im,
   }
 
   // Compute relative sampling positions
-  const vcl_ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
-  const vcl_ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
-  const vcl_ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
+  const std::ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
+  const std::ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
+  const std::ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
   const unsigned nk1 = nk-1;
 
-  const vcl_ptrdiff_t src_istep = src_im.istep();
-  const vcl_ptrdiff_t gri_istep = grad_i.istep();
-  const vcl_ptrdiff_t grj_istep = grad_j.istep();
-  const vcl_ptrdiff_t grk_istep = grad_j.istep();
+  const std::ptrdiff_t src_istep = src_im.istep();
+  const std::ptrdiff_t gri_istep = grad_i.istep();
+  const std::ptrdiff_t grj_istep = grad_j.istep();
+  const std::ptrdiff_t grk_istep = grad_j.istep();
 
   for (unsigned k=1;k<nk1;++k)
   {
@@ -115,9 +115,9 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<float>& src_im,
   }
 
   // Compute relative sampling positions
-  const vcl_ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
-  const vcl_ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
-  const vcl_ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
+  const std::ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
+  const std::ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
+  const std::ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
@@ -175,9 +175,9 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<vxl_int_32>& src_im,
   }
 
   // Compute relative sampling positions
-  const vcl_ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
-  const vcl_ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
-  const vcl_ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
+  const std::ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
+  const std::ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
+  const std::ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
@@ -234,9 +234,9 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<vxl_byte>& src_im,
   }
 
   // Compute relative sampling positions
-  const vcl_ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
-  const vcl_ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
-  const vcl_ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
+  const std::ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
+  const std::ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
+  const std::ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
@@ -291,9 +291,9 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<float>& src_im,
   }
 
   // Compute relative sampling positions
-  const vcl_ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
-  const vcl_ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
-  const vcl_ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
+  const std::ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
+  const std::ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
+  const std::ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;
@@ -347,9 +347,9 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<vxl_int_32>& src_im,
   }
 
   // Compute relative sampling positions
-  const vcl_ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
-  const vcl_ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
-  const vcl_ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
+  const std::ptrdiff_t di1 = src_im.istep(), di2= -src_im.istep();
+  const std::ptrdiff_t dj1 = src_im.jstep(), dj2= -src_im.jstep();
+  const std::ptrdiff_t dk1 = src_im.kstep(), dk2= -src_im.kstep();
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;

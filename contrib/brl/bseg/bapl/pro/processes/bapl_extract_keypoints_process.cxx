@@ -30,13 +30,13 @@
 bool bapl_extract_keypoints_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // input image
   input_types.push_back("vcl_string"); // path and name of output keypoint file (a list of keypoint descriptors in a simple txt file)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // output color image with keypoints marked
   output_types.push_back("bapl_keypoint_set_sptr");    // output a set of keypoints
   ok = pro.set_output_types(output_types);
@@ -48,7 +48,7 @@ bool bapl_extract_keypoints_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cout << "bapl_extract_keypoints_process: The input number should be 2" << vcl_endl;
+    std::cout << "bapl_extract_keypoints_process: The input number should be 2" << std::endl;
     return false;
   }
 
@@ -63,14 +63,14 @@ bool bapl_extract_keypoints_process(bprb_func_process& pro)
   else
     grey_image_sptr = vil_new_image_resource_of_view( input_image );
 
-  vcl_string key_path = pro.get_input<vcl_string>(i++);
+  std::string key_path = pro.get_input<std::string>(i++);
 
   vul_timer t;
-  vcl_vector< bapl_keypoint_sptr > keypoints;
-  vcl_cout << "Finding Keypoints" << vcl_endl;
+  std::vector< bapl_keypoint_sptr > keypoints;
+  std::cout << "Finding Keypoints" << std::endl;
   bapl_keypoint_extractor( grey_image_sptr, keypoints);
 
-  vcl_cout << "Drawing Keypoints" << vcl_endl;
+  std::cout << "Drawing Keypoints" << std::endl;
 
   vil_image_view<vxl_byte> output_img;
   output_img.deep_copy(input_image);
@@ -90,26 +90,26 @@ bool bapl_extract_keypoints_process(bprb_func_process& pro)
   pro.set_output_val<bapl_keypoint_set_sptr>(1, key_set);
 
   // write keypoints to file
-  vcl_ofstream ofs(key_path.c_str());
+  std::ofstream ofs(key_path.c_str());
   if (!ofs.is_open()) {
-    vcl_cerr << "Failed to open file " << key_path.c_str() << vcl_endl;
+    std::cerr << "Failed to open file " << key_path.c_str() << std::endl;
     return false;
   }
   ofs << keypoints.size() << " ";
-  int len = 128; ofs << len << vcl_endl;
+  int len = 128; ofs << len << std::endl;
   for (unsigned i = 0; i < keypoints.size(); i++) {
     bapl_lowe_keypoint_sptr kp;
     kp.vertical_cast(keypoints[i]);
     ofs << kp->location_j() << " " << kp->location_i() << " "; // i <-> y, j <-> x
-    ofs << kp->scale() << " " << kp->orientation() << vcl_endl;
+    ofs << kp->scale() << " " << kp->orientation() << std::endl;
     vnl_vector_fixed<double, 128> desc = kp->descriptor();
     for (int j = 0; j < len; j++) {
       ofs << desc[j] << " ";
     }
-    ofs << vcl_endl;
+    ofs << std::endl;
   }
   ofs.close();
-  vcl_cout << "Extracted keypoints in " << t.real()/(1000.0*60.0) << " mins.\n";
+  std::cout << "Extracted keypoints in " << t.real()/(1000.0*60.0) << " mins.\n";
 
   return true;
 }
@@ -118,13 +118,13 @@ bool bapl_extract_keypoints_process(bprb_func_process& pro)
 bool bapl_draw_keypoints_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // input image
   input_types.push_back("bapl_keypoint_set_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // output color image with keypoints marked
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -135,7 +135,7 @@ bool bapl_draw_keypoints_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cout << "bapl_draw_keypoints_process: The input number should be 2" << vcl_endl;
+    std::cout << "bapl_draw_keypoints_process: The input number should be 2" << std::endl;
     return false;
   }
 
@@ -145,7 +145,7 @@ bool bapl_draw_keypoints_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> input_image(input_image_sptr);
 
   bapl_keypoint_set_sptr key_set = pro.get_input<bapl_keypoint_set_sptr>(i++);
-  vcl_vector< bapl_keypoint_sptr >& keypoints = key_set->keys_;
+  std::vector< bapl_keypoint_sptr >& keypoints = key_set->keys_;
 
   vil_image_view<vxl_byte> output_img(input_image.ni(), input_image.nj(), 3);
   vil_image_view<vxl_byte> output_img_r = vil_plane(output_img, 0);
@@ -179,11 +179,11 @@ bool bapl_draw_keypoints_process(bprb_func_process& pro)
 bool bapl_load_keypoints_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string"); // path and name of input keypoint file (a list of keypoint descriptors in a simple txt file)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("bapl_keypoint_set_sptr");    // output a set of keypoints
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -194,24 +194,24 @@ bool bapl_load_keypoints_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 1) {
-    vcl_cout << "bapl_load_keypoints_process: The input number should be 1" << vcl_endl;
+    std::cout << "bapl_load_keypoints_process: The input number should be 1" << std::endl;
     return false;
   }
 
   // get the inputs
   unsigned i=0;
-  vcl_string key_path = pro.get_input<vcl_string>(i++);
+  std::string key_path = pro.get_input<std::string>(i++);
 
-  vcl_vector< bapl_keypoint_sptr > keypoints;
+  std::vector< bapl_keypoint_sptr > keypoints;
 
-  vcl_cout << "Reading Keypoints from file: " << key_path.c_str() << vcl_endl;
-  vcl_ifstream ifs(key_path.c_str());
+  std::cout << "Reading Keypoints from file: " << key_path.c_str() << std::endl;
+  std::ifstream ifs(key_path.c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file " << key_path.c_str() << vcl_endl;
+    std::cerr << "Failed to open file " << key_path.c_str() << std::endl;
     return 0;
   }
   int n; ifs >> n; int len; ifs >> len;
-  vcl_cout << "Found " << n << " keypoints.\n";
+  std::cout << "Found " << n << " keypoints.\n";
   for (int i = 0; i < n; i++) {
     bapl_lowe_keypoint_sptr kp = read_from_file(ifs, len);
     keypoints.push_back(kp);

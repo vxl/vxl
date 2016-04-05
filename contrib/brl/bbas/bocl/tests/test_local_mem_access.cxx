@@ -16,11 +16,11 @@ bool test_workspace()
   bocl_command_queue_mgr &mgr = bocl_command_queue_mgr::instance();
 
   //create command queue
-  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, NULL);
+  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, VXL_NULLPTR);
 
   //create kernel
-  vcl_string src_path = testlib_root_dir() + "/contrib/brl/bbas/bocl/tests/test_local_mem_access.cl";
-  vcl_vector<vcl_string> paths; paths.push_back(src_path);
+  std::string src_path = testlib_root_dir() + "/contrib/brl/bbas/bocl/tests/test_local_mem_access.cl";
+  std::vector<std::string> paths; paths.push_back(src_path);
   bocl_kernel test_kernel;
   test_kernel.create_kernel( &mgr.context(), &mgr.devices()[0], paths, "test_local_mem_access", "", "bocl test local memory access kernel");
 
@@ -31,23 +31,23 @@ bool test_workspace()
   b_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set up thread arrays
-  vcl_size_t lthread[] = { 8, 8 };
-  vcl_size_t gthread[] = { 20*8, 30*8 };
+  std::size_t lthread[] = { 8, 8 };
+  std::size_t gthread[] = { 20*8, 30*8 };
 
   //execute kernel
   test_kernel.set_arg(&a_mem);
   test_kernel.set_arg(&b_mem);
   test_kernel.execute(queue, 2, lthread, gthread);
   clFinish(queue);
-  vcl_cout<<"Execution time: "<<test_kernel.exec_time()<<" ms"<<vcl_endl;
+  std::cout<<"Execution time: "<<test_kernel.exec_time()<<" ms"<<std::endl;
 
   //read from output
   b_mem.read_to_buffer(queue);
   for(int i=0; i<8; ++i) {
     for(int j=0; j<8; ++j) {
-      vcl_cout<<b[i+8*j]<<"  ";
+      std::cout<<b[i+8*j]<<"  ";
     }
-    vcl_cout<<'\n';
+    std::cout<<'\n';
   }
   for(int i=0; i<64; ++i) {
     if(b[i] != 10.0f)

@@ -53,7 +53,7 @@ int main(int argc, char ** argv)
   for (int i=0; i<argc; i++)
     my_argv[i] = argv[i];
   my_argv[argc] = new char[13];
-  vcl_strcpy(my_argv[argc], "--mfc-use-gl");
+  std::strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);
   delete[] my_argv[argc];
   delete[] my_argv;
@@ -61,7 +61,7 @@ int main(int argc, char ** argv)
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
 #endif
-    vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
+    vul_arg<std::string> scene_file("-scene", "scene filename", "");
     vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
     vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
 
@@ -70,7 +70,7 @@ int main(int argc, char ** argv)
 
     //make bocl manager
     bocl_manager_child* mgr =bocl_manager_child::instance();
-    vcl_vector<bocl_device_sptr> gpus(mgr->gpus_.size());
+    std::vector<bocl_device_sptr> gpus(mgr->gpus_.size());
 
     for(int i = 0; i < mgr->gpus_.size(); i++)
       gpus[i] = (bocl_device_sptr) (mgr->gpus_[i]);
@@ -88,7 +88,7 @@ int main(int argc, char ** argv)
     //create cache, grab singleton instance
     bstm_lru_cache::create(scene);
 
-    vcl_vector<bstm_opencl_cache_sptr> opencl_caches(gpus.size());
+    std::vector<bstm_opencl_cache_sptr> opencl_caches(gpus.size());
     for(int i = 0; i < gpus.size(); i++)
       opencl_caches[i] = new bstm_opencl_cache(scene, gpus[i]);
 
@@ -121,6 +121,6 @@ int main(int argc, char ** argv)
 
     //set vgui off
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-    vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
+    std::cout << "GLEW is supported= " << bGLEW << std::endl;
     return vgui::run();
 }

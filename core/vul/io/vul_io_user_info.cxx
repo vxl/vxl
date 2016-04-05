@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-
+#include <iostream>
 #include "vul_io_user_info.h"
 #include <vul/vul_user_info.h>
 
@@ -44,9 +44,9 @@ void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vul_user_info&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vul_user_info&)\n"
              << "           Unknown version number "<< v << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -54,7 +54,7 @@ void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
 
 //=========================================================================
 //: Output a human readable summary to the stream
-void vsl_print_summary(vcl_ostream& os,const vul_user_info & p)
+void vsl_print_summary(std::ostream& os,const vul_user_info & p)
 {
   os << "( uid,gid,name,home_directory,full_name,shell,passwd="
      << p.uid<<','<<p.gid<<','<<p.name

@@ -1,8 +1,9 @@
+#include <cmath>
 #include "vpgl_rational_adjust.h"
 //:
 // \file
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_2d.h>
@@ -13,8 +14,8 @@
 
 vpgl_adjust_lsqr::
 vpgl_adjust_lsqr(vpgl_rational_camera<double>  const& rcam,
-                 vcl_vector<vgl_point_2d<double> > const& img_pts,
-                 vcl_vector<vgl_point_3d<double> > const& geo_pts,
+                 std::vector<vgl_point_2d<double> > const& img_pts,
+                 std::vector<vgl_point_3d<double> > const& geo_pts,
                  unsigned num_unknowns, unsigned num_residuals)
   : vnl_least_squares_function(num_unknowns, num_residuals,
                                vnl_least_squares_function::no_gradient),
@@ -37,7 +38,7 @@ void vpgl_adjust_lsqr::f( const vnl_vector<double>& unknowns,
   rcam_.set_scale(vpgl_rational_camera<double>::Z_INDX, unknowns[4]);
   rcam_.set_offset(vpgl_rational_camera<double>::Z_INDX, unknowns[5]);
 
-  vcl_cout << "x(" << unknowns[0] << ' ' << unknowns[1] << ")\n"
+  std::cout << "x(" << unknowns[0] << ' ' << unknowns[1] << ")\n"
            << "y(" << unknowns[2] << ' ' << unknowns[3] << ")\n"
            << "z(" << unknowns[4] << ' ' << unknowns[5] << ")\n";
 #endif
@@ -55,10 +56,10 @@ void vpgl_adjust_lsqr::f( const vnl_vector<double>& unknowns,
     projection_error[ir++] = (pp.y()-c.y())*(pp.y()-c.y());
 
 #if 0
-    projection_error[ir++] = vcl_fabs(pp.x()-c.x());
-    projection_error[ir++] = vcl_fabs(pp.y()-c.y());
+    projection_error[ir++] = std::fabs(pp.x()-c.x());
+    projection_error[ir++] = std::fabs(pp.y()-c.y());
 
-    vcl_cout << "perror[" << i << "](" << projection_error[ir-2] << ' '
+    std::cout << "perror[" << i << "](" << projection_error[ir-2] << ' '
              << projection_error[ir-1] << ")\n";
 #endif
   }
@@ -70,8 +71,8 @@ void vpgl_adjust_lsqr::f( const vnl_vector<double>& unknowns,
 //The backprojected image points and their actual 3-d locations.
 //
 static bool initial_offsets(vpgl_rational_camera<double> const& initial_rcam,
-                            vcl_vector<vgl_point_2d<double> > const& img_pts,
-                            vcl_vector<vgl_point_3d<double> > const& geo_pts,
+                            std::vector<vgl_point_2d<double> > const& img_pts,
+                            std::vector<vgl_point_3d<double> > const& geo_pts,
                             double& xoff,
                             double& yoff,
                             double& zoff)
@@ -111,8 +112,8 @@ static bool initial_offsets(vpgl_rational_camera<double> const& initial_rcam,
 // Returns true if successful, else false
 bool vpgl_rational_adjust::
 adjust(vpgl_rational_camera<double> const& initial_rcam,
-       vcl_vector<vgl_point_2d<double> > img_pts,
-       vcl_vector<vgl_point_3d<double> > geo_pts,
+       std::vector<vgl_point_2d<double> > img_pts,
+       std::vector<vgl_point_3d<double> > geo_pts,
        vpgl_rational_camera<double> & adj_rcam)
 {
   // Get initial offsets by backprojection
@@ -168,7 +169,7 @@ adjust(vpgl_rational_camera<double> const& initial_rcam,
   // Summarize the results
   levmarq.diagnose_outcome();
 #ifdef ADJUST_DEBUG
-  vcl_cout << "Min error of " << levmarq.get_end_error() << " at the following local minima : " << '\n';
+  std::cout << "Min error of " << levmarq.get_end_error() << " at the following local minima : " << '\n';
 #endif
   // set up the camera for return
   adj_rcam = initial_rcam;
@@ -184,7 +185,7 @@ adjust(vpgl_rational_camera<double> const& initial_rcam,
     vgl_point_2d<double> pp = adj_rcam.project(geo_pts[i]);
     vgl_point_2d<double> c = img_pts[i];
     double d = vgl_distance<double>(c, pp);
-    vcl_cout << "p[" << i << "]->(" << pp.x() << ' ' << pp.y() << ")\n"
+    std::cout << "p[" << i << "]->(" << pp.x() << ' ' << pp.y() << ")\n"
              << "c(" << c.x() << ' ' << c.y() << "): " << d << '\n';
   }
 #endif

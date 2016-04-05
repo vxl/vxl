@@ -11,6 +11,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
+#include <iostream>
 #include <vepl/vepl_convert.h>
 #include <vepl/vepl_moment.h>
 #include <vepl/vepl_monadic.h>
@@ -19,7 +20,7 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 
 int
@@ -27,7 +28,7 @@ main(int argc, char** argv)
 {
   if (argc < 3)
   {
-    vcl_cerr << "Syntax: example_vepl_moment file_in file_out\n";
+    std::cerr << "Syntax: example_vepl_moment file_in file_out\n";
     return 1;
   }
 
@@ -53,9 +54,9 @@ main(int argc, char** argv)
   // vepl_convert to ubyte and write to PGM file:
   out = vepl_convert(out, (vxl_byte)0);
   if (vil_save_image_resource(out, argv[2], "pnm"))
-    vcl_cout << "Written standard-deviation image to PNM image "<< argv[2]<< '\n';
+    std::cout << "Written standard-deviation image to PNM image "<< argv[2]<< '\n';
   else
-    vcl_cout << "Could not write standard-deviation image as PNM to " << argv[2] << '\n';
+    std::cout << "Could not write standard-deviation image as PNM to " << argv[2] << '\n';
 
   return 0;
 }

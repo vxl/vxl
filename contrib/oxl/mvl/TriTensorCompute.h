@@ -17,7 +17,9 @@
 //             Oxford University, UK
 //---------------------------------------------------------------------------
 
-#include <vcl_list.h>
+#include <iostream>
+#include <list>
+#include <vcl_compiler.h>
 
 class HomgMatchLineSeg2D2D2D;
 class HomgMatchPoint2D2D2D;
@@ -34,9 +36,9 @@ class BaseTriTensorCompute
 
   // Data Access-----------------------------------------------------------
 
-  void add_matches (vcl_list<HomgMatchLineSeg2D2D2D*> *match_list);
+  void add_matches (std::list<HomgMatchLineSeg2D2D2D*> *match_list);
 
-  void add_matches (vcl_list<HomgMatchPoint2D2D2D*> *match_list);
+  void add_matches (std::list<HomgMatchPoint2D2D2D*> *match_list);
 
   void clear_matches_line (void);
   void clear_matches_point (void);
@@ -47,10 +49,10 @@ class BaseTriTensorCompute
   // Data Members----------------------------------------------------------
 
   // the matched points.
-  vcl_list<HomgMatchPoint2D2D2D*> *matchpoint_list_ptr_;
+  std::list<HomgMatchPoint2D2D2D*> *matchpoint_list_ptr_;
 
   // the matched line segments.
-  vcl_list<HomgMatchLineSeg2D2D2D*> *matchlineseg_list_ptr_;
+  std::list<HomgMatchLineSeg2D2D2D*> *matchlineseg_list_ptr_;
 };
 
 #endif // BaseTriTensorCompute_h_

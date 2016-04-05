@@ -15,7 +15,7 @@ if(EXPAT_FOUND)
   aux_source_directory(processes bocl_pro_sources)
   aux_source_directory(Templates bocl_pro_sources)
 
-  add_library(bocl_pro ${bocl_pro_sources} )
+  vxl_add_library(LIBRARY_NAME bocl_pro LIBRARY_SOURCES ${bocl_pro_sources} )
 
   target_link_libraries(bocl_pro bocl bprb brdb )
 

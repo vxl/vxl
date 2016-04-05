@@ -20,7 +20,7 @@ bool sdet_detect_edge_tangent_interp_process_cons(bprb_func_process& pro)
   // process takes 2 inputs
   //input[0]: input grayscale image
   //input[1]: string indicating the output format
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
 
@@ -40,7 +40,7 @@ bool sdet_detect_edge_tangent_interp_process_cons(bprb_func_process& pro)
   //
   // plane 2 - line coefficient c
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
@@ -53,7 +53,7 @@ bool sdet_detect_edge_tangent_interp_process(bprb_func_process& pro)
 
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs" << std::endl;
     return false;
   }
 
@@ -63,14 +63,14 @@ bool sdet_detect_edge_tangent_interp_process(bprb_func_process& pro)
 
   //check input validity
   if (!input_image_sptr) {
-    vcl_cout << pro.name() <<" :-- null input image\n";
+    std::cout << pro.name() <<" :-- null input image\n";
     return false;
   }
 
   vil_image_view<vxl_byte> input_image =
     *vil_convert_cast(vxl_byte(), input_image_sptr);
 
-  vcl_string out_type = pro.get_input<vcl_string>(1);
+  std::string out_type = pro.get_input<std::string>(1);
   // get parameters
   double noise_multiplier=1.5, smooth=1.5;
   bool automatic_threshold=false, junctionp=false, aggressive_junction_closure=false;
@@ -81,8 +81,8 @@ bool sdet_detect_edge_tangent_interp_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_junctionp_, junctionp);
   pro.parameters()->get_value(param_aggressive_junction_closure_, aggressive_junction_closure);
 #if 0
-  vcl_cout << "Edge detection parameters\n";
-  pro.parameters()->print_all(vcl_cout);
+  std::cout << "Edge detection parameters\n";
+  pro.parameters()->print_all(std::cout);
 #endif
   vil_image_view<float> edge_image =
     sdet_img_edge::detect_edge_tangent_interpolated(input_image,
@@ -113,13 +113,13 @@ bool sdet_detect_edge_line_fitted_process_cons(bprb_func_process& pro)
   // process takes 2 inputs:
   //input[0]: input grayscale image
   //input[1]: string indicating the output format
-  vcl_vector<vcl_string> input_types_(2);
+  std::vector<std::string> input_types_(2);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
   if (!pro.set_input_types(input_types_))
     return false;
 
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
 }
@@ -129,7 +129,7 @@ bool sdet_detect_edge_line_fitted_process(bprb_func_process& pro)
   using namespace sdet_detect_edge_line_fitted_process_globals;
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs" << std::endl;
     return false;
   }
 
@@ -139,14 +139,14 @@ bool sdet_detect_edge_line_fitted_process(bprb_func_process& pro)
 
   //check input validity
   if (!input_image_sptr) {
-    vcl_cout << pro.name() <<" :-- null input image\n";
+    std::cout << pro.name() <<" :-- null input image\n";
     return false;
   }
 
   vil_image_view<vxl_byte> input_image =
     *vil_convert_cast(vxl_byte(), input_image_sptr);
 
-  vcl_string out_type = pro.get_input<vcl_string>(1);
+  std::string out_type = pro.get_input<std::string>(1);
   // get parameters
   double noise_multiplier=1.5, smooth=1.5;
   bool automatic_threshold=false, junctionp=false, aggressive_junction_closure=false;
@@ -197,13 +197,13 @@ bool sdet_write_edge_file_process_cons(bprb_func_process& pro)
   // plane 2 - Orientation of local edge tangent direction in radians
   // range is [0, 2pi).
 
-  vcl_vector<vcl_string> input_types_(2);
+  std::vector<std::string> input_types_(2);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";  // name of output file, extention should be .edg
   if (!pro.set_input_types(input_types_))
     return false;
 
-  vcl_vector<vcl_string> output_types_(0);
+  std::vector<std::string> output_types_(0);
   return pro.set_output_types(output_types_);
 }
 
@@ -211,18 +211,18 @@ bool sdet_write_edge_file_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs" << std::endl;
     return false;
   }
 
   // get inputs
   // image
   vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(0);
-  vcl_string filename = pro.get_input<vcl_string>(1);
+  std::string filename = pro.get_input<std::string>(1);
 
   //check input validity
   if (!input_image_sptr || input_image_sptr->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-    vcl_cout << pro.name() <<" :-- null input image or wrong image type\n";
+    std::cout << pro.name() <<" :-- null input image or wrong image type\n";
     return false;
   }
 
@@ -241,10 +241,10 @@ bool sdet_write_edge_file_process(bprb_func_process& pro)
   }
 
   //1) If file open fails, return.
-  vcl_ofstream outfp(filename.c_str(), vcl_ios::out);
+  std::ofstream outfp(filename.c_str(), std::ios::out);
 
   if (!outfp){
-    vcl_cout << " Error opening file  " << filename.c_str() << vcl_endl;
+    std::cout << " Error opening file  " << filename.c_str() << std::endl;
     return false;
   }
 
@@ -253,7 +253,7 @@ bool sdet_write_edge_file_process(bprb_func_process& pro)
         << "# Format :  [Pixel_Pos]  Pixel_Dir Pixel_Conf  [Sub_Pixel_Pos] Sub_Pixel_Dir Strength Uncer\n\n"
         << "WIDTH=" << ni << '\n'
         << "HEIGHT=" << nj << '\n'
-        << "EDGE_COUNT=" << cnt  << '\n' << vcl_endl;
+        << "EDGE_COUNT=" << cnt  << '\n' << std::endl;
 
   for (unsigned i = 0; i < ni; i++) {
     for (unsigned j = 0; j < nj; j++) {
@@ -269,7 +269,7 @@ bool sdet_write_edge_file_process(bprb_func_process& pro)
         double idir = edge_image(i,j,2), iconf = 0.0;
         double dir= edge_image(i,j,2), conf= 0.0, uncer=0.0;
 
-        outfp << "[" << ix << ", " << iy << "]    " << idir << " " << iconf << "   [" << x << ", " << y << "]   " << dir << " " << conf << " " << uncer << vcl_endl;
+        outfp << "[" << ix << ", " << iy << "]    " << idir << " " << iconf << "   [" << x << ", " << y << "]   " << dir << " " << conf << " " << uncer << std::endl;
     }
   }
 

@@ -12,8 +12,9 @@
 // corresponding bicub and bilin files that would likely also benefit from
 // the same change.
 
+#include <cstddef>
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
 #include <vil/vil_fwd.h>
 
 //: Compute nearest neighbour interpolation at (x,y), no bound checks. Requires -0.5<x<ni-0.5, -0.5<y<nj-0.5
@@ -22,7 +23,7 @@
 template<class T>
 inline T vil_nearest_interp_unsafe(double x, double y, const T* data,
                                    int /*nx*/, int /*ny*/,
-                                   vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                   std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   int ix = int(x + 0.5);
   int iy = int(y + 0.5);
@@ -45,7 +46,7 @@ inline T vil_nearest_interp_unsafe(const vil_image_view<T>& view, double x, doub
 template<class T>
 inline T vil_nearest_interp_safe(double x, double y, const T* data,
                                  int nx, int ny,
-                                 vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                 std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   int ix = int(x + 0.5);
   int iy = int(y + 0.5);
@@ -77,7 +78,7 @@ inline T vil_nearest_interp_safe(
 template<class T>
 inline T vil_nearest_interp(double x, double y, const T* data,
                             int nx, int ny,
-                            vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                            std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   int ix = int(x + 0.5);
   int iy = int(y + 0.5);
@@ -110,7 +111,7 @@ inline T vil_nearest_interp(
 template<class T>
 inline T vil_nearest_interp_safe_extend(double x, double y, const T* data,
                                         int nx, int ny,
-                                        vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                        std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   int ix = int(x + 0.5);
   int iy = int(y + 0.5);

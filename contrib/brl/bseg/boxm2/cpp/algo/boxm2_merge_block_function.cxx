@@ -1,11 +1,13 @@
+#include <iostream>
+#include <list>
 #include "boxm2_merge_block_function.h"
-#include <vcl_list.h>
+#include <vcl_compiler.h>
 
 //:
 // \file
 
 //: initialize generic data base pointers as their data type
-bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_data_base*>& datas, float prob_thresh)
+bool boxm2_merge_block_function::init_data(boxm2_block* blk, std::vector<boxm2_data_base*>& datas, float prob_thresh)
 {
     //store block and pointer to uchar16 3d block
     blk_   = blk;
@@ -13,7 +15,7 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
 
     //store data buffers
     if (datas.size() < 3) {
-      vcl_cout<<"boxm2_merge_block_function:: too few data buffers passed in"<<vcl_endl;
+      std::cout<<"boxm2_merge_block_function:: too few data buffers passed in"<<std::endl;
       return false;
     }
     int i=0;
@@ -23,6 +25,13 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
 
     //Data length now is constant
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+      return false;
+    }
+
     data_len_ = (int) (alph->buffer_length()/alphaTypeSize);
     alpha_   = (float*)   alph->data_buffer();
     mog_     = (uchar8*)  mog->data_buffer();
@@ -32,7 +41,7 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
     max_level_ = blk_->max_level();
 
     //max alpha integrated
-    //max_alpha_int_ = -vcl_log(1.f - prob_thresh);
+    //max_alpha_int_ = -std::log(1.f - prob_thresh);
     prob_thresh_ = prob_thresh;
 
     //length of one side of a sub block
@@ -40,7 +49,7 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
 
     //USE rootlevel to determine MAX_INNER and MAX_CELLS
     if (max_level_ == 1) {
-      vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+      std::cout<<"Trying to refine scene with max level 1"<<std::endl;
       return true;
     }
     else if (max_level_ == 2) {
@@ -52,12 +61,12 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
     else if (max_level_ == 4) {
       MAX_INNER_CELLS_=73, MAX_CELLS_=585;
     }
-    vcl_cout<<"Merge Info: [blk "<<blk->block_id()
+    std::cout<<"Merge Info: [blk "<<blk->block_id()
             <<"] [blk_len "<<block_len_
             <<"] [data_len "<<data_len_
             <<"] [prob_thresh "<<prob_thresh_
             <<"] [max level "<<max_level_
-            <<']'<<vcl_endl;
+            <<']'<<std::endl;
 
     //for debugging
     merge_count_ = 0;
@@ -77,9 +86,9 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
 //    - get a new data pointer (with newSize), will create CPU buffer and GPU buffer
 //    - Run refine_data_kernel with the two buffers
 //    - delete the old BOCL_MEM*, and that's it...
-bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
+bool boxm2_merge_block_function::merge(std::vector<boxm2_data_base*>& datas)
 {
-  vcl_cout<<"CPU merge:"<<vcl_endl;
+  std::cout<<"CPU merge:"<<std::endl;
 
   //1. loop over each tree, refine it in place (keep a vector of locations for
   boxm2_array_3d<uchar16>  trees = blk_->trees_copy();  //trees to refine
@@ -102,12 +111,12 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
       int newSize = refined_tree.num_cells();
 
       //cache refined tree
-      vcl_memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
+      std::memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
       dataSize += newSize;
   }
 
   //2. allocate new data arrays of the appropriate size
-  vcl_cout<<"Allocating new data blocks of length "<<dataSize<<vcl_endl;
+  std::cout<<"Allocating new data blocks of length "<<dataSize<<std::endl;
   boxm2_block_id id = datas[0]->block_id();
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize * sizeof(float) ], dataSize * sizeof(float), id);
   boxm2_data_base* newM = new boxm2_data_base(new char[dataSize * sizeof(uchar8)], dataSize * sizeof(uchar8), id);
@@ -117,7 +126,7 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
   ushort4* num_obs_cpy = (ushort4*) newN->data_buffer();
 
   //3. loop through tree again, putting the data in the right place
-  vcl_cout<<"Swapping data into new blocks..."<<vcl_endl;
+  std::cout<<"Swapping data into new blocks..."<<std::endl;
   int newInitCount = 0;
   currIndex = 0;
   for (blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter, ++currIndex)
@@ -147,13 +156,13 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
                                       num_obs_cpy+root_index);
 
       //4. store old tree in new tree, swap data out
-      vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
+      std::memcpy(blk_iter, refined_tree.get_bits(), 16);
   }
   blk_->set_trees(trees);
-  vcl_cout<<"Number of merged cells: "<<merge_count_ << '\n'
+  std::cout<<"Number of merged cells: "<<merge_count_ << '\n'
           <<"  New Alpha Size: "<<newA->buffer_length() / 1024.0/1024.0<<" mb" << '\n'
           <<"  New MOG   Size: "<<newM->buffer_length() / 1024.0/1024.0<<" mb" << '\n'
-          <<"  New NOBS  Size: "<<newN->buffer_length() / 1024.0/1024.0<<" mb" << vcl_endl;
+          <<"  New NOBS  Size: "<<newN->buffer_length() / 1024.0/1024.0<<" mb" << std::endl;
 
   //3. Replace data in the cache
   boxm2_cache_sptr cache = boxm2_cache::instance();
@@ -186,7 +195,7 @@ boct_bit_tree boxm2_merge_block_function::merge_bit_tree(boct_bit_tree& unrefine
   float probs[8];
 
   //push back first generation
-  vcl_list<int> toVisit;
+  std::list<int> toVisit;
   for (int i=1; i<9; ++i)
     toVisit.push_back(i);
 
@@ -206,7 +215,7 @@ boct_bit_tree boxm2_merge_block_function::merge_bit_tree(boct_bit_tree& unrefine
     //calculate the theoretical radius of this cell
     int curr_depth = unrefined_tree.depth_at(currBit);
     float side_len = (float)block_len_ / float(1<<curr_depth);
-    probs[genCounter++] = 1.0f - (float)vcl_exp(-alpha * side_len);
+    probs[genCounter++] = 1.0f - (float)std::exp(-alpha * side_len);
 
     //track current generation's leaf status, and push back children if not
     if (! unrefined_tree.is_leaf(currBit)) {
@@ -265,10 +274,10 @@ int boxm2_merge_block_function::move_data( boct_bit_tree& old_tree,
 
   //place to get data and place to put it in new buffer
   int oldDataIndex=0, newDataIndex=0;
-  float max_alpha = -vcl_log(1.0f - init_prob_);
+  float max_alpha = -std::log(1.0f - init_prob_);
 
   //push back root
-  vcl_list<int> toVisit;
+  std::list<int> toVisit;
   toVisit.push_back(0);
   while ( !toVisit.empty() )
   {
@@ -317,7 +326,7 @@ int boxm2_merge_block_function::move_data( boct_bit_tree& old_tree,
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_merge_block( boxm2_scene_sptr scene,
                         boxm2_block* blk,
-                        vcl_vector<boxm2_data_base*> & datas,
+                        std::vector<boxm2_data_base*> & datas,
                         float prob_thresh,
                         bool is_random)
 {

@@ -3,13 +3,13 @@
 // \file
 
 //: global initialization for singleton instance_
-boxm2_cache_sptr boxm2_cache::instance_ = 0;
+boxm2_cache_sptr boxm2_cache::instance_ = VXL_NULLPTR;
 
 //: Only one instance should be created (by a derived class)
 boxm2_cache_sptr boxm2_cache::instance()
 {
   if (!instance_)
-    vcl_cerr<<"warning: boxm2_cache:: instance has not been created\n";
+    std::cerr<<"warning: boxm2_cache:: instance has not been created\n";
   return instance_;
 }
 

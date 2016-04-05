@@ -25,7 +25,7 @@ public:
   volm_desc_land_matcher() {}
 
   //: Constructor
-  volm_desc_land_matcher(vcl_string const& NLCD_folder, vgl_point_3d<double>& query_gt_loc);
+  volm_desc_land_matcher(std::string const& NLCD_folder, vgl_point_3d<double>& query_gt_loc);
 
   //: Destrcutor
   ~volm_desc_land_matcher() {}
@@ -36,11 +36,11 @@ public:
   //: Compare two descriptor a and b and return a score to quantifies the similarity
   virtual float score(volm_desc_sptr const& query, volm_desc_sptr const& index);
 
-  virtual vcl_string get_index_type_str() { return volm_desc_land_indexer::get_name(); }
+  virtual std::string get_index_type_str() { return volm_desc_land_indexer::get_name(); }
 
 private:
-  //vcl_string query_category_file_;
-  vcl_vector<volm_img_info> NLCD_imgs_;
+  //std::string query_category_file_;
+  std::vector<volm_img_info> NLCD_imgs_;
   vgl_point_3d<double> query_gt_loc_;
 
 };

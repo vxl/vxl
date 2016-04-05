@@ -20,6 +20,6 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon<T> & v);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os,const vgl_polygon<T> & b);
+void vsl_print_summary(std::ostream& os,const vgl_polygon<T> & b);
 
 #endif // vgl_io_polygon_h

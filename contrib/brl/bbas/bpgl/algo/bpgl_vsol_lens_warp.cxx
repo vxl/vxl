@@ -1,4 +1,6 @@
 // This is bbas/bpgl/algo/bpgl_vsol_lens_warp.cxx
+#include <list>
+#include <iostream>
 #include "bpgl_vsol_lens_warp.h"
 //:
 // \file
@@ -11,8 +13,7 @@
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <vcl_list.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 //: Apply lens distortion to this vsol_spatial_object_2d and produce a new spatial object
@@ -48,7 +49,7 @@ bpgl_vsol_lens_warp(const vsol_spatial_object_2d_sptr& obj,
       return bpgl_vsol_lens_warp(pg, lens, invert, midpt_thresh).ptr();
     }
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 //: Apply lens distortion to this vsol_point_2d and produce a new point
@@ -59,7 +60,7 @@ bpgl_vsol_lens_warp(const vsol_point_2d_sptr& pt,
                     double midpt_thresh)
 {
   if ( midpt_thresh <= 0 )
-    return 0;
+    return VXL_NULLPTR;
   if (invert)
     return new vsol_point_2d( lens.undistort( vgl_homg_point_2d<double>(pt->get_p()) ) );
   else
@@ -74,7 +75,7 @@ bpgl_vsol_warp_divide(const vsol_line_2d_sptr& ln,
                       const vpgl_lens_distortion<double>& lens,
                       bool invert,
                       double midpt_thresh,
-                      vcl_list<vsol_point_2d_sptr>& pts)
+                      std::list<vsol_point_2d_sptr>& pts)
 {
   if ( midpt_thresh <= 0 )
     return false;
@@ -84,7 +85,7 @@ bpgl_vsol_warp_divide(const vsol_line_2d_sptr& ln,
   if (vgl_distance(wmp->get_p(), dmp->get_p()) < midpt_thresh)
     return false;
 
-  vcl_list<vsol_point_2d_sptr> pts1, pts2;
+  std::list<vsol_point_2d_sptr> pts1, pts2;
   bpgl_vsol_warp_divide(new vsol_line_2d(ln->p0(),mp),
                          new vsol_line_2d(wln->p0(),dmp),
                          lens, invert, midpt_thresh, pts1);
@@ -109,16 +110,16 @@ bpgl_vsol_lens_warp(const vsol_line_2d_sptr& ln,
   vsol_point_2d_sptr p0 = bpgl_vsol_lens_warp(ln->p0(), lens, invert, midpt_thresh);
   vsol_point_2d_sptr p1 = bpgl_vsol_lens_warp(ln->p1(), lens, invert, midpt_thresh);
   if (!p0 || !p1)
-    return NULL;
+    return VXL_NULLPTR;
   vsol_line_2d_sptr line = new vsol_line_2d(p0,p1);
-  vcl_list<vsol_point_2d_sptr> pts;
+  std::list<vsol_point_2d_sptr> pts;
   bpgl_vsol_warp_divide(ln,line,lens,invert,midpt_thresh,pts);
   if (pts.empty())
     return line.ptr();
   pts.push_front(p0);
   pts.push_back(p1);
-  vcl_vector<vsol_point_2d_sptr> v_pts;
-  for (vcl_list<vsol_point_2d_sptr>::iterator i = pts.begin();
+  std::vector<vsol_point_2d_sptr> v_pts;
+  for (std::list<vsol_point_2d_sptr>::iterator i = pts.begin();
        i != pts.end(); ++i )
     v_pts.push_back(*i);
   return new vsol_polyline_2d(v_pts);
@@ -132,7 +133,7 @@ bpgl_vsol_lens_warp(const vsol_polyline_2d_sptr& pln,
                     bool invert,
                     double midpt_thresh)
 {
-  vcl_list<vsol_point_2d_sptr> pts;
+  std::list<vsol_point_2d_sptr> pts;
   vsol_point_2d_sptr last_p = pln->p0();
   vsol_point_2d_sptr last_dp = bpgl_vsol_lens_warp(last_p, lens, invert, midpt_thresh);
   pts.push_back(last_dp);
@@ -141,18 +142,18 @@ bpgl_vsol_lens_warp(const vsol_polyline_2d_sptr& pln,
     vsol_point_2d_sptr p = pln->vertex(i);
     vsol_point_2d_sptr dp = bpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return 0;
+      return VXL_NULLPTR;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
-    vcl_list<vsol_point_2d_sptr> new_pts;
+    std::list<vsol_point_2d_sptr> new_pts;
     bpgl_vsol_warp_divide(ln,wln,lens,invert,midpt_thresh,new_pts);
     pts.splice(pts.end(),new_pts);
     pts.push_back(dp);
     last_p = p;
     last_dp = dp;
   }
-  vcl_vector<vsol_point_2d_sptr> v_pts;
-  for (vcl_list<vsol_point_2d_sptr>::iterator i = pts.begin();
+  std::vector<vsol_point_2d_sptr> v_pts;
+  for (std::list<vsol_point_2d_sptr>::iterator i = pts.begin();
        i != pts.end(); ++i )
     v_pts.push_back(*i);
   return new vsol_polyline_2d(v_pts);
@@ -166,7 +167,7 @@ bpgl_vsol_lens_warp(const vsol_digital_curve_2d_sptr& dc,
                     bool invert,
                     double midpt_thresh)
 {
-  vcl_list<vsol_point_2d_sptr> pts;
+  std::list<vsol_point_2d_sptr> pts;
   vsol_point_2d_sptr last_p = dc->p0();
   vsol_point_2d_sptr last_dp = bpgl_vsol_lens_warp(last_p, lens, invert, midpt_thresh);
   pts.push_back(last_dp);
@@ -174,18 +175,18 @@ bpgl_vsol_lens_warp(const vsol_digital_curve_2d_sptr& dc,
     vsol_point_2d_sptr p = dc->point(i);
     vsol_point_2d_sptr dp = bpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return 0;
+      return VXL_NULLPTR;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
-    vcl_list<vsol_point_2d_sptr> new_pts;
+    std::list<vsol_point_2d_sptr> new_pts;
     bpgl_vsol_warp_divide(ln,wln,lens,invert,midpt_thresh,new_pts);
     pts.splice(pts.end(),new_pts);
     pts.push_back(dp);
     last_p = p;
     last_dp = dp;
   }
-  vcl_vector<vsol_point_2d_sptr> v_pts;
-  for (vcl_list<vsol_point_2d_sptr>::iterator i = pts.begin();
+  std::vector<vsol_point_2d_sptr> v_pts;
+  for (std::list<vsol_point_2d_sptr>::iterator i = pts.begin();
        i != pts.end(); ++i )
     v_pts.push_back(*i);
   return new vsol_digital_curve_2d(v_pts);
@@ -199,25 +200,25 @@ bpgl_vsol_lens_warp(const vsol_polygon_2d_sptr& pg,
                     bool invert,
                     double midpt_thresh)
 {
-  vcl_list<vsol_point_2d_sptr> pts;
+  std::list<vsol_point_2d_sptr> pts;
   vsol_point_2d_sptr last_p = pg->vertex(pg->size()-1);
   vsol_point_2d_sptr last_dp = bpgl_vsol_lens_warp(last_p, lens, invert, midpt_thresh);
   for (unsigned int i=0; i<pg->size(); ++i){
     vsol_point_2d_sptr p = pg->vertex(i);
     vsol_point_2d_sptr dp = bpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return 0;
+      return VXL_NULLPTR;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
-    vcl_list<vsol_point_2d_sptr> new_pts;
+    std::list<vsol_point_2d_sptr> new_pts;
     bpgl_vsol_warp_divide(ln,wln,lens,invert,midpt_thresh,new_pts);
     pts.splice(pts.end(),new_pts);
     pts.push_back(dp);
     last_p = p;
     last_dp = dp;
   }
-  vcl_vector<vsol_point_2d_sptr> v_pts;
-  for (vcl_list<vsol_point_2d_sptr>::iterator i = pts.begin();
+  std::vector<vsol_point_2d_sptr> v_pts;
+  for (std::list<vsol_point_2d_sptr>::iterator i = pts.begin();
        i != pts.end(); ++i )
     v_pts.push_back(*i);
   return new vsol_polygon_2d(v_pts);
@@ -233,7 +234,7 @@ bpgl_vsol_lens_warp(vsol_spatial_object_2d_sptr& obj,
                     bool invert)
 {
   if (invert)
-    vcl_cerr << "Warning: invert not yet implemented in bpgl_vsol_lens_warp\n";
+    std::cerr << "Warning: invert not yet implemented in bpgl_vsol_lens_warp\n";
 
   if (vsol_point_2d_sptr pt = obj->cast_to_point())
   {
@@ -292,7 +293,7 @@ bpgl_vsol_lens_warp(vsol_line_2d_sptr& ln,
                     bool invert)
 {
   if (invert)
-    vcl_cerr << "Warning: line invert not yet implemented in bpgl_vsol_lens_warp\n";
+    std::cerr << "Warning: line invert not yet implemented in bpgl_vsol_lens_warp\n";
 
   vsol_point_2d_sptr p0=ln->p0(), p1=ln->p1();
   return bpgl_vsol_lens_warp(p0, lens) &&
@@ -308,7 +309,7 @@ bpgl_vsol_lens_warp(vsol_polyline_2d_sptr& pln,
                     bool invert)
 {
   if (invert)
-    vcl_cerr << "Warning: polyline invert not yet implemented in bpgl_vsol_lens_warp\n";
+    std::cerr << "Warning: polyline invert not yet implemented in bpgl_vsol_lens_warp\n";
 
   for (unsigned int i=0; i<pln->size(); ++i){
     vsol_point_2d_sptr p=pln->vertex(i);
@@ -328,7 +329,7 @@ bpgl_vsol_lens_warp(vsol_digital_curve_2d_sptr& dc,
                     bool invert)
 {
   if (invert)
-    vcl_cerr << "Warning: curve invert not yet implemented in bpgl_vsol_lens_warp\n";
+    std::cerr << "Warning: curve invert not yet implemented in bpgl_vsol_lens_warp\n";
 
   for (unsigned int i=0; i<dc->size(); ++i) {
     vsol_point_2d_sptr p=dc->point(i);
@@ -348,7 +349,7 @@ bpgl_vsol_lens_warp(vsol_polygon_2d_sptr& pg,
                     bool invert)
 {
   if (invert)
-    vcl_cerr << "Warning: polygon invert not yet implemented in bpgl_vsol_lens_warp\n";
+    std::cerr << "Warning: polygon invert not yet implemented in bpgl_vsol_lens_warp\n";
 
   for (unsigned int i=0; i<pg->size(); ++i){
     vsol_point_2d_sptr p=pg->vertex(i);

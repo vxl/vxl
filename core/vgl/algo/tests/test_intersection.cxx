@@ -1,8 +1,9 @@
 // Some tests for vgl_intersection
 // Gamze Tunali, Jan 2007.
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
-#include <vcl_list.h>
+#include <iostream>
+#include <limits>
+#include <list>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_2d.h>
@@ -26,7 +27,7 @@ static void test_plane_intersection()
   vgl_line_3d_2_points<double> l2(vgl_point_3d<double>(0,0,0),vgl_point_3d<double>(10,0,-10));
   vgl_point_3d<double> pt2 = vgl_intersection(l2, pl1);
 
-  const double inf = vcl_numeric_limits<double>::infinity();
+  const double inf = std::numeric_limits<double>::infinity();
   TEST("vgl_intersection(l2,pl1) = (inf,inf,inf)", pt2,
        vgl_point_3d<double>(inf, inf, inf));
 
@@ -122,7 +123,7 @@ static void test_multiple_planes()
 
   vgl_plane_3d<double> pl2(s3,-s3,0,-s3);
 
-  vcl_list<vgl_plane_3d<double> > planes;
+  std::list<vgl_plane_3d<double> > planes;
   planes.push_back(pl0);   planes.push_back(pl1); planes.push_back(pl2);
   vgl_infinite_line_3d<double> line = vgl_intersection(planes);
   vgl_point_3d<double> p0(2, 1, 1);
@@ -132,10 +133,10 @@ static void test_multiple_planes()
   vgl_plane_3d<double> wpl0(0,1,0,0.0);
   vgl_plane_3d<double> wpl1(1,0,0, 0.0);
   vgl_plane_3d<double> wpl2(0.707,0.707,0.0,1);
-  vcl_list<vgl_plane_3d<double> > wplanes;
+  std::list<vgl_plane_3d<double> > wplanes;
   wplanes.push_back(wpl0); wplanes.push_back(wpl1); wplanes.push_back(wpl2);
 
-  vcl_vector<double> ws;
+  std::vector<double> ws;
   ws.push_back(1.0);ws.push_back(1.0);ws.push_back(1.0);
   double residual=0.0;
   vgl_infinite_line_3d<double> weightedline;
@@ -150,8 +151,8 @@ static void test_lines_intersection()
   bool is_intersection;
   vgl_point_2d<double> point_intersection(0,0);
   is_intersection = vgl_intersection( vgl_line_2d<double>( vgl_point_2d<double>(1,1),
-                                                           vgl_vector_2d<double>(0.5, vcl_sqrt(3.0)/2)),
-                                      vgl_line_2d<double>( -vcl_sqrt(2.0), vcl_sqrt(2.0), 0 ),
+                                                           vgl_vector_2d<double>(0.5, std::sqrt(3.0)/2)),
+                                      vgl_line_2d<double>( -std::sqrt(2.0), std::sqrt(2.0), 0 ),
                                       point_intersection );
   double intersection_error;
   intersection_error =  (point_intersection.x() - 1.0) * (point_intersection.x() - 1.0);
@@ -167,7 +168,7 @@ static void test_lines_intersection()
 
 static void test_lines_intersect_in_tol()
 {
-  vcl_cout<<"Testing intersection of two line segments with tolerance.\n";
+  std::cout<<"Testing intersection of two line segments with tolerance.\n";
 
   // intersection: should return true
   vgl_point_2d<double> p1(0,0), p2(2,2), q1(2,1), q2(1,2);
@@ -231,7 +232,7 @@ static void test_lines_intersect_in_tol()
 
 static void test_box_2d_intersection()
 {
-  vcl_cout<<"Testing intersection of 2d box and point.\n";
+  std::cout<<"Testing intersection of 2d box and point.\n";
   vgl_point_2d<double> p0(0.3, 0.3), p1(0.7, 0.3), p2(0.6, 0.7), p3(0.7, 0.7), p4(0.8, 0.6);
   vgl_point_2d<double> bp0(0.6, 0.6), bp1(0.8, 0.8);
   vgl_box_2d<double> b1; b1.add(bp0); b1.add(bp1);
@@ -244,7 +245,7 @@ static void test_box_2d_intersection()
   TEST("point on boundary of box", vgl_intersection(b1, p2), true);
   TEST("point on corner of box", vgl_intersection(b1, p4), true);
 
-  vcl_cout<<"Testing intersection of two 2d boxes.\n";
+  std::cout<<"Testing intersection of two 2d boxes.\n";
   vgl_box_2d<double> b2;
   //Case I: one box inside other box
   b2.add(vgl_point_2d<double>(0.6,0.7)); b2.add(vgl_point_2d<double>(0.7,0.8));
@@ -260,7 +261,7 @@ static void test_box_2d_intersection()
 
 static void test_box_3d_intersection()
 {
-  vcl_cout<<"Testing intersection of 3d box and point.\n";
+  std::cout<<"Testing intersection of 3d box and point.\n";
   vgl_point_3d<int> p0(3,3,3), p1(7,3,5), p2(6,7,7), p3(7,7,7), p4(6,7,8), p5(6,8,8);
   vgl_point_3d<int> bp0(6,6,6), bp1(8,8,8);
   vgl_box_3d<int> b1; b1.add(bp0); b1.add(bp1);
@@ -274,7 +275,7 @@ static void test_box_3d_intersection()
   TEST("point on edge of box", vgl_intersection(b1, p4), true);
   TEST("point on corner of box", vgl_intersection(b1, p5), true);
 
-  vcl_cout<<"Testing intersection of two 3d boxes.\n";
+  std::cout<<"Testing intersection of two 3d boxes.\n";
   vgl_box_3d<int> b2;
   //Case I: one box inside other box
   b2.add(vgl_point_3d<int>(6,7,7)); b2.add(vgl_point_3d<int>(7,7,8));
@@ -347,7 +348,7 @@ static void test_box_3d_intersection()
 
 static void test_box_poly_intersection()
 {
-  vcl_cout<<"Testing intersection of box and polygon.\n";
+  std::cout<<"Testing intersection of box and polygon.\n";
   //test polygon probe
   //a rectangle at 45 degrees (oriented box)
   vgl_point_2d<float> pr0(0.3f, 0.7f), pr1(0.7f, 0.3f), pr2(0.5f, 0.9f),
@@ -395,8 +396,8 @@ static void test_box_poly_intersection()
 
 static void test_poly_line_intersection()
 {
-  vcl_cout << "Testing polygon - line intersection\n";
-  vcl_vector<vgl_point_2d<double> > sh0, sh1;
+  std::cout << "Testing polygon - line intersection\n";
+  std::vector<vgl_point_2d<double> > sh0, sh1;
   vgl_point_2d<double> p00(-10.0, -10.0), p01(10.0,-10.0);
   vgl_point_2d<double> p02(10.0, 10.0), p03(-10.0, 10.0);
   sh0.push_back(p00);   sh0.push_back(p01);
@@ -410,7 +411,7 @@ static void test_poly_line_intersection()
   // test line with all line-edge intersections
   vgl_point_2d<double> p0(-20.0, 0.0), p1(20.0, 0.0);
   vgl_line_2d<double> line_a(p0, p1);
-  vcl_vector<vgl_point_2d<double> > inters =
+  std::vector<vgl_point_2d<double> > inters =
     vgl_intersection<double>(poly, line_a);
   TEST("number of intersections, interior case", inters.size(), 4);
   double corrs=0.0;
@@ -422,7 +423,7 @@ static void test_poly_line_intersection()
   //check grazing intersection
   vgl_point_2d<double> pg0(-20.0, 1.0), pg1(20.0, 1.0);
   vgl_line_2d<double> line_g(pg0, pg1);
-  vcl_vector<vgl_point_2d<double> > ginter =
+  std::vector<vgl_point_2d<double> > ginter =
     vgl_intersection<double>(line_g, poly);
   TEST("number of intersections, vertex case", ginter.size(), 4);
   double t = -ginter[2].x() + ginter[3].x()+ginter[2].y()+ginter[3].y();
@@ -431,7 +432,7 @@ static void test_poly_line_intersection()
 
 void test_intersection()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing vgl_intersection\n"
            << "**************************\n\n";
   test_plane_intersection();

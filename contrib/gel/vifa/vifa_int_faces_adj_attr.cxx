@@ -5,8 +5,8 @@ vifa_int_faces_adj_attr::
 vifa_int_faces_adj_attr(void)
   : vifa_int_faces_attr(),
     closure_valid_(false),
-    seed_(NULL),
-    seed_attr_(NULL),
+    seed_(VXL_NULLPTR),
+    seed_attr_(VXL_NULLPTR),
     depth_(BAD_DEPTH)
 {
   init();
@@ -27,7 +27,7 @@ vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
   : vifa_int_faces_attr(fitter_params, gpp_s, gpp_w, cpp, np, factory),
     closure_valid_(false),
     seed_(seed),
-    seed_attr_(NULL),
+    seed_attr_(VXL_NULLPTR),
     depth_(depth),
     size_filter_(size_filter),
     junk_area_percentage_(junk_area_percentage),
@@ -52,7 +52,7 @@ vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
   : vifa_int_faces_attr(neighborhood, fitter_params, gpp_s, gpp_w, cpp, np, factory),
     closure_valid_(false), // still need to filter on size!
     seed_(seed),
-    seed_attr_(NULL),
+    seed_attr_(VXL_NULLPTR),
     depth_(depth),
     size_filter_(size_filter),
     junk_area_percentage_(junk_area_percentage),
@@ -146,7 +146,7 @@ NeighborhoodSize()
 
 // Populate a vector containing all attributes, including inherited ones.
 bool vifa_int_faces_adj_attr::
-GetAttributes(vcl_vector<float>& attrs)
+GetAttributes(std::vector<float>& attrs)
 {
   if (vifa_int_faces_attr::GetAttributes(attrs))
     return this->vifa_int_faces_adj_attr::GetNativeAttributes(attrs);
@@ -157,19 +157,19 @@ GetAttributes(vcl_vector<float>& attrs)
 // Append the attribute names to a vector in the same order as
 // GetAttributes.  KEEP IN SYNC WITH GetAttributes!!!
 void vifa_int_faces_adj_attr::
-GetAttributeNames(vcl_vector<vcl_string>& names)
+GetAttributeNames(std::vector<std::string>& names)
 {
   vifa_int_faces_attr::GetAttributeNames(names);
 
   for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
   {
-    vcl_string  name(attr_names[i]);
+    std::string  name(attr_names[i]);
     names.push_back("ratio" + name);
   }
 
   for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
   {
-    vcl_string  name(attr_names[i]);
+    std::string  name(attr_names[i]);
     names.push_back("minRatio" + name);
   }
 }
@@ -178,11 +178,11 @@ GetAttributeNames(vcl_vector<vcl_string>& names)
 // inherited).  KEEP IN SYNC WITH GETNAMES ABOVE!
 // Assumes that
 bool vifa_int_faces_adj_attr::
-GetNativeAttributes(vcl_vector<float>& attrs)
+GetNativeAttributes(std::vector<float>& attrs)
 {
   if (!this->ComputeAttributes())
   {
-    vcl_cerr << "Couldn't compute group adj attributes?\n";
+    std::cerr << "Couldn't compute group adj attributes?\n";
     return false;
   }
 
@@ -204,13 +204,13 @@ GetNativeAttributes(vcl_vector<float>& attrs)
 bool vifa_int_faces_adj_attr::
 compute_closure()
 {
-//  vcl_cout << " In ifsaa::compute_closure()...\n";
+//  std::cout << " In ifsaa::compute_closure()...\n";
 
   if (!closure_valid_)
   {
     if (faces_.empty())
     {
-//      vcl_cout << "faces_ is empty -- rebuilding\n";
+//      std::cout << "faces_ is empty -- rebuilding\n";
 
       if ((seed_) && (depth_ != BAD_DEPTH))
       {
@@ -226,7 +226,7 @@ compute_closure()
       }
     }
 
-//    vcl_cout << faces_.size() << " face(s)" << endl;
+//    std::cout << faces_.size() << " face(s)" << endl;
 
     float    original_area = 0;
     float    junk_area = 0;
@@ -246,7 +246,7 @@ compute_closure()
       }
     }
 
-//    vcl_cout << keep_faces.size() << " keep_face(s)" << endl;
+//    std::cout << keep_faces.size() << " keep_face(s)" << endl;
 
     faces_ = keep_faces;
     junk_percent_ = (float)junk_count_ / original_nbrhood_size;
@@ -255,14 +255,14 @@ compute_closure()
   }
 
 #if 0
-  vcl_cout << "Final faces_: " << faces_.size() << vcl_endl;
+  std::cout << "Final faces_: " << faces_.size() << std::endl;
 
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
-    vcl_cout << "  (" << (*f)->Xo() << ", " << (*f)->Yo() << "), "
+    std::cout << "  (" << (*f)->Xo() << ", " << (*f)->Yo() << "), "
              << (*f)->Npix() << " pixels\n";
 #endif
 
-//  vcl_cout << "Leaving ifsaa::compute_closure()\n";
+//  std::cout << "Leaving ifsaa::compute_closure()\n";
 
   return closure_valid_;
 }
@@ -356,24 +356,24 @@ compute_closure_step(int                       current_depth,
                      vtol_intensity_face_sptr  seed)
 {
 #ifdef CCS_DEBUG
-  vcl_cout << "ccs: depth " << current_depth << " of " << depth_;
+  std::cout << "ccs: depth " << current_depth << " of " << depth_;
 
   if (seed)
-    vcl_cout << " at seed " << seed->Xo() << ", " << seed->Yo();
+    std::cout << " at seed " << seed->Xo() << ", " << seed->Yo();
   else
-    vcl_cout << " with null seed";
+    std::cout << " with null seed";
 #endif
 
   if ((current_depth >= depth_) || (!seed))
   {
 #ifdef CCS_DEBUG
-    vcl_cout << "...bailing\n";
+    std::cout << "...bailing\n";
 #endif
     return;
   }
 #ifdef CCS_DEBUG
   else
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
 #endif
 
   // Get all the faces adjacent to the seed face
@@ -397,14 +397,14 @@ compute_closure_step(int                       current_depth,
     delete adj_faces;
   }
   else
-    vcl_cerr << "vifsaa::compute_closure_step(): No adj. faces found!\n";
+    std::cerr << "vifsaa::compute_closure_step(): No adj. faces found!\n";
 }
 
 vtol_intensity_face_sptr vifa_int_faces_adj_attr::
 get_adjacent_face_at_edge(vtol_intensity_face_sptr&  known_face,
                           vtol_edge_2d*              e)
 {
-  vtol_intensity_face_sptr  adj_face = 0;
+  vtol_intensity_face_sptr  adj_face = VXL_NULLPTR;
   face_list faces; e->faces(faces);
 
   // Expect only one or two intensity faces for 2-D case
@@ -430,7 +430,7 @@ get_adjacent_face_at_edge(vtol_intensity_face_sptr&  known_face,
 iface_list* vifa_int_faces_adj_attr::
 get_adjacent_faces(vtol_intensity_face_sptr&  known_face)
 {
-  iface_list*    faces = NULL;
+  iface_list*    faces = VXL_NULLPTR;
 
   if (known_face.ptr())
   {

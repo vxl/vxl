@@ -11,7 +11,8 @@
 // \author J. L. Mundy
 // \date 19 March 2006
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_image_resource.h>
@@ -34,7 +35,7 @@
 class vil_pyramid_image_resource : public vil_image_resource
 {
  public:
-  vil_pyramid_image_resource(vcl_vector<vil_image_resource_sptr> const& images);
+  vil_pyramid_image_resource(std::vector<vil_image_resource_sptr> const& images);
   virtual ~vil_pyramid_image_resource();
 
   //: The number of planes (or components) in the image.
@@ -75,7 +76,7 @@ class vil_pyramid_image_resource : public vil_image_resource
   virtual char const* file_format() const = 0;
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = 0) const;
+  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const;
 
   // === Methods particular to pyramid resource ===
 

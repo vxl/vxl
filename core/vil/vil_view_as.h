@@ -12,7 +12,8 @@
 // conversions for you.
 // \author Tim Cootes, Ian Scott - Manchester
 
-#include <vcl_complex.h>
+#include <complex>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
@@ -80,15 +81,15 @@ inline vil_image_view<vil_rgba<T> > vil_view_as_rgba(const vil_image_view<T>& v)
 // For example vsl_b_write(os, vil_view_as_complex(img); and vsl_b_read(...) will fail. Simply deep copy the
 // view before checking (or saving) the image to avoid problems.
 template<class T>
-inline vil_image_view<vcl_complex<T> >
+inline vil_image_view<std::complex<T> >
 vil_view_as_complex (const vil_image_view<T> & v)
 {
   if ((v.nplanes()%2!=0) || (v.planestep()!=1) || (v.istep()!=2 && v.jstep()!=2))
-      return vil_image_view<vcl_complex<T> >();
+      return vil_image_view<std::complex<T> >();
 
-  return vil_image_view<vcl_complex<T> > (
+  return vil_image_view<std::complex<T> > (
       v.memory_chunk(),
-      reinterpret_cast<vcl_complex<T> const *> (v.top_left_ptr()),
+      reinterpret_cast<std::complex<T> const *> (v.top_left_ptr()),
       v.ni(), v.nj(), v.nplanes()/2,
       v.istep()/2, v.jstep()/2, 1);
 }
@@ -102,7 +103,7 @@ vil_view_as_complex (const vil_image_view<T> & v)
 // view before checking (or saving) the image to avoid problems.
 template <class T>
 inline vil_image_view<T>
-vil_view_part (vil_image_view<vcl_complex<T> > img, int pt)
+vil_view_part (vil_image_view<std::complex<T> > img, int pt)
 {
   return vil_image_view<T> (
       img.memory_chunk(),
@@ -120,7 +121,7 @@ vil_view_part (vil_image_view<vcl_complex<T> > img, int pt)
 // view before checking (or saving) the image to avoid problems.
 template <class T>
 inline vil_image_view<T>
-vil_view_real_part (vil_image_view<vcl_complex<T> > img)
+vil_view_real_part (vil_image_view<std::complex<T> > img)
 {
   return vil_view_part (img, 0);
 }
@@ -134,7 +135,7 @@ vil_view_real_part (vil_image_view<vcl_complex<T> > img)
 // view before checking (or saving) the image to avoid problems.
 template <class T>
 inline vil_image_view<T>
-vil_view_imag_part (vil_image_view<vcl_complex<T> > img)
+vil_view_imag_part (vil_image_view<std::complex<T> > img)
 {
   return vil_view_part (img, 1);
 }

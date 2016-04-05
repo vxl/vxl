@@ -21,8 +21,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_complex.h>
+#include <vector>
+#include <iostream>
+#include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
@@ -50,9 +52,9 @@ class brip_vil1_float_ops
   static void non_maximum_suppression(vil1_memory_image_of<float> const & input,
                                       const int n,
                                       const float thresh,
-                                      vcl_vector<float>& x_pos,
-                                      vcl_vector<float>& y_pos,
-                                      vcl_vector<float>& value);
+                                      std::vector<float>& x_pos,
+                                      std::vector<float>& y_pos,
+                                      std::vector<float>& value);
 
   //: downsamples the input using the Bert-Adelson algorithm
   static vil1_memory_image_of<float>
@@ -190,12 +192,12 @@ class brip_vil1_float_ops
   convert_to_float(vnl_matrix<float> const & matrix);
 
   //: loads a 2n+1 x 2n+1 convolution kernel (see .cxx for file format)
-  static vbl_array_2d<float> load_kernel(vcl_string const & file);
+  static vbl_array_2d<float> load_kernel(std::string const & file);
 
   //: compute basis images for a set of input images
   static
-    void basis_images(vcl_vector<vil1_memory_image_of<float> > const & input_images,
-                      vcl_vector<vil1_memory_image_of<float> > & basis);
+    void basis_images(std::vector<vil1_memory_image_of<float> > const & input_images,
+                      std::vector<vil1_memory_image_of<float> > & basis);
 
   //: compute the Fourier transform using the vnl FFT algorithm
   static bool fourier_transform(vil1_memory_image_of<float> const & input,
@@ -292,11 +294,11 @@ class brip_vil1_float_ops
   static bool fft_1d(int dir, int m, double* x, double* y);
 
   //: Two-dimensional fft
-  static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
+  static bool fft_2d(vnl_matrix<std::complex<double> >& c, int nx,int ny,int dir);
   //: Transform the fft coefficients from/to fft/frequency order(self inverse).
   static
-    void ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
-                                vnl_matrix<vcl_complex<double> > & F2);
+    void ftt_fourier_2d_reorder(vnl_matrix<std::complex<double> > const& F1,
+                                vnl_matrix<std::complex<double> > & F2);
   //: Blocking filter function
   static float gaussian_blocking_filter(const float dir_fx,
                                         const float dir_fy,

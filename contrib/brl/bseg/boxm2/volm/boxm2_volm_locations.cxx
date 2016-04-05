@@ -14,10 +14,10 @@ void
 boxm2_volm_loc_hypotheses::add_dems(boxm2_scene_sptr scene,
                                     unsigned interval_i, unsigned interval_j,
                                     float altitude,
-                                    vcl_vector<vil_image_view<float> >& dems, vcl_vector<vpgl_geo_camera*>& cams)
+                                    std::vector<vil_image_view<float> >& dems, std::vector<vpgl_geo_camera*>& cams)
 {
-  vcl_cout << "tile lat: " << tile_.lat_ << " lon: " << tile_.lon_ << vcl_endl
-           << "dem ni: " << dems[0].ni() << " nj: " << dems[0].nj() << vcl_endl;
+  std::cout << "tile lat: " << tile_.lat_ << " lon: " << tile_.lon_ << std::endl
+           << "dem ni: " << dems[0].ni() << " nj: " << dems[0].nj() << std::endl;
 
   vgl_box_3d<double> sbox = scene->bounding_box();
 
@@ -33,9 +33,9 @@ boxm2_volm_loc_hypotheses::add_dems(boxm2_scene_sptr scene,
         double u,v;
         cams[k]->global_to_img(lon, lat, 0, u, v);
         // find the nearest pixel in the dem (no interpolation of any kind)
-        int uu = (int)vcl_floor(u+0.5);
-        int vv = (int)vcl_floor(v+0.5);
-        //vcl_cout << "i: " << i << " j: " << j << " lon: " << lon << " lat: " << lat << " u: " << u << " v: " << v << " uu: " << uu << " vv: " << vv << vcl_endl;
+        int uu = (int)std::floor(u+0.5);
+        int vv = (int)std::floor(v+0.5);
+        //std::cout << "i: " << i << " j: " << j << " lon: " << lon << " lat: " << lat << " u: " << u << " v: " << v << " uu: " << uu << " vv: " << vv << std::endl;
         if (uu >= 0 && vv >= 0 && uu < (int)dems[k].ni() && vv < (int)dems[k].nj()) {
           elev = dems[k]((unsigned)uu,(unsigned)vv);
           break;
@@ -56,7 +56,7 @@ bool boxm2_volm_loc_hypotheses::add(boxm2_scene_sptr scene, vgl_box_3d<double>& 
   if (scene_bounding_box.contains(local)) {
     vgl_point_3d<float> ll((float)lx, (float)ly, (float)lz);
     locs_.push_back(ll);
-    pixels_.push_back(vcl_pair<unsigned, unsigned>(i,j));
+    pixels_.push_back(std::pair<unsigned, unsigned>(i,j));
     return true;
   }
   return false;
@@ -69,7 +69,7 @@ bool boxm2_volm_loc_hypotheses::add(double lon, double lat, float cent_x, float 
     return false;
   vgl_point_3d<float> ll(cent_x, cent_y, cent_z);
   locs_.push_back(ll);
-  pixels_.push_back(vcl_pair<unsigned, unsigned>(i,j));
+  pixels_.push_back(std::pair<unsigned, unsigned>(i,j));
   return true;
 }
 
@@ -77,11 +77,11 @@ bool boxm2_volm_loc_hypotheses::add(double lon, double lat, float cent_x, float 
 
 
 //: construct by reading from a binary file
-boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(vcl_string bin_file)
+boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(std::string bin_file)
 {
   vsl_b_ifstream is(bin_file.c_str());
   if (!is) {
-    vcl_cerr << "In boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses() -- cannot open: " << bin_file << vcl_endl;
+    std::cerr << "In boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses() -- cannot open: " << bin_file << std::endl;
     return;
   }
   this->b_read(is);
@@ -89,7 +89,7 @@ boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(vcl_string bin_file)
 
 
 //: construct the output tile image using the score, score vector's size need to be same as locs_ size
-void boxm2_volm_loc_hypotheses::generate_output_tile(vcl_vector<float>& scores, int uncertainty_size_i, int uncertainty_size_j, float cut_off, vil_image_view<unsigned int>& out)
+void boxm2_volm_loc_hypotheses::generate_output_tile(std::vector<float>& scores, int uncertainty_size_i, int uncertainty_size_j, float cut_off, vil_image_view<unsigned int>& out)
 {
   assert(scores.size() == locs_.size());
   vbl_array_2d<bool> mask;
@@ -98,24 +98,24 @@ void boxm2_volm_loc_hypotheses::generate_output_tile(vcl_vector<float>& scores, 
   volm_tile::get_uncertainty_region((float)uncertainty_size_i, (float)uncertainty_size_j, cut_off, mask, kernel);
 
   #if 0
-  vcl_cout << "kernel_max: " << kernel[kernel.rows()/2][kernel.cols()/2]
+  std::cout << "kernel_max: " << kernel[kernel.rows()/2][kernel.cols()/2]
            << "uncertainty mask:\n";
   for (unsigned i = 0; i < mask.cols(); i++) {
     for (unsigned j = 0; j < mask.rows(); j++)
-      vcl_cout << mask[i][j] << ' ';
-    vcl_cout << '\n';
+      std::cout << mask[i][j] << ' ';
+    std::cout << '\n';
   }
   for (unsigned i = 0; i < kernel.cols(); i++) {
     for (unsigned j = 0; j < kernel.rows(); j++)
-      vcl_cout << kernel[i][j] << ' ';
-    vcl_cout << '\n';
+      std::cout << kernel[i][j] << ' ';
+    std::cout << '\n';
   }
   #endif
   for (unsigned i = 0; i < scores.size(); i++)
     volm_tile::mark_uncertainty_region(pixels_[i].first,  pixels_[i].second, scores[i], mask, kernel, out);
 }
 
-bool boxm2_volm_loc_hypotheses::write_hypotheses(vcl_string out_file)
+bool boxm2_volm_loc_hypotheses::write_hypotheses(std::string out_file)
 {
   vsl_b_ofstream os(out_file.c_str());
   if (!os)
@@ -155,7 +155,7 @@ void boxm2_volm_loc_hypotheses::b_read(vsl_b_istream &is)
      tile_.b_read(is);
      unsigned s;
      vsl_b_read(is, s);
-     pixels_.resize(s, vcl_pair<unsigned, unsigned>(0,0));
+     pixels_.resize(s, std::pair<unsigned, unsigned>(0,0));
      for (unsigned i = 0; i < pixels_.size(); i++) {
        vsl_b_read(is, pixels_[i].first);
        vsl_b_read(is, pixels_[i].second);
@@ -171,26 +171,26 @@ void boxm2_volm_loc_hypotheses::b_read(vsl_b_istream &is)
      }
      break; }
    default:
-    vcl_cerr << "I/O ERROR: boxm2_volm_loc_hypotheses::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: boxm2_volm_loc_hypotheses::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 //: for debugging purposes
-bool boxm2_volm_loc_hypotheses::write_hypotheses_kml(boxm2_scene_sptr scene, vcl_string kml_file)
+bool boxm2_volm_loc_hypotheses::write_hypotheses_kml(boxm2_scene_sptr scene, std::string kml_file)
 {
-  vcl_ofstream ofs(kml_file.c_str());
+  std::ofstream ofs(kml_file.c_str());
   if (!ofs) {
-    vcl_cerr << "In boxm2_volm_loc_hypotheses::write_hypotheses_kml() -- cannot open: " << kml_file << vcl_endl;
+    std::cerr << "In boxm2_volm_loc_hypotheses::write_hypotheses_kml() -- cannot open: " << kml_file << std::endl;
     return false;
   }
   bkml_write::open_document(ofs);
   for (unsigned i = 0; i < locs_.size(); i++) {
     double lon, lat, gz;
     scene->lvcs().local_to_global(locs_[i].x(), locs_[i].y(), locs_[i].z(), vpgl_lvcs::wgs84, lon, lat, gz);
-    vcl_stringstream str; str << "loc hypotheses " << i;
+    std::stringstream str; str << "loc hypotheses " << i;
     vnl_double_2 ul(lat, lon); vnl_double_2 ur(lat+0.0005, lon); vnl_double_2 ll(lat, lon-0.0005); vnl_double_2 lr(lat+0.0005, lon-0.0005);
     bkml_write::write_box(ofs, str.str(), str.str(), ul, ur, ll, lr);
   }

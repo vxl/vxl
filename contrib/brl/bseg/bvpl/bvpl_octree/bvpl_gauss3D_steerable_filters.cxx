@@ -20,34 +20,34 @@ bvpl_gauss3D_steerable_filters::bvpl_gauss3D_steerable_filters()
   basis_names_.clear();
 
   //zerth order - that is gaussian functio
-  vcl_string G0a[3] = {"f01", "f02", "f02"};
-  basis_.push_back(vcl_vector<vcl_string>(&G0a[0], &G0a[3]));
+  std::string G0a[3] = {"f01", "f02", "f02"};
+  basis_.push_back(std::vector<std::string>(&G0a[0], &G0a[3]));
   basis_names_.push_back("G0a");
 
   //first order derivatives
-  vcl_string G1a[3] = {"f11", "f12", "f12"};
-  vcl_string G1b[3] = {"f12", "f11", "f12"};
-  vcl_string G1c[3] = {"f12", "f12", "f11"};
-  basis_.push_back(vcl_vector<vcl_string>(&G1a[0], &G1a[3]));
-  basis_.push_back(vcl_vector<vcl_string>(&G1b[0], &G1b[3]));
-  basis_.push_back(vcl_vector<vcl_string>(&G1c[0], &G1c[3]));
+  std::string G1a[3] = {"f11", "f12", "f12"};
+  std::string G1b[3] = {"f12", "f11", "f12"};
+  std::string G1c[3] = {"f12", "f12", "f11"};
+  basis_.push_back(std::vector<std::string>(&G1a[0], &G1a[3]));
+  basis_.push_back(std::vector<std::string>(&G1b[0], &G1b[3]));
+  basis_.push_back(std::vector<std::string>(&G1c[0], &G1c[3]));
   basis_names_.push_back("G1a");
   basis_names_.push_back("G1b");
   basis_names_.push_back("G1c");
 
   //second order derivatives
-  vcl_string G2a[3] = {"f21", "f22", "f22"};
-  vcl_string G2b[3] = {"f23", "f24", "f22"};
-  vcl_string G2c[3] = {"f22", "f21", "f22"};
-  vcl_string G2d[3] = {"f23", "f22", "f24"};
-  vcl_string G2e[3] = {"f22", "f23", "f24"};
-  vcl_string G2f[3] = {"f22", "f22", "f21"};
-  basis_.push_back(vcl_vector<vcl_string>(&G2a[0], &G2a[3]));
-  basis_.push_back(vcl_vector<vcl_string>(&G2b[0], &G2b[3]));
-  basis_.push_back(vcl_vector<vcl_string>(&G2c[0], &G2c[3]));
-  basis_.push_back(vcl_vector<vcl_string>(&G2d[0], &G2d[3]));
-  basis_.push_back(vcl_vector<vcl_string>(&G2e[0], &G2e[3]));
-  basis_.push_back(vcl_vector<vcl_string>(&G2f[0], &G2f[3]));
+  std::string G2a[3] = {"f21", "f22", "f22"};
+  std::string G2b[3] = {"f23", "f24", "f22"};
+  std::string G2c[3] = {"f22", "f21", "f22"};
+  std::string G2d[3] = {"f23", "f22", "f24"};
+  std::string G2e[3] = {"f22", "f23", "f24"};
+  std::string G2f[3] = {"f22", "f22", "f21"};
+  basis_.push_back(std::vector<std::string>(&G2a[0], &G2a[3]));
+  basis_.push_back(std::vector<std::string>(&G2b[0], &G2b[3]));
+  basis_.push_back(std::vector<std::string>(&G2c[0], &G2c[3]));
+  basis_.push_back(std::vector<std::string>(&G2d[0], &G2d[3]));
+  basis_.push_back(std::vector<std::string>(&G2e[0], &G2e[3]));
+  basis_.push_back(std::vector<std::string>(&G2f[0], &G2f[3]));
   basis_names_.push_back("G2a");
   basis_names_.push_back("G2b");
   basis_names_.push_back("G2c");
@@ -71,7 +71,7 @@ bool bvpl_gauss3D_steerable_filters::basis_response_at_leaves(boxm_scene<boct_tr
   // each basis function, should have 3 1-d taps (one in x, one in y, one in z)
   unsigned max_ntaps = 3;
 
-  vcl_cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << vcl_endl;
+  std::cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << std::endl;
   typedef boct_tree<short, vnl_vector_fixed<float,DIM_> > tree_type;
   typedef boct_tree_cell<short, vnl_vector_fixed<float,DIM_> > cell_type;
 
@@ -89,10 +89,10 @@ bool bvpl_gauss3D_steerable_filters::basis_response_at_leaves(boxm_scene<boct_tr
   for (unsigned tap_i=0; tap_i<max_ntaps; tap_i++)
   {
     //Assemple tabs into a map
-    vcl_vector<vnl_vector_fixed<float,5> > one_d_taps;
+    std::vector<vnl_vector_fixed<float,5> > one_d_taps;
 
     for (unsigned dim=0; dim< DIM_; dim++){
-      vcl_string tap_name = basis_[dim][tap_i];
+      std::string tap_name = basis_[dim][tap_i];
       one_d_taps.push_back(separable_taps_[tap_name]);
     }
 
@@ -207,10 +207,10 @@ bool bvpl_gauss3D_steerable_filters::multiscale_basis_response(boxm_scene<boct_t
   for (unsigned tap_i=0; tap_i<max_ntaps; tap_i++)
   {
     //Assemple tabs into a map
-    vcl_vector<vnl_vector_fixed<float,5> > one_d_taps;
+    std::vector<vnl_vector_fixed<float,5> > one_d_taps;
 
     for (unsigned dim=0; dim< DIM_; dim++){
-      vcl_string tap_name = basis_[dim][tap_i];
+      std::string tap_name = basis_[dim][tap_i];
       one_d_taps.push_back(separable_taps_[tap_name]);
     }
 
@@ -314,7 +314,7 @@ bool bvpl_gauss3D_steerable_filters::basis_response(boxm_scene<boct_tree<short, 
   // each basis function, should have 3 1-d taps (one in x, one in y, one in z)
   unsigned max_ntaps = 3;
 
-  vcl_cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << vcl_endl;
+  std::cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << std::endl;
   typedef boct_tree<short, vnl_vector_fixed<float,DIM_> > tree_type;
   typedef boct_tree_cell<short, vnl_vector_fixed<float,DIM_> > cell_type;
 
@@ -327,26 +327,26 @@ bool bvpl_gauss3D_steerable_filters::basis_response(boxm_scene<boct_tree<short, 
   boct_tree<short, bool> *valid_tree = tree->clone_to_type<bool>();
   valid_tree->init_cells(true);
 
-  vcl_vector<cell_type* > cells = tree->leaf_cells();
-  vcl_vector<cell_type* > temp_cells = temp_tree->leaf_cells();
-  vcl_vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
+  std::vector<cell_type* > cells = tree->leaf_cells();
+  std::vector<cell_type* > temp_cells = temp_tree->leaf_cells();
+  std::vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
 
-  vcl_cout << scene->locate_point_in_memory(test_point)->data()<< vcl_endl;
+  std::cout << scene->locate_point_in_memory(test_point)->data()<< std::endl;
 
   for (unsigned tap_i=0; tap_i<max_ntaps; tap_i++)
   {
     //Assemple tabs into a map
-    vcl_vector<vnl_vector_fixed<float,5> > one_d_taps;
+    std::vector<vnl_vector_fixed<float,5> > one_d_taps;
 
     for (unsigned dim=0; dim< DIM_; dim++){
-      vcl_string tap_name = basis_[dim][tap_i];
+      std::string tap_name = basis_[dim][tap_i];
       one_d_taps.push_back(separable_taps_[tap_name]);
     }
 
     //Traverse applying the appropriate 1-d taps
-    vcl_vector<cell_type* >::iterator cells_it = cells.begin();
-    vcl_vector<cell_type* >::iterator temp_it = temp_cells.begin();
-    vcl_vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
+    std::vector<cell_type* >::iterator cells_it = cells.begin();
+    std::vector<cell_type* >::iterator temp_it = temp_cells.begin();
+    std::vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
     for (; (cells_it!=cells.end())&&(temp_it!=temp_cells.end())&&(valid_it!=valid_cells.end()); cells_it++, valid_it++, temp_it++)
     {
       cell_type *center_cell = *cells_it;
@@ -403,7 +403,7 @@ bool bvpl_gauss3D_steerable_filters::basis_response(boxm_scene<boct_tree<short, 
     for (; (cells_it!=cells.end())&&(temp_it!=temp_cells.end()); cells_it++, temp_it++)
       (*cells_it)->set_data((*temp_it)->data());
 
-    vcl_cout << scene->locate_point_in_memory(test_point)->data()<< vcl_endl;;
+    std::cout << scene->locate_point_in_memory(test_point)->data()<< std::endl;;
   }
 
   //write the output block
@@ -477,36 +477,36 @@ void bvpl_gauss3D_steerable_filters::assemble_basis_size_5()
   //Separable basis taps: f01, f02
   float f01_data[5] = {0.000402093f, 0.162216f, 1.19862f, 0.162216f, 0.000402093f};
   vnl_vector_fixed<float, 5> f01(f01_data);
-  separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f01", f01));
+  separable_taps_.insert(std::pair<std::string, vnl_vector_fixed<float, 5> >("f01", f01));
 
   float f02_data[5] = {0.000335463f, 0.135335f, 1.0f, 0.135335f, 0.000335463f};
   vnl_vector_fixed<float,5> f02(f02_data);
-  separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f02", f02));
+  separable_taps_.insert(std::pair<std::string, vnl_vector_fixed<float, 5> >("f02", f02));
 
   //First Derivative Basis: G1 = alpha*G1a + beta*G1b
   //Separable basis functions: f11, f12
   float f11_data[5] = {0.00227458f, 0.458816f, 0.0f, -0.458816f, -0.00227458f};
   vnl_vector_fixed<float,5> f11(f11_data);
-  separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f11", f11));
+  separable_taps_.insert(std::pair<std::string, vnl_vector_fixed<float, 5> >("f11", f11));
   float f12_data[5] = {0.000335463f, 0.135335f, 1.0f, 0.135335f, 0.000335463f};
   vnl_vector_fixed<float,5> f12(f12_data);
-  separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f12", f12));
+  separable_taps_.insert(std::pair<std::string, vnl_vector_fixed<float, 5> >("f12", f12));
 
   //Second derivative basis G2 = alpha^2*G2a + 2*alpha*beta*G2b + beta^2*G2c + 2*alpha*gamma*G2d + 2*beta*gamma*G2e + gamma^2*G2f
   //Separable basis taps = f21, f22, f23, f24
   float f21_data[5] = {0.00696448f, 0.561934f, -1.38405f, 0.561934f, 0.00696448f};
   vnl_vector_fixed<float,5> f21(f21_data);
-  separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f21", f21));
+  separable_taps_.insert(std::pair<std::string, vnl_vector_fixed<float, 5> >("f21", f21));
 
   float f22_data[5] = {0.000335463f, 0.135335f, 1.0f, 0.135335f, 0.000335463f};
   vnl_vector_fixed<float,5> f22(f22_data);
-  separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f22", f22));
+  separable_taps_.insert(std::pair<std::string, vnl_vector_fixed<float, 5> >("f22", f22));
 
   float f23_data[5] = {-0.00643349f, -1.29773f, 0.0f, 1.29773f, 0.00643349f};
   vnl_vector_fixed<float,5> f23(f23_data);
-  separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f23", f23));
+  separable_taps_.insert(std::pair<std::string, vnl_vector_fixed<float, 5> >("f23", f23));
 
   float f24_data[5] = {-0.000670925f, -0.135335f, 0.0f, 0.135335f, 0.000670925f};
   vnl_vector_fixed<float,5> f24(f24_data);
-  separable_taps_.insert(vcl_pair<vcl_string, vnl_vector_fixed<float, 5> >("f24", f24));
+  separable_taps_.insert(std::pair<std::string, vnl_vector_fixed<float, 5> >("f24", f24));
 }

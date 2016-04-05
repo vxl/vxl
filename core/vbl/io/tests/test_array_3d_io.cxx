@@ -1,5 +1,6 @@
 // This is core/vbl/io/tests/test_array_3d_io.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/io/vbl_io_array_3d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
@@ -8,7 +9,7 @@
 
 void test_array_3d_io()
 {
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << "Testing vbl_array_3d<float> io\n"
            << "******************************\n";
 
@@ -48,19 +49,19 @@ void test_array_3d_io()
     test_result = false;
   else
   {
-    vcl_size_t array_row1 = v_out.get_row1_count();
-    vcl_size_t array_row2 = v_out.get_row2_count();
-    vcl_size_t array_row3 = v_out.get_row3_count();
-    for (vcl_size_t i=0; i<array_row1; i++)
-      for (vcl_size_t j=0; j<array_row2; j++)
-        for (vcl_size_t k=0; k<array_row3; k++)
+    std::size_t array_row1 = v_out.get_row1_count();
+    std::size_t array_row2 = v_out.get_row2_count();
+    std::size_t array_row3 = v_out.get_row3_count();
+    for (std::size_t i=0; i<array_row1; i++)
+      for (std::size_t j=0; j<array_row2; j++)
+        for (std::size_t k=0; k<array_row3; k++)
           if (v_out(i,j,k) != v_in(i,j,k))
             test_result = false;
   }
   TEST("v_out == v_in", test_result, true);
 
-  vsl_print_summary(vcl_cout, v_in);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, v_in);
+  std::cout << std::endl;
   vsl_indent_clear_all_data ();
 }
 

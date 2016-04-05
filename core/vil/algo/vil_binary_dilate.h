@@ -10,7 +10,7 @@
 #include <vil/vil_border.h>
 
 //: Return true if any im[offset[k]] is non-zero
-inline bool vil_binary_dilate(const bool* im, const vcl_ptrdiff_t* offset, unsigned n)
+inline bool vil_binary_dilate(const bool* im, const std::ptrdiff_t* offset, unsigned n)
 {
   for (unsigned i=0;i<n;++i) if (im[offset[i]]) return true;
   return false;

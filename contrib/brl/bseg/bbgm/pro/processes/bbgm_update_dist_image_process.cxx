@@ -1,8 +1,9 @@
 // This is brl/bseg/bbgm/pro/processes/bbgm_update_dist_image_process.cxx
 //:
 // \file
+#include <iostream>
 #include <bprb/bprb_func_process.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_update.h>
@@ -20,7 +21,7 @@
 
 bool bbgm_update_dist_image_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> in_types(7), out_types(1);
+  std::vector<std::string> in_types(7), out_types(1);
   in_types[0] = "bbgm_image_sptr";// the distribution image being updated
   in_types[1]= "vil_image_view_base_sptr";//the update image data
   in_types[2]= "int"; //max_components
@@ -31,13 +32,13 @@ bool bbgm_update_dist_image_process_cons(bprb_func_process& pro)
   pro.set_input_types(in_types);
   out_types[0]= "bbgm_image_sptr";// the updated distribution image
   pro.set_output_types(out_types);
-  pro.set_input(0, brdb_value_sptr(new brdb_value_t<bbgm_image_sptr>(0)));
+  pro.set_input(0, brdb_value_sptr(new brdb_value_t<bbgm_image_sptr>(VXL_NULLPTR)));
   return true;
 }
 
 bool bbgm_update_dist_image_process_init(bprb_func_process& pro)
 {
-  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(0));
+  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(VXL_NULLPTR));
   return true;
 }
 
@@ -46,7 +47,7 @@ bool bbgm_update_dist_image_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()){
-    vcl_cerr << "In bbgm_update_dist_image_process::execute() -"
+    std::cerr << "In bbgm_update_dist_image_process::execute() -"
              << " invalid inputs\n";
     return false;
   }

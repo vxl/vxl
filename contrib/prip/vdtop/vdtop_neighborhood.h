@@ -26,8 +26,8 @@ class vdtop_8_neighborhood
   void set_center(vdtop_pixel<T> & pix)
   {
     vil_image_view<T> & img=pix.image() ;
-    vcl_ptrdiff_t istep=img.istep();
-    vcl_ptrdiff_t jstep=img.jstep();
+    std::ptrdiff_t istep=img.istep();
+    std::ptrdiff_t jstep=img.jstep();
     typename vil_image_view<T>::iterator tmp=pix.position();
     tmp+=istep ;
     neighbors_[0]=tmp ;
@@ -76,8 +76,8 @@ class vdtop_4_neighborhood
   {
     vil_image_view<T> & img=pix.image() ;
     typename vil_image_view<T>::iterator tmp=pix.position();
-    vcl_ptrdiff_t istep=img.istep();
-    vcl_ptrdiff_t jstep=img.jstep();
+    std::ptrdiff_t istep=img.istep();
+    std::ptrdiff_t jstep=img.jstep();
     tmp+=istep ;
     neighbors_[0]=tmp ;
     tmp-=jstep ;

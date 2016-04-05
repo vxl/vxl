@@ -6,7 +6,9 @@
 // \date March 2001
 // \brief Base class for an estimation problem in the robust estimation library.
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 
 class rrel_wls_obj;
@@ -88,7 +90,7 @@ class rrel_estimation_problem
   // must be filled in with num_samples_to_instantiate() indices.
   // Returns true if and only if the points resulted in a unique
   // parameter vector.
-  virtual bool fit_from_minimal_set( const vcl_vector<int>& /* point_indices */,
+  virtual bool fit_from_minimal_set( const std::vector<int>& /* point_indices */,
                                      vnl_vector<double>& /* params */ ) const = 0;
 
   //: Compute the residuals relative to the given parameter vector.
@@ -99,7 +101,7 @@ class rrel_estimation_problem
   // given parameter vector must return the same residuals (in the
   // same order).
   virtual void compute_residuals( const vnl_vector<double>& params,
-                                  vcl_vector<double>& residuals ) const = 0;
+                                  std::vector<double>& residuals ) const = 0;
 
   //: Compute the weights for the given residuals.
   // The residuals are essentially those returned by
@@ -107,17 +109,17 @@ class rrel_estimation_problem
   // to each residual. Some problems, however, many need to augment
   // the weights. Such problems should override this function (but
   // may want to call this to compute the "basic" weights).
-  virtual void compute_weights( const vcl_vector<double>& residuals,
+  virtual void compute_weights( const std::vector<double>& residuals,
                                 const rrel_wls_obj* obj,
                                 double scale,
-                                vcl_vector<double>& weights ) const;
+                                std::vector<double>& weights ) const;
 
   //: Type of scale information the problem provides.
   virtual scale_t scale_type() const { return scale_type_; }
 
   //: The prior scale vector, if available.
   // The call is valid only if scale_type() == MULTIPLE.
-  virtual const vcl_vector<double>& prior_multiple_scales() const;
+  virtual const std::vector<double>& prior_multiple_scales() const;
 
   //: The prior scale, if available.
   // The call is valid only if scale_type() == SINGLE.
@@ -125,7 +127,7 @@ class rrel_estimation_problem
 
   //: Sets the scales for heteroscedastic data.
   //  Side effect: set scale_type() = MULTIPLE.
-  virtual void set_prior_multiple_scales( const vcl_vector<double>& scales );
+  virtual void set_prior_multiple_scales( const std::vector<double>& scales );
 
   //: Sets the scale for homoscedastic data.
   //  Side effect: set scale_type() = SINGLE.
@@ -137,11 +139,11 @@ class rrel_estimation_problem
 
   //: Set similarity weights
   //  Currently it is only used in wgted random sampling search
-  void set_similarity_weights( const vcl_vector<double>& wgts )
+  void set_similarity_weights( const std::vector<double>& wgts )
   { similarity_weights_ = wgts; }
 
   //: Get similarity weights
-  const vcl_vector<double>& similarity_weights() const
+  const std::vector<double>& similarity_weights() const
   { return similarity_weights_; }
 
   //: Compute the parameter vector and the normalised covariance matrix.
@@ -157,7 +159,7 @@ class rrel_estimation_problem
   // to 0.
   virtual bool weighted_least_squares_fit( vnl_vector<double>& params,
                                            vnl_matrix<double>& norm_covar,
-                                           const vcl_vector<double>* weights=0 ) const = 0;
+                                           const std::vector<double>* weights=0 ) const = 0;
 
  protected:
   //: Set the degrees of freedom.
@@ -174,8 +176,8 @@ class rrel_estimation_problem
   unsigned int num_samples_for_fit_;
   scale_t scale_type_;
   double single_scale_;
-  vcl_vector<double>* multiple_scales_;
-  vcl_vector<double>  similarity_weights_;
+  std::vector<double>* multiple_scales_;
+  std::vector<double>  similarity_weights_;
 };
 
 #endif

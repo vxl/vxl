@@ -7,7 +7,8 @@
 // \author J. L. Mundy
 // \date August 06, 2007
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -27,8 +28,8 @@ class vpgl_adjust_lsqr : public vnl_least_squares_function
   //: Constructor
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_adjust_lsqr(vpgl_rational_camera<double>  const& rcam,
-                   vcl_vector<vgl_point_2d<double> > const& img_pts,
-                   vcl_vector<vgl_point_3d<double> > const& geo_pts,
+                   std::vector<vgl_point_2d<double> > const& img_pts,
+                   std::vector<vgl_point_3d<double> > const& geo_pts,
                    unsigned num_unknowns, unsigned num_residuals);
 
   //: Destructor
@@ -47,8 +48,8 @@ class vpgl_adjust_lsqr : public vnl_least_squares_function
  protected:
   unsigned num_corrs_;
   vpgl_rational_camera<double> rcam_;
-  vcl_vector<vgl_point_2d<double> > img_pts_;
-  vcl_vector<vgl_point_3d<double> > geo_pts_;
+  std::vector<vgl_point_2d<double> > img_pts_;
+  std::vector<vgl_point_3d<double> > geo_pts_;
 };
 
 class vpgl_rational_adjust
@@ -57,8 +58,8 @@ class vpgl_rational_adjust
   ~vpgl_rational_adjust(){}
 
   static bool adjust(vpgl_rational_camera<double> const& initial_rcam,
-                     vcl_vector<vgl_point_2d<double> > img_pts,
-                     vcl_vector<vgl_point_3d<double> > geo_pts,
+                     std::vector<vgl_point_2d<double> > img_pts,
+                     std::vector<vgl_point_3d<double> > geo_pts,
                      vpgl_rational_camera<double> & adj_rcam);
  protected:
   vpgl_rational_adjust();

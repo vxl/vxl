@@ -16,7 +16,7 @@ void boxm2_vecf_orbit_tableau::init()
   vgui_shell_tableau_sptr shell = vgui_shell_tableau_new(v2D);
   this->add_child(shell);
 }
-bool boxm2_vecf_orbit_tableau::set_image(vcl_string const& image_path){
+bool boxm2_vecf_orbit_tableau::set_image(std::string const& image_path){
   vil_image_resource_sptr res = vil_load_image_resource(image_path.c_str());
   if(!res)
     return false;
@@ -24,26 +24,26 @@ bool boxm2_vecf_orbit_tableau::set_image(vcl_string const& image_path){
   return true;
 }
 
-void boxm2_vecf_orbit_tableau::set_params(vcl_string const& param_path, bool is_right){
-  vcl_ifstream istr(param_path.c_str());
+void boxm2_vecf_orbit_tableau::set_params(std::string const& param_path, bool is_right){
+  std::ifstream istr(param_path.c_str());
   if(is_right)
     istr >> right_params_;
   else
     istr >> left_params_;
 }
 
-bool boxm2_vecf_orbit_tableau::set_dlib_parts(vcl_string const& dlib_path){
+bool boxm2_vecf_orbit_tableau::set_dlib_parts(std::string const& dlib_path){
   return fo_.read_dlib_part_file(dlib_path);
 }
 void boxm2_vecf_orbit_tableau::draw_orbit(bool is_right, unsigned num_pts){
   // get parameter bounds and model to image transformation parameters
 
   boxm2_vecf_orbit_exporter orbit_exporter(left_params_,right_params_,num_pts);
-  vcl_vector<vsol_point_2d_sptr> vsol_pts;
+  std::vector<vsol_point_2d_sptr> vsol_pts;
 
-  vcl_vector<vgl_point_3d<double> > inf_pts;
-  vcl_vector<vgl_point_3d<double> > sup_pts;
-  vcl_vector<vgl_point_3d<double> > crease_pts;
+  std::vector<vgl_point_3d<double> > inf_pts;
+  std::vector<vgl_point_3d<double> > sup_pts;
+  std::vector<vgl_point_3d<double> > crease_pts;
 
   orbit_exporter.export_orbit(is_right, crease_pts, sup_pts, inf_pts,this->export_fname_base_);
   for (unsigned i=0; i<crease_pts.size(); i++)
@@ -74,11 +74,11 @@ void boxm2_vecf_orbit_tableau::draw_dlib_parts(bool is_right){
   vgui_style_sptr crease_style = vgui_style::new_style(0.0f, 1.0f, 1.0f, 7.5f, 1.0f);
 
   boxm2_vecf_orbit_params params = left_params_;
-  vcl_string mcs = "left_eye_medial_canthus";
-  vcl_string lcs = "left_eye_lateral_canthus";
-  vcl_string infs = "left_eye_inferior_margin";
-  vcl_string sups = "left_eye_superior_margin";
-  vcl_string creases = "left_eye_superior_crease";
+  std::string mcs = "left_eye_medial_canthus";
+  std::string lcs = "left_eye_lateral_canthus";
+  std::string infs = "left_eye_inferior_margin";
+  std::string sups = "left_eye_superior_margin";
+  std::string creases = "left_eye_superior_crease";
   if(is_right){
     params = right_params_;
     mcs = "right_eye_medial_canthus";
@@ -90,32 +90,32 @@ void boxm2_vecf_orbit_tableau::draw_dlib_parts(bool is_right){
   double image_height = params.image_height_;
   vgl_point_3d<double> mc;
   vgl_point_3d<double> lc;
-  vcl_vector<vgl_point_3d<double> > inf_pts;
-  vcl_vector<vgl_point_3d<double> > sup_pts;
-  vcl_vector<vgl_point_3d<double> > crease_pts;
+  std::vector<vgl_point_3d<double> > inf_pts;
+  std::vector<vgl_point_3d<double> > sup_pts;
+  std::vector<vgl_point_3d<double> > crease_pts;
   bool good = fo_.lab_point(mcs, mc);
   if(!good){
-    vcl_cout << "no " + mcs << '\n';
+    std::cout << "no " + mcs << '\n';
     return;
   }
   good = fo_.lab_point(lcs, lc);
   if(!good){
-    vcl_cout << "no " + lcs << '\n';
+    std::cout << "no " + lcs << '\n';
     return;
   }
   inf_pts = fo_.orbit_data(infs);
   if(!inf_pts.size()){
-    vcl_cout << "no " + infs << '\n';
+    std::cout << "no " + infs << '\n';
     return;
   }
   sup_pts = fo_.orbit_data(sups);
   if(!sup_pts.size()){
-    vcl_cout << "no " + sups << '\n';
+    std::cout << "no " + sups << '\n';
     return;
   }
   crease_pts = fo_.orbit_data(creases);
   if(!crease_pts.size()){
-    vcl_cout << "no " + creases << '\n';
+    std::cout << "no " + creases << '\n';
     return;
   }
 
@@ -126,19 +126,19 @@ void boxm2_vecf_orbit_tableau::draw_dlib_parts(bool is_right){
   vsol_point_2d_sptr pmc = new vsol_point_2d(mc.x(), mc.y());
   vsol_tab_->add_vsol_point_2d(pmc, med_style);
 
-  for(vcl_vector<vgl_point_3d<double> >::iterator iit =  inf_pts.begin();
+  for(std::vector<vgl_point_3d<double> >::iterator iit =  inf_pts.begin();
       iit !=  inf_pts.end(); ++iit){
     vsol_point_2d_sptr p = new vsol_point_2d(iit->x(), iit->y());
     vsol_tab_->add_vsol_point_2d(p, inf_style);
   }
 
-  for(vcl_vector<vgl_point_3d<double> >::iterator sit =  sup_pts.begin();
+  for(std::vector<vgl_point_3d<double> >::iterator sit =  sup_pts.begin();
         sit !=  sup_pts.end(); ++sit){
     vsol_point_2d_sptr p = new vsol_point_2d(sit->x(), sit->y());
     vsol_tab_->add_vsol_point_2d(p, sup_style);
   }
 
-  for(vcl_vector<vgl_point_3d<double> >::iterator cit =  crease_pts.begin();
+  for(std::vector<vgl_point_3d<double> >::iterator cit =  crease_pts.begin();
       cit !=  crease_pts.end(); ++cit){
     vsol_point_2d_sptr p = new vsol_point_2d(cit->x(), cit->y());
     vsol_tab_->add_vsol_point_2d(p, crease_style);

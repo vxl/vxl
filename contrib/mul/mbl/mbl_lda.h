@@ -10,9 +10,11 @@
 // \author Tim Cootes
 //         Converted to VXL by Gavin Wheeler
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -24,10 +26,10 @@ class mbl_lda
 {
  private:
 
-  vcl_vector<vnl_vector<double> > mean_;
-  vcl_vector<vnl_vector<double> > d_mean_;
+  std::vector<vnl_vector<double> > mean_;
+  std::vector<vnl_vector<double> > d_mean_;
   vnl_vector<double> mean_class_mean_;
-  vcl_vector<int> n_samples_;
+  std::vector<int> n_samples_;
   vnl_matrix<double> withinS_;
   vnl_matrix<double> betweenS_;
   vnl_matrix<double> basis_;
@@ -81,7 +83,7 @@ class mbl_lda
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
   // - Classes must be labeled from 0..n-1
-  void build(const vnl_vector<double>* v, const vcl_vector<int>& label);
+  void build(const vnl_vector<double>* v, const std::vector<int>& label);
 
   //: Perform LDA on data
   // \param label  Array [0..n-1] of integers indices
@@ -92,7 +94,7 @@ class mbl_lda
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
   // - Classes must be labeled from 0..n-1
-  void build(const vnl_vector<double>* v, const vcl_vector<int>& label,
+  void build(const vnl_vector<double>* v, const std::vector<int>& label,
              const vnl_matrix<double>& wS);
 
   //: Perform LDA on data
@@ -103,7 +105,7 @@ class mbl_lda
   // - If label[i]<0 the class is assumed to be unknown
   //   and example i is ignored
   // - Classes must be labeled from 0..n-1
-  void build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<int>& label);
+  void build(const std::vector<vnl_vector<double> >& v, const std::vector<int>& label);
 
   //: Perform LDA on data
   // \param label  Array [0..n-1] of integers indices
@@ -113,7 +115,7 @@ class mbl_lda
   // - label[i] gives class of v[i]
   // - Classes must be labeled from 0..n-1
   // - If label[i]<0 the class is assumed to be unknown and example i is ignored
-  void build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<int>& label,
+  void build(const std::vector<vnl_vector<double> >& v, const std::vector<int>& label,
              const vnl_matrix<double>& wS);
 
   //: Perform LDA on data
@@ -124,7 +126,7 @@ class mbl_lda
   //   and example i is ignored
   // - Note also that this is inefficient - it converts the
   //   matrix to an array and calls build(v,label)
-  void build(const vnl_matrix<double>& M, const vcl_vector<int>& label);
+  void build(const vnl_matrix<double>& M, const std::vector<int>& label);
 
   //: Perform LDA on data
   // - Columns of M form example vectors
@@ -137,7 +139,7 @@ class mbl_lda
   // \param M     The columns of this matrix for the example vectors
   // \param label The vector of class labels corresponding to these examples
   // \param wS    Within class covariance to use
-  void build(const vnl_matrix<double>& M, const vcl_vector<int>& label,
+  void build(const vnl_matrix<double>& M, const std::vector<int>& label,
              const vnl_matrix<double>& wS);
 
   //: Number of classes
@@ -180,13 +182,13 @@ class mbl_lda
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -203,9 +205,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_lda& b);
 void vsl_b_read(vsl_b_istream& bfs, mbl_lda& b);
 
 //: Print summary for class reference
-void vsl_print_summary(vcl_ostream& os, const mbl_lda& b);
+void vsl_print_summary(std::ostream& os, const mbl_lda& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_lda& b);
+std::ostream& operator<<(std::ostream& os,const mbl_lda& b);
 
 #endif // mbl_lda_h_

@@ -13,9 +13,11 @@
 // \endverbatim
 
 
+#include <iostream>
+#include <limits>
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 
 
 //: Intersect the ray from point p with direction d and the triangle defined by a,b,c
@@ -162,6 +164,6 @@ imesh_triangle_intersect(const vgl_point_2d<double>& p,
 unsigned char
 imesh_triangle_intersect(double& u, double& v,
                          const double& du, const double& dv,
-                         const double& eps = vcl_numeric_limits<double>::epsilon());
+                         const double& eps = std::numeric_limits<double>::epsilon());
 
 #endif // imesh_intersect_h_

@@ -1,10 +1,11 @@
 // This is brl/bseg/bapl/bapl_lowe_keypoint.cxx
+#include <iostream>
+#include <cstdlib>
 #include "bapl_lowe_keypoint.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <bapl/bapl_lowe_pyramid_set.h>
 
 //: Constructor
@@ -12,7 +13,7 @@ bapl_lowe_keypoint::bapl_lowe_keypoint()
 {
   // make a random keypoint
   for ( int i=0; i<128; ++i) {
-    descriptor_[i] = vcl_rand();
+    descriptor_[i] = std::rand();
   }
   this->normalize();
 }
@@ -78,15 +79,15 @@ bapl_lowe_keypoint::normalize()
 
 //: Print a summary of the keypoint data to a stream
 void
-bapl_lowe_keypoint::print_summary(vcl_ostream& os) const
+bapl_lowe_keypoint::print_summary(std::ostream& os) const
 {
-  os << "Lowe keypoint: ("<<location_i_<<','<<location_j_<<") scale="<<scale_<<" orientation="<<orientation_<<vcl_endl;
-  //os << "               desc="<< descriptor_ << vcl_endl;
+  os << "Lowe keypoint: ("<<location_i_<<','<<location_j_<<") scale="<<scale_<<" orientation="<<orientation_<<std::endl;
+  //os << "               desc="<< descriptor_ << std::endl;
 }
 
 //: translate the coordinate frame with respect to image width and height if necessary, otherwise pass 0, 0
 //  Warning: does not read/write the bapl_lowe_pyramid_set, only the location, orientation and descriptor of the keypoint
-bapl_lowe_keypoint_sptr read_from_file(vcl_istream& ifs, int len, int img_width, int img_height)
+bapl_lowe_keypoint_sptr read_from_file(std::istream& ifs, int len, int img_width, int img_height)
 {
   float loc_x, loc_y, scale, orientation;
   ifs >> loc_x >> loc_y >> scale >> orientation;
@@ -96,8 +97,8 @@ bapl_lowe_keypoint_sptr read_from_file(vcl_istream& ifs, int len, int img_width,
     loc_y -= 0.5f*img_height;
   }
   if (len != 128) {  // not possible to use this method for any other sized descriptor
-    //vcl_cout << "In bapl_lowe_keypoint_sptr read_from_file() -- this method assumes 128 length descriptor vector!\n";
-    vcl_cerr << "WARNING descriptor size is not 128, this method will work if len < 128 and fill the rest with zeros, otherwise it will break!\n";
+    //std::cout << "In bapl_lowe_keypoint_sptr read_from_file() -- this method assumes 128 length descriptor vector!\n";
+    std::cerr << "WARNING descriptor size is not 128, this method will work if len < 128 and fill the rest with zeros, otherwise it will break!\n";
     //return 0;
   }
   vnl_vector_fixed<double, 128> desc;

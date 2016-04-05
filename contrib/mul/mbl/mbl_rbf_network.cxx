@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_rbf_network.cxx
+#include <iostream>
+#include <cstdlib>
 #include "mbl_rbf_network.h"
 //:
 // \file
@@ -22,7 +24,7 @@
 //  I'm not sure if this is exactly an RBF network in the original
 //  definition. I'll check one day.
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_stats_1d.h>
@@ -41,16 +43,16 @@ mbl_rbf_network::mbl_rbf_network()
 }
 
 //: Build weights given examples x.
-//  s gives the scaling to use in r2 * vcl_log(r2) r2 = distSqr/(s*s)
+//  s gives the scaling to use in r2 * std::log(r2) r2 = distSqr/(s*s)
 //  If s<=0 then a suitable s is estimated from the data
-void mbl_rbf_network::build(const vcl_vector<vnl_vector<double> >& x, double s)
+void mbl_rbf_network::build(const std::vector<vnl_vector<double> >& x, double s)
 {
   int n = x.size();
   build(&(x.front()),n,s);
 }
 
 //: Build weights given n examples x[0] to x[n-1].
-//  s gives the scaling to use in r2 * vcl_log(r2) r2 = distSqr/(s*s)
+//  s gives the scaling to use in r2 * std::log(r2) r2 = distSqr/(s*s)
 //  If s<=0 then a suitable s is estimated from the data
 void mbl_rbf_network::build(const vnl_vector<double>* x, int n, double s)
 {
@@ -100,8 +102,8 @@ double mbl_rbf_network::distSqr(const vnl_vector<double>& x, const vnl_vector<do
   unsigned int n = x.size();
   if (y.size()!=n)
   {
-    vcl_cerr<<"mbl_rbf_network::distSqr() x and y different sizes.\n";
-    vcl_abort();
+    std::cerr<<"mbl_rbf_network::distSqr() x and y different sizes.\n";
+    std::abort();
   }
 
   const double *x_data = x.begin();
@@ -148,8 +150,8 @@ void mbl_rbf_network::calcWts(vnl_vector<double>& w, const vnl_vector<double>& n
   if (n==2)
   {
     // Use linear interpolation based on distance.
-    double d0 = vcl_sqrt(distSqr(new_x,x_data[0]));
-    double d1 = vcl_sqrt(distSqr(new_x,x_data[1]));
+    double d0 = std::sqrt(distSqr(new_x,x_data[0]));
+    double d1 = std::sqrt(distSqr(new_x,x_data[1]));
     w(0) = d1/(d0+d1);
     w(1) = 1.0 - w(0);
     return;
@@ -182,16 +184,16 @@ short mbl_rbf_network::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mbl_rbf_network::is_a() const
+std::string mbl_rbf_network::is_a() const
 {
-  return vcl_string("mbl_rbf_network");
+  return std::string("mbl_rbf_network");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool mbl_rbf_network::is_class(vcl_string const& s) const
+bool mbl_rbf_network::is_class(std::string const& s) const
 {
   return s==is_a();
 }
@@ -201,7 +203,7 @@ bool mbl_rbf_network::is_class(vcl_string const& s) const
 //=======================================================================
 
 // required if data is present in this class
-void mbl_rbf_network::print_summary(vcl_ostream& os) const
+void mbl_rbf_network::print_summary(std::ostream& os) const
 {
   os << "Built with "<<x_.size()<<" examples.";
   //  os << x_ << '\n' << W_ << '\n' << s2_<< '\n';
@@ -246,9 +248,9 @@ void mbl_rbf_network::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,flag);  sum_to_one_ = (flag!=0);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_rbf_network &)\n"
-             << "           Unknown version number "<< version << vcl_endl;
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_rbf_network &)\n"
+             << "           Unknown version number "<< version << std::endl;
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -276,7 +278,7 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_rbf_network& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_rbf_network& b)
+std::ostream& operator<<(std::ostream& os,const mbl_rbf_network& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);

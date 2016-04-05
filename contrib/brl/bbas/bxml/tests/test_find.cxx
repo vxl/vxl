@@ -1,6 +1,8 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <bxml/bxml_find.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 namespace {
 
@@ -47,7 +49,7 @@ bxml_document make_long_doc()
       bxml_element * data = new bxml_element("data");
       frame->append_text("\n    ");
       frame->append_data(data);
-      vcl_stringstream s;
+      std::stringstream s;
       s << "This is data element "<<i<<", "<<j;
       data->append_text(s.str());
     }

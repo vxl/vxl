@@ -21,7 +21,7 @@ T getpixel(vil_image_view<T> const& i, int x, int y, T); \
 void setpixel(vil_image_view<T>& i, int x, int y, T e)
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_accessors_vil_image_view.txx"
+#include "vipl_accessors_vil_image_view.hxx"
 #endif
 
 #endif // vipl_accessors_vil_image_view_h_

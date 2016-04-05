@@ -3,7 +3,8 @@
 // \brief Example of creating, processing and using an image data object
 // \author Ian Scott
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 
 //: Analyse an image file without reading the pixels.
@@ -11,11 +12,11 @@ int main(int argc, char** argv)
 {
   if (argc < 2)
   {
-    vcl_cerr << "Specify an image filename\n";
+    std::cerr << "Specify an image filename\n";
     return 3;
   }
 
-  vcl_cout<<"Load " << argv[1] << " into an image data object\n";
+  std::cout<<"Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we initialise an image resource object.
@@ -24,16 +25,16 @@ int main(int argc, char** argv)
 
   if (!data)
   {
-    vcl_cerr << "Couldn't load " << argv[1] <<vcl_endl;
+    std::cerr << "Couldn't load " << argv[1] <<std::endl;
     return 3;
   }
 
-  vcl_cout << "Loaded " << argv[1] <<vcl_endl;
+  std::cout << "Loaded " << argv[1] <<std::endl;
 
-  vcl_cout<<"Image is:\n"
+  std::cout<<"Image is:\n"
           <<" size: " << data->ni() << 'x' << data->nj() << '\n'
           <<" planes: " << data->nplanes() << '\n'
-          <<" pixel type: " << data->pixel_format() << vcl_endl;
+          <<" pixel type: " << data->pixel_format() << std::endl;
 
   return 0;
 }

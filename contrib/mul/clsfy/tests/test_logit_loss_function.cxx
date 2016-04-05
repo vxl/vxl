@@ -1,12 +1,13 @@
 // This is mul/clsfy/tests/test_logit_loss_function.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \brief Tests the clsfy_logit_loss_function class
 // \author TFC
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_logit_loss_function.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
@@ -16,7 +17,7 @@
 //: Tests the clsfy_logit_loss_function class
 void test_logit_loss_function()
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << " Testing clsfy_logit_loss_function_builder\n"
            << "**************************************\n";
 
@@ -24,7 +25,7 @@ void test_logit_loss_function()
   unsigned n_egs=20;
   unsigned n_dim=10;
   vnl_random rand1(3857);
-  vcl_vector<vnl_vector<double> > data(n_egs);
+  std::vector<vnl_vector<double> > data(n_egs);
   vnl_vector<double> class_id(n_egs);
 
   vnl_vector<double> mean1(n_dim,0.0),mean2(n_dim,1.1),var(n_dim,n_dim);
@@ -57,7 +58,7 @@ void test_logit_loss_function()
 
   vnl_vector<double> w(n_dim+1,0.5);
   for (unsigned i=0;i<=n_dim;++i) w[i]=0.1*(i+1);
-  vcl_cout<<"f(w)="<<fn.f(w)<<vcl_endl;
+  std::cout<<"f(w)="<<fn.f(w)<<std::endl;
 
   // Test the gradient
   double f0 = fn.f(w);

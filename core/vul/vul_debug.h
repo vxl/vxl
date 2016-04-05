@@ -32,12 +32,12 @@ bool vul_debug_core_dump(const char * filename);
 // \returns true on success, false when coredump could not be taken
 bool vul_debug_core_dump_in_windows_se(const char * filename,
                                        void* pep);
+#include <exception>
 #include <vcl_config_compiler.h>
 
 #if VCL_HAS_EXCEPTIONS
-# include <vcl_exception.h>
 //: A translated structured exception.
-class vul_debug_windows_structured_exception : public vcl_exception
+class vul_debug_windows_structured_exception : public std::exception
 {
   void * ex_ptr_;
  public:
@@ -61,7 +61,7 @@ class vul_debug_windows_structured_exception {};
 void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename);
 
 //: Setup the system to core dump and throw a C++ exception on detection of out of memory.
-// The system will throw vcl_bad_alloc.
+// The system will throw std::bad_alloc.
 // \param filename can have up to one "%d" option, which will be given a different index number
 // on each core dump.
 void vul_debug_set_coredump_and_throw_on_out_of_memory(const char * filename);

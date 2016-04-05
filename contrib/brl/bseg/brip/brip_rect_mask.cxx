@@ -1,9 +1,10 @@
+#include <iostream>
 #include "brip_rect_mask.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
-vcl_map<brip_rect_mask::ang_id, vcl_string > brip_rect_mask::names_=vcl_map<brip_rect_mask::ang_id, vcl_string >();
-vcl_map<brip_rect_mask::ang_id, float > brip_rect_mask::angles_=vcl_map<brip_rect_mask::ang_id, float >();
+std::map<brip_rect_mask::ang_id, std::string > brip_rect_mask::names_=std::map<brip_rect_mask::ang_id, std::string >();
+std::map<brip_rect_mask::ang_id, float > brip_rect_mask::angles_=std::map<brip_rect_mask::ang_id, float >();
 bool brip_rect_mask::is_init_ = false;
 
 //        0 0 - 0 0
@@ -1022,13 +1023,13 @@ brip_rect_mask::brip_rect_mask(mask_id mid)
     }
 
     default:
-      vcl_cout << "specified mask does not exist\n";
+      std::cout << "specified mask does not exist\n";
     };
 }
 
 bool brip_rect_mask::
 find_ait(ang_id aid,
-         vcl_map<ang_id, vnl_matrix<int> >::const_iterator& ait) const
+         std::map<ang_id, vnl_matrix<int> >::const_iterator& ait) const
 {
   ait = masks_.find(aid);
   if (ait == masks_.end())
@@ -1038,7 +1039,7 @@ find_ait(ang_id aid,
 
 brip_rect_mask::ang_id brip_rect_mask::angle_id(unsigned angle_index) const
 {
-  vcl_map<ang_id, vnl_matrix<int> >::const_iterator ait = masks_.begin();
+  std::map<ang_id, vnl_matrix<int> >::const_iterator ait = masks_.begin();
   for (unsigned i = 0; i<angle_index; ++i)
     ++ait;
   return (*ait).first;
@@ -1046,7 +1047,7 @@ brip_rect_mask::ang_id brip_rect_mask::angle_id(unsigned angle_index) const
 
 bool brip_rect_mask::set_angle_id(ang_id aid)
 {
-  vcl_map<ang_id, vnl_matrix<int> >::const_iterator ait;
+  std::map<ang_id, vnl_matrix<int> >::const_iterator ait;
   bool found = find_ait(aid, ait);
   if (!found) {
     ru_ = 0; rv_ = 0;
@@ -1081,10 +1082,10 @@ void brip_rect_mask::init()
   }
 }
 
-vcl_string brip_rect_mask::name(ang_id aid)
+std::string brip_rect_mask::name(ang_id aid)
 {
   init();
-  vcl_map<ang_id, vcl_string >::const_iterator ait;
+  std::map<ang_id, std::string >::const_iterator ait;
   ait = names_.find(aid);
   if (ait == names_.end())
     return "null";
@@ -1094,7 +1095,7 @@ vcl_string brip_rect_mask::name(ang_id aid)
 float brip_rect_mask::angle(ang_id aid)
 {
   init();
-  vcl_map<ang_id, float >::const_iterator ait;
+  std::map<ang_id, float >::const_iterator ait;
   ait = angles_.find(aid);
   if (ait == angles_.end())
     return 0.0f;
@@ -1175,10 +1176,10 @@ bool brip_rect_mask::intersect_domain(mask_id mid,
 
 void brip_rect_mask::print(ang_id aid)
 {
-  vcl_map<ang_id, vnl_matrix<int> >::const_iterator ait;
+  std::map<ang_id, vnl_matrix<int> >::const_iterator ait;
   bool found = find_ait(aid, ait);
   if (!found) {
-    vcl_cout<< "no such angle\n";
+    std::cout<< "no such angle\n";
     return;
   }
   vnl_matrix<int> msk = (*ait).second;
@@ -1188,18 +1189,18 @@ void brip_rect_mask::print(ang_id aid)
     {
       int m = msk(jr+rj, ir+ri);
       if (m >0)
-        vcl_cout << '+' << ' ';
+        std::cout << '+' << ' ';
       else if (m<0)
-        vcl_cout << '-' << ' ';
+        std::cout << '-' << ' ';
       else
-        vcl_cout << '0' << ' ';
+        std::cout << '0' << ' ';
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
-  vcl_cout<< '\n';
+  std::cout<< '\n';
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, brip_rect_mask const& msk)
+std::ostream& operator<<(std::ostream& s, brip_rect_mask const& msk)
 {
   s << "masks\n";
   brip_rect_mask& msk_nc = const_cast<brip_rect_mask&>(msk);

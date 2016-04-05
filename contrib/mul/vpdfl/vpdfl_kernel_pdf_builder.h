@@ -9,8 +9,10 @@
 // \author Tim Cootes
 // \brief Initialises kernel pdfs
 
+#include <iostream>
+#include <iosfwd>
 #include <vpdfl/vpdfl_builder_base.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 
@@ -88,7 +90,7 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
   //: Build model from weighted data
   virtual void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
-                              const vcl_vector<double>& wts) const;
+                              const std::vector<double>& wts) const;
 
   //: Build from n elements in data[i].  Fixed kernel width.
   void build_fixed_width(vpdfl_kernel_pdf& kpdf,
@@ -115,13 +117,13 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -141,7 +143,7 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(vcl_istream & is);
+  virtual void config_from_stream(std::istream & is);
 
 };
 

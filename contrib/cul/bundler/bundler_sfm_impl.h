@@ -46,7 +46,7 @@ class bundler_sfm_impl_select_next_images
   bool operator() (
       bundler_inters_reconstruction &reconstruction,
 
-      vcl_vector<bundler_inters_image_sptr> &to_add);
+      std::vector<bundler_inters_image_sptr> &to_add);
 };
 
 
@@ -65,10 +65,10 @@ class bundler_sfm_impl_add_next_images
 
   //: Adds to_the reconstruction
   void operator() (
-      const vcl_vector<bundler_inters_image_sptr> &to_add,
+      const std::vector<bundler_inters_image_sptr> &to_add,
 
       bundler_inters_reconstruction &reconstruction,
-      vcl_vector<bundler_inters_image_sptr> &added_cameras);
+      std::vector<bundler_inters_image_sptr> &added_cameras);
 };
 
 
@@ -87,7 +87,7 @@ class bundler_sfm_impl_add_new_points
 
   void operator() (
       bundler_inters_reconstruction &reconstruction,
-      const vcl_vector<bundler_inters_image_sptr> &added_cameras);
+      const std::vector<bundler_inters_image_sptr> &added_cameras);
 };
 
 

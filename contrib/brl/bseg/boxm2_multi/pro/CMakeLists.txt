@@ -13,10 +13,8 @@ if(EXPAT_FOUND)
   aux_source_directory(processes boxm2_multi_pro_sources)
 
 
-  add_library(boxm2_multi_pro ${boxm2_multi_pro_sources})
-  #install the .h .txx and libs
-  install_targets(/lib boxm2_multi_pro)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_multi/pro ${boxm2_multi_pro_sources})
+  vxl_add_library(LIBRARY_NAME boxm2_multi_pro LIBRARY_SOURCES ${boxm2_multi_pro_sources})
+  #install the .h .hxx and libs
 
   target_link_libraries(boxm2_multi_pro boxm2_multi_algo bprb)
 

@@ -12,8 +12,10 @@
 //
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: global variables
 namespace sdet_segment_image_process_globals

@@ -31,11 +31,11 @@ bool boxm_describe_scene_process_cons(bprb_func_process& pro)
 
   //process takes 1 input
   //input[0]: scene binary file
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
 
   // process has 4 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "bsta_histogram_sptr"; // Omega Histogram
   output_types_[1] = "bsta_histogram_sptr"; // Sigma Histogram
   output_types_[2] = "bsta_histogram_sptr"; // Level Histogram
@@ -56,7 +56,7 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
   using namespace boxm_describe_scene_process_globals;
 
   if ( !pro.verify_inputs() ) {
-    vcl_cerr << pro.name() << ": invalid inputs\n";
+    std::cerr << pro.name() << ": invalid inputs\n";
     return false;
   }
   unsigned n_leaves = 0;
@@ -65,12 +65,12 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
     if (!scene_ptr->multi_bin())
     {
-      vcl_cerr<<"boxm_describe_scene_process not yet implemented for Gaussian mixture\n";
+      std::cerr<<"boxm_describe_scene_process not yet implemented for Gaussian mixture\n";
       return false;//not implemented
     }
     else
     {
-      vcl_cerr<<"boxm_describe_scene_process not yet implemented for multi-bin/Gaussian mixture\n";
+      std::cerr<<"boxm_describe_scene_process not yet implemented for multi-bin/Gaussian mixture\n";
       return false;
     }
   }
@@ -84,20 +84,20 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
       if (!compute_scene_statistics(*scene, omega_hist, sigma_hist,
                                     level_hist, n_leaves))
         return false;
-      vcl_cout << "Omega Hist\n";
+      std::cout << "Omega Hist\n";
       omega_hist.print_vals_prob();
-      vcl_cout << "Sigma Hist\n";
+      std::cout << "Sigma Hist\n";
       sigma_hist.print_vals_prob();
-      vcl_cout << "Level Hist\n";
+      std::cout << "Level Hist\n";
       level_hist.print_vals_prob();
-      vcl_cout << "Number of Leaves " << n_leaves << '\n';
+      std::cout << "Number of Leaves " << n_leaves << '\n';
       pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(omega_hist));
       pro.set_output_val<bsta_histogram_sptr>(1, new bsta_histogram<float>(sigma_hist));
       pro.set_output_val<bsta_histogram_sptr>(2, new bsta_histogram<float>(level_hist));
       pro.set_output_val<unsigned>(3, n_leaves);
     }
     else {
-      vcl_cerr<<"boxm_describe_scene_process not yet implemented for multi-bin/simple_grey\n";
+      std::cerr<<"boxm_describe_scene_process not yet implemented for multi-bin/simple_grey\n";
       return false;
     }
   }

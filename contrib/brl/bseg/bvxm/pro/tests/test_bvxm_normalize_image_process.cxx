@@ -4,13 +4,15 @@
 // \author Ozge C. Ozcanli
 // \date   March 04, 2008
 //
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
 
+#include <vcl_compiler.h>
 #include <vcl_string.h>
-#include <vcl_iostream.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -80,7 +82,7 @@ vpgl_camera_double_sptr create_camera()
   return cam1;
 }
 
-bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img)
+bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(std::string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img)
 {
   vul_file::make_directory(model_dir);
 
@@ -166,13 +168,13 @@ static void test_bvxm_normalize_image_process()
   vil_image_view<vxl_byte> input_img(ni, nj, 1);
   input_img.fill(200);
   vil_image_view_base_sptr input_img_sptr = new vil_image_view<vxl_byte>(input_img);
-  vcl_cout << "format: " << input_img_sptr->pixel_format() << vcl_endl;
+  std::cout << "format: " << input_img_sptr->pixel_format() << std::endl;
   TEST("check byte", input_img_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE, true);
 
   vil_image_view<vxl_byte> input_img_rgb(ni, nj, 3);
   input_img.fill(200);
   vil_image_view_base_sptr input_img_rgb_sptr = new vil_image_view<vxl_byte>(input_img_rgb);
-  vcl_cout << "format: " << input_img_rgb_sptr->pixel_format() << vcl_endl;
+  std::cout << "format: " << input_img_rgb_sptr->pixel_format() << std::endl;
   TEST("check byte", input_img_rgb_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE, true);
 
   // test image conversions
@@ -232,16 +234,16 @@ static void test_bvxm_normalize_image_process()
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(ni, nj, 1);
   bvxm_util::img_to_slab(input_img_float_stretched_sptr,image_slab);
-  input_img_float_stretched_sptr = 0;  // clears up the space taken by new
+  input_img_float_stretched_sptr = VXL_NULLPTR;  // clears up the space taken by new
   TEST_NEAR("check slab conversion", (float)*(image_slab.begin()), 200.0f/255.0f, 0.01f);
 
 
   bvxm_voxel_slab<obs_datatype_rgb> image_slab_rgb(ni, nj, 1);
   bvxm_util::img_to_slab(input_img_rgb_float_stretched_sptr,image_slab_rgb);
-  input_img_rgb_float_stretched_sptr = 0;
+  input_img_rgb_float_stretched_sptr = VXL_NULLPTR;
 
   // create a GREY mog image from a known world
-  vcl_string model_dir("test_world_dir");
+  std::string model_dir("test_world_dir");
   if (vul_file::is_directory(model_dir))
     vul_file::delete_file_glob(model_dir+"/*");
   else {
@@ -259,8 +261,8 @@ static void test_bvxm_normalize_image_process()
   TEST("testing mixture of gaussian image creation", !mog_image_ptr, false);
   vil_image_view<unsigned char> expected_i(*expected_image);
   vil_save(expected_i, "./expected.png");
-  //TEST_NEAR("testing expected img", expected_i(146,332), (int)vcl_floor(0.2*255 + 0.5), 0.01);
-  //TEST_NEAR("testing expected img", expected_i(400,250), (int)vcl_floor(0.5*255 + 0.5), 0.01);
+  //TEST_NEAR("testing expected img", expected_i(146,332), (int)std::floor(0.2*255 + 0.5), 0.01);
+  //TEST_NEAR("testing expected img", expected_i(400,250), (int)std::floor(0.5*255 + 0.5), 0.01);
 
   bvxm_voxel_traits<APM_MOG_GREY>::appearance_processor apm_processor;
   bvxm_voxel_slab<float> prob = apm_processor.prob_density(*mog_image_ptr,image_slab); //prob( nimg );
@@ -268,7 +270,7 @@ static void test_bvxm_normalize_image_process()
   bvxm_voxel_slab<float> product(ni, nj, 1);
   bvxm_util::multiply_slabs(prob, weights, product);
   float this_prob = bvxm_util::sum_slab(product);
-  vcl_cout << "this prob: " << this_prob << vcl_endl;
+  std::cout << "this prob: " << this_prob << std::endl;
 
   // create a test image
   float aa = 1.2f;
@@ -286,7 +288,7 @@ static void test_bvxm_normalize_image_process()
   vpgl_camera_double_sptr cam1 = create_camera();
   brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(cam1);
   brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(vox_world);
-  brdb_value_sptr v3 = new brdb_value_t<vcl_string>("apm_mog_grey");
+  brdb_value_sptr v3 = new brdb_value_t<std::string>("apm_mog_grey");
   brdb_value_sptr v4 = new brdb_value_t<unsigned>(0);
   brdb_value_sptr v5 = new brdb_value_t<unsigned>(0);
   brdb_value_sptr v6 = new brdb_value_t<unsigned>(ni);
@@ -314,8 +316,8 @@ static void test_bvxm_normalize_image_process()
   TEST("output slab is in db", S_slab->size(), 1);
 
   brdb_value_sptr value_slab;
-  TEST("output slab is in db", S_slab->get_value(vcl_string("value"), value_slab), true);
-  TEST("output slab is non-null", (value_slab != 0) ,true);
+  TEST("output slab is in db", S_slab->get_value(std::string("value"), value_slab), true);
+  TEST("output slab is non-null", (value_slab != VXL_NULLPTR) ,true);
 
   good = bprb_batch_process_manager::instance()->init_process("bvxmNormalizeImageProcess")
       && bprb_batch_process_manager::instance()->set_input(0, v0)
@@ -337,8 +339,8 @@ static void test_bvxm_normalize_image_process()
   TEST("output image is in db", S_img->size(), 1);
 
   brdb_value_sptr value_img;
-  TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
-  TEST("output image is non-null", (value_img != 0) ,true);
+  TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);
+  TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
@@ -353,8 +355,8 @@ static void test_bvxm_normalize_image_process()
   TEST("output a is in db", S_a->size(), 1);
 
   brdb_value_sptr value_a;
-  TEST("output a is in db", S_a->get_value(vcl_string("value"), value_a), true);
-  TEST("output a is non-null", (value_a != 0) ,true);
+  TEST("output a is in db", S_a->get_value(std::string("value"), value_a), true);
+  TEST("output a is non-null", (value_a != VXL_NULLPTR) ,true);
 
   brdb_value_t<float>* resulta = static_cast<brdb_value_t<float>* >(value_a.ptr());
   float result_a = resulta->value();
@@ -365,8 +367,8 @@ static void test_bvxm_normalize_image_process()
   TEST("output b is in db", S_b->size(), 1);
 
   brdb_value_sptr value_b;
-  TEST("output b is in db", S_b->get_value(vcl_string("value"), value_b), true);
-  TEST("output b is non-null", (value_b != 0) ,true);
+  TEST("output b is in db", S_b->get_value(std::string("value"), value_b), true);
+  TEST("output b is non-null", (value_b != VXL_NULLPTR) ,true);
 
   brdb_value_t<float>* resultb = static_cast<brdb_value_t<float>* >(value_b.ptr());
   float result_b = resultb->value();

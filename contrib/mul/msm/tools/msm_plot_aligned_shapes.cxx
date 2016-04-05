@@ -3,14 +3,16 @@
 // \brief Tool to generate EPS file containing aligned shape points
 // \author Tim Cootes
 
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
 
 #include <msm/msm_aligner.h>
@@ -51,9 +53,9 @@ images: {
 
 void print_usage()
 {
-  vcl_cout << "msm_plot_aligned_shapes -p param_file\n"
+  std::cout << "msm_plot_aligned_shapes -p param_file\n"
            << "Generate EPS file containing aligned shape points.\n"
-           << vcl_endl;
+           << std::endl;
 
   vul_arg_display_usage_and_exit();
 }
@@ -62,51 +64,51 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  vcl_auto_ptr<msm_aligner> aligner;
+  std::auto_ptr<msm_aligner> aligner;
 
-  vcl_string curves_path;
+  std::string curves_path;
 
   //: Colour to draw curves
-  vcl_string line_colour;
+  std::string line_colour;
 
   //: Directory containing images
-  vcl_string image_dir;
+  std::string image_dir;
 
   //: Directory containing points
-  vcl_string points_dir;
+  std::string points_dir;
 
   //: Approximate width of region to display shape
   int display_width;
 
   //: Point colour
-  vcl_string point_colour;
-  vcl_string mean_colour;
+  std::string point_colour;
+  std::string mean_colour;
 
   //: Radius of points to display (if <0, then don't draw points)
   double point_radius;
 
   //: File to save EPS file to
-  vcl_string output_path;
+  std::string output_path;
 
   //: List of image names
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
 
   //: List of points file names
-  vcl_vector<vcl_string> points_names;
+  std::vector<std::string> points_names;
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void tool_params::read_from_file(const vcl_string& path)
+void tool_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -126,8 +128,8 @@ void tool_params::read_from_file(const vcl_string& path)
                                           "aligned.eps");
 
   {
-    vcl_string aligner_str = props.get_required_property("aligner");
-    vcl_stringstream ss(aligner_str);
+    std::string aligner_str = props.get_required_property("aligner");
+    std::stringstream ss(aligner_str);
     aligner = msm_aligner::create_from_stream(ss);
   }
 
@@ -137,16 +139,16 @@ void tool_params::read_from_file(const vcl_string& path)
   // Don't look for unused props so can use a single common parameter file.
 }
 
-void load_shapes(const vcl_string& points_dir,
-                 const vcl_vector<vcl_string>& filenames,
-                 vcl_vector<msm_points>& shapes)
+void load_shapes(const std::string& points_dir,
+                 const std::vector<std::string>& filenames,
+                 std::vector<msm_points>& shapes)
 {
   unsigned n=filenames.size();
 
   shapes.resize(n);
   for (unsigned i=0;i<n;++i)
   {
-    vcl_string path = points_dir+"/"+filenames[i];
+    std::string path = points_dir+"/"+filenames[i];
     if (!shapes[i].read_text_file(path))
     {
       mbl_exception_parse_error x("Failed to load points from "+path);
@@ -158,7 +160,7 @@ void load_shapes(const vcl_string& points_dir,
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> param_path("-p","Parameter filename");
+  vul_arg<std::string> param_path("-p","Parameter filename");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -176,7 +178,7 @@ int main(int argc, char** argv)
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<'\n';
+    std::cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
@@ -184,15 +186,15 @@ int main(int argc, char** argv)
   if (params.curves_path!="")
   {
     if (!curves.read_text_file(params.curves_path))
-      vcl_cerr<<"Failed to read in curves from " <<params.curves_path<<'\n';
+      std::cerr<<"Failed to read in curves from " <<params.curves_path<<'\n';
   }
 
   // Load in all the shapes
-  vcl_vector<msm_points> shapes;
+  std::vector<msm_points> shapes;
   load_shapes(params.points_dir,params.points_names,shapes);
 
   msm_points mean_shape;
-  vcl_vector<vnl_vector<double> > pose_to_ref;
+  std::vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
 
   params.aligner->align_set(shapes,mean_shape,pose_to_ref,average_pose);
@@ -238,7 +240,7 @@ int main(int argc, char** argv)
   msm_draw_shape_to_eps(writer,points,curves);
 
   writer.close();
-  vcl_cout<<"Plotted shapes to "<<params.output_path<<vcl_endl;
+  std::cout<<"Plotted shapes to "<<params.output_path<<std::endl;
 
   return 0;
 }

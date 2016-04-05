@@ -2,7 +2,7 @@
 
 link_libraries(vmap)
 
-add_executable(vmap_test vmap_test.cxx my_map.h my_map_functions.txx)
+add_executable(vmap_test vmap_test.cxx my_map.h my_map_functions.hxx)
 # temporarily disabling this test: it causes segfaults
 #add_test( NAME vmap_test COMMAND $<TARGET_FILE:vmap_test)>
 

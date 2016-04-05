@@ -4,8 +4,10 @@
 //  \file
 //
 //-----------------------------------------------------------------------------
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <iostream>
 //--------------------------------------------
 // Carmen Includes
 #define DEFINED_MAX_MIN
@@ -43,7 +45,7 @@ void carmen_interface::set_carmen_camera(int view_no)
   bool stat = (bool)_carmen->create_camera(view_no, "PerspectiveCamera");
   if (!stat)
     {
-      vcl_cerr << _carmen->geterror() << vcl_endl;
+      std::cerr << _carmen->geterror() << std::endl;
       return;
     }
 }
@@ -63,7 +65,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
                                               default_3d_point_sdev, FIX);
   if (!stat)
     {
-      vcl_cerr << _carmen->geterror() << vcl_endl;
+      std::cerr << _carmen->geterror() << std::endl;
       return stat;
     }
 
@@ -71,14 +73,14 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
                                               default_3d_point_sdev, FIX);
   if (!stat)
     {
-      vcl_cerr << _carmen->geterror() << vcl_endl;
+      std::cerr << _carmen->geterror() << std::endl;
       return stat;
     }
   stat = (bool)_carmen->set_primary_parameter(point_id, "Z", z,
                                               default_3d_point_sdev, FIX);
   if (!stat)
     {
-      vcl_cerr << _carmen->geterror() << vcl_endl;
+      std::cerr << _carmen->geterror() << std::endl;
       return stat;
     }
   //define the corresponding 2d secondary
@@ -86,7 +88,7 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
                                        default_2d_point_sdev);
   if (!stat)
     {
-      vcl_cerr << _carmen->geterror() << vcl_endl;
+      std::cerr << _carmen->geterror() << std::endl;
       return stat;
     }
   return stat;
@@ -96,11 +98,11 @@ bool carmen_interface::add_full_correspondence(int view_no, int point_id,
 //
 bool carmen_interface::load_correspondence_file(const string& file_path)
 {
-  vcl_ifstream instr(file_path.c_str());
+  std::ifstream instr(file_path.c_str());
   if (!instr)
     {
-      vcl_cout <<"In carmen_interface::load_correspondence_file()"
-               <<" - can't open file " << file_path.c_str() << vcl_endl;
+      std::cout <<"In carmen_interface::load_correspondence_file()"
+               <<" - can't open file " << file_path.c_str() << std::endl;
       return false;
     }
   char buf[100];
@@ -112,7 +114,7 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
     instr >> npts;
   else
     {
-      vcl_cout << "bad file\n";
+      std::cout << "bad file\n";
       return false;
     }
   int view_no=0, point_id=0;
@@ -124,12 +126,12 @@ bool carmen_interface::load_correspondence_file(const string& file_path)
       keyword = buf;
       if (keyword!="CORRESP:")
         {
-          vcl_cout << "wrong number of correspondences\n";
+          std::cout << "wrong number of correspondences\n";
           return false;
         }
       instr >> view_no >> point_id >> x >> y >> z >> u >> v;
-      vcl_cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y
-               << " " << z << " " <<  u << " " << v << vcl_endl;
+      std::cout << "Corr: " <<  view_no << " " << point_id << " " << x << " " <<  y
+               << " " << z << " " <<  u << " " << v << std::endl;
       bool stat = add_full_correspondence(view_no, point_id, x, y, z, u, v);
       if (!stat)
         return false;
@@ -147,12 +149,12 @@ void carmen_interface::solve()
   bool stat = (bool)_carmen->init_cameras();
   if (!stat)
     {
-      vcl_cerr << _carmen->geterror() << vcl_endl;
+      std::cerr << _carmen->geterror() << std::endl;
       return;
     }
   stat = (bool)_carmen->solve_for_everything();
   if (!stat)
-    vcl_cerr << _carmen->geterror() << vcl_endl;
+    std::cerr << _carmen->geterror() << std::endl;
 }
 
 //--------------------------------------------------------------------

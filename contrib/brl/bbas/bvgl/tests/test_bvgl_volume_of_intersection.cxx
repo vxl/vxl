@@ -1,8 +1,9 @@
 //:
 // \file
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_volume_of_intersection.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 //: Test changes

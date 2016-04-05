@@ -2,6 +2,9 @@
 // \file
 // \author Gehua Yang
 // \date   March 2005
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "rgrl_matcher_k_nearest_random.h"
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_feature_set.h>
@@ -9,8 +12,7 @@
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_match_set.h>
 
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 rgrl_matcher_k_nearest_random::
 rgrl_matcher_k_nearest_random( unsigned int k, unsigned int max_num )
@@ -46,7 +48,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   //  get the features in the current view
   feat_vector from;
   if( !current_view.features_in_region( from, from_set ) ) {
-    DebugMacro( 1, "Cannot get features in current region!!!" << vcl_endl );
+    DebugMacro( 1, "Cannot get features in current region!!!" << std::endl );
     return matches_sptr;
   }
 
@@ -58,7 +60,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   matches_sptr->reserve( from.size() );
 
   // set up a vector of same from size to indicate which feature shall be used
-  vcl_vector<bool> to_use( from.size(), true );
+  std::vector<bool> to_use( from.size(), true );
 
   if( from.size() > max_num_ )
     generate_random_indices( to_use );
@@ -100,12 +102,12 @@ compute_matches( rgrl_feature_set const&       from_set,
 
 void
 rgrl_matcher_k_nearest_random::
-generate_random_indices( vcl_vector<bool>& to_use ) const
+generate_random_indices( std::vector<bool>& to_use ) const
 {
   const unsigned size = to_use.size();
 
   // set all entries to false
-  vcl_fill( to_use.begin(), to_use.end(), false );
+  std::fill( to_use.begin(), to_use.end(), false );
 
   unsigned num = 0;
   while( num < max_num_ ) {
@@ -116,9 +118,9 @@ generate_random_indices( vcl_vector<bool>& to_use ) const
       continue;
 
     // mark it
-    // vcl_cout << index << ' ';
+    // std::cout << index << ' ';
     to_use[index] = true;
     ++num;
   }
-  // vcl_cout <<"\n";
+  // std::cout <<"\n";
 }

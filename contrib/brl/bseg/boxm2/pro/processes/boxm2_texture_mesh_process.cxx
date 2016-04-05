@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_texture_mesh_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Mar 15, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_random.h>
@@ -47,22 +49,22 @@ namespace boxm2_texture_mesh_process_globals
   };
 
   //aux data structures (norm images, vis images)
-  vcl_vector<vil_image_view<int>* > vis_images_;
-  vcl_vector<vil_image_view<float>* > normx_, normy_, normz_;
+  std::vector<vil_image_view<int>* > vis_images_;
+  std::vector<vil_image_view<float>* > normx_, normy_, normz_;
 
   //main helper method - fills out a map of imesh_mesh's, each texture mapped with a separate image
-  void boxm2_texture_mesh_from_imgs(vcl_string im_dir,
-                                    vcl_string cam_dir,
-                                    vcl_string out_dir,
+  void boxm2_texture_mesh_from_imgs(std::string im_dir,
+                                    std::string cam_dir,
+                                    std::string out_dir,
                                     imesh_mesh& in_mesh,
-                                    vcl_map<vcl_string, imesh_mesh>& meshes);
+                                    std::map<std::string, imesh_mesh>& meshes);
 
   //populates a vector of visibility images (by face id int)
-  void boxm2_visible_faces( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
+  void boxm2_visible_faces( std::vector<vpgl_perspective_camera<double>* >& cameras,
                             imesh_mesh& in_mesh,  unsigned int ni, unsigned int nj);
 
   //stores a norm image (3d face norm) for each of the texture images
-  void compute_norm_images( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
+  void compute_norm_images( std::vector<vpgl_perspective_camera<double>* >& cameras,
                             imesh_mesh& in_mesh,unsigned int ni, unsigned int nj);
 
   //smooths the vector of norm images above
@@ -74,24 +76,24 @@ namespace boxm2_texture_mesh_process_globals
                         triangle_3d& world_tri);
 
   //matches textures
-  void boxm2_match_textures(vcl_vector<vpgl_perspective_camera<double>* >& cameras,
-                            vcl_vector<vcl_string>& imfiles,
+  void boxm2_match_textures(std::vector<vpgl_perspective_camera<double>* >& cameras,
+                            std::vector<std::string>& imfiles,
                             imesh_mesh& in_mesh,
-                            vcl_map<vcl_string, vcl_vector<unsigned> >& app_faces,
-                            vcl_map<vcl_string, vpgl_perspective_camera<double>* >& texture_cams);
+                            std::map<std::string, std::vector<unsigned> >& app_faces,
+                            std::map<std::string, vpgl_perspective_camera<double>* >& texture_cams);
 
   //returns a list of visible triangles given a camera,
   //visibility image, and world coordinate 3d triangle
-  vcl_vector<triangle_3d> get_visible_triangles(vpgl_perspective_camera<double>* cam,
+  std::vector<triangle_3d> get_visible_triangles(vpgl_perspective_camera<double>* cam,
                                                 vil_image_view<int>* vis_img,
                                                 triangle_3d& world_tri);
 
   //given revised lists of visible images, norms, etc, return the index of the best view
-  int get_best_view(vcl_vector<vpgl_perspective_camera<double>* >& cams,
-                    vcl_vector<vil_image_view<int>* >& vis_images,
-                    vcl_vector<vil_image_view<float>* >& normx,
-                    vcl_vector<vil_image_view<float>* >& normy,
-                    vcl_vector<vil_image_view<float>* >& normz,
+  int get_best_view(std::vector<vpgl_perspective_camera<double>* >& cams,
+                    std::vector<vil_image_view<int>* >& vis_images,
+                    std::vector<vil_image_view<float>* >& normx,
+                    std::vector<vil_image_view<float>* >& normy,
+                    std::vector<vil_image_view<float>* >& normz,
                     triangle_3d& world_tri );
 
   vgl_vector_3d<double> calc_smooth_norm( vpgl_perspective_camera<double>* cam,
@@ -108,14 +110,14 @@ bool boxm2_texture_mesh_process_cons(bprb_func_process& pro)
 
   //process takes 2 inputs
   int i=0;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[i++] = "imesh_mesh_sptr";  //depth image
   input_types_[i++] = "vcl_string";       //directory of scene images
   input_types_[i++] = "vcl_string";       //directory of corresponding cams
   input_types_[i++] = "vcl_string";       //output dir of saved mesh
 
   // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   //output_types_[0] = "boxm2_scene_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -125,19 +127,19 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_texture_mesh_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   unsigned argIdx = 0;
   imesh_mesh_sptr mesh = pro.get_input<imesh_mesh_sptr>(argIdx++);
-  vcl_string img_dir   = pro.get_input<vcl_string>(argIdx++);
-  vcl_string cam_dir   = pro.get_input<vcl_string>(argIdx++);
-  vcl_string out_dir   = pro.get_input<vcl_string>(argIdx++);
+  std::string img_dir   = pro.get_input<std::string>(argIdx++);
+  std::string cam_dir   = pro.get_input<std::string>(argIdx++);
+  std::string out_dir   = pro.get_input<std::string>(argIdx++);
 
   //create the mesh directory
   if (out_dir != "") {
     if (!vul_file::make_directory_path(out_dir.c_str())) {
-      vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
+      std::cout<<"Couldn't make directory path "<<out_dir<<std::endl;
       return false;
     }
   }
@@ -146,26 +148,26 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
   //Texture map the mesh
   //////////////////////////////////////////////////////////////////////////////
   vul_timer t;
-  vcl_map<vcl_string, imesh_mesh> meshes;
+  std::map<std::string, imesh_mesh> meshes;
   boxm2_texture_mesh_from_imgs(img_dir, cam_dir, out_dir, *mesh, meshes);
 
   ////////////////////////////////////////////////////////////////////////////////
   //// Write out in VRML format
   ////////////////////////////////////////////////////////////////////////////////
   //output file and stream
-  vcl_string vrfile = out_dir + "/vrmesh.wrl";
-  vcl_ofstream os(vrfile.c_str());
+  std::string vrfile = out_dir + "/vrmesh.wrl";
+  std::ofstream os(vrfile.c_str());
 
   //write each submesh into one file
-  vcl_map<vcl_string, imesh_mesh>::iterator subMesh;
+  std::map<std::string, imesh_mesh>::iterator subMesh;
   for (subMesh = meshes.begin(); subMesh != meshes.end(); ++subMesh)
   {
     imesh_mesh& sMesh = subMesh->second;
-    vcl_cout<<"Writing sub mesh: "<<sMesh.tex_source()<<" has "<<sMesh.num_faces()<<" faces"<<vcl_endl;
+    std::cout<<"Writing sub mesh: "<<sMesh.tex_source()<<" has "<<sMesh.num_faces()<<" faces"<<std::endl;
     imesh_write_vrml(os, sMesh);
   }
   os.close();
-  vcl_cout<<"Texture Mapping Mesh Time: "<<t.all()<<"ms"<<vcl_endl;
+  std::cout<<"Texture Mapping Mesh Time: "<<t.all()<<"ms"<<std::endl;
 
   return true;
 }
@@ -173,17 +175,17 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
 
 //: Given a directory of images, dir cams, an input mesh, this function creates a map of textured meshes
 // (imesh doesn't ostensibly handle meshes from multiple textures)
-void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string im_dir,
-                                                                      vcl_string cam_dir,
-                                                                      vcl_string out_dir,
+void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::string im_dir,
+                                                                      std::string cam_dir,
+                                                                      std::string out_dir,
                                                                       imesh_mesh& in_mesh,
-                                                                      vcl_map<vcl_string, imesh_mesh>& meshes)
+                                                                      std::map<std::string, imesh_mesh>& meshes)
 {
   ////////////////////////////////////////////////////////////////////////////////
   // BEGIN TEXTURE MAPPING
   // Gather cameras and iamges that will contribute to the texture
   ////////////////////////////////////////////////////////////////////////////////
-  vcl_vector<vcl_string> allims  = boxm2_util::images_from_directory(im_dir);
+  std::vector<std::string> allims  = boxm2_util::images_from_directory(im_dir);
 
   //create blank texturemap image
   vil_image_view_base_sptr first_im = boxm2_util::prepare_input_image(allims[0]);
@@ -195,19 +197,19 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
 
   //chop paths to make mesh portable
   for (unsigned int i=0; i<allims.size(); ++i) {
-    vcl_string full_path = allims[i];
-    vcl_string rel_path = vul_file::basename(full_path);
+    std::string full_path = allims[i];
+    std::string rel_path = vul_file::basename(full_path);
     allims[i] = rel_path;
   }
-  vcl_vector<vpgl_perspective_camera<double>* > allcams = bpgl_camera_utils::cameras_from_directory(cam_dir);
+  std::vector<vpgl_perspective_camera<double>* > allcams = bpgl_camera_utils::cameras_from_directory(cam_dir);
   if (allims.size() != allcams.size()) {
-    vcl_cout<<"Texture images are not 1 to 1 with cameras:: dirs "<<im_dir<<" and "<<cam_dir<<vcl_endl;
+    std::cout<<"Texture images are not 1 to 1 with cameras:: dirs "<<im_dir<<" and "<<cam_dir<<std::endl;
     return;
   }
 
   //choose a few random images
-  vcl_vector<vcl_string> imfiles;
-  vcl_vector<vpgl_perspective_camera<double>* > cameras;
+  std::vector<std::string> imfiles;
+  std::vector<vpgl_perspective_camera<double>* > cameras;
 
   //unsigned int handpicked[] = {0,1,13,25,33,40,51,64,73,82,96,105,109,114,125,133,140,147,153,164,175};
   //int handpicked[] = { 0,1,13,25,33,51,73,96,109,114,133,147,164};
@@ -217,7 +219,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   for (unsigned int i=0; i<allims.size(); ++i) {
       imfiles.push_back(allims[i]);
       cameras.push_back(allcams[i]);
-      vcl_cout<<"added image: "<<imfiles[i]<<vcl_endl;
+      std::cout<<"added image: "<<imfiles[i]<<std::endl;
   }
 #if 0
   vnl_random rand(9667566);
@@ -236,22 +238,22 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   ////////////////////////////////////////////////////////////////////////////////
   // Render Visibility Images
   ////////////////////////////////////////////////////////////////////////////////
-  vcl_cout<<"calculating visibility images (for each textured image)"<<vcl_endl;
+  std::cout<<"calculating visibility images (for each textured image)"<<std::endl;
   boxm2_visible_faces(cameras, in_mesh,first_im->ni(),first_im->nj());
 
   ////////////////////////////////////////////////////////////////////////////////
   // Render norm images (and then smooth them)
   ////////////////////////////////////////////////////////////////////////////////
-  vcl_cout<<"calculating norm images (for each texture image)"<<vcl_endl;
+  std::cout<<"calculating norm images (for each texture image)"<<std::endl;
   compute_norm_images(cameras, in_mesh,first_im->ni(),first_im->nj());
   smooth_norm_images(30.0);
 
   ////////////////////////////////////////////////////////////////////////////////
   // match each face to best image, store a list for each texture image
   ////////////////////////////////////////////////////////////////////////////////
-  vcl_cout<<"Populating faces for each texture"<<vcl_endl;
-  vcl_map<vcl_string, vcl_vector<unsigned> > app_faces; //image_name to face_list
-  vcl_map<vcl_string, vpgl_perspective_camera<double>* > texture_cams;
+  std::cout<<"Populating faces for each texture"<<std::endl;
+  std::map<std::string, std::vector<unsigned> > app_faces; //image_name to face_list
+  std::map<std::string, vpgl_perspective_camera<double>* > texture_cams;
   boxm2_match_textures(cameras, imfiles, in_mesh, app_faces, texture_cams);
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -263,8 +265,8 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
   //for each appearance (texture image), create an imesh_mesh (subMesh);
-  vcl_cout<<"Creating Sub Meshes for each texture"<<vcl_endl;
-  vcl_map<vcl_string, vcl_vector<unsigned> >::iterator apps;
+  std::cout<<"Creating Sub Meshes for each texture"<<std::endl;
+  std::map<std::string, std::vector<unsigned> >::iterator apps;
   for (apps = app_faces.begin(); apps != app_faces.end(); ++apps)
   {
     //for each appearance, we're creating a whole new mesh
@@ -275,7 +277,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
     imesh_vertex_array<3>* verts3 = new imesh_vertex_array<3>();
 
     //get faces list corresponding to this texture
-    vcl_vector<unsigned>& face_list = apps->second;
+    std::vector<unsigned>& face_list = apps->second;
     for (unsigned int i=0; i<face_list.size(); ++i) {
       //get old face
       unsigned old_fIdx = face_list[i];
@@ -295,11 +297,11 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
     }
 
     //create the submesh using the auto ptrs
-    vcl_auto_ptr<imesh_vertex_array_base> v3(verts3);
-    vcl_auto_ptr<imesh_face_array_base> f3(flist);
+    std::auto_ptr<imesh_vertex_array_base> v3(verts3);
+    std::auto_ptr<imesh_face_array_base> f3(flist);
     imesh_mesh subMesh(v3, f3);
 
-    vcl_cout<<"Setting tex source: "<<apps->first<<vcl_endl;
+    std::cout<<"Setting tex source: "<<apps->first<<std::endl;
     meshes[apps->first] = subMesh;
     meshes[apps->first].set_tex_source(apps->first);
   }
@@ -307,9 +309,9 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
   //////////////////////////////////////////////////////////////////////////////
   //For each mesh, map each vertex
   //////////////////////////////////////////////////////////////////////////////
-  vcl_cout<<"Mapping sub meshes for each texture"<<vcl_endl;
-  vcl_map<vcl_string, imesh_mesh>::iterator subMesh;
-  vcl_map<vcl_string, vpgl_perspective_camera<double>* >::iterator txCam = texture_cams.begin();
+  std::cout<<"Mapping sub meshes for each texture"<<std::endl;
+  std::map<std::string, imesh_mesh>::iterator subMesh;
+  std::map<std::string, vpgl_perspective_camera<double>* >::iterator txCam = texture_cams.begin();
   for (subMesh = meshes.begin(); subMesh != meshes.end(); ++subMesh, ++txCam)
   {
     imesh_mesh& mesh = subMesh->second;
@@ -319,7 +321,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
     //texture map the non empty appearances
     if (txCam->first != "empty.png")
     {
-      vcl_vector<vgl_point_2d<double> > tex_coords(nverts, vgl_point_2d<double>(0.0,0.0));
+      std::vector<vgl_point_2d<double> > tex_coords(nverts, vgl_point_2d<double>(0.0,0.0));
       for (unsigned iv = 0; iv<nverts; ++iv)
       {
         //find camera corresponding to this texture
@@ -346,7 +348,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
     }
     else {
       //otherwise put in default texture (grey)
-      vcl_vector<vgl_point_2d<double> > tex_coords(nverts, vgl_point_2d<double>(0.0,0.0));
+      std::vector<vgl_point_2d<double> > tex_coords(nverts, vgl_point_2d<double>(0.0,0.0));
       for (unsigned iv = 0; iv<nverts; ++iv) {
         tex_coords[iv] = vgl_point_2d<double>(.5, .5);
       }
@@ -357,11 +359,11 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(vcl_string
 
 
 //image_name to face_list
-void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_perspective_camera<double>* >& cameras,
-                                                              vcl_vector<vcl_string>& imfiles,
+void boxm2_texture_mesh_process_globals::boxm2_match_textures(std::vector<vpgl_perspective_camera<double>* >& cameras,
+                                                              std::vector<std::string>& imfiles,
                                                               imesh_mesh& in_mesh,
-                                                              vcl_map<vcl_string, vcl_vector<unsigned> >& app_faces,
-                                                              vcl_map<vcl_string, vpgl_perspective_camera<double>* >& texture_cams)
+                                                              std::map<std::string, std::vector<unsigned> >& app_faces,
+                                                              std::map<std::string, vpgl_perspective_camera<double>* >& texture_cams)
 {
   //grab faces and vertices from the mesh
   imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
@@ -383,10 +385,10 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
     }
 
     //create list of cameras from which you can see this face
-    vcl_vector<vcl_string> visible_imfiles;
-    vcl_vector<vpgl_perspective_camera<double>* > visible_views;
-    vcl_vector<vil_image_view<int>* > vis_images;
-    vcl_vector<vil_image_view<float>* > normx, normy, normz;
+    std::vector<std::string> visible_imfiles;
+    std::vector<vpgl_perspective_camera<double>* > visible_views;
+    std::vector<vil_image_view<int>* > vis_images;
+    std::vector<vil_image_view<float>* > normx, normy, normz;
     for (unsigned int i=0; i<vis_images_.size(); ++i) {
       if ( face_is_visible( cameras[i], vis_images_[i], world_tri) ) {
         visible_imfiles.push_back(imfiles[i]);
@@ -401,24 +403,24 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
     //now compare the normal to each of the visible view cameras
 #ifdef DEBUG
     vgl_vector_3d<double>& normal = in_faces.normal(iface);
-    vcl_cout<<"Face "<<iface<<" normal: "<<normal<<vcl_endl;
+    std::cout<<"Face "<<iface<<" normal: "<<normal<<std::endl;
 #endif
 
     //find camera with the closest look vector to this normal
     //int closeIdx = boxm2_util::find_nearest_cam(normal, visible_views);
     int closeIdx = get_best_view(visible_views, vis_images, normx, normy, normz, world_tri);
-    vpgl_perspective_camera<double>* closest = NULL;
-    vcl_string im_name = "empty.png";
+    vpgl_perspective_camera<double>* closest = VXL_NULLPTR;
+    std::string im_name = "empty.png";
     if (closeIdx >= 0) {
       closest = visible_views[closeIdx];
       im_name = visible_imfiles[closeIdx];
     }
 
     //grab appropriate face list (create it if it's not there)
-    vcl_map<vcl_string, vcl_vector<unsigned> >::iterator iter = app_faces.find(im_name);
+    std::map<std::string, std::vector<unsigned> >::iterator iter = app_faces.find(im_name);
     if ( iter == app_faces.end() ) {
-      vcl_cout<<"boxm2_match_textures:: Adding image "<<im_name<<" to texture list"<<vcl_endl;
-      vcl_vector<unsigned> faceList;
+      std::cout<<"boxm2_match_textures:: Adding image "<<im_name<<" to texture list"<<std::endl;
+      std::vector<unsigned> faceList;
       faceList.push_back(iface);
       app_faces[im_name] = faceList;
 
@@ -447,7 +449,7 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
     //whole first chunk figures out which set of triangles this face should be broken into
     double max_area = 0.0;
     double max_img = -1;
-    vcl_vector<triangle_3d> final_triangles;
+    std::vector<triangle_3d> final_triangles;
     for (int imIdx=0; imIdx<vis_images.size(); ++imIdx) {
       //if this angle is too large, just pass over it
       double midAngle = angle(in_faces.normal(iface), -1*cameras[imIdx]->principal_axis()); // return acos(cos_angle(a,b));
@@ -463,7 +465,7 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
         double z = in_verts[vertexId][2];
         world_tri.points[i] = vgl_point_3d<double>(x,y,z);
       }
-      vcl_vector<triangle_3d> vis_tris = get_visible_triangles(cameras[imIdx], vis_images[imIdx], world_tri);
+      std::vector<triangle_3d> vis_tris = get_visible_triangles(cameras[imIdx], vis_images[imIdx], world_tri);
 
       //get the total area of the triangles
       double totalArea = 0;
@@ -486,7 +488,7 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
     // 2. add the new faces
 
     // 3. add the new faces to the correct texture list
-    vcl_string im_name =
+    std::string im_name =
     app_faces[im_name].push_back(iface);
   }
 
@@ -499,11 +501,11 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
 }
 
 //: Compares each visible camera with the average normal from each norm image, chooses the one that most closely matches
-int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspective_camera<double>* >& cams,
-                                                      vcl_vector<vil_image_view<int>* >& vis_images,
-                                                      vcl_vector<vil_image_view<float>* >& normx,
-                                                      vcl_vector<vil_image_view<float>* >& normy,
-                                                      vcl_vector<vil_image_view<float>* >& normz,
+int boxm2_texture_mesh_process_globals::get_best_view(std::vector<vpgl_perspective_camera<double>* >& cams,
+                                                      std::vector<vil_image_view<int>* >& vis_images,
+                                                      std::vector<vil_image_view<float>* >& normx,
+                                                      std::vector<vil_image_view<float>* >& normy,
+                                                      std::vector<vil_image_view<float>* >& normz,
                                                       triangle_3d& world_tri)
 {
   if (cams.empty()) {
@@ -516,14 +518,14 @@ int boxm2_texture_mesh_process_globals::get_best_view(vcl_vector<vpgl_perspectiv
   for (unsigned int i=0; i<cams.size(); ++i) {
     //get the smooth norm corresponding to this camera view
     vgl_vector_3d<double> normal = calc_smooth_norm( cams[i], vis_images[i], normx[i], normy[i], normz[i], world_tri);
-    //vcl_cout<<"   face "<<world_tri.face_id<<" image "<<i<<" normal: "<<normal<<vcl_endl;
+    //std::cout<<"   face "<<world_tri.face_id<<" image "<<i<<" normal: "<<normal<<std::endl;
 
     double dotProd = dot_product( normal, -1*cams[i]->principal_axis());
-    double ang = vcl_acos(dotProd);
+    double ang = std::acos(dotProd);
 #ifdef DEBUG
-    if ( vcl_fabs(normal.z()) > .8 ) {
-      vcl_cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
-              <<" and angle: " <<ang * vnl_math::deg_per_rad<<vcl_endl;
+    if ( std::fabs(normal.z()) > .8 ) {
+      std::cout<<"Face normal: "<<normal<<"  principal axis: "<<cams[i]->principal_axis()<<'\n'
+              <<" and angle: " <<ang * vnl_math::deg_per_rad<<std::endl;
     }
 #endif
     if (ang < minAngle && ang < vnl_math::pi/2.0) {
@@ -592,13 +594,13 @@ boxm2_texture_mesh_process_globals::calc_smooth_norm( vpgl_perspective_camera<do
 //:
 // returns a list of visible triangles given a camera,
 // visibility image, and world coordinate 3d triangle
-vcl_vector<boxm2_texture_mesh_process_globals::triangle_3d>
+std::vector<boxm2_texture_mesh_process_globals::triangle_3d>
 boxm2_texture_mesh_process_globals::get_visible_triangles(vpgl_perspective_camera<double>* /*cam*/,
                                                           vil_image_view<int>* /*vis_img*/,
                                                           triangle_3d& /*world_tri*/)
 {
-  vcl_cerr << "TODO: boxm2_texture_mesh_process_globals::get_visible_triangles is not yet implemented\n";
-  return vcl_vector<triangle_3d>();
+  std::cerr << "TODO: boxm2_texture_mesh_process_globals::get_visible_triangles is not yet implemented\n";
+  return std::vector<triangle_3d>();
 }
 
 
@@ -657,7 +659,7 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
 
 //: Constructs vector of visibility images - images that identify which triangle is visible at which pixel.
 // Function is more or less complete - not much more to it.
-void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
+void boxm2_texture_mesh_process_globals::boxm2_visible_faces( std::vector<vpgl_perspective_camera<double>* >& cameras,
                                                               imesh_mesh& in_mesh, unsigned int ni=1024, unsigned int nj=768)
 {
   imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
@@ -671,7 +673,7 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
     //// get the principal point of the cam for image size
     vpgl_perspective_camera<double>* pcam = cameras[i];
 
-    //vcl_cout<<(*pcam);
+    //std::cout<<(*pcam);
     //vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
     //unsigned ni = (unsigned) (principal_point.x()*2.0);
     //unsigned nj = (unsigned) (principal_point.y()*2.0);
@@ -712,7 +714,7 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( vcl_vector<vpgl_pe
 
 //: Constructs vector of visibility images - images that identify which triangle is visible at which pixel.
 // Function is more or less complete - not much more to it.
-void boxm2_texture_mesh_process_globals::compute_norm_images( vcl_vector<vpgl_perspective_camera<double>* >& cameras,
+void boxm2_texture_mesh_process_globals::compute_norm_images( std::vector<vpgl_perspective_camera<double>* >& cameras,
                                                               imesh_mesh& in_mesh,unsigned int ni, unsigned int nj)
 {
   imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();

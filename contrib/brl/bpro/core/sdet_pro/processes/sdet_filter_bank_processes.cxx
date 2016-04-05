@@ -23,14 +23,14 @@
 //  the params of the classifier instance are used
 bool sdet_extract_filter_bank_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
   input_types.push_back("vcl_string"); // input image name
   input_types.push_back("vcl_string");   // filter bank folder
   if (!pro.set_input_types(input_types))
     return false;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_output_types(output_types);
 }
 
@@ -38,18 +38,18 @@ bool sdet_extract_filter_bank_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< std::endl;
     return false;
   }
   // get inputs
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  vcl_string name = pro.get_input<vcl_string>(1);
-  vcl_string folder = pro.get_input<vcl_string>(2);
+  std::string name = pro.get_input<std::string>(1);
+  std::string folder = pro.get_input<std::string>(2);
 
   // assumes to load a float image in [0,1] using the name, name should be full path to the image
   if (!tc_ptr->compute_filter_bank_float_img(folder, name))
   {
-    vcl_cout << "problems computing filter bank on the image!\n";
+    std::cout << "problems computing filter bank on the image!\n";
     return false;
   }
 
@@ -62,7 +62,7 @@ bool sdet_extract_filter_bank_process(bprb_func_process& pro)
 //  the params of the classifier instance are used
 bool sdet_add_to_filter_bank_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
   input_types.push_back("vcl_string");   // input image name
   input_types.push_back("unsigned");     // the plane to extract the filters from
@@ -72,7 +72,7 @@ bool sdet_add_to_filter_bank_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types))
     return false;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_output_types(output_types);
 }
 
@@ -80,42 +80,42 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< std::endl;
     return false;
   }
   // get inputs
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  vcl_string name = pro.get_input<vcl_string>(1);
+  std::string name = pro.get_input<std::string>(1);
   unsigned n = pro.get_input<unsigned>(2);
-  vcl_string folder = pro.get_input<vcl_string>(3);
-  vcl_string res_name = pro.get_input<vcl_string>(4);
+  std::string folder = pro.get_input<std::string>(3);
+  std::string res_name = pro.get_input<std::string>(4);
   bool is_smooth = pro.get_input<bool>(5);
 
   vil_image_view_base_sptr img_sptr = vil_load(name.c_str());
 
   vil_image_view<float> img_f;
   if (vil_image_view<vxl_byte>* img_ptr = dynamic_cast<vil_image_view<vxl_byte>*>(img_sptr.ptr())) {
-    vcl_cout << " loaded image, ni: " << img_ptr->ni() << " " << img_ptr->nj() << " nplanes: " << img_ptr->nplanes()
-             << " with pixel format: " << img_ptr->pixel_format() << vcl_endl;
+    std::cout << " loaded image, ni: " << img_ptr->ni() << " " << img_ptr->nj() << " nplanes: " << img_ptr->nplanes()
+             << " with pixel format: " << img_ptr->pixel_format() << std::endl;
     vil_image_view<vxl_byte> img_band = vil_plane(*img_ptr, n);
     vil_convert_stretch_range_limited(img_band, img_f, (vxl_byte)0, (vxl_byte)255, 0.0f, 1.0f);
   }else if (vil_image_view<float>* img_ptr = dynamic_cast<vil_image_view<float>*>(img_sptr.ptr())) {
-    vcl_cout << " loaded image, ni: " << img_ptr->ni() << " " << img_ptr->nj() << " nplanes: " << img_ptr->nplanes()
-             << " with pixel format: " << img_ptr->pixel_format() << vcl_endl;
+    std::cout << " loaded image, ni: " << img_ptr->ni() << " " << img_ptr->nj() << " nplanes: " << img_ptr->nplanes()
+             << " with pixel format: " << img_ptr->pixel_format() << std::endl;
     img_f = vil_plane(*img_ptr, n);
   }else {
-    vcl_cout << "Error: " << pro.name() << " -- The image pixel format: " << img_sptr->pixel_format() << " is not supported!\n";
+    std::cout << "Error: " << pro.name() << " -- The image pixel format: " << img_sptr->pixel_format() << " is not supported!\n";
     return false;
   }
 
   if (is_smooth)
-    vcl_cout << " gauss smooth is applied on the input image" << vcl_endl;
+    std::cout << " gauss smooth is applied on the input image" << std::endl;
 
   unsigned tni = tc_ptr->filter_responses().ni();
   unsigned tnj = tc_ptr->filter_responses().nj();
   if (tni != img_f.ni() || tnj != img_f.nj()) {
-    vcl_cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
-    vcl_cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
+    std::cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
+    std::cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
 
     vil_image_view<float> out_img(tni, tnj);
     vil_resample_bilin(img_f, out_img, tni, tnj);
@@ -131,14 +131,14 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
 //  the params of the classifier instance are used
 bool sdet_add_to_filter_bank_process2_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
   input_types.push_back("vcl_string");   // input image name
   input_types.push_back("vcl_string");   // filter bank folder
   if (!pro.set_input_types(input_types))
     return false;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_output_types(output_types);
 }
 
@@ -161,30 +161,30 @@ bool sdet_add_to_filter_bank_process2(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< std::endl;
     return false;
   }
   // get inputs
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  vcl_string name = pro.get_input<vcl_string>(1);
-  vcl_string folder = pro.get_input<vcl_string>(2);
+  std::string name = pro.get_input<std::string>(1);
+  std::string folder = pro.get_input<std::string>(2);
 
   vil_image_view_base_sptr img_sptr = vil_load(name.c_str());
   if (img_sptr->nplanes() < 4) {
-    vcl_cerr << pro.name() << " input image does not have at least 4 bands!\n";
+    std::cerr << pro.name() << " input image does not have at least 4 bands!\n";
     return false;
   }
 
   // assumes an input image in [0,1] range
   vil_image_view<float> img_f(img_sptr);
-  vcl_cout << " loaded image, ni: " << img_sptr->ni() << " " << img_sptr->nj() << " nplanes: " << img_f.nplanes()
-           << " with pixel format: " << img_sptr->pixel_format() << vcl_endl;
+  std::cout << " loaded image, ni: " << img_sptr->ni() << " " << img_sptr->nj() << " nplanes: " << img_f.nplanes()
+           << " with pixel format: " << img_sptr->pixel_format() << std::endl;
 
   unsigned tni = tc_ptr->filter_responses().ni();
   unsigned tnj = tc_ptr->filter_responses().nj();
   if (tni != img_f.ni() || tnj != img_f.nj()) {
-    vcl_cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
-    vcl_cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
+    std::cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
+    std::cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
 
     vil_image_view<float> out_img(tni, tnj, img_f.nplanes());
     vil_resample_bilin(img_f, out_img, tni, tnj);
@@ -241,7 +241,7 @@ bool sdet_add_to_filter_bank_process2(bprb_func_process& pro)
 //  the params of the classifier instance are used
 bool sdet_add_responses_to_filter_bank_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
   input_types.push_back("vcl_string");   // input image name
   input_types.push_back("vil_image_view_base_sptr");     // input image
@@ -250,7 +250,7 @@ bool sdet_add_responses_to_filter_bank_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types))
     return false;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_output_types(output_types);
 }
 
@@ -259,18 +259,18 @@ bool sdet_add_responses_to_filter_bank_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< std::endl;
     return false;
   }
   // get inputs
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  vcl_string name = pro.get_input<vcl_string>(1);
+  std::string name = pro.get_input<std::string>(1);
   vil_image_view_base_sptr img_sptr = pro.get_input<vil_image_view_base_sptr>(2);
-  vcl_string folder = pro.get_input<vcl_string>(3);
-  vcl_string res_name = pro.get_input<vcl_string>(4);
+  std::string folder = pro.get_input<std::string>(3);
+  std::string res_name = pro.get_input<std::string>(4);
 
   if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-    vcl_cerr << " In sdet_add_responses_to_filter_bank_process(): the input image format is not FLOAT!.. it is assumed the input image is properly scaled to [0,1]!\n";
+    std::cerr << " In sdet_add_responses_to_filter_bank_process(): the input image format is not FLOAT!.. it is assumed the input image is properly scaled to [0,1]!\n";
     return false;
   }
 
@@ -278,15 +278,15 @@ bool sdet_add_responses_to_filter_bank_process(bprb_func_process& pro)
   float min_value, max_value;
   vil_math_value_range(img_f, min_value, max_value);
   if (max_value > 1.0 || min_value < 0) {
-    vcl_cerr << " In sdet_add_responses_to_filter_bank_process(): the input image is NOT scaled to [0,1]!\n";
+    std::cerr << " In sdet_add_responses_to_filter_bank_process(): the input image is NOT scaled to [0,1]!\n";
     return false;
   }
 
   unsigned tni = tc_ptr->filter_responses().ni();
   unsigned tnj = tc_ptr->filter_responses().nj();
   if (tni != img_f.ni() || tnj != img_f.nj()) {
-    vcl_cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
-    vcl_cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
+    std::cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
+    std::cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
 
     vil_image_view<float> out_img(tni, tnj);
     vil_resample_bilin(img_f, out_img, tni, tnj);

@@ -4,11 +4,12 @@
 // \author Gamze D. Tunali
 // \date   March 07, 2008
 //
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -54,9 +55,9 @@ static void test_bvxm_rpc_registration_process()
   bvxm_voxel_world_sptr voxel_world = new bvxm_voxel_world();
   voxel_world->set_params(voxel_world_params);
 
-  vcl_string png = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bvxm/pro/tests/rpc_registration_image.png";
-  vcl_string rpb = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bvxm/pro/tests/rpc_registration_camera.rpb";
-  vcl_string xml = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bvxm/pro/tests/update_edges_parameters.xml";
+  std::string png = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bvxm/pro/tests/rpc_registration_image.png";
+  std::string rpb = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bvxm/pro/tests/rpc_registration_camera.rpb";
+  std::string xml = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bvxm/pro/tests/update_edges_parameters.xml";
 
   vil_image_view_base_sptr img = vil_load(png.c_str());
   vpgl_rational_camera<double>* camera_rational = read_rational_camera<double>(rpb);
@@ -103,12 +104,12 @@ static void test_bvxm_rpc_registration_process()
 //  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id_n_normal);
 //  brdb_selection_sptr S = DATABASE->select("float_data", Q);
 //  if (S->size()!=1) {
-//    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
+//    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
 //  }
 //
 //  brdb_value_sptr value_n_normal;
-//  if (!S->get_value(vcl_string("value"), value_n_normal)) {
-//    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";}
+//  if (!S->get_value(std::string("value"), value_n_normal)) {
+//    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";}
 //#if 0 // TEST_FAILS  -- FIXME
 //    TEST("float non-null", value_n_normal>0, true);
 //#endif
@@ -155,15 +156,15 @@ static void test_bvxm_rpc_registration_process()
     brdb_query_aptr Q_cam = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
     brdb_selection_sptr S_cam = DATABASE->select("vpgl_camera_double_sptr_data", Q_cam);
     if (S_cam->size()!=1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
     }
 
     brdb_value_sptr value_cam;
-    if (!S_cam->get_value(vcl_string("value"), value_cam)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S_cam->get_value(std::string("value"), value_cam)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                 << " didn't get value\n";
     }
-    TEST("vpgl_camera_double_sptr non-null", value_cam != 0, true);
+    TEST("vpgl_camera_double_sptr non-null", value_cam != VXL_NULLPTR, true);
 
     brdb_value_t<vpgl_camera_double_sptr>* result_cam =
       static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value_cam.ptr());
@@ -172,21 +173,21 @@ static void test_bvxm_rpc_registration_process()
     brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
     brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
     if (S_img->size()!=1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                 << " no selections\n";
     }
 
     brdb_value_sptr value_img;
-    if (!S_img->get_value(vcl_string("value"), value_img)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S_img->get_value(std::string("value"), value_img)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                 << " didn't get value\n";
     }
-    TEST("image output non-null", value_img != 0, true);
+    TEST("image output non-null", value_img != VXL_NULLPTR, true);
 
     brdb_value_t<vil_image_view_base_sptr>* result_img =
       static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
     vil_image_view_base_sptr expected_edge_img_out = result_img->value();
-    vcl_string out_img = "./rpc_test/expected_edge_image.tif";
+    std::string out_img = "./rpc_test/expected_edge_image.tif";
     bool saved = vil_save(*expected_edge_img_out, out_img.c_str());
     TEST("image saved", saved ,true);
 #endif

@@ -1,11 +1,12 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include "sample_database.h"
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_database.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 static void test_database()
 {
@@ -13,20 +14,20 @@ static void test_database()
   //////////////////////////////////////////////////////////////////////////////////
   ////////  test the binary IO function of database
   //////////////////////////////////////////////////////////////////////////////////
-  vcl_cout << "Warning: Binary I/O test deactivated because of failures" <<vcl_endl;
+  std::cout << "Warning: Binary I/O test deactivated because of failures" <<std::endl;
 
 #if 0
   brdb_database_sptr test_db1 = generate_sample_database();
 
-  vcl_cout << "test_db1: " << vcl_endl;
+  std::cout << "test_db1: " << std::endl;
   test_db1->print();
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   vsl_b_ofstream out_stream("test_database_bio.vsl");
   if (!out_stream){
-    vcl_cerr<<"Failed to open test_database_bio.vsl for output.\n";
+    std::cerr<<"Failed to open test_database_bio.vsl for output.\n";
   }
-  vcl_cout << "Opened file successfully " << vcl_endl;
+  std::cout << "Opened file successfully " << std::endl;
 
   test_db1->b_write(out_stream);
   out_stream.close();
@@ -36,9 +37,9 @@ static void test_database()
 
   vsl_b_ifstream in_stream("test_database_bio.vsl");
   if (!in_stream){
-    vcl_cerr<<"Failed to open test_relation_bio.vsl for input.\n";
+    std::cerr<<"Failed to open test_relation_bio.vsl for input.\n";
   }
-  vcl_cout << "Opened file successfully " << vcl_endl;
+  std::cout << "Opened file successfully " << std::endl;
 
   test_db->b_read(in_stream);
   in_stream.close();
@@ -52,13 +53,13 @@ static void test_database()
 
   TEST("construct", true, true);
 
-  vcl_set<vcl_string> all_relation_names = test_db->get_all_relation_names();
-  vcl_cout << " Relation names:  " << vcl_endl;
-  for (vcl_set<vcl_string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  std::set<std::string> all_relation_names = test_db->get_all_relation_names();
+  std::cout << " Relation names:  " << std::endl;
+  for (std::set<std::string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
   {
-    vcl_cout << "   " << (*itr) << vcl_endl;
+    std::cout << "   " << (*itr) << std::endl;
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   TEST("get_all_relation_names()", true, true);
 
   test_db->print();
@@ -70,7 +71,7 @@ static void test_database()
   TEST("exists()", (test_db->exists("department")), true);
 
   brdb_relation_sptr r3 = test_db->get_relation("department");
-  TEST("get_relation()", r3 == NULL, false);
+  TEST("get_relation()", r3 == VXL_NULLPTR, false);
 
   test_db->remove_relation("department");
   TEST("remove_relation()", test_db->exists("department"), false);
@@ -78,7 +79,7 @@ static void test_database()
   test_db->add_relation("new_department", r3);
   TEST("add_new_relation()", test_db->exists("new_department"), true);
 
-  brdb_tuple_sptr r3_new_tuple = new brdb_tuple(999, vcl_string("Engineering Department"));
+  brdb_tuple_sptr r3_new_tuple = new brdb_tuple(999, std::string("Engineering Department"));
   unsigned int prev_size = r3->size();
   bool added = test_db->add_tuple("new_department", r3_new_tuple);
   TEST("add_tuple()", added && r3->size() == prev_size+1, true);

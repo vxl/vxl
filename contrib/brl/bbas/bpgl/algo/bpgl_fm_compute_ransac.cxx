@@ -2,12 +2,13 @@
 #ifndef bpgl_fm_compute_ransac_cxx_
 #define bpgl_fm_compute_ransac_cxx_
 
+#include <iostream>
+#include <cmath>
 #include "bpgl_fm_compute_ransac.h"
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -19,27 +20,27 @@
 //------------------------------------------
 bool
 bpgl_fm_compute_ransac::compute(
-  const vcl_vector< vgl_point_2d<double> >& pr,
-  const vcl_vector< vgl_point_2d<double> >& pl,
+  const std::vector< vgl_point_2d<double> >& pr,
+  const std::vector< vgl_point_2d<double> >& pl,
   vpgl_fundamental_matrix<double>& fm )
 {
   // Check that there are at least 8 points.
   if ( pr.size() < 8 || pl.size() < 8 ){
-    vcl_cerr << "bpgl_fm_compute_ransac: Need at least 8 point pairs.\n"
-             << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
+    std::cerr << "bpgl_fm_compute_ransac: Need at least 8 point pairs.\n"
+             << "Number in each set: " << pr.size() << ", " << pl.size() << std::endl;
     return false;
   }
 
   // Check that the correspondence lists are the same size.
   if ( pr.size() != pl.size() ){
-    vcl_cerr << "bpgl_fm_compute_ransac: Need correspondence lists of same size.\n";
+    std::cerr << "bpgl_fm_compute_ransac: Need correspondence lists of same size.\n";
     return false;
   }
 
   // The following block is hacked from similar code in rrel_homography2d_est.
   rrel_fm_problem* estimator = new rrel_fm_problem( pr, pl );
   estimator->verbose = false;
-  rrel_muset_obj* ransac = new rrel_muset_obj((int)vcl_floor(pr.size()*.75));
+  rrel_muset_obj* ransac = new rrel_muset_obj((int)std::floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(trace_level_);
@@ -57,7 +58,7 @@ bpgl_fm_compute_ransac::compute(
   // Get a list of the outliers.
   estimator->compute_residuals( ransam->params(), residuals );
 
-  outliers = vcl_vector<bool>();
+  outliers = std::vector<bool>();
   for ( unsigned i = 0; i < pr.size(); i++ ){
     if ( residuals[i] > outlier_thresh_ )
       outliers.push_back( true );
@@ -75,8 +76,8 @@ bpgl_fm_compute_ransac::compute(
 
 //------------------------------------------
 rrel_fm_problem::rrel_fm_problem(
-  const vcl_vector< vgl_point_2d<double> >& pr,
-  const vcl_vector< vgl_point_2d<double> >& pl ) :
+  const std::vector< vgl_point_2d<double> >& pr,
+  const std::vector< vgl_point_2d<double> >& pl ) :
   rrel_estimation_problem(7,8)
 {
   assert( pr.size() == pl.size() );
@@ -93,13 +94,13 @@ rrel_fm_problem::rrel_fm_problem(
 //------------------------------------------
 bool
 rrel_fm_problem::fit_from_minimal_set(
-  const vcl_vector<int>& point_indices,
+  const std::vector<int>& point_indices,
   vnl_vector<double>& params ) const
 {
-  if ( verbose ) vcl_cerr << "rrel_fm_problem::fit_from_minimal_set\n";
+  if ( verbose ) std::cerr << "rrel_fm_problem::fit_from_minimal_set\n";
   assert( point_indices.size() == 8 );
 
-  vcl_vector< vgl_homg_point_2d<double> > set_pr, set_pl;
+  std::vector< vgl_homg_point_2d<double> > set_pr, set_pl;
   for ( int i = 0; i < 8; i++ ){
     int index = point_indices[i];
     set_pr.push_back( vgl_homg_point_2d<double>( pr_[index] ) );
@@ -112,7 +113,7 @@ rrel_fm_problem::fit_from_minimal_set(
     return false;
 
   fm_to_params( fm, params );
-  if ( verbose ) vcl_cerr << "params: " << params << '\n';
+  if ( verbose ) std::cerr << "params: " << params << '\n';
   return true;
 }
 
@@ -121,9 +122,9 @@ rrel_fm_problem::fit_from_minimal_set(
 void
 rrel_fm_problem::compute_residuals(
   const vnl_vector<double>& params,
-  vcl_vector<double>& residuals ) const
+  std::vector<double>& residuals ) const
 {
-  if ( verbose ) vcl_cerr << "rrel_fm_problem::compute_residuals\n";
+  if ( verbose ) std::cerr << "rrel_fm_problem::compute_residuals\n";
 
   vpgl_fundamental_matrix<double> fm;
   params_to_fm(params, fm);
@@ -180,9 +181,9 @@ bool
 rrel_fm_problem::weighted_least_squares_fit(
   vnl_vector<double>& /*params*/,
   vnl_matrix<double>& /*norm_covar*/,
-  const vcl_vector<double>* /*weights*/ ) const
+  const std::vector<double>* /*weights*/ ) const
 {
-  vcl_cerr << "rrel_fm_problem::weighted_least_squares_fit was called, but is not implemented.\n";
+  std::cerr << "rrel_fm_problem::weighted_least_squares_fit was called, but is not implemented.\n";
   return false;
 }
 

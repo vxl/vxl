@@ -6,17 +6,18 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cstdlib>
+#include <new>
 #include "osl_edgel_chain.h"
 
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-#include <vcl_new.h>
+#include <vcl_compiler.h>
 
 #include <osl/osl_hacks.h>
 
 //--------------------------------------------------------------------------------
 
-osl_edgel_chain::osl_edgel_chain() : n(0), x(0), y(0), grad(0), theta(0) { }
+osl_edgel_chain::osl_edgel_chain() : n(0), x(VXL_NULLPTR), y(VXL_NULLPTR), grad(VXL_NULLPTR), theta(VXL_NULLPTR) { }
 
 osl_edgel_chain::osl_edgel_chain(unsigned int n_)
   : n(n_)
@@ -44,7 +45,7 @@ osl_edgel_chain::osl_edgel_chain(osl_edgel_chain const &that)
 
 osl_edgel_chain& osl_edgel_chain::operator=(osl_edgel_chain const &that)
 {
-  vcl_cerr << __FILE__ ": assignment to osl_edgel_chain\n";
+  std::cerr << __FILE__ ": assignment to osl_edgel_chain\n";
   if (this != &that) {
     this->~osl_edgel_chain();
     new (this) osl_edgel_chain(that);
@@ -55,10 +56,10 @@ osl_edgel_chain& osl_edgel_chain::operator=(osl_edgel_chain const &that)
 osl_edgel_chain::~osl_edgel_chain()
 {
   n = 0;
-  fsm_delete_array x; x = 0;
-  fsm_delete_array y; y = 0;
-  fsm_delete_array grad; grad = 0;
-  fsm_delete_array theta; theta = 0;
+  fsm_delete_array x; x = VXL_NULLPTR;
+  fsm_delete_array y; y = VXL_NULLPTR;
+  fsm_delete_array grad; grad = VXL_NULLPTR;
+  fsm_delete_array theta; theta = VXL_NULLPTR;
 }
 
 float  osl_edgel_chain::GetGrad(unsigned int i) const { return grad[i]; }
@@ -80,22 +81,22 @@ void osl_edgel_chain::SetLength(unsigned int nn)
   if (nn <= n)
     n = nn;
   else
-    vcl_abort();
+    std::abort();
 }
 
-void osl_edgel_chain::write_ascii(vcl_ostream &os) const
+void osl_edgel_chain::write_ascii(std::ostream &os) const
 {
-  os << n << vcl_endl; // length
+  os << n << std::endl; // length
   for (unsigned int i=0; i<n; ++i)
-    os << x[i] << ' ' << y[i] << ' ' << grad[i] << ' ' << theta[i] << vcl_endl;
+    os << x[i] << ' ' << y[i] << ' ' << grad[i] << ' ' << theta[i] << std::endl;
 }
 
-void osl_edgel_chain::read_ascii(vcl_istream &is)
+void osl_edgel_chain::read_ascii(std::istream &is)
 {
   int n_ = -1;
-  is >> vcl_ws >> n_;
+  is >> std::ws >> n_;
   if (n_<0 || is.bad()) {
-    vcl_cerr << __FILE__ ": failed to read length of osl_edgel_chain\n";
+    std::cerr << __FILE__ ": failed to read length of osl_edgel_chain\n";
     return;
   }
   //SetLength(n_);
@@ -103,9 +104,9 @@ void osl_edgel_chain::read_ascii(vcl_istream &is)
   new (this) osl_edgel_chain((unsigned int)n_); // construct
 
   for (unsigned int i=0; i<n; ++i)
-    is >> vcl_ws >> x[i] >> y[i] >> grad[i] >> theta[i];
+    is >> std::ws >> x[i] >> y[i] >> grad[i] >> theta[i];
   if (is.bad()) {
-    vcl_cerr << __FILE__ ": stream bad before end of osl_edgel_chain\n";
+    std::cerr << __FILE__ ": stream bad before end of osl_edgel_chain\n";
     return;
   }
 

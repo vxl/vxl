@@ -12,7 +12,8 @@
 //   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_point_3d.h>
@@ -78,13 +79,13 @@ class breg3d_ekf_camera_optimizer_state
   double t_scale_;
 
   // IO functions
-  friend vcl_ostream&  operator<<(vcl_ostream& s, breg3d_ekf_camera_optimizer_state const& ekf_state);
+  friend std::ostream&  operator<<(std::ostream& s, breg3d_ekf_camera_optimizer_state const& ekf_state);
   friend void vsl_b_write(vsl_b_ostream & os, breg3d_ekf_camera_optimizer_state const& ekf_state);
   friend void vsl_b_read(vsl_b_istream & is, breg3d_ekf_camera_optimizer_state &ekf_state);
 };
 
 //: output description of state to stream.
-vcl_ostream&  operator<<(vcl_ostream& s, breg3d_ekf_camera_optimizer_state const& ekf_state);
+std::ostream&  operator<<(std::ostream& s, breg3d_ekf_camera_optimizer_state const& ekf_state);
 
 //: Binary save state to stream.
 void vsl_b_write(vsl_b_ostream & os, breg3d_ekf_camera_optimizer_state const& ekf_state);

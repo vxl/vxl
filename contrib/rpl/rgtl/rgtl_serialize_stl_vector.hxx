@@ -11,37 +11,38 @@
 // \author Brad King
 // \date February 2008
 
+#include <vector>
+#include <iostream>
 #include "rgtl_serialize_split.hxx"
 
-#include <vcl_vector.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class Serializer, typename T>
-void rgtl_serialize_save(Serializer& sr, vcl_vector<T>& self)
+void rgtl_serialize_save(Serializer& sr, std::vector<T>& self)
 {
-  typename vcl_vector<T>::size_type sz = self.size();
+  typename std::vector<T>::size_type sz = self.size();
   sr << sz;
-  for(typename vcl_vector<T>::iterator i = self.begin(); i != self.end(); ++i)
+  for(typename std::vector<T>::iterator i = self.begin(); i != self.end(); ++i)
     {
     sr << *i;
     }
 }
 
 template <class Serializer, typename T>
-void rgtl_serialize_load(Serializer& sr, vcl_vector<T>& self)
+void rgtl_serialize_load(Serializer& sr, std::vector<T>& self)
 {
-  typename vcl_vector<T>::size_type sz;
+  typename std::vector<T>::size_type sz;
   sr >> sz;
   self.resize(sz);
-  for(typename vcl_vector<T>::iterator i = self.begin(); i != self.end(); ++i)
+  for(typename std::vector<T>::iterator i = self.begin(); i != self.end(); ++i)
     {
     sr >> *i;
     }
 }
 
 template <class Serializer, typename T>
-void rgtl_serialize(Serializer& sr, vcl_vector<T>& self)
+void rgtl_serialize(Serializer& sr, std::vector<T>& self)
 {
   rgtl_serialize_split(sr, self);
 }

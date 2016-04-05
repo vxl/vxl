@@ -16,14 +16,14 @@ float render_expected_image(  bstm_scene_sptr & scene,
                                 bocl_mem_sptr & exp_image,
                                 bocl_mem_sptr & vis_image,
                                 bocl_mem_sptr & exp_img_dim,
-                                vcl_string data_type,
+                                std::string data_type,
                                 bocl_kernel* kernel,
-                                vcl_size_t * lthreads,
+                                std::size_t * lthreads,
                                 unsigned cl_ni,
                                 unsigned cl_nj,
                                 int apptypesize,
                                 float time,
-                                vcl_string label_data_type,
+                                std::string label_data_type,
                                 int label_apptypesize,
                                 bool render_label)
   {
@@ -32,11 +32,11 @@ float render_expected_image(  bstm_scene_sptr & scene,
 
     //camera check
     if (cam->type_name()!= "vpgl_perspective_camera" &&  cam->type_name()!= "vpgl_generic_camera" ) {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
-    vcl_cout << "TIME: " << time << vcl_endl;
+    std::cout << "TIME: " << time << std::endl;
     // create all buffers
     cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
     cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
@@ -67,11 +67,11 @@ float render_expected_image(  bstm_scene_sptr & scene,
     time_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<bstm_block_id>::iterator id;
+    std::vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<bstm_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -141,7 +141,7 @@ float render_expected_image(  bstm_scene_sptr & scene,
         kern->clear_args();
         kern->release_current_event();
     }
-    vcl_cout << "Ocl cache size: " << opencl_cache->bytes_in_cache() << vcl_endl;
+    std::cout << "Ocl cache size: " << opencl_cache->bytes_in_cache() << std::endl;
 
     //clean up cam
     delete[] ray_origins;
@@ -149,7 +149,7 @@ float render_expected_image(  bstm_scene_sptr & scene,
     opencl_cache->unref_mem(ray_o_buff.ptr());
     opencl_cache->unref_mem(ray_d_buff.ptr());
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }
 

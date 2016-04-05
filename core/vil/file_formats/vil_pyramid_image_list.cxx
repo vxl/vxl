@@ -1,10 +1,11 @@
+#include <algorithm>
+#include <cmath>
+#include <sstream>
 #include "vil_pyramid_image_list.h"
 //:
 // \file
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_list.h>
 #include <vil/vil_blocked_image_facade.h>
@@ -19,7 +20,7 @@ vil_pyramid_image_resource_sptr
 vil_pyramid_image_list_format::make_input_pyramid_image(char const* directory)
 {
   vil_image_list il(directory);
-  vcl_vector<vil_image_resource_sptr> rescs = il.resources();
+  std::vector<vil_image_resource_sptr> rescs = il.resources();
   if (rescs.size() < 2L)
     return VXL_NULLPTR;
   vil_pyramid_image_list* pil = new vil_pyramid_image_list(rescs);
@@ -36,13 +37,13 @@ vil_pyramid_image_list_format::make_pyramid_output_image(char const* file)
 }
 
 static bool copy_base_resc(vil_image_resource_sptr const& base_image,
-                           vcl_string full_filename,
+                           std::string full_filename,
                            char const* file_format,
                            vil_blocked_image_resource_sptr& copy)
 {
   { //scope for closing resource
   //Create a new blocked base image resource
-  vcl_cout << "Copying base resource\n";
+  std::cout << "Copying base resource\n";
   vil_blocked_image_resource_sptr brsc = blocked_image_resource(base_image);
   if (!brsc||brsc->size_block_i()%2!=0||brsc->size_block_i()%2!=0)
     brsc = new vil_blocked_image_facade(base_image);
@@ -73,17 +74,17 @@ static bool copy_base_resc(vil_image_resource_sptr const& base_image,
   return (bool)copy;
 }
 
-static vcl_string level_filename(vcl_string& directory, vcl_string& filename,
+static std::string level_filename(std::string& directory, std::string& filename,
                                  float level)
 {
-  vcl_string slash;
+  std::string slash;
 
 #ifdef VCL_WIN32
   slash =  "\\";
 #else
   slash = "/";
 #endif
-  vcl_stringstream cs;
+  std::stringstream cs;
   cs << level;
   return directory + slash + filename + "_" + cs.str();
 }
@@ -102,9 +103,9 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
 {
   if (!vil_image_list::vil_is_directory(directory))
     return VXL_NULLPTR;
-  vcl_string d = directory;
-  vcl_string fn = filename;
-  vcl_string full_filename = level_filename(d,fn, 0.0f) + '.'+ level_file_format;
+  std::string d = directory;
+  std::string fn = filename;
+  std::string full_filename = level_filename(d,fn, 0.0f) + '.'+ level_file_format;
   vil_blocked_image_resource_sptr blk_base;
   if (copy_base)
   {
@@ -124,13 +125,13 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
     vil_image_resource_sptr image = blk_base.ptr();
     for (unsigned int L = 1; L<nlevels; ++L)
     {
-      vcl_cout << "Decimating Level " << L << vcl_endl;
+      std::cout << "Decimating Level " << L << std::endl;
       full_filename = level_filename(d, fn, float(L)) + '.'+ level_file_format;
       image = vil_pyramid_image_resource::decimate(image,full_filename.c_str());
     }
   } //end program scope to close resource files
   vil_image_list il(directory);
-  vcl_vector<vil_image_resource_sptr> rescs = il.resources();
+  std::vector<vil_image_resource_sptr> rescs = il.resources();
   return new vil_pyramid_image_list(rescs);
 }
 
@@ -149,9 +150,9 @@ vil_pyramid_image_list::vil_pyramid_image_list() : directory_("")
 vil_pyramid_image_list::vil_pyramid_image_list(char const* directory) : directory_(directory)
 {}
 
-vil_pyramid_image_list::vil_pyramid_image_list(vcl_vector<vil_image_resource_sptr> const& images) : directory_("")
+vil_pyramid_image_list::vil_pyramid_image_list(std::vector<vil_image_resource_sptr> const& images) : directory_("")
 {
-  for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = images.begin();
+  for (std::vector<vil_image_resource_sptr>::const_iterator rit = images.begin();
        rit != images.end(); ++rit)
   {
     //if the resource is blocked use a cached access
@@ -164,7 +165,7 @@ vil_pyramid_image_list::vil_pyramid_image_list(vcl_vector<vil_image_resource_spt
     levels_.push_back(level);
   }
   //sort on image width
-  vcl_sort(levels_.begin(), levels_.end(), level_compare);
+  std::sort(levels_.begin(), levels_.end(), level_compare);
   this->normalize_scales();
 }
 
@@ -211,7 +212,7 @@ vil_pyramid_image_list::add_resource(vil_image_resource_sptr const& image)
   if (levels_.size() == 1)
     return true;
   //sort the pyramid
-  vcl_sort(levels_.begin(), levels_.end(), level_compare);
+  std::sort(levels_.begin(), levels_.end(), level_compare);
   //normalize the scales
   this->normalize_scales();
   return true;
@@ -237,9 +238,9 @@ bool vil_pyramid_image_list::put_resource(vil_image_resource_sptr const& image)
   if (this->is_same_size(image))
     return false;
   float level = this->find_next_level(image);
-  vcl_string copy_name = "copyR";
-  vcl_string file = level_filename(directory_,copy_name, level);
-  vcl_string ffmt = "pgm";
+  std::string copy_name = "copyR";
+  std::string file = level_filename(directory_,copy_name, level);
+  std::string ffmt = "pgm";
   if (image->file_format())
     ffmt = image->file_format();
   file = file +'.'+ ffmt;
@@ -284,7 +285,7 @@ pyramid_level* vil_pyramid_image_list::closest(const float scale) const
   unsigned int lmin = 0;
   for (unsigned int i = 0; i<nlevels; ++i)
   {
-    float ds = vcl_fabs(vcl_log(levels_[i]->scale_ / scale));
+    float ds = std::fabs(std::log(levels_[i]->scale_ / scale));
     if (ds<mind)
     {
       mind = ds;
@@ -304,7 +305,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0, unsigned int n_i,
 {
   if (level>=this->nlevels())
   {
-    vcl_cerr << "pyramid_image_list::get_copy_view(.) level = "
+    std::cerr << "pyramid_image_list::get_copy_view(.) level = "
              << level << " max level = "
              << this->nlevels() -1 << '\n';
     return VXL_NULLPTR;
@@ -323,7 +324,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0, unsigned int n_i,
   vil_image_view_base_sptr v = pl->image_->get_copy_view(si0, sni, sj0, snj);
   if (!v)
   {
-    vcl_cerr << "pyramid_image_list::get_copy_view(.) level = "
+    std::cerr << "pyramid_image_list::get_copy_view(.) level = "
              << level << "(i0,j0):("
              << i0 << ' ' << j0 << ") (ni, nj):("
              << n_i << ' ' << n_j << ")\n"

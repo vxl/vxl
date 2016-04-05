@@ -2,7 +2,7 @@
 
 set(vil_io_sources
   vil_io_memory_chunk.cxx  vil_io_memory_chunk.h
-  vil_io_smart_ptr.txx     vil_io_smart_ptr.h
+  vil_io_smart_ptr.hxx     vil_io_smart_ptr.h
   vil_io_image_view.h
   vil_io_image_view_base.h vil_io_image_view_base.cxx
 )
@@ -14,7 +14,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
                               COMPILE_FLAGS -ftemplate-depth-50)
 endif()
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil_io LIBSRCS ${vil_io_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil_io LIBRARY_SOURCES ${vil_io_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vsl )
 
 if( BUILD_TESTING)

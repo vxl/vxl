@@ -1,8 +1,10 @@
 // This is brl/bpro/core/brad_pro/processes/brad_estimate_empty_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_phongs_model_est.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_math.h>
 //:
@@ -19,13 +21,13 @@ bool brad_estimate_empty_process_cons(bprb_func_process& pro)
 {
     using namespace brad_estimate_empty_process_globals;
 
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "bbas_1d_array_float_sptr";
     input_types_[1] = "bbas_1d_array_float_sptr";
     input_types_[2] = "bbas_1d_array_float_sptr";
     input_types_[3] = "bbas_1d_array_float_sptr";
 
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
 
     output_types_[0] = "float";
 
@@ -39,7 +41,7 @@ bool brad_estimate_empty_process(bprb_func_process& pro)
 {
     // Sanity check
     if (pro.n_inputs()< 4) {
-        vcl_cout << "brip_extrema_process: The input number should be 6" << vcl_endl;
+        std::cout << "brip_extrema_process: The input number should be 6" << std::endl;
         return false;
     }
 
@@ -70,30 +72,28 @@ bool brad_estimate_empty_process(bprb_func_process& pro)
         mean_intensities += float(vis[i]* Iobs[i]);
         sum_weights      += float(vis[i]);
     }
-    vcl_vector<float> temp_histogram(8,0.125f);
+    std::vector<float> temp_histogram(8,0.125f);
 
     float sum = 1.0;
     for (unsigned i=0;i<Iobs.size();i++)
     {
-        unsigned index = i;
+        unsigned index = i + 1;
         if (i == Iobs.size()-1)
             index =0;
-        else
-            index = i+1;
-        float gradI = (float)vcl_fabs(Iobs[i]-Iobs[index]);
+        float gradI = (float)std::fabs(Iobs[i]-Iobs[index]);
 
-        int bin_index  = (int) vcl_floor(gradI*8);
+        int bin_index  = (int) std::floor(gradI*8);
         bin_index = bin_index>7 ? 7:bin_index;
-        temp_histogram[bin_index] += (float)vcl_min(vis[i],vis[index]);
-        sum += (float)vcl_min(vis[i],vis[index]);
+        temp_histogram[bin_index] += (float)std::min(vis[i],vis[index]);
+        sum += (float)std::min(vis[i],vis[index]);
     }
     for (unsigned i =0; i < 8;i++) temp_histogram[i] /= sum;
     float entropy_histo  =0.0;
     for (unsigned int i = 0; i<8; ++i)
-        entropy_histo += temp_histogram[i]*vcl_log(temp_histogram[i]);
+        entropy_histo += temp_histogram[i]*std::log(temp_histogram[i]);
 
     entropy_histo /= float(vnl_math::log2e);
-    entropy_histo = vcl_exp(-entropy_histo);
+    entropy_histo = std::exp(-entropy_histo);
 
     i = 0;
     pro.set_output_val<float>(i++, entropy_histo);

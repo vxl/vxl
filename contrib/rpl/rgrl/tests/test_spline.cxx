@@ -1,7 +1,8 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <rgrl/rgrl_spline.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h> // for vnl_math::isnan()
@@ -14,7 +15,7 @@ spline_1d_value(double u, vnl_vector<double> c)
 {
   if (u < 0 || u+3 > c.size())
     return 0.0;
-  unsigned int f = (unsigned int)vcl_floor( u );
+  unsigned int f = (unsigned int)std::floor( u );
 
   u -= f; // u is now between 0 and 1
   if (u==0)  // this avoids access to nonexisting c[f+3] when u+3 == c.size()
@@ -37,7 +38,7 @@ spline_2d_value( vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsign
   for (unsigned i = 0; i < m.size(); ++i ) {
     if ( pt[ i ] < 0 || pt[ i ] > m[ i ] )
       return 0;
-    f[ i ] = (unsigned int)vcl_floor( pt[ i ] );
+    f[ i ] = (unsigned int)std::floor( pt[ i ] );
   }
   double u = pt[ 0 ] - f[ 0 ]; // a number between 0 and 1
   double v = pt[ 1 ] - f[ 1 ]; // a number between 0 and 1
@@ -66,7 +67,7 @@ spline_3d_value(vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsigne
   for (unsigned i = 0; i < m.size(); ++i ) {
     if ( pt[ i ] < 0 || pt[ i ] > m[ i ] )
       return 0;
-    f[ i ] = (unsigned int)vcl_floor( pt[ i ] );
+    f[ i ] = (unsigned int)std::floor( pt[ i ] );
   }
   double u = pt[ 0 ] - f[ 0 ]; // a number between 0 and 1
   double v = pt[ 1 ] - f[ 1 ]; // a number between 0 and 1
@@ -96,7 +97,7 @@ static
 void
 test_1d_spline()
 {
-  vcl_cout << "estimate 1-D spline" << vcl_endl;
+  std::cout << "estimate 1-D spline" << std::endl;
   double c_data[] = { 1.0, 2.0, -2.0, -1.0, 2.0 };
   vnl_vector<unsigned> m(1);  m[0] = 2;
   vnl_vector<double> c(c_data,5); // c.size() must equal m[0]+3
@@ -106,18 +107,18 @@ test_1d_spline()
   for (double u=0; u<=2.0; u+=0.5 ) {
     vnl_vector<double> pt(1,u);
     double return_spline_value = spline_1d.f_x( pt );
-    vcl_cout << "\nreturn spline value  f(" << pt << ")=" << return_spline_value ;
+    std::cout << "\nreturn spline value  f(" << pt << ")=" << return_spline_value ;
     double true_spline_value = spline_1d_value( pt[0], c );
-    vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl ;
+    std::cout << "    true spline value  f(" << pt << ")=" << true_spline_value << std::endl ;
     TEST_NEAR_REL(" test spline value: ", return_spline_value, true_spline_value, 1e-9);
   }
   // random point
   vnl_vector<double> pt(1);
   pt[0] = random_.drand32(0,2);
   double return_spline_value = spline_1d.f_x( pt );
-  vcl_cout << "\nreturn spline value  f(" << pt[0] << ")=" << return_spline_value;
+  std::cout << "\nreturn spline value  f(" << pt[0] << ")=" << return_spline_value;
   double true_spline_value = spline_1d_value( pt[0], c );
-  vcl_cout << "    true spline value  f(" << pt[0] << ")=" << true_spline_value << vcl_endl;
+  std::cout << "    true spline value  f(" << pt[0] << ")=" << true_spline_value << std::endl;
   TEST_NEAR_REL(" test random spline value: ", return_spline_value, true_spline_value, 1e-9);
 }
 
@@ -125,7 +126,7 @@ static
 void
 test_2d_spline()
 {
-  vcl_cout << "\nestimate 2-D spline" << vcl_endl;
+  std::cout << "\nestimate 2-D spline" << std::endl;
   vnl_vector<unsigned> m(2);  m[0] = m[1] = 2;
   vnl_vector<double> c(25); // c.size() must equal (m[0]+3)*(m[1]+3)
   c[ 0] = 1; c[ 1] = 2; c[ 3]= -2; c[ 3]= -1; c[ 4] = 2;
@@ -139,11 +140,11 @@ test_2d_spline()
   for (double u=0; u<=2.0; u+=0.5 ) {
     for (double v=0; v<=2.0; v+= 0.5 ) {
       vnl_vector<double> pt(2); pt[0] = u; pt[1] = v;
-      vcl_cout << pt << vcl_endl;
+      std::cout << pt << std::endl;
       double return_spline_value = spline_2d.f_x( pt );
-      vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
+      std::cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
       double true_spline_value = spline_2d_value( pt, c, m );
-      vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
+      std::cout << "    true spline value  f(" << pt << ")=" << true_spline_value << std::endl;
       TEST_NEAR_REL("test spline value: ", return_spline_value, true_spline_value, 1e-9);
     }
   }
@@ -151,11 +152,11 @@ test_2d_spline()
   vnl_vector<double> pt(2);
   pt[0] = random_.drand32(0,2);
   pt[1] = random_.drand32(0,2);
-  vcl_cout << pt << vcl_endl;
+  std::cout << pt << std::endl;
   double return_spline_value = spline_2d.f_x( pt );
-  vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
+  std::cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
   double true_spline_value = spline_2d_value( pt, c, m );
-  vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
+  std::cout << "    true spline value  f(" << pt << ")=" << true_spline_value << std::endl;
 
   TEST_NEAR_REL("test random spline value: ", return_spline_value, true_spline_value, 1e-9);
 }
@@ -164,7 +165,7 @@ static
 void
 test_3d_spline()
 {
-  vcl_cout << "\nestimate 3-D spline" << vcl_endl;
+  std::cout << "\nestimate 3-D spline" << std::endl;
   vnl_vector< unsigned > m(3);  m[0] = m[1] = 2;  m[2] = 1;
   vnl_vector<double> c(100); // c.size() must equal (m[0]+3)*(m[1]+3)*(m[2]+3)
   c[ 0] = 1; c[ 1] = 2; c[ 3]= -2; c[ 3]= -1; c[ 4] = 2;
@@ -198,11 +199,11 @@ test_3d_spline()
     for (double v=0; v<=2.0; v+= 0.5 ) {
       for (double w=0; w<=1.0; w+= 0.25 ) {
         vnl_vector<double> pt(3); pt[0] = u; pt[1] = v; pt[2] = w;
-        vcl_cout << pt << vcl_endl;
+        std::cout << pt << std::endl;
         double return_spline_value = spline_3d.f_x( pt );
-        vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
+        std::cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
         double true_spline_value = spline_3d_value( pt, c, m );
-        vcl_cout << "    true spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
+        std::cout << "    true spline value  f(" << pt << ")=" << true_spline_value << std::endl;
         if (!vnl_math::isnan(true_spline_value)) {
           TEST_NEAR_REL("test spline value: ", return_spline_value, true_spline_value, 1e-9);
         }
@@ -214,11 +215,11 @@ test_3d_spline()
   pt[0] = random_.drand32( 0, 2 );
   pt[1] = random_.drand32( 0, 2 );
   pt[2] = random_.drand32( 0, 1 );
-  vcl_cout << pt << vcl_endl;
+  std::cout << pt << std::endl;
   double return_spline_value = spline_3d.f_x( pt );
-  vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value << vcl_endl;
+  std::cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value << std::endl;
   double true_spline_value = spline_3d_value( pt, c, m );
-  vcl_cout << "\ntrue spline value  f(" << pt << ")=" << true_spline_value << vcl_endl;
+  std::cout << "\ntrue spline value  f(" << pt << ")=" << true_spline_value << std::endl;
 
   TEST_NEAR_REL(" test spline value: ", return_spline_value, true_spline_value, 1e-9);
 }
@@ -227,7 +228,7 @@ static
 void
 test_refine_1d_spline()
 {
-  vcl_cout << "\nTest 1d refinement\n";
+  std::cout << "\nTest 1d refinement\n";
 
   vnl_vector< unsigned > m(1);      m[0] = 5;
   rgrl_spline spline( m );
@@ -243,13 +244,13 @@ test_refine_1d_spline()
   rgrl_spline_sptr refine_spline = spline.refinement( new_m );
   TEST("new number of control points is 12", refine_spline->num_of_control_points(), new_m[0]+3);
 #ifdef DEBUG
-  vcl_cout << "the original control points: " << c << '\n'
-           << "the refined control points: " << refine_spline->get_control_points() << vcl_endl;
+  std::cout << "the original control points: " << c << '\n'
+           << "the refined control points: " << refine_spline->get_control_points() << std::endl;
 #endif
   for (unsigned i=0; i < 100; ++i ) {
     vnl_vector< double > p( 1 );
     p[0] = random_.drand32( 0, new_m[0]*0.5 );
-    vcl_cout << "f(" <<p[0] << ")= " << spline.f_x( p ) << " => " << refine_spline->f_x( p*2.0 ) << '\n';
+    std::cout << "f(" <<p[0] << ")= " << spline.f_x( p ) << " => " << refine_spline->f_x( p*2.0 ) << '\n';
     TEST_NEAR_REL( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-9);
   }
 }
@@ -258,7 +259,7 @@ static
 void
 test_refine_2d_spline()
 {
-  vcl_cout << "\nTest 2d refinement\n";
+  std::cout << "\nTest 2d refinement\n";
 
   vnl_vector< unsigned > m(2);  m[0] = m[1] = 3;
   rgrl_spline spline( m );
@@ -274,15 +275,15 @@ test_refine_2d_spline()
   rgrl_spline_sptr refine_spline = spline.refinement( new_m );
   TEST("new number of control points is 64", refine_spline->num_of_control_points(), (new_m[0]+3)*(new_m[1]+3));
 #ifdef DEBUG
-  vcl_cout << "the original control points: " << c << '\n'
-           << "the refined control points: " << refine_spline->get_control_points() << vcl_endl;
+  std::cout << "the original control points: " << c << '\n'
+           << "the refined control points: " << refine_spline->get_control_points() << std::endl;
 #endif
   for (unsigned i=0; i < 10; ++i ) {
     vnl_vector< double > p( 2 );
     p[ 0 ] = random_.drand32( 0, new_m[0]*0.5 );
     for (unsigned j=0; j < 10; ++j ) {
       p[ 1 ] = random_.drand32( 0, new_m[1]*0.5 );
-      vcl_cout << "f(" <<p << ")= " << spline.f_x( p ) << " => " << refine_spline->f_x( p*2 ) << '\n';
+      std::cout << "f(" <<p << ")= " << spline.f_x( p ) << " => " << refine_spline->f_x( p*2 ) << '\n';
       TEST_NEAR_REL( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-9);
     }
   }
@@ -292,7 +293,7 @@ static
 void
 test_refine_3d_spline()
 {
-  vcl_cout << "\nTest 3d refinement\n";
+  std::cout << "\nTest 3d refinement\n";
 
   vnl_vector< unsigned > m(3);  m[0] = m[1] = m[2] = 3;
   rgrl_spline spline( m );
@@ -308,8 +309,8 @@ test_refine_3d_spline()
   rgrl_spline_sptr refine_spline = spline.refinement( new_m );
   TEST("new number of control points is 512", refine_spline->num_of_control_points(), (new_m[0]+3)*(new_m[1]+3)*(new_m[2]+3));
 #ifdef DEBUG
-  vcl_cout << "the original control points: " << c << '\n'
-           << "the refined control points: " << refine_spline->get_control_points() << vcl_endl;
+  std::cout << "the original control points: " << c << '\n'
+           << "the refined control points: " << refine_spline->get_control_points() << std::endl;
 #endif
   for (unsigned i=0; i < 10; ++i ) {
     vnl_vector< double > p( 3 );

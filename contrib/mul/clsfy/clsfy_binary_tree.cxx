@@ -1,15 +1,17 @@
 // This is mul/clsfy/clsfy_binary_tree.cxx
+#include <string>
+#include <deque>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <cmath>
 #include "clsfy_binary_tree.h"
 //:
 // \file
 // \brief Binary tree classifier
 // \author Martin Roberts
 
-#include <vcl_string.h>
-#include <vcl_deque.h>
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -20,7 +22,7 @@
 clsfy_binary_tree::clsfy_binary_tree(const clsfy_binary_tree& srcTree)
 : clsfy_classifier_base(srcTree)
 {
-    root_=cache_node_=0;
+    root_=cache_node_=VXL_NULLPTR;
     copy(srcTree);
 }
 
@@ -39,12 +41,12 @@ void clsfy_binary_tree::copy(const clsfy_binary_tree& srcTree)
     //Then copy into the classifier
     if (srcTree.root_)
     {
-        root_ = new clsfy_binary_tree_node(0,srcTree.root_->op_);
+        root_ = new clsfy_binary_tree_node(VXL_NULLPTR,srcTree.root_->op_);
         root_->prob_ = srcTree.root_->prob_;
         copy_children(srcTree.root_,root_);
     }
     else
-        root_=0;
+        root_=VXL_NULLPTR;
     cache_node_ = root_;
 }
 
@@ -75,11 +77,11 @@ unsigned clsfy_binary_tree::classify(const vnl_vector<double> &input) const
     clsfy_binary_tree_node* pNode=root_;
     if (!pNode)
     {
-        vcl_cerr<<"WARNING - empty tree in clsfy_binary_tree::classify\n"
+        std::cerr<<"WARNING - empty tree in clsfy_binary_tree::classify\n"
                 <<"Return default classification zero\n";
         return 0;
     }
-    clsfy_binary_tree_node* pChild=0;
+    clsfy_binary_tree_node* pChild=VXL_NULLPTR;
     do //Keep dropping down the tree till reach base level
     {
         pNode->op_.set_data(input);
@@ -107,7 +109,7 @@ unsigned clsfy_binary_tree::classify(const vnl_vector<double> &input) const
 //=======================================================================
 //: Return a probability like value that the input being in each class.
 // output(i) i<<nClasses, contains the probability that the input is in class i
-void clsfy_binary_tree::class_probabilities(vcl_vector<double>& outputs,
+void clsfy_binary_tree::class_probabilities(std::vector<double>& outputs,
                                             vnl_vector<double>const& input) const
 {
     outputs.resize(1);
@@ -132,13 +134,13 @@ unsigned clsfy_binary_tree::n_dims() const
 // class probability = exp(logL) / (1+exp(logL))
 double clsfy_binary_tree::log_l(const vnl_vector<double> &input) const
 {
-    vcl_vector<double > probs;
+    std::vector<double > probs;
     class_probabilities(probs,input);
     double p1=probs[0];
     double p0=1-p1;
     const double epsilon=1.0E-8;
     if (p0<epsilon) p0=epsilon;
-    double L=vcl_log(p1/p0);
+    double L=std::log(p1/p0);
 
     return L;
 }
@@ -146,14 +148,14 @@ double clsfy_binary_tree::log_l(const vnl_vector<double> &input) const
 
 //=======================================================================
 
-vcl_string clsfy_binary_tree::is_a() const
+std::string clsfy_binary_tree::is_a() const
 {
-    return vcl_string("clsfy_binary_tree");
+    return std::string("clsfy_binary_tree");
 }
 
 //=======================================================================
 
-bool clsfy_binary_tree::is_class(vcl_string const& s) const
+bool clsfy_binary_tree::is_class(std::string const& s) const
 {
     return s == clsfy_binary_tree::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -174,7 +176,7 @@ clsfy_classifier_base* clsfy_binary_tree::clone() const
 
 //=======================================================================
 
-void clsfy_binary_tree::print_summary(vcl_ostream& /*os*/) const
+void clsfy_binary_tree::print_summary(std::ostream& /*os*/) const
 {
 }
 
@@ -185,9 +187,9 @@ void clsfy_binary_tree::b_write(vsl_b_ostream& bfs) const
     vsl_b_write(bfs,version_no());
     int nodeId=0; //used numeric ids for parent child relations
     // -1 means none
-    vcl_deque<clsfy_binary_tree_node*> stack;
-    vcl_deque<clsfy_binary_tree_node*> outlist;
-    vcl_vector<graph_rep> arcs;
+    std::deque<clsfy_binary_tree_node*> stack;
+    std::deque<clsfy_binary_tree_node*> outlist;
+    std::vector<graph_rep> arcs;
     clsfy_binary_tree_node* pNode=root_;
 
     stack.push_back(pNode);
@@ -223,8 +225,8 @@ void clsfy_binary_tree::b_write(vsl_b_ostream& bfs) const
     unsigned N=outlist.size();
     vsl_b_write(bfs,N);
 
-    vcl_deque<clsfy_binary_tree_node*>::iterator outIter=outlist.begin();
-    vcl_deque<clsfy_binary_tree_node*>::iterator outIterEnd=outlist.end();
+    std::deque<clsfy_binary_tree_node*>::iterator outIter=outlist.begin();
+    std::deque<clsfy_binary_tree_node*>::iterator outIterEnd=outlist.end();
     while (outIter != outIterEnd)
     {
         clsfy_binary_tree_node* pNode=*outIter;
@@ -238,8 +240,8 @@ void clsfy_binary_tree::b_write(vsl_b_ostream& bfs) const
     N=arcs.size();
     vsl_b_write(bfs,N);
 
-    vcl_vector<graph_rep>::iterator arcIter=arcs.begin();
-    vcl_vector<graph_rep>::iterator arcIterEnd=arcs.end();
+    std::vector<graph_rep>::iterator arcIter=arcs.begin();
+    std::vector<graph_rep>::iterator arcIterEnd=arcs.end();
 
     while (arcIter != arcIterEnd)
     {
@@ -257,7 +259,7 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
     if (!bfs) return;
 
     remove_tree(root_);
-    root_=0;
+    root_=VXL_NULLPTR;
 
     short version;
     vsl_b_read(bfs,version);
@@ -265,10 +267,10 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
     {
         case (1):
         {
-            vcl_map<int,clsfy_binary_tree_node*> workmap;
-            vcl_vector<graph_rep> arcs;
+            std::map<int,clsfy_binary_tree_node*> workmap;
+            std::vector<graph_rep> arcs;
 
-            clsfy_binary_tree_node* pNull=0;
+            clsfy_binary_tree_node* pNull=VXL_NULLPTR;
             unsigned N;
             vsl_b_read(bfs,N);
             for (unsigned i=0;i<N;++i)
@@ -299,8 +301,8 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
                 if (link.me!= -1)
                 {
                     clsfy_binary_tree_node* parent=workmap[link.me];
-                    clsfy_binary_tree_node* left_child=0;
-                    clsfy_binary_tree_node* right_child=0;
+                    clsfy_binary_tree_node* left_child=VXL_NULLPTR;
+                    clsfy_binary_tree_node* right_child=VXL_NULLPTR;
                     if (link.left_child != -1)
                         left_child=workmap[link.left_child];
                     if (link.right_child != -1)
@@ -308,19 +310,19 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
 
                     if (!parent || parent->nodeId_ != link.me)
                     {
-                        vcl_cerr<<"ERROR - Inconsistent parent in tree set up in clsfy_binary_tree::b_read\n";
+                        std::cerr<<"ERROR - Inconsistent parent in tree set up in clsfy_binary_tree::b_read\n";
                         assert(0);
                     }
                     if ((link.left_child != -1) &&
                         (!left_child || left_child->nodeId_ != link.left_child))
                                         {
-                        vcl_cerr<<"ERROR - Inconsistent left child in tree set up in clsfy_binary_tree::b_read\n";
+                        std::cerr<<"ERROR - Inconsistent left child in tree set up in clsfy_binary_tree::b_read\n";
                         assert(0);
                     }
                     if ((link.right_child != -1) &&
                         (!right_child || right_child->nodeId_ != link.right_child))
                                         {
-                        vcl_cerr<<"ERROR - Inconsistent right child in tree set up in clsfy_binary_tree::b_read\n";
+                        std::cerr<<"ERROR - Inconsistent right child in tree set up in clsfy_binary_tree::b_read\n";
                         assert(0);
                     }
 
@@ -337,8 +339,8 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
 
             //Validate the tree
             assert(root_);
-            vcl_map<int,clsfy_binary_tree_node*>::iterator nodeIter =workmap.begin();
-            vcl_map<int,clsfy_binary_tree_node*>::iterator nodeIterEnd =workmap.end();
+            std::map<int,clsfy_binary_tree_node*>::iterator nodeIter =workmap.begin();
+            std::map<int,clsfy_binary_tree_node*>::iterator nodeIterEnd =workmap.end();
             while (nodeIter != nodeIterEnd)
             {
                 clsfy_binary_tree_node* pNode=nodeIter->second;
@@ -367,22 +369,22 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
         break;
 
         default:
-            vcl_cerr << "I/O ERROR: clsfy_binary_tree::b_read(vsl_b_istream&)\n"
+            std::cerr << "I/O ERROR: clsfy_binary_tree::b_read(vsl_b_istream&)\n"
                      << "           Unknown version number "<< version << '\n';
-            bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+            bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
 }
 
 clsfy_binary_tree::~clsfy_binary_tree()
 {
     remove_tree(root_);
-    root_=0;
+    root_=VXL_NULLPTR;
 }
 
 void  clsfy_binary_tree::remove_tree(clsfy_binary_tree_node* root)
 {
-    vcl_deque<clsfy_binary_tree_node*> stack;
-    vcl_deque<clsfy_binary_tree_node*> killset;
+    std::deque<clsfy_binary_tree_node*> stack;
+    std::deque<clsfy_binary_tree_node*> killset;
     stack.push_back(root);
     while (!stack.empty())
     {
@@ -435,9 +437,9 @@ void clsfy_binary_tree_op::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,version);
     if (version != 1)
     {
-        vcl_cerr << "I/O ERROR: clsfy_binary_tree::b_read(vsl_b_istream&)\n"
+        std::cerr << "I/O ERROR: clsfy_binary_tree::b_read(vsl_b_istream&)\n"
                  << "           Unknown version number "<< version << '\n';
-        bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
     else
     {

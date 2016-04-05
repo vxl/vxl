@@ -32,10 +32,10 @@ bool boxm_split_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_split_scene_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
   output_types_[1] = "boxm_scene_base_sptr";
 
@@ -48,8 +48,8 @@ bool boxm_split_scene_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << ": the input number should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+    std::cout << pro.name() << ": the input number should be " << n_inputs_
+             << " but instead it is " << pro.n_inputs() << std::endl;
     return false;
   }
 
@@ -58,7 +58,7 @@ bool boxm_split_scene_process(bprb_func_process& pro)
 
   //check input's validity
   if (!scene_base.ptr()) {
-    vcl_cout <<  " :-- Grid is not valid!\n";
+    std::cout <<  " :-- Grid is not valid!\n";
     return false;
   }
 

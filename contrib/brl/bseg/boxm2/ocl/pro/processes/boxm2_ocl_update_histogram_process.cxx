@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_histogram_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -28,11 +30,11 @@ namespace boxm2_ocl_update_histogram_process_globals
 {
   const unsigned n_inputs_ =  5;
   const unsigned n_outputs_ = 0;
-  vcl_size_t local_threads[]={8,8};
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  std::size_t local_threads[]={8,8};
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -43,30 +45,30 @@ namespace boxm2_ocl_update_histogram_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    vcl_string options = " -D INTENSITY ";
+    std::string options = " -D INTENSITY ";
     options += " -D MOG_TYPE_8 ";
     //create all passes
     bocl_kernel* seg_len = new bocl_kernel();
-    vcl_string seg_opts = options + "-D DETERMINISTIC -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
+    std::string seg_opts = options + "-D DETERMINISTIC -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
     seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "cum_len_main", seg_opts, "update::seg_len");
     vec_kernels.push_back(seg_len);
 
 
     bocl_kernel* update_hist = new bocl_kernel();
-    vcl_string hist_opts = options + "-D DETERMINISTIC -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
+    std::string hist_opts = options + "-D DETERMINISTIC -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
     update_hist->create_kernel(&device->context(), device->device_id(), src_paths, "update_hist_main", hist_opts, "update::hist");
     vec_kernels.push_back(update_hist);
 
-    vcl_vector<vcl_string> clean_seg_kernels_src;
+    std::vector<std::string> clean_seg_kernels_src;
     clean_seg_kernels_src.push_back(source_dir + "scene_info.cl");
     clean_seg_kernels_src.push_back(source_dir + "bit/batchkernels.cl");
 
     bocl_kernel* clean_seg_len = new bocl_kernel();
-    vcl_string clean_seg_len_opts = options + " -D CLEAN_SEG_LEN ";
+    std::string clean_seg_len_opts = options + " -D CLEAN_SEG_LEN ";
     clean_seg_len->create_kernel(&device->context(), device->device_id(), clean_seg_kernels_src, "clean_seg_len_main", clean_seg_len_opts, "clean::seg_len");
     vec_kernels.push_back(clean_seg_len);
   }
-  static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<cl_device_id*,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_update_histogram_process_cons(bprb_func_process& pro)
@@ -74,7 +76,7 @@ bool boxm2_ocl_update_histogram_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_histogram_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -82,7 +84,7 @@ bool boxm2_ocl_update_histogram_process_cons(bprb_func_process& pro)
   input_types_[4] = "vcl_string";
 
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -92,7 +94,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   using namespace boxm2_ocl_update_histogram_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -103,7 +105,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  vcl_string in_img_name= pro.get_input<vcl_string>(i++);
+  std::string in_img_name= pro.get_input<std::string>(i++);
 
 
 //: create a command queue.
@@ -118,8 +120,8 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   // compile the kernel
   if (kernels.find((device->device_id()))==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
     kernels[(device->device_id())]=ks;
   }
@@ -185,8 +187,8 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   for (unsigned kernelindex=0;kernelindex<3;kernelindex++)
   {
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr());
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       //choose correct render kernel
@@ -215,8 +217,8 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
         //local tree , cumsum buffer
         kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
         kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
-        vcl_size_t lThreads[] = {8, 8};
-        vcl_size_t gThreads[] = {cl_ni,cl_nj};
+        std::size_t lThreads[] = {8, 8};
+        std::size_t gThreads[] = {cl_ni,cl_nj};
         //execute kernel
         kern->execute(queue, 2, lThreads, gThreads);
         clFinish(queue);
@@ -248,7 +250,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
         //local tree , cumsum buffer
         kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );
         kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) );
-        vcl_size_t gThreads[] = {cl_ni,cl_nj};
+        std::size_t gThreads[] = {cl_ni,cl_nj};
         //execute kernel
         kern->execute(queue, 2, local_threads, gThreads);
         clFinish(queue);
@@ -274,8 +276,8 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
         kern->set_arg( aux );
         kern->set_arg( cl_output.ptr() );
 
-        vcl_size_t lThreads[] = { 1,1};
-        vcl_size_t gThreads[] = { RoundUp(numbuf*datlen,64),1};
+        std::size_t lThreads[] = { 1,1};
+        std::size_t gThreads[] = { RoundUp(numbuf*datlen,64),1};
         //execute kernel
         kern->execute(queue, 2, lThreads, gThreads);
         clFinish(queue);

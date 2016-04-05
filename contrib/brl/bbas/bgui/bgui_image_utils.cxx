@@ -1,7 +1,9 @@
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "bgui_image_utils.h"
 
-#include <vcl_cstdlib.h> // for rand()
-#include <vcl_cmath.h> // for ceil()
+#include <vcl_compiler.h>
 
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
@@ -19,7 +21,7 @@
 bgui_image_utils::bgui_image_utils():
   hist_valid_(false), percent_limit_(0.0002), bin_limit_(1000),
   n_skip_upper_bins_(0), n_skip_lower_bins_(1), min_blocks_(50),
-  scan_fraction_(0.005), image_(0), poly_(0)
+  scan_fraction_(0.005), image_(VXL_NULLPTR), poly_(VXL_NULLPTR)
 {
 }
 
@@ -41,7 +43,7 @@ void bgui_image_utils::set_image(vil_image_resource_sptr const& image)
 {
   if (!image)
   {
-    image_ = 0;
+    image_ = VXL_NULLPTR;
     return;
   }
   image_ = image;
@@ -76,7 +78,7 @@ bool bgui_image_utils::init_histogram_from_data()
     return false;
 
   vil_image_resource_sptr image;
-  bool pyr = image_->get_property(vil_property_pyramid, 0);
+  bool pyr = image_->get_property(vil_property_pyramid, VXL_NULLPTR);
   if (pyr)
   {
     // cast to pyramid resource
@@ -106,7 +108,7 @@ bool bgui_image_utils::init_histogram_from_data()
 
   if (np!=1&&np!=3&&np!=4)
   {
-    vcl_cout << "Format not supported by bgui_image_utils\n";
+    std::cout << "Format not supported by bgui_image_utils\n";
     return false;
   }
   double min_val=0.0, max_val = 255.0;
@@ -115,7 +117,7 @@ bool bgui_image_utils::init_histogram_from_data()
    case  VIL_PIXEL_FORMAT_BYTE:
     for (unsigned p = 0; p<np; ++p) {
       hist_[p] = bsta_histogram<double>(min_val, max_val, 255);
-      for (vcl_vector<double>::iterator dit = data_[p].begin();
+      for (std::vector<double>::iterator dit = data_[p].begin();
            dit != data_[p].end(); dit++)
         hist_[p].upcount(*dit, 1.0);
     }
@@ -125,9 +127,9 @@ bool bgui_image_utils::init_histogram_from_data()
     max_val = 65535.0;
 
     // determine the min and max range of image values
-    vcl_vector<double> minr(np, max_val), maxr(np,min_val);
+    std::vector<double> minr(np, max_val), maxr(np,min_val);
     for (unsigned p = 0; p<np; ++p) {
-      for (vcl_vector<double>::iterator dit = data_[p].begin();
+      for (std::vector<double>::iterator dit = data_[p].begin();
            dit != data_[p].end(); dit++)
       {
         if ((*dit)<minr[p]) minr[p] = *dit;
@@ -141,12 +143,12 @@ bool bgui_image_utils::init_histogram_from_data()
         nbins = static_cast<unsigned short>(bin_limit_);
         // increase max value to make bin delta an integer
         double range = smax-smin;
-        unsigned short del = static_cast<unsigned short>(vcl_ceil(range/nbins));
+        unsigned short del = static_cast<unsigned short>(std::ceil(range/nbins));
         smax = static_cast<unsigned short>(smin + nbins*del);
       }
       hist_[p] = bsta_histogram<double>(static_cast<double>(smin),
                                         static_cast<double>(smax), nbins);
-      for (vcl_vector<double>::iterator dit = data_[p].begin();
+      for (std::vector<double>::iterator dit = data_[p].begin();
            dit != data_[p].end(); ++dit)
         hist_[p].upcount(*dit, 1.0);
     }
@@ -157,7 +159,7 @@ bool bgui_image_utils::init_histogram_from_data()
      return true;
    }
    default:
-    vcl_cout << "Format not supported by bgui_image_utils\n";
+    std::cout << "Format not supported by bgui_image_utils\n";
     return false;
   }
 }
@@ -169,7 +171,7 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
 {
   if (!view)
   {
-    vcl_cout << "set histogram failed in bgui_image_utils\n";
+    std::cout << "set histogram failed in bgui_image_utils\n";
     return false;
   }
   vil_pixel_format type = view->pixel_format();
@@ -185,8 +187,8 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        unsigned i = static_cast<unsigned>((ni-1)*(std::rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(std::rand()/(RAND_MAX+1.0)));
         double val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
@@ -200,8 +202,8 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        unsigned i = static_cast<unsigned>((ni-1)*(std::rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(std::rand()/(RAND_MAX+1.0)));
         double val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
@@ -215,8 +217,8 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(vcl_rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(vcl_rand()/(RAND_MAX+1.0)));
+        unsigned i = static_cast<unsigned>((ni-1)*(std::rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(std::rand()/(RAND_MAX+1.0)));
         double val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
@@ -224,7 +226,7 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
     return true;
    }
    default:
-     vcl_cout << "Format not supported for histogram construction by bgui_image_utils\n";
+     std::cout << "Format not supported for histogram construction by bgui_image_utils\n";
   }
   return false;
 }
@@ -237,8 +239,8 @@ set_data_by_random_blocks(const unsigned total_num_blocks,
   unsigned nbi = bir->n_block_i(), nbj = bir->n_block_j();
   for (unsigned ib = 0; ib<total_num_blocks; ++ib)
   {
-    unsigned bi = static_cast<unsigned>((nbi-1)*(vcl_rand()/(RAND_MAX+1.0)));
-    unsigned bj = static_cast<unsigned>((nbj-1)*(vcl_rand()/(RAND_MAX+1.0)));
+    unsigned bi = static_cast<unsigned>((nbi-1)*(std::rand()/(RAND_MAX+1.0)));
+    unsigned bj = static_cast<unsigned>((nbj-1)*(std::rand()/(RAND_MAX+1.0)));
     if (!this->set_data_from_view(bir->get_block(bi, bj), fraction))
       return false;
   }
@@ -251,7 +253,7 @@ set_data_inside_polygon(vil_blocked_image_resource_sptr const& bir)
   vil_blocked_image_resource_sptr cbir =
     vil_new_cached_image_resource(bir);
   if (!cbir) {
-    vcl_cout << "Null cached image resource to construct histogram\n";
+    std::cout << "Null cached image resource to construct histogram\n";
     return false;
   }
   // convert to vgl_polygon
@@ -278,7 +280,7 @@ bool bgui_image_utils::construct_histogram()
   vul_timer t;
   if (!this->init_histogram_from_data())
   {
-    vcl_cout << "Unable to construct histogram in bgui_image_utils\n";
+    std::cout << "Unable to construct histogram in bgui_image_utils\n";
     return false;
   }
   unsigned  np = image_->nplanes();
@@ -292,27 +294,27 @@ bool bgui_image_utils::construct_histogram()
     for (unsigned s =last_bin; s>last_bin-n_skip_upper_bins_; s--)
       hist_[p].set_count(s, 0.0);
 
-  vcl_cout << "computed histogram on " << np*data_[0].size()
+  std::cout << "computed histogram on " << np*data_[0].size()
            << " pixels in " << t.real() << " milliseconds\n";
 
   float area = hist_[0].area();
   float low_perc = percent_limit_;
 #if 0
-    vcl_cout << "n pix low " << low_perc*area << '\n';
+    std::cout << "n pix low " << low_perc*area << '\n';
 #endif
   if(low_perc*area < 100.0f)
     low_perc = 100.0f/area;
   if(low_perc >0.01f)
-    vcl_cout << "Warning too few pixels in image\n";
+    std::cout << "Warning too few pixels in image\n";
   else
-    vcl_cout << "low limit based on " << low_perc*area << " pixels\n";
+    std::cout << "low limit based on " << low_perc*area << " pixels\n";
   float low = hist_[0].value_with_area_below(low_perc);
   float high = hist_[0].value_with_area_above(0.1f);
   float mean = hist_[0].mean_vals(low, high);
 #if 0
-  vcl_cout << " Hist stats \n";
-  vcl_cout << "low\thigh\tmean\n";
-  vcl_cout << low << '\t' << high << '\t' << mean << '\n';
+  std::cout << " Hist stats \n";
+  std::cout << "low\thigh\tmean\n";
+  std::cout << low << '\t' << high << '\t' << mean << '\n';
 #endif
   hist_valid_ = true;
   return true;
@@ -338,21 +340,21 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
   unsigned n_planes = image_->nplanes();
 
   if (!image_ || n_planes>4)
-    return 0;
+    return VXL_NULLPTR;
 
   if (!hist_valid_)
     if (!this->construct_histogram())
-      return 0;
+      return VXL_NULLPTR;
 
   bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
 
   if (n_planes ==1)
   {
     unsigned lowbin =hist_[0].low_bin(), highbin = hist_[0].high_bin();
-    if (lowbin>highbin) return 0; // shouldn't happen
-    vcl_vector<double> pos = hist_[0].value_array();
-    vcl_vector<double> counts = hist_[0].count_array();
-    vcl_vector<double> trim_pos, trim_counts;
+    if (lowbin>highbin) return VXL_NULLPTR; // shouldn't happen
+    std::vector<double> pos = hist_[0].value_array();
+    std::vector<double> counts = hist_[0].count_array();
+    std::vector<double> trim_pos, trim_counts;
     // make sure the lowest sample starts at a multiple of 10
     double p0 = pos[lowbin];
     double pten = 10.0*static_cast<int>(p0/10);
@@ -375,7 +377,7 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
   for (unsigned p = 0; p<n_planes; ++p)
   {
     unsigned lbin = hist_[p].low_bin(), hbin = hist_[p].high_bin();
-    vcl_vector<double> pos = hist_[p].value_array();
+    std::vector<double> pos = hist_[p].value_array();
     if (pos[lbin]<minpos) minpos = pos[lbin];
     if (pos[hbin]>maxpos) maxpos = pos[hbin];
     double delta = hist_[p].delta();
@@ -392,13 +394,13 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
   if (delta_i==0) delta_i += 1.0;
   unsigned npos = static_cast<unsigned>(range/delta_i);
   // set  up the integral positions
-  vcl_vector<double> dpos(npos);
+  std::vector<double> dpos(npos);
   for (unsigned i = 0; i<npos; ++i)
     dpos[i] = i*delta_i;
 
-  vcl_vector<vcl_vector<double> > mpos(n_planes, dpos);
+  std::vector<std::vector<double> > mpos(n_planes, dpos);
 
-  vcl_vector<vcl_vector<double> > mcounts(n_planes);
+  std::vector<std::vector<double> > mcounts(n_planes);
   for (unsigned p = 0; p<n_planes; ++p)
   {
     double area = hist_[p].area();
@@ -457,12 +459,12 @@ bool bgui_image_utils::range_map_from_hist(float gamma, bool invert,
                                            bool gl_map, bool cache,
                                            vgui_range_map_params_sptr& rmp)
 {
-  rmp = 0;
+  rmp = VXL_NULLPTR;
   if (!image_)
     return false;
 
   unsigned np = image_->nplanes();
-  vcl_vector<double> minr(np, 0.0), maxr(np, 0.0);
+  std::vector<double> minr(np, 0.0), maxr(np, 0.0);
 
   for (unsigned p = 0; p<np; ++p)
     if (!this->range(minr[p], maxr[p], p))

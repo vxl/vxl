@@ -1,5 +1,6 @@
 // This is core/vbl/io/tests/test_triple_io.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/io/vbl_io_triple.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
@@ -8,7 +9,7 @@
 
 void test_triple_io()
 {
-  vcl_cout << "*************************************\n"
+  std::cout << "*************************************\n"
            << "Testing vbl_triple<double,int,int> io\n"
            << "*************************************\n";
 
@@ -30,8 +31,8 @@ void test_triple_io()
 
   TEST("v_out == v_in", v_out, v_in);
 
-  vsl_print_summary(vcl_cout, v_in);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, v_in);
+  std::cout << std::endl;
   vsl_indent_clear_all_data ();
 }
 

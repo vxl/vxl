@@ -12,12 +12,12 @@
 bool bvxm_scene_box_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_scene_box_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";     // voxel world spec
   if (!pro.set_input_types(input_types_))
     return false;
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double"; // lower left lon
   output_types_[1] = "double"; // lower left lat
   output_types_[2] = "double"; // lower left elev
@@ -32,10 +32,10 @@ bool bvxm_scene_box_process(bprb_func_process& pro)
 {
   using namespace bvxm_scene_box_process_globals;
   //static const parameters
-  static const vcl_string error = "error";
+  static const std::string error = "error";
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -71,12 +71,12 @@ bool bvxm_scene_box_process(bprb_func_process& pro)
 //: set input and output types
 bool bvxm_scene_origin_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types_(1);
+  std::vector<std::string> input_types_(1);
   input_types_[0] = "bvxm_voxel_world_sptr";     // voxel world spec
   if (!pro.set_input_types(input_types_))
     return false;
 
-  vcl_vector<vcl_string> output_types_(3);
+  std::vector<std::string> output_types_(3);
   output_types_[0] = "double"; // lower left lon
   output_types_[1] = "double"; // lower left lat
   output_types_[2] = "double"; // origin elev
@@ -86,10 +86,10 @@ bool bvxm_scene_origin_process_cons(bprb_func_process& pro)
 bool bvxm_scene_origin_process(bprb_func_process& pro)
 {
   //static const parameters
-  static const vcl_string error = "error";
+  static const std::string error = "error";
 
   if ( pro.n_inputs() < 1 ) {
-    vcl_cout << pro.name() << " The input number should be " << 1 << vcl_endl;
+    std::cout << pro.name() << " The input number should be " << 1 << std::endl;
     return false;
   }
 

@@ -1,18 +1,19 @@
+#include <cmath>
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
 #include "bcvr_clsd_cvmatch.h"
 //:
 // \file
-#include <vcl_cmath.h>
-#include <vcl_cstdio.h>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #define TOL                   (1.0e-1)
-#define IS_ALMOST_ZERO(X)     (vcl_abs(X) < TOL)
-#define IS_ALMOST_EQUAL(X,Y)  (vcl_abs(X-Y) < TOL)
+#define IS_ALMOST_ZERO(X)     (std::abs(X) < TOL)
+#define IS_ALMOST_EQUAL(X,Y)  (std::abs(X-Y) < TOL)
 
 #include "bcvr_cv_cor.h"
 
@@ -24,7 +25,7 @@ bcvr_cv_cor::bcvr_cv_cor()
 
 bcvr_cv_cor::bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
                          const bsol_intrinsic_curve_2d_sptr c2,
-                         vcl_vector< vcl_pair <int,int> >& map,
+                         std::vector< std::pair <int,int> >& map,
                          int n1)
 : final_cost_(0), final_norm_cost_(0)
 {
@@ -32,7 +33,7 @@ bcvr_cv_cor::bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
 
   // save pointers to the original polygons also
   // (might be line fitted versions of input polygons to dbcvr_clsd_cvmatch)
-  vcl_vector<vsol_point_2d_sptr> tmp;
+  std::vector<vsol_point_2d_sptr> tmp;
   for (int i = 0; i<n1; i++)
     tmp.push_back(c1->vertex(i));
   poly1_ = new vsol_polygon_2d(tmp);
@@ -78,10 +79,10 @@ bcvr_cv_cor::bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
 
 #if 0
   for (unsigned int i = 0; i<arclengths1_.size(); i++)
-    vcl_cout << "arclengths1[" << i << "]: " << vcl_fmod(arclengths1_[i], length1_) << vcl_endl;
+    std::cout << "arclengths1[" << i << "]: " << std::fmod(arclengths1_[i], length1_) << std::endl;
   for (unsigned int i = 0; i<arclengths2_.size(); i++)
-    vcl_cout << "arclengths2[" << i << "]: " << arclengths2_[i] << vcl_endl;
-  vcl_cout << "length of curve1: " << length1_ << " length of curve2: " << length2_ << vcl_endl;
+    std::cout << "arclengths2[" << i << "]: " << arclengths2_[i] << std::endl;
+  std::cout << "length of curve1: " << length1_ << " length of curve2: " << length2_ << std::endl;
 #endif
 }
 
@@ -102,8 +103,8 @@ double bcvr_cv_cor::get_arclength_on_curve2(double s1)
     s1 = s1 + length1_;
 
   // binary search for s1 in vector of arclengths
-  const vcl_vector<double>::const_iterator
-      p = vcl_lower_bound(arclengths1_.begin(), arclengths1_.end(), s1);
+  const std::vector<double>::const_iterator
+      p = std::lower_bound(arclengths1_.begin(), arclengths1_.end(), s1);
 
   if (p == arclengths1_.begin())
     return arclengths2_[0];
@@ -131,11 +132,11 @@ double bcvr_cv_cor::get_arclength_on_curve1(double s2)
    }
 
   // binary search for s2 in vector of arclengths
-  const vcl_vector<double>::const_iterator
-      p = vcl_lower_bound(arclengths2_.begin(), arclengths2_.end(), s2);
+  const std::vector<double>::const_iterator
+      p = std::lower_bound(arclengths2_.begin(), arclengths2_.end(), s2);
 
   if (p == arclengths2_.begin())
-    return vcl_fmod(arclengths1_[0], length1_);
+    return std::fmod(arclengths1_[0], length1_);
 
   int loc = p - arclengths2_.begin();
 
@@ -143,15 +144,15 @@ double bcvr_cv_cor::get_arclength_on_curve1(double s2)
   double dif = s2-arclengths2_[loc-1];
   double interval_dif = arclengths2_[loc]-arclengths2_[loc-1];
   double interval_dif2 = arclengths1_[loc]-arclengths1_[loc-1];
-  return vcl_fmod(arclengths1_[loc-1]+(dif/interval_dif)*interval_dif2, length1_);
+  return std::fmod(arclengths1_[loc-1]+(dif/interval_dif)*interval_dif2, length1_);
 }
 
 //: write points to a file
-bool bcvr_cv_cor::write_correspondence(vcl_string file_name, int increment)
+bool bcvr_cv_cor::write_correspondence(std::string file_name, int increment)
 {
-  vcl_ofstream of(file_name.c_str());
+  std::ofstream of(file_name.c_str());
   if (!of) {
-    vcl_cerr << "Unable to open output file " <<file_name << " for write\n";
+    std::cerr << "Unable to open output file " <<file_name << " for write\n";
     return false;
   }
 
@@ -162,11 +163,11 @@ bool bcvr_cv_cor::write_correspondence(vcl_string file_name, int increment)
   for (unsigned i = 0; i<pts2_.size(); i+=increment)
     cnt2++;
 
-  of << cnt1 << vcl_endl;
+  of << cnt1 << std::endl;
   for (unsigned i = 0; i<pts1_.size(); i+=increment)
     of << pts1_[i].x() << ' ' << pts1_[i].y() << '\n';
 
-  of << cnt2 << vcl_endl;
+  of << cnt2 << std::endl;
   for (unsigned i = 0; i<pts2_.size(); i+=increment)
     of << pts2_[i].x() << ' ' << pts2_[i].y() << '\n';
 
@@ -241,7 +242,7 @@ void bcvr_cv_cor::b_read(vsl_b_istream &is)
         poly1_->b_read(is);
       }
       else
-        poly1_ = 0;
+        poly1_ = VXL_NULLPTR;
 
       vsl_b_read(is, poly_available);
       if (poly_available) {
@@ -249,7 +250,7 @@ void bcvr_cv_cor::b_read(vsl_b_istream &is)
         poly2_->b_read(is);
       }
       else
-        poly2_ = 0;
+        poly2_ = VXL_NULLPTR;
 
       unsigned cnt;
       vsl_b_read(is, cnt);

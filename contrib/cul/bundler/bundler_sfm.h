@@ -3,8 +3,10 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include <bundler/bundler_inters.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //:
 // An abstract functor. Takes in the track set, and fills the
@@ -31,7 +33,7 @@ class bundler_sfm_select_next_images
   virtual bool operator() (
       bundler_inters_reconstruction &reconstruction,
 
-      vcl_vector<bundler_inters_image_sptr> &to_add) = 0;
+      std::vector<bundler_inters_image_sptr> &to_add) = 0;
 };
 
 
@@ -44,10 +46,10 @@ class bundler_sfm_add_next_images
 {
  public:
   virtual void operator() (
-      const vcl_vector<bundler_inters_image_sptr> &to_add,
+      const std::vector<bundler_inters_image_sptr> &to_add,
 
       bundler_inters_reconstruction &reconstruction,
-      vcl_vector<bundler_inters_image_sptr> &added_images) = 0;
+      std::vector<bundler_inters_image_sptr> &added_images) = 0;
 };
 
 
@@ -60,7 +62,7 @@ class bundler_sfm_add_new_points
  public:
   virtual void operator() (
       bundler_inters_reconstruction &reconstruction,
-      const vcl_vector<bundler_inters_image_sptr> &added) = 0;
+      const std::vector<bundler_inters_image_sptr> &added) = 0;
 };
 
 

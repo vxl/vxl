@@ -1,11 +1,12 @@
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
 #include "bvpl_kernel.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <bxml/bxml_find.h>
 
@@ -20,11 +21,11 @@ unsigned bvpl_kernel::get_next_id()
 }
 
 //: Saves the kernel to ascii file
-void bvpl_kernel::print_to_file(vcl_string filename)
+void bvpl_kernel::print_to_file(std::string filename)
 {
-  vcl_fstream ofs(filename.c_str(), vcl_ios::out);
+  std::fstream ofs(filename.c_str(), std::ios::out);
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening file " << filename << " for write!\n";
+    std::cerr << "error opening file " << filename << " for write!\n";
     return;
   }
 
@@ -42,11 +43,11 @@ void bvpl_kernel::print_to_file(vcl_string filename)
 //: Saves the kernel to Drishti .raw data format.
 // The kernel does not occupy the entire volume, so the empty voxels are set to 0.
 // The size of the box is max(x,y,z) * max(x,y,z) * max(x,y,z)
-bool bvpl_kernel::save_raw(vcl_string filename)
+bool bvpl_kernel::save_raw(std::string filename)
 {
-  vcl_fstream ofs(filename.c_str(), vcl_ios::binary | vcl_ios::out);
+  std::fstream ofs(filename.c_str(), std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening file " << filename << " for write!\n";
+    std::cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
 
@@ -82,8 +83,8 @@ bool bvpl_kernel::save_raw(vcl_string filename)
         min = (*kernel_).c_;
       ++kernel_;
     }
-    vcl_cout << "max: " << max <<vcl_endl
-             << "min: " << min <<vcl_endl;
+    std::cout << "max: " << max <<std::endl
+             << "min: " << min <<std::endl;
   }
 
   //Since our kernel does not occupy the entire space we need to initialize our data
@@ -97,7 +98,7 @@ bool bvpl_kernel::save_raw(vcl_string filename)
     data_array[index] = (float)((*kernel_).c_);
     ++kernel_;
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   ofs.write(reinterpret_cast<char*>(data_array),sizeof(float)*nx*ny*nz);
   ofs.close();
@@ -138,7 +139,7 @@ bxml_data_sptr bvpl_kernel::xml_element()
   bxml_element *kernel = new bxml_element("bvpl_kernel");
   kernel->append_text("\n");
   if(!factory_data_)
-    return NULL;
+    return VXL_NULLPTR;
   //bxml_data_sptr factory_data = factory_->xml_element();
   kernel->append_data(factory_data_);
   kernel->append_text("\n");
@@ -153,7 +154,7 @@ bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
 
   bxml_data_sptr root = bxml_find_by_name(d, query);
   if (!root || root->type() != bxml_data::ELEMENT) {
-    return NULL;
+    return VXL_NULLPTR;
   }
   bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());
 
@@ -162,7 +163,7 @@ bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
 
   gp_root->get_attribute("voxel_length", voxel_length );
   //try each factory
-  bvpl_kernel_sptr kernel = NULL;
+  bvpl_kernel_sptr kernel = VXL_NULLPTR;
 
   kernel = bvpl_edge3d_kernel_factory::parse_xml_element(d);
 
@@ -171,7 +172,7 @@ bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
     return kernel;
   }
   else
-    return NULL;
+    return VXL_NULLPTR;
 
 
 }

@@ -33,18 +33,18 @@ class vimt3d_image_3d : public vimt_image
   //  3D image is v[0] x v[1] x v[2]
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual vcl_vector<unsigned> image_size() const;
+  virtual std::vector<unsigned> image_size() const;
 
   //: Return 3D vectors defining bounding box containing image in world co-ords
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual void world_bounds(vcl_vector<double>& b_lo,
-                            vcl_vector<double>& b_hi) const;
+  virtual void world_bounds(std::vector<double>& b_lo,
+                            std::vector<double>& b_hi) const;
 
   //: Return 3 element vector indicating the size of a pixel
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual vcl_vector<double> pixel_size() const;
+  virtual std::vector<double> pixel_size() const;
 
   //: Current world-to-image transformation
   const vimt3d_transform_3d& world2im() const { return world2im_; }
@@ -60,10 +60,10 @@ class vimt3d_image_3d : public vimt_image
   virtual const vil3d_image_view_base& image_base() const = 0;
 
   //: Name of the class
-  virtual vcl_string is_a() const { return "vimt3d_image_3d"; }
+  virtual std::string is_a() const { return "vimt3d_image_3d"; }
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const
+  virtual bool is_class(std::string const& s) const
   { return s=="vimt3d_image_3d" || vimt_image::is_class(s); }
 };
 

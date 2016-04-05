@@ -51,7 +51,7 @@ class vgui_win32 : public vgui_toolkit
   virtual void uninit();
 
   // Returns the name of the toolkit
-  virtual vcl_string name() const { return "win32"; }
+  virtual std::string name() const { return "win32"; }
 
   virtual vgui_window* produce_window(int width, int height,
                                       vgui_menu const &menubar,
@@ -90,11 +90,11 @@ class vgui_win32 : public vgui_toolkit
   char     *szAppName_;
 
   // Save pointers to vgui_win32_window for access and free at app exit.
-  vcl_vector<vgui_window*> windows_to_delete;
+  std::vector<vgui_window*> windows_to_delete;
   vgui_window* current_window;
 
   // Save pointer to vgui_dialog_impl for access from dialog procedure.
-  vcl_vector<vgui_dialog_impl*> dialogs_to_delete;
+  std::vector<vgui_dialog_impl*> dialogs_to_delete;
   vgui_dialog_impl* current_dialog;
 };
 

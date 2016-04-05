@@ -1,6 +1,7 @@
 // This is brl/bseg/brip/tests/test_lucas_kanade.cxx
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <iomanip>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <brip/brip_vil1_float_ops.h>
@@ -32,8 +33,8 @@ static void test_lucas_kanade()
   brip_vil1_float_ops::Lucas_KanadeMotion(gauss_cur, gauss_prev, 1, 500.0, vx, vy);
   for (int y =0; y<h; y++)
     for (int x = 0; x<w; x++)
-      ang(x,y) = float(D_R*vcl_atan2(vy(x,y), vx(x,y)));
-  vcl_cout << vx(11,10)<<' '<< vx(12,16)<<' '<< vx(10,21)<<' '<< vx(9,26)<< '\n'
+      ang(x,y) = float(D_R*std::atan2(vy(x,y), vx(x,y)));
+  std::cout << vx(11,10)<<' '<< vx(12,16)<<' '<< vx(10,21)<<' '<< vx(9,26)<< '\n'
            << vy(11,10)<<' '<< vy(12,16)<<' '<< vy(10,21)<<' '<< vy(9,26)<< '\n'
            << vx(9,10)<< ' '<< vx(9,14)<< ' '<< vx(10,19)<<' '<< vx(11,24)<<'\n'
            << vy(9,10)<< ' '<< vy(9,14)<< ' '<< vy(10,19)<<' '<< vy(11,24)<<'\n'
@@ -43,8 +44,8 @@ static void test_lucas_kanade()
   for (int y =0; y<h; y++)
   {
     for (int x = 0; x<w; x++)
-      vcl_cout << ' ' << vcl_setw(3) << int(ang(x,y));
-    vcl_cout << '\n';
+      std::cout << ' ' << std::setw(3) << int(ang(x,y));
+    std::cout << '\n';
   }
   TEST_NEAR("ang(11,10)", ang(11,10), 170.91, 0.005);
   TEST_NEAR("ang(12,16)", ang(12,16),-158.65, 0.005);

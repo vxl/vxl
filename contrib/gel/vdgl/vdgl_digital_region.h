@@ -28,8 +28,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_float_3x3.h>
 #include <vnl/vnl_float_2.h>
@@ -115,10 +117,10 @@ class vdgl_digital_region : public vsol_region_2d
 
   //: Compute the intensity histogram
   //  The intensity ranges from get_min() to get_max().
-  vcl_vector<unsigned int> histogram(int nbins);
+  std::vector<unsigned int> histogram(int nbins);
   //: Compute the residual intensity histogram
   //  The intensity range is returned as the last two arguments.
-  vcl_vector<unsigned int> residual_histogram(int nbins, float* min=0, float* max=0);
+  std::vector<unsigned int> residual_histogram(int nbins, float* min=VXL_NULLPTR, float* max=VXL_NULLPTR);
 
   //: Return true if this region is convex
   virtual bool is_convex() const { return false; } // virtual of vsol_region_2d
@@ -138,7 +140,7 @@ class vdgl_digital_region : public vsol_region_2d
   virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("vdgl_digital_region"); }
+  std::string is_a() const { return std::string("vdgl_digital_region"); }
 
  protected:
   // Members

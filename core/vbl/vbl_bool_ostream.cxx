@@ -3,10 +3,11 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vbl_bool_ostream.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
-vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::on_off& proxy)
+std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::on_off& proxy)
 {
   if (*(proxy.truth))
     s << "on";
@@ -15,7 +16,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::on_off& proxy)
   return s;
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::high_low& proxy)
+std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::high_low& proxy)
 {
   if (*(proxy.truth))
     s << "high";
@@ -24,7 +25,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::high_low& proxy)
   return s;
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const vbl_bool_ostream::true_false& proxy)
+std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::true_false& proxy)
 {
   if (*(proxy.truth))
     s << "true";

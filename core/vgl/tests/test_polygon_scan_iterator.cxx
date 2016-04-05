@@ -14,10 +14,11 @@
 //                                as signalled by Kenneth Fritzsche and Gehua Yang.
 // \endverbatim
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 typedef vgl_polygon<float>::point_t        Point_type;
 typedef vgl_polygon<float>                 Polygon_type;
@@ -41,7 +42,7 @@ test_without_boundary()
   Polygon_scan it(poly, false);
   int y=0;
   for (it.reset(); it.next(); ++y) {
-    vcl_cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
              << ") goes from " << it.fstartx() << " (" << it.startx()
              << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     TEST("iteration without boundary: y value", it.scany(), y);
@@ -69,7 +70,7 @@ test_with_boundary()
   Polygon_scan it(poly);
   int y=21;
   for (it.reset(); it.next(); ++y) {
-    vcl_cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
              << ") goes from " << it.fstartx() << " (" << it.startx()
              << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     TEST("iteration with boundary: y value", it.scany(), y);
@@ -101,7 +102,7 @@ test_degenerate_polygon()
   unsigned int count=0;
   int y=10;
   for (it.reset(); it.next(); ++y) {
-    vcl_cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
              << ") goes from " << it.fstartx() << " (" << it.startx()
              << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     TEST("zero-length edges: y value", it.scany(), y);
@@ -121,7 +122,7 @@ test_empty_polygon()
   Polygon_scan it( poly );
   unsigned int count=0;
   for (it.reset(); it.next(); ) {
-    vcl_cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
              << ") goes from " << it.fstartx() << " (" << it.startx()
              << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     count += it.endx() - it.startx() + 1;
@@ -146,7 +147,7 @@ test_almost_horizontal()
   Polygon_scan it(poly,false);
   int y=786;
   for (it.reset(); it.next(); ++y) {
-    vcl_cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
+    std::cout << "Scan line at y=" << it.fscany() << " (" << it.scany()
              << ") goes from " << it.fstartx() << " (" << it.startx()
              << ") to " << it.fendx() << " (" << it.endx() << ")\n";
     TEST("almost horizontal sides: y value", it.scany(), y);

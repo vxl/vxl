@@ -1,4 +1,7 @@
 // This is mul/mbl/mbl_parse_block.cxx
+#include <iostream>
+#include <cctype>
+#include <cstring>
 #include "mbl_parse_block.h"
 //:
 // \file
@@ -6,9 +9,7 @@
 // \date  25-Feb-2003
 // \brief Load a block of text from a file.
 
-#include <vcl_cctype.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 
 //: Read a block of text from a stream.
@@ -25,14 +26,14 @@
 // \throws mbl_exception_parse_block_parse_error if unrecoverable parse error.
 // Set to empty for no comment stripping.
 
-vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, const char * comment /*= "//"*/)
+std::string mbl_parse_block(std::istream &afs, bool open_already /*= false*/, const char * comment /*= "//"*/)
 {
   if (!afs) return "{}";
   //: The last character to be read from the stream
   char c;
 
   // length of the comment token;
-  const unsigned comment_length = vcl_strlen(comment);
+  const unsigned comment_length = std::strlen(comment);
 
   if (!open_already)
   {
@@ -54,11 +55,11 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
           return "{}";
         }
       }
-      vcl_string dummy;
-      vcl_getline(afs, dummy);
+      std::string dummy;
+      std::getline(afs, dummy);
       if (afs.eof())
         return "{}";
-      afs >> vcl_ws >> c;
+      afs >> std::ws >> c;
     }
     if (c != '{')
     {
@@ -67,10 +68,10 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
     }
   }
   // The stored string.
-  vcl_string s="{";
+  std::string s="{";
   // The current line is stored separately
   // before being added to s, in case it turns out to be a comment.
-  vcl_string s2="";
+  std::string s2="";
   // The number of open braces.
   unsigned level=1;
   // The current position in a comment token.
@@ -92,15 +93,15 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
         newline = true;
         comment_position = 0;
       }
-      else if (vcl_isspace(c))
+      else if (std::isspace(c))
         comment_position = 0;
       else if (newline && comment_position < comment_length
                &&  c==comment[comment_position])
       {
         if (++comment_position == 2)
         {
-          vcl_string dummy;
-          vcl_getline(afs, dummy);
+          std::string dummy;
+          std::getline(afs, dummy);
           s2 = "";
           newline = true; //false;
           comment_position = 0;
@@ -116,7 +117,7 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
           {
             s+=s2;
             for (unsigned i = 1; i+1 < s.size(); ++i)
-              if (!vcl_isspace(s[i])) return s;
+              if (!std::isspace(s[i])) return s;
             // Contents between braces is just empty space
             return "{}";
           }
@@ -125,6 +126,6 @@ vcl_string mbl_parse_block(vcl_istream &afs, bool open_already /*= false*/, cons
   }
   mbl_exception_warning(mbl_exception_parse_block_parse_error(
     "Read problem (possibly end-of-file) before closing '}'\n",s));
-  afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+  afs.clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   return "{}";
 }

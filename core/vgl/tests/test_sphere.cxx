@@ -1,13 +1,14 @@
 // Some tests for vgl_sphere_3d
 // Ian Scott, Aug 2005.
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 static void test_sphere()
 {
-  vcl_cout << "Simple sphere\n";
+  std::cout << "Simple sphere\n";
 
   // Default sphere
   vgl_sphere_3d<double> s;
@@ -37,11 +38,11 @@ static void test_sphere()
   TEST("Intersection point 2", p2, vgl_point_3d<double>(0,1,0));
 
   // Test basic i/o
-  vcl_cout << u << vcl_endl;
-  vcl_ostringstream oss;
+  std::cout << u << std::endl;
+  std::ostringstream oss;
   oss << u.centre().x() << " "  << u.centre().y() << " "
       << u.centre().z() << " "  << u.radius();
-  vcl_istringstream iss(oss.str());
+  std::istringstream iss(oss.str());
   vgl_sphere_3d<double> v;
   iss >> v;
   TEST("Basic i/o", u==v, true);

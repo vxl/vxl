@@ -10,10 +10,12 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class btol_vertex_algs
 {
@@ -27,7 +29,7 @@ class btol_vertex_algs
   static bool merge_superiors(vtol_vertex_sptr& va,
                               vtol_vertex_sptr& vb);
 
-  static void vertex_erase(vcl_vector<vtol_vertex>& verts,
+  static void vertex_erase(std::vector<vtol_vertex>& verts,
                            vtol_vertex_sptr& v);
 
   static vtol_vertex_2d_sptr transform(vtol_vertex_2d_sptr const& v,

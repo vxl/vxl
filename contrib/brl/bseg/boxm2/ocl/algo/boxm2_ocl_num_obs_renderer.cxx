@@ -5,10 +5,12 @@
 //
 // \author Daniel Crispell, adapted from process version
 // \date 4 Nov 2014
+#include <iostream>
+#include <algorithm>
+#include <stdexcept>
 #include "boxm2_ocl_num_obs_renderer.h"
 
-#include <vcl_algorithm.h>
-#include <vcl_stdexcept.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -28,7 +30,7 @@
 boxm2_ocl_num_obs_renderer
 ::boxm2_ocl_num_obs_renderer(boxm2_scene_sptr scene,
                              boxm2_opencl_cache_sptr ocl_cache,
-                             vcl_string ident) :
+                             std::string ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
   buffers_allocated_(false),
@@ -36,7 +38,7 @@ boxm2_ocl_num_obs_renderer
 {
   device_ = ocl_cache->get_device();
   bool foundDataType = false;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
 
   nobs_type_size_ = 0;
   boxm2_data_type valid_nobs_types[] = {
@@ -46,17 +48,17 @@ boxm2_ocl_num_obs_renderer
   int num_valid_nobs_types = sizeof(valid_nobs_types) / sizeof(valid_nobs_types[0]);
 
   for (unsigned int i=0; i<apps.size(); ++i) {
-    vcl_cout << "app["<<i<<"] = " << apps[i] << vcl_endl;
+    std::cout << "app["<<i<<"] = " << apps[i] << std::endl;
     for (unsigned v = 0; v < num_valid_nobs_types; ++v) {
       boxm2_data_type valid_nobs_type = valid_nobs_types[v];
-      vcl_string valid_nobs_prefix = boxm2_data_info::prefix(valid_nobs_type, ident);
-      vcl_cout << "     valid_nobs_prefix = " << boxm2_data_info::prefix(valid_nobs_type, ident) << vcl_endl;
+      std::string valid_nobs_prefix = boxm2_data_info::prefix(valid_nobs_type, ident);
+      std::cout << "     valid_nobs_prefix = " << boxm2_data_info::prefix(valid_nobs_type, ident) << std::endl;
       if ( apps[i] == valid_nobs_prefix )
       {
         nobs_type_ = valid_nobs_prefix;
         foundDataType = true;
         nobs_type_size_ = boxm2_data_info::datasize(valid_nobs_type);
-        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+        std::cout<<"===========Compiling kernels==========="<<std::endl;
         compile_kernels(device_, kernels_, valid_nobs_type);
         break;
       }
@@ -64,9 +66,9 @@ boxm2_ocl_num_obs_renderer
   }
 
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_NUM_OBS_RENDERER ERROR: scene doesn't have valid num_obs type"<<vcl_endl;
-    vcl_cout<<"                                  looking for ident = " << ident << vcl_endl;
-    throw vcl_runtime_error("scene does not have valid num_obs type");
+    std::cout<<"BOXM2_OCL_NUM_OBS_RENDERER ERROR: scene doesn't have valid num_obs type"<<std::endl;
+    std::cout<<"                                  looking for ident = " << ident << std::endl;
+    throw std::runtime_error("scene does not have valid num_obs type");
   }
 }
 
@@ -120,15 +122,15 @@ boxm2_ocl_num_obs_renderer
   delete[] max_omega_buff_;
 
   opencl_cache_->unref_mem(exp_nobs_image_.ptr());
-  exp_nobs_image_ = bocl_mem_sptr(0);
+  exp_nobs_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(vis_image_.ptr());
-  vis_image_ = bocl_mem_sptr(0);
+  vis_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(max_omega_image_.ptr());
-  max_omega_image_ = bocl_mem_sptr(0);
+  max_omega_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(img_dim_.ptr());
-  img_dim_ = bocl_mem_sptr(0);
+  img_dim_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(tnearfar_.ptr());
-  tnearfar_ = bocl_mem_sptr(0);
+  tnearfar_ = bocl_mem_sptr(VXL_NULLPTR);
 
   buffers_allocated_ = false;
   return true;
@@ -174,7 +176,7 @@ boxm2_ocl_num_obs_renderer
 
   vul_timer rtime;
 
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
   //: create a command queue.
   int status=0;
@@ -207,11 +209,11 @@ boxm2_ocl_num_obs_renderer
   if(camera->type_name() == "vpgl_perspective_camera")
   {
       float f  = ((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().x_scale();
-      vcl_cout<<"Focal Length " << f<<vcl_endl;
+      std::cout<<"Focal Length " << f<<std::endl;
       tnearfar_buff_[0] = f* scene_->finest_resolution()/nearfactor ;
       tnearfar_buff_[1] = f* scene_->finest_resolution()*farfactor ;
 
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<std::endl;
   }
   tnearfar_->write_to_buffer(queue, true);
 
@@ -223,7 +225,7 @@ boxm2_ocl_num_obs_renderer
   // normalize
   if (kernels_.size()>1)
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels_[1];
     normalize_kern->set_arg( exp_image_.ptr() );
     normalize_kern->set_arg( vis_image_.ptr() );
@@ -250,20 +252,20 @@ boxm2_ocl_num_obs_renderer
     }
   }
 
-  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<<rtime.all()<<" ms"<<std::endl;
   clReleaseCommandQueue(queue);
 
   render_success_ = true;
   return render_success_;
 }
 
-bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, vcl_vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
+bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
 {
 
   if (data_type == BOXM2_NUM_OBS_VIEW)
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
@@ -275,7 +277,7 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, vcl_ve
     src_paths.push_back(source_dir + "expected_nobs_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_string options = "-D RENDER_VIEW_DEP -D STEP_CELL=step_cell_render_nobs(aux_args,data_ptr,d*linfo->block_len)";
+    std::string options = "-D RENDER_VIEW_DEP -D STEP_CELL=step_cell_render_nobs(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -289,7 +291,7 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, vcl_ve
 
 #if 0
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -307,8 +309,8 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, vcl_ve
   }
   else if (data_type == BOXM2_NUM_OBS_SINGLE)
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
@@ -320,7 +322,7 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, vcl_ve
     src_paths.push_back(source_dir + "expected_nobs_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_string options = "-D RENDER -D STEP_CELL=step_cell_render_nobs(aux_args,data_ptr,d*linfo->block_len)";
+    std::string options = "-D RENDER -D STEP_CELL=step_cell_render_nobs(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
@@ -334,7 +336,7 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, vcl_ve
 
 #if 0
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -351,7 +353,7 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, vcl_ve
 
   }
   else {
-    vcl_cerr << "ERROR: boxm2_ocl_num_obs_renderer::compile_kernels(): Unsupported num_obs type " << data_type << vcl_endl;
+    std::cerr << "ERROR: boxm2_ocl_num_obs_renderer::compile_kernels(): Unsupported num_obs type " << data_type << std::endl;
     return false;
   }
   return true;

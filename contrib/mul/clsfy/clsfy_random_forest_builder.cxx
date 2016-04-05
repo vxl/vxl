@@ -7,13 +7,14 @@
 // \brief Implement a random_forest classifier builder
 // \author Martin Roberts
 
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <numeric>
+#include <iterator>
 #include "clsfy_random_forest_builder.h"
 #include <vxl_config.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
-#include <vcl_numeric.h>
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_stl.h>
@@ -26,7 +27,7 @@
 clsfy_random_forest_builder::clsfy_random_forest_builder()
   : ntrees_(100),
     max_depth_(-1), min_node_size_(-1),
-    poob_indices_(0),
+    poob_indices_(VXL_NULLPTR),
     calc_test_error_(true)
 {
     unsigned long default_seed=123654987;
@@ -38,7 +39,7 @@ clsfy_random_forest_builder::clsfy_random_forest_builder(unsigned ntrees,
                                                          int min_node_size)
   : ntrees_(ntrees),
     max_depth_(max_depth), min_node_size_(min_node_size),
-    poob_indices_(0),
+    poob_indices_(VXL_NULLPTR),
     calc_test_error_(true)
 {
     unsigned long default_seed=123654987;
@@ -57,14 +58,14 @@ short clsfy_random_forest_builder::version_no() const
 
 //=======================================================================
 
-vcl_string clsfy_random_forest_builder::is_a() const
+std::string clsfy_random_forest_builder::is_a() const
 {
-    return vcl_string("clsfy_random_forest_builder");
+    return std::string("clsfy_random_forest_builder");
 }
 
 //=======================================================================
 
-bool clsfy_random_forest_builder::is_class(vcl_string const& s) const
+bool clsfy_random_forest_builder::is_class(std::string const& s) const
 {
     return s == clsfy_random_forest_builder::is_a() || clsfy_builder_base::is_class(s);
 }
@@ -78,7 +79,7 @@ clsfy_builder_base* clsfy_random_forest_builder::clone() const
 
 //=======================================================================
 
-void clsfy_random_forest_builder::print_summary(vcl_ostream& os) const
+void clsfy_random_forest_builder::print_summary(std::ostream& os) const
 {
     os << "Num trees = "<<ntrees_<<"\tmax_depth = " << max_depth_;
 }
@@ -92,7 +93,7 @@ void clsfy_random_forest_builder::b_write(vsl_b_ostream& bfs) const
     vsl_b_write(bfs, max_depth_);
     vsl_b_write(bfs, min_node_size_);
     vsl_b_write(bfs,calc_test_error_);
-    vcl_cerr << "clsfy_random_forest_builder::b_write() NYI\n";
+    std::cerr << "clsfy_random_forest_builder::b_write() NYI\n";
 }
 
 //=======================================================================
@@ -112,9 +113,9 @@ void clsfy_random_forest_builder::b_read(vsl_b_istream& bfs)
             vsl_b_read(bfs,calc_test_error_);
             break;
         default:
-            vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_forest_builder&)\n"
+            std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_forest_builder&)\n"
                      << "           Unknown version number "<< version << '\n';
-            bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+            bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
 }
 
@@ -127,7 +128,7 @@ void clsfy_random_forest_builder::b_read(vsl_b_istream& bfs)
 double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
                                           mbl_data_wrapper<vnl_vector<double> >& inputs,
                                           unsigned nClasses,
-                                          const vcl_vector<unsigned> &outputs) const
+                                          const std::vector<unsigned> &outputs) const
 {
     assert(classifier.is_class("clsfy_random_forest")); // equiv to dynamic_cast<> != 0
     assert(inputs.size()==outputs.size());
@@ -136,7 +137,7 @@ double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
 
     clsfy_random_forest &random_forest = static_cast<clsfy_random_forest&>(classifier);
     unsigned npoints=inputs.size();
-    vcl_vector<vnl_vector<double> > vin(npoints);
+    std::vector<vnl_vector<double> > vin(npoints);
 
     inputs.reset();
     unsigned i=0;
@@ -151,8 +152,8 @@ double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
     int nbranch_params=select_nbranch_params(ndims);
 
     //Start with all parameter indices
-    vcl_cout<<"npoints= "<<npoints<<"\tndims= "<<ndims<<vcl_endl;
-    vcl_vector<unsigned> indices(ndims,0);
+    std::cout<<"npoints= "<<npoints<<"\tndims= "<<ndims<<std::endl;
+    std::vector<unsigned> indices(ndims,0);
 
     mbl_stl_increments(indices.begin(),indices.end(),0);
 
@@ -166,8 +167,8 @@ double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
     }
 
 
-    vcl_vector<vnl_vector<double> > bootstrapped_inputs;
-    vcl_vector<unsigned  > bootstrapped_outputs;
+    std::vector<vnl_vector<double> > bootstrapped_inputs;
+    std::vector<unsigned  > bootstrapped_outputs;
 
     for (i=0;i<ntrees_;++i)
     {
@@ -182,7 +183,7 @@ double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
         builder.set_nbranch_params(nbranch_params);
 
         unsigned long seed=get_tree_builder_seed();
-//        vcl_cout<<"The seed is "<<seed<<vcl_endl;
+//        std::cout<<"The seed is "<<seed<<std::endl;
         builder.seed_sampler(seed);
 
         builder.set_max_depth(max_depth_);
@@ -212,10 +213,10 @@ clsfy_classifier_base* clsfy_random_forest_builder::new_classifier() const
 }
 
 
-void clsfy_random_forest_builder::select_data(vcl_vector<vnl_vector<double> >& inputs,
-                                              const vcl_vector<unsigned> &outputs,
-                                              vcl_vector<vnl_vector<double> >& bootstrapped_inputs,
-                                              vcl_vector<unsigned> & bootstrapped_outputs) const
+void clsfy_random_forest_builder::select_data(std::vector<vnl_vector<double> >& inputs,
+                                              const std::vector<unsigned> &outputs,
+                                              std::vector<vnl_vector<double> >& bootstrapped_inputs,
+                                              std::vector<unsigned> & bootstrapped_outputs) const
 {
     unsigned npoints=inputs.size();
     bootstrapped_inputs.resize(npoints);
@@ -223,7 +224,7 @@ void clsfy_random_forest_builder::select_data(vcl_vector<vnl_vector<double> >& i
     unsigned ndims=  inputs.front().size();
     if (poob_indices_)
     {
-        poob_indices_->push_back(vcl_vector<unsigned>());
+        poob_indices_->push_back(std::vector<unsigned>());
         poob_indices_->back().reserve(npoints);
     }
     for (unsigned i=0;i<npoints;++i)
@@ -242,7 +243,7 @@ unsigned  clsfy_random_forest_builder::select_nbranch_params(unsigned ndims) con
     unsigned nbranch_params=1;
     if (ndims>2)
     {
-        double dnbranch_params=vcl_sqrt(double(ndims)+0.1); //round up if close
+        double dnbranch_params=std::sqrt(double(ndims)+0.1); //round up if close
         nbranch_params=unsigned (dnbranch_params); //round
     }
     return nbranch_params;
@@ -258,7 +259,7 @@ unsigned long clsfy_random_forest_builder::get_tree_builder_seed() const
     //generate some bytes from the original seeded random number generator
     unsigned long N=256;
     unsigned nbytes=sizeof(unsigned long);
-    vcl_vector<vxl_byte> seedAsBytes(nbytes,1);
+    std::vector<vxl_byte> seedAsBytes(nbytes,1);
 
     for (unsigned ib=0;ib<nbytes;++ib)
     {

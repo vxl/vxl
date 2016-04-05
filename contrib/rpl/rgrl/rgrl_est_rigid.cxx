@@ -39,12 +39,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // so we want to have some sort of state, but we don't really want to un-const-ize this method,
   // so we implement a quick hack by using const_cast to change the value of stats
-  vcl_vector<vcl_vector<double> >* pp =
-    const_cast<vcl_vector<vcl_vector<double> >* >(&stats);
+  std::vector<std::vector<double> >* pp =
+    const_cast<std::vector<std::vector<double> >* >(&stats);
 
   // reset the stats before this new run
   pp->clear();
-  vcl_vector<double> cur_stat;
+  std::vector<double> cur_stat;
 
   // Make a copy of the current transform that we can modify.
   rgrl_transformation_sptr current_trans =
@@ -64,7 +64,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ++ms;
   if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
-    return 0; // no data!
+    return VXL_NULLPTR; // no data!
   }
   const unsigned int m = matches[ms]->from_begin().from_feature()->location().size();
   assert ( m==3 ); // currently only 3D estimation is implemented
@@ -143,7 +143,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     if ( (unsigned)svd.rank() < m ) {
       DebugMacro(1, "rank ("<<svd.rank()<<") < "<<m<<"; no solution." );
       DebugMacro_abv(1, "(used " << count << " correspondences)\n" );
-      return 0; // no solution
+      return VXL_NULLPTR; // no solution
     }
 
     // Compute the solution into XtWy
@@ -160,7 +160,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     trans[1]=XtWy[4];
     trans[2]=XtWy[5];
 
-    //vcl_cerr<<"Estimated parameter vector in raw form is\n"<<XtWy<<vcl_endl;
+    //std::cerr<<"Estimated parameter vector in raw form is\n"<<XtWy<<std::endl;
 
     // Matrix component
     vnl_matrix<double> R( m, m );
@@ -172,7 +172,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     //
 
     cur_stat.push_back(vnl_determinant(R));
-    DebugMacro_abv(2, "about to orthonormalize with determinant "<<vnl_determinant(R)<<vcl_endl);
+    DebugMacro_abv(2, "about to orthonormalize with determinant "<<vnl_determinant(R)<<std::endl);
     vnl_svd<double> svdR( R );
 
     // Set singular values to unity
@@ -193,7 +193,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     double fro_norm1 = I.frobenius_norm();
 
 #ifdef DEBUG
-    vcl_cerr<<"fro_norm of deltaT,deltatrans is "<<fro_norm1<<','<<fro_norm2<<vcl_endl;
+    std::cerr<<"fro_norm of deltaT,deltatrans is "<<fro_norm1<<','<<fro_norm2<<std::endl;
 #endif
 
     cur_stat.push_back(fro_norm1);
@@ -264,55 +264,55 @@ void rgrl_est_rigid::determine_covariance( rgrl_set_of<rgrl_match_set_sptr> cons
   vnl_matrix<double> Rthetadd(3,3,0.0);
 
 
-  Rtheta(0,0) = vcl_cos(theta);
-  Rtheta(0,1) = -vcl_sin(theta);
-  Rtheta(1,0) = vcl_sin(theta);
-  Rtheta(1,1) = vcl_cos(theta);
+  Rtheta(0,0) = std::cos(theta);
+  Rtheta(0,1) = -std::sin(theta);
+  Rtheta(1,0) = std::sin(theta);
+  Rtheta(1,1) = std::cos(theta);
   Rtheta(2,2) = 1;
 
-  Ralpha(0,0) = vcl_cos(alpha);
-  Ralpha(0,2) = vcl_sin(alpha);
+  Ralpha(0,0) = std::cos(alpha);
+  Ralpha(0,2) = std::sin(alpha);
   Ralpha(1,1) = 1;
-  Ralpha(2,0) = -vcl_sin(alpha);
-  Ralpha(2,2) = vcl_cos(alpha);
+  Ralpha(2,0) = -std::sin(alpha);
+  Ralpha(2,2) = std::cos(alpha);
 
   Rphi(0,0) = 1;
-  Rphi(1,1) = vcl_cos(phi);
-  Rphi(1,2) = -vcl_sin(phi);
-  Rphi(2,1) = vcl_sin(phi);
-  Rphi(2,2) = vcl_cos(phi);
+  Rphi(1,1) = std::cos(phi);
+  Rphi(1,2) = -std::sin(phi);
+  Rphi(2,1) = std::sin(phi);
+  Rphi(2,2) = std::cos(phi);
 
   // derivative matrices now
-  Rthetad(0,0) = -vcl_sin(theta);
-  Rthetad(0,1) = -vcl_cos(theta);
-  Rthetad(1,0) = vcl_cos(theta);
-  Rthetad(1,1) = -vcl_sin(theta);
+  Rthetad(0,0) = -std::sin(theta);
+  Rthetad(0,1) = -std::cos(theta);
+  Rthetad(1,0) = std::cos(theta);
+  Rthetad(1,1) = -std::sin(theta);
 
-  Ralphad(0,0) = -vcl_sin(alpha);
-  Ralphad(0,2) = vcl_cos(alpha);
-  Ralphad(2,0) = -vcl_cos(alpha);
-  Ralphad(2,2) = -vcl_sin(alpha);
+  Ralphad(0,0) = -std::sin(alpha);
+  Ralphad(0,2) = std::cos(alpha);
+  Ralphad(2,0) = -std::cos(alpha);
+  Ralphad(2,2) = -std::sin(alpha);
 
-  Rphid(1,1) = -vcl_sin(phi);
-  Rphid(1,2) = -vcl_cos(phi);
-  Rphid(2,1) = vcl_cos(phi);
-  Rphid(2,2) = -vcl_sin(phi);
+  Rphid(1,1) = -std::sin(phi);
+  Rphid(1,2) = -std::cos(phi);
+  Rphid(2,1) = std::cos(phi);
+  Rphid(2,2) = -std::sin(phi);
 
   //second derivative matrices
-  Rthetadd(0,0) = -vcl_cos(theta);
-  Rthetadd(0,1) = vcl_sin(theta);
-  Rthetadd(1,0) = -vcl_sin(theta);
-  Rthetadd(1,1) = -vcl_cos(theta);
+  Rthetadd(0,0) = -std::cos(theta);
+  Rthetadd(0,1) = std::sin(theta);
+  Rthetadd(1,0) = -std::sin(theta);
+  Rthetadd(1,1) = -std::cos(theta);
 
-  Ralphadd(0,0) = -vcl_cos(alpha);
-  Ralphadd(0,2) = -vcl_sin(alpha);
-  Ralphadd(2,0) = vcl_sin(alpha);
-  Ralphadd(2,2) = -vcl_cos(alpha);
+  Ralphadd(0,0) = -std::cos(alpha);
+  Ralphadd(0,2) = -std::sin(alpha);
+  Ralphadd(2,0) = std::sin(alpha);
+  Ralphadd(2,2) = -std::cos(alpha);
 
-  Rphidd(1,1) = -vcl_cos(phi);
-  Rphidd(1,2) = vcl_sin(phi);
-  Rphidd(2,1) = -vcl_sin(phi);
-  Rphidd(2,2) = -vcl_cos(phi);
+  Rphidd(1,1) = -std::cos(phi);
+  Rphidd(1,2) = std::sin(phi);
+  Rphidd(2,1) = -std::sin(phi);
+  Rphidd(2,2) = -std::cos(phi);
 
 
   // now the entire rotation matrices
@@ -429,7 +429,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_rigid::
 transformation_type() const
 {

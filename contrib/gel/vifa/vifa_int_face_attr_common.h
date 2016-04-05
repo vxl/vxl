@@ -20,7 +20,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>
@@ -94,8 +96,8 @@ class vifa_int_face_attr_common : public vifa_int_face_attr_common_params
   // Public functional methods
   // ---
   virtual bool  ComputeAttributes() = 0;
-  virtual bool  GetAttributes(vcl_vector<float>&  attrs) = 0;
-  virtual bool  GetNativeAttributes(vcl_vector<float>&  attrs) = 0;
+  virtual bool  GetAttributes(std::vector<float>&  attrs) = 0;
+  virtual bool  GetNativeAttributes(std::vector<float>&  attrs) = 0;
   virtual bool  valid_p() const { return attributes_valid_; }
 
   // Data access for non-attributes

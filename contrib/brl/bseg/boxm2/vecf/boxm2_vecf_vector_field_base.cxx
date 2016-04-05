@@ -30,8 +30,8 @@ compute_cell_centers(boxm2_scene_sptr scene,
         uchar16 tree = trees(x, y, z);
         boct_bit_tree bit_tree((unsigned char*) tree.data_block(), blk->max_level());
         // for all leaves in current tree
-        vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-        vcl_vector<int>::iterator iter;
+        std::vector<int> leafBits = bit_tree.get_leaf_bits();
+        std::vector<int>::iterator iter;
         for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
           int bit_idx = (*iter);
           int data_idx = bit_tree.get_data_index(bit_idx);

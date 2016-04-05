@@ -12,7 +12,7 @@ set(boxm_test_all_sources
     test_utils.h    test_utils.cxx
     )
 
-add_library(boxm_tests  ${boxm_test_all_sources})
+vxl_add_library(LIBRARY_NAME boxm_tests LIBRARY_SOURCES  ${boxm_test_all_sources})
 target_link_libraries(boxm_tests boxm boct ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul)
 
 target_link_libraries( boxm_test_all boxm_tests boxm boct ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul)

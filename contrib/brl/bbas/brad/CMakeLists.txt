@@ -10,7 +10,7 @@
       brad_hist_prob_feature_vector.h brad_hist_prob_feature_vector.cxx
       brad_grad_hist_feature_vector.h brad_grad_hist_feature_vector.cxx
       brad_grad_int_feature_vector.h  brad_grad_int_feature_vector.cxx
-      brad_eigenspace.h               brad_eigenspace.txx
+      brad_eigenspace.h               brad_eigenspace.hxx
       brad_eigenspace_base.h          brad_eigenspace_base.cxx
       brad_eigenspace_sptr.h
       brad_phongs_model_est.h         brad_phongs_model_est.cxx
@@ -21,7 +21,7 @@
       brad_estimate_shadows.h         brad_estimate_shadows.cxx
      )
   aux_source_directory(Templates brad_sources)
-  add_library(brad ${brad_sources} )
+  vxl_add_library(LIBRARY_NAME brad LIBRARY_SOURCES ${brad_sources} )
 
   target_link_libraries(brad  bsta ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul )
 
@@ -32,5 +32,3 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib brad)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brad ${brad_sources})

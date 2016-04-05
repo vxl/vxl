@@ -4,9 +4,10 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vil_stream_fstream64.h"
 #include <vcl_cassert.h>
-#include <vcl_iostream.h> //for vcl_cerr
+#include <vcl_compiler.h>
 
 #if defined(WIN32)
 #include <io.h>
@@ -36,7 +37,7 @@
 #define _write ::write
 #endif
 
-#define xerr if (true) ; else (vcl_cerr << "vcl_fstream#" << fd_ << ": ")
+#define xerr if (true) ; else (std::cerr << "std::fstream#" << fd_ << ": ")
 
 static int modeflags(char const* mode)
 {
@@ -54,7 +55,7 @@ static int modeflags(char const* mode)
   else if ( read ) return _O_RDONLY;
   else if ( write ) return _O_WRONLY;
 
-  vcl_cerr << '\n' << __FILE__ ": DODGY MODE " << mode << '\n';
+  std::cerr << '\n' << __FILE__ ": DODGY MODE " << mode << '\n';
   return 0;
 }
 
@@ -68,7 +69,7 @@ vil_stream_fstream64::vil_stream_fstream64(char const* fn, char const* mode) :
     fd_ = _open( fn, mode_ | _O_CREAT | _O_BINARY, _S_IREAD | _S_IWRITE );
   }
   if ( fd_ == -1 ){
-    vcl_cerr << "vil_stream_fstream64::Could not open [" << fn << "]\n";
+    std::cerr << "vil_stream_fstream64::Could not open [" << fn << "]\n";
   }
 }
 
@@ -82,7 +83,7 @@ vil_stream_fstream64::vil_stream_fstream64(wchar_t const* fn, char const* mode):
     fd_ = _wopen( fn, mode_ | _O_CREAT | _O_BINARY, _S_IREAD | _S_IWRITE );
   if ( fd_ == -1 )
   {
-    vcl_cerr << "vil_stream_fstream64::Could not open [" << fn << "]\n";
+    std::cerr << "vil_stream_fstream64::Could not open [" << fn << "]\n";
   }
 }
 #endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
@@ -103,14 +104,14 @@ vil_streampos vil_stream_fstream64::write(void const* buf, vil_streampos n)
   if ( !( ( mode_ == _O_WRONLY ) ||
           ( mode_ == _O_RDWR ) ) )
   {
-    vcl_cerr << "vil_stream_fstream64: write failed, stream not open for write\n";
+    std::cerr << "vil_stream_fstream64: write failed, stream not open for write\n";
     return 0;
   }
 
   //cast should be ok unless trying to write >2GB (not likely)
   int ret_val = _write( fd_, buf, (unsigned int)n );
   if ( ret_val == -1 ){
-    vcl_cerr << ("vil_stream_fstream64: ERROR: write failed!\n");
+    std::cerr << ("vil_stream_fstream64: ERROR: write failed!\n");
     return 0;
   } else {
     //apparently calling _commit is relatively slow
@@ -143,7 +144,7 @@ vil_streampos vil_stream_fstream64::read(void* buf, vil_streampos n)
   if ( ret_val == -1 )
     xerr << "read failed!\n";
   else if ( ret_val < n )
-    xerr << "only read " << ret_val << vcl_endl;
+    xerr << "only read " << ret_val << std::endl;
 
   return ret_val;
 }

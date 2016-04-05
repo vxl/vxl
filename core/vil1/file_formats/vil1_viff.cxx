@@ -3,6 +3,8 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <cstring>
 #include "vil1_viff.h"
 extern "C" {
 #include "vil1_viff_support.h"
@@ -11,8 +13,7 @@ extern "C" {
 
 char const* vil1_viff_format_tag = "viff";
 
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -24,9 +25,9 @@ static inline void swap(void* p,int length)
   char* t = (char*)p;
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
-    vcl_cerr << "Swapping " << *(vxl_uint_32*)p;
+    std::cerr << "Swapping " << *(vxl_uint_32*)p;
     if (length == sizeof(float))
-      vcl_cerr << " (or " << *(float*)p << ')';
+      std::cerr << " (or " << *(float*)p << ')';
   }
 #endif
   for (int j=0;2*j<length;++j)
@@ -37,10 +38,10 @@ static inline void swap(void* p,int length)
   }
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
-    vcl_cerr << " to " << *(vxl_uint_32*)p;
+    std::cerr << " to " << *(vxl_uint_32*)p;
     if (length == sizeof(float))
-      vcl_cerr << " (or " << *(float*)p << ')';
-    vcl_cerr << '\n';
+      std::cerr << " (or " << *(float*)p << ')';
+    std::cerr << '\n';
   }
 #endif
 }
@@ -73,8 +74,8 @@ vil1_image_impl* vil1_viff_file_format::make_input_image(vil1_stream* is)
     case VFF_TYP_DCOMPLEX:
       return new vil1_viff_generic_image(is);
     default:
-      vcl_cout << "vil1_viff: non supported data type: VFF_TYP "
-               << header.data_storage_type << vcl_endl;
+      std::cout << "vil1_viff: non supported data type: VFF_TYP "
+               << header.data_storage_type << std::endl;
       return VXL_NULLPTR;
   }
 }
@@ -102,7 +103,7 @@ vil1_viff_generic_image::vil1_viff_generic_image(vil1_stream* is)
   is_->ref();
   if (!read_header())
   {
-    vcl_cerr << "vil1_viff: cannot read file header; creating dummy 0x0 image\n";
+    std::cerr << "vil1_viff: cannot read file header; creating dummy 0x0 image\n";
     start_of_data_ = VIFF_HEADERSIZE; endian_consistent_ = true;
     width_ = height_ = 0; planes_ = 1; maxval_ = 255;
     bits_per_component_ = 8; format_ = VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
@@ -111,10 +112,10 @@ vil1_viff_generic_image::vil1_viff_generic_image(vil1_stream* is)
 
 bool vil1_viff_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -226,8 +227,8 @@ bool vil1_viff_generic_image::read_header()
       bits_per_component_ = 128;
       break;
     default:
-      vcl_cout << "vil1_viff: non supported data type: VFF_TYP "
-               <<   header_.data_storage_type << vcl_endl;
+      std::cout << "vil1_viff: non supported data type: VFF_TYP "
+               <<   header_.data_storage_type << std::endl;
       format_ = VIL1_COMPONENT_FORMAT_UNKNOWN;
       return false;
   }
@@ -252,7 +253,7 @@ bool vil1_viff_generic_image::write_header()
       case 16: type=VFF_TYP_2_BYTE; break;
       case 32: type=VFF_TYP_4_BYTE; break;
       default:
-        vcl_cerr << "vil1_viff: non supported data type: " << bits_per_component_ << " bit pixels\n";
+        std::cerr << "vil1_viff: non supported data type: " << bits_per_component_ << " bit pixels\n";
         return false;
     }
   }
@@ -263,7 +264,7 @@ bool vil1_viff_generic_image::write_header()
       case 32: type=VFF_TYP_FLOAT; break;
       case 64: type=VFF_TYP_DOUBLE; break;
       default:
-        vcl_cerr << "vil1_viff: non supported data type: " << bits_per_component_ << " bit float pixels\n";
+        std::cerr << "vil1_viff: non supported data type: " << bits_per_component_ << " bit float pixels\n";
         return false;
     }
   }
@@ -274,13 +275,13 @@ bool vil1_viff_generic_image::write_header()
       case 64: type=VFF_TYP_COMPLEX; break;
       case 128: type=VFF_TYP_DCOMPLEX; break;
       default:
-        vcl_cerr << "vil1_viff: non supported data type: " << bits_per_component_ << " bit complex pixels\n";
+        std::cerr << "vil1_viff: non supported data type: " << bits_per_component_ << " bit complex pixels\n";
         return false;
     }
   }
   else
   {
-    vcl_cout << "vil1_viff: non supported data type: " << (short)component_format() << vcl_endl;
+    std::cout << "vil1_viff: non supported data type: " << (short)component_format() << std::endl;
     return false;
   }
 
@@ -291,7 +292,7 @@ bool vil1_viff_generic_image::write_header()
                                                     VFF_MS_NONE,VFF_MAPTYP_NONE,VFF_LOC_IMPLICIT,0);
 
   //make local copy of header
-  vcl_memcpy(&header_, imagep, sizeof(header_));
+  std::memcpy(&header_, imagep, sizeof(header_));
   start_of_data_ = sizeof(header_);
 
   // release xv header from createimage
@@ -310,7 +311,7 @@ bool vil1_viff_generic_image::get_section(void* buf, int x0, int y0, int xs, int
   if (!buf) return false; // no storage location given
   unsigned char* ib = (unsigned char*) buf;
   if ((x0*bits_per_component_)%8 != 0)
-    vcl_cerr << "vil1_viff_generic_image::get_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
+    std::cerr << "vil1_viff_generic_image::get_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
   vxl_uint_32 rowsize = (bits_per_component_*xs+7)/8;
   vxl_uint_32 tbytes = rowsize*ys*planes_;
@@ -340,7 +341,7 @@ bool vil1_viff_generic_image::put_section(void const* buf, int x0, int y0, int x
   if (!buf) return false; // no storage location given
   unsigned char const* ob = (unsigned char const*) buf;
   if ((x0*bits_per_component_)%8 != 0)
-    vcl_cerr << "vil1_viff_generic_image::put_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
+    std::cerr << "vil1_viff_generic_image::put_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
   vxl_uint_32 rowsize = (bits_per_component_*xs+7)/8;
   if (endian_consistent_)
@@ -356,7 +357,7 @@ bool vil1_viff_generic_image::put_section(void const* buf, int x0, int y0, int x
     unsigned char* tempbuf = new unsigned char[rowsize];
     for (int p = 0; p<planes_; ++p)
       for (int y = y0; y < y0+ys; ++y) {
-        vcl_memcpy(tempbuf, ob, rowsize);
+        std::memcpy(tempbuf, ob, rowsize);
         for (unsigned int i=0; i<rowsize; i+=bits_per_component_/8)
           swap(tempbuf+i,bits_per_component_/8);
         is_->seek(start_of_data_ + p*width_*height_*bits_per_component_/8 + bits_per_component_*(y*width_+x0)/8);
@@ -380,9 +381,9 @@ bool vil1_viff_generic_image::check_endian()
   endian_consistent_ = ((dst & 0xff) != 0);
 #ifdef DEBUG
   if (endian_consistent_)
-    vcl_cerr << "Endian is Consistent\n";
+    std::cerr << "Endian is Consistent\n";
   else
-    vcl_cerr << "Endian is NOT Consistent\n";
+    std::cerr << "Endian is NOT Consistent\n";
 #endif
   return endian_consistent_;
 }
@@ -390,13 +391,13 @@ bool vil1_viff_generic_image::check_endian()
 vil1_image vil1_viff_generic_image::get_plane(unsigned int plane) const
 {
   assert((int)plane < planes_);
-  vcl_cerr << "FIXME: this should be an adapter that shifts to the plane asked for\n";
+  std::cerr << "FIXME: this should be an adapter that shifts to the plane asked for\n";
   return const_cast<vil1_viff_generic_image*>(this);
 }
 
 bool vil1_viff_generic_image::get_section_rgb_byte(void* /*buf*/, int /*x0*/, int /*y0*/, int /*width*/, int /*height*/) const
 {
-  vcl_cerr << "FIXME: vil1_viff_generic_image::get_section_rgb_byte() not yet implemented\n";
+  std::cerr << "FIXME: vil1_viff_generic_image::get_section_rgb_byte() not yet implemented\n";
   return false;
 }
 
@@ -419,7 +420,7 @@ void vil1_viff_generic_image::set_ispare1(vxl_uint_32 ispare1)
   header_.ispare1 = ispare1;
   int longsize = sizeof(vxl_uint_32);
   unsigned char* bytes = new unsigned char[longsize];
-  vcl_memcpy(bytes,&ispare1,longsize);
+  std::memcpy(bytes,&ispare1,longsize);
   if (!endian_consistent_)
     swap(bytes,longsize);
 
@@ -433,7 +434,7 @@ void vil1_viff_generic_image::set_ispare2(vxl_uint_32 ispare2)
   header_.ispare2 = ispare2;
   int longsize = sizeof(vxl_uint_32);
   unsigned char* bytes = new unsigned char[longsize];
-  vcl_memcpy(bytes,&ispare2,longsize);
+  std::memcpy(bytes,&ispare2,longsize);
   if (!endian_consistent_)
     swap(bytes,longsize);
 
@@ -447,7 +448,7 @@ void vil1_viff_generic_image::set_fspare1(float fspare1)
   header_.fspare1 = fspare1;
   int floatsize = sizeof(float);
   unsigned char* bytes = new unsigned char[floatsize];
-  vcl_memcpy(bytes,&fspare1,floatsize);
+  std::memcpy(bytes,&fspare1,floatsize);
   if (!endian_consistent_)
     swap(bytes,floatsize);
 
@@ -462,7 +463,7 @@ void vil1_viff_generic_image::set_fspare2(float fspare2)
   header_.fspare2 = fspare2;
   int floatsize = sizeof(float);
   unsigned char* bytes = new unsigned char[floatsize];
-  vcl_memcpy(bytes,&fspare2,floatsize);
+  std::memcpy(bytes,&fspare2,floatsize);
   if (!endian_consistent_)
     swap(bytes,floatsize);
 

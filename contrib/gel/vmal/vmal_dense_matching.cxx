@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "vmal_dense_matching.h"
 #include <vtol/vtol_edge_2d.h>
 #include <vmal/vmal_convert_vtol.h>
@@ -9,7 +11,7 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_save.h>
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 vmal_dense_matching::vmal_dense_matching(const vnl_double_3x3 & H0,
                                          const vnl_double_3x3 & H1)
@@ -51,8 +53,8 @@ void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mv
       vnl_double_3* lines1_p;
       vnl_double_3* lines1_q;
 
-      vcl_vector<vtol_edge_2d_sptr> tmp_lines0;
-      vcl_vector<vtol_edge_2d_sptr> tmp_lines1;
+      std::vector<vtol_edge_2d_sptr> tmp_lines0;
+      std::vector<vtol_edge_2d_sptr> tmp_lines1;
 
       mvd_edge->get(0,1,tmp_lines0,tmp_lines1);
       int numlines=tmp_lines0.size();
@@ -121,7 +123,7 @@ void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mv
     }
   }
   else
-    vcl_cerr<<"Error: you must set the Fundamental matrix to use this method.\n";
+    std::cerr<<"Error: you must set the Fundamental matrix to use this method.\n";
 }
 
 // Between two set of lines in 2 images that are matched, it compute the best lines
@@ -139,8 +141,8 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
       vnl_double_3* lines1_p;
       vnl_double_3* lines1_q;
 
-      vcl_vector<vtol_edge_2d_sptr> tmp_lines0;
-      vcl_vector<vtol_edge_2d_sptr> tmp_lines1;
+      std::vector<vtol_edge_2d_sptr> tmp_lines0;
+      std::vector<vtol_edge_2d_sptr> tmp_lines1;
 
       mvd_edge->get(0,1,tmp_lines0,tmp_lines1);
       int numlines=tmp_lines0.size();
@@ -205,7 +207,7 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
     }
   }
   else
-    vcl_cerr<<"Error: you must set the Homography matrix to use this method.\n";
+    std::cerr<<"Error: you must set the Homography matrix to use this method.\n";
 }
 
 
@@ -219,8 +221,8 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
 
   int disparity, min_disparity=0,max_disparity=0;
 
-  vcl_vector<vtol_edge_2d_sptr> tmp_lines0;
-  vcl_vector<vtol_edge_2d_sptr> tmp_lines1;
+  std::vector<vtol_edge_2d_sptr> tmp_lines0;
+  std::vector<vtol_edge_2d_sptr> tmp_lines1;
 
   mvd_edge->get(0,1,tmp_lines0,tmp_lines1);
   int numlines=tmp_lines0.size();
@@ -294,7 +296,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
     while (point0!=int_line0q)
     {
       if (num0!=0.0)
-        if (vcl_fabs(((point0[0]+delta0x)*a0+b0)-point0[1])<=0.5)
+        if (std::fabs(((point0[0]+delta0x)*a0+b0)-point0[1])<=0.5)
           point0[0]+=delta0x*2;
         else
           point0[1]+=delta0y*2;
@@ -302,7 +304,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
         point0[1]+=delta0y*2;
 
       if (num1!=0.0) {
-        if (vcl_fabs(((point1[0]+delta1x)*a1+b1)-point1[1])<=0.5)
+        if (std::fabs(((point1[0]+delta1x)*a1+b1)-point1[1])<=0.5)
           point1[0]+=delta1x*2;
         else
           point1[1]+=delta1y*2;
@@ -326,7 +328,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
         max_disparity=disparity;
     }
   }
-  vcl_cerr<<"Disparity min: "<<min_disparity<<'\n'
+  std::cerr<<"Disparity min: "<<min_disparity<<'\n'
           <<"Disparity max: "<<max_disparity<<'\n';
 
   //Save the matrix in a pgn image
@@ -336,6 +338,11 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
   {
     for (int j=0; j<w; j++)
     {
+      if(max_disparity == 0 )
+      {
+        std::cerr << "Error: Divide by zero in " << __FILE__ << __LINE__ << std::endl;
+        throw 0;
+      }
       int value=vmal_round_int((map(j,i)-min_disparity)*255/max_disparity);
       buf[i*w+j]=(unsigned char)value;
     }

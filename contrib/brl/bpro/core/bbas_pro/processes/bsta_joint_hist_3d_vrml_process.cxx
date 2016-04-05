@@ -10,7 +10,7 @@ bool bsta_joint_hist_3d_vrml_process_cons(bprb_func_process& pro)
 {
   // no inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("bsta_joint_histogram_3d_base_sptr"); //joint_hist_3d
   input_types.push_back("vcl_string"); //vrml path
   input_types.push_back("bool"); //relative probability
@@ -21,7 +21,7 @@ bool bsta_joint_hist_3d_vrml_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //no output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -32,7 +32,7 @@ bool bsta_joint_hist_3d_vrml_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 6) {
-    vcl_cout << "bsta_joint_hist_3d_vrml_process: The input number should be 6" << vcl_endl;
+    std::cout << "bsta_joint_hist_3d_vrml_process: The input number should be 6" << std::endl;
     return false;
   }
   int i = 0;
@@ -41,14 +41,14 @@ bool bsta_joint_hist_3d_vrml_process(bprb_func_process& pro)
     pro.get_input<bsta_joint_histogram_3d_base_sptr>(i++);
 
   if(!jhist3d){
-    vcl_cout << "bsta_joint_hist_3d_vrml_process: null histogram pointer\n";
+    std::cout << "bsta_joint_hist_3d_vrml_process: null histogram pointer\n";
     return false;
   }
 
-  vcl_string path = pro.get_input<vcl_string>(i++);
-  vcl_ofstream os(path.c_str());
+  std::string path = pro.get_input<std::string>(i++);
+  std::ofstream os(path.c_str());
   if(!os.is_open()){
-    vcl_cout << "bsta_joint_hist_3d_vrml_process: can't open output stream\n";
+    std::cout << "bsta_joint_hist_3d_vrml_process: can't open output stream\n";
     return false;
   }
   bool relative_prob = pro.get_input<bool>(i++);

@@ -14,8 +14,9 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vul/vul_arg.h>
@@ -63,18 +64,18 @@ xcv_tableau* xcv_tab;
 //-----------------------------------------------------------------------------
 //: Get file last used for saving data.
 //-----------------------------------------------------------------------------
-vcl_string* get_savefile()
+std::string* get_savefile()
 {
-  static vcl_string savefile = "";
+  static std::string savefile = "";
   return &savefile;
 }
 
 //-----------------------------------------------------------------------------
 //: Get file last used for loading data.
 //-----------------------------------------------------------------------------
-vcl_string* get_loadfile()
+std::string* get_loadfile()
 {
-  static vcl_string loadfile = "";
+  static std::string loadfile = "";
   return &loadfile;
 }
 
@@ -83,7 +84,7 @@ vcl_string* get_loadfile()
 //-----------------------------------------------------------------------------
 void post_to_status_bar(const char* msg)
 {
-  vgui::out << msg << vcl_endl;
+  vgui::out << msg << std::endl;
 }
 
 vgui_tableau_sptr get_top(unsigned col,unsigned row)
@@ -94,15 +95,15 @@ vgui_tableau_sptr get_top(unsigned col,unsigned row)
 //-----------------------------------------------------------------------------
 //: Gets the list of all image tableaux in xcv.
 //-----------------------------------------------------------------------------
-vcl_vector<xcv_image_tableau_sptr> get_image_list()
+std::vector<xcv_image_tableau_sptr> get_image_list()
 {
-  vcl_vector<xcv_image_tableau_sptr> img_tabs;
-  vcl_vector<vgui_tableau_sptr> all_tabs = xcv_tab->get_tableau_list();
+  std::vector<xcv_image_tableau_sptr> img_tabs;
+  std::vector<vgui_tableau_sptr> all_tabs = xcv_tab->get_tableau_list();
   for (unsigned i=0; i<all_tabs.size(); i++)
   {
     xcv_image_tableau_sptr img
       = (xcv_image_tableau*)vgui_find_below_by_type_name(all_tabs[i],
-      vcl_string("xcv_image_tableau")).operator->();
+      std::string("xcv_image_tableau")).operator->();
     img_tabs.push_back(img);
   }
   return img_tabs;
@@ -111,15 +112,15 @@ vcl_vector<xcv_image_tableau_sptr> get_image_list()
 //-----------------------------------------------------------------------------
 //: Gets the list of all easy2D tableaux in xcv.
 //-----------------------------------------------------------------------------
-vcl_vector<vgui_easy2D_tableau_sptr> get_easy2D_list()
+std::vector<vgui_easy2D_tableau_sptr> get_easy2D_list()
 {
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_tabs;
-  vcl_vector<vgui_tableau_sptr> all_tabs = xcv_tab->get_tableau_list();
+  std::vector<vgui_easy2D_tableau_sptr> easy_tabs;
+  std::vector<vgui_tableau_sptr> all_tabs = xcv_tab->get_tableau_list();
   for (unsigned i=0; i<all_tabs.size(); i++)
   {
     vgui_easy2D_tableau_sptr easy =
       (vgui_easy2D_tableau*)vgui_find_below_by_type_name(
-        all_tabs[i], vcl_string("vgui_easy2D_tableau")).operator->();
+        all_tabs[i], std::string("vgui_easy2D_tableau")).operator->();
     easy_tabs.push_back(easy);
   }
   return easy_tabs;
@@ -136,9 +137,9 @@ void get_current(unsigned* col, unsigned* row)
 //-----------------------------------------------------------------------------
 //: Returns true if there are exactly two selected views.
 //-----------------------------------------------------------------------------
-bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
+bool get_twoviews(std::vector<int>* col_pos, std::vector<int>* row_pos)
 {
-  vcl_vector<int> cols, rows, times;
+  std::vector<int> cols, rows, times;
   int nb_views = xcv_tab->get_selected_positions(&cols, &rows, &times);
   // if not selected,  pick top left pair.
   if (nb_views != 2) {
@@ -163,7 +164,7 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
     two_dl.ask();
     vgui_macro_warning
       << "You must select exactly two views, not the current "
-      << nb_views << vcl_endl;
+      << nb_views << std::endl;
     return false;
   }
 
@@ -184,9 +185,9 @@ bool get_twoviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
 //-----------------------------------------------------------------------------
 //: Returns true if there are exactly three selected views.
 //-----------------------------------------------------------------------------
-bool get_threeviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
+bool get_threeviews(std::vector<int>* col_pos, std::vector<int>* row_pos)
 {
-  vcl_vector<int> cols, rows, times;
+  std::vector<int> cols, rows, times;
   int nb_views = xcv_tab->get_selected_positions(&cols, &rows, &times);
   if (nb_views != 3)
   {
@@ -197,7 +198,7 @@ bool get_threeviews(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos)
     dl.ask();
     vgui_macro_warning
       << "You need to selected exactly three views. Number selected = "
-      << nb_views << vcl_endl;
+      << nb_views << std::endl;
     return false;
   }
   // Sort the view into time order:
@@ -230,7 +231,7 @@ vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned col, unsigned row)
   vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
   if (top_tab)
   {
-    vcl_string type_name("vgui_rubberband_tableau");
+    std::string type_name("vgui_rubberband_tableau");
     vgui_rubberband_tableau_sptr tab;
     tab.vertical_cast(vgui_find_below_by_type_name(top_tab, type_name));
     if (tab)
@@ -250,7 +251,7 @@ vgui_easy2D_tableau_sptr get_easy2D_at(unsigned col, unsigned row)
   vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
   if (top_tab)
   {
-    vcl_string type_name("vgui_easy2D_tableau");
+    std::string type_name("vgui_easy2D_tableau");
     vgui_easy2D_tableau_sptr tab;
     tab.vertical_cast(vgui_find_below_by_type_name(top_tab, type_name));
     if (tab)
@@ -269,7 +270,7 @@ vgui_composite_tableau_sptr get_composite_at(unsigned col, unsigned row)
   vgui_tableau_sptr top_tab = xcv_tab->get_tableau_at(col, row);
   if (top_tab)
   {
-    vcl_string type_name("vgui_composite_tableau");
+    std::string type_name("vgui_composite_tableau");
     vgui_composite_tableau_sptr tab;
     tab.vertical_cast(vgui_find_below_by_type_name(top_tab, type_name));
     if (tab)
@@ -290,7 +291,7 @@ vgui_viewer2D_tableau_sptr get_viewer2D_at(unsigned col, unsigned row)
   {
     vgui_viewer2D_tableau_sptr view;
     view.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                    vcl_string("vgui_viewer2D_tableau")));
+                                                    std::string("vgui_viewer2D_tableau")));
     if (view)
       return view;
   }
@@ -320,7 +321,7 @@ xcv_image_tableau_sptr get_image_tableau_at(unsigned col, unsigned row)
   {
     xcv_image_tableau_sptr tt;
     tt.vertical_cast(vgui_find_below_by_type_name(tab,
-      vcl_string("xcv_image_tableau")));
+      std::string("xcv_image_tableau")));
     if (tt)
       return tt;
   }
@@ -340,7 +341,7 @@ xcv_picker_tableau_sptr get_picker_tableau_at(unsigned col, unsigned row)
   {
     xcv_picker_tableau_sptr tt;
     tt.vertical_cast(vgui_find_below_by_type_name(top_tab,
-      vcl_string("xcv_picker_tableau")));
+      std::string("xcv_picker_tableau")));
     if (tt)
       return tt;
   }
@@ -382,7 +383,7 @@ vgui_tableau_sptr create_tableau(vil1_image img)
 //-----------------------------------------------------------------------------
 //: Displays the given image on XCV at the given position.
 //-----------------------------------------------------------------------------
-void add_image_at(vcl_string image_filename, unsigned col, unsigned row)
+void add_image_at(std::string image_filename, unsigned col, unsigned row)
 {
   vil1_image img = vil1_load(image_filename.c_str());
   vgui_tableau_sptr tab = create_tableau(img);
@@ -431,7 +432,7 @@ vgui_menu create_menubar()
 // greatest as the window width (height).
 //-----------------------------------------------------------------------------
 void xcv_window_size_traditional(int rows, int cols,
-                                 vcl_vector<vil1_image> const &images,
+                                 std::vector<vil1_image> const &images,
                                  unsigned *window_w, unsigned *window_h,
                                  double *viewer_scale)
 {
@@ -478,7 +479,7 @@ void xcv_window_size_traditional(int rows, int cols,
 //  Useful for very small or very large images.
 //-----------------------------------------------------------------------------
 void xcv_window_size_adaptive(int rows, int cols,
-                              vcl_vector<vil1_image> const &images,
+                              std::vector<vil1_image> const &images,
                               unsigned *window_w, unsigned *window_h,
                               double *viewer_scale)
 {
@@ -558,11 +559,11 @@ int main(int argc, char** argv)
   unsigned window_height = 0;
 
   {
-    vcl_vector<vgui_tableau_sptr> viewers;
-    vcl_vector<vil1_image> images;
+    std::vector<vgui_tableau_sptr> viewers;
+    std::vector<vil1_image> images;
 
     xcv_tab->set_grid_size_changeable(false);
-    for (int argcount=1; argcount<argc && vcl_strcmp(argv[argcount], "-d");
+    for (int argcount=1; argcount<argc && std::strcmp(argv[argcount], "-d");
          ++argcount)
     {
       vil1_image img = vil1_load(argv[argcount]);
@@ -602,8 +603,8 @@ int main(int argc, char** argv)
   if (window_height <= MENUBAR_HEIGHT)
     window_height = 512;
 
-  vcl_cerr << "window_width  = " << window_width << vcl_endl
-           << "window_height = " << window_height << vcl_endl;
+  std::cerr << "window_width  = " << window_width << std::endl
+           << "window_height = " << window_height << std::endl;
 
   // Create a window, add the tableau and show it on screen:
   vgui_window *win = vgui::produce_window(window_width, window_height,

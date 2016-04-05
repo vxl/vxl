@@ -1,13 +1,14 @@
+#include <new>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_stream_block_cache.h"
-#include <vcl_new.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 //:
 // \file
 
 boxm2_stream_block_cache::boxm2_stream_block_cache(boxm2_scene_sptr scene,
-                                                   const vcl_vector<vcl_string>& data_types,
-                                                   const vcl_vector<vcl_string>& identifier_list)
+                                                   const std::vector<std::string>& data_types,
+                                                   const std::vector<std::string>& identifier_list)
 : scene_(scene), data_types_list_(data_types),identifier_list_(identifier_list)
 {
 }
@@ -21,27 +22,27 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
         unsigned long total_bytes_per_data_type = 0 ;
         unsigned long bytes_per_data_type = 0 ;
         for (unsigned j = 0; j < identifier_list_.size(); j++) {
-            vcl_string filename = scene_->data_path() + data_types_list_[i] + "_"+ identifier_list_[j] +"_"+ current_block_id_.to_string() + ".bin";
+            std::string filename = scene_->data_path() + data_types_list_[i] + "_"+ identifier_list_[j] +"_"+ current_block_id_.to_string() + ".bin";
             if (vul_file::exists(filename))
                 bytes_per_data_type= vul_file::size(filename);
         }
         total_bytes_per_data_type= bytes_per_data_type* identifier_list_.size();
         char * buffer = new(std::nothrow) char[total_bytes_per_data_type];
 
-        if (buffer == 0)
-           vcl_cout<<"Failed to Allocate Memory"<<vcl_endl;
+        if (buffer == VXL_NULLPTR)
+           std::cout<<"Failed to Allocate Memory"<<std::endl;
 
         unsigned long global_index = 0;
 
         unsigned long num_bytes = 0;
         for (unsigned j = 0; j < identifier_list_.size(); j++) {
-            vcl_string filename = scene_->data_path() + data_types_list_[i] + "_" + identifier_list_[j]+"_"+current_block_id_.to_string() + ".bin";
+            std::string filename = scene_->data_path() + data_types_list_[i] + "_" + identifier_list_[j]+"_"+current_block_id_.to_string() + ".bin";
             if (vul_file::exists(filename))
             {
                 unsigned long filesize= vul_file::size(filename);
                 num_bytes   =   filesize;
-                vcl_ifstream ifs;
-                ifs.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
+                std::ifstream ifs;
+                ifs.open(filename.c_str(), std::ios::in | std::ios::binary);
                 if (!ifs) return false;
                 ifs.read(&(buffer[global_index]), num_bytes);
                 int cnt = (int)ifs.gcount();
@@ -50,9 +51,9 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
             else
             {
                 //init with zero
-                vcl_memset (&(buffer[global_index]), 0, bytes_per_data_type);
+                std::memset (&(buffer[global_index]), 0, bytes_per_data_type);
                 global_index+=bytes_per_data_type;
-                vcl_cerr << "For " << id << ", data type: " << data_types_list_[i] + "_" + identifier_list_[j] << " does not exist!\n";
+                std::cerr << "For " << id << ", data type: " << data_types_list_[i] + "_" + identifier_list_[j] << " does not exist!\n";
             }
         }
 
@@ -65,7 +66,7 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
 
 bool boxm2_stream_block_cache::clear()
 {
-   vcl_map<data_type, boxm2_data_base *>::iterator mit = data_types_.begin();
+   std::map<data_type, boxm2_data_base *>::iterator mit = data_types_.begin();
    for (; mit != data_types_.end(); ++mit) {
       boxm2_data_base* ptr = mit->second;
       delete ptr;

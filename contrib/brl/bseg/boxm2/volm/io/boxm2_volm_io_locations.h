@@ -3,8 +3,9 @@
 //:
 // \file
 
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 
 
@@ -14,13 +15,13 @@ void vsl_b_write(vsl_b_ostream & os, boxm2_volm_loc_hypotheses const &loc_hyp);
 //: Binary load parameters from stream.
 void vsl_b_read(vsl_b_istream & is, boxm2_volm_loc_hypotheses &loc_hyp);
 
-void vsl_print_summary(vcl_ostream &os, const boxm2_volm_loc_hypotheses &loc_hyp);
+void vsl_print_summary(std::ostream &os, const boxm2_volm_loc_hypotheses &loc_hyp);
 
 void vsl_b_read(vsl_b_istream& is, boxm2_volm_loc_hypotheses* p);
 
 void vsl_b_write(vsl_b_ostream& os, const boxm2_volm_loc_hypotheses* &p);
 
-void vsl_print_summary(vcl_ostream& os, const boxm2_volm_loc_hypotheses* &p);
+void vsl_print_summary(std::ostream& os, const boxm2_volm_loc_hypotheses* &p);
 
 #endif
 

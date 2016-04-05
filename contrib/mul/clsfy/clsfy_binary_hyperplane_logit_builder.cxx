@@ -1,4 +1,10 @@
 // This is mul/clsfy/clsfy_binary_hyperplane_logit_builder.cxx
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <numeric>
 #include "clsfy_binary_hyperplane_logit_builder.h"
 //:
 // \file
@@ -8,13 +14,8 @@
 
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vcl_numeric.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_lbfgs.h>
 #include <clsfy/clsfy_logit_loss_function.h>
@@ -45,7 +46,7 @@ void clsfy_binary_hyperplane_logit_builder::set_min_p(double p)
 double clsfy_binary_hyperplane_logit_builder::build(clsfy_classifier_base& classifier,
                                           mbl_data_wrapper<vnl_vector<double> >& inputs,
                                           unsigned n_classes,
-                                          const vcl_vector<unsigned>& outputs) const
+                                          const std::vector<unsigned>& outputs) const
 {
   assert (n_classes == 1);
   return clsfy_binary_hyperplane_logit_builder::build(classifier, inputs, outputs);
@@ -54,17 +55,17 @@ double clsfy_binary_hyperplane_logit_builder::build(clsfy_classifier_base& class
 //: Build a linear hyperplane classifier with the given data.
 double clsfy_binary_hyperplane_logit_builder::build(clsfy_classifier_base& classifier,
                                         mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                        const vcl_vector<unsigned>& outputs) const
+                                        const std::vector<unsigned>& outputs) const
 {
   // First let the base class get us a starting solution
   clsfy_binary_hyperplane_ls_builder::build( classifier,inputs,outputs);
 
-  vcl_cout<<"Initial error:"<< clsfy_test_error(classifier, inputs, outputs) <<vcl_endl;
+  std::cout<<"Initial error:"<< clsfy_test_error(classifier, inputs, outputs) <<std::endl;
 
   unsigned n_egs = inputs.size();
   if (n_egs == 0)
   {
-      vcl_cerr<<"WARNING - clsfy_binary_hyperplane_logit_builder::build called with no data\n";
+      std::cerr<<"WARNING - clsfy_binary_hyperplane_logit_builder::build called with no data\n";
       return 0.0;
   }
 
@@ -90,8 +91,8 @@ double clsfy_binary_hyperplane_logit_builder::build(clsfy_classifier_base& class
   optimizer.set_x_tolerance(1e-5);
   if (!optimizer.minimize(w))
   {
-    vcl_cerr<<"vnl_lbfgs optimisation failed!"<<vcl_endl;
-    vcl_cerr<<"Failure code: "<<optimizer.get_failure_code()<<vcl_endl;
+    std::cerr<<"vnl_lbfgs optimisation failed!"<<std::endl;
+    std::cerr<<"Failure code: "<<optimizer.get_failure_code()<<std::endl;
   }
 
   vnl_vector_ref<double> new_wts(n_dim,&w[1]);
@@ -128,22 +129,22 @@ void clsfy_binary_hyperplane_logit_builder::b_read(vsl_b_istream &bfs)
       vsl_b_read(bfs,alpha_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_binary_hyperplane_logit_builder::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: clsfy_binary_hyperplane_logit_builder::b_read(vsl_b_istream&)\n"
                 << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
 //=======================================================================
 
-vcl_string clsfy_binary_hyperplane_logit_builder::is_a() const
+std::string clsfy_binary_hyperplane_logit_builder::is_a() const
 {
-  return vcl_string("clsfy_binary_hyperplane_logit_builder");
+  return std::string("clsfy_binary_hyperplane_logit_builder");
 }
 
 //=======================================================================
 
-bool clsfy_binary_hyperplane_logit_builder::is_class(vcl_string const& s) const
+bool clsfy_binary_hyperplane_logit_builder::is_class(std::string const& s) const
 {
   return s == clsfy_binary_hyperplane_logit_builder::is_a() || clsfy_binary_hyperplane_ls_builder::is_class(s);
 }
@@ -157,7 +158,7 @@ short clsfy_binary_hyperplane_logit_builder::version_no() const
 
 //=======================================================================
 
-void clsfy_binary_hyperplane_logit_builder::print_summary(vcl_ostream& os) const
+void clsfy_binary_hyperplane_logit_builder::print_summary(std::ostream& os) const
 {
   os << is_a();
 }

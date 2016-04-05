@@ -18,11 +18,12 @@
 //   26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim
 
+#include <string>
 #include "vgui_deck_tableau_sptr.h"
 #include <vgui/vgui_observable.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_parent_child_link.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: Tableau holding many child tableaux, but only one receives events.
 //
@@ -79,15 +80,15 @@ class vgui_deck_tableau : public vgui_tableau
 
   //: Returns the file_name of the active child.
   //  Over-rides function in vgui_tableau.
-  virtual vcl_string file_name() const;
+  virtual std::string file_name() const;
 
   //: Returns a nice version of the name, including info on the active child.
   //  Over-rides function in vgui_tableau.
-  virtual vcl_string pretty_name() const;
+  virtual std::string pretty_name() const;
 
   //: Returns the type of this tableau ('vgui_deck_tableau').
   //  Over-rides function in vgui_tableau.
-  virtual vcl_string type_name() const;
+  virtual std::string type_name() const;
 
   //: Builds a popup menu for the user to select the active child.
   //  Over-rides function in vgui_tableau.
@@ -128,7 +129,7 @@ class vgui_deck_tableau : public vgui_tableau
   //-----
 
   //: List of child tableaux.
-  vcl_vector<vgui_parent_child_link> children;
+  std::vector<vgui_parent_child_link> children;
 
   //: Currently active child tableau.
   int index_;

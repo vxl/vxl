@@ -6,10 +6,12 @@
 // \author Daniel Crispell
 // \date Mar 3, 2012
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -41,11 +43,11 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
     CONVERT_AUX_INT_FLOAT = 2
   };
 
-  bool compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+  bool compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -59,7 +61,7 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
     //convert aux buffer int values to float (just divide by SEGLENFACTOR
     bocl_kernel* convert_aux_int_float = new bocl_kernel();
     if (!convert_aux_int_float->create_kernel(&device->context(),device->device_id(), src_paths, "convert_aux_int_to_float", opts+" -D CONVERT_AUX ", "batch_update::convert_aux_int_to_float")) {
-      vcl_cerr << "ERROR compiling kernel convert_aux_int_float\n";
+      std::cerr << "ERROR compiling kernel convert_aux_int_float\n";
       return false;
     }
 
@@ -69,18 +71,18 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
 
     // push back seg_len kernel
     bocl_kernel* seg_len = new bocl_kernel();
-    vcl_string seg_opts = "-D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+    std::string seg_opts = "-D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
     if (!seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len")) {
-      vcl_cerr << "ERROR compiling kernel seg_len\n";
+      std::cerr << "ERROR compiling kernel seg_len\n";
       return false;
     }
     vec_kernels.push_back(seg_len);
 
     //push back cast_ray_bit
     bocl_kernel* aux_previs_naa_kernel = new bocl_kernel();
-    vcl_string aux_opt = opts + " -D AUX_PREVIS_NAA -D STEP_CELL=step_cell_aux_previs_naa(aux_args,data_ptr,llid,d) ";
+    std::string aux_opt = opts + " -D AUX_PREVIS_NAA -D STEP_CELL=step_cell_aux_previs_naa(aux_args,data_ptr,llid,d) ";
     if (!aux_previs_naa_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "aux_previs_main_naa", aux_opt, "batch_update::aux_previs_main_naa")) {
-      vcl_cerr << "ERROR compiling kernel aux_previs_naa_kernel\n";
+      std::cerr << "ERROR compiling kernel aux_previs_naa_kernel\n";
       return false;
     }
     vec_kernels.push_back(aux_previs_naa_kernel);
@@ -91,7 +93,7 @@ namespace boxm2_ocl_update_aux_per_view_naa_process_globals
     return true;
   }
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_update_aux_per_view_naa_process_cons(bprb_func_process& pro)
@@ -99,7 +101,7 @@ bool boxm2_ocl_update_aux_per_view_naa_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_aux_per_view_naa_process_globals;
 
   //process takes 10 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -112,11 +114,11 @@ bool boxm2_ocl_update_aux_per_view_naa_process_cons(bprb_func_process& pro)
   input_types_[9] = "vil_image_view_base_sptr";
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the input 5 is not set
-  brdb_value_sptr idx5 = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx5 = new brdb_value_t<std::string>("");
   pro.set_input(5, idx5);
 
   return good;
@@ -125,11 +127,11 @@ bool boxm2_ocl_update_aux_per_view_naa_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_aux_per_view_naa_process_globals;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -143,18 +145,18 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
   brad_image_metadata_sptr metadata        = pro.get_input<brad_image_metadata_sptr>(i++);
   brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(i++);
-  vcl_string suffix                     = pro.get_input<vcl_string>(i++);
+  std::string suffix                     = pro.get_input<std::string>(i++);
   vil_image_view_base_sptr alt_prior_base    = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr alt_density_base  = pro.get_input<vil_image_view_base_sptr>(i++);
 
   vil_image_view<float> *alt_prior = dynamic_cast<vil_image_view<float>*>(alt_prior_base.ptr());
   if (!alt_prior) {
-    vcl_cerr << "ERROR casting alt_prior to vil_image_view<float>\n";
+    std::cerr << "ERROR casting alt_prior to vil_image_view<float>\n";
     return false;
   }
   vil_image_view<float> *alt_density = dynamic_cast<vil_image_view<float>*>(alt_density_base.ptr());
   if (!alt_density) {
-    vcl_cerr << "ERROR casting alt_density to vil_image_view<float>\n";
+    std::cerr << "ERROR casting alt_density to vil_image_view<float>\n";
     return false;
   }
   // variances
@@ -164,20 +166,20 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
   const double skylight_var = boxm2_normal_albedo_array_constants::sigma_skylight * boxm2_normal_albedo_array_constants::sigma_skylight;
 
   // get normal directions
-  vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
+  std::vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
   unsigned int num_normals = normals.size();
   // opencl code depends on there being exactly 16 normal directions - do sanity check here
   if (num_normals != 16) {
-    vcl_cerr << "ERROR: boxm2_ocl_update_aux_per_view_naa_process: num_normals = " << num_normals << ".  Expected 16\n";
+    std::cerr << "ERROR: boxm2_ocl_update_aux_per_view_naa_process: num_normals = " << num_normals << ".  Expected 16\n";
     return false;
   }
 
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   bool foundDataType = false;
-  vcl_string data_type,num_obs_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type,num_obs_type,options;
+  std::vector<std::string> apps = scene->appearances();
   int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
@@ -189,7 +191,7 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_UPDATE_AUX_PER_VIEW_NAA_PROCESS ERROR: scene doesn't have NORMAL_ALBEDO_ARRAY data type"<<vcl_endl;
+    std::cout<<"BOXM2_OCL_UPDATE_AUX_PER_VIEW_NAA_PROCESS ERROR: scene doesn't have NORMAL_ALBEDO_ARRAY data type"<<std::endl;
     return false;
   }
 
@@ -198,14 +200,14 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
   // compile the kernel if not already compiled
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     if (!compile_kernel(device,ks,"")) {
-      vcl_cerr << "ERROR: compile kernel returned false\n";
+      std::cerr << "ERROR: compile kernel returned false\n";
       return false;
     }
     kernels[identifier]=ks;
@@ -239,17 +241,17 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
      // compute scale
      double var = brad_radiance_variance_chavez(1.0, normals[n], *metadata, *atm_params, reflectance_var, optical_depth_var, skylight_var, airlight_var);
      radiance_var_scales_buff[n] = var - var_offset;
-     vcl_cout << "---- normal = " << normals[n] << vcl_endl
-              << "radiance scale = " << radiance << " offset = " << offset << vcl_endl
-              << "radiance var scale = " << var << " variance offset = " << var_offset << vcl_endl;
+     std::cout << "---- normal = " << normals[n] << std::endl
+              << "radiance scale = " << radiance << " offset = " << offset << std::endl
+              << "radiance var scale = " << var << " variance offset = " << var_offset << std::endl;
   }
 
   //set generic cam
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  vcl_cout << "allocating ray_o_buff: ni = " << cl_ni << ", nj = " << cl_nj << "  size = " << cl_ni*cl_nj*sizeof(cl_float4) << vcl_endl;
+  std::cout << "allocating ray_o_buff: ni = " << cl_ni << ", nj = " << cl_nj << "  size = " << cl_ni*cl_nj*sizeof(cl_float4) << std::endl;
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4) , ray_origins,"ray_origins buffer");
-  vcl_cout << "allocating ray_d_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  std::cout << "allocating ray_d_buff: ni = " << cl_ni << ", nj = " << cl_nj << std::endl;
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_directions,"ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
@@ -274,19 +276,19 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
       ++count;
     }
   }
-  vcl_cout << "allocating input_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  std::cout << "allocating input_buff: ni = " << cl_ni << ", nj = " << cl_nj << std::endl;
   bocl_mem_sptr in_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),input_buff,"input image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  vcl_cout << "allocating vis_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  std::cout << "allocating vis_buff: ni = " << cl_ni << ", nj = " << cl_nj << std::endl;
   bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  vcl_cout << "allocating pre_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  std::cout << "allocating pre_buff: ni = " << cl_ni << ", nj = " << cl_nj << std::endl;
   bocl_mem_sptr pre_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),pre_buff,"pre image buffer");
   pre_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  vcl_cout << "Done allocating images" << vcl_endl;
+  std::cout << "Done allocating images" << std::endl;
 
   // Allocate buffers for holding radiance scales and offsets
   bocl_mem_sptr radiance_scales = new bocl_mem(device->context(), radiance_scales_buff, sizeof(float)*num_normals,"radiance scales buffer");
@@ -328,8 +330,8 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels[identifier].size(); ++i)
   {
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -500,7 +502,7 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
   delete [] radiance_var_scales_buff;
   delete [] radiance_var_offsets_buff;
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }

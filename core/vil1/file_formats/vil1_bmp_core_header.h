@@ -13,7 +13,8 @@
 // \endverbatim
 
 class vil1_stream;
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 struct vil1_bmp_core_header
 {
@@ -27,7 +28,7 @@ struct vil1_bmp_core_header
   vil1_bmp_core_header();
   void read(vil1_stream *);
   void write(vil1_stream *) const;
-  void print(vcl_ostream &) const;
+  void print(std::ostream &) const;
 };
 
 #endif // vil1_bmp_core_header_h_

@@ -18,10 +18,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <mvl/FMatrixCompute.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class FMatrixComputeRobust : public FMatrixCompute
 {
@@ -34,38 +36,38 @@ class FMatrixComputeRobust : public FMatrixCompute
   //: Compute a fundamental matrix for a set of point matches.
   // This is the implemented method, other computes wrap this.
   bool compute(PairMatchSetCorner& matches, FMatrix* F);
-  bool compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2, FMatrix* F)
+  bool compute(std::vector<HomgPoint2D>& p1, std::vector<HomgPoint2D>& p2, FMatrix* F)
     { return FMatrixCompute::compute(p1,p2,F); }
-  bool compute(vcl_vector<vgl_homg_point_2d<double> >& p1,
-               vcl_vector<vgl_homg_point_2d<double> >& p2,
+  bool compute(std::vector<vgl_homg_point_2d<double> >& p1,
+               std::vector<vgl_homg_point_2d<double> >& p2,
                FMatrix& F)
     { return FMatrixCompute::compute(p1,p2,F); }
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
-  inline FMatrix compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2)
+  inline FMatrix compute(std::vector<HomgPoint2D>& p1, std::vector<HomgPoint2D>& p2)
     { return FMatrixCompute::compute(p1,p2); }
-  inline FMatrix compute(vcl_vector<vgl_homg_point_2d<double> >& p1,
-                         vcl_vector<vgl_homg_point_2d<double> >& p2)
+  inline FMatrix compute(std::vector<vgl_homg_point_2d<double> >& p1,
+                         std::vector<vgl_homg_point_2d<double> >& p2)
     { return FMatrixCompute::compute(p1,p2); }
 
   // Data Access---------------------------------------------------------------
 
-  vcl_vector<int> get_basis() const { return basis_; }
+  std::vector<int> get_basis() const { return basis_; }
   HomgPoint2D get_epipole1() const { return epipole1_; }
   HomgPoint2D get_epipole2() const { return epipole2_; }
-  vcl_vector<double> get_residuals() const { return residuals_; }
-  vcl_vector<bool> get_inliers() const { return inliers_; }
+  std::vector<double> get_residuals() const { return residuals_; }
+  std::vector<bool> get_inliers() const { return inliers_; }
 
   // These virtual functions must be implemented
-  virtual double calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count);
+  virtual double calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count);
   virtual double calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F);
   virtual double calculate_residual(vgl_homg_point_2d<double>& one,
                                     vgl_homg_point_2d<double>& two, FMatrix* F);
-  vcl_vector<double> calculate_residuals(vcl_vector<HomgPoint2D>& one, vcl_vector<HomgPoint2D>& two, FMatrix* F);
-  vcl_vector<double> calculate_residuals(vcl_vector<vgl_homg_point_2d<double> >& one,
-                                         vcl_vector<vgl_homg_point_2d<double> >& two,
+  std::vector<double> calculate_residuals(std::vector<HomgPoint2D>& one, std::vector<HomgPoint2D>& two, FMatrix* F);
+  std::vector<double> calculate_residuals(std::vector<vgl_homg_point_2d<double> >& one,
+                                         std::vector<vgl_homg_point_2d<double> >& two,
                                          FMatrix* F);
-  double stdev(vcl_vector<double>& residuals);
+  double stdev(std::vector<double>& residuals);
  protected:
   bool rank2_truncate_;
   double inthresh_;
@@ -73,12 +75,12 @@ class FMatrixComputeRobust : public FMatrixCompute
  private:
   int row_;
   int col_;
-  vcl_vector<int> basis_;
+  std::vector<int> basis_;
   HomgPoint2D epipole1_;
   HomgPoint2D epipole2_;
   int data_size_;
-  vcl_vector<double> residuals_;
-  vcl_vector<bool> inliers_;
+  std::vector<double> residuals_;
+  std::vector<bool> inliers_;
 };
 
 #endif // FMatrixComputeRobust_h_

@@ -60,11 +60,11 @@ class vsol_region_2d : public vsol_spatial_object_2d
   virtual vsol_region_2d* cast_to_region(void) { return this; }
   virtual vsol_region_2d const* cast_to_region(void) const { return this; }
 
-  virtual vsol_polygon_2d* cast_to_polygon(void) { return 0; }
-  virtual vsol_polygon_2d const* cast_to_polygon(void) const { return 0; }
+  virtual vsol_polygon_2d* cast_to_polygon(void) { return VXL_NULLPTR; }
+  virtual vsol_polygon_2d const* cast_to_polygon(void) const { return VXL_NULLPTR; }
 
-  virtual vsol_poly_set_2d* cast_to_poly_set(void) { return 0; }
-  virtual vsol_poly_set_2d const* cast_to_poly_set(void) const { return 0; }
+  virtual vsol_poly_set_2d* cast_to_poly_set(void) { return VXL_NULLPTR; }
+  virtual vsol_poly_set_2d const* cast_to_poly_set(void) const { return VXL_NULLPTR; }
   //***************************************************************************
   // Status report
   //***************************************************************************
@@ -85,10 +85,10 @@ class vsol_region_2d : public vsol_spatial_object_2d
   virtual bool is_convex(void) const=0;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_region_2d"); }
+  virtual std::string is_a() const { return std::string("vsol_region_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 };
 
 #endif // vsol_region_2d_h_

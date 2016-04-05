@@ -3,10 +3,12 @@
 // \author Tim Cootes
 // \brief Calculate and apply translation + scale transform
 
+#include <iostream>
+#include <cstddef>
 #include "msm_zoom_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -15,7 +17,7 @@
 vnl_vector<double> msm_zoom_aligner::inverse(const vnl_vector<double>& t) const
 {
   vnl_vector<double> q(3);
-  double s=vcl_exp(t[0]);
+  double s=std::exp(t[0]);
   q[0]=-t[0];
   q[1]=-t[1]/s;
   q[2]=-t[2]/s;
@@ -28,14 +30,14 @@ void msm_zoom_aligner::apply_transform(const msm_points& points,
                                        msm_points& new_points) const
 {
   new_points=points;
-  new_points.transform_by(vcl_exp(trans[0]),0.0,trans[1],trans[2]);
+  new_points.transform_by(std::exp(trans[0]),0.0,trans[1],trans[2]);
 }
 
 //: Return scaling applied by the transform with given parameters.
 double msm_zoom_aligner::scale(const vnl_vector<double>& trans) const
 {
   assert(trans.size()==3);
-  return vcl_exp(trans[0]);
+  return std::exp(trans[0]);
 }
 
 
@@ -73,7 +75,7 @@ void msm_zoom_aligner::calc_transform_from_ref(const msm_points& ref_pts,
   }
 
   trans.set_size(3);
-  trans[0] = vcl_log(dot_sum);
+  trans[0] = std::log(dot_sum);
   trans[1] = cog2.x();
   trans[2] = cog2.y();
 }
@@ -105,7 +107,7 @@ void msm_zoom_aligner::calc_transform(const msm_points& pts1,
 
   trans.set_size(3);
   double s = dot_sum/x2_sum;
-  trans[0] = vcl_log(s);
+  trans[0] = std::log(s);
   trans[1] = cog2.x() - s*cog1.x();
   trans[2] = cog2.y() - s*cog1.y();
 }
@@ -158,7 +160,7 @@ void msm_zoom_aligner::calc_transform_wt(const msm_points& pts1,
 
   trans.set_size(3);
   double s = dot_sum/x2_sum;
-  trans[0] = vcl_log(s);
+  trans[0] = std::log(s);
   trans[1] = cog2.x() - s*cog1.x();
   trans[2] = cog2.y() - s*cog1.y();
 }
@@ -168,7 +170,7 @@ void msm_zoom_aligner::calc_transform_wt(const msm_points& pts1,
 //  ie error is sum (p2_i-T(p1_i)'*wt_mat[i]*(p2_i-T(p1_i)
 void msm_zoom_aligner::calc_transform_wt_mat(const msm_points& pts1,
                                              const msm_points& pts2,
-                                             const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                                             const std::vector<msm_wt_mat_2d>& wt_mat,
                                              vnl_vector<double>& trans) const
 {
   assert(pts2.size()==pts1.size());
@@ -180,7 +182,7 @@ void msm_zoom_aligner::calc_transform_wt_mat(const msm_points& pts1,
   const double* p1 = pts1.vector().begin();
   const double* p2 = pts2.vector().begin();
   const double* p1_end = pts1.vector().end();
-  vcl_vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
+  std::vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
   for (;p1!=p1_end;p1+=2,p2+=2,++w)
   {
     double wa=w->m11(), wb=w->m12(), wc=w->m22();
@@ -219,17 +221,17 @@ void msm_zoom_aligner::calc_transform_wt_mat(const msm_points& pts1,
 
   trans.set_size(3);
   double s = txx_sum/sum1;
-  trans[0] = vcl_log(s);
+  trans[0] = std::log(s);
   trans[1] = cog2.x() - s*cog1.x();
   trans[2] = cog2.y() - s*cog1.y();
 }
 
   //: Apply transform to weight matrices (ie ignore translation component)
-void msm_zoom_aligner::transform_wt_mat(const vcl_vector<msm_wt_mat_2d>& wt_mat,
+void msm_zoom_aligner::transform_wt_mat(const std::vector<msm_wt_mat_2d>& wt_mat,
                                         const vnl_vector<double>& trans,
-                                        vcl_vector<msm_wt_mat_2d>& new_wt_mat) const
+                                        std::vector<msm_wt_mat_2d>& new_wt_mat) const
 {
-  double s=vcl_exp(trans[0]);
+  double s=std::exp(trans[0]);
   new_wt_mat.resize(wt_mat.size());
   for (unsigned i=0;i<wt_mat.size();++i)
     new_wt_mat[i]=wt_mat[i].transform_by(s,0);
@@ -240,7 +242,7 @@ vnl_vector<double> msm_zoom_aligner::compose(
                          const vnl_vector<double>& pose1,
                          const vnl_vector<double>& pose2) const
 {
-  double s1=vcl_exp(pose1[0]);
+  double s1=std::exp(pose1[0]);
 
   vnl_vector<double> p(3);
   p[0]= pose1[0]+pose2[0];
@@ -267,12 +269,13 @@ void msm_zoom_aligner::normalise_shape(msm_points& points) const
 //  frame (ie pose is the mapping from the reference frame to
 //  the target frames).
 // \param average_pose Average mapping from ref to target frame
-void msm_zoom_aligner::align_set(const vcl_vector<msm_points>& points,
+void msm_zoom_aligner::align_set(const std::vector<msm_points>& points,
                                  msm_points& ref_mean_shape,
-                                 vcl_vector<vnl_vector<double> >& pose_to_ref,
-                                 vnl_vector<double>& average_pose) const
+                                 std::vector<vnl_vector<double> >& pose_to_ref,
+                                 vnl_vector<double>& average_pose,
+                                 ref_pose_source) const
 {
-  vcl_size_t n_shapes = points.size();
+  std::size_t n_shapes = points.size();
   assert(n_shapes>0);
   pose_to_ref.resize(n_shapes);
 
@@ -318,9 +321,9 @@ void msm_zoom_aligner::align_set(const vcl_vector<msm_points>& points,
 
 //=======================================================================
 
-vcl_string msm_zoom_aligner::is_a() const
+std::string msm_zoom_aligner::is_a() const
 {
-  return vcl_string("msm_zoom_aligner");
+  return std::string("msm_zoom_aligner");
 }
 
 //: Create a copy on the heap and return base class pointer

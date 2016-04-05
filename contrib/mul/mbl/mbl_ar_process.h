@@ -6,13 +6,15 @@
 // \brief Compute the parameters of a second order autoregressive process.
 // \author Franck Bettinger
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class vnl_random;
 
@@ -35,13 +37,13 @@ class mbl_ar_process
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  bool is_class(vcl_string const& s) const;
+  bool is_class(std::string const& s) const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -50,10 +52,10 @@ class mbl_ar_process
   void b_read(vsl_b_istream& bfs);
 
   //: Dynamic learning
-  void learn(vcl_vector<vnl_vector<T> >& data);
+  void learn(std::vector<vnl_vector<T> >& data);
 
   //: Learning using Burg's algorithm
-  void learn_burg(vcl_vector<vnl_vector<T> >& data);
+  void learn_burg(std::vector<vnl_vector<T> >& data);
 
   //: Prediction
   // of a vector given the two previous vectors
@@ -72,6 +74,6 @@ void vsl_b_read(vsl_b_istream& s, mbl_ar_process<T>* & v);
 
 //: Print class to os
 template<class T>
-void vsl_print_summary(vcl_ostream& os, const mbl_ar_process<T>* p);
+void vsl_print_summary(std::ostream& os, const mbl_ar_process<T>* p);
 
 #endif // mbl_ar_process_h_

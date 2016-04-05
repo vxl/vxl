@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_aggregate_normal_from_filter_vector_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -30,7 +32,7 @@
 #include <bvpl/kernels/bvpl_kernel.h>
 
 //utilities
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 
 namespace boxm2_ocl_aggregate_normal_from_filter_vector_process_globals
@@ -38,7 +40,7 @@ namespace boxm2_ocl_aggregate_normal_from_filter_vector_process_globals
   const unsigned n_inputs_ =  4;
   const unsigned n_outputs_ = 0;
 
-  static vcl_map<vcl_string, boxm2_ocl_aggregate_normal_from_filter_vector*> engines;
+  static std::map<std::string, boxm2_ocl_aggregate_normal_from_filter_vector*> engines;
 }
 
 bool boxm2_ocl_aggregate_normal_from_filter_vector_process_cons(bprb_func_process& pro)
@@ -46,13 +48,13 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process_cons(bprb_func_proces
   using namespace boxm2_ocl_aggregate_normal_from_filter_vector_process_globals;
 
   // process has 4 inputs and no outputs:
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "bvpl_kernel_vector_sptr";
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
 }
@@ -62,7 +64,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
   using namespace boxm2_ocl_aggregate_normal_from_filter_vector_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -75,10 +77,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector_process(bprb_func_process& pr
 
   //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   // compile the kernel if not already compiled
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
 
   if (engines.find(identifier) == engines.end()) {
     engines[identifier] = new boxm2_ocl_aggregate_normal_from_filter_vector(scene, opencl_cache,

@@ -86,10 +86,10 @@ convert_parameters( vnl_vector<double>& params,
   index_row_ = index_col_ = -1;  // init to bad value
   for ( unsigned i=0; i<Tdim+1; ++i )
     for ( unsigned j=0; j<Fdim+1; ++j )
-      if ( vcl_abs( proj_matrix(i,j) ) > max_val ) {
+      if ( std::abs( proj_matrix(i,j) ) > max_val ) {
         index_row_ = i;
         index_col_ = j;
-        max_val = vcl_abs( proj_matrix(i,j) );
+        max_val = std::abs( proj_matrix(i,j) );
       }
 
   // normalize the proj_matrix to have the largest value as 1
@@ -265,7 +265,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           vnl_vector_fixed<double, Tdim> to = ti.to_feature()->location();
           error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
-          double const wgt = vcl_sqrt(ti.cumulative_weight());
+          double const wgt = std::sqrt(ti.cumulative_weight());
           vnl_vector_fixed<double, Tdim> diff = error_proj_sqrt * (mapped - to);
 
           // fill in
@@ -313,7 +313,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();
           error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
-          double const wgt = vcl_sqrt(ti.cumulative_weight());
+          double const wgt = std::sqrt(ti.cumulative_weight());
           jac = error_proj_sqrt * base_jac;
           jac *= wgt;
 
@@ -363,15 +363,15 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   else
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
-    vcl_cerr <<  "Levenberg-Marquardt failed\n";
-    lm.diagnose_outcome(vcl_cerr);
+    std::cerr <<  "Levenberg-Marquardt failed\n";
+    lm.diagnose_outcome(std::cerr);
     return false;
   }
-  //lm.diagnose_outcome(vcl_cout);
+  //lm.diagnose_outcome(std::cout);
 
   // convert parameters back into matrix form
   this->restored_centered_proj( proj, p );
-  //vcl_cout << "Final params=" << proj << vcl_endl;
+  //std::cout << "Final params=" << proj << std::endl;
 
   // compute covariance
   // Jac^\top * Jac is INVERSE of the covariance
@@ -385,9 +385,9 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // Jac = U W V^\top
   vnl_svd<double> svd( jac, zero_svd_thres_ );
   if ( svd.rank()+1 < proj_size_ ) {
-    vcl_cerr <<  "The covariance of projection matrix ranks less than "
+    std::cerr <<  "The covariance of projection matrix ranks less than "
              << proj_size_-1 << "!\n"
-             << "  The singular values are " << svd.W() << vcl_endl;
+             << "  The singular values are " << svd.W() << std::endl;
     return false;
   }
 
@@ -460,7 +460,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   if ( !compute_weighted_centres( matches, from_centre, to_centre ) )
     return 0;
    DebugMacro( 3, "From center: " << from_centre
-               <<"  To center: " << to_centre << vcl_endl );
+               <<"  To center: " << to_centre << std::endl );
 
   // construct least square cost function
   rgrl_est_proj_func<Tdim, Fdim> proj_func( matches, tot_num, with_grad_ );
@@ -485,7 +485,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
     WarningMacro( "Levenberg-Marquardt failed" );
     return false;
   }
-  //lm.diagnose_outcome(vcl_cout);
+  //lm.diagnose_outcome(std::cout);
 
   // convert parameters back into matrix form
   restored_centered_proj( proj, p );

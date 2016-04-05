@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_render_expected_image.h"
 //
 #include <vul/vul_timer.h>
@@ -7,7 +9,7 @@
 #include <vsph/vsph_camera_bounds.h>
 #include <vgl/vgl_ray_3d.h>
 #include <boct/boct_bit_tree.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
@@ -22,11 +24,11 @@ using namespace boxm2_ocl_render_expected_image_globals;
 //--------------------------------------------------
 bool boxm2_ocl_render_expected_image_globals::validate_appearances(
     boxm2_scene_sptr scene,
-    vcl_string& data_type,
+    std::string& data_type,
     int& appTypeSize,
-    vcl_string& options)
+    std::string& options)
 {
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
   bool foundDataType = false;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -59,14 +61,14 @@ bool boxm2_ocl_render_expected_image_globals::validate_appearances(
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_EXPECTED_IMAGE ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OCL_RENDER_EXPECTED_IMAGE ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
   return true;
 }
 
 //declare static map
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_render_expected_image::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_render_expected_image::kernels_;
 
 bool boxm2_ocl_render_expected_image::render(
     vil_image_view<float>&   exp_img_out,
@@ -75,16 +77,16 @@ bool boxm2_ocl_render_expected_image::render(
     bocl_device_sptr         device,
     boxm2_opencl_cache_sptr  opencl_cache,
     vpgl_camera_double_sptr  cam,
-    vcl_string               ident,
+    std::string               ident,
     unsigned                 ni,
     unsigned                 nj,
     float                    nearfactor,
     float                    farfactor,
-    vcl_size_t               startI,
-    vcl_size_t               startJ)
+    std::size_t               startI,
+    std::size_t               startJ)
 {
   vul_timer rtime;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
 
   if(!exp_img_out) {
@@ -94,15 +96,15 @@ bool boxm2_ocl_render_expected_image::render(
     vis_img_out.set_size(ni,nj,1);
   }
   if ( exp_img_out.ni() != ni || exp_img_out.nj() != nj ) {
-    vcl_cout<<"Expected image must have size (" << ni << "," << nj << ")" <<vcl_endl;
+    std::cout<<"Expected image must have size (" << ni << "," << nj << ")" <<std::endl;
     return false;
   }
   if ( vis_img_out.ni() != ni || vis_img_out.nj() != nj ) {
-    vcl_cout<<"Visibility image must have size (" << ni << "," << nj << ")" <<vcl_endl;
+    std::cout<<"Visibility image must have size (" << ni << "," << nj << ")" <<std::endl;
     return false;
   }
 
-  vcl_string data_type, options;
+  std::string data_type, options;
   int appTypeSize = 0;
   if (!validate_appearances(scene, data_type, appTypeSize, options))
     return false;
@@ -117,8 +119,8 @@ bool boxm2_ocl_render_expected_image::render(
   if (status!=0) return false;
 
   // grab the kernel
-  vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-  vcl_vector<bocl_kernel*>& kernels = get_kernel(device, options);
+  std::cout<<"===========Compiling kernels==========="<<std::endl;
+  std::vector<bocl_kernel*>& kernels = get_kernel(device, options);
 
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
@@ -137,12 +139,12 @@ bool boxm2_ocl_render_expected_image::render(
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   float* max_omega_buff = new float[cl_ni*cl_nj];
-  vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
+  std::fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"vis image buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -151,11 +153,11 @@ bool boxm2_ocl_render_expected_image::render(
   if(cam->type_name() == "vpgl_perspective_camera")
   {
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
-      vcl_cout<<"Focal Length " << f<<vcl_endl;
+      std::cout<<"Focal Length " << f<<std::endl;
       tnearfar[0] = f* scene->finest_resolution()/nearfactor ;
       tnearfar[1] = f* scene->finest_resolution()*farfactor ;
 
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<std::endl;
   }
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -167,7 +169,7 @@ bool boxm2_ocl_render_expected_image::render(
   // normalize
   if (kernels.size()>1)
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels[1];
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
@@ -198,7 +200,7 @@ bool boxm2_ocl_render_expected_image::render(
     for (unsigned r=0;r<ni;r++)
       vis_img_out(r,c)=vis_buff[c*cl_ni+r];
 
-  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<<rtime.all()<<" ms"<<std::endl;
   delete [] vis_buff;
   delete [] exp_buff;
   delete [] max_omega_buff;
@@ -211,21 +213,21 @@ bool boxm2_ocl_render_expected_image::render(
   return true;
 }
 
-vcl_vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
-    bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
+    bocl_device_sptr device, std::string opts)
 {
   // check to see if this device has compiled kernels already
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
       return kernels_[identifier];
 
   //if not, compile and cache them
-  vcl_cout<<"===========Compiling multi update kernels===========\n"
-          <<"  for device: "<<device->device_identifier()<<vcl_endl;
+  std::cout<<"===========Compiling multi update kernels===========\n"
+          <<"  for device: "<<device->device_identifier()<<std::endl;
 
   //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -237,12 +239,12 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
 
-  vcl_vector<bocl_kernel*> vec_kernels;
-  vcl_size_t found = opts.find("SHORT");
-  if (found!=vcl_string::npos)
+  std::vector<bocl_kernel*> vec_kernels;
+  std::size_t found = opts.find("SHORT");
+  if (found!=std::string::npos)
   {
-    vcl_cout<<"COMPILING SHORT"<<vcl_endl;
-    vcl_string options = opts;
+    std::cout<<"COMPILING SHORT"<<std::endl;
+    std::string options = opts;
     options += "-D RENDER ";
     options += "-D RENDER_MAX -D STEP_CELL=step_cell_render_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
 
@@ -259,7 +261,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
   }
   else
   {
-    vcl_string options = opts;
+    std::string options = opts;
     options += "-D RENDER ";
 
     options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
@@ -275,7 +277,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
     vec_kernels.push_back(ray_trace_kernel);
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();

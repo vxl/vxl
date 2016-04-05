@@ -18,10 +18,13 @@ include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 find_file(VIDEODEV_FOUND videodev.h /usr/include/linux/)
 find_file(VIDEODEV2_FOUND videodev2.h /usr/include/linux/)
 
-configure_file( ${vxl_SOURCE_DIR}/core/vidl/vidl_config.h.in
-                ${vxl_BINARY_DIR}/core/vidl/vidl_config.h )
+vxl_configure_file( ${CMAKE_CURRENT_LIST_DIR}/vidl_config.h.in
+                    ${PROJECT_BINARY_DIR}/vidl_config.h include/vxl/core/vidl )
 
 if( FFMPEG_FOUND )
+  # Mark FFMPEG is found.  In future we can even export
+  # FFMPEG setting for external use. 
+  SET(CORE_VIDEO_FFMPEG_FOUND ON CACHE INTERNAL "FFMPEG library has been found and is used in vidl")
   include_directories(${FFMPEG_INCLUDE_DIR})
 endif()
 
@@ -50,13 +53,12 @@ if(DIRECTSHOW_FOUND)
 endif()
 
 set(vidl_sources
-    vidl_config.h.in
     vidl_pixel_format.h           vidl_pixel_format.cxx
 	vidl_export.h
     vidl_color.h                  vidl_color.cxx
     vidl_frame.h                  vidl_frame.cxx           vidl_frame_sptr.h
     vidl_pixel_iterator.h         vidl_pixel_iterator.cxx
-                                  vidl_pixel_iterator.txx
+                                  vidl_pixel_iterator.hxx
     vidl_convert.h                vidl_convert.cxx
 
     vidl_istream.h                vidl_istream_sptr.h
@@ -82,20 +84,20 @@ if( FFMPEG_FOUND )
   set(vidl_sources ${vidl_sources}
       vidl_ffmpeg_init.h             vidl_ffmpeg_init.cxx
       vidl_ffmpeg_convert.h          vidl_ffmpeg_convert.cxx
-      vidl_ffmpeg_istream_v1.txx     vidl_ffmpeg_ostream_v1.txx
-      vidl_ffmpeg_istream_v2.txx     vidl_ffmpeg_ostream_v2.txx
-      vidl_ffmpeg_istream_v3.txx     vidl_ffmpeg_ostream_v3.txx
-                                     vidl_ffmpeg_ostream_v4.txx
-      vidl_ffmpeg_istream_v0.9.txx   vidl_ffmpeg_ostream_v0.9.txx
-                                     vidl_ffmpeg_ostream_v0.11.txx
-      vidl_ffmpeg_istream_v56.txx    vidl_ffmpeg_ostream_v56.txx
+      vidl_ffmpeg_istream_v1.hxx     vidl_ffmpeg_ostream_v1.hxx
+      vidl_ffmpeg_istream_v2.hxx     vidl_ffmpeg_ostream_v2.hxx
+      vidl_ffmpeg_istream_v3.hxx     vidl_ffmpeg_ostream_v3.hxx
+                                     vidl_ffmpeg_ostream_v4.hxx
+      vidl_ffmpeg_istream_v0.9.hxx   vidl_ffmpeg_ostream_v0.9.hxx
+                                     vidl_ffmpeg_ostream_v0.11.hxx
+      vidl_ffmpeg_istream_v56.hxx    vidl_ffmpeg_ostream_v56.hxx
       vidl_ffmpeg_pixel_format.h     vidl_ffmpeg_pixel_format.cxx
      )
 # Stub implementation, when ffmeg is not available
 else()
   set(vidl_sources ${vidl_sources}
-      vidl_ffmpeg_istream_stub.txx
-      vidl_ffmpeg_ostream_stub.txx
+      vidl_ffmpeg_istream_stub.hxx
+      vidl_ffmpeg_ostream_stub.hxx
      )
 endif()
 
@@ -140,7 +142,7 @@ endif()
 
 aux_source_directory(Templates vidl_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vidl LIBSRCS ${vidl_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vidl LIBRARY_SOURCES ${vidl_sources})
 
 target_link_libraries( ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
 if( FFMPEG_FOUND )

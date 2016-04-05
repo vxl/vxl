@@ -16,7 +16,7 @@
 #include <vidl/gui/vidl_gui_param_dialog.h>
 
 
-vcl_string vidl_capture_tableau::type_name() const
+std::string vidl_capture_tableau::type_name() const
 {
   return "vidl_capture_tableau";
 }
@@ -47,7 +47,7 @@ bool vidl_capture_tableau::handle( vgui_event const &e)
     {
       GLint vp[4]; // x,y,w,h
       glGetIntegerv(GL_VIEWPORT, vp);
-      vcl_cout << "window size = "<< vp[2] << ", "<<vp[3]<<vcl_endl;
+      std::cout << "window size = "<< vp[2] << ", "<<vp[3]<<std::endl;
     }
   }
   return handled;

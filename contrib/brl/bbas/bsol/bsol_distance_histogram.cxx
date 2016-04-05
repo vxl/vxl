@@ -1,8 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "bsol_distance_histogram.h"
 //:
 // \file
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -32,7 +33,7 @@ bsol_distance_histogram::bsol_distance_histogram(int nbins, double max_val)
 
 bsol_distance_histogram::
 bsol_distance_histogram(const int nbins,
-                        vcl_vector<vsol_line_2d_sptr> const& lines)
+                        std::vector<vsol_line_2d_sptr> const& lines)
 {
   if (!nbins)
   {
@@ -44,15 +45,15 @@ bsol_distance_histogram(const int nbins,
   weights_.resize(nbins, 0.0);
 
   int Nlines = lines.size();
-  vcl_vector<vgl_homg_line_2d<double> > hlines;
+  std::vector<vgl_homg_line_2d<double> > hlines;
   double dmin = vnl_numeric_traits<double>::maxval, dmax = -dmin;
   for (int i = 0; i<Nlines; i++)
   {
     hlines.push_back(lines[i]->vgl_hline_2d());
     hlines[i].normalize();
     double d = hlines[i].c();
-    dmin = vnl_math::min(dmin, d);
-    dmax = vnl_math::max(dmax, d);
+    dmin = std::min(dmin, d);
+    dmax = std::max(dmax, d);
   }
   delta_ = (dmax-dmin)/nbins;
 
@@ -64,7 +65,7 @@ bsol_distance_histogram(const int nbins,
     {
       double cj = hlines[j].c();
       double length = lines[j]->length()+length_i;
-      double D = vcl_fabs(ci-cj);
+      double D = std::fabs(ci-cj);
       this->up_count(D, length, length);
     }
   }
@@ -133,7 +134,7 @@ double bsol_distance_histogram::interpolate_peak(int initial_peak)
 
   double df = 0.5*(fplus-fminus); // first derivative
   double d2f = 0.5*(fplus+fminus-2.0*fzero); // second derivative
-  if (vcl_fabs(d2f)<1.0e-8)
+  if (std::fabs(d2f)<1.0e-8)
     return bin_values_[initial_peak];
 
   double root = -0.5*df/d2f;
@@ -149,7 +150,7 @@ double bsol_distance_histogram::interpolate_peak(int initial_peak)
   else
     result = (dzero*(1-root)+dplus*root);
 #ifdef DEBUG
-  vcl_cout << "interpolated distance " << result << '\n';
+  std::cout << "interpolated distance " << result << '\n';
 #endif // DEBUG
   return result;
 }
@@ -174,7 +175,7 @@ distance_peaks(double& peak1, double& peak2, double min_peak_height_ratio)
   for (int i = 0; i<nbins&&state!=fail&&state!=s_peak2; i++)
   {
 #ifdef DEBUG
-    vcl_cout << "State[" << state << "], D = " << bin_values_[i]
+    std::cout << "State[" << state << "], D = " << bin_values_[i]
              << " C = "<< bin_counts_[i] << " srt_d = " << start_distance
              << " v = "<< v << '\n';
 #endif
@@ -338,26 +339,26 @@ double bsol_distance_histogram::max_count() const
   return max_cnt;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const bsol_distance_histogram& h)
+std::ostream& operator << (std::ostream& os, const bsol_distance_histogram& h)
 {
   int nchars = 25; // display resolution
-  vcl_cout << "Distance Histogram\n";
+  std::cout << "Distance Histogram\n";
   // get the maximum bin value
   double max_cnt = h.max_count();
   if (!max_cnt)
     return os;
 
-  vcl_vector<double> const& vals = h.values();
-  vcl_vector<double> const& cnts = h.counts();
+  std::vector<double> const& vals = h.values();
+  std::vector<double> const& cnts = h.counts();
   for (unsigned int i=0; i<vals.size(); ++i)
   {
     double val = vals[i];
-    vcl_cout << val << '|';
+    std::cout << val << '|';
     double cnt = cnts[i];
     int c = int(cnt*nchars/max_cnt);
     for (int k = 0; k<c; k++)
-      vcl_cout << '*';
-    vcl_cout << '\n';
+      std::cout << '*';
+    std::cout << '\n';
   }
   return os;
 }

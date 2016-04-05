@@ -12,6 +12,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <list>
+#include <iostream>
 #include <vgl/vgl_box_3d.h>
 
 #include <boxm/boxm_scene.h>
@@ -21,8 +23,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_list.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <bvpl/bvpl_octree/sample/bvpl_pca_basis_sample.h>
 
@@ -38,11 +39,11 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
 {
  public:
   //: Constructor from neighborhood bounding boxm, number of samples to be drawn, scene and flag to indicate whether to use evd or svd
-  bvpl_discover_pca_kernels(vgl_box_3d<int> nbbox, unsigned long long nsamples, boxm_scene<boct_tree<short,float> > *scene, const vcl_string& path_out=".", bool use_evd = true):
+  bvpl_discover_pca_kernels(vgl_box_3d<int> nbbox, unsigned long long nsamples, boxm_scene<boct_tree<short,float> > *scene, const std::string& path_out=".", bool use_evd = true):
   nbbox_(nbbox), nsamples_(nsamples), path_out_(path_out)
   {
     scene_path_ = scene->filename();
-    vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;;
+    std::cout << "Scene path: " << scene->filename()<< std::endl;;
     data_scene_base_=scene;
 
     finest_cell_length_ = scene->finest_cell_length();
@@ -61,7 +62,7 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   }
 
   //: Construct from xml file
-  bvpl_discover_pca_kernels(const vcl_string &path);
+  bvpl_discover_pca_kernels(const std::string &path);
 
   //: Constructor from zero-mean matrix
   bvpl_discover_pca_kernels(const vnl_matrix<double>& M)
@@ -126,7 +127,7 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   unsigned feature_dim() const { return feature_dim_; }
 
   //: Return scene path
-  vcl_string scene_path() const { return scene_path_; }
+  std::string scene_path() const { return scene_path_; }
 
   //: Return number of blocks in the data scene
   vgl_vector_3d<unsigned> data_scene_dim() const { return data_scene_base_->world_dim(); }
@@ -186,15 +187,15 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   double finest_cell_length_;
 
   //: Paths for i/o of matrices and vectors
-  vcl_string path_out_;
-  vcl_string scene_path_;
-  vcl_string pc_path() const { return path_out_ + "/pc.txt" ; }
-  vcl_string data_path() const { return path_out_ + "/data.txt"; }
-  vcl_string weights_path() const { return path_out_ + "/weights.txt"; }
-  vcl_string pos_path() const { return path_out_ + "/positions.txt"; }
-  vcl_string sample_mean_path() const { return  path_out_ + "/sample_mean.txt"; }
-  vcl_string data_mean_path() const { return  path_out_ + "/data_mean.txt"; }
-  vcl_string xml_path() const { return path_out_ + "/pca_info.xml"; }
+  std::string path_out_;
+  std::string scene_path_;
+  std::string pc_path() const { return path_out_ + "/pc.txt" ; }
+  std::string data_path() const { return path_out_ + "/data.txt"; }
+  std::string weights_path() const { return path_out_ + "/weights.txt"; }
+  std::string pos_path() const { return path_out_ + "/positions.txt"; }
+  std::string sample_mean_path() const { return  path_out_ + "/sample_mean.txt"; }
+  std::string data_mean_path() const { return  path_out_ + "/data_mean.txt"; }
+  std::string xml_path() const { return path_out_ + "/pca_info.xml"; }
 
   //: Tolerance, retain eigenvalues above max(eigenVals)*tol
   double tol_;
@@ -215,7 +216,7 @@ void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, bvpl_pca_bas
   boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
 
   if (!(data_scene &&proj_scene)) {
-    vcl_cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";
+    std::cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";
     return;
   }
 
@@ -223,7 +224,7 @@ void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, bvpl_pca_bas
 
   //get the cells for this block
   if (!(data_scene->valid_index(block_i, block_j, block_k) && proj_scene->valid_index(block_i, block_j, block_k))) {
-    vcl_cerr << "In compute_testing_error: Invalid block\n";
+    std::cerr << "In compute_testing_error: Invalid block\n";
     return;
   }
 
@@ -235,8 +236,8 @@ void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, bvpl_pca_bas
   pca_tree_type* proj_tree = data_tree->template clone_to_type<bvpl_pca_basis_sample<DIM> >();
 
   //get the leaves
-  vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
-  vcl_vector<pca_cell_type*> proj_leaves = proj_tree->leaf_cells();
+  std::vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
+  std::vector<pca_cell_type*> proj_leaves = proj_tree->leaf_cells();
 
   //CAUTION: the neighborhood box was supposed to be defined as number of regular neighbors
   //convert neighborhood box to scene coordinates
@@ -273,7 +274,7 @@ void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, bvpl_pca_bas
           boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
 
           if (!neighbor_cell) {
-            vcl_cerr << "Error in compute_testing_error\n";
+            std::cerr << "Error in compute_testing_error\n";
             return;
           }
 
@@ -282,7 +283,7 @@ void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, bvpl_pca_bas
         }
 
     if (curr_dim != feature_dim_) {
-      vcl_cerr << "Error in compute_testing_error\n";
+      std::cerr << "Error in compute_testing_error\n";
       return;
     }
     this_feature-=data_mean_feature_;

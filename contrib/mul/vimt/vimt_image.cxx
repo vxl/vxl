@@ -5,13 +5,14 @@
 //:
 // \file
 
+#include <iostream>
 #include "vimt_image.h"
 #if VCL_CXX_HAS_HEADER_TYPEINFO
 # include <vcl_typeinfo.h>
 #endif
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 
@@ -38,15 +39,15 @@ bool vimt_image::operator==(const vimt_image &im) const
 
 //=======================================================================
 
-vcl_string vimt_image::is_a() const
+std::string vimt_image::is_a() const
 {
-  static const vcl_string c_ = "vimt_image";
+  static const std::string c_ = "vimt_image";
   return c_;
 }
 
 //=======================================================================
 
-bool vimt_image::is_class(vcl_string const& s) const
+bool vimt_image::is_class(std::string const& s) const
 {
   return s==vimt_image::is_a();
 }
@@ -68,7 +69,7 @@ void vsl_b_read(vsl_b_istream& bfs, vimt_image& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const vimt_image& b)
+std::ostream& operator<<(std::ostream& os,const vimt_image& b)
 {
     os << b.is_a() << ":\n";
     vsl_indent_inc(os);
@@ -79,7 +80,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const vimt_image& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const vimt_image* b)
+std::ostream& operator<<(std::ostream& os,const vimt_image* b)
 {
     if (b)
         return os << *b;
@@ -88,7 +89,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const vimt_image* b)
 }
 
 //: Print class to os
-void vsl_print_summary(vcl_ostream& os, const vimt_image& im)
+void vsl_print_summary(std::ostream& os, const vimt_image& im)
 {
   im.print_summary(os);
 }

@@ -6,9 +6,10 @@
 // \author Kieran O'Mahony
 // \date 21 June 2007
 
-#include <vcl_algorithm.h>
-#include <vcl_utility.h>
-#include <vcl_cmath.h>
+#include <algorithm>
+#include <utility>
+#include <cmath>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -22,7 +23,7 @@ enum vgl_triangle_3d_intersection_t
 
 //: Check for coincident edges of triangles a and b
 //  \return a vector of the coincident edges
-vcl_vector<vcl_pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
+std::vector<std::pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
   const vgl_point_3d<double>& a_p1,
   const vgl_point_3d<double>& a_p2,
   const vgl_point_3d<double>& a_p3,
@@ -136,9 +137,9 @@ inline double vgl_triangle_3d_longest_side(
   const vgl_point_3d<double>& p2,
   const vgl_point_3d<double>& p3)
 {
-  double side_length_max = vcl_max( (p2 - p1).sqr_length(), (p3 - p2).sqr_length());
-  side_length_max = vcl_max( side_length_max, (p1 - p3).sqr_length());
-  return vcl_sqrt(side_length_max);
+  double side_length_max = std::max( (p2 - p1).sqr_length(), (p3 - p2).sqr_length());
+  side_length_max = std::max( side_length_max, (p1 - p3).sqr_length());
+  return std::sqrt(side_length_max);
 }
 
 //: Compute the shortest side of the given triangle
@@ -149,9 +150,9 @@ inline double vgl_triangle_3d_shortest_side(
   const vgl_point_3d<double>& p2,
   const vgl_point_3d<double>& p3)
 {
-  double side_length_min = vcl_min( (p2 - p1).sqr_length(), (p3 - p2).sqr_length());
-  side_length_min = vcl_min( side_length_min, (p1 - p3).sqr_length());
-  return vcl_sqrt(side_length_min);
+  double side_length_min = std::min( (p2 - p1).sqr_length(), (p3 - p2).sqr_length());
+  side_length_min = std::min( side_length_min, (p1 - p3).sqr_length());
+  return std::sqrt(side_length_min);
 }
 
 //: Compute the closest point on a triangle to a reference point

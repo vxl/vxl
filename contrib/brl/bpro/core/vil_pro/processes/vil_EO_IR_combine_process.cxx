@@ -11,14 +11,14 @@
 bool vil_EO_IR_combine_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(2);
+  std::vector<std::string> input_types(2);
   input_types[0] = "vil_image_view_base_sptr"; //color image
   input_types[1] = "vil_image_view_base_sptr"; //IR image
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //this process has one output
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vil_image_view_base_sptr"; // 3- channel image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -30,7 +30,7 @@ bool vil_EO_IR_combine_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cout << "vil_EO_IR_combine_process: bad inputs" << vcl_endl;
+    std::cout << "vil_EO_IR_combine_process: bad inputs" << std::endl;
     return false;
   }
 
@@ -42,8 +42,8 @@ bool vil_EO_IR_combine_process(bprb_func_process& pro)
   if (img_eo->nplanes() < 3 || img_ir->nplanes() !=1 ||
       img_eo->ni() != img_ir->ni() || img_eo->nj() !=img_ir->nj())
   {
-    vcl_cout<<"# of planes  "<<img_eo->nplanes()<<' '<<img_ir->nplanes()<<'\n'
-            <<"Error in the input image"<<vcl_endl;
+    std::cout<<"# of planes  "<<img_eo->nplanes()<<' '<<img_ir->nplanes()<<'\n'
+            <<"Error in the input image"<<std::endl;
     return false;
   }
   vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, img_eo);
@@ -59,7 +59,7 @@ bool vil_EO_IR_combine_process(bprb_func_process& pro)
   vil_image_view<vxl_byte >::iterator ir_iter=ir_view->begin();
   vil_image_view<vil_rgb<vxl_byte> >::iterator out_iter= out_img->begin();
   for (; eo_iter != eo_rgba_view->end(); ++eo_iter,++ir_iter,++out_iter) {
-    (*out_iter) = vil_rgb<vxl_byte>((unsigned char)(0.75*(float)eo_iter->R()+0.25*(float)(*ir_iter)),eo_iter->G(),  (unsigned char)vcl_fabs(0.75*(float)eo_iter->G()-0.25*(float)(*ir_iter)));
+    (*out_iter) = vil_rgb<vxl_byte>((unsigned char)(0.75*(float)eo_iter->R()+0.25*(float)(*ir_iter)),eo_iter->G(),  (unsigned char)std::fabs(0.75*(float)eo_iter->G()-0.25*(float)(*ir_iter)));
   }
 
   vil_image_view_base_sptr out_img_ptr=out_img;

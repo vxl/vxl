@@ -24,12 +24,13 @@
 //
 //=========================================================================
 
+#include <string>
+#include <vector>
 #include <vidl/vidl_istream.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_pixel_format.h>
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <atlbase.h>
 #include <dshow.h>
@@ -53,7 +54,7 @@ class vidl_dshow_file_istream : public vidl_istream
 {
  public:
   //: Constructor - from a string containing the file name.
-  vidl_dshow_file_istream(const vcl_string& name);
+  vidl_dshow_file_istream(const std::string& name);
 
   //: Destructor.
   virtual ~vidl_dshow_file_istream();
@@ -126,7 +127,7 @@ class vidl_dshow_file_istream : public vidl_istream
   vidl_dshow_file_istream& operator=(const vidl_dshow_file_istream&);
 
   //: Open a video file.
-  void open(const vcl_string& filename);
+  void open(const std::string& filename);
 
   // Handles to the COM interfaces.
   CComPtr<IFilterGraph2>          filter_graph_;
@@ -136,7 +137,7 @@ class vidl_dshow_file_istream : public vidl_istream
   CComPtr<ISampleGrabber>         sample_grabber_;
 
   // Internal frame buffer information.
-  vcl_vector<unsigned char>  buffer_[2];
+  std::vector<unsigned char>  buffer_[2];
   double                     buffer_time_[2];
   unsigned char              buffer_index_;
   unsigned int               buffer_width_;

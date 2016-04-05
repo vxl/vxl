@@ -13,8 +13,10 @@
 // Nov 2008 J Becker: Added a clone function.
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <rgrl/rgrl_feature.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class rgrl_feature_face_pt
   : public rgrl_feature
@@ -25,11 +27,11 @@ class rgrl_feature_face_pt
 
   //: read in feature
   virtual
-  bool read( vcl_istream& is, bool skip_tag=false );
+  bool read( std::istream& is, bool skip_tag=false );
 
   //: write out feature
   virtual
-  void write( vcl_ostream& os ) const;
+  void write( std::ostream& os ) const;
 
   virtual
   vnl_matrix<double> const&
@@ -60,7 +62,7 @@ class rgrl_feature_face_pt
   virtual vnl_vector<double> signature_error_vector( rgrl_feature const& other ) const;
 
   //:  the dimensions of the signature error vector.
-  virtual unsigned signature_error_dimension( const vcl_type_info& other_feature_type ) const;
+  virtual unsigned signature_error_dimension( const std::type_info& other_feature_type ) const;
 
   //: make a clone copy
   virtual rgrl_feature_sptr clone() const;
@@ -74,7 +76,7 @@ class rgrl_feature_face_pt
 
   // to be able to use the protected constructor
   friend rgrl_feature_sptr
-         rgrl_feature_reader( vcl_istream& is );
+         rgrl_feature_reader( std::istream& is );
 
   //: Apply transformation to the scale property
   virtual double

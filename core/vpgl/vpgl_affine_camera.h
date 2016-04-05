@@ -53,7 +53,7 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   virtual bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix );
   virtual bool set_matrix( const T* new_camera_matrix ); // i.e., T new_camera_matrix[12]
 
-  virtual vcl_string type_name() const { return "vpgl_affine_camera"; }
+  virtual std::string type_name() const { return "vpgl_affine_camera"; }
 
   //: Set the top two rows.
   void set_rows( const vnl_vector_fixed<T,4>& row1,
@@ -92,10 +92,10 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
 
 //: Read vpgl_affine_camera  from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, vpgl_affine_camera<Type>& c);
+std::istream&  operator>>(std::istream& s, vpgl_affine_camera<Type>& c);
 
 //: Write vpgl_affine_camera to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vpgl_affine_camera<Type> const& c);
+std::ostream&  operator<<(std::ostream& s, vpgl_affine_camera<Type> const& c);
 
 #endif // vpgl_affine_camera_h_

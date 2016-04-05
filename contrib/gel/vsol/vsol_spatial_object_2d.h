@@ -42,8 +42,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vsol/vsol_spatial_object.h>
 #include <vsl/vsl_fwd.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>
@@ -87,9 +88,9 @@ class vsol_spatial_object_2d : public vsol_spatial_object
   //   bounding_box is set to NULL.
   vsol_spatial_object_2d();
   vsol_spatial_object_2d(vsol_spatial_object_2d const& other);
-  void not_applicable(vcl_string const& message) const
+  void not_applicable(std::string const& message) const
   {
-      vcl_cerr <<message<<"() function call not applicable\tfor 2d spatial object "
+      std::cerr <<message<<"() function call not applicable\tfor 2d spatial object "
                <<get_name()<<" !\n";
   }
 
@@ -113,7 +114,7 @@ class vsol_spatial_object_2d : public vsol_spatial_object
   // Binary I/O------------------------------------------------------------------
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const=0;
+  virtual std::string is_a() const=0;
 
   //: Return IO version number;
   short version() const;
@@ -124,11 +125,11 @@ class vsol_spatial_object_2d : public vsol_spatial_object
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
-  virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
+  virtual void print(std::ostream &strm=std::cout) const { describe(strm); }
+  virtual void describe(std::ostream& =std::cout, int /*blanking*/=0) const { not_applicable("describe"); }
 
-  friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_2d const&);
-  friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_2d const*);
+  friend inline std::ostream &operator<<(std::ostream &, vsol_spatial_object_2d const&);
+  friend inline std::ostream &operator<<(std::ostream &, vsol_spatial_object_2d const*);
 
   //Operators
   virtual bool operator==(vsol_spatial_object_2d const& obj) const { return this==&obj; }
@@ -173,30 +174,30 @@ class vsol_spatial_object_2d : public vsol_spatial_object
   virtual vsol_spatial_object_2d* cast_to_spatial_object() { return this; }
   virtual vsol_spatial_object_2d const* cast_to_spatial_object() const{return this;}
 
-  virtual vtol_topology_object* cast_to_topology_object() {return 0;}
-  virtual vtol_topology_object const* cast_to_topology_object()const{return 0;}
+  virtual vtol_topology_object* cast_to_topology_object() {return VXL_NULLPTR;}
+  virtual vtol_topology_object const* cast_to_topology_object()const{return VXL_NULLPTR;}
 
-  virtual vsol_spatial_object_2d* cast_to_vsol_spatial_object() { return 0; }
-  virtual vsol_spatial_object_2d const* cast_to_vsol_spatial_object() const { return 0; }
-  virtual vsol_point_2d* cast_to_point() { return 0; }
-  virtual vsol_point_2d const* cast_to_point() const { return 0; }
-  virtual vsol_curve_2d *cast_to_curve() { return 0; }
-  virtual vsol_curve_2d const* cast_to_curve() const { return 0; }
-  virtual vsol_region_2d* cast_to_region() { return 0; }
-  virtual vsol_region_2d const* cast_to_region() const { return 0; }
-  virtual vsol_group_2d *cast_to_group() { return 0; }
-  virtual vsol_group_2d const* cast_to_group() const { return 0; }
+  virtual vsol_spatial_object_2d* cast_to_vsol_spatial_object() { return VXL_NULLPTR; }
+  virtual vsol_spatial_object_2d const* cast_to_vsol_spatial_object() const { return VXL_NULLPTR; }
+  virtual vsol_point_2d* cast_to_point() { return VXL_NULLPTR; }
+  virtual vsol_point_2d const* cast_to_point() const { return VXL_NULLPTR; }
+  virtual vsol_curve_2d *cast_to_curve() { return VXL_NULLPTR; }
+  virtual vsol_curve_2d const* cast_to_curve() const { return VXL_NULLPTR; }
+  virtual vsol_region_2d* cast_to_region() { return VXL_NULLPTR; }
+  virtual vsol_region_2d const* cast_to_region() const { return VXL_NULLPTR; }
+  virtual vsol_group_2d *cast_to_group() { return VXL_NULLPTR; }
+  virtual vsol_group_2d const* cast_to_group() const { return VXL_NULLPTR; }
 };
 
 // inline member functions
 
-inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_2d const& so)
+inline std::ostream &operator<<(std::ostream &strm, vsol_spatial_object_2d const& so)
 {
   so.print(strm);
   return strm;
 }
 
-inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_2d const* so)
+inline std::ostream &operator<<(std::ostream &strm, vsol_spatial_object_2d const* so)
 {
   if (so)
     so->print(strm);
@@ -206,7 +207,7 @@ inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_2d const* 
 }
 
 //: Stream output operator for class pointer
-inline void vsl_print_summary(vcl_ostream& os, vsol_spatial_object_2d const* so)
+inline void vsl_print_summary(std::ostream& os, vsol_spatial_object_2d const* so)
 {
   os << so;
 }

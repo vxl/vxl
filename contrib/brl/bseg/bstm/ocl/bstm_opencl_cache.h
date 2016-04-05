@@ -3,6 +3,9 @@
 //:
 // \file
 // \brief
+#include <vector>
+#include <iostream>
+#include <list>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_data_base.h>
@@ -11,8 +14,7 @@
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
 
 //open cl includes
 #include <bocl/bocl_cl.h>
@@ -57,15 +59,15 @@ class bstm_opencl_cache: public vbl_ref_count
 
     //: returns data pointer to data block specified by ID
     template<bstm_data_type T>
-    bocl_mem* get_data(bstm_block_id, vcl_size_t num_bytes=0, bool read_only = true);
-    bocl_mem* get_data(bstm_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data(bstm_block_id, std::size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data(bstm_block_id, std::string type, std::size_t num_bytes=0, bool read_only = true);
 
     template<bstm_data_type T>
-    bocl_mem* get_data_new(bstm_block_id, vcl_size_t num_bytes=0, bool read_only = true);
-    bocl_mem* get_data_new(bstm_block_id id, vcl_string type, vcl_size_t num_bytes = 0, bool read_only = true);
+    bocl_mem* get_data_new(bstm_block_id, std::size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data_new(bstm_block_id id, std::string type, std::size_t num_bytes = 0, bool read_only = true);
 
     //: returns a flat bocl_mem of a certain size
-    bocl_mem* alloc_mem(vcl_size_t num_bytes, void* cpu_buff=NULL, vcl_string id="bocl_mem in pool");
+    bocl_mem* alloc_mem(std::size_t num_bytes, void* cpu_buff=NULL, std::string id="bocl_mem in pool");
     void      unref_mem(bocl_mem* mem);
     void      free_mem(bocl_mem* mem);
     void      free_mem_pool();
@@ -74,22 +76,22 @@ class bstm_opencl_cache: public vbl_ref_count
     bool clear_cache();
 
     //: returns num bytes in mem pool only
-    vcl_size_t bytes_in_mem_pool();
+    std::size_t bytes_in_mem_pool();
 
     //: returns num bytes in cache
-    vcl_size_t bytes_in_cache();
+    std::size_t bytes_in_cache();
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
-    void deep_replace_data(bstm_block_id id, vcl_string type, bocl_mem* mem, bool read_only=true);
+    void deep_replace_data(bstm_block_id id, std::string type, bocl_mem* mem, bool read_only=true);
 
     //: deep_remove_data removes this id and type from ocl cache, as well as the cpu cache
-    void deep_remove_data(bstm_block_id id, vcl_string type, bool write_out=true);
+    void deep_remove_data(bstm_block_id id, std::string type, bool write_out=true);
 
     //: shallow_remove_data removes data with id and type from ocl cache only
-    void shallow_remove_data(bstm_block_id id, vcl_string type);
+    void shallow_remove_data(bstm_block_id id, std::string type);
 
     //: to string method prints out LRU order
-    vcl_string to_string();
+    std::string to_string();
 
     //: get max mem size
     unsigned long max_memory_in_cache() { return maxBytesInCache_; }
@@ -105,7 +107,7 @@ class bstm_opencl_cache: public vbl_ref_count
     //: maximum number of blocks this cache will allow (eventually this will become smart)
     void lru_push_front( bstm_block_id id );
     bool lru_remove_last(bstm_block_id& id); //removes all data and block with this ID. returns false if lru is empty
-    vcl_list<bstm_block_id> lru_order_;
+    std::list<bstm_block_id> lru_order_;
     unsigned long bytesInCache_;
     unsigned long maxBytesInCache_;
 
@@ -119,20 +121,20 @@ class bstm_opencl_cache: public vbl_ref_count
     bocl_mem* block_info_t_;
 
     //: dumb cache keeps one cached block, the last one used.
-    vcl_map<bstm_block_id, bocl_mem*> cached_blocks_;
+    std::map<bstm_block_id, bocl_mem*> cached_blocks_;
 
     //: dumb cache keeps one cached block, the last one used.
-    vcl_map<bstm_block_id, bocl_mem*> cached_time_blocks_;
+    std::map<bstm_block_id, bocl_mem*> cached_time_blocks_;
 
     //: keeps one copy of each type of cached data
-    vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem*> > cached_data_;
+    std::map<std::string, std::map<bstm_block_id, bocl_mem*> > cached_data_;
 
     //: helper method for finding the right data map
-    vcl_map<bstm_block_id, bocl_mem*>& cached_data_map(vcl_string prefix);
+    std::map<bstm_block_id, bocl_mem*>& cached_data_map(std::string prefix);
 
     //: memory cache - caches various non model memory (images, some aux data)
     // Does not account for block/data_base data
-    vcl_map<bocl_mem*, vcl_size_t> mem_pool_;
+    std::map<bocl_mem*, std::size_t> mem_pool_;
 
     ////////////////////////////////////////////////////////////////////////////
     // opencl objects
@@ -152,14 +154,14 @@ typedef vbl_smart_ptr<bstm_opencl_cache> bstm_opencl_cache_sptr;
 
 //: get data by type and id
 template<bstm_data_type T>
-bocl_mem* bstm_opencl_cache::get_data(bstm_block_id id, vcl_size_t num_bytes, bool read_only)
+bocl_mem* bstm_opencl_cache::get_data(bstm_block_id id, std::size_t num_bytes, bool read_only)
 {
   return get_data(id, bstm_data_traits<T>::prefix(), num_bytes, read_only);
 }
 
 //: get new data by type and id
 template<bstm_data_type T>
-bocl_mem* bstm_opencl_cache::get_data_new(bstm_block_id id, vcl_size_t num_bytes, bool read_only)
+bocl_mem* bstm_opencl_cache::get_data_new(bstm_block_id id, std::size_t num_bytes, bool read_only)
 {
   return get_data_new(id, bstm_data_traits<T>::prefix(), num_bytes, read_only);
 }

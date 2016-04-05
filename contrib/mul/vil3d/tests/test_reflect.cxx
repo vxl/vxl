@@ -1,8 +1,9 @@
 // This is mul/vil3d/tests/test_reflect.cxx
 
+#include <iostream>
+#include <ctime>
 #include <testlib/testlib_test.h>
-#include <vcl_ctime.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vil3d/vil3d_reflect.h>
 #include <vil3d/vil3d_print.h>
@@ -13,7 +14,7 @@
 //========================================================================
 static void test_reflect_int()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing vil3d_reflect<vxl_int_32>\n"
            << "***********************************\n";
 
@@ -40,21 +41,21 @@ static void test_reflect_int()
 
 //--- Additional output for Debug configurations -------------------------
 #ifndef NDEBUG
-  vcl_cout << "Original image:\n";
-  vil3d_print_all(vcl_cout, image);
-  vcl_cout << vcl_endl;
+  std::cout << "Original image:\n";
+  vil3d_print_all(std::cout, image);
+  std::cout << std::endl;
 
-  vcl_cout << "Reflecting in i:\n";
-  vil3d_print_all(vcl_cout, tempi);
-  vcl_cout << vcl_endl;
+  std::cout << "Reflecting in i:\n";
+  vil3d_print_all(std::cout, tempi);
+  std::cout << std::endl;
 
-  vcl_cout << "Reflecting in j:\n";
-  vil3d_print_all(vcl_cout, tempj);
-  vcl_cout << vcl_endl;
+  std::cout << "Reflecting in j:\n";
+  vil3d_print_all(std::cout, tempj);
+  std::cout << std::endl;
 
-  vcl_cout << "Reflecting in k:\n";
-  vil3d_print_all(vcl_cout, tempk);
-  vcl_cout << vcl_endl;
+  std::cout << "Reflecting in k:\n";
+  vil3d_print_all(std::cout, tempk);
+  std::cout << std::endl;
 #endif
 //------------------------------------------------------------------------
 
@@ -89,7 +90,7 @@ static void test_reflect_int()
 //========================================================================
 static void time_reflect()
 {
-  vcl_cout << "**********************************\n"
+  std::cout << "**********************************\n"
            << " Timing vil3d_reflect<vxl_int_32>\n"
            << "**********************************\n";
 
@@ -109,15 +110,15 @@ static void time_reflect()
     }
   }
 
-  vcl_clock_t beg_time1 = vcl_clock();
+  std::clock_t beg_time1 = std::clock();
   //
   vil3d_image_view<vxl_int_32> temp1 = vil3d_reflect_k(image);
   //
-  vcl_clock_t end_time1 = vcl_clock();
+  std::clock_t end_time1 = std::clock();
   double duration1 = (double)(end_time1 - beg_time1)/CLOCKS_PER_SEC;
 
 
-  vcl_clock_t beg_time2 = vcl_clock();
+  std::clock_t beg_time2 = std::clock();
   //
   vil3d_image_view<vxl_int_32> temp2(ni, nj, nk);
   for (unsigned k=0; k<nk; ++k)
@@ -132,10 +133,10 @@ static void time_reflect()
     }
   }
   //
-  vcl_clock_t end_time2 = vcl_clock();
+  std::clock_t end_time2 = std::clock();
   double duration2 = (double)(end_time2 - beg_time2)/CLOCKS_PER_SEC;
 
-  vcl_cout << "==============================================================\n"
+  std::cout << "==============================================================\n"
            << "vil3d_reflect() duration: " << duration1      << " s.\n"
            << "transposition duration:   " << duration2      << " s.\n"
            << "==============================================================\n\n";

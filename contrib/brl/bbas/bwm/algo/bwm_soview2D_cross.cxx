@@ -3,7 +3,7 @@
 void bwm_soview2D_cross::draw() const
 {
 #ifdef DEBUG
-  vcl_cerr << "bwm_soview2D_cross::draw() line id=" << id << '\n';
+  std::cerr << "bwm_soview2D_cross::draw() line id=" << id << '\n';
 #endif
 
 #if 0

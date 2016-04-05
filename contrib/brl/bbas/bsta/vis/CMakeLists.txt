@@ -7,7 +7,7 @@ set( bsta_vis_sources
   bsta_svg_tools.h bsta_svg_tools.cxx
 )
 
-add_library( bsta_vis  ${bsta_vis_sources} )
+vxl_add_library(LIBRARY_NAME bsta_vis LIBRARY_SOURCES  ${bsta_vis_sources} )
 
 target_link_libraries( bsta_vis bsta bsvg ${VXL_LIB_PREFIX}vnl )
 

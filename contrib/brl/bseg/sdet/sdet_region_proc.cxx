@@ -23,10 +23,10 @@
 sdet_region_proc::sdet_region_proc(sdet_region_proc_params& rpp)
   : sdet_region_proc_params(rpp)
 {
-  image_ = 0;
-  vimage_ = 0;
-  clip_ = 0;
-  vclip_ = 0;
+  image_ = VXL_NULLPTR;
+  vimage_ = VXL_NULLPTR;
+  clip_ = VXL_NULLPTR;
+  vclip_ = VXL_NULLPTR;
   use_vil_image_ = true; //who knows, but need to chose one
 }
 
@@ -43,7 +43,7 @@ void sdet_region_proc::set_image(vil1_image const& image,
 {
   if (!image)
   {
-    vcl_cout <<"In sdet_region_proc::set_image(.) - null input\n";
+    std::cout <<"In sdet_region_proc::set_image(.) - null input\n";
     return;
   }
 
@@ -53,7 +53,7 @@ void sdet_region_proc::set_image(vil1_image const& image,
     roi_ = new brip_roi(image.width(), image.height());
     roi_->add_region(box);
     if (!brip_vil1_float_ops::chip(image, roi_, clip_))
-      vcl_cout << "In sdet_region_proc::set_image() - chip failed\n";
+      std::cout << "In sdet_region_proc::set_image() - chip failed\n";
   }
   regions_valid_ = false;
   image_ = image;
@@ -68,21 +68,21 @@ void sdet_region_proc::set_image_resource(vil_image_resource_sptr const& image,
 {
   if (!image)
   {
-    vcl_cout <<"In sdet_region_proc::set_image(.) - null input\n";
+    std::cout <<"In sdet_region_proc::set_image(.) - null input\n";
     return;
   }
 vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0,
                                  unsigned n_i, unsigned j0, unsigned n_j);
   if (box)
   {
-    vclip_ = 0;
+    vclip_ = VXL_NULLPTR;
 
     unsigned i0 = (unsigned)box->get_min_x(), j0 = (unsigned)box->get_min_y();
     unsigned n_i = ((unsigned)box->get_max_x())-i0;
     unsigned n_j = ((unsigned)box->get_max_y())-j0;
     vclip_ = vil_crop(image, i0, n_i, j0, n_j);
     if (!vclip_)
-      vcl_cout << "In sdet_region_proc::set_image_resource() - chip failed\n";
+      std::cout << "In sdet_region_proc::set_image_resource() - chip failed\n";
   }
   regions_valid_ = false;
   vimage_ = image;
@@ -94,15 +94,15 @@ set_detector_image_vil1(sdet_detector& d)
   // Check the image
   if (!image_ && !clip_)
     {
-      vcl_cout << "In sdet_region_proc::extract_regions() -"
+      std::cout << "In sdet_region_proc::extract_regions() -"
                << " no vil1_image nor clip\n";
       return false;
     }
   vil1_image temp = image_;
   if (clip_)
     temp = clip_;
-  vcl_cout << "sdet_region_proc::extract_regions(): width = "
-           << temp.width() << " height = " << temp.height() << vcl_endl;
+  std::cout << "sdet_region_proc::extract_regions(): width = "
+           << temp.width() << " height = " << temp.height() << std::endl;
 
   d.SetImage(temp);
   return true;
@@ -114,15 +114,15 @@ set_detector_image_vil(sdet_detector& d)
   // Check the image resources
   if (!vimage_ && !vclip_)
     {
-      vcl_cout << "In sdet_region_proc::extract_regions() -"
+      std::cout << "In sdet_region_proc::extract_regions() -"
                << " no vil_image nor clip\n";
       return false;
     }
   vil_image_resource_sptr temp = vimage_;
   if (clip_)
     temp = vclip_;
-  vcl_cout << "sdet_region_proc::extract_regions(): width = "
-           << temp->ni() << " height = " << temp->nj() << vcl_endl;
+  std::cout << "sdet_region_proc::extract_regions(): width = "
+           << temp->ni() << " height = " << temp->nj() << std::endl;
 
   d.SetImage(temp);
   return true;
@@ -134,17 +134,17 @@ void sdet_region_proc::extract_regions()
 {
   if (regions_valid_)
     return;
-  vcl_vector<vtol_edge_2d_sptr> * edges;
+  std::vector<vtol_edge_2d_sptr> * edges;
   sdet_detector detector(dp_);
   if(!use_vil_image_&&!this->set_detector_image_vil1(detector))
     {
-      vcl_cout << "In sdet_region_proc::extract_regions() [vil1] -"
+      std::cout << "In sdet_region_proc::extract_regions() [vil1] -"
                << " image set error\n";
       return;
     }
   else if(use_vil_image_&&!this->set_detector_image_vil(detector))
     {
-      vcl_cout << "In sdet_region_proc::extract_regions() [vil]-"
+      std::cout << "In sdet_region_proc::extract_regions() [vil]-"
                << " image set error\n";
       return;
     }
@@ -153,7 +153,7 @@ void sdet_region_proc::extract_regions()
   edges = detector.GetEdges();
   if (!edges||!edges->size())
   {
-    vcl_cout << "In sdet_region_proc::extract_regions() -"
+    std::cout << "In sdet_region_proc::extract_regions() -"
              << " No Edgels were computed\n";
     return;
   }
@@ -190,14 +190,14 @@ vil1_image sdet_region_proc::get_residual_image()
 {
   if (!image_||!regions_valid_)
   {
-    vcl_cout << "In sdet_region_proc::get_residual_image() - no regions\n";
-    return 0;
+    std::cout << "In sdet_region_proc::get_residual_image() - no regions\n";
+    return VXL_NULLPTR;
   }
   int xsize = image_.width(), ysize = image_.height();
   vil1_memory_image_of<unsigned char> res_image(xsize, ysize);
   res_image.fill(0);
   float min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
-  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
+  for (std::vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
        fit != regions_.end(); fit++)
     for ((*fit)->reset(); (*fit)->next();)
     {
@@ -206,7 +206,7 @@ vil1_image sdet_region_proc::get_residual_image()
         min_res = res;
     }
 
-  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
+  for (std::vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
        fit != regions_.end(); fit++)
     for ((*fit)->reset(); (*fit)->next();)
     {
@@ -228,14 +228,14 @@ vil_image_view<float> sdet_region_proc::get_residual_image_view()
   vil_image_view<float> null;
   if (!vimage_||!regions_valid_)
   {
-    vcl_cout << "In sdet_region_proc::get_residual_image() - no regions\n";
+    std::cout << "In sdet_region_proc::get_residual_image() - no regions\n";
     return null;
   }
 
   int xsize = vimage_->ni(), ysize = vimage_->nj();
   null.set_size(xsize, ysize);
   null.fill(0.0);
-  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
+  for (std::vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
        fit != regions_.end(); fit++)
     for ((*fit)->reset(); (*fit)->next();)
     {
@@ -264,21 +264,21 @@ bool sdet_region_proc::transform_regions()
   //we need to get all the edges and remove duplicates
   //then get the vertices and remove duplicates
   //finally transform the digital regions
-  vcl_vector<vtol_edge_sptr> edges;
-  for (vcl_vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
+  std::vector<vtol_edge_sptr> edges;
+  for (std::vector<vtol_intensity_face_sptr>::iterator fit = regions_.begin();
        fit != regions_.end(); fit++)
   {
-    vcl_vector<vtol_edge_sptr> face_edges;
+    std::vector<vtol_edge_sptr> face_edges;
     (*fit)->edges(face_edges);
-    for (vcl_vector<vtol_edge_sptr>::iterator eit = face_edges.begin();
+    for (std::vector<vtol_edge_sptr>::iterator eit = face_edges.begin();
          eit != face_edges.end(); eit++)
       edges.push_back(*eit);
   }
   //remove duplicates
-  vcl_vector<vtol_edge_sptr>* edg_adr = &edges;
+  std::vector<vtol_edge_sptr>* edg_adr = &edges;
   edg_adr = tagged_union(edg_adr);
 
-  for (vcl_vector<vtol_edge_sptr>::iterator eit = edges.begin();
+  for (std::vector<vtol_edge_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
     ...
 }

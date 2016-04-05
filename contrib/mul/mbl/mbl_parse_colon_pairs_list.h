@@ -6,9 +6,10 @@
 // \brief Parse list of string pairs separated by colons
 // \author Tim Cootes
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 
 //: Parse list of string pairs separated by colons
 // Expects format of data string to contain pairs of
@@ -21,9 +22,9 @@
 // }
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
-void mbl_parse_colon_pairs_list(vcl_istream& is,
-                          vcl_vector<vcl_string>& item1,
-                          vcl_vector<vcl_string>& item2);
+void mbl_parse_colon_pairs_list(std::istream& is,
+                          std::vector<std::string>& item1,
+                          std::vector<std::string>& item2);
 
 //: Parse list of string pairs separated by colons
 // Expects format of data string to contain pairs of
@@ -36,9 +37,9 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
 // }
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
-void mbl_parse_colon_pairs_list(const vcl_string& data,
-                          vcl_vector<vcl_string>& item1,
-                          vcl_vector<vcl_string>& item2);
+void mbl_parse_colon_pairs_list(const std::string& data,
+                          std::vector<std::string>& item1,
+                          std::vector<std::string>& item2);
 
 //: Writes pairs to a stream, separated by colons
 // Format of output
@@ -48,8 +49,8 @@ void mbl_parse_colon_pairs_list(const vcl_string& data,
 //   item1[1] : item2[1]
 // }
 // \endverbatim
-void mbl_write_colon_pairs_list(vcl_ostream& os,
-                          const vcl_vector<vcl_string>& item1,
-                          const vcl_vector<vcl_string>& item2);
+void mbl_write_colon_pairs_list(std::ostream& os,
+                          const std::vector<std::string>& item1,
+                          const std::vector<std::string>& item2);
 
 #endif // mbl_parse_colon_pairs_list_h_

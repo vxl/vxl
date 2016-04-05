@@ -32,7 +32,7 @@ class vgui_debug_tableau : public vgui_wrapper_tableau
   vgui_debug_tableau(vgui_tableau_sptr const& child);
 
   //: Returns the type of this tableau ('vgui_debug_tableau').
-  vcl_string type_name() const { return "vgui_debug_tableau"; }
+  std::string type_name() const { return "vgui_debug_tableau"; }
 
  protected:
   //: Destructor - called by vgui_debug_tableau_sptr.

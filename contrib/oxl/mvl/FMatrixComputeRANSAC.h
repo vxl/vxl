@@ -34,8 +34,8 @@ class FMatrixComputeRANSAC : public FMatrixComputeRobust
   FMatrixComputeRANSAC(bool rank2_truncate, double std);
   virtual ~FMatrixComputeRANSAC();
 
-  virtual double calculate_term(vcl_vector<double>& residuals,
-                                vcl_vector<bool>& inlier_list,
+  virtual double calculate_term(std::vector<double>& residuals,
+                                std::vector<bool>& inlier_list,
                                 int& count);
   virtual double calculate_residual(HomgPoint2D& one,
                                     HomgPoint2D& two,

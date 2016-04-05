@@ -41,7 +41,7 @@ class rgrl_matcher_pseudo_int_3d
     rgrl_mapped_pixel_type(): location(), intensity(0.0), weight(1.0)  {}
   };
 
-  typedef vcl_vector< rgrl_mapped_pixel_type > rgrl_mapped_pixel_vector_type;
+  typedef std::vector< rgrl_mapped_pixel_type > rgrl_mapped_pixel_vector_type;
 
   //: Initialize the matcher using 3d images.
   //
@@ -100,7 +100,7 @@ class rgrl_matcher_pseudo_int_3d
 
   //:  The actual work of mapping the region intensities.
   void
-  map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
+  map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
                           rgrl_transformation           const& trans,
                           rgrl_feature_sptr                    feature_sptr,
                           rgrl_mapped_pixel_vector_type      & mapped_pixels) const;
@@ -110,8 +110,8 @@ class rgrl_matcher_pseudo_int_3d
   slide_window(rgrl_feature_sptr                    mapped_feature,
                rgrl_mapped_pixel_vector_type const& mapped_pixels,
                rgrl_scale                    const& current_scale,
-               vcl_vector< rgrl_feature_sptr >    & matched_to_features,
-               vcl_vector< double >               & match_weights ) const;
+               std::vector< rgrl_feature_sptr >    & matched_to_features,
+               std::vector< double >               & match_weights ) const;
 
   //: compute response
   double compute_response( rgrl_mapped_pixel_vector_type const& mapped_pixels,
@@ -120,7 +120,7 @@ class rgrl_matcher_pseudo_int_3d
   //: sample pixel locations along a direction vector
   //  The first element is always [0 0 0]
   //  And it make sure all elements are connected
-  void sample_pixels_along_direction( vcl_vector<discrete_shift_node>& two_dir_shifts,
+  void sample_pixels_along_direction( std::vector<discrete_shift_node>& two_dir_shifts,
                                       vnl_double_3 dir,
                                       double max_length ) const;
  private:

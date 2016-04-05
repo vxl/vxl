@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_observable_mesh.h"
 #include "bwm_world.h"
 //:
@@ -6,8 +8,7 @@
 #include "algo/bwm_algo.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 #include <vgl/vgl_point_3d.h>
@@ -36,13 +37,13 @@
 #include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
 
 bwm_observable_mesh::bwm_observable_mesh()
-  : object_(0)
+  : object_(VXL_NULLPTR)
 {
   //bwm_world::instance()->add(this);
 }
 
 bwm_observable_mesh::bwm_observable_mesh(BWM_MESH_TYPES type)
-  : object_(0), mesh_type_(type)
+  : object_(VXL_NULLPTR), mesh_type_(type)
 {
   //bwm_world::instance()->add(this);
 }
@@ -74,7 +75,7 @@ bwm_observable_mesh::bwm_observable_mesh(vgl_box_3d<double> box)
   vgl_point_3d<double> p1(max.x(), min.y(), min.z());
   vgl_point_3d<double> p2(min.x(), max.y(), min.z());
   vgl_point_3d<double> p3(max.x(), max.y(), min.z());
-  vcl_vector<vsol_point_3d_sptr> v;
+  std::vector<vsol_point_3d_sptr> v;
   v.push_back(new vsol_point_3d(min));
   v.push_back(new vsol_point_3d(p1));
   v.push_back(new vsol_point_3d(p3));
@@ -96,7 +97,7 @@ bwm_observable_mesh::~bwm_observable_mesh()
 {
 #if 0
   notify_observers("delete");
-  vcl_vector<vgui_observer*> observers;
+  std::vector<vgui_observer*> observers;
   get_observers(observers);
   for (unsigned i=0; i<observers.size(); i++) {
     detach(observers[i]);
@@ -119,7 +120,7 @@ void bwm_observable_mesh::remove()
     notify_observers("delete");
   }
 
-  vcl_vector<vgui_observer*> observers;
+  std::vector<vgui_observer*> observers;
   get_observers(observers);
   for (unsigned i=0; i<observers.size(); i++) {
     detach(observers[i]);
@@ -128,11 +129,11 @@ void bwm_observable_mesh::remove()
   //bwm_world::instance()->remove(this);
 }
 
-void bwm_observable_mesh::notify_observers(vcl_string message_type)
+void bwm_observable_mesh::notify_observers(std::string message_type)
 {
   vgui_message msg;
   msg.from = this;
-  msg.data = new vcl_string(message_type);
+  msg.data = new std::string(message_type);
   this->notify(msg);
 }
 
@@ -145,7 +146,7 @@ vgl_box_3d<double> bwm_observable_mesh::bounding_box()
 
 BWM_FACE_LABEL bwm_observable_mesh::get_face_label(unsigned face_id)
 {
-  vcl_map<unsigned, BWM_FACE_LABEL>::iterator it = labels_.find(face_id);
+  std::map<unsigned, BWM_FACE_LABEL>::iterator it = labels_.find(face_id);
   if (it != labels_.end())
     return it->second;
   return None;
@@ -159,14 +160,14 @@ void bwm_observable_mesh::send_update()
 
 void bwm_observable_mesh::translate(vgl_vector_3d<double> T)
 {
-  vcl_map<int, bmsh3d_vertex*> v_map = object_->vertexmap();
-  vcl_map<int, bmsh3d_vertex*>::iterator iter = v_map.begin();
+  std::map<int, bmsh3d_vertex*> v_map = object_->vertexmap();
+  std::map<int, bmsh3d_vertex*>::iterator iter = v_map.begin();
   while (iter != v_map.end()) {
     bmsh3d_vertex* v = (bmsh3d_vertex*) iter->second;
     v->set_pt (vgl_point_3d<double> (v->get_pt().x() + T.x() ,
                                      v->get_pt().y() + T.y(),
                                      v->get_pt().z() + T.z()));
-    vcl_cout << v->get_pt() << vcl_endl;
+    std::cout << v->get_pt() << std::endl;
     iter++;
   }
   notify_observers("move");
@@ -175,7 +176,7 @@ void bwm_observable_mesh::translate(vgl_vector_3d<double> T)
 bool bwm_observable_mesh::
 single_face_with_vertices(unsigned face_id,
                           vsol_polygon_3d_sptr& poly,
-                          vcl_vector<bmsh3d_vertex*>& verts)
+                          std::vector<bmsh3d_vertex*>& verts)
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*)object_->facemap(face_id);
   if (face && (object_->facemap().size() == 1)) {
@@ -190,7 +191,7 @@ single_face_with_vertices(unsigned face_id,
 bwm_observable_sptr bwm_observable_mesh::transform(vgl_h_matrix_3d<double> T_)
 {
   bmsh3d_mesh_mc* M_copy = object_->clone();
-  vcl_map<int, bmsh3d_vertex*> vertices = M_copy->vertexmap();
+  std::map<int, bmsh3d_vertex*> vertices = M_copy->vertexmap();
   for (unsigned i=0; i<vertices.size(); i++) {
     bmsh3d_vertex* v = vertices[i];
     vgl_point_3d<double> p = v->get_pt();
@@ -209,10 +210,10 @@ bool bwm_observable_mesh::move_poly_in_optical_cone(vpgl_camera<double> * cam,
 {
   if (!cam) return false;
   vsol_polygon_3d_sptr poly_3d;
-  vcl_vector<bmsh3d_vertex*> verts;
+  std::vector<bmsh3d_vertex*> verts;
   if (!this->single_face_with_vertices(face_id,poly_3d,verts))
   {
-    vcl_cerr << "In bwm_observable_mesh::move_poly_in_optical_cone - "
+    std::cerr << "In bwm_observable_mesh::move_poly_in_optical_cone - "
              << "meshes with more than one face not allowed\n";
     return false;
   }
@@ -224,7 +225,7 @@ bool bwm_observable_mesh::move_poly_in_optical_cone(vpgl_camera<double> * cam,
   vgl_vector_3d<double> ray_dir;
   if (!vpgl_ray::ray(cam, pg3d, ray_dir))
   {
-    vcl_cerr << "In bwm_observable_mesh::move_poly_in_optical_cone - "
+    std::cerr << "In bwm_observable_mesh::move_poly_in_optical_cone - "
              << "ray direction computation failed\n";
     return false;
   }
@@ -245,7 +246,7 @@ bool bwm_observable_mesh::move_poly_in_optical_cone(vpgl_camera<double> * cam,
 
   // intersect rays through each vertex to
   // get the vertices translated and scaled in the cone
-  for (vcl_vector<bmsh3d_vertex*>::iterator vit = verts.begin();
+  for (std::vector<bmsh3d_vertex*>::iterator vit = verts.begin();
        vit != verts.end(); ++vit)
   {
     vgl_point_3d<double> pg= (*vit)->pt();
@@ -253,7 +254,7 @@ bool bwm_observable_mesh::move_poly_in_optical_cone(vpgl_camera<double> * cam,
     vgl_vector_3d<double> rdir;
     if (!vpgl_ray::ray(cam, pg, rdir))
     {
-      vcl_cerr << "In bwm_observable_mesh::translate_along_optical_cone - "
+      std::cerr << "In bwm_observable_mesh::translate_along_optical_cone - "
                << "ray direction computation failed\n";
       return false;
     }
@@ -261,7 +262,7 @@ bool bwm_observable_mesh::move_poly_in_optical_cone(vpgl_camera<double> * cam,
     vgl_point_3d<double> i_pt;
     if (!vgl_intersection(l, plane, i_pt))
     {
-      vcl_cerr << "In bwm_observable_mesh::translate_along_optical_cone - "
+      std::cerr << "In bwm_observable_mesh::translate_along_optical_cone - "
                << "ray intersection computation failed\n";
       return false;
     }
@@ -282,9 +283,9 @@ void bwm_observable_mesh::extrude(int face_id)
     if (face) {
       if (object_->facemap().size() == 1) {
         bmsh3d_face_mc* face = (bmsh3d_face_mc*) object_->facemap(face_id);
-        vcl_vector<bmsh3d_vertex*> vertices;
+        std::vector<bmsh3d_vertex*> vertices;
         vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
-        vcl_map<int, vsol_polygon_3d_sptr> inner_faces = this->extract_inner_faces(face);
+        std::map<int, vsol_polygon_3d_sptr> inner_faces = this->extract_inner_faces(face);
         delete object_;
         object_ = new bmsh3d_mesh_mc();
         // the first polygon is always the outer one
@@ -298,21 +299,21 @@ void bwm_observable_mesh::extrude(int face_id)
     else
       current_extr_face = 0;
   }
-  vcl_cout << "FACES====>" << vcl_endl;
+  std::cout << "FACES====>" << std::endl;
   this->print_faces();
 #endif // 0
 }
 
 void bwm_observable_mesh::extrude(int face_id, double dist)
 {
-  if (object_ != 0) {
+  if (object_ != VXL_NULLPTR) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*)object_->facemap(face_id);
     if (face) {
       if (object_->facemap().size() == 1) {
         bmsh3d_face_mc* face = (bmsh3d_face_mc*) object_->facemap(face_id);
-        vcl_vector<bmsh3d_vertex*> vertices;
+        std::vector<bmsh3d_vertex*> vertices;
         vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
-        vcl_map<int, vsol_polygon_3d_sptr> inner_faces = this->extract_inner_faces(face);
+        std::map<int, vsol_polygon_3d_sptr> inner_faces = this->extract_inner_faces(face);
         delete object_;
         object_ = new bmsh3d_mesh_mc();
         // the first polygon is always the outer one
@@ -325,18 +326,18 @@ void bwm_observable_mesh::extrude(int face_id, double dist)
       notify_observers("update");
     }
     else
-      current_extr_face = 0;
+      current_extr_face = VXL_NULLPTR;
   }
 #if 0
-  vcl_cout << "FACES====>" << vcl_endl;
+  std::cout << "FACES====>" << std::endl;
   this->print_faces();
 #endif
 }
 
 void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
 {
-  vcl_string msg = "";
-  if (object_ == 0)
+  std::string msg = "";
+  if (object_ == VXL_NULLPTR)
     msg = "new";
   else {
     msg = "update";
@@ -350,8 +351,8 @@ void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
 
 void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double z)
 {
-  vcl_string msg = "";
-  if (object_ == 0)
+  std::string msg = "";
+  if (object_ == VXL_NULLPTR)
     msg = "new";
   else {
     msg = "update";
@@ -359,7 +360,7 @@ void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double z)
   }
 
   object_ = new bmsh3d_mesh_mc;
-  vcl_map<int, vsol_polygon_3d_sptr> inner_faces;
+  std::map<int, vsol_polygon_3d_sptr> inner_faces;
   create_mesh_HE(poly, z, inner_faces);
   //object_->orient_face_normals();
   notify_observers(msg);
@@ -370,8 +371,8 @@ void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly)
   if (!poly || poly->size()==0)
     return;
 
-  vcl_string msg = "";
-  if (object_ == 0)
+  std::string msg = "";
+  if (object_ == VXL_NULLPTR)
     msg = "new";
   else {
     msg = "update";
@@ -386,7 +387,7 @@ void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly)
 
 void bwm_observable_mesh::replace(bmsh3d_mesh_mc* obj)
 {
-  vcl_string msg="";
+  std::string msg="";
   if (object_) {
     delete object_;
     msg = "update";
@@ -402,9 +403,9 @@ void bwm_observable_mesh::replace(bmsh3d_mesh_mc* obj)
 //  If there are inner faces, there are more than one polygon,
 //  otherwise it is always one.
 vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(bmsh3d_face_mc* face,
-                                                       vcl_vector<bmsh3d_vertex*> &vertices)
+                                                       std::vector<bmsh3d_vertex*> &vertices)
 {
-  vcl_vector<vsol_point_3d_sptr> v_list;
+  std::vector<vsol_point_3d_sptr> v_list;
   bmsh3d_halfedge* cur_he = (bmsh3d_halfedge*) face->halfedge();
 #if 0
   //open
@@ -415,9 +416,9 @@ vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(bmsh3d_face_mc* face,
     bmsh3d_vertex* vertex = (bmsh3d_vertex*) Es_sharing_V  (cur_he->edge(), next_he->edge());
 
     vertices.push_back(vertex);
-    //vcl_cout << "vertex " << vertex->id() << " between "
+    //std::cout << "vertex " << vertex->id() << " between "
     //         << cur_he->edge()->id() << " and "
-    //         << next_he->edge()->id() << vcl_endl;
+    //         << next_he->edge()->id() << std::endl;
     vgl_point_3d<double> p = vertex->get_pt();
     v_list.push_back(new vsol_point_3d (p.x(), p.y(), p.z()));
     cur_he = (bmsh3d_halfedge*) cur_he->next();
@@ -428,18 +429,18 @@ vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(bmsh3d_face_mc* face,
   return poly3d;
 }
 
-vcl_map<int, vsol_polygon_3d_sptr>
+std::map<int, vsol_polygon_3d_sptr>
 bwm_observable_mesh::extract_inner_faces(bmsh3d_face_mc* face)
 {
   // now, add the inner polygons
-  vcl_map<int, bmsh3d_halfedge*> set_he = face->get_mc_halfedges();
-  vcl_map<int, vsol_polygon_3d_sptr> polygons;
-  vcl_map<int, bmsh3d_halfedge*>::iterator it = set_he.begin();
+  std::map<int, bmsh3d_halfedge*> set_he = face->get_mc_halfedges();
+  std::map<int, vsol_polygon_3d_sptr> polygons;
+  std::map<int, bmsh3d_halfedge*>::iterator it = set_he.begin();
   while (it != set_he.end())
   {
     bmsh3d_halfedge* he = it->second;
     bmsh3d_halfedge* HE = he;
-    vcl_vector<vsol_point_3d_sptr> v_list;
+    std::vector<vsol_point_3d_sptr> v_list;
 
     do {
       bmsh3d_halfedge* next_he = (bmsh3d_halfedge*) HE->next();
@@ -458,11 +459,11 @@ bwm_observable_mesh::extract_inner_faces(bmsh3d_face_mc* face)
   return polygons;
 }
 
-vcl_map<int, vsol_polygon_3d_sptr>
+std::map<int, vsol_polygon_3d_sptr>
 bwm_observable_mesh::extract_inner_faces(int face_id)
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*)object_->facemap(face_id);
-  vcl_map<int, vsol_polygon_3d_sptr> polys;
+  std::map<int, vsol_polygon_3d_sptr> polys;
   if (face) {
     polys = extract_inner_faces(face);
   }
@@ -472,21 +473,21 @@ bwm_observable_mesh::extract_inner_faces(int face_id)
 vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(unsigned i)
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*) object_->facemap(i);
-  vcl_vector<bmsh3d_vertex*> vertices;
+  std::vector<bmsh3d_vertex*> vertices;
   vsol_polygon_3d_sptr poly = extract_face(face, vertices);
   return poly;
 }
 
 vsol_polygon_3d_sptr bwm_observable_mesh::extract_bottom_face()
 {
-  vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
-  vcl_map<int, vsol_polygon_3d_sptr> faces;
+  std::map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
+  std::map<int, vsol_polygon_3d_sptr> faces;
   double min_z=1e6;
   vsol_polygon_3d_sptr bottom;
   for (; it != object_->facemap().end(); it++) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
-    //vcl_cout << "face " << face->id() << vcl_endl;
-    vcl_vector<bmsh3d_vertex*> vertices;
+    //std::cout << "face " << face->id() << std::endl;
+    std::vector<bmsh3d_vertex*> vertices;
     vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
     vsol_box_3d_sptr bb = poly->get_bounding_box();
     if (min_z > bb->get_min_z()) {
@@ -497,25 +498,25 @@ vsol_polygon_3d_sptr bwm_observable_mesh::extract_bottom_face()
   return bottom;
 }
 
-vcl_map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_faces()
+std::map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_faces()
 {
-  vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
-  vcl_map<int, vsol_polygon_3d_sptr> faces;
+  std::map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
+  std::map<int, vsol_polygon_3d_sptr> faces;
 
   for (; it != object_->facemap().end(); it++) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
-    //vcl_cout << "face " << face->id() << vcl_endl;
-    vcl_vector<bmsh3d_vertex*> vertices;
+    //std::cout << "face " << face->id() << std::endl;
+    std::vector<bmsh3d_vertex*> vertices;
     vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
     faces[face->id()] = poly;
   }
   return faces;
 }
 
-vcl_map<int, vsol_line_3d_sptr> bwm_observable_mesh::extract_edges()
+std::map<int, vsol_line_3d_sptr> bwm_observable_mesh::extract_edges()
 {
-  vcl_map<int, bmsh3d_edge*>::iterator it = object_->edgemap().begin();
-  vcl_map<int, vsol_line_3d_sptr> edges;
+  std::map<int, bmsh3d_edge*>::iterator it = object_->edgemap().begin();
+  std::map<int, vsol_line_3d_sptr> edges;
 
   for (; it != object_->edgemap().end(); it++) {
     bmsh3d_edge* edge = (bmsh3d_edge*) (*it).second;
@@ -529,11 +530,11 @@ vcl_map<int, vsol_line_3d_sptr> bwm_observable_mesh::extract_edges()
   return edges;
 }
 
-vcl_vector<vsol_point_3d_sptr> bwm_observable_mesh::extract_vertices()
+std::vector<vsol_point_3d_sptr> bwm_observable_mesh::extract_vertices()
 {
-  vcl_vector<vsol_point_3d_sptr> vertices;
+  std::vector<vsol_point_3d_sptr> vertices;
   if (object_) {
-    vcl_map<int, bmsh3d_vertex*>::iterator it = object_->vertexmap().begin();
+    std::map<int, bmsh3d_vertex*>::iterator it = object_->vertexmap().begin();
     for (; it != object_->vertexmap().end(); it++) {
       bmsh3d_vertex* V = (bmsh3d_vertex*) it->second;
       vsol_point_3d_sptr pt = new vsol_point_3d(V->pt().x(),V->pt().y(),V->pt().z());
@@ -558,14 +559,14 @@ void bwm_observable_mesh::create_interior()
 void bwm_observable_mesh::move(vsol_polygon_3d_sptr poly)
 {
   if (!object_) {
-    vcl_cerr << "mesh object id null\n";
+    std::cerr << "mesh object id null\n";
     return;
   }
 
   if (object_->facemap().size() == 1) {
-    vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
+    std::map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
-    vcl_vector<bmsh3d_vertex*> vertices;
+    std::vector<bmsh3d_vertex*> vertices;
     vsol_polygon_3d_sptr old_poly = extract_face(face, vertices);
 
     for (unsigned i=0; i<poly->size(); i++) {
@@ -580,12 +581,12 @@ void bwm_observable_mesh::move(vsol_polygon_3d_sptr poly)
 void bwm_observable_mesh::move_normal_dir(double dist)
 {
   if (object_->facemap().size() == 1) {
-    vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
+    std::map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
     //vgl_vector_3d<double> normal = face->compute_normal();
     //normal /= normal.length();
 
-    vcl_vector<bmsh3d_vertex*> vertices;
+    std::vector<bmsh3d_vertex*> vertices;
     vsol_polygon_3d_sptr poly = extract_face(face, vertices);
     vgl_vector_3d<double> normal = poly->normal();
     //normal /= normal.length();
@@ -603,7 +604,7 @@ void bwm_observable_mesh::move_normal_dir(double dist)
 void bwm_observable_mesh::move_extr_face(double z)
 {
   if (current_extr_face) {
-    vcl_vector<bmsh3d_vertex*> vertices;
+    std::vector<bmsh3d_vertex*> vertices;
     vsol_polygon_3d_sptr polygon = extract_face(current_extr_face, vertices);
     // at this point, the halfedges already sorted in extract_face
 
@@ -620,7 +621,7 @@ void bwm_observable_mesh::move_extr_face(double z)
       v->set_pt (vgl_point_3d<double> (v->get_pt().x(), v->get_pt().y(), v->get_pt().z()+z));
       //just use the z value as the new height
 
-      //vcl_cout << "new v=" << v->get_pt() << vcl_endl;
+      //std::cout << "new v=" << v->get_pt() << std::endl;
     }
     // FIX THIS , uncomment
     //bwm_algo::move_points_to_plane(current_extr_face);
@@ -635,13 +636,13 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
                                       vgl_point_3d<double> p2)
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*) object_->facemap(face_id);
-  vcl_vector<bmsh3d_halfedge *> halfedges;
-  if (face == 0) {
+  std::vector<bmsh3d_halfedge *> halfedges;
+  if (face == VXL_NULLPTR) {
     print_faces();
-    vcl_cerr << "Face " << face_id << " is not found in the facemap\n";
+    std::cerr << "Face " << face_id << " is not found in the facemap\n";
   }
   face->get_incident_HEs(halfedges);
-  vcl_vector<bmsh3d_vertex *> vertices;
+  std::vector<bmsh3d_vertex *> vertices;
   extract_face(face, vertices);
   // create 2 new vertices
   bmsh3d_vertex* v1 = (bmsh3d_vertex*) object_->_new_vertex ();
@@ -653,15 +654,15 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
   object_->_add_vertex(v2);
 
   // find the halfedges corresponding to edge segments
-  bmsh3d_edge* edge1=0;
-  bmsh3d_edge* edge2=0;
+  bmsh3d_edge* edge1=VXL_NULLPTR;
+  bmsh3d_edge* edge2=VXL_NULLPTR;
 
 #ifdef DEBUG
-  vcl_cout << "p1=" << p1 << " p2=" << p2 << '\n'
+  std::cout << "p1=" << p1 << " p2=" << p2 << '\n'
            << "l1=" << l1 << '\n'
            << "l2=" << l2 << '\n'
            << "l3=" << l3 << '\n'
-           << "l4=" << l4 << vcl_endl;
+           << "l4=" << l4 << std::endl;
 #endif
   double min_d1=1e23, min_d2=1e23;
   unsigned min_index1=0, min_index2=0;
@@ -674,7 +675,7 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
     vgl_point_3d<double> ep(e->get_pt());
 
     vgl_line_3d_2_points<double> line(sp, ep);
-    //vcl_cout << "edge" << edge->id() << " s=" << s->get_pt() << "e =" << e->get_pt() << vcl_endl;
+    //std::cout << "edge" << edge->id() << " s=" << s->get_pt() << "e =" << e->get_pt() << std::endl;
 
     double d1 = vgl_distance(vgl_point_3d<double>(l1), line);
     double d2 = vgl_distance(vgl_point_3d<double>(l2), line);
@@ -708,8 +709,8 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
   bmsh3d_halfedge* he2 = (bmsh3d_halfedge*) halfedges[min_index2];
   edge2 = he2->edge();
 
-  if (edge1 == 0 || edge2 == 0) {
-    vcl_cerr << "bwm_observable_mesh::divide_face -- edges are not found in polygon\n";
+  if (edge1 == VXL_NULLPTR || edge2 == VXL_NULLPTR) {
+    std::cerr << "bwm_observable_mesh::divide_face -- edges are not found in polygon\n";
     return;
   }
 
@@ -727,7 +728,7 @@ bmsh3d_face* bwm_observable_mesh::create_inner_face(vsol_polygon_3d_sptr polygon
   unsigned n = polygon->size();
   bmsh3d_face* inner_face = new bmsh3d_face();
   // create vertices
-  bmsh3d_vertex* prev_v = 0;
+  bmsh3d_vertex* prev_v = VXL_NULLPTR;
   bmsh3d_vertex* v_first;
   for (unsigned i=0; i<n; i++) {
     double x = polygon->vertex(i)->x();
@@ -736,7 +737,7 @@ bmsh3d_face* bwm_observable_mesh::create_inner_face(vsol_polygon_3d_sptr polygon
     bmsh3d_vertex* v = (bmsh3d_vertex*) object_->_new_vertex ();
     v->get_pt().set(x, y, z);
     object_->_add_vertex(v); //??? do we add this vertex to the mesh
-    if (prev_v != 0) {
+    if (prev_v != VXL_NULLPTR) {
 #if 0
       object_->add_new_edge(v, prev_v);
 #endif
@@ -764,7 +765,7 @@ bmsh3d_face_mc* bwm_observable_mesh::create_face(vsol_polygon_3d_sptr polygon)
   unsigned n = polygon->size();
 
   // create vertices
-  bmsh3d_vertex* prev_v = 0;
+  bmsh3d_vertex* prev_v = VXL_NULLPTR;
   for (unsigned i=0; i<n; i++) {
     double x = polygon->vertex(i)->x();
     double y = polygon->vertex(i)->y();
@@ -772,7 +773,7 @@ bmsh3d_face_mc* bwm_observable_mesh::create_face(vsol_polygon_3d_sptr polygon)
     bmsh3d_vertex* v = (bmsh3d_vertex*) object_->_new_vertex ();
     v->get_pt().set(x, y, z);
     object_->_add_vertex(v);
-    if (prev_v != 0)
+    if (prev_v != VXL_NULLPTR)
       object_->add_new_edge (v, prev_v);
     prev_v = v;
   }
@@ -798,9 +799,9 @@ int bwm_observable_mesh::find_closest_face(vgl_point_3d<double> point)
 {
   int index = -1;
   double dmin = 1e26;
-  vcl_cout << "dmin=" << dmin << vcl_endl;
-  vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
-  vcl_map<int, vsol_polygon_3d_sptr> faces;
+  std::cout << "dmin=" << dmin << std::endl;
+  std::map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
+  std::map<int, vsol_polygon_3d_sptr> faces;
 
   for (; it != object_->facemap().end(); it++) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
@@ -810,20 +811,20 @@ int bwm_observable_mesh::find_closest_face(vgl_point_3d<double> point)
       dmin = d;
       index = face->id();
     }
-    vcl_cout << face->id() << " dmin=" << dmin << vcl_endl;
+    std::cout << face->id() << " dmin=" << dmin << std::endl;
   }
   return index;
 }
 
 void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
                                          double dist,
-                                         vcl_map<int, vsol_polygon_3d_sptr> inner_faces)
+                                         std::map<int, vsol_polygon_3d_sptr> inner_faces)
 {
   polygon = bwm_algo::move_points_to_plane(polygon);
 
   unsigned n = polygon->size();
 
-  vcl_vector<bmsh3d_vertex* > v_list(2*n);
+  std::vector<bmsh3d_vertex* > v_list(2*n);
   unsigned int next_index;
   // unsigned int next_index_ext; // unused
 
@@ -857,7 +858,7 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   }
 
   // create the edges of parallel faces
-  vcl_vector<bmsh3d_edge* > e_list(2*n);
+  std::vector<bmsh3d_edge* > e_list(2*n);
   for (unsigned i=0; i<2*n; i++) {
     next_index = i + 1;
     if (next_index == n)
@@ -876,7 +877,7 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   }
 
   // re-attach the inner faces
-  vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = inner_faces.begin();
+  std::map<int, vsol_polygon_3d_sptr>::iterator iter = inner_faces.begin();
   while (iter != inner_faces.end()) {
     attach_inner_face(f0->id(), iter->second);
     iter++;
@@ -891,7 +892,7 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   current_extr_face = f1;
 
   // create the in between edges and faces
-  vcl_vector<bmsh3d_edge* > e_btw_list(n);
+  std::vector<bmsh3d_edge* > e_btw_list(n);
   for (unsigned i=0; i<n; i++) {
     bmsh3d_edge* e = object_->add_new_edge (v_list[i], v_list[n+i]);
     e_btw_list[i] = e;
@@ -918,12 +919,12 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   print_faces();
 }
 
-void bwm_observable_mesh::create_mesh_surface(vcl_vector<vgl_point_3d<double> > vertices,
-                                              vcl_vector<vgl_point_3d<int> > triangles)
+void bwm_observable_mesh::create_mesh_surface(std::vector<vgl_point_3d<double> > vertices,
+                                              std::vector<vgl_point_3d<int> > triangles)
 {
   object_ = new bmsh3d_mesh_mc();
   // create vertices
-  vcl_vector<bmsh3d_vertex* > v_list(vertices.size());
+  std::vector<bmsh3d_vertex* > v_list(vertices.size());
 
   // first create the vertices
   for (unsigned i=0; i<vertices.size(); i++) {
@@ -967,13 +968,13 @@ void bwm_observable_mesh::attach_inner_face(unsigned face_id, vsol_polygon_3d_sp
 {
   bmsh3d_face* inner_face = create_inner_face(poly);
   bmsh3d_face_mc* outer_face = (bmsh3d_face_mc*) object_->facemap(face_id);
-  if (outer_face != 0) {
+  if (outer_face != VXL_NULLPTR) {
     bmsh3d_halfedge* he = (bmsh3d_halfedge*) inner_face->halfedge();
     outer_face->add_mc_halfedge(he);
     notify_observers("update");
   }
   else {
-    vcl_cerr << "bwm_observable_mesh::attach_inner_face() -- outer face id is not valid\n";
+    std::cerr << "bwm_observable_mesh::attach_inner_face() -- outer face id is not valid\n";
   }
 }
 
@@ -985,15 +986,15 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
   vgl_point_3d<double> center = F->compute_center_pt();
   if (M->facemap().size() > 1)
   {
-    vcl_vector<bmsh3d_edge*> inc_edges;
+    std::vector<bmsh3d_edge*> inc_edges;
     F->get_incident_edges (inc_edges);
     bmsh3d_edge* first_edge = inc_edges[0];
     vgl_vector_3d<double> face_normal = cur_face->compute_normal(center, first_edge, first_edge->s_vertex());
     face_normal /= face_normal.length();
-    vcl_vector<bmsh3d_face*> incident_faces;
+    std::vector<bmsh3d_face*> incident_faces;
     for (unsigned i=0; i<inc_edges.size(); i++) {
       bmsh3d_edge* edge = inc_edges[i];
-      vcl_vector<bmsh3d_face*> faces;
+      std::vector<bmsh3d_face*> faces;
       edge->get_incident_faces(faces);
 
       for (unsigned j=0; j<faces.size(); j++) {
@@ -1021,7 +1022,7 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
       bmsh3d_face_mc* inc_face = (bmsh3d_face_mc*) incident_faces[i];
       // check with all the edges, if the incident face share this edge,
       //trying to find the edge between the current face and the given face
-      vcl_vector<bmsh3d_edge*> inc_edges;
+      std::vector<bmsh3d_edge*> inc_edges;
       bmsh3d_edge* edge;
       cur_face->get_incident_edges (inc_edges);
       for (unsigned j=0; j<inc_edges.size(); j++) {
@@ -1032,7 +1033,7 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
       }
 
       if (edge == 0) {
-        vcl_cerr << "ERROR: incident face is not found in extrude_face()\n";
+        std::cerr << "ERROR: incident face is not found in extrude_face()\n";
         return 0;
       }
 
@@ -1059,7 +1060,7 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
   }
   else
   {
-    vcl_vector<bmsh3d_edge*> inc_edges;
+    std::vector<bmsh3d_edge*> inc_edges;
     cur_face->get_incident_edges (inc_edges);
     for (unsigned j=0; j<inc_edges.size(); j++) {
       bmsh3d_edge* edge = inc_edges[j];
@@ -1083,8 +1084,8 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
     }
   }
 #endif // 0
-  vcl_vector<bmsh3d_vertex*> v_list;
-  vcl_vector<bmsh3d_edge*> e_vert_list;
+  std::vector<bmsh3d_vertex*> v_list;
+  std::vector<bmsh3d_edge*> e_vert_list;
   bmsh3d_halfedge* he = (bmsh3d_halfedge*) cur_face->halfedge();
   bmsh3d_vertex* s = he->s_vertex();
   bmsh3d_vertex* v0 = (bmsh3d_vertex*) M->_new_vertex ();
@@ -1114,7 +1115,7 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
   }
 
   // create th new top face
-  vcl_vector<bmsh3d_edge* > e_hor_list;
+  std::vector<bmsh3d_edge* > e_hor_list;
   bmsh3d_face_mc* new_face = M->_new_mc_face();
   M->_add_face (new_face);
   for (unsigned i=0; i < v_list.size(); i++) {
@@ -1147,20 +1148,20 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
   } while (next != he);
 
   new_face->_sort_HEs_circular();
-  vcl_ostringstream oss;
+  std::ostringstream oss;
   new_face->getInfo(oss);
 
-  vcl_cout << oss.str().c_str();
+  std::cout << oss.str().c_str();
   return new_face;
 }
 
 vgl_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
 {
   bmsh3d_face* face = object_->facemap(face_id);
-  vcl_vector<bmsh3d_vertex*> vertices;
+  std::vector<bmsh3d_vertex*> vertices;
   face->get_ordered_Vs(vertices);
 
-  vcl_vector<vsol_point_3d_sptr> points;
+  std::vector<vsol_point_3d_sptr> points;
   vgl_fit_plane_3d<double> fitter;
   for (unsigned i=0; i<vertices.size(); i++) {
     bmsh3d_vertex* v = (bmsh3d_vertex*) vertices[i];
@@ -1173,11 +1174,11 @@ vgl_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
   if (face->vertices().size()==0)
     return plane;
 #endif
-  if (fitter.fit(0.0001, &vcl_cerr)) {
+  if (fitter.fit(0.0001, &std::cerr)) {
     plane = fitter.get_plane();
   }
   else {
-    vcl_cout << "NO FITTING" << vcl_endl;
+    std::cout << "NO FITTING" << std::endl;
   }
 
   return plane;
@@ -1185,15 +1186,15 @@ vgl_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
 
 void bwm_observable_mesh::print_faces()
 {
-  vcl_ostringstream oss;
-  vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
+  std::ostringstream oss;
+  std::map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
 
   for (; it != object_->facemap().end(); it++) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
     //face->_sort_halfedges_circular();
     face->getInfo(oss);
   }
-  vcl_cout << oss.str().c_str();
+  std::cout << oss.str().c_str();
 }
 
 void bwm_observable_mesh::move_points_to_plane(bmsh3d_face_mc* face)
@@ -1204,7 +1205,7 @@ void bwm_observable_mesh::move_points_to_plane(bmsh3d_face_mc* face)
   vgl_plane_3d<double> plane = get_plane(face->id());
 
   // find the closest point on the plane and replace it for each point
-  vcl_vector<vsol_point_3d_sptr> points;
+  std::vector<vsol_point_3d_sptr> points;
   for (unsigned i=0; i<face->vertices().size(); i++) {
     bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(i);
     vgl_point_3d<double> hp(v->get_pt().x(), v->get_pt().y(), v->get_pt().z());
@@ -1217,21 +1218,21 @@ void bwm_observable_mesh::shrink_mesh(bmsh3d_mesh_mc* mesh, double r)
 {
   mesh->orient_face_normals();
 
-  vcl_map<int, bmsh3d_vertex* > vertices = mesh->vertexmap();
-  vcl_vector<vgl_point_3d<double> > new_vertices;
-  vcl_map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
+  std::map<int, bmsh3d_vertex* > vertices = mesh->vertexmap();
+  std::vector<vgl_point_3d<double> > new_vertices;
+  std::map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
   while (v_it != vertices.end()) {
     bmsh3d_vertex* vertex = (bmsh3d_vertex*) v_it->second;
     vgl_point_3d<double> p(vertex->get_pt());
-    vcl_cout << "old vertex->" << p << vcl_endl;
+    std::cout << "old vertex->" << p << std::endl;
     // find the faces incident to this vertex
-    vcl_set<bmsh3d_face*> inc_faces;
+    std::set<bmsh3d_face*> inc_faces;
     vertex->get_incident_Fs(inc_faces);
     if (inc_faces.size() < 3) {
-      vcl_cerr << "The number of planes < 3!!!!!!!!!!!\n";
+      std::cerr << "The number of planes < 3!!!!!!!!!!!\n";
     }
 
-    vcl_set<bmsh3d_face*>::iterator it = inc_faces.begin();
+    std::set<bmsh3d_face*>::iterator it = inc_faces.begin();
 
     while (it != inc_faces.end()) {
       bmsh3d_face_mc* face1 = (bmsh3d_face_mc*) *it;
@@ -1249,7 +1250,7 @@ void bwm_observable_mesh::shrink_mesh(bmsh3d_mesh_mc* mesh, double r)
       n3 /= n3.length();
       it++;
       vgl_point_3d<double> v = bwm_algo::fit_sphere_to_corner(p, -1*n1, p, -1*n2, p , -1*n3, r);
-      vcl_cout << "New vertex->" << v << vcl_endl;
+      std::cout << "New vertex->" << v << std::endl;
       new_vertices.push_back(v);
     }
     v_it++;
@@ -1285,7 +1286,7 @@ bwm_observable_sptr bwm_observable_mesh::global_to_local(vpgl_lvcs* lvcs, double
 {
   if (lvcs) {
     bmsh3d_mesh_mc* mesh = object_->clone();
-    vcl_map<int, bmsh3d_vertex*>::iterator vit;
+    std::map<int, bmsh3d_vertex*>::iterator vit;
     for (vit = mesh->vertexmap().begin(); vit!= mesh->vertexmap().end(); vit++) {
       bmsh3d_vertex* v = (bmsh3d_vertex*)vit->second;
       double x,y,z;
@@ -1298,7 +1299,7 @@ bwm_observable_sptr bwm_observable_mesh::global_to_local(vpgl_lvcs* lvcs, double
     }
     return new bwm_observable_mesh(mesh);
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
 #if 0
@@ -1316,9 +1317,9 @@ SoSeparator* bwm_observable_mesh::convert_coin3d(bool b_shape_hints,
 }
 #endif
 
-bool bwm_observable_mesh::load_from(vcl_string filename)
+bool bwm_observable_mesh::load_from(std::string filename)
 {
-  vcl_string msg = "new";
+  std::string msg = "new";
   if (object_) {
     delete object_;
     msg = "update";
@@ -1326,7 +1327,7 @@ bool bwm_observable_mesh::load_from(vcl_string filename)
 
   object_ = new bmsh3d_mesh_mc();
   if (!bmsh3d_load_ply(object_,filename.data())) {
-    vcl_cerr << "Error loading mesh from " << filename << '\n';
+    std::cerr << "Error loading mesh from " << filename << '\n';
     return false;
   }
 
@@ -1343,18 +1344,18 @@ void bwm_observable_mesh::save(const char* filename, vpgl_lvcs* lvcs)
   bmsh3d_mesh* mesh2 = object_->clone();
 
   if (!lvcs) {
-    vcl_cerr << "error: lvcs == null\n";
+    std::cerr << "error: lvcs == null\n";
     return;
   }
 
-  vcl_map<int, bmsh3d_vertex*>::iterator it = mesh2->vertexmap().begin();
+  std::map<int, bmsh3d_vertex*>::iterator it = mesh2->vertexmap().begin();
   for (; it != mesh2->vertexmap().end(); it++) {
     bmsh3d_vertex* V = (bmsh3d_vertex*) (*it).second;
     double x=0,y=0,z=0;
     lvcs->global_to_local(V->pt().x(),V->pt().y(),V->pt().z(),vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
     vgl_point_3d<double> new_pt(x,y,z);
-    vcl_cout << "converted global <"<<V->pt().x() <<", "<< V->pt().y()
-             <<", "<< V->pt().z() <<"> to <" <<x<< ", "<<y<<" ,"<<z<<'>'<<vcl_endl;
+    std::cout << "converted global <"<<V->pt().x() <<", "<< V->pt().y()
+             <<", "<< V->pt().z() <<"> to <" <<x<< ", "<<y<<" ,"<<z<<'>'<<std::endl;
     V->set_pt(new_pt);
   }
 
@@ -1369,7 +1370,7 @@ void bwm_observable_mesh::save(const char* filename)
   bmsh3d_mesh* mesh2 = object_->clone();
 
   mesh2->build_IFS_mesh();
-  vcl_string comment;
+  std::string comment;
   if (this->mesh_type_ == BWM_MESH_FEATURE)
     comment = BWM_MESH_FEATURE_STR;
   else if (this->mesh_type_ == BWM_MESH_IMAGE_PROCESSING)
@@ -1378,7 +1379,7 @@ void bwm_observable_mesh::save(const char* filename)
     comment = BWM_MESH_TERRAIN_STR;
   else {
     comment = "";
-    vcl_cerr << "Mesh type is invalid\n";
+    std::cerr << "Mesh type is invalid\n";
   }
 
   bmsh3d_save_ply(mesh2, filename, true, comment);

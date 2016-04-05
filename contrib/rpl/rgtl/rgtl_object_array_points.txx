@@ -5,9 +5,11 @@
 #ifndef rgtl_object_array_points_txx
 #define rgtl_object_array_points_txx
 
+#include <iostream>
+#include <limits>
 #include "rgtl_object_array_points.hxx"
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
@@ -18,7 +20,7 @@ rgtl_object_array_points<D>::rgtl_object_array_points(int n): points_(n)
 //----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_object_array_points<D>
-::rgtl_object_array_points(vcl_vector<point_type> const& points):
+::rgtl_object_array_points(std::vector<point_type> const& points):
   points_(points)
 {
 }
@@ -134,8 +136,8 @@ void rgtl_object_array_points<D>::compute_bounds(double bounds[D][2]) const
   // Initialize bounds to empty.
   for (unsigned int a=0; a < D; ++a)
   {
-    bounds[a][0] = +vcl_numeric_limits<double>::max();
-    bounds[a][1] = -vcl_numeric_limits<double>::max();
+    bounds[a][0] = +std::numeric_limits<double>::max();
+    bounds[a][1] = -std::numeric_limits<double>::max();
   }
 
   // Update the bounds for each point.

@@ -1,17 +1,18 @@
 // This is gel/vifa/vifa_histogram.cxx
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <fstream>
+#include <cstdio>
 #include "vifa_histogram.h"
 //:
 // \file
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 
 static int MEAN_FLAG = 1;
 static int SD_FLAG = 2;
 
-// MPP 7/25/2003  Replaced min & max inline functions w/ vcl_max & vcl_min template functions
+// MPP 7/25/2003  Replaced min & max inline functions w/ std::max & std::min template functions
 
 vifa_histogram::vifa_histogram()
 {
@@ -38,21 +39,21 @@ vifa_histogram::vifa_histogram(int xres, float val1, float val2)
 
   // MPP 7/25/2003
   // Swapped argument order so val1 is selected if arguments are equal
-  vmax = vcl_max(val2, val1);
-  vmin = vcl_min(val2, val1);
+  vmax = std::max(val2, val1);
+  vmin = std::min(val2, val1);
 
   delta = (vmax - vmin) / xres;
   mean = (vmax + vmin) / 2.0f;
-  standard_dev = (vmax - vmin) / float(2 * vcl_sqrt(3.0));
+  standard_dev = (vmax - vmin) / float(2 * std::sqrt(3.0));
   stats_consistent = 0;
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
   delimiter = ' ';
 
-  if (vals == NULL || counts == NULL)
+  if (vals == VXL_NULLPTR || counts == VXL_NULLPTR)
   {
-    vcl_cerr << "vifa_histogram : Ran out of array memory.\n\n";
-    vals = NULL;
-    counts = NULL;
+    std::cerr << "vifa_histogram : Ran out of array memory.\n\n";
+    vals = VXL_NULLPTR;
+    counts = VXL_NULLPTR;
     num = 0;
     vmin = 0;
     vmax = 0;
@@ -103,11 +104,11 @@ vifa_histogram::vifa_histogram(const vifa_histogram& h)
   counts = new float[num];
   float const* his_counts = h.GetCounts();
 
-  if (vals == NULL || counts == NULL)
+  if (vals == VXL_NULLPTR || counts == VXL_NULLPTR)
   {
-    vcl_cerr << "vifa_histogram : Ran out of array memory.\n\n";
-    vals = NULL;
-    counts = NULL;
+    std::cerr << "vifa_histogram : Ran out of array memory.\n\n";
+    vals = VXL_NULLPTR;
+    counts = VXL_NULLPTR;
     num = 0;
     vmin = 0;
     vmax = 0;
@@ -174,7 +175,7 @@ vifa_histogram::vifa_histogram(vifa_histogram const* his, float width, bool pres
   else if (!(width == 0.0f))
   {
     // Any degenerate cases?
-    num = (int)vcl_ceil((maxvalue - minvalue) / width);
+    num = (int)std::ceil((maxvalue - minvalue) / width);
   }
   else
   {
@@ -194,11 +195,11 @@ vifa_histogram::vifa_histogram(vifa_histogram const* his, float width, bool pres
   vmax =  mean_val + half_range;
   vmin =  mean_val - half_range;
 
-  if (vals == NULL || counts == NULL)
+  if (vals == VXL_NULLPTR || counts == VXL_NULLPTR)
   {
-    vcl_cerr << "vifa_histogram : Ran out of array memory.\n\n";
-    vals = NULL;
-    counts = NULL;
+    std::cerr << "vifa_histogram : Ran out of array memory.\n\n";
+    vals = VXL_NULLPTR;
+    counts = VXL_NULLPTR;
     num = 0;
     vmin = 0;
     vmax = 0;
@@ -413,7 +414,7 @@ vifa_histogram* vifa_histogram::Scale(float scale_factor)
     }
 
     float fraction = (trans_x - vals[index])/delta;
-    float abs_fraction = (float)vcl_fabs(fraction);
+    float abs_fraction = (float)std::fabs(fraction);
     int x_index = GetIndex(x);
     if (x_index < 0)
     {
@@ -635,8 +636,8 @@ vifa_histogram* vifa_histogram::NonMaximumSupress(int radius, bool cyclic)
 {
   if ((2*radius +1)> num/2)
   {
-    vcl_cerr << "In vifa_histogram::NonMaximumSupress(): radius is too large\n";
-    return NULL;
+    std::cerr << "In vifa_histogram::NonMaximumSupress(): radius is too large\n";
+    return VXL_NULLPTR;
   }
   // Get the counts array of "this"
   vifa_histogram* h_new = new vifa_histogram(*this);
@@ -699,7 +700,7 @@ float vifa_histogram::GetMean() const
     if (area <= 0.0f)
     {
 #ifdef DEBUG
-      vcl_cerr << "vifa_histogram::GetMean() : Area <= 0.0\n\n";
+      std::cerr << "vifa_histogram::GetMean() : Area <= 0.0\n\n";
 #endif
       return 0.0f;
     }
@@ -739,14 +740,14 @@ float vifa_histogram::GetStandardDev() const
     if (area <= 0.0f)
     {
 #ifdef DEBUG
-      vcl_cerr << "vifa_histogram::GetStandardDev() : Area <= 0.0\n\n";
+      std::cerr << "vifa_histogram::GetStandardDev() : Area <= 0.0\n\n";
 #endif
       return 0.0f;
     }
     else
     {
       stats_consistent |= SD_FLAG;
-      standard_dev = (float)vcl_sqrt(sum/area);
+      standard_dev = (float)std::sqrt(sum/area);
       return standard_dev;
     }
   }
@@ -1052,7 +1053,7 @@ float vifa_histogram::HighClipVal(float clip_fraction)
   return vals[i];
 }
 //--------------------------------------------------------------------------
-//: Prints histogram counts onto vcl_cout
+//: Prints histogram counts onto std::cout
 void vifa_histogram::Print()
 {
   float* vals = this->GetVals();
@@ -1064,17 +1065,17 @@ void vifa_histogram::Print()
     if (width >= 5)
     {
       width = 0;
-      vcl_cout << vcl_endl;
+      std::cout << std::endl;
     }
-    vcl_printf("%6.1f %5.0f |", vals[j], counts[j]);
+    std::printf("%6.1f %5.0f |", vals[j], counts[j]);
     width++;
   }
 
-  vcl_cout << vcl_endl << " MaxVal " << this->GetMaxVal() << vcl_endl
-           << " MinVal " << this->GetMinVal() << vcl_endl
-           << " BucketSize " << this->GetBucketSize() << vcl_endl
-           << " Resolution " << this->GetRes() << vcl_endl
-           << " Area " << this->ComputeArea(this->GetMinVal(),this->GetMaxVal()) << vcl_endl
+  std::cout << std::endl << " MaxVal " << this->GetMaxVal() << std::endl
+           << " MinVal " << this->GetMinVal() << std::endl
+           << " BucketSize " << this->GetBucketSize() << std::endl
+           << " Resolution " << this->GetRes() << std::endl
+           << " Area " << this->ComputeArea(this->GetMinVal(),this->GetMaxVal()) << std::endl
            << "------------------------------------------------\n\n";
 }
 //---------------------------------------------------------------------------
@@ -1082,27 +1083,27 @@ void vifa_histogram::Print()
 
 void vifa_histogram::Dump(char *dumpfile)
 {
-  vcl_ofstream dumpfp(dumpfile, vcl_ios::out);
+  std::ofstream dumpfp(dumpfile, std::ios::out);
 
   if (!dumpfp)
   {
-    vcl_cerr << "Error opening histogram data file.\n";
+    std::cerr << "Error opening histogram data file.\n";
     return;
   }
 
   for (int i = 0; i < num; i++)
-    dumpfp << vals[i] << ' ' << counts[i] << vcl_endl;
+    dumpfp << vals[i] << ' ' << counts[i] << std::endl;
 }
 
 //---------------------------------------------------------------------------
 //: Writes histogram in format suitable for plotting tools like Gnuplot.
 int vifa_histogram::WritePlot(const char *fname)
 {
-  vcl_ofstream fp(fname, vcl_ios::out); // open the file...
+  std::ofstream fp(fname, std::ios::out); // open the file...
 
   if (!fp)
   {
-    vcl_cerr << "Error opening histogram plot file.\n";
+    std::cerr << "Error opening histogram plot file.\n";
     return 0;
   }
 
@@ -1124,7 +1125,7 @@ int vifa_histogram::WritePlot(const char *fname)
   }
 
   for (int j = 0; j < 2*stat_res; j++)
-    fp << x[j] << delimiter << y[j] << vcl_endl;
+    fp << x[j] << delimiter << y[j] << std::endl;
 
   delete [] x;
   delete [] y;
@@ -1146,9 +1147,9 @@ float vifa_histogram::CompareToHistogram(vifa_histogram* h)
   float v2 = h->GetStandardDev();
 
   // We don't like singular situations
-  if ( vcl_fabs(v1) < 1e-6 || vcl_fabs(v2) < 1e-6 ) return 0.0f;
+  if ( std::fabs(v1) < 1e-6 || std::fabs(v2) < 1e-6 ) return 0.0f;
   if (m1==0||m2==0) return 0.0f; // means exactly 0 indicate singular histogram
 
   // scale factor ln(2)/2 = 0.347 means M = 2 at exp = 0.5
-  return (float)vcl_exp(- vcl_fabs( 0.693 * (m1 - m2) * vcl_sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
+  return (float)std::exp(- std::fabs( 0.693 * (m1 - m2) * std::sqrt(1.0/(v1*v1) + 1.0/(v2*v2))));
 }

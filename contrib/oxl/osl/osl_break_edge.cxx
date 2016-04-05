@@ -13,8 +13,8 @@
 #include <osl/osl_ortho_regress.h>
 
 void osl_break_edge(osl_edge const *in,
-                    vcl_vector<unsigned> const &where,
-                    vcl_list<osl_edge*> *broken)
+                    std::vector<unsigned> const &where,
+                    std::list<osl_edge*> *broken)
 {
   assert(broken);
   assert(in);
@@ -25,7 +25,7 @@ void osl_break_edge(osl_edge const *in,
   assert(where.back()+1 == in->size());
 
   // make array of vertices, one for each break.
-  vcl_vector<osl_vertex*> verts;
+  std::vector<osl_vertex*> verts;
   verts.push_back(in->GetV1()); // maintain topology.
   for (unsigned int i=1; i+1<where.size(); ++i)
     verts.push_back(new osl_vertex(x[where[i]], y[where[i]]));
@@ -43,7 +43,7 @@ void osl_break_edge(osl_edge const *in,
 }
 
 void osl_break_edge(osl_edge const *in,
-                    vcl_list<osl_edge*> *out_ptr,
+                    std::list<osl_edge*> *out_ptr,
                     double threshold,
                     unsigned nbhd_size)
 {
@@ -56,7 +56,7 @@ void osl_break_edge(osl_edge const *in,
   osl_ortho_regress fitter;
 
   // decide where to break the edge.
-  vcl_vector<unsigned> breaks;
+  std::vector<unsigned> breaks;
 
   breaks.push_back(0);   // first edgel
   for (unsigned int pos=nbhd_size; pos+nbhd_size<n; ++pos) {

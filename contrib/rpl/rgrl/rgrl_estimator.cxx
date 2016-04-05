@@ -89,7 +89,7 @@ rgrl_est_compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& match
   // if the weight is too small or zero,
   // that means there is no good match
   if ( sum_wgt < 1e-8 ) {
-    vcl_cerr << "Sum of weights is too small for centre computation.\n";
+    std::cerr << "Sum of weights is too small for centre computation.\n";
     return false;
   }
 

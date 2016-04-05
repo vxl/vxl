@@ -4,6 +4,10 @@
 //  Copyright: (C) 2000 Victoria University of Manchester
 //
 //=======================================================================
+#include <sstream>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "vpdfl_mixture_builder.h"
 //:
 // \file
@@ -16,10 +20,8 @@
 //    IMS   Converted to VXL 14 May 2000, with redesign
 // \endverbatim
 
-#include <vcl_sstream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_loader.h>
@@ -153,8 +155,8 @@ double vpdfl_mixture_builder::min_var() const
 void vpdfl_mixture_builder::build(vpdfl_pdf_base& /*model*/,
                                   const vnl_vector<double>& /*mean*/) const
 {
-  vcl_cerr<<"vpdfl_mixture_builder::build(model,mean) Not yet implemented.\n";
-  vcl_abort();
+  std::cerr<<"vpdfl_mixture_builder::build(model,mean) Not yet implemented.\n";
+  std::abort();
 }
 
 //=======================================================================
@@ -163,7 +165,7 @@ void vpdfl_mixture_builder::build(vpdfl_pdf_base& /*model*/,
 void vpdfl_mixture_builder::build(vpdfl_pdf_base& model,
                                   mbl_data_wrapper<vnl_vector<double> >& data) const
 {
-  vcl_vector<double> wts(int(data.size()), 1.0);
+  std::vector<double> wts(int(data.size()), 1.0);
   weighted_build(model,data,wts);
 }
 
@@ -172,7 +174,7 @@ void vpdfl_mixture_builder::build(vpdfl_pdf_base& model,
 //: Build model from weighted data
 void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
                                            mbl_data_wrapper<vnl_vector<double> >& data,
-                                           const vcl_vector<double>& wts) const
+                                           const std::vector<double>& wts) const
 {
   assert(base_model.is_class("vpdfl_mixture"));
   vpdfl_mixture& model = static_cast<vpdfl_mixture&>( base_model);
@@ -197,7 +199,7 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
 
   // Get vectors into an array for rapid access
   const vnl_vector<double>* data_ptr;
-  vcl_vector<vnl_vector<double> > data_array;
+  std::vector<vnl_vector<double> > data_array;
 
   {
     unsigned int n=data.size();
@@ -215,7 +217,7 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
   if (!model_setup || !initial_means_.empty())
     initialise(model,data_ptr,wts);
 
-  vcl_vector<vnl_vector<double> > probs;
+  std::vector<vnl_vector<double> > probs;
 
   int n_its = 0;
   double max_move = 1e-6;
@@ -246,8 +248,8 @@ static void UpdateRange(vnl_vector<double>& min_vec, vnl_vector<double>& max_vec
 //: Assumes means set up.  Estimates starting components.
 void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
                                                    const vnl_vector<double>* data,
-                                                   const vcl_vector<vnl_vector<double> >& mean,
-                                                   const vcl_vector<double>& wts) const
+                                                   const std::vector<vnl_vector<double> >& mean,
+                                                   const std::vector<double>& wts) const
 {
   const unsigned int n_comp = builder_.size();
   const unsigned int n_samples = wts.size();
@@ -262,7 +264,7 @@ void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
   if (mean_sep<=1e-6) mean_sep = 1e-6;
 
 
-  vcl_vector<double> wts_i(n_samples);
+  std::vector<double> wts_i(n_samples);
 
   mbl_data_array_wrapper<vnl_vector<double> > data_array(data,n_samples);
 
@@ -290,7 +292,7 @@ void vpdfl_mixture_builder::initialise_given_means(vpdfl_mixture& model,
 
 void vpdfl_mixture_builder::initialise_diagonal(vpdfl_mixture& model,
                                                 const vnl_vector<double>* data,
-                                                const vcl_vector<double>& wts) const
+                                                const std::vector<double>& wts) const
 {
   // Build each component using randomly weighted data
   const unsigned int n_comp = builder_.size();
@@ -307,7 +309,7 @@ void vpdfl_mixture_builder::initialise_diagonal(vpdfl_mixture& model,
 #endif
 
   // Create means along diagonal of bounding box
-  vcl_vector<vnl_vector<double> > mean(n_comp);
+  std::vector<vnl_vector<double> > mean(n_comp);
   for (unsigned int i=0;i<n_comp;++i)
   {
     double f = (i+1.0)/(n_comp+1);
@@ -321,7 +323,7 @@ void vpdfl_mixture_builder::initialise_diagonal(vpdfl_mixture& model,
 
 void vpdfl_mixture_builder::initialise_to_regular_samples(vpdfl_mixture& model,
                                                           const vnl_vector<double>* data,
-                                                          const vcl_vector<double>& wts) const
+                                                          const std::vector<double>& wts) const
 {
   // Build each component using randomly weighted data
   const unsigned int n_comp = builder_.size();
@@ -330,7 +332,7 @@ void vpdfl_mixture_builder::initialise_to_regular_samples(vpdfl_mixture& model,
   double f = double(n_samples)/n_comp;
 
   // Select means from data
-  vcl_vector<vnl_vector<double> > mean(n_comp);
+  std::vector<vnl_vector<double> > mean(n_comp);
   for (unsigned int i=0;i<n_comp;++i)
   {
     unsigned int j = vnl_math::rnd((i+0.5)*f); // must not be negative!
@@ -343,7 +345,7 @@ void vpdfl_mixture_builder::initialise_to_regular_samples(vpdfl_mixture& model,
 
 void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
                                        const vnl_vector<double>* data,
-                                       const vcl_vector<double>& wts) const
+                                       const std::vector<double>& wts) const
 {
   // Later add a switch to decide on how to initialise
   if (!initial_means_.empty() )
@@ -356,20 +358,20 @@ void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
   }
 }
 
-void vpdfl_mixture_builder::preset_initial_means(const vcl_vector<vnl_vector<double> >& component_means)
+void vpdfl_mixture_builder::preset_initial_means(const std::vector<vnl_vector<double> >& component_means)
 {
     initial_means_ = component_means;
 }
 //=======================================================================
 
 void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
-                                   vcl_vector<vnl_vector<double> >& probs,
+                                   std::vector<vnl_vector<double> >& probs,
                                    const vnl_vector<double>* data,
-                                   const vcl_vector<double>& wts) const
+                                   const std::vector<double>& wts) const
 {
   const unsigned int n_comp = builder_.size();
   const unsigned int n_egs = wts.size();
-  const vcl_vector<double>& m_wts = model.weights();
+  const std::vector<double>& m_wts = model.weights();
 
   if (probs.size()!=n_comp) probs.resize(n_comp);
 
@@ -385,7 +387,7 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
 
     double *p_data = probs[i].begin();
 
-    double log_wt_i = vcl_log(m_wts[i]);
+    double log_wt_i = std::log(m_wts[i]);
 
     for (unsigned int j=0;j<n_egs;++j)
     {
@@ -410,7 +412,7 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
     for (unsigned int i=0;i<n_comp;++i)
     {
       if (m_wts[i]<=0) continue;
-      double p = vcl_exp(probs[i](j)-max_log_p);
+      double p = std::exp(probs[i](j)-max_log_p);
       probs[i](j) = p;
       sum+=p;
     }
@@ -421,20 +423,20 @@ void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,
         probs[i](j)/=sum;
 
     if (sum<=0)
-      vcl_cerr<<"vpdfl_mixture_builder::e_step() Zero sum for probs!\n";
+      std::cerr<<"vpdfl_mixture_builder::e_step() Zero sum for probs!\n";
   }
 }
 
 //=======================================================================
 
 double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
-                                     const vcl_vector<vnl_vector<double> >& probs,
+                                     const std::vector<vnl_vector<double> >& probs,
                                      const vnl_vector<double>* data,
-                                     const vcl_vector<double>& wts) const
+                                     const std::vector<double>& wts) const
 {
   const unsigned int n_comp = builder_.size();
   const unsigned int n_egs = wts.size();
-  vcl_vector<double> wts_i(n_egs);
+  std::vector<double> wts_i(n_egs);
 
   mbl_data_array_wrapper<vnl_vector<double> > data_array(data,n_egs);
 
@@ -476,7 +478,7 @@ double vpdfl_mixture_builder::m_step(vpdfl_mixture& model,
     }
 
     if (w_sum<=0.0)
-      vcl_cerr<<"m_step: Dubious weights. sum="<<w_sum<<'\n';
+      std::cerr<<"m_step: Dubious weights. sum="<<w_sum<<'\n';
 
     old_mean = model.components()[i]->mean();
     builder_[i]->weighted_build(*(model.components()[i]), data_array, wts_i);
@@ -540,14 +542,14 @@ void vpdfl_mixture_builder::calc_mean_and_variance(vpdfl_mixture& model)
 
 //=======================================================================
 
-vcl_string vpdfl_mixture_builder::is_a() const
+std::string vpdfl_mixture_builder::is_a() const
 {
-  return vcl_string("vpdfl_mixture_builder");
+  return std::string("vpdfl_mixture_builder");
 }
 
 //=======================================================================
 
-bool vpdfl_mixture_builder::is_class(vcl_string const& s) const
+bool vpdfl_mixture_builder::is_class(std::string const& s) const
 {
   return vpdfl_builder_base::is_class(s) || s==vpdfl_mixture_builder::is_a();
 }
@@ -568,7 +570,7 @@ vpdfl_builder_base* vpdfl_mixture_builder::clone() const
 
 //=======================================================================
 
-void vpdfl_mixture_builder::print_summary(vcl_ostream& os) const
+void vpdfl_mixture_builder::print_summary(std::ostream& os) const
 {
   if (weights_fixed_) os<<vsl_indent()<<"Weights fixed"<<'\n';
   else                os<<vsl_indent()<<"Weights may vary"<<'\n';
@@ -597,14 +599,14 @@ void vpdfl_mixture_builder::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -620,9 +622,9 @@ void vpdfl_mixture_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,weights_fixed_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture_builder &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -637,11 +639,11 @@ void vpdfl_mixture_builder::b_read(vsl_b_istream& bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void vpdfl_mixture_builder::config_from_stream(vcl_istream & is)
+void vpdfl_mixture_builder::config_from_stream(std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   double mv=1.0e-6;
@@ -675,8 +677,8 @@ void vpdfl_mixture_builder::config_from_stream(vcl_istream & is)
 
   if (props.find("basis_pdf")!=props.end())
   {
-    vcl_istringstream pdf_ss(props["basis_pdf"]);
-    vcl_auto_ptr<vpdfl_builder_base>
+    std::istringstream pdf_ss(props["basis_pdf"]);
+    std::auto_ptr<vpdfl_builder_base>
             b = vpdfl_builder_base::new_pdf_builder_from_stream(pdf_ss);
     init(*b,n_pdfs);
     props.erase("basis_pdf");

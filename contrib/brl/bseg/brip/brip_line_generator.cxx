@@ -1,7 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include "brip_line_generator.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 bool brip_line_generator::generate(bool& init, float xs, float ys,
                                    float xe, float ye,
@@ -13,7 +14,7 @@ bool brip_line_generator::generate(bool& init, float xs, float ys,
   {
     dx = xe-xs;
     dy = ye-ys;
-    mag = (float)vcl_sqrt(dx*dx + dy*dy);
+    mag = (float)std::sqrt(dx*dx + dy*dy);
     if (mag<1)//Can't reach the next pixel under any circumstances
       return false;
     xinc = dx/mag;
@@ -42,10 +43,10 @@ bool brip_line_generator::generate(bool& init, float xs, float ys,
     if (passed_xe||passed_ye)
       return false;
     //Check if we have advanced by at least 1 pixel
-    if (vcl_fabs(static_cast<float>(xc-xp))>=1||vcl_fabs(static_cast<float>(yc-yp))>=1)
+    if (std::fabs(static_cast<float>(xc-xp))>=1||std::fabs(static_cast<float>(yc-yp))>=1)
       return true;
   }
-  vcl_cout << "In brip_line_generator: - shouldn't happen - "
-           << "xs="<<xs<<" ys="<<ys<<" xe="<<xe<<" ye="<< ye << vcl_endl;
+  std::cout << "In brip_line_generator: - shouldn't happen - "
+           << "xs="<<xs<<" ys="<<ys<<" xe="<<xe<<" ye="<< ye << std::endl;
   return false;
 }

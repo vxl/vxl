@@ -1,10 +1,11 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
+#include <iomanip>
 #include "bvpl_find_surface_functor.h"
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 // Default constructor
 bvpl_find_surface_functor::bvpl_find_surface_functor()
 {
@@ -21,7 +22,7 @@ void bvpl_find_surface_functor::init()
 void bvpl_find_surface_functor::apply(float& val, bvpl_kernel_dispatch& d)
 {
   if (d.c_ > 0) {
-    P1_ += vcl_log(val);
+    P1_ += std::log(val);
     n1_++;
   }
 }
@@ -32,7 +33,7 @@ float bvpl_find_surface_functor::result()
 
   float result =0.0f;
 
-  if (vcl_exp(P1_) > 0.005f)
+  if (std::exp(P1_) > 0.005f)
     result = 1.0f;
 
 

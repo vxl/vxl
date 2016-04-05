@@ -1,12 +1,13 @@
 // This is core/vul/vul_psfile.cxx
+#include <cmath>
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
 #include "vul_psfile.h"
 //:
 // \file
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h> // for setw()
-#include <vcl_algorithm.h> // for vcl_min()
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #define RANGE(a,b,c) { if (a < b) a = b;  if (a > c) a = c; }
@@ -44,7 +45,7 @@ static double margins[8 ][2] = {
 static float ps_minimum = 0.1f;
 static float ps_maximum = 8.f;
 
-static const vcl_streampos HEADER_START(-1);
+static const std::streampos HEADER_START(-1);
 
 //-----------------------------------------------------------------------------
 //: Default constructor.
@@ -77,7 +78,7 @@ vul_psfile::vul_psfile(char const* f, bool dbg)
     exist_objs (false)
 {
   debug = dbg;
-  if (debug) vcl_cout << "vul_psfile::vul_psfile\n";
+  if (debug) std::cout << "vul_psfile::vul_psfile\n";
   postscript_header();
 }
 
@@ -86,7 +87,7 @@ vul_psfile::vul_psfile(char const* f, bool dbg)
 //-----------------------------------------------------------------------------
 vul_psfile::~vul_psfile()
 {
-  if (debug) vcl_cout << "vul_psfile::~vul_psfile\n";
+  if (debug) std::cout << "vul_psfile::~vul_psfile\n";
   reset_bounding_box();
   if (!doneps)
     done();
@@ -98,7 +99,7 @@ vul_psfile::~vul_psfile()
 //-----------------------------------------------------------------------------
 void vul_psfile::reset_bounding_box()
 {
-  vcl_streampos temp_pos;
+  std::streampos temp_pos;
   temp_pos = output_filestream.tellp();
 
   if (exist_image)
@@ -153,8 +154,8 @@ void vul_psfile::compute_bounding_box()
     RANGE(pos_iny, -hsy, psizey-hsy);
 
     // round to integer .001ths of an inch
-    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) * .001;
-    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) * .001;
+    pos_inx = std::floor(pos_inx * 1000.0 + 0.5) * .001;
+    pos_iny = std::floor(pos_iny * 1000.0 + 0.5) * .001;
   }
   else if (printer_paper_layout == vul_psfile::MAX)
   {
@@ -166,7 +167,7 @@ void vul_psfile::compute_bounding_box()
     if (box_height == 0) box_height = 1;
 
     // choose the smaller scaling factor
-    scale_x = scale_y = (float)vcl_min(hsx/box_width, hsy/box_height) * PIX2INCH;
+    scale_x = scale_y = (float)std::min(hsx/box_width, hsy/box_height) * PIX2INCH;
 
     RANGE(scale_x,ps_minimum,ps_maximum);
     RANGE(scale_y,ps_minimum,ps_maximum);
@@ -175,8 +176,8 @@ void vul_psfile::compute_bounding_box()
     pos_iny = psizey*.5 - box_height/ PIX2INCH * scale_y *.5;
 
     // round to integer .001ths of an inch
-    pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) * .001;
-    pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) * .001;
+    pos_inx = std::floor(pos_inx * 1000.0 + 0.5) * .001;
+    pos_iny = std::floor(pos_iny * 1000.0 + 0.5) * .001;
   }
 
   // printed image will have size iw,ih (in picas)
@@ -195,7 +196,7 @@ void vul_psfile::compute_bounding_box()
   ox = int(pos_inx*PIX2INCH+0.5);
   oy = int(pos_iny*PIX2INCH+0.5);
 
-  if (debug) vcl_cout << "vul_psfile::compute_bounding_box, box_width = "
+  if (debug) std::cout << "vul_psfile::compute_bounding_box, box_width = "
                       << box_width << ", box_height = " << box_height << '\n';
 }
 
@@ -229,7 +230,7 @@ void vul_psfile::set_min_max_xy(int x, int y)
 void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int sizey)
 {
   if (debug)
-    vcl_cout << "vul_psfile::print_greyscale_image, width = " << sizex
+    std::cout << "vul_psfile::print_greyscale_image, width = " << sizex
              << ", height = " << sizey  << ", reduction_factor = "
              << reduction_factor << '\n';
 
@@ -243,8 +244,8 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
   if (reduction_factor < 1)
     reduction_factor = 1;
 
-  int new_width = (int)vcl_ceil(sizex/(double)reduction_factor); // round up
-  int new_height= (int)vcl_ceil(sizey/(double)reduction_factor);
+  int new_width = (int)std::ceil(sizex/(double)reduction_factor); // round up
+  int new_height= (int)std::ceil(sizey/(double)reduction_factor);
 
   output_filestream
     << "\n%%Page: 1 1\n\n% remember original state\n/origstate save def\n"
@@ -287,6 +288,11 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
               index += int(*(buffer + (pixel_number+m+n*width)));
               ++number_of_pixels_sampled;
             }
+        if(number_of_pixels_sampled == 0)
+        {
+          std::cerr << "ERROR: Division by 0! " << __FILE__ << __LINE__ << std::endl;
+          throw 0;
+        }
         index/=number_of_pixels_sampled; // Average the pixel intensity value.
       }
 
@@ -302,7 +308,7 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
         output_filestream << pixel;
       }
       else
-        vcl_cout << " index out of range: " << index << '\n';
+        std::cout << " index out of range: " << index << '\n';
 
       countrow+=2;
       if (countrow >= linesize)
@@ -323,7 +329,7 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
 void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
 {
   if (debug)
-    vcl_cout << "vul_psfile::print_color_image, width = " << sizex
+    std::cout << "vul_psfile::print_color_image, width = " << sizex
              << ", height = " << sizey  << ", reduction_factor = "
              << reduction_factor << '\n';
 
@@ -338,8 +344,8 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
   if (reduction_factor < 1)
     reduction_factor = 1;
 
-  int new_width = (int)vcl_ceil(sizex/(double)reduction_factor); // round up
-  int new_height= (int)vcl_ceil(sizey/(double)reduction_factor);
+  int new_width = (int)std::ceil(sizex/(double)reduction_factor); // round up
+  int new_height= (int)std::ceil(sizey/(double)reduction_factor);
 
   // This part uses xv outfile as a reference:
   output_filestream
@@ -443,6 +449,11 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
                 index += int(*(data+(pixel_number+(m+n*sizex)*bytes_per_pixel)));
                 ++number_of_pixels_sampled;
               }
+          if(number_of_pixels_sampled == 0)
+          {
+              std::cerr << "ERROR: Division by 0! " << __FILE__ << __LINE__ << std::endl;
+              throw 0;
+          }
           index/=number_of_pixels_sampled;  // average the pixel intensity
         }
 
@@ -458,7 +469,7 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
           output_filestream << pixel;
         }
         else
-          vcl_cout << " index out of range: " << index << '\n';
+          std::cout << " index out of range: " << index << '\n';
 
         countrow+=2;
         if (countrow >= linesize)
@@ -501,15 +512,15 @@ void vul_psfile::image_translate_and_scale()
   int scale_max_y  = int(max_y * scale_y);
 
   if (debug)
-    vcl_cout << "vul_psfile::image_translate_and_scale, scale_height= "
+    std::cout << "vul_psfile::image_translate_and_scale, scale_height= "
              << scale_height << ", scale_min_x = " << scale_min_x
              << ", scale_max_y = " << scale_max_y << '\n';
 
-  output_filestream << vcl_setw(6) << ox - scale_min_x << ' '
-                    << vcl_setw(6) << oy + scale_max_y - scale_height << " translate\n"
+  output_filestream << std::setw(6) << ox - scale_min_x << ' '
+                    << std::setw(6) << oy + scale_max_y - scale_height << " translate\n"
                     << "\n% size of image (on paper, in 1/72inch coordinates)\n"
-                    << vcl_setw(9) << iwf << ' '
-                    << vcl_setw(9) << ihf << " scale\n\n";
+                    << std::setw(9) << iwf << ' '
+                    << std::setw(9) << ihf << " scale\n\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -521,13 +532,13 @@ void vul_psfile::object_translate_and_scale()
   int scale_min_x  = int(min_x * scale_x);
   int scale_min_y  = int(min_y * scale_y);
   // round to integer .01ths
-  scale_x = vcl_floor(scale_x * 100.0f + 0.5f) * .01f;
-  scale_y = vcl_floor(scale_y * 100.0f + 0.5f) * .01f;
+  scale_x = std::floor(scale_x * 100.0f + 0.5f) * .01f;
+  scale_y = std::floor(scale_y * 100.0f + 0.5f) * .01f;
 
   // move origin
-  output_filestream << vcl_setw(6) << ox - scale_min_x << ' '
-                    << vcl_setw(6) << oy + scale_height + scale_min_y << " translate\n"
-                    << vcl_setw(9) << scale_x << ' ' << vcl_setw(9) << -scale_y << " scale\n\n"
+  output_filestream << std::setw(6) << ox - scale_min_x << ' '
+                    << std::setw(6) << oy + scale_height + scale_min_y << " translate\n"
+                    << std::setw(9) << scale_x << ' ' << std::setw(9) << -scale_y << " scale\n\n"
                     << "/originalCTM matrix currentmatrix def\n";
 }
 
@@ -555,7 +566,7 @@ void vul_psfile::postscript_header()
 {
   if (header_pos != HEADER_START)
   {
-    vcl_cerr << "vul_psfile: Header already set to " << long(header_pos) << '\n';
+    std::cerr << "vul_psfile: Header already set to " << long(header_pos) << '\n';
     return;
   }
 
@@ -575,16 +586,16 @@ void vul_psfile::reset_postscript_header()
 {
   if (printer_paper_orientation == vul_psfile::LANDSCAPE)
     output_filestream
-       << vcl_setw(6) << int(pos_iny*PIX2INCH+0.5) << ' '
-       << vcl_setw(6) << int(pos_inx*PIX2INCH+0.5) << ' '
-       << vcl_setw(6) << int(pos_iny*PIX2INCH+0.5)+ih << ' '
-       << vcl_setw(6) << int(pos_inx*PIX2INCH+0.5)+iw << '\n';
+       << std::setw(6) << int(pos_iny*PIX2INCH+0.5) << ' '
+       << std::setw(6) << int(pos_inx*PIX2INCH+0.5) << ' '
+       << std::setw(6) << int(pos_iny*PIX2INCH+0.5)+ih << ' '
+       << std::setw(6) << int(pos_inx*PIX2INCH+0.5)+iw << '\n';
   else
     output_filestream
-       << vcl_setw(6) << ox << ' '
-       << vcl_setw(6) << oy << ' '
-       << vcl_setw(6) << ox+iw << ' '
-       << vcl_setw(6) << oy+ih << '\n';
+       << std::setw(6) << ox << ' '
+       << std::setw(6) << oy << ' '
+       << std::setw(6) << ox+iw << ' '
+       << std::setw(6) << oy+ih << '\n';
   output_filestream << "%%Pages: 1\n%%DocumentFonts:\n%%EndComments\n";
 }
 
@@ -644,10 +655,10 @@ void vul_psfile::ellipse(float x, float y, float a_axis, float b_axis, int angle
   #endif
   const double radsperdeg = PI/180.0;
 
-  set_min_max_xy(int(x+a_axis*vcl_cos(angle*radsperdeg) + 0.5),
-                 int(y+a_axis*vcl_sin(angle*radsperdeg) + 0.5) );
-  set_min_max_xy(int(x-a_axis*vcl_cos(angle*radsperdeg) + 0.5),
-                 int(y-a_axis*vcl_sin(angle*radsperdeg) + 0.5) );
+  set_min_max_xy(int(x+a_axis*std::cos(angle*radsperdeg) + 0.5),
+                 int(y+a_axis*std::sin(angle*radsperdeg) + 0.5) );
+  set_min_max_xy(int(x-a_axis*std::cos(angle*radsperdeg) + 0.5),
+                 int(y-a_axis*std::sin(angle*radsperdeg) + 0.5) );
   compute_bounding_box();
 
   print_graphics_prolog();
@@ -1027,7 +1038,7 @@ void vul_psfile::print_graphics_prolog()
 
 void vul_psfile::done()
 {
-  if (debug) vcl_cout << "vul_psfile::done\n";
+  if (debug) std::cout << "vul_psfile::done\n";
   doneps = true;
   if (graphics_prolog_exists)
     output_filestream << "end % TargetjrDict\n";

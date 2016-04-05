@@ -1,10 +1,11 @@
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bundler/bundler_tracks_impl.h>
 
-#include <vcl_string.h>
 #include <vil/vil_load.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 // TODO: Save an image with the location of all the features.
 
@@ -14,7 +15,7 @@ static void test_tracks_detect(int argc, char* argv[])
     vil_image_resource_sptr source_img;
 
     if(argc < 2){
-        vcl_cerr<<"Supply a filename for the first argument!" << vcl_endl;
+        std::cerr<<"Supply a filename for the first argument!" << std::endl;
 
         TEST("test_tracks_detect", true, false);
 
@@ -46,7 +47,7 @@ static void test_tracks_detect(int argc, char* argv[])
     TEST_FAR("Make sure there are some features.",
         image->features.size(), 0, .5);
 
-    vcl_vector<bundler_inters_feature_sptr>::iterator i;
+    std::vector<bundler_inters_feature_sptr>::iterator i;
     for(i = image->features.begin();
         i != image->features.end(); i++){
 
@@ -73,7 +74,7 @@ static void test_tracks_detect(int argc, char* argv[])
         // I can't think of a good test for the descriptor or the
         // 2D location. I'm just going to print out the 2d point
         // for a manual check. If anyone can think of a better idea...
-        vcl_cout << "Location of feature: " << (*i)->point << vcl_endl;
+        std::cout << "Location of feature: " << (*i)->point << std::endl;
     }
 }
 

@@ -26,7 +26,7 @@ set(boxm2_cpp_algo_sources
     boxm2_mean_intensities_batch_functor.h
     boxm2_filter_block_function.h     boxm2_filter_block_function.cxx
     boxm2_compute_derivative_function.h     boxm2_compute_derivative_function.cxx
-    boxm2_apply_filter_function.h     boxm2_apply_filter_function.txx
+    boxm2_apply_filter_function.h     boxm2_apply_filter_function.hxx
     boxm2_extract_point_cloud.h       boxm2_extract_point_cloud.cxx
     boxm2_export_oriented_point_cloud.h  boxm2_export_oriented_point_cloud.cxx
     boxm2_export_oriented_point_cloud_function.h     boxm2_export_oriented_point_cloud_function.cxx
@@ -51,12 +51,12 @@ set(boxm2_cpp_algo_sources
     boxm2_normals_to_id_functor.h
     boxm2_import_triangle_mesh.h  boxm2_import_triangle_mesh.cxx
     boxm2_refine_block_function_with_labels.h boxm2_refine_block_function_with_labels.cxx
-    boxm2_surface_distance_refine.h boxm2_surface_distance_refine.txx
+    boxm2_surface_distance_refine.h boxm2_surface_distance_refine.hxx
     boxm2_refine_block_multi_data.h  boxm2_refine_block_multi_data.cxx
    )
 aux_source_directory(Templates boxm2_cpp_algo_sources)
 
-add_library(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
+vxl_add_library(LIBRARY_NAME boxm2_cpp_algo LIBRARY_SOURCES  ${boxm2_cpp_algo_sources})
 target_link_libraries(boxm2_cpp_algo boxm2_cpp brad boct brdb expatpp ${VXL_LIB_PREFIX}vpgl bvgl imesh imesh_algo bsta_algo bsta ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl bvpl rply)
 
 if(BUILD_TESTING)

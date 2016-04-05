@@ -1,8 +1,9 @@
 // This is gel/gevd/tests/test_gevd_bufferxy.cxx
 // Description: Test gevd_bufferxy class
 
-#include <vcl_iostream.h>
-#include <vcl_cstring.h> // memcpy
+#include <iostream>
+#include <cstring>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 #include <testlib/testlib_test.h>
 #include <gevd/gevd_bufferxy.h>
@@ -27,11 +28,11 @@ test_gevd_bufferxy()
   for (int i=0;i<3;i++)
   {
     char* dataddr = (char*) gbxy1->GetElementAddr(i,1);
-    vcl_memcpy(dataddr,"n",2);
+    std::memcpy(dataddr,"n",2);
   }
 
   char* dat = (char*) gbxy1->GetElementAddr(2,1);
-  vcl_string strdat = dat;
+  std::string strdat = dat;
   TEST("GetElementAddr", strdat, "n");
 
   // test second type of constructor
@@ -62,7 +63,7 @@ test_gevd_bufferxy()
   strdat = dat;
   TEST("GetElementAddr3", strdat, "n");
 
-  vcl_cout << "the following is a dump of a bufferxy:\n" << (*gbxy1)<< vcl_endl;
+  std::cout << "the following is a dump of a bufferxy:\n" << (*gbxy1)<< std::endl;
   const char * fn = "gevd_bufferxy_dump_file.tmp";
   gbxy1->dump(fn);
   // "unlink" should return 0 on success, nonzero on "file not found":
@@ -71,7 +72,7 @@ test_gevd_bufferxy()
   delete gbxy1;
   delete gbxy2;
   delete gbxy3;
-  vcl_cout << "Test vil buffer constructor\n";
+  std::cout << "Test vil buffer constructor\n";
 
   // Test vil buffer constructor
   // Test byte constructor

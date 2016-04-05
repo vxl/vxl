@@ -8,9 +8,10 @@
 // \file
 // \author Ian Scott, Tim Cootes.
 
+#include <iostream>
 #include <vil/vil_print.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #ifdef VCL_VC_DOTNET
 #  pragma warning( push )
@@ -20,7 +21,7 @@
 //: Print all image data to os in a grid (rounds output to int)
 // \relatesalso vil3d_image_view
 template <class T>
-inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
+inline void vil3d_print_all(std::ostream& os,const vil3d_image_view<T>& view)
 {
   int width=os.width();
   os<<view.is_a()<<' '<<view.nplanes()
@@ -28,7 +29,7 @@ inline void vil3d_print_all(vcl_ostream& os,const vil3d_image_view<T>& view)
     <<" istep: "<<view.istep()<<' '
     <<" jstep: "<<view.jstep()<<' '
     <<" kstep: "<<view.kstep()<<' '
-    <<" planestep: "<<view.planestep()<<'\n' << vcl_flush;
+    <<" planestep: "<<view.planestep()<<'\n' << std::flush;
   for (unsigned int p=0;p<view.nplanes();++p)
   {
     if (view.nplanes()>1) os<<"Plane "<<p<<'\n';

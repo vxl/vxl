@@ -6,9 +6,10 @@
 // \brief Create a big image by tiling images in patches
 // \author Tim Cootes
 
+#include <vector>
+#include <cmath>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Create a big image by tiling images in patches (must be of same size).
@@ -19,10 +20,10 @@
 // \relatesalso vil_image_view
 template<class T>
 inline void vil_tile_images(vil_image_view<T>& big_image,
-                            const vcl_vector<vil_image_view<T> >& patches)
+                            const std::vector<vil_image_view<T> >& patches)
 {
   unsigned n = patches.size();
-  unsigned nj = unsigned(vcl_sqrt(float(n)));
+  unsigned nj = unsigned(std::sqrt(float(n)));
   unsigned ni = 1+(n-1)/nj;
 
   unsigned pi = patches[0].ni();

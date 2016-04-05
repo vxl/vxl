@@ -9,7 +9,8 @@
 // \brief An in-core vil1_stream implementation
 // \author  fsm
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil1/vil1_stream.h>
 
 //: An in-core vil1_stream implementation.
@@ -19,7 +20,7 @@ class vil1_stream_core : public vil1_stream
 {
   vil1_streampos curpos_;       // current file pointer.
   unsigned blocksize_;
-  vcl_vector<char*> block_;
+  std::vector<char*> block_;
   vil1_streampos tailpos_; // size of file so far
 
  public:

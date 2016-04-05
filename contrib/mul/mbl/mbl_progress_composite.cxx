@@ -31,14 +31,14 @@ short mbl_progress_composite::version_no() const
 
 
 //=======================================================================
-vcl_string mbl_progress_composite::is_a() const
+std::string mbl_progress_composite::is_a() const
 {
-  return vcl_string("mbl_progress_composite");
+  return std::string("mbl_progress_composite");
 }
 
 
 // =================================================
-void mbl_progress_composite::on_set_estimated_iterations(const vcl_string &identifier,int total_iterations)
+void mbl_progress_composite::on_set_estimated_iterations(const std::string &identifier,int total_iterations)
 {
   for (unsigned int i=0;i<progress_objects_.size();++i)
   {
@@ -48,7 +48,7 @@ void mbl_progress_composite::on_set_estimated_iterations(const vcl_string &ident
 
 
 // =================================================
-void mbl_progress_composite::on_set_progress(const vcl_string &identifier, int progress)
+void mbl_progress_composite::on_set_progress(const std::string &identifier, int progress)
 {
   for (unsigned int i=0;i<progress_objects_.size();++i)
   {
@@ -58,7 +58,7 @@ void mbl_progress_composite::on_set_progress(const vcl_string &identifier, int p
 
 
 // =================================================
-void mbl_progress_composite::on_end_progress(const vcl_string &identifier)
+void mbl_progress_composite::on_end_progress(const std::string &identifier)
 {
   for (unsigned int i=0;i<progress_objects_.size();++i)
   {

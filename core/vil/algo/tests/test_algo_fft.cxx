@@ -1,24 +1,25 @@
 // This is core/vil/algo/tests/test_algo_fft.cxx
+#include <complex>
+#include <ctime>
 #include <testlib/testlib_test.h>
-#include <vcl_complex.h>
 #include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_fft.h>
-#include <vcl_ctime.h> // seed for random number generator
+#include <vcl_compiler.h>
 
 static void test_algo_fft()
 {
-  vil_image_view<vcl_complex<double> > img0(4, 8, 2);
-  unsigned int seed = (unsigned int)vcl_time(VXL_NULLPTR);
+  vil_image_view<std::complex<double> > img0(4, 8, 2);
+  unsigned int seed = (unsigned int)std::time(VXL_NULLPTR);
 
   // fill in image
   for (unsigned i=0; i<img0.ni(); i++)
     for (unsigned j=0; j<img0.nj(); j++)
       for (unsigned p=0; p<img0.nplanes(); ++p, seed*=16807)
-        img0(i,j,p) = vcl_complex<double>(-1e-5*seed+111.1, -1e-5*seed+222.2);
+        img0(i,j,p) = std::complex<double>(-1e-5*seed+111.1, -1e-5*seed+222.2);
 
   // copy image
-  vil_image_view<vcl_complex<double> > img1;
+  vil_image_view<std::complex<double> > img1;
   img1.deep_copy(img0);
 
   // FFT and inverse FFT
@@ -31,7 +32,7 @@ static void test_algo_fft()
   TEST_NEAR("FFT and inverse FFT recovers image", d, 0.0, 1e-9);
 
   // FFT of constant image
-  vcl_complex<double> v = vcl_complex<double>(1.1, 2.2);
+  std::complex<double> v = std::complex<double>(1.1, 2.2);
   img0.fill(v);
   vil_fft_2d_fwd(img0);
   TEST_NEAR("FFT coeff. 0,0 is mean", img0(0,0,0), v, 1e-9);

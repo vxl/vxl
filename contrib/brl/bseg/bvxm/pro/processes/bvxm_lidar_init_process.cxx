@@ -32,7 +32,7 @@ bool bvxm_lidar_init_process_cons(bprb_func_process& pro)
 
   //this process takes 3 input:
   //the filename of the image, the camera and the voxel world
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   int i=0;
   input_types_[i++] = "vcl_string";             // first ret. image path (geotiff)
   input_types_[i++] = "vcl_string";             // second ret. image path (geotiff)
@@ -41,7 +41,7 @@ bool bvxm_lidar_init_process_cons(bprb_func_process& pro)
     return false;
 
     // output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   unsigned j =0;
   output_types_[j++]= "vpgl_camera_double_sptr";   // lidar local camera
   output_types_[j++]= "vil_image_view_base_sptr";  // first ret image ROI
@@ -57,15 +57,15 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
 
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
   // get the inputs:
   // image
   unsigned i = 0;
-  vcl_string first = pro.get_input<vcl_string>(i++);
-  vcl_string second = pro.get_input<vcl_string>(i++);
+  std::string first = pro.get_input<std::string>(i++);
+  std::string second = pro.get_input<std::string>(i++);
   //voxel_world
   bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   //get parameters:
@@ -76,7 +76,7 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
   bvxm_world_params_sptr world_params = voxel_world->get_params();
   vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
   if (!first_ret) {
-    vcl_cout << "bvxm_lidar_init_process -- First return image path is not valid!\n";
+    std::cout << "bvxm_lidar_init_process -- First return image path is not valid!\n";
     return false;
   }
 
@@ -85,28 +85,28 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
 
   vpgl_lvcs_sptr lvcs = world_params->lvcs();
   if (!lvcs) {
-    vcl_cout << "bvxm_lidar_init_process -- LVCS is not set!\n";
+    std::cout << "bvxm_lidar_init_process -- LVCS is not set!\n";
     return false;
   }
 
-  vil_image_view_base_sptr roi_first=0, roi_second=0;
-  vpgl_geo_camera *cam_first=0, *cam_second=0;
+  vil_image_view_base_sptr roi_first=VXL_NULLPTR, roi_second=VXL_NULLPTR;
+  vpgl_geo_camera *cam_first=VXL_NULLPTR, *cam_second=VXL_NULLPTR;
 
   if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
-    vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
+    std::cout << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;
   }
 
   if (second_ret) {
     if (!lidar_init(second_ret, world_params, roi_second, cam_second)) {
-      vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
+      std::cout << "bvxm_lidar_init_process -- The process has failed!\n";
       return false;
     }
   }
 
-  vil_image_view_base_sptr mask=0;
+  vil_image_view_base_sptr mask=VXL_NULLPTR;
   if (!gen_mask(roi_first, cam_first, roi_second, cam_second, mask, thresh)) {
-    vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
+    std::cout << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;
   }
 
@@ -129,9 +129,9 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
                                                   vpgl_geo_camera*& camera)
 {
   // the file should be a geotiff
-  vcl_cout << "FORMAT=" << lidar->file_format();
-  if (vcl_strcmp(lidar->file_format(),"tiff") != 0) {
-    vcl_cout << "bvxm_lidar_init_process::lidar_init -- The image should be a TIFF!\n";
+  std::cout << "FORMAT=" << lidar->file_format();
+  if (std::strcmp(lidar->file_format(),"tiff") != 0) {
+    std::cout << "bvxm_lidar_init_process::lidar_init -- The image should be a TIFF!\n";
     return false;
   }
 
@@ -146,7 +146,7 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
 
     // backproject the 3D world coordinates on the image
     vgl_box_3d<double> world = params->world_box_local();
-    vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
+    std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
     for (unsigned i=0; i<corners.size(); i++) {
       double x = corners[i].x();
       double y = corners[i].y();
@@ -157,9 +157,9 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
       roi_box.add(p);
     }
 
-    vcl_cout << *(camera->lvcs()) << vcl_endl;
+    std::cout << *(camera->lvcs()) << std::endl;
     camera->lvcs()->local_to_global(200,200,0,vpgl_lvcs::wgs84,lon,lat,elev);
-    vcl_cout << "corner--> lon=" << lon << "  lat=" << lat << " gz=" << elev << vcl_endl;
+    std::cout << "corner--> lon=" << lon << "  lat=" << lat << " gz=" << elev << std::endl;
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();
     bb->add_point(roi_box.min_x(), roi_box.min_y());
@@ -176,18 +176,18 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
     }
 
     if (!roi) {
-      vcl_cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
+      std::cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
       return false;
     }
   }
   else {
-    vcl_cout << "bvxm_lidar_init_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << vcl_endl;
+    std::cout << "bvxm_lidar_init_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << std::endl;
     return false;
   }
 
   return true;
 #else // if !HAS_GEOTIFF
-  vcl_cout << "bvxm_lidar_init_process::lidar_init()-- GEOTIFF lib is needed to run bvxm_lidar_init_process--\n";
+  std::cout << "bvxm_lidar_init_process::lidar_init()-- GEOTIFF lib is needed to run bvxm_lidar_init_process--\n";
   return false;
 #endif // HAS_GEOTIFF
 }
@@ -201,12 +201,12 @@ bool bvxm_lidar_init_process_globals::gen_mask( vil_image_view_base_sptr roi_fir
 {
   // compare the cameras, if the second one existed
   if (!cam_first) {
-    vcl_cout << "bvxm_lidar_init_process::gen_mask -- camera not found!\n";
+    std::cout << "bvxm_lidar_init_process::gen_mask -- camera not found!\n";
     return false;
   }
 
   if (!roi_first) {
-    vcl_cout << "bvxm_lidar_init_process::gen_mask -- image not found!\n";
+    std::cout << "bvxm_lidar_init_process::gen_mask -- image not found!\n";
     return false;
   }
 

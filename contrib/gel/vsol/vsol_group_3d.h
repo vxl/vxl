@@ -19,10 +19,11 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_spatial_object_3d.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class vsol_group_3d : public vsol_spatial_object_3d
 {
@@ -33,7 +34,7 @@ class vsol_group_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   // Description: Set of objects that `this' contains
   //---------------------------------------------------------------------------
-  vcl_vector<vsol_spatial_object_3d_sptr> *storage_;
+  std::vector<vsol_spatial_object_3d_sptr> *storage_;
 
  public:
   //***************************************************************************
@@ -152,22 +153,22 @@ class vsol_group_3d : public vsol_spatial_object_3d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return "vsol_group_3d"; }
+  virtual std::string is_a() const { return "vsol_group_3d"; }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  inline void describe(vcl_ostream &strm, int blanking=0) const
+  inline void describe(std::ostream &strm, int blanking=0) const
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "vsol_group_3d of size " << this->size() << ":\n";
-    for (vcl_vector<vsol_spatial_object_3d_sptr>::const_iterator it = storage_->begin();
+    for (std::vector<vsol_spatial_object_3d_sptr>::const_iterator it = storage_->begin();
          it != storage_->end(); ++it)
       (*it)->describe(strm,blanking+2);
   }

@@ -12,10 +12,12 @@
 //   None
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <bapl/bapl_affine_transform.h>
 #include <bapl/bapl_mi_matcher_params.h>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class bapl_affine_roi;
 
@@ -72,7 +74,7 @@ class bapl_mi_matcher
   //: The affine transformation
   bapl_affine_transform init_xform_;
   //: The generated matches
-  vcl_vector<bapl_match> matches_;
+  std::vector<bapl_match> matches_;
   //: The parameters for generating matches
   bapl_mi_matcher_params params_;
 };

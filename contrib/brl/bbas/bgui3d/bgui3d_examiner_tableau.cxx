@@ -1,10 +1,12 @@
 // This is brl/bbas/bgui3d/bgui3d_examiner_tableau.cxx
+#include <iostream>
+#include <algorithm>
 #include "bgui3d_examiner_tableau.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_command.h>
@@ -57,7 +59,7 @@ bgui3d_examiner_tableau::~bgui3d_examiner_tableau()
 }
 
 
-vcl_string bgui3d_examiner_tableau::type_name() const {return "bgui3d_examiner_tableau";}
+std::string bgui3d_examiner_tableau::type_name() const {return "bgui3d_examiner_tableau";}
 
 //: Handle the events coming in
 // - Left mouse = spin
@@ -252,8 +254,8 @@ bool bgui3d_examiner_tableau::handle(const vgui_event& e)
       }
       const SbVec2f last_pos_norm = last_pos_;
       const SbVec2s curr_pos = SbVec2s(e.wx, e.wy) - viewport_origin;
-      const SbVec2f curr_pos_norm((float) curr_pos[0] / (float) vcl_max((int)(viewport_size[0] - 1), 1),
-                                  (float) curr_pos[1] / (float) vcl_max((int)(viewport_size[1] - 1), 1));
+      const SbVec2f curr_pos_norm((float) curr_pos[0] / (float) std::max((int)(viewport_size[0] - 1), 1),
+                                  (float) curr_pos[1] / (float) std::max((int)(viewport_size[1] - 1), 1));
 
       last_pos_ = curr_pos_norm;
 
@@ -367,7 +369,7 @@ void bgui3d_examiner_tableau::get_popup(const vgui_popup_params& params,
 {
   bgui3d_fullviewer_tableau::get_popup(params, menu);
 
-  vcl_string axis_item;
+  std::string axis_item;
   if ( this->axis_visible() )
     axis_item = "Disable Axis";
   else
@@ -375,8 +377,8 @@ void bgui3d_examiner_tableau::get_popup(const vgui_popup_params& params,
 
   menu.add(axis_item, new bgui3d_axis_visible_command(this));
 
-  vcl_string check_on = "[x]";
-  vcl_string check_off = "[ ]";
+  std::string check_on = "[x]";
+  std::string check_off = "[ ]";
 
   vgui_menu seek_menu;
   SeekDistance seek = seek_distance_;
@@ -491,7 +493,7 @@ seeksensorCB(void * data, SoSensor * s)
   if ((t > 1.0f) || (t + sensor->getInterval().getValue() > 1.0f)) t = 1.0f;
   SbBool end = (t == 1.0f);
 
-  t = float(1 - vcl_cos(M_PI*t)) * 0.5f;
+  t = float(1 - std::cos(M_PI*t)) * 0.5f;
 
   thisp->camera_node()->position = thisp->fromPos_ + (thisp->toPos_ - thisp->fromPos_) * t;
   thisp->camera_node()->orientation = SbRotation::slerp( thisp->fromRot_, thisp->toRot_, t);
@@ -622,7 +624,7 @@ bgui3d_examiner_tableau::draw_axis_cross()
   glGetIntegerv(GL_VIEWPORT, vp);
   const int view_x = vp[2];
   const int view_y = vp[3];
-  const int pixelarea = int(0.25f * vcl_min(view_x, view_y));
+  const int pixelarea = int(0.25f * std::min(view_x, view_y));
   // lower right of canvas
   glViewport(vp[0]+vp[2] - pixelarea, vp[1], pixelarea, pixelarea);
 
@@ -632,7 +634,7 @@ bgui3d_examiner_tableau::draw_axis_cross()
 
   const float NEARVAL = 0.1f;
   const float FARVAL = 10.0f;
-  const float dim = NEARVAL * float(vcl_tan(M_PI / 8.0)); // FOV is 45 (45/360 = 1/8)
+  const float dim = NEARVAL * float(std::tan(M_PI / 8.0)); // FOV is 45 (45/360 = 1/8)
   glFrustum(-dim, dim, -dim, dim, NEARVAL, FARVAL);
 
   // Set up the model matrix.
@@ -677,9 +679,9 @@ bgui3d_examiner_tableau::draw_axis_cross()
     float val[3] = { xpos[2], ypos[2], zpos[2] };
 
     // Bubble sort.. :-}
-    if (val[0] < val[1]) { vcl_swap(val[0], val[1]); vcl_swap(idx[0], idx[1]); }
-    if (val[1] < val[2]) { vcl_swap(val[1], val[2]); vcl_swap(idx[1], idx[2]); }
-    if (val[0] < val[1]) { vcl_swap(val[0], val[1]); vcl_swap(idx[0], idx[1]); }
+    if (val[0] < val[1]) { std::swap(val[0], val[1]); std::swap(idx[0], idx[1]); }
+    if (val[1] < val[2]) { std::swap(val[1], val[2]); std::swap(idx[1], idx[2]); }
+    if (val[0] < val[1]) { std::swap(val[0], val[1]); std::swap(idx[0], idx[1]); }
     assert((val[0] >= val[1]) && (val[1] >= val[2])); // Just checking..
 
     for (int i=0; i < 3; i++) {

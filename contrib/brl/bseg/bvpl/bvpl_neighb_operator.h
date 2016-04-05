@@ -43,7 +43,7 @@ class bvpl_neighb_operator
          vgl_point_3d<int> idx = kernel_iter.index();
          T val;
          if (subgrid.voxel(idx, val)) {
-           //vcl_cout<< val << "at " << idx <<vcl_endl;
+           //std::cout<< val << "at " << idx <<std::endl;
            bvpl_kernel_dispatch d = *kernel_iter;
            func_.apply(val, d);
           }

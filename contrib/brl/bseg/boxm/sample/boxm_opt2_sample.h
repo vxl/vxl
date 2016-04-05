@@ -3,7 +3,8 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_rgb.h>
 #include <vsl/vsl_binary_io.h>
 #include <boxm/boxm_aux_traits.h>
@@ -19,7 +20,7 @@ class boxm_opt2_sample
 
   ~boxm_opt2_sample() {}
   static short version_no() { return 1; }
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
   OBS_T obs_;
   float pre_;
@@ -38,7 +39,7 @@ class boxm_aux_traits<BOXM_AUX_OPT2_GREY>
  public:
   typedef boxm_opt2_sample<float> sample_datatype;
 
-  static vcl_string storage_subdir() { return "opt2_grey_work"; }
+  static std::string storage_subdir() { return "opt2_grey_work"; }
 };
 
 //:traits for an rgb optimization sample
@@ -48,7 +49,7 @@ class boxm_aux_traits<BOXM_AUX_OPT2_RGB>
  public:
   typedef boxm_opt2_sample<vil_rgb<float> > sample_datatype;
 
-  static vcl_string storage_subdir() { return "opt2_rgb_work"; }
+  static std::string storage_subdir() { return "opt2_rgb_work"; }
 };
 
 template <class T>
@@ -64,6 +65,6 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_opt2_sample<T> *&sample);
 
 template <class T>
-vcl_ostream& operator<< (vcl_ostream& os, const boxm_opt2_sample<T>& sample);
+std::ostream& operator<< (std::ostream& os, const boxm_opt2_sample<T>& sample);
 
 #endif // boxm_opt2_sample_h_

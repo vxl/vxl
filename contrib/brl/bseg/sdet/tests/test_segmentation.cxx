@@ -17,8 +17,8 @@ static void test_segmentation(int argc, char * argv[])
   TEST("out img pix 0 is not the same as pix 1", out_img(2,2) != out_img(2,1), true);
   TEST("out img pix 0 is not the same as pix 1", out_img(2,2) == out_img(1,2), true);
   /*
-  vcl_string image_path = ".\\beach.png";
-  vcl_cout << "Loading Image " << image_path << '\n';
+  std::string image_path = ".\\beach.png";
+  std::cout << "Loading Image " << image_path << '\n';
   vil_image_view<vxl_byte> imgi = vil_load(image_path.c_str());
   vil_image_view<vxl_byte> img_grey;
   //vil_convert_rgb_to_grey(img, img_grey);
@@ -35,7 +35,7 @@ static void test_segmentation(int argc, char * argv[])
   vil_image_view<vil_rgb<vxl_byte> > out_imgi2;
   sdet_segment_img<float>(imgi2, 10, 8, 0.1, 1, 50, out_imgi2);
 
-  vcl_string out_img_path = ".\\0_09SEP07161459-P1BS-052808601050_01_P004.NTF_reflectance_truncated_seg.tif";
+  std::string out_img_path = ".\\0_09SEP07161459-P1BS-052808601050_01_P004.NTF_reflectance_truncated_seg.tif";
   vil_save(out_imgi2, out_img_path.c_str());
    */
 }

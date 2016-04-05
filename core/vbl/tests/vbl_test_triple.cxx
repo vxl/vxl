@@ -1,12 +1,13 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <vbl/vbl_triple.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 static
 void vbl_test_triple()
 {
-  vcl_cout << "\n\n\n"
+  std::cout << "\n\n\n"
            << "*****************\n"
            << " Test vbl_triple\n"
            << "*****************\n";
@@ -21,7 +22,7 @@ void vbl_test_triple()
   TEST("vbl_triple compare", t != t2, true);
   TEST("vbl_triple compare", t < t2, true);
 
-  vcl_stringstream s;
+  std::stringstream s;
   s << t;
   vbl_triple<double,int,int> t3;
   s >> t3;

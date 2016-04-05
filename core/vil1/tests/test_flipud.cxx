@@ -1,4 +1,5 @@
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_flipud.h>
@@ -11,9 +12,9 @@ static void p(vil1_image const& m)
     for (int x = 0; x < m.width(); ++x) {
       unsigned char val = 0;
       m.get_section(&val, x, y, 1, 1);
-      vcl_cout << '\t' << (int)val;
+      std::cout << '\t' << (int)val;
     }
-    vcl_cout << vcl_endl << vcl_endl;
+    std::cout << std::endl << std::endl;
   }
 }
 

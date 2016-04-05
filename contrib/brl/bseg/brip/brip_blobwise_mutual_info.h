@@ -7,9 +7,11 @@
 // \author Matt Leotta
 //
 
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 //: Calculate the Mutual Information between the images.
@@ -29,8 +31,8 @@ void brip_blobwise_kl_div( const vil_image_view<T>& img1,
 
 //: calculates the kl divergeance D_kl ( P || Q );
 inline
-double brip_hist_kl_div(const vcl_vector<double>& P, double magP,
-                        const vcl_vector<double>& Q, double magQ)
+double brip_hist_kl_div(const std::vector<double>& P, double magP,
+                        const std::vector<double>& Q, double magQ)
 {
   double kl = 0.0;
   for (unsigned int i=0; i<P.size(); ++i) {
@@ -38,7 +40,7 @@ double brip_hist_kl_div(const vcl_vector<double>& P, double magP,
     double probQ = Q[i]/magQ;
     if (probP==0 || probQ==0) continue;
 
-    kl += probP * vcl_log( probP / probQ );
+    kl += probP * std::log( probP / probQ );
   }
   return  kl/vnl_math::ln2; // divide by ln(2) to convert this measure to base 2
 }

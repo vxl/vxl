@@ -2,29 +2,30 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <iomanip>
+#include <string>
 #include "vil_nitf2_compound_field_value.h"
 
-// not used? #include <vcl_sstream.h>
-#include <vcl_iomanip.h>
-#include <vcl_string.h>
+// not used? #include <sstream>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2_typed_field_formatter.h"
 
 //==============================================================================
 // Class vil_nitf2_date_time
 
-vcl_ostream& vil_nitf2_date_time::output(vcl_ostream& os) const
+std::ostream& vil_nitf2_date_time::output(std::ostream& os) const
 {
   os << year << '/'
-     << vcl_setw(2) << vcl_setfill('0') << month << '/'
-     << vcl_setw(2) << vcl_setfill('0') << day << ' '
-     << vcl_setw(2) << vcl_setfill('0') << hour << ':'
-     << vcl_setw(2) << vcl_setfill('0') << minute << ':';
+     << std::setw(2) << std::setfill('0') << month << '/'
+     << std::setw(2) << std::setfill('0') << day << ' '
+     << std::setw(2) << std::setfill('0') << hour << ':'
+     << std::setw(2) << std::setfill('0') << minute << ':';
   if (second < 10) os << '0';
   if (sec_precision==0) {
     os << int(second);
   } else if (sec_precision>0) {
-    os << vcl_fixed << vcl_setprecision(sec_precision) << second;
+    os << std::fixed << std::setprecision(sec_precision) << second;
   }
   return os;
 }
@@ -39,18 +40,18 @@ bool vil_nitf2_date_time::is_valid() const
          second >= 0.0 && second < 60.0;
 }
 
-bool vil_nitf2_date_time::write(vcl_ostream& output, int field_width) const
+bool vil_nitf2_date_time::write(std::ostream& output, int field_width) const
 {
-  output << vcl_setw(4) << vcl_noshowpos << vcl_internal << year
-         << vcl_setw(2) << vcl_noshowpos << vcl_internal << vcl_setfill('0') << month
-         << vcl_setw(2) << vcl_noshowpos << vcl_internal << vcl_setfill('0') << day;
+  output << std::setw(4) << std::noshowpos << std::internal << year
+         << std::setw(2) << std::noshowpos << std::internal << std::setfill('0') << month
+         << std::setw(2) << std::noshowpos << std::internal << std::setfill('0') << day;
   if (field_width >= 10 && !output.fail()) {
-    output << vcl_setw(2) << vcl_noshowpos << vcl_internal << vcl_setfill('0') << hour;
+    output << std::setw(2) << std::noshowpos << std::internal << std::setfill('0') << hour;
   }
   else
     output << "  ";
   if (field_width >= 12 && !output.fail()) {
-    output << vcl_setw(2) << vcl_noshowpos << vcl_internal << vcl_setfill('0') << minute;
+    output << std::setw(2) << std::noshowpos << std::internal << std::setfill('0') << minute;
   }
   else
     output << "  ";
@@ -59,20 +60,20 @@ bool vil_nitf2_date_time::write(vcl_ostream& output, int field_width) const
     output << "  ";
   } else if (field_width == 14 && !output.fail()) {
     // display integer seconds
-    output << vcl_setw(2) << vcl_noshowpos << vcl_internal << vcl_setfill('0') << (int)second;
+    output << std::setw(2) << std::noshowpos << std::internal << std::setfill('0') << (int)second;
   } else if (!output.fail()) {
     // display decimal seconds
-    output << vcl_setw(field_width - 12) << vcl_fixed << vcl_noshowpos << vcl_internal
-           << vcl_setfill(' ') << vcl_setprecision(field_width - 15) << second;
+    output << std::setw(field_width - 12) << std::fixed << std::noshowpos << std::internal
+           << std::setfill(' ') << std::setprecision(field_width - 15) << second;
   }
   // Return whether all output operations were successful
   return !output.fail();
 }
 
-bool vil_nitf2_date_time::read(vcl_istream& input, int field_width, bool& out_blank)
+bool vil_nitf2_date_time::read(std::istream& input, int field_width, bool& out_blank)
 {
   bool blank;
-  vcl_string fieldStr;
+  std::string fieldStr;
   bool ok;
   ok = vil_nitf2_integer_formatter(4).read_vcl_stream(input, year, blank); out_blank = blank;
   ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, month, blank); out_blank &= blank;
@@ -103,7 +104,7 @@ bool vil_nitf2_date_time::read(vcl_istream& input, int field_width, bool& out_bl
   return ok && is_valid();
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_date_time& dateTime)
+std::ostream& operator << (std::ostream& os, const vil_nitf2_date_time& dateTime)
 {
   return dateTime.output(os);
 }
@@ -111,15 +112,15 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_date_time& dateTime)
 //==============================================================================
 // Class vil_nitf2_location_degrees
 
-vcl_ostream& vil_nitf2_location_degrees::output(vcl_ostream& os) const
+std::ostream& vil_nitf2_location_degrees::output(std::ostream& os) const
 {
   os << '('
-     << vcl_fixed << lat_degrees << ", "
-     << vcl_fixed << lon_degrees << ')';
+     << std::fixed << lat_degrees << ", "
+     << std::fixed << lon_degrees << ')';
   return os;
 }
 
-bool vil_nitf2_location_degrees::read(vcl_istream& input, int field_width, bool& out_blank)
+bool vil_nitf2_location_degrees::read(std::istream& input, int field_width, bool& out_blank)
 {
   int lat_width = (field_width-1)/2;
   int lon_width = (field_width+1)/2;
@@ -131,14 +132,14 @@ bool vil_nitf2_location_degrees::read(vcl_istream& input, int field_width, bool&
   return ok && is_valid();
 }
 
-bool vil_nitf2_location_degrees::write(vcl_ostream& output, int field_width)
+bool vil_nitf2_location_degrees::write(std::ostream& output, int field_width)
 {
   // Could someone remind me again why I didn't just use printf and scanf
   // instead?
-  output << vcl_setw((field_width-1)/2) << vcl_fixed << vcl_showpos << vcl_internal
-         << vcl_setfill('0') <<  vcl_setprecision(precision) << lat_degrees
-         << vcl_setw((field_width+1)/2) << vcl_fixed << vcl_showpos << vcl_internal
-         << vcl_setfill('0') << vcl_setprecision(precision) << lon_degrees;
+  output << std::setw((field_width-1)/2) << std::fixed << std::showpos << std::internal
+         << std::setfill('0') <<  std::setprecision(precision) << lat_degrees
+         << std::setw((field_width+1)/2) << std::fixed << std::showpos << std::internal
+         << std::setfill('0') << std::setprecision(precision) << lon_degrees;
   return !output.fail();
 }
 
@@ -152,7 +153,7 @@ bool vil_nitf2_location_degrees::is_valid() const
 //==============================================================================
 // Class vil_nitf2_location
 
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_location& loc)
+std::ostream& operator << (std::ostream& os, const vil_nitf2_location& loc)
 {
   return loc.output(os);
 }
@@ -160,7 +161,7 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_location& loc)
 //==============================================================================
 // Class vil_nitf2_location_dmsh
 
-vcl_ostream& vil_nitf2_location_dmsh::output(vcl_ostream& os) const
+std::ostream& vil_nitf2_location_dmsh::output(std::ostream& os) const
 {
   os << '('
      << lat_degrees << ':' << lat_minutes    << ':'
@@ -170,7 +171,7 @@ vcl_ostream& vil_nitf2_location_dmsh::output(vcl_ostream& os) const
   return os;
 }
 
-bool vil_nitf2_location_dmsh::read(vcl_istream& input, int /* field_width */, bool& out_blank)
+bool vil_nitf2_location_dmsh::read(std::istream& input, int /* field_width */, bool& out_blank)
 {
   bool blank;
   // Read latitude fields
@@ -196,7 +197,7 @@ bool vil_nitf2_location_dmsh::read(vcl_istream& input, int /* field_width */, bo
   return ok && is_valid();
 }
 
-bool vil_nitf2_location_dmsh::write(vcl_ostream& output, int /* field_width */)
+bool vil_nitf2_location_dmsh::write(std::ostream& output, int /* field_width */)
 {
   bool ok;
   // Write latitude fields
@@ -220,6 +221,6 @@ bool vil_nitf2_location_dmsh::is_valid() const
          lon_minutes >= 0 && lon_minutes < 60 &&
          lat_seconds >= 0.0 && lat_seconds < 60.0 &&
          lon_seconds >= 0.0 && lon_seconds < 60.0 &&
-         vcl_string("NnSs").find(lat_hemisphere) != vcl_string::npos &&
-         vcl_string("EeWw").find(lon_hemisphere) != vcl_string::npos;
+         std::string("NnSs").find(lat_hemisphere) != std::string::npos &&
+         std::string("EeWw").find(lon_hemisphere) != std::string::npos;
 }

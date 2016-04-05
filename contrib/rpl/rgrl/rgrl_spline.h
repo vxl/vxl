@@ -6,10 +6,12 @@
 //  \date   Sep 2003
 //  \brief A class for dealing a uniform cubic B-spline up to 4D (a hypersurface in 4D).
 
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_spline_sptr.h"
 #include "rgrl_object.h"
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
@@ -98,10 +100,10 @@ class rgrl_spline
   friend class test_rgrl_spline;
 
   // for output
-  friend vcl_ostream& operator<< (vcl_ostream& os, rgrl_spline const& spline );
+  friend std::ostream& operator<< (std::ostream& os, rgrl_spline const& spline );
 
   // for input
-  friend vcl_istream& operator>> (vcl_istream& is, rgrl_spline& spline );
+  friend std::istream& operator>> (std::istream& is, rgrl_spline& spline );
 
 
   //: Generate a refined B-spline that produces the same surface.

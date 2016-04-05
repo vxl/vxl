@@ -5,11 +5,12 @@
 #ifndef VIL_NITF2_CLASSIFICATION_H
 #define VIL_NITF2_CLASSIFICATION_H
 
+#include <string>
+#include <map>
+#include <utility>
 #include "vil_nitf2.h"
 
-#include <vcl_string.h>
-#include <vcl_map.h>
-#include <vcl_utility.h> // vcl_pair
+#include <vcl_compiler.h>
 
 class vil_nitf2_field_definitions;
 
@@ -49,13 +50,13 @@ public:
   // in the case of a file header.
   static const vil_nitf2_field_definitions* get_field_definitions(
     const file_version& version,
-    vcl_string tag_prefix, vcl_string pretty_name_prefix );
+    std::string tag_prefix, std::string pretty_name_prefix );
 
   // Like get_field_defintions(), but appends fields to defs instead
   // of returning them.
   static void add_field_defs(
     vil_nitf2_field_definitions* defs, const file_version& version,
-    vcl_string prefix, vcl_string pretty_name_prefix);
+    std::string prefix, std::string pretty_name_prefix);
 
 private:
   // Purely static class; don't instantiate.
@@ -63,9 +64,9 @@ private:
 
   // A cache of field definitions, indexed by version, tag_prefix and
   // pretty_name_prefix.
-  typedef vcl_pair< file_version, vcl_pair< vcl_string, vcl_string> >
+  typedef std::pair< file_version, std::pair< std::string, std::string> >
     type_field_defs_key;
-  typedef vcl_map< type_field_defs_key, vil_nitf2_field_definitions*>
+  typedef std::map< type_field_defs_key, vil_nitf2_field_definitions*>
     type_field_defs_map;
   static type_field_defs_map & s_field_definitions();
 

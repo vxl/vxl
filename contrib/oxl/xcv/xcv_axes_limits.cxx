@@ -1,4 +1,6 @@
 // This is oxl/xcv/xcv_axes_limits.cxx
+#include <iostream>
+#include <cmath>
 #include "xcv_axes_limits.h"
 //:
 // \file
@@ -14,8 +16,7 @@
 // \endverbatim
 //
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 static bool debug = false;
 
@@ -50,17 +51,17 @@ void xcv_axes_limits::set_range(double low, double high)
 void xcv_axes_limits::calc_ticks()
 {
   tick_spacing = calc_tick_spacing();
-  tick_start = vcl_floor(low / tick_spacing) * tick_spacing;
-  tick_end = vcl_ceil(high / tick_spacing) * tick_spacing;
+  tick_start = std::floor(low / tick_spacing) * tick_spacing;
+  tick_end = std::ceil(high / tick_spacing) * tick_spacing;
   tick_n = (int)((tick_end - tick_start) / tick_spacing);
   if (debug)
   {
-    vcl_cout << "calc_ticks: high = " << high << vcl_endl;
-    vcl_cout << "calc_ticks: low = " << low << vcl_endl;
-    vcl_cout << "calc_ticks: spacing = "  << tick_spacing << vcl_endl;
-    vcl_cout << "calc_ticks: start = "  << tick_start << vcl_endl;
-    vcl_cout << "calc_ticks: end = "  << tick_end << vcl_endl;
-    vcl_cout << "calc_ticks: n = "  << tick_n << vcl_endl;
+    std::cout << "calc_ticks: high = " << high << std::endl;
+    std::cout << "calc_ticks: low = " << low << std::endl;
+    std::cout << "calc_ticks: spacing = "  << tick_spacing << std::endl;
+    std::cout << "calc_ticks: start = "  << tick_start << std::endl;
+    std::cout << "calc_ticks: end = "  << tick_end << std::endl;
+    std::cout << "calc_ticks: n = "  << tick_n << std::endl;
   }
 }
 
@@ -72,8 +73,8 @@ double xcv_axes_limits::calc_tick_spacing()
     200.0, 500.0, 1000.0, 2000.0, 5000.0};
   double l = high - low;
 
-  exp_n = (int)vcl_floor(vcl_log10(l));
-  exp = vcl_pow(10.0, exp_n);
+  exp_n = (int)std::floor(std::log10(l));
+  exp = std::pow(10.0, exp_n);
 
   for (unsigned int i = 0; i < sizeof trythese / sizeof trythese[0]; ++i) {
     double tickspacing = (trythese[i] * exp);

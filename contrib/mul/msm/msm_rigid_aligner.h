@@ -68,13 +68,13 @@ class msm_rigid_aligner : public msm_aligner
   //  i.e. error is sum (p2_i-T(p1_i)'*wt_mat[i]*(p2_i-T(p1_i)
   virtual void calc_transform_wt_mat(const msm_points& points1,
                                      const msm_points& points2,
-                                     const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                                     const std::vector<msm_wt_mat_2d>& wt_mat,
                                      vnl_vector<double>& trans) const;
 
   //: Apply transform to weight matrices (ie ignore translation component)
-  virtual void transform_wt_mat(const vcl_vector<msm_wt_mat_2d>& wt_mat,
+  virtual void transform_wt_mat(const std::vector<msm_wt_mat_2d>& wt_mat,
                                 const vnl_vector<double>& trans,
-                                vcl_vector<msm_wt_mat_2d>& new_wt_mat) const;
+                                std::vector<msm_wt_mat_2d>& new_wt_mat) const;
 
   //: Returns params of pose such that pose(x) = pose1(pose2(x))
   virtual vnl_vector<double> compose(const vnl_vector<double>& pose1,
@@ -90,14 +90,16 @@ class msm_rigid_aligner : public msm_aligner
   //  frame, pose_to_ref[i] maps points[i] into the reference
   //  frame (ie pose is the mapping from the reference frame to
   //  the target frames).
+  // \param pose_source defines how orientation of ref_mean_shape is calculated
   // \param average_pose Some estimate of the average mapping
-  virtual void align_set(const vcl_vector<msm_points>& points,
+  virtual void align_set(const std::vector<msm_points>& points,
                          msm_points& ref_mean_shape,
-                         vcl_vector<vnl_vector<double> >& pose_to_ref,
-                         vnl_vector<double>& average_pose) const;
+                         std::vector<vnl_vector<double> >& pose_to_ref,
+                         vnl_vector<double>& average_pose,
+                         ref_pose_source pose_source) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual msm_aligner* clone() const;

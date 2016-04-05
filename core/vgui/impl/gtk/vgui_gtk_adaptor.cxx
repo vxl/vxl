@@ -15,10 +15,11 @@
 //                          - Set event.ascii_char to actual key stroke
 // \endverbatim
 
+#include <cstdlib>
+#include <utility>
 #include "vgui_gtk_adaptor.h"
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_utility.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
@@ -72,8 +73,8 @@ vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win)
   }
 
   if (!widget) {
-    vcl_cerr << __FILE__ << " : Could not get a GL visual!\n";
-    vcl_abort();
+    std::cerr << __FILE__ << " : Could not get a GL visual!\n";
+    std::abort();
   }
 
   // Since we need to access the widget from time to time (e.g. to
@@ -164,13 +165,13 @@ void vgui_gtk_adaptor::post_timer(float timeout, int name)
 
   // add them to timer map
   internal_timer i( id, (void*)cd );
-  timers_.insert( vcl_pair<int, internal_timer>(name, i) );
+  timers_.insert( std::pair<int, internal_timer>(name, i) );
 }
 
 //: timeout is in milliseconds
 void vgui_gtk_adaptor::kill_timer(int name)
 {
-  vcl_map<int, internal_timer>::iterator it
+  std::map<int, internal_timer>::iterator it
     = timers_.find( name );
   if ( it == timers_.end() )  // if such timer does not exist
     return;
@@ -196,12 +197,12 @@ void vgui_gtk_adaptor::post_destroy()
 
 void vgui_gtk_adaptor::set_default_popup(vgui_menu)
 {
-  vcl_cerr << "vgui_gtk_adaptor::set_default_popup\n";
+  std::cerr << "vgui_gtk_adaptor::set_default_popup\n";
 }
 
 vgui_menu vgui_gtk_adaptor::get_popup()
 {
-  vcl_cerr << "vgui_gtk_adaptor::get_popup\n";
+  std::cerr << "vgui_gtk_adaptor::get_popup\n";
   return vgui_menu();
 }
 
@@ -312,7 +313,7 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
     return TRUE;
   }
 
-  if (debug) vcl_cerr << "vgui_event " << event << vcl_endl;
+  if (debug) std::cerr << "vgui_event " << event << std::endl;
   // Only send events to the tableau if the widget is mapped; that is,
   // only when an OpenGL context exists.
   if ( GTK_WIDGET_MAPPED(widget) ) {
@@ -321,7 +322,7 @@ gint vgui_gtk_adaptor::handle(GtkWidget *widget,
     else
       adaptor->dispatch_to_tableau(event);
   } else {
-    vcl_cerr << __FILE__ << ": error: event " << event
+    std::cerr << __FILE__ << ": error: event " << event
              << " while GL area was not mapped\n";
   }
 
@@ -350,7 +351,7 @@ void vgui_gtk_adaptor::reshape()
 //: This is overriding the gtk draw() method.
 void vgui_gtk_adaptor::draw()
 {
-  if (debug) vcl_cerr << "vgui_gtk_adaptor::draw\n";
+  if (debug) std::cerr << "vgui_gtk_adaptor::draw\n";
   if ( GTK_WIDGET_MAPPED(widget) ) {
     make_current();
     glDrawBuffer(GL_BACK);
@@ -394,7 +395,7 @@ gint vgui_gtk_adaptor::idle_callback_for_destroy(gpointer data)
   if (win)
     delete win;
   else
-    vcl_cerr << __FILE__ " : parent vgui_gtk_window is unknown, so cannot destroy!\n";
+    std::cerr << __FILE__ " : parent vgui_gtk_window is unknown, so cannot destroy!\n";
 
   // capes - returning FALSE automagically cancels this callback
   return FALSE;

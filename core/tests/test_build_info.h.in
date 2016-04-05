@@ -5,7 +5,7 @@
 #ifndef test_build_info_h
 #define test_build_info_h
 
-#define vxl_BUILD_DIR "@vxl_BINARY_DIR@"
+#define vxl_BUILD_DIR "@CMAKE_BINARY_DIR@"
 #define vxl_BUILD_NAME "@BUILDNAME@"
 #define vxl_SITE "@SITE@"
 

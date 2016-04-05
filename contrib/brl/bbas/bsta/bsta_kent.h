@@ -12,6 +12,8 @@
 //   (none yet)
 // \endverbatim
 
+#include <vector>
+#include <iostream>
 #include "bsta_distribution.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -19,8 +21,7 @@
 #include <vgl/vgl_plane_3d.h>
 #endif
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class bsta_kent // : public bsta_distribution<T,1>
@@ -39,7 +40,7 @@ class bsta_kent // : public bsta_distribution<T,1>
 
 #if 0
   //: constructs kent distr. from a set of planes
-  bsta_kent(vcl_vector<vgl_plane_3d<T> > const& planes);
+  bsta_kent(std::vector<vgl_plane_3d<T> > const& planes);
 #endif
 
   //: construct from a 3x3 matrix
@@ -59,7 +60,7 @@ class bsta_kent // : public bsta_distribution<T,1>
   //: pre:
   T prob_density(vnl_vector_fixed<T,3> const& x);
 
-  vnl_vector_fixed<T,3> mean() const { return gamma1_; /* vcl_pow(kappa_,beta_); ??? */ }
+  vnl_vector_fixed<T,3> mean() const { return gamma1_; /* std::pow(kappa_,beta_); ??? */ }
 
  private:
   T kappa_;  // concentration or spread of the distribution (SHOULD BE > 0)
@@ -85,6 +86,6 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, bsta_kent<T> *&b);
 
 template <class T>
-vcl_ostream& operator<< (vcl_ostream& os, bsta_kent<T> & b);
+std::ostream& operator<< (std::ostream& os, bsta_kent<T> & b);
 
 #endif

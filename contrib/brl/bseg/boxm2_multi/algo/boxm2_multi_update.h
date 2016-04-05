@@ -27,17 +27,17 @@ class boxm2_multi_update
 class boxm2_multi_update_helper
 {
   public:
-    boxm2_multi_update_helper(vcl_vector<cl_command_queue>& queues,
-                              vcl_vector<bocl_mem_sptr>& ray_os,
-                              vcl_vector<bocl_mem_sptr>& ray_ds,
-                              vcl_vector<bocl_mem_sptr>& img_dims,
-                              vcl_vector<bocl_mem_sptr>& tnearfarptrs,
-                              vcl_vector<bocl_mem_sptr>& lookups,
-                              vcl_vector<bocl_mem_sptr>& outputs,
-                              vcl_vector<boxm2_multi_cache_group*>& group_orders,
-                              vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders,
-                              vcl_vector<boxm2_opencl_cache1*>& vis_caches,
-                              vcl_size_t maxBlocks) :
+    boxm2_multi_update_helper(std::vector<cl_command_queue>& queues,
+                              std::vector<bocl_mem_sptr>& ray_os,
+                              std::vector<bocl_mem_sptr>& ray_ds,
+                              std::vector<bocl_mem_sptr>& img_dims,
+                              std::vector<bocl_mem_sptr>& tnearfarptrs,
+                              std::vector<bocl_mem_sptr>& lookups,
+                              std::vector<bocl_mem_sptr>& outputs,
+                              std::vector<boxm2_multi_cache_group*>& group_orders,
+                              std::vector<std::vector<boxm2_block_id> >& vis_orders,
+                              std::vector<boxm2_opencl_cache1*>& vis_caches,
+                              std::size_t maxBlocks) :
       queues_(queues),
       img_dims_(img_dims),
       tnearfarptrs_(tnearfarptrs),
@@ -52,16 +52,16 @@ class boxm2_multi_update_helper
     {}
 
     //update command queues
-    vcl_vector<cl_command_queue>& queues_;
+    std::vector<cl_command_queue>& queues_;
 
     //ray trace vars
-    vcl_vector<bocl_mem_sptr>&  img_dims_, outputs_, ray_ds_, ray_os_, lookups_, tnearfarptrs_;
+    std::vector<bocl_mem_sptr>&  img_dims_, outputs_, ray_ds_, ray_os_, lookups_, tnearfarptrs_;
 
     //visibility order for each dev
-    vcl_vector<vcl_vector<boxm2_block_id> >& vis_orders_;
-    vcl_vector<boxm2_opencl_cache1*>& vis_caches_;
-    vcl_size_t maxBlocks_;
-    vcl_vector<boxm2_multi_cache_group*>& group_orders_;
+    std::vector<std::vector<boxm2_block_id> >& vis_orders_;
+    std::vector<boxm2_opencl_cache1*>& vis_caches_;
+    std::size_t maxBlocks_;
+    std::vector<boxm2_multi_cache_group*>& group_orders_;
 };
 
 //: patch helper
@@ -70,12 +70,12 @@ class boxm2_multi_image_patch
   public:
     boxm2_multi_image_patch(boxm2_block_id id,
                             float* img,
-                            vcl_size_t ni, vcl_size_t nj,
-                            vcl_size_t oi, vcl_size_t oj)
+                            std::size_t ni, std::size_t nj,
+                            std::size_t oi, std::size_t oj)
       : ni_(ni), nj_(nj), oi_(oi), oj_(oj), img_(img), id_(id) {}
 
   private:
-    vcl_size_t ni_, nj_, oi_, oj_;
+    std::size_t ni_, nj_, oi_, oj_;
     float* img_;
     boxm2_block_id id_;
 };

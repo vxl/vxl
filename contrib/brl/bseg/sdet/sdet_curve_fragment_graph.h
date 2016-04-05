@@ -17,8 +17,10 @@
 //                   So I've switched to maps instead.
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <vcl_compiler.h>
 
 #include "sdet_edgel.h"
 #include "sdet_edgemap.h"
@@ -29,8 +31,8 @@
 class sdet_curve_fragment_graph
 {
 public:
-  vcl_vector<sdet_edgel_chain_list> cFrags; ///< child curve fragments
-  vcl_vector<sdet_edgel_chain_list> pFrags; ///< parent curve fragments
+  std::vector<sdet_edgel_chain_list> cFrags; ///< child curve fragments
+  std::vector<sdet_edgel_chain_list> pFrags; ///< parent curve fragments
 
   sdet_edgel_chain_list frags; ///< redundant single list of all fragments
 

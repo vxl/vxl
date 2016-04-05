@@ -19,7 +19,7 @@ keys_at_res( rgrl_data_set const& ds,
              unsigned resolution,
              unsigned count )
 {
-  vcl_vector<rgrl_data_set::key_type> keys =
+  std::vector<rgrl_data_set::key_type> keys =
     ds.keys_at_resolution( resolution );
 
   bool okay = true;
@@ -57,7 +57,7 @@ get( rgrl_data_set const& ds,
 
 static void test_data_set()
 {
-  vcl_vector<rgrl_feature_sptr> points;
+  std::vector<rgrl_feature_sptr> points;
   points.push_back( pf( vec3d( 0.0, 0.0, 0.0 ) ) );
 
   rgrl_feature_set_sptr set1 = new rgrl_feature_set_location<3>( points );

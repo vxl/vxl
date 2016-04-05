@@ -6,8 +6,9 @@
 // \brief Program demonstrating use of the Robust Estimation library in line fitting
 //
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 #include <rrel/rrel_homography2d_est.h>
@@ -29,12 +30,12 @@ main()
   // with 20% gross outliers.
   //
 
-  vcl_vector< vnl_vector<double> > from_pts;
-  vcl_vector< vnl_vector<double> > to_pts;
+  std::vector< vnl_vector<double> > from_pts;
+  std::vector< vnl_vector<double> > to_pts;
   vnl_vector<double> p(3);
   double x1, x2, y1, y2, w1, w2;
 
-  while (vcl_cin >> x1 >> y1 >> w1 >> x2 >> y2 >> w2 ) {
+  while (std::cin >> x1 >> y1 >> w1 >> x2 >> y2 >> w2 ) {
     p[0] = x1; p[1] = y1; p[2] = w1;
     from_pts.push_back(p);
 
@@ -65,13 +66,13 @@ main()
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
     if ( !ransam->estimate( hg, lms ) )
-      vcl_cout << "LMS failed!!\n";
+      std::cout << "LMS failed!!\n";
     else {
-      vcl_cout << "LMS succeeded.\n"
-               << "estimate = " << ransam->params() << vcl_endl
-               << "scale = " << ransam->scale() << vcl_endl;
+      std::cout << "LMS succeeded.\n"
+               << "estimate = " << ransam->params() << std::endl
+               << "scale = " << ransam->scale() << std::endl;
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     delete lms;
     delete ransam;
   }
@@ -88,13 +89,13 @@ main()
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
     if ( !ransam->estimate( hg, ransac ) )
-      vcl_cout << "RANSAC failed!!\n";
+      std::cout << "RANSAC failed!!\n";
     else {
-      vcl_cout << "RANSAC succeeded.\n"
-               << "estimate = " << ransam->params() << vcl_endl
-               << "scale = " << ransam->scale() << vcl_endl;
+      std::cout << "RANSAC succeeded.\n"
+               << "estimate = " << ransam->params() << std::endl
+               << "scale = " << ransam->scale() << std::endl;
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     delete ransac;
     delete ransam;
   }
@@ -110,13 +111,13 @@ main()
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
     if ( !ransam->estimate( hg, msac ) )
-      vcl_cout << "MSAC failed!!\n";
+      std::cout << "MSAC failed!!\n";
     else {
-      vcl_cout << "MSAC succeeded.\n"
-               << "estimate = " << ransam->params() << vcl_endl
-               << "scale = " << ransam->scale() << vcl_endl;
+      std::cout << "MSAC succeeded.\n"
+               << "estimate = " << ransam->params() << std::endl
+               << "scale = " << ransam->scale() << std::endl;
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     delete msac;
     delete ransam;
   }
@@ -135,13 +136,13 @@ main()
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
     if ( !ransam->estimate( hg, mlesac ) )
-      vcl_cout << "MLESAC failed!!\n";
+      std::cout << "MLESAC failed!!\n";
     else {
-      vcl_cout << "MLESAC succeeded.\n"
-               << "estimate = " << ransam->params() << vcl_endl
-               << "scale = " << ransam->scale() << vcl_endl;
+      std::cout << "MLESAC succeeded.\n"
+               << "estimate = " << ransam->params() << std::endl
+               << "scale = " << ransam->scale() << std::endl;
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     delete mlesac;
     delete ransam;
   }
@@ -160,13 +161,13 @@ main()
                                  max_pops);
 
     if ( !ransam->estimate( hg, muset ) )
-      vcl_cout << "MUSE failed!!\n";
+      std::cout << "MUSE failed!!\n";
     else {
-      vcl_cout << "MUSE succeeded.\n"
-               << "estimate = " << ransam->params() << vcl_endl
-               << "scale = " << ransam->scale() << vcl_endl;
+      std::cout << "MUSE succeeded.\n"
+               << "estimate = " << ransam->params() << std::endl
+               << "scale = " << ransam->scale() << std::endl;
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     delete muset;
     delete ransam;
   }

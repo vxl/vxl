@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_ingest_label_with_cam_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -9,7 +11,7 @@
 // \author Ozge C. Ozcanli
 // \date Nov 18, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -31,12 +33,12 @@ namespace boxm2_ocl_ingest_label_with_cam_process_globals
 {
   const unsigned n_inputs_  = 6;
   const unsigned n_outputs_ = 0;
-  vcl_size_t local_threads[2]={8,8};
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string options)
+  std::size_t local_threads[2]={8,8};
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
@@ -60,14 +62,14 @@ namespace boxm2_ocl_ingest_label_with_cam_process_globals
                                      "boxm2 opencl ingest label map");
     vec_kernels.push_back(ray_trace_kernel);
   }
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_ingest_label_with_cam_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_ingest_label_with_cam_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -76,7 +78,7 @@ bool boxm2_ocl_ingest_label_with_cam_process_cons(bprb_func_process& pro)
   input_types_[5] = "vcl_string";  // the identifier of the output label_short data type, e.g. "combined"
 
   // process has no outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   return good;
 }
@@ -86,7 +88,7 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   using namespace boxm2_ocl_ingest_label_with_cam_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -99,20 +101,20 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
 
   vil_image_view_base_sptr label_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string out_ident = pro.get_input<vcl_string>(i++);  // identifier for the output label data blocks
+  std::string out_ident = pro.get_input<std::string>(i++);  // identifier for the output label data blocks
 
   unsigned int ni     = label_img->ni();
   unsigned int nj     = label_img->nj();
 
   unsigned int cl_ni  = RoundUp(label_img->ni(),8);
   unsigned int cl_nj  = RoundUp(label_img->nj(),8);
-  vcl_cout << "casting images of size: " << label_img->ni() << " x " << label_img->nj() << " rounded up size: " << cl_ni << " x " << cl_nj << vcl_endl;
+  std::cout << "casting images of size: " << label_img->ni() << " x " << label_img->nj() << " rounded up size: " << cl_ni << " x " << cl_nj << std::endl;
 
   if (label_img->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
-    vcl_cerr << " format of label image is not vxl_byte!!\n";
+    std::cerr << " format of label image is not vxl_byte!!\n";
     return false;
   }
-  vcl_cout << "ingesting label img..\n"; vcl_cout.flush();
+  std::cout << "ingesting label img..\n"; std::cout.flush();
 
   vil_image_view<vxl_byte> * label_img_byte = dynamic_cast<vil_image_view<vxl_byte> * > (label_img.ptr());
 
@@ -143,26 +145,26 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
                                         "label image buffer");
   label_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  vcl_string data_type = boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix();
+  std::string data_type = boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix();
 
-  vcl_string out_data_type;
+  std::string out_data_type;
   if (out_ident.compare("") == 0)
     out_data_type = data_type;
   else
     out_data_type = data_type + "_" + out_ident;
   // read orientation data blocks
   //data_type += "_orientation";
-  vcl_cout << " will read data blocks with type: " << data_type << vcl_endl;
-  vcl_cout << " will ingest and write data blocks with type: " << out_data_type << " as output!\n";
+  std::cout << " will read data blocks with type: " << data_type << std::endl;
+  std::cout << " will ingest and write data blocks with type: " << out_data_type << " as output!\n";
 
 
-  size_t apptypesize = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
-  size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
+  //size_t apptypesize = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
+  //size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
 
 
   //get x and y size from scene
-  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),
@@ -174,12 +176,12 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, 0, 0);
 
   // compile the kernel
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
 
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,"");
     kernels[identifier]=ks;
   }
@@ -200,15 +202,15 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //2. set workgroup size
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {cl_ni,cl_nj};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {cl_ni,cl_nj};
 
-  vcl_cout<<"Ingesting Label Img"<<vcl_endl;
+  std::cout<<"Ingesting Label Img"<<std::endl;
   // set arguments
 
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-    vcl_cout<<"Block # "<<*id<<vcl_endl;
+    std::cout<<"Block # "<<*id<<std::endl;
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     bocl_kernel* kern =  kernels[identifier][0];
@@ -239,13 +241,13 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
     kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
     kern->set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
     kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
-    vcl_cout<<"Setting arguments"<<vcl_endl;
+    std::cout<<"Setting arguments"<<std::endl;
 
     //execute kernel
     kern->execute(queue, 2, lThreads, gThreads);
     clFinish(queue);
     gpu_time += kern->exec_time();
-    vcl_cout<<" Time "<<gpu_time<<vcl_endl;
+    std::cout<<" Time "<<gpu_time<<std::endl;
 
     // to go back to ingesting labels as is with the input data_type, uncomment below and comment deep_replace, also change ingest_label_map.cl accordingly
     //label_data->read_to_buffer(queue);

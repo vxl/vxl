@@ -22,9 +22,10 @@
 //   25 Sept 2004 Peter Vanroose added full 3D interface
 // \endverbatim
 
+#include <utility>
+#include <limits>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vcl_utility.h> // for vcl_pair<T,U>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 //: Closest point to \a (x,y) on the line segment \a (x1,y1)-(x2,y2)
 template <class T>
 void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,
@@ -179,7 +180,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_point_2d<T> const& point,
 // \param line1
 // \param line2
 //
-// \return vcl_pair<vgl_homg_point_3d<T>,vgl_homg_point_3d<T> >
+// \return std::pair<vgl_homg_point_3d<T>,vgl_homg_point_3d<T> >
 // \relatesalso vgl_homg_line_3d_2_points
 //
 // \author Paul Bourke, modified for use in VXL by Brendan McCane
@@ -189,7 +190,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_point_2d<T> const& point,
 // http://astronomy.swin.edu.au/~pbourke/geometry/lineline3d/
 
 template <class T>
-vcl_pair<vgl_homg_point_3d<T>, vgl_homg_point_3d<T> >
+std::pair<vgl_homg_point_3d<T>, vgl_homg_point_3d<T> >
 vgl_closest_points(vgl_homg_line_3d_2_points<T> const& line1,
                    vgl_homg_line_3d_2_points<T> const& line2);
 
@@ -261,7 +262,7 @@ double vgl_closest_point_t(vgl_point_3d<T> const& p,
 // The distance between the points is still valid, however.
 // \relatesalso vgl_line_3d_2_points
 template <class T>
-vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
+std::pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
                    const vgl_line_3d_2_points<T>& l2,
                    bool* unique=0);
@@ -275,7 +276,7 @@ vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
 // The distance between the points is still valid, however.
 // \relatesalso vgl_line_3d_2_points
 template <class T>
-vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
+std::pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_infinite_line_3d<T>& l1,
                    const vgl_infinite_line_3d<T>& l2,
                    bool* unique=0)
@@ -293,7 +294,7 @@ vgl_closest_points(const vgl_infinite_line_3d<T>& l1,
 // The distance between the points is still valid, however.
 // \relatesalso vgl_line_segment_3d
 template <class T>
-vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
+std::pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_line_segment_3d<T>& l1,
                    const vgl_line_segment_3d<T>& l2,
                    bool* unique=0);
@@ -333,5 +334,10 @@ vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
 //
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset, vgl_point_3d<T> const& p,
-                                  T dist = vcl_numeric_limits<T>::max());
+                                  T dist = std::numeric_limits<T>::max());
+
+//: Return the closest point on a cubic spline
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_cubic_spline_3d<T> const& cspl, vgl_point_3d<T> const& p);
+
 #endif // vgl_closest_point_h_

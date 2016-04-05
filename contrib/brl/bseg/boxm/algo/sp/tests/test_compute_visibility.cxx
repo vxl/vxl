@@ -19,7 +19,7 @@ static void test_compute_visibility()
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
   scene.set_paths("./boxm_scene1", "block");
   vul_file::make_directory("./boxm_scene1");
-  vcl_ofstream os("scene1.xml");
+  std::ofstream os("scene1.xml");
   x_write(os, scene, "scene");
   os.close();
 
@@ -46,7 +46,7 @@ static void test_compute_visibility()
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
     if (iter.index().z()==1)
     {
-      vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=tree->leaf_cells();
+      std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=tree->leaf_cells();
       s1_sample.alpha=0.6f;
 
       for (unsigned i=0;i<leaf_cells.size();i++)
@@ -58,7 +58,7 @@ static void test_compute_visibility()
     }
     else
     {
-      vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells= tree->leaf_cells();
+      std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells= tree->leaf_cells();
       s1_sample.alpha=0.01f;
 
       for (unsigned i=0;i<leaf_cells.size();i++)

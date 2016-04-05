@@ -19,10 +19,12 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h> // for std::ostream
+#include <vcl_compiler.h>
 
 class brip_roi : public vbl_ref_count
 {
@@ -75,10 +77,10 @@ class brip_roi : public vbl_ref_count
  protected:
   unsigned n_image_cols_;
   unsigned n_image_rows_;
-  vcl_vector<vsol_box_2d_sptr> regions_;
+  std::vector<vsol_box_2d_sptr> regions_;
 };
 
-vcl_ostream&  operator<<(vcl_ostream& s, brip_roi const& r);
+std::ostream&  operator<<(std::ostream& s, brip_roi const& r);
 
 #include "brip_roi_sptr.h"
 

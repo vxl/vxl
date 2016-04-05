@@ -5,10 +5,12 @@
 #ifndef rgtl_sqt_space_txx
 #define rgtl_sqt_space_txx
 
+#include <iostream>
+#include <cmath>
 #include "rgtl_sqt_space.hxx"
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
@@ -17,12 +19,12 @@ rgtl_sqt_space_base<D>::direction_to_face(double const d[D])
 {
   // The face axis corresponds to the component of the direction that
   // has the largest magnitude.
-  double max_d = vcl_fabs(d[0]);
+  double max_d = std::fabs(d[0]);
   unsigned int max_axis = 0;
   unsigned int max_side = (d[0] >= 0)? 1:0;
   for(unsigned int a=1; a < D; ++a)
     {
-    double cur_d = vcl_fabs(d[a]);
+    double cur_d = std::fabs(d[a]);
     if(cur_d > max_d)
       {
       max_d = cur_d;
@@ -41,12 +43,12 @@ rgtl_sqt_space<D, Face>
 {
   for(unsigned int a=0; a < face_axis; ++a)
     {
-    d[a] = vcl_tan(u[a]);
+    d[a] = std::tan(u[a]);
     }
   d[face_axis] = (face_side? +1:-1);
   for(unsigned int a=face_axis+1; a < D; ++a)
     {
-    d[a] = vcl_tan(u[a-1]);
+    d[a] = std::tan(u[a-1]);
     }
 }
 
@@ -60,11 +62,11 @@ rgtl_sqt_space<D, Face>
   assert(da > 0);
   for(unsigned int a=0; a < face_axis; ++a)
     {
-    u[a] = vcl_atan(d[a]/da);
+    u[a] = std::atan(d[a]/da);
     }
   for(unsigned int a=face_axis+1; a < D; ++a)
     {
-    u[a-1] = vcl_atan(d[a]/da);
+    u[a-1] = std::atan(d[a]/da);
     }
 }
 
@@ -78,19 +80,19 @@ rgtl_sqt_space<D, Face>
     {
     if(a == j)
       {
-      n[a] = vcl_cos(u);
+      n[a] = std::cos(u);
       }
     else
       {
       n[a] = 0;
       }
     }
-  n[face_axis] = (face_side?-1:+1)*vcl_sin(u);
+  n[face_axis] = (face_side?-1:+1)*std::sin(u);
   for(unsigned int a=face_axis+1; a < D; ++a)
     {
     if(a-1 == j)
       {
-      n[a] = vcl_cos(u);
+      n[a] = std::cos(u);
       }
     else
       {

@@ -11,10 +11,11 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_matrix.h>
@@ -23,13 +24,13 @@
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
 
-bool brad_load_surface_nhbds(vcl_string const& path,
-                             vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds);
+bool brad_load_surface_nhbds(std::string const& path,
+                             std::vector<std::vector<vnl_matrix<float> > >& nhds);
 
-bool brad_load_illumination_dirs(vcl_string const& path,
-                                 vcl_vector<vnl_double_3>& ill_dirs);
-bool brad_load_norm_intensities(vcl_string const& path,
-                                vcl_vector<double>& norm_ints);
+bool brad_load_illumination_dirs(std::string const& path,
+                                 std::vector<vnl_double_3>& ill_dirs);
+bool brad_load_norm_intensities(std::string const& path,
+                                std::vector<double>& norm_ints);
 
 
 //:
@@ -37,10 +38,10 @@ bool brad_load_norm_intensities(vcl_string const& path,
 // find the surface normal and ambient illumination factor, where
 // both are weighted by the surface albedo. A minimum of 4 directions
 // are required.
-bool brad_solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
-                                 vcl_vector<double> const& intensities,
+bool brad_solve_lambertian_model(std::vector<vnl_double_3> const& ill_dirs,
+                                 std::vector<double> const& intensities,
                                  vnl_double_4& model_params,
-                                 vcl_vector<double>& fitting_error);
+                                 std::vector<double>& fitting_error);
 
 //:given an illumination direction and Lambertian model, predict the resulting image intensity
 double brad_expected_intensity(vnl_double_3 const& illum_dir,
@@ -49,12 +50,12 @@ double brad_expected_intensity(vnl_double_3 const& illum_dir,
 //:
 // Test the error in adding a new image observation to the model
 // based on a full solution with the new point. Leave one out method
-void brad_solution_error(vcl_vector<vnl_double_3> const& ill_dirs,
-                         vcl_vector<double> const& intensities,
-                         vcl_vector<double>& fitting_error);
+void brad_solution_error(std::vector<vnl_double_3> const& ill_dirs,
+                         std::vector<double> const& intensities,
+                         std::vector<double>& fitting_error);
 
 //: Find the nearest illumination orientation
-double brad_nearest_ill_dir(vcl_vector<vnl_double_3> const& ill_dirs,
+double brad_nearest_ill_dir(std::vector<vnl_double_3> const& ill_dirs,
                             vnl_double_3 const& dir);
 
 // new model requires scene irradiance for each image
@@ -99,7 +100,7 @@ double brad_atmos_prediction(vnl_double_3 const& ill_dir,
                              );
 
 void brad_display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
-                                          vcl_string const& path,
+                                          std::string const& path,
                                           vnl_double_3 degenerate_dir =
                                           vnl_double_3(0,0,0));
 

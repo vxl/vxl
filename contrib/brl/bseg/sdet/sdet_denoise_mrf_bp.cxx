@@ -1,6 +1,8 @@
 // This is brl/bseg/sdet/sdet_denoise_mrf_bp.cxx
+#include <iostream>
+#include <cstdlib>
 #include "sdet_denoise_mrf_bp.h"
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_line_generator.h>
@@ -50,9 +52,9 @@ bool sdet_denoise_mrf_bp::denoise()
   vul_timer t;
   for (unsigned it = 0; it<n_iter_; ++it) {
     mrf_->send_messages_optimized();
-    vcl_cout << '.'<<vcl_flush;
+    std::cout << '.'<<std::flush;
   }
-  vcl_cout << "completed belief propagation at top level in "
+  std::cout << "completed belief propagation at top level in "
            << t.real()/1000.0 << " seconds\n";
 
   for (--lev ; lev>=0; --lev) {
@@ -61,9 +63,9 @@ bool sdet_denoise_mrf_bp::denoise()
     t.mark();
     for (unsigned it = 0; it<n_iter_; ++it) {
       mrf_->send_messages_optimized();
-      vcl_cout << '.'<<vcl_flush;
+      std::cout << '.'<<std::flush;
     }
-    vcl_cout << "completed belief propagation at pyramid level " << lev
+    std::cout << "completed belief propagation at pyramid level " << lev
              << " in " << t.real()/1000.0 << " seconds\n";
   }
   output_valid_ = true;
@@ -76,9 +78,9 @@ sdet_mrf_bp_sptr sdet_denoise_mrf_bp::
 pyramid_upsample(sdet_mrf_bp_sptr const& in_mrf, unsigned level)
 {
   if (level==0)
-    return 0;
+    return VXL_NULLPTR;
   unsigned nj = in_mrf->nj(), ni = in_mrf->ni();
-  if (!ni || !nj) return 0;
+  if (!ni || !nj) return VXL_NULLPTR;
   //initialize a mrf at the next resolution level
   vil_image_view<float> in_view = pyr_in_(level-1);
   unsigned njd = in_view.nj(), nid = in_view.ni();
@@ -103,7 +105,7 @@ pyramid_upsample(sdet_mrf_bp_sptr const& in_mrf, unsigned level)
       {
         unsigned in = 2*i;
         if (in+1>=nid) continue;
-        vcl_vector<float> msg = in_mrf->prior_message(i, j, n);
+        std::vector<float> msg = in_mrf->prior_message(i, j, n);
         out_mrf->set_prior_message(in, jn, n, msg);
         out_mrf->set_prior_message(in+1, jn, n, msg);
         out_mrf->set_prior_message(in, jn+1, n, msg);

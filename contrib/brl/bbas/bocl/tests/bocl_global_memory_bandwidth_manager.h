@@ -2,9 +2,10 @@
 #define bocl_global_memory_bandwidth_manager_h_
 //:
 // \file
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <string>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <bocl/bocl_mem.h>
@@ -17,7 +18,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   unsigned array_size() const { return len_; }
   bocl_mem* array_buf() { return array_buf_; }
 
-  vcl_string program_source() const { return prog_; }
+  std::string program_source() const { return prog_; }
   cl_program program() { return program_; }
 
   bool setup_array(unsigned len);
@@ -33,7 +34,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   //: diff from run_kernel allocated array of float4 in local memory
   bool run_kernel_prefetch();
 
-  int create_kernel(vcl_string const& kernel_name, vcl_string src_path, vcl_string options);
+  int create_kernel(std::string const& kernel_name, std::string src_path, std::string options);
 
   float time_taken() const  { return time_in_secs_; }
   bocl_kernel kernel()      { return kernel_; }

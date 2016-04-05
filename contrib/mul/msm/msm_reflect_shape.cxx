@@ -12,7 +12,7 @@
 //: Reflect points in the line x=ax, then re-number
 //  On exit, new_points[i] = points[relabel[i]] reflected in x=ax
 void msm_reflect_shape_along_x(const msm_points& points,
-                               const vcl_vector<unsigned>& sym_pts,
+                               const std::vector<unsigned>& sym_pts,
                                msm_points& new_points,
                                double ax)
 {

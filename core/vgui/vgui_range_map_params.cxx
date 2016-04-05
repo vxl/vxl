@@ -1,11 +1,11 @@
 #include "vgui_range_map_params.h"
 
-vcl_vector<vcl_string> minit()
+std::vector<std::string> minit()
 {
-  vcl_vector<vcl_string> m(5);
+  std::vector<std::string> m(5);
   m[0]="RGBA"; m[1]="RGB"; m[2]= "XRG";
   m[3]="RXB"; m[4]="RGX";
   return m;
 }
 
-vcl_vector<vcl_string> vgui_range_map_params::bmap = minit();
+std::vector<std::string> vgui_range_map_params::bmap = minit();

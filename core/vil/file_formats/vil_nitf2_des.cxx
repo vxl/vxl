@@ -2,10 +2,11 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <sstream>
 #include "vil_nitf2_des.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_typed_field_formatter.h"
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 vil_nitf2_des::field_definition_map&
   vil_nitf2_des::all_definitions()
@@ -29,13 +30,13 @@ vil_nitf2_des::field_definition_map&
 
 
 vil_nitf2_field_definitions&
-vil_nitf2_des::define(vcl_string desId )
+vil_nitf2_des::define(std::string desId )
 {
   if (all_definitions().find(desId) != all_definitions().end()) {
     throw("des with that name already defined.");
   }
   vil_nitf2_field_definitions* definition = new vil_nitf2_field_definitions();
-  all_definitions().insert( vcl_make_pair(desId, definition) );
+  all_definitions().insert( std::make_pair(desId, definition) );
   return *definition;
 }
 
@@ -49,7 +50,7 @@ vil_nitf2_des::vil_nitf2_des( vil_nitf2_classification::file_version version, in
 bool vil_nitf2_des::read(vil_stream* stream)
 {
   if ( m_field_sequence1->read(*stream) ) {
-    vcl_string desId;
+    std::string desId;
     m_field_sequence1->get_value( "DESID", desId );
     if ( desId == "TRE_OVERFLOW" ){
       return true;
@@ -95,24 +96,24 @@ void vil_nitf2_des::add_shared_field_defs_2( vil_nitf2_field_definitions* defs, 
                .value( "TXSHD", "Text Extended Subheader Data" );
   (*defs)
     .field( "DESOFLW", "Overflowed Header Type", NITF_ENUM( 6, overflow_enum ),
-            false, VXL_NULLPTR, new vil_nitf2_field_value_one_of<vcl_string>( "DESID", "TRE_OVERFLOW" ) )
+            false, VXL_NULLPTR, new vil_nitf2_field_value_one_of<std::string>( "DESID", "TRE_OVERFLOW" ) )
     .field( "DESITEM", "Data Item Overflowed", NITF_INT( 3, false ),
-            false, VXL_NULLPTR, new vil_nitf2_field_value_one_of<vcl_string>( "DESID", "TRE_OVERFLOW" ))
+            false, VXL_NULLPTR, new vil_nitf2_field_value_one_of<std::string>( "DESID", "TRE_OVERFLOW" ))
     .field( "DESSHL", "Length of DES-Defined Subheader Fields", NITF_INT( 4, false ), false, VXL_NULLPTR, VXL_NULLPTR )
     .field( "DESDATA", "DES-Defined Data Field", NITF_TRES(), false,
             new vil_nitf2_max_field_value_plus_offset_and_threshold( "DESSHL", data_width, 0, -1 ),
-            new vil_nitf2_field_value_one_of<vcl_string>( "DESID", "TRE_OVERFLOW" ) )
+            new vil_nitf2_field_value_one_of<std::string>( "DESID", "TRE_OVERFLOW" ) )
     .end();
 }
 
 vil_nitf2_field::field_tree* vil_nitf2_des::get_tree( int i ) const
 {
   vil_nitf2_field::field_tree* t = new vil_nitf2_field::field_tree;
-  vcl_stringstream name_stream;
+  std::stringstream name_stream;
   name_stream << "Data Extension Segment";
   if ( i > 0 ) name_stream << " #" << i;
   t->columns.push_back( name_stream.str() );
-  vcl_string desId;
+  std::string desId;
   if ( m_field_sequence1->get_value( "DESID", desId ) ) {
     t->columns.push_back( desId );
   }

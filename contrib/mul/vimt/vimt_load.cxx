@@ -86,12 +86,12 @@ vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr& 
 
 //: Load image from path into byte image, merging transparent image planes
 // If input image is float then stretch values to byte
-void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& image,
+void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& image,
                        float unit_scaling)
 {
   vil_image_resource_sptr ir = vil_load_image_resource(im_path.c_str());
 
-  if (ir.ptr()==0)
+  if (ir.ptr()==VXL_NULLPTR)
   {
     image.image().set_size(0,0);
     return;
@@ -112,8 +112,8 @@ void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& im
   }
   else
   {
-    vcl_cerr<<"Unknown image pixel format ("<<ir->pixel_format()<<") for image "<<im_path.c_str()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"Unknown image pixel format ("<<ir->pixel_format()<<") for image "<<im_path.c_str()<<std::endl;
+    std::abort();
   }
 }
 

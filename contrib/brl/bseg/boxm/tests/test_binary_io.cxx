@@ -22,7 +22,7 @@ static void test_binary_io()
   vgl_vector_3d<double> world_dim(30,30,30);
   boxm_scene<boct_tree<short,point_type > > scene(lvcs, origin, block_dim, world_dim);
   scene.set_paths("./boxm_scene", "block");
-  x_write(vcl_cout, scene, "scene");
+  x_write(std::cout, scene, "scene");
 
   vsl_b_ofstream os("scene.bin");
   scene.b_write(os);
@@ -30,7 +30,7 @@ static void test_binary_io()
   vul_file::make_directory("./boxm_scene");
 
   boxm_scene<boct_tree<short,vgl_point_3d<double> > > scene_out;
-  vsl_b_ifstream is("scene.bin", vcl_ios_binary);
+  vsl_b_ifstream is("scene.bin", std::ios::binary);
   scene_out.b_read(is);
   vpl_rmdir("./boxm_scene");
   vpl_unlink("./scene.bin");

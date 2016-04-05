@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mbl_parse_string_list.h"
 //:
 // \file
@@ -6,7 +8,7 @@
 
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_block.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 //: Parse list of strings
 // Expects format of data:
@@ -16,12 +18,12 @@
 // }
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
-void mbl_parse_string_list(vcl_istream& is,
-                           vcl_vector<vcl_string>& items,
-                           const vcl_string& comment_str)
+void mbl_parse_string_list(std::istream& is,
+                           std::vector<std::string>& items,
+                           const std::string& comment_str)
 {
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   char c;
   ss>>c;  // Remove opening brace
   if (c!='{')
@@ -32,7 +34,7 @@ void mbl_parse_string_list(vcl_istream& is,
   unsigned comment_len = comment_str.size();
 
   items.resize(0);
-  vcl_string label;
+  std::string label;
   while (!ss.eof())
   {
     ss >> label;
@@ -42,8 +44,8 @@ void mbl_parse_string_list(vcl_istream& is,
     {
       // label begins with comment_str
       // - treat as comment and discard rest of line
-      vcl_string dummy;
-      vcl_getline(ss,dummy);
+      std::string dummy;
+      std::getline(ss,dummy);
       continue;
     }
     if (label == "}") continue;
@@ -64,11 +66,11 @@ void mbl_parse_string_list(vcl_istream& is,
 // }
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
-void mbl_parse_string_list(const vcl_string& data,
-                           vcl_vector<vcl_string>& items,
-                           const vcl_string& comment_str)
+void mbl_parse_string_list(const std::string& data,
+                           std::vector<std::string>& items,
+                           const std::string& comment_str)
 {
-  vcl_istringstream data_stream(data);
+  std::istringstream data_stream(data);
   mbl_parse_string_list(data_stream,items,comment_str);
 }
 

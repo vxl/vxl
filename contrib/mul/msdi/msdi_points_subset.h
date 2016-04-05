@@ -17,7 +17,7 @@ private:
   msdi_marked_images& marked_images_;
 
   //: Indicate which points to return in subset
-  vcl_vector<unsigned> index_;
+  std::vector<unsigned> index_;
 
   //: Current points
   msm_points points_;
@@ -31,7 +31,7 @@ public:
     //: Default constructor
     // /params index indicates subset of points to return
   msdi_points_subset(msdi_marked_images& raw_data,
-                             const vcl_vector<unsigned>& subset_index);
+                             const std::vector<unsigned>& subset_index);
 
     //: Construct with external vectors of images and points
     //  Pointers retained to both - they must stay in scope.
@@ -59,10 +59,10 @@ public:
   virtual const msm_points& points();
 
     //: Return current image file name
-  virtual vcl_string image_name() const;
+  virtual std::string image_name() const;
 
     //: Return current points file name
-  virtual vcl_string points_name() const;
+  virtual std::string points_name() const;
 };
 
 #endif // msdi_points_subset_h_

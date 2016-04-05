@@ -2,6 +2,7 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <iostream>
 #include "geml_matcher_correlation.h"
 //:
 // \file
@@ -12,7 +13,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 
@@ -27,14 +28,14 @@
 
 geml_matcher_correlation::geml_matcher_correlation( const vil1_memory_image_of<vxl_byte> image1,
                                                     const vil1_memory_image_of<vxl_byte> image2,
-                                                    const vcl_vector< vcl_pair<float,float> > &corners1,
-                                                    const vcl_vector< vcl_pair<float,float> > &corners2)
+                                                    const std::vector< std::pair<float,float> > &corners1,
+                                                    const std::vector< std::pair<float,float> > &corners2)
   : geml_matcher( image1, image2, corners1, corners2)
 {
 }
 
 
-vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
+std::vector< std::pair<int,int> > geml_matcher_correlation::get_matches()
 {
   // correlate each corner against each corner
   vnl_matrix<double> scores1to2(corners1_.size(),corners2_.size());
@@ -52,7 +53,7 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
 
       if (vnl_math::abs(x1-x2) < SEARCH_WINDOW_X && vnl_math::abs(y1-y2) < SEARCH_WINDOW_Y)
       {
-        vcl_pair<double,double> scores= best_local_correlation_score( i, j);
+        std::pair<double,double> scores= best_local_correlation_score( i, j);
 
         scores1to2.put( i, j, scores.first);
         scores2to1.put( j, i, scores.second);
@@ -66,8 +67,8 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   }
 
   // look for best match to first image corners
-  vcl_vector<int> bestimage1match( corners1_.size());
-  vcl_vector<double> bestimage1score( corners1_.size());
+  std::vector<int> bestimage1match( corners1_.size());
+  std::vector<double> bestimage1score( corners1_.size());
 
   for (unsigned int i=0; i< corners1_.size(); ++i)
   {
@@ -93,8 +94,8 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   }
 
   // look for best match to second image corners
-  vcl_vector<int> bestimage2match( corners2_.size());
-  vcl_vector<double> bestimage2score( corners2_.size());
+  std::vector<int> bestimage2match( corners2_.size());
+  std::vector<double> bestimage2score( corners2_.size());
 
   for (unsigned int i=0; i< corners2_.size(); ++i)
   {
@@ -122,7 +123,7 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
   // and check that the best match from image 1 to 2 is the
   //  same as the best match from image 2 to 1
 
-  vcl_vector< vcl_pair<int,int> > l;
+  std::vector< std::pair<int,int> > l;
 
   for (unsigned int i=0; i< corners1_.size(); i++)
   {
@@ -131,14 +132,14 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
 
     if ((int)i==b)
     {
-      vcl_cerr << i << ' ' << a << '\n';
-      vcl_cout << corners1_[i].first << ' ' << corners1_[i].second << ' '
-               << corners2_[a].first << ' ' << corners2_[a].second << vcl_endl;
-      l.push_back( vcl_pair<int,int>(i,a) );
+      std::cerr << i << ' ' << a << '\n';
+      std::cout << corners1_[i].first << ' ' << corners1_[i].second << ' '
+               << corners2_[a].first << ' ' << corners2_[a].second << std::endl;
+      l.push_back( std::pair<int,int>(i,a) );
     }
   }
 
-  //  vcl_cerr << bestimage1match << '\n'
+  //  std::cerr << bestimage1match << '\n'
   //           << bestimage2match << '\n';
 
   return l;
@@ -146,7 +147,7 @@ vcl_vector< vcl_pair<int,int> > geml_matcher_correlation::get_matches()
 
 
 // search in a small window (about 3x3) for the best correlation between a pair of corners
-vcl_pair<double,double> geml_matcher_correlation::best_local_correlation_score( const int c1, const int c2)
+std::pair<double,double> geml_matcher_correlation::best_local_correlation_score( const int c1, const int c2)
 {
   double x1= corners1_[c1].first;
   double y1= corners1_[c1].second;
@@ -177,5 +178,5 @@ vcl_pair<double,double> geml_matcher_correlation::best_local_correlation_score( 
     }
   }
 
-  return vcl_pair<double,double>(bestscore1,bestscore2);
+  return std::pair<double,double>(bestscore1,bestscore2);
 }

@@ -11,12 +11,12 @@
 #include <boxm/boxm_scene_parser.h>
 #include <vcl_cassert.h>
 
-bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
+bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const std::string &path)
 {
-  vcl_cout << "Loading pca info from xml-file" << vcl_endl;
+  std::cout << "Loading pca info from xml-file" << std::endl;
 
   path_out_ = path;
-  vcl_ifstream xml_ifs(xml_path().c_str());
+  std::ifstream xml_ifs(xml_path().c_str());
 
   if (!xml_ifs)
     return;
@@ -24,7 +24,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   bxml_element query("pca_info");
   bxml_data_sptr root = bxml_find_by_name(doc.root_element(), query);
   if (!root) {
-    vcl_cout << "bvpl_discover_pca_kernels - could not parse xml root\n";
+    std::cout << "bvpl_discover_pca_kernels - could not parse xml root\n";
   }
 
   //Parse neighborhood bounding box - units are number of voxels
@@ -40,21 +40,21 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   nbbox_elm->get_attribute("max_z", max_z);
 
   nbbox_ = vgl_box_3d<int>(vgl_point_3d<int>(min_x, min_y, min_y), vgl_point_3d<int>(max_x, max_y, max_z));
-  vcl_cout << "Neighborhood: " << nbbox_ << vcl_endl;
+  std::cout << "Neighborhood: " << nbbox_ << std::endl;
 
   //Parse Number of samples
   bxml_element nsamples_query("samples");
   bxml_data_sptr nsamples_data = bxml_find_by_name(root, nsamples_query);
   bxml_element* nsamples_elm = dynamic_cast<bxml_element*>(nsamples_data.ptr());
   nsamples_elm->get_attribute("nsamples", nsamples_);
-  vcl_cout << "Number of samples: " << nsamples_ << vcl_endl;
+  std::cout << "Number of samples: " << nsamples_ << std::endl;
 
   //Parse dimension
   bxml_element dim_query("dimension");
   bxml_data_sptr dim_data = bxml_find_by_name(root, dim_query);
   bxml_element* dim_elm = dynamic_cast<bxml_element*>(dim_data.ptr());
   dim_elm->get_attribute("feature_dim", feature_dim_);
-  vcl_cout << "Feature dimension: " << feature_dim_ << vcl_endl;
+  std::cout << "Feature dimension: " << feature_dim_ << std::endl;
 
   //Parse paths and set matrices
   bxml_element paths_query("paths");
@@ -62,13 +62,13 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   bxml_element* path_elm = dynamic_cast<bxml_element*>(paths_data.ptr());
 
   int valid = 0;
-  vcl_string ifs_path;
+  std::string ifs_path;
 
   path_elm->get_attribute("pc_path", ifs_path);
   if (ifs_path != pc_path())
     valid = -1;
   else{
-    vcl_ifstream ifs(ifs_path.c_str());
+    std::ifstream ifs(ifs_path.c_str());
     ifs >> pc_;
     if (pc_.size()!=feature_dim_*feature_dim_)
       valid = -2;
@@ -78,7 +78,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   if (ifs_path != weights_path())
     valid = -3;
   else{
-    vcl_ifstream ifs(ifs_path.c_str());
+    std::ifstream ifs(ifs_path.c_str());
     ifs >> weights_;
     if (weights_.size()!=feature_dim_)
       valid = -4;
@@ -89,7 +89,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
     valid = -5;
   else
   {
-    vcl_ifstream ifs(ifs_path.c_str());
+    std::ifstream ifs(ifs_path.c_str());
     ifs >> sample_mean_feature_ ;
     if (sample_mean_feature_.size()!=feature_dim_)
       valid = -6;
@@ -121,11 +121,11 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   if (ifs_path != data_mean_path()){
     compute_mean_feature(scene);
     valid = -9;
-    vcl_cout << "bvpl_discover_pca_kernels - errors parsing data_mean_feature.xml\n";
+    std::cout << "bvpl_discover_pca_kernels - errors parsing data_mean_feature.xml\n";
   }
   else
   {
-    vcl_ifstream ifs(ifs_path.c_str());
+    std::ifstream ifs(ifs_path.c_str());
     ifs >> data_mean_feature_ ;
     if (data_mean_feature_.size()!=feature_dim_)
       valid = -10;
@@ -137,14 +137,14 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const vcl_string &path)
   bxml_element* cell_length_elm = dynamic_cast<bxml_element*>(cell_length_data.ptr());
   bool has_length = cell_length_elm->get_attribute("length", finest_cell_length_);
   if (!has_length || finest_cell_length_ < 0.0){
-     vcl_cout << "Error: Finest cell length read from file: " << finest_cell_length_ << " has length " << has_length << vcl_endl;
+     std::cout << "Error: Finest cell length read from file: " << finest_cell_length_ << " has length " << has_length << std::endl;
      finest_cell_length_ = scene->finest_cell_length();
      valid = -11;
   }
-  vcl_cout << "Finest cell length: " << finest_cell_length_ << vcl_endl;
+  std::cout << "Finest cell length: " << finest_cell_length_ << std::endl;
 
   if (valid<0){
-    vcl_cout << "bvpl_discover_pca_kernels - errors parsing pca_info.xml. Error code: " << valid << vcl_endl;
+    std::cout << "bvpl_discover_pca_kernels - errors parsing pca_info.xml. Error code: " << valid << std::endl;
     xml_write();
   }
 }
@@ -167,7 +167,7 @@ void bvpl_discover_pca_kernels::set_up_pca_svd(boxm_scene<boct_tree<short,float>
   weights_ = element_product(weights_, weights_);
 
 #ifdef DEBUG
-  vcl_cerr << "Scatter Matix svd" << M*M.transpose() << '\n'
+  std::cerr << "Scatter Matix svd" << M*M.transpose() << '\n'
            << "PC Matix SVD:\n Size: " << pc_.size() << '\n' <<pc_ << '\n'
            << "Evals SVD:\nSize: " << weights_.size() << '\n' << weights_ << '\n';
   bvpl_write_pca(path_out_ + "/pca_matrices", M, weights_, pc_);
@@ -193,7 +193,7 @@ void bvpl_discover_pca_kernels::set_up_pca_evd(boxm_scene<boct_tree<short,float>
   weights_.flip();
 
 #ifdef DEBUG
-  vcl_cerr << "Scatter Matix" << S << '\n'
+  std::cerr << "Scatter Matix" << S << '\n'
            << "PC Matix EVD:\n Size: " << pc_.size() << '\n' <<pc_ << '\n'
            << "EVals EVD:\n Size: " << weights_.size() << '\n' <<weights_ << '\n';
   bvpl_write_pca(path_out_ + "/pca_evd", S, weights_, pc_);
@@ -212,8 +212,8 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
   sample_mean_feature_.fill(0.0f);
   vnl_matrix<double> S(feature_dim_, feature_dim_, 0.0f);
   vnl_random rng;
-  vcl_ofstream pos_ofs(pos_path().c_str());
-  vcl_ofstream data_ofs(data_path().c_str());
+  std::ofstream pos_ofs(pos_path().c_str());
+  std::ofstream data_ofs(data_path().c_str());
   data_ofs.precision(15);
 
   // 1. Traverse through the blocks/trees
@@ -226,12 +226,12 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
     assert(tree != NULL);
 
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
-    vcl_vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
     int tree_ncells = leaf_cells.size();
     unsigned long tree_nsamples = (unsigned long)((float)tree_ncells/scene_ncells*nsamples_);
 #ifdef DEBUG
-    vcl_cout <<"Tree nsamples is: " << tree_nsamples << '\n'
-             <<" nsamples is: " << nsamples_ <<vcl_endl;
+    std::cout <<"Tree nsamples is: " << tree_nsamples << '\n'
+             <<" nsamples is: " << nsamples_ <<std::endl;
 #endif
     for (unsigned i=0; i<tree_nsamples; ++i)
     {
@@ -294,7 +294,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
 
       ++nfeature;
 #ifdef DEBUG
-      vcl_cerr << "Feature EVD: " <<this_feature << '\n'
+      std::cerr << "Feature EVD: " <<this_feature << '\n'
                << "Mean Feature EVD: " <<mean_feature << '\n';
 #endif
     }
@@ -302,7 +302,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
 
   pos_ofs.close();
   data_ofs.close();
-  vcl_ofstream mean_ofs(sample_mean_path().c_str());
+  std::ofstream mean_ofs(sample_mean_path().c_str());
   mean_ofs.precision(15);
   mean_ofs << sample_mean_feature_;
   mean_ofs.close();
@@ -323,7 +323,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
   sample_mean_feature_.fill(0.0f);
   vnl_matrix<double> M(feature_dim_, (unsigned int)nsamples_);
   vnl_random rng(9667566ul);
-  vcl_ofstream pos_ofs(pos_path().c_str());
+  std::ofstream pos_ofs(pos_path().c_str());
 
   // 1. Traverse through the blocks/trees
   boxm_block_iterator<boct_tree<short,float> > it = scene->iterator();
@@ -335,7 +335,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
     assert(tree != NULL);
 
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
-    vcl_vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
     int tree_ncells = leaf_cells.size();
     unsigned long tree_nsamples = (unsigned long)(tree_ncells*nsamples_/scene_ncells); // possible overflow ...
 
@@ -388,7 +388,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
       sample_mean_feature_+=this_feature;
       ++feature_col;
 #ifdef DEBUG
-      vcl_cerr << "Feature SVD: " <<this_feature << '\n'
+      std::cerr << "Feature SVD: " <<this_feature << '\n'
                << "Mean Feature SVD: " <<mean_feature/(double)feature_col << '\n';
 #endif
     }
@@ -402,9 +402,9 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
   //4. Normalize feature vector
   sample_mean_feature_/=feature_col;
 #ifdef DEBUG
-  vcl_cerr << "Mean Feature SVD: " <<mean_feature << '\n';
+  std::cerr << "Mean Feature SVD: " <<mean_feature << '\n';
 #endif
-  vcl_ofstream mean_ofs(sample_mean_path().c_str());
+  std::ofstream mean_ofs(sample_mean_path().c_str());
   mean_ofs.precision(15);
   mean_ofs << sample_mean_feature_;
   mean_ofs.close();
@@ -419,8 +419,8 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
 //: Project training samples onto pca space and return error as a function of number of components used
 void bvpl_discover_pca_kernels::compute_training_error(vnl_vector<double> &proj_error)
 {
-  vcl_ifstream data_ifs(data_path().c_str());
-  vcl_cerr << data_path() << '\n';
+  std::ifstream data_ifs(data_path().c_str());
+  std::cerr << data_path() << '\n';
   //a vector to keep projection error - first element refers to error when using only first pc,
   //the sencond elemend, to error when projecting on frist 2 components and so on
   proj_error.set_size(feature_dim_);
@@ -436,7 +436,7 @@ void bvpl_discover_pca_kernels::compute_training_error(vnl_vector<double> &proj_
     vnl_vector<double> norm_feature(feature_dim_, 0.0);
     data_ifs >> norm_feature;
 #ifdef DEBUG
-    vcl_cerr << "Feature: " <<norm_feature << '\n';
+    std::cerr << "Feature: " <<norm_feature << '\n';
 #endif
     norm_feature-=sample_mean_feature_;
 
@@ -545,7 +545,7 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
     a = pc_.transpose() * (this_feature);
 
 #ifdef DEBUG
-    vcl_cout <<"This feature is " << this_feature <<vcl_endl;
+    std::cout <<"This feature is " << this_feature <<std::endl;
 #endif
 
     //project as a function of number of components
@@ -555,7 +555,7 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
       vnl_vector<double> feature_approx  = pc_.extract(feature_dim_, c+1) * a.extract(c+1);
       vnl_vector<double> rec_feature = pc_*a;
 #ifdef DEBUG
-      vcl_cout <<"Feature approx at c = " << c << " is " <<  feature_approx <<vcl_endl;
+      std::cout <<"Feature approx at c = " << c << " is " <<  feature_approx <<std::endl;
 #endif
       //compute error
       proj_error[c]+= (this_feature - feature_approx).squared_magnitude();
@@ -583,13 +583,13 @@ void bvpl_discover_pca_kernels::compute_testing_error(boxm_scene_base_sptr error
   boxm_scene<float_tree_type> * error_scene = dynamic_cast<boxm_scene<float_tree_type>* > (error_scene_base.as_pointer());
 
   if (!(data_scene &&error_scene)){
-    vcl_cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";
+    std::cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";
     return;
   }
 
   //get the cells for this block
   if (!(data_scene->valid_index(block_i, block_j, block_k) && error_scene->valid_index(block_i, block_j, block_k))){
-    vcl_cerr << "In compute_testing_error: Invalid block\n";
+    std::cerr << "In compute_testing_error: Invalid block\n";
     return;
   }
   data_scene->unload_active_blocks();
@@ -604,8 +604,8 @@ void bvpl_discover_pca_kernels::compute_testing_error(boxm_scene_base_sptr error
   error_tree->init_cells(-1.0f);
 
   //get the leaves
-  vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
-  vcl_vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
+  std::vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
+  std::vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
 
   //CAUTION: the neighborhood box was suppossed to be defined as number of regular neighbors
   //convert neighborhood box to scene coordinates
@@ -640,7 +640,7 @@ void bvpl_discover_pca_kernels::compute_testing_error(boxm_scene_base_sptr error
           boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
 
           if (!neighbor_cell){
-            vcl_cerr << "Error in compute_testing_error\n";
+            std::cerr << "Error in compute_testing_error\n";
             return;
           }
 
@@ -649,7 +649,7 @@ void bvpl_discover_pca_kernels::compute_testing_error(boxm_scene_base_sptr error
         }
 
     if (curr_dim != feature_dim_){
-      vcl_cerr << "Error in compute_testing_error\n";
+      std::cerr << "Error in compute_testing_error\n";
       return;
     }
     this_feature-=data_mean_feature_;
@@ -685,17 +685,17 @@ void bvpl_discover_pca_kernels::compute_testing_error_thread_safe(boxm_scene<boc
   boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
 
   if (!(data_scene &&error_scene)){
-    vcl_cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";
+    std::cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";
     return;
   }
 
   if (!(data_scene->load_all_blocks() && error_scene->load_all_blocks())){
-    vcl_cerr << "Must load all blocks into memory before using threads\n";
+    std::cerr << "Must load all blocks into memory before using threads\n";
     return;
   }
   //get the cells for this block
   if (!error_scene->valid_index(block_i, block_j, block_k)){
-    vcl_cerr << "In compute_testing_error: Invalid block\n";
+    std::cerr << "In compute_testing_error: Invalid block\n";
     return;
   }
 
@@ -712,8 +712,8 @@ void bvpl_discover_pca_kernels::compute_testing_error_thread_safe(boxm_scene<boc
   // error_tree->init_cells(-1.0f);
 
   //get the leaves
-  vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
-  //vcl_vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
+  std::vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
+  //std::vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
 
   //CAUTION: the neighborhood box was suppossed to be defined as number of regular neighbors
   //convert neighborhood box to scene coordinates
@@ -748,7 +748,7 @@ void bvpl_discover_pca_kernels::compute_testing_error_thread_safe(boxm_scene<boc
           boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
 
           if (!neighbor_cell){
-            vcl_cerr << "Error in compute_testing_error\n";
+            std::cerr << "Error in compute_testing_error\n";
             return;
           }
 
@@ -757,7 +757,7 @@ void bvpl_discover_pca_kernels::compute_testing_error_thread_safe(boxm_scene<boc
         }
 
     if (curr_dim != feature_dim_){
-      vcl_cerr << "Error in compute_testing_error\n";
+      std::cerr << "Error in compute_testing_error\n";
       return;
     }
     this_feature-=data_mean_feature_;
@@ -842,7 +842,7 @@ void bvpl_discover_pca_kernels::compute_mean_feature(boxm_scene<boct_tree<short,
   }
   data_mean_feature_ = data_mean_feature_/(double)nfeatures;
 
-  vcl_ofstream mean_ofs(data_mean_path().c_str());
+  std::ofstream mean_ofs(data_mean_path().c_str());
   mean_ofs.precision(15);
   mean_ofs << data_mean_feature_;
   mean_ofs.close();
@@ -882,14 +882,14 @@ vnl_matrix<float>& bvpl_discover_pca_kernels::compute_deviation_matrix(boxm_scen
   positions_.sort();
   if (nsamples_ != positions_.size())
   {
-    vcl_cerr << "Error computing PCA features: Wrong number of random samples generated\n";
+    std::cerr << "Error computing PCA features: Wrong number of random samples generated\n";
     return false;
   }
 
   cell_it.begin();
 
   //init cells array to first random element
-  vcl_list<unsigned long>::const_iterator rand_it = positions_.begin();
+  std::list<unsigned long>::const_iterator rand_it = positions_.begin();
   cell_it+=(*rand_it - pos_pre);
   pos_pre = *rand_it;
 
@@ -906,7 +906,7 @@ vnl_matrix<float>& bvpl_discover_pca_kernels::compute_deviation_matrix(boxm_scen
     vgl_point_3d<double> center_cell_centroid = cell_it.global_centroid();
 
     if (!center_cell){
-      vcl_cerr << "Error is bvpl_discover_pca_kernels: Unexpected NULL cell\n";
+      std::cerr << "Error is bvpl_discover_pca_kernels: Unexpected NULL cell\n";
       return false;
     }
 
@@ -925,7 +925,7 @@ vnl_matrix<float>& bvpl_discover_pca_kernels::compute_deviation_matrix(boxm_scen
           boct_tree_cell<short,float> *neighbor_cell = scene->locate_point_in_memory(neighbor_origin);
 
           if (!neighbor_cell){
-            vcl_cerr << "Error is bvpl_discover_pca_kernels: Unexpected NULL cell\n";
+            std::cerr << "Error is bvpl_discover_pca_kernels: Unexpected NULL cell\n";
             return false;
           }
 
@@ -1000,7 +1000,7 @@ void bvpl_discover_pca_kernels::xml_write()
   root->append_data(cell_length);
   root->append_text("\n");
 
-  vcl_ofstream os(xml_path().c_str());
+  std::ofstream os(xml_path().c_str());
   bxml_write(os, doc);
   os.close();
 
@@ -1013,9 +1013,9 @@ void bvpl_discover_pca_kernels::xml_write()
 //: Write a PCA file
 bool bvpl_discover_pca_kernels::write_pca_matrices()
 {
-  vcl_ofstream pc_ofs(pc_path().c_str());
+  std::ofstream pc_ofs(pc_path().c_str());
   pc_ofs.precision(15);
-  vcl_ofstream weights_ofs(weights_path().c_str());
+  std::ofstream weights_ofs(weights_path().c_str());
   weights_ofs.precision(15);
 
   pc_ofs << pc_;

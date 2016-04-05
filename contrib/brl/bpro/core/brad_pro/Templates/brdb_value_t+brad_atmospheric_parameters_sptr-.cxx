@@ -1,4 +1,4 @@
-#include <brdb/brdb_value.txx>
+#include <brdb/brdb_value.hxx>
 #include <brad/brad_atmospheric_parameters.h>
 #include <brad/io/brad_io_atmospheric_parameters.h>
 #include <vbl/io/vbl_io_smart_ptr.h>

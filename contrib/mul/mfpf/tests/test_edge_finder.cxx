@@ -4,14 +4,15 @@
 //  Copyright: (C) 2007 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test mfpf_edge_finder
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mfpf/mfpf_add_all_loaders.h>
@@ -25,7 +26,7 @@
 
 void test_edge_finder_search(mfpf_point_finder_builder& b)
 {
-  vcl_cout<<"Testing building and search."<<vcl_endl;
+  std::cout<<"Testing building and search."<<std::endl;
 
   mfpf_point_finder* pf = b.new_finder();
 
@@ -45,7 +46,7 @@ void test_edge_finder_search(mfpf_point_finder_builder& b)
   b.add_example(image,p0,u);
   b.build(*pf);
 
-  vcl_cout<<"Built model: "<<pf<<vcl_endl;
+  std::cout<<"Built model: "<<pf<<std::endl;
 
   vgl_point_2d<double> new_p;
   vgl_vector_2d<double> new_u;
@@ -53,7 +54,7 @@ void test_edge_finder_search(mfpf_point_finder_builder& b)
   pf->set_search_area(3,0);
 
   pf->search(image,p1,u,new_p,new_u);
-  vcl_cout<<"Found point: "<<new_p<<vcl_endl;
+  std::cout<<"Found point: "<<new_p<<std::endl;
 
   TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
@@ -62,7 +63,7 @@ void test_edge_finder_search(mfpf_point_finder_builder& b)
   pf->evaluate_region(image,p1,u,response);
   TEST("Response ni",response.image().ni(),7);
   TEST("Response nj",response.image().nj(),1);
-  vcl_cout<<"World2im: "<<response.world2im()<<vcl_endl;
+  std::cout<<"World2im: "<<response.world2im()<<std::endl;
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
@@ -73,7 +74,7 @@ void test_edge_finder_search(mfpf_point_finder_builder& b)
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
+  std::cout<<r0<<','<<r1<<','<<r2<<std::endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
 
@@ -82,7 +83,7 @@ void test_edge_finder_search(mfpf_point_finder_builder& b)
 
 void test_edge_finder()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing mfpf_edge_finder\n"
            << "***********************\n";
 
@@ -97,20 +98,20 @@ void test_edge_finder()
   {
     mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_edge_finder_builder());
 
-    vcl_istringstream ss(
+    std::istringstream ss(
           "mfpf_edge_finder_builder\n"
           "{\n"
           "  search_ni: 17\n"
           "}\n");
 
-    vcl_auto_ptr<mfpf_point_finder_builder>
+    std::auto_ptr<mfpf_point_finder_builder>
             pfb = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Builder",pfb->is_a(),"mfpf_edge_finder_builder");
     if (pfb->is_a()=="mfpf_edge_finder_builder")
     {
       mfpf_edge_finder_builder &a_pfb = static_cast<mfpf_edge_finder_builder&>(*pfb);
-      vcl_cout<<a_pfb<<vcl_endl;
+      std::cout<<a_pfb<<std::endl;
       TEST("search_ni configured",a_pfb.search_ni(),17);
     }
   }
@@ -138,7 +139,7 @@ void test_edge_finder()
     bfs_out.close();
 
     mfpf_edge_finder edge_finder_in;
-    mfpf_point_finder *base_ptr_in = 0;
+    mfpf_point_finder *base_ptr_in = VXL_NULLPTR;
 
     vsl_b_ifstream bfs_in("test_edge_finder.bvl.tmp");
     TEST ("Opened test_edge_finder.bvl.tmp for reading",

@@ -2,11 +2,12 @@
 #define boxm_refine_h_
 //:
 // \file
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class T_loc, class T_data>
 void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
@@ -14,13 +15,13 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   tree_type* tree = block->get_tree();
-  float max_alpha_int = (float)-vcl_log(1.0 - occlusion_prob_thresh);
+  float max_alpha_int = (float)-std::log(1.0 - occlusion_prob_thresh);
   // get the leaf nodes of the block
-  vcl_vector<boct_tree_cell<T_loc, T_data>*> leaf_nodes = tree->leaf_cells();
+  std::vector<boct_tree_cell<T_loc, T_data>*> leaf_nodes = tree->leaf_cells();
 #ifdef DEBUG
-  vcl_cout << "  NUMBER OF LEAF NODES=" << leaf_nodes.size();
+  std::cout << "  NUMBER OF LEAF NODES=" << leaf_nodes.size();
 #endif
-  vcl_vector<boct_tree_cell<T_loc, T_data >*> split_list;
+  std::vector<boct_tree_cell<T_loc, T_data >*> split_list;
   for (unsigned i=0; i<leaf_nodes.size(); i++) {
     boct_tree_cell<T_loc, T_data>* cell = leaf_nodes[i];
     T_data data = cell->data();
@@ -35,7 +36,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
       // get all the faces;
 #if 0
       boct_face_idx faces = ALL;
-      vcl_vector<boct_tree_cell<T_loc, T_data >*> neighbors;
+      std::vector<boct_tree_cell<T_loc, T_data >*> neighbors;
       cell->find_neighbors(faces, neighbors, cell->level()+1);
       split_list.insert(split_list.end(), neighbors.begin(), neighbors.end());
 #endif
@@ -43,7 +44,7 @@ void boxm_refine_block(boxm_block<boct_tree<T_loc, T_data> > *block,
   }
   num_split+=(int)split_list.size();
 #ifdef DEBUG
-  vcl_cout<<" Splitting "<<split_list.size()<<" cells" << vcl_endl;
+  std::cout<<" Splitting "<<split_list.size()<<" cells" << std::endl;
 #endif
   // splitting
   for (unsigned i=0; i<split_list.size(); i++) {
@@ -82,7 +83,7 @@ unsigned int boxm_refine_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   unsigned int nleaves = 0;
   boxm_block_iterator<tree_type> iter(&scene);
-  //float max_alpha_int = (float)-vcl_log(1.0 - occlusion_prob_thresh);
+  //float max_alpha_int = (float)-std::log(1.0 - occlusion_prob_thresh);
   for (; !iter.end(); iter++) {
     scene.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
@@ -90,7 +91,7 @@ unsigned int boxm_refine_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     //nleaves += block->size();
     scene.write_active_block();
   }
-  vcl_cout<<"Total No of leaves split "<<nleaves<<vcl_endl;
+  std::cout<<"Total No of leaves split "<<nleaves<<std::endl;
   return nleaves;
 }
 

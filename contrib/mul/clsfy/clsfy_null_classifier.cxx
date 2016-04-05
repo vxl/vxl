@@ -10,24 +10,25 @@
 // \author iscott
 // \date    25 Aug 2009
 
+#include <iostream>
+#include <string>
+#include <algorithm>
 #include "clsfy_null_classifier.h"
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 
 //=======================================================================
 
-vcl_string clsfy_null_classifier::is_a() const
+std::string clsfy_null_classifier::is_a() const
 {
-  return vcl_string("clsfy_null_classifier");
+  return std::string("clsfy_null_classifier");
 }
 
 //=======================================================================
 
-bool clsfy_null_classifier::is_class(vcl_string const& s) const
+bool clsfy_null_classifier::is_class(std::string const& s) const
 {
   return s == clsfy_null_classifier::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -41,7 +42,7 @@ clsfy_classifier_base* clsfy_null_classifier::clone() const
 
 //=======================================================================
 
-void clsfy_null_classifier::print_summary(vcl_ostream& os) const
+void clsfy_null_classifier::print_summary(std::ostream& os) const
 {
   os << "n_dims: " << n_dims_ << " default class: " << default_class_;
 }
@@ -71,9 +72,9 @@ void clsfy_null_classifier::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, default_class_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_null_classifier&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_null_classifier&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
@@ -82,14 +83,14 @@ void clsfy_null_classifier::b_read(vsl_b_istream& bfs)
 //: The number of possible output classes.
 unsigned clsfy_null_classifier::n_classes() const
 {
-  return vcl_max(1u,default_class_);
+  return std::max(1u,default_class_);
 }
 
 //=======================================================================
 
 //: Return the probability the input being in each class.
 // output(i) i<nClasses, contains the probability that the input is in class i
-void clsfy_null_classifier::class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const
+void clsfy_null_classifier::class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const
 {
   unsigned n=n_classes();
   outputs.resize(n);

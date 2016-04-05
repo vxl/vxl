@@ -2,7 +2,7 @@
 # brl/bseg/sbin/CMakeLists.txt
 
 include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
-include( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
+include( ${VXL_ROOT_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 
 include_directories( ${BRL_INCLUDE_DIR} )

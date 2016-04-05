@@ -1,12 +1,14 @@
 // This is mul/mbl/mbl_exception.cxx
+#include <cerrno>
+#include <iostream>
+#include <cstring>
 #include "mbl_exception.h"
 //:
 // \file
 // \brief Exceptions thrown by mbl, and a mechanism for turning them off.
 // \author Ian Scott.
 
-#include <vcl_cerrno.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 
 #if 0 // should be #ifdef VCL_VC, but it doesn't work yet - I can't get it to link
 #pragma comment(lib, "user32")
@@ -35,9 +37,9 @@ WINUSERAPI bool WINAPI OpenClipboard(HANDLE hWndNewOwner);
 WINUSERAPI bool WINAPI CloseClipboard(void);
 WINUSERAPI HANDLE WINAPI GetClipboardData(UINT uFormat);
 WINBASEAPI void * WINAPI GlobalLock(HANDLE hMem);
-static vcl_string LotsOfInfo()
+static std::string LotsOfInfo()
 {
-  vcl_string text;
+  std::string text;
   text = "Stack: ";
   ::AfxDumpStack(AFX_STACK_DUMP_TARGET_CLIPBOARD);
   if ( !::OpenClipboard(0) )
@@ -56,7 +58,7 @@ static vcl_string LotsOfInfo()
 
 #else // 0, should be VCL_VC
 
-static vcl_string LotsOfInfo()
+static std::string LotsOfInfo()
 {
   return "";
 }
@@ -65,30 +67,30 @@ static vcl_string LotsOfInfo()
 
 #if !VCL_HAS_EXCEPTIONS
 
-mbl_exception_abort::mbl_exception_abort(const vcl_string& comment):
+mbl_exception_abort::mbl_exception_abort(const std::string& comment):
   msg_(comment + LotsOfInfo()) {}
 
 #else
 
-mbl_exception_abort::mbl_exception_abort(const vcl_string& comment):
-  vcl_logic_error(comment + LotsOfInfo()) {}
+mbl_exception_abort::mbl_exception_abort(const std::string& comment):
+  std::logic_error(comment + LotsOfInfo()) {}
 
 #endif
 
-mbl_exception_os_error::mbl_exception_os_error(int errnum, const vcl_string &file_name,
-                                               const vcl_string &comment/*=""*/):
+mbl_exception_os_error::mbl_exception_os_error(int errnum, const std::string &file_name,
+                                               const std::string &comment/*=""*/):
 #if !VCL_HAS_EXCEPTIONS
-  msg_(file_name + " " + vcl_strerror(errnum) + "\n" + comment),
-    errno(errnum), error_message(vcl_strerror(errnum)), filename(file_name),
+  msg_(file_name + " " + std::strerror(errnum) + "\n" + comment),
+    errno(errnum), error_message(std::strerror(errnum)), filename(file_name),
     additional_comment(comment) {}
 #else
-  vcl_runtime_error(vcl_string("\"") + file_name + "\" " + vcl_strerror(errnum) + "\n" + comment),
-    err_no(errnum), error_message(vcl_strerror(errnum)), filename(file_name),
+  std::runtime_error(std::string("\"") + file_name + "\" " + std::strerror(errnum) + "\n" + comment),
+    err_no(errnum), error_message(std::strerror(errnum)), filename(file_name),
     additional_comment(comment) {}
 #endif
 
-void mbl_exception_throw_os_error(const vcl_string& filename,
-                                  const vcl_string& additional_comment /*=""*/)
+void mbl_exception_throw_os_error(const std::string& filename,
+                                  const std::string& additional_comment /*=""*/)
 {
   switch (errno)
   {

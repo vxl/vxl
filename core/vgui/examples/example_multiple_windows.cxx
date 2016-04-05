@@ -8,9 +8,10 @@
 // 2 - selecting the "Close View" menu option
 // 3 - pressing Meta-W (caught by vgui_quit_tableau and vgui_shell_tableau)
 
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <cstdlib>
+#include <iostream>
+#include <sstream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_text_tableau.h>
@@ -45,7 +46,7 @@ class example_flim_tableau : public vgui_tableau {
     else
       return false;
   }
-  vcl_string type_name() const { return "example_flim_tableau"; }
+  std::string type_name() const { return "example_flim_tableau"; }
 };
 
 typedef vgui_tableau_sptr_t<example_flim_tableau> example_flim_tableau_sptr;
@@ -68,7 +69,7 @@ static void hedphelym(const void* const_data)
 static void ptolemy()
 {
   vgui_text_tableau_new text_tab;
-  vcl_stringstream s; s << "This is view " << window_count;
+  std::stringstream s; s << "This is view " << window_count;
   text_tab->add(256,256,s.str());
 
   example_flim_tableau_new flim_tab;
@@ -98,8 +99,8 @@ int main (int argc, char** argv) {
   vgui::init(argc, argv);
 
   if (argc < 2) {
-    vcl_cerr << __FILE__ " : image_file argument required\n";
-    vcl_abort();
+    std::cerr << __FILE__ " : image_file argument required\n";
+    std::abort();
   }
 
   vil1_image img = vil1_load(argv[1]);
@@ -109,7 +110,7 @@ int main (int argc, char** argv) {
 
   int wd=img.width(), ht=img.height();
   vgui_text_tableau_new text_tab;
-  vcl_stringstream s; s << "This is view " << window_count;
+  std::stringstream s; s << "This is view " << window_count;
   text_tab->add(wd*.5f-100,ht*.5f,s.str());
 
   example_flim_tableau_new flim_tab;
@@ -127,7 +128,7 @@ int main (int argc, char** argv) {
   s.clear(); s << "Window " << window_count++;
   main_window->get_statusbar()->write(s.str().c_str());
 
-  vgui_text_graph(vcl_cerr);
+  vgui_text_graph(std::cerr);
 
   return vgui::run();
 }

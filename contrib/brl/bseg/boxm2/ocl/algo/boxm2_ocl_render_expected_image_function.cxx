@@ -20,15 +20,15 @@ float render_expected_image( boxm2_scene_sptr & scene,
                              bocl_mem_sptr & vis_image,
                              bocl_mem_sptr & max_omega_image,
                              bocl_mem_sptr & exp_img_dim,
-                             vcl_string data_type,
+                             std::string data_type,
                              bocl_kernel* kernel,
-                             vcl_size_t * lthreads,
+                             std::size_t * lthreads,
                              unsigned cl_ni,
                              unsigned cl_nj,
                              int apptypesize,
                              bocl_mem_sptr & tnearfar_mem_ptr,
-                             vcl_size_t startI,
-                             vcl_size_t startJ)
+                             std::size_t startI,
+                             std::size_t startJ)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -37,7 +37,7 @@ float render_expected_image( boxm2_scene_sptr & scene,
     if (cam->type_name()!= "vpgl_perspective_camera" &&
         cam->type_name()!= "vpgl_generic_camera" &&
         cam->type_name()!= "vpgl_affine_camera") {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
@@ -61,17 +61,17 @@ float render_expected_image( boxm2_scene_sptr & scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order;
+    std::vector<boxm2_block_id> vis_order;
     if(cam->type_name() == "vpgl_perspective_camera")
       vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),cl_ni,cl_nj);
     else
       vis_order= scene->get_vis_blocks(cam);
 
-    vcl_cout<<"Scene : "<<scene->data_path()<<' '<<vis_order.size()<<" cache size "<<opencl_cache->bytes_in_cache()<< vcl_endl;
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::cout<<"Scene : "<<scene->data_path()<<' '<<vis_order.size()<<" cache size "<<opencl_cache->bytes_in_cache()<< std::endl;
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id !=  vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -123,7 +123,7 @@ float render_expected_image( boxm2_scene_sptr & scene,
     opencl_cache->unref_mem(ray_d_buff.ptr());
     opencl_cache->unref_mem(cl_output.ptr());
     opencl_cache->unref_mem(lookup.ptr());
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }
 
@@ -136,9 +136,9 @@ float render_expected_image2( boxm2_scene_sptr & scene,
                               bocl_mem_sptr & vis_image,
                               bocl_mem_sptr & max_omega_image,
                               bocl_mem_sptr & exp_img_dim,
-                              vcl_string data_type,
+                              std::string data_type,
                               bocl_kernel* kernel,
-                              vcl_size_t * lthreads,
+                              std::size_t * lthreads,
                               unsigned cl_ni,
                               unsigned cl_nj,
                               int apptypesize,
@@ -151,7 +151,7 @@ float render_expected_image2( boxm2_scene_sptr & scene,
     if (cam->type_name()!= "vpgl_perspective_camera" &&
         cam->type_name()!= "vpgl_generic_camera" &&
         cam->type_name()!= "vpgl_affine_camera" ) {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
@@ -175,16 +175,16 @@ float render_expected_image2( boxm2_scene_sptr & scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order;
+    std::vector<boxm2_block_id> vis_order;
     if(cam->type_name() == "vpgl_perspective_camera")
       vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),cl_ni,cl_nj);
     else
       vis_order= scene->get_vis_blocks(cam);
-    vcl_cout<<"Scene : "<<scene->data_path()<<' '<<vis_order.size()<<" cache size "<<opencl_cache->bytes_in_cache()<< vcl_endl;
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::cout<<"Scene : "<<scene->data_path()<<' '<<vis_order.size()<<" cache size "<<opencl_cache->bytes_in_cache()<< std::endl;
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id !=  vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -236,7 +236,7 @@ float render_expected_image2( boxm2_scene_sptr & scene,
     opencl_cache->unref_mem(ray_d_buff.ptr());
     opencl_cache->unref_mem(cl_output.ptr());
     opencl_cache->unref_mem(lookup.ptr());
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }
 
@@ -252,9 +252,9 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
                                   bocl_mem_sptr & vis_image,
                                   bocl_mem_sptr & ray_level_image,
                                   bocl_mem_sptr & exp_img_dim,
-                                  vcl_string data_type,
+                                  std::string data_type,
                                   bocl_kernel* kernel,
-                                  vcl_size_t * lthreads,
+                                  std::size_t * lthreads,
                                   unsigned cl_ni,
                                   unsigned cl_nj )
 {
@@ -265,7 +265,7 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
     if (cam->type_name()!= "vpgl_perspective_camera" &&
         cam->type_name() != "vpgl_generic_camera" &&
         cam->type_name() != "vpgl_affine_camera" ) {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
@@ -279,7 +279,7 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
 
     ////////////////////////////////////////////////////////////////////////////////
     //gotta do this the old fashion way for debuggin....
-    vcl_cout<<"  DEBUG: COMPUTING CONE HALF ANGLES ON CPU"<<vcl_endl;
+    std::cout<<"  DEBUG: COMPUTING CONE HALF ANGLES ON CPU"<<std::endl;
     int cnt = 0;
     for (unsigned j=0;j<cl_nj;++j) {
       for (unsigned i=0;i<cl_ni;++i) {
@@ -293,12 +293,12 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
       }
     }
     ray_d_buff->write_to_buffer(queue);
-    vcl_cout<<"opencl Half angle: "
+    std::cout<<"opencl Half angle: "
             <<ray_directions[0]<<','
             <<ray_directions[1]<<','
             <<ray_directions[2]<<','
             <<ray_directions[3]<<'\n'
-            <<"  DEBUG: FINISHED CONE HALF ANGLES ON CPU"<<vcl_endl;
+            <<"  DEBUG: FINISHED CONE HALF ANGLES ON CPU"<<std::endl;
     ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -323,11 +323,11 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
     centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -379,7 +379,7 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
     delete[] ray_origins;
     delete[] ray_directions;
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }
 
@@ -391,9 +391,9 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
                                  bocl_mem_sptr & exp_image,
                                  bocl_mem_sptr & vis_image,
                                  bocl_mem_sptr & exp_img_dim,
-                                 vcl_string data_type,
+                                 std::string data_type,
                                  bocl_kernel* kernel,
-                                 vcl_size_t * lthreads,
+                                 std::size_t * lthreads,
                                  unsigned cl_ni,
                                  unsigned cl_nj )
 {
@@ -404,7 +404,7 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
     if (cam->type_name()!= "vpgl_perspective_camera" &&
         cam->type_name() != "vpgl_generic_camera" &&
         cam->type_name() != "vpgl_affine_camera") {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
@@ -428,11 +428,11 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -444,10 +444,10 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
         bocl_mem *aux_sun   = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX0>::prefix(data_type));
-        //vcl_cout << "id = " << id << vcl_endl;
-        vcl_cout << "blk = " << blk->cpu_buffer() << '\n'
+        //std::cout << "id = " << id << std::endl;
+        std::cout << "blk = " << blk->cpu_buffer() << '\n'
                  << "alpha = " << alpha->cpu_buffer() << '\n'
-                 << "aux_sun = " << aux_sun->cpu_buffer() << vcl_endl;
+                 << "aux_sun = " << aux_sun->cpu_buffer() << std::endl;
 
         transfer_time += (float) transfer.all();
         ////3. SET args
@@ -484,7 +484,7 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
     delete[] ray_origins;
     delete[] ray_directions;
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }
 
@@ -496,9 +496,9 @@ float render_expected_phongs_image( boxm2_scene_sptr & scene,
                                     bocl_mem_sptr & exp_image,
                                     bocl_mem_sptr & vis_image,
                                     bocl_mem_sptr & exp_img_dim,
-                                    vcl_string data_type,
+                                    std::string data_type,
                                     bocl_kernel* kernel,
-                                    vcl_size_t * lthreads,
+                                    std::size_t * lthreads,
                                     unsigned cl_ni,
                                     unsigned cl_nj,
                                     bocl_mem_sptr sundir)
@@ -510,7 +510,7 @@ float render_expected_phongs_image( boxm2_scene_sptr & scene,
     if (cam->type_name()!= "vpgl_perspective_camera" &&
         cam->type_name()!= "vpgl_generic_camera" &&
         cam->type_name()!= "vpgl_affine_camera" ) {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
@@ -534,14 +534,14 @@ float render_expected_phongs_image( boxm2_scene_sptr & scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout<<(*id);
+        std::cout<<(*id);
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         bocl_kernel* kern =  kernel;
@@ -586,7 +586,7 @@ float render_expected_phongs_image( boxm2_scene_sptr & scene,
     delete[] ray_origins;
     delete[] ray_directions;
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }
 
@@ -600,7 +600,7 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
                                   bocl_mem_sptr & vis_image,
                                   bocl_mem_sptr & exp_img_dim,
                                   bocl_kernel* kernel,
-                                  vcl_size_t * lthreads,
+                                  std::size_t * lthreads,
                                   unsigned cl_ni,
                                   unsigned cl_nj,
                                   const brad_image_metadata_sptr  metadata,
@@ -613,7 +613,7 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
     if (cam->type_name()!= "vpgl_perspective_camera" &&
         cam->type_name()!= "vpgl_generic_camera" &&
         cam->type_name()!= "vpgl_affine_camera" )  {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
@@ -625,20 +625,20 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
     // get normal directions
-    vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
+    std::vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
     unsigned int num_normals = normals.size();
     // opencl code depends on there being exactly 16 normal directions - do sanity check here
     if (num_normals != 16) {
-      vcl_cerr << "ERROR: boxm2_ocl_update_alpha_naa_process: num_normals = " << num_normals << ".  Expected 16\n";
+      std::cerr << "ERROR: boxm2_ocl_update_alpha_naa_process: num_normals = " << num_normals << ".  Expected 16\n";
       return false;
     }
 
    double deg2rad = vnl_math::pi_over_180;
    double sun_az = metadata->sun_azimuth_ * deg2rad;
    double sun_el = metadata->sun_elevation_ * deg2rad;
-   vgl_vector_3d<double> sun_dir(vcl_sin(sun_az)*vcl_cos(sun_el),
-                                 vcl_cos(sun_az)*vcl_cos(sun_el),
-                                 vcl_sin(sun_el));
+   vgl_vector_3d<double> sun_dir(std::sin(sun_az)*std::cos(sun_el),
+                                 std::cos(sun_az)*std::cos(sun_el),
+                                 std::sin(sun_el));
 
    // buffers for holding radiance scales and offsets per normal
    float* radiance_scales_buff = new float[num_normals];
@@ -658,7 +658,7 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
       double radiance_shadow = brad_expected_radiance_chavez(1.0, normals[n], shadow_metadata, *atm_params);
       radiance_shadow_scales_buff[n] = radiance_shadow - offset;
 #endif
-      vcl_cout << "radiance_scales["<<n<<"] = " << radiance_scales_buff[n] << vcl_endl;
+      std::cout << "radiance_scales["<<n<<"] = " << radiance_scales_buff[n] << std::endl;
    }
 
     bocl_mem_sptr radiance_scales = new bocl_mem(device->context(), radiance_scales_buff, sizeof(float)*num_normals,"radiance scales buffer");
@@ -680,14 +680,14 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout << (*id) << vcl_endl;
+        std::cout << (*id) << std::endl;
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         bocl_kernel* kern =  kernel;
@@ -700,7 +700,7 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
         int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         // data type string may contain an identifier so determine the buffer size
         unsigned int num_cells = alpha->num_bytes()/alphaTypeSize;
-        vcl_string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
+        std::string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
         int appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
 
         bocl_mem* naa_apm  = opencl_cache->get_data(scene, *id,data_type,num_cells*appTypeSize, true);
@@ -727,11 +727,11 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
         kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
 
         //execute kernel
-        vcl_cout << "executing kernel.." << vcl_endl;
+        std::cout << "executing kernel.." << std::endl;
         kern->execute(queue, 2, lthreads, gThreads);
         clFinish(queue);
         float kern_time = kern->exec_time();
-        vcl_cout << "..exec_time = " << kern_time << vcl_endl;
+        std::cout << "..exec_time = " << kern_time << std::endl;
         gpu_time += kern_time;
 
         //clear render kernel args so it can reset em on next execution
@@ -748,8 +748,8 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
     //delete[] radiance_scales_shadow_buff;
     delete[] radiance_offsets_buff;
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<'\n'
-            << "Returning" << vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<'\n'
+            << "Returning" << std::endl;
     return gpu_time + transfer_time;
 }
 
@@ -762,7 +762,7 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
                                      bocl_mem_sptr & vis_image,
                                      bocl_mem_sptr & exp_img_dim,
                                      bocl_kernel* kernel,
-                                     vcl_size_t * lthreads,
+                                     std::size_t * lthreads,
                                      unsigned cl_ni,
                                      unsigned cl_nj)
 {
@@ -773,7 +773,7 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
     if (cam->type_name()!= "vpgl_perspective_camera" &&
         cam->type_name()!= "vpgl_generic_camera" &&
         cam->type_name()!= "vpgl_affine_camera" ) {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
@@ -785,7 +785,7 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
     // get normals
-    vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
+    std::vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
     cl_float16 normals_x, normals_y, normals_z;
 #ifdef CL_ALIGNED
     for (unsigned int i=0; i<16; ++i) {
@@ -825,14 +825,14 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     //2. set global thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout << (*id) << vcl_endl;
+        std::cout << (*id) << std::endl;
 
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
@@ -846,7 +846,7 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
         int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         // data type string may contain an identifier so determine the buffer size
         unsigned int num_cells = alpha->num_bytes()/alphaTypeSize;
-        vcl_string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
+        std::string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
         int appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
 
         bocl_mem* naa_apm  = opencl_cache->get_data(scene, *id,data_type,num_cells*appTypeSize, true);
@@ -874,11 +874,11 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
         kern->set_local_arg( lthreads[0]*lthreads[1]*sizeof(cl_int) );
 
         //execute kernel
-        vcl_cout << "executing kernel.." << vcl_endl;
+        std::cout << "executing kernel.." << std::endl;
         kern->execute(queue, 2, lthreads, gThreads);
         clFinish(queue);
         float kern_time = kern->exec_time();
-        vcl_cout << "..exec_time = " << kern_time << vcl_endl;
+        std::cout << "..exec_time = " << kern_time << std::endl;
         gpu_time += kern_time;
 
         //clear render kernel args so it can reset em on next execution
@@ -892,6 +892,6 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
     delete[] ray_origins;
     delete[] ray_directions;
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }

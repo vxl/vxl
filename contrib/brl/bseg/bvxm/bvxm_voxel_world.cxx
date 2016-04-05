@@ -1,13 +1,14 @@
 // This is brl/bseg/bvxm/bvxm_voxel_world.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "bvxm_voxel_world.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_2d.h>
@@ -70,20 +71,20 @@ vgl_plane_3d<double> bvxm_voxel_world::fit_plane()
 }
 
 //: output description of voxel world to stream.
-vcl_ostream&  operator<<(vcl_ostream& s, bvxm_voxel_world const& vox_world)
+std::ostream&  operator<<(std::ostream& s, bvxm_voxel_world const& vox_world)
 {
   bvxm_world_params_sptr params = vox_world.get_params();
-  s << "bvxm_voxel_world : " << params->num_voxels().x() << " x " << params->num_voxels().y() << " x " << params->num_voxels().z() << vcl_endl;
+  s << "bvxm_voxel_world : " << params->num_voxels().x() << " x " << params->num_voxels().y() << " x " << params->num_voxels().z() << std::endl;
   return s;
 }
 
 //: save the occupancy grid as an 8-bit 3-d vff image
-bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename,unsigned scale_idx)
+bool bvxm_voxel_world::save_occupancy_vff(std::string filename,unsigned scale_idx)
 {
   // open file for binary writing
-  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening file " << filename << " for write!\n";
+    std::cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
   bvxm_world_params_sptr params = this->get_params();
@@ -98,7 +99,7 @@ bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename,unsigned scale_idx
   vxl_uint_32 nz = ocp_grid->grid_size().z();
 
   // write header
-  vcl_stringstream header;
+  std::stringstream header;
   header << "ncaa\n"
          << "title=bvxm occupancy probabilities;\n"
          << "rank=3;\n"
@@ -112,7 +113,7 @@ bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename,unsigned scale_idx
          << "origin=0 0 0;\n"
          << "rawsize=" << nx*ny*nz << ";\n\f\n";
 
-  vcl_string header_string = header.str();
+  std::string header_string = header.str();
   unsigned header_len = header_string.size();
 
   ofs.write(header_string.c_str(),header_len);
@@ -123,14 +124,14 @@ bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename,unsigned scale_idx
 
   bvxm_voxel_grid<ocp_datatype>::iterator ocp_it = ocp_grid->begin();
   for (unsigned k=nz-1; ocp_it != ocp_grid->end(); ++ocp_it, --k) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
       for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
         ocp_array[k*nx*ny + j*nx + i] = (unsigned char)((*ocp_it)(i,j) * 255.0);;
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   ofs.write(reinterpret_cast<char*>(ocp_array),sizeof(unsigned char)*nx*ny*nz);
 
   ofs.close();
@@ -144,9 +145,9 @@ bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename,unsigned scale_idx
 bool bvxm_voxel_world::clean_grids()
 {
   // look for existing grids in the directory
-  vcl_string storage_directory = params_->model_dir();
+  std::string storage_directory = params_->model_dir();
 
-  vcl_stringstream grid_glob;
+  std::stringstream grid_glob;
   grid_glob << storage_directory << "/*.vox";
   bool result = vul_file::delete_file_glob(grid_glob.str().c_str());
 
@@ -171,10 +172,10 @@ bool bvxm_voxel_world::update_lidar(bvxm_image_metadata const& observation,
 {
   // check image sizes
   if ( (observation.img->ni() != pix_prob_density.ni()) || (observation.img->nj() != pix_prob_density.nj()) ) {
-    vcl_cerr << "error: metadata image size does not match probability image size.\n";
+    std::cerr << "error: metadata image size does not match probability image size.\n";
   }
   if ( (observation.img->ni() != mask.ni()) || (observation.img->nj() != mask.nj()) ) {
-    vcl_cerr << "error: metadata image size does not match mask image size.\n";
+    std::cerr << "error: metadata image size does not match mask image size.\n";
   }
   return this->update_lidar_impl(observation, true, pix_prob_density, true, mask, scale);
 }
@@ -193,7 +194,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   double lidar_pixel_size = 1.0;
   if (dummy_cam->type_name()=="vpgl_geo_camera"){
     vpgl_geo_camera* lcam = static_cast<vpgl_geo_camera*>(dummy_cam.ptr());
-    vcl_cout << "Lidar Camera\n" << *lcam << vcl_endl;
+    std::cout << "Lidar Camera\n" << *lcam << std::endl;
     lidar_pixel_size = lcam->pixel_spacing();
   }
   //typedef bvxm_voxel_traits<LIDAR>::lidar_processor lidar_processor;
@@ -205,8 +206,8 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   ocp_datatype max_vox_prob = params_->max_occupancy_prob();
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -220,7 +221,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
+    std::cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
     return false;
   }
 
@@ -251,7 +252,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
 
-  vcl_cout << "Pass 1:" << vcl_endl;
+  std::cout << "Pass 1:" << std::endl;
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,  scale);
@@ -275,13 +276,13 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it, ++preX_slab_it, ++PLvisX_slab_it)
   {
-    vcl_cout << k_idx << vcl_endl;
+    std::cout << k_idx << std::endl;
 
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[k_idx], frame_backproj);
 
 #ifdef DEBUG
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss << "./frame_backproj_" << k_idx <<".tiff";
     bvxm_util::write_slab_as_image(frame_backproj,ss.str());
 #endif
@@ -300,7 +301,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
     for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++) {
       for (unsigned j_idx=0; j_idx<frame_backproj.ny(); j_idx++) {
-        vcl_vector<vgl_homg_point_2d<double> > vp(4);
+        std::vector<vgl_homg_point_2d<double> > vp(4);
         int i = i_idx+1;
         int j = j_idx-1;
         vp[0] = vgl_homg_point_2d<double>(i, j);
@@ -327,10 +328,10 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 #ifdef DEBUG
         if (p > p_max) {
           p_max = p;
-          vcl_cout << "-------------max_p=" << p << vcl_endl;
+          std::cout << "-------------max_p=" << p << std::endl;
         }
         if (p >1.0) {
-          vcl_cout << "ERROR!" << vcl_endl;
+          std::cout << "ERROR!" << std::endl;
           p=max_vox_prob;
         }
 #endif
@@ -348,7 +349,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     // multiply to get PLPX
     bvxm_util::multiply_slabs(PL,*ocp_slab_it,PLPX);
 #ifdef DEBUG
-    vcl_stringstream ss1, ss2, ss3;
+    std::stringstream ss1, ss2, ss3;
     ss1 << "PL_" << k_idx <<".tiff";
     ss2 <<"PX_" << k_idx <<".tiff";
     ss3 << "PL_P" << k_idx <<".tiff";
@@ -368,7 +369,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
       *preX_accum_it += (*PLPX_img_it) * (*visX_accum_it);
     }
 #ifdef DEBUG
-    vcl_stringstream plpx, vis, prex;
+    std::stringstream plpx, vis, prex;
     plpx << "PLPX_" << k_idx <<".tiff";
     vis  << "visX_" << k_idx <<".tiff";
     prex << "preX_" << k_idx <<".tiff";
@@ -397,19 +398,19 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   bvxm_voxel_slab<float> visX_accum_vox(grid_size.x(),grid_size.y(),1);
 
 #ifdef DEBUG
-  vcl_stringstream vis2, prex2;
+  std::stringstream vis2, prex2;
   vis2  << "visX2_.tiff";
   prex2 << "preX2_.tiff";
   bvxm_util::write_slab_as_image(visX_accum,vis2.str());
   bvxm_util::write_slab_as_image(preX_accum,prex2.str());
 #endif
 
-  vcl_cout << "\nPass 2:" << vcl_endl;
+  std::cout << "\nPass 2:" << std::endl;
   PLvisX_slab_it = PLvisX.begin();
   preX_slab_it = preX.begin();
   bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
   for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++PLvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2) {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // transform preX_sum to current level
     bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[k_idx], preX_accum_vox);
@@ -436,7 +437,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
         *PX_it = max_vox_prob;
     }
   }
-  vcl_cout << "\ndone." << vcl_endl;
+  std::cout << "\ndone." << std::endl;
 
   if (return_prob) {
     // fill pixel_probabilities with preX_accum
@@ -486,8 +487,8 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -505,7 +506,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
   if ((!bvxm_util::img_to_slab(lidar_height,lidar_height_slab)) ||
       (!bvxm_util::img_to_slab(lidar_edges,lidar_edges_slab)) ||
       (!bvxm_util::img_to_slab(lidar_edges_prob,lidar_edges_prob_slab))) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
+    std::cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
     return false;
   }
 
@@ -521,7 +522,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
 
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++edges_slab_it)
   {
-    vcl_cout << k_idx << vcl_endl;
+    std::cout << k_idx << std::endl;
 
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(lidar_height_slab, H_plane_to_img[k_idx], lidar_height_backproj);
@@ -536,7 +537,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
 
     for (unsigned i_idx=0; i_idx<lidar_height_backproj.nx(); i_idx++) {
       for (unsigned j_idx=0; j_idx<lidar_height_backproj.ny(); j_idx++) {
-        vcl_vector<vgl_homg_point_2d<double> > vp(4);
+        std::vector<vgl_homg_point_2d<double> > vp(4);
         int i = i_idx+1;
         int j = j_idx-1;
         vp[0] = vgl_homg_point_2d<double>(i, j);
@@ -588,8 +589,8 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
 
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
+  std::vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
 
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
@@ -615,9 +616,9 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
-  vcl_cout << "generating height map from virtual camera:" << vcl_endl;
+  std::cout << "generating height map from virtual camera:" << std::endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // compute PXvisX for virtual camera and update visX
     bvxm_util::warp_slab_bilinear(*ocp_slab_it,H_virtual_img_to_plane[z],slice_prob_img);
@@ -636,7 +637,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
       *visX_it *= (1.0f - *PX_it);
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
 #define HMAP_DEBUG
 #ifdef  DEBUG
@@ -656,7 +657,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   /*
   // first, median filter heightmap
   vil_image_view<float> heightmap_med_img(heightmap.ni(),heightmap.nj());
-  vcl_vector<int> strel_vec;
+  std::vector<int> strel_vec;
   for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
     strel_vec.push_back(i);
   vil_structuring_element strel(strel_vec,strel_vec);
@@ -668,7 +669,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   vil_image_view<bool> inliers(heightmap.ni(),heightmap.nj());
   vil_threshold_below(med_abs_diff,inliers,med_diff_thresh);
 
-  vcl_cout << "smoothing height map: ";
+  std::cout << "smoothing height map: ";
   vil_image_view<float> heightmap_filtered_img(heightmap.ni(),heightmap.nj(),1);
   vil_image_view<bool> conf_mask(heightmap.ni(),heightmap.nj());
   // threshold confidence
@@ -687,7 +688,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   }
 
   for (unsigned i=0; i< n_smooth_iterations; ++i) {
-    vcl_cout << '.';
+    std::cout << '.';
     // smooth heightmap
     vil_gauss_filter_2d(heightmap_filtered_img, heightmap_filtered_img, 1.0, 2, vil_convolve_constant_extend);
     // reset values we are confident in
@@ -700,7 +701,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   // finally, median filter final heightmap
   vil_image_view<float> heightmap_filtered_med(heightmap.ni(),heightmap.nj());
@@ -737,8 +738,8 @@ bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
+  std::vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
 
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
@@ -795,9 +796,9 @@ bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
-  vcl_cout << "generating depth map from virtual camera:" << vcl_endl;
+  std::cout << "generating depth map from virtual camera:" << std::endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // compute PXvisX for virtual camera and update visX
     bvxm_util::warp_slab_bilinear(*ocp_slab_it,H_virtual_img_to_plane[z],slice_prob_img);
@@ -822,7 +823,7 @@ bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil
       float inc_x = *x_pre_it - *x_it;
       float inc_y = *y_pre_it - *y_it;
       float inc_z = *z_pre_it - *z_it;
-      float d = vcl_sqrt(inc_x*inc_x + inc_y*inc_y + inc_z*inc_z);
+      float d = std::sqrt(inc_x*inc_x + inc_y*inc_y + inc_z*inc_z);
       *depth_it += d;
       *x_pre_it = *x_it;
       *y_pre_it = *y_it;
@@ -842,7 +843,7 @@ bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil
       *visX_it *= (1.0f - *PX_it);
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   // find the depth at the slab below the world volume
   for (unsigned i = 0; i < grid_size.x(); i++)
@@ -864,7 +865,7 @@ bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil
     float inc_x = *x_pre_it - *x_it;
     float inc_y = *y_pre_it - *y_it;
     float inc_z = *z_pre_it - *z_it;
-    float d = vcl_sqrt(inc_x*inc_x + inc_y*inc_y + inc_z*inc_z);
+    float d = std::sqrt(inc_x*inc_x + inc_y*inc_y + inc_z*inc_z);
     *depth_it += d;
   }
 
@@ -891,8 +892,8 @@ bool bvxm_voxel_world::uncertainty(vpgl_camera_double_sptr virtual_camera, vil_i
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
+  std::vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
 
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
@@ -918,9 +919,9 @@ bool bvxm_voxel_world::uncertainty(vpgl_camera_double_sptr virtual_camera, vil_i
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
-  vcl_cout << "generating depth map from virtual camera:" << vcl_endl;
+  std::cout << "generating depth map from virtual camera:" << std::endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // compute PXvisX for virtual camera and update visX
     bvxm_util::warp_slab_bilinear(*ocp_slab_it,H_virtual_img_to_plane[z],slice_prob_img);
@@ -942,7 +943,7 @@ bool bvxm_voxel_world::uncertainty(vpgl_camera_double_sptr virtual_camera, vil_i
       *visX_it *= (1.0f - *PX_it);
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   // compute the average
   bvxm_voxel_slab<float>::iterator uncer_it = uncer.begin(), uncer_cnt_it = uncer_cnt.begin();
@@ -972,8 +973,8 @@ void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
 {
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
-  vcl_vector<vgl_homg_point_2d<double> > voxel_corners_img;
-  vcl_vector<vgl_homg_point_2d<double> > voxel_corners_vox;
+  std::vector<vgl_homg_point_2d<double> > voxel_corners_img;
+  std::vector<vgl_homg_point_2d<double> > voxel_corners_vox;
 
   // create vectors containing four corners of grid, and their projections into the image
   double u=0, v=0;
@@ -1002,14 +1003,14 @@ void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
 
   vgl_h_matrix_2d_compute_linear comp_4pt;
   if (!comp_4pt.compute(voxel_corners_img,voxel_corners_vox, H_image_to_plane)) {
-    vcl_cerr << "ERROR computing homography from image to voxel slice.\n";
+    std::cerr << "ERROR computing homography from image to voxel slice.\n";
     for (unsigned i = 0; i < voxel_corners_img.size(); i++)
-      vcl_cerr << voxel_corners_img[i] << vcl_endl;
+      std::cerr << voxel_corners_img[i] << std::endl;
     for (unsigned i = 0; i < voxel_corners_vox.size(); i++)
-      vcl_cerr << voxel_corners_vox[i] << vcl_endl;
+      std::cerr << voxel_corners_vox[i] << std::endl;
   }
   if (!comp_4pt.compute(voxel_corners_vox,voxel_corners_img, H_plane_to_image)) {
-    vcl_cerr << "ERROR computing homography from voxel slice to image.\n";
+    std::cerr << "ERROR computing homography from voxel slice to image.\n";
   }
   return;
 }

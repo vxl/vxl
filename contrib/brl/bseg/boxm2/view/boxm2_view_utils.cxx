@@ -11,7 +11,7 @@ cl_context boxm2_view_utils::create_clgl_context(cl_device_id& device)
   //init glew
   GLenum err = glewInit();
   if (GLEW_OK != err)
-    vcl_cout<< "GlewInit Error: "<<glewGetErrorString(err)<<vcl_endl;    // Problem: glewInit failed, something is seriously wrong.
+    std::cout<< "GlewInit Error: "<<glewGetErrorString(err)<<std::endl;    // Problem: glewInit failed, something is seriously wrong.
 
   //initialize the render manager
   cl_platform_id platform_id[1];
@@ -55,7 +55,7 @@ cl_context boxm2_view_utils::create_clgl_context(cl_device_id& device)
 #endif
 
   if (status!=CL_SUCCESS) {
-    vcl_cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<vcl_endl;
+    std::cout<<"Error: Failed to create a compute CL/GL context!" << error_to_string(status) <<std::endl;
     return 0;
   }
   return ComputeContext;
@@ -89,7 +89,7 @@ boxm2_view_utils::convert_camera_to_vrml(vgl_vector_3d<double>  look,
     }
     else
     {
-        norm_quat_vxl=vnl_quaternion<double>(vnl_vector_fixed<double,3>(norm_axis_vxl.x(),norm_axis_vxl.y(),norm_axis_vxl.z()),vcl_acos(-look.z()));
+        norm_quat_vxl=vnl_quaternion<double>(vnl_vector_fixed<double,3>(norm_axis_vxl.x(),norm_axis_vxl.y(),norm_axis_vxl.z()),std::acos(-look.z()));
     }
     // norm_quat now holds the rotation needed to line up the view directions.
     // We need to find the rotation to align the up vectors also.
@@ -121,7 +121,7 @@ boxm2_view_utils::convert_camera_to_vrml(vgl_vector_3d<double>  look,
         }
     }
     temp_v_vxl=normalize(temp_v_vxl);
-    vnl_quaternion<double> rot_y_quat_vxl(vnl_vector_fixed<double,3>(temp_v_vxl.x(),temp_v_vxl.y(),temp_v_vxl.z()),vcl_acos(dot_product(new_y_vxl,v_vxl)));
+    vnl_quaternion<double> rot_y_quat_vxl(vnl_vector_fixed<double,3>(temp_v_vxl.x(),temp_v_vxl.y(),temp_v_vxl.z()),std::acos(dot_product(new_y_vxl,v_vxl)));
 
     vnl_quaternion<double> rot_quat_vxl=rot_y_quat_vxl*norm_quat_vxl;
     // rot_y_quat holds the rotation about the initial camera direction needed
@@ -130,10 +130,10 @@ boxm2_view_utils::convert_camera_to_vrml(vgl_vector_3d<double>  look,
     res_angle=rot_quat_vxl.angle();
 }
 
-void boxm2_view_utils::add_vrml_animation(vcl_ostream & os,vcl_vector<vpgl_camera_double_sptr > &  cameras)
+void boxm2_view_utils::add_vrml_animation(std::ostream & os,std::vector<vpgl_camera_double_sptr > &  cameras)
 {
-    vcl_vector<vnl_vector_fixed<double,4> >  orientations;
-    vcl_vector<vnl_vector_fixed<double,3> >  positions;
+    std::vector<vnl_vector_fixed<double,4> >  orientations;
+    std::vector<vnl_vector_fixed<double,3> >  positions;
     double rot_angle;
     vgl_vector_3d<double> up(0,0,1);
     vgl_vector_3d<double> rot_axis;
@@ -165,7 +165,7 @@ void boxm2_view_utils::add_vrml_animation(vcl_ostream & os,vcl_vector<vpgl_camer
     os<<"]\n"
       <<"\tkeyValue [\n";
     for (unsigned i=0;i<cameras.size();i++)
-      os<<positions[i][0]<<' '<<positions[i][1]<<' '<<positions[i][2]<<','<<vcl_endl;
+      os<<positions[i][0]<<' '<<positions[i][1]<<' '<<positions[i][2]<<','<<std::endl;
     os<<"]\n"
       <<"}\n"
       <<"DEF camerarot OrientationInterpolator {\n"
@@ -173,10 +173,10 @@ void boxm2_view_utils::add_vrml_animation(vcl_ostream & os,vcl_vector<vpgl_camer
     for (unsigned i=0;i<cameras.size();i++)
       os<<inc*(float)i<<',';
     os<<"]\n"
-      <<vcl_endl
+      <<std::endl
       <<"\tkeyValue [";
     for (unsigned i=0;i<cameras.size();i++)
-      os<<orientations[i][0]<<' '<<orientations[i][1]<<' '<<orientations[i][2]<<' '<<orientations[i][3]<<','<<vcl_endl;
+      os<<orientations[i][0]<<' '<<orientations[i][1]<<' '<<orientations[i][2]<<' '<<orientations[i][3]<<','<<std::endl;
     os<<"]\n"
       <<"}\n"
       <<" DEF flypos Viewpoint {\n"
@@ -191,5 +191,5 @@ void boxm2_view_utils::add_vrml_animation(vcl_ostream & os,vcl_vector<vpgl_camer
       <<"ROUTE Clock.fraction_changed  TO camerarot.set_fraction\n"
       <<"ROUTE camerapath.value_changed TO flypos.position\n"
       <<"ROUTE camerarot.value_changed TO flypos.orientation\n"
-      <<vcl_endl;
+      <<std::endl;
 }

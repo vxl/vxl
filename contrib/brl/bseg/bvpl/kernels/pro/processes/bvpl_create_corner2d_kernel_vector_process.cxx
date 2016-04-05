@@ -32,13 +32,13 @@ bool bvpl_create_corner2d_kernel_vector_process_cons(bprb_func_process& pro)
   //input[1]: Kernel width
   //input[2]: Kernel thickness
   //input[3]: String : type of kernel directions
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "unsigned";
   input_types_[1] = "unsigned";
   input_types_[2] = "unsigned";
   input_types_[3] = "vcl_string";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_kernel_vector_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -50,7 +50,7 @@ bool bvpl_create_corner2d_kernel_vector_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -61,7 +61,7 @@ bool bvpl_create_corner2d_kernel_vector_process(bprb_func_process& pro)
   width = pro.get_input<unsigned int>(1);
   unsigned int thickness = 5;
   thickness = pro.get_input<unsigned int>(2);
-  vcl_string dir_type =pro.get_input<vcl_string>(3);
+  std::string dir_type =pro.get_input<std::string>(3);
 
   //Create the factory and get the vector of kernels
   bvpl_corner2d_kernel_factory factory(length,width,thickness);

@@ -13,7 +13,9 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_conic_2d_sptr.h>
@@ -69,18 +71,18 @@ class segv_misc_manager : public vgui_wrapper_tableau
   void set_window(vgui_window* win){win_=win;}
 
  protected:
-  void draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
-  void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs,
+  void draw_edges(std::vector<vtol_edge_2d_sptr>& edges, bool verts=false);
+  void draw_lines(std::vector<vsol_line_2d_sptr> const & line_segs,
                   const vgui_style_sptr& style = NULL);
 
-  void draw_conics(vcl_vector<vsol_conic_2d_sptr> const & conic_segs,
+  void draw_conics(std::vector<vsol_conic_2d_sptr> const & conic_segs,
                   const vgui_style_sptr& style = NULL);
 
-  void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys,
+  void draw_polylines(std::vector<vsol_polyline_2d_sptr> const & polys,
                       vgui_style_sptr style=(vgui_style*)0);
-  void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
+  void draw_regions(std::vector<vtol_intensity_face_sptr>& regions,
                     bool verts=false);
-  void draw_points(vcl_vector<vsol_point_2d_sptr> const & points,
+  void draw_points(std::vector<vsol_point_2d_sptr> const & points,
                    const vgui_style_sptr& style);
 
   void set_selected_grid_image(vil_image_resource_sptr const& image,

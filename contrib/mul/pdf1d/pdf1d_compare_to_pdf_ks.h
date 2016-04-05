@@ -7,8 +7,10 @@
 // \author Tim Cootes
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 
+#include <iostream>
+#include <iosfwd>
 #include <pdf1d/pdf1d_compare_to_pdf.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 class pdf1d_compare_to_pdf_ks : public pdf1d_compare_to_pdf
@@ -28,16 +30,16 @@ class pdf1d_compare_to_pdf_ks : public pdf1d_compare_to_pdf
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_compare_to_pdf* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

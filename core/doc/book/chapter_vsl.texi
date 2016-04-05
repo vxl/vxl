@@ -222,7 +222,7 @@ An example template file, is shown below. It enables saving of a 2d array of "@c
 
 @example
   // This is my_module/hjk/Templates/vbl_array_2d_io+hjk_model~-.cxx
-  #include <vbl/io/vbl_io_array_2d.txx>
+  #include <vbl/io/vbl_io_array_2d.hxx>
   #include <hjk/hjk_model.h>
   VBL_IO_ARRAY_2D_INSTANTIATE(hjk_model);
 @end example
@@ -235,7 +235,7 @@ is shown below.
 
 @example
   // file = my_module/hjk/Templates/vsl_vector_io+vgl_point_2d~-.cxx
-  #include <vsl/vsl_vector_io.txx>
+  #include <vsl/vsl_vector_io.hxx>
   #include <vgl/io/vgl_io_point_2d.h>
   VSL_VECTOR_IO_INSTANTIATE(vgl_point_2d<double>);
 @end example

@@ -7,10 +7,11 @@
 //:
 // \file
 
+#include <vector>
+#include <string>
 #include <vsl/vsl_binary_loader_base.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: Class to load objects by baseclass pointer using `clipon' classes
 // An example of a singleton design pattern for loading
@@ -42,7 +43,7 @@
 //   //: Copy this object onto the heap and return a pointer
 //   virtual BaseClassIO* clone() const;
 //   //: Return name of class for which this object provides IO
-//   virtual vcl_string target_classname() const;
+//   virtual std::string target_classname() const;
 //   //: Return true if b is of class target_classname()
 //   //  Typically this will just be "return b.is_a()==target_classname()"
 //   //  However, third party libraries may use a different system
@@ -81,10 +82,10 @@ class vsl_clipon_binary_loader : public vsl_binary_loader_base
   static vsl_clipon_binary_loader<BaseClass,BaseClassIO>* instance_;
 
   //: List of object loaders
-  vcl_vector<BaseClassIO*> object_io_;
+  std::vector<BaseClassIO*> object_io_;
 
   //: Return index associated with given object name
-  int index_for_name(const vcl_string& name) const;
+  int index_for_name(const std::string& name) const;
 
  public:
   //: Constructor
@@ -103,11 +104,11 @@ class vsl_clipon_binary_loader : public vsl_binary_loader_base
   void add( const BaseClassIO& b);
 
   //: Return current list of individual IO objects
-  const vcl_vector<BaseClassIO*>& object_io() const { return object_io_; }
+  const std::vector<BaseClassIO*>& object_io() const { return object_io_; }
 
   //: Return IO object for given named class
   //  Aborts if not available
-  const BaseClassIO& object_io(const vcl_string& name) const;
+  const BaseClassIO& object_io(const std::string& name) const;
 
   //: Return IO object that can deal with given class
   const BaseClassIO& io_for_class(const BaseClass& b) const;
@@ -132,7 +133,7 @@ class vsl_clipon_binary_loader : public vsl_binary_loader_base
   //  and calls the appropriate print summary function.
   //  (Class must be one given to Loader by the add method).
   //  If b==0, a suitable string will be saved
-  void print_object_summary( vcl_ostream& os, const BaseClass* b);
+  void print_object_summary( std::ostream& os, const BaseClass* b);
 };
 
 

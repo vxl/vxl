@@ -7,8 +7,8 @@
 
 //: initialize generic data base pointers as their data type
 template <class T>
-bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh,
-                vcl_string app_type,vcl_string flow_prefix)
+bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, std::vector<boxm2_data_base*> & datas, float prob_thresh,
+                std::string app_type,std::string flow_prefix)
 {
     //store block and pointer to uchar16 3d block
     blk_   = blk;
@@ -28,22 +28,22 @@ bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, vcl
     if(datas.size()>=4)
         flow_res_   =  (vnl_vector_fixed<float,4>*)   datas[i++]->data_buffer();
     else
-        flow_res_ = 0;
+        flow_res_ = VXL_NULLPTR;
 
     if(datas.size()>=5)
         alpha_sav_   =  (float*)   datas[i++]->data_buffer();
     else
-        alpha_sav_ = 0;
+        alpha_sav_ = VXL_NULLPTR;
 
      if(datas.size()>=6)
         mog_sav_   =  (T*)   datas[i++]->data_buffer();
     else
-        mog_sav_ = 0;
+        mog_sav_ = VXL_NULLPTR;
 
      if(datas.size()>=7)
         flow_   =  (vnl_vector_fixed<float,4>*)   datas[i++]->data_buffer();
     else
-        flow_ = 0;
+        flow_ = VXL_NULLPTR;
 
 
 
@@ -51,7 +51,7 @@ bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, vcl
     max_level_ = blk_->max_level();
 
     //max alpha integrated
-    max_alpha_int_ = -vcl_log(1.f - prob_thresh);
+    max_alpha_int_ = -std::log(1.f - prob_thresh);
 
     //Data length now is constant
     data_len_ = 65536;
@@ -61,7 +61,7 @@ bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, vcl
 
     //USE rootlevel to determine MAX_INNER and MAX_CELLS
     if (max_level_ == 1) {
-      vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+      std::cout<<"Trying to refine scene with max level 1"<<std::endl;
       return true;
     }
     else if (max_level_ == 2) {
@@ -74,12 +74,12 @@ bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, vcl
       MAX_INNER_CELLS_=73, MAX_CELLS_=585;
     }
 
-    vcl_cout<<"Refine Info: [blk "<<blk->block_id()
+    std::cout<<"Refine Info: [blk "<<blk->block_id()
             <<"] [blk_len "<<block_len_
             <<"] [data_len "<<data_len_
             <<"] [max_alpha_int "<<max_alpha_int_
             <<"] [max level "<<max_level_
-            <<']'<<vcl_endl;
+            <<']'<<std::endl;
 
     //for debugging
     num_split_ = 0;
@@ -100,9 +100,9 @@ bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, vcl
 //    - Run refine_data_kernel with the two buffers
 //    - delete the old BOCL_MEM*, and that's it...
 template <class T>
-bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector<boxm2_data_base*>& datas)
+bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(std::vector<boxm2_data_base*>& datas)
 {
-  vcl_cout<<"CPU deterministic refine:"<<vcl_endl;
+  std::cout<<"CPU deterministic refine:"<<std::endl;
 
   //loop over each tree, refine it in place (keep a vector of locations for
   // posterities sake
@@ -127,24 +127,24 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
       int newSize = refined_tree.num_cells();
 
       //cache refined tree
-      vcl_memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
+      std::memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
       dataSize += newSize;
   }
 
 
   //2. allocate new data arrays of the appropriate size
-  vcl_cout<<"Allocating new data blocks"<<vcl_endl;
+  std::cout<<"Allocating new data blocks"<<std::endl;
   boxm2_cache_sptr cache = boxm2_cache::instance();
   boxm2_scene_sptr scene = cache->get_scenes()[0];
   boxm2_block_id id = datas[0]->block_id();
   char* buf = new char[dataSize * app_type_size_];
-  vcl_cout << "data size is "<<app_type_size_<<" , "<<sizeof(T)<<" and id is "<<app_type_<<vcl_endl;
+  std::cout << "data size is "<<app_type_size_<<" , "<<sizeof(T)<<" and id is "<<app_type_<<std::endl;
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize * sizeof(float) ], dataSize * sizeof(float), id);
   boxm2_data_base* newM = new boxm2_data_base(new char[dataSize * app_type_size_], dataSize * app_type_size_, id);
-  boxm2_data_base* newF = 0;
-  boxm2_data_base* newF_res = 0;
-  boxm2_data_base* newA_sav = 0;
-  boxm2_data_base* newM_sav = 0;
+  boxm2_data_base* newF = VXL_NULLPTR;
+  boxm2_data_base* newF_res = VXL_NULLPTR;
+  boxm2_data_base* newA_sav = VXL_NULLPTR;
+  boxm2_data_base* newM_sav = VXL_NULLPTR;
   T fills;
   fills.fill(0);
 
@@ -160,20 +160,20 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
 
   if(flow_res_){
 
-          vcl_cout<<"optical flow will be moved"<<vcl_endl;
+          std::cout<<"optical flow will be moved"<<std::endl;
   }
 
   if(alpha_sav_ && mog_sav_){
 
-          vcl_cout<<"saved buffers will be moved"<<vcl_endl;
+          std::cout<<"saved buffers will be moved"<<std::endl;
   }
 
   float*   alpha_cpy = (float*) newA->data_buffer();
   T* mog_cpy   = (T*) newM->data_buffer();
-  float4*   flow_cpy = 0;
-  float4*  flow_res_cpy =0;
-  float*   alpha_sav_cpy = 0;
-  T*  mog_sav_cpy = 0;
+  float4*   flow_cpy = VXL_NULLPTR;
+  float4*  flow_res_cpy =VXL_NULLPTR;
+  float*   alpha_sav_cpy = VXL_NULLPTR;
+  T*  mog_sav_cpy = VXL_NULLPTR;
   if(flow_)
           flow_cpy =(float4*)newF->data_buffer();
   if(flow_res_)
@@ -184,7 +184,7 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
           mog_sav_cpy = (T*)newM_sav->data_buffer();
 
   //3. loop through tree again, putting the data in the right place
-  vcl_cout<<"Swapping data into new blocks..."<<vcl_endl;
+  std::cout<<"Swapping data into new blocks..."<<std::endl;
   int newInitCount = 0;
   currIndex = 0;
   int count_original=0;
@@ -208,7 +208,7 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
       newInitCount += this->move_data(old_tree, refined_tree, alpha_cpy, alpha_sav_cpy,mog_cpy,mog_sav_cpy,flow_cpy,flow_res_cpy);
 
       //4. store old tree in new tree, swap data out
-      vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
+      std::memcpy(blk_iter, refined_tree.get_bits(), 16);
 
       int index_x = currIndex/(trees.get_row2_count() * trees.get_row3_count());
       int rem_x= currIndex- index_x*(trees.get_row2_count() * trees.get_row3_count());
@@ -220,9 +220,9 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
   }
   blk_->set_trees(trees);
 
-  vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
+  std::cout<<"Number of new cells: "<<newInitCount<<std::endl;
 
-  vcl_cout<<"old and new counts "<<count_original<<" "<<count_new<<" "<<vcl_endl;
+  std::cout<<"old and new counts "<<count_original<<" "<<count_new<<" "<<std::endl;
 
   //3. Replace data in the cache
 
@@ -295,7 +295,7 @@ boct_bit_tree boxm2_refine_block_function_with_labels<T>::refine_bit_tree(boct_b
         //this->recursive_refine(refined_tree,i);
 
 
-        //vcl_cout<<"before refinement have label "<<curr_label<<" at "<<dataIndex<<" and depth is "<<currDepth<< " max lvl is "<<max_level_<<vcl_endl;
+        //std::cout<<"before refinement have label "<<curr_label<<" at "<<dataIndex<<" and depth is "<<currDepth<< " max lvl is "<<max_level_<<std::endl;
 
         //keep track of number of nodes that split
         ++num_split_;
@@ -310,10 +310,10 @@ boct_bit_tree boxm2_refine_block_function_with_labels<T>::refine_bit_tree(boct_b
 template <class T>
 void boxm2_refine_block_function_with_labels<T>::recursive_refine(boct_bit_tree & tree,int i){
 
-        vcl_vector<int> leafs= tree.get_leaf_bits(i);
+        std::vector<int> leafs= tree.get_leaf_bits(i);
         int count =0;
 
-        for (vcl_vector<int>::iterator it= leafs.begin();it!=leafs.end();it++,count++){
+        for (std::vector<int>::iterator it= leafs.begin();it!=leafs.end();it++,count++){
                 if (tree.depth_at(*it)>=2)
                         return;
                 tree.set_bit_at(*it,true);
@@ -322,7 +322,7 @@ void boxm2_refine_block_function_with_labels<T>::recursive_refine(boct_bit_tree 
 
         }
         if(count!=8)
-                vcl_cout<<"count was found to be "<<count<<" at level "<<tree.depth_at(i)<<vcl_endl;
+                std::cout<<"count was found to be "<<count<<" at level "<<tree.depth_at(i)<<std::endl;
 }
 
 //Deterministic move data
@@ -341,7 +341,7 @@ int boxm2_refine_block_function_with_labels<T>::move_data(boct_bit_tree& unrefin
   int newSize = refined_tree.num_cells();
 /*
   if (newSize!=1)
-          vcl_cout<<"new size is "<<newSize<<vcl_endl;
+          std::cout<<"new size is "<<newSize<<std::endl;
 */
 
 
@@ -397,7 +397,7 @@ int boxm2_refine_block_function_with_labels<T>::move_data(boct_bit_tree& unrefin
 
       if(labels_[dataIndex] == 1){
           if(replace_){
-                  alpha_cpy[newDataPtr]  = float(alpha_[dataIndex] * 2); // (float(-vcl_log(1.0f - p_init_) / side_len));
+                  alpha_cpy[newDataPtr]  = float(alpha_[dataIndex] * 2); // (float(-std::log(1.0f - p_init_) / side_len));
                   mog_cpy[newDataPtr]    = mog_[dataIndex];
                   if (flow_cpy)
                           flow_cpy[newDataPtr]    = flow_[dataIndex];

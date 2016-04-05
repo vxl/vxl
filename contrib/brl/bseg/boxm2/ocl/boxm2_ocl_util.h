@@ -12,7 +12,7 @@ class boxm2_ocl_util
 {
   public:
 
-    static vcl_string ocl_src_root();
+    static std::string ocl_src_root();
 
     //: fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
     static void set_ocl_camera(vpgl_camera_double_sptr& cam, cl_float* persp_cam);
@@ -30,13 +30,13 @@ class boxm2_ocl_util
     static void set_dodecahedron_orientations_lookup(cl_float4* dir);
 
 
-    static void load_perspective_camera(vcl_string filename, vpgl_perspective_camera<double> & pcam);
+    static void load_perspective_camera(std::string filename, vpgl_perspective_camera<double> & pcam);
 
     //: this function obtains a cdf of the intensity distribution over a sequcne of image which can be used for rendering images.
-    static void get_render_transfer_function(vcl_vector<vcl_string> imgfilenames, float & min, float & max, vbl_array_1d<float> & tf);
+    static void get_render_transfer_function(std::vector<std::string> imgfilenames, float & min, float & max, vbl_array_1d<float> & tf);
 
     //: mog optoins
-    static vcl_string mog_options(vcl_string data_type);
+    static std::string mog_options(std::string data_type);
 
     //: generate a look up table for chi square cdf
     static void set_cdf_chisqr_lookup(cl_float* chisqr_lookup);

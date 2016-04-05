@@ -9,10 +9,10 @@ include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
 
 set(boxm_sources
     boxm_export.h
-    boxm_block.txx                         boxm_block.h
+    boxm_block.hxx                         boxm_block.h
     boxm_scene_base.cxx                    boxm_scene_base.h
-    boxm_scene.txx                         boxm_scene.h
-    boxm_aux_scene.txx                     boxm_aux_scene.h
+    boxm_scene.hxx                         boxm_scene.h
+    boxm_aux_scene.hxx                     boxm_aux_scene.h
     boxm_scene_parser.cxx                  boxm_scene_parser.h
     boxm_apm_traits.cxx                    boxm_apm_traits.h
     boxm_aux_traits.h
@@ -21,7 +21,7 @@ set(boxm_sources
 
 aux_source_directory(Templates boxm_sources)
 
-add_library(boxm  ${boxm_sources})
+vxl_add_library(LIBRARY_NAME boxm LIBRARY_SOURCES  ${boxm_sources})
 
 target_link_libraries(boxm boct bsta brdb ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_xio ${VXL_LIB_PREFIX}vpgl_algo vsol expatpp ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vcl)
 
@@ -48,6 +48,4 @@ endif()
 
 endif()
 
-#install the .h .txx and libs
-install_targets(/lib boxm)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm/ ${boxm_sources})
+#install the .h .hxx and libs

@@ -4,12 +4,12 @@ doxygen_add_library(contrib/rpl/rgrl
   DESCRIPTION "Rensselaer (Generalized) Registration Library"
   )
 
-if(vxl_SOURCE_DIR)
+if(CMAKE_SOURCE_DIR)
   set(VXL_MUL_INCLUDE_DIR ${MUL_INCLUDE_DIR})
 endif()
 
 include_directories( ${VXL_MUL_INCLUDE_DIR} )
-include_directories( ${vxl_BINARY_DIR}/contrib/rpl )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/rpl )
 set( rgrl_sources
   rgrl_export.h
   rgrl_fwd.h
@@ -162,10 +162,7 @@ set( rgrl_sources
 
 aux_source_directory( Templates rgrl_sources )
 
-add_library( rgrl ${rgrl_sources} )
-
-install_targets(/lib rgrl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgrl ${rgrl_sources})
+vxl_add_library(LIBRARY_NAME rgrl LIBRARY_SOURCES ${rgrl_sources} )
 target_link_libraries( rgrl rrel rsdl vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 #find_package( ITK )
 #if( ITK_FOUND )

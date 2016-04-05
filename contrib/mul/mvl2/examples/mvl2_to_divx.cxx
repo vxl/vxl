@@ -1,4 +1,5 @@
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <mvl2/mvl2_video_from_avi.h>
 #include <mvl2/mvl2_video_from_sequence.h>
 
@@ -11,7 +12,7 @@ int main(int argc, char **argv)
 {
   if (argc<3)
   {
-    vcl_cout << "usage : " << argv[0] << " file1.(seq|avi) file2.avi\n";
+    std::cout << "usage : " << argv[0] << " file1.(seq|avi) file2.avi\n";
     return -1;
   }
 
@@ -20,48 +21,48 @@ int main(int argc, char **argv)
   mvl2_video_to_avi vid_output_;
   mbl_cloneable_ptr<mvl2_video_reader> vid_input_;
 
-  if (vcl_string(argv[1]).rfind(".avi")==vcl_string(argv[1]).length()-4)
+  if (std::string(argv[1]).rfind(".avi")==std::string(argv[1]).length()-4)
   {
-    vcl_cout << "Trying AVI file format\n";
+    std::cout << "Trying AVI file format\n";
     vid_input_=file_vid;
   }
   else
   {
-    if (vcl_string(argv[1]).rfind(".seq")==vcl_string(argv[1]).length()-4)
+    if (std::string(argv[1]).rfind(".seq")==std::string(argv[1]).length()-4)
     {
-      vcl_cout << "Trying SEQUENCE file format\n";
+      std::cout << "Trying SEQUENCE file format\n";
       vid_input_=file_sequ_vid;
     }
     else
     {
-      vcl_cout << "Not an AVI or SEQUENCE format file.\n";
+      std::cout << "Not an AVI or SEQUENCE format file.\n";
       return -1;
     }
   }
 
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
-  if (!vid_input_->initialize(320,240,vcl_string("Color"),vcl_string(argv[1])))
+  if (!vid_input_->initialize(320,240,std::string("Color"),std::string(argv[1])))
   {
-    vcl_cerr << "Error while initializing the video sequence\n";
+    std::cerr << "Error while initializing the video sequence\n";
     return -1;
   }
 
-  vcl_cout << vcl_endl
+  std::cout << std::endl
            << "The frame rate is : "
-           << vid_input_->get_frame_rate() << vcl_endl
+           << vid_input_->get_frame_rate() << std::endl
            << "The length of the sequence is : "
-           << vid_input_->length() << vcl_endl
+           << vid_input_->length() << std::endl
            << "Size of the image : " << vid_input_->get_width()
-           << " x " << vid_input_->get_height() << vcl_endl
-           << vcl_endl;
+           << " x " << vid_input_->get_height() << std::endl
+           << std::endl;
 
   vid_output_.set_codec('D','X','5','0');
   vid_output_.set_frame_rate(25);
   vid_output_.set_quality(90000);
-  if (!vid_output_.open(320,240,vcl_string(""),vcl_string(argv[2])))
+  if (!vid_output_.open(320,240,std::string(""),std::string(argv[2])))
   {
-    vcl_cerr << "Error while opening the output video sequence\n";
+    std::cerr << "Error while opening the output video sequence\n";
     vid_input_->uninitialize();
     return -1;
   }

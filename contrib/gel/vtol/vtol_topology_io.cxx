@@ -1,7 +1,9 @@
 // This is gel/vtol/vtol_topology_io.cxx
+#include <iostream>
+#include <ostream>
 #include "vtol_topology_io.h"
 
-#include <vcl_ostream.h>
+#include <vcl_compiler.h>
 
 #include <vtol/vtol_list_functions.h>
 #include <vtol/vtol_vertex_2d.h>
@@ -27,30 +29,30 @@ vtol_topology_io::~vtol_topology_io()
 
 // write out a list of topology objects
 
-void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
-                             vcl_ostream &strm)
+void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
+                             std::ostream &strm)
 {
   // write out the dtd table
 
-  strm << "<?xml version=\"1.0\" standalone=\"yes\"?>" << vcl_endl;
+  strm << "<?xml version=\"1.0\" standalone=\"yes\"?>" << std::endl;
 
   write_dtd(strm);
 
-  strm << "<vxl>" << vcl_endl;
+  strm << "<vxl>" << std::endl;
 
   // ****** get lists of all the topology types *******
 
   // start off with getting a list of all the vertices
 
-  vcl_list<vtol_topology_object_sptr> vertices;
-  vcl_list<vtol_topology_object_sptr> zero_chains;
-  vcl_list<vtol_topology_object_sptr> edges;
-  vcl_list<vtol_topology_object_sptr> one_chains;
-  vcl_list<vtol_topology_object_sptr> faces;
-  vcl_list<vtol_topology_object_sptr> two_chains;
-  vcl_list<vtol_topology_object_sptr> blocks;
+  std::list<vtol_topology_object_sptr> vertices;
+  std::list<vtol_topology_object_sptr> zero_chains;
+  std::list<vtol_topology_object_sptr> edges;
+  std::list<vtol_topology_object_sptr> one_chains;
+  std::list<vtol_topology_object_sptr> faces;
+  std::list<vtol_topology_object_sptr> two_chains;
+  std::list<vtol_topology_object_sptr> blocks;
 
-  vcl_list<vtol_topology_object_sptr>::iterator ti;
+  std::list<vtol_topology_object_sptr>::iterator ti;
   for (ti=topo_objects.begin();ti!= topo_objects.end();ti++)
   {
     // *** get the vertices
@@ -265,14 +267,14 @@ void vtol_topology_io::write(vcl_list<vtol_topology_object_sptr> &topo_objects,
     }
   }
 
-  strm << "</vxl>" << vcl_endl;
+  strm << "</vxl>" << std::endl;
 }
 
 
 // write out a 2d vertex
 
 void vtol_topology_io::write_vertex_2d(vtol_vertex_2d_sptr const& v,
-                                       vcl_ostream &strm)
+                                       std::ostream &strm)
 {
   // ok lets write this vertex out
   // it looks something like this
@@ -280,15 +282,15 @@ void vtol_topology_io::write_vertex_2d(vtol_vertex_2d_sptr const& v,
   //       <vxl_point_2d id="p1" x="0" y="0"/>
   //    </vxl_vertex_2d>
 
-  strm << "<vxl_vertex_2d id=\"v2d" << v->get_id() << "\">" << vcl_endl
-       << " <vxl_point_2d x=\""<< v->x() << '"' << " y=\"" << v->y() << "\"/>" << vcl_endl
-       << "</vxl_vertex_2d>" << vcl_endl;
+  strm << "<vxl_vertex_2d id=\"v2d" << v->get_id() << "\">" << std::endl
+       << " <vxl_point_2d x=\""<< v->x() << '"' << " y=\"" << v->y() << "\"/>" << std::endl
+       << "</vxl_vertex_2d>" << std::endl;
 }
 
 void vtol_topology_io::write_zero_chain(vtol_zero_chain_sptr const& zc,
-                                        vcl_ostream &strm)
+                                        std::ostream &strm)
 {
-  strm << "<vxl_zero_chain_2d id=\"zc_" << zc->get_id() << "\">" << vcl_endl;
+  strm << "<vxl_zero_chain_2d id=\"zc_" << zc->get_id() << "\">" << std::endl;
 
   // write the inferiors
 
@@ -297,15 +299,15 @@ void vtol_topology_io::write_zero_chain(vtol_zero_chain_sptr const& zc,
   topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
-    strm << " <vxl_vertex_2d_sptr id=\"v2d" << (*i)->get_id() << "\"/>" << vcl_endl;
+    strm << " <vxl_vertex_2d_sptr id=\"v2d" << (*i)->get_id() << "\"/>" << std::endl;
   }
 
-  strm << "</vxl_zero_chain_2d>" << vcl_endl;
+  strm << "</vxl_zero_chain_2d>" << std::endl;
 }
 
-void vtol_topology_io::write_edge_2d(vtol_edge_2d_sptr const& e, vcl_ostream &strm)
+void vtol_topology_io::write_edge_2d(vtol_edge_2d_sptr const& e, std::ostream &strm)
 {
-  strm << "<vxl_edge_2d id=\"e2d" << e->get_id() << "\">" << vcl_endl;
+  strm << "<vxl_edge_2d id=\"e2d" << e->get_id() << "\">" << std::endl;
 
   // write the inferiors
 
@@ -314,16 +316,16 @@ void vtol_topology_io::write_edge_2d(vtol_edge_2d_sptr const& e, vcl_ostream &st
   topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
-    strm << " <vxl_zero_chain_2d_sptr id=\"zc_" << (*i)->get_id() << "\"/>" << vcl_endl;
+    strm << " <vxl_zero_chain_2d_sptr id=\"zc_" << (*i)->get_id() << "\"/>" << std::endl;
   }
 
-  strm << "</vxl_edge_2d>" << vcl_endl;
+  strm << "</vxl_edge_2d>" << std::endl;
 }
 
 
-void vtol_topology_io::write_one_chain(vtol_one_chain_sptr const& oc, vcl_ostream &strm)
+void vtol_topology_io::write_one_chain(vtol_one_chain_sptr const& oc, std::ostream &strm)
 {
-  strm << "<vxl_one_chain_2d id=\"oc_" << oc->get_id() << "\">" << vcl_endl;
+  strm << "<vxl_one_chain_2d id=\"oc_" << oc->get_id() << "\">" << std::endl;
 
   // write the inferiors
 
@@ -340,24 +342,24 @@ void vtol_topology_io::write_one_chain(vtol_one_chain_sptr const& oc, vcl_ostrea
         // determine the direction of the edge
         if (oc->direction(*e) ==1)
         {
-          strm << " <vxl_edge_2d_sptr id=\"e2d" << (*i)->get_id() << "\"/>" << vcl_endl;
+          strm << " <vxl_edge_2d_sptr id=\"e2d" << (*i)->get_id() << "\"/>" << std::endl;
         }
         else
         {
           // we have to signal a flip
-          strm << " <vxl_edge_2d_sptr id=\"e2d" << (*i)->get_id() << "\"/><vxl_flip/>"  << vcl_endl;
+          strm << " <vxl_edge_2d_sptr id=\"e2d" << (*i)->get_id() << "\"/><vxl_flip/>"  << std::endl;
         }
       }
     }
   }
 
-  strm << "</vxl_one_chain_2d>" << vcl_endl;
+  strm << "</vxl_one_chain_2d>" << std::endl;
 }
 
 
-void vtol_topology_io::write_face_2d(vtol_face_2d_sptr const& f, vcl_ostream &strm)
+void vtol_topology_io::write_face_2d(vtol_face_2d_sptr const& f, std::ostream &strm)
 {
-  strm << "<vxl_face_2d id=\"f2d" << f->get_id() << "\">" << vcl_endl;
+  strm << "<vxl_face_2d id=\"f2d" << f->get_id() << "\">" << std::endl;
 
   // write the inferiors
 
@@ -366,16 +368,16 @@ void vtol_topology_io::write_face_2d(vtol_face_2d_sptr const& f, vcl_ostream &st
   topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
-    strm << " <vxl_one_chain_2d_sptr id=\"oc_" << (*i)->get_id() << "\"/>" << vcl_endl;
+    strm << " <vxl_one_chain_2d_sptr id=\"oc_" << (*i)->get_id() << "\"/>" << std::endl;
   }
 
-  strm << "</vxl_face_2d>" << vcl_endl;
+  strm << "</vxl_face_2d>" << std::endl;
 }
 
 
-void vtol_topology_io::write_two_chain(vtol_two_chain_sptr const& tc, vcl_ostream &strm)
+void vtol_topology_io::write_two_chain(vtol_two_chain_sptr const& tc, std::ostream &strm)
 {
-  strm << "<vxl_two_chain_2d id=\"tc_" << tc->get_id() << "\">" << vcl_endl;
+  strm << "<vxl_two_chain_2d id=\"tc_" << tc->get_id() << "\">" << std::endl;
 
   // write the inferiors
 
@@ -392,24 +394,24 @@ void vtol_topology_io::write_two_chain(vtol_two_chain_sptr const& tc, vcl_ostrea
         // determine the direction of the edge
         if (tc->direction(*f) ==1)
         {
-          strm << " <vxl_face_2d_sptr id=\"f2d" << (*i)->get_id() << "\"/>" << vcl_endl;
+          strm << " <vxl_face_2d_sptr id=\"f2d" << (*i)->get_id() << "\"/>" << std::endl;
         }
         else
         {
           // we have to signal a flip
-          strm << " <vxl_face_2d_sptr id=\"f2d" << (*i)->get_id() << "\"/><vxl_flip/>"  << vcl_endl;
+          strm << " <vxl_face_2d_sptr id=\"f2d" << (*i)->get_id() << "\"/><vxl_flip/>"  << std::endl;
         }
       }
     }
   }
 
-  strm << "</vxl_two_chain_2d>" << vcl_endl;
+  strm << "</vxl_two_chain_2d>" << std::endl;
 }
 
 
-void vtol_topology_io::write_block(vtol_block_sptr const& b, vcl_ostream &strm)
+void vtol_topology_io::write_block(vtol_block_sptr const& b, std::ostream &strm)
 {
-  strm << "<vxl_block_2d id=\"b__" << b->get_id() << "\">" << vcl_endl;
+  strm << "<vxl_block_2d id=\"b__" << b->get_id() << "\">" << std::endl;
 
   // write the inferiors
 
@@ -418,13 +420,13 @@ void vtol_topology_io::write_block(vtol_block_sptr const& b, vcl_ostream &strm)
   topology_list::const_iterator i;
   for (i=inferiors->begin();i!=inferiors->end();++i)
   {
-    strm << " <vxl_two_chain_2d_sptr id=\"tc_" << (*i)->get_id() << "\"/>" << vcl_endl;
+    strm << " <vxl_two_chain_2d_sptr id=\"tc_" << (*i)->get_id() << "\"/>" << std::endl;
   }
 
-  strm << "</vxl_block_2d>" << vcl_endl;
+  strm << "</vxl_block_2d>" << std::endl;
 }
 
-void vtol_topology_io::write_dtd(vcl_ostream &strm)
+void vtol_topology_io::write_dtd(std::ostream &strm)
 {
   #include <vtol/vtol_dtd.h>
 

@@ -23,7 +23,8 @@
 //---------------------------------------------------------------------------
 
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vbl/vbl_sparse_array_base.h>
 #include <vbl/vbl_triple.h>
 
@@ -78,13 +79,13 @@ class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_triple<unsigned,
   }
 
   //: Print the Array to a stream in "(i,j,k): value" format.
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 };
 
 //: Stream operator - print the Array to a stream in "(i,j,k): value" format.
 template <class T>
-inline vcl_ostream& operator <<
-(vcl_ostream& s, const vbl_sparse_array_3d<T>& a)
+inline std::ostream& operator <<
+(std::ostream& s, const vbl_sparse_array_3d<T>& a)
 {
   return a.print(s);
 }

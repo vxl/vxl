@@ -9,9 +9,9 @@ typedef  boxm2_data_traits<BOXM2_VIS_SCORE>::datatype vis_score_t;
 typedef vnl_vector_fixed<float,8> float8;
 typedef vnl_vector_fixed<unsigned char,8> uchar8;
 
-static vcl_string gray_APM_prefix = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix();
-static vcl_string color_APM_prefix = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix();
-static vcl_string vis_score_prefix = boxm2_data_traits<BOXM2_VIS_SCORE>::prefix();
+static std::string gray_APM_prefix = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix();
+static std::string color_APM_prefix = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix();
+static std::string vis_score_prefix = boxm2_data_traits<BOXM2_VIS_SCORE>::prefix();
 
 class boxm2_vecf_appearance_extractor{
  public:
@@ -59,5 +59,5 @@ class boxm2_vecf_appearance_extractor{
   float vis_sclera_,vis_pupil_,vis_iris_;
   vis_score_t * current_vis_score_;
   boxm2_vecf_composite_head_model& head_model_;
-  vcl_vector<unsigned> vis_cells_;
+  std::vector<unsigned> vis_cells_;
 };

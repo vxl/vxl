@@ -1,9 +1,11 @@
+#include <iostream>
+#include <sstream>
 #include "bstm_ocl_multi_render_tableau.h"
 //:
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
@@ -36,8 +38,8 @@ bstm_ocl_multi_render_tableau::bstm_ocl_multi_render_tableau()
 }
 
 //: initialize tableau properties
-bool bstm_ocl_multi_render_tableau::init(vcl_vector<bocl_device_sptr> devices,
-                                    vcl_vector<bstm_opencl_cache_sptr> opencl_caches,
+bool bstm_ocl_multi_render_tableau::init(std::vector<bocl_device_sptr> devices,
+                                    std::vector<bstm_opencl_cache_sptr> opencl_caches,
                                     bstm_scene_sptr scene,
                                     unsigned ni,
                                     unsigned nj,
@@ -98,18 +100,18 @@ void bstm_ocl_multi_render_tableau::compute_gpu_assignments()
 
   unsigned min_block_id,max_block_id;
   scene_->blocks_ids_bounding_box_t(min_block_id,max_block_id);
-  vcl_cout << "Scene is comprised of " << max_block_id - min_block_id << " time blocks..." << vcl_endl;
+  std::cout << "Scene is comprised of " << max_block_id - min_block_id << " time blocks..." << std::endl;
   gpu_ids_.resize(max_block_id - min_block_id);
   for(int scene_blk_id = 0; scene_blk_id< gpu_ids_.size(); scene_blk_id++)
   {
-    vcl_cout << "Is " << (float)scene_blk_id / gpu_ids_.size() << " smaller than " << (float)(curr_mem_size  + opencl_caches_[curr_gpu_id]->max_memory_in_cache()) / total_gpu_mem_ << vcl_endl;
+    std::cout << "Is " << (float)scene_blk_id / gpu_ids_.size() << " smaller than " << (float)(curr_mem_size  + opencl_caches_[curr_gpu_id]->max_memory_in_cache()) / total_gpu_mem_ << std::endl;
     if((float)scene_blk_id / gpu_ids_.size() < (float)(curr_mem_size  + opencl_caches_[curr_gpu_id]->max_memory_in_cache()) / total_gpu_mem_)
       gpu_ids_[scene_blk_id] = curr_gpu_id;
     else {
       curr_mem_size  += opencl_caches_[curr_gpu_id]->max_memory_in_cache();
       gpu_ids_[scene_blk_id] = ++curr_gpu_id;
     }
-    vcl_cout << gpu_ids_[scene_blk_id]  << vcl_endl;
+    std::cout << gpu_ids_[scene_blk_id]  << std::endl;
   }
 
 }
@@ -146,7 +148,7 @@ bool bstm_ocl_multi_render_tableau::handle(vgui_event const &e)
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 
     //calculate and write fps to status
-    vcl_stringstream str;
+    std::stringstream str;
     str<<".  rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
     if (status_) {
       status_->write(str.str().c_str());
@@ -165,7 +167,7 @@ bool bstm_ocl_multi_render_tableau::handle(vgui_event const &e)
 //Currently it divides evenly the time among gpus.
 unsigned bstm_ocl_multi_render_tableau::gpu_id(double time)
 {
-  return gpu_ids_[vcl_floor( time * gpu_ids_.size() )];
+  return gpu_ids_[std::floor( time * gpu_ids_.size() )];
 }
 
 //: calls on ray manager to render frame into the pbuffer_
@@ -222,12 +224,12 @@ float bstm_ocl_multi_render_tableau::render_frame()
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, time_id);
   brdb_selection_sptr S = DATABASE->select("float_data", Q);
   if (S->size()!=1){
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
           << " no selections\n";
   }
   brdb_value_sptr value;
-  if (!S->get_value(vcl_string("value"), value)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S->get_value(std::string("value"), value)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
           << " didn't get value\n";
   }
   float time = value->val<float>();
@@ -247,11 +249,11 @@ bool bstm_ocl_multi_render_tableau::init_clgl()
   for(int gpu_no = 0; gpu_no < num_gpus_; gpu_no++)
   {
     //get relevant blocks
-    vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
+    std::cout<<"Data Path: "<<scene_->data_path()<<std::endl;
     devices_[gpu_no]->context() = boxm2_view_utils::create_clgl_context(*(devices_[gpu_no]->device_id()));
     opencl_caches_[gpu_no]->set_context(devices_[gpu_no]->context());
 
-    vcl_cout << "HANDLE" << vcl_endl;
+    std::cout << "HANDLE" << std::endl;
 
     int status_queue=0;
     queues_[gpu_no] =  clCreateCommandQueue(devices_[gpu_no]->context(),*(devices_[gpu_no]->device_id()),CL_QUEUE_PROFILING_ENABLE,&status_queue);

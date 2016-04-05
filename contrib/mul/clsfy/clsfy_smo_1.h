@@ -39,7 +39,7 @@ class clsfy_smo_1_lin: public clsfy_smo_base
 
   //: Takes a copy of the data wrapper, but not the data.
   // Be careful not to destroy the underlying data while using this object.
-  void set_data(const mbl_data_wrapper<vnl_vector<double> >& data, const vcl_vector<int>& targets);
+  void set_data(const mbl_data_wrapper<vnl_vector<double> >& data, const std::vector<int>& targets);
 
   // Upper bounds on each parameter.
   double C() const;

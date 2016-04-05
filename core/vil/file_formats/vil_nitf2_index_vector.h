@@ -5,36 +5,37 @@
 #ifndef VIL_NITF2_INDEX_VECTOR_H
 #define VIL_NITF2_INDEX_VECTOR_H
 
-#include <vcl_ostream.h>
-#include <vcl_vector.h>
+#include <ostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 // A wrapper for a vector of ints that represents an index into
 // a repeating field. This class serves two simple purposes: it
 // provides some convenient constructors from scalars (remember the
-// lisp function "list"?), and it defines operator<< (vcl_ostream&).
+// lisp function "list"?), and it defines operator<< (std::ostream&).
 
-class vil_nitf2_index_vector : public vcl_vector<int>
+class vil_nitf2_index_vector : public std::vector<int>
 {
  public:
   // Convenience constructors: empty vector, 1 element, etc.
-  vil_nitf2_index_vector() : vcl_vector<int>() {}
-  vil_nitf2_index_vector(int i): vcl_vector<int>(1) {
+  vil_nitf2_index_vector() : std::vector<int>() {}
+  vil_nitf2_index_vector(int i): std::vector<int>(1) {
     (*this)[0] = i; }
-  vil_nitf2_index_vector(int i, int j) : vcl_vector<int>(2) {
+  vil_nitf2_index_vector(int i, int j) : std::vector<int>(2) {
     (*this)[0] = i; (*this)[1] = j; }
-  vil_nitf2_index_vector(int i, int j, int k) : vcl_vector<int>(3) {
+  vil_nitf2_index_vector(int i, int j, int k) : std::vector<int>(3) {
     (*this)[0] = i; (*this)[1] = j; (*this)[2] = k; }
-  vil_nitf2_index_vector(int i, int j, int k, int l) : vcl_vector<int>(4) {
+  vil_nitf2_index_vector(int i, int j, int k, int l) : std::vector<int>(4) {
     (*this)[0] = i; (*this)[1] = j; (*this)[2] = k; (*this)[3] = l; }
 
   // General-purpose constructor
-  vil_nitf2_index_vector(const vcl_vector<int>& v) : vcl_vector<int>(v) {}
+  vil_nitf2_index_vector(const std::vector<int>& v) : std::vector<int>(v) {}
 
   // Destructor
   virtual ~vil_nitf2_index_vector() {}
 };
 
-inline vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_index_vector& vec)
+inline std::ostream& operator << (std::ostream& os, const vil_nitf2_index_vector& vec)
 {
   os << '(';
   for (vil_nitf2_index_vector::const_iterator it = vec.begin(); it != vec.end(); ++it) {

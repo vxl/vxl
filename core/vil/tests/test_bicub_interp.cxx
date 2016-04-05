@@ -1,13 +1,14 @@
 // This is core/vil/tests/test_bicub_interp.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_bicub_interp.h>
 
 static void test_bicub_interp_byte()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing vil_bicub_interp\n"
            << "**************************\n";
 

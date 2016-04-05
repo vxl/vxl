@@ -12,9 +12,11 @@
 //                            This is to allow user to add other local-defined transformations types.
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <rgrl/rgrl_transformation_sptr.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Reader class for smartly detecting various transformation classes
 //  Users can also add user-defined classes, which takes priority before others
@@ -30,7 +32,7 @@ public:
   //  NULL smart ptr is returned if reading operation fails.
   //  Please check the validity of the returned smart ptr.
   static
-  rgrl_transformation_sptr read( vcl_istream& is );
+  rgrl_transformation_sptr read( std::istream& is );
 
   //: Read a transformation from input file for convenience
   //
@@ -42,10 +44,10 @@ public:
   void add_xform( rgrl_transformation_sptr );
 
 protected:
-  static vcl_vector< rgrl_transformation_sptr >   xform_candidates_;
+  static std::vector< rgrl_transformation_sptr >   xform_candidates_;
 };
 
 //: stream input operator for reading a transformation
-vcl_istream& operator>>( vcl_istream& is, rgrl_transformation_sptr& sptr );
+std::istream& operator>>( std::istream& is, rgrl_transformation_sptr& sptr );
 
 #endif // rgrl_trans_reader_h_

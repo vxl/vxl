@@ -1,20 +1,22 @@
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
 #include "vsph_segment_sphere.h"
 //:
 // \file
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // for std::rand()
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_graph_partition.h>
 #include <vbl/vbl_edge.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 static void random_rgb(float& r, float&g, float& b)
 {
     float rmaxinv = 1.f / RAND_MAX;
-    r = static_cast<float>(vcl_rand())*rmaxinv;
-    g = static_cast<float>(vcl_rand())*rmaxinv;
-    b = static_cast<float>(vcl_rand())*rmaxinv;
+    r = static_cast<float>(std::rand())*rmaxinv;
+    g = static_cast<float>(std::rand())*rmaxinv;
+    b = static_cast<float>(std::rand())*rmaxinv;
 }
 
 void vsph_segment_sphere::smooth_data()
@@ -27,18 +29,18 @@ void vsph_segment_sphere::smooth_data()
     smooth_data_.resize(nd, 0.0);
     double point_angle_rad = usph_.point_angle()/vnl_math::deg_per_rad;
     double arg = 0.5*(point_angle_rad*point_angle_rad)/(sigma_*sigma_);
-    double neigh_weight = vcl_exp(-arg);
+    double neigh_weight = std::exp(-arg);
     if (!usph_.neighbors_valid())
         usph_.find_neighbors();
     unsigned nv = usph_.size();
     for (unsigned i = 0; i<nv; ++i) {
-        vcl_set<int> neighbors = usph_.neighbors(i);
+        std::set<int> neighbors = usph_.neighbors(i);
         double sum = 0.0;
         sum += data_[i];
         unsigned nn = neighbors.size();
         if (nn == 0) continue;
         double weight_sum = static_cast<double>(nn)*neigh_weight + 1.0;
-        for (vcl_set<int>::iterator nit = neighbors.begin();
+        for (std::set<int>::iterator nit = neighbors.begin();
              nit != neighbors.end(); ++nit)
             sum += neigh_weight*data_[*nit];
 
@@ -59,18 +61,18 @@ void vsph_segment_sphere::segment()
     }
     int nd = smooth_data_.size();
     if (nd==0) return;
-    vcl_vector<vsph_edge> sph_edges = usph_.edges();
+    std::vector<vsph_edge> sph_edges = usph_.edges();
     int ne = sph_edges.size();
     if (!usph_.neighbors_valid())
         usph_.find_neighbors();
     //construct graph partition
-    vcl_vector<vbl_edge> edges(ne);
+    std::vector<vbl_edge> edges(ne);
     for (int i = 0; i<ne; ++i) {
         vsph_edge& sphe = sph_edges[i];
         int is = sphe.vs_, ie = sphe.ve_;
         edges[i].v0_ = is; edges[i].v1_ = ie;
         double diff = smooth_data_[is]-smooth_data_[ie];
-        edges[i].w_ = static_cast<float>(vcl_sqrt(diff*diff));
+        edges[i].w_ = static_cast<float>(std::sqrt(diff*diff));
     }
     int nv = usph_.size();
     ds_.add_elements(nv);
@@ -89,21 +91,21 @@ void vsph_segment_sphere::segment()
         regions_[comp].push_back(i);
     }
     unsigned maxsize = 0, minsize = nv+1;
-    for (vcl_map<int,  vcl_vector<int> >::const_iterator rit = regions_.begin();
+    for (std::map<int,  std::vector<int> >::const_iterator rit = regions_.begin();
          rit != regions_.end(); ++rit) {
         unsigned n = rit->second.size();
         if (n<minsize) minsize = n;
         if (n>maxsize) maxsize = n;
     }
-    vcl_cout << "Found " << num_ccs_ << " regions\n";
-    vcl_cout << "minArea = " << minsize << "  MaxArea = " << maxsize << '\n';
+    std::cout << "Found " << num_ccs_ << " regions\n";
+    std::cout << "minArea = " << minsize << "  MaxArea = " << maxsize << '\n';
     seg_valid_=true;
 }
 
 //: function to compute mean of the pixels in a region using the oringal values of the spherical segment
 double vsph_segment_sphere::region_mean(int id)
 {
-    vcl_vector<int>  region = regions_[id];
+    std::vector<int>  region = regions_[id];
     double sum = 0.0;
     for (unsigned int i = 0; i<region.size(); ++i)
         sum += data_[region[i]];
@@ -115,24 +117,24 @@ double vsph_segment_sphere::region_mean(int id)
 //: function to compute median of the pixels in a region using the oringal values of the spherical segment
 double vsph_segment_sphere::region_median(int id)
 {
-    vcl_vector<double> vals;
-    vcl_vector<int>  region = regions_[id];
+    std::vector<double> vals;
+    std::vector<int>  region = regions_[id];
     for (unsigned int i = 0; i<region.size(); ++i)
         vals.push_back( data_[region[i]] );
-    vcl_sort(vals.begin(), vals.end());
+    std::sort(vals.begin(), vals.end());
     if ( vals.size() > 0)
         return vals[vals.size()/2];
     else
         return 0.0;
 }
 
-vcl_vector<double> vsph_segment_sphere::region_data() const
+std::vector<double> vsph_segment_sphere::region_data() const
 {
-    if (!seg_valid_) return vcl_vector<double>();
-    vcl_vector<double> rdata(data_.size());
-    vcl_map<int,  vcl_vector<int> >::const_iterator rit = regions_.begin();
+    if (!seg_valid_) return std::vector<double>();
+    std::vector<double> rdata(data_.size());
+    std::map<int,  std::vector<int> >::const_iterator rit = regions_.begin();
     for (; rit != regions_.end(); ++rit) {
-        const vcl_vector<int>& pt_ids = rit->second;
+        const std::vector<int>& pt_ids = rit->second;
         int n = pt_ids.size();
         double dn = static_cast<double>(n);
         if (dn == 0.0) dn = 1.0;
@@ -146,16 +148,16 @@ vcl_vector<double> vsph_segment_sphere::region_data() const
     return rdata;
 }
 
-vcl_vector<vcl_vector<float> > vsph_segment_sphere::region_color() const
+std::vector<std::vector<float> > vsph_segment_sphere::region_color() const
 {
-    if (!seg_valid_) return vcl_vector<vcl_vector<float> >();
-    vcl_vector<vcl_vector<float> > cdata(data_.size());
-    vcl_map<int,  vcl_vector<int> >::const_iterator rit = regions_.begin();
+    if (!seg_valid_) return std::vector<std::vector<float> >();
+    std::vector<std::vector<float> > cdata(data_.size());
+    std::map<int,  std::vector<int> >::const_iterator rit = regions_.begin();
     for (; rit != regions_.end(); ++rit) {
-        const vcl_vector<int>& pt_ids = rit->second;
+        const std::vector<int>& pt_ids = rit->second;
         float r, g, b;
         random_rgb(r, g, b);
-        vcl_vector<float> color(3);
+        std::vector<float> color(3);
         color[0]=r; color[1]=g; color[2]=b;
         int n = pt_ids.size();
         for (int i = 0; i<n; ++i)
@@ -169,18 +171,18 @@ bool vsph_segment_sphere::extract_region_bounding_boxes()
     if (!seg_valid_) return false;
     if (!usph_.neighbors_valid())
         usph_.find_neighbors();
-    const vcl_vector<vsph_sph_point_2d>& spts = usph_.sph_points_ref();
-    vcl_map<int,  vcl_vector<int> >::iterator rit = regions_.begin();
+    const std::vector<vsph_sph_point_2d>& spts = usph_.sph_points_ref();
+    std::map<int,  std::vector<int> >::iterator rit = regions_.begin();
     for (; rit != regions_.end(); ++rit) {
         int reg_set_id = rit->first;
-        vcl_vector<int>& rays = rit->second;
+        std::vector<int>& rays = rit->second;
         int n = rays.size();
         int ra=-1, rb=-1, rc=-1;
         bool done = false;
         for (int i = 0; i<n&&!done; ++i) {
             int ray = rays[i];
-            vcl_set<int> neigh = usph_.neighbors(ray);
-            for (vcl_set<int>::iterator nit = neigh.begin();
+            std::set<int> neigh = usph_.neighbors(ray);
+            for (std::set<int>::iterator nit = neigh.begin();
                  nit != neigh.end()&&!done; ++nit) {
                 int nid = *nit;
                 int nbr_set_id = ds_.find_set(nid);

@@ -1,4 +1,6 @@
 // This is gel/vifa/vifa_parallel.cxx
+#include <iostream>
+#include <fstream>
 #include "vifa_parallel.h"
 //:
 // \file
@@ -12,7 +14,7 @@
 
 #ifdef DUMP
 #include <vul/vul_sprintf.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 static int pass = 0;
 #endif
@@ -51,11 +53,11 @@ vifa_parallel(iface_list&   faces,
           vtol_intensity_face_sptr other_f = get_adjacent_iface(*ifi, e);
 
           if (other_f)
-            length = vcl_sqrt((dx * dx) + (dy * dy))
-                   * vcl_fabs((*ifi)->Io() - other_f->Io());
+            length = std::sqrt((dx * dx) + (dy * dy))
+                   * std::fabs((*ifi)->Io() - other_f->Io());
         }
 
-        double  orientation = vcl_atan2(dy, dx) * vnl_math::deg_per_rad;
+        double  orientation = std::atan2(dy, dx) * vnl_math::deg_per_rad;
         if (orientation < 0)
           orientation += 180.0;
 
@@ -77,7 +79,7 @@ vifa_parallel(iface_list&   faces,
               // Use parametric index representation (0 -- 1)
               double theta = dc->get_theta(i / l);
 #ifdef DEBUG
-              vcl_cout << "raw theta: " << theta;
+              std::cout << "raw theta: " << theta;
 #endif
               while (theta < min_angle)
                 theta += range;
@@ -85,7 +87,7 @@ vifa_parallel(iface_list&   faces,
               while (theta > max_angle)
                 theta -= range;
 #ifdef DEBUG
-              vcl_cout << " to " << theta << vcl_endl;
+              std::cout << " to " << theta << std::endl;
 #endif
               raw_h_->UpCount(float(theta));
             }
@@ -101,14 +103,14 @@ vifa_parallel(iface_list&   faces,
 
 
 vifa_parallel::
-vifa_parallel(vcl_vector<float>&  pixel_orientations,
+vifa_parallel(std::vector<float>&  pixel_orientations,
               vifa_parallel_params*  params) :
   vifa_parallel_params(params)
 {
   raw_h_ = new vifa_histogram(nbuckets, min_angle, max_angle);
   float  range = max_angle - min_angle;
 
-  for (vcl_vector<float>::iterator p = pixel_orientations.begin();
+  for (std::vector<float>::iterator p = pixel_orientations.begin();
        p != pixel_orientations.end(); ++p)
   {
     float  theta = (*p);
@@ -135,7 +137,7 @@ vifa_parallel(float  center_angle,
   raw_h_ = new vifa_histogram(nbuckets, min_angle, max_angle);
 
 #ifdef DEBUG
-  vcl_cout << "vifa_parallel(): 0.5 is "<< raw_h_->GetValIndex(0.5) << vcl_endl;
+  std::cout << "vifa_parallel(): 0.5 is "<< raw_h_->GetValIndex(0.5) << std::endl;
 #endif
 
   vifa_gaussian  g(center_angle, std_dev);
@@ -210,7 +212,7 @@ map_gaussian(float&  max_angle,
 #ifdef DUMP
         char      buf[25];
         vul_sprintf(buf, "gauss-%d-%d-%d.dat", pass, (int)j, i);
-        vcl_ofstream  gdump(buf);
+        std::ofstream  gdump(buf);
 #endif
         // int    sample_count = 0;
         float  sample_sum = 0.0;
@@ -229,10 +231,10 @@ map_gaussian(float&  max_angle,
             f = 0;
           }
 
-          float  diff = vcl_fabs(f - e);
+          float  diff = std::fabs(f - e);
 
 #ifdef DUMP
-          gdump << x << ' ' << e << ' ' << diff << ' ' << vx << ' ' << f << vcl_endl;
+          gdump << x << ' ' << e << ' ' << diff << ' ' << vx << ' ' << f << std::endl;
 #endif
           if (e != 0.0)
           {
@@ -251,20 +253,20 @@ map_gaussian(float&  max_angle,
           scale = local_scale;
 
 #ifdef DEBUG
-          vcl_cout << "*** ";
+          std::cout << "*** ";
 #endif
         }
 
 #ifdef DEBUG
-        vcl_cout << j << " gaussian " << i << " residual "
-                 << sample_sum << " sample count " << sample_count << vcl_endl;
+        std::cout << j << " gaussian " << i << " residual "
+                 << sample_sum << " sample count " << sample_count << std::endl;
 #endif
       }
     }
 
 #ifdef DEBUG
-    vcl_cout << "best is at " << max_angle << " sd of " << std_dev
-             << " scale " << scale << vcl_endl;
+    std::cout << "best is at " << max_angle << " sd of " << std_dev
+             << " scale " << scale << std::endl;
 #endif
 
 #ifdef DUMP
@@ -296,15 +298,15 @@ remove_gaussian(float  max_angle,
         float  new_val = ((f - e) < 0) ? 0 : (f - e);
 
 #ifdef DEBUG
-        vcl_cout << "  --- " << x << ": " << f <<" to " << new_val << vcl_endl;
+        std::cout << "  --- " << x << ": " << f <<" to " << new_val << std::endl;
 #endif
 
         norm_h_->SetCount(x, new_val);
       }
       else
       {
-        vcl_cerr << "  --- " << x << ": bad " <<
-          norm_h_->GetValIndex(x) << vcl_endl;
+        std::cerr << "  --- " << x << ": bad " <<
+          norm_h_->GetValIndex(x) << std::endl;
       }
     }
   }
@@ -416,7 +418,7 @@ vtol_intensity_face_sptr vifa_parallel::
 get_adjacent_iface(vtol_intensity_face_sptr  known_face,
                    vtol_edge_2d*         e)
 {
-  vtol_intensity_face_sptr  adj_face = 0;
+  vtol_intensity_face_sptr  adj_face = VXL_NULLPTR;
   face_list faces; e->faces(faces);
 
   // Expect only two intensity faces for 2-D case

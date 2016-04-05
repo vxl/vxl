@@ -11,8 +11,9 @@
 // corresponding bilin file that would likely also benefit from
 // the same change.
 
+#include <cstddef>
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 //: Compute bicubic interpolation at (x,y), no bound checks. Requires 1<x<ni-3, 1<y<nj-3
@@ -20,7 +21,7 @@
 //  No bound checks are done.
 template<class T>
 double vil_bicub_interp_unsafe(double x, double y, const T* data,
-                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep);
+                               std::ptrdiff_t xstep, std::ptrdiff_t ystep);
 
 //: Compute bicubic interpolation at (x,y), no bound checks. Requires 1<x<ni-3, 1<y<nj-3
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
@@ -30,7 +31,7 @@ double vil_bicub_interp_unsafe(double x, double y, const T* data,
 template<class T>
 inline double vil_bicub_interp_unsafe(double x, double y, const T* data,
                                       int /*nx*/, int /*ny*/,
-                                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                      std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   return vil_bicub_interp_unsafe(x, y, data, xstep, ystep);
 }
@@ -42,7 +43,7 @@ inline double vil_bicub_interp_unsafe(double x, double y, const T* data,
 //  No bound checks are done.
 template<class T>
 double vil_bicub_interp_raw(double x, double y, const T* data,
-                            vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep);
+                            std::ptrdiff_t xstep, std::ptrdiff_t ystep);
 
 
 //: Compute bicubic interpolation at (x,y), no bound checks
@@ -53,7 +54,7 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
 template<class T>
 inline double vil_bicub_interp_raw(double x, double y, const T* data,
                                    int /*nx*/, int /*ny*/,
-                                   vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                   std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   return vil_bicub_interp_raw(x, y, data, xstep, ystep);
 }
@@ -65,7 +66,7 @@ inline double vil_bicub_interp_raw(double x, double y, const T* data,
 template<class T>
 inline double vil_bicub_interp_safe(double x, double y, const T* data,
                                     int nx, int ny,
-                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                    std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
     if (x<1) return 0.0;
     if (y<1) return 0.0;
@@ -95,7 +96,7 @@ inline double vil_bicub_interp_safe(const vil_image_view<T> &view,
 template<class T>
 inline double vil_bicub_interp(double x, double y, const T* data,
                                int nx, int ny,
-                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                               std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
     assert (x>=1);
     assert (y>=1);
@@ -125,7 +126,7 @@ inline double vil_bicub_interp(const vil_image_view<T> &view,
 template<class T>
 inline double vil_bicub_interp_safe_extend(double x, double y, const T* data,
                                            int nx, int ny,
-                                           vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                           std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
     if (x<1) x= 0.0;
     if (y<1) y= 0.0;

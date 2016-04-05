@@ -12,7 +12,7 @@ bool brip_vil_nitf_ops::truncate_nitf_bits(vil_image_view<vxl_uint_16> const& in
                                            vil_image_view<vxl_byte>& output)
 {
   if (in_img.ni() != output.ni() || in_img.nj() != output.nj() || in_img.nplanes() != in_img.nplanes() ) {
-    vcl_cout << "In brip_vil_nitf_ops::truncated_nitf_bits: input image size differs from output image\n";
+    std::cout << "In brip_vil_nitf_ops::truncated_nitf_bits: input image size differs from output image\n";
     return false;
   }
 
@@ -51,7 +51,7 @@ bool brip_vil_nitf_ops::truncate_nitf_bits(vil_image_view<vxl_uint_16> const& in
                                            vil_image_view<vxl_uint_16>& output)
 {
   if (in_img.ni() != output.ni() || in_img.nj() != output.nj() || in_img.nplanes() != in_img.nplanes() ) {
-    vcl_cout << "In brip_vil_nitf_ops::truncated_nitf_bits: input image size differs from output image\n";
+    std::cout << "In brip_vil_nitf_ops::truncated_nitf_bits: input image size differs from output image\n";
     return false;
   }
   // bit operation on the input NITF image
@@ -129,7 +129,7 @@ bool brip_vil_nitf_ops::scale_nitf_bits(vil_image_view<vxl_uint_16> const& in_im
     for (unsigned i = 0; i < output.ni(); i++)
       for (unsigned j = 0; j < output.nj(); j++)
       {
-        int scaledval = vcl_floor((float)(temp_plane(i,j)-smin_val)/(float)(smax_val-smin_val) * 255.0f);
+        int scaledval = std::floor((float)(temp_plane(i,j)-smin_val)/(float)(smax_val-smin_val) * 255.0f);
         scaledval = scaledval > 255 ?  255: scaledval;
         scaledval = scaledval < 0   ?    0: scaledval;
         output_byte(i,j,p) = (unsigned char) scaledval;

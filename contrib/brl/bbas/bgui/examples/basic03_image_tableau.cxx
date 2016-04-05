@@ -5,7 +5,8 @@
 // \date   2007-07-09
 //
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
@@ -18,9 +19,9 @@
 #include <vgui/vgui_clear_tableau.h>
 
 //global pointer to the rubberband tableau
-static vgui_easy2D_tableau_sptr easy = 0;
-static vgui_image_tableau_sptr itab = 0;
-static vgui_shell_tableau_sptr shell = 0;
+static vgui_easy2D_tableau_sptr easy = VXL_NULLPTR;
+static vgui_image_tableau_sptr itab = VXL_NULLPTR;
+static vgui_shell_tableau_sptr shell = VXL_NULLPTR;
 
 //the meunu callback functions
 static void range_mapping()
@@ -85,7 +86,7 @@ int main(int argc, char ** argv)
   vgui::init(argc,argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line\n";
+    std::cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

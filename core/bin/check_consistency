@@ -261,7 +261,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vcl_cerrno.h') { $i='errno|EBUSY|EEXIST'; }
     elsif ($j eq 'vcl_cfloat.h') { $i='FLT_MAX|DBL_MAX|MAXFLOAT|MAXDOUBLE'; }
     elsif ($j eq 'vcl_climits.h') { $i='CHAR_BIT|CLK_TCK|[US]?(INT|CHAR)_(MIN|MAX)'; }
-    elsif ($j eq 'vcl_cmath.h') { $i='vcl_(abs|acos|asin|atan|atan2|ceil|cos|cosh|exp|fabs|floor|fmod|frexp|ldexp|log|log10|modf|pow|sin|sinh|sqrt|tan|tanh)|hypot|HUGE_VAL'; }
+    elsif ($j eq 'vcl_cmath.h') { $i='vcl_(abs|acos|asin|atan|atan2|ceil|cos|cosh|exp|fabs|floor|fmod|frexp|ldexp|log|log10|modf|pow|sin|sinh|sqrt|tan|tanh)|hypot'; }
     elsif ($j eq 'vcl_complex.h') { $i='vcl_(complex|real|imag|abs|arg|norm|conj|polar|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)'; }
     elsif ($j eq 'vcl_complex.h' && $f =~ m!/tests/test_cmath\.cxx$!) { $i=''; }
     elsif ($j eq 'vcl_csetjmp.h') { $i='setjmp|vcl_(jmp_buf|longjmp)'; }
@@ -276,7 +276,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vcl_cwctype.h') { $i='vcl_(wctrans_t|wctype_t|wint_t|iswalnum|iswalpha|iswcntrl|iswctype|iswdigit|iswgraph|iswlower|iswprint|iswpunct|iswspace|iswupper|iswxdigit|iswctrans|iswupper|iswxdigit|towctrans|towlower|towupper|wctrans|wctype)'; }
     elsif ($j eq 'vcl_deque.h') { $i='vcl_(deque|swap)'; }
     elsif ($j eq 'vcl_deprecated.h') { $i='vcl_deprecated_(warn|abort)|VXL_DEPRECATED'; }
-    elsif ($j eq 'vcl_exception.h') { $i='vcl_(exception|bad_exception|throw|catch|catch_all)'; }
+    elsif ($j eq 'vcl_exception.h') { $i='vcl_(exception|bad_exception|throw|catch|catch(...))'; }
     elsif ($j eq 'vcl_fstream.h') { next if ($f =~ m!\bvcl/(Templates/f?stream|vcl_iostream)!); $i='vcl_(filebuf|fstream|ifstream|ofstream)'; }
     elsif ($j eq 'vcl_functional.h') { $i='vcl_((|pointer_to_)(unary|binary)_(function|negate)|plus|minus|multiplies|divides|modulus|negate|(|not_)equal_to|(greater|less)(|_equal)|logical_(and|or|not)|not(1|2)|bind(|er)(1st|2nd)|ptr_fun|(|const_)mem_fun(|1)(|_ref)(_t|)|transform)'; }
     elsif ($j eq 'vcl_iomanip.h') { $i='vcl_((re|)setiosflags|set(base|fill|precision|w)|(no|)(boolalpha|showbase|showpoint|showpos|skipws|uppercase)|internal|left|right|dec|hex|oct|fixed|scientific)'; }
@@ -622,11 +622,6 @@ foreach $f (@FILES)
   $file =~ s!(\"[^\001\n\"]{0,15})\001([^\001\n\"]{0,15}\")!$1/\*$2!g;
   $file =~ s!(\"[^\002\n\"]{0,15})\002([^\002\n\"]{0,15}\")!$1\*/$2!g;
   $file =~ s!\001\*!/\*\*!g; # Doxygen style comments
-# if ($file =~ m!//\s*[a-zA-Z_0_9]*\s*--\s+(\S*)! && $1 ne "JLM")
-# {
-#   &msg(1, "contains old style // -- docs")
-#     unless ($f =~ m!vcl/vcl_complex_fwd\.h$! $f =~ m!vgui/vgui_glut\.h$!);
-# }
   &msg(1, "contains long /*...*/ comments")
     if ($cpp_file && $file =~ s!\001[^\001\002]{121,}\002!!g &&
         $f !~ m!\bvidl_vil1/vidl_vil1_mpegcodec\.cxx$! &&

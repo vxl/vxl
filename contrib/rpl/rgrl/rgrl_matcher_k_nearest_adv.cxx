@@ -1,3 +1,5 @@
+#include <iostream>
+#include <map>
 #include "rgrl_matcher_k_nearest_adv.h"
 //:
 // \file
@@ -9,8 +11,8 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_match_set.h>
-// not used? #include <vcl_vector.h>
-#include <vcl_map.h>
+// not used? #include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //-----------------------------------------------
@@ -75,7 +77,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   // create a map for from feature and the match iterator
   //
   typedef rgrl_match_set::const_from_iterator  from_feature_iterator;
-  vcl_map< rgrl_feature_sptr, from_feature_iterator > feature_sptr_iterator_map;
+  std::map< rgrl_feature_sptr, from_feature_iterator > feature_sptr_iterator_map;
   if ( allow_reuse_match )
   {
     for ( from_feature_iterator i=old_matches->from_begin(); i!=old_matches->from_end(); ++i )
@@ -117,7 +119,7 @@ compute_matches( rgrl_feature_set const&       from_set,
       prev_xform_->map_location( (*fitr)->location(), prev_mapped );
 
       // if the mapping difference is smaller than this threshold
-      vcl_map< rgrl_feature_sptr, from_feature_iterator >::const_iterator map_itr;
+      std::map< rgrl_feature_sptr, from_feature_iterator >::const_iterator map_itr;
       if ( vnl_vector_ssd( prev_mapped, mapped->location() ) < sqr_thres_for_reuse_match_  &&
            (map_itr=feature_sptr_iterator_map.find( *fitr )) != feature_sptr_iterator_map.end() )
       {
@@ -154,7 +156,7 @@ compute_matches( rgrl_feature_set const&       from_set,
     }
   }
 
-  DebugMacro( 1, "There are " << reuse_match_count << " reuse of previous matches out of " << from.size() << vcl_endl );
+  DebugMacro( 1, "There are " << reuse_match_count << " reuse of previous matches out of " << from.size() << std::endl );
 
   // store xform
   prev_xform_ = current_view.xform_estimate();

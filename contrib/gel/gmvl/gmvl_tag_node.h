@@ -10,20 +10,22 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <gmvl/gmvl_node.h>
 
 class gmvl_tag_node : public gmvl_node
 {
  public:
-  gmvl_tag_node(vcl_string const& name) : name_(name) { type_="gmvl_tag_node"; }
+  gmvl_tag_node(std::string const& name) : name_(name) { type_="gmvl_tag_node"; }
   ~gmvl_tag_node() {}
 
   // accessor
-  vcl_string &get() { return name_; }
+  std::string &get() { return name_; }
 
  protected:
-  vcl_string name_;
+  std::string name_;
 };
 
 #endif // gmvl_tag_node_h_

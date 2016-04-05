@@ -41,8 +41,8 @@ class boxm2_ocl_change_tableau : public boxm2_ocl_render_tableau
                     unsigned ni,
                     unsigned nj,
                     vpgl_perspective_camera<double>* cam,
-                    vcl_vector<vcl_string>& change_imgs,
-                    vcl_vector<vcl_string>& change_cams);
+                    std::vector<std::string>& change_imgs,
+                    std::vector<std::string>& change_cams);
 
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
@@ -51,8 +51,8 @@ class boxm2_ocl_change_tableau : public boxm2_ocl_render_tableau
 
   //func to update frame on GPU (returns gpu time)
   float change_detect(int frame);
-  vcl_vector<vcl_string>  cams_;
-  vcl_vector<vcl_string>  imgs_;
+  std::vector<std::string>  cams_;
+  std::vector<std::string>  imgs_;
   int                     frame_;
   bool                    do_render_change_;
   int                     n_;               //for nxn change detection

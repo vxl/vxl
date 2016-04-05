@@ -28,7 +28,7 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam
 
   virtual ~bwm_tableau_rat_cam() {}
 
-  virtual vcl_string type_name() const { return "bwm_tableau_rat_cam"; }
+  virtual std::string type_name() const { return "bwm_tableau_rat_cam"; }
 
   bool handle(const vgui_event &);
 
@@ -39,7 +39,7 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam
   void center_pos();
 
   // saves the camera with a new version number and returns the path
-  vcl_string save_camera();
+  std::string save_camera();
   void save_adj_camera() { save_camera();}
   // ******************** LVCS Menu
 

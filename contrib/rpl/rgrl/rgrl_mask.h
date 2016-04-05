@@ -15,7 +15,9 @@
 // Oct. 2006  Gehua Yang (RPI) - move rgrl_mask_3d_image into separate file
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 
@@ -147,10 +149,10 @@ class rgrl_mask_box
 };
 
 //: An output operator for displaying a mask_box
-vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box);
+std::ostream& operator<<(std::ostream& os, const rgrl_mask_box& box);
 
 //: An output operator for displaying a mask_box
-vcl_istream& operator>>(vcl_istream& is, rgrl_mask_box& box);
+std::istream& operator>>(std::istream& is, rgrl_mask_box& box);
 
 //--------------------------------
 //               Utility functions

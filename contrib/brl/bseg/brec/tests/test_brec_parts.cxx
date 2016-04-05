@@ -1,7 +1,8 @@
+#include <iostream>
+#include <sstream>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <brec/brec_part_base.h>
 #include <brec/brec_part_base_sptr.h>
@@ -23,7 +24,7 @@
 
 static void test_brec_parts()
 {
-  vcl_string file = "digits_small.png";
+  std::string file = "digits_small.png";
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
 
   unsigned ni = img->ni();
@@ -35,7 +36,7 @@ static void test_brec_parts()
   float theta = 0.0f;
   bool bright = false;
 
-  vcl_vector<brec_part_instance_sptr> parts_0_0;
+  std::vector<brec_part_instance_sptr> parts_0_0;
   TEST("testing brec parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.01f, 0.1f, 0, parts_0_0), true);
   TEST_NEAR("testing brec parts ", parts_0_0.size(), 25, 0.0001);
 
@@ -52,7 +53,7 @@ static void test_brec_parts()
   vil_save(out_image, "./extracted_horizontal_parts.png");
 
   theta = 90.0f;
-  vcl_vector<brec_part_instance_sptr> parts_0_1;
+  std::vector<brec_part_instance_sptr> parts_0_1;
   TEST("testing brec parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.01f, 0.1f, 1, parts_0_1), true);
   TEST_NEAR("testing brec parts ", parts_0_1.size(), 36, 0.0001);
   vil_image_view<vxl_byte> out_image2(ni, nj, 3);
@@ -63,7 +64,7 @@ static void test_brec_parts()
   }
   vil_save(out_image2, "./extracted_ninety_degree_parts_0_1.png");
 
-  vcl_vector<brec_part_instance_sptr> parts;
+  std::vector<brec_part_instance_sptr> parts;
   theta = 45.0f;
   TEST("testing brec parts ", extract_gaussian_primitives(img, lambda0, lambda1, theta, bright, 0.01f, 0.1f, 2, parts), true);
 
@@ -102,7 +103,7 @@ static void test_brec_parts()
   float a1, a2, d1, d2;
   e_1_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample1, d1, a1);
   e_1_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample2, d2, a2);
-  vcl_cout << "p_1_0 edge to second part training d1: " << d1 << " angle: " << a1*vnl_math::deg_per_rad << " degrees\n"
+  std::cout << "p_1_0 edge to second part training d1: " << d1 << " angle: " << a1*vnl_math::deg_per_rad << " degrees\n"
            << "p_1_0 edge to second part training d2: " << d2 << " angle: " << a2*vnl_math::deg_per_rad << " degrees\n";
   e_1_0_to_second->update_dist_model(d1);
   e_1_0_to_second->update_dist_model(d2);
@@ -127,7 +128,7 @@ static void test_brec_parts()
   h_8->add_edge(e_2_0_to_second);
   vnl_vector_fixed<float,2> sample3(-1.0f,8.0f); // measured from the 8 sample
   e_2_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample3, d1, a1); // using pi_0_1 as it is still the center of p_1_0
-  vcl_cout << "p_2_0 edge to second part training d: " << d1 << " angle: " << a1*vnl_math::deg_per_rad << " degrees\n";
+  std::cout << "p_2_0 edge to second part training d: " << d1 << " angle: " << a1*vnl_math::deg_per_rad << " degrees\n";
   e_2_0_to_second->update_dist_model(d1);
   e_2_0_to_second->update_angle_model(a1);
 
@@ -158,18 +159,18 @@ static void test_brec_parts()
 
   float min, max;
   vil_math_value_range(map, min, max);
-  vcl_cout << " map 0 1 value range, min: " << min << " max: " << max << vcl_endl;
+  std::cout << " map 0 1 value range, min: " << min << " max: " << max << std::endl;
   vil_image_view<vxl_byte> map_b(ni, nj);
   vil_convert_stretch_range_limited(map, map_b, 0.0f, max);
   vil_save(map_b, "./map_generated_0_1.png");
 
-  vcl_vector<brec_part_instance_sptr> dummy(nj, 0);
-  vcl_vector<vcl_vector<brec_part_instance_sptr> > part_map(ni, dummy);
+  std::vector<brec_part_instance_sptr> dummy(nj, 0);
+  std::vector<std::vector<brec_part_instance_sptr> > part_map(ni, dummy);
   brec_part_hierarchy::generate_map(parts_0_1, part_map);
 
   brec_part_instance_sptr ins = h_8->exists(p_1_0, parts_0_1[0], map, type_map, part_map, 0.1f); // p will be its central part and map will tell if all the other parts exist
   TEST("testing exists", !ins, false);
-  vcl_cout << "strength is: " << ins->strength_ << vcl_endl;
+  std::cout << "strength is: " << ins->strength_ << std::endl;
 #if 0
   // find the central part
   unsigned ind = 21;
@@ -180,15 +181,15 @@ static void test_brec_parts()
     }
   }
 
-  vcl_vector<brec_part_instance_sptr> parts_1_0;
+  std::vector<brec_part_instance_sptr> parts_1_0;
   ins = h_8->exists(p_1_0, parts_0_1[ind], map, type_map, 0.1f); // p will be its central part and map will tell if all the other parts exist
   TEST("testing exists", !ins, false);
   parts_1_0.push_back(ins);
-  vcl_cout << "strength is: " << ins->strength_ << vcl_endl;
+  std::cout << "strength is: " << ins->strength_ << std::endl;
 
   brec_part_hierarchy::generate_map(parts_1_0, map, type_map);
   vil_math_value_range(map, min, max);
-  vcl_cout << " map 1 0 value range, min: " << min << " max: " << max << vcl_endl;
+  std::cout << " map 1 0 value range, min: " << min << " max: " << max << std::endl;
   vil_convert_stretch_range_limited(map, map_b, 0.0f, max);
   vil_save(map_b, "./map_generated_1_0.png");
 
@@ -199,13 +200,13 @@ static void test_brec_parts()
   parts_1_0.clear();
 #endif // 0
 
-  vcl_vector<brec_part_instance_sptr> parts_1_0;
+  std::vector<brec_part_instance_sptr> parts_1_0;
   h_8->extract_upper_layer(parts_0_1, ni, nj, parts_1_0);
   //TEST_NEAR("extracting layer 1", parts_1_0.size(), 54, 0.1);
 
   brec_part_hierarchy::generate_map(parts_1_0, map, type_map);
   vil_math_value_range(map, min, max);
-  vcl_cout << " map 1 0 value range, min: " << min << " max: " << max << vcl_endl;
+  std::cout << " map 1 0 value range, min: " << min << " max: " << max << std::endl;
   vil_convert_stretch_range_limited(map, map_b, 0.0f, max);
   vil_save(map_b, "./map_generated_1_0.png");
 
@@ -217,13 +218,13 @@ static void test_brec_parts()
   }
   vil_save(output_map, "./map_receptive_field_1_0.png");
 
-  vcl_vector<brec_part_instance_sptr> parts_2_0;
+  std::vector<brec_part_instance_sptr> parts_2_0;
   h_8->extract_upper_layer(parts_1_0, ni, nj, parts_2_0);
   //TEST_NEAR("extracting layer 1", parts_2_0.size(), 40, 0.1);
 
   brec_part_hierarchy::generate_map(parts_2_0, map, type_map);
   vil_math_value_range(map, min, max);
-  vcl_cout << " map 2 0 value range, min: " << min << " max: " << max << vcl_endl;
+  std::cout << " map 2 0 value range, min: " << min << " max: " << max << std::endl;
   vil_convert_stretch_range_limited(map, map_b, 0.0f, max);
   vil_save(map_b, "./map_generated_2_0.png");
 
@@ -237,7 +238,7 @@ static void test_brec_parts()
   vil_image_view<float> output_map_float(ni, nj);
   brec_part_hierarchy::generate_output_map(parts_2_0, output_map_float);
   vil_math_value_range(output_map_float, min, max);
-  vcl_cout << " output map float value range, min: " << min << " max: " << max << vcl_endl;
+  std::cout << " output map float value range, min: " << min << " max: " << max << std::endl;
 
   vil_image_view<vxl_byte> output_map_byte(ni, nj);
   vil_convert_stretch_range_limited(output_map_float, output_map_byte, 0.0f, 1.0f);
@@ -247,8 +248,8 @@ static void test_brec_parts()
     output_map_float.fill(0.0f);
     parts_2_0[i]->mark_receptive_field(output_map_float, parts_2_0[i]->strength_/max);
     vil_convert_stretch_range_limited(output_map_float, output_map_byte, 0.0f, 1.0f);
-    vcl_stringstream ss; ss << i;
-    vcl_string name = "./map_output_receptive_field_2_0_"+ss.str()+".png";
+    std::stringstream ss; ss << i;
+    std::string name = "./map_output_receptive_field_2_0_"+ss.str()+".png";
     vil_save(output_map_byte, name.c_str());
   }
 }

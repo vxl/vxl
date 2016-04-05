@@ -21,8 +21,9 @@
 // \endverbatim
 
 
+#include <cstddef>
+#include <iosfwd>
 #include <vcl_compiler.h>
-#include <vcl_cstddef.h>
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)
@@ -38,7 +39,7 @@ VCL_TEMPLATE_EXPORT template <class T>
 class vbl_array_3d
 {
  public:
-  typedef vcl_size_t size_type;
+  typedef std::size_t size_type;
   typedef T element_type;
 
  private:
@@ -83,6 +84,8 @@ class vbl_array_3d
   ~vbl_array_3d () { destruct(); }
   vbl_array_3d<T>& operator=(vbl_array_3d<T> const& that) {
     resize(that.row1_count_, that.row2_count_, that.row3_count_);
+        if(row1_count_*row2_count_*row3_count_==0)
+                return *this;
     set(that.data_block());
     return *this;
   }
@@ -154,11 +157,11 @@ class vbl_array_3d
 //
 // formatted I/O
 //
-#include <vcl_iosfwd.h>
-VCL_TEMPLATE_EXPORT template <class T> vcl_ostream& operator<<(vcl_ostream&,
+#include <vcl_compiler.h>
+VCL_TEMPLATE_EXPORT template <class T> std::ostream& operator<<(std::ostream&,
                                                   vbl_array_3d<T >const&);
 
-VCL_TEMPLATE_EXPORT template <class T> vcl_istream& operator>>(vcl_istream&,
+VCL_TEMPLATE_EXPORT template <class T> std::istream& operator>>(std::istream&,
                                                   vbl_array_3d<T >&);
 
 #define VBL_ARRAY_3D_INSTANTIATE \

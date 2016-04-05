@@ -1,6 +1,7 @@
+#include <iostream>
+#include <vector>
 #include "similarity_from_matches.h"
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -12,7 +13,7 @@ double noise( double sigma );
 
 // Assume throughout that the format of the parameter vector is a, b, tx, ty
 
-similarity_from_matches::similarity_from_matches( const vcl_vector<image_point_match>& matches )
+similarity_from_matches::similarity_from_matches( const std::vector<image_point_match>& matches )
   : rrel_estimation_problem(2,2),
     matches_(matches)
 {
@@ -32,7 +33,7 @@ similarity_from_matches::similarity_from_matches( const vcl_vector<image_point_m
 }
 
 bool
-similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indices,
+similarity_from_matches::fit_from_minimal_set( const std::vector<int>& match_indices,
                                                vnl_vector<double>& params ) const
 {
   assert( match_indices.size() == 2 );
@@ -40,7 +41,7 @@ similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indi
        (matches_[match_indices[0]].to_loc_ - matches_[match_indices[1]].to_loc_).squared_magnitude()
        < 1.0e-6 )
   {
-    vcl_cerr << "identical from points or to points: returning false\n";
+    std::cerr << "identical from points or to points: returning false\n";
     return false;
   }
 
@@ -48,7 +49,7 @@ similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indi
   vnl_vector_fixed<double,4> U;
   for ( int i=0; i<2; ++i )
   {
-    // vcl_cout << "i = " << i << ", match_indices[i] = " << match_indices[i] << '\n'
+    // std::cout << "i = " << i << ", match_indices[i] = " << match_indices[i] << '\n'
     //          << "from_loc_ = " << matches_[match_indices[i]].from_loc_
     //          << ", to_loc_ = " << matches_[match_indices[i]].to_loc_ << '\n';
     double x = matches_[match_indices[i]].from_loc_[0];
@@ -62,12 +63,12 @@ similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indi
     U( 2*i+1 ) = v;
   }
 
-  // vcl_cout << "X matrix = " << X << '\n'
+  // std::cout << "X matrix = " << X << '\n'
   //          << "U vector = " << U << '\n';
 
   if ( vnl_det(X) == 0.0 )
   {
-    vcl_cout << "Rank is < 4, fit_from_minimal_set() returns false\n";
+    std::cout << "Rank is < 4, fit_from_minimal_set() returns false\n";
     return false;
   }
 
@@ -97,7 +98,7 @@ double calc_residual( const vnl_vector<double>& params, const image_point_match&
 
 void
 similarity_from_matches::compute_residuals( const vnl_vector<double>& params,
-                                            vcl_vector<double>& residuals ) const
+                                            std::vector<double>& residuals ) const
 {
   if ( residuals.size() != matches_.size() )
     residuals.resize( matches_.size() );
@@ -107,10 +108,10 @@ similarity_from_matches::compute_residuals( const vnl_vector<double>& params,
 
 
 void
-similarity_from_matches::compute_weights( const vcl_vector<double>& residuals,
+similarity_from_matches::compute_weights( const std::vector<double>& residuals,
                                           const rrel_wls_obj* obj,
                                           double scale,
-                                          vcl_vector<double>& weights ) const
+                                          std::vector<double>& weights ) const
 {
   // First compute the weights as normal.
   rrel_estimation_problem::compute_weights( residuals, obj, scale, weights );
@@ -132,7 +133,7 @@ similarity_from_matches::compute_weights( const vcl_vector<double>& residuals,
 bool
 similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
                                                      vnl_matrix<double>& cofact,
-                                                     const vcl_vector<double>* weights ) const
+                                                     const std::vector<double>* weights ) const
 {
   vnl_matrix_fixed<double,4,4> wXtX(0.0);
   vnl_matrix_fixed<double,2,4> Xi(0.0);  Xi(0,2) = Xi(1,3) = 1.0;
@@ -140,24 +141,24 @@ similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
 
   for ( unsigned int i=0; i<matches_.size(); ++i )
   {
-    // vcl_cout << "i = " << i << ". from_loc_ = " << matches_[i].from_loc_
-    //          << ", to_loc_ = " << matches_[i].to_loc_ << vcl_endl;
+    // std::cout << "i = " << i << ". from_loc_ = " << matches_[i].from_loc_
+    //          << ", to_loc_ = " << matches_[i].to_loc_ << std::endl;
     Xi( 0, 0 ) = Xi( 1, 1 ) = matches_[i].from_loc_[0];
     Xi( 1, 0 ) = matches_[i].from_loc_[1];
     Xi( 0, 1 ) = -Xi(1, 0 );
 
-    // vcl_cout << "Xi = " << Xi << vcl_endl;
+    // std::cout << "Xi = " << Xi << std::endl;
     double wt = (*weights)[i];
     wXtX += wt * Xi.transpose() * Xi;
     wXtu += wt * Xi.transpose() * matches_[i].to_loc_;
   }
 
-  // vcl_cout << "wXtX matrix = " << wXtX << '\n'
+  // std::cout << "wXtX matrix = " << wXtX << '\n'
   //          << "wXtu vector = " << wXtu << '\n';
 
   if ( vnl_det(wXtX) == 0.0 )
   {
-    vcl_cout << "Rank is < 4, weighted_least_squares_fit() returns false\n";
+    std::cout << "Rank is < 4, weighted_least_squares_fit() returns false\n";
     return false;
   }
 
@@ -165,7 +166,7 @@ similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
   params = cofact * wXtu;
   if ( vnl_math::abs(params[0]) < 1.0e-6 && vnl_math::abs(params[1]) < 1.0e-6 )
   {
-    vcl_cout << "Transformation is degenerate\n";
+    std::cout << "Transformation is degenerate\n";
     return false;
   }
   else
@@ -175,7 +176,7 @@ similarity_from_matches::weighted_least_squares_fit( vnl_vector<double>& params,
 void
 generate_similarity_matches( const vnl_vector<double>& params,
                              double sigma,
-                             vcl_vector<image_point_match>& matches )
+                             std::vector<image_point_match>& matches )
 {
   assert( params.size() == 4 );
   vnl_matrix_fixed<double,2,2> A;

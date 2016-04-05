@@ -43,7 +43,7 @@
 
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_stlfwd.h> // for vcl_vector
+#include <vcl_stlfwd.h> // for std::vector
 
 class gevd_region_edge : public vbl_ref_count
 {
@@ -64,7 +64,7 @@ class gevd_region_edge : public vbl_ref_count
   bool SetNewLabel(unsigned int label);
   //members
   vtol_edge_2d_sptr edge_;
-  vcl_vector<unsigned int> labels_;
+  std::vector<unsigned int> labels_;
 };
 
 #endif // gevd_region_edge_h_

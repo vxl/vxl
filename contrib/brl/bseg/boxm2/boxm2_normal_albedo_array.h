@@ -1,8 +1,10 @@
 #ifndef boxm2_normal_albedo_array_h_
 #define boxm2_normal_albedo_array_h_
 
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include "boxm2_export.h"
 
 class boxm2_normal_albedo_array
@@ -10,7 +12,7 @@ class boxm2_normal_albedo_array
  public:
   boxm2_normal_albedo_array();
 
-  static vcl_vector<vgl_vector_3d<double> > get_normals();
+  static std::vector<vgl_vector_3d<double> > get_normals();
 
   float get_albedo(unsigned int i) const {return albedos[i];}
   float get_probability(unsigned int i) const {return probs[i];}

@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/functors/bvpl_local_max_functor.h>
@@ -20,7 +21,7 @@
 
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class bvpl_scene_vector_operator
 {
@@ -39,11 +40,11 @@ class bvpl_scene_vector_operator
 
   //:Function incharged of combining results
   template<class T_data>
-  void combine_kernel_responses(const vcl_vector<T_data>& responses, vnl_vector_fixed<T_data, 3> &response_out);
+  void combine_kernel_responses(const std::vector<T_data>& responses, vnl_vector_fixed<T_data, 3> &response_out);
 
   //:Function incharged of combining results
   template<class T_data>
-  void combine_kernel_responses(const vcl_vector<T_data>& responses, bvpl_octree_sample<T_data> &response_out);
+  void combine_kernel_responses(const std::vector<T_data>& responses, bvpl_octree_sample<T_data> &response_out);
 };
 
 
@@ -58,11 +59,11 @@ void bvpl_scene_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in> 
   // CAUTION: kernel is run at finest resolution, but this may not always be desired
   double cell_length = scene_in.finest_cell_length();
 
-  vcl_cout << "bvpl_scene_kernel_operator: Operating on cells at level: " << finest_level << " and length: " << cell_length << vcl_endl;
+  std::cout << "bvpl_scene_kernel_operator: Operating on cells at level: " << finest_level << " and length: " << cell_length << std::endl;
 
   T_data_out zero;
   scene_in.template clone_blocks_to_type<boct_tree<short, T_data_out > >(scene_out, zero);
-  vcl_cout << "The initial zero-value for all cells is : " << zero << vcl_endl;
+  std::cout << "The initial zero-value for all cells is : " << zero << std::endl;
 
   //(1) Traverse the scene - is there an easy way to modify the cell iterator so to only use leaf cells at level 0;
   boxm_cell_iterator<boct_tree<short, T_data_in > > iterator = scene_in.cell_iterator(&boxm_scene<boct_tree<short, T_data_in > >::load_block_and_neighbors);
@@ -80,7 +81,7 @@ void bvpl_scene_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in> 
 
     //if level and location code of cells isn't the same then continue
     if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))) {
-      vcl_cerr << " Input and output cells don't have the same structure " << vcl_endl;
+      std::cerr << " Input and output cells don't have the same structure " << std::endl;
       ++iterator;
       ++out_iter;
       continue;
@@ -97,7 +98,7 @@ void bvpl_scene_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in> 
 
     //(2) Run vector of kernels
 
-    vcl_vector<T_data_in> responses;
+    std::vector<T_data_in> responses;
     for (unsigned k= 0; k< kernel_vector->kernels_.size(); k++)
     {
       bvpl_kernel_sptr kernel = kernel_vector->kernels_[k];
@@ -136,10 +137,10 @@ void bvpl_scene_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in> 
 }
 
 template <class T_data>
-void bvpl_scene_vector_operator::combine_kernel_responses(const vcl_vector<T_data>& responses, vnl_vector_fixed<T_data, 3> &response_out)
+void bvpl_scene_vector_operator::combine_kernel_responses(const std::vector<T_data>& responses, vnl_vector_fixed<T_data, 3> &response_out)
 {
   if (responses.size() != 3) {
-    vcl_cerr << "Wrong number of responses" << vcl_endl;
+    std::cerr << "Wrong number of responses" << std::endl;
     return;
   }
 
@@ -151,10 +152,10 @@ void bvpl_scene_vector_operator::combine_kernel_responses(const vcl_vector<T_dat
 }
 
 template <class T_data>
-void bvpl_scene_vector_operator::combine_kernel_responses(const vcl_vector<T_data>& responses, bvpl_octree_sample<T_data> &response_out)
+void bvpl_scene_vector_operator::combine_kernel_responses(const std::vector<T_data>& responses, bvpl_octree_sample<T_data> &response_out)
 {
   if (responses.size() != 3) {
-    vcl_cerr << "Wrong number of responses" << vcl_endl;
+    std::cerr << "Wrong number of responses" << std::endl;
     return;
   }
 

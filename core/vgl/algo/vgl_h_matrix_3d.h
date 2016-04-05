@@ -19,13 +19,14 @@
 //   26 Jul 2011 - Peter Vanroose - added correlation(),set_affine(),is_identity()
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,3>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_pointset_3d.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //:
 // A class to hold a 3-d projective transformation matrix
@@ -47,13 +48,13 @@ class vgl_h_matrix_3d
                   vnl_vector_fixed<T,3> const& m);
   //: Constructor from 4x4 row-storage C-array
   explicit vgl_h_matrix_3d(T const* M) : t12_matrix_(M) {}
-  //: Load from ASCII vcl_istream.
-  explicit vgl_h_matrix_3d(vcl_istream& s);
+  //: Load from ASCII std::istream.
+  explicit vgl_h_matrix_3d(std::istream& s);
   //: Load from file
   explicit vgl_h_matrix_3d(char const* filename);
   //: Constructor - calculate homography between two sets of 3D points (minimum 5)
-  vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& points1,
-                  vcl_vector<vgl_homg_point_3d<T> > const& points2);
+  vgl_h_matrix_3d(std::vector<vgl_homg_point_3d<T> > const& points1,
+                  std::vector<vgl_homg_point_3d<T> > const& points2);
 
   // Operations----------------------------------------------------------------
 
@@ -69,7 +70,14 @@ class vgl_h_matrix_3d
   vgl_homg_plane_3d<T> correlation(vgl_homg_point_3d<T> const& p) const;
   vgl_homg_point_3d<T> correlation(vgl_homg_plane_3d<T> const& l) const;
 
-  //: operate directly on a Euclidean pointset for convenience (no ideal points allowed)
+
+  //: operate directly on Euclidean points for convenience (no ideal points allowed)
+
+  vgl_point_3d<T> operator()(vgl_point_3d<T> const& p) const{
+    vgl_homg_point_3d<T> hp(p); return (*this)(hp);}
+
+  vgl_point_3d<T> operator* (vgl_point_3d<T> const& p) const {return (*this)(p);}
+
   vgl_pointset_3d<T> operator()(vgl_pointset_3d<T> const& ptset) const;
 
   //the following require computing the inverse homography
@@ -176,14 +184,14 @@ class vgl_h_matrix_3d
   //     0  &   0  &   1   &   0  &   1  \\%
   //     0  &   0  &   0   &   1  &   1
   // \end{array}$
-  bool projective_basis(vcl_vector<vgl_homg_point_3d<T> > const& five_points);
+  bool projective_basis(std::vector<vgl_homg_point_3d<T> > const& five_points);
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of planes to the canonical
   // frame.  The planes act as the dual projective basis for the canonical
   // coordinate system.  In the canonical frame the planes have equations:
   // x=0; y=0; z=0; w=0; x+y+z+w=0. (The latter plane is the plane at infinity.)
-  bool projective_basis(vcl_vector<vgl_homg_plane_3d<T> > const& five_planes);
+  bool projective_basis(std::vector<vgl_homg_plane_3d<T> > const& five_planes);
 
   // ---------- extract components as transformations ----------
 
@@ -200,15 +208,15 @@ class vgl_h_matrix_3d
   void polar_decomposition(vnl_matrix_fixed<T, 3, 3>& S, vnl_matrix_fixed<T, 3, 3>& R) const;
 
   //: Load H from ASCII file.
-  bool read(vcl_istream& s);
+  bool read(std::istream& s);
   //: Read H from file
   bool read(char const* filename);
 };
 
-//: Print H on vcl_ostream
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_3d<T> const& H);
+//: Print H on std::ostream
+template <class T> std::ostream& operator<<(std::ostream& s, vgl_h_matrix_3d<T> const& H);
 //: Load H from ASCII file.
-template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_3d<T>&       H)
+template <class T> std::istream& operator>>(std::istream& s, vgl_h_matrix_3d<T>&       H)
 { H.read(s); return s; }
 
 #define VGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_3d.txx first"

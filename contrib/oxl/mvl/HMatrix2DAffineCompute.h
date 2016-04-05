@@ -30,13 +30,13 @@ class HomgPoint2D;
 class HMatrix2DAffineCompute : public HMatrix2DCompute
 {
  protected:
-  bool compute_p(vcl_vector<HomgPoint2D> const&,
-                 vcl_vector<HomgPoint2D> const&,
+  bool compute_p(std::vector<HomgPoint2D> const&,
+                 std::vector<HomgPoint2D> const&,
                  HMatrix2D *);
  public:
-  static HMatrix2D compute(const vcl_vector<HomgPoint2D>&p1, const vcl_vector<HomgPoint2D>&p2);
-  static HMatrix2D compute(vcl_vector<vgl_homg_point_2d<double> > const& p1,
-                           vcl_vector<vgl_homg_point_2d<double> > const& p2);
+  static HMatrix2D compute(const std::vector<HomgPoint2D>&p1, const std::vector<HomgPoint2D>&p2);
+  static HMatrix2D compute(std::vector<vgl_homg_point_2d<double> > const& p1,
+                           std::vector<vgl_homg_point_2d<double> > const& p2);
   int minimum_number_of_correspondences() const { return 3; }
   // left in for capes :
   static HMatrix2D compute(const PairMatchSetCorner &matches);
@@ -52,8 +52,8 @@ class HMatrix2DAffineCompute : public HMatrix2DCompute
 //
 struct NonHomg : public vnl_matrix<double>
 {
-  NonHomg(const vcl_vector<HomgPoint2D> &A);
-  NonHomg(vcl_vector<vgl_homg_point_2d<double> > const& A);
+  NonHomg(const std::vector<HomgPoint2D> &A);
+  NonHomg(std::vector<vgl_homg_point_2d<double> > const& A);
 };
 
 //

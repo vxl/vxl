@@ -8,14 +8,14 @@
 
 // back project a set of edges onto a 3-d plane
 bool bwm_reg_utils::
-back_project_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges_2d,
+back_project_edges(std::vector<vsol_digital_curve_2d_sptr> const& edges_2d,
                    vpgl_rational_camera<double> const& rcam,
                    vgl_plane_3d<double> const& pl,
                    vgl_point_3d<double> const& initial_guess,
-                   vcl_vector<vsol_digital_curve_3d_sptr>& edges_3d)
+                   std::vector<vsol_digital_curve_3d_sptr>& edges_3d)
 {
   edges_3d.clear();
-  for (vcl_vector<vsol_digital_curve_2d_sptr>::const_iterator eit = edges_2d.begin();
+  for (std::vector<vsol_digital_curve_2d_sptr>::const_iterator eit = edges_2d.begin();
        eit != edges_2d.end(); ++eit){
     vsol_digital_curve_3d_sptr dc3d = new vsol_digital_curve_3d;
     unsigned n = (*eit)->size();
@@ -35,12 +35,12 @@ back_project_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges_2d,
 
 //forward project edges onto an image plane
 void bwm_reg_utils::
-project_edges(vcl_vector<vsol_digital_curve_3d_sptr> const& edges_3d,
+project_edges(std::vector<vsol_digital_curve_3d_sptr> const& edges_3d,
               vpgl_rational_camera<double> const& rcam,
-              vcl_vector<vsol_digital_curve_2d_sptr>& edges_2d)
+              std::vector<vsol_digital_curve_2d_sptr>& edges_2d)
 {
   edges_2d.clear();
-  for (vcl_vector<vsol_digital_curve_3d_sptr>::const_iterator eit = edges_3d.begin();
+  for (std::vector<vsol_digital_curve_3d_sptr>::const_iterator eit = edges_3d.begin();
        eit != edges_3d.end(); ++eit){
     vsol_digital_curve_2d_sptr dc2d = new vsol_digital_curve_2d;
     unsigned n = (*eit)->size();

@@ -13,12 +13,14 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "volm_category_io.h"
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class volm_osm_object_line;
 typedef vbl_smart_ptr<volm_osm_object_line> volm_osm_object_line_sptr;
@@ -30,10 +32,10 @@ public:
   volm_osm_object_line() : prop_(0, "invalid", 0, 0.0, vil_rgb<vxl_byte>(0,0,0)) { line_.clear(); }
 
   //: constructor
-  volm_osm_object_line(volm_land_layer prop, vcl_vector<vgl_point_2d<double> > line) : prop_(prop), line_(line) {}
+  volm_osm_object_line(volm_land_layer prop, std::vector<vgl_point_2d<double> > line) : prop_(prop), line_(line) {}
 
   //: accessors
-  vcl_vector<vgl_point_2d<double> >& line() { return line_; }
+  std::vector<vgl_point_2d<double> >& line() { return line_; }
   volm_land_layer prop() const { return prop_; }
 
   //: screen print
@@ -55,7 +57,7 @@ private:
   volm_land_layer prop_;
 
   //: coords of the point location in format of wgs84, x -- lon, y -- lat
-  vcl_vector<vgl_point_2d<double> > line_;
+  std::vector<vgl_point_2d<double> > line_;
 };
 
 void vsl_b_write(vsl_b_ostream& os, const volm_osm_object_line* rptr);

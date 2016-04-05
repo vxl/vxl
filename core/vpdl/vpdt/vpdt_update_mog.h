@@ -7,13 +7,14 @@
 // \date March 8, 2009
 // \brief Iterative updating of a mixture of Gaussians
 
+#include <utility>
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_gaussian.h>
 #include <vpdl/vpdt/vpdt_mixture_of.h>
 #include <vpdl/vpdt/vpdt_update_gaussian.h>
 #include <vpdl/vpdt/vpdt_mog_fitness.h>
 #include <vpdl/vpdt/vpdt_num_obs.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: A mixture of Gaussians updater
@@ -128,7 +129,7 @@ class vpdt_mog_sg_updater : public vpdt_mog_updater<mog_type>
       gaussian_type& g = mix.distribution(i);
       // unlike the original paper, the normal distribution here is unnormalized
       // if normalized, rho can exceed 1 leading to divergence
-      T rho = alpha * vcl_exp(-sqr_dist/2);
+      T rho = alpha * std::exp(-sqr_dist/2);
       if (min_var_ > T(0))
         vpdt_update_gaussian(g, rho, sample, min_var_);
       else
@@ -203,18 +204,18 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
   }
 
   //: find all matches within the \c gt2_ threshold and compute the probability of each
-  vcl_vector<vcl_pair<unsigned int,double> >
+  std::vector<std::pair<unsigned int,double> >
   matches(const mog_type& mix, const F& sample) const
   {
     const unsigned int mix_nc = mix.num_components();
     double sum_p = 0.0;
-    vcl_vector<vcl_pair<unsigned int,double> > matchez;
+    std::vector<std::pair<unsigned int,double> > matchez;
     // find the square distance to all components, count those below gt2_
     for (unsigned int i=0; i<mix_nc; ++i) {
       const gaussian_type& g = mix.distribution(i);
       double sqr_dist = g.sqr_mahal_dist(sample);
       if (sqr_dist < gt2_)
-        matchez.push_back(vcl_pair<unsigned int,double>(i,sqr_dist));
+        matchez.push_back(std::pair<unsigned int,double>(i,sqr_dist));
     }
     // if only one match, it has prob 1
     if (matchez.size() == 1) {
@@ -226,7 +227,7 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
         unsigned int& i = matchez[j].first;
         double& p = matchez[j].second;
         const gaussian_type& g = mix.distribution(i);
-        p = mix.weight(i) * g.norm_const() * vcl_exp(-p/2);
+        p = mix.weight(i) * g.norm_const() * std::exp(-p/2);
         sum_p += p;
       }
       // normalize
@@ -239,7 +240,7 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
 
   //: Apply a winner-take-all strategy to the matches.
   //  Keep only the highest probability match and assign it probability 1
-  void winner_take_all(vcl_vector<vcl_pair<unsigned int,double> >& m) const
+  void winner_take_all(std::vector<std::pair<unsigned int,double> >& m) const
   {
     double max_p = m[0].second;
     unsigned int max_j = 0;
@@ -263,7 +264,7 @@ class vpdt_mog_lee_updater : public vpdt_mog_updater<mog_type>
       return;
     }
     // find all matching components (sqr dist < gt2_) and their probabilites
-    vcl_vector<vcl_pair<unsigned int,double> > m = matches(mix, sample);
+    std::vector<std::pair<unsigned int,double> > m = matches(mix, sample);
 
     if (!m.empty())
     {

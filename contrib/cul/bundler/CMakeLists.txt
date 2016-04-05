@@ -30,7 +30,7 @@ set(bundler_sources
     bundler_inters.h        bundler_inters.cxx
    )
 
-add_library(bundler ${bundler_sources})
+vxl_add_library(LIBRARY_NAME bundler LIBRARY_SOURCES ${bundler_sources})
 
 target_link_libraries(bundler ${VXL_LIB_PREFIX}vpgl_algo bpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl rrel bapl rsdl)
 

@@ -27,7 +27,7 @@ vil_image_resource_sptr vepl_x_gradient(vil_image_resource_sptr image, double sc
       img_out->put_view(out);
     }
     else
-      vcl_cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
+      std::cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
   }
 
   // byte greyscale
@@ -104,7 +104,7 @@ vil_image_resource_sptr vepl_x_gradient(vil_image_resource_sptr image, double sc
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_x_gradient() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_x_gradient() not implemented for " << image << '\n';
 
   return img_out;
 }

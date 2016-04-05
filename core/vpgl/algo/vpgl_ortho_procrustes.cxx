@@ -16,7 +16,7 @@ vpgl_ortho_procrustes(vnl_matrix<double> const& X,
 {
   if (X.rows()!=3 || Y.rows()!=3||X.columns()!=Y.columns()){
     cannot_compute_ = true;
-    vcl_cout << "Fatal error in vpgl_ortho_procrustes - unmatched pointsets\n";
+    std::cout << "Fatal error in vpgl_ortho_procrustes - unmatched pointsets\n";
     return;
   }
   X_ = X;
@@ -60,10 +60,10 @@ void vpgl_ortho_procrustes::compute()
   double neu = vnl_trace<double, 3, 3>(Xm*(Xm.transpose()));
   double den = vnl_trace<double, 3, 3>(Ym*(Ym.transpose()));
   if (den!=0)
-    s_ = vcl_sqrt(neu/den);
+    s_ = std::sqrt(neu/den);
 
   //Normalize X, Y by the average radius
-  double sigma_x = vcl_sqrt(smx/N), sigma_y = vcl_sqrt(smy/N);
+  double sigma_x = std::sqrt(smx/N), sigma_y = std::sqrt(smy/N);
   Xm /= sigma_x;
   Ym /= sigma_y;
 

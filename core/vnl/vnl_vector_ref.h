@@ -13,7 +13,7 @@
 // \verbatim
 //  Modifications
 //   LSB (Manchester) 19/03/2001: Tidied up the documentation
-//   Peter Vanroose   27-Jun-2003 Removed .txx as all methods are inlined
+//   Peter Vanroose   27-Jun-2003 Removed .hxx as all methods are inlined
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ class vnl_vector_ref : public vnl_vector<T>
   //: Destructor
   // Prevents base destructor from releasing memory we don't own
   ~vnl_vector_ref() {
-    Base::data = 0;
+    Base::data = VXL_NULLPTR;
   }
 
   //: Reference to self to make non-const temporaries.

@@ -5,26 +5,27 @@
 // \brief Construct histogram from pixels in given image.
 // \author Tim Cootes
 
+#include <vector>
+#include <algorithm>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
-#include <vcl_algorithm.h>
 
 //: Construct histogram from pixels in given image
 //  \relatesalso vil_image_view
 template<class T>
 inline
 void vil_histogram(const vil_image_view<T>& image,
-                   vcl_vector<double>& histo,
+                   std::vector<double>& histo,
                    double min, double max, unsigned n_bins)
 {
   histo.resize(n_bins);
-  vcl_fill(histo.begin(),histo.end(),0.0);
+  std::fill(histo.begin(),histo.end(),0.0);
   double x0 = double(min);
   double s = double(n_bins-1)/(double(max)-x0);
 
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   const T* plane = image.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
   {
@@ -45,12 +46,12 @@ void vil_histogram(const vil_image_view<T>& image,
 //  Resulting histogram has 256 bins
 //  \relatesalso vil_image_view
 void vil_histogram_byte(const vil_image_view<vxl_byte>& image,
-                        vcl_vector<double>& histo);
+                        std::vector<double>& histo);
 
 //: Instantiation macro for other types
 #define VIL_HISTOGRAM_INSTANTIATE(T) \
 template void vil_histogram(const vil_image_view<T>& image, \
-                            vcl_vector<double>& histo, \
+                            std::vector<double>& histo, \
                             double min, double max, unsigned n_bins)
 
 #endif // vil_histogram_h_

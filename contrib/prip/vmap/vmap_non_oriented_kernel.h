@@ -13,8 +13,10 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "vmap_types.h" // for vmap_dart_index
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: A wrapper to an existing kernel which manages darts in a non oriented manager and avoids having loops in the resulting kernel.
 // The darts added to the kernel using the function "add" are added if the resulting edge graph is a tree.
@@ -85,20 +87,20 @@ class vmap_non_oriented_kernel : public TKernel
  protected :
 
   //:
-  void add_from(element_index elt, vcl_vector<int> & visited) ;
+  void add_from(element_index elt, std::vector<int> & visited) ;
 
  private :
 
   //:
-  typedef vcl_vector<dart_iterator> AdjList;
+  typedef std::vector<dart_iterator> AdjList;
 
   //:
-  typedef vcl_vector<AdjList> Graph;
+  typedef std::vector<AdjList> Graph;
 
   //:
   Graph graph_ ;
 };
 
-#include "vmap_non_oriented_kernel.txx"
+#include "vmap_non_oriented_kernel.hxx"
 
 #endif

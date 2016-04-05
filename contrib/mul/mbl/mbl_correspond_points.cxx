@@ -1,15 +1,17 @@
 // This is mul/mbl/mbl_correspond_points.cxx
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mbl_correspond_points.h"
 //:
 // \file
 // \brief Shapiro & Brady's point correspondence algorithm
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 // Dflt ctor
@@ -24,7 +26,7 @@ unsigned mbl_correspond_points::closest_row(const vnl_matrix<double>& H1,
                                             const vnl_matrix<double>& H2,
                                             unsigned i1)
 {
-  unsigned nc = vcl_min(H1.cols(),H2.cols());
+  unsigned nc = std::min(H1.cols(),H2.cols());
   unsigned best_i = 0;
   double best_d2 = -1.0;
   const double* h1 = &H1(i1,0);
@@ -61,9 +63,9 @@ void mbl_correspond_points::fix_eigenvectors(vnl_matrix<double>& P)
 //  On exit, matches[i] gives index of points2 which
 //  corresponds to points1[i].
 //  \param sigma Scaling factor defining kernel width
-void mbl_correspond_points::correspond(const vcl_vector<vgl_point_2d<double> >& points1,
-                                       const vcl_vector<vgl_point_2d<double> >& points2,
-                                       vcl_vector<unsigned>& matches, double sigma)
+void mbl_correspond_points::correspond(const std::vector<vgl_point_2d<double> >& points1,
+                                       const std::vector<vgl_point_2d<double> >& points2,
+                                       std::vector<unsigned>& matches, double sigma)
 {
   unsigned n1 = points1.size();
   unsigned n2 = points2.size();
@@ -99,7 +101,7 @@ void mbl_correspond_points::correspond(const vcl_vector<vgl_point_2d<double> >& 
 //: Construct distance matrix using cosh kernel
 //  On exit, D(i,j) = tanh(pi*d_ij/sigma) * 2/(pi*d_ij)
 //  where d_ij is the distance between points i and j
-void mbl_correspond_points::proximity_by_tanh(const vcl_vector<vgl_point_2d<double> >& points,
+void mbl_correspond_points::proximity_by_tanh(const std::vector<vgl_point_2d<double> >& points,
                                               vnl_matrix<double>& H, double sigma)
 {
   const unsigned n = points.size();
@@ -115,7 +117,7 @@ void mbl_correspond_points::proximity_by_tanh(const vcl_vector<vgl_point_2d<doub
     for (unsigned j=i+1;j<n;++j)
     {
       double d = vgl_distance(p[i],p[j]);
-      H(i,j) = H(j,i) = k1*vcl_tanh(k2*d)/d;
+      H(i,j) = H(j,i) = k1*std::tanh(k2*d)/d;
     }
   }
 }

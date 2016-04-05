@@ -3,7 +3,8 @@
 // \brief PMatrixDecompCR example
 // \author Peter Vanroose, November 2002
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3x4.h>
 #include <mvl/PMatrix.h>
 #include <mvl/PMatrixDecompCR.h>
@@ -19,12 +20,12 @@ int main()
 
   {
     PMatrixDecompCR decomp(P);
-    vcl_cout << "Decomposition:\n"
+    std::cout << "Decomposition:\n"
              << "C =\n" << decomp.C << "Rt =\n" << decomp.Po;
   }
   {
     PMatrixDecompCR decomp(P, false);
-    vcl_cout << "Decomposition without scaling:\n"
+    std::cout << "Decomposition without scaling:\n"
              << "C =\n" << decomp.C << "Rt =\n" << decomp.Po;
   }
   return 0;

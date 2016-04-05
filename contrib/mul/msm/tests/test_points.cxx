@@ -4,13 +4,14 @@
 //  Copyright: (C) 2008 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test msm_points
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <msm/msm_points.h>
 #include <vgl/vgl_point_2d.h>
@@ -19,7 +20,7 @@
 
 void test_points()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing msm_points\n"
            << "***********************\n";
 
@@ -27,13 +28,13 @@ void test_points()
   points.vector().set_size(10);
   for (unsigned i=0;i<10;++i) points.vector()[i]=i;
 
-  vcl_cout<<points<<vcl_endl;
+  std::cout<<points<<std::endl;
 
   TEST("Number of points",points.size(),5);
   TEST_NEAR("First point",
             (points[0]-vgl_point_2d<double>(0,1)).length(),0,1e-6);
 
-  vcl_vector<vgl_point_2d<double> > pts0;
+  std::vector<vgl_point_2d<double> > pts0;
   points.get_points(pts0);
   TEST("Number of points",pts0.size(),points.size());
 
@@ -41,7 +42,7 @@ void test_points()
   points1.set_points(pts0);
   TEST("Set points",points1,points);
 
-  vcl_cout<<"CoG: "<<points.cog()<<vcl_endl;
+  std::cout<<"CoG: "<<points.cog()<<std::endl;
   TEST_NEAR("Centre of Gravity",
             (points.cog()-vgl_point_2d<double>(4,5)).length(),0,1e-6);
 
@@ -49,7 +50,7 @@ void test_points()
   TEST_NEAR("translate_by",
             (points1.cog()-vgl_point_2d<double>(4.5,5.7)).length(),0,1e-6);
 
-  vcl_cout<<"Scale: "<<points1.scale()<<vcl_endl;
+  std::cout<<"Scale: "<<points1.scale()<<std::endl;
   TEST_NEAR("scale()",points1.scale(),4,1e-6);
 
   points1.scale_by(1.5);
@@ -69,7 +70,7 @@ void test_points()
             (b_hi-vgl_point_2d<double>(8,9)).length(),0,1e-6);
 
   {
-    vcl_cout<<"Test binary load and save"<<vcl_endl;
+    std::cout<<"Test binary load and save"<<std::endl;
 
     vsl_b_ofstream bfs_out("test_points.bvl.tmp");
     TEST ("Created test_points.bvl.tmp for writing",
@@ -90,8 +91,8 @@ void test_points()
   }
 
   {
-    vcl_cout<<"Test text load and save"<<vcl_endl;
-    vcl_string text_path("test_points.txt.tmp");
+    std::cout<<"Test text load and save"<<std::endl;
+    std::string text_path("test_points.txt.tmp");
     TEST("write_text_file",points.write_text_file(text_path),true);
 
     msm_points points_in;

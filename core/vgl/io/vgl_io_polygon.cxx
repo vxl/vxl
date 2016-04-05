@@ -1,4 +1,5 @@
 // This is core/vgl/io/vgl_io_polygon.cxx
+#include <iostream>
 #include "vgl_io_polygon.h"
 //:
 // \file
@@ -53,9 +54,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon<T> & p)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_polygon<T>&)\n"
              << "           Unknown version number "<< v << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -66,16 +67,16 @@ template void vsl_b_read(vsl_b_istream&, vgl_polygon<double>&);
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os, vgl_polygon<T>const& p)
+void vsl_print_summary(std::ostream& os, vgl_polygon<T>const& p)
 {
   os<<"Polygon with points defined by sheets :\n";
   for (unsigned int i=0;i<p.num_sheets();i++)
   {
       for (unsigned int j=0;j<p[i].size();j++)
-          os << p[i][j].x()<<','<<p[i][j].y()<<vcl_endl;
-      os<<vcl_endl;
+          os << p[i][j].x()<<','<<p[i][j].y()<<std::endl;
+      os<<std::endl;
   }
 }
 
-template void vsl_print_summary(vcl_ostream&, vgl_polygon<float>const&);
-template void vsl_print_summary(vcl_ostream&, vgl_polygon<double>const&);
+template void vsl_print_summary(std::ostream&, vgl_polygon<float>const&);
+template void vsl_print_summary(std::ostream&, vgl_polygon<double>const&);

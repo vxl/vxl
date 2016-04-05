@@ -1,5 +1,10 @@
 // This is mul/clsfy/tests/test_rbf_svm_smo.cxx
 // Copyright: (C) 2001 British Telecommunications PLC
+#include <vector>
+#include <iostream>
+#include <iomanip>
+#include <ios>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,11 +12,7 @@
 // \author Ian Scott
 // Test construction, IO etc.
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_ios.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <clsfy/clsfy_rbf_svm.h>
 #include <clsfy/clsfy_rbf_svm_smo_1_builder.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
@@ -31,13 +32,13 @@
 //=======================================================================
 void test_rbf_svm_smo()
 {
-  vcl_cout << "*************************************\n"
+  std::cout << "*************************************\n"
            << " Testing clsfy_rbf_svm_smo_1_builder\n"
            << "*************************************\n";
 
-  vcl_cout<<"======== TESTING BUILDING ===========\n";
+  std::cout<<"======== TESTING BUILDING ===========\n";
 
-  vcl_vector<vpdfl_axis_gaussian_sampler *> generator(4);//
+  std::vector<vpdfl_axis_gaussian_sampler *> generator(4);//
   const unsigned nDims = 2;
   vnl_vector<double> mean0(nDims), var0(nDims), mean1(nDims), var1(nDims), mean2(nDims), var2(nDims), mean3(nDims), var3(nDims);
   vpdfl_axis_gaussian PDF0, PDF1, PDF2, PDF3;
@@ -65,11 +66,11 @@ void test_rbf_svm_smo()
   vnl_random rng;
   rng.reseed(333248);
   const unsigned nSamples = 200;
-  vcl_vector<unsigned> labels(nSamples);
-  vcl_vector<vnl_vector<double> > data(nSamples);
+  std::vector<unsigned> labels(nSamples);
+  std::vector<vnl_vector<double> > data(nSamples);
   vnl_vector<double> s;
-  vcl_cout << "Generating test data\n";
-  vcl_vector<unsigned> labelcount(4, 0u);
+  std::cout << "Generating test data\n";
+  std::vector<unsigned> labelcount(4, 0u);
   for (unsigned int i=0; i<nSamples; i++)
   {
     int c = rng.lrand32(3);
@@ -80,8 +81,8 @@ void test_rbf_svm_smo()
   }
 
   const unsigned nTestSamples = 1000;
-  vcl_vector<unsigned> testLabels(nTestSamples);
-  vcl_vector<vnl_vector<double> > testingVectors(nTestSamples);
+  std::vector<unsigned> testLabels(nTestSamples);
+  std::vector<vnl_vector<double> > testingVectors(nTestSamples);
   for (unsigned int i=0; i<nTestSamples; i++)
   {
     int c = rng.lrand32(3);
@@ -98,61 +99,61 @@ void test_rbf_svm_smo()
   mbl_data_array_wrapper<vnl_vector<double> > trainingVectors(data);
 
 
-  vcl_cout << "****************The Training set****************\n";
-  vcl_cout << "The number of labels from each generators are respectively ";
-  vcl_cout << labelcount[0] << ' ' << labelcount[1] << ' ' << labelcount[2] << ' ' << labelcount[3] <<  vcl_endl;
+  std::cout << "****************The Training set****************\n";
+  std::cout << "The number of labels from each generators are respectively ";
+  std::cout << labelcount[0] << ' ' << labelcount[1] << ' ' << labelcount[2] << ' ' << labelcount[3] <<  std::endl;
 
   vnl_vector<double> x(nDims);
-  vcl_vector<double> out(1);
+  std::vector<double> out(1);
   x.fill(0.0);
-  vcl_cout << "x(1) varies across from -2 to + 2\n";
-  vcl_cout << "x(0) varies down from -2 to + 2\n";
+  std::cout << "x(1) varies across from -2 to + 2\n";
+  std::cout << "x(0) varies down from -2 to + 2\n";
 
   clsfy_k_nearest_neighbour knn;
   knn.set(data, labels);
   knn.set_k(3);
-  vcl_cout  << vcl_endl << "KNN output\n";
-  vcl_cout << vcl_setprecision(4);
+  std::cout  << std::endl << "KNN output\n";
+  std::cout << std::setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       knn.class_probabilities(out, x);
-      vcl_cout << vcl_fixed << vcl_setw(3) << out[0] << ' ';
+      std::cout << std::fixed << std::setw(3) << out[0] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
-      vcl_cout << knn.classify(x);
+      std::cout << knn.classify(x);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   clsfy_rbf_parzen win;
   win.set(data, labels);
   win.set_rbf_width(0.08);
   win.set_power(10);
-  vcl_cout << vcl_endl << "Training data distribution\n";
-  vcl_cout << vcl_setprecision(1);
+  std::cout << std::endl << "Training data distribution\n";
+  std::cout << std::setprecision(1);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       double v = win.weightings(x);
       if (v < 0.01)
-        vcl_cout << " 0   ";
+        std::cout << " 0   ";
       else
-        vcl_cout << vcl_fixed << vcl_setw(4) << v << ' ';
+        std::cout << std::fixed << std::setw(4) << v << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
-  vcl_cout << "\n*********Testing Support Vector Training*********\n";
-  vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
+  std::cout << "\n*********Testing Support Vector Training*********\n";
+  std::cout << std::setprecision(6) << std::resetiosflags(std::ios::floatfield);
 
   clsfy_rbf_svm_smo_1_builder builder;
   builder.set_bound_on_multipliers(1e2);
@@ -165,59 +166,59 @@ void test_rbf_svm_smo()
   double error = builder.build(classifier3, trainingVectors, labels);
 
   long realtime = mytimer.real();
-  vcl_cout << "\nOptimisation took " << realtime/1000.0 << " seconds\n";
-  vcl_cout << "\nLagrangians ";
+  std::cout << "\nOptimisation took " << realtime/1000.0 << " seconds\n";
+  std::cout << "\nLagrangians ";
   for (unsigned i=0; i < classifier3.n_support_vectors(); ++i)
-    vcl_cout << classifier3.lagrangians()[i] << " ";
-  vcl_cout << vcl_endl;
+    std::cout << classifier3.lagrangians()[i] << " ";
+  std::cout << std::endl;
 
-  vcl_cout << "Training Error " << error << vcl_endl;
+  std::cout << "Training Error " << error << std::endl;
 #if 0
   mbl_data_wrapper<vnl_vector<double> > &data = trainingVectors.vectorData();
   data.first();
   for (unsigned int i=0; i<nSamples; i++)
   {
-    vcl_cout << i << '\t' << vcl_setw(8) << pClassifier->log_l(data.current()) << '\t' << pClassifier->classify(data.current()) <<
-      " should be " << labels(i) <<vcl_endl;
+    std::cout << i << '\t' << std::setw(8) << pClassifier->log_l(data.current()) << '\t' << pClassifier->classify(data.current()) <<
+      " should be " << labels(i) <<std::endl;
     data.next();
   }
 #endif
   // print input, print output
 
-  vcl_cout << vcl_setprecision(4);
+  std::cout << std::setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       classifier3.class_probabilities(out, x);
-      vcl_cout << vcl_fixed << vcl_setw(3) << out[0] << ' ';
+      std::cout << std::fixed << std::setw(3) << out[0] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
-      vcl_cout << classifier3.classify(x);
+      std::cout << classifier3.classify(x);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
-  vcl_cout << "There are " << classifier3.n_support_vectors() << " Support Vectors\n";
+  std::cout << "There are " << classifier3.n_support_vectors() << " Support Vectors\n";
 
   TEST_NEAR("Training Error < 0.05", error, 0.0, 0.05);
 
-  vcl_cout << "\nError on Testing set ";
+  std::cout << "\nError on Testing set ";
   mbl_data_array_wrapper<vnl_vector<double> > test_vector_data(testingVectors);
   double testError = clsfy_test_error(classifier3, test_vector_data, testLabels);
-  vcl_cout << testError << vcl_endl;
+  std::cout << testError << std::endl;
 
   TEST_NEAR("Test Error < 0.1", testError, 0.0, 0.1);
 
-  vcl_cout << "\n****************Testing classifier IO**************\n";
+  std::cout << "\n****************Testing classifier IO**************\n";
   vsl_add_to_binary_loader(clsfy_rbf_svm());
-  vcl_string test_path = "test_rbf_svm.bvl.tmp";
+  std::string test_path = "test_rbf_svm.bvl.tmp";
 
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -226,7 +227,7 @@ void test_rbf_svm_smo()
   bfs_out.close();
 
   clsfy_rbf_svm svmi;
-  clsfy_classifier_base *pClassifier2=0;
+  clsfy_classifier_base *pClassifier2=VXL_NULLPTR;
 
   vsl_b_ifstream bfs_in(test_path);
   TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);
@@ -237,9 +238,9 @@ void test_rbf_svm_smo()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Saved : " << classifier3 << vcl_endl;
-  vcl_cout<<"Loaded: " << svmi << vcl_endl;
-  vcl_cout<<"Loaded: " << pClassifier2 << vcl_endl;
+  std::cout<<"Saved : " << classifier3 << std::endl;
+  std::cout<<"Loaded: " << svmi << std::endl;
+  std::cout<<"Loaded: " << pClassifier2 << std::endl;
 
   clsfy_rbf_svm &svmo = *(clsfy_rbf_svm *)&classifier3;
 
@@ -263,12 +264,12 @@ void test_rbf_svm_smo()
   TEST("Loaded Classifier has base class type",
        pClassifier2->is_class("clsfy_classifier_base"), true);
 
-  vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
+  std::cout << std::setprecision(6) << std::resetiosflags(std::ios::floatfield);
 
   delete pClassifier2;
   vsl_delete_all_loaders();
 
-  vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
+  std::cout << std::setprecision(6) << std::resetiosflags(std::ios::floatfield);
 }
 
 TESTMAIN(test_rbf_svm_smo);

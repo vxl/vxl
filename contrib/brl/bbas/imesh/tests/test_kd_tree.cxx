@@ -1,3 +1,4 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_kd_tree.h>
 #include <imesh/imesh_mesh.h>
@@ -5,12 +6,12 @@
 #include <imesh/imesh_operations.h>
 #include "test_share.h"
 #include <imesh/algo/imesh_transform.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
-void test_closest_point(const imesh_mesh& mesh, const vcl_vector<vgl_point_3d<double> >& pts)
+void test_closest_point(const imesh_mesh& mesh, const std::vector<vgl_point_3d<double> >& pts)
 {
-  vcl_auto_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(mesh);
+  std::auto_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(mesh);
 
   bool same_tri = true;
   bool same_pt = true;
@@ -19,18 +20,18 @@ void test_closest_point(const imesh_mesh& mesh, const vcl_vector<vgl_point_3d<do
     unsigned int ind1 = imesh_kd_tree_closest_point(pts[i],mesh,kd_tree,cp1);
     unsigned int ind2 = imesh_closest_point(pts[i],mesh,cp2);
     if (ind1 != ind2) {
-      if (vcl_abs((cp1-pts[i]).length() - (cp2-pts[i]).length()) > 1e-8) {
+      if (std::abs((cp1-pts[i]).length() - (cp2-pts[i]).length()) > 1e-8) {
         same_tri = false;
-        vcl_cout << "kd tree closest point to "<<pts[i]<<" at index "<< ind1<<vcl_endl
-                 << "exhaustive closest point to "<<pts[i]<<" at index "<< ind2<<vcl_endl;
+        std::cout << "kd tree closest point to "<<pts[i]<<" at index "<< ind1<<std::endl
+                 << "exhaustive closest point to "<<pts[i]<<" at index "<< ind2<<std::endl;
       }
     }
     if ((cp1-cp2).length() > 1e-8)
     {
-      if (vcl_abs((cp1-pts[i]).length() - (cp2-pts[i]).length()) > 1e-8) {
+      if (std::abs((cp1-pts[i]).length() - (cp2-pts[i]).length()) > 1e-8) {
         same_pt = false;
-        vcl_cout << "kd tree closest point to "<<pts[i]<<" is "<<cp1<<vcl_endl
-                 << "exhaustive closest point to "<<pts[i]<<" is "<<cp2<<vcl_endl;
+        std::cout << "kd tree closest point to "<<pts[i]<<" is "<<cp1<<std::endl
+                 << "exhaustive closest point to "<<pts[i]<<" is "<<cp2<<std::endl;
       }
     }
   }
@@ -41,7 +42,7 @@ void test_closest_point(const imesh_mesh& mesh, const vcl_vector<vgl_point_3d<do
 
 static void test_kd_tree()
 {
-  vcl_vector<vgl_point_3d<double> > pts;
+  std::vector<vgl_point_3d<double> > pts;
   pts.push_back(vgl_point_3d<double>(0,0,0));
   pts.push_back(vgl_point_3d<double>(1.5,0,0.5));
   pts.push_back(vgl_point_3d<double>(0.1,.2,0));
@@ -54,12 +55,12 @@ static void test_kd_tree()
 
   test_closest_point(cube,pts);
 
-  vcl_vector<imesh_kd_tree_queue_entry> dists;
-  vcl_auto_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(cube);
+  std::vector<imesh_kd_tree_queue_entry> dists;
+  std::auto_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(cube);
   vgl_point_3d<double> cp;
   imesh_kd_tree_closest_point(pts[3],cube,kd_tree,cp,&dists);
   unsigned int leaf_count = 0;
-  vcl_vector<imesh_kd_tree_node*> internals;
+  std::vector<imesh_kd_tree_node*> internals;
   for (unsigned int i=0; i<dists.size(); ++i) {
     if (dists[i].node_->is_leaf())
       ++leaf_count;

@@ -67,12 +67,12 @@ class ihog_minimizer
   vil_pyramid_image_view<float> from_mask_pyramid_;
   vil_pyramid_image_view<float> to_mask_pyramid_;
   // vimt_pyramid has w2img transforms but not worth making another class
-  vcl_vector<ihog_transform_2d> w2img1_;
-  vcl_vector<ihog_transform_2d> w2img2_;
-  vcl_vector<ihog_transform_2d> w2mask_img1_;
-  vcl_vector<ihog_transform_2d> w2mask_img2_;
+  std::vector<ihog_transform_2d> w2img1_;
+  std::vector<ihog_transform_2d> w2img2_;
+  std::vector<ihog_transform_2d> w2mask_img1_;
+  std::vector<ihog_transform_2d> w2mask_img2_;
 
-  vcl_vector<ihog_world_roi> roi_pyramid_;
+  std::vector<ihog_world_roi> roi_pyramid_;
 
   //  static const unsigned min_level_size_ = 256;
   static const unsigned min_level_size_ = 8;

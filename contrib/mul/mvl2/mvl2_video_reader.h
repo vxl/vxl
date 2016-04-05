@@ -9,10 +9,12 @@
 // \brief A base class for cameras/virtual cameras
 // \author Louise Butcher
 
+#include <utility>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vxl_config.h>
-#include <vcl_utility.h> // for vcl_pair
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 
@@ -28,17 +30,17 @@ class mvl2_video_reader
   virtual ~mvl2_video_reader();
 
   //: Load configurations from a file, returns a configuration's name vector
-  vcl_vector<vcl_string> load_configs(vcl_string filename);
+  std::vector<std::string> load_configs(std::string filename);
 
   //: Use the configuration given by the configuration's name
-  bool use_config(vcl_string configname);
+  bool use_config(std::string configname);
 
   //: Display the configurations on the standard output
   void display_configs();
 
   //: Initialize the camera (format can be Grey, RGB, or more complex)
   virtual bool  initialize( int width, int height,
-                            vcl_string format, vcl_string file_name) =0;
+                            std::string format, std::string file_name) =0;
 
   //: Tidy up
   virtual void  uninitialize() {}
@@ -95,7 +97,7 @@ class mvl2_video_reader
   virtual void set_whiteness(int /*value*/) {}
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Returns the number of frames available from the beginning of the stream or -1 if unknown
   virtual int length();
@@ -112,10 +114,10 @@ class mvl2_video_reader
   mutable int width_;
   mutable int height_;
   bool firstcall_;
-  vcl_vector<vcl_string> config_names_;
-  vcl_vector<vcl_pair<int,int > > config_sizes_;
-  vcl_vector<vcl_string> config_strings_;
-  vcl_vector<vcl_string> config_filenames_;
+  std::vector<std::string> config_names_;
+  std::vector<std::pair<int,int > > config_sizes_;
+  std::vector<std::string> config_strings_;
+  std::vector<std::string> config_filenames_;
 };
 
 #endif // mvl2_video_reader_h_

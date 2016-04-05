@@ -177,9 +177,9 @@ void vsol_point_3d::b_read(vsl_b_istream &is)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsol_point_3d::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vsol_point_3d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -191,7 +191,7 @@ short vsol_point_3d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_point_3d::print_summary(vcl_ostream &os) const
+void vsol_point_3d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -200,7 +200,7 @@ void vsol_point_3d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, vsol_point_3d const* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -213,7 +213,7 @@ vsl_b_write(vsl_b_ostream &os, vsol_point_3d const* p)
 void
 vsl_b_read(vsl_b_istream &is, vsol_point_3d* &p)
 {
-  delete p; p=0;
+  delete p; p=VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr) {

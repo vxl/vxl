@@ -79,9 +79,9 @@ double sdet_gray_EMD(const sdet_bin dirt[], const sdet_bin hole[])
 
     // Compute the work done moving the smaller amount of mass and decide
     // how much is left over in each bin.
-    double massmoved = vcl_min(dirt_amt, hole_amt);
+    double massmoved = std::min(dirt_amt, hole_amt);
 
-    work += massmoved * (1 - vcl_exp(-vcl_fabs(hole[j].value - dirt[i].value) / GAMMA));
+    work += massmoved * (1 - std::exp(-std::fabs(hole[j].value - dirt[i].value) / GAMMA));
 
     leftoverdirt = dirt_amt - massmoved;
     leftoverhole = hole_amt - massmoved;

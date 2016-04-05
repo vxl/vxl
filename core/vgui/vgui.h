@@ -19,9 +19,10 @@
 //   16-NOV_2007  Gamze Tunali - Added a new type of dialog called dialog_extensions
 // \endverbatim
 
+#include <string>
+#include <iosfwd>
 #include "dll.h"
-#include <vcl_string.h>
-#include <vcl_iosfwd.h> // for the status bar vcl_ostream.
+#include <vcl_compiler.h>
 
 class vgui_window;
 class vgui_adaptor;
@@ -69,7 +70,7 @@ class vgui
   static vgui_DLLDATA bool quit_called;
  public:
   //: Needed for statusbar.
-  static vgui_DLLDATA vcl_ostream out;
+  static vgui_DLLDATA std::ostream out;
 
   //: Method for determining if a given toolkit is available.
   static bool exists(char const *toolkit);
@@ -104,34 +105,34 @@ class vgui
   //: Produce window with menubar.
   static vgui_window* produce_window(int width, int height,
                                      vgui_menu const & menubar,
-                                     vcl_string const &title ="");
+                                     std::string const &title ="");
   //: Produce window without menubar.
   static vgui_window* produce_window(int width, int height,
-                                     vcl_string const &title ="");
+                                     std::string const &title ="");
   //: Produce dialog box.
-  static vgui_dialog_impl* produce_dialog(vcl_string const &name);
+  static vgui_dialog_impl* produce_dialog(std::string const &name);
 
   //: Produce dialog box.
-  static vgui_dialog_extensions_impl* produce_extension_dialog(vcl_string const &name);
+  static vgui_dialog_extensions_impl* produce_extension_dialog(std::string const &name);
 
   // Convenience methods
   //--------------------
 
   //: Display this tableau and run till dead (no menubar).
   static int run(vgui_tableau_sptr const&, int w, int h,
-                 vcl_string const &title ="");
+                 std::string const &title ="");
 
   //: Display this tableau and run till dead (with menubar)
   static int run(vgui_tableau_sptr const&, int w, int h,
-                 vgui_menu const &menubar, vcl_string const &title ="");
+                 vgui_menu const &menubar, std::string const &title ="");
 
   //: Create the vgui_window but don't run it (no menubar).
   static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h,
-                            vcl_string const &title ="");
+                            std::string const &title ="");
 
   //: Create the vgui_window but don't run it (with menubar).
   static vgui_window *adapt(vgui_tableau_sptr const&, int w, int h,
-                            vgui_menu const &, vcl_string const &title ="");
+                            vgui_menu const &, std::string const &title ="");
 
   // Functions for event-loop management
   //------------------------------------

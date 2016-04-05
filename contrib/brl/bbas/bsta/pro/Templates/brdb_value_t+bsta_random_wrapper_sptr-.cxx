@@ -1,4 +1,4 @@
-#include <brdb/brdb_value.txx>
+#include <brdb/brdb_value.hxx>
 #include <bsta/bsta_random_wrapper.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 

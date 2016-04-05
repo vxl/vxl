@@ -12,9 +12,10 @@
 //   bijective, though a closed form solution for the inverse may not exist in general.
 //   A default iterative solver is implemented to solve
 
+#include <vector>
 #include "vpgl_radial_distortion.h"
 #include <vgl/vgl_point_2d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: A class for nth order polynomial radial lens distortion
@@ -40,7 +41,7 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
 
   //: Constructor
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
-                                   const vcl_vector<T>& k)
+                                   const std::vector<T>& k)
    : vpgl_radial_distortion<T>(center,true)
   {
     set_coefficients(k);
@@ -49,13 +50,13 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
   //: Constructor
   vpgl_poly_radial_distortion<T,n>(const vgl_point_2d<T>& center,
                                    const vgl_point_2d<T>& distorted_center,
-                                   const vcl_vector<T>& k)
+                                   const std::vector<T>& k)
    : vpgl_radial_distortion<T>(center, distorted_center,true)
   {
     set_coefficients(k);
   }
 
-  void set_coefficients(const vcl_vector<T>& k)
+  void set_coefficients(const std::vector<T>& k)
   {
     assert(k.size() == n);
     T* coptr = coefficients_;

@@ -1,5 +1,4 @@
 #include <vtol/vtol_topology_object.h>
-#include <vtol/vtol_list_functions.txx>
-#include <vcl_list.txx>
+#include <vtol/vtol_list_functions.hxx>
 
-template vcl_list<vtol_topology_object_sptr>* tagged_union(vcl_list<vtol_topology_object_sptr>*);
+template std::list<vtol_topology_object_sptr>* tagged_union(std::list<vtol_topology_object_sptr>*);

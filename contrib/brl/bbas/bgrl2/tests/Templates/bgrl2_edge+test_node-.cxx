@@ -1,4 +1,4 @@
-#include <bgrl2/bgrl2_edge.txx>
+#include <bgrl2/bgrl2_edge.hxx>
 
 #include "../test_node.h"
 

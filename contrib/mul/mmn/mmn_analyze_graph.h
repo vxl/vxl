@@ -6,9 +6,11 @@
 // \brief Analyze a graph to deduce the dependency order.
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Given a graph with n.size() nodes and arc.size() arcs, deduce dependencies
 //  If returns true, then dep is an ordered list of dependencies
@@ -20,9 +22,9 @@
 //  root to the leaves.  The original order gives a method of
 //  visiting every node only after any child/leaf nodes have been
 //  visited first.
-bool mmn_analyze_graph(const vcl_vector<unsigned>& n,
-                       const vcl_vector<mmn_arc>& arc,
-                       vcl_vector<mmn_dependancy>& dep,
+bool mmn_analyze_graph(const std::vector<unsigned>& n,
+                       const std::vector<mmn_arc>& arc,
+                       std::vector<mmn_dependancy>& dep,
                        unsigned& max_arcs);
 
 

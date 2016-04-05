@@ -15,9 +15,10 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <string>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 
 
 //: Maps sequence frame indices to filenames
@@ -39,34 +40,34 @@ class vul_sequence_filename_map
 {
  public:
   vul_sequence_filename_map ();
-  vul_sequence_filename_map (vcl_string const & seq_template,
-                             vcl_vector<int> const & indices);
-  vul_sequence_filename_map (vcl_string const & seq_template,
+  vul_sequence_filename_map (std::string const & seq_template,
+                             std::vector<int> const & indices);
+  vul_sequence_filename_map (std::string const & seq_template,
                              int start, int end, int step = 1);
-  vul_sequence_filename_map (vcl_string const & seq_template,
+  vul_sequence_filename_map (std::string const & seq_template,
                              int step = 1);
   ~vul_sequence_filename_map ();
 
   //: returns frame name with no extension, e.g. "img.003", "img.003.004"
-  vcl_string name(int frame);
-  vcl_string pair_name(int i, int j);
-  vcl_string triplet_name(int i, int j, int k);
+  std::string name(int frame);
+  std::string pair_name(int i, int j);
+  std::string triplet_name(int i, int j, int k);
 
-  vcl_string image_name(int frame)
+  std::string image_name(int frame)
   { return image_dir_ + name(frame) + image_extension_; }
 
   //: returns the image directory e.g. "pgm/"
-  vcl_string get_image_dir() const { return image_dir_; }
+  std::string get_image_dir() const { return image_dir_; }
 
   //: returns the image extension e.g. ".pgm"
-  vcl_string get_image_extension() const { return image_extension_; }
+  std::string get_image_extension() const { return image_extension_; }
 
   //: returns the base name e.h. "img."
-  vcl_string get_base_name() const { return basename_; }
+  std::string get_base_name() const { return basename_; }
 
   //: returns the actually on-disk index corresponding to frame N
   int get_real_index(int frame) const { return indices_[frame]; }
-  vcl_vector<int> const& get_real_indices() const { return indices_; }
+  std::vector<int> const& get_real_indices() const { return indices_; }
 
   //: returns the frame number corresp. to on-disk index N, or -1 if out-of-range
   int get_mapped_index(int real) const;
@@ -75,18 +76,18 @@ class vul_sequence_filename_map
 
 
   //: pretty print
-  vcl_ostream& print(vcl_ostream& s) const;
+  std::ostream& print(std::ostream& s) const;
 
  protected:
-  bool filter_dirent(char const* name, vcl_string const& extension);
+  bool filter_dirent(char const* name, std::string const& extension);
   int extract_index(char const* name);
 
-  vcl_string seq_template_;
-  vcl_vector<int> indices_;
-  vcl_string basename_;
-  vcl_string index_format_;
-  vcl_string image_dir_;
-  vcl_string image_extension_;
+  std::string seq_template_;
+  std::vector<int> indices_;
+  std::string basename_;
+  std::string index_format_;
+  std::string image_dir_;
+  std::string image_extension_;
   int start_;
   int step_;
   int end_;
@@ -94,6 +95,6 @@ class vul_sequence_filename_map
   void parse();
 };
 
-vcl_ostream& operator<<(vcl_ostream &os, const vul_sequence_filename_map& s);
+std::ostream& operator<<(std::ostream &os, const vul_sequence_filename_map& s);
 
 #endif // vul_sequence_filename_map_h_

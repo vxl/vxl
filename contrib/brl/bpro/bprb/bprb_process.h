@@ -22,8 +22,10 @@
 // \endverbatim
 //------------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters_sptr.h>
@@ -75,37 +77,37 @@ class bprb_process : public vbl_ref_count
   //: Set the parameters
   void set_parameters(const bprb_parameters_sptr& params);
 
-  bool parse_params_XML(const vcl_string& xml_path);
+  bool parse_params_XML(const std::string& xml_path);
 
   //: The name of the process
-  virtual vcl_string name() const = 0;
+  virtual std::string name() const = 0;
 
   //: The number of inputs
   unsigned n_inputs() const;
 
   //: Get all input types at once
-  vcl_vector<vcl_string> const& input_types() const {return input_types_;}
+  std::vector<std::string> const& input_types() const {return input_types_;}
 
   // The type of each input
-  vcl_string input_type(unsigned i) const;
+  std::string input_type(unsigned i) const;
 
   //: The number of outputs
   unsigned n_outputs() const;
 
   //: Get all output types at once
-  vcl_vector<vcl_string> const& output_types() const {return output_types_;}
+  std::vector<std::string> const& output_types() const {return output_types_;}
 
   // The type of each output
-  vcl_string output_type(unsigned i) const;
+  std::string output_type(unsigned i) const;
 
   //: Set all the inputs at once
-  virtual bool set_input_data(vcl_vector<brdb_value_sptr> const& inputs);
+  virtual bool set_input_data(std::vector<brdb_value_sptr> const& inputs);
 
   //: set a particular input
   virtual bool set_input(unsigned i, brdb_value_sptr const& value);
 
   //: get all outputs at once
-  vcl_vector<brdb_value_sptr>& output_data(){return output_data_;}
+  std::vector<brdb_value_sptr>& output_data(){return output_data_;}
 
   //: get a particular output
   brdb_value_sptr output(unsigned i)
@@ -130,11 +132,11 @@ class bprb_process : public vbl_ref_count
   virtual ~bprb_process();
 
   //: The parameters of this process
-  vcl_vector<brdb_value_sptr> input_data_;
-  vcl_vector<brdb_value_sptr> output_data_;
+  std::vector<brdb_value_sptr> input_data_;
+  std::vector<brdb_value_sptr> output_data_;
   bprb_parameters_sptr parameters_;
-  vcl_vector<vcl_string> input_types_;
-  vcl_vector<vcl_string> output_types_;
+  std::vector<std::string> input_types_;
+  std::vector<std::string> output_types_;
 };
 #include <bprb/bprb_process_sptr.h>
 #endif // bprb_process_h_

@@ -19,7 +19,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vifa/vifa_bbox.h>
 #include <vifa/vifa_group_pgram_params.h>
 #include <vifa/vifa_histogram.h>
@@ -33,7 +35,7 @@ class vifa_group_pgram : public vifa_group_pgram_params
   double      angle_range_;
 
   //: Array of dominant theta indices
-  vcl_vector<int>  dominant_dirs_;
+  std::vector<int>  dominant_dirs_;
 
   vifa_bbox_sptr  bb_;
   imp_line_table  curves_;

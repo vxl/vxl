@@ -1,21 +1,22 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <volm/volm_candidate_region_parser.h>
 #include <bkml/bkml_write.h>
 #include <vcl_where_root_dir.h>
 
 static void test_candidate_region_parser()
 {
-  vcl_string kml_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/tests/test_region.kml";
+  std::string kml_file = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/tests/test_region.kml";
 
   // obtain location points
-  vcl_vector<vgl_point_3d<double> > landmarks0 = volm_candidate_region_parser::parse_points(kml_file, "Landmarks0");
-  vcl_vector<vgl_point_3d<double> > landmarks1 = volm_candidate_region_parser::parse_points(kml_file, "Landmarks1");
-  vcl_vector<vgl_point_3d<double> > landmarks2 = volm_candidate_region_parser::parse_points(kml_file, "Landmarks2");
-  vcl_vector<vgl_point_3d<double> > landmarks_none = volm_candidate_region_parser::parse_points(kml_file, "None");
+  std::vector<vgl_point_3d<double> > landmarks0 = volm_candidate_region_parser::parse_points(kml_file, "Landmarks0");
+  std::vector<vgl_point_3d<double> > landmarks1 = volm_candidate_region_parser::parse_points(kml_file, "Landmarks1");
+  std::vector<vgl_point_3d<double> > landmarks2 = volm_candidate_region_parser::parse_points(kml_file, "Landmarks2");
+  std::vector<vgl_point_3d<double> > landmarks_none = volm_candidate_region_parser::parse_points(kml_file, "None");
 
   // obtain lines
-  vcl_vector<vcl_vector<vgl_point_3d<double> > > lines = volm_candidate_region_parser::parse_lines(kml_file, "Region");
+  std::vector<std::vector<vgl_point_3d<double> > > lines = volm_candidate_region_parser::parse_lines(kml_file, "Region");
 
   // obtain polygon with name "Region"
   vgl_polygon<double> poly_outer_region = volm_candidate_region_parser::parse_polygon(kml_file, "Region");
@@ -30,36 +31,36 @@ static void test_candidate_region_parser()
   vgl_polygon<double> poly_all_region = volm_candidate_region_parser::parse_polygon_with_inner(kml_file, "Region", outer, inner, n_out, n_in);
 
   // print out the point coordinates
-  vcl_cout << "Landmarks0:\n";
+  std::cout << "Landmarks0:\n";
   for (unsigned i = 0; i < landmarks0.size(); i++)
-    vcl_cout << '\t' << i << ": " << landmarks0[i] << '\n';
-  vcl_cout << "Landmarks1:\n";
+    std::cout << '\t' << i << ": " << landmarks0[i] << '\n';
+  std::cout << "Landmarks1:\n";
   for (unsigned i = 0; i < landmarks1.size(); i++)
-    vcl_cout << '\t' << i << ": " << landmarks1[i] << '\n';
-  vcl_cout << "Landmarks2:\n";
+    std::cout << '\t' << i << ": " << landmarks1[i] << '\n';
+  std::cout << "Landmarks2:\n";
   for (unsigned i = 0; i < landmarks2.size(); i++)
-    vcl_cout << '\t' << i << ": " << landmarks2[i] << '\n';
+    std::cout << '\t' << i << ": " << landmarks2[i] << '\n';
 
   // print out the line
-  vcl_cout << "Line:\n\t";
+  std::cout << "Line:\n\t";
   for (unsigned i = 0; i < lines.size(); i++) {
     for (unsigned k = 0; k < lines[i].size(); k++) {
-      vcl_cout << lines[i][k] << ' ';
+      std::cout << lines[i][k] << ' ';
     }
-    vcl_cout << "\n\t";
+    std::cout << "\n\t";
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
 
   // print out the polygon
-  vcl_cout << "Region outer boundary:\n";
-  poly_outer_region.print(vcl_cout);
-  vcl_cout << "Overhead Overlay outer boundary:\n";
-  poly_outer_overhead.print(vcl_cout);
-  vcl_cout << "Region inner boundary:\n";
-  inner.print(vcl_cout);
+  std::cout << "Region outer boundary:\n";
+  poly_outer_region.print(std::cout);
+  std::cout << "Overhead Overlay outer boundary:\n";
+  poly_outer_overhead.print(std::cout);
+  std::cout << "Region inner boundary:\n";
+  inner.print(std::cout);
 
-  vcl_cout << "Entire region\n";
-  poly_all_region.print(vcl_cout);
+  std::cout << "Entire region\n";
+  poly_all_region.print(std::cout);
 
   TEST("parse point with name \"Landmarks0\"", landmarks0.size(), 3);
   TEST("parse point with name \"Landmarks1\"", landmarks1.size(), 4);

@@ -1,5 +1,6 @@
 // This is mul/vimt3d/tests/test_load.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vil3d/vil3d_load.h>
 #include <vimt3d/vimt3d_load.h>
@@ -7,11 +8,11 @@
 
 static void test_load(int argc, char* argv[])
 {
-  vcl_cout << "*********************\n"
+  std::cout << "*********************\n"
            << " Testing vimt3d_load\n"
            << "*********************\n";
 
-  vcl_string imagename = argc<2 ? "../../vil3d/tests/file_read_data" : argv[1];
+  std::string imagename = argc<2 ? "../../vil3d/tests/file_read_data" : argv[1];
   imagename = imagename+"/ff_rgb8bit_ascii.1.ppm;"+
               imagename+"/ff_rgb8bit_ascii.2.ppm";
   vil3d_image_resource_sptr im = vil3d_load_image_resource(imagename.c_str());
@@ -30,7 +31,7 @@ static void test_load(int argc, char* argv[])
 
   if (!im) return;
   vimt3d_transform_3d t2 = vimt3d_load_transform(im);
-  vcl_cout << "\n gipl transform: " << t2 << vcl_endl;
+  std::cout << "\n gipl transform: " << t2 << std::endl;
 
   typedef vgl_point_3d<double> GP;
 

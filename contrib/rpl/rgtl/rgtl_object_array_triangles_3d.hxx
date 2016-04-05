@@ -10,10 +10,12 @@
 // \author Brad King
 // \date March 2007
 
+#include <iostream>
+#include <vector>
 #include "rgtl_object_array_points.hxx"
 
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class rgtl_serialize_access;
 
@@ -90,7 +92,7 @@ class rgtl_object_array_triangles_3d: public rgtl_object_array_points<3>
 
   // Store the triangle vertex ids.
   typedef vnl_vector_fixed<int, 3> triangle_type;
-  vcl_vector<triangle_type> triangles_;
+  std::vector<triangle_type> triangles_;
 
   // Internal implementation details.
   class pimpl;

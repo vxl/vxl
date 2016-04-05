@@ -2,6 +2,7 @@
 // \file
 // \author Chuck Stewart
 
+#include <iostream>
 #include "rgrl_scale_est_closest.h"
 
 #include <rrel/rrel_objective.h>
@@ -11,11 +12,11 @@
 #include "rgrl_match_set.h"
 #include "rgrl_util.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 rgrl_scale_est_closest::
-rgrl_scale_est_closest( vcl_auto_ptr<rrel_objective>  obj,
+rgrl_scale_est_closest( std::auto_ptr<rrel_objective>  obj,
                         bool                          do_signature_scale )
   : do_signature_scale_( do_signature_scale ),
     obj_( obj )
@@ -67,7 +68,7 @@ compute_geometric_scale( double& return_scale,
     scaling =  rgrl_util_geometric_error_scaling( match_set );
   }
 
-  vcl_vector<double> error_distances;
+  std::vector<double> error_distances;
   error_distances.reserve( match_set.from_size() );
   DebugMacro(1, "\n");
 
@@ -95,14 +96,14 @@ compute_geometric_scale( double& return_scale,
   }
 
 #if 0 // commented out
-  vcl_cout << " error_distance :\n" << vcl_endl;
+  std::cout << " error_distance :\n" << std::endl;
   unsigned zeros = 0;
   for ( unsigned i = 0; i < error_distances.size(); ++i ) {
     if ( error_distances[ i ] == 0 )
       ++zeros;
-    vcl_cout << error_distances[ i ] << vcl_endl;
+    std::cout << error_distances[ i ] << std::endl;
   }
-  vcl_cout << " number of zers : " << zeros << " out of " << error_distances.size() << vcl_endl;
+  std::cout << " number of zers : " << zeros << " out of " << error_distances.size() << std::endl;
 #endif // 0
 
   // empty set
@@ -110,7 +111,7 @@ compute_geometric_scale( double& return_scale,
     return false;
 
   const double epsilon = 1e-16;
-  return_scale = scaling * vnl_math::max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
+  return_scale = scaling * std::max( obj_->scale( error_distances.begin(), error_distances.end() ), epsilon );
 
   // is finite?
   if ( !vnl_math::isfinite( return_scale ) )
@@ -140,7 +141,7 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
   // check on the error vector dimension
   if ( !nrows ) return false;
 
-  vcl_vector< vcl_vector<double> > all_errors( nrows );
+  std::vector< std::vector<double> > all_errors( nrows );
   bool success = true;
 
   for ( ; fitr != match_set.from_end(); ++fitr ) {

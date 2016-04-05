@@ -17,9 +17,10 @@
 //
 //  EndLatex
 
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 
@@ -52,17 +53,17 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
+typedef std::vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,3>       vector_3d;
 
 void
 read_feature_file( const char* filename,
                    feature_vector& features, int sample_spacing )
 {
-  vcl_ifstream istr( filename );
+  std::ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+    std::cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -79,7 +80,7 @@ read_feature_file( const char* filename,
 
   istr.close();
 
-  vcl_cout<<"There are "<<features.size()<<" features"<<vcl_endl;
+  std::cout<<"There are "<<features.size()<<" features"<<std::endl;
 }
 
 // using command/observer pattern
@@ -97,17 +98,17 @@ class command_iteration_update: public rgrl_command
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
+    std::cout<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<std::endl;
 
 #if 0 // commented out
     static unsigned count = 0;
     ++count;
 
-    vcl_ostringstream s;
+    std::ostringstream s;
     s << "xform-dump-"<<count;
-    vcl_ofstream xform_out( s.str().c_str() );
+    std::ofstream xform_out( s.str().c_str() );
 
-    xform_out<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
+    xform_out<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<std::endl;
     xform_out.close();
 
     // Output the matches
@@ -115,11 +116,11 @@ class command_iteration_update: public rgrl_command
     typedef rgrl_match_set::from_iterator  from_iter;
     typedef from_iter::to_iterator         to_iter;
 
-    vcl_ostringstream ss,ss2;
+    std::ostringstream ss,ss2;
     ss << "matches-dump-"<<count;
-    vcl_ofstream fout( ss.str().c_str() );
+    std::ofstream fout( ss.str().c_str() );
     ss2 << "sub-matches-dump-"<<count;
-    vcl_ofstream fout2( ss2.str().c_str() );
+    std::ofstream fout2( ss2.str().c_str() );
 
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
       rgrl_match_set_sptr match_set = match_sets[ms];
@@ -137,8 +138,8 @@ class command_iteration_update: public rgrl_command
           rgrl_feature_sptr to_feature = titr.to_feature();
           fout<<' '<<to_feature->location();
           double error = titr.to_feature()->geometric_error( *mapped_from );
-          fout<<' '<<error<<vcl_endl;
-          if (error > 1) fout2<<mapped_from->location()<<vcl_endl;
+          fout<<' '<<error<<std::endl;
+          if (error > 1) fout2<<mapped_from->location()<<std::endl;
         }
       }
     }
@@ -152,7 +153,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 3 ) {
-    vcl_cerr << "Missing Parameters\n"
+    std::cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageFeatureFile MovingImageFeatureFile\n";
     return 1;
@@ -197,8 +198,8 @@ main( int argc, char* argv[] )
   vnl_matrix<double> A(3,3,vnl_matrix_identity);
   double angle = 35*vnl_math::pi_over_180; //35 degree rotation around y-axis
 //double angle = 27*vnl_math::pi_over_180; //27 degree rotation around y-axis
-  A(0,0) = vcl_cos(angle); A(0,2) = vcl_sin(angle);
-  A(2,0) = -vcl_sin(angle); A(2,2) = vcl_cos(angle);
+  A(0,0) = std::cos(angle); A(0,2) = std::sin(angle);
+  A(2,0) = -std::sin(angle); A(2,2) = std::cos(angle);
 //vector_3d t(-0.06, -0.01, -0.02);
 //vector_3d t(-0.0520211, -0.000383981, -0.0109223);
   vector_3d t(-0.065, -0.015, -0.02);
@@ -223,13 +224,13 @@ main( int argc, char* argv[] )
 
   //Weighter
   //
-  vcl_auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+  std::auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
   rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(m_est_obj, false, false);
 
   //Scale estimator
   //
   int max_set_size = 1000;  //maximum expected number of features
-  vcl_auto_ptr<rrel_objective> muset_obj( new rrel_muset_obj( max_set_size , false) );
+  std::auto_ptr<rrel_objective> muset_obj( new rrel_muset_obj( max_set_size , false) );
 
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est;
   rgrl_scale_estimator_wgted_sptr wgted_scale_est;
@@ -261,12 +262,12 @@ main( int argc, char* argv[] )
 
   // Output Results
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+    std::cout<<"Final xform:"<<std::endl;
     rgrl_transformation_sptr final_trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(final_trans);
 
-    vcl_cout<<"A =\n"<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    std::cout<<"A =\n"<<a_xform->A()<<"t = "<<a_xform->t()<<std::endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<std::endl;
   }
 
   // BeginLatex

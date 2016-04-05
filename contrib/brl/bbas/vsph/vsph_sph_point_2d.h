@@ -2,8 +2,9 @@
 #define vsph_sph_point_2d_h_
 //:
 // \file
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: a point in the spherical coordinate system on the surface of a unit sphere
 // \p theta is elevation with zero at the North Pole, 180 degress at the South Pole
@@ -24,7 +25,7 @@ class vsph_sph_point_2d
   bool operator==(const vsph_sph_point_2d &other) const;
 
 
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
   void b_read(vsl_b_istream& is);
 
@@ -40,8 +41,8 @@ void vsl_b_read(vsl_b_istream& is, vsph_sph_point_2d& sp);
 
 void vsl_b_write(vsl_b_ostream& os, vsph_sph_point_2d const& sp);
 
-void vsl_print_summary(vcl_ostream& os, vsph_sph_point_2d const& sp);
+void vsl_print_summary(std::ostream& os, vsph_sph_point_2d const& sp);
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_2d const& sp);
+std::ostream& operator<<(std::ostream& os, vsph_sph_point_2d const& sp);
 
 #endif

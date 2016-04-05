@@ -79,7 +79,7 @@ verify( rgrl_view                        const& /*view*/,
         rgrl_set_of<rgrl_match_set_sptr> const& /*current_match_sets*/,
         rgrl_set_of<rgrl_scale_sptr>     const& /*current_scales*/ )const
 {
-  vcl_cerr << "WARNING: should never call rgrl_convergence_tester::verify()\n";
+  std::cerr << "WARNING: should never call rgrl_convergence_tester::verify()\n";
   return new rgrl_converge_status( rgrl_converge_status::converged, rgrl_converge_status::good_and_terminate,
                                    -1.0, 0, -1.0 );
 }
@@ -116,7 +116,7 @@ init_status( rgrl_view       const& /*init_view*/,
              bool                   /*penalize_scaling*/ ) const
 {
   // nothing to initialize
-  return 0;
+  return VXL_NULLPTR;
 }
 
 rgrl_converge_status_sptr
@@ -142,7 +142,7 @@ compute_status_helper( double new_error,
     double old_error = prev_status->error();
     error_diff = new_error-old_error;
     double diff = (new_error-old_error) / new_error ;
-    converged = vcl_abs( diff ) < rel_tol_thres_;
+    converged = std::abs( diff ) < rel_tol_thres_;
 
     if ( !converged ) {
       // look for oscillation

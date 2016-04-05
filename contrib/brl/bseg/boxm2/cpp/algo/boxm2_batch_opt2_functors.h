@@ -3,12 +3,13 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: compute average pre_i, vis_i and post_i for each cell, save the values in aux
 template <boxm2_data_type APM_TYPE>
@@ -18,7 +19,7 @@ class boxm2_batch_update_opt2_pass2_functor
   //: "default" constructor
   boxm2_batch_update_opt2_pass2_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,
+  bool init_data(std::vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
                  vil_image_view<float> * vis_img,
                  vil_image_view<float> * beta_denom,
@@ -60,7 +61,7 @@ class boxm2_batch_update_opt2_pass2_functor
     alpha_integral_(i,j) += alpha * seg_len;
 
     // compute new visibility probability with updated alpha_integral
-    float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
+    float vis_prob_end = std::exp(-alpha_integral_(i,j));
     // grab this cell's pre and vis value
     float pre = (*pre_img_)(i,j);
     float vis = (*vis_img_)(i,j);
@@ -87,18 +88,18 @@ class boxm2_batch_update_opt2_pass2_functor
     if (beta_denom_expanded > 1e-5f) {
       beta =  beta_num_expanded / beta_denom_expanded;
     }
-    const float old_PQ = (float)(1.0 - vcl_exp(-alpha*seg_len));
+    const float old_PQ = (float)(1.0 - std::exp(-alpha*seg_len));
     const float new_PQ = old_PQ * beta;
     const float pass_prob_old = 1.0f - old_PQ;
     float pass_prob = 1.0f - new_PQ;
 
     // compute expected information gained from update
-    const float weight = new_PQ * vcl_log(new_PQ / old_PQ) + pass_prob * vcl_log(pass_prob / pass_prob_old);
+    const float weight = new_PQ * std::log(new_PQ / old_PQ) + pass_prob * std::log(pass_prob / pass_prob_old);
     // ensure log doesn't go to infinity
     if (pass_prob < 1e-5f) {
       pass_prob = 1e-5f;
     }
-    aux[2] += vcl_log(pass_prob) * weight/seg_len; //aux_val.log_pass_prob_sum_ +=
+    aux[2] += std::log(pass_prob) * weight/seg_len; //aux_val.log_pass_prob_sum_ +=
     aux[3] += weight; // aux_val.weighted_seg_len_sum_
 
     return true;
@@ -146,14 +147,14 @@ class boxm2_batch_update_opt2_functor
     boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
     typename boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
 
-    vcl_vector<aux0_datatype> aux0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-    vcl_vector<aux1_datatype> aux1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-    vcl_vector<aux_datatype> aux = str_cache_->get_next<BOXM2_AUX>(id_, index);
-    vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
+    std::vector<aux0_datatype> aux0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+    std::vector<aux1_datatype> aux1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+    std::vector<aux_datatype> aux = str_cache_->get_next<BOXM2_AUX>(id_, index);
+    std::vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
 
-    vcl_vector<float> pre_vector;
-    vcl_vector<float> vis_vector;
-    vcl_vector<float> obs_vector;
+    std::vector<float> pre_vector;
+    std::vector<float> vis_vector;
+    std::vector<float> obs_vector;
 
     // UPDATE METHOD #1 : "OR" of occlusion probabilities
     double log_pass_prob_sum = 0.0;
@@ -164,28 +165,28 @@ class boxm2_batch_update_opt2_functor
     int cell_no = 2000000;
 
     if (index == cell_no) {
-      vcl_cout << "stream cache read:\n"
+      std::cout << "stream cache read:\n"
                << "aux0: ";
       for (unsigned int s=0; s<aux.size(); ++s)
-        vcl_cout << aux0[s] << ' ';
-      vcl_cout << "\naux1: ";
+        std::cout << aux0[s] << ' ';
+      std::cout << "\naux1: ";
       for (unsigned int s=0; s<aux.size(); ++s)
-        vcl_cout << aux1[s] << ' ';
-      vcl_cout << "\naux[0]: ";
+        std::cout << aux1[s] << ' ';
+      std::cout << "\naux[0]: ";
       for (unsigned int s=0; s<aux.size(); ++s)
-        vcl_cout << aux[s][0] << ' ';
-      vcl_cout << "\naux[1]: ";
+        std::cout << aux[s][0] << ' ';
+      std::cout << "\naux[1]: ";
       for (unsigned int s=0; s<aux.size(); ++s)
-        vcl_cout << aux[s][1] << ' ';
-      vcl_cout << "\naux[2]: ";
+        std::cout << aux[s][1] << ' ';
+      std::cout << "\naux[2]: ";
       for (unsigned int s=0; s<aux.size(); ++s)
-        vcl_cout << aux[s][2] << ' ';
-      vcl_cout << "\naux[3]: ";
+        std::cout << aux[s][2] << ' ';
+      std::cout << "\naux[3]: ";
       for (unsigned int s=0; s<aux.size(); ++s)
-        vcl_cout << aux[s][3] << ' ';
-      vcl_cout << "\nnrays ";
+        std::cout << aux[s][3] << ' ';
+      std::cout << "\nnrays ";
       for (unsigned int s=0; s<aux.size(); ++s)
-        vcl_cout << nrays[s] << ' ';
+        std::cout << nrays[s] << ' ';
     }
 #endif
     for (unsigned int s=0; s<aux.size(); ++s) {
@@ -207,16 +208,16 @@ class boxm2_batch_update_opt2_functor
       if (index == cell_no) {
         float mean_obs = aux0[s]/obs_seg_len;
         float PI = boxm2_processor_type<APM_TYPE>::type::prob_density(mog, mean_obs);
-        vcl_cout << "\t m: " << s << " pre_i: " << aux[s][0]/obs_seg_len << " vis_i: " << aux[s][1]/obs_seg_len << '\n'
+        std::cout << "\t m: " << s << " pre_i: " << aux[s][0]/obs_seg_len << " vis_i: " << aux[s][1]/obs_seg_len << '\n'
                  << "obs_seg_len: " << obs_seg_len << " PI: " << PI << " mean_obs: " << mean_obs << '\n'
-                 << "max_obs_seg_len: " << max_obs_seg_len << vcl_endl;
+                 << "max_obs_seg_len: " << max_obs_seg_len << std::endl;
       }
 #endif
     }
 #if 0
     if (index == cell_no) {
-      float p_q = 1.0f-vcl_exp(-alpha*max_obs_seg_len);
-      vcl_cout << "current alpha: " << alpha << " p_q: " << p_q << vcl_endl;
+      float p_q = 1.0f-std::exp(-alpha*max_obs_seg_len);
+      std::cout << "current alpha: " << alpha << " p_q: " << p_q << std::endl;
     }
 #endif
 
@@ -226,13 +227,13 @@ class boxm2_batch_update_opt2_functor
     }
 #if 0
     if (index == cell_no) {
-      float p_q_new = 1.0f-vcl_exp(-alpha*max_obs_seg_len);
-      vcl_cout << "after update alpha: " << alpha << " p_q_new: " << p_q_new << vcl_endl;
+      float p_q_new = 1.0f-std::exp(-alpha*max_obs_seg_len);
+      std::cout << "after update alpha: " << alpha << " p_q_new: " << p_q_new << std::endl;
     }
 #endif
 
-    float alpha_min = -vcl_log(1.f-0.0001f)/max_obs_seg_len;
-    float alpha_max = -vcl_log(1.f-0.995f)/max_obs_seg_len;
+    float alpha_min = -std::log(1.f-0.0001f)/max_obs_seg_len;
+    float alpha_max = -std::log(1.f-0.995f)/max_obs_seg_len;
 
     if (alpha > alpha_max) {
       alpha = alpha_max;

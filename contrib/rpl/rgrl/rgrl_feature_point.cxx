@@ -123,12 +123,12 @@ transform_scale( rgrl_transformation const& xform ) const
   {
     // "average" them
     if ( dim == 2 )
-      scale = vcl_sqrt( scaling[0]*scaling[1] ) * this->scale_;
+      scale = std::sqrt( scaling[0]*scaling[1] ) * this->scale_;
     else {
       double prod_scale=1;
       for ( unsigned i=0; i < dim; ++i )
         prod_scale *= scaling[i];
-      scale = vcl_exp( vcl_log(prod_scale) / double(dim) ) * this->scale_;
+      scale = std::exp( std::log(prod_scale) / double(dim) ) * this->scale_;
     }
   }
   else if ( this-> scale_ != 1.0 ) {
@@ -159,7 +159,7 @@ transform_scale( rgrl_transformation const& xform ) const
     for ( unsigned j=0; j<jac.rows(); ++j )
       sqr_mag += vnl_math::sqr( jac(j,i) );
 
-    cumulative_scale_change += vcl_sqrt( sqr_mag );
+    cumulative_scale_change += std::sqrt( sqr_mag );
   }
   cumulative_scale_change /= jac.cols();
 
@@ -188,36 +188,36 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     // scale_wgt = scale_wgt * scale_wgt;
   }
 
-  return  vcl_sqrt(scale_wgt);
+  return  std::sqrt(scale_wgt);
 }
 
 //: write out feature
 void
 rgrl_feature_point::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // tag
-  os << "POINT" << vcl_endl;
+  os << "POINT" << std::endl;
 
   // dim
-  os << location_.size() << vcl_endl;
+  os << location_.size() << std::endl;
 
   // atributes
-  os << location_ << "    " << scale_ << vcl_endl;
+  os << location_ << "    " << scale_ << std::endl;
 }
 
 //: read in feature
 bool
 rgrl_feature_point::
-read( vcl_istream& is, bool skip_tag )
+read( std::istream& is, bool skip_tag )
 {
   if ( !skip_tag )
   {
     // skip empty lines
     rgrl_util_skip_empty_lines( is );
 
-    vcl_string str;
-    vcl_getline( is, str );
+    std::string str;
+    std::getline( is, str );
 
     // The token should appear at the beginning of line
     if ( str.find( "POINT" ) != 0 ) {

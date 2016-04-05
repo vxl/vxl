@@ -14,7 +14,7 @@
 static const int di[4]={ 0, -1, 1, 0};
 static const int dj[4]={-1,  0, 0, 1};
 
-void lower_envelope_linear(float w, vcl_vector<float>& msg)
+void lower_envelope_linear(float w, std::vector<float>& msg)
 {
   unsigned nlabels = msg.size();
   // pass 1
@@ -37,13 +37,13 @@ void lower_envelope_linear(float w, vcl_vector<float>& msg)
   }
 }
 
-vcl_vector<float> lower_envelope_quadratic(float w,
-                                           vcl_vector<float> const& h)
+std::vector<float> lower_envelope_quadratic(float w,
+                                           std::vector<float> const& h)
 {
   int nlabels = h.size();
-  vcl_vector<float> env_out(nlabels);
-  vcl_vector<int> v(nlabels);
-  vcl_vector<float> z(nlabels+1);
+  std::vector<float> env_out(nlabels);
+  std::vector<int> v(nlabels);
+  std::vector<float> z(nlabels+1);
   int k = 0;
   v[0] = 0;
   z[0] = -vnl_numeric_traits<float>::maxval;
@@ -198,7 +198,7 @@ void sdet_mrf_bp::send_messages_optimized()
         sdet_mrf_site_bp_sptr sq = sites_[kj][ki];
 
         //initialize message with h(fp)
-        vcl_vector<float> temp(n_labels_), msg;
+        std::vector<float> temp(n_labels_), msg;
         // minr is the smallest value of h
         float minh = vnl_numeric_traits<float>::maxval;
         for (unsigned fq = 0; fq<n_labels_; ++fq) {
@@ -242,14 +242,14 @@ void sdet_mrf_bp::send_messages_optimized()
 }
 
 void sdet_mrf_bp::set_prior_message(unsigned i, unsigned j, unsigned n,
-                                    vcl_vector<float> const& msg)
+                                    std::vector<float> const& msg)
 {
   this->site(i,j)->set_prior_message(n, msg);
 }
 
 void sdet_mrf_bp::print_prior_messages()
 {
-  vcl_cout << "Neighbor layout\n"
+  std::cout << "Neighbor layout\n"
            << "     0\n"
            << "  1  x  2\n"
            << "     3\n\n";
@@ -257,7 +257,7 @@ void sdet_mrf_bp::print_prior_messages()
   for (unsigned j = 0; j<nj_; ++j)
     for (unsigned i = 0; i<ni_; ++i) {
       sdet_mrf_site_bp_sptr sp = sites_[j][i];
-      vcl_cout << " site(" << i << ' ' << j << ")==>\n";
+      std::cout << " site(" << i << ' ' << j << ")==>\n";
       sp->print_prior_messages();
     }
 }
@@ -267,14 +267,14 @@ void sdet_mrf_bp::print_belief_vectors()
   for (unsigned j = 0; j<nj_; ++j)
     for (unsigned i = 0; i<ni_; ++i) {
       sdet_mrf_site_bp_sptr sp = sites_[j][i];
-      vcl_cout << " site(" << i << ' ' << j << ")==>\n";
+      std::cout << " site(" << i << ' ' << j << ")==>\n";
       sp->print_belief_vector();
     }
 }
 
 vil_image_resource_sptr sdet_mrf_bp::belief_image()
 {
-  vil_image_resource_sptr ret = 0;
+  vil_image_resource_sptr ret = VXL_NULLPTR;
   if (nj_==0||ni_==0)
     return ret;
   vil_image_view<float> view(ni_, nj_);
@@ -292,7 +292,7 @@ vil_image_resource_sptr sdet_mrf_bp::belief_image()
   return ret;
 }
 
-vcl_vector<float> sdet_mrf_bp::prior_message(unsigned i, unsigned j, unsigned n)
+std::vector<float> sdet_mrf_bp::prior_message(unsigned i, unsigned j, unsigned n)
 {
   sdet_mrf_site_bp_sptr sp = sites_[j][i];
   return sp->prior_message(n);

@@ -8,10 +8,11 @@
 // \date   14 Sep 1999
 // \brief  See vgui_displaylist2D_tableau.h for a description of this file.
 
+#include <iostream>
+#include <vector>
 #include "vgui_displaylist2D_tableau.h"
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>
@@ -54,7 +55,7 @@ bool vgui_displaylist2D_tableau::handle(const vgui_event& e)
 
 //: Return indices of my elements which are near (x,y)
 void vgui_displaylist2D_tableau::get_hits(float x, float y,
-                                          vcl_vector<unsigned>& my_hits)
+                                          std::vector<unsigned>& my_hits)
 {
   // select objects within 20 pixels of the mouse
   GLuint *ptr = vgui_utils::enter_pick_mode(x,y,20);
@@ -66,11 +67,11 @@ void vgui_displaylist2D_tableau::get_hits(float x, float y,
   int num_hits = vgui_utils::leave_pick_mode();
 
   // get all hits
-  vcl_vector<vcl_vector<unsigned> > hits;
+  std::vector<std::vector<unsigned> > hits;
   vgui_utils::process_hits(num_hits, ptr, hits);
 
   // for each hit get the name of the soview if it is
-  // being managed by this vcl_list
+  // being managed by this std::list
   //
   // Each hit from a display list has two entries. The first is the id
   // of the display list, and the second is the id of the soview. See
@@ -78,10 +79,10 @@ void vgui_displaylist2D_tableau::get_hits(float x, float y,
   // belongs to this display list iff the first hit number is this
   // list's id.
 
-  for (vcl_vector<vcl_vector<unsigned> >::iterator i=hits.begin();
+  for (std::vector<std::vector<unsigned> >::iterator i=hits.begin();
        i != hits.end(); ++i)
   {
-    vcl_vector<unsigned> const& names = *i;
+    std::vector<unsigned> const& names = *i;
 
     if ( ! names.empty() && names[0] == this->get_id() )
     {
@@ -97,12 +98,12 @@ void vgui_displaylist2D_tableau::get_hits(float x, float y,
 }
 
 unsigned vgui_displaylist2D_tableau::find_closest(float x, float y,
-                                                  vcl_vector<unsigned> const& hits)
+                                                  std::vector<unsigned> const& hits)
 {
   unsigned closest = 0;
   float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
 
-  for (vcl_vector<unsigned>::const_iterator h_iter = hits.begin();
+  for (std::vector<unsigned>::const_iterator h_iter = hits.begin();
        h_iter != hits.end(); ++h_iter)
   {
     // In principle, VXL shouldn't use dynamic_cast since it depends
@@ -116,7 +117,7 @@ unsigned vgui_displaylist2D_tableau::find_closest(float x, float y,
 
     float dist = so->distance_squared(x,y);
 #ifdef DEBUG
-    vcl_cerr << "vgui_displaylist2D_tableau::find_closest distance to " << (void*)so << " is " << dist << '\n';
+    std::cerr << "vgui_displaylist2D_tableau::find_closest distance to " << (void*)so << " is " << dist << '\n';
 #endif
     if (closest_dist<0 || dist<closest_dist) {
       closest_dist = dist;
@@ -133,7 +134,7 @@ bool vgui_displaylist2D_tableau::motion(int x, int y)
   float ix, iy;
   pi.window_to_image_coordinates(x,y, ix,iy);
 
-  vcl_vector<unsigned> hits;
+  std::vector<unsigned> hits;
   get_hits(x,y,hits);
   unsigned closest_id = find_closest(ix,iy,hits);
 
@@ -154,9 +155,9 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
   if (button == vgui_LEFT && modifier == 0)
   {
 #ifdef DEBUG
-    vcl_cerr << "vgui_displaylist2D_tableau::mouse_down: selecting at " << x << ',' << y << '\n';
+    std::cerr << "vgui_displaylist2D_tableau::mouse_down: selecting at " << x << ',' << y << '\n';
 #endif
-    vcl_vector<unsigned> hits;
+    std::vector<unsigned> hits;
     get_hits(x,y,hits);
     unsigned closest_id = find_closest(ix,iy,hits);
     if (closest_id) {
@@ -174,7 +175,7 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
     if (modifier & vgui_SHIFT)
     {
 #ifdef DEBUG
-      vcl_cerr << "vgui_displaylist2D_tableau::mouse_down: deselecting all\n";
+      std::cerr << "vgui_displaylist2D_tableau::mouse_down: deselecting all\n";
 #endif
       this->deselect_all();
       this->post_redraw();
@@ -182,9 +183,9 @@ bool vgui_displaylist2D_tableau::mouse_down(int x, int y, vgui_button button, vg
     }
 
 #ifdef DEBUG
-    vcl_cerr << "vgui_displaylist2D_tableau::mouse_down: deselecting at " << x << ' ' << y << '\n';
+    std::cerr << "vgui_displaylist2D_tableau::mouse_down: deselecting at " << x << ' ' << y << '\n';
 #endif
-    vcl_vector<unsigned> hits;
+    std::vector<unsigned> hits;
     get_hits(x,y,hits);
     unsigned closest_id = find_closest(ix,iy,hits);
     if (closest_id) {

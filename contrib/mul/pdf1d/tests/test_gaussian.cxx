@@ -1,11 +1,12 @@
 // This is mul/pdf1d/tests/test_gaussian.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test pdf1d_gaussian, building, sampling, saving etc.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <pdf1d/pdf1d_gaussian.h>
@@ -23,7 +24,7 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_gaussian()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing pdf1d_gaussian\n"
            << "************************\n";
 
@@ -44,7 +45,7 @@ void test_gaussian()
   pdf1d_sampler* p_sampler = pdf.new_sampler();
 
 // Generate lots of samples
-  vcl_vector<double> data(n_samples);
+  std::vector<double> data(n_samples);
   for (int i=0;i<n_samples;++i)
     data[i] = p_sampler->sample();
 
@@ -54,10 +55,10 @@ void test_gaussian()
 
   builder.build(*p_pdf_built,data_array);
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf);
-  vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
-  vcl_cout<<"\n\nPDF sampler: "; vsl_print_summary(vcl_cout, p_sampler);
-  vcl_cout<<'\n';
+  std::cout<<"Original PDF: "; vsl_print_summary(std::cout, pdf);
+  std::cout<<"\nRebuilt PDF: "; vsl_print_summary(std::cout, p_pdf_built);
+  std::cout<<"\n\nPDF sampler: "; vsl_print_summary(std::cout, p_sampler);
+  std::cout<<'\n';
 
 // Test the IO ================================================
 
@@ -67,7 +68,7 @@ void test_gaussian()
   TEST_NEAR("Mean of built model",pdf.mean(),p_pdf_built->mean(),0.1);
   TEST_NEAR("Variances",pdf.variance(),p_pdf_built->variance(),0.1);
 
-  vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
+  std::cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out("test_gaussian.bvl.tmp");
   TEST("Created test_gaussian.bvl.tmp for writing", (!bfs_out), false);
 
@@ -95,11 +96,11 @@ void test_gaussian()
   vpl_unlink("test_gaussian.bvl.tmp");
 #endif
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf);
-  vcl_cout<<"\nOriginal builder: "; vsl_print_summary(vcl_cout, builder);
-  vcl_cout<<"\n\nLoaded PDF: "; vsl_print_summary(vcl_cout, pdf_in);
-  vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, builder_in);
-  vcl_cout<<"\n\n";
+  std::cout<<"Original PDF: "; vsl_print_summary(std::cout, pdf);
+  std::cout<<"\nOriginal builder: "; vsl_print_summary(std::cout, builder);
+  std::cout<<"\n\nLoaded PDF: "; vsl_print_summary(std::cout, pdf_in);
+  std::cout<<"\nLoaded builder: "; vsl_print_summary(std::cout, builder_in);
+  std::cout<<"\n\n";
 
   TEST("Original Model == Loaded model",
        pdf.mean()==pdf_in.mean() &&
@@ -121,11 +122,11 @@ void test_gaussian()
        builder.is_class(p_builder_in->is_a()),
        true);
 
-  vcl_cout << "========Testing PDF Thresholds==========";
+  std::cout << "========Testing PDF Thresholds==========";
   pdf1d_sampler *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass=0, fail=0;
   double thresh = p_pdf_built->log_prob_thresh(0.9);
-  vcl_cout << "\nlog density threshold for passing 90%: " << thresh << '\n';
+  std::cout << "\nlog density threshold for passing 90%: " << thresh << '\n';
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -134,11 +135,11 @@ void test_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
   pass=0; fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.1);
-  vcl_cout << "\n\nlog density threshold for passing 10%: " << thresh << '\n';
+  std::cout << "\n\nlog density threshold for passing 10%: " << thresh << '\n';
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -147,7 +148,7 @@ void test_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   delete p_sampler2;

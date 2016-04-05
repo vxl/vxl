@@ -1,10 +1,12 @@
 // This is gel/vmal/vmal_rectifier.cxx
+#include <iostream>
+#include <cmath>
 #include "vmal_rectifier.h"
 //:
 // \file
 
 #include <vmal/vmal_convert_vtol.h>
-#include <vcl_cmath.h> // atan2()
+#include <vcl_compiler.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>
@@ -19,12 +21,12 @@
 
 vmal_rectifier::vmal_rectifier()
 {
-  lines0_p_=NULL;
-  lines0_q_=NULL;
-  lines1_p_=NULL;
-  lines1_q_=NULL;
-  points0_=NULL;
-  points1_=NULL;
+  lines0_p_=VXL_NULLPTR;
+  lines0_q_=VXL_NULLPTR;
+  lines1_p_=VXL_NULLPTR;
+  lines1_q_=VXL_NULLPTR;
+  points0_=VXL_NULLPTR;
+  points1_=VXL_NULLPTR;
   rectL =  new vil_image_view<vxl_byte>(1,1,1);
   rectR =  new vil_image_view<vxl_byte>(1,1,1);
   //  rectL =  NULL;
@@ -36,19 +38,19 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
                                int ima_height, int ima_width) :
   is_f_compute_(false)
 {
-  lines0_p_=NULL;
-  lines0_q_=NULL;
-  lines1_p_=NULL;
-  lines1_q_=NULL;
-  points0_=NULL;
+  lines0_p_=VXL_NULLPTR;
+  lines0_q_=VXL_NULLPTR;
+  lines1_p_=VXL_NULLPTR;
+  lines1_q_=VXL_NULLPTR;
+  points0_=VXL_NULLPTR;
   rectL =  new vil_image_view<vxl_byte>(1,1,1);
   rectR =  new vil_image_view<vxl_byte>(1,1,1);
 
   if ((mvd_vertex->get_nb_views()>1) && (mvd_edge->get_nb_views()>1))
   {
     // Prescale the points
-    vcl_vector<vtol_edge_2d_sptr> tmp_lines0;
-    vcl_vector<vtol_edge_2d_sptr> tmp_lines1;
+    std::vector<vtol_edge_2d_sptr> tmp_lines0;
+    std::vector<vtol_edge_2d_sptr> tmp_lines1;
 
     mvd_edge->get(0,1,tmp_lines0,tmp_lines1);
     numpoints_=tmp_lines0.size();
@@ -56,8 +58,8 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
     convert_lines_double_3(tmp_lines0, lines0_p_, lines0_q_);
     convert_lines_double_3(tmp_lines1, lines1_p_, lines1_q_);
 
-    vcl_vector<vtol_vertex_2d_sptr> tmp_points0;
-    vcl_vector<vtol_vertex_2d_sptr> tmp_points1;
+    std::vector<vtol_vertex_2d_sptr> tmp_points0;
+    std::vector<vtol_vertex_2d_sptr> tmp_points1;
 
     mvd_vertex->get(0,1,tmp_points0,tmp_points1);
 
@@ -70,10 +72,10 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
 
 // Constructor for dealing with just matched points
 
-vmal_rectifier::vmal_rectifier(vcl_vector< vnl_vector<double> >* pts0,
-                               vcl_vector< vnl_vector<double> >* pts1,
+vmal_rectifier::vmal_rectifier(std::vector< vnl_vector<double> >* pts0,
+                               std::vector< vnl_vector<double> >* pts1,
                                int ima_height, int ima_width) :
-  lines0_p_(0), lines0_q_(0), lines1_p_(0), lines1_q_(0),
+  lines0_p_(VXL_NULLPTR), lines0_q_(VXL_NULLPTR), lines1_p_(VXL_NULLPTR), lines1_q_(VXL_NULLPTR),
   numpoints_(pts0->size()), height_(ima_height), width_(ima_width),
   is_f_compute_(false)
 {
@@ -83,8 +85,8 @@ vmal_rectifier::vmal_rectifier(vcl_vector< vnl_vector<double> >* pts0,
   // put the points in the proper buffers...
   points0_ = new vnl_double_3[numpoints_];
   points1_ = new vnl_double_3[numpoints_];
-  vcl_vector< vnl_vector<double> >::iterator vit0 = pts0->begin();
-  vcl_vector< vnl_vector<double> >::iterator vit1 = pts1->begin();
+  std::vector< vnl_vector<double> >::iterator vit0 = pts0->begin();
+  std::vector< vnl_vector<double> >::iterator vit1 = pts1->begin();
   for (int i=0; i<numpoints_; ++i,++vit0,++vit1)
   {
     points0_[i][0] = (*vit0)[0]; // [1]
@@ -115,8 +117,8 @@ void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
   if (!is_f_compute_)
   {
     is_f_compute_=true;
-    vcl_vector<HomgPoint2D> v_points0;
-    vcl_vector<HomgPoint2D> v_points1;
+    std::vector<HomgPoint2D> v_points0;
+    std::vector<HomgPoint2D> v_points1;
     for (int i=0;i<numpoints_;i++)
     {
       HomgPoint2D tmp_point0(points0_[i][0],points0_[i][1]);
@@ -130,7 +132,7 @@ void vmal_rectifier::rectification_matrix(vnl_double_3x3& H0,
     tmp_fcom.compute(v_points0,v_points1,& tmp_f);
     tmp_f.get(&F12_.as_ref().non_const());
 
-    vcl_cout << "Fundamental Matrix:\n" << tmp_f << vcl_endl;
+    std::cout << "Fundamental Matrix:\n" << tmp_f << std::endl;
 
     HomgPoint2D epi1;
     HomgPoint2D epi2;
@@ -232,7 +234,7 @@ void vmal_rectifier::compute_joint_epipolar_transform_new (
    // Also, rotate a further 180 degrees if necessary
    conditional_rectify_rotate180 (output_roi, H0, H1);
 #endif
-   vcl_cerr << "vmal_rectifier::compute_joint_epipolar_transform_new() not yet fully implemented\n";
+   std::cerr << "vmal_rectifier::compute_joint_epipolar_transform_new() not yet fully implemented\n";
 }
 
 void vmal_rectifier::compute_initial_joint_epipolar_transforms (
@@ -254,12 +256,12 @@ void vmal_rectifier::compute_initial_joint_epipolar_transforms (
     if ( !compute_initial_joint_epipolar_transforms (F12_,sweeti, sweetj, H0, H1))
     {
       // Error message and exit
-      vcl_cerr<<"Computation of epipolar transform failed\n";
+      std::cerr<<"Computation of epipolar transform failed\n";
     }
   }
   else // TODO
   {
-    vcl_cerr << "vmal_rectifier::compute_initial_joint_epipolar_transforms() not yet fully implemented\n";
+    std::cerr << "vmal_rectifier::compute_initial_joint_epipolar_transforms() not yet fully implemented\n";
 #if 0
     // First of all compute the Q matrix
     rhMatrix Q(3, 3);
@@ -315,14 +317,14 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   // Make sure that the epipole is not at the origin
   if (p1[0] == 0.0 && p1[1] == 0.0)
   {
-    vcl_cerr<<"Error : Epipole is at image center\n";
+    std::cerr<<"Error : Epipole is at image center\n";
     return 0;
   }
 
   // Next determine a rotation that will send the epipole to (1, 0, x)
-  double theta = vcl_atan2 (p1[1], p1[0]);
-  double c = vcl_cos (theta);
-  double s = vcl_sin (theta);
+  double theta = std::atan2 (p1[1], p1[0]);
+  double c = std::cos (theta);
+  double s = std::sin (theta);
 
   double t[] = { c,   s, 0.0,
                 -s,   c, 0.0,
@@ -340,12 +342,12 @@ int vmal_rectifier::compute_initial_joint_epipolar_transforms (
   // Multiply things out.  Put the result in H0
   H0 = E * H0;
   ep1=H0*epipoles_[0];
-  vcl_cout << "vmal_rectifier::c_i_j_e_t: epipole[0] at infinity = " << ep1 << vcl_endl;
+  std::cout << "vmal_rectifier::c_i_j_e_t: epipole[0] at infinity = " << ep1 << std::endl;
   // Next compute the initial 2x
   H1 = matching_transform (Q.transpose(), H0);
 
   vnl_double_3 ep2=H1*epipoles_[1];
-  vcl_cout << "vmal_rectifier::c_i_j_e_t: epipole[1] at infinity = " << ep2 << vcl_endl;
+  std::cout << "vmal_rectifier::c_i_j_e_t: epipole[1] at infinity = " << ep2 << std::endl;
 
   // Return 1 value
   return 1;

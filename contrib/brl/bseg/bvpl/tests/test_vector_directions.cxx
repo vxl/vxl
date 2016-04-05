@@ -13,16 +13,16 @@ bool test_directions(FUNC dir)
   bvpl_edge3d_kernel_factory kernels_3d(-1,1,-1,1,-1,1);
   bvpl_kernel_vector_sptr kernel_vec = kernels_3d.create_kernel_vector(dir);
 
-  vcl_vector<vnl_float_3> axes1= dir.get_axes();
+  std::vector<vnl_float_3> axes1= dir.get_axes();
 
-  vcl_vector<vnl_float_3>::iterator iter1 = axes1.begin();
+  std::vector<vnl_float_3>::iterator iter1 = axes1.begin();
   bvpl_kernel_vector::iterator iter2 = kernel_vec->begin();
   bool result = true;
   for (; iter1!=axes1.end(); ++iter1, ++iter2)
   {
     result = result && ((*iter1 -(*iter2)->axis()).two_norm() < 1e-2f);
     if (!result)
-      vcl_cout << *iter1 << "  should be  " << (*iter2)->axis() << vcl_endl;
+      std::cout << *iter1 << "  should be  " << (*iter2)->axis() << std::endl;
   }
 
   return result;

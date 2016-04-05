@@ -1,6 +1,7 @@
 // Some tests for vgl_triangle_3d_line_intersection
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -14,7 +15,7 @@ static const double tol=1e-9;
 //========================================================================
 static void test_point_inside()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "*************************************\n"
            << " Testing vgl_triangle_3d_test_inside\n"
            << "*************************************\n";
@@ -87,7 +88,7 @@ static void test_point_inside()
 //========================================================================
 static void test_line_intersection()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "*******************************************\n"
            << " Testing vgl_triangle_3d_line_intersection\n"
            << "*******************************************\n";
@@ -118,7 +119,7 @@ static void test_line_intersection()
       {
         // Define a triangle that wobbles about p1-p2
         vgl_point_3d<double> p1(1000,1000,1000), p2(1002,1000,1000),
-                             p3(1001, 1000+(20*vcl_sin(a*rad)), 1000-(20*vcl_cos(a*rad)));
+                             p3(1001, 1000+(20*std::sin(a*rad)), 1000-(20*std::cos(a*rad)));
         vgl_triangle_3d_intersection_t in_result1 = vgl_triangle_3d_line_intersection(l_in, p1, p2, p3, i_pnt);
         vgl_triangle_3d_intersection_t in_result2 = vgl_triangle_3d_line_intersection(l_in, p1, p3, p2, i_pnt);
         vgl_triangle_3d_intersection_t in_result3 = vgl_triangle_3d_line_intersection(l_in, p3, p1, p2, i_pnt);
@@ -137,68 +138,68 @@ static void test_line_intersection()
             out_result1 != None || out_result2 != None || out_result3 != None ||
             out_result4 != None || out_result5 != None || out_result6 != None)
         {
-          vcl_cout << "normal_distance: " << e << " angle: " << a;
+          std::cout << "normal_distance: " << e << " angle: " << a;
           if (out_result1 != None)
           {
             outside_fail = true;
-            vcl_cout << " outside 1 fail";
+            std::cout << " outside 1 fail";
           }
           if (out_result2 != None)
           {
             outside_fail = true;
-            vcl_cout << " outside 2 fail";
+            std::cout << " outside 2 fail";
           }
           if (out_result3 != None)
           {
             outside_fail = true;
-            vcl_cout << " outside 3 fail";
+            std::cout << " outside 3 fail";
           }
           if (out_result4 != None)
           {
             outside_fail = true;
-            vcl_cout << " outside 4 fail";
+            std::cout << " outside 4 fail";
           }
           if (out_result5 != None)
           {
             outside_fail = true;
-            vcl_cout << " outside 5 fail";
+            std::cout << " outside 5 fail";
           }
           if (out_result6 != None)
           {
             outside_fail = true;
-            vcl_cout << " outside 6 fail";
+            std::cout << " outside 6 fail";
           }
           if (in_result1 != Skew)
           {
             inside_fail = true;
-            vcl_cout << " inside 1 fail";
+            std::cout << " inside 1 fail";
           }
           if (in_result2 != Skew)
           {
             inside_fail = true;
-            vcl_cout << " inside 2 fail";
+            std::cout << " inside 2 fail";
           }
           if (in_result3 != Skew)
           {
             inside_fail = true;
-            vcl_cout << " inside 3 fail";
+            std::cout << " inside 3 fail";
           }
           if (in_result4 != Skew)
           {
             inside_fail = true;
-            vcl_cout << " inside 4 fail";
+            std::cout << " inside 4 fail";
           }
           if (in_result5 != Skew)
           {
             inside_fail = true;
-            vcl_cout << " inside 5 fail";
+            std::cout << " inside 5 fail";
           }
           if (in_result6 != Skew)
           {
             inside_fail = true;
-            vcl_cout << " inside 6 fail";
+            std::cout << " inside 6 fail";
           }
-          vcl_cout << vcl_endl;
+          std::cout << std::endl;
         }
       }
     }

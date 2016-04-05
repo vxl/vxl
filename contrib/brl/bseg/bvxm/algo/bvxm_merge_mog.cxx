@@ -1,9 +1,11 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "bvxm_merge_mog.h"
 //:
 // \file
 
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 
 void bvxm_merge_mog::kl_merge(bvxm_merge_mog::mix_gauss_type const& mixture, bsta_gauss_sf1 &gaussian)
@@ -30,11 +32,11 @@ void bvxm_merge_mog::kl_merge(bvxm_merge_mog::mix_gauss_type const& mixture, bst
     // only because in this case it is 1
     mean = mean + mixture.weight(i)*mixture.distribution(i).mean();
     var = var +  mixture.weight(i)*mixture.distribution(i).var() +
-      mixture.weight(i)*vcl_pow(mixture.distribution(i).mean(),2);
+      mixture.weight(i)*std::pow(mixture.distribution(i).mean(),2);
   }
-  if (var <  vcl_pow(mean,2))
-    vcl_cout<< mixture <<vcl_endl;
-  var = var - vcl_pow(mean,2);
+  if (var <  std::pow(mean,2))
+    std::cout<< mixture <<std::endl;
+  var = var - std::pow(mean,2);
 
   gaussian.set_mean(mean);
   gaussian.set_var(var);

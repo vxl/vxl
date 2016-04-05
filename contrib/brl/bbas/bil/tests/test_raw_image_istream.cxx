@@ -1,18 +1,19 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <bil/bil_raw_image_istream.h>
-#include <vcl_sstream.h>
 
 
 
 static void create_raw_image_stream()
 {
-    vcl_string root = testlib_root_dir();
-    vcl_string base = root + "/contrib/brl/bbas/bil/tests/file_read_data/";
-    vcl_string rawFile = base+"test_raw_image_stream.raw";
-    vcl_ofstream ofile(rawFile.c_str(),vcl_ios::binary);
+    std::string root = testlib_root_dir();
+    std::string base = root + "/contrib/brl/bbas/bil/tests/file_read_data/";
+    std::string rawFile = base+"test_raw_image_stream.raw";
+    std::ofstream ofile(rawFile.c_str(),std::ios::binary);
     int ni = 1;
     int nj = 1;
     int pixelsize = 8;
@@ -26,9 +27,9 @@ static void create_raw_image_stream()
 static void test_raw_image_istream()
 {
    create_raw_image_stream();
-    vcl_string root = testlib_root_dir();
-    vcl_string base = root + "/contrib/brl/bbas/bil/tests/file_read_data/";
-    vcl_string rawFile = base+"test_raw_image_stream.raw";
+    std::string root = testlib_root_dir();
+    std::string base = root + "/contrib/brl/bbas/bil/tests/file_read_data/";
+    std::string rawFile = base+"test_raw_image_stream.raw";
     // Constructor - from a file glob string
     bil_raw_image_istream  stream(rawFile);
     bool good = false;

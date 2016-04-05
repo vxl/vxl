@@ -15,7 +15,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_typeinfo.h>
+#include <iostream>
+#include <typeinfo>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
@@ -63,10 +65,10 @@ class bvgl_param_curve
 
   virtual ~bvgl_param_curve() {}
 
-  static const vcl_type_info& type_id()
+  static const std::type_info& type_id()
   { return typeid(bvgl_param_curve); }
 
-  virtual bool is_type( const vcl_type_info& type ) const
+  virtual bool is_type( const std::type_info& type ) const
   { return (typeid(bvgl_param_curve) == type)!=0; }
 
   //: comparison operator.
@@ -78,7 +80,7 @@ class bvgl_param_curve
   //: Write "<dbvgl_param_curve> to stream"
   // \relates dbvgl_param_curve
   //virtual
-  //vcl_ostream&  operator<<(vcl_ostream& s);
+  //std::ostream&  operator<<(std::ostream& s);
 
   // Elementary geometric functions ----------------------------------
 
@@ -118,6 +120,6 @@ class bvgl_param_curve
 
 //: Read parameters from stream
 // \relates dbvgl_param_curve
-//vcl_istream&  operator>>(vcl_istream& s, bvgl_param_curve const& c) const = 0;
+//std::istream&  operator>>(std::istream& s, bvgl_param_curve const& c) const = 0;
 
 #endif // bvgl_param_curve_h_

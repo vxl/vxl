@@ -25,7 +25,7 @@ vil_image_resource_sptr vepl_dilate_disk(vil_image_resource_sptr image, float ra
       img_out->put_view(out);
     }
     else
-      vcl_cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
+      std::cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
   }
 
   // byte greyscale
@@ -96,7 +96,7 @@ vil_image_resource_sptr vepl_dilate_disk(vil_image_resource_sptr image, float ra
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_dilate_disk() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_dilate_disk() not implemented for " << image << '\n';
 
   return img_out;
 }

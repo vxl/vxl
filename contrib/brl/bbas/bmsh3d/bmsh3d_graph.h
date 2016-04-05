@@ -15,10 +15,12 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
+#include <iostream>
+#include <map>
+#include <utility>
 #include <vcl_cassert.h>
 
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 #include <bmsh3d/bmsh3d_vertex.h>
 #include <bmsh3d/bmsh3d_edge.h>
@@ -28,7 +30,7 @@
 class bmsh3d_graph : public bmsh3d_pt_set
 {
  protected:
-  vcl_map<int, bmsh3d_edge*> edgemap_;
+  std::map<int, bmsh3d_edge*> edgemap_;
   int   edge_id_counter_;
 
  public:
@@ -38,14 +40,14 @@ class bmsh3d_graph : public bmsh3d_pt_set
   }
 
   virtual void clear () {
-    vcl_map<int, bmsh3d_edge*>::iterator it =  edgemap_.begin();
+    std::map<int, bmsh3d_edge*>::iterator it =  edgemap_.begin();
     for (; it != edgemap_.end(); it++) {
       _del_edge ((*it).second);
     }
     edgemap_.clear ();
 
     if (b_free_objects_in_destructor_) {
-      vcl_map<int, bmsh3d_vertex*>::iterator it = vertexmap_.begin();
+      std::map<int, bmsh3d_vertex*>::iterator it = vertexmap_.begin();
       for (; it != vertexmap_.end(); it++)
         _del_vertex ((*it).second);
       vertexmap_.clear();
@@ -60,11 +62,11 @@ class bmsh3d_graph : public bmsh3d_pt_set
   }
 
   //###### Data access functions ######
-  vcl_map<int, bmsh3d_edge*>& edgemap() {
+  std::map<int, bmsh3d_edge*>& edgemap() {
     return edgemap_;
   }
   bmsh3d_edge* edgemap (const int i) {
-    vcl_map<int, bmsh3d_edge*>::iterator it = edgemap_.find (i);
+    std::map<int, bmsh3d_edge*>::iterator it = edgemap_.find (i);
     if (it == edgemap_.end())
       return NULL;
     return (*it).second;
@@ -95,7 +97,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
   }
 
   void _add_edge (bmsh3d_edge* E) {
-    edgemap_.insert (vcl_pair<int, bmsh3d_edge*>(E->id(), E));
+    edgemap_.insert (std::pair<int, bmsh3d_edge*>(E->id(), E));
   }
 
   void add_edge_incidence (bmsh3d_edge* E) {
@@ -109,7 +111,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
   }
 
   void add_edge_incidence_check (bmsh3d_edge* E) {
-    edgemap_.insert (vcl_pair<int, bmsh3d_edge*>(E->id(), E));
+    edgemap_.insert (std::pair<int, bmsh3d_edge*>(E->id(), E));
     bmsh3d_vertex* sV = E->sV();
     sV->check_add_incident_E (E);
     bmsh3d_vertex* eV = E->eV();

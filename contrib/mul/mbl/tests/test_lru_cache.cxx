@@ -1,10 +1,11 @@
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <mbl/mbl_lru_cache.h>
 #include <testlib/testlib_test.h>
 
 void test_lru_cache()
 {
-  vcl_cout << "\n\n***********************\n"
+  std::cout << "\n\n***********************\n"
            <<     " Testing mbl_lru_cache\n"
            <<     "***********************\n";
 

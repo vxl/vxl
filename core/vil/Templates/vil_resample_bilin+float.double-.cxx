@@ -1,2 +1,2 @@
-#include <vil/vil_resample_bilin.txx>
+#include <vil/vil_resample_bilin.hxx>
 VIL_RESAMPLE_BILIN_INSTANTIATE( float , double );

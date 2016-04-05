@@ -13,6 +13,8 @@
 // \author Andrew Miller
 // \date   26 Oct 2010
 //
+#include <iostream>
+#include <iosfwd>
 #include <boxm2/boxm2_block_metadata.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
@@ -20,7 +22,7 @@
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //smart pointer stuff
 #include <vbl/vbl_ref_count.h>
@@ -61,7 +63,7 @@ class boxm2_block : public vbl_ref_count
   bool b_write(char* buffer);
 
   //: filename for all block files stored by boxm2_scenes
-  vcl_string              filename()          const { return "block.bin"; }
+  std::string              filename()          const { return "block.bin"; }
 
   //: accessors
   boxm2_block_id&           block_id()          { return block_id_; }         //somehow make this a const return..
@@ -94,16 +96,16 @@ class boxm2_block : public vbl_ref_count
   // Sets the trees of the current block
   void set_trees(const boxm2_array_3d<uchar16>& that){
     if(that.get_row1_count()!=this->trees_.get_row1_count() || that.get_row2_count()!=this->trees_.get_row2_count() || that.get_row3_count()!=this->trees_.get_row3_count()){
-      vcl_cout<<"Cannot assign tree array to block id "<<this->block_id_<<" ; sizes mismatch!"<<vcl_endl;
+      std::cout<<"Cannot assign tree array to block id "<<this->block_id_<<" ; sizes mismatch!"<<std::endl;
       return;
       }
-    vcl_memcpy(this->trees_.data_block() , that.data_block(),that.size() * 16);
+    std::memcpy(this->trees_.data_block() , that.data_block(),that.size() * 16);
     n_cells_ = this->recompute_num_cells();
   }
   // Returns a deep copy of the current tree array. The caller will take ownership; Use this method to modify the current tree array
   boxm2_array_3d<uchar16> trees_copy(){
     uchar16 * copy_buff = new uchar16[trees_.size()];
-    vcl_memcpy(copy_buff, this->trees_.data_block() ,trees_.size() * 16);
+    std::memcpy(copy_buff, this->trees_.data_block() ,trees_.size() * 16);
     return boxm2_array_3d<uchar16>(trees_.get_row1_count(),trees_.get_row2_count(),trees_.get_row3_count(),copy_buff);
 
   }
@@ -133,19 +135,19 @@ class boxm2_block : public vbl_ref_count
   bool data_index(vgl_point_3d<double> const& global_pt, unsigned& index) const;
 
   //: retrieve a vector of cell centers and other info inside the specified bounding box, both in global world coordinates
-  vcl_vector<cell_info> cells_in_box(vgl_box_3d<double> const& global_box);
+  std::vector<cell_info> cells_in_box(vgl_box_3d<double> const& global_box);
 
   // find neigboring sub_block cell centers within a specified distance from probe, including the cell containing the probe
-  vcl_vector<vgl_point_3d<double> > sub_block_neighbors(vgl_point_3d<double> const& probe, double distance) const;
+  std::vector<vgl_point_3d<double> > sub_block_neighbors(vgl_point_3d<double> const& probe, double distance) const;
 
   //: retrieve neighborhood of probe consisting of leaf cells. If relative_distance is true then the neighborhood distance
   // is scaled according to the size of the cell containing the probe. Otherwise the distance is absolute, e.g. meters.
-  void leaf_neighbors(vgl_point_3d<double> const& probe, double distance, vcl_vector<vgl_point_3d<double> >& nbrs,
-                      vcl_vector<double>& nbr_edge_lengths, vcl_vector<unsigned>& data_indices, bool relative_distance = true) const;
+  void leaf_neighbors(vgl_point_3d<double> const& probe, double distance, std::vector<vgl_point_3d<double> >& nbrs,
+                      std::vector<double>& nbr_edge_lengths, std::vector<unsigned>& data_indices, bool relative_distance = true) const;
   /////
   //=== sub_block intersection methods ====//
   ////
-  vcl_vector<vgl_point_3d<int> >  sub_blocks_intersect_box(vgl_box_3d<double> const& box) const;
+  std::vector<vgl_point_3d<int> >  sub_blocks_intersect_box(vgl_box_3d<double> const& box) const;
   ////
  private:
   unsigned recompute_num_cells();
@@ -181,10 +183,10 @@ class boxm2_block : public vbl_ref_count
 typedef vbl_smart_ptr<boxm2_block> boxm2_block_sptr;
 
 //: output stream
-vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block);
+std::ostream& operator <<(std::ostream &s, boxm2_block& block);
 
 //: write to xml file
-//void x_write(vcl_ostream &os, boxm2_block& scene, vcl_string name);
+//void x_write(std::ostream &os, boxm2_block& scene, std::string name);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_block const& scene);

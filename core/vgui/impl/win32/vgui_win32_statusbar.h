@@ -10,8 +10,9 @@
 // Modifications:
 //  August 4, 2009              Initial version
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h> // for the declaration of vcl_ostream
+#include <string>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_statusbar.h>
 #include <vgui/vgui_statusbuf.h>
@@ -37,9 +38,9 @@ class vgui_win32_statusbar : public vgui_statusbar
   //: Append given text to the status bar
   virtual int write(const char* text);
 
-  vcl_string linebuffer;
+  std::string linebuffer;
   vgui_statusbuf *statusbuf;
-  vcl_ostream out;
+  std::ostream out;
 
  private:
   static int statusBarID;

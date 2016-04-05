@@ -9,9 +9,10 @@ class vil_nitf2_field;
 class vil_nitf2_enum_values;
 class vil_nitf2_index_vector;
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <string>
+#include <vector>
+#include <map>
+#include <vcl_compiler.h>
 #include "vil_nitf2_field_sequence.h"
 
 //-----------------------------------------------------------------------------
@@ -63,17 +64,17 @@ class vil_nitf2_field_functor
 // if 0 was a special value that actually meant 1 but all other values
 // (2, 3, 4...) actually meant when they were you could get that effect like this:
 // <code>
-// vcl_map< int, int > overrides;
-// overrides.insert( vcl_make_pair( 0, 1 ) );
+// std::map< int, int > overrides;
+// overrides.insert( std::make_pair( 0, 1 ) );
 // new vil_nitf2_field_value( "FIELD_NAME", overrides );
 // </code>
 template<typename T>
 class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
 {
  public:
-  vil_nitf2_field_value(vcl_string tag) : tag(tag) {}
+  vil_nitf2_field_value(std::string tag) : tag(tag) {}
 
-  vil_nitf2_field_value(vcl_string tag, vcl_map<T, T> overrideMap )
+  vil_nitf2_field_value(std::string tag, std::map<T, T> overrideMap )
     : tag(tag), overrides( overrideMap ) {}
 
   virtual vil_nitf2_field_functor<T>* copy() const {
@@ -85,7 +86,7 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
     bool success = record->get_value(tag, indexes, value, true);
     if ( success ) {
       //check to see if this value is overridden or not
-      typename vcl_map<T, T>::const_iterator it = overrides.find( value );
+      typename std::map<T, T>::const_iterator it = overrides.find( value );
       if ( it != overrides.end() ){
         //found override, use it
         value = (*it).second;
@@ -95,8 +96,8 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
   }
 
  private:
-  vcl_string tag;
-  vcl_map<T, T> overrides;
+  std::string tag;
+  std::map<T, T> overrides;
 };
 
 //:
@@ -108,8 +109,8 @@ class vil_nitf2_field_value : public vil_nitf2_field_functor<T>
 class vil_nitf2_multiply_field_values : public vil_nitf2_field_functor<int>
 {
  public:
-  vil_nitf2_multiply_field_values(const vcl_string& tag_1,
-                                  const vcl_string& tag_2,
+  vil_nitf2_multiply_field_values(const std::string& tag_1,
+                                  const std::string& tag_2,
                                   bool use_zero_if_tag_not_found = false)
     : tag_1(tag_1),
       tag_2(tag_2),
@@ -124,8 +125,8 @@ class vil_nitf2_multiply_field_values : public vil_nitf2_field_functor<int>
                    const vil_nitf2_index_vector& indexes, int& value);
 
  private:
-  vcl_string tag_1;
-  vcl_string tag_2;
+  std::string tag_1;
+  std::string tag_2;
   bool use_zero_if_tag_not_found;
 };
 
@@ -139,7 +140,7 @@ class vil_nitf2_max_field_value_plus_offset_and_threshold : public vil_nitf2_fie
 {
  public:
   vil_nitf2_max_field_value_plus_offset_and_threshold(
-    vcl_string tag, int offset, int min_threshold = 0, int tag_factor = 1 )
+    std::string tag, int offset, int min_threshold = 0, int tag_factor = 1 )
     : tag(tag), offset(offset), min_threshold(min_threshold), tag_factor( tag_factor ) {}
 
   vil_nitf2_field_functor<int>* copy() const {
@@ -150,7 +151,7 @@ class vil_nitf2_max_field_value_plus_offset_and_threshold : public vil_nitf2_fie
                    const vil_nitf2_index_vector& indexes, int& value);
 
  private:
-  vcl_string tag;
+  std::string tag;
   int offset;
   int min_threshold;
   int tag_factor;
@@ -166,7 +167,7 @@ template<typename T>
 class vil_nitf2_field_value_greater_than: public vil_nitf2_field_functor<bool>
 {
  public:
-  vil_nitf2_field_value_greater_than(vcl_string tag, T threshold)
+  vil_nitf2_field_value_greater_than(std::string tag, T threshold)
     : tag(tag), threshold(threshold) {}
 
   vil_nitf2_field_functor<bool>* copy() const {
@@ -184,7 +185,7 @@ class vil_nitf2_field_value_greater_than: public vil_nitf2_field_functor<bool>
     }
   }
  private:
-  vcl_string tag;
+  std::string tag;
   T threshold;
 };
 
@@ -195,7 +196,7 @@ class vil_nitf2_field_value_greater_than: public vil_nitf2_field_functor<bool>
 class vil_nitf2_field_specified: public vil_nitf2_field_functor<bool>
 {
  public:
-  vil_nitf2_field_specified(vcl_string tag) : tag(tag) {}
+  vil_nitf2_field_specified(std::string tag) : tag(tag) {}
 
   vil_nitf2_field_functor<bool>* copy() const {
     return new vil_nitf2_field_specified(tag); }
@@ -204,24 +205,24 @@ class vil_nitf2_field_specified: public vil_nitf2_field_functor<bool>
                    const vil_nitf2_index_vector& indexes, bool& result);
 
  private:
-  vcl_string tag;
+  std::string tag;
 };
 
 //:
 // Functor vil_nitf2_field_value_one_of defines a predicate that sets its out
 // parameter to true iff the value of the specified tag equals one of
-// the elements of a vcl_vector of acceptable values.
+// the elements of a std::vector of acceptable values.
 //
 template<typename T>
 class vil_nitf2_field_value_one_of: public vil_nitf2_field_functor<bool>
 {
  public:
-  /// Constructor to specify a vcl_vector of acceptable values
-  vil_nitf2_field_value_one_of(vcl_string tag, vcl_vector<T> acceptable_values)
+  /// Constructor to specify a std::vector of acceptable values
+  vil_nitf2_field_value_one_of(std::string tag, std::vector<T> acceptable_values)
     : tag(tag), acceptable_values(acceptable_values) {}
 
   /// Constructor to specify only one acceptable value
-  vil_nitf2_field_value_one_of(vcl_string tag, T acceptable_value)
+  vil_nitf2_field_value_one_of(std::string tag, T acceptable_value)
     : tag(tag), acceptable_values(1, acceptable_value) {}
 
   vil_nitf2_field_functor<bool>* copy() const {
@@ -233,7 +234,7 @@ class vil_nitf2_field_value_one_of: public vil_nitf2_field_functor<bool>
     result = false;
     T val;
     if (record->get_value(tag, indexes, val, true)) {
-      typename vcl_vector<T>::iterator it;
+      typename std::vector<T>::iterator it;
       for (it = acceptable_values.begin(); it != acceptable_values.end(); ++it) {
         if ((*it) == val) {
           result = true;
@@ -247,8 +248,8 @@ class vil_nitf2_field_value_one_of: public vil_nitf2_field_functor<bool>
   }
 
  protected:
-  vcl_string tag;
-  vcl_vector<T> acceptable_values;
+  std::string tag;
+  std::vector<T> acceptable_values;
 };
 
 //:
@@ -263,7 +264,7 @@ class vil_nitf2_choose_field_value : public vil_nitf2_field_functor<T>
 {
  public:
   /// Constructor. I take ownership of inDecider.
-  vil_nitf2_choose_field_value(const vcl_string& tag_1, const vcl_string& tag_2,
+  vil_nitf2_choose_field_value(const std::string& tag_1, const std::string& tag_2,
                                vil_nitf2_field_functor<bool>* choose_tag_1_predicate)
     : tag_1(tag_1), tag_2(tag_2), choose_tag_1_predicate(choose_tag_1_predicate) {}
 
@@ -285,8 +286,8 @@ class vil_nitf2_choose_field_value : public vil_nitf2_field_functor<T>
     else return false;
   }
  private:
-  vcl_string tag_1;
-  vcl_string tag_2;
+  std::string tag_1;
+  std::string tag_2;
   vil_nitf2_field_functor<bool>* choose_tag_1_predicate;
 };
 

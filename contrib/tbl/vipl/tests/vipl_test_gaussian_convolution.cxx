@@ -26,7 +26,7 @@ int vipl_test_gaussian_convolution()
   vil_image_view<short> shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
   vil_image_view<float> flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
 
-  vcl_string m = "vipl_gaussian_convolution";
+  std::string m = "vipl_gaussian_convolution";
   ALL_TESTS(vipl_gaussian_convolution,m,1.0);
 
   return 0;

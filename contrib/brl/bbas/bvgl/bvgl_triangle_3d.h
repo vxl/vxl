@@ -7,9 +7,11 @@
 // \author Jan 30, 2012 Andrew Miller
 //
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 template <class Type>
 class bvgl_triangle_3d
@@ -32,24 +34,24 @@ class bvgl_triangle_3d
   // ----- IO --------
 
   //: Write "<vgl_box_3d x0,y0,z0 to x1,y1,z1>" to stream
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 
   //: Write "x0 y0 z0 x1 y1 z1(endl)" to stream
-  vcl_ostream& write(vcl_ostream&) const;
+  std::ostream& write(std::ostream&) const;
 
   //: Read x0,y0,z0,x1,y1,z1 from stream
-  vcl_istream& read(vcl_istream&);
+  std::istream& read(std::istream&);
 
  private:
   vgl_point_3d<Type> points_[3];
 };
 
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, bvgl_triangle_3d<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, bvgl_triangle_3d<Type> const& p);
 
 //: Read box from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  bvgl_triangle_3d<Type>& p);
+std::istream&  operator>>(std::istream& is,  bvgl_triangle_3d<Type>& p);
 
 #define BVGL_TRIANGLE_3D(T) extern "please include bbas/bvgl/bvgl_triangle_3d.txx first"
 

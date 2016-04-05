@@ -19,7 +19,8 @@
 //   16-NOV-2007 Gamze Tunali - added produce_dialog_extension()
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgui/vgui_toolkit.h>
 class vgui_mfc_adaptor;
 class vgui_mfc_window;
@@ -36,7 +37,7 @@ class vgui_mfc : public vgui_toolkit
   // singleton method
   static vgui_mfc* instance();
 
-  virtual vcl_string name() const;
+  virtual std::string name() const;
 
   virtual void run();
   virtual void run_one_event();
@@ -62,7 +63,7 @@ class vgui_mfc : public vgui_toolkit
   void init(int &, char **);
   void uninit();
   vgui_mfc_app* theApp_;
-  vcl_vector<vgui_window*> windows_to_delete;
+  std::vector<vgui_window*> windows_to_delete;
 };
 
 #endif // vgui_mfc_h_

@@ -1,5 +1,6 @@
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <pop/pop_vertex.h>
 #include <pop/pop_edge.h>
@@ -27,7 +28,7 @@ int main(int argc, char** argv)
   // get six parameters for a rigid transform
   pop_manager pm;
 
-  vcl_vector<pop_parameter*> params = pm.new_parameters(6);
+  std::vector<pop_parameter*> params = pm.new_parameters(6);
 
   // set the rotation to non changeable and just test the translation component.
   // the first 3 parameters are rotation and the second 3 are translation.
@@ -63,7 +64,7 @@ int main(int argc, char** argv)
   // now make 10 observables, 10 observations and
   // 10 cost functions
 
-  vcl_vector<pop_geometric_cost_function*> cfs(10);
+  std::vector<pop_geometric_cost_function*> cfs(10);
 
   int i;
   double x;
@@ -102,7 +103,7 @@ int main(int argc, char** argv)
     // now make a cost function between the observable and the observation
 
     if (!(observable->cast_to_pop_point_3d())) {
-        vcl_cout << "cannot safely downcast\n";
+        std::cout << "cannot safely downcast\n";
     }
 
     pop_geometric_cost_function *cf = new pop_geometric_cost_function(observable,observation);
@@ -118,12 +119,12 @@ int main(int argc, char** argv)
   // it should be 0 rotation and a translation in the x direction
 
   params = e.get_transform()->get_parameters();
-  vcl_cout << "The new transform parameters are\n";
+  std::cout << "The new transform parameters are\n";
   for (i=0;i<params.size();i++) {
-    vcl_cout << params[i]->value_ << vcl_endl;
+    std::cout << params[i]->value_ << std::endl;
   }
 
-  vcl_cout << "We want something like 0 0 0 1 0 0\n";
+  std::cout << "We want something like 0 0 0 1 0 0\n";
 
   return 0;
 }

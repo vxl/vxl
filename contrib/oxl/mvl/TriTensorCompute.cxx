@@ -13,10 +13,10 @@
 BaseTriTensorCompute::BaseTriTensorCompute ()
 {
   // zero length list.
-  matchlineseg_list_ptr_ = new vcl_list<HomgMatchLineSeg2D2D2D*> ();
+  matchlineseg_list_ptr_ = new std::list<HomgMatchLineSeg2D2D2D*> ();
 
   // zero length list.
-  matchpoint_list_ptr_ = new vcl_list<HomgMatchPoint2D2D2D*> ();
+  matchpoint_list_ptr_ = new std::list<HomgMatchPoint2D2D2D*> ();
 }
 
 // Destructor.
@@ -29,7 +29,7 @@ BaseTriTensorCompute::~BaseTriTensorCompute()
 //: append match_list to the list of matched linesegments
 
 void
-BaseTriTensorCompute::add_matches (vcl_list<HomgMatchLineSeg2D2D2D*> *match_list)
+BaseTriTensorCompute::add_matches (std::list<HomgMatchLineSeg2D2D2D*> *match_list)
 {
   delete matchlineseg_list_ptr_;
   matchlineseg_list_ptr_ = match_list;
@@ -40,7 +40,7 @@ BaseTriTensorCompute::add_matches (vcl_list<HomgMatchLineSeg2D2D2D*> *match_list
 //: append match_list to the list of matched points
 
 void
-BaseTriTensorCompute::add_matches (vcl_list<HomgMatchPoint2D2D2D*> *match_list)
+BaseTriTensorCompute::add_matches (std::list<HomgMatchPoint2D2D2D*> *match_list)
 {
   delete matchpoint_list_ptr_;
   matchpoint_list_ptr_ = match_list;

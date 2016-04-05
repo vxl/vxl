@@ -2,11 +2,13 @@
 // \author Peter Vanroose
 // \date 13 November 2004
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_digital_curve_3d.h>
@@ -16,7 +18,7 @@
 
 void test_vsol_digital_curve_3d()
 {
-  vcl_vector<vsol_point_3d_sptr> samples(5);
+  std::vector<vsol_point_3d_sptr> samples(5);
   samples[0]=new vsol_point_3d(0.0,0.0,0.0);
   samples[1]=new vsol_point_3d(1.0,2.0,3.0);
   samples[2]=new vsol_point_3d(2.5,3.5,4.5);
@@ -49,43 +51,43 @@ void test_vsol_digital_curve_3d()
   TEST("vsol_digital_curve_3d::interp(2.0)",
        dc->interp(2.0), vgl_point_3d<double>(2.5,3.5,4.5));
 
-  vcl_cout << "digital curve: " << *dc << vcl_endl;
+  std::cout << "digital curve: " << *dc << std::endl;
   vsol_digital_curve_3d_sptr curve1, curve2;
   // Split the curve at a segment
   double index = closest_index(vgl_point_3d<double>(1.5,3.0,4.0),dc);
   TEST_NEAR("closest_index at (1.5,3.0,4.0)", index, 14.0/9, 1e-12);
   bool split_test = split(dc, 1.5, curve1, curve2);
   TEST("split curve at 1.5", split_test && curve1 && curve2, true);
-  vcl_cout << "curve 1: " << *curve1 << vcl_endl
-           << curve1->point(2)->get_p() << vcl_endl;
+  std::cout << "curve 1: " << *curve1 << std::endl
+           << curve1->point(2)->get_p() << std::endl;
   TEST("split result 1", curve1->point(2)->get_p() == vgl_point_3d<double>(1.75,2.75,3.75)
                          && curve1->size() == 3, true);
-  vcl_cout << "curve 2: " << *curve2 << vcl_endl
-           << curve2->point(0)->get_p() << vcl_endl;
+  std::cout << "curve 2: " << *curve2 << std::endl
+           << curve2->point(0)->get_p() << std::endl;
   TEST("split result 2", curve2->point(0)->get_p() == vgl_point_3d<double>(1.75,2.75,3.75)
                          && curve2->size() == 4, true);
 
   // Split the curve at a point
   index = closest_index(vgl_point_3d<double>(5.0,2.0,-1.0),dc);
-  vcl_cout << index << vcl_endl;
+  std::cout << index << std::endl;
   TEST("closest_index at (5.0,2.0,-1)", index, 3.0);
   split_test = split(dc, index, curve1, curve2);
   TEST("split curve at this index", split_test && curve1 && curve2, true);
-  vcl_cout << "curve 1: " << *curve1 << vcl_endl;
+  std::cout << "curve 1: " << *curve1 << std::endl;
   TEST("split result 1", curve1->point(3)->get_p() == vgl_point_3d<double>(4.5,3.0,-1.0)
                          && curve1->size() == 4, true);
-  vcl_cout << "curve 2: " << *curve2 << vcl_endl;
+  std::cout << "curve 2: " << *curve2 << std::endl;
   TEST("split result 2", curve2->point(0)->get_p() == vgl_point_3d<double>(4.5,3.0,-1.0)
                          && curve2->size() == 2, true);
 
   // Split curve at its end points (this should fail)
   index = closest_index(vgl_point_3d<double>(7.0,5.0,1.0),dc);
-  vcl_cout << index << vcl_endl;
+  std::cout << index << std::endl;
   TEST("closest_index at (7.0,5.0,1.0)", index, 4.0);
   split_test = split(dc, index, curve1, curve2);
   TEST("split curve at 4.0 (end)", split_test, false);
   index = closest_index(vgl_point_3d<double>(0.0,-1.0,-2.0),dc);
-  vcl_cout << index << vcl_endl;
+  std::cout << index << std::endl;
   TEST("closest_index at (0.0,-1.0)", index, 0.0);
   split_test = split(dc, index, curve1, curve2);
   TEST("split curve at 0.0 (start)", split_test, false);

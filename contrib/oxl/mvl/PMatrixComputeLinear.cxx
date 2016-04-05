@@ -1,9 +1,11 @@
 // This is oxl/mvl/PMatrixComputeLinear.cxx
+#include <iostream>
+#include <vector>
 #include "PMatrixComputeLinear.h"
 //:
 //  \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
@@ -32,8 +34,8 @@
 // \right)
 // \f]
 bool
-PMatrixComputeLinear::compute(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                              vcl_vector<vgl_homg_point_3d<double> > const& points2,
+PMatrixComputeLinear::compute(std::vector<vgl_homg_point_2d<double> > const& points1,
+                              std::vector<vgl_homg_point_3d<double> > const& points2,
                               PMatrix *P)
 {
   assert(P);
@@ -85,7 +87,7 @@ PMatrixComputeLinear::compute(vcl_vector<vgl_homg_point_2d<double> > const& poin
 }
 
 bool
-PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D> const& points1, vcl_vector<HomgPoint3D> const& points2, PMatrix *P)
+PMatrixComputeLinear::compute (std::vector<HomgPoint2D> const& points1, std::vector<HomgPoint3D> const& points2, PMatrix *P)
 {
   assert(P);
   assert(points1.size() >= 6);

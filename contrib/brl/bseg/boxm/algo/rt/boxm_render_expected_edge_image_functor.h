@@ -2,6 +2,7 @@
 #define boxm_render_expected_edge_image_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_rt_sample.h>
@@ -13,7 +14,7 @@
 #include <sdet/sdet_img_edge.h>
 
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 template <boxm_apm_type APM, class T_aux>
@@ -48,7 +49,7 @@ class boxm_render_expected_edge_image_functor
 
     // keep the max value in expected image
     // if (expected_(i,j) < exp)
-    expected_(i,j) =  vnl_math::max(expected_(i,j), exp);
+    expected_(i,j) =  std::max(expected_(i,j), exp);
 
     return true;
   }
@@ -69,7 +70,7 @@ class normalize_expected_functor_edge
   normalize_expected_functor_edge(float n_normal, unsigned int dof) : n_normal_(n_normal), dof_(dof)
   {
 #ifdef DEBUG
-    vcl_cout << "Degrees of freedom: " << dof << vcl_endl;
+    std::cout << "Degrees of freedom: " << dof << std::endl;
 #endif
   }
 

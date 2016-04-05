@@ -84,19 +84,19 @@ void vgui_dialog::field(const char* txt, double& v)
   if (impl) impl->double_field(txt, v);
 }
 
-void vgui_dialog::field(const char* txt, vcl_string& v)
+void vgui_dialog::field(const char* txt, std::string& v)
 {
   if (impl) impl->string_field(txt, v);
 }
 
-void vgui_dialog::choice(const char* txt, const vcl_vector<vcl_string>& labels, int& v)
+void vgui_dialog::choice(const char* txt, const std::vector<std::string>& labels, int& v)
 {
   if (impl) impl->choice_field(txt, labels, v);
 }
 
 void vgui_dialog::choice(const char* label, const char* option1, const char* option2, int& chosen)
 {
-  vcl_vector<vcl_string> strs;
+  std::vector<std::string> strs;
   strs.push_back(option1);
   strs.push_back(option2);
   choice(label, strs, chosen);
@@ -104,30 +104,30 @@ void vgui_dialog::choice(const char* label, const char* option1, const char* opt
 
 void vgui_dialog::choice(const char* label, const char* option1, const char* option2, const char* option3, int& chosen)
 {
-  vcl_vector<vcl_string> strs;
+  std::vector<std::string> strs;
   strs.push_back(option1);
   strs.push_back(option2);
   strs.push_back(option3);
   choice(label, strs, chosen);
 }
 
-void vgui_dialog::file(const char* label, vcl_string& regexp, vcl_string& v)
+void vgui_dialog::file(const char* label, std::string& regexp, std::string& v)
 {
   if (impl) impl->file_browser(label, regexp, v);
 }
 
-void vgui_dialog::inline_file(const char* label,vcl_string& regexp,
-                              vcl_string& v)
+void vgui_dialog::inline_file(const char* label,std::string& regexp,
+                              std::string& v)
 {
   if (impl) impl->inline_file_browser(label, regexp, v);
 }
 
-void vgui_dialog::color(const char* label, vcl_string& v)
+void vgui_dialog::color(const char* label, std::string& v)
 {
   if (impl) impl->color_chooser(label, v);
 }
 
-void vgui_dialog::inline_color(const char* label, vcl_string& v)
+void vgui_dialog::inline_color(const char* label, std::string& v)
 {
   if (impl) impl->inline_color_chooser(label, v);
 }

@@ -15,9 +15,11 @@
 // \endverbatim
 
 
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_ref_count.h>
 #include <bprb/bprb_process_sptr.h>
@@ -33,13 +35,13 @@ class bprb_process_manager : public vbl_ref_count
   //: Use this instead of constructor
   static T* instance();
 
-  bprb_process_sptr get_process_by_name( const vcl_string& name ) const;
+  bprb_process_sptr get_process_by_name( const std::string& name ) const;
 
   void add_process_to_queue(const bprb_process_sptr& process);
   void delete_last_process();
   void clear_process_queue();
 
-  vcl_vector <vcl_string> get_process_queue_list() const;
+  std::vector <std::string> get_process_queue_list() const;
 
   static void register_process( const bprb_process_sptr& sptr );
 
@@ -53,9 +55,9 @@ class bprb_process_manager : public vbl_ref_count
   //: Initialize the static instance
   void initialize();
 
-  static vcl_map< vcl_string , bprb_process_sptr > process_map;
+  static std::map< std::string , bprb_process_sptr > process_map;
 
-  vcl_vector< bprb_process_sptr > process_queue;
+  std::vector< bprb_process_sptr > process_queue;
 };
 
 #endif // bprb_process_manager_h_

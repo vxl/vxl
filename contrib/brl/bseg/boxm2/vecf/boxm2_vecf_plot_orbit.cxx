@@ -3,7 +3,7 @@
 #include "boxm2_vecf_eyelid_crease.h"
 
 void boxm2_vecf_plot_orbit::
-plot_inferior_margin(boxm2_vecf_orbit_params const& opr, bool is_right, double xm_min, double xm_max, vcl_vector<vgl_point_3d<double> >& pts, int n_pts){
+plot_inferior_margin(boxm2_vecf_orbit_params const& opr, bool is_right, double xm_min, double xm_max, std::vector<vgl_point_3d<double> >& pts, int n_pts){
   double min_tinf = opr.lower_eyelid_tmin_;
   boxm2_vecf_eyelid lid = boxm2_vecf_eyelid(opr, false);
   double incr = n_pts != 0  ? (xm_max - xm_min)/(n_pts-1) : 0.25;
@@ -22,12 +22,12 @@ plot_inferior_margin(boxm2_vecf_orbit_params const& opr, bool is_right, double x
     vgl_point_3d<double> min_p(xm, min_yy, min_zz);
     pts.push_back(min_p);
   }
-    vcl_cout<<pts.back().x()<<" "<<pts[pts.size()-2].x()<<" "<<xm_max<<" "<<incr<<vcl_endl;
+    std::cout<<pts.back().x()<<" "<<pts[pts.size()-2].x()<<" "<<xm_max<<" "<<incr<<std::endl;
 
 }
 
 void boxm2_vecf_plot_orbit::
-plot_superior_margin(boxm2_vecf_orbit_params const& opr, bool is_right, double xm_min, double xm_max,vcl_vector<vgl_point_3d<double> >& pts,int n_pts){
+plot_superior_margin(boxm2_vecf_orbit_params const& opr, bool is_right, double xm_min, double xm_max,std::vector<vgl_point_3d<double> >& pts,int n_pts){
   boxm2_vecf_eyelid lid = boxm2_vecf_eyelid(opr, true);
   double lid_t = opr.eyelid_tmin_;
   double incr = n_pts != 0 ? (xm_max - xm_min)/(n_pts - 1) : 0.25;
@@ -50,7 +50,7 @@ plot_superior_margin(boxm2_vecf_orbit_params const& opr, bool is_right, double x
 }
 
 void boxm2_vecf_plot_orbit::
-plot_crease(boxm2_vecf_orbit_params const& opr, bool is_right, double xm_min, double xm_max, vcl_vector<vgl_point_3d<double> >& pts,int n_pts){
+plot_crease(boxm2_vecf_orbit_params const& opr, bool is_right, double xm_min, double xm_max, std::vector<vgl_point_3d<double> >& pts,int n_pts){
   boxm2_vecf_eyelid_crease crease = boxm2_vecf_eyelid_crease(opr);
   double ct = opr.eyelid_crease_ct_;
   double incr = n_pts != 0 ? (xm_max - xm_min)/(n_pts - 1 ) : 0.25;
@@ -72,7 +72,7 @@ plot_crease(boxm2_vecf_orbit_params const& opr, bool is_right, double xm_min, do
   //ensure that the canthi get included, in the case of fixed number of point sampling
 }
 bool boxm2_vecf_plot_orbit::
-plot_limits(vcl_vector<vgl_point_3d<double> > const& inf_pts, vcl_vector<vgl_point_3d<double> > const& sup_pts, int& imin, int& imax){
+plot_limits(std::vector<vgl_point_3d<double> > const& inf_pts, std::vector<vgl_point_3d<double> > const& sup_pts, int& imin, int& imax){
   // find the inferior and superior crossing points (canthi)
   int n  = static_cast<int>(inf_pts.size());
   imin = -1; imax = -1; //impossible values

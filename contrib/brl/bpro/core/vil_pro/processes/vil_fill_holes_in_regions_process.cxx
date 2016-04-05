@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_fill_holes_in_regions_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,21 +9,20 @@
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //: Constructor
 bool vil_fill_holes_in_regions_process_cons(bprb_func_process& pro)
 {
   //this process takes one input: the filename
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
 
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -34,7 +35,7 @@ bool vil_fill_holes_in_regions_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vil_fill_holes_in_regions_process: The number of inputs should be 1" << vcl_endl;
+    std::cout << "vil_fill_holes_in_regions_process: The number of inputs should be 1" << std::endl;
     return false;
   }
 
@@ -51,33 +52,33 @@ bool vil_fill_holes_in_regions_process(bprb_func_process& pro)
     for (unsigned k = 0; k< ni; k++)
     {
       if (k % 10 == 0)
-        vcl_cout<<k<<vcl_endl;
+        std::cout<<k<<std::endl;
       for (unsigned l = 0; l< nj; l++)
       {
         if ((*view)(k,l) == 0)
         {
           unsigned char labels[256]={0};
 
-          for (unsigned int s = k; (int)s >= vcl_max((int)k-10,0) ; s-- )
+          for (unsigned int s = k; (int)s >= std::max((int)k-10,0) ; s-- )
             if ( (*view)(s,l) > 0 )
             {
               labels[(int)((*view)(s,l))]++;
               break;
             }
-          for (unsigned int s = k; (int)s < vcl_min((int)k+10,(int)ni) ; s++ )
+          for (unsigned int s = k; (int)s < std::min((int)k+10,(int)ni) ; s++ )
           if ( (*view)(s,l) > 0 )
           {
             labels[(int)((*view)(s,l))]++;
             break;
           }
-          unsigned int lmax = (unsigned int)vcl_max((int)l-10,(int)0);
+          unsigned int lmax = (unsigned int)std::max((int)l-10,(int)0);
           for (unsigned int s = l; s > lmax  ; s-- )
           if ( (*view)(k,s) > 0 )
           {
             labels[(int)((*view)(k,s))]++;
             break;
           }
-          for (unsigned int s = l; (int)s < vcl_min((int)l+10,(int)nj) ; s++ )
+          for (unsigned int s = l; (int)s < std::min((int)l+10,(int)nj) ; s++ )
           if ( (*view)(k,s) > 0 )
           {
             labels[(int)((*view)(k,s))]++;
@@ -99,6 +100,6 @@ bool vil_fill_holes_in_regions_process(bprb_func_process& pro)
     return true;
   }
 
-  vcl_cerr<<"Error! Require a Byte image\n";
+  std::cerr<<"Error! Require a Byte image\n";
   return false;
 }

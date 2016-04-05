@@ -70,7 +70,7 @@ main( int argc, char ** argv )
   {
     back_img = vil_load( background() );
     if ( !back_img )
-      vcl_cerr << "Couldn't load background image " << background() << '\n';
+      std::cerr << "Couldn't load background image " << background() << '\n';
   }
   if ( !back_img )
   {
@@ -85,7 +85,7 @@ main( int argc, char ** argv )
   {
     sprite_img = vil_load( sprite() );
     if ( !sprite_img )
-      vcl_cerr << "Couldn't load foreground sprite image " << sprite() << '\n';
+      std::cerr << "Couldn't load foreground sprite image " << sprite() << '\n';
   }
   if ( !sprite_img )
   {
@@ -101,11 +101,11 @@ main( int argc, char ** argv )
     sprite_img = img;
   }
 
-  vcl_cout << "Move sprite around with\n"
+  std::cout << "Move sprite around with\n"
            << " left:  " << left_event.as_string() << '\n'
            << " right: " << right_event.as_string() << '\n'
            << " up:    " << up_event.as_string() << '\n'
-           << " down:  " << down_event.as_string() << vcl_endl;
+           << " down:  " << down_event.as_string() << std::endl;
 
   vgui_image_tableau_new    back_img_tab( *back_img );
   vgui_easy2D_tableau_new   easy2d_tab( back_img_tab );

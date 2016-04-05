@@ -12,7 +12,9 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 //#include <vil/vil_image_view_base.h>
 
@@ -38,7 +40,7 @@ class bapl_lowe_pyramid
 
  private:
   //: The image data
-  vcl_vector< vcl_vector< vil_image_view< T > > > data_;
+  std::vector< std::vector< vil_image_view< T > > > data_;
 
   //: Number of images per octave
   int octave_size_;

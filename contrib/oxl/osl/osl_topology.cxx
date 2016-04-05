@@ -6,9 +6,11 @@
 // \file
 // \author fsm
 
+#include <new>
+#include <iostream>
+#include <cstring>
 #include "osl_topology.h"
-#include <vcl_new.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <osl/osl_hacks.h>
 
 // Set this to 1 if you think it can avoid heap corruption, and
@@ -29,7 +31,7 @@ struct osl_stash_link {
   osl_stash_link *next;
 };
 
-osl_topology_base::osl_topology_base() : id(0), stash_head(0) { }
+osl_topology_base::osl_topology_base() : id(0), stash_head(VXL_NULLPTR) { }
 void  osl_topology_base::stash_add(char const *name,
                                    void const *data,
                                    void (*dtor)(void *))
@@ -43,7 +45,7 @@ void  osl_topology_base::stash_replace(char const *name,
                                        void (*dtor)(void *))
 {
   for (osl_stash_link *l = stash_head; l; l=l->next) {
-    if (vcl_strcmp(l->name, name) == 0) {
+    if (std::strcmp(l->name, name) == 0) {
       l->name = name;
       l->data = const_cast<void*>(data);
       l->dtor = dtor;
@@ -56,15 +58,15 @@ void  osl_topology_base::stash_replace(char const *name,
 
 void *osl_topology_base::stash_retrieve(char const *name) const {
   for (osl_stash_link *l = stash_head; l; l=l->next)
-    if (vcl_strcmp(l->name, name) == 0)
+    if (std::strcmp(l->name, name) == 0)
       return l->data;
   // not found
-  return 0;
+  return VXL_NULLPTR;
 }
 
 void *osl_topology_base::stash_remove(char const *name) {
-  for (osl_stash_link *p = 0, *l = stash_head; l; p=l, l=p->next) {
-    if (vcl_strcmp(l->name, name) == 0) {
+  for (osl_stash_link *p = VXL_NULLPTR, *l = stash_head; l; p=l, l=p->next) {
+    if (std::strcmp(l->name, name) == 0) {
       if (p)
         p->next = l->next;
       else
@@ -73,7 +75,7 @@ void *osl_topology_base::stash_remove(char const *name) {
     }
   }
   // not found
-  return 0;
+  return VXL_NULLPTR;
 }
 
 osl_topology_base::~osl_topology_base() {

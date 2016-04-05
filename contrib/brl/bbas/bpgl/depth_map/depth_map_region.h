@@ -14,8 +14,11 @@
 //     Yi Dong     SEP--2014    added height of the region
 // \endverbatim
 // units are in meters
+#include <iostream>
+#include <limits>
+#include <string>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -24,7 +27,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vcl_string.h>
 #include <vsl/vsl_binary_io.h>
 
 
@@ -38,7 +40,7 @@ class depth_map_region : public vbl_ref_count
   depth_map_region(vsol_polygon_2d_sptr const& region,
                    vgl_plane_3d<double> const& region_plane,
                    double const& min_depth, double const& max_depth,
-                   vcl_string const& name,
+                   std::string const& name,
                    depth_map_region::orientation orient,
                    unsigned const& land_id = 0,
                    double const& height = -1.0,
@@ -48,13 +50,13 @@ class depth_map_region : public vbl_ref_count
   //: constructor for a fixed plane, e.g. the ground plane
   depth_map_region(vsol_polygon_2d_sptr const& region,
                    vgl_plane_3d<double> const& region_plane,
-                   vcl_string const& name,
+                   std::string const& name,
                    depth_map_region::orientation orient,
                    unsigned const& land_id = 0);
 
   //: constructor for a region of infinite distance
   depth_map_region(vsol_polygon_2d_sptr const& region,
-                   vcl_string name);
+                   std::string name);
 
   void set_region_3d(vpgl_perspective_camera<double> const& cam);
   void set_region_3d(double depth, vpgl_perspective_camera<double> const& cam);
@@ -75,13 +77,13 @@ class depth_map_region : public vbl_ref_count
   double max_depth() const {return max_depth_;}
   double height()    const {return height_;}
   //: unique name
-  vcl_string name() const {return name_;}
+  std::string name() const {return name_;}
   //: region orientation
   orientation orient_type() const{return orient_type_;}
   //: orientation color
-  static vcl_vector<float> orient_color(unsigned char orient_code);
+  static std::vector<float> orient_color(unsigned char orient_code);
   //: string name for orientation
-  static vcl_string orient_string(unsigned char orient_code);
+  static std::string orient_string(unsigned char orient_code);
   //: region land land classfication id
   unsigned land_id() const { return land_id_; }
   vsol_polygon_3d_sptr region_3d() const {return region_3d_;}
@@ -153,7 +155,7 @@ class depth_map_region : public vbl_ref_count
   unsigned order_;   // depth order
   unsigned land_id_; // land classification id defined in volm_label_table (in volm_io)
   orientation orient_type_;
-  vcl_string name_;
+  std::string name_;
   // depth value for region centroid
   double depth_; //current depth estimate
   double min_depth_; // closest possible centroid depth

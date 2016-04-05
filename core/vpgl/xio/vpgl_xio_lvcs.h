@@ -14,13 +14,14 @@
 //   <none yet>
 // \endverbatim
 
+#include <string>
+#include <iosfwd>
 #include <vpgl/vpgl_lvcs.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: XML save vpgl_lvcs to stream.
 // \relatesalso vpgl_lvcs
-void x_write(vcl_ostream & os, vpgl_lvcs const& v,
-             vcl_string element_name="vpgl_lvcs");
+void x_write(std::ostream & os, vpgl_lvcs const& v,
+             std::string element_name="vpgl_lvcs");
 
 #endif // vpgl_xio_lvcs_h

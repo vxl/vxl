@@ -3,11 +3,13 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <vector>
 #include "TripleMatchSetLineSeg.h"
 
 #include <vcl_cassert.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <mvl/HomgLineSeg2D.h>
 
 #include <mvl/LineSegSet.h>
@@ -41,9 +43,9 @@ void TripleMatchSetLineSeg::set(LineSegSet& lines1, LineSegSet& lines2, LineSegS
   TripleMatchSet::set(new PairMatchSetLineSeg(lines1, lines2), new PairMatchSetLineSeg(lines2, lines3));
 }
 
-void TripleMatchSetLineSeg::extract_matches(vcl_vector<HomgLineSeg2D> &linesegs1, vcl_vector<int> &indices1,
-                                            vcl_vector<HomgLineSeg2D> &linesegs2, vcl_vector<int> &indices2,
-                                            vcl_vector<HomgLineSeg2D> &linesegs3, vcl_vector<int> &indices3) const
+void TripleMatchSetLineSeg::extract_matches(std::vector<HomgLineSeg2D> &linesegs1, std::vector<int> &indices1,
+                                            std::vector<HomgLineSeg2D> &linesegs2, std::vector<int> &indices2,
+                                            std::vector<HomgLineSeg2D> &linesegs3, std::vector<int> &indices3) const
 {
   const LineSegSet* linesegs1_ = get_linesegs1();
   const LineSegSet* linesegs2_ = get_linesegs2();

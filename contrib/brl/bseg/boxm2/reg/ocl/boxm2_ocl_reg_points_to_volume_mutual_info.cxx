@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_reg_points_to_volume_mutual_info.h"
 //:
 // \file
@@ -16,7 +18,7 @@
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 
@@ -63,9 +65,9 @@ double boxm2_ocl_reg_points_to_volume_mutual_info:: cost(vnl_vector<double> cons
 
 bool boxm2_ocl_reg_points_to_volume_mutual_info::compile_kernel()
 {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-    vcl_string reg_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/reg/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    std::string reg_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/reg/ocl/cl/";
     src_paths.push_back(source_dir     + "scene_info.cl");
     src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(reg_source_dir + "estimate_mi_ply_blockwise_vol.cl");
@@ -132,10 +134,10 @@ bool boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_register_world(vgl_ro
     bocl_mem_sptr ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
     ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-    vcl_vector<boxm2_block_id> blocks_B = sceneB_->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
-    vcl_size_t local_threads[1]={64};
-    vcl_size_t global_threads[1]={1};
+    std::vector<boxm2_block_id> blocks_B = sceneB_->get_block_ids();
+    std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+    std::size_t local_threads[1]={64};
+    std::size_t global_threads[1]={1};
     int status=0;    float gpu_time = 0.0;
     global_threads[0] = (unsigned) RoundUp(nptsA_,(int)local_threads[0]);
     for (iter_blks_B = blocks_B.begin();iter_blks_B!=blocks_B.end(); iter_blks_B++)
@@ -150,6 +152,13 @@ bool boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_register_world(vgl_ro
         bocl_mem* blk_B       = opencl_cache_->get_block(sceneB_, *iter_blks_B);
         bocl_mem* alpha_B     = opencl_cache_->get_data<BOXM2_ALPHA>(sceneB_, *iter_blks_B,0,false);
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+            return false;
+        }
+
         info_buffer_B->data_buffer_length = (int) (alpha_B->num_bytes()/alphaTypeSize);
 
         bocl_mem* blk_info_B  = new bocl_mem(device_->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );
@@ -175,7 +184,7 @@ bool boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_register_world(vgl_ro
 
         if(!kern->execute(queue, 1, local_threads, global_threads))
         {
-            vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+            std::cout<<"Kernel Failed to Execute "<<std::endl;
             return false;
         }
         int status = clFinish(queue);

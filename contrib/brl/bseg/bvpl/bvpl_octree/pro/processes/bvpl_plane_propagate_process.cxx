@@ -1,4 +1,8 @@
 //This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_plane_propagate_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <set>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,8 +15,7 @@
 //
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -28,7 +31,6 @@
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/bvpl_octree/bvpl_octree_neighbors.h>
-#include <vcl_set.h>
 
 struct ltstr
 {
@@ -80,7 +82,7 @@ bool bvpl_plane_propagate_process_cons(bprb_func_process& pro)
   //input[1]: the scene path for the output scene
   //input[2]: block prefix for the output scene
   //input[3]: the filename for the new scene xml file
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
@@ -88,7 +90,7 @@ bool bvpl_plane_propagate_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: the new scene with updated cell information
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
 
   if (!pro.set_input_types(input_types_))
@@ -109,15 +111,15 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << n_inputs_ << std::endl;
     return false;
   }
 
   // get the inputs
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-  vcl_string scene_path = pro.get_input<vcl_string>(1);
-  vcl_string block_prefix = pro.get_input<vcl_string>(2);
-  vcl_string scene_filename = pro.get_input<vcl_string>(3);
+  std::string scene_path = pro.get_input<std::string>(1);
+  std::string block_prefix = pro.get_input<std::string>(2);
+  std::string scene_filename = pro.get_input<std::string>(3);
   boxm_scene_base_sptr output_scene_sptr;
   // only applies to the edge_line type of scenes
   if (scene_base->appearence_model() == BOXM_EDGE_TANGENT_LINE) {
@@ -125,7 +127,7 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
     typedef boct_tree_cell<short,boxm_edge_tangent_sample<float> > cell_type;
     boxm_scene<tree_type> *scene=dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
     if (!scene) {
-       vcl_cerr << "error casting scene_base to scene\n";
+       std::cerr << "error casting scene_base to scene\n";
        return false;
     }
 
@@ -158,18 +160,18 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
       boxm_block<tree_type>* output_block = *output_iter;
 
       tree_type* tree = block->get_tree();
-      vcl_vector<cell_type *> cells = tree->leaf_cells();
+      std::vector<cell_type *> cells = tree->leaf_cells();
 
       tree_type* output_tree=tree->clone();
-      vcl_vector<cell_type *> output_cells = output_tree->leaf_cells();
+      std::vector<cell_type *> output_cells = output_tree->leaf_cells();
 
       bvpl_octree_neighbors<boxm_edge_tangent_sample<float> > oper(tree);
       for (unsigned i=0; i<cells.size(); i++) {
         cell_type *cell=cells[i];
         cell_type *output_cell=output_cells[i];
-        vcl_vector<cell_type *> neighb_cells;
+        std::vector<cell_type *> neighb_cells;
         oper.neighbors(kernel, cells[i], neighb_cells);
-        vcl_set<boxm_plane_obs<float>,ltstr> planes;
+        std::set<boxm_plane_obs<float>,ltstr> planes;
 
         for (unsigned n=0; n<neighb_cells.size(); n++) {
           cell_type *neighbor = neighb_cells[n];
@@ -177,14 +179,14 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
           boct_loc_code<short> n_code = neighbor->code_;
           bool itself = n_code.isequal(&cell_code);
          if (!itself) {
-             vcl_vector<boxm_plane_obs<float> > observations = neighbor->data().obs_list();
+             std::vector<boxm_plane_obs<float> > observations = neighbor->data().obs_list();
              boxm_edge_tangent_sample<float> data=output_cell->data();
              data.insert(observations);
              output_cell->set_data(data);
             }
         }
       }
-      //  vcl_set<boxm_plane_obs<float>,ltstr >::iterator iter1=planes.begin();
+      //  std::set<boxm_plane_obs<float>,ltstr >::iterator iter1=planes.begin();
       //  boxm_edge_tangent_sample<float> data;
       //  for(;iter1!=planes.end();iter1++)
       //  {

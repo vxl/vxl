@@ -1,11 +1,12 @@
 //:
 // \file
 
+#include <iostream>
 #include "boxm2_vecf_fit_margins.h"
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -14,9 +15,9 @@
 #include "boxm2_vecf_eyelid_crease.h"
 class margin_residual_function : public vnl_least_squares_function{
  public:
-margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
-                         vcl_vector<vgl_point_2d<double> >  const& sup_pts,
-                         vcl_vector<vgl_point_2d<double> >  const& crease_pts,
+margin_residual_function(std::vector<vgl_point_2d<double> >  const& inf_pts,
+                         std::vector<vgl_point_2d<double> >  const& sup_pts,
+                         std::vector<vgl_point_2d<double> >  const& crease_pts,
                          vgl_point_2d<double> const& lat_canth,
                          vgl_point_2d<double> const& med_canth,
                          boxm2_vecf_orbit_params& opr, bool is_right,
@@ -112,9 +113,9 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
  private:
   bool is_right_;
   boxm2_vecf_orbit_params& opr_;
-  vcl_vector<vgl_point_2d<double> > inf_pts_;
-  vcl_vector<vgl_point_2d<double> > sup_pts_;
-  vcl_vector<vgl_point_2d<double> > crease_pts_;
+  std::vector<vgl_point_2d<double> > inf_pts_;
+  std::vector<vgl_point_2d<double> > sup_pts_;
+  std::vector<vgl_point_2d<double> > crease_pts_;
   vgl_point_2d<double> lat_canth_;
   vgl_point_2d<double> med_canth_;
   bool estimate_t_;
@@ -126,7 +127,7 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
   superior_margin_pts_.clear();
 }
 
-double boxm2_vecf_fit_margins::fit(vcl_ostream* outstream, bool verbose){
+double boxm2_vecf_fit_margins::fit(std::ostream* outstream, bool verbose){
   double dtrx = opr_.trans_x_, dtry = opr_.trans_y_, dtrz = opr_.trans_z_;
 
   margin_residual_function mrf(inferior_margin_pts_, superior_margin_pts_, superior_crease_pts_,lateral_canthus_, medial_canthus_, opr_, is_right_,estimate_t_);
@@ -178,7 +179,7 @@ double boxm2_vecf_fit_margins::fit(vcl_ostream* outstream, bool verbose){
   return dsum;
 }
 
-bool boxm2_vecf_fit_margins::plot_orbit(vcl_ostream& ostr) const{
+bool boxm2_vecf_fit_margins::plot_orbit(std::ostream& ostr) const{
   if(!ostr)
     return false;
   boxm2_vecf_eyelid lid(opr_);

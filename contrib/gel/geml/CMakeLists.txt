@@ -11,9 +11,7 @@ set(geml_sources
  geml_matcher_correlation.cxx geml_matcher_correlation.h
 )
 
-add_library(geml ${geml_sources})
-install_targets(/lib geml)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/geml ${geml_sources})
+vxl_add_library(LIBRARY_NAME geml LIBRARY_SOURCES ${geml_sources})
 target_link_libraries(geml ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl)
 
 if( BUILD_TESTING )

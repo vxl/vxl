@@ -1,6 +1,7 @@
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
@@ -21,7 +22,7 @@ const double conv_tolerance=1.0e-5;
 static void
 regression_points( const vnl_vector<double>& a,
                    double sigma,
-                   vcl_vector< vnl_vector<double> >& pts )
+                   std::vector< vnl_vector<double> >& pts )
 {
   const int num_pts=20;
   pts.resize( num_pts );
@@ -104,11 +105,11 @@ check( const vnl_vector<double>& correct_params,
   vnl_vector<double> err_vector(res - correct_params);
 
   //  Get standardized error
-  double err = vcl_sqrt(dot_product( err_vector*covar, err_vector ));
+  double err = std::sqrt(dot_product( err_vector*covar, err_vector ));
   bool success = err < 0.5*s;
 #ifdef DEBUG
   bool conv = ( irls->did_it_converge( ) );
-  vcl_cout << "Finished:\n"
+  std::cout << "Finished:\n"
            << "  estimate = " << irls->estimate()
            << ", true fit = " << correct_params << '\n'
            << "  Mahalanobis param error = " << err << '\n'
@@ -131,7 +132,7 @@ static void test_irls()
   //
   bool use_intercept=true;
   double sigma = 0.25;
-  vcl_vector< vnl_vector<double> > pts;
+  std::vector< vnl_vector<double> > pts;
   regression_points( true_params.as_vector(), sigma, pts );
   rrel_linear_regression * lr = new rrel_linear_regression( pts, use_intercept );
   int dof = lr->param_dof();
@@ -139,7 +140,7 @@ static void test_irls()
   int max_iterations = 50;
   testlib_test_begin( "ctor" );
   rrel_irls * irls = new rrel_irls( max_iterations );
-  testlib_test_perform( irls != 0 );
+  testlib_test_perform( irls != VXL_NULLPTR );
 
   //  Setting max iteration parameters.
   max_iterations = 50;
@@ -157,7 +158,7 @@ static void test_irls()
 
   testlib_test_begin( "irls with scale estimation" );
   bool success = irls->estimate( lr, m_est ) && check( true_params.as_vector(), irls );
-  vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
+  std::cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << std::endl;
   testlib_test_perform( success );
 
   irls->reset_params();
@@ -167,7 +168,7 @@ static void test_irls()
 
   testlib_test_begin( "irls with weighted scale" );
   success = irls->estimate( lr, m_est ) && check( true_params.as_vector(), irls );
-  vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
+  std::cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << std::endl;
   testlib_test_perform( success );
   testlib_test_begin( "did it converge?" );
   testlib_test_perform( irls->converged() );
@@ -177,7 +178,7 @@ static void test_irls()
   irls->initialize_params( true_params.as_vector() );
   testlib_test_begin( "irls with correct initial fit" );
   success = irls->estimate( lr, m_est ) && check( true_params.as_vector(), irls );
-  vcl_cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << vcl_endl;
+  std::cout << "scale:  correct = " << sigma << ", estimated = " << irls->scale() << std::endl;
   testlib_test_perform( success );
 
   irls->reset_params();
@@ -198,7 +199,7 @@ static void test_irls()
   //  onto irls from matches
   int trace_level = 0;
   vnl_double_4 params(1.2,0.3,15.0,-4.0);
-  vcl_vector< image_point_match > matches;
+  std::vector< image_point_match > matches;
   sigma = 0.25;
   generate_similarity_matches( params.as_vector(), sigma, matches );
   rrel_estimation_problem* match_prob = new similarity_from_matches( matches );
@@ -212,7 +213,7 @@ static void test_irls()
   testlib_test_begin( "non-unique matches -- params initialized correctly, weighted scale" );
   testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
                         check( params.as_vector(), &irls_m ) );
-  vcl_cout << "true scale = " << sigma << ", weighted scale = " << irls_m.scale() << vcl_endl;
+  std::cout << "true scale = " << sigma << ", weighted scale = " << irls_m.scale() << std::endl;
 
   irls_m.reset_params();
   irls_m.initialize_params( params.as_vector() );
@@ -221,7 +222,7 @@ static void test_irls()
   testlib_test_begin( "non-unique matches -- params initialized correctly, MAD scale" );
   testlib_test_perform( irls_m.estimate( match_prob, m_est ) &&
                         check( params.as_vector(), &irls_m ) );
-  vcl_cout << "true scale = " << sigma << ", MAD scale = " << irls_m.scale() << vcl_endl;
+  std::cout << "true scale = " << sigma << ", MAD scale = " << irls_m.scale() << std::endl;
 
   irls_m.reset_params();
   irls_m.initialize_params( params.as_vector() );

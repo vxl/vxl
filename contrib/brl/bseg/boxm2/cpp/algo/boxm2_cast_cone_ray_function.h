@@ -3,6 +3,9 @@
 //:
 // \file
 
+#include <iostream>
+#include <algorithm>
+#include <list>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
@@ -16,9 +19,7 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_util.h>
 #include <boct/boct_bit_tree.h>
-#include <vcl_algorithm.h>
-#include <vcl_list.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 // camera includes
 #include <vpgl/vpgl_perspective_camera.h>
@@ -38,7 +39,7 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
                                   F functor)
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;    // defines a bit tree
-  double sinAlpha = vcl_sin(cone_half_angle);
+  double sinAlpha = std::sin(cone_half_angle);
 
 
   float volume_scale=linfo->block_len*linfo->block_len*linfo->block_len;
@@ -55,17 +56,17 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
   float max_facex = (ray_dx > 0.0f) ? (linfo->scene_dims[0]) : 0.0f;
   float max_facey = (ray_dy > 0.0f) ? (linfo->scene_dims[1]) : 0.0f;
   float max_facez = (ray_dz > 0.0f) ? (linfo->scene_dims[2]) : 0.0f;
-  float tfar = vcl_min(vcl_min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
+  float tfar = std::min(std::min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
   float min_facex = (ray_dx < 0.0f) ? (linfo->scene_dims[0]) : 0.0f;
   float min_facey = (ray_dy < 0.0f) ? (linfo->scene_dims[1]) : 0.0f;
   float min_facez = (ray_dz < 0.0f) ? (linfo->scene_dims[2]) : 0.0f;
-  float tblock = vcl_max(vcl_max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
+  float tblock = std::max(std::max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
   if (tfar <= tblock) {
     return;
   }
 
   // make sure tNear is at least 0...
-  double currT = (double) vcl_max( (double) tblock, MIN_T);
+  double currT = (double) std::max( (double) tblock, MIN_T);
 
   // calculate tFar
   double tFar = (double) tfar;
@@ -84,12 +85,12 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
     vgl_sphere_3d<double> currSphere( ray.origin() + ray.direction() * currT, currR);
 
     // minimum/maximum subblock eclipsed
-    vgl_point_3d<int> minCell( (int) vcl_max( (int) (currSphere.centre().x() - currR), 0),
-                               (int) vcl_max( (int) (currSphere.centre().y() - currR), 0),
-                               (int) vcl_max( (int) (currSphere.centre().z() - currR), 0) );
-    vgl_point_3d<int> maxCell( (int) vcl_min( (int) (currSphere.centre().x() + currR + 1.0), linfo->scene_dims[0] ),
-                               (int) vcl_min( (int) (currSphere.centre().y() + currR + 1.0), linfo->scene_dims[1] ),
-                               (int) vcl_min( (int) (currSphere.centre().z() + currR + 1.0), linfo->scene_dims[2] ) );
+    vgl_point_3d<int> minCell( (int) std::max( (int) (currSphere.centre().x() - currR), 0),
+                               (int) std::max( (int) (currSphere.centre().y() - currR), 0),
+                               (int) std::max( (int) (currSphere.centre().z() - currR), 0) );
+    vgl_point_3d<int> maxCell( (int) std::min( (int) (currSphere.centre().x() + currR + 1.0), linfo->scene_dims[0] ),
+                               (int) std::min( (int) (currSphere.centre().y() + currR + 1.0), linfo->scene_dims[1] ),
+                               (int) std::min( (int) (currSphere.centre().z() + currR + 1.0), linfo->scene_dims[2] ) );
 
     for (int x=minCell.x(); x<maxCell.x(); ++x) {
       for (int y=minCell.y(); y<maxCell.y(); ++y) {
@@ -103,10 +104,10 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
 
           // max cell - go through deepest generation
           int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
-          max_cell = vcl_min(585, max_cell);
+          max_cell = std::min(585, max_cell);
 
           // depth first search (DFS) through the tree
-          vcl_list<unsigned> toVisit;
+          std::list<unsigned> toVisit;
           toVisit.push_back( 0 );
           while ( !toVisit.empty() ) // DFS
           {
@@ -157,10 +158,10 @@ void boxm2_cast_cone_ray_function(vgl_box_3d<double>& block_box,
 
           // max cell - go through deepest generation
           int max_cell = ((1 << (3*(deepest_gen+1))) - 1) / 7;
-          max_cell = vcl_min(585, max_cell);
+          max_cell = std::min(585, max_cell);
 
           // depth first search (DFS) through the tree
-          vcl_list<unsigned> toVisit;
+          std::list<unsigned> toVisit;
           toVisit.push_back( 0 );
           while ( !toVisit.empty() ) // DFS
           {
@@ -217,7 +218,7 @@ bool cast_cone_ray_per_block( functor_type functor,
   {
     for (unsigned i=roi_ni0;i<roi_ni;++i)
     {
-      if (i%10==0) vcl_cout<<'.'<<vcl_flush;
+      if (i%10==0) std::cout<<'.'<<std::flush;
       for (unsigned j=roi_nj0;j<roi_nj;++j)
       {
         // calculate ray and ray angles at pixel ij
@@ -236,10 +237,10 @@ bool cast_cone_ray_per_block( functor_type functor,
         double dray_ij_x=double(ray_ij.direction().x()),
                dray_ij_y=double(ray_ij.direction().y()),
                dray_ij_z=double(ray_ij.direction().z());
-        double thresh = vcl_exp(-12.0f);
-        if (vcl_fabs(dray_ij_x) < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
-        if (vcl_fabs(dray_ij_y) < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
-        if (vcl_fabs(dray_ij_z) < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
+        double thresh = std::exp(-12.0f);
+        if (std::fabs(dray_ij_x) < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
+        if (std::fabs(dray_ij_y) < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
+        if (std::fabs(dray_ij_z) < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
 
         // calculate vgl_box_3d
         vgl_point_3d<double> minCorner(0.0, 0.0, 0.0);
@@ -256,7 +257,7 @@ bool cast_cone_ray_per_block( functor_type functor,
     }
     return true;
   }
-  vcl_cout<<"Cast Cone Ray Per Block Returning False"<<vcl_endl;
+  std::cout<<"Cast Cone Ray Per Block Returning False"<<std::endl;
   return false;
 }
 

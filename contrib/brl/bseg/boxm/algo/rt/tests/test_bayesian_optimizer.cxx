@@ -21,7 +21,7 @@ static void test_bayesian_optimizer()
   scene.set_octree_levels(3,2);
   scene.set_paths("./boxm_scene", "block");
   scene.set_appearance_model(BOXM_APM_SIMPLE_GREY);
-  x_write(vcl_cout, scene, "scene");
+  x_write(std::cout, scene, "scene");
   vul_file::make_directory("./boxm_scene");
   scene.write_scene();
   //vsl_b_ofstream os("scene.bin");
@@ -62,11 +62,11 @@ static void test_bayesian_optimizer()
   }
 
   // create the auxiliary scenes for each image
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
   image_names.push_back("image1");
   image_names.push_back("image2");
   image_names.push_back("image3");
-  vcl_vector<boxm_scene<boct_tree<short,aux_type> >*> aux_scenes(image_names.size());
+  std::vector<boxm_scene<boct_tree<short,aux_type> >*> aux_scenes(image_names.size());
 
   // create aux scenes
   for (unsigned i=0; i<image_names.size(); i++) {

@@ -1,5 +1,6 @@
 // This is core/vgl/io/tests/test_polygon_io.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_polygon.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_polygon.h>
@@ -8,7 +9,7 @@
 
 static void test_polygon_io()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vgl_polygon io\n"
            << "************************\n";
 
@@ -41,8 +42,8 @@ static void test_polygon_io()
         p_out[0]==p_in[0] &&
         p_out[1]==p_in[1] , true);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, p_out);
+  std::cout << std::endl;
   vsl_indent_clear_all_data();
 }
 

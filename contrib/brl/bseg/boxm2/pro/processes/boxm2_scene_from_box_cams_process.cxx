@@ -22,7 +22,7 @@ bool boxm2_scene_from_box_cams_process_cons(bprb_func_process& pro)
   using namespace boxm2_scene_from_box_cams_process_globals;
 
   //process takes 1 input, the scene
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string" ; //cam_dir
   input_types_[1] = "float"; //xmin
   input_types_[2] = "float"; //ymon
@@ -33,7 +33,7 @@ bool boxm2_scene_from_box_cams_process_cons(bprb_func_process& pro)
   input_types_[7] = "vcl_string"; // model dir
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -44,32 +44,32 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
   using namespace boxm2_scene_from_box_cams_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
-  vcl_string camdir  = pro.get_input<vcl_string>(0);
+  std::string camdir  = pro.get_input<std::string>(0);
   float xmin         = pro.get_input<float>(1);
   float ymin         = pro.get_input<float>(2);
   float zmin         = pro.get_input<float>(3);
   float width        = pro.get_input<float>(4);
   float height       = pro.get_input<float>(5);
   float depth        = pro.get_input<float>(6);
-  vcl_string modeldir= pro.get_input<vcl_string>(7);
+  std::string modeldir= pro.get_input<std::string>(7);
 
   // get the scene bounding box
   vgl_box_3d<double> box(vgl_point_3d<double>(xmin,ymin,zmin),
                          vgl_point_3d<double>(xmin+width,ymin+height,zmin+depth));
-  vcl_vector<vpgl_perspective_camera<double>* > ptrcams = bpgl_camera_utils::cameras_from_directory(camdir);
-  vcl_vector<vpgl_perspective_camera<double> > cams;
+  std::vector<vpgl_perspective_camera<double>* > ptrcams = bpgl_camera_utils::cameras_from_directory(camdir);
+  std::vector<vpgl_perspective_camera<double> > cams;
   for(unsigned int i = 0 ; i < ptrcams.size(); i++)
       cams.push_back( * (ptrcams[i]) );
 
-  vcl_vector<vcl_string> appearance;
+  std::vector<std::string> appearance;
   appearance.push_back("boxm2_mog3_grey");
   appearance.push_back("boxm2_num_obs");
 
-  vcl_string scene_dir =modeldir+ "/model";
+  std::string scene_dir =modeldir+ "/model";
   if (!vul_file::make_directory_path( scene_dir.c_str()))
     return false;
   boxm2_scene_sptr uscene = new boxm2_scene(scene_dir, box.min_point());

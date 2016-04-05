@@ -20,32 +20,32 @@ int main(int argc,  char** argv)
 {
   vul_arg<bool> match("-match", "if exists run the matcher, otherwise run the indexer", false);
   vul_arg<bool> random("-random", "if exists create output prob maps randomly, otherwise run the land type matcher");
-  vul_arg<vcl_string> category_file("-cat", "category file that contains one line for the land type of the camera for the query ", "");
-  vul_arg<vcl_string> category_gt_file("-cat_gt", "category gt file of multiple images, use image id to get gt loc of this one ", "");
+  vul_arg<std::string> category_file("-cat", "category file that contains one line for the land type of the camera for the query ", "");
+  vul_arg<std::string> category_gt_file("-cat_gt", "category gt file of multiple images, use image id to get gt loc of this one ", "");
   vul_arg<int> img_id("-id", "query image id in the category gt file, starts from 0", 1000);
-  vul_arg<vcl_string> world_str("-world", "world name, can be desert, coast, Chile, India, Jordan, Philippine, Taiwan", "");
-  vul_arg<vcl_string> out_folder("-out", "output folder to save index or if matching results", "");
-  vul_arg<vcl_string> desc_index_folder("-desc", "folder to read the descriptor index of the tile", "");
-  vul_arg<vcl_string> land_name("-land", "land id for test query image", "");
+  vul_arg<std::string> world_str("-world", "world name, can be desert, coast, Chile, India, Jordan, Philippine, Taiwan", "");
+  vul_arg<std::string> out_folder("-out", "output folder to save index or if matching results", "");
+  vul_arg<std::string> desc_index_folder("-desc", "folder to read the descriptor index of the tile", "");
+  vul_arg<std::string> land_name("-land", "land id for test query image", "");
   vul_arg<bool> save_images("-save", "save out images or not", false);
 
   // PARAMS for indexing
-  vul_arg<vcl_string> lidar_folder("-lidar", "lidar folder to use for indexing", "");
-  vul_arg<vcl_string> NLCD_folder("-nlcd", "NLCD folder to use for indexing", "");
-  vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");                      // index -- folder to read the hypos for each leaf
+  vul_arg<std::string> lidar_folder("-lidar", "lidar folder to use for indexing", "");
+  vul_arg<std::string> NLCD_folder("-nlcd", "NLCD folder to use for indexing", "");
+  vul_arg<std::string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");                      // index -- folder to read the hypos for each leaf
   vul_arg<int> tile_id("-tile", "id of the tile to be indexed", -1);
   vul_arg<bool> index_2d("-ex_2d", "if exists index ex_2d using the classification maps that are passed", false);
-  vul_arg<vcl_string> maps_folder("-maps", "the classification map images where each pixel has the land id (type is unsigned char)", "");
-  vul_arg<vcl_string> radii_string("-rad", "e.g. pass 100_500_1000 for radii of 100, 500 and 1000 meter to construct descriptors at each location", "");
+  vul_arg<std::string> maps_folder("-maps", "the classification map images where each pixel has the land id (type is unsigned char)", "");
+  vul_arg<std::string> radii_string("-rad", "e.g. pass 100_500_1000 for radii of 100, 500 and 1000 meter to construct descriptors at each location", "");
   vul_arg<int> max_leaf_id ("-max", "maximum leaf id considered", 1000);
   vul_arg<int> min_leaf_id ("-min", "minimum leaf id considered", 0);
 
   vul_arg_parse(argc, argv);
-  vcl_cout << "argc: " << argc << vcl_endl;
+  std::cout << "argc: " << argc << std::endl;
 
   if (match()) {  // run the matcher
 
-    vcl_vector<volm_tile> tiles;
+    std::vector<volm_tile> tiles;
 
     if (world_str().compare("Chile")==0)             tiles = volm_tile::generate_p1b_wr1_tiles();
     else if (world_str().compare("India")==0)        tiles = volm_tile::generate_p1b_wr2_tiles();
@@ -55,17 +55,17 @@ int main(int argc,  char** argv)
     else if (world_str().compare("Coast")== 0)       tiles = volm_tile::generate_p1_wr2_tiles();
     else if (world_str().compare("Desert")== 0)      tiles = volm_tile::generate_p1_wr1_tiles();
     else {
-      vcl_cout << "ERROR: unknown ROI region: " << world_str() << ".  Available regions are: Coast, Desert, Chile, India, Jordan, Philippines, Taiwan\n";
+      std::cout << "ERROR: unknown ROI region: " << world_str() << ".  Available regions are: Coast, Desert, Chile, India, Jordan, Philippines, Taiwan\n";
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     if (tile_id() >= tiles.size()) {
-      vcl_cout << "ERROR: unknown tile id " << tile_id() << " for ROI region: " << world_str() << "!\n";
+      std::cout << "ERROR: unknown tile id " << tile_id() << " for ROI region: " << world_str() << "!\n";
       return volm_io::EXE_ARGUMENT_ERROR;
     }
 
     if (random()) {
         if (geo_hypo_folder().compare("") == 0 || out_folder().compare("") == 0 || tile_id() < 0 || img_id() < 0) {
-          vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
+          std::cerr << "EXE_ARGUMENT_ERROR!\n";
           volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
           vul_arg_display_usage_and_exit();
           return volm_io::EXE_ARGUMENT_ERROR;
@@ -78,18 +78,18 @@ int main(int argc,  char** argv)
         m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10.0f, 127.0f, thres);
 
         volm_io::write_status(out_folder(), volm_io::SUCCESS);
-        vcl_cout << "returning SUCCESS!\n";
+        std::cout << "returning SUCCESS!\n";
         return volm_io::SUCCESS;
     }
 
     if (category_gt_file().compare("") == 0 || out_folder().compare("") == 0 || geo_hypo_folder().compare("") == 0 || tile_id() < 0 || img_id() < 0 || desc_index_folder().compare("") == 0 || NLCD_folder().compare("") == 0) {
-      vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
+      std::cerr << "EXE_ARGUMENT_ERROR!\n";
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
       vul_arg_display_usage_and_exit();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
 
-    vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > query_img_info;
+    std::vector<std::pair<vgl_point_3d<double>, std::pair<std::pair<std::string, int>, std::string> > > query_img_info;
     volm_io::read_gt_file(category_gt_file(), query_img_info);
 
     int img_info_id = -1;
@@ -101,7 +101,7 @@ int main(int argc,  char** argv)
     }
     //if (query_img_info.size() <= img_id()) {
     if (img_info_id < 0) {
-      vcl_cerr << "query image id: " << img_id() << " cannot be found in the gt loc file: " << category_gt_file() << "!\n";
+      std::cerr << "query image id: " << img_id() << " cannot be found in the gt loc file: " << category_gt_file() << "!\n";
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     volm_desc_matcher_sptr m = new volm_desc_land_matcher(NLCD_folder(), query_img_info[img_info_id].first);
@@ -110,7 +110,7 @@ int main(int argc,  char** argv)
     if (land_name().compare("") != 0 && volm_osm_category_io::volm_land_table_name.find(land_name()) == volm_osm_category_io::volm_land_table_name.end()) {
       // create query descriptor based on NLCD
       query = m->create_query_desc();
-      vcl_cout << "will use the gt loc of the image " << img_id()
+      std::cout << "will use the gt loc of the image " << img_id()
                << " which is: " << query_img_info[img_info_id].first.x()
                << " " << query_img_info[img_info_id].first.y() << " " << query_img_info[img_info_id].first.z() << "\n";
     }
@@ -119,7 +119,7 @@ int main(int argc,  char** argv)
       unsigned char land_id = volm_osm_category_io::volm_land_table_name[land_name()].id_;
       query = new volm_desc_land((int)land_id, "volm");
     }
-    vcl_cout <<"create query:\n";
+    std::cout <<"create query:\n";
     query->print();
     double thres = 0.5;
 
@@ -131,7 +131,7 @@ int main(int argc,  char** argv)
     m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, thres);
 
     volm_io::write_status(out_folder(), volm_io::SUCCESS);
-    vcl_cout << "returning SUCCESS!\n";
+    std::cout << "returning SUCCESS!\n";
     return volm_io::SUCCESS;
 
   } else {  // run the indexer
@@ -139,30 +139,30 @@ int main(int argc,  char** argv)
 
     if (index_2d()) {
       if (radii_string().compare("") == 0 || maps_folder().compare("") == 0 || out_folder().compare("") == 0) {
-        vcl_cerr << "EXE_ARGUMENT_ERROR for -index_2d, need a radii_string, maps_folder and out_folder!\n";
+        std::cerr << "EXE_ARGUMENT_ERROR for -index_2d, need a radii_string, maps_folder and out_folder!\n";
         vul_arg_display_usage_and_exit();
         return volm_io::EXE_ARGUMENT_ERROR;
       }
 
-      vcl_vector<double> radii;
+      std::vector<double> radii;
 
       char buf[1000];
       for (unsigned kk = 0; kk < radii_string().size(); kk++)
         buf[kk] = radii_string()[kk];
 
-      char *tok = vcl_strtok(buf, "_");;
-      while (tok != 0) {
-        vcl_stringstream tokstr(tok);
+      char *tok = std::strtok(buf, "_");;
+      while (tok != VXL_NULLPTR) {
+        std::stringstream tokstr(tok);
         double radius;
         tokstr >> radius;
         radii.push_back(radius);
-        tok = vcl_strtok(NULL, "_"); // tokenize the remaining string
+        tok = std::strtok(VXL_NULLPTR, "_"); // tokenize the remaining string
       }
-      vcl_cout << " will index 2d maps using radii: ";
+      std::cout << " will index 2d maps using radii: ";
       for (unsigned i = 0; i < radii.size(); i++) {
-        vcl_cout << radii[i] << " ";
+        std::cout << radii[i] << " ";
       }
-      vcl_cout << '\n';
+      std::cout << '\n';
 
       indexer = new volm_desc_ex_2d_indexer(maps_folder(), out_folder(), radii);
     } else {

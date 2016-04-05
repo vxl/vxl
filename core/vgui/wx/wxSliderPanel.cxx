@@ -132,9 +132,9 @@ void wxSliderPanel::CreateControls()
   itemFlexGridSizer->Add(0,3,0,wxGROW,0);
 }
 
-void wxSliderPanel::CreateSliders(const vcl_vector<double>& init_vals,
-                                  const vcl_vector<double>& min_vals,
-                                  const vcl_vector<double>& max_vals)
+void wxSliderPanel::CreateSliders(const std::vector<double>& init_vals,
+                                  const std::vector<double>& min_vals,
+                                  const std::vector<double>& max_vals)
 {
   assert(init_vals.size() == min_vals.size());
   assert(init_vals.size() == max_vals.size());
@@ -265,7 +265,7 @@ void wxSliderPanel::OnEnterText( wxCommandEvent& event )
 
 
 //: Update the data
-void wxSliderPanel::update_data(vcl_vector<double>& data,
+void wxSliderPanel::update_data(std::vector<double>& data,
                                 bool send_messages)
 {
   for (unsigned int i=0; i<data.size() && i<vals_.size(); ++i)

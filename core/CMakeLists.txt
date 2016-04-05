@@ -9,13 +9,24 @@ doxygen_add_package(core-L2 "Level-2 Vision Libraries")
 doxygen_add_package(core-L2E "Level-2 Vision Libraries (Experimental)")
 doxygen_add_package(core-test "Test Framework")
 
+#
+# Do platform-specific configuration.
+# configure files
+#
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vxl_config.h.in ${PROJECT_BINARY_DIR}/vxl_config.h include/vxl/core)
+include_directories(${PROJECT_BINARY_DIR})
+
 set(global_sources
  vxl_copyright.h
  vxl_version.h
- vxl_config.h.in
 )
-
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core ${global_sources})
+# If VXL_INSTALL_INCLUDE_DIR is the default value
+if("${VXL_INSTALL_INCLUDE_DIR}" STREQUAL "include/vxl")
+  set(prefix "${VXL_INSTALL_INCLUDE_DIR}/core")
+else()
+  set(prefix "${VXL_INSTALL_INCLUDE_DIR}")
+endif()
+INSTALL_NOBASE_HEADER_FILES(${prefix} ${global_sources})
 
 if(BUILD_CORE_UTILITIES)
   # POSIX layer
@@ -124,7 +135,8 @@ endif ()
 add_subdirectory(testlib)
 
 # Tests that check and output the vxl configuration
-if( BUILD_TESTING )
+# NOTE: some external projects remove the tests directory (aka ITK)
+if( BUILD_TESTING AND EXISTS "tests")
   add_subdirectory(tests)
 endif()
 if( BUILD_EXAMPLES )

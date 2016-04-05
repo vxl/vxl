@@ -12,8 +12,10 @@
 //   9 Sept 2004 - Peter Vanroose - removed InitParams
 // \endverbatim
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class brip_para_cvrg_params : public gevd_param_mixin
 {
@@ -44,6 +46,6 @@ class brip_para_cvrg_params : public gevd_param_mixin
   bool verbose_;      //!< output debug messages
 };
 
-vcl_ostream& operator<<(vcl_ostream& os, brip_para_cvrg_params const& pcp);
+std::ostream& operator<<(std::ostream& os, brip_para_cvrg_params const& pcp);
 
 #endif

@@ -33,7 +33,7 @@ bool brec_update_changes_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");      // input change map
   input_types.push_back("vil_image_view_base_sptr");      // input orig view
   input_types.push_back("unsigned");      // number of passes
@@ -41,7 +41,7 @@ bool brec_update_changes_process_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");      // output new prob map
   output_types.push_back("vil_image_view_base_sptr");      // output new prob map as a byte image
   ok = pro.set_output_types(output_types);
@@ -53,7 +53,7 @@ bool brec_update_changes_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 4) {
-    vcl_cerr << " brec_recognize_structure_process - invalid inputs\n";
+    std::cerr << " brec_recognize_structure_process - invalid inputs\n";
     return false;
   }
 
@@ -81,7 +81,7 @@ bool brec_update_changes_process(bprb_func_process& pro)
   //fgbgp.set_sigma(0.02);
   //fgbgp.set_sigma(0.2);
   fgbgp.set_sigma(sigma);
-  vcl_cout << "\t update process running with sigma: " << sigma << vcl_endl;
+  std::cout << "\t update process running with sigma: " << sigma << std::endl;
 
   brec_bayesian_propagation bp(orig_img, change_map_f);
   bp.initialize_bg_map(); // just turning change_map_f (a density map) into a probability map with values in [0,1]
@@ -96,7 +96,7 @@ bool brec_update_changes_process(bprb_func_process& pro)
   vil_image_view_base_sptr out_map_sptr2 = new vil_image_view<vxl_byte>(out_b);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr2);
 
-  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
+  std::cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }

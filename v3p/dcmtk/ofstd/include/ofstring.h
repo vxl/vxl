@@ -26,6 +26,7 @@
 #ifndef OFSTRING_H
 #define OFSTRING_H
 
+#include <string>
 #include "osconfig.h"     /* include OS specific configuration first */
 
 #ifdef HAVE_STD_STRING
@@ -33,7 +34,6 @@
 ** Use the ANSI Standard string class
 */
 
-#include <string>
 
 #define OFString string
 #define OFString_npos string::npos

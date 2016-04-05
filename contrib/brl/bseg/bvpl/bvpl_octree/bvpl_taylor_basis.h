@@ -22,7 +22,7 @@ class bvpl_taylor_basis
 {
 
 public:
-  //  bvpl_taylor_basis(boxm_scene_base_sptr scene_base, bvpl_taylor_basis_loader loader, vcl_string path_out):
+  //  bvpl_taylor_basis(boxm_scene_base_sptr scene_base, bvpl_taylor_basis_loader loader, std::string path_out):
   //  kernel_loader_(loader), scene_base_(scene_base), path_out_(path_out){}
   //
   static bool assemble_basis(bvpl_taylor_scenes_map_sptr taylor_scenes,int block_i, int block_j, int block_k);
@@ -44,7 +44,7 @@ protected:
   //
   //  bvpl_taylor_basis_loader kernel_loader_;
   //  boxm_scene_base_sptr scene_base_;
-  //  vcl_string path_out_;
+  //  std::string path_out_;
 };
 
 #endif

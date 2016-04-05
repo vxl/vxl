@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mbl_parse_keyword_list.h"
 //:
 // \file
@@ -6,7 +8,7 @@
 
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_block.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 
 //: Read in data from a stream, assumed to be a list of items
@@ -20,12 +22,12 @@
 //   keyword: string3
 // }
 // \endverbatim
-void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
-                            vcl_vector<vcl_string>& items,
+void mbl_parse_keyword_list(std::istream& is, const std::string& keyword,
+                            std::vector<std::string>& items,
                             bool discard_comments /* = false */)
 {
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   char c;
   ss>>c;  // Remove opening brace
   if (c!='{')
@@ -34,7 +36,7 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
   }
 
   items.resize(0);
-  vcl_string label;
+  std::string label;
   while (!ss.eof())
   {
     ss >> label;         // Next follows the parameters
@@ -45,14 +47,14 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
     else if ( discard_comments && (label.substr(0,2) == "//") )
     {
       // Comment line, so read to end
-      vcl_string comment_string;
-      vcl_getline(ss, comment_string);
+      std::string comment_string;
+      std::getline(ss, comment_string);
       continue;
     }
 
     else if (label!=keyword)
     {
-      vcl_string error_msg = "Expected keyword: '";
+      std::string error_msg = "Expected keyword: '";
       error_msg+=keyword;
       error_msg+="' Got '";
       error_msg+=label;
@@ -73,12 +75,12 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
 //   keyword: string1 { stuff in braces }
 // }
 // \endverbatim
-void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
-                             vcl_vector<vcl_string>& items,
+void mbl_parse_keyword_list2(std::istream& is, const std::string& keyword,
+                             std::vector<std::string>& items,
                              bool discard_comments /* = false */)
 {
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   char c;
   ss>>c;  // Remove opening brace
   if (c!='{')
@@ -87,7 +89,7 @@ void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
   }
 
   items.resize(0);
-  vcl_string label,string1,string2;
+  std::string label,string1,string2;
   while (!ss.eof())
   {
     ss >> label;         // Next follows the parameters
@@ -98,14 +100,14 @@ void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
     else if ( discard_comments && (label.substr(0,2) == "//") )
     {
       // Comment line, so read to end
-      vcl_string comment_string;
-      vcl_getline(ss, comment_string);
+      std::string comment_string;
+      std::getline(ss, comment_string);
       continue;
     }
 
     if (label!=keyword)
     {
-      vcl_string error_msg = "Expected keyword: '";
+      std::string error_msg = "Expected keyword: '";
       error_msg+=keyword;
       error_msg+="' Got '";
       error_msg+=label;

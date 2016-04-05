@@ -1,14 +1,15 @@
 // This is core/vgl/algo/vgl_h_matrix_3d_compute_affine.cxx
+#include <iostream>
+#include <cmath>
+#include <iomanip>
 #include "vgl_h_matrix_3d_compute_affine.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 
 const int TM_UNKNOWNS_COUNT = 9;
 const double DEGENERACY_THRESHOLD = 0.00001;
@@ -20,8 +21,8 @@ const double DEGENERACY_THRESHOLD = 0.00001;
 
 //:Assumes all corresponding points have equal weight
 bool vgl_h_matrix_3d_compute_affine::
-solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
-                     vcl_vector<vgl_homg_point_3d<double> > const& p2,
+solve_linear_problem(std::vector<vgl_homg_point_3d<double> > const& p1,
+                     std::vector<vgl_homg_point_3d<double> > const& p2,
                      vnl_matrix<double>& M)
 {
   int n = static_cast<int>(p1.size());
@@ -36,8 +37,8 @@ solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
     double X1 = hp1.x(), X2 = hp1.y(), X3 = hp1.z();
     double x1 = hp2.x(), x2 = hp2.y(), x3 = hp2.z();
 #if 0
-    vcl_cout << "X(" << X1 << ' ' << X2 << ' ' << X3 << '\n';
-    vcl_cout << "x(" << x1 << ' ' << x2 << ' ' << x3 << '\n';
+    std::cout << "X(" << X1 << ' ' << X2 << ' ' << X3 << '\n';
+    std::cout << "x(" << x1 << ' ' << x2 << ' ' << x3 << '\n';
 #endif
     D(row, 0) =   X1;   D(row, 1) =   X2;   D(row, 2) =   X3;  b(row,0) = x1;
     D(row+1, 3) = X1;   D(row+1, 4) = X2;   D(row+1, 5) = X3;  b(row+1,0) = x2;
@@ -45,23 +46,23 @@ solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
     row+=3;
   }
 #if 0
-  vcl_cout << '{';
+  std::cout << '{';
   for(int r = 0; r<(3*n); ++r){
-    vcl_cout << '{';
+    std::cout << '{';
     for(int c = 0; c<9; ++c)
-      vcl_cout << D[r][c] << ',';
-    vcl_cout << "},";
+      std::cout << D[r][c] << ',';
+    std::cout << "},";
   }
-  vcl_cout << '}';
-  vcl_cout << '{';
+  std::cout << '}';
+  std::cout << '{';
   for(int r = 0; r<(3*n); ++r)
-    vcl_cout << b[r][0] << ',';
-  vcl_cout << "}\n";
+    std::cout << b[r][0] << ',';
+  std::cout << "}\n";
 #endif
   vnl_svd<double> svd(D);
-  vcl_cout << svd.W() << '\n';
+  std::cout << svd.W() << '\n';
   if (svd.W(8)<DEGENERACY_THRESHOLD*svd.W(7)) {
-    vcl_cerr << "vgl_h_matrix_3d_compute_linear : design matrix has rank < 9\n"
+    std::cerr << "vgl_h_matrix_3d_compute_linear : design matrix has rank < 9\n"
              << "vgl_h_matrix_3d_compute_linear : probably due to degenerate point configuration\n";
     return false;
   }
@@ -70,8 +71,8 @@ solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
 }
 
 bool vgl_h_matrix_3d_compute_affine::
-compute_p(vcl_vector<vgl_homg_point_3d<double> > const& points1,
-          vcl_vector<vgl_homg_point_3d<double> > const& points2,
+compute_p(std::vector<vgl_homg_point_3d<double> > const& points1,
+          std::vector<vgl_homg_point_3d<double> > const& points2,
           vgl_h_matrix_3d<double>& H)
 {
   //number of points must be the same
@@ -79,8 +80,8 @@ compute_p(vcl_vector<vgl_homg_point_3d<double> > const& points1,
   int n = static_cast<int>(points1.size());
 
   if (n * 3 < TM_UNKNOWNS_COUNT+3) {
-    vcl_cerr << "vgl_h_matrix_3d_compute_affine: Need at least 4 matches.\n";
-    if (n == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    std::cerr << "vgl_h_matrix_3d_compute_affine: Need at least 4 matches.\n";
+    if (n == 0) std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
     return false;
   }
   //compute the normalizing transforms
@@ -89,7 +90,7 @@ compute_p(vcl_vector<vgl_homg_point_3d<double> > const& points1,
     return false;
   if (!tr2.compute_from_points(points2))
     return false;
-  vcl_vector<vgl_homg_point_3d<double> > tpoints1, tpoints2;
+  std::vector<vgl_homg_point_3d<double> > tpoints1, tpoints2;
   for (int i = 0; i<n; i++)
   {
     tpoints1.push_back(tr1(points1[i]));
@@ -107,8 +108,8 @@ compute_p(vcl_vector<vgl_homg_point_3d<double> > const& points1,
   m[3][3] = 1.0;
 #if 0
   for(unsigned r = 0; r<4; ++r)
-    vcl_cout << vcl_setprecision(2) << m[r][0] << ' ' << m[r][1] << ' '<< m[r][2] << ' '<< m[r][3] << '\n';
-  vcl_cout << '\n';
+    std::cout << std::setprecision(2) << m[r][0] << ' ' << m[r][1] << ' '<< m[r][2] << ' '<< m[r][3] << '\n';
+  std::cout << '\n';
 #endif
   vgl_h_matrix_3d<double> hh(m);
   //

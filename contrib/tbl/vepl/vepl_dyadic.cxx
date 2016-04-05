@@ -95,7 +95,7 @@ void vepl_dyadic_sum(vil_image_resource_sptr im_out, vil_image_resource_sptr ima
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_dyadic_sum() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_dyadic_sum() not implemented for " << image << '\n';
 }
 
 void vepl_dyadic_dif(vil_image_resource_sptr im_out, vil_image_resource_sptr image)
@@ -162,7 +162,7 @@ void vepl_dyadic_dif(vil_image_resource_sptr im_out, vil_image_resource_sptr ima
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_dyadic_dif() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_dyadic_dif() not implemented for " << image << '\n';
 }
 
 void vepl_dyadic_min(vil_image_resource_sptr im_out, vil_image_resource_sptr image)
@@ -219,7 +219,7 @@ void vepl_dyadic_min(vil_image_resource_sptr im_out, vil_image_resource_sptr ima
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_dyadic_min() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_dyadic_min() not implemented for " << image << '\n';
 }
 
 void vepl_dyadic_max(vil_image_resource_sptr im_out, vil_image_resource_sptr image)
@@ -276,6 +276,6 @@ void vepl_dyadic_max(vil_image_resource_sptr im_out, vil_image_resource_sptr ima
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_dyadic_max() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_dyadic_max() not implemented for " << image << '\n';
 }
 

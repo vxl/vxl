@@ -29,8 +29,9 @@
 //   Peter Vanroose  22 Jul 2009: Moved vgl_intersection() to vgl_intersection.h
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_3d
 
 //: Represents a cartesian 3D box
@@ -150,7 +151,7 @@ class vgl_box_3d
   vgl_point_3d<Type> max_point() const;
 
   //: Return the 8 vertices of the box
-  vcl_vector<vgl_point_3d<Type> > vertices() const;
+  std::vector<vgl_point_3d<Type> > vertices() const;
 
   // Data Control--------------------------------------------------------------
 
@@ -239,13 +240,13 @@ class vgl_box_3d
   // I/O-----------------------------------------------------------------------
 
   //: Write "<vgl_box_3d x0,y0,z0 to x1,y1,z1>" to stream
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 
   //: Write "x0 y0 z0 x1 y1 z1(endl)" to stream
-  vcl_ostream& write(vcl_ostream&) const;
+  std::ostream& write(std::ostream&) const;
 
   //: Read x0,y0,z0,x1,y1,z1 from stream
-  vcl_istream& read(vcl_istream&);
+  std::istream& read(std::istream&);
 
   // INTERNALS-----------------------------------------------------------------
  protected:
@@ -257,12 +258,12 @@ class vgl_box_3d
 //: Write box to stream
 // \relatesalso vgl_box_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, vgl_box_3d<Type> const& p);
 
 //: Read box from stream
 // \relatesalso vgl_box_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p);
+std::istream&  operator>>(std::istream& is,  vgl_box_3d<Type>& p);
 
 //: Calculate the bounding box of a sequence of points or boxes.
 template <class T, class ITER>

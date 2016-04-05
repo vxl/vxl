@@ -1,12 +1,14 @@
 // This is brl/bbas/bsol/bsol_intrinsic_curve_3d.cxx
+#include <cstdio>
+#include <iostream>
+#include <cmath>
+#include <cstring>
 #include "bsol_intrinsic_curve_3d.h"
 //:
 // \file
 #include <vsol/vsol_point_3d.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
-#include <vcl_cmath.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 //***************************************************************************
@@ -18,17 +20,17 @@
 //---------------------------------------------------------------------------
 bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d()
 {
-  storage_=new vcl_vector<vsol_point_3d_sptr>();
+  storage_=new std::vector<vsol_point_3d_sptr>();
   computeProperties();
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector of points
+//: Constructor from a std::vector of points
 //---------------------------------------------------------------------------
 
-bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices)
+bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d(const std::vector<vsol_point_3d_sptr> &new_vertices)
 {
-  storage_=new vcl_vector<vsol_point_3d_sptr>(new_vertices);
+  storage_=new std::vector<vsol_point_3d_sptr>(new_vertices);
   computeProperties();
 }
 
@@ -38,7 +40,7 @@ bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d(const vcl_vector<vsol_point_3d_
 bsol_intrinsic_curve_3d::bsol_intrinsic_curve_3d(const bsol_intrinsic_curve_3d &other)
   : vsol_curve_3d(other)
 {
-  storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_point_3d_sptr>(*other.storage_);
   for (unsigned int i=0; i<storage_->size(); ++i)
     (*storage_)[i]=new vsol_point_3d(*((*other.storage_)[i]));
   computeProperties();
@@ -77,7 +79,7 @@ bool bsol_intrinsic_curve_3d::operator==(const bsol_intrinsic_curve_3d &other) c
     return false;
 
   // run through other list to find the point matching the first point of this:
-  vcl_vector<vsol_point_3d_sptr>::const_iterator i1 = storage_->begin(),
+  std::vector<vsol_point_3d_sptr>::const_iterator i1 = storage_->begin(),
                                                  i2 = other.storage_->begin();
   while (i2!=other.storage_->end() && *(*i1)!=*(*i2))
     ++i2;
@@ -138,9 +140,9 @@ void bsol_intrinsic_curve_3d::computeProperties()
   theta_.push_back(-1);
   thetas_.push_back(-1); thetas_.push_back(-1);
   thetass_.push_back(-1); thetass_.push_back(-1);
-  Tangent_.push_back(NULL);
-  Normal_.push_back(NULL); Normal_.push_back(NULL);
-  Binormal_.push_back(NULL); Binormal_.push_back(NULL);
+  Tangent_.push_back(VXL_NULLPTR);
+  Normal_.push_back(VXL_NULLPTR); Normal_.push_back(VXL_NULLPTR);
+  Binormal_.push_back(VXL_NULLPTR); Binormal_.push_back(VXL_NULLPTR);
   curvature_.push_back(-1.0); curvature_.push_back(-1.0);
   torsion_.push_back(-1); torsion_.push_back(-1);
 
@@ -164,15 +166,15 @@ void bsol_intrinsic_curve_3d::computeProperties()
     double cur_dx = cur_x - prev_x;
     double cur_dy = cur_y - prev_y;
     double cur_dz = cur_z - prev_z;
-    double dL = vcl_sqrt(cur_dx*cur_dx + cur_dy*cur_dy + cur_dz*cur_dz);
+    double dL = std::sqrt(cur_dx*cur_dx + cur_dy*cur_dy + cur_dz*cur_dz);
     s_.push_back(dL);
     length += dL;
     arcLength_.push_back(length);
 
-    double phi = vcl_acos(cur_dz/dL);
+    double phi = std::acos(cur_dz/dL);
     phi_.push_back(phi);
-    double dLxy = dL*vcl_sin(phi);
-    double theta = vcl_acos(cur_dx/dLxy);
+    double dLxy = dL*std::sin(phi);
+    double theta = std::acos(cur_dx/dLxy);
     theta_.push_back(theta);
 
     vgl_vector_3d<double>* tangent = new vgl_vector_3d<double>(cur_dx, cur_dy, cur_dz);
@@ -198,20 +200,20 @@ void bsol_intrinsic_curve_3d::computeProperties()
     phis_.push_back(phis);
     double thetas = (theta_[i] - theta_[i-1])/s_[i];
     thetas_.push_back(thetas);
-    double curvature = vnl_math::hypot(phis, vcl_sin(phi_[i])*thetas);
+    double curvature = vnl_math::hypot(phis, std::sin(phi_[i])*thetas);
     curvature_.push_back(curvature);
     totalCurvature_ += curvature;
-    totalAngleChange_ += vcl_fabs(curvature);
+    totalAngleChange_ += std::fabs(curvature);
 
-    double cos_phi = vcl_cos(phi_[i]);
-    double sin_phi = vcl_sin(phi_[i]);
-    double cos_theta = vcl_cos(theta_[i]);
-    double sin_theta = vcl_sin(theta_[i]);
+    double cos_phi = std::cos(phi_[i]);
+    double sin_phi = std::sin(phi_[i]);
+    double cos_theta = std::cos(theta_[i]);
+    double sin_theta = std::sin(theta_[i]);
     double normalx = cos_phi * cos_theta * phis -
                 sin_phi * sin_theta * thetas;
     double normaly = cos_phi * sin_theta * phis -
                 sin_phi * cos_theta * thetas;
-    double normalz = - vcl_sin(phi_[i]) * phis;
+    double normalz = - std::sin(phi_[i]) * phis;
     vgl_vector_3d<double>* normal = new vgl_vector_3d<double>(normalx, normaly, normalz);
     normalize(*normal); //normalize the normal vector.
     Normal_.push_back(normal);
@@ -236,8 +238,8 @@ void bsol_intrinsic_curve_3d::computeProperties()
 
     //compute torsion. (this is a very noisy approach, without ENO).
 #if 0
-    double sin_phi = vcl_sin(phi_[i]);
-    double cos_phi = vcl_cos(phi_[i]);
+    double sin_phi = std::sin(phi_[i]);
+    double cos_phi = std::cos(phi_[i]);
     double torsion_n = 2*cos_phi*thetas_[i]*phis_[i]*phis_[i] +
                  sin_phi*phis_[i]*thetass_[i] +
                  sin_phi*thetas_[i]*
@@ -314,7 +316,7 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
     arcLength_.push_back(length);
     s_.push_back(dL);
 
-     double theta = vcl_atan2(cur_dy, cur_dx);
+     double theta = std::atan2(cur_dy, cur_dx);
     angle_.push_back(theta);
 
     double K;
@@ -332,7 +334,7 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
       }
       double d2x = (cdx-pdx)/dL;
       double d2y = (cdy-pdy)/dL;
-      K = (d2y*cdx-d2x*cdy) / vcl_pow(cdx*cdx+cdy*cdy,3/2);
+      K = (d2y*cdx-d2x*cdy) / std::pow(cdx*cdx+cdy*cdy,3/2);
     }
     else {
       K = 0;
@@ -370,7 +372,7 @@ void bsol_intrinsic_curve_3d::computeProperties_old()
     Tangent_[0] = Tangent_[1];
     angle_[0] = angle_[1];
     for (unsigned int i=1; i<size(); ++i)
-      totalAngleChange_ += vcl_fabs(angle_[i]-angle_[i-1]);
+      totalAngleChange_ += std::fabs(angle_[i]-angle_[i-1]);
 
     // 5-2)Deal with the ending part of the curve.
     Normal_[0] = Normal_[1];
@@ -390,7 +392,7 @@ void bsol_intrinsic_curve_3d::clear(void)
 
   //reset the storage_
   delete storage_;
-  storage_=new vcl_vector<vsol_point_3d_sptr>();
+  storage_=new std::vector<vsol_point_3d_sptr>();
 
   arcLength_.clear();
   s_.clear();
@@ -409,67 +411,67 @@ void bsol_intrinsic_curve_3d::clear(void)
   totalAngleChange_ = 0;
 }
 
-bool bsol_intrinsic_curve_3d::LoadCON3File(vcl_string fileName)
+bool bsol_intrinsic_curve_3d::LoadCON3File(std::string fileName)
 {
-  vcl_FILE* fp;
+  std::FILE* fp;
   char buffer[128];
 
-  if ((fp = vcl_fopen(fileName.c_str(), "r")) == NULL) {
-    vcl_fprintf(stderr, "ERROR: Can't open input .con3 file %s.\n", fileName.c_str());
+  if ((fp = std::fopen(fileName.c_str(), "r")) == VXL_NULLPTR) {
+    std::fprintf(stderr, "ERROR: Can't open input .con3 file %s.\n", fileName.c_str());
     return false;
   }
   CON3Filename_ = fileName;
 
-  int ret = vcl_fscanf(fp, "CONTOUR\n"); assert (ret==0);
-  ret = vcl_fscanf(fp, "%s\n", buffer); assert (ret==1);
-  if (vcl_strcmp(buffer, "OPEN")==0) //the same
+  int ret = std::fscanf(fp, "CONTOUR\n"); assert (ret==0);
+  ret = std::fscanf(fp, "%s\n", buffer); assert (ret==1);
+  if (std::strcmp(buffer, "OPEN")==0) //the same
     isOpen_ = true;
   else //"CLOSE"
     isOpen_ = false;
   int numPoints=0;
-  ret = vcl_fscanf(fp, "%d\n", &numPoints); assert (ret==1);
+  ret = std::fscanf(fp, "%d\n", &numPoints); assert (ret==1);
   if (numPoints<=0)
-    vcl_fprintf(stderr, "WARNING: First line of file %s (number of points) should be strictly positive.\n",
+    std::fprintf(stderr, "WARNING: First line of file %s (number of points) should be strictly positive.\n",
                 fileName.c_str());
 
   for (int i=0; i<numPoints; ++i) {
     double x, y, z;
-    ret = vcl_fscanf(fp, "%lf", &x); assert (ret==1);
-    ret = vcl_fscanf(fp, "%lf", &y); assert (ret==1);
-    ret = vcl_fscanf(fp, "%lf", &z); assert (ret==1);
+    ret = std::fscanf(fp, "%lf", &x); assert (ret==1);
+    ret = std::fscanf(fp, "%lf", &y); assert (ret==1);
+    ret = std::fscanf(fp, "%lf", &z); assert (ret==1);
     add_vertex(x, y, z);
   }
 
   //Note here that if the numPoints is wrong, the rest of the file is not read.
-  vcl_fclose(fp);
+  std::fclose(fp);
 
   computeProperties();
 
   return true;
 }
 
-bool bsol_intrinsic_curve_3d::SaveCON3File(vcl_string fileName)
+bool bsol_intrinsic_curve_3d::SaveCON3File(std::string fileName)
 {
-  vcl_FILE* fp;
+  std::FILE* fp;
 
-  if ((fp = vcl_fopen(fileName.c_str(), "w")) == NULL) {
-    vcl_fprintf(stderr, "ERROR( bsol_intrinsic_curve_3d::SaveCON3File): Can't open output .con3 file %s.\n", fileName.c_str());
+  if ((fp = std::fopen(fileName.c_str(), "w")) == VXL_NULLPTR) {
+    std::fprintf(stderr, "ERROR( bsol_intrinsic_curve_3d::SaveCON3File): Can't open output .con3 file %s.\n", fileName.c_str());
     return false;
   }
 
-  vcl_fprintf(fp, "CONTOUR\n");
+  std::fprintf(fp, "CONTOUR\n");
   if (isOpen_)
-    vcl_fprintf(fp, "OPEN\n");
+    std::fprintf(fp, "OPEN\n");
   else
-    vcl_fprintf(fp, "CLOSE\n");
+    std::fprintf(fp, "CLOSE\n");
 
-  vcl_fprintf(fp, "%d\n", size());
+  std::fprintf(fp, "%d\n", size());
 
   for (unsigned int i=0; i<size(); ++i) {
-    vcl_fprintf(fp, "%.10f %.10f %.10f\n", x(i), y(i), z(i));
+    std::fprintf(fp, "%.10f %.10f %.10f\n", x(i), y(i), z(i));
   }
 
-  vcl_fclose(fp);
+  std::fclose(fp);
   return true;
 }
 

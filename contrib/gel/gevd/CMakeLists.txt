@@ -32,9 +32,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(gevd_contour.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-add_library(gevd ${gevd_sources})
-install_targets(/lib gevd)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gevd ${gevd_sources})
+vxl_add_library(LIBRARY_NAME gevd LIBRARY_SOURCES ${gevd_sources})
 target_link_libraries(gevd vtol vsol vdgl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 
 if(BUILD_TESTING)

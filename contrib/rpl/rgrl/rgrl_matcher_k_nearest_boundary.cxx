@@ -67,7 +67,7 @@ compute_matches( rgrl_feature_set const&       from_set,
     }
 
     //assign the corresponding to_pt_boundary points to the from_boundary_points
-    vcl_vector<feature_vector> to_bd_pt_set(from_bd_pts.size());
+    std::vector<feature_vector> to_bd_pt_set(from_bd_pts.size());
     for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
       rgrl_feature_trace_pt* to_feature =
         rgrl_cast<rgrl_feature_trace_pt *>(ti.to_feature());

@@ -15,10 +15,12 @@
 //                          - Set event.ascii_char to actual key stroke
 // \endverbatim
 
+#include <cstdlib>
+#include <utility>
+#include <iostream>
 #include "vgui_gtk2_adaptor.h"
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_utility.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkgl.h>
@@ -29,7 +31,6 @@
 #include <vgui/internals/vgui_overlay_helper.h>
 #include "vgui_gtk2_utils.h"
 #include "vgui_gtk2_window.h"
-#include <vcl_iostream.h>
 
 vgui_menu vgui_gtk2_adaptor::last_popup;
 
@@ -64,7 +65,7 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
     if (glconfig == 0)
     {
       g_print ("*** No appropriate OpenGL-capable visual found.\n");
-      vcl_abort();
+      std::abort();
     }
   }
 
@@ -73,8 +74,8 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
 
   if (!widget)
   {
-    vcl_cerr << __FILE__ << " : Could not get a GL widget!\n";
-    vcl_abort();
+    std::cerr << __FILE__ << " : Could not get a GL widget!\n";
+    std::abort();
   }
 
   // Set OpenGL-capability to the widget.
@@ -84,8 +85,8 @@ vgui_gtk2_adaptor::vgui_gtk2_adaptor(vgui_gtk2_window* win)
                                      TRUE,
                                      GDK_GL_RGBA_TYPE) )
   {
-    vcl_cerr << __FILE__ << " : Could not set GL capability!\n";
-    vcl_abort();
+    std::cerr << __FILE__ << " : Could not set GL capability!\n";
+    std::abort();
   }
 
   // Since we need to access the widget from time to time (e.g. to
@@ -200,13 +201,13 @@ void vgui_gtk2_adaptor::post_timer(float timeout, int name)
 
   // add them to timer map
   internal_timer i( id, (void*)cd );
-  timers_.insert( vcl_pair<int, internal_timer>(name, i) );
+  timers_.insert( std::pair<int, internal_timer>(name, i) );
 }
 
 //: timeout is in milliseconds
 void vgui_gtk2_adaptor::kill_timer(int name)
 {
-  vcl_map<int, internal_timer>::iterator it
+  std::map<int, internal_timer>::iterator it
     = timers_.find( name );
   if ( it == timers_.end() )  // if such timer does not exist
     return;
@@ -234,14 +235,14 @@ void vgui_gtk2_adaptor::post_destroy()
 void vgui_gtk2_adaptor::set_default_popup(vgui_menu)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_gtk2_adaptor::set_default_popup\n";
+  std::cerr << "vgui_gtk2_adaptor::set_default_popup\n";
 #endif
 }
 
 vgui_menu vgui_gtk2_adaptor::get_popup()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_gtk2_adaptor::get_popup\n";
+  std::cerr << "vgui_gtk2_adaptor::get_popup\n";
 #endif
   return vgui_menu();
 }
@@ -406,7 +407,7 @@ gint vgui_gtk2_adaptor::handle(const vgui_event &event,
     ret_value = FALSE;
 
 #ifdef DEBUG
-  vcl_cerr << "vgui_event " << event << '\n';
+  std::cerr << "vgui_event " << event << '\n';
 #endif
   // Only send events to the tableau if the widget is mapped; that is,
   // only when an OpenGL context exists.
@@ -418,7 +419,7 @@ gint vgui_gtk2_adaptor::handle(const vgui_event &event,
       adaptor->dispatch_to_tableau(event);
   }
   else
-    vcl_cerr << __FILE__ << ": error: event " << event
+    std::cerr << __FILE__ << ": error: event " << event
              << " while GL area was not mapped\n";
 
   return ret_value;
@@ -454,7 +455,7 @@ bool vgui_gtk2_adaptor::do_idle()
 void vgui_gtk2_adaptor::draw()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_gtk2_adaptor::draw\n";
+  std::cerr << "vgui_gtk2_adaptor::draw\n";
 #endif
   if ( GTK_WIDGET_MAPPED(widget) )
   {
@@ -505,7 +506,7 @@ gint vgui_gtk2_adaptor::idle_callback_for_destroy(gpointer data)
   if (win)
     delete win;
   else
-    vcl_cerr << __FILE__ " : parent vgui_gtk2_window is unknown, so cannot destroy!\n";
+    std::cerr << __FILE__ " : parent vgui_gtk2_window is unknown, so cannot destroy!\n";
 
   // The adaptor destructor unrefs its tableau and disconnects/destroys
   // its glarea widget

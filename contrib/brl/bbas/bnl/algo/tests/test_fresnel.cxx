@@ -1,7 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <bnl/algo/bnl_fresnel.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 
 //: Compare the values of Fresnel integral (cosin and sin) computed
@@ -10,7 +11,7 @@ MAIN( test_fresnel )
 {
   START ("Fresnel Integral");
 
-  vcl_cout << "Test Fresnel integral:" << vcl_endl;
+  std::cout << "Test Fresnel integral:" << std::endl;
   double tol = 1e-8;
   double x[] = {
    -1.000000000000000e+030,
@@ -113,7 +114,7 @@ MAIN( test_fresnel )
 
   for (int i = 0; i < 27; ++i)
   {
-    vcl_cout << "x = " << x[i] << vcl_endl;
+    std::cout << "x = " << x[i] << std::endl;
     TEST_NEAR("Test fresnel cosine", fc[i], matlab_fresnel_cos_x[i], tol);
     TEST_NEAR("Test fresnel sine", fs[i], matlab_fresnel_sin_x[i], tol);
   }

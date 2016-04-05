@@ -6,8 +6,9 @@
 // \brief Store information about which node a given node depends on.
 // \author Tim Cootes
 
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Value to indicate no valid arc
 const unsigned mmn_no_arc=99999;
@@ -53,7 +54,7 @@ class mmn_dependancy
       n_dep(2), tri1(t1) {}
 };
 
-inline vcl_ostream& operator<<(vcl_ostream& os, const mmn_dependancy& t)
+inline std::ostream& operator<<(std::ostream& os, const mmn_dependancy& t)
 {
   os<<'{';
   if (t.n_dep==1) os<<t.v0<<':'<<t.v1<<'}';
@@ -92,9 +93,9 @@ inline void vsl_b_read(vsl_b_istream& bfs, mmn_dependancy& t)
       vsl_b_read(bfs,t.n_dep);
       return;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

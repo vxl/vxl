@@ -9,7 +9,7 @@
 xcv_tjunction::xcv_tjunction(xcv_mview_manager* xmm)
   : vgui_tableau()
   , xcv_mgr(xmm)
-  , child_tab(this, 0)
+  , child_tab(this, VXL_NULLPTR)
 {
 }
 
@@ -20,19 +20,19 @@ void xcv_tjunction::set_child(vgui_tableau_sptr const& ct)
   child_tab.assign(ct);
 }
 
-vcl_string xcv_tjunction::type_name() const
+std::string xcv_tjunction::type_name() const
 {
-  return vcl_string("xcv_tjunction");
+  return std::string("xcv_tjunction");
 }
 
-vcl_string xcv_tjunction::file_name() const
+std::string xcv_tjunction::file_name() const
 {
-  return vcl_string("(none)");
+  return std::string("(none)");
 }
 
-vcl_string xcv_tjunction::pretty_name() const
+std::string xcv_tjunction::pretty_name() const
 {
-  return vcl_string("xcv_tjunction");
+  return std::string("xcv_tjunction");
 }
 
 //------------------------------------------------------------------------------

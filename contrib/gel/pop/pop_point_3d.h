@@ -23,7 +23,7 @@ class pop_point_3d:public vgl_point_3d<double>, public pop_geometric_object
 {
  public:
   //: constructor
-  pop_point_3d(pop_vertex *coordinate_system,vcl_vector<pop_parameter*> &params);
+  pop_point_3d(pop_vertex *coordinate_system,std::vector<pop_parameter*> &params);
 
   //: used when this is not a parametric object
   pop_point_3d(pop_vertex *coordinate_system, double x, double y, double z);

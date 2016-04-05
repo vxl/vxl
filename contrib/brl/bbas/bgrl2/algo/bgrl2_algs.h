@@ -12,7 +12,9 @@
 //   Ozge C. Ozcanli 11/15/08  Moved up to vxl
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include "../bgrl2_graph.h"
 
@@ -22,7 +24,7 @@
 //  starting from the "next edge" of the given node wrt the given edge, add the next edges of successor nodes as a chain
 //  stop when the initial edge is re-encountered
 template <class G, class E, class V>
-void euler_tour(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n, vcl_vector<vbl_smart_ptr<E> >& edges);
+void euler_tour(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n, std::vector<vbl_smart_ptr<E> >& edges);
 
 //: return the depth of the graph starting from the given node (!!!assumes there are no loops)
 template <class G, class E, class V>

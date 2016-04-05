@@ -2,12 +2,13 @@
 #ifndef rsdl_bins_2d__txx_
 #define rsdl_bins_2d__txx_
 
+#include <iostream>
+#include <vector>
+#include <cstddef>
 #include "rsdl_bins_2d.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -32,8 +33,8 @@ rsdl_bins_2d( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
   assert( min_pt_[0] <= max_pt_[0] );
   assert( min_pt_[1] <= max_pt_[1] );
 
-  num_bins_x_ = int( vcl_ceil( double( max_pt_[0] - min_pt_[0] ) / bin_sizes_[0] ) );
-  num_bins_y_ = int( vcl_ceil( double( max_pt_[1] - min_pt_[1] ) / bin_sizes_[1] ) );
+  num_bins_x_ = int( std::ceil( double( max_pt_[0] - min_pt_[0] ) / bin_sizes_[0] ) );
+  num_bins_y_ = int( std::ceil( double( max_pt_[1] - min_pt_[1] ) / bin_sizes_[1] ) );
 
   // make sure the number is at least 1
   if ( num_bins_x_ <=0 )  num_bins_x_ = 1;
@@ -63,8 +64,8 @@ reset( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
   assert( min_pt_[0] <= max_pt_[0] );
   assert( min_pt_[1] <= max_pt_[1] );
 
-  num_bins_x_ = int( vcl_ceil( double( max_pt_[0] - min_pt_[0] ) / bin_sizes_[0] ) );
-  num_bins_y_ = int( vcl_ceil( double( max_pt_[1] - min_pt_[1] ) / bin_sizes_[1] ) );
+  num_bins_x_ = int( std::ceil( double( max_pt_[0] - min_pt_[0] ) / bin_sizes_[0] ) );
+  num_bins_y_ = int( std::ceil( double( max_pt_[1] - min_pt_[1] ) / bin_sizes_[1] ) );
 
   bins_.resize( 2, 2);    //needed because the next line does not clear out the previous bins
                           //if the previous bins are the same size....KHF 8/6/01
@@ -104,7 +105,7 @@ get_value( const vnl_vector_fixed< COORD_T,  2 > & pt, VALUE_T& value )
   int bin_x, bin_y;
   this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
 
-  COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
+  COORD_T distance = std::sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
   this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
@@ -133,7 +134,7 @@ change_point( const vnl_vector_fixed< COORD_T, 2 > & pt,
   int bin_x, bin_y;
   this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
 
-  COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
+  COORD_T distance = std::sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
   this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
@@ -163,7 +164,7 @@ change_point( const vnl_vector_fixed< COORD_T, 2 > & pt,
   int bin_x, bin_y;
   this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
 
-  COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
+  COORD_T distance = std::sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
   this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
@@ -192,7 +193,7 @@ remove_point( const vnl_vector_fixed< COORD_T, 2 > & pt )
   int bin_x, bin_y;
   this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
 
-  COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
+  COORD_T distance = std::sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
   this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
@@ -221,7 +222,7 @@ remove_point( const vnl_vector_fixed< COORD_T, 2 > & pt,
   int bin_x, bin_y;
   this->point_to_bin( pt[0], pt[1], bin_x, bin_y );
 
-  COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
+  COORD_T distance = std::sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
   this->point_to_bin( pt[0]-distance, pt[1]-distance, min_bin_x, min_bin_y );
 
@@ -247,9 +248,9 @@ void
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 n_nearest( const vnl_vector_fixed< COORD_T, 2 >& query_pt,
            int n,
-           vcl_vector< VALUE_T >& values ) const
+           std::vector< VALUE_T >& values ) const
 {
-  vcl_vector< vnl_vector_fixed< COORD_T, 2 > > points;
+  std::vector< vnl_vector_fixed< COORD_T, 2 > > points;
   n_nearest( query_pt, n, points, values );
 }
 
@@ -259,13 +260,13 @@ void
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
            int n,
-           vcl_vector< vnl_vector_fixed< COORD_T, 2 > > & points,
-           vcl_vector< VALUE_T > & values ) const
+           std::vector< vnl_vector_fixed< COORD_T, 2 > > & points,
+           std::vector< VALUE_T > & values ) const
 {
   assert( n >= 1 );
   points.clear();
   values.clear();
-  vcl_vector< double > sq_distances( n );
+  std::vector< double > sq_distances( n );
 
   int num_found = 0;
 
@@ -274,7 +275,7 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
 
   int infinity_norm_dist = 0;
 
-  vcl_vector< int > bin_xs, bin_ys;
+  std::vector< int > bin_xs, bin_ys;
   bin_xs.push_back( c_bin_x );
   bin_ys.push_back( c_bin_y );
 
@@ -320,8 +321,8 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
       bin_xs.clear(); bin_ys.clear();
 
       // make list of bins to try
-      int lower_x_for_y = vnl_math::max( c_bin_x - infinity_norm_dist, 0 );
-      int upper_x_for_y = vnl_math::min( c_bin_x + infinity_norm_dist, num_bins_x_-1 );
+      int lower_x_for_y = std::max( c_bin_x - infinity_norm_dist, 0 );
+      int upper_x_for_y = std::min( c_bin_x + infinity_norm_dist, num_bins_x_-1 );
 
       // across top (when origin is at upper left)
       if ( c_bin_y - infinity_norm_dist >= 0 ) {
@@ -339,8 +340,8 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
         }
       }
 
-      int lower_y_for_x = vnl_math::max( c_bin_y - infinity_norm_dist+1, 0 );
-      int upper_y_for_x = vnl_math::min( c_bin_y + infinity_norm_dist-1, num_bins_y_-1 );
+      int lower_y_for_x = std::max( c_bin_y - infinity_norm_dist+1, 0 );
+      int upper_y_for_x = std::min( c_bin_y + infinity_norm_dist-1, num_bins_y_-1 );
 
       // across left
       if ( c_bin_x - infinity_norm_dist >= 0 ) {   // haven't fallen off left edge
@@ -367,7 +368,7 @@ rsdl_bins_2d< COORD_T, VALUE_T > ::
 is_any_point_within_radius( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
                             COORD_T radius ) const
 {
-  radius += vcl_sqrt(dist_tolerance_sqr_);
+  radius += std::sqrt(dist_tolerance_sqr_);
   COORD_T sq_radius = radius * radius;
 
   int min_bin_x, min_bin_y;
@@ -392,9 +393,9 @@ void
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 points_within_radius( const vnl_vector_fixed< COORD_T,  2> & query_pt,
                       COORD_T radius,
-                      vcl_vector< VALUE_T > & values ) const
+                      std::vector< VALUE_T > & values ) const
 {
-  radius += vcl_sqrt(dist_tolerance_sqr_);
+  radius += std::sqrt(dist_tolerance_sqr_);
   COORD_T sq_radius = radius * radius;
 
   int min_bin_x, min_bin_y;
@@ -422,10 +423,10 @@ void
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 points_within_radius( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
                       COORD_T radius,
-                      vcl_vector< vnl_vector_fixed< COORD_T, 2 > > & points,
-                      vcl_vector< VALUE_T > & values ) const
+                      std::vector< vnl_vector_fixed< COORD_T, 2 > > & points,
+                      std::vector< VALUE_T > & values ) const
 {
-  radius += vcl_sqrt(dist_tolerance_sqr_);
+  radius += std::sqrt(dist_tolerance_sqr_);
   COORD_T sq_radius = radius * radius;
 
   int min_bin_x, min_bin_y;
@@ -456,7 +457,7 @@ rsdl_bins_2d< COORD_T, VALUE_T > ::
 is_any_point_in_bounding_box( const vnl_vector_fixed<COORD_T,2>& min_query_pt,
                               const vnl_vector_fixed<COORD_T,2>& max_query_pt) const
 {
-  COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
+  COORD_T distance = std::sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
   this->point_to_bin( min_query_pt[0]-distance, min_query_pt[1]-distance, min_bin_x, min_bin_y );
 
@@ -480,9 +481,9 @@ void
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 points_in_bounding_box( const vnl_vector_fixed<COORD_T,2>& min_query_pt,
                         const vnl_vector_fixed<COORD_T,2>& max_query_pt,
-                        vcl_vector< VALUE_T >& values ) const
+                        std::vector< VALUE_T >& values ) const
 {
-  vcl_vector< vnl_vector_fixed< COORD_T, 2 > > points;
+  std::vector< vnl_vector_fixed< COORD_T, 2 > > points;
   points_in_bounding_box( min_query_pt, max_query_pt, points, values );
 }
 
@@ -492,10 +493,10 @@ void
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 points_in_bounding_box( const vnl_vector_fixed< COORD_T, 2 > & min_query_pt,
                         const vnl_vector_fixed< COORD_T, 2 > & max_query_pt,
-                        vcl_vector< vnl_vector_fixed< COORD_T, 2 > > & points,
-                        vcl_vector< VALUE_T > & values ) const
+                        std::vector< vnl_vector_fixed< COORD_T, 2 > > & points,
+                        std::vector< VALUE_T > & values ) const
 {
-  COORD_T distance = vcl_sqrt(dist_tolerance_sqr_);
+  COORD_T distance = std::sqrt(dist_tolerance_sqr_);
   int min_bin_x, min_bin_y;
   this->point_to_bin( min_query_pt[0]-distance, min_query_pt[1]-distance, min_bin_x, min_bin_y );
 
@@ -578,11 +579,11 @@ change_value( const VALUE_T& old_val, const VALUE_T& new_val )
 }
 
 template < class COORD_T, class VALUE_T >
-vcl_size_t
+std::size_t
 rsdl_bins_2d< COORD_T, VALUE_T > ::
 num_pts() const
 {
-  vcl_size_t num = 0;
+  std::size_t num = 0;
   for ( int bin_x = 0; bin_x < num_bins_x_; ++ bin_x )
     for ( int bin_y = 0; bin_y < num_bins_y_; ++ bin_y )
       num += bins_( bin_x, bin_y).size();
@@ -590,8 +591,8 @@ num_pts() const
 }
 
 template < class COORD_T, class VALUE_T >
-vcl_ostream& operator<< ( vcl_ostream& ostr,
-                          const vcl_vector< rsdl_bins_2d_entry< COORD_T, VALUE_T > > & entries )
+std::ostream& operator<< ( std::ostream& ostr,
+                          const std::vector< rsdl_bins_2d_entry< COORD_T, VALUE_T > > & entries )
 {
   for ( unsigned int i=0; i<entries.size(); ++ i )
     ostr << i << ":  point = " << entries[i].point_ << ", value = " << entries[i].value_ << '\n';
@@ -602,8 +603,8 @@ vcl_ostream& operator<< ( vcl_ostream& ostr,
 #define RSDL_BINS_2D_INSTANTIATE( COORD_T, VALUE_T ) \
 template class rsdl_bins_2d_entry< COORD_T, VALUE_T >; \
 template class rsdl_bins_2d< COORD_T, VALUE_T >; \
-template vcl_ostream& \
-operator<< ( vcl_ostream& ostr, \
-             const vcl_vector< rsdl_bins_2d_entry< COORD_T, VALUE_T > > & entry )
+template std::ostream& \
+operator<< ( std::ostream& ostr, \
+             const std::vector< rsdl_bins_2d_entry< COORD_T, VALUE_T > > & entry )
 
 #endif // rsdl_bins_2d__txx_

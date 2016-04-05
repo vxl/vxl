@@ -12,8 +12,9 @@
 //              when checking if they are 2D transformations.
 // \endverbatim
 
+#include <vector>
 #include <vgui/vgui_gl.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil/vil_image_view.h>
@@ -46,7 +47,7 @@ class vgui_utils
   // Selection utilities
   static GLuint* enter_pick_mode(float x, float y, float w, float h=0);
   static unsigned leave_pick_mode();
-  static void process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<unsigned> >& hits);
+  static void process_hits(int num_hits, GLuint* ptr, std::vector<std::vector<unsigned> >& hits);
 
   //: Returns the number of bits per pixel.
   static int bits_per_pixel(GLenum format, GLenum type);

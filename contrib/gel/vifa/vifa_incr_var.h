@@ -17,7 +17,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -79,6 +81,6 @@ class vifa_incr_var : public vul_timestamp, public vbl_ref_count
 };
 
 typedef vbl_smart_ptr<vifa_incr_var>   vifa_incr_var_sptr;
-typedef vcl_vector<vifa_incr_var_sptr> incr_var_list;
+typedef std::vector<vifa_incr_var_sptr> incr_var_list;
 
 #endif // _VIFA_INCR_VAR_H_

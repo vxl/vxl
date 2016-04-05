@@ -30,9 +30,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_param_limiter& b)
 //: Initialise from a text stream.
 // The default implementation is for attribute-less normalisers,
 // and throws if it finds any data in the stream.
-void msm_param_limiter::config_from_stream(vcl_istream &is)
+void msm_param_limiter::config_from_stream(std::istream &is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
   if (s.empty() || s=="{}") return;
 
   mbl_exception_parse_error x(
@@ -44,12 +44,12 @@ void msm_param_limiter::config_from_stream(vcl_istream &is)
 
 //=======================================================================
 //: Create a concrete msm_param_limiter-derived object, from a text specification.
-vcl_auto_ptr<msm_param_limiter> msm_param_limiter::create_from_stream(vcl_istream &is)
+std::auto_ptr<msm_param_limiter> msm_param_limiter::create_from_stream(std::istream &is)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
 
-  vcl_auto_ptr<msm_param_limiter> ps =
+  std::auto_ptr<msm_param_limiter> ps =
     mbl_cloneables_factory<msm_param_limiter>::get_clone(name);
 
   ps -> config_from_stream(is);
@@ -65,7 +65,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_param_limiter& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_param_limiter& b)
+std::ostream& operator<<(std::ostream& os,const msm_param_limiter& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -76,7 +76,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_param_limiter& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_param_limiter* b)
+std::ostream& operator<<(std::ostream& os,const msm_param_limiter* b)
 {
   if (b)
     return os << *b;
@@ -86,14 +86,14 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_param_limiter* b)
 
 //=======================================================================
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_param_limiter& b)
+void vsl_print_summary(std::ostream& os,const msm_param_limiter& b)
 {
   os << b;
 }
 
 //=======================================================================
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_param_limiter* b)
+void vsl_print_summary(std::ostream& os,const msm_param_limiter* b)
 {
   if (b)
     os << *b;

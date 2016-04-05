@@ -156,7 +156,7 @@ bounding_box() const
 }
 
 template<unsigned N>
-const vcl_type_info&
+const std::type_info&
 rgrl_feature_set_bins<N>::
 type() const
 {

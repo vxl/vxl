@@ -35,7 +35,7 @@ class bsta_mixture_weight_by_obs_updater
     void operator() ( mix_dist_& mix ) const
     {
       T total = 0;
-      vcl_vector<T> new_weights(mix.num_components(),T(0));
+      std::vector<T> new_weights(mix.num_components(),T(0));
       for (unsigned int i=0; i<new_weights.size(); ++i){
         comp_obs_dist_& d = mix.distribution(i);
         total += d.num_observations;

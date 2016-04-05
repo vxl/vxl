@@ -10,15 +10,12 @@ set( VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT  CACHE PATH "Where to store historical m
 mark_as_advanced(VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT)
 
 # Set up mbl_config.h for VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT, etc.
-configure_file(
-  ${vxl_SOURCE_DIR}/contrib/mul/mbl/mbl_config.h.in
-  ${vxl_BINARY_DIR}/contrib/mul/mbl/mbl_config.h ESCAPE_QUOTES
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/mbl_config.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/mbl_config.h
+  include/vxl/contrib/mul/mbl
 )
-include_directories( ${vxl_BINARY_DIR}/contrib/mul )
 
 set(mbl_sources
-  mbl_config.h.in
-
   mbl_add_all_loaders.cxx               mbl_add_all_loaders.h
   mbl_gamma.cxx                         mbl_gamma.h
   mbl_matrix_products.cxx               mbl_matrix_products.h
@@ -54,22 +51,22 @@ set(mbl_sources
   mbl_clamped_plate_spline_2d.cxx       mbl_clamped_plate_spline_2d.h
   mbl_correspond_points.cxx             mbl_correspond_points.h
 
-  mbl_ar_process.txx                    mbl_ar_process.h
+  mbl_ar_process.hxx                    mbl_ar_process.h
 
-  mbl_selected_data_wrapper.txx         mbl_selected_data_wrapper.h
-  mbl_data_array_ptr_wrapper.txx        mbl_data_array_ptr_wrapper.h
+  mbl_selected_data_wrapper.hxx         mbl_selected_data_wrapper.h
+  mbl_data_array_ptr_wrapper.hxx        mbl_data_array_ptr_wrapper.h
 
-  mbl_data_array_wrapper.txx            mbl_data_array_wrapper.h
-  mbl_data_collector.txx                mbl_data_collector.h
-  mbl_data_collector_list.txx           mbl_data_collector_list.h
-  mbl_data_wrapper.txx                  mbl_data_wrapper.h
-  mbl_stochastic_data_collector.txx     mbl_stochastic_data_collector.h
-  mbl_data_wrapper_mixer.txx            mbl_data_wrapper_mixer.h
-  mbl_file_data_collector.txx           mbl_file_data_collector.h
-  mbl_file_data_wrapper.txx             mbl_file_data_wrapper.h
+  mbl_data_array_wrapper.hxx            mbl_data_array_wrapper.h
+  mbl_data_collector.hxx                mbl_data_collector.h
+  mbl_data_collector_list.hxx           mbl_data_collector_list.h
+  mbl_data_wrapper.hxx                  mbl_data_wrapper.h
+  mbl_stochastic_data_collector.hxx     mbl_stochastic_data_collector.h
+  mbl_data_wrapper_mixer.hxx            mbl_data_wrapper_mixer.h
+  mbl_file_data_collector.hxx           mbl_file_data_collector.h
+  mbl_file_data_wrapper.hxx             mbl_file_data_wrapper.h
 
-  mbl_clusters.txx                      mbl_clusters.h
-  mbl_cluster_tree.txx                  mbl_cluster_tree.h
+  mbl_clusters.hxx                      mbl_clusters.h
+  mbl_cluster_tree.hxx                  mbl_cluster_tree.h
 
   mbl_table.cxx                         mbl_table.h
   mbl_progress.cxx                      mbl_progress.h
@@ -105,8 +102,8 @@ set(mbl_sources
   mbl_stepwise_regression.cxx          mbl_stepwise_regression.h
   mbl_dyn_prog.cxx                     mbl_dyn_prog.h
 
-  mbl_save_text_file.txx               mbl_save_text_file.h
-  mbl_load_text_file.txx               mbl_load_text_file.h
+  mbl_save_text_file.hxx               mbl_save_text_file.h
+  mbl_load_text_file.hxx               mbl_load_text_file.h
   mbl_sample_stats_1d.cxx              mbl_sample_stats_1d.h
 
   mbl_mask.cxx                         mbl_mask.h
@@ -120,11 +117,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-add_library(mbl ${mbl_sources})
+vxl_add_library(LIBRARY_NAME mbl LIBRARY_SOURCES ${mbl_sources})
 target_link_libraries(mbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
-
-install_targets(/lib mbl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mbl ${mbl_sources})
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

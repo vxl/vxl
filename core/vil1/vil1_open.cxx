@@ -6,9 +6,11 @@
 // \file
 // \author fsm
 
+#include <cstring>
+#include <iostream>
 #include "vil1_open.h"
 
-#include <vcl_cstring.h>  // strncmp()
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_stream_fstream.h>
 #include <vil1/vil1_stream_core.h>
@@ -43,16 +45,16 @@ vil1_stream *vil1_open(char const* what, char const* how)
 
   if (!is) {
     // hacked check for filenames beginning "gen:".
-    int l = (int)vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "gen:", 4) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    int l = (int)std::strlen(what);
+    if (l > 4 && std::strncmp(what, "gen:", 4) == 0) {
+      if (std::strcmp(how, "r") == 0) {
         // Make an in-core stream...
         vil1_stream_core *cis = new vil1_stream_core();
         cis->write(what, l+1);
         is = cis;
       }
       else {
-        vcl_cerr << __FILE__ ": cannot open gen:* for writing\n";
+        std::cerr << __FILE__ ": cannot open gen:* for writing\n";
       }
     }
   }
@@ -65,15 +67,15 @@ vil1_stream *vil1_open(char const* what, char const* how)
 
   if (!is) {
     // maybe it's a URL?
-    int l = (int)vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
+    int l = (int)std::strlen(what);
+    if (l > 4 && std::strncmp(what, "http://", 7) == 0) {
 #ifdef __APPLE__
-      vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+      std::cerr << __FILE__ ": cannot open URL for writing (yet)\n";
 #else
-      if (vcl_strcmp(how, "r") == 0) {
+      if (std::strcmp(how, "r") == 0) {
         is = new vil1_stream_url(what);
       }
-      else vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+      else std::cerr << __FILE__ ": cannot open URL for writing (yet)\n";
 #endif
     }
   }

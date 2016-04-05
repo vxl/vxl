@@ -55,8 +55,8 @@ class bgui3d_export_command : public vgui_command
   void execute()
   {
     vgui_dialog export_dlg("Export Scene Graph");
-    static vcl_string file_name = "";
-    static vcl_string ext = "";
+    static std::string file_name = "";
+    static std::string ext = "";
     export_dlg.file("File:", ext, file_name);
     static int type = 0;
     export_dlg.choice("Type:","IV","VRML","VRML 2.0", type);
@@ -93,8 +93,8 @@ class bgui3d_import_command : public vgui_command
   void execute()
   {
     vgui_dialog import_dlg("Import Scene Graph");
-    static vcl_string file_name = "";
-    static vcl_string ext = "iv";
+    static std::string file_name = "";
+    static std::string ext = "iv";
     import_dlg.file("File:", ext, file_name);
     static bool overwrite = false;
     import_dlg.checkbox("Overwrite existing scene", overwrite);
@@ -238,31 +238,31 @@ class bgui3d_select_camera_command : public vgui_command
 void bgui3d_fullviewer_tableau::get_popup(const vgui_popup_params& /*params*/, // unused - FIXME
                                           vgui_menu &menu)
 {
-  vcl_string animation_item;
+  std::string animation_item;
   if ( this->is_idle_enabled() )
     animation_item = "Disable Animation";
   else
     animation_item = "Enable Animation";
 
-  vcl_string headlight_item;
+  std::string headlight_item;
   if ( this->is_headlight() )
     headlight_item = "Disable Headlight";
   else
     headlight_item = "Enable Headlight";
 
-  vcl_string check_on = "[x]";
-  vcl_string check_off = "[ ]";
+  std::string check_on = "[x]";
+  std::string check_off = "[ ]";
 
   if ( camera_group_ ) {
     int active_cam_idx = camera_group_->whichChild.getValue();
     SoChildList* list = camera_group_->getChildren();
     vgui_menu camera_list_menu;
     if (!this->find_cameras(this->user_scene_root()).empty()) {
-      vcl_string name = ((active_cam_idx<0)?check_on:check_off) +" Scene Camera";
+      std::string name = ((active_cam_idx<0)?check_on:check_off) +" Scene Camera";
       camera_list_menu.add(name,new bgui3d_select_camera_command(this,-1));
     }
     for (int i=0; i<list->getLength(); ++i) {
-      vcl_string name((*list)[i]->getName().getString());
+      std::string name((*list)[i]->getName().getString());
       name = ((i==active_cam_idx)?check_on:check_off) +" "+ name;
       camera_list_menu.add(name,new bgui3d_select_camera_command(this,i));
     }

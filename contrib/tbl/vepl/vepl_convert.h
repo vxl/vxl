@@ -21,7 +21,7 @@ template <class D>
 vil_image_resource_sptr vepl_convert(vil_image_resource_sptr, D dummy);
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vepl_convert.txx"
+#include "vepl_convert.hxx"
 #endif
 
 #endif // vepl_convert_h_

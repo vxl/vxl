@@ -13,8 +13,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
 #include "vil_clamp.h"
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vil/vil_property.h>
 #include <vil/vil_exception.h>
@@ -37,7 +38,7 @@ vil_clamp_image_resource::vil_clamp_image_resource(vil_image_resource_sptr const
   //: Extra property information
 bool vil_clamp_image_resource::get_property(char const* tag, void* property_value) const
 {
-  if (0==vcl_strcmp(tag, vil_property_read_only))
+  if (0==std::strcmp(tag, vil_property_read_only))
     return property_value ? (*static_cast<bool*>(property_value)) = true : true;
 
   return src_->get_property(tag, property_value);
@@ -69,7 +70,7 @@ vil_image_view_base_sptr vil_clamp_image_resource::get_copy_view(unsigned i0, un
       macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
       macro(VIL_PIXEL_FORMAT_FLOAT , float )
       macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-// How might you clamp a vcl_complex image ?
+// How might you clamp a std::complex image ?
 #undef macro
   default:
     vil_exception_warning(vil_exception_unsupported_pixel_format(

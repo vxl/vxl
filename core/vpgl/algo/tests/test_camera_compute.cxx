@@ -1,8 +1,9 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #if 0
 #include <testlib/testlib_root_dir.h>
 #endif
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -27,7 +28,7 @@ static void test_camera_compute_setup()
   vnl_vector_fixed<double,4> r1( 1, 2, 3, 4 );
   vnl_vector_fixed<double,4> r2( -1, 4, -2, 0 );
   vpgl_affine_camera<double> C1( r1, r2 );
-  vcl_vector< vgl_point_3d<double> > world_pts;
+  std::vector< vgl_point_3d<double> > world_pts;
   world_pts.push_back( vgl_point_3d<double>( 1, 0, -1 ) );
   world_pts.push_back( vgl_point_3d<double>( 6, 1, 2 ) );
   world_pts.push_back( vgl_point_3d<double>( -1, -3, -2 ) );
@@ -37,14 +38,14 @@ static void test_camera_compute_setup()
   world_pts.push_back( vgl_point_3d<double>( -4, -4, 5 ) );
   world_pts.push_back( vgl_point_3d<double>( -1, 3, 4 ) );
   world_pts.push_back( vgl_point_3d<double>( 1, 2, -7 ) );
-  vcl_vector< vgl_point_2d<double> > image_pts;
+  std::vector< vgl_point_2d<double> > image_pts;
   for ( unsigned int i = 0; i < world_pts.size(); ++i )
     image_pts.push_back( C1.project( vgl_homg_point_3d<double>(world_pts[i]) ) );
 
   vpgl_affine_camera<double> C1e;
   vpgl_affine_camera_compute::compute( image_pts, world_pts, C1e );
 
-  vcl_cerr << "\nTrue camera matrix:\n" << C1.get_matrix() << '\n'
+  std::cerr << "\nTrue camera matrix:\n" << C1.get_matrix() << '\n'
            << "\nEstimated camera matrix:\n" << C1e.get_matrix() << '\n';
   TEST_NEAR( "vpgl_affine_camera_compute:",
              ( C1.get_matrix()-C1e.get_matrix() ).frobenius_norm(), 0, 1 );
@@ -52,7 +53,7 @@ static void test_camera_compute_setup()
 
 void test_perspective_compute()
 {
-  vcl_cout << "Test Perspective Compute\n";
+  std::cout << "Test Perspective Compute\n";
   vnl_vector_fixed<double, 3> rv, trans;
   for (unsigned i = 0; i<3; ++i)
     rv[i]=0.9068996774314604; // axis along diagonal, rotation of 90 degrees
@@ -95,9 +96,9 @@ void test_perspective_compute()
     for (unsigned r = 0; r<2; ++r)
       Z[r][c] = pvpr[r]/pvpr[2];
   }
-  vcl_cout << "Projected points\n " << Z << '\n';
-  vcl_vector<vgl_point_2d<double> > image_pts;
-  vcl_vector<vgl_point_3d<double> > world_pts;
+  std::cout << "Projected points\n " << Z << '\n';
+  std::vector<vgl_point_2d<double> > image_pts;
+  std::vector<vgl_point_3d<double> > world_pts;
   for (unsigned i = 0; i<6; ++i)
   {
     vgl_point_2d<double> ip(Z[0][i], Z[1][i]);
@@ -109,7 +110,7 @@ void test_perspective_compute()
   vpgl_perspective_camera<double> pc;
 
   vpgl_perspective_camera_compute::compute(image_pts, world_pts, K, pc);
-  vcl_cout << pc << '\n';
+  std::cout << pc << '\n';
   vgl_point_3d<double> cc = pc.get_camera_center();
   TEST_NEAR("perspective camera from 6 points exact", cc.z(), -14.2265, 0.001);
 }
@@ -118,7 +119,7 @@ void test_perspective_compute()
 static void test_perspective_compute_direct_linear_transform()
 {
   //Create the world points
-  vcl_vector< vgl_point_3d<double> > world_pts;
+  std::vector< vgl_point_3d<double> > world_pts;
   world_pts.push_back( vgl_point_3d<double>( 1, 0, -1 ) );
   world_pts.push_back( vgl_point_3d<double>( 6, 1, 2 ) );
   world_pts.push_back( vgl_point_3d<double>( -1, -3, -2 ) );
@@ -133,7 +134,7 @@ static void test_perspective_compute_direct_linear_transform()
   proj.set(2,0,0); proj.set(2,1,0); proj.set(2,2,1);      proj.set(2, 3, 0);
 
   //Do the projection for each of the points
-  vcl_vector< vgl_point_2d<double> > image_pts;
+  std::vector< vgl_point_2d<double> > image_pts;
   for (unsigned int i = 0; i < world_pts.size(); i++) {
     vnl_vector_fixed<double, 4> world_pt;
     world_pt[0] = world_pts[i].x();
@@ -175,7 +176,7 @@ static void test_perspective_compute_ground()
   vpgl_perspective_camera<double> trueP(trueK,trueC,trueR);
 
   // generate some points on the ground
-  vcl_vector<vgl_point_2d<double> > ground_pts;
+  std::vector<vgl_point_2d<double> > ground_pts;
   ground_pts.push_back( vgl_point_2d<double>( 14.3256, 5.7912 ) );
   ground_pts.push_back( vgl_point_2d<double>( 14.3256, 9.4488 ) );
   ground_pts.push_back( vgl_point_2d<double>( 14.3256, 15.24 ) );
@@ -183,7 +184,7 @@ static void test_perspective_compute_ground()
   ground_pts.push_back( vgl_point_2d<double>( 22.8092, 9.398 ) );
 
   // project them to the image
-  vcl_vector< vgl_point_2d<double> > image_pts;
+  std::vector< vgl_point_2d<double> > image_pts;
   for ( int k = 0; k < ground_pts.size(); ++k )
   {
     vgl_homg_point_3d<double> world_pt(ground_pts[k].x(), ground_pts[k].y(), 0, 1);
@@ -215,7 +216,7 @@ static void test_calibration_compute_natural()
   vpgl_perspective_camera<double> trueP(trueK,trueC,trueR);
 
   // generate some points on the ground
-  vcl_vector<vgl_point_2d<double> > ground_pts;
+  std::vector<vgl_point_2d<double> > ground_pts;
   ground_pts.push_back( vgl_point_2d<double>( 14.3256, 5.7912 ) );
   ground_pts.push_back( vgl_point_2d<double>( 14.3256, 9.4488 ) );
   ground_pts.push_back( vgl_point_2d<double>( 14.3256, 15.24 ) );
@@ -223,7 +224,7 @@ static void test_calibration_compute_natural()
   ground_pts.push_back( vgl_point_2d<double>( 22.8092, 9.398 ) );
 
   // project them to the image
-  vcl_vector< vgl_point_2d<double> > image_pts;
+  std::vector< vgl_point_2d<double> > image_pts;
   for ( int k = 0; k < ground_pts.size(); ++k )
   {
     vgl_homg_point_3d<double> world_pt( ground_pts[k].x(), ground_pts[k].y(), 0, 1 );

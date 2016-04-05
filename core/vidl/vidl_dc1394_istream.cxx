@@ -180,31 +180,31 @@ open(unsigned int num_dma_buffers,
 
   is_->camera_info_ = dc1394_camera_new (is_->dc1394_data_, params.guid_);
   if (!is_->camera_info_) {
-    vcl_cerr << "Warning, failed to initialize camera with guid " << vcl_hex << params.guid_ << vcl_endl;
+    std::cerr << "Warning, failed to initialize camera with guid " << std::hex << params.guid_ << std::endl;
     return false;
   }
 
   dc1394operation_mode_t op_mode = params.b_mode_ ? DC1394_OPERATION_MODE_1394B : DC1394_OPERATION_MODE_LEGACY;
   if ( dc1394_video_set_operation_mode(is_->camera_info_, op_mode) != DC1394_SUCCESS) {
-    vcl_cerr << "Failed to set camera in b mode\n";
+    std::cerr << "Failed to set camera in b mode\n";
     close();
     return false;
   }
 
   if (dc1394_video_set_iso_speed(is_->camera_info_, dc1394speed_t(params.speed_)) != DC1394_SUCCESS) {
-    vcl_cerr << "Failed to set iso channel and speed.\n";
+    std::cerr << "Failed to set iso channel and speed.\n";
     close();
     return false;
   }
 
   if (dc1394_video_set_mode(is_->camera_info_, dc1394video_mode_t(params.video_mode_)) != DC1394_SUCCESS) {
-    vcl_cerr << "Failed to set video mode.\n";
+    std::cerr << "Failed to set video mode.\n";
     close();
     return false;
   }
 
   if (dc1394_video_set_framerate(is_->camera_info_, dc1394framerate_t(params.frame_rate_)) != DC1394_SUCCESS) {
-    vcl_cerr << "Failed to set frame rate.\n";
+    std::cerr << "Failed to set frame rate.\n";
     close();
     return false;
   }
@@ -216,7 +216,7 @@ open(unsigned int num_dma_buffers,
     dc1394feature_info_t f = vidl_feature_to_dc1394(params.features_[i]);
     // Enable/Disable a feature
     if ( dc1394_feature_set_power(is_->camera_info_, f.id, f.is_on?DC1394_ON:DC1394_OFF) != DC1394_SUCCESS) {
-      vcl_cerr << "Failed to " << (f.is_on ? "enable" : "disable") <<" feature \""
+      std::cerr << "Failed to " << (f.is_on ? "enable" : "disable") <<" feature \""
                << vidl_iidc1394_params::feature_string(params.features_[i].id)
                << '\n';
       return false;
@@ -227,7 +227,7 @@ open(unsigned int num_dma_buffers,
     if ( dc1394_feature_get_mode(is_->camera_info_, f.id, &old_mode) == DC1394_SUCCESS &&
          old_mode != f.current_mode ) {
       if ( dc1394_feature_set_mode(is_->camera_info_, f.id, f.current_mode) != DC1394_SUCCESS) {
-        vcl_cerr << "Failed to set mode of feature \""
+        std::cerr << "Failed to set mode of feature \""
                  << vidl_iidc1394_params::feature_string(params.features_[i].id)
                  << "\" to " << vidl_iidc1394_params::feature_mode_string(params.features_[i].active_mode) << '\n';
         return false;
@@ -240,14 +240,14 @@ open(unsigned int num_dma_buffers,
     {
      case vidl_iidc1394_params::FEATURE_WHITE_BALANCE:
       if ( dc1394_feature_whitebalance_set_value(is_->camera_info_, f.BU_value, f.RV_value) != DC1394_SUCCESS) {
-        vcl_cerr << "Failed to set feature \"White Balance\" to "<< f.BU_value<<", "<<f.RV_value <<'\n';
+        std::cerr << "Failed to set feature \"White Balance\" to "<< f.BU_value<<", "<<f.RV_value <<'\n';
         close();
         return false;
       }
       break;
     case vidl_iidc1394_params::FEATURE_TEMPERATURE:
       if ( dc1394_feature_temperature_set_value(is_->camera_info_, f.target_value) != DC1394_SUCCESS) {
-        vcl_cerr << "Failed to set feature \"Temperature\" to "<< f.target_value<<'\n';
+        std::cerr << "Failed to set feature \"Temperature\" to "<< f.target_value<<'\n';
         close();
         return false;
       }
@@ -255,7 +255,7 @@ open(unsigned int num_dma_buffers,
     default:
       if ( f.abs_control ) {
         if ( dc1394_feature_set_absolute_value(is_->camera_info_, f.id, f.abs_value) != DC1394_SUCCESS) {
-          vcl_cerr << "Failed to set feature \""
+          std::cerr << "Failed to set feature \""
                    << vidl_iidc1394_params::feature_string(params.features_[i].id)
                    << "\" to absolute value "<< f.value <<'\n';
           close();
@@ -263,7 +263,7 @@ open(unsigned int num_dma_buffers,
         }
       }
       else if ( dc1394_feature_set_value(is_->camera_info_, f.id, f.value) != DC1394_SUCCESS) {
-        vcl_cerr << "Failed to set feature \""
+        std::cerr << "Failed to set feature \""
                  << vidl_iidc1394_params::feature_string(params.features_[i].id)
                  << "\" to "<< f.value <<'\n';
         close();
@@ -275,7 +275,7 @@ open(unsigned int num_dma_buffers,
 
   if (dc1394_capture_setup(is_->camera_info_, num_dma_buffers,
                            DC1394_CAPTURE_FLAGS_DEFAULT) != DC1394_SUCCESS) {
-    vcl_cerr << "Failed to setup DMA capture.\n";
+    std::cerr << "Failed to setup DMA capture.\n";
     return false;
   }
 
@@ -289,19 +289,19 @@ open(unsigned int num_dma_buffers,
   if (dc1394_video_get_transmission(is_->camera_info_, &pwr) == DC1394_SUCCESS) {
     if (pwr == DC1394_ON ) {
       dc1394_video_set_transmission(is_->camera_info_, DC1394_OFF);
-      vcl_cerr << "power already on\n";
+      std::cerr << "power already on\n";
     }
     if (dc1394_video_set_transmission(is_->camera_info_, DC1394_ON) == DC1394_SUCCESS) {
-      vcl_cerr << "power turned on\n";
+      std::cerr << "power turned on\n";
     }
     else {
-      vcl_cerr << "unable to power on\n";
+      std::cerr << "unable to power on\n";
       return false;
     }
     return true;
   }
   else {
-    vcl_cerr << "unable to start camera iso transmission\n";
+    std::cerr << "unable to start camera iso transmission\n";
     close();
     return false;
   }
@@ -347,8 +347,8 @@ valid_params(vidl_iidc1394_params::valid_options& options)
   dc1394error_t err = dc1394_camera_enumerate(d, &list);
 
   if (err) {
-    vcl_cerr << "error finding cameras: "
-             << dc1394_error_get_string(err) << vcl_endl;
+    std::cerr << "error finding cameras: "
+             << dc1394_error_get_string(err) << std::endl;
     dc1394_camera_free_list (list);
     dc1394_free(d);
     return false;
@@ -368,7 +368,7 @@ valid_params(vidl_iidc1394_params::valid_options& options)
   for (unsigned int i=0; i<list->num; ++i) {
     dc1394camera_t *camera = dc1394_camera_new (d, list->ids[i].guid);
     if (!camera) {
-      vcl_cerr << "Warning, failed to initialize camera with guid " << vcl_hex << list->ids[i].guid << vcl_endl;
+      std::cerr << "Warning, failed to initialize camera with guid " << std::hex << list->ids[i].guid << std::endl;
       continue;
     }
 
@@ -394,7 +394,7 @@ valid_params(vidl_iidc1394_params::valid_options& options)
 
     dc1394video_modes_t modes;
     if ( dc1394_video_get_supported_modes(camera, &modes ) <0 ) {
-      vcl_cerr << "Could not find any supported video modes\n";
+      std::cerr << "Could not find any supported video modes\n";
       dc1394_camera_free_list (list);
       dc1394_free(d);
       return false;
@@ -416,7 +416,7 @@ valid_params(vidl_iidc1394_params::valid_options& options)
     }
     dc1394featureset_t features;
     if (dc1394_feature_get_all(camera, &features) < 0) {
-      vcl_cerr << "Could not find any camera control features\n";
+      std::cerr << "Could not find any camera control features\n";
       dc1394_camera_free_list (list);
       dc1394_free(d);
       return false;
@@ -426,7 +426,7 @@ valid_params(vidl_iidc1394_params::valid_options& options)
       if (!f.available)
         continue;
       options.cameras[i].features.push_back(dc1394_feature_to_vidl(f));
-      vcl_cout << "feature: "<< dc1394_feature_get_string(f.id) << vcl_endl;
+      std::cout << "feature: "<< dc1394_feature_get_string(f.id) << std::endl;
     }
     dc1394_feature_print_all(&features, stdout);
 
@@ -544,7 +544,7 @@ advance()
     dc1394_capture_enqueue(is_->camera_info_, is_->dc1394frame_);
 
   if (dc1394_capture_dequeue(is_->camera_info_, DC1394_CAPTURE_POLICY_WAIT, &(is_->dc1394frame_))!=DC1394_SUCCESS) {
-    vcl_cerr << "capture failed\n";
+    std::cerr << "capture failed\n";
     return false;
   }
   return true;

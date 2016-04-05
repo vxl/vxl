@@ -1,9 +1,10 @@
 // This is mul/m23d/tests/test_correction_matrix_error.cxx
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
 #include <m23d/m23d_correction_matrix_error.h>
 #include <m23d/m23d_make_ortho_projection.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 #include <m23d/m23d_rotation_matrix.h>
 #include <m23d/m23d_set_q_constraint.h>
@@ -18,7 +19,7 @@ bool test_projection_matrix(const vnl_matrix<double>& P)
   unsigned m=P.cols()/3-1;
 
   bool test_ok=true;
-  vcl_cout<<"Testing projection matrix."<<vcl_endl;
+  std::cout<<"Testing projection matrix."<<std::endl;
   for (unsigned k=0;k<=m;++k)
   {
     // Test orthogonality of rows of each projection matrix
@@ -26,20 +27,20 @@ bool test_projection_matrix(const vnl_matrix<double>& P)
     {
       vnl_matrix<double> Pik = P.extract(2,3,2*i,3*k);
       vnl_matrix<double> PPt=Pik*Pik.transpose();
-      if (vcl_fabs(PPt(0,1))>1e-5)
+      if (std::fabs(PPt(0,1))>1e-5)
       {
-        vcl_cout<<"View "<<i<<" mode "<<k<<" ) rows not orthogonal. "<<PPt(0,1)<<vcl_endl;
+        std::cout<<"View "<<i<<" mode "<<k<<" ) rows not orthogonal. "<<PPt(0,1)<<std::endl;
         test_ok=false;
       }
-      if (vcl_fabs(PPt(0,0)-PPt(1,1))>1e-5)
+      if (std::fabs(PPt(0,0)-PPt(1,1))>1e-5)
       {
-        vcl_cout<<"View "<<i<<" mode "<<k<<" ) rows don't scale equally. "<<PPt(0,0)-PPt(1,1)<<vcl_endl;
+        std::cout<<"View "<<i<<" mode "<<k<<" ) rows don't scale equally. "<<PPt(0,0)-PPt(1,1)<<std::endl;
         test_ok=false;
       }
     }
   }
   if (test_ok)
-    vcl_cout<<"Projection matrix passed the tests."<<vcl_endl;
+    std::cout<<"Projection matrix passed the tests."<<std::endl;
 
   return test_ok;
 }
@@ -61,21 +62,21 @@ static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
 {
   unsigned n=3;
   vnl_svd<double> svd(A);
-  vcl_cout<<"Singular Values of A: "<<svd.W().diagonal()<<vcl_endl;
+  std::cout<<"Singular Values of A: "<<svd.W().diagonal()<<std::endl;
   vnl_vector<double> q0 = svd.solve(rhs);
   vnl_matrix<double> Q0=sym_matrix_from_vec(q0,n);
 //   unsigned nq = q0.size();
-  vcl_cout<<"Error for q0 = "<<(A*q0-rhs).rms()<<vcl_endl;
+  std::cout<<"Error for q0 = "<<(A*q0-rhs).rms()<<std::endl;
 
   // If Gk is the t x 3 matrix, the k-th triplet of columns of G,
   // then Gk.Gk'=Q0
   // Use eigen decomposition to compute Gk
   vnl_symmetric_eigensystem<double> eig(Q0);
   vnl_matrix<double> Gk(n,3);
-  vcl_cout<<"Eigenvalues: "<<eig.D.diagonal()<<vcl_endl;
+  std::cout<<"Eigenvalues: "<<eig.D.diagonal()<<std::endl;
   for (unsigned i=0;i<3;++i)
   {
-    Gk.set_column(i,vcl_sqrt(eig.get_eigenvalue(n-1-i))
+    Gk.set_column(i,std::sqrt(eig.get_eigenvalue(n-1-i))
                             *eig.get_eigenvector(n-1-i));
   }
 
@@ -97,9 +98,9 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
 
 //  LM.minimize_using_gradient(g);  *** Seem to get a different result with gradient! ***
   if (!LM.minimize_using_gradient(g))
-    vcl_cout<<"LM failed!!"<<vcl_endl;
+    std::cout<<"LM failed!!"<<std::endl;
 
-  vcl_cout<<"am_solve_for_Gk (k="<<k<<") RMS="<<err_fn.rms(g)<<vcl_endl;
+  std::cout<<"am_solve_for_Gk (k="<<k<<") RMS="<<err_fn.rms(g)<<std::endl;
 
   // Reshape g into 3(m+1) x 3 matrix
   return vnl_matrix<double>(g.data_block(),3*(m+1),3);
@@ -119,7 +120,7 @@ void compute_Gk(const vnl_matrix<double> & M, unsigned k,
     Gk=am_solve_for_G0(A,rhs);
   else
   {
-    vcl_cout<<"Solving for Gk:"<<vcl_endl;
+    std::cout<<"Solving for Gk:"<<std::endl;
     Gk=am_solve_for_Gk(A,rhs,m,k);
   }
 
@@ -132,7 +133,7 @@ void compute_Gk(const vnl_matrix<double> & M, unsigned k,
     // Compute a rotation matrix for this
     vnl_matrix<double> R=m23d_rotation_from_ortho_projection(M0);
 
-    vcl_cout<<"M0*Rt (k="<<k<<')'<<vcl_endl<<M0*R.transpose()<<vcl_endl;
+    std::cout<<"M0*Rt (k="<<k<<')'<<std::endl<<M0*R.transpose()<<std::endl;
 
     // Apply inverse so that P.G gives unit projection
     Gk=Gk*R.transpose();
@@ -168,7 +169,7 @@ static vnl_vector<double> vec_from_sym_matrix(const vnl_matrix<double>& S)
 
 void test_correction_matrix_error()
 {
-  vcl_cout<<"==== test m23d_correction_matrix_error ====="<<vcl_endl;
+  std::cout<<"==== test m23d_correction_matrix_error ====="<<std::endl;
 
   vnl_random r(35813);
   unsigned ns = 20;
@@ -177,27 +178,27 @@ void test_correction_matrix_error()
   bool b1=test_projection_matrix(P);
   TEST("Pure projection matrix OK",b1,true);
 
-  vcl_cout<<"Apply a rotation to columns of P"<<vcl_endl;
+  std::cout<<"Apply a rotation to columns of P"<<std::endl;
   vnl_matrix<double> P2(P),G;
   vnl_matrix<double> R2=m23d_rotation_matrix(0.1,0.2,0.3);
-  vcl_cout<<"Rotation applied: "<<vcl_endl<<R2<<vcl_endl;
+  std::cout<<"Rotation applied: "<<std::endl<<R2<<std::endl;
   for (unsigned i=0;i<=n_modes;++i)
     P2.update(P.extract(2*ns,3,0,3*i)*R2,0,3*i);
   m23d_compute_correction(P2,G);
-  vcl_cout<<"G for rotated P"<<vcl_endl<<G<<vcl_endl;
+  std::cout<<"G for rotated P"<<std::endl<<G<<std::endl;
   b1=test_projection_matrix(P2*G);
   TEST("Corrected projection matrix OK",b1,true);
 
-  vcl_cout<<"Apply a rotation and scaling to columns of P"<<vcl_endl;
+  std::cout<<"Apply a rotation and scaling to columns of P"<<std::endl;
   for (unsigned i=0;i<=n_modes;++i)
     P2.update(P.extract(2*ns,3,0,3*i)*R2*(3+i),0,3*i);
   m23d_compute_correction(P2,G);
-  vcl_cout<<"G for scaled and rotated P"<<vcl_endl<<G<<vcl_endl;
+  std::cout<<"G for scaled and rotated P"<<std::endl<<G<<std::endl;
 
   b1=test_projection_matrix(P2*G);
   TEST("Corrected projection matrix OK",b1,true);
 
-  vcl_cout<<"=== Apply a random affine projection ==="<<vcl_endl;
+  std::cout<<"=== Apply a random affine projection ==="<<std::endl;
   vnl_matrix<double> G0(G);
   for (unsigned i=0;i<G0.rows();++i)
     for (unsigned j=0;j<G0.cols();++j)  G0(i,j)=r.drand64(-1,1);
@@ -205,9 +206,9 @@ void test_correction_matrix_error()
   m23d_compute_correction(P3,G);
   b1=test_projection_matrix(P3*G);
   TEST("Corrected projection matrix OK",b1,true);
-  vcl_cout<<"G0*G="<<vcl_endl<<G0*G<<vcl_endl;
+  std::cout<<"G0*G="<<std::endl<<G0*G<<std::endl;
 
-  vcl_cout<<"Test that the function is zero at a true minima"<<vcl_endl;
+  std::cout<<"Test that the function is zero at a true minima"<<std::endl;
   vnl_matrix<double> A;
   vnl_vector<double> rhs;
   m23d_set_q_constraints(P3,0,A,rhs);
@@ -219,7 +220,7 @@ void test_correction_matrix_error()
   vnl_vector<double> gk0(G0_inv0.data_block(),18);
   vnl_vector<double> fx;
   cme.f(gk0,fx);
-  vcl_cout<<"Function: "<<cme.rms(gk0)<<vcl_endl;
+  std::cout<<"Function: "<<cme.rms(gk0)<<std::endl;
 
   vnl_matrix<double> Q=G0_inv0*G0_inv0.transpose();
   vnl_vector<double> fx1 = A*vec_from_sym_matrix(Q)-rhs;
@@ -227,7 +228,7 @@ void test_correction_matrix_error()
   TEST_NEAR("f(x) correct given A",(fx-fx1).rms(),0,1e-6);
   TEST_NEAR("f(x) correct",fx.rms(),0,1e-6);
 
-  vcl_cout<<"Check computation of Jacobian"<<vcl_endl;
+  std::cout<<"Check computation of Jacobian"<<std::endl;
   vnl_vector<double> g0(gk0.size(),0.123),g1;
   vnl_vector<double> f0,f1;
   vnl_matrix<double> J;
@@ -241,7 +242,7 @@ void test_correction_matrix_error()
     cme.f(g1,f1);
     f1-=f0;
     f1/=delta;
-    vcl_cout<<f1(0)<<','<<J(0,i)/f1(0)<<vcl_endl;
+    std::cout<<f1(0)<<','<<J(0,i)/f1(0)<<std::endl;
     TEST_NEAR("Jacobian column",(f1-J.get_column(i)).rms(),0.0,1e-5);
   }
 }

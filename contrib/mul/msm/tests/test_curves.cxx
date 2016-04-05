@@ -4,6 +4,8 @@
 //  Copyright: (C) 2010 The University of Manchester
 //
 //=======================================================================
+#include <sstream>
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,14 +13,13 @@
 // \brief test msm_curves
 
 #include <msm/msm_curve.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 
 void test_curve()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing msm_curve\n"
            << "***********************\n";
 
@@ -27,21 +28,21 @@ void test_curve()
   TEST("First",curve.index()[0],3);
   TEST("Last",curve.index()[6],9);
 
-  vcl_cout<<curve<<vcl_endl;
+  std::cout<<curve<<std::endl;
 
-  vcl_istringstream params2("{ name: fred open: false indices: { 2 3 9 } }");
+  std::istringstream params2("{ name: fred open: false indices: { 2 3 9 } }");
   msm_curve curve2;
   curve2.config_from_stream(params2);
-  vcl_cout<<curve2<<vcl_endl;
+  std::cout<<curve2<<std::endl;
   TEST("Name",curve2.name(),"fred");
   TEST("Open",curve2.open(),false);
   TEST("First",curve2.index()[0],2);
   TEST("Last",curve2.index()[2],9);
 
-  vcl_istringstream params3("{ name: jim open: true indices: { 4 : 7 11 12 } }");
+  std::istringstream params3("{ name: jim open: true indices: { 4 : 7 11 12 } }");
   msm_curve curve3;
   curve3.config_from_stream(params3);
-  vcl_cout<<curve3<<vcl_endl;
+  std::cout<<curve3<<std::endl;
   TEST("Name",curve3.name(),"jim");
   TEST("Open",curve3.open(),true);
   TEST("[0]",curve3.index()[0],4);
@@ -54,7 +55,7 @@ void test_curves()
 {
   test_curve();
 
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing msm_curves\n"
            << "***********************\n";
 
@@ -63,13 +64,13 @@ void test_curves()
   TEST("[0]",curves1[0].index()[0],2);
   TEST("[6]",curves1[0].index()[6],8);
 
-  vcl_cout<<curves1<<vcl_endl;
+  std::cout<<curves1<<std::endl;
 
-  vcl_istringstream params2("{ curve: { name: c1 open: true indices: { 2 3 9 } }  curve: { name: c2 open: true indices: { 9 : 11 } } }");
+  std::istringstream params2("{ curve: { name: c1 open: true indices: { 2 3 9 } }  curve: { name: c2 open: true indices: { 9 : 11 } } }");
 
   msm_curves curves2;
   curves2.config_from_stream(params2);
-  vcl_cout<<curves2<<vcl_endl;
+  std::cout<<curves2<<std::endl;
   TEST("Two curves",curves2.size(),2);
   TEST("[0][0]",curves2[0].index()[0],2);
   TEST("[0][2]",curves2[0].index()[2],9);
@@ -79,7 +80,7 @@ void test_curves()
   curves2.write_text_file("test.crvs");
   msm_curves curves3;
   curves3.read_text_file("test.crvs");
-  vcl_cout<<curves3<<vcl_endl;
+  std::cout<<curves3<<std::endl;
 
 
 }

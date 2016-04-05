@@ -24,10 +24,10 @@ bool bvpl_load_taylor_kernel_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_load_taylor_kernel_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_kernel_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -40,9 +40,9 @@ bool bvpl_load_taylor_kernel_process(bprb_func_process& pro)
   using namespace bvpl_load_taylor_kernel_process_globals;
 
   //get inputs
-  vcl_string filename = pro.get_input<vcl_string>(0);
+  std::string filename = pro.get_input<std::string>(0);
 
-  vcl_cout << "Reading kernel file : " << filename << vcl_endl;
+  std::cout << "Reading kernel file : " << filename << std::endl;
 
   bvpl_taylor_basis_factory factory(filename);
 

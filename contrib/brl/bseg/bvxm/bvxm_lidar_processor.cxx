@@ -48,7 +48,7 @@ bvxm_lidar_processor::prob_density(float z_dim,  bvxm_voxel_slab<float> const& o
       for ( int ni = min_i; ni <= max_i; ni++ ) {
         for ( int nj = min_j; nj <= max_j; nj++ ) {
           float d = obs(ni,nj,0)-z_dim;
-          d = vcl_sqrt( d*d + (ni-min_i)*(ni-min_i)*voxel_width*voxel_width + (nj-min_j)*(nj-min_j)*voxel_width*voxel_width );
+          d = std::sqrt( d*d + (ni-min_i)*(ni-min_i)*voxel_width*voxel_width + (nj-min_j)*(nj-min_j)*voxel_width*voxel_width );
           if ( ni == min_i || nj == min_j ) min_d = d;
           if ( d < min_d ) min_d = d;
         }
@@ -76,10 +76,10 @@ float bvxm_lidar_processor::prob_density(vil_image_view_base_sptr lidar,
                                     float(lidar_roi.max_y()),
                                     z_dim+0.5f*voxel_width);
 
-  int min_i = (int)vcl_floor(lidar_roi.min_x()); if ( min_i < 0 ) min_i = 0;
-  int min_j = (int)vcl_floor(lidar_roi.min_y()); if ( min_j < 0 ) min_j = 0;
-  int max_i = (int) vcl_ceil(lidar_roi.max_x()); if ( max_i >= (int)lidar->ni() ) max_i = lidar->ni()-1;
-  int max_j = (int) vcl_ceil(lidar_roi.max_y()); if ( max_j >= (int)lidar->nj() ) max_j = lidar->nj()-1;
+  int min_i = (int)std::floor(lidar_roi.min_x()); if ( min_i < 0 ) min_i = 0;
+  int min_j = (int)std::floor(lidar_roi.min_y()); if ( min_j < 0 ) min_j = 0;
+  int max_i = (int) std::ceil(lidar_roi.max_x()); if ( max_i >= (int)lidar->ni() ) max_i = lidar->ni()-1;
+  int max_j = (int) std::ceil(lidar_roi.max_y()); if ( max_j >= (int)lidar->nj() ) max_j = lidar->nj()-1;
 
   float p = 1.0f;
   for ( int ni = min_i; ni < max_i; ni++ ) {

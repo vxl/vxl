@@ -13,9 +13,11 @@
 //    IMS   Converted to VXL 23 April 2000
 // \endverbatim
 
+#include <string>
+#include <iostream>
+#include <cstdlib>
 #include "vpdfl_pc_gaussian.h"
-#include <vcl_string.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_indent.h>
@@ -29,7 +31,7 @@
 
 //: Dflt ctor
 vpdfl_pc_gaussian::vpdfl_pc_gaussian()
-  : partition_(0), log_k_principal_(0.0), partition_chooser_(0)
+  : partition_(0), log_k_principal_(0.0), partition_chooser_(VXL_NULLPTR)
 {
 }
 //=======================================================================
@@ -131,9 +133,9 @@ void vpdfl_pc_gaussian::calcPartLogK()
   double log_v_sum = 0.0;
   const unsigned& n = partition_;
 
-  for (unsigned int i=0;i<n;i++) log_v_sum+=vcl_log(v_data[i]);
+  for (unsigned int i=0;i<n;i++) log_v_sum+=std::log(v_data[i]);
 
-  log_k_principal_ = -0.5 * (n*vcl_log(vnl_math::twopi) + log_v_sum);
+  log_k_principal_ = -0.5 * (n*std::log(vnl_math::twopi) + log_v_sum);
 }
 
 
@@ -183,9 +185,9 @@ void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,  const vnl_matrix<do
 #ifndef NDEBUG
   if (!partition_chooser_)
   {
-    vcl_cerr << "ERROR: vpdfl_pc_gaussian::set()\nUsing this function requires"
+    std::cerr << "ERROR: vpdfl_pc_gaussian::set()\nUsing this function requires"
              << " partition_chooser_ to be set to a real builder\n\n";
-    vcl_abort();
+    std::abort();
   }
 #endif
 
@@ -219,14 +221,14 @@ vpdfl_sampler_base* vpdfl_pc_gaussian::sampler() const
 
 //=======================================================================
 
-vcl_string vpdfl_pc_gaussian::is_a() const
+std::string vpdfl_pc_gaussian::is_a() const
 {
-  return vcl_string("vpdfl_pc_gaussian");
+  return std::string("vpdfl_pc_gaussian");
 }
 
 //=======================================================================
 
-bool vpdfl_pc_gaussian::is_class(vcl_string const& s) const
+bool vpdfl_pc_gaussian::is_class(std::string const& s) const
 {
   return vpdfl_gaussian::is_class(s) || s==vpdfl_pc_gaussian::is_a();
 }
@@ -247,7 +249,7 @@ vpdfl_pdf_base* vpdfl_pc_gaussian::clone() const
 
 //=======================================================================
 
-void vpdfl_pc_gaussian::print_summary(vcl_ostream& os) const
+void vpdfl_pc_gaussian::print_summary(std::ostream& os) const
 {
   os << '\n' << vsl_indent() << "Partition at: " << partition_
      << "  Log(k) for principal space: "<< log_k_principal_ << '\n'
@@ -276,14 +278,14 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -295,23 +297,23 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
       vpdfl_gaussian::b_read(bfs);
       vsl_b_read(bfs,partition_);
       vsl_b_read(bfs,log_k_principal_);
-      partition_chooser_ = 0;
+      partition_chooser_ = VXL_NULLPTR;
       break;
     case (2):
       vpdfl_gaussian::b_read(bfs);
       vsl_b_read(bfs,partition_);
       vsl_b_read(bfs,log_k_principal_);
       {
-        vpdfl_builder_base * c = 0;
+        vpdfl_builder_base * c = VXL_NULLPTR;
         vsl_b_read(bfs,c);
         assert(!c || c->is_class("vpdfl_pc_gaussian_builder"));
         partition_chooser_ = static_cast<vpdfl_pc_gaussian_builder *>(c);
       }
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -332,5 +334,5 @@ void vpdfl_pc_gaussian::set_partition_chooser(
   if (partition_chooser)
     partition_chooser_ = static_cast<vpdfl_pc_gaussian_builder *>(partition_chooser->clone());
   else
-    partition_chooser_ = 0;
+    partition_chooser_ = VXL_NULLPTR;
 }

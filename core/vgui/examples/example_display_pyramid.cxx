@@ -2,7 +2,8 @@
 // an image pyramid for that image.  The user can move through the list
 // of images by pressing PageUp and PageDown.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_image.h>
@@ -39,7 +40,7 @@ struct example_pyramid_tableau : public vgui_tableau
       if (level <= 5) {
         image_tab->set_image(pyr[level]);
         post_redraw();
-        vcl_cerr << "level " << level << vcl_endl;
+        std::cerr << "level " << level << std::endl;
       }
       else
         level = 5;
@@ -52,7 +53,7 @@ struct example_pyramid_tableau : public vgui_tableau
       {
         image_tab->set_image(pyr[level]);
         post_redraw();
-        vcl_cerr << "level " << level << vcl_endl;
+        std::cerr << "level " << level << std::endl;
       }
       else
         level = 0;
@@ -69,16 +70,16 @@ int main(int argc, char **argv)
 
   if (argc != 2)
   {
-    vcl_cerr << "need name of image" << vcl_endl;
+    std::cerr << "need name of image" << std::endl;
     return 1;
   }
 
   vil1_image image = vil1_load(argv[1]);
   if (!image) {
-    vcl_cerr << "load failed -- invalid image?" << vcl_endl;
+    std::cerr << "load failed -- invalid image?" << std::endl;
     return 1;
   }
-  vcl_cerr << image << vcl_endl;
+  std::cerr << image << std::endl;
 
   vgui_tableau_sptr tab(new example_pyramid_tableau(image));
   vgui_viewer2D_tableau_new zoom(tab);

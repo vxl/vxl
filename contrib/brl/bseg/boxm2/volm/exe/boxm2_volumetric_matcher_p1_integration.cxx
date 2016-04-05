@@ -33,23 +33,23 @@
 int main(int argc, char** argv)
 {
   // input
-  vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                                          // query -- spherical shell container binary
-  vul_arg<vcl_string> param_file("-param", "parameter file to read the parameters for depth interval", "");   // query -- parameter file for depth interval
-  vul_arg<vcl_string> weight_file("-wgt", "weight parameters for query", "");                                 // query -- weight parameter file
-  vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");                      // index -- folder to read the hypos for each leaf
-  vul_arg<vcl_string> geo_index_folder("-geo", "folder to read the geo index", "");                           // index -- folder to read the index for each location
-  vul_arg<vcl_string> candidate_list("-cand", "candidate list in kml format","");                             // query -- candidate list polygon
+  vul_arg<std::string> sph_bin("-sph", "spherical shell binary", "");                                          // query -- spherical shell container binary
+  vul_arg<std::string> param_file("-param", "parameter file to read the parameters for depth interval", "");   // query -- parameter file for depth interval
+  vul_arg<std::string> weight_file("-wgt", "weight parameters for query", "");                                 // query -- weight parameter file
+  vul_arg<std::string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses", "");                      // index -- folder to read the hypos for each leaf
+  vul_arg<std::string> geo_index_folder("-geo", "folder to read the geo index", "");                           // index -- folder to read the index for each location
+  vul_arg<std::string> candidate_list("-cand", "candidate list in kml format","");                             // query -- candidate list polygon
   vul_arg<unsigned>   tile_id("-tile", "tile id", 0);                                                         // index -- tile_id
   vul_arg<unsigned>   zone_id("-zone", "zone id", 17);                                                        // index -- zone_id
   vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);                           // index -- buffer capacity
   vul_arg<unsigned>   dev_id("-gpuid", "device used for current matcher", 0);                                 // matcher -- device id
   vul_arg<float>      threshold("-thres", "threshold for choosing valid cameras (0~1)", 0.4f);                // matcher -- threshold for choosing cameras
   vul_arg<unsigned>   max_cam_per_loc("-max_cam", "maximum number of cameras to be saved", 200);              // matcher -- output related
-  vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "");                   // matcher -- output folder
+  vul_arg<std::string> out_folder("-out", "output folder where score binary is stored", "");                   // matcher -- output folder
   vul_arg<bool>       logger("-logger", "designate one of the exes as logger", false);                        // matcher -- log file generation
   vul_arg_parse(argc, argv);
 
-  vcl_stringstream log;
+  std::stringstream log;
   bool do_log = false;
   if (logger())
     do_log = true;
@@ -66,14 +66,14 @@ int main(int argc, char** argv)
       volm_io::write_log(out_folder(), log.str());
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     }
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-  vcl_string cam_bin = out_folder() + "/camera_space.bin";
-  vcl_string dms_bin = out_folder() + "/depth_map_scene.bin";
-  vcl_string query_bin = out_folder() + "/volm_query.bin";
+  std::string cam_bin = out_folder() + "/camera_space.bin";
+  std::string dms_bin = out_folder() + "/depth_map_scene.bin";
+  std::string query_bin = out_folder() + "/volm_query.bin";
 
   // check(waiting) for all available query file
   bool all_available = false;
@@ -98,17 +98,16 @@ int main(int argc, char** argv)
       volm_io::write_log(out_folder(), log.str());
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     }
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   else {
-    vcl_cerr << "loading spherical shell from " << sph_bin() << '\n';
+    std::cerr << "loading spherical shell from " << sph_bin() << '\n';
   }
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container();
   vsl_b_ifstream is_sph(sph_bin());
   sph_shell->b_read(is_sph);
   is_sph.close();
-  unsigned layer_size = (unsigned)sph_shell->get_container_size();
 
   // create depth interval
   if (!vul_file::exists(param_file())) {
@@ -117,7 +116,7 @@ int main(int argc, char** argv)
       volm_io::write_log(out_folder(), log.str());
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     }
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   volm_io_expt_params params;
@@ -125,9 +124,9 @@ int main(int argc, char** argv)
 
   volm_spherical_container_sptr sph = new volm_spherical_container(params.solid_angle, params.vmin, params.dmax);
   // construct depth_interval table for pass 1 matcher
-  vcl_map<double, unsigned char>& depth_interval_map = sph->get_depth_interval_map();
-  vcl_vector<float> depth_interval;
-  vcl_map<double, unsigned char>::iterator iter = depth_interval_map.begin();
+  std::map<double, unsigned char>& depth_interval_map = sph->get_depth_interval_map();
+  std::vector<float> depth_interval;
+  std::map<double, unsigned char>::iterator iter = depth_interval_map.begin();
   for (; iter != depth_interval_map.end(); ++iter)
     depth_interval.push_back((float)iter->first);
 
@@ -138,11 +137,11 @@ int main(int argc, char** argv)
   ifs_cam.close();
 
   // load the volm_query
-  vcl_cout << " sph_shell , point angle = " << sph_shell->point_angle() << " top_angle = " << sph_shell->top_angle() << vcl_endl;
+  std::cout << " sph_shell , point angle = " << sph_shell->point_angle() << " top_angle = " << sph_shell->top_angle() << std::endl;
 
   volm_query_sptr query = new volm_query(query_bin, cam_space, dms_bin, sph_shell, sph);
   // create volm_weight if weight_file is given or create equal weight
-  vcl_vector<volm_weight> weights;
+  std::vector<volm_weight> weights;
   depth_map_scene_sptr dm = query->depth_scene();
   if (vul_file::exists(weight_file())) {
     // read the weight parameter from pre-loaded
@@ -160,7 +159,7 @@ int main(int argc, char** argv)
 
   // screen output
   unsigned total_size = query->obj_based_query_size_byte();
-  vcl_cout << "\n==================================================================================================\n"
+  std::cout << "\n==================================================================================================\n"
            << "\t\t  1. Create query from given camera space and Depth map scene\n"
            << "\t\t  " << dms_bin << '\n'
            << "\t\t  generate query has " << query->get_cam_num() << " cameras "
@@ -172,32 +171,32 @@ int main(int argc, char** argv)
            << ", bottom_angle = " << query->sph_shell()->bottom_angle()
            << ", size = " << query->get_query_size() << '\n'
            << " The depth interval used for current query has size " << depth_interval.size()
-           << ", max depth = " << depth_interval[depth_interval.size()-1] << vcl_endl;
+           << ", max depth = " << depth_interval[depth_interval.size()-1] << std::endl;
 
-  vcl_cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << vcl_endl;
+  std::cout << " The " << dm->ni() << " x " << dm->nj() << " query image has following defined depth region" << std::endl;
   if (dm->sky().size()) {
-    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
+    std::cout << " -------------- SKYs --------------" << std::endl;
     for (unsigned i = 0; i < dm->sky().size(); i++)
-      vcl_cout << "\t name = " << (dm->sky()[i]->name())
+      std::cout << "\t name = " << (dm->sky()[i]->name())
                << ",\t depth = " << 254
                << ",\t orient = " << (int)query->sky_orient()
-               << vcl_endl;
+               << std::endl;
   }
   if (dm->ground_plane().size()) {
-    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
+    std::cout << " -------------- GROUND PLANE --------------" << std::endl;
     for (unsigned i = 0; i < dm->ground_plane().size(); i++)
-      vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
+      std::cout << "\t name = " << dm->ground_plane()[i]->name()
                << ",\t depth = " << dm->ground_plane()[i]->min_depth()
                << ",\t orient = " << dm->ground_plane()[i]->orient_type()
                << ",\t land_id = " << dm->ground_plane()[i]->land_id()
                << ",\t land_name = " << volm_label_table::land_string(dm->ground_plane()[i]->land_id())
-               << vcl_endl;
+               << std::endl;
   }
-  vcl_vector<depth_map_region_sptr> dmr = query->depth_regions();
+  std::vector<depth_map_region_sptr> dmr = query->depth_regions();
   if (dmr.size()) {
-    vcl_cout << " -------------- DEPTH REGIONS --------------" << vcl_endl;
+    std::cout << " -------------- DEPTH REGIONS --------------" << std::endl;
     for (unsigned i = 0; i < dmr.size(); i++) {
-      vcl_cout << "\t\t " <<  dmr[i]->name()  << " region "
+      std::cout << "\t\t " <<  dmr[i]->name()  << " region "
                << ",\t\t min_depth = " << dmr[i]->min_depth()
                << " ---> interval = " << (int)sph->get_depth_interval(dmr[i]->min_depth())
                << ",\t\t max_depth = " << dmr[i]->max_depth()
@@ -205,20 +204,20 @@ int main(int argc, char** argv)
                << ",\t\t orient = " << dmr[i]->orient_type()
                << ",\t\t NLCD_id = " << dmr[i]->land_id()
                << ",\t\t land_name = " << volm_label_table::land_string(dmr[i]->land_id())
-               << vcl_endl;
+               << std::endl;
     }
   }
 
-  vcl_cout << "\n==================================================================================================\n"
+  std::cout << "\n==================================================================================================\n"
            << "\t\t  2. Weight parameters used are as following\n";
-  for (vcl_vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit)
-    vcl_cout << ' ' << vit->w_typ_
+  for (std::vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit)
+    std::cout << ' ' << vit->w_typ_
              << ' ' << vit->w_ori_
              << ' ' << vit->w_lnd_
              << ' ' << vit->w_dst_
              << ' ' << vit->w_ord_
-             << ' ' << vit->w_obj_ << vcl_endl;
-  vcl_cout << "==================================================================================================\n\n";
+             << ' ' << vit->w_obj_ << std::endl;
+  std::cout << "==================================================================================================\n\n";
 
   // define device that will be used
   bocl_manager_child &mgr = bocl_manager_child::instance();
@@ -228,19 +227,19 @@ int main(int argc, char** argv)
       volm_io::write_log(out_folder(), log.str());
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     }
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_cout << "\n==================================================================================================\n"
+  std::cout << "\n==================================================================================================\n"
            << "\t\t  3. Following device is used for volm_matcher\n"
            << "\t\t  " << mgr.gpus_[dev_id()]->info() << '\n'
-           << "\n==================================================================================================" << vcl_endl;
+           << "\n==================================================================================================" << std::endl;
 
   // check the geo_hypo_folder and geo_index_folder
 
-  vcl_stringstream file_name_pre_hypo;
+  std::stringstream file_name_pre_hypo;
   file_name_pre_hypo << geo_hypo_folder() << "/geo_index_tile_" << tile_id() <<".txt";
-  vcl_stringstream file_name_pre_indx;
+  std::stringstream file_name_pre_indx;
   file_name_pre_indx << geo_index_folder() << "/geo_index_tile_" << tile_id() << "_index.params";
   if (!vul_file::exists(file_name_pre_hypo.str()) || !vul_file::exists(file_name_pre_indx.str())) {
     log << " ERROR: geo_index is missing for tile " << tile_id() << '\n';
@@ -248,12 +247,12 @@ int main(int argc, char** argv)
       volm_io::write_log(out_folder(), log.str());
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     }
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
   // load associate geo_hypo
-  vcl_stringstream file_name_pre;
+  std::stringstream file_name_pre;
   file_name_pre << geo_hypo_folder() << "/geo_index_tile_" << tile_id();
   float min_size;
   volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
@@ -267,7 +266,7 @@ int main(int argc, char** argv)
     if (!vul_file::exists(candidate_list())) {
       log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
       if (do_log)  volm_io::write_composer_log(out_folder(), log.str());
-      vcl_cerr << log.str();
+      std::cerr << log.str();
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
       return volm_io::EXE_ARGUMENT_ERROR;
     }
@@ -275,22 +274,22 @@ int main(int argc, char** argv)
       // parse polygon from kml
       is_candidate = true;
       cand_poly = bkml_parser::parse_polygon(candidate_list());
-      vcl_cout << " candidate list is parsed from file: " << candidate_list() << vcl_endl;
-      vcl_cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << vcl_endl;
+      std::cout << " candidate list is parsed from file: " << candidate_list() << std::endl;
+      std::cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << std::endl;
     }
   }
   else {
-    vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
+    std::cout << " NO candidate list for this query image, full index space is considered" << std::endl;
     is_candidate = false;
   }
   if (is_candidate)
     volm_geo_index::prune_tree(root, cand_poly);
-  vcl_vector<volm_geo_index_node_sptr> leaves;
+  std::vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
-  vcl_cout << "\n==================================================================================================\n"
+  std::cout << "\n==================================================================================================\n"
              << "\t\t  4. Start volumetric matcher for tile " << tile_id() << '\n'
-             << "==================================================================================================\n" << vcl_endl;
+             << "==================================================================================================\n" << std::endl;
 
   // start the volm_matcher
   bool is_last_pass = false;
@@ -304,16 +303,16 @@ int main(int argc, char** argv)
       volm_io::write_log(out_folder(), log.str());
       volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
     }
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
 
   // write the score output binary
-  vcl_cout << "\n==================================================================================================\n"
+  std::cout << "\n==================================================================================================\n"
           << "\t\t  5. Generate output of pass 1 matcher for zone " << zone_id() << " and tile " << tile_id() << ", store it in\n"
           << "\t\t     " << out_folder() << '\n'
-          << "==================================================================================================\n" << vcl_endl;
-  vcl_stringstream out_fname_bin;
+          << "==================================================================================================\n" << std::endl;
+  std::stringstream out_fname_bin;
   out_fname_bin << out_folder() << "/ps_1_scores_tile_" << tile_id() << ".bin";
   if (!obj_ps1_matcher.write_matcher_result(out_fname_bin.str())) {
     log << " ERROR: write output failed for pass 1 matcher for zone " << zone_id() << ", tile " << tile_id() << '\n';
@@ -321,7 +320,7 @@ int main(int argc, char** argv)
       volm_io::write_log(out_folder(), log.str());
       volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FAILED);
     }
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
   if (do_log)

@@ -15,7 +15,7 @@ static void test_lms_lts()
   double frac = 0.5;
   rrel_objective * lms1 = new rrel_lms_obj( dof, frac );
 
-  vcl_vector<double> test_lms;
+  std::vector<double> test_lms;
   test_lms.push_back( -1.0 );
   test_lms.push_back( -2.0 );
   test_lms.push_back( 1.2 );
@@ -33,13 +33,13 @@ static void test_lms_lts()
   test_lms.push_back( -0.8 );
   test_lms.push_back( 0.6 );
   double corr_obj = 2.2*2.2;
-  double obj = lms1->fcn( test_lms.begin(), test_lms.end(), 0.0, 0 );
+  double obj = lms1->fcn( test_lms.begin(), test_lms.end(), 0.0, VXL_NULLPTR );
   TEST_NEAR("LMS with 0.5 inlier fraction:", obj, corr_obj, 1e-6);
 
   frac = 0.7;
   rrel_objective * lms2 = new rrel_lms_obj( dof, frac );
   corr_obj = 4.0*4.0;
-  obj = lms2->fcn( test_lms.begin(), test_lms.end(), 0.0, 0 );
+  obj = lms2->fcn( test_lms.begin(), test_lms.end(), 0.0, VXL_NULLPTR );
   TEST_NEAR("LMS with 0.7 inlier fraction:", obj, corr_obj, 1e-6);
 
   //
@@ -48,7 +48,7 @@ static void test_lms_lts()
   dof = 3;
   frac = 0.5;
   rrel_objective * lts1 = new rrel_lts_obj( dof, frac );
-  vcl_vector<double> test_lts;
+  std::vector<double> test_lts;
   test_lts.push_back( -1.0 );
   test_lts.push_back( -2.0 );
   test_lts.push_back( 1.2 );
@@ -69,13 +69,13 @@ static void test_lms_lts()
     vnl_math::sqr(-1.0) + vnl_math::sqr(-2.0) + vnl_math::sqr(1.2) + vnl_math::sqr(-1.5) +
     vnl_math::sqr(2.2)  + vnl_math::sqr(1.1) + vnl_math::sqr(2.15) + vnl_math::sqr(-2.1) +
     vnl_math::sqr(-0.8) + vnl_math::sqr(0.6);
-  obj = lts1->fcn( test_lts.begin(), test_lts.end(), 0.0, 0 );
+  obj = lts1->fcn( test_lts.begin(), test_lts.end(), 0.0, VXL_NULLPTR );
   TEST_NEAR("LTS with 0.5 inlier fraction:", obj, corr_obj, 1e-6);
 
   frac = 0.7;
   rrel_objective * lts2 = new rrel_lts_obj( dof, frac );
   corr_obj +=  vnl_math::sqr(-4.0) + vnl_math::sqr(-2.4) + vnl_math::sqr(3.1) ;
-  obj = lts2->fcn( test_lts.begin(), test_lts.end(), 0.0, 0 );
+  obj = lts2->fcn( test_lts.begin(), test_lts.end(), 0.0, VXL_NULLPTR );
   TEST_NEAR("LTS with 0.7 inlier fraction:", obj, corr_obj, 1e-6);
 
   delete lms1;

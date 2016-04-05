@@ -61,8 +61,8 @@ bool bstm_block::init_empty_block(bstm_block_metadata data)
   //only 1 buffer, blocks per buffer is all blocks
   num_buffers = 1;
   blocks_per_buffer = total_blocks;
-  vcl_cout<<"Num buffers: "<<num_buffers
-          <<" .. num_trees: "<<blocks_per_buffer<<vcl_endl;
+  std::cout<<"Num buffers: "<<num_buffers
+          <<" .. num_trees: "<<blocks_per_buffer<<std::endl;
 
   //now construct a byte stream, and read in with b_read
   byte_count_ = calc_byte_count(num_buffers, blocks_per_buffer, total_blocks);
@@ -141,7 +141,7 @@ long bstm_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num_
 
 
 //------------ I/O -------------------------------------------------------------
-vcl_ostream& operator <<(vcl_ostream &s, bstm_block& block)
+std::ostream& operator <<(std::ostream &s, bstm_block& block)
 {
   return
   s << "Block ID=" << block.block_id() << '\n'
@@ -151,7 +151,7 @@ vcl_ostream& operator <<(vcl_ostream &s, bstm_block& block)
     << "Max MB=" << block.max_mb() << '\n'
     << "Read only=" << block.read_only() << '\n'
     << "Sub Block Dim=" << block.sub_block_dim() << '\n'
-    << "Sub Block Num=" << block.sub_block_num() << vcl_endl;
+    << "Sub Block Num=" << block.sub_block_num() << std::endl;
 }
 
 //: Binary write bstm_block to stream.

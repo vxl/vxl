@@ -1,10 +1,11 @@
 // This is core/vgui/impl/win32/vgui_win32.cxx
+#include <iostream>
+#include <cstring>
 #include "vgui_win32.h"
 
 #include <vgui/vgui_gl.h> // for glFlush()
-#include <vcl_iostream.h> // for vcl_cerr
+#include <vcl_compiler.h>
 #include <vcl_cassert.h> // for assert
-#include <vcl_cstring.h> // for vcl_strlen()
 #include "vgui_win32_window.h"
 #include "vgui_win32_dialog_impl.h"
 
@@ -46,19 +47,19 @@ BOOL vgui_win32::ProcessShellCommand(int argc, char **argv)
   char *p, *q = argv[0];
 
   // Skip path
-  while ( p = vcl_strchr(q, '\\') ) q = ++p;
+  while ( p = std::strchr(q, '\\') ) q = ++p;
   // remove ".exe" suffix
-  p = vcl_strstr(q, ".exe");
+  p = std::strstr(q, ".exe");
   // Now q points to the app name.
   if (p)
     szAppName_ = (char *)malloc(sizeof(char)*(p-q+1));
   else // .exe is not provided.
-    szAppName_ = (char *)malloc(sizeof(char)*(1+vcl_strlen(q)));
+    szAppName_ = (char *)malloc(sizeof(char)*(1+std::strlen(q)));
 
   if ( szAppName_ == NULL )
     return FALSE;
   if (p) *p = 0;
-  vcl_strcpy(szAppName_, q);
+  std::strcpy(szAppName_, q);
 
   // Convert argv into szCmdLine_
   szCmdLine_ = GetCommandLine();
@@ -83,7 +84,7 @@ void vgui_win32::init(int &argc, char **argv)
   wndclass.lpszClassName = szAppName_;
 
   if ( !RegisterClass(&wndclass) ) {
-    vcl_cerr << "Fail to register window class for main window.\n";
+    std::cerr << "Fail to register window class for main window.\n";
     assert(false); // quit ugly
   }
 
@@ -250,7 +251,7 @@ BOOL vgui_win32::PumpMessage()
 inline int vgui_win32::find_window(HWND hwnd)
 {
   int i;
-  vcl_vector<vgui_window*>::const_iterator it;
+  std::vector<vgui_window*>::const_iterator it;
   for ( i = 0,  it = windows_to_delete.begin();
         it != windows_to_delete.end(); it++, i++ ) {
     HWND the_hwnd = ((vgui_win32_window*)(*it))->getWindowHandle();
@@ -263,13 +264,13 @@ inline int vgui_win32::find_window(HWND hwnd)
 
 inline void vgui_win32::dump_window_stack()
 {
-  vcl_cout << "z-top of window stack: ";
+  std::cout << "z-top of window stack: ";
 
-  vcl_vector<vgui_window*>::const_iterator it;
+  std::vector<vgui_window*>::const_iterator it;
   for ( it = windows_to_delete.begin();
         it != windows_to_delete.end(); it++ )
-    vcl_cout << ((vgui_win32_window*)(*it))->getWindowHandle() << ',';
-  vcl_cout << vcl_endl;
+    std::cout << ((vgui_win32_window*)(*it))->getWindowHandle() << ',';
+  std::cout << std::endl;
 }
 
 // Set the current window as the one whose handle is "hwnd".

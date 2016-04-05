@@ -1,4 +1,5 @@
 // This is brl/bbas/imesh/algo/imesh_generate_mesh.cxx
+#include <iostream>
 #include "imesh_generate_mesh.h"
 //:
 // \file
@@ -9,7 +10,7 @@ extern "C" {
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_box_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #define GRID_SIZE 1000 // defined by the tolerance for equal vertices
 
@@ -65,8 +66,8 @@ class point_index
 };
 
 void
-imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
-                       vcl_vector<vgl_line_segment_2d<double> > const& segs,
+imesh_generate_mesh_2d(std::vector<vgl_point_2d<double> > const& convex_hull,
+                       std::vector<vgl_line_segment_2d<double> > const& segs,
                        imesh_mesh& mesh)
 {
   // form a grid to store vertex indices in order to detect
@@ -114,7 +115,7 @@ imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
     in.segmentlist[m]=pi1;     in.segmentlist[m+1]=pi2;
   }
   //attributes and markers are not used in this algorithm
-  in.pointattributelist = NULL;
+  in.pointattributelist = VXL_NULLPTR;
   in.pointmarkerlist = (int*)malloc(in.numberofpoints * sizeof(int));
   for (int i = 0; i<in.numberofpoints; ++i)
     in.pointmarkerlist[i]=0;
@@ -122,18 +123,18 @@ imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
   for (int i = 0; i<in.numberofsegments; ++i)
     in.segmentmarkerlist[i]=0;
 
-  out.pointlist = (REAL *) NULL;            // Not needed if -N switch used.
+  out.pointlist = (REAL *) VXL_NULLPTR;            // Not needed if -N switch used.
   // Not needed if -N switch used or number of point attributes is zero:
-  out.pointattributelist = (REAL *) NULL;
-  out.pointmarkerlist = (int *) NULL; // Not needed if -N or -B switch used.
-  out.trianglelist = (int *) NULL;          // Not needed if -E switch used.
-  out.neighborlist = (int *) NULL;         // Needed only if -n switch used.
+  out.pointattributelist = (REAL *) VXL_NULLPTR;
+  out.pointmarkerlist = (int *) VXL_NULLPTR; // Not needed if -N or -B switch used.
+  out.trianglelist = (int *) VXL_NULLPTR;          // Not needed if -E switch used.
+  out.neighborlist = (int *) VXL_NULLPTR;         // Needed only if -n switch used.
   // Needed only if segments are output (-p or -c) and -P not used:
   out.segmentlist = (int *) (REAL *) malloc(in.numberofsegments * 2 * sizeof(REAL)); // Suspicious. Why the double cast? and why sizeof(REAL) if it's really int*?
   // Needed only if segments are output (-p or -c) and -P and -B not used:
-  out.segmentmarkerlist = (int *) NULL;
-  out.edgelist = (int *) NULL;             // Needed only if -e switch used.
-  out.edgemarkerlist = (int *) NULL;   // Needed if -e used and -B not used.
+  out.segmentmarkerlist = (int *) VXL_NULLPTR;
+  out.edgelist = (int *) VXL_NULLPTR;             // Needed only if -e switch used.
+  out.edgemarkerlist = (int *) VXL_NULLPTR;   // Needed if -e used and -B not used.
 
   //A string of switch characters must be provided
   // Triangulate the points.  Switches are chosen to read and write a
@@ -148,7 +149,7 @@ imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
   unsigned k = 0;
   for (unsigned i = 0; i<npts; ++i, k+=2)
     verts->push_back(imesh_vertex<2>(out.pointlist[k], out.pointlist[k+1]));
-  vcl_auto_ptr<imesh_vertex_array_base> v(verts);
+  std::auto_ptr<imesh_vertex_array_base> v(verts);
   mesh.set_vertices(v);
   //construct triangular faces
   unsigned ntri = static_cast<unsigned>(out.numberoftriangles);
@@ -161,15 +162,15 @@ imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
     faces->push_back(tri);
   }
   //set the faces on the mesh
-  vcl_auto_ptr<imesh_face_array_base> f(faces);
+  std::auto_ptr<imesh_face_array_base> f(faces);
   mesh.set_faces(f);
 }
 
 
 void
-imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
-                         vcl_vector<vgl_line_segment_2d<double> > const& segs,
-                         vcl_vector<vgl_point_2d<double> > const & points,
+imesh_generate_mesh_2d_2(std::vector<vgl_point_2d<double> > const& convex_hull,
+                         std::vector<vgl_line_segment_2d<double> > const& segs,
+                         std::vector<vgl_point_2d<double> > const & points,
                          imesh_mesh& mesh)
 {
   // form a grid to store vertex indices in order to detect
@@ -227,7 +228,7 @@ imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
     in.segmentlist[m]=pi1;     in.segmentlist[m+1]=pi2;
   }
   //attributes and markers are not used in this algorithm
-  in.pointattributelist = NULL;
+  in.pointattributelist = VXL_NULLPTR;
   in.pointmarkerlist = (int*)malloc(in.numberofpoints * sizeof(int));
   for (int i = 0; i<in.numberofpoints; ++i)
     in.pointmarkerlist[i]=0;
@@ -235,18 +236,18 @@ imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
   for (int i = 0; i<in.numberofsegments; ++i)
     in.segmentmarkerlist[i]=0;
 
-  out.pointlist = (REAL *) NULL;            // Not needed if -N switch used.
+  out.pointlist = (REAL *) VXL_NULLPTR;            // Not needed if -N switch used.
   // Not needed if -N switch used or number of point attributes is zero:
-  out.pointattributelist = (REAL *) NULL;
-  out.pointmarkerlist = (int *) NULL; // Not needed if -N or -B switch used.
-  out.trianglelist = (int *) NULL;          // Not needed if -E switch used.
-  out.neighborlist = (int *) NULL;         // Needed only if -n switch used.
+  out.pointattributelist = (REAL *) VXL_NULLPTR;
+  out.pointmarkerlist = (int *) VXL_NULLPTR; // Not needed if -N or -B switch used.
+  out.trianglelist = (int *) VXL_NULLPTR;          // Not needed if -E switch used.
+  out.neighborlist = (int *) VXL_NULLPTR;         // Needed only if -n switch used.
   // Needed only if segments are output (-p or -c) and -P not used:
   out.segmentlist = (int *) (REAL *) malloc(in.numberofsegments * 2 * sizeof(REAL)); // Suspicious. Why the double cast? and why sizeof(REAL) if it's really int*?
   // Needed only if segments are output (-p or -c) and -P and -B not used:
-  out.segmentmarkerlist = (int *) NULL;
-  out.edgelist = (int *) NULL;             // Needed only if -e switch used.
-  out.edgemarkerlist = (int *) NULL;   // Needed if -e used and -B not used.
+  out.segmentmarkerlist = (int *) VXL_NULLPTR;
+  out.edgelist = (int *) VXL_NULLPTR;             // Needed only if -e switch used.
+  out.edgemarkerlist = (int *) VXL_NULLPTR;   // Needed if -e used and -B not used.
 
   //A string of switch characters must be provided
   // Triangulate the points.  Switches are chosen to read and write a
@@ -261,7 +262,7 @@ imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
   unsigned k = 0;
   for (unsigned i = 0; i<npts; ++i, k+=2)
     verts->push_back(imesh_vertex<2>(out.pointlist[k], out.pointlist[k+1]));
-  vcl_auto_ptr<imesh_vertex_array_base> v(verts);
+  std::auto_ptr<imesh_vertex_array_base> v(verts);
   mesh.set_vertices(v);
   //construct triangular faces
   unsigned ntri = static_cast<unsigned>(out.numberoftriangles);
@@ -274,6 +275,6 @@ imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
     faces->push_back(tri);
   }
   //set the faces on the mesh
-  vcl_auto_ptr<imesh_face_array_base> f(faces);
+  std::auto_ptr<imesh_face_array_base> f(faces);
   mesh.set_faces(f);
 }

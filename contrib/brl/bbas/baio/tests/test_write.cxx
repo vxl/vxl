@@ -1,17 +1,18 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <baio/baio.h>
-#include <vcl_iostream.h> //for vcl_cout
-#include <vcl_fstream.h>  //for file open
-#include <vcl_cstdlib.h>  //includes malloc
+#include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 #include <vpl/vpl.h>
 
 static void test_write()
 {
   const unsigned int buffSize = 1024*1024;
-  vcl_string root_dir = testlib_root_dir();
-  vcl_string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file_w.txt";
+  std::string root_dir = testlib_root_dir();
+  std::string test_file = root_dir + "/contrib/brl/bbas/baio/tests/test_file_w.txt";
 
   //load from file with blocking
   char* in_tester = new char[buffSize];
@@ -27,11 +28,11 @@ static void test_write()
     num_flops += 4;
   }
   aio.close_file();
-  vcl_cout<<"Number of flops performed during ASYNC write: "<<num_flops<<vcl_endl;
+  std::cout<<"Number of flops performed during ASYNC write: "<<num_flops<<std::endl;
 
   unsigned int charCount = 0;
-  vcl_string line;
-  vcl_ifstream myfile(test_file.c_str(),vcl_ios::binary);
+  std::string line;
+  std::ifstream myfile(test_file.c_str(),std::ios::binary);
   if (myfile.is_open()) {
     while ( myfile.good() ) {
       getline (myfile,line);
@@ -54,7 +55,7 @@ static void test_write()
   for (unsigned int i=0; i<buffSize; ++i) {
     if (out_tester[i] != in_tester[i]) {
       good = false;
-      //vcl_cout<<(int) out_tester[i]<<"... "<<(int) in_tester[i]<<vcl_endl;
+      //std::cout<<(int) out_tester[i]<<"... "<<(int) in_tester[i]<<std::endl;
     }
   }
   TEST("data read matches data", good, true);

@@ -19,7 +19,7 @@ ihog_transform_2d breg3d_lm_direct_homography_generator::compute_homography()
   else
     init_xform.set_affine(vnl_double_2x3().set_identity());
 
-  ihog_minimizer *minimizer = 0;
+  ihog_minimizer *minimizer = VXL_NULLPTR;
   // no masks
   if (!use_mask0_ && !use_mask1_) {
     ihog_image<float> from_img(*img0_, init_xform);
@@ -48,11 +48,11 @@ ihog_transform_2d breg3d_lm_direct_homography_generator::compute_homography()
     minimizer = new ihog_minimizer(from_img, to_img, from_mask, to_mask, roi);
   }
 
-  vcl_cout << " minimizing image error..";
+  std::cout << " minimizing image error..";
   minimizer->minimize(init_xform);
-  vcl_cout << "..done." << vcl_endl;
+  std::cout << "..done." << std::endl;
   double curr_error = minimizer->get_end_error();
-  vcl_cout << "end error = " << curr_error << vcl_endl;
+  std::cout << "end error = " << curr_error << std::endl;
   // computed homography maps pixels in current image to pixels in base image
   //vnl_double_3x3 H = init_xform.get_inverse().get_matrix();
   delete minimizer;

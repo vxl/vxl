@@ -3,13 +3,15 @@
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date October 16, 2008
 
+#include <iostream>
+#include <cmath>
 #include "brec_hierarchy_edge.h"
 #include <bsta/algo/bsta_gaussian_updater.h>
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_quaternion.h>
 
 #include <bxml/bxml_find.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/vnl_double_3.h>
@@ -87,10 +89,10 @@ brec_hierarchy_edge::calculate_dist_angle(brec_part_instance_sptr pi, vnl_vector
 
   dist = (float)dif_to_center.magnitude();
   vnl_vector_fixed<float, 2> v1_hat = dif_to_center.normalize();
-  angle = (float)vcl_acos(dot_product(v, v1_hat));
+  angle = (float)std::acos(dot_product(v, v1_hat));
 
   //: if angle is ~ 180 degrees return a positive angle
-  if ((vcl_abs(angle-vnl_math::pi) < 0.17) || (angle < 0.17))  // allow for a 10 degree interval around 180 degrees and 0 degree
+  if ((std::abs(angle-vnl_math::pi) < 0.17) || (angle < 0.17))  // allow for a 10 degree interval around 180 degrees and 0 degree
     return;
 
   //: now we want this angle positive or negative, depending on which side of v does v1 lie
@@ -130,7 +132,7 @@ brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
 
   float mx = cx + out_dist[0];
   float my = cy + out_dist[1];
-  float rad = (float)vcl_ceil(vcl_sqrt(var_dist())+3);
+  float rad = (float)std::ceil(std::sqrt(var_dist())+3);
   float si = mx - rad;
   float upper_i = mx + rad;
   float sj = my - rad;

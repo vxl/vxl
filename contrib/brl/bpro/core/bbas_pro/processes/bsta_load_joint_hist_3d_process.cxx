@@ -11,13 +11,13 @@ bool bsta_load_joint_hist_3d_process_cons(bprb_func_process& pro)
 {
   // no inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string"); //joint_hist_3d path
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //no output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("bsta_joint_histogram_3d_base_sptr"); //joint_hist_3d
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -30,14 +30,14 @@ bool bsta_load_joint_hist_3d_process(bprb_func_process& pro)
 
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "bsta_load_joint_hist_3d_process: The input number should be 1" << vcl_endl;
+    std::cout << "bsta_load_joint_hist_3d_process: The input number should be 1" << std::endl;
     return false;
   }
 
-  vcl_string path = pro.get_input<vcl_string>(0);
+  std::string path = pro.get_input<std::string>(0);
   vsl_b_ifstream is(path.c_str());
   if (!is) {
-    vcl_cout << "in load_joint_hist_3d_process, couldn't open input file stream\n";
+    std::cout << "in load_joint_hist_3d_process, couldn't open input file stream\n";
     return false;
   }
 

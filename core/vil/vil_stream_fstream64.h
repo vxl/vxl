@@ -18,7 +18,7 @@
 #include "vcl_compiler.h"
 #include <vil/vil_stream.h>
 
-//: A vil_stream implementation using vcl_fstream
+//: A vil_stream implementation using std::fstream
 class vil_stream_fstream64 : public vil_stream
 {
  public:

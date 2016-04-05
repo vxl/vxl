@@ -41,7 +41,7 @@ public:
             rgrl_transformation const& cur_transform ) const;
 
   //: Type of transformation estimated by this estimator.
-  const vcl_type_info& transformation_type() const;
+  const std::type_info& transformation_type() const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_dis_homo2d_lm, rgrl_nonlinear_estimator );

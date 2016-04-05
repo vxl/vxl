@@ -55,12 +55,12 @@ vimt3d_transform_3d vimt3d_load_transform(const vil3d_image_resource_sptr &im, b
 //: Load 3D image and return pointer.  Caller responsible for deleting object
 //  Object will be of type matching pixel format in file, such as
 //  vimt3d_image_3d_of<vxl_byte>  or vimt3d_image_3d_of<float>
-vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
+vimt3d_image_3d* vimt3d_load(const std::string& path, bool use_mm)
 {
   vil3d_image_resource_sptr ir = vil3d_load_image_resource(path.c_str());
-  if (ir.ptr()==0)
+  if (ir.ptr()==VXL_NULLPTR)
   {
-    return 0;
+    return VXL_NULLPTR;
   }
 
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
@@ -100,6 +100,6 @@ vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
     return image;
   }
 
-  vcl_cerr<<"vimt3d_load() Unknown pixel format: "<<ir->pixel_format()<<vcl_endl;
-  return 0;
+  std::cerr<<"vimt3d_load() Unknown pixel format: "<<ir->pixel_format()<<std::endl;
+  return VXL_NULLPTR;
 }

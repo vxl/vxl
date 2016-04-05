@@ -11,8 +11,8 @@
 #include <vgui/vgui_tableau.h>
 
 // Does a depth-first search for the first tableau whose type_name()
-// method returns the given vcl_string. Returns 0 if no tableau is found.
-vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, vcl_string const &tn, bool direction_down)
+// method returns the given std::string. Returns 0 if no tableau is found.
+vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, std::string const &tn, bool direction_down)
 {
   if (!start)
     return VXL_NULLPTR;
@@ -20,7 +20,7 @@ vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, vcl_str
   if (start->type_name() == tn)
     return start;
 
-  vcl_vector<vgui_tableau_sptr> tt;
+  std::vector<vgui_tableau_sptr> tt;
   if (direction_down)
     start->get_children(&tt); // get all children.
   else
@@ -36,7 +36,7 @@ vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, vcl_str
 
 
 vgui_tableau_sptr
-vgui_find_by_name(vgui_tableau_sptr const& start, vcl_string const &name, bool direction_down)
+vgui_find_by_name(vgui_tableau_sptr const& start, std::string const &name, bool direction_down)
 {
   if (!start)
     return VXL_NULLPTR;
@@ -44,7 +44,7 @@ vgui_find_by_name(vgui_tableau_sptr const& start, vcl_string const &name, bool d
   if (start->name() == name)
     return start;
 
-  vcl_vector<vgui_tableau_sptr> tt;
+  std::vector<vgui_tableau_sptr> tt;
   if (direction_down)
     start->get_children(&tt); // get all children.
   else

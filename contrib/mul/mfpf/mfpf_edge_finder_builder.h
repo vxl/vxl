@@ -5,9 +5,11 @@
 // \brief Builder for mfpf_edge_finder objects.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Builder for mfpf_edge_finder objects.
 class mfpf_edge_finder_builder : public mfpf_point_finder_builder
@@ -43,19 +45,19 @@ class mfpf_edge_finder_builder : public mfpf_point_finder_builder
   virtual void build(mfpf_point_finder&);
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

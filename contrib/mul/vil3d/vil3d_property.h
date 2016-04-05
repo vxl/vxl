@@ -32,11 +32,11 @@
 // An example
 // \code
 // float vs[3];
-// vcl_cout << "Volume of image is ";
+// std::cout << "Volume of image is ";
 // if (image.get_property(vil3d_property_voxel_size, &voxel_size))
-//   vcl_cout << vs[0]*vs[1]*vs[2]*im.ni()*im.nj()*im.nk() << vcl_endl;
+//   std::cout << vs[0]*vs[1]*vs[2]*im.ni()*im.nj()*im.nk() << std::endl;
 // else
-//   vcl_cout << "unknown\n";
+//   std::cout << "unknown\n";
 // \endcode
 //
 // \author Ian Scott - Copied from fsm's design in vil.

@@ -55,7 +55,7 @@ int main(int argc, char ** argv)
   vgui::select("gtk");
   vgui::init(argc, argv);
 
-  vcl_list<vcl_string> img_filenames;
+  std::list<std::string> img_filenames;
   if (argc <= 1)
     for (int i=1; i<10; ++i)
     {
@@ -66,7 +66,7 @@ int main(int argc, char ** argv)
     for (int i=1; i<argc; ++i)
       img_filenames.push_back(argv[i]);
 
-  vcl_cout << argv[0] << ": playing " << img_filenames.size() << " frames\n";
+  std::cout << argv[0] << ": playing " << img_filenames.size() << " frames\n";
 
   my_movie = vidl_vil1_io::load_movie(img_filenames);
   pframe = my_movie->first();

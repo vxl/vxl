@@ -12,9 +12,10 @@
 //   (none yet)
 // \endverbatim
 
+#include <vector>
+#include <iostream>
 #include "bsta_distribution.h"
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class bsta_beta : public bsta_distribution<T,1>
@@ -28,7 +29,7 @@ class bsta_beta : public bsta_distribution<T,1>
   { if (alpha_< 0) alpha_=T(0.00001); if (beta_<0) beta_=T(0.00001); }
 
   //: constructs from a set of sample values
-  bsta_beta(vcl_vector<T> x);
+  bsta_beta(std::vector<T> x);
 
   static bool bsta_beta_from_moments(T mean, T var, T& alpha, T& beta);
 
@@ -61,7 +62,7 @@ class bsta_beta : public bsta_distribution<T,1>
 };
 
 template <class T>
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline std::ostream& operator<< (std::ostream& os,
                                 bsta_beta<T> const& b)
 {
   return

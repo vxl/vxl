@@ -33,7 +33,7 @@ class brec_bg_pair_density : public brec_pair_density
  public:
   virtual ~brec_bg_pair_density() {}
   brec_bg_pair_density(bvxm_voxel_world_sptr w, vpgl_camera_double_sptr cam,
-                       vcl_string voxel_type, unsigned bin, unsigned scale,
+                       std::string voxel_type, unsigned bin, unsigned scale,
                        unsigned ni, unsigned nj)
   : brec_pair_density(), verbose(false), world_(w), cam_(cam), voxel_type_(voxel_type),
     bin_(bin), scale_(scale), ni_(ni), nj_(nj), i_(0), j_(0) {}
@@ -69,7 +69,7 @@ class brec_bg_pair_density : public brec_pair_density
  private:
   bvxm_voxel_world_sptr world_;
   vpgl_camera_double_sptr cam_;
-  vcl_string voxel_type_;
+  std::string voxel_type_;
   unsigned bin_;
   unsigned scale_;
   unsigned ni_;

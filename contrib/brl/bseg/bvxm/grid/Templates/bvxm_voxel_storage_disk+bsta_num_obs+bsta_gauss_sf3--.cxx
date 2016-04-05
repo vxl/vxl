@@ -1,4 +1,4 @@
-#include <bvxm/grid/bvxm_voxel_storage_disk.txx>
+#include <bvxm/grid/bvxm_voxel_storage_disk.hxx>
 #include <bsta/bsta_attributes.h>
 #include <bsta/io/bsta_io_attributes.h>
 #include <bsta/io/bsta_io_gaussian_sphere.h>

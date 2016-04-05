@@ -1,7 +1,8 @@
 // This is mul/vil3d/tests/test_algo_find_blobs.cxx
 
-#include <vcl_iostream.h>
-#include <vcl_map.h>
+#include <iostream>
+#include <map>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vil3d/algo/vil3d_find_blobs.h>
 #include <vil3d/vil3d_crop.h>
@@ -13,7 +14,7 @@
 // Find the first voxel (in raster scan order) of each blob in a blob image
 //========================================================================
 static void first_voxel_of_blobs(const vil3d_image_view<unsigned>& img,
-                                 vcl_map<unsigned, vgl_point_3d<unsigned> >& blob_vox)
+                                 std::map<unsigned, vgl_point_3d<unsigned> >& blob_vox)
 {
   blob_vox.clear();
 
@@ -40,13 +41,13 @@ static void first_voxel_of_blobs(const vil3d_image_view<unsigned>& img,
 static void test_blob_image(const vil3d_image_view<bool>& src,
                             const vil3d_find_blob_connectivity conn,
                             const vil3d_image_view<unsigned>& tru,
-                            const vcl_string& testname)
+                            const std::string& testname)
 {
   vil3d_image_view<unsigned> dst;
   vil3d_find_blobs(src, conn, dst);
 
   // Check first voxels
-  vcl_map<unsigned, vgl_point_3d<unsigned> > blob_vox;
+  std::map<unsigned, vgl_point_3d<unsigned> > blob_vox;
   first_voxel_of_blobs(src, blob_vox);
 
 
@@ -55,33 +56,33 @@ static void test_blob_image(const vil3d_image_view<bool>& src,
 
 #if 0
 //#ifndef NDEBUG
-  vcl_cout << "--------------------------------------------------\n"
+  std::cout << "--------------------------------------------------\n"
            << testname << "\n\n";
 
-  vcl_cout << "src image:\n";
-  vil3d_print_all(vcl_cout, src);
-  vcl_cout << '\n';
+  std::cout << "src image:\n";
+  vil3d_print_all(std::cout, src);
+  std::cout << '\n';
 
-  vcl_cout << "dst image:\n";
-  vil3d_print_all(vcl_cout, dst);
-  vcl_cout << '\n';
+  std::cout << "dst image:\n";
+  vil3d_print_all(std::cout, dst);
+  std::cout << '\n';
 
-  vcl_cout << "tru image:\n";
-  vil3d_print_all(vcl_cout, tru);
-  vcl_cout << '\n';
+  std::cout << "tru image:\n";
+  vil3d_print_all(std::cout, tru);
+  std::cout << '\n';
 
-  vcl_cout << "first voxels:\n";
-  for (vcl_map<unsigned, vgl_point_3d<unsigned> >::const_iterator it=blob_vox.begin();
+  std::cout << "first voxels:\n";
+  for (std::map<unsigned, vgl_point_3d<unsigned> >::const_iterator it=blob_vox.begin();
        it!=blob_vox.end(); ++it)
   {
-    vcl_cout << it->first << ": "
+    std::cout << it->first << ": "
              << it->second.x() << ' '
              << it->second.y() << ' '
              << it->second.z() << '\n';
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
 
-  vcl_cout << "--------------------------------------------------\n";
+  std::cout << "--------------------------------------------------\n";
 //#endif // NDEBUG
 #endif
 }
@@ -347,7 +348,7 @@ static void test_multilimb_merging3()
 //========================================================================
 static void test_algo_find_blobs()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing vil3d_find_blobs\n"
            << "**************************\n";
 

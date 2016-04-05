@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include "volm_spherical_query_region.h"
 #include <vgl/vgl_polygon.h>
 #include <bsol/bsol_algs.h>
@@ -6,7 +8,7 @@
 #include "volm_spherical_container.h"
 #include "volm_char_codes.h"
 #include <bpgl/depth_map/depth_map_region.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 void volm_spherical_query_region::
 set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
@@ -20,7 +22,7 @@ set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
   order_ =  static_cast<unsigned char>(dm_region->order());
   nlcd_id_ = static_cast<unsigned char>(dm_region->land_id());
   //nlcd_id_ = static_cast<unsigned char>(dm_region->nlcd_id());
-  vcl_string nam = dm_region->name();
+  std::string nam = dm_region->name();
   if (otype == depth_map_region::GROUND_PLANE) {
     orientation_ = static_cast<unsigned char>(depth_map_region::HORIZONTAL);
     min_depth_ = static_cast<unsigned char>(sph_vol->min_voxel_res());
@@ -53,8 +55,8 @@ set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
   }
 }
 
-void volm_spherical_query_region::print(vcl_ostream& os) const
+void volm_spherical_query_region::print(std::ostream& os) const
 {
-  vcl_cout << depth_map_region::orient_string(orientation_) << "::";
+  std::cout << depth_map_region::orient_string(orientation_) << "::";
   box_.print(os, false);
 }

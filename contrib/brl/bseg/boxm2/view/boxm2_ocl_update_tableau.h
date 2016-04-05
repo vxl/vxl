@@ -43,8 +43,8 @@ class boxm2_ocl_update_tableau : public boxm2_ocl_render_tableau
                     unsigned ni,
                     unsigned nj,
                     vpgl_perspective_camera<double>* cam,
-                    vcl_vector<vcl_string>& update_imgs,
-                    vcl_vector<vcl_string>& update_cams);
+                    std::vector<std::string>& update_imgs,
+                    std::vector<std::string>& update_cams);
 
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
@@ -57,8 +57,8 @@ class boxm2_ocl_update_tableau : public boxm2_ocl_render_tableau
   float merge(float thresh);
   float filter();
   float save();
-  vcl_vector<vcl_string> cams_;
-  vcl_vector<vcl_string> imgs_;
+  std::vector<std::string> cams_;
+  std::vector<std::string> imgs_;
   vnl_random random_;
   bool do_update_;
 

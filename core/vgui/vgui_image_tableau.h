@@ -34,7 +34,7 @@ class vgui_image_tableau
   : public vgui_tableau
 {
  protected:
-  vcl_string name_;
+  std::string name_;
   bool pixels_centered_;
   vgui_range_map_params_sptr rmp_;
   vgui_image_renderer* renderer_;
@@ -42,19 +42,19 @@ class vgui_image_tableau
 
  public:
   //: Returns the type of this tableau ('vgui_image_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Returns the filename of the loaded image.
   //  It will not know this if the tableau was constructed from
   //  a vil1_image, only if the filename was given to the constructor.
-  vcl_string file_name() const;
+  std::string file_name() const;
 
   //: Set the filename of the loaded image
   //  It could be used to identify a specific image
-  void set_file_name( const vcl_string & fn ) { name_ = fn; }
+  void set_file_name( const std::string & fn ) { name_ = fn; }
 
   //: Returns a nice version of the name, including details of the image file.
-  vcl_string pretty_name() const;
+  std::string pretty_name() const;
 
   //: Return the image being rendered by this tableau.
   virtual vil1_image get_image() const;

@@ -35,7 +35,7 @@ class vil_file_format
   //  ... or from an image file_format that supports multiple images per file.
   virtual vil_pyramid_image_resource_sptr
     make_input_pyramid_image(char const* /*directory_or_file*/)
-    {return 0;}
+    {return VXL_NULLPTR;}
 
   //: Construct a pyramid image resource from a base image.
   //  All levels are stored in the same resource file. Each level has the same
@@ -50,7 +50,7 @@ class vil_file_format
                                  vil_image_resource_sptr const& /*base_image*/,
                                  unsigned /*nlevels*/,
                                  char const* /*temp_dir*/)
-    {return 0;}
+    {return VXL_NULLPTR;}
 
   //: Make a "generic_image" on which put_section may be applied.
   // The stream vs is assumed to be open for writing, as an image header may be
@@ -72,11 +72,11 @@ class vil_file_format
                               unsigned /*size_block_i*/,
                               unsigned /* size_block_j*/,
                               enum vil_pixel_format)
-    {return 0;}
+    {return VXL_NULLPTR;}
 
   virtual vil_pyramid_image_resource_sptr
     make_pyramid_output_image(char const* /*file*/)
-    {return 0;}
+    {return VXL_NULLPTR;}
 
  public:
   static vil_file_format** all();

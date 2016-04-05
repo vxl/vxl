@@ -5,7 +5,8 @@
 // \author Amitha Perera
 // \date   Feb 2005
 
-#include <vcl_list.h>
+#include <list>
+#include <vcl_compiler.h>
 #include <vgui/vgui_tableau.h>
 #include "vgui_slider_tableau_sptr.h"
 
@@ -44,7 +45,7 @@ class vgui_slider_tableau
 
   // Internal structure used to store the callback pointer and
   // associated data. It needs to be public because it is used to
-  // instantiate a vcl_list. It also needs to be complete at the time
+  // instantiate a std::list. It also needs to be complete at the time
   // of instantiation, so we can't simply forward declare it.
   struct callback_info {
     callback func_;
@@ -54,7 +55,7 @@ class vgui_slider_tableau
 
 
   //: A handle used to refer to callback functions added to this slider
-  typedef vcl_list< callback_info >::iterator cb_handle;
+  typedef std::list< callback_info >::iterator cb_handle;
 
   //: Add a callback.
   //
@@ -106,7 +107,7 @@ class vgui_slider_tableau
   void draw_bar() const;
 
   //: Call each of the callbacks in \a cbs
-  void call_callbacks( vcl_list< callback_info > const& cbs );
+  void call_callbacks( std::list< callback_info > const& cbs );
 
   //: Update the slider location
   // \a newx and \a newy give the latest mouse position in window coordinates
@@ -133,10 +134,10 @@ class vgui_slider_tableau
   int last_x_, last_y_;
 
   //: Callbacks called on every change of the slider
-  vcl_list< callback_info > motion_callbacks_;
+  std::list< callback_info > motion_callbacks_;
 
   //: Callbacks called only at the final position of the slider
-  vcl_list< callback_info > final_callbacks_;
+  std::list< callback_info > final_callbacks_;
 };
 
 //: Create a smart-pointer to a vgui_displaybase_tableau tableau.

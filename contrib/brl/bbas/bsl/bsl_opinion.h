@@ -16,10 +16,11 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <limits>
+#include <cmath>
 
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 class bsl_opinion
 {
@@ -74,7 +75,7 @@ inline bsl_opinion fuse(bsl_opinion const& lhs, bsl_opinion const& rhs)
   float kappa = uA + uB - uA*uB; // = 1 - (1-uA)*(1-uB)
 
   // if one of the uncertainties is non-zero
-  if (vcl_abs(uA) > vcl_numeric_limits<float>::epsilon() || vcl_abs(uB) > vcl_numeric_limits<float>::epsilon()) {
+  if (std::abs(uA) > std::numeric_limits<float>::epsilon() || std::abs(uB) > std::numeric_limits<float>::epsilon()) {
     float b = (bA*uB + bB*uA)/kappa;
     float u = uA*uB/kappa;
     return bsl_opinion(u,b,lhs.a()); // atomicity should be the same for lhs & rhs
@@ -96,7 +97,7 @@ inline float operator*(bsl_opinion const& lhs, bsl_opinion const& rhs) { return 
 inline bsl_opinion operator/(float o1, bsl_opinion const& o2) { return bsl_opinion(o1/o2.b()); }
 inline bsl_opinion operator/(bsl_opinion const& o1, bsl_opinion const& o2) { return bsl_opinion(o1.b()/o2.b()); }
 
-inline vcl_ostream& operator<< (vcl_ostream& s, bsl_opinion const& o) { s << "bsl_opinion [b=" << o.b() << " u=" << o.u() << ']' << vcl_endl; return s; }
+inline std::ostream& operator<< (std::ostream& s, bsl_opinion const& o) { s << "bsl_opinion [b=" << o.b() << " u=" << o.u() << ']' << std::endl; return s; }
 
 
 #endif

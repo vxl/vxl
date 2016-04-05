@@ -12,11 +12,12 @@
 //  Modifications
 // \endverbatim
 
+#include <iostream>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: base class for images of features
 class bbgm_feature_image_base : public vbl_ref_count
@@ -30,7 +31,7 @@ class bbgm_feature_image_base : public vbl_ref_count
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is)=0;
 
-  virtual vcl_string is_a() const=0;
+  virtual std::string is_a() const=0;
 
   virtual bbgm_feature_image_base* clone() const = 0;
 
@@ -117,7 +118,7 @@ class bbgm_feature_image : public bbgm_feature_image_base
 
   //: Return a string name
   // \note this is probably not portable
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   virtual bbgm_feature_image_base* clone() const;
 
@@ -136,7 +137,7 @@ class bbgm_feature_image : public bbgm_feature_image_base
 };
 
 template <class f_type_>
-void vsl_print_summary(vcl_ostream& os,
+void vsl_print_summary(std::ostream& os,
                        const bbgm_feature_image<f_type_> & b)
 { os << "not yet implemented for bbgm_feature_image\n";}
 

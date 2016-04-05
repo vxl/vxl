@@ -1,13 +1,14 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <limits>
+#include <algorithm>
 #include "depth_map_scene.h"
 //:
 // \file
 #include "depth_map_region.h"
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_limits.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vsol/vsol_polygon_3d.h>
@@ -19,16 +20,16 @@
 
 depth_map_scene::
 depth_map_scene(unsigned ni, unsigned nj,
-                vcl_string const& image_path,
+                std::string const& image_path,
                 vpgl_perspective_camera<double> const& cam,
                 depth_map_region_sptr const& ground_plane,
                 depth_map_region_sptr const& sky,
-                vcl_vector<depth_map_region_sptr> const& scene_regions)
+                std::vector<depth_map_region_sptr> const& scene_regions)
   : ni_(ni), nj_(nj), image_path_(image_path), cam_(cam)
 {
   ground_plane_.push_back(ground_plane);
   sky_.push_back(sky);
-  for (vcl_vector<depth_map_region_sptr>::const_iterator rit = scene_regions.begin();
+  for (std::vector<depth_map_region_sptr>::const_iterator rit = scene_regions.begin();
        rit != scene_regions.end(); ++rit)
     scene_regions_[(*rit)->name()]=(*rit);
 }
@@ -37,7 +38,7 @@ void depth_map_scene::set_ground_plane(vsol_polygon_2d_sptr ground_plane)
 {
   vgl_plane_3d<double> gp(0.0, 0.0, 1.0, 0.0);//z axis is the plane normal
   depth_map_region_sptr ground = new depth_map_region(ground_plane, gp,
-                                                      vcl_string("ground_plane"),
+                                                      std::string("ground_plane"),
                                                       depth_map_region::GROUND_PLANE);
   ground_plane_.push_back(ground);
 }
@@ -46,7 +47,7 @@ void depth_map_scene::add_ground(vsol_polygon_2d_sptr const& ground_plane,
                                  double min_depth,
                                  double max_depth,
                                  unsigned order,
-                                 vcl_string name,
+                                 std::string name,
                                  unsigned land_id,
                                  double height)
 {
@@ -67,7 +68,7 @@ void depth_map_scene::set_sky(vsol_polygon_2d_sptr sky)
 
 void depth_map_scene::add_sky(vsol_polygon_2d_sptr const& sky,
                               unsigned order,
-                              vcl_string name)
+                              std::string name)
 {
   depth_map_region_sptr sky_pt = new depth_map_region(sky, name);
   sky_pt->set_order(order);
@@ -78,7 +79,7 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
                                  vgl_vector_3d<double> region_normal,
                                  double min_depth,
                                  double max_depth,
-                                 vcl_string name,
+                                 std::string name,
                                  depth_map_region::orientation orient,
                                  unsigned order,
                                  unsigned land_id,
@@ -101,23 +102,23 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
 void depth_map_scene::
 add_ortho_perp_region(vsol_polygon_2d_sptr const& region,
                       double min_depth, double max_depth,
-                      vcl_string name)
+                      std::string name)
 {
   vgl_vector_3d<double> normal_dir = depth_map_region::perp_ortho_dir(cam_);
   this->add_region(region, normal_dir, min_depth, max_depth, name,
                    depth_map_region::VERTICAL);
 }
 
-vcl_vector<depth_map_region_sptr> depth_map_scene::scene_regions() const
+std::vector<depth_map_region_sptr> depth_map_scene::scene_regions() const
 {
-  vcl_vector<depth_map_region_sptr> ret;
-  vcl_map<vcl_string, depth_map_region_sptr>::const_iterator rit = scene_regions_.begin();
+  std::vector<depth_map_region_sptr> ret;
+  std::map<std::string, depth_map_region_sptr>::const_iterator rit = scene_regions_.begin();
   for (; rit != scene_regions_.end(); ++rit)
     ret.push_back((*rit).second);
   return ret;
 }
 
-bool depth_map_scene::set_depth(double depth, vcl_string const& name)
+bool depth_map_scene::set_depth(double depth, std::string const& name)
 {
   if (name == "sky" || name == "ground_plane")
     return false;
@@ -146,7 +147,7 @@ set_ground_plane_max_depth(double max_depth,
 vil_image_view<float> depth_map_scene::
 depth_map(unsigned log2_downsample_ratio)
 {
-  double ratio = vcl_pow(2.0, static_cast<double>(log2_downsample_ratio));
+  double ratio = std::pow(2.0, static_cast<double>(log2_downsample_ratio));
   double dni = static_cast<double>(ni_)/ratio,
     dnj = static_cast<double>(nj_)/ratio;
   if (dni<2.0) dni = 2.0;
@@ -159,9 +160,9 @@ depth_map(unsigned log2_downsample_ratio)
   // necessary
   bool good = true;
   if (sky_.size()) {
-    vcl_vector<depth_map_region_sptr> skys;
+    std::vector<depth_map_region_sptr> skys;
     skys = sky_;
-    vcl_sort(skys.begin(), skys.end(), compare_order());
+    std::sort(skys.begin(), skys.end(), compare_order());
     int ns = (int)skys.size();
     for (int i = (ns-1); i>=0; --i)
       good = good && skys[i]->update_depth_image(depth, cam_, ratio);
@@ -169,23 +170,23 @@ depth_map(unsigned log2_downsample_ratio)
   assert(good);
   // then do the ground plane
   if (ground_plane_.size()) {
-    vcl_vector<depth_map_region_sptr> grounds;
+    std::vector<depth_map_region_sptr> grounds;
     grounds = ground_plane_;
-    vcl_sort(grounds.begin(), grounds.end(), compare_order());
+    std::sort(grounds.begin(), grounds.end(), compare_order());
     int ng = (int)grounds.size();
     for (int i = (ng-1); i>=0; i--)
       good = good && grounds[i]->update_depth_image(depth, cam_, ratio);
   }
   assert(good);
   // All the other objects
-  vcl_vector<depth_map_region_sptr> regions;
-  vcl_map<vcl_string, depth_map_region_sptr>::iterator rit =
+  std::vector<depth_map_region_sptr> regions;
+  std::map<std::string, depth_map_region_sptr>::iterator rit =
     scene_regions_.begin();
   for (; rit != scene_regions_.end(); ++rit)
     if (rit->second->active())
       regions.push_back(rit->second);
   //sort on depth order
-  vcl_sort(regions.begin(), regions.end(), compare_order());
+  std::sort(regions.begin(), regions.end(), compare_order());
   // paint in reverse depth order so closer regions paint over more
   // distant regions
   int nr = (int)regions.size();
@@ -196,9 +197,9 @@ depth_map(unsigned log2_downsample_ratio)
 }
 
 vil_image_view<float> depth_map_scene::
-depth_map(vcl_string region_name, unsigned log2_downsample_ratio, double gp_dist_cutoff)
+depth_map(std::string region_name, unsigned log2_downsample_ratio, double gp_dist_cutoff)
 {
-  double ratio = vcl_pow(2.0, static_cast<double>(log2_downsample_ratio));
+  double ratio = std::pow(2.0, static_cast<double>(log2_downsample_ratio));
   double dni = static_cast<double>(ni_)/ratio,
     dnj = static_cast<double>(nj_)/ratio;
   if (dni<2.0) dni = 2.0;
@@ -208,9 +209,9 @@ depth_map(vcl_string region_name, unsigned log2_downsample_ratio, double gp_dist
   depth.fill(-1.0f); // depth is undefined
 
   if (region_name.compare("ground_plane") == 0 && ground_plane_.size()) {
-    vcl_vector<depth_map_region_sptr> grounds;
+    std::vector<depth_map_region_sptr> grounds;
     grounds = ground_plane_;
-    vcl_sort(grounds.begin(), grounds.end(), compare_order());
+    std::sort(grounds.begin(), grounds.end(), compare_order());
     int ng = (int)grounds.size();
     bool good = true;
     for (int i = (ng-1); i>=0; i--) {
@@ -220,9 +221,9 @@ depth_map(vcl_string region_name, unsigned log2_downsample_ratio, double gp_dist
     assert(good);
   }
   else if (region_name.compare("sky") == 0 && sky_.size()) {
-    vcl_vector<depth_map_region_sptr> skys;
+    std::vector<depth_map_region_sptr> skys;
     skys = sky_;
-    vcl_sort(skys.begin(), skys.end(), compare_order());
+    std::sort(skys.begin(), skys.end(), compare_order());
     int ns = (int)skys.size();
     bool good = true;
     for (int i = (ns-1); i>=0; --i)
@@ -230,7 +231,7 @@ depth_map(vcl_string region_name, unsigned log2_downsample_ratio, double gp_dist
     assert(good);
   }
   else {
-    vcl_map<vcl_string, depth_map_region_sptr>::iterator rit = scene_regions_.begin();
+    std::map<std::string, depth_map_region_sptr>::iterator rit = scene_regions_.begin();
     for (; rit != scene_regions_.end(); ++rit)
       if (rit->first.compare(region_name) == 0 && rit->second) {
         rit->second->update_depth_image(depth, cam_, ratio);
@@ -288,13 +289,13 @@ bool depth_map_scene::next_depth()
 void depth_map_scene::init_depths()
 {
   depth_states_.clear();
-  vcl_map<vcl_string, depth_map_region_sptr>::iterator rit =
+  std::map<std::string, depth_map_region_sptr>::iterator rit =
     scene_regions_.begin();
   for (; rit !=     scene_regions_.end(); ++rit)
     if (rit->second->active())
       depth_states_.push_back(rit->second);
   //sort on depth order
-  vcl_sort(depth_states_.begin(), depth_states_.end(), compare_order());
+  std::sort(depth_states_.begin(), depth_states_.end(), compare_order());
   //set depths to min depth.
   unsigned ns = depth_states_.size();
   for (unsigned i = 0; i<ns; ++i)
@@ -309,9 +310,9 @@ void depth_map_scene::print_depth_states()
   unsigned ns = depth_states_.size();
   for (unsigned i = 0; i<ns; ++i) {
     depth_map_region_sptr dmr = depth_states_[i];
-    vcl_cout << dmr->name() << ' ' << dmr->depth() << ' ';
+    std::cout << dmr->name() << ' ' << dmr->depth() << ' ';
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
 }
 
 //: binary IO write
@@ -376,14 +377,14 @@ void depth_map_scene::b_read(vsl_b_istream& is)
     vsl_b_read(is, cam_);
   }
   else {
-    vcl_cout << " in depth_map_scene::b_read - unknown version " << ver << "\n";
+    std::cout << " in depth_map_scene::b_read - unknown version " << ver << "\n";
     return;
   }
 }
 
 void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* ds_ptr)
 {
-  if (ds_ptr ==0)
+  if (ds_ptr ==VXL_NULLPTR)
     vsl_b_write(os, false);
   else
     vsl_b_write(os, true);
@@ -400,7 +401,7 @@ void vsl_b_read(vsl_b_istream &is, depth_map_scene*& ds_ptr)
     ds_ptr->b_read(is);
     return;
   }
-  ds_ptr = 0;
+  ds_ptr = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& ds_ptr)
@@ -411,32 +412,32 @@ void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& ds_ptr)
 
 void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& ds_ptr)
 {
-  depth_map_scene* ds=0;
+  depth_map_scene* ds=VXL_NULLPTR;
   vsl_b_read(is, ds);
   ds_ptr = ds;
 }
 
-bool pair_sort(vcl_pair<float, int> const& lhs, vcl_pair<float, int> const& rhs)
+bool pair_sort(std::pair<float, int> const& lhs, std::pair<float, int> const& rhs)
 {
   return lhs.first < rhs.first;
 }
 
 inline float denominator(float std_dev)
 {
-  return (float)(1.0f/(std_dev*vcl_sqrt(2*vnl_math::pi)));
+  return (float)(1.0f/(std_dev*std::sqrt(2*vnl_math::pi)));
 }
 
 inline float normal_pdf(float d, float mean, float std_dev, float den)
 {
   float expo = (d-mean)/std_dev;
-  return (float)den*vcl_exp(-0.5*expo*expo);
+  return (float)den*std::exp(-0.5*expo*expo);
 }
 
 
 //: match to a given continuous depth image
 bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_view<float> const& vis_img, unsigned level, float& score)
 {
-  //vcl_cout << "Scene depth map file, # of regions: " << scene.scene_regions().size() << '\n';
+  //std::cout << "Scene depth map file, # of regions: " << scene.scene_regions().size() << '\n';
   this->begin();
   // first count number of overlapping sky pixels
   vil_image_view<float> sky_img = this->depth_map("sky", level);
@@ -444,14 +445,14 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
   unsigned ni = sky_img.ni(); unsigned nj = sky_img.nj();
   assert(ni == depth_img.ni() && nj == depth_img.nj() && ni == vis_img.ni() && nj == vis_img.nj());
 
-  vcl_vector<vil_image_view<float> > region_imgs;
+  std::vector<vil_image_view<float> > region_imgs;
 
   for (unsigned r = 0; r < this->scene_regions().size(); r++) {
     vil_image_view<float> reg_img = this->depth_map(this->scene_regions()[r]->name(), level);
     region_imgs.push_back(reg_img);
   }
-  vcl_vector<float> region_means(this->scene_regions().size(), 0.0f);
-  vcl_vector<float> region_std_dev(this->scene_regions().size(), 0.0f);
+  std::vector<float> region_means(this->scene_regions().size(), 0.0f);
+  std::vector<float> region_std_dev(this->scene_regions().size(), 0.0f);
 
   vil_image_view<bool> processed_pixels(ni, nj);
   processed_pixels.fill(false);
@@ -504,12 +505,12 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
                 if (region_imgs[r](u,v) > 0 && vis_img(u,v) < vis_threshold)  // use this as mask
                   std_dev += (depth_img(u,v)-mean)*(depth_img(u,v)-mean);
             std_dev /= cnt;
-            std_dev = (float)vcl_sqrt(std_dev);
+            std_dev = (float)std::sqrt(std_dev);
             region_std_dev[r] = std_dev;
             // will normalize probs by assuming that non-object depths are given by a uniform distribution of 4*std_dev
             float norm_val = 1.0/(4*std_dev);
 #ifdef DEBUG
-            vcl_cout << " region: " << scene.scene_regions()[r]->name() << " depth mean: " << mean << " std dev: " << std_dev << " score prev: " << score << vcl_endl;
+            std::cout << " region: " << scene.scene_regions()[r]->name() << " depth mean: " << mean << " std dev: " << std_dev << " score prev: " << score << std::endl;
 #endif
             float den = denominator(std_dev); // = 1.0f/float(std_dev*vnl_math::sqrt2pi);
             // now find the likelihood of each pixel in this region to be a part of the same object with this depth profile
@@ -519,7 +520,7 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
                   if (vis_img(u,v) < vis_threshold) {
 #if 0
                     float expo = (depth_img(u,v)-mean)/std_dev;
-                    float prob = 1.0f/den*(float)vcl_exp(-0.5*expo*expo);
+                    float prob = 1.0f/den*(float)std::exp(-0.5*expo*expo);
 #else
                     float prob = normal_pdf(depth_img(u,v), mean, std_dev, den);
 #endif
@@ -536,21 +537,21 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
     }
   }
   // check the min depth and ordering of the images
-  vcl_vector<vcl_pair<float, int> > region_order;
+  std::vector<std::pair<float, int> > region_order;
   for (unsigned r = 0; r < this->scene_regions().size(); r++) {
     if (this->scene_regions()[r]->min_depth() > region_means[r]) {
-      //vcl_cout << " region: " << scene.scene_regions()[r]->name() << " has min depth: " << scene.scene_regions()[r]->min_depth() <<" but mean is: " << region_means[r] << vcl_endl;
+      //std::cout << " region: " << scene.scene_regions()[r]->name() << " has min depth: " << scene.scene_regions()[r]->min_depth() <<" but mean is: " << region_means[r] << std::endl;
       score = 0.0f;
       region_imgs.clear();
       return true;
     }
-    region_order.push_back(vcl_pair<float, int>(region_means[r], this->scene_regions()[r]->order()));
+    region_order.push_back(std::pair<float, int>(region_means[r], this->scene_regions()[r]->order()));
   }
-  vcl_sort(region_order.begin(), region_order.end(), &pair_sort);
+  std::sort(region_order.begin(), region_order.end(), &pair_sort);
 
 #ifdef DEBUG
   for (unsigned r = 0; r < scene.scene_regions().size(); r++)
-    vcl_cout << "region: " << scene.scene_regions()[r]->name() << ' ' << region_order[r].first << ' ' << region_order[r].second << '\n';
+    std::cout << "region: " << scene.scene_regions()[r]->name() << ' ' << region_order[r].first << ' ' << region_order[r].second << '\n';
 #endif
   for (unsigned r = 0; r < this->scene_regions().size(); ++r)
     if (region_order[r].second != (int)r+1) {
@@ -605,16 +606,16 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
       ground_plane_[i]->set_region_3d(ground_plane_[i]->max_depth(), this->cam());
   }
   vil_image_view<float> ground_img = this->depth_map("ground_plane", level);
-  vcl_vector<vil_image_view<float> > region_imgs;
-  vcl_vector<vcl_string> region_names;
-  vcl_vector<vcl_pair<float, int> > region_min_depths;
-  vcl_vector<float> region_means;
-  //vcl_vector<float> region_std_dev(this->scene_regions().size(), 0.0f);
-  vcl_vector<float> region_scores;
+  std::vector<vil_image_view<float> > region_imgs;
+  std::vector<std::string> region_names;
+  std::vector<std::pair<float, int> > region_min_depths;
+  std::vector<float> region_means;
+  //std::vector<float> region_std_dev(this->scene_regions().size(), 0.0f);
+  std::vector<float> region_scores;
 
 
 #if 0
-  vcl_map<vcl_string, vil_image_view<float> > debug_imgs;
+  std::map<std::string, vil_image_view<float> > debug_imgs;
   vil_image_view<float> temp(ni, nj); temp.fill(-1);
   debug_imgs["sky"] = temp;
   vil_image_view<float> temp1(ni, nj); temp1.fill(-1);
@@ -627,7 +628,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
       region_names.push_back(this->scene_regions()[r]->name());
       region_scores.push_back(0.0f);
       region_means.push_back(0.0f);
-      region_min_depths.push_back(vcl_pair<float, int>(this->scene_regions()[r]->min_depth(), this->scene_regions()[r]->order()));
+      region_min_depths.push_back(std::pair<float, int>(this->scene_regions()[r]->min_depth(), this->scene_regions()[r]->order()));
 #if 0
       vil_image_view<float> temp2(ni, nj); temp2.fill(-1);
       debug_imgs[this->scene_regions()[r]->name()] = temp2;
@@ -651,7 +652,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
   // set sky prob to norm(mu+-2*ground_depth_std_dev), i.e. whatever ground would be at mean+-std_dev
   float dummy_mean = 0.0;
   float sky_prob = normal_pdf(dummy_mean-4*ground_depth_std_dev, dummy_mean, ground_depth_std_dev, gd_den);
-  vcl_cout << "sky prob: " << sky_prob << '\n';
+  std::cout << "sky prob: " << sky_prob << '\n';
 
   // weights for beachgrass query
   float ground_weight = 0.899999999f;
@@ -712,11 +713,11 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
                 if (region_imgs[r](u,v) > 0 && vis_img(u,v) < vis_threshold)  // use this as mask
                   std_dev += (depth_img(u,v)-mean)*(depth_img(u,v)-mean);
             std_dev /= cnt;
-            std_dev = (float)vcl_sqrt(std_dev);
+            std_dev = (float)std::sqrt(std_dev);
             region_std_dev[r] = std_dev;
             // will normalize probs by assuming that non-object depths are given by a uniform distribution of 4*std_dev
             float norm_val = 1.0/(4*std_dev);
-            //vcl_cout << " region: " << scene.scene_regions()[r]->name() << " depth mean: " << mean << " std dev: " << std_dev << " score prev: " << score << vcl_endl;
+            //std::cout << " region: " << scene.scene_regions()[r]->name() << " depth mean: " << mean << " std dev: " << std_dev << " score prev: " << score << std::endl;
             float den = denominator(std_dev);
             // now find the likelihood of each pixel in this region to be a part of the same object with this depth profile
             for (unsigned v = 0; v < nj; v++)
@@ -738,7 +739,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
     }
   }
 #endif
-  vcl_cout << "score: " << score << '\n';
+  std::cout << "score: " << score << '\n';
   if (sky_active) {
     float sky_score = 0.0f;
     int sky_cnt = 0;
@@ -752,11 +753,11 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
       }
     }
     if (sky_cnt > 0) sky_score /= sky_cnt;
-    vcl_cout << "sky score: " << sky_score << '\n';
+    std::cout << "sky score: " << sky_score << '\n';
     score += sky_weight*sky_score;
     score_cnt++;
   }
-  vcl_cout << "score: " << score << '\n';
+  std::cout << "score: " << score << '\n';
   if (ground_active) {
     float g_score = 0;
     int g_cnt = 0;
@@ -772,11 +773,11 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
       }
     }
     if (g_cnt > 0) g_score /= g_cnt;
-    vcl_cout << "ground score: " << g_score << '\n';
+    std::cout << "ground score: " << g_score << '\n';
     score += ground_weight*g_score;
     score_cnt++;
   }
-  vcl_cout << "score: " << score << '\n';
+  std::cout << "score: " << score << '\n';
   for (unsigned r = 0; r < region_imgs.size(); r++) {
     float region_score = 0.0f;
     float mean = 0.0f;
@@ -789,7 +790,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
         }
     if (!cnt) {
       region_scores[r] = region_score;
-      vcl_cout << "region " << region_names[r] << " score: " << region_score << '\n';
+      std::cout << "region " << region_names[r] << " score: " << region_score << '\n';
       continue;
     }
     float std_dev = 0.0f;
@@ -800,11 +801,11 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
         if (region_imgs[r](i,j) > 0 && vis_img(i,j) < vis_threshold)  // use this as mask
           std_dev += (depth_img(i,j)-mean)*(depth_img(i,j)-mean);
     std_dev /= cnt;
-    std_dev = (float)vcl_sqrt(std_dev);
+    std_dev = (float)std::sqrt(std_dev);
     // normalize probs by assuming that non-object depths are given by a uniform distribution of 4*std_dev
     float norm_val = 1.0/(4*std_dev);
 #if 0
-    vcl_cout << " region: " << scene.scene_regions()[r]->name() << " depth mean: " << mean << " std dev: " << std_dev << " score prev: " << score << vcl_endl;
+    std::cout << " region: " << scene.scene_regions()[r]->name() << " depth mean: " << mean << " std dev: " << std_dev << " score prev: " << score << std::endl;
 #endif
     float den = denominator(std_dev);
     // find the likelihood of each pixel in this region to be a part of the same object with this depth profile
@@ -817,25 +818,25 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
           region_score += prob;
         }
     region_score /= cnt;
-    vcl_cout << "region " << region_names[r] << " score: " << region_score << '\n';
+    std::cout << "region " << region_names[r] << " score: " << region_score << '\n';
     region_scores[r] = region_score;
   }
 
   // check the min depth and ordering of the images
-  vcl_vector<vcl_pair<float, int> > region_order;
+  std::vector<std::pair<float, int> > region_order;
   for (unsigned r = 0; r < region_min_depths.size(); r++) {
     if (region_min_depths[r].first > region_means[r]) {
-      //vcl_cout << " region: " << scene.scene_regions()[r]->name() << " has min depth: " << scene.scene_regions()[r]->min_depth() <<" but mean is: " << region_means[r] << vcl_endl;
+      //std::cout << " region: " << scene.scene_regions()[r]->name() << " has min depth: " << scene.scene_regions()[r]->min_depth() <<" but mean is: " << region_means[r] << std::endl;
       score = 0.0f;
       region_imgs.clear();
       return true;
     }
-    region_order.push_back(vcl_pair<float, int>(region_means[r], region_min_depths[r].second));
+    region_order.push_back(std::pair<float, int>(region_means[r], region_min_depths[r].second));
   }
-  vcl_sort(region_order.begin(), region_order.end(), &pair_sort);
+  std::sort(region_order.begin(), region_order.end(), &pair_sort);
 
   for (unsigned r = 0; r < region_names.size(); r++)
-    vcl_cout << "region: " << region_names[r] << ' ' << region_order[r].first << ' ' << region_order[r].second << '\n';
+    std::cout << "region: " << region_names[r] << ' ' << region_order[r].first << ' ' << region_order[r].second << '\n';
   for (unsigned r = 1; r < region_order.size(); r++)
     if (region_order[r].second < region_order[r-1].second) {
       score = 0.0f;
@@ -847,7 +848,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
     score_cnt++;
   }
   if (score_cnt > 0) score /= score_cnt;
-  vcl_cout << "score: " << score << vcl_endl;
+  std::cout << "score: " << score << std::endl;
 
   region_imgs.clear();
   return true;

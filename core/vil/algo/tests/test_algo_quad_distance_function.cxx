@@ -1,14 +1,15 @@
+#include <vector>
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_quad_distance_function.h>
 
 void test_algo_quad_envelope_float()
 {
-  vcl_vector<float> data(5);
+  std::vector<float> data(5);
   for (unsigned i=0;i<5;++i) data[i]=1.0f;
   data[2]=-10;
-  vcl_vector<double> x,y,z;
+  std::vector<double> x,y,z;
   double a=0.8;
   vil_quad_envelope(&data[0],1,data.size(),x,y,z,a);
   TEST("Only one parabola in envelope",x.size(),1);
@@ -20,7 +21,7 @@ void test_algo_quad_envelope_float()
   data[0]=-10;
   vil_quad_envelope(&data[0],1,data.size(),x,y,z,a);
   TEST("Two parabolas in envelope",x.size(),2);
-  vcl_cout<<"N.parabolas="<<x.size()<<vcl_endl;
+  std::cout<<"N.parabolas="<<x.size()<<std::endl;
   TEST_NEAR("Centre",x[0],0.0,1e-6);
   TEST_NEAR("Value",y[0],-10.0,1e-6);
   TEST_NEAR("Low limit",z[0],0.0,1e-6);
@@ -41,9 +42,9 @@ void test_algo_quad_envelope_float()
   data[4]=-10;
   vil_quad_envelope(&data[0],1,data.size(),x,y,z,a);
   TEST("Three parabolas in envelope",x.size(),3);
-  vcl_cout<<"N.parabolas="<<x.size()<<vcl_endl;
+  std::cout<<"N.parabolas="<<x.size()<<std::endl;
 
-  vcl_vector<double> dest(5);
+  std::vector<double> dest(5);
   vil_sample_quad_envelope(x,y,z,a,&dest[0],1,dest.size());
   TEST_NEAR("d[0]",dest[0],-10,1e-6);
   TEST_NEAR("d[1]",dest[1],-9.2,1e-6);
@@ -51,7 +52,7 @@ void test_algo_quad_envelope_float()
   TEST_NEAR("d[3]",dest[3],-9.2,1e-6);
   TEST_NEAR("d[4]",dest[4],-10,1e-6);
 
-  vcl_vector<int> pos(5);
+  std::vector<int> pos(5);
   data[2]=-10.1f;  // Removes ambiguities
   vil_quad_envelope(&data[0],1,data.size(),x,y,z,a);
   vil_sample_quad_envelope_with_pos(x,y,z,a,&dest[0],1,dest.size(),&pos[0],1);
@@ -62,7 +63,7 @@ void test_algo_quad_envelope_float()
   TEST("pos[4]",pos[4],4);
 
 
-  vcl_vector<double> dest2(5);
+  std::vector<double> dest2(5);
   vil_quad_distance_function_1D(&data[0],1,data.size(),a,&dest2[0],1);
   TEST_NEAR("d[0]",dest2[0],-10,1e-6);
   TEST_NEAR("d[1]",dest2[1],-9.3,1e-6);
@@ -73,7 +74,7 @@ void test_algo_quad_envelope_float()
 
 void test_algo_quad_distance_function_float_float()
 {
-  vcl_cout << "*************************************************\n"
+  std::cout << "*************************************************\n"
            << " Testing vil_quad_distance_function<float,float>\n"
            << "*************************************************\n";
   vil_image_view<float> src(7,7),dest,pos;
@@ -90,7 +91,7 @@ void test_algo_quad_distance_function_float_float()
   TEST_NEAR("d(0,1)",dest(0,1),1,1e-6);
   TEST_NEAR("d(0,2)",dest(0,2),-2,1e-6);
 
-  vcl_cout<<"Extra minima."<<vcl_endl;
+  std::cout<<"Extra minima."<<std::endl;
   src(1,2)=-10.0f;
   vil_quad_distance_function(src,1,1,dest);
   TEST_NEAR("d(1,2)",dest(1,2),-10,1e-6);
@@ -98,7 +99,7 @@ void test_algo_quad_distance_function_float_float()
 
 void test_algo_quad_distance_function_with_pos_float_float()
 {
-  vcl_cout << "***************************************************************\n"
+  std::cout << "***************************************************************\n"
            << " Testing vil_quad_distance_function<float,float> with position\n"
            << "***************************************************************\n";
   vil_image_view<float> src(7,7),dest;
@@ -120,13 +121,13 @@ void test_algo_quad_distance_function_with_pos_float_float()
   TEST("pos(4,6)=(2,4)",pos(4,6,0)==2 && pos(4,6,1)==4,true);
   TEST_NEAR("d(0,1)",dest(0,1),1,1e-6);
   TEST("pos(0,1)=(0,1)",pos(0,1,0)==0 && pos(0,1,1)==1,true);
-  vcl_cout<<"pos(0,0)=("<<pos(0,0,0)<<','<<pos(0,0,1)<<")\n"
+  std::cout<<"pos(0,0)=("<<pos(0,0,0)<<','<<pos(0,0,1)<<")\n"
           <<"pos(0,1)=("<<pos(0,1,0)<<','<<pos(0,1,1)<<")\n"
-          <<"pos(0,2)=("<<pos(0,2,0)<<','<<pos(0,2,1)<<')'<<vcl_endl;
+          <<"pos(0,2)=("<<pos(0,2,0)<<','<<pos(0,2,1)<<')'<<std::endl;
   TEST_NEAR("d(0,2)",dest(0,2),-2,1e-6);
   TEST("pos(0,2)=(2,4)",pos(0,2,0)==2 && pos(0,2,1)==4,true);
 
-  vcl_cout<<"Extra minima."<<vcl_endl;
+  std::cout<<"Extra minima."<<std::endl;
   src(1,2)=-10.0f;
   vil_quad_distance_function(src,1,1,dest,pos);
   TEST_NEAR("d(1,2)=-10",dest(1,2),-10,1e-6);

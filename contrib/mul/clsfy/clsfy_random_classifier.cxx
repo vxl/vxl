@@ -10,10 +10,11 @@
 // \author iscott
 // \date   Tue Oct  9 10:21:59 2001
 
+#include <iostream>
+#include <string>
 #include "clsfy_random_classifier.h"
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_classifier_base.h>
@@ -29,14 +30,14 @@ confidence_(0.0), n_dims_(0u)
 
 //=======================================================================
 
-vcl_string clsfy_random_classifier::is_a() const
+std::string clsfy_random_classifier::is_a() const
 {
-  return vcl_string("clsfy_random_classifier");
+  return std::string("clsfy_random_classifier");
 }
 
 //=======================================================================
 
-bool clsfy_random_classifier::is_class(vcl_string const& s) const
+bool clsfy_random_classifier::is_class(std::string const& s) const
 {
   return s == clsfy_random_classifier::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -51,7 +52,7 @@ clsfy_classifier_base* clsfy_random_classifier::clone() const
 //=======================================================================
 
     // required if data is present in this base class
-void clsfy_random_classifier::print_summary(vcl_ostream& os) const
+void clsfy_random_classifier::print_summary(std::ostream& os) const
 {
   os << "Prior probs = "; vsl_print_summary(os, probs_);
   os << ", confidence = " << confidence_<<'\n';
@@ -88,9 +89,9 @@ void clsfy_random_classifier::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, n_dims_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_classifier&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_classifier&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
@@ -111,7 +112,7 @@ void clsfy_random_classifier::set_confidence(double confidence)
 
 //=======================================================================
 
-const vcl_vector<double> & clsfy_random_classifier::probs() const
+const std::vector<double> & clsfy_random_classifier::probs() const
 {
   return probs_;
 }
@@ -138,7 +139,7 @@ void clsfy_random_classifier::calc_min_to_win()
 //=======================================================================
 typedef vnl_c_vector<double> cvd;
 
-void clsfy_random_classifier::set_probs(const vcl_vector<double> &probs)
+void clsfy_random_classifier::set_probs(const std::vector<double> &probs)
 {
   probs_ = probs;
   const unsigned n = probs_.size();
@@ -178,7 +179,7 @@ unsigned clsfy_random_classifier::n_classes() const
 
 //: Return the probability the input being in each class.
 // output(i) i<nClasses, contains the probability that the input is in class i
-void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const
+void clsfy_random_classifier::class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const
 {
   if (last_inputs_ != input)
   {
@@ -216,9 +217,9 @@ void clsfy_random_classifier::class_probabilities(vcl_vector<double> &outputs, c
 double clsfy_random_classifier::log_l(const vnl_vector<double> &input) const
 {
   assert (n_classes() == 1);
-  vcl_vector<double> prob(1);
+  std::vector<double> prob(1);
   class_probabilities(prob, input);
-  return vcl_log(prob[0]/(1-prob[0]));
+  return std::log(prob[0]/(1-prob[0]));
 }
 
 //=======================================================================

@@ -58,8 +58,9 @@
 //   none
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -107,7 +108,7 @@ class vgl_conic_2d_regression
   vgl_conic<T> conic() const { return conic_; }
 
   // Debug support
-  void print_pointset(vcl_ostream& str = vcl_cout );
+  void print_pointset(std::ostream& str = std::cout );
  protected:
   // Internals
   void init();
@@ -118,7 +119,7 @@ class vgl_conic_2d_regression
   // Data Members--------------------------------------------------------------
 
   //: The current set of points
-  vcl_vector<vgl_point_2d<T> > points_;
+  std::vector<vgl_point_2d<T> > points_;
 
   //: Size of point set
   unsigned npts_;
@@ -127,7 +128,7 @@ class vgl_conic_2d_regression
   vgl_norm_trans_2d<T> trans_;
 
   //: The partial scatter term sums, updated with each ::add_point
-  vcl_vector<T> partial_sums_;
+  std::vector<T> partial_sums_;
 
   //: The fitting matrices
   vnl_matrix_fixed<T,3,3> S11_, S12_, S22_;
@@ -143,7 +144,7 @@ class vgl_conic_2d_regression
   T sampson_error_;
 
   //: Normalized points
-  vcl_vector<vgl_homg_point_2d<T> > hnorm_points_;
+  std::vector<vgl_homg_point_2d<T> > hnorm_points_;
 };
 
 #define VGL_CONIC_2D_REGRESSION_INSTANTIATE(T) extern "please include vgl/algo/vgl_conic_2d_regression.txx first"

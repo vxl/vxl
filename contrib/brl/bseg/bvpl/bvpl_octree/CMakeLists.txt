@@ -10,8 +10,8 @@ if(EXPAT_FOUND)
 
 find_package( Threads )
 
-#configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/bvpl_octree_config.h.in
-#                ${CMAKE_CURRENT_BINARY_DIR}/bvpl_octree_config.h )
+#vxl_configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/bvpl_octree_config.h.in
+#                ${CMAKE_CURRENT_BINARY_DIR}/bvpl_octree_config.h include/vxl/contrib/brl/bseg/bvpl/bvpl_octree)
 
 include_directories( ${EXPAT_INCLUDE_DIR} )
 include_directories( ${VXLCORE_INCLUDE_DIR} )
@@ -34,10 +34,10 @@ set(bvpl_octree_sources
     bvpl_scene_statistics.h               bvpl_scene_statistics.cxx
     bvpl_discover_pca_kernels.h           bvpl_discover_pca_kernels.cxx
     bvpl_pca_error_scenes.h               bvpl_pca_error_scenes.cxx
-    bvpl_global_pca.h                     bvpl_global_pca.txx
+    bvpl_global_pca.h                     bvpl_global_pca.hxx
     bvpl_taylor_scenes_map.h              bvpl_taylor_scenes_map.cxx
     bvpl_taylor_basis.h                   bvpl_taylor_basis.cxx
-    bvpl_global_taylor.h                  bvpl_global_taylor.txx          bvpl_global_taylor.cxx
+    bvpl_global_taylor.h                  bvpl_global_taylor.hxx          bvpl_global_taylor.cxx
     bvpl_global_corners.h                 bvpl_global_corners.cxx
     bvpl_corner_detector.h
     bvpl_corner_functors.h
@@ -46,7 +46,7 @@ set(bvpl_octree_sources
 
 aux_source_directory(Templates bvpl_octree_sources)
 
-add_library(bvpl_octree ${bvpl_octree_sources})
+vxl_add_library(LIBRARY_NAME bvpl_octree LIBRARY_SOURCES ${bvpl_octree_sources})
 target_link_libraries(bvpl_octree bvpl_kernels bvpl_functors bvpl_octree_sample bvrml boxm boct ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
 #Binary io

@@ -4,8 +4,10 @@
 // \author Tim Cootes
 // \brief Adaptor which generates reflected versions of images/points
 
+#include <iostream>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include "msdi_reflected_marked_images.h"
 #include <vimt/vimt_image_2d_of.h>
@@ -15,7 +17,7 @@
 //: Construct with external vectors of images and points
 msdi_reflected_marked_images::msdi_reflected_marked_images(
                         msdi_marked_images& raw_data,
-                        const vcl_vector<unsigned>& sym_pts,
+                        const std::vector<unsigned>& sym_pts,
                         bool only_reflect)
   : marked_images_(raw_data),
     sym_pts_(sym_pts),
@@ -139,7 +141,7 @@ void msdi_reflected_marked_images::get_points()
 
 
 //: Return current image file name
-vcl_string msdi_reflected_marked_images::image_name() const
+std::string msdi_reflected_marked_images::image_name() const
 {
   if (!first_pass_) return marked_images_.image_name();
 
@@ -147,7 +149,7 @@ vcl_string msdi_reflected_marked_images::image_name() const
 }
 
 //: Return current points file name
-vcl_string msdi_reflected_marked_images::points_name() const
+std::string msdi_reflected_marked_images::points_name() const
 {
   if (!first_pass_) return marked_images_.points_name();
 

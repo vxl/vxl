@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_multi_update_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,15 +10,14 @@
 // \author Vishal Jain
 // \date Aug 28, 2014
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2_multi/algo/boxm2_multi_render.h>
 #include <boxm2_multi/algo/boxm2_multi_update.h>
 #include <boxm2_multi/algo/boxm2_multi_refine.h>
 
 #include <vcl_where_root_dir.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //executable args
 #include <vil/vil_image_view_base.h>
@@ -47,7 +49,7 @@ bool boxm2_multi_update_process_cons(bprb_func_process& pro)
   using namespace boxm2_multi_update_process_globals;
 
   //process takes 9 inputs (of which the four last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_multi_cache_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";      //input camera
@@ -60,11 +62,11 @@ bool boxm2_multi_update_process_cons(bprb_func_process& pro)
   input_types_[9] = "float";                        // far factor ( minimum # of pixels should map to the finest voxel )
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // default 5, 6 and 7 and 8 inputs
-  brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx        = new brdb_value_t<std::string>("");
   brdb_value_sptr up_alpha   = new brdb_value_t<bool>(true);  //by default update alpha
   brdb_value_sptr def_var    = new brdb_value_t<float>(-1.0f);
   brdb_value_sptr up_app   = new brdb_value_t<bool>(true);  //by default update alpha
@@ -85,7 +87,7 @@ bool boxm2_multi_update_process(bprb_func_process& pro)
 
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -94,7 +96,7 @@ bool boxm2_multi_update_process(bprb_func_process& pro)
   boxm2_scene_sptr         scene        = pro.get_input<boxm2_scene_sptr>(i++);
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string               ident        = pro.get_input<vcl_string>(i++);
+  std::string               ident        = pro.get_input<std::string>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
   float                    mog_var      = pro.get_input<float>(i++);
   bool                     update_app   = pro.get_input<bool>(i++);
@@ -107,11 +109,11 @@ bool boxm2_multi_update_process(bprb_func_process& pro)
 
   float gpu_time = boxm2_multi_update::update(*(multi_cache.ptr()), *inImgPtr, cam);
   float total = t.all();
-  vcl_cout<<"  ===> Total update time: "<<total<<" ms\n"
+  std::cout<<"  ===> Total update time: "<<total<<" ms\n"
       <<"  ===> total GPU time   : "<<gpu_time<<" ms\n"
-      <<"  ===> total gpu / total: "<<gpu_time/total<<vcl_endl;
+      <<"  ===> total gpu / total: "<<gpu_time/total<<std::endl;
 
-  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  std::cout<<"Total time taken is "<<t.all()<<std::endl;
 
   return false;
 }

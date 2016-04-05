@@ -12,6 +12,8 @@
 //     30 Mar 2007 Peter Vanroose - replaced deprecated vil_new_image_view_j_i_plane()
 //\endverbatim
 
+#include <iostream>
+#include <cstring>
 #include "vil_jpeg.h"
 #include "vil_jpeg_source_mgr.h"
 #include "vil_jpeg_decompressor.h"
@@ -19,8 +21,7 @@
 #include "vil_jpeg_compressor.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_cstring.h> // memcpy()
+#include <vcl_compiler.h>
 #include <vxl_config.h> // vxl_byte
 
 #include <vil/vil_stream.h>
@@ -35,7 +36,7 @@ bool vil_jpeg_file_probe(vil_stream *vs)
   vil_streampos n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic)) {
-    vcl_cerr << __FILE__ << " : vil_stream::read() failed\n";
+    std::cerr << __FILE__ << " : vil_stream::read() failed\n";
     return false;
   }
 
@@ -69,7 +70,7 @@ vil_image_resource_sptr
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
   {
-    vcl_cout<<"ERROR! vil_jpeg_file_format::make_output_image()\n"
+    std::cout<<"ERROR! vil_jpeg_file_format::make_output_image()\n"
             <<"Pixel format should be byte, but is "<<format<<" instead.\n";
     return VXL_NULLPTR;
   }
@@ -110,7 +111,7 @@ vil_jpeg_image::vil_jpeg_image(vil_stream *s,
   , stream(s)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
-    vcl_cerr << "Sorry -- pixel format " << format << " not yet supported\n";
+    std::cerr << "Sorry -- pixel format " << format << " not yet supported\n";
   assert(format == VIL_PIXEL_FORMAT_BYTE); // FIXME.
 
   stream->ref();
@@ -122,7 +123,7 @@ vil_jpeg_image::vil_jpeg_image(vil_stream *s,
   jc->jobj.image_width = nx;
   jc->jobj.image_height = ny;
 #ifdef DEBUG
-  vcl_cerr << "w h = " << nx << ' ' << ny << '\n';
+  std::cerr << "w h = " << nx << ' ' << ny << '\n';
 #endif
 }
 
@@ -149,11 +150,11 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
                                                        unsigned ny) const
 {
   if (!jd) {
-    vcl_cerr << "attempted get_copy_view() failed -- no jpeg decompressor\n";
+    std::cerr << "attempted get_copy_view() failed -- no jpeg decompressor\n";
     return VXL_NULLPTR;
   }
 #ifdef DEBUG
-  vcl_cerr << "get_copy_view " << ' ' << x0 << ' ' << nx << ' ' << y0 << ' ' << ny << '\n';
+  std::cerr << "get_copy_view " << ' ' << x0 << ' ' << nx << ' ' << y0 << ' ' << ny << '\n';
 #endif
 
   // number of bytes per pixel
@@ -166,7 +167,7 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
     if (!scanline)
       return VXL_NULLPTR; // failed
 
-    vcl_memcpy(reinterpret_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
+    std::memcpy(reinterpret_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
   }
 
   return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte *>(chunk->data()), nx, ny, bpp, bpp, bpp*nx, 1);
@@ -186,13 +187,13 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
   }
 
   if (!jc) {
-    vcl_cerr << "attempted put_view() failed -- no jpeg compressor\n";
+    std::cerr << "attempted put_view() failed -- no jpeg compressor\n";
     return false;
   }
 
   if (view.pixel_format() != VIL_PIXEL_FORMAT_BYTE)
   {
-    vcl_cerr << "vil_jpeg_image::put_view() failed -- can only deal with byte images\n";
+    std::cerr << "vil_jpeg_image::put_view() failed -- can only deal with byte images\n";
     return false;
   }
 
@@ -203,11 +204,11 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
   if (x0 != 0 || view2.ni() != jc->jobj.image_width) {
-    vcl_cerr << __FILE__ << " : Can only compress complete scanlines\n";
+    std::cerr << __FILE__ << " : Can only compress complete scanlines\n";
     return false;
   }
   if (y0 != jc->jobj.next_scanline) {
-    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
+    std::cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
     return false;
   }
 

@@ -1,4 +1,5 @@
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_blob.h>
 #include <vil/vil_crop.h>
@@ -80,12 +81,12 @@ static vil_image_view<bool> generate_test_image()
 
 static void test_algo_blob()
 {
-  vcl_cout<<"=== Testing vil_blob ===\n";
+  std::cout<<"=== Testing vil_blob ===\n";
   vil_image_view<bool> image(10,11);
   vil_image_view<unsigned> labels;
   vil_image_view<unsigned> edge_labels;
-  vcl_vector<vil_blob_region > regions;
-  vcl_vector<vil_blob_pixel_list > edge_lists;
+  std::vector<vil_blob_region > regions;
+  std::vector<vil_blob_pixel_list > edge_lists;
 
   // Create 3 x 3 square
   image.fill(false);
@@ -95,8 +96,8 @@ static void test_algo_blob()
   vil_blob_labels_to_regions(labels, regions);
   vil_blob_labels_to_edge_labels(labels, vil_blob_4_conn, edge_labels);
   vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
-  vil_print_all(vcl_cout, labels, 1);
-  vil_print_all(vcl_cout, edge_labels, 1);
+  vil_print_all(std::cout, labels, 1);
+  vil_print_all(std::cout, edge_labels, 1);
 
   TEST("Count (3x3)", regions.size(), 1);
   TEST("Area (3x3)", vil_area(regions[0]), 9);
@@ -111,8 +112,8 @@ static void test_algo_blob()
   vil_blob_labels_to_regions(labels, regions);
   vil_blob_labels_to_edge_labels(labels, vil_blob_4_conn, edge_labels);
   vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
-  vil_print_all(vcl_cout, labels, 1);
-  vil_print_all(vcl_cout, edge_labels, 1);
+  vil_print_all(std::cout, labels, 1);
+  vil_print_all(std::cout, edge_labels, 1);
 
   TEST("Count (1x5)", regions.size(), 1);
   TEST("Area (1x5)", vil_area(regions[0]), 5);
@@ -125,7 +126,7 @@ static void test_algo_blob()
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
 
-  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(std::cout, labels, 1);
 
   TEST("Count (L shape)", regions.size(), 1);
   TEST("Area (L shape)", vil_area(regions[0]), 6);
@@ -137,7 +138,7 @@ static void test_algo_blob()
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
 
-  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(std::cout, labels, 1);
 
   TEST("Count (T shape)", regions.size(), 1);
   TEST("Area (T shape)", vil_area(regions[0]), 6);
@@ -153,7 +154,7 @@ static void test_algo_blob()
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
-  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(std::cout, labels, 1);
 
   TEST("Count (U shape)", regions.size(), 1);
   TEST("Area (U shape)", vil_area(regions[0]), 13);
@@ -169,7 +170,7 @@ static void test_algo_blob()
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
-  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(std::cout, labels, 1);
 
   TEST("Count (V shape 4-conn)", regions.size(), 3);
   TEST("Area (V shape 4-conn - 1)", vil_area(regions[0]), 1);
@@ -178,7 +179,7 @@ static void test_algo_blob()
 
   vil_blob_labels(image, vil_blob_8_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
-  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(std::cout, labels, 1);
 
   TEST("Count (V shape 8-conn)", regions.size(), 1);
   TEST("Area (V shape 8-conn - 1)", vil_area(regions[0]), 3);
@@ -192,8 +193,8 @@ static void test_algo_blob()
   vil_blob_labels_to_regions(labels, regions);
   vil_blob_labels_to_edge_labels(labels, vil_blob_4_conn, edge_labels);
   vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
-  vil_print_all(vcl_cout, labels, 1);
-  vil_print_all(vcl_cout, edge_labels, 1);
+  vil_print_all(std::cout, labels, 1);
+  vil_print_all(std::cout, edge_labels, 1);
 
   TEST("Count (Cross shape 4-conn)", regions.size(), 1);
   TEST("Area (Cross shape 4-conn)", vil_area(regions[0]), 9);
@@ -204,8 +205,8 @@ static void test_algo_blob()
   vil_blob_labels_to_regions(labels, regions);
   vil_blob_labels_to_edge_labels(labels, vil_blob_8_conn, edge_labels);
   vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
-  vil_print_all(vcl_cout, labels, 1);
-  vil_print_all(vcl_cout, edge_labels, 1);
+  vil_print_all(std::cout, labels, 1);
+  vil_print_all(std::cout, edge_labels, 1);
 
   TEST("Count (Cross shape 8-conn)", regions.size(), 1);
   TEST("Area (Cross shape 8-conn)", vil_area(regions[0]), 9);
@@ -217,7 +218,7 @@ static void test_algo_blob()
   vil_crop(image, 5,1, 0,10).fill(true);
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
-  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(std::cout, labels, 1);
 
   TEST("Count (vertical line)", regions.size(), 1);
   TEST("Area (vertical line)", vil_area(regions[0]), 10);
@@ -227,13 +228,13 @@ static void test_algo_blob()
   vil_crop(image, 0,10, 5,1).fill(true);
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
-  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(std::cout, labels, 1);
 
   TEST("Count (Horizontal line)", regions.size(), 1);
   TEST("Area (Horizontal line)", vil_area(regions[0]), 10);
   TEST("N chords (Horizontal line)", regions[0].size(), 1);
 
-  vcl_cout<<"Test nested blobs."<<vcl_endl;
+  std::cout<<"Test nested blobs."<<std::endl;
   image.fill(false);
   vil_crop(image, 3,6, 3,6).fill(true);
   vil_crop(image, 4,4, 4,4).fill(false);
@@ -241,7 +242,7 @@ static void test_algo_blob()
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
-  vil_print_all(vcl_cout, labels, 1);
+  vil_print_all(std::cout, labels, 1);
 
   TEST("Count (nested blocks)", regions.size(), 2);
   // Assume that first blob is outer one - but API gives no guarantee.
@@ -251,14 +252,14 @@ static void test_algo_blob()
   // Generic image
   {
     vil_image_view<bool> c_shape_image = generate_test_image();
-    vil_print_all(vcl_cout, c_shape_image, 1);
+    vil_print_all(std::cout, c_shape_image, 1);
 
     vil_blob_labels(c_shape_image, vil_blob_8_conn, labels);
     vil_blob_labels_to_regions(labels, regions);
     vil_blob_labels_to_edge_labels(labels, vil_blob_8_conn, edge_labels);
     vil_blob_labels_to_pixel_lists(edge_labels, edge_lists);
-    vil_print_all(vcl_cout, labels, 1);
-    vil_print_all(vcl_cout, edge_labels, 1);
+    vil_print_all(std::cout, labels, 1);
+    vil_print_all(std::cout, edge_labels, 1);
 
     TEST("Number of blobs", regions.size(), 1 );
 

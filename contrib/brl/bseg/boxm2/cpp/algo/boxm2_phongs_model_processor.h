@@ -12,9 +12,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <brad/brad_phongs_model_est.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class  boxm2_phongs_model_processor
 {
@@ -26,9 +28,9 @@ class  boxm2_phongs_model_processor
     static brad_phongs_model  compute_phongs_model(float & var,
                                                    float sun_elev,
                                                    float sun_azim,
-                                                   vcl_vector<float>        & obs,
-                                                   vcl_vector<vnl_double_3> & view_dirs,
-                                                   vcl_vector<float>        & vis);
+                                                   std::vector<float>        & obs,
+                                                   std::vector<vnl_double_3> & view_dirs,
+                                                   std::vector<float>        & vis);
 };
 
 #endif // boxm2_phongs_model_processor_h_

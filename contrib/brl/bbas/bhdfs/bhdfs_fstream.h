@@ -20,9 +20,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <vxl_config.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include "bhdfs_manager.h"
 
@@ -36,7 +37,7 @@ class bhdfs_fstream: public vbl_ref_count
 {
  public:
   // supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
-  bhdfs_fstream(vcl_string filename, char const* mode_flags);
+  bhdfs_fstream(std::string filename, char const* mode_flags);
 
   // implement an interface that is similar to vil_stream
   bool ok() const { return f_ != 0; }
@@ -59,7 +60,7 @@ class bhdfs_fstream: public vbl_ref_count
 
  private:
   hdfsFile f_;
-  vcl_string fname_;
+  std::string fname_;
 
 };
 typedef vbl_smart_ptr<bhdfs_fstream> bhdfs_fstream_sptr;

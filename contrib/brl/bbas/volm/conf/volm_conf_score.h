@@ -12,7 +12,8 @@
 //   Modifications
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
@@ -26,26 +27,26 @@ class volm_conf_score : public vbl_ref_count
  public:
    //: constructors
    volm_conf_score(): score_(0.0f), theta_(0.0f) { landmarks_.clear(); }
-   volm_conf_score(float const& score, float const& theta, vcl_vector<volm_conf_object> const& landmarks);
+   volm_conf_score(float const& score, float const& theta, std::vector<volm_conf_object> const& landmarks);
    //: destructor
    ~volm_conf_score() {}
    //: set method
    void set_score(float const& score) { score_ = score; }
    void set_theta(float const& theta) { theta_ = theta; }
-   void set_landmarks(vcl_vector<volm_conf_object> const& landmarks) { landmarks_ = landmarks; }
+   void set_landmarks(std::vector<volm_conf_object> const& landmarks) { landmarks_ = landmarks; }
    //: access
    float score() const { return score_; }
    float theta() const { return theta_; }
-   vcl_vector<volm_conf_object>& landmarks() { return landmarks_; }
+   std::vector<volm_conf_object>& landmarks() { return landmarks_; }
    float theta_in_deg() const;
    //: return the angular value in degree relative to north
    float theta_to_north() const;
 
 
    //: print
-   void print(vcl_ostream& os) const
+   void print(std::ostream& os) const
    {
-     os << "boxm2_volm_conf_socre -- score: " << score_ << ", theta: " << theta_ << " (" << this->theta_in_deg() << " degree)" << vcl_endl;
+     os << "boxm2_volm_conf_socre -- score: " << score_ << ", theta: " << theta_ << " (" << this->theta_in_deg() << " degree)" << std::endl;
    }
 
   // ================  binary I/O ===================
@@ -62,7 +63,7 @@ class volm_conf_score : public vbl_ref_count
   //: a direction relative to a location origin which defines the favored heading (from 0 to 2*pi and 0 refers to east direction)
   float theta_;
   //: a list of volm_conf_objects which are the best matched landmarks
-  vcl_vector<volm_conf_object> landmarks_;
+  std::vector<volm_conf_object> landmarks_;
 };
 
 void vsl_b_write(vsl_b_ostream& os, volm_conf_score const&           socre);

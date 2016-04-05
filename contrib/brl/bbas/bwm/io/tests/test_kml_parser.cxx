@@ -1,12 +1,13 @@
+#include <string>
+#include <iostream>
+#include <cstdio>
 #include <testlib/testlib_test.h>
 #include "../bwm_io_kml_camera.h"
 #include <expatpp.h>
-#include <vcl_string.h>
-#include <vcl_cstdio.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 void test_kml_parser()
 {
-  vcl_string path = "";//FIXME need test kml file
+  std::string path = "";//FIXME need test kml file
   double right_fov;
   double top_fov;
   double altitude;

@@ -6,11 +6,13 @@
 // \author Daniel Crispell
 // \date Dec 19, 2011
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -34,14 +36,14 @@ namespace boxm2_ocl_render_expected_albedo_normal_process_globals
 {
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 3;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
-  bool compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
+  bool compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -53,7 +55,7 @@ namespace boxm2_ocl_render_expected_albedo_normal_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = opts + " -D RENDER_ALBEDO_NORMAL ";
+    std::string options = opts + " -D RENDER_ALBEDO_NORMAL ";
     options += " -D DETERMINISTIC ";
     options += " -D STEP_CELL=step_cell_render_albedo_normal(aux_args,data_ptr,d*linfo->block_len,vis)";
 
@@ -66,7 +68,7 @@ namespace boxm2_ocl_render_expected_albedo_normal_process_globals
                                           "render_albedo_normal",   //kernel name
                                           options,              //options
                                           "boxm2 opencl render_albedo_normal")) { //kernel identifier (for error checking)
-       vcl_cerr << "create_kernel (render kernel) returned error.\n";
+       std::cerr << "create_kernel (render kernel) returned error.\n";
        return false;
     }
     vec_kernels.push_back(ray_trace_kernel);
@@ -80,7 +82,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process_cons(bprb_func_process& pro
   using namespace boxm2_ocl_render_expected_albedo_normal_process_globals;
 
   //process takes 6 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -92,7 +94,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process_cons(bprb_func_process& pro
   // output[0]: expected albedo image
   // output[1]: normal image
   // output[2]: visibility image
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
   output_types_[2] = "vil_image_view_base_sptr";
@@ -108,7 +110,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
 
   vul_timer rtime;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -121,8 +123,8 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
   unsigned nj=pro.get_input<unsigned>(5);
 
   bool found_appearance = false;
-  vcl_string data_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type,options;
+  std::vector<std::string> apps = scene->appearances();
 
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
@@ -133,7 +135,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
     }
   }
   if (!found_appearance) {
-    vcl_cout<<"BOXM2_OCL_RENDER_IMAGE_NAA_PROCESS ERROR: scene doesn't have BOXM2_NORMAL_ALBEDO_ARRAY data type" << vcl_endl;
+    std::cout<<"BOXM2_OCL_RENDER_IMAGE_NAA_PROCESS ERROR: scene doesn't have BOXM2_NORMAL_ALBEDO_ARRAY data type" << std::endl;
     return false;
   }
 
@@ -142,15 +144,15 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
 
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     if (!compile_kernel(device,ks,options)){
-      vcl_cerr << "ERROR: compile_kernel returned false.\n";
+      std::cerr << "ERROR: compile_kernel returned false.\n";
       return false;
     }
     kernels[identifier]=ks;
@@ -159,7 +161,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
   float* exp_buff = new float[4*cl_ni*cl_nj];
-  vcl_fill(exp_buff, exp_buff + 4*cl_ni*cl_nj, 0.0f);
+  std::fill(exp_buff, exp_buff + 4*cl_ni*cl_nj, 0.0f);
 
   bocl_mem_sptr exp_albedo_normal = opencl_cache->alloc_mem(4*cl_ni*cl_nj*sizeof(float), exp_buff,"exp normal albedo buffer");
 
@@ -173,7 +175,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -215,7 +217,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
           expected_albedo /= mask_val;
           expected_normal = vgl_vector_3d<double>((*exp_normal_out)(i,j,0),(*exp_normal_out)(i,j,1),(*exp_normal_out)(i,j,2));
           if (expected_normal.z() < -1e-3){
-             vcl_cout << "ERROR: expected_normal = " << expected_normal << vcl_endl;
+             std::cout << "ERROR: expected_normal = " << expected_normal << std::endl;
           }
           else {
              normalize(expected_normal);
@@ -231,7 +233,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
      }
   }
 
-  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<<rtime.all()<<" ms"<<std::endl;
 
   opencl_cache->unref_mem(exp_albedo_normal.ptr());
   opencl_cache->unref_mem(vis_image.ptr());

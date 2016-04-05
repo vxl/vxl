@@ -1,11 +1,13 @@
 // This is oxl/osl/osl_canny_base.cxx
+#include <iostream>
+#include <cmath>
+#include <list>
 #include "osl_canny_base.h"
 //:
 //  \file
 
 #include <osl/osl_canny_port.h>
-#include <vcl_cmath.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //--------------------------------------------------------------
@@ -14,23 +16,23 @@ osl_canny_base::osl_canny_base(float sigma, float low, float high, bool v)
   : xstart_(0), ystart_(0)
   , xsize_(0), ysize_(0)
 
-  , smooth_(0)
-  , dx_(0)
-  , dy_(0)
-  , grad_(0)
+  , smooth_(VXL_NULLPTR)
+  , dx_(VXL_NULLPTR)
+  , dy_(VXL_NULLPTR)
+  , grad_(VXL_NULLPTR)
 
-  , thick_(0)
-  , thin_(0)
-  , theta_(0)
+  , thick_(VXL_NULLPTR)
+  , thin_(VXL_NULLPTR)
+  , theta_(VXL_NULLPTR)
 
-  , junction_(0)
-  , jx_(0)
-  , jy_(0)
-  , xjunc_(0)
-  , yjunc_(0)
-  , vlist_(0)
+  , junction_(VXL_NULLPTR)
+  , jx_(VXL_NULLPTR)
+  , jy_(VXL_NULLPTR)
+  , xjunc_(VXL_NULLPTR)
+  , yjunc_(VXL_NULLPTR)
+  , vlist_(VXL_NULLPTR)
 
-  , kernel_(0)
+  , kernel_(VXL_NULLPTR)
 {
   verbose =v;
   sigma_ = sigma;
@@ -49,9 +51,9 @@ osl_canny_base::~osl_canny_base() {  }
 // and accounts for single pixel gaps in the chains.
 void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, float low,
                                     int x, int y,
-                                    vcl_list<int> *xc,
-                                    vcl_list<int> *yc,
-                                    vcl_list<float> *grad)
+                                    std::list<int> *xc,
+                                    std::list<int> *yc,
+                                    std::list<float> *grad)
 {
   // Make sure that we are not likely to overun the border of the image
   if ( (x<=0) || (x>=xsize-1) || (y<=0) || (y>=ysize-1) )
@@ -90,9 +92,9 @@ void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, f
 // Following routine looking for connectiveness of edgel chains
 // and accounts for single pixel gaps in the chains.
 void osl_canny_base::Final_follow(int x, int y,
-                                  vcl_list<int> *xc,
-                                  vcl_list<int> *yc,
-                                  vcl_list<float> *grad,
+                                  std::list<int> *xc,
+                                  std::list<int> *yc,
+                                  std::list<float> *grad,
                                   int reverse)
 {
   // Make sure that we do not overun the border of the image
@@ -171,8 +173,8 @@ void osl_canny_base::Final_follow(int x, int y,
 //
 void osl_canny_base::Follow_junctions(int * const *junction,
                                       int x, int y,
-                                      vcl_list<int> *xc,
-                                      vcl_list<int> *yc)
+                                      std::list<int> *xc,
+                                      std::list<int> *yc)
 {
   // Add the current junction to the coordinate lists, and delete from
   // the junction image
@@ -204,11 +206,11 @@ void osl_canny_base::Follow_junctions(int * const *junction,
 
 //: Finds which member of the lists lies closest to the centre of gravity of the lists.
 void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
-                                               vcl_list<int> &xc,
-                                               vcl_list<int> &yc,
+                                               std::list<int> &xc,
+                                               std::list<int> &yc,
                                                int &x0, int &y0)
 {
-  typedef vcl_list<int>::iterator it;
+  typedef std::list<int>::iterator it;
 
   if ( xc.empty() )
     return;
@@ -228,7 +230,7 @@ void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
     //xc.reset(),yc.reset();xc.next(),yc.next();)
     //float newdist = hypot(x- *i/*xc.value()*/,y- *j/*yc.value()*/);
     double newdist;
-    { double dx = x- *i/*xc.value()*/, dy = y- *j/*yc.value()*/; newdist = vcl_sqrt(dx*dx + dy*dy); }
+    { double dx = x- *i/*xc.value()*/, dy = y- *j/*yc.value()*/; newdist = std::sqrt(dx*dx + dy*dy); }
     if ( dist<0 || newdist < dist ) {
       x0 = *i;//xc.value();
       y0 = *j;//yc.value();

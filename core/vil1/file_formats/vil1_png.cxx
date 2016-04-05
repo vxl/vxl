@@ -6,11 +6,12 @@
 // \file
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
 
+#include <cstring>
+#include <iostream>
+#include <cstdlib>
 #include "vil1_png.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -21,7 +22,7 @@
 #if (PNG_LIBPNG_VER_MAJOR == 0)
 extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE_V3P_PNG to ON."
 #endif
-#include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_compiler.h>
 
 #include <vxl_config.h>
 
@@ -33,7 +34,7 @@ char const* vil1_png_format_tag = "png";
 // Functions
 static bool problem(char const* msg)
 {
-  vcl_cerr << "[vil1_png: PROBLEM " <<msg << ']';
+  std::cerr << "[vil1_png: PROBLEM " <<msg << ']';
   return false;
 }
 
@@ -83,7 +84,7 @@ static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t leng
 
 static void user_flush_data(png_structp /*png_ptr*/)
 {
-  vcl_cerr << "vil1_png_generic_image::user_flush_data() NYI\n";
+  std::cerr << "vil1_png_generic_image::user_flush_data() NYI\n";
 #if 0 // NYI
   IOFile* f = (IOFile*)png_get_io_ptr(png_ptr);
   // urk.  how to flush?
@@ -120,19 +121,19 @@ static bool jmpbuf_ok = false;
 //
 static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
 {
-  vcl_cerr << "vil1_png:  fatal libpng error: " << msg << '\n';
+  std::cerr << "vil1_png:  fatal libpng error: " << msg << '\n';
 
   if (!jmpbuf_ok) {
     // Someone called the error handler when the setjmp was wrong
-    vcl_cerr << "vil1_png: jmpbuf is pretty far from ok.  returning\n";
-    // vcl_abort();
+    std::cerr << "vil1_png: jmpbuf is pretty far from ok.  returning\n";
+    // std::abort();
     return;
   }
 
   vil1_jmpbuf_wrapper  *jmpbuf_ptr = (vil1_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
   if (jmpbuf_ptr == VXL_NULLPTR) {         // we are completely hosed now
-    vcl_cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
-    vcl_exit(99);
+    std::cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
+    std::exit(99);
   }
 
   longjmp(jmpbuf_ptr->jmpbuf, 1);
@@ -270,10 +271,10 @@ vil1_png_generic_image::vil1_png_generic_image(vil1_stream* is)
 
 bool vil1_png_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -409,12 +410,12 @@ bool vil1_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
   int bytes_per_row_dst = xs*bytes_per_pixel;
   if ((unsigned int)xs == png_get_image_width(p->png_ptr, p->info_ptr)) {
     assert(x0 == 0);
-    vcl_memcpy(buf, rows[y0], ys * bytes_per_row_dst);
+    std::memcpy(buf, rows[y0], ys * bytes_per_row_dst);
   }
   else {
     png_byte* dst = (png_byte*)buf;
     for (int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
-      vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], xs*bytes_per_pixel);
+      std::memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], xs*bytes_per_pixel);
   }
 
   return true;
@@ -434,12 +435,12 @@ bool vil1_png_generic_image::put_section(void const* buf, int x0, int y0, int xs
   int bytes_per_row_dst = xs*bytes_per_pixel;
   if ((unsigned int)xs == png_get_image_width(p->png_ptr, p->info_ptr)) {
     assert(x0 == 0);
-    vcl_memcpy(rows[y0], buf, ys * bytes_per_row_dst);
+    std::memcpy(rows[y0], buf, ys * bytes_per_row_dst);
   }
   else {
     const png_byte* dst = (const png_byte*)buf;
     for (int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
-      vcl_memcpy(&rows[y0+y][x0*bytes_per_pixel], dst, xs*bytes_per_pixel);
+      std::memcpy(&rows[y0+y][x0*bytes_per_pixel], dst, xs*bytes_per_pixel);
   }
 
   return true;

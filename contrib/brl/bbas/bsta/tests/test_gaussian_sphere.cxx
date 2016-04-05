@@ -1,12 +1,13 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_string.h>
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class T>
-void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
+void test_gaussian_sphere_type(T epsilon, const std::string& type_name)
 {
   bsta_gaussian_sphere<T,3> df_gauss;
 
@@ -35,7 +36,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
        gauss.sqr_mahalanobis_dist(test_pt), sqr_mah_dist);
 
   T two_pi = static_cast<T>(vnl_math::twopi);
-  T prob = static_cast<T>(1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2));
+  T prob = static_cast<T>(1.0/std::sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * std::exp(-sqr_mah_dist/2));
 
   TEST_NEAR(("probability density <"+type_name+">").c_str(),
             gauss.prob_density(test_pt), prob, epsilon);
@@ -43,7 +44,7 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
   bsta_gaussian_sphere<T,3> zero_var_gauss;
   TEST(("zero var mahalanobis dist <"+type_name+">").c_str(),
        zero_var_gauss.sqr_mahalanobis_dist(test_pt),
-       vcl_numeric_limits<T>::infinity());
+       std::numeric_limits<T>::infinity());
 
   TEST(("zero var probability density<"+type_name+">").c_str(),
        zero_var_gauss.prob_density(test_pt), T(0));
@@ -62,11 +63,11 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
             prob_box_1d,0.11246291,1e-07);
 
   // test stream
-  vcl_cout << "testing stream operator\n"
+  std::cout << "testing stream operator\n"
            << gauss << '\n';
 
   bsta_num_obs<bsta_gaussian_sphere<T, 3> > nobs(gauss, 1);
-  vcl_cout << nobs << '\n';
+  std::cout << nobs << '\n';
 }
 
 

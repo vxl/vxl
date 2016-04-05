@@ -24,7 +24,7 @@ boxm_apm_type bvpl_taylor_apm();
 
 namespace bvpl_global_tylor_defaults
 {
-  const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+  const std::string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
 ;
 }
 
@@ -34,7 +34,7 @@ class bvpl_global_taylor : public vbl_ref_count
  public:
 
   //: Constructor  from xml file
-  bvpl_global_taylor(const vcl_string &path, const vcl_string kernel_names[]);
+  bvpl_global_taylor(const std::string &path, const std::string kernel_names[]);
 
   //: Init auxiliary scenes and smallest cell length values
   void init();
@@ -55,41 +55,41 @@ class bvpl_global_taylor : public vbl_ref_count
   void xml_write();
 
   // Accessors
-  vcl_string path_out() const { return path_out_; }
-  vcl_vector<vcl_string> scenes() const { return scenes_; }
-  vcl_vector<vcl_string> aux_dirs() const { return aux_dirs_; }
-  vcl_string aux_dirs( unsigned i ) const { return aux_dirs_[i]; }
-  vcl_vector<double> cell_lengths() const { return finest_cell_length_; }
-  //vcl_vector<bool> training_scenes() const { return training_scenes_; }
+  std::string path_out() const { return path_out_; }
+  std::vector<std::string> scenes() const { return scenes_; }
+  std::vector<std::string> aux_dirs() const { return aux_dirs_; }
+  std::string aux_dirs( unsigned i ) const { return aux_dirs_[i]; }
+  std::vector<double> cell_lengths() const { return finest_cell_length_; }
+  //std::vector<bool> training_scenes() const { return training_scenes_; }
 
   boxm_scene_base_sptr load_scene (int scene_id);
   boxm_scene_base_sptr load_error_scene (int scene_id);
   boxm_scene_base_sptr load_valid_scene (int scene_id);
   boxm_scene_base_sptr load_projection_scene (int scene_id);
 
-  vcl_string xml_path() { return path_out_ + "/taylor_global_info.xml"; }
+  std::string xml_path() { return path_out_ + "/taylor_global_info.xml"; }
 
   friend class bvpl_global_corners;
 
  protected:
 
   //: A vector to hold scene paths
-  vcl_vector<vcl_string> scenes_;
+  std::vector<std::string> scenes_;
   //: A vector to hold paths to keep any kind of auxiliary scene or info(must be in the same order as scenes_)
-  vcl_vector<vcl_string> aux_dirs_;
+  std::vector<std::string> aux_dirs_;
   //: A vector to hold the finest cell length of the corresponding scene scene
-  vcl_vector<double> finest_cell_length_;
+  std::vector<double> finest_cell_length_;
   //: A vector that indicates whether a scene should be used as train (True) or test(False). Order is equivalent to scenes_
-  //vcl_vector<bool> training_scenes_;
+  //std::vector<bool> training_scenes_;
 
   //: A vector to 2-degree taylor approximation kernels
   //  The order is I0, Ix, Iy, Iz, Ixx, Iyy, Izz, Ixy, Ixz, Iyz (therefore this class works for dimensions 1-10)
   bvpl_kernel_vector_sptr kernel_vector_;
 
   //: Path to kernel files
-  vcl_string kernels_path_;
+  std::string kernels_path_;
   //: Path to xml info file
-  vcl_string path_out_;
+  std::string path_out_;
 };
 
 #include <vbl/vbl_smart_ptr.h>

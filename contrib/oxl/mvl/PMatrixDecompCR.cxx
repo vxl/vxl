@@ -5,10 +5,11 @@
 //:
 //  \file
 
+#include <iostream>
 #include "PMatrixDecompCR.h"
 
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_double_3.h>
@@ -87,11 +88,11 @@ void PMatrixDecompCR::compute(const vnl_double_3x4& p, bool scale_C)
       (C(0,0) < 0) ||
       (C(1,1) < 0) ||
       (C(2,2) < 0)) {
-    vcl_cerr << "PMatrixDecompCR: AIEEE!\n";
-    vnl_matlab_print(vcl_cerr, p, "p");
-    vnl_matlab_print(vcl_cerr, C, "C");
-    vnl_matlab_print(vcl_cerr, Po, "Po");
-    vnl_matlab_print(vcl_cerr, C * Po - p, "C * Po - p");
+    std::cerr << "PMatrixDecompCR: AIEEE!\n";
+    vnl_matlab_print(std::cerr, p, "p");
+    vnl_matlab_print(std::cerr, C, "C");
+    vnl_matlab_print(std::cerr, Po, "Po");
+    vnl_matlab_print(std::cerr, C * Po - p, "C * Po - p");
   }
 
   // Make C(2,2) = 1

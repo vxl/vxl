@@ -1,17 +1,19 @@
 // This is mul/mbl/mbl_stepwise_regression.cxx
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <utility>
 #include "mbl_stepwise_regression.h"
 //:
 // \file
 // \brief Conduct stepwise regression
 // \author Martin Roberts
 
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
-#include <vcl_utility.h>
-// not used? #include <vcl_cmath.h>
+#include <vcl_compiler.h>
+// not used? #include <cmath>
 #include <vcl_cassert.h>
-// not used? #include <vcl_vector.h>
-// not used? #include <vcl_iostream.h>
+// not used? #include <vector>
+// not used? #include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_stl.h>
@@ -90,11 +92,11 @@ void mbl_stepwise_regression::operator()()
         basis_.clear(); //start from an empty basis
         basis_complement_.clear();
         //And fill the complement with 1..n
-        mbl_stl_increments_n(vcl_inserter(basis_complement_,basis_complement_.end()),
+        mbl_stl_increments_n(std::inserter(basis_complement_,basis_complement_.end()),
                             num_vars_,0);
 
         //First fit a starting minimally sized basis best sum of squares first
-        unsigned  min_basis = vcl_min(num_vars_/10,num_examples_/5);
+        unsigned  min_basis = std::min(num_vars_/10,num_examples_/5);
         if (min_basis<1) min_basis = 1;
         bool forceAdd=true;
         for (unsigned i=0; i<min_basis;i++)
@@ -107,7 +109,7 @@ void mbl_stepwise_regression::operator()()
     else // Backwards
     {
         // start from a full basis
-        mbl_stl_increments_n(vcl_inserter(basis_,basis_.end()),
+        mbl_stl_increments_n(std::inserter(basis_,basis_.end()),
                             num_vars_,0);
         basis_complement_.clear();
         do_backward_stepwise_regression();
@@ -159,8 +161,8 @@ bool mbl_stepwise_regression::add_variable(bool forceAdd)
     double FratioMax=-1.0;
 
     int  knew= -1;
-    vcl_set<unsigned>::const_iterator candIter=basis_complement_.begin();
-    vcl_set<unsigned>::const_iterator candIterEnd=basis_complement_.end();
+    std::set<unsigned>::const_iterator candIter=basis_complement_.begin();
+    std::set<unsigned>::const_iterator candIterEnd=basis_complement_.end();
     double rssNew=rss_;
     while (candIter != candIterEnd)
     {
@@ -181,7 +183,7 @@ bool mbl_stepwise_regression::add_variable(bool forceAdd)
     {
         if (knew>=0)
         {
-            vcl_pair<vcl_set<unsigned>::iterator,bool> inserted = basis_.insert(knew);
+            std::pair<std::set<unsigned>::iterator,bool> inserted = basis_.insert(knew);
             really_added = inserted.second;
             basis_complement_.erase(knew);
             rss_ = rssNew;
@@ -203,8 +205,8 @@ bool mbl_stepwise_regression::remove_variable()
     double min_Fratio=1.0E30;
     double rssBest=rss_;
     int knew=-1;
-    vcl_set<unsigned>::const_iterator candIter=basis_.begin();
-    vcl_set<unsigned>::const_iterator candIterEnd=basis_.end();
+    std::set<unsigned>::const_iterator candIter=basis_.begin();
+    std::set<unsigned>::const_iterator candIterEnd=basis_.end();
     while (candIter != candIterEnd)
     {
         unsigned k = *candIter++;
@@ -258,15 +260,15 @@ double mbl_stepwise_regression_helpers::lsfit_this_basis::operator()()
     //Create working copies of mtrices containing just the subset of variables in the basis
     vnl_matrix<double> XtX(1+ndims,1+ndims);
 
-    vcl_set<unsigned>::iterator basisVarIter=basis_.begin();
-    vcl_set<unsigned>::iterator basisVarIterEnd=basis_.end();
+    std::set<unsigned>::iterator basisVarIter=basis_.begin();
+    std::set<unsigned>::iterator basisVarIterEnd=basis_.end();
     unsigned i = 0;
     vnl_vector<double> XtY(ndims+1, 0.0);
 
     while (basisVarIter != basisVarIterEnd)
     {
         unsigned k1=*basisVarIter++;
-        vcl_set<unsigned>::iterator basisVarInnerIter=basis_.begin();
+        std::set<unsigned>::iterator basisVarInnerIter=basis_.begin();
         unsigned j = 0;
         //Set half of off-diagonals
         while (*basisVarInnerIter < k1) //NB set is ordered

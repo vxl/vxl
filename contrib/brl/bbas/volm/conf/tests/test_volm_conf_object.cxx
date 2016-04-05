@@ -1,8 +1,10 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <volm/conf/volm_conf_object.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
-#include <vcl_limits.h>
 #include <vgl/vgl_point_2d.h>
 #include <vul/vul_file.h>
 
@@ -13,17 +15,17 @@ static void test_volm_conf_object()
   double height = 12.31f;
   unsigned char land_id = 18;
 
-  float theta = (vcl_atan2(pt.y(), pt.x())<0) ? (float)vcl_atan2(pt.y(), pt.x()) + vnl_math::twopi : (float)vcl_atan2(pt.y(), pt.x());
+  float theta = (std::atan2(pt.y(), pt.x())<0) ? (float)std::atan2(pt.y(), pt.x()) + vnl_math::twopi : (float)std::atan2(pt.y(), pt.x());
   float theta_in_deg = theta / vnl_math::pi_over_180;
-  float dist = (float)vcl_sqrt(pt.x()*pt.x() + pt.y()*pt.y());
+  float dist = (float)std::sqrt(pt.x()*pt.x() + pt.y()*pt.y());
 
   volm_conf_object_sptr obj_sptr = new volm_conf_object(pt, height, land_id);
-  vcl_cout << "given location point: (" << pt.x() << ',' << pt.y() << ") with land id: " << (int)land_id << vcl_endl;
-  obj_sptr->print(vcl_cout);
+  std::cout << "given location point: (" << pt.x() << ',' << pt.y() << ") with land id: " << (int)land_id << std::endl;
+  obj_sptr->print(std::cout);
   float epsilon = 1E-5;
-  vcl_cout << "epsilon = " << epsilon << vcl_endl;
-  vcl_cout << "size of an volm_conf_object: " << sizeof(*obj_sptr) << " bytes" << vcl_endl;
-  vcl_cout << "size of its member: " << sizeof(obj_sptr->theta()) + sizeof(obj_sptr->dist()) + sizeof(obj_sptr->land()) + sizeof(obj_sptr->height()) << " bytes" << vcl_endl;
+  std::cout << "epsilon = " << epsilon << std::endl;
+  std::cout << "size of an volm_conf_object: " << sizeof(*obj_sptr) << " bytes" << std::endl;
+  std::cout << "size of its member: " << sizeof(obj_sptr->theta()) + sizeof(obj_sptr->dist()) + sizeof(obj_sptr->land()) + sizeof(obj_sptr->height()) << " bytes" << std::endl;
   TEST_NEAR("Test angle value", obj_sptr->theta(), theta, epsilon);
   TEST_NEAR("Test angle value(in degree)", obj_sptr->theta_in_deg(), theta_in_deg, epsilon);
   TEST_NEAR("Test distance value", obj_sptr->dist(), dist, epsilon);

@@ -6,13 +6,14 @@
 // \brief Find peaks in image
 // \author Tim Cootes
 
+#include <vector>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: True if pixel at *im is strictly above 8 neighbours.
 // \sa vil_is_plateau_3x3()
 template <class T>
-inline bool vil_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+inline bool vil_is_peak_3x3(const T* im, std::ptrdiff_t i_step, std::ptrdiff_t j_step)
 {
   T v = *im;
   return v > im[i_step]
@@ -31,8 +32,8 @@ inline bool vil_is_peak_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_s
 // \sa vil_find_plateaus_3x3()
 // \relatesalso vil_image_view
 template <class T>
-inline void vil_find_peaks_3x3(vcl_vector<unsigned>& pi,
-                               vcl_vector<unsigned>& pj,
+inline void vil_find_peaks_3x3(std::vector<unsigned>& pi,
+                               std::vector<unsigned>& pj,
                                const vil_image_view<T>& image,
                                const T& min_thresh,
                                bool clear_list=true)
@@ -42,7 +43,7 @@ inline void vil_find_peaks_3x3(vcl_vector<unsigned>& pi,
     pj.resize(0);
   }
   const unsigned ni1=image.ni()-1,nj1=image.nj()-1;
-  const vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
+  const std::ptrdiff_t istep = image.istep(),jstep=image.jstep();
   const T* row = image.top_left_ptr()+istep+jstep;
   for (unsigned j=1;j<nj1;++j,row+=jstep)
   {
@@ -60,7 +61,7 @@ inline void vil_find_peaks_3x3(vcl_vector<unsigned>& pi,
 // \a dx and \a dy as well as the interpolated peak value \a val.
 template<class T>
 bool vil_interpolate_peak(const T* pixel,
-                          vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep,
+                          std::ptrdiff_t istep, std::ptrdiff_t jstep,
                           double& dx, double& dy, double& val)
 {
   dx=dy=0;
@@ -140,9 +141,9 @@ bool vil_interpolate_peak(const T* pixel,
 // \param clear_list  If true (the default) then empty lists before adding new examples.
 // \relatesalso vil_image_view
 template <class T>
-inline void vil_find_peaks_3x3_subpixel(vcl_vector<double>& px,
-                                        vcl_vector<double>& py,
-                                        vcl_vector<double>& val,
+inline void vil_find_peaks_3x3_subpixel(std::vector<double>& px,
+                                        std::vector<double>& py,
+                                        std::vector<double>& val,
                                         const vil_image_view<T>& image,
                                         const T& min_thresh,
                                         bool clear_list=true)
@@ -153,7 +154,7 @@ inline void vil_find_peaks_3x3_subpixel(vcl_vector<double>& px,
     val.resize(0);
   }
   const unsigned ni1=image.ni()-1,nj1=image.nj()-1;
-  const vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
+  const std::ptrdiff_t istep = image.istep(),jstep=image.jstep();
   const T* row = image.top_left_ptr()+istep+jstep;
   double dx,dy,v;
   for (unsigned j=1;j<nj1;++j,row+=jstep)

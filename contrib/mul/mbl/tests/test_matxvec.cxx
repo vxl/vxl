@@ -1,5 +1,6 @@
 // This is mul/mbl/tests/test_matxvec.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matxvec.h>
@@ -8,7 +9,7 @@
 
 void test1()
 {
-  vcl_cout << "\ntest1():\n";
+  std::cout << "\ntest1():\n";
 
   vnl_matrix<double> A(4,5);
   for (unsigned int i=0;i<A.rows();++i)
@@ -40,7 +41,7 @@ void test1()
 // Check consistency with full vector-matrix multiplication
 void test2()
 {
-  vcl_cout << "\ntest2():\n";
+  std::cout << "\ntest2():\n";
 
   vnl_matrix<double> A(2,2);
   A(0,0) = 1;  A(0,1) = 3;
@@ -53,22 +54,22 @@ void test2()
   vnl_vector<double> x1(2), x2(2);
 
   mbl_matxvec_prod_vm(b,A,x1);
-  //vcl_cout << "prod_vm: b * A = " << x1 << '\n';
+  //std::cout << "prod_vm: b * A = " << x1 << '\n';
   x2 = b*A;
-  //vcl_cout << "std: b * A = " << x2 << '\n';
+  //std::cout << "std: b * A = " << x2 << '\n';
   TEST_NEAR("prod_vm same as v*M", (x1-x2).magnitude(), 0.0, 1e-8);
 
   mbl_matxvec_prod_mv(A,b,x1);
-  //vcl_cout << "prod_mv: A * b = " << x1 << '\n';
+  //std::cout << "prod_mv: A * b = " << x1 << '\n';
   x2 = A*b;
-  //vcl_cout << "std: A * b = " << x2 << '\n';
+  //std::cout << "std: A * b = " << x2 << '\n';
   TEST_NEAR("prod_mv same as M*v", (x1-x2).magnitude(), 0.0, 1e-8);
 }
 
 
 void test_matxvec()
 {
-  vcl_cout << "*********************\n"
+  std::cout << "*********************\n"
            << " Testing mbl_matxvec\n"
            << "*********************\n";
 

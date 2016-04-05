@@ -2,11 +2,12 @@
 // each of the 37 color tables found in vil_color_table.h
 // The created image is simply a ramp through 255 values.
 
+#include <sstream>
+#include <cstdio>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_color_table.h>
-#include <vcl_sstream.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 
 int main()
 {
@@ -21,8 +22,8 @@ int main()
       }
     }
     char fname[25];
-    vcl_sprintf(fname,"color_table_%2.2d.png",c);
-    vcl_cout << "Saving " << fname << vcl_endl;
+    std::sprintf(fname,"color_table_%2.2d.png",c);
+    std::cout << "Saving " << fname << std::endl;
     vil_save(cimg, fname);
   }
 

@@ -16,8 +16,9 @@
 // they should work for any istream that follows this
 // specification.
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
 #include "vidl_pixel_format.h"
 
 //: A parameters struct for IIDC 1394 camera streams
@@ -120,13 +121,13 @@ struct vidl_iidc1394_params
                        FEATURE_MODE_ONE_PUSH_AUTO};
 
   //: Return string describing the mode
-  static vcl_string video_mode_string(video_mode_t m);
+  static std::string video_mode_string(video_mode_t m);
 
   //: Return string describing the feature
-  static vcl_string feature_string(feature_t f);
+  static std::string feature_string(feature_t f);
 
   //: Return string describing the feature mode
-  static vcl_string feature_mode_string(feature_mode_t fm);
+  static std::string feature_mode_string(feature_mode_t fm);
 
   //: Return the format number from the video mode enumeration
   static unsigned int video_format_val(video_mode_t m);
@@ -168,7 +169,7 @@ struct vidl_iidc1394_params
   video_mode_t video_mode_;
 
   //: The settings of camera features
-  vcl_vector<feature_options> features_;
+  std::vector<feature_options> features_;
 
   //-------------------------------------------------------
 
@@ -211,7 +212,7 @@ struct vidl_iidc1394_params::feature_options
   bool            is_on;
   feature_mode_t  active_mode;
 
-  vcl_vector<feature_mode_t>  available_modes;
+  std::vector<feature_mode_t>  available_modes;
 
 // FIXME - add trigger options
 #if 0
@@ -249,26 +250,26 @@ struct vidl_iidc1394_params::valid_options
   struct valid_mode
   {
     video_mode_t mode;
-    vcl_vector<frame_rate_t> frame_rates;
+    std::vector<frame_rate_t> frame_rates;
   };
 
   //: A valid camera and its options
   struct camera
   {
     vxl_uint_64 guid; // global unique identifier
-    vcl_string vendor;
-    vcl_string model;
+    std::string vendor;
+    std::string model;
     speed_t speed;
     bool b_mode;
-    vcl_vector<valid_mode> modes;
-    vcl_vector<vidl_iidc1394_params::feature_options> features;
+    std::vector<valid_mode> modes;
+    std::vector<vidl_iidc1394_params::feature_options> features;
     video_mode_t curr_mode;
     frame_rate_t curr_frame_rate;
   };
 
   //: A vector of the valid cameras
   // one object for each camera detected on the bus
-  vcl_vector<camera> cameras;
+  std::vector<camera> cameras;
 };
 
 #endif // vidl_iidc1394_params_h_

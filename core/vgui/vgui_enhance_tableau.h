@@ -51,10 +51,10 @@ class vgui_enhance_tableau : public vgui_tableau
                        vgui_tableau_sptr const& t2);
 
   //: Returns the file_name of the first child tableau.
-  vcl_string file_name() const;
+  std::string file_name() const;
 
   //: Returns the type of this tableau ('vgui_enhance_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: True to enable key-presses to change size and magnification.
   void set_enable_key_bindings(bool on) { enable_key_bindings = on; }

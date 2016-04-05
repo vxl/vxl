@@ -65,7 +65,7 @@
 //                         parameters defined by line l)
 //   \code
 //      ...
-//      vcl_vector<vsol_line_2d_sptr> lines;
+//      std::vector<vsol_line_2d_sptr> lines;
 //      index->lines_in_interval(lines, l, 1.0, 5.0);//dr = 1.0, dtheta = 5.0
 //                                                   //i.e. +- 1.0 and +- 5.0
 //   \endcode
@@ -83,7 +83,9 @@
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_array_2d.h>
@@ -148,18 +150,18 @@ class bsol_hough_line_index :  public vbl_ref_count
 
   //: Lines in a line index bin at integer r and theta bin indices.
   void lines_at_index(const int r, const int theta,
-                      vcl_vector<vsol_line_2d_sptr>& lines);
+                      std::vector<vsol_line_2d_sptr>& lines);
 
-  vcl_vector<vsol_line_2d_sptr > lines_at_index(const int r,
+  std::vector<vsol_line_2d_sptr > lines_at_index(const int r,
                                                 const int theta);
 
   //: Lines in a tolerance box around the r and theta of a given line.
   // r is in distance units and theta is in degrees.
   void lines_in_interval(vsol_line_2d_sptr const& l,
                          const float r_dist, const float theta_dist,
-                         vcl_vector<vsol_line_2d_sptr>& lines);
+                         std::vector<vsol_line_2d_sptr>& lines);
 
-  vcl_vector<vsol_line_2d_sptr>
+  std::vector<vsol_line_2d_sptr>
     lines_in_interval(vsol_line_2d_sptr const & l,
                       const float r_dist,
                       const float theta_dist);
@@ -167,39 +169,39 @@ class bsol_hough_line_index :  public vbl_ref_count
   //:Lines parallel to a given angle in degrees
   void parallel_lines(const float angle,
                       const float angle_dist,
-                      vcl_vector<vsol_line_2d_sptr>& lines);
+                      std::vector<vsol_line_2d_sptr>& lines);
 
-  vcl_vector<vsol_line_2d_sptr> parallel_lines(const float angle,
+  std::vector<vsol_line_2d_sptr> parallel_lines(const float angle,
                                                const float angle_dist);
 
   //: Lines at an angle to a given line (angle is in degrees)
   void lines_at_angle(vsol_line_2d_sptr const &l,
                       const float angle, const float angle_dist,
-                      vcl_vector<vsol_line_2d_sptr >& lines);
+                      std::vector<vsol_line_2d_sptr >& lines);
 
-  vcl_vector<vsol_line_2d_sptr>
+  std::vector<vsol_line_2d_sptr>
     lines_at_angle(vsol_line_2d_sptr const &l,
                    const float angle, const float angle_dist);
 
   //: Lines parallel to a given line with angle_dist in degrees
   void parallel_lines(vsol_line_2d_sptr const &l,
                       const float angle_dist,
-                      vcl_vector<vsol_line_2d_sptr>& lines);
+                      std::vector<vsol_line_2d_sptr>& lines);
 
-  vcl_vector<vsol_line_2d_sptr>
+  std::vector<vsol_line_2d_sptr>
     parallel_lines(vsol_line_2d_sptr const &l,
                    const float angle_dist);
 
   //: Angle histogram - projection of hough space onto theta axis
-  vcl_vector<int> angle_histogram();
+  std::vector<int> angle_histogram();
 
   //: Dominant line directions found by non-maximum suppression above thresh
   int dominant_directions(const int thresh, const float angle_tol,
-                          vcl_vector<int>& dirs);
+                          std::vector<int>& dirs);
 
   //: Dominant parallel line groups
   int dominant_line_groups(const int thresh, const float angle_tol,
-                           vcl_vector<vcl_vector<vsol_line_2d_sptr> >& groups);
+                           std::vector<std::vector<vsol_line_2d_sptr> >& groups);
 
   //: An image of the hough space
   vbl_array_2d<unsigned char> get_hough_image();
@@ -213,8 +215,8 @@ class bsol_hough_line_index :  public vbl_ref_count
  protected:
   //internal functions
   void init(const int r_dimension, const int theta_dimension);
-  vcl_vector<int> non_maximum_suppress(const int radius,
-                                       vcl_vector<int> const & bins);
+  std::vector<int> non_maximum_suppress(const int radius,
+                                       std::vector<int> const & bins);
 
   // Data Members--------------------------------------------------------------
 
@@ -233,7 +235,7 @@ class bsol_hough_line_index :  public vbl_ref_count
   int   th_dim_;
 
   //: The index space for lines. An array of vectors of line indices
-  vbl_array_2d<vcl_vector<vsol_line_2d_sptr>* > index_;
+  vbl_array_2d<std::vector<vsol_line_2d_sptr>* > index_;
 };
 
 #endif

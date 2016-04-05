@@ -1,15 +1,16 @@
+#include <iostream>
 #include "sdet_atmospheric_image_classifier.h"
 //
 #include <vnl/vnl_numeric_traits.h>
 #include <vul/vul_timer.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vil/vil_load.h>
 // test if a given texture category is an atmospheric effect
-bool sdet_atmospheric_image_classifier::atmos_cat(vcl_string const& cat)
+bool sdet_atmospheric_image_classifier::atmos_cat(std::string const& cat)
 {
-  for (vcl_vector<vcl_string>::iterator cit = atmos_categories_.begin();
+  for (std::vector<std::string>::iterator cit = atmos_categories_.begin();
        cit != atmos_categories_.end(); ++cit)
     if (cat == *cit)
       return true;
@@ -25,19 +26,19 @@ bool sdet_atmospheric_image_classifier::atmos_cat(vcl_string const& cat)
 // seems to work well in a large number of situations
 //
 void sdet_atmospheric_image_classifier::
-category_quality_color_mix(vcl_map<vcl_string, float>& probs,
+category_quality_color_mix(std::map<std::string, float>& probs,
                            vnl_vector_fixed<float, 3> const& uncert,
                            vnl_vector_fixed<float, 3>& color_mix)
 {
   //start with max prob color
-  vcl_map<vcl_string, vcl_vector<float> >::iterator hit = category_histograms_.begin();
+  std::map<std::string, std::vector<float> >::iterator hit = category_histograms_.begin();
   // accumulate p_atmos, p_no_atmos, and p_haze
   float atmos_sum = 0.0f;
   float no_atmos_sum = 0.0f;
   float prob_sum = 0.0f;
   float up = 0.0f;
   for (; hit != category_histograms_.end(); ++hit) {
-    const vcl_string& cat = (*hit).first;
+    const std::string& cat = (*hit).first;
     float p = probs[cat];
     prob_sum += p;
     if (atmos_cat(cat))
@@ -78,19 +79,19 @@ static bool required_block(int bidxu, int bidxv, int i,
 #endif // 0
 
 vil_image_view<float> sdet_atmospheric_image_classifier::
-classify_image_blocks_qual(vcl_string const& img_path)
+classify_image_blocks_qual(std::string const& img_path)
 {
   vil_image_resource_sptr resc = vil_load_image_resource(img_path.c_str());
   vil_image_view<float> img = scale_image(resc); // map to [0, 1]
-  vcl_cout << "Classifying quality on image " << img_path << '\n' << vcl_flush;
+  std::cout << "Classifying quality on image " << img_path << '\n' << std::flush;
   return classify_image_blocks_qual(img);
 }
 
 vil_image_view<float>
 sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<float> const& image)
 {
-  vcl_cout << "image size(" << image.ni()<< ' ' << image.nj() << ")pixels:["
-           << texton_dictionary_.size() << "]categories \n" << vcl_flush;
+  std::cout << "image size(" << image.ni()<< ' ' << image.nj() << ")pixels:["
+           << texton_dictionary_.size() << "]categories \n" << std::flush;
   vul_timer t;
   if (!color_map_valid_)
     this->init_color_map();
@@ -98,14 +99,14 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<flo
     this->compute_texton_index();
   this->compute_filter_bank(image);
   unsigned dim = filter_responses_.n_levels();
-  vcl_cout << "texton dimension " << dim +2<< '\n';
+  std::cout << "texton dimension " << dim +2<< '\n';
 
   int margin = static_cast<int>(this->max_filter_radius());
-  vcl_cout << "filter kernel margin " << margin << '\n';
+  std::cout << "filter kernel margin " << margin << '\n';
   int ni = static_cast<int>(image.ni());
   int nj = static_cast<int>(image.nj());
   if ((ni-margin)<=0 || (nj-margin)<=0) {
-    vcl_cout << "Image smaller than filter margin\n";
+    std::cout << "Image smaller than filter margin\n";
     return vil_image_view<float>(0, 0);
   }
   //number of pixels in a block
@@ -126,7 +127,7 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<flo
   for (int j = margin; j<(nj-margin); j+=block_size_, ++bidxv) {
     int bidxu = 0;
     for (int i = margin; i<(ni-margin); i+=block_size_, ++bidxu) {
-      vcl_vector<float> h(nh, 0.0f);
+      std::vector<float> h(nh, 0.0f);
       for (unsigned r = 0; r<block_size_; ++r)
         for (unsigned c = 0; c<block_size_; ++c) {
           vnl_vector<double> temp(dim+2);
@@ -139,7 +140,7 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<flo
         }
 
       //finished a block - compute category probabilites from the histogram
-      vcl_map<vcl_string, float> texture_probs =
+      std::map<std::string, float> texture_probs =
         this->texture_probabilities(h);
       vnl_vector_fixed<float, 3> color;
       //colorize output according to probabilities of each category
@@ -149,14 +150,14 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual(vil_image_view<flo
           for (unsigned b = 0; b<3; ++b)
             prob(i+c,j+r,b) = color[b];
     }
-    vcl_cout << '.' << vcl_flush;
+    std::cout << '.' << std::flush;
   }
-  vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
+  std::cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << std::flush;
   return prob;
 }
 
 vil_image_view<vxl_byte>
-sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string, unsigned char>& cat_id_map, vcl_map<vcl_string, float>& cat_percentage_map)
+sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<float> const& image, std::map<std::string, unsigned char>& cat_id_map, std::map<std::string, float>& cat_percentage_map)
 {
   if (!texton_index_valid_)
     this->compute_texton_index();
@@ -171,26 +172,26 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
   prob.fill(0);
 
   if ((ni-margin)<=0 || (nj-margin)<=0) {
-    vcl_cout << "Image smaller than filter margin\n";
+    std::cout << "Image smaller than filter margin\n";
     return vil_image_view<vxl_byte>(0, 0);
   }
   //number of pixels in a block
   unsigned block_area = block_size_*block_size_;
   float weight = 1.0f/static_cast<float>(block_area);
 
-  for (vcl_map<vcl_string, unsigned char>::iterator iter = cat_id_map.begin(); iter != cat_id_map.end(); iter++)
+  for (std::map<std::string, unsigned char>::iterator iter = cat_id_map.begin(); iter != cat_id_map.end(); iter++)
     cat_percentage_map[iter->first] = 0.0f;
 
   int max_j = margin > block_size_ ? nj-margin : nj-block_size_;
   int max_i = margin > block_size_ ? ni-margin : ni-block_size_;
   unsigned nh = texton_index_.size();
   unsigned pix_count = 0;
-  vcl_cout << "ni: " << ni << ", nj: " << nj << vcl_endl;
-  vcl_cout << "margin: " << margin << ", max_j: " << max_j << ", max_i: " << max_i << ", block_size: " << block_size_ << vcl_endl;
+  std::cout << "ni: " << ni << ", nj: " << nj << std::endl;
+  std::cout << "margin: " << margin << ", max_j: " << max_j << ", max_i: " << max_i << ", block_size: " << block_size_ << std::endl;
 
   for (int j = margin; j<max_j; j+=block_size_) {
     for (int i = margin; i<max_i; i+=block_size_) {
-      vcl_vector<float> h(nh, 0.0f);
+      std::vector<float> h(nh, 0.0f);
       for (unsigned r = 0; r<block_size_; ++r)
         for (unsigned c = 0; c<block_size_; ++c) {
           vnl_vector<double> temp(dim+2);
@@ -203,7 +204,7 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
         }
 
       // new method: just assign the highest prob class
-      vcl_pair<vcl_string, float> class_prob = this->highest_prob_class(h);
+      std::pair<std::string, float> class_prob = this->highest_prob_class(h);
       cat_percentage_map[class_prob.first] += block_area;
       for (unsigned r = 0; r < block_size_; ++r)
         for (unsigned c = 0; c < block_size_; ++c) {
@@ -211,9 +212,9 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
           pix_count++;
         }
     }
-    vcl_cout << j << "," << vcl_flush;
+    std::cout << j << "," << std::flush;
   }
-  for (vcl_map<vcl_string, float>::iterator iter = cat_percentage_map.begin(); iter != cat_percentage_map.end(); iter++) {
+  for (std::map<std::string, float>::iterator iter = cat_percentage_map.begin(); iter != cat_percentage_map.end(); iter++) {
     iter->second /= pix_count;
     iter->second *= 100.0;
   }
@@ -222,14 +223,14 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
 }
 
 vil_image_view<float> sdet_atmospheric_image_classifier::
-classify_image_blocks_expected(vcl_string const& img_path,
-                               vcl_string const& exp_path)
+classify_image_blocks_expected(std::string const& img_path,
+                               std::string const& exp_path)
 {
   vil_image_resource_sptr resc = vil_load_image_resource(img_path.c_str());
   vil_image_view<float> img = scale_image(resc); // map to [0, 1]
   vil_image_resource_sptr resce = vil_load_image_resource(exp_path.c_str());
   vil_image_view<float> exp = scale_image(resce); // map to [0, 1]
-  vcl_cout << "Classifying quality on image " << img_path << " using expected image " << exp_path << '\n' << vcl_flush;
+  std::cout << "Classifying quality on image " << img_path << " using expected image " << exp_path << '\n' << std::flush;
   return classify_image_blocks_expected(img, exp);
 }
 
@@ -243,12 +244,12 @@ classify_image_blocks_expected(vil_image_view<float> const& image,
   int ni_exp = static_cast<int>(exp.ni());
   int nj_exp = static_cast<int>(exp.nj());
   if ((ni != ni_exp) || (nj != nj_exp)) {
-    vcl_cout << "Incoming image and expected image not of same size\n"
-             << vcl_flush;
+    std::cout << "Incoming image and expected image not of same size\n"
+             << std::flush;
     return vil_image_view<float>();
   }
-  vcl_cout << "image size(" << ni << ' '
-           << nj << ")pixels \n" << vcl_flush;
+  std::cout << "image size(" << ni << ' '
+           << nj << ")pixels \n" << std::flush;
 
   vul_timer t;
 
@@ -256,16 +257,16 @@ classify_image_blocks_expected(vil_image_view<float> const& image,
     this->compute_texton_index();
   this->compute_filter_bank(image);
   unsigned dim = filter_responses_.n_levels();
-  vcl_cout << "texton dimension " << dim +2<< '\n';
+  std::cout << "texton dimension " << dim +2<< '\n';
 
   int margin = static_cast<int>(this->max_filter_radius());
-  vcl_cout << "filter kernel margin " << margin << '\n';
+  std::cout << "filter kernel margin " << margin << '\n';
   if ((ni-margin)<=0 || (nj-margin)<=0) {
-    vcl_cout << "Image smaller than filter margin\n";
+    std::cout << "Image smaller than filter margin\n";
     return vil_image_view<float>(0, 0);
   }
   //cached filter outputs for the input image
-  vcl_vector<vil_image_view<float> > image_resps =
+  std::vector<vil_image_view<float> > image_resps =
     filter_responses_.responses();
   vil_image_view<float> laplace = laplace_;
   vil_image_view<float> gauss = gauss_;
@@ -282,14 +283,14 @@ classify_image_blocks_expected(vil_image_view<float> const& image,
       for (unsigned p = 0; p<3; ++p)
         prob(i,j,p) = unct[p];
 
-  vcl_vector<float>& mod_hist = category_histograms_["mod"];
+  std::vector<float>& mod_hist = category_histograms_["mod"];
   unsigned nh = mod_hist.size();
   if (nh == 0) {
-    vcl_cout << "No model category to evaluate image\n";
+    std::cout << "No model category to evaluate image\n";
     return prob;
   }
   double thr = dist_["mod"]["mod"];
-  //vcl_vector<vnl_vector<double> >& textons = texton_dictionary_["mod"]; -- unused!
+  //std::vector<vnl_vector<double> >& textons = texton_dictionary_["mod"]; -- unused!
   thr *= 0.25;//temporary hard coded threshold ratio
   int bidxv = 0;
   for (int j = margin; j<(nj-margin); j+=block_size_, ++bidxv) {
@@ -307,7 +308,7 @@ classify_image_blocks_expected(vil_image_view<float> const& image,
           temp_img[dim]=laplace(i+c,j+r); temp_img[dim+1]=gauss(i+c,j+r);
           unsigned indx_exp = this->nearest_texton_index(temp_exp);
           double di_exp_img = vnl_vector_ssd(temp_exp, temp_img);
-          di_exp_img = vcl_sqrt(di_exp_img/temp_exp.size());
+          di_exp_img = std::sqrt(di_exp_img/temp_exp.size());
           total += mod_hist[indx_exp];
           if (di_exp_img<thr)
             pr += mod_hist[indx_exp];
@@ -327,8 +328,8 @@ classify_image_blocks_expected(vil_image_view<float> const& image,
           prob(i+c,j+r,2) = u;
         }
     }
-      vcl_cout << '.' << vcl_flush;
+      std::cout << '.' << std::flush;
   }
-  vcl_cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << vcl_flush;
+  std::cout << "\nBlock classification took " << t.real()/1000.0 << " seconds\n" << std::flush;
   return prob;
 }

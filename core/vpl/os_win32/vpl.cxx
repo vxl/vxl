@@ -7,7 +7,7 @@
 #include <windows.h>
 
 char *
-vpl_getcwd( char *buf, vcl_size_t buf_size )
+vpl_getcwd( char *buf, std::size_t buf_size )
 {
   return _getcwd( buf, (int)buf_size );
 }
@@ -63,7 +63,7 @@ int vpl_putenv ( const char * envvar )
 }
 
 
-int vpl_gethostname(char *name, vcl_size_t len)
+int vpl_gethostname(char *name, std::size_t len)
 {
 #if defined(VCL_VC)
   static bool wsa_initialised = false;

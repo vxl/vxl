@@ -88,7 +88,7 @@ class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,Data
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_gaussian_convolution.txx"
+#include "vipl_gaussian_convolution.hxx"
 #endif
 
 #endif // vipl_gaussian_convolution_h_

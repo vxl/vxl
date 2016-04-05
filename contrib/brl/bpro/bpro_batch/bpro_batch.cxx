@@ -1,3 +1,5 @@
+#include <string>
+#include <iostream>
 #include "bpro_batch.h"
 
 #include <bprb/bprb_batch_process_manager.h>
@@ -13,8 +15,8 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_int.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_unsigned.h>
 
+#include <vcl_compiler.h>
 #include <vcl_string.h>
-#include <vcl_iostream.h>
 
 static PyObject *init_process(PyObject *self, PyObject *args);
 static PyObject *set_input_bool(PyObject *self, PyObject *args);
@@ -100,9 +102,9 @@ PyObject *init_process(PyObject * /*self*/, PyObject *args)
   const char* name;
   if (!PyArg_ParseTuple(args, "s:init_process", &name))
     return NULL;
-  vcl_string n(name);
+  std::string n(name);
   if (verbose_state)
-    vcl_cout << n << '\n';
+    std::cout << n << '\n';
   bool result = bprb_batch_process_manager::instance()->init_process(n);
   return Py_BuildValue("b", result);
 }
@@ -115,7 +117,7 @@ PyObject *set_input_bool(PyObject * /*self*/, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<bool>(value);
   if (verbose_state)
-    vcl_cout << "input[" << input << "](bool): " << value << '\n';
+    std::cout << "input[" << input << "](bool): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -127,9 +129,9 @@ set_input_string(PyObject * /*self*/, PyObject *args)
   const char* value;
   if (!PyArg_ParseTuple(args, "is:set_input_string", &input, &value))
     return NULL;
-  brdb_value_sptr v = new brdb_value_t<vcl_string>(value);
+  brdb_value_sptr v = new brdb_value_t<std::string>(value);
   if (verbose_state)
-    vcl_cout << "input[" << input << "](string): " << value << '\n';
+    std::cout << "input[" << input << "](string): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -148,7 +150,7 @@ PyObject *set_input_string_array(PyObject * /*self*/, PyObject *args){
         bbas_1d_array_string_sptr sarray = new bbas_1d_array_string(length);
         for(unsigned i = 0; i < length; ++i){
                 PyObject *obj = PyList_GetItem(list,i);
-                vcl_string s = static_cast<vcl_string>(PyString_AsString(obj));
+                std::string s = static_cast<std::string>(PyString_AsString(obj));
                 sarray->data_array[i] = s;
         }
         brdb_value_sptr v = new brdb_value_t<bbas_1d_array_string_sptr>(sarray);
@@ -164,7 +166,7 @@ PyObject *set_input_unsigned(PyObject * /*self*/, PyObject *args)
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<unsigned>(ivalue);
   if (verbose_state)
-    vcl_cout << "input[" << input << "](unsigned): " << ivalue << '\n';
+    std::cout << "input[" << input << "](unsigned): " << ivalue << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
 }
@@ -201,7 +203,7 @@ PyObject *set_input_int(PyObject * /*self*/, PyObject *args)
     return NULL;
   brdb_value_sptr iv = new brdb_value_t<int>(ivalue);
   if (verbose_state)
-    vcl_cout << "input[" << input << "](int): " << ivalue << '\n';
+    std::cout << "input[" << input << "](int): " << ivalue << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
 }
@@ -238,7 +240,7 @@ PyObject *set_input_long(PyObject * /*self*/, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<long>(value);
   if (verbose_state)
-    vcl_cout << "input[" << input << "](long): " << value << '\n';
+    std::cout << "input[" << input << "](long): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -251,7 +253,7 @@ PyObject *set_input_float(PyObject * /*self*/, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<float>(value);
   if (verbose_state)
-    vcl_cout << "input[" << input << "](float): " << value << '\n';
+    std::cout << "input[" << input << "](float): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -288,7 +290,7 @@ PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
     return NULL;
   brdb_value_sptr v = new brdb_value_t<double>(value);
   if (verbose_state)
-    vcl_cout << "input[" << input << "](double): " << value << '\n';
+    std::cout << "input[" << input << "](double): " << value << '\n';
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -319,37 +321,37 @@ PyObject *set_input_double_array(PyObject * /*self*/, PyObject *args)
 PyObject *get_output_string(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
-  vcl_string value;
+  std::string value;
   if (!PyArg_ParseTuple(args, "i:get_output_string", &id))
     return NULL;
 
-  vcl_string relation_name = "vcl_string_data";
+  std::string relation_name = "vcl_string_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
 
   if (selec->size()!=1) {
-    vcl_cout << "in get_output_string() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_output_string() - no relation with type" << relation_name << " id: " << id << std::endl;
     return Py_BuildValue("s", "");
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_output_string() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_output_string() didn't get value\n";
     return Py_BuildValue("s","");
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_output_string() - null value\n";
+    std::cout << "in get_output_string() - null value\n";
     return Py_BuildValue("s","");
   }
-  brdb_value_t<vcl_string>* result_out = static_cast<brdb_value_t<vcl_string>* >(brdb_value.ptr());
+  brdb_value_t<std::string>* result_out = static_cast<brdb_value_t<std::string>* >(brdb_value.ptr());
   value = result_out->value();
 
   if( verbose_state )
-    vcl_cout << " In get_output_string, the output string is: "
-             << value << vcl_endl;
+    std::cout << " In get_output_string, the output string is: "
+             << value << std::endl;
 
   return Py_BuildValue("s", value.c_str());
 }
@@ -362,25 +364,25 @@ PyObject *get_output_float(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_output_float", &id))
     return NULL;
 
-  vcl_string relation_name = "float_data";
+  std::string relation_name = "float_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
 
   if (selec->size()!=1) {
-    vcl_cout << "in get_output_float() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_output_float() - no relation with type" << relation_name << " id: " << id << std::endl;
     return Py_BuildValue("f",-1.0);
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_output_float() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_output_float() didn't get value\n";
     return Py_BuildValue("f",-1.0);
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_output_float() - null value\n";
+    std::cout << "in get_output_float() - null value\n";
     return Py_BuildValue("f",-1.0);
   }
   brdb_value_t<float>* result_out = static_cast<brdb_value_t<float>* >(brdb_value.ptr());
@@ -396,25 +398,25 @@ PyObject *get_output_double(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_output_double", &id))
     return NULL;
 
-  vcl_string relation_name = "double_data";
+  std::string relation_name = "double_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
 
   if (selec->size()!=1) {
-    vcl_cout << "in get_output_double() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_output_double() - no relation with type" << relation_name << " id: " << id << std::endl;
     return Py_BuildValue("d",-1.0);
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_output_double() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_output_double() didn't get value\n";
     return Py_BuildValue("d",-1.0);
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_output_double() - null value\n";
+    std::cout << "in get_output_double() - null value\n";
     return Py_BuildValue("d",-1.0);
   }
   brdb_value_t<double>* result_out = static_cast<brdb_value_t<double>* >(brdb_value.ptr());
@@ -430,25 +432,25 @@ PyObject *get_output_int(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_output_int", &id))
     return NULL;
 
-  vcl_string relation_name = "int_data";
+  std::string relation_name = "int_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
 
   if (selec->size()!=1) {
-    vcl_cout << "in get_output_int() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_output_int() - no relation with type" << relation_name << " id: " << id << std::endl;
     return Py_BuildValue("i",1000);
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_output_int() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_output_int() didn't get value\n";
     return Py_BuildValue("i",1000);
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_output_int() - null value\n";
+    std::cout << "in get_output_int() - null value\n";
     return Py_BuildValue("i",1000);
   }
   brdb_value_t<int>* result_out = static_cast<brdb_value_t<int>* >(brdb_value.ptr());
@@ -464,25 +466,25 @@ PyObject *get_output_unsigned(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_output_unsigned", &id))
     return NULL;
 
-  vcl_string relation_name = "unsigned_data";
+  std::string relation_name = "unsigned_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
 
   if (selec->size()!=1) {
-    vcl_cout << "in get_output_unsigned() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_output_unsigned() - no relation with type" << relation_name << " id: " << id << std::endl;
     return Py_BuildValue("I",1000);
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_output_unsigned() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_output_unsigned() didn't get value\n";
     return Py_BuildValue("I",1000);
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_output_unsigned() - null value\n";
+    std::cout << "in get_output_unsigned() - null value\n";
     return Py_BuildValue("I",1000);
   }
   brdb_value_t<unsigned>* result_out = static_cast<brdb_value_t<unsigned>* >(brdb_value.ptr());
@@ -498,8 +500,8 @@ PyObject *process_print_default_params(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "ss:process_print_default_params", &name, &value))
     return NULL;
 
-  vcl_string n(name);
-  vcl_string f(value);
+  std::string n(name);
+  std::string f(value);
 
   bool result = bprb_batch_process_manager::instance()->print_default_params(n, f);
   return Py_BuildValue("b", result);
@@ -517,7 +519,7 @@ PyObject *set_params_process(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "s:set_params_process", &value))
     return NULL;
 
-  vcl_string f(value);
+  std::string f(value);
 
   bool result = bprb_batch_process_manager::instance()->set_params(f);
   return Py_BuildValue("b", result);
@@ -555,7 +557,7 @@ PyObject *commit_output(PyObject * /*self*/, PyObject *args)
   unsigned output;
   if (!PyArg_ParseTuple(args, "i:commit_output", &output))
     return NULL;
-  vcl_string type;
+  std::string type;
   bool result = bprb_batch_process_manager::instance()->commit_output(output,id, type);
   if (!result)
     return Py_BuildValue("i", -1);
@@ -634,26 +636,26 @@ PyObject *get_bbas_1d_array_int(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_bbas_1d_array_int", &id))
     return NULL;
 
-  vcl_string relation_name = "bbas_1d_array_int_sptr_data";
+  std::string relation_name = "bbas_1d_array_int_sptr_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
   PyObject *array_1d=0;
   if (selec->size()!=1) {
-    vcl_cout << "in get_bbas_1d_array_int() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_bbas_1d_array_int() - no relation with type" << relation_name << " id: " << id << std::endl;
 
     return array_1d;
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_bbas_1d_array_int() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_bbas_1d_array_int() didn't get value\n";
     return array_1d;
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_bbas_1d_array_int() - null value\n";
+    std::cout << "in get_bbas_1d_array_int() - null value\n";
     return array_1d;
   }
 
@@ -677,26 +679,26 @@ PyObject *get_bbas_1d_array_unsigned(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_bbas_1d_array_unsigned", &id))
     return NULL;
 
-  vcl_string relation_name = "bbas_1d_array_unsigned_sptr_data";
+  std::string relation_name = "bbas_1d_array_unsigned_sptr_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
   PyObject *array_1d=0;
   if (selec->size()!=1) {
-    vcl_cout << "in get_bbas_1d_array_unsigned() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_bbas_1d_array_unsigned() - no relation with type" << relation_name << " id: " << id << std::endl;
 
     return array_1d;
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_bbas_1d_array_unsigned() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_bbas_1d_array_unsigned() didn't get value\n";
     return array_1d;
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_bbas_1d_array_unsigned() - null value\n";
+    std::cout << "in get_bbas_1d_array_unsigned() - null value\n";
     return array_1d;
   }
 
@@ -720,26 +722,26 @@ PyObject *get_bbas_1d_array_float(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_bbas_1d_array_float", &id))
     return NULL;
 
-  vcl_string relation_name = "bbas_1d_array_float_sptr_data";
+  std::string relation_name = "bbas_1d_array_float_sptr_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
   PyObject *array_1d=0;
   if (selec->size()!=1) {
-    vcl_cout << "in get_bbas_1d_array_float() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_bbas_1d_array_float() - no relation with type" << relation_name << " id: " << id << std::endl;
 
     return array_1d;
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_bbas_1d_array_float() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_bbas_1d_array_float() didn't get value\n";
     return array_1d;
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_bbas_1d_array_float() - null value\n";
+    std::cout << "in get_bbas_1d_array_float() - null value\n";
     return array_1d;
   }
 
@@ -763,26 +765,26 @@ PyObject *get_output_double_array(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_output_double_array", &id))
     return NULL;
 
-  vcl_string relation_name = "bbas_1d_array_double_sptr_data";
+  std::string relation_name = "bbas_1d_array_double_sptr_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
   PyObject *array_1d=0;
   if (selec->size()!=1) {
-    vcl_cout << "in get_bbas_1d_array_double() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_bbas_1d_array_double() - no relation with type" << relation_name << " id: " << id << std::endl;
 
     return array_1d;
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_bbas_1d_array_double() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_bbas_1d_array_double() didn't get value\n";
     return array_1d;
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_bbas_1d_array_double() - null value\n";
+    std::cout << "in get_bbas_1d_array_double() - null value\n";
     return array_1d;
   }
 
@@ -806,26 +808,26 @@ PyObject *get_bbas_1d_array_string(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_bbas_1d_array_string", &id))
     return NULL;
 
-  vcl_string relation_name = "bbas_1d_array_string_sptr_data";
+  std::string relation_name = "bbas_1d_array_string_sptr_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
   PyObject *array_1d=0;
   if (selec->size()!=1) {
-    vcl_cout << "in get_bbas_1d_array_string() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_bbas_1d_array_string() - no relation with type" << relation_name << " id: " << id << std::endl;
 
     return array_1d;
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_bbas_1d_array_string() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_bbas_1d_array_string() didn't get value\n";
     return array_1d;
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_bbas_1d_array_string() - null value\n";
+    std::cout << "in get_bbas_1d_array_string() - null value\n";
     return array_1d;
   }
 
@@ -847,8 +849,8 @@ PyObject *set_stdout(PyObject * /*self*/, PyObject *args)
   const char* file;
   if (!PyArg_ParseTuple(args, "s:set_stdout", &file))
     return NULL;
-  vcl_string f(file);
-  vcl_cout << f << '\n';
+  std::string f(file);
+  std::cout << f << '\n';
   bprb_batch_process_manager::instance()->set_stdout(f);
   Py_INCREF(Py_None);
   return Py_None;

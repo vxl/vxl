@@ -1,4 +1,5 @@
 // This is core/vgui/vgui_image_tableau.cxx
+#include <string>
 #include "vgui_image_tableau.h"
 //:
 // \file
@@ -12,7 +13,7 @@
 // \endverbatim
 
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <vil/vil_image_view_base.h>
 #include <vil1/vil1_load.h>
@@ -107,7 +108,7 @@ vgui_image_tableau::
 
 //-----------------------------------------------------------------------------
 
-vcl_string
+std::string
 vgui_image_tableau::
 type_name() const
 {
@@ -117,7 +118,7 @@ type_name() const
 
 //-----------------------------------------------------------------------------
 
-vcl_string
+std::string
 vgui_image_tableau::
 file_name() const
 {
@@ -126,7 +127,7 @@ file_name() const
 
 //-----------------------------------------------------------------------------
 
-vcl_string
+std::string
 vgui_image_tableau::
 pretty_name() const
 {
@@ -422,7 +423,7 @@ class vgui_set_rangemap_command : public vgui_command
       rmp_dialog.field("X Min ",ranges[6]);
       rmp_dialog.field("X Max ",ranges[7]);
       rmp_dialog.field("X Gamma ",rmp->gamma_X_);
-      vcl_vector<vcl_string> choices;
+      std::vector<std::string> choices;
       for (unsigned c = 0; c<vgui_range_map_params::END_m; ++c)
         choices.push_back(vgui_range_map_params::bmap[c]);
       rmp_dialog.choice("Band Map", choices, choice);

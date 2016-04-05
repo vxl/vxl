@@ -17,6 +17,8 @@
 //    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_4.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -25,7 +27,7 @@
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgLineSeg2D.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //:
 // A class to hold a plane-to-plane projective transformation matrix
@@ -52,7 +54,7 @@ class HMatrix2D
   HMatrix2D(const HMatrix2D& M);
   HMatrix2D(vnl_double_3x3 const& M);
   HMatrix2D(const double* t_matrix);
-  HMatrix2D(vcl_istream& s);
+  HMatrix2D(std::istream& s);
   HMatrix2D(char const* filename);
  ~HMatrix2D();
 
@@ -104,11 +106,11 @@ class HMatrix2D
   void set(const double *t_matrix);
   void set(vnl_double_3x3 const& t_matrix);
 
-  bool read(vcl_istream& s);
+  bool read(std::istream& s);
   bool read(char const* filename);
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HMatrix2D& H);
-vcl_istream& operator>>(vcl_istream& s, HMatrix2D& H);
+std::ostream& operator<<(std::ostream& s, const HMatrix2D& H);
+std::istream& operator>>(std::istream& s, HMatrix2D& H);
 
 #endif // _HMatrix2D_h

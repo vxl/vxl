@@ -1,15 +1,17 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_volm_wr3db_index.h"
 //:
 // \file
 #include <bbas/volm/volm_spherical_container.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
-bool boxm2_volm_wr3db_index_params::write_params_file(vcl_string index_file_name)
+bool boxm2_volm_wr3db_index_params::write_params_file(std::string index_file_name)
 {
-  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
-  vcl_ofstream ofs(index_params_file.c_str());
+  std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  std::ofstream ofs(index_params_file.c_str());
   if (!ofs.is_open())
     return false;
   ofs << "start " << start << '\n'
@@ -23,18 +25,18 @@ bool boxm2_volm_wr3db_index_params::write_params_file(vcl_string index_file_name
       << "top_angle " << top_angle << '\n'
       << "bottom_angle " << bottom_angle << '\n'
 #endif
-      << "layer_size " << layer_size << vcl_endl;
+      << "layer_size " << layer_size << std::endl;
   ofs.close();
   return true;
 }
 
-bool boxm2_volm_wr3db_index_params::read_params_file(vcl_string index_file_name)
+bool boxm2_volm_wr3db_index_params::read_params_file(std::string index_file_name)
 {
-  vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
-  vcl_ifstream ifs(index_params_file.c_str());
+  std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  std::ifstream ifs(index_params_file.c_str());
   if (!ifs.is_open())
     return false;
-  vcl_string tmp;
+  std::string tmp;
   ifs >> tmp >> start;
   ifs >> tmp >> skip;
   ifs >> tmp >> vmin;
@@ -64,10 +66,10 @@ bool boxm2_volm_wr3db_index_params::query_params_equal(boxm2_volm_wr3db_index_pa
 }
 
 
-bool boxm2_volm_wr3db_index_params::write_size_file(vcl_string index_file_name, unsigned long indexed_cnt)
+bool boxm2_volm_wr3db_index_params::write_size_file(std::string index_file_name, unsigned long indexed_cnt)
 {
-  vcl_string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
-  vcl_ofstream ofs(index_size_file.c_str());
+  std::string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
+  std::ofstream ofs(index_size_file.c_str());
   if (!ofs.is_open())
     return false;
   ofs << indexed_cnt << '\n';
@@ -75,10 +77,10 @@ bool boxm2_volm_wr3db_index_params::write_size_file(vcl_string index_file_name, 
   return true;
 }
 
-bool boxm2_volm_wr3db_index_params::read_size_file(vcl_string index_file_name, unsigned long& size)
+bool boxm2_volm_wr3db_index_params::read_size_file(std::string index_file_name, unsigned long& size)
 {
-  vcl_string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
-  vcl_ifstream ifs(index_size_file.c_str());
+  std::string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
+  std::ifstream ifs(index_size_file.c_str());
   if (!ifs.is_open())
     return false;
   ifs >> size;
@@ -88,9 +90,9 @@ bool boxm2_volm_wr3db_index_params::read_size_file(vcl_string index_file_name, u
 
 
 boxm2_volm_wr3db_index::boxm2_volm_wr3db_index(unsigned layer_size, float buffer_capacity) :
-layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0), m_(NOT_INITIALIZED), file_name_(""), active_buffer_(0)
+layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0), m_(NOT_INITIALIZED), file_name_(""), active_buffer_(VXL_NULLPTR)
 {
-  buffer_size_ = (unsigned int)vcl_floor((buffer_capacity*1024*1024*1024)/(2.0f*layer_size));
+  buffer_size_ = (unsigned int)std::floor((buffer_capacity*1024*1024*1024)/(2.0f*layer_size));
   active_buffer_ = new uchar[buffer_size_*layer_size_];
 }
 
@@ -102,14 +104,14 @@ boxm2_volm_wr3db_index::~boxm2_volm_wr3db_index()
     delete [] active_buffer_;
 }
 
-bool boxm2_volm_wr3db_index::initialize_write(vcl_string file_name)
+bool boxm2_volm_wr3db_index::initialize_write(std::string file_name)
 {
   if (m_ == READ)
     this->finalize();
   m_ = WRITE;
   file_name_ = file_name;
-  //f_obj_.open(file_name.c_str(), vcl_ios::app | vcl_ios::binary);
-  of_obj_.open(file_name.c_str(), vcl_ios::binary);
+  //f_obj_.open(file_name.c_str(), std::ios::app | std::ios::binary);
+  of_obj_.open(file_name.c_str(), std::ios::binary);
   if (!of_obj_.good())
     return false;
   current_id_ = 0;
@@ -117,13 +119,13 @@ bool boxm2_volm_wr3db_index::initialize_write(vcl_string file_name)
   return true;
 }
 
-bool boxm2_volm_wr3db_index::initialize_read(vcl_string file_name)
+bool boxm2_volm_wr3db_index::initialize_read(std::string file_name)
 {
   if (m_ == WRITE)
     this->finalize();
   m_ = READ;
   file_name_ = file_name;
-  if_obj_.open(file_name.c_str(), vcl_ios::in | vcl_ios::binary);
+  if_obj_.open(file_name.c_str(), std::ios::in | std::ios::binary);
   if (!if_obj_.good())
     return false;
   current_id_ = 0;
@@ -149,14 +151,14 @@ bool boxm2_volm_wr3db_index::finalize()
 
 //: just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known.
 //  caller is responsible to keep the ordering consistent with the hypotheses ordering
-bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<uchar>& values)
+bool boxm2_volm_wr3db_index::add_to_index(std::vector<uchar>& values)
 {
   if (m_ == READ) {
-    vcl_cout << "index object is in READ mode! cannot add to index!\n";
+    std::cout << "index object is in READ mode! cannot add to index!\n";
     return false;
   }
   if (values.size() != layer_size_) {
-    vcl_cout << "In boxm2_volm_wr3db_index::add_to_index() -- size of value array is not consistent with layer size of this index object!\n";
+    std::cout << "In boxm2_volm_wr3db_index::add_to_index() -- size of value array is not consistent with layer size of this index object!\n";
     return false;
   }
   if (current_id_ == buffer_size_) {  // write the current cache
@@ -177,7 +179,7 @@ bool boxm2_volm_wr3db_index::add_to_index(vcl_vector<uchar>& values)
 bool boxm2_volm_wr3db_index::add_to_index(uchar* values)
 {
   if (m_ == READ) {
-    vcl_cout << "index object is in READ mode! cannot add to index!\n";
+    std::cout << "index object is in READ mode! cannot add to index!\n";
     return false;
   }
   if (current_id_ == buffer_size_) {  // write the current cache
@@ -211,10 +213,10 @@ unsigned int boxm2_volm_wr3db_index::read_to_buffer(uchar* buf)
 }
 
 //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc, values array is resized to layer_size
-bool boxm2_volm_wr3db_index::get_next(vcl_vector<uchar>& values)
+bool boxm2_volm_wr3db_index::get_next(std::vector<uchar>& values)
 {
   if (m_ == WRITE) {
-    vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
+    std::cout << "index object is in WRITE mode! cannot read from index!\n";
     return false;
   }
 
@@ -236,7 +238,7 @@ bool boxm2_volm_wr3db_index::get_next(vcl_vector<uchar>& values)
 bool boxm2_volm_wr3db_index::get_next(uchar* values, unsigned size)
 {
   if (m_ == WRITE) {
-    vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
+    std::cout << "index object is in WRITE mode! cannot read from index!\n";
     return false;
   }
 
@@ -251,25 +253,25 @@ bool boxm2_volm_wr3db_index::get_next(uchar* values, unsigned size)
   //unsigned char val = (unsigned char)0;
   //for (unsigned i = layer_size_; i < size; i++)
   //  values[i] = val;
-  vcl_fill(values+layer_size_, values+size, (unsigned char)0);
+  std::fill(values+layer_size_, values+size, (unsigned char)0);
   current_global_id_++;
   current_id_++;
   return true;
 }
 
 //: inflate the index for ith location and return a vector of char values where last bit is visibility and second to last is prob (occupied or not)
-bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(vcl_vector<uchar>& values,
+bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(std::vector<uchar>& values,
                                                         volm_spherical_container_sptr cont,
-                                                        vcl_vector<char>& vis_prob)
+                                                        std::vector<char>& vis_prob)
 {
   // get the voxel on the indexed layer for a given voxel
-  vcl_vector<volm_voxel>& voxels = cont->get_voxels();
+  std::vector<volm_voxel>& voxels = cont->get_voxels();
 
   unsigned int offset, end_offset; double depth;
   cont->first_res(cont->min_voxel_res()*2, offset, end_offset, depth);
 
-  vcl_map<double, unsigned int>& depth_offset_map = cont->get_depth_offset_map();
-  vcl_map<double, unsigned int>::iterator iter = depth_offset_map.begin();
+  std::map<double, unsigned int>& depth_offset_map = cont->get_depth_offset_map();
+  std::map<double, unsigned int>::iterator iter = depth_offset_map.begin();
   vgl_point_3d<double> origin(0,0,0);
   unsigned char current_depth_interval = 0; // to count the depth intervals
 
@@ -311,7 +313,7 @@ bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(vcl_vector<uchar>& value
           vgl_vector_3d<double> dif = dir1-dir2;
           double dist = dif.length();
           normalize(dir1);
-          double theta = vcl_acos(dot_product(dir1, dir2n));
+          double theta = std::acos(dot_product(dir1, dir2n));
           if (theta < theta_closest && dist < dist_closest) {
             closest = jj;
             theta_closest = theta;
@@ -335,13 +337,13 @@ bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(vcl_vector<uchar>& value
 }
 
 #if 0
-bool boxm2_volm_wr3db_index::write_index(vcl_string out_file)
+bool boxm2_volm_wr3db_index::write_index(std::string out_file)
 {
   vsl_b_ofstream os(out_file.c_str());
   if (!os)
     return false;
   if (!index_.size()) {
-    vcl_cerr << "In boxm2_volm_wr3db_index::write_index() -- index size is zero, cannot write!\n";
+    std::cerr << "In boxm2_volm_wr3db_index::write_index() -- index size is zero, cannot write!\n";
     return false;
   }
   vsl_b_write(os, index_.size());
@@ -355,7 +357,7 @@ bool boxm2_volm_wr3db_index::write_index(vcl_string out_file)
   return true;
 }
 
-bool boxm2_volm_wr3db_index::read_index(vcl_string in_file)
+bool boxm2_volm_wr3db_index::read_index(std::string in_file)
 {
   vsl_b_ifstream ifs(in_file.c_str());
   if (!ifs)

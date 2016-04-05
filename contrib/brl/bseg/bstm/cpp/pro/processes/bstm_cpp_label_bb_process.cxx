@@ -1,4 +1,6 @@
 // This is brl/bseg/bstm/cpp/pro/processes/bstm_cpp_label_bb_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Ali Osman Ulusoy
 // \date Jan 28, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <bstm/bstm_scene.h>
@@ -33,7 +35,7 @@ bool bstm_cpp_label_bb_process_cons(bprb_func_process& pro)
   using namespace bstm_cpp_label_bb_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
@@ -49,7 +51,7 @@ bool bstm_cpp_label_bb_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   return good;
@@ -60,7 +62,7 @@ bool bstm_cpp_label_bb_process(bprb_func_process& pro)
   using namespace bstm_cpp_label_bb_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -83,8 +85,8 @@ bool bstm_cpp_label_bb_process(bprb_func_process& pro)
   vgl_box_3d<double> box(center,len_x,len_y,len_z, vgl_box_3d<double>::centre);
 
   //iterate over each block/metadata to check if bbox intersects the input bbox
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
   for(; bstm_iter != blocks.end() ; bstm_iter++)
   {
     bstm_block_id bstm_id = bstm_iter->first;
@@ -94,7 +96,7 @@ bool bstm_cpp_label_bb_process(bprb_func_process& pro)
       double local_time;
       if(bstm_metadata.contains_t (time, local_time) ) //if the block box contains the given time
       {
-        vcl_cout << "Found intersecting bbox at block " << bstm_id << "..." << vcl_endl;
+        std::cout << "Found intersecting bbox at block " << bstm_id << "..." << std::endl;
 
         bstm_block* blk = cache->get_block(bstm_metadata.id_);
         bstm_time_block* blk_t = cache->get_time_block(bstm_metadata.id_);

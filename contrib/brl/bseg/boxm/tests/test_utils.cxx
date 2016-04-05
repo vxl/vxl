@@ -11,7 +11,7 @@
 void init_tree(boct_tree<short,float> *tree, unsigned i)
 {
   tree-> split(); //now we have 8 cells
-  vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
+  std::vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
   leaves[i]->set_data(0.8f);
   leaves[i]->split();
 }
@@ -27,17 +27,17 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     vgl_vector_3d<unsigned> world_dim(world_dimx,world_dimy,world_dimz); //number of blocks in a scene
 
   boxm_scene<boct_tree<short, float> > *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim);
-  vcl_string scene_path("./");
+  std::string scene_path("./");
   scene->set_paths(scene_path, "test_scene");
  #ifdef DEBUG
-  vcl_cerr << "Leaks Created - scene constructor: " << boct_tree_cell<short,float>::nleaks() << '\n';
+  std::cerr << "Leaks Created - scene constructor: " << boct_tree_cell<short,float>::nleaks() << '\n';
 #endif
   unsigned cell_index = 7;
   boxm_block_iterator<boct_tree<short, float> > iter=scene->iterator();
   iter.begin();
   while (!iter.end())
   {
-    //vcl_cout << "Loading block " << iter.index() << vcl_endl;
+    //std::cout << "Loading block " << iter.index() << std::endl;
     scene->load_block(iter.index());
     boxm_block<boct_tree<short, float> > *block = scene->get_active_block();
     // Construct an empty tree with 3 maximum levels 1 levele initialized to 0.0
@@ -54,7 +54,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   //scene->unload_active_blocks();
 
 #ifdef DEBUG_LEAKS
-  vcl_cerr << "Leaks Created by create_scene() : " << boct_tree_cell<short,float>::nleaks() << '\n';
+  std::cerr << "Leaks Created by create_scene() : " << boct_tree_cell<short,float>::nleaks() << '\n';
 #endif
 
   return scene;

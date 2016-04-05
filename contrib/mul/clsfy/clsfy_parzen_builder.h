@@ -11,10 +11,12 @@
 // \author Ian Scott
 // \date 2001-10-07
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_builder_base.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 
@@ -44,13 +46,13 @@ class clsfy_parzen_builder : public clsfy_builder_base
   virtual double build(clsfy_classifier_base& model,
                        mbl_data_wrapper<vnl_vector<double> >& inputs,
                        unsigned nClasses,
-                       const vcl_vector<unsigned> &outputs) const;
+                       const std::vector<unsigned> &outputs) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: IO Version number
   short version_no() const;
@@ -59,7 +61,7 @@ class clsfy_parzen_builder : public clsfy_builder_base
   virtual clsfy_builder_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -88,7 +90,7 @@ class clsfy_parzen_builder : public clsfy_builder_base
   void set_power(double p);
 
   //: Initialise the parameters from a text stream.
-  void config(vcl_istream &as);
+  void config(std::istream &as);
 };
 
 

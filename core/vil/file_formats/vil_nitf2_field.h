@@ -5,10 +5,11 @@
 #ifndef VIL_NITF2_FIELD_H
 #define VIL_NITF2_FIELD_H
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-// not used? #include <vcl_sstream.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+// not used? #include <sstream>
+#include <vcl_compiler.h>
 
 class vil_nitf2_date_time;
 class vil_nitf2_location;
@@ -33,13 +34,13 @@ class vil_nitf2_field
 {
  public:
   // Return my identifier
-  vcl_string tag() const;
+  std::string tag() const;
 
   // Return my descriptive name
-  vcl_string pretty_name() const;
+  std::string pretty_name() const;
 
   // Return my description
-  vcl_string description() const;
+  std::string description() const;
 
   // Return number of dimensions: 0 for scalar fields, positive for array fields
   virtual int num_dimensions() const = 0;
@@ -52,7 +53,7 @@ class vil_nitf2_field
   virtual ~vil_nitf2_field() {}
 
   // Output to stream (required overload as a reminder to implement operator <<)
-  virtual vcl_ostream& output(vcl_ostream& os) const = 0;
+  virtual std::ostream& output(std::ostream& os) const = 0;
 
   // Return my element data type
   vil_nitf2::enum_field_type type() const;
@@ -61,8 +62,8 @@ class vil_nitf2_field
   // of child nodes in the true
   class field_tree {
    public:
-    vcl_vector< vcl_string > columns;
-    vcl_vector< field_tree* > children;
+    std::vector< std::string > columns;
+    std::vector< field_tree* > children;
     ~field_tree();
   };
 
@@ -78,6 +79,6 @@ class vil_nitf2_field
 };
 
 // Output operator
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_field& field);
+std::ostream& operator << (std::ostream& os, const vil_nitf2_field& field);
 
 #endif // VIL_NITF2_FIELD_H

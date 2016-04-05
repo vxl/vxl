@@ -16,8 +16,10 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <iostream>
+#include <map>
+#include <utility>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 
 #include "bmsh3d_vertex.h"
@@ -26,10 +28,10 @@ class bmsh3d_pt_set
 {
  protected:
   //: The modified-halfedge mesh vertex data structure.
-  vcl_map<int, bmsh3d_vertex*> vertexmap_;
+  std::map<int, bmsh3d_vertex*> vertexmap_;
 
   //: traversal position of next vertex
-  vcl_map<int, bmsh3d_vertex* >::iterator vertex_traversal_pos_;
+  std::map<int, bmsh3d_vertex* >::iterator vertex_traversal_pos_;
 
   int vertex_id_counter_;
 
@@ -53,7 +55,7 @@ class bmsh3d_pt_set
   virtual void clear () {
     vertex_id_counter_ = 0;
     if (b_free_objects_in_destructor_) { //Skip already released objects.
-      vcl_map<int, bmsh3d_vertex*>::iterator it = vertexmap_.begin();
+      std::map<int, bmsh3d_vertex*>::iterator it = vertexmap_.begin();
       for (; it != vertexmap_.end(); it++)
         _del_vertex ((*it).second);
       vertexmap_.clear();
@@ -70,11 +72,11 @@ class bmsh3d_pt_set
     return this->vertexmap_.size();
   }
 
-  vcl_map<int, bmsh3d_vertex*>& vertexmap() {
+  std::map<int, bmsh3d_vertex*>& vertexmap() {
     return vertexmap_;
   }
   bmsh3d_vertex* vertexmap (const int i) {
-    vcl_map<int, bmsh3d_vertex*>::iterator it = vertexmap_.find (i);
+    std::map<int, bmsh3d_vertex*>::iterator it = vertexmap_.find (i);
     if (it == vertexmap_.end())
       return NULL;
     return (*it).second;
@@ -94,7 +96,7 @@ class bmsh3d_pt_set
   }
 
   bool contains_V (const int vid) {
-    vcl_map<int, bmsh3d_vertex*>::iterator it = vertexmap_.find (vid);
+    std::map<int, bmsh3d_vertex*>::iterator it = vertexmap_.find (vid);
     return it != vertexmap_.end();
   }
 
@@ -114,7 +116,7 @@ class bmsh3d_pt_set
   }
 
   void _add_vertex (bmsh3d_vertex* V) {
-    vertexmap_.insert (vcl_pair<int, bmsh3d_vertex*>(V->id(), V));
+    vertexmap_.insert (std::pair<int, bmsh3d_vertex*>(V->id(), V));
   }
 
   void reset_vertices_ids ();

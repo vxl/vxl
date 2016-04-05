@@ -10,9 +10,11 @@
 //
 // A class to hold a homogeneous 4-vector for a 3D plane.
 
+#include <iostream>
+#include <iosfwd>
 #include <mvl/Homg3D.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class HomgPoint3D;
 
@@ -34,6 +36,6 @@ class HomgPlane3D : public Homg3D
   vnl_vector<double> n() const { return homg_vector_.extract(3).normalize(); }
 };
 
-vcl_ostream& operator<<(vcl_ostream&, const HomgPlane3D&);
+std::ostream& operator<<(std::ostream&, const HomgPlane3D&);
 
 #endif // HomgPlane3D_h_

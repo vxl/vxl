@@ -16,7 +16,7 @@ bool brad_classify_image_pixel_process_cons(bprb_func_process& pro)
 {
 using namespace bbas_core_brad_classify_image_pixel;
   bool ok=false;
-  vcl_vector<vcl_string> input_types(5);
+  std::vector<std::string> input_types(5);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bsta_joint_histogram_3d_base_sptr"; //no atmospherics
   input_types[2]="bsta_joint_histogram_3d_base_sptr"; //with atmospherics
@@ -26,7 +26,7 @@ using namespace bbas_core_brad_classify_image_pixel;
   if (!ok) return ok;
 
   //outputs
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0]= "vil_image_view_base_sptr";
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -39,12 +39,12 @@ bool brad_classify_image_pixel_process(bprb_func_process& pro)
   using namespace bbas_core_brad_classify_image_pixel;
   // Sanity check
   if (pro.n_inputs()!= 5) {
-    vcl_cout << "brad_classify_image_pixel_process: The input number should be 5" << vcl_endl;
+    std::cout << "brad_classify_image_pixel_process: The input number should be 5" << std::endl;
     return false;
   }
   brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
   if (!es_ptr) {
-    vcl_cout << "in classify_image_pixel_process, null eigenspace pointer\n";
+    std::cout << "in classify_image_pixel_process, null eigenspace pointer\n";
     return false;
   }
   bsta_joint_histogram_3d_base_sptr hno_ptr =
@@ -53,7 +53,7 @@ bool brad_classify_image_pixel_process(bprb_func_process& pro)
   bsta_joint_histogram_3d<float>* hist_no = dynamic_cast<bsta_joint_histogram_3d<float>*>(hno_ptr.ptr());
 
   if (!hist_no) {
-    vcl_cout << "in classify_image_pixel_process, hist can't be cast\n";
+    std::cout << "in classify_image_pixel_process, hist can't be cast\n";
     return false;
   }
 
@@ -63,12 +63,12 @@ bool brad_classify_image_pixel_process(bprb_func_process& pro)
   bsta_joint_histogram_3d<float>* hist_atmos = dynamic_cast<bsta_joint_histogram_3d<float>*>(h_atmos_ptr.ptr());
 
   if (!hist_atmos) {
-    vcl_cout << "in classify_image_pixel_process, hist can't be cast\n";
+    std::cout << "in classify_image_pixel_process, hist can't be cast\n";
     return false;
   }
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(3);
   if (!image) {
-    vcl_cout << "in classify_image_pixel_process, input image view is null\n";
+    std::cout << "in classify_image_pixel_process, input image view is null\n";
     return false;
   }
   vil_image_view<float> fimage = *vil_convert_cast(float(), image);

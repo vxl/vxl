@@ -6,12 +6,13 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <vector>
 #include "vil1_skip_image_impl.h"
 
 #include <vcl_climits.h> // CHAR_BIT
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 vil1_skip_image_impl::vil1_skip_image_impl(vil1_image const &underlying, unsigned sx, unsigned sy)
   : base(underlying)
@@ -46,7 +47,7 @@ bool vil1_skip_image_impl::get_property(char const *, void *) const
 bool vil1_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h) const
 {
   if (base.bits_per_component() % CHAR_BIT) {
-    vcl_cerr << __FILE__ " : urgh!\n";
+    std::cerr << __FILE__ " : urgh!\n";
     return false; // FIXME
   }
 
@@ -54,7 +55,7 @@ bool vil1_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h)
   unsigned cell_size = base.planes() * base.components() * base.bits_per_component();
   cell_size /= CHAR_BIT;
   unsigned buffer_size = (skipx*w * cell_size);
-  vcl_vector<unsigned char> buffer(buffer_size);
+  std::vector<unsigned char> buffer(buffer_size);
 
   // destination, as a unsigned char*
   unsigned char *dst = static_cast<unsigned char*>(buf);

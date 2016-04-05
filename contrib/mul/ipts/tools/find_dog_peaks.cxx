@@ -12,15 +12,15 @@
 
 void print_usage()
 {
-  vcl_cout<<"find_dog_peaks -i input_image -o out_image -d dog_image"<<vcl_endl;
+  std::cout<<"find_dog_peaks -i input_image -o out_image -d dog_image"<<std::endl;
 }
 
 int main( int argc, char* argv[] )
 {
-  vul_arg<vcl_string> in_path("-i","Input image path");
-  vul_arg<vcl_string> out_path("-o","Output image file (peaks)");
-  vul_arg<vcl_string> dog_path("-d","Output image file (DOG)","dog.pnm");
-  vul_arg<vcl_string> smooth_path("-s","Output image file (Smooth )","smooth.pnm");
+  vul_arg<std::string> in_path("-i","Input image path");
+  vul_arg<std::string> out_path("-o","Output image file (peaks)");
+  vul_arg<std::string> dog_path("-d","Output image file (DOG)","dog.pnm");
+  vul_arg<std::string> smooth_path("-s","Output image file (Smooth )","smooth.pnm");
   vul_arg<float> threshold("-t","Threshold on DoG value",2.0f);
   vul_arg_parse(argc, argv);
 
@@ -33,7 +33,7 @@ int main( int argc, char* argv[] )
   vil_image_view<vxl_byte> image = vil_load(in_path().c_str());
   if (image.ni()==0)
   {
-    vcl_cout<<"Failed to load image."<<vcl_endl;
+    std::cout<<"Failed to load image."<<std::endl;
     return 1;
   }
 
@@ -47,9 +47,9 @@ int main( int argc, char* argv[] )
   vimt_dog_pyramid_builder_2d<float> pyr_builder;
   pyr_builder.build_dog(dog_pyramid,smooth_pyramid,image_f,true);
 
-  vcl_vector<vgl_point_3d<double> > peak_pts;
+  std::vector<vgl_point_3d<double> > peak_pts;
   ipts_scale_space_peaks_2d(peak_pts,dog_pyramid,threshold());
-  vcl_cout<<"Found "<<peak_pts.size()<<" peaks."<<vcl_endl;
+  std::cout<<"Found "<<peak_pts.size()<<" peaks."<<std::endl;
 
   for (unsigned i=0;i<peak_pts.size();++i)
   {
@@ -63,17 +63,17 @@ int main( int argc, char* argv[] )
   vimt_image_pyramid_flatten(flat_smooth,smooth_pyramid);
 
   vil_save(image,out_path().c_str());
-  vcl_cout<<"Image + pts saved to "<<out_path()<<vcl_endl;
+  std::cout<<"Image + pts saved to "<<out_path()<<std::endl;
 
   vil_image_view<vxl_byte> out_dog;
   vil_convert_stretch_range(flat_dog.image(),out_dog);
   vil_save(out_dog,dog_path().c_str());
-  vcl_cout<<"DoG pyramid saved to "<<dog_path()<<vcl_endl;
+  std::cout<<"DoG pyramid saved to "<<dog_path()<<std::endl;
 
   vil_image_view<vxl_byte> out_smooth;
   vil_convert_stretch_range(flat_smooth.image(),out_smooth);
   vil_save(out_smooth,smooth_path().c_str());
-  vcl_cout<<"Smooth pyramid saved to "<<smooth_path()<<vcl_endl;
+  std::cout<<"Smooth pyramid saved to "<<smooth_path()<<std::endl;
 
   return 0;
 }

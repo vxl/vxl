@@ -64,7 +64,7 @@ bool register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
                                   vgl_plane_3d<double> const& world_plane,
                                   vsol_box_2d_sptr const& bounds,
                                   double world_sample_distance,
-                                  vcl_string const& homg_out_dir,
+                                  std::string const& homg_out_dir,
                                   unsigned skip_frames = 0
                                   );
  private:

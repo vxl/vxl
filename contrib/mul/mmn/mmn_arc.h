@@ -6,9 +6,10 @@
 // \author Tim Cootes
 
 
+#include <iostream>
+#include <vector>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Representation of topological arc joining two vertices
 class mmn_arc
@@ -35,13 +36,13 @@ inline bool operator==(const mmn_arc& t1, const mmn_arc& t2)
 inline bool operator!=(const mmn_arc& t1, const mmn_arc& t2)
 { return !(t1==t2); }
 
-inline vcl_ostream& operator<<(vcl_ostream& os, const mmn_arc& t)
+inline std::ostream& operator<<(std::ostream& os, const mmn_arc& t)
 {
   return os<<'{'<<t.v1<<','<<t.v2<<'}';
 }
 
-inline vcl_ostream& operator<<(vcl_ostream& os,
-                               const vcl_vector<mmn_arc>& arcs)
+inline std::ostream& operator<<(std::ostream& os,
+                               const std::vector<mmn_arc>& arcs)
 {
   for (unsigned i=0;i<arcs.size();++i) os<<arcs[i];
   return os;
@@ -59,7 +60,7 @@ inline void vsl_b_read(vsl_b_istream& bfs, mmn_arc& t)
   vsl_b_read(bfs,t.v2);
 }
 
-inline void vsl_b_write(vsl_b_ostream& bfs, const vcl_vector<mmn_arc>& a)
+inline void vsl_b_write(vsl_b_ostream& bfs, const std::vector<mmn_arc>& a)
 {
   short version_no = 1;
   vsl_b_write(bfs,version_no);
@@ -67,7 +68,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs, const vcl_vector<mmn_arc>& a)
   for (unsigned i=0;i<a.size();++i) vsl_b_write(bfs,a[i]);
 }
 
-inline void vsl_b_read(vsl_b_istream& bfs, vcl_vector<mmn_arc>& a)
+inline void vsl_b_read(vsl_b_istream& bfs, std::vector<mmn_arc>& a)
 {
   if (!bfs) return;
   short version;
@@ -81,9 +82,9 @@ inline void vsl_b_read(vsl_b_istream& bfs, vcl_vector<mmn_arc>& a)
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,a[i]);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,vector<arc>)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(bfs,vector<arc>)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

@@ -15,7 +15,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_map.h>
+#include <iostream>
+#include <map>
+#include <vcl_compiler.h>
 
 #include "bmsh3d_face.h"
 #include "bmsh3d_halfedge.h"
@@ -24,7 +26,7 @@ class bmsh3d_edge;
 class bmsh3d_face_mc : public bmsh3d_face
 {
  protected:
-  vcl_map<int, bmsh3d_halfedge*> set_he_;
+  std::map<int, bmsh3d_halfedge*> set_he_;
   int id_counter_;
 
  public:
@@ -51,18 +53,18 @@ class bmsh3d_face_mc : public bmsh3d_face
 
   int size() const {return set_he_.size(); }
 
-  vcl_map<int, bmsh3d_halfedge*> get_mc_halfedges() { return set_he_; }
+  std::map<int, bmsh3d_halfedge*> get_mc_halfedges() { return set_he_; }
 
   void add_mc_halfedge(bmsh3d_halfedge* he);
 
   void remove_mc_halfedge(bmsh3d_halfedge* /*he*/) {}
 
   void get_mc_incident_halfedges (bmsh3d_halfedge* he,
-                                  vcl_vector<bmsh3d_halfedge*>& incident_edges) const;
+                                  std::vector<bmsh3d_halfedge*>& incident_edges) const;
 
   //: given halfedge head, returns the set of incident edges of the inner face
   void get_mc_incident_edges (bmsh3d_halfedge* he,
-                              vcl_vector<bmsh3d_edge*>& incident_edges) const;
+                              std::vector<bmsh3d_edge*>& incident_edges) const;
 
   void reverse_mc_chain_of_halfedges (bmsh3d_halfedge* he);
 

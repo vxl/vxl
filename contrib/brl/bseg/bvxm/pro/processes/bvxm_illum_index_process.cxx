@@ -1,4 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_process.cxx
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "bvxm_illum_index_process.h"
 //:
 // \file
@@ -7,9 +10,7 @@
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: set input and output types
 bool bvxm_illum_index_process_cons(bprb_func_process& pro)
@@ -23,7 +24,7 @@ bool bvxm_illum_index_process_cons(bprb_func_process& pro)
   // 1: NITF image path
   // 2: Number of latitude regions
   // 3: Number of "longitudinal" regions
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
@@ -33,7 +34,7 @@ bool bvxm_illum_index_process_cons(bprb_func_process& pro)
 
   //output
    //0: bin index
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]= "unsigned";
   return pro.set_output_types(output_types_);
 }
@@ -44,14 +45,14 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
 
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
   //get the inputs
   unsigned i = 0;
-  vcl_string map_type = pro.get_input<vcl_string>(i++);
-  vcl_string nitf_image_path = pro.get_input<vcl_string>(i++);
+  std::string map_type = pro.get_input<std::string>(i++);
+  std::string nitf_image_path = pro.get_input<std::string>(i++);
   unsigned num_lat = pro.get_input<unsigned>(i++);
   unsigned num_long = pro.get_input<unsigned>(i++);
 
@@ -61,16 +62,16 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
       vil_load_image_resource(nitf_image_path.c_str());
   if (!image)
   {
-    vcl_cout << "NITF image load failed in bvxm_illum_index_process\n";
+    std::cout << "NITF image load failed in bvxm_illum_index_process\n";
     return 0;
   }
 
-  vcl_string format = image->file_format();
-  vcl_string prefix = format.substr(0,4);
+  std::string format = image->file_format();
+  std::string prefix = format.substr(0,4);
 
   if (prefix != "nitf")
   {
-    vcl_cout << "source image is not NITF in bvxm_illum_index_process\n";
+    std::cout << "source image is not NITF in bvxm_illum_index_process\n";
     return 0;
   }
 
@@ -78,7 +79,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
   vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
 
     //get NITF information
-  vcl_vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
+  std::vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
   vil_nitf2_image_subheader* hdr = headers[0];
 
   double sun_el;
@@ -87,7 +88,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
   bool success = hdr->get_sun_params(sun_el, sun_az);
 
   if (!success) {
-    vcl_cerr << "error bvxm_illum_index_process: failed to obtain illumination angles from nitf image\n";
+    std::cerr << "error bvxm_illum_index_process: failed to obtain illumination angles from nitf image\n";
     return false;
   }
 
@@ -101,7 +102,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
 
 
 unsigned
-bvxm_illum_index_process_globals::bin_index(vcl_string map_type,
+bvxm_illum_index_process_globals::bin_index(std::string map_type,
                                             double sun_el, double sun_az,
                                             unsigned num_lat, unsigned num_long)
 {
@@ -130,7 +131,7 @@ bvxm_illum_index_process_globals::bin_index(vcl_string map_type,
       lat_area = 1/double(num_lat);
 
     //match sun elevation angle to latitudinal region
-    double sin_el = vcl_sin(sun_el);
+    double sin_el = std::sin(sun_el);
     for (unsigned i = 1; i <= num_lat; i++)
     {
       //general case

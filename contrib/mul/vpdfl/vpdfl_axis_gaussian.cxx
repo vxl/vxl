@@ -8,11 +8,13 @@
 // \date 12-Apr-2001
 // \brief Multi-variate Gaussian PDF, with a diagonal covariance matrix
 
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <string>
 #include "vpdfl_axis_gaussian.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
@@ -44,16 +46,16 @@ void vpdfl_axis_gaussian::calcLogK()
   int n = n_dims();
   double log_v_sum = 0.0;
   for (int i=0;i<n;i++)
-    log_v_sum+=vcl_log(v_data[i]);
+    log_v_sum+=std::log(v_data[i]);
 
-  log_k_ = -0.5 * (n*vcl_log(vnl_math::twopi) + log_v_sum);
+  log_k_ = -0.5 * (n*std::log(vnl_math::twopi) + log_v_sum);
 }
 
 void vpdfl_axis_gaussian::calcSD()
 {
   sd_ = variance();
   int n = sd_.size();
-  for (int i=0;i<n;i++) sd_[i] = vcl_sqrt(sd_[i]);
+  for (int i=0;i<n;i++) sd_[i] = std::sqrt(sd_[i]);
 }
 
 
@@ -76,9 +78,9 @@ double vpdfl_axis_gaussian::dx_sigma_dx(const vnl_vector<double> &x) const
 #ifndef NDEBUG
   if (n!=n_dims())
   {
-    vcl_cerr<<"ERROR: vpdfl_axis_gaussian::log_p: Target vector has "
+    std::cerr<<"ERROR: vpdfl_axis_gaussian::log_p: Target vector has "
             <<n<<" dimensions, not the required "<<n_dims()<<'\n';
-    vcl_abort();
+    std::abort();
   }
 #endif
 
@@ -124,7 +126,7 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
     g_data[i]= -dx/v_data[i];
   }
 
-  p = vcl_exp(log_k() - 0.5*sum);
+  p = std::exp(log_k() - 0.5*sum);
 
   g*=p;
 }
@@ -183,7 +185,7 @@ void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x,
 
   if (sd_limit_sqr >= x_dist_sqr) return;
 
-  const double corrective_factor = vcl_sqrt(sd_limit_sqr / x_dist_sqr);
+  const double corrective_factor = std::sqrt(sd_limit_sqr / x_dist_sqr);
 
   for (unsigned i=0;i<n;++i)
     x(i) = ((x(i)-mean()(i)) * corrective_factor) + mean()(i);
@@ -191,15 +193,15 @@ void vpdfl_axis_gaussian::nearest_plausible(vnl_vector<double>& x,
 
 //=======================================================================
 
-vcl_string vpdfl_axis_gaussian::is_a() const
+std::string vpdfl_axis_gaussian::is_a() const
 {
-  static const vcl_string s_ = "vpdfl_axis_gaussian";
+  static const std::string s_ = "vpdfl_axis_gaussian";
   return s_;
 }
 
 //=======================================================================
 
-bool vpdfl_axis_gaussian::is_class(vcl_string const& s) const
+bool vpdfl_axis_gaussian::is_class(std::string const& s) const
 {
   return s==vpdfl_axis_gaussian::is_a() || vpdfl_pdf_base::is_class(s);
 }
@@ -220,7 +222,7 @@ vpdfl_pdf_base* vpdfl_axis_gaussian::clone() const
 
 //=======================================================================
 
-void vpdfl_axis_gaussian::print_summary(vcl_ostream& os) const
+void vpdfl_axis_gaussian::print_summary(std::ostream& os) const
 {
   vpdfl_pdf_base::print_summary(os);
 }
@@ -247,9 +249,9 @@ void vpdfl_axis_gaussian::b_read(vsl_b_istream& bfs)
       vpdfl_pdf_base::b_read(bfs);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 

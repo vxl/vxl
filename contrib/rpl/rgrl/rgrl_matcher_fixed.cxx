@@ -44,11 +44,11 @@ compute_matches( rgrl_feature_set const&       /*from_features*/,
   for ( FIter fi = match_set_->from_begin(); fi != match_set_->from_end(); ++fi ) {
     rgrl_feature_sptr from_feature = fi.from_feature();
     if ( current_view.region().inside(from_feature->location()) ) {
-      vcl_vector<rgrl_feature_sptr> matching_to;
+      std::vector<rgrl_feature_sptr> matching_to;
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         matching_to.push_back( ti.to_feature());
       }
-      sub_match_set->add_feature_and_matches( from_feature, 0, matching_to);
+      sub_match_set->add_feature_and_matches( from_feature, VXL_NULLPTR, matching_to);
     }
   }
   sub_match_set->remap_from_features( current_xform );

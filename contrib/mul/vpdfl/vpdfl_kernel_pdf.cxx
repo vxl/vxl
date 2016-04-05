@@ -7,8 +7,10 @@
 // \brief Multi-variate kernel PDF
 // \author Tim Cootes
 
+#include <iostream>
+#include <string>
 #include "vpdfl_kernel_pdf.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
@@ -91,9 +93,9 @@ void vpdfl_kernel_pdf::set_centres(const vnl_vector<double>* x, int n,
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_kernel_pdf::is_a() const
+std::string vpdfl_kernel_pdf::is_a() const
 {
-  static const vcl_string s_ = "vpdfl_kernel_pdf";
+  static const std::string s_ = "vpdfl_kernel_pdf";
   return s_;
 }
 
@@ -101,7 +103,7 @@ vcl_string vpdfl_kernel_pdf::is_a() const
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_kernel_pdf::is_class(vcl_string const& s) const
+bool vpdfl_kernel_pdf::is_class(std::string const& s) const
 {
   return s==vpdfl_kernel_pdf::is_a() || vpdfl_pdf_base::is_class(s);
 }
@@ -119,7 +121,7 @@ short vpdfl_kernel_pdf::version_no() const
 // Method: print
 //=======================================================================
 
-void vpdfl_kernel_pdf::print_summary(vcl_ostream& os) const
+void vpdfl_kernel_pdf::print_summary(std::ostream& os) const
 {
   vpdfl_pdf_base::print_summary(os);
 }
@@ -154,9 +156,9 @@ void vpdfl_kernel_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,width_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_kernel_pdf &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_kernel_pdf &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

@@ -11,7 +11,9 @@
 //   221198 - Peter Vanroose - Added CrossRatio()
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgPoint3D.h>
@@ -24,19 +26,19 @@ class HomgOperator3D
   static double distance_squared (const HomgPoint3D& point1, const HomgPoint3D& point2);
   static HomgPoint3D intersect_line_and_plane (const HomgLine3D&, const HomgPlane3D&);
   static HomgPoint3D lines_to_point (const HomgLine3D& line1, const HomgLine3D& line2);
-  static HomgPoint3D lines_to_point (const vcl_vector<HomgLine3D>& line_list);
+  static HomgPoint3D lines_to_point (const std::vector<HomgLine3D>& line_list);
   static double perp_dist_squared (const HomgPoint3D& point, const HomgLine3D& line);
   static HomgLine3D perp_line_through_point (const HomgLine3D& line, const HomgPoint3D& point);
   static HomgPoint3D perp_projection (const HomgLine3D& line, const HomgPoint3D& point);
   static HomgLine3D planes_to_line (const HomgPlane3D& plane1, const HomgPlane3D& plane2);
-  static HomgLine3D planes_to_line (const vcl_vector<HomgPlane3D>& plane_list);
+  static HomgLine3D planes_to_line (const std::vector<HomgPlane3D>& plane_list);
   static HomgLine3D points_to_line (const HomgPoint3D& point1, const HomgPoint3D& point2);
-  static HomgLine3D points_to_line (const vcl_vector<HomgPoint3D>& point_list);
+  static HomgLine3D points_to_line (const std::vector<HomgPoint3D>& point_list);
 
   static HomgPlane3D points_to_plane (const HomgPoint3D& , const HomgPoint3D& , const HomgPoint3D& );
-  static HomgPlane3D points_to_plane (const vcl_vector<HomgPoint3D>& point_list);
+  static HomgPlane3D points_to_plane (const std::vector<HomgPoint3D>& point_list);
   static HomgPoint3D intersection_point (const HomgPlane3D& , const HomgPlane3D& , const HomgPlane3D& );
-  static HomgPoint3D intersection_point (const vcl_vector<HomgPlane3D>&);
+  static HomgPoint3D intersection_point (const std::vector<HomgPlane3D>&);
 
   static void sort_points(HomgPoint3D* p, int n);
 

@@ -7,15 +7,16 @@
 // See vgui_wx.h for details.
 //=========================================================================
 
+#include <cstdlib>
+#include <cstddef>
+#include <iostream>
 #include "vgui_wx.h"
 #include "vgui_wx_window.h"
 #include "vgui_wx_dialog_impl.h"
 #include <vgui/vgui_gl.h>
 
-#include <vcl_cstdlib.h> // for vcl_exit()
-#include <vcl_cstddef.h> // for vcl_size_t
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 
 #include <wx/app.h>
 #include <wx/log.h>
@@ -47,14 +48,14 @@ vgui_wx* vgui_wx::instance()
 }
 
 //: Returns the name of the GUI toolkit ("wx").
-vcl_string vgui_wx::name(void) const { return "wx"; }
+std::string vgui_wx::name(void) const { return "wx"; }
 
 //: Constructor - default.
 vgui_wx::vgui_wx(void)
   : adaptor_embedded_(true)
 {
 #ifdef DEBUG
-  vcl_cout << "vgui_wx::vgui_wx() - Constructor" << vcl_endl;
+  std::cout << "vgui_wx::vgui_wx() - Constructor" << std::endl;
 #endif
 }
 
@@ -62,7 +63,7 @@ vgui_wx::vgui_wx(void)
 vgui_wx::~vgui_wx(void)
 {
 #ifdef DEBUG
-  vcl_cout << "vgui_wx::~vgui_wx() - Destructor" << vcl_endl;
+  std::cout << "vgui_wx::~vgui_wx() - Destructor" << std::endl;
 #endif
 }
 
@@ -72,15 +73,15 @@ void vgui_wx::init(int& argc, char** argv)
   // ***** ensure this is only entered once...
 
 #ifdef DEBUG
-  vcl_cout << "vgui_wx::init()" << vcl_endl;
+  std::cout << "vgui_wx::init()" << std::endl;
 #endif
 
   if (wxTheApp)
   {
     // if we are here, then we aren't trying to use vgui in a wxWidgets App
-    vcl_cerr << "vgui_wx::init(): wxApp object already exists!\n";
+    std::cerr << "vgui_wx::init(): wxApp object already exists!\n";
     // ***** exit here... or can we recover from this?
-    vcl_exit(-1);
+    std::exit(-1);
   }
 
   // Set the app initializer so that we can create the vgui_wx_app.
@@ -99,7 +100,7 @@ void vgui_wx::init(int& argc, char** argv)
   g_Argc = argc;
   g_wxCharArgv = new wxChar*[argc+1];
   for ( int cnt = 0; cnt < argc; ++cnt ) {
-    vcl_size_t len = wxConvLocal.MB2WC( NULL, argv[cnt], 0 );
+    std::size_t len = wxConvLocal.MB2WC( NULL, argv[cnt], 0 );
     g_wxCharArgv[cnt] = new wxChar[len+1];
     wxConvLocal.MB2WC( g_wxCharArgv[cnt], argv[cnt], len+1 );
   }
@@ -112,18 +113,18 @@ void vgui_wx::init(int& argc, char** argv)
   // wxWidgets initialization
   if (!wxInitialize(argc, wxArgv))
   {
-    vcl_cerr << "vgui_wx::init(): wxInitialize failed!\n";
+    std::cerr << "vgui_wx::init(): wxInitialize failed!\n";
     // ***** exit here... or can we recover from this?
-    vcl_exit(-1);
+    std::exit(-1);
   }
 
   // wxApp initialization
   if (!wxTheApp->CallOnInit())
   {
-    vcl_cerr << "vgui_wx::init(): wxTheApp->OnInit failed!\n";
+    std::cerr << "vgui_wx::init(): wxTheApp->OnInit failed!\n";
     // ***** exit here... or can we recover from this?
     // ***** do we need to call wxUninitialize (or uninit) before exit?
-    vcl_exit(-1);
+    std::exit(-1);
   }
 
   // adaptor is being extended (i.e., vgui is controlling the event loop)
@@ -138,13 +139,13 @@ void vgui_wx::init(int& argc, char** argv)
 void vgui_wx::uninit(void)
 {
 #ifdef DEBUG
-  vcl_cout << "vgui_wx::uninit()" << vcl_endl;
+  std::cout << "vgui_wx::uninit()" << std::endl;
 #endif
 
   // not controlling the main loop from vgui_wx
   if (adaptor_embedded_)
   {
-    vcl_cerr << __FILE__ ":embedding adaptor; don't call uninit!\n";
+    std::cerr << __FILE__ ":embedding adaptor; don't call uninit!\n";
     return;
   }
 
@@ -184,13 +185,13 @@ void vgui_wx::uninit(void)
 void vgui_wx::run(void)
 {
 #ifdef DEBUG
-  vcl_cout << "vgui_wx::run()" << vcl_endl;
+  std::cout << "vgui_wx::run()" << std::endl;
 #endif
 
   // not controlling the main loop from vgui_wx
   if (adaptor_embedded_)
   {
-    vcl_cerr << __FILE__ ":embedding adaptor; don't call run!\n";
+    std::cerr << __FILE__ ":embedding adaptor; don't call run!\n";
     return;
   }
 
@@ -232,7 +233,7 @@ void vgui_wx::add_event(const vgui_event&)
 void vgui_wx::quit(void)
 {
 #ifdef DEBUG
-  vcl_cout << "vgui_wx::quit()" << vcl_endl;
+  std::cout << "vgui_wx::quit()" << std::endl;
 #endif
 
   // not controlling the main loop from vgui_wx
@@ -282,7 +283,7 @@ namespace
     vgui_wx_app()
     {
 #ifdef DEBUG
-      vcl_cout << "vgui_wx_app: Constructor" << vcl_endl;
+      std::cout << "vgui_wx_app: Constructor" << std::endl;
 #endif
     }
 
@@ -290,7 +291,7 @@ namespace
     virtual ~vgui_wx_app()
     {
 #ifdef DEBUG
-      vcl_cout << "vgui_wx_app: Destructor" << vcl_endl;
+      std::cout << "vgui_wx_app: Destructor" << std::endl;
 #endif
     }
 
@@ -298,7 +299,7 @@ namespace
     bool OnInit()
     {
 #ifdef DEBUG
-      vcl_cout << "vgui_wx_app: OnInit()" << vcl_endl;
+      std::cout << "vgui_wx_app: OnInit()" << std::endl;
 #endif
 
       // ***** wxApp's OnInit command parser usually gets in the way...
@@ -309,7 +310,7 @@ namespace
     virtual int OnExit()
     {
 #ifdef DEBUG
-      vcl_cout << "vgui_wx_app: OnExit()" << vcl_endl;
+      std::cout << "vgui_wx_app: OnExit()" << std::endl;
 #endif
 
       return wxApp::OnExit();
@@ -320,7 +321,7 @@ namespace
     virtual bool OnExceptionInMainLoop()
     {
 #ifdef DEBUG
-      vcl_cout << "vgui_wx_app: OnExceptionInMainLoop()" << vcl_endl;
+      std::cout << "vgui_wx_app: OnExceptionInMainLoop()" << std::endl;
 #endif
 
       return false;

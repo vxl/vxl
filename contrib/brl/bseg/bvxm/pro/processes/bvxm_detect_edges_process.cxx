@@ -29,14 +29,14 @@ bool bvxm_detect_edges_process_cons(bprb_func_process& pro)
   using namespace bvxm_detect_edges_process_globals;
   // process takes 1 input:
   //input[0]: input grayscale image
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   if (!pro.set_input_types(input_types_))
     return false;
 
   // process has 1 output:
   // output[0]: output edge image
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
 }
@@ -48,7 +48,7 @@ bool bvxm_detect_edges_process(bprb_func_process& pro)
 
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -58,7 +58,7 @@ bool bvxm_detect_edges_process(bprb_func_process& pro)
 
   //check input validity
   if (!input_image_sptr) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
 

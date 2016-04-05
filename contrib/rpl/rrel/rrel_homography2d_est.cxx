@@ -1,4 +1,6 @@
 // This is rpl/rrel/rrel_homography2d_est.cxx
+#include <iostream>
+#include <cmath>
 #include "rrel_homography2d_est.h"
 
 #include <vgl/vgl_homg_point_2d.h>
@@ -6,12 +8,11 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
-rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
-                                                const vcl_vector< vgl_homg_point_2d<double> > & to_pts,
+rrel_homography2d_est :: rrel_homography2d_est( const std::vector< vgl_homg_point_2d<double> > & from_pts,
+                                                const std::vector< vgl_homg_point_2d<double> > & to_pts,
                                                 unsigned int homog_dof )
   : rrel_estimation_problem( homog_dof /*dof*/, ( homog_dof / 2 ) /*points to instantiate*/ )
 {
@@ -37,8 +38,8 @@ rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vgl_homg_point
   min_num_pts_ = homog_dof_ / 2;
 }
 
-rrel_homography2d_est :: rrel_homography2d_est( const vcl_vector< vnl_vector<double> > & from_pts,
-                                                const vcl_vector< vnl_vector<double> > & to_pts,
+rrel_homography2d_est :: rrel_homography2d_est( const std::vector< vnl_vector<double> > & from_pts,
+                                                const std::vector< vnl_vector<double> > & to_pts,
                                                 unsigned int homog_dof )
   : rrel_estimation_problem( homog_dof /*dof*/, ( homog_dof / 2 ) /*points to instantiate*/ ),
     from_pts_( from_pts ), to_pts_( to_pts )
@@ -67,7 +68,7 @@ rrel_homography2d_est :: num_samples( ) const
 
 
 bool
-rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indices,
+rrel_homography2d_est :: fit_from_minimal_set( const std::vector<int>& point_indices,
                                                vnl_vector<double>& params ) const
 {
   vnl_matrix< double > A(9, 9, 0.0);
@@ -100,7 +101,7 @@ rrel_homography2d_est :: fit_from_minimal_set( const vcl_vector<int>& point_indi
 
 void
 rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
-                                            vcl_vector<double>& residuals ) const
+                                            std::vector<double>& residuals ) const
 {
   vnl_matrix< double > H(3,3);
   int r,c;
@@ -110,7 +111,7 @@ rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
 
   vnl_svd< double > svd_H( H );
   if ( svd_H.rank() < 3 )
-    vcl_cerr << "rrel_homography2d_est :: compute_residuals  rank(H) < 3!!";
+    std::cerr << "rrel_homography2d_est :: compute_residuals  rank(H) < 3!!";
   vnl_matrix< double > H_inv( svd_H.inverse() );
 
   if ( residuals.size() != from_pts_.size() )
@@ -133,7 +134,7 @@ rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
       del_y = trans_pt[ 1 ] / trans_pt[ 2 ] - to_pts_[ i ][ 1 ] / to_pts_[ i ][ 2 ];
       inv_del_x = inv_trans_pt[ 0 ] / inv_trans_pt[ 2 ] - from_pts_[ i ][ 0 ] / from_pts_[ i ][ 2 ];
       inv_del_y = inv_trans_pt[ 1 ] / inv_trans_pt[ 2 ] - from_pts_[ i ][ 1 ] / from_pts_[ i ][ 2 ];
-      residuals [ i ] = vcl_sqrt( vnl_math::sqr(del_x)     + vnl_math::sqr(del_y)
+      residuals [ i ] = std::sqrt( vnl_math::sqr(del_x)     + vnl_math::sqr(del_y)
                                 + vnl_math::sqr(inv_del_x) + vnl_math::sqr(inv_del_y) );
     }
   }
@@ -143,15 +144,15 @@ rrel_homography2d_est :: compute_residuals( const vnl_vector<double>& params,
 bool
 rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
                                                      vnl_matrix<double>& /* norm_covar */,
-                                                     const vcl_vector<double>* weights ) const
+                                                     const std::vector<double>* weights ) const
 {
-  const vcl_vector<double> * w;
+  const std::vector<double> * w;
   if ( weights )
     w = weights;
   else
-    w = new vcl_vector<double>( from_pts_.size(), 1 );
+    w = new std::vector<double>( from_pts_.size(), 1 );
 
-  vcl_vector< vnl_vector<double> > norm_from, norm_to;
+  std::vector< vnl_vector<double> > norm_from, norm_to;
   vnl_matrix< double > norm_matrix_from(3,3), norm_matrix_to(3,3);
 
   this -> normalize( from_pts_, *w, norm_from, norm_matrix_from );
@@ -218,9 +219,9 @@ rrel_homography2d_est :: params_to_homog(const vnl_vector<double>& p,
 }
 
 void
-rrel_homography2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
-                                    const vcl_vector< double >& wgts,
-                                    vcl_vector< vnl_vector<double> > & norm_pts,
+rrel_homography2d_est :: normalize( const std::vector< vnl_vector<double> >& pts,
+                                    const std::vector< double >& wgts,
+                                    std::vector< vnl_vector<double> > & norm_pts,
                                     vnl_matrix< double > & norm_matrix ) const
 {
   norm_pts.resize( pts.size() );
@@ -240,7 +241,7 @@ rrel_homography2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
 
   double avg_distance = 0;
   for ( i=0; i<pts.size(); ++i ) {
-    avg_distance += wgts[i] * vcl_sqrt( vnl_math::sqr( pts[i][0] / pts[i][2] - center[0] ) +
+    avg_distance += wgts[i] * std::sqrt( vnl_math::sqr( pts[i][0] / pts[i][2] - center[0] ) +
                                         vnl_math::sqr( pts[i][1] / pts[i][2] - center[1] ) );
   }
   avg_distance /= sum_wgt;

@@ -15,7 +15,7 @@ sdet_edge_champher::sdet_edge_champher(vbl_array_2d<vtol_edge_2d_sptr>& edges)
   ysize_ = edges.rows();
   //note the max value of unsigned char is -1
   distance_ = vbl_array_2d<unsigned char>(ysize_, xsize_, (unsigned char)-1 );
-  edges_ = vbl_array_2d<vtol_edge_2d_sptr>(ysize_, xsize_, 0);
+  edges_ = vbl_array_2d<vtol_edge_2d_sptr>(ysize_, xsize_, VXL_NULLPTR);
   // Extract the edgel data and write to the distance and orientation images
   this->initialize_arrays(edges);
   // Do the Chamfer 3-4 filtering
@@ -40,7 +40,7 @@ sdet_edge_champher::initialize_arrays(vbl_array_2d<vtol_edge_2d_sptr>& edges)
   for (int x=0; x<xsize_; x++)
     for (int y=0; y<ysize_; y++)
     {
-      if ( edges.get(y,x) !=0 ) distance_[y][x] = 0;
+      if ( edges.get(y,x) !=VXL_NULLPTR ) distance_[y][x] = 0;
       edges_[y][x] = edges.get(y,x);
     }
 }

@@ -1,5 +1,5 @@
 #include <vxl_config.h>
 #if VXL_HAS_INT_64
-#include <vil/vil_image_view.txx>
+#include <vil/vil_image_view.hxx>
 VIL_IMAGE_VIEW_INSTANTIATE(vxl_int_64);
 #endif

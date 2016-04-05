@@ -70,7 +70,7 @@ class vipl_threshold : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_threshold.txx"
+#include "vipl_threshold.hxx"
 #endif
 
 #endif // vipl_threshold_h_

@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_dem_to_xyz_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,7 +15,6 @@
 // \author Ozge C. Ozcanli
 // \date May 02, 2012
 
-#include <vcl_fstream.h>
 #include <boxm2/boxm2_scene.h>
 
 #include <vpgl/file_formats/vpgl_geo_camera.h>
@@ -20,7 +22,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 //#include <vil/vil_resample_bilin.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
@@ -42,7 +44,7 @@ bool boxm2_dem_to_xyz_process_cons(bprb_func_process& pro)
   using namespace boxm2_dem_to_xyz_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vcl_string";  // geotiff image of DEM
   input_types_[2] = "double"; // lvcs is using wgs84 so wrt ellipsoid, however some DEMs are using geoid,
@@ -52,7 +54,7 @@ bool boxm2_dem_to_xyz_process_cons(bprb_func_process& pro)
   input_types_[4] = "float";  // some DEMs have gaps or invalid regions, pass the value in the DEM imagery that is used to fill those areas.
 
   // process has 1 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
   output_types_[2] = "vil_image_view_base_sptr";  // z image
@@ -73,13 +75,13 @@ bool upsample_dem(vil_image_resource_sptr& out_img_res, unsigned ni, unsigned nj
     return true;
   }
   else if (dem_ni > ni || dem_nj > nj) {
-    vcl_cerr << "in upsample_dem() -- cannot downsample image, image sizes are incompatible!\n";
+    std::cerr << "in upsample_dem() -- cannot downsample image, image sizes are incompatible!\n";
     return false;
   }
   int block_ni = ni/dem_ni;
   int block_nj = nj/dem_nj;
-  vcl_cout << "ni: " << ni << " dem_ni: " << dem_ni << " block_ni: " << block_ni << '\n'
-           << "nj: " << nj << " dem_nj: " << dem_nj << " block_nj: " << block_nj << vcl_endl;
+  std::cout << "ni: " << ni << " dem_ni: " << dem_ni << " block_ni: " << block_ni << '\n'
+           << "nj: " << nj << " dem_nj: " << dem_nj << " block_nj: " << block_nj << std::endl;
   for (unsigned i = 0; i < dem_ni; i++) {
     for (unsigned j = 0; j < dem_nj; j++) {
       vil_image_view<float> block(block_ni, block_nj, 1);
@@ -95,39 +97,39 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   using namespace boxm2_dem_to_xyz_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-  vcl_string geotiff_fname = pro.get_input<vcl_string>(1);
+  std::string geotiff_fname = pro.get_input<std::string>(1);
   double geoid_height = pro.get_input<double>(2);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(3);
   float fill_in_value = pro.get_input<float>(4);
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
 
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   if (cam && (geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr())) ) {
-    vcl_cout << "Using the loaded camera!\n";
+    std::cout << "Using the loaded camera!\n";
   }
   else {
     vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam); // FIXME leaking geocam. This pattern is everywhere...
   }
 
   if (!geocam) {
-    vcl_cerr << "In boxm2_dem_to_xyz_process() - the geocam could not be initialized!\n";
+    std::cerr << "In boxm2_dem_to_xyz_process() - the geocam could not be initialized!\n";
     return false;
   }
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  std::vector<boxm2_block_id> blks = scene->get_block_ids();
   if (blks.size() < 1)
     return false;
 
   unsigned orig_dem_ni = dem_res->ni(); unsigned orig_dem_nj = dem_res->nj();
-  vcl_cout << "original dem resolution: " << orig_dem_ni << ' ' << orig_dem_nj << vcl_endl;
+  std::cout << "original dem resolution: " << orig_dem_ni << ' ' << orig_dem_nj << std::endl;
   brip_roi broi(orig_dem_ni, orig_dem_nj);
   vsol_box_2d_sptr bb = new vsol_box_2d();
 
@@ -138,7 +140,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   bb->add_point(u,v);
   bb = broi.clip_to_image_bounds(bb);
   if (bb->width() <= 0 || bb->height() <= 0) {
-    vcl_cout << "In boxm2_dem_to_xyz_process() -- " << geotiff_fname << " does not overlap the scene!\n";
+    std::cout << "In boxm2_dem_to_xyz_process() -- " << geotiff_fname << " does not overlap the scene!\n";
     return false;
   }
 
@@ -152,7 +154,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
     if (!dem_view_int) {
       vil_image_view<vxl_byte>* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_view_base.ptr());
       if (!dem_view_byte) {
-        vcl_cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
+        std::cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
         return false;
       }
       else {
@@ -173,10 +175,10 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   float vox_length = sb_length/8.0f;
 
   // prepare an image for the finest resolution
-  int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x())/vox_length);
-  int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y())/vox_length);
+  int ni = (int)std::ceil((scene_bbox.max_x()-scene_bbox.min_x())/vox_length);
+  int nj = (int)std::ceil((scene_bbox.max_y()-scene_bbox.min_y())/vox_length);
 
-  vcl_cout <<"ni: " << ni << " nj: " << nj << vcl_endl;
+  std::cout <<"ni: " << ni << " nj: " << nj << std::endl;
 
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
@@ -190,19 +192,19 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   //out_img_x->fill((float)(scene_bbox.min_x())-10.0f); // local coord system min z
   //out_img_y->fill((float)(scene_bbox.min_y())-10.0f); // local coord system min z
   //out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
-  vcl_cout <<   "out img x(0,0): " << ((*out_img_x)(0,0))
+  std::cout <<   "out img x(0,0): " << ((*out_img_x)(0,0))
            << "\nout img y(0,0): " << ((*out_img_y)(0,0))
-           << "\nout img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl;
+           << "\nout img z(0,0): " << ((*out_img_z)(0,0)) << std::endl;
 
   double lon,lat,gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84,lon, lat, gz);
-  vcl_cout << "lvcs origin height: " << gz << vcl_endl;
+  std::cout << "lvcs origin height: " << gz << std::endl;
   gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
   //gz += scene_bbox.min_z();
 
-  vcl_cout << " scene min z: " << scene_bbox.min_z() << " gz: " << gz << vcl_endl;
+  std::cout << " scene min z: " << scene_bbox.min_z() << " gz: " << gz << std::endl;
   if (fill_in_value <= 0)
-    fill_in_value = vcl_numeric_limits<float>::max();
+    fill_in_value = std::numeric_limits<float>::max();
 
   for (int i = 0; i < ni; ++i)
     for (int j = 0; j < nj; ++j) {
@@ -214,8 +216,8 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
       double u,v;
       geocam->project(local_x, local_y, scene_bbox.min_z(), u, v);
       // for now just cast to the nearest pixel in DEM, might want to sample bilinearly
-      int uu = (int)vcl_floor(u+0.5);
-      int vv = (int)vcl_floor(v+0.5);
+      int uu = (int)std::floor(u+0.5);
+      int vv = (int)std::floor(v+0.5);
       if (uu >= 0 && vv >= 0 && uu < (int)orig_dem_ni && vv < (int)orig_dem_nj) {
         if ((*dem_view)(uu,vv) < fill_in_value)  // otherwise it remains at local min z
           (*out_img_z)(i,j) = (*dem_view)(uu,vv)-(float)gz;  // we need local height
@@ -242,7 +244,7 @@ bool boxm2_shadow_heights_to_xyz_process_cons(bprb_func_process& pro)
   using namespace boxm2_shadow_heights_to_xyz_process_globals;
 
   //process takes 5 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vil_image_view_base_sptr";  // shadow height map image of the cropped ortho aerial image, height values are in pixels with respect to a horizontal surface at the base of the object
   input_types_[2] = "vpgl_camera_double_sptr"; // generic cam of cropped ortho aerial image (to be given by roi_init_geotiff_process)
@@ -250,7 +252,7 @@ bool boxm2_shadow_heights_to_xyz_process_cons(bprb_func_process& pro)
   input_types_[4] = "double"; // pixel scaling
 
   // process has 3 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
   output_types_[2] = "vil_image_view_base_sptr";  // z image
@@ -263,7 +265,7 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
   using namespace boxm2_shadow_heights_to_xyz_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -271,7 +273,7 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(1);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(2);
-  vcl_string geotiff_fname = pro.get_input<vcl_string>(3);
+  std::string geotiff_fname = pro.get_input<std::string>(3);
   double scale = pro.get_input<double>(4);
 
   vpgl_generic_camera<double>* gcam=dynamic_cast<vpgl_generic_camera<double>*> (cam.ptr());
@@ -281,17 +283,17 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
   unsigned nj = height_img.nj();
 
   if (gcam->rows() != nj || gcam->cols() !=ni) {
-    vcl_cerr << "In boxm2_shadow_heights_to_xyz_process() - generic cam and height image sizes are not compatible!\n"
+    std::cerr << "In boxm2_shadow_heights_to_xyz_process() - generic cam and height image sizes are not compatible!\n"
              << "gcam rows: " << gcam->rows() << " cols: " << gcam->cols() << " ni: " << ni << " nj: " << nj << '\n';
     return false;
   }
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  std::vector<boxm2_block_id> blks = scene->get_block_ids();
   if (blks.size() < 1)
     return false;
 
@@ -302,20 +304,20 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
   proj_bbox.add(vgl_point_2d<double>(u,v));
   geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
   proj_bbox.add(vgl_point_2d<double>(u,v));
-  int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
-  int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
-  int max_i = int(vcl_min(dem_res->ni()-1.0, vcl_ceil(proj_bbox.max_x())));
-  int max_j = int(vcl_min(dem_res->nj()-1.0, vcl_ceil(proj_bbox.max_y())));
-  vcl_cout << "scene projected in the image mini: " << min_i << " minj: " << min_j << " maxi: " << max_i << " maxj: " << max_j << vcl_endl;
+  int min_i = int(std::max(0.0, std::floor(proj_bbox.min_x())));
+  int min_j = int(std::max(0.0, std::floor(proj_bbox.min_y())));
+  int max_i = int(std::min(dem_res->ni()-1.0, std::ceil(proj_bbox.max_x())));
+  int max_j = int(std::min(dem_res->nj()-1.0, std::ceil(proj_bbox.max_y())));
+  std::cout << "scene projected in the image mini: " << min_i << " minj: " << min_j << " maxi: " << max_i << " maxj: " << max_j << std::endl;
   unsigned int dem_ni = max_i - min_i + 1;
   unsigned int dem_nj = max_j - min_j + 1;
   vil_image_view_base_sptr dem_view_base = dem_res->get_view((unsigned int)min_i, dem_ni, (unsigned int)min_j, dem_nj);
   vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
   if (!dem_view) {
-      vcl_cerr << "Error: boxm2_dem_to_xyz_process: could not cast first return image to a vil_image_view<float>\n";
+      std::cerr << "Error: boxm2_dem_to_xyz_process: could not cast first return image to a vil_image_view<float>\n";
       return false;
   }
-  vcl_cout << "dem resolution is: " << dem_ni << " by " << dem_nj << vcl_endl;
+  std::cout << "dem resolution is: " << dem_ni << " by " << dem_nj << std::endl;
 
   vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj, 1);
   vil_image_resource_sptr out_img_res = vil_new_image_resource_of_view(*out_img);
@@ -361,7 +363,7 @@ bool boxm2_dem_to_xyz_process2_cons(bprb_func_process& pro)
   using namespace boxm2_dem_to_xyz_process2_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vcl_string";  // geotiff image of DEM
   input_types_[2] = "double"; // lvcs is using wgs84 so wrt ellipsoid, however some DEMs are using geoid,
@@ -371,7 +373,7 @@ bool boxm2_dem_to_xyz_process2_cons(bprb_func_process& pro)
   input_types_[4] = "float";  // some DEMs have gaps or invalid regions, pass the value in the DEM imagery that is used to fill those areas.
 
   // process has 1 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
   output_types_[2] = "vil_image_view_base_sptr";  // z image
@@ -390,40 +392,40 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   using namespace boxm2_dem_to_xyz_process2_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-  vcl_string geotiff_fname = pro.get_input<vcl_string>(1);
-  double geoid_height = pro.get_input<double>(2); // TODO: unused!
+  std::string geotiff_fname = pro.get_input<std::string>(1);
+  //double geoid_height = pro.get_input<double>(2); // TODO: unused!
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(3);
-  float fill_in_value = pro.get_input<float>(4); // TODO: unused!
+  //float fill_in_value = pro.get_input<float>(4); // TODO: unused!
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
 
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   if ( cam && (geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr())) ) {
-    vcl_cout << "Using the loaded camera!\n";
+    std::cout << "Using the loaded camera!\n";
   }
   else {
     vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
   }
 
   if (!geocam) {
-    vcl_cerr << "In boxm2_dem_to_xyz_process() - the geocam could not be initialized!\n";
+    std::cerr << "In boxm2_dem_to_xyz_process() - the geocam could not be initialized!\n";
     return false;
   }
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
-  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  std::vector<boxm2_block_id> blks = scene->get_block_ids();
   if (blks.size() < 1)
     return false;
 
   unsigned orig_dem_ni = dem_res->ni(),
            orig_dem_nj = dem_res->nj();
-  vcl_cout << "original dem resolution: " << orig_dem_ni << ' ' << orig_dem_nj << vcl_endl;
+  std::cout << "original dem resolution: " << orig_dem_ni << ' ' << orig_dem_nj << std::endl;
   brip_roi broi(orig_dem_ni, orig_dem_nj);
   vsol_box_2d_sptr bb = new vsol_box_2d();
 
@@ -434,10 +436,10 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   bb->add_point(max_uu,max_vv);
   bb = broi.clip_to_image_bounds(bb);
   if (bb->width() <= 0 || bb->height() <= 0) {
-    vcl_cout << "In boxm2_dem_to_xyz_process() -- " << geotiff_fname << " does not overlap the scene!\n";
+    std::cout << "In boxm2_dem_to_xyz_process() -- " << geotiff_fname << " does not overlap the scene!\n";
     return false;
   }
-  vcl_cout <<"projected scene bbox: " << *bb << vcl_endl;
+  std::cout <<"projected scene bbox: " << *bb << std::endl;
 
   unsigned int min_i = min_uu > 0 ? (unsigned int)min_uu : 0;
   unsigned int min_j = max_vv > 0 ? (unsigned int)max_vv : 0;  // scene box min projects to lower left corner of the scene in the image
@@ -447,9 +449,9 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   int ni = bb->get_max_x() - bb->get_min_x() + 1;
   int nj = bb->get_max_y() - bb->get_min_y() + 1;
 
-  vcl_cout <<  "min_uu: " << min_uu << " min_vv: " << min_vv
+  std::cout <<  "min_uu: " << min_uu << " min_vv: " << min_vv
            <<"\nmax_uu: " << max_uu << " max_vv: " << max_vv
-           <<"\nmin_i: " << min_i << " min_j: " << min_j << " ni: " << ni << " nj: " << nj << vcl_endl;
+           <<"\nmin_i: " << min_i << " min_j: " << min_j << " ni: " << ni << " nj: " << nj << std::endl;
 
   vil_image_view_base_sptr dem_view_base = dem_res->get_view(min_i, ni, min_j, nj);
   vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
@@ -460,7 +462,7 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
     if (!dem_view_int) {
       vil_image_view<vxl_byte>* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_view_base.ptr());
       if (!dem_view_byte) {
-        vcl_cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
+        std::cerr << "Error: boxm2_dem_to_xyz_process: The image pixel format: " << dem_view_base->pixel_format() << " is not supported!\n";
         return false;
       }
       else
@@ -470,12 +472,12 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
       vil_convert_cast(*dem_view_int, temp);
     dem_view = new vil_image_view<float>(temp);
   }
-  vcl_cout <<"got dem image!" << vcl_endl;
+  std::cout <<"got dem image!" << std::endl;
 
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
   float sb_length = info->block_len;
-  vcl_cout <<"sb_length: " << sb_length << "!\n\n"
-           <<"ni: " << ni << " nj: " << nj << vcl_endl;
+  std::cout <<"sb_length: " << sb_length << "!\n\n"
+           <<"ni: " << ni << " nj: " << nj << std::endl;
 
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
@@ -484,9 +486,9 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   out_img_x->fill((float)(scene_bbox.min_x())-10.0f);  // local coord system min z
   out_img_y->fill((float)(scene_bbox.min_y())-10.0f);  // local coord system min z
   out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
-  vcl_cout <<   "out img x(0,0): " << ((*out_img_x)(0,0))
+  std::cout <<   "out img x(0,0): " << ((*out_img_x)(0,0))
            << "\nout img y(0,0): " << ((*out_img_y)(0,0))
-           << "\nout img z(0,0): " << ((*out_img_z)(0,0)) << vcl_endl;
+           << "\nout img z(0,0): " << ((*out_img_z)(0,0)) << std::endl;
 
   for (int i = 0; i < ni; ++i)
     for (int j = 0; j < nj; ++j) {
@@ -520,11 +522,11 @@ bool boxm2_initialize_ground_xyz_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_initialize_ground_xyz_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "int";   // desired height of ground plane in global coords, e.g. for ground plane to be at global z = 0, pass 0
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
   output_types_[2] = "vil_image_view_base_sptr";  // z image
@@ -537,7 +539,7 @@ bool boxm2_initialize_ground_xyz_process(bprb_func_process& pro)
   using namespace boxm2_initialize_ground_xyz_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -546,16 +548,16 @@ bool boxm2_initialize_ground_xyz_process(bprb_func_process& pro)
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
 
-  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  std::vector<boxm2_block_id> blks = scene->get_block_ids();
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
   float sb_length = info->block_len;
   float vox_length = sb_length/8.0f;
-  vcl_cout << "voxel length: " << vox_length;
+  std::cout << "voxel length: " << vox_length;
 
   // prepare an image for the finest resolution
-  int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x()+1.0)/vox_length);
-  int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y()+1.0)/vox_length);
-  vcl_cout <<"image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << vcl_endl;
+  int ni = (int)std::ceil((scene_bbox.max_x()-scene_bbox.min_x()+1.0)/vox_length);
+  int nj = (int)std::ceil((scene_bbox.max_y()-scene_bbox.min_y()+1.0)/vox_length);
+  std::cout <<"image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << std::endl;
 
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
@@ -566,9 +568,9 @@ bool boxm2_initialize_ground_xyz_process(bprb_func_process& pro)
   out_img_z->fill((float)(scene_bbox.min_z())-1.0f);  // local coord system min z
 
   double lat, lon, elev; scene->lvcs().get_origin(lat, lon, elev);
-  vcl_cout << "global scene origin is at z = " << elev << vcl_endl;
+  std::cout << "global scene origin is at z = " << elev << std::endl;
   double g_h = ground_height - elev;
-  vcl_cout << " in global coords, ground plane is at z = " << ground_height << '\n'
+  std::cout << " in global coords, ground plane is at z = " << ground_height << '\n'
            << " in local coords, this corresponds to z = " << scene_bbox.min_z()+g_h  << '\n';
 
   for (int i = 0; i < ni; i++)

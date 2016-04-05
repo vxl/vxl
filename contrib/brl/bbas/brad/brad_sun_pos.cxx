@@ -1,13 +1,14 @@
+#include <iostream>
+#include <cmath>
+#include <map>
+#include <cstdlib>
 #include "brad_sun_pos.h"
 //:
 // \file
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_brent_minimizer.h>
-#include <vcl_cmath.h>
-#include <vcl_map.h>
-#include <vcl_cstdlib.h> // for std::rand()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 // Declaration of some constants
 static double twopi  = vnl_math::twopi;
@@ -33,7 +34,7 @@ double julian_day(int year, int month, int day, int hour=0, int minute=0, int se
 double solve_eccentric_anomaly(double mean_anomaly, double eccentricity)
 {
    // this approximation of the eccentric anomaly is probably good enough..
-   double approx_E = mean_anomaly + eccentricity * vcl_sin(mean_anomaly);
+   double approx_E = mean_anomaly + eccentricity * std::sin(mean_anomaly);
 
    // .. but solve using minimizer just to be sure.
    // Create 1D cost function
@@ -45,7 +46,7 @@ double solve_eccentric_anomaly(double mean_anomaly, double eccentricity)
 
       double f(const vnl_vector<double>& x)
       {
-         double residual = M_ - (x[0] - e_*vcl_sin(x[0]));
+         double residual = M_ - (x[0] - e_*std::sin(x[0]));
          return residual*residual;
       }
     protected:
@@ -75,7 +76,7 @@ double brad_sun_distance(int year, int month, int day, int hours, int minutes, i
    double D = jday - J2000;
    double g = 357.529 + 0.98560028 * D;
    double g_rad = g * rad;
-   double dist = 1.00014 - 0.01671*vcl_cos(g_rad) - 0.00014*vcl_cos(2.0*g_rad);
+   double dist = 1.00014 - 0.01671*std::cos(g_rad) - 0.00014*std::cos(2.0*g_rad);
    return dist;
 #else
    // More Exact calculation valid over longer time period: taken from:
@@ -103,7 +104,7 @@ double brad_sun_distance(int year, int month, int day, int hours, int minutes, i
    // solve for eccentric anomaly
    double eccentric_anomaly = solve_eccentric_anomaly(mean_anomaly_rads, eccentricity);
 
-   double radius = mean_dist * (1.0 - eccentricity * vcl_cos(eccentric_anomaly));
+   double radius = mean_dist * (1.0 - eccentricity * std::cos(eccentric_anomaly));
 
    return radius;
 #endif
@@ -114,7 +115,7 @@ int rand_minutes( int center, int range)
 {
   double c = center, r = range;
   double low = c-(r/2.0);
-  double ret = low + r*(vcl_rand()/(RAND_MAX+1.0));
+  double ret = low + r*(std::rand()/(RAND_MAX+1.0));
   return static_cast<int>(ret);
 }
 
@@ -163,11 +164,11 @@ void brad_sun_pos(int year, int month, int day,
     dOmega=2.1429-0.0010394594*dElapsedJulianDays;
     dMeanLongitude = 4.8950630+ 0.017202791698*dElapsedJulianDays; // Radians
     dMeanAnomaly = 6.2400600+ 0.0172019699*dElapsedJulianDays;
-    dEclipticLongitude = dMeanLongitude + 0.03341607*vcl_sin( dMeanAnomaly )
-      + 0.00034894*vcl_sin( 2*dMeanAnomaly )-0.0001134
-      - 0.0000203*vcl_sin(dOmega);
+    dEclipticLongitude = dMeanLongitude + 0.03341607*std::sin( dMeanAnomaly )
+      + 0.00034894*std::sin( 2*dMeanAnomaly )-0.0001134
+      - 0.0000203*std::sin(dOmega);
     dEclipticObliquity = 0.4090928 - 6.2140e-9*dElapsedJulianDays
-      + 0.0000396*vcl_cos(dOmega);
+      + 0.0000396*std::cos(dOmega);
   }
 
   // Calculate celestial coordinates ( right ascension and declination ) in radians
@@ -175,12 +176,12 @@ void brad_sun_pos(int year, int month, int day,
   // greater than 2*Pi)
   {
     double dSin_EclipticLongitude;
-    dSin_EclipticLongitude= vcl_sin( dEclipticLongitude );
-    dY = vcl_cos( dEclipticObliquity ) * dSin_EclipticLongitude;
-    dX = vcl_cos( dEclipticLongitude );
-    dRightAscension = vcl_atan2( dY,dX );
+    dSin_EclipticLongitude= std::sin( dEclipticLongitude );
+    dY = std::cos( dEclipticObliquity ) * dSin_EclipticLongitude;
+    dX = std::cos( dEclipticLongitude );
+    dRightAscension = std::atan2( dY,dX );
     if ( dRightAscension < 0.0 ) dRightAscension = dRightAscension + twopi;
-    dDeclination = vcl_asin( vcl_sin( dEclipticObliquity )*dSin_EclipticLongitude );
+    dDeclination = std::asin( std::sin( dEclipticObliquity )*dSin_EclipticLongitude );
   }
 
   // Calculate local coordinates ( azimuth and zenith angle ) in degrees
@@ -198,19 +199,19 @@ void brad_sun_pos(int year, int month, int day,
     dLocalMeanSiderealTime = (dGreenwichMeanSiderealTime*15 + longitude)*rad;
     dHourAngle = dLocalMeanSiderealTime - dRightAscension;
     dLatitudeInRadians = latitude*rad;
-    dCos_Latitude = vcl_cos(dLatitudeInRadians);
-    dSin_Latitude = vcl_sin(dLatitudeInRadians);
-    dCos_HourAngle= vcl_cos(dHourAngle);
-    sun_elevation = vcl_acos( dCos_Latitude*dCos_HourAngle*vcl_cos(dDeclination)
-                              + vcl_sin(dDeclination)*dSin_Latitude);
-    dY = -vcl_sin(dHourAngle);
-    dX = vcl_tan(dDeclination)*dCos_Latitude - dSin_Latitude*dCos_HourAngle;
-    sun_azimuth = vcl_atan2( dY, dX );
+    dCos_Latitude = std::cos(dLatitudeInRadians);
+    dSin_Latitude = std::sin(dLatitudeInRadians);
+    dCos_HourAngle= std::cos(dHourAngle);
+    sun_elevation = std::acos( dCos_Latitude*dCos_HourAngle*std::cos(dDeclination)
+                              + std::sin(dDeclination)*dSin_Latitude);
+    dY = -std::sin(dHourAngle);
+    dX = std::tan(dDeclination)*dCos_Latitude - dSin_Latitude*dCos_HourAngle;
+    sun_azimuth = std::atan2( dY, dX );
     if ( sun_azimuth < 0.0 )
       sun_azimuth = sun_azimuth + twopi;
     sun_azimuth = sun_azimuth*invrad;
     // Parallax Correction
-    dParallax=(dEarthMeanRadius/dAstronomicalUnit) *vcl_sin(sun_elevation);
+    dParallax=(dEarthMeanRadius/dAstronomicalUnit) *std::sin(sun_elevation);
     sun_elevation=(sun_elevation + dParallax)*invrad;
     sun_elevation = 90.0-sun_elevation;//angle from local horizon
   }

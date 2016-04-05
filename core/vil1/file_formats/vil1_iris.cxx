@@ -8,11 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vil1_iris.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h> // for memcpy()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -86,15 +87,15 @@ vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, char const* im
 {
   is_->ref();
   read_header();
-  vcl_strncpy(imagename_, imagename, 80);
+  std::strncpy(imagename_, imagename, 80);
 }
 
 bool vil1_iris_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -125,7 +126,7 @@ vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, int planes,
     height_ = height;
     pixmin_ = 0;
     pixmax_ = (bits_per_component == 8) ? 255 : 65535;
-    vcl_strcpy(imagename_, "vil1 writes an iris image!");
+    std::strcpy(imagename_, "vil1 writes an iris image!");
     colormap_ = 0;
 
     components_ = 1;
@@ -134,10 +135,10 @@ vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, int planes,
       dimension_ = 2;
     else if (planes_ == 3 || planes_ == 4)
       dimension_ = 3;
-    else vcl_cerr << __FILE__ ": Cannot write iris image, they can only do grayscale or RGB(A)\n";
+    else std::cerr << __FILE__ ": Cannot write iris image, they can only do grayscale or RGB(A)\n";
     write_header();
   }
-  else vcl_cerr << __FILE__ ": Cannot write iris image, they want 8 or 16 bits per component\n";
+  else std::cerr << __FILE__ ": Cannot write iris image, they want 8 or 16 bits per component\n";
 }
 
 vil1_iris_generic_image::~vil1_iris_generic_image()
@@ -175,26 +176,26 @@ bool vil1_iris_generic_image::read_header()
 
   if (magic_ != 474)
   {
-    vcl_cerr << __FILE__ ": This is not an Iris RGB file: magic number is incorrect: "
-             << magic_ << vcl_endl;
+    std::cerr << __FILE__ ": This is not an Iris RGB file: magic number is incorrect: "
+             << magic_ << std::endl;
     return false;
   }
 
   if (storage_ != 0 && storage_ != 1)
   {
-    vcl_cerr << __FILE__ ": This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
+    std::cerr << __FILE__ ": This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
     return false;
   }
 
   if (colormap_ == 3)
   {
-    vcl_cerr << __FILE__ ": This is not an ordinary Iris RGB image but a colormap file\n";
+    std::cerr << __FILE__ ": This is not an ordinary Iris RGB image but a colormap file\n";
     return false;
   }
 
   if (dimension_ == 3 && colormap_ != 0)
   {
-    vcl_cerr << __FILE__ ": Cannot handle Iris RGB file with colormap other than NORMAL\n";
+    std::cerr << __FILE__ ": Cannot handle Iris RGB file with colormap other than NORMAL\n";
     return false;
   }
 
@@ -208,21 +209,21 @@ bool vil1_iris_generic_image::read_header()
 bool vil1_iris_generic_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": vil1_iris_generic_image::write_header()\n"
+  std::cerr << __FILE__ ": vil1_iris_generic_image::write_header()\n"
            << "Here we go :\n"
-           << "magic_      = " << magic_    << vcl_endl
-           << "storage_    = " << storage_ << vcl_endl
-           << "bytes_per_c = " << bytes_per_component_ << vcl_endl
-           << "dimension_  = " << dimension_ << vcl_endl
-           << "width_      = " << width_ << vcl_endl
-           << "height_     = " << height_ << vcl_endl
-           << "planes_     = " << planes_ << vcl_endl
-           << "pixmin_     = " << pixmin_ << vcl_endl
-           << "pixmax_     = " << pixmax_ << vcl_endl
-           << "colormap_   = " << colormap_ << vcl_endl
-           << "components_ = " << components_ << vcl_endl
-           << "imagename_  = " << imagename_ << vcl_endl
-           << vcl_endl;
+           << "magic_      = " << magic_    << std::endl
+           << "storage_    = " << storage_ << std::endl
+           << "bytes_per_c = " << bytes_per_component_ << std::endl
+           << "dimension_  = " << dimension_ << std::endl
+           << "width_      = " << width_ << std::endl
+           << "height_     = " << height_ << std::endl
+           << "planes_     = " << planes_ << std::endl
+           << "pixmin_     = " << pixmin_ << std::endl
+           << "pixmax_     = " << pixmax_ << std::endl
+           << "colormap_   = " << colormap_ << std::endl
+           << "components_ = " << components_ << std::endl
+           << "imagename_  = " << imagename_ << std::endl
+           << std::endl;
 #endif
 
   char dummy[410];
@@ -250,7 +251,7 @@ bool vil1_iris_generic_image::write_header()
 vil1_image vil1_iris_generic_image::get_plane(unsigned int plane) const
 {
   assert((int)plane < planes_);
-  vcl_cerr << __FILE__ ": do something for vil1_iris_generic_image::get_plane\n";
+  std::cerr << __FILE__ ": do something for vil1_iris_generic_image::get_plane\n";
   return VXL_NULLPTR;
 }
 
@@ -333,7 +334,7 @@ bool vil1_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, 
       delete[] rlerow;
 
       // write expanded row in store
-      vcl_memcpy(cbi,exrow+x0,xs);
+      std::memcpy(cbi,exrow+x0,xs);
     }
   }
   delete[] exrow;

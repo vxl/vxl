@@ -22,14 +22,14 @@ class bwm_tableau_generic_cam : public bwm_tableau_cam
 
   virtual ~bwm_tableau_generic_cam(){}
 
-  virtual vcl_string type_name() const { return "bwm_tableau_generic_cam"; }
+  virtual std::string type_name() const { return "bwm_tableau_generic_cam"; }
 
   bool handle(const vgui_event &);
 
   void get_popup(vgui_popup_params const &params, vgui_menu &menu);
 
   //: saves the camera with a new version number (if adjusted) and returns the path
-  vcl_string save_camera();
+  std::string save_camera();
   void ray_image();
  protected:
   bwm_observer_generic_cam* my_observer_;

@@ -9,7 +9,7 @@ set(vrml_sources
  vrml_out.cxx vrml_out.h
 )
 
-add_library(oxl_vrml ${vrml_sources})
+vxl_add_library(LIBRARY_NAME oxl_vrml LIBRARY_SOURCES ${vrml_sources})
 target_link_libraries(oxl_vrml ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )

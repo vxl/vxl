@@ -7,8 +7,9 @@
 // \author Amir Tamrakar
 // \date June 18, 2005
 
+#include <iostream>
 #include <bgrl2/bgrl2_edge.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include "test_node.h"
 #include "test_node_sptr.h"
@@ -30,9 +31,9 @@ class test_edge : public bgrl2_edge<test_node>
   void set_id(int id){id_ = id;}
 
   //: Print an ascii summary to the stream
-  virtual void print_summary(vcl_ostream &os) const
+  virtual void print_summary(std::ostream &os) const
   {
-    os << id_ << ": [" << source_->id() << "] - [" << target_->id() << ']' << vcl_endl;
+    os << id_ << ": [" << source_->id() << "] - [" << target_->id() << ']' << std::endl;
   }
 };
 

@@ -32,7 +32,7 @@ void test_data_sio()
     delete test_data;
 
     ////file name
-    vcl_string filename = boxm2_data_traits<BOXM2_ALPHA>::prefix() + "_" + id.to_string() + ".bin";
+    std::string filename = boxm2_data_traits<BOXM2_ALPHA>::prefix() + "_" + id.to_string() + ".bin";
 
     unsigned long bytecount = vul_file::size(filename.c_str());
     TEST("Successful Synchronous Write ",bytecount,array_size*sizeof(float));
@@ -46,7 +46,7 @@ void test_data_sio()
         if (bufferread[i]!=buffer_bkup[i])
         {
             flag=false;
-            vcl_cout<<"Orig val "<<(int) buffer_bkup[i]<<" Read val "<< (int) bufferread[i]<<vcl_endl;
+            std::cout<<"Orig val "<<(int) buffer_bkup[i]<<" Read val "<< (int) bufferread[i]<<std::endl;
         }
 
     TEST("Successful Synchronous Read", true, flag);

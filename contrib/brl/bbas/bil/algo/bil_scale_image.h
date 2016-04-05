@@ -25,8 +25,10 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vector>
+#include <iostream>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_math.h>
 
@@ -53,7 +55,7 @@ class bil_scale_image
   //: Find the scale for the given octave and level
   float scale(int octave, unsigned int level) const
   {
-    return (float) vcl_pow(2.0, octave + double(level)/(num_levels_)) * init_scale_;
+    return (float) std::pow(2.0, octave + double(level)/(num_levels_)) * init_scale_;
   }
 
   //: Find how much the size of the image has been scaled for the given index
@@ -66,9 +68,9 @@ class bil_scale_image
   //: Find the closest scale to \p scale that is represented by an image
   float closest_scale(float scale) const
   {
-    double log2_scale = vcl_log(scale/init_scale_) / vnl_math::ln2; // divide by log(2) to get base 2 log
+    double log2_scale = std::log(scale/init_scale_) / vnl_math::ln2; // divide by log(2) to get base 2 log
     int s = int(log2_scale*num_levels_ +0.5);
-    return (float) vcl_pow(2.0, double(s)/num_levels_) * init_scale_;
+    return (float) std::pow(2.0, double(s)/num_levels_) * init_scale_;
   }
 
   //: Return the number of levels
@@ -96,7 +98,7 @@ class bil_scale_image
 
  private:
   //: The image data
-  vcl_vector< vcl_vector< vil_image_view< T > > > data_;
+  std::vector< std::vector< vil_image_view< T > > > data_;
 
   //: Number of images per octave
   unsigned int num_levels_;

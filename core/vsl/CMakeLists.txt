@@ -18,24 +18,24 @@ set(vsl_sources
   vsl_stream.h
   vsl_block_binary_rle.h
 
-  vsl_binary_loader.txx vsl_binary_loader.h
-  vsl_clipon_binary_loader.txx vsl_clipon_binary_loader.h
-  vsl_complex_io.txx vsl_complex_io.h
-  vsl_deque_io.txx vsl_deque_io.h
-  vsl_list_io.txx vsl_list_io.h
-  vsl_map_io.txx vsl_map_io.h
-  vsl_pair_io.txx vsl_pair_io.h
-  vsl_set_io.txx vsl_set_io.h
-  vsl_stack_io.txx vsl_stack_io.h
-  vsl_string_io.txx vsl_string_io.h
-  vsl_vector_io.txx vsl_vector_io.h vsl_vector_io_bool.cxx
+  vsl_binary_loader.hxx vsl_binary_loader.h
+  vsl_clipon_binary_loader.hxx vsl_clipon_binary_loader.h
+  vsl_complex_io.hxx vsl_complex_io.h
+  vsl_deque_io.hxx vsl_deque_io.h
+  vsl_list_io.hxx vsl_list_io.h
+  vsl_map_io.hxx vsl_map_io.h
+  vsl_pair_io.hxx vsl_pair_io.h
+  vsl_set_io.hxx vsl_set_io.h
+  vsl_stack_io.hxx vsl_stack_io.h
+  vsl_string_io.hxx vsl_string_io.h
+  vsl_vector_io.hxx vsl_vector_io.h vsl_vector_io_bool.cxx
                                     vsl_vector_io_vector_bool.cxx
   vsl_basic_xml_element.cxx vsl_basic_xml_element.h
 )
 
 aux_source_directory(Templates vsl_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vsl LIBSRCS ${vsl_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vsl LIBRARY_SOURCES ${vsl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl )
 
 if(BUILD_TESTING)

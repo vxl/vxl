@@ -1,11 +1,12 @@
 // This is brl/bpro/core/vil_pro/processes/vil_image_size_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view_base.h>
 
@@ -14,13 +15,13 @@ bool vil_image_size_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("unsigned");  // ni of the image
   output_types.push_back("unsigned");  // nj of the image
   ok = pro.set_output_types(output_types);
@@ -33,7 +34,7 @@ bool vil_image_size_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vil_load_image_view_binary_process: The input number should be 1" << vcl_endl;
+    std::cout << "vil_load_image_view_binary_process: The input number should be 1" << std::endl;
     return false;
   }
 
@@ -42,7 +43,7 @@ bool vil_image_size_process(bprb_func_process& pro)
   //Retrieve image
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
   if ( !image ) {
-    vcl_cout << "Input image is empty!" << vcl_endl;
+    std::cout << "Input image is empty!" << std::endl;
     return false;
   }
 

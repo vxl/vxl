@@ -1,7 +1,9 @@
 #ifndef boxm2_vecf_composite_transform_h_included_
 #define boxm2_vecf_composite_transform_h_included_
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>
@@ -11,7 +13,7 @@
 class boxm2_vecf_composite_transform : public boxm2_vecf_vector_field_base
 {
   public:
-    boxm2_vecf_composite_transform(vcl_vector<boxm2_vecf_vector_field_base_sptr> xforms);
+    boxm2_vecf_composite_transform(std::vector<boxm2_vecf_vector_field_base_sptr> xforms);
 
     bool compute_forward_transform(boxm2_scene_sptr source,
                                    boxm2_block_id const& blk_id,
@@ -25,7 +27,7 @@ class boxm2_vecf_composite_transform : public boxm2_vecf_vector_field_base
                                    boxm2_data_traits<BOXM2_POINT>::datatype *source_pts);
 
   private:
-    vcl_vector<boxm2_vecf_vector_field_base_sptr> xforms_;
+    std::vector<boxm2_vecf_vector_field_base_sptr> xforms_;
 
 };
 

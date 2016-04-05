@@ -34,26 +34,26 @@
 // is set to WARN or higher.
 // You can avoid using macros by calling the logger directly
 // \code
-// my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << vcl_endl;
+// my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << std::endl;
 // \endcode
-// The vcl_endl (or a vcl_flush) is necessary to terminate the log line. The problem with this
+// The std::endl (or a std::flush) is necessary to terminate the log line. The problem with this
 // explicit version is that the stream insertion and call to the time() function take place,
 // even if the logging level is set below WARN. Ideally, we would like unsent log messages
 // to take as little time as possible - so that there is no overhead in leaving the
 // log message in your code. To achieve this we can test the log level first
 // \code
 // if (my_log.level() >= mbl_logger::WARN)
-//   my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << vcl_endl;
+//   my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << std::endl;
 // \endcode
 // Of course, you should just use MBL_LOG which handles this for you. Additionally
-// MBL_LOG sorts out termination of the log message without using vcl_endl, allowing you to send
+// MBL_LOG sorts out termination of the log message without using std::endl, allowing you to send
 // multi-line messages in a single log output.
 //
 // You can also use the logger to control the dumping of data files straight to the filesystem.
 // \code
 // if (my_log.level() >= mbl_logger::INFO && my_log.dump())
 // {
-//   vcl_string filename=my_log.dump_prefix()+"my_image.png";
+//   std::string filename=my_log.dump_prefix()+"my_image.png";
 //   if (vil_save(my_image, filename.c_str()))
 //     MBL_LOG(INFO, my_log, "Saved my_image to " << filename);
 //   else
@@ -67,13 +67,15 @@
 // \endcode
 
 
-#include <vcl_fstream.h>
-#include <vcl_streambuf.h>
-#include <vcl_string.h>
-#include <vcl_ostream.h>
-#include <vcl_set.h>
-#include <vcl_map.h>
-#include <vcl_ios.h>
+#include <iostream>
+#include <fstream>
+#include <streambuf>
+#include <string>
+#include <ostream>
+#include <set>
+#include <map>
+#include <ios>
+#include <vcl_compiler.h>
 
 
 // define MBL_LOG_DISABLE_ALL_LOGGING to stop all logging.
@@ -82,18 +84,18 @@ class mbl_logger_root;
 class mbl_logger;
 
 //: Allows stream-like syntax on logger.
-class mbl_log_streambuf: public vcl_streambuf
+class mbl_log_streambuf: public std::streambuf
 {
   mbl_logger* logger_;
  public:
   mbl_log_streambuf(mbl_logger* logger): logger_(logger) {}
   virtual int sync ();
   virtual int overflow (int ch);
-  virtual vcl_streamsize xsputn(const char *ptr, vcl_streamsize count);
+  virtual std::streamsize xsputn(const char *ptr, std::streamsize count);
 };
 
 //: A null streambuf ignores all input.
-class mbl_log_null_streambuf: public vcl_streambuf
+class mbl_log_null_streambuf: public std::streambuf
 {
 };
 
@@ -110,7 +112,7 @@ class mbl_log_output_base
   // Future calls to terminate_flush will be honoured.
   virtual void start_with_flush_termination(int level, const char *srcfile, int srcline)=0;
   //: Add contents to the existing log entry.
-  virtual void append(const char * contents, vcl_streamsize n_chars)=0;
+  virtual void append(const char * contents, std::streamsize n_chars)=0;
   //: Finish the log entry, sent from a stream flush.
   virtual void terminate_manual()=0;
   //: Finish the log entry, sent from explicit function call, e.g. by MBL_LOG.
@@ -121,11 +123,11 @@ class mbl_log_output_base
 };
 
 #if !defined MBL_LOG_DISABLE_ALL_LOGGING
-//: Outputs log messages to an existing stream (e.g. vcl_cerr).
+//: Outputs log messages to an existing stream (e.g. std::cerr).
 class mbl_log_output_stream: public mbl_log_output_base
 {
   //: A pointer to the stream where logging finally gets sent.
-  vcl_ostream* real_stream_;
+  std::ostream* real_stream_;
   //: logger identity
   const char * id_;
   //: true if a log entry is in progress.
@@ -136,7 +138,7 @@ class mbl_log_output_stream: public mbl_log_output_base
   // The current log message should be manually terminated.
   bool ignore_flush_;
  public:
-  mbl_log_output_stream(vcl_ostream& real_stream, const char *id);
+  mbl_log_output_stream(std::ostream& real_stream, const char *id);
   //: Start a new log entry, with id info.
   // Future calls to terminate_flush will be ignored.
   virtual void start_with_manual_termination(int level, const char *srcfile, int srcline);
@@ -144,7 +146,7 @@ class mbl_log_output_stream: public mbl_log_output_base
   // Future calls to terminate_flush will be honoured.
   virtual void start_with_flush_termination(int level, const char *srcfile, int srcline);
   //: Add contents to the existing log entry.
-  virtual void append(const char * contents, vcl_streamsize n_chars);
+  virtual void append(const char * contents, std::streamsize n_chars);
   //: Finish the log entry, sent from a stream flush.
   virtual void terminate_manual();
   //: Finish the log entry, sent from explicit function call, e.g. by MBL_LOG.
@@ -157,7 +159,7 @@ class mbl_log_output_stream: public mbl_log_output_base
 class mbl_log_output_file: public mbl_log_output_base
 {
   //: The file where logging finally gets sent.
-  vcl_ofstream file_;
+  std::ofstream file_;
   //: logger identity
   const char * id_;
   //: true if a log entry is in progress.
@@ -168,7 +170,7 @@ class mbl_log_output_file: public mbl_log_output_base
   // The current log message should be manually terminated.
   bool ignore_flush_;
  public:
-  mbl_log_output_file(const vcl_string &filename, const char *id);
+  mbl_log_output_file(const std::string &filename, const char *id);
   //: Start a new log entry, with id info.
   // Future calls to terminate_flush will be ignored.
   virtual void start_with_manual_termination(int level, const char *srcfile, int srcline);
@@ -176,7 +178,7 @@ class mbl_log_output_file: public mbl_log_output_base
   // Future calls to terminate_flush will be honoured.
   virtual void start_with_flush_termination(int level, const char *srcfile, int srcline);
   //: Add contents to the existing log entry.
-  virtual void append(const char * contents, vcl_streamsize n_chars);
+  virtual void append(const char * contents, std::streamsize n_chars);
   //: Finish the log entry, sent from a stream flush.
   virtual void terminate_manual();
   //: Finish the log entry, sent from explicit function call, e.g. by MBL_LOG.
@@ -193,26 +195,26 @@ class mbl_logger
 #ifdef MBL_LOG_DISABLE_ALL_LOGGING
   mbl_logger(): nullstream_(&nullbuf_) {}
   mbl_log_null_streambuf nullbuf_;
-  vcl_ostream nullstream_;
+  std::ostream nullstream_;
  public:  mbl_logger(const char *id): nullstream_(&nullbuf_) {}
   int level() const { return -1000; }
-  vcl_ostream &log(int level) { return nullstream_; }
-  vcl_ostream &mtlog() {return nullstream_;}
+  std::ostream &log(int level) { return nullstream_; }
+  std::ostream &mtlog() {return nullstream_;}
   bool dump() const { return false; }
-  const vcl_string& dump_prefix() const { return ""; }
-  const vcl_string& timestamp() const { return ""; }
+  const std::string& dump_prefix() const { return ""; }
+  const std::string& timestamp() const { return ""; }
 #else
   int level_;
   mbl_log_output_base *output_;
   mbl_log_streambuf streambuf_;
-  vcl_ostream logstream_;
-  vcl_ostream *mt_logstream_;
+  std::ostream logstream_;
+  std::ostream *mt_logstream_;
   //: File location to dump files.
   // If empty - don't dump files.
-  vcl_string dump_prefix_;
+  std::string dump_prefix_;
   //: Time stamp format.
   // If empty - don't print time stamp.
-  vcl_string timestamp_;
+  std::string timestamp_;
   //: Default constructor only available to root's default logger.
   mbl_logger();
 
@@ -229,10 +231,10 @@ class mbl_logger
   void set(int level, mbl_log_output_base* output);
   //: Higher means more output.
   int level() const { return level_; }
-  vcl_ostream &log(int level, const char * srcfile="", int srcline=0);
+  std::ostream &log(int level, const char * srcfile="", int srcline=0);
 
   //: A log with manual event start and stop requirements.
-  vcl_ostream &mtlog() {return *mt_logstream_;}
+  std::ostream &mtlog() {return *mt_logstream_;}
   void mtstart(int level, const char * srcfile="", int srcline=0);
   void mtstop();
 
@@ -243,10 +245,10 @@ class mbl_logger
   // Normal behaviour is to treat this as a prefix rather than a dir, so
   // "./my_dump_area/foo_" indicates the program should create files
   // that begin with "foo_" in sub-directory my_dump_area of the cwd.
-  const vcl_string& dump_prefix() const {return dump_prefix_;}
+  const std::string& dump_prefix() const {return dump_prefix_;}
 
   //: Time stamp format. Don't save timestamp if empty. Not Yet Implemented
-  const vcl_string& timestamp() const { return timestamp_; }
+  const std::string& timestamp() const { return timestamp_; }
 
 #endif // MBL_LOG_DISABLE_ALL_LOGGING
 
@@ -273,29 +275,29 @@ class mbl_log_categories
   {
     int level;
     enum output_type {FILE_OUT, NAMED_STREAM} output;
-    vcl_string name;
-    vcl_string dump_prefix;
-    vcl_string timestamp;
-    vcl_ostream *stream;
+    std::string name;
+    std::string dump_prefix;
+    std::string timestamp;
+    std::ostream *stream;
   };
 
   mbl_log_categories();
 
   //: Configure whole category list from a file.
   // New entries are added to any existing category details.
-  void config(vcl_istream&, const vcl_map<vcl_string, vcl_ostream *>& stream_names);
+  void config(std::istream&, const std::map<std::string, std::ostream *>& stream_names);
 
   //: Make the category list empty;
   // An "empty" list still contains a root entry.
   void clear();
 
   //: Get the closest matching entry;
-  const cat_spec& get(const vcl_string& category) const;
+  const cat_spec& get(const std::string& category) const;
 
-  void print(vcl_ostream& ss) const;
+  void print(std::ostream& ss) const;
 
  private:
-  vcl_map<vcl_string, cat_spec> cat_list_;
+  std::map<std::string, cat_spec> cat_list_;
 };
 
 
@@ -307,9 +309,9 @@ class mbl_logger_root
 
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
   mbl_log_null_streambuf null_streambuf_;
-  vcl_ostream null_stream_;
+  std::ostream null_stream_;
 
-  vcl_set<mbl_logger*> all_loggers_;
+  std::set<mbl_logger*> all_loggers_;
 
   mbl_logger_root():
     null_stream_(&null_streambuf_) {}
@@ -319,7 +321,7 @@ class mbl_logger_root
   //: List of category entries.
   const mbl_log_categories &categories() {return categories_;}
 
-  typedef vcl_map<vcl_string, vcl_ostream *> stream_names_t;
+  typedef std::map<std::string, std::ostream *> stream_names_t;
 
   //:Load a default configuration file
   // This function will look for a configuration file called
@@ -339,18 +341,18 @@ class mbl_logger_root
   // priority than the given level, the message will be output.
   // Finally the category destination must be specified as a
   // "file_output" and the filename or "stream_output" and the stream name.
-  // The known stream names are "vcl_cout" and "vcl_cerr", and additional
+  // The known stream names are "std::cout" and "std::cerr", and additional
   // names can be provided through \p stream_names.
   // The
   //\verbatim
   // root: { level: INFO stream_output: test }
-  // obj3: { level: INFO stream_output: vcl_cout }\n
+  // obj3: { level: INFO stream_output: std::cout }\n
   // obj3.obj6: { level: INFO file_output: results.txt }\n
-  // obj3.obj7.images: { level: INFO stream_output: vcl_cout dump_prefix: ./logging_dir/ }\n
+  // obj3.obj7.images: { level: INFO stream_output: std::cout dump_prefix: ./logging_dir/ }\n
   //\endverbatim
   // where LEVEL is an integer - setting the logging level.
   // see mbl_logger:levels for useful values.
-  void load_log_config(vcl_istream &config, const stream_names_t &stream_names = stream_names_t());
+  void load_log_config(std::istream &config, const stream_names_t &stream_names = stream_names_t());
 
   //: Force all loggers to update themselves in light of changes to the root and configuration.
   // This is already called automatically by load_log_config_file().
@@ -371,10 +373,10 @@ class mbl_logger_root
   do { mbl_logger &rlogger = logger; \
     if (rlogger.level() >= mbl_logger:: my_level) {\
       rlogger.mtstart(mbl_logger:: my_level, __FILE__, __LINE__); \
-      vcl_ios_fmtflags flags=rlogger.mtlog().flags(); \
-      vcl_streamsize precision=rlogger.mtlog().precision(); \
-      vcl_streamsize width=rlogger.mtlog().width(); \
-      rlogger.mtlog() << message << vcl_endl; \
+      std::ios::fmtflags flags=rlogger.mtlog().flags(); \
+      std::streamsize precision=rlogger.mtlog().precision(); \
+      std::streamsize width=rlogger.mtlog().width(); \
+      rlogger.mtlog() << message << std::endl; \
       rlogger.mtlog().width(width); \
       rlogger.mtlog().precision(precision); \
       rlogger.mtlog().flags(flags); \

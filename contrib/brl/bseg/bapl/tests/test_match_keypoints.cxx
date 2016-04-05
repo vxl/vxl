@@ -30,7 +30,7 @@ void draw_keypoint(vil_image_view<vxl_byte>& img, bapl_keypoint_sptr k)
 
 static void test_match_keypoints(int argc, char* argv[])
 {
-  vcl_string dir_base;
+  std::string dir_base;
 
   if ( argc >= 2 ) {
     dir_base = argv[1];
@@ -41,15 +41,15 @@ static void test_match_keypoints(int argc, char* argv[])
 #endif
   }
 
-  vcl_string name1 = dir_base + "frame000.key";
-  vcl_string name2 = dir_base + "frame001.key";
+  std::string name1 = dir_base + "frame000.key";
+  std::string name2 = dir_base + "frame001.key";
 
-  vcl_vector< bapl_keypoint_sptr > keypoints1, keypoints2;
-  vcl_ifstream ifs1(name1.c_str());
+  std::vector< bapl_keypoint_sptr > keypoints1, keypoints2;
+  std::ifstream ifs1(name1.c_str());
   if (!ifs1.is_open()) {
     return;
   }
-  vcl_ifstream ifs2(name2.c_str());
+  std::ifstream ifs2(name2.c_str());
   if (!ifs2.is_open()) {
     return;
   }
@@ -71,19 +71,19 @@ static void test_match_keypoints(int argc, char* argv[])
   for (unsigned i = 0; i < keypoints2.size(); i++) {
     keypoints2[i]->set_id(i);
   }
-  vcl_cout << "loaded: " << keypoints1.size() << " keypoints in the first set!\n";
-  vcl_cout << "loaded: " << keypoints2.size() << " keypoints in the second set!\n";
+  std::cout << "loaded: " << keypoints1.size() << " keypoints in the first set!\n";
+  std::cout << "loaded: " << keypoints2.size() << " keypoints in the second set!\n";
 
   vul_timer t;
 
   bapl_bbf_tree bbf(keypoints2, 16);  // create a kd-tree for features of J (second image)
 
-  vcl_vector<bapl_key_match> matches;
+  std::vector<bapl_key_match> matches;
 
   //for (unsigned i=0; i<keypoints1.size(); ++i) {  // for each feature in I (first image)
   for (unsigned i=0; i<1; ++i) {  // for each feature in I (first image)
     bapl_keypoint_sptr query = keypoints1[i];
-    vcl_vector<bapl_keypoint_sptr> match;
+    std::vector<bapl_keypoint_sptr> match;
     //bbf.n_nearest(query, match, 2, 200);       // find its two nearest neighbors, 200 is parameter value used in bundler package
     bbf.n_nearest(query, match, 2, 1);       // limit the depth of the search
     if ( vnl_vector_ssd(query->descriptor(),match[0]->descriptor()) <
@@ -93,18 +93,18 @@ static void test_match_keypoints(int argc, char* argv[])
     }
   }
 
-  vcl_cout << "Found: " << matches.size() << " matches!\n";
+  std::cout << "Found: " << matches.size() << " matches!\n";
 
-  vcl_vector<bapl_key_match> matches_pruned(matches);
+  std::vector<bapl_key_match> matches_pruned(matches);
   bapl_keypoint_match_set::prune_spurious_matches(matches_pruned);
-  vcl_cout << "After pruning found: " << matches_pruned.size() << '\n';
+  std::cout << "After pruning found: " << matches_pruned.size() << '\n';
   bapl_keypoint_match_set_sptr ms = new bapl_keypoint_match_set(0, 1, matches_pruned);
 
   // refine matches
-  vcl_vector<bapl_key_match> matches_refined;
+  std::vector<bapl_key_match> matches_refined;
   ms->refine_matches(9.0f, matches_refined);
 
-  vcl_cout << "After refinement found: " << matches_refined.size() << '\n';
+  std::cout << "After refinement found: " << matches_refined.size() << '\n';
 }
 
 TESTMAIN_ARGS(test_match_keypoints)

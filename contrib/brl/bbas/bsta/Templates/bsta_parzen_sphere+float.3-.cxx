@@ -1,4 +1,4 @@
-#include <bsta/bsta_parzen_sphere.txx>
+#include <bsta/bsta_parzen_sphere.hxx>
 //
 // Do not remove the following statement
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)

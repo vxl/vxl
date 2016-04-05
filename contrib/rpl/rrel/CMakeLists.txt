@@ -43,10 +43,7 @@ set(rrel_sources
 
 aux_source_directory(Templates rrel_sources)
 
-add_library(rrel ${rrel_sources})
-
-install_targets(/lib rrel)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rrel ${rrel_sources})
+vxl_add_library(LIBRARY_NAME rrel LIBRARY_SOURCES ${rrel_sources})
 target_link_libraries(rrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
 
 include_directories(${VXLCORE_INCLUDE_DIR})

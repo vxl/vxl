@@ -1,18 +1,20 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_create_scene_xml_process.cxx
+#include <iostream>
+#include <string>
 #include "bvxm_create_scene_xml_process.h"
 //:
 // \file
 #include <bvxm/bvxm_world_params.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
 // set up input types
 bool bvxm_create_scene_xml_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_create_scene_xml_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0]  = "vcl_string";      // scene xml output file
   input_types_[1]  = "vcl_string";      // scene world directory
   input_types_[2]  = "float";           // scene corner x coordinate
@@ -27,7 +29,7 @@ bool bvxm_create_scene_xml_process_cons(bprb_func_process& pro)
   input_types_[11] = "float";           // scene minimum occupancy probability
   input_types_[12] = "float";           // scene maximum occupancy probability
   input_types_[13] = "unsigned";        // scene maximum scale
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -38,14 +40,14 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
   using namespace bvxm_create_scene_xml_process_globals;
   // sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << pro.name() << ": Wrong inputs!!\n";
+    std::cerr << pro.name() << ": Wrong inputs!!\n";
     return false;
   }
 
   // get input
   unsigned in_i = 0;
-  vcl_string  scene_xml = pro.get_input<vcl_string>(in_i++);
-  vcl_string  world_dir = pro.get_input<vcl_string>(in_i++);
+  std::string  scene_xml = pro.get_input<std::string>(in_i++);
+  std::string  world_dir = pro.get_input<std::string>(in_i++);
   float       corner_x  = pro.get_input<float>(in_i++);
   float       corner_y  = pro.get_input<float>(in_i++);
   float       corner_z  = pro.get_input<float>(in_i++);
@@ -54,17 +56,17 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
   unsigned       dim_z  = pro.get_input<unsigned>(in_i++);
   float     voxel_size  = pro.get_input<float>(in_i++);
   vpgl_lvcs_sptr  lvcs  = pro.get_input<vpgl_lvcs_sptr>(in_i++);
-  vcl_string lvcs_file  = pro.get_input<vcl_string>(in_i++);
+  std::string lvcs_file  = pro.get_input<std::string>(in_i++);
   float   min_ocp_prob  = pro.get_input<float>(in_i++);
   float   max_ocp_prob  = pro.get_input<float>(in_i++);
   unsigned   max_scale  = pro.get_input<unsigned>(in_i++);
 
   if (!lvcs) {
-    vcl_cerr << pro.name() << ": input scene lvcs is empty!!\n";
+    std::cerr << pro.name() << ": input scene lvcs is empty!!\n";
     return false;
   }
   if (!vul_file::exists(lvcs_file)) {
-    vcl_cerr << pro.name() << ": can not find lvcs file - " << lvcs_file << "!!\n";
+    std::cerr << pro.name() << ": can not find lvcs file - " << lvcs_file << "!!\n";
     return false;
   }
 
@@ -92,7 +94,7 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
 bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_create_scene_xml_large_scale_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";    // region where scenes will cover, defined in kml file
   input_types_[1] = "vcl_string";    // folder where scene xml files will reside
   input_types_[2] = "vcl_string";    // folder where scene world directories will reside
@@ -102,7 +104,7 @@ bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro)
   input_types_[6] = "float";         // scene voxel size
   input_types_[7] = "float";         // the amount to be added on top of the terrain height (large enough to cover highest building)
   input_types_[8] = "float";         // the amount to be subtracted on bottom of the terrain height (to overcome the height map inaccuracy)
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "unsigned";     // number of scenes created
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -113,16 +115,16 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   using namespace bvxm_create_scene_xml_large_scale_process_globals;
   // sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << pro.name() << ": Wrong inputs!\n";
+    std::cerr << pro.name() << ": Wrong inputs!\n";
     return false;
   }
   // get inputs
   unsigned in_i = 0;
-  vcl_string roi_kml     = pro.get_input<vcl_string>(in_i++);
-  vcl_string scene_root  = pro.get_input<vcl_string>(in_i++);
-  vcl_string world_dir   = pro.get_input<vcl_string>(in_i++);
-  vcl_string dem_folder  = pro.get_input<vcl_string>(in_i++);
-  vcl_string land_folder = pro.get_input<vcl_string>(in_i++);
+  std::string roi_kml     = pro.get_input<std::string>(in_i++);
+  std::string scene_root  = pro.get_input<std::string>(in_i++);
+  std::string world_dir   = pro.get_input<std::string>(in_i++);
+  std::string dem_folder  = pro.get_input<std::string>(in_i++);
+  std::string land_folder = pro.get_input<std::string>(in_i++);
   float world_size_in = pro.get_input<float>(in_i++);
   float voxel_size    = pro.get_input<float>(in_i++);
   float height        = pro.get_input<float>(in_i++);
@@ -131,7 +133,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   // find the bounding box from the given region
   vgl_polygon<double> poly = bkml_parser::parse_polygon(roi_kml);
   if (poly[0].size() == 0) {
-    vcl_cerr << pro.name() << ": can not get region from input kml: " << roi_kml << "!\n";
+    std::cerr << pro.name() << ": can not get region from input kml: " << roi_kml << "!\n";
     return false;
   }
   vgl_box_2d<double> bbox_rect;
@@ -141,7 +143,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   vgl_box_2d<double> bbox(bbox_rect.min_point(), square_size, square_size, vgl_box_2d<double>::min_pos);
 
   // truncate the world size from given voxel size
-  double world_size = (unsigned)vcl_ceil(world_size_in / voxel_size)*(double)voxel_size;
+  double world_size = (unsigned)std::ceil(world_size_in / voxel_size)*(double)voxel_size;
   // from truncated world size, calculate the min_size of the geoindex
   vgl_point_2d<double> ll(bbox_rect.min_x(), bbox_rect.min_y());
   vgl_point_2d<double> ur(bbox_rect.max_x(), bbox_rect.max_y());
@@ -155,7 +157,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   scale_ur_x -= ur.x();
   scale_ur_y -= ur.y();
 
-  vcl_set<double> scale_set;
+  std::set<double> scale_set;
   scale_set.insert(scale_ur_x);  scale_set.insert(scale_ur_y);  scale_set.insert(scale_ll_x);  scale_set.insert(scale_ll_y);
   double min_size = *scale_set.begin();
 
@@ -163,12 +165,12 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   // create 2-d quad-tree
   // each leaf refers to a bvxm scene and scene content is unban land ratio of the scene, if land mask is available, otherwise -1.0
   bvgl_2d_geo_index_node_sptr root = bvgl_2d_geo_index::construct_tree<float>(bbox, min_size, poly);
-  vcl_string txt_filename = scene_root + "/geo_index.txt";
+  std::string txt_filename = scene_root + "/geo_index.txt";
   bvgl_2d_geo_index::write(root, txt_filename, min_size);
   unsigned tree_depth = bvgl_2d_geo_index::depth(root);
-  vcl_vector<bvgl_2d_geo_index_node_sptr> leaves;
+  std::vector<bvgl_2d_geo_index_node_sptr> leaves;
   bvgl_2d_geo_index::get_leaves(root, leaves);
-  vcl_cout << "the geo-index has " << leaves.size() << " leaves and depth is " << tree_depth << vcl_endl;
+  std::cout << "the geo-index has " << leaves.size() << " leaves and depth is " << tree_depth << std::endl;
 
 
   // initialize the urban land ratio
@@ -178,15 +180,15 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   }
 
   // load height images
-  vcl_vector<volm_img_info> dem_infos;
+  std::vector<volm_img_info> dem_infos;
   volm_io_tools::load_aster_dem_imgs(dem_folder, dem_infos);
   if (dem_infos.empty()) {
-    vcl_cerr << pro.name() << ": can not load any height map from: " << dem_folder << "!\n";
+    std::cerr << pro.name() << ": can not load any height map from: " << dem_folder << "!\n";
     return false;
   }
 
   // load land masks
-  vcl_vector<volm_img_info> land_infos;
+  std::vector<volm_img_info> land_infos;
   volm_io_tools::load_geocover_imgs(land_folder, land_infos);
   bool land_available = false;
   if (!land_infos.empty()) {
@@ -195,32 +197,32 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
 
   // create scene for each leaf, note that the scene size is different (in meters)
   double height_dif_max = 0.0;
-  vcl_string lvcs_folder = scene_root + "/lvcs";
+  std::string lvcs_folder = scene_root + "/lvcs";
   if (!(vul_file::exists(lvcs_folder) && vul_file::is_directory(lvcs_folder)))
     if (!vul_file::make_directory(lvcs_folder)) {
-      vcl_cerr << pro.name() << ": creating lvcs folder " << lvcs_folder << " failed!\n";
+      std::cerr << pro.name() << ": creating lvcs folder " << lvcs_folder << " failed!\n";
       return false;
     }
-  vcl_cout << "pre-defined world size: " << world_size_in << ", voxel size: " << voxel_size << ", truncated world size: " << world_size << vcl_endl;
-  vcl_cout << "bounding box for input region: " << bbox_rect << " expending to square: " << bbox << vcl_endl;
-  vcl_cout << "lower  left: " << ll << " --> scale: " << scale_ll_x << ", " << scale_ll_y << vcl_endl;
-  vcl_cout << "upper right: " << ur << " --> scale: " << scale_ur_x << ", " << scale_ur_y << vcl_endl;
-  vcl_cout << "scene size: " << min_size << vcl_flush << vcl_endl;
-  vcl_cout << "loaded " << dem_infos.size() << " DEM tiles!\n";
-  vcl_cout << "loaded " << land_infos.size() << " Land mask!\n";
-  vcl_cout << "the geo-index has " << leaves.size() << " leaves and depth is " << tree_depth << vcl_endl;
-  vcl_cout << "Start to generate " << leaves.size() << " scenes: ";
+  std::cout << "pre-defined world size: " << world_size_in << ", voxel size: " << voxel_size << ", truncated world size: " << world_size << std::endl;
+  std::cout << "bounding box for input region: " << bbox_rect << " expending to square: " << bbox << std::endl;
+  std::cout << "lower  left: " << ll << " --> scale: " << scale_ll_x << ", " << scale_ll_y << std::endl;
+  std::cout << "upper right: " << ur << " --> scale: " << scale_ur_x << ", " << scale_ur_y << std::endl;
+  std::cout << "scene size: " << min_size << std::flush << std::endl;
+  std::cout << "loaded " << dem_infos.size() << " DEM tiles!\n";
+  std::cout << "loaded " << land_infos.size() << " Land mask!\n";
+  std::cout << "the geo-index has " << leaves.size() << " leaves and depth is " << tree_depth << std::endl;
+  std::cout << "Start to generate " << leaves.size() << " scenes: ";
   for (unsigned i = 0; i < leaves.size(); i++)
   {
     if (i % 100 == 0)
-      vcl_cout << i << '.' << vcl_flush;
+      std::cout << i << '.' << std::flush;
 
     vgl_point_2d<double> lower_left  = leaves[i]->extent_.min_point();
     vgl_point_2d<double> upper_right = leaves[i]->extent_.max_point();
     // find the evaluation information
     double min = 10000.0, max = -10000.0;
     if (!volm_io_tools::find_min_max_height(lower_left, upper_right, dem_infos, min, max)) {
-      vcl_cerr << pro.name() << ": can not find height info for leave " << i << ", lower left: " << lower_left << ", upper right: " << upper_right << "!\n";
+      std::cerr << pro.name() << ": can not find height info for leave " << i << ", lower left: " << lower_left << ", upper right: " << upper_right << "!\n";
       return false;
     }
     double h_diff = max-min;
@@ -232,26 +234,26 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
     vgl_point_3d<float> corner(0.0f, 0.0f, 0.0f);
     double lx, ly, lz;
     lvcs->global_to_local(upper_right.x(), upper_right.y(), max+height, vpgl_lvcs::wgs84, lx, ly, lz);
-    unsigned dim_x = (unsigned)vcl_ceil(lx / voxel_size);
-    unsigned dim_y = (unsigned)vcl_ceil(ly / voxel_size);
-    unsigned dim_z = (unsigned)vcl_ceil(lz / voxel_size);
+    unsigned dim_x = (unsigned)std::ceil(lx / voxel_size);
+    unsigned dim_y = (unsigned)std::ceil(ly / voxel_size);
+    unsigned dim_z = (unsigned)std::ceil(lz / voxel_size);
     vgl_vector_3d<unsigned> num_voxels(dim_x, dim_y, dim_z);
-    vcl_stringstream scene_world;
+    std::stringstream scene_world;
     scene_world << world_dir << "/scene_" << i;
     if (!(vul_file::exists(scene_world.str()) && vul_file::is_directory(scene_world.str())))
       if (!vul_file::make_directory(scene_world.str())) {
-        vcl_cerr << pro.name() << ": creating scene world folder " << scene_world.str() << " failed!\n";
+        std::cerr << pro.name() << ": creating scene world folder " << scene_world.str() << " failed!\n";
         return false;
       }
     bvxm_world_params params;
     params.set_params(scene_world.str(), corner, num_voxels, voxel_size, lvcs);
 
     // write out
-    vcl_stringstream scene_file;  scene_file << scene_root  << "/scene_" << i << ".xml";
-    vcl_stringstream lvcs_file;   lvcs_file  << lvcs_folder << "/scene_" << i << ".lvcs";
-    vcl_ofstream ofs(lvcs_file.str().c_str());
+    std::stringstream scene_file;  scene_file << scene_root  << "/scene_" << i << ".xml";
+    std::stringstream lvcs_file;   lvcs_file  << lvcs_folder << "/scene_" << i << ".lvcs";
+    std::ofstream ofs(lvcs_file.str().c_str());
     if (!ofs) {
-      vcl_cerr << pro.name() << ": can not open file: " << lvcs_file.str() << "!\n";
+      std::cerr << pro.name() << ": can not open file: " << lvcs_file.str() << "!\n";
       return false;
     }
     lvcs->write(ofs);
@@ -281,8 +283,8 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
           lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
           double u, v;
           land_cover.cam->global_to_img(lon, lat, gz, u, v);
-          unsigned uu = (unsigned)vcl_floor(u+0.5);
-          unsigned vv = (unsigned)vcl_floor(v+0.5);
+          unsigned uu = (unsigned)std::floor(u+0.5);
+          unsigned vv = (unsigned)std::floor(v+0.5);
           if (uu > 0 && vv > 0 && uu < land_cover.ni && vv < land_cover.nj) {
             if ((*land_img)(uu,vv) == volm_osm_category_io::GEO_URBAN) {
               urban_pixels++;
@@ -298,8 +300,8 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   } // end of the leaf loop
 
   // save the urban ratio in a txt file
-  vcl_string urban_txt = scene_root + "/scene_urban_ratio.txt";
-  vcl_ofstream ofs_urban(urban_txt.c_str());
+  std::string urban_txt = scene_root + "/scene_urban_ratio.txt";
+  std::ofstream ofs_urban(urban_txt.c_str());
   ofs_urban << "scene_id   urban_ratio\n";
   for (unsigned i = 0; i < leaves.size(); i++) {
     bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
@@ -308,18 +310,18 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   ofs_urban.close();
 
   // write the kml for visualization
-  vcl_string kml_file = scene_root + "/scene_geo_index.kml";
-  vcl_ofstream ofs(kml_file.c_str());
+  std::string kml_file = scene_root + "/scene_geo_index.kml";
+  std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   for (unsigned i = 0; i < leaves.size(); i++) {
     bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
-    vcl_stringstream description; description << "scene_" << i << "_urban_" << leaf_ptr->contents_;
+    std::stringstream description; description << "scene_" << i << "_urban_" << leaf_ptr->contents_;
     bvgl_2d_geo_index::write_to_kml_node(ofs, leaves[i], 0, 0, description.str());
   }
   bkml_write::close_document(ofs);
   ofs.close();
 
-  vcl_cout << "\nDONE!!! largest height difference in the entire region is: " << height_dif_max << vcl_endl;
+  std::cout << "\nDONE!!! largest height difference in the entire region is: " << height_dif_max << std::endl;
 
   // generate output
   pro.set_output_val<unsigned>(0, leaves.size());

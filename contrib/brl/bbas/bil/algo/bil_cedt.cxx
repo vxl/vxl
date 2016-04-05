@@ -1,9 +1,11 @@
+#include <iostream>
+#include <cmath>
 #include "bil_cedt.h"
 //:
 // \file
 
 #include <vbl/vbl_array_2d.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 bil_cedt::bil_cedt()
 {
@@ -43,7 +45,7 @@ bool bil_cedt::compute_cedt()
 
     for (unsigned j=0;j<dist_.nj();++j)
       for (unsigned i=0;i<dist_.ni();++i)
-         dist_(i,j)=vcl_sqrt((float)(dx_(j,i)*dx_(j,i)+dy_(j,i)*dy_(j,i)));
+         dist_(i,j)=std::sqrt((float)(dx_(j,i)*dx_(j,i)+dy_(j,i)*dy_(j,i)));
 
     delete heap;
     return true;
@@ -734,7 +736,7 @@ void bil_cedt_heap::print_heap()
 #if 0 // this variable is not used in the code.  FIXME !  -MM
     int pos = y*ni_+x;
 #endif
-    vcl_cout<<"i ="<<i<<" index[i]= "<<index[i]<< " x= "<<x<<" y= "<<y<<'\n';
+    std::cout<<"i ="<<i<<" index[i]= "<<index[i]<< " x= "<<x<<" y= "<<y<<'\n';
   }
 }
 

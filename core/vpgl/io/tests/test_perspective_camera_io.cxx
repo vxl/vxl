@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
 #include <vnl/vnl_double_3.h>
@@ -15,7 +16,7 @@ static double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
 }
 static void test_perspective_camera_io()
 {
-  vcl_cout << "Testing perspective camera" << vcl_endl;
+  std::cout << "Testing perspective camera" << std::endl;
 
   // ===========  Construct the camera
 
@@ -31,10 +32,10 @@ static void test_perspective_camera_io()
   vnl_double_3 axis(0.0, 1.0, 0.0);
   vgl_h_matrix_3d<double> R;
   R.set_identity().set_rotation_about_axis(axis, theta);
-  vcl_cout <<"Rotation Matrix\n" << R << '\n';
+  std::cout <<"Rotation Matrix\n" << R << '\n';
   vpgl_perspective_camera<double> P(K, center, vgl_rotation_3d<double>(R));
 
-  vcl_cout << "Camera " << P;
+  std::cout << "Camera " << P;
 
   // test output
 
@@ -52,7 +53,7 @@ static void test_perspective_camera_io()
   vsl_b_read(bp_in, P_r);
   bp_in.close();
   vpl_unlink("test_perspective_camera_io.tmp");
-  vcl_cout << "Recovered Camera " << P_r;
+  std::cout << "Recovered Camera " << P_r;
   double er = camera_diff_norm(P, P_r);
   TEST_NEAR("recovered camera", er, 0.0, 1e-3);
 }

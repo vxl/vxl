@@ -16,7 +16,9 @@
 // \endverbatim
 //
 
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg2D.h>
@@ -57,10 +59,10 @@ class HomgPoint2D : public Homg2D
   HomgPoint2D get_unitized() const;
 
   // Utility Methods---------------------------------------------------------
-  static HomgPoint2D read(vcl_istream&, bool is_homogeneous = false);
+  static HomgPoint2D read(std::istream&, bool is_homogeneous = false);
 };
 
-vcl_istream& operator>>(vcl_istream& is, HomgPoint2D& p);
-vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint2D& );
+std::istream& operator>>(std::istream& is, HomgPoint2D& p);
+std::ostream& operator<<(std::ostream& s, const HomgPoint2D& );
 
 #endif // HomgPoint2D_h_

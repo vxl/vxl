@@ -15,7 +15,8 @@
 // J.L. Mundy     - 13 April 2003 - Added angle and line coefficient functions
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h> // data member of this class
 
 //: Represents a 2D line segment using two points.
@@ -97,12 +98,12 @@ class vgl_line_segment_2d
 //: Write to stream
 // \relatesalso vgl_line_segment_2d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_2d<Type>& p);
+std::ostream&  operator<<(std::ostream& s, const vgl_line_segment_2d<Type>& p);
 
 //: Read from stream
 // \relatesalso vgl_line_segment_2d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_2d<Type>& p);
+std::istream&  operator>>(std::istream& is,  vgl_line_segment_2d<Type>& p);
 
 #define VGL_LINE_SEGMENT_2D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_2d.txx first"
 

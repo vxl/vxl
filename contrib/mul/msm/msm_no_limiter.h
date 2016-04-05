@@ -5,9 +5,11 @@
 // \author Tim Cootes
 // \brief No limits applied to parameters
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: No limits applied to parameters
 class msm_no_limiter : public msm_param_limiter
@@ -31,13 +33,13 @@ class msm_no_limiter : public msm_param_limiter
   void set_n_sds(double n_sds);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual msm_param_limiter* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

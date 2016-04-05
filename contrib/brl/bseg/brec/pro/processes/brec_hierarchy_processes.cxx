@@ -24,7 +24,7 @@ bool brec_create_hierarchy_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("bool");      // if true creates an empty hierarchy otherwise returns an instance created by the builder class for the given detector id
   input_types.push_back("unsigned");      // detector id for the type of structure to be recognized (if using builder class, otherwise not-used)
   input_types.push_back("vcl_string");      // name of the hierarchy
@@ -32,7 +32,7 @@ bool brec_create_hierarchy_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("brec_part_hierarchy_sptr");      // output hierarchy
   ok = pro.set_output_types(output_types);
   return ok;
@@ -43,7 +43,7 @@ bool brec_create_hierarchy_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 3) {
-    vcl_cerr << "brec_create_hierarchy_process - invalid inputs\n";
+    std::cerr << "brec_create_hierarchy_process - invalid inputs\n";
     return false;
   }
 
@@ -51,7 +51,7 @@ bool brec_create_hierarchy_process(bprb_func_process& pro)
   unsigned i = 0;
   bool create_empty = pro.get_input<bool>(i++);
   unsigned d_id = pro.get_input<unsigned>(i++);
-  vcl_string name = pro.get_input<vcl_string>(i++);
+  std::string name = pro.get_input<std::string>(i++);
 
   brec_part_hierarchy_sptr h;
   if (create_empty) {
@@ -65,7 +65,7 @@ bool brec_create_hierarchy_process(bprb_func_process& pro)
       case 3: { h = brec_part_hierarchy_builder::construct_detector_roi1_3(); } break;
       case 4: { h = brec_part_hierarchy_builder::construct_detector_roi1_4(); } break;
       case 100: { h = brec_part_hierarchy_builder::construct_test_detector(); } break;
-      default: { vcl_cout << "In brec_create_hierarchy_process::execute() -- Unrecognized detector type!!\n"; return false; }
+      default: { std::cout << "In brec_create_hierarchy_process::execute() -- Unrecognized detector type!!\n"; return false; }
     }
   }
 
@@ -79,13 +79,13 @@ bool brec_load_hierarchy_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");      // name of xml file
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("brec_part_hierarchy_sptr");      // h
   ok = pro.set_output_types(output_types);
   return ok;
@@ -95,16 +95,16 @@ bool brec_load_hierarchy_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 1) {
-    vcl_cerr << " brec_load_hierarchy_process - invalid inputs\n";
+    std::cerr << " brec_load_hierarchy_process - invalid inputs\n";
     return false;
   }
 
   // get input
   unsigned i = 0;
-  vcl_string name = pro.get_input<vcl_string>(i++);
+  std::string name = pro.get_input<std::string>(i++);
 
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
-  vcl_ifstream is(name.c_str());
+  std::ifstream is(name.c_str());
   h->read_xml(is);
   is.close();
 
@@ -117,14 +117,14 @@ bool brec_save_hierarchy_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brec_part_hierarchy_sptr");      // h
   input_types.push_back("vcl_string");      // name of output xml file
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -133,16 +133,16 @@ bool brec_save_hierarchy_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cerr << " brec_load_hierarchy_process - invalid inputs\n";
+    std::cerr << " brec_load_hierarchy_process - invalid inputs\n";
     return false;
   }
 
   // get input
   unsigned i = 0;
   brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
-  vcl_string name = pro.get_input<vcl_string>(i++);
+  std::string name = pro.get_input<std::string>(i++);
 
-  vcl_ofstream os(name.c_str());
+  std::ofstream os(name.c_str());
   h->write_xml(os);
   os.close();
 
@@ -153,7 +153,7 @@ bool brec_draw_hierarchy_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brec_part_hierarchy_sptr");      // h
   input_types.push_back("vcl_string");      // name of output ps file
   input_types.push_back("float");  // drawing radius for the primitive parts, this radius is doubled as we go up in the hierarchy
@@ -162,7 +162,7 @@ bool brec_draw_hierarchy_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -171,14 +171,14 @@ bool brec_draw_hierarchy_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 4) {
-    vcl_cerr << " brec_load_hierarchy_process - invalid inputs\n";
+    std::cerr << " brec_load_hierarchy_process - invalid inputs\n";
     return false;
   }
 
   // get input
   unsigned i = 0;
   brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
-  vcl_string name = pro.get_input<vcl_string>(i++);
+  std::string name = pro.get_input<std::string>(i++);
   float drawing_radius = pro.get_input<float>(i++);
   int N = pro.get_input<int>(i++);
 
@@ -191,14 +191,14 @@ bool brec_set_hierarchy_model_dir_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brec_part_hierarchy_sptr");      // h
   input_types.push_back("vcl_string");      // model dir
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -207,14 +207,14 @@ bool brec_set_hierarchy_model_dir_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cerr << " brec_set_hierarchy_model_dir_process - invalid inputs\n";
+    std::cerr << " brec_set_hierarchy_model_dir_process - invalid inputs\n";
     return false;
   }
 
   // get input
   unsigned i = 0;
   brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
-  vcl_string name = pro.get_input<vcl_string>(i++);
+  std::string name = pro.get_input<std::string>(i++);
   h->set_model_dir(name);
   return true;
 }

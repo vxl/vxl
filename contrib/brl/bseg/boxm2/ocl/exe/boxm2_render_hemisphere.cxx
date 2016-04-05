@@ -1,5 +1,7 @@
+#include <iostream>
+#include <sstream>
 #include <bocl/bocl_cl.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsph/vsph_view_sphere.h>
@@ -36,9 +38,9 @@
 
 int main(int argc,  char** argv)
 {
-  vcl_cout<<"Boxm2 Hemisphere"<<vcl_endl;
-  vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-  vul_arg<vcl_string> img("-img", "output image directory", "");
+  std::cout<<"Boxm2 Hemisphere"<<std::endl;
+  vul_arg<std::string> scene_file("-scene", "scene filename", "");
+  vul_arg<std::string> img("-img", "output image directory", "");
   vul_arg<unsigned> ni("-ni", "Width of image", 640);
   vul_arg<unsigned> nj("-nj", "Height of image", 480);
   vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
@@ -80,18 +82,18 @@ int main(int argc,  char** argv)
   /////////////////////////////////////////////////////////////////////////////
   if ( !grid() )
   {
-    vcl_vector<vil_image_view<vxl_byte>* > images;
+    std::vector<vil_image_view<vxl_byte>* > images;
 
-    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), radius());
+    vsph_view_sphere<vsph_view_point<std::string> > sphere(scene->bounding_box(), radius());
     sphere.add_uniform_views(vnl_math::pi/3, vnl_math::pi/18.0, ni(), nj());
-    vcl_cout<<"Number of views to render: "<<sphere.size()<<vcl_endl;
+    std::cout<<"Number of views to render: "<<sphere.size()<<std::endl;
 
-    vsph_view_sphere<vsph_view_point<vcl_string> >::iterator iter; int img_index=0;
+    vsph_view_sphere<vsph_view_point<std::string> >::iterator iter; int img_index=0;
     for (iter = sphere.begin(); iter != sphere.end(); ++iter, ++img_index)
     {
-      vcl_cout<<"view: [id "<<iter->first<<']'<<vcl_endl;
+      std::cout<<"view: [id "<<iter->first<<']'<<std::endl;
 
-      vsph_view_point<vcl_string>& view = iter->second;
+      vsph_view_point<std::string>& view = iter->second;
       vpgl_camera_double_sptr cam_sptr = view.camera();
       vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
       brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
@@ -108,7 +110,7 @@ int main(int argc,  char** argv)
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
       }
       if ( !good ) {
-        vcl_cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << vcl_endl;
+        std::cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << std::endl;
         return -1;
       }
       //set process args and run process
@@ -121,26 +123,26 @@ int main(int argc,  char** argv)
           && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
           && bprb_batch_process_manager::instance()->run_process();
       if ( !good ) {
-        vcl_cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << vcl_endl;
+        std::cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << std::endl;
         return -1;
       }
 
       unsigned int img_id=0;
       good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
       if ( !good ) {
-        vcl_cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << vcl_endl;
+        std::cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << std::endl;
         return -1;
       }
       brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
       brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
       if (S->size()!=1) {
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                  << " no selections\n";
       }
 
       brdb_value_sptr value;
-      if (!S->get_value(vcl_string("value"), value)) {
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      if (!S->get_value(std::string("value"), value)) {
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                  << " didn't get value\n";
       }
 
@@ -153,11 +155,11 @@ int main(int argc,  char** argv)
           (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
 
       //save image
-      vcl_stringstream stream, tfstream, jpgstream;
+      std::stringstream stream, tfstream, jpgstream;
       stream<<img()<<"/pimg_"<<img_index<<".png";
       tfstream<<img()<<"/timg_"<<img_index<<".tiff";
       jpgstream<<img()<<"/jimg_"<<img_index<<".jpeg";
-      vcl_string* filepath = new vcl_string();
+      std::string* filepath = new std::string();
       (*filepath) = stream.str();
       view.set_metadata(filepath);
       vil_save( *byte_img, stream.str().c_str() );
@@ -170,11 +172,11 @@ int main(int argc,  char** argv)
     }
 
     //Save sphere
-    vcl_cout<<"SAVING SPHERE TO SPHERE PATH"<<vcl_endl;
-    vcl_string sphere_path = img() + "/sphere.bin";
+    std::cout<<"SAVING SPHERE TO SPHERE PATH"<<std::endl;
+    std::string sphere_path = img() + "/sphere.bin";
     vsl_b_ofstream sphere_os(sphere_path);
     if (!sphere_os) {
-      vcl_cout<<"cannot open "<<sphere_path<<" for writing\n";
+      std::cout<<"cannot open "<<sphere_path<<" for writing\n";
       return false;
     }
     vsl_b_write(sphere_os, sphere);
@@ -187,9 +189,9 @@ int main(int argc,  char** argv)
   else
   {
     //set up a view sphere, use find closest for closest neighbors
-    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), radius());
+    vsph_view_sphere<vsph_view_point<std::string> > sphere(scene->bounding_box(), radius());
     sphere.add_uniform_views(vnl_math::pi/3, vnl_math::pi/18.0, ni(), nj());
-    vcl_cout<<"Number of views to render: "<<sphere.size()<<vcl_endl;
+    std::cout<<"Number of views to render: "<<sphere.size()<<std::endl;
 
     //rendered array of views
     vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
@@ -206,7 +208,7 @@ int main(int argc,  char** argv)
         vsph_sph_point_3d curr_point(radius(), el, az);
         vgl_point_3d<double> cart_point = sphere.cart_coord(curr_point);
         int uid; double dist;
-        vsph_view_point<vcl_string> view = sphere.find_closest(cart_point, uid, dist);
+        vsph_view_point<std::string> view = sphere.find_closest(cart_point, uid, dist);
         vpgl_camera_double_sptr cam_sptr = view.camera();
         brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
@@ -225,7 +227,7 @@ int main(int argc,  char** argv)
           good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
         }
         if ( !good ) {
-          vcl_cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << vcl_endl;
+          std::cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << std::endl;
           return -1;
         }
 
@@ -239,26 +241,26 @@ int main(int argc,  char** argv)
             && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
             && bprb_batch_process_manager::instance()->run_process();
         if ( !good ) {
-          vcl_cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << vcl_endl;
+          std::cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << std::endl;
           return -1;
         }
 
         unsigned int img_id=0;
         good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
         if ( !good ) {
-          vcl_cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << vcl_endl;
+          std::cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << std::endl;
           return -1;
         }
         brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
         brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
         if (S->size()!=1) {
-          vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+          std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                    << " no selections\n";
         }
 
         brdb_value_sptr value;
-        if (!S->get_value(vcl_string("value"), value)) {
-          vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+        if (!S->get_value(std::string("value"), value)) {
+          std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                    << " didn't get value\n";
         }
 
@@ -271,7 +273,7 @@ int main(int argc,  char** argv)
             (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
 
         //save as jpeg
-        vcl_stringstream pngstream, jpgstream;
+        std::stringstream pngstream, jpgstream;
         jpgstream<<img()<<"/jimg_"<<el_i<<'_'<<az_i<<".jpeg";
         vil_save( *byte_img, jpgstream.str().c_str() );
 #if 0
@@ -299,7 +301,7 @@ int main(int argc,  char** argv)
       }
 
       //save as pngv
-      vcl_string big = img() + "/scene-reel.jpeg";
+      std::string big = img() + "/scene-reel.jpeg";
       vil_save( *stitched, big.c_str() );
     }
   }

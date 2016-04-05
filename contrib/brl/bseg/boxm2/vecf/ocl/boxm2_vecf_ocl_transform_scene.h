@@ -33,16 +33,16 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
                                  boxm2_scene_sptr target_scene,
                                  boxm2_opencl_cache_sptr ocl_cache,
-                                 vcl_string gray_app_id="",
-                                 vcl_string color_app_id="",
+                                 std::string gray_app_id="",
+                                 std::string color_app_id="",
                                  bool do_alpha = true,
                                  bool do_interp = true);
 
   //constructor if target scene is not known at the time of creation
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
                                  boxm2_opencl_cache_sptr ocl_cache,
-                                 vcl_string gray_app_id="",
-                                 vcl_string color_app_id="",
+                                 std::string gray_app_id="",
+                                 std::string color_app_id="",
                                  bool do_alpha = true,
                                  bool do_interp = true);
 
@@ -85,7 +85,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   boxm2_scene_sptr source_scene(){return source_scene_;}
   boxm2_opencl_cache_sptr opencl_cache(){return opencl_cache_;}
   bool get_scene_appearance(boxm2_scene_sptr scene,
-                            vcl_string&      options);
+                            std::string&      options);
 
 private:
   bool init_target_scene_buffers(boxm2_scene_sptr target_scene);
@@ -105,7 +105,7 @@ private:
   bocl_device_sptr device_;
   int apptypesize_;//size of the appearance model in bytes
   boxm2_data_type app_type_; //type of appearance
-  vcl_string color_app_type_id_; //type of appearance
+  std::string color_app_type_id_; //type of appearance
 
   //transform kernels and args
   //bocl_kernel * trans_kern;
@@ -147,7 +147,7 @@ private:
   int data_size;
   float * long_output;
   bocl_mem_sptr output_f;
-  vcl_string grey_app_id_,color_app_id_;
+  std::string grey_app_id_,color_app_id_;
   bool do_alpha_,do_interp_;
 
   bocl_mem* alpha_target_;

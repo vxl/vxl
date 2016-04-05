@@ -25,7 +25,7 @@ bool bvxm_report_statistics_point_cloud_process_cons(bprb_func_process& pro)
 
   // process takes 1 input, no outputs
   // input[0]: filename for input point cloud (x y z)
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
   return pro.set_input_types(input_types_);
 }
@@ -37,21 +37,21 @@ bool bvxm_report_statistics_point_cloud_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< " but is " << pro.n_inputs() << vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< " but is " << pro.n_inputs() << std::endl;
     return false;
   }
 
   // get inputs
   unsigned i = 0;
-  vcl_string point_filename = pro.get_input<vcl_string>(i++);
-  vcl_ifstream ifile(point_filename.c_str());
+  std::string point_filename = pro.get_input<std::string>(i++);
+  std::ifstream ifile(point_filename.c_str());
   if (!ifile)
   {
-    vcl_cout<<"Failed to open "<<point_filename<<vcl_endl;
+    std::cout<<"Failed to open "<<point_filename<<std::endl;
     return false;
   }
 
-  vcl_vector<vgl_point_3d<float> > point_cloud;
+  std::vector<vgl_point_3d<float> > point_cloud;
   float minx=1e20f,  miny=1e20f,  minz=1e20f,
         maxx=-1e20f, maxy=-1e20f, maxz=-1e20f;
 
@@ -69,9 +69,9 @@ bool bvxm_report_statistics_point_cloud_process(bprb_func_process& pro)
     if (z>maxz) maxz=z;
     point_cloud.push_back(p3d);
   }
-  vcl_cout<<"Min: ("<<minx<<','<<miny<<','<<minz<<")\n"
+  std::cout<<"Min: ("<<minx<<','<<miny<<','<<minz<<")\n"
           <<"Max: ("<<maxx<<','<<maxy<<','<<maxz<<")\n"
-          <<'('<<maxx-minx<<','<<maxy-miny<<','<<maxz-minz<<')'<<vcl_endl;
+          <<'('<<maxx-minx<<','<<maxy-miny<<','<<maxz-minz<<')'<<std::endl;
 
   return true;
 }

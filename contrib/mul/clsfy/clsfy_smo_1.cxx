@@ -1,4 +1,6 @@
 // This is mul/clsfy/clsfy_smo_1.cxx
+#include <iostream>
+#include <cmath>
 #include "clsfy_smo_1.h"
 //:
 // \file
@@ -14,9 +16,8 @@
 // Minimal Optimisation. In Advances in Kernel Methods - Support Vector Learning.
 // B. Scholkopf, C. Burges and A. Smola, MIT Press: 185-208. and other papers.
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
 // Linear SMO
@@ -39,14 +40,14 @@ double clsfy_smo_1_rbf::kernel(int i1, int i2)
   double s = dot_product(data_point(i1),data_point(i2));
   s *= -2.0f;
   s += precomputed_self_dot_product_[i1] + precomputed_self_dot_product_[i2];
-  return vcl_exp(gamma_ * s);
+  return std::exp(gamma_ * s);
 }
 
 // ----------------------------------------------------------------
 
 //: Takes a copy of the data wrapper, but not the data.
 // Be careful not to destroy the underlying data while using this object.
-void clsfy_smo_1_lin::set_data(const mbl_data_wrapper<vnl_vector<double> >& data, const vcl_vector<int>& targets)
+void clsfy_smo_1_lin::set_data(const mbl_data_wrapper<vnl_vector<double> >& data, const std::vector<int>& targets)
 {
   const unsigned N = data.size();
   data_ = data.clone();
@@ -372,14 +373,14 @@ int clsfy_smo_1_lin::calc()
               t += alph_[i]*alph_[j]*target_[i]*target_[j]*kernel(i,j);
         }
       }
-      vcl_cerr << "Objective function=" << (s - t/2.) << '\t';
+      std::cerr << "Objective function=" << (s - t/2.) << '\t';
       for (int i=0; i<N; i++)
         if (alph_[i] < 0)
-          vcl_cerr << "alph_[" << i << "]=" << alph_[i] << " < 0\n";
+          std::cerr << "alph_[" << i << "]=" << alph_[i] << " < 0\n";
       s = 0.;
       for (int i=0; i<N; i++)
         s += alph_[i] * target_[i];
-      vcl_cerr << "s=" << s << "\terror_rate=" << error_rate() << '\t';
+      std::cerr << "s=" << s << "\terror_rate=" << error_rate() << '\t';
     }
 #endif
 
@@ -395,7 +396,7 @@ int clsfy_smo_1_lin::calc()
           else
             bound_support++;
         }
-      vcl_cerr << "non_bound=" << non_bound_support << '\t'
+      std::cerr << "non_bound=" << non_bound_support << '\t'
                << "bound_support=" << bound_support << '\n';
     }
 #endif
@@ -404,8 +405,8 @@ int clsfy_smo_1_lin::calc()
   error_ = error_rate();
 
 #if !defined NDEBUG && CLSFY_SMO_BASE_PRINT_PROGRESS
-  vcl_cerr << "Threshold=" << b_ << '\n';
-  vcl_cout << "Error rate=" << error_ << vcl_endl;
+  std::cerr << "Threshold=" << b_ << '\n';
+  std::cout << "Error rate=" << error_ << std::endl;
 #endif
 
   return 0;

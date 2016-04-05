@@ -35,10 +35,10 @@ else()
   # exist.
   #
 
-  if(EXISTS ${vxl_SOURCE_DIR}/v3p/zlib/zlib.h)
+  if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/zlib/zlib.h)
 
     set( ZLIB_FOUND "YES" )
-    set( ZLIB_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/zlib)
+    set( ZLIB_INCLUDE_DIR ${VXL_ROOT_SOURCE_DIR}/v3p/zlib)
     set( ZLIB_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/zlib)
     set( ZLIB_LIBRARIES z )
 

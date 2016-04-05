@@ -3,11 +3,13 @@
 //:
 // \file
 
+#include <string>
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "pdf1d_kernel_pdf_builder.h"
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector_ref.h>
 #include <mbl/mbl_data_wrapper.h>
@@ -83,7 +85,7 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, double mean) const
 
   vnl_vector<double> m(1);
   m[0] = mean;
-  kpdf.set_centres(m,vcl_sqrt(min_var_));
+  kpdf.set_centres(m,std::sqrt(min_var_));
 }
 
 //: Build kernel_pdf from n elements in data[i]
@@ -94,8 +96,8 @@ void pdf1d_kernel_pdf_builder::build_from_array(pdf1d_pdf& model,
 
   if (n<1)
   {
-    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() No examples available.\n";
-    vcl_abort();
+    std::cerr<<"pdf1d_kernel_pdf_builder::build() No examples available.\n";
+    std::abort();
   }
 
   // Initially just use Silverman's estimate
@@ -118,8 +120,8 @@ void pdf1d_kernel_pdf_builder::build_from_array(pdf1d_pdf& model,
     build_adaptive(kpdf,data,n);
     break;
     default:
-    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() Unknown build type.\n";
-    vcl_abort();
+    std::cerr<<"pdf1d_kernel_pdf_builder::build() Unknown build type.\n";
+    std::abort();
   }
 }
 
@@ -131,8 +133,8 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>&
 
   if (n<1)
   {
-    vcl_cerr<<"pdf1d_kernel_pdf_builder::build() No examples available.\n";
-    vcl_abort();
+    std::cerr<<"pdf1d_kernel_pdf_builder::build() No examples available.\n";
+    std::abort();
   }
 
   if (data.is_class("mbl_data_array_wrapper<T>"))
@@ -157,9 +159,9 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>&
 
 void pdf1d_kernel_pdf_builder::weighted_build(pdf1d_pdf& model,
                                               mbl_data_wrapper<double>& data,
-                                              const vcl_vector<double>& /*wts*/) const
+                                              const std::vector<double>& /*wts*/) const
 {
-  vcl_cerr<<"pdf1d_kernel_pdf_builder::weighted_build() Ignoring weights.\n";
+  std::cerr<<"pdf1d_kernel_pdf_builder::weighted_build() Ignoring weights.\n";
   build(model,data);
 }
 
@@ -181,8 +183,8 @@ void pdf1d_kernel_pdf_builder::build_select_equal_width(pdf1d_kernel_pdf& kpdf,
   pdf1d_calc_mean_var(m,var,data,n);
   if (var<min_var_) var=min_var_;
 
-  double k_var = var*vcl_pow(4.0/(3*n),0.4);
-  double w = vcl_sqrt(k_var);
+  double k_var = var*std::pow(4.0/(3*n),0.4);
+  double w = std::sqrt(k_var);
 
   build_fixed_width(kpdf,data,n,w);
 }
@@ -195,7 +197,7 @@ static double dist_to_neighbour(int i0, const double* data, const int *index, in
   int ilo = i0-k; if (ilo<0) ilo=0;
   int ihi = i0+k; if (ihi>=n) ihi=n-1;
 
-  return vcl_fabs(data[index[ihi]]-data[index[ilo]]);
+  return std::fabs(data[index[ihi]]-data[index[ilo]]);
 
 #if 0
   double di0 = data[index[i0]];
@@ -203,14 +205,14 @@ static double dist_to_neighbour(int i0, const double* data, const int *index, in
   const double min_diff = 1.0e-6;
   // Look below i0
   int i=i0-1;
-  while (i>0 && vcl_fabs(data[i]-di0)<min_diff) --i;
-  double d_lo = vcl_fabs(data[i]-di0);
+  while (i>0 && std::fabs(data[i]-di0)<min_diff) --i;
+  double d_lo = std::fabs(data[i]-di0);
 
   // Look above i0
   i=i0+1;
   int n1 = n-1;
-  while (i<n1 && vcl_fabs(data[i]-di0)<min_diff) ++i;
-  double d_hi = vcl_fabs(data[i]-di0);
+  while (i<n1 && std::fabs(data[i]-di0)<min_diff) ++i;
+  double d_hi = std::fabs(data[i]-di0);
 
   return d_hi+d_lo;
 #endif
@@ -221,13 +223,13 @@ void pdf1d_kernel_pdf_builder::build_width_from_separation(pdf1d_kernel_pdf& kpd
                                                            const double* data, int n) const
 {
   // Sort the data
-  vcl_vector<int> index;
+  std::vector<int> index;
   mbl_index_sort(data, n, index);
 
   vnl_vector<double> width(n);
   double* w=width.data_block();
 
-  double min_w = vcl_sqrt(min_var_)/n;
+  double min_w = std::sqrt(min_var_)/n;
 
   for (int i=0;i<n;++i)
   {
@@ -261,7 +263,7 @@ void pdf1d_kernel_pdf_builder::build_adaptive(pdf1d_kernel_pdf& kpdf,
   for (int i=0;i<n;++i)
   {
     // Scale each inversely by sqrt(prob)
-    new_width[i] *= vcl_exp(-0.5*(log_p[i]-log_mean));
+    new_width[i] *= std::exp(-0.5*(log_p[i]-log_mean));
   }
 
   kpdf.set_centres(kpdf.centre(),new_width);
@@ -269,14 +271,14 @@ void pdf1d_kernel_pdf_builder::build_adaptive(pdf1d_kernel_pdf& kpdf,
 
 //=======================================================================
 
-vcl_string pdf1d_kernel_pdf_builder::is_a() const
+std::string pdf1d_kernel_pdf_builder::is_a() const
 {
-  return vcl_string("pdf1d_kernel_pdf_builder");
+  return std::string("pdf1d_kernel_pdf_builder");
 }
 
 //=======================================================================
 
-bool pdf1d_kernel_pdf_builder::is_class(vcl_string const& s) const
+bool pdf1d_kernel_pdf_builder::is_class(std::string const& s) const
 {
   return pdf1d_builder::is_class(s) || s==pdf1d_kernel_pdf_builder::is_a();
 }
@@ -290,7 +292,7 @@ short pdf1d_kernel_pdf_builder::version_no() const
 
 //=======================================================================
 
-void pdf1d_kernel_pdf_builder::print_summary(vcl_ostream& os) const
+void pdf1d_kernel_pdf_builder::print_summary(std::ostream& os) const
 {
   os << "Min. var.: "<< min_var_;
 }
@@ -317,9 +319,9 @@ void pdf1d_kernel_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf_builder &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf_builder &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

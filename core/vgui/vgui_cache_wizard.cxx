@@ -6,13 +6,14 @@
 // \file
 // \brief See vgui_cache_wizard.h for a description of this file.
 
+#include <iostream>
 #include "vgui_cache_wizard.h"
 
 #include <vil1/vil1_crop.h>
 #include <vil1/vil1_pixel.h>
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_pixel.h>
 #include <vgui/vgui_macro.h>
@@ -35,7 +36,7 @@ vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
                                      int quadrant_height)
 {
   if (debug)
-    vcl_cerr << __FILE__": this is the constructor\n";
+    std::cerr << __FILE__": this is the constructor\n";
     // *(int*)0 = 1;
 
   //: Get the maximum texture size.
@@ -64,7 +65,7 @@ vgui_cache_wizard::vgui_cache_wizard(int quadrant_width,
 //: Destructor
 vgui_cache_wizard::~vgui_cache_wizard()
 {
-  vcl_list<GLuint>::iterator i = cache_queue_.begin();
+  std::list<GLuint>::iterator i = cache_queue_.begin();
   for (int j=0; i!=cache_queue_.end(); ++i,++j)
     texture_names_[j] = *i;
   glDeleteTextures(cache_queue_.size(),texture_names_);
@@ -81,7 +82,7 @@ vgui_cache_wizard *vgui_cache_wizard::Instance()
 int vgui_cache_wizard::load_image(vil1_image img)
 {
   // Check whether the image pointer is already in memory
-  vcl_vector<wizard_image *>::iterator i = images_.begin();
+  std::vector<wizard_image *>::iterator i = images_.begin();
   for (int j = 0; i!=images_.end(); ++i,++j)
     if ((*i)->first == img)
       return j;
@@ -121,7 +122,7 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
   int qw_c = (x+width)/quadrant_width_-qx_c;//mb_jigerry_pokery(x+width,quadrant_width_);
   int qh_c = (y+height)/quadrant_height_-qy_c;//mb_jigerry_pokery(y+height,quadrant_height_);
   if (debug)
-    vcl_cerr<<"X: "<<qx_c<<"Y: "<<qy_c<<"W:"<<qw_c<<" H:"<<qh_c<<vcl_endl;
+    std::cerr<<"X: "<<qx_c<<"Y: "<<qy_c<<"W:"<<qw_c<<" H:"<<qh_c<<std::endl;
   pos->first = qx_c;
   pos->second = qy_c;
   size->first = qw_c;
@@ -141,13 +142,13 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
       // Check to see whether the quadrant is in cache
       if (index<0 || index>=int(icq->size()))
       {
-        vcl_cerr << __FILE__ ": index out of range\n";
+        std::cerr << __FILE__ ": index out of range\n";
         return false;
       }
       if (mb_is_valid((*icq)[index]))
       {
         quadrants->push_back((*icq)[index]);
-        vcl_list<GLuint>::iterator i;
+        std::list<GLuint>::iterator i;
         for (i = cache_queue_.begin();i!=cache_queue_.end() && (*i)!=(*icq)[index]; i++)
           ;
         cache_queue_.erase(i);
@@ -162,16 +163,16 @@ bool vgui_cache_wizard::get_section(int id,int x,int y,int width,int height,
         {
           // Time to dump LRU texture and use it for the quadrant of this image section
           texture_name = cache_queue_.front();
-          vcl_cerr<<"Texture name: "<<texture_name<<vcl_endl;
+          std::cerr<<"Texture name: "<<texture_name<<std::endl;
           cache_queue_.pop_front();
           // Find the image where texture_name has been used and invalidate
           // that qudrangle
-          for (vcl_vector<wizard_image *>::iterator i = images_.begin(); i!=images_.end();i++)
+          for (std::vector<wizard_image *>::iterator i = images_.begin(); i!=images_.end();i++)
             for (image_cache_quadrants::iterator k = (*i)->second->begin(); k!=(*i)->second->end();k++)
               if ((*k) == texture_name)
               {
                 *k = GLuint(INVALID_TEXTURE_NAME);
-                vcl_cerr<<"Invalidated!\n";
+                std::cerr<<"Invalidated!\n";
               }
         }
         else
@@ -217,7 +218,7 @@ if (false) {}
 #define fsm_macro_magic(fmt, typ, sto) \
 if (format==fmt && type==typ) { \
   if (debug) \
-    vcl_cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format\n"; \
+    std::cerr << __FILE__ ": converting " << what << " image to " #fmt "," #typ " format\n"; \
   if (!the_pixels) \
     the_pixels = new sto[img.width()*img.height()]; \
   vgui_pixel_convert_span(data, static_cast<sto*>(the_pixels), \
@@ -312,7 +313,7 @@ void vgui_cache_wizard::TexImage2D_Brownie(vil1_image img)
   vgui_macro_report_errors;
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  if (debug) vcl_cerr<<"Loading texture...";
+  if (debug) std::cerr<<"Loading texture...";
   glTexImage2D(GL_TEXTURE_2D, // target
                0,             // level
                3,             // internalformat (use only RGB. ignore alpha channel)

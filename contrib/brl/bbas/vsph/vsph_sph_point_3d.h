@@ -2,8 +2,9 @@
 #define vsph_sph_point_3d_h_
 //:
 // \file
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: a point in the spherical coordinate system
 // theta is elevation with zero at the North pole
@@ -21,7 +22,7 @@ class vsph_sph_point_3d
 
   void set(double r, double theta, double phi) { radius_=r; theta_=theta; phi_=phi; }
 
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
   void b_read(vsl_b_istream& is);
 
@@ -34,7 +35,7 @@ class vsph_sph_point_3d
   double phi_;
 };
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_3d const& p);
+std::ostream& operator<<(std::ostream& os, vsph_sph_point_3d const& p);
 
 void vsl_b_write(vsl_b_ostream& os, vsph_sph_point_3d& p);
 void vsl_b_read(vsl_b_istream &is, vsph_sph_point_3d& p);

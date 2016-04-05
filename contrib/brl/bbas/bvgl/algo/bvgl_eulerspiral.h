@@ -22,9 +22,11 @@
 // \endverbatim
 
 
-#include <vcl_ostream.h>
+#include <iostream>
+#include <ostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_string.h>
 #include "bvgl_eulerspiral_base.h"
 
 // declaration of bvgl_eulerspiral_optimization_function;
@@ -61,10 +63,10 @@ public:
   virtual ~bvgl_eulerspiral(){};
 
   //----------------- TYPE ----------------------------
-  static const vcl_type_info& type_id()
+  static const std::type_info& type_id()
   { return typeid(bvgl_eulerspiral); }
 
-  virtual bool is_type( const vcl_type_info& type ) const {
+  virtual bool is_type( const std::type_info& type ) const {
     return (typeid(bvgl_eulerspiral) == type) != 0 ||
       this->bvgl_eulerspiral_base::is_type(type);
   }
@@ -138,7 +140,7 @@ public:
   double average_curvature() { return curvature_at_length(len_/2.0f); }
 
   //: compute extrinsic points of eulerspiral
-  void compute_spiral(vcl_vector<vgl_point_2d<double> >& spiral, double ds=0, int npts=0);
+  void compute_spiral(std::vector<vgl_point_2d<double> >& spiral, double ds=0, int npts=0);
 
   // ---------------- SUPPORT FUNCTIONS ---------------------------
 
@@ -181,7 +183,7 @@ public:
 
   // ---------------- MISCELLANEOUS ----------------------
   //: Print parameters of the eulerspiral
-  void print(vcl_ostream &os );
+  void print(std::ostream &os );
 
   //: return number of times the function compute_end_pt(...) has been evaluated since it
   // was last reset
@@ -291,16 +293,16 @@ private:
   //: hold the pointer to the only instance of the class
   static bvgl_eulerspiral_lookup_table * instance_;
 
-  static const vcl_string file_name; //("bvgl_eulerspiral_lookup_table.bvl");
-  static const vcl_string file_path; // (LEMSVXL_LIB_DIR)
+  static const std::string file_name; //("bvgl_eulerspiral_lookup_table.bvl");
+  static const std::string file_path; // (LEMSVXL_LIB_DIR)
 
   // ----------- THE LOOK-UP TABLE ----------------------------------
   //: size of the lookup tables (npts_ x npts_)
   // or number of data points between 0 and 2*pi
   int npts_;
-  vcl_vector< vcl_vector< double > > k0_table_;
-  vcl_vector< vcl_vector< double > > gamma_table_;
-  vcl_vector< vcl_vector< double > > len_table_;
+  std::vector< std::vector< double > > k0_table_;
+  std::vector< std::vector< double > > gamma_table_;
+  std::vector< std::vector< double > > len_table_;
   // : delta - difference between two consecutive sampled angles, = 2Pi / npts
   double dt_;
   //: indicate whether the table was created successfully

@@ -27,7 +27,7 @@ public:
 
   //: Constructor
   boxm2_volm_desc_ex_land_only_matcher(depth_map_scene_sptr const& dms,
-                                       vcl_vector<double> const& radius,
+                                       std::vector<double> const& radius,
                                        unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                                        unsigned char const& initial_mag = 0)
   : dms_(dms), radius_(radius), nlands_(nlands), initial_mag_(initial_mag)
@@ -45,13 +45,13 @@ public:
   //: Create a volumetric existence descriptor for the query image
   virtual volm_desc_sptr create_query_desc();
 
-  virtual vcl_string get_index_type_str() { return volm_desc_ex_land_only_indexer::get_name(); }
+  virtual std::string get_index_type_str() { return volm_desc_ex_land_only_indexer::get_name(); }
 
 private:
     //: query depth_map_scene
   depth_map_scene_sptr  dms_;
   //: parameters related to volumetric existence descriptor
-  vcl_vector<double> radius_;
+  std::vector<double> radius_;
   unsigned           nlands_;
   unsigned char initial_mag_;
 };

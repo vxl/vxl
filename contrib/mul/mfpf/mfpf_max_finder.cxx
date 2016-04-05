@@ -37,7 +37,7 @@ double mfpf_max_finder::radius() const
 //: Generate points in ref frame that represent boundary
 //  Points of a closed contour around the shape.
 //  Used for display purposes.
-void mfpf_max_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+void mfpf_max_finder::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(2);
   pts[0]=vgl_point_2d<double>(-0.5,0);
@@ -121,9 +121,9 @@ double mfpf_max_finder::search_one_pose(
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_max_finder::is_a() const
+std::string mfpf_max_finder::is_a() const
 {
-  return vcl_string("mfpf_max_finder");
+  return std::string("mfpf_max_finder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -136,7 +136,7 @@ mfpf_point_finder* mfpf_max_finder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_max_finder::print_summary(vcl_ostream& os) const
+void mfpf_max_finder::print_summary(std::ostream& os) const
 {
   os<<"{ ";
   mfpf_point_finder::print_summary(os);
@@ -170,9 +170,9 @@ void mfpf_max_finder::b_read(vsl_b_istream& bfs)
       mfpf_point_finder::b_read(bfs);  // Load in baseclass
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

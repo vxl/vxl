@@ -1,6 +1,7 @@
 // This is mul/vimt3d/tests/test_transform_3d.cxx
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <cstdlib>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -31,9 +32,9 @@ static bool delta_equiv(const vimt3d_transform_3d& T,
 #ifndef NDEBUG
   if (!equiv)
   {
-    vcl_cerr << "dp: " << dp << "\n";
-    vcl_cerr << "pq: " << pq << "\n";
-    vcl_cerr << "dl: " << dl << "\n";
+    std::cerr << "dp: " << dp << "\n";
+    std::cerr << "pq: " << pq << "\n";
+    std::cerr << "dl: " << dl << "\n";
   }
 #endif
   return equiv;
@@ -150,26 +151,26 @@ static void test_products(const vimt3d_transform_3d& trans1)
 {
   vimt3d_transform_3d trans0;
   trans0.set_identity();
-  vcl_cout<<"Pre-multiply with Identity\n";
+  std::cout<<"Pre-multiply with Identity\n";
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with Translation\n";
+  std::cout<<"Pre-multiply with Translation\n";
   trans0.set_translation(1.2, 3.4,0);
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with ZoomOnly\n";
+  std::cout<<"Pre-multiply with ZoomOnly\n";
   trans0.set_zoom_only(2, 3, -4, 0);
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with RigidBody\n";
+  std::cout<<"Pre-multiply with RigidBody\n";
   trans0.set_rigid_body(1.4,0.9,1.1,1.5,3.4, 5.6);
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with Similarity\n";
+  std::cout<<"Pre-multiply with Similarity\n";
   trans0.set_similarity(2,3,1,3,4,5,6);
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with Affine\n";
+  std::cout<<"Pre-multiply with Affine\n";
   trans0.set_affine(0.5,2,3,2,3,1.5, 3.4, 5.6,0.1);
   test_product(trans0,trans1);
 }
@@ -223,7 +224,7 @@ static void test_composition_and_construction(
     B.set_affine(sx, sy, sz, rx, ry, rz, tx, ty, tz);
     break;
   default:
-    vcl_cerr << "test_composition_and_construction() is only intended for "
+    std::cerr << "test_composition_and_construction() is only intended for "
              << "forms ZoomOnly, RigidBody, Similarity, Affine\n";
     break;
   }
@@ -234,13 +235,13 @@ static void test_composition_and_construction(
 #ifndef NDEBUG
   if (!transf_ok)
   {
-    vcl_cout << "Composition:\n";
-    A.print_all(vcl_cout);
-    vcl_cout << vcl_endl;
+    std::cout << "Composition:\n";
+    A.print_all(std::cout);
+    std::cout << std::endl;
 
-    vcl_cout << "Construction:\n";
-    B.print_all(vcl_cout);
-    vcl_cout << vcl_endl;
+    std::cout << "Construction:\n";
+    B.print_all(std::cout);
+    std::cout << std::endl;
   }
 #endif
 }
@@ -278,7 +279,7 @@ static void test_the_transform(vimt3d_transform_3d& t)
 
 static void test_simplify(const vimt3d_transform_3d& input, const vimt3d_transform_3d& expected)
 {
-  vcl_cout << "Testing Simplify\n";
+  std::cout << "Testing Simplify\n";
 
   vimt3d_transform_3d copy(input);
   copy.simplify();
@@ -318,17 +319,17 @@ static void test_affine_puvw()
 #ifndef NDEBUG
   if (!transf_ok)
   {
-    vcl_cout << "set_affine(sx, sy, sz, rx, ry, rz, tx, ty, tz):\n";
-    A.print_all(vcl_cout);
-    vcl_cout << vcl_endl;
+    std::cout << "set_affine(sx, sy, sz, rx, ry, rz, tx, ty, tz):\n";
+    A.print_all(std::cout);
+    std::cout << std::endl;
 
-    vcl_cout << "set_affine(p, u, v, w):\n";
-    B.print_all(vcl_cout);
-    vcl_cout << vcl_endl;
+    std::cout << "set_affine(p, u, v, w):\n";
+    B.print_all(std::cout);
+    std::cout << std::endl;
 
     vnl_matrix<double> M = A.matrix();
     vnl_matrix<double> N = B.matrix();
-    vcl_cout << "Max diff= " << (M-N).absolute_value_max() << vcl_endl;
+    std::cout << "Max diff= " << (M-N).absolute_value_max() << std::endl;
   }
 #endif
 }
@@ -396,7 +397,7 @@ static void test_set_matrix()
 //=========================================================================
 static void test_transform_3d()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vimt3d_transform_3d\n"
            << "*****************************\n";
 
@@ -404,12 +405,12 @@ static void test_transform_3d()
   vgl_point_3d<double> p0(1,2,0),p1;
 
   trans0.set_identity();
-  vcl_cout<<"\n== Testing Identity ==\n";
+  std::cout<<"\n== Testing Identity ==\n";
   TEST_NEAR("Identity transform",vgl_distance(trans0(p0),p0),0.0,1e-8);
   test_the_transform(trans0);
   test_simplify(trans0, trans0);
 
-  vcl_cout<<"\n== Testing Translation ==\n";
+  std::cout<<"\n== Testing Translation ==\n";
   trans0.set_translation(1.2, 3.4,0);
   p1 = vgl_point_3d<double>(2.2,5.4,0);
   TEST_NEAR("Translation transform",vgl_distance(trans0(p0),p1),0.0,1e-8);
@@ -421,7 +422,7 @@ static void test_transform_3d()
   trans2.set_identity();
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"\n== Testing ZoomOnly ==\n";
+  std::cout<<"\n== Testing ZoomOnly ==\n";
   trans0.set_zoom_only(2, 3, 4,0);
   p1 = vgl_point_3d<double>(5,8,0);
   TEST_NEAR("Zoom transform",vgl_distance(trans0(p0),p1),0.0,1e-8);
@@ -436,7 +437,7 @@ static void test_transform_3d()
   trans2.set_identity();
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"\n== Testing RigidBody ==\n";
+  std::cout<<"\n== Testing RigidBody ==\n";
   trans0.set_rigid_body(1.2,1,5,1,2,3);
   test_the_transform(trans0);
 
@@ -449,7 +450,7 @@ static void test_transform_3d()
   trans2.set_identity();
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"\n== Testing Similarity ==\n";
+  std::cout<<"\n== Testing Similarity ==\n";
   trans0.set_similarity(0.51,2,3,4,0.2,1,-4);
   test_the_transform(trans0);
 
@@ -465,53 +466,53 @@ static void test_transform_3d()
   trans2.set_translation(-30, -40, -50);
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"\n== Testing Similarity Parameters ==\n";
+  std::cout<<"\n== Testing Similarity Parameters ==\n";
   double s= 0.51;
   double r_x= 2.0, r_y=0.1, r_z=4.0;
   double t_x= 0.2, t_y=1.0, t_z=-4.0;
-  vcl_cout<<"original parameters:-\n"
-          <<"s= "<<s<<vcl_endl
-          <<"r_x= "<<r_x<<vcl_endl
-          <<"r_y= "<<r_y<<vcl_endl
-          <<"r_z= "<<r_z<<vcl_endl
-          <<"t_x= "<<t_x<<vcl_endl
-          <<"t_y= "<<t_y<<vcl_endl
-          <<"t_z= "<<t_z<<vcl_endl;
+  std::cout<<"original parameters:-\n"
+          <<"s= "<<s<<std::endl
+          <<"r_x= "<<r_x<<std::endl
+          <<"r_y= "<<r_y<<std::endl
+          <<"r_z= "<<r_z<<std::endl
+          <<"t_x= "<<t_x<<std::endl
+          <<"t_y= "<<t_y<<std::endl
+          <<"t_z= "<<t_z<<std::endl;
   trans0.set_similarity( s, r_x, r_y, r_z, t_x, t_y, t_z);
   vnl_vector<double> trans0_vec;
   trans0.params( trans0_vec );
-  vcl_cout<<"trans0_vec= "<<trans0_vec<<vcl_endl;
+  std::cout<<"trans0_vec= "<<trans0_vec<<std::endl;
   vimt3d_transform_3d trans0_test;
   trans0_test.set( trans0_vec, trans0.form() );
-  vcl_cout<<"trans0= "<<trans0<<vcl_endl
-          <<"trans0_test= "<<trans0_test<<vcl_endl;
+  std::cout<<"trans0= "<<trans0<<std::endl
+          <<"trans0_test= "<<trans0_test<<std::endl;
   //TEST("Similarity Params", trans0_test== trans0, true);
 
   // check transforms agree when applied to basis vectors
   vgl_point_3d<double> vec_x(1,0,0);
   vgl_point_3d<double> vec_x0= trans0( vec_x );
-  vcl_cout<<"vec_x0= "<<vec_x0<<vcl_endl;
+  std::cout<<"vec_x0= "<<vec_x0<<std::endl;
   vgl_point_3d<double> vec_x0_test= trans0_test( vec_x );
-  vcl_cout<<"vec_x0_test= "<<vec_x0_test<<vcl_endl;
+  std::cout<<"vec_x0_test= "<<vec_x0_test<<std::endl;
   TEST("Test x basis vec", (vec_x0- vec_x0_test).length()< 1e-6, true);
 
   vgl_point_3d<double> vec_y(0,1,0);
   vgl_point_3d<double> vec_y0= trans0( vec_y );
-  vcl_cout<<"vec_y0= "<<vec_y0<<vcl_endl;
+  std::cout<<"vec_y0= "<<vec_y0<<std::endl;
   vgl_point_3d<double> vec_y0_test= trans0_test( vec_y );
-  vcl_cout<<"vec_y0_test= "<<vec_y0_test<<vcl_endl;
+  std::cout<<"vec_y0_test= "<<vec_y0_test<<std::endl;
   TEST("Test y basis vec", (vec_y0- vec_y0_test).length()< 1e-6, true);
 
   vgl_point_3d<double> vec_z(0,0,1);
   vgl_point_3d<double> vec_z0= trans0( vec_z );
-  vcl_cout<<"vec_z0= "<<vec_z0<<vcl_endl;
+  std::cout<<"vec_z0= "<<vec_z0<<std::endl;
   vgl_point_3d<double> vec_z0_test= trans0_test( vec_z );
-  vcl_cout<<"vec_z0_test= "<<vec_z0_test<<vcl_endl;
+  std::cout<<"vec_z0_test= "<<vec_z0_test<<std::endl;
   TEST("Test z basis vec", (vec_z0- vec_z0_test).length()< 1e-6, true);
 
 
 
-  vcl_cout<<"\n== Testing Affine ==\n";
+  std::cout<<"\n== Testing Affine ==\n";
   trans0.set_affine(-0.2, 0.3,4,2,1,4,5,0.1,-0.21);
   test_the_transform(trans0);
   trans0.set_affine(0.2,-0.3,-4, 0,0,0, 5,0.1,-0.21);
@@ -537,18 +538,18 @@ static void test_transform_3d()
 
 
 #if 0
-  vcl_cout<<"\n== Testing Affine Parameters ==\n";
+  std::cout<<"\n== Testing Affine Parameters ==\n";
   trans0.set_affine(0.2,-0.3,4,2,1,4,5,0.1,-0.21);
-  vcl_cout<<"trans0= "<<trans0<<vcl_endl;
+  std::cout<<"trans0= "<<trans0<<std::endl;
   vnl_vector<double> trans0_affine_vec;
   trans0.params( trans0_affine_vec );
-  vcl_cout<<"trans0_affine_vec= "<<trans0_affine_vec<<vcl_endl;
+  std::cout<<"trans0_affine_vec= "<<trans0_affine_vec<<std::endl;
   vimt3d_transform_3d trans0_affine_test;
   trans0_affine_test.set( trans0_affine_vec, trans0.form() );
-  vcl_cout<<"trans0= "<<trans0<<vcl_endl
-          <<"trans0_affine_test= "<<trans0_affine_test<<vcl_endl;
+  std::cout<<"trans0= "<<trans0<<std::endl
+          <<"trans0_affine_test= "<<trans0_affine_test<<std::endl;
   //TEST("Similarity Params", trans0_test== trans0, true);
-  vcl_abort();
+  std::abort();
 #endif // 0
 
   // -------- Test the binary I/O --------
@@ -577,15 +578,15 @@ static void test_transform_3d()
   TEST_NEAR("Binary IO for params", (v0-v0_in).magnitude(),0.0,1e-6);
 
   // --- Test the function vimt3d_is_transform_zoom_only()
-  vcl_cout << "\n== Testing vimt3d_is_transform_zoom_only() ==\n";
+  std::cout << "\n== Testing vimt3d_is_transform_zoom_only() ==\n";
   TEST("Test vimt3d_is_transform_zoom_only()", test_is_zoom_only(), true);
 
   // --- Test the function delta()
-  vcl_cout << "\n== Testing delta() ==\n";
+  std::cout << "\n== Testing delta() ==\n";
   TEST("Test delta()", test_delta(), true);
 
   // --- Test the function set(matrix, Form)
-  vcl_cout << "\n== Testing set(matrix, Form) ==\n";
+  std::cout << "\n== Testing set(matrix, Form) ==\n";
   test_set_matrix();
 
 }

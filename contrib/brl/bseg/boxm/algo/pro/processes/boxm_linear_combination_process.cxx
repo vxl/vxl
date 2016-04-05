@@ -25,7 +25,7 @@ bool boxm_linear_combination_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_linear_combination_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr" ; //scene1
   input_types_[i++] = "boxm_scene_base_sptr" ; //scene2
@@ -35,7 +35,7 @@ bool boxm_linear_combination_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int" ; //block index in y-dimension
   input_types_[i++] = "int" ; //block index in z-dimension
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -58,7 +58,7 @@ bool boxm_linear_combination_process(bprb_func_process& pro)
 
   if (!(scene_base1 && scene_base2))
   {
-    vcl_cerr << "In boxm_linear_combination_process: Null input scene\n";
+    std::cerr << "In boxm_linear_combination_process: Null input scene\n";
     return false;
   }
 
@@ -68,7 +68,7 @@ bool boxm_linear_combination_process(bprb_func_process& pro)
     {
       if (scene_base2->appearence_model()!= BOXM_FLOAT)
       {
-        vcl_cerr << "In boxm_linear_combination_process, datatype not supported\n";
+        std::cerr << "In boxm_linear_combination_process, datatype not supported\n";
         return false;
       }
       boxm_scene<boct_tree<short, float> > *scene1 = static_cast<boxm_scene<boct_tree<short, float> >*> (scene_base1.as_pointer());
@@ -93,7 +93,7 @@ bool boxm_linear_combination_process(bprb_func_process& pro)
       break;
     }
     default:
-      vcl_cerr << "In boxm_linear_combination_process: Invalid datatype\n";
+      std::cerr << "In boxm_linear_combination_process: Invalid datatype\n";
       return false;
       break;
   }

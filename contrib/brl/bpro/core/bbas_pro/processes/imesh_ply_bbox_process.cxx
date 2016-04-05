@@ -1,4 +1,6 @@
 // This is brl/bpro/core/bbas_pro/processes/imesh_ply_bbox_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date jan 26, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <imesh/imesh_fileio.h>
 #include <vgl/vgl_box_3d.h>
 
@@ -21,11 +23,11 @@ bool imesh_ply_bbox_process_cons(bprb_func_process& pro)
 {
   using namespace imesh_ply_bbox_process_globals;
   //process takes 1 input, the scene
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
 
   // process has 6 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "double";// minx
   output_types_[1] = "double";// miny
   output_types_[2] = "double";// minz
@@ -40,17 +42,17 @@ bool imesh_ply_bbox_process(bprb_func_process& pro)
   using namespace imesh_ply_bbox_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
   //get the inputs
-  vcl_string   mesh_file  = pro.get_input<vcl_string>(0);
+  std::string   mesh_file  = pro.get_input<std::string>(0);
   imesh_mesh mesh ;
   imesh_read(mesh_file, mesh);
 
   imesh_vertex_array_base  & verts = mesh.vertices();
-  vcl_cout<<" No of vertices "<< verts.size();
+  std::cout<<" No of vertices "<< verts.size();
   vgl_box_3d<double> bbox;
   for (unsigned i = 0 ; i < verts.size(); i++)
   {

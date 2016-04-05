@@ -1,2 +1,2 @@
-#include <vil/vil_resample_nearest.txx>
+#include <vil/vil_resample_nearest.hxx>
 VIL_RESAMPLE_NEAREST_INSTANTIATE( float , double );

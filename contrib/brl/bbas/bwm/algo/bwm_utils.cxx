@@ -1,7 +1,8 @@
+#include <iostream>
+#include <fstream>
 #include "bwm_utils.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_config.h>
 
 #include <vgui/vgui_dialog.h>
@@ -21,10 +22,10 @@
 #include <vgl/vgl_point_3d.h>
 #endif
 
-vcl_string bwm_utils::select_file()
+std::string bwm_utils::select_file()
 {
   vgui_dialog params ("File Open");
-  vcl_string ext, file, empty="";
+  std::string ext, file, empty="";
 
   params.file ("Open...", ext, file);
   if (!params.ask())
@@ -39,25 +40,25 @@ vcl_string bwm_utils::select_file()
   return file;
 }
 
-void bwm_utils::load_from_txt(vcl_string filename,
-                              vcl_string &tab_type,
-                              vcl_string &tab_name,
-                              vcl_string &img_path,
-                              vcl_string &cam_path,
+void bwm_utils::load_from_txt(std::string filename,
+                              std::string &tab_type,
+                              std::string &tab_name,
+                              std::string &img_path,
+                              std::string &cam_path,
                               int &cam_type)
 {
   if (filename.empty()) {
-    vcl_cout << "Bad filename\n";
+    std::cout << "Bad filename\n";
     return;
   }
 
-  vcl_ifstream is(filename.data());
+  std::ifstream is(filename.data());
   if (!is.is_open())  {
-    vcl_cout << "Can't open file\n";
+    std::cout << "Can't open file\n";
     return;
   }
 
-  vcl_string type, str;
+  std::string type, str;
   while (!is.eof())
   {
     is >> type;
@@ -67,7 +68,7 @@ void bwm_utils::load_from_txt(vcl_string filename,
       is >> tab_name;
       is >> str;
       if (str != "IMAGE:")  {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
 
@@ -80,21 +81,21 @@ void bwm_utils::load_from_txt(vcl_string filename,
     {
       is >> tab_name >> str;
       if (str != "IMAGE:")  {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
 
       is >> img_path;
       is >> str;
       if (str != "CAMERA_TYPE:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
-      vcl_string camera_type;
+      std::string camera_type;
       is >> camera_type;
       is >> str;
       if (str != "CAMERA_PATH:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
 
@@ -116,15 +117,15 @@ void bwm_utils::load_from_txt(vcl_string filename,
       is >> tab_name;
       is >> str;
       if (str != "CAMERA_TYPE:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
-      vcl_string camera_type;
+      std::string camera_type;
       is >> camera_type;
       is >> cam_type;
       is >> str;
       if (str != "CAMERA_PATH:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
 
@@ -142,18 +143,18 @@ void bwm_utils::load_from_txt(vcl_string filename,
       is >> tab_name;
       is >> str;
       if (str != "TYPE:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
 
-      vcl_string type;
+      std::string type;
       is >> type;
 
-      vcl_string coin3d_name = "";
+      std::string coin3d_name = "";
       if (type == "simple") {
         is >> str;
         if (str != "COIN3D:") {
-          vcl_cout << "Bad file parse\n";
+          std::cout << "Bad file parse\n";
           return;
         }
         is >> coin3d_name;
@@ -161,22 +162,22 @@ void bwm_utils::load_from_txt(vcl_string filename,
 
       is >> str;
       if (str != "IMAGE:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
 
       is >> img_path;
       is >> str;
       if (str != "CAMERA_TYPE:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
 
-      vcl_string camera_type;
+      std::string camera_type;
       is >> camera_type;
       is >> str;
       if (str != "CAMERA_PATH:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
 
@@ -192,16 +193,16 @@ void bwm_utils::load_from_txt(vcl_string filename,
       is >> tab_name;
       is >> str;
       if (str != "FIRST RESPONSE IMAGE:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
-      vcl_string first_ret = str;
+      std::string first_ret = str;
       is >> str;
       if (str != "SECOND RESPONSE IMAGE:") {
-        vcl_cout << "Bad file parse\n";
+        std::cout << "Bad file parse\n";
         return;
       }
-      vcl_string second_ret = str;
+      std::string second_ret = str;
       is >> img_path;
       // create_lidar_tableau(name, first_ret, second_ret);
     }
@@ -211,15 +212,15 @@ void bwm_utils::load_from_txt(vcl_string filename,
       int num, c_num;
       is >> c_num;
 
-      vcl_string mode;
+      std::string mode;
       is >> str;
       if (str != "CORR_MODE:") {
-        vcl_cerr << "Correspondence mode is missing\n";
+        std::cerr << "Correspondence mode is missing\n";
         return;
       }
       is >> mode;
       if ((mode != "IMAGE_TO_IMAGE") && (mode != "WORLD_TO_IMAGE")) {
-        vcl_cerr << "Invalid correspondence mode\n";
+        std::cerr << "Invalid correspondence mode\n";
         return;
       }
       // read the correspondences
@@ -227,7 +228,7 @@ void bwm_utils::load_from_txt(vcl_string filename,
       {
         is >> str;
         if (str != "C:" )
-          vcl_cerr << "Invalid correspondence format\n";
+          std::cerr << "Invalid correspondence format\n";
         else
         {
           is >> num;
@@ -237,7 +238,7 @@ void bwm_utils::load_from_txt(vcl_string filename,
             is >> str;
 
             if (str != "WORLD_POINT:") {
-              vcl_cerr << "wrong corr format\n";
+              std::cerr << "wrong corr format\n";
               return;
             }
 
@@ -248,7 +249,7 @@ void bwm_utils::load_from_txt(vcl_string filename,
             corr->set_mode(false);
             corr->set_world_pt(vgl_point_3d<double>(wx, wy, wz));
           }
-          vcl_string tab_name;
+          std::string tab_name;
           double X, Y;
           for (int j=0; j<num; j++) {
             is >> tab_name;
@@ -278,7 +279,7 @@ void bwm_utils::load_from_txt(vcl_string filename,
 }
 
 vil_image_resource_sptr
-bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
+bwm_utils::load_image(std::string& filename, vgui_range_map_params_sptr& rmps)
 {
   vil_image_resource_sptr res;
 
@@ -292,8 +293,8 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
       res = pyr.ptr();
     }
     else {
-      vcl_cerr << "error loading image pyramid "<< filename << '\n';
-      return 0;
+      std::cerr << "error loading image pyramid "<< filename << '\n';
+      return VXL_NULLPTR;
     }
   }
   else {
@@ -301,7 +302,7 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
 #if HAS_J2K
     // determine if the image can be made into a J2K-nitf pyramid
     char const* fmtp = res->file_format();
-    vcl_string file_fmt = "";
+    std::string file_fmt = "";
     if (fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
       if (file_fmt == "nitf21")
       {
@@ -320,12 +321,12 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
       }
 #endif //HAS_J2K
   }
-  if (!res) return 0;
+  if (!res) return VXL_NULLPTR;
   float gamma = 1.0f;
   bool invert = false;
   bool gl_map = false;
   bool cache = true;
-  bool is_pyr = res->get_property(vil_property_pyramid, 0);
+  bool is_pyr = res->get_property(vil_property_pyramid, VXL_NULLPTR);
   if (is_pyr)
   { gl_map = true; cache = true;}
 
@@ -339,10 +340,10 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
     return res;
   if (biu.default_range_map(rmps, gamma, invert, gl_map, cache))
     return res;
-  return 0;
+  return VXL_NULLPTR;
 }
 
-void bwm_utils::show_error(vcl_string msg)
+void bwm_utils::show_error(std::string msg)
 {
   vgui_dialog err("ERROR occurred");
   err.message(msg.c_str());

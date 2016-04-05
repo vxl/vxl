@@ -1,6 +1,8 @@
 // This is brl/bseg/boxm/algo/rt/pro/processes/boxm_estimate_camera_process.cxx
 //:
 // \file
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
@@ -13,7 +15,7 @@
 #include <bpgl/bpgl_camera_estimator.h>
 #include <bpgl/bpgl_camera_estimator_amoeba.h>
 
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <boxm/algo/rt/boxm_expected_edge_functor.h>
@@ -25,14 +27,14 @@ namespace boxm_estimate_camera_process_globals
   const unsigned n_outputs_ = 3;
 
   // parameter strings
-  const vcl_string theta_range_ =  "theta_range";
-  const vcl_string theta_step_ =  "theta_step";
-  const vcl_string phi_range_ =  "phi_range";
-  const vcl_string phi_step_ =  "phi_step";
-  const vcl_string rot_range_ =  "rot_range";
-  const vcl_string rot_step_ =  "rot_step";
-  const vcl_string max_iter_rot_angle_ =  "max_iter_rot_angle";
-  const vcl_string max_iter_cam_center_ =  "max_iter_cam_center";
+  const std::string theta_range_ =  "theta_range";
+  const std::string theta_step_ =  "theta_step";
+  const std::string phi_range_ =  "phi_range";
+  const std::string phi_step_ =  "phi_step";
+  const std::string rot_range_ =  "rot_range";
+  const std::string rot_step_ =  "rot_step";
+  const std::string max_iter_rot_angle_ =  "max_iter_rot_angle";
+  const std::string max_iter_cam_center_ =  "max_iter_cam_center";
 }
 
 //: set input and output types
@@ -45,7 +47,7 @@ bool boxm_estimate_camera_process_cons(bprb_func_process& pro)
   //input[1]: Initial camera
   //input[2]: Edge image
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
@@ -58,7 +60,7 @@ bool boxm_estimate_camera_process_cons(bprb_func_process& pro)
   // output[1]: Expected edge image (after camera correction)
   // output[2]: Expected edge image (before camera correction)
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "vpgl_camera_double_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
@@ -73,7 +75,7 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
 
   //check number of inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -113,7 +115,7 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
   pro.parameters()->get_value(max_iter_cam_center_, max_iter_cam_center);
 
 #if 0
-  vcl_cout << "printing boxm_estimate_camera_process parameters:\n"
+  std::cout << "printing boxm_estimate_camera_process parameters:\n"
            << "theta_range: " << theta_range << '\n'
            << "theta_step: " << theta_step << '\n'
            << "phi_range: " << phi_range << '\n'
@@ -136,7 +138,7 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_inf_line_sample<float> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
-        vcl_cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
+        std::cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
         return false;
       }
 
@@ -184,12 +186,12 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cerr << "boxm_estimate_camera_process: Multibin version not yet implemented\n";
+      std::cerr << "boxm_estimate_camera_process: Multibin version not yet implemented\n";
       return false;
     }
   }
   else {
-    vcl_cerr << "boxm_estimate_camera_process: undefined APM type\n";
+    std::cerr << "boxm_estimate_camera_process: undefined APM type\n";
     return false;
   }
 }

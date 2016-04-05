@@ -1,8 +1,10 @@
+#include <iostream>
+#include <algorithm>
 #include "bvpl_edge3d_kernel_factory.h"
 //:
 // \file
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <bxml/bxml_find.h>
 
 // Default Constructor
@@ -55,9 +57,9 @@ void bvpl_edge3d_kernel_factory::create_canonical()
       for (int z= min_z_; z<= max_z_; ++z)
       {
         if (x < 0)
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1.0f / float(n0))));
+          canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1.0f / float(n0))));
         else // if (x >= 0)
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch( 1.0f / float(n1))));
+          canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch( 1.0f / float(n1))));
       }
 
   //set the dimension of the 3-d grid
@@ -100,7 +102,7 @@ bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(bxml_data_sptr d)
   bxml_element query("bvpl_edge3d_kernel_factory");
   bxml_data_sptr root = bxml_find_by_name(d, query);
   if (!root || root->type() != bxml_data::ELEMENT) {
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());

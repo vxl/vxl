@@ -7,12 +7,14 @@
 // \author J. L. Mundy
 // \date November 2, 2015
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_bounding_box.h>
 
@@ -35,11 +37,11 @@ public:
   //: for display purposes
   bvgl_cross_section apply_vector(vgl_vector_3d<double> const& v) const;
   // the swept cross section of the generalized cylinder
-  void display_cross_section_plane(vcl_ofstream& ostr) const;
+  void display_cross_section_plane(std::ofstream& ostr) const;
   // the point set associated with a cross section, i.e. points closest to the plane
-  void display_cross_section_pts(vcl_ofstream& ostr) const;
+  void display_cross_section_pts(std::ofstream& ostr) const;
   // each point with normal is represented by a disk, where the disk plane normal is the point normal
-  void display_cross_section_normal_disks(vcl_ofstream& ostr) const;
+  void display_cross_section_normal_disks(std::ofstream& ostr) const;
  private:
   double t_;
   vgl_point_3d<double> p_;

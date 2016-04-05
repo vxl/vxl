@@ -6,11 +6,13 @@
 // \brief base class for topology objects
 // \author Patricia A. Vrobel.
 
+#include <vector>
+#include <list>
+#include <iostream>
+#include <iosfwd>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h> // parent class
-#include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_zero_chain_sptr.h>
 #include <vtol/vtol_edge_sptr.h>
@@ -22,15 +24,15 @@
 class vtol_topology_cache;
 
 // Useful typedefs
-typedef vcl_vector<vtol_topology_object_sptr> topology_list;
-typedef vcl_vector<vtol_vertex_sptr>          vertex_list;
-typedef vcl_vector<vtol_zero_chain_sptr>      zero_chain_list;
-typedef vcl_vector<vtol_edge_sptr>            edge_list;
-typedef vcl_vector<vtol_one_chain_sptr>       one_chain_list;
-typedef vcl_vector<vtol_face_sptr>            face_list;
-typedef vcl_vector<vtol_two_chain_sptr>       two_chain_list;
-typedef vcl_vector<vtol_block_sptr>           block_list;
-typedef vcl_vector<vtol_chain_sptr>           chain_list;
+typedef std::vector<vtol_topology_object_sptr> topology_list;
+typedef std::vector<vtol_vertex_sptr>          vertex_list;
+typedef std::vector<vtol_zero_chain_sptr>      zero_chain_list;
+typedef std::vector<vtol_edge_sptr>            edge_list;
+typedef std::vector<vtol_one_chain_sptr>       one_chain_list;
+typedef std::vector<vtol_face_sptr>            face_list;
+typedef std::vector<vtol_two_chain_sptr>       two_chain_list;
+typedef std::vector<vtol_block_sptr>           block_list;
+typedef std::vector<vtol_chain_sptr>           chain_list;
 
 //*****************************************************************************
 // ALL THE DERIVED AND NON-ABSTRACT CLASSES OF THIS CLASS MUST CALL
@@ -123,7 +125,7 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   // Description: array of superiors
   //---------------------------------------------------------------------------
-  vcl_list<vtol_topology_object*> superiors_;
+  std::list<vtol_topology_object*> superiors_;
 
   //---------------------------------------------------------------------------
   // Description: array of inferiors
@@ -300,7 +302,7 @@ class vtol_topology_object : public vsol_spatial_object_2d
  private:
   const topology_list *superiors() const;
  public:
-  const vcl_list<vtol_topology_object*> *superiors_list() const {return &superiors_;}
+  const std::list<vtol_topology_object*> *superiors_list() const {return &superiors_;}
 
   //---------------------------------------------------------------------------
   //: Return the inferiors list
@@ -406,10 +408,10 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: print and describe the objects
   //---------------------------------------------------------------------------
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
-  void describe_inferiors(vcl_ostream &strm=vcl_cout, int blanking=0) const;
-  void describe_superiors(vcl_ostream &strm=vcl_cout, int blanking=0) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  virtual void print(std::ostream &strm=std::cout) const;
+  void describe_inferiors(std::ostream &strm=std::cout, int blanking=0) const;
+  void describe_superiors(std::ostream &strm=std::cout, int blanking=0) const;
+  virtual void describe(std::ostream &strm=std::cout, int blanking=0) const;
 
   virtual void compute_bounding_box() const; //A local implementation
 
@@ -417,43 +419,43 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //: compute lists of vertices
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_vertex*> *compute_vertices();
+  virtual std::vector<vtol_vertex*> *compute_vertices();
 
   //---------------------------------------------------------------------------
   //: compute lists of zero chains
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
 
   //---------------------------------------------------------------------------
   //: compute lists of edges
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_edge*> *compute_edges();
+  virtual std::vector<vtol_edge*> *compute_edges();
 
   //---------------------------------------------------------------------------
   //: compute lists of one chains
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
+  virtual std::vector<vtol_one_chain*> *compute_one_chains();
 
   //---------------------------------------------------------------------------
   //: compute lists of faces
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_face*> *compute_faces();
+  virtual std::vector<vtol_face*> *compute_faces();
 
   //---------------------------------------------------------------------------
   //: compute lists of two chains
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
+  virtual std::vector<vtol_two_chain*> *compute_two_chains();
 
   //---------------------------------------------------------------------------
   //: compute lists of blocks
   // \warning should not be used by clients
   //---------------------------------------------------------------------------
-  virtual vcl_vector<vtol_block*> *compute_blocks();
+  virtual std::vector<vtol_block*> *compute_blocks();
 
  private:
   // declare a friend class

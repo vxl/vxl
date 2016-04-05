@@ -92,10 +92,11 @@
 //   2009-06-06 Peter Vanroose - Added the contains() method (not yet implem.)
 // \endverbatim
 
+#include <iosfwd>
 #include <vgl/vgl_homg_point_2d.h> // data member of this class
 #include <vgl/vgl_conic.h>         // data member of this class
 #include <vgl/vgl_point_2d.h>      // return type of some methods
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Represents a 2D conic segment using two points.
@@ -262,12 +263,12 @@ class vgl_conic_segment_2d
 //: Write to stream
 // \relatesalso vgl_conic_segment_2d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_conic_segment_2d<Type>& c_s);
+std::ostream&  operator<<(std::ostream& s, const vgl_conic_segment_2d<Type>& c_s);
 
 //: Read from stream
 // \relatesalso vgl_conic_segment_2d
 template <class Type>
-vcl_istream& operator>>(vcl_istream& is, vgl_conic_segment_2d<Type>& c_s);
+std::istream& operator>>(std::istream& is, vgl_conic_segment_2d<Type>& c_s);
 
 #define VGL_CONIC_SEGMENT_2D_INSTANTIATE(T) extern "please include vgl/vgl_conic_segment_2d.txx first"
 

@@ -1,5 +1,6 @@
 // This is core/vul/examples/vul_sequence_filename_example.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_sequence_filename_map.h>
 
 int main (int argc, char** argv)
@@ -10,7 +11,7 @@ int main (int argc, char** argv)
 
     // Print out all the files that are specified by that pattern.
     for (int i = 0; i < map.get_nviews(); ++i) {
-      vcl_cout << map.name(i) << vcl_endl;
+      std::cout << map.name(i) << std::endl;
     }
   } else {
     // Capes' examples
@@ -25,10 +26,10 @@ int main (int argc, char** argv)
     }
     {
       vul_sequence_filename_map map("im.###,:5:");
-      vcl_cerr << map.name(10) << vcl_endl
-               << map.pair_name(10,11) << vcl_endl
-               << map.triplet_name(10,11,12) << vcl_endl
-               << map.image_name(10) << vcl_endl;
+      std::cerr << map.name(10) << std::endl
+               << map.pair_name(10,11) << std::endl
+               << map.triplet_name(10,11,12) << std::endl
+               << map.image_name(10) << std::endl;
     }
   }
   return 0;

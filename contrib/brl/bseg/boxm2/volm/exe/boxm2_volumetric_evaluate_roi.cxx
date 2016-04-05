@@ -7,25 +7,27 @@
 // \author Yi Dong
 // \date Feb 18, 2013
 
+#include <set>
+#include <iostream>
+#include <ios>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
-#include <vcl_set.h>
-#include <vcl_ios.h>
+#include <vcl_compiler.h>
 #include <bvrml/bvrml_write.h>
 
 bool is_same(double const& x, double const& y)
 {
-  return (vcl_fabs(x-y) < 1E-6);
+  return (std::fabs(x-y) < 1E-6);
 }
 
 int main(int argc, char** argv)
 {
   vul_arg<unsigned>    world_id("-world",     "ROI world id", 9999);
-  vul_arg<vcl_string>       out("-out", "experiment output root", "");
+  vul_arg<std::string>       out("-out", "experiment output root", "");
   vul_arg<float>             kl("-kl", "parameter for nonlinear score scaling", 200.0f);
   vul_arg<float>             ku("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg<double>        gt_lon("-lon",      "location longitude", 0.0);
@@ -38,11 +40,11 @@ int main(int argc, char** argv)
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
-  vcl_stringstream log;
-  vcl_string log_file = out() + "/evaluate_roi_log.xml";
+  std::stringstream log;
+  std::string log_file = out() + "/evaluate_roi_log.xml";
 
   // create tile
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   if (!volm_tile::generate_tiles(world_id(), tiles)) {
     log << "ERROR: unknown world id " << world_id() << "!\n";
     volm_io::write_error_log(log_file, log.str());
@@ -50,18 +52,18 @@ int main(int argc, char** argv)
   }
 
   // start to calculate roi
-  vcl_vector<double> test_img_roi;
-  vcl_vector<double> test_img_thres;
+  std::vector<double> test_img_roi;
+  std::vector<double> test_img_thres;
 
   // get the score for ground truth location and and maximum score for all locations
   float gt_score = 0.0f;
   float max_score_all = 0.0f;
   for (unsigned i = 0; i < tiles.size(); i++) {
-    vcl_string img_name = out() + "/" + "ProbMap_float_" + tiles[i].get_string() + ".tif";
+    std::string img_name = out() + "/" + "ProbMap_float_" + tiles[i].get_string() + ".tif";
     if (!vul_file::exists(img_name)) {
       log << " WARNING: missing prob_map: " << img_name << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
-      vcl_cerr << log.str();
+      std::cerr << log.str();
       continue;
     }
     vil_image_view<float> tile_img = vil_load(img_name.c_str());
@@ -78,7 +80,7 @@ int main(int argc, char** argv)
                       << u << ", " << v << " in tile " << i << " and has value: "
                       << gt_score << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
-        vcl_cerr << log.str();
+        std::cerr << log.str();
     }
   }
 
@@ -90,31 +92,31 @@ int main(int argc, char** argv)
   test_img_thres.push_back(gt_score);
   test_img_thres.push_back(max_score_all);
 
-  vcl_cout << " for query location: " << gt_lon() << "x" << gt_lat() << ", gt_score = " << gt_score << ", max_score = " << max_score_all << '\n';
+  std::cout << " for query location: " << gt_lon() << "x" << gt_lat() << ", gt_score = " << gt_score << ", max_score = " << max_score_all << '\n';
   // calculate roi for current valid out_folder
   // cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
-  vcl_map<float, vcl_vector<unsigned> > cnt_map;
-  for (vcl_vector<double>::iterator vit = test_img_thres.begin(); vit != test_img_thres.end(); ++vit) {
-    vcl_vector<unsigned> cnt_vec(3,0);
-    vcl_pair<float, vcl_vector<unsigned> > cnt_pair;
+  std::map<float, std::vector<unsigned> > cnt_map;
+  for (std::vector<double>::iterator vit = test_img_thres.begin(); vit != test_img_thres.end(); ++vit) {
+    std::vector<unsigned> cnt_vec(3,0);
+    std::pair<float, std::vector<unsigned> > cnt_pair;
     cnt_pair.first = *vit;  cnt_pair.second = cnt_vec;
     cnt_map.insert(cnt_pair);
   }
 
   // loop over all tiles of current test images
   for (unsigned i = 0; i < tiles.size(); ++i) {
-    vcl_string img_name = out() + "/" + "ProbMap_float_" + tiles[i].get_string() + ".tif";
+    std::string img_name = out() + "/" + "ProbMap_float_" + tiles[i].get_string() + ".tif";
     if (!vul_file::exists(img_name)) {
       log << " WARNING: missing prob_map: " << img_name << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
-      vcl_cerr << log.str();
+      std::cerr << log.str();
       continue;
     }
     vil_image_view<float> tile_img = vil_load(img_name.c_str());
     for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
       for (unsigned jj = 0; jj < tile_img.nj(); ++jj) {
         // loop over all threshold
-        for ( vcl_map<float, vcl_vector<unsigned> >::iterator mit = cnt_map.begin(); mit != cnt_map.end(); ++mit)
+        for ( std::map<float, std::vector<unsigned> >::iterator mit = cnt_map.begin(); mit != cnt_map.end(); ++mit)
         {
           if (tile_img(ii, jj) < 0)
             mit->second[2]++;
@@ -130,7 +132,7 @@ int main(int argc, char** argv)
 
   // calculate ROI, save the gt_score and ROI for current test_id
   test_img_roi.push_back(gt_score);
-  for (vcl_map<float, vcl_vector<unsigned> >::iterator mit = cnt_map.begin();
+  for (std::map<float, std::vector<unsigned> >::iterator mit = cnt_map.begin();
         mit != cnt_map.end(); ++mit)
   {
     float roi = 1.0 - (double)mit->second[0]/mit->second[1];
@@ -139,9 +141,9 @@ int main(int argc, char** argv)
   test_img_roi.push_back((float)cnt_map.begin()->second[1]);
 
   // create folder for different thresholds,
-  vcl_vector<vcl_string> prob_thres_folders;
-  for (vcl_vector<double>::iterator vit = test_img_thres.begin(); vit != test_img_thres.end(); ++vit) {
-    vcl_stringstream folder_name;
+  std::vector<std::string> prob_thres_folders;
+  for (std::vector<double>::iterator vit = test_img_thres.begin(); vit != test_img_thres.end(); ++vit) {
+    std::stringstream folder_name;
     folder_name << out() << "/ProbMap_scaled_" << *vit;
     vul_file::make_directory(folder_name.str());
     prob_thres_folders.push_back(folder_name.str());
@@ -149,16 +151,16 @@ int main(int argc, char** argv)
 
   // create tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
   for (unsigned ti = 0; ti < tiles.size(); ++ti) {
-    vcl_string img_name = out() + "/" + "ProbMap_float_" + tiles[ti].get_string() + ".tif";
+    std::string img_name = out() + "/" + "ProbMap_float_" + tiles[ti].get_string() + ".tif";
     if (!vul_file::exists(img_name)) {
       log << " WARNING: missing prob_map: " << img_name << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
-      vcl_cerr << log.str();
+      std::cerr << log.str();
       continue;
     }
     vil_image_view<float> tile_img = vil_load(img_name.c_str());
     unsigned cnt = 0;
-    for (vcl_vector<double>::iterator vit = test_img_thres.begin(); vit != test_img_thres.end(); ++vit) {
+    for (std::vector<double>::iterator vit = test_img_thres.begin(); vit != test_img_thres.end(); ++vit) {
       if (*vit < gt_score) {
         vil_image_view<vxl_byte> out_png(tile_img.ni(), tile_img.nj());
         out_png.fill(volm_io::UNKNOWN);
@@ -171,28 +173,28 @@ int main(int argc, char** argv)
           }
         }
         // save the image
-        //vcl_stringstream out_png_name;
-        vcl_string out_png_name = prob_thres_folders[cnt++] + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
+        //std::stringstream out_png_name;
+        std::string out_png_name = prob_thres_folders[cnt++] + "/" + "ProbMap_" + tiles[ti].get_string() + ".tif";
         vil_save(out_png, out_png_name.c_str());
       }
     }
   }
 
   // write down the ROI values
-  vcl_string eoi_file = out() + "/roi_result.txt";
-  vcl_ofstream fout(eoi_file.c_str());
+  std::string eoi_file = out() + "/roi_result.txt";
+  std::ofstream fout(eoi_file.c_str());
 
   fout << "  test_id      gt_loc_score      total_locs                                       thresholds\n"
        << "----------------------------------------------------------------------------------------------------------------------------\n";
-  fout.setf(vcl_ios_right);
-  vcl_vector<double> thresholds = test_img_thres;
+  fout.setf(std::ios::right);
+  std::vector<double> thresholds = test_img_thres;
   fout << "                                              ";
-  for (vcl_vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
+  for (std::vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
     fout.precision(6); fout.fill(' '); fout.width(13);
     fout << *vit;
   }
   fout << '\n';
-  vcl_stringstream out_str;
+  std::stringstream out_str;
   out_str << "query_image";
   fout << out_str.str();
   fout.precision(4); fout.width(13); fout.fill(' ');
@@ -201,7 +203,7 @@ int main(int argc, char** argv)
   fout.width(13); fout.fill(' ');
   fout << tot_loc << "        ";
   for (unsigned i = 1; i < thresholds.size()+1; i++) {
-    fout.setf(vcl_ios_right);
+    fout.setf(std::ios::right);
     fout.precision(6); fout.width(13); fout.fill(' ');
     fout << test_img_roi[i];
   }

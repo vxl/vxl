@@ -1,6 +1,7 @@
 // This is mul/vil3d/tests/test_algo_grad_1x3.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil3d/algo/vil3d_grad_1x3.h>
 #include <vil3d/vil3d_crop.h>
@@ -8,7 +9,7 @@
 
 static void test_grad_1x3_1plane_byte(vil3d_image_view<vxl_byte>& image)
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing vil3d_grad_1x3_1plane\n"
            << "*******************************\n";
 
@@ -41,7 +42,7 @@ static void test_grad_1x3_1plane_byte(vil3d_image_view<vxl_byte>& image)
 
 static void test_grad_1x3_byte(vil3d_image_view<vxl_byte>& image)
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil3d_grad_1x3\n"
            << "************************\n";
 
@@ -51,15 +52,15 @@ static void test_grad_1x3_byte(vil3d_image_view<vxl_byte>& image)
   vil3d_image_view<float> gradi, gradj, gradk;
   vil3d_grad_1x3(image,gradi,gradj,gradk);
 
-  vcl_cout << " ********SRC***********\n";
-  vil3d_print_all(vcl_cout, image);
+  std::cout << " ********SRC***********\n";
+  vil3d_print_all(std::cout, image);
 
-  vcl_cout << " ********gradi***********\n";
-  vil3d_print_all(vcl_cout, gradi);
-  vcl_cout << " ********gradj***********\n";
-  vil3d_print_all(vcl_cout, gradj);
-  vcl_cout << " ********gradk***********\n";
-  vil3d_print_all(vcl_cout, gradk);
+  std::cout << " ********gradi***********\n";
+  vil3d_print_all(std::cout, gradi);
+  std::cout << " ********gradj***********\n";
+  vil3d_print_all(std::cout, gradj);
+  std::cout << " ********gradk***********\n";
+  vil3d_print_all(std::cout, gradk);
 
 
   TEST_NEAR("gradi(5,5,5)", gradi(5,5,5),  0.0f, 0.0001f);
@@ -81,7 +82,7 @@ static void test_grad_1x3_byte(vil3d_image_view<vxl_byte>& image)
 
 static void test_grad_1x3_mag_sq_byte(vil3d_image_view<vxl_byte>& image)
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing vil3d_grad_1x3_mag_sq\n"
            << "*******************************\n";
 
@@ -100,7 +101,7 @@ static void test_grad_1x3_mag_sq_byte(vil3d_image_view<vxl_byte>& image)
 
 static void test_grad_1x3_i_byte()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing vil3d_grad_1x3_i\n"
            << "*************************\n";
 
@@ -122,7 +123,7 @@ static void test_grad_1x3_i_byte()
 
 static void test_grad_1x3_j_byte()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing vil3d_grad_1x3_j\n"
            << "*************************\n";
 
@@ -144,7 +145,7 @@ static void test_grad_1x3_j_byte()
 
 static void test_grad_1x3_k_byte()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing vil3d_grad_1x3_k\n"
            << "*************************\n";
 
@@ -172,7 +173,7 @@ static void test_grad_1x3_byte()
   test_grad_1x3_byte(image);
   test_grad_1x3_mag_sq_byte(image);
 
-  vcl_cout<<"Test non-contiguous image\n";
+  std::cout<<"Test non-contiguous image\n";
   vil3d_image_view<vxl_byte> crop_image = vil3d_crop(image,2,10,3,10,4,10);
 
   test_grad_1x3_byte(crop_image);

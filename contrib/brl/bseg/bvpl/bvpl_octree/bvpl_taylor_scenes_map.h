@@ -29,12 +29,12 @@ public:
 
   bvpl_taylor_scenes_map(bvpl_taylor_basis_loader loader);
 
-  boxm_scene_base_sptr get_scene(vcl_string basis) {return scenes_[basis];}
+  boxm_scene_base_sptr get_scene(std::string basis) {return scenes_[basis];}
 
   const bvpl_taylor_basis_loader& loader() {return loader_ ;}
 
 private:
-  vcl_map<vcl_string, boxm_scene_base_sptr> scenes_;
+  std::map<std::string, boxm_scene_base_sptr> scenes_;
   bvpl_taylor_basis_loader loader_;
 
 };

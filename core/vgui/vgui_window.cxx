@@ -7,8 +7,9 @@
 // \author fsm
 // \brief  See vgui_window.h for a description of this file.
 
+#include <iostream>
 #include "vgui_window.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_statusbar.h>
@@ -77,7 +78,7 @@ void vgui_window::reposition(int,int)
   vgui_macro_warning << "vgui_window::reposition() dummy implementation\n";
 }
 
-void vgui_window::set_title(vcl_string const&)
+void vgui_window::set_title(std::string const&)
 {
   vgui_macro_warning << "vgui_window::set_title() dummy implementation\n";
 }

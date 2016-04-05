@@ -4,7 +4,7 @@
 
 void test_get_order()
 {
-  vcl_cout<<"==== test mmn_get_order ====="<<vcl_endl;
+  std::cout<<"==== test mmn_get_order ====="<<std::endl;
 
   unsigned i0,i1,i2;
   mmn_get_order(0,1,2,i0,i1,i2);
@@ -28,7 +28,7 @@ void test_get_order()
 
 void test_get_rank()
 {
-  vcl_cout<<"==== test mmn_get_rank ====="<<vcl_endl;
+  std::cout<<"==== test mmn_get_rank ====="<<std::endl;
 
   unsigned i0,i1,i2;
   mmn_get_rank(0,1,2,i0,i1,i2);
@@ -52,7 +52,7 @@ void test_get_rank()
 
 void test_order_cost_a()
 {
-  vcl_cout<<"==== Test mmn_order_cost + mmn_unorder_cost ===="<<vcl_endl;
+  std::cout<<"==== Test mmn_order_cost + mmn_unorder_cost ===="<<std::endl;
   vil_image_view<double> c(3,4,5),d,e;
 
   d=mmn_order_cost(c,0,2,1);

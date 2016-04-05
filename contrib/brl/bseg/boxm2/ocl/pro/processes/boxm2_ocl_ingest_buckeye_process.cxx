@@ -1,4 +1,8 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_ingest_buckeye_process.cxx
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,9 +11,7 @@
 // \author Daniel Crispell
 // \date November 8, 2011
 
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boct/boct_bit_tree.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -57,20 +59,20 @@ class alpha_update_from_opinion_functor
      float belief = aux0_data_->data()[index];
      float uncertainty = aux1_data_->data()[index];
 #ifdef DEBUG
-     vcl_cout << "index " << index << ": belief = " << belief << ", uncertainty = " << uncertainty << ", alpha = " << alpha << vcl_endl;
+     std::cout << "index " << index << ": belief = " << belief << ", uncertainty = " << uncertainty << ", alpha = " << alpha << std::endl;
 #endif
      //if(belief< 0)
      {
 
      float ray_len = side_len;
 
-     float PQ_prior = 1.0f - float(vcl_exp(-alpha*ray_len));
+     float PQ_prior = 1.0f - float(std::exp(-alpha*ray_len));
      float PQ = belief + uncertainty*PQ_prior;
 
-     alpha =  float(-vcl_log(1.0 - PQ)/ray_len);
+     alpha =  float(-std::log(1.0 - PQ)/ray_len);
 
      if (alpha < 0) {
-       vcl_cerr << "ERROR: alpha = " << alpha << ",  PQ = " << PQ << " ray_len = " << ray_len << '\n'
+       std::cerr << "ERROR: alpha = " << alpha << ",  PQ = " << PQ << " ray_len = " << ray_len << '\n'
                 << "    belief = " << belief << " uncertainty = " << uncertainty << "  PQ_prior = " << PQ_prior << '\n';
        alpha = 0.0f;
      }
@@ -89,12 +91,12 @@ namespace boxm2_ocl_ingest_buckeye_dem_process_globals
 {
   const unsigned n_inputs_  = 7;
   const unsigned n_outputs_ = 0;
-  vcl_size_t local_threads[2]={8,8};
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string options)
+  std::size_t local_threads[2]={8,8};
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
@@ -105,7 +107,7 @@ namespace boxm2_ocl_ingest_buckeye_dem_process_globals
     //set kernel options
     options += " -D INGEST_BUCKEYE_DEM ";
     options += " -D STEP_CELL=step_cell_ingest_buckeye_dem(aux_args,data_ptr,(t_vox_exit-d)*linfo->block_len,t_vox_exit*linfo->block_len)";
-    vcl_cout << "Kernel Options = [" << options << ']' << vcl_endl;
+    std::cout << "Kernel Options = [" << options << ']' << std::endl;
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
@@ -117,7 +119,7 @@ namespace boxm2_ocl_ingest_buckeye_dem_process_globals
                                      "boxm2 opencl ingest buckeye dem"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
   }
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_ingest_buckeye_dem_process_cons(bprb_func_process& pro)
@@ -125,7 +127,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_ingest_buckeye_dem_process_globals;
 
   //process takes 6 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -135,12 +137,12 @@ bool boxm2_ocl_ingest_buckeye_dem_process_cons(bprb_func_process& pro)
   input_types_[6] = "vpgl_camera_double_sptr"; // external geo cam
 
   // process has no outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   bool good =  pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
  //set defaults inputs
- brdb_value_sptr cam    = new brdb_value_t<vpgl_camera_double_sptr>(0);
+ brdb_value_sptr cam    = new brdb_value_t<vpgl_camera_double_sptr>(VXL_NULLPTR);
 
   pro.set_input(6, cam);
 
@@ -152,7 +154,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   using namespace boxm2_ocl_ingest_buckeye_dem_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -163,8 +165,8 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(1);
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(2);
 
-  vcl_string a1_fname = pro.get_input<vcl_string>(3);
-  vcl_string a2_fname = pro.get_input<vcl_string>(4);
+  std::string a1_fname = pro.get_input<std::string>(3);
+  std::string a2_fname = pro.get_input<std::string>(4);
 
   double geoid_height = pro.get_input<float>(5);
   vpgl_camera_double_sptr geocam_in = pro.get_input<vpgl_camera_double_sptr>(6);
@@ -174,10 +176,10 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
 
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   if (geocam_in->is_a()=="vpgl_geo_camera")
   {
-    vcl_cout<<"LOADING EXTERNAL CAMERA"<<vcl_endl;
+    std::cout<<"LOADING EXTERNAL CAMERA"<<std::endl;
     geocam = static_cast<vpgl_geo_camera*>(geocam_in.ptr());
   }
   else
@@ -188,20 +190,20 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   vgl_box_2d<double> proj_bbox;
   double u,v;
-  vcl_cout<<"Scene BBox "<<scene_bbox<<vcl_endl;
+  std::cout<<"Scene BBox "<<scene_bbox<<std::endl;
   geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z() + geoid_height, u, v);
   proj_bbox.add(vgl_point_2d<double>(u,v));
   geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z() + geoid_height, u, v);
   proj_bbox.add(vgl_point_2d<double>(u,v));
 
-  vcl_cout<<"Proj Box "<<proj_bbox<<vcl_endl;
-  int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
-  int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
-  int max_i = int(vcl_min(a1_res->ni()-1.0, vcl_ceil(proj_bbox.max_x())));
-  int max_j = int(vcl_min(a1_res->nj()-1.0, vcl_ceil(proj_bbox.max_y())));
+  std::cout<<"Proj Box "<<proj_bbox<<std::endl;
+  int min_i = int(std::max(0.0, std::floor(proj_bbox.min_x())));
+  int min_j = int(std::max(0.0, std::floor(proj_bbox.min_y())));
+  int max_i = int(std::min(a1_res->ni()-1.0, std::ceil(proj_bbox.max_x())));
+  int max_j = int(std::min(a1_res->nj()-1.0, std::ceil(proj_bbox.max_y())));
 
   if ((min_i > max_i) || (min_j > max_j)) {
-      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
+      std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
       return false;
   }
 
@@ -213,12 +215,12 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
 
   vil_image_view<float>* a1_view = dynamic_cast<vil_image_view<float>*>(a1_view_base.ptr());
   if (!a1_view) {
-      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast first return image to a vil_image_view<float>\n";
+      std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast first return image to a vil_image_view<float>\n";
       return false;
   }
   vil_image_view<float>* a2_view = dynamic_cast<vil_image_view<float>*>(a2_view_base.ptr());
   if (!a2_view) {
-      vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast last return image to a vil_image_view<float>\n";
+      std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast last return image to a vil_image_view<float>\n";
       return false;
   }
 
@@ -279,8 +281,8 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   //out_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //get x and y size from scene
-  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),
@@ -290,12 +292,12 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     return false;
 
   // compile the kernel
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
 
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,"");
     kernels[identifier]=ks;
   }
@@ -315,15 +317,15 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //2. set workgroup size
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {cl_ni,cl_nj};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {cl_ni,cl_nj};
 
-  vcl_cout<<"Ingesting DEM"<<vcl_endl;
+  std::cout<<"Ingesting DEM"<<std::endl;
   // set arguments
 
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-    vcl_cout<<"Block # "<<*id<<vcl_endl;
+    std::cout<<"Block # "<<*id<<std::endl;
 
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
@@ -371,27 +373,27 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_uchar16) );
     kern->set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
     kern->set_local_arg( lThreads[0]*lThreads[1]*sizeof(cl_int) );
-    vcl_cout<<"Setting arguments"<<vcl_endl;
+    std::cout<<"Setting arguments"<<std::endl;
 
     //execute kernel
     if (!kern->execute(queue, 2, lThreads, gThreads)) {
-      vcl_cerr << "boxm2_ocl_ingest_buckeye_dem_process: kern->execute() returned error. exiting process.\n";
+      std::cerr << "boxm2_ocl_ingest_buckeye_dem_process: kern->execute() returned error. exiting process.\n";
       clReleaseCommandQueue(queue);
       return false;
     }
 
-    vcl_cout << "Calling clFinish" << vcl_endl;
+    std::cout << "Calling clFinish" << std::endl;
     status = clFinish(queue);
     if ( !check_val(status,CL_SUCCESS,"clFinish failed (" + kern->id() + ") " +error_to_string(status)) ) {
-      vcl_cerr << "boxm2_ocl_ingest_dem_process: clFinish returned error. exiting process.\n";
+      std::cerr << "boxm2_ocl_ingest_dem_process: clFinish returned error. exiting process.\n";
       clReleaseCommandQueue(queue);
       return false;
     }
-    vcl_cout << "clFinish returned success" << vcl_endl;
+    std::cout << "clFinish returned success" << std::endl;
     gpu_time += kern->exec_time();
-    vcl_cout<<" Time "<<gpu_time<<vcl_endl;
+    std::cout<<" Time "<<gpu_time<<std::endl;
 #endif
-    vcl_cout << "Reading back AUX buffers" << vcl_endl;
+    std::cout << "Reading back AUX buffers" << std::endl;
     aux0->read_to_buffer(queue );
     aux1->read_to_buffer(queue );
 
@@ -411,14 +413,14 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     alpha_update_from_opinion_functor update_func(alpha_data, aux0_data, aux1_data, subblock_side_len);
 
     int buff_len = alpha_data->buffer_length();
-    vcl_cout << "buffer length = " << buff_len << vcl_endl;
+    std::cout << "buffer length = " << buff_len << std::endl;
     int datasize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    vcl_cout << "datasize = " << datasize << vcl_endl;
+    std::cout << "datasize = " << datasize << std::endl;
     int data_len = int(alpha_data->buffer_length() / boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix()));
-    vcl_cout << "data length = " << data_len << '\n'
-             << "Updating Alpha values.." << vcl_endl;
+    std::cout << "data length = " << data_len << '\n'
+             << "Updating Alpha values.." << std::endl;
     boxm2_data_leaves_serial_iterator<alpha_update_from_opinion_functor>(block, data_len, update_func);
-    vcl_cout << "Done updating Alpha values." << vcl_endl;
+    std::cout << "Done updating Alpha values." << std::endl;
   }
 
   clReleaseCommandQueue(queue);

@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -89,21 +90,21 @@ static void test_ray_intersect()
   vgl_point_3d<double> p3d(44.255196,33.284970 , 32);
   p1 = rcam1.project(p3d);
   p2 = rcam2.project(p3d);
-  vcl_cout << "Projected point from rcam 1 " << p1 << '\n'
+  std::cout << "Projected point from rcam 1 " << p1 << '\n'
            << "Projected point from rcam 2 " << p2 << '\n';
-  vcl_vector<vpgl_camera<double> const * > cams(2);
+  std::vector<vpgl_camera<double> const * > cams(2);
   cams[0]= (vpgl_camera<double>*)(&rcam1);
   cams[1]= (vpgl_camera<double>*)(&rcam2);
-  vcl_vector<vgl_point_2d<double> > image_pts;
+  std::vector<vgl_point_2d<double> > image_pts;
   image_pts.push_back(p1);   image_pts.push_back(p2);
   vpgl_ray_intersect<double> ri(2);
   vgl_point_3d<double> intersection;
   vgl_point_3d<double> initial_point(44.3542,33.1855 ,32);
   /*bool success =*/ ri.intersect(cams, image_pts, initial_point, intersection);
-  vcl_cout << "Result " << intersection << '\n';
-  TEST_NEAR("test ray_intersection", vcl_fabs(44.2552-intersection.x())+
-            vcl_fabs(33.285-intersection.y())+
-            vcl_fabs(32.001-intersection.z()),0 , 0.001);
+  std::cout << "Result " << intersection << '\n';
+  TEST_NEAR("test ray_intersection", std::fabs(44.2552-intersection.x())+
+            std::fabs(33.285-intersection.y())+
+            std::fabs(32.001-intersection.z()),0 , 0.001);
 }
 
 TESTMAIN(test_ray_intersect);

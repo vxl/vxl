@@ -33,15 +33,13 @@ if(EXPAT_FOUND)
 
     aux_source_directory(Templates boxm2_volm_sources)
 
-    add_library(boxm2_volm ${boxm2_volm_sources})
+    vxl_add_library(LIBRARY_NAME boxm2_volm LIBRARY_SOURCES ${boxm2_volm_sources})
     target_link_libraries(boxm2_volm boxm2 boxm2_io brip baio ${VXL_LIB_PREFIX}vpgl volm ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl depth_map)
     if(OPENCL_FOUND)
     target_link_libraries(boxm2_volm bocl)
     endif()
 
-    #install the .h .txx and libs
-    install_targets(/lib boxm2_volm)
-    INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_volm/ ${boxm2_volm_sources})
+    #install the .h .hxx and libs
 
     add_subdirectory(io)
 

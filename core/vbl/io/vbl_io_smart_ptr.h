@@ -41,7 +41,7 @@
 //   }
 // }
 //
-// void vsl_print_summary(vcl_ostream& os, const MY_CLASS *p)
+// void vsl_print_summary(std::ostream& os, const MY_CLASS *p)
 // {
 //   if (p==0)
 //     os << "NULL PTR";
@@ -56,9 +56,10 @@
 //
 // Objects using I/O via a smart ptr, should not save the objects reference count.
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Binary save vbl_smart_ptr to stream.
 template <class T>
@@ -70,6 +71,6 @@ void vsl_b_read(vsl_b_istream & is, vbl_smart_ptr<T> & v);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & b);
+void vsl_print_summary(std::ostream & os,const vbl_smart_ptr<T> & b);
 
 #endif // vbl_io_smart_ptr_h

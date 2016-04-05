@@ -77,13 +77,13 @@ bool operator > (const rgrl_invariant_match& left,
                  const rgrl_invariant_match& right);
 
 //: Same as operator <, but operates on smart pointers to constellation matches
-//  \note This function is used to in vcl_sort to sort vectors of smart
+//  \note This function is used to in std::sort to sort vectors of smart
 //        pointers to pregl_constellation_match objects
 bool dist_less (const vbl_smart_ptr<rgrl_invariant_match>& left,
                 const vbl_smart_ptr<rgrl_invariant_match>& right);
 
 //: Same as operator >, but operates on smart pointers to constellation matches
-//  \note This function is used to in vcl_sort to sort vectors of smart
+//  \note This function is used to in std::sort to sort vectors of smart
 //        pointers to pregl_constellation_match objects
 bool dist_greater (const vbl_smart_ptr<rgrl_invariant_match>& left,
                    const vbl_smart_ptr<rgrl_invariant_match>& right);

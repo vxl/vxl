@@ -9,24 +9,24 @@ simple_segmentation_builder::simple_segmentation_builder()
 
 void simple_segmentation_builder::initialise(const my_image_type & arg)
 {
-  vcl_cout<<"--------------------------------------------"<<vcl_endl
-          <<"Begin initialization ..."<<vcl_endl ;
+  std::cout<<"--------------------------------------------"<<std::endl
+          <<"Begin initialization ..."<<std::endl ;
 #ifdef DEBUG
   chrono_.start() ;
 #endif
-  vcl_cout<<"Initializing a grid structure."<<vcl_endl ;
+  std::cout<<"Initializing a grid structure."<<std::endl ;
 #if 0
   grid_.initialize(arg.width(), arg.height()) ;
 
-  vcl_cout<<"Computing its dual."<<vcl_endl ;
+  std::cout<<"Computing its dual."<<std::endl ;
   grid_.set_dual() ;
   if (!grid_.valid_permutations())
   {
-    vcl_cerr<<"Before : Invalid permutations."<<vcl_endl ;
+    std::cerr<<"Before : Invalid permutations."<<std::endl ;
   }
 #endif // 0
 
-  vcl_cout<<"Initialization of a 2X2 grid."<<vcl_endl ;
+  std::cout<<"Initialization of a 2X2 grid."<<std::endl ;
 
   grid_structure_.initialise(arg.ni(),arg.nj()) ;
 
@@ -36,13 +36,13 @@ void simple_segmentation_builder::initialise(const my_image_type & arg)
   top_map_.valid_permutations() ;
 #endif // 0
   background_=&top_map_.face(grid_structure_.background_index()) ;
-  vcl_cout<<"Set the base of the pyramid."<<vcl_endl ;
+  std::cout<<"Set the base of the pyramid."<<std::endl ;
   top_map_.set_pyramid_base_structure() ;
 #if 0
   pyramid_.base_map().valid_permutations() ;
   b.build(pyramid_.base_map()) ;
   pyramid_.base_map().valid_permutations() ;
-  vcl_cout<<"Set the base of the pyramid."<<vcl_endl ;
+  std::cout<<"Set the base of the pyramid."<<std::endl ;
   top_map_.synchronise() ;
   top_map_.valid_permutations() ;
   background_=&top_map_.face(top_map_.nb_faces()-1) ;
@@ -54,7 +54,7 @@ void simple_segmentation_builder::initialise(const my_image_type & arg)
     e->set_value(i) ;
   }
 
-  vcl_cout<<"Initialize values of edges."<<vcl_endl ;
+  std::cout<<"Initialize values of edges."<<std::endl ;
   for (my_top_map::edge_iterator e=top_map_.begin_edge(); e!=top_map_.end_edge(); ++e)
   {
     if (!e->is_adjacent_to(*background_))
@@ -70,19 +70,19 @@ void simple_segmentation_builder::initialise(const my_image_type & arg)
 #ifdef DEBUG
   chrono_.stop() ;
 #endif
-  vcl_cout<<"Initialization done" ;
+  std::cout<<"Initialization done" ;
 #ifdef DEBUG
-  vcl_cout<<" in "<<chrono_.read()<<" seconds"
+  std::cout<<" in "<<chrono_.read()<<" seconds"
 #endif
-  vcl_cout<<".\n--------------------------------------------"<<vcl_endl ;
+  std::cout<<".\n--------------------------------------------"<<std::endl ;
 }
 
 void simple_segmentation_builder::draw_down_projection(my_image_type & res, const my_image_type & org) const
 {
   res.set_size(grid_structure_.width(),grid_structure_.height()) ;
-  vcl_cout<<"--------------------------------------------"<<vcl_endl
-          <<"Drawing down projection of the top level ..."<<vcl_endl ;
-  vcl_vector<vmap_face_index> corresp ;
+  std::cout<<"--------------------------------------------"<<std::endl
+          <<"Drawing down projection of the top level ..."<<std::endl ;
+  std::vector<vmap_face_index> corresp ;
 
   pyramid_.down_projection_faces(pyramid_.top_map_index(),corresp) ;
 
@@ -94,7 +94,7 @@ void simple_segmentation_builder::draw_down_projection(my_image_type & res, cons
     }
   }
 
-  vcl_cout<<"--------------------------------------------"<<vcl_endl ;
+  std::cout<<"--------------------------------------------"<<std::endl ;
 }
 
 #if 0
@@ -118,12 +118,12 @@ void simple_segmentation_builder::filter_edge_below(int threshold)
   pyramid_.base_map().valid_permutations() ;
   my_top_removal_kernel rk(top_map_) ;
 
-  vcl_cout<<"********************************************"<<vcl_endl
-          <<"********************************************"<<vcl_endl
-          <<" Constructing level "<<vcl_endl
-          <<"--------------------------------------------"<<vcl_endl
+  std::cout<<"********************************************"<<std::endl
+          <<"********************************************"<<std::endl
+          <<" Constructing level "<<std::endl
+          <<"--------------------------------------------"<<std::endl
 
-          <<"removal kernel.."<<vcl_endl ;
+          <<"removal kernel.."<<std::endl ;
   rk.initialise() ;
   for (my_top_map::edge_iterator e=top_map_.begin_edge(); e!=top_map_.end_edge(); ++e)
   {
@@ -131,18 +131,18 @@ void simple_segmentation_builder::filter_edge_below(int threshold)
     {
       rk.add(*e) ;
 #ifdef DEBUG
-      vcl_cout<<e->value()<<' ' << vcl_flush;
+      std::cout<<e->value()<<' ' << std::flush;
 #endif
     }
   }
   rk.finalise() ;
   if (!rk.valid())
   {
-    vcl_cerr<<"KERNEL PROBLEM !"<<vcl_endl ;
+    std::cerr<<"KERNEL PROBLEM !"<<std::endl ;
   }
   //if (!rk.empty())
   {
-    vcl_cout<<"removal.."<<rk.size()<<vcl_endl ;
+    std::cout<<"removal.."<<rk.size()<<std::endl ;
     top_map_.removal(rk) ;
 #ifdef DEBUG
     my_pyramid::level_type::dart_iterator dp=pyramid_.top_level().begin_dart() ;
@@ -150,7 +150,7 @@ void simple_segmentation_builder::filter_edge_below(int threshold)
     {
       if (dp->vertex().sequence_index()!=d->vertex().sequence_index())
       {
-        vcl_cout<<dp->vertex().sequence_index()<<"!="<<d->vertex().sequence_index()<<' ' << vcl_flush;
+        std::cout<<dp->vertex().sequence_index()<<"!="<<d->vertex().sequence_index()<<' ' << std::flush;
       }
     }
     my_level::vertex_iterator vp=pyramid_.top_level().begin_vertex() ;
@@ -158,29 +158,29 @@ void simple_segmentation_builder::filter_edge_below(int threshold)
     {
       if (pyramid_.base_map().vertex_position(vp->sequence_index())!=v->value())
       {
-        vcl_cout<<pyramid_.base_map().vertex_position(vp->sequence_index())<<"ii"
-                <<v->value()<<'/'<<vp->sequence_index()<<"pp"<<v->sequence_index()<<' ' << vcl_flush;
+        std::cout<<pyramid_.base_map().vertex_position(vp->sequence_index())<<"ii"
+                <<v->value()<<'/'<<vp->sequence_index()<<"pp"<<v->sequence_index()<<' ' << std::flush;
       }
     }
 #endif // DEBUG
-    vcl_cout<<"contract pendant darts.."<<vcl_endl ;
+    std::cout<<"contract pendant darts.."<<std::endl ;
     my_top_map::contraction_kernel K2(top_map_) ;
 
     K2.initialise() ;
     K2.add_1_cycles() ;
     K2.finalise() ;
-    if (!K2.valid()) vcl_cout<<"error"<<vcl_endl ;
+    if (!K2.valid()) std::cout<<"error"<<std::endl ;
 
     top_map_.contraction(K2) ;
 #ifdef DEBUG
-    vcl_cout<<top_map_.nb_vertices()<<'/'<<pyramid_.top_level().nb_vertices()<<' '
-            <<top_map_.nb_darts()<<'/'<<pyramid_.top_level().nb_darts()<<vcl_endl ;
+    std::cout<<top_map_.nb_vertices()<<'/'<<pyramid_.top_level().nb_vertices()<<' '
+            <<top_map_.nb_darts()<<'/'<<pyramid_.top_level().nb_darts()<<std::endl ;
     dp=pyramid_.top_level().begin_dart() ;
     for (my_top_map::dart_iterator d=top_map_.begin_dart(); d!=top_map_.end_dart(); ++d, ++dp)
     {
       if (dp->vertex().sequence_index()!=d->vertex().sequence_index())
       {
-        vcl_cout<<dp->vertex().sequence_index()<<"!="<<d->vertex().sequence_index()<<' ' << vcl_flush;
+        std::cout<<dp->vertex().sequence_index()<<"!="<<d->vertex().sequence_index()<<' ' << std::flush;
       }
     }
     vp=pyramid_.top_level().begin_vertex() ;
@@ -188,30 +188,30 @@ void simple_segmentation_builder::filter_edge_below(int threshold)
     {
       if (pyramid_.base_map().vertex_position(vp->sequence_index())!=v->value())
       {
-        vcl_cout<<pyramid_.base_map().vertex_position(vp->sequence_index())<<"::"<<v->value()
-                <<'/'<<vp->sequence_index()<<".."<<v->sequence_index()<<' ' << vcl_flush;
+        std::cout<<pyramid_.base_map().vertex_position(vp->sequence_index())<<"::"<<v->value()
+                <<'/'<<vp->sequence_index()<<".."<<v->sequence_index()<<' ' << std::flush;
       }
     }
 #endif // DEBUG
 
-    vcl_cout<<"contract redundant darts.."<<vcl_endl ;
+    std::cout<<"contract redundant darts.."<<std::endl ;
     K2.clear() ;
     K2.initialise() ;
     K2.add_2_cycles() ;
     K2.finalise() ;
-    if (!K2.valid()) vcl_cout<<"error"<<vcl_endl ;
+    if (!K2.valid()) std::cout<<"error"<<std::endl ;
 #ifdef DEBUG
     dp=pyramid_.top_level().begin_dart() ;
     for (my_top_map::dart_iterator d=top_map_.begin_dart(); d!=top_map_.end_dart(); ++d, ++dp)
     {
       if (dp->vertex().sequence_index()!=d->vertex().sequence_index())
       {
-        vcl_cout<<dp->vertex().sequence_index()<<"!="<<d->vertex().sequence_index()<<' ' << vcl_flush;
+        std::cout<<dp->vertex().sequence_index()<<"!="<<d->vertex().sequence_index()<<' ' << std::flush;
       }
     }
 #endif // DEBUG
     top_map_.contraction(K2) ;
   }
-  vcl_cout<<"********************************************"<<vcl_endl
-          <<"********************************************"<<vcl_endl ;
+  std::cout<<"********************************************"<<std::endl
+          <<"********************************************"<<std::endl ;
 }

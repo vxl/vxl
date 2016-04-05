@@ -2,9 +2,10 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <cstring>
 #include "vil_blocked_image_facade.h"
 
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_view.h>
@@ -140,17 +141,17 @@ return src_->put_view(view, i0, j0);
 
 bool vil_blocked_image_facade::get_property(char const * tag, void * value) const
 {
-  if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
+  if (std::strcmp(vil_property_quantisation_depth, tag)==0)
     return src_->get_property(tag, value);
 
-  if (vcl_strcmp(vil_property_size_block_i, tag)==0)
+  if (std::strcmp(vil_property_size_block_i, tag)==0)
   {
     if (value)
       *static_cast<unsigned*>(value) = this->size_block_i();
     return true;
   }
 
-  if (vcl_strcmp(vil_property_size_block_j, tag)==0)
+  if (std::strcmp(vil_property_size_block_j, tag)==0)
   {
     if (value)
       *static_cast<unsigned*>(value) = this->size_block_j();

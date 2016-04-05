@@ -1,7 +1,8 @@
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_utility.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <utility>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_random.h>
 #include <testlib/testlib_test.h>
@@ -10,8 +11,8 @@
 #include <rsdl/rsdl_dist.h>
 
 static inline bool close( double x, double y ) { return vnl_math::abs(x-y) < 1.0e-6; }
-static inline bool less_first( const vcl_pair<double,int>& left,
-                               const vcl_pair<double,int>& right )
+static inline bool less_first( const std::pair<double,int>& left,
+                               const std::pair<double,int>& right )
 {
   return left.first < right.first;
 }
@@ -20,7 +21,7 @@ static void test_kd_tree()
 {
   int Nc=2, Na=3;
   rsdl_point pt( Nc, Na );
-  vcl_vector< rsdl_point > points;
+  std::vector< rsdl_point > points;
 
   //  0
   pt.cartesian( 0 ) = 80.2;  pt.cartesian( 1 ) =  99.4;
@@ -70,8 +71,8 @@ static void test_kd_tree()
   query.cartesian( 0 ) = 80;  query.cartesian( 1 ) = 99.3;
   query.angular( 0 ) = 3.14;  query.angular( 1 ) = 2.9;  query.angular( 2 ) = 1.45;
 
-  vcl_vector< rsdl_point > cpoints, cpoints_heap;
-  vcl_vector< int > cindices, cindices_heap;
+  std::vector< rsdl_point > cpoints, cpoints_heap;
+  std::vector< int > cindices, cindices_heap;
 
   bool use_heap = false;
   tree.n_nearest( query, 2, cpoints, cindices );
@@ -95,7 +96,7 @@ static void test_kd_tree()
 
   int M = 5000;
   points.resize( M );
-  vcl_vector< vcl_pair< double, int > > dist_pairs( M );
+  std::vector< std::pair< double, int > > dist_pairs( M );
   int num_tests = 20;
   const int n=5;
   vnl_random mz_rand;
@@ -114,7 +115,7 @@ static void test_kd_tree()
   for ( int t=0; t<num_tests; ++t )
   {
 #ifdef DEBUG
-    vcl_cout << "\n\n=============================\n  n_nearest test " << t
+    std::cout << "\n\n=============================\n  n_nearest test " << t
              <<   "\n=============================\n";
 #endif
     rsdl_point query(2,3);
@@ -129,7 +130,7 @@ static void test_kd_tree()
       dist_pairs[i].first = rsdl_dist_sq( query, points[i] );
       dist_pairs[i].second = i;
     }
-    vcl_sort( dist_pairs.begin(), dist_pairs.end(), less_first );
+    std::sort( dist_pairs.begin(), dist_pairs.end(), less_first );
 
     //  find out the k-d tree results w/o heap
     use_heap = false;
@@ -171,13 +172,13 @@ static void test_kd_tree()
 
     //  Now do "points_in_bounding_box" query.
     rsdl_bounding_box box( min_point, max_point );
-    vcl_vector< rsdl_point > box_points;
-    vcl_vector< int > box_indices;
+    std::vector< rsdl_point > box_points;
+    std::vector< int > box_indices;
     tree2.points_in_bounding_box( box, box_points, box_indices );
 
     // Exhaustively check each point and count the number inside
     unsigned int inside_count = 0;
-    vcl_vector< bool > pt_inside(M,false);
+    std::vector< bool > pt_inside(M,false);
     for ( int i=0; i<M; ++i ) {
       if ( rsdl_dist_point_in_box( points[i], box ) ) {
         pt_inside[ i ] = true;
@@ -187,11 +188,11 @@ static void test_kd_tree()
 
 #ifdef DEBUG
     //  Output to check everything:
-    vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_bounding_box\n"
+    std::cout << "\n\nChecking rsdl_kd_tree::points_in_bounding_box\n"
              << " inside_count from exhaustive test: " << inside_count << '\n'
-             << " number in vector: " << box_indices.size() << vcl_endl;
+             << " number in vector: " << box_indices.size() << std::endl;
 
-    vcl_cout << "\nNow checking each:\n";
+    std::cout << "\nNow checking each:\n";
 #endif
     int disagree_index = 0, disagree_pt = 0;
     for ( unsigned int i=0; i<box_points.size(); ++i ) {
@@ -202,8 +203,8 @@ static void test_kd_tree()
     }
 
 #ifdef DEBUG
-    vcl_cout << "Number of index disagreements = " << disagree_index
-             <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
+    std::cout << "Number of index disagreements = " << disagree_index
+             <<"\nNumber of point disagreements =" << disagree_pt << std::endl;
 #endif
 
     testlib_test_begin( "k-d tree bounding box ");
@@ -216,8 +217,8 @@ static void test_kd_tree()
     double radius = vnl_math::pi + 0.01;
 
     //  Now do "points_in_radius" query.
-    vcl_vector< rsdl_point > radius_points;
-    vcl_vector< int > radius_indices;
+    std::vector< rsdl_point > radius_points;
+    std::vector< int > radius_indices;
     tree2.points_in_radius( query, radius, radius_points, radius_indices );
 
     //  Exhaustively gather info.
@@ -233,7 +234,7 @@ static void test_kd_tree()
 
 #ifdef DEBUG
     //  Output to check everything:
-    vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
+    std::cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
              << " inside_count from exhaustive test: " << inside_count << '\n'
              << " number in vector: " << radius_indices.size() << '\n'
              << '\n'
@@ -248,8 +249,8 @@ static void test_kd_tree()
     }
 
 #ifdef DEBUG
-    vcl_cout << "Number of index disagreements = " << disagree_index
-             <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
+    std::cout << "Number of index disagreements = " << disagree_index
+             <<"\nNumber of point disagreements =" << disagree_pt << std::endl;
 #endif
 
     testlib_test_begin( "k-d tree points_in_radius (1)");
@@ -280,7 +281,7 @@ static void test_kd_tree()
 
 #ifdef DEBUG
     //  Output to check everything:
-    vcl_cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
+    std::cout << "\n\nChecking rsdl_kd_tree::points_in_radius\n"
              << " inside_count from exhaustive test: " << inside_count << '\n'
              << " number in vector: " << radius_indices.size() << '\n'
              << '\n'
@@ -295,8 +296,8 @@ static void test_kd_tree()
     }
 
 #ifdef DEBUG
-    vcl_cout << "Number of index disagreements = " << disagree_index
-             <<"\nNumber of point disagreements =" << disagree_pt << vcl_endl;
+    std::cout << "Number of index disagreements = " << disagree_index
+             <<"\nNumber of point disagreements =" << disagree_pt << std::endl;
 #endif
 
     testlib_test_begin( "k-d tree points_in_radius ");

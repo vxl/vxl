@@ -9,13 +9,15 @@
 //
 // TODO - limit t_min so that the brow region doesn't jut out too far when the brow angle is increased.
 //
+#include <iostream>
+#include <cmath>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include "boxm2_vecf_eyelid.h"
 #include "boxm2_vecf_lid_base.h"
 #include "boxm2_vecf_orbit_params.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
  public:
   boxm2_vecf_eyelid_crease();
@@ -37,7 +39,7 @@ class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
   double t(double xp, double y) const;
 
   //: distance to closest point on crease surface
-  double surface_distance(vgl_point_3d<double> const& p) const;
+  double distance(vgl_point_3d<double> const& p) const;
 
   //: socket surface tapers from brow (params.mid_eyelid_crease_z_) to medial and lateral socket planes
   // matches z values at t = params.eyelid_crease_ct_

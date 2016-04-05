@@ -1,8 +1,9 @@
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
 #include <bocl/bocl_cl.h>
-#include <vcl_sstream.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
@@ -40,7 +41,7 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vil/file_formats/vil_jpeg.h>
 #include <vil/vil_open.h>
 // Boxm2_Export_Scene executable will create a small, portable, pre rendered
@@ -68,7 +69,7 @@ bool vil_save_jpeg(const vil_image_view_base &im,const char* filename)
   switch (vil_pixel_format_component_format(im.pixel_format()))
   {
   case VIL_PIXEL_FORMAT_BYTE:
-    vcl_cout<<"BYTE"<<vcl_endl;
+    std::cout<<"BYTE"<<std::endl;
     return jimage.put_view(vil_image_view<vxl_byte>(im),0,0);
   case VIL_PIXEL_FORMAT_UINT_16:
     return jimage.put_view(vil_image_view<vxl_uint_16>(im),0,0);
@@ -99,11 +100,11 @@ bool vil_save_jpeg(const vil_image_view_base &im,const char* filename)
 }
 int main(int argc,  char** argv)
 {
-    vcl_cout<<"Boxm2 Hemisphere"<<vcl_endl;
-    vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-    vul_arg<vcl_string> dir("-dir", "output image directory", "");
+    std::cout<<"Boxm2 Hemisphere"<<std::endl;
+    vul_arg<std::string> scene_file("-scene", "scene filename", "");
+    vul_arg<std::string> dir("-dir", "output image directory", "");
     vul_arg<bool> depth("-depth", "output depth maps", 0);
-    vul_arg<vcl_string> imgname("-imgname", "name of the image", "scene");
+    vul_arg<std::string> imgname("-imgname", "name of the image", "scene");
     vul_arg<unsigned> ni("-ni", "Width of image", 640);
     vul_arg<unsigned> nj("-nj", "Height of image", 480);
     vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
@@ -121,13 +122,13 @@ int main(int argc,  char** argv)
     //////////////////////////////////////////////////////////////////////////////
     //see if directory exists
     if ( vul_file::exists(dir()) && vul_file::is_directory(dir()) ) {
-        vcl_cout<<"Directory "<<dir()<<" exists - overwriting it."<<vcl_endl;
+        std::cout<<"Directory "<<dir()<<" exists - overwriting it."<<std::endl;
     }
     else {
         vul_file::make_directory_path(dir());
     }
     //see if img folder exists
-    vcl_string imgdir = dir() + "/img/";
+    std::string imgdir = dir() + "/img/";
     if ( vul_file::exists(imgdir) && vul_file::is_directory(imgdir) ) {
         vul_file::delete_file_glob(imgdir+"*");
     }
@@ -154,11 +155,11 @@ int main(int argc,  char** argv)
     //make bocl manager
     bocl_manager_child &mgr =bocl_manager_child::instance();
     if (gpu_idx() >= mgr.gpus_.size()){
-      vcl_cout << "GPU index out of bounds" << vcl_endl;
+      std::cout << "GPU index out of bounds" << std::endl;
       return -1;
     }
     bocl_device_sptr device = mgr.gpus_[gpu_idx()];
-    vcl_cout << "Using: " << *device;
+    std::cout << "Using: " << *device;
 
     double gsdofcentralpixel = gsd();
     //create cache, grab singleton instance
@@ -172,20 +173,20 @@ int main(int argc,  char** argv)
     // FOR  GRID
     //////////////////////////////////////////////////////////////////////////////
     //set up a view sphere, use find closest for closest neighbors
-    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(scene->bounding_box(), scene->bounding_box().depth()*radius());
+    vsph_view_sphere<vsph_view_point<std::string> > sphere(scene->bounding_box(), scene->bounding_box().depth()*radius());
 
     //map of ID's that have been rendered
-    vcl_map<int, vcl_string> saved_imgs;
-    vbl_array_2d<vcl_string> img_grid(num_in(), num_az());
+    std::map<int, std::string> saved_imgs;
+    vbl_array_2d<std::string> img_grid(num_in(), num_az());
 
     /////////////////////////////////////////////////////////////////////////////
     //rendered array of views
-    vcl_map<int, vil_image_view<vxl_byte>* > img_map;
+    std::map<int, vil_image_view<vxl_byte>* > img_map;
     vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
-    vcl_stringstream camstream;
+    std::stringstream camstream;
     camstream<<dir()<<"/cams.txt";
 
-    vcl_ofstream cam_file_stream(camstream.str().c_str());
+    std::ofstream cam_file_stream(camstream.str().c_str());
     // determine increment along azimuth and elevation (incline)
     double az_incr = vnl_math::twopi/num_az();
     double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
@@ -202,10 +203,10 @@ int main(int argc,  char** argv)
             sphere.add_view(curr_point,ni(), nj());
             vgl_point_3d<double> cart_point = sphere.cart_coord(curr_point);
             int uid; double dist;
-            vsph_view_point<vcl_string> view = sphere.find_closest(cart_point, uid, dist);
+            vsph_view_point<std::string> view = sphere.find_closest(cart_point, uid, dist);
 
             //if the viewpoint has already been rendered, skip it
-            vcl_stringstream fstr, idstream;
+            std::stringstream fstr, idstream;
             fstr<<imgname()<<'_'<<uid<<".jpg";
             img_grid(el_i, az_i) = fstr.str();
             idstream<<imgdir<<imgname()<<'_'<<uid<<".jpg";
@@ -251,26 +252,26 @@ int main(int argc,  char** argv)
                         && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                         && bprb_batch_process_manager::instance()->run_process();
                     if( !good ) {
-                      vcl_cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << vcl_endl;
+                      std::cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << std::endl;
                       return -1;
                     }
 
                     unsigned int img_id=0;
                     good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
                     if( !good ) {
-                      vcl_cout << "ERROR!!:  commit output failed: " << __FILE__ << __LINE__ << vcl_endl;
+                      std::cout << "ERROR!!:  commit output failed: " << __FILE__ << __LINE__ << std::endl;
                       return -1;
                     }
 
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
+                        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
                     }
 
                     brdb_value_sptr value;
-                    if (!S->get_value(vcl_string("value"), value)) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
+                    if (!S->get_value(std::string("value"), value)) {
+                        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
                     }
                     vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
                     vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = static_cast<vil_image_view<vil_rgba<vxl_byte> > *>(outimg.ptr());
@@ -284,7 +285,7 @@ int main(int argc,  char** argv)
                             jpg_out(i,j,2) = (*exp_img_out)(i,j).B();
                         }
                     }
-                    vcl_stringstream colorstream;
+                    std::stringstream colorstream;
                     colorstream<<imgdir<<"scene_"<<uid<<".jpg";
                     vil_save_jpeg( jpg_out, (colorstream.str().c_str()) );
 
@@ -301,26 +302,26 @@ int main(int argc,  char** argv)
                         && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                         && bprb_batch_process_manager::instance()->run_process();
                     if( !good ) {
-                      vcl_cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << vcl_endl;
+                      std::cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << std::endl;
                       return -1;
                     }
 
                     unsigned int img_id=0;
                     good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
                     if( !good ) {
-                      vcl_cout << "ERROR!!: commit output failed: " << __FILE__ << __LINE__ << vcl_endl;
+                      std::cout << "ERROR!!: commit output failed: " << __FILE__ << __LINE__ << std::endl;
                       return -1;
                     }
 
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
+                        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
                     }
 
                     brdb_value_sptr value;
-                    if (!S->get_value(vcl_string("value"), value)) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
+                    if (!S->get_value(std::string("value"), value)) {
+                        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
                     }
                     vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
                     vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
@@ -328,7 +329,7 @@ int main(int argc,  char** argv)
                     for (unsigned int i=0; i<ni(); ++i)
                         for (unsigned int j=0; j<nj(); ++j)
                             (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
-                    vcl_stringstream graystream;
+                    std::stringstream graystream;
                     graystream<<imgdir<<"ir_"<<uid<<".jpg";
                     saved_imgs[uid] = idstream.str();
                      vil_save_jpeg( *byte_img, graystream.str().c_str() );
@@ -346,33 +347,33 @@ int main(int argc,  char** argv)
                         && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                         && bprb_batch_process_manager::instance()->run_process();
                     if( !good ) {
-                      vcl_cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << vcl_endl;
+                      std::cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << std::endl;
                       return -1;
                     }
 
                     unsigned int img_id=0;
                     good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
                     if( !good ) {
-                      vcl_cout << "ERROR!!: commit output failed: " << __FILE__ << __LINE__ << vcl_endl;
+                      std::cout << "ERROR!!: commit output failed: " << __FILE__ << __LINE__ << std::endl;
                       return -1;
                     }
 
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
+                        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
                     }
                     brdb_value_sptr value;
-                    if (!S->get_value(vcl_string("value"), value)) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
+                    if (!S->get_value(std::string("value"), value)) {
+                        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
                     }
                     vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
                     vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
                     vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
                     for (unsigned int i=0; i<ni(); ++i)
                         for (unsigned int j=0; j<nj(); ++j)
-                            (*byte_img)(i,j) =  (unsigned char)(vcl_min((*expimg_view)(i,j),255.0f) );   //just grab the first byte (all foura r the same)
-                    vcl_stringstream depthstream;
+                            (*byte_img)(i,j) =  (unsigned char)(std::min((*expimg_view)(i,j),255.0f) );   //just grab the first byte (all foura r the same)
+                    std::stringstream depthstream;
                     depthstream<<imgdir<<"label_"<<uid<<".jpg";
                     vil_save(*byte_img, depthstream.str().c_str() );
                 }
@@ -389,19 +390,19 @@ int main(int argc,  char** argv)
                         && bprb_batch_process_manager::instance()->run_process()
                         && bprb_batch_process_manager::instance()->commit_output(0, img_id);
                     if( !good ) {
-                      vcl_cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << vcl_endl;
+                      std::cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << std::endl;
                       return -1;
                     }
 
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
+                        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
                     }
 
                     brdb_value_sptr value;
-                    if (!S->get_value(vcl_string("value"), value)) {
-                        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
+                    if (!S->get_value(std::string("value"), value)) {
+                        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - didn't get value\n";
                     }
                     vil_image_view_base_sptr depthimg=value->val<vil_image_view_base_sptr>();
                     vil_image_view<float>* depthimg_view = static_cast<vil_image_view<float>* >(depthimg.ptr());
@@ -409,7 +410,7 @@ int main(int argc,  char** argv)
                     vil_math_value_range<  float>(*depthimg_view, vmin, vmax);
                     vil_image_view<vxl_byte> byte_img = brip_vil_float_ops::convert_to_byte(*depthimg_view);
                     cam_file_stream<<vmin<<' '<<vmax<<'\n';
-                    vcl_stringstream depthstream;
+                    std::stringstream depthstream;
                     depthstream<<imgdir<<"depth_"<<uid<<".jpg";
                     vil_save_jpeg( byte_img, depthstream.str().c_str() );
                     //vil_save( byte_img, depthstream.str().c_str() );
@@ -433,7 +434,7 @@ int main(int argc,  char** argv)
             }
         }
         //save as pngv
-        vcl_string big = dir() + "/scene-reel.jpg";
+        std::string big = dir() + "/scene-reel.jpg";
         vil_save( *stitched, big.c_str() );
     }
     return 0;

@@ -28,13 +28,13 @@ bool bvpl_compute_sf_raw_response_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compute_sf_raw_response_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr";  //input/response scene
   input_types_[i++] = "boxm_scene_base_sptr";  //valid scene
 
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

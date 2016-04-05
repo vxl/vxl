@@ -16,7 +16,8 @@
 //   Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_point_2d and vgl_line_2d
 #include <vcl_cassert.h>
 #include <vgl/vgl_vector_2d.h>
@@ -137,12 +138,12 @@ inline bool concurrent(l const& l1, l const& l2, l const& l3)
 //: Print line equation to stream
 // \relatesalso vgl_homg_line_2d
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, l const& line);
+std::ostream& operator<<(std::ostream& s, l const& line);
 
 //: Load in line parameters from stream
 // \relatesalso vgl_homg_line_2d
 template <class T>
-vcl_istream& operator>>(vcl_istream& s, l& line);
+std::istream& operator>>(std::istream& s, l& line);
 
 #undef l
 

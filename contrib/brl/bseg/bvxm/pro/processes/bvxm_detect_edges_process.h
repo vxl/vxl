@@ -13,8 +13,10 @@
 //   Peter Vanroose  - Jul 10, 2009 - split into .h and .cxx
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: global variables
 namespace bvxm_detect_edges_process_globals
@@ -23,11 +25,11 @@ namespace bvxm_detect_edges_process_globals
   const unsigned n_outputs_=1;
 
   // parameter strings
-  const vcl_string param_noise_multiplier_ =  "noise_multiplier";
-  const vcl_string param_smooth_ =  "smooth";
-  const vcl_string param_automatic_threshold_ =  "automatic_threshold";
-  const vcl_string param_junctionp_ =  "junctionp";
-  const vcl_string param_aggressive_junction_closure_ =  "aggressive_junction_closure";
+  const std::string param_noise_multiplier_ =  "noise_multiplier";
+  const std::string param_smooth_ =  "smooth";
+  const std::string param_automatic_threshold_ =  "automatic_threshold";
+  const std::string param_junctionp_ =  "junctionp";
+  const std::string param_aggressive_junction_closure_ =  "aggressive_junction_closure";
 }
 
 //: initialize input and output types

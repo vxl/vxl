@@ -5,12 +5,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstring>
 #include "vbl_bit_array_2d.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_climits.h>  // for CHAR_BIT
 #include <vcl_cassert.h>
-#include <vcl_cstring.h> // for memcmp()
 
 //: Copy constructor
 vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
@@ -19,7 +20,7 @@ vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
   if ( that.data_)
   {
     construct(that.num_rows_, that.num_cols_);
-    vcl_memcpy(data_, that.data_, this->size());
+    std::memcpy(data_, that.data_, this->size());
   }
 }
 
@@ -38,7 +39,7 @@ vbl_bit_array_2d& vbl_bit_array_2d::operator=(vbl_bit_array_2d const& that)
       num_cols_ != that.num_cols_)
     resize(that.num_rows_, that.num_cols_);
 
-  vcl_memcpy(data_, that.data_, this->size());
+  std::memcpy(data_, that.data_, this->size());
   return *this;
 }
 
@@ -67,7 +68,7 @@ void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
       unsigned long oldbyteindex= (unsigned long)(double(i*tempn)/CHAR_BIT);
 
       // copy i-th column
-      vcl_memcpy(data_+byteindex, tempdata+oldbyteindex, (tempn+CHAR_BIT-1)/CHAR_BIT);
+      std::memcpy(data_+byteindex, tempdata+oldbyteindex, (tempn+CHAR_BIT-1)/CHAR_BIT);
     }
     delete[] tempdata;
   }
@@ -77,7 +78,7 @@ void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
 void vbl_bit_array_2d::fill(bool value)
 {
   unsigned char v = value ? ~(unsigned char)0 : 0;
-  vcl_memset(data_, v, this->size());
+  std::memset(data_, v, this->size());
 }
 
 unsigned long vbl_bit_array_2d::size() const
@@ -107,7 +108,7 @@ bool vbl_bit_array_2d::operator==(vbl_bit_array_2d const &a) const
 {
   if (rows() != a.rows() || cols() != a.cols())
     return false;
-  return 0 == vcl_memcmp(data_, a.data_, this->size());
+  return 0 == std::memcmp(data_, a.data_, this->size());
 }
 
 bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j) const
@@ -151,14 +152,14 @@ bool vbl_bit_array_2d::get(unsigned int i, unsigned int j) const
 }
 
 //
-vcl_ostream& operator<< (vcl_ostream &os, const vbl_bit_array_2d &array)
+std::ostream& operator<< (std::ostream &os, const vbl_bit_array_2d &array)
 {
   for (unsigned int i=0; i< array.rows(); i++)
   {
     for (unsigned int j=0; j< array.columns(); j++)
       os << array(i,j) << ' ';
 
-    os << vcl_endl;
+    os << std::endl;
   }
   return os;
 }

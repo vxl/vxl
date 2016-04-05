@@ -29,7 +29,9 @@
 // \endverbatim
 //======================================================================
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 
 #if 0 // not implemented
 class ParamModifier;
@@ -38,7 +40,7 @@ class ParamModifier;
 class gevd_param_mixin
 {
   bool valid_;
-  vcl_string error_msg_;
+  std::string error_msg_;
  public:
   //=====================================================
   //: Constructor.  By default a constructed parameter block is valid.
@@ -67,31 +69,31 @@ class ParamModifier
 
   //------------------------------------------------------------
   //: Name those parameters which follow.
-  virtual void Name(const vcl_string& name) = 0;
+  virtual void Name(const std::string& name) = 0;
 
   //------------------------------------------------------------
   //: Add a float parameter.
-  virtual void AddParam(const vcl_string& name, float& value) = 0;
+  virtual void AddParam(const std::string& name, float& value) = 0;
 
   //------------------------------------------------------------
   //: Add a double parameter.
-  virtual void AddParam(const vcl_string& name, double& value) = 0;
+  virtual void AddParam(const std::string& name, double& value) = 0;
 
   //------------------------------------------------------------
   //: Add an integer parameter.
-  virtual void AddParam(const vcl_string& name, int& value) = 0;
+  virtual void AddParam(const std::string& name, int& value) = 0;
 
   //------------------------------------------------------------
   //: Add a boolean parameter.
-  virtual void AddParam(const vcl_string& name, bool& value) = 0;
+  virtual void AddParam(const std::string& name, bool& value) = 0;
 
   //------------------------------------------------------------
   //: Add a choice parameter.
-  //  virtual void AddParam(const vcl_string& name, int& value, UIChoice* choices) = 0;
+  //  virtual void AddParam(const std::string& name, int& value, UIChoice* choices) = 0;
 
   //------------------------------------------------------------
   //: Add a boolean choice parameter, using one of the convenient standard styles.
-  virtual void AddParam(const vcl_string& name, bool& value,
+  virtual void AddParam(const std::string& name, bool& value,
                         BoolChoiceStyle style = TrueFalse) = 0;
 };
 #endif

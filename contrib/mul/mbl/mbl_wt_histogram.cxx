@@ -1,12 +1,13 @@
 // This is mul/mbl/mbl_wt_histogram.cxx
+#include <iostream>
+#include <cmath>
 #include "mbl_wt_histogram.h"
 //:
 // \file
 // \brief Simple object to build histogram from supplied data, with weights
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
 
@@ -68,14 +69,14 @@ bool mbl_wt_histogram::operator==(const mbl_wt_histogram& s) const
 {
   if (s.n_bins()!=n_bins()) return false;
   if (s.n_obs_ != n_obs_) return false;
-  if (vcl_fabs(s.wt_below_-wt_below_)>MAX_ERROR) return false;
-  if (vcl_fabs(s.wt_above_-wt_above_)>MAX_ERROR) return false;
-  if (vcl_fabs(s.xlo_-xlo_)>MAX_ERROR) return false;
-  if (vcl_fabs(s.dx_-dx_)>MAX_ERROR) return false;
+  if (std::fabs(s.wt_below_-wt_below_)>MAX_ERROR) return false;
+  if (std::fabs(s.wt_above_-wt_above_)>MAX_ERROR) return false;
+  if (std::fabs(s.xlo_-xlo_)>MAX_ERROR) return false;
+  if (std::fabs(s.dx_-dx_)>MAX_ERROR) return false;
 
   int n = n_bins();
   for (int i=0;i<n;++i)
-    if (vcl_fabs(s.wt_sum_[i]-wt_sum_[i])>MAX_ERROR) return false;
+    if (std::fabs(s.wt_sum_[i]-wt_sum_[i])>MAX_ERROR) return false;
 
   return true;
 }
@@ -117,14 +118,14 @@ void mbl_wt_histogram::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,wt_sum_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: mbl_wt_histogram::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: mbl_wt_histogram::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< file_version_no << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
-void mbl_wt_histogram::print_summary(vcl_ostream& os) const
+void mbl_wt_histogram::print_summary(std::ostream& os) const
 {
   os << "mbl_wt_histogram: ";
   if (n_bins()==0) { os<< "No bins defined."; return; }
@@ -151,7 +152,7 @@ bool mbl_wt_histogram::write_probabilities(const char* path)
   int n = n_bins();
   if (n==0) return false;
 
-  vcl_ofstream ofs(path);
+  std::ofstream ofs(path);
   if (!ofs) return false;
   for (int i=0;i<n;++i)
   {
@@ -161,14 +162,14 @@ bool mbl_wt_histogram::write_probabilities(const char* path)
   return true;
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const mbl_wt_histogram& histo)
+std::ostream& operator<<(std::ostream& os, const mbl_wt_histogram& histo)
 {
   histo.print_summary(os);
   return os;
 }
 
   //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mbl_wt_histogram& histo)
+void vsl_print_summary(std::ostream& os,const mbl_wt_histogram& histo)
 {
   histo.print_summary(os);
 }

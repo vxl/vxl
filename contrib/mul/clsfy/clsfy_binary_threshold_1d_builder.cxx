@@ -1,18 +1,19 @@
 // This is mul/clsfy/clsfy_binary_threshold_1d_builder.cxx
+#include <iostream>
+#include <string>
+#include <algorithm>
 #include "clsfy_binary_threshold_1d_builder.h"
 //:
 // \file
 // \author dac
 // \date   Tue Mar  5 01:11:31 2002
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_double_2.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 
@@ -51,7 +52,7 @@ clsfy_classifier_1d* clsfy_binary_threshold_1d_builder::new_classifier() const
 double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
                                                 const vnl_vector<double>& egs,
                                                 const vnl_vector<double>& wts,
-                                                const vcl_vector<unsigned> &outputs) const
+                                                const std::vector<unsigned> &outputs) const
 {
   // this method sorts the data and passes it to the method below
   assert(classifier.is_class("clsfy_binary_threshold_1d"));
@@ -61,7 +62,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
   assert ( outputs.size() == n );
 
   // create triples data, so can sort
-  vcl_vector<vbl_triple<double,int,int> > data;
+  std::vector<vbl_triple<double,int,int> > data;
 
   vbl_triple<double,int,int> t;
   // add data to triples
@@ -74,7 +75,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
   }
 
   vbl_triple<double,int,int> *data_ptr=&data[0];
-  vcl_sort(data_ptr,data_ptr+n);
+  std::sort(data_ptr,data_ptr+n);
   return build_from_sorted_data(classifier, &data[0], wts);
 }
 
@@ -91,7 +92,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
   // this method sorts the data and passes it to the method below
   assert(classifier.is_class("clsfy_binary_threshold_1d"));
 
-  vcl_vector<vbl_triple<double,int,int> > data;
+  std::vector<vbl_triple<double,int,int> > data;
   unsigned int n0 = egs0.size();
   unsigned int n1 = egs1.size();
   vnl_vector<double> wts(n0+n1);
@@ -119,7 +120,7 @@ double clsfy_binary_threshold_1d_builder::build(clsfy_classifier_1d& classifier,
   unsigned int n=n0+n1;
 
   vbl_triple<double,int,int> *data_ptr=&data[0];
-  vcl_sort(data_ptr,data_ptr+n);
+  std::sort(data_ptr,data_ptr+n);
 
   return build_from_sorted_data(classifier,&data[0], wts);
 }
@@ -199,12 +200,12 @@ double clsfy_binary_threshold_1d_builder::build_from_sorted_data(
 
 //=======================================================================
 
-vcl_string clsfy_binary_threshold_1d_builder::is_a() const
+std::string clsfy_binary_threshold_1d_builder::is_a() const
 {
-  return vcl_string("clsfy_binary_threshold_1d_builder");
+  return std::string("clsfy_binary_threshold_1d_builder");
 }
 
-bool clsfy_binary_threshold_1d_builder::is_class(vcl_string const& s) const
+bool clsfy_binary_threshold_1d_builder::is_class(std::string const& s) const
 {
   return s == clsfy_binary_threshold_1d_builder::is_a() || clsfy_builder_1d::is_class(s);
 }
@@ -219,7 +220,7 @@ clsfy_builder_1d* clsfy_binary_threshold_1d_builder::clone() const
 //=======================================================================
 
 // required if data is present in this base class
-void clsfy_binary_threshold_1d_builder::print_summary(vcl_ostream& /*os*/) const
+void clsfy_binary_threshold_1d_builder::print_summary(std::ostream& /*os*/) const
 {
 }
 
@@ -246,9 +247,9 @@ void clsfy_binary_threshold_1d_builder::b_read(vsl_b_istream& bfs)
   case 1:
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_builder&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_builder&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

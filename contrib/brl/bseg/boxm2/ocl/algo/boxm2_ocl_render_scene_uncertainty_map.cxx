@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_render_scene_uncertainty_map.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_render_scene_uncertainty_map.h"
 //:
 // \file
@@ -7,8 +10,7 @@
 // \author Vishal Jain
 // \date Mar 25, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -28,7 +30,7 @@
 #include <bocl/bocl_kernel.h>
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_render_scene_uncertainty_map::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_render_scene_uncertainty_map::kernels_;
 
 //: Main public method, updates color model
 bool
@@ -37,24 +39,24 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
                                                                       boxm2_opencl_cache_sptr & opencl_cache,
                                                                       unsigned ni,
                                                                       unsigned nj,
-                                                                      vcl_string ident,
+                                                                      std::string ident,
                                                                       vil_image_view<float>* exp_image,
                                                                       vil_image_view<unsigned char>* radial_image,
-                                                                      vcl_string cam_dir_1,
-                                                                      vcl_string cam_dir_2)
+                                                                      std::string cam_dir_1,
+                                                                      std::string cam_dir_2)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
     //setup local/global size
-    vcl_size_t local_threads[2]={8,8};
+    std::size_t local_threads[2]={8,8};
     enum {
         COMPUTE_ALPHA_INTEGRAL = 0,
         RENDER_IMAGE = 1,
         NORMALIZE_KERNEL =2
     };
     bool foundDataType = false;
-    vcl_string data_type, options;
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::string data_type, options;
+    std::vector<std::string> apps = scene->appearances();
 
     int apptypesize = 0;
     for (unsigned int i=0; i<apps.size(); ++i) {
@@ -81,7 +83,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"BOXM2_OCL_RENDER_SCENE_UNCERTAINTY_MAP ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+        std::cout<<"BOXM2_OCL_RENDER_SCENE_UNCERTAINTY_MAP ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
         return false;
     }
     if (ident.size() > 0) {
@@ -93,7 +95,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
         CL_QUEUE_PROFILING_ENABLE,&status);
     if (status!=0) return false;
-    vcl_vector<bocl_kernel*> kernels = boxm2_ocl_render_scene_uncertainty_map::get_kernels(device,options);
+    std::vector<bocl_kernel*> kernels = boxm2_ocl_render_scene_uncertainty_map::get_kernels(device,options);
     unsigned cl_ni=RoundUp(ni,local_threads[0]);
     unsigned cl_nj=RoundUp(nj,local_threads[1]);
 
@@ -104,25 +106,25 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
 
     // Expected image buff
     float* buff = new float[cl_ni*cl_nj];
-    vcl_fill(buff, buff + cl_ni*cl_nj, 0.0f);
+    std::fill(buff, buff + cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr exp=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), buff,"exp image buffer");
     exp->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     // Vis Image
     float* vis_buff = new float[cl_ni*cl_nj];
-    vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+    std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
     bocl_mem_sptr vis=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image");
     vis->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     // Alpha Integral Image
     float* alpha_integral_buff = new float[cl_ni*cl_nj];
-    vcl_fill(alpha_integral_buff, alpha_integral_buff + cl_ni*cl_nj, 0.0f);
+    std::fill(alpha_integral_buff, alpha_integral_buff + cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr alpha_integral_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), alpha_integral_buff,"alpha integral buffer");
     alpha_integral_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     // Alpha Integral Image
     float* cum_alpha_integral_buff = new float[cl_ni*cl_nj];
-    vcl_fill(cum_alpha_integral_buff, cum_alpha_integral_buff + cl_ni*cl_nj, 0.0f);
+    std::fill(cum_alpha_integral_buff, cum_alpha_integral_buff + cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr cum_alpha_integral_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), cum_alpha_integral_buff," cumulative alpha integral buffer");
     cum_alpha_integral_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -132,7 +134,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
     exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    vcl_size_t global_threads[] = {cl_ni,cl_nj};
+    std::size_t global_threads[] = {cl_ni,cl_nj};
 
     float theta_min = 0.0 ;
     float theta_max = 3*vnl_math::pi/4;
@@ -153,7 +155,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     theta_inc = (theta_max-theta_min)/ (float) (cl_nj) ;
 
 #if 0 // unused
-    double radius = 10*vcl_sqrt(scene_bbox.width()*scene_bbox.width()+
+    double radius = 10*std::sqrt(scene_bbox.width()*scene_bbox.width()+
                                 scene_bbox.depth()*scene_bbox.depth()+
                                 scene_bbox.height()*scene_bbox.height());
 #endif
@@ -163,9 +165,9 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         {
             float theta = theta_min + (float)j*theta_inc ;
             float phi   = phi_min + (float)i*phi_inc ;
-            float dirx = vcl_sin(theta)*vcl_cos(phi);
-            float diry = vcl_sin(theta)*vcl_sin(phi);
-            float dirz = vcl_cos(theta);
+            float dirx = std::sin(theta)*std::cos(phi);
+            float diry = std::sin(theta)*std::sin(phi);
+            float dirz = std::cos(theta);
             ray_origins[(j*cl_ni+i)*4+0] = (float) (center.x());
             ray_origins[(j*cl_ni+i)*4+1] = (float) (center.y());
             ray_origins[(j*cl_ni+i)*4+2] = (float) (center.z());
@@ -196,11 +198,11 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_order_from_pt(center);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_order_from_pt(center);
+    std::vector<boxm2_block_id>::iterator id;
 
     bocl_kernel * kern = kernels[0];
-    vcl_cout<<"PASS 1: Accumulating alpha integral"<<vcl_endl;
+    std::cout<<"PASS 1: Accumulating alpha integral"<<std::endl;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
@@ -234,7 +236,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     }
 
     kern = kernels[1];
-    vcl_cout<<"PASS 2: Rendering Uncertainty Map"<<vcl_endl;
+    std::cout<<"PASS 2: Rendering Uncertainty Map"<<std::endl;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
@@ -278,40 +280,40 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         for (unsigned r=0;r<ni;r++)
             (* exp_image)(r,c)=buff[c*cl_ni+r];
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     clReleaseCommandQueue(queue);
     vnl_float_4 x =boxm2_ocl_render_scene_uncertainty_map::compute_cubic_trajectory( phi_min,phi_max,theta_min,theta_max,exp_image);
     radial_image->set_size(cl_ni,cl_ni);
 
 #if 0 // unused
-    float radial_phi_inc =  (phi_max-phi_min)/((float)cl_ni/vcl_sqrt(2.0))  ;
+    float radial_phi_inc =  (phi_max-phi_min)/((float)cl_ni/std::sqrt(2.0))  ;
 #endif
-    float radial_theta_inc = (theta_max-theta_min)/ ((float)cl_ni/vcl_sqrt(2.0))  ;
+    float radial_theta_inc = (theta_max-theta_min)/ ((float)cl_ni/std::sqrt(2.0))  ;
     float img_center_x = (float) cl_ni/2;
     float img_center_y = (float) cl_ni/2;
 
     for (unsigned j = 0 ; j < cl_ni; j++)
         for (unsigned i = 0 ; i < cl_ni; i++)
         {
-            float r = vcl_sqrt((j-img_center_y)*(j-img_center_y)+(i-img_center_x)*(i-img_center_x));
+            float r = std::sqrt((j-img_center_y)*(j-img_center_y)+(i-img_center_x)*(i-img_center_x));
             float theta = theta_min + radial_theta_inc * r ;
-            float phi   = vcl_atan2((j-img_center_y),(i-img_center_x)) ;
+            float phi   = std::atan2((j-img_center_y),(i-img_center_x)) ;
 
-            int prev_i = (int)vcl_floor((phi-phi_min)/phi_inc );
-            int prev_j = (int)vcl_floor((theta-theta_min)/theta_inc);
+            int prev_i = (int)std::floor((phi-phi_min)/phi_inc );
+            int prev_j = (int)std::floor((theta-theta_min)/theta_inc);
 
             prev_i = prev_i < 0 ? 0 : prev_i > (int)cl_ni ? cl_ni : prev_i;
             prev_j = prev_j < 0 ? 0 : prev_j > (int)cl_ni ? cl_ni : prev_j;
-            (*radial_image)(i,j,0) = (unsigned char) vcl_floor(255.0f*buff[prev_j*cl_ni+prev_i]);
-            (*radial_image)(i,j,1) = (unsigned char) vcl_floor(255.0f*buff[prev_j*cl_ni+prev_i]);
-            (*radial_image)(i,j,2) = (unsigned char) vcl_floor(255.0f*buff[prev_j*cl_ni+prev_i]);
+            (*radial_image)(i,j,0) = (unsigned char) std::floor(255.0f*buff[prev_j*cl_ni+prev_i]);
+            (*radial_image)(i,j,1) = (unsigned char) std::floor(255.0f*buff[prev_j*cl_ni+prev_i]);
+            (*radial_image)(i,j,2) = (unsigned char) std::floor(255.0f*buff[prev_j*cl_ni+prev_i]);
         }
 
 
-    vcl_vector<vcl_string> cams_used = boxm2_util::camfiles_from_directory( cam_dir_1 );
-    vcl_vector<vcl_string> cams_unused = boxm2_util::camfiles_from_directory( cam_dir_2 );
+    std::vector<std::string> cams_used = boxm2_util::camfiles_from_directory( cam_dir_1 );
+    std::vector<std::string> cams_unused = boxm2_util::camfiles_from_directory( cam_dir_2 );
 
-    vcl_map<float,vcl_string>  view_uncertainty_map;
+    std::map<float,std::string>  view_uncertainty_map;
 #if 0
     for (unsigned i = 0 ; i<cams_unused.size();i++)
     {
@@ -320,25 +322,25 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         vgl_point_3d<double> cc= pcam->get_camera_center();
         vgl_vector_3d<double> ray = cc - center;
 
-        float theta = vcl_acos( ray.z()/ray.length());
-        float phi = vcl_atan2(ray.y(),ray.x());
+        float theta = std::acos( ray.z()/ray.length());
+        float phi = std::atan2(ray.y(),ray.x());
 
-        float r = vcl_floor((theta_max-theta_min)/radial_theta_inc/2);
+        float r = std::floor((theta_max-theta_min)/radial_theta_inc/2);
 
-        int k = vcl_floor(r*vcl_cos(phi) +img_center_x );
-        int j = vcl_floor(r*vcl_sin(phi) +img_center_y );
+        int k = std::floor(r*std::cos(phi) +img_center_x );
+        int j = std::floor(r*std::sin(phi) +img_center_y );
 
         //: find corresponding point on the trajectory
         float y = x[0]+x[1]*phi+x[2]*phi*phi+x[3]*phi*phi*phi;
 
-        float yr = vcl_floor((y-theta_min)/radial_theta_inc);
-        unsigned yi = vcl_floor(yr*vcl_cos(phi) +img_center_x );
-        unsigned yj = vcl_floor(yr*vcl_sin(phi) +img_center_y );
+        float yr = std::floor((y-theta_min)/radial_theta_inc);
+        unsigned yi = std::floor(yr*std::cos(phi) +img_center_x );
+        unsigned yj = std::floor(yr*std::sin(phi) +img_center_y );
 
         view_uncertainty_map[(* radial_image)(yi,yj,0)] = cams_unused[i];
         if (yi<0 || yi>=cl_ni || yj <0 || yj >=cl_ni)
             continue;
-        vcl_cout<<(int)(* radial_image)(yi,yj,0)<<' '<< cams_unused[i]<<vcl_endl;
+        std::cout<<(int)(* radial_image)(yi,yj,0)<<' '<< cams_unused[i]<<std::endl;
         for (unsigned ki = k-4;ki<=k+4;ki++)
             for (unsigned ji = j-4;ji<=j+4;ji++)
             {
@@ -347,9 +349,9 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
                 //(* radial_image)(ki,ji,2) = 255;
             }
     }
-    vcl_map<float,vcl_string>::iterator iter ;
+    std::map<float,std::string>::iterator iter ;
     for (iter = view_uncertainty_map.begin(); iter != view_uncertainty_map.end(); iter++)
-        vcl_cout<<iter->second<<' '<<iter->first<<vcl_endl;
+        std::cout<<iter->second<<' '<<iter->first<<std::endl;
 #endif // 0
     for (unsigned i = 0 ; i<cams_used.size();i++)
     {
@@ -358,12 +360,12 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         vgl_point_3d<double> cc= pcam->get_camera_center();
         vgl_vector_3d<double> ray = cc - center;
 
-        // float theta = vcl_acos(ray.z()/ray.length());
-        float phi = vcl_atan2(ray.y(),ray.x());
+        // float theta = std::acos(ray.z()/ray.length());
+        float phi = std::atan2(ray.y(),ray.x());
 
-        float r = vcl_floor((theta_max-theta_min)/radial_theta_inc/2);
-        int k = (int)vcl_floor(r*vcl_cos(phi) +img_center_x );
-        int j = (int)vcl_floor(r*vcl_sin(phi) +img_center_y );
+        float r = std::floor((theta_max-theta_min)/radial_theta_inc/2);
+        int k = (int)std::floor(r*std::cos(phi) +img_center_x );
+        int j = (int)std::floor(r*std::sin(phi) +img_center_y );
 
         for (int ki = k-7;ki<=k+7;++ki)
         {
@@ -380,13 +382,13 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         }
     }
 #if 0
-    vcl_cout<<" DRAW TRAJECTORY"<<vcl_endl;
+    std::cout<<" DRAW TRAJECTORY"<<std::endl;
     for (float phi = phi_min; phi <=phi_max+phi_inc; phi+=phi_inc)
     {
         float y = x[0]+x[1]*phi+x[2]*phi*phi+x[3]*phi*phi*phi;
-        float r = vcl_floor((y-theta_min)/radial_theta_inc);
-        int i = vcl_floor(r*vcl_cos(phi) +img_center_x );
-        int j = vcl_floor(r*vcl_sin(phi) +img_center_y );
+        float r = std::floor((y-theta_min)/radial_theta_inc);
+        int i = std::floor(r*std::cos(phi) +img_center_x );
+        int j = std::floor(r*std::sin(phi) +img_center_y );
         if (i<0 || i>=cl_ni || j <0 || j >=cl_ni)
             continue;
         for (int ii = i-3;ii<=i+3;ii++)
@@ -398,7 +400,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
             }
     }
 #endif // 0
-    vcl_cout<<"Cubic coefficients for the trajectory are "<<x<<vcl_endl;
+    std::cout<<"Cubic coefficients for the trajectory are "<<x<<std::endl;
     return true;
 }
 
@@ -456,19 +458,19 @@ vnl_float_4 boxm2_ocl_render_scene_uncertainty_map::compute_cubic_trajectory(flo
 }
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_render_scene_uncertainty_map::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_render_scene_uncertainty_map::get_kernels(bocl_device_sptr device, std::string opts)
 {
     // compile kernels if not already compiled
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //otherwise compile the kernels
-    vcl_cout<<"=== boxm2_ocl_update_color_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+    std::cout<<"=== boxm2_ocl_update_color_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -480,12 +482,12 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_render_scene_uncertainty_map::get_kernels(bo
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = opts ;
+    std::string options = opts ;
 
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
     //have kernel construct itself using the context and device
     bocl_kernel * alpha_integral_kernel=new bocl_kernel();
-    vcl_string alpha_integral_options =options  + "-D RENDER_ALPHA_INTEGRAL -D STEP_CELL=step_cell_alpha_integral(aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.alpha_int)";
+    std::string alpha_integral_options =options  + "-D RENDER_ALPHA_INTEGRAL -D STEP_CELL=step_cell_alpha_integral(aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.alpha_int)";
 
     alpha_integral_kernel->create_kernel( &device->context(),
                                           device->device_id(),
@@ -496,7 +498,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_render_scene_uncertainty_map::get_kernels(bo
     vec_kernels.push_back(alpha_integral_kernel);
 
     bocl_kernel * render_kernel=new bocl_kernel();
-    vcl_string render_options =options  + "-D RENDER_USING_ALPHA_INTEGRAL -D STEP_CELL=step_cell_render_using_alpha_intergal(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.alpha_int,aux_args.alpha_int_cum,aux_args.expint)";
+    std::string render_options =options  + "-D RENDER_USING_ALPHA_INTEGRAL -D STEP_CELL=step_cell_render_using_alpha_intergal(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.alpha_int,aux_args.alpha_int_cum,aux_args.expint)";
     render_kernel->create_kernel( &device->context(),
                                   device->device_id(),
                                   src_paths,
@@ -505,7 +507,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_render_scene_uncertainty_map::get_kernels(bo
                                   "boxm2 render using alpha integral"); //kernel identifier (for error checking)
     vec_kernels.push_back(render_kernel);
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();

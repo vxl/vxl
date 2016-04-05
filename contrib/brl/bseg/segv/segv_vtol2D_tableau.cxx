@@ -31,7 +31,7 @@ segv_vtol_soview2D_edge* segv_vtol2D_tableau::add_edge(vtol_edge_2d_sptr& e)
 }
 
 segv_vtol_soview2D_edge_group*
-segv_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
+segv_vtol2D_tableau::add_edge_group(std::vector<vtol_edge_2d_sptr>& edges)
 {
   segv_vtol_soview2D_edge_group* obj =
     new segv_vtol_soview2D_edge_group(edges);

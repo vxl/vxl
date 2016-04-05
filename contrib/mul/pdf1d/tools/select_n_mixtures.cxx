@@ -10,7 +10,8 @@
 // of components to the data, and select the one that
 // gives the largest mean overlap.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 #include <pdf1d/pdf1d_sampler.h>
@@ -19,13 +20,13 @@
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
 
-vcl_ofstream ofs;
+std::ofstream ofs;
 
 //: Compute how well different forms of pdf match to data x.
 //  pdf[i] is the model built by builder[i]
-void test_form(vcl_vector<double>& B,
+void test_form(std::vector<double>& B,
                const vnl_vector<double>& x,
-               vcl_vector<pdf1d_builder*>& builder,
+               std::vector<pdf1d_builder*>& builder,
                pdf1d_compare_to_pdf_bhat& comparator)
 {
   // This is inefficient
@@ -36,18 +37,18 @@ void test_form(vcl_vector<double>& B,
   {
 //    B[i] = comparator.compare_form(x.data_block(),x.size(),*builder[i]);
     B[i] = comparator.bootstrap_compare_form(b,x.data_block(),x.size(),*builder[i],10);
-    vcl_cout<<i+1<<") B: "<<B[i]<<vcl_endl;
-    ofs<<i+1<<' '<<B[i]<<vcl_endl;
+    std::cout<<i+1<<") B: "<<B[i]<<std::endl;
+    ofs<<i+1<<' '<<B[i]<<std::endl;
     for (unsigned int j=0;j<b.size();++j)
-      ofs<<' '<<j+1<<' '<<b[j]<<vcl_endl;
+      ofs<<' '<<j+1<<' '<<b[j]<<std::endl;
   }
-  vcl_cout<<"------------------------\n";
+  std::cout<<"------------------------\n";
 }
 
 void select_form(vnl_vector<int>& histo,
                  int n_samples, int n_trials,
                  const pdf1d_pdf& true_pdf,
-                 vcl_vector<pdf1d_builder*>& builder,
+                 std::vector<pdf1d_builder*>& builder,
                  pdf1d_compare_to_pdf_bhat& comparator)
 {
   vnl_vector<double> x(n_samples);
@@ -60,7 +61,7 @@ void select_form(vnl_vector<int>& histo,
     histo.fill(0);
   }
 
-  vcl_vector<double> B(n);
+  std::vector<double> B(n);
 
   for (int i=0;i<n_trials;++i)
   {
@@ -89,7 +90,7 @@ void select_form(int n_samples, int n_trials, int max_comp,
   vnl_vector<int> histo;
   pdf1d_gaussian_builder gauss_builder;
 
-  vcl_vector<pdf1d_builder*> builder(max_comp);
+  std::vector<pdf1d_builder*> builder(max_comp);
   for (int i=0;i<max_comp;++i)
   {
     pdf1d_mixture_builder *b = new pdf1d_mixture_builder;
@@ -99,14 +100,14 @@ void select_form(int n_samples, int n_trials, int max_comp,
 
   select_form(histo,n_samples,n_trials,true_pdf,builder,comparator);
 
-  vcl_cout<<"PDF: "<<true_pdf<<vcl_endl
+  std::cout<<"PDF: "<<true_pdf<<std::endl
           <<"Sampling "<<n_samples
           <<" values from pdf and computing overlap with kernel estimate.\n"
           <<"Averaging over "<<n_trials<<" trials.\n"
           <<"Number of times each number of components preferred:\n";
   for (int i=0;i<max_comp;++i)
   {
-    vcl_cout<<i+1<<" components: "<<histo[i]<<vcl_endl;
+    std::cout<<i+1<<" components: "<<histo[i]<<std::endl;
   }
 
     // Tidy up
@@ -131,11 +132,11 @@ int main()
   // Let true pdf be n Gaussians at 0,1,2 with sd of 0.25
   pdf1d_gaussian_kernel_pdf true_pdf(n_mix,1,0.25);
 
-  ofs.open("B_vs_N_mix.txt",vcl_ios::out);
+  ofs.open("B_vs_N_mix.txt",std::ios::out);
   select_form(n_samples,n_trials,max_comp,true_pdf,comparator);
   ofs.close();
 
-  vcl_cout<<"See B_vs_N_mix.txt\n";
+  std::cout<<"See B_vs_N_mix.txt\n";
 
   return 0;
 }

@@ -1,8 +1,9 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_imls_surface.h>
 #include "test_share.h"
 #include <imesh/algo/imesh_transform.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <imesh/imesh_fileio.h>
 #include <imesh/imesh_operations.h>
@@ -125,15 +126,15 @@ static void test_imls_surface()
   sum *= cross_product(p2-p0,p1-p0).length() / (p1-p0).length();
   sum_dx *= cross_product(p2-p0,p1-p0).length() / (p1-p0).length();
 
-  vcl_cout << "integral 1 = "<<sum << vcl_endl
-           << "integral 1 dx = "<<sum_dx << vcl_endl;
+  std::cout << "integral 1 = "<<sum << std::endl
+           << "integral 1 dx = "<<sum_dx << std::endl;
 
   vgl_vector_2d<double> ii = imesh_imls_surface::split_triangle_quadrature(x,p0,p1,p2,v0,v1,v2,eps2);
-  vcl_cout << "integral 2 = "<<ii.x()<<vcl_endl;
+  std::cout << "integral 2 = "<<ii.x()<<std::endl;
 
   imesh_imls_surface::integral_data id =
       imesh_imls_surface::split_triangle_quadrature_with_deriv(x,p0,p1,p2,v0,v1,v2,eps2);
-  vcl_cout << "integral 2 dx = "<<id.dI_phi<<vcl_endl;
+  std::cout << "integral 2 dx = "<<id.dI_phi<<std::endl;
 
   TEST_NEAR("Same with and without deriv (phi)", ii.x(), id.I_phi, 2e-10);
   TEST_NEAR("Same with and without deriv ", ii.y(), id.I, 1e-10);
@@ -146,7 +147,7 @@ static void test_imls_surface()
                                         double, double, double, double);
     T data = imesh_imls_surface::triangle_quadrature<T,F>(imesh_imls_surface::split_triangle_quadrature,
                                                           x,p0,p1,p2,n,v0,v1,v2,eps2);
-    vcl_cout << "integral 3 = "<<data<<vcl_endl;
+    std::cout << "integral 3 = "<<data<<std::endl;
   }
 
   {
@@ -157,8 +158,8 @@ static void test_imls_surface()
     T data = imesh_imls_surface::triangle_quadrature<T,F>
                    (imesh_imls_surface::split_triangle_quadrature_with_deriv,
                     x,p0,p1,p2,n,v0,v1,v2,eps2);
-    vcl_cout << "integral 3a = "<< data.I << ' ' << data.I_phi
-             << ' ' <<data.dI << ' ' << data.dI_phi << vcl_endl;
+    std::cout << "integral 3a = "<< data.I << ' ' << data.I_phi
+             << ' ' <<data.dI << ' ' << data.dI_phi << std::endl;
   }
 
   {
@@ -189,9 +190,9 @@ static void test_imls_surface()
     sum *= cross_product(p1-p0, p2-p0).length();
     sum_dx /= num_samps * num_samps;
     sum_dx *= cross_product(p1-p0, p2-p0).length();
-    vcl_cout << "true integral = " << sum << vcl_endl
-             << "true integral of dx = " << sum_dx << vcl_endl
-             << "area = " << cross_product(p1-p0, p2-p0).length()/2.0 << vcl_endl;
+    std::cout << "true integral = " << sum << std::endl
+             << "true integral of dx = " << sum_dx << std::endl
+             << "area = " << cross_product(p1-p0, p2-p0).length()/2.0 << std::endl;
   }
 
   {
@@ -200,7 +201,7 @@ static void test_imls_surface()
     imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,0,vnl_math::pi_over_4));
     imesh_quad_subdivide(cube);
     imesh_quad_subdivide(cube);
-    vcl_set<unsigned int> no_normals;
+    std::set<unsigned int> no_normals;
     for (unsigned int i=32; i<64; i+=2) {
       no_normals.insert(i);
     }
@@ -219,7 +220,7 @@ static void test_imls_surface()
 #if 0
     vnl_matrix<double> M(200,200);
     for (int i=0; i<200; ++i) {
-      vcl_cout << "row "<< i<<vcl_endl;
+      std::cout << "row "<< i<<std::endl;
       for (int j=0; j<200; ++j) {
         M(i,j) = f(double(i-100)/50.0, double(j-100)/50.0, 0.25);
       }

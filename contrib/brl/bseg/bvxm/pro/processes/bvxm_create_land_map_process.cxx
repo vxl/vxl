@@ -12,7 +12,7 @@ bool bvxm_create_land_map_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_create_land_map_process_globals;
   // process takes 7 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";      // voxel world spec
   input_types_[1] = "vcl_string";                 // geo cover image folder
   input_types_[2] = "vcl_string";                 // urban image folder
@@ -22,7 +22,7 @@ bool bvxm_create_land_map_process_cons(bprb_func_process& pro)
   input_types_[6] = "bool";                       // option to ingest open street map region
   input_types_[7] = "bool";                       // option to covert pixel value from original image pixel to pre-define geo-label
   // process generates 1 outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // land image
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -34,9 +34,9 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   // get inputs
   unsigned in_i = 0;
   bvxm_voxel_world_sptr scene = pro.get_input<bvxm_voxel_world_sptr>(in_i++);
-  vcl_string geo_cover_folder = pro.get_input<vcl_string>(in_i++);
-  vcl_string urban_img_folder = pro.get_input<vcl_string>(in_i++);
-  vcl_string osm_folder       = pro.get_input<vcl_string>(in_i++);
+  std::string geo_cover_folder = pro.get_input<std::string>(in_i++);
+  std::string urban_img_folder = pro.get_input<std::string>(in_i++);
+  std::string osm_folder       = pro.get_input<std::string>(in_i++);
   bool       is_osm_pt        = pro.get_input<bool>(in_i++);
   bool       is_osm_rd        = pro.get_input<bool>(in_i++);
   bool       is_osm_rg        = pro.get_input<bool>(in_i++);
@@ -47,7 +47,6 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = params->lvcs();
   vgl_point_3d<float> lower_left = params->corner();
   vgl_vector_3d<unsigned> num_voxels = params->num_voxels();
-  float voxel_length = params->voxel_length();
   double dim_x, dim_y, dim_z;
   double lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev;
   lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84,
@@ -67,24 +66,24 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   out_img->fill(0);
 
   // load geo cover data
-  vcl_vector<volm_img_info> geo_infos;
+  std::vector<volm_img_info> geo_infos;
   volm_io_tools::load_geocover_imgs(geo_cover_folder, geo_infos);
   // load urban image data
-  vcl_vector<volm_img_info> urban_infos;
+  std::vector<volm_img_info> urban_infos;
   volm_io_tools::load_urban_imgs(urban_img_folder, urban_infos);
   // load osm data
-  vcl_vector<volm_osm_objects> osm_objs;
-  vcl_string file_glob = osm_folder + "//*.bin";
+  std::vector<volm_osm_objects> osm_objs;
+  std::string file_glob = osm_folder + "//*.bin";
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn)
     osm_objs.push_back(volm_osm_objects(fn()));
 
-  vcl_cout << pro.name() << ":\n";
-  vcl_cout << geo_infos.size() << " geo cover images are loaded from " << geo_cover_folder << vcl_endl;
-  vcl_cout << urban_infos.size() << " urban images are loaded from " << urban_img_folder << vcl_endl;
-  vcl_cout << osm_objs.size() << " OSM images are loaded form " << osm_folder << vcl_endl;
+  std::cout << pro.name() << ":\n";
+  std::cout << geo_infos.size() << " geo cover images are loaded from " << geo_cover_folder << std::endl;
+  std::cout << urban_infos.size() << " urban images are loaded from " << urban_img_folder << std::endl;
+  std::cout << osm_objs.size() << " OSM images are loaded form " << osm_folder << std::endl;
 
   // ingest geo cover images
-  for (vcl_vector<volm_img_info>::iterator vit = geo_infos.begin(); vit != geo_infos.end(); ++vit)
+  for (std::vector<volm_img_info>::iterator vit = geo_infos.begin(); vit != geo_infos.end(); ++vit)
   {
     if (vgl_intersection(scene_bbox, vit->bbox).is_empty())
       continue;
@@ -97,21 +96,26 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
         lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
         double u, v;
         vit->cam->global_to_img(lon, lat, gz, u, v);
-        unsigned uu = (unsigned)vcl_floor(u+0.5), vv = (unsigned)vcl_floor(v+0.5);
+        unsigned uu = (unsigned)std::floor(u+0.5), vv = (unsigned)std::floor(v+0.5);
         if (uu < vit->ni && vv < vit->nj)
+        {
           if (is_convert)
+          {
             (*out_img)(i, j) = volm_osm_category_io::geo_land_table[(*geo_img)(uu,vv)].id_;
+          }
           else
+          {
             (*out_img)(i, j) = (*geo_img)(uu,vv);
+          }
+        }
       }
     }
   }
   // ingest urban image
-  for (vcl_vector<volm_img_info>::iterator vit = urban_infos.begin(); vit != urban_infos.end(); ++vit)
+  for (std::vector<volm_img_info>::iterator vit = urban_infos.begin(); vit != urban_infos.end(); ++vit)
   {
     if (vgl_intersection(scene_bbox, vit->bbox).is_empty())
       continue;
-    vil_image_view<vxl_byte>* urban_img = dynamic_cast<vil_image_view<vxl_byte>*>(vit->img_r.ptr());
     for (unsigned i = 0; i < ni; i++) {
       for (unsigned j = 0; j < nj; j++) {
         double lon, lat, gz;
@@ -120,8 +124,8 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
           lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
           double u, v;
           vit->cam->global_to_img(lon, lat, gz, u, v);
-          unsigned uu = (unsigned)vcl_floor(u+0.5);
-          unsigned vv = (unsigned)vcl_floor(v+0.5);
+          unsigned uu = (unsigned)std::floor(u+0.5);
+          unsigned vv = (unsigned)std::floor(v+0.5);
           if (uu < vit->ni && vv < vit->nj)
             (*out_img)(i,j) = volm_osm_category_io::geo_land_table[volm_osm_category_io::GEO_URBAN].id_;
       }
@@ -129,7 +133,7 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   }
 
   // ingest OSM data
-  for (vcl_vector<volm_osm_objects>::iterator vit = osm_objs.begin(); vit != osm_objs.end(); ++vit)
+  for (std::vector<volm_osm_objects>::iterator vit = osm_objs.begin(); vit != osm_objs.end(); ++vit)
   {
     if (is_osm_rg)
     {
@@ -178,11 +182,11 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
     {
       unsigned n_rds = vit->loc_lines().size();
       for (unsigned r_idx = 0; r_idx < n_rds; r_idx++) {
-        vcl_vector<vgl_point_2d<double> > road = vit->loc_lines()[r_idx]->line();
-        vcl_vector<vgl_point_2d<double> > line_geo;
+        std::vector<vgl_point_2d<double> > road = vit->loc_lines()[r_idx]->line();
+        std::vector<vgl_point_2d<double> > line_geo;
         if (!volm_io_tools::line_inside_the_box(scene_bbox, road, line_geo))
           continue;
-        vcl_vector<vgl_point_2d<double> > line_img;
+        std::vector<vgl_point_2d<double> > line_img;
         unsigned char curr_id = vit->loc_lines()[r_idx]->prop().id_;
         double width = vit->loc_lines()[r_idx]->prop().width_;
         for (unsigned pt_idx = 0; pt_idx < line_geo.size(); pt_idx++) {
@@ -198,7 +202,7 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
         if (width < 1.0) width = 1.1;
         vgl_polygon<double> img_poly;
         if (!volm_io_tools::expend_line(line_img, width, img_poly)) {
-          vcl_cerr << pro.name() << ": expend line to polygon failed\n";
+          std::cerr << pro.name() << ": expend line to polygon failed\n";
           return false;
         }
         // update the label
@@ -214,7 +218,7 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
     }
     if (is_osm_pt)
     {
-      vcl_vector<volm_osm_object_point_sptr> loc_pts = vit->loc_pts();
+      std::vector<volm_osm_object_point_sptr> loc_pts = vit->loc_pts();
       unsigned n_pts = loc_pts.size();
       for (unsigned p_idx = 0; p_idx < n_pts; p_idx++) {
         if (!scene_bbox.contains(loc_pts[p_idx]->loc()))
@@ -224,8 +228,8 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
         lvcs->global_to_local(pt.x(), pt.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
         double i = lx;
         double j = dimy - ly;
-        unsigned x = (unsigned)vcl_floor(i+0.5);
-        unsigned y = (unsigned)vcl_floor(j+0.5);
+        unsigned x = (unsigned)std::floor(i+0.5);
+        unsigned y = (unsigned)std::floor(j+0.5);
         if (x < out_img->ni() && y < out_img->nj())
           (*out_img)(x,y) = loc_pts[p_idx]->prop().id_;
       }

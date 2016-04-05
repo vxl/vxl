@@ -8,12 +8,13 @@
 // \date   03 Nov 1999
 // \brief  See vgui_loader_tableau.h for a description of this file.
 
+#include <iostream>
 #include "vgui_loader_tableau.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgui/vgui_gl.h>
 
-vcl_string vgui_loader_tableau::type_name() const
+std::string vgui_loader_tableau::type_name() const
 {
   return "vgui_loader_tableau";
 }
@@ -81,7 +82,7 @@ void vgui_loader_tableau::set_identity()
 void vgui_loader_tableau::set_ortho(float x1,float y1,float z1, float x2,float y2,float z2)
 {
   if (x1==x2 || y1==y2 || z1==z2)
-    vcl_cerr << __FILE__ " warning in set_ortho() : volume has no extent\n";
+    std::cerr << __FILE__ " warning in set_ortho() : volume has no extent\n";
 
   vnl_matrix_fixed<double,4,4> M; M.set_identity();
   set_projection(M);

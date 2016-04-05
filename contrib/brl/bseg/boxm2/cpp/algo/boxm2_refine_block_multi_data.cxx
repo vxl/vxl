@@ -1,5 +1,7 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_refine_block_multi_data.h"
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_data_traits.h>
 //:
 // \file
@@ -12,7 +14,7 @@ uchar16 boxm2_refine_block_multi_data::fully_refined(int depth, int& data_size){
   uchar16 ret; data_size = 0;
   ret.fill((unsigned char)(0));
   if(depth >3){
-    vcl_cout << "FATAL! - depth > 3\n";
+    std::cout << "FATAL! - depth > 3\n";
     return ret;
   }
   if(depth == 0){
@@ -40,13 +42,13 @@ uchar16 boxm2_refine_block_multi_data::fully_refined(int depth, int& data_size){
 }
 
 //: initialize data base pointers and associated data buffers for each prefix (data type)
-bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_block_sptr blk, vcl_vector<vcl_string> const& prefixes, float prob_thresh)
+bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_block_sptr blk, std::vector<std::string> const& prefixes, float prob_thresh)
 {
   //the prefix set must include "alpha" , occupation density
-  vcl_vector<vcl_string>::const_iterator pit;
-  pit = vcl_find(prefixes.begin(), prefixes.end(),"alpha");
+  std::vector<std::string>::const_iterator pit;
+  pit = std::find(prefixes.begin(), prefixes.end(),"alpha");
   if(pit == prefixes.end()){
-    "FATAL! In refine - the data base for alpha must be present\n";
+    std::cerr << "FATAL! In refine - the data base for alpha must be present\n" << std::endl;
     return false;
   }
   // the index in the prefix list corresponding to alpha
@@ -60,7 +62,7 @@ bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_bloc
   // cache the databases and data buffers before refine
   dbs_.clear();
   old_bufs_.clear();
-  for(vcl_vector<vcl_string>::const_iterator pit = prefixes.begin(); pit != prefixes.end(); ++pit){
+  for(std::vector<std::string>::const_iterator pit = prefixes.begin(); pit != prefixes.end(); ++pit){
     boxm2_data_base* db = boxm2_cache::instance()->get_data_base(scene,id,*pit);
     if(*pit == "alpha")
       alpha_   = (float*)   db->data_buffer();
@@ -74,7 +76,7 @@ bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_bloc
 
   //max alpha integrated,  p_occlusion = (1 - e^-(alpha*length))
   // for length == 1, alpha = -log((1- p_occlusion) )
-  max_alpha_int_ = -vcl_log(1.f - prob_thresh);
+  max_alpha_int_ = -std::log(1.f - prob_thresh);
 
   //Data length now is constant
   data_len_ = 65536;
@@ -84,7 +86,7 @@ bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_bloc
 
   //USE rootlevel to determine MAX_INNER and MAX_CELLS
   if (max_level_ == 1) {
-    vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+    std::cout<<"Trying to refine scene with max level 1"<<std::endl;
     return false;
   }
   else if (max_level_ == 2) {
@@ -97,12 +99,12 @@ bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_bloc
     MAX_INNER_CELLS_=73, MAX_CELLS_=585;
   }
 
-  vcl_cout<<"Refine Info: [blk "<<blk->block_id()
+  std::cout<<"Refine Info: [blk "<<blk->block_id()
           <<"] [blk_len "<<block_len_
           <<"] [data_len "<<data_len_
           <<"] [max_alpha_int "<<max_alpha_int_
           <<"] [max level "<<max_level_
-          <<']'<<vcl_endl;
+          <<']'<<std::endl;
 
   //for debugging
   num_split_ = 0;
@@ -112,9 +114,9 @@ bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_bloc
 
 // the term deterministic is anachronistic but kept for historical reasons
 // earlier forms of refine assigned data locations randomly vs. determinisically
-bool boxm2_refine_block_multi_data::refine_deterministic(vcl_vector<vcl_string> const& prefixes)
+bool boxm2_refine_block_multi_data::refine_deterministic(std::vector<std::string> const& prefixes)
 {
-  vcl_cout<<"CPU deterministic refine:"<<vcl_endl;
+  std::cout<<"CPU deterministic refine:"<<std::endl;
   // get a copy of the blocks's trees
   //loop over each tree, refine it in place
   boxm2_array_3d<uchar16> trees = blk_->trees_copy();  //trees to refine
@@ -137,22 +139,22 @@ bool boxm2_refine_block_multi_data::refine_deterministic(vcl_vector<vcl_string> 
       int newSize = refined_tree.num_cells();
 
       //cache refined tree
-      vcl_memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
+      std::memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
       dataSize += newSize;
   }
 
 
   //2. allocate new data arrays of the appropriate size
-  vcl_cout<<"Allocating new data blocks"<<vcl_endl;
+  std::cout<<"Allocating new data blocks"<<std::endl;
   boxm2_block_id id = dbs_[0]->block_id();
-  vcl_vector<boxm2_data_base *> new_dbs;
-  vcl_vector<vcl_size_t> type_sizes;
+  std::vector<boxm2_data_base *> new_dbs;
+  std::vector<std::size_t> type_sizes;
   // get data buffers for old and new databases
-  vcl_vector<char*> new_bufs;
-  vcl_vector<vcl_string>::const_iterator pit = prefixes.begin();
-  vcl_vector<boxm2_data_base *>::iterator dit = dbs_.begin();
+  std::vector<char*> new_bufs;
+  std::vector<std::string>::const_iterator pit = prefixes.begin();
+  std::vector<boxm2_data_base *>::iterator dit = dbs_.begin();
   for(; dit!=dbs_.end(); ++dit, ++pit){
-    vcl_size_t type_size = boxm2_data_info::datasize(*pit);
+    std::size_t type_size = boxm2_data_info::datasize(*pit);
     type_sizes.push_back(type_size);
     boxm2_data_base* new_db = new boxm2_data_base(new char[dataSize *type_size ], dataSize * type_size, id);
     new_db->enable_write();
@@ -160,7 +162,7 @@ bool boxm2_refine_block_multi_data::refine_deterministic(vcl_vector<vcl_string> 
     new_dbs.push_back(new_db);
   }
   //3. loop through tree again, putting the data in the right place
-  vcl_cout<<"Swapping data into new databases..."<<vcl_endl;
+  std::cout<<"Swapping data into new databases..."<<std::endl;
   int newInitCount = 0;
   currIndex = 0;
   for (blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter, ++currIndex)
@@ -181,10 +183,10 @@ bool boxm2_refine_block_multi_data::refine_deterministic(vcl_vector<vcl_string> 
       newInitCount += this->move_data(old_tree, refined_tree, type_sizes, new_bufs);
 
       //4. store old tree in new tree, swap data out
-      vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
+      std::memcpy(blk_iter, refined_tree.get_bits(), 16);
   }
   blk_->set_trees(trees);
-  vcl_cout<<"Number of new cells for alpha refine: "<<newInitCount<<vcl_endl;
+  std::cout<<"Number of new cells for alpha refine: "<<newInitCount<<std::endl;
 
   //3. Replace data in the cache
   boxm2_cache_sptr cache = boxm2_cache::instance();
@@ -253,7 +255,7 @@ boct_bit_tree boxm2_refine_block_multi_data::refine_bit_tree(boct_bit_tree& unre
 // fully refine each tree to match the depth specified by depths_to_match
 // create new databases to hold the increased data size
 // copy the data from the unrefined cells to the new cells if COPY_PARENT_DATA !=0 othewise set the new data elements to zero
-bool boxm2_refine_block_multi_data::match_refine(vcl_vector<vcl_string> const& prefixes,vbl_array_3d<int> const& depths_to_match){
+bool boxm2_refine_block_multi_data::match_refine(std::vector<std::string> const& prefixes,vbl_array_3d<int> const& depths_to_match){
   // get a copy of the block trees
   boxm2_array_3d<uchar16> trees = blk_->trees_copy();
   int dataIndex = 0;
@@ -274,7 +276,7 @@ bool boxm2_refine_block_multi_data::match_refine(vcl_vector<vcl_string> const& p
         //if the tree refinement is the same,just update the data pointer bits
         if(cur_depth == required_depth){
           cur_tree.set_data_ptr(dataIndex, false);
-          vcl_memcpy(tree_bits.data_block(), cur_tree.get_bits(), 16);
+          std::memcpy(tree_bits.data_block(), cur_tree.get_bits(), 16);
           dataSize += cur_tree.num_cells();
           continue;
         }
@@ -282,20 +284,20 @@ bool boxm2_refine_block_multi_data::match_refine(vcl_vector<vcl_string> const& p
         uchar16 refined_bits = fully_refined(required_depth, dsize);
         boct_bit_tree refined_tree( (unsigned char*)refined_bits.data_block(), max_level);
         refined_tree.set_data_ptr(dataIndex, false);
-        vcl_memcpy(tree_bits.data_block(), refined_tree.get_bits(), 16);
+        std::memcpy(tree_bits.data_block(), refined_tree.get_bits(), 16);
         dataSize += dsize;
       }
   //2. allocate new data arrays of the appropriate size for the block database
-  vcl_cout<<"Allocating new data blocks"<<vcl_endl;
+  std::cout<<"Allocating new data blocks"<<std::endl;
   boxm2_block_id id = dbs_[0]->block_id();
-  vcl_vector<boxm2_data_base *> new_dbs;
-  vcl_vector<vcl_size_t> type_sizes;
+  std::vector<boxm2_data_base *> new_dbs;
+  std::vector<std::size_t> type_sizes;
   // get data buffers for old and new databases
-  vcl_vector<char*> new_bufs;
-  vcl_vector<vcl_string>::const_iterator pit = prefixes.begin();
-  vcl_vector<boxm2_data_base *>::iterator dit = dbs_.begin();
+  std::vector<char*> new_bufs;
+  std::vector<std::string>::const_iterator pit = prefixes.begin();
+  std::vector<boxm2_data_base *>::iterator dit = dbs_.begin();
   for(; dit!=dbs_.end(); ++dit, ++pit){
-    vcl_size_t type_size = boxm2_data_info::datasize(*pit);
+    std::size_t type_size = boxm2_data_info::datasize(*pit);
     type_sizes.push_back(type_size);
     boxm2_data_base* new_db = new boxm2_data_base(new char[dataSize *type_size ], dataSize * type_size, id);
     new_db->enable_write();
@@ -304,7 +306,7 @@ bool boxm2_refine_block_multi_data::match_refine(vcl_vector<vcl_string> const& p
   }
   //3. loop through tree again, putting the data in the right place
   int newInitCount = 0;
-  vcl_cout<<"Swapping data into new blocks..."<<vcl_endl;
+  std::cout<<"Swapping data into new blocks..."<<std::endl;
   boxm2_array_3d<uchar16> old_trees = blk_->trees_copy();
   for(int ix = 0; ix<nx; ++ix)
     for(int iy = 0; iy<ny; ++iy)
@@ -323,7 +325,7 @@ bool boxm2_refine_block_multi_data::match_refine(vcl_vector<vcl_string> const& p
   for(; dit!=new_dbs.end(); ++dit, ++pit){
     cache->replace_data_base(scene_, id, *pit, *dit);
   }
-  vcl_cout<<"Number of new cells for match refine: "<<newInitCount<<vcl_endl;
+  std::cout<<"Number of new cells for match refine: "<<newInitCount<<std::endl;
  return true;
 }
 
@@ -335,12 +337,12 @@ bool boxm2_refine_block_multi_data::match_refine(vcl_vector<vcl_string> const& p
 // otherwise the cell data is set to zero
 int boxm2_refine_block_multi_data::move_data(boct_bit_tree& unrefined_tree,
                                                       boct_bit_tree& refined_tree,
-                                                      vcl_vector<vcl_size_t> const& type_sizes,
-                                                      vcl_vector<char*>& new_bufs)
+                                                      std::vector<std::size_t> const& type_sizes,
+                                                      std::vector<char*>& new_bufs)
 {
-  vcl_size_t n = type_sizes.size();
+  std::size_t n = type_sizes.size();
   if(n != old_bufs_.size()||n!=new_bufs.size()){
-    vcl_cout << "!FATAL - n type sizes not equal to number of buffers\n";
+    std::cout << "!FATAL - n type sizes not equal to number of buffers\n";
     return -1;
   }
   // get data indexes
@@ -372,7 +374,7 @@ int boxm2_refine_block_multi_data::move_data(boct_bit_tree& unrefined_tree,
         //for each database type (ptr_inc)
         char* old_byte_ptr = old_buf + oldDataPtr*ptr_inc;
         char* new_byte_ptr = new_buf + newDataPtr*ptr_inc;
-        vcl_memcpy(new_byte_ptr, old_byte_ptr, ptr_inc);
+        std::memcpy(new_byte_ptr, old_byte_ptr, ptr_inc);
       }
       //increment data pointers
       ++oldDataPtr;
@@ -400,9 +402,9 @@ int boxm2_refine_block_multi_data::move_data(boct_bit_tree& unrefined_tree,
         char* old_byte_ptr = old_buf + dataIndex*ptr_inc;
         char* new_byte_ptr = new_buf + newDataPtr*ptr_inc;
         if(i == alpha_index_)
-          vcl_memcpy(new_byte_ptr, new_alpha, ptr_inc);
+          std::memcpy(new_byte_ptr, new_alpha, ptr_inc);
         else{
-          vcl_memcpy(new_byte_ptr, old_byte_ptr, ptr_inc);
+          std::memcpy(new_byte_ptr, old_byte_ptr, ptr_inc);
         }
       }
 #else//don't copy parent data
@@ -414,9 +416,9 @@ int boxm2_refine_block_multi_data::move_data(boct_bit_tree& unrefined_tree,
         int ptr_inc = static_cast<int>(type_sizes[i]);
         int new_byte_ptr = new_buf + newDataPtr*ptr_inc;
         if(i == alpha_index_)
-          vcl_memcpy(new_byte_ptr, new_alpha, ptr_inc);
+          std::memcpy(new_byte_ptr, new_alpha, ptr_inc);
         else
-          vcl_memcpy(new_byte_ptr, zero_data, ptr_inc);
+          std::memcpy(new_byte_ptr, zero_data, ptr_inc);
       }
       delete [] zero_data;
 #endif
@@ -442,7 +444,7 @@ int boxm2_refine_block_multi_data::free_space(int startPtr, int endPtr)
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
                                              boxm2_block_sptr blk,
-                                             vcl_vector<vcl_string> const& prefixes,
+                                             std::vector<std::string> const& prefixes,
                                              float prob_thresh)
 {
   boxm2_refine_block_multi_data refine_block;
@@ -456,7 +458,7 @@ void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
 
 void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
                                              boxm2_block_sptr blk,
-                                             vcl_vector<vcl_string> const& prefixes,
+                                             std::vector<std::string> const& prefixes,
                                              vbl_array_3d<int> const& depths_to_match){
   boxm2_refine_block_multi_data refine_block;
   if(!refine_block.init_data(scene, blk, prefixes, 0.99f))

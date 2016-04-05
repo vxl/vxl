@@ -29,14 +29,14 @@ bool brec_prob_map_supress_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");      // input map (density or prob map (i.e. values in [0,1]) to be corrected with respect to suppressor map
   input_types.push_back("vil_image_view_base_sptr");      // suppressor map (another prob map)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");      // output map as suppressed input map
   output_types.push_back("vil_image_view_base_sptr");      // output byte image of suppressed map
   ok = pro.set_output_types(output_types);
@@ -48,7 +48,7 @@ bool brec_prob_map_supress_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cerr << " brec_prob_map_roc_compute_process - invalid inputs\n";
+    std::cerr << " brec_prob_map_roc_compute_process - invalid inputs\n";
     return false;
   }
 
@@ -74,7 +74,7 @@ bool brec_prob_map_supress_process(bprb_func_process& pro)
 
   float min, max;
   vil_math_value_range(input_map, min, max);
-  //vcl_cout << "\t input map float value range, min: " << min << " max: " << max << vcl_endl;
+  //std::cout << "\t input map float value range, min: " << min << " max: " << max << std::endl;
   //vil_convert_stretch_range_limited(input_map, dummy_byte, 0.0f, max);
   //vil_save(dummy_byte, "./input_map.png");
 
@@ -103,7 +103,7 @@ bool brec_prob_map_supress_process(bprb_func_process& pro)
   vil_image_view<float> output_map(ni, nj);
   vil_math_image_product(dummy2, dummy4, output_map);
   //vil_math_value_range(output_map, min, max);
-  //vcl_cout << "\t output map float value range after multiplication, min: " << min << " max: " << max << vcl_endl;
+  //std::cout << "\t output map float value range after multiplication, min: " << min << " max: " << max << std::endl;
 
   //vil_convert_stretch_range_limited(output_map, dummy_byte, 0.0f, max);
   //vil_save(dummy_byte, "./output_map_mult.png");

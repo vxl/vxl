@@ -18,12 +18,12 @@ bool test_fill_kernel()
   //make bocl manager (handles a lot of OpenCL stuff)
   bocl_manager_child &mgr = bocl_manager_child::instance();
   if(mgr.gpus_.size() < 1) {
-    vcl_cout<<"NO GPUS!!!!"<<vcl_endl;
+    std::cout<<"NO GPUS!!!!"<<std::endl;
     return false;
   }
 
   //create command queue
-  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, NULL);
+  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, VXL_NULLPTR);
 
   //cr  //make sure a is set to zero
   bocl_mem a_mem(mgr.context(), a, length * sizeof(int), "test int buffer");
@@ -87,10 +87,10 @@ bool test_fill_kernel()
   float trans_time = t.all() / 1000.0f;
 
   if( fill_time < trans_time )
-    vcl_cout<<"Kernel fill time faster on average!: ";
+    std::cout<<"Kernel fill time faster on average!: ";
   else
-    vcl_cout<<"Buffer transfer fill time faster on average: ";
-  vcl_cout<<fill_time<<" ms vs. "<<trans_time<<" ms"<<vcl_endl;
+    std::cout<<"Buffer transfer fill time faster on average: ";
+  std::cout<<fill_time<<" ms vs. "<<trans_time<<" ms"<<std::endl;
 
   //clean up buffer
   delete[] a;

@@ -5,13 +5,15 @@
 // \author Tim Cootes
 // \brief Base for objects which perform some form of linear component analysis.
 
+#include <string>
+#include <memory>
+#include <iostream>
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
-#include <vcl_string.h>
-#include <vcl_memory.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Base for objects which perform some form of linear component analysis.
 // Derived classes (such as mcal_pca) generate linear modes to span
@@ -58,13 +60,13 @@ class mcal_component_analyzer
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const = 0;
+  virtual std::string is_a() const = 0;
 
   //: Create a copy on the heap and return base class pointer
   virtual mcal_component_analyzer* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const =0;
+  virtual void print_summary(std::ostream& os) const =0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const=0;
@@ -75,10 +77,10 @@ class mcal_component_analyzer
   //: Read initialisation settings from a stream.
   // The default implementation merely checks that no properties have
   // been specified.
-  virtual void config_from_stream(vcl_istream &);
+  virtual void config_from_stream(std::istream &);
 
   //: Create a concrete mcal_component_analyzer object, from a text specification.
-  static vcl_auto_ptr<mcal_component_analyzer> create_from_stream(vcl_istream &is);
+  static std::auto_ptr<mcal_component_analyzer> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -99,9 +101,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mcal_component_analyzer& b);
 void vsl_b_read(vsl_b_istream& bfs, mcal_component_analyzer& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mcal_component_analyzer& b);
+std::ostream& operator<<(std::ostream& os,const mcal_component_analyzer& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const mcal_component_analyzer* b);
+std::ostream& operator<<(std::ostream& os,const mcal_component_analyzer* b);
 
 #endif // mcal_component_analyzer_h

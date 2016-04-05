@@ -1,3 +1,6 @@
+#include <vector>
+#include <stack>
+#include <iostream>
 #include "bundler_tracks_impl.h"
 //
 #include <bundler/bundler_inters.h>
@@ -12,10 +15,8 @@
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_point.h>
 
-#include <vcl_vector.h>
-#include <vcl_stack.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 static const double TOL = .01;
 
@@ -86,7 +87,7 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
 {
     // We are going to be using the Lowe keypoint and SIFT implementation
     // in brl/bseg/babl.
-    vcl_vector<bapl_keypoint_sptr> keypoints;
+    std::vector<bapl_keypoint_sptr> keypoints;
 
     // First, extract all the keypoints in the image.
     bapl_keypoint_extractor(
@@ -96,7 +97,7 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
         false);
 
     keypoints.erase(
-        vcl_unique(keypoints.begin(), keypoints.end(), kps_in_same_place),
+        std::unique(keypoints.begin(), keypoints.end(), kps_in_same_place),
         keypoints.end());
 
     // Then we are going to convert from the bapl_lowe_keypoint
@@ -108,7 +109,7 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
 
     // Add all the features to the image.
     feature_adder adder(image);
-    vcl_for_each(keypoints.begin(), keypoints.end(), adder);
+    std::for_each(keypoints.begin(), keypoints.end(), adder);
 
     return image;
 }
@@ -117,13 +118,13 @@ bundler_inters_image_sptr bundler_tracks_impl_detect_sift::operator ()(
 /*------------------------Match List Implementation-----------------------*/
 // Match list implementation. Proposes all possible pairings.
 void bundler_tracks_impl_propose_matches_all::operator ()(
-    const vcl_vector<bundler_inters_image_sptr> &features,
-    vcl_vector<bundler_inters_image_pair> &matches)
+    const std::vector<bundler_inters_image_sptr> &features,
+    std::vector<bundler_inters_image_pair> &matches)
 {
     // Add every possible pairing to the match list. Make sure an image is
     // not paired with itself, and also make sure that if there is
     // (a, b) in the set, there is not (b, a).
-    vcl_vector<bundler_inters_image_sptr>::const_iterator i, j;
+    std::vector<bundler_inters_image_sptr>::const_iterator i, j;
 
     for (i = features.begin(); i != features.end(); ++i) {
         for (j = i; j != features.end(); ++j) {
@@ -145,10 +146,10 @@ void bundler_tracks_impl_propose_matches_all::operator ()(
 // a set of features to a vector of rsdl_points to use in the
 // rsdl_kd_tree approximate nearest neighbours function.
 static void to_rsdl_pt_vector(
-    const vcl_vector<bundler_inters_feature_sptr> &f,
-    vcl_vector<rsdl_point> &v)
+    const std::vector<bundler_inters_feature_sptr> &f,
+    std::vector<rsdl_point> &v)
 {
-    vcl_vector<bundler_inters_feature_sptr>::const_iterator i;
+    std::vector<bundler_inters_feature_sptr>::const_iterator i;
     for (i = f.begin(); i != f.end(); ++i)
     {
         rsdl_point pt((*i)->descriptor.size());
@@ -187,14 +188,14 @@ void bundler_tracks_impl_match_ann::operator ()(
     matches.image2 = to_match.f2;
 
     // Create the KD-tree
-    vcl_vector<rsdl_point> desc_f2;
+    std::vector<rsdl_point> desc_f2;
     to_rsdl_pt_vector(to_match.f2->features, desc_f2);
 
     rsdl_kd_tree tree(desc_f2);
 
 
     // Now do the matching
-    vcl_vector<bundler_inters_feature_sptr>::const_iterator i;
+    std::vector<bundler_inters_feature_sptr>::const_iterator i;
     for (i = to_match.f1->features.begin();
          i != to_match.f1->features.end(); ++i)
     {
@@ -203,8 +204,8 @@ void bundler_tracks_impl_match_ann::operator ()(
         pt.set_cartesian((*i)->descriptor);
 
         // Get the two closest points
-        vcl_vector<rsdl_point> closest_pts;
-        vcl_vector<int> indices;
+        std::vector<rsdl_point> closest_pts;
+        std::vector<int> indices;
         tree.n_nearest(pt, 2, closest_pts, indices);
 
         // Conditionally add the match to the set.
@@ -228,7 +229,7 @@ void bundler_tracks_impl_match_ann::operator ()(
 // It deleted every element in the Ts vector whose corresponding element
 // in the bool vector is true. Checks that the vectors are the same size.
 static inline void remove_if_true(
-    vcl_vector<bool> &checks,
+    std::vector<bool> &checks,
     bundler_inters_match_set &to_prune)
 {
     assert(checks.size() == (unsigned int)to_prune.num_features());
@@ -248,7 +249,7 @@ static inline void remove_if_true(
 static inline void remove_all_duplicates(
     bundler_inters_match_set &matches)
 {
-    vcl_vector<bool> checks;
+    std::vector<bool> checks;
 
     for (int i = 0; i < matches.num_features(); ++i) {
         bool to_kill = false;
@@ -300,7 +301,7 @@ void bundler_tracks_impl_refine_epipolar::operator ()(
     ransac.set_max_outlier_frac(settings.max_outlier_frac);
 
     // Run the ransac
-    vcl_vector<vgl_point_2d<double> > rhs, lhs;
+    std::vector<vgl_point_2d<double> > rhs, lhs;
     for (int i = 0; i < matches.num_features(); ++i) {
         rhs.push_back(matches.matches[i].first->point);
         lhs.push_back(matches.matches[i].second->point);
@@ -322,7 +323,7 @@ void bundler_tracks_impl_refine_epipolar::operator ()(
 
 // Use DFS to find all features in this track
 static void create_new_track(
-    const vcl_vector<bundler_inters_match_set> &matches,
+    const std::vector<bundler_inters_match_set> &matches,
     const bundler_inters_feature_sptr &f1,
     const bundler_inters_feature_sptr &f2,
     bundler_inters_track_sptr &new_track)
@@ -333,7 +334,7 @@ static void create_new_track(
 
     // This stack will hold all the features that have been explored
     // but whose neighbours have not been found.
-    vcl_stack<bundler_inters_feature_sptr> feature_stack;
+    std::stack<bundler_inters_feature_sptr> feature_stack;
 
     // Mark both the input features as explored, and add them to the stack
     f1->visited = true;
@@ -355,7 +356,7 @@ static void create_new_track(
         curr->track = new_track;
 
         // Find neighbours with this match.
-        vcl_vector<bundler_inters_match_set>::const_iterator match;
+        std::vector<bundler_inters_match_set>::const_iterator match;
         for (match = matches.begin(); match != matches.end(); match++) {
             for (int i = 0; i < match->num_features(); i++) {
                 if (match->matches[i].first == curr &&
@@ -376,28 +377,28 @@ static void create_new_track(
 }
 
 static void remove_all(
-    const vcl_vector<bundler_inters_feature_sptr> &to_remove,
-    vcl_vector<bundler_inters_match_set> &matches,
-    vcl_vector<bundler_inters_image_sptr> &images,
-    vcl_vector<bundler_inters_track_sptr> &tracks)
+    const std::vector<bundler_inters_feature_sptr> &to_remove,
+    std::vector<bundler_inters_match_set> &matches,
+    std::vector<bundler_inters_image_sptr> &images,
+    std::vector<bundler_inters_track_sptr> &tracks)
 {
-    vcl_vector<bundler_inters_feature_sptr>::const_iterator i;
+    std::vector<bundler_inters_feature_sptr>::const_iterator i;
     for (i = to_remove.begin(); i != to_remove.end(); ++i)
     {
         // Remove the feature from the match list.
-        vcl_vector<bundler_inters_match_set>::iterator m;
+        std::vector<bundler_inters_match_set>::iterator m;
         for (m = matches.begin(); m != matches.end(); ++m) {
             m->remove_if_present(*i);
         }
 
         // Remove the feature from the images
-        vcl_vector<bundler_inters_image_sptr>::iterator img;
+        std::vector<bundler_inters_image_sptr>::iterator img;
         for (img = images.begin(); img != images.end(); ++img) {
             (*img)->remove_if_present(*i);
         }
 
         // Remove the feature from the tracks.
-        vcl_vector<bundler_inters_track_sptr>::iterator t;
+        std::vector<bundler_inters_track_sptr>::iterator t;
         for (t = tracks.begin(); t != tracks.end(); ++t) {
             (*t)->remove_if_present(*i);
         }
@@ -406,11 +407,11 @@ static void remove_all(
 
 // Chain matches implementation
 void bundler_tracks_impl_chain_matches::operator ()(
-    vcl_vector<bundler_inters_match_set> &matches,
-    vcl_vector<bundler_inters_image_sptr> &images,
-    vcl_vector<bundler_inters_track_sptr> &tracks)
+    std::vector<bundler_inters_match_set> &matches,
+    std::vector<bundler_inters_image_sptr> &images,
+    std::vector<bundler_inters_track_sptr> &tracks)
 {
-    vcl_vector<bundler_inters_match_set>::const_iterator match;
+    std::vector<bundler_inters_match_set>::const_iterator match;
     for (match = matches.begin(); match != matches.end(); match++) {
         for (int i = 0; i < match->num_features(); i++)
         {
@@ -446,9 +447,9 @@ void bundler_tracks_impl_chain_matches::operator ()(
     // come from.
 
     // Keep a list of all the features to remove.
-    vcl_vector<bundler_inters_feature_sptr> to_remove;
+    std::vector<bundler_inters_feature_sptr> to_remove;
 
-    vcl_vector<bundler_inters_track_sptr>::iterator t;
+    std::vector<bundler_inters_track_sptr>::iterator t;
     for (t = tracks.begin(); t != tracks.end(); ++t)
     {
         // Look at every pair of points.
@@ -485,7 +486,7 @@ void bundler_tracks_impl_chain_matches::operator ()(
 
     // Make sure that the indices from the features into the images
     // are consistent.
-    vcl_vector<bundler_inters_image_sptr>::iterator img;
+    std::vector<bundler_inters_image_sptr>::iterator img;
     for (img = images.begin(); img != images.end(); ++img ) {
         for (unsigned int i = 0; i < (*img)->features.size(); ++i) {
             (*img)->features[i]->index_in_image = i;

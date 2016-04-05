@@ -18,7 +18,7 @@ bool bvxm_ocp_hist_process_cons(bprb_func_process& pro)
   //input[1]: The path for the output file
   //input[2]: The world scale
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   int i=0;
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
   input_types_[i++] = "vcl_string";
@@ -34,7 +34,7 @@ bool bvxm_ocp_hist_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   // get the inputs:
@@ -42,7 +42,7 @@ bool bvxm_ocp_hist_process(bprb_func_process& pro)
   // voxel_world
   bvxm_voxel_world_sptr voxel_world = pro.get_input< bvxm_voxel_world_sptr>(i++);
   // the output path
-  vcl_string path = pro.get_input<vcl_string>(i++);
+  std::string path = pro.get_input<std::string>(i++);
   // scale
   unsigned scale = pro.get_input<unsigned>(i++);
 
@@ -52,7 +52,7 @@ bool bvxm_ocp_hist_process(bprb_func_process& pro)
 }
 
 bool bvxm_ocp_hist_process_globals::compute(bvxm_voxel_world_sptr w,
-                                            unsigned scale, vcl_string path)
+                                            unsigned scale, std::string path)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
@@ -72,9 +72,9 @@ bool bvxm_ocp_hist_process_globals::compute(bvxm_voxel_world_sptr w,
       }
     }
   }
-  vcl_ofstream f(path.c_str());
+  std::ofstream f(path.c_str());
   hist.print(f);
-  /*vcl_ofstream f2((path+".log").c_str());
+  /*std::ofstream f2((path+".log").c_str());
   hist.print_log(f2);*/
   return true;
 }

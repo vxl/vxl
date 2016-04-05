@@ -7,12 +7,13 @@
 // \author J.L. Mundy
 // \date   6 Sept 2015
 //
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <vcl_compiler.h>
 #include "boxm2_vecf_skull_params.h"
 #include "boxm2_vecf_labeled_point.h"
-#include <vcl_map.h>
 #include <vgl/vgl_vector_3d.h>
 class boxm2_vecf_fit_skull{
  public:
@@ -24,7 +25,7 @@ class boxm2_vecf_fit_skull{
 
   //: read a 3-d anchor file:
   // canthi, forehead, jaw
-  bool read_anchor_file(vcl_string const& path);
+  bool read_anchor_file(std::string const& path);
 
   //: add a labeled point to lpts_
   bool add_labeled_point(boxm2_vecf_labeled_point lp);
@@ -36,17 +37,17 @@ class boxm2_vecf_fit_skull{
   bool set_trans();
 
   //: transform skull
-  bool transform_skull(vcl_string const& source_skull_path, vcl_string const& target_skull_path) const;
+  bool transform_skull(std::string const& source_skull_path, std::string const& target_skull_path) const;
 
  private:
   //: the map between string and enum
   void fill_smid_map();
 
   //: map a string label to the corresponding enum value
-  vcl_map<vcl_string, mids> smid_map_;
+  std::map<std::string, mids> smid_map_;
 
   //: a map of labeled points, e.g. left_eye_lateral_canthus
-  vcl_map<mids, boxm2_vecf_labeled_point> lpts_;
+  std::map<mids, boxm2_vecf_labeled_point> lpts_;
 
   //: normal to forehead (converted from point format)
   vgl_vector_3d<double> forehead_normal_;

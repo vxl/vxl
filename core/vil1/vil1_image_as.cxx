@@ -6,15 +6,16 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <vector>
+#include <string>
 #include "vil1_image_as.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_pixel.h>
-#include <vil1/vil1_memory_image_of_format.txx>
+#include <vil1/vil1_memory_image_of_format.hxx>
 
 #include <vxl_config.h>
 
@@ -46,10 +47,10 @@ struct vil1_image_as_impl : public vil1_image_impl, public vil1_memory_image_of_
   bool put_section(void const *, int, int, int, int) { return false; }
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(std::string const&) const;
 };
 
 //--------------------------------------------------------------------------------
@@ -57,7 +58,7 @@ struct vil1_image_as_impl : public vil1_image_impl, public vil1_memory_image_of_
 template<class Inp, class Out>
 bool convert_grey_to_grey( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
-  vcl_vector<Inp> scan(width);
+  std::vector<Inp> scan(width);
   for (int j=0; j<height; ++j) {
     if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
       return false;
@@ -71,7 +72,7 @@ bool convert_grey_to_grey( const vil1_image& image, void* buf, int x0, int y0, i
 template<class Inp, class Out>
 bool convert_rgb_to_grey( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
-  vcl_vector<Inp> scan(3*width);
+  std::vector<Inp> scan(3*width);
   for (int j=0; j<height; ++j) {
     if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
       return false;
@@ -94,7 +95,7 @@ bool convert_rgb_to_grey( const vil1_image& image, void* buf, int x0, int y0, in
 template<class Inp, class Out>
 bool convert_grey_to_rgb( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
-  vcl_vector<Inp> scan(width);
+  std::vector<Inp> scan(width);
   for (int j=0; j<height; ++j) {
     if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
       return false;
@@ -111,7 +112,7 @@ bool convert_grey_to_rgb( const vil1_image& image, void* buf, int x0, int y0, in
 template<class Inp, class Out>
 bool convert_rgb_to_rgb( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
-  vcl_vector<Inp> scan(3*width);
+  std::vector<Inp> scan(3*width);
   for (int j=0; j<height; ++j) {
     if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
       return false;
@@ -127,7 +128,7 @@ bool convert_rgb_to_rgb( const vil1_image& image, void* buf, int x0, int y0, int
 template<class Inp, class Out>
 bool convert_rgba_to_rgb( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
-  vcl_vector<Inp> scan(4*width);
+  std::vector<Inp> scan(4*width);
   for (int j=0; j<height; ++j) {
     if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
       return false;
@@ -144,7 +145,7 @@ bool convert_rgba_to_rgb( const vil1_image& image, void* buf, int x0, int y0, in
 template<class Inp, class Out>
 bool convert_rgba_to_grey( const vil1_image& image, void* buf, int x0, int y0, int width, int height, Inp* , Out* )
 {
-  vcl_vector<Inp> scan(4*width);
+  std::vector<Inp> scan(4*width);
   for (int j=0; j<height; ++j) {
     if (!image.get_section(/* xxx */&scan[0], x0, y0+j, width, 1))
       return false;
@@ -281,21 +282,21 @@ bool vil1_image_as_impl<vxl_byte>::get_section(void *buf, int x0, int y0, int wi
    case VIL1_RGBA_BYTE:
     return convert_rgba_to_grey( image, buf, x0, y0, width, height, (vxl_byte*)VXL_NULLPTR,(Outtype*)VXL_NULLPTR);
    default:
-    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
+    std::cerr << __FILE__ ": get_section() not implemented for " << image << std::endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil1_image_as_impl<vxl_byte>::is_a() const
+std::string vil1_image_as_impl<vxl_byte>::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_as_impl<vxl_byte>";
+  static const std::string class_name_="vil1_image_as_impl<vxl_byte>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil1_image_as_impl<vxl_byte>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vxl_byte>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vxl_byte>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -342,21 +343,21 @@ bool vil1_image_as_impl<vxl_uint_16>::get_section(void *buf, int x0, int y0, int
    case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)VXL_NULLPTR,(Outtype*)VXL_NULLPTR);
    default:
-    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
+    std::cerr << __FILE__ ": get_section() not implemented for " << image << std::endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil1_image_as_impl<vxl_uint_16>::is_a() const
+std::string vil1_image_as_impl<vxl_uint_16>::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_as_impl<vxl_uint_16>";
+  static const std::string class_name_="vil1_image_as_impl<vxl_uint_16>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil1_image_as_impl<vxl_uint_16>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vxl_uint_16>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vxl_uint_16>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -404,21 +405,21 @@ bool vil1_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, 
    case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)VXL_NULLPTR,(Outtype*)VXL_NULLPTR);
    default:
-    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
+    std::cerr << __FILE__ ": get_section() not implemented for " << image << std::endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil1_image_as_impl<int>::is_a() const
+std::string vil1_image_as_impl<int>::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_as_impl<int>";
+  static const std::string class_name_="vil1_image_as_impl<int>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil1_image_as_impl<int>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<int>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<int>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -465,21 +466,21 @@ bool vil1_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width
    case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)VXL_NULLPTR,(Outtype*)VXL_NULLPTR);
    default:
-    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
+    std::cerr << __FILE__ ": get_section() not implemented for " << image << std::endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil1_image_as_impl<float>::is_a() const
+std::string vil1_image_as_impl<float>::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_as_impl<float>";
+  static const std::string class_name_="vil1_image_as_impl<float>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil1_image_as_impl<float>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<float>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<float>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -526,21 +527,21 @@ bool vil1_image_as_impl<double>::get_section(void *buf, int x0, int y0, int widt
    case VIL1_RGB_DOUBLE:
     return convert_rgb_to_grey( image, buf, x0, y0, width, height, (double*)VXL_NULLPTR,(Outtype*)VXL_NULLPTR);
    default:
-    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
+    std::cerr << __FILE__ ": get_section() not implemented for " << image << std::endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil1_image_as_impl<double>::is_a() const
+std::string vil1_image_as_impl<double>::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_as_impl<double>";
+  static const std::string class_name_="vil1_image_as_impl<double>";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil1_image_as_impl<double>::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<double>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<double>::is_a() || vil1_image_impl::is_class(s);
 }
@@ -591,21 +592,21 @@ bool vil1_image_as_impl<vil1_rgb<unsigned char> >::get_section(void *buf,
    case VIL1_RGBA_BYTE:
     return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vxl_byte*)VXL_NULLPTR,(Outtype*)VXL_NULLPTR );
    default:
-    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
+    std::cerr << __FILE__ ": get_section() not implemented for " << image << std::endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() const
+std::string vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_as_impl<vil1_rgb<unsigned char> >";
+  static const std::string class_name_="vil1_image_as_impl<vil1_rgb<unsigned char> >";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil1_image_as_impl<vil1_rgb<unsigned char> >::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vil1_rgb<unsigned char> >::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() || vil1_image_impl::is_class(s);
 }
@@ -656,21 +657,21 @@ bool vil1_image_as_impl<vil1_rgb<float> >::get_section(void *buf,
    case VIL1_RGBA_BYTE:
     return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vxl_byte*)VXL_NULLPTR,(Outtype*)VXL_NULLPTR);
    default:
-    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
+    std::cerr << __FILE__ ": get_section() not implemented for " << image << std::endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
 }
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil1_image_as_impl<vil1_rgb<float> >::is_a() const
+std::string vil1_image_as_impl<vil1_rgb<float> >::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_as_impl<vil1_rgb<float> >";
+  static const std::string class_name_="vil1_image_as_impl<vil1_rgb<float> >";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil1_image_as_impl<vil1_rgb<float> >::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vil1_rgb<float> >::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vil1_rgb<float> >::is_a() || vil1_image_impl::is_class(s);
 }
@@ -722,7 +723,7 @@ bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::get_section(void *buf,
    case VIL1_RGBA_BYTE:
     return convert_rgba_to_rgb( image, buf, x0, y0, width, height, (vxl_byte*)VXL_NULLPTR,(Outtype*)VXL_NULLPTR);
    default:
-    vcl_cerr << __FILE__ ": get_section() not implemented for " << image << vcl_endl;
+    std::cerr << __FILE__ ": get_section() not implemented for " << image << std::endl;
     assert(false/* implement for your image type as needed */);
     return false;
   }
@@ -730,14 +731,14 @@ bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::get_section(void *buf,
 
 
 VCL_DEFINE_SPECIALIZATION
-vcl_string vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_a() const
+std::string vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_as_impl<vil1_rgb<vxl_uint_16> >";
+  static const std::string class_name_="vil1_image_as_impl<vil1_rgb<vxl_uint_16> >";
   return class_name_;
 }
 
 VCL_DEFINE_SPECIALIZATION
-bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_class(vcl_string const& s) const
+bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_a() || vil1_image_impl::is_class(s);
 }

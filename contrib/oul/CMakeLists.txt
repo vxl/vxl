@@ -14,7 +14,7 @@ include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${OUL_INCLUDE_DIR} )
 
 set(oul_sources oul_copyright.h)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul ${oul_sources})
+INSTALL_NOBASE_HEADER_FILES(include/vxl/contrib/oul ${oul_sources})
 
 add_subdirectory(ouel)
 add_subdirectory(ouml)

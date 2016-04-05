@@ -71,7 +71,7 @@ compute_matches( rgrl_feature_set const&    from_set,
                  rgrl_scale const&          current_scale,
                  rgrl_match_set_sptr const& /*old_matches*/ )
 {
-  typedef vcl_vector<rgrl_feature_sptr> f_vector_type;
+  typedef std::vector<rgrl_feature_sptr> f_vector_type;
   typedef f_vector_type::iterator f_iterator_type;
 
   //  Build an empty match set
@@ -90,7 +90,7 @@ compute_matches( rgrl_feature_set const&    from_set,
 
   //  Vectors for matched features and weights.
   f_vector_type matched_to_features;
-  vcl_vector<double> match_weights;
+  std::vector<double> match_weights;
 
   // Match each feature...
   for ( f_iterator_type fitr = from.begin(); fitr != from.end(); ++fitr )
@@ -129,8 +129,8 @@ compute_matches( rgrl_feature_set const&    from_set,
     // set the weight = 0
     if ( !in_range( to_image_, to_mask_, mapped_feature->location() ) ) {
       //  Make a dummy vector of intensity weights.
-      // vcl_vector< double > dummy_intensity_weights( 0 ) //CT: not needed now;
-      vcl_vector< double > match_weights( 0 );
+      // std::vector< double > dummy_intensity_weights( 0 ) //CT: not needed now;
+      std::vector< double > match_weights( 0 );
 
       //  Add the feature and its matches and weights to the match set
       matches_sptr
@@ -154,8 +154,8 @@ compute_matches( rgrl_feature_set const&    from_set,
     // if there is no mapped pixels in the valid region, no matcher is created
     if ( mapped_pixels.size() == 0 ) {
       //  Make a dummy vector of intensity weights.
-      // vcl_vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
-      vcl_vector< double > match_weights( 0 );
+      // std::vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
+      std::vector< double > match_weights( 0 );
 
       //  Add the feature and its matches and weights to the match set
       matches_sptr
@@ -170,7 +170,7 @@ compute_matches( rgrl_feature_set const&    from_set,
                                  matched_to_features, match_weights );
 
     //  Make a dummy vector of intensity weights.
-    // vcl_vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
+    // std::vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
 
     //  Add the feature and its matches and weights to the match set
     matches_sptr -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
@@ -232,7 +232,7 @@ map_region_intensities( rgrl_transformation      const& trans,
 template <class PixelType>
 void
 rgrl_matcher_pseudo<PixelType> ::
-map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
+map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
                         rgrl_transformation           const& trans,
                         rgrl_feature_sptr                    feature_sptr,
                         rgrl_mapped_pixel_vector_type   & mapped_pixels) const
@@ -298,7 +298,7 @@ est_sub_offset( vnl_matrix< double > const& A, vnl_matrix< double > const& S )
 
 #if 0
 inline vnl_vector< double >
-sub_pixel_2d( vcl_vector< vcl_vector< double > > const& responses,
+sub_pixel_2d( std::vector< std::vector< double > > const& responses,
               int idx1, int idx2 )
 {
   assert( responses.size() >= 3 );
@@ -343,7 +343,7 @@ sub_pixel_2d( vcl_vector< vcl_vector< double > > const& responses,
 #endif // 0
 
 inline double
-rgrl_matcher_pseudo_sub_pixel( vcl_vector< double > const& responses )
+rgrl_matcher_pseudo_sub_pixel( std::vector< double > const& responses )
 {
   assert( responses.size() == 3 );
 
@@ -387,8 +387,8 @@ rgrl_matcher_pseudo<PixelType> ::
 match_mapped_region( rgrl_feature_sptr                     mapped_feature,
                      rgrl_mapped_pixel_vector_type const & mapped_pixels,
                      rgrl_scale                    const & current_scale,
-                     vcl_vector< rgrl_feature_sptr >     & matched_to_features,
-                     vcl_vector< double >                & match_weights ) const
+                     std::vector< rgrl_feature_sptr >     & matched_to_features,
+                     std::vector< double >                & match_weights ) const
 {
   //  At this point, find the most similar feature within the given
   //  scale.
@@ -432,7 +432,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
 
     DebugMacro_abv(2, "normal basis :\n" << basis << '\n');
 
-    vcl_vector<double> responses( 2*max_offset+1, 0.0 );
+    std::vector<double> responses( 2*max_offset+1, 0.0 );
     bool is_best_initialized = false;
     int best_offset = 0;
 
@@ -496,7 +496,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
           index--;
         else
         {
-          vcl_vector< double > responses_for_sub_pixel( 3 );
+          std::vector< double > responses_for_sub_pixel( 3 );
           responses_for_sub_pixel[ 0 ] = responses[ index - 1 ];
           responses_for_sub_pixel[ 1 ] = responses[ index ];
           responses_for_sub_pixel[ 2 ] = responses[ index + 1 ];
@@ -538,8 +538,8 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     vnl_vector<double> basis1 = normal_space . get_column(0);
     vnl_vector<double> basis2 = normal_space . get_column(1);
 
-    vcl_vector<double> temp( 2*max_offset+1, 0.0 );
-    vcl_vector< vcl_vector<double> > responses( 2*max_offset+1, temp );
+    std::vector<double> temp( 2*max_offset+1, 0.0 );
+    std::vector< std::vector<double> > responses( 2*max_offset+1, temp );
 
     bool is_best_initialized = false;
     int best_off1 = 0, best_off2 = 0;
@@ -593,7 +593,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     }
     else
     {
-      vcl_vector< double > responses_for_sub_pixel( 3 );
+      std::vector< double > responses_for_sub_pixel( 3 );
       responses_for_sub_pixel[ 0 ] = responses[ idx1 - 1 ][ idx2 ];
       responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
       responses_for_sub_pixel[ 2 ] = responses[ idx1 + 1 ][ idx2 ];
@@ -624,7 +624,7 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     }
     else
     {
-      vcl_vector< double > responses_for_sub_pixel( 3 );
+      std::vector< double > responses_for_sub_pixel( 3 );
       responses_for_sub_pixel[ 0 ] = responses[ idx1 ][ idx2 - 1 ];
       responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
       responses_for_sub_pixel[ 2 ] = responses[ idx1 ][ idx2 + 1 ];
@@ -639,12 +639,12 @@ match_mapped_region( rgrl_feature_sptr                     mapped_feature,
     double second_d2 = vnl_math::abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
                                       - 2 * responses[ idx1 ][ idx2 ] );
 
-    second_derivative = vnl_math::min( second_d1, second_d2 );
+    second_derivative = std::min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
     DebugMacro_abv(1, "best match :\n" << match_location << '\n' );
   }
   else {
-    vcl_cerr << "Code doesn't handle a normal subspace of greater than two dimenions.\n";
+    std::cerr << "Code doesn't handle a normal subspace of greater than two dimenions.\n";
     assert( false );
   }
 
@@ -692,9 +692,9 @@ compute_response( vnl_double_2                  const& mapped_location, // FIXME
   //  Extract the intensities at the mapped locations.  Make sure
   //  they are inside the image.
 
-  vcl_vector< double > a;
-  vcl_vector< double > b;
-  vcl_vector< double > weights;
+  std::vector< double > a;
+  std::vector< double > b;
+  std::vector< double > weights;
   double intensity;
 
   // reserve space
@@ -703,7 +703,7 @@ compute_response( vnl_double_2                  const& mapped_location, // FIXME
   weights.reserve( mapped_pixels.size() );
   for ( unsigned i = 0; i < mapped_pixels.size(); ++i ) {
     vnl_double_2 location = mapped_pixels[i].location + shift;
-    //vcl_cout << " position : " << mapped_pixels[ i ].location << "  shift " << shift << vcl_endl;
+    //std::cout << " position : " << mapped_pixels[ i ].location << "  shift " << shift << std::endl;
     // Check if the location is inside the valid region
     if ( !in_range( to_image_, to_mask_, location ) )
       return rgrl_matcher_pseudo_max_response_value;

@@ -1,3 +1,6 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "rrel_affine_est.h"
 
 #include <vnl/vnl_matrix.h>
@@ -5,14 +8,12 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_point_2d.h>
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 rrel_affine_est::
-rrel_affine_est( const vcl_vector< vgl_point_2d<double> > & from_pts,
-                 const vcl_vector< vgl_point_2d<double> > & to_pts )
+rrel_affine_est( const std::vector< vgl_point_2d<double> > & from_pts,
+                 const std::vector< vgl_point_2d<double> > & to_pts )
   : rrel_estimation_problem( 6, 3 /*points to instantiate*/ )
 {
   assert( from_pts.size() == to_pts.size() );
@@ -37,8 +38,8 @@ rrel_affine_est( const vcl_vector< vgl_point_2d<double> > & from_pts,
 }
 
 rrel_affine_est::
-rrel_affine_est( const vcl_vector< vnl_vector<double> > & from_pts,
-                 const vcl_vector< vnl_vector<double> > & to_pts,
+rrel_affine_est( const std::vector< vnl_vector<double> > & from_pts,
+                 const std::vector< vnl_vector<double> > & to_pts,
                  unsigned int dim )
   : rrel_estimation_problem( (dim+1)*dim /*dof*/,  dim+1/*points to instantiate*/ ),
     from_pts_( from_pts ), to_pts_( to_pts )
@@ -111,11 +112,11 @@ trans( const vnl_vector<double>& params ) const
 //
 bool
 rrel_affine_est::
-fit_from_minimal_set( const vcl_vector<int>& point_indices,
+fit_from_minimal_set( const std::vector<int>& point_indices,
                       vnl_vector<double>& params ) const
 {
   if ( point_indices.size() != min_num_pts_ ) {
-    vcl_cerr << "rrel_affine_est::fit_from_minimal_sample  The number of point "
+    std::cerr << "rrel_affine_est::fit_from_minimal_sample  The number of point "
              << "indices must agree with the fit degrees of freedom.\n";
     return false;
   }
@@ -148,7 +149,7 @@ fit_from_minimal_set( const vcl_vector<int>& point_indices,
 
 void
 rrel_affine_est::compute_residuals( const vnl_vector<double>& params,
-                                          vcl_vector<double>& residuals ) const
+                                          std::vector<double>& residuals ) const
 {
   assert( residuals.size() == num_samples_ );
 
@@ -169,16 +170,16 @@ bool
 rrel_affine_est::
 weighted_least_squares_fit( vnl_vector<double>& params,
                             vnl_matrix<double>& norm_covar,
-                            const vcl_vector<double>* weights ) const
+                            const std::vector<double>* weights ) const
 {
   vnl_matrix<double> sumProds(min_num_pts_, min_num_pts_, 0.0);
   vnl_matrix<double> sumDists(min_num_pts_, min_num_pts_-1, 0.0);
 
-  vcl_vector<double> tmp_wgts;
+  std::vector<double> tmp_wgts;
   if ( !weights ) {
     // set weight to one
     tmp_wgts.resize( num_samples_ );
-    vcl_fill( tmp_wgts.begin(), tmp_wgts.end(), 1.0 );
+    std::fill( tmp_wgts.begin(), tmp_wgts.end(), 1.0 );
     weights = &tmp_wgts;
   }
   //  Aside:  this probably would be faster if I used iterators...
@@ -203,7 +204,7 @@ weighted_least_squares_fit( vnl_vector<double>& params,
 
   vnl_svd<double> svd( sumProds, 1.0e-8 );
   if ( (unsigned int)svd.rank() < min_num_pts_ ) {
-    vcl_cerr << "rrel_affine_est::WeightedLeastSquaresFit --- singularity!\n";
+    std::cerr << "rrel_affine_est::WeightedLeastSquaresFit --- singularity!\n";
     return false;
   }
   else {

@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_ray_app_density_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date June 3, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -25,7 +27,7 @@ namespace boxm2_cpp_ray_app_density_process_globals
 {
     const unsigned n_inputs_ = 7;
     const unsigned n_outputs_ = 1;
-    vcl_size_t lthreads[2]={8,8};
+    std::size_t lthreads[2]={8,8};
 }
 
 bool boxm2_cpp_ray_app_density_process_cons(bprb_func_process& pro)
@@ -33,7 +35,7 @@ bool boxm2_cpp_ray_app_density_process_cons(bprb_func_process& pro)
     using namespace boxm2_cpp_ray_app_density_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
     input_types_[1] = "boxm2_cache_sptr";
     input_types_[2] = "vpgl_camera_double_sptr";
@@ -45,13 +47,13 @@ bool boxm2_cpp_ray_app_density_process_cons(bprb_func_process& pro)
 
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     output_types_[0] = "bbas_1d_array_float_sptr"; //seg_len
 
     bool good = pro.set_input_types(input_types_) &&
         pro.set_output_types(output_types_);
     // in case the 6th input is not set
-    brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+    brdb_value_sptr idx = new brdb_value_t<std::string>("");
     pro.set_input(5, idx);
     return good;
 }
@@ -61,7 +63,7 @@ bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
     using namespace boxm2_cpp_ray_app_density_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     //get the inputs
@@ -72,11 +74,11 @@ bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
     unsigned pi=pro.get_input<unsigned>(i++);
     unsigned pj=pro.get_input<unsigned>(i++);
     float intensity=pro.get_input<float>(i++);
-    vcl_string identifier = pro.get_input<vcl_string>(i);
+    std::string identifier = pro.get_input<std::string>(i);
 
     bool foundDataType = false;
-    vcl_string data_type;
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::string data_type;
+    std::vector<std::string> apps = scene->appearances();
     for (unsigned int i=0; i<apps.size(); ++i) {
         if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
         {
@@ -90,7 +92,7 @@ bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+        std::cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
         return false;
     }
 
@@ -98,16 +100,16 @@ bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
         data_type += "_" + identifier;
     }
 
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_generic_camera<double>*)(cam.ptr()));
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_generic_camera<double>*)(cam.ptr()));
+    std::vector<boxm2_block_id>::iterator id;
 
-    vcl_vector<float> app_density;
+    std::vector<float> app_density;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
+        std::cout<<"Block Id "<<(*id)<<std::endl;
         boxm2_block *     blk  =  cache->get_block(scene,*id);
         boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
-        vcl_vector<boxm2_data_base*> datas;
+        std::vector<boxm2_data_base*> datas;
         datas.push_back(mog);
 
         boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();

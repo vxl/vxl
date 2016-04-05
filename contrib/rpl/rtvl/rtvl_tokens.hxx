@@ -6,11 +6,13 @@
 #ifndef rtvl_tokens_hxx
 #define rtvl_tokens_hxx
 
+#include <iostream>
+#include <vector>
 #include "rtvl_tensor.hxx"
 
 #include <rgtl/rgtl_object_array_points.hxx>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <rgtl/rgtl_serialize_access.hxx>
 #include <rgtl/rgtl_serialize_base.hxx>
@@ -27,7 +29,7 @@ public:
   rgtl_object_array_points<N> points;
 
   /** Refined tokens ready for dense analysis at this scale.  */
-  vcl_vector< rtvl_tensor<N> > tokens;
+  std::vector< rtvl_tensor<N> > tokens;
 
 private:
   friend class rgtl_serialize_access;

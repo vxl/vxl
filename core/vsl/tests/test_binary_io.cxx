@@ -1,7 +1,8 @@
 // This is core/vsl/tests/test_binary_io.cxx
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
-#include <vcl_cstddef.h>
+#include <iostream>
+#include <cstring>
+#include <cstddef>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_quick_file.h>
 #include <testlib/testlib_root_dir.h>
@@ -10,7 +11,7 @@
 
 void test_binary_io()
 {
-  vcl_cout << "*********************\n"
+  std::cout << "*********************\n"
            << "Testing vsl binary io\n"
            << "*********************\n";
 
@@ -26,10 +27,10 @@ void test_binary_io()
   unsigned long ulong_out = 87654321;
   float f_out = 1.7f;
   double d_out = 3.4;
-  vcl_string string_out = "Hello World!";
+  std::string string_out = "Hello World!";
   const char* c_string_out = "A C string";
-  vcl_size_t size_t_out = 1023;
-  vcl_ptrdiff_t ptrdiff_t_out = 23;
+  std::size_t size_t_out = 1023;
+  std::ptrdiff_t ptrdiff_t_out = 23;
 
   vsl_b_ofstream bfs_out("vsl_binary_io_test.bvl.tmp");
   TEST("Created vsl_binary_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -65,10 +66,10 @@ void test_binary_io()
   unsigned long ulong_in = 99;
   float f_in = 99.99f;
   double d_in = 99.9;
-  vcl_string string_in;
+  std::string string_in;
   char c_string_in[80];
-  vcl_size_t size_t_in = 99;
-  vcl_ptrdiff_t ptrdiff_t_in = 99;
+  std::size_t size_t_in = 99;
+  std::ptrdiff_t ptrdiff_t_in = 99;
 
   // Test the internal consistency - can it load what it just saved?
 
@@ -77,90 +78,90 @@ void test_binary_io()
   vsl_b_read(bfs_in, b_in);
 
   TEST("bool out == bool in", b_out, b_in);
-  vsl_print_summary(vcl_cout, b_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, b_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, c_in);
   TEST("char out == char in", c_out, c_in);
-  vsl_print_summary(vcl_cout, c_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, c_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, sc_in);
   TEST("signed char out == signed char in", sc_out, sc_in);
-  vsl_print_summary(vcl_cout, sc_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, sc_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, uc_in);
   TEST("unsigned char out == unsigned char in", uc_out, uc_in);
-  vsl_print_summary(vcl_cout, uc_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, uc_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, i_in);
   TEST("int out == int in", i_out, i_in);
-  vsl_print_summary(vcl_cout, i_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, i_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, ui_in);
   TEST("unsigned int out == unsigned int in", ui_out, ui_in);
-  vsl_print_summary(vcl_cout, ui_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, ui_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, short_in);
   TEST("short int out == short int in", short_out, short_in);
-  vsl_print_summary(vcl_cout, short_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, short_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, ushort_in);
   TEST("unsigned short int out == unsigned short int in", ushort_out, ushort_in);
-  vsl_print_summary(vcl_cout, short_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, short_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, long_in);
   TEST("long out == long in", long_out, long_in);
-  vsl_print_summary(vcl_cout, long_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, long_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, ulong_in);
   TEST("unsigned long out == unsigned long in", ulong_out, ulong_in);
-  vsl_print_summary(vcl_cout, ulong_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, ulong_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, f_in);
   TEST("float out == float in", f_out, f_in);
-  vsl_print_summary(vcl_cout, f_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, f_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, d_in);
   TEST("double out == double in", d_out, d_in);
-  vsl_print_summary(vcl_cout, d_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, d_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, string_in);
   TEST("string out == string in", string_out, string_in);
-  vsl_print_summary(vcl_cout, string_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, string_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, c_string_in);
-  TEST("C string out == C string in", vcl_strcmp(c_string_out,c_string_in), 0);
-  vsl_print_summary(vcl_cout, c_string_out);
-  vcl_cout << vcl_endl;
+  TEST("C string out == C string in", std::strcmp(c_string_out,c_string_in), 0);
+  vsl_print_summary(std::cout, c_string_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, size_t_in);
-  TEST("vcl_size_t out == vcl_size_t in", size_t_out, size_t_in);
-  vsl_print_summary(vcl_cout, size_t_out);
-  vcl_cout << vcl_endl;
+  TEST("std::size_t out == std::size_t in", size_t_out, size_t_in);
+  vsl_print_summary(std::cout, size_t_out);
+  std::cout << std::endl;
 
   vsl_b_read(bfs_in, ptrdiff_t_in);
-  TEST("vcl_ptrdiff_t out == vcl_ptrdiff_t in", ptrdiff_t_out, ptrdiff_t_in);
-  vsl_print_summary(vcl_cout, ptrdiff_t_out);
-  vcl_cout << vcl_endl;
+  TEST("std::ptrdiff_t out == std::ptrdiff_t in", ptrdiff_t_out, ptrdiff_t_in);
+  vsl_print_summary(std::cout, ptrdiff_t_out);
+  std::cout << std::endl;
 
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
   vpl_unlink ("vsl_binary_io_test.bvl.tmp");
 
-  vcl_cout << "****************************\n"
+  std::cout << "****************************\n"
            << "Testing Golden vsl binary io\n"
            << "****************************\n";
 
@@ -184,12 +185,12 @@ void test_binary_io()
   unsigned long ulong_in2 = 99;
   float f_in2 = 99.99f;
   double d_in2 = 99.9;
-  vcl_string string_in2;
+  std::string string_in2;
   char c_string_in2[80];
-  vcl_size_t size_t_in2 = 99;
-  vcl_ptrdiff_t ptrdiff_t_in2 = 99;
+  std::size_t size_t_in2 = 99;
+  std::ptrdiff_t ptrdiff_t_in2 = 99;
 
-  vcl_string gold_path=testlib_root_dir()+"/core/vsl/tests/golden_test_binary_io.bvl";
+  std::string gold_path=testlib_root_dir()+"/core/vsl/tests/golden_test_binary_io.bvl";
   vsl_b_ifstream bfs_in2(gold_path.c_str());
 
   // If this test fails, it could be due to a missing golden file, or one
@@ -230,28 +231,28 @@ void test_binary_io()
   TEST("Golden float out == float in", f_out, f_in2);
   TEST("Golden double out == double in", d_out, d_in2);
   TEST("Golden string out == string in", string_out, string_in2);
-  TEST("Golden C string out == C string in", vcl_string(c_string_out), vcl_string(c_string_in2));
-  TEST("Golden vcl_size_t out == vcl_size_t in", size_t_out, size_t_in2);
-  TEST("Golden vcl_ptrdiff_t out == vcl_ptrdiff_t in", ptrdiff_t_out, ptrdiff_t_in2);
+  TEST("Golden C string out == C string in", std::string(c_string_out), std::string(c_string_in2));
+  TEST("Golden std::size_t out == std::size_t in", size_t_out, size_t_in2);
+  TEST("Golden std::ptrdiff_t out == std::ptrdiff_t in", ptrdiff_t_out, ptrdiff_t_in2);
 
 
-  vcl_cout << "****************************\n"
+  std::cout << "****************************\n"
            << " Testing magic number check\n"
            << "****************************\n";
 
-  vcl_ifstream gold_if(gold_path.c_str());
+  std::ifstream gold_if(gold_path.c_str());
   TEST("vsl_b_stream_test on golden data", vsl_b_istream_test(gold_if), true);
   {
-    vcl_ofstream f("vsl_binary_io_test.txt");
+    std::ofstream f("vsl_binary_io_test.txt");
     f << "Some random text.\n";
   }
-  vcl_ifstream none_if("Some_non_existant_file");
+  std::ifstream none_if("Some_non_existant_file");
   TEST("vsl_b_stream_test on missing file fails", vsl_b_istream_test(none_if), false);
   {
-    vcl_ofstream f("Some_empty_file");
+    std::ofstream f("Some_empty_file");
   }
   TEST("vsl_b_stream_test on empty file fails", vsl_b_istream_test(none_if), false);
-  vcl_ifstream text_if("vsl_binary_io_test.txt");
+  std::ifstream text_if("vsl_binary_io_test.txt");
   TEST("vsl_b_stream_test on text file fails", vsl_b_istream_test(text_if), false);
 
 }

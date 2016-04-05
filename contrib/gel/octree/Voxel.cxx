@@ -12,8 +12,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <iostream>
 #include "Voxel.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #if 0
@@ -23,7 +24,7 @@ bool operator==( const Voxel &a, const Voxel &b)
 }
 #endif
 
-vcl_ostream &operator<<( vcl_ostream &os, const Voxel &a)
+std::ostream &operator<<( std::ostream &os, const Voxel &a)
 {
   return os << a.depth << ' ' << a.x << ' ' << a.y << ' ' << a.z;
 }

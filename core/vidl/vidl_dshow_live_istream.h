@@ -20,13 +20,14 @@
 //
 //=========================================================================
 
+#include <string>
+#include <vector>
 #include <vidl/vidl_istream.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_pixel_format.h>
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <atlbase.h>
 #include <dshow.h>
@@ -56,7 +57,7 @@ class sample_grabber_cb : public ISampleGrabberCB
 
  private:
   // Internal frame buffer information.
-  vcl_vector<unsigned char> buffer_[3];
+  std::vector<unsigned char> buffer_[3];
   double                    buffer_time_[3];
 
   // Some status checking flags and counters.
@@ -89,7 +90,7 @@ class vidl_dshow_live_istream : public vidl_istream
   vidl_dshow_live_istream();
 
   //: Constructor - from a string containing a device name.
-  vidl_dshow_live_istream(const vcl_string& device_name);
+  vidl_dshow_live_istream(const std::string& device_name);
 
   //: Constructor - from a parameter object.
   vidl_dshow_live_istream(const ParamsObject& params);

@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_compare_3d_voxels_process.cxx
+#include <iostream>
+#include <fstream>
 #include "bvxm_compare_3d_voxels_process.h"
 //:
 // \file
@@ -14,14 +16,14 @@
 #include <bvxm/bvxm_util.h>
 #include <bsta/bsta_histogram.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 //: set input and output types
 bool bvxm_compare_3d_voxels_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_compare_3d_voxels_process_globals;
   //inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";   // world
   input_types_[1] = "bvxm_voxel_world_sptr";
   input_types_[2] = "unsigned";
@@ -38,7 +40,7 @@ bool bvxm_compare_3d_voxels_process(bprb_func_process& pro)
   //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
+    std::cout << pro.name() <<" : The input number should be "<< n_inputs_ << std::endl;
     return false;
   }
 
@@ -47,7 +49,7 @@ bool bvxm_compare_3d_voxels_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr main_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_voxel_world_sptr multi_scale_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   unsigned input_scale = pro.get_input<unsigned>(i++);
-  vcl_string filename = pro.get_input<vcl_string>(i++);
+  std::string filename = pro.get_input<std::string>(i++);
 
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
@@ -86,7 +88,7 @@ bool bvxm_compare_3d_voxels_process(bprb_func_process& pro)
               if (m_slab(i,j)>multi_scale_world->get_params()->min_occupancy_prob() &&
                   gt_slab(gt_i,gt_j) >main_world->get_params()->min_occupancy_prob())
               {
-                double err=2*vcl_fabs(m_slab(i,j)-gt_slab(gt_i,gt_j));
+                double err=2*std::fabs(m_slab(i,j)-gt_slab(gt_i,gt_j));
                 err/=(m_slab(i,j)+gt_slab(gt_i,gt_j));
                 if (err<min_err)
                   min_err=err;
@@ -100,10 +102,10 @@ bool bvxm_compare_3d_voxels_process(bprb_func_process& pro)
     }
   }
 
-  vcl_ofstream ofile(filename.c_str());
+  std::ofstream ofile(filename.c_str());
   if (!ofile)
   {
-    vcl_cerr<<"Couldn't open file "<<filename<< '\n';
+    std::cerr<<"Couldn't open file "<<filename<< '\n';
     return false;
   }
 

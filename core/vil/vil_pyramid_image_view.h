@@ -17,7 +17,8 @@
 // \author Gamze D. Tunali
 // \date   Aug 16, 2010
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
 
@@ -46,8 +47,8 @@ class vil_pyramid_image_view
 
     //: Creates a pyramid of given image views with associated scales.
     // post: sorted in the descending order of the scales
-    vil_pyramid_image_view(vcl_vector<vil_image_view_base_sptr> const& images,
-                           vcl_vector<double> const& scales);
+    vil_pyramid_image_view(std::vector<vil_image_view_base_sptr> const& images,
+                           std::vector<double> const& scales);
 
     //: Copy constructor.
     // The new object will point to the same underlying image as the rhs.
@@ -83,10 +84,10 @@ class vil_pyramid_image_view
 
  protected:
     //: the list of image vieas
-    vcl_vector<vil_image_view_base_sptr> images_;
+    std::vector<vil_image_view_base_sptr> images_;
 
     //: the associated scales of images, scales_.size() is always equals to images_.size()
-    vcl_vector<double> scales_;
+    std::vector<double> scales_;
 
     // the number of images in the view, 0 if it is empty
     unsigned nlevels_;

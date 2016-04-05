@@ -79,16 +79,16 @@ void pdf1d_sampler::regular_samples_and_prob(vnl_vector<double>& x, vnl_vector<d
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_sampler::is_a() const
+std::string pdf1d_sampler::is_a() const
 {
-  return vcl_string("pdf1d_sampler");
+  return std::string("pdf1d_sampler");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_sampler::is_class(vcl_string const& s) const
+bool pdf1d_sampler::is_class(std::string const& s) const
 {
   return s==pdf1d_sampler::is_a();
 }
@@ -98,14 +98,14 @@ bool pdf1d_sampler::is_class(vcl_string const& s) const
 //=======================================================================
 
   // required if data is present in this base class
-void pdf1d_sampler::print_summary(vcl_ostream& os) const
+void pdf1d_sampler::print_summary(std::ostream& os) const
 {
   os << vsl_indent() << "PDF: ";
   vsl_print_summary(os, model());
 }
 
 
-void vsl_print_summary(vcl_ostream& os,const pdf1d_sampler& b)
+void vsl_print_summary(std::ostream& os,const pdf1d_sampler& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -115,7 +115,7 @@ void vsl_print_summary(vcl_ostream& os,const pdf1d_sampler& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const pdf1d_sampler* b)
+void vsl_print_summary(std::ostream& os,const pdf1d_sampler* b)
 {
   if (b)
     vsl_print_summary(os, *b);

@@ -16,11 +16,12 @@
 //   Peter Vanroose - 21 May  2009 - istream operator>> re-implemented
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
 
 //: Represents a cartesian 3D point
 template <class Type>
@@ -93,7 +94,7 @@ class vgl_point_3d
   //  or reads three comma-separated numbers,
   //  or reads three numbers in parenthesized form "(123, 321, 567)"
   // \relatesalso vgl_point_3d
-  vcl_istream& read(vcl_istream& is);
+  std::istream& read(std::istream& is);
 };
 
 //  +-+-+ point_3d simple I/O +-+-+
@@ -101,7 +102,7 @@ class vgl_point_3d
 //: Write "<vgl_point_3d x,y,z> " to stream
 // \relatesalso vgl_point_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_3d<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, vgl_point_3d<Type> const& p);
 
 //: Read from stream, possibly with formatting
 //  Either just reads three blank-separated numbers,
@@ -109,7 +110,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_3d<Type> const& p);
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relatesalso vgl_point_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, vgl_point_3d<Type>& p);
+std::istream&  operator>>(std::istream& s, vgl_point_3d<Type>& p);
 
 //  +-+-+ point_3d arithmetic +-+-+
 
@@ -258,7 +259,7 @@ vgl_point_3d<Type> centre(vgl_point_3d<Type> const& p1,
 // Beware of possible rounding errors when Type is e.g. int.
 // \relatesalso vgl_point_3d
 template <class Type> inline
-vgl_point_3d<Type> centre(vcl_vector<vgl_point_3d<Type> > const& v)
+vgl_point_3d<Type> centre(std::vector<vgl_point_3d<Type> > const& v)
 {
   int n = (int)(v.size());
   assert(n>0); // it is *not* correct to return the point (0,0) when n==0.
@@ -272,7 +273,7 @@ vgl_point_3d<Type> centre(vcl_vector<vgl_point_3d<Type> > const& v)
 //  of sum of squares) of the distances from that centre of gravity.
 // \relatesalso vgl_point_3d
 template <class Type>
-double stddev(vcl_vector<vgl_point_3d<Type> > const& v);
+double stddev(std::vector<vgl_point_3d<Type> > const& v);
 
 //: Return true iff the 4 points are coplanar, i.e., they belong to a common plane
 // \relatesalso vgl_point_3d

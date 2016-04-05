@@ -27,15 +27,15 @@ class boxm2_multi_render
   private:
 
     //: map keeps track of all kernels compiled and cached
-    vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels_;
+    std::map<std::string,std::vector<bocl_kernel*> > kernels_;
 
     //compile kernels and cache
-    vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
+    std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
 
     //: pick out data type
     bool get_scene_appearances(boxm2_scene_sptr    scene,
-                               vcl_string&         data_type,
-                               vcl_string&         options,
+                               std::string&         data_type,
+                               std::string&         options,
                                int&                apptypesize);
 
     //: renders single image
@@ -47,9 +47,9 @@ class boxm2_multi_render
                         bocl_mem_sptr & exp_image,
                         bocl_mem_sptr & vis_image,
                         bocl_mem_sptr & exp_img_dim,
-                        vcl_string data_type,
+                        std::string data_type,
                         bocl_kernel* kernel,
-                        vcl_size_t * lthreads,
+                        std::size_t * lthreads,
                         unsigned cl_ni,
                         unsigned cl_nj,
                         int apptypesize  );
@@ -68,9 +68,9 @@ class boxm2_multi_render
                         bocl_mem_sptr & cl_output,
                         bocl_mem_sptr & tnearfar_mem_ptr,
                         bocl_mem_sptr & lookup,
-                        vcl_string data_type,
+                        std::string data_type,
                         bocl_kernel* kern,
-                        vcl_size_t* lthreads,
+                        std::size_t* lthreads,
                         unsigned cl_ni,
                         unsigned cl_nj,
                         int apptypesize);

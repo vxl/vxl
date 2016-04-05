@@ -8,7 +8,8 @@
 // of several pdfs samples belong to.  Generate graph of
 // %correct vs N.samples
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
@@ -23,7 +24,7 @@
 
 
 //: Generate samples from pdf[0].  See how often pdf[0] is selected.
-double pdf1d_test_pdf_selection(vcl_vector<const pdf1d_pdf*>& pdf,
+double pdf1d_test_pdf_selection(std::vector<const pdf1d_pdf*>& pdf,
                                 int n_samples,
                                 pdf1d_compare_to_pdf& comparator, int n_tests)
 {
@@ -45,9 +46,9 @@ double pdf1d_test_pdf_selection(vcl_vector<const pdf1d_pdf*>& pdf,
 }
 
 //: Generate samples from pdf[0].  See how often pdf[0] is selected.
-double pdf1d_test_bhat_pdf_selection(vcl_vector<const pdf1d_pdf*>& pdf,
+double pdf1d_test_bhat_pdf_selection(std::vector<const pdf1d_pdf*>& pdf,
                           int n_samples,
-                          vcl_vector<pdf1d_builder*>& pdf_builder, int n_tests)
+                          std::vector<pdf1d_builder*>& pdf_builder, int n_tests)
 {
   pdf1d_compare_to_pdf_bhat comparator;
   int n_correct = 0;
@@ -67,36 +68,36 @@ double pdf1d_test_bhat_pdf_selection(vcl_vector<const pdf1d_pdf*>& pdf,
   return double(n_correct)/n_tests;
 }
 
-void graph_selection_results(const vcl_string& path,
-                             vcl_vector<const pdf1d_pdf*>& pdf,
+void graph_selection_results(const std::string& path,
+                             std::vector<const pdf1d_pdf*>& pdf,
                              pdf1d_compare_to_pdf& comparator, int n_tests)
 {
-  vcl_ofstream ofs(path.c_str(),vcl_ios::out);
+  std::ofstream ofs(path.c_str(),std::ios::out);
   for (int n_samples=10;n_samples<=200;n_samples+=10)
   {
     double prop_correct = pdf1d_test_pdf_selection(pdf,n_samples,comparator,n_tests);
-    ofs<<n_samples<<' '<<prop_correct<<vcl_endl;
+    ofs<<n_samples<<' '<<prop_correct<<std::endl;
   }
 
   ofs.close();
 
-  vcl_cout<<"Results saved to "<<path<<vcl_endl;
+  std::cout<<"Results saved to "<<path<<std::endl;
 }
 
-void graph_bhat_selection_results(const vcl_string& path,
-                             vcl_vector<const pdf1d_pdf*>& pdf,
-                             vcl_vector<pdf1d_builder*>& pdf_builder,  int n_tests)
+void graph_bhat_selection_results(const std::string& path,
+                             std::vector<const pdf1d_pdf*>& pdf,
+                             std::vector<pdf1d_builder*>& pdf_builder,  int n_tests)
 {
-  vcl_ofstream ofs(path.c_str(),vcl_ios::out);
+  std::ofstream ofs(path.c_str(),std::ios::out);
   for (int n_samples=10;n_samples<=200;n_samples+=10)
   {
     double prop_correct = pdf1d_test_bhat_pdf_selection(pdf,n_samples,pdf_builder,n_tests);
-    ofs<<n_samples<<' '<<prop_correct<<vcl_endl;
+    ofs<<n_samples<<' '<<prop_correct<<std::endl;
   }
 
   ofs.close();
 
-  vcl_cout<<"Results saved to "<<path<<vcl_endl;
+  std::cout<<"Results saved to "<<path<<std::endl;
 }
 
 void test_flat_vs_gauss()
@@ -104,7 +105,7 @@ void test_flat_vs_gauss()
   pdf1d_flat flat(-1,1);
   pdf1d_gaussian Gaussian(flat.mean(),flat.variance());
 
-  vcl_vector<const pdf1d_pdf*> pdf;
+  std::vector<const pdf1d_pdf*> pdf;
   pdf.push_back(&flat);
   pdf.push_back(&Gaussian);
 
@@ -128,7 +129,7 @@ void test_g1_v_g2()
   pdf1d_gaussian g1(0,1);
   pdf1d_gaussian g2(0,2);
 
-  vcl_vector<const pdf1d_pdf*> pdf;
+  std::vector<const pdf1d_pdf*> pdf;
   pdf.push_back(&g1);
   pdf.push_back(&g2);
 
@@ -157,7 +158,7 @@ void test_g2_v_g3()
   pdf1d_gaussian g1(0,2);
   pdf1d_gaussian g2(0,3);
 
-  vcl_vector<const pdf1d_pdf*> pdf;
+  std::vector<const pdf1d_pdf*> pdf;
   pdf.push_back(&g1);
   pdf.push_back(&g2);
 
@@ -193,13 +194,13 @@ void test_e_v_g()
   pdf1d_exponential e;
   pdf1d_gaussian g(e.mean(),e.variance());
 
-  vcl_vector<const pdf1d_pdf*> pdf;
+  std::vector<const pdf1d_pdf*> pdf;
   pdf.push_back(&e);
   pdf.push_back(&g);
 
   pdf1d_exponential_builder e_builder;
   pdf1d_gaussian_builder g_builder;
-  vcl_vector<pdf1d_builder*> pdf_builder;
+  std::vector<pdf1d_builder*> pdf_builder;
   pdf_builder.push_back(&e_builder);
   pdf_builder.push_back(&g_builder);
 

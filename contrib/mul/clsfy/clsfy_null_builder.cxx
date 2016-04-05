@@ -8,12 +8,13 @@
 // \author Ian Scott
 // \date 2009-08-27
 
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <algorithm>
 #include "clsfy_null_builder.h"
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_parse_block.h>
@@ -23,14 +24,14 @@
 
 //=======================================================================
 
-vcl_string clsfy_null_builder::is_a() const
+std::string clsfy_null_builder::is_a() const
 {
-  return vcl_string("clsfy_null_builder");
+  return std::string("clsfy_null_builder");
 }
 
 //=======================================================================
 
-bool clsfy_null_builder::is_class(vcl_string const& s) const
+bool clsfy_null_builder::is_class(std::string const& s) const
 {
   return s == clsfy_null_builder::is_a() || clsfy_builder_base::is_class(s);
 }
@@ -44,7 +45,7 @@ clsfy_builder_base* clsfy_null_builder::clone() const
 
 //=======================================================================
 
-void clsfy_null_builder::print_summary(vcl_ostream& os) const
+void clsfy_null_builder::print_summary(std::ostream& os) const
 {
   os << "default_class: " << default_class_;
 }
@@ -72,9 +73,9 @@ void clsfy_null_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, default_class_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_null_builder&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_null_builder&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
@@ -87,14 +88,14 @@ void clsfy_null_builder::b_read(vsl_b_istream& bfs)
 double clsfy_null_builder::build(clsfy_classifier_base& model,
                                  mbl_data_wrapper<vnl_vector<double> >& inputs,
                                  unsigned /* nClasses */,
-                                 const vcl_vector<unsigned> &outputs) const
+                                 const std::vector<unsigned> &outputs) const
 {
   clsfy_null_classifier &classifier = dynamic_cast<clsfy_null_classifier&>(model);
 
   classifier.set_default_class(default_class_);
 
   return static_cast<double>(
-    vcl_count(outputs.begin(), outputs.end(), default_class_) )
+    std::count(outputs.begin(), outputs.end(), default_class_) )
     / outputs.size();
 }
 
@@ -115,11 +116,11 @@ clsfy_classifier_base* clsfy_null_builder::new_classifier() const
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void clsfy_null_builder::config(vcl_istream &as)
+void clsfy_null_builder::config(std::istream &as)
 {
- vcl_string s = mbl_parse_block(as);
+ std::string s = mbl_parse_block(as);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   {

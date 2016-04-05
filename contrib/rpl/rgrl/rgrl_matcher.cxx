@@ -1,10 +1,12 @@
+#include <iostream>
+#include <algorithm>
 #include "rgrl_matcher.h"
 //:
 // \file
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_match_set.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 // less than operator
 bool
@@ -43,7 +45,7 @@ compute_matches( rgrl_feature_set const&    from_features,
 {
   rgrl_mask_sptr from_roi = new rgrl_mask_box( from_region.x0(), from_region.x1() );
   rgrl_mask_sptr to_roi = new rgrl_mask_box( to_region.x0(), to_region.x1() );
-  rgrl_view view( from_roi, to_roi, from_region, from_region, 0, 0, 0);
+  rgrl_view view( from_roi, to_roi, from_region, from_region, VXL_NULLPTR, VXL_NULLPTR, 0);
 
   return this->compute_matches(from_features,
                                to_features,
@@ -67,8 +69,8 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   rgrl_feature_sptr mapped = from->transform( *inverse_xform );
 
   // setup structure
-  vcl_vector< rgrl_feature_sptr > matching_tos;
-  vcl_vector< double >            sig_wgts;
+  std::vector< rgrl_feature_sptr > matching_tos;
+  std::vector< double >            sig_wgts;
   matching_tos.reserve( size );
   sig_wgts.reserve( size );
 
@@ -98,7 +100,7 @@ invert_matches( rgrl_match_set const&    current_set,
                           current_set.from_label() );
 
   inv_set->reserve( 3*current_set.from_size() );
-  vcl_vector< flip_node >  matches;
+  std::vector< flip_node >  matches;
   matches.reserve( 5*current_set.from_size() );
 
   flip_node tmp;
@@ -114,8 +116,8 @@ invert_matches( rgrl_match_set const&    current_set,
 
       matches.push_back( tmp );
       //rgrl_feature_sptr mapped = from->transform( *reverse_xform );
-      //vcl_vector<rgrl_feature_sptr> to_vec(1, to );
-      //vcl_vector<double>            sig_vec(1, titr.signature_weight() );
+      //std::vector<rgrl_feature_sptr> to_vec(1, to );
+      //std::vector<double>            sig_vec(1, titr.signature_weight() );
       //inv_set->add_feature_matches_and_weights( from, mapped, to_vec, sig_vec );
     }
   }
@@ -125,9 +127,9 @@ invert_matches( rgrl_match_set const&    current_set,
     return inv_set;
 
   // sort the matches according to To feature pointer
-  vcl_sort( matches.begin(), matches.end() );
+  std::sort( matches.begin(), matches.end() );
 
-  vcl_vector<flip_node>::const_iterator begin_iter, end_iter;
+  std::vector<flip_node>::const_iterator begin_iter, end_iter;
   for ( begin_iter=matches.begin(), end_iter=matches.begin()+1;
         end_iter!=matches.end(); ++end_iter ) {
     if ( end_iter->to_ == begin_iter->to_ )

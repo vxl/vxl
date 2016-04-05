@@ -1,12 +1,14 @@
 // This is brl/bbas/bgui/bgui_range_adjuster_tableau.cxx
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include "bgui_range_adjuster_tableau.h"
 //:
 // \file
 // \author  J. L. Mundy after Matt Leotta original
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> //for fabs()
-#include <vcl_limits.h> // for min and max
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_vil.h>
@@ -24,7 +26,7 @@
 void bgui_range_adjuster_tableau::draw_box()
 {
   // Draw a square around the histogram
-  vcl_vector<float> x_corners, y_corners;
+  std::vector<float> x_corners, y_corners;
   x_corners.push_back(left_offset_);
   x_corners.push_back(left_offset_+graph_width_);
   x_corners.push_back(left_offset_+graph_width_);
@@ -50,23 +52,23 @@ void bgui_range_adjuster_tableau::init()
 // Constructors
 
 bgui_range_adjuster_tableau::bgui_range_adjuster_tableau(const char* n) :
-  vgui_easy2D_tableau(n), min_bar_(0), max_bar_(0),
+  vgui_easy2D_tableau(n), min_bar_(VXL_NULLPTR), max_bar_(VXL_NULLPTR),
   left_offset_(10), top_offset_(10),
-  graph_width_(256), graph_height_(200), plot_(0), hist_(0,0)
+  graph_width_(256), graph_height_(200), plot_(VXL_NULLPTR), hist_(0,0)
 {   this->init(); }
 
 bgui_range_adjuster_tableau::bgui_range_adjuster_tableau(vgui_tableau_sptr const& t,
                                                          const char* n) :
-  vgui_easy2D_tableau(t, n), min_bar_(0), max_bar_(0),
+  vgui_easy2D_tableau(t, n), min_bar_(VXL_NULLPTR), max_bar_(VXL_NULLPTR),
   left_offset_(10), top_offset_(10),
-  graph_width_(256), graph_height_(200), plot_(0), hist_(0,0)
+  graph_width_(256), graph_height_(200), plot_(VXL_NULLPTR), hist_(0,0)
 {   this->init(); }
 
 bgui_range_adjuster_tableau::bgui_range_adjuster_tableau(vgui_image_tableau_sptr const& t,
                                                          const char* n) :
-  vgui_easy2D_tableau(t,n), min_bar_(0), max_bar_(0),
+  vgui_easy2D_tableau(t,n), min_bar_(VXL_NULLPTR), max_bar_(VXL_NULLPTR),
   left_offset_(10), top_offset_(10),
-  graph_width_(256), graph_height_(200), plot_(0), hist_(0,0)
+  graph_width_(256), graph_height_(200), plot_(VXL_NULLPTR), hist_(0,0)
 {   this->init(); }
 
 //========================================================================
@@ -80,7 +82,7 @@ int bgui_range_adjuster_tableau::map_val_to_display(const double val)
 {
   //compute display scale
   double scale = 1.0;
-  if (vcl_fabs(max_-min_)>0)
+  if (std::fabs(max_-min_)>0)
     scale = graph_width_/(max_-min_);
   int display_x = (int)((val-min_)*scale + left_offset_);
   return display_x;
@@ -91,7 +93,7 @@ double bgui_range_adjuster_tableau::map_display_to_val(const int display_x)
 {
   //compute display scale
   double scale = 1.0;
-  if (vcl_fabs(max_-min_)>0)
+  if (std::fabs(max_-min_)>0)
     scale = graph_width_/(max_-min_);
   double temp = display_x - left_offset_;
   temp/=scale;
@@ -128,52 +130,52 @@ bool bgui_range_adjuster_tableau::update(vil_image_resource_sptr const& r)
    case VIL_PIXEL_FORMAT_BYTE: {
     vil_image_view<vxl_byte> v = r->get_view();
     assert(v);
-    min_ = vcl_numeric_limits<vxl_byte>::min();
-    max_ = vcl_numeric_limits<vxl_byte>::max();
+    min_ = std::numeric_limits<vxl_byte>::min();
+    max_ = std::numeric_limits<vxl_byte>::max();
     vil_histogram_byte(v , data_);
     break; }
    case VIL_PIXEL_FORMAT_SBYTE: {
     vil_image_view<vxl_sbyte> v = r->get_view();
     assert(v);
-    min_ = vcl_numeric_limits<vxl_sbyte>::min();
-    max_ = vcl_numeric_limits<vxl_sbyte>::max();
+    min_ = std::numeric_limits<vxl_sbyte>::min();
+    max_ = std::numeric_limits<vxl_sbyte>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = false;
     break; }
    case VIL_PIXEL_FORMAT_UINT_16: {
     vil_image_view<vxl_uint_16> v = r->get_view();
     assert(v);
-    min_ = vcl_numeric_limits<vxl_uint_16>::min();
-    max_ = vcl_numeric_limits<vxl_uint_16>::max();
+    min_ = std::numeric_limits<vxl_uint_16>::min();
+    max_ = std::numeric_limits<vxl_uint_16>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = np==1;
     break; }
    case VIL_PIXEL_FORMAT_INT_16: {
     vil_image_view<vxl_int_16> v = r->get_view();
     assert(v);
-    min_ = vcl_numeric_limits<vxl_int_16>::min();
-    max_ = vcl_numeric_limits<vxl_int_16>::max();
+    min_ = std::numeric_limits<vxl_int_16>::min();
+    max_ = std::numeric_limits<vxl_int_16>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = false;
     break; }
    case VIL_PIXEL_FORMAT_FLOAT: {
     vil_image_view<float> v = r->get_view();
     assert(v);
-    min_ = -vcl_numeric_limits<float>::max();
-    max_ = vcl_numeric_limits<float>::max();
+    min_ = -std::numeric_limits<float>::max();
+    max_ = std::numeric_limits<float>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = false;
     break; }
    case VIL_PIXEL_FORMAT_DOUBLE: {
     vil_image_view<double> v = r->get_view();
     assert(v);
-    min_ = -vcl_numeric_limits<double>::max();
-    max_ = vcl_numeric_limits<double>::max();
+    min_ = -std::numeric_limits<double>::max();
+    max_ = std::numeric_limits<double>::max();
     vil_histogram(v, data_, min_, max_, graph_width_);
     hardware_ = false;
     break; }
    default:
-    vcl_cout << "In bgui_range_adjuster_tableau - image type not supported\n";
+    std::cout << "In bgui_range_adjuster_tableau - image type not supported\n";
     return false;
   }
   hist_ = bsta_histogram<double>(min_, max_, data_);
@@ -193,7 +195,7 @@ bool bgui_range_adjuster_tableau::update()
 }
 
 bool bgui_range_adjuster_tableau::update(const double min, const double max,
-                                         vcl_vector<double> const& hist)
+                                         std::vector<double> const& hist)
 {
   if (!hist.size())
     return false;
@@ -219,7 +221,7 @@ void bgui_range_adjuster_tableau::draw_histogram()
     if (max < data_[i]) max = data_[i];
 
   // scale and shift the data points
-  vcl_vector<float> xscaled, yscaled;
+  std::vector<float> xscaled, yscaled;
   for (unsigned int i=0; i<data_.size(); ++i) {
     xscaled.push_back(left_offset_ + i);
     yscaled.push_back(static_cast<float>(top_offset_ + graph_height_ - data_[i]/max*graph_height_));
@@ -249,11 +251,11 @@ vgui_image_tableau_sptr bgui_range_adjuster_tableau::get_child_image_tableau()
   if (ch)
   {
     vgui_image_tableau_sptr itab;
-    itab.vertical_cast(vgui_find_below_by_type_name(ch, vcl_string("vgui_image_tableau")));
+    itab.vertical_cast(vgui_find_below_by_type_name(ch, std::string("vgui_image_tableau")));
     return itab;
   }
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 float bgui_range_adjuster_tableau::screen_to_bar(const float sx)
@@ -368,6 +370,6 @@ void bgui_range_adjuster_tableau::clear()
 {
   this->remove(plot_);
   delete plot_;
-  plot_ = 0;
+  plot_ = VXL_NULLPTR;
   this->post_redraw();
 }

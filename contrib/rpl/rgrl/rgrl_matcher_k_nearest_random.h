@@ -44,7 +44,7 @@ class rgrl_matcher_k_nearest_random
 
  protected:
 
-  void generate_random_indices( vcl_vector<bool>& to_use ) const;
+  void generate_random_indices( std::vector<bool>& to_use ) const;
 
  protected:
   unsigned int          max_num_;

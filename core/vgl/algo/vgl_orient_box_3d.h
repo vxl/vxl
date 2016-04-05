@@ -15,11 +15,12 @@
 //   2010-01-18 Peter Vanroose - added constructor from 4 corner points
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_quaternion.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 template <class Type>
 class vgl_orient_box_3d
@@ -51,7 +52,7 @@ class vgl_orient_box_3d
   Type height() const { return box_.height(); }
   Type depth() const { return box_.depth(); }
   inline Type volume() const { return box_.width()*box_.height()*box_.depth(); }
-  vcl_vector<vgl_point_3d<Type> > corners() const;
+  std::vector<vgl_point_3d<Type> > corners() const;
   vgl_point_3d<Type>  centroid() {return box_.centroid(); }
   vgl_box_3d<Type> const box() {return box_; }
 
@@ -64,9 +65,9 @@ class vgl_orient_box_3d
   //: Return true if point is inside this box
   bool contains(vgl_point_3d<Type> const& p) const {return contains(p.x(), p.y(), p.z());}
 
-  vcl_ostream& print(vcl_ostream& s) const;
+  std::ostream& print(std::ostream& s) const;
 
-  vcl_istream& read(vcl_istream& s);
+  std::istream& read(std::istream& s);
 
  //private:
   //: regular AABB(axis-aligned bounding box)
@@ -79,13 +80,13 @@ class vgl_orient_box_3d
 //: Write box to stream
 // \relatesalso vgl_box_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_orient_box_3d<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, vgl_orient_box_3d<Type> const& p);
 
 //: Read box from stream
 // \relatesalso vgl_box_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_orient_box_3d<Type>& p);
+std::istream&  operator>>(std::istream& is,  vgl_orient_box_3d<Type>& p);
 
-#define VGL_ORIENT_BOX_3D_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d.txx> instead"
+#define VGL_ORIENT_BOX_3D_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d.hxx> instead"
 
 #endif // vgl_orient_box_3d_h

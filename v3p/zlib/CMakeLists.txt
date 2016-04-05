@@ -28,7 +28,5 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(deflate.c PROPERTIES COMPILE_FLAGS -O1)
 endif()
 
-add_library( z ${zlib_sources} )
-install_targets( /lib z )
-
+vxl_add_library(LIBRARY_NAME z LIBRARY_SOURCES ${zlib_sources} )
 

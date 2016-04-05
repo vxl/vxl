@@ -7,8 +7,9 @@
 // \author fsm
 // \brief  See vgui_adaptor_tableau.h for a description of this file.
 
+#include <iostream>
 #include "vgui_adaptor_tableau.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgui/vgui_adaptor.h>
 
 //:
@@ -20,13 +21,13 @@ vgui_adaptor_tableau::vgui_adaptor_tableau(vgui_adaptor *a)
   , slot(this)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_adaptor_tableau::slot = " << slot << '\n';
+  std::cerr << "vgui_adaptor_tableau::slot = " << slot << '\n';
 #endif
 }
 
 vgui_adaptor_tableau::~vgui_adaptor_tableau()
 {
-  vcl_cerr << "~vgui_adaptor_tableau(this = " << (void*)this << ")\n";
+  std::cerr << "~vgui_adaptor_tableau(this = " << (void*)this << ")\n";
 }
 
 //: Take a message (which is invariably being sent from a child tableau), and call the adaptor's post_message(...) method.

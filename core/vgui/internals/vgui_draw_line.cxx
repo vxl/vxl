@@ -112,7 +112,7 @@ bool vgui_draw_line(double const X[4], double const Y[4])
 }
 #define add3(a, b, c) { for (int i=0; i<3; ++i) (c)[i] = (a)[i] + (b)[i]; }
 #define sub3(a, b, c) { for (int i=0; i<3; ++i) (c)[i] = (a)[i] - (b)[i]; }
-#define trace(str) /* { vcl_cerr << str << vcl_endl; } */
+#define trace(str) /* { std::cerr << str << std::endl; } */
 
 bool vgui_draw_line(double const T[4][4], double a, double b, double c)
 {

@@ -18,13 +18,15 @@
 //
 // \verbatim
 //  Modifications:
-//   Peter Vanroose - 27 aug.97 - moved vcl_vector<HomgInterestPoint> instantiation to Templates
+//   Peter Vanroose - 27 aug.97 - moved std::vector<HomgInterestPoint> instantiation to Templates
 //   Peter Vanroose - 22 oct.02 - added vgl_homg_point_2d interface
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_double_2.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -49,8 +51,8 @@ class HomgInterestPointSet
   HomgInterestPointSet();
   HomgInterestPointSet(const HomgMetric&);
   HomgInterestPointSet(const char* filename, const HomgMetric& = 0);
-  HomgInterestPointSet(const vcl_vector<HomgPoint2D>&, ImageMetric* conditioner);
-  HomgInterestPointSet(vcl_vector<vgl_homg_point_2d<double> > const&, ImageMetric* conditioner);
+  HomgInterestPointSet(const std::vector<HomgPoint2D>&, ImageMetric* conditioner);
+  HomgInterestPointSet(std::vector<vgl_homg_point_2d<double> > const&, ImageMetric* conditioner);
   HomgInterestPointSet(const HomgInterestPointSet& that);
  ~HomgInterestPointSet();
 
@@ -73,8 +75,8 @@ class HomgInterestPointSet
   vgl_homg_point_2d<double> homg_point(int i) const;
   float              get_mean_intensity(int i) const;
 
-  vcl_vector<HomgPoint2D> const & get_homg_points() const;
-  vcl_vector<vgl_homg_point_2d<double> > homg_points() const;
+  std::vector<HomgPoint2D> const & get_homg_points() const;
+  std::vector<vgl_homg_point_2d<double> > homg_points() const;
 
   const ImageMetric* get_conditioner() const { return (const ImageMetric*)conditioner_; }
   void set_conditioner(const HomgMetric& c);
@@ -94,8 +96,8 @@ class HomgInterestPointSet
   bool read(const char* filename, vil1_image const& src, const HomgMetric& c = 0);
   bool write(const char* filename) const;
 
-  bool read(vcl_istream& f, const ImageMetric* c);
-  bool write(vcl_ostream& f, const ImageMetric* c) const;
+  bool read(std::istream& f, const ImageMetric* c);
+  bool write(std::ostream& f, const ImageMetric* c) const;
 
  protected:
   void init_conditioner(const HomgMetric& c = 0);

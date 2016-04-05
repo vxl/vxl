@@ -18,7 +18,8 @@
 //    3-Feb-07 Peter Vanroose - changed vnl_vector to vnl_vector_fixed
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
@@ -73,7 +74,7 @@ class vgl_homg_operators_3d
 #if 0 // not yet implemented
   static vgl_homg_point_3d<Type> lines_to_point(const vgl_homg_line_3d& line1,
                                                 const vgl_homg_line_3d& line2);
-  static vgl_homg_point_3d<Type> lines_to_point(const vcl_vector<vgl_homg_line_3d>& line_list);
+  static vgl_homg_point_3d<Type> lines_to_point(const std::vector<vgl_homg_line_3d>& line_list);
 #endif // 0
   static double perp_dist_squared(const vgl_homg_line_3d& line,
                                   const vgl_homg_point_3d<Type>& point);
@@ -89,27 +90,27 @@ class vgl_homg_operators_3d
   static Type plane_plane_angle(const vgl_homg_plane_3d<Type>& plane1,
                                 const vgl_homg_plane_3d<Type>& plane2);
 #if 0 // not yet implemented
-  static vgl_homg_line_3d planes_to_line(const vcl_vector<vgl_homg_plane_3d<Type> >& plane_list);
+  static vgl_homg_line_3d planes_to_line(const std::vector<vgl_homg_plane_3d<Type> >& plane_list);
   static vgl_homg_line_3d points_to_line(const vgl_homg_point_3d<Type>& point1,
                                          const vgl_homg_point_3d<Type>& point2);
-  static vgl_homg_line_3d points_to_line(const vcl_vector<vgl_homg_point_3d<Type> >& point_list);
+  static vgl_homg_line_3d points_to_line(const std::vector<vgl_homg_point_3d<Type> >& point_list);
 
   static vgl_homg_plane_3d<Type> points_to_plane(const vgl_homg_point_3d<Type>&,
                                                  const vgl_homg_point_3d<Type>&,
                                                  const vgl_homg_point_3d<Type>& );
-  static vgl_homg_plane_3d<Type> points_to_plane(const vcl_vector<vgl_homg_point_3d<Type> >& point_list);
+  static vgl_homg_plane_3d<Type> points_to_plane(const std::vector<vgl_homg_point_3d<Type> >& point_list);
 #endif // 0
   static vgl_homg_point_3d<Type> intersection(const vgl_homg_plane_3d<Type>&,
                                               const vgl_homg_plane_3d<Type>&,
                                               const vgl_homg_plane_3d<Type>&);
-  static vgl_homg_point_3d<Type> intersection(const vcl_vector<vgl_homg_plane_3d<Type> >&);
+  static vgl_homg_point_3d<Type> intersection(const std::vector<vgl_homg_plane_3d<Type> >&);
 
   //: Return the midpoint of the line joining two homogeneous points
   static vgl_homg_point_3d<Type> midpoint(const vgl_homg_point_3d<Type>& p1,
                                           const vgl_homg_point_3d<Type>& p2);
 
   //: Intersect a set of 3D planes to find the least-square point of intersection.
-  static vgl_homg_point_3d<Type> planes_to_point(const vcl_vector<vgl_homg_plane_3d<Type> >& planes);
+  static vgl_homg_point_3d<Type> planes_to_point(const std::vector<vgl_homg_plane_3d<Type> >& planes);
 
   //-----------------------------------------------------------------------------
   //: Calculates the cross ratio of four collinear points p1, p2, p3 and p4.
@@ -151,7 +152,7 @@ class vgl_homg_operators_3d
                                            double cr = -1.0);
 
   //: compute most orthogonal vector with SVD
-  static vnl_vector_fixed<Type,4> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_plane_3d<Type> >& planes);
+  static vnl_vector_fixed<Type,4> most_orthogonal_vector_svd(const std::vector<vgl_homg_plane_3d<Type> >& planes);
 };
 
 //: Homographic transformation of a 3D point through a 4x4 projective transformation matrix
@@ -175,6 +176,6 @@ vgl_homg_plane_3d<Type> operator*(vnl_matrix_fixed<Type,4,3> const& m,
                                   vgl_homg_line_2d<Type> const& l);
 
 #define VGL_HOMG_OPERATORS_3D_INSTANTIATE(T) \
-        "Please #include <vgl/algo/vgl_homg_operators_3d.txx>"
+        "Please #include <vgl/algo/vgl_homg_operators_3d.hxx>"
 
 #endif // vgl_homg_operators_3d_h_

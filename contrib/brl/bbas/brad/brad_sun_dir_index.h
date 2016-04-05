@@ -17,11 +17,13 @@
 // \date May 10, 2011
 //
 //----------------------------------------------------------------------------
-#include <vcl_map.h>
+#include <map>
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <bbas/bsta/bsta_spherical_histogram.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class brad_sun_dir_index
 {
@@ -35,7 +37,7 @@ class brad_sun_dir_index
 
   //:constructor not enabling the direction histogram, bin centers are previously defined
   brad_sun_dir_index(double longitude_deg, double latitude_deg,
-                     vcl_vector<vnl_double_3> sun_dir_bin_centers)
+                     std::vector<vnl_double_3> sun_dir_bin_centers)
     : longitude_deg_(longitude_deg), latitude_deg_(latitude_deg),
     cone_axes_(sun_dir_bin_centers), cone_half_angle_(0.0){
     bin_radius_ = ((int)sun_dir_bin_centers.size()-1)/2;}
@@ -60,10 +62,10 @@ class brad_sun_dir_index
 
   //: path along the major axis of the illumination distribution, +- 2std_dev.
   // useful for debugging
-  vcl_vector<vnl_double_3> major_path();
+  std::vector<vnl_double_3> major_path();
 
   //: output a vrml display of the major path and the bin axis positions on sun direction sphere
-  void print_to_vrml(vcl_ostream& os);
+  void print_to_vrml(std::ostream& os);
  private:
   brad_sun_dir_index();//no default constructor
   //: the histogram of sun directions for the specified location and collection time
@@ -73,11 +75,11 @@ class brad_sun_dir_index
   int bin_radius_;
   bsta_spherical_histogram<double> hist_;
   //: cone axes associated with each illumination bin
-  vcl_vector<vnl_double_3> cone_axes_;
+  std::vector<vnl_double_3> cone_axes_;
   //: cone half angle, to truncate bin membership (not currently used)
   double cone_half_angle_;
 };
 
-vcl_ostream&  operator<<(vcl_ostream& s, brad_sun_dir_index const& bdi);
+std::ostream&  operator<<(std::ostream& s, brad_sun_dir_index const& bdi);
 
 #endif

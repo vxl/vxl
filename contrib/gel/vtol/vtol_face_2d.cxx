@@ -15,7 +15,7 @@
 //: Pseudo copy constructor.  Deep copy.
 //---------------------------------------------------------------------------
 vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
-  : surface_(0)
+  : surface_(VXL_NULLPTR)
 {
   edge_list edgs;    other->edges(edgs);
   vertex_list verts; other->vertices(verts);
@@ -39,7 +39,7 @@ vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
     vtol_topology_object_sptr V2 = newverts[e->v2()->get_id()];
     if (!V1 || !V2)
     {
-      vcl_cerr << "Inconsistent topology in vtol_face_2d pseudo copy constructor\n";
+      std::cerr << "Inconsistent topology in vtol_face_2d pseudo copy constructor\n";
       link_inferior(new vtol_one_chain);
       return;
      }
@@ -55,7 +55,7 @@ vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
   topology_list::const_iterator ii;
   for (ii=other->inferiors()->begin();ii!= other->inferiors()->end();++ii)
     link_inferior((*ii)->cast_to_one_chain()->copy_with_arrays(newverts,newedges));
-  set_surface(0);
+  set_surface(VXL_NULLPTR);
   if (other->surface_)
     set_surface(other->surface_->clone()->cast_to_region());
 }
@@ -103,7 +103,7 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links() const
 {
   vtol_face_2d *result;
   result=new vtol_face_2d;
-  result->set_surface(0);
+  result->set_surface(VXL_NULLPTR);
   if (surface_)
     result->set_surface(surface_->clone()->cast_to_region());
   return result;
@@ -115,7 +115,7 @@ vtol_face *vtol_face_2d::shallow_copy_with_no_links() const
 // Require: verts.size()>2
 
 vtol_face_2d::vtol_face_2d(vertex_list const& verts)
-  :surface_(0)
+  :surface_(VXL_NULLPTR)
 {
   // require
   assert(verts.size()>2);
@@ -135,7 +135,7 @@ vtol_face_2d::vtol_face_2d(vertex_list const& verts)
   vertex_list::const_iterator vi=verts.begin();
   vtol_vertex_sptr v01=(*vi);
   edge_list elist;
-  vcl_vector<signed char> directions;
+  std::vector<signed char> directions;
 
   while (!done)
   {
@@ -170,7 +170,7 @@ vtol_face_2d::vtol_face_2d(vertex_list const& verts)
 // on the face.
 
 vtol_face_2d::vtol_face_2d(one_chain_list const& onechs)
-  :surface_(0)
+  :surface_(VXL_NULLPTR)
 {
   // 1)  Add one chains to the inferiors list.
   //     Assume that the first vtol_one_chain on the
@@ -204,7 +204,7 @@ vtol_face_2d::vtol_face_2d(one_chain_list const& onechs)
 //  This method uses the vtol_one_chain, edgeloop, as the outside boundary of the face.
 
 vtol_face_2d::vtol_face_2d(vtol_one_chain_sptr const& edgeloop)
-  : surface_(0)
+  : surface_(VXL_NULLPTR)
 {
   link_inferior(edgeloop);
 
@@ -217,7 +217,7 @@ vtol_face_2d::vtol_face_2d(vtol_one_chain_sptr const& edgeloop)
 
 //: Constructor requiring only the underlying geometric surface
 vtol_face_2d::vtol_face_2d (vsol_region_2d &facesurf)
-  : surface_(0)
+  : surface_(VXL_NULLPTR)
 {
   set_surface(&facesurf);
 
@@ -280,14 +280,14 @@ bool vtol_face_2d::operator==(const vsol_spatial_object_2d& obj) const
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
 
-void vtol_face_2d::describe(vcl_ostream &strm,
+void vtol_face_2d::describe(std::ostream &strm,
                             int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
   print(strm);
   for (unsigned int i=0;i<inferiors()->size();++i)
   {
-    if ((inferiors_[i])->cast_to_one_chain()!=0)
+    if ((inferiors_[i])->cast_to_one_chain()!=VXL_NULLPTR)
       inferiors_[i]->cast_to_one_chain()->describe(strm,blanking);
     else
       strm << "*** Odd inferior for a face\n";
@@ -297,7 +297,7 @@ void vtol_face_2d::describe(vcl_ostream &strm,
 //:
 // This method prints out a simple text representation for the vtol_face_2d which
 // includes its address in memory.
-void vtol_face_2d::print(vcl_ostream &strm) const
+void vtol_face_2d::print(std::ostream &strm) const
 {
   strm << "<vtol_face_2d ";
 

@@ -62,13 +62,13 @@ void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk& chunk)
       write_case_macro(bool);
       break;
     case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
-      write_case_macro(vcl_complex<float>);
+      write_case_macro(std::complex<float>);
       break;
     case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
-      write_case_macro(vcl_complex<double>);
+      write_case_macro(std::complex<double>);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_write(vsl_b_istream&, vil_memory_chunk&)\n"
+      std::cerr << "I/O ERROR: vsl_b_write(vsl_b_istream&, vil_memory_chunk&)\n"
                << "           Unknown component type\n";
       return;
   }
@@ -149,9 +149,9 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
       break;
      // No version 1 complex images were ever written.
      default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
                << "           Unknown pixel format "<< format << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
     break;
@@ -197,15 +197,15 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
       read_case_macro_v3(bool);
       break;
      case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
-      read_case_macro_v3(vcl_complex<float>);
+      read_case_macro_v3(std::complex<float>);
       break;
      case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
-      read_case_macro_v3(vcl_complex<double>);
+      read_case_macro_v3(std::complex<double>);
       break;
      default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
                << "           Unknown pixel format "<< format << '\n';
-       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
     break;
@@ -251,23 +251,23 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
       read_case_macro_v3(bool);
       break;
      case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
-      read_case_macro_v3(vcl_complex<float>);
+      read_case_macro_v3(std::complex<float>);
       break;
      case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
-      read_case_macro_v3(vcl_complex<double>);
+      read_case_macro_v3(std::complex<double>);
       break;
      default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
                << "           Unknown pixel format "<< format << '\n';
-       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+       is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_memory_chunk&)\n"
              << "           Unknown version number "<< w << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -299,7 +299,7 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk*& p)
 }
 
 //: Print human readable summary of a vil_memory_chunk object to a stream
-void vsl_print_summary(vcl_ostream& os,const vil_memory_chunk& chunk)
+void vsl_print_summary(std::ostream& os,const vil_memory_chunk& chunk)
 {
   os<<"vil_memory_chunk containing "<<chunk.size()<<" bytes of "<<chunk.pixel_format();
 }

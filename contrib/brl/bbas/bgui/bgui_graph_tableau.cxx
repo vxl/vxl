@@ -1,9 +1,11 @@
 // This is brl/bbas/bgui/bgui_graph_tableau.cxx
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "bgui_graph_tableau.h"
 //:
 // \file
-#include <vcl_cmath.h> //for fabs()
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vgui/vgui.h>
@@ -20,8 +22,8 @@ void bgui_graph_tableau::init()
   easy_->set_foreground(0.0, 1.0f, 0.0);
   easy_->set_line_width(2.0f);
   n_ = 0;
-  pos_ = 0;
-  vals_ = 0;
+  pos_ = VXL_NULLPTR;
+  vals_ = VXL_NULLPTR;
   tic_length_ = 10.0f;
   left_offset_ = 75;
   top_offset_ = 20;
@@ -33,7 +35,7 @@ void bgui_graph_tableau::init()
 
 bgui_graph_tableau::bgui_graph_tableau(const unsigned gwidth,
                                        const unsigned gheight) :
-  graph_width_(gwidth), graph_height_(gheight), plot_(0)
+  graph_width_(gwidth), graph_height_(gheight), plot_(VXL_NULLPTR)
 {   this->init(); }
 
 // Destructor.
@@ -60,7 +62,7 @@ static float find_y_origin(const float ymin, const float yinc)
 {
   if (yinc==0)
     return 0;
-  float nincs = vcl_floor(ymin/yinc);
+  float nincs = std::floor(ymin/yinc);
   return nincs*yinc;
 }
 //-----------------------------------------------------------------------------
@@ -99,9 +101,9 @@ static float find_increment(float scale, float def = 1.0f)
 void bgui_graph_tableau::compute_scale()
 {
   xscale_=1.0f; yscale_=1.0f;
-  if (vcl_fabs(xmax_-xmin_)>0)
+  if (std::fabs(xmax_-xmin_)>0)
     xscale_ = (graph_width_-left_offset_)/(xmax_-xmin_);
-  if (vcl_fabs(ymax_-ymin_)>0)
+  if (std::fabs(ymax_-ymin_)>0)
     yscale_ = (graph_height_-top_offset_)/(ymax_-ymin_);
 
   yinc_ = find_increment(yscale_);
@@ -113,8 +115,8 @@ void bgui_graph_tableau::compute_scale()
   yorigin_ = find_y_origin(ymin_,yinc_);
 }
 
-void bgui_graph_tableau::update(vcl_vector<double> const& pos,
-                                vcl_vector<double> const & vals)
+void bgui_graph_tableau::update(std::vector<double> const& pos,
+                                std::vector<double> const & vals)
 {
   n_ = pos.size();
   pos_ = new float[n_];
@@ -124,19 +126,19 @@ void bgui_graph_tableau::update(vcl_vector<double> const& pos,
   for (unsigned i = 0; i<n_; ++i)
   {
     pos_[i]=static_cast<float>(pos[i]);
-    xmin_ = vnl_math::min(xmin_, pos_[i]);
-    xmax_ = vnl_math::max(xmax_, pos_[i]);
+    xmin_ = std::min(xmin_, pos_[i]);
+    xmax_ = std::max(xmax_, pos_[i]);
     vals_[i]=static_cast<float>(vals[i]);
-    ymin_ = vnl_math::min(ymin_, vals_[i]);
-    ymax_ = vnl_math::max(ymax_, vals_[i]);
+    ymin_ = std::min(ymin_, vals_[i]);
+    ymax_ = std::max(ymax_, vals_[i]);
   }
   compute_scale();
   draw_graph();
 }
 
 
-void bgui_graph_tableau::update(vcl_vector<float> const& pos,
-                                vcl_vector<float> const & vals)
+void bgui_graph_tableau::update(std::vector<float> const& pos,
+                                std::vector<float> const & vals)
 {
   n_ = pos.size();
   pos_ = new float[n_];
@@ -144,11 +146,11 @@ void bgui_graph_tableau::update(vcl_vector<float> const& pos,
   for (unsigned i = 0; i<n_; ++i)
   {
     pos_[i]=pos[i];
-    xmin_ = vnl_math::min(xmin_, pos_[i]);
-    xmax_ = vnl_math::max(xmax_, pos_[i]);
+    xmin_ = std::min(xmin_, pos_[i]);
+    xmax_ = std::max(xmax_, pos_[i]);
     vals_[i]=vals[i];
-    ymin_ = vnl_math::min(ymin_, vals_[i]);
-    ymax_ = vnl_math::max(ymax_, vals_[i]);
+    ymin_ = std::min(ymin_, vals_[i]);
+    ymax_ = std::max(ymax_, vals_[i]);
   }
   compute_scale();
   draw_graph();
@@ -157,8 +159,8 @@ void bgui_graph_tableau::update(vcl_vector<float> const& pos,
 // all plots have to have the same number of positions and values.
 // The vector position input is for future development where this
 // class takes care of the multiple position case - JLM
-void bgui_graph_tableau::update(vcl_vector<vcl_vector<double> > const& pos,
-                                vcl_vector<vcl_vector<double> >const & vals)
+void bgui_graph_tableau::update(std::vector<std::vector<double> > const& pos,
+                                std::vector<std::vector<double> >const & vals)
 {
   n_plots_ = pos.size();
   if (!n_plots_)
@@ -173,10 +175,10 @@ void bgui_graph_tableau::update(vcl_vector<vcl_vector<double> > const& pos,
   for (unsigned p = 0; p<n_plots_; ++p)
     for (unsigned i = 0; i<n_; ++i)
     {
-      xmin = vnl_math::min(xmin, pos[p][i]);
-      xmax = vnl_math::max(xmax, pos[p][i]);
-      ymin = vnl_math::min(ymin, vals[p][i]);
-      ymax = vnl_math::max(ymax, vals[p][i]);
+      xmin = std::min(xmin, pos[p][i]);
+      xmax = std::max(xmax, pos[p][i]);
+      ymin = std::min(ymin, vals[p][i]);
+      ymax = std::max(ymax, vals[p][i]);
     }
   xmin_ = static_cast<float>(xmin);
   xmax_ = static_cast<float>(xmax);
@@ -207,9 +209,9 @@ void bgui_graph_tableau::draw_tics()
       xtics_.push_back(easy_->add_line(xd, y0, xd, y0-1.5f*tl));
       easy_->set_foreground(0.0f, 1.0f, 0.0);
     }
-    vcl_stringstream ts;
+    std::stringstream ts;
     ts<<xs;
-    vcl_string xval = ts.str();
+    std::string xval = ts.str();
     unsigned nchars = xval.size();
     float offset = static_cast<float>(nchars)/2;
     offset *= 10.0f;
@@ -234,9 +236,9 @@ void bgui_graph_tableau::draw_tics()
                                        1.5f*tl+left_offset_,yd));
       easy_->set_foreground(0.0f, 1.0f, 0.0);
     }
-    vcl_stringstream ts;
+    std::stringstream ts;
     ts<<ys;
-    vcl_string yval = ts.str();
+    std::string yval = ts.str();
     float len = yval.size()+1;
      len*= 10.0f;
     tt_->add(left_offset_-len, yd+5.0f, yval);
@@ -250,10 +252,10 @@ void bgui_graph_tableau::draw_tics()
                             map_y_to_display(ymax_+yinc_)));
 
   //Make the tics and axes unselectable
-  for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
+  for (std::vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
        cit!=xtics_.end(); ++cit)
     (*cit)->set_selectable(false);
-  for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = ytics_.begin();
+  for (std::vector<vgui_soview2D_lineseg*>::iterator cit = ytics_.begin();
        cit!=ytics_.end(); ++cit)
     (*cit)->set_selectable(false);
 }
@@ -263,7 +265,7 @@ void bgui_graph_tableau::draw_graph()
 {
   if (n_ == 0)
     return;
-  vcl_vector<float> x(n_), y(n_);
+  std::vector<float> x(n_), y(n_);
   if (m_plot_.size())
   {
     for (unsigned i =0; i<m_plot_.size(); ++i)
@@ -276,7 +278,7 @@ void bgui_graph_tableau::draw_graph()
     easy_->remove(plot_);
     tt_->clear();
     delete plot_;
-    plot_ = 0;
+    plot_ = VXL_NULLPTR;
   }
   for (unsigned i = 0; i<n_; ++i)
   {
@@ -307,7 +309,7 @@ void bgui_graph_tableau::draw_multi_graph()
   }
   for (unsigned p = 0; p<n_plots_; ++p)
   {
-    vcl_vector<float> x(n_), y(n_);
+    std::vector<float> x(n_), y(n_);
     for (unsigned i = 0; i<n_; ++i)
     {
       x[i]=map_x_to_display(static_cast<float>(mpos_[p][i]));
@@ -330,16 +332,16 @@ void bgui_graph_tableau::rem()
   {
     easy_->remove(plot_);
     //delete plot_;
-    plot_ = 0;
+    plot_ = VXL_NULLPTR;
   }
-  for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
+  for (std::vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
        cit!=xtics_.end(); ++cit)
     if (*cit)
     {
       easy_->remove(*cit);
      // delete *cit;
     }
-  for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = ytics_.begin();
+  for (std::vector<vgui_soview2D_lineseg*>::iterator cit = ytics_.begin();
        cit!=ytics_.end(); ++cit)
     if (*cit)
     {
@@ -357,12 +359,12 @@ void bgui_graph_tableau::del()
   if (pos_)
   {
     delete [] pos_;
-    pos_ =0;
+    pos_ =VXL_NULLPTR;
   }
   if (vals_)
   {
     delete [] vals_;
-    vals_ = 0;
+    vals_ = VXL_NULLPTR;
   }
 }
 
@@ -376,7 +378,7 @@ void bgui_graph_tableau::clear()
 
 // Provide a popup dialog that contains the graph.  The string info
 // contains user defined documentation for the graph.
-vgui_dialog* bgui_graph_tableau::popup_graph(vcl_string const& info,
+vgui_dialog* bgui_graph_tableau::popup_graph(std::string const& info,
                                              const unsigned sizex,
                                              const unsigned sizey)
 {
@@ -387,8 +389,8 @@ vgui_dialog* bgui_graph_tableau::popup_graph(vcl_string const& info,
     h = sizey;
   vgui_viewer2D_tableau_sptr v = vgui_viewer2D_tableau_new(this);
   vgui_shell_tableau_sptr s = vgui_shell_tableau_new(v);
-  vcl_string temp = info;
-  vcl_stringstream xinc, yinc, ymin, ymax;
+  std::string temp = info;
+  std::stringstream xinc, yinc, ymin, ymax;
   xinc << xinc_; yinc << yinc_; ymin << ymin_; ymax<< ymax_;
 #if 0
   temp += " xinc:" + xinc.str();
@@ -408,7 +410,7 @@ bool bgui_graph_tableau::handle(const vgui_event& event)
   // Pass events on down to the child tableaux:
   if (event.type == vgui_DRAW)
   {
-    vcl_cout << "Graph Handle\n";
+    std::cout << "Graph Handle\n";
     easy_->handle(event);
     tt_->handle(event);
   }

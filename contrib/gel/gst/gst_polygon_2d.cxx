@@ -6,9 +6,10 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gst_polygon_2d.h"
 #include "gst_vertex_2d_sptr.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 bool gst_polygon_2d::check_validity() const
 {
@@ -122,10 +123,10 @@ bool gst_polygon_2d::inside( const gst_vertex_2d_sptr v) const
 }
 
 
-vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p)
+std::ostream &operator<<( std::ostream &os, gst_polygon_2d &p)
 {
   for (unsigned int i=0; i< p.edges_.size(); i++)
     os << (*p.edges_[i]) << ' ';
 
-  return os << vcl_endl;
+  return os << std::endl;
 }

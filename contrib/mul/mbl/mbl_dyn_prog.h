@@ -6,12 +6,14 @@
 // \brief Class to solve simple dynamic programming problems
 // \author Tim Cootes
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_vector.h>
 
@@ -36,7 +38,7 @@ private:
   vnl_vector<double> next_cost_;
 
     //: Construct path from links_, assuming it ends at end_state
-  void construct_path(vcl_vector<int>& x, int end_state);
+  void construct_path(std::vector<int>& x, int end_state);
 
     //: Compute running costs for DP problem with costs W
     //  Pair cost term:  C_i(x1,x2) = c(|x1-x2|)
@@ -62,7 +64,7 @@ public:
     //  If first_state>=0 then the first is constrained to that index value
     // \retval x  Optimal path
     // \return Total cost of given path
-  double solve(vcl_vector<int>& x,
+  double solve(std::vector<int>& x,
                const vnl_matrix<double>& W,
                const vnl_vector<double>& pair_cost,
                int first_state=-1);
@@ -75,7 +77,7 @@ public:
     //  last states.
     // \retval x  Optimal path
     // \return Total cost of given path
-  double solve_loop(vcl_vector<int>& x,
+  double solve_loop(std::vector<int>& x,
                const vnl_matrix<double>& W,
                const vnl_vector<double>& pair_cost);
 
@@ -84,10 +86,10 @@ public:
   short version_no() const;
 
     //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
     //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
     //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -103,7 +105,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_dyn_prog& b);
 void vsl_b_read(vsl_b_istream& bfs, mbl_dyn_prog& b);
 
   //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_dyn_prog& b);
+std::ostream& operator<<(std::ostream& os,const mbl_dyn_prog& b);
 
 //=======================================================================
 #endif

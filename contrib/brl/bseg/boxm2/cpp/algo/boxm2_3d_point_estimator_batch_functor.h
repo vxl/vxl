@@ -3,11 +3,12 @@
 //:
 // \file
 
+#include <vector>
+#include <limits>
+#include <iostream>
+#include <cmath>
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_vector.h>
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
@@ -42,23 +43,23 @@ class boxm2_3d_point_estimator_batch_functor
     pt_datatype & pt=pts_data_->data()[index];
     cov_datatype & cov=covs_data_->data()[index];
 
-    vcl_vector<pt_datatype> im_pts = str_cache_->get_next<BOXM2_POINT>(id_, index);
-    vcl_vector<cov_datatype> im_covs = str_cache_->get_next<BOXM2_COVARIANCE>(id_, index);
+    std::vector<pt_datatype> im_pts = str_cache_->get_next<BOXM2_POINT>(id_, index);
+    std::vector<cov_datatype> im_covs = str_cache_->get_next<BOXM2_COVARIANCE>(id_, index);
 
     //: the point is the average of all the point hypothesis from the images
     pt = pt_datatype(0.0);
 #if DEBUG
     //if (index%1000000 == 0) {
     if (spt_bid_ == id_ && index == spt_data_index_) {
-      vcl_cout << "index: " << index << vcl_endl;
-      vcl_cout << "stream cache returns a vector of size: " << im_pts.size() << vcl_endl;
-      vcl_cout << "pt initialized to: " << pt << vcl_endl;
-      vcl_cout << "pts from stream cache:\n";
+      std::cout << "index: " << index << std::endl;
+      std::cout << "stream cache returns a vector of size: " << im_pts.size() << std::endl;
+      std::cout << "pt initialized to: " << pt << std::endl;
+      std::cout << "pts from stream cache:\n";
       for (unsigned j = 0; j < im_pts.size(); j++)
-        vcl_cout << im_pts[j] << vcl_endl;
-      vcl_cout << "covariances from stream cache:\n";
+        std::cout << im_pts[j] << std::endl;
+      std::cout << "covariances from stream cache:\n";
       for (unsigned j = 0; j < im_covs.size(); j++)
-        vcl_cout << im_covs[j] << vcl_endl;
+        std::cout << im_covs[j] << std::endl;
     }
 #endif
 
@@ -103,13 +104,13 @@ class boxm2_3d_point_estimator_batch_functor
 #if DEBUG
     //if (index%1000000 == 0) {
     if (spt_bid_ == id_ && index == spt_data_index_) {
-      vcl_cout << "pt: " << pt << vcl_endl;
-      vcl_cout << "cov: \n" << pt_cov << vcl_endl;
+      std::cout << "pt: " << pt << std::endl;
+      std::cout << "cov: \n" << pt_cov << std::endl;
       // compute the eigenvalues
       vnl_matrix<double> V(3,3,0.0); vnl_vector<double> eigs(3);
       vnl_symmetric_eigensystem_compute(pt_cov, V, eigs);
-      vcl_cout << "eigen values (length of axis of error ellipse) in meters: " << vcl_endl;
-      vcl_cout << vcl_sqrt(eigs[0]) << " " << vcl_sqrt(eigs[1]) << " " << vcl_sqrt(eigs[2]) << "\n";
+      std::cout << "eigen values (length of axis of error ellipse) in meters: " << std::endl;
+      std::cout << std::sqrt(eigs[0]) << " " << std::sqrt(eigs[1]) << " " << std::sqrt(eigs[2]) << "\n";
     }
 #endif
 

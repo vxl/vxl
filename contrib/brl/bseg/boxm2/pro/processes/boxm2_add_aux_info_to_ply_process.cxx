@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_add_aux_info_to_ply_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -14,7 +16,7 @@
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boct/boct_bit_tree.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <rply.h>
@@ -28,7 +30,7 @@ namespace boxm2_add_aux_info_to_ply_process_globals
   class ply_points_reader
   {
    public:
-    vcl_vector<vgl_point_3d<double> > points;
+    std::vector<vgl_point_3d<double> > points;
     double p[3];
   };
 
@@ -61,18 +63,18 @@ namespace boxm2_add_aux_info_to_ply_process_globals
   }
 
   //: The PLY reader of PCL is rather strict, so lets load the cloud on our own
-  bool read_points_from_ply(const vcl_string &filename, vcl_vector<vgl_point_3d<double> > &points)
+  bool read_points_from_ply(const std::string &filename, std::vector<vgl_point_3d<double> > &points)
   {
     ply_points_reader parsed_ply;
     parsed_ply.points = points;
 
-    p_ply ply = ply_open(filename.c_str(), NULL, 0, NULL);
+    p_ply ply = ply_open(filename.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
     if (!ply) {
-      vcl_cout << "File " << filename << " doesn't exist.";
+      std::cout << "File " << filename << " doesn't exist.";
       return false;
     }
     if (!ply_read_header(ply)){
-      vcl_cout << "File " << filename << " doesn't have header.";
+      std::cout << "File " << filename << " doesn't have header.";
       return false;
     }
 
@@ -81,7 +83,7 @@ namespace boxm2_add_aux_info_to_ply_process_globals
     ply_set_read_cb(ply, "vertex", "y", plyio_vertex_cb, (void*) (&parsed_ply), 1);
     ply_set_read_cb(ply, "vertex", "z", plyio_vertex_cb, (void*) (&parsed_ply), 2);
 
-    vcl_cout << "Parsed: " << nvertices << "points\n";
+    std::cout << "Parsed: " << nvertices << "points\n";
 
     // Read DATA
     ply_read(ply);
@@ -100,13 +102,13 @@ bool boxm2_add_aux_info_to_ply_process_cons(bprb_func_process& pro)
   using namespace boxm2_add_aux_info_to_ply_process_globals;
 
   //process takes 4 or 5 inputs and no outputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string"; //input PLY filename
   input_types_[3] = "vcl_string"; //output PLY filename
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
 }
@@ -116,7 +118,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
   using namespace boxm2_add_aux_info_to_ply_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -124,18 +126,18 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_string input_mesh_filename = pro.get_input<vcl_string>(i++);
-  vcl_string output_mesh_filename = pro.get_input<vcl_string>(i++);
+  std::string input_mesh_filename = pro.get_input<std::string>(i++);
+  std::string output_mesh_filename = pro.get_input<std::string>(i++);
 
-  vcl_string data_type;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type;
+  std::vector<std::string> apps = scene->appearances();
 
   //read incoming ply -- only points are read. Normals, prob, vis and color are read from the scene
-  vcl_vector<vgl_point_3d<double> > points;
+  std::vector<vgl_point_3d<double> > points;
   read_points_from_ply(input_mesh_filename, points);
 
   //write outgoing mesh header
-  p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, NULL, 0, NULL);
+  p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, VXL_NULLPTR, 0, VXL_NULLPTR);
 
   // HEADER SECTION
   // vertex
@@ -157,13 +159,13 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
   // end header
   ply_write_header(oply);
 
-  vcl_cout << "Start iterating over pts..." << vcl_endl;
+  std::cout << "Start iterating over pts..." << std::endl;
 
   //get data sizes
-  vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-//vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix()); // UNUSED!! -- fixme
-  vcl_size_t normalTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
-  vcl_size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix());
+  std::size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+//std::size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix()); // UNUSED!! -- fixme
+  std::size_t normalTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
+  std::size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix());
   int mogSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
 
   //iterate through the points
@@ -176,13 +178,13 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     const vgl_point_3d<double> pt = points[i];
 
     if (!scene->contains(pt, id, local)) {
-      vcl_cout << "ERROR: point: " << pt << " isn't in scene. Exiting...." << vcl_endl;
+      std::cout << "ERROR: point: " << pt << " isn't in scene. Exiting...." << std::endl;
       return false;
     }
 
-    int index_x=(int)vcl_floor(local.x());
-    int index_y=(int)vcl_floor(local.y());
-    int index_z=(int)vcl_floor(local.z());
+    int index_x=(int)std::floor(local.x());
+    int index_y=(int)std::floor(local.y());
+    int index_z=(int)std::floor(local.z());
 
     boxm2_block * blk=cache->get_block(scene,id);
     boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
@@ -192,7 +194,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
 
     int depth=tree.depth_at(bit_index);
     if (!tree.is_leaf(bit_index)) {
-      vcl_cout << "ERROR: point: " << pt << " isn't a leaf cell...." << vcl_endl;
+      std::cout << "ERROR: point: " << pt << " isn't a leaf cell...." << std::endl;
       //return false;
     }
 
@@ -216,7 +218,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     float alpha=alpha_data[data_offset];
     double side_len = 1.0 / (double) (1 << depth);
     //store cell probability
-    prob = 1.0f - (float)vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
+    prob = 1.0f - (float)std::exp(-alpha * side_len * mdata.sub_block_dim_.x());
     unsigned char intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(mog_data[data_offset])*255.0f);
 
     ply_write(oply, pt.x());
@@ -233,7 +235,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     ply_write(oply, (unsigned char)(intensity));
     ply_write(oply, (unsigned char) depth);
   }
-  vcl_cout << "Done iterating over pts..." << vcl_endl;
+  std::cout << "Done iterating over pts..." << std::endl;
 
    // CLOSE PLY FILE
   ply_close(oply);

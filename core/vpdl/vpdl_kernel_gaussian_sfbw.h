@@ -12,11 +12,12 @@
 //   None
 // \endverbatim
 
+#include <limits>
 #include <vpdl/vpdl_kernel_base.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vnl/vnl_erf.h>
 #include <vnl/vnl_math.h> // for twopi
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: A fixed bandwidth spherical Gaussian kernel distribution
@@ -34,7 +35,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
   vpdl_kernel_gaussian_sfbw() {}
 
   //: Constructor - from sample centers and bandwidth (variance)
-  vpdl_kernel_gaussian_sfbw(const vcl_vector<vector>& samplez,
+  vpdl_kernel_gaussian_sfbw(const std::vector<vector>& samplez,
                             T bandwid = T(1))
   : vpdl_kernel_fbw_base<T,n>(samplez,bandwid) {}
 
@@ -53,14 +54,14 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
 
     const unsigned int d = this->dimension();
     T sum = T(0);
-    typedef typename vcl_vector<vector>::const_iterator vitr;
+    typedef typename std::vector<vector>::const_iterator vitr;
     for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       T ssd = T(0);
       for (unsigned int i=0; i<d; ++i) {
         T tmp = (vpdt_index(pt,i)-vpdt_index(*s,i))/this->bandwidth();
         ssd += tmp*tmp;
       }
-      sum += T(vcl_exp(-0.5*ssd));
+      sum += T(std::exp(-0.5*ssd));
     }
 
     return sum;
@@ -92,7 +93,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     T sum = T(0);
     vector g_s;
     vpdt_set_size(g_s,d);
-    typedef typename vcl_vector<vector>::const_iterator vitr;
+    typedef typename std::vector<vector>::const_iterator vitr;
     for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       T ssd = T(0);
       for (unsigned int i=0; i<d; ++i) {
@@ -100,7 +101,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
         vpdt_index(g_s,i) = tmp/this->bandwidth();
         ssd += tmp*tmp;
       }
-      T dens = T(vcl_exp(-0.5*ssd));
+      T dens = T(std::exp(-0.5*ssd));
       g_s *= -dens;
       sum += dens;
       g += g_s;
@@ -119,10 +120,10 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
       return 0.0;
 
     const unsigned int d = this->dimension();
-    double s2 = 1/(this->bandwidth()*vcl_sqrt(2.0));
+    double s2 = 1/(this->bandwidth()*std::sqrt(2.0));
 
     double sum = 0.0;
-    typedef typename vcl_vector<vector>::const_iterator vitr;
+    typedef typename std::vector<vector>::const_iterator vitr;
     for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       double val = 1.0;
       for (unsigned int i=0; i<d; ++i) {
@@ -143,10 +144,10 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
       return 0.0;
 
     const unsigned int dim = this->dimension();
-    double s2 = 1/(this->bandwidth()*vcl_sqrt(2.0));
+    double s2 = 1/(this->bandwidth()*std::sqrt(2.0));
 
     double sum = 0.0;
-    typedef typename vcl_vector<vector>::const_iterator vitr;
+    typedef typename std::vector<vector>::const_iterator vitr;
     for (vitr s=this->samples().begin(); s!=this->samples().end(); ++s) {
       double prob = 1.0;
       for (unsigned int i=0; i<dim; ++i) {
@@ -170,7 +171,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     vpdt_fill(covar,T(0));
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
-    typedef typename vcl_vector<vector>::const_iterator samp_itr;
+    typedef typename std::vector<vector>::const_iterator samp_itr;
     for (samp_itr s = this->samples().begin(); s != this->samples().end(); ++s) {
       covar += outer_product(*s,*s);
       mean += *s;
@@ -192,7 +193,7 @@ class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
     for (unsigned int i=1; i<dim; ++i)
       denom *= v2pi;
 
-    return static_cast<T>(vcl_sqrt(1/denom));
+    return static_cast<T>(std::sqrt(1/denom));
   }
 };
 

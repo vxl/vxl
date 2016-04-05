@@ -8,9 +8,10 @@
 // \date   August 6, 2008
 //
 
+#include <vector>
 #include <wx/scrolwin.h>
 #include <vgui/vgui_observable.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 // forward declarations
 class wxSlider;
@@ -54,9 +55,9 @@ class wxSliderPanel: public wxScrolledWindow, public vgui_observable
   void CreateControls();
 
   //: Create new sliders with these bounds and initial values
-  void CreateSliders(const vcl_vector<double>& init_vals,
-                     const vcl_vector<double>& min_vals,
-                     const vcl_vector<double>& max_vals);
+  void CreateSliders(const std::vector<double>& init_vals,
+                     const std::vector<double>& min_vals,
+                     const std::vector<double>& max_vals);
 
   //: Event handler
   void OnSliderTrack( wxScrollEvent& event );
@@ -71,10 +72,10 @@ class wxSliderPanel: public wxScrolledWindow, public vgui_observable
   int GetWidgets(const wxEvent& event, wxSlider*& slider, wxTextCtrl*& text);
 
   //: Return the vector of data
-  const vcl_vector<double>& data() const { return vals_; }
+  const std::vector<double>& data() const { return vals_; }
 
   //: Update the data
-  void update_data(vcl_vector<double>& data,
+  void update_data(std::vector<double>& data,
                    bool send_messages = true);
   //: Update the data
   void update_data(unsigned int i, double val,
@@ -97,9 +98,9 @@ class wxSliderPanel: public wxScrolledWindow, public vgui_observable
 
  private:
   wxWindowID base_id_;
-  vcl_vector<double> vals_;
-  vcl_vector<double> min_vals_;
-  vcl_vector<double> max_vals_;
+  std::vector<double> vals_;
+  std::vector<double> min_vals_;
+  std::vector<double> max_vals_;
 
   //: used to disable sending of message
   bool send_messages_;

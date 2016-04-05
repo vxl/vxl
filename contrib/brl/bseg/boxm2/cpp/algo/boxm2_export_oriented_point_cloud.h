@@ -1,6 +1,8 @@
 #ifndef boxm2_export_oriented_point_cloud_h_included_
 #define boxm2_export_oriented_point_cloud_h_included_
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 
@@ -8,10 +10,10 @@ class boxm2_export_oriented_point_cloud
 {
 public:
   static bool export_oriented_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
-                                          vcl_string output_filename, bool output_aux = false,
+                                          std::string output_filename, bool output_aux = false,
                                           float vis_t=0.0f, float nmag_t=0.0f,
                                           float prob_t=0.0f, float exp_t=0.0f,
-                                          vcl_string bb_filename="");
+                                          std::string bb_filename="");
 
 };
 

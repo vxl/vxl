@@ -1,3 +1,5 @@
+#include <iostream>
+#include <ctime>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,8 +8,7 @@
 //   2009-03-08 Peter Vanroose - Increased test coverage: added "inside" & "plane intersection" tests
 // \endverbatim
 
-#include <vcl_iostream.h>
-#include <vcl_ctime.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_distance.h>
@@ -87,7 +88,7 @@ inline void test_intersecting2()
   double p1_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0,0,0));
   double p2_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(1,1,0));
   //handle ambiguity of intersecting line segment ordering.
-  if (p1_err>p2_err) vcl_swap(edge_p1, edge_p2);
+  if (p1_err>p2_err) std::swap(edge_p1, edge_p2);
   TEST_NEAR("Intersecting Skew, iline correct", p1_err + p2_err, 0, 1e-8);
   // handle ambiguity of intersecting line point 1 , which lies on a vertex of each input triangle.
   TEST("Intersecting Skew, edge label 1 correct", edge_p1==0 || edge_p1==2 || edge_p1==4 || edge_p1==5, true);
@@ -119,7 +120,7 @@ inline void test_intersecting3()
   //handle ambiguity of intersecting line segment ordering.
   if (p1_err > 1e-4)
   {
-    vcl_swap(edge_p1, edge_p2);
+    std::swap(edge_p1, edge_p2);
     p1_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(0,0,0));
     p2_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0,4,0));
   }
@@ -156,7 +157,7 @@ inline void test_intersecting4()
   //handle ambiguity of intersecting line segment ordering.
   if (p1_err > 1e-4)
   {
-    vcl_swap(edge_p1, edge_p2);
+    std::swap(edge_p1, edge_p2);
     p1_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(0,0,0));
     p2_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(0,4,0));
   }
@@ -187,7 +188,7 @@ inline void test_intersecting5_arrangement(
   //handle ambiguity of intersecting line segment ordering.
   if (p1_err > 1e-2)
   {
-    vcl_swap(edge_p1, edge_p2);
+    std::swap(edge_p1, edge_p2);
     p1_err = vgl_distance(i_line.point2(), vgl_point_3d<double>(1,1,0));
     p2_err = vgl_distance(i_line.point1(), vgl_point_3d<double>(2,2,0));
   }
@@ -210,7 +211,7 @@ inline void test_intersecting5()
   vgl_point_3d<double> b_p2(1, 1, -4);
   vgl_point_3d<double> b_p3(1, 1, 4);
 
-  vcl_cout << "Test skew intersection with multiple arrangements.\n";
+  std::cout << "Test skew intersection with multiple arrangements.\n";
 
   test_intersecting5_arrangement(a_p1, a_p2, a_p3, b_p1, b_p2, b_p3, 4, 1);
   test_intersecting5_arrangement(a_p2, a_p1, a_p3, b_p1, b_p2, b_p3, 4, 2);
@@ -251,7 +252,7 @@ inline void test_intersecting5()
 //==============================================================================
 inline void test_intersecting_degenerate_triangles1()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "----------------------------------------------\n"
            << " test vgl_triangle_3d_triangle_intersection()\n"
            << "----------------------------------------------\n";
@@ -329,7 +330,7 @@ inline void test_intersecting_degenerate_triangles1()
       if (exp_result[i][j]!=None) // Check for any unwarranted looseness in test.
         assert(exp_edges[i][j][0]!=9);
 
-      vcl_string test_desc = degen_desc[i];
+      std::string test_desc = degen_desc[i];
       test_desc += " (";
       test_desc += degen_tests_desc[j];
       test_desc += ")";
@@ -350,7 +351,7 @@ inline void test_intersecting_degenerate_triangles1()
       if (exp_edges[i][j][0]!=9)
       {
         if (point1_edge > point2_edge) // Canonicalise edge results.
-          vcl_swap(point1_edge, point2_edge);
+          std::swap(point1_edge, point2_edge);
         if (exp_edges[i][j][0]==8)
           TEST("Edge 1 == Edge 2 for no definite edge result",
                point1_edge == point2_edge && point1_edge >= 3, true);
@@ -378,7 +379,7 @@ inline void test_intersecting_degenerate_triangles1()
       if (exp_edges[i][j][0]!=9)
       {
         if (point1_edge > point2_edge) // Canonicalise edge results.
-          vcl_swap(point1_edge, point2_edge);
+          std::swap(point1_edge, point2_edge);
         if (exp_edges[i][j][0]==8)
           TEST("Edge 1 == Edge 2 for no definite edge result",
                point1_edge == point2_edge && point1_edge < 3, true);
@@ -400,7 +401,7 @@ inline void test_intersecting_degenerate_triangles1()
 //==============================================================================
 inline void test_intersecting_degenerate_triangles2()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "----------------------------------------------\n"
            << " test vgl_triangle_3d_triangle_intersection()\n"
            << "----------------------------------------------\n";
@@ -443,7 +444,7 @@ inline void test_intersecting_degenerate_triangles2()
 //==============================================================================
 inline void test_coincident_edges1()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "-----------------------------------------\n"
            << " test vgl_triangle_3d_coincident_edges()\n"
            << "-----------------------------------------\n";
@@ -456,7 +457,7 @@ inline void test_coincident_edges1()
   vgl_point_3d<double> b_p2(-4, 0, 0);
   vgl_point_3d<double> b_p3( 0,-4, 0);
 
-  vcl_vector<vcl_pair<unsigned,unsigned> > coinc =
+  std::vector<std::pair<unsigned,unsigned> > coinc =
     vgl_triangle_3d_coincident_edges(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
 
   TEST("Coincident_edges non-coincident", coinc.empty(), true);
@@ -474,10 +475,10 @@ inline void test_coincident_edges2()
   vgl_point_3d<double> b_p2(0, 0, 4);
   vgl_point_3d<double> b_p3( 2,0, 0);
 
-  vcl_vector<vcl_pair<unsigned,unsigned> > coinc =
+  std::vector<std::pair<unsigned,unsigned> > coinc =
     vgl_triangle_3d_coincident_edges(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
 
-  vcl_pair<unsigned,unsigned> exp_edge(2,2);
+  std::pair<unsigned,unsigned> exp_edge(2,2);
 
   TEST("Coincident_edges 1 coincident edge",
        coinc.size() == 1 && coinc[0] == exp_edge, true);
@@ -486,7 +487,7 @@ inline void test_coincident_edges2()
 //==============================================================================
 inline void test_intersect_plane()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "-------------------------------------------\n"
            << " test vgl_triangle_3d_plane_intersection()\n"
            << "-------------------------------------------\n";
@@ -521,7 +522,7 @@ inline void test_intersect_plane()
 //==============================================================================
 inline void test_point_containment()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "------------------------------------\n"
            << " test vgl_triangle_3d_test_inside()\n"
            << "------------------------------------\n";
@@ -606,15 +607,15 @@ inline void test_point_containment_algo_perf()
 
   unsigned tries = 10000000;
 
-  vcl_clock_t bary_st = vcl_clock();
+  std::clock_t bary_st = std::clock();
   for (unsigned i = 0; i < tries; ++i)
     vgl_triangle_3d_test_inside(test_pt,p1,p2,p3);
-  vcl_clock_t bary_en = vcl_clock();
+  std::clock_t bary_en = std::clock();
 
-  vcl_clock_t ang_st = vcl_clock();
+  std::clock_t ang_st = std::clock();
   for (unsigned i = 0; i < tries; ++i)
     vgl_triangle_3d_test_inside_simple(test_pt,p1,p2,p3);
-  vcl_clock_t ang_en = vcl_clock();
+  std::clock_t ang_en = std::clock();
 
   unsigned long bary_time = bary_en - bary_st;
   unsigned long ang_time = ang_en - ang_st;
@@ -622,10 +623,10 @@ inline void test_point_containment_algo_perf()
   unsigned long bary_ps = (tries * CLOCKS_PER_SEC) / bary_time;
   unsigned long ang_ps = (tries * CLOCKS_PER_SEC) / ang_time;
 
-  vcl_cout<<"Barycentric method: "<< bary_ps << "/sec ("<<bary_time<<" ticks)\n"
+  std::cout<<"Barycentric method: "<< bary_ps << "/sec ("<<bary_time<<" ticks)\n"
           <<"Angles method: "<< ang_ps << "/sec ("<<ang_time<<" ticks)\n";
-  vcl_cout.precision(2);
-  vcl_cout<<"Barycentric "<<vcl_fixed<< double(bary_ps)/ang_ps << " times faster than angles\n";
+  std::cout.precision(2);
+  std::cout<<"Barycentric "<<std::fixed<< double(bary_ps)/ang_ps << " times faster than angles\n";
 
   // usually get Barycentric about 2.5 to 3 times faster than angles KOM (Aug 07)
 }
@@ -636,7 +637,7 @@ inline void test_point_containment_algo_perf()
 //==============================================================================
 inline void test_closest_point()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "----------------------\n"
            << " test_closest_point()\n"
            << "----------------------\n";
@@ -697,7 +698,7 @@ inline void test_closest_point()
     vgl_point_3d<double> p1(-250.00000027628425, 307.98258024874724, 359.57738152050911);
     vgl_point_3d<double> p2(-239.99999999497970, 314.64924710295026, 359.57738152050911);
     vgl_point_3d<double> p3(-240.00000000000000, 314.64924709960337, 359.57738152050911);
-    vcl_cout << "Nearly degenerate triangle " << p1 << p2 << p3 << vcl_endl;
+    std::cout << "Nearly degenerate triangle " << p1 << p2 << p3 << std::endl;
 
     vgl_point_3d<double> in1(-245.00000013828425, 311.31591367584872, 359.57738152050911);
     vgl_point_3d<double> out1(-245.00000013828425, 311.31591367584872, 380);
@@ -714,7 +715,7 @@ inline void test_closest_point()
 //==============================================================================
 inline void test_distance()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "---------------------------------\n"
            << " test vgl_triangle_3d_distance()\n"
            << "---------------------------------\n";
@@ -779,7 +780,7 @@ inline void test_distance()
 //==============================================================================
 inline void test_area()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "-----------------------------\n"
            << " test vgl_triangle_3d_area()\n"
            << "-----------------------------\n";
@@ -798,7 +799,7 @@ inline void test_area()
 //==============================================================================
 inline void test_aspect_ratio()
 {
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "-------------------------------------\n"
            << " test vgl_triangle_3d_aspect_ratio()\n"
            << "-------------------------------------\n";
@@ -808,7 +809,7 @@ inline void test_aspect_ratio()
   vgl_point_3d<double> p3(0,1,0);
 
   double ratio = vgl_triangle_3d_aspect_ratio( p1, p2, p3 );
-  TEST_NEAR("Triangle area", ratio, vcl_sqrt(2.0),1e-6);
+  TEST_NEAR("Triangle area", ratio, std::sqrt(2.0),1e-6);
 }
 
 

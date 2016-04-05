@@ -6,9 +6,7 @@ set(vil3d_io_sources
     vil3d_io_dummy.cxx
 )
 
-add_library(vil3d_io ${vil3d_io_sources})
-install_targets(/lib vil3d_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d/io ${vil3d_io_sources})
+vxl_add_library(LIBRARY_NAME vil3d_io LIBRARY_SOURCES ${vil3d_io_sources})
 target_link_libraries( vil3d_io vil3d ${VXL_LIB_PREFIX}vil_io )
 
 if( BUILD_TESTING)

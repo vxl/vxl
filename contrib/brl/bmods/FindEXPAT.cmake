@@ -36,19 +36,18 @@ if(NOT EXPAT_FOUND)
   # exist.
   #
   if(NOT EXPAT_FOUND)
-    if(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat/expat.h)
+    if(EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expat/expat.h)
       set( EXPAT_FOUND "YES" )
       set( EXPAT_LIBRARIES expat )
       set( EXPAT_LIBRARY expat )
-      set( EXPAT_INCLUDE_DIRS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
-      set( EXPAT_INCLUDE_DIR  ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
+      set( EXPAT_INCLUDE_DIRS ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expat ${CMAKE_BINARY_DIR}/contrib/brl/b3p/expat )
+      set( EXPAT_INCLUDE_DIR  ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expat ${CMAKE_BINARY_DIR}/contrib/brl/b3p/expat )
       set( EXPAT_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expat)
     endif()
   endif()
 
 endif()
 #mark_as_advanced(EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
-
 
 if(EXPAT_FOUND) # EXPATPP requires EXPAT
 
@@ -60,13 +59,13 @@ if(EXPAT_FOUND) # EXPATPP requires EXPAT
     set(EXPATPP_LIBRARIES ${EXPATPP_SYSTEM_LIBRARY})
     set(EXPATPP_INCLUDE_DIRS ${EXPATPP_SYSTEM_INCLUDE_DIR})
   else()
-    set(VXL_USING_NATIVE_EXPATPP "NO")
-    if(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp/expatpp.h)
-      set( EXPATPP_FOUND "YES" )
+    set(VXL_USING_NATIVE_EXPATPP NO)
+    if(EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expatpp/expatpp.h)
+      set( EXPATPP_FOUND YES )
       set( EXPATPP_LIBRARIES expatpp )
       set( EXPATPP_LIBRARY expatpp )
-      set( EXPATPP_INCLUDE_DIRS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp ${vxl_BINARY_DIR}/contrib/brl/b3p/expatpp )
-      set( EXPATPP_INCLUDE_DIR ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp ${vxl_BINARY_DIR}/contrib/brl/b3p/expatpp )
+      set( EXPATPP_INCLUDE_DIRS ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expatpp ${CMAKE_BINARY_DIR}/contrib/brl/b3p/expatpp )
+      set( EXPATPP_INCLUDE_DIR ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expatpp ${CMAKE_BINARY_DIR}/contrib/brl/b3p/expatpp )
       set( EXPATPP_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expatpp)
     else()
       unset(EXPATPP_LIBRARIES)
@@ -77,10 +76,10 @@ if(EXPAT_FOUND) # EXPATPP requires EXPAT
   endif()
 
   include(FindPackageHandleStandardArgs)
-  FIND_PACKAGE_HANDLE_STANDARD_ARGS( EXPATPP FOUND_VAR EXPATPP_FOUND
+  # FOUND_VAR EXPATPP_FOUND  not supported in cmake 2.8.9
+  FIND_PACKAGE_HANDLE_STANDARD_ARGS( EXPATPP
              REQUIRED_VARS EXPATPP_LIBRARY EXPATPP_INCLUDE_DIR
              FAIL_MESSAGE "MISSING: "
      )
-
 endif()
 mark_as_advanced(EXPATPP_INCLUDE_DIR EXPATPP_LIBRARY)

@@ -4,8 +4,8 @@
 #include <vil/vil_load.h>
 
 
-icam_view_metadata::icam_view_metadata(vcl_string const& exp_img,
-                                       vcl_string const& dt)
+icam_view_metadata::icam_view_metadata(std::string const& exp_img,
+                                       std::string const& dt)
   : exp_img_path_(exp_img),depth_img_path_(dt)
 {
 }
@@ -33,8 +33,8 @@ void icam_view_metadata::register_image(vil_image_view<float> const& source_img,
                                         icam_minimizer_params const& params)
 {
   // create the images
-  vil_image_view<float> *exp_img=0;
-  vil_image_view<double> *depth_img=0;
+  vil_image_view<float> *exp_img=VXL_NULLPTR;
+  vil_image_view<double> *depth_img=VXL_NULLPTR;
   icam_minimizer* minimizer;
   create_minimizer(exp_img,depth_img,camera,params,minimizer);
   if (minimizer) {
@@ -56,9 +56,9 @@ void icam_view_metadata::register_image(vil_image_view<float> const& source_img,
                                         min_allowed_overlap,min_trans_,
                                         min_rot_, cost_,min_overlap);
 
-    vcl_cout << " min translation " << min_trans_ << '\n'
+    std::cout << " min translation " << min_trans_ << '\n'
              << " min rotation " << min_rot_.as_rodrigues() << '\n'
-             << " registration cost " << cost_ << '\n'<< vcl_endl;
+             << " registration cost " << cost_ << '\n'<< std::endl;
     delete minimizer;
   }
   if (exp_img) delete exp_img;
@@ -91,10 +91,10 @@ void icam_view_metadata::refine_camera(vil_image_view<float> const& source_img,
                                      cost_,
                                      act_overlap);
 
-    vcl_cout << " Pyramid search result\n"
+    std::cout << " Pyramid search result\n"
              << " min translation " << min_trans_ << '\n'
              << " min rotation " << min_rot_.as_rodrigues() << '\n'
-             << " registration cost " << cost_ << '\n'<< vcl_endl;
+             << " registration cost " << cost_ << '\n'<< std::endl;
     delete minimizer;
   }
   if (exp_img) delete exp_img;
@@ -102,9 +102,9 @@ void icam_view_metadata::refine_camera(vil_image_view<float> const& source_img,
 
 #if 0
   vil_image_view<float> img = minimizer_->view(min_rot,min_trans,0);
-  vcl_stringstream s;
+  std::stringstream s;
   s << "view" << cost_ << ".tiff";
-  vcl_cout << "PATH=" << s.str().c_str() << vcl_endl;
+  std::cout << "PATH=" << s.str().c_str() << std::endl;
   vil_save(img, s.str().c_str());
 #endif
 }
@@ -144,7 +144,7 @@ void icam_view_metadata::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, version());
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, icam_view_metadata const& p)
+std::ostream& operator<<(std::ostream& os, icam_view_metadata const& p)
 {
   p.print(os);
   return os;

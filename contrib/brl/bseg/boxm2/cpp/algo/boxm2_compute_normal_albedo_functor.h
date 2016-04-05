@@ -3,12 +3,14 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
@@ -26,8 +28,8 @@ class boxm2_compute_normal_albedo_functor
   //: standard constructor
   boxm2_compute_normal_albedo_functor(bool update_alpha)  : update_alpha_(update_alpha) {}
 
-  bool init_data(vcl_vector<brad_image_metadata> const& metadata,
-                 vcl_vector<brad_atmospheric_parameters> const& atm_params,
+  bool init_data(std::vector<brad_image_metadata> const& metadata,
+                 std::vector<brad_atmospheric_parameters> const& atm_params,
                  boxm2_stream_cache_sptr str_cache,
                  boxm2_data_base * alpha_data,
                  boxm2_data_base * normal_albedo_model);
@@ -40,28 +42,28 @@ class boxm2_compute_normal_albedo_functor
 
   boxm2_stream_cache_sptr str_cache_;
   boxm2_block_id id_;
-  vcl_vector<brad_image_metadata> metadata_;
-  vcl_vector<brad_atmospheric_parameters> atm_params_;
+  std::vector<brad_image_metadata> metadata_;
+  std::vector<brad_atmospheric_parameters> atm_params_;
 
   unsigned int num_normals_;
   unsigned int num_images_;
   bool update_alpha_;
 
   // cache sun positions
-  vcl_vector<vgl_vector_3d<double> > sun_positions_;
+  std::vector<vgl_vector_3d<double> > sun_positions_;
   // cache normal directions
-  vcl_vector<vgl_vector_3d<double> > normals_;
+  std::vector<vgl_vector_3d<double> > normals_;
 
   // cache scale and offset values for reflectance, expected radiance, and expected radiance variance
   // reflectance = scale * radiance + offset
-  vcl_vector<vcl_vector<double> > reflectance_scales_;
-  vcl_vector<vcl_vector<double> > reflectance_offsets_;
+  std::vector<std::vector<double> > reflectance_scales_;
+  std::vector<std::vector<double> > reflectance_offsets_;
   // expected radiance = scale * reflectance + offset
-  vcl_vector<vcl_vector<double> > radiance_scales_;
-  vcl_vector<vcl_vector<double> > radiance_offsets_;
+  std::vector<std::vector<double> > radiance_scales_;
+  std::vector<std::vector<double> > radiance_offsets_;
   // radiance variance = scale*reflectance*reflectance + offset
-  vcl_vector<vcl_vector<double> > radiance_var_scales_;
-  vcl_vector<vcl_vector<double> > radiance_var_offsets_;
+  std::vector<std::vector<double> > radiance_var_scales_;
+  std::vector<std::vector<double> > radiance_var_offsets_;
 
 };
 

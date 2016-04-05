@@ -5,13 +5,15 @@
 // \brief Uses regression to predict new pose from current sample
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_pose.h>
 #include <mbl/mbl_chord.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 
 //: Types of 2D transformation
@@ -19,7 +21,7 @@
 // zoom=(tx,ty,s), similarity = (tx,ty,scosA,ssinA)
 enum mfpf_pose_type { translation,rigid,zoom,similarity };
 
-vcl_ostream& operator<<(vcl_ostream&,const mfpf_pose_type&);
+std::ostream& operator<<(std::ostream&,const mfpf_pose_type&);
 
 //: Uses regression to predict new pose from current sample.
 //  Samples intensities in a region of interest, defined by the set of mbl_chords roi_.
@@ -38,7 +40,7 @@ class mfpf_pose_predictor
   double ref_y_;
 
   //: Chords defining the region of interest
-  vcl_vector<mbl_chord> roi_;
+  std::vector<mbl_chord> roi_;
 
   //: Size of bounding box of region of interest
   unsigned roi_ni_;
@@ -88,7 +90,7 @@ class mfpf_pose_predictor
   void set_pose_type(const mfpf_pose_type&);
 
   //: Define region to be used
-  void set(const vcl_vector<mbl_chord>& roi,
+  void set(const std::vector<mbl_chord>& roi,
            double ref_x, double ref_y,
            short norm_method=1);
 
@@ -130,22 +132,22 @@ class mfpf_pose_predictor
   //: Generate points in ref frame that represent boundary
   //  Points of a contour around the shape.
   //  Used for display purposes.
-  virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
+  virtual void get_outline(std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_pose_predictor* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Prints ASCII representation of shape to os
-  void print_shape(vcl_ostream& os) const;
+  void print_shape(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -164,7 +166,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mfpf_pose_predictor& b);
 void vsl_b_read(vsl_b_istream& bfs, mfpf_pose_predictor& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_pose_predictor& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_pose_predictor& b);
 
 
 #endif

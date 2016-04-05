@@ -1,4 +1,5 @@
 // This is oxl/xcv/xcv_file.cxx
+#include <iostream>
 #include "xcv_file.h"
 //:
 //  \file
@@ -12,7 +13,7 @@
 // \endverbatim
 //
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_save.h>
@@ -26,10 +27,10 @@
 
 #include <xcv/xcv_image_tableau.h>
 
-extern vcl_string* get_loadfile();
-extern vcl_string* get_savefile();
+extern std::string* get_loadfile();
+extern std::string* get_savefile();
 extern void get_current(unsigned*, unsigned*);
-extern void add_image_at(vcl_string, unsigned, unsigned);
+extern void add_image_at(std::string, unsigned, unsigned);
 extern bool get_image_at(vil1_image*, unsigned, unsigned);
 extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
 extern vgui_tableau_sptr get_top(unsigned,unsigned);
@@ -46,15 +47,15 @@ void xcv_file::load_image()
   get_current(&col, &row);
 
   vgui_dialog load_image_dl("Load image");
-  vcl_string* image_filename = get_loadfile();
-  static vcl_string regexp = "*.*";
+  std::string* image_filename = get_loadfile();
+  static std::string regexp = "*.*";
   load_image_dl.inline_file("Filename of image:", regexp, *image_filename);
 
   if (!load_image_dl.ask())
     return;
 
 #ifdef DEBUG
-  vcl_cerr << "Loading image file: " << *image_filename << vcl_endl;
+  std::cerr << "Loading image file: " << *image_filename << std::endl;
 #endif
   add_image_at(*image_filename, col, row);
 }
@@ -68,23 +69,23 @@ void xcv_file::save_image()
   unsigned col,row;
   get_current(&col,&row);
   xcv_image_tableau_sptr imt = get_image_tableau_at(col,row);
-  static vcl_string* image_filename = get_savefile();
-  static vcl_string regexp = "*.*";
+  static std::string* image_filename = get_savefile();
+  static std::string regexp = "*.*";
   load_image_dl.inline_file("Filename to save image:", regexp, *image_filename);
-  vcl_vector<vcl_string> labels;
-  labels.push_back(vcl_string("JPEG"));
-  labels.push_back(vcl_string("TIFF"));
-  labels.push_back(vcl_string("PNM"));
-  labels.push_back(vcl_string("PNG"));
-  labels.push_back(vcl_string("IRIS"));
-  labels.push_back(vcl_string("MIT"));
-  labels.push_back(vcl_string("VIFF"));
+  std::vector<std::string> labels;
+  labels.push_back(std::string("JPEG"));
+  labels.push_back(std::string("TIFF"));
+  labels.push_back(std::string("PNM"));
+  labels.push_back(std::string("PNG"));
+  labels.push_back(std::string("IRIS"));
+  labels.push_back(std::string("MIT"));
+  labels.push_back(std::string("VIFF"));
   static int choice_value = 0;
   load_image_dl.choice("File format ",labels,choice_value);
   if (load_image_dl.ask())
   {
 #ifdef DEBUG
-    vcl_cerr << "Saving image to file: " << image_filename->c_str() << vcl_endl;
+    std::cerr << "Saving image to file: " << image_filename->c_str() << std::endl;
 #endif
     static const char *format[] = {
       "jpg","tiff","pnm","png","iris","mit","viff"};
@@ -98,13 +99,13 @@ void xcv_file::save_image()
 void xcv_file::dump_image()
 {
   vgui_dialog dump_image_dl(" Dump window to image file");
-  static vcl_string* image_filename = get_savefile();
-  static vcl_string regexp = "*.*";
+  static std::string* image_filename = get_savefile();
+  static std::string regexp = "*.*";
   dump_image_dl.inline_file("Filename to save image:", regexp, *image_filename);
   if (dump_image_dl.ask())
   {
 #ifdef DEBUG
-    vcl_cerr << "Saving image to file: " << image_filename->c_str() << vcl_endl;
+    std::cerr << "Saving image to file: " << image_filename->c_str() << std::endl;
 #endif
     vgui_utils::dump_colour_buffer( image_filename->c_str() );
   }
@@ -119,8 +120,8 @@ void xcv_file::save_as_ps()
   get_current(&col, &row);
 
   vgui_dialog ps_dl("Save postscript ");
-  vcl_string* image_filename = get_savefile();
-  static vcl_string regexp = "*.ps";
+  std::string* image_filename = get_savefile();
+  static std::string regexp = "*.ps";
   static bool save_objs = true;
   static int reduction_factor = 1;
   ps_dl.inline_file("Enter file name to save to:", regexp, *image_filename);
@@ -129,7 +130,7 @@ void xcv_file::save_as_ps()
   if (ps_dl.ask())
   {
 #ifdef DEBUG
-    vcl_cerr << "Saving data to postscript file: "<< image_filename << vcl_endl;
+    std::cerr << "Saving data to postscript file: "<< image_filename << std::endl;
 #endif
     vgui_easy2D_tableau_sptr easy = get_easy2D_at(col, row);
     if (easy)

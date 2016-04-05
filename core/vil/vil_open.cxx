@@ -6,15 +6,17 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cstring>
+#include <fstream>
 #include "vil_open.h"
 
-#include <vcl_cstring.h>  // strncmp()
 
 #include <vil/vil_stream_fstream.h>
 
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_url.h>
-// not used? #include <vcl_fstream.h>
+// not used? #include <vcl_compiler.h>
 
 vil_stream *vil_open(char const* what, char const* how)
 {
@@ -54,16 +56,16 @@ vil_stream *vil_open(char const* what, char const* how)
 
   if (!is) {
     // hacked check for filenames beginning "gen:".
-    int l = (int)vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "gen:", 4) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    int l = (int)std::strlen(what);
+    if (l > 4 && std::strncmp(what, "gen:", 4) == 0) {
+      if (std::strcmp(how, "r") == 0) {
         // Make an in-core stream...
         vil_stream_core *cis = new vil_stream_core();
         cis->write(what, l+1);
         is = cis;
       }
       else {
-        vcl_cerr << __FILE__ ": cannot open gen:* for writing\n";
+        std::cerr << __FILE__ ": cannot open gen:* for writing\n";
       }
     }
   }
@@ -76,13 +78,13 @@ vil_stream *vil_open(char const* what, char const* how)
 
   if (!is) {
     // maybe it's a URL?
-    int l = (int)vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    int l = (int)std::strlen(what);
+    if (l > 4 && std::strncmp(what, "http://", 7) == 0) {
+      if (std::strcmp(how, "r") == 0) {
         is = new vil_stream_url(what);
       }
       else
-        vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+        std::cerr << __FILE__ ": cannot open URL for writing (yet)\n";
     }
   }
   if (is && !is->ok()) {
@@ -125,14 +127,14 @@ vil_stream *vil_open(wchar_t const* what, char const* how)
     // hacked check for filenames beginning "gen:".
     int l = wcslen(what);
     if (l > 4 && wcsncmp(what, L"gen:", 4) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+      if (std::strcmp(how, "r") == 0) {
         // Make an in-core stream...
         vil_stream_core *cis = new vil_stream_core();
         cis->write(what, l+1);
         is = cis;
       }
       else {
-        vcl_cerr << __FILE__ ": cannot open gen:* for writing\n";
+        std::cerr << __FILE__ ": cannot open gen:* for writing\n";
       }
     }
   }
@@ -147,13 +149,13 @@ vil_stream *vil_open(wchar_t const* what, char const* how)
 #if 0  // TODO: add wchar_t support in vil_stream_url
   if (!is) {
     // maybe it's a URL?
-    int l = vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    int l = std::strlen(what);
+    if (l > 4 && std::strncmp(what, "http://", 7) == 0) {
+      if (std::strcmp(how, "r") == 0) {
         is = new vil_stream_url(what);
       }
       else
-        vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+        std::cerr << __FILE__ ": cannot open URL for writing (yet)\n";
     }
   }
   if (is && !is->ok()) {

@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_fundamental_matrix.h>
 
@@ -89,15 +90,15 @@ static void test_fundamental_matrix()
   vpgl_proj_camera<double> C2l_est =
     F3.extract_left_camera( vnl_vector_fixed<double,3>(0,0,0), 1 );
   vpgl_fundamental_matrix<double> F3_est( C2r, C2l_est );
-  vcl_cerr << "\nTrue fundamental matrix: " << F3.get_matrix() << '\n'
+  std::cerr << "\nTrue fundamental matrix: " << F3.get_matrix() << '\n'
            << "Estimated fundamental matrix: " << F3_est.get_matrix() << '\n';
   TEST_NEAR( "left camera extraction",
              F3.get_matrix()(0,0)/F3_est.get_matrix()(0,0) -
              F3.get_matrix()(0,1)/F3_est.get_matrix()(0,1), 0, 1e-06 );
 
   // Test camera extraction with point correspondences.
-  vcl_vector< vgl_point_3d<double> > p3w;
-  vcl_vector< vgl_point_2d<double> > p3i;
+  std::vector< vgl_point_3d<double> > p3w;
+  std::vector< vgl_point_2d<double> > p3i;
   p3w.push_back( vgl_point_3d<double>( 1, 10, 3 ) );
   p3w.push_back( vgl_point_3d<double>( -5, 3, -4 ) );
   p3w.push_back( vgl_point_3d<double>( 3, -8, 1 ) );
@@ -106,7 +107,7 @@ static void test_fundamental_matrix()
       C2l.project( vgl_homg_point_3d<double>(p3w[i]) ) ) );
   vpgl_proj_camera<double> C2l_est2 =
     F3.extract_left_camera( p3w, p3i );
-  vcl_cerr << "\nTrue camera matrix: " << C2l.get_matrix() << '\n'
+  std::cerr << "\nTrue camera matrix: " << C2l.get_matrix() << '\n'
            << "Estimated camera matrix: " << C2l_est2.get_matrix() << '\n'
            << C2l.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n'
            << C2l_est.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n';

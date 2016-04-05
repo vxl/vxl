@@ -5,7 +5,7 @@
 
 
 //: Return the group name for a given face index
-vcl_string imesh_face_array_base::group_name(unsigned int f) const
+std::string imesh_face_array_base::group_name(unsigned int f) const
 {
   if (groups_.empty())
     return "";
@@ -22,10 +22,10 @@ vcl_string imesh_face_array_base::group_name(unsigned int f) const
 
 
 //: Return a set of all faces in a group
-vcl_set<unsigned int>
-imesh_face_array_base::group_face_set(const vcl_string& name) const
+std::set<unsigned int>
+imesh_face_array_base::group_face_set(const std::string& name) const
 {
-  vcl_set<unsigned int> face_set;
+  std::set<unsigned int> face_set;
   unsigned int start = 0, end;
   for (unsigned int g=0; g<groups_.size(); ++g) {
     end = groups_[g].second;
@@ -41,14 +41,14 @@ imesh_face_array_base::group_face_set(const vcl_string& name) const
 
 //: Assign a group name to all faces currently unnamed
 //  Return the number of faces in the new group
-unsigned int imesh_face_array_base::make_group(const vcl_string& name)
+unsigned int imesh_face_array_base::make_group(const std::string& name)
 {
   unsigned int start_idx = 0;
   if (!groups_.empty())
     start_idx = groups_.back().second;
 
   if (start_idx < this->size())
-    groups_.push_back(vcl_pair<vcl_string,unsigned int>(name,this->size()));
+    groups_.push_back(std::pair<std::string,unsigned int>(name,this->size()));
 
   return this->size() - start_idx;
 }
@@ -91,7 +91,7 @@ void imesh_face_array::append(const imesh_face_array_base& other,
 
     if (ind_shift > 0) {
       for (unsigned int i=new_begin; i<faces_.size(); ++i) {
-        vcl_vector<unsigned int>& f = faces_[i];
+        std::vector<unsigned int>& f = faces_[i];
         for (unsigned int j=0; j<f.size(); ++j)
           f[j] += ind_shift;
       }
@@ -99,7 +99,7 @@ void imesh_face_array::append(const imesh_face_array_base& other,
   }
   else {
     for (unsigned int i=0; i<other.size(); ++i) {
-      vcl_vector<unsigned int> f(other.num_verts(i));
+      std::vector<unsigned int> f(other.num_verts(i));
       for (unsigned int j=0; j<other.num_verts(i); ++j)
         f[j] = other(i,j) + ind_shift;
       faces_.push_back(f);
@@ -109,12 +109,12 @@ void imesh_face_array::append(const imesh_face_array_base& other,
 
 
 //: Merge the two face arrays
-vcl_auto_ptr<imesh_face_array_base>
+std::auto_ptr<imesh_face_array_base>
 imesh_merge(const imesh_face_array_base& f1,
             const imesh_face_array_base& f2,
             unsigned int ind_shift)
 {
-  vcl_auto_ptr<imesh_face_array_base> f;
+  std::auto_ptr<imesh_face_array_base> f;
   // if both face sets are regular with the same number of vertices per face
   if (f1.regularity() == f2.regularity() || f1.regularity() == 0) {
     f.reset(f1.clone());

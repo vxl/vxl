@@ -6,13 +6,15 @@
 // \author Ying-Lin Bess Lee
 // \date   Sept 2003
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_transformation.h"
 #include "rgrl_spline.h"
 #include "rgrl_spline_sptr.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class rgrl_trans_spline
   : public rgrl_transformation
@@ -24,11 +26,11 @@ class rgrl_trans_spline
   rgrl_trans_spline(unsigned int dim = 0);
 
   //: Constructor
-  rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
+  rgrl_trans_spline( std::vector<rgrl_spline_sptr> const& splines,
                      vnl_vector< double > const& x0, vnl_vector< double > const& delta,
                      rgrl_transformation_sptr xform = 0 );
   //: Constructor
-  rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
+  rgrl_trans_spline( std::vector<rgrl_spline_sptr> const& splines,
                      vnl_vector< double > const& x0, vnl_vector< double > const& delta,
                      vnl_matrix< double > const& covar,
                      rgrl_transformation_sptr xform = 0 );
@@ -50,10 +52,10 @@ class rgrl_trans_spline
   friend class test_rgrl_trans_spline;
 
   //: for output
-  void write( vcl_ostream& os ) const;
+  void write( std::ostream& os ) const;
 
   //: for input
-  bool read( vcl_istream& is );
+  bool read( std::istream& is );
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;
@@ -78,7 +80,7 @@ class rgrl_trans_spline
 
   // The displacement function has this form(in 3D): [x y z]^T = D( [x y z]^T )
   // This variable contains [ D_x D_y D_z ], each of which is an independent spline
-  vcl_vector<rgrl_spline_sptr> splines_;
+  std::vector<rgrl_spline_sptr> splines_;
 
   // The covariance of control points of splines. The displacement in
   // x, y, z are independent to each other, the covariance between

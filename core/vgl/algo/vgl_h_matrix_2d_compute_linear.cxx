@@ -1,10 +1,11 @@
 // This is core/vgl/algo/vgl_h_matrix_2d_compute_linear.cxx
+#include <iostream>
+#include <cmath>
 #include "vgl_h_matrix_2d_compute_linear.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_transpose.h>
@@ -48,8 +49,8 @@ const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
 // allows for ideal points is used.
 bool vgl_h_matrix_2d_compute_linear::
 solve_linear_problem(int equ_count,
-                     vcl_vector<vgl_homg_point_2d<double> > const& p1,
-                     vcl_vector<vgl_homg_point_2d<double> > const& p2,
+                     std::vector<vgl_homg_point_2d<double> > const& p1,
+                     std::vector<vgl_homg_point_2d<double> > const& p2,
                      vgl_h_matrix_2d<double>& H)
 {
   //transform the point sets and fill the design matrix
@@ -100,7 +101,7 @@ solve_linear_problem(int equ_count,
   // FSM added :
   //
   if (svd.W(7)<DEGENERACY_THRESHOLD*svd.W(8)) {
-    vcl_cerr << "vgl_h_matrix_2d_compute_linear : design matrix has rank < 8\n"
+    std::cerr << "vgl_h_matrix_2d_compute_linear : design matrix has rank < 8\n"
              << "vgl_h_matrix_2d_compute_linear : probably due to degenerate point configuration\n";
     return false;
   }
@@ -110,8 +111,8 @@ solve_linear_problem(int equ_count,
 }
 
 bool vgl_h_matrix_2d_compute_linear::
-compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-          vcl_vector<vgl_homg_point_2d<double> > const& points2,
+compute_p(std::vector<vgl_homg_point_2d<double> > const& points1,
+          std::vector<vgl_homg_point_2d<double> > const& points2,
           vgl_h_matrix_2d<double>& H)
 {
   //number of points must be the same
@@ -120,8 +121,8 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 
   int equ_count = n * (allow_ideal_points_ ? 3 : 2);
   if (n * 2 < TM_UNKNOWNS_COUNT - 1) {
-    vcl_cerr << "vgl_h_matrix_2d_compute_linear: Need at least 4 matches.\n";
-    if (n == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    std::cerr << "vgl_h_matrix_2d_compute_linear: Need at least 4 matches.\n";
+    if (n == 0) std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
     return false;
   }
   //compute the normalizing transforms
@@ -130,7 +131,7 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
     return false;
   if (!tr2.compute_from_points(points2))
     return false;
-  vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
+  std::vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
   for (int i = 0; i<n; i++)
   {
     tpoints1.push_back(tr1(points1[i]));
@@ -153,8 +154,8 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 }
 
 bool vgl_h_matrix_2d_compute_linear::
-compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-          vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
+          std::vector<vgl_homg_line_2d<double> > const& lines2,
           vgl_h_matrix_2d<double>& H)
 {
   //number of lines must be the same
@@ -168,8 +169,8 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
     return false;
   if (!tr2.compute_from_lines(lines2))
     return false;
-  vcl_vector<vgl_homg_point_2d<double> > tlines1, tlines2;
-  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+  std::vector<vgl_homg_point_2d<double> > tlines1, tlines2;
+  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines1.begin(); lit != lines1.end(); lit++)
   {
     // transform the lines according to the normalizing transform
@@ -178,7 +179,7 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
     vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines1.push_back(p);
   }
-  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines2.begin(); lit != lines2.end(); lit++)
   {
     // transform the lines according to the normalizing transform
@@ -210,10 +211,10 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
 }
 
 bool vgl_h_matrix_2d_compute_linear::
-compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-           vcl_vector<vgl_homg_point_2d<double> > const& points2,
-           vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+compute_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
+           std::vector<vgl_homg_point_2d<double> > const& points2,
+           std::vector<vgl_homg_line_2d<double> > const& lines1,
+           std::vector<vgl_homg_line_2d<double> > const& lines2,
            vgl_h_matrix_2d<double>& H)
 {
   //number of points must be the same
@@ -226,8 +227,8 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   int equ_count = np * (allow_ideal_points_ ? 3 : 2) + 2*nl;
   if ((np+nl)*2+1 < TM_UNKNOWNS_COUNT)
   {
-    vcl_cerr << "vgl_h_matrix_2d_compute_linear: Need at least 4 matches.\n";
-    if (np+nl == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    std::cerr << "vgl_h_matrix_2d_compute_linear: Need at least 4 matches.\n";
+    if (np+nl == 0) std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
     return false;
   }
   //compute the normalizing transforms
@@ -236,7 +237,7 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
     return false;
   if (!tr2.compute_from_points_and_lines(points2,lines2))
     return false;
-  vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
+  std::vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
   for (int i = 0; i<np; i++)
   {
     tpoints1.push_back(tr1(points1[i]));
@@ -244,9 +245,9 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   }
   for (int i = 0; i<nl; i++)
   {
-    double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=vcl_sqrt(a*a+b*b);
+    double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=std::sqrt(a*a+b*b);
     tpoints1.push_back(tr1(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
-    a=lines2[i].a(), b=lines2[i].b(), c=lines2[i].c(), d = vcl_sqrt(a*a+b*b);
+    a=lines2[i].a(), b=lines2[i].b(), c=lines2[i].c(), d = std::sqrt(a*a+b*b);
     tpoints2.push_back(tr2(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
   }
   vgl_h_matrix_2d<double> hh;
@@ -276,9 +277,9 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 //  case of unweighted least squares.
 //
 bool vgl_h_matrix_2d_compute_linear::
-solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
-                             vcl_vector<vgl_homg_line_2d<double> > const& l2,
-                             vcl_vector<double> const& w,
+solve_weighted_least_squares(std::vector<vgl_homg_line_2d<double> > const& l1,
+                             std::vector<vgl_homg_line_2d<double> > const& l2,
+                             std::vector<double> const& w,
                              vgl_h_matrix_2d<double>& H)
 {
   int Nc = l1.size();
@@ -330,7 +331,7 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
   // FSM added :
   //
   if (svd.W(7)<DEGENERACY_THRESHOLD*svd.W(8)) {
-    vcl_cerr << "vgl_h_matrix_2d_compute_linear : design matrix has rank < 8\n"
+    std::cerr << "vgl_h_matrix_2d_compute_linear : design matrix has rank < 8\n"
              << "vgl_h_matrix_2d_compute_linear : probably due to degenerate point configuration\n";
     return false;
   }
@@ -340,9 +341,9 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
 }
 
 bool vgl_h_matrix_2d_compute_linear::
-compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-          vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-          vcl_vector<double> const & weights,
+compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
+          std::vector<vgl_homg_line_2d<double> > const& lines2,
+          std::vector<double> const & weights,
           vgl_h_matrix_2d<double>& H)
 {
   //number of lines must be the same
@@ -355,15 +356,15 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
     return false;
   if (!tr2.compute_from_lines(lines2))
     return false;
-  vcl_vector<vgl_homg_line_2d<double> > tlines1, tlines2;
-  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+  std::vector<vgl_homg_line_2d<double> > tlines1, tlines2;
+  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines1.begin(); lit != lines1.end(); lit++)
   {
     // transform the lines according to the normalizing transform
     vgl_homg_line_2d<double> l = tr1(*lit);
     tlines1.push_back(l);
   }
-  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines2.begin(); lit != lines2.end(); lit++)
   {
     // transform the lines according to the normalizing transform

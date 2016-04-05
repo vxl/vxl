@@ -5,12 +5,14 @@
 // \author Tim Cootes
 // \brief Generates set of axis aligned modes for non-zero elements
 
+#include <iostream>
+#include <iosfwd>
 #include <mcal/mcal_component_analyzer.h>
 #include <mcal/mcal_single_basis_cost.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Generates set of axis aligned modes for non-zero element
 //  Given n-D input data, for each element which contains non-zero
@@ -40,13 +42,13 @@ class mcal_trivial_ca : public mcal_component_analyzer
   short version_no() const;
 
     //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
     //: Create a copy on the heap and return base class pointer
   virtual  mcal_component_analyzer*  clone()  const;
 
     //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
     //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -61,7 +63,7 @@ class mcal_trivial_ca : public mcal_component_analyzer
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(vcl_istream & is);
+  virtual void config_from_stream(std::istream & is);
 };
 
 #endif // mcal_trivial_ca_h_

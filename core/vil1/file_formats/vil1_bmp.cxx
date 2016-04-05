@@ -3,16 +3,17 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <vector>
+#include <cstring>
 #include "vil1_bmp.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_property.h>
 
-#define where (vcl_cerr << __FILE__ ":" << __LINE__ << " : ")
+#define where (std::cerr << __FILE__ ":" << __LINE__ << " : ")
 
 //--------------------------------------------------------------------------------
 
@@ -65,13 +66,13 @@ vil1_bmp_generic_image::vil1_bmp_generic_image(vil1_stream* is)
 
 bool vil1_bmp_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = false, true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_component_order_is_BGR))
+  if (0==std::strcmp(tag, vil1_property_component_order_is_BGR))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -135,13 +136,13 @@ bool vil1_bmp_generic_image::read_header()
     return false;
   }
 #ifdef DEBUG
-  file_hdr.print(vcl_cerr); // blather
+  file_hdr.print(std::cerr); // blather
 #endif
 
   // read core header
   core_hdr.read(is_);
 #ifdef DEBUG
-  core_hdr.print(vcl_cerr); // blather
+  core_hdr.print(std::cerr); // blather
 #endif
   // allowed values for bitsperpixel are 1 4 8 16 24 32;
   // currently we only support 8 and 24 - FIXME
@@ -159,7 +160,7 @@ bool vil1_bmp_generic_image::read_header()
     // probably an info header. read it now.
     info_hdr.read(is_);
 #ifdef DEBUG
-    info_hdr.print(vcl_cerr); // blather
+    info_hdr.print(std::cerr); // blather
 #endif
     if (info_hdr.compression) {
       where << "cannot cope with compression at the moment\n";
@@ -168,7 +169,7 @@ bool vil1_bmp_generic_image::read_header()
   }
   else {
     // urgh!
-    where << "dunno about header_size " << core_hdr.header_size << vcl_endl;
+    where << "dunno about header_size " << core_hdr.header_size << std::endl;
     return false;
   }
 
@@ -223,9 +224,9 @@ bool vil1_bmp_generic_image::read_header()
     else
       cmap_size = ccount*4;
 
-    vcl_vector<uchar> cmap(cmap_size, 0); // use vector<> to avoid coreleak
+    std::vector<uchar> cmap(cmap_size, 0); // use vector<> to avoid coreleak
     if (is_->read(/* xxx */&cmap[0], 1024L) != 1024L) {
-      vcl_cerr << "Error reading image palette\n";
+      std::cerr << "Error reading image palette\n";
       return false;
     }
 
@@ -251,7 +252,7 @@ bool vil1_bmp_generic_image::read_header()
   // remember the position of the start of the bitmap data
   bit_map_start = is_->tell();
 #ifdef DEBUG
-  where << "bit_map_start = " << bit_map_start << vcl_endl; // blather
+  where << "bit_map_start = " << bit_map_start << std::endl; // blather
 #endif
   assert(bit_map_start == (int)file_hdr.bitmap_offset); // I think they're supposed to be the same -- fsm.
 
@@ -261,7 +262,7 @@ bool vil1_bmp_generic_image::read_header()
 bool vil1_bmp_generic_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << "Writing BMP header\n"
+  std::cerr << "Writing BMP header\n"
            << width() << 'x' << height() << '@'
            << components() << 'x' << bits_per_component() << '\n';
 #endif

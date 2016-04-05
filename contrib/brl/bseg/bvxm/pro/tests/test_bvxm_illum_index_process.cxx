@@ -4,13 +4,14 @@
 // \author Isabel Restrepo
 // \date   February 29, 2008
 
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/pro/processes/bvxm_illum_index_process.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -34,8 +35,8 @@ static void test_bvxm_illum_index_process()
     REGISTER_DATATYPE(unsigned);
 
     // set the inputs
-    brdb_value_sptr v0 = new brdb_value_t<vcl_string>("eq_area");
-    brdb_value_sptr v1 = new brdb_value_t<vcl_string>("po_39928_pan_0000000_chip_700_700_withICHIPB.nitf");
+    brdb_value_sptr v0 = new brdb_value_t<std::string>("eq_area");
+    brdb_value_sptr v1 = new brdb_value_t<std::string>("po_39928_pan_0000000_chip_700_700_withICHIPB.nitf");
     brdb_value_sptr v2 = new brdb_value_t<unsigned>(10);
     brdb_value_sptr v3 = new brdb_value_t<unsigned>(0);
 
@@ -62,16 +63,16 @@ static void test_bvxm_illum_index_process()
       brdb_query_aptr bin_idx_Q = brdb_query_comp_new("id", brdb_query::EQ, id_bin_idx);
       brdb_selection_sptr bin_idx_S = DATABASE->select("unsigned_data", bin_idx_Q);
       if (bin_idx_S->size()!=1){
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                  << " no selections\n";
       }
 
       brdb_value_sptr value;
-      if (!bin_idx_S->get_value(vcl_string("value"), value)) {
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      if (!bin_idx_S->get_value(std::string("value"), value)) {
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                  << " didn't get value\n";
       }
-      bool non_null = (value != 0);
+      bool non_null = (value != VXL_NULLPTR);
       TEST("bin index output non-null", non_null ,true);
 
       // check that for zero regions choice, the index is zero
@@ -79,7 +80,7 @@ static void test_bvxm_illum_index_process()
         static_cast<brdb_value_t<unsigned>* >(value.ptr());
       unsigned idx = result->value();
 
-      vcl_cout<<idx<< vcl_endl;
+      std::cout<<idx<< std::endl;
       TEST("default index", idx ,0);
     }
   }

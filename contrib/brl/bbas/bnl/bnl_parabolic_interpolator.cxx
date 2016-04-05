@@ -1,8 +1,9 @@
+#include <iostream>
 #include "bnl_parabolic_interpolator.h"
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 void
 bnl_parabolic_interpolator::add_data_point(const double p, const double v)
@@ -60,7 +61,7 @@ bool bnl_parabolic_interpolator::solve()
   this->fill_scatter_matrix();
   vnl_svd<double> svd(s_);
   vnl_vector<double> nv = svd.nullvector();
-  vcl_cout << "NV: " << nv << '\n';
+  std::cout << "NV: " << nv << '\n';
   if (nv[0] > -1e-6)
     return false;//Vxx is too small
   p_ext_ = -nv[1]/(2.0*nv[0]);
@@ -69,9 +70,9 @@ bool bnl_parabolic_interpolator::solve()
 
 void bnl_parabolic_interpolator::print()
 {
-  vcl_cout << "P / V\n";
+  std::cout << "P / V\n";
   for (int i = 0; i<this->n_points(); i++)
-    vcl_cout << p_[i] << '\t' << v_[i] << '\n';
-  vcl_cout << vcl_flush;
+    std::cout << p_[i] << '\t' << v_[i] << '\n';
+  std::cout << std::flush;
 }
 

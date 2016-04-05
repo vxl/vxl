@@ -15,8 +15,9 @@
 // \endverbatim
 
 
+#include <iostream>
 #include "vgui_tview_launcher_tableau.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -26,7 +27,7 @@
 vgui_tview_launcher_tableau::vgui_tview_launcher_tableau()
   : c_graph(vgui_key('g'), vgui_SHIFT) { }
 
-vcl_string vgui_tview_launcher_tableau::type_name() const
+std::string vgui_tview_launcher_tableau::type_name() const
 {
   return "vgui_tview_launcher_tableau";
 }
@@ -56,7 +57,7 @@ void vgui_tview_launcher_tableau::get_popup(const vgui_popup_params& /*params*/,
 void vgui_tview_launcher_tableau::go(vgui_adaptor* a)
 {
   if (!a) {
-    vcl_cerr << __FILE__ ": a = 0\n";
+    std::cerr << __FILE__ ": a = 0\n";
     return;
   }
   vgui_tview_tableau_new tview(a->get_tableau());

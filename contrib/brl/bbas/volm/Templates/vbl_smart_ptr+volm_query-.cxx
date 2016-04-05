@@ -6,7 +6,7 @@
 #include <vsol/vsol_box_3d.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_camera_space.h>
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 
 VBL_SMART_PTR_INSTANTIATE(volm_query);
 

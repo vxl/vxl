@@ -4,6 +4,8 @@
 //  Copyright: (C) 1998 Victoria University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <string>
 #include "vpdfl_mixture_sampler.h"
 //:
 // \file
@@ -18,7 +20,7 @@
 //
 //=======================================================================
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 
 //=======================================================================
@@ -127,14 +129,14 @@ void vpdfl_mixture_sampler::reseed(unsigned long seed)
 
 //=======================================================================
 
-vcl_string vpdfl_mixture_sampler::is_a() const
+std::string vpdfl_mixture_sampler::is_a() const
 {
-  return vcl_string("vpdfl_mixture_sampler");
+  return std::string("vpdfl_mixture_sampler");
 }
 
 //=======================================================================
 
-bool vpdfl_mixture_sampler::is_class(vcl_string const& s) const
+bool vpdfl_mixture_sampler::is_class(std::string const& s) const
 {
   return vpdfl_sampler_base::is_class(s) || s==vpdfl_mixture_sampler::is_a();
 }

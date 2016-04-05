@@ -21,7 +21,7 @@ T getpixel(vnl_vector<T> const& i, int x, int y, T); \
 void setpixel(vnl_vector<T>& i, int x, int y, T e)
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_accessors_vnl_vector.txx"
+#include "vipl_accessors_vnl_vector.hxx"
 #endif
 
 #endif // vipl_accessors_vnl_vector_h_

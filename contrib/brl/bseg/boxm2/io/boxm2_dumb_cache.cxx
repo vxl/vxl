@@ -3,7 +3,7 @@
 // \file
 
 //: constructor from scene pointer
-boxm2_dumb_cache::boxm2_dumb_cache(boxm2_scene* scene) : boxm2_cache1(scene), cached_block_(0)
+boxm2_dumb_cache::boxm2_dumb_cache(boxm2_scene* scene) : boxm2_cache1(scene), cached_block_(VXL_NULLPTR)
 {
   scene_dir_ = scene->data_path();
 }
@@ -17,7 +17,7 @@ boxm2_dumb_cache::~boxm2_dumb_cache()
   delete cached_block_;
 
   // clean up loaded data
-  vcl_map<vcl_string, boxm2_data_base* >::iterator iter;
+  std::map<std::string, boxm2_data_base* >::iterator iter;
   for (iter=cached_data_.begin(); iter!=cached_data_.end(); ++iter) {
     delete (*iter).second;
   }
@@ -27,7 +27,7 @@ boxm2_dumb_cache::~boxm2_dumb_cache()
 //: realization of abstract "get_block(block_id)"
 boxm2_block* boxm2_dumb_cache::get_block(boxm2_block_id id)
 {
-  vcl_cout<<"Dumb Cache Get Block"<<vcl_endl;
+  std::cout<<"Dumb Cache Get Block"<<std::endl;
   if (cached_block_ && cached_block_->block_id() == id)
     return cached_block_;
 
@@ -36,7 +36,7 @@ boxm2_block* boxm2_dumb_cache::get_block(boxm2_block_id id)
 
   //check to make sure it's loaded
   if (!loaded && scene_->block_exists(id)) {
-    vcl_cout<<"boxm2_nn_cache::initializing empty block "<<id<<vcl_endl;
+    std::cout<<"boxm2_nn_cache::initializing empty block "<<id<<std::endl;
     boxm2_block_metadata data = scene_->get_block_metadata(id);
     loaded = new boxm2_block(data);
   }
@@ -53,7 +53,7 @@ void boxm2_dumb_cache::update_block_cache(boxm2_block* blk)
 }
 
 //: get data by type and id
-boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
+boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
 {
   if ( cached_data_.find(type) != cached_data_.end() )
   {
@@ -66,7 +66,7 @@ boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, vcl_string t
 
   //make sure it loaded
   if (!loaded && scene_->block_exists(id)) {
-    vcl_cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+    std::cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<type<<std::endl;
     boxm2_block_metadata data = scene_->get_block_metadata(id);
     loaded = new boxm2_data_base(data, type);
   }
@@ -75,21 +75,21 @@ boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, vcl_string t
   return loaded;
 }
 
-void boxm2_dumb_cache::remove_data_base(boxm2_block_id, vcl_string type)
+void boxm2_dumb_cache::remove_data_base(boxm2_block_id, std::string type)
 {
-  vcl_cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<vcl_endl;
+  std::cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<std::endl;
 }
 
-void boxm2_dumb_cache::replace_data_base(boxm2_block_id, vcl_string type, boxm2_data_base* replacement)
+void boxm2_dumb_cache::replace_data_base(boxm2_block_id, std::string type, boxm2_data_base* replacement)
 {
-  vcl_cout<<"BOXM2_DUMB_CACHE::replace_data_base not implemented"<<vcl_endl;
+  std::cout<<"BOXM2_DUMB_CACHE::replace_data_base not implemented"<<std::endl;
 }
 
 
 //: update data cache by type
-void boxm2_dumb_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string type)
+void boxm2_dumb_cache::update_data_base_cache(boxm2_data_base* dat, std::string type)
 {
-  vcl_map<vcl_string, boxm2_data_base* >::iterator iter;
+  std::map<std::string, boxm2_data_base* >::iterator iter;
   iter = cached_data_.find(type);
   if ( iter != cached_data_.end() )
   {

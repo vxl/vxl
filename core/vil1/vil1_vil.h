@@ -5,12 +5,13 @@
 // \file
 // \brief Provide inline vil wrappers of vil1 and vice-versa.
 
+#include <iostream>
 #include <vil1/vil1_fwd.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vil/vil_memory_chunk.h>
 
@@ -25,7 +26,7 @@ vil_image_view<T> vil1_to_vil_image_view(const vil1_memory_image_of<T> &vil1_im)
 {
   const T* tl = &vil1_im(0,0);
 
-  vcl_ptrdiff_t planestep;
+  std::ptrdiff_t planestep;
 
   if (vil1_im.planes() == 1)
     planestep = vil1_im.cols()* vil1_im.rows();
@@ -46,7 +47,7 @@ vil1_memory_image_of<T> vil1_from_vil_image_view(const vil_image_view<T> &vil_im
 {
   if (!vil_im.is_contiguous() || vil_im.nplanes() != 1)
   {
-    vcl_cerr << "WARNING vil1_vil1_from_image_view(): Unable to create vil1_memory_image_of<T>\n";
+    std::cerr << "WARNING vil1_vil1_from_image_view(): Unable to create vil1_memory_image_of<T>\n";
     return vil1_memory_image_of<T>();
   }
 

@@ -95,6 +95,6 @@ vgl_homg_point_1d<T> operator*(vnl_matrix_fixed<T,2,2> const& m,
                                vgl_homg_point_1d<T> const& p);
 
 #define VGL_HOMG_OPERATORS_1D_INSTANTIATE(T) \
-        "Please #include <vgl/algo/vgl_homg_operators_1d.txx>"
+        "Please #include <vgl/algo/vgl_homg_operators_1d.hxx>"
 
 #endif // vgl_homg_operators_1d_h_

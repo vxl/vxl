@@ -3,12 +3,14 @@
 //:
 // \file
 
+#include <string>
+#include <iostream>
+#include <map>
 #include <vbl/vbl_ref_count.h>
 
 #include "bwm_observable_sptr.h"
 
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -35,7 +37,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual ~bwm_observable() {}
 
-  virtual vcl_string type_name() const { return "bwm_observable"; }
+  virtual std::string type_name() const { return "bwm_observable"; }
 
   virtual int obj_type() const=0;
 
@@ -64,13 +66,13 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual vgl_plane_3d<double> get_plane(unsigned face_id)=0;
 
-  virtual vcl_map<int, vsol_polygon_3d_sptr> extract_faces()=0;
+  virtual std::map<int, vsol_polygon_3d_sptr> extract_faces()=0;
 
-  virtual vcl_map<int, vsol_line_3d_sptr> extract_edges()=0;
+  virtual std::map<int, vsol_line_3d_sptr> extract_edges()=0;
 
-  virtual vcl_vector<vsol_point_3d_sptr> extract_vertices()=0;
+  virtual std::vector<vsol_point_3d_sptr> extract_vertices()=0;
 
-  virtual vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id)=0;
+  virtual std::map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id)=0;
 
   virtual void divide_face(unsigned face_id,
                            vgl_point_3d<double> l1, vgl_point_3d<double> l2,
@@ -97,17 +99,17 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual void save(const char* filename)=0;
 
-  vcl_string path() const { return path_; }
-  void set_path(vcl_string const& path) { path_=path; }
+  std::string path() const { return path_; }
+  void set_path(std::string const& path) { path_=path; }
 
-  vcl_string site() const { return site_; }
-  void set_site(vcl_string const& site) { site_=site; }
+  std::string site() const { return site_; }
+  void set_site(std::string const& site) { site_=site; }
 
  protected:
   //: the observable file path
-  vcl_string path_;
+  std::string path_;
   //: the observable site name
-  vcl_string site_;
+  std::string site_;
 
   vgl_vector_3d<double> last_translation_;
 };

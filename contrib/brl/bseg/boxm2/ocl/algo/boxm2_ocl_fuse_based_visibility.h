@@ -24,10 +24,10 @@ class boxm2_ocl_fuse_based_visibility
 
   private:
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="");
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="");
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
 
 };
@@ -43,10 +43,10 @@ class boxm2_ocl_fuse_based_orientation
 
   private:
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="");
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="");
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
 
 };
@@ -63,10 +63,10 @@ class boxm2_ocl_fuse_surface_density
 
   private:
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="");
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="");
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
 
 };

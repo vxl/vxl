@@ -1,17 +1,19 @@
+#include <iostream>
+#include <algorithm>
 #include "mbl_minimum_spanning_tree.h"
 //:
 // \file
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h> // for vnl_matrix<double>::get_row()
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //: Select the smallest pair s.t. first is in \param a, second in \param b
-static vcl_pair<unsigned,unsigned> mbl_mst_next_pair(
+static std::pair<unsigned,unsigned> mbl_mst_next_pair(
                                            const vnl_matrix<double>& D,
-                                           const vcl_vector<unsigned>& a,
-                                           const vcl_vector<unsigned>& b)
+                                           const std::vector<unsigned>& a,
+                                           const std::vector<unsigned>& b)
 {
-  vcl_pair<unsigned,unsigned> p;
+  std::pair<unsigned,unsigned> p;
   double min_sim = 9.9e9;
   for (unsigned i=0; i<a.size(); ++i)
     for (unsigned j=0; j<b.size(); ++j)
@@ -33,10 +35,10 @@ static vcl_pair<unsigned,unsigned> mbl_mst_next_pair(
 //  \param pairs[i].second is linked to \param pairs[i].first
 //  We compute the minimum spanning tree of the graph using Prim's algorithm.
 void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
-                               vcl_vector<vcl_pair<int,int> >& pairs)
+                               std::vector<std::pair<int,int> >& pairs)
 {
   unsigned n = D.rows();
-  vcl_vector<unsigned> a(0),b(n);
+  std::vector<unsigned> a(0),b(n);
   for (unsigned i=0;i<n;++i) b[i]=i;
   // Select element closest to all others on average
   double min_sum=9e9;
@@ -46,14 +48,14 @@ void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
     double sum = D.get_row(i).sum();
     if (sum<min_sum) { min_sum=sum; best_i=i; }
   }
-  b.erase(vcl_find(b.begin(),b.end(),best_i));
+  b.erase(std::find(b.begin(),b.end(),best_i));
   a.push_back(best_i);
 
   for (unsigned i=1;i<n;++i)
   {
-    vcl_pair<unsigned,unsigned> p = mbl_mst_next_pair(D,a,b);
+    std::pair<unsigned,unsigned> p = mbl_mst_next_pair(D,a,b);
     pairs.push_back(p);
-    b.erase(vcl_find(b.begin(),b.end(),p.second));
+    b.erase(std::find(b.begin(),b.end(),p.second));
     a.push_back(p.second);
   }
 }
@@ -63,8 +65,8 @@ void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
 //  Tree defined by pairs.
 //  \param pairs[i].second is linked to \param pairs[i].first
 //  We compute the minimum spanning tree of the graph using Prim's algorithm.
-void mbl_minimum_spanning_tree(const vcl_vector<vgl_point_2d<double> >& pts,
-                               vcl_vector<vcl_pair<int,int> >& pairs)
+void mbl_minimum_spanning_tree(const std::vector<vgl_point_2d<double> >& pts,
+                               std::vector<std::pair<int,int> >& pairs)
 {
   unsigned n=pts.size();
   vnl_matrix<double> D(n,n);
@@ -84,8 +86,8 @@ void mbl_minimum_spanning_tree(const vcl_vector<vgl_point_2d<double> >& pts,
 //  Tree defined by pairs.
 //  \param pairs[i].second is linked to \param pairs[i].first
 //  We compute the minimum spanning tree of the graph using Prim's algorithm.
-void mbl_minimum_spanning_tree(const vcl_vector<vgl_point_3d<double> >& pts,
-                               vcl_vector<vcl_pair<int,int> >& pairs)
+void mbl_minimum_spanning_tree(const std::vector<vgl_point_3d<double> >& pts,
+                               std::vector<std::pair<int,int> >& pairs)
 {
   unsigned n=pts.size();
   vnl_matrix<double> D(n,n);

@@ -64,7 +64,7 @@ void bvgl_change_obj::b_read(vsl_b_istream& is)
     vsl_b_read(is, poly_);
     break;
    default:
-    vcl_cout << "In bvgl_change_obj::b_read() -- Unrecognized version number\n";
+    std::cout << "In bvgl_change_obj::b_read() -- Unrecognized version number\n";
     break;
   }
 

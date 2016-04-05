@@ -33,14 +33,14 @@ class vgui_qt_dialog_impl :
    void* long_field_widget(const char*, long&);
    void* float_field_widget(const char*, float&);
    void* double_field_widget(const char*, double&);
-   void* string_field_widget(const char*, vcl_string&);
-   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+   void* string_field_widget(const char*, std::string&);
+   void* choice_field_widget(const char*, const std::vector<std::string>&, int&);
 
    void* text_message_widget(const char*);
-   void* file_browser_widget(const char*, vcl_string&, vcl_string&);
-   void* inline_file_browser_widget(const char *,vcl_string&, vcl_string&);
-   void* color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
-   void* inline_color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
+   void* file_browser_widget(const char*, std::string&, std::string&);
+   void* inline_file_browser_widget(const char *,std::string&, std::string&);
+   void* color_chooser_widget(const char *,std::string&);//, std::string&);
+   void* inline_color_chooser_widget(const char *,std::string&);//, std::string&);
    void* inline_tableau_widget(const vgui_tableau_sptr tab,
                                unsigned int width, unsigned int height);
    void  modal(bool m);
@@ -57,16 +57,16 @@ class vgui_qt_filebrowser_impl : public QHGroupBox
 {
    Q_OBJECT
  public:
-   vgui_qt_filebrowser_impl(QWidget* parent, const char*, vcl_string&, vcl_string&);
+   vgui_qt_filebrowser_impl(QWidget* parent, const char*, std::string&, std::string&);
   ~vgui_qt_filebrowser_impl() {}
 
-   vcl_string  file() const { return vcl_string(edit_->text().latin1()); }
+   std::string  file() const { return std::string(edit_->text().latin1()); }
 
  public slots:
    void get_a_file();
 
  private:
-   vcl_string& filter_;
+   std::string& filter_;
    QLineEdit*  edit_;
 };
 
@@ -74,16 +74,16 @@ class vgui_qt_colorchooser_impl : public QHGroupBox
 {
    Q_OBJECT
  public:
-   vgui_qt_colorchooser_impl(QWidget* parent, const char*, vcl_string&);
+   vgui_qt_colorchooser_impl(QWidget* parent, const char*, std::string&);
   ~vgui_qt_colorchooser_impl() {}
 
-  vcl_string  color() const { return value_; }
+  std::string  color() const { return value_; }
 
  public slots:
    void get_a_color();
 
  private:
-   vcl_string& value_;
+   std::string& value_;
    QFrame*     frame_;
 };
 

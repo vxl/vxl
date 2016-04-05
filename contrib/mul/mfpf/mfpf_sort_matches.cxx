@@ -8,12 +8,12 @@
 
 //: Sorts matches so first has smallest fit
 //  Sorts so that pose[0] is best fit (ie smallest fit value)
-void mfpf_sort_matches(vcl_vector<mfpf_pose>& poses,
-                       vcl_vector<double>& fits)
+void mfpf_sort_matches(std::vector<mfpf_pose>& poses,
+                       std::vector<double>& fits)
 {
-  vcl_vector<double> fits0=fits;
-  vcl_vector<mfpf_pose> poses0=poses;
-  vcl_vector<int> index;
+  std::vector<double> fits0=fits;
+  std::vector<mfpf_pose> poses0=poses;
+  std::vector<int> index;
   mbl_index_sort(fits,index);
   for (unsigned i=0;i<index.size();++i)
   {

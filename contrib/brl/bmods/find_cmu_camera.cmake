@@ -9,11 +9,11 @@
 if(WIN32)
 
   find_path( CMU1394CAMERA_VVID_INCLUDE_PATH 1394Camera.h
-    ${vxl_SOURCE_DIR}/../1394camera6_3/include
+    ${CMAKE_SOURCE_DIR}/../1394camera6_3/include
   )
 
   find_library( CMU1394CAMERA_VVID_LIBRARY_PATH 1394camera
-    ${vxl_SOURCE_DIR}/../1394camera6_3/lib
+    ${CMAKE_SOURCE_DIR}/../1394camera6_3/lib
   )
 
   if(CMU1394CAMERA_VVID_INCLUDE_PATH)

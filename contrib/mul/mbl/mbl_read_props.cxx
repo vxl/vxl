@@ -2,13 +2,14 @@
 //:
 // \file
 
+#include <sstream>
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <utility>
 #include "mbl_read_props.h"
 #include <vsl/vsl_indent.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_cctype.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
@@ -17,12 +18,12 @@
 // Return the contents for a given (required) property prop.
 // prop is removed from the property list.
 // \throws mbl_exception_missing_property if prop doesn't exist
-vcl_string mbl_read_props_type::get_required_property(const vcl_string &prop)
+std::string mbl_read_props_type::get_required_property(const std::string &prop)
 {
   mbl_read_props_type::iterator it = this->find(prop);
   if (it==this->end())
     mbl_exception_error(mbl_exception_missing_property(prop));
-  vcl_string result = it->second;
+  std::string result = it->second;
   this->erase(it);
   return result;
 }
@@ -31,10 +32,10 @@ vcl_string mbl_read_props_type::get_required_property(const vcl_string &prop)
 // Return the contents for a given (optional) property prop.
 // prop is removed from the property list.
 // Returns empty string if prop doesn't exist.
-vcl_string mbl_read_props_type::get_optional_property(const vcl_string &prop,
-                                                      const vcl_string &def_value /*=""*/)
+std::string mbl_read_props_type::get_optional_property(const std::string &prop,
+                                                      const std::string &def_value /*=""*/)
 {
-  vcl_string result(def_value);
+  std::string result(def_value);
   mbl_read_props_type::iterator it = this->find(prop);
   if (it!=this->end())
   {
@@ -45,9 +46,9 @@ vcl_string mbl_read_props_type::get_optional_property(const vcl_string &prop,
 }
 
 
-void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
+void mbl_read_props_print(std::ostream &afs, mbl_read_props_type props)
 {
-  typedef vcl_map<vcl_string, vcl_string>::iterator ITER;
+  typedef std::map<std::string, std::string>::iterator ITER;
   afs << vsl_indent() << "{\n";
   vsl_indent_inc(afs);
   for (ITER i = props.begin(); i != props.end(); ++i)
@@ -57,9 +58,9 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props)
 }
 
 
-void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props, unsigned max_chars)
+void mbl_read_props_print(std::ostream &afs, mbl_read_props_type props, unsigned max_chars)
 {
-  typedef vcl_map<vcl_string, vcl_string>::iterator ITER;
+  typedef std::map<std::string, std::string>::iterator ITER;
   afs << vsl_indent() << "{\n";
   vsl_indent_inc(afs);
   for (ITER i = props.begin(); i != props.end(); ++i)
@@ -72,10 +73,10 @@ void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props, unsigned 
 }
 
 
-static void strip_trailing_ws(vcl_string &s)
+static void strip_trailing_ws(std::string &s)
 {
   int p=s.length()-1;
-  while (p>0 && vcl_isspace(s[p])) --p;
+  while (p>0 && std::isspace(s[p])) --p;
   s.erase(p+1);
 }
 
@@ -91,19 +92,19 @@ static void strip_trailing_ws(vcl_string &s)
 // braces is included in the property value.
 // Each property label should not contain
 // any whitespace.
-mbl_read_props_type mbl_read_props(vcl_istream &afs)
+mbl_read_props_type mbl_read_props(std::istream &afs)
 {
   if (!afs) return mbl_read_props_type();
 
-  vcl_string label, str1;
+  std::string label, str1;
 
-  while ( afs>>vcl_ws, !afs.eof() )
+  while ( afs>>std::ws, !afs.eof() )
   {
     afs >> label;
     if (label.substr(0,2) =="//")
     {
       // Comment line, so read to end
-      vcl_getline( afs, str1 );
+      std::getline( afs, str1 );
     }
     else break;
   }
@@ -120,7 +121,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
   if ( label.empty() )
   {
-    afs >> vcl_ws;
+    afs >> std::ws;
 
     // Several tests with Borland 5.5.1 fail because this next
     // statement 'afs >> label;' moves past the '\n' char when the
@@ -131,18 +132,18 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
     afs >> label;
 
-    // vcl_cout << "debug label " << label << vcl_endl
-    //          << "debug peek() " << afs.peek() << vcl_endl;
+    // std::cout << "debug label " << label << std::endl
+    //          << "debug peek() " << afs.peek() << std::endl;
   }
 
-  vcl_string last_label( label );
+  std::string last_label( label );
 
   do
   {
     if ( label.substr(0,2) =="//" )
     {
       // Comment line, so read to end
-      vcl_getline(afs, str1);
+      std::getline(afs, str1);
     }
     else if ( need_closing_brace && label[0] == '}' )
     {
@@ -155,8 +156,8 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
            label[label.size() -1] == ':' )
       {
         label.erase( label.size() -1, 1 );
-        afs >> vcl_ws;
-        vcl_getline(afs, str1);
+        afs >> std::ws;
+        std::getline(afs, str1);
 
         if ( str1.substr(0,1) == "{" )
         {
@@ -170,22 +171,22 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
         if (it != props.end() && it->first == label)
         {
           mbl_exception_warning(
-            mbl_exception_read_props_parse_error( vcl_string(
+            mbl_exception_read_props_parse_error( std::string(
               "Found second entry with label \"") + label + '"' ) );
-          afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+          afs.clear(std::ios::badbit); // Set an unrecoverable IO error on stream
           return props;
         }
 
 
-        props.insert(it, vcl_make_pair(label, str1));
+        props.insert(it, std::make_pair(label, str1));
         last_label = label;
       }
       else if ( label.substr(0,1) == "{" )
       {
-        vcl_string block = mbl_parse_block( afs, true );
+        std::string block = mbl_parse_block( afs, true );
         if ( block.substr(0,2) != "{}" )
         {
-          vcl_string prop = props[ last_label ];
+          std::string prop = props[ last_label ];
           prop += "\n";
           prop += block;
           props[ last_label ] = prop;
@@ -194,42 +195,42 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
       else
       {
         char c;
-        afs >> vcl_ws;
+        afs >> std::ws;
         afs >> c;
 
         if (c != ':')
         {
-          vcl_getline(afs, str1);
+          std::getline(afs, str1);
           // The next loop replaces any characters outside the ASCII range
           // 32-126 with their XML equivalent, e.g. a TAB with &#9;
           // This is necessary for the tests dashboard since otherwise the
           // the Dart server gives up on interpreting the XML file sent. - PVr
           for (int i=-1; i<256; ++i)
           {
-            char c= i<0 ? '&' : char(i); vcl_string s(1,c); // first do '&'
+            char c= i<0 ? '&' : char(i); std::string s(1,c); // first do '&'
             if (i>=32 && i<127 && c!='<')
               continue; // keep "normal" chars
 
-            vcl_ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
-            vcl_string::size_type pos;
+            std::ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
+            std::string::size_type pos;
 
-            while ((pos=str1.find(s)) != vcl_string::npos)
+            while ((pos=str1.find(s)) != std::string::npos)
               str1.replace(pos,1,os.str());
 
-            while ((pos=label.find(s)) != vcl_string::npos)
+            while ((pos=label.find(s)) != std::string::npos)
               label.replace(pos,1,os.str());
           }
           mbl_exception_warning(
-            mbl_exception_read_props_parse_error( vcl_string(
+            mbl_exception_read_props_parse_error( std::string(
               "Could not find colon ':' separator while reading line ")
               + label + " " + str1) );
-          afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+          afs.clear(std::ios::badbit); // Set an unrecoverable IO error on stream
           return props;
         }
       }
     }
 
-    afs >> vcl_ws >> label;
+    afs >> std::ws >> label;
   }
 
   while ( !afs.eof() );
@@ -237,11 +238,11 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
   if ( need_closing_brace && label != "}" )
   {
     mbl_exception_warning(
-      mbl_exception_read_props_parse_error( vcl_string(
+      mbl_exception_read_props_parse_error( std::string(
         "Unexpected end of file while "
         "looking for '}'. Last read string = \"")
         + label +'"') );
-    afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    afs.clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 
   return props;
@@ -264,19 +265,19 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 // braces is included in the property value.
 // Each property label should not contain
 // any whitespace.
-mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
+mbl_read_props_type mbl_read_props_ws(std::istream &afs)
 {
   if (!afs) return mbl_read_props_type();
 
-  vcl_string label, str1;
+  std::string label, str1;
 
-  while ( afs>>vcl_ws, !afs.eof() )
+  while ( afs>>std::ws, !afs.eof() )
   {
     afs >> label;
     if (label.substr(0,2) =="//")
     {
       // Comment line, so read to end
-      vcl_getline( afs, str1 );
+      std::getline( afs, str1 );
     }
     else break;
   }
@@ -295,7 +296,7 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
 
   if ( label.empty() )
   {
-    afs >> vcl_ws;
+    afs >> std::ws;
 
     // Several tests with Borland 5.5.1 fail because this next
     // statement 'afs >> label;' moves past the '\n' char when the
@@ -306,18 +307,18 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
 
     afs >> label;
 
-    // vcl_cout << "debug label " << label << vcl_endl
-    //          << "debug peek() " << afs.peek() << vcl_endl;
+    // std::cout << "debug label " << label << std::endl
+    //          << "debug peek() " << afs.peek() << std::endl;
   }
 
-  vcl_string last_label( label );
+  std::string last_label( label );
 
   do
   {
     if ( label.substr(0,2) =="//" )
     {
       // Comment line, so read to end
-      vcl_getline(afs, str1);
+      std::getline(afs, str1);
     }
     else if ( need_closing_brace && label[0] == '}' )
     {
@@ -332,7 +333,7 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
         label.erase( label.size() -1, 1 );
 
         char brace;
-        afs >> vcl_ws >> brace;
+        afs >> std::ws >> brace;
 
         if (brace == '{')
           str1 = mbl_parse_block(afs, true);
@@ -350,22 +351,22 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
         if (it != props.end() && it->first == label)
         {
           mbl_exception_warning(
-            mbl_exception_read_props_parse_error( vcl_string(
+            mbl_exception_read_props_parse_error( std::string(
               "Found second entry with label \"") + label + '"' ) );
-          afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+          afs.clear(std::ios::badbit); // Set an unrecoverable IO error on stream
           return props;
         }
 
-        props.insert(it, vcl_make_pair(label, str1));
+        props.insert(it, std::make_pair(label, str1));
 
         last_label = label;
       }
       else if ( label.substr(0,1) == "{" )
       {
-        vcl_string block = mbl_parse_block( afs, true );
+        std::string block = mbl_parse_block( afs, true );
         if ( block.substr(0,2) != "{}" )
         {
-          vcl_string prop = props[ last_label ];
+          std::string prop = props[ last_label ];
           prop += " ";
           prop += block;
           props[ last_label ] = prop;
@@ -374,42 +375,42 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
       else
       {
         char c;
-        afs >> vcl_ws;
+        afs >> std::ws;
         afs >> c;
 
         if (c != ':')
         {
-          vcl_getline(afs, str1);
+          std::getline(afs, str1);
           // The next loop replaces any characters outside the ASCII range
           // 32-126 with their XML equivalent, e.g. a TAB with &#9;
           // This is necessary for the tests dashboard since otherwise the
           // the Dart server gives up on interpreting the XML file sent. - PVr
           for (int i=-1; i<256; ++i)
           {
-            char c= i<0 ? '&' : char(i); vcl_string s(1,c); // first do '&'
+            char c= i<0 ? '&' : char(i); std::string s(1,c); // first do '&'
             if (i>=32 && i<127 && c!='<')
               continue; // keep "normal" chars
 
-            vcl_ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
-            vcl_string::size_type pos;
+            std::ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
+            std::string::size_type pos;
 
-            while ((pos=str1.find(s)) != vcl_string::npos)
+            while ((pos=str1.find(s)) != std::string::npos)
               str1.replace(pos,1,os.str());
 
-            while ((pos=label.find(s)) != vcl_string::npos)
+            while ((pos=label.find(s)) != std::string::npos)
               label.replace(pos,1,os.str());
           }
           mbl_exception_warning(
-            mbl_exception_read_props_parse_error( vcl_string(
+            mbl_exception_read_props_parse_error( std::string(
               "Could not find colon ':' separator while reading line ")
               + label + " " + str1) );
-          afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+          afs.clear(std::ios::badbit); // Set an unrecoverable IO error on stream
           return props;
         }
       }
     }
 
-    afs >> vcl_ws >> label;
+    afs >> std::ws >> label;
   }
 
   while ( !afs.eof() );
@@ -417,11 +418,11 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
   if ( need_closing_brace && label != "}" )
   {
     mbl_exception_warning(
-      mbl_exception_read_props_parse_error( vcl_string(
+      mbl_exception_read_props_parse_error( std::string(
         "Unexpected end of file while "
         "looking for '}'. Last read string = \"")
         + label + '"') );
-    afs.clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    afs.clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return props;
   }
 
@@ -467,7 +468,7 @@ mbl_read_props_type mbl_read_props_merge(const mbl_read_props_type& a,
 //: Throw error if there are any keys in props that aren't in ignore.
 // \throw mbl_exception_unused_props
 void mbl_read_props_look_for_unused_props(
-  const vcl_string & function_name,
+  const std::string & function_name,
   const mbl_read_props_type &props,
   const mbl_read_props_type &ignore)
 {
@@ -481,7 +482,7 @@ void mbl_read_props_look_for_unused_props(
   if (!p2.empty())
   {
 
-    vcl_ostringstream ss;
+    std::ostringstream ss;
     mbl_read_props_print(ss, p2, 1000);
     mbl_exception_error(mbl_exception_unused_props(function_name, ss.str()));
   }

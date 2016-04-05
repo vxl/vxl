@@ -12,12 +12,13 @@
 //   None
 // \endverbatim
 
+#include <vector>
+#include <algorithm>
+#include <memory>
 #include <vpdl/vpdl_multi_cmp_dist.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
 
 //: A mixture of distributions
 // A mixture is a weighted linear combination of other mixtures.
@@ -57,7 +58,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
     // ============ Data =============
 
     //: The distribution
-    vcl_auto_ptr<vpdl_distribution<T,n> > distribution;
+    std::auto_ptr<vpdl_distribution<T,n> > distribution;
     //: The weight
     T weight;
   };
@@ -83,7 +84,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   };
 
   //: The vector of components
-  vcl_vector<component*> components_;
+  std::vector<component*> components_;
 
  public:
 
@@ -190,7 +191,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   //: Evaluate the unnormalized density at a point
   virtual T density(const vector& pt) const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T dens = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       // must use prob_density here to get meaningful results
@@ -202,7 +203,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   //: Compute the probability density at this point
   T prob_density(const vector& pt) const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
@@ -219,7 +220,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   // \retval g the gradient vector
   virtual T gradient_density(const vector& pt, vector& g) const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     const unsigned int d = this->dimension();
     vpdt_set_size(g,d);
     vpdt_fill(g,T(0));
@@ -237,7 +238,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   //: The probability integrated over a box
   T box_prob(const vector& min_pt, const vector& max_pt) const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
@@ -253,7 +254,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   // (in all dimensions) to the point in question
   virtual T cumulative_prob(const vector& pt) const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
@@ -272,7 +273,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
 
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     vector cmp_mean;
     T sum_w = T(0);
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
@@ -295,7 +296,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
 
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     vector cmp_mean;
     matrix cmp_covar;
     T sum_w = T(0);
@@ -320,7 +321,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   // norm_const() is reciprocal of the integral of density over the entire field
   virtual T norm_const() const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T sum = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i)
       sum += (*i)->weight;
@@ -331,18 +332,18 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   //: Normalize the weights of the components to add to 1.
   void normalize_weights()
   {
-    typedef typename vcl_vector<component*>::iterator comp_itr;
+    typedef typename std::vector<component*>::iterator comp_itr;
     T norm = norm_const();
     for (comp_itr i = components_.begin(); i != components_.end(); ++i)
       (*i)->weight *= norm;
   }
 
   //: Sort the components in order of decreasing weight
-  void sort() { vcl_sort(components_.begin(), components_.end(), sort_weight() ); }
+  void sort() { std::sort(components_.begin(), components_.end(), sort_weight() ); }
 
   //: Sort the components in the range \a idx1 to \a idx2 in order of decreasing weight
   void sort(unsigned int idx1, unsigned int idx2)
-  { vcl_sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_weight() ); }
+  { std::sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_weight() ); }
 
   //: Sort the components using any StrictWeakOrdering function
   // The prototype should be
@@ -354,7 +355,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   template <class comp_type_>
   void sort(comp_type_ comp)
   {
-    vcl_sort(components_.begin(),
+    std::sort(components_.begin(),
              components_.end(),
              sort_adaptor<comp_type_>(comp));
   }
@@ -363,7 +364,7 @@ class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
   template <class comp_type_>
   void sort(comp_type_ comp, unsigned int idx1, unsigned int idx2)
   {
-    vcl_sort(components_.begin()+idx1,
+    std::sort(components_.begin()+idx1,
              components_.begin()+idx2+1,
              sort_adaptor<comp_type_>(comp));
   }

@@ -43,13 +43,14 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#include <vcl_ios.h>
+#include <ios>
+#include <vcl_compiler.h>
 
 //: Use RAII to save and restore precision and other state on an iostream
 class vul_ios_state_saver
 {
   public:
-    explicit  vul_ios_state_saver( vcl_ios_base &s )
+    explicit  vul_ios_state_saver( std::ios_base &s )
         : stream_( s ),
         flags_( s.flags() ),
         precision_( s.precision() ),
@@ -66,10 +67,10 @@ class vul_ios_state_saver
     }
 
   private:
-    vcl_ios_base & stream_;
-    const vcl_ios_fmtflags flags_;
-    const vcl_streamsize precision_;
-    const vcl_streamsize width_;
+    std::ios_base & stream_;
+    const std::ios::fmtflags flags_;
+    const std::streamsize precision_;
+    const std::streamsize width_;
 };
 
 #endif

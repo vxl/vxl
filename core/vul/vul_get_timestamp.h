@@ -16,7 +16,8 @@
 // \endverbatim
 
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 
 
 //: purpose: obtain time elapsed since 1 Jan 1970, in seconds and milliseconds.
@@ -31,7 +32,7 @@ enum vul_time_style
 };
 
 //: Get the present time and date as a string, e.g. "Fri Dec 8 14:54:17 2006"
-vcl_string vul_get_time_as_string(vul_time_style style=vul_asc);
+std::string vul_get_time_as_string(vul_time_style style=vul_asc);
 
 
 #endif // vul_get_timestamp_h_

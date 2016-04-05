@@ -44,11 +44,11 @@ protected:
   int numsamples_;
   vnl_vector<double> mu_;
   vnl_vector<double> cov_;
-  vcl_vector< vnl_vector<double> > samples_;
-  vcl_vector< vnl_vector<double> > parent_samples_;
-  vcl_vector< double > mis;
-  vcl_vector<vcl_pair<int, double> > pdf_;
-  vcl_vector<vcl_pair<int, double> > cdf_;
+  std::vector< vnl_vector<double> > samples_;
+  std::vector< vnl_vector<double> > parent_samples_;
+  std::vector< double > mis;
+  std::vector<std::pair<int, double> > pdf_;
+  std::vector<std::pair<int, double> > cdf_;
 
   bool do_vary_scale_;
 

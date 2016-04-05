@@ -1,3 +1,4 @@
+#include <cmath>
 #include "vpgl_datum_conversion.h"
 //******************************************************************************
 //:
@@ -24,12 +25,12 @@
 //         lon(NAD27) = lon(WGS84)-d_lon <- note "-" signs
 //         elev(NAD27) = elev(WGS84)-d_H
 //
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 #define degree_to_rad   (vnl_math::pi_over_180)      // Degree to rad conv.
-#define dcos(x)         vcl_cos((x)*vnl_math::pi_over_180)
-#define dsin(x)         vcl_sin((x)*vnl_math::pi_over_180)
+#define dcos(x)         std::cos((x)*vnl_math::pi_over_180)
+#define dsin(x)         std::sin((x)*vnl_math::pi_over_180)
 #define EPSILON         1.0e-12
 
 
@@ -389,9 +390,9 @@ void nad27n_to_wgs84_alternate
 #ifdef DEBUG_DATUM
   //   Display the program title.
 
-  vcl_cout << "\n  NAD27 to WGS84 Conversion routine\n\n"
+  std::cout << "\n  NAD27 to WGS84 Conversion routine\n\n"
            << "       Enter latitude and longitude : ";
-  vcl_cin >> nad27_lat >> nad27_lon;
+  std::cin >> nad27_lat >> nad27_lon;
 
 #endif
 
@@ -404,7 +405,7 @@ void nad27n_to_wgs84_alternate
 
 //lon_int = (int) prin_lon;
 //lon_int_fl = (double)lon_int;
-//lon_frac = vcl_fabs(prin_lon - lon_int);
+//lon_frac = std::fabs(prin_lon - lon_int);
 
   if (prin_lon < 0)
     prin_lon = 360.0 + prin_lon;
@@ -567,9 +568,9 @@ void nad27n_to_wgs84_alternate
 
 #ifdef DEBUG_DATUM
   ft_lat = 101.0 * delta_lat_p;
-  ft_lon = 101.0 * vcl_cos(prin_lat_rad) * delta_lon_p;
+  ft_lon = 101.0 * std::cos(prin_lat_rad) * delta_lon_p;
 
-  c_error = (double)vcl_sqrt(ft_lat*ft_lat + ft_lon*ft_lon);
+  c_error = (double)std::sqrt(ft_lat*ft_lat + ft_lon*ft_lon);
 #endif
 
   *wgs84_lat = nad27_lat + (delta_lat_p/3600.0);
@@ -579,7 +580,7 @@ void nad27n_to_wgs84_alternate
 #ifdef DEBUG_DATUM
   new_lat = *wgs84_lat;
   new_lon = *wgs84_lon;
-  vcl_cout << "\n d_lat = " << delta_lat
+  std::cout << "\n d_lat = " << delta_lat
            << "\n d_lon = " << delta_lon
            << "\n d_H = " << delta_H
            << "\n N = " << N_height
@@ -645,9 +646,9 @@ void wgs84_to_nad27n_alternate
 #ifdef DEBUG_DATUM
   //   Display the program title.
 
-  vcl_cout << "\n  wgs84 to NAD27N Conversion routine\n\n";
+  std::cout << "\n  wgs84 to NAD27N Conversion routine\n\n";
               "       Enter latitude, longitude ";
-  vcl_cin >> wgs84_lat >> wgs84_lon;
+  std::cin >> wgs84_lat >> wgs84_lon;
 
 #endif
 
@@ -660,7 +661,7 @@ void wgs84_to_nad27n_alternate
 
 //lon_int = (int) prin_lon;
 //lon_int_fl = (double)lon_int;
-//lon_frac = vcl_fabs(prin_lon - lon_int);
+//lon_frac = std::fabs(prin_lon - lon_int);
 
   if (prin_lon < 0)
     prin_lon = 360.0 + prin_lon;
@@ -822,9 +823,9 @@ void wgs84_to_nad27n_alternate
 
 #ifdef DEBUG_DATUM
   ft_lat = 101.0 * delta_lat_p;
-  ft_lon = 101.0 * vcl_cos(prin_lat_rad) * delta_lon_p;
+  ft_lon = 101.0 * std::cos(prin_lat_rad) * delta_lon_p;
 
-  c_error = (double)vcl_sqrt(ft_lat*ft_lat + ft_lon*ft_lon);
+  c_error = (double)std::sqrt(ft_lat*ft_lat + ft_lon*ft_lon);
 #endif
 
   // SUBTRACT the deltas
@@ -835,7 +836,7 @@ void wgs84_to_nad27n_alternate
 #ifdef DEBUG_DATUM
   new_lat = *nad27n_lat;
   new_lon = *nad27n_lon;
-  vcl_cout << "\n d_lat = " << delta_lat
+  std::cout << "\n d_lat = " << delta_lat
            << "\n d_lon = " << delta_lon
            << "\n d_H = " << delta_H
            << "\n N = " << N_height
@@ -854,7 +855,7 @@ double geo_detic2centric
    double A,
    double B)             //!< Major and minor axes of earth
 {
-  return(vcl_atan((B/A)*(B/A) * vcl_tan(geodetic_lat)));
+  return(std::atan((B/A)*(B/A) * std::tan(geodetic_lat)));
 }
 
 //**********************************************************************
@@ -865,7 +866,7 @@ double geo_centric2detic
    double A,
    double B)              //!< Major and minor axes of earth
 {
-  return(vcl_atan((A/B)*(A/B) * vcl_tan(geocentric_lat)));
+  return(std::atan((A/B)*(A/B) * std::tan(geocentric_lat)));
 }
 
 
@@ -900,19 +901,19 @@ void GRS_to_latlong
   double xy_dist;                //!< dist in x-y plane
   double ee;                     //!< eccentricity square
 
-  xy_dist = vcl_sqrt(x*x + y*y);
+  xy_dist = std::sqrt(x*x + y*y);
   ee = 1 - (B/A)*(B/A);
 
   // Compute geocentric = geodetic longitude from the
   // dot-product of (x, y, 0) and (1, 0, 0) and assign
   // proper sign to it based on y.
 
-  *lon = vcl_acos(x/xy_dist);
+  *lon = std::acos(x/xy_dist);
   if (y < 0)    // Negative y => West of Greenwich meridian
     *lon = - *lon;
 
   // Compute an initial value for geodetic latitude
-  new_lat = vcl_atan2(z, xy_dist);
+  new_lat = std::atan2(z, xy_dist);
 
   do
   {
@@ -921,15 +922,15 @@ void GRS_to_latlong
     // Compute the sin and cos of the approx geodetic lat
 
     // Compute the distance N along the height
-    N = A / vcl_sqrt(1 - ee * vcl_sin(*geodetic_lat) * vcl_sin(*geodetic_lat));
+    N = A / std::sqrt(1 - ee * std::sin(*geodetic_lat) * std::sin(*geodetic_lat));
 
     // new_lat is already in the range -PI to PI
-    new_lat = vcl_atan2( (z + N * ee * vcl_sin(*geodetic_lat)),  xy_dist );
+    new_lat = std::atan2( (z + N * ee * std::sin(*geodetic_lat)),  xy_dist );
   }
-  while (vcl_fabs(new_lat - *geodetic_lat) > EPSILON);
+  while (std::fabs(new_lat - *geodetic_lat) > EPSILON);
 
   *geodetic_lat = new_lat;
-  *el = xy_dist/vcl_cos(new_lat)  -  N;
+  *el = xy_dist/std::cos(new_lat)  -  N;
 }
 
 
@@ -946,10 +947,10 @@ void GRS_to_latlong
 //
 //  An alternate way of doing this computation would be:
 //
-//  N = A/vcl_sqrt(1 - e*e*vcl_sin(lat)*vcl_sin(lat))
-//  x = (N + el)vcl_cos(lat)vcl_cos(lon)
-//  y = (N + el)vcl_cos(lat)vcl_sin(lon)
-//  z = (N(1-e*e) + el) vcl_sin(lat)
+//  N = A/std::sqrt(1 - e*e*std::sin(lat)*std::sin(lat))
+//  x = (N + el)std::cos(lat)std::cos(lon)
+//  y = (N + el)std::cos(lat)std::sin(lon)
+//  z = (N(1-e*e) + el) std::sin(lat)
 //**********************************************************************
 
 void latlong_to_GRS
@@ -969,21 +970,21 @@ void latlong_to_GRS
   geocentric_lat = geo_detic2centric(geodetic_lat, A, B);
 
   // Compute the sin and cos of the latitude
-  s = vcl_sin(geocentric_lat);
-  c = vcl_cos(geocentric_lat);
+  s = std::sin(geocentric_lat);
+  c = std::cos(geocentric_lat);
 
 
   // Compute the distance to the centre of the earth
-  local_radius = (A*B) / vcl_sqrt(B*B*c*c + A*A*s*s);
+  local_radius = (A*B) / std::sqrt(B*B*c*c + A*A*s*s);
 
-  *x =  (local_radius*c + el*vcl_cos(geodetic_lat))*vcl_cos(lon);
-  *y =  (local_radius*c + el*vcl_cos(geodetic_lat))*vcl_sin(lon);
-  *z =  (local_radius*s + el*vcl_sin(geodetic_lat));
+  *x =  (local_radius*c + el*std::cos(geodetic_lat))*std::cos(lon);
+  *y =  (local_radius*c + el*std::cos(geodetic_lat))*std::sin(lon);
+  *z =  (local_radius*s + el*std::sin(geodetic_lat));
 
 #ifdef DEBUG_DATUM
   double tlat, tlon, tel;
   GRS_to_latlong(*x, *y, *z, &tlat, &tlon, &tel, A, B);
-  vcl_cout << "Error in computation: (" << (tlat-geodetic_lat) << ", " << (tlon-lon) << ", " << (tel-el) << ")\n";
+  std::cout << "Error in computation: (" << (tlat-geodetic_lat) << ", " << (tlon-lon) << ", " << (tel-el) << ")\n";
 #endif
 }
 

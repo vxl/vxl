@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
@@ -7,8 +9,7 @@
 #include <brdb/brdb_database_sptr.h>
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_query.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 static void test_database_manager()
 {
@@ -16,32 +17,32 @@ static void test_database_manager()
   // example: creating values, tuples and relations
   ////////////////////////////////////////////////////////////////////////////
 
-  vcl_vector<vcl_string> r1_names(3);
-  vcl_vector<vcl_string> r1_types(3);
-  vcl_vector<brdb_tuple_sptr> r1_tuples(20);
+  std::vector<std::string> r1_names(3);
+  std::vector<std::string> r1_types(3);
+  std::vector<brdb_tuple_sptr> r1_tuples(20);
 
-  vcl_vector<vcl_string> r2_names(2);
-  vcl_vector<vcl_string> r2_types(2);
-  vcl_vector<brdb_tuple_sptr> r2_tuples(30);
+  std::vector<std::string> r2_names(2);
+  std::vector<std::string> r2_types(2);
+  std::vector<brdb_tuple_sptr> r2_tuples(30);
 
-  vcl_vector<vcl_string> r3_names(2);
-  vcl_vector<vcl_string> r3_types(2);
-  vcl_vector<brdb_tuple_sptr> r3_tuples(40);
+  std::vector<std::string> r3_names(2);
+  std::vector<std::string> r3_types(2);
+  std::vector<brdb_tuple_sptr> r3_tuples(40);
 
   r1_names[0] = "ID";
   r1_names[1] = "Name";
   r1_names[2] = "Gender";
 
   r1_types[0] = brdb_value_t<int>::type();
-  r1_types[1] = brdb_value_t<vcl_string>::type();
+  r1_types[1] = brdb_value_t<std::string>::type();
   r1_types[2] = brdb_value_t<bool>::type();
 
   for (int i=0; i<20; i++)
   {
     int ID = 100+i;
-    vcl_stringstream SS;
+    std::stringstream SS;
     SS << "zhao_yong_" << i;
-    vcl_string name;
+    std::string name;
     SS >> name;
     bool gender;
 
@@ -77,14 +78,14 @@ static void test_database_manager()
   r3_names[1] = "Department";
 
   r3_types[0] = brdb_value_t<int>::type();
-  r3_types[1] = brdb_value_t<vcl_string>::type();
+  r3_types[1] = brdb_value_t<std::string>::type();
 
   for (int i=0; i<40; i++)
   {
     int ID = 100+i;
-    vcl_stringstream SS;
+    std::stringstream SS;
     SS << "dempartment_" << i;
-    vcl_string dept;
+    std::string dept;
     SS >> dept;
 
     r3_tuples[i] = new brdb_tuple(ID, dept);
@@ -97,12 +98,12 @@ static void test_database_manager()
   // example: creating database using relations
   ////////////////////////////////////////////////////////////////////////////
 
-  vcl_vector<brdb_relation_sptr> test_relations;
+  std::vector<brdb_relation_sptr> test_relations;
   test_relations.push_back(r1);
   test_relations.push_back(r2);
   test_relations.push_back(r3);
 
-  vcl_vector<vcl_string> relation_names;
+  std::vector<std::string> relation_names;
   relation_names.push_back("name_gender");
   relation_names.push_back("age");
   relation_names.push_back("department");
@@ -143,14 +144,14 @@ static void test_database_manager()
   brdb_database_manager::instance()->print_database();
   TEST("clear_relation()", true, true);
 
-  vcl_set<vcl_string> names1;
+  std::set<std::string> names1;
   names1.insert("age");
   names1.insert("name_gender");
   brdb_database_manager::instance()->clear_all_except(names1);
   brdb_database_manager::instance()->print_database();
   TEST("clear_all_except()", true, true);
 
-  vcl_set<vcl_string> names2;
+  std::set<std::string> names2;
   names2.insert("age");
   brdb_database_manager::instance()->remove_all_except(names2);
   brdb_database_manager::instance()->print_database();
@@ -227,7 +228,7 @@ static void test_database_manager()
   s1->delete_tuples();
   brdb_database_manager::instance()->print_database();
 
-  brdb_query_sptr q2 = new brdb_query("name_gender", "Name", BT, vcl_string("zhao_yong_5"));
+  brdb_query_sptr q2 = new brdb_query("name_gender", "Name", BT, std::string("zhao_yong_5"));
   brdb_selection_sptr s2;
   brdb_database_manager::instance()->select(q2, s2);
   s2->print();
@@ -281,7 +282,7 @@ static void test_database_manager()
   brdb_database_manager::instance()->select(q4, s4);
   s4->print();
 
-  brdb_query_sptr q5 = new brdb_query(s4, vcl_string("ID"), LT, 113);
+  brdb_query_sptr q5 = new brdb_query(s4, std::string("ID"), LT, 113);
   brdb_selection_sptr s5;
   brdb_database_manager::instance()->select(q5, s5);
 
@@ -298,23 +299,23 @@ static void test_database_manager()
   brdb_query_sptr q6 = new brdb_query("name_gender", "ID", EQ, 114);
   brdb_selection_sptr s6;
   brdb_database_manager::instance()->select(q6, s6);
-  vcl_string get_name1;
+  std::string get_name1;
   bool get_gender1;
   brdb_database_manager::instance()->get(s6, "Name", get_name1);
   brdb_database_manager::instance()->get(s6, "Gender", get_gender1);
-  vcl_cout << "ID: 104  Name:   " << get_name1 << "   Gender:   " << get_gender1 << vcl_endl;
+  std::cout << "ID: 104  Name:   " << get_name1 << "   Gender:   " << get_gender1 << std::endl;
   TEST("get()", true, true);
 
   brdb_query_sptr q6_a = new brdb_query("name_gender", "ID", LT, 105);
   brdb_selection_sptr s6_a;
   brdb_database_manager::instance()->select(q6_a, s6_a);
-  vcl_vector<vcl_string> get_names;
+  std::vector<std::string> get_names;
 
   for (unsigned int i=0; i<s6_a->size(); i++)
   {
-    vcl_string get_name_a;
+    std::string get_name_a;
     brdb_database_manager::instance()->get(s6_a, "Name", i, get_name_a);
-    vcl_cout << get_name_a << "  ";
+    std::cout << get_name_a << "  ";
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -324,12 +325,12 @@ static void test_database_manager()
   brdb_query_sptr q7 = new brdb_query("name_gender", "ID", EQ, 104);
   brdb_selection_sptr s7;
   brdb_database_manager::instance()->select(q7, s7);
-  brdb_tuple_sptr update_tuple = new brdb_tuple(104, vcl_string("monster"), true);
+  brdb_tuple_sptr update_tuple = new brdb_tuple(104, std::string("monster"), true);
   brdb_database_manager::instance()->update_selected_tuple(s7, update_tuple);
   brdb_database_manager::instance()->print_database();
 
   bool update_gender(false);
-  brdb_database_manager::instance()->update_selected_tuple_value(s7, "Name", vcl_string("zhao_yong_4"));
+  brdb_database_manager::instance()->update_selected_tuple_value(s7, "Name", std::string("zhao_yong_4"));
   brdb_database_manager::instance()->update_selected_tuple_value(s7, "Gender", update_gender);
   brdb_database_manager::instance()->print_database();
   TEST("update tuple/values", true, true);
@@ -353,13 +354,13 @@ static void test_database_manager()
   brdb_query_sptr q9 = new brdb_query("age", "ID", LEQ, 125);
   brdb_selection_sptr s9;
   brdb_database_manager::instance()->select(q9, s9);
-  vcl_cout << "s9: " << vcl_endl;
+  std::cout << "s9: " << std::endl;
   s9->print();
 
   brdb_query_sptr q10 = new brdb_query("age", "ID", BEQ, 120);
   brdb_selection_sptr s10;
   brdb_database_manager::instance()->select(q10, s10);
-  vcl_cout << "s10: " << vcl_endl;
+  std::cout << "s10: " << std::endl;
   s10->print();
 
   brdb_selection_sptr s11;
@@ -381,16 +382,16 @@ static void test_database_manager()
   s14->clear();
 
   s11 = s9 & s10;
-  vcl_cout << "s11: " << vcl_endl;
+  std::cout << "s11: " << std::endl;
   s11->print();
   s12 = s9 | s10;
-  vcl_cout << "s12: " << vcl_endl;
+  std::cout << "s12: " << std::endl;
   s12->print();
   s13 = s9 ^ s10;
-  vcl_cout << "s13: " << vcl_endl;
+  std::cout << "s13: " << std::endl;
   s13->print();
   s14 = ~s9;
-  vcl_cout << "s14: " << vcl_endl;
+  std::cout << "s14: " << std::endl;
   s14->print();
 
   TEST("selection_and()", true, true);

@@ -9,10 +9,11 @@
 #ifndef brad_atmospheric_parameters_h_
 #define brad_atmospheric_parameters_h_
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_vector.h>
 
 class brad_atmospheric_parameters : public vbl_ref_count
 {
@@ -24,9 +25,9 @@ class brad_atmospheric_parameters : public vbl_ref_count
    //: optical depth of nadir path through atmosphere to ground
    double optical_depth_;
 
-   vcl_vector<double> airlight_multi_;  // for at least 4 bands
-   vcl_vector<double> skylight_multi_;
-   vcl_vector<double> optical_depth_multi_;
+   std::vector<double> airlight_multi_;  // for at least 4 bands
+   std::vector<double> skylight_multi_;
+   std::vector<double> optical_depth_multi_;
 #if 0
    //: predicted at-sensor radiance value of a horizontal perfect lambertian reflector
    double predicted_lambertian_max_; // units W m^2 sr^-2 um^-2
@@ -36,10 +37,10 @@ class brad_atmospheric_parameters : public vbl_ref_count
 typedef vbl_smart_ptr<brad_atmospheric_parameters> brad_atmospheric_parameters_sptr;
 
 //: Write brad_atmospheric_parameters to stream
-vcl_ostream&  operator<<(vcl_ostream& s, brad_atmospheric_parameters const& atm);
+std::ostream&  operator<<(std::ostream& s, brad_atmospheric_parameters const& atm);
 
 //: Read brad_atmospheric_parameters from stream
-vcl_istream&  operator>>(vcl_istream& s, brad_atmospheric_parameters& atm);
+std::istream&  operator>>(std::istream& s, brad_atmospheric_parameters& atm);
 
 #endif
 

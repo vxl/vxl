@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mfpf_region_definer.h"
 //:
 // \file
@@ -10,7 +12,7 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 // Dflt ctor
@@ -29,16 +31,16 @@ mfpf_region_definer::~mfpf_region_definer()
 }
 
 //: Initialise from a string stream
-bool mfpf_region_definer::set_from_stream(vcl_istream &is)
+bool mfpf_region_definer::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   if (props.size()!=0)
   {
-    vcl_cerr<<is_a()<<" does not expect any extra arguments.\n";
+    std::cerr<<is_a()<<" does not expect any extra arguments.\n";
     mbl_read_props_look_for_unused_props(
       "mfpf_region_definer::set_from_stream", props, mbl_read_props_type());
   }
@@ -46,12 +48,12 @@ bool mfpf_region_definer::set_from_stream(vcl_istream &is)
 }
 
 //: Create a concrete object, from a text specification.
-vcl_auto_ptr<mfpf_region_definer> mfpf_region_definer::
-  create_from_stream(vcl_istream &is)
+std::auto_ptr<mfpf_region_definer> mfpf_region_definer::
+  create_from_stream(std::istream &is)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
-  vcl_auto_ptr<mfpf_region_definer> vcb;
+  std::auto_ptr<mfpf_region_definer> vcb;
   try {
     vcb = mbl_cloneables_factory<mfpf_region_definer>::get_clone(name);
   }
@@ -76,9 +78,9 @@ short mfpf_region_definer::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_region_definer::is_a() const
+std::string mfpf_region_definer::is_a() const
 {
-  return vcl_string("mfpf_region_definer");
+  return std::string("mfpf_region_definer");
 }
 
 //: Allows derived class to be loaded by base-class pointer
@@ -109,7 +111,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_region_definer& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_region_definer& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -122,7 +124,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer* b)
+std::ostream& operator<<(std::ostream& os,const mfpf_region_definer* b)
 {
   if (b)
     return os << *b;
@@ -132,9 +134,9 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer* b)
 
 //: Generate a new set of points from pts0 using set of definers
 void mfpf_points_from_definers(
-              const vcl_vector<mfpf_region_definer*>& definer,
-              const vcl_vector<vgl_point_2d<double> >& pts0,
-              vcl_vector<vgl_point_2d<double> >& new_pts)
+              const std::vector<mfpf_region_definer*>& definer,
+              const std::vector<vgl_point_2d<double> >& pts0,
+              std::vector<vgl_point_2d<double> >& new_pts)
 {
   unsigned n=definer.size();
   new_pts.resize(n);
@@ -152,7 +154,7 @@ void mfpf_points_from_definers(
 //  The function tests for this case, and returns false if it fails.
 //  In particular consider the following
 //  \verbatim
-//  vcl_vector<vgl_point_2d<double> > pts0,pts1,pts2;
+//  std::vector<vgl_point_2d<double> > pts0,pts1,pts2;
 //  // Set up pts0
 //  ...
 //  // Generate pts1 from pts0
@@ -166,10 +168,10 @@ void mfpf_points_from_definers(
 //  They may be left in an invalid state if this returns false,
 //  so caller should ensure a backup retained.
 bool mfpf_renumber_to_self(
-                  vcl_vector<mfpf_region_definer*>& definer,
+                  std::vector<mfpf_region_definer*>& definer,
                   unsigned n_pts0)
 {
-  vcl_vector<unsigned> new_index(n_pts0,mfpf_invalid_index);
+  std::vector<unsigned> new_index(n_pts0,mfpf_invalid_index);
   for (unsigned i=0;i<definer.size();++i)
   {
     if (definer[i]->is_centred_on_pt())
@@ -177,7 +179,7 @@ bool mfpf_renumber_to_self(
       unsigned ri = definer[i]->ref_point_index();
       if (ri>=n_pts0)
       {
-        vcl_cerr<<"Index out of range:"<<ri<<vcl_endl;
+        std::cerr<<"Index out of range:"<<ri<<std::endl;
         return false;
       }
       new_index[ri]=i;
@@ -188,7 +190,7 @@ bool mfpf_renumber_to_self(
   {
     if (!definer[i]->replace_index(new_index))
     {
-      vcl_cerr<<"Failed to update indices in "<<definer[i]<<vcl_endl;
+      std::cerr<<"Failed to update indices in "<<definer[i]<<std::endl;
       return false;
     }
   }

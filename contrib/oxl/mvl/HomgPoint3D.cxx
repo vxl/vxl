@@ -5,8 +5,9 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgPoint3D.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //--------------------------------------------------------------
 //
@@ -72,8 +73,8 @@ HomgPoint3D::rescale_w(double new_w)
 }
 
 //
-//: Print to vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint3D& p)
+//: Print to std::ostream
+std::ostream& operator<<(std::ostream& s, const HomgPoint3D& p)
 {
   return s << "<HomgPoint3D " << p.get_vector() << '>';
 }

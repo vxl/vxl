@@ -12,7 +12,7 @@ set(bsta_pro_sources
 aux_source_directory(Templates bsta_pro_sources)
 aux_source_directory(processes bsta_pro_sources)
 
-add_library(bsta_pro ${bsta_pro_sources} )
+vxl_add_library(LIBRARY_NAME bsta_pro LIBRARY_SOURCES ${bsta_pro_sources} )
 
 target_link_libraries(bsta_pro bsta_algo bsta_io bsta bprb brdb brip ${VXL_LIB_PREFIX}vbl_io)
 
@@ -20,5 +20,3 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib bsta_pro)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta/pro ${bsta_pro_sources})

@@ -32,10 +32,10 @@ unsigned bbgm_mask_feature::nj() const
   return m.nj();
 }
 
-vcl_vector<vgl_point_2d<unsigned short> > bbgm_mask_feature::
+std::vector<vgl_point_2d<unsigned short> > bbgm_mask_feature::
 pixels(unsigned i, unsigned j)
 {
-  vcl_vector<vgl_point_2d<unsigned short> > pix;
+  std::vector<vgl_point_2d<unsigned short> > pix;
   if (mid_ == brip_rect_mask::ntypes||aid_ == brip_rect_mask::ntypes)
     return pix;
   brip_rect_mask m(static_cast<brip_rect_mask::mask_id>(mid_));
@@ -48,7 +48,7 @@ pixels(unsigned i, unsigned j)
         unsigned short pi = static_cast<unsigned short>(ii+i);
         unsigned short pj = static_cast<unsigned short>(jj+j);
         if (pi>=320||pj>=180) {
-          vcl_cout << "Write out of bounds in mask(" << pi << ' ' << pj << ")\n";
+          std::cout << "Write out of bounds in mask(" << pi << ' ' << pj << ")\n";
           continue;
         }
         pix.push_back(vgl_point_2d<unsigned short>(pi, pj));
@@ -61,7 +61,7 @@ pixels(unsigned i, unsigned j)
 //: Return a string name
 // \note this is probably not portable
 
-vcl_string bbgm_mask_feature::is_a() const
+std::string bbgm_mask_feature::is_a() const
 {
   return "bbgm_mask_feature";
 }
@@ -107,7 +107,7 @@ void bbgm_mask_feature::b_read(vsl_b_istream &is)
       vsl_b_read(is, p_);
       break;
     default:
-      vcl_cerr << "bbgm_mask_feature: unknown I/O version " << ver << '\n';
+      std::cerr << "bbgm_mask_feature: unknown I/O version " << ver << '\n';
     }
 }
 
@@ -125,9 +125,9 @@ void vsl_b_read(vsl_b_istream &is, bbgm_mask_feature& b)
   b = temp;
 }
 
-void vsl_print_summary(vcl_ostream& /*os*/, const bbgm_mask_feature & /*b*/)
+void vsl_print_summary(std::ostream& /*os*/, const bbgm_mask_feature & /*b*/)
 {
-  vcl_cerr << "bbgm_mask_feature::vsl_print_summary not implemented\n";
+  std::cerr << "bbgm_mask_feature::vsl_print_summary not implemented\n";
 }
 
 //===========================================================================
@@ -137,9 +137,9 @@ void vsl_print_summary(vcl_ostream& /*os*/, const bbgm_mask_feature & /*b*/)
 unsigned bbgm_mask_pair_feature::uid_ = 0; //initialize unique id counter
 
 
-vcl_vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
+std::vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
 {
-  vcl_vector<vgl_point_2d<unsigned short> > pixp;
+  std::vector<vgl_point_2d<unsigned short> > pixp;
   //start of path
   float isf = static_cast<float>(i0_), jsf = static_cast<float>(j0_);
   // end point of path
@@ -153,34 +153,34 @@ vcl_vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
     unsigned ili = static_cast<unsigned short>(lif),
       ilj = static_cast<unsigned short>(ljf);
       if (ili>=320||ilj>=180) {
-        vcl_cout << "Write out of bounds in mask pair(" << ili << ' ' << ilj << ")\n";
+        std::cout << "Write out of bounds in mask pair(" << ili << ' ' << ilj << ")\n";
         continue;
       }
     pixp.push_back(vgl_point_2d<unsigned short>(ili, ilj));
   }
   //get the positive elements of masks
   bbgm_mask_feature mf0(mid_, ang0_), mf1(mid_, ang1_);
-  vcl_vector<vgl_point_2d<unsigned short> > pixm0 = mf0.pixels(i0_, j0_);
-  vcl_vector<vgl_point_2d<unsigned short> > pixm1 = mf0.pixels(i1_, j1_);
-  vcl_vector<vgl_point_2d<unsigned short> > pix;
-  for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pit = pixp.begin();
+  std::vector<vgl_point_2d<unsigned short> > pixm0 = mf0.pixels(i0_, j0_);
+  std::vector<vgl_point_2d<unsigned short> > pixm1 = mf0.pixels(i1_, j1_);
+  std::vector<vgl_point_2d<unsigned short> > pix;
+  for (std::vector<vgl_point_2d<unsigned short> >::iterator pit = pixp.begin();
        pit!= pixp.end(); ++pit)
     pix.push_back(*pit);
   //add mask pixels (removing duplicates)
-  for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pit = pixm0.begin();
+  for (std::vector<vgl_point_2d<unsigned short> >::iterator pit = pixm0.begin();
        pit!= pixm0.end(); ++pit) {
     bool found = false;
-    for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
+    for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
          pot != pix.end()&&!found; ++pot)
       if ((*pot)==(*pit)) {
         found = true;
       }
     if (!found) pix.push_back(*pit);
   }
-  for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pit = pixm1.begin();
+  for (std::vector<vgl_point_2d<unsigned short> >::iterator pit = pixm1.begin();
        pit!= pixm1.end(); ++pit) {
     bool found = false;
-    for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
+    for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
          pot != pix.end()&&!found; ++pot)
       if ((*pot)==(*pit)) {
         found = true;
@@ -196,7 +196,7 @@ vcl_vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
 //: Return a string name
 // \note this is probably not portable
 
-vcl_string bbgm_mask_pair_feature::is_a() const
+std::string bbgm_mask_pair_feature::is_a() const
 {
   return "bbgm_mask_pair_feature";
 }
@@ -260,7 +260,7 @@ void bbgm_mask_pair_feature::b_read(vsl_b_istream &is)
     ang1_ = static_cast<brip_rect_mask::ang_id>(temp2);
     break;
    default:
-    vcl_cerr << "bbgm_mask_pair_feature: unknown I/O version " << ver << '\n';
+    std::cerr << "bbgm_mask_pair_feature: unknown I/O version " << ver << '\n';
     break;
   }
 }
@@ -279,9 +279,9 @@ void vsl_b_read(vsl_b_istream &is, bbgm_mask_pair_feature& b)
   b = temp;
 }
 
-void vsl_print_summary(vcl_ostream& /*os*/, const bbgm_mask_pair_feature& /*b*/)
+void vsl_print_summary(std::ostream& /*os*/, const bbgm_mask_pair_feature& /*b*/)
 {
-  vcl_cerr << "bbgm_mask_pair_feature::vsl_print_summary not implemented\n";
+  std::cerr << "bbgm_mask_pair_feature::vsl_print_summary not implemented\n";
 }
 
 
@@ -309,7 +309,7 @@ vgl_box_2d<unsigned> bbgm_pair_group_feature::bounding_box() const
   vgl_box_2d<unsigned> box;
   if (!pairs_.size())
     return box;
-  vcl_set<bbgm_mask_pair_feature, fless >::const_iterator vit;
+  std::set<bbgm_mask_pair_feature, fless >::const_iterator vit;
   for (vit=pairs_.begin(); vit != pairs_.end(); ++vit)
   {
     unsigned short ci, cj;
@@ -322,8 +322,8 @@ vgl_box_2d<unsigned> bbgm_pair_group_feature::bounding_box() const
 
 vgl_polygon<double> bbgm_pair_group_feature::convex_hull() const
 {
-  vcl_vector<vgl_point_2d<double> > points;
-  vcl_set<bbgm_mask_pair_feature, fless >::const_iterator vit;
+  std::vector<vgl_point_2d<double> > points;
+  std::set<bbgm_mask_pair_feature, fless >::const_iterator vit;
   for (vit=pairs_.begin(); vit != pairs_.end(); ++vit)
   {
     unsigned short ci, cj;
@@ -338,18 +338,18 @@ vgl_polygon<double> bbgm_pair_group_feature::convex_hull() const
   return h.hull();
 }
 
-vcl_vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
+std::vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
 {
-  vcl_vector<vgl_point_2d<unsigned short> > pix;
-  vcl_set<bbgm_mask_pair_feature, fless >::iterator pit = pairs_.begin();
+  std::vector<vgl_point_2d<unsigned short> > pix;
+  std::set<bbgm_mask_pair_feature, fless >::iterator pit = pairs_.begin();
   for (; pit!=pairs_.end(); ++pit)
   {
     bbgm_mask_pair_feature mpf = *pit;
-    vcl_vector<vgl_point_2d<unsigned short> > pixp = mpf.pixels();
-    for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pxt = pixp.begin();
+    std::vector<vgl_point_2d<unsigned short> > pixp = mpf.pixels();
+    for (std::vector<vgl_point_2d<unsigned short> >::iterator pxt = pixp.begin();
          pxt!= pixp.end(); ++pxt) {
       bool found = false;
-      for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
+      for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
            pot != pix.end()&&!found; ++pot)
         if ((*pot)==(*pxt)) {
           found = true;
@@ -373,11 +373,11 @@ vcl_vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
         ilj = static_cast<unsigned short>(ljf);
       vgl_point_2d<unsigned short> pt(ili, ilj);
       if (ili>=320||ilj>=180) {
-        vcl_cout << "Write out of bounds in pair group(" << ili << ' ' << ilj << ")\n";
+        std::cout << "Write out of bounds in pair group(" << ili << ' ' << ilj << ")\n";
         continue;
       }
       bool found = false;
-      for (vcl_vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
+      for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
            pot != pix.end()&&!found; ++pot)
         if ((*pot)==pt) {
           found = true;
@@ -392,7 +392,7 @@ vcl_vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
 //: Return a string name
 // \note this is probably not portable
 
-vcl_string bbgm_pair_group_feature::is_a() const
+std::string bbgm_pair_group_feature::is_a() const
 {
   return "bbgm_pair_group_feature";
 }
@@ -424,7 +424,7 @@ void bbgm_pair_group_feature::b_write(vsl_b_ostream &os) const
   //since general vsl_set_io doesn't take a predicate.
   unsigned n = pairs_.size();
   vsl_b_write(os, n);
-  vcl_set<bbgm_mask_pair_feature, fless>::const_iterator vit;
+  std::set<bbgm_mask_pair_feature, fless>::const_iterator vit;
   vit = pairs_.begin();
   for (; vit!= pairs_.end(); ++vit)
     vsl_b_write(os, *vit);
@@ -457,7 +457,7 @@ void bbgm_pair_group_feature::b_read(vsl_b_istream &is)
     mid_ = static_cast<brip_rect_mask::mask_id>(temp);
     break;
    default:
-    vcl_cerr << "bbgm_pair_group_feature: unknown I/O version " << ver << '\n';
+    std::cerr << "bbgm_pair_group_feature: unknown I/O version " << ver << '\n';
     break;
   }
 }
@@ -476,9 +476,9 @@ void vsl_b_read(vsl_b_istream &is, bbgm_pair_group_feature& b)
   b = temp;
 }
 
-void vsl_print_summary(vcl_ostream& /*os*/, const bbgm_pair_group_feature& /*b*/)
+void vsl_print_summary(std::ostream& /*os*/, const bbgm_pair_group_feature& /*b*/)
 {
-  vcl_cerr << "bbgm_pair_group_feature::vsl_print_summary not implemented\n";
+  std::cerr << "bbgm_pair_group_feature::vsl_print_summary not implemented\n";
 }
 
 bool pair_intersect(bbgm_mask_pair_feature const& mp0,
@@ -527,16 +527,16 @@ bbgm_pair_group_feature pair_group_merge(bbgm_pair_group_feature const& pg0,
                                          float p_path)
 {
   //collect the vertices
-  const vcl_set<bbgm_mask_pair_feature, fless>& pairs0 =
+  const std::set<bbgm_mask_pair_feature, fless>& pairs0 =
     pg0.pairs();
   double pr0 = pg0();
 
-  const vcl_set<bbgm_mask_pair_feature, fless>& pairs1 = pg1.pairs();
+  const std::set<bbgm_mask_pair_feature, fless>& pairs1 = pg1.pairs();
   double pr1 = pg1();
 
-  vcl_set<bbgm_mask_pair_feature, fless> merged_verts;
+  std::set<bbgm_mask_pair_feature, fless> merged_verts;
 
-  vcl_set<bbgm_mask_pair_feature, fless>::const_iterator pit;
+  std::set<bbgm_mask_pair_feature, fless>::const_iterator pit;
 
   for (pit = pairs0.begin(); pit != pairs0.end(); ++pit)
     merged_verts.insert(*pit);
@@ -545,8 +545,8 @@ bbgm_pair_group_feature pair_group_merge(bbgm_pair_group_feature const& pg0,
     merged_verts.insert(*pit);
   double np = merged_verts.size();
   if (np==0) return pg0;
-  double dp = vcl_pow(pr0, (np-1.0)/np);
-  dp *= vcl_pow(pr1, 1.0/np);
+  double dp = std::pow(pr0, (np-1.0)/np);
+  dp *= std::pow(pr1, 1.0/np);
   float p = static_cast<float>(dp)*p_path;
   bbgm_pair_group_feature pgm;
   pgm.set_prob(merged_verts, p);
@@ -558,14 +558,14 @@ pair_group_max_union(bbgm_pair_group_feature const& pg0,
                      bbgm_pair_group_feature const& pg1)
 {
   //collect the mask pairs in each group
-  const vcl_set<bbgm_mask_pair_feature, fless>& pairs0 = pg0.pairs();
+  const std::set<bbgm_mask_pair_feature, fless>& pairs0 = pg0.pairs();
 
-  const vcl_set<bbgm_mask_pair_feature, fless>& pairs1 = pg1.pairs();
+  const std::set<bbgm_mask_pair_feature, fless>& pairs1 = pg1.pairs();
 
   //the pairs in the union
-  vcl_set<bbgm_mask_pair_feature, fless> merged_verts;
+  std::set<bbgm_mask_pair_feature, fless> merged_verts;
 
-  vcl_set<bbgm_mask_pair_feature, fless>::const_iterator pit;
+  std::set<bbgm_mask_pair_feature, fless>::const_iterator pit;
 
   float pmax = 0.0f;
   for (pit = pairs0.begin(); pit != pairs0.end(); ++pit) {

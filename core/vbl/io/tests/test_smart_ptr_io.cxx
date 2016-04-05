@@ -1,12 +1,13 @@
 // This is core/vbl/io/tests/test_smart_ptr_io.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include "vbl_io_test_classes.h"
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 
 void test_smart_ptr_io()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << "Testing smart_ptr<impl> io\n"
            << "**************************\n";
 
@@ -45,7 +46,7 @@ void test_smart_ptr_io()
   TEST("sp1_in->get_references() == 2", sp1_in->get_references(), 2);
   TEST("null1_in==0", null1_in.ptr(), 0);
   TEST("null2_in==0", null2_in.ptr(), 0);
-  vsl_print_summary(vcl_cout, sp1_out); vcl_cout<<vcl_endl;
+  vsl_print_summary(std::cout, sp1_out); std::cout<<std::endl;
 }
 
 TESTMAIN(test_smart_ptr_io);

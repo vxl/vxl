@@ -9,14 +9,14 @@
 
 void print_usage()
 {
-  vcl_cout<<"make_dog_pyramid -i input_image -o out_image"<<vcl_endl;
+  std::cout<<"make_dog_pyramid -i input_image -o out_image"<<std::endl;
 }
 
 int main( int argc, char* argv[] )
 {
-  vul_arg<vcl_string> in_path("-i","Input image path");
-  vul_arg<vcl_string> out_path("-o","Output image file (DOG)");
-  vul_arg<vcl_string> smooth_path("-s","Output image file (smoothed)");
+  vul_arg<std::string> in_path("-i","Input image path");
+  vul_arg<std::string> out_path("-o","Output image file (DOG)");
+  vul_arg<std::string> smooth_path("-s","Output image file (smoothed)");
   vul_arg_parse(argc, argv);
 
   if(in_path() == "")
@@ -39,12 +39,12 @@ int main( int argc, char* argv[] )
   vil_image_view<vxl_byte> out_dog;
   vil_convert_stretch_range(flat_dog.image(),out_dog);
   vil_save(out_dog,out_path().c_str());
-  vcl_cout<<"DoG saved to "<<out_path()<<vcl_endl;
+  std::cout<<"DoG saved to "<<out_path()<<std::endl;
 
   vil_image_view<vxl_byte> out_smooth;
   vil_convert_stretch_range(flat_smooth.image(),out_smooth);
   vil_save(out_smooth,smooth_path().c_str());
-  vcl_cout<<"Smooth pyramid saved to "<<smooth_path()<<vcl_endl;
+  std::cout<<"Smooth pyramid saved to "<<smooth_path()<<std::endl;
 
   return 0;
 }

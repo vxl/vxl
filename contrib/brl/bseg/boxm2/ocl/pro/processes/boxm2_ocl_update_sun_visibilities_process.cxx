@@ -6,9 +6,11 @@
 // \author Vishal Jain
 // \date Mar 25, 2011
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/algo/boxm2_ocl_update_sun_visibilities.h>
@@ -29,7 +31,7 @@ bool boxm2_ocl_update_sun_visibilities_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_sun_visibilities_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -41,7 +43,7 @@ bool boxm2_ocl_update_sun_visibilities_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -50,7 +52,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
   using namespace boxm2_ocl_update_sun_visibilities_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -63,7 +65,7 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
   vpgl_camera_double_sptr   cam          = pro.get_input<vpgl_camera_double_sptr>(argIdx++);
   unsigned                  ni           = pro.get_input<unsigned>(argIdx++);
   unsigned                  nj           = pro.get_input<unsigned>(argIdx++);
-  vcl_string                prefix_name  = pro.get_input<vcl_string>(argIdx++);
+  std::string                prefix_name  = pro.get_input<std::string>(argIdx++);
 
   return boxm2_ocl_update_sun_visibilities::update(scene, device, opencl_cache, cache, cam, ni, nj, prefix_name);
 }

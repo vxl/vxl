@@ -1,12 +1,13 @@
 // This is mul/vil3d/tests/test_switch_axes.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vil3d/vil3d_switch_axes.h>
 
 static void test_switch_axes_int()
 {
-  vcl_cout << "***************************\n"
+  std::cout << "***************************\n"
            << " Testing vil3d_switch_axes\n"
            << "***************************\n";
 

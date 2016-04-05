@@ -3,8 +3,10 @@
 //:
 // \file
 
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <vector>
+#include <iostream>
+#include <map>
+#include <vcl_compiler.h>
 
 #include <bwm/algo/bwm_soview2D_vertex.h>
 
@@ -38,8 +40,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   typedef bgui_vsol2D_tableau base;
 
-  bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name,
-                   vcl_string image_path, bool display_image_path);
+  bwm_observer_img(bgui_image_tableau_sptr const& img, std::string name,
+                   std::string image_path, bool display_image_path);
 
   bwm_observer_img(bgui_image_tableau_sptr const& img)
   : bgui_vsol2D_tableau(img), lock_vgui_status_(false), vgui_status_on_(false), draw_mode_(MODE_2D_POLY),
@@ -56,13 +58,13 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { viewer_ = viewer; }
 
-  virtual void set_tab_name(vcl_string name) { tab_name_.assign(name); }
+  virtual void set_tab_name(std::string name) { tab_name_.assign(name); }
 
-  vcl_string tab_name() const { return tab_name_; }
+  std::string tab_name() const { return tab_name_; }
 
   bool handle(const vgui_event &);
 
-  virtual vcl_string type_name() const { return "bwm_observer_img"; }
+  virtual std::string type_name() const { return "bwm_observer_img"; }
 
   unsigned create_box(vsol_box_2d_sptr);
 
@@ -121,14 +123,14 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   unsigned row() const {return row_;}
   unsigned col() const {return col_;}
 
-  vcl_vector<vsol_digital_curve_2d_sptr> edges(unsigned id)
+  std::vector<vsol_digital_curve_2d_sptr> edges(unsigned id)
     {return edge_list[id];}
 
-  void display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges,
-                       vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges);
+  void display_reg_seg(std::vector<vsol_digital_curve_2d_sptr> const& search_edges,
+                       std::vector<vsol_digital_curve_2d_sptr> const& model_edges);
   void clear_reg_segmentation();
 
-  vcl_string image_path() const {return img_tab_->file_name();}
+  std::string image_path() const {return img_tab_->file_name();}
 
   virtual void init_mask();
   //: sets the change type for ground truth areas
@@ -152,7 +154,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void set_vgui_status_on(bool status_on){vgui_status_on_ = status_on;}
 
   //: returns a list of all the existing spatial objects
-  vcl_vector<vsol_spatial_object_2d_sptr> get_spatial_objects_2d();
+  std::vector<vsol_spatial_object_2d_sptr> get_spatial_objects_2d();
 
   //: set the draw mode to either polygon or vertex
   void set_draw_mode(BWM_2D_DRAW_MODE mode);
@@ -178,28 +180,28 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   vil_image_view_base_sptr mask_;
 
   //: change areas, mapped to the soviewID for easy deletion
-  vcl_map<unsigned int, bvgl_change_obj_sptr> change_polys_;
+  std::map<unsigned int, bvgl_change_obj_sptr> change_polys_;
 
   //: ground truth areas
   bvgl_changes_sptr ground_truth_;
 
   //: the current ground truth change type
-  vcl_string change_type_;
+  std::string change_type_;
 
   bool show_image_path_;
 
   // polygons are mapped soview ID
-  vcl_map<unsigned, bgui_vsol_soview2D*> obj_list;
+  std::map<unsigned, bgui_vsol_soview2D*> obj_list;
 
   // vector of vertices are mapped soview ID for each polygon
-  vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > vert_list;
+  std::map<unsigned, std::vector<bwm_soview2D_vertex* > > vert_list;
 
   // maps for box segmentations
-  vcl_map<unsigned, vcl_vector<vsol_digital_curve_2d_sptr > > edge_list;
-  vcl_map<unsigned, vcl_vector<vsol_line_2d_sptr > > line_list;
-  vcl_map<unsigned, vcl_vector<bgui_vsol_soview2D*> > seg_views;
+  std::map<unsigned, std::vector<vsol_digital_curve_2d_sptr > > edge_list;
+  std::map<unsigned, std::vector<vsol_line_2d_sptr > > line_list;
+  std::map<unsigned, std::vector<bgui_vsol_soview2D*> > seg_views;
   // storage for registration edge views
-  vcl_vector<bgui_vsol_soview2D*> reg_seg_views_;
+  std::vector<bgui_vsol_soview2D*> reg_seg_views_;
 
   float start_x_, start_y_;
   bgui_vsol_soview2D* moving_p_;
@@ -214,14 +216,14 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void delete_vertex(vgui_soview* vertex);
 
   //: returns the type of selected object iff there is one object. If warn is true, then issue a warning if the object is not found.
-  vgui_soview2D* get_selected_object(vcl_string type, bool warn = false);
+  vgui_soview2D* get_selected_object(std::string type, bool warn = false);
 
   //: returns a list of selected object from the given type
-  vcl_vector<vgui_soview2D*> get_selected_objects(vcl_string type);
+  std::vector<vgui_soview2D*> get_selected_objects(std::string type);
 
-  vcl_string tab_name_;
+  std::string tab_name_;
 
-  vcl_vector<vcl_string> change_choices_;
+  std::vector<std::string> change_choices_;
 
   unsigned row_; //location of observer in grid
   unsigned col_;

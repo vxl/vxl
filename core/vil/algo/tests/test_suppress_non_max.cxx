@@ -1,11 +1,12 @@
 // This is core/vil/algo/tests/test_suppress_non_max.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_suppress_non_max.h>
 
 static void test_suppress_non_max_byte()
 {
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << " Testing vil_suppress_non_max\n"
            << "******************************\n";
 
