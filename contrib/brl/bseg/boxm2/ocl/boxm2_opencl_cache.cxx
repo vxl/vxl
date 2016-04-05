@@ -9,8 +9,8 @@
 boxm2_opencl_cache::boxm2_opencl_cache(bocl_device_sptr device)
 : bytesInCache_(0), block_info_(VXL_NULLPTR), device_(device)
 {
-  // store max bytes allowed in cache - use only 80 percent of the memory
-  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * 0.7);
+  // store max bytes allowed in cache - use only 70 percent of the memory
+  maxBytesInCache_ = (std::size_t) (device->info().total_global_memory_ * 0.7);
 
   // by default try to create an LRU cache
 
