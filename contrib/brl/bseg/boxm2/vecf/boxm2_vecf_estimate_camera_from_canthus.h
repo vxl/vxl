@@ -7,7 +7,7 @@
 #include <boxm2/vecf/boxm2_vecf_orbit_params.h>
 class boxm2_vecf_estimate_camera_from_canthus{
 public:
-  boxm2_vecf_estimate_camera_from_canthus(){
+  boxm2_vecf_estimate_camera_from_canthus():canthus_line_length_(95.0),iris_nominal_(5.5),n_dlib_orbit_parts_(22),n_dlib_alfw_landmarks_(22){
     H_ = vnl_matrix_fixed<double,3,3>(0.0);
     scale_ = 1.0; psi_ = phi_ = 0.0; z0_ = 0;
   }
@@ -22,10 +22,10 @@ private:
 
   vcl_map<vcl_string,vgl_point_2d<double> > dlib_part_map_;
   vgl_h_matrix_2d<double> H_;
-  const double canthus_line_length_ = 95.0; //these values are constant across subjects
-  const double iris_nominal_ = 5.5;
-  const unsigned n_dlib_orbit_parts_ = 18;
-  const unsigned n_dlib_alfw_landmarks_ = 22;
+  const double canthus_line_length_; //these values are constant across subjects
+  const double iris_nominal_ ;
+  const unsigned n_dlib_orbit_parts_ ;
+  const unsigned n_dlib_alfw_landmarks_;
   double scale_, phi_,psi_;
   double z0_;
   vgl_vector_2d<double> t_;
