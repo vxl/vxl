@@ -39,6 +39,9 @@ class bvgl_k_nearest_neighbors_3d
   //: find k nearest neighbors. if the source pointset has normals they are included in the returned pointset
   bool knn(vgl_point_3d<Type> const& p, unsigned k, vgl_pointset_3d<Type>& neighbors) const;
 
+  //: find the indices of the k closest neighbors.
+  bool knn_indices(vgl_point_3d<Type> const& p, unsigned k, vnl_vector<int> &indices) const;
+
   //: accessors provide efficient access to a single pointset copy
   const vgl_pointset_3d<Type>& const_ptset() const {return ptset_;}
   vgl_pointset_3d<Type>& ptset(){return ptset_;}
@@ -79,6 +82,23 @@ bvgl_k_nearest_neighbors_3d<Type>::bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<T
 search_tree_(0), tolerance_(tolerance), ptset_(ptset){
   create();
 }
+
+template <class Type>
+bool bvgl_k_nearest_neighbors_3d<Type>::knn_indices(vgl_point_3d<Type> const& p, unsigned k, vnl_vector<int> &indices) const
+{
+  indices.set_size(k);
+  vnl_vector<Type> q(3),dists2(k);
+  q[0]=p.x();  q[1]=p.y();  q[2]=p.z();
+  if(!search_tree_) {
+    return false;
+  }
+  search_tree_->knn(q, indices, dists2, k, tolerance_, flags_);
+  if(dists2[k-1] == vcl_numeric_limits<Type>::infinity()||indices[k-1]<0) {
+    return false;
+  }
+  return true;
+}
+
 template <class Type>
 bool bvgl_k_nearest_neighbors_3d<Type>::closest_index(vgl_point_3d<Type> const& p, unsigned& index) const{
   unsigned k = 1;
