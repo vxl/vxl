@@ -77,7 +77,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
                                      vgl_rotation_3d<double>  rot,
                                      vgl_vector_3d<double> trans,
                                      vgl_vector_3d<double> scale,
-                                     bool finish);
+                                     bool finish = true);
 
   //: warps using general vector field
   bool transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field, bool finish);

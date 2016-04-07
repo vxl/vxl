@@ -16,8 +16,8 @@
 
 
 boxm2_ocl_aggregate_normal_from_filter_vector::
-boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector) :
-  scene_(scene), ocl_cache_(ocl_cache), device_(device), filter_vector_(filter_vector)
+boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector,bool optimize_transfers) :
+  scene_(scene), ocl_cache_(ocl_cache), device_(device), filter_vector_(filter_vector),optimize_transfers_(optimize_transfers)
 {
   unsigned num_filters = filter_vector->kernels_.size();
 
@@ -178,11 +178,12 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
 
     //clear render kernel args so it can reset em on next execution
     kernel_.clear_args();
-
     //read normals and vis from gpu
-    normals->read_to_buffer(queue);
-    status = clFinish(queue);
-    check_val(status, MEM_FAILURE, "READ NORMALS FAILED: " + error_to_string(status));
+    if (!optimize_transfers_){
+      normals->read_to_buffer(queue);
+      status = clFinish(queue);
+      check_val(status, MEM_FAILURE, "READ NORMALS FAILED: " + error_to_string(status));
+    }
   }
 
   std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
