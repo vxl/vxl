@@ -1,10 +1,13 @@
 #include "brad_appearance_neighborhood_index.h"
 #include <vpgl/vpgl_camera.h>
 #include <vnl/vnl_math.h>
+#include <bsta/algo/bsta_mog3_grey.h>
 #include <cstdlib> // for rand
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#define BRAD_INIT_SIGMA 0.15f
+#define BRAD_MIN_SIGMA 0.10f
 brad_appearance_neighborhood_index::brad_appearance_neighborhood_index(std::vector<brad_image_metadata_sptr> const& metadata)
 {
     std::vector<vgl_vector_3d<double > > local_view_dirs;
@@ -81,8 +84,8 @@ void brad_appearance_neighborhood_index::fill_near_view_dir_map(){
     }
   }
 }
+#if 1
 // note! the view direction neighbors must be computed before calling this method
-
 void brad_appearance_neighborhood_index::fill_near_illum_dir_map(){
   unsigned n = this->n_dirs();
   bool full_overlap = !this->overlap_is_specified();
@@ -104,8 +107,26 @@ void brad_appearance_neighborhood_index::fill_near_illum_dir_map(){
     }
   }
 }
-
-
+#else
+// note! the view direction neighbors must be computed before calling this method
+void brad_appearance_neighborhood_index::fill_near_illum_dir_map(){
+  unsigned n = this->n_dirs();
+  bool full_overlap = !this->overlap_is_specified();
+  for(unsigned i = 0; i<n; ++i){
+    vgl_vector_3d<double> i_illum_dir = illumination_dirs_[i];
+    for(unsigned j = 0; j<n; ++j){
+      if(i==j)
+        continue;
+      double dp = dot_product(i_illum_dir, illumination_dirs_[j]);
+	double sang = std::sqrt(1.0-(dp*dp));
+        if(sang<max_illum_dir_thresh_ && full_overlap)
+          near_illum_dir_map_[i].push_back(j);
+        else if(!full_overlap && sang<max_illum_dir_thresh_ && view_overlap_[i][j]>min_overlap_thresh_)
+          near_illum_dir_map_[i].push_back(j);
+    }
+  }
+}
+#endif
 void brad_appearance_neighborhood_index::compute_index(){
   // full overlap can occur in the case of cropped satellite images of 
   // a scene where every view provides full coverage of scene surfaces
@@ -227,7 +248,9 @@ bool brad_appearance_neighborhood_index::pixel_intensity(vil_image_view<float> c
   I = img(i,j);
   return true;
 }
-void brad_appearance_neighborhood_index::print_intensities(vgl_point_3d<double> const& p) const{
+void brad_appearance_neighborhood_index::project_intensities(vgl_point_3d<double> const& p){
+  intensity_.clear();
+  nbr_intensities_.clear();
   for(std::map<unsigned, std::vector<unsigned> >::const_iterator iit = index_.begin();
       iit != index_.end(); ++iit){
     unsigned img_index = iit->first;
@@ -235,14 +258,26 @@ void brad_appearance_neighborhood_index::print_intensities(vgl_point_3d<double> 
     float Itarg = 0.0f;
     if(!pixel_intensity(imgs_[img_index], cams_[img_index], p, Itarg))
       continue;
-    std::cout << "t: " << Itarg << " n:( ";
+    intensity_[img_index]=Itarg;
     for(std::vector<unsigned>::const_iterator nit = nbrs.begin();
         nit != nbrs.end(); ++nit){
       float Inbr = 0.0f;
       if(!pixel_intensity(imgs_[*nit], cams_[*nit], p, Inbr))
         continue;
-      std::cout << Inbr << ' ';
+      nbr_intensities_[img_index].push_back(Inbr);
     }
+  }
+}
+void brad_appearance_neighborhood_index::print_intensities() const{
+  std::map<unsigned, double>::const_iterator inti = intensity_.begin();
+  std::map<unsigned, std::vector<double> >::const_iterator ninti = nbr_intensities_.begin();
+  for(; inti!=intensity_.end(); ++inti, ++ninti){
+    double tint = inti->second;
+    const std::vector<double>& nbr_intens = ninti->second;
+    std::cout << "t["<< inti->first <<  "]: " << tint << " n:( ";
+    for(std::vector<double>::const_iterator nit = nbr_intens.begin();
+        nit != nbr_intens.end(); ++nit)
+      std::cout << *nit << ' ';
     std::cout << ")\n";
   }
 }
@@ -271,5 +306,29 @@ void brad_appearance_neighborhood_index::print_illum_neighbors() const{
         nit != nbrs.end(); ++nit)
       std::cout << *nit << ' ';
     std::cout << "]\n";
+  }
+}
+void brad_appearance_neighborhood_index::test_appearance_update(){
+  // must have called ::print_intensities first!
+  std::map<unsigned, double>::iterator inti = intensity_.begin();
+  std::map<unsigned, std::vector<double> >::iterator ninti = nbr_intensities_.begin();
+  for(; inti!=intensity_.end(); ++inti, ++ninti){
+    float tint = static_cast<float>(inti->second);
+    vnl_vector_fixed<unsigned char, 8> mog3(static_cast<unsigned char>(0));
+    vnl_vector_fixed<float, 4> nobs(0.0f);
+    std::vector<double>& nbr_intens = ninti->second;
+    unsigned n_nbr = static_cast<unsigned>(nbr_intens.size());
+    for(unsigned i = 0; i<n_nbr; ++i)
+      bsta_mog3_grey::update_gauss_mixture_3(mog3, nobs, static_cast<float>(nbr_intens[i]), 1.0f, BRAD_INIT_SIGMA, BRAD_MIN_SIGMA);
+
+    float mu0 = static_cast<float>(mog3[0])/255.0f, mu1 = static_cast<float>(mog3[3])/255.0f, mu2 = static_cast<float>(mog3[6])/255.0f;
+    float w0 = static_cast<float>(mog3[2])/255.0f, w1 = static_cast<float>(mog3[5])/255.0f, w2 = 1.0f-(w0+w1);
+    float sigma0 = static_cast<float>(mog3[1])/255.0f, sigma1 = static_cast<float>(mog3[4])/255.0f, sigma2 =static_cast<float>(mog3[7])/255.0f;
+    std::cout << "Updated mog[" << inti->first << "]: mean(" << mu0 << ' '<< mu1 << ' '<< mu2 <<") w("<< w0 << ' '<< w1 << ' ' << w2 <<") sigma("
+              << sigma0 << ' ' << sigma1 << ' ' << sigma2 << ")\n";
+    // below is done if mog_var is >0 which is bad!!!
+    //sigma0 = 0.01f*255.0f;     sigma1 = 0.01f*255.0f;     sigma2 = 0.01f*255.0f;
+    //    mog3[1] = static_cast<unsigned char>(sigma0);     mog3[4] = static_cast<unsigned char>(sigma1); mog3[7] = static_cast<unsigned char>(sigma2);
+    std::cout << "P(" << tint << ") = " << bsta_mog3_grey::prob_density(mog3, tint) << '\n';
   }
 }

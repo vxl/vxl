@@ -1,11 +1,9 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
-#include "boxm2_mog3_grey_processor.h"
 //
 #define TMATCH 2.5f
 
-#include <boxm2/boxm2_util.h>
 #include <vcl_compiler.h>
 
 #include <bsta/bsta_distribution.h>
@@ -16,6 +14,7 @@
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/algo/bsta_fit_gaussian.h>
 
+static float bsta_clamp(float x, float a, float b) { return x < a ? a : (x > b ? b : x); }
 
 bool sort_components (vnl_vector_fixed<float,3> i,vnl_vector_fixed<float,3> j)
 {
@@ -24,7 +23,7 @@ bool sort_components (vnl_vector_fixed<float,3> i,vnl_vector_fixed<float,3> j)
   return ratio1>ratio2;
 }
 
-float  boxm2_mog3_grey_processor::expected_color( vnl_vector_fixed<unsigned char, 8> mog3)
+float  bsta_mog3_grey::expected_color( vnl_vector_fixed<unsigned char, 8> mog3)
 {
   float w2=0.0f;
   if (mog3[2]>0 && mog3[5]>0)
@@ -39,12 +38,12 @@ float  boxm2_mog3_grey_processor::expected_color( vnl_vector_fixed<unsigned char
   return exp_intensity;
 }
 
-float  boxm2_mog3_grey_processor::gauss_prob_density(float x, float mu, float sigma)
+float  bsta_mog3_grey::gauss_prob_density(float x, float mu, float sigma)
 {
   return 0.398942280f*std::exp(-0.5f*(x - mu)*(x - mu)/(sigma*sigma))/sigma;
 }
 
-float  boxm2_mog3_grey_processor::prob_density(const vnl_vector_fixed<unsigned char, 8> & mog3, float x)
+float  bsta_mog3_grey::prob_density(const vnl_vector_fixed<unsigned char, 8> & mog3, float x)
 {
   float sum = 0.0f;
   float sum_weights=0.0f;
@@ -58,7 +57,7 @@ float  boxm2_mog3_grey_processor::prob_density(const vnl_vector_fixed<unsigned c
 
   if (w0>0.0f && sigma0 >0.0f)
   {
-    sum += w0*boxm2_mog3_grey_processor::gauss_prob_density(x, mu0, sigma0);
+    sum += w0*bsta_mog3_grey::gauss_prob_density(x, mu0, sigma0);
     if (w1>0.0f && sigma1 >0.0f)
     {
       sum += w1*gauss_prob_density(x, mu1, sigma1);
@@ -74,7 +73,7 @@ float  boxm2_mog3_grey_processor::prob_density(const vnl_vector_fixed<unsigned c
   return sum;
 }
 
-void boxm2_mog3_grey_processor::update_gauss(float & x, float & rho, float & mu, float &  sigma,float min_sigma)
+void bsta_mog3_grey::update_gauss(float & x, float & rho, float & mu, float &  sigma,float min_sigma)
 {
   float var = sigma*sigma;
   float diff = x-mu;
@@ -84,7 +83,7 @@ void boxm2_mog3_grey_processor::update_gauss(float & x, float & rho, float & mu,
   sigma = sigma < min_sigma ? min_sigma: sigma;
 }
 
-void boxm2_mog3_grey_processor::sort_mix_3(float & mu0, float& sigma0, float& w0, float& Nobs0,
+void bsta_mog3_grey::sort_mix_3(float & mu0, float& sigma0, float& w0, float& Nobs0,
                                            float & mu1, float& sigma1, float& w1, float& Nobs1,
                                            float & mu2, float& sigma2, float& w2, float& Nobs2)
 {
@@ -157,7 +156,7 @@ void boxm2_mog3_grey_processor::sort_mix_3(float & mu0, float& sigma0, float& w0
     }
 }
 
-void boxm2_mog3_grey_processor::insert_gauss_3(float x, float init_weight, float init_sigma, int & match,
+void bsta_mog3_grey::insert_gauss_3(float x, float init_weight, float init_sigma, int & match,
                                                float& mu0, float& sigma0, float& w0, float& Nobs0,
                                                float& mu1, float& sigma1, float& w1, float& Nobs1,
                                                float& mu2, float& sigma2, float& w2, float& Nobs2)
@@ -194,9 +193,9 @@ void boxm2_mog3_grey_processor::insert_gauss_3(float x, float init_weight, float
 }
 
 void
-boxm2_mog3_grey_processor::update_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3,
-                                                  vnl_vector_fixed<float, 4> & nobs,
-                                                  float x, float w, float init_sigma,float min_sigma)
+bsta_mog3_grey::update_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3,
+                                       vnl_vector_fixed<float, 4> & nobs,
+                                       float x, float w, float init_sigma,float min_sigma)
 {
   float mu0=((float)mog3[0]/255.0f);float sigma0=((float)mog3[1]/255.0f);float w0=((float)mog3[2]/255.0f);
   float mu1=((float)mog3[3]/255.0f);float sigma1=((float)mog3[4]/255.0f);float w1=((float)mog3[5]/255.0f);
@@ -218,7 +217,7 @@ boxm2_mog3_grey_processor::update_gauss_mixture_3(vnl_vector_fixed<unsigned char
         weight += alpha;
         nobs[0]++;
         rho = (1.0f-alpha)/nobs[0] + alpha;
-        boxm2_mog3_grey_processor::update_gauss(x, rho, mu0, sigma0, min_sigma);
+        bsta_mog3_grey::update_gauss(x, rho, mu0, sigma0, min_sigma);
         match = 0;
       }
       w0 = weight;
@@ -230,7 +229,7 @@ boxm2_mog3_grey_processor::update_gauss_mixture_3(vnl_vector_fixed<unsigned char
         weight += alpha;
         nobs[1]++;
         rho = (1.0f-alpha)/nobs[1] + alpha;
-        boxm2_mog3_grey_processor::update_gauss(x, rho, mu1, sigma1, min_sigma);
+        bsta_mog3_grey::update_gauss(x, rho, mu1, sigma1, min_sigma);
         match = 1;
       }
       w1 = weight;
@@ -242,34 +241,34 @@ boxm2_mog3_grey_processor::update_gauss_mixture_3(vnl_vector_fixed<unsigned char
         weight += alpha;
         nobs[2]++;
         rho = (1.0f-alpha)/nobs[2] + alpha;
-        boxm2_mog3_grey_processor::update_gauss(x, rho, mu2, sigma2, min_sigma);
+        bsta_mog3_grey::update_gauss(x, rho, mu2, sigma2, min_sigma);
         match = 2;
       }
       w2 = weight;
     }
     // If there were no matches then insert a new component
     if (match<0)
-      boxm2_mog3_grey_processor::insert_gauss_3(x, alpha, init_sigma, match,
+      bsta_mog3_grey::insert_gauss_3(x, alpha, init_sigma, match,
                                                 mu0, sigma0, w0, nobs[0],
                                                 mu1, sigma1, w1, nobs[1],
                                                 mu2, sigma2, w2, nobs[2]);
 
-    boxm2_mog3_grey_processor::sort_mix_3(mu0, sigma0, w0, nobs[0],
+    bsta_mog3_grey::sort_mix_3(mu0, sigma0, w0, nobs[0],
                                           mu1, sigma1, w1, nobs[1],
                                           mu2, sigma2, w2, nobs[2]);
   }
 
-  mog3[0]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(mu0,0,1)*255.0f);
-  mog3[1]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(sigma0,0,1)*255.0f);
-  mog3[2]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(w0,0,1)*255.0f);
-  mog3[3]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(mu1,0,1)*255.0f);
-  mog3[4]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(sigma1,0,1)*255.0f);
-  mog3[5]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(w1,0,1)*255.0f);
-  mog3[6]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(mu2,0,1)*255.0f);
-  mog3[7]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(sigma2,0,1)*255.0f);
+  mog3[0]=(unsigned char)std::floor(bsta_clamp(mu0,0,1)*255.0f);
+  mog3[1]=(unsigned char)std::floor(bsta_clamp(sigma0,0,1)*255.0f);
+  mog3[2]=(unsigned char)std::floor(bsta_clamp(w0,0,1)*255.0f);
+  mog3[3]=(unsigned char)std::floor(bsta_clamp(mu1,0,1)*255.0f);
+  mog3[4]=(unsigned char)std::floor(bsta_clamp(sigma1,0,1)*255.0f);
+  mog3[5]=(unsigned char)std::floor(bsta_clamp(w1,0,1)*255.0f);
+  mog3[6]=(unsigned char)std::floor(bsta_clamp(mu2,0,1)*255.0f);
+  mog3[7]=(unsigned char)std::floor(bsta_clamp(sigma2,0,1)*255.0f);
 }
 
-bool boxm2_mog3_grey_processor::merge_gauss(float mu1,float var1, float w1,
+bool bsta_mog3_grey::merge_gauss(float mu1,float var1, float w1,
                                             float mu2,float var2, float w2,
                                             vnl_vector_fixed<float, 3> & new_component)
 {
@@ -284,7 +283,7 @@ bool boxm2_mog3_grey_processor::merge_gauss(float mu1,float var1, float w1,
   return true;
 }
 
-void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 8> & mog3_1, float w1,
+void  bsta_mog3_grey::merge_mixtures(vnl_vector_fixed<unsigned char, 8> & mog3_1, float w1,
                                                 vnl_vector_fixed<unsigned char, 8> & mog3_2, float w2,
                                                 vnl_vector_fixed<unsigned char, 8> & mog3_3)
 {
@@ -356,9 +355,9 @@ void  boxm2_mog3_grey_processor::merge_mixtures(vnl_vector_fixed<unsigned char, 
   }
 }
 
-// Most of the following code is copied over from boxm_mog_grey_processor::compute_appearance
+// Most of the following code is copied over from boxm_mog_grey::compute_appearance
 
-void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
+void bsta_mog3_grey::compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
                                                   std::vector<float> const& obs,
                                                   std::vector<float> const& obs_weights,
                                                   bsta_sigma_normalizer_sptr n_table,
@@ -369,7 +368,7 @@ void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char
   compute_app_model(apm,obs,pre,obs_weights,n_table,min_sigma);
 }
 
-void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3,
+void bsta_mog3_grey::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3,
                                                   std::vector<float> const& obs,
                                                   std::vector<float> const& pre,
                                                   std::vector<float> const& vis,
@@ -388,14 +387,14 @@ void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char
   }
   if (nobs == 1) {
     // just make the sample the mean and the mixture a single mode distribution
-    mog3[0]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(obs[0],0,1)*255.0f);
-    mog3[1]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(big_sigma,0,1)*255.0f);
-    mog3[2]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(1.0f,0,1)*255.0f);
-    mog3[3]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(obs[0],0,1)*255.0f);
-    mog3[4]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(big_sigma,0,1)*255.0f);
-    mog3[5]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(0.0f,0,1)*255.0f);
-    mog3[6]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(obs[0],0,1)*255.0f);
-    mog3[7]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(big_sigma,0,1)*255.0f);
+    mog3[0]=(unsigned char)std::floor(bsta_clamp(obs[0],0,1)*255.0f);
+    mog3[1]=(unsigned char)std::floor(bsta_clamp(big_sigma,0,1)*255.0f);
+    mog3[2]=(unsigned char)std::floor(bsta_clamp(1.0f,0,1)*255.0f);
+    mog3[3]=(unsigned char)std::floor(bsta_clamp(obs[0],0,1)*255.0f);
+    mog3[4]=(unsigned char)std::floor(bsta_clamp(big_sigma,0,1)*255.0f);
+    mog3[5]=(unsigned char)std::floor(bsta_clamp(0.0f,0,1)*255.0f);
+    mog3[6]=(unsigned char)std::floor(bsta_clamp(obs[0],0,1)*255.0f);
+    mog3[7]=(unsigned char)std::floor(bsta_clamp(big_sigma,0,1)*255.0f);
     return;
   }
 
@@ -521,14 +520,14 @@ void boxm2_mog3_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char
   // sort the modes based on weight
   model.sort();
 
-  mog3[0]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(model.distribution(0).mean(),0,1)*255.0f);
-  mog3[1]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(std::sqrt(model.distribution(0).var()),0,1)*255.0f);
-  mog3[2]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(model.weight(0),0,1)*255.0f);
-  mog3[3]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(model.distribution(1).mean(),0,1)*255.0f);
-  mog3[4]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(std::sqrt(model.distribution(1).var()),0,1)*255.0f);
-  mog3[5]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(model.weight(1),0,1)*255.0f);
-  mog3[6]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(model.distribution(2).mean(),0,1)*255.0f);
-  mog3[7]=(unsigned char)std::floor(boxm2_mog3_grey_processor::clamp(std::sqrt(model.distribution(2).var()),0,1)*255.0f);
+  mog3[0]=(unsigned char)std::floor(bsta_clamp(model.distribution(0).mean(),0,1)*255.0f);
+  mog3[1]=(unsigned char)std::floor(bsta_clamp(std::sqrt(model.distribution(0).var()),0,1)*255.0f);
+  mog3[2]=(unsigned char)std::floor(bsta_clamp(model.weight(0),0,1)*255.0f);
+  mog3[3]=(unsigned char)std::floor(bsta_clamp(model.distribution(1).mean(),0,1)*255.0f);
+  mog3[4]=(unsigned char)std::floor(bsta_clamp(std::sqrt(model.distribution(1).var()),0,1)*255.0f);
+  mog3[5]=(unsigned char)std::floor(bsta_clamp(model.weight(1),0,1)*255.0f);
+  mog3[6]=(unsigned char)std::floor(bsta_clamp(model.distribution(2).mean(),0,1)*255.0f);
+  mog3[7]=(unsigned char)std::floor(bsta_clamp(std::sqrt(model.distribution(2).var()),0,1)*255.0f);
 
   return;
 }

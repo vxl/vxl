@@ -26,7 +26,7 @@
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #define BRAD_VTHR 0.05
-#define BRAD_ITHR 0.2
+#define BRAD_ITHR 0.15
 class brad_appearance_neighborhood_index
 {
  public:
@@ -73,8 +73,9 @@ class brad_appearance_neighborhood_index
   // for testing radiometric consistency
   void set_images(std::vector<vil_image_view<float> > const& imgs){imgs_ = imgs;}
   void set_cams(std::vector<vpgl_camera_double_sptr> const& cams){ cams_ = cams;}
-  void print_intensities(vgl_point_3d<double> const& p) const;
-
+  void project_intensities(vgl_point_3d<double> const& p);
+  void print_intensities() const;
+  void test_appearance_update();
   private:
   double max_view_dir_thresh_;
   double max_illum_dir_thresh_;
@@ -86,6 +87,8 @@ class brad_appearance_neighborhood_index
   std::map<unsigned, std::map<unsigned, double> > view_overlap_;
   std::map<unsigned, std::vector<unsigned> > near_view_dir_map_;//close view directions
   std::map<unsigned, std::vector<unsigned> > near_illum_dir_map_; //close illumination directions 
+  std::map<unsigned, double> intensity_;
+  std::map<unsigned, std::vector<double> > nbr_intensities_;
   // for testing purposes
   std::vector<vil_image_view<float> > imgs_;
   std::vector<vpgl_camera_double_sptr> cams_;

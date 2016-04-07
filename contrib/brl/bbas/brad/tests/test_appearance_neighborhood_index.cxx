@@ -148,14 +148,6 @@ static void test_appearance_neighborhood_index()
   brad_appearance_neighborhood_index idx(metadata);
   std::cout << "==== INDEX =====\n";
   idx.print_index();
-  std::cout << "Retry ====>\n";
-  idx.compute_index();
-  idx.print_index();
-  std::cout << "Retry ====>\n";
-  idx.compute_index();
-  idx.print_index();
-#if 0
-  idx.print_index();
   idx.print_index_angles();
   //10FEB10145223-P1BS-052869846010_01_P001 10JAN08145510-P1BS-052869801050_01_P001
   vgl_point_3d<double>  p(257.2, 107.9, 19.0);
@@ -176,7 +168,15 @@ static void test_appearance_neighborhood_index()
 
   idx.set_images(imgs);
   idx.set_cams(cams);
-  idx.print_intensities(p);
-#endif
+
+  idx.project_intensities(p);
+  idx.print_intensities();
+  idx.test_appearance_update();
+
+  idx.compute_index();
+  idx.print_index();
+  idx.project_intensities(p);
+  idx.print_intensities();
+  idx.test_appearance_update();
 }
 TESTMAIN( test_appearance_neighborhood_index );
