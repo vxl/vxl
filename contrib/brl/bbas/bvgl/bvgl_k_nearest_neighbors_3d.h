@@ -11,6 +11,8 @@
 #include <bnabo/bnabo.h>
 #include <vcl_iosfwd.h>
 #include <vcl_limits.h>
+#include <algorithm> // for std::swap
+
 template <class Type>
 class bvgl_k_nearest_neighbors_3d
 {
@@ -25,6 +27,21 @@ class bvgl_k_nearest_neighbors_3d
       delete search_tree_;
     search_tree_ = 0;
   }
+  //: copy constructor
+  bvgl_k_nearest_neighbors_3d(bvgl_k_nearest_neighbors_3d const& other) :
+    tolerance_(other.tolerance_), ptset_(other.ptset_),
+    search_tree_(0)
+  {
+    // create handles init of M_ and search_tree_, and flags_
+    create();
+  }
+  //: assignment operator
+  bvgl_k_nearest_neighbors_3d& operator = (bvgl_k_nearest_neighbors_3d rhs)
+  {
+    swap(*this, rhs);
+    return *this;
+  }
+
   //: create search tree
   // use this method if adding a pointset to an existing default k_nearest_neighbors instance
   bool create();
@@ -49,6 +66,18 @@ class bvgl_k_nearest_neighbors_3d
     ptset_ = ptset;
     this->create();
   }
+
+  //: swap the two objects (used as part of "copy and swap" idiom)
+  friend void swap(bvgl_k_nearest_neighbors_3d<Type>& first,
+                   bvgl_k_nearest_neighbors_3d<Type>& second)
+  {
+    std::swap(first.tolerance_, second.tolerance_);
+    std::swap(first.search_tree, second.search_tree_);
+    std::swap(first.M_, second.M_);
+    std::swap(first.ptset_, second.ptset_);
+    std::swap(first.flags_, second.flags_);
+  }
+
   protected:
   Type tolerance_;
   Nabo::NearestNeighbourSearch<Type>* search_tree_;
