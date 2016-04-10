@@ -10,6 +10,7 @@ DECLARE( test_synoptic_function );
 DECLARE( test_image_metadata );
 DECLARE( test_atmospheric_parameters );
 DECLARE(test_appearance_neighborhood_index );
+DECLARE(test_belief_prop_utils );
 void register_tests()
 {
   REGISTER( test_illum );
@@ -22,6 +23,7 @@ void register_tests()
   REGISTER( test_image_metadata );
   REGISTER( test_atmospheric_parameters );
   REGISTER( test_appearance_neighborhood_index );
+  REGISTER( test_belief_prop_utils );
 }
 
 DEFINE_MAIN;

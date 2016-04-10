@@ -268,6 +268,12 @@ bsta_mog3_grey::update_gauss_mixture_3(vnl_vector_fixed<unsigned char, 8> & mog3
   mog3[7]=(unsigned char)std::floor(bsta_clamp(sigma2,0,1)*255.0f);
 }
 
+void bsta_mog3_grey::force_mog3_sigmas_to_value(vnl_vector_fixed<unsigned char, 8> & mog3,float sigma){
+  mog3[1]=(unsigned char)vcl_floor(bsta_clamp(sigma,0,1)*255.0f);
+  mog3[4]=(unsigned char)vcl_floor(bsta_clamp(sigma,0,1)*255.0f);
+  mog3[7]=(unsigned char)vcl_floor(bsta_clamp(sigma,0,1)*255.0f);
+}
+
 bool bsta_mog3_grey::merge_gauss(float mu1,float var1, float w1,
                                             float mu2,float var2, float w2,
                                             vnl_vector_fixed<float, 3> & new_component)

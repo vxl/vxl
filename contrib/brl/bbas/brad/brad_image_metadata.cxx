@@ -1375,7 +1375,9 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
   double d = brad_sun_distance(t_.year, t_.month, t_.day, t_.hour, t_.min);
   if (n_bands_ == 1) {
     if(verbose_)
+    {
       std::cout << "solar_irradiance_: " << solar_irrad << ", time: ";  this->print_time();  std::cout << '\n';
+    }
     sun_irradiance_ = solar_irrad/(d*d);
     if(verbose_)
       std::cout << " after scaling with Earth-Sun distance: " << sun_irradiance_ << std::endl;
@@ -1398,7 +1400,8 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
     }
   }
 
-  if(verbose_){
+  if(verbose_)
+  {
     std::cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << std::endl;
     std::cout << *this;
   }

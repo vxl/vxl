@@ -48,6 +48,12 @@ bool brad_compute_appearance_index_process(bprb_func_process& pro)
   }
   // create the index 
   brad_appearance_neighborhood_index idx(metadata);
+#if 0
+  // debug jlm ====================
+  unsigned mnv = idx.most_nadir_view();
+  idx.force_single_index(mnv);
+  //===============================
+#endif
   std::map<unsigned, std::vector<unsigned> > index = idx.index();
   unsigned total_size = 0;
   for(std::map<unsigned, std::vector<unsigned> >::const_iterator iit = index.begin();

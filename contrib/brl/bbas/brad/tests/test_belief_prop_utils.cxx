@@ -1,14 +1,20 @@
 #include <testlib/testlib_test.h>
-#include <brad/brad_appearance_neighborhood_index.h>
+#include <brad/brad_belief_prop_utils.h>
 #include <fstream>
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-static void test_appearance_neighborhood_index()
+static void test_belief_prop_utils()
 {
-  START("test_appearance_neighborhood_index");
+  START("test_belief_prop_utils");
+  // test belief prop functions
+  brad_ray ray;
+  ray.init_ray();
+  ray.print();
+  std:: cout << ' ';
+
   std::string files[] = {//"03JAN08145014-P1BS-052869788020_01_P006",
                          //"05DEC11150006-P1BS-052869812040_01_P002",
                          //"07JAN06150926-P1BS-052869817030_01_P004",
@@ -145,12 +151,69 @@ static void test_appearance_neighborhood_index()
       continue;
     metadata.push_back(meta_ptr);
   }
-  brad_appearance_neighborhood_index idx(metadata);
-  std::cout << "==== INDEX =====\n";
-  idx.print_index();
-  idx.print_index_angles();
-  std::cout << "==== NEXT RANDOM INDEX =====\n";
-  idx.compute_index();
-  idx.print_index();
+  brad_belief_prop_utils utils;
+  utils.set_metadata(metadata);
+  unsigned mnv = utils.most_nadir_view();
+  utils.force_single_index(mnv);
+  std::vector<unsigned> ref_views =utils.index(mnv);
+  vgl_vector_3d<double> nview = utils.view_dir(mnv);
+  for(std::vector<unsigned>::iterator vit = ref_views.begin();
+      vit != ref_views.end(); ++vit){
+    vgl_vector_3d<double> view = utils.view_dir(*vit);
+    double dp = dot_product(nview, view);
+    double angle = std::acos(dp)*180.0/3.14159;
+    std::cout << "angle[" << *vit << "]: " << angle << '\n';
+  }
+
+  std::vector<vil_image_view<float> > imgs;
+  std::vector<vpgl_camera_double_sptr> cams;
+  for(unsigned i = 0; i<n; ++i){
+    std::string img_file = imgcam_dir + files[i] + post + ".tif";
+    std::string cam_file = imgcam_dir + files[i] + post + ".rpb";
+    vil_image_view<float> img = vil_load(img_file.c_str());
+    vpgl_camera_double_sptr ratcam = read_local_rational_camera<double>(cam_file);
+	if(!img || !ratcam){
+		std::cout << "null img or cam" << files[i] << '\n';
+		continue;
+	}
+	imgs.push_back(img);
+    cams.push_back(ratcam);
+  }
+  utils.set_images(imgs);
+  utils.set_cams(cams);
+  vgl_point_3d<double>  p0(257.2, 107.9, 19.0);
+  vgl_point_3d<double>  p1(334.3,244.5 , 13.6);
+  vgl_point_3d<double>  p2(314.4,387.9 , 14.56);
+  vgl_point_3d<double>  p2d(316.0, 388.0, 14.56);
+  vgl_point_3d<double>  proad(228.7,342.7, 2.9);
+  float Iray =0.0f;
+  vgl_point_3d<double> p = proad;
+  utils.pixel_intensity(imgs[mnv], cams[mnv], p, Iray);
+  std::cout << "Iray[" << mnv << "]: " << Iray << " RefInts[";
+  std::vector<double> ref_intents = utils.ref_intensities(ref_views, p);
+  for(std::vector<double>::iterator intit = ref_intents.begin();
+      intit != ref_intents.end(); ++intit)
+    std::cout << *intit << ' ';
+  std::cout << "]\n";
+  vnl_vector_fixed<unsigned char, 8> mog3(static_cast<unsigned char>(0));
+  vnl_vector_fixed<float, 4> nobs(0.0f);
+  utils.update_mog(ref_intents, mog3, nobs, true);
+  double pray = utils.p_mog(Iray, mog3);
+  std::cout << "P(Iray): " << pray << " mix-> ";
+  utils.print_mog(mog3, nobs);
+  ///
+  utils.init_zray(Iray, ref_views, p, -10.0, true);
+  utils.zray_pre();
+  utils.zray_post();
+  utils.update_PinS();
+  utils.update_vis();
+  utils.print_zray();
+  double ed = utils.expected_depth();
+  std::cout << "expected depth " << ed << '\n';
+#if 0
+  utils.project_intensities(p);
+  utils.print_intensities();
+  utils.test_appearance_update();
+#endif
 }
-TESTMAIN( test_appearance_neighborhood_index );
+TESTMAIN( test_belief_prop_utils );
