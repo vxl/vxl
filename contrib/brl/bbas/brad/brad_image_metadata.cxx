@@ -1121,8 +1121,9 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
     if (img_info.find("IKONOS") != std::string::npos || nitf_filename.find("IK") != std::string::npos) {
       solar_irrad = 1375.8;
       satellite_name_ = "IKONOS";
-    } else if (img_info.find("GeoEye-1") != std::string::npos || img_info.find("GEOEYE1") != std::string::npos || satellite_name_.compare("OV-5") == 0 ) { // OZGE TODO: check this one
-      // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
+    } else if ( img_info.find("GeoEye-1") != std::string::npos || img_info.find("GEOEYE1") != std::string::npos ||
+                satellite_name_.find("OV-5") != std::string::npos || satellite_name_.find("GE01") != std::string::npos )
+    { // OZGE TODO: check this one these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
       solar_irrad = 1617;
       satellite_name_ = "GeoEye-1";
       // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for geoeye1 plane 0
@@ -1143,7 +1144,7 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
                nitf_filename.find("QB") != std::string::npos ||
                nitf_filename.find("QuickBird") != std::string::npos ||
                img_info.find("QB02") != std::string::npos ||
-               satellite_name_.compare("QB02") == 0)
+               satellite_name_.find("QB02") != std::string::npos)
     {
       solar_irrad = 1381.7;
       satellite_name_ = "QuickBird";
@@ -1158,10 +1159,10 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
         std::cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << std::endl;;
         return false;
       }
-    } else if (img_info.find("WorldView") != std::string::npos  || img_info.find("WV01") != std::string::npos || satellite_name_.compare("WV01") == 0 ) {
+    } else if (img_info.find("WorldView") != std::string::npos  || img_info.find("WV01") != std::string::npos || satellite_name_.find("WV01") != std::string::npos ) {
       solar_irrad = 1580.814;
       satellite_name_ = "WorldView";
-    } else if (img_info.find("WorldView2") != std::string::npos || img_info.find("WV02") != std::string::npos || satellite_name_.compare("WV02") == 0) {
+    } else if (img_info.find("WorldView2") != std::string::npos || img_info.find("WV02") != std::string::npos || satellite_name_.find("WV02") != std::string::npos) {
       // these values are from http://www.digitalglobe.com/sites/default/files/Radiometric_Use_of_WorldView-2_Imagery%20(1).pdf
       solar_irrad = 1580.814;
       satellite_name_ = "WorldView2";
@@ -1188,7 +1189,7 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
         return false;
       }
     }
-    else if (img_info.find("WorldView3") != std::string::npos || img_info.find("WV03") != std::string::npos || satellite_name_.compare("WV03") == 0)
+    else if (img_info.find("WorldView3") != std::string::npos || img_info.find("WV03") != std::string::npos || satellite_name_.find("WV03") != std::string::npos)
     {
       // these values are from https://calval.cr.usgs.gov/wordpress/wp-content/uploads/JACIE2015_Kuester_V3.pdf.  Should check Digitial Globe for any updates
       solar_irrad = 1583.58;
@@ -1306,7 +1307,8 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
     solar_irrad = 1375.8;
     satellite_name_ = "IKNOOS";
   }
-  else if ( satellite_name_.find("OV-5") != std::string::npos || satellite_name_.find("GeoEye-1") != std::string::npos || satellite_name_.find("GEOEYE1") != std::string::npos)
+  else if ( satellite_name_.find("OV-5") != std::string::npos || satellite_name_.find("GeoEye-1") != std::string::npos ||
+            satellite_name_.find("GEOEYE1") != std::string::npos || satellite_name_.find("GE01") != std::string::npos )
   {
     // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
     solar_irrad = 1617;
