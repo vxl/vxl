@@ -1,23 +1,22 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
-#include <vgl/algo/vgl_compute_similarity_3d.h>
+#include <vgl/algo/vgl_compute_rigid_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 
 
+namespace vgl_test_compute_rigid_3d {
+
 std::vector<vgl_point_3d<double> >
 transform_points(const std::vector<vgl_point_3d<double> >& points,
-                 double s,
                  vgl_rotation_3d<double> R,
                  vgl_vector_3d<double> t)
 {
   std::vector<vgl_point_3d<double> > t_pts;
   for (unsigned i=0; i<points.size(); ++i)
   {
-    vgl_point_3d<double> p = R*points[i];
-    p.set(s*p.x(), s*p.y(), s*p.z());
-    p += t;
+    vgl_point_3d<double> p = R*points[i] + t;
     t_pts.push_back(p);
   }
   return t_pts;
@@ -44,9 +43,9 @@ double alignment_error(const std::vector<vgl_point_3d<double> >& points1,
   }
   return std::sqrt(error/points1.size());
 }
+}
 
-
-static void test_compute_similarity_3d()
+static void test_compute_rigid_3d()
 {
   std::vector<vgl_point_3d<double> > points1;
   points1.push_back(vgl_point_3d<double>(10.5, 200.0, -340.5));
@@ -56,44 +55,45 @@ static void test_compute_similarity_3d()
   points1.push_back(vgl_point_3d<double>(42.3, 205.0, -325.0));
   points1.push_back(vgl_point_3d<double>(-5.0, 265.0, -305.0));
 
-  double s = 3.0;
   vgl_vector_3d<double> t(100, -200, 200);
   vgl_rotation_3d<double> R(3.0, -1.0, 0.5);
 
-  std::vector<vgl_point_3d<double> > points2 = transform_points(points1,s,R,t);
+  std::vector<vgl_point_3d<double> > points2 =
+    vgl_test_compute_rigid_3d::transform_points(points1,R,t);
 
-  vgl_compute_similarity_3d<double> est_sim(points1, points2);
+  vgl_compute_rigid_3d<double> est_sim(points1, points2);
   est_sim.estimate();
 
-  TEST_NEAR("scale estimate",est_sim.scale(),s,1e-8);
   TEST_NEAR("translation estimate",(est_sim.translation()-t).length(),0.0,1e-8);
   TEST_NEAR("rotation estimate",
             (est_sim.rotation().as_matrix()-R.as_matrix()).array_inf_norm(),0.0,1e-8);
   TEST_NEAR("RMS alignment error",
-            alignment_error(transform_points(points1,
-                                             est_sim.scale(),
-                                             est_sim.rotation(),
-                                             est_sim.translation()), points2),
+            vgl_test_compute_rigid_3d::
+            alignment_error( vgl_test_compute_rigid_3d::
+                             transform_points(points1,
+                                              est_sim.rotation(),
+                                              est_sim.translation()), points2),
             0.0, 1e-8);
 
   // add noise and try again
   double sigma = 1e-2;
-  add_noise(points1, sigma);
-  add_noise(points2, sigma);
+  vgl_test_compute_rigid_3d::add_noise(points1, sigma);
+  vgl_test_compute_rigid_3d::add_noise(points2, sigma);
 
-  vgl_compute_similarity_3d<double> est_sim2(points1, points2);
+  vgl_compute_rigid_3d<double> est_sim2(points1, points2);
   est_sim2.estimate();
 
-  TEST_NEAR("noisy scale estimate",est_sim2.scale(),s,sigma);
   TEST_NEAR("noisy translation estimate",(est_sim2.translation()-t).length(),0.0,150*sigma);
   TEST_NEAR("noisy rotation estimate",
             (est_sim2.rotation().as_matrix()-R.as_matrix()).array_inf_norm(),0.0,sigma);
   TEST_NEAR("RMS alignment error",
-            alignment_error(transform_points(points1,
-                                             est_sim2.scale(),
+            vgl_test_compute_rigid_3d::
+            alignment_error(vgl_test_compute_rigid_3d::
+                            transform_points(points1,
                                              est_sim2.rotation(),
                                              est_sim2.translation()), points2),
             0.0, 10*sigma);
+
 }
 
-TESTMAIN(test_compute_similarity_3d);
+TESTMAIN(test_compute_rigid_3d);
