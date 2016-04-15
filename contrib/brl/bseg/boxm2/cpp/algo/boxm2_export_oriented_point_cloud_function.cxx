@@ -283,14 +283,14 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
 
   CE = CEx > CEy ? CEx : CEy;
 
-  if (LE > 2.5)
-  {
-    return false;
-  }
-  if (CE > 2.5)
-  {
-    return false;
-  }
+  //if (LE > 2.5)
+  //{
+  //  return false;
+  //}
+  //if (CE > 2.5)
+  //{
+  //  return false;
+  //}
 
   return true;
 }
