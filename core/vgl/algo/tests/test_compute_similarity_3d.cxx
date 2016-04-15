@@ -94,6 +94,35 @@ static void test_compute_similarity_3d()
                                              est_sim2.rotation(),
                                              est_sim2.translation()), points2),
             0.0, 10*sigma);
+
+  // constrain scale to be 1
+  {
+    double s = 1.0;
+    vgl_vector_3d<double> t(100, -200, 200);
+    vgl_rotation_3d<double> R(3.0, -1.0, 0.5);
+
+    std::vector<vgl_point_3d<double> > points2 = transform_points(points1,s,R,t);
+    // add noise
+    double sigma = 1e-2;
+    add_noise(points2, sigma);
+
+    vgl_compute_similarity_3d<double> est_sim(points1, points2);
+    bool fix_scale = true;
+    est_sim.estimate(fix_scale);
+
+    // scale should be exactly 1
+    TEST_EQUAL("scale estimate (fixed)",est_sim.scale(),1);
+    // rotation and translation should still be correct
+    TEST_NEAR("translation estimate (fixed scale)",(est_sim.translation()-t).length(),0.0,150*sigma);
+    TEST_NEAR("rotation estimate (fixed scale)",
+              (est_sim.rotation().as_matrix()-R.as_matrix()).array_inf_norm(),0.0,sigma);
+    TEST_NEAR("RMS alignment error (fixed scale)",
+              alignment_error(transform_points(points1,
+                                               est_sim.scale(),
+                                               est_sim.rotation(),
+                                               est_sim.translation()), points2),
+              0.0, 10*sigma);
+  }
 }
 
 TESTMAIN(test_compute_similarity_3d);

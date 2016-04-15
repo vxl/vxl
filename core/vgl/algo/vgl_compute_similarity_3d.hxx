@@ -84,17 +84,26 @@ scale_points(std::vector<vgl_point_3d<T> >& pts,
 
 
 template <class T>
-bool vgl_compute_similarity_3d<T>::estimate()
+bool vgl_compute_similarity_3d<T>::estimate(bool fix_scale)
 {
   vgl_vector_3d<T> t1, t2;
   std::vector<vgl_point_3d<T> > pts1(points1_), pts2(points2_);
   center_points(pts1, t1);
   center_points(pts2, t2);
 
-
   T s1, s2;
-  scale_points(pts1, s1);
   scale_points(pts2, s2);
+  if (fix_scale) {
+    s1 = s2;
+    for (unsigned i=0; i<pts1.size(); ++i)
+    {
+      vgl_point_3d<T>& p = pts1[i];
+      p.set(p.x()*s1, p.y()*s1, p.z()*s1);
+    }
+  }
+  else {
+    scale_points(pts1, s1);
+  }
   scale_ = s1/s2;
 
   // estimate rotation

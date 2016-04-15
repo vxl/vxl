@@ -50,7 +50,7 @@ class vgl_compute_similarity_3d
   void clear();
 
   //: estimates the similarity transformation from the stored points
-  bool estimate();
+  bool estimate(bool fix_scale=false);
 
   // Data Access---------------------------------------------------------------
 
