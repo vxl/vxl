@@ -394,7 +394,7 @@ PyObject *get_output_float(PyObject * /*self*/, PyObject *args)
 PyObject *get_output_double(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
-  float value;
+  double value;
   if (!PyArg_ParseTuple(args, "i:get_output_double", &id))
     return NULL;
 
