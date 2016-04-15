@@ -122,7 +122,7 @@ render_height_map(__constant  RenderSceneInfo    * linfo,
 typedef struct
 {
   __global float * alpha;
-  __global float  outimg;
+//  __global float  outimg;
   float resolution ;
 } AuxArgs;
 
@@ -180,7 +180,7 @@ void ingest_height_map(__constant  RenderSceneInfo    * linfo,
   AuxArgs aux_args;
   float out1 =0.0f;
   aux_args.alpha  = alpha_array;
-  aux_args.outimg = out1;
+//  aux_args.outimg = out1;
   float vis =1.0;
 
   cast_ray( i, j,
