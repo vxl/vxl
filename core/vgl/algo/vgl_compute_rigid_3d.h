@@ -1,22 +1,22 @@
-// This is core/vgl/algo/vgl_compute_similarity_3d.h
-#ifndef vgl_compute_similarity_3d_h_
-#define vgl_compute_similarity_3d_h_
+// This is core/vgl/algo/vgl_compute_rigid_3d.h
+#ifndef vgl_compute_rigid_3d_h_
+#define vgl_compute_rigid_3d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
 //:
 // \file
-// \brief Compute a similarity transformation between two corresponding sets of 3D points
-// \author Matt Leotta
-// \date April 7, 2010
+// \brief Compute a rigid transformation between two corresponding sets of 3D points
+// \author Matt Leotta, Dan Crispell
+// \date April 15 2016
 //
 //
-//  Estimate scale \a s, translation \a t, and rotation \a R such that
-//  sum ||s*R*p1 + t - p2||  is minimized over all pairs (p1,p2)
+//  Estimate translation \a t and rotation \a R such that
+//  sum ||R*p1 + t - p2||  is minimized over all pairs (p1,p2)
 //
 // \verbatim
 //  Modifications
-//  dec: Factored out rigid transform computation to vgl_compute_rigid_3d
+//    dec: Adapted from vgl_compute_similarity_3d
 // \endverbatim
 
 #include <vector>
@@ -27,18 +27,18 @@
 
 
 template <class T>
-class vgl_compute_similarity_3d
+class vgl_compute_rigid_3d
 {
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-   vgl_compute_similarity_3d() {}
+   vgl_compute_rigid_3d() {}
 
-   vgl_compute_similarity_3d(std::vector<vgl_point_3d<T> > const& points1,
+   vgl_compute_rigid_3d(std::vector<vgl_point_3d<T> > const& points1,
                              std::vector<vgl_point_3d<T> > const& points2);
 
-  ~vgl_compute_similarity_3d() {}
+  ~vgl_compute_rigid_3d() {}
 
   // Operations---------------------------------------------------------------
 
@@ -49,7 +49,7 @@ class vgl_compute_similarity_3d
   //: clear internal data
   void clear();
 
-  //: estimates the similarity transformation from the stored points
+  //: estimates the rigid transformation from the stored points
   bool estimate();
 
   // Data Access---------------------------------------------------------------
@@ -59,9 +59,6 @@ class vgl_compute_similarity_3d
 
   //: Access the estimated translation
   const vgl_vector_3d<T>& translation() const { return translation_; }
-
-  //: Access he estimated scale
-  T scale() const { return scale_; }
 
  protected:
   // Internal functions--------------------------------------------------------
@@ -78,12 +75,11 @@ class vgl_compute_similarity_3d
   // Data Members--------------------------------------------------------------
   std::vector<vgl_point_3d<T> > points1_;
   std::vector<vgl_point_3d<T> > points2_;
-  T scale_;
   vgl_rotation_3d<T> rotation_;
   vgl_vector_3d<T> translation_;
 };
 
-#define VGL_COMPUTE_SIMILARITY_3D_INSTANTIATE(T) \
-extern "please include vgl/algo/vgl_compute_similarity_3d.txx first"
+#define VGL_COMPUTE_RIGID_3D_INSTANTIATE(T) \
+extern "please include vgl/algo/vgl_compute_rigid_3d.txx first"
 
-#endif // vgl_compute_similarity_3d_h_
+#endif // vgl_compute_rigid_3d_h_
