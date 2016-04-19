@@ -10,7 +10,6 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
-#include <vcl_compiler.h>
 #include <boct/boct_bit_tree.h>
 
 #include "boxm2_mog3_grey_processor.h"
@@ -48,7 +47,7 @@ class boxm2_export_oriented_point_cloud_function
   //: Use covariance estimate to export a point cloud
   static void exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                   boxm2_data_base* mog, boxm2_data_base* alpha, boxm2_data_base* points, boxm2_data_base* covariances, std::ofstream& file,
-                                  float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, bool color_using_model);
+                                  float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype);
 
   static bool calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
                                    const vnl_vector_fixed<float, 4>& point,

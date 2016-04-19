@@ -6,7 +6,6 @@
 
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vcl_compiler.h>
 
 #include <rply.h>   //.ply parser
 
@@ -116,11 +115,10 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
 void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                      boxm2_data_base* mog, boxm2_data_base* alpha,
                                                                      boxm2_data_base* points, boxm2_data_base* covariances, std::ofstream& file,
-                                                                     float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, bool color_using_model)
+                                                                     float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype)
 {
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_COVARIANCE>::datatype *  covs_data = (boxm2_data_traits<BOXM2_COVARIANCE>::datatype*) covariances->data_buffer();
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
   boxm2_data_traits<BOXM2_ALPHA>::datatype     *   alpha_data   = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
 
   file << std::fixed;
@@ -148,16 +146,36 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
         //check bounding box
         if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
         {
-          exp_color = boxm2_processor_type<BOXM2_MOG3_GREY>::type::expected_color(mog_data[currIdx]);
           file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
-          int col = (int)(exp_color*255);
-          col = col > 255 ? 255 : col;
-          file << col << ' ' << col << ' ' << col << ' '
-               << axes[0] << ' ' << axes[1] << ' ' << axes[2] << ' '
-        //     << eval[0] << ' ' << eval[1] << ' ' << eval[2] << ' '
-               << LE << ' ' << CE << ' ';
+
+          if(datatype == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+          {
+            boxm2_data_traits<BOXM2_MOG3_GREY>::datatype * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
+            exp_color = boxm2_processor_type<BOXM2_MOG3_GREY>::type::expected_color(mog_data[currIdx]);
+            int col = (int)(exp_color*255);
+            col = col > 255 ? 255 : col;
+            file << col << ' ' << col << ' ' << col << ' ';
+          }
+          else if ( datatype == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
+          {
+            boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *color_data = (boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*) mog->data_buffer();
+            vnl_vector_fixed<float,3> exp_color = boxm2_processor_type<BOXM2_GAUSS_RGB>::type::expected_color(color_data[currIdx]);
+
+            int col0 = (int)(exp_color[0]*255);
+            col0 = col0 > 255 ? 255 : col0;
+            int col1 = (int)(exp_color[1]*255);
+            col1 = col1 > 255 ? 255 : col1;
+            int col2 = (int)(exp_color[2]*255);
+            col2 = col2 > 255 ? 255 : col2;
+            file << col0 << ' ' << col1 << ' ' << col2 << ' ';
+          }
+          else
+          {
+            file << 0 << ' ' << 0 << ' ' << 0 << ' ';
+          }
+          file << axes[0] << ' ' << axes[1] << ' ' << axes[2] << ' '
+               << LE << ' ' << CE << ' ' <<  prob << std::endl;
           num_vertices++;
-          file  <<  prob << std::endl;
         }
       }
     //}
