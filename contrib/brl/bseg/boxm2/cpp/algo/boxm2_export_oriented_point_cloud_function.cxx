@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <vnl_math.h>
 #include "boxm2_export_oriented_point_cloud_function.h"
 //:
 // \file
@@ -248,6 +249,13 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
 {
   vgl_point_3d<double> local;
   boxm2_block_id id;
+
+  if (point[3] <= 0.0 || vnl_math::isinf(cov[0]) || vnl_math::isnan(cov[0]))  // the covariance matrices with such values cause problems for eigen value calculation, skip these points!
+                                                                              // if pt[3] == 0 then this point is uninitialized, skipping is fine
+                                                                              // if the covariance has invalid values, then over or under flows might have happened during cov computation using float point precision
+                                                                              // ideally we should switch to double point precision during covariance calculations
+    return false;
+
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
   //if the scene doesn't contain point,
   if (!scene->contains(vgl_point, id, local)) {

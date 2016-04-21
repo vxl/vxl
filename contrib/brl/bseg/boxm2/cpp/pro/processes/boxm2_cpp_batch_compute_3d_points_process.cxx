@@ -63,7 +63,7 @@ bool boxm2_cpp_batch_compute_3d_points_process(bprb_func_process& pro)
   boxm2_stream_cache_sptr str_cache= pro.get_input<boxm2_stream_cache_sptr>(i++);
 
   boxm2_block_id bid;
-  int data_index;
+  int data_index = 0;
 
   // vgl_point_3d<double> point(309.583,251.252,258.228);
   // boxm2_block_id bid; int data_index; float side_len;

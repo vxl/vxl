@@ -71,4 +71,7 @@ DECLARE_FUNC_CONS(boxm2_export_oriented_point_cloud_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_compute_3d_points_process);
 DECLARE_FUNC_CONS(boxm2_cpp_cast_3d_point_hypothesis_process);
 DECLARE_FUNC_CONS(boxm2_cpp_cast_3d_point_hypothesis_process2);
+DECLARE_FUNC_CONS(boxm2_cpp_compute_3d_points_and_covs_process);
+DECLARE_FUNC_CONS(boxm2_cpp_compute_3d_points_and_covs_normalize_process);
+
 #endif

@@ -2190,6 +2190,20 @@ def cast_3d_point_pass2(scene, cache, generic_camera, appearance_model_name,
     boxm2_batch.set_input_string(4, cov_c_path)
     boxm2_batch.set_input_string(5, cov_v_path)
     boxm2_batch.run_process()
+
+def accumulate_3d_point_and_cov(scene, cache, appearance_model_name):
+    boxm2_batch.init_process("boxm2CppCompute3dPointsAndCovsProcess")
+    boxm2_batch.set_input_from_db(0, scene)
+    boxm2_batch.set_input_from_db(1, cache)
+    boxm2_batch.set_input_string(2, appearance_model_name)
+    boxm2_batch.run_process()
+
+def normalize_3d_point_and_cov(scene, cache):
+    boxm2_batch.init_process("boxm2CppCompute3dPointsAndCovsNormalizeProcess")
+    boxm2_batch.set_input_from_db(0, scene)
+    boxm2_batch.set_input_from_db(1, cache)
+    boxm2_batch.run_process()
+
 # process that find the minimum and maximum elevation from height map, for
 # a give 2-d rectangluar region
 
