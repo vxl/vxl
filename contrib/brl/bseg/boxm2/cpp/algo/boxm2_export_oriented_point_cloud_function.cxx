@@ -1,6 +1,6 @@
 #include <iostream>
 #include <limits>
-#include <vnl_math.h>
+#include <vnl/vnl_math.h>
 #include "boxm2_export_oriented_point_cloud_function.h"
 //:
 // \file
