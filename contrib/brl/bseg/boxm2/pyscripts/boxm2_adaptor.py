@@ -123,10 +123,12 @@ def describe_scene(scene):
     (id, type) = boxm2_batch.commit_output(1)
     appType = boxm2_batch.get_output_string(id)
     boxm2_batch.remove_data(id)
-    description = {
-        'dataPath': dataPath,
-        'appType': appType,
-    }
+    (id, type) = boxm2_batch.commit_output(2)
+    voxel_size = boxm2_batch.get_output_double(id)
+    boxm2_batch.remove_data(id)
+    description = {'voxelLength': voxel_size,
+                   'dataPath': dataPath,
+                   'appType': appType}
     return description
 
 # modifies scene appearance, use case build the model in grey scale and
@@ -1999,7 +2001,9 @@ def compute_los_visibility(scene, cache, x0, y0, z0, x1, y1, z1, t=5):
     return vis
 
 
-def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir):
+def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir,
+                            lvcs_origin_lat=0.0, lvcs_origin_lon=0.0,
+                            lvcs_origin_elev=0.0):
 
     boxm2_batch.init_process("boxm2SceneFromBoxCamsProcess")
     boxm2_batch.set_input_string(0, camsdir)
@@ -2010,6 +2014,9 @@ def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir):
     boxm2_batch.set_input_float(5, y1)
     boxm2_batch.set_input_float(6, z1)
     boxm2_batch.set_input_string(7, modeldir)
+    boxm2_batch.set_input_double(8, lvcs_origin_lat)
+    boxm2_batch.set_input_double(9, lvcs_origin_lon)
+    boxm2_batch.set_input_double(10, lvcs_origin_elev)
 
     result = boxm2_batch.run_process()
 
@@ -2183,6 +2190,20 @@ def cast_3d_point_pass2(scene, cache, generic_camera, appearance_model_name,
     boxm2_batch.set_input_string(4, cov_c_path)
     boxm2_batch.set_input_string(5, cov_v_path)
     boxm2_batch.run_process()
+
+def accumulate_3d_point_and_cov(scene, cache, appearance_model_name):
+    boxm2_batch.init_process("boxm2CppCompute3dPointsAndCovsProcess")
+    boxm2_batch.set_input_from_db(0, scene)
+    boxm2_batch.set_input_from_db(1, cache)
+    boxm2_batch.set_input_string(2, appearance_model_name)
+    boxm2_batch.run_process()
+
+def normalize_3d_point_and_cov(scene, cache):
+    boxm2_batch.init_process("boxm2CppCompute3dPointsAndCovsNormalizeProcess")
+    boxm2_batch.set_input_from_db(0, scene)
+    boxm2_batch.set_input_from_db(1, cache)
+    boxm2_batch.run_process()
+
 # process that find the minimum and maximum elevation from height map, for
 # a give 2-d rectangluar region
 

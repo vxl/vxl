@@ -6,7 +6,6 @@
 #include <cstring>
 #include "boct_bit_tree.h"
 #include "boct_tree_cell.h"
-#include <vcl_compiler.h>
 
 //: default constructor
 boct_bit_tree::boct_bit_tree()
@@ -157,6 +156,40 @@ bool boct_bit_tree::valid_cell(int bit_index)
 bool boct_bit_tree::is_leaf(int bit_index)
 {
   return this->valid_cell(bit_index) && (this->bit_at(bit_index)==0);
+}
+
+//returns bit indices of all tree nodes under rootBit
+std::vector<int> boct_bit_tree::get_cell_bits(int rootBit)
+{
+  //use num cells to accelerate (cut off for loop)
+  std::vector<int> leafBits;
+
+  //special root case
+  if ( bits_[0] == 0 && rootBit == 0 )
+  {
+    leafBits.push_back(0);
+    return leafBits;
+  }
+
+  //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
+  std::vector<int> subTree;
+  std::list<unsigned> toVisit;
+  toVisit.push_back(rootBit);
+  while (!toVisit.empty()) 
+  {
+    int currBitIndex = toVisit.front();
+    toVisit.pop_front();
+
+    subTree.push_back(currBitIndex);
+
+    if (!this->is_leaf(currBitIndex) )
+    { //add children to the visit list
+      unsigned firstChild = 8 * currBitIndex + 1;
+      for (int ci = 0; ci < 8; ++ci)
+        toVisit.push_back( firstChild + ci );
+    }
+  }
+  return subTree;
 }
 
 //returns bit indices of leaf nodes under rootBit

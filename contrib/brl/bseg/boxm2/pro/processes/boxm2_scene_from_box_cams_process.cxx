@@ -56,6 +56,9 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
   float height       = pro.get_input<float>(5);
   float depth        = pro.get_input<float>(6);
   std::string modeldir= pro.get_input<std::string>(7);
+  double lvcs_origin_lat = pro.get_input<double>(8);
+  double lvcs_origin_lon = pro.get_input<double>(9);
+  double lvcs_origin_elev = pro.get_input<double>(10);
 
   // get the scene bounding box
   vgl_box_3d<double> box(vgl_point_3d<double>(xmin,ymin,zmin),
@@ -76,6 +79,8 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
   uscene->set_appearances(appearance);
   uscene->save_scene();
 
+  vpgl_lvcs lvcs(lvcs_origin_lat, lvcs_origin_lon, lvcs_origin_elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  uscene->set_lvcs(lvcs);
 
   //build the two scenes
   boxm2_util_cams_and_box_to_scene(cams, box, *uscene);

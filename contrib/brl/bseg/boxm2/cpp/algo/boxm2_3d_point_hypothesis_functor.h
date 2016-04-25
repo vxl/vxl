@@ -58,7 +58,8 @@ class boxm2_3d_point_hypothesis_functor
     boxm2_data<BOXM2_POINT>::datatype & pt=pts_data_->data()[index];
 #if DEBUG
     //if (index%1000000 == 0) {
-    if (spt_bid_ == id_ && index == spt_data_index_) {
+    if (index == 5822246) {
+    //if (spt_bid_ == id_ && index == spt_data_index_) {
       std::cout << "index: " << index << " len: " << seg_len << std::endl;
       std::cout << "current pt: " << pt << " vis(" << i << ", " << j << "): " << vis << std::endl;
       std::cout << "cam center: " << C_.x() << " " << C_.y() << " " << C_.z() << "\n";
@@ -78,7 +79,8 @@ class boxm2_3d_point_hypothesis_functor
 
 #if DEBUG
     //if (index%1000000 == 0)
-    if (spt_bid_ == id_ && index == spt_data_index_)
+    if (index == 5822246) 
+    //if (spt_bid_ == id_ && index == spt_data_index_)
       std::cout << "pt after update: " << pt << std::endl;
 #endif
 
@@ -111,7 +113,8 @@ class boxm2_3d_point_hypothesis_functor
 
 #if DEBUG
     //if (index%1000000 == 0)
-    if (spt_bid_ == id_ && index == spt_data_index_)
+    if (index == 5822246) 
+    //if (spt_bid_ == id_ && index == spt_data_index_)
       std::cout << "sums: " << sums << std::endl;
 #endif
 
@@ -168,7 +171,8 @@ class boxm2_3d_point_hypothesis_cov_functor
 
 #if DEBUG2
     //if (index%1000000 == 0) {
-    if (spt_bid_ == id_ && index == spt_data_index_) {
+    if (index == 5822246) {
+    //if (spt_bid_ == id_ && index == spt_data_index_) {
       std::cout << "--------------------------------------------------\n";
       std::cout << "index: " << index << "\n";// len: " << seg_len << "\n";// ray i: " << i << " j: "<< j << std::endl;
       std::cout << "cov matrix: \n" << cov_C_ << "\n";
@@ -213,7 +217,8 @@ class boxm2_3d_point_hypothesis_cov_functor
 
 #if DEBUG2
     //if (index%1000000 == 0) {
-    if (spt_bid_ == id_ && index == spt_data_index_) {
+    if (index == 5822246) {
+    //if (spt_bid_ == id_ && index == spt_data_index_) {
       std::cout << "portion of cov from cam orientation variation: " << std::endl;
       std::cout << jac*temp << std::endl;
     }
@@ -227,7 +232,8 @@ class boxm2_3d_point_hypothesis_cov_functor
 
 #if DEBUG2
     //if (index%1000000 == 0) {
-    if (spt_bid_ == id_ && index == spt_data_index_) {
+    if (index == 5822246) {
+    //if (spt_bid_ == id_ && index == spt_data_index_) {
       std::cout << "sums: " << sums << std::endl;
       std::cout << "portion of cov from depth variation: " << std::endl;
       std::cout << temp << std::endl;
@@ -250,7 +256,8 @@ class boxm2_3d_point_hypothesis_cov_functor
 
 #if DEBUG2
     //if (index%1000000 == 0) {
-    if (spt_bid_ == id_ && index == spt_data_index_) {
+    if (index == 5822246) {
+    //if (spt_bid_ == id_ && index == spt_data_index_) {
       std::cout << "cov: " << std::endl;
       std::cout << out_cov << std::endl;
     }
