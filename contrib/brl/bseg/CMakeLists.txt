@@ -53,6 +53,9 @@ add_subdirectory(boxm2_batch)
 # octree based modeling python interface
 add_subdirectory(boxm_batch)
 
+# semi-global matching
+add_subdirectory(bsgm)
+
 # voxel processing library
 add_subdirectory(bvpl)
 
