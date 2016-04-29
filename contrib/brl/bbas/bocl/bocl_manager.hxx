@@ -48,6 +48,7 @@ void bocl_manager<T>::clear_cl()
 template <class T>
 bocl_manager<T>::~bocl_manager()
 {
+  this->clear_cl();
 }
 
 template <class T>
@@ -87,7 +88,7 @@ bool bocl_manager<T>::initialize_cl()
   const std::size_t MAX_CPUS = 16;
   char platform_name[256];
   std::size_t ret_size;
-   
+
   // First checking for GPU
   bool gpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
@@ -102,16 +103,16 @@ bool bocl_manager<T>::initialize_cl()
       clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
       gpu_found=true;
       std::cout<<"Found "<<numGpus<<" GPUs"<<std::endl;
+
       //create device objects, push them onto gpu list
       for (unsigned int i=0; i<numGpus; ++i) {
-        //bocl_device_sptr gpu = new bocl_device(gpu_ids[i]);
-        gpus_.push_back(new bocl_device(gpu_ids[i]));
+        bocl_device_sptr gpu = new bocl_device(gpu_ids[i]);
+        gpus_.push_back(gpu);
       }
 
       //break;
     }
   }
-
   // now check for CPUs
   bool cpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
@@ -126,8 +127,8 @@ bool bocl_manager<T>::initialize_cl()
 
       //create device objects, push them onto gpu list
       for (unsigned int i=0; i<numCpus; ++i) {
-        //bocl_device_sptr cpu = new bocl_device(cpu_ids[i]);
-        cpus_.push_back(new bocl_device(cpu_ids[i]));
+        bocl_device_sptr cpu = new bocl_device(cpu_ids[i]);
+        cpus_.push_back(cpu);
       }
       break;
     }
@@ -137,7 +138,7 @@ bool bocl_manager<T>::initialize_cl()
     delete [] platform_id;
     return false;
   }
-  
+
   //////////////////////////////////////////////////////////////////////////////
   //store current_device_/context for older functions that use bocl_manager
   if (gpu_found)

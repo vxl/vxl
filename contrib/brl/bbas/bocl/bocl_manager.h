@@ -46,14 +46,14 @@ class bocl_manager
   static T& instance();
 
   //: available devices
-  std::vector<bocl_device*> gpus_;
-  std::vector<bocl_device*> cpus_;
+  std::vector<bocl_device_sptr> gpus_;
+  std::vector<bocl_device_sptr> cpus_;
   int numCPUs() const { return cpus_.size(); }
   int numGPUs() const { return gpus_.size(); }
 
   //////////////////////////////////////////////////////////////////////////////
   //: current device (defaults to last GPU), used for old methods
-  bocl_device *  curr_device_;
+  bocl_device_sptr curr_device_;
   cl_device_id* devices() { return curr_device_->device_id(); }
 
   //get for current manager information..
@@ -110,7 +110,6 @@ class bocl_manager
   bocl_manager(bocl_manager<T> const& og) {}
   //: assignment operator
   bocl_manager& operator = (bocl_manager<T> const& rhs) {return *this;}
-
 };
 
 class bocl_manager_child: public bocl_manager<bocl_manager_child>
@@ -119,7 +118,7 @@ class bocl_manager_child: public bocl_manager<bocl_manager_child>
   friend class bocl_manager<bocl_manager_child>;
  private:
   bocl_manager_child() : bocl_manager<bocl_manager_child>() {}
-  virtual ~bocl_manager_child() {  }
+  ~bocl_manager_child() {}
 };
 
 //: Binary write boxm2_scene scene to stream
