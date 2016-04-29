@@ -63,7 +63,7 @@ bsgm_disparity_estimator::compute(
       img_ref.ni() != w_ || img_ref.nj() != h_ ) return false;
 
   vul_timer timer, total_timer; 
-  if( params_.print_timing_ ){
+  if( params_.print_timing ){
     timer.mark(); total_timer.mark();
   }
 
@@ -71,7 +71,7 @@ bsgm_disparity_estimator::compute(
   vil_image_view<bool> invalid_tar;
   compute_invalid_map( img_tar, img_ref, invalid_tar );
 
-  if( params_.print_timing_ ) 
+  if( params_.print_timing ) 
     print_time( "Invalid map computation", timer );
 
   // Compute gradient images.
@@ -80,7 +80,7 @@ bsgm_disparity_estimator::compute(
       params_.xgrad_weight > 0.0f )
     vil_sobel_3x3<vxl_byte,float>( img_tar, grad_x_tar, grad_y_tar );
 
-  if( params_.print_timing_ ) 
+  if( params_.print_timing ) 
     print_time( "Gradient image computation", timer );
 
   // Compute appearance cost volume data.
@@ -98,7 +98,7 @@ bsgm_disparity_estimator::compute(
     compute_xgrad_data( grad_x_tar, grad_x_ref, invalid_tar, xgrad_cost_ );
   }
 
-  if( params_.print_timing_ ) 
+  if( params_.print_timing ) 
     print_time( "Appearance cost computation", timer );
 
   // Fuse appearance volumes if necessary.
@@ -113,7 +113,7 @@ bsgm_disparity_estimator::compute(
             params_.census_weight*census_cost_[y][x][d] + 
             params_.xgrad_weight*xgrad_cost_[y][x][d] ) );
 
-    if( params_.print_timing_ ) 
+    if( params_.print_timing ) 
       print_time( "Appearance fusion", timer );
   }
 
@@ -123,7 +123,7 @@ bsgm_disparity_estimator::compute(
   run_multi_dp( 
     *active_app_cost_, total_cost_, invalid_tar, grad_x_tar, grad_y_tar );
 
-  if( params_.print_timing_ ) 
+  if( params_.print_timing ) 
     print_time( "Dynamic programming", timer );
 
   // Find the lowest total cost disparity for each pixel, do quadratic
@@ -137,7 +137,7 @@ bsgm_disparity_estimator::compute(
   vil_median( disp_tar, disp2, se );
   disp_tar.deep_copy( disp2 );
 
-  if( params_.print_timing_ ) 
+  if( params_.print_timing ) 
     print_time( "Disparity map extraction", timer );
 
   // Check consistency if configured.
@@ -148,10 +148,10 @@ bsgm_disparity_estimator::compute(
   if( params_.using_ref_to_target_disparities )
     invert_disparities( disp_tar );
 
-  if( params_.print_timing_ ) 
+  if( params_.print_timing ) 
     print_time( "Consistency check", timer );
 
-  if( params_.print_timing_ ) 
+  if( params_.print_timing ) 
     print_time( "TOTAL TIME", total_timer );
 
   return true;
@@ -312,7 +312,9 @@ bsgm_disparity_estimator::compute_census_data(
   const vil_image_view<bool>& invalid_tar,
   std::vector< std::vector< unsigned char* > >& app_cost )
 {
-  int census_diam = 7;
+  int census_diam = 2*params_.census_rad + 1;
+  if( census_diam > 7 ) census_diam = 7;
+  if( census_diam < 3 ) census_diam = 3;
   float census_norm = 8.0f*cost_unit_/(float)(census_diam*census_diam);
 
   // Compute census images
@@ -334,7 +336,41 @@ bsgm_disparity_estimator::compute_census_data(
         continue;
       }
 
-      // Otherwise compute all costs
+      // Start iterating through disparities
+      int d = 0;
+      int x2 = x + params_.min_disparity;
+      
+      // Pixels off left-side of image set to 255
+      unsigned char* ac = &app_cost[y][x][0];
+      for( ; x2 < 0; d++, x2++, ac++ )
+        *ac = 255;
+
+      // This needed in rare case that min_disparity > 0
+      for( ; x2 >= w_ && d < params_.num_disparities; d++, x2++, ac++ )
+        *ac = 255;
+
+      // Compute census costs for all valid disparities
+      unsigned long long cen_t = census_tar(x,y);
+      unsigned long long* cen_r = &census_ref(x2,y);
+      unsigned long long conf_t = census_conf_tar(x,y);
+      unsigned long long* conf_r = &census_conf_ref(x2,y);
+      for( ; d < params_.num_disparities; d++, x2++, ac++, cen_r++, conf_r++ ){
+
+        // Check valid match pixel
+        if( x2 >= w_ ) 
+          *ac = 255;
+
+        // Compare census images using hamming distance
+        else {
+
+          float ham = census_norm*bsgm_compute_hamming( 
+            cen_t, *cen_r, conf_t, *conf_r );
+          *ac = (unsigned char)( ham > 255.0f ? 255.0f : ham );
+        }
+
+      } //d*/
+
+      /* THIS ACCOMPLISHES THE SAME BUT SLOWER
       int x2 = x + params_.min_disparity;
       for( int d = 0; d < params_.num_disparities; d++, x2++ ){
 
@@ -349,7 +385,8 @@ bsgm_disparity_estimator::compute_census_data(
             census_tar(x,y), census_ref(x2,y), 
             census_conf_tar(x,y), census_conf_ref(x2,y) ) );
 
-      } //d
+      } //d*/
+
     } //j
   } //i
 

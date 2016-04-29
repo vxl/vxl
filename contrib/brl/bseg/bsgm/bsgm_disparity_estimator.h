@@ -24,55 +24,78 @@
 struct bsgm_disparity_estimator_params
 {
   //: The minimum disparity to consider, can be negative.
-  int min_disparity = 0;
+  int min_disparity;
 
   //: The number of disparities to search over, range will be
   // [ min_disparity, min_disparity + num_disparities )
-  int num_disparities = 20;
+  int num_disparities;
 
   //: Use 16 directions in the dynamic programming, otherwise 8.  This 
   // roughly doubles computation time.
   bool use_16_directions = false;
 
   //: Scale the internally set P1, P2 smoothing parameters.
-  float p1_scale = 1.0f;
-  float p2_scale = 1.0f;
+  float p1_scale;
+  float p2_scale;
 
   //: Use gradient-weighted P2 smoothing, as suggested in paper.
-  bool use_gradient_weighted_smoothing = true;
+  bool use_gradient_weighted_smoothing;
 
   //: In gradient-weighted smoothing, gradients beyond this magnitude are
   // truncated.
-  float max_grad = 32.0f;
+  float max_grad;
 
   //: Use quadratic interpolation to obtain sub-pixel estimates of final
   // disparity map.
-  bool perform_quadratic_interp = true;
+  bool perform_quadratic_interp;
 
   //: Perform a quick uniqueness check to flag invalid disparities.
-  bool perform_consistency_check = true;
+  bool perform_consistency_check;
 
   //: Identify rectification border pixels by this intensity and remove
   // from computation.  Set < 0 to disable.
-  int border_val = 0;
+  int border_val;
 
   //: Appearance costs computed by different algorithms are statically fused 
   // using these weights. Set any to <= 0 to prevent computation.
-  float census_weight = 0.3f;
-  float xgrad_weight = 0.7f;
+  float census_weight;
+  float xgrad_weight;
 
   //: Pixel differences less than this magnitude are not considered in the
   // census computation.  Increase to prevent errors from sensor noise. 
   // Set to 0 for textbook census implementation.
-  int census_tol = 2;
+  int census_tol;
+
+  //: The length of the census kernal will be 2*census_rad+1. Must be 1,2,or 3.
+  int census_rad;
 
   //: Set this to treat all input/output disparities as the displacement
   // of the target pixel with respect to the ref pixel, as the OpenCV 
   // implementation does.
-  bool using_ref_to_target_disparities = true;
+  bool using_ref_to_target_disparities;
 
   //: Print detailed timing information to cerr.
-  bool print_timing_ = false;
+  bool print_timing;
+
+
+  //: Default parameters
+  bsgm_disparity_estimator_params():
+    min_disparity(0),
+    num_disparities(20),
+    use_16_directions(false),
+    p1_scale(1.0f),
+    p2_scale(1.0f),
+    use_gradient_weighted_smoothing(true),
+    max_grad(32.0f),
+    perform_quadratic_interp(true),
+    perform_consistency_check(true),
+    border_val(0),
+    census_weight(0.3f),
+    xgrad_weight(0.7f),
+    census_tol(2),
+    census_rad(2),
+    using_ref_to_target_disparities(true),
+    print_timing(false){}
 
 };
 

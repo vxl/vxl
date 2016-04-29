@@ -13,10 +13,6 @@
 #include <bsgm\bsgm_disparity_estimator.h>
 
 
-// TODO: 
-// -tune
-// -bt option
-
 int main(int argc,char * argv[])
 {
   // Hardcoded params
@@ -25,8 +21,10 @@ int main(int argc,char * argv[])
   params.use_gradient_weighted_smoothing = true;
   params.census_weight = 0.3;
   params.xgrad_weight = 0.7;
-  params.print_timing_ = true;
+  params.census_rad = 2;
+  params.print_timing = true;
 
+  // Usage information
   if( argc != 6 ){
     std::cout<<"Usage : bsgm_app.exe target_img ref_img disp_img min_disparity num_disparities\n";
     return -1;
@@ -66,8 +64,6 @@ int main(int argc,char * argv[])
 
   // Debugging
   //sgm.write_cost_debug_imgs( std::string("C:/data/results"), true );
-  //vil_save( img_right, "C:/data/results/r.png" );
-  //vil_save( img_left, "C:/data/results/l.png" );
 
   return 0;
 };
