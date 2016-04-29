@@ -69,6 +69,11 @@ class bocl_manager
   std::string platform_name()      const { return curr_device_->info().platform_name_; }
   cl_device_type device_type()    const { return curr_device_->info().device_type_; }
   //////////////////////////////////////////////////////////////////////////////
+  
+  static bool is_instantiated() { return instantiated_; }
+
+  //: Clear the opencl environment smart pointers
+  void clear_cl();
 
  protected:
 
@@ -78,9 +83,6 @@ class bocl_manager
   //: Queries found platforms, creates a list of CPU and GPU devices
   bool initialize_cl();
 
-  //: Initialise the opencl environment
-  void clear_cl();
-
 ////////////////////////////////////////////////////////////////////////////////
 // OLD helper methods/ deprecated
 ////////////////////////////////////////////////////////////////////////////////
@@ -89,6 +91,8 @@ class bocl_manager
   bool create_buffer(void** buffer,std::string type,int elm_size,int length);
     //: program source
   std::string prog_;
+
+  static bool instantiated_;
 
  public:
   //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
@@ -120,6 +124,10 @@ class bocl_manager_child: public bocl_manager<bocl_manager_child>
   bocl_manager_child() : bocl_manager<bocl_manager_child>() {}
   ~bocl_manager_child() {}
 };
+
+template<class T>
+bool bocl_manager<T>::instantiated_=false;
+//bool bocl_manager_child::instantiated_=false;
 
 //: Binary write boxm2_scene scene to stream
 void vsl_b_write(vsl_b_ostream& os, bocl_manager_child const& scene);

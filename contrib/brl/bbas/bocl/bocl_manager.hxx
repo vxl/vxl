@@ -35,6 +35,7 @@ T& bocl_manager<T>::instance()
    * constructor.
    **/
   static T instance_;
+  T::instantiated_=true;
   return instance_;
 }
 
@@ -42,6 +43,9 @@ T& bocl_manager<T>::instance()
 template <class T>
 void bocl_manager<T>::clear_cl()
 {
+  this->curr_device_ = VXL_NULLPTR;
+  this->cpus_.clear();
+  this->gpus_.clear();
 }
 
 //: Destructor
