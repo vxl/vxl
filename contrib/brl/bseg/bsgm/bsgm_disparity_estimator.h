@@ -32,7 +32,7 @@ struct bsgm_disparity_estimator_params
 
   //: Use 16 directions in the dynamic programming, otherwise 8.  This 
   // roughly doubles computation time.
-  bool use_16_directions = false;
+  bool use_16_directions;
 
   //: Scale the internally set P1, P2 smoothing parameters.
   float p1_scale;
