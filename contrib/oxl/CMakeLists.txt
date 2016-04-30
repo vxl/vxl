@@ -10,7 +10,6 @@ set( OXL_INSTALL_INCLUDE_DIR
   CACHE INTERNAL "Oxford University package include files"
 )
 
-include_directories(${VXLCORE_INCLUDE_DIR})
 include_directories(${OXL_INCLUDE_DIR})
 
 # These four libraries are mutually independent:

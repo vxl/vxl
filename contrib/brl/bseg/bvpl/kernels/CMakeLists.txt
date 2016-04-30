@@ -5,7 +5,6 @@ include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if(EXPAT_FOUND)
 
 include_directories( ${EXPAT_INCLUDE_DIR} )
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR}/bseg/bvpl )
 include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
 

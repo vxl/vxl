@@ -1,4 +1,3 @@
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 
 add_executable( vtol_example2d           example2d.cxx )
 target_link_libraries( vtol_example2d    vtol ${VXL_LIB_PREFIX}vcl )
