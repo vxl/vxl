@@ -14,12 +14,13 @@ set( vpl_sources
 
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpl LIBRARY_SOURCES ${vpl_sources})
 if(NOT WIN32)
+  set(CURR_LIB_NAME vpl)
   set_vxl_library_properties(
      COMPILE_FLAGS "-fPIC"
-     TARGET_NAME ${VXL_LIB_PREFIX}vpl
-     BASE_NAME vpl
-     EXPORT_HEADER_FILE ${PROJECT_BINARY_DIR}/vpl_export.h
-     INSTALL_DIR ${VXL_INSTALL_INCLUDE_DIR}/core/vpl
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
      USE_HIDDEN_VISIBILITY
   )
 endif()
