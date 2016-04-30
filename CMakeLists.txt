@@ -169,12 +169,17 @@ else()
 endif()
 
 # Standard include directories.
-set(VXLCORE_INCLUDE_DIR ${PROJECT_BINARY_DIR}/core ${CMAKE_CURRENT_LIST_DIR}/core)
+set(VXLCORE_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/core)    #Source includes
+set(VXLCORE_BINARY_INCLUDE_DIR ${PROJECT_BINARY_DIR}/core) #Generated includes
+set(VXLCORE_INCLUDE_DIRS ${VXLCORE_BINARY_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 set(VXLCORE_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/core)
-set(VCL_INCLUDE_DIR ${PROJECT_BINARY_DIR}/vcl ${CMAKE_CURRENT_LIST_DIR}/vcl)
+
+set(VCL_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/vcl)    #Source includes
+set(VCL_BINARY_INCLUDE_DIR ${PROJECT_BINARY_DIR}/vcl) #Generated includes
+set(VCL_INCLUDE_DIRS ${VCL_BINARY_INCLUDE_DIR} ${VCL_INCLUDE_DIR})
 set(VCL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/vcl)
 
-include_directories(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
+include_directories(${VCL_INCLUDE_DIRS} ${VXLCORE_INCLUDE_DIRS})
 
 # Do platform-specific configuration.
 include(${CMAKE_CURRENT_LIST_DIR}/config/cmake/config/VXLIntrospectionConfig.cmake)
