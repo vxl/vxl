@@ -10,7 +10,6 @@ set( OUL_INSTALL_INCLUDE_DIR
   CACHE INTERNAL "Otago University package include files"
 )
 
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${OUL_INCLUDE_DIR} )
 
 set(oul_sources oul_copyright.h)

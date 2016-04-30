@@ -3,7 +3,6 @@ include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 if( HAS_VGUI )
 
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 
 set(vidl_player_sources
     vidl_player_main.cxx

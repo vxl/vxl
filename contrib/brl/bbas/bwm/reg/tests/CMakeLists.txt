@@ -1,5 +1,4 @@
 # brl/bbas/bwm/reg/tests/CMakeLists.txt
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${GEL_INCLUDE_DIR})
 include_directories( ${BRL_INCLUDE_DIR})
 

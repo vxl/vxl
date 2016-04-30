@@ -7,7 +7,6 @@ doxygen_add_library(core/vpgl
   DESCRIPTION "Photogrammetry Library"
   )
 
-include_directories(${VXLCORE_INCLUDE_DIR})
 
 set( vpgl_sources
   vpgl_camera.h                    vpgl_camera_double_sptr.h

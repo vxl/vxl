@@ -10,7 +10,6 @@ set( TBL_INSTALL_INCLUDE_DIR
   CACHE INTERNAL "TB package include files"
 )
 
-include_directories(${VXLCORE_INCLUDE_DIR})
 include_directories(${TBL_INCLUDE_DIR})
 
 add_subdirectory(vipl)
