@@ -85,7 +85,6 @@ aux_source_directory(Templates vgl_sources)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vgl LIBRARY_SOURCES ${vgl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl )
-include(GenerateExportHeader)
 generate_export_header(${VXL_LIB_PREFIX}vgl BASE_NAME vgl)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vgl_export.h
     DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vgl

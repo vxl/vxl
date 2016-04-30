@@ -35,6 +35,7 @@ endif()
 project(vxl)
 
 include(CMakeDependentOption)
+include(GenerateExportHeader)
 
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)

@@ -37,7 +37,6 @@ aux_source_directory(Templates vsl_sources)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vsl LIBRARY_SOURCES ${vsl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl )
-include(GenerateExportHeader)
 generate_export_header(${VXL_LIB_PREFIX}vsl BASE_NAME vsl)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vsl_export.h
     DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vsl

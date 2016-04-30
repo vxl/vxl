@@ -76,7 +76,6 @@ endif()
 
 endif()
 
-include(GenerateExportHeader)
 generate_export_header(${VXL_LIB_PREFIX}vul BASE_NAME vul)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vul_export.h
     DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vul
