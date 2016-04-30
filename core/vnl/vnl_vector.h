@@ -24,6 +24,7 @@
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_config.h>
 #include <vnl/vnl_error.h>
+#include "vnl/vnl_export.h"
 #ifndef NDEBUG
 # if VNL_CONFIG_CHECK_BOUNDS
 #  include <vcl_cassert.h>
@@ -44,21 +45,21 @@ VCL_TEMPLATE_EXPORT template <class T> class vnl_matrix;
 
 #define v vnl_vector<T>
 #define m vnl_matrix<T>
-template <class T> T      dot_product(v const&, v const&);
-template <class T> T      inner_product(v const&, v const&);
-template <class T> T      bracket(v const &, m const &, v const &);
-template <class T> T      cos_angle(v const&, v const& );
-template <class T> double angle(v const&, v const&);
-template <class T> m      outer_product(v const&, v const&);
-template <class T> v      operator+(T, v const&);
-template <class T> v      operator-(T, v const&);
-template <class T> v      operator*(T, v const&);
-// also exists as method: template <class T> v      operator*(m const&, v const&);
-template <class T> v      operator*(v const&, m const&);
-template <class T> v      element_product(v const&,v const&);
-template <class T> v      element_quotient(v const&,v const&);
-template <class T> T      vnl_vector_ssd(v const&, v const&);
-template <class T> void   swap(v &, v &);
+template <class T> VNL_EXPORT T      dot_product(v const&, v const&);
+template <class T> VNL_EXPORT T      inner_product(v const&, v const&);
+template <class T> VNL_EXPORT T      bracket(v const &, m const &, v const &);
+template <class T> VNL_EXPORT T      cos_angle(v const&, v const& );
+template <class T> VNL_EXPORT double angle(v const&, v const&);
+template <class T> VNL_EXPORT m      outer_product(v const&, v const&);
+template <class T> VNL_EXPORT v      operator+(T, v const&);
+template <class T> VNL_EXPORT v      operator-(T, v const&);
+template <class T> VNL_EXPORT v      operator*(T, v const&);
+// also exists as method: template <class T> VNL_EXPORT v      operator*(m const&, v const&);
+template <class T> VNL_EXPORT v      operator*(v const&, m const&);
+template <class T> VNL_EXPORT v      element_product(v const&,v const&);
+template <class T> VNL_EXPORT v      element_quotient(v const&,v const&);
+template <class T> VNL_EXPORT T      vnl_vector_ssd(v const&, v const&);
+template <class T> VNL_EXPORT void   swap(v &, v &);
 #undef v
 #undef m
 
@@ -74,7 +75,7 @@ template <class T> void   swap(v &, v &);
 //
 // NOTE: Vectors are indexed from zero!  Thus valid elements are [0,size()-1].
 template<class T>
-class vnl_vector
+class VNL_EXPORT vnl_vector
 {
  public:
   friend class vnl_matrix<T>;
@@ -570,9 +571,9 @@ inline T vnl_vector_ssd(vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 
 //: Write vector to a std::ostream
 // \relatesalso vnl_vector
-VCL_TEMPLATE_EXPORT template <class T> std::ostream& operator<<(std::ostream &, vnl_vector<T> const&);
+VCL_TEMPLATE_EXPORT template <class T> VNL_EXPORT std::ostream& operator<<(std::ostream &, vnl_vector<T> const&);
 //: Read vector from a std::istream
 // \relatesalso vnl_vector
-VCL_TEMPLATE_EXPORT template <class T> std::istream& operator>>(std::istream &, vnl_vector<T>      &);
+VCL_TEMPLATE_EXPORT template <class T> VNL_EXPORT std::istream& operator>>(std::istream &, vnl_vector<T>      &);
 
 #endif // vnl_vector_h_
