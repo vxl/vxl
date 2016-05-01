@@ -80,3 +80,6 @@ add_subdirectory(bstm_batch)
 
 #the bridge lib to convert between bvxm and boxm2 scenes
 add_subdirectory(bvxm_bridge)
+
+#event trigger library
+add_subdirectory(betr)
