@@ -1,6 +1,7 @@
 #include <iostream>
 #include "bocl_utils.h"
 #include <vcl_compiler.h>
+#include <sstream>
 
 std::size_t RoundUp(int global_size,int group_size)
 {
@@ -67,7 +68,11 @@ std::string error_to_string(cl_int  status )
     else if ( status == CL_INVALID_GL_OBJECT) output="CL_INVALID_GL_OBJECT";
     else if ( status == CL_INVALID_BUFFER_SIZE) output="CL_INVALID_BUFFER_SIZE";
     else if ( status == CL_INVALID_MIP_LEVEL) output="CL_INVALID_MIP_LEVEL";
-    else output="Unknown Error (" + std::to_string(status) + ")";
+    else {
+      std::ostringstream message("Unknown Error (");
+      message << status << ")";
+      output = message.str();
+    }
 
     return output;
 }
