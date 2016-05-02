@@ -18,6 +18,7 @@
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
 #include <boxm2_multi/pro/boxm2_multi_register.h>
 #include <boxm2/vecf/ocl/pro/boxm2_vecf_ocl_register.h>
+#include <iostream>
 #if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif
@@ -124,11 +125,10 @@ PyObject *
 }
 
 #if defined(HAS_OPENCL) && HAS_OPENCL
-#include <iostream>
 void release_ocl_contexts()
 {
     std::cout << "Py_AtExit::Releasing ocl contexts" << std::endl;
-	if (bocl_manager_child::is_instantiated())
+    if (bocl_manager_child::is_instantiated())
       bocl_manager_child::instance().clear_cl();
 }
 #endif

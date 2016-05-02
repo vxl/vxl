@@ -372,6 +372,9 @@ bool bocl_manager<T>::create_buffer(void** buffer,std::string type, int elm_size
   return true;
 }
 
+template<class T>
+bool bocl_manager<T>::instantiated_=false;
+
 #undef BOCL_MANAGER_INSTANTIATE
 #define BOCL_MANAGER_INSTANTIATE(T) \
 template class bocl_manager<T >

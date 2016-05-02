@@ -122,12 +122,8 @@ class bocl_manager_child: public bocl_manager<bocl_manager_child>
   friend class bocl_manager<bocl_manager_child>;
  private:
   bocl_manager_child() : bocl_manager<bocl_manager_child>() {}
-  ~bocl_manager_child() {}
+  virtual ~bocl_manager_child() {}
 };
-
-template<class T>
-bool bocl_manager<T>::instantiated_=false;
-//bool bocl_manager_child::instantiated_=false;
 
 //: Binary write boxm2_scene scene to stream
 void vsl_b_write(vsl_b_ostream& os, bocl_manager_child const& scene);
