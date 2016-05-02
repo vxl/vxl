@@ -815,7 +815,7 @@ class boxm2_scene_adaptor(object):
     def init_uniform_prob(self):
         return boxm2_init_uniform_prob(self.scene,self.device,self.opencl_cache) 
 
-  def remove_low_nobs(self, nobs_thresh_multiplier=3.0) :
-    dev = self.device;
-    cache = self.opencl_cache;
-    return boxm2_remove_low_nobs(self.scene, dev,cache, nobs_thresh_multiplier)
+    def remove_low_nobs(self, nobs_thresh_multiplier=3.0):
+        dev = self.device;
+        cache = self.opencl_cache;
+        return boxm2_remove_low_nobs(self.scene, dev,cache, nobs_thresh_multiplier)
