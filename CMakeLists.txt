@@ -12,7 +12,7 @@
 # Root vxl
 #
 #   vxl-maintainers@lists.sf.net
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 
 # Set policies for cmake
 if( POLICY CMP0003 )
@@ -35,6 +35,7 @@ endif()
 project(vxl)
 
 include(CMakeDependentOption)
+include(GenerateExportHeader)
 
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
