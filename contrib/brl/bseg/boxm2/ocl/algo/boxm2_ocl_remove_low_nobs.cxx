@@ -76,7 +76,7 @@ bool boxm2_ocl_remove_low_nobs::remove_low_nobs(boxm2_scene_sptr         scene,
       //upcount the matched histogram bins
       for(unsigned i = 0; i<n; ++i){
         // number of observations for each mog component
-        short n0 = nobs_ptr[i].x, n1 = nobs_ptr[i].y, n2 = nobs_ptr[i].z;
+        short n0 = nobs_ptr[i].s[0], n1 = nobs_ptr[i].s[0], n2 = nobs_ptr[i].s[0];
         short v = n0 + n1 + n2;
         bool found = false;
         for(unsigned k = 0; k<nbins&&!found; k++){

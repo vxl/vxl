@@ -14,9 +14,11 @@
 #include <brip_pro/brip_register.h>
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
+#include <bocl/bocl_manager.h>
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
 #include <boxm2_multi/pro/boxm2_multi_register.h>
 #include <boxm2/vecf/ocl/pro/boxm2_vecf_ocl_register.h>
+#include <iostream>
 #if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif
@@ -122,6 +124,14 @@ PyObject *
     return Py_None;
 }
 
+#if defined(HAS_OPENCL) && HAS_OPENCL
+void release_ocl_contexts()
+{
+    std::cout << "Py_AtExit::Releasing ocl contexts" << std::endl;
+    if (bocl_manager_child::is_instantiated())
+      bocl_manager_child::instance().clear_cl();
+}
+#endif
 
 PyMODINIT_FUNC
     initboxm2_batch(void)
@@ -145,6 +155,9 @@ PyMODINIT_FUNC
         boxm2_batch_methods[i+2]=batch_methods[i];
     }
 
+#if defined(HAS_OPENCL) && HAS_OPENCL
+    Py_AtExit(release_ocl_contexts);
+#endif
     Py_InitModule("boxm2_batch", boxm2_batch_methods);
 }
 
