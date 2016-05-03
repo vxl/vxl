@@ -4,6 +4,7 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+#include <vcl_compiler.h>
 #include "vnl/vnl_export.h"
 
 //:
@@ -11,7 +12,7 @@
 // \author Aaron Kotcheff (Manchester)
 // \brief A superior random number generator
 
-VNL_EXPORT const unsigned int vnl_random_array_size = 37;
+VXL_CONSTEXPR unsigned int vnl_random_array_size = 37;
 
 //: A superior random number generator.
 // Implements a new random number generator that
