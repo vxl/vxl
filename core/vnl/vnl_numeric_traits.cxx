@@ -66,17 +66,16 @@ const char vnl_numeric_traits<char>::maxval VCL_STATIC_CONST_INIT_INT_DEFN(char(
 //  It is 127 when "char" is signed and 255 when "char" is unsigned.
 const unsigned char vnl_numeric_traits<unsigned char>::maxval VCL_STATIC_CONST_INIT_INT_DEFN(255);
 const signed char vnl_numeric_traits<signed char>::maxval VCL_STATIC_CONST_INIT_INT_DEFN(127);
-#endif
-
-const short vnl_numeric_traits<short>::maxval = s16;
-const unsigned short vnl_numeric_traits<unsigned short>::maxval = u16;
-const int vnl_numeric_traits<int>::maxval = sizeof(int)==4?s32:s16;
-const unsigned int vnl_numeric_traits<unsigned int>::maxval = sizeof(unsigned int)==4?u32:u16;
-const long vnl_numeric_traits<long>::maxval = sizeof(long)==8?s64:s32;
-const unsigned long vnl_numeric_traits<unsigned long>::maxval = sizeof(unsigned long)==8?u64:u32;
+const short vnl_numeric_traits<short>::maxval VCL_STATIC_CONST_INIT_INT_DEFN( s16 );
+const unsigned short vnl_numeric_traits<unsigned short>::maxval VCL_STATIC_CONST_INIT_INT_DEFN( u16 );
+const int vnl_numeric_traits<int>::maxval VCL_STATIC_CONST_INIT_INT_DEFN( sizeof(int)==4?s32:s16 );
+const unsigned int vnl_numeric_traits<unsigned int>::maxval VCL_STATIC_CONST_INIT_INT_DEFN( sizeof(unsigned int)==4?u32:u16 );
+const long vnl_numeric_traits<long>::maxval VCL_STATIC_CONST_INIT_INT_DEFN( sizeof(long)==8?s64:s32 );
+const unsigned long vnl_numeric_traits<unsigned long>::maxval VCL_STATIC_CONST_INIT_INT_DEFN( sizeof(unsigned long)==8?u64:u32 );
 #if VCL_HAS_LONG_LONG
-const long long vnl_numeric_traits<long long>::maxval = sizeof(long long)==8?s64:s32;
-const unsigned long long vnl_numeric_traits<unsigned long long>::maxval = sizeof(unsigned long long)==8?u64:u32;
+const long long vnl_numeric_traits<long long>::maxval VCL_STATIC_CONST_INIT_INT_DEFN( sizeof(long long)==8?s64:s32 );
+const unsigned long long vnl_numeric_traits<unsigned long long>::maxval VCL_STATIC_CONST_INIT_INT_DEFN( sizeof(unsigned long long)==8?u64:u32 );
+#endif
 #endif
 
 #if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
