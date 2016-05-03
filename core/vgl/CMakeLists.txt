@@ -85,11 +85,14 @@ aux_source_directory(Templates vgl_sources)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vgl LIBRARY_SOURCES ${vgl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl )
-generate_export_header(${VXL_LIB_PREFIX}vgl BASE_NAME vgl)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vgl_export.h
-    DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vgl
-    PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
-    COMPONENT Development )
+set(CURR_LIB_NAME vgl)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
+)
 
 doxygen_add_library(core/vgl
   #DEPENDS core/vsl core/vnl

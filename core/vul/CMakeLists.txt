@@ -76,11 +76,14 @@ endif()
 
 endif()
 
-generate_export_header(${VXL_LIB_PREFIX}vul BASE_NAME vul)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vul_export.h
-    DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vul
-    PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
-    COMPONENT Development )
+set(CURR_LIB_NAME vul)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
+)
 
 target_link_libraries( ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl )
 

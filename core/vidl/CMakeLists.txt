@@ -143,11 +143,14 @@ aux_source_directory(Templates vidl_sources)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vidl LIBRARY_SOURCES ${vidl_sources})
-generate_export_header(${VXL_LIB_PREFIX}vidl BASE_NAME vidl)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vidl_export.h
-    DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vidl
-    PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
-    COMPONENT Development )
+set(CURR_LIB_NAME vidl)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
+)
 
 target_link_libraries( ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
 if( FFMPEG_FOUND )
