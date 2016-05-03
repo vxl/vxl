@@ -62,7 +62,6 @@ void test_opt_orient_pos_f(vpgl_perspective_camera<double> const& cam,
 
   const double max_t_err = 0;//10.0; // maximum translation error to introduce
   const double max_r_err = 0;//vnl_math::pi/4; // maximum rotation error to introduce (radians)
-  const double max_f_err = 100.0;
 
   // select a random rotation axis
   vnl_double_3 dw = (vnl_double_3(rnd.drand32(), rnd.drand32(), rnd.drand32())-0.5).normalize();

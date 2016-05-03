@@ -38,7 +38,6 @@ bool vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double
   vnl_vector_fixed<double,4> C1; C1[0] = C.x(); C1[1] = C.y(); C1[2] = C.z(); C1[3] = C.w();
 
   vnl_matrix_fixed<double, 3,4> M2 = cam2->get_matrix();
-  vgl_homg_point_3d<double> C2 = cam2->camera_center();
 
   vnl_vector_fixed<double,3> e2 = M2*C1;
 
