@@ -125,7 +125,6 @@ if(VIDEODEV_FOUND)
    set(vidl_sources ${vidl_sources}
        vidl_v4l_params.h   vidl_v4l_params.cxx
        vidl_v4l_istream.h  vidl_v4l_istream.cxx
-       vidl_v4l_ulong_fix.h
       )
 endif()
 
