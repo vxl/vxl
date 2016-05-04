@@ -49,8 +49,11 @@ struct bsgm_disparity_estimator_params
   // disparity map.
   bool perform_quadratic_interp;
 
-  //: Perform a quick uniqueness check to flag invalid disparities.
-  bool perform_consistency_check;
+  //: Mode for finding and fixing errors in the disparity map
+  // 0 raw disparity map
+  // 1 bad pixels flagged
+  // 2 bad pixels interpolated over
+  int error_check_mode;
 
   //: Identify rectification border pixels by this intensity and remove
   // from computation.  Set < 0 to disable.
@@ -88,7 +91,7 @@ struct bsgm_disparity_estimator_params
     use_gradient_weighted_smoothing(true),
     max_grad(32.0f),
     perform_quadratic_interp(true),
-    perform_consistency_check(true),
+    error_check_mode(1),
     border_val(0),
     census_weight(0.3f),
     xgrad_weight(0.7f),
@@ -198,10 +201,11 @@ class bsgm_disparity_estimator
     const vil_image_view<float>& grad_y );
 
   //: Pixel-wise directional cost
-  void compute_dir_cost(
+  inline void compute_dir_cost(
     const unsigned short* prev_row_cost,
     const unsigned char* cur_app_cost,
     unsigned short* cur_row_cost,
+    unsigned short* total_cost,
     unsigned short p1,
     unsigned short p2 );
 
@@ -222,6 +226,12 @@ class bsgm_disparity_estimator
     vil_image_view<float>& disp_img,
     const vil_image_view<unsigned short>& disp_cost,
     int disp_thresh = 1 );
+
+  //: Fill in disparity pixels flagged as errors via multi-directional 
+  // sampling
+  void interpolate_errors(
+    vil_image_view<float>& disp_img,
+    const vil_image_view<bool>& invalid );
 
   //: Flip the sign of all valid disparities.
   void invert_disparities(

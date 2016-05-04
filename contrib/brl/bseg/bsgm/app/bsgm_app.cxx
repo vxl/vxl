@@ -25,8 +25,8 @@ int main(int argc,char * argv[])
   params.print_timing = true;
 
   // Usage information
-  if( argc != 6 ){
-    std::cout<<"Usage : bsgm_app.exe target_img ref_img disp_img min_disparity num_disparities\n";
+  if( argc != 6 && argc != 7 ){
+    std::cout<<"Usage : bsgm_app.exe target_img ref_img disp_img min_disparity num_disparities error_check_mode\n";
     return -1;
   }
     
@@ -36,6 +36,7 @@ int main(int argc,char * argv[])
   std::string disp_name(argv[3]);
   int min_disparity = atoi(argv[4]);
   int num_disparities = atoi(argv[5]);
+  int error_check_mode = (argc==6) ? 1 : atoi(argv[6]);
 
   // Load images
   vil_image_view<vxl_byte> img_right = 
@@ -46,6 +47,7 @@ int main(int argc,char * argv[])
   // Setup SGM
   params.min_disparity = min_disparity;
   params.num_disparities = num_disparities;
+  params.error_check_mode = error_check_mode;
 
   bsgm_disparity_estimator sgm( params );
 
