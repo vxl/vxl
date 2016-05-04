@@ -30,11 +30,11 @@
 // a debugger!
 
 #ifdef VXL_WARN_DEPRECATED
-  void vcl_deprecated_warn( const char* func_name );
-  void vcl_deprecated_abort( const char* func_name );
   #ifdef VXL_WARN_DEPRECATED_ABORT
+    void vcl_deprecated_abort( const char* func_name );
     #define VXL_DEPRECATED(f) vcl_deprecated_abort( f )
   #else
+    void vcl_deprecated_warn( const char* func_name );
     #ifdef VXL_WARN_DEPRECATED_ONCE
       #define VXL_DEPRECATED(f) \
         do { \
