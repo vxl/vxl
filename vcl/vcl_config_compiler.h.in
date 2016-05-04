@@ -103,10 +103,6 @@
  * may be necessary for static const float initialization
  * and is benificial in other cases where
  * a value can be constant. */
-#if  VXL_COMPILED_CXX_STANDARD_VERSION >= 201103L
-# define VCL_CAN_STATIC_CONST_INIT_INT 1
-# define VCL_CAN_STATIC_CONST_INIT_FLOAT 1
-#endif
 
 //: VCL_STATIC_CONST_INIT_INT_DECL(x)
 //
@@ -126,58 +122,26 @@
 // definition (header file). This declares the constant.
 // \code
 //     class A {
-//       static const int x VCL_STATIC_CONST_INIT_INT_DECL(27);
+//       static VCL_CONSTEXPR int x VCL_STATIC_CONST_INIT_INT_DECL(27);
 //     };
 // \endcode
 // Use VCL_STATIC_CONST_INIT_INT_DEFN in some .cxx file to define
-// the constant, but only if VCL_STATIC_CONST_INIT_INT_NO_DEFN
-// evaluates to false.
-// \code
-//     #if !VCL_STATIC_CONST_INIT_INT_NO_DEFN
-//     const int A::x VCL_STATIC_CONST_INIT_INT_DEFN(27);
-//     #endif
-// \endcode
+// the constant.
 //
-// In order to be able to query the setting of this, one actually must
-// define VCL_CAN_STATIC_CONST_INIT_INT to either 0 or 1.
-
-//#define VCL_CAN_STATIC_CONST_INIT_INT 1 /* allowed */
-//#define VCL_CAN_STATIC_CONST_INIT_INT 0 /* not allowed */
-#ifndef VCL_CAN_STATIC_CONST_INIT_INT
-# define VCL_CAN_STATIC_CONST_INIT_INT @VCL_STATIC_CONST_INIT_INT@
-#endif
-#if VCL_CAN_STATIC_CONST_INIT_INT
+#if VXL_COMPILED_CXX_STANDARD_VERSION >= 201103L //C++11 compliant
 # define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
 # define VCL_STATIC_CONST_INIT_INT_DEFN(x) /* initialized at declaration */
-# define VCL_STATIC_CONST_INIT_INT_NO_DEFN @VCL_STATIC_CONST_INIT_NO_DEFN@
+
+# define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
+# define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
+
 #else
 # define VCL_STATIC_CONST_INIT_INT_DECL(x) /* not allowed */
 # define VCL_STATIC_CONST_INIT_INT_DEFN(x) = x
-# define VCL_STATIC_CONST_INIT_INT_NO_DEFN 0
-#endif
 
-
-//: VCL_STATIC_CONST_INIT_FLOAT(x)
-//
-// GCC allows the above, but with floating point types, ANSI doesn't.
-// Again, we'll use it if we've got it.
-//
-// In order to be able to query the setting of this, one actually must
-// define VCL_CAN_STATIC_CONST_INIT_FLOAT to either 0 or 1.
-
-//#define VCL_CAN_STATIC_CONST_INIT_FLOAT 1 /* allowed */
-//#define VCL_CAN_STATIC_CONST_INIT_FLOAT 0 /* not allowed */
-#ifndef VCL_CAN_STATIC_CONST_INIT_FLOAT
-# define VCL_CAN_STATIC_CONST_INIT_FLOAT @VCL_STATIC_CONST_INIT_FLOAT@
-#endif
-#if VCL_CAN_STATIC_CONST_INIT_FLOAT
-# define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
-# define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
-# define VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN @VCL_STATIC_CONST_INIT_NO_DEFN@
-#else
 # define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) /* not allowed */
 # define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) = x
-# define VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN 0
+
 #endif
 
 
