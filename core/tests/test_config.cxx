@@ -79,14 +79,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_FOR_SCOPE_HACK ";
-#ifdef VCL_FOR_SCOPE_HACK
-  std::cout << "is set to " << quote(VCL_FOR_SCOPE_HACK);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_DEFAULT_VALUE(x) ";
 #ifdef VCL_DEFAULT_VALUE
   std::cout << "is set to " << quote(VCL_DEFAULT_VALUE(x));

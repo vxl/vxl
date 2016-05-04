@@ -154,14 +154,6 @@
 # define VCL_INSTANTIATE_INLINE(symbol) /* */
 #endif
 
-//--------------------------------------------------------------------------------
-
-#if VCL_FOR_SCOPE_HACK
-# undef for
-# define for if (false) { } else for
-typedef int saw_VCL_FOR_SCOPE_HACK;
-#endif
-
 // fix to instantiate template functions
 #define VCL_INSTANTIATE_NONINLINE(fn_decl) template fn_decl
 

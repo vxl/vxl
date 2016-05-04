@@ -71,12 +71,6 @@
 #define VCL_HAS_EXPLICIT @VCL_HAS_EXPLICIT@
 
 
-//: VCL_FOR_SCOPE_HACK:
-//
-// True if the compiler uses old-style 'for' loop scoping.
-// Setting this nonzero causes the Henderson trick to be used.
-#define VCL_FOR_SCOPE_HACK @VCL_FOR_SCOPE_HACK@
-
 //: VCL_COMPLEX_POW_WORKS
 //
 // It appears several programmers have (independently)
