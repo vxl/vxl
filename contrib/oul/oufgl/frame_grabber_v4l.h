@@ -45,7 +45,7 @@ class FrameGrabberV4lGrey : public FrameGrabber
   typedef vil1_memory_image_of< ImageContents > ImageGrey;
 
   FrameGrabberV4lGrey(int width_=384, int height_=288, bool debug=false,
-                      char *devname="/dev/video0");
+                      const char * const devname="/dev/video0");
   virtual ~FrameGrabberV4lGrey();
   // returns the current acquired frame
   inline vil1_memory_image *get_current_frame()

@@ -48,13 +48,13 @@ class VNL_EXPORT vnl_numeric_traits
 {
  public:
   //: Additive identity
-  static VNL_EXPORT const vnl_numeric_traits_not_a_valid_type zero;
+  static VNL_EXPORT VXL_CONSTEXPR vnl_numeric_traits_not_a_valid_type zero;
 
   //: Multiplicative identity
-  static VNL_EXPORT const vnl_numeric_traits_not_a_valid_type one;
+  static VNL_EXPORT VXL_CONSTEXPR vnl_numeric_traits_not_a_valid_type one;
 
   //: Maximum value which this type can assume
-  static VNL_EXPORT const vnl_numeric_traits_not_a_valid_type maxval;
+  static VNL_EXPORT VXL_CONSTEXPR vnl_numeric_traits_not_a_valid_type maxval;
 
   //: Return value of abs()
   typedef vnl_numeric_traits_not_a_valid_type abs_t;

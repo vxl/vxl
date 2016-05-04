@@ -157,14 +157,14 @@ struct vtol_extract_topology_vertex_node
   // A vertex with an index value >= this value does not correspond to
   // a node in the graph.
   //
-  static const unsigned null_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-2) );
+  static VXL_CONSTEXPR unsigned null_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-2) );
 
   //: "Processed" index value
   //
   // This is used to indicate that the boundary edge following went
   // through a vertex.
   //
-  static const unsigned done_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-1) );
+  static VXL_CONSTEXPR unsigned done_index   VCL_STATIC_CONST_INIT_INT_DECL( unsigned(-1) );
 };
 
 //: Extracts the topology from a segmentation label image.
