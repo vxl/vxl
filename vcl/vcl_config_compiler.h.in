@@ -1,5 +1,8 @@
 #ifndef vcl_config_compiler_h_
 #define vcl_config_compiler_h_
+
+#include "vcl_compiler_detection.h"
+
 //:
 // \file
 // This file either is or was generated from vcl_config_compiler.h.in
