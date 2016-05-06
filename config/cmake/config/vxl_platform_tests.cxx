@@ -1,15 +1,5 @@
 //-------------------------------------
-
-// Duplicated form vxl_config.h.in to break circular dependancy
-/* When using C++11 or greater, constexpr
- * may be necessary for static const float initialization
- * and is benificial in other cases where
- * a value can be constant. */
-#if  __cplusplus >= 201103L
-# define PLTFMTEST_CONSTEXPR constexpr
-#else
-# define PLTFMTEST_CONSTEXPR const
-#endif
+#include <vcl_compiler_detection.h>
 
 #ifdef VCL_HAS_BOOL
 
@@ -235,8 +225,8 @@ int main() { return 0; }
 
 class A {
  public:
-  static PLTFMTEST_CONSTEXPR int x = 27;
-  static PLTFMTEST_CONSTEXPR bool y = false;
+  static VXL_CONSTEXPR int x = 27;
+  static VXL_CONSTEXPR bool y = false;
 };
 
 int main() { return A::x == 27 && !A::y ? 0 : 1; }
@@ -254,7 +244,7 @@ int main() { return A::x == 27 && !A::y ? 0 : 1; }
 class A
 {
  public:
-  static PLTFMTEST_CONSTEXPR int x = 27;
+  static VXL_CONSTEXPR int x = 27;
 };
 
 int f(const void* x) { return x?1:0; }
@@ -265,13 +255,12 @@ int main() { return f(&A::x); }
 
 #ifdef VCL_STATIC_CONST_INIT_FLOAT
 
-// If __cplusplus is C++11 (greater than equal to 201103L)
-// then constexpr floating point initialization is supported.
-#if  __cplusplus >= 201103L
+// If supported then constexpr floating point initialization is supported.
+#if VXL_COMPILER_CXX_CONSTEXPR
 class A {
  public:
-  static PLTFMTEST_CONSTEXPR float x = 27.0f;
-  static PLTFMTEST_CONSTEXPR double y = 27.0;
+  static VXL_CONSTEXPR float x = 27.0f;
+  static VXL_CONSTEXPR double y = 27.0;
 };
 int main() { return A::x == 27.0f && A::y == 27.0 ? 0 : 1; }
 #else

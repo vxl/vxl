@@ -190,10 +190,10 @@
 #endif
 
 #if VXL_COMPILED_CXX_STANDARD_VERSION >= 201103L
-# define VXL_CXX11 1
+# define VXL_FULLCXX11SUPPORT 1
 #else
 //  C++11 not supported
-# define VXL_CXX11 0
+# define VXL_FULLCXX11SUPPORT 0
 #endif
 
 #if ! VXL_COMPILER_CXX_NOEXCEPT
@@ -896,7 +896,7 @@ __inline int vcl_snprintf(char *outBuf, size_t size, const char *format, ...)
 #define vcl_indirect_array std::indirect_array
 #define vcl_vector std::vector
 
-#if VXL_COMPILED_CXX_STANDARD_VERSION >= 201103L || VCL_MEMORY_HAS_SHARED_PTR
+#if VXL_FULLCXX11SUPPORT || VCL_MEMORY_HAS_SHARED_PTR
 # define vcl_memory_prefix std
 #elif VCL_TR1_MEMORY_HAS_SHARED_PTR
   // [20.6] lib.memory (additions in 0x draft: 2006-11-06)

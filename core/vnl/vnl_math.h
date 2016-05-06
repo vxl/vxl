@@ -152,7 +152,7 @@ namespace vnl_math
 
 namespace vnl_math
 {
-#if  VXL_COMPILED_CXX_STANDARD_VERSION >= 201103L
+#if VXL_FULLCXX11SUPPORT
   // Prefer to use perfect forwarding to the std library if C++11 features are available.
   //http://stackoverflow.com/questions/9864125/c11-how-to-alias-a-function
   template <typename... Args>
