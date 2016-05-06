@@ -165,7 +165,7 @@ Notes:
           #endif // deprecated function
 
      Further, the body of f() should be marked as deprecated with
-     VXL_DEPRECATED, to provide run-time information about
+     VXL_DEPRECATED_MACRO, to provide run-time information about
      deprecated function calls. This code would stay within the
      #if-#endif block at least till version 1.0.4. After that it
      may be removed from the code entirely.

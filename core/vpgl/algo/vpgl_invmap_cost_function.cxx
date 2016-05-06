@@ -77,7 +77,7 @@ set_params(vnl_vector_fixed<double,3> const& xyz, vnl_vector_fixed<double,2> &x)
 void vpgl_invmap_cost_function::
 set_params(vnl_vector_fixed<double, 3> const& xyz, vnl_vector<double> &x)
 {
-  VXL_DEPRECATED("vpgl_invmap_cost_function::set_params(, vnl_vector<double>&)");
+  VXL_DEPRECATED_MACRO("vpgl_invmap_cost_function::set_params(, vnl_vector<double>&)");
   switch (pp_)
   {
     case X_Y:
@@ -144,7 +144,7 @@ point_3d(vnl_vector_fixed<double,2> const& x, vnl_vector_fixed<double,3>& xyz)
 void vpgl_invmap_cost_function::
 point_3d(vnl_vector<double> const& x, vnl_vector_fixed<double, 3>& xyz)
 {
-  VXL_DEPRECATED("vpgl_invmap_cost_function::point_3d(vnl_vector<double>,)");
+  VXL_DEPRECATED_MACRO("vpgl_invmap_cost_function::point_3d(vnl_vector<double>,)");
   //Switch on plane parameterization
   switch (pp_)
   {
