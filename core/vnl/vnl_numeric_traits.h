@@ -33,7 +33,7 @@
 
 // this is an empty class template.
 // only the specializations make sense.
-#if !defined(VCL_VC)
+#if !defined(VCL_VC) || (_MSC_VER >= 1800 )
 template <class T>
 class VNL_EXPORT vnl_numeric_traits;
 #else

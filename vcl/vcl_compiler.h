@@ -185,7 +185,7 @@
 # define VXL_CONSTEXPR_FUNC constexpr
 #else
 # undef VXL_CONSTEXPR
-# define VXL_CONSTEXPR const
+# define VXL_CONSTEXPR const //Redefine as const for non C++11
 # define VXL_CONSTEXPR_FUNC
 #endif
 

@@ -125,7 +125,7 @@
 // Use VCL_STATIC_CONST_INIT_INT_DEFN in some .cxx file to define
 // the constant.
 //
-#if VXL_COMPILED_CXX_STANDARD_VERSION >= 201103L //C++11 compliant
+#if VXL_COMPILER_CXX_CONSTEXPR //C++11 compliant
 # define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
 # define VCL_STATIC_CONST_INIT_INT_DEFN(x) /* initialized at declaration */
 
