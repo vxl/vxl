@@ -48,13 +48,13 @@ class VNL_EXPORT vnl_numeric_traits
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR vnl_numeric_traits_not_a_valid_type zero;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR vnl_numeric_traits_not_a_valid_type zero;
 
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR vnl_numeric_traits_not_a_valid_type one;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR vnl_numeric_traits_not_a_valid_type one;
 
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR vnl_numeric_traits_not_a_valid_type maxval;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR vnl_numeric_traits_not_a_valid_type maxval;
 
   //: Return value of abs()
   typedef vnl_numeric_traits_not_a_valid_type abs_t;
@@ -73,11 +73,11 @@ class VNL_EXPORT vnl_numeric_traits<bool>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR bool zero VCL_STATIC_CONST_INIT_INT_DECL(false);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR bool zero VCL_STATIC_CONST_INIT_INT_DECL(false);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR bool one VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR bool one VCL_STATIC_CONST_INIT_INT_DECL(true);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR bool maxval VCL_STATIC_CONST_INIT_INT_DECL(true);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR bool maxval VCL_STATIC_CONST_INIT_INT_DECL(true);
   //: Return value of abs()
   typedef unsigned int abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -97,19 +97,19 @@ class VNL_EXPORT vnl_numeric_traits<char>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR char zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR char zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR char one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR char one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume.
   //  It is 127 (and not 255) since "char" is not guaranteed to be unsigned.
 #ifdef _MSC_VER
 #ifdef _CHAR_UNSIGNED
-  static VNL_EXPORT VXL_CONSTEXPR char maxval VCL_STATIC_CONST_INIT_INT_DECL(255);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR char maxval VCL_STATIC_CONST_INIT_INT_DECL(255);
 #else
-  static VNL_EXPORT VXL_CONSTEXPR char maxval VCL_STATIC_CONST_INIT_INT_DECL(127);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR char maxval VCL_STATIC_CONST_INIT_INT_DECL(127);
 #endif
 #else
-  static VNL_EXPORT VXL_CONSTEXPR char maxval VCL_STATIC_CONST_INIT_INT_DECL(char(255)<char(0)?char(127):char(255));
+  static VNL_EXPORT VXL_CONSTEXPR_VAR char maxval VCL_STATIC_CONST_INIT_INT_DECL(char(255)<char(0)?char(127):char(255));
 #endif
   //: Return value of abs()
   typedef unsigned char abs_t;
@@ -129,11 +129,11 @@ class VNL_EXPORT vnl_numeric_traits<unsigned char>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned char zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned char zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned char one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned char one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR unsigned char maxval VCL_STATIC_CONST_INIT_INT_DECL(255);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned char maxval VCL_STATIC_CONST_INIT_INT_DECL(255);
   //: Return value of abs()
   typedef unsigned char abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -152,11 +152,11 @@ class VNL_EXPORT vnl_numeric_traits<signed char>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR signed char zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR signed char zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR signed char one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR signed char one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR signed char maxval VCL_STATIC_CONST_INIT_INT_DECL(127);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR signed char maxval VCL_STATIC_CONST_INIT_INT_DECL(127);
   //: Return value of abs()
   typedef unsigned char abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -175,11 +175,11 @@ class VNL_EXPORT vnl_numeric_traits<short>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR short zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR short zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR short one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR short one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR short maxval VCL_STATIC_CONST_INIT_INT_DECL(0x7fff); // = 0x7fff;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR short maxval VCL_STATIC_CONST_INIT_INT_DECL(0x7fff); // = 0x7fff;
   //: Return value of abs()
   typedef unsigned short abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -198,11 +198,11 @@ class VNL_EXPORT vnl_numeric_traits<unsigned short>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned short zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned short zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned short one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned short one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR unsigned short maxval VCL_STATIC_CONST_INIT_INT_DECL(0xffff); // = 0xffff;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned short maxval VCL_STATIC_CONST_INIT_INT_DECL(0xffff); // = 0xffff;
   //: Return value of abs()
   typedef unsigned short abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -221,11 +221,11 @@ class VNL_EXPORT vnl_numeric_traits<int>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR int zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR int zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR int one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR int one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR int maxval VCL_STATIC_CONST_INIT_INT_DECL(0x7fffffff); // = 0x7fffffff;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR int maxval VCL_STATIC_CONST_INIT_INT_DECL(0x7fffffff); // = 0x7fffffff;
   //: Return value of abs()
   typedef unsigned int abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -244,11 +244,11 @@ class VNL_EXPORT vnl_numeric_traits<unsigned int>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned int zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned int zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned int one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned int one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR unsigned int maxval VCL_STATIC_CONST_INIT_INT_DECL(0xffffffff); // = 0xffffffff;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned int maxval VCL_STATIC_CONST_INIT_INT_DECL(0xffffffff); // = 0xffffffff;
   //: Return value of abs()
   typedef unsigned int abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -267,11 +267,11 @@ class VNL_EXPORT vnl_numeric_traits<long>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR long zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR long one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR long maxval VCL_STATIC_CONST_INIT_INT_DECL(sizeof(long)==8?(vxl_uint_64)(-1)/2:0x7fffffffL); // = 0x7fffffffL or 0x7fffffffffffffffL;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long maxval VCL_STATIC_CONST_INIT_INT_DECL(sizeof(long)==8?(vxl_uint_64)(-1)/2:0x7fffffffL); // = 0x7fffffffL or 0x7fffffffffffffffL;
   //: Return value of abs()
   typedef unsigned long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -290,11 +290,11 @@ class VNL_EXPORT vnl_numeric_traits<unsigned long>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned long zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned long zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned long one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned long one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR unsigned long maxval VCL_STATIC_CONST_INIT_INT_DECL( sizeof(unsigned long)==8?((vxl_uint_64)(-1)):0xffffffffL );
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned long maxval VCL_STATIC_CONST_INIT_INT_DECL( sizeof(unsigned long)==8?((vxl_uint_64)(-1)):0xffffffffL );
   // = 0xffffffffL or 0xffffffffffffffffL;
   //: Return value of abs()
   typedef unsigned long abs_t;
@@ -315,11 +315,11 @@ class VNL_EXPORT vnl_numeric_traits<size_t>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR size_t zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR size_t zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR size_t one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR size_t one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR size_t maxval VCL_STATIC_CONST_INIT_INT_DECL(0x7fffffff); // = 0x7fffffff;
+  static VNL_EXPORT VXL_CONSTEXPR_VAR size_t maxval VCL_STATIC_CONST_INIT_INT_DECL(0x7fffffff); // = 0x7fffffff;
   //: Return value of abs()
   typedef size_t abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -340,11 +340,11 @@ class VNL_EXPORT vnl_numeric_traits<long long>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR long long zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long long zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR long long one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long long one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR long long maxval VCL_STATIC_CONST_INIT_INT_DECL( sizeof(long long)==8?((vxl_uint_64)(-1))/2:0x7fffffffL );
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long long maxval VCL_STATIC_CONST_INIT_INT_DECL( sizeof(long long)==8?((vxl_uint_64)(-1))/2:0x7fffffffL );
   //: Return value of abs()
   typedef unsigned long long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -363,11 +363,11 @@ class VNL_EXPORT vnl_numeric_traits<unsigned long long>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned long long zero VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned long long zero VCL_STATIC_CONST_INIT_INT_DECL(0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR unsigned long long one VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned long long one VCL_STATIC_CONST_INIT_INT_DECL(1);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR unsigned long long maxval VCL_STATIC_CONST_INIT_INT_DECL(sizeof(unsigned long long)==8?(vxl_uint_64)(-1):0xffffffffL);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR unsigned long long maxval VCL_STATIC_CONST_INIT_INT_DECL(sizeof(unsigned long long)==8?(vxl_uint_64)(-1):0xffffffffL);
   //: Return value of abs()
   typedef unsigned long long abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -387,11 +387,11 @@ class VNL_EXPORT vnl_numeric_traits<float>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR float zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0F);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR float zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0F);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR float one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0F);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR float one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0F);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR float maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(3.40282346638528860e+38F);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR float maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(3.40282346638528860e+38F);
   //: Return value of abs()
   typedef float abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -410,11 +410,11 @@ class VNL_EXPORT vnl_numeric_traits<double>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR double zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR double zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR double one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR double one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR double maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(1.7976931348623157E+308);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR double maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(1.7976931348623157E+308);
   //: Return value of abs()
   typedef double abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -433,11 +433,11 @@ class VNL_EXPORT vnl_numeric_traits<long double>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VXL_CONSTEXPR long double zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long double zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0);
   //: Multiplicative identity
-  static VNL_EXPORT VXL_CONSTEXPR long double one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long double one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VXL_CONSTEXPR long double maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(1.7976931348623157E+308);
+  static VNL_EXPORT VXL_CONSTEXPR_VAR long double maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(1.7976931348623157E+308);
   //: Return value of abs()
   typedef long double abs_t;
   //: Name of a type twice as long as this one for accumulators and products.

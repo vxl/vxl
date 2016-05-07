@@ -179,14 +179,57 @@
    struct safe_bool_dummy { void dummy() {} }; \
    typedef void (safe_bool_dummy::* safe_bool)()
 
-//----------------------------------------------------------------------------
-// Check if the compiler (claims to) support C++11.
-#if VXL_COMPILER_CXX_NOEXCEPT
-# define VXL_CONSTEXPR_FUNC constexpr
+
+//----------------------------------------------------------------------
+// constant initializer issues.
+
+/* When using C++11 or greater, constexpr
+ * may be necessary for static const float initialization
+ * and is benificial in other cases where
+ * a value can be constant. */
+
+//: VCL_STATIC_CONST_INIT_INT_DECL(x)
+//
+// ANSI allows
+// \code
+//     class A {
+//       static const int x = 27;
+//     };
+// \endcode
+// And there is a speed advantage, so we want to use it where supported.
+// However, the standard also requires (9.4.2/4) that the constant be
+// defined in namespace scope. (That is, space must be allocated.)
+// To make matters worse, some compilers (at least VC 7) mistakenly
+// allocate storage without the definition in namespace scope,
+// which results in multiply defined symbols.
+// To use the macro, use VCL_STATIC_CONST_INIT_INT_DECL in the class
+// definition (header file). This declares the constant.
+// \code
+//     class A {
+//       static VCL_CONSTEXPR int x VCL_STATIC_CONST_INIT_INT_DECL(27);
+//     };
+// \endcode
+// Use VCL_STATIC_CONST_INIT_INT_DEFN in some .cxx file to define
+// the constant.
+//
+#if VXL_COMPILER_CXX_CONSTEXPR //C++11 compliant
+# define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
+# define VCL_STATIC_CONST_INIT_INT_DEFN(x) /* initialized at declaration */
+
+# define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
+# define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
+
+# define VXL_CONSTEXPR_FUNC constexpr  //constexpr in C++11, empty in C++98
+# define VXL_CONSTEXPR_VAR  constexpr  //constexpr in C++11, const in C++98
 #else
-# undef VXL_CONSTEXPR
-# define VXL_CONSTEXPR const //Redefine as const for non C++11
-# define VXL_CONSTEXPR_FUNC
+# define VCL_STATIC_CONST_INIT_INT_DECL(x) /* not allowed */
+# define VCL_STATIC_CONST_INIT_INT_DEFN(x) = x
+
+# define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) /* not allowed */
+# define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) = x
+
+# define VXL_CONSTEXPR_FUNC           //constexpr in C++11, empty in C++98
+# define VXL_CONSTEXPR_VAR const      //constexpr in C++11, const in C++98
 #endif
 
 #if VXL_COMPILED_CXX_STANDARD_VERSION >= 201103L
