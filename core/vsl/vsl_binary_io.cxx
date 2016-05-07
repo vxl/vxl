@@ -79,33 +79,36 @@ MACRO_MAKE_INTEGER_READ_WRITE(std::size_t);
 
 void vsl_b_write(vsl_b_ostream& os, char n )
 {
-  os.os().write( ( char* )&n, sizeof( n ) );
+  os.os().write( reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_read(vsl_b_istream &is, char& n )
 {
-  is.is().read( ( char* )&n, sizeof( n ) );
+  const int value = is.is().get();
+  n = static_cast<signed char>(value);
 }
 
 void vsl_b_write(vsl_b_ostream& os, signed char n )
 {
-  os.os().write( ( char* )&n, sizeof( n ) );
+  os.os().write( reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_read(vsl_b_istream &is, signed char& n )
 {
-  is.is().read( ( char* )&n, sizeof( n ) );
+  const int value = is.is().get();
+  n = static_cast<signed char>(value);
 }
 
 
 void vsl_b_write(vsl_b_ostream& os,unsigned char n )
 {
-  os.os().write( ( char* )&n, 1 );
+  os.os().write( reinterpret_cast<char *>(&n), 1 );
 }
 
 void vsl_b_read(vsl_b_istream &is,unsigned char& n )
 {
-  is.is().read( ( char* )&n, 1 );
+  const int value = is.is().get();
+  n = static_cast<unsigned char>(value);
 }
 
 
@@ -169,26 +172,26 @@ void vsl_b_read(vsl_b_istream &is,bool& b)
 
 void vsl_b_write(vsl_b_ostream& os,float n )
 {
-  vsl_swap_bytes(( char* )&n, sizeof( n ) );
-  os.os().write( ( char* )&n, sizeof( n ) );
+  vsl_swap_bytes(reinterpret_cast<char *>(&n), sizeof( n ) );
+  os.os().write( reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_read(vsl_b_istream &is,float& n )
 {
-  is.is().read( ( char* )&n, sizeof( n ) );
-  vsl_swap_bytes(( char* )&n, sizeof( n ) );
+  is.is().read( reinterpret_cast<char *>(&n), sizeof( n ) );
+  vsl_swap_bytes(reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_write(vsl_b_ostream& os,double n )
 {
-  vsl_swap_bytes(( char* )&n, sizeof( n ) );
-  os.os().write( ( char* )&n, sizeof( n ) );
+  vsl_swap_bytes(reinterpret_cast<char *>(&n), sizeof( n ) );
+  os.os().write( reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_read(vsl_b_istream &is,double& n )
 {
-  is.is().read( ( char* )&n, sizeof( n ) );
-  vsl_swap_bytes(( char* )&n, sizeof( n ) );
+  is.is().read( reinterpret_cast<char *>(&n), sizeof( n ) );
+  vsl_swap_bytes(reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 
