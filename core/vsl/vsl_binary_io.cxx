@@ -12,10 +12,70 @@
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
+template <typename TYPE>
+void  local_vsl_b_write(vsl_b_ostream& os, const TYPE n)
+{
+  const size_t MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
+  unsigned char buf[ MAX_INT_BUFFER_LENGTH ] = {0};
+  const std::size_t nbytes = (std::size_t)vsl_convert_to_arbitrary_length(&n, buf);
+  os.os().write((char*)buf, nbytes );
+}
 
+template <typename TYPE>
+void local_vsl_b_read(vsl_b_istream &is,TYPE & n)
+{
+  const size_t MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
+  unsigned char buf[MAX_INT_BUFFER_LENGTH] = {0};
+  unsigned char *ptr=buf;
+  do
+  {
+    vsl_b_read(is, *ptr);
+    const std::ptrdiff_t ptr_offset_from_begin = ptr-buf;
+    if (ptr_offset_from_begin >= (std::ptrdiff_t)MAX_INT_BUFFER_LENGTH)
+    {
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, int& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n"
+               << "ptr_offset_from_begin: " << ptr_offset_from_begin << " >= " << MAX_INT_BUFFER_LENGTH << std::endl;
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+      n = 0; //If failure occurs, then set n=0 for number of reads.
+      return;
+    }
+  }
+  while (!(*(ptr++) & 128));
+  vsl_convert_from_arbitrary_length(buf, &n);
+}
 
+#define MACRO_MAKE_INTEGER_READ_WRITE( TYPEIN ) \
+void vsl_b_write(vsl_b_ostream& os,TYPEIN n )   \
+{                                               \
+  local_vsl_b_write<TYPEIN>(os,n);              \
+}                                               \
+                                                \
+void vsl_b_read(vsl_b_istream &is,TYPEIN& n )   \
+{                                               \
+  local_vsl_b_read<TYPEIN>(is,n);               \
+}
 
+MACRO_MAKE_INTEGER_READ_WRITE(int);
+MACRO_MAKE_INTEGER_READ_WRITE(unsigned int);
+MACRO_MAKE_INTEGER_READ_WRITE(short);
+MACRO_MAKE_INTEGER_READ_WRITE(unsigned short);
+MACRO_MAKE_INTEGER_READ_WRITE(long);
+MACRO_MAKE_INTEGER_READ_WRITE(unsigned long);
+#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
+MACRO_MAKE_INTEGER_READ_WRITE(vxl_int_64);
+MACRO_MAKE_INTEGER_READ_WRITE(vxl_uint_64);
+#endif
+#if 0
+MACRO_MAKE_INTEGER_READ_WRITE(std::ptrdiff_t);
+// When the macro is ready, this test will be
+// #if ! VCL_SIZE_T_IS_A_STANDARD_TYPE
+MACRO_MAKE_INTEGER_READ_WRITE(std::size_t);
+// #endif
+#endif
 
+#undef MACRO_MAKE_INTEGER_READ_WRITE
 
 void vsl_b_write(vsl_b_ostream& os, char n )
 {
@@ -106,310 +166,6 @@ void vsl_b_read(vsl_b_istream &is,bool& b)
   vsl_b_read(is, c);
   b = (c != 0);
 }
-
-
-void vsl_b_write(vsl_b_ostream& os,int n )
-{
-  unsigned char buf[ VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) ];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,int& n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, int& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-
-void vsl_b_write(vsl_b_ostream& os,unsigned int n )
-{
-  unsigned char
-    buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,unsigned int& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned int& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-
-void vsl_b_write(vsl_b_ostream& os,short n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,short& n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, short& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-void vsl_b_write(vsl_b_ostream& os, unsigned short n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is, unsigned short& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned short& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-
-void vsl_b_write(vsl_b_ostream& os,long n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,long& n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, long& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-void vsl_b_write(vsl_b_ostream& os,unsigned long n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,unsigned long& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned long& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
-
-void vsl_b_write(vsl_b_ostream& os, vxl_int_64 n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,vxl_int_64& n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vxl_int_64& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-void vsl_b_write(vsl_b_ostream& os, vxl_uint_64 n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,vxl_uint_64& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vxl_uint_64& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-#endif // VXL_HAS_INT_64
-
-#if 0
-// When the macro is ready, this test will be
-// #if ! VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
-
-void vsl_b_write(vsl_b_ostream& os, std::ptrdiff_t n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(std::ptrdiff_t))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is, std::ptrdiff_t& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(std::ptrdiff_t))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(std::ptrdiff_t)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, std::ptrdiff_t& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes\n"
-               << "           and represents a very large data structure.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-#endif // 0
-
-#if 0
-// When the macro is ready, this test will be
-// #if ! VCL_SIZE_T_IS_A_STANDARD_TYPE
-
-void vsl_b_write(vsl_b_ostream& os, std::size_t n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(std::size_t))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is, std::size_t& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(std::size_t))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (std::ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(std::size_t)))
-    {
-      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, std::size_t& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes\n"
-               << "           and represents a very large data structure.\n";
-      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-#endif // 0
-
 
 void vsl_b_write(vsl_b_ostream& os,float n )
 {
