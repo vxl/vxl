@@ -92,10 +92,10 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 class vipl_filter          : public vipl_filter_abs
 {
   // declare some static consts....
-  static VXL_CONSTEXPR VIPL_FILTER_STATE Not_Ready      VCL_STATIC_CONST_INIT_INT_DECL(0);
-  static VXL_CONSTEXPR VIPL_FILTER_STATE Ready          VCL_STATIC_CONST_INIT_INT_DECL(1);
-  static VXL_CONSTEXPR VIPL_FILTER_STATE Unchanged      VCL_STATIC_CONST_INIT_INT_DECL(2);
-  static VXL_CONSTEXPR VIPL_FILTER_STATE Filter_Owned   VCL_STATIC_CONST_INIT_INT_DECL(4);
+  static VXL_CONSTEXPR_VAR VIPL_FILTER_STATE Not_Ready      VCL_STATIC_CONST_INIT_INT_DECL(0);
+  static VXL_CONSTEXPR_VAR VIPL_FILTER_STATE Ready          VCL_STATIC_CONST_INIT_INT_DECL(1);
+  static VXL_CONSTEXPR_VAR VIPL_FILTER_STATE Unchanged      VCL_STATIC_CONST_INIT_INT_DECL(2);
+  static VXL_CONSTEXPR_VAR VIPL_FILTER_STATE Filter_Owned   VCL_STATIC_CONST_INIT_INT_DECL(4);
   // typedef iterators from our "iterator" class
 
  public: typedef typename PixelItr::Titerator Titerator;

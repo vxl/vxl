@@ -777,7 +777,7 @@ template <class outP>
 inline void vil_convert_cast(const vil_image_view_base_sptr& src,
                              vil_image_view<outP >&dest)
 {
-  VXL_DEPRECATED( "void vil_convert_cast(const vil_image_view_base_sptr&,"
+  VXL_DEPRECATED_MACRO( "void vil_convert_cast(const vil_image_view_base_sptr&,"
                   " vil_image_view<outP>&)" );
 
   switch ( src->pixel_format() )
@@ -938,7 +938,7 @@ template <class outP>
 inline vil_image_view<outP> vil_convert_to_grey_using_average(
   const vil_image_view_base_sptr &src, outP /*dummy*/)
 {
-  VXL_DEPRECATED( "vil_convert_to_grey_using_average<outP>("
+  VXL_DEPRECATED_MACRO( "vil_convert_to_grey_using_average<outP>("
                   "const vil_image_view_base_sptr &, outP)" );
 
   // Check output is scalar component image.
@@ -1120,7 +1120,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
                           double gw=0.7154,
                           double bw=0.0721)
 {
-  VXL_DEPRECATED( "vil_convert_to_grey_using_rgb_weighting<outP>("
+  VXL_DEPRECATED_MACRO( "vil_convert_to_grey_using_rgb_weighting<outP>("
                   "const vil_image_view_base_sptr &, outP)" );
 
   // Check output is scalar component image.

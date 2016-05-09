@@ -1,16 +1,5 @@
 //-------------------------------------
 
-// Duplicated form vxl_config.h.in to break circular dependancy
-/* When using C++11 or greater, constexpr
- * may be necessary for static const float initialization
- * and is benificial in other cases where
- * a value can be constant. */
-#if  __cplusplus >= 201103L
-# define PLTFMTEST_CONSTEXPR constexpr
-#else
-# define PLTFMTEST_CONSTEXPR const
-#endif
-
 #ifdef VCL_HAS_BOOL
 
 void function(int i, void *ptr, bool v) {}
@@ -228,57 +217,6 @@ int function()
 
 int main() { return 0; }
 #endif // VCL_NEEDS_INLINE_INSTANTIATION
-
-//-------------------------------------
-
-#ifdef VCL_STATIC_CONST_INIT_INT
-
-class A {
- public:
-  static PLTFMTEST_CONSTEXPR int x = 27;
-  static PLTFMTEST_CONSTEXPR bool y = false;
-};
-
-int main() { return A::x == 27 && !A::y ? 0 : 1; }
-#endif // VCL_STATIC_CONST_INIT_INT
-
-//-------------------------------------
-
-#ifdef VCL_STATIC_CONST_INIT_NO_DEFN
-
-// This should not compile.  C++ requires storage to be allocated for
-// the constant to use it at runtime.  Some compilers do compile this,
-// though, and if a definition is given, it becomes a multiply defined
-// symbol.  If this does compile, we should not give a definition for
-// such constants.
-class A
-{
- public:
-  static PLTFMTEST_CONSTEXPR int x = 27;
-};
-
-int f(const void* x) { return x?1:0; }
-int main() { return f(&A::x); }
-#endif // VCL_STATIC_CONST_INIT_NO_DEFN
-
-//-------------------------------------
-
-#ifdef VCL_STATIC_CONST_INIT_FLOAT
-
-// If __cplusplus is C++11 (greater than equal to 201103L)
-// then constexpr floating point initialization is supported.
-#if  __cplusplus >= 201103L
-class A {
- public:
-  static PLTFMTEST_CONSTEXPR float x = 27.0f;
-  static PLTFMTEST_CONSTEXPR double y = 27.0;
-};
-int main() { return A::x == 27.0f && A::y == 27.0 ? 0 : 1; }
-#else
-  #error "VCL_STATIC_CONST_INIT_FLOAT only supported on gcc compilers (and c++0x)."
-  int main() { return 1; }
-#endif
-#endif // VCL_STATIC_CONST_INIT_FLOAT
 
 //-------------------------------------
 

@@ -369,28 +369,28 @@ class VNL_EXPORT vnl_vector
 #if VNL_CONFIG_LEGACY_METHODS // these methods are deprecated and should not be used
   //: Return first element of vector
   // \deprecated
-  T& x() const { VXL_DEPRECATED("vnl_vector<T>::x()"); return data[0]; }
+  T& x() const { VXL_DEPRECATED_MACRO("vnl_vector<T>::x()"); return data[0]; }
   //: Return second element of vector
   // \deprecated
-  T& y() const { VXL_DEPRECATED("vnl_vector<T>::y()"); return data[1]; }
+  T& y() const { VXL_DEPRECATED_MACRO("vnl_vector<T>::y()"); return data[1]; }
   //: Return third element of vector
   // \deprecated
-  T& z() const { VXL_DEPRECATED("vnl_vector<T>::z()"); return data[2]; }
+  T& z() const { VXL_DEPRECATED_MACRO("vnl_vector<T>::z()"); return data[2]; }
   //: Return fourth element of vector
   // \deprecated
-  T& t() const { VXL_DEPRECATED("vnl_vector<T>::t()"); return data[3]; }
+  T& t() const { VXL_DEPRECATED_MACRO("vnl_vector<T>::t()"); return data[3]; }
   //: Set the first element (with bound checking)
   // \deprecated
-  void set_x(T const&xx) { VXL_DEPRECATED("vnl_vector<T>::set_x()"); if (size() >= 1) data[0] = xx; }
+  void set_x(T const&xx) { VXL_DEPRECATED_MACRO("vnl_vector<T>::set_x()"); if (size() >= 1) data[0] = xx; }
   //: Set the second element (with bound checking)
   // \deprecated
-  void set_y(T const&yy) { VXL_DEPRECATED("vnl_vector<T>::set_y()"); if (size() >= 2) data[1] = yy; }
+  void set_y(T const&yy) { VXL_DEPRECATED_MACRO("vnl_vector<T>::set_y()"); if (size() >= 2) data[1] = yy; }
   //: Set the third element (with bound checking)
   // \deprecated
-  void set_z(T const&zz) { VXL_DEPRECATED("vnl_vector<T>::set_z()"); if (size() >= 3) data[2] = zz; }
+  void set_z(T const&zz) { VXL_DEPRECATED_MACRO("vnl_vector<T>::set_z()"); if (size() >= 3) data[2] = zz; }
   //: Set the fourth element (with bound checking)
   // \deprecated
-  void set_t(T const&tt) { VXL_DEPRECATED("vnl_vector<T>::set_t()"); if (size() >= 4) data[3] = tt; }
+  void set_t(T const&tt) { VXL_DEPRECATED_MACRO("vnl_vector<T>::set_t()"); if (size() >= 4) data[3] = tt; }
 #endif // VNL_CONFIG_LEGACY_METHODS
 
   //: Check that size()==sz if not, abort();
