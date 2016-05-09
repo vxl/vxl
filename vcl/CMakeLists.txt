@@ -35,7 +35,7 @@ if( VXL_MANUAL_GENERATE_NEW_COMPILER_DETECTION_HEADERS )
       PREFIX VXL
       OUTPUT_FILES_VAR compiler_stub_headers
       OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/TMP/compilers
-      COMPILERS AppleClang Clang GNU MSVC SunPro  #Supported compilers as of 3.5.2
+      COMPILERS AppleClang Clang GNU MSVC SunPro Intel #Supported compilers as of 3.5.2
       VERSION ${CMAKE_VERSION}
       FEATURES
         cxx_aggregate_default_initializers      # Aggregate default initializers, as defined in N3605.
