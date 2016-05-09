@@ -35,7 +35,7 @@
 #endif
 #ifdef MOG_TYPE_2
     #define MOG_TYPE uchar2
-    #define CONVERT_FUNC(lhs,data) ushort8 lhs = as_ushort8(data)
+    #define CONVERT_FUNC(lhs,data) uchar2 lhs = as_uchar2(data)
     #define MOG_INIT(lhs) uchar2 lhs = {0,0}
     #define NORM 65535
 #endif
@@ -107,7 +107,7 @@ typedef struct
   int4      dims;                     // number of blocks in each dimension
   float     block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
   float     epsilon;
-
+  float pinit;
   //tree meta information
   int       root_level;               // root_level of trees
   int       num_buffer;               // number of buffers (both data and tree)

@@ -80,13 +80,13 @@ def gen_error_point_cloud(scene,cache,filename,thresh = 0.3):
     boxm2_batch.set_input_float(3,thresh); #prob threshold
     boxm2_batch.run_process();
 
-def export_stack(scene, cache, outdir, isopacityonly=True):
-    boxm2_batch.init_process("boxm2ExportStackImagesProcess")
-    boxm2_batch.set_input_from_db(0, scene)
-    boxm2_batch.set_input_from_db(1, cache)
-    boxm2_batch.set_input_string(2, outdir)
-    boxm2_batch.set_input_bool(3, isopacityonly)
-    boxm2_batch.run_process()
+def export_stack(scene,cache,outdir,identifier):
+    boxm2_batch.init_process("boxm2ExportStackImagesProcess");
+    boxm2_batch.set_input_from_db(0,scene);
+    boxm2_batch.set_input_from_db(1,cache);
+    boxm2_batch.set_input_string(2,outdir);
+    boxm2_batch.set_input_string(3,identifier);
+    boxm2_batch.run_process();
 
 
 def paint_mesh(scene, cache, in_file, out_file):

@@ -38,7 +38,7 @@ class boxm2_lru_cache : public boxm2_cache
     virtual boxm2_data_base* get_data_base_new(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true);
 
     //: removes data from this cache (may or may not write to disk first)
-    virtual void remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type);
+    virtual void remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, bool write_out=true);
 
     //: replaces a database in the cache, deletes it
     virtual void replace_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, boxm2_data_base* replacement);

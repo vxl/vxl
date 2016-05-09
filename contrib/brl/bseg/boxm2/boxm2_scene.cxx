@@ -526,6 +526,7 @@ boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id const& id)
   info->num_buffer = 0;
   info->tree_buffer_length = 0;
   info->data_buffer_length = 0;
+  info->pinit = data.p_init_;
   return info;
 }
 

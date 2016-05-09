@@ -527,7 +527,7 @@ void boxm2_opencl_cache::deep_remove_data(boxm2_scene_sptr scene, boxm2_block_id
   }
 
   //remove from cpu_cache_
-  cpu_cache_->remove_data_base(scene, id, type);
+  cpu_cache_->remove_data_base(scene, id, type, write_out);
 #if 0
   remove from lru_order
   std::list<boxm2_block_id>::iterator loc = std::find(lru_order_.begin(), lru_order_.end(), id);

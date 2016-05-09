@@ -324,38 +324,67 @@ void step_cell_vis(__global float* cell_data, int data_ptr,
 
 #ifdef RENDER_DEPTH
 void step_cell_render_depth2(float depth,
-                             float block_len,
-                             __global float  * alpha_data,
-                             int      data_ptr,
-                             float    d,
-                             float  * vis,
-                             float  * expected_depth,
-                             float  * expected_depth_square,
-                             float  * probsum,
-                             float * t)
+    float block_len,
+    __global float  * alpha_data,
+    int      data_ptr,
+    float    d,
+    float  * vis,
+    float  * expected_depth,
+    float  * expected_depth_square,
+    float  * probsum,
+    float * t)
 {
-  const float alpha = alpha_data[data_ptr];
-  const float diff_omega=exp(-alpha*d);
-  const float omega=(*vis) * (1.0f - diff_omega);
-  (*probsum)+=omega;
-  (*t) = depth*block_len;
-  //: to compute the expected depth
-  if (alpha > 1e-6) {
-      //float expdepth = (*vis)*((*t)*(1 - diff_omega) + d*(-diff_omega) + (1.0 - diff_omega) / alpha);
-      const float t0 = *t;
-      const float t1 = t0+d;
-      // the derivation for the following two equations is a bit ugly, but is based on starting
-      // with the equation for expected depth, which is:
-      // E[depth] = int_0^inf t * exp(-int_0^t alpha(s) ds) dt
-      float expdepth_contribution = (*vis)/alpha * (-diff_omega*(alpha*t1 + 1) + alpha*t0 + 1.0);
-      float expdepth_sqrd_contribution = (*vis)*(diff_omega*(-t1*t1 - 2*t1/alpha + 2/(-alpha*alpha)) - (-t0*t0 - 2*t0/alpha + 2/(-alpha*alpha)));
-      (*expected_depth) += expdepth_contribution;
-      (*expected_depth_square) += expdepth_sqrd_contribution;
-      (*vis) *= diff_omega;
-  }
-  (*t) = depth*block_len +d;
+    const float alpha = alpha_data[data_ptr];
+    const float diff_omega = exp(-alpha*d);
+    const float omega = (*vis) * (1.0f - diff_omega);
+    (*probsum) += omega;
+    (*t) = depth*block_len;
+    //: to compute the expected depth
+    if (alpha > 1e-6) {
+        //float expdepth = (*vis)*((*t)*(1 - diff_omega) + d*(-diff_omega) + (1.0 - diff_omega) / alpha);
+        const float t0 = *t;
+        const float t1 = t0 + d;
+        // the derivation for the following two equations is a bit ugly, but is based on starting
+        // with the equation for expected depth, which is:
+        // E[depth] = int_0^inf t * exp(-int_0^t alpha(s) ds) dt
+        float expdepth_contribution = (*vis) / alpha * (-diff_omega*(alpha*t1 + 1) + alpha*t0 + 1.0);
+        float expdepth_sqrd_contribution = (*vis)*(diff_omega*(-t1*t1 - 2 * t1 / alpha + 2 / (-alpha*alpha)) - (-t0*t0 - 2 * t0 / alpha + 2 / (-alpha*alpha)));
+        (*expected_depth) += expdepth_contribution;
+        (*expected_depth_square) += expdepth_sqrd_contribution;
+        (*vis) *= diff_omega;
+    }
+    (*t) = depth*block_len + d;
 }
+void step_cell_render_height(float depth,
+    float block_len,
+    __global float  * alpha_data,
+    int      data_ptr,
+    float    d,
+    float  * vis,
+    float  * expected_depth,
+    float  * expected_depth_square,
+    float  * probsum,
+    float * t)
+{
 
+
+    const float alpha = alpha_data[data_ptr];
+    const float diff_omega = exp(-alpha*d);
+    const float omega = (*vis) * (1.0f - diff_omega);
+    (*probsum) += omega;
+    (*t) = depth*block_len;
+    //: to compute the expected depth
+    if (alpha > 1e-6) {
+        const float t0 = *t;
+        const float t1 = t0 + d;
+        float expdepth_contribution = (t0 + t1)  * omega / 2.0f;
+        float expdepth_sqrd_contribution = (t0 + t1)*(t0 + t1) * omega / 4.0f;
+        (*expected_depth) += expdepth_contribution;
+        (*expected_depth_square) += expdepth_sqrd_contribution;
+        (*vis) *= diff_omega;
+    }
+    (*t) = depth*block_len + d;
+}
 void step_cell_render_depth2_byte(float depth,
                                   float block_len,
                                   __global float  * alpha_data,
@@ -394,7 +423,7 @@ void step_cell_render_depth2(float depth,
   float alpha = alpha_data[data_ptr];
   float diff_omega=exp(-alpha*d);
 
-  //for rendering only
+  ////for rendering only
   float expected_int_cell=0.0f;
   if (diff_omega<0.995f)
   {
@@ -407,7 +436,7 @@ void step_cell_render_depth2(float depth,
   float omega=(*vis) * (1.0f - diff_omega);
   (*expected_i)+=expected_int_cell*omega;
 
-  //depth
+  ////depth
   (*probsum)+=omega;
   (*vis) *= diff_omega;
   (*expected_depth)+=depth*omega;
