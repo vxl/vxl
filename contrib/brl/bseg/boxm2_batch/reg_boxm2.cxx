@@ -127,9 +127,11 @@ PyObject *
 #if defined(HAS_OPENCL) && HAS_OPENCL
 void release_ocl_contexts()
 {
-    std::cout << "Py_AtExit::Releasing ocl contexts" << std::endl;
     if (bocl_manager_child::is_instantiated())
+    {
+      std::cout << "Py_AtExit::Releasing ocl contexts" << std::endl;
       bocl_manager_child::instance().clear_cl();
+    }
 }
 #endif
 
