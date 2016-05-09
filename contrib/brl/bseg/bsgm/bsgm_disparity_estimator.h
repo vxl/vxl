@@ -228,7 +228,7 @@ class bsgm_disparity_estimator
     int disp_thresh = 1 );
 
   //: Fill in disparity pixels flagged as errors via multi-directional 
-  // sampling
+  // sampling.
   void interpolate_errors(
     vil_image_view<float>& disp_img,
     const vil_image_view<bool>& invalid );
