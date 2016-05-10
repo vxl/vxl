@@ -27,7 +27,7 @@ class bvgl_scaled_shape_3d
     stype_(LINEAR){reset_def_params(); reset_scale_params();}
   //: Construct using spline knots (must be closed curve)
  bvgl_scaled_shape_3d(bvgl_spline_region_3d<Type> const& region, Type max_norm_distance, Type scale_at_max, Type tolerance):
-  base_(region), max_norm_distance_(max_norm_distance), scale_at_max_(scale_at_max),scale_at_midpt_(Type(0.5)*scale_at_max_),
+  base_(region), max_norm_distance_(max_norm_distance), scale_at_max_(scale_at_max),scale_at_midpt_(Type(0.5)*scale_at_max),
   tolerance_(tolerance), stype_(LINEAR){
     reset_def_params(); reset_scale_params();
     this->compute_cross_sections();

@@ -1,4 +1,3 @@
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${MUL_INCLUDE_DIR} )
 
 if(WIN32 AND VXL_USE_LFS)

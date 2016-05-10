@@ -2,7 +2,6 @@
 
 include_directories(${BRL_INCLUDE_DIR}/bbas )
 include_directories(${BRL_INCLUDE_DIR}/bseg )
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 
 set( register_images_exe_sources
      register_images_exe.cxx

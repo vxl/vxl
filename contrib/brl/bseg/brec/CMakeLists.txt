@@ -1,6 +1,5 @@
 # This is contrib/brl/bseg/brec/CMakeLists.txt
 
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${GEL_INCLUDE_DIR} )
 include_directories( ${MUL_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR}/bbas )

@@ -140,6 +140,7 @@ class boxm2_scene_adaptor(object):
         else:
             return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var, update_app, tnear, tfar)
 
+
     # update wrapper, can pass in a Null device to use
     def update_app(self, cam, img, device_string="", force_grey=False):
         cache = self.active_cache
@@ -283,9 +284,9 @@ class boxm2_scene_adaptor(object):
         elif device_string == "cpp":
             cache = self.cpu_cache
             dev = None
-        z_image, var_image, x_image, y_image, prob_image, app_image = render_height_map(
+        z_image, var_image, x_image, y_image, prob_image = render_height_map(
             self.scene, cache, dev)
-        return z_image, var_image, x_image, y_image, prob_image, app_image
+        return z_image, var_image, x_image, y_image, prob_image
 
     # ingest heigh map
     def ingest_height_map(self, x_img, y_img, z_img, zero_out_alpha=True, device_string=""):
@@ -785,3 +786,36 @@ class boxm2_scene_adaptor(object):
         else:
             print "ERROR: Cache type not recognized: ", cache.type
             return False
+
+    def compute_pre_post(self, cam, img, view_identifier="",tnear = 100000.0, tfar = 100000.0) :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return boxm2_compute_pre_post(self.scene, dev,cache, cam, img,view_identifier,tnear,tfar);
+
+    def update_if(self, does_add=True, view_identifier="") :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return update_image_factor(self.scene, dev,cache, does_add, view_identifier);
+
+    def fuse_factors(self, view_idents,weights) :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return boxm2_fuse_factors(self.scene, dev,cache,view_idents,weights)
+  
+    def compute_hmapf(self, zimg,zvar,ximg,yimg,sradius=16) :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return compute_hmap_factor(self.scene, dev,cache,zimg,zvar,ximg,yimg,sradius);
+
+    def update_hf(self, does_add=True) :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return update_hmap_factor(self.scene, dev,cache, does_add);
+
+    def init_uniform_prob(self):
+        return boxm2_init_uniform_prob(self.scene,self.device,self.opencl_cache) 
+
+    def remove_low_nobs(self, nobs_thresh_multiplier=3.0):
+        dev = self.device;
+        cache = self.opencl_cache;
+        return boxm2_remove_low_nobs(self.scene, dev,cache, nobs_thresh_multiplier)

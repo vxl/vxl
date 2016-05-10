@@ -6,7 +6,6 @@ if( PYTHON_FOUND )
   include_directories( ${BRL_INCLUDE_DIR}/bpro )
   include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
 
-  include_directories( ${VXLCORE_INCLUDE_DIR} )
   set(bpro_batch_sources
     bpro_batch.h              bpro_batch.cxx
   )

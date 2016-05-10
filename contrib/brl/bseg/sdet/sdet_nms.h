@@ -93,7 +93,7 @@ class sdet_nms
 
  public:
   //: default constructor is not to be used
-  sdet_nms() VXL_DELETE_FUNCTION;
+  sdet_nms() VXL_DELETED_FUNCTION;
 
   //: Constructor from a parameter block, gradient magnitudes given as an image and gradients given as component images
   sdet_nms(const sdet_nms_params& nsp,

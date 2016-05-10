@@ -185,7 +185,7 @@ static void test_perspective_compute_ground()
 
   // project them to the image
   std::vector< vgl_point_2d<double> > image_pts;
-  for ( int k = 0; k < ground_pts.size(); ++k )
+  for ( size_t k = 0; k < ground_pts.size(); ++k )
   {
     vgl_homg_point_3d<double> world_pt(ground_pts[k].x(), ground_pts[k].y(), 0, 1);
 
@@ -225,7 +225,7 @@ static void test_calibration_compute_natural()
 
   // project them to the image
   std::vector< vgl_point_2d<double> > image_pts;
-  for ( int k = 0; k < ground_pts.size(); ++k )
+  for ( size_t k = 0; k < ground_pts.size(); ++k )
   {
     vgl_homg_point_3d<double> world_pt( ground_pts[k].x(), ground_pts[k].y(), 0, 1 );
 

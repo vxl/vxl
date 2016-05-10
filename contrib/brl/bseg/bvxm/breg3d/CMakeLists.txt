@@ -4,7 +4,6 @@ if(BUILD_MUL)
   include_directories( ${BRL_INCLUDE_DIR}/bseg )
   include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
   include_directories( ${MUL_INCLUDE_DIR})
-  include_directories( ${VXLCORE_INCLUDE_DIR} )
 
   set(breg3d_sources
       breg3d_ekf_camera_optimizer.h            breg3d_ekf_camera_optimizer.cxx

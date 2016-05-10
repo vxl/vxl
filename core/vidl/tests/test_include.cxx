@@ -41,10 +41,5 @@
 #include <vidl/vidl_dshow_istream_params_esf.h>
 #endif // HAS_DSHOW_ESF
 #endif // HAS_DSHOW
-#if 0 // FIXME
-#include <vidl/vidl_v4l_istream.h>
-#include <vidl/vidl_v4l_params.h>
-#include <vidl/vidl_v4l_ulong_fix.h>
-#endif // 0
 
 int main() { return 0; }

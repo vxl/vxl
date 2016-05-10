@@ -8,7 +8,6 @@ set( RPL_INSTALL_INCLUDE_DIR
   CACHE INTERNAL "RPI package include files"
 )
 
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${RPL_INCLUDE_DIR} )
 
 add_subdirectory(rrel)

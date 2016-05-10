@@ -10,7 +10,6 @@ set( GEL_INSTALL_INCLUDE_DIR
   CACHE INTERNAL "GE package include files"
 )
 
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${GEL_INCLUDE_DIR} )
 
 # spatial objects

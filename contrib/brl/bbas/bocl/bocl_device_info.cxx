@@ -161,6 +161,8 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
       clGetDeviceInfo(*device_, CL_DEVICE_GPU_OVERLAP_NV, sizeof(cl_bool), &gpu_overlap_, VXL_NULLPTR);
       clGetDeviceInfo(*device_, CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV, sizeof(cl_bool), &exec_timeout_, VXL_NULLPTR);
       clGetDeviceInfo(*device_, CL_DEVICE_INTEGRATED_MEMORY_NV, sizeof(cl_bool), &integrated_memory_, VXL_NULLPTR);
+      clGetDeviceInfo(*device_, CL_DEVICE_PCI_BUS_ID_NV, sizeof(cl_uint), &bus_id_, VXL_NULLPTR);
+      clGetDeviceInfo(*device_, CL_DEVICE_PCI_SLOT_ID_NV, sizeof(cl_uint), &slot_id_, VXL_NULLPTR);
   }
 
 
@@ -261,6 +263,8 @@ std::ostream& operator <<(std::ostream &s, bocl_device_info& info)
       << "   CL_DEVICE_GPU_OVERLAP_NV: " << ((info.gpu_overlap_ == CL_TRUE) ? "CL_TRUE" : "CL_FALSE") << '\n'
       << "   CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV: " << ((info.exec_timeout_ == CL_TRUE) ? "CL_TRUE" : "CL_FALSE") << '\n'
       << "   CL_DEVICE_INTEGRATED_MEMORY_NV: " << ((info.integrated_memory_ == CL_TRUE) ? "CL_TRUE" : "CL_FALSE") << '\n'
+      << "   CL_DEVICE_PCI_BUS_ID_NV: " << info.bus_id_ << '\n'
+      << "   CL_DEVICE_PCI_SLOT_ID_NV: " << info.slot_id_ << '\n'
     ;
   }
 

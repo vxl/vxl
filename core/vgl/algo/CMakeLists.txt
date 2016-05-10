@@ -18,6 +18,7 @@ set( vgl_algo_sources
   vgl_norm_trans_2d.hxx                    vgl_norm_trans_2d.h
   vgl_norm_trans_3d.hxx                    vgl_norm_trans_3d.h
   vgl_compute_similarity_3d.hxx            vgl_compute_similarity_3d.h
+  vgl_compute_rigid_3d.hxx            vgl_compute_rigid_3d.h
                                            vgl_h_matrix_1d_compute.h
   vgl_h_matrix_1d_compute_linear.cxx       vgl_h_matrix_1d_compute_linear.h
   vgl_h_matrix_1d_compute_3point.cxx       vgl_h_matrix_1d_compute_3point.h

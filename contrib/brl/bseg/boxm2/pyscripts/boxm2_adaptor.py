@@ -123,10 +123,12 @@ def describe_scene(scene):
     (id, type) = boxm2_batch.commit_output(1)
     appType = boxm2_batch.get_output_string(id)
     boxm2_batch.remove_data(id)
-    description = {
-        'dataPath': dataPath,
-        'appType': appType,
-    }
+    (id, type) = boxm2_batch.commit_output(2)
+    voxel_size = boxm2_batch.get_output_double(id)
+    boxm2_batch.remove_data(id)
+    description = {'voxelLength': voxel_size,
+                   'dataPath': dataPath,
+                   'appType': appType}
     return description
 
 # modifies scene appearance, use case build the model in grey scale and
@@ -202,6 +204,7 @@ def init_alpha(scene, cache, device, pinit=0.01, thresh=1.0):
 # Generic update - will use GPU if device/openclcache are passed in
 
 
+# Generic update - will use GPU if device/openclcache are passed in
 def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0, update_app=True, tnear=100000.0, tfar=100000.0):
     # If no device is passed in, do cpu update
     if cache.type == "boxm2_cache_sptr":
@@ -388,10 +391,10 @@ def render_height_map(scene, cache, device=None):
         prob_image = dbvalue(id, type)
 
         # appearance_img
-        (id, type) = boxm2_batch.commit_output(5)
-        app_image = dbvalue(id, type)
+        #(id,type) = boxm2_batch.commit_output(5);
+        #app_image = dbvalue(id,type);
 
-        return z_image, var_image, x_image, y_image, prob_image, app_image
+        return z_image, var_image, x_image, y_image, prob_image#, app_image;
     else:
         print "ERROR: Cache type not recognized: ", cache.type
     # Generic render, returns a dbvalue expected image
@@ -1999,7 +2002,9 @@ def compute_los_visibility(scene, cache, x0, y0, z0, x1, y1, z1, t=5):
     return vis
 
 
-def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir):
+def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir,
+                            lvcs_origin_lat=0.0, lvcs_origin_lon=0.0,
+                            lvcs_origin_elev=0.0):
 
     boxm2_batch.init_process("boxm2SceneFromBoxCamsProcess")
     boxm2_batch.set_input_string(0, camsdir)
@@ -2010,6 +2015,9 @@ def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir):
     boxm2_batch.set_input_float(5, y1)
     boxm2_batch.set_input_float(6, z1)
     boxm2_batch.set_input_string(7, modeldir)
+    boxm2_batch.set_input_double(8, lvcs_origin_lat)
+    boxm2_batch.set_input_double(9, lvcs_origin_lon)
+    boxm2_batch.set_input_double(10, lvcs_origin_elev)
 
     result = boxm2_batch.run_process()
 
@@ -2183,6 +2191,20 @@ def cast_3d_point_pass2(scene, cache, generic_camera, appearance_model_name,
     boxm2_batch.set_input_string(4, cov_c_path)
     boxm2_batch.set_input_string(5, cov_v_path)
     boxm2_batch.run_process()
+
+def accumulate_3d_point_and_cov(scene, cache, appearance_model_name):
+    boxm2_batch.init_process("boxm2CppCompute3dPointsAndCovsProcess")
+    boxm2_batch.set_input_from_db(0, scene)
+    boxm2_batch.set_input_from_db(1, cache)
+    boxm2_batch.set_input_string(2, appearance_model_name)
+    boxm2_batch.run_process()
+
+def normalize_3d_point_and_cov(scene, cache):
+    boxm2_batch.init_process("boxm2CppCompute3dPointsAndCovsNormalizeProcess")
+    boxm2_batch.set_input_from_db(0, scene)
+    boxm2_batch.set_input_from_db(1, cache)
+    boxm2_batch.run_process()
+
 # process that find the minimum and maximum elevation from height map, for
 # a give 2-d rectangluar region
 
@@ -2203,3 +2225,80 @@ def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
         return min_elev, max_elev
     else:
         return 0.0, 0.0
+
+
+def boxm2_compute_pre_post(scene, device, cache, cam, img,view_identifier, tnear = 100000.0 , tfar = 100000.0 ) :
+    #If no device is passed in, do cpu update
+    print("boxm2_batch GPU update");
+    boxm2_batch.init_process("boxm2OclComputePrePostProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,cam);
+    boxm2_batch.set_input_from_db(4,img);
+    boxm2_batch.set_input_string(5,view_identifier);
+    boxm2_batch.set_input_float(6, tnear);
+    boxm2_batch.set_input_float(7, tfar);
+    return boxm2_batch.run_process();
+def update_image_factor(scene, device, cache,sum,view_identifier):
+    #If no device is passed in, do cpu update
+    print("boxm2_batch GPU update");
+    boxm2_batch.init_process("boxm2OclUpdateImageFactorProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_bool(3,sum);
+    boxm2_batch.set_input_string(4,view_identifier);
+    return boxm2_batch.run_process();
+
+def boxm2_fuse_factors(scene, device, cache, view_idents=[], weights= []) :
+    #If no device is passed in, do cpu update
+    print("boxm2_batch GPU update");
+    boxm2_batch.init_process("boxm2OclFuseFactorsProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_string_array(3,view_idents);
+    boxm2_batch.set_input_float_array(4,weights);
+    return boxm2_batch.run_process();
+def compute_hmap_factor(scene, device, cache,zimg,zvar,ximg,yimg,sradius):
+    #If no device is passed in, do cpu update
+    print("boxm2_batch GPU compute_hmap_factor");
+    boxm2_batch.init_process("boxm2OclComputeHeightFactorProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,zimg);
+    boxm2_batch.set_input_from_db(4,zvar);
+    boxm2_batch.set_input_from_db(5,ximg);
+    boxm2_batch.set_input_from_db(6,yimg);
+    boxm2_batch.set_input_int(7,sradius);
+    return boxm2_batch.run_process();
+
+def update_hmap_factor(scene, device, cache,add):
+    #If no device is passed in, do cpu update
+    print("boxm2_batch GPU update");
+    boxm2_batch.init_process("boxm2OclUpdateHeightMapFactorProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_bool(3,add);
+    return boxm2_batch.run_process();
+
+def boxm2_init_uniform_prob(scene, device, cache):
+    #If no device is passed in, do cpu update
+    print("boxm2_batch GPU update");
+    boxm2_batch.init_process("boxm2OclInitProbUniformProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    return boxm2_batch.run_process();
+
+def boxm2_remove_low_nobs(scene, device, cache, nobs_thresh_multiplier):
+    print("boxm2_batch GPU process");
+    boxm2_batch.init_process("boxm2OclRemoveLowNobsProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_float(3,nobs_thresh_multiplier);
+    return boxm2_batch.run_process();

@@ -7,7 +7,6 @@ include_directories( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 include_directories( ${VXL_GEL_INCLUDE_DIR})
 include_directories( ${VXL_MUL_INCLUDE_DIR})
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 
 set(breg3d_pro_sources
     breg3d_ekf_camera_optimize_process.h  breg3d_ekf_camera_optimize_process.cxx
