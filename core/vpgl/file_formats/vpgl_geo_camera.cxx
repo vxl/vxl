@@ -1,9 +1,10 @@
 // This is core/vpgl/file_formats/vpgl_geo_camera.cxx
+#include <vector>
 #include "vpgl_geo_camera.h"
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_vector.h>
@@ -42,17 +43,17 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
   // check if the image is tiff
   vil_tiff_image* geotiff_tiff = dynamic_cast<vil_tiff_image*> (geotiff_img.ptr());
   if (!geotiff_tiff) {
-      vcl_cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image.\n";
+      std::cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image.\n";
       return false;
   }
   if (!geotiff_tiff->get_geotiff_header()) {
-    vcl_cerr << "no geotiff header!\n";
+    std::cerr << "no geotiff header!\n";
     return false;
   }
 
   // check if the tiff file is geotiff
   if (!geotiff_tiff->is_GEOTIFF()) {
-    vcl_cerr << "vpgl_geo_camera::init_geo_camera -- The image should be a GEOTIFF!\n";
+    std::cerr << "vpgl_geo_camera::init_geo_camera -- The image should be a GEOTIFF!\n";
     return false;
   }
 
@@ -60,7 +61,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
   int utm_zone;
   vil_geotiff_header::GTIF_HEMISPH h;
 
-  vcl_vector<vcl_vector<double> > tiepoints;
+  std::vector<std::vector<double> > tiepoints;
   gtif->gtif_tiepoints(tiepoints);
 
   // create a transformation matrix
@@ -70,9 +71,9 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
   double sx1, sy1, sz1;
   bool scale_tag=false;
   if (gtif->gtif_trans_matrix(trans_matrix_values)) {
-    vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
+    std::cout << "Transfer matrix is given, using that...." << std::endl;
     trans_matrix.copy_in(trans_matrix_values);
-    vcl_cout << "Warning LIDAR sample spacing different than 1 meter will not be handled correctly!\n";
+    std::cout << "Warning LIDAR sample spacing different than 1 meter will not be handled correctly!\n";
   }
   else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
     scale_tag = true;
@@ -80,7 +81,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
                                        trans_matrix, scale_tag);
   }
   else {
-    vcl_cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
+    std::cout << "vpgl_geo_camera::init_geo_camera comp_trans_matrix -- Transform matrix cannot be formed..\n";
     return false;
   }
 
@@ -99,26 +100,26 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
     return true;
   }
   else {
-    vcl_cout << "vpgl_geo_camera::init_geo_camera()-- if UTM only PCS_WGS84_UTM and PCS_NAD83_UTM, if geographic (GCS_WGS_84) only linear units in meters, angular units in degrees are supported, please define otherwise!" << vcl_endl;
+    std::cout << "vpgl_geo_camera::init_geo_camera()-- if UTM only PCS_WGS84_UTM and PCS_NAD83_UTM, if geographic (GCS_WGS_84) only linear units in meters, angular units in degrees are supported, please define otherwise!" << std::endl;
     return false;
   }
 }
 
 //: define a geo_camera by the image file name (filename should have format such as xxx_N35W73_S0.6x0.6_xxx.tif)
-bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
+bool vpgl_geo_camera::init_geo_camera(std::string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
 {
   // determine the translation matrix from the image file name and construct a geo camera
-  vcl_string name = vul_file::strip_directory(img_name);
+  std::string name = vul_file::strip_directory(img_name);
   name = name.substr(name.find_first_of('_')+1, name.size());
-  
-  vcl_string n_coords = name.substr(0, name.find_first_of('_'));
-  vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
-  vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
+
+  std::string n_coords = name.substr(0, name.find_first_of('_'));
+  std::string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
+  std::cout << "will determine transformation matrix from the file name: " << name << std::endl;
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
-  vcl_string hemisphere, direction;
+  std::string hemisphere, direction;
   float lon, lat, scale_lat, scale_lon;
-  vcl_size_t n = n_coords.find("N");
+  std::size_t n = n_coords.find("N");
   if (n < n_coords.size())
     hemisphere = "N";
   else
@@ -128,33 +129,33 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
     direction = "E";
   else
     direction = "W";
-  
-  vcl_string n_str = n_coords.substr(n_coords.find_first_of(hemisphere)+1, n_coords.find_first_of(direction)-n_coords.find_first_of(hemisphere)-1);
-  vcl_stringstream str(n_str);  str >> lat;
-  
+
+  std::string n_str = n_coords.substr(n_coords.find_first_of(hemisphere)+1, n_coords.find_first_of(direction)-n_coords.find_first_of(hemisphere)-1);
+  std::stringstream str(n_str);  str >> lat;
+
   n_str = n_coords.substr(n_coords.find_first_of(direction)+1, n_coords.size());
-  vcl_stringstream str2(n_str);  str2 >> lon;
+  std::stringstream str2(n_str);  str2 >> lon;
 
   n_str = n_scale.substr(n_scale.find_first_of('S')+1, n_scale.find_first_of('x')-n_scale.find_first_of('S')-1);
-  vcl_stringstream str3(n_str);  str3 >> scale_lat;
+  std::stringstream str3(n_str);  str3 >> scale_lat;
 
   n_str = n_scale.substr(n_scale.find_first_of('x')+1, n_scale.size());
-  vcl_stringstream str4(n_str);  str4 >> scale_lon;
+  std::stringstream str4(n_str);  str4 >> scale_lon;
 
-  vcl_cout << " hemisphere: " << hemisphere << " direction: " << direction
+  std::cout << " hemisphere: " << hemisphere << " direction: " << direction
            << "\n lat: " << lat << " lon: " << lon
-           << "\n scale_lat: " << scale_lat << " scale_lon: " << scale_lon << vcl_endl;
+           << "\n scale_lat: " << scale_lat << " scale_lon: " << scale_lon << std::endl;
 
   // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
   if (hemisphere == "N")
-    vcl_cout << " upper left corner in the image is: " << hemisphere << lat+scale_lat << direction << lon << vcl_endl;
+    std::cout << " upper left corner in the image is: " << hemisphere << lat+scale_lat << direction << lon << std::endl;
   else
-    vcl_cout << " upper left corner in the image is: " << hemisphere << lat-scale_lat << direction << lon << vcl_endl;
+    std::cout << " upper left corner in the image is: " << hemisphere << lat-scale_lat << direction << lon << std::endl;
   if (direction == "W")
-    vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon-scale_lon << vcl_endl;
+    std::cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon-scale_lon << std::endl;
   else
-    vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale_lon << vcl_endl;
-  vnl_matrix<double> trans_matrix(4,4,0,0);
+    std::cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale_lon << std::endl;
+  vnl_matrix<double> trans_matrix(4,4,0,VXL_NULLPTR);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
   if (direction == "E") {
     trans_matrix[0][3] = lon - 0.5/(ni-1.0);
@@ -177,18 +178,18 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
   return true;
 
 #if 0
-    vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
+    std::string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
   float lon, lat, scale;
-  vcl_stringstream str(n); str >> lat;
+  std::stringstream str(n); str >> lat;
   n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
-  vcl_stringstream str2(n); str2 >> lon;
+  std::stringstream str2(n); str2 >> lon;
   n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
-  vcl_stringstream str3(n); str3 >> scale;
-  vcl_cout << " lat: " << lat << " lon: " << lon << " WARNING: using same scale for both ni and nj: scale:" << scale << vcl_endl;
+  std::stringstream str3(n); str3 >> scale;
+  std::cout << " lat: " << lat << " lon: " << lon << " WARNING: using same scale for both ni and nj: scale:" << scale << std::endl;
 
   // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
-  vcl_cout << "upper left corner in the image is: " << lat+scale << " N " << lon << " W\n"
-           << "lower right corner in the image is: " << lat << " N " << lon-scale << " W" << vcl_endl;
+  std::cout << "upper left corner in the image is: " << lat+scale << " N " << lon << " W\n"
+           << "lower right corner in the image is: " << lat << " N " << lon-scale << " W" << std::endl;
   vnl_matrix<double> trans_matrix(4,4,0.0);
   trans_matrix[0][0] = -scale/ni; trans_matrix[1][1] = -scale/nj;
   trans_matrix[0][3] = lon; trans_matrix[1][3] = lat+scale;
@@ -199,20 +200,20 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
 }
 
 // loads a geo_camera from the file and uses global WGS84 coordinates, so no need to convert negative values to positives in the global_to_img method as in the previous method
-bool vpgl_geo_camera::init_geo_camera_from_filename(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
+bool vpgl_geo_camera::init_geo_camera_from_filename(std::string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
 {
   // determine the translation matrix from the image file name and construct a geo camera
-  vcl_string name = vul_file::strip_directory(img_name);
+  std::string name = vul_file::strip_directory(img_name);
   name = name.substr(name.find_first_of('_')+1, name.size());
-  
-  vcl_string n_coords = name.substr(0, name.find_first_of('_'));
-  vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
-  vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
+
+  std::string n_coords = name.substr(0, name.find_first_of('_'));
+  std::string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
+  std::cout << "will determine transformation matrix from the file name: " << name << std::endl;
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
-  vcl_string hemisphere, direction;
+  std::string hemisphere, direction;
   float lon, lat, scale;
-  vcl_size_t n = n_coords.find("N");
+  std::size_t n = n_coords.find("N");
   if (n < n_coords.size())
     hemisphere = "N";
   else
@@ -222,31 +223,31 @@ bool vpgl_geo_camera::init_geo_camera_from_filename(vcl_string img_name, unsigne
     direction = "E";
   else
     direction = "W";
-  
-  vcl_string n_str = n_coords.substr(n_coords.find_first_of(hemisphere)+1, n_coords.find_first_of(direction)-n_coords.find_first_of(hemisphere)-1);
-  vcl_stringstream str(n_str);  str >> lat;
-  
+
+  std::string n_str = n_coords.substr(n_coords.find_first_of(hemisphere)+1, n_coords.find_first_of(direction)-n_coords.find_first_of(hemisphere)-1);
+  std::stringstream str(n_str);  str >> lat;
+
   n_str = n_coords.substr(n_coords.find_first_of(direction)+1, n_coords.size());
-  vcl_stringstream str2(n_str);  str2 >> lon;
+  std::stringstream str2(n_str);  str2 >> lon;
 
   n_str = n_scale.substr(n_scale.find_first_of('S')+1, n_scale.find_first_of('x')-n_scale.find_first_of('S')-1);
-  vcl_stringstream str3(n_str);  str3 >> scale;
+  std::stringstream str3(n_str);  str3 >> scale;
 
-  vcl_cout << " hemisphere: " << hemisphere << " direction: " << direction
+  std::cout << " hemisphere: " << hemisphere << " direction: " << direction
            << "\n lat: " << lat << " lon: " << lon
-           << "\n WARNING: using same scale for both ni and nj: " << scale << vcl_endl;
+           << "\n WARNING: using same scale for both ni and nj: " << scale << std::endl;
 
   // simply convert to global coords (i.e. lats for S are negative)
-  if (hemisphere == "S") 
+  if (hemisphere == "S")
     lat = -lat;
   if (direction == "W")
     lon = -lon;
 
   // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
-  vcl_cout << " upper left corner in the image is: " << hemisphere << lat+scale << direction << lon << vcl_endl;
-  vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale << vcl_endl;
-  
-  vnl_matrix<double> trans_matrix(4,4,0,0);
+  std::cout << " upper left corner in the image is: " << hemisphere << lat+scale << direction << lon << std::endl;
+  std::cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale << std::endl;
+
+  vnl_matrix<double> trans_matrix(4,4,0,VXL_NULLPTR);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
   trans_matrix[0][3] = lon - 0.5/(ni-1.0);
   trans_matrix[0][0] = scale/(ni-1.0);
@@ -256,19 +257,19 @@ bool vpgl_geo_camera::init_geo_camera_from_filename(vcl_string img_name, unsigne
   camera->set_scale_format(true);
   return true;
 }
-  
+
 
 //: init using a tfw file, reads the transformation matrix from the tfw
-bool vpgl_geo_camera::init_geo_camera(vcl_string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera)
+bool vpgl_geo_camera::init_geo_camera(std::string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera)
 {
-  
-  vcl_ifstream ifs(tfw_name.c_str());
-  
+
+  std::ifstream ifs(tfw_name.c_str());
+
   if (!ifs.is_open()) {
-    vcl_cerr << "in vpgl_geo_camera::init_geo_camera() -- cannot open: " << tfw_name << '\n';
+    std::cerr << "in vpgl_geo_camera::init_geo_camera() -- cannot open: " << tfw_name << '\n';
     return false;
   }
-  
+
   vnl_matrix<double> trans_matrix(4,4,0.0);
   ifs >> trans_matrix[0][0];
   ifs >> trans_matrix[0][1];
@@ -282,7 +283,7 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string tfw_name, vpgl_lvcs_sptr lvcs, 
   if (utm_zone != 0)
     camera->set_utm(utm_zone, northing);
   camera->set_scale_format(true);
-  
+
   ifs.close();
   return true;
 }
@@ -330,7 +331,7 @@ void vpgl_geo_camera::backproject(const double u, const double v,
   }
   vec[2] = 0;
   vec[3] = 1;
-  //vcl_cout << '\n' << vec << vcl_endl;
+  //std::cout << '\n' << vec << std::endl;
 
   double lat, lon, elev;
   if (is_utm) {
@@ -362,7 +363,7 @@ void vpgl_geo_camera::translate(double tx, double ty, double z)
     trans_matrix_[1][3] += ty*trans_matrix_[1][1]; // multiplying by -1.0 to get sy
   }
   else {
-    vcl_cout << "Warning! Translation offset will only be computed correctly for lidar pixel spacing = 1 meter\n";
+    std::cout << "Warning! Translation offset will only be computed correctly for lidar pixel spacing = 1 meter\n";
     trans_matrix_[0][3] += tx;
     trans_matrix_[1][3] -= ty;
   }
@@ -405,7 +406,7 @@ void vpgl_geo_camera::global_to_img(const double lon, const double lat, const do
     vpgl_utm utm;
     int utm_zone;
     utm.transform(lat, lon, x1, y1, utm_zone);
-    //vcl_cout << "utm returned x1: " << x1 << " y1: " << y1 << vcl_endl;
+    //std::cout << "utm returned x1: " << x1 << " y1: " << y1 << std::endl;
     //z1 = 0;
   }
   vec[0] = x1;
@@ -501,9 +502,9 @@ void vpgl_geo_camera::local_to_utm(const double x, const double y, const double 
 }
 
 // save the camera matrix into a tfw file
-void vpgl_geo_camera::save_as_tfw(vcl_string const& tfw_filename)
+void vpgl_geo_camera::save_as_tfw(std::string const& tfw_filename)
 {
-  vcl_ofstream ofs(tfw_filename.c_str());
+  std::ofstream ofs(tfw_filename.c_str());
   ofs.precision(12);
   ofs << trans_matrix_[0][0] << '\n';
   ofs << trans_matrix_[0][1] << '\n';
@@ -517,7 +518,7 @@ void vpgl_geo_camera::save_as_tfw(vcl_string const& tfw_filename)
 bool vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2)
 {
   if (!is_utm) {
-    vcl_cerr << "In vpgl_geo_camera::img_four_corners_in_utm() -- UTM hasn't been set!\n";
+    std::cerr << "In vpgl_geo_camera::img_four_corners_in_utm() -- UTM hasn't been set!\n";
     return false;
   }
   double lon,lat;
@@ -537,7 +538,7 @@ bool vpgl_geo_camera::operator==(vpgl_geo_camera const& rhs) const
 }
 
 //: Write vpgl_perspective_camera to stream
-vcl_ostream&  operator<<(vcl_ostream& s,
+std::ostream&  operator<<(std::ostream& s,
                          vpgl_geo_camera const& p)
 {
   s << p.trans_matrix_ << '\n'<< *(p.lvcs_) << '\n';
@@ -549,7 +550,7 @@ vcl_ostream&  operator<<(vcl_ostream& s,
 }
 
 //: Read vpgl_perspective_camera from stream
-vcl_istream&  operator>>(vcl_istream& s,
+std::istream&  operator>>(std::istream& s,
                          vpgl_geo_camera& p)
 {
   vnl_matrix_fixed<double,4,4> tr_matrix;
@@ -561,7 +562,7 @@ vcl_istream&  operator>>(vcl_istream& s,
 }
 
 bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
-                                        vcl_vector<vcl_vector<double> > tiepoints,
+                                        std::vector<std::vector<double> > tiepoints,
                                         vnl_matrix<double>& trans_matrix,
                                         bool scale_tag)
 {
@@ -605,7 +606,7 @@ bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
   m[1][3] = Ty;
   m[2][3] = Tz;
   trans_matrix = m;
-  vcl_cout << trans_matrix << vcl_endl;
+  std::cout << trans_matrix << std::endl;
   return true;
 }
 
@@ -658,9 +659,9 @@ void vpgl_geo_camera::b_read(vsl_b_istream& is)
     break; }
 
    default:
-    vcl_cerr << "I/O ERROR: vpgl_geo_camera::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vpgl_geo_camera::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

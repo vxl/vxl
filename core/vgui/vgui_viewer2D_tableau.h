@@ -41,7 +41,7 @@ class vgui_viewer2D_tableau : public vgui_wrapper_tableau, public vgui_drag_mixi
   virtual bool handle(const vgui_event& event);
 
   //: Returns the type of this tableau ('vgui_viewer2D_tableau').
-  virtual vcl_string type_name() const;
+  virtual std::string type_name() const;
 
   //: Set the correct projection matrix for GL (take account of zoom, drag etc).
   void setup_gl_matrices();

@@ -1,4 +1,6 @@
 // This is oul/ouml/polygon_mesh.cxx
+#include <iostream>
+#include <cstdio>
 #include "polygon_mesh.h"
 //:
 // \file
@@ -9,8 +11,7 @@
 // file.
 //----------------------------------------------------------------------
 
-#include <vcl_cstdio.h> // for fscanf()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_cross.h>
 
@@ -106,7 +107,7 @@ PolygonMesh::DPoint PolygonMesh::get_vertex(int index)
   assert(index >= 0);
   if ((unsigned int)index>=vertex_list.size())
   {
-    vcl_cerr << "Warning: vertex doesn't exist\n";
+    std::cerr << "Warning: vertex doesn't exist\n";
     return DPoint();
   }
   return vertex_list[index];
@@ -129,7 +130,7 @@ PolygonMesh::Polygon PolygonMesh::get_face(int index)
   Polygon poly;
   if ((unsigned int)index>=face_list.size())
   {
-    vcl_cerr << "Warning: face doesn't exist\n";
+    std::cerr << "Warning: face doesn't exist\n";
     return poly;
   }
   Face& face = face_list[index];
@@ -153,44 +154,44 @@ PolygonMesh::Polygon PolygonMesh::get_face(int index)
 bool PolygonMesh::read_file(char *filename)
 {
   char start[100];
-  FILE *fp=vcl_fopen(filename, "r");
+  FILE *fp=std::fopen(filename, "r");
   if (!fp) return false;
 
-  while (vcl_fscanf(fp, "%s", start)!=EOF)
+  while (std::fscanf(fp, "%s", start)!=EOF)
   {
-    if (!vcl_strcmp(start, "Vertex")) // read in a vertex
+    if (!std::strcmp(start, "Vertex")) // read in a vertex
     {
       int index;
       double x, y, z;
-      int ret = vcl_fscanf(fp, "%d %lf %lf %lf", &index, &x, &y, &z); if (ret<4) return false;
+      int ret = std::fscanf(fp, "%d %lf %lf %lf", &index, &x, &y, &z); if (ret<4) return false;
       // add the vertex
       DPoint pt(x,y,z);
-      //vcl_printf("Vertex: %d %f %f %f\n", index, x, y, z);
+      //std::printf("Vertex: %d %f %f %f\n", index, x, y, z);
       set_vertex(index, pt);
     }
-    else if (!vcl_strcmp(start, "Face")) // read in a face
+    else if (!std::strcmp(start, "Face")) // read in a face
     {
       int index;
       int vertex;
       Face fc;
-      int ret = vcl_fscanf(fp, "%d", &index); if (ret<1) return false;
-      //vcl_printf("Face: %d ", index);
+      int ret = std::fscanf(fp, "%d", &index); if (ret<1) return false;
+      //std::printf("Face: %d ", index);
       // read in all the vertex indices
-      while ((vcl_fscanf(fp, "%d", &vertex)))
+      while ((std::fscanf(fp, "%d", &vertex)))
       {
-        //vcl_printf("%d ", vertex);
+        //std::printf("%d ", vertex);
         fc.push_back(vertex);
       }
-      //vcl_printf("\n");
+      //std::printf("\n");
       set_face(index, fc);
     }
-    else if (!vcl_strcmp(start, "End")) // end of mesh
+    else if (!std::strcmp(start, "End")) // end of mesh
       break;
     else // assume comment, read to eoln
     {
       char c;
       do {
-        int ret = vcl_fscanf(fp, "%c", &c); if (ret<1) return false;
+        int ret = std::fscanf(fp, "%c", &c); if (ret<1) return false;
       } while (c!='\n');
     }
   }

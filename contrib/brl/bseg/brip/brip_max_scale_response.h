@@ -18,8 +18,10 @@
 // 1, 1.4, 2, 2.8, 4, 5.6, 8, i.e.,
 // 8/4 = 2, 2^(0.5) = 1.4, 4*1.4 = 5.6
 //
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class brip_max_scale_response
@@ -30,33 +32,33 @@ class brip_max_scale_response
                            double scale_ratio,
                            double max_scale);
   //: a pre-computed pyramid
-  brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid);
+  brip_max_scale_response( std::vector<vil_image_view<T> > const& pyramid);
 
   //: The vector of image scales
-  vcl_vector<float> scales() const {return pyramid_scales_;}
+  std::vector<float> scales() const {return pyramid_scales_;}
 
   //: A pyramid from a base image with scales according to this->scales()
-  vcl_vector<vil_image_view<T> > image_pyramid(vil_image_view<T> const& base);
+  std::vector<vil_image_view<T> > image_pyramid(vil_image_view<T> const& base);
 
   //: a single image with the natural scale at each pixel
   vil_image_view<float> scale_base();
 
   //: a pyramid of natural scales at each pixel
-  vcl_vector<vil_image_view<float> > scale_pyramid();
+  std::vector<vil_image_view<float> > scale_pyramid();
 
   //: a mask that is true if the natural scale of pixel at a pyramid level is the same as the scale of the pyramid level
-  vcl_vector<vil_image_view<vxl_byte> > mask_pyramid();
+  std::vector<vil_image_view<vxl_byte> > mask_pyramid();
 
   //: for debugging purposes -- not normally used
-  vcl_vector<vil_image_view<float> > trace_pyramid() const {return trace_;}
+  std::vector<vil_image_view<float> > trace_pyramid() const {return trace_;}
  protected:
   //internal functions
   brip_max_scale_response(): trace_valid_(false){}
   void compute_trace_pyramid();
-  vcl_vector<float> pyramid_scales_;
-  vcl_vector<vil_image_view<float> > grey_pyramid_;
+  std::vector<float> pyramid_scales_;
+  std::vector<vil_image_view<float> > grey_pyramid_;
   bool trace_valid_;
-  vcl_vector<vil_image_view<float> > trace_;
+  std::vector<vil_image_view<float> > trace_;
 };
 
 #endif // brip_scale_extrema_h_

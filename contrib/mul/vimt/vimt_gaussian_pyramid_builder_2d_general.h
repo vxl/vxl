@@ -7,10 +7,12 @@
 // \author Ian Scott
 //=======================================================================
 
+#include <iostream>
+#include <iosfwd>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_gauss_reduce.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
 
@@ -53,11 +55,11 @@ class vimt_gaussian_pyramid_builder_2d_general : public vimt_gaussian_pyramid_bu
     //: Version number for I/O
     short version_no() const ;
     //: Name of the class
-    virtual vcl_string is_a() const ;
+    virtual std::string is_a() const ;
     //: Does the name of the class match the argument?
-    virtual bool is_class(vcl_string const& s) const;
+    virtual bool is_class(std::string const& s) const;
     //: Print class to os
-    void print_summary(vcl_ostream&) const;
+    void print_summary(std::ostream&) const;
     //: Save class to binary file stream
     void b_write(vsl_b_ostream& bfs) const;
     //: Load class from binary file stream

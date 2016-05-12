@@ -6,8 +6,10 @@
 #ifndef m2d3_ortho_rigid_builder_h_
 #define m2d3_ortho_rigid_builder_h_
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_matrix.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -44,7 +46,7 @@ class m23d_ortho_rigid_builder
   //: The CoG of each shape supplied to reconstruct()
   //  This has been subtracted from each example to centre on the origin
   //  Centred data stored in P2Dc_
-  vcl_vector<vgl_point_2d<double> > cog_;
+  std::vector<vgl_point_2d<double> > cog_;
 
   //: Centred version of the 2D views supplied to reconstruct()
   //  Each 2D shape has been translated so that its CoG is at the origin
@@ -73,7 +75,7 @@ class m23d_ortho_rigid_builder
                                    const vnl_matrix<double>& P);
 
   //: Return 3d pts given 3*np matrix
-  void mat_to_3d_pts( vcl_vector< vgl_point_3d<double> >& pts,
+  void mat_to_3d_pts( std::vector< vgl_point_3d<double> >& pts,
                       const vnl_matrix<double>& M) const;
 
  public:
@@ -86,7 +88,7 @@ class m23d_ortho_rigid_builder
 
   //: Reconstruct structure from set of 2d pts
   // Formulates measurement matrix P2D then calls reconstruct function above
-  void reconstruct(const vcl_vector< vcl_vector< vgl_point_2d<double> > >& pt_vec_list );
+  void reconstruct(const std::vector< std::vector< vgl_point_2d<double> > >& pt_vec_list );
 
   //: Refine estimates of projection and structure
   void refine();
@@ -106,13 +108,13 @@ class m23d_ortho_rigid_builder
   const vnl_matrix<double>& centred_views() const { return P2Dc_; }
 
   //: Return 3d pts given 3*np matrix
-  void get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const;
+  void get_shape_3d_pts( std::vector< vgl_point_3d<double> >& pts ) const;
 #if 0
   { mat_to_3d_pts( pts, P3D_); }
 #endif
 
   //: Get back 3d pts rotated and shifted for each frame
-  void recon_shapes(vcl_vector< vcl_vector< vgl_point_3d<double> > >& pt_vec_list ) const;
+  void recon_shapes(std::vector< std::vector< vgl_point_3d<double> > >& pt_vec_list ) const;
 
   //: Flip z coords
   // may need to do this to fix z coord ambiguity

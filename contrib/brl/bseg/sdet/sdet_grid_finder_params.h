@@ -10,9 +10,11 @@
 //    Brown University
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class sdet_grid_finder_params : public gevd_param_mixin
 {
@@ -34,9 +36,9 @@ class sdet_grid_finder_params : public gevd_param_mixin
  ~sdet_grid_finder_params(){}
 
   bool SanityCheck();
-  void get_debug_choices(vcl_vector<vcl_string>& choices);
+  void get_debug_choices(std::vector<std::string>& choices);
   friend
-    vcl_ostream& operator<<(vcl_ostream&, const sdet_grid_finder_params& gfp);
+    std::ostream& operator<<(std::ostream&, const sdet_grid_finder_params& gfp);
  protected:
   void InitParams(const int n_lines_x, const int n_lines_y,
                   const double spacing, const int thresh,

@@ -23,7 +23,9 @@
 //   None
 // \endverbatim
 //
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
@@ -206,13 +208,13 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
                vgl_vector_3d<double>& trans, unsigned level);
 
   //: the average intensity difference for a given rotation, translation and level over a set of parameter values
-  vcl_vector<double> error(vgl_rotation_3d<double>& rot,
+  std::vector<double> error(vgl_rotation_3d<double>& rot,
                            vgl_vector_3d<double>& trans, unsigned level,
                            unsigned param_index, double pmin,
                            double pmax, double pinc);
 
   //: source images mapped to destination camera for a set of parameter values
-  vcl_vector<vil_image_view<float> > views(vgl_rotation_3d<double>& rot,
+  std::vector<vil_image_view<float> > views(vgl_rotation_3d<double>& rot,
                                            vgl_vector_3d<double>& trans,
                                            unsigned level,
                                            unsigned param_index, double pmin,
@@ -249,7 +251,7 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   icam_depth_transform depth_trans(unsigned level) {return dt_pyramid_.depth_trans(level);}
 
   //: display box search as a set of vrml spheres
-  bool box_search_vrml(vcl_string const& vrml_file,
+  bool box_search_vrml(std::string const& vrml_file,
                        vgl_vector_3d<double> const& trans =
                        vgl_vector_3d<double>());
   vnl_matrix_fixed<double, 3, 3> to_calibration_matrix(unsigned level);
@@ -286,7 +288,7 @@ bool  pyramid_camera_search(vgl_vector_3d<double> const&
   vil_pyramid_image_view<float> dest_pyramid_;
   icam_depth_trans_pyramid dt_pyramid_;
   double end_error_;
-  vcl_string base_path_;
+  std::string base_path_;
   bool verbose_;
   vgl_vector_3d<double> actual_trans_;
   vgl_rotation_3d<double> actual_rot_;

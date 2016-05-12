@@ -52,7 +52,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ++ms;
   if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
-    return 0; // no data!
+    return VXL_NULLPTR; // no data!
   }
   const unsigned int m = matches[ms]->from_begin().from_feature()->location().size();
   assert ( m==2 ); // only 2D reduced_quad2d estimation
@@ -102,13 +102,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // if the weight is too small or zero,
   // that means there is no good match
   if ( sum_wgt < 1e-13 ) {
-    return 0;
+    return VXL_NULLPTR;
   }
 
   from_centre /= sum_wgt;
   to_centre /= sum_wgt;
 
-  if ( sum_wgt < 1e-16 ) return 0; //sum_wgt approaching 0
+  if ( sum_wgt < 1e-16 ) return VXL_NULLPTR; //sum_wgt approaching 0
 
   // Since XtWX is symmetric, we only compute the upper triangle, and
   // copy it later into the lower triangle.
@@ -153,11 +153,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // Find the scales and scale the matrices appropriate to normalize
   // them and increase the numerical stability.
-  double factor0 = vnl_math::max(XtWX(4,4), XtWX(5,5));
-  double factor1 = vnl_math::max(XtWX(2,2), XtWX(3,3));
-  double factor2 = vnl_math::max(XtWX(1,1), XtWX(0,0));
-  double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1);   // neither should be 0
-  double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
+  double factor0 = std::max(XtWX(4,4), XtWX(5,5));
+  double factor1 = std::max(XtWX(2,2), XtWX(3,3));
+  double factor2 = std::max(XtWX(1,1), XtWX(0,0));
+  double scale0 = std::sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1);   // neither should be 0
+  double scale1 = std::sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
 
   vnl_vector_fixed<double, 6> s;
   s(0) = s(1) = 1; s(2) = s(3) = scale1;
@@ -181,12 +181,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   if ( (unsigned)svd.rank() < 6) {
     DebugMacro(1, "rank ("<<svd.rank()<<") < "<<6<<"; no solution." );
     DebugMacro_abv(1, "(used " << count << " correspondences)\n" );
-    return 0; // no solution
+    return VXL_NULLPTR; // no solution
   }
   double cond_num = svd.well_condition();
   if ( condition_num_thrd_ > cond_num ) {
     DebugMacro(1, "Unstable xform with condition number = "<<cond_num<<'\n' );
-    return 0; //no solution
+    return VXL_NULLPTR; //no solution
   }
 
   // Compute the solution into XtWy
@@ -236,7 +236,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_reduced_quad2d::
 transformation_type() const
 {

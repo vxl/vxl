@@ -19,27 +19,29 @@
 //   10 Apr 2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <fstream>
+#include <vector>
+#include <cstdio>
+#include <vcl_compiler.h>
 #undef sprintf // works around a bug in libintl.h
-#include <vcl_cstdio.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 
 template <class T>
-class mystack : public vcl_vector<T>
+class mystack : public std::vector<T>
 {
  public:
-  void push(const T& t) { vcl_vector<T>::push_back(t); }
+  void push(const T& t) { std::vector<T>::push_back(t); }
 
   T pop() {
     int n = this->size();
     if (n == 0) {
-      vcl_cerr <<  "ZOKS: Stack underflow\n";
-      vcl_exit(1);
+      std::cerr <<  "ZOKS: Stack underflow\n";
+      std::exit(1);
     }
     T tmp = (*this)[n-1];
     this->pop_back();
@@ -48,16 +50,16 @@ class mystack : public vcl_vector<T>
 
   void print() {
     for (unsigned i = 0; i < this->size(); ++i)
-      vcl_cout << (*this)[i] << vcl_endl;
+      std::cout << (*this)[i] << std::endl;
   }
 };
 
 #define POP2(expr) Matrix b = stack.pop(); Matrix a = stack.pop(); stack.push(expr);
 
-void cantshift(const vcl_string& arg)
+void cantshift(const std::string& arg)
 {
-  vcl_cerr << "matcalc: Missing argument after \"" << arg << "\".\n";
-  vcl_exit (-1);
+  std::cerr << "matcalc: Missing argument after \"" << arg << "\".\n";
+  std::exit (-1);
 }
 
 typedef vnl_matrix<double> Matrix;
@@ -71,16 +73,16 @@ void print(mystack<Matrix> const &stack, char const *fmt)
     Matrix const& M = stack[k];
     for (unsigned int i=0; i<M.rows(); ++i) {
       for (unsigned int j=0; j<M.cols(); ++j) {
-        vcl_sprintf(buf, fmt, M[i][j]);
-        vcl_cout << ' ' << buf;
+        std::sprintf(buf, fmt, M[i][j]);
+        std::cout << ' ' << buf;
       }
-      vcl_cout << vcl_endl;
+      std::cout << std::endl;
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 }
 
-void print(mystack<Matrix> const &stack, vcl_string const& fmt)
+void print(mystack<Matrix> const &stack, std::string const& fmt)
 {
   print(stack, fmt.c_str());
 }
@@ -91,14 +93,14 @@ int main(int argc, char ** argv)
   int cout_precision = 0;
 
   //Matrix::set_print_format("%20.16e");
-  vcl_string print_format = "%20.16e";
+  std::string print_format = "%20.16e";
 
   for (int i = 1; i < argc; ++i) {
-    vcl_string arg = argv[i];
+    std::string arg = argv[i];
 #define SHIFT { if (++i >= argc) cantshift(arg); else arg = argv[i]; }
 
     if (arg[0] >= '0' && arg[0] <= '9') {
-      stack.push(Matrix(1,1,vcl_atof(arg.c_str())));
+      stack.push(Matrix(1,1,std::atof(arg.c_str())));
     }
     else if (arg == "+") {
       POP2(a+b);
@@ -161,9 +163,9 @@ int main(int argc, char ** argv)
     }
     else { // Load from file
       Matrix m;
-      vcl_ifstream f(arg.c_str());
+      std::ifstream f(arg.c_str());
       if (!m.read_ascii(f)) {
-        vcl_cerr <<  "Can't read file [" << arg << "]\n";
+        std::cerr <<  "Can't read file [" << arg << "]\n";
         return -1;
       }
       stack.push(m);

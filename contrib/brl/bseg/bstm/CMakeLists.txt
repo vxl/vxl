@@ -1,37 +1,37 @@
 # contrib/brl/bseg/bstm/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
-SET(bstm_sources bstm_block_metadata.h bstm_block_metadata.cxx
-	         bstm_time_tree.h bstm_time_tree.cxx
-		 bstm_scene.h bstm_scene.cxx
-		 bstm_scene_parser.h bstm_scene_parser.cxx
-		 bstm_data_base.h bstm_data_base.cxx
-		 bstm_block.h bstm_block.cxx
-		 bstm_data_traits.h
-		 bstm_time_block.h bstm_time_block.cxx
-		 bstm_util.cxx bstm_util.h)
+set(bstm_sources bstm_block_metadata.h bstm_block_metadata.cxx
+                 bstm_time_tree.h bstm_time_tree.cxx
+                 bstm_scene.h bstm_scene.cxx
+                 bstm_scene_parser.h bstm_scene_parser.cxx
+                 bstm_data_base.h bstm_data_base.cxx
+                 bstm_block.h bstm_block.cxx
+                 bstm_data_traits.h
+                 bstm_time_block.h bstm_time_block.cxx
+                 bstm_util.cxx bstm_util.h)
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
-ENDIF(EXPAT_FOUND)
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  include_directories( ${EXPAT_INCLUDE_DIR} )
+  include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+endif()
 
 
-AUX_SOURCE_DIRECTORY(Templates bstm_sources)
+aux_source_directory(Templates bstm_sources)
 
-ADD_LIBRARY(bstm  ${bstm_sources})
-TARGET_LINK_LIBRARIES(bstm boxm2 bstm_basic vgl vnl_algo vnl)
+vxl_add_library(LIBRARY_NAME bstm LIBRARY_SOURCES  ${bstm_sources})
+target_link_libraries(bstm boxm2 bstm_basic ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl)
 
-IF(EXPAT_FOUND)
-  TARGET_LINK_LIBRARIES(bstm expatpp)
-ENDIF(EXPAT_FOUND)
+if(EXPAT_FOUND)
+  target_link_libraries(bstm expatpp)
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 #basic
 subdirs(basic)

@@ -22,8 +22,8 @@ static void test_shadow_appearance()
                       0.701665,0.64778,0.65111,0.72611,0.82889,0.735,
                       0.077222,0.0816665,0.051111,0.71722,0.61722,
                       0.065,0.095,0.0866665,0.58611,0.665555};
-  vcl_vector<obs_type> obs;
-  vcl_vector<float> pre, vis;
+  std::vector<obs_type> obs;
+  std::vector<float> pre, vis;
   for (unsigned i = 0; i<32; ++i) {
     obs.push_back(static_cast<obs_type>(obs_arr[i]));
     pre.push_back(0.0f);
@@ -42,8 +42,8 @@ static void test_shadow_appearance()
                                                        shadow_mean,
                                                        shadow_sigma,
                                                        verbose);
-  double er = vcl_fabs(0.70034355-model.color())+
-    vcl_fabs(model.sigma()- 1.0/11.954589);
+  double er = std::fabs(0.70034355-model.color())+
+    std::fabs(model.sigma()- 1.0/11.954589);
   TEST_NEAR("test shadow appearance EM", er, 0.0, 1e-6);
   // normalized observations for dark road surface
 double dark_obs_arr[] ={0.0477778,0.0666665,0.0072222,0.175,0.12,
@@ -53,7 +53,7 @@ double dark_obs_arr[] ={0.0477778,0.0666665,0.0072222,0.175,0.12,
                         0.0883335,0.03944445,0.122222,0.125,0.25,
                         0.005,0.0122222,0.1,0.1166665,0.03166665,
                         0.015,0.01,0.1016665,0.167222};
-  vcl_vector<obs_type> dark_obs;
+  std::vector<obs_type> dark_obs;
   for (unsigned i = 0; i<32; ++i)
     dark_obs.push_back(static_cast<obs_type>(dark_obs_arr[i]));
   app_type dark_model;
@@ -64,8 +64,8 @@ double dark_obs_arr[] ={0.0477778,0.0666665,0.0072222,0.175,0.12,
                                                        shadow_mean,
                                                        shadow_sigma,
                                                        verbose);
-  double dark_er = vcl_fabs(0.14765342-dark_model.color())
-                 + vcl_fabs(dark_model.sigma()- 1.0/16.097824);
+  double dark_er = std::fabs(0.14765342-dark_model.color())
+                 + std::fabs(dark_model.sigma()- 1.0/16.097824);
   TEST_NEAR("test dark surface shadow appearance EM", dark_er, 0.0, 1e-6);
 }
 

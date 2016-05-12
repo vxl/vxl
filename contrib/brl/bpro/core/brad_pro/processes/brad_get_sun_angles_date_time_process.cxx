@@ -12,7 +12,7 @@
 //: set input and output types
 bool brad_get_sun_angles_date_time_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("float"); // latitude
   input_types.push_back("float"); // longitude
   input_types.push_back("int"); // year
@@ -24,7 +24,7 @@ bool brad_get_sun_angles_date_time_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types))
     return false;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float");
   output_types.push_back("float");
   return pro.set_output_types(output_types);
@@ -34,7 +34,7 @@ bool brad_get_sun_angles_date_time_process(bprb_func_process& pro)
 {
   if ( pro.n_inputs() != pro.input_types().size() )
   {
-    vcl_cout << pro.name() << " The number of inputs should be " << pro.input_types().size() << vcl_endl;
+    std::cout << pro.name() << " The number of inputs should be " << pro.input_types().size() << std::endl;
     return false;
   }
 

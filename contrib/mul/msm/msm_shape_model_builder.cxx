@@ -1,15 +1,16 @@
+#include <iostream>
+#include <cstdlib>
 #include "msm_shape_model_builder.h"
 //:
 // \file
 // \brief Object to build a msm_shape_model
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>
 #include <mcal/mcal_extract_mode.h>
@@ -23,7 +24,7 @@
 //=======================================================================
 
 msm_shape_model_builder::msm_shape_model_builder()
-  : var_prop_(0.98),min_modes_(0),max_modes_(9999)
+  : var_prop_(0.98),min_modes_(0),max_modes_(9999),ref_pose_source_(msm_aligner::first_shape)
 {
 }
 
@@ -56,21 +57,26 @@ void msm_shape_model_builder::set_mode_choice(unsigned min, unsigned max,
   var_prop_ = var_proportion;
 }
 
+//: Define how to compute alignment of reference shape
+void msm_shape_model_builder::set_ref_pose_source(msm_aligner::ref_pose_source rps)
+{
+  ref_pose_source_=rps;
+}
 
 //: Builds the model from the supplied examples
 void msm_shape_model_builder::build_model(
-                   const vcl_vector<msm_points>& shapes,
+                   const std::vector<msm_points>& shapes,
                    msm_shape_model& shape_model)
 {
   // Align shapes and estimate mean pose
   msm_points ref_mean_shape;
-  vcl_vector<vnl_vector<double> > pose_to_ref;
+  std::vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
-  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose,ref_pose_source_);
 
   // Generate vectors corresponding to aligned shapes
   unsigned n = shapes.size();
-  vcl_vector<vnl_vector<double> > aligned_shape_vec(n);
+  std::vector<vnl_vector<double> > aligned_shape_vec(n);
   msm_points aligned_shape;
   for (unsigned i=0;i<n;++i)
   {
@@ -98,8 +104,8 @@ void msm_shape_model_builder::build_model(
 
 //: Each point p controls two elements 2p,2p+1
 inline void msm_elements_from_pts_used(
-                   const vcl_vector<vcl_vector<unsigned> >& pts_used,
-                   vcl_vector<vcl_vector<unsigned> >& used)
+                   const std::vector<std::vector<unsigned> >& pts_used,
+                   std::vector<std::vector<unsigned> >& used)
 {
   used.resize(pts_used.size());
   for (unsigned i=0;i<pts_used.size();++i)
@@ -125,19 +131,19 @@ inline void msm_elements_from_pts_used(
 //  Builds at least \p pts_used.size() modes. Number defined by
 //  max_modes and var_prop.
 void msm_shape_model_builder::build_model(
-                  const vcl_vector<msm_points>& shapes,
-                  const vcl_vector<vcl_vector<unsigned> >& pts_used,
+                  const std::vector<msm_points>& shapes,
+                  const std::vector<std::vector<unsigned> >& pts_used,
                   msm_shape_model& shape_model)
 {
   // Align shapes and estimate mean pose
   msm_points ref_mean_shape;
-  vcl_vector<vnl_vector<double> > pose_to_ref;
+  std::vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
-  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose,ref_pose_source_);
 
   // Generate vectors corresponding to aligned shapes
   unsigned n = shapes.size();
-  vcl_vector<vnl_vector<double> > dshape_vec(n);
+  std::vector<vnl_vector<double> > dshape_vec(n);
   msm_points aligned_shape;
   for (unsigned i=0;i<n;++i)
   {
@@ -147,7 +153,7 @@ void msm_shape_model_builder::build_model(
 
   // Set up indication for which elements to be used
   // pt i corresponds to elements 2i,2i+1
-  vcl_vector<vcl_vector<unsigned> > used;
+  std::vector<std::vector<unsigned> > used;
   msm_elements_from_pts_used(pts_used,used);
 
   vnl_matrix<double> modes;
@@ -165,11 +171,11 @@ void msm_shape_model_builder::build_model(
 
 //: Builds the model from the points loaded from given files
 void msm_shape_model_builder::build_from_files(
-                   const vcl_string& points_dir,
-                   const vcl_vector<vcl_string>& filenames,
+                   const std::string& points_dir,
+                   const std::vector<std::string>& filenames,
                    msm_shape_model& shape_model)
 {
-  vcl_vector<msm_points> shapes(filenames.size());
+  std::vector<msm_points> shapes(filenames.size());
   msm_load_shapes(points_dir,filenames,shapes);
   build_model(shapes,shape_model);
 }
@@ -179,8 +185,8 @@ void msm_shape_model_builder::build_from_files(
 //  On exit n_per_class[j] indicates number of class j
 //  It is resized to cope with the largest ID number. Some elements
 //  may be zero.
-static void msm_count_classes(const vcl_vector<int>& id,
-                              vcl_vector<unsigned>& n_per_class)
+static void msm_count_classes(const std::vector<int>& id,
+                              std::vector<unsigned>& n_per_class)
 {
   int max_id = 0;
   for (unsigned i=0;i<id.size();++i)
@@ -202,19 +208,19 @@ static void msm_count_classes(const vcl_vector<int>& id,
 //  If \p id[i]<0, then shape is
 //  used for building global mean, but not for within class model.
 void msm_shape_model_builder::build_within_class_model(
-                   const vcl_vector<msm_points>& shapes,
-                   const vcl_vector<int>& id,
+                   const std::vector<msm_points>& shapes,
+                   const std::vector<int>& id,
                    msm_shape_model& shape_model)
 {
   // Align shapes and estimate mean pose
   msm_points ref_mean_shape;
-  vcl_vector<vnl_vector<double> > pose_to_ref;
+  std::vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
-  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose,ref_pose_source_);
 
-  vcl_vector<unsigned> n_per_class;
+  std::vector<unsigned> n_per_class;
   msm_count_classes(id,n_per_class);
-  vcl_vector<vnl_vector<double> > class_mean(n_per_class.size());
+  std::vector<vnl_vector<double> > class_mean(n_per_class.size());
 
   // Initialise sums for class means
   for (unsigned j=0;j<n_per_class.size();++j)
@@ -226,8 +232,8 @@ void msm_shape_model_builder::build_within_class_model(
 
   // Generate vectors corresponding to aligned shapes
   unsigned n = shapes.size();
-  vcl_vector<vnl_vector<double> > dshape_vec;
-  vcl_vector<int> valid_id;
+  std::vector<vnl_vector<double> > dshape_vec;
+  std::vector<int> valid_id;
   dshape_vec.reserve(n);
   valid_id.reserve(n);
 
@@ -280,20 +286,20 @@ void msm_shape_model_builder::build_within_class_model(
 //
 //  \param pts_used[i] indicates which points will be controlled by mode i.
 void msm_shape_model_builder::build_within_class_model(
-                   const vcl_vector<msm_points>& shapes,
-                   const vcl_vector<int>& id,
-                   const vcl_vector<vcl_vector<unsigned> >& pts_used,
+                   const std::vector<msm_points>& shapes,
+                   const std::vector<int>& id,
+                   const std::vector<std::vector<unsigned> >& pts_used,
                    msm_shape_model& shape_model)
 {
   // Align shapes and estimate mean pose
   msm_points ref_mean_shape;
-  vcl_vector<vnl_vector<double> > pose_to_ref;
+  std::vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
-  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose,ref_pose_source_);
 
-  vcl_vector<unsigned> n_per_class;
+  std::vector<unsigned> n_per_class;
   msm_count_classes(id,n_per_class);
-  vcl_vector<vnl_vector<double> > class_mean(n_per_class.size());
+  std::vector<vnl_vector<double> > class_mean(n_per_class.size());
 
   // Initialise sums for class means
   for (unsigned j=0;j<n_per_class.size();++j)
@@ -305,8 +311,8 @@ void msm_shape_model_builder::build_within_class_model(
 
   // Generate vectors corresponding to aligned shapes
   unsigned n = shapes.size();
-  vcl_vector<vnl_vector<double> > dshape_vec;
-  vcl_vector<int> valid_id;
+  std::vector<vnl_vector<double> > dshape_vec;
+  std::vector<int> valid_id;
   dshape_vec.reserve(n);
   valid_id.reserve(n);
 
@@ -331,7 +337,7 @@ void msm_shape_model_builder::build_within_class_model(
 
   // Set up indication for which elements to be used
   // pt i corresponds to elements 2i,2i+1
-  vcl_vector<vcl_vector<unsigned> > used;
+  std::vector<std::vector<unsigned> > used;
   msm_elements_from_pts_used(pts_used,used);
 
   vnl_matrix<double> modes;
@@ -350,15 +356,15 @@ void msm_shape_model_builder::build_within_class_model(
 
 //: Loads all shapes from \p points_dir/filenames[i].
 //  Throws mbl_exception_parse_error if fails.
-void msm_load_shapes(const vcl_string& points_dir,
-                     const vcl_vector<vcl_string>& filenames,
-                     vcl_vector<msm_points>& shapes)
+void msm_load_shapes(const std::string& points_dir,
+                     const std::vector<std::string>& filenames,
+                     std::vector<msm_points>& shapes)
 {
   unsigned n=filenames.size();
   shapes.resize(n);
   for (unsigned i=0;i<n;++i)
   {
-    vcl_string path = points_dir+"/"+filenames[i];
+    std::string path = points_dir+"/"+filenames[i];
     if (!shapes[i].read_text_file(path))
     {
       mbl_exception_parse_error x("Failed to load points from "+path);
@@ -368,26 +374,26 @@ void msm_load_shapes(const vcl_string& points_dir,
 }
 
 //: Initialise from a text stream.
-void msm_shape_model_builder::config_from_stream(vcl_istream &is)
+void msm_shape_model_builder::config_from_stream(std::istream &is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
-  
-  vcl_string aligner_str = props.get_required_property("aligner");
-  vcl_stringstream aligner_ss(aligner_str);
-  vcl_auto_ptr<msm_aligner> aligner=msm_aligner::create_from_stream(aligner_ss);
+
+  std::string aligner_str = props.get_required_property("aligner");
+  std::stringstream aligner_ss(aligner_str);
+  std::auto_ptr<msm_aligner> aligner=msm_aligner::create_from_stream(aligner_ss);
   aligner_=aligner->clone();
- 
-  vcl_string param_limiter_str 
+
+  std::string param_limiter_str
       = props.get_optional_property("param_limiter",
                                     "msm_ellipsoid_limiter { accept_prop: 0.98 }");
   if (param_limiter_str!="-")
   {
-    vcl_stringstream ss(param_limiter_str);
+    std::stringstream ss(param_limiter_str);
 
-    vcl_auto_ptr<msm_param_limiter> param_limiter;
+    std::auto_ptr<msm_param_limiter> param_limiter;
     param_limiter = msm_param_limiter::create_from_stream(ss);
     param_limiter_ = param_limiter->clone();
   }
@@ -395,6 +401,16 @@ void msm_shape_model_builder::config_from_stream(vcl_istream &is)
   min_modes_=vul_string_atoi(props.get_optional_property("min_modes","0"));
   max_modes_=vul_string_atoi(props.get_optional_property("max_modes","999"));
   var_prop_=vul_string_atof(props.get_optional_property("var_prop","0.98"));
+
+  std::string rps_str = props.get_optional_property("ref_pose_source","first_shape");
+  if (rps_str=="first_shape") ref_pose_source_=msm_aligner::first_shape;
+  else
+  if (rps_str=="mean_pose") ref_pose_source_=msm_aligner::mean_pose;
+  else
+  {
+    mbl_exception_parse_error x("Unknown ref_pose_source: "+rps_str);
+    mbl_exception_error(x);
+  }
 
   mbl_read_props_look_for_unused_props(
       "msm_shape_model_builder::config_from_stream", props, mbl_read_props_type());
@@ -407,16 +423,16 @@ void msm_shape_model_builder::config_from_stream(vcl_istream &is)
 
 short msm_shape_model_builder::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 //=======================================================================
 // Method: is_a
 //=======================================================================
 
-vcl_string msm_shape_model_builder::is_a() const
+std::string msm_shape_model_builder::is_a() const
 {
-  return vcl_string("msm_shape_model_builder");
+  return std::string("msm_shape_model_builder");
 }
 
 //=======================================================================
@@ -424,7 +440,7 @@ vcl_string msm_shape_model_builder::is_a() const
 //=======================================================================
 
   // required if data is present in this class
-void msm_shape_model_builder::print_summary(vcl_ostream& os) const
+void msm_shape_model_builder::print_summary(std::ostream& os) const
 {
   os<<'\n'<<vsl_indent()<<"aligner: ";
   if (aligner_.isDefined()) os<<aligner_; else os<<"-";
@@ -433,7 +449,14 @@ void msm_shape_model_builder::print_summary(vcl_ostream& os) const
     os<<param_limiter_; else os<<"-";
   os<<vsl_indent()<<"min_modes: "<<min_modes_<<'\n'
     <<vsl_indent()<<"max_modes: "<<max_modes_<<'\n'
-    <<vsl_indent()<<"var_prop: "<<var_prop_;
+    <<vsl_indent()<<"var_prop: "<<var_prop_<<'\n';
+  os<<vsl_indent()<<"ref_pose_source: ";
+  switch (ref_pose_source_)
+  {
+    case (msm_aligner::first_shape): os<<"first_shape"; break;
+    case (msm_aligner::mean_pose): os<<"mean_pose"; break;
+    default: os<<"unknown";
+  }
 }
 
 //=======================================================================
@@ -449,6 +472,7 @@ void msm_shape_model_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,min_modes_);
   vsl_b_write(bfs,max_modes_);
   vsl_b_write(bfs,var_prop_);
+  vsl_b_write(bfs,short(ref_pose_source_));
 }
 
 //=======================================================================
@@ -460,19 +484,26 @@ void msm_shape_model_builder::b_read(vsl_b_istream& bfs)
 {
   short version;
   vsl_b_read(bfs,version);
+  short rps;
   switch (version)
   {
     case (1):
+    case (2):
       vsl_b_read(bfs,aligner_);
       vsl_b_read(bfs,param_limiter_);
       vsl_b_read(bfs,min_modes_);
       vsl_b_read(bfs,max_modes_);
       vsl_b_read(bfs,var_prop_);
+      if (version==1) ref_pose_source_=msm_aligner::first_shape;
+      else
+      {
+        vsl_b_read(bfs,rps); ref_pose_source_=msm_aligner::ref_pose_source(rps);
+      }
       break;
     default:
-      vcl_cerr << "msm_shape_model_builder::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "msm_shape_model_builder::b_read() :\n"
+               << "Unexpected version number " << version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -500,7 +531,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_shape_model_builder& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_shape_model_builder& b)
+std::ostream& operator<<(std::ostream& os,const msm_shape_model_builder& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -510,7 +541,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_shape_model_builder& b)
 }
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_shape_model_builder& b)
+void vsl_print_summary(std::ostream& os,const msm_shape_model_builder& b)
 {
  os << b;
 }

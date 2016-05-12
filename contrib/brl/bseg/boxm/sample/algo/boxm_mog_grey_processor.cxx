@@ -79,22 +79,22 @@ bool boxm_mog_grey_processor::update( apm_datatype &appear, obs_datatype const& 
   return true;
 }
 
-void boxm_mog_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
+void boxm_mog_grey_processor::update_appearance(std::vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, std::vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
 {
-  vcl_vector<float> pre(obs.size(),0.0f);
+  std::vector<float> pre(obs.size(),0.0f);
   compute_appearance(obs,pre,obs_weights,model,min_sigma);
   return;
 }
 
-void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
+void boxm_mog_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, std::vector<float> const& obs_weights, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
 {
-  vcl_vector<float> pre(obs.size(),0.0f);
+  std::vector<float> pre(obs.size(),0.0f);
   compute_appearance(obs,pre,obs_weights,model,min_sigma);
   return;
 }
 
-void boxm_mog_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs,
-                                                  vcl_vector<float> const& obs_weights, // FIXME - unused
+void boxm_mog_grey_processor::finalize_appearance(std::vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs,
+                                                  std::vector<float> const& obs_weights, // FIXME - unused
                                                   boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model,
                                                   float min_sigma)
 {
@@ -126,7 +126,7 @@ void boxm_mog_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOX
   return;
 }
 
-void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
+void boxm_mog_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs, std::vector<float> const& pre, std::vector<float> const& vis, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model, float min_sigma)
 {
   static const unsigned int max_nmodes = boxm_apm_traits<BOXM_APM_MOG_GREY>::n_gaussian_modes_;
   const float min_var = min_sigma*min_sigma;
@@ -165,13 +165,13 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
     }
   }
 
-  vcl_vector<vcl_vector<float> > mode_probs(nobs);
+  std::vector<std::vector<float> > mode_probs(nobs);
   for (unsigned int n=0; n<nobs; ++n) {
     for (unsigned int m=0; m<nmodes; ++m) {
       mode_probs[n].push_back(0.0f);
     }
   }
-  vcl_vector<float> mode_weight_sum(nmodes,0.0f);
+  std::vector<float> mode_weight_sum(nmodes,0.0f);
 
   // run EM algorithm to maximize expected probability of observations
   const unsigned int max_its = 50;
@@ -183,7 +183,7 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
     for (unsigned int n=0; n<nobs; ++n) {
       // for each observation, assign probabilities to each mode of appearance model (and to a "previous cell")
       float total_prob = 0.0f;
-      vcl_vector<float> new_mode_probs(nmodes);
+      std::vector<float> new_mode_probs(nmodes);
       for (unsigned int m=0; m<nmodes; ++m) {
         // compute probability that nth data point was produced by mth mode
         const float new_mode_prob = vis[n] * model.distribution(m).prob_density(obs[n]) * model.weight(m);
@@ -196,7 +196,7 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
       if (total_prob > 1e-6) {
         for (unsigned int m=0; m<nmodes; ++m) {
           new_mode_probs[m] /= total_prob;
-          const float weight_change = vcl_fabs(new_mode_probs[m] - mode_probs[n][m]);
+          const float weight_change = std::fabs(new_mode_probs[m] - mode_probs[n][m]);
           if (weight_change > max_weight_change) {
             max_weight_change = weight_change;
           }
@@ -215,7 +215,7 @@ void boxm_mog_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM
     // update the mode parameters
     for (unsigned int m=0; m<nmodes; ++m) {
       mode_weight_sum[m] = 0.0f;
-      vcl_vector<float> obs_weights(nobs);
+      std::vector<float> obs_weights(nobs);
       for (unsigned int n=0; n<nobs; ++n) {
         obs_weights[n] = mode_probs[n][m];
         mode_weight_sum[m] += obs_weights[n];

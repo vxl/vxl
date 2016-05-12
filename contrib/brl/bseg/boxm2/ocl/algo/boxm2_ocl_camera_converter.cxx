@@ -5,8 +5,8 @@
 #include <vpgl/algo/vpgl_camera_convert.h>
 
 //Default private variables to null/0
-bocl_kernel* boxm2_ocl_camera_converter::persp_to_generic_kernel = 0;
-vcl_map<vcl_string, bocl_kernel*> boxm2_ocl_camera_converter::kernels_;
+bocl_kernel* boxm2_ocl_camera_converter::persp_to_generic_kernel = VXL_NULLPTR;
+std::map<std::string, bocl_kernel*> boxm2_ocl_camera_converter::kernels_;
 
 //takes in an unknown camera (must be vpgl_generic or perspective)
 // cam, it's cl_ni, nj, and creates ray image
@@ -17,13 +17,13 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
                                                     unsigned cl_nj,
                                                     bocl_mem_sptr & ray_origins,
                                                     bocl_mem_sptr & ray_directions,
-                                                    vcl_size_t i_min,
-                                                    vcl_size_t j_min,
+                                                    std::size_t i_min,
+                                                    std::size_t j_min,
                                                     bool create_ray_o_d_buffers)
 {
   if (cam->type_name() == "vpgl_perspective_camera") {
 #ifdef DEBUG
-    vcl_cout<<"Converting perspective cam to generic !!"<<vcl_endl;
+    std::cout<<"Converting perspective cam to generic !!"<<std::endl;
     float convTime =
 #endif
       boxm2_ocl_camera_converter::convert_persp_to_generic( device,
@@ -33,9 +33,9 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
                                                             ray_directions,
                                                             cl_ni, cl_nj,
                                                             i_min, j_min,
-							    create_ray_o_d_buffers);
+                                                            create_ray_o_d_buffers);
 #ifdef DEBUG
-    vcl_cout<<"Camera Convert Time: "<<convTime<<" ms"<<vcl_endl;
+    std::cout<<"Camera Convert Time: "<<convTime<<" ms"<<std::endl;
 #endif
     return;
   }
@@ -69,7 +69,7 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
     }
   }
   else {
-    vcl_cout<<"Camera type "<<cam->type_name()<<" not supported by boxm2_ocl_camera_converter"<<vcl_endl;
+    std::cout<<"Camera type "<<cam->type_name()<<" not supported by boxm2_ocl_camera_converter"<<std::endl;
     ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   }
@@ -83,16 +83,16 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
                                                            bocl_mem_sptr & ray_directions,
                                                            unsigned cl_ni,
                                                            unsigned cl_nj,
-                                                           vcl_size_t i_min,
-                                                           vcl_size_t j_min,
-							   bool create_ray_o_d_buffers)
+                                                           std::size_t i_min,
+                                                           std::size_t j_min,
+                                                           bool create_ray_o_d_buffers)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
 
-    vcl_string identifier = device->device_identifier();
+    std::string identifier = device->device_identifier();
     if ( kernels_.find(identifier) == kernels_.end() ) {
-      vcl_cout<<"Compiling conversion kernel (should only happen once)..."<<vcl_endl;
+      std::cout<<"Compiling conversion kernel (should only happen once)..."<<std::endl;
       persp_to_generic_kernel = boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(device);
       kernels_[identifier] = persp_to_generic_kernel;
     }
@@ -100,11 +100,11 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
 
     //sanity check
     if (pcam->type_name() != "vpgl_perspective_camera") {
-      vcl_cout<<"Cannot convert "<<pcam->type_name()<<" to generic cam!!"<<vcl_endl;
+      std::cout<<"Cannot convert "<<pcam->type_name()<<" to generic cam!!"<<std::endl;
       return 0.0f;
     }
 
-    //vcl_cout<<"Converting perspective camera"<<vcl_endl;
+    //std::cout<<"Converting perspective camera"<<std::endl;
 
     // set persp cam buffer
     cl_float *cam_buffer= new cl_float[48];
@@ -121,8 +121,8 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
       ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     }
     //2. set global/local thread size
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
-    vcl_size_t lThreads[] = {8, 8};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t lThreads[] = {8, 8};
 
 
     // set arguments
@@ -146,7 +146,7 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
     delete persp_cam;
 
     //delete persp_cam;
-    // vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    // std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }
 
@@ -154,12 +154,12 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
 bocl_kernel* boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(bocl_device_sptr device)
 {
   //gather all cam convert sources
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "backproject.cl");
   src_paths.push_back(source_dir + "camera_convert.cl");
-  vcl_string options = "";
+  std::string options = "";
 
   //have kernel construct itself using the context and device
   bocl_kernel* kern = new bocl_kernel();

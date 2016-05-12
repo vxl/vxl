@@ -73,8 +73,9 @@
 
 class gevd_bufferxy;
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_image.h>
 #include <vil/vil_image_resource.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -109,17 +110,17 @@ class sdet_detector : public sdet_detector_params
 
   //Fold contour detection
   void DoFoldContourDetector(vil1_image image,
-                             vcl_vector<vtol_edge_2d_sptr >& edgels);
+                             std::vector<vtol_edge_2d_sptr >& edgels);
 
   void DoFoldContourDetector(vil_image_resource_sptr const& image,
-                             vcl_vector<vtol_edge_2d_sptr >& edgels);
+                             std::vector<vtol_edge_2d_sptr >& edgels);
 
 
   //Corner detection using curvature on edgel chains
   //GEOFF  void  DoCornerDetector(vil1_image image, IUPointGroup& corners);
 
   //Corner detection using curvature on edgel chains
-  void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& in_edgels, vcl_vector<vtol_edge_2d_sptr >& out_edgels);
+  void  DoBreakCorners(std::vector<vtol_edge_2d_sptr >& in_edgels, std::vector<vtol_edge_2d_sptr >& out_edgels);
 
   // internal interfaces
   bool DoFoldContour();
@@ -134,18 +135,18 @@ class sdet_detector : public sdet_detector_params
   gevd_bufferxy* GetBufferFromImage(); //!< vil1 image conversion
   gevd_bufferxy* GetBufferFromVilImage();//!< vil image conversion
 
-  vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
-  vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
+  std::vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
+  std::vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
 
-  bool get_vdgl_edges(vcl_vector<vdgl_digital_curve_sptr>& edges );
+  bool get_vdgl_edges(std::vector<vdgl_digital_curve_sptr>& edges );
 
-  bool get_vsol_edges(vcl_vector<vsol_digital_curve_2d_sptr>& edges );
+  bool get_vsol_edges(std::vector<vsol_digital_curve_2d_sptr>& edges );
   //:The last type set is used in the execution if both types are valid
   void SetImage(vil1_image img);
   void SetImage(vil_image_resource_sptr const& img);
   void SetImage(vil_image_resource_sptr const& img, brip_roi const& roi);
 
-  void print(vcl_ostream &strm=vcl_cout) const;
+  void print(std::ostream &strm=std::cout) const;
 
  protected:
   void ClearData(); //!< clear buffer
@@ -162,8 +163,8 @@ class sdet_detector : public sdet_detector_params
     *direction, *locationx, *locationy, *grad_mag, *angle; //!< detect step/fold
   int *junctionx, *junctiony, njunction; //!< junctions found
 
-  vcl_vector<vtol_vertex_2d_sptr >* vertices;//!< network of linked
-  vcl_vector<vtol_edge_2d_sptr >* edges; //!< edges and vertices
+  std::vector<vtol_vertex_2d_sptr >* vertices;//!< network of linked
+  std::vector<vtol_edge_2d_sptr >* edges; //!< edges and vertices
 
   float filterFactor;     //!< factor in convolution filter
   float hysteresisFactor; //!< hysteresis factor

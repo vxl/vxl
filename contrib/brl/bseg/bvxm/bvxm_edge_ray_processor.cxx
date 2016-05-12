@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "bvxm_edge_ray_processor.h"
 //:
 // \file
@@ -15,14 +18,13 @@
 #include <vgl/vgl_closest_point.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 static const bool edge_debug = false;
 static const bool print_arrays = false;
-static vcl_string base = "";
+static std::string base = "";
 #if 0
-static vcl_ofstream dos((base + "bproj_planes_44_24.txt").c_str());
+static std::ofstream dos((base + "bproj_planes_44_24.txt").c_str());
 #endif
 
 // initialize the voxel grid for edges
@@ -43,13 +45,13 @@ bool bvxm_edge_ray_processor::init_edges(unsigned scale)
   bvxm_voxel_grid<edges_datatype> *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
 
   // Pass 1: to build the marginal
-  vcl_cout << "Initializing the voxel world:" << vcl_endl;
+  std::cout << "Initializing the voxel world:" << std::endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_voxel_it = edges_voxel->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_voxel_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
     if ( (edges_voxel_it == edges_voxel->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -59,7 +61,7 @@ bool bvxm_edge_ray_processor::init_edges(unsigned scale)
       (*edges_voxel_it_it) = 0.0f;
     }
   }
-  vcl_cout << "\nDone\n";
+  std::cout << "\nDone\n";
 
   return true;
 }
@@ -77,8 +79,8 @@ bool bvxm_edge_ray_processor::update_edges(bvxm_image_metadata const& metadata, 
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -93,7 +95,7 @@ bool bvxm_edge_ray_processor::update_edges(bvxm_image_metadata const& metadata, 
   bvxm_voxel_slab<edges_datatype> image_voxel(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<edges_datatype> image_image(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_image)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)EDGES << '\n';
+    std::cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)EDGES << '\n';
     return false;
   }
 
@@ -102,13 +104,13 @@ bool bvxm_edge_ray_processor::update_edges(bvxm_image_metadata const& metadata, 
   bvxm_voxel_grid<edges_datatype> *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
 
   // Pass 1: to build the marginal
-  vcl_cout << "Pass 1 of 1:" << vcl_endl;
+  std::cout << "Pass 1 of 1:" << std::endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_voxel_it = edges_voxel->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_voxel_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
     if ( (edges_voxel_it == edges_voxel->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -121,7 +123,7 @@ bool bvxm_edge_ray_processor::update_edges(bvxm_image_metadata const& metadata, 
       (*edges_voxel_it_it) = (*edges_voxel_it_it) + (*image_voxel_it);
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   world_->increment_observations<EDGES>(0,scale);
 
@@ -141,8 +143,8 @@ bool bvxm_edge_ray_processor::update_edges_with_Lidar_surface(bvxm_image_metadat
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -157,7 +159,7 @@ bool bvxm_edge_ray_processor::update_edges_with_Lidar_surface(bvxm_image_metadat
   bvxm_voxel_slab<edges_datatype> image_voxel(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<edges_datatype> image_image(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_image)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)EDGES << '\n';
+    std::cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)EDGES << '\n';
     return false;
   }
 
@@ -169,14 +171,14 @@ bool bvxm_edge_ray_processor::update_edges_with_Lidar_surface(bvxm_image_metadat
   bvxm_voxel_grid<ocp_datatype> *surface_voxel  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(voxel_base.ptr());
 
   // Pass 1: to build the marginal
-  vcl_cout << "Pass 1 of 1:" << vcl_endl;
+  std::cout << "Pass 1 of 1:" << std::endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_voxel_it = edges_voxel->begin();
   bvxm_voxel_grid<ocp_datatype>::iterator voxel_it = surface_voxel->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_voxel_it,++voxel_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
     if ( (edges_voxel_it == edges_voxel->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -190,7 +192,7 @@ bool bvxm_edge_ray_processor::update_edges_with_Lidar_surface(bvxm_image_metadat
       (*edges_voxel_it_it) = (*edges_voxel_it_it) + (*image_voxel_it)*((*voxel_it_it)*2-1);
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   world_->increment_observations<EDGES>(0,scale);
 
@@ -207,8 +209,8 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
@@ -229,9 +231,9 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_voxel_it(edges_voxel->begin());
 
-  vcl_cout << "Generating Expected Edge Image:" << vcl_endl;
+  std::cout << "Generating Expected Edge Image:" << std::endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_voxel_it) {
-    vcl_cout << '.';
+    std::cout << '.';
 
     bvxm_util::warp_slab_bilinear((*edges_voxel_it), H_img_to_plane[z], edges_image);
 
@@ -239,19 +241,19 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
     bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
 
     for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it, ++edges_image_it) {
-      (*expected_edge_image_it) = vnl_math::max((*expected_edge_image_it),(*edges_image_it));
+      (*expected_edge_image_it) = std::max((*expected_edge_image_it),(*edges_image_it));
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   int dof = (int)world_->num_observations<EDGES>(0,scale)-1;
   bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
-  float eei_min = vcl_numeric_limits<float>::max();
-  float eei_max = vcl_numeric_limits<float>::min();
+  float eei_min = std::numeric_limits<float>::max();
+  float eei_max = std::numeric_limits<float>::min();
   for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
     (*expected_edge_image_it) = sdet_img_edge::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
-    eei_min = vnl_math::min(eei_min,*expected_edge_image_it);
-    eei_max = vnl_math::max(eei_max,*expected_edge_image_it);
+    eei_min = std::min(eei_min,*expected_edge_image_it);
+    eei_max = std::max(eei_max,*expected_edge_image_it);
   }
 
   if (eei_min<eei_max) {
@@ -278,8 +280,8 @@ bool bvxm_edge_ray_processor::expected_edge_image_and_heights(bvxm_image_metadat
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
@@ -303,9 +305,9 @@ bool bvxm_edge_ray_processor::expected_edge_image_and_heights(bvxm_image_metadat
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_voxel_it(edges_voxel->begin());
 
-  vcl_cout << "Generating Expected Edge Image:" << vcl_endl;
+  std::cout << "Generating Expected Edge Image:" << std::endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_voxel_it) {
-    vcl_cout << '.';
+    std::cout << '.';
 
     bvxm_util::warp_slab_bilinear((*edges_voxel_it), H_img_to_plane[z], edges_image);
 
@@ -314,23 +316,23 @@ bool bvxm_edge_ray_processor::expected_edge_image_and_heights(bvxm_image_metadat
     bvxm_voxel_slab<float>::iterator z_image_it = z_image.begin();
 
     for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it, ++edges_image_it, ++z_image_it) {
-      //(*expected_edge_image_it) = vnl_math::max((*expected_edge_image_it),(*edges_image_it));
+      //(*expected_edge_image_it) = std::max((*expected_edge_image_it),(*edges_image_it));
       if ((*expected_edge_image_it) < (*edges_image_it)) {
-        (*expected_edge_image_it) = (*edges_image_it); 
+        (*expected_edge_image_it) = (*edges_image_it);
         (*z_image_it) = (float)z;
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   int dof = (int)world_->num_observations<EDGES>(0,scale)-1;
   bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
-  float eei_min = vcl_numeric_limits<float>::max();
-  float eei_max = vcl_numeric_limits<float>::min();
+  float eei_min = std::numeric_limits<float>::max();
+  float eei_max = std::numeric_limits<float>::min();
   for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it) {
     (*expected_edge_image_it) = sdet_img_edge::convert_edge_statistics_to_probability((*expected_edge_image_it),n_normal,dof);
-    eei_min = vnl_math::min(eei_min,*expected_edge_image_it);
-    eei_max = vnl_math::max(eei_max,*expected_edge_image_it);
+    eei_min = std::min(eei_min,*expected_edge_image_it);
+    eei_max = std::max(eei_max,*expected_edge_image_it);
   }
 
   if (eei_min<eei_max) {
@@ -348,12 +350,12 @@ bool bvxm_edge_ray_processor::expected_edge_image_and_heights(bvxm_image_metadat
 
 
 //: save the edge probability grid as an 8-bit 3-d vff image
-bool bvxm_edge_ray_processor::save_edges_vff(vcl_string filename,unsigned scale)
+bool bvxm_edge_ray_processor::save_edges_vff(std::string filename,unsigned scale)
 {
   // open file for binary writing
-  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening file " << filename << " for write!\n";
+    std::cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
   bvxm_world_params_sptr params = world_->get_params();
@@ -368,7 +370,7 @@ bool bvxm_edge_ray_processor::save_edges_vff(vcl_string filename,unsigned scale)
   vxl_uint_32 nz = edges_grid->grid_size().z();
 
   // write header
-  vcl_stringstream header;
+  std::stringstream header;
   header << "ncaa\n"
          << "title=bvxm edge probabilities;\n"
          << "rank=3;\n"
@@ -382,7 +384,7 @@ bool bvxm_edge_ray_processor::save_edges_vff(vcl_string filename,unsigned scale)
          << "origin=0 0 0;\n"
          << "rawsize=" << nx*ny*nz << ";\n\f\n";
 
-  vcl_string header_string = header.str();
+  std::string header_string = header.str();
   unsigned header_len = header_string.size();
 
   ofs.write(header_string.c_str(),header_len);
@@ -393,14 +395,14 @@ bool bvxm_edge_ray_processor::save_edges_vff(vcl_string filename,unsigned scale)
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
   for (unsigned k=nz-1; edges_it != edges_grid->end(); ++edges_it, --k) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (unsigned i=0; i<(*edges_it).nx(); ++i) {
       for (unsigned j=0; j < (*edges_it).ny(); ++j) {
         edges_array[k*nx*ny + j*nx + i] = (unsigned char)((*edges_it)(i,j) * 255.0);;
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   ofs.write(reinterpret_cast<char*>(edges_array),sizeof(unsigned char)*nx*ny*nz);
 
   ofs.close();
@@ -411,11 +413,11 @@ bool bvxm_edge_ray_processor::save_edges_vff(vcl_string filename,unsigned scale)
 }
 
 //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
-bool bvxm_edge_ray_processor::save_edges_raw(vcl_string filename, float n_normal, unsigned scale)
+bool bvxm_edge_ray_processor::save_edges_raw(std::string filename, float n_normal, unsigned scale)
 {
-  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening file " << filename << " for write!\n";
+    std::cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
@@ -441,17 +443,17 @@ bool bvxm_edge_ray_processor::save_edges_raw(vcl_string filename, float n_normal
 
   int dof = (int)world_->num_observations<EDGES>(0,scale)-1;
 
-  vcl_cout << "Saving edges to RAW file:" << vcl_endl;
+  std::cout << "Saving edges to RAW file:" << std::endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
   for (unsigned k=0; edges_it != edges_grid->end(); ++edges_it, ++k) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (unsigned i=0; i<(*edges_it).nx(); ++i) {
       for (unsigned j=0; j < (*edges_it).ny(); ++j) {
         edges_array[i*ny*nz + j*nz + k] = (unsigned char)(255.0*sdet_img_edge::convert_edge_statistics_to_probability((*edges_it)(i,j),n_normal,dof));
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   ofs.write(reinterpret_cast<char*>(edges_array),sizeof(unsigned char)*nx*ny*nz);
 
   ofs.close();
@@ -480,7 +482,7 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
     ny = static_cast<unsigned>(grid_size.y()), nz = static_cast<unsigned>(grid_size.z());
   double radius = 0.866*params->voxel_length()*initial_sd_ratio;
   if (edge_debug)
-    vcl_cout << "Initializing a world " << nx << 'x'
+    std::cout << "Initializing a world " << nx << 'x'
              << ny << 'x' << nz << '\n';
   bvxm_voxel_grid_base_sptr tangent_pos_base = world_->get_grid<TANGENT_POS>(0, scale);
   bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  =
@@ -527,8 +529,8 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
   bvxm_von_mises_tangent_processor<float> tan_proc;
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img0,H_plane_to_img1;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane0,H_img_to_plane1;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img0,H_plane_to_img1;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane0,H_img_to_plane1;
   {
     vgl_h_matrix_2d<double> Hp2i0, Hi2p0,Hp2i1, Hi2p1;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -583,16 +585,16 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
   // 3-d tangent position grid distributions
 
   if (edge_debug)
-    vcl_cout << "Initializing the tangent world:" << vcl_endl;
+    std::cout << "Initializing the tangent world:" << std::endl;
   bvxm_voxel_grid<pos_dist_t>::iterator pos_dist_it = pos_dist_grid->begin();
   bvxm_voxel_grid<dir_dist_t>::iterator dir_dist_it = dir_dist_grid->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z();++z,++pos_dist_it,++dir_dist_it)
   {
     if (edge_debug)
-      vcl_cout << "processing slab " << z << '\n';
+      std::cout << "processing slab " << z << '\n';
     if ( (pos_dist_it == pos_dist_grid->end())||
          (dir_dist_it == dir_dist_grid->end()) ) {
-      vcl_cerr << "error: reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
     voxel_pos_slab.fill(pos_t(0.0f));
@@ -614,12 +616,12 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
                                      base+"Img0c.tiff");
     }
     if (edge_debug&&print_arrays) {
-      vcl_cout.precision(2);
-      vcl_cout << "back proj view 0\n";
+      std::cout.precision(2);
+      std::cout << "back proj view 0\n";
       for (unsigned j = 0; j<ny; j++) {
         for (unsigned i = 0; i<nx; i++)
-          vcl_cout << bproj_image_a_slab0(i,j) << ' ';
-        vcl_cout << '\n';
+          std::cout << bproj_image_a_slab0(i,j) << ' ';
+        std::cout << '\n';
       }
     }
     bvxm_util::warp_slab_nearest_neighbor(image_a_slab1, H_plane_to_img1[z],
@@ -637,11 +639,11 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
                                      base+"Img1c.tiff");
     }
     if (edge_debug&&print_arrays) {
-      vcl_cout << "back proj view 1\n";
+      std::cout << "back proj view 1\n";
       for (unsigned j = 0; j<ny; j++) {
         for (unsigned i = 0; i<nx; i++)
-          vcl_cout << bproj_image_a_slab1(i,j) << ' ';
-        vcl_cout << '\n';
+          std::cout << bproj_image_a_slab1(i,j) << ' ';
+        std::cout << '\n';
       }
     }
     bsta_histogram<double> h(0.0, 2.0, 10);
@@ -684,7 +686,7 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
           vgl_box_3d<float> b;
           b.add(local_xyz_00); b.add(local_xyz_11);
           if (edge_debug)
-            vcl_cout << "\n===>checking\n" << b << '\n';
+            std::cout << "\n===>checking\n" << b << '\n';
           n_init_trials++;
           // check intersection
 #if 0 // LJM mod
@@ -709,7 +711,7 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
           (voxel_dir_slab(c, r))[1]=dir.y();
           (voxel_dir_slab(c, r))[2]=dir.z();
           if (edge_debug) {
-            vcl_cout << "\n===>does intersect\n" << x0 << '\n'
+            std::cout << "\n===>does intersect\n" << x0 << '\n'
                      << dir << '\n';
           }
           // a flag to indicate that the voxel contains update information
@@ -717,7 +719,7 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
         }
       }
     if (edge_debug) {
-      vcl_cout << "Number of init trials: " << n_init_trials << '\n'
+      std::cout << "Number of init trials: " << n_init_trials << '\n'
                << "Number of init intersections: " << n_init_hits << '\n'
                << "Distance histogram\n";
       h.print();
@@ -727,15 +729,15 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
                         voxel_dir_slab, voxel_pos_slab, voxel_flag_slab))
       return false;
     if (edge_debug&&print_arrays) {
-      vcl_cout << "grid contents after initialization\n";
+      std::cout << "grid contents after initialization\n";
       for (unsigned r=0; r<ny; ++r) {
         for (unsigned c=0; c<nx; ++c) {
           pos_dist_t pos_dist = (*pos_dist_it)(c,r);
           dir_dist_t dir_dist = (*dir_dist_it)(c,r);
-          vcl_cout << '(' << pos_dist.num_observations << ' '
+          std::cout << '(' << pos_dist.num_observations << ' '
                    << dir_dist.num_observations << ") ";
         }
-        vcl_cout << '\n';
+        std::cout << '\n';
       }
     }
   }
@@ -767,8 +769,8 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
   bvxm_von_mises_tangent_processor<float> tan_proc;
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -825,16 +827,16 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
     static_cast<bvxm_voxel_grid<dir_dist_t>*>(tangent_dir_base.ptr());
 
   if (edge_debug)
-    vcl_cout << "Updating the tangent world:" << vcl_endl;
+    std::cout << "Updating the tangent world:" << std::endl;
   bvxm_voxel_grid<pos_dist_t>::iterator pos_dist_it = pos_dist_grid->begin();
   bvxm_voxel_grid<dir_dist_t>::iterator dir_dist_it = dir_dist_grid->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z();++z,++pos_dist_it,++dir_dist_it)
   {
     if (edge_debug)
-      vcl_cout << "processing slab " << z << '\n';
+      std::cout << "processing slab " << z << '\n';
     if ( (pos_dist_it == pos_dist_grid->end())||
          (dir_dist_it == dir_dist_grid->end()) ) {
-      vcl_cerr << "error: reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
     voxel_pos_slab.fill(pos_t(0.0f));
@@ -848,12 +850,12 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
     bvxm_util::warp_slab_nearest_neighbor(image_c_slab, H_plane_to_img[z],
                                           bproj_image_c_slab);
     if (edge_debug&&print_arrays) {
-      vcl_cout.precision(2);
-      vcl_cout << "back proj view\n";
+      std::cout.precision(2);
+      std::cout << "back proj view\n";
       for (unsigned j = 0; j<ny; j++) {
         for (unsigned i = 0; i<nx; i++)
-          vcl_cout << bproj_image_a_slab(i,j) << ' ';
-        vcl_cout << '\n';
+          std::cout << bproj_image_a_slab(i,j) << ' ';
+        std::cout << '\n';
       }
     }
     bvxm_voxel_slab<pos_dist_t>& pos_dist_slab = (*pos_dist_it);
@@ -886,21 +888,25 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
           if (r == 44 && c == 24) {
 #if 0
             pos_t pm = pos_dist.mean();
-            math_t psd = vcl_sqrt(pos_dist.var());
+            math_t psd = std::sqrt(pos_dist.var());
             dir_t dm = dir_dist.mean();
             math_t ka = dir_dist.kappa();
             dos << pm[0] << ' ' << pm[1] << ' ' << psd << ' '
                 << dm[0] << ' ' << dm[1] << ' ' << dm[2] << ' '
-                << ka << '\n' << vcl_flush;
+                << ka << '\n' << std::flush;
 #endif
             vgl_homg_line_2d<double> img_l(img_a, img_b, img_c);
             vgl_plane_3d<double> pl = cam->backproject(img_l);
-            double pa = pl.a(), pb = pl.b(), pc = pl.c(), pd = pl.d();
-            double nm = vcl_sqrt(pa*pa + pb*pb + pc*pc);
-            pa/=nm; pb/=nm; pc/=nm; pd/=nm;
+            double pa = pl.a(), pb = pl.b(), pc = pl.c();
 #if 0
+            double pd = pl.d();
+            double nm = std::sqrt(pa*pa + pb*pb + pc*pc);
+            pa/=nm;
+            pb/=nm;
+            pc/=nm;
+            pd/=nm;
             dos << pa << ' ' << pb << ' ' << pc << ' ' << pd
-                << '\n' << vcl_flush;
+                << '\n' << std::flush;
 #endif
           }
           //========================================
@@ -917,7 +923,7 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
           vgl_box_3d<math_t> b;
           b.add(local_xyz_00); b.add(local_xyz_11);
           if (edge_debug)
-            vcl_cout << "\n===>checking\n" << b << '\n';
+            std::cout << "\n===>checking\n" << b << '\n';
           n_update_trials++;
           vgl_point_3d<math_t> cc = b.centroid();
           vgl_point_3d<math_t> pc = vgl_closest_point<math_t>(line_3d, cc);
@@ -933,7 +939,7 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
           if (edge_debug) {
             vgl_vector_2d<math_t> x0 = line_3d.x0();
             vgl_vector_3d<math_t> dir = line_3d.direction();
-            vcl_cout << "\n===>does intersect\n" << x0 << '\n'
+            std::cout << "\n===>does intersect\n" << x0 << '\n'
                      << dir << '\n';
           }
           // intersection line does pass through the voxel
@@ -951,7 +957,7 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
         }
       }
     if (edge_debug) {
-      vcl_cout << "ntrials for update: " << n_update_trials << '\n'
+      std::cout << "ntrials for update: " << n_update_trials << '\n'
                << "nhits for update: " << n_update_hits << '\n';
     }
     if (!tan_proc.update(*dir_dist_it, *pos_dist_it,
@@ -964,13 +970,13 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
 }
 
 void bvxm_edge_ray_processor::
-display_edge_tangent_world_vrml(vcl_string const& vrml_path)
+display_edge_tangent_world_vrml(std::string const& vrml_path)
 {
   // open the file
-  vcl_ofstream os(vrml_path.c_str());
+  std::ofstream os(vrml_path.c_str());
   if (!os.is_open())
   {
-    vcl_cerr << "In bvxm_edge_ray_processor::display_edge_tangent_world_vrml - "
+    std::cerr << "In bvxm_edge_ray_processor::display_edge_tangent_world_vrml - "
              << " invalid path " << vrml_path << '\n';
     return;
   }
@@ -1016,7 +1022,7 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
   {
     if ( (pos_dist_it == pos_dist_grid->end())||
          (dir_dist_it == dir_dist_grid->end()) ) {
-      vcl_cerr << "In bvxm_edge_ray_processor::display_edge_tangent_world_vrml- reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "In bvxm_edge_ray_processor::display_edge_tangent_world_vrml- reached end of tangent slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return;
     }
     bvxm_voxel_slab<pos_dist_t>& pos_dist_slab = (*pos_dist_it);
@@ -1037,7 +1043,7 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
           // get the infinite 3-d line corresponding to the tangent dist
           pos_t pos_mean = pos_dist.mean();
           dir_t dir_mean = dir_dist.mean();
-          double sd = vcl_sqrt(pos_dist.var());
+          double sd = std::sqrt(pos_dist.var());
           ssd += sd;
           if (sd<min_sd)
             min_sd = sd;
@@ -1107,7 +1113,7 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
      << "geometry Sphere\n{\n  radius .05\n   }\n  }\n ]\n}\n";
   os.close();
   if (edge_debug) {
-    vcl_cout << "min sd " << min_sd << "mean sd " << ssd/sd_count
+    std::cout << "min sd " << min_sd << "mean sd " << ssd/sd_count
              << " max sd " << max_sd << '\n'
              << "min kappa " << min_kappa << "mean kappa " << skap/kappa_count
              << " max kappa " << max_kappa << '\n'
@@ -1115,26 +1121,26 @@ display_edge_tangent_world_vrml(vcl_string const& vrml_path)
     h.print();
   }
 
-  vcl_cout << "Max nobs, " << max_nobs << " at (" << max_nobs_c << ' '
+  std::cout << "Max nobs, " << max_nobs << " at (" << max_nobs_c << ' '
            << max_nobs_r << ") 3d pos: " << max_pc << '\n';
 }
 
 void bvxm_edge_ray_processor::
-display_ground_truth(vcl_string const& gnd_truth_path,
-                     vcl_string const& vrml_path)
+display_ground_truth(std::string const& gnd_truth_path,
+                     std::string const& vrml_path)
 {
   // open the files
-  vcl_ifstream is(gnd_truth_path.c_str());
+  std::ifstream is(gnd_truth_path.c_str());
   if (!is.is_open())
   {
-    vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
+    std::cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
              << " invalid input path " << vrml_path << '\n';
     return;
   }
-  vcl_ofstream os(vrml_path.c_str());
+  std::ofstream os(vrml_path.c_str());
   if (!os.is_open())
   {
-    vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
+    std::cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
              << " invalid output path " << vrml_path << '\n';
     return;
   }
@@ -1145,11 +1151,11 @@ display_ground_truth(vcl_string const& gnd_truth_path,
      << "  groundColor [ 0 0 0 ]\n"
      << "}\n";
   // read the file
-  vcl_string temp;
+  std::string temp;
   is >> temp;
   if (temp!="nlines:")
   {
-    vcl_cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
+    std::cerr << "In bvxm_edge_ray_processor::display_ground_truth - "
              << " parse of input failed\n";
     return;
   }

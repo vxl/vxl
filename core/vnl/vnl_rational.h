@@ -45,8 +45,10 @@
 //                                (actually a full re-implementation, using gcd)
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
+#include "vnl/vnl_export.h"
 
 //: High-precision rational numbers
 //
@@ -66,8 +68,9 @@
 // conversion from e.g. double 1.0/3.0 to the rational number 1/3, hence no more
 // rounding errors.  This is implemented with continued fraction approximations.
 //
-class vnl_rational
+class VNL_EXPORT vnl_rational
 {
+ private:
   long num_; //!< Numerator portion
   long den_; //!< Denominator portion
 
@@ -274,14 +277,14 @@ class vnl_rational
 
 //: formatted output
 // \relatesalso vnl_rational
-inline vcl_ostream& operator<<(vcl_ostream& s, vnl_rational const& r)
+inline std::ostream& operator<<(std::ostream& s, vnl_rational const& r)
 {
   return s << r.numerator() << '/' << r.denominator();
 }
 
 //: simple input
 // \relatesalso vnl_rational
-inline vcl_istream& operator>>(vcl_istream& s, vnl_rational& r)
+inline std::istream& operator>>(std::istream& s, vnl_rational& r)
 {
   long n, d; s >> n >> d;
   r.set(n,d); return s;

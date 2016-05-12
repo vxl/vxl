@@ -13,7 +13,7 @@ class boxm2_render_cone_functor
   //: "default" constructor
   boxm2_render_cone_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
+  bool init_data(std::vector<boxm2_data_base*> & datas, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
   {
     alpha_data_   = new boxm2_data<BOXM2_GAMMA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     mog3_data_    = new boxm2_data<BOXM2_MOG3_GREY>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
@@ -33,7 +33,7 @@ class boxm2_render_cone_functor
     boxm2_data<BOXM2_GAMMA>::datatype alpha = alpha_data_->data()[index];
     float voxel_int = boxm2_processor_type<BOXM2_MOG3_GREY>::type::expected_color(mog3_data_->data()[index]);
     //probability that this voxel is occupied by surface
-    float temp =vcl_exp(-alpha*volume);
+    float temp =std::exp(-alpha*volume);
 
     //weighted intensity for this voxel
     exp_cum += voxel_int*volume;

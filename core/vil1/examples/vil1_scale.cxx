@@ -1,9 +1,10 @@
 // This is core/vil1/examples/vil1_scale.cxx
 // Example: scaling.
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>    // vcl_sqrt()
-#include <vcl_cstdlib.h>  // vcl_atoi()
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_new.h>
 #include <vil1/vil1_load.h>
@@ -14,11 +15,11 @@ void vil1_scale(vil1_image in, int newxsize, int newysize, vil1_image out);
 int main(int argc, char ** argv)
 {
   if (argc != 6) {
-    vcl_cerr << "usage: vil1_scale w h in out format\n";
+    std::cerr << "usage: vil1_scale w h in out format\n";
     return -1;
   }
-  int w = vcl_atoi(argv[1]);
-  int h = vcl_atoi(argv[2]);
+  int w = std::atoi(argv[1]);
+  int h = std::atoi(argv[2]);
   char const* input_filename = argv[3];
   char const* output_filename = argv[4];
   char const* output_format = argv[5];
@@ -47,8 +48,8 @@ struct pnmscale {
   }
 
   void pm_error(char const* msg) {
-    vcl_cerr <<"vil1_scale: ERROR: " << msg << vcl_endl;
-    vcl_abort();
+    std::cerr <<"vil1_scale: ERROR: " << msg << std::endl;
+    std::abort();
   }
 
   void set_xscale(double xscale) {
@@ -156,7 +157,7 @@ struct pnmscale {
       else
       {
         xscale = yscale =
-          vcl_sqrt( (float) newpixels / (float) cols / (float) rows );
+          std::sqrt( (float) newpixels / (float) cols / (float) rows );
         specxscale = specyscale = 1;
       }
     }
@@ -356,24 +357,6 @@ void pnmscaleT<T, longT>::go()
 
 template struct pnmscaleT<unsigned char, long>;
 
-#if defined(VCL_SGI_CC)
-// fsm
-// "vil1_scale.cxx", line 263: error(1324): more than one operator "*" matches
-//           these operands:
-//             built-in operator "arithmetic * arithmetic"
-//             function template "operator*(double, const vil1_rgb<T> &)"
-//             operand types are: long * vil1_rgb<unsigned char>
-//                   gs[col] += longT(fracrowleft * (*xP));
-//                                                ^
-//           detected during instantiation of "void pnmscaleT<vil1_rgb<unsigned
-//                     char>, vil1_rgb<long>>::go()"
-static inline
-vil1_rgb<long> operator*(long const &a, vil1_rgb<unsigned char> const &b) {
-  return vil1_rgb<long>(a*long(b.r),
-                        a*long(b.g),
-                        a*long(b.b));
-}
-#endif
 template struct pnmscaleT<vil1_rgb<unsigned char>, vil1_rgb<long> >;
 
 void vil1_scale(vil1_image in, int newxsize, int newysize, vil1_image out)

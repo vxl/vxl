@@ -50,10 +50,10 @@ void ihog_sample_grid_bilin(vnl_vector<double>& vec,
 
     vil_sample_grid_bilin(vec_data,image.image(),im_p0.x(),im_p0.y(),
                           im_u.x(),im_u.y(),im_v.x(),im_v.y(),n1,n2);
-  
+
     return;
   }
-  
+
   // Otherwise do more fiddly projective calculations
 
   // Check that all the grid points are within the image.
@@ -69,9 +69,9 @@ void ihog_sample_grid_bilin(vnl_vector<double>& vec,
   const float* plane0 = image.image().top_left_ptr();
   unsigned ni = image.image().ni();
   unsigned nj = image.image().nj();
-  vcl_ptrdiff_t istep = image.image().istep();
-  vcl_ptrdiff_t jstep = image.image().jstep();
-  vcl_ptrdiff_t pstep = image.image().planestep();
+  std::ptrdiff_t istep = image.image().istep();
+  std::ptrdiff_t jstep = image.image().jstep();
+  std::ptrdiff_t pstep = image.image().planestep();
 
   if (all_in_image)
   {

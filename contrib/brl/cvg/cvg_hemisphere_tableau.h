@@ -34,9 +34,9 @@ class cvg_hemisphere_tableau : public vgui_image_tableau
   cvg_hemisphere_tableau(vil_image_view_base const& img);
   cvg_hemisphere_tableau(vil_image_resource_sptr const& img);
   cvg_hemisphere_tableau(vil_image_resource_sptr const& img,
-                         vsph_view_sphere<vsph_view_point<vcl_string> > sphere);
+                         vsph_view_sphere<vsph_view_point<std::string> > sphere);
   cvg_hemisphere_tableau(vil_image_view_base const& img,
-                         vsph_view_sphere<vsph_view_point<vcl_string> > sphere);
+                         vsph_view_sphere<vsph_view_point<std::string> > sphere);
   virtual ~cvg_hemisphere_tableau() {}
 
   //: i'd imagine this will be initialized with a 2d array of images
@@ -48,13 +48,13 @@ class cvg_hemisphere_tableau : public vgui_image_tableau
  protected:
 
   //: image filename sphere
-  vsph_view_sphere<vsph_view_point<vcl_string> > img_sphere_;
+  vsph_view_sphere<vsph_view_point<std::string> > img_sphere_;
 
   //: current location
   vsph_sph_point_3d curr_point_;
 
   //: cache pyramids that you've loaded
-  vcl_map<int, vil_pyramid_image_view<vxl_byte>*> pyramids_;
+  std::map<int, vil_pyramid_image_view<vxl_byte>*> pyramids_;
 
   //: current image pyramid
   vil_pyramid_image_view<vxl_byte>* curr_pyramid_;
@@ -86,12 +86,12 @@ struct cvg_hemisphere_tableau_new : public cvg_hemisphere_tableau_sptr
 
   //: constructor with view sphere
   cvg_hemisphere_tableau_new( vil_image_resource_sptr const& t,
-                              vsph_view_sphere<vsph_view_point<vcl_string> > sphere)
+                              vsph_view_sphere<vsph_view_point<std::string> > sphere)
     : base( new cvg_hemisphere_tableau(t, sphere) ) { }
 
   //: constructor with view sphere
   cvg_hemisphere_tableau_new( vil_image_view_base const& t,
-                              vsph_view_sphere<vsph_view_point<vcl_string> > sphere)
+                              vsph_view_sphere<vsph_view_point<std::string> > sphere)
     : base( new cvg_hemisphere_tableau(t, sphere) ) { }
 };
 

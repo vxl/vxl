@@ -5,11 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "FMatrixPlanar.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3.h>
 
 #include <vnl/algo/vnl_svd.h>
@@ -93,8 +94,8 @@ FMatrixPlanar::set (vnl_double_3x3 const& f_matrix )
   if (svd.rank()!=2)
   {
     planar = false;
-    vcl_cerr << "WARNING in FMatrixPlanar::set\n"
-             << "F matrix not rank 2: svd = " << svd.W() << vcl_endl;
+    std::cerr << "WARNING in FMatrixPlanar::set\n"
+             << "F matrix not rank 2: svd = " << svd.W() << std::endl;
   }
   else
   {
@@ -102,14 +103,14 @@ FMatrixPlanar::set (vnl_double_3x3 const& f_matrix )
     if (svd.rank()!=2)
     {
       planar = false;
-      vcl_cerr << "WARNING in FMatrixPlanar::set\n"
+      std::cerr << "WARNING in FMatrixPlanar::set\n"
                << "Symmetric part matrix not rank 2: svd = " << svd.W() << '\n';
     }
   }
 
   if (!planar)
   {
-    vcl_cerr << "WARNING: F matrix not planar so cannot allocate to FMatrixPlanar\n" ;
+    std::cerr << "WARNING: F matrix not planar so cannot allocate to FMatrixPlanar\n" ;
     return FALSE;
   }
 
@@ -163,25 +164,25 @@ void FMatrixPlanar::init(const FMatrix& F)
   vnl_double_3 f1, f2;
 
   if (eig0 > 0 && eig1 < 0) {
-    f1 = vcl_sqrt(eig0)*v0 + vcl_sqrt(-eig1)*v1;
-    f2 = vcl_sqrt(eig0)*v0 - vcl_sqrt(-eig1)*v1;
+    f1 = std::sqrt(eig0)*v0 + std::sqrt(-eig1)*v1;
+    f2 = std::sqrt(eig0)*v0 - std::sqrt(-eig1)*v1;
   }
   else if (eig0 < 0 && eig1 > 0) {
-    f1 = vcl_sqrt(eig1)*v1 + vcl_sqrt(-eig0)*v0;
-    f2 = vcl_sqrt(eig1)*v1 - vcl_sqrt(-eig0)*v0;
+    f1 = std::sqrt(eig1)*v1 + std::sqrt(-eig0)*v0;
+    f2 = std::sqrt(eig1)*v1 - std::sqrt(-eig0)*v0;
   }
   else {
-    vcl_cerr << "ERROR in FMatrix::init\n"
+    std::cerr << "ERROR in FMatrix::init\n"
              << "EXITING...\n";
     assert(false);
   }
 
 #define dot_n(a,b) (a.x()*b(0)/a.w()+a.y()*b(1)/a.w()+b(2))
   vnl_double_3 ls;
-  if (vcl_fabs(dot_n(e1,f1))+
-      vcl_fabs(dot_n(e2,f1)) >
-      vcl_fabs(dot_n(e1,f2))+
-      vcl_fabs(dot_n(e2,f2)) )
+  if (std::fabs(dot_n(e1,f1))+
+      std::fabs(dot_n(e2,f1)) >
+      std::fabs(dot_n(e1,f2))+
+      std::fabs(dot_n(e2,f2)) )
     ls = f1;
   else
     ls = f2;
@@ -189,18 +190,18 @@ void FMatrixPlanar::init(const FMatrix& F)
 
   ls.normalize();
 
-  double ls_thi = vcl_acos(ls[2]);
+  double ls_thi = std::acos(ls[2]);
   if (ls_thi < 0) ls_thi += vnl_math::pi;
 
   double ls_theta;
   if (ls[1] >= 0)
-    ls_theta =  vcl_acos(ls[0]/vcl_sin(ls_thi));
+    ls_theta =  std::acos(ls[0]/std::sin(ls_thi));
   else
-    ls_theta = -vcl_acos(ls[0]/vcl_sin(ls_thi));
+    ls_theta = -std::acos(ls[0]/std::sin(ls_thi));
 
-  double ls1 = vcl_cos(ls_theta)*vcl_sin(ls_thi);
-  double ls2 = vcl_sin(ls_theta)*vcl_sin(ls_thi);
-  double ls3 = vcl_cos(ls_thi);
+  double ls1 = std::cos(ls_theta)*std::sin(ls_thi);
+  double ls2 = std::sin(ls_theta)*std::sin(ls_thi);
+  double ls3 = std::cos(ls_thi);
 
   double list1[9] = {0,-1.0,e1.y()/e1.w(),
                      1,0,-e1.x()/e1.w(),

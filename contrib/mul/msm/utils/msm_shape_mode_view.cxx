@@ -4,19 +4,21 @@
 // \brief Generates shapes displaying modes of a shape model.
 // \author Tim Cootes
 
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "msm_shape_mode_view.h"
 #include <msm/msm_ref_shape_model.h>
-#include <vcl_cmath.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 // Dflt ctor
 //=======================================================================
 
 msm_shape_mode_view::msm_shape_mode_view():
-  shape_model_(0),
+  shape_model_(VXL_NULLPTR),
   points_(3),
   n_per_mode_(3),
   mode_(0),
@@ -32,7 +34,7 @@ void msm_shape_mode_view::set_overlap_shapes(bool b)
 {
   msm_shape_mode_view::overlap_shapes_=b;
 
-  if (shape_model_!=0)
+  if (shape_model_!=VXL_NULLPTR)
     compute_shapes();
 }
 
@@ -46,7 +48,7 @@ void msm_shape_mode_view::set_shape_model(const msm_ref_shape_model& sm)
   sm_inst_.set_shape_model(*shape_model_);
 
   b_sd_ = sm.mode_var();
-  for (unsigned i=0;i<b_sd_.size();i++) b_sd_[i]=vcl_sqrt(b_sd_[i]);
+  for (unsigned i=0;i<b_sd_.size();i++) b_sd_[i]=std::sqrt(b_sd_[i]);
 
   if (b_sd_.size()>0)
     set_mode(1);
@@ -144,11 +146,11 @@ void msm_shape_mode_view::compute_shapes(unsigned n_shapes,
   // Estimate scaling required to fit into window
 
   // Assumes shapes have origin at CoG
-//  double sw = 0.5*w_width/vcl_max(-bbox.min_x(),bbox.max_x());
-//  double sh = 0.5*w_height/vcl_max(-bbox.min_y(),bbox.max_y());
+//  double sw = 0.5*w_width/std::max(-bbox.min_x(),bbox.max_x());
+//  double sh = 0.5*w_height/std::max(-bbox.min_y(),bbox.max_y());
   double sw = w_width/(bbox.max_x()-bbox.min_x());
   double sh = w_height/(bbox.max_y()-bbox.min_y());
-  double s = vcl_min(sw,sh)*rel_scale_;
+  double s = std::min(sw,sh)*rel_scale_;
 
   // Scale each example
   for (unsigned i=0;i<n_shapes;++i)
@@ -184,14 +186,14 @@ void msm_shape_mode_view::set_display_window(const vgl_box_2d<int> & win)
 {
   display_win_ = win;
 
-  if (shape_model_!=0)
+  if (shape_model_!=VXL_NULLPTR)
     compute_shapes();
 }
 
     //: Define current mode to use
 void msm_shape_mode_view::set_mode(unsigned m)
 {
-  if (shape_model_==0) return;
+  if (shape_model_==VXL_NULLPTR) return;
 
   if (m>=shape_model().n_modes()) m = shape_model().n_modes();
   mode_ = m;
@@ -219,7 +221,7 @@ void msm_shape_mode_view::set_n_per_mode(unsigned n)
 //: Maximum number of shape modes available
 unsigned msm_shape_mode_view::max_modes() const
 {
-  if (shape_model_==0)
+  if (shape_model_==VXL_NULLPTR)
     return 0;
   else
     return shape_model_->n_modes();

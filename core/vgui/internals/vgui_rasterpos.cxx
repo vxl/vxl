@@ -44,7 +44,7 @@ void vgui_rasterpos4dv(double const X[4])
   glBitmap(0,0,
            0,0,
            float(rx*vp[2]/2), float(ry*vp[3]/2),
-           0);
+           VXL_NULLPTR);
 }
 
 

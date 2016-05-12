@@ -5,15 +5,17 @@
 // \file
 // \brief A class for a grey-scale-gaussian processor
 //
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date   June 15, 2011
 // \verbatim
 //  Modifications
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <bsta/algo/bsta_sigma_normalizer.h>
 
@@ -26,17 +28,17 @@ class  boxm2_gauss_grey_processor
      static void  update_app_model(vnl_vector_fixed<unsigned char, 2> & apm,
                                         vnl_vector_fixed<float, 4> & nobs,
                                         float x, float w, float init_sigma,float min_sigma);
-     
+
      static void compute_app_model(vnl_vector_fixed<unsigned char, 2> & apm,
-                                         vcl_vector<float> const& obs, 
-                                         vcl_vector<float> const& obs_weights, 
-                                         bsta_sigma_normalizer_sptr n_table, 
+                                         std::vector<float> const& obs,
+                                         std::vector<float> const& obs_weights,
+                                         bsta_sigma_normalizer_sptr n_table,
                                          float min_sigma = 0.01f);
 
      static void compute_app_model(vnl_vector_fixed<unsigned char, 2> & apm,
-                                   vcl_vector<float> const& obs, 
-                                   vcl_vector<float> const& pre, 
-                                   vcl_vector<float> const& vis, 
+                                   std::vector<float> const& obs,
+                                   std::vector<float> const& pre,
+                                   std::vector<float> const& vis,
                                    bsta_sigma_normalizer_sptr n_table,
                                    float min_sigma=0.01f);
 };

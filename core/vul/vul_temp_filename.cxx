@@ -3,13 +3,14 @@
 #pragma implementation
 #endif
 
+#include <string>
+#include <ctime>
+#include <cstdlib>
 #include "vul_temp_filename.h"
-#include <vcl_string.h>
-#include <vcl_ctime.h>
-#include <vcl_cstdlib.h> // for rand/srand
+#include <vcl_compiler.h>
 
-#if defined(VCL_BORLAND) || defined (VCL_VC) || defined(__MINGW32__)
-# include <vcl_cstdio.h> // for _tempnam on borland (and stlport5 with VC8)
+#if defined (VCL_VC) || defined(__MINGW32__)
+# include <vcl_cstdio.h>
 # include <Windows.h>
 #else
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
@@ -22,7 +23,7 @@
   namespace {
     // The filename is okay if it doesn't exist and can be opened for
     // writing.
-    bool is_okay( const vcl_string& name )
+    bool is_okay( const std::string& name )
     {
       bool okay = true;
       int fd = open( name.c_str(), O_CREAT|O_EXCL, 0600 );
@@ -41,7 +42,7 @@
     // randomness is that crucial.
     int init_randomizer()
     {
-      vcl_srand( vcl_time( 0 ) );
+      std::srand( std::time( VXL_NULLPTR ) );
       return 0;
     }
     static int random_seed_trigger = init_randomizer();
@@ -49,14 +50,14 @@
     char random_letter()
     {
       // Make sure the random character is a letter.
-      int r = vcl_rand() % (26+26); // 26 uppercase and 26 lowercase letters
+      int r = std::rand() % (26+26); // 26 uppercase and 26 lowercase letters
       return (r<26) ? char('A'+r) : char('a'+r-26);
     }
 
     char random_char()
     {
       // Make sure the random character is a letter or number.
-      int r = vcl_rand() % (26+26+10); // 2x26 letters, 10 digits
+      int r = std::rand() % (26+26+10); // 2x26 letters, 10 digits
       return (r<26) ? char('A'+r) : (r<52) ? char('a'+r-26) : char('0'+r-52);
     }
   }
@@ -65,10 +66,10 @@
 #endif
 #endif
 
-vcl_string
+std::string
 vul_temp_filename( )
 {
-#if defined(VCL_VC) || defined(VCL_BORLAND) || defined(__MINGW32__)
+#if defined(VCL_VC) || defined(__MINGW32__)
   char path[ _MAX_PATH ];
   char* file;
   if ( GetTempPath( _MAX_PATH, path ) == 0 )
@@ -78,11 +79,7 @@ vul_temp_filename( )
   // yet another file that will lie around if the caller doesn't use the generated
   // filename. And I don't trust the implementation enough to just unlink the file
   // before returning.
-# if defined(VCL_BORLAND_56)
-  file = std::_tempnam( path, "" );
-# else
   file = _tempnam( path, "" );
-# endif
   if ( file == 0 )
     return "";
   return file;
@@ -91,13 +88,13 @@ vul_temp_filename( )
   // Don't use tmpnam, since it causes linker warnings (and sometimes
   // linker errors). Instead reimplement. Sigh.
   const unsigned int num_char_in_filename = 7+1; // should always be at least 1
-  vcl_string filename;
-  vcl_string tempdir;
+  std::string filename;
+  std::string tempdir;
   unsigned int count = 0;
   bool okay = false;
 
-  if ( vcl_getenv( "TMP" ) ) {
-    tempdir = vcl_getenv( "TMP" );
+  if ( std::getenv( "TMP" ) ) {
+    tempdir = std::getenv( "TMP" );
   } else {
     tempdir = P_tmpdir; // defined in stdio.h
   }

@@ -1,12 +1,14 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_basic_functors.h>
 
 template <class T>
-void test_mixture_type(T /*dummy*/, const vcl_string& type_name)
+void test_mixture_type(T /*dummy*/, const std::string& type_name)
 {
   // test stuff here
   TEST(("Dummy test <"+type_name+">").c_str(), true, true);
@@ -14,7 +16,7 @@ void test_mixture_type(T /*dummy*/, const vcl_string& type_name)
 
 void test_probability_functor()
 {
-  vcl_cout << "Starting test of probability functors\n";
+  std::cout << "Starting test of probability functors\n";
   const float covar = 0.01f;
   const float mod_covar = 0.02f;
   const float sample = 0.25f;
@@ -46,7 +48,7 @@ void test_probability_functor()
 
 void test_sampling()
 {
-  vcl_cout << "Starting test of sampling\n";
+  std::cout << "Starting test of sampling\n";
   typedef bsta_gauss_sf1 bsta_gauss_t;
   typedef bsta_gauss_t::covar_type covar_t;
   typedef bsta_gauss_t::vector_type vector_t;
@@ -57,20 +59,18 @@ void test_sampling()
   vnl_random rng;
   for (unsigned i = 0; i < 1000; i++) {
     vector_t s0 = gauss0.sample(rng);
-    vcl_cout << s0 << ' ';
+    std::cout << s0 << ' ';
     mean += s0;
   }
-  mean /= 1000;
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   mean = 0.0f;
   for (unsigned i = 0; i < 1000; i++) {
     vector_t s1 = gauss1.sample(rng);
-    vcl_cout << s1 << ' ';
+    std::cout << s1 << ' ';
     mean += s1;
   }
-  mean /= 1000;
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
 #if 0
   typedef bsta_mixture<bsta_gauss_t> mix_gauss_type;

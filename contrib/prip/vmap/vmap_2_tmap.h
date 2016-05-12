@@ -12,7 +12,9 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include "vmap_types.h"       // for vmap_face_index etc.
 #include "vmap_2_tmap_elts.h" // for vmap_2_tmap_dart etc.
 #include "vmap_2_map.h"
@@ -527,10 +529,10 @@ class vmap_2_tmap: public vmap_2_map<D>,
   void contraction(dart_iterator & arg) ;
 
   //: Initializes the structure of the combinatorial map from "stream".
-  void read_structure(vcl_istream & stream) ;
+  void read_structure(std::istream & stream) ;
 
   //: Writes the structure of the combinatorial map to "stream".
-  void write_structure(vcl_ostream & stream) const ;
+  void write_structure(std::ostream & stream) const ;
 
  protected:
 
@@ -707,6 +709,6 @@ class vmap_2_tmap: public vmap_2_map<D>,
   }
 };
 
-#include "vmap_2_tmap.txx"
+#include "vmap_2_tmap.hxx"
 
 #endif

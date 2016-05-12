@@ -10,8 +10,8 @@
 //********************************************************************************
 
 bool vgl_h_matrix_1d_compute_linear::
-compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&P,
-                  const vcl_vector<vgl_homg_point_1d<double> >&Q,
+compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >&P,
+                  const std::vector<vgl_homg_point_1d<double> >&Q,
                   vgl_h_matrix_1d<double>& M)
 {
   unsigned N=P.size(); assert(N==Q.size());

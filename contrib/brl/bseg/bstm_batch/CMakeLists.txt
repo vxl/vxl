@@ -1,71 +1,68 @@
 # contrib/brl/bseg/bstm_batch/CMakeLists.txt
-PROJECT( bstm_batch )
+project( bstm_batch )
 
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
+include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
-IF(DIRECTSHOW_FOUND)
-  ADD_DEFINITIONS(-DHAS_DIRECTSHOW)
-ENDIF(DIRECTSHOW_FOUND)
+include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
+if(DIRECTSHOW_FOUND)
+  add_definitions(-DHAS_DIRECTSHOW)
+endif()
 
-IF( PYTHON_FOUND )
-  INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-  IF( EXPAT_FOUND )
-    INCLUDE_DIRECTORIES( ${PYTHON_INCLUDE_DIRS} )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
+if( PYTHON_FOUND )
+  include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+  if( EXPAT_FOUND )
+    include_directories( ${PYTHON_INCLUDE_DIRS} )
+    include_directories( ${BRL_INCLUDE_DIR} )
+    include_directories( ${BRL_INCLUDE_DIR}/bpro )
+    include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
 
-    INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-    INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-    INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
+    include_directories( ${GEL_INCLUDE_DIR}/mrc )
+    include_directories( ${MUL_INCLUDE_DIR} )
+    include_directories( ${BRL_INCLUDE_DIR}/bseg )
+    include_directories( ${BRL_INCLUDE_DIR}/bbas)
 
-     SET(bstm_batch_sources
+     set(bstm_batch_sources
          reg_bstm.h   reg_bstm.cxx
         )
 
-    IF(NOT BUILD_POSITION_DEPENDENT_CODE)
-      ADD_LIBRARY(bstm_batch SHARED ${bstm_batch_sources})
+    if(NOT BUILD_POSITION_DEPENDENT_CODE)
+      vxl_add_library(LIBRARY_NAME bstm_batch LIBRARY_SOURCES SHARED ${bstm_batch_sources})
 
       #library has to have different name depending on debug or release version.
-      IF(WIN32)
-        SET_TARGET_PROPERTIES(bstm_batch PROPERTIES OUTPUT_NAME bstm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
-      ENDIF(WIN32)
-      IF(APPLE)
-        SET_TARGET_PROPERTIES(bstm_batch PROPERTIES OUTPUT_NAME bstm_batch SUFFIX .so)
-      ENDIF(APPLE)
-      SET_TARGET_PROPERTIES(bstm_batch PROPERTIES PREFIX "")
+      if(WIN32)
+        set_target_properties(bstm_batch PROPERTIES OUTPUT_NAME bstm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
+      endif()
+      if(APPLE)
+        set_target_properties(bstm_batch PROPERTIES OUTPUT_NAME bstm_batch SUFFIX .so)
+      endif()
+      set_target_properties(bstm_batch PROPERTIES PREFIX "")
 
-      TARGET_LINK_LIBRARIES(bstm_batch bstm_pro bstm_cpp_pro bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
+      target_link_libraries(bstm_batch bstm_pro bstm_cpp_pro bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
 
-      IF(OPENCL_FOUND)
-        ADD_DEFINITIONS(-DHAS_OPENCL=1)
-        TARGET_LINK_LIBRARIES(bstm_batch bocl_pro bstm_ocl bstm_ocl_pro boxm2_ocl_pro)
-      ENDIF(OPENCL_FOUND)
-
-
-      IF (PYTHON_DEBUG_LIBRARIES)
-        TARGET_LINK_LIBRARIES( bstm_batch debug ${PYTHON_DEBUG_LIBRARY})
-      ENDIF(PYTHON_DEBUG_LIBRARIES )
-
-      IF(PYTHON_LIBRARIES)
-        TARGET_LINK_LIBRARIES( bstm_batch optimized ${PYTHON_LIBRARY})
-      ENDIF(PYTHON_LIBRARIES)
+      if(OPENCL_FOUND)
+        add_definitions(-DHAS_OPENCL=1)
+        target_link_libraries(bstm_batch bocl_pro bstm_ocl bstm_ocl_pro boxm2_ocl_pro)
+      endif()
 
 
-      #install the .h .txx and libs
-      INSTALL_TARGETS(/lib bstm_batch)
-      INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm_batch/ ${bstm_batch_sources})
+      if(PYTHON_DEBUG_LIBRARIES)
+        target_link_libraries( bstm_batch debug ${PYTHON_DEBUG_LIBRARY})
+      endif()
 
-      IF( BUILD_TESTING )
+      if(PYTHON_LIBRARIES)
+        target_link_libraries( bstm_batch optimized ${PYTHON_LIBRARY})
+      endif()
+
+
+      #install the .h .hxx and libs
+
+      if( BUILD_TESTING )
         add_subdirectory(tests)
-      ENDIF( BUILD_TESTING )
-    ENDIF (NOT BUILD_POSITION_DEPENDENT_CODE)
-  ENDIF( EXPAT_FOUND )
-ENDIF( PYTHON_FOUND )
+      endif()
+    endif()
+  endif()
+endif()
 
 

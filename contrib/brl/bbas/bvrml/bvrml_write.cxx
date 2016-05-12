@@ -1,5 +1,7 @@
+#include <iostream>
+#include <cmath>
 #include "bvrml_write.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 unsigned bvrml_color::heatmap_classic_size = 256;
 unsigned char bvrml_color::heatmap_classic[256][3] = {
@@ -261,7 +263,7 @@ unsigned char bvrml_color::heatmap_classic[256][3] = {
              {53, 52, 61}
 };
 
-void bvrml_write::write_vrml_header(vcl_ofstream& str)
+void bvrml_write::write_vrml_header(std::ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -280,7 +282,7 @@ void bvrml_write::write_vrml_header(vcl_ofstream& str)
 }
 
 
-void bvrml_write::write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<float> const& sphere,
+void bvrml_write::write_vrml_sphere(std::ofstream& str, vgl_sphere_3d<float> const& sphere,
                                     const float r, const float g, const float b,
                                     const float transparency)
 {
@@ -308,7 +310,7 @@ void bvrml_write::write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<float> cons
 }
 
 
-void bvrml_write::write_vrml_disk(vcl_ofstream& str,
+void bvrml_write::write_vrml_disk(std::ofstream& str,
                                   vgl_point_3d<double> const& pt,
                                   vgl_vector_3d<double> const &dir,
                                   float radius,
@@ -317,14 +319,14 @@ void bvrml_write::write_vrml_disk(vcl_ofstream& str,
   write_vrml_cylinder(str, pt, dir, radius, 0.1f, r, g, b);
 }
 
-void bvrml_write::write_vrml_cylinder(vcl_ofstream& str,
+void bvrml_write::write_vrml_cylinder(std::ofstream& str,
                                       vgl_point_3d<double> const& pt,
                                       vgl_vector_3d<double> const &dir,
                                       float radius, float height,
                                       const float r, const float g, const float b,
                                       const unsigned side)
 {
-  double denom=vcl_sqrt(dir.x()*dir.x()+dir.y()*dir.y());
+  double denom=std::sqrt(dir.x()*dir.x()+dir.y()*dir.y());
   float axis_x;
   float axis_y;
 
@@ -339,7 +341,7 @@ void bvrml_write::write_vrml_cylinder(vcl_ofstream& str,
     axis_x=-float(dir.y()/denom);
     axis_y=float(dir.x()/denom);
   }
-  float phi=float(vcl_acos(dir.z()));
+  float phi=float(std::acos(dir.z()));
 
   str << "Transform {\n"
       << "translation " << pt.x() << ' ' << pt.y() << ' '
@@ -370,7 +372,7 @@ void bvrml_write::write_vrml_cylinder(vcl_ofstream& str,
 }
 
 
-void bvrml_write::write_vrml_line(vcl_ofstream& str,vgl_point_3d<double> pt,
+void bvrml_write::write_vrml_line(std::ofstream& str,vgl_point_3d<double> pt,
                                   vgl_vector_3d<double> dir,
                                   const float length,
                                   const float r,

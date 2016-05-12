@@ -30,10 +30,10 @@ class vpdfl_gaussian_kernel_pdf_builder : public vpdfl_kernel_pdf_builder
   virtual vpdfl_pdf_base* new_model() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_builder_base* clone() const;

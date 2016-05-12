@@ -39,11 +39,11 @@ void detect(bbgm_image_of<dist_>& dimg,
   assert(data.nplanes() == d_np);
 
   result.set_size(ni,nj,1);
-  const vcl_ptrdiff_t r_istep = result.istep();
-  const vcl_ptrdiff_t r_jstep = result.jstep();
-  const vcl_ptrdiff_t d_istep = data.istep();
-  const vcl_ptrdiff_t d_jstep = data.jstep();
-  const vcl_ptrdiff_t d_pstep = data.planestep();
+  const std::ptrdiff_t r_istep = result.istep();
+  const std::ptrdiff_t r_jstep = result.jstep();
+  const std::ptrdiff_t d_istep = data.istep();
+  const std::ptrdiff_t d_jstep = data.jstep();
+  const std::ptrdiff_t d_pstep = data.planestep();
 
   const unsigned size_se = se.p_i().size();
 
@@ -97,13 +97,13 @@ void detect_masked(bbgm_image_of<dist_>& dimg,
   assert(mask.nj() == nj);
 
   result.set_size(ni,nj,1);
-  const vcl_ptrdiff_t r_istep = result.istep();
-  const vcl_ptrdiff_t r_jstep = result.jstep();
-  const vcl_ptrdiff_t d_istep = data.istep();
-  const vcl_ptrdiff_t d_jstep = data.jstep();
-  const vcl_ptrdiff_t d_pstep = data.planestep();
-  const vcl_ptrdiff_t m_istep = mask.istep();
-  const vcl_ptrdiff_t m_jstep = mask.jstep();
+  const std::ptrdiff_t r_istep = result.istep();
+  const std::ptrdiff_t r_jstep = result.jstep();
+  const std::ptrdiff_t d_istep = data.istep();
+  const std::ptrdiff_t d_jstep = data.jstep();
+  const std::ptrdiff_t d_pstep = data.planestep();
+  const std::ptrdiff_t m_istep = mask.istep();
+  const std::ptrdiff_t m_jstep = mask.jstep();
 
   const unsigned size_se = se.p_i().size();
 
@@ -158,11 +158,11 @@ void detect(bbgm_image_of<dist_>& dimg,
 
     result.set_size(ni,nj,1);
 
-    const vcl_ptrdiff_t r_istep = result.istep();
-    const vcl_ptrdiff_t r_jstep = result.jstep();
-    const vcl_ptrdiff_t d_istep = image.istep();
-    const vcl_ptrdiff_t d_jstep = image.jstep();
-    const vcl_ptrdiff_t d_pstep = image.planestep();
+    const std::ptrdiff_t r_istep = result.istep();
+    const std::ptrdiff_t r_jstep = result.jstep();
+    const std::ptrdiff_t d_istep = image.istep();
+    const std::ptrdiff_t d_jstep = image.jstep();
+    const std::ptrdiff_t d_pstep = image.planestep();
 
     bool temp_val;
     vector_ sample;
@@ -214,14 +214,14 @@ void detect_masked(bbgm_image_of<dist_>& dimg,
 
     result.set_size(ni,nj,1);
 
-    const vcl_ptrdiff_t r_istep = result.istep();
-    const vcl_ptrdiff_t r_jstep = result.jstep();
-    const vcl_ptrdiff_t d_istep = image.istep();
-    const vcl_ptrdiff_t d_jstep = image.jstep();
-    const vcl_ptrdiff_t d_pstep = image.planestep();
+    const std::ptrdiff_t r_istep = result.istep();
+    const std::ptrdiff_t r_jstep = result.jstep();
+    const std::ptrdiff_t d_istep = image.istep();
+    const std::ptrdiff_t d_jstep = image.jstep();
+    const std::ptrdiff_t d_pstep = image.planestep();
 
-    const vcl_ptrdiff_t m_istep = mask.istep();
-    const vcl_ptrdiff_t m_jstep = mask.jstep();
+    const std::ptrdiff_t m_istep = mask.istep();
+    const std::ptrdiff_t m_jstep = mask.jstep();
 
 
     bool temp_val;
@@ -288,15 +288,15 @@ void detect_masked(bbgm_image_of<dist_>& dimg,
 
     result.set_size(ni,nj,1);
 
-    const vcl_ptrdiff_t r_istep = result.istep();
-    const vcl_ptrdiff_t r_jstep = result.jstep();
+    const std::ptrdiff_t r_istep = result.istep();
+    const std::ptrdiff_t r_jstep = result.jstep();
 
-    const vcl_ptrdiff_t m_istep = mask.istep();
-    const vcl_ptrdiff_t m_jstep = mask.jstep();
+    const std::ptrdiff_t m_istep = mask.istep();
+    const std::ptrdiff_t m_jstep = mask.jstep();
 
-    const vcl_ptrdiff_t d_istep = image.istep();
-    const vcl_ptrdiff_t d_jstep = image.jstep();
-    const vcl_ptrdiff_t d_pstep = image.planestep();
+    const std::ptrdiff_t d_istep = image.istep();
+    const std::ptrdiff_t d_jstep = image.jstep();
+    const std::ptrdiff_t d_pstep = image.planestep();
 
     rT temp_val;
     vector_ sample;

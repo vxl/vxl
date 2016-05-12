@@ -5,8 +5,10 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
+#include <iostream>
+#include <algorithm>
 #include "rgrl_set_of.h"
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 template<typename T>
 rgrl_set_of<T>::
@@ -25,7 +27,7 @@ push_back( T const& item )
 
 
 template<typename T>
-vcl_size_t
+std::size_t
 rgrl_set_of<T>::
 size() const
 {
@@ -75,11 +77,11 @@ resize( unsigned n )
 }
 
 template<typename T>
-void 
+void
 rgrl_set_of<T>::
 fill( T const& item )
 {
-  vcl_fill( data_.begin(), data_.end(), item );
+  std::fill( data_.begin(), data_.end(), item );
 }
 
 #endif // rgrl_set_of_txx_

@@ -4,7 +4,7 @@
 test_ifa_factory::
 test_ifa_factory()
 {
-  table_ = new vcl_vector<ifp>;
+  table_ = new std::vector<ifp>;
 }
 
 test_ifa_factory::
@@ -17,13 +17,13 @@ void test_ifa_factory::
 reset()
 {
   delete table_;
-  table_ = new vcl_vector<ifp>;
+  table_ = new std::vector<ifp>;
 }
 
 vifa_int_face_attr_sptr test_ifa_factory::
 obtain_int_face_attr(vtol_intensity_face_sptr  face)
 {
-  vcl_vector<ifp>::iterator  ifpi = table_->begin();
+  std::vector<ifp>::iterator  ifpi = table_->begin();
 
   for (; ifpi != table_->end(); ifpi++)
   {
@@ -36,7 +36,7 @@ obtain_int_face_attr(vtol_intensity_face_sptr  face)
   }
 
   // Cache miss
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 vifa_int_face_attr_sptr test_ifa_factory::
@@ -46,7 +46,7 @@ obtain_int_face_attr(vtol_intensity_face_sptr  face,
                      vifa_group_pgram_params*  gpp_w,
                      vifa_norm_params*         np)
 {
-  vcl_vector<ifp>::iterator  ifpi = table_->begin();
+  std::vector<ifp>::iterator  ifpi = table_->begin();
   for (; ifpi != table_->end(); ifpi++)
   {
     // Lookup the face in the cache
@@ -64,6 +64,6 @@ obtain_int_face_attr(vtol_intensity_face_sptr  face,
                                                         np);
 
   // Add a face/attribute pair to the cache
-  table_->push_back(vcl_make_pair(face, ifa));
+  table_->push_back(std::make_pair(face, ifa));
   return ifa;
 }

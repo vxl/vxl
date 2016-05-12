@@ -6,7 +6,7 @@ doxygen_add_library(contrib/oxl/osl
   DESCRIPTION "Oxford's segmentation library"
   )
 
-SET(osl_sources
+set(osl_sources
     osl_topology.cxx                osl_topology.h
     osl_vertex.cxx                  osl_vertex.h
     osl_edge.cxx                    osl_edge.h
@@ -38,21 +38,19 @@ SET(osl_sources
     internals/droid.cxx             internals/droid.h
     internals/osl_reorder_chain.cxx internals/osl_reorder_chain.h
 
-    osl_1d_half_kernel.txx          osl_1d_half_kernel.h
-    osl_canny_smooth.txx            osl_canny_smooth.h osl_canny_smooth.cxx
+    osl_1d_half_kernel.hxx          osl_1d_half_kernel.h
+    osl_canny_smooth.hxx            osl_canny_smooth.h osl_canny_smooth.cxx
     osl_hacks.h
 )
-AUX_SOURCE_DIRECTORY(Templates osl_sources)
+aux_source_directory(Templates osl_sources)
 
-ADD_LIBRARY(osl ${osl_sources})
-INSTALL_TARGETS(/lib osl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oxl/osl ${osl_sources})
-TARGET_LINK_LIBRARIES(osl vnl_algo vnl vgl vil1 vbl)
+vxl_add_library(LIBRARY_NAME osl LIBRARY_SOURCES ${osl_sources})
+target_link_libraries(osl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vbl)
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

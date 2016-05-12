@@ -1,2 +1,2 @@
-ADD_EXECUTABLE(geml_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( geml_test_include geml )
+add_executable(geml_test_include test_include.cxx )
+target_link_libraries( geml_test_include geml )

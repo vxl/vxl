@@ -4,7 +4,7 @@
 
 //:
 // \file
-// \brief A class to hold the smartpointers to response scenes and their corresponding names 
+// \brief A class to hold the smartpointers to response scenes and their corresponding names
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  15-Feb-2011.
 //
@@ -26,16 +26,16 @@ typedef vbl_smart_ptr<bvpl_taylor_scenes_map> bvpl_taylor_scenes_map_sptr;
 class bvpl_taylor_scenes_map : public vbl_ref_count
 {
 public:
-  
+
   bvpl_taylor_scenes_map(bvpl_taylor_basis_loader loader);
-  
-  boxm_scene_base_sptr get_scene(vcl_string basis) {return scenes_[basis];}
-  
+
+  boxm_scene_base_sptr get_scene(std::string basis) {return scenes_[basis];}
+
   const bvpl_taylor_basis_loader& loader() {return loader_ ;}
-  
+
 private:
-  vcl_map<vcl_string, boxm_scene_base_sptr> scenes_;
+  std::map<std::string, boxm_scene_base_sptr> scenes_;
   bvpl_taylor_basis_loader loader_;
-  
+
 };
 #endif

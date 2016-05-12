@@ -4,16 +4,17 @@
 //  Copyright: (C) 2007 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <sstream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test mcal_trivial_ca
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mcal/mcal_add_all_loaders.h>
@@ -29,9 +30,9 @@ void test_trivial_ca1(unsigned nd, unsigned ns)
   for (unsigned i=0;i<nd;++i)
   {
     mean[i] = i;
-    v1[i] = vcl_cos(i*0.17);
-    v2[i] = vcl_cos(i*0.37+2);
-    v3[i] = vcl_cos(i*0.47+1.2);
+    v1[i] = std::cos(i*0.17);
+    v2[i] = std::cos(i*0.37+2);
+    v3[i] = std::cos(i*0.47+1.2);
   }
   v1.normalize();
 
@@ -43,12 +44,12 @@ void test_trivial_ca1(unsigned nd, unsigned ns)
   v3-=(v2*dot_product(v3,v2));
   v3.normalize();
 
-  vcl_vector<vnl_vector<double> > data(ns);
+  std::vector<vnl_vector<double> > data(ns);
   for (unsigned i=0;i<ns;++i)
   {
     double A = vnl_math::twopi/ns*i;
     // Third term introduces small "noise"
-    data[i] = mean + v1*(30*vcl_cos(A)) + v2*(10*vcl_sin(A)) + v3*(0.01*vcl_sin(3*A+0.1));
+    data[i] = mean + v1*(30*std::cos(A)) + v2*(10*std::sin(A)) + v3*(0.01*std::sin(3*A+0.1));
   }
 
   vnl_matrix<double> EVecs;
@@ -57,7 +58,7 @@ void test_trivial_ca1(unsigned nd, unsigned ns)
   mcal_trivial_ca trivial_ca;
   trivial_ca.build_from_array(&data[0],ns,m,EVecs,evals);
 
-  vcl_cout<<"evals: "<<evals<<vcl_endl;
+  std::cout<<"evals: "<<evals<<std::endl;
   TEST("N modes",evals.size(),nd);
 
   TEST_NEAR("Error on Mean",(m-mean).rms(),0,1e-6);
@@ -65,15 +66,15 @@ void test_trivial_ca1(unsigned nd, unsigned ns)
 
 void test_trivial_ca()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing mcal_trivial_ca\n"
            << "*************************\n";
 
   vsl_add_to_binary_loader(mcal_trivial_ca());
 
-  vcl_cout<<"== Run test with more examples than dimensions =="<<vcl_endl;
+  std::cout<<"== Run test with more examples than dimensions =="<<std::endl;
   test_trivial_ca1(7,16);
-  vcl_cout<<"== Run test with fewer examples than dimensions =="<<vcl_endl;
+  std::cout<<"== Run test with fewer examples than dimensions =="<<std::endl;
   test_trivial_ca1(15,4);
 
   vsl_delete_all_loaders();
@@ -84,12 +85,12 @@ void test_trivial_ca()
   {
     mbl_cloneables_factory<mcal_component_analyzer>::add(mcal_trivial_ca());
 
-    vcl_istringstream ss(
+    std::istringstream ss(
           "mcal_trivial_ca\n"
           "{\n"
           "}\n");
 
-    vcl_auto_ptr<mcal_component_analyzer>
+    std::auto_ptr<mcal_component_analyzer>
             ca = mcal_component_analyzer::create_from_stream(ss);
 
     TEST("Correct component analyzer",ca->is_a(),"mcal_trivial_ca");

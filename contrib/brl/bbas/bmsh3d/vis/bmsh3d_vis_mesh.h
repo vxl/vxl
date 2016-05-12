@@ -6,7 +6,9 @@
 // \author Ming-Ching Chang
 // \date May 03, 2005.
 
-#include <vcl_set.h>
+#include <iostream>
+#include <set>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 
@@ -22,35 +24,35 @@ class SoSeparator;
 class SoVertexProperty;
 
 //###############################################################
-int _count_faces_indices (const vcl_vector<vcl_vector<int> >& faces);
+int _count_faces_indices (const std::vector<std::vector<int> >& faces);
 
 void draw_ifs_geom (SoGroup* root,
-                    const vcl_vector<vgl_point_3d<double> >& pts,
-                    const vcl_vector<vcl_vector<int> >& faces);
+                    const std::vector<vgl_point_3d<double> >& pts,
+                    const std::vector<std::vector<int> >& faces);
 
-void draw_ifs_geom (SoGroup* root, vcl_set<bmsh3d_vertex*>& pts,
-                    vcl_set<bmsh3d_face*>& faces);
+void draw_ifs_geom (SoGroup* root, std::set<bmsh3d_vertex*>& pts,
+                    std::set<bmsh3d_face*>& faces);
 
-SoSeparator* draw_ifs (const vcl_vector<vgl_point_3d<double> >& pts,
-                       const vcl_vector<vcl_vector<int> >& faces,
+SoSeparator* draw_ifs (const std::vector<vgl_point_3d<double> >& pts,
+                       const std::vector<std::vector<int> >& faces,
                        const int colorcode = COLOR_SILVER,
                        const bool b_shape_hints = false,
                        const float transp = 0.0f);
 
-SoSeparator* draw_ifs (const vcl_vector<vgl_point_3d<double> >& pts,
-                       const vcl_vector<vcl_vector<int> >& faces,
+SoSeparator* draw_ifs (const std::vector<vgl_point_3d<double> >& pts,
+                       const std::vector<std::vector<int> >& faces,
                        const SbColor& color,
                        const bool b_shape_hints = false,
                        const float transp = 0.0f);
 
-SoSeparator* draw_ifs (vcl_set<bmsh3d_vertex*>& pts,
-                       vcl_set<bmsh3d_face*>& faces,
+SoSeparator* draw_ifs (std::set<bmsh3d_vertex*>& pts,
+                       std::set<bmsh3d_face*>& faces,
                        const int colorcode = COLOR_SILVER,
                        const bool b_shape_hints = false,
                        const float transp = 0.0f);
 
-SoSeparator* draw_ifs (vcl_set<bmsh3d_vertex*>& pts,
-                       vcl_set<bmsh3d_face*>& faces,
+SoSeparator* draw_ifs (std::set<bmsh3d_vertex*>& pts,
+                       std::set<bmsh3d_face*>& faces,
                        const SbColor& color,
                        const bool b_shape_hints = false,
                        const float transp = 0.0f);
@@ -101,7 +103,7 @@ SoSeparator* draw_M_faces_idv (bmsh3d_mesh* M, const bool b_shape_hints = false,
 
 SoSeparator* draw_M_color (bmsh3d_mesh* M,
                            const bool b_shape_hints, const float trans,
-                           const vcl_vector<SbColor>& color_set,
+                           const std::vector<SbColor>& color_set,
                            const bool user_defined_class = true);
 
 //############ Visualize Mesh Geometry & Topology Info ############
@@ -119,7 +121,7 @@ VIS_COLOR_CODE get_M_face_topo_color (const TRIFACE_TYPE type);
 SoSeparator* draw_M_bnd_faces_anim (bmsh3d_mesh* M, const int nF_batch = 30);
 
 void draw_faces_in_switch (SoSeparator* root,
-                           const vcl_vector<bmsh3d_face*>& Faces);
+                           const std::vector<bmsh3d_face*>& Faces);
 
 
 #endif

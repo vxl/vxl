@@ -1,10 +1,11 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "bdgl_curve_algs.h"
 //:
 // \file
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // for std::abs(int)
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
@@ -44,7 +45,7 @@ double bdgl_curve_algs::closest_point(vdgl_digital_curve_sptr const& dc,
 {
   if (!dc)
   {
-    vcl_cout<<"In bdgl_curve_algs::closest_point(..) -"
+    std::cout<<"In bdgl_curve_algs::closest_point(..) -"
             << " warning, null digital curve\n";
     return 0;
   }
@@ -66,7 +67,7 @@ int bdgl_curve_algs::closest_point(vdgl_edgel_chain_sptr const& ec,
 {
   if (!ec)
   {
-    vcl_cout<<"In bdgl_curve_algs::closest_point(..) - warning, null chain\n";
+    std::cout<<"In bdgl_curve_algs::closest_point(..) - warning, null chain\n";
     return 0;
   }
   //for now just scan the curve and save the closest point
@@ -76,7 +77,7 @@ int bdgl_curve_algs::closest_point(vdgl_edgel_chain_sptr const& ec,
   for (int i = 0; i<N; i++)
   {
     vdgl_edgel ed = ec->edgel(i);
-    double d = vcl_sqrt((ed.x()-x)*(ed.x()-x) + (ed.y()-y)*(ed.y()-y));
+    double d = std::sqrt((ed.x()-x)*(ed.x()-x) + (ed.y()-y)*(ed.y()-y));
     if (d<mind)
     {
       mind = d;
@@ -100,7 +101,7 @@ bool bdgl_curve_algs::closest_point(vdgl_digital_curve_sptr const& dc,
 {
   if (!dc)
   {
-    vcl_cout<<"In bdgl_curve_algs::closest_point(..) - warning, null curve\n";
+    std::cout<<"In bdgl_curve_algs::closest_point(..) - warning, null curve\n";
     return false;
   }
   vdgl_interpolator_sptr interp = dc->get_interpolator();
@@ -173,7 +174,7 @@ bool bdgl_curve_algs::closest_point_near(vdgl_edgel_chain_sptr const& ec,
     return false;
 
   double t = interpolate_segment(p0, p1, p, pc);
-  vcl_cout << "At " << p << " t = " << t << '\n';
+  std::cout << "At " << p << " t = " << t << '\n';
   xc = pc[0];   yc = pc[1];
   return true;
 }
@@ -184,7 +185,7 @@ bool bdgl_curve_algs::closest_point_near(vdgl_edgel_chain_sptr const& ec,
 vdgl_digital_curve_sptr bdgl_curve_algs::reverse(vdgl_digital_curve_sptr const& dc)
 {
   if (!dc)
-    return 0;
+    return VXL_NULLPTR;
   vdgl_interpolator_sptr intrp = dc->get_interpolator();
   vdgl_edgel_chain_sptr ec = intrp->get_edgel_chain();
   int N = ec->size();
@@ -223,7 +224,7 @@ static bool intersect_crossing(vnl_double_3& line_coefs,
   //Find the intersection point
   inter = vnl_cross_3d(lv01, line_coefs);
   //Check sanity of the intersection
-  return vcl_fabs(inter[2]) >= bdgl_curve_algs::tol;
+  return std::fabs(inter[2]) >= bdgl_curve_algs::tol;
 }
 
 
@@ -232,16 +233,16 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
                                   vnl_double_3& lv,
                                   double dist1, double dist2,
                                   int index1, int index2,
-                                  vcl_vector<vgl_point_2d<double> >& pts)
+                                  std::vector<vgl_point_2d<double> >& pts)
 {
   int di = (index2 - index1);
   if (di<1) {
-    vcl_cout << "In bdgl_curve_algs::intersect_line_helper -"
+    std::cout << "In bdgl_curve_algs::intersect_line_helper -"
              << " invalid curve segment\n";
     return false;
   }
 
-  if (vcl_fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0) {
+  if (std::fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0) {
     // base case: compute the intersection
     if (di==1) {
       // the first and last edgels
@@ -261,7 +262,7 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
   }
   else{
     if (di==1) return false;
-    if ((di*bdgl_curve_algs::max_edgel_sep)<vcl_fabs(dist1+dist2)) return false;
+    if ((di*bdgl_curve_algs::max_edgel_sep)<std::fabs(dist1+dist2)) return false;
   }
 
   int mid_index = index1 + di/2;
@@ -280,11 +281,11 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
 //  This implementation uses a recursive helper function
 bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
                                           vgl_line_2d<double> & line,
-                                          vcl_vector<vgl_point_2d<double> >& pts)
+                                          std::vector<vgl_point_2d<double> >& pts)
 {
   if (!dc)
   {
-    vcl_cout << "In bdgl_curve_algs::intersect_line_fast - null curve\n";
+    std::cout << "In bdgl_curve_algs::intersect_line_fast - null curve\n";
     return false;
   }
   vdgl_interpolator_sptr interp = dc->get_interpolator();
@@ -308,7 +309,7 @@ bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
   bool intersection = false;
   // This case (the first edgel is on the line)
   // is not covered by the recursion
-  if (vcl_fabs(dist1)<bdgl_curve_algs::tol) {
+  if (std::fabs(dist1)<bdgl_curve_algs::tol) {
     vdgl_edgel const& e = (*ec)[1];
     vnl_double_3 p(e.get_x(), e.get_y(), 1.0);
     vnl_double_3 inter;
@@ -330,11 +331,11 @@ bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
 //  can intersect multiple times. All the intersections are returned.
 bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
                                      vgl_line_2d<double>& line,
-                                     vcl_vector<vgl_point_2d<double> >& pts)
+                                     std::vector<vgl_point_2d<double> >& pts)
 {
   if (!dc)
   {
-    vcl_cout << "In bdgl_curve_algs::intersect_line - null curve\n";
+    std::cout << "In bdgl_curve_algs::intersect_line - null curve\n";
     return false;
   }
   //compute the resolution of the intersection. The digital curve is
@@ -355,8 +356,8 @@ bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
     p1[0]=dc->get_x(t); p1[1]=dc->get_y(t); p1[2]= 1.0;
     double sign0 = dot_product(p0, lv);
     double sign1 = dot_product(p1, lv);
-    if (vcl_fabs(sign0)<bdgl_curve_algs::tol||              //we have crossed or
-        vcl_fabs(sign1)<bdgl_curve_algs::tol||sign0*sign1<=0) // are on the line
+    if (std::fabs(sign0)<bdgl_curve_algs::tol||              //we have crossed or
+        std::fabs(sign1)<bdgl_curve_algs::tol||sign0*sign1<=0) // are on the line
     {
       vnl_double_3 inter;
       if (intersect_crossing(lv, p0, p1, inter))
@@ -381,17 +382,17 @@ static double interpolate_parameter(const double t0, const double t1,
                                     vnl_double_3& p1,
                                     vnl_double_3& pt)
 {
-  if (vcl_fabs(p0[2])<bdgl_curve_algs::tol)
+  if (std::fabs(p0[2])<bdgl_curve_algs::tol)
     return t0;
-  if (vcl_fabs(p1[2])<bdgl_curve_algs::tol)
+  if (std::fabs(p1[2])<bdgl_curve_algs::tol)
     return t0;
-  if (vcl_fabs(pt[2])<bdgl_curve_algs::tol)
+  if (std::fabs(pt[2])<bdgl_curve_algs::tol)
     return t0;
   double x0 = p0[0]/p0[2], y0 = p0[1]/p0[2];
   double x1 = p1[0]/p1[2], y1 = p1[1]/p1[2];
   double xt = pt[0]/pt[2], yt = pt[1]/pt[2];
-  double d01 = vcl_sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0));
-  double d0t = vcl_sqrt((xt-x0)*(xt-x0) + (yt-y0)*(yt-y0));
+  double d01 = std::sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0));
+  double d0t = std::sqrt((xt-x0)*(xt-x0) + (yt-y0)*(yt-y0));
   double r = d0t/d01;//relative length from p0 to pt
   double dt = t1-t0;
   return t0 + r*dt;
@@ -403,16 +404,16 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
                                   vnl_double_3& lv,
                                   double dist1, double dist2,
                                   int index1, int index2,
-                                  vcl_vector<double>& indices)
+                                  std::vector<double>& indices)
 {
   int di = (index2 - index1);
   if (di<1) {
-    vcl_cout << "In bdgl_curve_algs::intersect_line_helper -"
+    std::cout << "In bdgl_curve_algs::intersect_line_helper -"
              << " invalid curve segment\n";
     return false;
   }
 
-  if (vcl_fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0) {
+  if (std::fabs(dist2)<bdgl_curve_algs::tol || dist1*dist2<0.0) {
     // base case: compute the intersection
     if (di==1) {
       // the first and last edgels
@@ -434,7 +435,7 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
   }
   else{
     if (di==1) return false;
-    if ((di*bdgl_curve_algs::max_edgel_sep)<vcl_fabs(dist1+dist2)) return false;
+    if ((di*bdgl_curve_algs::max_edgel_sep)<std::fabs(dist1+dist2)) return false;
   }
 
   int mid_index = index1 + di/2;
@@ -455,11 +456,11 @@ static bool intersect_line_helper(vdgl_edgel_chain const& ec,
 //  This implementation uses a recursive helper function
 bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
                                           vgl_line_2d<double> & line,
-                                          vcl_vector<double>& indices)
+                                          std::vector<double>& indices)
 {
   if (!dc)
   {
-    vcl_cout << "In bdgl_curve_algs::intersect_line_fast - null curve\n";
+    std::cout << "In bdgl_curve_algs::intersect_line_fast - null curve\n";
     return false;
   }
   vdgl_interpolator_sptr interp = dc->get_interpolator();
@@ -483,7 +484,7 @@ bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
   bool intersection = false;
   // This case (the first edgel is on the line)
   // is not covered by the recursion
-  if (vcl_fabs(dist1)<bdgl_curve_algs::tol) {
+  if (std::fabs(dist1)<bdgl_curve_algs::tol) {
     vdgl_edgel const& e = (*ec)[1];
     vnl_double_3 p(e.get_x(), e.get_y(), 1.0);
     vnl_double_3 inter;
@@ -507,11 +508,11 @@ bool bdgl_curve_algs::intersect_line_fast(vdgl_digital_curve_sptr const& dc,
 //  the intersection points are returned
 bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
                                      vgl_line_2d<double>& line,
-                                     vcl_vector<double>& indices)
+                                     std::vector<double>& indices)
 {
   if (!dc)
   {
-    vcl_cout << "In bdgl_curve_algs::intersect_line - null curve\n";
+    std::cout << "In bdgl_curve_algs::intersect_line - null curve\n";
     return false;
   }
   //compute the resolution of the intersection. The digital curve is
@@ -532,8 +533,8 @@ bool bdgl_curve_algs::intersect_line(vdgl_digital_curve_sptr const& dc,
     p1[0]=dc->get_x(t); p1[1]=dc->get_y(t); p1[2]= 1.0;
     double sign0 = dot_product(p0, lv);
     double sign1 = dot_product(p1, lv);
-    if (vcl_fabs(sign0)<bdgl_curve_algs::tol||              //we have crossed or
-        vcl_fabs(sign1)<bdgl_curve_algs::tol||sign0*sign1<=0) // are on the line
+    if (std::fabs(sign0)<bdgl_curve_algs::tol||              //we have crossed or
+        std::fabs(sign1)<bdgl_curve_algs::tol||sign0*sign1<=0) // are on the line
     {
       vnl_double_3 inter;
       if (intersect_crossing(lv, p0, p1, inter))
@@ -564,27 +565,27 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
   double la = line.slope_degrees();
   if (la<0)
     la+=180;
-  vcl_vector<double> indices;
+  std::vector<double> indices;
   if (!bdgl_curve_algs::intersect_line(dc, line, indices))
     return false;
   vgl_homg_point_2d<double> rph(ref_point.x(), ref_point.y());
   double dist = 1e10;
   bool found_valid_intersection = false;
-  for (vcl_vector<double>::iterator iit = indices.begin();
+  for (std::vector<double>::iterator iit = indices.begin();
        iit != indices.end(); iit++)
   {
     double grad_angle = dc->get_theta(*iit);
-    if (vcl_fabs(ref_gradient_angle-grad_angle)>angle_tol)
+    if (std::fabs(ref_gradient_angle-grad_angle)>angle_tol)
       continue;
     double ca = dc->get_tangent_angle(*iit);
     if (ca<0)
       ca+=180;
-    double delt = vcl_fabs(vcl_sin(vcl_fabs(vnl_math::pi_over_180*(ca-la)))*vnl_math::deg_per_rad);
+    double delt = std::fabs(std::sin(std::fabs(vnl_math::pi_over_180*(ca-la)))*vnl_math::deg_per_rad);
     if (delt<angle_thresh)
       continue;
     vgl_homg_point_2d<double> ph(dc->get_x(*iit), dc->get_y(*iit));
     double d = vgl_homg_operators_2d<double>::distance_squared(rph, ph);
-    d = vcl_sqrt(d);
+    d = std::sqrt(d);
     found_valid_intersection = true;
     if (d<dist)
     {
@@ -631,7 +632,7 @@ bool bdgl_curve_algs::line_gen(const float xs, const float ys,
   if (done) return false;
   float dx = xe-xs;
   float dy = ye-ys;
-  float mag = vcl_sqrt(dx*dx + dy*dy);
+  float mag = std::sqrt(dx*dx + dy*dy);
   if (mag<pix_edge)//Can't reach the next pixel under any circumstances
   {                //so just output the target, xe, ye.
     x = (float)xe; y = (float)ye;
@@ -657,10 +658,10 @@ bool bdgl_curve_algs::line_gen(const float xs, const float ys,
     //Check if we have advanced by more than .5 pixels
     x = (float)(xi/pix_edge);
     y = (float)(yi/pix_edge);
-    if (2*vcl_abs(int(x)-xp)>pix_edge || 2*vcl_abs(int(y)-yp)>pix_edge)
+    if (2*std::abs(int(x)-xp)>pix_edge || 2*std::abs(int(y)-yp)>pix_edge)
       return true;
   }
-  vcl_cout << "in bdgl_curve_algs::line_gen - shouldn't happen\n";
+  std::cout << "in bdgl_curve_algs::line_gen - shouldn't happen\n";
   return false;
 }
 
@@ -686,7 +687,7 @@ int bdgl_curve_algs::add_straight_edgels(vdgl_edgel_chain_sptr const& ec,
       ec->add_edgel(ed);
       Npix++;
       if (debug)
-        vcl_cout << "Adding edgel " << ed << '\n';
+        std::cout << "Adding edgel " << ed << '\n';
     }
     else
       first = false;//skip first point since it is already last element of ec
@@ -701,19 +702,19 @@ int bdgl_curve_algs::closest_end(vdgl_edgel_chain_sptr const & ec,
 {
   if (!ec)
   {
-    vcl_cout << "In bdgl_curve_algs::closest_end - null edgel chain\n";
+    std::cout << "In bdgl_curve_algs::closest_end - null edgel chain\n";
     return 0;
   }
   int N = ec->size();
   if (!N)
   {
-    vcl_cout << "In bdgl_curve_algs::closest_end - no edgels in chain\n";
+    std::cout << "In bdgl_curve_algs::closest_end - no edgels in chain\n";
     return 0;
   }
   double x0 = (*ec)[0].x(), y0=(*ec)[0].y();
   double xn = (*ec)[N-1].x(), yn=(*ec)[N-1].y();
-  double d0 = vcl_sqrt((x0-x)*(x0-x)+ (y0-y)*(y0-y));
-  double dn = vcl_sqrt((xn-x)*(xn-x)+ (yn-y)*(yn-y));
+  double d0 = std::sqrt((x0-x)*(x0-x)+ (y0-y)*(y0-y));
+  double dn = std::sqrt((xn-x)*(xn-x)+ (yn-y)*(yn-y));
   if (d0<dn)
     return 0;
   return N;
@@ -722,7 +723,7 @@ int bdgl_curve_algs::closest_end(vdgl_edgel_chain_sptr const & ec,
 
 // smooth a curve by convolving x(s),y(s) with a gaussian filter
 void bdgl_curve_algs::
-smooth_curve(vcl_vector<vgl_point_2d<double> > &curve,double sigma)
+smooth_curve(std::vector<vgl_point_2d<double> > &curve,double sigma)
 {
   vnl_gaussian_kernel_1d gauss_1d(sigma);
   curve.insert(curve.begin(),curve[0]);
@@ -753,7 +754,7 @@ smooth_curve(vcl_vector<vgl_point_2d<double> > &curve,double sigma)
 }
 
 vdgl_digital_curve_sptr  bdgl_curve_algs::
-create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve)
+create_digital_curves(std::vector<vgl_point_2d<double> > & curve)
 {
   vdgl_edgel_chain_sptr vec;
   vec= new vdgl_edgel_chain;

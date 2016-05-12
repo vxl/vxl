@@ -11,7 +11,7 @@
 //  On exit (i,j) and p are updated to move to neighbour
 inline void bil_next_8con_boundary_point(int& i, int& j, int& dir, const bool* &p,
                                          int ni1, int nj1,
-                                         vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep)
+                                         std::ptrdiff_t istep, std::ptrdiff_t jstep)
 {
   for (int k=0;k<8;++k)
   {
@@ -72,14 +72,14 @@ static inline int bil_first_direction(unsigned int i, unsigned int j, const vil_
 //  Assumes that (i0,j0) is a boundary point.
 //  Searches for the boundary pixels and runs around until it gets back to beginning.
 //  On exit the boundary points are given by (bi[k],bj[k])
-void bil_trace_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
+void bil_trace_8con_boundary(std::vector<int>& bi, std::vector<int>& bj,
                              const vil_image_view<bool>& image,
                              int i0, int j0)
 {
   bi.resize(0); bj.resize(0);
   unsigned int ni1 = image.ni()-1;
   unsigned int nj1 = image.nj()-1;
-  vcl_ptrdiff_t istep = image.istep(), jstep=image.jstep();
+  std::ptrdiff_t istep = image.istep(), jstep=image.jstep();
 
   int i = i0, j = j0;
   const bool* p = &image(i,j);

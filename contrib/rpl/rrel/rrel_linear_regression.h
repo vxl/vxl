@@ -23,7 +23,7 @@
 //  planar, quadratics, etc --- where most of the error is in the
 //  depth direction.  Assuming a data point vector \f$x = (x_1, ...,
 //  x_m)\f$, if the "use_intercept" parameter sent to the constructor is
-//  true and then the regression model is 
+//  true and then the regression model is
 //  \f[
 //      x_m = a_1 + a_2 x_1 + ... + a_{m} x_{m-1}
 //  \f]
@@ -33,7 +33,7 @@
 //  \f]
 //  The parameter vector is \f$a = (a_1, ..., a_{m})\f$ for the former and
 //  \f$a = (a_1,...,a_{m-1})\f$ for the latter.
-//  
+//
 //  To illustrate, consider range data, where each measured point is
 //  p = (x,y,z).  For planar fits, the input pts to the class
 //  constructor are then just p, so the regression model is
@@ -52,40 +52,40 @@ public:
   //: Constructor that includes all information in the sample vectors.
   //  For each sample, the first m-1 entries are the independent
   //  variables, and the last entry is the dependent variable.
-  rrel_linear_regression( const vcl_vector<vnl_vector<double> >& pts,
+  rrel_linear_regression( const std::vector<vnl_vector<double> >& pts,
                           bool use_intercept=true);
 
-  //: Constructor with data pre-separated into arrays of independent and dependent variables. 
-  rrel_linear_regression( const vcl_vector< vnl_vector<double> >&  ind_vars,
-                          const vcl_vector< double >&  dep_vars );
+  //: Constructor with data pre-separated into arrays of independent and dependent variables.
+  rrel_linear_regression( const std::vector< vnl_vector<double> >&  ind_vars,
+                          const std::vector< double >&  dep_vars );
 
   //: Destructor.
   virtual ~rrel_linear_regression();
 
   //: Total number of data points.
-  unsigned int num_samples( ) const; 
+  unsigned int num_samples( ) const;
 
   //: Generate a parameter estimate from a minimal sample set.
-  bool fit_from_minimal_set( const vcl_vector<int>& point_indices,
+  bool fit_from_minimal_set( const std::vector<int>& point_indices,
                              vnl_vector<double>& params ) const;
 
   //: Compute signed fit residuals relative to the parameter estimate.
   void compute_residuals( const vnl_vector<double>& params,
-                          vcl_vector<double>& residuals ) const;
+                          std::vector<double>& residuals ) const;
 
-  //: \brief Weighted least squares parameter estimate. 
+  //: \brief Weighted least squares parameter estimate.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const vcl_vector<double>* weights=0 ) const;
+                                   const std::vector<double>* weights=0 ) const;
 
 public:  // testing / debugging utility
     //: \brief Print information as a test utility.
   void print_points() const;
 
 protected:
-  vcl_vector<double> rand_vars_;               // e.g. the z or depth values
-  vcl_vector<vnl_vector<double> > ind_vars_;   // e.g. the image coordinates (plus 1.0
+  std::vector<double> rand_vars_;               // e.g. the z or depth values
+  std::vector<vnl_vector<double> > ind_vars_;   // e.g. the image coordinates (plus 1.0
                                                // for intercept parameters)
 };
-  
+
 #endif

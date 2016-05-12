@@ -1,8 +1,9 @@
 // This is core/vil/tests/test_border.cxx
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-// not used? #include <vcl_sstream.h>
-// not used? #include <vcl_functional.h>
+// not used? #include <vcl_compiler.h>
+// not used? #include <functional>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_border.h>
@@ -155,27 +156,27 @@ static void test_border_periodic()
 
 static void test_border()
 {
-  vcl_cout << "******************************************\n"
+  std::cout << "******************************************\n"
            << " Testing vil_border_constant (byte image)\n"
            << "******************************************\n";
   test_border_constant_byte();
 
-  vcl_cout << "*****************************************\n"
+  std::cout << "*****************************************\n"
            << " Testing vil_border_constant (hsv image)\n"
            << "*****************************************\n";
   test_border_constant_hsv();
 
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vil_border_geodesic\n"
            << "*****************************\n";
   test_border_geodesic();
 
-  vcl_cout << "****************************\n"
+  std::cout << "****************************\n"
            << " Testing vil_border_reflect\n"
            << "****************************\n";
   test_border_reflect();
 
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vil_border_periodic\n"
            << "*****************************\n";
   test_border_periodic();

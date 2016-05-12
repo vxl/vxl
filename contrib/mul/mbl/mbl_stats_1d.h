@@ -6,9 +6,11 @@
 // \brief Simple statistics on a 1D variable.
 // \author Tim Cootes
 
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
 
 // windows thinks min and max are macros in this file, but they
 // are not, don't know where they are defined (somewhere in vxl!)
@@ -28,11 +30,11 @@
 //     else     odd_stats.obs(i);
 //   }
 //
-//   vcl_cout << stats << "\nStats of odd numbers :\n" << odd_stats;
+//   std::cout << stats << "\nStats of odd numbers :\n" << odd_stats;
 //
 //   sum_stats = odd_stats + even_stats;
 //
-//   vcl_cout << "Sum of odd and even stats\n" << sum_stats;
+//   std::cout << "Sum of odd and even stats\n" << sum_stats;
 // \endcode
 class mbl_stats_1d
 {
@@ -50,7 +52,7 @@ public:
   mbl_stats_1d();
 
   //: Construct with a set of observations
-  mbl_stats_1d(const vcl_vector<double>& observations);
+  mbl_stats_1d(const std::vector<double>& observations);
 
     //: Remove all data
   void clear();
@@ -93,7 +95,7 @@ public:
 
     //: Add statistics together
   mbl_stats_1d& operator+=(const mbl_stats_1d& s1);
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
     //: Version number for I/O
   void b_write(vsl_b_ostream& bfs) const;
   void b_read(vsl_b_istream& bfs);
@@ -112,9 +114,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_stats_1d& b);
 void vsl_b_read(vsl_b_istream& bfs, mbl_stats_1d& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_stats_1d& stats);
+std::ostream& operator<<(std::ostream& os,const mbl_stats_1d& stats);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mbl_stats_1d& stats);
+void vsl_print_summary(std::ostream& os,const mbl_stats_1d& stats);
 
 #endif

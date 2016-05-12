@@ -13,6 +13,7 @@
 // \endverbatim
 //=========================================================================
 
+#include <map>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 
@@ -20,7 +21,7 @@
 #include <wx/glcanvas.h>
 class wxMenu;
 
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 //: wxWidgets implementation of vgui_adaptor.
@@ -174,7 +175,7 @@ class vgui_wx_adaptor
   bool destroy_posted_;
 
   int last_key_down_;
-  vcl_map<int,int> ascii_code_;
+  std::map<int,int> ascii_code_;
 };
 
 #endif // vgui_wx_adaptor_h_

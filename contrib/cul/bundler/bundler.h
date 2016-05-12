@@ -14,7 +14,9 @@
 
 
 // Generic includes.
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_sparse_matrix.h>
 
 // We use vil_image_resources since they are not in memory, and we might
@@ -50,11 +52,11 @@ struct bundler_routines;
 // or whose exif tag is missing the focal length.
 bool bundler_driver(
     const bundler_routines &routines,
-    const vcl_vector<vil_image_resource_sptr> &imageset,
-    const vcl_vector<double> &exif_tags,
+    const std::vector<vil_image_resource_sptr> &imageset,
+    const std::vector<double> &exif_tags,
 
-    vcl_vector<vpgl_perspective_camera<double> > &cameras,
-    vcl_vector<vgl_point_3d<double> > &points,
+    std::vector<vpgl_perspective_camera<double> > &cameras,
+    std::vector<vgl_point_3d<double> > &points,
     vnl_sparse_matrix<bool> &visibility_graph);
 
 
@@ -62,12 +64,12 @@ bool bundler_driver(
 // the point data held in points.
 bool bundler_write_ply_file(
     const char *filename,
-    const vcl_vector<vgl_point_3d<double> > &points);
+    const std::vector<vgl_point_3d<double> > &points);
 
 bool bundler_write_bundle_file(
     const char* filename,
-    const vcl_vector<vpgl_perspective_camera<double> > &cameras,
-    const vcl_vector<vgl_point_3d<double> > &points);
+    const std::vector<vpgl_perspective_camera<double> > &cameras,
+    const std::vector<vgl_point_3d<double> > &points);
 
 // A collection of routines that provide the feature phase of
 // the bundler pipeline. There are three constructors, one for the default,
@@ -129,8 +131,8 @@ class bundler_tracks
         // pipeline. Alternatively, you can directly call functors
         // yourself.
         virtual void run_feature_stage(
-            const vcl_vector<vil_image_resource_sptr> &imageset,
-            const vcl_vector<double> &focal_lengths,
+            const std::vector<vil_image_resource_sptr> &imageset,
+            const std::vector<double> &focal_lengths,
             bundler_inters_reconstruction &empty_recon) const;
 };
 
@@ -194,8 +196,8 @@ class bundler_sfm
         // yourself.
         virtual bool run_sfm_stage(
             bundler_inters_reconstruction &empty_recon,
-            vcl_vector<vpgl_perspective_camera<double> > &cameras,
-            vcl_vector<vgl_point_3d<double> > &points,
+            std::vector<vpgl_perspective_camera<double> > &cameras,
+            std::vector<vgl_point_3d<double> > &points,
             vnl_sparse_matrix<bool> visibility_graph) const;
 };
 

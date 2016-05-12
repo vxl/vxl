@@ -6,10 +6,12 @@
 // \author Yi Dong
 // \date Feb 13, 2014
 
+#include <iostream>
+#include <iomanip>
 #include <bprb/bprb_func_process.h>
 #include <boxm2/boxm2_scene.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 
 namespace boxm2_ortho_geo_cam_from_scene_process_globals
 {
@@ -22,10 +24,10 @@ bool boxm2_ortho_geo_cam_from_scene_process_cons(bprb_func_process& pro)
   using namespace boxm2_ortho_geo_cam_from_scene_process_globals;
 
   // process takes 1 input, the scene
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   // process has 1 output, vpgl_geo_camera
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";    // return the ortho camera of the scene that can be used to generate height map from the scene
   output_types_[1] = "unsigned";                   // image size ni
   output_types_[2] = "unsigned";                   // image size nj
@@ -38,7 +40,7 @@ bool boxm2_ortho_geo_cam_from_scene_process(bprb_func_process& pro)
   using namespace boxm2_ortho_geo_cam_from_scene_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_ << std::endl;
     return false;
   }
 
@@ -47,12 +49,12 @@ bool boxm2_ortho_geo_cam_from_scene_process(bprb_func_process& pro)
 
   vpgl_lvcs lvcs = scene->lvcs();
   vgl_box_3d<double> bbox = scene->bounding_box();
-  
+
   // obtain the scene finest resolution
   // note that the sub block size is truncated to integer here
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
   double res_x = 1E5, res_y = 1E5;
-  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++)
+  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++)
   {
     double voxel_size_x = (iter->second.sub_block_dim_.x()) / (1 << (iter->second.max_level_ - iter->second.init_level_));
     double voxel_size_y = (iter->second.sub_block_dim_.y()) / (1 << (iter->second.max_level_ - iter->second.init_level_));
@@ -61,8 +63,8 @@ bool boxm2_ortho_geo_cam_from_scene_process(bprb_func_process& pro)
   }
 
   unsigned ni, nj;
-  ni = (unsigned)vcl_ceil((bbox.max_x()-bbox.min_x())/res_x);
-  nj = (unsigned)vcl_ceil((bbox.max_y()-bbox.min_y())/res_y);
+  ni = (unsigned)std::ceil((bbox.max_x()-bbox.min_x())/res_x);
+  nj = (unsigned)std::ceil((bbox.max_y()-bbox.min_y())/res_y);
 
   vgl_point_3d<double> upper_left(bbox.min_x(), bbox.max_y(), bbox.min_z());
   vgl_point_3d<double> lower_rght(bbox.max_x(), bbox.min_y(), bbox.min_z());
@@ -81,18 +83,18 @@ bool boxm2_ortho_geo_cam_from_scene_process(bprb_func_process& pro)
   trans_matrix[1][3] = upper_left_lat;
 
   vpgl_lvcs_sptr lvcs_ptr = new vpgl_lvcs(lvcs);
-  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs_ptr); 
+  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs_ptr);
   cam->set_scale_format(true);
   vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);
-  
-  vcl_cout << " the bounding box of the scene is: " << bbox << vcl_endl;
-  vcl_cout << " scene finest voxel resolution is: " << res_x << " x " << res_y << vcl_endl;
-  vcl_cout << " length in meters: " << ni << " x " << nj << vcl_endl;
-  vcl_cout << " upper_left:  " << vcl_setprecision(12) << upper_left_lon << " x " << upper_left_lat << vcl_endl;
-  vcl_cout << " lower_right: " << vcl_setprecision(12) << lower_rght_lon << " x " << lower_rght_lat << vcl_endl;
-  vcl_cout << " transformation matrix is: \n";
-  trans_matrix.print(vcl_cout);
-  vcl_cout << vcl_endl;
+
+  std::cout << " the bounding box of the scene is: " << bbox << std::endl;
+  std::cout << " scene finest voxel resolution is: " << res_x << " x " << res_y << std::endl;
+  std::cout << " length in meters: " << ni << " x " << nj << std::endl;
+  std::cout << " upper_left:  " << std::setprecision(12) << upper_left_lon << " x " << upper_left_lat << std::endl;
+  std::cout << " lower_right: " << std::setprecision(12) << lower_rght_lon << " x " << lower_rght_lat << std::endl;
+  std::cout << " transformation matrix is: \n";
+  trans_matrix.print(std::cout);
+  std::cout << std::endl;
 
   pro.set_output_val<vpgl_camera_double_sptr>(0, camera);
   pro.set_output_val<unsigned>(1, ni);

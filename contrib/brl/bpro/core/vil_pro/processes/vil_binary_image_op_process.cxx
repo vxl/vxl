@@ -1,4 +1,5 @@
 // This is brl/bpro/core/vil_pro/processes/vil_binary_image_op_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,19 +9,19 @@
 #include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 //: Constructor
 bool vil_binary_image_op_process_cons(bprb_func_process& pro)
 {
   //this process takes three inputs and has one output
-  vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("vcl_string"); 
+  std::vector<std::string> input_types;
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vcl_string");
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image
 
   return pro.set_input_types(input_types)
@@ -32,7 +33,7 @@ bool vil_binary_image_op_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 3) {
-    vcl_cout << "vil_binary_image_op_process: The number of inputs should be 3" << vcl_endl;
+    std::cout << "vil_binary_image_op_process: The number of inputs should be 3" << std::endl;
     return false;
   }
 
@@ -40,7 +41,7 @@ bool vil_binary_image_op_process(bprb_func_process& pro)
   unsigned i=0;
   vil_image_view_base_sptr img_ptr_a = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr img_ptr_b = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string operation = pro.get_input<vcl_string>(i++);
+  std::string operation = pro.get_input<std::string>(i++);
 
   vil_image_view<float> view_a = *(vil_convert_cast(float(), img_ptr_a));
   vil_image_view<float> view_b = *(vil_convert_cast(float(), img_ptr_b));
@@ -59,7 +60,7 @@ bool vil_binary_image_op_process(bprb_func_process& pro)
     vil_math_image_ratio(view_a, view_b, result);
   else
     {
-    vcl_cerr << "In vil_binary_image_op_process::execute() -"
+    std::cerr << "In vil_binary_image_op_process::execute() -"
              << " unknown binary operation\n";
     return false;
     }

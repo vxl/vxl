@@ -1,3 +1,6 @@
+#include <vector>
+#include <iostream>
+#include <stack>
 #include "vil3d_fill_boundary.h"
 //:
 // \file
@@ -5,8 +8,7 @@
 // \author Kola Babalola
 
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_vector.h>
-#include <vcl_stack.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/algo/vil3d_threshold.h>
 
@@ -22,7 +24,7 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
   vil3d_image_view<int> image(ni,nj,nk,nplanes);
   vil3d_convert_cast(bool_image,image);
 
-  vcl_ptrdiff_t istep = image.istep();
+  std::ptrdiff_t istep = image.istep();
 
   // scan the image and look for a boundary pixel
   int *page0 = image.origin_ptr();
@@ -60,9 +62,9 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
   unsigned ni = image.ni();
   unsigned nj = image.nj();
 
-  vcl_vector<int> x_offset(8); vcl_vector<int> y_offset(8);
+  std::vector<int> x_offset(8); std::vector<int> y_offset(8);
 
-  vcl_vector<int> next_dir(8);
+  std::vector<int> next_dir(8);
 
   // assign the x and y offsets for the 8-neighbourhood
   x_offset[0] = -1; y_offset[0] =  0;
@@ -128,7 +130,7 @@ void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_labe
   unsigned ni = image.ni();
   unsigned nj = image.nj();
 
-  vcl_stack<int> x_stack, y_stack;
+  std::stack<int> x_stack, y_stack;
   int i=0, m;
 
   // push all boundary pixels onto stack. Needed for degenerate cases
@@ -144,7 +146,7 @@ void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_labe
     }
 
   // assign the x and y offsets for the 8-neighbourhood
-  vcl_vector<int> x_offset(8); vcl_vector<int> y_offset(8);
+  std::vector<int> x_offset(8); std::vector<int> y_offset(8);
   x_offset[0] = -1; y_offset[0] =  0;
   x_offset[1] = -1; y_offset[1] = -1;
   x_offset[2] = 0;  y_offset[2] = -1;

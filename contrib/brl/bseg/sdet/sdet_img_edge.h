@@ -14,13 +14,14 @@
 //   July 07, 2010 - Ozge C. Ozcanli - added detect_edge_tangent_interpolated method
 // \endverbatim
 
+#include <string>
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 class sdet_img_edge
 {
@@ -43,7 +44,7 @@ class sdet_img_edge
                                                    bool aggressive_junction_closure);
 
   // return image has three planes as in detect_edge_tangent
-  // Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator                                  
+  // Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator
   static vil_image_view<float> detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
                                                                 double noise_multiplier,
                                                                 double smooth,
@@ -59,7 +60,7 @@ class sdet_img_edge
                                                    bool aggressive_junction_closure,
                                                    int min_fit_length, double rms_distance);
 
-  // input is an edge image as the output of detect_edge_tangent(); output is line image: 
+  // input is an edge image as the output of detect_edge_tangent(); output is line image:
   // plane 0 - line coefficient a --
   //                                |-- components of line normal vector
   // plane 1 - line coefficient b --

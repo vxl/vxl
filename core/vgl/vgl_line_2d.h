@@ -6,13 +6,13 @@
 #endif
 //:
 // \file
-// \author Don Hamilton, Peter Tu, Peter Vanroose, François BERTEL, Franck Bettinger
+// \author Don Hamilton, Peter Tu, Peter Vanroose, Francois BERTEL, Franck Bettinger
 // \date   2000-02-16 Don HAMILTON, Peter TU - Creation
 //
 // \verbatim
 //  Modifications
 //   2000-02-29 Peter Vanroose    Several minor fixes
-//   2000-05-05 François BERTEL   Several minor bugs fixed
+//   2000-05-05 Francois BERTEL   Several minor bugs fixed
 //   2000-05-09 Peter Vanroose    dist_origin() re-implemented
 //   2000-12-01 Peter Vanroose    moved dist_origin() to vgl_distance.h
 //   2001-03-19 Franck Bettinger  added Manchester binary IO code
@@ -22,7 +22,8 @@
 //   2009-05-21 Peter Vanroose    istream operator>> re-implemented
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d and vgl_homg_line_2d
 #include <vgl/vgl_vector_2d.h>
@@ -147,7 +148,7 @@ bool concurrent(l const& l1, l const& l2, l const& l3)
 //: Write line description to stream: "<vgl_line_2d ax+by+c>"
 // \relatesalso vgl_line_2d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, l const& line);
+std::ostream&  operator<<(std::ostream& s, l const& line);
 
 //: Read in three line parameters from stream
 //  Either just reads three blank-separated numbers,
@@ -156,7 +157,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, l const& line);
 //  or reads a formatted line equation "123x+321y-456=0"
 // \relatesalso vgl_line_2d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, l& line);
+std::istream&  operator>>(std::istream& s, l& line);
 
 #undef l
 

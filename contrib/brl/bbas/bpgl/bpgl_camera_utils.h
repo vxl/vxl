@@ -12,11 +12,12 @@
 // \endverbatim
 
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <limits>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_line_2d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 class bpgl_camera_utils
@@ -45,27 +46,27 @@ class bpgl_camera_utils
                     double tilt, double roll);
 
   // return a vector of cameras saved in the specified directory
-  static vcl_vector<vpgl_perspective_camera<double>* > cameras_from_directory(vcl_string dir);
+  static std::vector<vpgl_perspective_camera<double>* > cameras_from_directory(std::string dir);
 
   // the horizon line for a given camera
   static vgl_line_2d<double>
     horizon(vpgl_perspective_camera<double> const& cam);
 
-  static vcl_string get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll);
+  static std::string get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll);
 
   static void camera_parameters(vpgl_perspective_camera<double> const& cam,
-				double& rodrigues_x, double& rodrigues_y,
-				double& rodriques_z, double& tx, double& ty,
-				double& tz, double& focal_length_u,
-				double& focal_length_v, double& principal_pt_u,
-				double& principal_pt_v);
+                                double& rodrigues_x, double& rodrigues_y,
+                                double& rodriques_z, double& tx, double& ty,
+                                double& tz, double& focal_length_u,
+                                double& focal_length_v, double& principal_pt_u,
+                                double& principal_pt_v);
 
   static bool camera_from_parameters(double rodrigues_x, double rodrigues_y,
-				     double rodriques_z, double tx, double ty,
-				     double tz, double focal_length_u,
-				     double focal_length_v,
-				     double principal_pt_u,
-				     double principal_pt_v,
-				     vpgl_perspective_camera<double>& cam);
+                                     double rodriques_z, double tx, double ty,
+                                     double tz, double focal_length_u,
+                                     double focal_length_v,
+                                     double principal_pt_u,
+                                     double principal_pt_v,
+                                     vpgl_perspective_camera<double>& cam);
 };
 #endif //bpgl_camera_utils_h_

@@ -1,5 +1,6 @@
 // This is gel/vtol/examples/example_vdgl.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vsol/vsol_point_2d.h>
 
@@ -43,7 +44,7 @@ int main()
 
   // create a list of edgels from data
   //   note: grad = 0 and theta = 1 for all edgels
-  vcl_vector<vdgl_edgel> edgels;
+  std::vector<vdgl_edgel> edgels;
 
   for ( int i=0; data[i]!= -999; i+= 2)
     edgels.push_back( vdgl_edgel( data[i], data[i+1], 0, 1));
@@ -68,7 +69,7 @@ int main()
   vtol_vertex_2d_sptr vertexend  = new vtol_vertex_2d(*pointend);
 
   vtol_edge_2d_sptr edge = new vtol_edge_2d( vertexstart, vertexend, digital_curve.ptr());
-  vcl_cout << *edge << '\n';
+  std::cout << *edge << '\n';
 
   // Sample 50 points along the curve and print them out
   for ( double i=0; i< 1; i+=0.02)
@@ -76,7 +77,7 @@ int main()
     double x= digital_curve->get_x(i);
     double y= digital_curve->get_y(i);
 
-    vcl_cout << x << '\t' << y << '\n';
+    std::cout << x << '\t' << y << '\n';
   }
 
   // And now play with the digital region
@@ -86,7 +87,7 @@ int main()
   digitalregion.add_point( vgl_point_2d<double>(4,3));
   digitalregion.add_point( vgl_point_2d<double>(5,6));
 
-  vcl_cerr << digitalregion << '\n';
+  std::cerr << digitalregion << '\n';
 #endif
   return 0;
 }

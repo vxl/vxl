@@ -8,7 +8,7 @@
 
 #include "gtrl_polygon.h"
 
-gtrl_polygon::gtrl_polygon( const vcl_vector<gtrl_vertex_sptr> ps)
+gtrl_polygon::gtrl_polygon( const std::vector<gtrl_vertex_sptr> ps)
   : ps_(ps)
 {
 }

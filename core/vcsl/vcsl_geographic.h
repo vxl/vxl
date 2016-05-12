@@ -3,11 +3,11 @@
 //:
 // \file
 // \brief Represent a location relative to the earth
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/29 François BERTEL Creation. Adapted from IUE
+//   2000/06/29 Francois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2004/09/17 Peter Vanroose  made spheroid() non-virtual - it just returns a member and should not be overloaded
 //   2004/09/17 Peter Vanroose  do not pass vcsl_spheroid objects; use vcsl_spheroid_sptr instead

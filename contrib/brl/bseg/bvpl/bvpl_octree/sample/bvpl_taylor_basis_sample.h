@@ -4,7 +4,7 @@
 
 //:
 // \file
-// \brief A data structure that contains vectors and matrices needed for taylor approximation 
+// \brief A data structure that contains vectors and matrices needed for taylor approximation
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  10-Feb-2011.
 //
@@ -13,16 +13,17 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 
 //: Data structure needed for 2-degree taylor approximation of 3-dimesional volumes
 class bvpl_taylor_basis2_sample
-{  
+{
 public:
   bvpl_taylor_basis2_sample()
   {
@@ -31,7 +32,7 @@ public:
     G = vnl_double_3(0.0,0.0,0.0);
     H = vnl_double_3x3(0.0);
   }
-  
+
   bvpl_taylor_basis2_sample(double zeroth_dev, vnl_double_3 grad, vnl_double_3x3 hess): I0(zeroth_dev), G(grad), H(hess){}
 
   short version_no() const{ return 1; }
@@ -43,7 +44,7 @@ public:
   vnl_double_3x3 H;
 };
 
-vcl_ostream& operator << (vcl_ostream& os, const bvpl_taylor_basis2_sample& sample);
+std::ostream& operator << (std::ostream& os, const bvpl_taylor_basis2_sample& sample);
 
 void vsl_b_write(vsl_b_ostream & os, bvpl_taylor_basis2_sample const &sample);
 

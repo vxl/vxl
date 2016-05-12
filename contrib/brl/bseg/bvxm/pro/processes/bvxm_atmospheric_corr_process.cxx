@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_atmospheric_corr_process.cxx
+#include <string>
+#include <iostream>
 #include "bvxm_atmospheric_corr_process.h"
 //:
 // \file
@@ -9,9 +11,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 
-#include <vcl_string.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 #include <brdb/brdb_value.h>
@@ -25,14 +26,14 @@ bool bvxm_atmospheric_corr_process_cons(bprb_func_process& pro)
   //0: The unnormalized image
   //1: sz the z component of the illumination direction
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "float";
 
   if (!pro.set_input_types(input_types_))
     return false;
   //output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]= "vil_image_view_base_sptr"; // corrected image
   return pro.set_output_types(output_types_);
 }
@@ -44,28 +45,28 @@ bool bvxm_atmospheric_corr_process(bprb_func_process& pro)
  //check number of inputs
   if(!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs " << std::endl;
     return false;
   }
 
   //get the inputs
-  vil_image_view_base_sptr input_img = 
+  vil_image_view_base_sptr input_img =
     pro.get_input<vil_image_view_base_sptr>(0);
 
   float sz = pro.get_input<float>(1);
-  
+
   //check inputs validity
   if (!input_img) {
-    vcl_cout << pro.name() <<" :--  image  is null!\n";
+    std::cout << pro.name() <<" :--  image  is null!\n";
     return false;
   }
   ni_ = input_img->ni(); nj_ = input_img->nj(); nplanes_ = input_img->nplanes();
   if(nplanes_!=1){
-    vcl_cout << pro.name() <<" :--  image  is not grey scale!\n";
+    std::cout << pro.name() <<" :--  image  is not grey scale!\n";
     return false;
   }
   if(sz<0.1) {
-    vcl_cout << pro.name() <<" :--  sun illumination angle too low\n";
+    std::cout << pro.name() <<" :--  sun illumination angle too low\n";
     return false;
   }
   vil_image_view<vxl_byte> byte_img = *vil_convert_cast(vxl_byte(), input_img);
@@ -86,7 +87,7 @@ bool bvxm_atmospheric_corr_process(bprb_func_process& pro)
   // The corrected image should be explained by a Lambertian model,
   // that is, Icorr = alpha_i (n_i . s_j)
   //
-  vcl_cout << "airlight " << airlight << "  irradiance " << irrad << '\n';
+  std::cout << "airlight " << airlight << "  irradiance " << irrad << '\n';
 
   vil_image_view<float> float_img(ni_, nj_);
   float min = 1.0e8f, max = -1.0e8f;
@@ -97,13 +98,13 @@ bool bvxm_atmospheric_corr_process(bprb_func_process& pro)
       if(v>max) max = v;
       float_img(i,j) = v;
     }
-  
+
 #if 1
-  // 0 and 3 come from the relative refectances 
+  // 0 and 3 come from the relative refectances
   vil_image_view<float> float_stretch(ni_, nj_);
   vil_convert_stretch_range_limited<float>(float_img, float_stretch,
                                            0.0f, 3.0f, 0.0f, 255.0f);
-  vil_image_view<vxl_byte>* byte_output_img = 
+  vil_image_view<vxl_byte>* byte_output_img =
     new vil_image_view<vxl_byte>(ni_, nj_, nplanes_);
   vil_convert_cast(float_stretch, *byte_output_img);
 

@@ -7,15 +7,15 @@
 // \author J.L. Mundy
 // \brief A set of filter operations based on Gaussian derivatives
 //
-// Provides a set of 2nd derivative filter responses at each pixel over 
-// scale and orientation. The scale values are spaced at harmonic 
+// Provides a set of 2nd derivative filter responses at each pixel over
+// scale and orientation. The scale values are spaced at harmonic
 // intervals across the range. That is, the scale ratio is the nth root
 // of the scale range. The input image is downsampled to form the scale
-// pyramid. The anisotropic (in general) 2nd derivative filter is applied 
+// pyramid. The anisotropic (in general) 2nd derivative filter is applied
 // with the same max and min Gaussian standard deviations, lambda0,
 // and lambda1, at each level of the scale pyramid. At each level a search
 // over orientations is made and the maximum response is retained in the
-// filter response output. If the operator is isotropic, i.e., 
+// filter response output. If the operator is isotropic, i.e.,
 // lambda0 == lambda1, no search over orientations is carried out.
 // \verbatim
 //  Modifications
@@ -23,17 +23,18 @@
 // // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vector>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class brip_filter_bank
 {
  public:
 
   brip_filter_bank(): ni_(0), nj_(0),n_levels_(0), scale_ratio_(1.0),
-    lambda0_(1.0f), lambda1_(1.0f), theta_interval_(0.0f), 
+    lambda0_(1.0f), lambda1_(1.0f), theta_interval_(0.0f),
     cutoff_ratio_(0.01f){}
 
   brip_filter_bank(unsigned n_levels, double scale_range, float lambda0,
@@ -61,11 +62,11 @@ class brip_filter_bank
   vil_image_view<float>& response(unsigned int scale_level){
     return filter_responses_[scale_level];}
   //: full set of filter responses
-  vcl_vector<vil_image_view<float> > responses() const{
+  std::vector<vil_image_view<float> > responses() const{
     return filter_responses_;}
-  //: save filter responses as individual images  
-  bool save_filter_responses(vcl_string const& dir) const;
-  bool load_filter_responses(vcl_string const& dir, unsigned n_levels);
+  //: save filter responses as individual images
+  bool save_filter_responses(std::string const& dir) const;
+  bool load_filter_responses(std::string const& dir, unsigned n_levels);
 
   void set_params(unsigned n_levels, double scale_range, float lambda0, float lambda1, float theta_interval, float cuttoff_ratio);
 
@@ -84,9 +85,9 @@ class brip_filter_bank
   float cutoff_ratio_;
   vil_pyramid_image_view<float> scale_pyramid_;
   //: signed filter response in direction with maximum response
-  vcl_vector<vil_image_view<float> > filter_responses_;
+  std::vector<vil_image_view<float> > filter_responses_;
 };
 
-vcl_ostream&  operator<<(vcl_ostream& s, brip_filter_bank const& r);
+std::ostream&  operator<<(std::ostream& s, brip_filter_bank const& r);
 
 #endif // brip_filter_bank_h_

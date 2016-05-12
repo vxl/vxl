@@ -23,7 +23,7 @@ breg3d_ekf_camera_optimize_process::breg3d_ekf_camera_optimize_process()
   //input[4]: The voxel world
   //input[5]: The appearance model type to use for expected images
   //input[6]: The bin index to use for expected images
-  input_data_.resize(7,brdb_value_sptr(0));
+  input_data_.resize(7,brdb_value_sptr(VXL_NULLPTR));
   input_types_.resize(7);
   input_types_[0] = "breg3d_ekf_camera_optimizer_state";
   input_types_[1] = "vil_image_view_base_sptr";
@@ -36,7 +36,7 @@ breg3d_ekf_camera_optimize_process::breg3d_ekf_camera_optimize_process()
   // process has 2 outputs:
   // output[0]: The estimate for the current state
   // output[1]: The optimized camera
-  output_data_.resize(2,brdb_value_sptr(0));
+  output_data_.resize(2,brdb_value_sptr(VXL_NULLPTR));
   output_types_.resize(2);
   output_types_[0]= "breg3d_ekf_camera_optimizer_state";
   output_types_[1] = "vpgl_camera_double_sptr";
@@ -44,27 +44,27 @@ breg3d_ekf_camera_optimize_process::breg3d_ekf_camera_optimize_process()
   // parameters
   // default corresponds to roughly 1 degree std deviation
   if (!parameters()->add("Rotation Prediction Variance", "rotation_prediction_variance", 0.2))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
+    std::cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
   // default corresponds to roughly 1.4 meter std deviation
   if (!parameters()->add("Position Prediction Variance", "position_prediction_variance", 3.0))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
+    std::cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
     // default corresponds to roughly 1 degree std deviation
   if (!parameters()->add("Rotation Measurement Variance", "rotation_measurement_variance", 3e-4))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
+    std::cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
   // default corresponds to roughly 1.0 meter std deviation
   if (!parameters()->add("Position Measurement Variance", "position_measurement_variance", 1.0))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
+    std::cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
   //
   if (!parameters()->add("Homography terms Variance", "homography_term_variance", 0.08))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
+    std::cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 
   //
   if (!parameters()->add("Homography translation terms Variance", "homography_translation_term_variance", 0.08))
-    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
+    std::cerr << "ERROR: Adding parameters in " << __FILE__ << '\n';
 }
 
 
@@ -89,8 +89,8 @@ bool breg3d_ekf_camera_optimize_process::execute()
   brdb_value_t<bvxm_voxel_world_sptr>* input4 =
       static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[4].ptr());
 
-  brdb_value_t<vcl_string>* input5 =
-      static_cast<brdb_value_t<vcl_string>* >(input_data_[5].ptr());
+  brdb_value_t<std::string>* input5 =
+      static_cast<brdb_value_t<std::string>* >(input_data_[5].ptr());
 
   brdb_value_t<unsigned>* input6 =
       static_cast<brdb_value_t<unsigned>* >(input_data_[6].ptr());
@@ -108,36 +108,36 @@ bool breg3d_ekf_camera_optimize_process::execute()
   // get voxel world
   bvxm_voxel_world_sptr vox_world = input4->value();
   // get appearance model type
-  vcl_string apm_type = input5->value();
+  std::string apm_type = input5->value();
   // get bin index
   unsigned bin_idx = input6->value(); // FIXME: unused
 
   // get parameters
   double rot_var_measure=0, pos_var_measure=0;
-  if (!parameters()->get_value(vcl_string("position_measurement_variance"), rot_var_measure)) {
-    vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter rotation_variance\n";
+  if (!parameters()->get_value(std::string("position_measurement_variance"), rot_var_measure)) {
+    std::cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter rotation_variance\n";
     return false;
   }
-  if (!parameters()->get_value(vcl_string("position_measurement_variance"), pos_var_measure)) {
-    vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter position_variance\n";
+  if (!parameters()->get_value(std::string("position_measurement_variance"), pos_var_measure)) {
+    std::cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter position_variance\n";
     return false;
   }
   double rot_var_predict=0, pos_var_predict=0;
-  if (!parameters()->get_value(vcl_string("position_prediction_variance"), rot_var_predict)) {
-    vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter rotation_variance\n";
+  if (!parameters()->get_value(std::string("position_prediction_variance"), rot_var_predict)) {
+    std::cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter rotation_variance\n";
     return false;
   }
-  if (!parameters()->get_value(vcl_string("position_prediction_variance"), pos_var_predict)) {
-    vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter position_variance\n";
+  if (!parameters()->get_value(std::string("position_prediction_variance"), pos_var_predict)) {
+    std::cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter position_variance\n";
     return false;
   }
   double homography_var=0, homography_t_var=0;
-  if (!parameters()->get_value(vcl_string("homography_term_variance"), homography_var)) {
-    vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter homography_variance\n";
+  if (!parameters()->get_value(std::string("homography_term_variance"), homography_var)) {
+    std::cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter homography_variance\n";
     return false;
   }
-  if (!parameters()->get_value(vcl_string("homography_translation_term_variance"), homography_t_var)) {
-    vcl_cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter homography_variance\n";
+  if (!parameters()->get_value(std::string("homography_translation_term_variance"), homography_t_var)) {
+    std::cout << "breg3d_init_ekf_camera_optimize_process::execute() -- problem in retrieving parameter homography_variance\n";
     return false;
   }
 

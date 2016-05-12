@@ -5,8 +5,9 @@
 // \file
 // \author Tim Cootes
 
-#include <vcl_cstddef.h>
-#include <vcl_iostream.h>
+#include <iostream>
+#include <cstddef>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil/io/vil_io_memory_chunk.h>
 #include <vil/io/vil_io_smart_ptr.h>
@@ -29,7 +30,7 @@ inline void vsl_b_write(vsl_b_ostream &os, const vil3d_image_view<T>& image)
   {
     vsl_b_write(os, image.memory_chunk());
 
-    vcl_ptrdiff_t offset = (image.origin_ptr()-reinterpret_cast<const T*>(image.memory_chunk()->data()));
+    std::ptrdiff_t offset = (image.origin_ptr()-reinterpret_cast<const T*>(image.memory_chunk()->data()));
     vsl_b_write(os, offset);
   }
 }
@@ -42,9 +43,9 @@ inline void vsl_b_read(vsl_b_istream &is, vil3d_image_view<T>& image)
   if (!is) return;
 
   unsigned ni,nj,nk,np;
-  vcl_ptrdiff_t istep,jstep,kstep,pstep;
+  std::ptrdiff_t istep,jstep,kstep,pstep;
   vil_memory_chunk_sptr chunk;
-  vcl_ptrdiff_t offset;
+  std::ptrdiff_t offset;
 
   short w;
   vsl_b_read(is, w);
@@ -71,9 +72,9 @@ inline void vsl_b_read(vsl_b_istream &is, vil3d_image_view<T>& image)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil3d_image_view<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil3d_image_view<T>&)\n"
              << "           Unknown version number "<< w << "\n";
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -96,7 +97,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil3d_image_view<T>*& p)
 
 //: Print human readable summary of a vil3d_image_view<T> object to a stream
 template<class T>
-inline void vsl_print_summary(vcl_ostream& os,const vil3d_image_view<T>& image)
+inline void vsl_print_summary(std::ostream& os,const vil3d_image_view<T>& image)
 {
   image.print(os);
 }

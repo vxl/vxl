@@ -1,19 +1,21 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_volm_desc_ex_land_only_indexer.h"
 //:
 // \file
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
-vcl_string volm_desc_ex_land_only_indexer::get_name()
+std::string volm_desc_ex_land_only_indexer::get_name()
 {
-  vcl_string name = "ex_land_only";
+  std::string name = "ex_land_only";
   return name;
 }
 
-volm_desc_ex_land_only_indexer::volm_desc_ex_land_only_indexer(vcl_string const& index_folder,
-                                                               vcl_string const& out_index_folder,
-                                                               vcl_vector<double> const& radius,
-                                                               vcl_vector<double> const& depth_interval,
+volm_desc_ex_land_only_indexer::volm_desc_ex_land_only_indexer(std::string const& index_folder,
+                                                               std::string const& out_index_folder,
+                                                               std::vector<double> const& radius,
+                                                               std::vector<double> const& depth_interval,
                                                                unsigned index_layer_size,
                                                                float ind_buffer,
                                                                unsigned const& nlands,
@@ -31,7 +33,7 @@ volm_desc_ex_land_only_indexer::volm_desc_ex_land_only_indexer(vcl_string const&
   else
     radius_ = radius;
   // sort the radius to ensure the bin order
-  vcl_sort(radius_.begin(), radius_.end());
+  std::sort(radius_.begin(), radius_.end());
   unsigned ndists = (unsigned)radius.size() + 1;
   layer_size_ = ndists * nlands_;
 
@@ -60,12 +62,12 @@ bool volm_desc_ex_land_only_indexer::get_next()
     ind_comb_->finalize();
   }
   // initialize index given new leaf
-  vcl_stringstream file_name_pre;
+  std::stringstream file_name_pre;
   file_name_pre << index_folder_ << "geo_index_tile_" << tile_id_;
-  vcl_string index_dist_file = leaves_[current_leaf_id_]->get_index_name(file_name_pre.str());
-  vcl_string index_comb_file = leaves_[current_leaf_id_]->get_label_index_name(file_name_pre.str(), "combined");
+  std::string index_dist_file = leaves_[current_leaf_id_]->get_index_name(file_name_pre.str());
+  std::string index_comb_file = leaves_[current_leaf_id_]->get_label_index_name(file_name_pre.str(), "combined");
   if (!vul_file::exists(index_dist_file) || !vul_file::exists(index_comb_file)) {
-    vcl_cerr << " In volm_desc_ex_indexer::get_next -- can not find index file: " << index_dist_file << " or "
+    std::cerr << " In volm_desc_ex_indexer::get_next -- can not find index file: " << index_dist_file << " or "
               << index_comb_file << '\n';
     return false;
   }
@@ -75,11 +77,11 @@ bool volm_desc_ex_land_only_indexer::get_next()
   return true;
 }
 
-bool volm_desc_ex_land_only_indexer::extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values)
+bool volm_desc_ex_land_only_indexer::extract(double lat, double lon, double elev, std::vector<unsigned char>& values)
 {
   // fetch previous wr3db index for current location
-  vcl_vector<unsigned char> values_dist(index_layer_size_);
-  vcl_vector<unsigned char> values_comb(index_layer_size_);
+  std::vector<unsigned char> values_dist(index_layer_size_);
+  std::vector<unsigned char> values_comb(index_layer_size_);
   ind_dist_->get_next(values_dist);
   ind_comb_->get_next(values_comb);
 

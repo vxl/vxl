@@ -41,7 +41,7 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
             boxm2_scene_sptr scene,
             unsigned ni,
             unsigned nj,
-            vpgl_perspective_camera<double>* cam, vcl_string identifier = "");
+            vpgl_perspective_camera<double>* cam, std::string identifier = "");
 
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
@@ -62,20 +62,20 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
   unsigned ni_;
   unsigned nj_;
   vgui_statusbar* status_;
-  vcl_string identifier_;
+  std::string identifier_;
 
   //: shared GL_CL image buffer
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
   bocl_mem_sptr exp_img_;
-  bocl_mem_sptr exp_img_dim_; 
+  bocl_mem_sptr exp_img_dim_;
   //--Render, update, refine, save helper methods ------------------------------
   //func to render frame on GPU (returns gpu time)
   float render_frame();
 
   bool init_clgl();
   bool do_init_ocl;
-  
+
   //hack to toggle RGB to B&W
   bool is_bw_;
   // toggle depth / expected image

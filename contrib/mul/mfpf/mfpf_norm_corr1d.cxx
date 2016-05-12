@@ -1,3 +1,6 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mfpf_norm_corr1d.h"
 //:
 // \file
@@ -5,9 +8,8 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h> // for std::abs()
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
@@ -42,7 +44,7 @@ mfpf_norm_corr1d::~mfpf_norm_corr1d()
 //: Generate points in ref frame that represent boundary
 //  Points of a contour around the shape.
 //  Used for display purposes.
-void mfpf_norm_corr1d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+void mfpf_norm_corr1d::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(2);
   pts[0]=vgl_point_2d<double>(ilo_-0.5,0);
@@ -71,7 +73,7 @@ unsigned mfpf_norm_corr1d::model_dim()
 //: Radius of circle containing modelled region
 double mfpf_norm_corr1d::radius() const
 {
-  return vcl_max(vcl_abs(ilo_),vcl_abs(ihi_));
+  return std::max(std::abs(ilo_),std::abs(ihi_));
 }
 
 // Assumes v2[i] has zero mean and unit length as a vector
@@ -85,8 +87,8 @@ inline double norm_corr(const double* v1, const double* v2, unsigned n)
     sum_sq+=v1[i]*v1[i];
   }
   double mean = sum2/n;
-  double ss = vcl_max(1e-6,sum_sq-n*mean*mean);
-  double s = vcl_sqrt(ss);
+  double ss = std::max(1e-6,sum_sq-n*mean*mean);
+  double s = std::sqrt(ss);
   return sum1/s;
 }
 
@@ -175,9 +177,9 @@ double mfpf_norm_corr1d::search_one_pose(
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_norm_corr1d::is_a() const
+std::string mfpf_norm_corr1d::is_a() const
 {
-  return vcl_string("mfpf_norm_corr1d");
+  return std::string("mfpf_norm_corr1d");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -190,7 +192,7 @@ mfpf_point_finder* mfpf_norm_corr1d::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_norm_corr1d::print_summary(vcl_ostream& os) const
+void mfpf_norm_corr1d::print_summary(std::ostream& os) const
 {
   os << "{ size: [" << ilo_ << ',' << ihi_ << ']'
      << " Kernel: " << kernel_ << '\n';
@@ -230,9 +232,9 @@ void mfpf_norm_corr1d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,kernel_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

@@ -8,20 +8,21 @@
 // \file
 // \author Tim Cootes
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 //: Put indents into output streams, to produce more legible printed output
 //  Its use is best described by example:
 // \code
-// vcl_cout<<vsl_indent()<<"No Indent\n";
-// vsl_indent_inc(vcl_cout);
-// vcl_cout<<vsl_indent()<<"1 Indent\n";
-// vsl_indent_inc(vcl_cout);
-// vcl_cout<<vsl_indent()<<"2 Indent\n";
-// vsl_indent_dec(vcl_cout);
-// vcl_cout<<vsl_indent()<<"1 Indent\n";
-// vsl_indent_dec(vcl_cout);
-// vcl_cout<<vsl_indent()<<"No Indent\n";
+// std::cout<<vsl_indent()<<"No Indent\n";
+// vsl_indent_inc(std::cout);
+// std::cout<<vsl_indent()<<"1 Indent\n";
+// vsl_indent_inc(std::cout);
+// std::cout<<vsl_indent()<<"2 Indent\n";
+// vsl_indent_dec(std::cout);
+// std::cout<<vsl_indent()<<"1 Indent\n";
+// vsl_indent_dec(std::cout);
+// std::cout<<vsl_indent()<<"No Indent\n";
 // \endcode
 //
 // This produces output of the form
@@ -38,10 +39,10 @@
 // class Fred
 // {
 //  public:
-//   void print(vcl_ostream& os) const { os<<vsl_indent()<<"Fred's data"; }
+//   void print(std::ostream& os) const { os<<vsl_indent()<<"Fred's data"; }
 // };
 //
-// vcl_ostream& operator<<(vcl_ostream& os, const Fred& fred)
+// std::ostream& operator<<(std::ostream& os, const Fred& fred)
 // {
 //   os<<"Fred:\n";
 //   vsl_indent_inc(os);
@@ -55,14 +56,14 @@
 //  private:
 //   Fred fred_;
 //  public:
-//   void print(vcl_ostream& os) const
+//   void print(std::ostream& os) const
 //   {
 //     os<<vsl_indent()<<fred_<<'\n'
 //       <<vsl_indent()<<"Jim's other data\n";
 //   }
 // };
 //
-// vcl_ostream& operator<<(vcl_ostream& os, const Jim& jim)
+// std::ostream& operator<<(std::ostream& os, const Jim& jim)
 // {
 //   os<<"Jim:\n";
 //   vsl_indent_inc(os);
@@ -74,7 +75,7 @@
 // main()
 // {
 //   Jim jim;
-//   vcl_cout<<jim<<vcl_endl;
+//   std::cout<<jim<<std::endl;
 // }
 // \endcode
 //
@@ -90,22 +91,22 @@ class vsl_indent
 };
 
 //: Increments current indent for given stream
-void vsl_indent_inc(vcl_ostream& os);
+void vsl_indent_inc(std::ostream& os);
 
 //: Decrements current indent for given stream
-void vsl_indent_dec(vcl_ostream& os);
+void vsl_indent_dec(std::ostream& os);
 
 //: Set number of spaces per increment step
-void vsl_indent_set_tab(vcl_ostream& os,int);
+void vsl_indent_set_tab(std::ostream& os,int);
 
 //: Number of spaces per increment step
-int vsl_indent_tab(vcl_ostream& os);
+int vsl_indent_tab(std::ostream& os);
 
 //: Set indentation to zero
-void vsl_indent_clear(vcl_ostream& os);
+void vsl_indent_clear(std::ostream& os);
 
 //: Outputs current indent to os
-vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& indent);
+std::ostream& operator<<(std::ostream& os, const vsl_indent& indent);
 
 //: Tidy up the internal indent map to remove potential memory leaks
 //  The details of indents for each stream are stored in a static

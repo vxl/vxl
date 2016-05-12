@@ -1,6 +1,9 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include "../bmdl_processes.h"
 
+#include <vcl_compiler.h>
 #include <vcl_string.h>
 
 #include <vgl/vgl_polygon.h>
@@ -22,20 +25,20 @@ static void test_bmdl_trace_boundaries_process(int argc, char* argv[])
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
-  vcl_string image_base;
+  std::string image_base;
   if ( argc >= 2 ) {
     image_base = argv[1];
     image_base += "/";
   }
 
   //create vil_image_view_base_sptr
-  vcl_string label_img_path = image_base + "label.tif";
+  std::string label_img_path = image_base + "label.tif";
   vil_image_view_base_sptr label = vil_load(label_img_path.c_str());
 
-  vcl_string polygons_path = "polygons.bin";
+  std::string polygons_path = "polygons.bin";
 
   brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(label);
-  brdb_value_sptr v1 = new brdb_value_t<vcl_string>(polygons_path);
+  brdb_value_sptr v1 = new brdb_value_t<std::string>(polygons_path);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bmdlTraceBoundariesProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
@@ -52,7 +55,7 @@ static void test_bmdl_trace_boundaries_process(int argc, char* argv[])
   unsigned int size;
   vsl_b_read(os, size);
   vgl_polygon<double> polygon;
-  vcl_vector<vgl_polygon<double> > boundaries;
+  std::vector<vgl_polygon<double> > boundaries;
   for (unsigned i = 0; i < size; i++) {
     vsl_b_read(os, polygon);
     boundaries.push_back(polygon);

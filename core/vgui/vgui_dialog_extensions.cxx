@@ -27,7 +27,7 @@ vgui_dialog_extensions::vgui_dialog_extensions(const char* name)
 vgui_dialog_extensions::~vgui_dialog_extensions()
 {
   delete impl;
-  impl = 0;//so base class doesn't crash
+  impl = VXL_NULLPTR;//so base class doesn't crash
 }
 
 bool vgui_dialog_extensions::ask()
@@ -39,7 +39,7 @@ bool vgui_dialog_extensions::ask()
   return false;
 }
 
-void vgui_dialog_extensions::dir(const char* label, vcl_string& regexp, vcl_string& v)
+void vgui_dialog_extensions::dir(const char* label, std::string& regexp, std::string& v)
 {
   if (impl) {
     vgui_dialog_extensions_impl* my_impl = static_cast<vgui_dialog_extensions_impl*> (impl);

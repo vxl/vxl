@@ -6,10 +6,12 @@
 // (but not mouse or keyboard) can be used with a pure and
 // simple GLUT program.  This means that the really really hairy
 // image drawing stuff can be used in any GL program, whether or
-// not it buys into the whole VGUI framework.  The other main 
-// point is to show that vgui just makes OpenGL commands -- no 
+// not it buys into the whole VGUI framework.  The other main
+// point is to show that vgui just makes OpenGL commands -- no
 // magic happens when you send a vgui_DRAW event.
 
+#include <ctime>
+#include <cstdlib>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glut.h>
 
@@ -18,8 +20,7 @@
 #include <vgui/vgui_loader_tableau.h>
 #include <vgui/vgui_deck_tableau.h>
 
-#include <vcl_ctime.h>
-#include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_compiler.h>
 
 vgui_deck_tableau_new   deck;
 vgui_loader_tableau_new load(deck);
@@ -29,14 +30,14 @@ vgui_shell_tableau_new  shell(load);
 void keyboard(unsigned char k, int, int)
 {
   if (k=='q' || k=='Q' || k==27)
-    vcl_exit(0);
+    std::exit(0);
 }
 
 // GLUT idle callback
 void idle()
 {
-  static vcl_time_t last = 0;
-  vcl_time_t now = time(0);
+  static std::time_t last = 0;
+  std::time_t now = time(VXL_NULLPTR);
   if (now > last) {
     // Advance the deck
     deck->next();

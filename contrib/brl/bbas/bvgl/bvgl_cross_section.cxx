@@ -13,8 +13,8 @@ bvgl_cross_section bvgl_cross_section::apply_vector( vgl_vector_3d<double> const
   vgl_vector_3d<double> nv = v-temp;
   vgl_point_3d<double> pt_v = p_ + nv;
   unsigned n = ptset_.npts();
-  vcl_vector<vgl_point_3d<double> > pts;
-  vcl_vector<vgl_vector_3d<double> > normals;
+  std::vector<vgl_point_3d<double> > pts;
+  std::vector<vgl_vector_3d<double> > normals;
   for(unsigned i = 0; i<n; ++i){
     vgl_point_3d<double> p = ptset_.p(i) + nv;
     pts.push_back(p);
@@ -33,23 +33,23 @@ vgl_point_3d<double> bvgl_cross_section::closest_point(vgl_point_3d<double> cons
   return vgl_closest_point(ptset_, p, dist_thresh);
 }
 
-void bvgl_cross_section::display_cross_section_pts(vcl_ofstream& ostr) const{
+void bvgl_cross_section::display_cross_section_pts(std::ofstream& ostr) const{
   unsigned n = ptset_.npts();
   float r = 3.0f;
   for(unsigned i = 0; i<n; ++i){
     vgl_point_3d<double> p = ptset_.p(i);
     vgl_point_3d<float> pf(static_cast<float>(p.x()), static_cast<float>(p.y()), static_cast<float>(p.z()));
     vgl_sphere_3d<float> sp(pf, r);
-    bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 0.5f, 1.0f);      
+    bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 0.5f, 1.0f);
   }
 }
-void bvgl_cross_section::display_cross_section_plane( vcl_ofstream& ostr) const{
+void bvgl_cross_section::display_cross_section_plane( std::ofstream& ostr) const{
   vgl_vector_3d<double> norm = plane_.normal();
   float r = 10.0f, h = 0.1f;
   bvrml_write::write_vrml_cylinder(ostr, p_, norm, r, h, 0.0f, 1.0f, 1.0f, 1);
 }
 
-void bvgl_cross_section::display_cross_section_normal_disks(vcl_ofstream& ostr) const{
+void bvgl_cross_section::display_cross_section_normal_disks(std::ofstream& ostr) const{
   unsigned n = ptset_.npts();
   float r = 3.0f, h = 0.1f;
   for(unsigned i = 0; i<n; ++i){

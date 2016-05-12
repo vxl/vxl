@@ -1,7 +1,9 @@
 // This is tbl/vipl/tests/test_driver.cxx
+#include <iostream>
+#include <cmath>
 #include "test_driver.h"
 #include <testlib/testlib_register.h>
-#include <vcl_cmath.h> // for vcl_fabs()
+#include <vcl_compiler.h>
 
 DECLARE( vipl_test_histogram );
 DECLARE( vipl_test_erode_disk );
@@ -56,7 +58,7 @@ vil_image_view<float> CreateTestfloatImage(int wd, int ht)
 }
 
 template <class T>
-bool difference(vil_image_view<T> const& a, vil_image_view<T> const& b, double v, vcl_string const& m, T)
+bool difference(vil_image_view<T> const& a, vil_image_view<T> const& b, double v, std::string const& m, T)
 {
   int sx = a.ni();
   int sy = a.nj();
@@ -69,17 +71,17 @@ bool difference(vil_image_view<T> const& a, vil_image_view<T> const& b, double v
   for (int x=1; x+1<wd; ++x)
   for (int y=1; y+1<ht; ++y) {
     double d=(double)a(x,y) - (double)b(x,y);
-    val += vcl_fabs(d);
+    val += std::fabs(d);
   }
-  vcl_cout<<m<<": expected "<<v<<", found "<<val<<vcl_endl;
-  bool ret = (vcl_fabs(val - v) > 0.01*vcl_fabs(v));
+  std::cout<<m<<": expected "<<v<<", found "<<val<<std::endl;
+  bool ret = (std::fabs(val - v) > 0.01*std::fabs(v));
   TEST(m.c_str(), ret, false);
   return ret;
 }
 
 template bool difference(vil_image_view<vxl_byte> const&, vil_image_view<vxl_byte> const&,
-                         double, vcl_string const&, vxl_byte);
+                         double, std::string const&, vxl_byte);
 template bool difference(vil_image_view<short> const&, vil_image_view<short> const&,
-                         double, vcl_string const&, short);
+                         double, std::string const&, short);
 template bool difference(vil_image_view<float> const&, vil_image_view<float> const&,
-                         double, vcl_string const&, float);
+                         double, std::string const&, float);

@@ -81,7 +81,7 @@ class vil_mit_image : public vil_image_resource
   virtual bool put_view(vil_image_view_base const& buf, unsigned int x0, unsigned int y0);
 
   char const* file_format() const;
-  bool get_property(char const *tag, void *prop = 0) const;
+  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
 };
 
 #endif // vil_mit_file_format_h_

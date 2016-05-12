@@ -6,7 +6,7 @@
 //:
 // \file
 // \brief Biarc - two connected circular arcs with continuous tangent
-// 
+//
 // \author Nhon Trinh ( ntrinh@lems.brown.edu)
 // \date 2/03/05
 //
@@ -16,7 +16,9 @@
 // \endverbatim
 
 
-#include <vcl_ostream.h>
+#include <iostream>
+#include <ostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
@@ -28,16 +30,16 @@ public:
   // -------------- BASIC ----------------------------
   //: Constructor - default
   bvgl_biarc(){};
-  
+
   //: Constructor - from intrinsic parameters
   bvgl_biarc(vgl_point_2d<double > start, double start_angle, double k1, double len1, double k2, double len2);
 
   //: Constructor - from 2 point-tangents
-  bvgl_biarc( vgl_point_2d< double > start, double start_angle, 
+  bvgl_biarc( vgl_point_2d< double > start, double start_angle,
     vgl_point_2d< double > end, double end_angle );
 
   //: Constructor - from 2 point-tangents
-  bvgl_biarc( vgl_point_2d< double > start, vgl_vector_2d<double > start_tangent, 
+  bvgl_biarc( vgl_point_2d< double > start, vgl_vector_2d<double > start_tangent,
     vgl_point_2d< double > end, vgl_vector_2d<double > end_tangent );
 
   //: Destructor
@@ -46,10 +48,10 @@ public:
   //: Return the starting point of the biarc
   vgl_point_2d< double > start() const { return this->start_; }
   //: Set the starting point of the biarc - type 1
-  void set_start( double x_start, double y_start ){ this->start_.set(x_start, y_start); } 
+  void set_start( double x_start, double y_start ){ this->start_.set(x_start, y_start); }
   //: Set the starting point of the biarc - type 2
   void set_start( const vgl_point_2d< double > & start ){ this->start_ = start; }
-  
+
   //: Return the starting angle of the biarc, in the range [0, 2*pi)
   double start_angle() const { return this->start_angle_; }
   //: Set the start angle, converted to the range [0, 2*pi)
@@ -61,7 +63,7 @@ public:
 
   //: Return the ending angle of the biarc
   double end_angle() const { return this->end_angle_; }
-  
+
   //: Return curvature of the first arc
   double k1() const { return this->k1_; }
   //: Set the curvature of the first arc
@@ -90,7 +92,7 @@ public:
   bool is_consistent() const;
 
   // ---------------- GEOMETRY PROPERTIES -----------------------
-  
+
   //: Return radius of the first arc
   double r1() const;
   //: Return radius of the second arc
@@ -107,9 +109,9 @@ public:
   vgl_point_2d< double > center1() const ;
   //: Return the center of the second arc
   vgl_point_2d< double > center2() const;
-  
+
   // --- TO BE CONSISTENT WITH CURVE CLASS -----
-  
+
   //: Return the length of the total biarc
   double len() const { return this->len1() + this->len2(); }
   //: Return a point on the biarc with s arclength away from starting point
@@ -134,9 +136,9 @@ public:
     vgl_point_2d< double > end, double end_angle );
 
   //: compute biar parameters, given start and end parameters
-  bool compute_biarc_params(const vgl_point_2d< double >& start, 
+  bool compute_biarc_params(const vgl_point_2d< double >& start,
     const vgl_vector_2d<double >& start_tangent,
-    const vgl_point_2d< double >& end, 
+    const vgl_point_2d< double >& end,
     const vgl_vector_2d<double >& end_tangent );
 
   //: Compute the angle at which the two arcs meet
@@ -146,7 +148,7 @@ public:
 
   // ---------------- MISCELLANEOUS ----------------------
   //: Print parameters of the biarc
-  void print(vcl_ostream &os ) const;
+  void print(std::ostream &os ) const;
 
 protected:
   // core member variables
@@ -162,7 +164,7 @@ protected:
   double k2_;
   //: length of second arc
   double len2_;
-  
+
   // external member variables, used to compute core member variables
   //: ending point
   vgl_point_2d< double > end_;
@@ -174,11 +176,11 @@ protected:
   double energy_;
   //: flag to indicate whether this is a true biarc or just degenerate case (circle, line)
   int flag_;
-    
+
 
   //: set the end point of the biarc
   void set_end(const vgl_point_2d< double > & end ){ this->end_ = end; }
-  
+
   //: Set end angle of the biarc - converted to the range [0, 2pi)
   void set_end_angle( double end_angle );
 

@@ -36,8 +36,8 @@ bool pdf1d_smaller_samples(const double* x1, int n1, const double* x2, int n2, d
 
 //: Select the samples which are on average largest
 //  Where there is ambiguity return smallest index.
-int pdf1d_select_largest_samples(vcl_vector<const double*>& x,
-                                 vcl_vector<int>& n, double p)
+int pdf1d_select_largest_samples(std::vector<const double*>& x,
+                                 std::vector<int>& n, double p)
 {
   int t = n.size();
 

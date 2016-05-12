@@ -10,11 +10,13 @@
 // \date Jan 30, 2013
 
 //directory utility
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <vcl_where_root_dir.h>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -37,7 +39,7 @@ bool bstm_ocl_minfo_process_cons(bprb_func_process& pro)
   using namespace bstm_ocl_minfo_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "bstm_scene_sptr";
   input_types_[2] = "bstm_opencl_cache_sptr";
@@ -57,7 +59,7 @@ bool bstm_ocl_minfo_process_cons(bprb_func_process& pro)
   input_types_[16] = "float"; //time frame for relative template
   input_types_[17] = "int"; //number of bins to quantize histogram
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "float";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -69,7 +71,7 @@ bool bstm_ocl_minfo_process(bprb_func_process& pro)
   using namespace bstm_ocl_minfo_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -94,15 +96,15 @@ bool bstm_ocl_minfo_process(bprb_func_process& pro)
   int nbins = pro.get_input<int>(i++);
 
   //get scene data type and appTypeSize
-  vcl_string data_type;
+  std::string data_type;
   int apptypesize;
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-    vcl_cout<<"bstm_ocl_minfo_process ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT data type"<<vcl_endl;
+    std::cout<<"bstm_ocl_minfo_process ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT data type"<<std::endl;
     return false;
   }
-  vcl_string options = bstm_ocl_util::mog_options(data_type);
+  std::string options = bstm_ocl_util::mog_options(data_type);
 
   //construct R,T
   vnl_vector_fixed<double,3> rot_vector (R_x,R_y,R_z);

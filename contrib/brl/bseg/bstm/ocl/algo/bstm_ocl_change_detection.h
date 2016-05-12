@@ -8,9 +8,11 @@
 // \author Ali Osman Ulusoy
 // \date May 15, 2013
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <vcl_compiler.h>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -40,12 +42,12 @@ class bstm_ocl_change_detection
                               vpgl_camera_double_sptr   cam,
                               vil_image_view_base_sptr  img,
                               vil_image_view_base_sptr  mask_img,
-                              vcl_string                norm_type,
+                              std::string                norm_type,
                               float                     time);
 
   private:
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts, bool isColor);
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts, bool isColor);
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 
 //Older, single pass, multi-res change detection
@@ -62,8 +64,8 @@ class bstm_ocl_update_change
                                   float                     time );
 
   private:
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts, bool isColor);
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts, bool isColor);
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 
 class bstm_ocl_aux_pass_change
@@ -79,8 +81,8 @@ class bstm_ocl_aux_pass_change
                                 float                     time);
 
   private:
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 
 #endif // bstm_ocl_change_detection_h_

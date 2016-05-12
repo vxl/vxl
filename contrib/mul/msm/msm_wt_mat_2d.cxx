@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "msm_wt_mat_2d.h"
 //:
 // \file
@@ -6,8 +8,7 @@
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 //: Sets axis (eigenvector) of matrix and var along each
 //  Sets to s1*u*u' + s2*v*v', where u is the unit vector
@@ -29,20 +30,20 @@ void msm_wt_mat_2d::set_axes(double u1, double u2, double s1, double s2)
 msm_wt_mat_2d msm_wt_mat_2d::inverse() const
 {
   double D=det();
-  if (vcl_fabs(D)>1e-8)
+  if (std::fabs(D)>1e-8)
     return msm_wt_mat_2d(m22_/D,-m12_/D,m11_/D);
 
   // Small det implies this = (u v)'*(u v)
   // Inverse can be shown to be this/(u^2+v^2) = this/(m11_+m22_)
   double s=1.0/(m11_+m22_);
-  return msm_wt_mat_2d(s*m11_,s*vcl_sqrt(m11_*m22_),s*m22_);
+  return msm_wt_mat_2d(s*m11_,s*std::sqrt(m11_*m22_),s*m22_);
 }
 
 //: Calculate eigenvalues
 void msm_wt_mat_2d::eigen_values(double& EV1, double& EV2)
 {
   double dac=m11_-m22_;
-  double d=0.5*vcl_sqrt(dac*dac+4*m12_*m12_);
+  double d=0.5*std::sqrt(dac*dac+4*m12_*m12_);
   double hac = 0.5*(m11_+m22_);
   EV1=hac+d;
   EV2=hac-d;
@@ -86,9 +87,9 @@ msm_wt_mat_2d& msm_wt_mat_2d::operator+=(const msm_wt_mat_2d& W)
 //: Equality test
 bool msm_wt_mat_2d::operator==(const msm_wt_mat_2d& W)
 {
-  return (vcl_fabs(m11_-W.m11_)<1e-8) &&
-         (vcl_fabs(m12_-W.m12_)<1e-8) &&
-         (vcl_fabs(m22_-W.m22_)<1e-8);
+  return (std::fabs(m11_-W.m11_)<1e-8) &&
+         (std::fabs(m12_-W.m12_)<1e-8) &&
+         (std::fabs(m22_-W.m22_)<1e-8);
 }
 
 
@@ -96,7 +97,7 @@ bool msm_wt_mat_2d::operator==(const msm_wt_mat_2d& W)
 // Method: print
 //=======================================================================
 
-void msm_wt_mat_2d::print_summary(vcl_ostream& os) const
+void msm_wt_mat_2d::print_summary(std::ostream& os) const
 {
   os << "{ "<<m11_<<' '<<m12_<<" ; "<<m12_<<' '<<m22_<<" } ";
 }
@@ -144,14 +145,14 @@ void vsl_b_read(vsl_b_istream& bfs, msm_wt_mat_2d& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_wt_mat_2d& b)
+std::ostream& operator<<(std::ostream& os,const msm_wt_mat_2d& b)
 {
   b.print_summary(os);
   return os;
 }
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_wt_mat_2d& b)
+void vsl_print_summary(std::ostream& os,const msm_wt_mat_2d& b)
 {
  os << b;
 }

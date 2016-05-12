@@ -6,13 +6,14 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <cstring>
 #include "vil_mit.h"
 
 static char const* vil_mit_format_tag = "mit";
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>
@@ -60,27 +61,27 @@ static char const* vil_mit_format_tag = "mit";
 vil_image_resource_sptr vil_mit_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0L);
-  if (is->file_size() < 8L) return 0;
+  if (is->file_size() < 8L) return VXL_NULLPTR;
   unsigned int type = vil_stream_read_little_endian_uint_16(is);
 
   if (!(type == MIT_UNSIGNED ||
         type == MIT_RGB      ||
         type == MIT_SIGNED   ||
         type == MIT_FLOAT    ))
-    return 0;
+    return VXL_NULLPTR;
 
   unsigned int bpp = vil_stream_read_little_endian_uint_16(is);
   if (bpp != 1 && bpp != 8 && bpp != 16 && bpp != 32 && bpp != 64)
-    return 0;
+    return VXL_NULLPTR;
 
 #ifdef DEBUG
   unsigned int width = vil_stream_read_little_endian_uint_16(is);
   unsigned int height= vil_stream_read_little_endian_uint_16(is);
-  vcl_cerr << __FILE__ " : here we go:\n"
-           << __FILE__ " : type_ = " << type << vcl_endl
-           << __FILE__ " : bits_per_pixel_ = " << bpp << vcl_endl
-           << __FILE__ " : width_ = " << width << vcl_endl
-           << __FILE__ " : height_ = " << height << vcl_endl;
+  std::cerr << __FILE__ " : here we go:\n"
+           << __FILE__ " : type_ = " << type << std::endl
+           << __FILE__ " : bits_per_pixel_ = " << bpp << std::endl
+           << __FILE__ " : width_ = " << width << std::endl
+           << __FILE__ " : height_ = " << height << std::endl;
 #endif
   return new vil_mit_image(is);
 }
@@ -105,7 +106,7 @@ vil_mit_image::vil_mit_image(vil_stream* is)
   is_->ref();
   if (!read_header())
   {
-    vcl_cerr << "vil_mit: cannot read file header; creating dummy 0x0 image\n";
+    std::cerr << "vil_mit: cannot read file header; creating dummy 0x0 image\n";
     ni_ = nj_ = 0; components_ = 1; type_ = 1;
     format_ = VIL_PIXEL_FORMAT_BYTE;
   }
@@ -190,7 +191,7 @@ bool vil_mit_image::write_header()
   {
     if (components_ == 3) type_ = MIT_RGB;
     else if (components_ == 1) type_ = MIT_UNSIGNED;
-    else vcl_cerr << __FILE__ " : Can only write RGB or grayscale MIT images\n"
+    else std::cerr << __FILE__ " : Can only write RGB or grayscale MIT images\n"
                   << " (format="<<format_<<", #components="<<components_<<")\n";
   }
   else if (format_ == VIL_PIXEL_FORMAT_INT_32 ||
@@ -198,7 +199,7 @@ bool vil_mit_image::write_header()
            format_ == VIL_PIXEL_FORMAT_SBYTE)
   {
     if (components_ == 1) type_ = MIT_SIGNED;
-    else vcl_cerr << __FILE__ " : Can only write RGB or grayscale MIT images\n"
+    else std::cerr << __FILE__ " : Can only write RGB or grayscale MIT images\n"
                   << " (format="<<format_<<", #components="<<components_<<")\n";
   }
   else if (format_ == VIL_PIXEL_FORMAT_RGB_UINT_32 ||
@@ -209,18 +210,18 @@ bool vil_mit_image::write_header()
            format_ == VIL_PIXEL_FORMAT_RGB_SBYTE)
   {
     if (components_ == 1) type_ = MIT_RGB;
-    else vcl_cerr << __FILE__ " : Can only write RGB or grayscale MIT images\n"
+    else std::cerr << __FILE__ " : Can only write RGB or grayscale MIT images\n"
                   << " (format="<<format_<<", #components="<<components_<<")\n";
   }
   else if (format_ == VIL_PIXEL_FORMAT_RGB_FLOAT ||
            format_ == VIL_PIXEL_FORMAT_RGB_DOUBLE)
   {
     if (components_ == 1) type_ = MIT_FLOAT;
-    else vcl_cerr << __FILE__ " : Can only write grayscale float-pixel MIT images\n"
+    else std::cerr << __FILE__ " : Can only write grayscale float-pixel MIT images\n"
                   << " (format="<<format_<<", #components="<<components_<<")\n";
   }
   else
-    vcl_cerr << __FILE__ " : Can only write RGB or grayscale MIT images\n"
+    std::cerr << __FILE__ " : Can only write RGB or grayscale MIT images\n"
              << " (format="<<format_<<", #components="<<components_<<")\n";
 
   vil_stream_write_little_endian_uint_16(is_, type_);
@@ -237,16 +238,16 @@ static inline void swap(void* p,int length)
   char* t = (char*)p;
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
-    vcl_cerr << "Swapping " << *(vxl_uint_32*)p;
-    if (length == sizeof(float)) vcl_cerr << " (or " << *(float*)p << ')';
+    std::cerr << "Swapping " << *(vxl_uint_32*)p;
+    if (length == sizeof(float)) std::cerr << " (or " << *(float*)p << ')';
   }
 #endif
   for (int j=0;2*j<length;++j) { char c = t[j]; t[j] = t[length-j-1]; t[length-j-1] = c; }
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
-    vcl_cerr << " to " << *(vxl_uint_32*)p;
-    if (length == sizeof(float)) vcl_cerr << " (or " << *(float*)p << ')';
-    vcl_cerr << '\n';
+    std::cerr << " to " << *(vxl_uint_32*)p;
+    if (length == sizeof(float)) std::cerr << " (or " << *(float*)p << ')';
+    std::cerr << '\n';
   }
 #endif
 }
@@ -259,7 +260,7 @@ vil_image_view_base_sptr vil_mit_image::get_copy_view(unsigned int x0, unsigned 
   unsigned int pix_size = 8*bytes_per_pixel();
   if (format_==VIL_PIXEL_FORMAT_BOOL) pix_size = 1;
   if (format_==VIL_PIXEL_FORMAT_BOOL && x0%8 != 0)
-    vcl_cerr << "vil_mit_image::get_copy_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
+    std::cerr << "vil_mit_image::get_copy_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
   pix_size *= components_;
 
   vxl_uint_32 rowsize = (pix_size*xs+7)/8;
@@ -287,7 +288,7 @@ vil_image_view_base_sptr vil_mit_image::get_copy_view(unsigned int x0, unsigned 
   else if (format_ == VIL_PIXEL_FORMAT_INT_32)  return new vil_image_view<vxl_int_32> (ARGS(vxl_int_32));
   else if (format_ == VIL_PIXEL_FORMAT_FLOAT)   return new vil_image_view<float>      (ARGS(float));
   else if (format_ == VIL_PIXEL_FORMAT_DOUBLE)  return new vil_image_view<double>     (ARGS(double));
-  else return 0;
+  else return VXL_NULLPTR;
 #undef ARGS
 }
 
@@ -302,7 +303,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
   unsigned int ni = buf.ni();
   unsigned int nj = buf.nj();
 #ifdef DEBUG
-  vcl_cerr<<"vil_mit_image::put_view() : buf="
+  std::cerr<<"vil_mit_image::put_view() : buf="
           <<ni<<'x'<<nj<<'x'<< buf.nplanes()<<'p'
           <<" at ("<<x0<<','<<y0<<")\n";
 #endif
@@ -316,7 +317,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
     buf_is_planar = true;
   else
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n"
+    std::cerr << "ERROR: " << __FILE__ << ":\n"
              << " view does not fit: istep="<<ibuf.istep()
              << ", jstep="<<ibuf.jstep()
              << ", planestep="<<ibuf.planestep()
@@ -328,7 +329,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
   unsigned int pix_size = 8*bytes_per_pixel();
   if (format_==VIL_PIXEL_FORMAT_BOOL) pix_size = 1;
   if (format_==VIL_PIXEL_FORMAT_BOOL && x0%8 != 0)
-    vcl_cerr << "vil_mit_image::put_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
+    std::cerr << "vil_mit_image::put_view(): Warning: x0 should be a multiple of 8 for this type of image\n";
   pix_size *= components_;
 
   vxl_uint_32 rowsize = (pix_size*ni+7)/8;
@@ -344,11 +345,11 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
           is_->seek(8L + y*((ni_*pix_size+7)/8) + x*pix_size/8);
           for (unsigned int p=0; p<components_; ++p)
             if (sz != is_->write(ob+p*ni*nj*sz, sz))
-              vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+              std::cerr << "WARNING: " << __FILE__ << ":\n"
                        << " could not write "<<sz<<" bytes to stream; y,x="<<y<<','<<x<<'\n';
 #ifdef DEBUG
             else
-              vcl_cerr << "written "<<sz<<" bytes to stream; y,x="<<y<<','<<x<<'\n';
+              std::cerr << "written "<<sz<<" bytes to stream; y,x="<<y<<','<<x<<'\n';
 #endif
             ob += sz;
         }
@@ -358,11 +359,11 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
       {
         is_->seek(8L + y*((ni_*pix_size+7)/8) + x0*pix_size/8);
         if ((vil_streampos)rowsize != is_->write(ob, rowsize))
-          vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+          std::cerr << "WARNING: " << __FILE__ << ":\n"
                    << " could not write "<<rowsize<<" bytes to stream; y="<<y<<'\n';
 #ifdef DEBUG
         else
-          vcl_cerr << "written "<<rowsize<<" bytes to stream; y="<<y<<'\n';
+          std::cerr << "written "<<rowsize<<" bytes to stream; y="<<y<<'\n';
 #endif
         ob += rowsize;
       }
@@ -377,16 +378,16 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
         for (unsigned int x = x0; x < x0+ni; ++x)
         {
           for (unsigned int p=0; p<components_; ++p) {
-            vcl_memcpy(tempbuf+p*sz, ob+p*ni*nj, sz);
+            std::memcpy(tempbuf+p*sz, ob+p*ni*nj, sz);
             swap(tempbuf+p*sz,sz);
           }
           is_->seek(8L + pix_size*(y*ni_+x)/8);
           if (vil_streampos(components_*sz) != is_->write(tempbuf, components_*sz))
-             vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+             std::cerr << "WARNING: " << __FILE__ << ":\n"
                       << " could not write "<<components_*sz<<" bytes to stream; y,x="<<y<<','<<x<<'\n';
 #ifdef DEBUG
           else
-            vcl_cerr << "written "<<components_*sz<<" bytes to stream; y,x="<<y<<','<<x<<'\n';
+            std::cerr << "written "<<components_*sz<<" bytes to stream; y,x="<<y<<','<<x<<'\n';
 #endif
           ob += sz;
         }
@@ -397,16 +398,16 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
       vxl_byte* tempbuf = new vxl_byte[rowsize];
       for (unsigned int y = y0; y < y0+nj; ++y)
       {
-        vcl_memcpy(tempbuf, ob, rowsize);
+        std::memcpy(tempbuf, ob, rowsize);
         for (vxl_uint_32 i=0; i<rowsize; i+=bytes_per_pixel())
           swap(tempbuf+i,bytes_per_pixel());
         is_->seek(8L + bytes_per_pixel()*(y*ni_+x0));
         if ((vil_streampos)rowsize != is_->write(tempbuf, rowsize))
-          vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+          std::cerr << "WARNING: " << __FILE__ << ":\n"
                    << " could not write "<<rowsize<<" bytes to stream; y="<<y<<'\n';
 #ifdef DEBUG
         else
-          vcl_cerr << "written "<<rowsize<<" bytes to stream; y="<<y<<'\n';
+          std::cerr << "written "<<rowsize<<" bytes to stream; y="<<y<<'\n';
 #endif
         ob += rowsize;
       }

@@ -12,12 +12,12 @@ void init_tree(boct_tree<short,float> *tree, unsigned i)
 {
   tree-> split(); //now we have 8 cells
   //tree->print();
-  vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
+  std::vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
   leaves[i]->set_data(0.8f);
   leaves[i]->split();
 }
 
-boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned world_dimy,unsigned world_dimz, bool uniform, vcl_string scene_name)
+boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned world_dimy,unsigned world_dimz, bool uniform, std::string scene_name)
 {
   //crete the input scene
   vpgl_lvcs lvcs(33.33,44.44,10.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
@@ -28,7 +28,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     vgl_vector_3d<unsigned> world_dim(world_dimx,world_dimy,world_dimz); //number of blocks in a scene
 
   boxm_scene<boct_tree<short, float> > *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim);
-  vcl_string scene_path("./");
+  std::string scene_path("./");
   scene->set_paths(scene_path,  scene_name);
 
   unsigned cell_index = 7;

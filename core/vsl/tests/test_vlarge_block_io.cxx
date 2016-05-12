@@ -1,30 +1,31 @@
 // This is core/vsl/tests/test_vlarge_block_io.cxx
-#include <vcl_iostream.h>
-#include <vcl_new.h>
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
-#include <vcl_vector.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <new>
+#include <algorithm>
+#include <limits>
+#include <vector>
+#include <cstdlib>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_block_binary.h>
 #include <testlib/testlib_test.h>
 
-void free_blocks(vcl_vector<void *> &blocks)
+void free_blocks(std::vector<void *> &blocks)
 {
   for (unsigned i=0, n=blocks.size(); i!=n; ++i)
-    vcl_free(blocks[i]);
+    std::free(blocks[i]);
 }
 
 // scale should be 0 or 1.
 template <class T>
-void test_vlarge_block(void * block, vcl_size_t s, T scale)
+void test_vlarge_block(void * block, std::size_t s, T scale)
 {
   // fill one of the blocks with large numbers.
   T * const numbers = static_cast<T *>(block);
-  vcl_size_t n = s / sizeof(T);
+  std::size_t n = s / sizeof(T);
 
-  for (vcl_size_t i=0; i<n; ++i)
-    numbers[i] = static_cast<T>(vcl_numeric_limits<T>::max() - T(i) * scale) ;
+  for (std::size_t i=0; i<n; ++i)
+    numbers[i] = static_cast<T>(std::numeric_limits<T>::max() - T(i) * scale) ;
 
   vsl_b_ofstream bfs_out("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Created vsl_vlarge_block_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -38,7 +39,7 @@ void test_vlarge_block(void * block, vcl_size_t s, T scale)
   TEST("Stream still ok", (!bfs_out), false);
   bfs_out.close();
 
-  vcl_fill(numbers, numbers+n, T());
+  std::fill(numbers, numbers+n, T());
 
   vsl_b_ifstream bfs_in("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Opened vsl_vlarge_block_io_test.bvl.tmp for reading", (!bfs_in), false);
@@ -54,9 +55,9 @@ void test_vlarge_block(void * block, vcl_size_t s, T scale)
   TEST("Stream still ok", (!bfs_in), false);
   bfs_in.close();
 
-  vcl_size_t errors=0;
-  for (vcl_size_t i=0; i<n; ++i)
-    if (numbers[i] != static_cast<T>(vcl_numeric_limits<T>::max() - T(i) * scale) )
+  std::size_t errors=0;
+  for (std::size_t i=0; i<n; ++i)
+    if (numbers[i] != static_cast<T>(std::numeric_limits<T>::max() - T(i) * scale) )
       errors++;
 
   TEST_NEAR("No errors in stored numbers", static_cast<double>(errors), 0, 0);
@@ -65,72 +66,72 @@ void test_vlarge_block(void * block, vcl_size_t s, T scale)
 
 void test_vlarge_block_io()
 {
-  vcl_cout << "*********************************\n"
+  std::cout << "*********************************\n"
            << "Testing vsl_block_binary_write io\n"
            << "*********************************\n";
 
   // Try and find a block size that allows us to
   // control the availabililty of memory.
-  vcl_size_t s = vcl_numeric_limits<vcl_size_t>::max() / 16;
+  std::size_t s = std::numeric_limits<std::size_t>::max() / 16;
 
-  vcl_cout << "Start by trying to allocate " << (s/(1024*1024))+1 << "MiB" << vcl_endl;
+  std::cout << "Start by trying to allocate " << (s/(1024*1024))+1 << "MiB" << std::endl;
   while (true)
   {
-    char *block = 0;
-    block = (char *)vcl_malloc(s);
-    if (block != 0)
+    char *block = VXL_NULLPTR;
+    block = (char *)std::malloc(s);
+    if (block != VXL_NULLPTR)
     {
-      vcl_free(block);
+      std::free(block);
       break;
     }
     s /= 4;
     if (s==0)
     {
-      vcl_cout << "ERROR: Unable to allocate any memory" << vcl_endl;
-      vcl_exit(3);
+      std::cout << "ERROR: Unable to allocate any memory" << std::endl;
+      std::exit(3);
     }
   }
 
-  vcl_cout << "Succeeded allocating " <<(s+1)/(1024*1024)<<"MiB" << vcl_endl;
+  std::cout << "Succeeded allocating " <<(s+1)/(1024*1024)<<"MiB" << std::endl;
 
 
   // Now try to use up most of memory.
 
   s /= 1024*4; // a sensible block size.
   s *= 1024;
-  unsigned max_blocks = vcl_min<vcl_size_t>(1024*1024,
-                                            vcl_numeric_limits<vcl_size_t>::max() / (s/2) );
+  unsigned max_blocks = std::min<std::size_t>(1024*1024,
+                                            std::numeric_limits<std::size_t>::max() / (s/2) );
 
-  vcl_cout << "Try to allocate up to " << max_blocks << " blocks of "
-           << s/1024 << "KiB" << vcl_endl;
-  vcl_vector<void *> blocks;
+  std::cout << "Try to allocate up to " << max_blocks << " blocks of "
+           << s/1024 << "KiB" << std::endl;
+  std::vector<void *> blocks;
   blocks.reserve(max_blocks+2);
   while (true)
   {
     if (blocks.size() >= max_blocks+1)
     {
-      vcl_cout << "ERROR: Unable to force out of memory, after allocating\n"
+      std::cout << "ERROR: Unable to force out of memory, after allocating\n"
                << "         " << blocks.size() << " blocks of "
-               << s/1024<<"KiB" << vcl_endl;
+               << s/1024<<"KiB" << std::endl;
       free_blocks(blocks);
-      vcl_exit(3);
+      std::exit(3);
     }
-    void * block = 0;
-    block = vcl_malloc(s);
+    void * block = VXL_NULLPTR;
+    block = std::malloc(s);
     // if we have run out of memory, go on to next section.
-    if (block == 0)
+    if (block == VXL_NULLPTR)
       break;
     //otherwise store memory pointer, and try and use up some more.
     blocks.push_back(block);
   }
 
-  vcl_cout << "Run out of memory after allocating " << blocks.size()
-           << " blocks of " << s/1024 << " KiB" << vcl_endl;
+  std::cout << "Run out of memory after allocating " << blocks.size()
+           << " blocks of " << s/1024 << " KiB" << std::endl;
   if (blocks.empty())
   {
-    vcl_cout << "ERROR: Unable to use chosen block size" << vcl_endl;
+    std::cout << "ERROR: Unable to use chosen block size" << std::endl;
     free_blocks(blocks);
-    vcl_exit(3);
+    std::exit(3);
   }
 
 

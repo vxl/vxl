@@ -18,7 +18,7 @@ vpgl_rational_camera<double>
 perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 {
   vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
-  vcl_vector<double> neu_u,den_u,neu_v,den_v;
+  std::vector<double> neu_u,den_u,neu_v,den_v;
   double x_scale = 1.0, x_off = 0.0,
          y_scale = 1.0, y_off = 0.0,
          z_scale = 1.0, z_off = 0.0,
@@ -54,7 +54,7 @@ vpgl_camera_double_sptr generate_camera_top(vgl_box_3d<double>& world)
   vgl_point_3d<double> centroid = world.centroid();
   vgl_point_3d<double> camera_center(centroid.x(), centroid.y(), centroid.z()+boxm_camera_dist);
 
-  vcl_vector<vpgl_camera_double_sptr> rat_cameras;
+  std::vector<vpgl_camera_double_sptr> rat_cameras;
 
   vpgl_perspective_camera<double> persp_cam;
   generate_persp_camera(boxm_focal_length,principal_point, boxm_x_scale, boxm_y_scale, camera_center, persp_cam);
@@ -77,7 +77,7 @@ vpgl_camera_double_sptr generate_camera_top_persp(vgl_box_3d<double>& world)
   vgl_point_3d<double> centroid = world.centroid();
   vgl_point_3d<double> camera_center(centroid.x(), centroid.y(), centroid.z()+boxm_camera_dist);
 
-  vcl_vector<vpgl_camera_double_sptr> rat_cameras;
+  std::vector<vpgl_camera_double_sptr> rat_cameras;
 
   vpgl_perspective_camera<double> * persp_cam= new vpgl_perspective_camera<double>();
   generate_persp_camera(boxm_focal_length,principal_point, boxm_x_scale, boxm_y_scale, camera_center, *persp_cam);
@@ -85,21 +85,21 @@ vpgl_camera_double_sptr generate_camera_top_persp(vgl_box_3d<double>& world)
   return persp_cam;
 }
 
-vcl_vector<vpgl_camera_double_sptr> generate_cameras_diagonal(vgl_box_3d<double>& world)
+std::vector<vpgl_camera_double_sptr> generate_cameras_diagonal(vgl_box_3d<double>& world)
 {
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
   vgl_line_3d_2_points<double> diag(world.min_point(), world.max_point());
 
-  vcl_vector<vgl_point_3d<double> > centers;
+  std::vector<vgl_point_3d<double> > centers;
   unsigned i=0;
   for (double t=0; t<=1.0; t+=0.1) {
     vgl_point_3d<double> centroid = diag.point_t(1-t);
     centers.push_back(centroid);
-    vcl_cout << centers[i++] << vcl_endl;
+    std::cout << centers[i++] << std::endl;
   }
 
-  vcl_vector<vpgl_camera_double_sptr> cameras;
+  std::vector<vpgl_camera_double_sptr> cameras;
   for (unsigned i=0; i<centers.size(); i++)
   {
     vgl_point_3d<double> camera_center  = centers[i];
@@ -111,26 +111,26 @@ vcl_vector<vpgl_camera_double_sptr> generate_cameras_diagonal(vgl_box_3d<double>
   return cameras;
 }
 
-vcl_vector<vpgl_camera_double_sptr> generate_cameras_circular(vgl_box_3d<double>& world)
+std::vector<vpgl_camera_double_sptr> generate_cameras_circular(vgl_box_3d<double>& world)
 {
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
   vgl_line_3d_2_points<double> diag(world.min_point(), world.max_point());
 
-  vcl_vector<vgl_point_3d<double> > centers;
+  std::vector<vgl_point_3d<double> > centers;
   vgl_point_3d<double> centroid(0,0,0);
   double x,y;
   double alpha = 0;
   double delta_alpha = vnl_math::pi/9.;
   for (unsigned i=0; i<11; i++) {
-    x = boxm_camera_dist*vcl_cos(alpha);
-    y = boxm_camera_dist*vcl_sin(alpha);
+    x = boxm_camera_dist*std::cos(alpha);
+    y = boxm_camera_dist*std::sin(alpha);
     centers.push_back(vgl_point_3d<double> (centroid.x()+x, centroid.y()+y, centroid.z()));
-    vcl_cout << centers[i] << vcl_endl;
+    std::cout << centers[i] << std::endl;
     alpha += delta_alpha;
   }
 
-  vcl_vector<vpgl_camera_double_sptr> cameras;
+  std::vector<vpgl_camera_double_sptr> cameras;
   for (unsigned i=0; i<centers.size(); i++)
   {
     vgl_point_3d<double> camera_center  = centers[i];

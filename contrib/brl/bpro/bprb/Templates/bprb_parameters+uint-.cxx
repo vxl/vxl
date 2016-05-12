@@ -1,3 +1,3 @@
-#include <bprb/bprb_parameters.txx>
+#include <bprb/bprb_parameters.hxx>
 
 BPRB_PARAMETERS_INSTANTIATE(unsigned int);

@@ -16,10 +16,12 @@
 //    Matt Leotta   21 Dec 2005   Adapted from code by Amitha Perera
 // \endverbatim
 
+#include <string>
+#include <vector>
+#include <deque>
 #include "vidl_istream.h"
-#include <vcl_string.h>
-#include <vcl_deque.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+
 
 //: A video input stream using FFMPEG to decoded files
 class vidl_ffmpeg_istream
@@ -30,13 +32,13 @@ class vidl_ffmpeg_istream
   vidl_ffmpeg_istream();
 
   //: Constructor - from a filename
-  vidl_ffmpeg_istream(const vcl_string& filename);
+  vidl_ffmpeg_istream(const std::string& filename);
 
   //: Destructor
   virtual ~vidl_ffmpeg_istream();
 
   //: Open a new stream using a filename
-  virtual bool open(const vcl_string& filename);
+  virtual bool open(const std::string& filename);
 
   //: Close the stream
   virtual void close();
@@ -86,13 +88,13 @@ class vidl_ffmpeg_istream
 
   //: Return the current video packet's data, is used to get
   //  video stream embeded metadata.
-  virtual vcl_vector<vxl_byte> current_packet_data() const;
+  virtual std::vector<vxl_byte> current_packet_data() const;
 
   //: Return the raw metadata bytes obtained while reading the current frame.
   //  This deque will be empty if there is no metadata stream
   //  Metadata is often encoded as KLV,
   //  but no attempt to decode KLV is made here
-  vcl_deque<vxl_byte> current_metadata();
+  std::deque<vxl_byte> current_metadata();
 
   //: Return true if the video also has a metadata stream
   bool has_metadata() const;

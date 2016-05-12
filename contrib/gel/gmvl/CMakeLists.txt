@@ -6,7 +6,7 @@ doxygen_add_library(contrib/gel/gmvl
   DESCRIPTION "Multi-View Database"
   )
 
-SET(gmvl_sources
+set(gmvl_sources
     gmvl_connection.cxx       gmvl_connection.h       gmvl_connection_sptr.h
     gmvl_connection_cache.cxx gmvl_connection_cache.h
     gmvl_database.cxx         gmvl_database.h
@@ -18,17 +18,15 @@ SET(gmvl_sources
                               gmvl_topology_node.h
     gmvl_node_cache.cxx       gmvl_node_cache.h
 )
-AUX_SOURCE_DIRECTORY(Templates gmvl_sources)
+aux_source_directory(Templates gmvl_sources)
 
-ADD_LIBRARY(gmvl ${gmvl_sources})
-INSTALL_TARGETS(/lib gmvl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gmvl ${gmvl_sources})
-TARGET_LINK_LIBRARIES(gmvl vtol vil1 vnl vbl vcl)
+vxl_add_library(LIBRARY_NAME gmvl LIBRARY_SOURCES ${gmvl_sources})
+target_link_libraries(gmvl vtol ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()

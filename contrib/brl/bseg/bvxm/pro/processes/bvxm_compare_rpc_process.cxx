@@ -1,12 +1,13 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_compare_rpc_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
 #include "bvxm_compare_rpc_process.h"
 //:
 // \file
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -16,7 +17,7 @@ bool bvxm_compare_rpc_process_cons(bprb_func_process& pro)
 {
   //set input types
   using namespace bvxm_compare_rpc_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   int i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
@@ -37,7 +38,7 @@ bool bvxm_compare_rpc_process(bprb_func_process& pro)
   //check number of inputs.
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
+    std::cout << pro.name() <<" : The input number should be "<< n_inputs_ << std::endl;
     return false;
   }
 
@@ -45,17 +46,17 @@ bool bvxm_compare_rpc_process(bprb_func_process& pro)
   unsigned i = 0;
   vpgl_camera_double_sptr cam0 =pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_camera_double_sptr cam1 =pro.get_input<vpgl_camera_double_sptr>(i++);
-  vcl_string path = pro.get_input<vcl_string>(i++);
+  std::string path = pro.get_input<std::string>(i++);
 
   //check input's validity
   i = 0;
   if (!cam0) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if (!cam1) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
@@ -63,14 +64,14 @@ bool bvxm_compare_rpc_process(bprb_func_process& pro)
   vpgl_rational_camera<double>* rat_cam0 =
     dynamic_cast<vpgl_rational_camera<double>*> (cam0.as_pointer());
   if (!rat_cam0) {
-    vcl_cerr << "The camera input 0 is not a rational camera\n";
+    std::cerr << "The camera input 0 is not a rational camera\n";
     return false;
   }
 
   vpgl_rational_camera<double>* rat_cam1 =
     dynamic_cast<vpgl_rational_camera<double>*> (cam1.as_pointer());
   if (!rat_cam1) {
-    vcl_cerr << "The camera input 1 is not a rational camera\n";
+    std::cerr << "The camera input 1 is not a rational camera\n";
     return false;
   }
 
@@ -83,10 +84,10 @@ bool bvxm_compare_rpc_process(bprb_func_process& pro)
   v = rat_cam1->offset(vpgl_rational_camera<double>::V_INDX) -
     rat_cam0->offset(vpgl_rational_camera<double>::V_INDX);
 
-  vcl_cout << "u=" << u << " v=" << v << vcl_endl;
+  std::cout << "u=" << u << " v=" << v << std::endl;
 
-  vcl_ofstream file;
-  file.open("C:\\test_images\\LIDAR\\Hiafa\\test-reg\\diff.txt", vcl_ofstream::app);
+  std::ofstream file;
+  file.open("C:\\test_images\\LIDAR\\Hiafa\\test-reg\\diff.txt", std::ofstream::app);
   file << u << ' ' << v <<'\n';
   return true;
 }

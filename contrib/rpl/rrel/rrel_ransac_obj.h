@@ -32,7 +32,7 @@ public:
                       vect_const_iter scale_begin,
                       vnl_vector<double>* = 0 /* param vector is unused */ ) const;
 
-  //: Evaluate the objective function on homoscedastic residuals.  
+  //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter begin, vect_const_iter end,
                       double scale,

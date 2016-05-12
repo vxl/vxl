@@ -21,7 +21,7 @@ T getpixel(vnl_matrix<T> const& i, int x, int y, T); \
 void setpixel(vnl_matrix<T>& i, int x, int y, T e)
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_accessors_vnl_matrix.txx"
+#include "vipl_accessors_vnl_matrix.hxx"
 #endif
 
 #endif // vipl_accessors_vnl_matrix_h_

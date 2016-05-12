@@ -16,11 +16,13 @@
 // \author Andrew Miller
 // \date   16 Dec 2010
 //
+#include <iostream>
+#include <iosfwd>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -43,7 +45,7 @@ class boxm2_block_metadata: public vbl_ref_count
                         const int max_level,
                         const double max_mb,
                         const double p_init,
-                        const int version = 1) : id_(id),
+                        const int version = 2) : id_(id),
                                           local_origin_(local_origin),
                                           sub_block_dim_(sub_block_dim),
                                           sub_block_num_(sub_block_num),

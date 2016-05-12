@@ -11,7 +11,7 @@ volm_spherical_index_query_matcher::volm_spherical_index_query_matcher(volm_sphe
 bool volm_spherical_index_query_matcher::match()
 {
     volm_spherical_regions_layer index_layer = index_.index_regions();
-    vcl_vector<volm_spherical_region> i_regions = index_layer.regions();
+    std::vector<volm_spherical_region> i_regions = index_layer.regions();
     for (camera_space_iterator iter = cam_space_->begin(); iter != cam_space_->end(); ++iter)
     {
         cam_angles camera = iter->camera_angles();
@@ -37,7 +37,7 @@ bool volm_spherical_index_query_matcher::match()
                                                           (camera.top_fov_)/cam_space_->top_fov(0),
                                                           180-camera.tilt_,90-camera.heading_,false);
             // match it with index bboxes;
-            vcl_vector<unsigned int> attribute_poly_ids
+            std::vector<unsigned int> attribute_poly_ids
                 = index_layer.attributed_regions_by_value(ORIENTATION, qval);
             for (unsigned j = 0; j< attribute_poly_ids.size(); j++)
             {
@@ -49,7 +49,7 @@ bool volm_spherical_index_query_matcher::match()
                 //if (qval >=1 && ival>=2 && qval <= 3 && ival<=9 )
                 if (qval == ival)
                 {
-                    vcl_vector<vsph_sph_box_2d> intersection_box ;
+                    std::vector<vsph_sph_box_2d> intersection_box ;
                     if (intersection(qbox_xfomred,index_region.bbox_ref(),intersection_box))
                     {
                         for (unsigned k = 0 ; k < intersection_box.size();k++)

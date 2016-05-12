@@ -6,8 +6,10 @@
 // \author J.L. Mundy
 // \date October 25, 2014
 //
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
@@ -21,32 +23,32 @@
 class boxm2_vecf_ocl_filter
 {
  public:
-  //: Constructor. 
+  //: Constructor.
   boxm2_vecf_ocl_filter(boxm2_scene_sptr& source_scene,
                                  boxm2_scene_sptr& temp_scene,
                                  boxm2_opencl_cache_sptr ocl_cache);
 
   ~boxm2_vecf_ocl_filter();
 
-  
+
   //: transform a scene of arbitrary size, block by block
   // no interpolation
-  bool filter(vcl_vector<float> const& weights, unsigned num_iterations = 1);
+  bool filter(std::vector<float> const& weights, unsigned num_iterations = 1);
 
  protected:
   bool compile_filter_kernel();
   bool init_ocl_filter();
   bool get_scene_appearance(boxm2_scene_sptr scene,
-                            vcl_string&      options);
+                            std::string&      options);
 
   boxm2_opencl_cache_sptr  opencl_cache_;
   boxm2_scene_sptr temp_scene_;
   boxm2_scene_sptr source_scene_;
   bocl_device_sptr device_;
   int apptypesize_;//size of the appearance model in bytes
-  vcl_string app_type_; //type of appearance
+  std::string app_type_; //type of appearance
 
-  //filter kernel and args 
+  //filter kernel and args
   bocl_kernel * filter_kern;
   bocl_mem_sptr centerX;
   bocl_mem_sptr centerY;

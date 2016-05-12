@@ -1,19 +1,21 @@
 // This is brl/bbas/imesh/imesh_fileio.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <limits>
 #include "imesh_fileio.h"
 //:
 // \file
 
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vgl/vgl_point_2d.h>
 
 
 //: Read a mesh from a file, determine type from extension
-bool imesh_read(const vcl_string& filename, imesh_mesh& mesh)
+bool imesh_read(const std::string& filename, imesh_mesh& mesh)
 {
-  vcl_string ext = vul_file::extension(filename);
+  std::string ext = vul_file::extension(filename);
   if (ext == ".ply2")
     return imesh_read_ply2(filename,mesh);
   if (ext == ".ply")
@@ -26,9 +28,9 @@ bool imesh_read(const vcl_string& filename, imesh_mesh& mesh)
 
 
 //: Read a mesh from a PLY2 file
-bool imesh_read_ply2(const vcl_string& filename, imesh_mesh& mesh)
+bool imesh_read_ply2(const std::string& filename, imesh_mesh& mesh)
 {
-  vcl_ifstream fh(filename.c_str());
+  std::ifstream fh(filename.c_str());
   bool retval = imesh_read_ply2(fh,mesh);
   fh.close();
   return retval;
@@ -36,18 +38,18 @@ bool imesh_read_ply2(const vcl_string& filename, imesh_mesh& mesh)
 
 
 //: Read a mesh from a PLY2 stream
-bool imesh_read_ply2(vcl_istream& is, imesh_mesh& mesh)
+bool imesh_read_ply2(std::istream& is, imesh_mesh& mesh)
 {
   unsigned int num_verts, num_faces;
   is >> num_verts >> num_faces;
-  vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
-  vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
+  std::auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   for (unsigned int v=0; v<num_verts; ++v) {
     imesh_vertex<3>& vert = (*verts)[v];
     is >> vert[0] >> vert[1] >> vert[2];
   }
   for (unsigned int f=0; f<num_faces; ++f) {
-    vcl_vector<unsigned int>& face = (*faces)[f];
+    std::vector<unsigned int>& face = (*faces)[f];
     unsigned int cnt;
     is >> cnt;
     face.resize(cnt,0);
@@ -55,15 +57,15 @@ bool imesh_read_ply2(vcl_istream& is, imesh_mesh& mesh)
       is >> face[v];
   }
 
-  mesh.set_vertices(vcl_auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(vcl_auto_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
+  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
   return true;
 }
 
 //: Read a mesh from a PLY2 file
-bool imesh_read_ply(const vcl_string& filename, imesh_mesh& mesh)
+bool imesh_read_ply(const std::string& filename, imesh_mesh& mesh)
 {
-  vcl_ifstream fh(filename.c_str());
+  std::ifstream fh(filename.c_str());
   bool retval = imesh_read_ply(fh,mesh);
   fh.close();
   return retval;
@@ -71,10 +73,10 @@ bool imesh_read_ply(const vcl_string& filename, imesh_mesh& mesh)
 
 
 //: Read a mesh from a PLY2 stream
-bool imesh_read_ply(vcl_istream& is, imesh_mesh& mesh)
+bool imesh_read_ply(std::istream& is, imesh_mesh& mesh)
 {
   unsigned int num_verts, num_faces;
-  vcl_string str;
+  std::string str;
   is >> str;
   bool done=false;
   while (!done) {
@@ -92,14 +94,14 @@ bool imesh_read_ply(vcl_istream& is, imesh_mesh& mesh)
       done = true;
     }
   }
-  vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
-  vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
+  std::auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   for (unsigned int v=0; v<num_verts; ++v) {
     imesh_vertex<3>& vert = (*verts)[v];
     is >> vert[0] >> vert[1] >> vert[2];
   }
   for (unsigned int f=0; f<num_faces; ++f) {
-    vcl_vector<unsigned int>& face = (*faces)[f];
+    std::vector<unsigned int>& face = (*faces)[f];
     unsigned int cnt;
     is >> cnt;
     face.resize(cnt,0);
@@ -107,22 +109,22 @@ bool imesh_read_ply(vcl_istream& is, imesh_mesh& mesh)
       is >> face[v];
   }
 
-  mesh.set_vertices(vcl_auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(vcl_auto_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
+  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
   return true;
 }
 
 //: Write a mesh to a PLY2 file
-void imesh_write_ply2(const vcl_string& filename, const imesh_mesh& mesh)
+void imesh_write_ply2(const std::string& filename, const imesh_mesh& mesh)
 {
-  vcl_ofstream fh(filename.c_str());
+  std::ofstream fh(filename.c_str());
   imesh_write_ply2(fh,mesh);
   fh.close();
 }
 
 
 //: Write a mesh to a PLY2 stream
-void imesh_write_ply2(vcl_ostream& os, const imesh_mesh& mesh)
+void imesh_write_ply2(std::ostream& os, const imesh_mesh& mesh)
 {
   os << mesh.num_verts() <<'\n'<< mesh.num_faces() <<'\n';
   const imesh_vertex_array_base& verts = mesh.vertices();
@@ -143,9 +145,9 @@ void imesh_write_ply2(vcl_ostream& os, const imesh_mesh& mesh)
 
 
 //: Read texture coordinates from a UV2 file
-bool imesh_read_uv2(const vcl_string& filename, imesh_mesh& mesh)
+bool imesh_read_uv2(const std::string& filename, imesh_mesh& mesh)
 {
-   vcl_ifstream fh(filename.c_str());
+   std::ifstream fh(filename.c_str());
    bool retval = imesh_read_uv2(fh,mesh);
    fh.close();
    return retval;
@@ -153,9 +155,9 @@ bool imesh_read_uv2(const vcl_string& filename, imesh_mesh& mesh)
 
 
 //: Read texture coordinates from a UV2 stream
-bool imesh_read_uv2(vcl_istream& is, imesh_mesh& mesh)
+bool imesh_read_uv2(std::istream& is, imesh_mesh& mesh)
 {
-   vcl_vector<vgl_point_2d<double> > uv;
+   std::vector<vgl_point_2d<double> > uv;
    unsigned int num_verts, num_faces;
    is >> num_verts >> num_faces;
    if (num_verts != mesh.num_verts() && num_verts != mesh.num_edges()*2)
@@ -172,9 +174,9 @@ bool imesh_read_uv2(vcl_istream& is, imesh_mesh& mesh)
 
 
 //: Read a mesh from a wavefront OBJ file
-bool imesh_read_obj(const vcl_string& filename, imesh_mesh& mesh)
+bool imesh_read_obj(const std::string& filename, imesh_mesh& mesh)
 {
-  vcl_ifstream fh(filename.c_str());
+  std::ifstream fh(filename.c_str());
   bool retval = imesh_read_obj(fh,mesh);
   fh.close();
   return retval;
@@ -182,13 +184,13 @@ bool imesh_read_obj(const vcl_string& filename, imesh_mesh& mesh)
 
 
 //: Read a mesh from a wavefront OBJ stream
-bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
+bool imesh_read_obj(std::istream& is, imesh_mesh& mesh)
 {
-  vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>);
-  vcl_auto_ptr<imesh_face_array> faces(new imesh_face_array);
-  vcl_vector<vgl_vector_3d<double> > normals;
-  vcl_vector<vgl_point_2d<double> > tex;
-  vcl_string last_group = "ungrouped";
+  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>);
+  std::auto_ptr<imesh_face_array> faces(new imesh_face_array);
+  std::vector<vgl_vector_3d<double> > normals;
+  std::vector<vgl_point_2d<double> > tex;
+  std::string last_group = "ungrouped";
   char c;
   while (is >> c)
   {
@@ -228,11 +230,11 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
       }
       case 'f':
       {
-        vcl_string line;
-        vcl_getline(is,line);
-        vcl_vector<unsigned int> vi, ti, ni;
+        std::string line;
+        std::getline(is,line);
+        std::vector<unsigned int> vi, ti, ni;
         unsigned int v;
-        vcl_stringstream ss(line);
+        std::stringstream ss(line);
         while (ss >> v) {
           vi.push_back(v-1);
           if (ss.peek() == '/') {
@@ -247,7 +249,7 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
                   ni.push_back(v-1);
                 }
                 else {
-                  vcl_cerr << "improperly formed face line in OBJ: "<<line<<'\n';
+                  std::cerr << "improperly formed face line in OBJ: "<<line<<'\n';
                   return false;
                 }
               }
@@ -259,7 +261,7 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
                 ni.push_back(v-1);
               }
               else {
-                vcl_cerr << "improperly formed face line in OBJ: "<<line<<'\n';
+                std::cerr << "improperly formed face line in OBJ: "<<line<<'\n';
                 return false;
               }
             }
@@ -272,11 +274,11 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
       {
         faces->make_group(last_group);
         is.ignore();
-        vcl_getline(is,last_group);
+        std::getline(is,last_group);
         break;
       }
       default:
-        is.ignore(vcl_numeric_limits<vcl_streamsize>::max(),'\n');
+        is.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         break;
     }
   }
@@ -288,8 +290,8 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
   if (normals.size() == verts->size())
     verts->set_normals(normals);
 
-  mesh.set_vertices(vcl_auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(vcl_auto_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
+  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
   mesh.set_tex_coords(tex);
 
   return true;
@@ -297,9 +299,9 @@ bool imesh_read_obj(vcl_istream& is, imesh_mesh& mesh)
 
 
 //: Write a mesh to a wavefront OBJ file
-void imesh_write_obj(const vcl_string& filename, const imesh_mesh& mesh)
+void imesh_write_obj(const std::string& filename, const imesh_mesh& mesh)
 {
-  vcl_ofstream fh(filename.c_str());
+  std::ofstream fh(filename.c_str());
   imesh_write_obj(fh,mesh);
   fh.close();
 }
@@ -307,7 +309,7 @@ void imesh_write_obj(const vcl_string& filename, const imesh_mesh& mesh)
 
 //: Write a mesh to a wavefront OBJ stream
 // Rotated about X because Y is up in wavefront (not Z)
-void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
+void imesh_write_obj(std::ostream& os, const imesh_mesh& mesh)
 {
   const imesh_vertex_array_base& verts = mesh.vertices();
   for (unsigned int v=0; v<verts.size(); ++v) {
@@ -328,14 +330,14 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
   }
 
   if (mesh.has_tex_coords()) {
-    const vcl_vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
+    const std::vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
     for (unsigned int t=0; t<tex.size(); ++t) {
       os << "vt " << tex[t].x() << ' ' << tex[t].y() << '\n';
     }
   }
 
   const imesh_face_array_base& faces = mesh.faces();
-  const vcl_vector<vcl_pair<vcl_string,unsigned int> >& groups = faces.groups();
+  const std::vector<std::pair<std::string,unsigned int> >& groups = faces.groups();
 
   bool write_extra = mesh.has_tex_coords() || verts.has_normals();
 
@@ -371,7 +373,7 @@ void imesh_write_obj(vcl_ostream& os, const imesh_mesh& mesh)
   }
 }
 
-void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
+void imesh_write_kml(std::ostream& os, const imesh_mesh& mesh)
 {
   const imesh_face_array_base& faces = mesh.faces();
   const imesh_vertex_array_base& verts = mesh.vertices();
@@ -391,14 +393,14 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
        << "        <altitudeMode>absolute</altitudeMode>\n"
        << "        <outerBoundaryIs>\n"
        << "          <LinearRing>\n"
-       << "            <coordinates>" << vcl_endl;
+       << "            <coordinates>" << std::endl;
 
     for (unsigned int v=0; v<faces.num_verts(f); ++v) {
       unsigned int idx = faces(f,v);
       double x = verts(idx, 0);
       double y = verts(idx, 1);
       double z = verts(idx, 2);
-      os << "             " << x  << ", " << y << ", " << z << vcl_endl;
+      os << "             " << x  << ", " << y << ", " << z << std::endl;
     }
 
     //Now print the first vertex again to close the polygon
@@ -406,20 +408,20 @@ void imesh_write_kml(vcl_ostream& os, const imesh_mesh& mesh)
     double x = verts(idx, 0);
     double y = verts(idx, 1);
     double z = verts(idx, 2);
-    os << "             " << x  << ", " << y << ", " << z << vcl_endl
+    os << "             " << x  << ", " << y << ", " << z << std::endl
        << "            </coordinates>\n"
        << "          </LinearRing>\n"
        << "        </outerBoundaryIs>\n"
-       << "      </Polygon>" << vcl_endl;
+       << "      </Polygon>" << std::endl;
   }
 }
 
-void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
+void imesh_write_kml_collada(std::ostream& os, const imesh_mesh& mesh)
 {
   // get mesh faces as triangles
   if (mesh.faces().regularity() != 3)
   {
-    vcl_cerr << "ERROR! only triangle meshes are supported.\n";
+    std::cerr << "ERROR! only triangle meshes are supported.\n";
     return;
   }
   const imesh_regular_face_array<3>& tris =
@@ -428,13 +430,13 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
   const unsigned int nverts = verts.size();
   const unsigned int nfaces = tris.size();
 
-  vcl_string geometry_id = "geometry";
-  vcl_string geometry_position_id = "geometry_position";
-  vcl_string geometry_position_array_id = "geometry_position_array";
-  vcl_string geometry_uv_id = "geometry_uv";
-  vcl_string geometry_uv_array_id = "geometry_uv_array";
-  vcl_string geometry_vertex_id = "geometry_vertex";
-  vcl_string geometry_normal_id = "geometry_normal";
+  std::string geometry_id = "geometry";
+  std::string geometry_position_id = "geometry_position";
+  std::string geometry_position_array_id = "geometry_position_array";
+  std::string geometry_uv_id = "geometry_uv";
+  std::string geometry_uv_array_id = "geometry_uv_array";
+  std::string geometry_vertex_id = "geometry_vertex";
+  std::string geometry_normal_id = "geometry_normal";
 
   // Write the COLLADA XML
   os <<"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
@@ -453,13 +455,13 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
      << "  </asset>\n";
 
   // Write materials.  Use a single grey material
-  os << "  <library_materials>" << vcl_endl
-     << "    <material id=\"GreyID\" name=\"Grey\">"<< vcl_endl
-     << "       <instance_effect url=\"#Grey-effect\"/>"<< vcl_endl
-     << "    </material>"<< vcl_endl
-     << "  </library_materials>"<< vcl_endl
+  os << "  <library_materials>" << std::endl
+     << "    <material id=\"GreyID\" name=\"Grey\">"<< std::endl
+     << "       <instance_effect url=\"#Grey-effect\"/>"<< std::endl
+     << "    </material>"<< std::endl
+     << "  </library_materials>"<< std::endl
 
-     << "  <library_effects>"<< vcl_endl
+     << "  <library_effects>"<< std::endl
      << "    <effect id=\"Grey-effect\" name=\"Grey-effect\">\n"
      << "      <profile_COMMON>\n"
      << "         <technique sid=\"COMMON\">\n"
@@ -558,12 +560,12 @@ void imesh_write_kml_collada(vcl_ostream& os, const imesh_mesh& mesh)
      << "</COLLADA>\n";
 }
 
-void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
+void imesh_write_vrml(std::ostream& os, const imesh_mesh& mesh)
 {
   // get mesh faces as triangles
   if (mesh.faces().regularity() != 3)
   {
-    vcl_cerr << "ERROR! only triangle meshes are supported.\n";
+    std::cerr << "ERROR! only triangle meshes are supported.\n";
     return;
   }
   const imesh_regular_face_array<3>& tris =
@@ -572,7 +574,7 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
   unsigned d = vertsb.dim();
   if (d!=2&&d!=3)
   {
-    vcl_cerr << "vertex dimension must be 2 or 3.\n";
+    std::cerr << "vertex dimension must be 2 or 3.\n";
     return;
   }
   const unsigned int nfaces = tris.size();
@@ -624,7 +626,7 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
        << "   point [\n";
 
     //write tex coordinates (should be same number as vertices above)
-    const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
+    const std::vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
     for (unsigned int i=0; i<tc.size(); ++i)
       os << "    " << tc[i].x() << ' ' << tc[i].y() << ",\n";
 
@@ -661,7 +663,7 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
 
   //close shape
   os << "}\n";
-  
+
   //close transform
   os << "}\n";
 }

@@ -1,10 +1,11 @@
+#include <iostream>
 #include "icam_transform_2d.h"
 //:
 // \file
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_inverse.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 vgl_point_2d<double> icam_transform_2d::origin() const
 {
@@ -47,7 +48,7 @@ void icam_transform_2d::params_of(vnl_vector<double>& v, Form form) const
     break;
    case (RigidBody):
     v.set_size(3);
-    v(0)=vcl_atan2(-t12_matrix_[0][1],t12_matrix_[0][0]); // Angle
+    v(0)=std::atan2(-t12_matrix_[0][1],t12_matrix_[0][0]); // Angle
     v(1)=t12_matrix_[0][2]; v(2)=t12_matrix_[1][2];
     break;
    case (Affine):
@@ -62,7 +63,7 @@ void icam_transform_2d::params_of(vnl_vector<double>& v, Form form) const
     v(6)=t12_matrix_[2][0]; v(7)=t12_matrix_[2][1]; v(8)=t12_matrix_[2][2];
     break;
    default:
-    vcl_cerr<<"icam_transform_2d::params() Unexpected form: "<<int(form)<<'\n';
+    std::cerr<<"icam_transform_2d::params() Unexpected form: "<<int(form)<<'\n';
   }
 }
 
@@ -93,7 +94,7 @@ void icam_transform_2d::set(vnl_vector<double> const& v, Form form)
     form_ = Projective;
     break;
    default:
-    vcl_cerr<<"icam_transform_2d::set() Unexpected form: "<<int(form)<<'\n';
+    std::cerr<<"icam_transform_2d::set() Unexpected form: "<<int(form)<<'\n';
   }
 }
 
@@ -126,7 +127,7 @@ void icam_transform_2d::set_affine(vgl_point_2d<double> const& p,
 void icam_transform_2d::set_affine(vnl_double_2x3 const& M23)
 {
   if (M23(0,0)*M23(1,1) < M23(0,1)*M23(1,0)) {
-    vcl_cerr << "icam_transform_2d::set_affine:\n"
+    std::cerr << "icam_transform_2d::set_affine:\n"
              << "sub (2x2) matrix should have positive determinant\n";
   }
   vgl_h_matrix_2d<double>::set_affine(M23);
@@ -148,7 +149,7 @@ icam_transform_2d::delta(vgl_point_2d<double> const& p, vgl_vector_2d<double> co
    case Projective :
     return operator()(p+dp)-operator()(p);
    default:
-    vcl_cerr<<"icam_transform_2d::delta() : Unrecognised form: "<<int(form_)<<'\n';
+    std::cerr<<"icam_transform_2d::delta() : Unrecognised form: "<<int(form_)<<'\n';
     return vgl_vector_2d<double>();
   }
 }
@@ -177,7 +178,7 @@ vgl_point_2d<double> icam_transform_2d::operator()(double x, double y) const
                                       (x*t12_matrix_[1][0]+y*t12_matrix_[1][1]+t12_matrix_[1][2])/z);
    }
    default:
-    vcl_cerr<<"icam_transform_2d::operator() : Unrecognised form: "<<int(form_)<<'\n';
+    std::cerr<<"icam_transform_2d::operator() : Unrecognised form: "<<int(form_)<<'\n';
     return vgl_point_2d<double>();
   }
 }

@@ -1,4 +1,8 @@
 // This is mul/pdf1d/pdf1d_mixture_builder.cxx
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 #include "pdf1d_mixture_builder.h"
 //:
 // \file
@@ -6,9 +10,7 @@
 // \author Tim Cootes and Ian Scott
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_loader.h>
@@ -111,9 +113,9 @@ pdf1d_pdf* pdf1d_mixture_builder::new_model() const
   return new pdf1d_mixture;
 }
 
-vcl_string pdf1d_mixture_builder::new_model_type() const
+std::string pdf1d_mixture_builder::new_model_type() const
 {
-  return vcl_string("pdf1d_mixture");
+  return std::string("pdf1d_mixture");
 }
 
 //=======================================================================
@@ -137,8 +139,8 @@ double pdf1d_mixture_builder::min_var() const
 //: Build default model with given mean
 void pdf1d_mixture_builder::build(pdf1d_pdf& /*model*/, double /*mean*/) const
 {
-  vcl_cerr<<"pdf1d_mixture_builder::build(model,mean) not yet implemented.\n";
-  vcl_abort();
+  std::cerr<<"pdf1d_mixture_builder::build(model,mean) not yet implemented.\n";
+  std::abort();
 }
 
 //=======================================================================
@@ -147,8 +149,8 @@ void pdf1d_mixture_builder::build(pdf1d_pdf& /*model*/, double /*mean*/) const
 void pdf1d_mixture_builder::build(pdf1d_pdf& model,
                                   mbl_data_wrapper<double>& data) const
 {
-  vcl_vector<double> wts(data.size());
-  vcl_fill(wts.begin(),wts.end(),1.0);
+  std::vector<double> wts(data.size());
+  std::fill(wts.begin(),wts.end(),1.0);
   weighted_build(model,data,wts);
 }
 
@@ -157,7 +159,7 @@ void pdf1d_mixture_builder::build(pdf1d_pdf& model,
 //: Build model from weighted data
 void pdf1d_mixture_builder::weighted_build(pdf1d_pdf& base_model,
             mbl_data_wrapper<double>& data,
-            const vcl_vector<double>& wts) const
+            const std::vector<double>& wts) const
 {
   assert(base_model.is_class("pdf1d_mixture"));
   pdf1d_mixture& model = static_cast<pdf1d_mixture&>(base_model);
@@ -182,7 +184,7 @@ void pdf1d_mixture_builder::weighted_build(pdf1d_pdf& base_model,
 
   // Get data into an array for rapid access
   const double* data_ptr;
-  vcl_vector<double> data_array;
+  std::vector<double> data_array;
 
   {
     int n=data.size();
@@ -200,7 +202,7 @@ void pdf1d_mixture_builder::weighted_build(pdf1d_pdf& base_model,
   if (!model_setup)
     initialise(model,data_ptr,wts);
 
-  vcl_vector<vnl_vector<double> > probs;
+  std::vector<vnl_vector<double> > probs;
 
   int n_its = 0;
   double max_move = 1e-6;
@@ -225,13 +227,13 @@ static void UpdateRange(double& min_v, double& max_v, double v)
 //=======================================================================
 void pdf1d_mixture_builder::initialise(pdf1d_mixture& model,
           const double* data,
-          const vcl_vector<double>& wts) const
+          const std::vector<double>& wts) const
 {
   // Build each component using randomly weighted data
   int n_comp = builder_.size();
   int n_samples = wts.size();
 
-  vcl_vector<double> wts_i(n_samples);
+  std::vector<double> wts_i(n_samples);
 
   // Compute range of data
   double min_v = data[0];
@@ -240,7 +242,7 @@ void pdf1d_mixture_builder::initialise(pdf1d_mixture& model,
     UpdateRange(min_v,max_v,data[i]);
 
   // Create means equally distributed along range
-  vcl_vector<double> mean(n_comp);
+  std::vector<double> mean(n_comp);
   for (int i=0;i<n_comp;++i)
   {
     double f = (i+1.0)/(n_comp+1);
@@ -257,7 +259,7 @@ void pdf1d_mixture_builder::initialise(pdf1d_mixture& model,
     double w_sum = 0.0;
     for (int j=0;j<n_samples;++j)
     {
-      wts_i[j] = mean_sep/(mean_sep + vcl_fabs(data[j]-mean[i]));
+      wts_i[j] = mean_sep/(mean_sep + std::fabs(data[j]-mean[i]));
       w_sum+=wts_i[j];
     }
 
@@ -272,13 +274,13 @@ void pdf1d_mixture_builder::initialise(pdf1d_mixture& model,
 
 //=======================================================================
 void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
-        vcl_vector<vnl_vector<double> >& probs,
+        std::vector<vnl_vector<double> >& probs,
         const double* data,
-        const vcl_vector<double>& wts) const
+        const std::vector<double>& wts) const
 {
   unsigned int n_comp = builder_.size();
   unsigned int n_egs = wts.size();
-  const vcl_vector<double>& m_wts = model.weights();
+  const std::vector<double>& m_wts = model.weights();
 
   if (probs.size()!=n_comp) probs.resize(n_comp);
 
@@ -293,7 +295,7 @@ void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
     if (m_wts[i]<=0) continue;
 
     double *p_data = probs[i].begin();
-    double log_wt_i = vcl_log(model.weights()[i]);
+    double log_wt_i = std::log(model.weights()[i]);
 
     for (unsigned int j=0;j<n_egs;++j)
       p_data[j] = log_wt_i + model.components()[i]->log_p(data[j]);
@@ -316,7 +318,7 @@ void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
     for (unsigned int i=0;i<n_comp;++i)
     {
       if (m_wts[i]<=0) continue;
-      double p = vcl_exp(probs[i](j)-max_log_p);
+      double p = std::exp(probs[i](j)-max_log_p);
       probs[i](j) = p;
       sum+=p;
     }
@@ -330,13 +332,13 @@ void pdf1d_mixture_builder::e_step(pdf1d_mixture& model,
 
 //=======================================================================
 double pdf1d_mixture_builder::m_step(pdf1d_mixture& model,
-        const vcl_vector<vnl_vector<double> >& probs,
+        const std::vector<vnl_vector<double> >& probs,
         const double* data,
-        const vcl_vector<double>& wts) const
+        const std::vector<double>& wts) const
 {
   int n_comp = builder_.size();
   int n_egs = wts.size();
-  vcl_vector<double> wts_i(n_egs);
+  std::vector<double> wts_i(n_egs);
 
   mbl_data_array_wrapper<double> data_array(data,n_egs);
 
@@ -376,7 +378,7 @@ double pdf1d_mixture_builder::m_step(pdf1d_mixture& model,
     old_mean = model.components()[i]->mean();
     builder_[i]->weighted_build(*(model.components()[i]), data_array, wts_i);
 
-    move += vcl_fabs(old_mean-model.components()[i]->mean());
+    move += std::fabs(old_mean-model.components()[i]->mean());
   }
 
 
@@ -408,14 +410,14 @@ void pdf1d_mixture_builder::calc_mean_and_variance(pdf1d_mixture& model)
 
 //=======================================================================
 
-vcl_string pdf1d_mixture_builder::is_a() const
+std::string pdf1d_mixture_builder::is_a() const
 {
-  return vcl_string("pdf1d_mixture_builder");
+  return std::string("pdf1d_mixture_builder");
 }
 
 //=======================================================================
 
-bool pdf1d_mixture_builder::is_class(vcl_string const& s) const
+bool pdf1d_mixture_builder::is_class(std::string const& s) const
 {
   return pdf1d_builder::is_class(s) || s==pdf1d_mixture_builder::is_a();
 }
@@ -436,7 +438,7 @@ pdf1d_builder* pdf1d_mixture_builder::clone() const
 
 //=======================================================================
 
-void pdf1d_mixture_builder::print_summary(vcl_ostream& os) const
+void pdf1d_mixture_builder::print_summary(std::ostream& os) const
 {
   for (unsigned int i=0;i<builder_.size();++i)
   {
@@ -463,14 +465,14 @@ void pdf1d_mixture_builder::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture_builder &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture_builder &)\n"
              << "           Attempted to load object of type "
-             << name <<" into object of type " << is_a() << vcl_endl;
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+             << name <<" into object of type " << is_a() << std::endl;
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -486,9 +488,9 @@ void pdf1d_mixture_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,weights_fixed_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture_builder &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture_builder &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

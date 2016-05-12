@@ -1,10 +1,11 @@
 /*
   fsm
 */
+#include <iostream>
+#include <vector>
 #include "menu_hack.h"
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glut.h>
@@ -86,7 +87,7 @@ struct vgui_glut_menu_hack::per_window_record
 
 static vgui_glut_menu_hack::per_window_record * get_current_record()
 {
-  static vcl_vector<vgui_glut_menu_hack::per_window_record *> records;
+  static std::vector<vgui_glut_menu_hack::per_window_record *> records;
 
   unsigned win = glutGetWindow();
   if (win == 0)
@@ -96,7 +97,7 @@ static vgui_glut_menu_hack::per_window_record * get_current_record()
 
   if (records[win] == 0) {
 #ifdef DEBUG
-    vcl_cerr << __FILE__ " : create record for window " << win << vcl_endl;
+    std::cerr << __FILE__ " : create record for window " << win << std::endl;
 #endif
     records[win] = new vgui_glut_menu_hack::per_window_record;
   }
@@ -114,7 +115,7 @@ int vgui_glut_menu_hack::find_index(int button, int mods)
   for (unsigned i=0; i<table_size; i++)
     if (button==rec->entries[i].button && mods==rec->entries[i].mods)
       return i;
-  vcl_cerr << __FILE__ " : invalid button/modifier combination " << button << ' ' << mods << vcl_endl;
+  std::cerr << __FILE__ " : invalid button/modifier combination " << button << ' ' << mods << std::endl;
   return -1;
 }
 
@@ -144,7 +145,7 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x, int y)
   active = true;
   glut_button = button;
 #ifdef DEBUG
-  vcl_cerr << "active\n";
+  std::cerr << "active\n";
 #endif
 
   // attach the required button to the menu
@@ -192,7 +193,7 @@ void vgui_glut_menu_hack::menustatus(int status,int /*x*/,int /*y*/)
   if (active  &&  status == GLUT_MENU_NOT_IN_USE) {
     glutDetachMenu(glut_button);
 #ifdef DEBUG
-    vcl_cerr << "purged\n";
+    std::cerr << "purged\n";
 #endif
     active = false;
   }
@@ -210,7 +211,7 @@ void vgui_glut_menu_hack::bind  (int button, int mods, int menu_id)
     if (!rec)
       return;
 #ifdef DEBUG
-    vcl_cerr << "bind : " << glutGetWindow() << ' ' <<  button << ' ' << mods << ' ' << menu_id <<  vcl_endl;
+    std::cerr << "bind : " << glutGetWindow() << ' ' <<  button << ' ' << mods << ' ' << menu_id <<  std::endl;
 #endif
     rec->entries[index].menu_id = menu_id;
   }

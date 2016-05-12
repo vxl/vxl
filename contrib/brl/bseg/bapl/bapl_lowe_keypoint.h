@@ -12,11 +12,13 @@
 //   Ozge C. Ozcanli -- Sep 15, 2010 -- added constructor with a descriptor vector
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class bapl_lowe_keypoint : public bapl_keypoint
 {
@@ -59,7 +61,7 @@ class bapl_lowe_keypoint : public bapl_keypoint
   void set_descriptor(const vnl_vector_fixed<double,128>& descriptor);
 
   //: Print a summary of the keypoint data to a stream
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
  protected:
   //: Normalize, threshold, and renormalize
@@ -97,6 +99,6 @@ struct bapl_lowe_keypoint_new : public bapl_lowe_keypoint_sptr
 //:
 // warning: does not read/write the bapl_lowe_pyramid_set, only the location, orientation and descriptor of the keypoint.
 //  translate the coordinate frame with respect to image width and height if necessary, otherwise pass 0, 0
-bapl_lowe_keypoint_sptr read_from_file(vcl_istream& is, int len, int img_width = 0, int img_height = 0);
+bapl_lowe_keypoint_sptr read_from_file(std::istream& is, int len, int img_width = 0, int img_height = 0);
 
 #endif // bapl_lowe_keypoint_h_

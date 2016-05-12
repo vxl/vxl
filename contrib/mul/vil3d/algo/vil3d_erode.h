@@ -12,7 +12,7 @@
 
 //: Return minimum of im[offset[k]], k=0..n;
 template <class T>
-inline T vil3d_erode(const T* im, const vcl_ptrdiff_t* offset, unsigned n)
+inline T vil3d_erode(const T* im, const std::ptrdiff_t* offset, unsigned n)
 {
   T min_v = im[offset[0]];
   for (unsigned i=1;i<n;++i) if (im[offset[i]] < min_v) min_v=im[offset[i]];
@@ -33,11 +33,11 @@ void vil3d_erode(const vil3d_image_view<T>& src_image,
   unsigned nk = src_image.nk(); assert(nk>0);
   dest_image.set_size(ni,nj,nk,1);
 
-  vcl_ptrdiff_t s_istep = src_image.istep(),  s_jstep = src_image.jstep();
-  vcl_ptrdiff_t s_kstep = src_image.kstep();
-  vcl_ptrdiff_t d_istep = dest_image.istep();
+  std::ptrdiff_t s_istep = src_image.istep(),  s_jstep = src_image.jstep();
+  std::ptrdiff_t s_kstep = src_image.kstep();
+  std::ptrdiff_t d_istep = dest_image.istep();
 
-  vcl_vector<vcl_ptrdiff_t> offset;
+  std::vector<std::ptrdiff_t> offset;
   vil3d_compute_offsets(offset,element,s_istep,s_jstep,s_kstep);
 
   // Define box in which all element will be valid

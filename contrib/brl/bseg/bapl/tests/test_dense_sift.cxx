@@ -1,3 +1,4 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
@@ -6,7 +7,7 @@
 #include <bapl/bapl_dense_sift_sptr.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>
@@ -30,13 +31,13 @@ static void test_dense_sift()
     new bapl_dense_sift(vil_new_image_resource_of_view(img), 2, 0);
 
   bapl_lowe_keypoint_sptr keypoint;
-  
+
   dense_sift_sptr->make_keypoint(keypoint, ki, kj);
 
   //orientation should be 90 degrees
   TEST_NEAR("Testing orientation.", keypoint->orientation(), vnl_math::pi, 1e-3);
 
-  return;  
+  return;
 }
 
 TESTMAIN(test_dense_sift);

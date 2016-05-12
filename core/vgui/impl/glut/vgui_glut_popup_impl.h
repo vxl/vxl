@@ -29,7 +29,7 @@ struct vgui_glut_popup_impl
  private:
   static void command_func(int value);
 
-  vcl_vector<void*> subs; // list of pointers to popup_impls allocated by this popup_impl.
+  std::vector<void*> subs; // list of pointers to popup_impls allocated by this popup_impl.
   vgui_menu tmp_menu;     // see build_internal().
 
   void build_internal(vgui_menu const &m);

@@ -6,54 +6,51 @@ doxygen_add_library(core/vbl
   DESCRIPTION "Basic Template Library"
   )
 
-SET( vbl_sources
+set( vbl_sources
   vbl_fwd.h
 
   vbl_bool_ostream.cxx        vbl_bool_ostream.h
-  vbl_smart_ptr.txx           vbl_smart_ptr.h
+  vbl_smart_ptr.hxx           vbl_smart_ptr.h
                               vbl_shared_pointer.h
                               vbl_scoped_ptr.h
                               vbl_checked_delete.h
-  vbl_sort.txx                vbl_sort.h           vbl_sort.cxx
+  vbl_sort.hxx                vbl_sort.h           vbl_sort.cxx
   vbl_qsort.cxx               vbl_qsort.h
 
-  vbl_array_1d.txx            vbl_array_1d.h
-  vbl_array_2d.txx            vbl_array_2d.h
-  vbl_array_3d.txx            vbl_array_3d.h
+  vbl_array_1d.hxx            vbl_array_1d.h
+  vbl_array_2d.hxx            vbl_array_2d.h
+  vbl_array_3d.hxx            vbl_array_3d.h
   vbl_bit_array_2d.cxx        vbl_bit_array_2d.h
   vbl_bit_array_3d.cxx        vbl_bit_array_3d.h
-  vbl_sparse_array_base.txx   vbl_sparse_array_base.h
-  vbl_sparse_array_1d.txx     vbl_sparse_array_1d.h
-  vbl_sparse_array_2d.txx     vbl_sparse_array_2d.h
-  vbl_sparse_array_3d.txx     vbl_sparse_array_3d.h
-  vbl_big_sparse_array_3d.txx vbl_big_sparse_array_3d.h
+  vbl_sparse_array_base.hxx   vbl_sparse_array_base.h
+  vbl_sparse_array_1d.hxx     vbl_sparse_array_1d.h
+  vbl_sparse_array_2d.hxx     vbl_sparse_array_2d.h
+  vbl_sparse_array_3d.hxx     vbl_sparse_array_3d.h
+  vbl_big_sparse_array_3d.hxx vbl_big_sparse_array_3d.h
   vbl_batch_multimap.h
   vbl_batch_compact_multimap.h
 
                               vbl_ref_count.h
-  vbl_bounding_box.txx        vbl_bounding_box.h
+  vbl_bounding_box.hxx        vbl_bounding_box.h
 
-  vbl_triple.txx              vbl_triple.h
-  vbl_quadruple.txx           vbl_quadruple.h
-  vbl_local_minima.txx        vbl_local_minima.h
-  vbl_attributes.txx          vbl_attributes.h
+  vbl_triple.hxx              vbl_triple.h
+  vbl_quadruple.hxx           vbl_quadruple.h
+  vbl_local_minima.hxx        vbl_local_minima.h
+  vbl_attributes.hxx          vbl_attributes.h
   vbl_disjoint_sets.cxx       vbl_disjoint_sets.h
   vbl_graph_partition.cxx     vbl_graph_partition.h
   vbl_edge.h                  vbl_edge.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vbl_sources)
+aux_source_directory(Templates vbl_sources)
 
-ADD_LIBRARY(vbl ${vbl_sources})
-TARGET_LINK_LIBRARIES( vbl vcl )
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vbl LIBRARY_SOURCES ${vbl_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl )
 
-INSTALL_TARGETS(/lib vbl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vbl ${vbl_sources})
-
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

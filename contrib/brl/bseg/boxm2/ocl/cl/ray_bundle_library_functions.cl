@@ -718,7 +718,7 @@ __kernel void proc_norm_image(__global float4* image, __global float4* p_inf,__g
     int i=0;
     int j=0;
     map_work_space_2d(&i,&j);
-    
+
     if (i>=(*imgdims).z && j>=(*imgdims).w)
         return;
 
@@ -865,11 +865,11 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
 
 
         if(w0>0.0f && w1>0.0f)
-            w2=1-(*data).s3-(*data).s7;  
+            w2=1-(*data).s3-(*data).s7;
 
-        short Nobs0 = (short)(*data).s4, 
-              Nobs1 = (short)(*data).s8, 
-              Nobs2 = (short)(*data).sb; 
+        short Nobs0 = (short)(*data).s4,
+              Nobs1 = (short)(*data).s8,
+              Nobs2 = (short)(*data).sb;
         float Nobs_mix = (*data).sc;
 
         update_gauss_3_mixture(aux_data.y/aux_data.x,

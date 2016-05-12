@@ -19,9 +19,11 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
-// not used? #include <vcl_string.h>
+// not used? #include <vcl_compiler.h>
+#include <string>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include "vnl/vnl_export.h"
 
 //:  Abstract base for minimising functions.
 //    vnl_least_squares_function is an abstract base for functions to be minimized
@@ -33,7 +35,7 @@
 //    want to cache some information during the call, and if they're compute
 //    objects, will almost certainly be writing to members during the
 //    computation.  For the moment it's non-const, but we'll see...
-class vnl_least_squares_function
+class VNL_EXPORT vnl_least_squares_function
 {
  public:
   enum  UseGradient {

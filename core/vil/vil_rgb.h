@@ -29,13 +29,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
-#include <vcl_iostream.h>
-
-#ifdef VCL_SUNPRO_CC
-# define InLine inline
-#else
-# define InLine
-#endif
+#include <iostream>
+#include <vcl_compiler.h>
 
 //: This is the appropriate pixel type for 24-bit colour images.
 //
@@ -118,7 +113,7 @@ vil_rgb_call(macro)
 # undef macro
 
 # define macro(S) \
-  InLine vil_rgb<T>& operator=(vil_rgb<S > const& that);
+  vil_rgb<T>& operator=(vil_rgb<S > const& that);
 vil_rgb_call(macro)
 # undef macro
 #endif
@@ -144,13 +139,13 @@ vil_rgb_call(macro)
 
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<T> const& rgb)
+std::ostream& operator<<(std::ostream& s, vil_rgb<T> const& rgb)
 {
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }
 
 VCL_DEFINE_SPECIALIZATION
-vcl_ostream& operator<<(vcl_ostream& s, vil_rgb<unsigned char> const& rgb);
+std::ostream& operator<<(std::ostream& s, vil_rgb<unsigned char> const& rgb);
 
 
 // ** Arithmetic operators

@@ -23,7 +23,4 @@ s!Basics/IUE_sprintf.h!vbl/vbl_sprintf.h!g;
 s!Basics/RGB.h!vbl/vbl_rgb.h!g;
 s!<vector.h>!<vcl_vector.h>!g;
 s!\bvector\b!vcl_vector!g;
-s!INSTANTIATE_COPY!VCL_COPY_INSTANTIATE!g;
-s!INSTANTIATE_COPY!VCL_COPY_INSTANTIATE!g;
-s!INSTANTIATE_VECTOR!VCL_VECTOR_INSTANTIATE!g;
 s!\bostream_iterator!\bvcl_ostream_iterator!g;

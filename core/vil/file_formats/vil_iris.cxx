@@ -15,11 +15,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vil_iris.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h> // for memcpy()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
@@ -42,7 +43,7 @@ char const* vil_iris_format_tag = "iris";
 vil_image_resource_sptr vil_iris_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0L);
-  if (is->file_size() < 84L) return 0;
+  if (is->file_size() < 84L) return VXL_NULLPTR;
   int colormap_;
 
   vxl_sint_16 magic_      = get_short(is);
@@ -57,16 +58,16 @@ vil_image_resource_sptr vil_iris_file_format::make_input_image(vil_stream* is)
 
   is->seek(24L);
   char imagename[81];
-  if (is->read(imagename, 80L) != 80) return 0;
+  if (is->read(imagename, 80L) != 80) return VXL_NULLPTR;
 
   colormap_ = get_long(is);
 
-  if (magic_ != 474) return 0;
-  if (storage_ != 0 && storage_ != 1) return 0;
-  if (colormap_ == 3) return 0;
-  if (dimension_ == 3 && colormap_ != 0) return 0;
-  if (dimension_ > 3 || dimension_ < 1) return 0;
-  if (bytes_per_component < 1 || bytes_per_component > 2) return 0;
+  if (magic_ != 474) return VXL_NULLPTR;
+  if (storage_ != 0 && storage_ != 1) return VXL_NULLPTR;
+  if (colormap_ == 3) return VXL_NULLPTR;
+  if (dimension_ == 3 && colormap_ != 0) return VXL_NULLPTR;
+  if (dimension_ > 3 || dimension_ < 1) return VXL_NULLPTR;
+  if (bytes_per_component < 1 || bytes_per_component > 2) return VXL_NULLPTR;
 
   return new vil_iris_generic_image(is,imagename);
 }
@@ -86,11 +87,11 @@ char const* vil_iris_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 vil_iris_generic_image::vil_iris_generic_image(vil_stream* is, char const* imagename):
-  starttab_(0), lengthtab_(0), is_(is)
+  starttab_(VXL_NULLPTR), lengthtab_(VXL_NULLPTR), is_(is)
 {
   is_->ref();
   read_header();
-  vcl_strncpy(imagename_, imagename, 80);
+  std::strncpy(imagename_, imagename, 80);
 }
 
 bool vil_iris_generic_image::get_property(char const* /*tag*/, void* /*prop*/) const
@@ -107,7 +108,7 @@ char const* vil_iris_generic_image::file_format() const
 vil_iris_generic_image::vil_iris_generic_image(vil_stream* is,
                                                unsigned int ni, unsigned int nj, unsigned int nplanes,
                                                vil_pixel_format format)
-  : starttab_(0), lengthtab_(0), is_(is), magic_(474), ni_(ni), nj_(nj),
+  : starttab_(VXL_NULLPTR), lengthtab_(VXL_NULLPTR), is_(is), magic_(474), ni_(ni), nj_(nj),
     nplanes_(nplanes), format_(format), pixmin_(0),
     pixmax_(vil_pixel_format_sizeof_components(format)==1 ? 255 : 65535),
     storage_(0), dimension_(nplanes_==1 ? 2 : 3), colormap_(0)
@@ -116,13 +117,13 @@ vil_iris_generic_image::vil_iris_generic_image(vil_stream* is,
 
   if (vil_pixel_format_sizeof_components(format) <= 2)
   {
-    vcl_strcpy(imagename_, "written by vil_iris_generic_image");
+    std::strcpy(imagename_, "written by vil_iris_generic_image");
 
     if (nplanes_ != 1 && nplanes_ != 3 && nplanes_ != 4)
-      vcl_cerr << __FILE__ ": Cannot write iris image, can only do grayscale or RGB(A)\n";
+      std::cerr << __FILE__ ": Cannot write iris image, can only do grayscale or RGB(A)\n";
     write_header();
   }
-  else vcl_cerr << __FILE__ ": Cannot write iris image, which needs 8 or 16 bits per component\n";
+  else std::cerr << __FILE__ ": Cannot write iris image, which needs 8 or 16 bits per component\n";
 }
 
 vil_iris_generic_image::~vil_iris_generic_image()
@@ -139,15 +140,15 @@ bool vil_iris_generic_image::read_header()
   magic_ = get_short(is_, 0);
   if (magic_ != 474)
   {
-    vcl_cerr << __FILE__ ": This is not an Iris RGB file: magic number is incorrect: "
-             << magic_ << vcl_endl;
+    std::cerr << __FILE__ ": This is not an Iris RGB file: magic number is incorrect: "
+             << magic_ << std::endl;
     return false;
   }
 
   storage_ = get_char(is_);
   if (storage_ != 0 && storage_ != 1)
   {
-    vcl_cerr << __FILE__ ": This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
+    std::cerr << __FILE__ ": This is not an Iris RGB file: storage must be RLE or VERBATIM\n";
     return false;
   }
 
@@ -175,13 +176,13 @@ bool vil_iris_generic_image::read_header()
 
   if (colormap_ == 3)
   {
-    vcl_cerr << __FILE__ ": This is not an ordinary Iris RGB image but a colormap file which I cannot handle\n";
+    std::cerr << __FILE__ ": This is not an ordinary Iris RGB image but a colormap file which I cannot handle\n";
     return false;
   }
 
   if (dimension_ == 3 && colormap_ != 0)
   {
-    vcl_cerr << __FILE__ ": Cannot handle Iris RGB file with colormap other than NORMAL\n";
+    std::cerr << __FILE__ ": Cannot handle Iris RGB file with colormap other than NORMAL\n";
     return false;
   }
 
@@ -195,20 +196,20 @@ bool vil_iris_generic_image::read_header()
 bool vil_iris_generic_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": vil_iris_generic_image::write_header()\n"
+  std::cerr << __FILE__ ": vil_iris_generic_image::write_header()\n"
            << "Here we go :\n"
-           << "magic_      = " << magic_    << vcl_endl
-           << "storage_    = " << storage_ << vcl_endl
-           << "format_     = " << format_ << vcl_endl
-           << "dimension_  = " << dimension_ << vcl_endl
-           << "ni_      = " << ni_ << vcl_endl
-           << "nj_     = " << nj_ << vcl_endl
-           << "nplanes_    = " << nplanes_ << vcl_endl
-           << "pixmin_     = " << pixmin_ << vcl_endl
-           << "pixmax_     = " << pixmax_ << vcl_endl
-           << "colormap_   = " << colormap_ << vcl_endl
-           << "imagename_  = " << imagename_ << vcl_endl
-           << vcl_endl;
+           << "magic_      = " << magic_    << std::endl
+           << "storage_    = " << storage_ << std::endl
+           << "format_     = " << format_ << std::endl
+           << "dimension_  = " << dimension_ << std::endl
+           << "ni_      = " << ni_ << std::endl
+           << "nj_     = " << nj_ << std::endl
+           << "nplanes_    = " << nplanes_ << std::endl
+           << "pixmin_     = " << pixmin_ << std::endl
+           << "pixmax_     = " << pixmax_ << std::endl
+           << "colormap_   = " << colormap_ << std::endl
+           << "imagename_  = " << imagename_ << std::endl
+           << std::endl;
 #endif
 
   char dummy[410];
@@ -238,18 +239,18 @@ static inline void swap(void* p,int length)
   char* t = (char*)p;
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
-    vcl_cerr << "Swapping " << *(vxl_uint_32*)p;
+    std::cerr << "Swapping " << *(vxl_uint_32*)p;
     if (length == sizeof(float))
-      vcl_cerr << " (or " << *(float*)p << ')';
+      std::cerr << " (or " << *(float*)p << ')';
   }
 #endif
   for (int j=0;2*j<length;++j) { char c = t[j]; t[j] = t[length-j-1]; t[length-j-1] = c; }
 #ifdef DEBUG
   if (length == sizeof(vxl_uint_32) && *(vxl_uint_32*)p != 0) {
-    vcl_cerr << " to " << *(vxl_uint_32*)p;
+    std::cerr << " to " << *(vxl_uint_32*)p;
     if (length == sizeof(float))
-      vcl_cerr << " (or " << *(float*)p << ')';
-    vcl_cerr << '\n';
+      std::cerr << " (or " << *(float*)p << ')';
+    std::cerr << '\n';
   }
 #endif
 }
@@ -300,7 +301,7 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_verbatim(unsigned i
   else if (format_ == VIL_PIXEL_FORMAT_UINT_16)
     return new vil_image_view<vxl_uint_16>(buf,ob+xs*(ys-1),xs,ys,nplanes_,1,-int(xs),xs*ys);
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 
@@ -336,7 +337,7 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_rle(unsigned int x0
       delete[] rlerow;
 
       // write expanded row in store
-      vcl_memcpy(cbi,exrow+x0,xs);
+      std::memcpy(cbi,exrow+x0,xs);
     }
   }
   delete[] exrow;
@@ -345,7 +346,7 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_rle(unsigned int x0
   else if (format_ == VIL_PIXEL_FORMAT_UINT_16)
     return new vil_image_view<vxl_uint_16>(buf,ob+xs*(ys-1),xs,ys,nplanes_,1,-int(xs),xs*ys);
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 
@@ -358,7 +359,7 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
     return false;
   }
 #ifdef DEBUG
-  vcl_cerr << "vil_iris_image::put_view() : buf="
+  std::cerr << "vil_iris_image::put_view() : buf="
            << buf.ni()<<'x'<<buf.nj()<<'x'<< buf.nplanes()<<'p'
            << " at ("<<x0<<','<<y0<<")\n";
 #endif
@@ -366,9 +367,9 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
   const unsigned char* ob = buff.top_left_ptr();
   unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
 
-  vcl_size_t rowsize = pix_size*buf.ni();
-  vcl_ptrdiff_t rowskip = pix_size*buff.jstep();
-  vcl_size_t planeskip = pix_size*buff.planestep();
+  std::size_t rowsize = pix_size*buf.ni();
+  std::ptrdiff_t rowskip = pix_size*buff.jstep();
+  std::size_t planeskip = pix_size*buff.planestep();
 
   if (VXL_LITTLE_ENDIAN && pix_size > 1) // IRIS image data is big-endian
   {
@@ -383,17 +384,17 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
         // skip to start of section
         is_->seek(512L + (channel * ni_*nj_ + y * ni_ + x0) * pix_size);
         // swap bytes before writing
-        vcl_memcpy(tempbuf,ob,rowsize);
+        std::memcpy(tempbuf,ob,rowsize);
         for (unsigned int i=0;i<buf.ni();++i)
           swap(tempbuf+i*pix_size,pix_size);
         // write swapped bytes
         if ((vil_streampos)rowsize != is_->write(tempbuf, rowsize))
-          vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+          std::cerr << "WARNING: " << __FILE__ << ":\n"
                    << " could not write "<<rowsize<<" bytes to stream;\n"
                    << " channel="<<channel<<", y="<<y<<'\n';
 #ifdef DEBUG
         else
-          vcl_cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
+          std::cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
 #endif
       }
       ob += planeskip;
@@ -411,12 +412,12 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
         // skip to start of section
         is_->seek(512L + (channel * ni_*nj_ + y * ni_ + x0) * pix_size);
         if ((vil_streampos)rowsize != is_->write(ob, rowsize))
-          vcl_cerr << "WARNING: " << __FILE__ << ":\n"
+          std::cerr << "WARNING: " << __FILE__ << ":\n"
                    << " could not write "<<rowsize<<" bytes to stream;\n"
                    << " channel="<<channel<<", y="<<y<<'\n';
 #ifdef DEBUG
         else
-          vcl_cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
+          std::cerr << "written "<<rowsize<<" bytes to stream; channel="<<channel<<", y="<<y<<'\n';
 #endif
       }
       ob += planeskip;

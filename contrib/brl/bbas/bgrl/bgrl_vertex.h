@@ -14,12 +14,14 @@
 //  Modifications
 // \endverbatim
 
+#include <set>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <bgrl/bgrl_edge_sptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_set.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 #include "bgrl_vertex_sptr.h"
 
@@ -31,7 +33,7 @@ class bgrl_vertex : public vbl_ref_count
 {
  public:
 
-  typedef vcl_set<bgrl_edge_sptr>::iterator edge_iterator;
+  typedef std::set<bgrl_edge_sptr>::iterator edge_iterator;
   friend class bgrl_graph;
 
   //: Constructor
@@ -59,7 +61,7 @@ class bgrl_vertex : public vbl_ref_count
   unsigned int out_degree() const { return out_edges_.size(); }
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -75,7 +77,7 @@ class bgrl_vertex : public vbl_ref_count
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
  protected:
   //: Create an outgoing edge to \p vertex
@@ -100,10 +102,10 @@ class bgrl_vertex : public vbl_ref_count
 
 
   //: The pointers to outgoing edges
-  vcl_set<bgrl_edge_sptr> out_edges_;
+  std::set<bgrl_edge_sptr> out_edges_;
 
   //: The pointers to incoming edges
-  vcl_set<bgrl_edge_sptr> in_edges_;
+  std::set<bgrl_edge_sptr> in_edges_;
 };
 
 
@@ -119,6 +121,6 @@ class bgrl_vertex : public vbl_ref_count
 void vsl_add_to_binary_loader(const bgrl_vertex& v);
 
 //: Print an ASCII summary to the stream
-void vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v);
+void vsl_print_summary(std::ostream &os, const bgrl_vertex* v);
 
 #endif // bgrl_vertex_h_

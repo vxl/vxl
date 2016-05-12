@@ -1,8 +1,8 @@
 #depends on OPENCL being found...
-INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-SET(boxm2_ocl_algo_sources
+include_directories( ${OPENCL_INCLUDE_PATH} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR} )
+set(boxm2_ocl_algo_sources
     boxm2_ocl_render_expected_image.h           boxm2_ocl_render_expected_image.cxx
     boxm2_ocl_render_expected_image_function.h  boxm2_ocl_render_expected_image_function.cxx
     boxm2_ocl_camera_converter.h                boxm2_ocl_camera_converter.cxx
@@ -33,15 +33,17 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_filter_scene_data.h               boxm2_ocl_filter_scene_data.cxx
     boxm2_ocl_aggregate_normal_from_filter_vector.h  boxm2_ocl_aggregate_normal_from_filter_vector.cxx
     boxm2_ocl_kernel_vector_filter.h            boxm2_ocl_kernel_vector_filter.cxx
-   )
+    boxm2_ocl_update_image_factor.h				boxm2_ocl_update_image_factor.cxx
+    boxm2_ocl_fuse_factors.h					boxm2_ocl_fuse_factors.cxx
+    boxm2_ocl_update_heightmap_factor.h		boxm2_ocl_update_heightmap_factor.cxx
+    boxm2_ocl_remove_low_nobs.h	    	        boxm2_ocl_remove_low_nobs.cxx
+)
 
-ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl vgl vil vul vnl_algo brad bvpl_kernels)
+vxl_add_library(LIBRARY_NAME boxm2_ocl_algo LIBRARY_SOURCES  ${boxm2_ocl_algo_sources})
+target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vnl_algo brad bvpl_kernels)
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-INSTALL_TARGETS(/lib boxm2_ocl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl/algo ${boxm2_ocl_algo_sources})

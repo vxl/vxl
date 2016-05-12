@@ -85,15 +85,15 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
 
   //compute the gradient magnitude
   for (unsigned long i=0; i<grad_mag.size(); i++)
-    g_mag[i] = vcl_sqrt(gx[i]*gx[i] + gy[i]*gy[i]);
+    g_mag[i] = std::sqrt(gx[i]*gx[i] + gy[i]*gy[i]);
 
   double conv_time = t.real();
   t.mark(); //reset timer
 
   //Now call the nms code to determine the set of edgels and their subpixel positions
-  vcl_vector<vgl_point_2d<double> > edge_locs, edge_locations;
-  vcl_vector<vgl_point_2d<int> > pix_locs;
-  vcl_vector<double> orientation, mag, d2f;
+  std::vector<vgl_point_2d<double> > edge_locs, edge_locations;
+  std::vector<vgl_point_2d<int> > pix_locs;
+  std::vector<double> orientation, mag, d2f;
 
   //parameters for reliable NMS
   double noise_sigma = 1.5;
@@ -114,7 +114,7 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
     edge_locations.push_back(vgl_point_2d<double>(edge_locs[i].x()/scale, edge_locs[i].y()/scale));
 
   //for each edge, compute all the gradients to compute the new orientation
-  vcl_vector<double> Ix, Iy, Ixx, Ixy, Iyy, Ixxy, Ixyy, Ixxx, Iyyy;
+  std::vector<double> Ix, Iy, Ixx, Ixy, Iyy, Ixxy, Ixyy, Ixxx, Iyyy;
 
   switch (grad_op_)
   {
@@ -160,7 +160,7 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
   }
 
   //Now, compute and update each edge with its new orientation
-  vcl_vector<double> edge_orientations(edge_locations.size());
+  std::vector<double> edge_orientations(edge_locations.size());
   for (unsigned i=0; i<edge_locations.size();i++)
   {
     //compute F
@@ -173,22 +173,22 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
                 2*Ix[i]*Iyy[i]*Ixy[i]  + 2*Ix[i]*Iy[i]*Ixyy[i] + Ixxy[i]*Ix[i]*Ix[i] + Iyyy[i]*Iy[i]*Iy[i];
 
     //save new orientation
-    edge_orientations[i] = vnl_math::angle_0_to_2pi(vcl_atan2(Fx, -Fy));
+    edge_orientations[i] = vnl_math::angle_0_to_2pi(std::atan2(Fx, -Fy));
   }
 
   double third_order_time = t.real();
 
   //report timings
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "time taken for conv: " << conv_time << " msec\n"
            << "time taken for nms: " << nms_time << " msec\n"
-           << "time taken for third-order: " << third_order_time << " msec" << vcl_endl;
+           << "time taken for third-order: " << third_order_time << " msec" << std::endl;
 
   //------------------------------------------------------------------------------------------
   // Compute the edge uncertainty measures
 
 #if 0
-  vcl_vector<double> edge_uncertainties(edge_locations.size());
+  std::vector<double> edge_uncertainties(edge_locations.size());
   sdet_edge_uncertainty_measure edge_uncer(grad_x, grad_y, sigma_);
   edge_uncer.get_edgel_uncertainties(edge_locs, edge_uncertainties);
 #endif
@@ -200,7 +200,7 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
     edgels_.push_back(ed);
   }
   double edgel_encode_time = t.real();
-  vcl_cout << "time taken for edgel encode: " << edgel_encode_time << " msec" << vcl_endl;
+  std::cout << "time taken for edgel encode: " << edgel_encode_time << " msec" << std::endl;
 
   view_i = greyscale_view.ni();
   view_j = greyscale_view.nj();
@@ -254,7 +254,7 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
 bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& image)
 {
   if (image.nplanes() != 3) {
-    vcl_cerr << "In sdet_third_order_edge_det::apply_color() - only works with color images!\n";
+    std::cerr << "In sdet_third_order_edge_det::apply_color() - only works with color images!\n";
     return false;
   }
 
@@ -364,18 +364,18 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     double B = f1x[i]*f1y[i]+f2x[i]*f2y[i]+f3x[i]*f3y[i];
     double C = f1y[i]*f1y[i]+f2y[i]*f2y[i]+f3y[i]*f3y[i];
 
-    double l = (A+C+ vcl_sqrt((A-C)*(A-C) + 4*B*B))/2;
+    double l = (A+C+ std::sqrt((A-C)*(A-C) + 4*B*B))/2;
 
-    if (vcl_fabs(B)>1e-2) {
-      n1[i] = B/vcl_sqrt(B*B+(l-A)*(l-A));
-      n2[i] = (l-A)/vcl_sqrt(B*B+(l-A)*(l-A));
+    if (std::fabs(B)>1e-2) {
+      n1[i] = B/std::sqrt(B*B+(l-A)*(l-A));
+      n2[i] = (l-A)/std::sqrt(B*B+(l-A)*(l-A));
     }
     else {
-      n1[i] = (l-C)/vcl_sqrt(B*B+(l-C)*(l-C));
-      n2[i] = B/vcl_sqrt(B*B+(l-C)*(l-C));
+      n1[i] = (l-C)/std::sqrt(B*B+(l-C)*(l-C));
+      n2[i] = B/std::sqrt(B*B+(l-C)*(l-C));
     }
 
-    g_mag[i] = vcl_sqrt(l/3); //take the square root of the squared norm
+    g_mag[i] = std::sqrt(l/3); //take the square root of the squared norm
   }
 
 
@@ -383,8 +383,8 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   t.mark(); //reset timer
 
   //Now call the nms code to get the subpixel edge tokens
-  vcl_vector<vgl_point_2d<double> > edge_locations;
-  vcl_vector<double> orientation, mag, d2f;
+  std::vector<vgl_point_2d<double> > edge_locations;
+  std::vector<double> orientation, mag, d2f;
 
   sdet_nms NMS(sdet_nms_params(thresh_, (sdet_nms_params::PFIT_TYPE)pfit_type_), nu1, nu2, grad_mag);
   NMS.apply(true, edge_locations, orientation, mag, d2f);
@@ -397,9 +397,9 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     edge_locations[i].set(edge_locations[i].x()/scale, edge_locations[i].y()/scale);
 
   //for each edge, compute all the gradients to compute the new orientation
-  vcl_vector<double> If1x, If1y, If1xx, If1xy, If1yy, If1xxy, If1xyy, If1xxx, If1yyy;
-  vcl_vector<double> If2x, If2y, If2xx, If2xy, If2yy, If2xxy, If2xyy, If2xxx, If2yyy;
-  vcl_vector<double> If3x, If3y, If3xx, If3xy, If3yy, If3xxy, If3xyy, If3xxx, If3yyy;
+  std::vector<double> If1x, If1y, If1xx, If1xy, If1yy, If1xxy, If1xyy, If1xxx, If1yyy;
+  std::vector<double> If2x, If2y, If2xx, If2xy, If2yy, If2xxy, If2xyy, If2xxx, If2yyy;
+  std::vector<double> If3x, If3y, If3xx, If3xy, If3yy, If3xxy, If3xyy, If3xxx, If3yyy;
 
   switch (grad_op_)
   {
@@ -508,7 +508,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   }
 
   //Now, compute and update each edge with its new orientation
-  vcl_vector<double> edge_orientations(edge_locations.size());
+  std::vector<double> edge_orientations(edge_locations.size());
 
   for (unsigned i=0; i<edge_locations.size();i++)
   {
@@ -533,7 +533,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     double Cxy = 2*If1y[i]*If1xyy[i] + 2*If1yy[i]*If1xy[i] + 2*If2y[i]*If2xyy[i] + 2*If2yy[i]*If2xy[i] + 2*If3y[i]*If3xyy[i] + 2*If3yy[i]*If3xy[i];
     double Cyy = 2*If1y[i]*If1yyy[i] + 2*If1yy[i]*If1yy[i] + 2*If2y[i]*If2yyy[i] + 2*If2yy[i]*If2yy[i] + 2*If3y[i]*If3yyy[i] + 2*If3yy[i]*If3yy[i];
 
-    double l = ((C+A) + vcl_sqrt((A-C)*(A-C) + 4*B*B))/2.0;
+    double l = ((C+A) + std::sqrt((A-C)*(A-C) + 4*B*B))/2.0;
     double e = (2*l-A-C);
 
     double lx = ( (l-C)*Ax + (l-A)*Cx + 2*B*Bx)/e;
@@ -544,12 +544,12 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
 
     /********************************************************************************
     // This computation is noisy
-    double n1 = vcl_sqrt((1.0 + (A-C)/d)/2.0);
-    double n2 = vnl_math::sgn(B)*vcl_sqrt((1.0 - (A-C)/d)/2.0);
+    double n1 = std::sqrt((1.0 + (A-C)/d)/2.0);
+    double n2 = vnl_math::sgn(B)*std::sqrt((1.0 - (A-C)/d)/2.0);
 
     // when B is zero, these derivatives need to be corrected to the limiting value
     double n1x, n1y, n2x, n2y;
-    if (vcl_fabs(B)>1e-2) {
+    if (std::fabs(B)>1e-2) {
       n1x = ( 2*(Ax-Cx)/d - (A-C)*(2*(C-A)*(Cx-Ax) + 8*B*Bx)/(d*d*d))/2/n1;
       n1y = ( 2*(Ay-Cy)/d - (A-C)*(2*(C-A)*(Cy-Ay) + 8*B*By)/(d*d*d))/2/n1;
       n2x = (-2*(Ax-Cx)/d + (A-C)*(2*(C-A)*(Cx-Ax) + 8*B*Bx)/(d*d*d))/2/n2;
@@ -565,8 +565,8 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
 
     double n1, n2, n1x, n1y, n2x, n2y;
     // when B is zero, these derivatives need to be fixed
-    if (vcl_fabs(B)>1e-2) {
-      double f = vcl_sqrt(B*B+(l-A)*(l-A));
+    if (std::fabs(B)>1e-2) {
+      double f = std::sqrt(B*B+(l-A)*(l-A));
 
       n1 = B/f;
       n2 = (l-A)/f;
@@ -577,7 +577,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
       n2y = (ly-Ay)/f - (l-A)*(B*By + (l-A)*(ly-Ay))/(f*f*f);
     }
     else {
-      double f = vcl_sqrt(B*B+(l-C)*(l-C));
+      double f = std::sqrt(B*B+(l-C)*(l-C));
 
       n1 = (l-C)/f;
       n2 = B/f;
@@ -593,16 +593,16 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     double Fy = lx*n1y + n1*lxy + n2y*ly + n2*lyy;
 
     //save new orientation
-    edge_orientations[i] = vnl_math::angle_0_to_2pi(vcl_atan2(Fx, -Fy));
+    edge_orientations[i] = vnl_math::angle_0_to_2pi(std::atan2(Fx, -Fy));
   }
 
   double third_order_time = t.real();
 
   //report timings
-  vcl_cout << '\n'
+  std::cout << '\n'
            << "time taken for conv: " << conv_time << " msec\n"
            << "time taken for nms: " << nms_time << " msec\n"
-           << "time taken for color third-order: " << third_order_time << " msec" << vcl_endl;
+           << "time taken for color third-order: " << third_order_time << " msec" << std::endl;
 
   // --- new code ---
   t.mark(); //reset timer
@@ -612,7 +612,7 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
     edgels_.push_back(ed);
   }
   double edgel_encode_time = t.real();
-  vcl_cout << "time taken for edgel encode: " << edgel_encode_time << " msec" << vcl_endl;
+  std::cout << "time taken for edgel encode: " << edgel_encode_time << " msec" << std::endl;
 
   view_i = comp1.ni();
   view_j = comp1.nj();
@@ -645,14 +645,14 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   return true;
 }
 
-void sdet_third_order_edge_det::line_segs(vcl_vector<vsol_line_2d_sptr>& lines)
+void sdet_third_order_edge_det::line_segs(std::vector<vsol_line_2d_sptr>& lines)
 {
   lines.clear();
   for (unsigned i = 0; i<edgels_.size(); ++i)
   {
     double ang = edgels_[i].get_theta();
     double x = edgels_[i].x(), y = edgels_[i].y();
-    double vx = vcl_cos(ang), vy = vcl_sin(ang);
+    double vx = std::cos(ang), vy = std::sin(ang);
     vsol_point_2d_sptr line_start = new vsol_point_2d(x-vx*0.25, y-vy*0.25);
     vsol_point_2d_sptr line_end = new vsol_point_2d(x+vx*0.25, y+vy*0.25);
     vsol_line_2d_sptr line = new vsol_line_2d(line_start, line_end);
@@ -661,13 +661,13 @@ void sdet_third_order_edge_det::line_segs(vcl_vector<vsol_line_2d_sptr>& lines)
 }
 
 //: save edgels in the edge map file FORMAT, output files have .edg extension
-bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsigned ni, unsigned nj, const vcl_vector<vdgl_edgel>& edgels)
+bool sdet_third_order_edge_det::save_edg_ascii(const std::string& filename, unsigned ni, unsigned nj, const std::vector<vdgl_edgel>& edgels)
 {
   //1) If file open fails, return.
-  vcl_ofstream outfp(filename.c_str(), vcl_ios::out);
+  std::ofstream outfp(filename.c_str(), std::ios::out);
 
   if (!outfp) {
-    vcl_cerr << "*** Error opening file " << filename.c_str() << '\n';
+    std::cerr << "*** Error opening file " << filename.c_str() << '\n';
     return false;
   }
 
@@ -677,7 +677,7 @@ bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsig
         << "WIDTH=" << ni << '\n'
         << "HEIGHT=" << nj << '\n'
         << "EDGE_COUNT=" << edgels.size()  << '\n'
-        << '\n' << vcl_endl;
+        << '\n' << std::endl;
 
   //save the edgel tokens
   for (unsigned k = 0; k < edgels.size(); k++) {
@@ -692,7 +692,7 @@ bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsig
     double dir = idir, conf = iconf, uncer = 0.0;
     outfp << '[' << ix << ", " << iy << "]    "
           << idir << ' ' << iconf << "   [" << x << ", " << y << "]   "
-          << dir << ' ' << conf << ' ' << uncer << vcl_endl;
+          << dir << ' ' << conf << ' ' << uncer << std::endl;
   }
 
   outfp.close();
@@ -701,13 +701,13 @@ bool sdet_third_order_edge_det::save_edg_ascii(const vcl_string& filename, unsig
 }
 
 sdet_edgemap_sptr sdet_third_order_edge_det::edgemap() {
-   
+
   sdet_edgemap_sptr edge_map;
   edge_map = new sdet_edgemap(view_i, view_j);
 
   for (unsigned i=0; i<edgels_.size(); i++)
   {
-    sdet_edgel* new_edgel = new sdet_edgel(edgels_[i].get_pt(), vcl_tan(edgels_[i].get_theta()), edgels_[i].get_grad()); 
+    sdet_edgel* new_edgel = new sdet_edgel(edgels_[i].get_pt(), std::tan(edgels_[i].get_theta()), edgels_[i].get_grad());
     edge_map->insert(new_edgel);
   }
   return edge_map;

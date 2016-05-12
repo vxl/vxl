@@ -35,7 +35,7 @@ struct example_window_title_setter : public vgui_observer
     deck->observers.detach(this);
   }
 
-  vcl_string last_title;
+  std::string last_title;
 
   // When this observer receives an update message, it changes the window title.
   void update()
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
       deck->add(t);
     }
     else
-      vcl_cerr << "no such file : \'" << argv[i] << "\'\n";
+      std::cerr << "no such file : \'" << argv[i] << "\'\n";
   }
   deck->index(0);
 

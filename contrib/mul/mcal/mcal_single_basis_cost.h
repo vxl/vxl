@@ -5,11 +5,13 @@
 // \author Tim Cootes
 // \brief Base for objects which compute a cost function for one basis direction
 
+#include <string>
+#include <memory>
+#include <iostream>
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
-#include <vcl_string.h>
-#include <vcl_memory.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Base for objects which compute a cost function for one basis direction.
 // We assume that the component analysis aims to choose a set of orthogonal
@@ -54,13 +56,13 @@ class mcal_single_basis_cost
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const = 0;
+  virtual std::string is_a() const = 0;
 
   //: Create a copy on the heap and return base class pointer
   virtual mcal_single_basis_cost* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const =0;
+  virtual void print_summary(std::ostream& os) const =0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const=0;
@@ -71,10 +73,10 @@ class mcal_single_basis_cost
   //: Read initialisation settings from a stream.
   // The default implementation merely checks that no properties have
   // been specified.
-  virtual void config_from_stream(vcl_istream &);
+  virtual void config_from_stream(std::istream &);
 
   //: Create a concrete mcal_single_basis_cost object, from a text specification.
-  static vcl_auto_ptr<mcal_single_basis_cost> create_from_stream(vcl_istream &is);
+  static std::auto_ptr<mcal_single_basis_cost> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -95,9 +97,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mcal_single_basis_cost& b);
 void vsl_b_read(vsl_b_istream& bfs, mcal_single_basis_cost& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mcal_single_basis_cost& b);
+std::ostream& operator<<(std::ostream& os,const mcal_single_basis_cost& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const mcal_single_basis_cost* b);
+std::ostream& operator<<(std::ostream& os,const mcal_single_basis_cost* b);
 
 #endif // mcal_single_basis_cost_h

@@ -15,17 +15,19 @@
 
 //=======================================================================
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vpdfl/vpdfl_pdf_base.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 
 //: Represents a mixture model (a set of individual pdfs + weights)
 class vpdfl_mixture : public vpdfl_pdf_base
 {
-  vcl_vector<vpdfl_pdf_base*> component_;
-  vcl_vector<double>          weight_;
+  std::vector<vpdfl_pdf_base*> component_;
+  std::vector<double>          weight_;
 
   //: Workspace so we don't have to keep creating vectors
   mutable vnl_vector<double> ws_;
@@ -79,19 +81,19 @@ class vpdfl_mixture : public vpdfl_pdf_base
 
   //: Array of weights
   // Use weight(i) where possible
-  const vcl_vector<double>& weights() const { return weight_; }
+  const std::vector<double>& weights() const { return weight_; }
 
   //: Array of weights
   // Warning care must be taken to ensure consistency when modifying weights
   // Warning. Use weight(i) where possible
-  vcl_vector<double>& weights() { return weight_; }
+  std::vector<double>& weights() { return weight_; }
 
   //: Return index of component nearest to x
   unsigned nearest_comp(const vnl_vector<double>& x) const;
 
   //: Set the contents of the mixture model.
   // Clones are taken of all the data, and the class will be responsible for their deletion.
-  void set(const vcl_vector<vpdfl_pdf_base*> components, const vcl_vector<double> & weights);
+  void set(const std::vector<vpdfl_pdf_base*> components, const std::vector<double> & weights);
 
   //: Add a component to current model
   //  Clone taken of comp
@@ -106,11 +108,11 @@ class vpdfl_mixture : public vpdfl_pdf_base
   //: Access to components - for use by builders
   //  Care must be taken to ensure consistency when modifying
   // Use component(i) where possible
-  vcl_vector<vpdfl_pdf_base*>& components() { return component_; }
+  std::vector<vpdfl_pdf_base*>& components() { return component_; }
 
   //: Access to components - for use by builders
   // Use component(i) where possible
-  const vcl_vector<vpdfl_pdf_base*>& components() const { return component_; }
+  const std::vector<vpdfl_pdf_base*>& components() const { return component_; }
 
   //: Set the whole pdf mean and variance values.
   // Components and Weights should already be correct so that
@@ -127,16 +129,16 @@ class vpdfl_mixture : public vpdfl_pdf_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_pdf_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

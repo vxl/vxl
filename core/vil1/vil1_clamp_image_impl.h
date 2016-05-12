@@ -7,9 +7,10 @@
 //:
 // \file
 
+#include <string>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: View of image clamped to a given range
 class vil1_clamp_image_impl : public vil1_image_impl
@@ -31,10 +32,10 @@ class vil1_clamp_image_impl : public vil1_image_impl
   bool put_section(void const *buf, int x0, int y0, int w, int h);
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const { return "vil1_clamp_image_impl"; }
+  virtual std::string is_a() const { return "vil1_clamp_image_impl"; }
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const& s) const
+  virtual bool is_class(std::string const& s) const
   { return s==is_a() || vil1_image_impl::is_class(s); }
 
  private:

@@ -1,11 +1,13 @@
 #ifndef ComputeGRIC_h
 #define ComputeGRIC_h
 
+#include <vector>
+#include <iostream>
+#include <memory>
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HMatrix2D.h>
-#include <vcl_vector.h>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
 
 class ComputeGRIC
 {
@@ -27,22 +29,22 @@ class ComputeGRIC
   bool degenerate() const { return degenerate_; }
 
   // Return inliers after the computation
-  vcl_vector<bool>& get_inliers() { return degenerate_ ? inliersH_ : inliersF_; }
+  std::vector<bool>& get_inliers() { return degenerate_ ? inliersH_ : inliersF_; }
 
   // Get the 4 and 7 points bases for the resulting relations
-  vcl_vector<int>& get_basisF() { return basisF_; }
-  vcl_vector<int>& get_basisH() { return basisH_; }
+  std::vector<int>& get_basisF() { return basisF_; }
+  std::vector<int>& get_basisH() { return basisH_; }
 
  protected:
   double std_;
-  vcl_auto_ptr<FMatrix> F_;
-  vcl_auto_ptr<HMatrix2D> H_;
-  vcl_vector<double> residualsF_;
-  vcl_vector<double> residualsH_;
-  vcl_vector<bool> inliersF_;
-  vcl_vector<bool> inliersH_;
-  vcl_vector<int> basisF_;
-  vcl_vector<int> basisH_;
+  std::auto_ptr<FMatrix> F_;
+  std::auto_ptr<HMatrix2D> H_;
+  std::vector<double> residualsF_;
+  std::vector<double> residualsH_;
+  std::vector<bool> inliersF_;
+  std::vector<bool> inliersH_;
+  std::vector<int> basisF_;
+  std::vector<int> basisH_;
   bool degenerate_;
 };
 

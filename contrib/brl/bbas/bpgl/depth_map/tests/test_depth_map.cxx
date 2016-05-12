@@ -1,5 +1,7 @@
+#include <iostream>
+#include <limits>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <depth_map/depth_map_scene.h>
 #include <depth_map/depth_map_region.h>
@@ -14,7 +16,6 @@
 #include <vil/vil_save.h>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
-#include <vcl_limits.h>
 
 static void test_depth_map()
 {
@@ -39,7 +40,7 @@ static void test_depth_map()
   vsol_point_2d_sptr p3= new vsol_point_2d(0.0, 361.0);
 
 
-  vcl_vector<vsol_point_2d_sptr> verts;
+  std::vector<vsol_point_2d_sptr> verts;
   verts.push_back(p0);   verts.push_back(p1);
   verts.push_back(p2);   verts.push_back(p3);
 
@@ -56,7 +57,7 @@ static void test_depth_map()
   vsol_polygon_2d_sptr r2d = gpr->region_2d();
   vsol_polygon_3d_sptr r3d = gpr->region_3d();
   vgl_plane_3d<double> pl3d = r3d->plane();
-  vcl_cout << "Plane: " << pl3d << '\n';
+  std::cout << "Plane: " << pl3d << '\n';
   unsigned nv = r2d->size();
   double erh = 0.0;
   for (unsigned i = 0; i<nv; ++i) {
@@ -64,10 +65,10 @@ static void test_depth_map()
     vgl_point_2d<double> pimg = r2d->vertex(i)->get_p();
     vgl_point_2d<double> pmp_2d = H(vgl_homg_point_2d<double>(pimg.x(), pimg.y()));
     vgl_point_3d<double> rmap_3d = plane.world_coords(pmp_2d);
-    vcl_cout << pimg << ' ' << *p3d << ' ' << pmp_2d << ' ' << rmap_3d << '\n';
-    erh += vcl_fabs(p3d->x()-rmap_3d.x()) +
-      vcl_fabs(p3d->y()-rmap_3d.y()) +
-      vcl_fabs(p3d->z()-rmap_3d.z());
+    std::cout << pimg << ' ' << *p3d << ' ' << pmp_2d << ' ' << rmap_3d << '\n';
+    erh += std::fabs(p3d->x()-rmap_3d.x()) +
+      std::fabs(p3d->y()-rmap_3d.y()) +
+      std::fabs(p3d->z()-rmap_3d.z());
   }
 
   TEST_NEAR("planar homography", erh, 0.0, 1e-4);
@@ -75,7 +76,7 @@ static void test_depth_map()
   vsol_point_2d_sptr p1v= new vsol_point_2d(640.0, 360.0);
   vsol_point_2d_sptr p2v= new vsol_point_2d(640.0, 0.0);
   vsol_point_2d_sptr p3v= new vsol_point_2d(0.0, 0.0);
-  vcl_vector<vsol_point_2d_sptr> vertsv;
+  std::vector<vsol_point_2d_sptr> vertsv;
   vertsv.push_back(p0v);   vertsv.push_back(p1v);
   vertsv.push_back(p2v);   vertsv.push_back(p3v);
 
@@ -83,9 +84,9 @@ static void test_depth_map()
 
   double min_depth = 10000, max_depth = 30000;
   double depth = 10000;
-  vcl_string name =  "vert_perp";
-  vcl_string image_path = "dummy_path";
-  depth_map_scene dms(ni, nj, image_path, cam, gpr, 0, vcl_vector<depth_map_region_sptr>());
+  std::string name =  "vert_perp";
+  std::string image_path = "dummy_path";
+  depth_map_scene dms(ni, nj, image_path, cam, gpr, VXL_NULLPTR, std::vector<depth_map_region_sptr>());
   dms.add_ortho_perp_region(vp, min_depth, max_depth, name);
   /* bool success = */ dms.set_depth(depth, name);
 
@@ -122,7 +123,7 @@ static void test_depth_map()
   vsol_point_2d_sptr p1s= new vsol_point_2d(1280.0, 360.0);
   vsol_point_2d_sptr p2s= new vsol_point_2d(1280.0, 0.0);
   vsol_point_2d_sptr p3s= new vsol_point_2d(640.0, 0.0);
-  vcl_vector<vsol_point_2d_sptr> vertss;
+  std::vector<vsol_point_2d_sptr> vertss;
   vertss.push_back(p0s);   vertss.push_back(p1s);
   vertss.push_back(p2s);   vertss.push_back(p3s);
 

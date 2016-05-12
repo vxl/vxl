@@ -16,12 +16,12 @@ class boxm2_create_mog_image_functor
   //: "default" constructor
   boxm2_create_mog_image_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, vbl_array_2d<typename boxm2_data_traits<APM_TYPE>::datatype> * mog_img, vil_image_view<float> * vis_img)
+  bool init_data(std::vector<boxm2_data_base*> & datas, vbl_array_2d<typename boxm2_data_traits<APM_TYPE>::datatype> * mog_img, vil_image_view<float> * vis_img)
   {
     alpha_data_ = new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     mog3_data_ = new boxm2_data<APM_TYPE>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
     nobs_data_ = new boxm2_data<BOXM2_NUM_OBS>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
-   
+
     mog_img_ = mog_img;
     vis_img_ = vis_img;
     return true;
@@ -31,7 +31,7 @@ class boxm2_create_mog_image_functor
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float vis=(*vis_img_)(i,j);
-    float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
+    float curr_p=(1-std::exp(-alpha*seg_len))*vis;
     typename boxm2_data<APM_TYPE>::datatype & mog3_voxel =mog3_data_->data()[index];
 
     //float mean_obs = boxm2_processor_type<APM_TYPE>::type::most_probable_mode_color(mog3_voxel);
@@ -47,9 +47,9 @@ class boxm2_create_mog_image_functor
     nobs[0]=(unsigned short)nobs_float[0]; nobs[1]=(unsigned short)nobs_float[1]; nobs[2]=(unsigned short)nobs_float[2];
     nobs[3]=(unsigned short)(nobs_float[3]*100.0f);
 
-    vis*=vcl_exp(-alpha*seg_len);
+    vis*=std::exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;
-    
+
     return true;
   }
  private:

@@ -44,7 +44,7 @@ double
 rtvl_weight_original<N>
 ::compute_flat(rtvl_terms<N> const& terms)
 {
-  return vcl_exp(-terms.vlen_squared/geodesic_scale2);
+  return std::exp(-terms.vlen_squared/geodesic_scale2);
 }
 
 //----------------------------------------------------------------------------
@@ -64,7 +64,7 @@ rtvl_weight_original<N>
 ::compute_curved(rtvl_terms<N> const& terms)
 {
   // Angle between the votee and tangent direction.
-  theta = vcl_asin(terms.sin_theta);
+  theta = std::asin(terms.sin_theta);
 
   // Geodesic arc length of the hypothesized curve.
   arclen = terms.vlen * theta / terms.sin_theta;
@@ -74,7 +74,7 @@ rtvl_weight_original<N>
 
   // Strength of the vote.
   double sk2 = arclen*arclen + c*kappa*kappa;
-  return vcl_exp(-sk2/geodesic_scale2);
+  return std::exp(-sk2/geodesic_scale2);
 }
 
 //----------------------------------------------------------------------------

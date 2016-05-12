@@ -21,11 +21,6 @@
 // \endverbatim
 
 
-#ifdef __SUNPRO_CC
-// <string> breaks if NULL is defined to "(void*)0".
-# include <vcl_string.h>
-#endif
-
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_menu.h>
 
@@ -49,7 +44,7 @@ class vgui_gtk_window : public vgui_window
 
   void show();
   void hide();
-  void set_title(vcl_string const &);
+  void set_title(std::string const &);
 
   void set_menubar(const vgui_menu &menu);
   //: Returns the current adaptor (OpenGL widget holder).

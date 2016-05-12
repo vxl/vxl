@@ -10,8 +10,10 @@
 //      Nov 2008 J Becker: Added a clone function.
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_array_2d.h>
 
@@ -31,15 +33,15 @@ class rgrl_feature_landmark
   //
   // Works for 2d and 3d.
   rgrl_feature_landmark( vnl_vector<double> const& loc,
-                         vcl_vector< vnl_vector<double> > const& outgoing_directions );
+                         std::vector< vnl_vector<double> > const& outgoing_directions );
 
   //: read in feature
   virtual
-  bool read( vcl_istream& is, bool skip_tag=false );
+  bool read( std::istream& is, bool skip_tag=false );
 
   //: write out feature
   virtual
-  void write( vcl_ostream& os ) const;
+  void write( std::ostream& os ) const;
 
   vnl_matrix<double> const&
   error_projector() const;
@@ -71,7 +73,7 @@ class rgrl_feature_landmark
 
   // to be able to use the protected constructor
   friend rgrl_feature_sptr
-         rgrl_feature_reader( vcl_istream& is );
+         rgrl_feature_reader( std::istream& is );
 
   // disabled, not implemented
   rgrl_feature_landmark& operator=( rgrl_feature_landmark const& );
@@ -86,8 +88,8 @@ class rgrl_feature_landmark
   //   Registering Pairs of Images of the Curved Human Retina",
   //   IEEE Pattern Analysis and Machine Intelligence, 24(3), 2002.
   //
-  double max_similarity(const vcl_vector<vnl_vector<double> >& u,
-                        const vcl_vector<vnl_vector<double> >& v,
+  double max_similarity(const std::vector<vnl_vector<double> >& u,
+                        const std::vector<vnl_vector<double> >& v,
                         int count,
                         const vbl_array_2d<bool>& invalid) const;
 
@@ -96,7 +98,7 @@ class rgrl_feature_landmark
   vnl_matrix<double> error_proj_;
 
   // For the signature of the landmark
-  vcl_vector< vnl_vector<double> >  outgoing_directions_;
+  std::vector< vnl_vector<double> >  outgoing_directions_;
 };
 
 #endif // rgrl_feature_landmark_h_

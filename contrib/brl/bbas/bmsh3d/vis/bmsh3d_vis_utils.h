@@ -6,9 +6,11 @@
 // \author MingChing Chang
 // \date May 03, 2005.
 
-#include <vcl_cmath.h>
-#include <vcl_utility.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <cmath>
+#include <utility>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <bmsh3d/bmsh3d_utils.h>
@@ -38,14 +40,14 @@ SbColor get_next_rand_color ();
 SbColor get_color_tone (float cvalue);
 
 void generate_color_table (unsigned long seed, unsigned int size,
-                           vcl_vector<SbColor>& color_table);
+                           std::vector<SbColor>& color_table);
 
 #define VIS_CLOSE_TH  1E-6 //1E-6
 
 inline bool vis_too_close_ (const float a, const float b)
 {
   //If relative error < threshold, too close.
-  if (vcl_fabs((a-b)/a) < VIS_CLOSE_TH)
+  if (std::fabs((a-b)/a) < VIS_CLOSE_TH)
     return true;
   else
     return false;
@@ -105,16 +107,16 @@ SoSeparator* draw_cylinder(const vgl_point_3d<double>& centerline_start,
                            float transparency);
 
 
-SoSeparator* draw_polyline (vcl_vector<vgl_point_3d<double> >& polyline_vertices,
+SoSeparator* draw_polyline (std::vector<vgl_point_3d<double> >& polyline_vertices,
                             const float& width, const SbColor& color);
-void draw_polyline_geom (SoGroup *root, vcl_vector<vgl_point_3d<double> >& vertices);
+void draw_polyline_geom (SoGroup *root, std::vector<vgl_point_3d<double> >& vertices);
 
 SoSeparator* draw_polyline (const float** polylineVertices, const unsigned int nVertices,
                             const SbColor& color, const SoDrawStyle* drawStyle);
   void draw_polyline_geom (SoGroup *root, SbVec3f* vertices, const unsigned int nVertices);
 
 
-void draw_filled_polygon_geom (SoGroup *root, const vcl_vector<bmsh3d_vertex*>& vertices);
+void draw_filled_polygon_geom (SoGroup *root, const std::vector<bmsh3d_vertex*>& vertices);
 
 SoSeparator* draw_filled_polygon (SbVec3f* vertices, const int unsigned nVertices,
                                   const SbColor& color, const float fTransparency);
@@ -122,12 +124,12 @@ SoSeparator* draw_filled_polygon (float** vertices, const int unsigned nVertices
                                   const SbColor& color, const float fTransparency);
 void draw_filled_polygon_geom_ (SoGroup* root, SbVec3f* vertices, const int unsigned nVertices);
 
-SoSeparator* draw_line_set (const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > >& lines,
+SoSeparator* draw_line_set (const std::vector<std::pair<vgl_point_3d<double>, vgl_point_3d<double> > >& lines,
                             const SbColor& color);
 
 //: draw the whole set of lines in a single SoIndexedLineSet.
 void draw_line_set_geom (SoSeparator* root,
-        const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > >& lines);
+        const std::vector<std::pair<vgl_point_3d<double>, vgl_point_3d<double> > >& lines);
 
 void draw_triangle_geom (SoGroup* root,
                          const vgl_point_3d<double>& Pt1,

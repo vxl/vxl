@@ -11,11 +11,13 @@
 //   Modifications
 // \endverbatim
 
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <volm/conf/volm_conf_object.h>
 
 class volm_conf_buffered_index;
@@ -36,15 +38,15 @@ class volm_conf_buffered_index : public vbl_ref_count
 
   // ================ access ========================
 
-  
-  vcl_vector<unsigned>& length_vec() { return length_vec_; }
+
+  std::vector<unsigned>& length_vec() { return length_vec_; }
   unsigned current_id()  const { return current_id_; }
   unsigned global_current_id() const { return global_current_id_; }
   unsigned buffer_size() const { return buffer_size_; }
   unsigned unit_size()   const { return unit_size_; }
   unsigned read_in()     const { return read_in_; }
-  vcl_string file_name() const { return file_name_; }
-  vcl_string index_mode() const {
+  std::string file_name() const { return file_name_; }
+  std::string index_mode() const {
     switch (m_)
     {
       case(READ):
@@ -60,18 +62,18 @@ class volm_conf_buffered_index : public vbl_ref_count
 
   //: append values associated with certain location to the end of the current active buffer.
   //: caller is in charge of the internal order
-  bool add_to_index(vcl_vector<volm_conf_object> const& values);
-  bool add_to_index(vcl_vector<volm_conf_object_sptr> const& values);
+  bool add_to_index(std::vector<volm_conf_object> const& values);
+  bool add_to_index(std::vector<volm_conf_object_sptr> const& values);
 
   //: retrieve the next index from current active buffer.  if active_buffer has been retrieved, read form disc
   //: caller is in charge of the internal order
-  bool get_next(vcl_vector<volm_conf_object>& values);
-  bool get_next(vcl_vector<volm_conf_object_sptr>& values);
+  bool get_next(std::vector<volm_conf_object>& values);
+  bool get_next(std::vector<volm_conf_object_sptr>& values);
 
   // ================ IO ============================
 
-  bool initialize_read(vcl_string const& filename);
-  bool initialize_write(vcl_string const& filename);
+  bool initialize_read(std::string const& filename);
+  bool initialize_write(std::string const& filename);
   bool finalize();
 
  private:
@@ -85,7 +87,7 @@ class volm_conf_buffered_index : public vbl_ref_count
   volm_conf_object* active_buffer_;
 
   //: vector to store number of configurational objects in each location
-  vcl_vector<unsigned> length_vec_;
+  std::vector<unsigned> length_vec_;
 
   //: maximum number of configurational objects allowed in defined buffer
   unsigned buffer_size_;
@@ -100,7 +102,7 @@ class volm_conf_buffered_index : public vbl_ref_count
   unsigned read_in_;
   unsigned prev_length_;
   //: binary filename
-  vcl_string file_name_;
+  std::string file_name_;
 
   //: file stream
   vsl_b_ofstream *ofs_ptr_;

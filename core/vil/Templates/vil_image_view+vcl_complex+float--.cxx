@@ -1,3 +1,4 @@
-#include <vil/vil_image_view.txx>
-#include <vcl_complex.h>
-VIL_IMAGE_VIEW_INSTANTIATE(vcl_complex<float>);
+#include <complex>
+#include <vil/vil_image_view.hxx>
+#include <vcl_compiler.h>
+VIL_IMAGE_VIEW_INSTANTIATE(std::complex<float>);

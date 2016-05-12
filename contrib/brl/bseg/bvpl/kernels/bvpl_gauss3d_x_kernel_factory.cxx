@@ -1,9 +1,11 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "bvpl_gauss3d_x_kernel_factory.h"
 //:
 // \file
 
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h> // for std::sqrt() and std::exp() and std::floor()
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_float_3.h>
 #include <bsta/bsta_gauss_if3.h>
@@ -44,7 +46,7 @@ bvpl_gauss3d_x_kernel_factory::bvpl_gauss3d_x_kernel_factory(float s1, float s2,
 }
 #endif
 
-//: Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2, s3. 
+//: Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2, s3.
 //  The support can also be specified
 bvpl_gauss3d_x_kernel_factory::bvpl_gauss3d_x_kernel_factory(float s1, float s2, float s3, float supp1, float supp2, float supp3)
 {
@@ -79,13 +81,13 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
 
-  //This is the support of the kernel  
-  float min_x = -vcl_floor(supp1_*sigma1_+0.01f);
-  float max_x =  vcl_floor(supp1_*sigma1_+0.01f);
-  float min_y = -vcl_floor(supp2_*sigma2_+0.01f);
-  float max_y =  vcl_floor(supp2_*sigma2_+0.01f);
-  float min_z = -vcl_floor(supp3_*sigma3_+0.01f);
-  float max_z =  vcl_floor(supp3_*sigma3_+0.01f);
+  //This is the support of the kernel
+  float min_x = -std::floor(supp1_*sigma1_+0.01f);
+  float max_x =  std::floor(supp1_*sigma1_+0.01f);
+  float min_y = -std::floor(supp2_*sigma2_+0.01f);
+  float max_y =  std::floor(supp2_*sigma2_+0.01f);
+  float min_z = -std::floor(supp3_*sigma3_+0.01f);
+  float max_z =  std::floor(supp3_*sigma3_+0.01f);
   float l1_norm = 0.0f;
 
   for (float x=min_x; x<= max_x; x+=1.f)
@@ -96,21 +98,21 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
       {
         vnl_float_3 pt(x,y,z);
         float val = gauss_kernel.gradient(pt)[0];
-        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(x,y,z), dispatch(val)));
-        l1_norm += vcl_abs(val);
+        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(x,y,z), dispatch(val)));
+        l1_norm += std::abs(val);
       }
     }
   }
-  
+
   //normalize to L1 norm
-  vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator k_it = canonical_kernel_.begin();
+  std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator k_it = canonical_kernel_.begin();
   float norm = 0.0;
   for(; k_it != canonical_kernel_.end(); k_it++)
   {
     k_it->second.c_ = k_it->second.c_ / l1_norm;
-    norm+=vcl_abs(k_it->second.c_);
+    norm+=std::abs(k_it->second.c_);
   }
-  vcl_cout << "Canonical kernel has been normalized to have l1_norm, norm= " << norm <<vcl_endl;
+  std::cout << "Canonical kernel has been normalized to have l1_norm, norm= " << norm <<std::endl;
 
 
   //set the dimension of the 3-d grid

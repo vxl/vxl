@@ -12,7 +12,8 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 template<class T_data>
@@ -29,7 +30,7 @@ class bvpl_octree_sample
 
   short version_no() const{ return 1; }
 
-  void  print(vcl_ostream& os) const;
+  void  print(std::ostream& os) const;
 
   //Member variables
   T_data response_;
@@ -50,5 +51,5 @@ template<class T_data>
 void vsl_b_read(vsl_b_istream & is, bvpl_octree_sample<T_data> *&sample);
 
 template<class T_data>
-vcl_ostream& operator << (vcl_ostream& os, const bvpl_octree_sample<T_data>& sample);
+std::ostream& operator << (std::ostream& os, const bvpl_octree_sample<T_data>& sample);
 #endif

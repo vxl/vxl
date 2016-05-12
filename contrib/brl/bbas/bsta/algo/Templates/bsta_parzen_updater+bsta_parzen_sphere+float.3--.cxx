@@ -1,4 +1,4 @@
-#include <bsta/algo/bsta_parzen_updater.txx>
+#include <bsta/algo/bsta_parzen_updater.hxx>
 #include <bsta/bsta_parzen_sf3.h>
 
 

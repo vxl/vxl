@@ -7,10 +7,11 @@
 // \author Yi Dong
 // \date Aug. 24, 2013
 
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>
@@ -25,11 +26,11 @@
 #include <bkml/bkml_parser.h>
 #include <bkml/bkml_write.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
-void error_report(vcl_string error_file, vcl_string error_msg)
+void error_report(std::string error_file, std::string error_msg)
 {
-  vcl_cerr << error_msg;
+  std::cerr << error_msg;
   volm_io::write_post_processing_log(error_file, error_msg);
 }
 
@@ -41,25 +42,25 @@ unsigned zone_id(unsigned tile_id)
     return 18;
   else if(tile_id >= 8 && tile_id <= 13)
     return 18;
-  else 
+  else
     return 1000;
 }
 
-bool best_match(vgl_polygon<double> const& poly, vcl_vector<volm_geo_index_node_sptr> const &leaves, vcl_string const& score_file,
+bool best_match(vgl_polygon<double> const& poly, std::vector<volm_geo_index_node_sptr> const &leaves, std::string const& score_file,
                 float& max_score, vgl_point_2d<double>& best_location, unsigned& best_cam_id)
 {
   // get the leaves that intersect with the candidate region
-  vcl_vector<unsigned> leaf_ids;
+  std::vector<unsigned> leaf_ids;
   for(unsigned l_idx = 0; l_idx < leaves.size(); l_idx++)
     if (vgl_intersection(leaves[l_idx]->extent_, poly))
       leaf_ids.push_back(l_idx);
   // load the score
-  vcl_vector<volm_score_sptr> scores;
+  std::vector<volm_score_sptr> scores;
   volm_score::read_scores(scores, score_file);
-  vcl_vector<volm_score_sptr>::iterator vit = scores.begin();
+  std::vector<volm_score_sptr>::iterator vit = scores.begin();
   for (; vit != scores.end(); ++vit) {
     unsigned li = (*vit)->leaf_id_;
-    if (vcl_find(leaf_ids.begin(), leaf_ids.end(), li) == leaf_ids.end())
+    if (std::find(leaf_ids.begin(), leaf_ids.end(), li) == leaf_ids.end())
       continue;
     unsigned hi = (*vit)->hypo_id_;
     vgl_point_3d<double> loc = leaves[li]->hyps_->locs_[hi];
@@ -80,20 +81,20 @@ int main(int argc, char** argv)
   vul_arg<unsigned> world_id("-world", "world id of ROI", 100);
   vul_arg<unsigned> test_id("-testid", "test ids", 0);
   vul_arg<unsigned> img_id("-imgid", "query image id", 1000);
-  vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");
-  vul_arg<vcl_string> query_img("-img", "query image", "");
-  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary to get the depth value for all objects", "");
-  vul_arg<vcl_string> geo_hypo_a("-geoa", "folder where geo hypotheses for utm zone 17 are","");
-  vul_arg<vcl_string> geo_hypo_b("-geob", "folder where geo hypotheses for utm zone 18 are","");
-  vul_arg<vcl_string> score_folder("-score", "folder where the score binaries are","");
-  vul_arg<vcl_string> candlist_kml("-cand_file", "generate candidate list file", "");
-  vul_arg<vcl_string> candidate_list("-cand", " pre defined candidate list for given query", "");  // index -- candidate list file containing polygons
+  vul_arg<std::string> cam_bin("-cam", "camera space binary", "");
+  vul_arg<std::string> query_img("-img", "query image", "");
+  vul_arg<std::string> dms_bin("-dms", "depth_map_scene binary to get the depth value for all objects", "");
+  vul_arg<std::string> geo_hypo_a("-geoa", "folder where geo hypotheses for utm zone 17 are","");
+  vul_arg<std::string> geo_hypo_b("-geob", "folder where geo hypotheses for utm zone 18 are","");
+  vul_arg<std::string> score_folder("-score", "folder where the score binaries are","");
+  vul_arg<std::string> candlist_kml("-cand_file", "generate candidate list file", "");
+  vul_arg<std::string> candidate_list("-cand", " pre defined candidate list for given query", "");  // index -- candidate list file containing polygons
   vul_arg<unsigned> top_cam_num("-top_cam_num", "number of top camera kml we want to generate",10);
 
   vul_arg_parse(argc, argv);
 
   int ii = 0;
-  vcl_cout << " start " << vcl_endl;
+  std::cout << " start " << std::endl;
   int jj = 1;
 
   if (candlist_kml().compare("")==0 || score_folder().compare("") == 0 || world_id() == 100 ||
@@ -102,15 +103,15 @@ int main(int argc, char** argv)
       test_id() == 0 || img_id() == 1000)
   {
     vul_arg_display_usage_and_exit();
-    vcl_cerr << " input parameter is missing \n";
+    std::cerr << " input parameter is missing \n";
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_string out_dir = vul_file::dirname(candlist_kml());
-  vcl_stringstream log;
-  vcl_string log_file = out_dir + "/candidate_list_top_camera_log.xml";
-  vcl_string rationale_folder = out_dir + "/rationale/";
+  std::string out_dir = vul_file::dirname(candlist_kml());
+  std::stringstream log;
+  std::string log_file = out_dir + "/candidate_list_top_camera_log.xml";
+  std::string rationale_folder = out_dir + "/rationale/";
   vul_file::make_directory(rationale_folder);
-  
+
   // load camera space
   if (!vul_file::exists(cam_bin())) {
     log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
@@ -145,7 +146,7 @@ int main(int argc, char** argv)
   nj = query_image.nj();
 
   // create volm_tile
-  vcl_vector<volm_tile> tiles;/* = volm_tile::generate_p1_wr2_tiles();*/
+  std::vector<volm_tile> tiles;/* = volm_tile::generate_p1_wr2_tiles();*/
   if (world_id() == 1)      tiles = volm_tile::generate_p1b_wr1_tiles();
   else if (world_id() == 2) tiles = volm_tile::generate_p1b_wr2_tiles();
   else if (world_id() == 3) tiles = volm_tile::generate_p1b_wr3_tiles();
@@ -159,8 +160,7 @@ int main(int argc, char** argv)
   // check the score binary files in advance
   for (unsigned t_idx = 0; t_idx < tiles.size(); t_idx++) {
     if (t_idx == 10) continue;
-    unsigned zone_idx = zone_id(t_idx);
-    vcl_stringstream score_file;
+    std::stringstream score_file;
     score_file << score_folder() << "/ps_1_scores_tile_" << t_idx << ".bin";
     if (!vul_file::exists(score_file.str())) {
       log << " WARNING: can not find score file: " << score_file.str() << '\n';
@@ -173,53 +173,53 @@ int main(int argc, char** argv)
   // check whether we have candidate list for this query
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
-  vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
+  std::cout << " candidate list = " <<  candidate_list() << std::endl;
   if ( candidate_list().compare("") != 0) {
     if (!vul_file::exists(candidate_list())) {
       log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
-      vcl_cerr << log.str();
-      volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+      std::cerr << log.str();
+      volm_io::write_post_processing_log(log_file, log.str());  std::cerr << log.str();
       return volm_io::POST_PROCESS_FAILED;
     }
     else {
       // parse polygon from kml
       is_candidate = true;
       cand_poly = bkml_parser::parse_polygon(candidate_list());
-      vcl_cout << " candidate list is parsed from file: " << candidate_list() << vcl_endl;
-      vcl_cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << vcl_endl;
+      std::cout << " candidate list is parsed from file: " << candidate_list() << std::endl;
+      std::cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << std::endl;
     }
   }
   else {
-    vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
+    std::cout << " NO candidate list for this query image, full index space is considered" << std::endl;
     is_candidate = false;
   }
-  vcl_cout << " ============================  START ========================= " << vcl_endl;
+  std::cout << " ============================  START ========================= " << std::endl;
   // get candidate regions from candidate list file
   vgl_polygon<double> cand_regions = bkml_parser::parse_polygon(candlist_kml());
-  
+
   // for each candidate region, search for the best match
   unsigned num_regions = top_cam_num();
   if (top_cam_num() > cand_regions.num_sheets()) num_regions = cand_regions.num_sheets();
-  vcl_cout << " \t candidate file contains " <<  num_regions << " regions" << vcl_endl;
+  std::cout << " \t candidate file contains " <<  num_regions << " regions" << std::endl;
   for (unsigned r_idx = 0; r_idx < num_regions; r_idx ++) {
     vgl_polygon<double> poly(cand_regions[r_idx]);
     // check the intersected tile
-    vcl_vector<unsigned> tile_ids;
-    vcl_vector<unsigned> zone_ids;
+    std::vector<unsigned> tile_ids;
+    std::vector<unsigned> zone_ids;
     for (unsigned t_idx = 0; t_idx < tiles.size(); t_idx++)
       if (vgl_intersection(tiles[t_idx].bbox_double(), poly)) {
         tile_ids.push_back(t_idx);  zone_ids.push_back(zone_id(t_idx));
       }
-    vcl_cout << " \t region " << r_idx << " intersects with tile: ";
+    std::cout << " \t region " << r_idx << " intersects with tile: ";
     for (unsigned ii = 0; ii < tile_ids.size(); ii++)
-      vcl_cout << tile_ids[ii] << ' ';
-    vcl_cout << vcl_endl;
+      std::cout << tile_ids[ii] << ' ';
+    std::cout << std::endl;
     // get the best camera and location for current region
     unsigned best_cam_id;
     vgl_point_2d<double> best_location;
     float max_score = -1E6;
     for (unsigned i = 0; i < tile_ids.size(); i++) {
-      vcl_string geo_hypo_folder;
+      std::string geo_hypo_folder;
       if (zone_ids[i] == 17)
         geo_hypo_folder = geo_hypo_a();
       else if(zone_ids[i] == 18)
@@ -230,7 +230,7 @@ int main(int argc, char** argv)
         return volm_io::EXE_ARGUMENT_ERROR;
       }
       // load associated volm_geo_index
-      vcl_stringstream file_name_pre;
+      std::stringstream file_name_pre;
       file_name_pre << geo_hypo_folder << "geo_index_tile_" << tile_ids[i];
       if (!vul_file::exists(file_name_pre.str()+".txt")) {
         log << "ERROR: can not find volm_geo_index txt file: " << file_name_pre.str() << '\n';
@@ -242,10 +242,10 @@ int main(int argc, char** argv)
       volm_geo_index::read_hyps(root, file_name_pre.str());
       if (is_candidate)
         volm_geo_index::prune_tree(root, cand_poly);
-      vcl_vector<volm_geo_index_node_sptr> leaves;
+      std::vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(root, leaves);
 
-      vcl_stringstream score_file;
+      std::stringstream score_file;
       score_file << score_folder() << "/ps_1_scores_tile_" << tile_ids[i] << ".bin";
       if (!vul_file::exists(score_file.str()))
         continue;
@@ -258,26 +258,26 @@ int main(int argc, char** argv)
     }
     // write out the camera kml
     cam_angles best_cam = cam_space->camera_angles(best_cam_id);
-    vcl_cout << " \t after searching region " << r_idx << " has best maximum " << max_score << " at location "
-             << vcl_setprecision(12) << best_location.x() << vcl_setprecision(12) << best_location.y() << " and camera ";
+    std::cout << " \t after searching region " << r_idx << " has best maximum " << max_score << " at location "
+             << std::setprecision(12) << best_location.x() << std::setprecision(12) << best_location.y() << " and camera ";
     best_cam.print();
     double head = (best_cam.heading_ < 0) ? best_cam.heading_+360.0 : best_cam.heading_;
     double tilt = (best_cam.tilt_ < 0) ? best_cam.tilt_+360.0 : best_cam.tilt_;
     double roll = (best_cam.roll_ * best_cam.roll_ < 1E-10) ? 0 : best_cam.roll_;
     double tfov = best_cam.top_fov_;
     double tv_rad = tfov / vnl_math::deg_per_rad;
-    double ttr = vcl_tan(tv_rad);
-    double rfov = vcl_atan( ni * ttr / nj) * vnl_math::deg_per_rad;
+    double ttr = std::tan(tv_rad);
+    double rfov = std::atan( ni * ttr / nj) * vnl_math::deg_per_rad;
 
-    vcl_stringstream cam_kml;
+    std::stringstream cam_kml;
     if (r_idx == 0)
       cam_kml << rationale_folder << "/BestCamera_top_" << r_idx << ".kml";
     else
       cam_kml << rationale_folder << "/BestCamera_top_" << r_idx-1 << ".kml";
-    vcl_stringstream kml_name;
+    std::stringstream kml_name;
     kml_name << "BestCamera_top_" << r_idx;
 
-    vcl_ofstream ofs_kml(cam_kml.str().c_str());
+    std::ofstream ofs_kml(cam_kml.str().c_str());
     bkml_write::open_document(ofs_kml);
     bkml_write::write_photo_overlay(ofs_kml, kml_name.str(), best_location.x(), best_location.y(), cam_space->altitude(), head, tilt, roll, tfov, rfov, max_depth);
     bkml_write::write_location(ofs_kml, best_location, kml_name.str());

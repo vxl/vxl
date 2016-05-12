@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
 #include "rgtl_serialize_istream.hxx"
 //:
 // \file
@@ -6,13 +9,11 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 rgtl_serialize_istream
-::rgtl_serialize_istream(vcl_istream& is):
+::rgtl_serialize_istream(std::istream& is):
   stream_(is), buffer_left_(0), buffer_used_(0)
 {
 }
@@ -25,7 +26,7 @@ bool rgtl_serialize_istream::okay() const
 
 //----------------------------------------------------------------------------
 rgtl_serialize_istream&
-rgtl_serialize_istream::read(void* vdata, vcl_size_t length)
+rgtl_serialize_istream::read(void* vdata, std::size_t length)
 {
   char* data = static_cast<char*>(vdata);
   while (length > 0)
@@ -37,12 +38,12 @@ rgtl_serialize_istream::read(void* vdata, vcl_size_t length)
       {
         if (this->stream_.gcount() > 0)
         {
-          this->stream_.clear(this->stream_.rdstate() & ~vcl_ios::failbit);
+          this->stream_.clear(this->stream_.rdstate() & ~std::ios::failbit);
         }
         else
         {
-          vcl_cerr << "Error reading from stream (1)!\n";
-          vcl_abort();
+          std::cerr << "Error reading from stream (1)!\n";
+          std::abort();
         }
       }
       this->buffer_used_ = 0;
@@ -50,8 +51,8 @@ rgtl_serialize_istream::read(void* vdata, vcl_size_t length)
     }
 
     // Copy data from the buffer.
-    vcl_size_t s = this->buffer_left_ < length ? this->buffer_left_ : length;
-    vcl_memcpy(data, this->buffer_+this->buffer_used_, s);
+    std::size_t s = this->buffer_left_ < length ? this->buffer_left_ : length;
+    std::memcpy(data, this->buffer_+this->buffer_used_, s);
     this->buffer_used_ += s;
     this->buffer_left_ -= s;
     data += s;
@@ -61,7 +62,7 @@ rgtl_serialize_istream::read(void* vdata, vcl_size_t length)
 }
 
 //----------------------------------------------------------------------------
-vcl_size_t rgtl_serialize_istream::position()
+std::size_t rgtl_serialize_istream::position()
 {
   return this->stream_.tellg();
 }

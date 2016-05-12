@@ -30,7 +30,7 @@ int vipl_test_threshold()
   vil_image_view<short> shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
 //vil_image_view<float> flot_img = CreateTestfloatImage(32,32), flot_ori = CreateTestfloatImage(32,32);
 
-  vcl_string m = "vipl_threshold";
+  std::string m = "vipl_threshold";
   ALL_TESTS(vipl_threshold,m,128);
   return 0;
 }

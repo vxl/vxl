@@ -9,9 +9,9 @@
 
 //: Return vector indicating size of image in pixels
 //  3D image is v[0] x v[1] x v[2]
-vcl_vector<unsigned> vimt3d_image_3d::image_size() const
+std::vector<unsigned> vimt3d_image_3d::image_size() const
 {
-  vcl_vector<unsigned> d(3);
+  std::vector<unsigned> d(3);
   d[0]=image_base().ni();
   d[1]=image_base().nj();
   d[2]=image_base().nk();
@@ -20,9 +20,9 @@ vcl_vector<unsigned> vimt3d_image_3d::image_size() const
 
 
 //: Return 3 element vector indicating the size of a pixel
-vcl_vector<double> vimt3d_image_3d::pixel_size() const
+std::vector<double> vimt3d_image_3d::pixel_size() const
 {
-  vcl_vector<double> d(3);
+  std::vector<double> d(3);
   vgl_vector_3d<double> v =world2im_.inverse().
     delta(vgl_point_3d<double>(0,0,0), vgl_vector_3d<double>(1.0,1.0,1.0));
 
@@ -34,8 +34,8 @@ vcl_vector<double> vimt3d_image_3d::pixel_size() const
 
 
 //: Return vectors defining bounding box containing image in world co-ords
-void vimt3d_image_3d::world_bounds(vcl_vector<double>& b_lo,
-                                   vcl_vector<double>& b_hi) const
+void vimt3d_image_3d::world_bounds(std::vector<double>& b_lo,
+                                   std::vector<double>& b_hi) const
 {
   b_lo.resize(3); b_hi.resize(3);
   vgl_point_3d<double> p = world2im_.inverse()(0,0,0);
@@ -64,8 +64,8 @@ void vimt3d_image_3d::world_bounds(vcl_vector<double>& b_lo,
 //: Return bounding box containing image in world co-ords as a box
 vgl_box_3d<double> world_bounding_box(const vimt3d_image_3d& img)
 {
-  vcl_vector<double> b_lo(3,0.0);
-  vcl_vector<double> b_hi(3,0.0);
+  std::vector<double> b_lo(3,0.0);
+  std::vector<double> b_hi(3,0.0);
   img.world_bounds(b_lo,b_hi);
   //Use C-style vector interface for corner points, passing address of data as the C-style vector
   return vgl_box_3d<double>(&(b_lo[0]),&(b_hi[0]));

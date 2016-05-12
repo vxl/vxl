@@ -1,13 +1,14 @@
 // This is mul/clsfy/clsfy_binary_pdf_classifier.cxx
 //  Copyright: (C) 2000 British Telecommunications PLC
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "clsfy_binary_pdf_classifier.h"
 //:
 // \file
 
-#include <vcl_string.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
@@ -17,7 +18,7 @@
 void clsfy_binary_pdf_classifier::deleteStuff()
 {
   delete pdf_;
-  pdf_ = 0;
+  pdf_ = VXL_NULLPTR;
 }
 
 //=======================================================================
@@ -40,11 +41,11 @@ unsigned clsfy_binary_pdf_classifier::classify(const vnl_vector<double> &input) 
 // output(i) i<n_classes, contains the probability that the input is in class i
 //
 void clsfy_binary_pdf_classifier::class_probabilities(
-          vcl_vector<double> &outputs,
+          std::vector<double> &outputs,
           const vnl_vector<double> &input)  const
 {
   // likelihood = P(input|InClass) / prob_limit_
-  double likelihood= vcl_exp(log_l(input));
+  double likelihood= std::exp(log_l(input));
   outputs.resize(1);
   outputs[0] = likelihood / (1 + likelihood);
 }
@@ -67,14 +68,14 @@ double clsfy_binary_pdf_classifier::log_l(const vnl_vector<double> &input) const
 
 //=======================================================================
 
-vcl_string clsfy_binary_pdf_classifier::is_a() const
+std::string clsfy_binary_pdf_classifier::is_a() const
 {
-  return vcl_string("clsfy_binary_pdf_classifier");
+  return std::string("clsfy_binary_pdf_classifier");
 }
 
 //=======================================================================
 
-bool clsfy_binary_pdf_classifier::is_class(vcl_string const& s) const
+bool clsfy_binary_pdf_classifier::is_class(std::string const& s) const
 {
   return s == clsfy_binary_pdf_classifier::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -89,7 +90,7 @@ short clsfy_binary_pdf_classifier::version_no() const
 //=======================================================================
 
 // required if data is present in this class
-void clsfy_binary_pdf_classifier::print_summary(vcl_ostream& os) const
+void clsfy_binary_pdf_classifier::print_summary(std::ostream& os) const
 {
   os << "log Probability limit, " << log_prob_limit_ << " ,PDF " << pdf_;
 }
@@ -144,8 +145,8 @@ void clsfy_binary_pdf_classifier::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,pdf_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_binary_pdf_classifier::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: clsfy_binary_pdf_classifier::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << "\n";
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

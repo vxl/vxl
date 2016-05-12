@@ -45,21 +45,21 @@ void vil_corners(const vil_image_view<float>& grad_i,
   //  o1 o2 o3
   //  o4    o5
   //  o6 o7 o8
-  const vcl_ptrdiff_t oi1 = grad_i.jstep() - grad_i.istep();
-  const vcl_ptrdiff_t oi2 = grad_i.jstep();
-  const vcl_ptrdiff_t oi3 = grad_i.istep() + grad_i.jstep();
-  const vcl_ptrdiff_t oi4 = -grad_i.istep();
-  const vcl_ptrdiff_t oi5 = grad_i.istep();
-  const vcl_ptrdiff_t oi6 = -grad_i.istep() - grad_i.jstep();
-  const vcl_ptrdiff_t oi7 = -grad_i.jstep();
-  const vcl_ptrdiff_t oi8 = grad_i.istep() - grad_i.jstep();
+  const std::ptrdiff_t oi1 = grad_i.jstep() - grad_i.istep();
+  const std::ptrdiff_t oi2 = grad_i.jstep();
+  const std::ptrdiff_t oi3 = grad_i.istep() + grad_i.jstep();
+  const std::ptrdiff_t oi4 = -grad_i.istep();
+  const std::ptrdiff_t oi5 = grad_i.istep();
+  const std::ptrdiff_t oi6 = -grad_i.istep() - grad_i.jstep();
+  const std::ptrdiff_t oi7 = -grad_i.jstep();
+  const std::ptrdiff_t oi8 = grad_i.istep() - grad_i.jstep();
 
-  const vcl_ptrdiff_t oj1 = grad_j.jstep() - grad_j.istep();
-  const vcl_ptrdiff_t oj2 = grad_j.jstep();
-  const vcl_ptrdiff_t oj3 = grad_j.istep() + grad_j.jstep();
-  const vcl_ptrdiff_t oj6 = -grad_j.istep() - grad_j.jstep();
-  const vcl_ptrdiff_t oj7 = -grad_j.jstep();
-  const vcl_ptrdiff_t oj8 = grad_j.istep() - grad_j.jstep();
+  const std::ptrdiff_t oj1 = grad_j.jstep() - grad_j.istep();
+  const std::ptrdiff_t oj2 = grad_j.jstep();
+  const std::ptrdiff_t oj3 = grad_j.istep() + grad_j.jstep();
+  const std::ptrdiff_t oj6 = -grad_j.istep() - grad_j.jstep();
+  const std::ptrdiff_t oj7 = -grad_j.jstep();
+  const std::ptrdiff_t oj8 = grad_j.istep() - grad_j.jstep();
 
   float * d_data = &dest(2,2);
   const float * gi_data = &grad_i(2,2);
@@ -122,21 +122,21 @@ void vil_corners(const vil_image_view<double>& grad_i,
   //  o1 o2 o3
   //  o4    o5
   //  o6 o7 o8
-  const vcl_ptrdiff_t oi1 = grad_i.jstep() - grad_i.istep();
-  const vcl_ptrdiff_t oi2 = grad_i.jstep();
-  const vcl_ptrdiff_t oi3 = grad_i.istep() + grad_i.jstep();
-  const vcl_ptrdiff_t oi4 = -grad_i.istep();
-  const vcl_ptrdiff_t oi5 = grad_i.istep();
-  const vcl_ptrdiff_t oi6 = -grad_i.istep() - grad_i.jstep();
-  const vcl_ptrdiff_t oi7 = -grad_i.jstep();
-  const vcl_ptrdiff_t oi8 = grad_i.istep() - grad_i.jstep();
+  const std::ptrdiff_t oi1 = grad_i.jstep() - grad_i.istep();
+  const std::ptrdiff_t oi2 = grad_i.jstep();
+  const std::ptrdiff_t oi3 = grad_i.istep() + grad_i.jstep();
+  const std::ptrdiff_t oi4 = -grad_i.istep();
+  const std::ptrdiff_t oi5 = grad_i.istep();
+  const std::ptrdiff_t oi6 = -grad_i.istep() - grad_i.jstep();
+  const std::ptrdiff_t oi7 = -grad_i.jstep();
+  const std::ptrdiff_t oi8 = grad_i.istep() - grad_i.jstep();
 
-  const vcl_ptrdiff_t oj1 = grad_j.jstep() - grad_j.istep();
-  const vcl_ptrdiff_t oj2 = grad_j.jstep();
-  const vcl_ptrdiff_t oj3 = grad_j.istep() + grad_j.jstep();
-  const vcl_ptrdiff_t oj6 = -grad_j.istep() - grad_j.jstep();
-  const vcl_ptrdiff_t oj7 = -grad_j.jstep();
-  const vcl_ptrdiff_t oj8 = grad_j.istep() - grad_j.jstep();
+  const std::ptrdiff_t oj1 = grad_j.jstep() - grad_j.istep();
+  const std::ptrdiff_t oj2 = grad_j.jstep();
+  const std::ptrdiff_t oj3 = grad_j.istep() + grad_j.jstep();
+  const std::ptrdiff_t oj6 = -grad_j.istep() - grad_j.jstep();
+  const std::ptrdiff_t oj7 = -grad_j.jstep();
+  const std::ptrdiff_t oj8 = grad_j.istep() - grad_j.jstep();
 
   double * d_data = &dest(2,2);
   const double * gi_data = &grad_i(2,2);

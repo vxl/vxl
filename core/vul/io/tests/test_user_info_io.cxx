@@ -1,5 +1,6 @@
 // This is core/vul/io/tests/test_user_info_io.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_user_info.h>
 #include <vul/io/vul_io_user_info.h>
 #include <vsl/vsl_binary_io.h>
@@ -8,11 +9,11 @@
 
 void test_user_info_io()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << "Testing vul_user_info io\n"
            << "************************\n";
   //
-  vcl_string name="cjb";
+  std::string name="cjb";
   vul_user_info p_out(name), p_in("");
   p_out.init("cjb");
 
@@ -36,8 +37,8 @@ void test_user_info_io()
        p_out.full_name==p_in.full_name && p_out.shell==p_in.shell &&
        p_out.passwd==p_in.passwd, true);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, p_out);
+  std::cout << std::endl;
 }
 
 TESTMAIN(test_user_info_io);

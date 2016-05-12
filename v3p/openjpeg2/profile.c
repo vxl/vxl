@@ -101,39 +101,39 @@ void _ProfStop(OPJ_PROFILE_GROUP group)
                 group_list[ id ].totalCalls, \
                (OPJ_FLOAT64) group_list[ id ].total_time / CLOCKS_PER_SEC, \
                ((OPJ_FLOAT64) group_list[ id ].total_time / (group_list[ id ].totalCalls ? group_list[ id ].totalCalls : 1)), \
-			   ((OPJ_FLOAT64) group_list[ id ].total_time / totalTime * 100))
+                           ((OPJ_FLOAT64) group_list[ id ].total_time / totalTime * 100))
 
 #define proftracep(id,totalTime) \
         printf(#id "\t%u\t\t%6.6f\t\t%12.6f\t%2.2f%%\n",  \
                 group_list[ id ].totalCalls, \
                (OPJ_FLOAT64) group_list[ id ].total_time / CLOCKS_PER_SEC, \
-							 ((OPJ_FLOAT64) group_list[ id ].total_time  / (group_list[ id ].totalCalls ? group_list[ id ].totalCalls : 1)), \
-			   ((OPJ_FLOAT64) group_list[ id ].total_time / totalTime * 100))
+                                                         ((OPJ_FLOAT64) group_list[ id ].total_time  / (group_list[ id ].totalCalls ? group_list[ id ].totalCalls : 1)), \
+                           ((OPJ_FLOAT64) group_list[ id ].total_time / totalTime * 100))
 
 //==============================================================================
 void _ProfSave(const OPJ_CHAR * pFileName)
 {
-	FILE *p = fopen(pFileName, "wt");
-	OPJ_FLOAT64 totalTime = 0.;
-	OPJ_UINT32 i;
+        FILE *p = fopen(pFileName, "wt");
+        OPJ_FLOAT64 totalTime = 0.;
+        OPJ_UINT32 i;
 
-	if (!p)
-	{
-		return;
-	}
+        if (!p)
+        {
+                return;
+        }
 
-	for 
-		(i=0;i<PGROUP_LASTGROUP;++i)
-	{
-		totalTime += group_list[i].total_time;
-	}
+        for
+                (i=0;i<PGROUP_LASTGROUP;++i)
+        {
+                totalTime += group_list[i].total_time;
+        }
 
-	fputs("\n\nProfile Data:\n", p);
-	fputs("description\tnb calls\ttotal time (sec)\ttime per call\t%% of section\n", p);
+        fputs("\n\nProfile Data:\n", p);
+        fputs("description\tnb calls\ttotal time (sec)\ttime per call\t%% of section\n", p);
 
-	proftracef(PGROUP_DWT,totalTime);
-	proftracef(PGROUP_T1,totalTime);
-	proftracef(PGROUP_T2,totalTime);	
+        proftracef(PGROUP_DWT,totalTime);
+        proftracef(PGROUP_T1,totalTime);
+        proftracef(PGROUP_T2,totalTime);
 
    fputs("=== end of profile list ===\n\n", p);
 
@@ -144,26 +144,26 @@ void _ProfSave(const OPJ_CHAR * pFileName)
 //==============================================================================
 void _ProfPrint(void)
 {
-	OPJ_FLOAT64 totalTime = 0.;
-	OPJ_UINT32 i;
+        OPJ_FLOAT64 totalTime = 0.;
+        OPJ_UINT32 i;
 
-	for 
-		(i=0;i<PGROUP_LASTGROUP;++i)
-	{
-		totalTime += group_list[i].total_time;
-	}
+        for
+                (i=0;i<PGROUP_LASTGROUP;++i)
+        {
+                totalTime += group_list[i].total_time;
+        }
 
-	printf("\n\nProfile Data:\n");
-	printf("description\tnb calls\ttotal time (sec)\ttime per call\t%% of section\n");
+        printf("\n\nProfile Data:\n");
+        printf("description\tnb calls\ttotal time (sec)\ttime per call\t%% of section\n");
 
-	proftracep(PGROUP_RATE, totalTime);
-	proftracep(PGROUP_DC_SHIFT, totalTime);
-	proftracep(PGROUP_MCT, totalTime);
-	proftracep(PGROUP_DWT, totalTime);
-	proftracep(PGROUP_T1, totalTime);
-	proftracep(PGROUP_T2, totalTime);
+        proftracep(PGROUP_RATE, totalTime);
+        proftracep(PGROUP_DC_SHIFT, totalTime);
+        proftracep(PGROUP_MCT, totalTime);
+        proftracep(PGROUP_DWT, totalTime);
+        proftracep(PGROUP_T1, totalTime);
+        proftracep(PGROUP_T2, totalTime);
 
-	printf("\nTotal time: %6.3f second(s)\n", totalTime / CLOCKS_PER_SEC);
+        printf("\nTotal time: %6.3f second(s)\n", totalTime / CLOCKS_PER_SEC);
 
   printf("=== end of profile list ===\n\n");
 

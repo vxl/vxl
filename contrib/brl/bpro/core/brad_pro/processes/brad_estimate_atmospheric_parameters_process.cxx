@@ -1,11 +1,12 @@
 //This is brl/bpro/core/brad_pro/processes/brad_estimate_atmospheric_parameters_process.cxx
 //:
 // \file
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <brad/brad_image_metadata.h>
@@ -21,7 +22,7 @@ bool brad_estimate_atmospheric_parameters_process_cons(bprb_func_process& pro)
   //2: (optional) mean scene reflectance
   //3: (optional) constrain atmospheric parameters to physically meaningful values? (boolean)
 
-  vcl_vector<vcl_string> input_types_(4);
+  std::vector<std::string> input_types_(4);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "brad_image_metadata_sptr";
   input_types_[2] = "float";
@@ -31,7 +32,7 @@ bool brad_estimate_atmospheric_parameters_process_cons(bprb_func_process& pro)
     return false;
 
   //output: estimated atmospheric parameters
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "brad_atmospheric_parameters_sptr";
 
   if (!pro.set_output_types(output_types_))
@@ -50,7 +51,7 @@ bool brad_estimate_atmospheric_parameters_process(bprb_func_process& pro)
   //check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs" << std::endl;
     return false;
   }
   //get the inputs
@@ -61,17 +62,17 @@ bool brad_estimate_atmospheric_parameters_process(bprb_func_process& pro)
 
   //check inputs validity
   if (!radiance_img_base) {
-    vcl_cout << pro.name() <<" :--  image  is null!\n";
+    std::cout << pro.name() <<" :--  image  is null!\n";
     return false;
   }
 
   if (radiance_img_base->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-     vcl_cerr << "ERROR: brad_estimate_atmospheric_parameters: expecting floating point image\n";
+     std::cerr << "ERROR: brad_estimate_atmospheric_parameters: expecting floating point image\n";
      return false;
   }
   vil_image_view<float>* radiance_img = dynamic_cast<vil_image_view<float>*>(radiance_img_base.ptr());
   if (!radiance_img) {
-     vcl_cerr << "ERROR: brad_estimate_atmospheric_parameters: error casting to float image\n";
+     std::cerr << "ERROR: brad_estimate_atmospheric_parameters: error casting to float image\n";
      return false;
   }
   brad_atmospheric_parameters_sptr atm_params = new brad_atmospheric_parameters();
@@ -95,6 +96,6 @@ bool brad_estimate_atmospheric_parameters_process(bprb_func_process& pro)
   }
   else
     return false;
-  
+
 }
 

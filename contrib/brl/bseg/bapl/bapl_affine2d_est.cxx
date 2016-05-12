@@ -1,4 +1,6 @@
 // This is brl/bseg/bapl/bapl_affine2d_est.cxx
+#include <iostream>
+#include <cmath>
 #include "bapl_affine2d_est.h"
 //:
 // \file
@@ -8,12 +10,11 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 //: Constructor from a vector of matches (pairs of keypoint smart pointers)
-bapl_affine2d_est::bapl_affine2d_est( const vcl_vector< bapl_keypoint_match > & matches )
+bapl_affine2d_est::bapl_affine2d_est( const std::vector< bapl_keypoint_match > & matches )
   : rrel_estimation_problem( 6 /*dof*/, 3 /*points to instantiate*/ )
 {
   vnl_vector< double > p(2), q(2);
@@ -29,8 +30,8 @@ bapl_affine2d_est::bapl_affine2d_est( const vcl_vector< bapl_keypoint_match > & 
   }
 }
 
-bapl_affine2d_est::bapl_affine2d_est( const vcl_vector< vnl_vector<double> > & from_pts,
-                                      const vcl_vector< vnl_vector<double> > & to_pts )
+bapl_affine2d_est::bapl_affine2d_est( const std::vector< vnl_vector<double> > & from_pts,
+                                      const std::vector< vnl_vector<double> > & to_pts )
   : rrel_estimation_problem( 6 /*dof*/, 3 /*points to instantiate*/ ),
     from_pts_( from_pts ), to_pts_( to_pts )
 {
@@ -50,7 +51,7 @@ bapl_affine2d_est::num_samples( ) const
 
 
 bool
-bapl_affine2d_est::fit_from_minimal_set( const vcl_vector<int>& point_indices,
+bapl_affine2d_est::fit_from_minimal_set( const std::vector<int>& point_indices,
                                                vnl_vector<double>& params ) const
 {
   vnl_matrix< double > A(6, 6, 0.0);
@@ -78,7 +79,7 @@ bapl_affine2d_est::fit_from_minimal_set( const vcl_vector<int>& point_indices,
 
 void
 bapl_affine2d_est :: compute_residuals( const vnl_vector<double>& params,
-                                              vcl_vector<double>& residuals ) const
+                                              std::vector<double>& residuals ) const
 {
   vnl_matrix< double > A(2,2);
   vnl_vector< double > t(2);
@@ -91,7 +92,7 @@ bapl_affine2d_est :: compute_residuals( const vnl_vector<double>& params,
 
   vnl_svd< double > svd_A( A );
   if ( svd_A.rank() < 2 )
-    vcl_cerr << "bapl_affine2d_est :: compute_residuals  rank(A) < 2!!";
+    std::cerr << "bapl_affine2d_est :: compute_residuals  rank(A) < 2!!";
   vnl_matrix< double > A_inv( svd_A.inverse() );
 
   if ( residuals.size() != from_pts_.size() )
@@ -109,7 +110,7 @@ bapl_affine2d_est :: compute_residuals( const vnl_vector<double>& params,
     del_y = trans_pt[ 1 ] - to_pts_[ i ][ 1 ];
     inv_del_x = inv_trans_pt[ 0 ] - from_pts_[ i ][ 0 ];
     inv_del_y = inv_trans_pt[ 1 ] - from_pts_[ i ][ 1 ];
-    residuals [ i ] = vcl_sqrt( vnl_math::sqr(del_x)     + vnl_math::sqr(del_y)
+    residuals [ i ] = std::sqrt( vnl_math::sqr(del_x)     + vnl_math::sqr(del_y)
                               + vnl_math::sqr(inv_del_x) + vnl_math::sqr(inv_del_y) );
   }
 }
@@ -118,15 +119,15 @@ bapl_affine2d_est :: compute_residuals( const vnl_vector<double>& params,
 bool
 bapl_affine2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
                                                  vnl_matrix<double>& /*norm_covar*/, // FIXME: unused parameter
-                                                 const vcl_vector<double>* weights ) const
+                                                 const std::vector<double>* weights ) const
 {
-  const vcl_vector<double> * w;
+  const std::vector<double> * w;
   if ( weights )
     w = weights;
   else
-    w = new vcl_vector<double>( from_pts_.size(), 1 );
+    w = new std::vector<double>( from_pts_.size(), 1 );
 
-  vcl_vector< vnl_vector<double> > norm_from, norm_to;
+  std::vector< vnl_vector<double> > norm_from, norm_to;
   vnl_vector< double > center_from(2,0.0), center_to(2,0.0);
   double avg_distance_from, avg_distance_to;
 
@@ -172,9 +173,9 @@ bapl_affine2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
 
 
 void
-bapl_affine2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
-                                const vcl_vector< double >& wgts,
-                                vcl_vector< vnl_vector<double> > & norm_pts,
+bapl_affine2d_est :: normalize( const std::vector< vnl_vector<double> >& pts,
+                                const std::vector< double >& wgts,
+                                std::vector< vnl_vector<double> > & norm_pts,
                                 vnl_vector< double > & center,
                                 double &avg_distance ) const
 {
@@ -195,7 +196,7 @@ bapl_affine2d_est :: normalize( const vcl_vector< vnl_vector<double> >& pts,
 
   avg_distance = 0;
   for ( i=0; i<pts.size(); ++i ) {
-    avg_distance += wgts[i] * vcl_sqrt( vnl_math::sqr( pts[i][0] - center[0] ) +
+    avg_distance += wgts[i] * std::sqrt( vnl_math::sqr( pts[i][0] - center[0] ) +
                                         vnl_math::sqr( pts[i][1] - center[1] ) );
   }
   avg_distance /= sum_wgt;

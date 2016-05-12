@@ -330,8 +330,8 @@ sub process_headers {
       s/<Basics\/IUE_sprintf\.h>/<vbl\/vbl_sprintf.h>/;
       s/<Basics\/Array2D\.h>/<vbl\/vbl_array_2d.h>/;
       s/<Basics\/Array3D\.h>/<vbl\/vbl_array_3d.h>/;
-      s/<Basics\/Array2D\.C>/<vbl\/vbl_array_2d.txx>/;
-      s/<Basics\/Array3D\.C>/<vbl\/vbl_array_3d.txx>/;
+      s/<Basics\/Array2D\.C>/<vbl\/vbl_array_2d.hxx>/;
+      s/<Basics\/Array3D\.C>/<vbl\/vbl_array_3d.hxx>/;
       s/<Basics\/BaseArray3D\.h>/<vbl\/vbl_base_array_3d.h>/;
       s/<Basics\/file\.h>/<vbl\/vbl_file.h>/;
       s/<Basics\/stat\.h>/<vbl\/vbl_file.h> \/\/ use vbl_file instead of IUE_stat/;
@@ -348,9 +348,9 @@ sub process_headers {
 
       # sparse array things.
       s!<Basics/SparseArray([123])D.h>!<vbl/vbl_sparse_array_$1d.h>!;
-      s!<Basics/SparseArray([123])D.C>!<vbl/vbl_sparse_array_$1d.txx>!;
+      s!<Basics/SparseArray([123])D.C>!<vbl/vbl_sparse_array_$1d.hxx>!;
       s!<Basics/SparseArray.h>!<vbl/vbl_sparse_array.h>!;
-      s!<Basics/SparseArray.C>!<vbl/vbl_sparse_array.txx>!;
+      s!<Basics/SparseArray.C>!<vbl/vbl_sparse_array.hxx>!;
 
       s/<cool\/Timer\.h>/<vbl\/vbl_timer.h>/;
       s/<cool\/RegExp\.h>/<vbl\/vbl_reg_exp.h>/;
@@ -456,9 +456,7 @@ sub process_headers {
 
       s!<cool/Array.h>!<vcl_vector.h>!;
       s!<cool/ArrayP.h>!<vcl_vector.h>!;
-      s!<cool/Array.C>!<vcl_vector.txx>!;
       s!<cool/List(|P).h>!<vcl_list.h>!;
-      s!<cool/List.C>!<vcl_list.txx>!;
       s!^(\#include +\<(Geometry|Topology)/)!//$1!;
     }
 
@@ -579,23 +577,16 @@ sub process_lines {
     if ($vcl) {
       # IUE_compiler.h -> vcl_compiler.h
       s/\bIUE_GCC/VCL_GCC/g;
-      s/\bIUE_EGCS\b/VCL_EGCS/g;
-      s/\bIUE_SGI_CC/VCL_SGI_CC/g;
-      s/\bIUE_SUNPRO/VCL_SUNPRO/g;
       s/\bIUE_WIN32\b/VCL_WIN32/g;
-      s/\bIUE_VC50\b/VCL_VC_5/g;
-      s/\bIUE_VC60\b/VCL_VC_6/g;
 
       # defines from IUE_compiler :
       s/\bIUE_COMMA\b/VCL_COMMA/g;
-      s/\bIUE_FOR_SCOPE_HACK\b/VCL_FOR_SCOPE_HACK/g;
       s/\bIUE_HAS_MEMBER_TEMPLATES\b/VCL_HAS_MEMBER_TEMPLATES/g;
       s/\bIUE_NO_TEMPLATE_SYMBOLS\b/!VCL_HAS_TEMPLATE_SYMBOLS/g;
       s/\bIUE_CAN_DO_PARTIAL_SPECIALIZATION\b/VCL_CAN_DO_PARTIAL_SPECIALIZATION/g;
       s/\bIUE_HAS_DYNAMIC_CAST\b/VCL_HAS_DYNAMIC_CAST/g;
       s/\bIUE_STATIC_CONST_INIT_FLOAT\b/VCL_STATIC_CONST_INIT_FLOAT_DECL/g;
       s/\bIUE_STATIC_CONST_INIT_INT\b/VCL_STATIC_CONST_INIT_INT_DECL/g;
-      s/\bIUE_IMPLEMENT_STATIC_CONSTS\b/\!VCL_CAN_STATIC_CONST_INIT_INT/g;
       s/\bdefined\(IUE_NO_STATIC_DATA_MEMBERS\)/VCL_NO_STATIC_DATA_MEMBERS/g;
       s/(\#\s*if)def\s+IUE_NO_STATIC_DATA_MEMBERS\b/$1 VCL_NO_STATIC_DATA_MEMBERS/g;
       s/(\#\s*if)ndef\s+IUE_NO_STATIC_DATA_MEMBERS\b/$1 !VCL_NO_STATIC_DATA_MEMBERS/g;
@@ -614,15 +605,7 @@ sub process_lines {
       s/\bIUE_DFL_TYPE_PARAM_STLDECL\b/VCL_DFL_TYPE_PARAM_STLDECL/g;
       s/\bIUE_DFL_TMPL_PARAM_STLDECL\b/VCL_DFL_TMPL_PARAM_STLDECL/g;
       s/\bIUE_DFL_TMPL_ARG\b/VCL_DFL_TMPL_ARG/g;
-      s/\bIUE_SUNPRO_ALLOCATOR_HACK\b/VCL_SUNPRO_ALLOCATOR_HACK/g;
 
-      s/\bIUE_STRING_IS_TYPEDEF\b/VCL_STRING_IS_TYPEDEF/g;
-      s/\bdefined\(IUE_USE_NATIVE_STL\)/VCL_USE_NATIVE_STL/g;
-      s/(\#\s*if)def\s+IUE_USE_NATIVE_STL\b/$1 VCL_USE_NATIVE_STL/g;
-      s/(\#\s*if)ndef\s+IUE_USE_NATIVE_STL\b/$1 !VCL_USE_NATIVE_STL/g;
-      s/\bdefined\(IUE_USE_NATIVE_COMPLEX\)/VCL_USE_NATIVE_COMPLEX/g;
-      s/(\#\s*if)def\s+IUE_USE_NATIVE_COMPLEX\b/$1 VCL_USE_NATIVE_COMPLEX/g;
-      s/(\#\s*if)ndef\s+IUE_USE_NATIVE_COMPLEX\b/$1 !VCL_USE_NATIVE_COMPLEX/g;
       s/\bIUE_STL_USE_ABBREVS\b/__STL_USE_ABBREVS/g;
 
       # classes and functions
@@ -693,7 +676,6 @@ sub process_lines {
 
       # Instantiation macros.
       #deprecated:
-      #  s/\bINSTANTIATE_UNARY\b/VCL_SWAP_INSTANTIATE /g;
       #  HASHKEY, HASHMAP, HASHTABLE
       s/\bINSTANTIATE_COMPARISONS/\/\/INSTANTIATE_COMPARISONS/;
       s/\bINSTANTIATE_UNARY/\/\/INSTANTIATE_UNARY/;
@@ -966,7 +948,7 @@ sub output_lines {
 
       # emit any .txx files needed :
       foreach my $class (@txx_needed) {
-        print "#include <vcl_$class.txx>\n";
+        print "#include <vcl_$class.hxx>\n";
       }
 
       #

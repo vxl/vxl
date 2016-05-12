@@ -6,12 +6,14 @@
 // \brief Various mathematical manipulations of 3D images
 // \author Tim Cootes
 
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-// not used? #include <vcl_functional.h> // for std::less<T>
+// not used? #include <functional> // for std::less<T>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 
 //: Compute minimum and maximum values over im
@@ -35,7 +37,7 @@ inline void vil3d_math_value_range(const vil3d_image_view<T>& im,
   unsigned nj = im.nj();
   unsigned nk = im.nk();
   unsigned np = im.nplanes();
-  vcl_ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
+  std::ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
 
   for (unsigned int p=0;p<np;++p, plane += im.planestep())
   {
@@ -71,8 +73,8 @@ inline void vil3d_math_value_range_percentile(const vil3d_image_view<T>& im,
                                               const double fraction,
                                               T& value)
 {
-  vcl_vector<double> fractions(1, fraction);
-  vcl_vector<T> values;
+  std::vector<double> fractions(1, fraction);
+  std::vector<T> values;
   vil3d_math_value_range_percentiles(im, fractions, values);
   if (values.size() > 0)
     value = values[0]; // Bounds-checked access in case previous line failed.
@@ -89,8 +91,8 @@ inline void vil3d_math_value_range_percentile(const vil3d_image_view<T>& im,
 // and can be very expensive in terms of both processing and memory.
 template <class T>
 inline void vil3d_math_value_range_percentiles(const vil3d_image_view<T>& im,
-                                               const vcl_vector<double> fraction,
-                                               vcl_vector<T>& value)
+                                               const std::vector<double> fraction,
+                                               std::vector<T>& value)
 {
   value.clear();
 
@@ -111,13 +113,13 @@ inline void vil3d_math_value_range_percentiles(const vil3d_image_view<T>& im,
   unsigned nj = im.nj();
   unsigned nk = im.nk();
   unsigned np = im.nplanes();
-  vcl_ptrdiff_t istep = im.istep();
-  vcl_ptrdiff_t jstep=im.jstep();
-  vcl_ptrdiff_t kstep=im.kstep();
-  vcl_ptrdiff_t pstep = im.planestep();
-  vcl_vector<T> data(ni*nj*nk*np);
+  std::ptrdiff_t istep = im.istep();
+  std::ptrdiff_t jstep=im.jstep();
+  std::ptrdiff_t kstep=im.kstep();
+  std::ptrdiff_t pstep = im.planestep();
+  std::vector<T> data(ni*nj*nk*np);
 
-  typename vcl_vector<T>::iterator it = data.begin();
+  typename std::vector<T>::iterator it = data.begin();
   const T* plane = im.origin_ptr();
   for (unsigned int p=0;p<np;++p, plane += pstep)
   {
@@ -143,8 +145,8 @@ inline void vil3d_math_value_range_percentiles(const vil3d_image_view<T>& im,
   for (unsigned f=0; f<nfrac; ++f)
   {
     unsigned index = static_cast<unsigned>(fraction[f]*npix - 0.5);
-    typename vcl_vector<T>::iterator index_it = data.begin() + index;
-    vcl_nth_element(data.begin(), index_it, data.end());
+    typename std::vector<T>::iterator index_it = data.begin() + index;
+    std::nth_element(data.begin(), index_it, data.end());
     value[f] = *index_it;
   }
 }
@@ -202,7 +204,7 @@ inline void vil3d_math_rms(const vil3d_image_view<inT>& src,
         sumT sum_sqr=0;
         for (unsigned p=0;p<src.nplanes();++p)
           sum_sqr += static_cast<sumT>(src(i,j,k,p))*static_cast<sumT>(src(i,j,k,p));
-        dest(i,j,k) = static_cast<outT>(vcl_sqrt(sum_sqr / src.nplanes()));
+        dest(i,j,k) = static_cast<outT>(std::sqrt(sum_sqr / src.nplanes()));
       }
 }
 
@@ -224,7 +226,7 @@ inline void vil3d_math_sum(sumT& sum, const vil3d_image_view<imT>& im,
   unsigned ni = im.ni();
   unsigned nj = im.nj();
   unsigned nk = im.nk();
-  vcl_ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
+  std::ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
 
   const imT* slice = plane + p*im.planestep();
   for (unsigned int k=0;k<nk;++k, slice += kstep)
@@ -267,7 +269,7 @@ inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
   unsigned ni = im.ni();
   unsigned nj = im.nj();
   unsigned nk = im.nk();
-  vcl_ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
+  std::ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
 
   const imT* slice = plane + p*im.planestep();
   for (unsigned int k=0;k<nk;++k, slice += kstep)
@@ -312,7 +314,7 @@ inline void vil3d_math_scale_and_offset_values(vil3d_image_view<imT>& image,
 {
   unsigned ni = image.ni(), nj = image.nj(),
     nk = image.nk(), np = image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(), jstep=image.jstep(),
+  std::ptrdiff_t istep=image.istep(), jstep=image.jstep(),
     kstep = image.kstep(), pstep = image.planestep();
   imT* plane = image.origin_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
@@ -376,9 +378,9 @@ inline void vil3d_math_image_difference(const vil3d_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
   im_sum.set_size(ni,nj,nk,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),kstepS=im_sum.kstep(),pstepS = im_sum.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),kstepS=im_sum.kstep(),pstepS = im_sum.planestep();
   const aT* planeA = imA.origin_ptr();
   const bT* planeB = imB.origin_ptr();
   sumT* planeS     = im_sum.origin_ptr();
@@ -415,9 +417,9 @@ inline void vil3d_math_image_sum(const vil3d_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
   im_sum.set_size(ni,nj,nk,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),kstepS=im_sum.kstep(),pstepS = im_sum.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),kstepS=im_sum.kstep(),pstepS = im_sum.planestep();
   const aT* planeA = imA.origin_ptr();
   const bT* planeB = imB.origin_ptr();
   sumT* planeS     = im_sum.origin_ptr();
@@ -454,9 +456,9 @@ inline void vil3d_math_image_product(const vil3d_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
   im_prod.set_size(ni,nj,nk,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepS=im_prod.istep(),jstepS=im_prod.jstep(),kstepS=im_prod.kstep(),pstepS = im_prod.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepS=im_prod.istep(),jstepS=im_prod.jstep(),kstepS=im_prod.kstep(),pstepS = im_prod.planestep();
   const aT* planeA = imA.origin_ptr();
   const bT* planeB = imB.origin_ptr();
   prodT* planeS     = im_prod.origin_ptr();
@@ -494,8 +496,8 @@ inline void vil3d_math_add_image_fraction(vil3d_image_view<aT>& imA, scaleT fa,
   unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
   aT* planeA = imA.origin_ptr();
   const bT* planeB = imB.origin_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -526,7 +528,7 @@ inline void vil3d_math_truncate_range(vil3d_image_view<T>& image,
                                       T min_v, T max_v)
 {
   unsigned ni=image.ni(), nj=image.nj(), nk=image.nk(), np=image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(), jstep=image.jstep(),
+  std::ptrdiff_t istep=image.istep(), jstep=image.jstep(),
                 kstep=image.kstep(), pstep=image.planestep();
   T* plane = image.origin_ptr();
   for (unsigned p=0; p<np; ++p, plane+=pstep)
@@ -568,9 +570,9 @@ inline void vil3d_math_integral_image(const vil3d_image_view<aT>& imA,
   im_sum.set_size(ni1,nj1,nk1,1);
 
   // Put zeros along first plane of im_sum
-  vcl_ptrdiff_t istepS=im_sum.istep();
-  vcl_ptrdiff_t jstepS=im_sum.jstep();
-  vcl_ptrdiff_t kstepS=im_sum.kstep();
+  std::ptrdiff_t istepS=im_sum.istep();
+  std::ptrdiff_t jstepS=im_sum.jstep();
+  std::ptrdiff_t kstepS=im_sum.kstep();
   sumT* planeS = im_sum.origin_ptr();
   sumT* rowS = planeS;
   sumT* voxelS;
@@ -582,15 +584,15 @@ inline void vil3d_math_integral_image(const vil3d_image_view<aT>& imA,
   }
 
   // Now sum from original image (imA)
-  vcl_ptrdiff_t istepA=imA.istep();
-  vcl_ptrdiff_t jstepA=imA.jstep();
-  vcl_ptrdiff_t kstepA=imA.kstep();
+  std::ptrdiff_t istepA=imA.istep();
+  std::ptrdiff_t jstepA=imA.jstep();
+  std::ptrdiff_t kstepA=imA.kstep();
 
   const aT* planeA = imA.origin_ptr();
 
   sumT sum;
-  vcl_ptrdiff_t prev_j = -jstepS;
-  vcl_ptrdiff_t prev_k = -kstepS;
+  std::ptrdiff_t prev_j = -jstepS;
+  std::ptrdiff_t prev_k = -kstepS;
   planeS += kstepS;
 
   // for each plane, do a 2D integral image first
@@ -622,9 +624,9 @@ inline void vil3d_math_integral_image(const vil3d_image_view<aT>& imA,
         sum += *voxelA;
         *voxelS = sum + voxelS[prev_j];
       }
-    }    
+    }
   }
- 
+
   // Go through from plane 2 to end and add values of voxels in plane
   // above to get the 3D integral image
   planeS = im_sum.origin_ptr() + 2*kstepS;
@@ -667,12 +669,12 @@ inline void vil3d_math_integral_sqr_image(const vil3d_image_view<aT>& imA,
   im_sum_sq.set_size(ni1,nj1,nk1,1);
 
   // Put zeros along first plane of im_sum & im_sum_sq
-  vcl_ptrdiff_t istepS=im_sum.istep();
-  vcl_ptrdiff_t istepS2=im_sum_sq.istep();
-  vcl_ptrdiff_t jstepS=im_sum.jstep();
-  vcl_ptrdiff_t jstepS2=im_sum_sq.jstep();
-  vcl_ptrdiff_t kstepS=im_sum.kstep();
-  vcl_ptrdiff_t kstepS2=im_sum_sq.kstep();
+  std::ptrdiff_t istepS=im_sum.istep();
+  std::ptrdiff_t istepS2=im_sum_sq.istep();
+  std::ptrdiff_t jstepS=im_sum.jstep();
+  std::ptrdiff_t jstepS2=im_sum_sq.jstep();
+  std::ptrdiff_t kstepS=im_sum.kstep();
+  std::ptrdiff_t kstepS2=im_sum_sq.kstep();
   sumT* planeS = im_sum.origin_ptr();
   sumT* planeS2 = im_sum_sq.origin_ptr();
   sumT* rowS = planeS;
@@ -696,17 +698,17 @@ inline void vil3d_math_integral_sqr_image(const vil3d_image_view<aT>& imA,
   }
 
   // Now sum from original image (imA)
-  vcl_ptrdiff_t istepA=imA.istep();
-  vcl_ptrdiff_t jstepA=imA.jstep();
-  vcl_ptrdiff_t kstepA=imA.kstep();
+  std::ptrdiff_t istepA=imA.istep();
+  std::ptrdiff_t jstepA=imA.jstep();
+  std::ptrdiff_t kstepA=imA.kstep();
 
   const aT* planeA = imA.origin_ptr();
 
   sumT sum, sum2;
-  vcl_ptrdiff_t prev_j = -jstepS;
-  vcl_ptrdiff_t prev_k = -kstepS;
-  vcl_ptrdiff_t prev_j2 = -jstepS2;
-  vcl_ptrdiff_t prev_k2 = -kstepS2;
+  std::ptrdiff_t prev_j = -jstepS;
+  std::ptrdiff_t prev_k = -kstepS;
+  std::ptrdiff_t prev_j2 = -jstepS2;
+  std::ptrdiff_t prev_k2 = -kstepS2;
   planeS += kstepS;
   planeS2 += kstepS2;
 
@@ -752,9 +754,9 @@ inline void vil3d_math_integral_sqr_image(const vil3d_image_view<aT>& imA,
         sum2 += sumT(*voxelA)*sumT(*voxelA);
         *voxelS2 = sum2 + voxelS2[prev_j2];
       }
-    }    
+    }
   }
- 
+
   // Go through from plane 2 to end and add values of voxels in plane
   // above to get the 3D integral image
   planeS = im_sum.origin_ptr() + 2*kstepS;

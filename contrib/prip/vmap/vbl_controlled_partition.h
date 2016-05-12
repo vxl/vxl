@@ -12,7 +12,9 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 //: enables to handle partitions with actually choosing the representative for each set.
 // vbl_controlled_partition provides a way to choose while merging the representative for each set. It can be used
@@ -23,7 +25,7 @@ class vbl_controlled_partition
   {
     int father ;
   };
-  vcl_vector<node> elements_ ;
+  std::vector<node> elements_ ;
   int nb_sets_ ;
 
   void link(int i, int j)

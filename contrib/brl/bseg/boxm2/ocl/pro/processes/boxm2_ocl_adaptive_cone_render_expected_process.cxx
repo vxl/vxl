@@ -5,11 +5,13 @@
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
-
+//
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -32,15 +34,15 @@ namespace boxm2_ocl_adaptive_cone_render_expected_process_globals
 {
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 2;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "basic/linked_list.cl");
@@ -70,7 +72,7 @@ namespace boxm2_ocl_adaptive_cone_render_expected_process_globals
     vec_kernels.push_back(ray_trace_kernel);
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -89,7 +91,7 @@ bool boxm2_ocl_adaptive_cone_render_expected_process_cons(bprb_func_process& pro
   using namespace boxm2_ocl_adaptive_cone_render_expected_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -98,7 +100,7 @@ bool boxm2_ocl_adaptive_cone_render_expected_process_cons(bprb_func_process& pro
   input_types_[5] = "unsigned";
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
 
@@ -110,7 +112,7 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   using namespace boxm2_ocl_adaptive_cone_render_expected_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -124,8 +126,8 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   unsigned nj=pro.get_input<unsigned>(i++);
 
   bool foundDataType = false;
-  vcl_string data_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type,options;
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -141,7 +143,7 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_ADAPTIVE_CONE_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OCL_ADAPTIVE_CONE_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
@@ -150,13 +152,13 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
 
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
@@ -165,9 +167,9 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
   float* buff = new float[cl_ni*cl_nj];
-  vcl_fill(buff, buff+cl_ni*cl_nj, 0.0f);
+  std::fill(buff, buff+cl_ni*cl_nj, 0.0f);
   unsigned char* ray_level_buff = new unsigned char[cl_ni*cl_nj];
-  vcl_fill(ray_level_buff, ray_level_buff+cl_ni*cl_nj, 0);
+  std::fill(ray_level_buff, ray_level_buff+cl_ni*cl_nj, 0);
 
   bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp cone image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -182,7 +184,7 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -210,8 +212,8 @@ bool boxm2_ocl_adaptive_cone_render_expected_process(bprb_func_process& pro)
       float vis = vis_buff[idx];
       if (ray_level_buff[idx] < 4)
       {
-        float pow_factor =vcl_pow(0.25f,(float) (4-ray_level_buff[idx]));
-        vis =vcl_pow(vis,pow_factor);
+        float pow_factor =std::pow(0.25f,(float) (4-ray_level_buff[idx]));
+        vis =std::pow(vis,pow_factor);
       }
       (*vis_view)(r,c) = vis;
       idx++;

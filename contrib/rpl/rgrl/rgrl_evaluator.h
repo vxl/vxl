@@ -4,7 +4,9 @@
 // \file
 // \author Lee, Ying-Lin (Bess)
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <rgrl/rgrl_object.h>
 
 class rgrl_evaluator : public rgrl_object
@@ -16,9 +18,9 @@ class rgrl_evaluator : public rgrl_object
   virtual ~rgrl_evaluator() {}
 
   virtual
-  double evaluate( vcl_vector< double > const& a,
-                   vcl_vector< double > const& b,
-                   vcl_vector< double > const& weight ) const = 0;
+  double evaluate( std::vector< double > const& a,
+                   std::vector< double > const& b,
+                   std::vector< double > const& weight ) const = 0;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_evaluator, rgrl_object );

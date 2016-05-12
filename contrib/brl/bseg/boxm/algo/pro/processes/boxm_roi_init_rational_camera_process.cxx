@@ -44,7 +44,7 @@ namespace boxm_roi_init_rational_camera_process_globals
   const unsigned n_outputs_ = 3;
 
   // functions
-  bool roi_init(vcl_string const& image_path,
+  bool roi_init(std::string const& image_path,
                 vpgl_rational_camera<double>* camera,
                 vgl_box_3d<double> box,
                 vpgl_lvcs lvcs,
@@ -66,7 +66,7 @@ bool boxm_roi_init_rational_camera_process_cons(bprb_func_process& pro)
 
   //this process takes 3 input:
   //the filename of the image, the camera and the voxel world
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned  i=0;
   input_types_[i++] = "vcl_string";                // NITF image path
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
@@ -74,7 +74,7 @@ bool boxm_roi_init_rational_camera_process_cons(bprb_func_process& pro)
 
   //output
   unsigned j = 0;
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[j++] = "vpgl_camera_double_sptr"; // unadjusted local rational camera
   output_types_[j++] = "vil_image_view_base_sptr";  // image ROI
   output_types_[j++] = "float"; // uncertainty
@@ -87,23 +87,23 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
 {
   using namespace boxm_roi_init_rational_camera_process_globals;
   //static const parameters
-  static const vcl_string error = "error";
+  static const std::string error = "error";
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   // uncertainty (meters) -- SHOULD BE A PARAM
   float uncertainty=10.0;
   if ( !pro.parameters()->get_value(error, uncertainty) ) {
-    vcl_cout << pro.name() << ": error in retrieving parameters\n";
+    std::cout << pro.name() << ": error in retrieving parameters\n";
     return false;
   }
 
   // get the inputs:
   unsigned i = 0;
   // image
-  vcl_string image_path = pro.get_input<vcl_string>(i++);
+  std::string image_path = pro.get_input<std::string>(i++);
   // camera
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   //voxel_world
@@ -114,7 +114,7 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
   dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
 
   if (!rat_camera) {
-    vcl_cerr << "The camera input is not a rational camera\n";
+    std::cerr << "The camera input is not a rational camera\n";
     return false;
   }
 
@@ -126,7 +126,7 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
     boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
 
     if (!roi_init(image_path, rat_camera, s->get_world_bbox(),(s->lvcs()), uncertainty, img_ptr, local_camera)) {
-      vcl_cerr << "The process has failed!\n";
+      std::cerr << "The process has failed!\n";
       return false;
     }
 
@@ -143,14 +143,14 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
     pro.set_output_val<float>(j++, uncertainty);
   }
   else {
-    vcl_cout << "boxm_refine_scene_process: undefined APM type" << vcl_endl;
+    std::cout << "boxm_refine_scene_process: undefined APM type" << std::endl;
     return false;
   }
   return true;
 }
 
 //: roi_init function
-bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& image_path,
+bool boxm_roi_init_rational_camera_process_globals::roi_init(std::string const& image_path,
                                                              vpgl_rational_camera<double>* camera,
                                                              vgl_box_3d<double> box,
                                                              vpgl_lvcs lvcs,
@@ -160,10 +160,10 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
 {
   // read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
-  vcl_string format = img->file_format();
-  vcl_string prefix = format.substr(0,4);
+  std::string format = img->file_format();
+  std::string prefix = format.substr(0,4);
   if (prefix.compare("nitf") != 0) {
-    vcl_cerr << "boxm_roi_init_rational_camera_process::execute - The image should be an NITF\n";
+    std::cerr << "boxm_roi_init_rational_camera_process::execute - The image should be an NITF\n";
     return false;
   }
 
@@ -178,7 +178,7 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
   bb = broi.clip_to_image_bounds(bb);
 
   if (bb->width() <= 0 || bb->height() <= 0) {
-    vcl_cerr << "boxm_roi_init_rational_camera_process::roi_init()-- clipping box is out of image boundaries\n";
+    std::cerr << "boxm_roi_init_rational_camera_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
   }
 
@@ -187,7 +187,7 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
                                                      (unsigned int)bb->get_min_y(),
                                                      (unsigned int)bb->height());
   if (!roi) {
-    vcl_cerr << "boxm_roi_init_rational_camera_process::roi_init()-- clipping box is out of image boundaries\n";
+    std::cerr << "boxm_roi_init_rational_camera_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
   }
 
@@ -250,7 +250,7 @@ bool boxm_roi_init_rational_camera_process_globals::roi_init(vcl_string const& i
     *nitf_image_unsigned_char = vil_image_view<unsigned char>(roi);
   }
   else
-    vcl_cout << "boxm_roi_init_rational_camera_process - Unsupported Pixel Format = " << roi->pixel_format() << vcl_endl;
+    std::cout << "boxm_roi_init_rational_camera_process - Unsupported Pixel Format = " << roi->pixel_format() << std::endl;
 
   double u, v;
   camera->image_offset(u, v);
@@ -284,8 +284,8 @@ vgl_box_2d<double>*boxm_roi_init_rational_camera_process_globals::project_box( v
 
   // create a box with uncertainty
   vgl_box_3d<double> cam_box(center, 2*r, 2*r, 2*r, vgl_box_3d<double>::centre);
-  vcl_vector<vgl_point_3d<double> > cam_corners = boxm_utils::corners_of_box_3d(cam_box);
-  vcl_vector<vgl_point_3d<double> > box_corners = boxm_utils::corners_of_box_3d(box);
+  std::vector<vgl_point_3d<double> > cam_corners = boxm_utils::corners_of_box_3d(cam_box);
+  std::vector<vgl_point_3d<double> > box_corners = boxm_utils::corners_of_box_3d(box);
   vgl_box_2d<double>* roi = new vgl_box_2d<double>();
 
   double lon, lat, gz;

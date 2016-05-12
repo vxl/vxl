@@ -5,7 +5,9 @@
 // \author Tim Cootes
 // \brief Functions to compare sets of samples.
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 //: Return true if x1[i] significantly larger than x2[j]
 //  Essentially tests if on average a sample from x1 is larger than
@@ -25,5 +27,5 @@ double pdf1d_prop_larger(const double* x1, int n1, const double* x2, int n2);
 //  larger than a proportion p of those in x[j].
 //  Where there is ambiguity return smallest index.
 // \param x[i] pointer to data with n[i] elements
-int pdf1d_select_largest_samples(vcl_vector<const double*>& x, vcl_vector<int>& n, double p=0.6);
+int pdf1d_select_largest_samples(std::vector<const double*>& x, std::vector<int>& n, double p=0.6);
 #endif // pdf1d_compare_samples_h

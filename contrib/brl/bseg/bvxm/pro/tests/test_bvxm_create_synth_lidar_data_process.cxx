@@ -1,7 +1,8 @@
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -24,7 +25,7 @@ static void test_bvxm_create_synth_lidar_data_process()
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateSynthLidarDataProcess");
-  good = bprb_batch_process_manager::instance()->set_params("synth_test_params.xml");
+  good = good && bprb_batch_process_manager::instance()->set_params("synth_test_params.xml");
   good = good && bprb_batch_process_manager::instance()->run_process();
   TEST("run generate synthetic lidar data process should be successful", good, true);
 
@@ -37,31 +38,31 @@ static void test_bvxm_create_synth_lidar_data_process()
   brdb_query_aptr Q_cam = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
   brdb_selection_sptr S_cam = DATABASE->select("vpgl_camera_double_sptr_data", Q_cam);
   if (S_cam->size()!=1){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
   brdb_value_sptr value;
-  if (!S_cam->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S_cam->get_value(std::string("value"), value)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  bool non_null = (value != 0);
+  bool non_null = (value != VXL_NULLPTR);
   TEST("camera output non-null", non_null, true);
 
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
   if (S_img->size()!=1){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
   brdb_value_sptr value_img;
-  if (!S_img->get_value(vcl_string("value"), value_img)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S_img->get_value(std::string("value"), value_img)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  non_null = (value_img != 0);
+  non_null = (value_img != VXL_NULLPTR);
   TEST("image output non-null", non_null, true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =

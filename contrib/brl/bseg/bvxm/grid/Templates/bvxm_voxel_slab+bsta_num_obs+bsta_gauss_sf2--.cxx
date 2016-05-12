@@ -1,4 +1,4 @@
-#include <bvxm/grid/bvxm_voxel_slab.txx>
+#include <bvxm/grid/bvxm_voxel_slab.hxx>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf2.h>
 

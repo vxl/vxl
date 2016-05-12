@@ -1,3 +1,6 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "boxm_utils.h"
 //:
 // \file
@@ -12,8 +15,7 @@
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
                             vpgl_camera_double_sptr const& camera,
@@ -82,10 +84,10 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
 //     O-----X
 //
 // \endverbatim
-vcl_vector<vgl_point_3d<double> >
+std::vector<vgl_point_3d<double> >
 boxm_utils::corners_of_box_3d(vgl_box_3d<double> const& box)
 {
-  vcl_vector<vgl_point_3d<double> > corners;
+  std::vector<vgl_point_3d<double> > corners;
 
   corners.push_back(box.min_point());
   corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.min_z()));
@@ -99,7 +101,7 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> const& box)
 }
 
 void
-boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
+boxm_utils::project_corners(std::vector<vgl_point_3d<double> > const& corners,
                             vpgl_camera_double_sptr camera,
                             double* xverts, double* yverts)
 {
@@ -108,7 +110,7 @@ boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
 }
 
 void
-boxm_utils::project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
+boxm_utils::project_corners(std::vector<vgl_point_3d<double> > const& corners,
                             vpgl_camera_double_sptr camera,
                             double* xverts, double* yverts,
                             float* vertdist)
@@ -147,11 +149,11 @@ bool boxm_utils::is_face_visible(double * xverts, double *yverts,
 }
 
 //: corners of the input face: visible?
-bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
+bool boxm_utils::is_face_visible(std::vector<vgl_point_3d<double> > &face,
                                  vpgl_camera_double_sptr const& camera)
 {
   assert(face.size() >= 3);
-  vcl_vector<vgl_point_2d<double> > vs;
+  std::vector<vgl_point_2d<double> > vs;
 
   for (unsigned i=0; i<face.size(); ++i) {
     double u,v;
@@ -163,15 +165,15 @@ bool boxm_utils::is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
   vgl_vector_2d<double> v1 = vs[2] - vs[1];
   double normal = cross_product<double>(v0,v1);
   //if (normal>-1e-4 && normal<0.0)
-  //    vcl_cout<<"+";
+  //    std::cout<<"+";
   return normal < -1e-5;
 }
 
-vcl_vector<vgl_point_2d<double> >
-boxm_utils::project_face(vcl_vector<vgl_point_3d<double> > &face,
+std::vector<vgl_point_2d<double> >
+boxm_utils::project_face(std::vector<vgl_point_3d<double> > &face,
                          vpgl_camera_double_sptr const& camera)
 {
-  vcl_vector<vgl_point_2d<double> > vs;
+  std::vector<vgl_point_2d<double> > vs;
 
   for (unsigned i=0; i<face.size(); ++i) {
     double u,v;
@@ -213,51 +215,51 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
   //else
   {
     // fix the face normals so that the vertices are in counter-clockwise order
-    vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
+    std::map<boct_face_idx, std::vector<vgl_point_3d<double> > > faces;
     faces_of_box_3d(bbox, faces);
 
     if (is_face_visible(faces.find(Z_LOW)->second, camera)) {
       face_idx |= Z_LOW;
 #ifdef DEBUG
-      vcl_cout << "Z_LOW " ;
+      std::cout << "Z_LOW " ;
 #endif
     }
     if (is_face_visible(faces.find(Z_HIGH)->second, camera)) {
       face_idx |= Z_HIGH;
 #ifdef DEBUG
-      vcl_cout << "Z_HIGH " ;
+      std::cout << "Z_HIGH " ;
 #endif
     }
     if (is_face_visible(faces.find(X_LOW)->second, camera)) {
       face_idx |= X_LOW;
 #ifdef DEBUG
-      vcl_cout << "X_LOW " ;
+      std::cout << "X_LOW " ;
 #endif
     }
 
     if (is_face_visible(faces.find(X_HIGH)->second, camera)) {
       face_idx |= X_HIGH;
 #ifdef DEBUG
-      vcl_cout << "X_HIGH " ;
+      std::cout << "X_HIGH " ;
 #endif
     }
 
     if (is_face_visible(faces.find(Y_LOW)->second, camera)) {
       face_idx |= Y_LOW;
 #ifdef DEBUG
-      vcl_cout << "Y_LOW " ;
+      std::cout << "Y_LOW " ;
 #endif
     }
 
     if (is_face_visible(faces.find(Y_HIGH)->second, camera)) {
       face_idx |= Y_HIGH;
 #ifdef DEBUG
-      vcl_cout << "Y_HIGH " ;
+      std::cout << "Y_HIGH " ;
 #endif
     }
   }
 #ifdef DEBUG
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 #endif
 
   return face_idx;
@@ -299,52 +301,52 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& /*bbox*/, // FIXME: currentl
   {
     // fix the face normals so that the vertices are the counter clockwise order
 #if 0
-    vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
+    std::map<boct_face_idx, std::vector<vgl_point_3d<double> > > faces;
     faces_of_box_3d(bbox, faces);
     project_corners(bbox,camera,xverts,yverts);
 #endif // 0
     if (is_face_visible(xverts,yverts,1,0,3,2)) {
       face_idx |= Z_LOW;
 #ifdef DEBUG
-      vcl_cout << "Z_LOW " ;
+      std::cout << "Z_LOW " ;
 #endif
     }
     if (is_face_visible(xverts,yverts,4,5,6,7)) {
       face_idx |= Z_HIGH;
 #ifdef DEBUG
-      vcl_cout << "Z_HIGH " ;
+      std::cout << "Z_HIGH " ;
 #endif
     }
     if (is_face_visible(xverts,yverts,7,3,0,4)) {
       face_idx |= X_LOW;
 #ifdef DEBUG
-      vcl_cout << "X_LOW " ;
+      std::cout << "X_LOW " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,1,2,6,5)) {
       face_idx |= X_HIGH;
 #ifdef DEBUG
-      vcl_cout << "X_HIGH " ;
+      std::cout << "X_HIGH " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,0,1,5,4)) {
       face_idx |= Y_LOW;
 #ifdef DEBUG
-      vcl_cout << "Y_LOW " ;
+      std::cout << "Y_LOW " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,2,3,7,6)) {
       face_idx |= Y_HIGH;
 #ifdef DEBUG
-      vcl_cout << "Y_HIGH " ;
+      std::cout << "Y_HIGH " ;
 #endif
     }
   }
 #ifdef DEBUG
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 #endif
 
   return face_idx;
@@ -383,7 +385,7 @@ boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_doubl
   {
     // fix the face normals so that the vertices are the counter clockwise order
 #if 0
-    vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > faces;
+    std::map<boct_face_idx, std::vector<vgl_point_3d<double> > > faces;
     faces_of_box_3d(bbox, faces);
     double * xverts; double *yverts;
     project_corners(bbox,camera,xverts,yverts);
@@ -391,45 +393,45 @@ boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_doubl
     if (is_face_visible(xverts,yverts,1,0,3,2)) {
       face_idx |= Z_LOW;
 #ifdef DEBUG
-      vcl_cout << "Z_LOW " ;
+      std::cout << "Z_LOW " ;
 #endif
     }
     if (is_face_visible(xverts,yverts,4,5,6,7)) {
       face_idx |= Z_HIGH;
 #ifdef DEBUG
-      vcl_cout << "Z_HIGH " ;
+      std::cout << "Z_HIGH " ;
 #endif
     }
     if (is_face_visible(xverts,yverts,7,3,0,4)) {
       face_idx |= X_LOW;
 #ifdef DEBUG
-      vcl_cout << "X_LOW " ;
+      std::cout << "X_LOW " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,1,2,6,5)) {
       face_idx |= X_HIGH;
 #ifdef DEBUG
-      vcl_cout << "X_HIGH " ;
+      std::cout << "X_HIGH " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,0,1,5,4)) {
       face_idx |= Y_LOW;
 #ifdef DEBUG
-      vcl_cout << "Y_LOW " ;
+      std::cout << "Y_LOW " ;
 #endif
     }
 
     if (is_face_visible(xverts,yverts,2,3,7,6)) {
       face_idx |= Y_HIGH;
 #ifdef DEBUG
-      vcl_cout << "Y_HIGH " ;
+      std::cout << "Y_HIGH " ;
 #endif
     }
   }
 #ifdef DEBUG
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 #endif
 
   return face_idx;
@@ -437,12 +439,12 @@ boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_doubl
 
 //: returns the faces of a box, the vertices are ordered in the normal direction
 void boxm_utils::faces_of_box_3d(vgl_box_3d<double> const& bbox,
-                                 vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >& faces)
+                                 std::map<boct_face_idx, std::vector<vgl_point_3d<double> > >& faces)
 {
-  vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
+  std::vector<vgl_point_3d<double> > corners=corners_of_box_3d(bbox);
 
   // face bottom [1,0,3,2]
-  vcl_vector<vgl_point_3d<double> > face_corners;
+  std::vector<vgl_point_3d<double> > face_corners;
   face_corners.push_back(corners[1]);
   face_corners.push_back(corners[0]);
   face_corners.push_back(corners[3]);
@@ -488,7 +490,7 @@ void boxm_utils::faces_of_box_3d(vgl_box_3d<double> const& bbox,
 //: returns the union of the projected faces of a polygon
 void boxm_utils::project_cube(vgl_box_3d<double> &bbox,
                               vpgl_camera_double_sptr camera,
-                              vcl_map<boct_face_idx, vcl_vector< vgl_point_3d<double> > > & faces,
+                              std::map<boct_face_idx, std::vector< vgl_point_3d<double> > > & faces,
                               boct_face_idx & vis_face_ids)
 {
   faces_of_box_3d(bbox, faces);
@@ -538,8 +540,8 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,poly_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
@@ -564,8 +566,8 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,poly_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),poly_it.endx());
 
     double start_val=0;
     double end_val=0;
@@ -604,8 +606,8 @@ void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,poly_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       img(x,yu,img_plane_num) = val;
@@ -613,7 +615,7 @@ void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
       img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
       img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
       if (poly_it.pix_coverage(x)>1)
-        vcl_cout<<"ERROR ALERT "<<poly_it.pix_coverage(x)<<vcl_endl;
+        std::cout<<"ERROR ALERT "<<poly_it.pix_coverage(x)<<std::endl;
       assert(poly_it.pix_coverage(x)>1);
 #endif // 0
     }
@@ -644,8 +646,8 @@ void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,poly_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       //img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*val);
@@ -676,8 +678,8 @@ void boxm_utils::quad_mean(boxm_quad_scan_iterator &poly_it,
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,poly_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       val+=poly_it.pix_coverage(x)*img(x,yu) ;
@@ -708,8 +710,8 @@ void boxm_utils::quad_weighted_mean(boxm_quad_scan_iterator &poly_it,
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,poly_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       numerator+=poly_it.pix_coverage(x)*img(x,yu)*weighted_img(x,yu);
@@ -740,8 +742,8 @@ void boxm_utils::quad_sum(boxm_quad_scan_iterator &poly_it,
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,poly_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),poly_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,poly_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       val+=(poly_it.pix_coverage(x)*img(x,yu)) ;
@@ -750,17 +752,17 @@ void boxm_utils::quad_sum(boxm_quad_scan_iterator &poly_it,
   return;
 }
 
-bool boxm_utils::project_cube_xyz( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
+bool boxm_utils::project_cube_xyz( std::map<boct_face_idx,std::vector< vgl_point_3d<double> > > & faces,
                                    boct_face_idx & vis_face_ids,
                                    vil_image_view<float> &front_xyz,
                                    vil_image_view<float> &back_xyz,
                                    vpgl_camera_double_sptr cam)
 {
-  vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
+  std::map<boct_face_idx, std::vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
   for (; face_it!=faces.end(); ++face_it)
   {
-    vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
-    vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
+    std::vector<vgl_point_3d<double> > face_corners=face_it->second;
+    std::vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
 
     double xs[]={face_projected[0].x(),face_projected[1].x(),face_projected[2].x(),face_projected[3].x()};
     double ys[]={face_projected[0].y(),face_projected[1].y(),face_projected[2].y(),face_projected[3].y()};
@@ -786,7 +788,7 @@ bool boxm_utils::project_cube_xyz( vcl_map<boct_face_idx,vcl_vector< vgl_point_3
 }
 
 
-bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
+bool boxm_utils::project_cube_xyz(std::vector< vgl_point_3d<double> > & corners,
                                   boct_face_idx & vis_face_ids,
                                   vil_image_view<float> &front_xyz,
                                   vil_image_view<float> &back_xyz,
@@ -797,7 +799,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
     double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
     double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
 #if 0
-    vcl_vector<vgl_point_2d<double> > face_polygon(4);
+    std::vector<vgl_point_2d<double> > face_polygon(4);
     for (unsigned i=0;i<4;++i)
       face_polygon.push_back(vgl_point_2d<double>(xs[i],ys[i]));
 #endif // 0
@@ -927,7 +929,7 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
 }
 
 
-bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & /*corners*/,
+bool boxm_utils::project_cube_xyz(std::vector< vgl_point_3d<double> > & /*corners*/,
                                   boct_face_idx & vis_face_ids,
                                   vil_image_view<float> &front_xyz,
                                   vil_image_view<float> &back_xyz,
@@ -997,16 +999,16 @@ bool boxm_utils::project_cube_xyz(vcl_vector< vgl_point_3d<double> > & /*corners
 
 
 #if 0
-bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
+bool boxm_utils::project_cube_fill_val( std::map<boct_face_idx,std::vector< vgl_point_3d<double> > > & faces,
                                         boct_face_idx & vis_face_ids,
                                         vil_image_view<float> &fill_img,
                                         float val, vpgl_camera_double_sptr cam)
 {
-  for (vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
+  for (std::map<boct_face_idx, std::vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
        face_it!=faces.end(); ++face_it)
   {
-    vcl_vector<vgl_point_3d<double> > face_corners=face_it->second;
-    vcl_vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
+    std::vector<vgl_point_3d<double> > face_corners=face_it->second;
+    std::vector<vgl_point_2d<double> > face_projected=project_face(face_corners,cam);
     vgl_polygon<double> face_polygon(face_projected);
     double xs[]={xverts[1],xverts[0],xverts[3],xverts[2]};
     double ys[]={yverts[1],yverts[0],yverts[3],yverts[2]};
@@ -1017,7 +1019,7 @@ bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_po
   }
 }
 #else
-bool boxm_utils::project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > &,
+bool boxm_utils::project_cube_fill_val( std::map<boct_face_idx,std::vector< vgl_point_3d<double> > > &,
                                         boct_face_idx &, vil_image_view<float> &, float, vpgl_camera_double_sptr)
 { return false; }
 #endif // 0
@@ -1455,7 +1457,7 @@ double boxm_utils::max_point_to_box_dist(vgl_box_3d<double> box,vgl_point_3d<dou
 {
   double dist_max=0;
 
-  vcl_vector<vgl_point_3d<double> > corners=corners_of_box_3d(box);
+  std::vector<vgl_point_3d<double> > corners=corners_of_box_3d(box);
   for (unsigned i=0;i<corners.size();i++)
   {
     if (dist_max<(corners[i]-pt).length())

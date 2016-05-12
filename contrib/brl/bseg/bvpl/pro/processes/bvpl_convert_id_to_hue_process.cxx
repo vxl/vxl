@@ -1,4 +1,6 @@
 // This is brl/bseg/bvpl/pro/processes/bvpl_convert_id_to_hue_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,7 +13,7 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
@@ -31,7 +33,7 @@ bool bvpl_convert_id_to_hue_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_convert_id_to_hue_process_globals;
   //This process has no inputs nor outputs only parameters
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //the input id grid
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //the input response grid
@@ -41,7 +43,7 @@ bool bvpl_convert_id_to_hue_process_cons(bprb_func_process& pro)
 
   if (!pro.set_input_types(input_types_))
     return false;
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   i=0;
   output_types_[i++]="bvxm_voxel_grid_base_sptr"; //the output grid
   if (!pro.set_output_types(output_types_))
@@ -58,19 +60,19 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.input_types().size() != n_inputs_)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << n_inputs_ << std::endl;
     return false;
   }
 
   bvxm_voxel_grid_base_sptr id_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
   bvxm_voxel_grid_base_sptr response_base = pro.get_input<bvxm_voxel_grid_base_sptr>(1);
   bvpl_kernel_vector_sptr kernel_vector = pro.get_input<bvpl_kernel_vector_sptr>(2);
-  vcl_string output_world_dir = pro.get_input<vcl_string>(3);
-  vcl_string map_output_file = pro.get_input<vcl_string>(4);
+  std::string output_world_dir = pro.get_input<std::string>(3);
+  std::string map_output_file = pro.get_input<std::string>(4);
 
 
   if ((!id_base.ptr()) ||(!response_base.ptr())) {
-    vcl_cerr << "In bvpl_convert_id_to_hue_process -- one of the input grids is not valid!\n";
+    std::cerr << "In bvpl_convert_id_to_hue_process -- one of the input grids is not valid!\n";
     return false;
   }
   if (bvxm_voxel_grid<int> *id_grid = dynamic_cast< bvxm_voxel_grid<int >* >(id_base.ptr()))
@@ -79,7 +81,7 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
     {
       //assign hue values evenly dristributed on the color wheel
       //the wheel starts and ends on red, so we don't want to get back to the end
-      vcl_vector<float> colors;
+      std::vector<float> colors;
       float hue = 0.0f;
 #if 0
       colors.push_back(0.0f);
@@ -101,7 +103,7 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
     {
       //assign hue values evenly dristributed on the color wheel
       //the wheel starts and ends on red, so we don't want to get back to the end
-      vcl_vector<float> colors;
+      std::vector<float> colors;
       float hue = 0.0f;
       for ( unsigned i = 0; i < kernel_vector->kernels_.size(); ++i){
         colors.push_back(hue);
@@ -114,6 +116,6 @@ bool bvpl_convert_id_to_hue_process(bprb_func_process& pro)
       return true;
     }
   }
-  vcl_cerr << "datatype not supported\n";
+  std::cerr << "datatype not supported\n";
   return false;
 }

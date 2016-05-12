@@ -7,25 +7,25 @@
 # and then edit /etc/environment to contain the following:
 # CLASSPATH=$CLASSPATH:$TMP
 #  e.g. echo $CLASSPATH >> /etc/environment
-# 
+#
 #
 
-ADD_EXECUTABLE( bhdfs_test_all
+add_executable( bhdfs_test_all
   test_driver.cxx
-  test_hadoop.cxx  # start hadoop and run this test to see if hadoop and vxl are hookep fine. 
+  test_hadoop.cxx  # start hadoop and run this test to see if hadoop and vxl are hookep fine.
   test_manager.cxx
   test_fstream.cxx
   test_vil_stream.cxx
   test_vil_save_load_image.cxx
 )
 
-TARGET_LINK_LIBRARIES( bhdfs_test_all bhdfs vil testlib )
+target_link_libraries( bhdfs_test_all bhdfs ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}testlib )
 
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_manager )
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_fstream )
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_vil_stream )
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_vil_save_load_image )
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_hadoop )
+add_test( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_manager )
+add_test( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_fstream )
+add_test( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_vil_stream )
+add_test( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_vil_save_load_image )
+add_test( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_hadoop )
 
-ADD_EXECUTABLE( bhdfs_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bhdfs_test_include bhdfs )
+add_executable( bhdfs_test_include test_include.cxx )
+target_link_libraries( bhdfs_test_include bhdfs )

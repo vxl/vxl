@@ -5,12 +5,13 @@
 
 //=======================================================================
 
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "clsfy_simple_adaboost.h"
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
@@ -80,9 +81,9 @@ bool clsfy_simple_adaboost::operator==(const clsfy_simple_adaboost& x) const
 
 //: Set parameters.  Clones taken of *classifier[i]
 void clsfy_simple_adaboost::set_parameters(
-                      const vcl_vector<clsfy_classifier_1d*>& classifier,
-                      const vcl_vector<double>& alphas,
-                      const vcl_vector<int>& index)
+                      const std::vector<clsfy_classifier_1d*>& classifier,
+                      const std::vector<double>& alphas,
+                      const std::vector<int>& index)
 {
   delete_stuff();
 
@@ -120,8 +121,8 @@ void clsfy_simple_adaboost::add_classifier(clsfy_classifier_1d* c1d,
 // Returns either 1 (for positive class) or 0 (for negative class)
 unsigned clsfy_simple_adaboost::classify(const vnl_vector<double> &v) const
 {
-  //vcl_cout<<"alphas_.size()= "<<alphas_.size()<<vcl_endl;
-  //vcl_cout<<"n_clfrs_used_= "<<n_clfrs_used_<<vcl_endl;
+  //std::cout<<"alphas_.size()= "<<alphas_.size()<<std::endl;
+  //std::cout<<"n_clfrs_used_= "<<n_clfrs_used_<<std::endl;
   assert ( n_clfrs_used_ >= 0);
   assert ( (unsigned)n_clfrs_used_ <= alphas_.size() );
   assert ( n_dims_ >= 0);
@@ -131,7 +132,7 @@ unsigned clsfy_simple_adaboost::classify(const vnl_vector<double> &v) const
   double sum1 = 0.0, sum2 =0.0;
   for (int i=0;i<n_clfrs_used_;++i)
   {
-    //vcl_cout<<"index_["<<i<<"]= "<<index_[i]<<vcl_endl;
+    //std::cout<<"index_["<<i<<"]= "<<index_[i]<<std::endl;
     sum1 += alphas_[i]*classifier_1d_[i]->classify(v[ index_[i] ]);
     sum2 += alphas_[i];
   }
@@ -144,11 +145,11 @@ unsigned clsfy_simple_adaboost::classify(const vnl_vector<double> &v) const
 
 //: Find the posterior probability of the input being in the positive class.
 // The result is outputs(0)
-void clsfy_simple_adaboost::class_probabilities(vcl_vector<double> &outputs,
+void clsfy_simple_adaboost::class_probabilities(std::vector<double> &outputs,
   const vnl_vector<double> &input) const
 {
   outputs.resize(1);
-  outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));
+  outputs[0] = 1.0 / (1.0 + std::exp(-log_l(input)));
 }
 
 //=======================================================================
@@ -173,14 +174,14 @@ double clsfy_simple_adaboost::log_l(const vnl_vector<double> &v) const
 
 //=======================================================================
 
-vcl_string clsfy_simple_adaboost::is_a() const
+std::string clsfy_simple_adaboost::is_a() const
 {
-  return vcl_string("clsfy_simple_adaboost");
+  return std::string("clsfy_simple_adaboost");
 }
 
 //=======================================================================
 
-bool clsfy_simple_adaboost::is_class(vcl_string const& s) const
+bool clsfy_simple_adaboost::is_class(std::string const& s) const
 {
   return s == clsfy_simple_adaboost::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -188,7 +189,7 @@ bool clsfy_simple_adaboost::is_class(vcl_string const& s) const
 //=======================================================================
 
 // required if data is present in this class
-void clsfy_simple_adaboost::print_summary(vcl_ostream& os) const
+void clsfy_simple_adaboost::print_summary(std::ostream& os) const
 {
   int n = alphas_.size();
   assert( alphas_.size() == index_.size() );
@@ -239,8 +240,8 @@ void clsfy_simple_adaboost::b_read(vsl_b_istream& bfs)
 
       break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_simple_adaboost::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: clsfy_simple_adaboost::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

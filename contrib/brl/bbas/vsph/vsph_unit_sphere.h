@@ -10,6 +10,11 @@
 //  Modifications
 //   2013/01/13 Initial version
 // \endverbatim
+#include <vector>
+#include <map>
+#include <set>
+#include <iostream>
+#include <iosfwd>
 #include "vsph_sph_point_2d.h"
 #include "vsph_sph_box_2d.h"
 #include "vsph_grid_index_2d.h"
@@ -18,10 +23,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_set.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class vsph_edge
 {
@@ -34,7 +36,7 @@ class vsph_edge
   short version() const { return 1;}
   void b_read(vsl_b_istream& is);
   void b_write(vsl_b_ostream& os) const;
-  void print(vcl_ostream& os) const { os << '(' << vs_ << ' ' << ve_ << ")\n"; }
+  void print(std::ostream& os) const { os << '(' << vs_ << ' ' << ve_ << ")\n"; }
   //: start vertex
   int vs_;
   //: end vertex
@@ -75,18 +77,18 @@ class vsph_unit_sphere : public vbl_ref_count
 
   //: spherical points
   // \returns a copy
-  vcl_vector<vsph_sph_point_2d> sph_points() const { return sph_pts_; }
+  std::vector<vsph_sph_point_2d> sph_points() const { return sph_pts_; }
   // \returns a const reference
-  const vcl_vector<vsph_sph_point_2d>& sph_points_ref() const { return sph_pts_; }
+  const std::vector<vsph_sph_point_2d>& sph_points_ref() const { return sph_pts_; }
 
   //: Cartesian unit vectors
   // \returns a copy
-  vcl_vector<vgl_vector_3d<double> > cart_vectors() const { return cart_pts_; }
+  std::vector<vgl_vector_3d<double> > cart_vectors() const { return cart_pts_; }
   // \returns a const reference
-  const vcl_vector<vgl_vector_3d<double> >& cart_vectors_ref() const { return cart_pts_; }
+  const std::vector<vgl_vector_3d<double> >& cart_vectors_ref() const { return cart_pts_; }
 
   //: get the triangle edges
-  vcl_vector<vsph_edge> edges() const {return edges_;}
+  std::vector<vsph_edge> edges() const {return edges_;}
 
   //: find the nearest neighbors (connected by a single edge traversal)
   void find_neighbors();
@@ -95,45 +97,45 @@ class vsph_unit_sphere : public vbl_ref_count
   bool neighbors_valid() const {return neighbors_valid_;}
 
   //: get the neighboring vertices based on triangle edges (hex neighborhood)
-  vcl_set<int> neighbors(int vert_id) const {return neighbors_[vert_id];}
+  std::set<int> neighbors(int vert_id) const {return neighbors_[vert_id];}
 
   //: the tangent plane at the specified point
   static vgl_plane_3d<double> tangent_plane(vsph_sph_point_2d const& sph);
 
   //: display the vertices in a vrml format
-  void display_vertices(vcl_string const & path) const;
+  void display_vertices(std::string const & path) const;
 
   //: display the edges in a vrml format
-  void display_edges(vcl_string const & path) const;
+  void display_edges(std::string const & path) const;
 
   //: display data values associated with spherical positions
-  void display_data(vcl_string const & path,
-                    vcl_vector<double> const& data,
+  void display_data(std::string const & path,
+                    std::vector<double> const& data,
                     vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
 
   //: display a color distribution on the unit sphere
-  void display_color(vcl_string const & path,
-                     vcl_vector<vcl_vector<float> > const& cdata,
-                     vcl_vector<float> const& skip_color =
-                     vcl_vector<float>(3, -1.0f),
+  void display_color(std::string const & path,
+                     std::vector<std::vector<float> > const& cdata,
+                     std::vector<float> const& skip_color =
+                     std::vector<float>(3, -1.0f),
                      vsph_sph_box_2d const& mask = vsph_sph_box_2d()) const;
 
   //: display a set of axis aligned boxes on the sphere
-  void display_boxes(vcl_string const & path,
-                     vcl_vector<vsph_sph_box_2d> const& boxes);
+  void display_boxes(std::string const & path,
+                     std::vector<vsph_sph_box_2d> const& boxes);
 
   //: Iterator over the set of spherical points
-  typedef vcl_vector<vsph_sph_point_2d>::iterator iterator;
+  typedef std::vector<vsph_sph_point_2d>::iterator iterator;
   iterator begin() { return sph_pts_.begin(); }
   iterator end() { return sph_pts_.end(); }
 
   //: Const Iterator
-  typedef vcl_vector<vsph_sph_point_2d>::const_iterator const_iterator;
+  typedef std::vector<vsph_sph_point_2d>::const_iterator const_iterator;
   const_iterator begin() const { const_iterator it=sph_pts_.begin(); return it; }
   const_iterator end() const   { const_iterator it=sph_pts_.end();   return it; }
   bool operator==(const vsph_unit_sphere &other) const;
 
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
   void b_read(vsl_b_istream& is);
 
@@ -157,11 +159,11 @@ class vsph_unit_sphere : public vbl_ref_count
   void insert_edge(vsph_edge const&  e);
 
   //: views are associated with an id, all the view centers are on the sphere (r) of the coordinate system
-  vcl_vector<vsph_sph_point_2d> sph_pts_;
-  vcl_vector<vgl_vector_3d<double> > cart_pts_;
-  vcl_vector<vsph_edge> edges_;
-  vcl_vector<int> equivalent_ids_;
-  vcl_vector<vcl_set<int> > neighbors_;
+  std::vector<vsph_sph_point_2d> sph_pts_;
+  std::vector<vgl_vector_3d<double> > cart_pts_;
+  std::vector<vsph_edge> edges_;
+  std::vector<int> equivalent_ids_;
+  std::vector<std::set<int> > neighbors_;
   vsph_grid_index_2d index_;
  private:
   bool neighbors_valid_;
@@ -170,7 +172,7 @@ class vsph_unit_sphere : public vbl_ref_count
   double min_theta_;
   double max_theta_;
   //: returns true if all the angles between vertices of a triangle are smaller than \a angle.
-  bool min_angle(vcl_vector<vgl_vector_3d<double> > list, double angle_rad);
+  bool min_angle(std::vector<vgl_vector_3d<double> > list, double angle_rad);
 };
 
 #include "vsph_unit_sphere_sptr.h"
@@ -179,13 +181,13 @@ void vsl_b_read(vsl_b_istream& is, vsph_edge& e);
 
 void vsl_b_write(vsl_b_ostream& os, vsph_edge const& e);
 
-void vsl_print_summary(vcl_ostream& os, vsph_edge const& e);
+void vsl_print_summary(std::ostream& os, vsph_edge const& e);
 
 void vsl_b_read(vsl_b_istream& is, vsph_unit_sphere& usph);
 
 void vsl_b_write(vsl_b_ostream& os, vsph_unit_sphere const& usph);
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_unit_sphere const& usph);
+std::ostream& operator<<(std::ostream& os, vsph_unit_sphere const& usph);
 
 void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere const* usph_ptr);
 

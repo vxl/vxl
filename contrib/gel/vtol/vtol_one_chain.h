@@ -32,8 +32,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_chain.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
@@ -71,7 +73,7 @@ class vtol_one_chain : public vtol_chain
   //: Constructor from an array of edges and an array of directions
   //---------------------------------------------------------------------------
   vtol_one_chain(edge_list const&,
-                 vcl_vector<signed char> const&,
+                 std::vector<signed char> const&,
                  bool new_is_cycle=false);
 
   //---------------------------------------------------------------------------
@@ -96,10 +98,10 @@ class vtol_one_chain : public vtol_chain
   virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_one_chain"); }
+  virtual std::string is_a() const { return std::string("vtol_one_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const
+  virtual bool is_class(const std::string& cls) const
   { return cls==is_a() || vtol_chain::is_class(cls); }
 
   // Access methods
@@ -188,27 +190,27 @@ class vtol_one_chain : public vtol_chain
   inline bool operator!=(const vtol_one_chain &other)const{return !operator==(other);}
   bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe_directions(vcl_ostream &strm=vcl_cout, int blanking=0) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  virtual void print(std::ostream &strm=std::cout) const;
+  virtual void describe_directions(std::ostream &strm=std::cout, int blanking=0) const;
+  virtual void describe(std::ostream &strm=std::cout, int blanking=0) const;
 
  protected:
   // \warning clients should not use these methods
   // The returned pointers must be deleted after use.
 
-  virtual vcl_vector<vtol_vertex*> *compute_vertices();
-  virtual vcl_vector<vtol_edge*> *compute_edges();
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
-  virtual vcl_vector<vtol_face*> *compute_faces();
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
-  virtual vcl_vector<vtol_block*> *compute_blocks();
+  virtual std::vector<vtol_vertex*> *compute_vertices();
+  virtual std::vector<vtol_edge*> *compute_edges();
+  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual std::vector<vtol_one_chain*> *compute_one_chains();
+  virtual std::vector<vtol_face*> *compute_faces();
+  virtual std::vector<vtol_two_chain*> *compute_two_chains();
+  virtual std::vector<vtol_block*> *compute_blocks();
 
  public:
-  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices();
-  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
-  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges();
-  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains();
+  virtual std::vector<vtol_vertex*> *outside_boundary_compute_vertices();
+  virtual std::vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
+  virtual std::vector<vtol_edge*> *outside_boundary_compute_edges();
+  virtual std::vector<vtol_one_chain*> *outside_boundary_compute_one_chains();
 };
 
 #endif // vtol_one_chain_h_

@@ -6,9 +6,11 @@
 // \author Charlene Tsai
 // \date April 2004
 
+#include <iostream>
+#include <map>
 #include <vbl/vbl_ref_count.h>
 
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 #include "rgrl_command_sptr.h"
 #include "rgrl_event_sptr.h"
@@ -60,10 +62,10 @@ class rgrl_object
   //:
   virtual ~rgrl_object();
 
-  static const vcl_type_info& type_id()
+  static const std::type_info& type_id()
   { return typeid(rgrl_object); }
 
-  virtual bool is_type( const vcl_type_info& type ) const
+  virtual bool is_type( const std::type_info& type ) const
   { return (typeid(rgrl_object) == type)!=0; }
 
   //: Set the value of the debug flag. A non-zero value turns debugging on.
@@ -116,7 +118,7 @@ class rgrl_object
   mutable bool warning_;
 
   // For event handling
-  typedef vcl_map< unsigned, rgrl_object_observer > observer_map;
+  typedef std::map< unsigned, rgrl_object_observer > observer_map;
   observer_map observers_;
   unsigned int observer_count_;
 };

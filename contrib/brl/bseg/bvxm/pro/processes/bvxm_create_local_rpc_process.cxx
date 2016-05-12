@@ -13,7 +13,7 @@ bool bvxm_create_local_rpc_process_cons(bprb_func_process& pro)
   // process takes 2 inputs:
   //input[0]: The voxel world
   //input[1]: The current camera
-  vcl_vector<vcl_string>  input_types_(n_inputs_);
+  std::vector<std::string>  input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   if (!pro.set_input_types(input_types_))
@@ -21,7 +21,7 @@ bool bvxm_create_local_rpc_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: The local camera
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";
 
   return pro.set_output_types(output_types_);
@@ -35,7 +35,7 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
+    std::cout << pro.name() <<" : The input number should be "<< n_inputs_ << std::endl;
     return false;
   }
 
@@ -48,18 +48,18 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
   //check input's validity
   i = 0;
   if (!vox_world) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if (!camera_inp) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   vpgl_rational_camera<double> *cam_inp;
   if (!(cam_inp = dynamic_cast<vpgl_rational_camera<double>*>(camera_inp.ptr()))) {
-    vcl_cerr << "error: process expects camera to be a vpgl_rational_camera.\n";
+    std::cerr << "error: process expects camera to be a vpgl_rational_camera.\n";
     return false;
   }
 
@@ -69,7 +69,7 @@ bool bvxm_create_local_rpc_process(bprb_func_process& pro)
 
   //Set and Store outputs
   int j = 0;
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
 
   // updated camera
   pro.set_output_val<vpgl_camera_double_sptr>(j++, (new vpgl_local_rational_camera<double>(cam_out)));

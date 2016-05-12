@@ -3,14 +3,16 @@
 // \brief Tool to build a shape model from data in files.
 // \author Tim Cootes
 
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
 
 #include <msm/msm_shape_model_builder.h>
@@ -22,6 +24,10 @@ Parameter file format:
 <START FILE>
 //: Aligner for shape model
 aligner: msm_similarity_aligner
+
+//: Define how to align mean shape in reference frame
+// Options: { first_shape, mean_pose }
+ref_pose_source: first_shape
 
 //: Object to apply limits to parameters
 param_limiter: msm_ellipsoid_limiter { accept_prop: 0.98 }
@@ -47,9 +53,9 @@ images: {
 
 void print_usage()
 {
-  vcl_cout << "msm_build_shape_model -p param_file\n"
+  std::cout << "msm_build_shape_model -p param_file\n"
            << "Builds the shape model from the supplied data.\n"
-           << vcl_endl;
+           << std::endl;
 
   vul_arg_display_usage_and_exit();
 }
@@ -58,10 +64,12 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  vcl_auto_ptr<msm_aligner> aligner;
+  std::auto_ptr<msm_aligner> aligner;
+
+  msm_aligner::ref_pose_source ref_pose_source;
 
   //: Object to apply limits to parameters
-  vcl_auto_ptr<msm_param_limiter> limiter;
+  std::auto_ptr<msm_param_limiter> limiter;
 
   //: Maximum number of shape modes
   unsigned max_modes;
@@ -70,33 +78,33 @@ struct tool_params
   double var_prop;
 
   //: Directory containing images
-  vcl_string image_dir;
+  std::string image_dir;
 
   //: Directory containing points
-  vcl_string points_dir;
+  std::string points_dir;
 
   //: File to save shape model to
-  vcl_string shape_model_path;
+  std::string shape_model_path;
 
   //: List of image names
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
 
   //: List of points file names
-  vcl_vector<vcl_string> points_names;
+  std::vector<std::string> points_names;
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void tool_params::read_from_file(const vcl_string& path)
+void tool_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -110,17 +118,28 @@ void tool_params::read_from_file(const vcl_string& path)
                                                "shape_aam.bfs");
 
   {
-    vcl_string aligner_str
+    std::string aligner_str
        = props.get_required_property("aligner");
-    vcl_stringstream ss(aligner_str);
+    std::stringstream ss(aligner_str);
     aligner = msm_aligner::create_from_stream(ss);
   }
 
+  std::string rps_str = props.get_optional_property("ref_pose_source","first_shape");
+  if (rps_str=="first_shape") ref_pose_source=msm_aligner::first_shape;
+  else
+  if (rps_str=="mean_pose") ref_pose_source=msm_aligner::mean_pose;
+  else
   {
-    vcl_string limiter_str
+    mbl_exception_parse_error x("Unknown ref_pose_source: "+rps_str);
+    mbl_exception_error(x);
+  }
+
+
+  {
+    std::string limiter_str
        = props.get_optional_property("param_limiter",
                                      "msm_ellipsoid_limiter { accept_prop: 0.98 }");
-    vcl_stringstream ss(limiter_str);
+    std::stringstream ss(limiter_str);
     limiter = msm_param_limiter::create_from_stream(ss);
   }
 
@@ -132,8 +151,8 @@ void tool_params::read_from_file(const vcl_string& path)
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> param_path("-p","Parameter filename");
-  vul_arg<vcl_string> mode_var_path("-vp","Path for output of mode variances");
+  vul_arg<std::string> param_path("-p","Parameter filename");
+  vul_arg<std::string> mode_var_path("-vp","Path for output of mode variances");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -151,7 +170,7 @@ int main(int argc, char** argv)
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<'\n';
+    std::cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
@@ -159,37 +178,38 @@ int main(int argc, char** argv)
   msm_shape_model shape_model;
 
   builder.set_aligner(*params.aligner);
+  builder.set_ref_pose_source(params.ref_pose_source);
   builder.set_param_limiter(*params.limiter);
   builder.set_mode_choice(0,params.max_modes,params.var_prop);
   builder.build_from_files(params.points_dir,
                            params.points_names,
                            shape_model);
 
-  vcl_cout<<"Built model: "<<shape_model<<vcl_endl;
+  std::cout<<"Built model: "<<shape_model<<std::endl;
 
   if (vsl_quick_file_save(shape_model,params.shape_model_path))
   {
-    vcl_cout<<"Saved shape model to "
-            <<params.shape_model_path<<vcl_endl;
+    std::cout<<"Saved shape model to "
+            <<params.shape_model_path<<std::endl;
   }
   else
   {
-    vcl_cerr<<"Failed to save to "<<params.shape_model_path<<'\n';
+    std::cerr<<"Failed to save to "<<params.shape_model_path<<'\n';
     return 3;
   }
 
   if (mode_var_path()!="")
   {
-    vcl_ofstream ofs(mode_var_path().c_str());
+    std::ofstream ofs(mode_var_path().c_str());
     if (!ofs)
     {
-      vcl_cerr<<"Failed to open "<<mode_var_path()<<" for output.\n";
+      std::cerr<<"Failed to open "<<mode_var_path()<<" for output.\n";
       return 4;
     }
     for (unsigned i=0;i<shape_model.n_modes();++i)
-      ofs<<shape_model.mode_var()[i]<<vcl_endl;
+      ofs<<shape_model.mode_var()[i]<<std::endl;
     ofs.close();
-    vcl_cout<<"Saved mode variances to "<<mode_var_path()<<vcl_endl;
+    std::cout<<"Saved mode variances to "<<mode_var_path()<<std::endl;
   }
 
   return 0;

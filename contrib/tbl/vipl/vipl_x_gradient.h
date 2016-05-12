@@ -55,7 +55,7 @@ class vipl_x_gradient : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelI
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_x_gradient.txx"
+#include "vipl_x_gradient.hxx"
 #endif
 
 #endif // vipl_x_gradient_h_

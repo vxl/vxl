@@ -15,7 +15,7 @@ HMatrix2DComputeMLESAC::HMatrix2DComputeMLESAC(double std)
 
 HMatrix2DComputeMLESAC::~HMatrix2DComputeMLESAC() {}
 
-double HMatrix2DComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count)
+double HMatrix2DComputeMLESAC::calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count)
 {
   double inthresh = 5.99*std_*std_;
   double sse = 0.0;
@@ -48,13 +48,13 @@ double HMatrix2DComputeMLESAC::calculate_residual(HomgPoint2D& one, HomgPoint2D&
   r[0] = HomgOperator2D::distance_squared(H->transform_to_plane2(one), two);
   r[1] = HomgOperator2D::distance_squared(H->transform_to_plane1(two), one);
 #ifdef DEBUG
-  vcl_cerr << "r[0] : " << r[0] << " r[1] : " << r[1] << vcl_endl;
+  std::cerr << "r[0] : " << r[0] << " r[1] : " << r[1] << std::endl;
 #endif
 #if 0
   vnl_double_2 p1 = one.get_double2();
   vnl_double_2 p2 = two.get_double2();
-  vcl_cerr << H->transform_to_plane2(one) << " : " << p2 << " : " << r[0] << vcl_endl
-           << H->transform_to_plane1(two) << " : " << p1 << " : " << r[1] << vcl_endl;
+  std::cerr << H->transform_to_plane2(one) << " : " << p2 << " : " << r[0] << std::endl
+           << H->transform_to_plane1(two) << " : " << p1 << " : " << r[1] << std::endl;
   if (r[0] < 100.0 && r[1] < 100.0)
   {
     vnl_double_3x3 const& mat = H->get_matrix();

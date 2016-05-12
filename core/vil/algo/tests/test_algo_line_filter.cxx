@@ -1,5 +1,6 @@
 // This is core/vil/algo/tests/test_algo_line_filter.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_line_filter.h>
 #include <vil/vil_image_view.h>
 #include <testlib/testlib_test.h>
@@ -11,29 +12,29 @@ static void print_out(unsigned int n,
                       const char* s2, vil_image_view<unsigned char> b,
                       const char* s3, vil_image_view<float> c)
 {
-  vcl_cout << '\n';
-  vcl_cout.width(n+5); vcl_cout << s1;
-  vcl_cout.width(n+5); vcl_cout << s2;
-  vcl_cout.width(n+5); vcl_cout << s3;
+  std::cout << '\n';
+  std::cout.width(n+5); std::cout << s1;
+  std::cout.width(n+5); std::cout << s2;
+  std::cout.width(n+5); std::cout << s3;
   for (unsigned int j=0; j<n; ++j)
   {
-    vcl_cout << "\n ";
-    vcl_cout.width(1);
-    for (unsigned int i=0; i<n; ++i) vcl_cout << (int)(a(i,j)*9.9/(white-black));
-    vcl_cout << "     ";
-    vcl_cout.width(1);
-    for (unsigned int i=0; i<n; ++i) vcl_cout << (int)b(i,j);
-    vcl_cout << "     ";
-    vcl_cout.width(1);
-    for (unsigned int i=0; i<n; ++i) vcl_cout << (int)(c(i,j)*9/(white-black)+0.5);
+    std::cout << "\n ";
+    std::cout.width(1);
+    for (unsigned int i=0; i<n; ++i) std::cout << (int)(a(i,j)*9.9/(white-black));
+    std::cout << "     ";
+    std::cout.width(1);
+    for (unsigned int i=0; i<n; ++i) std::cout << (int)b(i,j);
+    std::cout << "     ";
+    std::cout.width(1);
+    for (unsigned int i=0; i<n; ++i) std::cout << (int)(c(i,j)*9/(white-black)+0.5);
   }
-  vcl_cout << '\n';
-  vcl_cout.width(0);
+  std::cout << '\n';
+  std::cout.width(0);
 }
 
 static void test_line_filter_byte()
 {
-  vcl_cout << "********************************\n"
+  std::cout << "********************************\n"
            << " Testing vil_line_filter (byte)\n"
            << "********************************\n";
 
@@ -48,7 +49,7 @@ static void test_line_filter_byte()
   vil_image_view<unsigned char> line_dir;
   vil_image_view<float> line_str;
 
-  vcl_cout<<"----- light_lines_3x3() -------\n";
+  std::cout<<"----- light_lines_3x3() -------\n";
 
   filter.light_lines_3x3(line_dir,line_str,image);
 
@@ -98,7 +99,7 @@ static void test_line_filter_byte()
   TEST_NEAR("Reverse line str", line_str(5,4), white, 1e-4);
 
   // ======================= dark_lines_3x3 ================
-  vcl_cout<<"----- dark_lines_3x3() -------\n";
+  std::cout<<"----- dark_lines_3x3() -------\n";
 
   image.fill(white);
   for (unsigned int i=0;i<n;++i)
@@ -151,7 +152,7 @@ static void test_line_filter_byte()
   TEST_NEAR("Reverse line str", line_str(5,4), white, 1e-4);
 
   // ======================= light_lines_5x5 ================
-  vcl_cout<<"----- light_lines_5x5() -------\n";
+  std::cout<<"----- light_lines_5x5() -------\n";
 
   image.fill(black);
   for (unsigned int i=0;i<n;++i)
@@ -202,7 +203,7 @@ static void test_line_filter_byte()
   TEST_NEAR("Reverse line str", line_str(5,4), white, 1e-4);
 
   // ======================= dark_lines_5x5 ================
-  vcl_cout<<"----- dark_lines_5x5() -------\n";
+  std::cout<<"----- dark_lines_5x5() -------\n";
 
   image.fill(white);
   for (unsigned int i=0;i<n;++i)

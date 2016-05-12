@@ -2,12 +2,13 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <sstream>
+#include <iomanip>
+#include <iostream>
+#include <string>
 #include "vil_nitf2_tagged_record.h"
 
-#include <vcl_sstream.h>
-#include <vcl_iomanip.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_section.h>
@@ -45,14 +46,14 @@ vil_nitf2_string_formatter& vil_nitf2_tagged_record::s_tag_formatter()
   return tag_formatter;
 }
 
-vcl_string vil_nitf2_tagged_record::name() const
+std::string vil_nitf2_tagged_record::name() const
 {
-  vcl_string cetag;
+  std::string cetag;
   if ( m_tag_field->value(cetag) ) return cetag;
   else                             return "<Unknown>";
 }
 
-vcl_string vil_nitf2_tagged_record::pretty_name() const
+std::string vil_nitf2_tagged_record::pretty_name() const
 {
   if ( m_definition ) return m_definition->m_pretty_name;
   else                return "<unknown>";
@@ -66,7 +67,7 @@ vil_nitf2_tagged_record* vil_nitf2_tagged_record::create(vil_nitf2_istream& inpu
   }
   else {
     delete record;
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -75,17 +76,17 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   // Read TRE tag
   m_tag_field = vil_nitf2_scalar_field::read(input, &s_tag_definition());
   if (!m_tag_field) {
-    vcl_cerr << "Error reading extension tag at offset " << input.tell() << ".\n";
+    std::cerr << "Error reading extension tag at offset " << input.tell() << ".\n";
     // Can't continue reading file
     return false;
   }
-  vcl_string cetag;
+  std::string cetag;
   m_tag_field->value(cetag);
 
   // Read TRE data length
   m_length_field = vil_nitf2_scalar_field::read(input, &s_length_definition());
   if (!m_length_field) {
-    vcl_cerr << "Error reading extension length for tag " << cetag << ".\n";
+    std::cerr << "Error reading extension length for tag " << cetag << ".\n";
     // Can't continue reading file
     return false;
   }
@@ -96,10 +97,10 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
     vil_nitf2_tagged_record_definition::find(cetag);
 
   // ... if not, skip ahead to next record ...
-  if (record_definition == 0) {
+  if (record_definition == VXL_NULLPTR) {
     VIL_NITF2_LOG(log_info) << "Skipping unknown record " << cetag << ".\n";
     // Return whether I've found end of record
-    //input.seekg(ceLength, vcl_ios::cur);
+    //input.seekg(ceLength, std::ios::cur);
     input.seek(input.tell()+m_length);
     return input.ok();
   }
@@ -114,7 +115,7 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   vil_streampos expected_pos = record_data_start_pos;
   expected_pos += m_length;
   if (input.tell() != expected_pos) {
-    vcl_cerr << "vil_nitf2_tagged_record::read(): Read " << input.tell() - record_data_start_pos
+    std::cerr << "vil_nitf2_tagged_record::read(): Read " << input.tell() - record_data_start_pos
              << " bytes instead of " << m_length << " as expected in "<<cetag<<".\n";
     // Attempt to reposition input stream to end of record; return whether
     // successful
@@ -125,74 +126,74 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   return true;
 }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, int& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, int& out_value) const
 { return m_field_sequence->get_value(tag, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, double& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, double& out_value) const
 { return m_field_sequence->get_value(tag, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, char& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, char& out_value) const
 { return m_field_sequence->get_value(tag, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, void*& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
-
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vcl_string& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, void*& out_value) const
 { return m_field_sequence->get_value(tag, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_location*& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, std::string& out_value) const
 { return m_field_sequence->get_value(tag, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_date_time& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, vil_nitf2_location*& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(std::string tag, vil_nitf2_date_time& out_value) const
 { return m_field_sequence->get_value(tag, out_value); }
 
 #if VXL_HAS_INT_64
 // if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
 // and this function will be a duplicate of that get_value
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_long& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, vil_nitf2_long& out_value) const
 { return m_field_sequence->get_value(tag, out_value); }
 #endif
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, int& out_value) const
 { return m_field_sequence->get_value(tag, indexes, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, double& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, double& out_value) const
 { return m_field_sequence->get_value(tag, indexes, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, char& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, char& out_value) const
 { return m_field_sequence->get_value(tag, indexes, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, void*& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, void*& out_value) const
 { return m_field_sequence->get_value(tag, indexes, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_string& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, std::string& out_value) const
 { return m_field_sequence->get_value(tag, indexes, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const
 { return m_field_sequence->get_value(tag, indexes, out_value); }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const
 { return m_field_sequence->get_value(tag, indexes, out_value); }
 
 #if VXL_HAS_INT_64
 // if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
 // and this function will be a duplicate of that get_value
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const
+bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const
 { return m_field_sequence->get_value(tag, indexes, out_value); }
 #endif
 
 // Macro to define both overloads of get_values()
 #define VIL_NITF2_TAGGED_RECORD_GET_VALUES(T) \
-bool vil_nitf2_tagged_record::get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, \
-                                         vcl_vector<T>& out_values, bool clear_out_values) const \
+bool vil_nitf2_tagged_record::get_values(std::string tag, const vil_nitf2_index_vector& indexes, \
+                                         std::vector<T>& out_values, bool clear_out_values) const \
 { return m_field_sequence->get_values(tag, indexes, out_values, clear_out_values); } \
-bool vil_nitf2_tagged_record::get_values(vcl_string tag, vcl_vector<T>& out_values) const \
+bool vil_nitf2_tagged_record::get_values(std::string tag, std::vector<T>& out_values) const \
 { return m_field_sequence->get_values(tag, out_values); }
 
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(int);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(double);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(char);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(void*);
-VIL_NITF2_TAGGED_RECORD_GET_VALUES(vcl_string);
+VIL_NITF2_TAGGED_RECORD_GET_VALUES(std::string);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_location*);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_date_time);
 #if VXL_HAS_INT_64
@@ -201,7 +202,7 @@ VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_date_time);
 
 
 vil_nitf2_tagged_record::vil_nitf2_tagged_record()
-  : m_length_field(0), m_tag_field(0), m_length(0), m_definition(0), m_field_sequence(0)
+  : m_length_field(VXL_NULLPTR), m_tag_field(VXL_NULLPTR), m_length(0), m_definition(VXL_NULLPTR), m_field_sequence(VXL_NULLPTR)
 {}
 
 // TO DO: rewrite this method a sequence of unit tests!
@@ -238,9 +239,9 @@ bool vil_nitf2_tagged_record::test()
                             .value("W", "Wheeled")),
                   true))
    .field("TEST_NEG_COND", "Test False Condition", NITF_STR_BCSA(14), false,
-          0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 5))
+          VXL_NULLPTR, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 5))
    .field("TEST_POS_COND", "Test True Condition",  NITF_STR_BCSA(14), false,
-          0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 1))
+          VXL_NULLPTR, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 1))
    .field("CLASS",  "Security Classification",
           NITF_ENUM(1, vil_nitf2_enum_values()
             .value("T", "Top Secret")
@@ -248,20 +249,20 @@ bool vil_nitf2_tagged_record::test()
             .value("C", "Confindential")
             .value("R", "Restricted")
             .value("U", "Unclassified")),
-            true, 0, 0)
+            true, VXL_NULLPTR, VXL_NULLPTR)
    .field("CODEW", "Code Words",                  NITF_STR_BCSA(15), false,
-          0, new vil_nitf2_field_value_one_of<vcl_string>( "CLASS", "T" ) )
+          VXL_NULLPTR, new vil_nitf2_field_value_one_of<std::string>( "CLASS", "T" ) )
    .field("CWTEST", "Another Code Word Test",     NITF_STR_BCSA(15), false,
-          0, new vil_nitf2_field_value_one_of<vcl_string>( "CLASS", "U" ) )
+          VXL_NULLPTR, new vil_nitf2_field_value_one_of<std::string>( "CLASS", "U" ) )
    .field("NBANDS", "Number of bands",            NITF_INT(1), false,
-          0, 0 )
+          VXL_NULLPTR, VXL_NULLPTR )
    .field("XBANDS", "Large number of bands",      NITF_INT(2), false,
-          0, new vil_nitf2_field_value_one_of<int>("NBANDS",0))
+          VXL_NULLPTR, new vil_nitf2_field_value_one_of<int>("NBANDS",0))
    .repeat(new vil_nitf2_choose_field_value<int>("NBANDS", "XBANDS",
              new vil_nitf2_field_value_greater_than<int>("NBANDS", 0)),
              vil_nitf2_field_definitions()
      .field("BAND_LTR", "Band Description",       NITF_CHAR(), true,
-            0)
+            VXL_NULLPTR)
    )
    .field( "EXP_TEST", "Exponential format test",  NITF_EXP(6,1))
    // test nested repeats and functor references to tags within and
@@ -280,8 +281,8 @@ bool vil_nitf2_tagged_record::test()
            .field("D", "Test fixed repeat", NITF_INT(1))
    )
   .end();
-  // Create a test input vcl_string
-  vcl_string testFieldsStr =
+  // Create a test input std::string
+  std::string testFieldsStr =
     "02"                     // MTI_DP
     "003"                    // MTI_PACKET_ID
   //"19990908070605"         // DATIME
@@ -328,12 +329,12 @@ bool vil_nitf2_tagged_record::test()
     // test fixed repeat
     "7890"
   ;
-  vcl_stringstream test_stream;
+  std::stringstream test_stream;
   test_stream << test_tre_tag; // CETAG
-  test_stream << vcl_setw(5) << vcl_setfill('0') << testFieldsStr.length(); // CELENGTH
+  test_stream << std::setw(5) << std::setfill('0') << testFieldsStr.length(); // CELENGTH
   test_stream << testFieldsStr; // rest of fields
-  vcl_string read_string = test_stream.str();
-  // Write the test input vcl_string to a vil_stream
+  std::string read_string = test_stream.str();
+  // Write the test input std::string to a vil_stream
   vil_stream_core* vs = new vil_stream_core();
   vs->write(read_string.c_str(), read_string.length());
   vs->seek(0);
@@ -342,9 +343,9 @@ bool vil_nitf2_tagged_record::test()
   vil_nitf2_tagged_record* record = vil_nitf2_tagged_record::create(*vss);
   if (record)
   {
-    vcl_cerr << *record << '\n';
+    std::cerr << *record << '\n';
     // Now write the record, and compare the output to the test input
-    vcl_cerr << "\nOriginal string:\n" << read_string
+    std::cerr << "\nOriginal string:\n" << read_string
              << "\nWrite() output:\n";
     vil_stream_core* vs2 = new vil_stream_core();
     record->write(*(vil_stream*)vs2);
@@ -353,21 +354,21 @@ bool vil_nitf2_tagged_record::test()
     vs2->seek(0);
     vs2->read(buf, bufsize);
     buf[bufsize]='\0';
-    vcl_string write_string = vcl_string(buf);
-    vcl_cerr << write_string << '\n';
+    std::string write_string = std::string(buf);
+    std::cerr << write_string << '\n';
     if (read_string != write_string) {
-      vcl_cerr << "\nWrite failed!\n";
+      std::cerr << "\nWrite failed!\n";
       error = true;
     }
     delete buf;
-    vcl_cerr << "Testing get_value:\n";
+    std::cerr << "Testing get_value:\n";
     int mti_dp;
     if (!record->get_value("MTI_DP", mti_dp) || mti_dp!=2) {
-      vcl_cerr << "Get value failed!\n";
+      std::cerr << "Get value failed!\n";
       error = true;
     }
     else {
-      vcl_cerr << "MTI_DP = " << mti_dp << '\n';
+      std::cerr << "MTI_DP = " << mti_dp << '\n';
     }
     int tgt_speed[4];
     if (!record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(0), tgt_speed[0])  ||
@@ -375,20 +376,20 @@ bool vil_nitf2_tagged_record::test()
         record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(1), tgt_speed[1]) /*should be null*/ ||
         !record->get_value("TGT_n_SPEED", vil_nitf2_index_vector(2), tgt_speed[2]) ||
         tgt_speed[2] != 4444) {
-      vcl_cerr << "Get vector value test failed!\n";
+      std::cerr << "Get vector value test failed!\n";
       error = true;
     }
     else {
-      vcl_cerr << "TGT_2_SPEED = " << tgt_speed[2] << '\n';
+      std::cerr << "TGT_2_SPEED = " << tgt_speed[2] << '\n';
     }
     int d2;
     if (!record->get_value("D", vil_nitf2_index_vector(2), d2) || d2 != 9) {
-      vcl_cerr << "Get fixed repeat count test failed!\n";
+      std::cerr << "Get fixed repeat count test failed!\n";
       error = true;
     }
     // fetch C[*]
-    vcl_cerr << "Testing get_values (all values)...\n";
-    vcl_vector<vcl_string> c_values;
+    std::cerr << "Testing get_values (all values)...\n";
+    std::vector<std::string> c_values;
     if (!record->get_values("C", c_values) ||
         c_values.size() != 5 ||
         c_values[0]!="C000" ||
@@ -396,18 +397,18 @@ bool vil_nitf2_tagged_record::test()
         c_values[2]!="C101" ||
         c_values[3]!="C110" ||
         c_values[4]!="C111") {
-      vcl_cerr << "failed!\n\n";
+      std::cerr << "failed!\n\n";
       error = true;
     }
     // Fetch A[1,*]
-    vcl_cerr << "Get values (partial index)...\n";
+    std::cerr << "Get values (partial index)...\n";
     vil_nitf2_index_vector indexes;
-    vcl_vector<int> a_values;
+    std::vector<int> a_values;
     indexes.push_back(1);
     if (!record->get_values("A", indexes, a_values) ||
         a_values.size() != 1 ||
         a_values[0] != 2) {
-      vcl_cerr << "failed!\n\n";
+      std::cerr << "failed!\n\n";
       error = true;
     }
     // Fetch C[1,*]
@@ -418,28 +419,28 @@ bool vil_nitf2_tagged_record::test()
         c_values[2]!="C110" ||
         c_values[3]!="C111")
     {
-      vcl_cerr << "failed!\n\n";
+      std::cerr << "failed!\n\n";
     }
   }
   else {
-    vcl_cerr << "Didn't create record!\n";
+    std::cerr << "Didn't create record!\n";
     error = true;
   }
   // Try output of vector field
-  vcl_cerr << "Output of vector field C:\n"
+  std::cerr << "Output of vector field C:\n"
            << *(record->get_field("C"));
   // Clean up test definition and test cleanup
   if (!vil_nitf2_tagged_record_definition::undefine(test_tre_tag)) {
-    vcl_cerr << "Error undefining TRE.\n";
+    std::cerr << "Error undefining TRE.\n";
     error = true;
   }
   return !error;
 }
 
-vcl_ostream& vil_nitf2_tagged_record::output(vcl_ostream& os) const
+std::ostream& vil_nitf2_tagged_record::output(std::ostream& os) const
 {
   os << "CETAG: " << name() << '\n'
-     << "CELEN: " << length() << vcl_endl;
+     << "CELEN: " << length() << std::endl;
   for (vil_nitf2_field_definitions::iterator fieldNode = m_definition->m_field_definitions->begin();
        fieldNode != m_definition->m_field_definitions->end(); ++fieldNode)
   {
@@ -449,10 +450,10 @@ vcl_ostream& vil_nitf2_tagged_record::output(vcl_ostream& os) const
     vil_nitf2_field* field = get_field(field_def->tag);
     os << field_def->tag << ": ";
     if (field) {
-      os << *field << vcl_endl;
+      os << *field << std::endl;
     }
     else {
-      os << "(undefined)" << vcl_endl;
+      os << "(undefined)" << std::endl;
     }
   }
   return os;
@@ -470,7 +471,7 @@ bool vil_nitf2_tagged_record::write(vil_nitf2_ostream& output)
   else return false;
   // Write data fields
   m_field_sequence->write(output);
-  // Check whether the vcl_right amount was written
+  // Check whether the std::right amount was written
   vil_streampos end = output.tell();
   vil_streampos length_written = end - start;
   int expected_length = s_tag_formatter().field_width + s_length_formatter().field_width
@@ -483,7 +484,7 @@ vil_nitf2_tagged_record::~vil_nitf2_tagged_record()
   delete m_field_sequence;
 }
 
-vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(vcl_string tag)
+vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(std::string tag)
 {
   for (vil_nitf2_field_definitions::const_iterator node = m_field_definitions->begin();
        node != m_field_definitions->end(); ++node)
@@ -497,7 +498,7 @@ vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(vcl_
     }
   }
   // tag definition not found
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
@@ -524,26 +525,26 @@ vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
   vil_nitf2_field::field_tree* first_child = new vil_nitf2_field::field_tree;
   first_child->columns.push_back( "CEL" );
   first_child->columns.push_back( "Extension Length" );
-  vcl_stringstream len_stream;
+  std::stringstream len_stream;
   len_stream << length();
   first_child->columns.push_back( len_stream.str() );
   tr->children.insert( tr->children.begin(), first_child );
   return tr;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record& record)
+std::ostream& operator << (std::ostream& os, const vil_nitf2_tagged_record& record)
 {
   return record.output(os);
 }
 
 // vil_nitf2_tagged_record_sequence
 
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record_sequence& seq)
+std::ostream& operator << (std::ostream& os, const vil_nitf2_tagged_record_sequence& seq)
 {
-  os << seq.size() << " TRE's:" << vcl_endl;
+  os << seq.size() << " TRE's:" << std::endl;
   vil_nitf2_tagged_record_sequence::const_iterator it;
   for (it = seq.begin(); it != seq.end(); ++it) {
-    os << *it << vcl_endl;
+    os << *it << std::endl;
   }
   return os;
 }

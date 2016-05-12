@@ -5,17 +5,18 @@
 // \author Tim Cootes
 // \brief Functions to generate combinations of integers
 
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //: Generate first combination (n.size() zeros)
 inline
-vcl_vector<unsigned> mbl_combination_begin(const vcl_vector<unsigned>& n)
+std::vector<unsigned> mbl_combination_begin(const std::vector<unsigned>& n)
 {
-  vcl_vector<unsigned> x(n.size());
-  vcl_fill(x.begin(),x.end(),0);
+  std::vector<unsigned> x(n.size());
+  std::fill(x.begin(),x.end(),0);
   return x;
 }
 
@@ -25,11 +26,11 @@ vcl_vector<unsigned> mbl_combination_begin(const vcl_vector<unsigned>& n)
 //  This allows stepping through all possible combinations of sets integers {x[i]}
 //  using
 // \code
-//  vcl_vector<unsigned> x = mbl_combination_begin(n);
+//  std::vector<unsigned> x = mbl_combination_begin(n);
 //  do { ...}  while (mbl_combination_next(x,n));
 // \endcode
 inline
-bool mbl_combination_next(vcl_vector<unsigned>& x, const vcl_vector<unsigned>& n)
+bool mbl_combination_next(std::vector<unsigned>& x, const std::vector<unsigned>& n)
 {
   assert(n.size()==x.size());
   for (unsigned i=0;i<n.size();++i)
@@ -42,7 +43,7 @@ bool mbl_combination_next(vcl_vector<unsigned>& x, const vcl_vector<unsigned>& n
 
 //: Number of possible combinations of n.size() values, drawing one from each of n[i] elements.
 inline
-unsigned mbl_n_combinations(const vcl_vector<unsigned>& n)
+unsigned mbl_n_combinations(const std::vector<unsigned>& n)
 {
   unsigned nc = 1;
   for (unsigned i=0;i<n.size();++i) if (n[i]>1) nc*=n[i];
@@ -51,7 +52,7 @@ unsigned mbl_n_combinations(const vcl_vector<unsigned>& n)
 
 //: Print combination as x3:x2:x1:x0
 inline
-void mbl_print_combination(vcl_ostream& os, const vcl_vector<unsigned>& x)
+void mbl_print_combination(std::ostream& os, const std::vector<unsigned>& x)
 {
   for (int i=x.size()-1;i>0;--i) os<<x[i]<<':';
   os<<x[0];

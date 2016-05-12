@@ -43,7 +43,7 @@ class boxm_render_expected_image_functor
     alpha_integral_(i,j) += cell_value.alpha * seg_len;
 
     // compute new visibility probability with updated alpha_integral
-    const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
+    const float vis_prob_end = std::exp(-alpha_integral_(i,j));
     // compute weight for this cell
     const float Omega = vis_img_(i,j) - vis_prob_end;
     // and update expected image

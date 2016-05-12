@@ -1,9 +1,11 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include <volm/conf/volm_conf_object.h>
 //:
 // \file
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
-#include <vcl_limits.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <bkml/bkml_write.h>
 #include <volm/volm_category_io.h>
@@ -12,21 +14,32 @@
 
   //The angular value is from 0 to 2*pi
 
-volm_conf_object::volm_conf_object(float const& theta, float const& dist, float const& height, unsigned char const& land)
- : dist_(dist), land_(land), height_(height)
+volm_conf_object
+::volm_conf_object(float const& theta,
+                   float const& dist,
+                   float const& height,
+                   unsigned char const& land) :
+  theta_(theta),
+  dist_(dist),
+  height_(height),
+  land_(land)
 {
-  theta_ = theta;
   while (theta_ > vnl_math::twopi)
     theta_ -= (float)vnl_math::twopi;
   while (theta_ < 0)
     theta_ += (float)vnl_math::twopi;
 }
 
-volm_conf_object::volm_conf_object(double const& theta, double const& dist, double const& height, unsigned char const& land)
-  : land_(land)
+volm_conf_object
+::volm_conf_object(double const& theta,
+                   double const& dist,
+                   double const& height,
+                   unsigned char const& land) :
+  theta_((float)theta),
+  dist_((float)dist),
+  height_((float)height),
+  land_(land)
 {
-  dist_ = (float)dist; height_ = (float)height;
-  theta_ = (float)theta;
   while (theta_ > vnl_math::twopi)
     theta_ -= (float)vnl_math::twopi;
   while (theta_ < 0)
@@ -34,83 +47,130 @@ volm_conf_object::volm_conf_object(double const& theta, double const& dist, doub
 }
 
 // construct by the location point represented as (x,y)
-volm_conf_object::volm_conf_object(vgl_point_2d<float> const& pt, float const& height, unsigned char const& land)
-  : land_(land), height_(height)
+volm_conf_object
+::volm_conf_object(vgl_point_2d<float> const& pt,
+                   float const& height,
+                   unsigned char const& land) :
+  height_(height),
+  land_(land)
 {
-  dist_ = vcl_sqrt(pt.x()*pt.x()+pt.y()*pt.y());
-  float theta = vcl_atan2(pt.y(),pt.x());
+  dist_ = std::sqrt(pt.x()*pt.x()+pt.y()*pt.y());
+  float theta = std::atan2(pt.y(),pt.x());
   theta_ = (theta < 0) ? theta + (float)vnl_math::twopi : theta;
 }
 
-volm_conf_object::volm_conf_object(vgl_point_2d<double> const& pt, double const& height, unsigned char const& land)
-  : land_(land)
+volm_conf_object
+::volm_conf_object(vgl_point_2d<double> const& pt,
+                   double const& height,
+                   unsigned char const& land) :
+  dist_((float)std::sqrt(pt.x()*pt.x()+pt.y()*pt.y())),
+  height_((float)height),
+  land_(land)
 {
-  height_ = (float)height;
-  dist_ = (float)vcl_sqrt(pt.x()*pt.x()+pt.y()*pt.y());
-  float theta = (float)vcl_atan2(pt.y(), pt.x());
+  float theta = (float)std::atan2(pt.y(), pt.x());
   theta_ = (theta < 0) ? theta + (float)vnl_math::twopi : theta;
 }
 
-volm_conf_object::volm_conf_object(vgl_point_3d<float> const& pt, unsigned char const& land)
-  : land_(land), height_(pt.z())
+volm_conf_object
+::volm_conf_object(vgl_point_3d<float> const& pt,
+                   unsigned char const& land) :
+  dist_(std::sqrt(pt.x()*pt.x()+pt.y()*pt.y())),
+  land_(land),
+  height_(pt.z())
 {
-  dist_ = vcl_sqrt(pt.x()*pt.x()+pt.y()*pt.y());
-  float theta = (float)vcl_atan2(pt.y(), pt.x());
+  float theta = (float)std::atan2(pt.y(), pt.x());
   theta_ = (theta < 0) ? theta + (float)vnl_math::twopi : theta;
 }
 
-volm_conf_object::volm_conf_object(vgl_point_3d<double> const& pt, unsigned char const& land)
-  : land_(land)
+volm_conf_object
+::volm_conf_object(vgl_point_3d<double> const& pt,
+                   unsigned char const& land) :
+  dist_((float)std::sqrt(pt.x()*pt.x()+pt.y()*pt.y())),
+  height_((float)pt.z()),
+  land_(land)
 {
-  height_ = (float)pt.z();
-  dist_ = (float)vcl_sqrt(pt.x()*pt.x()+pt.y()*pt.y());
-  float theta = (float)vcl_atan2(pt.y(), pt.x());
+  float theta = (float)std::atan2(pt.y(), pt.x());
   theta_ = (theta < 0) ? theta + (float)vnl_math::twopi : theta;
 }
 
-float volm_conf_object::theta_in_deg() const  {  return theta_ / (float)vnl_math::pi_over_180;  }
-float volm_conf_object::x() const  {  return dist_ * vcl_cos(theta_);  }
-float volm_conf_object::y() const  {  return dist_ * vcl_sin(theta_);  }
-vgl_point_2d<float> volm_conf_object::loc() const { return vgl_point_2d<float>(this->x(), this->y()); }
-
-bool volm_conf_object::is_same(volm_conf_object const& other)
+float
+volm_conf_object
+::theta_in_deg() const
 {
-  return (vcl_fabs(this->theta_ - other.theta() ) < EPSILON) && (vcl_fabs(this->dist_ - other.dist() ) < EPSILON) 
-          && (vcl_fabs(this->height_ - other.height() ) < EPSILON)
+return theta_ / (float)vnl_math::pi_over_180;
+}
+
+float
+volm_conf_object::x() const
+{
+return dist_ * std::cos(theta_);
+}
+
+float
+volm_conf_object
+::y() const
+{
+return dist_ * std::sin(theta_);
+}
+
+vgl_point_2d<float>
+volm_conf_object
+::loc() const
+{
+return vgl_point_2d<float>(this->x(), this->y());
+}
+
+bool
+volm_conf_object
+::is_same(volm_conf_object const& other)
+{
+  return (std::fabs(this->theta_ - other.theta() ) < EPSILON) && (std::fabs(this->dist_ - other.dist() ) < EPSILON)
+          && (std::fabs(this->height_ - other.height() ) < EPSILON)
           && this->land_ == other.land();
 }
-bool volm_conf_object::is_same(volm_conf_object_sptr other_sptr)
+
+bool
+volm_conf_object
+::is_same(volm_conf_object_sptr other_sptr)
 {
   return this->is_same(*other_sptr);
 }
-bool volm_conf_object::is_same(volm_conf_object const* other_ptr)
+
+bool
+volm_conf_object
+::is_same(volm_conf_object const* other_ptr)
 {
   return this->is_same(*other_ptr);
 }
 
-bool volm_conf_object::write_to_kml(double const& lon, double const& lat, vcl_vector<volm_conf_object>& values, vcl_string const& kml_file)
+bool
+volm_conf_object
+::write_to_kml(double const& lon,
+               double const& lat,
+               std::vector<volm_conf_object>& values,
+               std::string const& kml_file)
 {
   // construct a local lvcs with origin (lon, lat)
   vpgl_lvcs lvcs(lat, lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
   // write values into kml file
-  vcl_ofstream ofs(kml_file.c_str());
+  std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   // write the geo location into kml
-  vcl_stringstream name;
-  name << "hypo_" << vcl_setprecision(6) << lon << '_' << vcl_setprecision(6) << lat;
+  std::stringstream name;
+  name << "hypo_" << std::setprecision(6) << lon << '_' << std::setprecision(6) << lat;
   bkml_write::write_location(ofs, vgl_point_2d<double>(lon, lat), name.str(), "");
   unsigned n = values.size();
   for (unsigned i = 0; i < n; i++)
   {
     // calculate the actual location from local coordinate theta/dist
-    double lx = values[i].dist() * vcl_cos(values[i].theta());
-    double ly = values[i].dist() * vcl_sin(values[i].theta());
+    double lx = values[i].dist() * std::cos(values[i].theta());
+    double ly = values[i].dist() * std::sin(values[i].theta());
     double loc_lon, loc_lat, loc_gz;
     lvcs.local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, loc_lon, loc_lat, loc_gz);
     // write the location into kml
-    vcl_stringstream loc_name;
-    loc_name << i << "_" << vcl_setprecision(4) << loc_lon << '_' << vcl_setprecision(4) << loc_lat << '_' << vcl_setprecision(6) << values[i].height()
+    std::stringstream loc_name;
+    loc_name << i << "_" << std::setprecision(4) << loc_lon << '_' << std::setprecision(4) << loc_lat << '_' << std::setprecision(6) << values[i].height()
              << "_" << volm_osm_category_io::volm_land_table[values[i].land()].name_;
     vnl_double_2 ul, ll, lr, ur;
     double size = 5E-5;
@@ -126,7 +186,9 @@ bool volm_conf_object::write_to_kml(double const& lon, double const& lat, vcl_ve
 }
 
 // binary IO
-void volm_conf_object::b_write(vsl_b_ostream& os) const
+void
+volm_conf_object
+::b_write(vsl_b_ostream& os) const
 {
   unsigned char ver = this->version();
   vsl_b_write(os, ver);
@@ -136,7 +198,9 @@ void volm_conf_object::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, land_);
 }
 
-void volm_conf_object::b_read(vsl_b_istream& is)
+void
+volm_conf_object
+::b_read(vsl_b_istream& is)
 {
   unsigned char ver;
   vsl_b_read(is, ver);
@@ -155,8 +219,8 @@ void volm_conf_object::b_read(vsl_b_istream& is)
   }
   else
   {
-    vcl_cout << "volm_conf_object: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << (int)this->version() 
-             << vcl_flush << vcl_endl;
+    std::cout << "volm_conf_object: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << (int)this->version()
+             << std::flush << std::endl;
     return;
   }
 }
@@ -168,7 +232,7 @@ void vsl_b_write(vsl_b_ostream& os, volm_conf_object const& obj)
 
 void vsl_b_write(vsl_b_ostream& os, volm_conf_object const* obj_ptr)
 {
-  if (obj_ptr == 0)
+  if (obj_ptr == VXL_NULLPTR)
     vsl_b_write(os, false);
   else {
     vsl_b_write(os, true);
@@ -188,7 +252,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_object& obj)
 
 void vsl_b_read(vsl_b_istream& is, volm_conf_object*& obj_ptr)
 {
-  delete obj_ptr;  obj_ptr = 0;
+  delete obj_ptr;  obj_ptr = VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -200,12 +264,12 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_object*& obj_ptr)
 
 void vsl_b_read(vsl_b_istream& is, volm_conf_object_sptr& obj_sptr)
 {
-  volm_conf_object* obj_ptr = 0;
+  volm_conf_object* obj_ptr = VXL_NULLPTR;
   vsl_b_read(is, obj_ptr);
   obj_sptr = obj_ptr;
 }
 
-void vsl_print_summary(vcl_ostream& os, volm_conf_object const& obj)
+void vsl_print_summary(std::ostream& os, volm_conf_object const& obj)
 {
   obj.print(os);
 }

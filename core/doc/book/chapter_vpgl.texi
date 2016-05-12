@@ -35,7 +35,7 @@ example, as a @code{vgl_homg_point_2d<T>}. The use of homogeneous
 coordinates accounts for points that may be at infinity in either the
 3-d world or the image.
 @item @code{vpgl_perspective_camera<T>} - A camera that is defined by
-a triple of parameter classes: (K) @code{vpgl_calibration_matrix<T>}; (R) 
+a triple of parameter classes: (K) @code{vpgl_calibration_matrix<T>}; (R)
  @code{vgl_rotation_3d<T>}; and (t) - @code{vgl_vector_3d<T>}. The
 matrix K represents the internal parameters of a physical camera, such
 as focal length. The 3-d rotation, R,  defines the orientation of the
@@ -60,13 +60,13 @@ longitude, latitude and elevation to image row (line) and column
 camera except the 3-d point coordinates are expressed in a local
 tangent plane to the Earth's surface at a point specified by the local
 vertical coordinate system (lvcs). The lvcs is reprsented by the @code{vpgl_lvcs} class.
-@item @code{vpgl_generic_camera<T>} - A camera that is represented by a grid of rays. This structure can represent very general forms of world to image mapping, e.g. a camera that has multiple centers of projection. 
+@item @code{vpgl_generic_camera<T>} - A camera that is represented by a grid of rays. This structure can represent very general forms of world to image mapping, e.g. a camera that has multiple centers of projection.
 @end itemize
 
 @figure
 @image{vpgl_classes,,3in}
 @caption{1}
-The UML description of the major classes in @code{vpgl}. 
+The UML description of the major classes in @code{vpgl}.
 @endcaption
 @endfigure
 It is noted that @code{vpgl} is dependent on two other core libraries, @code{vgl} and @code{vnl}.
@@ -94,13 +94,13 @@ are represented by vnl vectors. The projection matrix of the
 The projective camera also supports @emph{backprojection} which casts
 a ray through a point in the image. A first point on the ray is
 defined as the center of projection, @math{C}, which is the nullvector
-of the projection matrix. That is, 
+of the projection matrix. That is,
 
-@math{(0, 0, 0)^t = [3@times4]@ (C_x, C_y, C_z, 1)^t}. 
+@math{(0, 0, 0)^t = [3@times4]@ (C_x, C_y, C_z, 1)^t}.
 
-The second point on the ray, @code{X}, is any solution to the equation, 
+The second point on the ray, @code{X}, is any solution to the equation,
 
-@math{(u, v, 1)^t = [3@times4]@ X}, 
+@math{(u, v, 1)^t = [3@times4]@ X},
 
 where @math{(u, v, 1)^t} is the image point being backprojected. The
 solution of this equation uses the @code{vnl_svd} @code{solve} method,
@@ -183,7 +183,7 @@ The use of @code{vpgl} classes in constructing and accessing a perspective camer
  vgl_point_2d<double> pp(640.0, 384.0); //for a 1280x768 image
  K.set_principal_point(pp);
  vgl_rotation_3d<double> R;// the identiy rotation
- vgl_vector_3d<double> t(0, 0, 10.0); //Translate along z. 
+ vgl_vector_3d<double> t(0, 0, 10.0); //Translate along z.
  vpgl_perspective_camera<double> per_cam(K, R, t);
  vgl_homg_point_3d<double> X(1.0, 2.0, 9.0, 1.0).
  vgl_homg_point_2d<double> x = per_cam(X);
@@ -206,7 +206,7 @@ specified by the first tworows of the 3x4 projection matrix, since the
 bottom row is @math{[0 @ 0 @ 0 @ 1]}. An example illustrating the affine camera interface follows.
 @example
   vnl_vector_fixed<double, 4> r0(1.0, 0.0, 0.0, 0.0);
-  vnl_vector_fixed<double, 4> r1(0.0, 1.0, 0.0, 0.0);  
+  vnl_vector_fixed<double, 4> r1(0.0, 1.0, 0.0, 0.0);
   vpgl_affine_camera<double> aff_cam(r0, r1);
   aff_cam.set_viewing_distance(1000.0);//1Km above the scene
   vgl_homg_plane_3d<double> pplane = aff_cam.principal_plane();
@@ -226,8 +226,8 @@ array is scanned over the scene by a rotating platform. The motion of
 the platform may be non-uniform with overshoot and oscillations. This
 complex scanning motion can be represented by a polynomial
 approximation with far fewer parameters than the kinetic motion
-parameters of the scanning platform. The standard rational camera is 
-based on cubic polynomials in (x, y, z) with units in the wgs84 geographic coordinate system of longitude (x), latitude (y) and elevation (z). 
+parameters of the scanning platform. The standard rational camera is
+based on cubic polynomials in (x, y, z) with units in the wgs84 geographic coordinate system of longitude (x), latitude (y) and elevation (z).
 
 A cubic polynomial in three variables requires 20 monomial terms, such as @math{x^3, x^2y, ..., y^3, ... 1}. There are four such polynomials used to compute the row and column coordinates of the projected 3-d geographic position. That is,
 
@@ -243,13 +243,13 @@ numerical precision it is necessary to offset and scale both the 3-d
 and 2-d coordinates onto the range @math{[-1,@ 1]}. This normalization
 is defined by ten additional camera parameters, which represent scale
 and offset coefficients, two for each of the five world and image
-coordinates. An example of constructing and applying a the rational camera is provided by the following example. 
+coordinates. An example of constructing and applying a the rational camera is provided by the following example.
 @example
 //Rational polynomial coefficients
 //Rational polynomial coefficients
 vcl_vector<double> neu_u(20,0.0), den_u(20,0.0),
 neu_v(20,0.0),den_v(20,0.0);
-  
+
 neu_u[0]=0.1; neu_u[10]=0.071; neu_u[7]=0.01;  neu_u[9]=0.3;
 neu_u[15]=1.0; neu_u[18]=1.0, neu_u[19]=0.75;
 
@@ -272,7 +272,7 @@ double sv = 500.0, ov = 200;
 vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v,
                                   sx, ox, sy, oy, sz, oz,
                                   su, ou, sv, ov);
-vgl_point_3d<double> X(150.0, 100.0, 10.0);                                 
+vgl_point_3d<double> X(150.0, 100.0, 10.0);
 vgl_point_2d<double> x;
 x = project(X); // xu = 1250.0, xv = 365.0
 
@@ -294,7 +294,7 @@ The @code{vpgl_local_rational_camera} is a sub-class of the @code{vpgl_rational_
 @figure
 @image{lvcs,,3in}
 @caption{3}
-A local vertical coordinate system defined on the surface of the Earth. 
+A local vertical coordinate system defined on the surface of the Earth.
 @endcaption
 @endfigure
 Following is an example of constructing a local rational camera.
@@ -337,7 +337,7 @@ The fundamental matrix plays an important role in finding the correspondence of 
 
 @math{x'^tFx = 0}
 
-This constraint is used to verify that proposed feature correspondences are consistent with the epipolar geometry of the two views being matched. 
+This constraint is used to verify that proposed feature correspondences are consistent with the epipolar geometry of the two views being matched.
 
 @figure
 @image{epipolar,,3in}
@@ -349,7 +349,7 @@ The geometry of the fundamental matrix.
 The fundamental matrix can be constructed from two cameras as illustrated in the following code fragment.
 @example
 // Ml and Mr, some 3x4 matrices
-vpgl_proj_camera<double> Cl(Ml),Cr(Mr) // right and left cameras 
+vpgl_proj_camera<double> Cl(Ml),Cr(Mr) // right and left cameras
 vpgl_fundamental_matrix<double> F1( C1r, C1l );
 @end example
 It is also the case that the fundamental matrix is sufficient to
@@ -358,7 +358,7 @@ the ``left'' camera, assuming the ``right'' camera is the identity
 matrix is,
 
 @example
-vpgl_proj_camera<T> 
+vpgl_proj_camera<T>
  extract_left_camera(const vnl_vector_fixed<T,3>& v, T lambda ) const;
 @end example
 The meaning of the arguments @code{v} and @code{lamba} are defined in Hartley and Zisserman, 2nd edition, p. 256.
@@ -499,7 +499,7 @@ It is useful for many applications to determine a 3-d point as the
 backprojection of an image point. The 3-d point is not defined unless
 a 3-d surface is also specified. This algorithm class applies
 non-linear optimization to find the closest 3-d point on a 3-d surface
-to a backprojected camera ray. 
+to a backprojected camera ray.
 
 A polymorphic form of the backproject method is as follows.
 @example
@@ -512,7 +512,7 @@ bool bproj_plane(const vpgl_camera<double>* cam,
 Note that since a non-linear solution is required in general (e.g. a rational camera) it is necessary to provide a guess as the starting point for the solution. In most cases the initial guess can just be the origin.  Another method on @code{vpgl_backproject} with a specific rational camera interface is shown below.
 @example
 ...
-vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, 
+vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v,
                                   sx, ox, sy, oy, sz, oz,
                                   su, ou, sv, ov)
 vnl_double_4 plane;
@@ -520,8 +520,8 @@ vnl_double_2 image_point;
 image_point[0]=1250.0;   image_point[1]=332;
 initial_guess[0]=200.0; initial_guess[1]=150.0; initial_guess[2]=15.0;
 plane[0]=0; plane[1]=0; plane[2]=1.0; plane[3]=-10.0;
- 
-bool success = 
+
+bool success =
   vpgl_backproject::bproj_plane(rcam, image_point, plane,
                                 initial_guess, world_point);
 @end example
@@ -554,7 +554,7 @@ This algorithm class computes the 3-d point that lies closest to a set of camera
   vpgl_ray_intersect ri(2);
   vgl_point_3d<double> intersection;
   vgl_point_3d<double> initial_point(44.3542,33.1855 ,32);
-  bool good = 
+  bool good =
     ri.intersect(cams, image_pts, initial_point, intersection);
 @end example
 Note that a class instance is required, rather than a static method.

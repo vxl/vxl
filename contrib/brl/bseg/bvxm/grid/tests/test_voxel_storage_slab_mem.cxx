@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_vector_3d.h>
 
@@ -20,7 +21,7 @@ static void test_voxel_storage_slab_mem()
   storage.initialize_data(init_val);
   bool init_check = true;
   bool write_read_check = true;
-  
+
   // read in each slice, check that init_val was set, and fill with new value
   unsigned cnt = 0;
   for (unsigned i = 0; i < storage.nz(); i++) {
@@ -29,7 +30,7 @@ static void test_voxel_storage_slab_mem()
     for (vit = slab.begin(); vit != slab.end(); vit++, cnt++) {
       if (*vit != init_val) {
 #ifdef DEBUG
-        vcl_cerr << "error: read in value does not match init value! slice = " << i << ", count = " << cnt << vcl_endl;
+        std::cerr << "error: read in value does not match init value! slice = " << i << ", count = " << cnt << std::endl;
 #endif
         init_check = false;
       }
@@ -49,7 +50,7 @@ static void test_voxel_storage_slab_mem()
     for (vit = slab.begin(); vit != slab.end(); vit++, cnt++) {
       if (*vit != static_cast<float>(cnt)) {
 #ifdef DEBUG
-        vcl_cerr << "error: read in value does not match written value! slice = " << i << ", count = " << cnt << vcl_endl;
+        std::cerr << "error: read in value does not match written value! slice = " << i << ", count = " << cnt << std::endl;
 #endif
         write_read_check = false;
       }

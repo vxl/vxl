@@ -6,7 +6,9 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 01 Aug 96
 //
 //-----------------------------------------------------------------------------
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 class LineSeg
 {
@@ -26,7 +28,7 @@ class LineSeg
   ~LineSeg() {}
 };
 
-vcl_ostream& operator<<(vcl_ostream&, const LineSeg& l);
-vcl_istream& operator>>(vcl_istream&, LineSeg& l);
+std::ostream& operator<<(std::ostream&, const LineSeg& l);
+std::istream& operator>>(std::istream&, LineSeg& l);
 
 #endif // LineSeg_h_

@@ -54,7 +54,7 @@ class boxm_render_expected_shadow_image_functor
     alpha_integral_(i,j) += cell_value.alpha * seg_len;
 
     // compute new visibility probability with updated alpha_integral
-    const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
+    const float vis_prob_end = std::exp(-alpha_integral_(i,j));
     // compute weight for this cell
     const float Omega = vis_img_(i,j) - vis_prob_end;
     // and update expected image
@@ -95,7 +95,7 @@ class normalize_shadow_functor
 
 template <class T_loc, boxm_apm_type APM ,  boxm_aux_type AUX>
 void boxm_render_shadow_image_rt(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
-                                 vcl_string const& aux_scene_id,
+                                 std::string const& aux_scene_id,
                                  vpgl_camera_double_sptr cam,
                                  vil_image_view<typename boxm_sample<APM>::obs_datatype> &expected,
                                  vil_image_view<float> & mask,

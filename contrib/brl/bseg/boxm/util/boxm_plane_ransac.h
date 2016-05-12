@@ -11,6 +11,9 @@
 //   Ozge C. Ozcanli  July 7, 2010 : made some internal hard-coded defaults into parameters
 // \endverbatim
 
+#include <iostream>
+#include <cstdlib>
+#include <list>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
@@ -20,15 +23,13 @@
 #include <vgl/vgl_closest_point.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/boxm_edge_tangent_sample.h>
-#include <vcl_cstdlib.h> // for rand()
-#include <vcl_iostream.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
 
 #define ITER_MAX 100
 
 template <class T>
-bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
-                       vcl_vector<T> /*weights*/,
+bool boxm_plane_ransac(std::vector<boxm_edge_tangent_sample<T> > aux_samples,
+                       std::vector<T> /*weights*/,
                        vgl_infinite_line_3d<T>& line,
                        T &min_res, vgl_box_3d<double> cell_global_box,
                        unsigned int threshold, float ortho_thres = 0.01f, float volume_ratio = 128.0f)
@@ -36,10 +37,10 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
   unsigned int num_imgs = aux_samples.size();
 
   vgl_point_3d<T> local_origin((T)cell_global_box.centroid_x(),(T)cell_global_box.centroid_y(),(T)cell_global_box.centroid_z());
-  vcl_list<vgl_plane_3d<T> > fit_planes;
+  std::list<vgl_plane_3d<T> > fit_planes;
   min_res=T(1e10);
   line=vgl_infinite_line_3d<T>(vgl_vector_2d<T>(-10000,-10000),vgl_vector_3d<T>(0,0,1));
-  vcl_vector<T> ws;
+  std::vector<T> ws;
   bool set=false;
   // this threshold is to check participation from number of images
   if (num_imgs<=threshold)
@@ -50,13 +51,13 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
     fit_planes.clear();
     ws.clear();
     // select two imgs randomly
-    int index1 = vcl_rand() % num_imgs;
+    int index1 = std::rand() % num_imgs;
     int index2 = index1;
     while (index2==index1)
-      index2=vcl_rand() % num_imgs;
+      index2=std::rand() % num_imgs;
 
-    int index1_1 =vcl_rand() % aux_samples[index1].num_obs();
-    int index2_1 =vcl_rand() % aux_samples[index2].num_obs();
+    int index1_1 =std::rand() % aux_samples[index1].num_obs();
+    int index2_1 =std::rand() % aux_samples[index2].num_obs();
 
     vgl_plane_3d<T> plane1 = aux_samples[index1].obs(index1_1).plane_;
     vgl_plane_3d<T> plane2 = aux_samples[index2].obs(index2_1).plane_;
@@ -80,7 +81,7 @@ bool boxm_plane_ransac(vcl_vector<boxm_edge_tangent_sample<T> > aux_samples,
             vgl_vector_3d<T> normal = plane.normal();
             // see if the line direction and plane normal is perpendicular
             T res = dot_product(normal,line_dir);
-            if (vcl_fabs(res) < T(ortho_thres))  {  // ortho_thres, used to be hard-coded to 0.05, then made a param with default 0.01 (stricter)
+            if (std::fabs(res) < T(ortho_thres))  {  // ortho_thres, used to be hard-coded to 0.05, then made a param with default 0.01 (stricter)
               // check to see if the line is close to the plane
               if (plane.contains(p,T(cell_global_box.width())/T(volume_ratio)))  // volume_ratio, used to be hard-coded to 8, then made a param with default 128 (stricter)
               {

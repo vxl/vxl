@@ -1,7 +1,7 @@
 #include "boxm2_vecf_composite_head_model_articulation.h"
 void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2_vecf_composite_head_parameters const&  head_params){
   {
-  vcl_vector<boxm2_vecf_composite_head_parameters> default_articulation;
+  std::vector<boxm2_vecf_composite_head_parameters> default_articulation;
     double ddt = 0.9;
     for(double dt = 0.0;dt<=ddt; dt +=0.1){
       boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
@@ -10,7 +10,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
       default_articulation.push_back(head_params_local_cpy);
     }
     // look left right
-    vcl_vector<vgl_vector_3d<double> > emv;
+    std::vector<vgl_vector_3d<double> > emv;
     emv.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
     emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
     emv.push_back(vgl_vector_3d<double>(-0.26, 0.0, 0.968));
@@ -20,7 +20,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     emv.push_back(vgl_vector_3d<double>(0.26, 0.0, 0.968));
     emv.push_back(vgl_vector_3d<double>(0.1736, 0.0, 0.9848));
     emv.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
-    for(vcl_vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
+    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
         eit != emv.end(); eit++){
       boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
 
@@ -37,12 +37,12 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     }
 
     // look up
-    vcl_vector<vgl_vector_3d<double> > emv2;
+    std::vector<vgl_vector_3d<double> > emv2;
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.0871, 0.9962));
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.1736, 0.9848));
     double ddt2 = 0.75;
-    for(vcl_vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
+    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
         eit != emv2.end(); eit++){
       boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
 
@@ -97,7 +97,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 
 //============================== brow angle articulation ====================
   {
-    vcl_vector<boxm2_vecf_composite_head_parameters> brow_angle_articulation;
+    std::vector<boxm2_vecf_composite_head_parameters> brow_angle_articulation;
     //  adjust brow angle
     double brow_angle=2, angle=0;
     unsigned char intensity =75;
@@ -123,7 +123,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 
 //============================== eyelid radius articulation ====================
   {
-    vcl_vector<boxm2_vecf_composite_head_parameters> eye_radius_articulation;
+    std::vector<boxm2_vecf_composite_head_parameters> eye_radius_articulation;
     double rad = 18;
 
     for(int i = 0; i<6; ++i){
@@ -144,7 +144,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 
 //============================== head scale articulation ====================
   {
-    vcl_vector<boxm2_vecf_composite_head_parameters> head_scale_articulation;
+    std::vector<boxm2_vecf_composite_head_parameters> head_scale_articulation;
     double ddt = 0.9;
     //scale head
     double scale =1.0;
@@ -169,7 +169,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
   }
 //============================== eyelid_dt open and close articulation ====================
   {
-    vcl_vector<boxm2_vecf_composite_head_parameters> eyelid_dt_open_and_close_articulation;
+    std::vector<boxm2_vecf_composite_head_parameters> eyelid_dt_open_and_close_articulation;
     vgl_vector_3d<double> look_dir_z(0.0, 0.0, 1.0);
     //slowly close
     double incr =0.1;
@@ -199,13 +199,13 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
       }
     }
 
-    vcl_vector<vgl_vector_3d<double> > emv2;
+    std::vector<vgl_vector_3d<double> > emv2;
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.0871, 0.9962));
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.1736, 0.9848));
 
     double ddt2 = stop; unsigned pause_duration = 1;
-    for(vcl_vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
+    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
         eit != emv2.end(); eit++){
       boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
       for( unsigned j=0;j<pause_duration;j++){
@@ -239,7 +239,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 
 //============================== eyelid_dt close articulation ====================
   {
-    vcl_vector<boxm2_vecf_composite_head_parameters > eyelid_dt_closed_articulation;
+    std::vector<boxm2_vecf_composite_head_parameters > eyelid_dt_closed_articulation;
     //slowly close
     for(int i=0; i<1;i++){
       double ddt = 0.9;
@@ -264,8 +264,8 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 //============================== look dir articulation ====================
   {
 
-    vcl_vector<boxm2_vecf_composite_head_parameters > look_dir_articulation;
-    vcl_vector<vgl_vector_3d<double> > emv;
+    std::vector<boxm2_vecf_composite_head_parameters > look_dir_articulation;
+    std::vector<vgl_vector_3d<double> > emv;
     boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
 
     head_params_local_cpy.l_orbit_params_.eyelid_dt_ = 0.9;
@@ -318,7 +318,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     emv.push_back(vgl_vector_3d<double>(0.1736, 0.0, 0.9848));
     emv.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
     unsigned pause_duration = 7;
-    for(vcl_vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
+    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
         eit != emv.end(); eit++){
       for (unsigned j = 0; j<pause_duration; j++){
         boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
@@ -333,7 +333,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
   }
 //============================== close while looking down ====================
 {
-    vcl_vector<boxm2_vecf_composite_head_parameters > eyelid_dt_close_look_dir_articulation;
+    std::vector<boxm2_vecf_composite_head_parameters > eyelid_dt_close_look_dir_articulation;
     //slowly close
     boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
 
@@ -396,10 +396,10 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 
     play_sequence_map_["eyelid_close_and_look_dir"] = eyelid_dt_close_look_dir_articulation;
   }
- vcl_vector<boxm2_vecf_composite_head_parameters> template_1;
+ std::vector<boxm2_vecf_composite_head_parameters> template_1;
  {
    unsigned   num_frames  = 4;
-   vcl_vector<vgl_vector_3d<double> > emv;
+   std::vector<vgl_vector_3d<double> > emv;
    //4 look directions
     emv.push_back(vgl_vector_3d<double>(-0.26, 0.0, 0.968));
     emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
@@ -419,7 +419,7 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     }
     //three eyelids
     vgl_vector_3d<double> look_dir_z(0,0,1);
-    vcl_vector<double> dts;
+    std::vector<double> dts;
     dts.push_back(0.5);
     dts.push_back(0);
     dts.push_back(0.95);

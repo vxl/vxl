@@ -1,4 +1,6 @@
 // Copyright: (C) 2000 British Telecommunications plc
+#include <iostream>
+#include <vector>
 #include "clsfy_classifier_base.h"
 //:
 // \file
@@ -10,9 +12,8 @@
 //   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -22,7 +23,7 @@ unsigned clsfy_classifier_base::classify(const vnl_vector<double> &input) const
 {
   unsigned N = n_classes();
 
-  vcl_vector<double> probs;
+  std::vector<double> probs;
   class_probabilities(probs, input);
 
   if (N == 1) // This is a binary classifier
@@ -52,7 +53,7 @@ unsigned clsfy_classifier_base::classify(const vnl_vector<double> &input) const
 
 //=======================================================================
 
-void clsfy_classifier_base::classify_many(vcl_vector<unsigned> &outputs, mbl_data_wrapper<vnl_vector<double> > &inputs) const
+void clsfy_classifier_base::classify_many(std::vector<unsigned> &outputs, mbl_data_wrapper<vnl_vector<double> > &inputs) const
 {
   outputs.resize(inputs.size());
 
@@ -67,21 +68,21 @@ void clsfy_classifier_base::classify_many(vcl_vector<unsigned> &outputs, mbl_dat
 
 //=======================================================================
 
-vcl_string clsfy_classifier_base::is_a() const
+std::string clsfy_classifier_base::is_a() const
 {
-  return vcl_string("clsfy_classifier_base");
+  return std::string("clsfy_classifier_base");
 }
 
 //=======================================================================
 
-bool clsfy_classifier_base::is_class(vcl_string const& s) const
+bool clsfy_classifier_base::is_class(std::string const& s) const
 {
   return s == clsfy_classifier_base::is_a();
 }
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os, clsfy_classifier_base const& b)
+std::ostream& operator<<(std::ostream& os, clsfy_classifier_base const& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -92,7 +93,7 @@ vcl_ostream& operator<<(vcl_ostream& os, clsfy_classifier_base const& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_classifier_base* b)
+std::ostream& operator<<(std::ostream& os,const clsfy_classifier_base* b)
 {
   if (b)
     return os << *b;
@@ -125,12 +126,12 @@ void vsl_b_read(vsl_b_istream& bfs, clsfy_classifier_base& b)
 //: Calculate the fraction of test samples which are classified incorrectly
 double clsfy_test_error(const clsfy_classifier_base &classifier,
                         mbl_data_wrapper<vnl_vector<double> > & test_inputs,
-                        const vcl_vector<unsigned> & test_outputs)
+                        const std::vector<unsigned> & test_outputs)
 {
   assert(test_inputs.size() == test_outputs.size());
   if (test_inputs.size()==0) return -1;
 
-  vcl_vector<unsigned> results;
+  std::vector<unsigned> results;
   classifier.classify_many(results, test_inputs);
   unsigned sum_diff = 0;
   const unsigned n = results.size();
@@ -144,7 +145,7 @@ double clsfy_test_error(const clsfy_classifier_base &classifier,
 // \return -1 if there are no samples of test_class.
 double clsfy_test_error(const clsfy_classifier_base &classifier,
                         mbl_data_wrapper<vnl_vector<double> > & test_inputs,
-                        const vcl_vector<unsigned> & test_outputs,
+                        const std::vector<unsigned> & test_outputs,
                         unsigned test_class)
 {
   assert(test_inputs.size() == test_outputs.size());

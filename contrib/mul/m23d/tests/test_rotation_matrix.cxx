@@ -1,12 +1,13 @@
 // This is mul/m23d/tests/test_rotation_matrix.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <m23d/m23d_rotation_matrix.h>
 
 
 void test_rotation_matrix()
 {
-  vcl_cout<<"==== test m23d_rotation_matrix ====="<<vcl_endl;
+  std::cout<<"==== test m23d_rotation_matrix ====="<<std::endl;
 
   vnl_matrix<double> I3(3,3);
   I3.set_identity();

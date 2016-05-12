@@ -36,61 +36,59 @@
 #if !defined(_MSC_VER) && !defined(__MINGW32__)
 static OPJ_CHAR*
 i2a(OPJ_UINT32 i, OPJ_CHAR *a, OPJ_UINT32 r) {
-	if (i/r > 0) a = i2a(i/r,a,r);
-	*a = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i%r];
-	return a+1;
+        if (i/r > 0) a = i2a(i/r,a,r);
+        *a = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i%r];
+        return a+1;
 }
 #endif
 /* ----------------------------------------------------------------------- */
 
 bool opj_event_msg(opj_event_mgr_t * p_event_mgr, OPJ_INT32 event_type, const OPJ_CHAR *fmt, ...) {
 #define MSG_SIZE 512 /* 512 bytes should be more than enough for a short message */
-	opj_msg_callback msg_handler = 00;
-	void * l_data = 00;
+        opj_msg_callback msg_handler = 00;
+        void * l_data = 00;
 
-	
-	if(p_event_mgr != 00) {
-		switch(event_type) {
-			case EVT_ERROR:
-				msg_handler = p_event_mgr->error_handler;
-				l_data = p_event_mgr->m_error_data;
-				break;
-			case EVT_WARNING:
-				msg_handler = p_event_mgr->warning_handler;
-				l_data = p_event_mgr->m_warning_data;
-				break;
-			case EVT_INFO:
-				msg_handler = p_event_mgr->info_handler;
-				l_data = p_event_mgr->m_info_data;
-				break;
-			default:
-				break;
-		}
-		if(msg_handler == 00) {
-			return false;
-		}
-	} else {
-		return false;
-	}
 
-	if ((fmt != 00) && (p_event_mgr != 00)) {
-		va_list arg;
-		OPJ_INT32 str_length/*, i, j*/; /* UniPG */
-		OPJ_CHAR message[MSG_SIZE];
-		memset(message, 0, MSG_SIZE);
-		/* initialize the optional parameter list */
-		va_start(arg, fmt);
-		/* check the length of the format string */
-		str_length = (strlen(fmt) > MSG_SIZE) ? MSG_SIZE : strlen(fmt);
-		/* parse the format string and put the result in 'message' */
-		vsprintf(message, fmt, arg); /* UniPG */
-		/* deinitialize the optional parameter list */
-		va_end(arg);
+        if(p_event_mgr != 00) {
+                switch(event_type) {
+                        case EVT_ERROR:
+                                msg_handler = p_event_mgr->error_handler;
+                                l_data = p_event_mgr->m_error_data;
+                                break;
+                        case EVT_WARNING:
+                                msg_handler = p_event_mgr->warning_handler;
+                                l_data = p_event_mgr->m_warning_data;
+                                break;
+                        case EVT_INFO:
+                                msg_handler = p_event_mgr->info_handler;
+                                l_data = p_event_mgr->m_info_data;
+                                break;
+                        default:
+                                break;
+                }
+                if(msg_handler == 00) {
+                        return false;
+                }
+        } else {
+                return false;
+        }
 
-		/* output the message to the user program */
-		msg_handler(message, l_data);
-	}
+        if ((fmt != 00) && (p_event_mgr != 00)) {
+                va_list arg;
+                //OPJ_INT32 str_length/*, i, j*/; /* UniPG */
+                OPJ_CHAR message[MSG_SIZE];
+                memset(message, 0, MSG_SIZE);
+                /* initialize the optional parameter list */
+                va_start(arg, fmt);
+                /* parse the format string and put the result in 'message' */
+                vsprintf(message, fmt, arg); /* UniPG */
+                /* deinitialize the optional parameter list */
+                va_end(arg);
 
-	return true;
+                /* output the message to the user program */
+                msg_handler(message, l_data);
+        }
+
+        return true;
 }
 

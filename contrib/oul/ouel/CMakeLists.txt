@@ -6,15 +6,13 @@ doxygen_add_library(contrib/oul/ouel
   DESCRIPTION "Estimation/filtering library"
   )
 
-SET(ouel_sources
+set(ouel_sources
   kalman_filter.h    kalman_filter.cxx
 )
 
-ADD_LIBRARY(ouel ${ouel_sources})
-INSTALL_TARGETS(/lib ouel)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/ouel ${ouel_sources})
-TARGET_LINK_LIBRARIES( ouel vnl_algo vnl )
+vxl_add_library(LIBRARY_NAME ouel LIBRARY_SOURCES ${ouel_sources})
+target_link_libraries( ouel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

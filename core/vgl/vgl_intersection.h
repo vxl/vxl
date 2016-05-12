@@ -16,6 +16,7 @@
 //   21 Jul 2009 - Peter Vanroose - added inlined point intersection functions
 // \endverbatim
 
+#include <vector>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vgl/vgl_box_2d.h> // method "contains()"
 #include <vgl/vgl_box_3d.h> // method "contains()"
@@ -25,7 +26,7 @@
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_pointset_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Return true if the two points intersect, i.e., coincide
 // \relatesalso vgl_point_2d
@@ -54,7 +55,7 @@ bool vgl_intersection(vgl_box_2d<T> const& box,
 template <class T>
 bool vgl_intersection(vgl_box_2d<T> const& box,
                       vgl_line_segment_2d<T> const& line,
-		      vgl_line_segment_2d<T>& int_line);
+                      vgl_line_segment_2d<T>& int_line);
 
 //: Returns the number of intersections of a line segment with a box, up to two are returned in p0 and p1.(warning! one intersection could be either p0 or p1)
 // \relatesalso vgl_line_segment_2d
@@ -73,8 +74,8 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1,
                                  vgl_line_3d_2_points<T> const& l2);
 
 //: Return the intersection point of segments of two concurrent lines. Returns false if the intersection point is not inside both line segments
-// \relatesalso vgl_line_segment_3d. 
-// 
+// \relatesalso vgl_line_segment_3d.
+//
 template <class T>
 bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
                       vgl_line_segment_3d<T> const& l2,
@@ -270,34 +271,34 @@ bool vgl_intersection(vgl_box_2d<T> const& b, vgl_polygon<T> const& poly);
 // \relatesalso vgl_point_2d
 // \relatesalso vgl_box_2d
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, vcl_vector<vgl_point_2d<T> > const& p);
+std::vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, std::vector<vgl_point_2d<T> > const& p);
 
 //: Return the points from the list that lie inside the box
 // \relatesalso vgl_point_2d
 // \relatesalso vgl_box_2d
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vcl_vector<vgl_point_2d<T> > const& p, vgl_box_2d<T> const& b);
+std::vector<vgl_point_2d<T> > vgl_intersection(std::vector<vgl_point_2d<T> > const& p, vgl_box_2d<T> const& b);
 
 //: Return the points from the list that lie inside the box
 // \relatesalso vgl_point_3d
 // \relatesalso vgl_box_3d
 template <class T>
-vcl_vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, vcl_vector<vgl_point_3d<T> > const& p);
+std::vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, std::vector<vgl_point_3d<T> > const& p);
 
 //: Return the points from the list that lie inside the box
 // \relatesalso vgl_point_3d
 // \relatesalso vgl_box_3d
 template <class T>
-vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b);
+std::vector<vgl_point_3d<T> > vgl_intersection(std::vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b);
 
 //: Find the intersections of a line with a polygon( can have multiple sheets)
 // \relatesalso vgl_line_2d
 // \relatesalso vgl_point_2d
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
+std::vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
                                               vgl_line_2d<T> const& line);
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
+std::vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
                                               vgl_polygon<T> const& poly){
   return vgl_intersection(poly, line);
 }
@@ -305,7 +306,7 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
 
 //: return the intersection of a pointset with a plane, given a tolerance tol
 //  the normal distance from the plane to the point is compared to the tolerance
-//  the points within tolerance are projected along the normal direction onto the plane 
+//  the points within tolerance are projected along the normal direction onto the plane
 template <class T>
 vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const& plane, vgl_pointset_3d<T> const& ptset, T tol);
 

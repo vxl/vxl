@@ -19,17 +19,17 @@ class geml_matcher_correlation : public geml_matcher
 
   geml_matcher_correlation( const vil1_memory_image_of<vxl_byte> image1,
                             const vil1_memory_image_of<vxl_byte> image2,
-                            const vcl_vector< vcl_pair<float,float> > &corners1,
-                            const vcl_vector< vcl_pair<float,float> > &corners2);
+                            const std::vector< std::pair<float,float> > &corners1,
+                            const std::vector< std::pair<float,float> > &corners2);
 
   // Operations----------------------------------------------------------------
 
-  vcl_vector< vcl_pair<int,int> > get_matches();
+  std::vector< std::pair<int,int> > get_matches();
 
  protected:
   // Data Members--------------------------------------------------------------
 
-  vcl_pair<double,double> best_local_correlation_score( const int c1, const int c2);
+  std::pair<double,double> best_local_correlation_score( const int c1, const int c2);
 };
 
 #endif // geml_matcher_correlation_h_

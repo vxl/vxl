@@ -1,9 +1,11 @@
 // This is gel/vtol/vtol_intensity_face.cxx
+#include <iostream>
+#include <vector>
 #include "vtol_intensity_face.h"
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_curve_2d.h>
@@ -44,7 +46,7 @@ vtol_intensity_face::vtol_intensity_face(one_chain_list & one_chains)
 }
 
 //: Uses given 2-d vtol_one_chain(s) (not deep copy) with intensity information from dr.
-vtol_intensity_face::vtol_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains, vdgl_digital_region const& dr)
+vtol_intensity_face::vtol_intensity_face(std::vector<vtol_one_chain_sptr>* chains, vdgl_digital_region const& dr)
   : vtol_face_2d(*chains), region_(new vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij()))
 {
 }
@@ -116,7 +118,7 @@ double vtol_intensity_face::perimeter()
 //-----------------------------------------------
 //: The extrema of the face along a line of given orientation
 //
-void vtol_intensity_face::extrema(vcl_vector<float>& orientation,
+void vtol_intensity_face::extrema(std::vector<float>& orientation,
                                   float& fmin, float& fmax)
 {
   //Iterate through the pixels of the face and determine the
@@ -154,11 +156,11 @@ Histogram_ref vtol_intensity_face::GetAdjacentRegionHistogram()
 {
   //Get the adjacent faces
   float mini=this->get_min(), maxi=this->get_max();
-  vcl_vector<vtol_face_2d*> adj_faces;
+  std::vector<vtol_face_2d*> adj_faces;
   this->GetAdjacentFaces(adj_faces);
   //iterate through and collect intensity bounds
   iface_list afs;
-  for (vcl_vector<vtol_face_2d*>::iterator fit = adj_faces.begin();
+  for (std::vector<vtol_face_2d*>::iterator fit = adj_faces.begin();
        fit != adj_faces.end(); fit++)
   {
     vtol_intensity_face_sptr af= (*fit)->cast_to_intensity_face();
@@ -183,12 +185,12 @@ Histogram_ref vtol_intensity_face::GetAdjacentRegionHistogram()
 float vtol_intensity_face::GetAdjacentRegionMean()
 {
     //Get the adjacent faces
-  vcl_vector<vtol_face_2d*> adj_faces;
+  std::vector<vtol_face_2d*> adj_faces;
   this->adjacent_faces(adj_faces);
   //iterate through and accumulate the mean
   float area =0;
   float mean = 0;
-  for (vcl_vector<vtol_face_2d*>::iterator fit = adj_faces.begin();
+  for (std::vector<vtol_face_2d*>::iterator fit = adj_faces.begin();
        fit != adj_faces.end(); fit++)
   {
     vtol_intensity_face_sptr af= (*fit)->cast_to_intensity_face();

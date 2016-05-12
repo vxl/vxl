@@ -31,11 +31,11 @@ bool bvpl_init_sf_response_scene_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_init_sf_response_scene_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";  //input scene
   input_types_[1] = "vcl_string";            //output path
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";  //response scene
   output_types_[1] = "boxm_scene_base_sptr";  //valid scene
 
@@ -52,7 +52,7 @@ bool bvpl_init_sf_response_scene_process(bprb_func_process& pro)
   //get inputs:
   unsigned i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
 
   //get scene
   typedef boct_tree<short, float> float_tree_type;
@@ -66,14 +66,14 @@ bool bvpl_init_sf_response_scene_process(bprb_func_process& pro)
     scene_out->set_appearance_model(VNL_FLOAT_10);
     scene_out->write_scene("steerable_gauss_3d_scene.xml");
     scene_in->clone_blocks_to_vector<10>(*scene_out);
-    
+
     boxm_scene<boct_tree<short, bool> > *valid_scene =
     new boxm_scene<boct_tree<short, bool> >(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
     valid_scene->set_paths(output_path, "valid_scene");
     valid_scene->set_appearance_model(BOXM_BOOL);
     valid_scene->write_scene("valid_scene.xml");
-    
-    
+
+
     //store output
     boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
     scene_ptr = scene_out;

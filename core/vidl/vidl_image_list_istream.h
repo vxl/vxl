@@ -11,9 +11,10 @@
 // \author Matt Leotta
 // \date 19 Dec 2005
 
+#include <vector>
+#include <string>
 #include "vidl_istream.h"
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 
 //: A video input stream from a list of images on disk
@@ -32,10 +33,10 @@ class vidl_image_list_istream
   vidl_image_list_istream();
 
   //: Constructor - from a file glob string
-  vidl_image_list_istream(const vcl_string& glob);
+  vidl_image_list_istream(const std::string& glob);
 
   //: Constructor - from a vector of file paths
-  vidl_image_list_istream(const vcl_vector<vcl_string>& paths);
+  vidl_image_list_istream(const std::vector<std::string>& paths);
 
   //: Destructor
   virtual ~vidl_image_list_istream() { close(); }
@@ -43,11 +44,11 @@ class vidl_image_list_istream
 
   //: Open a new stream using a file glob (see vul_file_iterator)
   // \note files are loaded in alphanumeric order by path name
-  virtual bool open(const vcl_string& glob);
+  virtual bool open(const std::string& glob);
 
   //: Open a new stream using a vector of file paths
   // \note all files are tested and only valid image files are retained
-  virtual bool open(const vcl_vector<vcl_string>& paths);
+  virtual bool open(const std::vector<std::string>& paths);
 
   //: Close the stream
   virtual void close();
@@ -95,7 +96,7 @@ class vidl_image_list_istream
   virtual vidl_frame_sptr current_frame();
 
   //: Return the path to the current image in the stream
-  vcl_string current_path() const;
+  std::string current_path() const;
 
   //: Seek to the given frame number (but do not load the image)
   // \returns true if successful
@@ -103,7 +104,7 @@ class vidl_image_list_istream
 
  private:
   //: The vector of images
-  vcl_vector<vcl_string> image_paths_;
+  std::vector<std::string> image_paths_;
 
   //: The current index
   unsigned int index_;

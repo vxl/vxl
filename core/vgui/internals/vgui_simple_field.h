@@ -18,7 +18,8 @@
 //   13-SEP-2002  K.Y.McGaul - Converted to doxygen style comments
 // \endverbatim
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 #include "vgui_dialog_field.h"
 
 //: Templated fields for dialog boxes.
@@ -34,8 +35,8 @@ class vgui_simple_field : public vgui_dialog_field
   vgui_simple_field(const char *text,T &variable_to_modify);
   ~vgui_simple_field();
 
-  vcl_string current_value() const;
-  bool update_value(const vcl_string &);
+  std::string current_value() const;
+  bool update_value(const std::string &);
 
   T &var;
 };

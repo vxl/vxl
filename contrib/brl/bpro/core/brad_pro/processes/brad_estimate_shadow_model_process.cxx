@@ -17,12 +17,12 @@ bool brad_estimate_shadow_model_process_cons(bprb_func_process& pro)
 {
   using namespace brad_estimate_shadow_model_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bbas_1d_array_float_sptr";
   input_types_[1] = "bbas_1d_array_float_sptr";
   input_types_[2] = "float";
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "float";
 
   return pro.set_input_types(input_types_) &&
@@ -37,7 +37,7 @@ bool brad_estimate_shadow_model_process(bprb_func_process& pro)
         using namespace brad_estimate_shadow_model_process_globals;
 
   if (pro.n_inputs()< n_inputs_) {
-    vcl_cout << "brad_estimate_shadow_model_process: The input number should be 3" << vcl_endl;
+    std::cout << "brad_estimate_shadow_model_process: The input number should be 3" << std::endl;
     return false;
   }
 

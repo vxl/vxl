@@ -29,14 +29,14 @@ class boxm2_render_depth_of_max_prob_functor
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float vis=(*vis_img_)(i,j);
-    float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
+    float curr_p=(1-std::exp(-alpha*seg_len))*vis;
     float curr_len = len_img_(i,j);
     float curr_max = (*max_prob_img_)(i,j);
     if (curr_p > curr_max) {
       (*max_prob_img_)(i,j) = curr_p;
       (*expected_img_)(i,j)=curr_len;
     }
-    vis*=vcl_exp(-alpha*seg_len);
+    vis*=std::exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;
     len_img_(i,j)=curr_len+seg_len;
     return true;

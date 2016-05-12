@@ -14,26 +14,27 @@
 // Initial version August 29,  2015
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 template <class Type>
 class vgl_pointset_3d
 {
   //: members
   bool has_normals_;
-  vcl_vector<vgl_point_3d<Type> > points_;
-  vcl_vector<vgl_vector_3d<Type> > normals_;
+  std::vector<vgl_point_3d<Type> > points_;
+  std::vector<vgl_vector_3d<Type> > normals_;
  public:
   //: Default constructor
  vgl_pointset_3d(): has_normals_(false){}
 
   //: Construct from a list
- vgl_pointset_3d(vcl_vector<vgl_point_3d<Type> > const& points): has_normals_(false),points_(points){}
- vgl_pointset_3d(vcl_vector<vgl_point_3d<Type> > const& points, vcl_vector<vgl_vector_3d<Type> > const& normals):
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points): has_normals_(false),points_(points){}
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points, std::vector<vgl_vector_3d<Type> > const& normals):
   has_normals_(true),points_(points), normals_(normals){}
 
   //: incrementally grow points, duplicate points are allowed
@@ -51,15 +52,27 @@ class vgl_pointset_3d
   vgl_vector_3d<Type> n(unsigned i) const
   {if(has_normals_) return normals_[i]; return vgl_vector_3d<Type>();}
 
-  vcl_vector<vgl_point_3d<Type> > points() const {return points_;}
-  vcl_vector<vgl_vector_3d<Type> > normals() const {return normals_;}
+  std::vector<vgl_point_3d<Type> > points() const {return points_;}
+  std::vector<vgl_vector_3d<Type> > normals() const {return normals_;}
 
-  void set_points(vcl_vector<vgl_point_3d<Type> > const& points)
+  void set_points(std::vector<vgl_point_3d<Type> > const& points)
   { points_ = points; has_normals_=false;}
 
-  void set_points_with_normals(vcl_vector<vgl_point_3d<Type> > const& points,
-                               vcl_vector<vgl_vector_3d<Type> > const& normals)
+  void set_points_with_normals(std::vector<vgl_point_3d<Type> > const& points,
+                               std::vector<vgl_vector_3d<Type> > const& normals)
   { points_ = points; normals_ = normals; has_normals_=true;}
+
+  void append_pointset(vgl_pointset_3d<Type> const& ptset){
+    if(this->has_normals_ != ptset.has_normals())
+      return; // can't be done
+    unsigned npts = ptset.npts();
+    for(unsigned i = 0; i<npts; ++i){
+      if(!this->has_normals_)
+        this->add_point(ptset.p(i));
+      else
+        this->add_point_with_normal(ptset.p(i), ptset.n(i));
+    }
+  }
 
   bool set_point(unsigned i, vgl_point_3d<Type> const& p){
     if(i>=static_cast<unsigned>(points_.size())) return false;
@@ -82,14 +95,14 @@ template <class Type>
   unsigned n = pointset.npts();
   if(n != this->npts())
     return false;
-  vcl_vector<vgl_point_3d<Type> > pts = pointset.points();
+  std::vector<vgl_point_3d<Type> > pts = pointset.points();
   for(unsigned i =0; i<n; ++i)
     if(pts[i] != points_[i])
       return false;
   if(has_normals_){
     if(static_cast<unsigned>(normals_.size()) != n)
       return false;
-    vcl_vector<vgl_vector_3d<Type> > normals = pointset.normals();
+    std::vector<vgl_vector_3d<Type> > normals = pointset.normals();
     for(unsigned i =0; i<n; ++i)
       if(normals[i] != normals_[i])
         return false;
@@ -98,19 +111,19 @@ template <class Type>
 }
 
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& ostr, vgl_pointset_3d<Type> const& ptset){
+std::ostream&  operator<<(std::ostream& ostr, vgl_pointset_3d<Type> const& ptset){
   if(!ostr){
-    vcl_cout << "Bad ostream in write vgl_pointset_3d to stream\n";
+    std::cout << "Bad ostream in write vgl_pointset_3d to stream\n";
     return ostr;
   }
-  vcl_vector<vgl_point_3d<Type> > pts = ptset.points();
+  std::vector<vgl_point_3d<Type> > pts = ptset.points();
   if(!ptset.has_normals()){
     for(unsigned i =0; i<static_cast<unsigned>(pts.size()); i++){
     const vgl_point_3d<Type>& p = pts[i];
     ostr << p.x() << ',' << p.y() << ',' << p.z() << '\n';
     }
   }else{
-    vcl_vector<vgl_vector_3d<Type> > normals = ptset.normals();
+    std::vector<vgl_vector_3d<Type> > normals = ptset.normals();
     for(unsigned i =0; i<static_cast<unsigned>(pts.size()); i++){
     const vgl_point_3d<Type>& p = pts[i];
     const vgl_vector_3d<Type>& n = normals[i];
@@ -121,19 +134,19 @@ vcl_ostream&  operator<<(vcl_ostream& ostr, vgl_pointset_3d<Type> const& ptset){
 }
 
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& istr, vgl_pointset_3d<Type>& ptset){
+std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
   if(!istr){
-    vcl_cout << "Bad istream in read vgl_pointset_3d from stream\n";
+    std::cout << "Bad istream in read vgl_pointset_3d from stream\n";
     return istr;
   }
-  vcl_vector<vgl_point_3d<Type> > pts;
-  vcl_vector<vgl_vector_3d<Type> > normals;
+  std::vector<vgl_point_3d<Type> > pts;
+  std::vector<vgl_vector_3d<Type> > normals;
   char buf[100];
   bool has_normals = false;
   //determine if file has three comma-separated double values or six
   bool first_line = true;
   while(istr.getline(buf,100)){
-      vcl_string buf_str;
+      std::string buf_str;
       if(first_line){
         bool done = false;
         unsigned comma_count = 0;
@@ -162,17 +175,17 @@ vcl_istream&  operator>>(vcl_istream& istr, vgl_pointset_3d<Type>& ptset){
           buf_str.push_back(c);
         }
       }
-      vcl_stringstream isstr(buf_str);
+      std::stringstream isstr(buf_str);
       Type x, y, z, nx, ny, nz;
       unsigned char c;
       isstr >> x >> c;
       if(c!=','){
-        vcl_cout << "stream parse error\n";
+        std::cout << "stream parse error\n";
         return istr;
       }
       isstr >> y >> c;
       if(c!=','){
-        vcl_cout << "stream parse error\n";
+        std::cout << "stream parse error\n";
         return istr;
       }
       if(!has_normals)
@@ -180,19 +193,19 @@ vcl_istream&  operator>>(vcl_istream& istr, vgl_pointset_3d<Type>& ptset){
       else{
         isstr >> z >> c;
         if(c!=','){
-          vcl_cout << "stream parse error\n";
+          std::cout << "stream parse error\n";
           return istr;
         }
       }
       if(has_normals){
         isstr >> nx >> c;
         if(c!=','){
-          vcl_cout << "stream parse error\n";
+          std::cout << "stream parse error\n";
           return istr;
         }
         isstr >> ny >> c;
         if(c!=','){
-          vcl_cout << "stream parse error\n";
+          std::cout << "stream parse error\n";
           return istr;
         }
         isstr >> nz;

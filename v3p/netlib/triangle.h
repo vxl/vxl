@@ -289,10 +289,9 @@ struct triangulateio {
 
 #define ANSI_DECLARATORS
 #ifdef ANSI_DECLARATORS
-#define VOID void
-void triangulate(char *, struct triangulateio *, struct triangulateio *,
+void triangulate(const char * const, struct triangulateio *, struct triangulateio *,
                  struct triangulateio *);
-void trifree(VOID *memptr);
+void trifree(void *memptr);
 #else /* not ANSI_DECLARATORS */
 void triangulate();
 void trifree();

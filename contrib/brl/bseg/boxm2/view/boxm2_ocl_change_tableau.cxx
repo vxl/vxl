@@ -1,10 +1,12 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_ocl_change_tableau.h"
 //:
 // \file
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>
@@ -46,8 +48,8 @@ bool boxm2_ocl_change_tableau::init_change (bocl_device_sptr device,
                                             unsigned ni,
                                             unsigned nj,
                                             vpgl_perspective_camera<double>* cam,
-                                            vcl_vector<vcl_string>& change_imgs,
-                                            vcl_vector<vcl_string>& change_cams)
+                                            std::vector<std::string>& change_imgs,
+                                            std::vector<std::string>& change_cams)
 {
   this->init(device, opencl_cache, scene, ni, nj, cam);
   cams_ = change_cams;
@@ -93,13 +95,13 @@ bool boxm2_ocl_change_tableau::handle(vgui_event const &e)
   }
   else if ( e.type == vgui_KEY_PRESS && e.key == vgui_key('+') ){
     n_ = (n_+2 > 9) ?  9 : n_+2;
-    vcl_cout<<"Setting N to "<< n_ <<vcl_endl;
+    std::cout<<"Setting N to "<< n_ <<std::endl;
     this->change_detect(frame_);
     this->post_redraw();
   }
   else if ( e.type == vgui_KEY_PRESS && e.key == vgui_key('-') ){
     n_ = (n_ - 2 < 1) ? 1 : n_-2;
-    vcl_cout<<"Setting N to "<<n_<<vcl_endl;
+    std::cout<<"Setting N to "<<n_<<std::endl;
     this->change_detect(frame_);
     this->post_redraw();
   }
@@ -117,7 +119,7 @@ bool boxm2_ocl_change_tableau::handle(vgui_event const &e)
 //: updates scene given image and camera
 float boxm2_ocl_change_tableau::change_detect(int frame)
 {
-  vcl_cout<<"Running change detection on frame: "<<frame<<vcl_endl;
+  std::cout<<"Running change detection on frame: "<<frame<<std::endl;
 
   //image and camera from file
   vil_image_view_base_sptr change_img = vil_load(imgs_[frame].c_str());
@@ -154,12 +156,12 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, time_id);
   brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
   if (S->size()!=1){
-      vcl_cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
                << " no selections\n";
   }
   brdb_value_sptr value;
-  if (!S->get_value(vcl_string("value"), value)) {
-      vcl_cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
+  if (!S->get_value(std::string("value"), value)) {
+      std::cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
                << " didn't get value\n";
   }
   vil_image_view_base_sptr exp_img = value->val<vil_image_view_base_sptr>();
@@ -192,11 +194,11 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
   Q = brdb_query_comp_new("id", brdb_query::EQ, change_id);
   S = DATABASE->select("vil_image_view_base_sptr_data", Q);
   if (S->size()!=1){
-      vcl_cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
                << " no selections\n";
   }
-  if (!S->get_value(vcl_string("value"), value)) {
-      vcl_cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
+  if (!S->get_value(std::string("value"), value)) {
+      std::cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
                << " didn't get value\n";
   }
   vil_image_view_base_sptr change_out = value->val<vil_image_view_base_sptr>();
@@ -227,7 +229,7 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
   //write to gpu buffer
   cl_int status = clEnqueueAcquireGLObjects( queue_, 1,&exp_img_->buffer(), 0, 0, 0);
   exp_img_->zero_gpu_buffer( queue_ );
-  vcl_cout<<"Writing to buffer on gpu ..." <<vcl_endl;
+  std::cout<<"Writing to buffer on gpu ..." <<std::endl;
   cl_event ceEvent_ = 0;
   status = clEnqueueWriteBuffer( queue_,
                                  exp_img_->buffer(),

@@ -1,10 +1,12 @@
+#include <iostream>
+#include <algorithm>
 #include "volm_desc_ex_2d.h"
 //:
 // \file
 #include <vsl/vsl_vector_io.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
-unsigned volm_desc_ex_2d::locate_idx(double const& target, vcl_vector<double> const& arr) const
+unsigned volm_desc_ex_2d::locate_idx(double const& target, std::vector<double> const& arr) const
 {
   // simple binary search to locate the dist_id and height_id given dist value or height values
   assert(target >= 0 && "given object dists/height is smaller than 0");
@@ -21,7 +23,7 @@ unsigned volm_desc_ex_2d::locate_idx(double const& target, vcl_vector<double> co
   return low;
 }
 
-volm_desc_ex_2d::volm_desc_ex_2d(vcl_vector<double> const& radius,
+volm_desc_ex_2d::volm_desc_ex_2d(std::vector<double> const& radius,
                                  double const& h_width, double const& h_inc,
                                  unsigned const& nlands,
                                  unsigned char const& initial_mag)
@@ -34,18 +36,18 @@ volm_desc_ex_2d::volm_desc_ex_2d(vcl_vector<double> const& radius,
   else
     radius_ = radius;
   // sort the radius to ensure the bin order
-  vcl_sort(radius_.begin(), radius_.end());
+  std::sort(radius_.begin(), radius_.end());
   ndists_ = (unsigned)radius.size() + 1;
   // set the heading bins
   h_width_ = h_width;
   h_inc_ = h_inc;
   if (h_width_ < h_inc_) h_inc_ = h_width_;
   if (h_inc_ == 360.0)  nheadings_ = 1;
-  else                  nheadings_ = vcl_ceil(360.0/h_inc_);
+  else                  nheadings_ = std::ceil(360.0/h_inc_);
   heading_intervals_.clear();
   for (unsigned hidx = 0; hidx < nheadings_; hidx++) {
     double s = hidx * h_inc_;  double e = s + h_width_;
-    heading_intervals_.push_back(vcl_pair<double, double>(s, e));
+    heading_intervals_.push_back(std::pair<double, double>(s, e));
   }
 
   // construct the histogram
@@ -75,7 +77,7 @@ unsigned volm_desc_ex_2d::bin_index(unsigned const& dist_idx, unsigned const& la
   return bin_idx;
 }
 
-vcl_vector<unsigned> volm_desc_ex_2d::bin_index(double const& distance, unsigned const& land_type, double const& heading) const
+std::vector<unsigned> volm_desc_ex_2d::bin_index(double const& distance, unsigned const& land_type, double const& heading) const
 {
   // obtain distance index
   unsigned dist_idx = this->locate_idx(distance, radius_);
@@ -83,19 +85,19 @@ vcl_vector<unsigned> volm_desc_ex_2d::bin_index(double const& distance, unsigned
   double heading_value = heading;
   while (heading_value >= heading_intervals_[heading_intervals_.size()-1].second)
     heading_value -= 360.0;
-  vcl_vector<unsigned> heading_indice;
+  std::vector<unsigned> heading_indice;
   for (unsigned hidx = 0; hidx < heading_intervals_.size(); hidx++)
     if (heading_value >= heading_intervals_[hidx].first && heading_value < heading_intervals_[hidx].second)
       heading_indice.push_back(hidx);
-  vcl_vector<unsigned> bin_indice;
-  for (vcl_vector<unsigned>::iterator it = heading_indice.begin(); it != heading_indice.end(); ++it)
+  std::vector<unsigned> bin_indice;
+  for (std::vector<unsigned>::iterator it = heading_indice.begin(); it != heading_indice.end(); ++it)
     bin_indice.push_back(this->bin_index(dist_idx, land_type, *it));
   return bin_indice;
 }
 
 void volm_desc_ex_2d::set_count(unsigned const& bin, unsigned char const& count)
 {
-  // Note for same 
+  // Note for same
   if (bin < nbins_) h_[bin] += count;
 }
 
@@ -107,8 +109,8 @@ void volm_desc_ex_2d::set_count(unsigned const& dist_idx, unsigned const& land_i
 
 void volm_desc_ex_2d::set_count(double const& distance, unsigned const& land_id, double const& heading, unsigned char const& count)
 {
-  vcl_vector<unsigned> bins = this->bin_index(distance, land_id, heading);
-  for (vcl_vector<unsigned>::iterator vit = bins.begin();  vit != bins.end();  ++vit)
+  std::vector<unsigned> bins = this->bin_index(distance, land_id, heading);
+  for (std::vector<unsigned>::iterator vit = bins.begin();  vit != bins.end();  ++vit)
     this->set_count(*vit, count);
 }
 
@@ -119,29 +121,29 @@ float volm_desc_ex_2d::similarity(volm_desc_sptr other)
   // calculate the intersection
   float intersec = 0.0f;
   for (unsigned idx = 0; idx < nbins_; idx++)
-    intersec += (float)vcl_min(this->count(idx), other->count(idx));
+    intersec += (float)std::min(this->count(idx), other->count(idx));
   // normalize by current histogram area
   return intersec/this->get_area();
 }
 
 void volm_desc_ex_2d::print() const
 {
-  vcl_cout << "descriptor name: " << name_ << '\n';
-  vcl_cout << "number of depth bins: " << ndists_ << '\n'
+  std::cout << "descriptor name: " << name_ << '\n';
+  std::cout << "number of depth bins: " << ndists_ << '\n'
      << "radius interval: ";
   for (unsigned ridx = 0; ridx < radius_.size(); ridx++)
-    vcl_cout << radius_[ridx] << ' ';
-  vcl_cout << "\nnumber of heading bins: " << nheadings_ << ", heading width: " << h_width_ << ", heading incremental: " << h_inc_ << '\n';
+    std::cout << radius_[ridx] << ' ';
+  std::cout << "\nnumber of heading bins: " << nheadings_ << ", heading width: " << h_width_ << ", heading incremental: " << h_inc_ << '\n';
   for (unsigned hidx = 0; hidx < heading_intervals_.size(); hidx++)
-    vcl_cout << '[' << heading_intervals_[hidx].first << ',' << heading_intervals_[hidx].second << "] ";
-  vcl_cout << '\n'
+    std::cout << '[' << heading_intervals_[hidx].first << ',' << heading_intervals_[hidx].second << "] ";
+  std::cout << '\n'
            << "number of land bins: " << nlands_ << '\n';
-  vcl_cout << "number of total bins:" << nbins_ << '\n';
+  std::cout << "number of total bins:" << nbins_ << '\n';
   if (nbins_ < 100) {
-    vcl_cout << "counts: ";
+    std::cout << "counts: ";
     for (unsigned i = 0; i < nbins_; i++)
-      vcl_cout << (int)h_[i] << ' ';
-    vcl_cout << vcl_endl;
+      std::cout << (int)h_[i] << ' ';
+    std::cout << std::endl;
   }
 }
 
@@ -179,12 +181,12 @@ void volm_desc_ex_2d::b_read(vsl_b_istream& is)
     heading_intervals_.clear();
     for (unsigned hidx = 0; hidx < nheadings_; hidx++) {
       double s = hidx * h_inc_;  double e = s + h_width_;
-      heading_intervals_.push_back(vcl_pair<double, double>(s, e));
+      heading_intervals_.push_back(std::pair<double, double>(s, e));
     }
   }
   else
   {
-    vcl_cout << "volm_desc_ex_2d descriptor -- unknown binary io version: " << ver << '\n';
+    std::cout << "volm_desc_ex_2d descriptor -- unknown binary io version: " << ver << '\n';
     return;
   }
 }

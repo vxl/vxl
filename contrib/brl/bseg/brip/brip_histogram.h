@@ -7,8 +7,10 @@
 // \author Matt Leotta
 //
 
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 
 //: Construct histogram from pixels in the given image.
@@ -16,7 +18,7 @@
 //  of all values in the histogram.
 template<class T>
 double brip_histogram(const vil_image_view<T>& image,
-                      vcl_vector<double>& histo,
+                      std::vector<double>& histo,
                       double min, double max, unsigned n_bins);
 
 
@@ -25,18 +27,18 @@ double brip_histogram(const vil_image_view<T>& image,
 template<class T>
 double brip_weighted_histogram(const vil_image_view<T>& image,
                                const vil_image_view<double>& weights,
-                               vcl_vector<double>& histo,
+                               std::vector<double>& histo,
                                double min, double max, unsigned n_bins);
 
 
 //: Construct the joint histogram between image1 and image2.
 //  The the values of min, max, and n_bins are used on both images
-//  the result is a 2D (n_bins x n_bins) vcl_vector.
+//  the result is a 2D (n_bins x n_bins) std::vector.
 //  The sum of all values in the histogram is returned.
 template<class T>
 double brip_joint_histogram(const vil_image_view<T>& image1,
                             const vil_image_view<T>& image2,
-                            vcl_vector<vcl_vector<double> >& histo,
+                            std::vector<std::vector<double> >& histo,
                             double min, double max, unsigned n_bins);
 
 #endif // brip_histogram_h_

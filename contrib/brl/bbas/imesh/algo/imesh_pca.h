@@ -13,8 +13,10 @@
 // \endverbatim
 
 
+#include <iostream>
+#include <vector>
 #include <imesh/imesh_mesh.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -29,7 +31,7 @@ class imesh_pca_mesh : public imesh_mesh
   imesh_pca_mesh() {}
 
   //: Constructor from a vector of meshes with the same topology
-  imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes);
+  imesh_pca_mesh(const std::vector<imesh_mesh>& meshes);
 
   //: Constructor from a mesh, mean, standard deviations, and PC matrix
   imesh_pca_mesh(const imesh_mesh& mesh,
@@ -39,7 +41,7 @@ class imesh_pca_mesh : public imesh_mesh
 
   //: Copy Constructor
   imesh_pca_mesh(const imesh_pca_mesh& other);
-  
+
   //: Assignment operator
   imesh_pca_mesh& operator=(const imesh_pca_mesh& other);
 
@@ -93,13 +95,13 @@ class imesh_pca_mesh : public imesh_mesh
 
  protected:
   //: compute and set the mean return the deviations matrix
-  vnl_matrix<double> compute_mean(const vcl_vector<imesh_mesh>& meshes);
+  vnl_matrix<double> compute_mean(const std::vector<imesh_mesh>& meshes);
   //: Construct from a mesh with no variation
   imesh_pca_mesh(const imesh_mesh& mesh);
 
   vnl_vector<double> std_devs_;
   vnl_matrix<double> pc_;
-  vcl_auto_ptr<imesh_vertex_array_base> mean_verts_;
+  std::auto_ptr<imesh_vertex_array_base> mean_verts_;
 
   vnl_vector<double> params_;
 };
@@ -108,28 +110,28 @@ class imesh_pca_mesh : public imesh_mesh
 //: Compute the image Jacobians at each vertex for PCA parameters in the result:
 //  Matrix n, row i is the image space derivative
 //  at vertex n with respect to the ith pca parameter
-vcl_vector<vnl_matrix<double> >
+std::vector<vnl_matrix<double> >
 imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
                           const imesh_pca_mesh& mesh);
 
 
 //: Read a PCA mesh from a mean mesh and a pca file
-imesh_pca_mesh imesh_read_pca(const vcl_string& mean_file,
-                              const vcl_string& pca_file);
+imesh_pca_mesh imesh_read_pca(const std::string& mean_file,
+                              const std::string& pca_file);
 
 //: Read a PCA file
-bool imesh_read_pca(const vcl_string& pca_file,
+bool imesh_read_pca(const std::string& pca_file,
                     vnl_vector<double>& mean,
                     vnl_vector<double>& std_devs,
                     vnl_matrix<double>& pc);
 
 //: Write the mean mesh and PCA file
-void imesh_write_pca(const vcl_string& mesh_file,
-                     const vcl_string& pca_file,
+void imesh_write_pca(const std::string& mesh_file,
+                     const std::string& pca_file,
                      const imesh_pca_mesh& pmesh);
 
 //: Write a PCA file
-bool imesh_write_pca(const vcl_string& filename,
+bool imesh_write_pca(const std::string& filename,
                      const vnl_vector<double>& mean,
                      const vnl_vector<double>& std_devs,
                      const vnl_matrix<double>& pc);

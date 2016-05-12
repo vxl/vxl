@@ -1,4 +1,4 @@
-#include <bvxm/grid/bvxm_voxel_storage_disk_cached.txx>
+#include <bvxm/grid/bvxm_voxel_storage_disk_cached.hxx>
 #include <vnl/vnl_vector_fixed.h>
 
 typedef vnl_vector_fixed<int,3> vector;

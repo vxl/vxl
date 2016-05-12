@@ -9,10 +9,11 @@
 // \author Ian Scott
 // \date 2001-10-08
 
+#include <iostream>
+#include <string>
 #include "clsfy_random_builder.h"
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_random_classifier.h>
@@ -33,14 +34,14 @@ short clsfy_random_builder::version_no() const
 
 //=======================================================================
 
-vcl_string clsfy_random_builder::is_a() const
+std::string clsfy_random_builder::is_a() const
 {
-  return vcl_string("clsfy_random_builder");
+  return std::string("clsfy_random_builder");
 }
 
 //=======================================================================
 
-bool clsfy_random_builder::is_class(vcl_string const& s) const
+bool clsfy_random_builder::is_class(std::string const& s) const
 {
   return s == clsfy_random_builder::is_a() || clsfy_builder_base::is_class(s);
 }
@@ -54,7 +55,7 @@ clsfy_builder_base* clsfy_random_builder::clone() const
 
 //=======================================================================
 
-void clsfy_random_builder::print_summary(vcl_ostream& os) const
+void clsfy_random_builder::print_summary(std::ostream& os) const
 {
   os << "confidence = " << confidence_;
 }
@@ -81,9 +82,9 @@ void clsfy_random_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, confidence_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_builder&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_random_builder&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
@@ -96,7 +97,7 @@ void clsfy_random_builder::b_read(vsl_b_istream& bfs)
 double clsfy_random_builder::build(clsfy_classifier_base& model,
                                    mbl_data_wrapper<vnl_vector<double> >& inputs,
                                    unsigned nClasses,
-                                   const vcl_vector<unsigned> &outputs) const
+                                   const std::vector<unsigned> &outputs) const
 {
   const unsigned n = outputs.size();
   assert(model.is_class("clsfy_random_classifier"));
@@ -106,7 +107,7 @@ double clsfy_random_builder::build(clsfy_classifier_base& model,
 
   assert (n>0);
 
-  vcl_vector<unsigned> freqs(nClasses);
+  std::vector<unsigned> freqs(nClasses);
   for (unsigned i=0; i < n; ++i)
   {
     assert (outputs[i] < nClasses);
@@ -114,7 +115,7 @@ double clsfy_random_builder::build(clsfy_classifier_base& model,
   }
 
   double sum = (double)(vnl_c_vector<unsigned>::sum(&freqs.front(), nClasses));
-  vcl_vector<double> probs(nClasses);
+  std::vector<double> probs(nClasses);
   for (unsigned i=0; i < nClasses; ++i)
     probs[i] = freqs[i] / sum;
   randclass.set_probs(probs);

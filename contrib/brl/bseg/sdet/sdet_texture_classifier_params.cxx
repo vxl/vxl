@@ -1,12 +1,13 @@
 // This is brl/bseg/sdet/sdet_texture_classifier_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_texture_classifier_params.h"
 //:
 // \file
 // See sdet_texture_classifier_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -44,8 +45,8 @@ sdet_texture_classifier_params(unsigned n_scales,
                                float angle_interval,
                                float lambda0,
                                float lambda1,
-                               float laplace_radius, 
-                               float gauss_radius, 
+                               float laplace_radius,
+                               float gauss_radius,
                                float cutoff_per,
                                bool signed_response,
                                bool mag,
@@ -56,7 +57,7 @@ sdet_texture_classifier_params(unsigned n_scales,
                                float weight_offset
                                )
 {
-  InitParams(n_scales, angle_interval,scale_interval, 
+  InitParams(n_scales, angle_interval,scale_interval,
              lambda0, lambda1, laplace_radius, gauss_radius,
              cutoff_per, signed_response, mag, fast, k, n_samples,
              block_size, weight_offset);
@@ -65,7 +66,7 @@ sdet_texture_classifier_params(unsigned n_scales,
 void sdet_texture_classifier_params::
 InitParams(unsigned n_scales, float scale_interval, float angle_interval,
            float lambda0, float lambda1,
-           float laplace_radius, float gauss_radius, 
+           float laplace_radius, float gauss_radius,
            float cutoff_per, bool signed_response,
            bool mag, bool fast, unsigned k, unsigned n_samples,
            unsigned block_size,
@@ -95,8 +96,8 @@ bool sdet_texture_classifier_params::SanityCheck()
 {
   //  Note that msg << ends seems to restart the string and erase the
   //  previous string. We should only use it as the last call, use
-  //  vcl_endl otherwise.
-  vcl_stringstream msg;
+  //  std::endl otherwise.
+  std::stringstream msg;
   bool valid = true;
 
   if (n_scales_ < 3)
@@ -110,16 +111,16 @@ bool sdet_texture_classifier_params::SanityCheck()
     }
 
 
-  msg << vcl_ends;
+  msg << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_texture_classifier_params& dmp)
+std::ostream& operator << (std::ostream& os, const sdet_texture_classifier_params& dmp)
 {
   os << "sdet_texture_classifier_params:\n[---\n"
-     << "n scales " << dmp.n_scales_ << " scale interval " 
+     << "n scales " << dmp.n_scales_ << " scale interval "
      << dmp.scale_interval_ << '\n'
      << "angle interval " << dmp.angle_interval_ << '\n'
      << "lambda0 " << dmp.lambda0_ << " lambda1 " << dmp.lambda1_ << '\n';
@@ -136,9 +137,9 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_texture_classifier_params&
   os << "---]\n";
   return os;
 }
-vcl_string sdet_texture_classifier_params::filter_dir_name() 
-{ 
-  vcl_stringstream str; 
+std::string sdet_texture_classifier_params::filter_dir_name()
+{
+  std::stringstream str;
   if (signed_response_)
     str << "filter_bank_" << n_scales_ << "_" << lambda0_ << "_" << lambda1_ << "_" << scale_interval_ << "_" << angle_interval_ << "_"
         << laplace_radius_ << "_" << gauss_radius_ << "_" << cutoff_per_ << "_signed";
@@ -149,10 +150,10 @@ vcl_string sdet_texture_classifier_params::filter_dir_name()
 }
 
 //: Binary save vgl_point_2d to stream.
-void vsl_b_write(vsl_b_ostream &os, 
+void vsl_b_write(vsl_b_ostream &os,
                  const sdet_texture_classifier_params & tcp)
 {
-  sdet_texture_classifier_params& tcpnc = 
+  sdet_texture_classifier_params& tcpnc =
     const_cast<sdet_texture_classifier_params&>(tcp);
   vsl_b_write(os,tcpnc.n_scales_);
   vsl_b_write(os,tcpnc.scale_interval_);
@@ -191,8 +192,8 @@ void vsl_b_read(vsl_b_istream &is, sdet_texture_classifier_params & tcp)
   vsl_b_read(is,tcp.weight_offset_);
 }
 //: Print human readable summary of object to a stream
-void vsl_print_summary(vcl_ostream& os,
+void vsl_print_summary(std::ostream& os,
                        const sdet_texture_classifier_params & tcp)
 {
-  os << tcp; 
+  os << tcp;
 }

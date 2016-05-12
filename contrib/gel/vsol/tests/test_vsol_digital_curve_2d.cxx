@@ -8,11 +8,13 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2004/07/13| Matt Leotta          |Creation
 //*****************************************************************************
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
@@ -22,7 +24,7 @@
 
 void test_vsol_digital_curve_2d()
 {
-  vcl_vector<vsol_point_2d_sptr> samples(5);
+  std::vector<vsol_point_2d_sptr> samples(5);
   samples[0]=new vsol_point_2d(0.0,0.0);
   samples[1]=new vsol_point_2d(1.0,2.0);
   samples[2]=new vsol_point_2d(2.5,3.5);
@@ -65,7 +67,7 @@ void test_vsol_digital_curve_2d()
   TEST("vsol_digital_curve_2d::interp(2.0)",
        dc->interp(2.0), vgl_point_2d<double>(2.5,3.5));
 
-  vcl_cout << "digital curve: " << *dc << vcl_endl;
+  std::cout << "digital curve: " << *dc << std::endl;
   vsol_digital_curve_2d_sptr curve1, curve2;
   // Split the curve at a segment
   double index = closest_index(vgl_point_2d<double>(1.5,3.0),dc);
@@ -76,8 +78,8 @@ void test_vsol_digital_curve_2d()
                          && curve1->size() == 3, true);
   TEST("split result 2", curve2->point(0)->get_p() == vgl_point_2d<double>(1.75,2.75)
                          && curve2->size() == 4, true);
-  vcl_cout << "curve 1: " << *curve1 << vcl_endl
-           << "curve 2: " << *curve2 << vcl_endl;
+  std::cout << "curve 1: " << *curve1 << std::endl
+           << "curve 2: " << *curve2 << std::endl;
 
   // Split the curve at a point
   index = closest_index(vgl_point_2d<double>(5.0,2.0),dc);
@@ -88,8 +90,8 @@ void test_vsol_digital_curve_2d()
                          && curve1->size() == 4, true);
   TEST("split result 2", curve2->point(0)->get_p() == vgl_point_2d<double>(4.5,3.0)
                          && curve2->size() == 2, true);
-  vcl_cout << "curve 1: " << *curve1 << vcl_endl
-           << "curve 2: " << *curve2 << vcl_endl;
+  std::cout << "curve 1: " << *curve1 << std::endl
+           << "curve 2: " << *curve2 << std::endl;
 
   // Split curve at its end points (this should fail)
   index = closest_index(vgl_point_2d<double>(7.0,5.0),dc);

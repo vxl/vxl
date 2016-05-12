@@ -1,12 +1,13 @@
 // This is brl/bpro/core/vil_pro/processes/vil_convert_pixel_type_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief Converts floating point image (0,1.0) to byte image (0,255) for compression/saveability reasons
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
@@ -15,13 +16,13 @@
 bool vil_convert_pixel_type_process_cons(bprb_func_process& pro)
 {
   //this process takes two inputs:
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vcl_string");
 
   //this process has 1 output
   // output(0): the output image with the specified number of planes
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image
 
   return pro.set_input_types(input_types)
@@ -33,7 +34,7 @@ bool vil_convert_pixel_type_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()<2) {
-    vcl_cout << "vil_convert_pixel_type_process: The input number should be 2" << vcl_endl;
+    std::cout << "vil_convert_pixel_type_process: The input number should be 2" << std::endl;
     return false;
   }
   unsigned i=0;
@@ -42,7 +43,7 @@ bool vil_convert_pixel_type_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
 
   //retrieve output type
-  vcl_string out_type = pro.get_input<vcl_string>(i++);
+  std::string out_type = pro.get_input<std::string>(i++);
 
   ////////////////////////////////////////////////////////////////////
   //Convert to float image

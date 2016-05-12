@@ -7,14 +7,14 @@ doxygen_add_library(contrib/brl/bseg/brip
   DESCRIPTION "Brown Image Processing Library"
   )
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+include_directories(${BRL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR}/bseg )
+include_directories(${GEL_INCLUDE_DIR})
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
-SET(brip_sources
-   brip_histogram.h          brip_histogram.txx
-   brip_mutual_info.h        brip_mutual_info.txx
+set(brip_sources
+   brip_histogram.h          brip_histogram.hxx
+   brip_mutual_info.h        brip_mutual_info.hxx
    brip_vil1_float_ops.h     brip_vil1_float_ops.cxx
    brip_vil_float_ops.h      brip_vil_float_ops.cxx
    brip_vil_nitf_ops.h       brip_vil_nitf_ops.cxx
@@ -26,27 +26,25 @@ SET(brip_sources
    brip_watershed.h          brip_watershed.cxx
    brip_roi.h                brip_roi.cxx              brip_roi_sptr.h
    brip_quadtree_node.h      brip_quadtree_node_base_sptr.h
-   brip_max_scale_response.h brip_max_scale_response.txx
-   brip_quadtree_utils.h     brip_quadtree_utils.txx
+   brip_max_scale_response.h brip_max_scale_response.hxx
+   brip_quadtree_utils.h     brip_quadtree_utils.hxx
    brip_rect_mask.h          brip_rect_mask.cxx
    brip_line_generator.h     brip_line_generator.cxx
    brip_label_equivalence.h  brip_label_equivalence.cxx
    brip_kernel.h
    brip_interp_kernel.h
    brip_gaussian_kernel.h
-   brip_blobwise_mutual_info.h brip_blobwise_mutual_info.txx
+   brip_blobwise_mutual_info.h brip_blobwise_mutual_info.hxx
    brip_filter_bank.h        brip_filter_bank.cxx
    brip_gain_offset_solver.h    brip_gain_offset_solver.cxx
    brip_phase_correlation.h    brip_phase_correlation.cxx
 )
-AUX_SOURCE_DIRECTORY(Templates brip_sources)
+aux_source_directory(Templates brip_sources)
 
-ADD_LIBRARY(brip ${brip_sources})
-INSTALL_TARGETS(/lib brip)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/brip ${brip_sources})
+vxl_add_library(LIBRARY_NAME brip LIBRARY_SOURCES ${brip_sources})
 
-TARGET_LINK_LIBRARIES(brip gevd bsta bsol vsol vil1 vil_algo vil vgl_algo vgl vnl_algo vnl vbl vul vpgl bil_algo)
+target_link_libraries(brip gevd bsta bsol vsol ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpgl bil_algo)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

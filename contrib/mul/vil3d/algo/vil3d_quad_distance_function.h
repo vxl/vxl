@@ -22,13 +22,13 @@ inline void vil3d_quad_distance_function_i(const vil3d_image_view<srcT>& src,
   assert(src.nplanes()==1);
   unsigned int ni=src.ni(),nj=src.nj(),nk=src.nk();
   dest.set_size(ni,nj,nk);
-  vcl_ptrdiff_t s_istep = src.istep(),   s_jstep = src.jstep(), s_kstep = src.kstep();
-  vcl_ptrdiff_t d_istep = dest.istep(),  d_jstep = dest.jstep(), d_kstep = dest.kstep();
+  std::ptrdiff_t s_istep = src.istep(),   s_jstep = src.jstep(), s_kstep = src.kstep();
+  std::ptrdiff_t d_istep = dest.istep(),  d_jstep = dest.jstep(), d_kstep = dest.kstep();
 
   const srcT* s_plane = src.origin_ptr();
   destT*      d_plane = dest.origin_ptr();
 
-  vcl_vector<double> x,y,z;
+  std::vector<double> x,y,z;
 
   // Apply transform along i direction
   for (unsigned k=0;k<nk;++k, s_plane+=s_kstep, d_plane+=d_kstep)
@@ -85,15 +85,15 @@ inline void vil3d_quad_distance_function_i(const vil3d_image_view<srcT>& src,
   unsigned int ni=src.ni(), nj=src.nj(), nk=src.nk();
   dest.set_size(ni,nj,nk);
   pos.set_size(ni,nj,nk,1);
-  vcl_ptrdiff_t s_istep = src.istep(),  s_jstep = src.jstep(),  s_kstep = src.kstep();
-  vcl_ptrdiff_t d_istep = dest.istep(), d_jstep = dest.jstep(), d_kstep = dest.kstep();
-  vcl_ptrdiff_t  p_istep = pos.istep(), p_jstep = pos.jstep(),  p_kstep = pos.kstep();
+  std::ptrdiff_t s_istep = src.istep(),  s_jstep = src.jstep(),  s_kstep = src.kstep();
+  std::ptrdiff_t d_istep = dest.istep(), d_jstep = dest.jstep(), d_kstep = dest.kstep();
+  std::ptrdiff_t  p_istep = pos.istep(), p_jstep = pos.jstep(),  p_kstep = pos.kstep();
 
   const srcT* s_plane = src.origin_ptr();
   destT*      d_plane = dest.origin_ptr();
   posT*       p_plane  = pos.origin_ptr();
 
-  vcl_vector<double> x,y,z;
+  std::vector<double> x,y,z;
 
   // Apply transform along i direction to get tmp
   for (unsigned k=0;k<nk;++k,s_plane+=s_kstep,d_plane+=d_kstep,p_plane+=p_kstep)

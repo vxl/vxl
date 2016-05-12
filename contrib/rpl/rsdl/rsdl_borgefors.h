@@ -12,7 +12,9 @@
 // (should be changed to any stl container type later) of any
 // datatype with x() and y() functions defined.
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 
 //: Defines functions associated with a templated borgefors distance map.
@@ -34,8 +36,8 @@
 template <class T>
 class rsdl_borgefors
 {
-  typedef typename vcl_vector<T>::iterator iterator_type;
-  typedef typename vcl_vector<T>::const_iterator const_iterator_type;
+  typedef typename std::vector<T>::iterator iterator_type;
+  typedef typename std::vector<T>::const_iterator const_iterator_type;
 
  public:
   //: default constructor
@@ -113,7 +115,7 @@ class rsdl_borgefors
   int org_x_, org_y_, size_x_, size_y_;
   vbl_array_2d<int> distance_map_;
   vbl_array_2d<int> index_map_;
-  vcl_vector<iterator_type> data_;
+  std::vector<iterator_type> data_;
 };
 
 #endif // rsdl_borgefors_h_

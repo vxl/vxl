@@ -6,10 +6,11 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gmvl_connection_cache.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 // constructors / destructors
@@ -39,7 +40,7 @@ void gmvl_connection_cache::add(const gmvl_node_sptr node1, const gmvl_node_sptr
     if (node1->ref_>= int(cache_.size())) cache_.resize(node1->ref_+1);
     if (node2->ref_>= int(cache_.size())) cache_.resize(node2->ref_+1);
 
-    unsigned int biggest = vnl_math::max(node1->ref_, node2->ref_);
+    unsigned int biggest = std::max(node1->ref_, node2->ref_);
 
     if (biggest>= cachebool_.rows())
     {
@@ -57,11 +58,11 @@ void gmvl_connection_cache::add(const gmvl_node_sptr node1, const gmvl_node_sptr
 
 // clever accessors
 
-vcl_vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr node1,
+std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr node1,
                                                            const gmvl_node_sptr node2) const
 {
-  vcl_vector<int> c= get_connected_nodes(node1);
-  vcl_vector<int> d;
+  std::vector<int> c= get_connected_nodes(node1);
+  std::vector<int> d;
 
   for (unsigned int i=0; i< c.size(); ++i)
     if (cachebool_(node2->ref_,c[i]))
@@ -70,12 +71,12 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr 
   return d;
 }
 
-vcl_vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr node1,
+std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr node1,
                                                            const gmvl_node_sptr node2,
                                                            const gmvl_node_sptr node3) const
 {
-  vcl_vector<int> c= get_connected_nodes(node1);
-  vcl_vector<int> d;
+  std::vector<int> c= get_connected_nodes(node1);
+  std::vector<int> d;
 
   for (unsigned int i=0; i< c.size(); ++i)
     if (cachebool_(node2->ref_,c[i]) &&
@@ -85,10 +86,10 @@ vcl_vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr 
   return d;
 }
 
-vcl_vector<int> gmvl_connection_cache::get_connected_nodes(const vcl_vector<gmvl_node_sptr> nodes) const
+std::vector<int> gmvl_connection_cache::get_connected_nodes(const std::vector<gmvl_node_sptr> nodes) const
 {
-  vcl_vector<int> c= get_connected_nodes(nodes[0]);
-  vcl_vector<int> d;
+  std::vector<int> c= get_connected_nodes(nodes[0]);
+  std::vector<int> d;
 
   for (unsigned int i=0; i< c.size(); ++i)
   {
@@ -125,7 +126,7 @@ void gmvl_connection_cache::rebuild()
     if (node1->ref_>= int(cache_.size())) cache_.resize(node1->ref_+1);
     if (node2->ref_>= int(cache_.size())) cache_.resize(node2->ref_+1);
 
-    unsigned int biggest= vnl_math::max(node1->ref_, node2->ref_);
+    unsigned int biggest= std::max(node1->ref_, node2->ref_);
 
     if (biggest>= cachebool_.rows())
     {
@@ -148,7 +149,7 @@ void gmvl_connection_cache::rebuild()
 
 // input / output
 
-vcl_ostream &operator<<(vcl_ostream &os, const gmvl_connection_cache &c)
+std::ostream &operator<<(std::ostream &os, const gmvl_connection_cache &c)
 {
 #if 0
   for (int i=0; i< c.connections_.size(); i++)

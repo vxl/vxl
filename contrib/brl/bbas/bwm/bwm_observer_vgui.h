@@ -3,6 +3,10 @@
 //:
 // \file
 
+#include <vector>
+#include <utility>
+#include <iostream>
+#include <string>
 #include <bwm/bwm_observer.h>
 #include <bwm/bwm_observer_img.h>
 #include <bwm/bwm_observable_sptr.h>
@@ -22,9 +26,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
-#include <vcl_vector.h>
-#include <vcl_utility.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 {
@@ -38,7 +40,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   bool handle(const vgui_event &);
 
-  virtual vcl_string type_name() const { return "bwm_observer_vgui"; }
+  virtual std::string type_name() const { return "bwm_observer_vgui"; }
 
   void add_new_obj(bwm_observable_sptr observable);
 
@@ -120,16 +122,16 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   bool corr_valid_;
 
   //: the current correspondence point
-  vcl_vector<vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > > corr_;
+  std::vector<std::pair<vgl_point_2d<double>, bwm_soview2D_cross * > > corr_;
 
   //: objects are kept as a triple (bwm_observable *, face_id, bgui_vsol_soview2D_polygon*)
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D* > > objects_;
+  std::map<bwm_observable_sptr, std::map<unsigned, bgui_vsol_soview2D* > > objects_;
 
   //: vertices are kept as a pair (bwm_observable *, vector<bwm_soview2D_vertex*> )
-  vcl_map<bwm_observable_sptr, vcl_vector<bwm_soview2D_vertex* > > object_verts_;
-  vcl_map<bwm_observable_sptr, vcl_vector<vsol_point_2d_sptr> > object_verts_xy_;
+  std::map<bwm_observable_sptr, std::vector<bwm_soview2D_vertex* > > object_verts_;
+  std::map<bwm_observable_sptr, std::vector<vsol_point_2d_sptr> > object_verts_xy_;
 
-  vcl_map<unsigned, vsol_point_3d_sptr> vertex_3d_map_;
+  std::map<unsigned, vsol_point_3d_sptr> vertex_3d_map_;
 
   bwm_observable_sptr moving_face_;
 
@@ -145,15 +147,15 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 #endif
 
   void draw_mesh(bwm_observable_sptr observable,
-                 vcl_map<unsigned, bgui_vsol_soview2D* > &poly_list,
-                 vcl_vector<bwm_soview2D_vertex*> &vertx_list,
-                 vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
+                 std::map<unsigned, bgui_vsol_soview2D* > &poly_list,
+                 std::vector<bwm_soview2D_vertex*> &vertx_list,
+                 std::vector<vsol_point_2d_sptr> &vertx_xy_list);
 
   void draw_vertices(bwm_observable_sptr observable,
-                     vcl_map<unsigned, bgui_vsol_soview2D* > list,
+                     std::map<unsigned, bgui_vsol_soview2D* > list,
                      bool selectable,
-                     vcl_vector<bwm_soview2D_vertex*> &vertx_list,
-                     vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
+                     std::vector<bwm_soview2D_vertex*> &vertx_list,
+                     std::vector<vsol_point_2d_sptr> &vertx_xy_list);
 };
 
 #endif // bwm_observer_vgui_h

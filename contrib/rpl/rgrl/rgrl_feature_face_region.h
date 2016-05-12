@@ -9,9 +9,11 @@
 // Modifications
 //      Nov 2008 J Becker: Added a clone function.
 // \endverbatim
+#include <iostream>
+#include <vector>
 #include <rgrl/rgrl_feature_face_pt.h>
 #include <rgrl/rgrl_feature_region.h>
-// not used? #include <vcl_vector.h>
+// not used? #include <vcl_compiler.h>
 
 class rgrl_feature_face_region : public rgrl_feature_face_pt, public rgrl_feature_region
 {

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vnl/vnl_math.h>
@@ -11,7 +12,7 @@
 #include <rgrl/rgrl_feature_trace_pt.h>
 #include <rgrl/rgrl_feature_face_pt.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <rgrl/rgrl_trans_affine.h>
 
@@ -29,7 +30,7 @@ static
 void
 test_feature_point()
 {
-  vcl_cout << "Test normal point feature\n";
+  std::cout << "Test normal point feature\n";
 
   vnl_double_2 loc2d(5.0, -4.0);
   vnl_double_3 loc3d(5.0, -4.0,  2.0);
@@ -64,7 +65,7 @@ test_feature_point()
     TEST("Transform 2D point feature (point location remains unchanged)", pf2d->location(), loc2d );
     TEST("Transform 2D point feature (feature is of point type)", result->is_type( rgrl_feature_point::type_id() ), true );
     TEST("Transform 2D point feature (mapped feature has location same as mapping location only)", result->location(), xform.map_location( loc2d ) );
-    // vcl_cout << "Error projector: " << result->error_projector() << vcl_endl;
+    // std::cout << "Error projector: " << result->error_projector() << std::endl;
     vnl_double_2x2 true_error_projector(0.0);
     true_error_projector.fill_diagonal(1.0/result->scale()/result->scale());
     TEST("Transform 2D point feature (Error projector is identity matrix)", result->error_projector(), true_error_projector );
@@ -76,7 +77,7 @@ static
 void
 test_feature_trace_pt()
 {
-  vcl_cout << "Test trace point feature\n";
+  std::cout << "Test trace point feature\n";
 
   vnl_double_2 loc2d(5.0, -4.0);
   vnl_double_2 dir2d(3.0, 1.0);
@@ -137,7 +138,7 @@ static
 void
 test_feature_face()
 {
-  vcl_cout << "Test face feature\n";
+  std::cout << "Test face feature\n";
 
   vnl_double_2 loc2d(3.0,-2.0);
   vnl_double_2 nor2d(3.0, 1.0); nor2d.normalize();
@@ -208,9 +209,9 @@ test_feature_face()
     // vnl_double_2x2 outer = outer_product( x_nor, x_nor );
     vnl_double_2x2 real_proj = outer_product( x_nor, x_nor ) / vnl_math::sqr(eig_val);
 
-    //vcl_cout << "error proj: " << result->error_projector() << vcl_endl;
-    //vcl_cout << "transformed normal: " << x_nor << vcl_endl;
-    //vcl_cout << "real proj: " << real_proj << vcl_endl;
+    //std::cout << "error proj: " << result->error_projector() << std::endl;
+    //std::cout << "transformed normal: " << x_nor << std::endl;
+    //std::cout << "real proj: " << real_proj << std::endl;
     TEST_NEAR( "                        , error projector",
                ( result->error_projector() - real_proj ).absolute_value_max(), 0, 0.05 );
   }

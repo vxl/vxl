@@ -6,17 +6,11 @@
 #ifndef rtvl_intpow_hxx
 #define rtvl_intpow_hxx
 
-#if defined(_MSC_VER) && _MSC_VER <= 1300
-# define RTVL_INTPOW_HELP , rtvl_intpow_impl<T, n>* = 0
-#else
-# define RTVL_INTPOW_HELP
-#endif
-
 template <bool> struct rtvl_bool {};
 template <typename T, unsigned int n> struct rtvl_intpow_impl;
 
 template <unsigned int n, typename T>
-inline T rtvl_intpow(T x RTVL_INTPOW_HELP)
+inline T rtvl_intpow(T x)
 {
   return rtvl_intpow_impl<T, n>::compute(x);
 }

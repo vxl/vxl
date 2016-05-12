@@ -1,13 +1,13 @@
 # contrib/brl/bbas/bxml/bsvg/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( bsvg_test_all
+add_executable( bsvg_test_all
   test_driver.cxx
   test_svg.cxx
 )
 
-TARGET_LINK_LIBRARIES( bsvg_test_all bsvg testlib )
+target_link_libraries( bsvg_test_all bsvg ${VXL_LIB_PREFIX}testlib )
 
-ADD_TEST( bsvg_test_svg  ${EXECUTABLE_OUTPUT_PATH}/bsvg_test_all test_svg )
+add_test( NAME bsvg_test_svg COMMAND $<TARGET_FILE:bsvg_test_all> test_svg )
 
-ADD_EXECUTABLE( bsvg_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bsvg_test_include bsvg )
+add_executable( bsvg_test_include test_include.cxx )
+target_link_libraries( bsvg_test_include bsvg )

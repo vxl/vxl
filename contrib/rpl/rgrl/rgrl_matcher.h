@@ -78,7 +78,7 @@ class rgrl_matcher
     bool operator<( flip_node const& other ) const;
   };
 
-  typedef vcl_vector<flip_node>::const_iterator nodes_vec_iterator;
+  typedef std::vector<flip_node>::const_iterator nodes_vec_iterator;
 
   virtual
   void

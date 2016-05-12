@@ -25,7 +25,7 @@ vil_image_view<float> boxm2_vecf_ocl_ssd_func::diff_img(vnl_vector<double> const
   for(unsigned j = 0; j<nj_; ++j)
     for(unsigned i = 0; i<ni_; ++i){
       float vi= vis(i,j), ex = exp(i,j), re = ref_img_(i,j);
-      float d = vcl_fabs((ex-re)*vi);
+      float d = std::fabs((ex-re)*vi);
       ret(i,j)=d;
     }
   return ret;

@@ -7,7 +7,7 @@ vgui_glut_window::vgui_glut_window(char const *title,
                                    unsigned w, unsigned h,
                                    int posx, int posy)
   : vgui_window()
-  , glutwin(0)
+  , glutwin(VXL_NULLPTR)
   , pending_reshape(false)
   , pending_reposition(false)
 {
@@ -35,7 +35,7 @@ vgui_glut_window::vgui_glut_window(char const *title,
 vgui_glut_window::~vgui_glut_window()
 {
   delete glutwin;
-  glutwin = 0;
+  glutwin = VXL_NULLPTR;
 }
 
 void vgui_glut_window::show()
@@ -78,7 +78,7 @@ void vgui_glut_window::reposition(int x,int y)
   glutSetWindow( old );
 }
 
-void vgui_glut_window::set_title(vcl_string const &s)
+void vgui_glut_window::set_title(std::string const &s)
 {
   glutSetWindowTitle(s.c_str());
   glutSetIconTitle(s.c_str());

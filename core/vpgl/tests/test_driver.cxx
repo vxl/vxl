@@ -2,6 +2,7 @@
 
 DECLARE( test_proj_camera );
 DECLARE( test_perspective_camera );
+DECLARE( test_perspective_camera_decomposition );
 DECLARE( test_affine_camera );
 DECLARE( test_fundamental_matrix );
 DECLARE( test_essential_matrix );
@@ -16,6 +17,7 @@ void register_tests()
 {
   REGISTER( test_proj_camera );
   REGISTER( test_perspective_camera );
+  REGISTER( test_perspective_camera_decomposition );
   REGISTER( test_affine_camera );
   REGISTER( test_fundamental_matrix );
   REGISTER( test_essential_matrix );

@@ -50,7 +50,7 @@ void test_kernel_set_up()
   pca_extractor.compute_testing_error(testing_error);
 
 #ifdef DEBUG_LEAKS
-  vcl_cerr << "Leaks at test_pca_kernels - 1 " << boct_tree_cell<short, float >::nleaks() << '\n';
+  std::cerr << "Leaks at test_pca_kernels - 1 " << boct_tree_cell<short, float >::nleaks() << '\n';
 #endif
 
   result = verror[verror.size()-1] < 1.0e-7;
@@ -88,11 +88,11 @@ void test_kernel_set_up()
   TEST("Testing errors are equal:", result, true);
 
 #ifdef DEBUG_LEAKS
-  vcl_cerr << "Leaks at test_pca_kernels - 2 " << boct_tree_cell<short, float >::nleaks() << '\n';
+  std::cerr << "Leaks at test_pca_kernels - 2 " << boct_tree_cell<short, float >::nleaks() << '\n';
 #endif
 
 #if 0
-  vcl_cout<< "error : " << verror << '\n'
+  std::cout<< "error : " << verror << '\n'
           << "t_error : " << t_verror << '\n'
           << "weights : " << pca_extractor.weights() << '\n'
 
@@ -103,7 +103,7 @@ void test_kernel_set_up()
           << "mean 2: " << pca_extractor2.mean() << '\n'
 
           << "path 1: " << pca_extractor.scene_path() << '\n'
-          << "path 2: " << pca_extractor2.scene_path() << vcl_endl;
+          << "path 2: " << pca_extractor2.scene_path() << std::endl;
 #endif
 }
 
@@ -126,9 +126,9 @@ void test_global()
   bvpl_discover_pca_kernels pca_info(neighborhood, nsamples, scene, "./pca_info");
   pca_info.xml_write();
 
-  vcl_vector<vcl_string> scenes;
-  vcl_vector<vcl_string> aux_paths;
-  vcl_vector<double> cell_lengths;
+  std::vector<std::string> scenes;
+  std::vector<std::string> aux_paths;
+  std::vector<double> cell_lengths;
   scenes.push_back("./test_scene.xml");
   aux_paths.push_back(".");
   cell_lengths.push_back(finest_cell_length);
@@ -137,8 +137,8 @@ void test_global()
   new boxm_scene<boct_tree<short, int> >(scene->lvcs(), scene->origin(), scene->block_dim(), scene->world_dim(), scene->max_level(), scene->init_level());
   aux_scene->set_appearance_model(BOXM_INT);
 
-  vcl_string scene_name = "test_aux_scene";
-  vcl_string scene_path(vul_file::get_cwd());
+  std::string scene_name = "test_aux_scene";
+  std::string scene_path(vul_file::get_cwd());
   aux_scene->set_paths(scene_path, scene_name);
   aux_scene->write_scene("./test_aux_scene.xml");
 
@@ -156,15 +156,15 @@ void test_global()
         unsigned long nfeature =0L;
         pca_global_info.sample_statistics(0, i, j, k, S, mean, nfeature);
 
-        vcl_stringstream scatter_ss;
+        std::stringstream scatter_ss;
         scatter_ss << pca_global_info.path_out() << "/S_" << 0 << '_' <<file<< ".txt";
-        vcl_ofstream scatter_ofs(scatter_ss.str().c_str());
+        std::ofstream scatter_ofs(scatter_ss.str().c_str());
         scatter_ofs.precision(15);
         scatter_ofs << S;
 
-        vcl_stringstream mean_ss;
+        std::stringstream mean_ss;
         mean_ss <<  pca_global_info.path_out() << "/mean_" << 0 << '_'  <<file << ".txt";
-        vcl_ofstream mean_ofs ( mean_ss.str().c_str() );
+        std::ofstream mean_ofs ( mean_ss.str().c_str() );
         mean_ofs.precision(15);
         mean_ofs << nfeature << '\n' << mean;
         file++;
@@ -185,13 +185,13 @@ void test_global()
       unsigned long nfeatures1 =0;
 
       {
-        vcl_stringstream scatter_ss;
+        std::stringstream scatter_ss;
         scatter_ss <<pca_global_info.path_out()  << "/S_" << nrepeat << '_' << file_p << ".txt";
-        vcl_ifstream scatter_ifs(scatter_ss.str().c_str());
+        std::ifstream scatter_ifs(scatter_ss.str().c_str());
         scatter_ifs >> S1;
-        vcl_stringstream mean_ss;
+        std::stringstream mean_ss;
         mean_ss << pca_global_info.path_out() << "/mean_" << nrepeat << '_'  << file_p << ".txt";
-        vcl_ifstream mean_ifs ( mean_ss.str().c_str() );
+        std::ifstream mean_ifs ( mean_ss.str().c_str() );
         mean_ifs >> nfeatures1;
         mean_ifs >> mean1;
 #if 0
@@ -205,13 +205,13 @@ void test_global()
       unsigned long nfeatures2 =0;
 
       {
-        vcl_stringstream scatter_ss;
+        std::stringstream scatter_ss;
         scatter_ss <<pca_global_info.path_out()  << "/S_" << nrepeat << '_' << file_p + 1  << ".txt";
-        vcl_ifstream scatter_ifs(scatter_ss.str().c_str());
+        std::ifstream scatter_ifs(scatter_ss.str().c_str());
         scatter_ifs >> S2;
-        vcl_stringstream mean_ss;
+        std::stringstream mean_ss;
         mean_ss << pca_global_info.path_out() << "/mean_" << nrepeat << '_' << file_p + 1 << ".txt";
-        vcl_ifstream mean_ifs ( mean_ss.str().c_str() );
+        std::ifstream mean_ifs ( mean_ss.str().c_str() );
         mean_ifs >> nfeatures2;
         mean_ifs >> mean2;
       }
@@ -221,15 +221,15 @@ void test_global()
       double nfeatures_out =0.0;
       bvpl_global_pca<125>::combine_pairwise_statistics(mean1, S1, (double)nfeatures1, mean2, S2, (double)nfeatures2, mean_out, S_out, nfeatures_out);
 
-      vcl_stringstream scatter_ss;
+      std::stringstream scatter_ss;
       scatter_ss <<pca_global_info.path_out()  << "/S_" << (nrepeat+1) << '_' << file_p/2  << ".txt";
-      vcl_ofstream scatter_ofs(scatter_ss.str().c_str());
+      std::ofstream scatter_ofs(scatter_ss.str().c_str());
       scatter_ofs.precision(15);
       scatter_ofs << S_out;
 
-      vcl_stringstream mean_ss;
+      std::stringstream mean_ss;
       mean_ss << pca_global_info.path_out() << "/mean_" <<  (nrepeat+1) << '_' << file_p/2<< ".txt";
-      vcl_ofstream mean_ofs ( mean_ss.str().c_str() );
+      std::ofstream mean_ofs ( mean_ss.str().c_str() );
       mean_ofs.precision(15);
       mean_ofs << nfeatures_out << '\n' << mean_out;
     }
@@ -242,18 +242,18 @@ void test_global()
   unsigned long nfeatures_total =0;
 
 
-  vcl_stringstream scatter_ss;
+  std::stringstream scatter_ss;
   scatter_ss <<pca_global_info.path_out()  << "/S_" << nrepeat<< '_' << 0 << ".txt";
-  vcl_ifstream scatter_ifs(scatter_ss.str().c_str());
+  std::ifstream scatter_ifs(scatter_ss.str().c_str());
   scatter_ifs >> S_total;
-  vcl_stringstream mean_ss;
+  std::stringstream mean_ss;
   mean_ss << pca_global_info.path_out() << "/mean_" << nrepeat << '_'  << 0 << ".txt";
-  vcl_ifstream mean_ifs ( mean_ss.str().c_str() );
+  std::ifstream mean_ifs ( mean_ss.str().c_str() );
   mean_ifs >> nfeatures_total;
   mean_ifs >> mean_total;
 
 
-  vcl_cout << "Scatter diff:\n " << ((s1  - S_total).array_two_norm()) << '\n'
+  std::cout << "Scatter diff:\n " << ((s1  - S_total).array_two_norm()) << '\n'
            << "Mean diff:\n " << (pca_info.mean()  - mean_total).two_norm() << '\n';
 
   clean_up("./pca_info", "*.txt");

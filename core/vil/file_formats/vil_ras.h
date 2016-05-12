@@ -14,7 +14,7 @@
 // 22 Apr 2003: Amitha Perera - converted to vil
 // 31 Dec 2005: J.L. Mundy - extended to read 16 bit images - didn't extend writing
 // \endverbatim
-// 
+//
 #include <vil/vil_image_resource.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream.h>
@@ -94,7 +94,7 @@ class vil_ras_image : public vil_image_resource
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
   char const* file_format() const;
-  bool get_property(char const *tag, void *prop = 0) const;
+  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
 };
 
 #endif // vil_ras_file_format_h_

@@ -3,9 +3,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <map>
 #include "bwm_observer_cam.h"
 #include "video/bwm_video_corr_sptr.h"
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgui/vgui_style.h>
 #include <vpgl/vpgl_camera.h>
@@ -21,7 +23,7 @@ class bwm_observer_video : public bwm_observer_cam
  public:
 
   bwm_observer_video(bgui_image_tableau_sptr const& img,
-                     vpgl_camera<double> *camera, vcl_string cam_path)
+                     vpgl_camera<double> *camera, std::string cam_path)
   : bwm_observer_cam(img, camera, cam_path), display_corrs_(false),
     display_world_pts_(false), play_video_(false), time_interval_(0.0f),
     video_istr_(0), cam_istr_(0), tracked_corr_(0)
@@ -37,12 +39,12 @@ class bwm_observer_video : public bwm_observer_cam
 
   bool handle(const vgui_event &e);
 
-  virtual vcl_string type_name() const { return "bwm_observer_video"; }
+  virtual std::string type_name() const { return "bwm_observer_video"; }
   // these are syncronized streams
   // currently the camera stream is implemented as a set of files,
   // one for each video frame
-  bool open_video_stream(vcl_string const& video_path);
-  bool open_camera_stream(vcl_string const& camera_path);
+  bool open_video_stream(std::string const& video_path);
+  bool open_camera_stream(std::string const& camera_path);
   // virtual methods for projecting 3-d objects
   virtual void proj_point(vgl_point_3d<double> world_pt,
                           vgl_point_2d<double> &image_pt);
@@ -66,7 +68,7 @@ class bwm_observer_video : public bwm_observer_cam
   void pause();
 
   // Save a video as image list
-  bool save_as_image_list(vcl_string const& path);
+  bool save_as_image_list(std::string const& path);
 
   //correspondence edit methods
   void set_world_pt(double lat, double lon, double elev);
@@ -107,11 +109,11 @@ class bwm_observer_video : public bwm_observer_cam
   void clear_video_corrs_display();
 
   //: access the current set of correspondences
-  vcl_vector<bwm_video_corr_sptr> corrs();
+  std::vector<bwm_video_corr_sptr> corrs();
 
 
   //: set the correspondences
-  void set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs);
+  void set_corrs(std::vector<bwm_video_corr_sptr> const& corrs);
 
   //: turn on/off world point display
   void toggle_corr_display(){display_corrs_ = !display_corrs_;
@@ -133,12 +135,12 @@ class bwm_observer_video : public bwm_observer_cam
 
   //: extract neighborhoods around correspondences for the stream
   bool extract_neighborhoods(unsigned nbd_radius_x,unsigned nbd_radius_y,
-                             vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds);
+                             std::vector<std::vector<vnl_matrix<float> > >& nhds);
 
   //: extract histograms of each frame
-  bool extract_histograms(vcl_vector<bsta_histogram<float> >& hists);
+  bool extract_histograms(std::vector<bsta_histogram<float> >& hists);
 
-  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> > frame_polygon_map()
+  std::map<unsigned, std::vector<vsol_polygon_2d_sptr> > frame_polygon_map()
   { return this->frame_polygon_map_; }
 
   virtual unsigned create_polygon(vsol_polygon_2d_sptr);
@@ -239,22 +241,22 @@ class bwm_observer_video : public bwm_observer_cam
   bwm_video_corr_sptr tracked_corr_;
 
   //: the video frame-to-frame correspondences, over all frames
-  vcl_map<unsigned, bwm_video_corr_sptr> video_corrs_;
+  std::map<unsigned, bwm_video_corr_sptr> video_corrs_;
 
   //: relation between correspondence views and correspondences and frame
-  vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> > corr_soview_map_;
+  std::map<unsigned, std::map<unsigned, bwm_soview2D_cross*> > corr_soview_map_;
 
   //: relation between 3-d point display and corr id
-  vcl_map<unsigned, vgui_soview2D_point*> world_pt_map_;
+  std::map<unsigned, vgui_soview2D_point*> world_pt_map_;
 
   //: relation frames/polygons
-  vcl_map<unsigned, vcl_vector<vsol_polygon_2d_sptr> > frame_polygon_map_;
+  std::map<unsigned, std::vector<vsol_polygon_2d_sptr> > frame_polygon_map_;
 
   //: relation frames/change type
-  vcl_map<unsigned, vcl_vector< vcl_string > > frame_change_map_;
+  std::map<unsigned, std::vector< std::string > > frame_change_map_;
 
   //: relation soviewID and vector position
-  vcl_map<unsigned, unsigned> id_pos_map_;
+  std::map<unsigned, unsigned> id_pos_map_;
 };
 
 #endif

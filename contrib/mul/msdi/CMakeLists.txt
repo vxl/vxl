@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/msdi
   DESCRIPTION "Manchester's Shape Data Iterator Library"
 )
 
-SET(msdi_sources
+set(msdi_sources
   msdi_marked_images.h
   msdi_marked_images_from_files.cxx  msdi_marked_images_from_files.h
   msdi_array_of_marked_images.cxx    msdi_array_of_marked_images.h
@@ -14,11 +14,11 @@ SET(msdi_sources
   msdi_points_subset.cxx             msdi_points_subset.h
 )
 
-#AUX_SOURCE_DIRECTORY(Templates msdi_sources)
+#aux_source_directory(Templates msdi_sources)
 
-ADD_LIBRARY(msdi ${msdi_sources})
-TARGET_LINK_LIBRARIES(msdi msm)
+vxl_add_library(LIBRARY_NAME msdi LIBRARY_SOURCES ${msdi_sources})
+target_link_libraries(msdi msm)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

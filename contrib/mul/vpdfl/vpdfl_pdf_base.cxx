@@ -8,13 +8,18 @@
 // \date 12-Apr-2001
 // \brief Base class for Multi-Variate Probability Density Function classes.
 
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <queue>
 #include "vpdfl_pdf_base.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_queue.h>
+
 #include <vpdfl/vpdfl_sampler_base.h>
 
 //=======================================================================
@@ -33,7 +38,7 @@ vpdfl_pdf_base::~vpdfl_pdf_base()
 
 double vpdfl_pdf_base::operator()(const vnl_vector<double>& x) const
 {
-  return vcl_exp(log_p(x));
+  return std::exp(log_p(x));
 }
 
 
@@ -53,7 +58,7 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
   vpdfl_sampler_base *sampler = new_sampler();
   if (pass_proportion > 0.5)
   {
-    vcl_priority_queue<double, vcl_vector<double>, vcl_less<double> > pq;
+    std::priority_queue<double, std::vector<double>, std::less<double> > pq;
     //We want at n_stat samples outside the cut-off.
     nSamples = (unsigned)(((double)n_stat / (1.0 - pass_proportion)) + 0.5);
 
@@ -83,7 +88,7 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
   }
   else
   {
-    vcl_priority_queue<double, vcl_vector<double>, vcl_greater<double> > pq;
+    std::priority_queue<double, std::vector<double>, std::greater<double> > pq;
     //We want at n_stat samples inside the cut-off.
     nSamples = (unsigned)(((double)n_stat / pass_proportion) + 0.5);
 
@@ -160,22 +165,22 @@ void vsl_add_to_binary_loader(const vpdfl_pdf_base& b)
 
 //=======================================================================
 
-vcl_string vpdfl_pdf_base::is_a() const
+std::string vpdfl_pdf_base::is_a() const
 {
-  static vcl_string class_name_ = "vpdfl_pdf_base";
+  static std::string class_name_ = "vpdfl_pdf_base";
   return class_name_;
 }
 
 //=======================================================================
 
-bool vpdfl_pdf_base::is_class(vcl_string const& s) const
+bool vpdfl_pdf_base::is_class(std::string const& s) const
 {
   return s==vpdfl_pdf_base::is_a();
 }
 
 //=======================================================================
 
-static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
+static void ShowStartVec(std::ostream& os, const vnl_vector<double>& v)
 {
   unsigned int n = 3;
   if (n>v.size()) n=v.size();
@@ -187,7 +192,7 @@ static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
 
 
   // required if data is present in this base class
-void vpdfl_pdf_base::print_summary(vcl_ostream& os) const
+void vpdfl_pdf_base::print_summary(std::ostream& os) const
 {
   os <<  "N. Dims: "<< mean_.size();
   os <<  "  Mean: "; ShowStartVec(os, mean_);
@@ -220,9 +225,9 @@ void vpdfl_pdf_base::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pdf_base &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pdf_base &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -244,7 +249,7 @@ void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base& b)
+void vsl_print_summary(std::ostream& os,const vpdfl_pdf_base& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -254,7 +259,7 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b)
+void vsl_print_summary(std::ostream& os,const vpdfl_pdf_base* b)
 {
   if (b)
     vsl_print_summary(os, *b);
@@ -265,7 +270,7 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b)
 //=======================================================================
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b)
+std::ostream& operator<<(std::ostream& os,const vpdfl_pdf_base& b)
 {
   vsl_print_summary(os,b);
   return os;
@@ -274,7 +279,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b)
 //=======================================================================
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b)
+std::ostream& operator<<(std::ostream& os,const vpdfl_pdf_base* b)
 {
   vsl_print_summary(os,b);
   return os;

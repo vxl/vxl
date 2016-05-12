@@ -1,8 +1,8 @@
 # basic radiometery library
 
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+  include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-  SET(brad_sources
+  set(brad_sources
       brad_illum_util.h               brad_illum_util.cxx
       brad_illum_cost_function.h
       brad_sun_pos.h                  brad_sun_pos.cxx
@@ -10,7 +10,7 @@
       brad_hist_prob_feature_vector.h brad_hist_prob_feature_vector.cxx
       brad_grad_hist_feature_vector.h brad_grad_hist_feature_vector.cxx
       brad_grad_int_feature_vector.h  brad_grad_int_feature_vector.cxx
-      brad_eigenspace.h               brad_eigenspace.txx
+      brad_eigenspace.h               brad_eigenspace.hxx
       brad_eigenspace_base.h          brad_eigenspace_base.cxx
       brad_eigenspace_sptr.h
       brad_phongs_model_est.h         brad_phongs_model_est.cxx
@@ -20,17 +20,15 @@
       brad_image_atmospherics_est.h   brad_image_atmospherics_est.cxx
       brad_estimate_shadows.h         brad_estimate_shadows.cxx
      )
-  AUX_SOURCE_DIRECTORY(Templates brad_sources)
-  ADD_LIBRARY(brad ${brad_sources} )
+  aux_source_directory(Templates brad_sources)
+  vxl_add_library(LIBRARY_NAME brad LIBRARY_SOURCES ${brad_sources} )
 
-  TARGET_LINK_LIBRARIES(brad  bsta vnl_io vnl vgl_algo vgl_io vnl_algo vgl vil vpgl vpgl_algo vbl_io vbl vpl vul )
+  target_link_libraries(brad  bsta ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul )
 
   add_subdirectory(io)
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-INSTALL_TARGETS(/lib brad)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brad ${brad_sources})

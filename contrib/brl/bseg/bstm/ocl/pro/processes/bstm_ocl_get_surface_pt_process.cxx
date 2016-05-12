@@ -8,10 +8,12 @@
 // \author Ali Osman Ulusoy
 // \date Jan 30, 2013
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -38,15 +40,15 @@ namespace bstm_ocl_get_surface_pt_process_globals
 {
   const unsigned n_inputs_ = 10;
   const unsigned n_outputs_ = 3;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -57,13 +59,13 @@ namespace bstm_ocl_get_surface_pt_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = opts + "-D SURFACE_PT ";
+    std::string options = opts + "-D SURFACE_PT ";
     options += " -D STEP_CELL=step_cell_surface_pt(aux_args,data_ptr_tt,d*linfo->block_len,posx*linfo->block_len+linfo->origin.x,posy*linfo->block_len+linfo->origin.y,posz*linfo->block_len+linfo->origin.z)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
-    vcl_cout << "Compiling with options: " << options << vcl_endl;
+    std::cout << "Compiling with options: " << options << std::endl;
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
@@ -81,7 +83,7 @@ bool bstm_ocl_get_surface_pt_process_cons(bprb_func_process& pro)
   using namespace bstm_ocl_get_surface_pt_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "bstm_scene_sptr";
   input_types_[2] = "bstm_opencl_cache_sptr";
@@ -93,7 +95,7 @@ bool bstm_ocl_get_surface_pt_process_cons(bprb_func_process& pro)
   input_types_[8] = "float"; // time
   input_types_[9] = "float"; // prob threshold
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "float";
   output_types_[1] = "float";
   output_types_[2] = "float";
@@ -106,7 +108,7 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
   using namespace bstm_ocl_get_surface_pt_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -127,12 +129,12 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()), CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
-  vcl_string options = "";
-  vcl_string identifier=device->device_identifier()+options;
+  std::string options = "";
+  std::string identifier=device->device_identifier()+options;
   if (kernels.find(identifier)==kernels.end())  // compile the kernel
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
@@ -145,7 +147,7 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
 
   //camera check
   if (cam->type_name()!= "vpgl_perspective_camera" && cam->type_name()!= "vpgl_generic_camera" ) {
-    vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+    std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
     return 0.0f;
   }
 
@@ -181,11 +183,11 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
   prob_t_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //2. set global thread size
-  vcl_size_t gThreads[] = {cl_ni,cl_nj};
+  std::size_t gThreads[] = {cl_ni,cl_nj};
 
   //3. set arguments
-  vcl_vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<bstm_block_id>::iterator id;
+  std::vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<bstm_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
       //choose correct render kernel
@@ -241,7 +243,7 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
 
   //read outout
   cl_output->read_to_buffer(queue);
-  vcl_cout << "prob: " << output_arr[0] << " pt: (" <<  output_arr[1] << "," << output_arr[2] << "," << output_arr[3] << ")" << vcl_endl;
+  std::cout << "prob: " << output_arr[0] << " pt: (" <<  output_arr[1] << "," << output_arr[2] << "," << output_arr[3] << ")" << std::endl;
 
 
   //clean up cam

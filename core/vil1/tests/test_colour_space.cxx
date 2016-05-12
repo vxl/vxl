@@ -1,5 +1,6 @@
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vil1/vil1_colour_space.h>
 
 #include <testlib/testlib_test.h>
@@ -10,29 +11,29 @@ static void test_colour_space()
   double g=120;
   double b=240;
 
-  vcl_cout<<"r= "<<r<<vcl_endl
-          <<"g= "<<g<<vcl_endl
-          <<"b= "<<b<<vcl_endl;
+  std::cout<<"r= "<<r<<std::endl
+          <<"g= "<<g<<std::endl
+          <<"b= "<<b<<std::endl;
 
   double h, s, v;
   vil1_colour_space_RGB_to_HSV(r,g,b,&h,&s,&v);
 
-  vcl_cout<<"h= "<<h<<vcl_endl
-          <<"s= "<<s<<vcl_endl
-          <<"v= "<<v<<vcl_endl;
+  std::cout<<"h= "<<h<<std::endl
+          <<"s= "<<s<<std::endl
+          <<"v= "<<v<<std::endl;
 
   double nr, ng, nb;
   vil1_colour_space_HSV_to_RGB(h,s,v,&nr,&ng,&nb);
 
-  vcl_cout<<"nr= "<<nr<<vcl_endl
-          <<"ng= "<<ng<<vcl_endl
-          <<"nb= "<<nb<<vcl_endl;
+  std::cout<<"nr= "<<nr<<std::endl
+          <<"ng= "<<ng<<std::endl
+          <<"nb= "<<nb<<std::endl;
 
-  double d = vcl_fabs (r-nr)
-           + vcl_fabs (g-ng)
-           + vcl_fabs (b-nb);
+  double d = std::fabs (r-nr)
+           + std::fabs (g-ng)
+           + std::fabs (b-nb);
 
-  vcl_cout<<"d= "<<d<<vcl_endl;
+  std::cout<<"d= "<<d<<std::endl;
 
   TEST_NEAR("test r g b values", d, 0.0, 0.1);
 }

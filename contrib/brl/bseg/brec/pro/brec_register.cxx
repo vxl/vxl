@@ -44,12 +44,12 @@ void brec_register::register_process()
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_construct_bg_op_models_process, "brecConstructBGOPModelsProcess");
   REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, brec_construct_class_op_models_process, "brecConstructClassOPModelsProcess");
-  
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_recognize_structure2_process, "brecRecStructure2Process");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_save_hierarchy_process, "brecSaveHierarchyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_create_hierarchy_process, "brecCreateHierarchyProcess");
-  
-  
+
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_init_process, "brecLearnerL0InitProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_fit_process, "brecLearnerL0FitProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer0_rank_process, "brecLearnerL0RankProcess");
@@ -60,13 +60,13 @@ void brec_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer_n_init_process, "brecLearnerLNInitProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer_n_update_stats_process, "brecLearnerLNUpdateProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_learner_layer_n_fit_process, "brecLearnerLNFitProcess");
-  
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_draw_hierarchy_process, "brecDrawHierachyProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_initialize_detector_process, "brecInitializeDetectorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_add_hierarchy_to_detector_process, "brecAddHierarchyToDetectorProcess");
   REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, brec_detect_hierarchy_process, "brecDetectHierarchyProcess");
-  
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brec_set_hierarchy_model_dir_process, "brecSetHierarchyModelDirProcess");
-  
+
 }

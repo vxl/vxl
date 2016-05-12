@@ -1,12 +1,12 @@
 # Brown Elastic Curve Matching Library
 # bbas/bcvr/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
+include_directories(${BRL_INCLUDE_DIR})
+include_directories(${BRL_INCLUDE_DIR}/bbas)
+include_directories(${BRL_INCLUDE_DIR}/bseg)
+include_directories(${GEL_INCLUDE_DIR})
 
-SET(bcvr_sources
+set(bcvr_sources
 
 bcvr_cvmatch.h
 bcvr_cvmatch.cxx
@@ -22,13 +22,13 @@ bcvr_cv_cor_sptr.h
 
 )
 
-AUX_SOURCE_DIRECTORY(Templates bcvr_sources)
+aux_source_directory(Templates bcvr_sources)
 
-ADD_LIBRARY(bcvr  ${bcvr_sources})
+vxl_add_library(LIBRARY_NAME bcvr LIBRARY_SOURCES  ${bcvr_sources})
 
-TARGET_LINK_LIBRARIES(bcvr bsol vdgl)
+target_link_libraries(bcvr bsol vdgl)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()
 

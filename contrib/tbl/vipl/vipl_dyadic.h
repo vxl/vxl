@@ -53,7 +53,7 @@ class vipl_dyadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_dyadic.txx"
+#include "vipl_dyadic.hxx"
 #endif
 
 #endif // vipl_dyadic_h_

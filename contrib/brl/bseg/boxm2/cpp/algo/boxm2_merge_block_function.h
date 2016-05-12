@@ -3,10 +3,11 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/boxm2_data_traits.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 
 class boxm2_merge_block_function
@@ -26,10 +27,10 @@ class boxm2_merge_block_function
                                  block_len_(1.0) {}
 
   //: initialize generic data base pointers as their data type
-  bool init_data(boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh);
+  bool init_data(boxm2_block* blk, std::vector<boxm2_data_base*> & datas, float prob_thresh);
 
   //: refine function;
-  bool merge(vcl_vector<boxm2_data_base*>& datas);
+  bool merge(std::vector<boxm2_data_base*>& datas);
 
   //: refine bit tree
   boct_bit_tree merge_bit_tree(boct_bit_tree& curr_tree, float* alphas, float prob_thresh);
@@ -75,7 +76,7 @@ class boxm2_merge_block_function
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_merge_block( boxm2_scene_sptr scene,
                         boxm2_block* blk,
-                        vcl_vector<boxm2_data_base*> & datas,
+                        std::vector<boxm2_data_base*> & datas,
                         float prob_thresh,
                         bool is_random = true);
 

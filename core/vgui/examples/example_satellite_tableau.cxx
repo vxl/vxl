@@ -1,26 +1,27 @@
 // \author  fsm
 // \brief   Example using vgui_satellite_tableau.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_satellite_tableau.h>
-#include <vgui/vgui_satellite_tableau.txx>
+#include <vgui/vgui_satellite_tableau.hxx>
 
 struct example_object
 {
   vgui_satellite_tableau_new<example_object> a;
   bool handle_a(vgui_event const &e) {
-    vcl_cerr << "handle_a(): " << e << vcl_endl;
+    std::cerr << "handle_a(): " << e << std::endl;
     return false;
   }
 
   vgui_satellite_tableau_t_new<example_object, int> b1, b2;
   bool handle_b(vgui_event const &, int d) {
-    vcl_cerr << "handle_b(): " << d << vcl_endl;
+    std::cerr << "handle_b(): " << d << std::endl;
     return false;
   }
 
-  vcl_string type_name() const { return "example_object"; }
+  std::string type_name() const { return "example_object"; }
 
   example_object()
     : a (this, &example_object::handle_a)

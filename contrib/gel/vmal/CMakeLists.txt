@@ -5,8 +5,8 @@ doxygen_add_library(contrib/gel/vmal
   PACKAGE contrib/gel
   DESCRIPTION "Multi-View Line matching"
   )
-IF(BUILD_OXL)
-SET(vmal_sources
+if(BUILD_OXL)
+set(vmal_sources
  vmal_dense_matching.cxx    vmal_dense_matching.h
  vmal_homog2d.cxx           vmal_homog2d.h
  vmal_lines_correlation.cxx vmal_lines_correlation.h
@@ -15,10 +15,10 @@ SET(vmal_sources
  vmal_track_lines.cxx       vmal_track_lines.h
  vmal_convert_vtol.cxx      vmal_convert_vtol.h
 )
-AUX_SOURCE_DIRECTORY(Templates vmal_sources)
+aux_source_directory(Templates vmal_sources)
 
- INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
- SET(vmal_sources ${vmal_sources}
+ include_directories(${OXL_INCLUDE_DIR})
+ set(vmal_sources ${vmal_sources}
  vmal_convert_osl.cxx       vmal_convert_osl.h
  vmal_rectifier.cxx         vmal_rectifier.h
  vmal_multi_view_data.cxx   vmal_multi_view_data.h
@@ -27,17 +27,15 @@ AUX_SOURCE_DIRECTORY(Templates vmal_sources)
 )
 
 
-ADD_LIBRARY(vmal ${vmal_sources})
-INSTALL_TARGETS(/lib vmal)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vmal ${vmal_sources})
+vxl_add_library(LIBRARY_NAME vmal LIBRARY_SOURCES ${vmal_sources})
 
-IF(BUILD_OXL)
- TARGET_LINK_LIBRARIES(vmal mvl osl vil)
-ENDIF(BUILD_OXL)
+if(BUILD_OXL)
+ target_link_libraries(vmal mvl osl ${VXL_LIB_PREFIX}vil)
+endif()
 
-TARGET_LINK_LIBRARIES(vmal vtol vnl_algo vil1 vnl vbl)
+target_link_libraries(vmal vtol ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
-ENDIF(BUILD_OXL)
+endif()
+endif()

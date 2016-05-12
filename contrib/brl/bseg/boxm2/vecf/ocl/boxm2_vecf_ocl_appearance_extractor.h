@@ -4,6 +4,7 @@
 #include <boxm2/vecf/boxm2_vecf_orbit_scene.h>
 #include <boxm2/vecf/ocl/boxm2_vecf_ocl_composite_head_model.h>
 #include <boxm2/io/boxm2_lru_cache.h>
+#include <vcl_algorithm.h>
 class boxm2_vecf_ocl_appearance_extractor{
  public:
   boxm2_vecf_ocl_appearance_extractor(boxm2_scene_sptr target_scene, boxm2_vecf_ocl_composite_head_model& source_model):scene_transformer_(target_scene,source_model.opencl_cache_,"",source_model.color_apm_id_,false,true),head_model_(source_model)
@@ -19,7 +20,7 @@ class boxm2_vecf_ocl_appearance_extractor{
   void extract_appearance(bool faux=false,bool individual_color=true,bool head_only=false){
     this->faux_ = faux;
     this->individual_appearance_ = individual_color;
-    this->head_only_ = head_only_;
+    this->head_only_ = head_only;
     vis_cells_.clear();
     this->extract_head_appearance();
     if(!head_only)
@@ -94,8 +95,8 @@ class boxm2_vecf_ocl_appearance_extractor{
   float max_t_color;
   vis_score_t * current_vis_score_;
   boxm2_vecf_ocl_composite_head_model& head_model_;
-  vcl_vector<unsigned> vis_cells_;
+  std::vector<unsigned> vis_cells_;
   boxm2_opencl_cache_sptr opencl_cache_;
   bocl_device_sptr device_;
-  vcl_vector<bocl_kernel*> kernels_;
+  std::vector<bocl_kernel*> kernels_;
 };

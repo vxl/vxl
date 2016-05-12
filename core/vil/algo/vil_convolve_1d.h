@@ -13,12 +13,13 @@
 // called "convolution". So don't break the convolution routines in
 // that particular way.
 
+#include <algorithm>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <vcl_algorithm.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_property.h>
@@ -91,11 +92,11 @@ enum vil_convolve_boundary_option
 //: Convolve edge with kernel[x*kstep] x in [k_lo,k_hi] (k_hi>=0)
 //  Fills only edge: dest[i], i=0..(k_hi-1)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_step,
-                                 destT* dest, vcl_ptrdiff_t d_step,
+inline void vil_convolve_edge_1d(const srcT* src, unsigned n, std::ptrdiff_t s_step,
+                                 destT* dest, std::ptrdiff_t d_step,
                                  const kernelT* kernel,
-                                 vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
-                                 vcl_ptrdiff_t kstep, accumT,
+                                 std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
+                                 std::ptrdiff_t kstep, accumT,
                                  vil_convolve_boundary_option option)
 {
   switch (option)
@@ -104,18 +105,18 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
     return;
    case vil_convolve_no_extend:
     // Initialise first elements of row to zero
-    for (vcl_ptrdiff_t i=-k_hi;i<0;++i,dest+=d_step)
+    for (std::ptrdiff_t i=-k_hi;i<0;++i,dest+=d_step)
       *dest = 0;
     return;
    case vil_convolve_zero_extend:
     // Assume src[i]==0 for i<0
-//    for (vcl_ptrdiff_t i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
-    for (vcl_ptrdiff_t i=0;i<k_hi;++i,dest+=d_step)
+//    for (std::ptrdiff_t i=-k_hi+1;i<=0;++i,dest+=d_step,src+=s_step)
+    for (std::ptrdiff_t i=0;i<k_hi;++i,dest+=d_step)
     {
       accumT sum = 0;
       const srcT* s = src;
       const kernelT* k = kernel+i*kstep;
-      for (vcl_ptrdiff_t j=i;j>=k_lo;--j,s+=s_step,k-=kstep)
+      for (std::ptrdiff_t j=i;j>=k_lo;--j,s+=s_step,k-=kstep)
         sum+= (accumT)((*s)*(*k));
       *dest=(destT)sum;
     }
@@ -123,11 +124,11 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
    case vil_convolve_constant_extend:
    {
     // Assume src[i]=src[0] for i<0
-    vcl_ptrdiff_t i_max = k_hi-1;
-    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+    std::ptrdiff_t i_max = k_hi-1;
+    for (std::ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
+      for (std::ptrdiff_t j=-k_hi;j<=-k_lo;++j)
       {
         if ((i+j)<0) sum+=(accumT)(src[0]*kernel[j*(-kstep)]);
         else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
@@ -139,11 +140,11 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
    case vil_convolve_reflect_extend:
    {
     // Assume src[i]=src[0] for i<0
-    vcl_ptrdiff_t i_max = k_hi-1;
-    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+    std::ptrdiff_t i_max = k_hi-1;
+    for (std::ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j)
+      for (std::ptrdiff_t j=-k_hi;j<=-k_lo;++j)
       {
         if ((i+j)<0) sum+=(accumT)(src[-(i+j)*s_step]*kernel[j*(-kstep)]);
         else         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
@@ -155,11 +156,11 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
    case vil_convolve_periodic_extend:
    {
     // Assume src[i]=src[n+i] for i<0
-    vcl_ptrdiff_t i_max = k_hi-1;
+    std::ptrdiff_t i_max = k_hi-1;
     for (int i=0;i<=i_max;++i)
     {
       accumT sum=0;
-      for (vcl_ptrdiff_t j=k_hi;j>=k_lo;--j)
+      for (std::ptrdiff_t j=k_hi;j>=k_lo;--j)
         sum+=(accumT)(src[((i-j+n)%n)*s_step]*kernel[j*kstep]);
       dest[i*d_step]=(destT)sum;
     }
@@ -169,16 +170,16 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
    {
     // Truncate and reweight kernel
     accumT k_sum_all=0;
-    for (vcl_ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
+    for (std::ptrdiff_t j=-k_hi;j<=-k_lo;++j) k_sum_all+=(accumT)(kernel[j*(-kstep)]);
 
-    vcl_ptrdiff_t i_max = k_hi-1;
-    for (vcl_ptrdiff_t i=0;i<=i_max;++i)
+    std::ptrdiff_t i_max = k_hi-1;
+    for (std::ptrdiff_t i=0;i<=i_max;++i)
     {
       accumT sum=0;
       accumT k_sum=0;
       // Sum elements which overlap src
       // ie i+j>=0  (so j starts at -i)
-      for (vcl_ptrdiff_t j=-i;j<=-k_lo;++j)
+      for (std::ptrdiff_t j=-i;j<=-k_lo;++j)
       {
         sum+=(accumT)(src[(i+j)*s_step]*kernel[j*(-kstep)]);
         k_sum += (accumT)(kernel[j*(-kstep)]);
@@ -188,9 +189,9 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
     return;
    }
    default:
-    vcl_cout<<"ERROR: vil_convolve_edge_1d: "
+    std::cout<<"ERROR: vil_convolve_edge_1d: "
             <<"Sorry, can't deal with supplied edge option.\n";
-    vcl_abort();
+    std::abort();
   }
 }
 
@@ -198,10 +199,10 @@ inline void vil_convolve_edge_1d(const srcT* src, unsigned n, vcl_ptrdiff_t s_st
 // Assumes dest and src same size (nx)
 // Kernel must not be larger than nx;
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
-                            destT* dest0, vcl_ptrdiff_t d_step,
+inline void vil_convolve_1d(const srcT* src0, unsigned nx, std::ptrdiff_t s_step,
+                            destT* dest0, std::ptrdiff_t d_step,
                             const kernelT* kernel,
-                            vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                            std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
                             accumT ac,
                             vil_convolve_boundary_option start_option,
                             vil_convolve_boundary_option end_option)
@@ -246,7 +247,7 @@ template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
                             vil_image_view<destT>& dest_im,
                             const kernelT* kernel,
-                            vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                            std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
                             accumT ac,
                             vil_convolve_boundary_option start_option,
                             vil_convolve_boundary_option end_option)
@@ -254,10 +255,10 @@ inline void vil_convolve_1d(const vil_image_view<srcT>& src_im,
   unsigned n_i = src_im.ni();
   unsigned n_j = src_im.nj();
   assert(k_hi - k_lo +1 <= (int) n_i);
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
 
   dest_im.set_size(n_i,n_j,src_im.nplanes());
-  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  std::ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   for (unsigned int p=0;p<src_im.nplanes();++p)
   {
@@ -331,9 +332,9 @@ class vil_convolve_1d_resource : public vil_image_resource
                                                  unsigned j0, unsigned n_j) const
   {
     if (i0 + n_i > src_->ni() || j0 + n_j > src_->nj())  return 0;
-    const unsigned lsrc = (unsigned) vcl_max(0,(int)i0 + klo_); // lhs of input window
-    const unsigned hsrc = vcl_min(src_->ni(),i0 + n_i - klo_ + khi_); // 1+rhs of input window.
-    const unsigned lboundary = vcl_min((unsigned) -klo_, i0); // width of lhs boundary area.
+    const unsigned lsrc = (unsigned) std::max(0,(int)i0 + klo_); // lhs of input window
+    const unsigned hsrc = std::min(src_->ni(),i0 + n_i - klo_ + khi_); // 1+rhs of input window.
+    const unsigned lboundary = std::min((unsigned) -klo_, i0); // width of lhs boundary area.
     assert (hsrc > lsrc);
     vil_image_view_base_sptr vs = src_->get_view(lsrc, hsrc-lsrc, j0, n_j);
     vil_image_view<destT> dest(vs->ni(), vs->nj(), vs->nplanes());
@@ -373,7 +374,7 @@ class vil_convolve_1d_resource : public vil_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base&  /*im*/, unsigned  /*i0*/, unsigned  /*j0*/)
   {
-    vcl_cerr << "WARNING: vil_convolve_1d_resource::put_back\n"
+    std::cerr << "WARNING: vil_convolve_1d_resource::put_back\n"
              << "\tYou can't push data back into a convolve filter.\n";
     return false;
   }
@@ -381,7 +382,7 @@ class vil_convolve_1d_resource : public vil_image_resource
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const
   {
-    if (0==vcl_strcmp(tag, vil_property_read_only))
+    if (0==std::strcmp(tag, vil_property_read_only))
       return property_value ? (*static_cast<bool*>(property_value)) = true : true;
 
     return src_->get_property(tag, property_value);

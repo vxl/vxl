@@ -1,6 +1,7 @@
 // This is mul/vil3d/tests/test_algo_smooth_121.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil3d/algo/vil3d_smooth_121.h>
 #include <vil3d/vil3d_crop.h>
@@ -8,7 +9,7 @@
 
 static void test_smooth_121_i_byte()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil3d_smooth_121_i\n"
            << "************************\n";
 
@@ -27,7 +28,7 @@ static void test_smooth_121_i_byte()
 }
 static void test_smooth_121_j_byte()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil3d_smooth_121_j\n"
            << "************************\n";
 
@@ -48,7 +49,7 @@ static void test_smooth_121_j_byte()
 }
 static void test_smooth_121_k_byte()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil3d_smooth_121_j\n"
            << "************************\n";
 
@@ -71,7 +72,7 @@ static void test_smooth_121_k_byte()
 
 static void test_smooth_121_byte()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil3d_smooth_121\n"
            << "************************\n";
 

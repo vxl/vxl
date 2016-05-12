@@ -11,7 +11,7 @@
 void init_tree(boct_tree<short,float> *tree, unsigned i);
 
 boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx = 2,unsigned world_dimy = 2,unsigned world_dimz = 2,
-                                                   bool uniform = false, vcl_string scene_name = "test_scene");
+                                                   bool uniform = false, std::string scene_name = "test_scene");
 
 void clean_up();
 

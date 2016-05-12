@@ -18,19 +18,20 @@
 //   Jun.2003 - Ian Scott      - added support for '\' file separator to dos version
 // \endverbatim
 
-#include <vcl_string.h>
+#include <string>
+#include <ctime>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
-#include <vcl_ctime.h>
 //: A collection of miscellaneous filesystem-type utilities
 //
 struct vul_file
 {
   //: Return current working directory
-  static vcl_string get_cwd();
+  static std::string get_cwd();
 
   //: change current working directory
   static bool change_directory(char const* dirname);
-  static bool change_directory(vcl_string const& dirname) {
+  static bool change_directory(std::string const& dirname) {
     return change_directory(dirname.c_str());
   }
 
@@ -38,90 +39,90 @@ struct vul_file
   // You might imagine mkdir would be a better name,
   // and then you might imagine a world w/out ms.
   static bool make_directory(char const* filename);
-  static bool make_directory(vcl_string const& filename) {
+  static bool make_directory(std::string const& filename) {
     return make_directory(filename.c_str());
   }
 
   //: Make a writable directory, including any necessary parents.
   // Returns true if successful, or if the directory already exists.
   static bool make_directory_path(char const* filename);
-  static bool make_directory_path(vcl_string const& filename) {
+  static bool make_directory_path(std::string const& filename) {
     return make_directory_path(filename.c_str());
   }
 
   //: Return true iff filename is a directory.
   static bool is_directory(char const* filename);
-  static bool is_directory(const vcl_string& filename) {
+  static bool is_directory(const std::string& filename) {
     return is_directory(filename.c_str());
   }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   //: Return true iff filename is a drive, e.g., "c:" or "Z:".
   static bool is_drive(char const* filename);
-  static bool is_drive(const vcl_string& filename) {
+  static bool is_drive(const std::string& filename) {
     return is_drive(filename.c_str());
   }
 #endif
 
   //: Expand any leading ~ escapes in filename
-  static vcl_string expand_tilde(char const* filename);
-  static vcl_string expand_tilde(vcl_string const& filename) {
+  static std::string expand_tilde(char const* filename);
+  static std::string expand_tilde(std::string const& filename) {
     return expand_tilde(filename.c_str());
   }
 
   //: Return true iff filename exists.  It may be any sort of file.
   static bool exists(char const* filename);
-  static bool exists(vcl_string const& filename) {
+  static bool exists(std::string const& filename) {
     return exists(filename.c_str());
   }
 
   //: Return size of vul_file
   static unsigned long size(char const* filename);
-  static unsigned long size(vcl_string filename) { return size(filename.c_str()); }
+  static unsigned long size(std::string filename) { return size(filename.c_str()); }
 
   //: Return dirname
-  static vcl_string dirname(char const* filename);
-  static vcl_string dirname(vcl_string const& filename) {
+  static std::string dirname(char const* filename);
+  static std::string dirname(std::string const& filename) {
     return dirname(filename.c_str());
   }
 
   //: Return extension (including the '.').
-  static vcl_string extension(char const* filename);
-  static vcl_string extension(vcl_string const& filename) {
+  static std::string extension(char const* filename);
+  static std::string extension(std::string const& filename) {
     return extension( filename.c_str() );
   }
 
   //: Return basename
   // Only strip specified suffix.
-  static vcl_string basename(char const* filename, char const* suffix = 0);
-  static vcl_string basename(vcl_string const& filename, char const* suffix = 0) {
+  static std::string basename(char const* filename, char const* suffix = VXL_NULLPTR);
+  static std::string basename(std::string const& filename, char const* suffix = VXL_NULLPTR) {
     return basename(filename.c_str(), suffix );
   }
 
   //: Strips away directory of the filename
-  static vcl_string strip_directory(char const* filename);
-  static vcl_string strip_directory(vcl_string const &filename)
+  static std::string strip_directory(char const* filename);
+  static std::string strip_directory(std::string const &filename)
   { return strip_directory(filename.c_str()); }
 
   //: Strips away extension of the filename
-  static vcl_string strip_extension(char const* filename);
-  static vcl_string strip_extension(vcl_string const &filename)
+  static std::string strip_extension(char const* filename);
+  static std::string strip_extension(std::string const &filename)
   { return strip_extension(filename.c_str()); }
 
   //: Delete 1 or more files using the Local OS preferred globbing.
   // E.g. \c delete_file_glob("*"); will delete all the files in the
   // current directory on most operating systems.
   // \return true if successful.
-  static bool delete_file_glob(vcl_string const& file_glob);
+  static bool delete_file_glob(std::string const& file_glob);
   static bool delete_file_glob(char const* file_glob)
-  { return delete_file_glob(vcl_string(file_glob)); }
+  { return delete_file_glob(std::string(file_glob)); }
 
 
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
 
   //: Return current working directory
   //  This function is provided as an overloading
-  static vcl_string get_cwd(char* /*dummy*/)
+  static std::string get_cwd(char* /*dummy*/)
   { return get_cwd(); }
 
   //: Return current working directory
@@ -209,24 +210,24 @@ struct vul_file
   { return strip_extension(filename.c_str()); }
 
 #endif
-  
-  static vcl_time_t time_modified(char const* filename);
-  static vcl_time_t time_modified(std::string const& filename) {
+
+  static std::time_t time_modified(char const* filename);
+  static std::time_t time_modified(std::string const& filename) {
     return time_modified(filename.c_str());
   }
 
 };
 
 inline bool vul_file_exists(char const *f) { return vul_file::exists(f); }
-inline bool vul_file_exists(vcl_string  f) { return vul_file::exists(f); }
+inline bool vul_file_exists(std::string  f) { return vul_file::exists(f); }
 
 inline bool vul_file_is_directory(char const *f) { return vul_file::is_directory(f); }
-inline bool vul_file_is_directory(vcl_string  f) { return vul_file::is_directory(f); }
+inline bool vul_file_is_directory(std::string  f) { return vul_file::is_directory(f); }
 
 inline unsigned long vul_file_size(char const *f) { return vul_file::size(f); }
-inline unsigned long vul_file_size(vcl_string  f) { return vul_file::size(f); }
+inline unsigned long vul_file_size(std::string  f) { return vul_file::size(f); }
 
-inline vcl_string vul_file_extension(char const *f) { return vul_file::extension(f); }
-inline vcl_string vul_file_extension(vcl_string  f) { return vul_file_extension(f.c_str()); }
+inline std::string vul_file_extension(char const *f) { return vul_file::extension(f); }
+inline std::string vul_file_extension(std::string  f) { return vul_file_extension(f.c_str()); }
 
 #endif // vul_file_h_

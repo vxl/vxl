@@ -28,7 +28,7 @@ class wx_childview_app : public wxApp
 
   //: Destructor.
   virtual ~wx_childview_app() {}
-  
+
   //: Called on app initialization.
   virtual bool OnInit();
 

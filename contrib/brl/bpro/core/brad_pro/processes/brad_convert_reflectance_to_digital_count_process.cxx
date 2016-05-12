@@ -1,11 +1,12 @@
 //This is brl/bpro/core/brad_pro/processes/brad_convert_reflectance_to_digital_count_process.cxx
 //:
 // \file
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
@@ -24,7 +25,7 @@ bool brad_convert_reflectance_to_digital_count_process_cons(bprb_func_process& p
   //3: normalize values? If TRUE, output image will floating point with input[4] mapped to 1.0
   //4: maximum digital count value (default 2047)
 
-  vcl_vector<vcl_string> input_types_(5);
+  std::vector<std::string> input_types_(5);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "brad_image_metadata_sptr";
   input_types_[2] = "brad_atmospheric_parameters_sptr";
@@ -35,7 +36,7 @@ bool brad_convert_reflectance_to_digital_count_process_cons(bprb_func_process& p
     return false;
 
   //output: digital count of original image - normalized to (0,1) if input 3 is set to TRUE
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";
 
   if (!pro.set_output_types(output_types_))
@@ -52,7 +53,7 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
   //check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs" << std::endl;
     return false;
   }
 
@@ -65,17 +66,17 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
 
   //check inputs validity
   if (!reflectance_img_base) {
-    vcl_cout << pro.name() <<" :--  image  is null!\n";
+    std::cout << pro.name() <<" :--  image  is null!\n";
     return false;
   }
 
   if (reflectance_img_base->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-     vcl_cerr << "ERROR: brad_convert_reflectance_to_digital_count: expecting floating point image\n";
+     std::cerr << "ERROR: brad_convert_reflectance_to_digital_count: expecting floating point image\n";
      return false;
   }
   vil_image_view<float>* reflectance_img = dynamic_cast<vil_image_view<float>*>(reflectance_img_base.ptr());
   if (!reflectance_img) {
-     vcl_cerr << "ERROR: brad_convert_reflectance_to_digital_count: error casting to float image\n";
+     std::cerr << "ERROR: brad_convert_reflectance_to_digital_count: error casting to float image\n";
      return false;
   }
 
@@ -88,7 +89,7 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
 
   vil_math_scale_and_offset_values(toa_radiance_img, (1.0/mdata->gain_), -(mdata->offset_/mdata->gain_) );
 
-  vil_image_view_base_sptr output_img = 0;
+  vil_image_view_base_sptr output_img = VXL_NULLPTR;
   if (do_normalization) {
     vil_image_view<float> *output_img_float = new vil_image_view<float>(ni,nj);
     vil_convert_stretch_range_limited(toa_radiance_img,*output_img_float,0.0f,(float)max_digital_count,0.0f,1.0f);

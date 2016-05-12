@@ -8,13 +8,14 @@
 // \date   24 Mar 99
 // \brief  See vgui_soview3D.h for a description of this file.
 
+#include <iostream>
 #include "vgui_soview3D.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgui/vgui_gl.h>
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_point3D::print(vcl_ostream& s) const
+std::ostream& vgui_point3D::print(std::ostream& s) const
 {
   s << "[vgui_point3D " << x << ',' << y << ',' << z << ' ';
   return vgui_soview3D::print(s) << ']';
@@ -40,7 +41,7 @@ void vgui_point3D::draw() const
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_lineseg3D::print(vcl_ostream& s) const
+std::ostream& vgui_lineseg3D::print(std::ostream& s) const
 {
   s << "[vgui_lineseg3D " << x0 << ',' << y0 << ',' << z0
     << " - " << x1 << ',' << y1 << ',' << z1 << ' ';
@@ -50,7 +51,7 @@ vcl_ostream& vgui_lineseg3D::print(vcl_ostream& s) const
 void vgui_lineseg3D::draw() const
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_lineseg3D::draw() line id=" << id << '\n';
+  std::cerr << "vgui_lineseg3D::draw() line id=" << id << '\n';
 #endif
 
   bool lighting = false;
@@ -71,7 +72,7 @@ void vgui_lineseg3D::draw() const
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_triangle3D::print(vcl_ostream& s) const
+std::ostream& vgui_triangle3D::print(std::ostream& s) const
 {
   s << "[vgui_triangle3D " << x0 << ',' << y0 << ',' << z0
     << " - " << x1 << ',' << y1 << ',' << z1

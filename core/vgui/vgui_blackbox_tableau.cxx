@@ -13,11 +13,12 @@
 //   13-OCT-1999 P.Pritchett - Initial version
 // \endverbatim
 
+#include <iostream>
+#include <cstdio>
+#include <fstream>
 #include "vgui_blackbox_tableau.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdio.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 #include <vpl/vpl.h>
 
@@ -34,12 +35,12 @@ vgui_blackbox_tableau::~vgui_blackbox_tableau()
 {
 }
 
-vcl_string vgui_blackbox_tableau::type_name() const { return "vgui_blackbox_tableau"; }
+std::string vgui_blackbox_tableau::type_name() const { return "vgui_blackbox_tableau"; }
 
 
 static void help()
 {
-  vcl_cerr << '\n'
+  std::cerr << '\n'
            << "+- vgui_blackbox_tableau keys -+\n"
            << "|                              |\n"
            << "| `,'  start/stop record       |\n"
@@ -79,12 +80,12 @@ bool vgui_blackbox_tableau::handle(const vgui_event& event)
       } else {
         vgui::out << "blackbox: starting playback\n";
         if (child) {
-          vgui_event *old_e = 0;
+          vgui_event *old_e = VXL_NULLPTR;
           int frame_number = 0;
           int t = 0;
-          vcl_ofstream story("/tmp/vgui_blackbox_tableau.story");
+          std::ofstream story("/tmp/vgui_blackbox_tableau.story");
 
-          for (vcl_vector<vgui_event>::iterator e_iter=events.begin();
+          for (std::vector<vgui_event>::iterator e_iter=events.begin();
                e_iter != events.end(); ++e_iter) {
 
             // if first event then don't wait
@@ -111,13 +112,13 @@ bool vgui_blackbox_tableau::handle(const vgui_event& event)
             // Save frames
             {
               char buf[1024];
-              vcl_sprintf(buf, "/tmp/vgui_blackbox_tableau.%03d.ppm", frame_number);
+              std::sprintf(buf, "/tmp/vgui_blackbox_tableau.%03d.ppm", frame_number);
               if (do_save)  vgui_utils::dump_colour_buffer(buf);
               if (old_e) {
                 double d = (dt * 1e-3);
-                story << "delay " <<  d << vcl_endl
-                      << "image " << buf << vcl_endl;
-                vgui::out << "blackbox: Saving frame " << buf << ", delay " << dt << vcl_endl;
+                story << "delay " <<  d << std::endl
+                      << "image " << buf << std::endl;
+                vgui::out << "blackbox: Saving frame " << buf << ", delay " << dt << std::endl;
               }
 
               ++frame_number;
@@ -130,10 +131,10 @@ bool vgui_blackbox_tableau::handle(const vgui_event& event)
 
     case '/':
       if (!recording) {
-        vcl_cerr << "vgui_blackbox_tableau EVENTS\n";
-        for (vcl_vector<vgui_event>::iterator e_iter=events.begin();
+        std::cerr << "vgui_blackbox_tableau EVENTS\n";
+        for (std::vector<vgui_event>::iterator e_iter=events.begin();
              e_iter != events.end(); ++e_iter) {
-          vcl_cerr << *e_iter << vcl_endl;
+          std::cerr << *e_iter << std::endl;
         }
         return true;
       }
@@ -164,7 +165,7 @@ bool vgui_blackbox_tableau::handle(const vgui_event& event)
     if (used)
       events.push_back(copy);
     else
-      vcl_cerr << "blackbox: Ignoring " << copy << vcl_endl;
+      std::cerr << "blackbox: Ignoring " << copy << std::endl;
   }
 
   return used;

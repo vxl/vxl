@@ -12,11 +12,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bsta/bsta_gaussian_full.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Binary save bsta_gaussian_full to stream.
 template <class T, unsigned n>
@@ -43,7 +44,7 @@ vsl_b_read(vsl_b_istream &is, bsta_gaussian_full<T,n>& g)
 //: Print summary
 template <class T, unsigned n>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_gaussian_full<T,n>& g)
+vsl_print_summary(std::ostream &os, const bsta_gaussian_full<T,n>& g)
 {
   os << "Gaussian (full) mean:"<<g.mean()<<" covar:"<<g.covar();
 }

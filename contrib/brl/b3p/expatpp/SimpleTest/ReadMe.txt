@@ -3,7 +3,7 @@
 ========================================================================
 
 
-AppWizard has created this SimpleTest application for you.  
+AppWizard has created this SimpleTest application for you.
 
 This file contains a summary of what you will find in each of the files that
 make up your SimpleTest application.

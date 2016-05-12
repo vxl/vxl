@@ -48,7 +48,7 @@ class bgui_image_utils
 
   //: Default range map based on default max min values
   bool default_range_map(vgui_range_map_params_sptr& rmp,
-                         double gamma = 1.0, bool invert = false, 
+                         double gamma = 1.0, bool invert = false,
                          bool gl_map = false, bool cache=true);
 
   //: Range map computed from the image histogram
@@ -84,8 +84,8 @@ class bgui_image_utils
 
   vil_image_resource_sptr image_;
   vsol_polygon_2d_sptr poly_;
-  vcl_vector<bsta_histogram<double> > hist_;
-  vcl_vector<vcl_vector<double> > data_;
+  std::vector<bsta_histogram<double> > hist_;
+  std::vector<std::vector<double> > data_;
 };
 
 

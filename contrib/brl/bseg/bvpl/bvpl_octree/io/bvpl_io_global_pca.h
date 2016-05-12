@@ -12,9 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 typedef bvpl_global_pca<125> bvpl_global_pca_125;
@@ -27,7 +28,7 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_global_pca_125 const &);
 void vsl_b_read(vsl_b_istream & is, bvpl_global_pca_125 &m);
 
 
-void vsl_print_summary(vcl_ostream &os, const bvpl_global_pca_125 &m);
+void vsl_print_summary(std::ostream &os, const bvpl_global_pca_125 &m);
 
 
 void vsl_b_read(vsl_b_istream& is, bvpl_global_pca_125* m);
@@ -35,7 +36,7 @@ void vsl_b_read(vsl_b_istream& is, bvpl_global_pca_125* m);
 
 void vsl_b_write(vsl_b_ostream& os, const bvpl_global_pca_125* &m);
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_global_pca_125* &m);
+void vsl_print_summary(std::ostream& os, const bvpl_global_pca_125* &m);
 
 
 #endif

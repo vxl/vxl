@@ -8,9 +8,10 @@
 // \date   27 Oct 99
 // \brief  See vgui_blender_tableau.h for a description of this file.
 
+#include <iostream>
 #include "vgui_blender_tableau.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_new.h>
@@ -29,14 +30,14 @@ vgui_blender_tableau::
 vgui_blender_tableau(char const* file,
                      vgui_range_map_params_sptr const& rmp,
                      float a)
-  : renderer_(0),
-    vil_renderer_(0),
+  : renderer_(VXL_NULLPTR),
+    vil_renderer_(VXL_NULLPTR),
     rmp_(rmp),
     alpha_(a)
 {
   vil_renderer_ = new vgui_vil_image_renderer;
   vil_renderer_->set_image_resource(vil_load_image_resource(file));
-  filename_ = vcl_string(file);
+  filename_ = std::string(file);
 }
 
 //-----------------------------------------------------------------------------
@@ -46,14 +47,14 @@ vgui_blender_tableau::
 vgui_blender_tableau(vil1_image const& img,
                      vgui_range_map_params_sptr const& rmp,
                      float a)
-  : renderer_(0),
-    vil_renderer_(0),
+  : renderer_(VXL_NULLPTR),
+    vil_renderer_(VXL_NULLPTR),
     rmp_(rmp),
     alpha_(a)
 {
   renderer_ = new vgui_image_renderer;
   renderer_->set_image(img);
-  filename_ = vcl_string("unknown");
+  filename_ = std::string("unknown");
 }
 
 //-----------------------------------------------------------------------------
@@ -63,14 +64,14 @@ vgui_blender_tableau::
 vgui_blender_tableau(vil_image_resource_sptr const& img,
                      vgui_range_map_params_sptr const& rmp,
                      float a)
-  : renderer_(0),
-    vil_renderer_(0),
+  : renderer_(VXL_NULLPTR),
+    vil_renderer_(VXL_NULLPTR),
     rmp_(rmp),
     alpha_(a)
 {
   vil_renderer_ = new vgui_vil_image_renderer;
   vil_renderer_->set_image_resource(img);
-  filename_ = vcl_string("unknown");
+  filename_ = std::string("unknown");
 }
 
 //-----------------------------------------------------------------------------
@@ -80,14 +81,14 @@ vgui_blender_tableau::
 vgui_blender_tableau(vil_image_view_base const& img,
                      vgui_range_map_params_sptr const& rmp,
                      float a)
-  : renderer_(0),
-    vil_renderer_(0),
+  : renderer_(VXL_NULLPTR),
+    vil_renderer_(VXL_NULLPTR),
     rmp_(rmp),
     alpha_(a)
 {
   vil_renderer_ = new vgui_vil_image_renderer;
   vil_renderer_->set_image_resource( vil_new_image_resource_of_view( img ) );
-  filename_ = vcl_string("unknown");
+  filename_ = std::string("unknown");
 }
 
 //-----------------------------------------------------------------------------
@@ -100,14 +101,14 @@ vgui_blender_tableau::~vgui_blender_tableau()
 
 //-----------------------------------------------------------------------------
 //: Returns the filename_ of the loaded image (if it was loaded from file).
-vcl_string vgui_blender_tableau::file_name() const
+std::string vgui_blender_tableau::file_name() const
 {
   return filename_.c_str();
 }
 
 //-----------------------------------------------------------------------------
 // Returns the type of this tableau ('vgui_blender_tableau').
-vcl_string vgui_blender_tableau::type_name() const
+std::string vgui_blender_tableau::type_name() const
 {
   return "vgui_blender_tableau";
 }
@@ -165,7 +166,7 @@ bool vgui_blender_tableau::handle(vgui_event const &e)
       alpha_ -= 0.1f;
       if (alpha_ <= 0.0f) alpha_ = 0.0f;
 #ifdef DEBUG
-      vcl_cerr << "blender : alpha_ = " << alpha_ << vcl_endl;
+      std::cerr << "blender : alpha_ = " << alpha_ << std::endl;
 #endif
       post_redraw();
       return true;
@@ -173,7 +174,7 @@ bool vgui_blender_tableau::handle(vgui_event const &e)
       alpha_ += 0.1f;
       if (alpha_ >= 1.0f) alpha_ = 1.0f;
 #ifdef DEBUG
-      vcl_cerr << "blender : alpha_ = " << alpha_ << vcl_endl;
+      std::cerr << "blender : alpha_ = " << alpha_ << std::endl;
 #endif
       post_redraw();
       return true;

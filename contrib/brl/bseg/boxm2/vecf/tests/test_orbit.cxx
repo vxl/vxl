@@ -4,8 +4,10 @@
 // \date 11/19/14
 
 
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_image_view.h>
@@ -22,31 +24,31 @@
 #include "../boxm2_vecf_eyelid.h"
 #include "../boxm2_vecf_eyelid_crease.h"
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-#define BUILD_TEST_ORBIT
+//#define BUILD_TEST_ORBIT
 void test_orbit()
 {
 #ifdef BUILD_TEST_ORBIT
   boxm2_vecf_eyelid_crease ec;
 #if 0
   double t = 1.0;
-  vcl_cout << "{\n";
+  std::cout << "{\n";
   for(double x = -10.0; x<=10.0; x+=0.5){
     double y = ec.gi(x, t);
-    vcl_cout << "{" << x << ','<<y<<"},";
+    std::cout << "{" << x << ','<<y<<"},";
   }
-  vcl_cout << "}\n";
-  vcl_cout << ec.t(0.0,5.70955-0.88) << ' ' << ec.t(0.0,8.91894-0.88)<< '\n';
+  std::cout << "}\n";
+  std::cout << ec.t(0.0,5.70955-0.88) << ' ' << ec.t(0.0,8.91894-0.88)<< '\n';
 #endif
 #if 1
   // Set up the scenes
-  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/";
-  //vcl_string orbit_scene_path = base_dir_path + "orbit/orbit.25.xml";
-  //vcl_string target_scene_path = base_dir_path + "orbit/target_orbit.25.xml";
-  vcl_string orbit_scene_path = base_dir_path + "orbit/orbit.xml";
-  vcl_string target_scene_path = base_dir_path + "orbit/target_orbit.xml";
+  std::string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/";
+  //std::string orbit_scene_path = base_dir_path + "orbit/orbit.25.xml";
+  //std::string target_scene_path = base_dir_path + "orbit/target_orbit.25.xml";
+  std::string orbit_scene_path = base_dir_path + "orbit/orbit.xml";
+  std::string target_scene_path = base_dir_path + "orbit/target_orbit.xml";
   if(!vul_file::exists(orbit_scene_path))
   {
-      vcl_cout<<"orbit scene file) does not exist"<<vcl_endl;
+      std::cout<<"orbit scene file) does not exist"<<std::endl;
       return;
   }
   //bool init = false;
@@ -64,4 +66,4 @@ void test_orbit()
 #endif //BUILD_TEST_ORBIT
 }
 TESTMAIN( test_orbit );
- 
+

@@ -1,12 +1,14 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include "bwm_video_registration.h"
 
 #include <bwm/video/bwm_video_cam_istream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
-#include <vcl_iomanip.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
 #include <vul/vul_file.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
@@ -69,7 +71,7 @@ output_frame_bounds_planar(bwm_video_cam_istream_sptr& cam_istream,
     bounds->add_point(maxx, maxy);
     //the largest diagonal of the projected quadrilateral
     double w = b->width(), h = b->height();
-    sd += vcl_sqrt(w*w + h*h);//accumulate for the average
+    sd += std::sqrt(w*w + h*h);//accumulate for the average
     ncams++;
     current_frame +=skip_frames;
   }
@@ -77,13 +79,13 @@ output_frame_bounds_planar(bwm_video_cam_istream_sptr& cam_istream,
   if (!ncams) return false;
   sd/=ncams;//average diagonal of projected image
   double ini = input_ni, inj = input_nj;
-  double in_diagonal = vcl_sqrt(ini*ini+inj*inj);
+  double in_diagonal = std::sqrt(ini*ini+inj*inj);
   world_sample_distance = sd/in_diagonal;
   return true;
 }
 
 bool convert_from_frame(vidl_frame_sptr const& frame,
-                        vcl_vector<vil_image_view<float> >& views)
+                        std::vector<vil_image_view<float> >& views)
 {
   if (!frame) return false;
   if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_F32){
@@ -120,15 +122,15 @@ bool convert_from_frame(vidl_frame_sptr const& frame,
 }
 
 static vidl_frame_sptr
-convert_to_frame(vcl_vector<vil_image_view<float> >const&  views,
+convert_to_frame(std::vector<vil_image_view<float> >const&  views,
                  bool preserve_float = false)
 {
   unsigned np = views.size();
   if (!np)
-    return 0;
+    return VXL_NULLPTR;
   unsigned ni = views[0].ni(), nj = views[0].nj();
   if (!preserve_float){
-    vcl_vector<vil_image_view<unsigned char> > cviews;
+    std::vector<vil_image_view<unsigned char> > cviews;
     for (unsigned p = 0; p<np; ++p)
       cviews.push_back(brip_vil_float_ops::convert_to_byte(views[p]));
     vil_image_view<unsigned char> out_view(ni, nj, np);
@@ -138,7 +140,7 @@ convert_to_frame(vcl_vector<vil_image_view<float> >const&  views,
           out_view(i, j, p) = cviews[p](i,j);
     return  new vidl_memory_chunk_frame(out_view);
   }
-  vcl_vector<vil_image_view<float> > cviews;
+  std::vector<vil_image_view<float> > cviews;
   for (unsigned p = 0; p<np; ++p)
     cviews.push_back(views[p]);
   vil_image_view<float> out_view(ni, nj, np);
@@ -200,13 +202,13 @@ register_image_stream_planar(vidl_istream_sptr& in_stream,
   {
     vul_timer tim;
     vidl_frame_sptr frame = in_stream->current_frame();
-    vcl_vector<vil_image_view<float> > float_vs;
+    std::vector<vil_image_view<float> > float_vs;
     if (!convert_from_frame(frame, float_vs)) return false;
     vpgl_perspective_camera<double>* cam = cam_istream->current_camera();
     if (!cam)
       return false;
     vgl_h_matrix_2d<double> Hsh = compute_homography(H0,t,cam, world_plane);
-    vcl_vector<vil_image_view<float> > out_vs;
+    std::vector<vil_image_view<float> > out_vs;
     for (unsigned p = 0; p<float_vs.size(); ++p){
       vil_image_view<float> out_view(out_ni, out_nj);
       if (!brip_vil_float_ops::homography(float_vs[p], Hsh, out_view, true))
@@ -219,9 +221,9 @@ register_image_stream_planar(vidl_istream_sptr& in_stream,
     if (!out_stream->write_frame(oframe))
       return false;
     current_frame +=skip_frames+1;
-    vcl_cout << "Registered frame[" << current_frame << "](" << out_ni
+    std::cout << "Registered frame[" << current_frame << "](" << out_ni
              << " x " << out_nj << ") in " << tim.real() << " milliseconds\n"
-             << vcl_flush;
+             << std::flush;
   }
   while (in_stream->seek_frame(current_frame) &&
          cam_istream->seek_camera(current_frame));
@@ -233,21 +235,21 @@ register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
                              vgl_plane_3d<double> const& world_plane,
                              vsol_box_2d_sptr const& bounds,
                              double world_sample_distance,
-                             vcl_string const& homg_out_dir,
+                             std::string const& homg_out_dir,
                              unsigned skip_frames
                             )
 {
   if (vul_file::exists(homg_out_dir)&&!vul_file::is_directory(homg_out_dir)){
-    vcl_cerr << "In bwm_video_registration:: -"
+    std::cerr << "In bwm_video_registration:: -"
              << " path exists but is not a directory\n" << homg_out_dir
-             << vcl_endl;
+             << std::endl;
     return false;
   }
 
   if (!vul_file::exists(homg_out_dir))
     if (!vul_file::make_directory(homg_out_dir)){
-      vcl_cerr << "In  vidl_pro_utils::create_directory() -"
-               << " could not make directory\n" << homg_out_dir << vcl_endl;
+      std::cerr << "In  vidl_pro_utils::create_directory() -"
+               << " could not make directory\n" << homg_out_dir << std::endl;
       return false;
     }
 
@@ -274,11 +276,11 @@ register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
       return false;
     vgl_h_matrix_2d<double> Hsh = compute_homography(H0,t,cam, world_plane);
 
-    vcl_stringstream str;
-    str << vcl_setw(5) << vcl_setfill('0') << current_frame;
-    vcl_string path = homg_out_dir + "\\" + "H" +str.str();
-    vcl_string save_path = path + '.' + "homg";
-    vcl_ofstream os(save_path.c_str());
+    std::stringstream str;
+    str << std::setw(5) << std::setfill('0') << current_frame;
+    std::string path = homg_out_dir + "\\" + "H" +str.str();
+    std::string save_path = path + '.' + "homg";
+    std::ofstream os(save_path.c_str());
     os << Hsh;
     os.close();
     current_frame +=skip_frames+1;

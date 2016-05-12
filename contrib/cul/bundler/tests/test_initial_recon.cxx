@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 
 #include <bundler/bundler.h>
@@ -7,8 +10,7 @@
 
 
 #include <vil/vil_load.h>
-#include <vcl_string.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 
 static const double FOCAL_LENGTH_MM = 5.4;
 static const double SENSOR_WIDTH_MM = 5.312;
@@ -20,10 +22,10 @@ static const char* IMG_PATH =
 
 static void test_initial_recon(int argc, char** argv)
 {
-    vcl_string filepath;
+    std::string filepath;
 
     if (argc < 2) {
-        vcl_cerr<<"Supply a filename for the first two args!\n";
+        std::cerr<<"Supply a filename for the first two args!\n";
         TEST("test_tracks", true, false);
 
         filepath = IMG_PATH;
@@ -33,13 +35,13 @@ static void test_initial_recon(int argc, char** argv)
     }
 
     //-------------------- Load all the images.
-    vcl_vector<vil_image_resource_sptr> imgs(NUM_IMGS);
-    vcl_vector<double> exif_tags(NUM_IMGS);
+    std::vector<vil_image_resource_sptr> imgs(NUM_IMGS);
+    std::vector<double> exif_tags(NUM_IMGS);
 
     for (int i = 0; i < NUM_IMGS; i++){
-        vcl_stringstream str;
+        std::stringstream str;
         str << filepath << "/kermit"
-            << vcl_setw(3) << vcl_setfill('0') << i << ".jpg";
+            << std::setw(3) << std::setfill('0') << i << ".jpg";
 
         imgs[i] = vil_load_image_resource(str.str().c_str(), false);
         exif_tags[i] = imgs[i]->ni() * FOCAL_LENGTH_MM / SENSOR_WIDTH_MM;
@@ -61,7 +63,7 @@ static void test_initial_recon(int argc, char** argv)
     test_recon(recon);
 
     int num_observed_imgs = 0;
-    vcl_vector<bundler_inters_image_sptr>::const_iterator j;
+    std::vector<bundler_inters_image_sptr>::const_iterator j;
     for (j = recon.feature_sets.begin(); j != recon.feature_sets.end(); j++)
     {
         if ((*j)->in_recon) {

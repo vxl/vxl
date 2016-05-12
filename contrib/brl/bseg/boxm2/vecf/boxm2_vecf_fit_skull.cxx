@@ -1,5 +1,9 @@
 
-#include <vcl_fstream.h>
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <iomanip>
 #include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_fit_skull.h"
 #include <vgl/vgl_vector_3d.h>
@@ -9,9 +13,7 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d_compute_affine.h>
 #include <bvrml/bvrml_write.h>
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 void boxm2_vecf_fit_skull::fill_smid_map(){
   smid_map_["left_lateral_canthus"]=LEFT_LATERAL_CANTHUS;
@@ -23,9 +25,9 @@ void boxm2_vecf_fit_skull::fill_smid_map(){
   smid_map_["forehead_intersection"]=FOREHEAD_INTERSECTION;
 }
 bool boxm2_vecf_fit_skull::add_labeled_point(boxm2_vecf_labeled_point lp){
-  vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(lp.label_);
+  std::map<std::string, mids>::iterator iit = smid_map_.find(lp.label_);
   if(iit == smid_map_.end() ){
-    vcl_cout << "Measurement label " << lp.label_ << " doesn't exist\n";
+    std::cout << "Measurement label " << lp.label_ << " doesn't exist\n";
     return false;
   }
   lpts_[iit->second] = lp;
@@ -48,29 +50,29 @@ bool boxm2_vecf_fit_skull::add_labeled_point(boxm2_vecf_labeled_point lp){
 // so the reader maps to the internal labels. The implementation below
 // can ingest either format
 //
-bool boxm2_vecf_fit_skull::read_anchor_file(vcl_string const& path){
+bool boxm2_vecf_fit_skull::read_anchor_file(std::string const& path){
 
   // parse generic point with label file format
-  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > anchors;  
+  std::map<std::string, std::vector<vgl_point_3d<double> > > anchors;
   bool good = boxm2_vecf_labeled_point::read_points(path, anchors);
   if(!good){
-    vcl_cout << "Parse of file " << path << " failed\n";
+    std::cout << "Parse of file " << path << " failed\n";
     return false;
   }
   // now that the file is parsed the labeled points can be added to the
   // internal database, lpts_ (labeled points)
-  for(vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > >::iterator ait = anchors.begin();
+  for(std::map<std::string, std::vector<vgl_point_3d<double> > >::iterator ait = anchors.begin();
       ait != anchors.end(); ++ait){
-    vcl_string lab = ait->first;
-    vcl_vector<vgl_point_3d<double> >& pts = ait->second;
+    std::string lab = ait->first;
+    std::vector<vgl_point_3d<double> >& pts = ait->second;
     double x = 0.0, y= 0.0, z = 0.0;
     double np = 0.0;
-    for(vcl_vector<vgl_point_3d<double> >::iterator pit = pts.begin();
+    for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
         pit != pts.end(); ++pit, np+=1.0){
       x += pit->x(); y += pit->y(); z += pit->z();
     }
     if(np == 0.0){
-    vcl_cout << "No points for label  " << lab << "\n";
+    std::cout << "No points for label  " << lab << "\n";
     return false;
     }
     x /= np;      y /= np;  z /= np;
@@ -82,7 +84,7 @@ bool boxm2_vecf_fit_skull::read_anchor_file(vcl_string const& path){
 }
 bool boxm2_vecf_fit_skull::compute_auxillary_points(){
   // convert point format to vector format (labeled point)
-  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
+  std::map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(MID_FOREHEAD_NORMAL);
   if(lit == lpts_.end())
     return false;
@@ -93,7 +95,7 @@ bool boxm2_vecf_fit_skull::compute_auxillary_points(){
   if(lit == lpts_.end())
     return false;
   const vgl_point_3d<double>& fmid = lit->second.p3d_;
-  
+
   // midpoint of line joining the canthi
    lit = lpts_.find(LEFT_LATERAL_CANTHUS);
   if(lit == lpts_.end())
@@ -117,7 +119,7 @@ bool boxm2_vecf_fit_skull::compute_auxillary_points(){
   vgl_point_3d<double> fore_int;
   bool success = vgl_intersection(ray, pl, fore_int);
   if(!success){
-    vcl_cout << "Intersection of ray with forehead plane - failed\n";
+    std::cout << "Intersection of ray with forehead plane - failed\n";
     return false;
   }
   boxm2_vecf_labeled_point lpint(fore_int, "forehead_intersection");
@@ -127,7 +129,7 @@ bool boxm2_vecf_fit_skull::compute_auxillary_points(){
 bool boxm2_vecf_fit_skull::set_trans(){
 
   // get target points and subtract off canthus midpoint vector
-  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
+  std::map<mids, boxm2_vecf_labeled_point>::iterator lit;
 
   lit = lpts_.find(LEFT_LATERAL_CANTHUS);
   if(lit == lpts_.end())
@@ -156,7 +158,7 @@ bool boxm2_vecf_fit_skull::set_trans(){
   vgl_point_3d<double> mjaw_src = params_.mid_upper_jaw_;
   vgl_point_3d<double> fint_src = params_.forehead_intersection_;
 
-  vcl_vector<vgl_homg_point_3d<double> > source_pts, target_pts;
+  std::vector<vgl_homg_point_3d<double> > source_pts, target_pts;
   source_pts.push_back(vgl_homg_point_3d<double>(llc_src)); source_pts.push_back(vgl_homg_point_3d<double>(rlc_src));
   source_pts.push_back(vgl_homg_point_3d<double>(mjaw_src)); source_pts.push_back(vgl_homg_point_3d<double>(fint_src));
   target_pts.push_back(vgl_homg_point_3d<double>(llc_tgt)); target_pts.push_back(vgl_homg_point_3d<double>(rlc_tgt));
@@ -165,38 +167,38 @@ bool boxm2_vecf_fit_skull::set_trans(){
   bool success = hca.compute(source_pts, target_pts, params_.trans_);
   if(!success) return false;
   //for debug purposes
-  vcl_cout << params_.trans_ << '\n';
+  std::cout << params_.trans_ << '\n';
   vnl_matrix_fixed<double, 3, 3> R, S;
   params_.trans_.polar_decomposition(S, R);
-  vcl_cout << "Rotation part\n " << R << '\n';
-  vcl_cout << "Symmetric part\n " << S << '\n';
+  std::cout << "Rotation part\n " << R << '\n';
+  std::cout << "Symmetric part\n " << S << '\n';
 
   unsigned n = static_cast<unsigned>(source_pts.size());
   for(unsigned i = 0; i<n; ++i){
     vgl_homg_point_3d<double> hts = params_.trans_(source_pts[i]);
     vgl_point_3d<double> ts(hts), t(target_pts[i]);
-    vcl_cout << vcl_setprecision(3) << ts << ' ' << t << ' ' << (t-ts).length() << '\n';
+    std::cout << std::setprecision(3) << ts << ' ' << t << ' ' << (t-ts).length() << '\n';
   }
-                                
+
   return true;
 }
 
-bool boxm2_vecf_fit_skull::transform_skull(vcl_string const& source_skull_path, vcl_string const& target_skull_path) const{
+bool boxm2_vecf_fit_skull::transform_skull(std::string const& source_skull_path, std::string const& target_skull_path) const{
   vgl_pointset_3d<double> src_ptset, trg_ptset;
-  vcl_ifstream sistr(source_skull_path.c_str());
+  std::ifstream sistr(source_skull_path.c_str());
     if(!sistr)
       return false;
     sistr >> src_ptset;
- 
+
   sistr.close();
 
   trg_ptset = params_.trans_(src_ptset);
-  
-  vcl_ofstream tostr(target_skull_path.c_str());
+
+  std::ofstream tostr(target_skull_path.c_str());
     if(!tostr)
       return false;
     tostr << trg_ptset;
- 
+
   tostr.close();
   return true;
 }

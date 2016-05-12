@@ -1,5 +1,6 @@
 // This is core/vgui/vgui_font_bitmap.cxx
 //=========================================================================
+#include <iostream>
 #include "vgui_font_bitmap.h"
 //:
 // \file
@@ -10,7 +11,7 @@
 
 #include <vgui/vgui_macro.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 // Supported fonts - declarations (definitions below).
@@ -33,7 +34,7 @@ vgui_font_bitmap::vgui_font_bitmap(bitmap_font_type t)
   if ((display_list_base_id_ = glGenLists(256)) == 0)
   {
 #ifdef DEBUG
-    vcl_cerr << __FILE__ ": Failed to create display lists!\n";
+    std::cerr << __FILE__ ": Failed to create display lists!\n";
 #endif
     return;
   }
@@ -53,7 +54,7 @@ vgui_font_bitmap::vgui_font_bitmap(bitmap_font_type t)
 
    default:
 #ifdef DEBUG
-    vcl_cerr << __FILE__ ": Invalid bitmap_font_type!\n";
+    std::cerr << __FILE__ ": Invalid bitmap_font_type!\n";
 #endif
     break;
   }
@@ -68,7 +69,7 @@ vgui_font_bitmap::~vgui_font_bitmap(void)
 }
 
 //: Draw a string of font symbols.
-void vgui_font_bitmap::draw(const vcl_string& str) const
+void vgui_font_bitmap::draw(const std::string& str) const
 {
   for (unsigned int i = 0; i < str.size(); ++i)
   {

@@ -16,7 +16,8 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 #include <vgui/vgui_dialog.h>
 
 class vgui_dialog_extensions_impl;
@@ -30,7 +31,7 @@ class vgui_dialog_extensions_impl;
 // until a line break element is inserted. This allows to create more versatile
 // dialogs, by grouping elements on one line.
 //
-// A field in this context consists of a vcl_string label and a variable.
+// A field in this context consists of a std::string label and a variable.
 // The dialog is then posted using the ask() method. If ask returns true then
 // any changes to the fields in the dialog are used to update the variables.
 // Each vgui_dialog contains an instance of a concrete subclass of
@@ -60,7 +61,7 @@ class vgui_dialog_extensions: public vgui_dialog
  virtual ~vgui_dialog_extensions();
 
   //: directory browsers
-  void dir (const char* label, vcl_string& regexp, vcl_string& dirpath);
+  void dir (const char* label, std::string& regexp, std::string& dirpath);
 
   bool ask();
 

@@ -1,15 +1,17 @@
 // This is brl/bbas/imesh/algo/imesh_kd_tree.cxx
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <cmath>
 #include "imesh_kd_tree.h"
-#include "imesh_kd_tree.txx"
+#include "imesh_kd_tree.hxx"
 //:
 // \file
 
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <imesh/algo/imesh_intersect.h>
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 
 //: The minimum square distance between \a p and any point in \a b
@@ -65,9 +67,9 @@ namespace {
 //: Functor for sorting boxes by increasing X centroid
 class less_box_centroid_x
 {
-  vcl_vector<vgl_box_3d<double> > boxes;
+  std::vector<vgl_box_3d<double> > boxes;
  public:
-  less_box_centroid_x(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  less_box_centroid_x(const std::vector<vgl_box_3d<double> >& b) : boxes(b) {}
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_x() < boxes[i2].centroid_x();
@@ -77,9 +79,9 @@ class less_box_centroid_x
 //: Functor for sorting boxes by increasing Y centroid
 class less_box_centroid_y
 {
-  vcl_vector<vgl_box_3d<double> > boxes;
+  std::vector<vgl_box_3d<double> > boxes;
  public:
-  less_box_centroid_y(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  less_box_centroid_y(const std::vector<vgl_box_3d<double> >& b) : boxes(b) {}
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_y() < boxes[i2].centroid_y();
@@ -89,9 +91,9 @@ class less_box_centroid_y
 //: Functor for sorting boxes by increasing Z centroid
 class less_box_centroid_z
 {
-  vcl_vector<vgl_box_3d<double> > boxes;
+  std::vector<vgl_box_3d<double> > boxes;
  public:
-  less_box_centroid_z(const vcl_vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  less_box_centroid_z(const std::vector<vgl_box_3d<double> >& b) : boxes(b) {}
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_z() < boxes[i2].centroid_z();
@@ -99,12 +101,12 @@ class less_box_centroid_z
 };
 
 bool
-best_split(const vcl_vector<vgl_box_3d<double> >& boxes,
-           const vcl_vector<unsigned int>& indices,
+best_split(const std::vector<vgl_box_3d<double> >& boxes,
+           const std::vector<unsigned int>& indices,
            double& min_volume, unsigned int& split_ind)
 {
   const unsigned int ind_size = indices.size();
-  vcl_vector<double> volume_seq;
+  std::vector<double> volume_seq;
   vgl_box_3d<double> box(boxes[indices[0]]);
   for (unsigned int i=1; i<ind_size; ++i)
   {
@@ -120,7 +122,7 @@ best_split(const vcl_vector<vgl_box_3d<double> >& boxes,
     box.add(boxes[indices[--i]]);
     volume += volume_seq[i];
     if (volume <= min_volume) {
-      double ratio_factor =  vcl_abs(0.5 - double(i+1)/ind_size);
+      double ratio_factor =  std::abs(0.5 - double(i+1)/ind_size);
       if ( ratio_factor < 0.25 && ratio_factor < best_ratio_factor) {
         min_volume = volume;
         split_ind = i+1;
@@ -136,25 +138,25 @@ best_split(const vcl_vector<vgl_box_3d<double> >& boxes,
 
 
 //: recursively construct a kd-tree of mesh triangles
-vcl_auto_ptr<imesh_kd_tree_node>
-imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
+std::auto_ptr<imesh_kd_tree_node>
+imesh_build_kd_tree_rec(const std::vector<vgl_box_3d<double> >& boxes,
                         const vgl_box_3d<double>& outer_box,
                         const vgl_box_3d<double>& inner_box,
-                        const vcl_vector< unsigned int >& indices)
+                        const std::vector< unsigned int >& indices)
 {
   // If only one triangle is left, create and return a leaf node.
   if (indices.size() == 1) {
-    return vcl_auto_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node( outer_box,
+    return std::auto_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node( outer_box,
                                                                     inner_box,
                                                                     indices[0] ));
   }
 
   // find best direction for splitting
-  vcl_vector<vcl_vector<unsigned int> > sorted(3,indices);
-  vcl_sort(sorted[0].begin(),sorted[0].end(), less_box_centroid_x(boxes));
-  vcl_sort(sorted[1].begin(),sorted[1].end(), less_box_centroid_y(boxes));
-  vcl_sort(sorted[2].begin(),sorted[2].end(), less_box_centroid_z(boxes));
-  double min_volume = vcl_numeric_limits<double>::infinity();
+  std::vector<std::vector<unsigned int> > sorted(3,indices);
+  std::sort(sorted[0].begin(),sorted[0].end(), less_box_centroid_x(boxes));
+  std::sort(sorted[1].begin(),sorted[1].end(), less_box_centroid_y(boxes));
+  std::sort(sorted[2].begin(),sorted[2].end(), less_box_centroid_z(boxes));
+  double min_volume = std::numeric_limits<double>::infinity();
   unsigned int split_ind=0;
   int dim = -1;
   if (best_split(boxes,sorted[0],min_volume,split_ind))
@@ -165,14 +167,14 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
     dim = 2;
 
   // split the sorted indices
-  vcl_vector<unsigned int> left_indices(sorted[dim].begin(),
+  std::vector<unsigned int> left_indices(sorted[dim].begin(),
                                         sorted[dim].begin()+split_ind);
-  vcl_vector<unsigned int> right_indices(sorted[dim].begin()+split_ind,
+  std::vector<unsigned int> right_indices(sorted[dim].begin()+split_ind,
                                          sorted[dim].end());
 
   // compute the left and right inner and outer boxes
   vgl_box_3d<double> left_inner_box, right_inner_box;
-  typedef vcl_vector<unsigned int>::const_iterator index_iterator;
+  typedef std::vector<unsigned int>::const_iterator index_iterator;
   for ( index_iterator itr=left_indices.begin(); itr!=left_indices.end(); ++itr )
     left_inner_box.add(boxes[*itr]);
   for ( index_iterator itr=right_indices.begin(); itr!=right_indices.end(); ++itr )
@@ -212,12 +214,12 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
   }
 
   // recursively construct child nodes
-  vcl_auto_ptr<imesh_kd_tree_node>
+  std::auto_ptr<imesh_kd_tree_node>
       left_child(imesh_build_kd_tree_rec(boxes,left_outer_box,left_inner_box,left_indices));
-  vcl_auto_ptr<imesh_kd_tree_node>
+  std::auto_ptr<imesh_kd_tree_node>
       right_child(imesh_build_kd_tree_rec(boxes,right_outer_box,right_inner_box,right_indices));
 
-  return vcl_auto_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node(outer_box,
+  return std::auto_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node(outer_box,
                                                                  inner_box,
                                                                  left_child,
                                                                  right_child));
@@ -225,16 +227,16 @@ imesh_build_kd_tree_rec(const vcl_vector<vgl_box_3d<double> >& boxes,
 
 
 //: Construct a kd-tree (in 3d) of axis aligned boxes
-vcl_auto_ptr<imesh_kd_tree_node>
-imesh_build_kd_tree(const vcl_vector<vgl_box_3d<double> >& boxes)
+std::auto_ptr<imesh_kd_tree_node>
+imesh_build_kd_tree(const std::vector<vgl_box_3d<double> >& boxes)
 {
   // make the outer box
-  double minv = -vcl_numeric_limits<double>::infinity();
-  double maxv = vcl_numeric_limits<double>::infinity();
+  double minv = -std::numeric_limits<double>::infinity();
+  double maxv = std::numeric_limits<double>::infinity();
   vgl_box_3d<double> outer_box(minv,minv,minv, maxv,maxv,maxv);
 
   // create the vector of ids
-  vcl_vector< unsigned int > indices( boxes.size() );
+  std::vector< unsigned int > indices( boxes.size() );
   for ( unsigned int i=0; i<indices.size(); ++i)
     indices[i] = i;
 
@@ -245,11 +247,11 @@ imesh_build_kd_tree(const vcl_vector<vgl_box_3d<double> >& boxes)
   }
 
   // call recursive function to do the real work
-  vcl_auto_ptr<imesh_kd_tree_node> root(imesh_build_kd_tree_rec(boxes, outer_box, inner_box, indices));
+  std::auto_ptr<imesh_kd_tree_node> root(imesh_build_kd_tree_rec(boxes, outer_box, inner_box, indices));
 
   // assign additional indices to internal nodes
   // reverse breadth first (root gets last index)
-  vcl_vector<imesh_kd_tree_node*> internal_nodes;
+  std::vector<imesh_kd_tree_node*> internal_nodes;
   internal_nodes.push_back(root.get());
   for (unsigned int c=0; c<internal_nodes.size(); ++c) {
     if (!internal_nodes[c]->left_->is_leaf())
@@ -257,7 +259,7 @@ imesh_build_kd_tree(const vcl_vector<vgl_box_3d<double> >& boxes)
     if (!internal_nodes[c]->right_->is_leaf())
       internal_nodes.push_back(internal_nodes[c]->right_.get());
   }
-  typedef vcl_vector<imesh_kd_tree_node*>::const_reverse_iterator critr;
+  typedef std::vector<imesh_kd_tree_node*>::const_reverse_iterator critr;
   unsigned int index = boxes.size();
   for (critr itr = internal_nodes.rbegin(); itr != critr(internal_nodes.rend()); ++itr)
     (*itr)->index_ = index++;
@@ -267,12 +269,12 @@ imesh_build_kd_tree(const vcl_vector<vgl_box_3d<double> >& boxes)
 
 
 //: construct a kd-tree of mesh faces
-vcl_auto_ptr<imesh_kd_tree_node>
+std::auto_ptr<imesh_kd_tree_node>
 imesh_build_kd_tree(const imesh_vertex_array<3>& verts,
                     const imesh_face_array_base& faces)
 {
   // build face bounding boxes
-  vcl_vector<vgl_box_3d<double> > boxes(faces.size());
+  std::vector<vgl_box_3d<double> > boxes(faces.size());
   for ( unsigned int i=0; i<boxes.size(); ++i ) {
     for ( unsigned int j=0; j<faces.num_verts(i); ++j) {
       boxes[i].add(verts[faces(i,j)]);
@@ -291,7 +293,7 @@ class tri_dist_func
   tri_dist_func(const imesh_vertex_array<3>& v,
                 const imesh_regular_face_array<3>& t)
   : verts(v), tris(t), closest_index(static_cast<unsigned int>(-1)),
-    closest_dist(vcl_numeric_limits<double>::infinity()),
+    closest_dist(std::numeric_limits<double>::infinity()),
     closest_u(0), closest_v(0) {}
   const imesh_vertex_array<3>& verts;
   const imesh_regular_face_array<3>& tris;
@@ -337,9 +339,9 @@ class tri_dist_func
 unsigned int
 imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
                             const imesh_mesh& mesh,
-                            const vcl_auto_ptr<imesh_kd_tree_node>& root,
+                            const std::auto_ptr<imesh_kd_tree_node>& root,
                             vgl_point_3d<double>& cp,
-                            vcl_vector<imesh_kd_tree_queue_entry>* dists)
+                            std::vector<imesh_kd_tree_queue_entry>* dists)
 {
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
   const imesh_regular_face_array<3>& faces = static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
@@ -355,12 +357,12 @@ imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
 //  Also returns a vector of the unexplored internal node-distance^2 pairs
 //  Resulting vectors are unsorted
 void imesh_kd_tree_traverse(const vgl_point_3d<double>& query,
-                            const vcl_auto_ptr<imesh_kd_tree_node>& root,
-                            vcl_vector<imesh_kd_tree_queue_entry>& leaf,
-                            vcl_vector<imesh_kd_tree_queue_entry>& internal_node)
+                            const std::auto_ptr<imesh_kd_tree_node>& root,
+                            std::vector<imesh_kd_tree_queue_entry>& leaf,
+                            std::vector<imesh_kd_tree_queue_entry>& internal_node)
 {
   // find the root leaves containing the query point
-  vcl_vector<imesh_kd_tree_node*> to_examine;
+  std::vector<imesh_kd_tree_node*> to_examine;
   to_examine.push_back(root.get());
   internal_node.clear();
   leaf.clear();

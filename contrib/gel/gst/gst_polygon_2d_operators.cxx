@@ -8,13 +8,13 @@
 
 #include "gst_polygon_2d_operators.h"
 
-vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const vcl_vector<gst_edge_2d_sptr> edges)
+std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const std::vector<gst_edge_2d_sptr> edges)
 {
   // flags showing edges already used
-  vcl_vector<int> used( edges.size(), 0);
+  std::vector<int> used( edges.size(), 0);
 
   // repository of polygons as they are created
-  vcl_vector<gst_polygon_2d_sptr> polygons;
+  std::vector<gst_polygon_2d_sptr> polygons;
 
   // start a polygon with each edge, and look for a closed cycle
   //  hopefully using a NEW edge
@@ -25,7 +25,7 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const vcl_vector<gst_edge_
       gst_polygon_2d_sptr thispoly= new gst_polygon_2d;
 
       // flags showing edges already used in this polygon
-      vcl_vector<int> pused( edges.size(), 0);
+      std::vector<int> pused( edges.size(), 0);
 
       thispoly->add( edges[i]);
 
@@ -75,13 +75,13 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const vcl_vector<gst_edge_
 }
 
 
-vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vector<gst_edge_2d_sptr> edges)
+std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const std::vector<gst_edge_2d_sptr> edges)
 {
   // flags showing edges already used
-  vcl_vector<int> used( edges.size(), 0);
+  std::vector<int> used( edges.size(), 0);
 
   // repository of polygons as they are created
-  vcl_vector<gst_polygon_2d_sptr> polygons;
+  std::vector<gst_polygon_2d_sptr> polygons;
 
   // start a polygon with each edge, and look for a closed cycle
   //  hopefully using a NEW edge
@@ -91,8 +91,8 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
       bool closed= false;
       gst_polygon_2d_sptr thispoly= new gst_polygon_2d;
 #if 0
-      vcl_cerr << "Starting face by adding edge\n"
-               << *edges[i] << vcl_endl;
+      std::cerr << "Starting face by adding edge\n"
+               << *edges[i] << std::endl;
 #endif
       thispoly->add( edges[i]);
 
@@ -118,8 +118,8 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
               if (edges[j]->get_start().ptr()== end.ptr() && !used[j])
                 {
 #if 0
-                  vcl_cerr << "Found unflip-necessary edge...\n";
-                  vcl_cerr << *edges[j] << vcl_endl;
+                  std::cerr << "Found unflip-necessary edge...\n";
+                  std::cerr << *edges[j] << std::endl;
 #endif
                   thispoly->add( edges[j]);
                   added= true;
@@ -138,12 +138,12 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
               else if (edges[j]->get_end().ptr()== end.ptr() && !used[j])
                 {
 #if 0
-                  vcl_cerr << "Found flip-necessary edge...\n";
-                  vcl_cerr << *edges[j] << " -- ";
+                  std::cerr << "Found flip-necessary edge...\n";
+                  std::cerr << *edges[j] << " -- ";
 #endif
                   edges[j]->flip();
 #if 0
-                  vcl_cerr << *edges[j] << vcl_endl;
+                  std::cerr << *edges[j] << std::endl;
 #endif
                   thispoly->add( edges[j]);
                   added= true;
@@ -168,8 +168,8 @@ vcl_vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const vcl_vecto
    for (unsigned int i=0; i< polygons.size(); i++)
    {
      gst_polygon_2d *p= polygons[i].ptr();
-     vcl_cerr << "Polygon " << i << vcl_endl;
-     vcl_cerr << *p << vcl_endl;
+     std::cerr << "Polygon " << i << std::endl;
+     std::cerr << *p << std::endl;
    }
 #endif
   return polygons;

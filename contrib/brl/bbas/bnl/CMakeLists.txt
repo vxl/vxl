@@ -1,20 +1,18 @@
 # brl/bbas/bnl/CMakeLists.txt
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+include_directories(${BRL_INCLUDE_DIR})
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-SET(bnl_sources
+set(bnl_sources
     bnl_parabolic_interpolator.cxx    bnl_parabolic_interpolator.h
     bnl_quadratic_interpolator.cxx    bnl_quadratic_interpolator.h
    )
 
-ADD_LIBRARY(bnl ${bnl_sources})
-INSTALL_TARGETS(/lib bnl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bnl ${bnl_sources})
+vxl_add_library(LIBRARY_NAME bnl LIBRARY_SOURCES ${bnl_sources})
 
-TARGET_LINK_LIBRARIES(bnl vnl vnl_algo)
+target_link_libraries(bnl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo)
 
 add_subdirectory(algo)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

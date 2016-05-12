@@ -22,16 +22,16 @@ class mfpf_searcher
 
   //: Find list of poses overlapping given pose
   void find_overlaps(mfpf_point_finder& pf,
-                     const vcl_vector<mfpf_pose>& poses,
+                     const std::vector<mfpf_pose>& poses,
                      const mfpf_pose& pose,
-                     vcl_vector<unsigned>& overlaps);
+                     std::vector<unsigned>& overlaps);
 
   //: If pose not near any poses in list, return false
   //  If it is near one, and its fit is better, then replace it.
   //  Uses pf.overlap() function to check for proximity
   bool find_near_pose(mfpf_point_finder& pf,
-                      vcl_vector<mfpf_pose>& poses,
-                      vcl_vector<double>& fits,
+                      std::vector<mfpf_pose>& poses,
+                      std::vector<double>& fits,
                       const mfpf_pose& pose, double fit);
 
  public:
@@ -41,8 +41,8 @@ class mfpf_searcher
                             const vimt_image_2d_of<float>& image,
                             const vgl_point_2d<double>& p,
                             const vgl_vector_2d<double>& u,
-                            vcl_vector<mfpf_pose>& pts,
-                            vcl_vector<double>& fit);
+                            std::vector<mfpf_pose>& pts,
+                            std::vector<double>& fit);
 
   //: For each pose in the set, perform local search+refinement
   //  On exit pose_set contains the improved matches.

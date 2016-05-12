@@ -5,7 +5,7 @@
 # Try to follow one of the other tests, like test_algorithm.cxx,
 # and add the test into test_driver.cxx.
 
-ADD_EXECUTABLE( vcl_test_all
+add_executable( vcl_test_all
  # Driver
      test_driver.cxx
  # The actual tests
@@ -35,34 +35,34 @@ ADD_EXECUTABLE( vcl_test_all
      test_atomic_count.cxx
      test_typename.cxx
 )
-TARGET_LINK_LIBRARIES( vcl_test_all vcl )
+target_link_libraries( vcl_test_all ${VXL_LIB_PREFIX}vcl )
 
-ADD_TEST( vcl_test_algorithm    ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_algorithm )
-ADD_TEST( vcl_test_cctype       ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_cctype )
-ADD_TEST( vcl_test_cmath        ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_cmath )
-ADD_TEST( vcl_test_compiler     ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_compiler )
-ADD_TEST( vcl_test_complex      ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_complex )
-ADD_TEST( vcl_test_deque        ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_deque )
-ADD_TEST( vcl_test_exception    ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_exception )
-ADD_TEST( vcl_test_fstream      ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_fstream )
-ADD_TEST( vcl_test_iostream     ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_iostream )
-ADD_TEST( vcl_test_iterator     ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_iterator )
-ADD_TEST( vcl_test_list         ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_list )
-ADD_TEST( vcl_test_limits       ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_limits )
-ADD_TEST( vcl_test_map          ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_map )
-ADD_TEST( vcl_test_memory       ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_memory )
-ADD_TEST( vcl_test_multimap     ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_multimap )
-ADD_TEST( vcl_test_new          ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_new )
-ADD_TEST( vcl_test_set          ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_set )
-ADD_TEST( vcl_test_string       ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_string )
-ADD_TEST( vcl_test_sstream      ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_sstream )
-ADD_TEST( vcl_test_vector       ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_vector )
-ADD_TEST( vcl_test_cstdio       ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_cstdio ${CMAKE_CURRENT_SOURCE_DIR}/test_cstdio.txt )
-ADD_TEST( vcl_test_preprocessor ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_preprocessor )
-ADD_TEST( vcl_test_atomic_count ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_atomic_count )
+add_test( NAME vcl_test_algorithm COMMAND $<TARGET_FILE:vcl_test_all> test_algorithm )
+add_test( NAME vcl_test_cctype COMMAND $<TARGET_FILE:vcl_test_all> test_cctype )
+add_test( NAME vcl_test_cmath COMMAND $<TARGET_FILE:vcl_test_all> test_cmath )
+add_test( NAME vcl_test_compiler COMMAND $<TARGET_FILE:vcl_test_all> test_compiler )
+add_test( NAME vcl_test_complex COMMAND $<TARGET_FILE:vcl_test_all> test_complex )
+add_test( NAME vcl_test_deque COMMAND $<TARGET_FILE:vcl_test_all> test_deque )
+add_test( NAME vcl_test_exception COMMAND $<TARGET_FILE:vcl_test_all> test_exception )
+add_test( NAME vcl_test_fstream COMMAND $<TARGET_FILE:vcl_test_all> test_fstream )
+add_test( NAME vcl_test_iostream COMMAND $<TARGET_FILE:vcl_test_all> test_iostream )
+add_test( NAME vcl_test_iterator COMMAND $<TARGET_FILE:vcl_test_all> test_iterator )
+add_test( NAME vcl_test_list COMMAND $<TARGET_FILE:vcl_test_all> test_list )
+add_test( NAME vcl_test_limits COMMAND $<TARGET_FILE:vcl_test_all> test_limits )
+add_test( NAME vcl_test_map COMMAND $<TARGET_FILE:vcl_test_all> test_map )
+add_test( NAME vcl_test_memory COMMAND $<TARGET_FILE:vcl_test_all> test_memory )
+add_test( NAME vcl_test_multimap COMMAND $<TARGET_FILE:vcl_test_all> test_multimap )
+add_test( NAME vcl_test_new COMMAND $<TARGET_FILE:vcl_test_all> test_new )
+add_test( NAME vcl_test_set COMMAND $<TARGET_FILE:vcl_test_all> test_set )
+add_test( NAME vcl_test_string COMMAND $<TARGET_FILE:vcl_test_all> test_string )
+add_test( NAME vcl_test_sstream COMMAND $<TARGET_FILE:vcl_test_all> test_sstream )
+add_test( NAME vcl_test_vector COMMAND $<TARGET_FILE:vcl_test_all> test_vector )
+add_test( NAME vcl_test_cstdio COMMAND $<TARGET_FILE:vcl_test_all> test_cstdio ${CMAKE_CURRENT_LIST_DIR}/test_cstdio.txt )
+add_test( NAME vcl_test_preprocessor COMMAND $<TARGET_FILE:vcl_test_all> test_preprocessor )
+add_test( NAME vcl_test_atomic_count COMMAND $<TARGET_FILE:vcl_test_all> test_atomic_count )
 # Only a compiler test:
-#ADD_TEST( vcl_test_stlfwd      ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_stlfwd )
-#ADD_TEST( vcl_test_typename    ${EXECUTABLE_OUTPUT_PATH}/vcl_test_all test_typename )
+#add_test( NAME vcl_test_stlfwd COMMAND $<TARGET_FILE:vcl_test_all> test_stlfwd )
+#add_test( NAME vcl_test_typename COMMAND $<TARGET_FILE:vcl_test_all> test_typename )
 
-ADD_EXECUTABLE( vcl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vcl_test_include vcl )
+add_executable( vcl_test_include test_include.cxx )
+target_link_libraries( vcl_test_include ${VXL_LIB_PREFIX}vcl )

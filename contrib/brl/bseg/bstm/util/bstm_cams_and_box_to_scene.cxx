@@ -12,7 +12,7 @@
 
 //~ //: takes in a list of cameras and a bounding box, creates
 //  an update scene and a render scene
-void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
+void bstm_util_cams_and_box_to_scene (std::vector<CamType>& cams,
                                        vgl_box_3d<double>   bbox,
                                        bstm_scene&         uscene,
                                        unsigned time_steps,
@@ -32,7 +32,7 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     double subBlockDim_t = 32; //fixed for now
     unsigned num_blocks_t = (double)(time_steps) / subBlockDim_t;
     unsigned numSubBlocks_t = 1;
-    vcl_cout << "Num t blosk :" << num_blocks_t << vcl_endl;
+    std::cout << "Num t blosk :" << num_blocks_t << std::endl;
 
     //---------------------------------------------------------------------------
     //create zplane count map
@@ -46,7 +46,7 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vgl_point_3d<double> cc = cam.camera_center();
     vgl_point_3d<double> zc( b2box.centroid().x(), b2box.centroid().y(), zplane);
     double res = 4.0*(cc-zc).length()*cone_half_angle;
-    vcl_cout<<"Resres :"<<res<<vcl_endl;
+    std::cout<<"Resres :"<<res<<std::endl;
 
     //extend bbox a bit
     //double extSize = b2box.width() * .1;
@@ -69,12 +69,12 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     //number of blocks in scene (nblks,nblks,1)
     vgl_vector_3d<unsigned> numBlocks(nblks, nblks, 3);
 
-    vcl_cout<<"totSubBlocks "<<totSubBlocks<<vcl_endl;
+    std::cout<<"totSubBlocks "<<totSubBlocks<<std::endl;
     //number of subblocks per block
-    vgl_vector_3d<unsigned> numSubBlocks( (unsigned) vcl_ceil( (float)totSubBlocks.x()/(float)numBlocks.x() ),
-                                          (unsigned) vcl_ceil( (float)totSubBlocks.y()/(float)numBlocks.y() ),
-                                          (unsigned) vcl_ceil( (float)totSubBlocks.z()/(float)numBlocks.z() ) );
-    vcl_cout<<" Num Sub blocks "<<numSubBlocks<<vcl_endl;
+    vgl_vector_3d<unsigned> numSubBlocks( (unsigned) std::ceil( (float)totSubBlocks.x()/(float)numBlocks.x() ),
+                                          (unsigned) std::ceil( (float)totSubBlocks.y()/(float)numBlocks.y() ),
+                                          (unsigned) std::ceil( (float)totSubBlocks.z()/(float)numBlocks.z() ) );
+    std::cout<<" Num Sub blocks "<<numSubBlocks<<std::endl;
     vgl_vector_3d<double>   blockDim( subBlockDim.x() * numSubBlocks.x(),
                                       subBlockDim.y() * numSubBlocks.y(),
                                       subBlockDim.z() * numSubBlocks.z() );
@@ -82,7 +82,7 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     //create an image with this res, and count each pixel
     unsigned ni = numSubBlocks.x()*numBlocks.x()*nblks;//(unsigned) (b2box.width()/res);
     unsigned nj = numSubBlocks.y()*numBlocks.y()*nblks;;
-    vcl_cout<<"Created Box size: "<<ni<<','<<nj<<vcl_endl;
+    std::cout<<"Created Box size: "<<ni<<','<<nj<<std::endl;
     vil_image_view<vxl_byte> cntimg(ni, nj); cntimg.fill(0);
     for (unsigned int i=0; i<cams.size(); ++i)
     {
@@ -104,6 +104,9 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
         good = good && vgl_intersection(ur, zp, urp);
         good = good && vgl_intersection(bl, zp, blp);
         good = good && vgl_intersection(br, zp, brp);
+        if (!good) {
+            std::cout << "ERROR: lines do not intersect" << __FILE__ << __LINE__ << std::endl;
+        }
 
         //convert the four corners into image coordinates
         typedef vgl_polygon<double>::point_t        Point_type;
@@ -128,7 +131,7 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
                 }
 #ifdef DEBUG
                 else {
-                    vcl_cout<<"X and Y in scan iterator are out of bounds: "<<x<<','<<y<<vcl_endl;
+                    std::cout<<"X and Y in scan iterator are out of bounds: "<<x<<','<<y<<std::endl;
                 }
 #endif
             }
@@ -152,9 +155,9 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
 
                   //get block map
                   bstm_block_id id(i,j,k,t);
-                  vcl_map<bstm_block_id, bstm_block_metadata> blks = uscene.blocks();
+                  std::map<bstm_block_id, bstm_block_metadata> blks = uscene.blocks();
                   if (blks.find(id)!=blks.end()) {
-                      vcl_cout<<"block already exists: "<<id<<vcl_endl;
+                      std::cout<<"block already exists: "<<id<<std::endl;
                       continue;
                   }
 
@@ -222,6 +225,6 @@ bool bstm_util_has_percent_views(int i,
         }
     }
     mean = mean / (pixPerBlock.x() * pixPerBlock.y());
-    vcl_cout << "Block (" <<i<< ',' << j << ") mean views,percent: " << mean << ',' << mean/num_views << vcl_endl;
+    std::cout << "Block (" <<i<< ',' << j << ") mean views,percent: " << mean << ',' << mean/num_views << std::endl;
     return mean/num_views > percent;
 }

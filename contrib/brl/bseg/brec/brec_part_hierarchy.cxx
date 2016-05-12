@@ -17,7 +17,7 @@
 #include <bxml/bxml_find.h>
 
 //: generate a map from the activated parts
-void brec_part_hierarchy::generate_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, vil_image_view<unsigned>& type_map)
+void brec_part_hierarchy::generate_map(std::vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, vil_image_view<unsigned>& type_map)
 {
   unsigned ni = map.ni();
   unsigned nj = map.nj();
@@ -34,13 +34,13 @@ void brec_part_hierarchy::generate_map(vcl_vector<brec_part_instance_sptr>& extr
   }
 }
 
-void brec_part_hierarchy::generate_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vcl_vector<vcl_vector<brec_part_instance_sptr> >& map)
+void brec_part_hierarchy::generate_map(std::vector<brec_part_instance_sptr>& extracted_parts, std::vector<std::vector<brec_part_instance_sptr> >& map)
 {
   unsigned ni = map.size();
   unsigned nj = map[0].size();
   for (unsigned i = 0; i < ni; i++)
     for (unsigned j = 0; j < nj; j++)
-      map[i][j] = 0;
+      map[i][j] = VXL_NULLPTR;
 
   for (unsigned i = 0; i < extracted_parts.size(); i++) {
     brec_part_instance_sptr p = extracted_parts[i];
@@ -54,7 +54,7 @@ void brec_part_hierarchy::generate_map(vcl_vector<brec_part_instance_sptr>& extr
 
 //: generate a float map with normalized strengths and receptive fields marked
 void
-brec_part_hierarchy::generate_output_map(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map)
+brec_part_hierarchy::generate_output_map(std::vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map)
 {
   map.fill(0.0f);
 
@@ -72,7 +72,7 @@ brec_part_hierarchy::generate_output_map(vcl_vector<brec_part_instance_sptr>& ex
 
 //: generate a float map with various posterior's
 void
-brec_part_hierarchy::generate_output_map_posterior(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, unsigned type)
+brec_part_hierarchy::generate_output_map_posterior(std::vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, unsigned type)
 {
   map.fill(0.0f);
   switch (type) {
@@ -104,13 +104,13 @@ brec_part_hierarchy::generate_output_map_posterior(vcl_vector<brec_part_instance
       }
       break;
                                                      }
-    default: { vcl_cout << "ERROR: In brec_part_hierarchy::generate_output_map_posterior() - brec_posterior_type " << type << " not defined!\n";
+    default: { std::cout << "ERROR: In brec_part_hierarchy::generate_output_map_posterior() - brec_posterior_type " << type << " not defined!\n";
              }
   }
 }
 
 void
-brec_part_hierarchy::generate_output_map_posterior_centers(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, unsigned type)
+brec_part_hierarchy::generate_output_map_posterior_centers(std::vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map, unsigned type)
 {
   map.fill(0.0f);
   switch (type)
@@ -140,7 +140,7 @@ brec_part_hierarchy::generate_output_map_posterior_centers(vcl_vector<brec_part_
       }
       break;
     default:
-      vcl_cout << "ERROR: In brec_part_hierarchy::generate_output_map_posterior() - brec_posterior_type " << type << " not defined!\n";
+      std::cout << "ERROR: In brec_part_hierarchy::generate_output_map_posterior() - brec_posterior_type " << type << " not defined!\n";
   }
 }
 
@@ -148,7 +148,7 @@ brec_part_hierarchy::generate_output_map_posterior_centers(vcl_vector<brec_part_
 //: generate a float map with strengths and receptive fields marked
 //  Stretch the values to be used for imaging
 void
-brec_part_hierarchy::generate_output_map3(vcl_vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map)
+brec_part_hierarchy::generate_output_map3(std::vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<float>& map)
 {
   map.fill(0.0f);
 
@@ -174,7 +174,7 @@ brec_part_hierarchy::generate_output_map3(vcl_vector<brec_part_instance_sptr>& e
 
 //: output_img needs to have 3 planes
 void
-brec_part_hierarchy::generate_output_img(vcl_vector<brec_part_instance_sptr>& extracted_parts,
+brec_part_hierarchy::generate_output_img(std::vector<brec_part_instance_sptr>& extracted_parts,
                                          vil_image_view<vxl_byte>& input_img,
                                          vil_image_view<vxl_byte>& output_img, unsigned posterior_type)
 {
@@ -199,26 +199,26 @@ brec_part_base_sptr brec_part_hierarchy::get_node(unsigned layer, unsigned type)
     if ((*it)->layer_ == layer && (*it)->type_ == type)
       return *it;
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
 brec_part_instance_sptr brec_part_hierarchy::get_node_instance(unsigned layer, unsigned type)
 {
   if (layer != 0)
-    return 0;
+    return VXL_NULLPTR;
   for (unsigned i = 0; i < dummy_primitive_instances_.size(); i++) {
     if (dummy_primitive_instances_[i]->type_ == type && dummy_primitive_instances_[i]->layer_ == layer) {
       return dummy_primitive_instances_[i];
     }
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: draw the nodes of the given layer side by side to the output image
 // \todo not implemented yet
-bool brec_part_hierarchy::draw_to_image(unsigned /*N*/, unsigned layer_id, float /*drawing_radius*/, vcl_string /*output_img*/)
+bool brec_part_hierarchy::draw_to_image(unsigned /*N*/, unsigned layer_id, float /*drawing_radius*/, std::string /*output_img*/)
 {
-  vcl_vector<brec_part_instance_sptr> ins_to_draw;
+  std::vector<brec_part_instance_sptr> ins_to_draw;
   for (vertex_iterator it = this->vertices_begin(); it != this->vertices_end(); it++) {
     if ((*it)->layer_ == layer_id)
       break;
@@ -303,7 +303,7 @@ bool draw_part_to_ps(vul_psfile& ps, brec_part_base_sptr p, float x, float y, fl
 //: generate sampled parts, draw N samples from the distributions
 //  Draw a ps image with sampled parts,
 //  Assumes parts double in size as one goes in hierarchy, radius is the radius of a part in primitive layer
-bool brec_part_hierarchy::draw_to_ps(unsigned N, vcl_string output_img, float radius)
+bool brec_part_hierarchy::draw_to_ps(unsigned N, std::string output_img, float radius)
 {
   vul_psfile f(output_img.c_str(),true);
   //f.set_paper_layout(vul_psfile::CENTER);
@@ -354,7 +354,7 @@ brec_part_instance_sptr brec_part_hierarchy::exists(brec_part_base_sptr upper_p,
                                                     brec_part_instance_sptr central_p,
                                                     vil_image_view<float>& map,
                                                     vil_image_view<unsigned>& type_map,
-                                                    vcl_vector<vcl_vector<brec_part_instance_sptr> >& part_map,
+                                                    std::vector<std::vector<brec_part_instance_sptr> >& part_map,
                                                     float det_threshold)
 {
   unsigned ni = map.ni();
@@ -362,8 +362,8 @@ brec_part_instance_sptr brec_part_hierarchy::exists(brec_part_base_sptr upper_p,
 
   // first check if types and layers of central_p instance matches with upper_p's info
   if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
-    vcl_cout << "central_p instance passed is not compatible with the upper layer part passes\n";
-    return 0;
+    std::cout << "central_p instance passed is not compatible with the upper layer part passes\n";
+    return VXL_NULLPTR;
   }
 
   brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
@@ -377,12 +377,12 @@ brec_part_instance_sptr brec_part_hierarchy::exists(brec_part_base_sptr upper_p,
   double strength = 1.0;
   for ( ; eit != upper_p->out_edges_end(); eit++)
   {
-    //int mx = (int)vcl_floor(cx+(*eit)->mean().get(0)+0.5);
-    //int my = (int)vcl_floor(cy+(*eit)->mean().get(1)+0.5);
-    //int rad = (int)vcl_ceil(vcl_sqrt((*eit)->var())+3);
-    int mx = (int)vcl_floor(cx+0.5);  // try all locations around center within dist+variance_dist radius
-    int my = (int)vcl_floor(cy+0.5);
-    int rad = (int)vcl_ceil((*eit)->mean_dist()+vcl_sqrt((*eit)->var_dist())+3);
+    //int mx = (int)std::floor(cx+(*eit)->mean().get(0)+0.5);
+    //int my = (int)std::floor(cy+(*eit)->mean().get(1)+0.5);
+    //int rad = (int)std::ceil(std::sqrt((*eit)->var())+3);
+    int mx = (int)std::floor(cx+0.5);  // try all locations around center within dist+variance_dist radius
+    int my = (int)std::floor(cy+0.5);
+    int rad = (int)std::ceil((*eit)->mean_dist()+std::sqrt((*eit)->var_dist())+3);
     int si = mx - rad;  si = si < 0 ? 0 : si;
     int upper_i = mx + rad; upper_i = upper_i > (int)ni ? ni : upper_i;
     int sj = my - rad;  sj = sj < 0 ? 0 : sj;
@@ -408,7 +408,7 @@ brec_part_instance_sptr brec_part_hierarchy::exists(brec_part_base_sptr upper_p,
       }
     }
     if (best_fit <= 0)
-      return 0;  // this sub-part not found
+      return VXL_NULLPTR;  // this sub-part not found
     strength *= best_fit*best_fit_str;
     if (best_part) {
       brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
@@ -424,20 +424,20 @@ brec_part_instance_sptr brec_part_hierarchy::exists(brec_part_base_sptr upper_p,
 }
 
 //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
-void brec_part_hierarchy::extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts,
+void brec_part_hierarchy::extract_upper_layer(std::vector<brec_part_instance_sptr>& extracted_parts,
                                               unsigned ni, unsigned nj,
-                                              vcl_vector<brec_part_instance_sptr>& extracted_upper_parts)
+                                              std::vector<brec_part_instance_sptr>& extracted_upper_parts)
 {
   vil_image_view<float> map(ni, nj, 1);  // the second plane will hold the types of the primitives
   vil_image_view<unsigned> type_map(ni, nj, 1);  // the second plane will hold the types of the primitives
   generate_map(extracted_parts, map, type_map);
 
-  vcl_vector<brec_part_instance_sptr> dummy(nj, 0);
-  vcl_vector<vcl_vector<brec_part_instance_sptr> > part_map(ni, dummy);
+  std::vector<brec_part_instance_sptr> dummy(nj, VXL_NULLPTR);
+  std::vector<std::vector<brec_part_instance_sptr> > part_map(ni, dummy);
   generate_map(extracted_parts, part_map);
 
   // we'll generate a list of instantiations for each part in the upper parts of the hierarchy
-  //vcl_map<vcl_pair<unsigned, unsigned>, vcl_vector<brec_part_instance_sptr> > instantiations;
+  //std::map<std::pair<unsigned, unsigned>, std::vector<brec_part_instance_sptr> > instantiations;
 
   // for each detected part, check for the existence of each upper layer part that uses it as a central part
   for (unsigned i = 0; i < extracted_parts.size(); i++)
@@ -467,7 +467,7 @@ void brec_part_hierarchy::extract_upper_layer(vcl_vector<brec_part_instance_sptr
 
 //: reader adds the edges of each vertex in the order read from the xml file
 //  CAUTION: assumes that central part is added prior to other children of a parent part hence its edge is added to the hierarchy before other parts
-void brec_part_hierarchy::write_xml(vcl_ostream& os)
+void brec_part_hierarchy::write_xml(std::ostream& os)
 {
   bxml_document doc;
   bxml_element * root = new bxml_element("hierarchy");
@@ -492,7 +492,7 @@ void brec_part_hierarchy::write_xml(vcl_ostream& os)
   root->append_data(vertices);
   root->append_text("\n");
 
-  vcl_map<brec_part_base_sptr, unsigned> vert_map;
+  std::map<brec_part_base_sptr, unsigned> vert_map;
   unsigned id = 0;
   for (vertex_iterator it = this->vertices_begin(); it != this->vertices_end(); it++) {
     bxml_data_sptr v = (*it)->xml_element();
@@ -525,7 +525,7 @@ void brec_part_hierarchy::write_xml(vcl_ostream& os)
   bxml_write(os,doc);
 }
 
-bool brec_part_hierarchy::read_xml(vcl_istream& is)
+bool brec_part_hierarchy::read_xml(std::istream& is)
 {
   bxml_document doc = bxml_read(is);
   bxml_element query("hierarchy");
@@ -533,20 +533,20 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
   bxml_data_sptr hierarchy_root = bxml_find_by_name(doc.root_element(), query);
 
   if (!hierarchy_root) {
-    vcl_cout << "brec_part_hierarchy::read_xml() - could not find the main node with name hierarchy!\n";
+    std::cout << "brec_part_hierarchy::read_xml() - could not find the main node with name hierarchy!\n";
     return false;
   }
 
   bxml_element* re = (bxml_element*)hierarchy_root.ptr();
   re->get_attribute("name", name_);
-  vcl_cout << "reading hierarchy with name: " << name_ << vcl_endl;
+  std::cout << "reading hierarchy with name: " << name_ << std::endl;
   re->get_attribute("model_dir", model_dir_);
 
   bxml_element query2("primitive_instances");
   bxml_data_sptr prims_root = bxml_find_by_name(hierarchy_root, query2);
 
   if (!prims_root || prims_root->type() != bxml_data::ELEMENT) {
-    vcl_cout << "brec_part_hierarchy::read_xml() - could not find the primitive instances node!\n";
+    std::cout << "brec_part_hierarchy::read_xml() - could not find the primitive instances node!\n";
     return false;
   }
 
@@ -570,7 +570,7 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
         break;
       }
       default: {
-        vcl_cout << "brec_part_hierarchy::read_xml() - primitive part kind: " << ins->kind_ << " not recognized by the parser!\n";
+        std::cout << "brec_part_hierarchy::read_xml() - primitive part kind: " << ins->kind_ << " not recognized by the parser!\n";
         return false;
       }
     }
@@ -579,11 +579,11 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
   bxml_element query3("vertices");
   bxml_data_sptr vert_root = bxml_find_by_name(hierarchy_root, query3);
   if (!vert_root || vert_root->type() != bxml_data::ELEMENT) {
-    vcl_cout << "brec_part_hierarchy::read_xml() - could not find the vertices node!\n";
+    std::cout << "brec_part_hierarchy::read_xml() - could not find the vertices node!\n";
     return false;
   }
 
-  vcl_map<unsigned, brec_part_base_sptr> vert_map;
+  std::map<unsigned, brec_part_base_sptr> vert_map;
   unsigned id = 0;
   pe = (bxml_element*)vert_root.ptr();
   for (bxml_element::const_data_iterator it = pe->data_begin(); it != pe->data_end(); it++) {
@@ -602,7 +602,7 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
   bxml_element query4("edges");
   bxml_data_sptr e_root = bxml_find_by_name(hierarchy_root, query4);
   if (!e_root || e_root->type() != bxml_data::ELEMENT) {
-    vcl_cout << "brec_part_hierarchy::read_xml() - could not find the edges node!\n";
+    std::cout << "brec_part_hierarchy::read_xml() - could not find the edges node!\n";
     return false;
   }
 
@@ -619,7 +619,7 @@ bool brec_part_hierarchy::read_xml(vcl_istream& is)
     bxml_element query("connectivity");
     bxml_data_sptr r = bxml_find_by_name((*it), query);
     if (!r || r->type() != bxml_data::ELEMENT) {
-      vcl_cout << "brec_part_hierarchy::read_xml() - could not find the edge node: connectivity!\n";
+      std::cout << "brec_part_hierarchy::read_xml() - could not find the edge node: connectivity!\n";
       return false;
     }
 
@@ -650,7 +650,7 @@ bool brec_part_hierarchy::get_score_helper(brec_part_instance_sptr ins_p, brec_p
 
     edge_iterator i_e_it = ins_p->out_edges_begin();
     edge_iterator e_it = p->out_edges_begin();
-    vcl_vector<double> part_scores;
+    std::vector<double> part_scores;
     for ( ; i_e_it != ins_p->out_edges_end(); i_e_it++, e_it++) {
       double e_s;
       if (!get_score_helper((*i_e_it)->target()->cast_to_instance(), (*e_it)->target(), e_s))
@@ -694,7 +694,7 @@ bool brec_part_hierarchy::get_score_helper(brec_part_instance_sptr ins_p, brec_p
 //: compute the probabilistic existence score for a given part (upper_p) if this one or equivalent ones exist in this hierarchy
 //  Equivalence is determined by the types of the primitive layer parts
 //  (i.e. all layer 1 parts with alpha and alpha_prime as primitive parts are equivalent)
-bool brec_part_hierarchy::get_score(brec_part_instance_sptr upper_p, vcl_vector<double>& scores)
+bool brec_part_hierarchy::get_score(brec_part_instance_sptr upper_p, std::vector<double>& scores)
 {
   //  this upper part with the same primitive set may not even exist in this hierarchy, first try to find a similar part,
   //  assume upper_part's layer will be the same as its counter-parts layers in this hierarchy
@@ -718,13 +718,13 @@ bool brec_part_hierarchy::get_score(brec_part_instance_sptr upper_p, vcl_vector<
 //: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
 void vsl_b_write(vsl_b_ostream & /*os*/, brec_part_hierarchy const & /*ph*/)
 {
-  vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
+  std::cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
 }
 
 void vsl_b_read(vsl_b_istream & /*is*/, brec_part_hierarchy & /*ph*/)
 {
-  vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
+  std::cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
 }
 
@@ -739,12 +739,12 @@ void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy* ph)
     vsl_b_read(is, *ph);
   }
   else
-    ph = 0;
+    ph = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy* &ph)
 {
-  if (ph==0)
+  if (ph==VXL_NULLPTR)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }

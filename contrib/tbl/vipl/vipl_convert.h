@@ -41,7 +41,7 @@ class vipl_convert : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_convert.txx"
+#include "vipl_convert.hxx"
 #endif
 
 #endif // vipl_convert_h_

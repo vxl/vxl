@@ -35,17 +35,17 @@ class boxm2_ocl_update_tableau : public boxm2_ocl_render_tableau
  public:
   boxm2_ocl_update_tableau();
   virtual ~boxm2_ocl_update_tableau() {}
-  
-  //: initialize tableau with scene_file, viewport size, initial cam,  
+
+  //: initialize tableau with scene_file, viewport size, initial cam,
   bool init_update (bocl_device_sptr device,
                     boxm2_opencl_cache_sptr opencl_cache,
                     boxm2_scene_sptr scene,
                     unsigned ni,
                     unsigned nj,
-                    vpgl_perspective_camera<double>* cam, 
-                    vcl_vector<vcl_string>& update_imgs,
-                    vcl_vector<vcl_string>& update_cams);
-          
+                    vpgl_perspective_camera<double>* cam,
+                    std::vector<std::string>& update_imgs,
+                    std::vector<std::string>& update_cams);
+
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
 
@@ -53,15 +53,15 @@ class boxm2_ocl_update_tableau : public boxm2_ocl_render_tableau
 
   //func to update frame on GPU (returns gpu time)
   float update_frame(vil_image_view_base_sptr in_im, vpgl_camera_double_sptr in_cam);
-  float refine(float thresh); 
-  float merge(float thresh); 
-  float filter(); 
+  float refine(float thresh);
+  float merge(float thresh);
+  float filter();
   float save();
-  vcl_vector<vcl_string> cams_;
-  vcl_vector<vcl_string> imgs_;
-  vnl_random random_; 
-  bool do_update_; 
-  
+  std::vector<std::string> cams_;
+  std::vector<std::string> imgs_;
+  vnl_random random_;
+  bool do_update_;
+
   boxm2_cache_sptr cache_; //for saving
 };
 

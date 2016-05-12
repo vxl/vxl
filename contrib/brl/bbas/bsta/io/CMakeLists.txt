@@ -1,7 +1,7 @@
 # basic/bsta/io/CMakeLists.txt
 # Brown statistics io Library.
 
-SET(bsta_io_sources
+set(bsta_io_sources
   bsta_io_mixture.h
   bsta_io_mixture_fixed.h
   bsta_io_attributes.h
@@ -13,14 +13,12 @@ SET(bsta_io_sources
   bsta_io_histogram.h bsta_io_histogram.cxx
   bsta_io_beta.h
 )
-#AUX_SOURCE_DIRECTORY(Templates bsta_io_sources)
+#aux_source_directory(Templates bsta_io_sources)
 
-ADD_LIBRARY(bsta_io  ${bsta_io_sources})
-TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io vbl_io vbl)
+vxl_add_library(LIBRARY_NAME bsta_io LIBRARY_SOURCES  ${bsta_io_sources})
+target_link_libraries(bsta_io bsta ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-INSTALL_TARGETS(/lib bsta_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta/io ${bsta_io_sources})

@@ -1,5 +1,10 @@
 //:
 // \file
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
@@ -10,11 +15,7 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_fstream.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 
 bool test_edge2d()
 {
@@ -34,7 +35,7 @@ bool test_edge2d()
         factory1.set_rotation_axis(vnl_float_3(float(i), float(j), float(k)));
 
         vnl_float_3 axis = factory1.axis();
-        vcl_cout << axis << vcl_endl
+        std::cout << axis << std::endl
                  << "-----------------------------------\n"
                  << "Rotating" <<i << j << k << '\n';
         float angle = 0.0f;
@@ -44,8 +45,8 @@ bool test_edge2d()
         // the test is just making sure that the methods are not crashing
         for (unsigned r=0; r<1; r++)
         {
-          vcl_stringstream filename;
-          vcl_cout << "angle " << angle << vcl_endl;
+          std::stringstream filename;
+          std::cout << "angle " << angle << std::endl;
           filename << "rotation_" <<i << j << k << '_' << r <<".raw";
           factory1.set_angle(angle);
           bvpl_kernel kernel = factory1.create();
@@ -65,12 +66,12 @@ bool test_edge3d()
   bvpl_kernel_vector_sptr kernel_3d_vecs = kernel_3d.create_kernel_vector(dir);
 
 #if 0
-  vcl_vector< bvpl_kernel_sptr >::iterator iter=kernel_3d_vecs->begin();
+  std::vector< bvpl_kernel_sptr >::iterator iter=kernel_3d_vecs->begin();
 
   for (;iter!=kernel_3d_vecs->end();iter++)
   {
     vnl_float_3 axis=(*iter)->axis();
-    vcl_ostringstream s;
+    std::ostringstream s;
     s.precision(2);
     s << "D:/vj/scripts/Lidar_edges/test_masks/"
       << axis[0] << '_'
@@ -97,7 +98,7 @@ void print_gauss_xx_kernels()
 
     kernel.save_raw("gauss_111_kernel.raw");
     //kernel.print_to_file("gauss_111_kernel.txt");
-    vcl_cout << "1 1 1 kernel " ;
+    std::cout << "1 1 1 kernel " ;
     kernel.cum_sum();
   }
 
@@ -106,7 +107,7 @@ void print_gauss_xx_kernels()
     bvpl_kernel kernel = factory.create();
     kernel.save_raw("gauss_001_kernel.raw");
     //kernel.print_to_file("gauss_001_kernel.txt");
-    vcl_cout << "0 0 1 kernel " ;
+    std::cout << "0 0 1 kernel " ;
     kernel.cum_sum();
   }
 
@@ -116,7 +117,7 @@ void print_gauss_xx_kernels()
     bvpl_kernel kernel = factory.create();
     kernel.save_raw("gauss_001_90_kernel.raw");
     //kernel.print_to_file("gauss_001_90_kernel.txt");
-    vcl_cout << "0 0 1 kernel, angle pi/2 " ;
+    std::cout << "0 0 1 kernel, angle pi/2 " ;
     kernel.cum_sum();
   }
 }
@@ -135,7 +136,7 @@ void print_gauss_x_kernels()
 
     kernel.save_raw("gauss_111_kernel.raw");
     //kernel.print_to_file("gauss_111_kernel.txt");
-    vcl_cout << "1 1 1 kernel " ;
+    std::cout << "1 1 1 kernel " ;
     kernel.cum_sum();
   }
 
@@ -144,7 +145,7 @@ void print_gauss_x_kernels()
     bvpl_kernel kernel = factory.create();
     kernel.save_raw("gauss_001_kernel.raw");
     //kernel.print_to_file("gauss_001_kernel.txt");
-    vcl_cout << "0 0 1 kernel " ;
+    std::cout << "0 0 1 kernel " ;
     kernel.cum_sum();
   }
 
@@ -154,7 +155,7 @@ void print_gauss_x_kernels()
     bvpl_kernel kernel = factory.create();
     kernel.save_raw("gauss_001_90_kernel.raw");
     //kernel.print_to_file("gauss_001_90_kernel.txt");
-    vcl_cout << "0 0 1 kernel, angle pi/2 " ;
+    std::cout << "0 0 1 kernel, angle pi/2 " ;
     kernel.cum_sum();
   }
 }
@@ -165,13 +166,13 @@ void print_directions( bvpl_kernel_vector_sptr kernel_vector)
 {
   bvpl_kernel_vector::iterator vit = kernel_vector->kernels_.begin();
 
-  vcl_cout <<"Writing to file axes in vector:" << vcl_endl;
+  std::cout <<"Writing to file axes in vector:" << std::endl;
 
-  vcl_string filename = "kernel_axes.txt";
-  vcl_fstream ofs(filename.c_str(), vcl_ios::out);
+  std::string filename = "kernel_axes.txt";
+  std::fstream ofs(filename.c_str(), std::ios::out);
 
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening filefor write!\n";
+    std::cerr << "error opening filefor write!\n";
   }
 
 
@@ -192,7 +193,7 @@ bool test_gaussian_xx()
   bvpl_gauss3d_xx_kernel_factory factory(sigma1, sigma2, sigma3);
   {
     bvpl_kernel kernel = factory.create();
-    vcl_cout << "Canonical kernel " ;
+    std::cout << "Canonical kernel " ;
     kernel.cum_sum();
   }
 
@@ -248,7 +249,7 @@ bool test_gaussian_xx()
       {
         bvpl_kernel_dispatch d1 = *kernel_iter1;
         bvpl_kernel_dispatch d2 = *kernel_iter2;
-        if (d1.c_ - d2.c_ > vcl_numeric_limits<float>::epsilon())
+        if (d1.c_ - d2.c_ > std::numeric_limits<float>::epsilon())
           symmetric = false;
       }
       ++kernel_iter2;
@@ -266,7 +267,7 @@ bool test_gaussian_xx()
       {
         bvpl_kernel_dispatch d1 = *kernel_iter1;
         bvpl_kernel_dispatch d3 = *kernel_iter3;
-        if (d1.c_ - d3.c_ > vcl_numeric_limits<float>::epsilon())
+        if (d1.c_ - d3.c_ > std::numeric_limits<float>::epsilon())
           symmetric = false;
       }
       ++kernel_iter3;
@@ -292,7 +293,7 @@ bool test_gaussian_x()
   bvpl_gauss3d_x_kernel_factory factory(sigma1, sigma2, sigma3);
   {
     bvpl_kernel kernel = factory.create();
-    vcl_cout << "Canonical kernel " ;
+    std::cout << "Canonical kernel " ;
     kernel.cum_sum();
     kernel.save_raw("canonical.raw");
   }
@@ -350,7 +351,7 @@ bool test_gaussian_x()
       {
         bvpl_kernel_dispatch d1 = *kernel_iter1;
         bvpl_kernel_dispatch d2 = *kernel_iter2;
-        if (d1.c_ - d2.c_ > vcl_numeric_limits<float>::epsilon())
+        if (d1.c_ - d2.c_ > std::numeric_limits<float>::epsilon())
           symmetric = false;
       }
       ++kernel_iter2;
@@ -368,7 +369,7 @@ bool test_gaussian_x()
       {
         bvpl_kernel_dispatch d1 = *kernel_iter1;
         bvpl_kernel_dispatch d3 = *kernel_iter3;
-        if (d1.c_ - d3.c_ > vcl_numeric_limits<float>::epsilon())
+        if (d1.c_ - d3.c_ > std::numeric_limits<float>::epsilon())
           symmetric = false;
       }
       ++kernel_iter3;
@@ -397,7 +398,7 @@ bool test_corner2d()
     bvpl_corner2d_kernel_factory factory(length, width, thickness);
     factory.set_angle(float(vnl_math::pi_over_4));
     bvpl_kernel kernel = factory.create();
-    vcl_cout << "Canonical kernel " ;
+    std::cout << "Canonical kernel " ;
     kernel.cum_sum();
   }
 
@@ -409,7 +410,7 @@ bool test_corner2d()
 
     kernel.save_raw("corner_010_kernel.raw");
     kernel.print_to_file("cornel_010_kernel.txt");
-    vcl_cout << "0 1 0 kernel " ;
+    std::cout << "0 1 0 kernel " ;
     kernel.cum_sum();
   }
 #endif

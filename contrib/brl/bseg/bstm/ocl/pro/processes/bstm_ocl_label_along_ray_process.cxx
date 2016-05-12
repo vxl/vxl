@@ -6,6 +6,10 @@
 // \author Ali Osman Ulusoy
 // \date May 15, 2013
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
@@ -22,9 +26,7 @@
 // directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
@@ -33,11 +35,11 @@ namespace bstm_ocl_label_along_ray_process_globals
   const unsigned n_inputs_     = 8;
   const unsigned n_outputs_    = 0;
 
-  bocl_kernel* compile_kernel(bocl_device_sptr device,vcl_string opts)
+  bocl_kernel* compile_kernel(bocl_device_sptr device,std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/time_tree_library_functions.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -46,15 +48,15 @@ namespace bstm_ocl_label_along_ray_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    vcl_string options = opts+ "-D LABELING ";
+    std::string options = opts+ "-D LABELING ";
 
     bocl_kernel* compute_vis = new bocl_kernel();
-    vcl_string seg_opts = options + " -D STEP_CELL=step_cell_label(aux_args,data_ptr,data_ptr_tt,d)";
+    std::string seg_opts = options + " -D STEP_CELL=step_cell_label(aux_args,data_ptr,data_ptr_tt,d)";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "label_scene", seg_opts, "label_scene");
     return compute_vis;
   }
 
-  static vcl_map<vcl_string, bocl_kernel* > kernels_;
+  static std::map<std::string, bocl_kernel* > kernels_;
 }
 
 bool bstm_ocl_label_along_ray_process_cons(bprb_func_process& pro)
@@ -62,7 +64,7 @@ bool bstm_ocl_label_along_ray_process_cons(bprb_func_process& pro)
   using namespace bstm_ocl_label_along_ray_process_globals;
 
   // process takes 9 inputs and two outputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "bstm_scene_sptr";
   input_types_[2] = "bstm_opencl_cache_sptr";
@@ -73,7 +75,7 @@ bool bstm_ocl_label_along_ray_process_cons(bprb_func_process& pro)
   input_types_[7] = "int";          // label
 
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
@@ -84,7 +86,7 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
 {
   using namespace bstm_ocl_label_along_ray_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -105,8 +107,8 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
 
   unsigned ni=change_img->ni();
   unsigned nj=change_img->nj();
-  vcl_size_t  local_threads [2] = {8,8};
-  vcl_size_t  global_threads[2] = {8,8};
+  std::size_t  local_threads [2] = {8,8};
+  std::size_t  global_threads[2] = {8,8};
 
   // create a command queue.
   int status=0;
@@ -115,9 +117,9 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
    return false;
 
   // compile the kernel if not already compiled
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
   if (kernels_.find(identifier)==kernels_.end()) {
-   vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+   std::cout<<"===========Compiling kernels==========="<<std::endl;
    kernels_[identifier]=  compile_kernel(device,"");
   }
 
@@ -187,8 +189,8 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
 
 
   //For each ID in the visibility order, grab that block
-  vcl_vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<bstm_block_id>::iterator id;
+  std::vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<bstm_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
      //choose correct render kernel

@@ -5,9 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "SimilarityMetric.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 #include <vnl/vnl_double_2.h>
@@ -108,11 +109,11 @@ SimilarityMetric::~SimilarityMetric()
 //: One line printout
 void SimilarityMetric::print(char* msg) const
 {
-  vcl_cerr<<msg<<": SimilarityMetric ("<<centre_x_<<','<<centre_y_<<", "<<inv_scale_<<")\n";
+  std::cerr<<msg<<": SimilarityMetric ("<<centre_x_<<','<<centre_y_<<", "<<inv_scale_<<")\n";
 }
 
 //: One line printout
-vcl_ostream& SimilarityMetric::print(vcl_ostream& s) const
+std::ostream& SimilarityMetric::print(std::ostream& s) const
 {
   return s<<"[SimilarityMetric ("<<centre_x_<<','<<centre_y_<<"), "<<inv_scale_ << ']';
 }
@@ -222,7 +223,7 @@ double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D con
 double SimilarityMetric::distance_squared(vgl_line_segment_2d<double> const& segment,
                                           vgl_homg_line_2d<double> const& line) const
 {
-  return vnl_math::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
+  return std::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
                       this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point2()), line));
 }
 
@@ -230,7 +231,7 @@ double SimilarityMetric::distance_squared(vgl_line_segment_2d<double> const& seg
 //  The metric used is the maximum of the two endpoint perp distances.
 double SimilarityMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const
 {
-  return vnl_math::max(this->perp_dist_squared(segment.get_point1(), line),
+  return std::max(this->perp_dist_squared(segment.get_point1(), line),
                       this->perp_dist_squared(segment.get_point2(), line));
 }
 
@@ -239,12 +240,12 @@ double SimilarityMetric::perp_dist_squared(vgl_homg_point_2d<double> const& p,
                                            vgl_homg_line_2d<double> const& l) const
 {
   if (p.ideal()) {
-    vcl_cerr << "SimilarityMetric::perp_dist_squared -- point at infinity\n";
+    std::cerr << "SimilarityMetric::perp_dist_squared -- point at infinity\n";
     return Homg::infinity;
   }
 
   if (l.ideal()) {
-    vcl_cerr << "SimilarityMetric::perp_dist_squared -- line at infinity\n";
+    std::cerr << "SimilarityMetric::perp_dist_squared -- line at infinity\n";
     return Homg::infinity;
   }
 
@@ -260,12 +261,12 @@ double SimilarityMetric::perp_dist_squared(HomgPoint2D const & p, HomgLine2D con
 
   // pcp separated
   if (p.ideal()) {
-    vcl_cerr << "SimilarityMetric::perp_dist_squared -- point at infinity\n";
+    std::cerr << "SimilarityMetric::perp_dist_squared -- point at infinity\n";
     return Homg::infinity;
   }
 
   if (l.ideal()) {
-    vcl_cerr << "SimilarityMetric::perp_dist_squared -- line at infinity\n";
+    std::cerr << "SimilarityMetric::perp_dist_squared -- line at infinity\n";
     return Homg::infinity;
   }
 

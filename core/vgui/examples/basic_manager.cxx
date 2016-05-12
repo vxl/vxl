@@ -1,6 +1,7 @@
 // This is core/vgui/examples/basic_manager.cxx
+#include <cstdlib>
 #include "basic_manager.h"
-#include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_compiler.h>
 #include <vil1/vil1_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
@@ -10,7 +11,7 @@
 
 basic_manager *basic_manager::instance()
 {
-  static basic_manager *instance_ = 0;
+  static basic_manager *instance_ = VXL_NULLPTR;
   if (!instance_)
   {
     instance_ = new basic_manager();
@@ -38,14 +39,14 @@ bool basic_manager::handle(vgui_event const & e)
 
 void basic_manager::quit()
 {
-  vcl_exit(1);
+  std::exit(1);
 }
 
 void basic_manager::load_image()
 {
   vgui_dialog load_image_dlg("Load image file");
-  static vcl_string image_filename = "";
-  static vcl_string ext = "*.*";
+  static std::string image_filename = "";
+  static std::string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);
   if (!load_image_dlg.ask())
     return;

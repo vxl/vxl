@@ -23,7 +23,7 @@ brdb_query::comp_type operator ~(brdb_query::comp_type type)
 brdb_query_aptr operator ~(const brdb_query_aptr& q)
 {
   if (!q.get())
-    return brdb_query_aptr(NULL);
+    return brdb_query_aptr(VXL_NULLPTR);
 
   return q->complement();
 }
@@ -34,7 +34,7 @@ brdb_query_aptr operator &(brdb_query_aptr q1, brdb_query_aptr q2)
 {
   if (!q1.get()){
     if (!q2.get())
-      return brdb_query_aptr(NULL);
+      return brdb_query_aptr(VXL_NULLPTR);
     else
       return q2;
   }
@@ -50,7 +50,7 @@ brdb_query_aptr operator |(brdb_query_aptr q1, brdb_query_aptr q2)
 {
   if (!q1.get()){
     if (!q2.get())
-      return brdb_query_aptr(NULL);
+      return brdb_query_aptr(VXL_NULLPTR);
     else
       return q2;
   }
@@ -153,9 +153,9 @@ brdb_query_or::complement() const
 
 
 //: make a query on a certain attribute, with a certain type of comparison to a value
-brdb_query_comp::brdb_query_comp(const vcl_string& attribute_name,
+brdb_query_comp::brdb_query_comp(const std::string& attribute_name,
                                  const brdb_query::comp_type& type,
-                                 vcl_auto_ptr<brdb_value> value)
+                                 std::auto_ptr<brdb_value> value)
   : attribute_name_(attribute_name),
     comparison_type_(type),
     value_(value)
@@ -177,7 +177,7 @@ brdb_query_aptr
 brdb_query_comp::complement() const
 {
   return brdb_query_aptr(new brdb_query_comp(attribute_name_, ~comparison_type_,
-                                             vcl_auto_ptr<brdb_value>(value_->clone())));
+                                             std::auto_ptr<brdb_value>(value_->clone())));
 }
 
 
@@ -194,7 +194,7 @@ brdb_query_comp::operator = (const brdb_query_comp& rhs)
 {
   this->attribute_name_ = rhs.attribute_name_;
   this->comparison_type_ = rhs.comparison_type_;
-  this->value_ = vcl_auto_ptr<brdb_value>(rhs.value_->clone());
+  this->value_ = std::auto_ptr<brdb_value>(rhs.value_->clone());
   return *this;
 }
 

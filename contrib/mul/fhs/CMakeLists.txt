@@ -6,19 +6,19 @@ doxygen_add_library(contrib/mul/fhs
   DESCRIPTION "Feature matching using Felzenszwalb and Huttenlocher's method"
   )
 
-SET(fhs_sources
+set(fhs_sources
   fhs_arc.cxx       fhs_arc.h
   fhs_searcher.cxx  fhs_searcher.h
 )
-AUX_SOURCE_DIRECTORY(Templates fhs_sources)
+aux_source_directory(Templates fhs_sources)
 
-ADD_LIBRARY(fhs ${fhs_sources})
-TARGET_LINK_LIBRARIES(fhs vimt vnl vil_algo vgl vsl)
+vxl_add_library(LIBRARY_NAME fhs LIBRARY_SOURCES ${fhs_sources})
+target_link_libraries(fhs vimt ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()
 
-IF(BUILD_MUL_TOOLS)
+if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
-ENDIF(BUILD_MUL_TOOLS)
+endif()

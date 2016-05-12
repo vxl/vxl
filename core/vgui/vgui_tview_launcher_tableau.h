@@ -42,7 +42,7 @@ class vgui_tview_launcher_tableau : public vgui_tableau
   bool handle(const vgui_event&);
 
   //: Returns the type of this tableau ('vgui_tview_launcher_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //:
   void get_popup(const vgui_popup_params&, vgui_menu& menu);

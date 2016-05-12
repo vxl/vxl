@@ -1,8 +1,8 @@
 #include "bwm_process_mgr.h"
 
-bwm_process_mgr* bwm_process_mgr::instance_ = 0;
+bwm_process_mgr* bwm_process_mgr::instance_ = VXL_NULLPTR;
 
-vcl_map<vcl_string, bwm_command_sptr> bwm_process_mgr::process_map;
+std::map<std::string, bwm_command_sptr> bwm_process_mgr::process_map;
 
 bwm_process_mgr* bwm_process_mgr::instance()
 {
@@ -25,19 +25,19 @@ void bwm_process_mgr::register_process(bwm_command_sptr process)
   process_map[process->name()] = process;
 }
 
-bwm_command_sptr bwm_process_mgr::load_process(vcl_string name)
+bwm_command_sptr bwm_process_mgr::load_process(std::string name)
 {
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
+  std::map<std::string, bwm_command_sptr>::iterator iter = process_map.find(name);
   if (iter != process_map.end()) {
     return iter->second;
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
-bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name,
+bwm_command_sptr bwm_process_mgr::load_tab_process(std::string name,
                                                    vgui_tableau_sptr tab)
 {
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
+  std::map<std::string, bwm_command_sptr>::iterator iter = process_map.find(name);
   if (iter != process_map.end()) {
     bwm_command_sptr c = iter->second;
     if (dynamic_cast<bwm_tab_process_command* > (c.as_pointer())) {
@@ -46,13 +46,13 @@ bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name,
       return comm;
     }
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
-bwm_command_sptr bwm_process_mgr::load_menu_process(vcl_string name,
+bwm_command_sptr bwm_process_mgr::load_menu_process(std::string name,
                                                     vgui_menu& menu)
 {
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
+  std::map<std::string, bwm_command_sptr>::iterator iter = process_map.find(name);
   if (iter != process_map.end()) {
     bwm_command_sptr c = iter->second;
     if (dynamic_cast<bwm_menu_process_command* > (c.as_pointer())) {
@@ -61,5 +61,5 @@ bwm_command_sptr bwm_process_mgr::load_menu_process(vcl_string name,
       return comm;
     }
   }
-  return 0;
+  return VXL_NULLPTR;
 }

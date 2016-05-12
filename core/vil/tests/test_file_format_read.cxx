@@ -1,8 +1,9 @@
 // This is core/vil/tests/test_file_format_read.cxx
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vxl_config.h> // for vxl_uint_16 etc.
 
@@ -30,7 +31,7 @@
 //   14 Nov 2011 - Gehua Yang     - added tests for loading 32bpp ARGB image
 // \endverbatim
 
-static vcl_string image_base;
+static std::string image_base;
 
 
 // A comparator interface to check if the pixels match. It will be
@@ -42,7 +43,7 @@ struct Compare
   virtual ~Compare() {}
   virtual bool operator() ( vil_image_view<ImgPixelType> const&,
                             int p, int i, int j,
-                            const vcl_vector<TruePixelType>& pixel ) const = 0;
+                            const std::vector<TruePixelType>& pixel ) const = 0;
 };
 
 
@@ -55,7 +56,7 @@ struct CompareRGB
 {
   virtual bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
                             int p, int i, int j,
-                            const vcl_vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const
   {
     return p==0 && pixel.size() == 3 &&
            img(i,j).r == pixel[0] &&
@@ -71,7 +72,7 @@ struct CompareRGBA
 {
   virtual bool operator() ( vil_image_view< vil_rgba<PixelType> > const& img,
                             int p, int i, int j,
-                            const vcl_vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const
   {
     return p==0 && pixel.size() == 4 &&
            img(i,j).r == pixel[0] &&
@@ -88,7 +89,7 @@ struct CompareRGBNear
 {
   virtual bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
                             int p, int i, int j,
-                            const vcl_vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const
     {
       if ( p == 0 && pixel.size() == 3 ) {
         // Find difference in two values whilst avoiding unsigned underflow
@@ -122,7 +123,7 @@ struct ComparePlanes
 {
   virtual bool operator() ( vil_image_view<PixelType> const& img,
                             int p, int i, int j,
-                            const vcl_vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const
   {
     return 0 <= p && p < num_planes && pixel.size() == 1 && img(i,j,p) == pixel[0];
   }
@@ -149,10 +150,10 @@ struct CompareGreyFloat
 {
   virtual bool operator() ( vil_image_view<PixelType> const& img,
                             int p, int i, int j,
-                            const vcl_vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const
   {
     return p==0 && pixel.size() == 1 &&
-           vcl_fabs( pixel[0] - img(i,j) ) <= 1e-6 * vcl_fabs( pixel[0] );
+           std::fabs( pixel[0] - img(i,j) ) <= 1e-6 * std::fabs( pixel[0] );
   }
 };
 
@@ -163,7 +164,7 @@ struct CompareGreyNear
 {
   virtual bool operator() ( vil_image_view<PixelType> const& img,
                             int p, int i, int j,
-                            const vcl_vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const
     {
       if ( p==0 && pixel.size() == 1 ) {
         // Find difference in two values whilst avoiding unsigned underflow
@@ -196,7 +197,7 @@ struct CompareGreyNear
 // Return value is true if the read FAILED.
 template<class TruePixelType>
 bool
-read_value( vcl_istream& fin, TruePixelType& pix )
+read_value( std::istream& fin, TruePixelType& pix )
 {
   return ! (fin >> pix);
 }
@@ -205,7 +206,7 @@ read_value( vcl_istream& fin, TruePixelType& pix )
 // See comments on template for return value.
 VCL_DEFINE_SPECIALIZATION
 bool
-read_value( vcl_istream& fin, char& pix )
+read_value( std::istream& fin, char& pix )
 {
   int x;
   // use operator! to test the stream to avoid compiler warnings
@@ -219,7 +220,7 @@ read_value( vcl_istream& fin, char& pix )
 // See comments on template for return value.
 VCL_DEFINE_SPECIALIZATION
 bool
-read_value( vcl_istream& fin, unsigned char& pix )
+read_value( std::istream& fin, unsigned char& pix )
 {
   int x;
   // use operator! to test the stream to avoid compiler warnings
@@ -233,7 +234,7 @@ read_value( vcl_istream& fin, unsigned char& pix )
 // See comments on template for return value.
 VCL_DEFINE_SPECIALIZATION
 bool
-read_value( vcl_istream& fin, signed char& pix )
+read_value( std::istream& fin, signed char& pix )
 {
   int x;
   // use operator! to test the stream to avoid compiler warnings
@@ -246,7 +247,7 @@ read_value( vcl_istream& fin, signed char& pix )
 // See comments on template for return value.
 VCL_DEFINE_SPECIALIZATION
 bool
-read_value( vcl_istream& fin, bool& pix )
+read_value( std::istream& fin, bool& pix )
 {
   int x;
   // use operator! to test the stream to avoid compiler warnings
@@ -283,17 +284,17 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
   int width;
   int height;
 
-  vcl_ifstream fin( (image_base+true_data_file).c_str() );
+  std::ifstream fin( (image_base+true_data_file).c_str() );
   if ( !( fin >> num_planes >> num_comp >> width >> height ) ) {
-    vcl_cout << "[couldn't read header from " << true_data_file << ']' << vcl_flush;
+    std::cout << "[couldn't read header from " << true_data_file << ']' << std::flush;
     return false;
   }
 
   // Generate different views from the resource, including the full image.
   //
-  vcl_vector< vil_image_view<ImgPixelType> > views;
-  vcl_vector< unsigned > offi;
-  vcl_vector< unsigned > offj;
+  std::vector< vil_image_view<ImgPixelType> > views;
+  std::vector< unsigned > offi;
+  std::vector< unsigned > offj;
   for ( unsigned dl = 0; dl < 3; ++dl ) {
     for ( unsigned dt = 0; dt < 2; ++dt ) {
       for ( unsigned dr = 0; dr < 3; ++dr ) {
@@ -302,33 +303,33 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
             vil_image_view_base_sptr im =
               ir->get_copy_view( dl, ir->ni()-dl-dr, dt, ir->nj()-dt-db );
             if ( !im ) {
-              vcl_cout << "[ couldn't read (sub)image data from " << ir << "]\n"
+              std::cout << "[ couldn't read (sub)image data from " << ir << "]\n"
                        << "[ off=(" << dl << ',' << dt
                        << ")x(" << ir->ni()-dl-dr << ','
-                       << ir->nj()-dt-db << " ]" << vcl_endl;
+                       << ir->nj()-dt-db << " ]" << std::endl;
               return false;
             }
             vil_image_view<ImgPixelType> img = im;
             if ( !img ) {
-              vcl_cout << "[ couldn't read (sub)image data of the expected format from "
-                       << im << " at offset " << dl << ',' << dt << ']' << vcl_endl;
+              std::cout << "[ couldn't read (sub)image data of the expected format from "
+                       << im << " at offset " << dl << ',' << dt << ']' << std::endl;
               return false;
             }
 
             if ( img.ni() != ir->ni()-dl-dr || img.nj() != ir->nj()-dt-db ) {
-              vcl_cout << "[ (sub)image has wrong size (!= "
+              std::cout << "[ (sub)image has wrong size (!= "
                        << ir->ni()-dl-dr << 'x' << ir->nj()-dt-db
-                       << ") in " << img << vcl_endl;
+                       << ") in " << img << std::endl;
               return false;
             }
 
 #ifdef DEBUG
             if (img.size() < 100) {
-              vcl_cout << "\nSubimage " << views.size() << " at ("<<dl<<','<<dt<<"):\n";
-              vil_print_all(vcl_cout, img); vcl_cout.flush();
+              std::cout << "\nSubimage " << views.size() << " at ("<<dl<<','<<dt<<"):\n";
+              vil_print_all(std::cout, img); std::cout.flush();
             }
             else {
-              vcl_cout << "Subimage size = " << img.size() << ".  Too large to display all pixels." << vcl_endl;
+              std::cout << "Subimage size = " << img.size() << ".  Too large to display all pixels." << std::endl;
             }
 #endif
 
@@ -344,7 +345,7 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
   // Compare pixels
   //
 
-  vcl_vector<TruePixelType> pixel( num_comp );
+  std::vector<TruePixelType> pixel( num_comp );
 
   for ( int p=0; p < num_planes; ++p ) {
     for ( int j=0; j < height; ++j ) {
@@ -370,12 +371,12 @@ CheckPixels( Compare<TruePixelType,ImgPixelType> const& check,
           if ( i >= int(offi[v]) && i < int(offi[v]+views[v].ni()) &&
                j >= int(offj[v]) && j < int(offj[v]+views[v].nj()) &&
                !check( views[v], p, i-offi[v], j-offj[v], pixel ) ) {
-            vcl_cout << "View " << v << " at offset (" << offi[v] << ',' << offj[v]
+            std::cout << "View " << v << " at offset (" << offi[v] << ',' << offj[v]
                      << ") [ " << views[v] << " ] has a mismatch at pixel (p="
-                     << p << ",i=" << i << ",j=" << j << ')' << vcl_endl;
+                     << p << ",i=" << i << ",j=" << j << ')' << std::endl;
             if ( views[v].size() < 100 ) {
-              vil_print_all( vcl_cout, views[v] );
-              vcl_cout.flush();
+              vil_print_all( std::cout, views[v] );
+              std::cout.flush();
             }
             return false;
           }
@@ -403,7 +404,7 @@ CheckFile( Compare<TruePixelType,ImgPixelType> const& check,
 {
   vil_image_resource_sptr ir = vil_load_image_resource((image_base + img_data_file).c_str());
   if ( !ir ) {
-    vcl_cout << "[ couldn't load image file " << img_data_file << " ]" << vcl_endl;
+    std::cout << "[ couldn't load image file " << img_data_file << " ]" << std::endl;
     return false;
   }
   else {
@@ -431,7 +432,7 @@ CheckFormat( Compare<TruePixelType,ImgPixelType> const& check,
   if ( is->ok() ) {
     vil_image_resource_sptr ir = ffmt->make_input_image( is );
     if ( !ir ) {
-      vcl_cout << "[ couldn't load image file " << img_data_file << " ]" << vcl_endl;
+      std::cout << "[ couldn't load image file " << img_data_file << " ]" << std::endl;
       result = false;
     }
     else {
@@ -439,7 +440,7 @@ CheckFormat( Compare<TruePixelType,ImgPixelType> const& check,
     }
   }
   else {
-    vcl_cout << "[ couldn't open file " << img_data_file << " for reading ]" << vcl_endl;
+    std::cout << "[ couldn't open file " << img_data_file << " for reading ]" << std::endl;
     result = false;
   }
   is->unref();
@@ -452,20 +453,20 @@ CheckFormat( Compare<TruePixelType,ImgPixelType> const& check,
 //
 template<typename T_PIXEL>
 bool
-image_equals( const vcl_string &test_file, const vcl_string &ref_file)
+image_equals( const std::string &test_file, const std::string &ref_file)
 {
   vil_image_view_base_sptr view_test_ptr =
     vil_load((image_base+test_file).c_str());
   if( !view_test_ptr )
   {
-    vcl_cout << "[ couldn't open or decode file " << test_file << " ]\n";
+    std::cout << "[ couldn't open or decode file " << test_file << " ]\n";
     return false;
   }
   vil_image_view_base_sptr view_ref_ptr =
     vil_load((image_base+ref_file).c_str());
   if( !view_ref_ptr )
   {
-    vcl_cout << "[ couldn't open or decode file " << ref_file << " ]\n";
+    std::cout << "[ couldn't open or decode file " << ref_file << " ]\n";
     return false;
   }
 
@@ -486,19 +487,19 @@ test_file_format_read( int argc, char* argv[] )
   if ( argc >= 2 ) {
     image_base = argv[1];
   }else{
-    vcl_string root = testlib_root_dir();
+    std::string root = testlib_root_dir();
     image_base = root + "/core/vil/tests/file_read_data";
   }
   exists = vul_file::is_directory(image_base);
   image_base += "/";
   if(!exists){
     TEST("No test data", false, true);
-    vcl_cout << "Failed file path: " << image_base << '\n';
+    std::cout << "Failed file path: " << image_base << '\n';
     return;
   }
   // Test generic file loads
 
-  vcl_cout << "GENERIC FILE LOAD\n\n"
+  std::cout << "GENERIC FILE LOAD\n\n"
            << "Portable aNy Map [pnm]: (pbm, pgm, ppm)\n";
 
   TEST("1-bit pbm ascii", CheckFile(CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit_ascii.pbm" ), true);
@@ -515,18 +516,18 @@ test_file_format_read( int argc, char* argv[] )
   TEST("16-bit ppm ascii", CheckFile(CompareRGB<vxl_uint_16>(), "ff_rgb16bit_true.txt", "ff_rgb16bit_ascii.ppm" ), true);
   TEST("16-bit ppm raw", CheckFile(CompareRGB<vxl_uint_16>(), "ff_rgb16bit_true.txt", "ff_rgb16bit_raw.ppm" ), true);
 
-  vcl_cout << "JPEG [jpg]\n";
+  std::cout << "JPEG [jpg]\n";
   TEST("8-bit grey, normal image to 4 quanta", CheckFile(CompareGreyNear<vxl_byte>(4), "ff_grey8bit_true.txt", "ff_grey8bit_compressed.jpg" ), true);
   TEST("8-bit RGB, easy image accurate to 3 quanta", CheckFile(CompareRGBNear<vxl_byte>(3), "ff_rgb8biteasy_true.txt", "ff_rgb8biteasy_compressed.jpg" ), true);
 
-  vcl_cout << "Windows bitmap [bmp]\n";
+  std::cout << "Windows bitmap [bmp]\n";
   TEST("8-bit greyscale (xv created)", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.bmp" ), true);
   //TEST("8-bit GA uncompressed", CheckFile(CompareGreyAlpha<vxl_byte>(), "ff_ga8bit_true.txt", "ff_ga8bit.bmp" ), true);
   TEST("8-bit RGB (xv created)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_xv.bmp" ), true);
   TEST("8-bit RGB (Top-down scans, Photoshop created)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_topdown_ps.bmp" ), true);
   TEST("8-bit RGBA uncompressed (Photoshop created)", CheckFile(CompareRGBA<vxl_byte>(), "ff_rgba8bit_true.txt", "ff_rgba8bit_uncompressed_ps.bmp" ), true);
 
-  vcl_cout << "Portable Network Graphics [png]\n";
+  std::cout << "Portable Network Graphics [png]\n";
   TEST("1-bit grey compressed", CheckFile(CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit.png" ), true);
   TEST("8-bit RGB uncompressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.png" ), true);
   TEST("8-bit RGB compressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_compressed.png" ), true);
@@ -537,7 +538,7 @@ test_file_format_read( int argc, char* argv[] )
   TEST("16-bit grey with bitdepth=true (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_labview_bitdepth_true.png" ), true);
   TEST("16-bit grey with bitdepth=false (from labview)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_labview_bitdepth_false.png" ), true);
 
-  vcl_cout << "TIFF [tiff]\n";
+  std::cout << "TIFF [tiff]\n";
   //TEST("1-bit grey uncompressed", CheckFile(CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit_uncompressed.tif" ), true);
   TEST("8-bit RGB uncompressed", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.tif" ), true);
 
@@ -554,29 +555,29 @@ test_file_format_read( int argc, char* argv[] )
   // data types (eg. 8-bit unsigned, 16-bit unsigned, 32-bit signed, double, float, bool)
   // TODO: Create NITF tests for the following cases:
   // 1) read second image test (ie. multiple images in one file)
-  vcl_cout << "NITF 2.1 [nitf] (uncompressed)\n";
+  std::cout << "NITF 2.1 [nitf] (uncompressed)\n";
   TEST("8-bit unsigned int (IMODE=P)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_p.nitf" ), true);
   TEST("8-bit unsigned int (IMODE=B)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_b.nitf" ), true);
   TEST("8-bit unsigned int (IMODE=R)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_r.nitf" ), true);
   TEST("8-bit unsigned int (IMODE=S)", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_nitf_8bit_true.txt", "ff_nitf_8bit_s.nitf" ), true);
   TEST("16-bit unsigned int (ABPP=13)", CheckFile(CompareGrey<vxl_uint_16>(), "ff_nitf_16bit_true.txt", "ff_nitf_16bit.nitf" ), true);
-  vcl_cout << "NITF 2.0 [nitf] (uncompressed)\n";
+  std::cout << "NITF 2.0 [nitf] (uncompressed)\n";
   TEST("32-bit signed int", CheckFile(CompareGrey<vxl_int_32>(), "ff_nitf_32bit_true.txt", "ff_nitf_32bit.nitf" ), true);
   TEST("32-bit float", CheckFile(CompareGreyFloat<float>(), "ff_nitf_float_true.txt", "ff_nitf_float.nitf" ), true);
   TEST("64-bit float (double)", CheckFile(CompareGreyFloat<double>(), "ff_nitf_float_true.txt", "ff_nitf_double.nitf" ), true);
-  vcl_cout << "NSIF 1.0 [nitf] (uncompressed)\n";
+  std::cout << "NSIF 1.0 [nitf] (uncompressed)\n";
   TEST("1-bit bool (NSIF w/ LUT to parse)", CheckFile(CompareGrey<bool>(), "ff_nitf_1bit_lut_true.txt", "ff_nitf_1bit_lut.nsif" ), true);
 
 #if HAS_J2K
-  vcl_cout << "JPEG 2000 [j2k,jpc]\n";
+  std::cout << "JPEG 2000 [j2k,jpc]\n";
   TEST("p0_12 (3x5x1 x 8Bit)", CheckFile(CompareGrey<vxl_byte>(), "p0_12_true.txt", "p0_12.j2k" ), true);
 
-  vcl_cout << "NITF 2.1 [nitf] (JPEG 2000 compressed)\n";
+  std::cout << "NITF 2.1 [nitf] (JPEG 2000 compressed)\n";
   TEST("p0_12 (3x5x1 x 8Bit)", CheckFile(CompareGrey<vxl_byte>(), "p0_12_true.txt", "p0_12a.ntf" ), true);
 #endif // HAS_J2K
 
 #if HAS_OPENJPEG2
-  vcl_cout << "OpenJPEG v2 \n";
+  std::cout << "OpenJPEG v2 \n";
   TEST("file1 (768x512 8Bit RGB)", image_equals<vxl_byte>("jpeg2000/file1.jp2", "jpeg2000/opj_file1.tif"), true);
   TEST("file2 (480x640 8Bit RGB)", image_equals<vxl_byte>("jpeg2000/file2.jp2", "jpeg2000/opj_file2.tif"), true);
   TEST("file4 (768x512 8Bit Grey)", image_equals<vxl_byte>("jpeg2000/file4.jp2", "jpeg2000/opj_file4.tif"), true);
@@ -587,12 +588,12 @@ test_file_format_read( int argc, char* argv[] )
   TEST("file9 (768x512 8Bit RGB)", image_equals<vxl_byte>("jpeg2000/file9.jp2", "jpeg2000/opj_file9.tif"), true);
 #endif
 
-  vcl_cout << "Sun raster [ras]\n";
+  std::cout << "Sun raster [ras]\n";
   TEST("8-bit grey, no colourmap", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit_nocol.ras" ), true);
   TEST("8-bit RGB, no colourmap", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_raw.ras" ), true);
   TEST("8-bit indexed RGB", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_indexed.ras" ), true);
 
-  vcl_cout << "Khoros VIFF [viff]\n";
+  std::cout << "Khoros VIFF [viff]\n";
   TEST("8-bit grey big endian", CheckFile(CompareGrey<vxl_uint_8>(), "ff_grey8bit_true.txt", "ff_grey8bit_bigendian.viff" ), true);
   TEST("8-bit RGB big endian", CheckFile(ComparePlanes<vxl_uint_8,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit_bigendian.viff" ), true);
   TEST("16-bit grey big endian", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_bigendian.viff" ), true);
@@ -609,18 +610,13 @@ test_file_format_read( int argc, char* argv[] )
   TEST("32-bit float grey little endian", CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float_littleendian.viff" ), true);
   TEST("64-bit float grey little endian", CheckFile(CompareGreyFloat<double>(), "ff_grey_float_true.txt", "ff_grey_double_littleendian.viff" ), true);
 
-  vcl_cout << "SGI IRIS [iris]\n";
-  TEST("8-bit grey rle", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.iris" ), true);
-  TEST("16-bit grey verbatim", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit.iris" ), true);
-  TEST("8-bit RGB rle", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit.iris" ), true);
-
-  vcl_cout << "MIT [mit]\n";
+  std::cout << "MIT [mit]\n";
   TEST("8-bit grey", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.mit" ), true);
   TEST("16-bit grey", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit.mit" ), true);
   TEST("8-bit RGB", CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit.mit" ), true);
 
 #if HAS_DCMTK
-  vcl_cout << "DICOM [dcm]\n";
+  std::cout << "DICOM [dcm]\n";
   TEST("16-bit greyscale uncompressed", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true_for_dicom.txt", "ff_grey16bit_uncompressed.dcm"), true);
   // These only pass if the DCMTK-based DICOM loader is available
   TEST("16-bit greyscale uncompressed 2", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit_uncompressed2.dcm" ), true);

@@ -5,8 +5,9 @@
 // \file
 // \author Tim Cootes
 
-#include <vcl_cstddef.h>
-#include <vcl_iostream.h>
+#include <cstddef>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/io/vil_io_memory_chunk.h>
 
@@ -27,7 +28,7 @@ inline void vsl_b_write(vsl_b_ostream &os, const vil_image_view<T>& image)
   {
     vsl_b_write(os, image.memory_chunk());
 
-    vcl_ptrdiff_t offset = (image.top_left_ptr()-
+    std::ptrdiff_t offset = (image.top_left_ptr()-
                             reinterpret_cast<const T*>(image.memory_chunk()->data()));
     vsl_b_write(os, offset);
   }
@@ -42,9 +43,9 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
   if (!is) return;
 
   unsigned ni,nj,np;
-  vcl_ptrdiff_t istep,jstep,pstep;
+  std::ptrdiff_t istep,jstep,pstep;
   vil_memory_chunk_sptr chunk;
-  vcl_ptrdiff_t offset;
+  std::ptrdiff_t offset;
 
   short w;
   vsl_b_read(is, w);
@@ -64,9 +65,9 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
       vsl_b_read(is, chunk);
       if (vil_pixel_format_component_format(image.pixel_format()) != chunk->pixel_format())
       {
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
+        std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
                  << "           Mismatched pixel format.\n";
-        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
         return;
       }
       vsl_b_read(is, offset);
@@ -75,9 +76,9 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
       if (chunk->size() < np*ni*nj*sizeof(T) ||
           offset < 0 || offset*sizeof(T) >= chunk->size())
       {
-        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
+        std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
                  << "           Image details not compatible with chunk data.\n";
-        is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
         return;
       }
 
@@ -87,9 +88,9 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>& image)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
              << "           Unknown version number "<< w << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
@@ -114,7 +115,7 @@ inline void vsl_b_read(vsl_b_istream &is, vil_image_view<T>*& p)
 //: Print human readable summary of a vil_image_view<T> object to a stream
 // \relatesalso vil_image_view
 template<class T>
-inline void vsl_print_summary(vcl_ostream& os,const vil_image_view<T>& image)
+inline void vsl_print_summary(std::ostream& os,const vil_image_view<T>& image)
 {
   image.print(os);
 }

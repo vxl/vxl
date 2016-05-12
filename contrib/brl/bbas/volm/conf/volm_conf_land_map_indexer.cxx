@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include <volm/conf/volm_conf_land_map_indexer.h>
 //:
 // \file
@@ -5,7 +7,7 @@
 #include <vil/vil_new.h>
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_roi.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_threshold.h>
@@ -93,7 +95,7 @@ volm_conf_land_map_indexer::volm_conf_land_map_indexer(float  const& min_lon, fl
   land_locs_.clear();
 }
 
-volm_conf_land_map_indexer::volm_conf_land_map_indexer(vcl_string const& bin_file)
+volm_conf_land_map_indexer::volm_conf_land_map_indexer(std::string const& bin_file)
 {
   assert(vul_file::exists(bin_file));
   vsl_b_ifstream is(bin_file.c_str());
@@ -102,17 +104,17 @@ volm_conf_land_map_indexer::volm_conf_land_map_indexer(vcl_string const& bin_fil
 }
 
 // create a string signature
-vcl_string volm_conf_land_map_indexer::box_string() const
+std::string volm_conf_land_map_indexer::box_string() const
 {
-  vcl_stringstream str;
-  str << vcl_setprecision(6) << bbox_.min_x() << "_" << vcl_setprecision(6) << bbox_.min_y();
+  std::stringstream str;
+  str << std::setprecision(6) << bbox_.min_x() << "_" << std::setprecision(6) << bbox_.min_y();
   return str.str();
 }
 
 // return list of all land types in current database
-vcl_vector<unsigned char> volm_conf_land_map_indexer::land_types() const
+std::vector<unsigned char> volm_conf_land_map_indexer::land_types() const
 {
-  vcl_vector<unsigned char> land_types;
+  std::vector<unsigned char> land_types;
   for (volm_conf_loc_map::const_iterator mit = land_locs_.begin(); mit != land_locs_.end(); ++mit)
     land_types.push_back(mit->first);
   return land_types;
@@ -146,7 +148,7 @@ bool volm_conf_land_map_indexer::add_locations(vgl_point_3d<double> const& loc, 
 
 // add locations from a land map
 // note that the edge points from image has no height available ( put -1.0 height for all points
-bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& image, vpgl_geo_camera* geocam, vcl_string const& img_type)
+bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& image, vpgl_geo_camera* geocam, std::string const& img_type)
 {
   // height value for all points from image
   double height_value = -1.0;
@@ -165,30 +167,30 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
   double min_uu, min_vv, max_uu, max_vv;
   geocam->global_to_img(bbox_.min_x(), bbox_.max_y(), 0.0, min_uu, min_vv);
   geocam->global_to_img(bbox_.max_x(), bbox_.min_y(), 0.0, max_uu, max_vv);
-  unsigned ci = vcl_floor(min_uu), cj = vcl_floor(min_vv);
-  unsigned cni = vcl_floor(max_uu-min_uu+0.5);
-  unsigned cnj = vcl_floor(max_vv-min_vv+0.5);
-  vcl_cout << "min_x: " << bbox_.min_x() << " min_y: " << bbox_.max_y() << ", min_u: " << min_uu << ", min_v: " << min_vv << vcl_endl;
-  vcl_cout << "max_x: " << bbox_.max_x() << " max_y: " << bbox_.min_y() << ", max_u: " << max_uu << ", max_v: " << max_vv << vcl_endl;
-  vcl_cout << "crop image: " << ci << "x" << cj << ", ni: " << cni << ", nj: " << cnj << vcl_endl;
-  vcl_cout << "original image: " << image.ni() << "x" << image.nj() << vcl_endl;
+  unsigned ci = std::floor(min_uu), cj = std::floor(min_vv);
+  unsigned cni = std::floor(max_uu-min_uu+0.5);
+  unsigned cnj = std::floor(max_vv-min_vv+0.5);
+  std::cout << "min_x: " << bbox_.min_x() << " min_y: " << bbox_.max_y() << ", min_u: " << min_uu << ", min_v: " << min_vv << std::endl;
+  std::cout << "max_x: " << bbox_.max_x() << " max_y: " << bbox_.min_y() << ", max_u: " << max_uu << ", max_v: " << max_vv << std::endl;
+  std::cout << "crop image: " << ci << "x" << cj << ", ni: " << cni << ", nj: " << cnj << std::endl;
+  std::cout << "original image: " << image.ni() << "x" << image.nj() << std::endl;
   vil_image_resource_sptr image_ptr = vil_new_image_resource_of_view(image);
   vil_image_resource_sptr crop_res = vil_crop(image_ptr, ci, cni, cj, cnj);
   vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(crop_res->get_view()));
   vil_image_view<vxl_byte>* crop_img = dynamic_cast<vil_image_view<vxl_byte>*>(out_sptr.ptr());
   // obtain the edge map for each land category
-  vcl_set<unsigned char> land_types;
+  std::set<unsigned char> land_types;
   for (unsigned i = 0; i < crop_img->ni(); i++) {
     for (unsigned j = 0; j < crop_img->nj(); j++) {
       land_types.insert((*crop_img)(i,j));
     }
   }
-  vcl_cout << land_types.size() << " land types are in " << img_type << " image: ";
-  for (vcl_set<unsigned char>::iterator sit = land_types.begin(); sit != land_types.end();  ++sit)
-    vcl_cout << (int)*sit << ", ";
-  vcl_cout << vcl_endl;
+  std::cout << land_types.size() << " land types are in " << img_type << " image: ";
+  for (std::set<unsigned char>::iterator sit = land_types.begin(); sit != land_types.end();  ++sit)
+    std::cout << (int)*sit << ", ";
+  std::cout << std::endl;
   // loop over each land type to add locations
-  for (vcl_set<unsigned char>::iterator sit = land_types.begin(); sit != land_types.end();  ++sit)
+  for (std::set<unsigned char>::iterator sit = land_types.begin(); sit != land_types.end();  ++sit)
   {
     // define the land type
     unsigned char land_id;
@@ -197,7 +199,7 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
     else if (img_type == "geocover")
         land_id = volm_osm_category_io::geo_land_table[*sit].id_;
     else {
-      vcl_cout << "In volm_conf_land_map_indexer, unknown image type: " << img_type << ", only nlcd/NLCD/geocover allowed" << vcl_endl;
+      std::cout << "In volm_conf_land_map_indexer, unknown image type: " << img_type << ", only nlcd/NLCD/geocover allowed" << std::endl;
       return false;
     }
     // ignore the invalid land type
@@ -223,12 +225,12 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
     vil_image_resource_sptr thres_img_res_sptr = vil_new_image_resource_of_view(thres_img_closed);
     detector.SetImage(thres_img_res_sptr);
     detector.DoContour();
-    vcl_vector<vtol_edge_2d_sptr>* edges = detector.GetEdges();
+    std::vector<vtol_edge_2d_sptr>* edges = detector.GetEdges();
     // form the location points
-    vcl_vector<vcl_vector<vsol_point_2d_sptr> > edge_locs;
+    std::vector<std::vector<vsol_point_2d_sptr> > edge_locs;
     for (unsigned e_idx = 0; e_idx < edges->size(); e_idx++)
     {
-      vcl_vector<vsol_point_2d_sptr> edge_loc;
+      std::vector<vsol_point_2d_sptr> edge_loc;
       edge_loc.clear();
       vdgl_digital_curve_sptr dc = ((*edges)[e_idx]->curve())->cast_to_vdgl_digital_curve();
       if (!dc)
@@ -239,8 +241,8 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
       // iterate over each point in the connected edge component
       for (unsigned j = 0; j < ec->size(); j++) {
         vdgl_edgel curr_edgel = ec->edgel(j);
-        unsigned cr_x = vcl_floor(curr_edgel.get_x()+0.5);
-        unsigned cr_y = vcl_floor(curr_edgel.get_y()+0.5);
+        unsigned cr_x = std::floor(curr_edgel.get_x()+0.5);
+        unsigned cr_y = std::floor(curr_edgel.get_y()+0.5);
         if (cr_x == 0 || cr_y == 0 || cr_x == thres_img_closed.ni()-1 || cr_y == thres_img_closed.nj()-1)
           continue;  // ignore the boundary edge
         unsigned oi, oj;
@@ -253,15 +255,15 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
         edge_locs.push_back(edge_loc);
     }
     // upsample the locations to desired density
-    vcl_vector<vcl_vector<vsol_point_2d_sptr> > sampled_edge_locs;
+    std::vector<std::vector<vsol_point_2d_sptr> > sampled_edge_locs;
     for (unsigned e_idx = 0; e_idx < edge_locs.size(); e_idx++) {
-        vcl_vector<vsol_point_2d_sptr> sampled_locs;
+        std::vector<vsol_point_2d_sptr> sampled_locs;
         this->upsample_location_list(edge_locs[e_idx],sampled_locs);
         sampled_edge_locs.push_back(sampled_locs);
     }
     // put the valid locations into database
     for (unsigned e_idx = 0; e_idx < sampled_edge_locs.size(); e_idx++)
-      for (vcl_vector<vsol_point_2d_sptr>::iterator vit = sampled_edge_locs[e_idx].begin();  vit != sampled_edge_locs[e_idx].end(); ++vit)
+      for (std::vector<vsol_point_2d_sptr>::iterator vit = sampled_edge_locs[e_idx].begin();  vit != sampled_edge_locs[e_idx].end(); ++vit)
         this->add_locations(vgl_point_3d<double>((*vit)->x(), (*vit)->y(), height_value), land_id);
   } // end of loop over all possible land id of input image
   return true;
@@ -269,19 +271,18 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
 
 // add locations from a list of location points
 // assume the list of points has constant height
-bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> > const& locs, unsigned char const& land, double const& height, double const& density)
+bool volm_conf_land_map_indexer::add_locations(std::vector<vgl_point_2d<double> > const& locs, unsigned char const& land, double const& height, double const& density)
 {
   // obtain the line segment that lies inside the leaf
-  vcl_vector<vgl_point_2d<double> > locs_in;
+  std::vector<vgl_point_2d<double> > locs_in;
   if (!volm_io_tools::line_inside_the_box(bbox_, locs, locs_in))
     locs_in = locs;
   // upsample the input location lines to desired density
-  unsigned num_locs = locs_in.size();
-  vcl_vector<vsol_point_2d_sptr> in_list;
-  for (vcl_vector<vgl_point_2d<double> >::const_iterator vit = locs_in.begin(); vit != locs_in.end(); ++vit)
+  std::vector<vsol_point_2d_sptr> in_list;
+  for (std::vector<vgl_point_2d<double> >::const_iterator vit = locs_in.begin(); vit != locs_in.end(); ++vit)
     in_list.push_back(new vsol_point_2d(*vit));
 
-  vcl_vector<vsol_point_2d_sptr> out_list;
+  std::vector<vsol_point_2d_sptr> out_list;
   this->upsample_location_list(in_list, out_list, density);
   // put the upsampled locations into database
   for (unsigned i = 0; i < out_list.size(); i++)
@@ -293,7 +294,7 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> >
 bool volm_conf_land_map_indexer::add_locations(vgl_polygon<double> const& poly, unsigned char const& land, double const& height)
 {
   // upsample the input polygon and generate the location list
-  vcl_vector<vsol_point_2d_sptr> out_locs;
+  std::vector<vsol_point_2d_sptr> out_locs;
   this->upsample_region_boundary(poly, out_locs);
   // put the upsampled locations into database
   for (unsigned i = 0; i < out_locs.size(); i++)
@@ -302,26 +303,26 @@ bool volm_conf_land_map_indexer::add_locations(vgl_polygon<double> const& poly, 
 }
 
 // add locations by searching over the intersections inside a line network
-bool volm_conf_land_map_indexer::add_locations(vcl_vector<vcl_vector<vgl_point_2d<double> > > const& lines, vcl_vector<unsigned char> const& lines_prop)
+bool volm_conf_land_map_indexer::add_locations(std::vector<std::vector<vgl_point_2d<double> > > const& lines, std::vector<unsigned char> const& lines_prop)
 {
   if (lines.size() != lines_prop.size()) {
-    vcl_cerr << " In volm_conf_land_map_indexer::add_location: number of defined line properties is unequal to number of lines in the network" << vcl_endl;
+    std::cerr << " In volm_conf_land_map_indexer::add_location: number of defined line properties is unequal to number of lines in the network" << std::endl;
     return false;
   }
   // look for the lines that inside the region
   double max_lx, max_ly, max_lz;
   lvcs_->global_to_local(bbox_.max_x(), bbox_.max_y(), 0.0, vpgl_lvcs::wgs84, max_lx, max_ly, max_lz);
-  vcl_vector<vcl_vector<vgl_point_2d<double> > > lines_in_local;
-  vcl_vector<volm_land_layer> lines_in_prop;
+  std::vector<std::vector<vgl_point_2d<double> > > lines_in_local;
+  std::vector<volm_land_layer> lines_in_prop;
   unsigned n_lines = lines.size();
   for (unsigned r_idx = 0; r_idx < n_lines; r_idx++)
   {
-    vcl_vector<vgl_point_2d<double> > line_global;
+    std::vector<vgl_point_2d<double> > line_global;
     // check and obtain the road segment that lies inside the region
     if (!volm_io_tools::line_inside_the_box(bbox_, lines[r_idx], line_global))
       continue;
     // go from global coord to local coord
-    vcl_vector<vgl_point_2d<double> > line_local;
+    std::vector<vgl_point_2d<double> > line_local;
     for (unsigned p_idx = 0; p_idx < line_global.size(); p_idx++)
     {
       if (!bbox_.contains(line_global[p_idx]))
@@ -340,20 +341,20 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vcl_vector<vgl_point_2
   unsigned n_lines_in = lines_in_local.size();
   for (unsigned r_idx = 0; r_idx < n_lines_in; r_idx++)
   {
-    vcl_vector<vgl_point_2d<double> > curr_line = lines_in_local[r_idx];
+    std::vector<vgl_point_2d<double> > curr_line = lines_in_local[r_idx];
     volm_land_layer curr_prop = lines_in_prop[r_idx];
-    vcl_vector<vcl_vector<vgl_point_2d<double> > > net;
-    vcl_vector<volm_land_layer> net_props;
+    std::vector<std::vector<vgl_point_2d<double> > > net;
+    std::vector<volm_land_layer> net_props;
     for (unsigned i = 0; i < n_lines_in; i++)
       if ( i != r_idx ) {
         net.push_back(lines_in_local[i]);  net_props.push_back(lines_in_prop[i]);
       }
     // find all intersections for current road
-    vcl_vector<vgl_point_2d<double> > cross_pts;
-    vcl_vector<volm_land_layer> cross_props;
-    vcl_vector<volm_land_layer> cross_geo_props;
+    std::vector<vgl_point_2d<double> > cross_pts;
+    std::vector<volm_land_layer> cross_props;
+    std::vector<volm_land_layer> cross_geo_props;
     if (!volm_io_tools::search_junctions(curr_line, curr_prop, net, net_props, cross_pts, cross_props, cross_geo_props)) {
-      vcl_cerr << "In volm_conf_land_map_indexer::add_location: find line intersection failed for line " << r_idx << vcl_endl;
+      std::cerr << "In volm_conf_land_map_indexer::add_location: find line intersection failed for line " << r_idx << std::endl;
       return false;
     }
     // put the intersections points into database
@@ -364,7 +365,7 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vcl_vector<vgl_point_2
       lvcs_->local_to_global(cross_pts[i].x(), cross_pts[i].y(), 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
       if ( volm_osm_category_io::volm_land_table[cross_props[i].id_].name_ == "invalid")
         continue;
-      if ( vcl_find(land_locs_[cross_props[i].id_].begin(), land_locs_[cross_props[i].id_].end(), vgl_point_3d<double>(lon, lat, -1.0)) == land_locs_[cross_props[i].id_].end() )
+      if ( std::find(land_locs_[cross_props[i].id_].begin(), land_locs_[cross_props[i].id_].end(), vgl_point_3d<double>(lon, lat, -1.0)) == land_locs_[cross_props[i].id_].end() )
         this->add_locations(vgl_point_3d<double>(lon, lat, -1.0), cross_props[i].id_);
     }
   }
@@ -372,7 +373,7 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vcl_vector<vgl_point_2
 }
 
 // upsample given list of points
-void volm_conf_land_map_indexer::upsample_location_list(vcl_vector<vsol_point_2d_sptr> const& in_locs, vcl_vector<vsol_point_2d_sptr>& out_locs, double const& density)
+void volm_conf_land_map_indexer::upsample_location_list(std::vector<vsol_point_2d_sptr> const& in_locs, std::vector<vsol_point_2d_sptr>& out_locs, double const& density)
 {
   out_locs.clear();
   // case where there is single location
@@ -385,16 +386,16 @@ void volm_conf_land_map_indexer::upsample_location_list(vcl_vector<vsol_point_2d
   double ori_lon, ori_lat, ori_elev;
   lvcs_->get_origin(ori_lon, ori_lat, ori_elev);
   // transfer location from wgs84 to local coord
-  vcl_vector<vsol_point_2d_sptr> locs;
-  for (vcl_vector<vsol_point_2d_sptr>::const_iterator vit = in_locs.begin();  vit != in_locs.end(); ++vit) {
+  std::vector<vsol_point_2d_sptr> locs;
+  for (std::vector<vsol_point_2d_sptr>::const_iterator vit = in_locs.begin();  vit != in_locs.end(); ++vit) {
     double lx, ly, lz;
     lvcs_->global_to_local((*vit)->x(), (*vit)->y(), ori_elev, vpgl_lvcs::wgs84, lx, ly, lz);
-    locs.push_back(new vsol_point_2d(lx, ly));  
+    locs.push_back(new vsol_point_2d(lx, ly));
   }
 
   // upsample the locations given density_
   unsigned ori_size = locs.size();
-  vcl_vector<vsol_point_2d_sptr> new_locs;
+  std::vector<vsol_point_2d_sptr> new_locs;
   new_locs.push_back(locs[0]);
   for (unsigned i = 1; i < ori_size; i++)
   {
@@ -403,7 +404,7 @@ void volm_conf_land_map_indexer::upsample_location_list(vcl_vector<vsol_point_2d
     double len = seg_vec.length();
     if (len < dist_interval) {
       // insert end point on current segment
-      if (vcl_find(new_locs.begin(), new_locs.end(), locs[i]) == new_locs.end())
+      if (std::find(new_locs.begin(), new_locs.end(), locs[i]) == new_locs.end())
         new_locs.push_back(locs[i]);
       continue;
     }
@@ -413,7 +414,7 @@ void volm_conf_land_map_indexer::upsample_location_list(vcl_vector<vsol_point_2d
       double nx = cnt*dist_interval*unit_vec.x() + locs[i-1]->x();
       double ny = cnt*dist_interval*unit_vec.y() + locs[i-1]->y();
       vsol_point_2d_sptr new_pt = new vsol_point_2d(nx, ny);
-      if (vcl_find(new_locs.begin(), new_locs.end(), new_pt) == new_locs.end())
+      if (std::find(new_locs.begin(), new_locs.end(), new_pt) == new_locs.end())
         new_locs.push_back(new vsol_point_2d(nx, ny));
     }
     // insert end point on current segment
@@ -421,7 +422,7 @@ void volm_conf_land_map_indexer::upsample_location_list(vcl_vector<vsol_point_2d
   }
 
   // transfer back to global coordinates
-  for (vcl_vector<vsol_point_2d_sptr>::iterator vit = new_locs.begin();  vit != new_locs.end(); ++vit) {
+  for (std::vector<vsol_point_2d_sptr>::iterator vit = new_locs.begin();  vit != new_locs.end(); ++vit) {
     double lon, lat, gz;
     lvcs_->local_to_global((*vit)->x(), (*vit)->y(), 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
     out_locs.push_back(new vsol_point_2d(lon, lat));
@@ -430,7 +431,7 @@ void volm_conf_land_map_indexer::upsample_location_list(vcl_vector<vsol_point_2d
 }
 
 // upsample the boundary of a input polygon
-void volm_conf_land_map_indexer::upsample_region_boundary(vgl_polygon<double> const& poly, vcl_vector<vsol_point_2d_sptr>& out_locs, double const& density)
+void volm_conf_land_map_indexer::upsample_region_boundary(vgl_polygon<double> const& poly, std::vector<vsol_point_2d_sptr>& out_locs, double const& density)
 {
   out_locs.clear();
 
@@ -443,10 +444,10 @@ void volm_conf_land_map_indexer::upsample_region_boundary(vgl_polygon<double> co
   {
     unsigned num_vertices = poly[s_idx].size();
     // upsample point 0 to point n-1 line segment
-    vcl_vector<vsol_point_2d_sptr> in_locs;
+    std::vector<vsol_point_2d_sptr> in_locs;
     for (unsigned v_idx = 0; v_idx < num_vertices; v_idx++)
       in_locs.push_back(new vsol_point_2d(poly[s_idx][v_idx]));
-    vcl_vector<vsol_point_2d_sptr> out_list;
+    std::vector<vsol_point_2d_sptr> out_list;
     this->upsample_location_list(in_locs, out_list, density);
 
     for (unsigned i = 0; i < out_list.size(); i++)
@@ -464,20 +465,19 @@ void volm_conf_land_map_indexer::upsample_region_boundary(vgl_polygon<double> co
 }
 
 // visualize locations database in kml
-void volm_conf_land_map_indexer::write_out_kml_locs(vcl_ofstream& ofs,
-                                                    vcl_vector<vgl_point_3d<double> > const& locations, unsigned char land_id,
+void volm_conf_land_map_indexer::write_out_kml_locs(std::ofstream& ofs,
+                                                    std::vector<vgl_point_3d<double> > const& locations, unsigned char land_id,
                                                     double const& size,  bool const& is_write_as_dot) const
 {
-  unsigned num_locs = locations.size();
-  for (unsigned i = 0; i < num_locs; i++)
+  unsigned int num_locs = locations.size();
+  for (unsigned int i = 0; i < num_locs; ++i)
   {
     double lon = locations[i].x();
     double lat = locations[i].y();
     double height = locations[i].z();
-    unsigned char land = land_id;
-    vcl_stringstream name;
-    name << i << "_" << vcl_setprecision(6) << lon << '_' << vcl_setprecision(6) << lat
-         << '_' << vcl_setprecision(6) << height
+    std::stringstream name;
+    name << i << "_" << std::setprecision(6) << lon << '_' << std::setprecision(6) << lat
+         << '_' << std::setprecision(6) << height
          << '_' <<  volm_osm_category_io::volm_land_table[land_id].name_;
     if (is_write_as_dot) {
       vgl_point_2d<double> pt(lon, lat);
@@ -495,41 +495,41 @@ void volm_conf_land_map_indexer::write_out_kml_locs(vcl_ofstream& ofs,
   return;
 }
 
-bool volm_conf_land_map_indexer::write_out_kml(vcl_string const& kml_file, unsigned char const& land_id, double const& size,  bool const& is_write_as_dot) const
+bool volm_conf_land_map_indexer::write_out_kml(std::string const& kml_file, unsigned char const& land_id, double const& size,  bool const& is_write_as_dot) const
 {
   if (land_locs_.find(land_id) == land_locs_.end()) {
-    vcl_cout << "In volm_conf_land_map_indexer: no land id " << (int)land_id << " in database, kml won't be created" << vcl_endl;
+    std::cout << "In volm_conf_land_map_indexer: no land id " << (int)land_id << " in database, kml won't be created" << std::endl;
     return false;
   }
 
-  vcl_ofstream ofs(kml_file.c_str());
+  std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   //// write out the bounding box
   //bkml_write::write_box(ofs, this->box_string(), "", bbox_);
 
   // write out locations
-  vcl_vector<vgl_point_3d<double> > locations = land_locs_.find(land_id)->second;
+  std::vector<vgl_point_3d<double> > locations = land_locs_.find(land_id)->second;
   this->write_out_kml_locs(ofs, locations, land_id, size, is_write_as_dot);
   bkml_write::close_document(ofs);
   ofs.close();
   return true;
 }
 
-bool volm_conf_land_map_indexer::write_out_kml(vcl_string const& kml_file, double const& size,  bool const& is_write_as_dot) const
+bool volm_conf_land_map_indexer::write_out_kml(std::string const& kml_file, double const& size,  bool const& is_write_as_dot) const
 {
   if (land_locs_.empty()) {
-    vcl_cout << "In volm_conf_land_map_indexer: no location in database, kml won't be created" << vcl_endl;
+    std::cout << "In volm_conf_land_map_indexer: no location in database, kml won't be created" << std::endl;
     return false;
   }
-  vcl_ofstream ofs(kml_file.c_str());
+  std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   //// write out the bounding box
   //bkml_write::write_box(ofs, this->box_string(), "", bbox_);
-  // loop over all land type in database to 
+  // loop over all land type in database to
   for (volm_conf_loc_map::const_iterator mit = land_locs_.begin(); mit != land_locs_.end(); ++mit)
   {
     unsigned land_id = mit->first;
-    vcl_vector<vgl_point_3d<double> > locations = mit->second;
+    std::vector<vgl_point_3d<double> > locations = mit->second;
     this->write_out_kml_locs(ofs, locations, land_id, size, is_write_as_dot);
   }
   bkml_write::close_document(ofs);
@@ -538,7 +538,7 @@ bool volm_conf_land_map_indexer::write_out_kml(vcl_string const& kml_file, doubl
 }
 
 // binary write out
-bool volm_conf_land_map_indexer::write_out_bin(vcl_string const& bin_file) const
+bool volm_conf_land_map_indexer::write_out_bin(std::string const& bin_file) const
 {
   if (land_locs_.empty())
     return true;
@@ -582,8 +582,8 @@ void volm_conf_land_map_indexer::b_read(vsl_b_istream& is)
         break;
       }
     default:
-      vcl_cerr << "I/O ERROR: volm_conf_land_map_indexer::b_read(vsl_b_istream&): Unknown version number " << ver << vcl_endl;
-      is.is().clear(vcl_ios::badbit); // set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: volm_conf_land_map_indexer::b_read(vsl_b_istream&): Unknown version number " << ver << std::endl;
+      is.is().clear(std::ios::badbit); // set an unrecoverable IO error on stream
   }
   return;
 }

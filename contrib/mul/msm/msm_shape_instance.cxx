@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "msm_shape_instance.h"
 //:
 // \file
@@ -5,14 +7,13 @@
 // \author Tim Cootes
 
 #include <msm/msm_shape_model.h>
-#include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -20,7 +21,7 @@
 //=======================================================================
 
 msm_shape_instance::msm_shape_instance()
-  : model_(0)
+  : model_(VXL_NULLPTR)
 {
 }
 
@@ -200,7 +201,7 @@ void msm_shape_instance::fit_to_points_wt(const msm_points& pts,
 //: Finds parameters and pose to best match to points
 //  Errors on point i are weighted by wt_mat[i] in target frame
 void msm_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
-                                              const vcl_vector<msm_wt_mat_2d>& wt_mat)
+                                              const std::vector<msm_wt_mat_2d>& wt_mat)
 {
   // Catch case when fitting to self
   if (&pts == &points_) return;
@@ -226,7 +227,7 @@ void msm_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
     // If A is 2x2 scale/rot component, then in model frame
     // error is (A*dx)'*W*(A*dx), thus:
     // wt_mat2[i] = A'*wt_mat[i]*A
-    vcl_vector<msm_wt_mat_2d> wt_mat2(n);
+    std::vector<msm_wt_mat_2d> wt_mat2(n);
     model().aligner().transform_wt_mat(wt_mat,pose_inv,wt_mat2);
 
     ref_shape_.fit_to_points_wt_mat(tmp_points_,wt_mat2);
@@ -255,9 +256,9 @@ short msm_shape_instance::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string msm_shape_instance::is_a() const
+std::string msm_shape_instance::is_a() const
 {
-  return vcl_string("msm_shape_instance");
+  return std::string("msm_shape_instance");
 }
 
 //=======================================================================
@@ -265,7 +266,7 @@ vcl_string msm_shape_instance::is_a() const
 //=======================================================================
 
   // required if data is present in this class
-void msm_shape_instance::print_summary(vcl_ostream& /*os*/) const
+void msm_shape_instance::print_summary(std::ostream& /*os*/) const
 {
 }
 
@@ -297,9 +298,9 @@ void msm_shape_instance::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,pose_);
       break;
     default:
-      vcl_cerr << "msm_shape_instance::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "msm_shape_instance::b_read() :\n"
+               << "Unexpected version number " << version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 
@@ -329,7 +330,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_shape_instance& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_shape_instance& b)
+std::ostream& operator<<(std::ostream& os,const msm_shape_instance& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -339,7 +340,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_shape_instance& b)
 }
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_shape_instance& b)
+void vsl_print_summary(std::ostream& os,const msm_shape_instance& b)
 {
  os << b;
 }

@@ -36,4 +36,4 @@ unsigned long getVMFromString(const char * val);
 char * getFirstValueFromString(const char * & s);
 
 
-#endif 
+#endif

@@ -20,16 +20,16 @@ void test_remove_level0()
                                                                                           scene1->world_dim(), scene1->max_level(), scene1->init_level(),
                                                                                           scene1->load_all_blocks(), scene1->save_internal_nodes());
 
-  vcl_stringstream block_pref;
+  std::stringstream block_pref;
   block_pref << scene1->block_prefix() << "_max_level_"  << (scene1->max_level() - 1);
   scene2->set_paths(scene1->path(), block_pref.str());
   scene2->set_appearance_model(scene1->appearence_model());
 
-  vcl_cout << "Cloning\n";
+  std::cout << "Cloning\n";
   scene1->clone_blocks(*scene2);
-  vcl_cout << "Restructuring\n";
+  std::cout << "Restructuring\n";
   boxm_remove_level_0_leaves(scene2);
-  vcl_cout << "Done\n";
+  std::cout << "Done\n";
 
   //Show contents of the scenes scene
   boxm_block_iterator<boct_tree<short, float> > it1 = scene1->iterator();

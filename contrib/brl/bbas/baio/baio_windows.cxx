@@ -1,10 +1,11 @@
 // This is brl/bbas/baio/baio_windows.cxx
+#include <iostream>
+#include <cstdio>
+#include <cstring>
 #include "baio.h"
 //:
 // \file
-#include <vcl_iostream.h> //for vcl_cout
-#include <vcl_cstdio.h>   //for vcl_perror
-#include <vcl_cstring.h>  //for vcl_memset
+#include <vcl_compiler.h>
 //windows specific includes
 #include <windows.h>
 
@@ -12,7 +13,7 @@
 struct baio_info {
   //: insert status variable and data buffer
   baio_info() {
-    vcl_memset(&o, 0, sizeof(OVERLAPPED));
+    std::memset(&o, 0, sizeof(OVERLAPPED));
     o.Offset = 0;
     o.OffsetHigh = 0;
     o.hEvent = 0;
@@ -39,7 +40,7 @@ baio::~baio()
 }
 
 //: Opens and reads file asynchronously
-bool baio::read(vcl_string filename, char* buffer, long BUFSIZE)
+bool baio::read(std::string filename, char* buffer, long BUFSIZE)
 {
   info_->fhandle = CreateFile(filename.c_str(),
                               FILE_READ_DATA,
@@ -47,27 +48,27 @@ bool baio::read(vcl_string filename, char* buffer, long BUFSIZE)
                               NULL, OPEN_EXISTING,
                               FILE_FLAG_NO_BUFFERING|FILE_FLAG_OVERLAPPED, NULL);
   if (info_->fhandle== INVALID_HANDLE_VALUE) {
-    vcl_cerr<<"baio (Windows)::read could not open file "<<filename<<'\n';
-    vcl_perror("open");
+    std::cerr<<"baio (Windows)::read could not open file "<<filename<<'\n';
+    std::perror("open");
   }
 
   info_->buffer=buffer;
   // 3. Allocate a data buffer for the aiocb request
   if (!info_->buffer) {
-    vcl_cerr<<"baio (Windows)::read could not allocate buffer of size "<<BUFSIZE<<'\n';
-    vcl_perror("malloc");
+    std::cerr<<"baio (Windows)::read could not allocate buffer of size "<<BUFSIZE<<'\n';
+    std::perror("malloc");
   }
   info_->buffer_length_=BUFSIZE;
   //
   DWORD bytesRead = 0;
 
-  vcl_cout << "reading..." << vcl_endl;
+  std::cout << "reading..." << std::endl;
   info_->status = ReadFile(info_->fhandle, info_->buffer, BUFSIZE, &bytesRead, &(info_->o));
   return info_->status;
 }
 
 //: Opens and reads file asynchronously
-bool baio::write(vcl_string filename, char* buffer, long BUFSIZE)
+bool baio::write(std::string filename, char* buffer, long BUFSIZE)
 {
   info_->fhandle = CreateFile(filename.c_str(),
                               FILE_WRITE_DATA,
@@ -75,18 +76,18 @@ bool baio::write(vcl_string filename, char* buffer, long BUFSIZE)
                               NULL, CREATE_ALWAYS,
                               FILE_FLAG_WRITE_THROUGH|FILE_FLAG_OVERLAPPED, NULL);
   if (info_->fhandle== INVALID_HANDLE_VALUE) {
-    vcl_cerr<<"baio (Windows)::read could not open file "<<filename<<'\n';
-    vcl_perror("open");
+    std::cerr<<"baio (Windows)::read could not open file "<<filename<<'\n';
+    std::perror("open");
   }
 
   info_->buffer=buffer;
   if (!info_->buffer) {
-    vcl_cerr<<"baio (Windows)::the buffer does not exist, BUFSIZE = "<<BUFSIZE<<'\n';
+    std::cerr<<"baio (Windows)::the buffer does not exist, BUFSIZE = "<<BUFSIZE<<'\n';
   }
   //
   DWORD byteswritten = 0;
 
-  vcl_cout << "reading..." << vcl_endl;
+  std::cout << "reading..." << std::endl;
   info_->status = WriteFile(info_->fhandle, info_->buffer, BUFSIZE, &byteswritten, &(info_->o));
   return info_->status;
 }

@@ -12,7 +12,8 @@
 // to generate a kernel pdf from the samples.
 // We then estimate the Bhat. overlap with the true pdf.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
@@ -22,10 +23,10 @@
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
 
 //: Compute how well data in x matches true pdf using n different comparators
-void test_comparison(vcl_vector<mbl_stats_1d>& B_stats,
+void test_comparison(std::vector<mbl_stats_1d>& B_stats,
                      const vnl_vector<double>& x,
                      const pdf1d_pdf& true_pdf,
-                     vcl_vector<pdf1d_compare_to_pdf*> comparator)
+                     std::vector<pdf1d_compare_to_pdf*> comparator)
 {
   int n = comparator.size();
   B_stats.resize(n);
@@ -38,10 +39,10 @@ void test_comparison(vcl_vector<mbl_stats_1d>& B_stats,
 }
 
 //: Compute how well data sampled from true_pdf matches true_pdf using n different comparators
-void test_comparison(vcl_vector<mbl_stats_1d>& B_stats,
+void test_comparison(std::vector<mbl_stats_1d>& B_stats,
                      int n_samples, int n_repeats,
                      const pdf1d_pdf& true_pdf,
-                     vcl_vector<pdf1d_compare_to_pdf*> comparator)
+                     std::vector<pdf1d_compare_to_pdf*> comparator)
 {
   vnl_vector<double> x(n_samples);
   pdf1d_sampler *sampler = true_pdf.new_sampler();
@@ -57,29 +58,29 @@ void test_comparison(vcl_vector<mbl_stats_1d>& B_stats,
 
 void test_comparison(int n_samples, int n_trials,
                      const pdf1d_pdf& true_pdf,
-                     vcl_vector<pdf1d_compare_to_pdf*> comparator,
-                     const vcl_vector<vcl_string>& name)
+                     std::vector<pdf1d_compare_to_pdf*> comparator,
+                     const std::vector<std::string>& name)
 {
-  vcl_vector<mbl_stats_1d> B_stats;
+  std::vector<mbl_stats_1d> B_stats;
 
   test_comparison(B_stats,n_samples,n_trials,true_pdf,comparator);
 
-  vcl_cout<<"PDF: "<<true_pdf<<vcl_endl
+  std::cout<<"PDF: "<<true_pdf<<std::endl
           <<"Sampling "<<n_samples
           <<" values from pdf and computing overlap with kernel estimate.\n"
-          <<"Averaging over "<<n_trials<<" trials."<<vcl_endl;
+          <<"Averaging over "<<n_trials<<" trials."<<std::endl;
   for (unsigned int i=0;i<B_stats.size();++i)
   {
-    vcl_cout<<name[i]<<" :\n"
+    std::cout<<name[i]<<" :\n"
             <<"Mean: "<<B_stats[i].mean()
-            <<" Std.Err: "<<B_stats[i].stdError()<<vcl_endl;
+            <<" Std.Err: "<<B_stats[i].stdError()<<std::endl;
   }
 }
 
 int main()
 {
-  vcl_vector<pdf1d_compare_to_pdf*> comparator;
-  vcl_vector<vcl_string> name;
+  std::vector<pdf1d_compare_to_pdf*> comparator;
+  std::vector<std::string> name;
 
 #if 0
   // Set up Gaussian estimator

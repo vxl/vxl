@@ -1,4 +1,6 @@
 // This is core/vgui/vgui_vil_image_renderer.cxx
+#include <iostream>
+#include <cmath>
 #include "vgui_vil_image_renderer.h"
 //:
 // \file
@@ -7,8 +9,7 @@
 //
 // Cut-n-paste and modify from vil1_image_renderer.cxx
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>
@@ -23,7 +24,7 @@
 
 // Only check-in false:
 static const bool debug = false;
-#define trace if (true) { } else vcl_cerr
+#define trace if (true) { } else std::cerr
 
 //#define RENDER_TIMER
 // limit on buffer size 25 Mpix
@@ -31,7 +32,7 @@ static const unsigned buf_limit = 25000000;
 
 vgui_vil_image_renderer::
 vgui_vil_image_renderer()
-  : buffer_( 0 ),  buffer_params_(0), valid_buffer_(false),
+  : buffer_( VXL_NULLPTR ),  buffer_params_(VXL_NULLPTR), valid_buffer_(false),
     x0_(0), y0_(0), w_(1), h_(1), zx_(1.0f), zy_(1.0f), sni_(0), snj_(0)
 {
 }
@@ -49,11 +50,11 @@ set_image_resource( vil_image_resource_sptr const& image )
 {
   // delete old buffer. we could try to reuse it.
   delete buffer_;
-  buffer_ = 0;
+  buffer_ = VXL_NULLPTR;
   valid_buffer_ = false;
   the_image_ = image;
   if ( the_image_ ) {
-    trace << "image : " << the_image_ << vcl_flush;
+    trace << "image : " << the_image_ << std::flush;
   }
 }
 
@@ -71,7 +72,7 @@ vgui_vil_image_renderer::
 reread_image()
 {
   delete buffer_;
-  buffer_ = 0;
+  buffer_ = VXL_NULLPTR;
   valid_buffer_ = false;
 }
 
@@ -83,13 +84,13 @@ create_buffer(vgui_range_map_params_sptr const& rmp)
   //If the image is too large only display the upper left corner
   //as a square region if possible
   unsigned dims =
-    static_cast<unsigned>(vcl_sqrt(static_cast<double>(buf_limit)));
+    static_cast<unsigned>(std::sqrt(static_cast<double>(buf_limit)));
   if (ni*nj>buf_limit)
   {
-    vcl_cerr << "In vgui_vil_image_renderer - image too large, " << ni << 'x' << nj <<", for complete buffer.\n"
+    std::cerr << "In vgui_vil_image_renderer - image too large, " << ni << 'x' << nj <<", for complete buffer.\n"
              << "Rendering only the top left "<< dims << 'x' << dims << " corner\n";
     unsigned dims =
-      static_cast<unsigned>(vcl_sqrt(static_cast<double>(buf_limit)));
+      static_cast<unsigned>(std::sqrt(static_cast<double>(buf_limit)));
     if (ni<dims)
       nj = (buf_limit/ni) -1 ;
     else {ni=dims; nj = dims;}
@@ -124,7 +125,7 @@ create_buffer(vgui_range_map_params_sptr const& rmp,
               vil_image_resource_sptr const& ir)
 {
   delete buffer_;
-  buffer_ = 0;
+  buffer_ = VXL_NULLPTR;
   if (!rmp||!ir)
     return;
 
@@ -243,7 +244,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                                         GL_UNSIGNED_BYTE, hmap, &fLmap))
             {
 #ifdef RENDER_TIMER
-              vcl_cout << "Directly Byte Luminance Rendered in "
+              std::cout << "Directly Byte Luminance Rendered in "
                        << t.real() << "msecs\n";
 #endif
               valid_buffer_ = false;
@@ -294,10 +295,10 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                                         sni_, snj_,
                                         zx_, zy_,
                                         GL_RGB, GL_UNSIGNED_BYTE, hmap,
-                                        0, &fRmap, &fGmap, &fBmap))
+                                        VXL_NULLPTR, &fRmap, &fGmap, &fBmap))
             {
 #ifdef RENDER_TIMER
-              vcl_cout << "Directly Byte RGB Rendered in "
+              std::cout << "Directly Byte RGB Rendered in "
                        << t.real() << "msecs\n";
 #endif
               valid_buffer_ = false;
@@ -331,7 +332,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                                         0, &fRmap, &fGmap, &fBmap, &fAmap))
             {
 #ifdef RENDER_TIMER
-              vcl_cout << "Directly Byte RGBA Rendered in "
+              std::cout << "Directly Byte RGBA Rendered in "
                        << t.real() << "msecs\n";
 #endif
               valid_buffer_ = false;
@@ -394,7 +395,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                                          hmap, &fLmap))
             {
 #ifdef RENDER_TIMER
-              vcl_cout << "ushort Luminance Map Hardware Rendered in "
+              std::cout << "ushort Luminance Map Hardware Rendered in "
                        << t.real() << "msecs\n";
 #endif
               valid_buffer_ = false;

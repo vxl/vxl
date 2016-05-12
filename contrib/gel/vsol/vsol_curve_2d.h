@@ -6,12 +6,12 @@
 // \brief Abstract curve in a 2D space
 //
 // \author
-//  François BERTEL
+//  Francois BERTEL
 //
 // \verbatim
 //  Modifications
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2000/04/27 François BERTEL Creation
+//   2000/04/27 Francois BERTEL Creation
 //   2002/04/22 Amir Tamrakar   Added POLYLINE type
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 //   2004/09/23 MingChing Chang fix name of cast_to functions and added endpoints_equal
@@ -88,39 +88,39 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_line_2d const*cast_to_line()const{return 0;}
-  virtual vsol_line_2d *cast_to_line() {return 0;}
+  virtual vsol_line_2d const*cast_to_line()const{return VXL_NULLPTR;}
+  virtual vsol_line_2d *cast_to_line() {return VXL_NULLPTR;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual dbsol_circ_arc_2d const*cast_to_circ_arc()const{return 0;}
-  virtual dbsol_circ_arc_2d *cast_to_circ_arc() {return 0;}
+  virtual dbsol_circ_arc_2d const*cast_to_circ_arc()const{return VXL_NULLPTR;}
+  virtual dbsol_circ_arc_2d *cast_to_circ_arc() {return VXL_NULLPTR;}
 
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_conic_2d const*cast_to_conic()const{return 0;}
-  virtual vsol_conic_2d *cast_to_conic() {return 0;}
+  virtual vsol_conic_2d const*cast_to_conic()const{return VXL_NULLPTR;}
+  virtual vsol_conic_2d *cast_to_conic() {return VXL_NULLPTR;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a polyline, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_polyline_2d const*cast_to_polyline()const{return 0;}
-  virtual vsol_polyline_2d *cast_to_polyline() {return 0;}
+  virtual vsol_polyline_2d const*cast_to_polyline()const{return VXL_NULLPTR;}
+  virtual vsol_polyline_2d *cast_to_polyline() {return VXL_NULLPTR;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a digital_curve_2d, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_digital_curve_2d const*cast_to_digital_curve()const{return 0;}
-  virtual vsol_digital_curve_2d *cast_to_digital_curve() {return 0;}
+  virtual vsol_digital_curve_2d const*cast_to_digital_curve()const{return VXL_NULLPTR;}
+  virtual vsol_digital_curve_2d *cast_to_digital_curve() {return VXL_NULLPTR;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vdgl_digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vdgl_digital_curve const*cast_to_vdgl_digital_curve()const{return 0;}
-  virtual vdgl_digital_curve *cast_to_vdgl_digital_curve() {return 0;}
+  virtual vdgl_digital_curve const*cast_to_vdgl_digital_curve()const{return VXL_NULLPTR;}
+  virtual vdgl_digital_curve *cast_to_vdgl_digital_curve() {return VXL_NULLPTR;}
 
   //***************************************************************************
   // Status report

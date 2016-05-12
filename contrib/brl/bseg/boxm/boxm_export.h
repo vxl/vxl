@@ -1,9 +1,9 @@
 #ifndef BOXM_EXPORT_H
 #define BOXM_EXPORT_H
 
-#include <vxl_config.h> // get VXL_BUILD_SHARED
+#include <vxl_config.h> // get VXL_BUILD_SHARED_LIBS
 
-#ifndef VXL_BUILD_SHARED  // if not a shared build
+#ifndef VXL_BUILD_SHARED_LIBS  // if not a shared build
 # define boxm_EXPORT_DATA
 #else  // this is a shared build
 # ifdef boxm_EXPORTS  // if building this library

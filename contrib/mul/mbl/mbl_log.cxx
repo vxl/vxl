@@ -9,20 +9,21 @@
 // n.b. We have not copied any code from log4j (or other logging libraries)
 // - just the ideas.
 
+#include <cstddef>
+#include <fstream>
+#include <memory>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <utility>
 #include "mbl_log.h"
-#include <vcl_cstddef.h>
-#include <vcl_fstream.h>
-#include <vcl_memory.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_utility.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 
-vcl_ostream& operator<<(vcl_ostream&os, mbl_logger::levels level)
+std::ostream& operator<<(std::ostream&os, mbl_logger::levels level)
 {
   switch (level)
   {
@@ -64,7 +65,7 @@ vcl_ostream& operator<<(vcl_ostream&os, mbl_logger::levels level)
 }
 
 
-vcl_ostream& operator<<(vcl_ostream&os, const mbl_log_categories::cat_spec& spec)
+std::ostream& operator<<(std::ostream&os, const mbl_log_categories::cat_spec& spec)
 {
   os << "{ level: " << static_cast<mbl_logger::levels>(spec.level);
   switch (spec.output)
@@ -130,7 +131,7 @@ int mbl_log_streambuf::overflow(int ch)
 #endif
 }
 
-vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
+std::streamsize mbl_log_streambuf::xsputn( const char *ptr, std::streamsize nchar)
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
 
@@ -152,7 +153,7 @@ vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
 //: Default constructor only available to root's default logger.
 mbl_logger::mbl_logger():
   level_(NOTICE),
-  output_(new mbl_log_output_stream(vcl_cerr, "")),
+  output_(new mbl_log_output_stream(std::cerr, "")),
   streambuf_(this),
   logstream_(&streambuf_),
   mt_logstream_(&logstream_)
@@ -169,7 +170,7 @@ mbl_logger::~mbl_logger()
   delete output_;
 }
 
-mbl_log_output_stream::mbl_log_output_stream(vcl_ostream& real_stream, const char *id):
+mbl_log_output_stream::mbl_log_output_stream(std::ostream& real_stream, const char *id):
   real_stream_(&real_stream), id_(id), has_started_(false)
 {}
 
@@ -204,7 +205,7 @@ void mbl_log_output_stream::start_with_flush_termination(int level, const char *
   (*real_stream_) << static_cast<mbl_logger::levels>(level) << ": " << id_ << ' ';
 }
 //: add contents to the existing log entry.
-void mbl_log_output_stream::append(const char * contents, vcl_streamsize n_chars)
+void mbl_log_output_stream::append(const char * contents, std::streamsize n_chars)
 {
   // Deal with unfinished log message
   if (!has_started_)
@@ -234,8 +235,8 @@ void mbl_log_output_stream::terminate_flush()
   }
 }
 
-mbl_log_output_file::mbl_log_output_file(const vcl_string &filename, const char *id):
-  file_(filename.c_str(), vcl_ios_app), id_(id), has_started_(false)
+mbl_log_output_file::mbl_log_output_file(const std::string &filename, const char *id):
+  file_(filename.c_str(), std::ios::app), id_(id), has_started_(false)
 {}
 
 //: Start a new log entry, with id info.
@@ -270,7 +271,7 @@ void mbl_log_output_file::start_with_flush_termination(int level, const char *sr
 }
 
 //: add contents to the existing log entry.
-void mbl_log_output_file::append(const char * contents, vcl_streamsize n_chars)
+void mbl_log_output_file::append(const char * contents, std::streamsize n_chars)
 {
   // Deal with unstarted log message
   if (!has_started_)
@@ -312,7 +313,7 @@ static mbl_logger& local_logger()
 #endif
 
 mbl_logger::mbl_logger(const char *id):
-  output_(0),
+  output_(VXL_NULLPTR),
   streambuf_(this),
   logstream_(&streambuf_),
   mt_logstream_(&logstream_)
@@ -374,7 +375,7 @@ void mbl_logger::set(int level, mbl_log_output_base* output)
 //  logstream_.tie(output_.real_stream_);
 }
 
-vcl_ostream &mbl_logger::log(int level, const char * srcfile, int srcline)
+std::ostream &mbl_logger::log(int level, const char * srcfile, int srcline)
 {
   if (level_ < level)
     return root().null_stream_;
@@ -403,10 +404,10 @@ void mbl_logger::mtstop()
 
 mbl_logger_root &mbl_logger::root()
 {
-  static vcl_auto_ptr<mbl_logger_root> root_;
+  static std::auto_ptr<mbl_logger_root> root_;
 
   if (!root_.get())
-    root_ = vcl_auto_ptr<mbl_logger_root>(new mbl_logger_root());
+    root_ = std::auto_ptr<mbl_logger_root>(new mbl_logger_root());
   return *root_;
 }
 
@@ -419,24 +420,24 @@ mbl_logger_root &mbl_logger::root()
 // where LEVEL is an integer - setting the logging level.
 // see mbl_logger:levels for useful values.
 void mbl_logger_root::load_log_config_file(
-  const vcl_map<vcl_string, vcl_ostream *> &stream_names)
+  const std::map<std::string, std::ostream *> &stream_names)
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
   // Make sure this list of mbl_log.properties locations code
   // stays in sync with mul/contrib/tools/print_mbl_log_properties.cxx
-  vcl_ifstream config_file("mbl_log.properties");
+  std::ifstream config_file("mbl_log.properties");
   if (!config_file.is_open())
     config_file.open("~/mbl_log.properties");
   if (!config_file.is_open())
     config_file.open("~/.mbl_log.properties");
   if (!config_file.is_open())
   {
-    vcl_string home1("${HOME}/mbl_log.properties");
-    vcl_string home2("${HOME}/.mbl_log.properties");
-    vcl_string home3("${HOMESHARE}/mbl_log.properties");
-    vcl_string home4("${HOMEDRIVE}${HOMEDIR}/mbl_log.properties");
-    vcl_string home5("${HOMEDRIVE}${HOMEPATH}/mbl_log.properties");
-    vcl_string home6("${USERPROFILE}/mbl_log.properties");
+    std::string home1("${HOME}/mbl_log.properties");
+    std::string home2("${HOME}/.mbl_log.properties");
+    std::string home3("${HOMESHARE}/mbl_log.properties");
+    std::string home4("${HOMEDRIVE}${HOMEDIR}/mbl_log.properties");
+    std::string home5("${HOMEDRIVE}${HOMEPATH}/mbl_log.properties");
+    std::string home6("${USERPROFILE}/mbl_log.properties");
     if (vul_string_expand_var(home1))
       config_file.open(home1.c_str());
     if (!config_file.is_open() && vul_string_expand_var(home2))
@@ -455,7 +456,7 @@ void mbl_logger_root::load_log_config_file(
 
   if (!config_file.is_open())
   {
-    vcl_cerr << "WARNING: No mbl_log.properties file found.\n";
+    std::cerr << "WARNING: No mbl_log.properties file found.\n";
     return;
   }
 
@@ -472,8 +473,8 @@ void mbl_logger_root::load_log_config_file(
 // \endverbatim
 // where LEVEL is an integer - setting the logging level.
 // see mbl_logger:levels for useful values.
-void mbl_logger_root::load_log_config(vcl_istream& is,
-                                      const vcl_map<vcl_string, vcl_ostream *> &stream_names)
+void mbl_logger_root::load_log_config(std::istream& is,
+                                      const std::map<std::string, std::ostream *> &stream_names)
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
   categories_.config(is, stream_names);
@@ -485,7 +486,7 @@ void mbl_logger_root::load_log_config(vcl_istream& is,
 void mbl_logger_root::update_all_loggers()
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
-  for (vcl_set<mbl_logger *>::iterator it=all_loggers_.begin(),
+  for (std::set<mbl_logger *>::iterator it=all_loggers_.begin(),
        end=all_loggers_.end(); it!=end; ++it)
     (*it)->reinitialise();
 #endif
@@ -497,23 +498,23 @@ mbl_log_categories::mbl_log_categories()
   cat_spec default_spec;
   default_spec.level = mbl_logger::NOTICE;
   default_spec.output = cat_spec::NAMED_STREAM;
-  default_spec.name = "vcl_cerr";
-  default_spec.stream = &vcl_cerr;
+  default_spec.name = "std::cerr";
+  default_spec.stream = &std::cerr;
   default_spec.dump_prefix = "";
   cat_list_[""] = default_spec;
 }
 
-typedef vcl_map<vcl_string, vcl_ostream*> stream_names_t;
+typedef std::map<std::string, std::ostream*> stream_names_t;
 
 
-inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
+inline mbl_log_categories::cat_spec parse_cat_spec(const std::string &str,
                                                    const stream_names_t& stream_names)
 {
   mbl_log_categories::cat_spec spec;
-  vcl_istringstream ss(str);
+  std::istringstream ss(str);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
-  vcl_string s = props.get_required_property("level");
+  std::string s = props.get_required_property("level");
   if (s == "NONE")
     spec.level = mbl_logger::NONE;
   else if (s == "EMERG")
@@ -538,7 +539,7 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
   {
     mbl_exception_warning(
       mbl_exception_parse_error(
-        vcl_string("mbl_log_categories.cxx:parse_cat_spec: unknown level: ") + s) );
+        std::string("mbl_log_categories.cxx:parse_cat_spec: unknown level: ") + s) );
     // Default to NOTICE if no exceptions.
     spec.level = mbl_logger::NOTICE;
   }
@@ -555,34 +556,34 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
   else if (props.find("stream_output") != props.end())
   {
     spec.name = "";
-    vcl_string s = props["stream_output"];
+    std::string s = props["stream_output"];
     spec.output = mbl_log_categories::cat_spec::NAMED_STREAM;
     spec.name = s;
     stream_names_t::const_iterator it = stream_names.find(s);
 
-    if (s == "cout" || s == "vcl_cout" || s == "std::cout")
-      spec.stream = &vcl_cout;
-    else if (s == "cerr" || s == "vcl_cerr" || s == "std::cerr")
-      spec.stream = &vcl_cerr;
+    if (s == "cout" || s == "std::cout" || s == "std::cout")
+      spec.stream = &std::cout;
+    else if (s == "cerr" || s == "std::cerr" || s == "std::cerr")
+      spec.stream = &std::cerr;
     else if (it != stream_names.end())
       spec.stream = it->second;
     else
     {
       mbl_exception_warning(
         mbl_exception_parse_error(
-          vcl_string("mbl_log.cxx:parse_cat_spec: unknown stream output name: ")
+          std::string("mbl_log.cxx:parse_cat_spec: unknown stream output name: ")
           + props["stream_output"]) );
       // Default to CERR if no exceptions.
-      spec.stream = &vcl_cerr;
-      spec.name = "vcl_cerr";
+      spec.stream = &std::cerr;
+      spec.name = "std::cerr";
     }
     props.erase("stream_output");
   }
   else
   {
     spec.output = mbl_log_categories::cat_spec::NAMED_STREAM;
-    spec.stream = &vcl_cerr;
-    spec.name = "vcl_cerr";
+    spec.stream = &std::cerr;
+    spec.name = "std::cerr";
   }
 
   mbl_read_props_look_for_unused_props("mbl_log.cxx::parse_cat_spec", props);
@@ -592,7 +593,7 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const vcl_string &str,
 
 //: Configure whole category list from a file.
 // New entries are added to any existing category details.
-void mbl_log_categories::config(vcl_istream&s, const stream_names_t& stream_names)
+void mbl_log_categories::config(std::istream&s, const stream_names_t& stream_names)
 {
   mbl_read_props_type props = mbl_read_props_ws(s);
 
@@ -623,7 +624,7 @@ void mbl_log_categories::clear()
   cat_spec default_spec;
   default_spec.level = mbl_logger::NOTICE;
   default_spec.name = "cerr";
-  default_spec.stream = &vcl_cerr;
+  default_spec.stream = &std::cerr;
   default_spec.output = cat_spec::NAMED_STREAM;
   default_spec.dump_prefix = "";
   cat_list_[""] = default_spec;
@@ -631,10 +632,10 @@ void mbl_log_categories::clear()
 
 struct mbl_log_prefix_comp
 {
-  vcl_string s2;
-  mbl_log_prefix_comp(const vcl_string& s): s2(s) {}
+  std::string s2;
+  mbl_log_prefix_comp(const std::string& s): s2(s) {}
 
-  bool operator() (const vcl_pair<vcl_string, mbl_log_categories::cat_spec>& s1)
+  bool operator() (const std::pair<std::string, mbl_log_categories::cat_spec>& s1)
   {
 // simple version:     return s1.first == s2.substr(0,s1.first.size());
 // However this would allow s1=AA.11 to match against AA.111
@@ -652,23 +653,23 @@ struct mbl_log_prefix_comp
 
 
 const mbl_log_categories::cat_spec&
-  mbl_log_categories::get(const vcl_string& category) const
+  mbl_log_categories::get(const std::string& category) const
 {
-  typedef vcl_map<vcl_string, cat_spec>::const_reverse_iterator iter;
+  typedef std::map<std::string, cat_spec>::const_reverse_iterator iter;
 
-  iter it = vcl_find_if(cat_list_.rbegin(), cat_list_.rend(),
+  iter it = std::find_if(cat_list_.rbegin(), cat_list_.rend(),
                         mbl_log_prefix_comp(category));
   // The search shouldn't get past the first (root) entry.
   assert(it != cat_list_.rend());
 
-  // vcl_cerr << "MBL_LOG: Using category \"" << it->first << '\"' << '\n';
+  // std::cerr << "MBL_LOG: Using category \"" << it->first << '\"' << '\n';
   return it->second;
 }
 
 
-void mbl_log_categories::print(vcl_ostream& os) const
+void mbl_log_categories::print(std::ostream& os) const
 {
-  typedef vcl_map<vcl_string, cat_spec>::const_iterator iter;
+  typedef std::map<std::string, cat_spec>::const_iterator iter;
   assert(!cat_list_.empty());
 
   iter it = cat_list_.begin(), end = cat_list_.end();

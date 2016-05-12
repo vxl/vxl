@@ -9,12 +9,13 @@
 //                               constructors, read/write, and accessors.
 // \endverbatim
 
+#include <cmath>
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_distance.h>
@@ -26,7 +27,7 @@
 
 static double d(double x0, double x1, double y0, double y1)
 {
-  return vcl_sqrt((x0-x1)*(x0-x1) + (y0-y1)*(y0-y1));
+  return std::sqrt((x0-x1)*(x0-x1) + (y0-y1)*(y0-y1));
 }
 
 static bool equals(double x[12], double y[12])
@@ -50,25 +51,25 @@ static void test_constructors()
     TEST( "Copy constructor", equals(data, gold), true );
   }
   {
-    vcl_stringstream ss; ss << "1 2 3 4 5 6 7 8 9 10 11 12";
+    std::stringstream ss; ss << "1 2 3 4 5 6 7 8 9 10 11 12";
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
     vgl_p_matrix<double> P(ss); P.get(data);
     TEST( "Constructor from istream", equals(data, gold), true );
   }
   {
-    vcl_stringstream ss; ss << "1 2 3 4 5 6 7 8 9 10 11 12";
+    std::stringstream ss; ss << "1 2 3 4 5 6 7 8 9 10 11 12";
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
     vgl_p_matrix<double> P; ss >> P; P.get(data);
     TEST( "operator>> from istream", equals(data, gold), true );
   }
   {
-    vcl_stringstream ss; ss << "1 2 3 4 5 6 7 8 9 10 11 12";
+    std::stringstream ss; ss << "1 2 3 4 5 6 7 8 9 10 11 12";
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
     vgl_p_matrix<double> P; P.read_ascii(ss); P.get(data);
     TEST( "read_ascii() method", equals(data, gold), true );
   }
   {
-    vcl_stringstream ss; ss << "1 2 3 4 5 6 7 8 9 10 11 12";
+    std::stringstream ss; ss << "1 2 3 4 5 6 7 8 9 10 11 12";
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
     vgl_p_matrix<double> P = vgl_p_matrix<double>::read(ss); P.get(data);
     TEST( "read() static method", equals(data, gold), true );
@@ -152,7 +153,7 @@ static void test_accessors()
   TEST( "get_rows(vnl_vector 3x)", v1==vnl_double_4(1,0,0,0) && v2==vnl_double_4(0,0.6,0.8,0) && v3==vnl_double_4(0,-0.8,0.6,0), true );
   vnl_double_4 d1, d2, d3; P.get_rows(&d1,&d2,&d3);
   TEST( "get_rows(vnl_double_4 3x)", d1==v1 && d2==v2 && d3==v3, true );
-  vcl_stringstream ss; ss << P;
+  std::stringstream ss; ss << P;
   TEST( "operator<< to ostream", P, vgl_p_matrix<double>(ss) );
   TEST_NEAR( "operator()(point projection)", vgl_distance(P(vgl_homg_point_3d<double>(1.0,2.0,0.0,0.0)),vgl_homg_point_2d<double>(1.0,1.2,-1.6)), 0, 1e-10 );
   TEST( "get_focal()", P.get_focal(), vgl_homg_point_3d<double>(0.0,0.0,0.0,1.0) );
@@ -183,7 +184,7 @@ static void test_homog_product()
 
 static void test_identity_projection()
 {
-  vcl_cout << "Testing identity projection for points\n";
+  std::cout << "Testing identity projection for points\n";
   vgl_homg_point_3d<double> X0(40,20,20,1), X1(10,5,5,1);
   vgl_p_matrix<double> P; P.set_identity();
   //The identity camera
@@ -196,7 +197,7 @@ static void test_identity_projection()
   vgl_homg_point_2d<double> hxa0 = P*X0, hxa1 = P*X1;
   vgl_point_2d<double> x0(hx0), x1(hx1);
   vgl_point_2d<double> x0a(hxa0), x1a(hxa1);
-  vcl_cout << "x0 = " << x0 << '\n'
+  std::cout << "x0 = " << x0 << '\n'
            << "x1 = " << x1 << '\n'
            << "x0a = " << x0a << '\n'
            << "x1a = " << x1a << '\n';
@@ -210,7 +211,7 @@ static void test_identity_projection()
 
 static void test_general_projection()
 {
-  vcl_cout << "Testing general projection for points\n";
+  std::cout << "Testing general projection for points\n";
   // Testing an actual camera projection matrix
   vnl_double_3x4 M;
   M.put(0,0,2.081017567642e-003);
@@ -235,7 +236,7 @@ static void test_general_projection()
 
   vgl_homg_point_2d<double> hx0 = P(X0), hx1 = P(X1);
   vgl_point_2d<double> x0(hx0), x1(hx1);
-  vcl_cout << "x0 = " << x0 << '\n'
+  std::cout << "x0 = " << x0 << '\n'
            << "x1 = " << x1 << '\n';
 // comparing with measured integer pixel coordinates
   double d0 = d(x0.x(), 701, x0.y(), 562);
@@ -245,17 +246,17 @@ static void test_general_projection()
 
 static void test_p_matrix()
 {
-  vcl_cout << "\n==================== test_constructors ====================\n\n";
+  std::cout << "\n==================== test_constructors ====================\n\n";
   test_constructors();
-  vcl_cout << "\n===================== test_accessors ======================\n\n";
+  std::cout << "\n===================== test_accessors ======================\n\n";
   test_accessors();
-  vcl_cout << "\n================ test_identity_projection =================\n\n";
+  std::cout << "\n================ test_identity_projection =================\n\n";
   test_identity_projection();
-  vcl_cout << "\n================= test_general_projection =================\n\n";
+  std::cout << "\n================= test_general_projection =================\n\n";
   test_general_projection();
-  vcl_cout << "\n=================== test_homog_product ====================\n\n";
+  std::cout << "\n=================== test_homog_product ====================\n\n";
   test_homog_product();
-  vcl_cout << "\n===================== test_cheirality =====================\n\n";
+  std::cout << "\n===================== test_cheirality =====================\n\n";
   test_cheirality();
 }
 

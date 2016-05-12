@@ -1,11 +1,13 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 
 #include <bundler/bundler.h>
 
 
 #include <vil/vil_load.h>
-#include <vcl_string.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 
 
 static double dist_sq(
@@ -30,10 +32,10 @@ static const double TOL_SQ = 1.0;
 
 static void test_tracks(int argc, char** argv)
 {
-    vcl_string filepath;
+    std::string filepath;
 
     if (argc < 2) {
-        vcl_cerr << "Supply a test_data directory name (containing files"
+        std::cerr << "Supply a test_data directory name (containing files"
                  << " kermit*.jpg) on the command line!\n";
         TEST("test_tracks", true, false);
 
@@ -44,13 +46,13 @@ static void test_tracks(int argc, char** argv)
     }
 
     //-------------------- Load all the images.
-    vcl_vector<vil_image_resource_sptr> imgs(NUM_IMGS);
-    vcl_vector<double> exif_tags(NUM_IMGS);
+    std::vector<vil_image_resource_sptr> imgs(NUM_IMGS);
+    std::vector<double> exif_tags(NUM_IMGS);
 
     for (int i = 0; i < NUM_IMGS; ++i) {
-        vcl_stringstream str;
+        std::stringstream str;
         str << filepath << "/kermit"
-            << vcl_setw(3) << vcl_setfill('0') << i << ".jpg";
+            << std::setw(3) << std::setfill('0') << i << ".jpg";
 
         imgs[i] = vil_load_image_resource(str.str().c_str(), false);
         exif_tags[i] = BUNDLER_NO_FOCAL_LEN;
@@ -65,8 +67,8 @@ static void test_tracks(int argc, char** argv)
 
     //-------------------- Consistency checks
 
-    vcl_vector<bundler_inters_image_sptr>::const_iterator fs_it;
-    vcl_vector<bundler_inters_track_sptr>::iterator trk_it;
+    std::vector<bundler_inters_image_sptr>::const_iterator fs_it;
+    std::vector<bundler_inters_track_sptr>::iterator trk_it;
 
     //Check the cross-references in the track set
 
@@ -139,7 +141,7 @@ static void test_tracks(int argc, char** argv)
             // tracks, unless this feature doesn't have a track. A feature
             // wouldn't have a track if it is unmatched, so it views a
             // 3D point that no other image contains.
-            if ( (*fs_it)->features[i]->track != NULL) {
+            if ( (*fs_it)->features[i]->track != VXL_NULLPTR) {
                 for (unsigned int j = i+1; j < (*fs_it)->features.size(); ++j) {
                     Assert(
                         "Features in an image come from different tracks.",
@@ -150,17 +152,17 @@ static void test_tracks(int argc, char** argv)
         }
     }
 
-    vcl_vector<bundler_inters_match_set>::const_iterator m;
+    std::vector<bundler_inters_match_set>::const_iterator m;
     for (m = recon.match_sets.begin();
          m != recon.match_sets.end(); ++m)
     {
         for (int i = 0; i < m->num_features(); ++i)
         {
             Assert("Anything in a matched pair has a track (first).",
-                   m->matches[i].first->track != NULL);
+                   m->matches[i].first->track != VXL_NULLPTR);
 
             Assert("Anything in a matched pair has a track (second).",
-                   m->matches[i].second->track != NULL);
+                   m->matches[i].second->track != VXL_NULLPTR);
 
             TEST("A pair of matched features is always in the same track.",
                  m->matches[i].first->track, m->matches[i].second->track);

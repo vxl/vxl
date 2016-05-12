@@ -7,7 +7,9 @@
 // \author J. L. Mundy
 // \date September 18, 2010
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_ray_3d.h>
@@ -98,7 +100,7 @@ class vsph_camera_bounds
                                   double z_plane=0.0);
 
   //: The union of the planar bounding boxes at specific z plane for each camera passed in
-  static bool planar_bounding_box(vcl_vector<vpgl_perspective_camera<double> > const& cams,
+  static bool planar_bounding_box(std::vector<vpgl_perspective_camera<double> > const& cams,
                                   vgl_box_2d<double>& bbox,
                                   double z_plane=0.0);
 
@@ -147,8 +149,8 @@ class principal_ray_scan
  private:
   principal_ray_scan() {}
   int index_;
-  vcl_vector<double> theta_;
-  vcl_vector<double> phi_;
+  std::vector<double> theta_;
+  std::vector<double> phi_;
 };
 
 #endif // vsph_camera_bounds_h_

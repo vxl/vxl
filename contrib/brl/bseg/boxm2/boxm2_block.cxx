@@ -56,23 +56,23 @@ bool boxm2_block::b_read(char* buff)
     long bytes_read = 0;
 
     //0. first 8 bytes denote size
-    vcl_memcpy(&byte_count_, buff, sizeof(byte_count_));
+    std::memcpy(&byte_count_, buff, sizeof(byte_count_));
     bytes_read += sizeof(byte_count_);
 
     //1. read init level, max level, max mb
-    vcl_memcpy(&init_level_, buff+bytes_read, sizeof(init_level_));
+    std::memcpy(&init_level_, buff+bytes_read, sizeof(init_level_));
     bytes_read += sizeof(init_level_);
-    vcl_memcpy(&max_level_, buff+bytes_read, sizeof(max_level_));
+    std::memcpy(&max_level_, buff+bytes_read, sizeof(max_level_));
     bytes_read += sizeof(max_level_);
-    vcl_memcpy(&max_mb_, buff+bytes_read, sizeof(max_mb_));
+    std::memcpy(&max_mb_, buff+bytes_read, sizeof(max_mb_));
     bytes_read += sizeof(max_mb_);
 
     //2. read in sub block dimension, sub block num
     double dims[4];
-    vcl_memcpy(&dims, buff+bytes_read, sizeof(dims));
+    std::memcpy(&dims, buff+bytes_read, sizeof(dims));
     bytes_read += sizeof(dims);
     int    nums[4];
-    vcl_memcpy(&nums, buff+bytes_read, sizeof(nums));
+    std::memcpy(&nums, buff+bytes_read, sizeof(nums));
     bytes_read += sizeof(nums);
     sub_block_dim_ = vgl_vector_3d<double>(dims[0], dims[1], dims[2]);
     sub_block_num_ = vgl_vector_3d<unsigned>(nums[0], nums[1], nums[2]);
@@ -111,24 +111,24 @@ bool boxm2_block::b_write(char* buff)
   if (version_ == 1)
   {
     //0. writing total size
-    vcl_memcpy(buff, &byte_count_, sizeof(byte_count_));
+    std::memcpy(buff, &byte_count_, sizeof(byte_count_));
     bytes_written += sizeof(byte_count_);
 
     //1. write init level, max level, max mb
-    vcl_memcpy(buff+bytes_written, &init_level_, sizeof(init_level_));
+    std::memcpy(buff+bytes_written, &init_level_, sizeof(init_level_));
     bytes_written += sizeof(init_level_);
-    vcl_memcpy(buff+bytes_written, &max_level_, sizeof(max_level_));
+    std::memcpy(buff+bytes_written, &max_level_, sizeof(max_level_));
     bytes_written += sizeof(max_level_);
-    vcl_memcpy(buff+bytes_written, &max_mb_, sizeof(max_mb_));
+    std::memcpy(buff+bytes_written, &max_mb_, sizeof(max_mb_));
     bytes_written += sizeof(max_mb_);
 
     //2. Write sub block dimension, sub block num
     double dims[4] = {sub_block_dim_.x(), sub_block_dim_.y(), sub_block_dim_.z(), 0.0};
-    vcl_memcpy(buff+bytes_written, dims, 4 * sizeof(double));
+    std::memcpy(buff+bytes_written, dims, 4 * sizeof(double));
     bytes_written += 4 * sizeof(double);
 
     unsigned int nums[4] = {sub_block_num_.x(), sub_block_num_.y(), sub_block_num_.z(), 0 };
-    vcl_memcpy(buff+bytes_written, nums, 4 * sizeof(unsigned int));
+    std::memcpy(buff+bytes_written, nums, 4 * sizeof(unsigned int));
   }
   //the arrays themselves should be already in the char buffer, so no need to copy
   return true;
@@ -157,8 +157,8 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata const& data)
   //only 1 buffer, blocks per buffer is all blocks
   num_buffers = 1;
   blocks_per_buffer = total_blocks;
-  vcl_cout<<"Num buffers: "<<num_buffers
-          <<" .. num_trees: "<<blocks_per_buffer<<vcl_endl;
+  std::cout<<"Num buffers: "<<num_buffers
+          <<" .. num_trees: "<<blocks_per_buffer<<std::endl;
 
   //now construct a byte stream, and read in with b_read
   byte_count_ = calc_byte_count(num_buffers, blocks_per_buffer, total_blocks);
@@ -276,9 +276,9 @@ bool boxm2_block::contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<i
   vgl_point_3d<double> p;
   if(!this->contains(global_pt, p))
     return false;
-  int index_x=(int)vcl_floor(p.x());
-  int index_y=(int)vcl_floor(p.y());
-  int index_z=(int)vcl_floor(p.z());
+  int index_x=(int)std::floor(p.x());
+  int index_y=(int)std::floor(p.y());
+  int index_z=(int)std::floor(p.z());
   local_pt.set(index_x, index_y, index_z);
   return true;
 }
@@ -287,9 +287,9 @@ bool boxm2_block::contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<d
                            vgl_point_3d<double>& cell_center, double& side_length) const{
   if(!this->contains(global_pt, local_tree_coords))
     return false;
-  int index_x=(int)vcl_floor(local_tree_coords.x());
-  int index_y=(int)vcl_floor(local_tree_coords.y());
-  int index_z=(int)vcl_floor(local_tree_coords.z());
+  int index_x=(int)std::floor(local_tree_coords.x());
+  int index_y=(int)std::floor(local_tree_coords.y());
+  int index_z=(int)std::floor(local_tree_coords.z());
   if(index_x >= this->trees_.get_row1_count() || index_y >= this->trees_.get_row2_count() || index_z>= this->trees_.get_row3_count())
     return false;
 
@@ -307,9 +307,9 @@ bool boxm2_block::data_index(vgl_point_3d<double> const& global_pt, unsigned& in
   vgl_point_3d<double> loc;
   if(!this->contains(global_pt, loc))
     return false;
-  int index_x=(int)vcl_floor(loc.x());
-  int index_y=(int)vcl_floor(loc.y());
-  int index_z=(int)vcl_floor(loc.z());
+  int index_x=(int)std::floor(loc.x());
+  int index_y=(int)std::floor(loc.y());
+  int index_z=(int)std::floor(loc.z());
   //could be on block boundary so double check array bounds
   if(index_x<0||index_x>=trees_.get_row1_count()) return false;
   if(index_x<0||index_y>=trees_.get_row2_count()) return false;
@@ -328,8 +328,8 @@ bool boxm2_block::data_index(vgl_point_3d<double> const& global_pt, unsigned& in
   return this->data_index(global_pt, index, depth, cell_side_length);
 }
 
-vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global_box){
-  vcl_vector<cell_info> temp;
+std::vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global_box){
+  std::vector<cell_info> temp;
   vgl_box_3d<double> bbox = this->bounding_box_global();
   vgl_box_3d<double> inter = vgl_intersection<double>(global_box, bbox);
   if(inter.is_empty())
@@ -341,13 +341,13 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
   double local_y_min =(min_pt.y()-local_origin_.y())/dy;
   double local_z_min =(min_pt.z()-local_origin_.z())/dz;
 
-  int index_x_min=(int)vcl_floor(local_x_min);
+  int index_x_min=(int)std::floor(local_x_min);
   if(index_x_min<0) index_x_min = 0;
 
-  int index_y_min=(int)vcl_floor(local_y_min);
+  int index_y_min=(int)std::floor(local_y_min);
    if(index_y_min<0) index_y_min = 0;
 
-  int index_z_min=(int)vcl_floor(local_z_min);
+  int index_z_min=(int)std::floor(local_z_min);
   if(index_z_min<0) index_z_min = 0;
 
   vgl_point_3d<double> max_pt = inter.max_point();
@@ -355,15 +355,15 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
   double local_y_max =(max_pt.y()-local_origin_.y())/dy;
   double local_z_max =(max_pt.z()-local_origin_.z())/dz;
 
-  int index_x_max=(int)vcl_floor(local_x_max);
+  int index_x_max=(int)std::floor(local_x_max);
   int nx = static_cast<int>(trees_.get_row1_count());
   if(index_x_max >=nx) index_x_max = nx-1;
 
-  int index_y_max=(int)vcl_floor(local_y_max);
+  int index_y_max=(int)std::floor(local_y_max);
   int ny = static_cast<int>(trees_.get_row2_count());
   if(index_y_max >=ny) index_y_max = ny-1;
 
-  int index_z_max=(int)vcl_floor(local_z_max);
+  int index_z_max=(int)std::floor(local_z_max);
   int nz = static_cast<int>(trees_.get_row3_count());
   if(index_z_max >=nz) index_z_max = nz-1;
 
@@ -377,8 +377,8 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
         vnl_vector_fixed<unsigned char,16> treebits=trees_(ix,iy,iz);
         boct_bit_tree tree(treebits.data_block(),max_level_);
         // iterate over the leaves of the tree
-        vcl_vector<int> leafBits = tree.get_leaf_bits(0,max_level_);
-        vcl_vector<int>::iterator iter;
+        std::vector<int> leafBits = tree.get_leaf_bits(0,max_level_);
+        std::vector<int>::iterator iter;
         for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
            vgl_point_3d<double> localCenter = tree.cell_center(currBitIndex);
@@ -403,15 +403,15 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
   return temp;
 }
 
-vcl_vector<vgl_point_3d<double> > boxm2_block::sub_block_neighbors(vgl_point_3d<double> const& probe, double distance) const{
-  vcl_vector<vgl_point_3d<double> > ret;
+std::vector<vgl_point_3d<double> > boxm2_block::sub_block_neighbors(vgl_point_3d<double> const& probe, double distance) const{
+  std::vector<vgl_point_3d<double> > ret;
   double r = sub_block_dim_.x();//assume cubical tree subblock
-  double dr = vcl_floor(distance/r) + r;// add r as margin for roundoff
+  double dr = std::floor(distance/r) + r;// add r as margin for roundoff
   vgl_box_3d<double> bb = this->bounding_box_global();
 
   // find the voxel center (x0, y0, z0) containing the probe
   vgl_vector_3d<double> loc = (probe-local_origin_)/r;
-  double x0 = vcl_floor(loc.x()), y0 = vcl_floor(loc.y()), z0 = vcl_floor(loc.z());
+  double x0 = std::floor(loc.x()), y0 = std::floor(loc.y()), z0 = std::floor(loc.z());
   x0 = x0*r + local_origin_.x();   y0 = y0*r + local_origin_.y();  z0 = z0*r + local_origin_.z();
   // scan the NxNxN neigborhood around the origin voxel
   for(double x = (x0-dr); x<=(x0+dr); x+=r)
@@ -426,7 +426,7 @@ vcl_vector<vgl_point_3d<double> > boxm2_block::sub_block_neighbors(vgl_point_3d<
       }
   return ret;
 }
-void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double distance, vcl_vector<vgl_point_3d<double> >& nbrs, vcl_vector<double>& nbr_edge_lengths, vcl_vector<unsigned>& data_indices, bool relative_distance) const{
+void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double distance, std::vector<vgl_point_3d<double> >& nbrs, std::vector<double>& nbr_edge_lengths, std::vector<unsigned>& data_indices, bool relative_distance) const{
   nbrs.clear();
   nbr_edge_lengths.clear();
   data_indices.clear();
@@ -436,7 +436,7 @@ void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double dista
   // find the tree index that contains probe
   vgl_vector_3d<double> v0 = probe-local_origin_;
   double dx = v0.x()/sub_block_dim_.x(), dy = v0.y()/sub_block_dim_.y(), dz = v0.z()/sub_block_dim_.z();
-  int ix = static_cast<int>(vcl_floor(dx)), iy = static_cast<int>(vcl_floor(dy)), iz = static_cast<int>(vcl_floor(dz));
+  int ix = static_cast<int>(std::floor(dx)), iy = static_cast<int>(std::floor(dy)), iz = static_cast<int>(std::floor(dz));
 
   // find tree neighborhood radius and relative or absolute neighbor distance
   int dri = static_cast<int>(distance/sub_block_dim_.x()) + 1;// add 1 as margin for roundoff
@@ -465,8 +465,8 @@ void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double dista
         vgl_point_3d<double> subblock_origin = local_origin_ + v;
 
         //iterate through leaves of the tree
-        vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-        for (vcl_vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
+        std::vector<int> leafBits = bit_tree.get_leaf_bits();
+        for (std::vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
           int currBitIndex = (*iter);
           int data_indx = bit_tree.get_data_index(currBitIndex); //data index
           vgl_point_3d<double> cell_pos = bit_tree.cell_center(currBitIndex);
@@ -484,20 +484,20 @@ void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double dista
       }
 }
 
-vcl_vector<vgl_point_3d<int> >  boxm2_block::sub_blocks_intersect_box(vgl_box_3d<double> const& box) const {
-  //vcl_cout << "Box " << box << '\n';
-  vcl_vector<vgl_point_3d<int> > ret;
+std::vector<vgl_point_3d<int> >  boxm2_block::sub_blocks_intersect_box(vgl_box_3d<double> const& box) const {
+  //std::cout << "Box " << box << '\n';
+  std::vector<vgl_point_3d<int> > ret;
   int nx = static_cast<int>(sub_block_num_.x()), ny = static_cast<int>(sub_block_num_.y()), nz = static_cast<int>(sub_block_num_.z());
   vgl_point_3d<double> minp = box.min_point();
   vgl_vector_3d<double> vmin= (minp-local_origin_);
   double x_min = vmin.x()/sub_block_dim_.x(), y_min = vmin.y()/sub_block_dim_.y(), z_min = vmin.z()/sub_block_dim_.z();
-  int ix_min = static_cast<int>(vcl_floor(x_min)), iy_min = static_cast<int>(vcl_floor(y_min)), iz_min = static_cast<int>(vcl_floor(z_min));
+  int ix_min = static_cast<int>(std::floor(x_min)), iy_min = static_cast<int>(std::floor(y_min)), iz_min = static_cast<int>(std::floor(z_min));
   ix_min--; iy_min--; iz_min--; //allow corners to intersect box as origins
 
   vgl_point_3d<double> maxp = box.max_point();
   vgl_vector_3d<double> vmax= (maxp-local_origin_);
   double x_max = vmax.x()/sub_block_dim_.x(), y_max = vmax.y()/sub_block_dim_.y(), z_max = vmax.z()/sub_block_dim_.z();
-  int ix_max = static_cast<int>(vcl_floor(x_max)), iy_max = static_cast<int>(vcl_floor(y_max)), iz_max = static_cast<int>(vcl_floor(z_max));
+  int ix_max = static_cast<int>(std::floor(x_max)), iy_max = static_cast<int>(std::floor(y_max)), iz_max = static_cast<int>(std::floor(z_max));
   ix_max++;   iy_max++;   iz_max++; // allow corners to intersect box as origins
 
   // modify box to include origins below min and above max by 1 box length
@@ -526,7 +526,7 @@ vcl_vector<vgl_point_3d<int> >  boxm2_block::sub_blocks_intersect_box(vgl_box_3d
 }
 
 //------------ I/O -------------------------------------------------------------
-vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block)
+std::ostream& operator <<(std::ostream &s, boxm2_block& block)
 {
   return
   s << "Block ID=" << block.block_id() << '\n'
@@ -536,7 +536,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block)
     << "Max MB=" << block.max_mb() << '\n'
     << "Sub Block Dim=" << block.sub_block_dim() << '\n'
     << "Sub Block Num=" << block.sub_block_num() << '\n'
-    << "Local Origin " << block.local_origin() << vcl_endl;
+    << "Local Origin " << block.local_origin() << std::endl;
 }
 
 //: Binary write boxm2_block to stream.

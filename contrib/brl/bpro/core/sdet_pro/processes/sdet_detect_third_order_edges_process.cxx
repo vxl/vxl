@@ -22,14 +22,14 @@ bool sdet_detect_third_order_edges_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vcl_string");  // path to write output edge map, extention: .edg
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output: [0] output edge image
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
@@ -41,7 +41,7 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
 {
  // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cerr << "dbrec_edge_det_process - invalid inputs\n";
+    std::cerr << "dbrec_edge_det_process - invalid inputs\n";
     return false;
   }
 
@@ -49,7 +49,7 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
   unsigned i = 0;
   vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<vxl_byte> input_image(input_image_sptr);
-  vcl_string out_edg_map_path = pro.get_input<vcl_string>(i++);
+  std::string out_edg_map_path = pro.get_input<std::string>(i++);
 
   //get the parameters
   sdet_third_order_edge_det_params dp;
@@ -68,17 +68,17 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
 
   sdet_third_order_edge_det det(dp);
   if (input_image.nplanes() == 3) {
-    vcl_cout << "Input image has 3 planes, applying color edge detector!\n";
+    std::cout << "Input image has 3 planes, applying color edge detector!\n";
     det.apply_color(input_image);
   }
   else {
     det.apply(input_image);
   }
 
-  vcl_vector<vdgl_edgel> edgels = det.edgels();
+  std::vector<vdgl_edgel> edgels = det.edgels();
 
-  vcl_cout << "done, sigma: " << dp.sigma_ << " thres: " << dp.thresh_ << "!\n"
-           << "#edgels = " << edgels.size() << vcl_endl;
+  std::cout << "done, sigma: " << dp.sigma_ << " thres: " << dp.thresh_ << "!\n"
+           << "#edgels = " << edgels.size() << std::endl;
 
   sdet_third_order_edge_det::save_edg_ascii(out_edg_map_path, input_image.ni(), input_image.nj(), edgels);
 
@@ -128,14 +128,14 @@ bool sdet_detect_third_order_edges_dt_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("int");  // max distance threshold
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output: [0] Distance transform (DT) of output edge image as a byte image
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
@@ -147,7 +147,7 @@ bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 1) {
-    vcl_cerr << "sdet_detect_third_order_edges_dt_process - invalid inputs\n";
+    std::cerr << "sdet_detect_third_order_edges_dt_process - invalid inputs\n";
     return false;
   }
 
@@ -174,15 +174,15 @@ bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
 
   sdet_third_order_edge_det det(dp);
   if (input_image.nplanes() == 3) {
-    vcl_cout << "Input image has 3 planes, applying color edge detector!\n";
+    std::cout << "Input image has 3 planes, applying color edge detector!\n";
     det.apply_color(input_image);
   }
   else {
     det.apply(input_image);
   }
-  vcl_vector<vdgl_edgel> edgels = det.edgels();
+  std::vector<vdgl_edgel> edgels = det.edgels();
 
-  vcl_vector<vsol_line_2d_sptr> line_segs;
+  std::vector<vsol_line_2d_sptr> line_segs;
   det.line_segs(line_segs);
 
   unsigned ni = input_image.ni();

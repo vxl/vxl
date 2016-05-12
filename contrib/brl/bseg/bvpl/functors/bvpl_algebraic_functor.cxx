@@ -3,10 +3,11 @@
 // \author Isabel Restrepo
 // \date 11-Oct-2010
 
+#include <iostream>
+#include <cmath>
 #include "bvpl_algebraic_functor.h"
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 // Default constructor
@@ -31,10 +32,10 @@ void bvpl_algebraic_functor::apply(const float& val, const bvpl_kernel_dispatch&
 float bvpl_algebraic_functor::result()
 {
   float result = result_;
-  
+
   //reset all variables
   init();
-  
+
   return result;
 }
 

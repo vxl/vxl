@@ -1,4 +1,4 @@
-#include <bbgm/bbgm_image_of.txx>
+#include <bbgm/bbgm_image_of.hxx>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_gauss_if3.h>

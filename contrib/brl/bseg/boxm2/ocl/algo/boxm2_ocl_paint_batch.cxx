@@ -1,3 +1,6 @@
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_paint_batch.h"
 //:
 // \file
@@ -14,15 +17,14 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vcl_fstream.h>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <vul/vul_timer.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //: Declare kernels
-vcl_map<vcl_string, bocl_kernel*> boxm2_ocl_paint_batch::kernels_;
+std::map<std::string, bocl_kernel*> boxm2_ocl_paint_batch::kernels_;
 
 //paint block
 void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
@@ -30,7 +32,7 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
                                          boxm2_stream_cache_sptr    str_cache,
                                          boxm2_opencl_cache_sptr    opencl_cache,
                                          cl_command_queue           &queue,
-                                         vcl_string                 data_type,
+                                         std::string                 data_type,
                                          boxm2_block_id             id,
                                          bsta_sigma_normalizer_sptr n_table )
 {
@@ -39,7 +41,7 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   typedef boxm2_data_traits<BOXM2_AUX2>::datatype aux2_datatype;
 
   //grab the device appropriate kernel
-  vcl_string opts = boxm2_ocl_util::mog_options( data_type );
+  std::string opts = boxm2_ocl_util::mog_options( data_type );
   bocl_kernel* kern = compile_kernels(device, opts);
 
   vul_timer t;
@@ -51,34 +53,40 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   boxm2_cache_sptr cache  = opencl_cache->get_cpu_cache();
   boxm2_data_base* alph   = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
   int alphaTypeSize       = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  // check for invalid parameters
+  if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+  {
+    std::cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << std::endl;
+    throw 0;
+  }
   int data_buff_length    = (int) (alph->buffer_length()/alphaTypeSize);
 
   //debuggers--------
   int mogSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   boxm2_data_base* mog_base = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), mogSize*data_buff_length, false);
-  boxm2_data<BOXM2_MOG3_GREY>* mog_data_ = new boxm2_data<BOXM2_MOG3_GREY>(mog_base->data_buffer(), mog_base->buffer_length(), mog_base->block_id());
+  //boxm2_data<BOXM2_MOG3_GREY>* mog_data_ = new boxm2_data<BOXM2_MOG3_GREY>(mog_base->data_buffer(), mog_base->buffer_length(), mog_base->block_id());
   //----------------
 
   //int buffer indicating starting location for each sample
   cl_uint* sampleIndex = new cl_uint[data_buff_length];
   cl_uint  currIdx     = 0;
-  vcl_vector<vxl_byte> all_obs, all_vis;
+  std::vector<vxl_byte> all_obs, all_vis;
 
   //go through each cell, get stats, store
-  vcl_cout<<"  NumIndexes: "<<data_buff_length<<'\n'
+  std::cout<<"  NumIndexes: "<<data_buff_length<<'\n'
           <<"  currIndex: ";
   for (int index = 0; index < data_buff_length; ++index) {
     if (index%10000==0)
-      vcl_cout<<index<<"..."<<vcl_flush;
+      std::cout<<index<<"..."<<std::flush;
 
     //make sure to store the currIDX;
     sampleIndex[index] = currIdx;
 
     //initial data
     vul_timer st;
-    vcl_vector<aux0_datatype> cell_len = str_cache->get_next<BOXM2_AUX0>(id, index);
-    vcl_vector<aux1_datatype> cell_obs = str_cache->get_next<BOXM2_AUX1>(id, index);
-    vcl_vector<aux2_datatype> cell_vis = str_cache->get_next<BOXM2_AUX2>(id, index);
+    std::vector<aux0_datatype> cell_len = str_cache->get_next<BOXM2_AUX0>(id, index);
+    std::vector<aux1_datatype> cell_obs = str_cache->get_next<BOXM2_AUX1>(id, index);
+    std::vector<aux2_datatype> cell_vis = str_cache->get_next<BOXM2_AUX2>(id, index);
     stream_time += st.all();
 
     //push all samples into block
@@ -101,16 +109,16 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
       }
     }
   }
-  vcl_cout<<vcl_endl;
+  std::cout<<std::endl;
 
   //report some buffer sizes
   long totalSize = sizeof(int)*data_buff_length + (all_obs.size()+all_vis.size())*sizeof(vxl_byte);
   unsigned int numSamps = (unsigned int) all_obs.size();
   float time = (float) t.all();
-  vcl_cout<<"  total time: "<<time<<"; "
+  std::cout<<"  total time: "<<time<<"; "
           <<"  num cells: "<<data_buff_length<<"; "
           <<"  num samps: "<<numSamps<<" = "<< (float)(numSamps/data_buff_length)<<" samples per cell (avg)\n"
-          <<"  total size: "<<(float)totalSize/1024.0f/1024.0f<<" mb in "<<t.all()<<" ms ("<<stream_time<<" ms in stream cache)"<<vcl_endl;
+          <<"  total size: "<<(float)totalSize/1024.0f/1024.0f<<" mb in "<<t.all()<<" ms ("<<stream_time<<" ms in stream cache)"<<std::endl;
 
   //-------------------------------------------------------------------------
   //set up input buffers
@@ -144,8 +152,8 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   info_buffer->data_buffer_length = data_buff_length;
   blk_info->write_to_buffer(queue);
   transfer_time += (float) transfer.all();
-  vcl_size_t lThreads[] = {64, 1};
-  vcl_size_t gThreads[] = {RoundUp(data_buff_length,lThreads[0]), 1};
+  std::size_t lThreads[] = {64, 1};
+  std::size_t gThreads[] = {RoundUp(data_buff_length,lThreads[0]), 1};
 
   //set first kernel args
   kern->set_arg( blk_info );
@@ -165,11 +173,11 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   mog->read_to_buffer(queue);
   gpu_time += kern->exec_time();
 
-  vcl_cout<<" Batch paint block GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
+  std::cout<<" Batch paint block GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<std::endl;
 
   // clean up cmdqueue
   opencl_cache->clear_cache();
-  vcl_cout<<"Opencl Cache: "<<opencl_cache->to_string()<<vcl_endl;
+  std::cout<<"Opencl Cache: "<<opencl_cache->to_string()<<std::endl;
   clReleaseCommandQueue(queue);
   delete[] sampleIndex;
 }
@@ -177,17 +185,17 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
 
 //: Keeps track of already compiled kernels, and returns matching ones
 bocl_kernel* boxm2_ocl_paint_batch::compile_kernels( bocl_device_sptr device,
-                                                     vcl_string       opts )
+                                                     std::string       opts )
 {
   //make id out of device
-  vcl_string identifier = device->device_identifier();
+  std::string identifier = device->device_identifier();
   if ( kernels_.find(identifier) != kernels_.end() )
     return kernels_[identifier];
 
-  vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+  std::cout<<"===========Compiling kernels==========="<<std::endl;
   //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "cell_utils.cl");
   src_paths.push_back(source_dir + "statistics_library_functions.cl");

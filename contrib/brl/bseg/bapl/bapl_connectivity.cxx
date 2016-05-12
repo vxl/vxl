@@ -1,4 +1,7 @@
 // This is brl/bseg/bapl/bapl_connectivity.cxx
+#include <iostream>
+#include <algorithm>
+#include <queue>
 #include "bapl_connectivity.h"
 //:
 // \file
@@ -7,8 +10,7 @@
 #include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_keypoint.h>
-#include <vcl_algorithm.h>
-#include <vcl_queue.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: For sorting keypoint_match_sets
@@ -30,8 +32,8 @@ bool bapl_conn_table::add_sym(bapl_keypoint_match_set_sptr set)
   conn.insert(p, set);
 
   //: reverse the match set
-  vcl_vector<bapl_key_match>& matches = set->matches_;
-  vcl_vector<bapl_key_match> reversed_matches;
+  std::vector<bapl_key_match>& matches = set->matches_;
+  std::vector<bapl_key_match> reversed_matches;
   for (unsigned i = 0; i < matches.size(); i++) {
     bapl_key_match key(matches[i].second, matches[i].first);
     reversed_matches.push_back(key);
@@ -64,8 +66,8 @@ void bapl_conn_table::make_symmetric()
     for (unsigned j = 0; j < conn.size(); j++) {
       bapl_keypoint_match_set_sptr ms = conn[j];
       //: reverse the match set
-      vcl_vector<bapl_key_match>& matches = ms->matches_;
-      vcl_vector<bapl_key_match> reversed_matches;
+      std::vector<bapl_key_match>& matches = ms->matches_;
+      std::vector<bapl_key_match> reversed_matches;
       for (unsigned i = 0; i < matches.size(); i++) {
         bapl_key_match key(matches[i].second, matches[i].first);
         reversed_matches.push_back(key);
@@ -82,41 +84,41 @@ void bapl_conn_table::make_symmetric()
 bool bapl_conn_table::contains(int id1, int id2)
 {
   bapl_conn& conn = conns_[id1];
-  vcl_vector<bapl_key_match> matches; // dummy vector
+  std::vector<bapl_key_match> matches; // dummy vector
   bapl_keypoint_match_set_sptr e = new bapl_keypoint_match_set(id1, id2, matches);
-  vcl_pair<bapl_conn::const_iterator, bapl_conn::const_iterator> p = equal_range(conn.begin(), conn.end(), e, second_less);
+  std::pair<bapl_conn::const_iterator, bapl_conn::const_iterator> p = equal_range(conn.begin(), conn.end(), e, second_less);
   return p.first != p.second; // true if not points to the end, false otherwise
 }
 
 void bapl_conn_table::print_table()
 {
   for (unsigned i = 0; i < conns_.size(); i++) {
-    vcl_vector<bapl_keypoint_match_set_sptr> conn = conns_[i];
+    std::vector<bapl_keypoint_match_set_sptr> conn = conns_[i];
     int crnt_id = 0;
     for (unsigned j = 0; j < conn.size(); j++) {
       int id2 = conn[j]->id_right_;
       while (id2 > crnt_id) {
-        vcl_cout << "0 ";
+        std::cout << "0 ";
         crnt_id++;
       }
-      vcl_cout << conn[j]->matches_.size() << ' ';
+      std::cout << conn[j]->matches_.size() << ' ';
       crnt_id++;
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 }
 
 void bapl_conn_table::print_table_with_matches()
 {
   for (unsigned i = 0; i < conns_.size(); i++) {
-    vcl_vector<bapl_keypoint_match_set_sptr> conn = conns_[i];
+    std::vector<bapl_keypoint_match_set_sptr> conn = conns_[i];
     for (unsigned j = 0; j < conn.size(); j++) {
-      vcl_cout << conn[j]->id_left_ << ' ' << conn[j]->id_right_ << '\n'
+      std::cout << conn[j]->id_left_ << ' ' << conn[j]->id_right_ << '\n'
                << conn[j]->matches_.size() << '\n';
       for (unsigned k = 0; k < conn[j]->matches_.size(); k++) {
-        vcl_cout << conn[j]->matches_[k].first->id() << ' ' << conn[j]->matches_[k].second->id() << '\n';
+        std::cout << conn[j]->matches_[k].first->id() << ' ' << conn[j]->matches_[k].second->id() << '\n';
       }
-      vcl_cout << '\n';
+      std::cout << '\n';
     }
   }
 }
@@ -134,13 +136,13 @@ bool compare_first(const bapl_key_match &k1, const bapl_key_match &k2)
 
 //: compute a set of tracks, each corresponding to a separate 3d point.
 //  assumes a symmetric connectivity table
-bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int new_image_start)
+bool bapl_conn_table::compute_tracks(std::vector<bapl_track_data>& tracks, int new_image_start)
 {
   unsigned num_images = conns_.size();
   //: check if image data is set for each image
   for (unsigned i = 0; i < num_images; i++) {
     if (!img_data_[i]) {
-      vcl_cout << "Data of img: " << i << " has not been set!\n";
+      std::cout << "Data of img: " << i << " has not been set!\n";
       return false;
     }
   }
@@ -163,13 +165,13 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
   for (unsigned i = 0; i < num_images; i++) {
     bapl_conn& conn = conns_[i];
     for (unsigned j = 0; j < conn.size(); j++) {
-      vcl_vector<bapl_key_match>& matches = conn[j]->matches_;
-      vcl_sort(matches.begin(), matches.end(), compare_first);
+      std::vector<bapl_key_match>& matches = conn[j]->matches_;
+      std::sort(matches.begin(), matches.end(), compare_first);
     }
   }
 
-  vcl_vector<bool> img_visited(num_images, false);
-  vcl_vector<int> img_touched;
+  std::vector<bool> img_visited(num_images, false);
+  std::vector<int> img_touched;
   img_touched.reserve(num_images);
 
   for (unsigned int i = 0; i < num_images; i++) {
@@ -184,7 +186,7 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
     for (int j = 0; j < num_features; j++) {
       bapl_keypoint_sptr kp = img_data_[i]->keys_[j];
       bapl_image_key_vector features;
-      vcl_queue<bapl_image_key> features_queue;
+      std::queue<bapl_image_key> features_queue;
 
       if (img_data_key_flags_[i][j])
        continue; // already visited this feature
@@ -227,7 +229,7 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
             continue;
 
           // binary search for the feature
-          vcl_pair<vcl_vector<bapl_key_match>::iterator, vcl_vector<bapl_key_match>::iterator > p;
+          std::pair<std::vector<bapl_key_match>::iterator, std::vector<bapl_key_match>::iterator > p;
           p = equal_range((*iter)->matches_.begin(), (*iter)->matches_.end(), dummy, compare_first);
 
           if (p.first == p.second)  continue;
@@ -255,14 +257,14 @@ bool bapl_conn_table::compute_tracks(vcl_vector<bapl_track_data>& tracks, int ne
     }
   } // for loop over images
 
-  vcl_cout << "Found " << tracks.size() << " points!\n";
+  std::cout << "Found " << tracks.size() << " points!\n";
   assert(pt_idx == (int) tracks.size());
 
   return true;
 }
 
 //: Print tracks as correspondences in BWM_VIDEO_SITE format for visualization
-void print_tracks(vcl_ostream& os, vcl_vector<bapl_track_data>& tracks, int img_width, int img_height)
+void print_tracks(std::ostream& os, std::vector<bapl_track_data>& tracks, int img_width, int img_height)
 {
   os << "<BWM_VIDEO_SITE name=\"\">\n"
      << "<videoPath path=\"\">\n</videoPath>\n"
@@ -291,10 +293,10 @@ void print_tracks(vcl_ostream& os, vcl_vector<bapl_track_data>& tracks, int img_
 
 
 //: Print a summary of the connectivity data to a stream
-vcl_ostream& operator<< (vcl_ostream& os, bapl_conn_table const & t)
+std::ostream& operator<< (std::ostream& os, bapl_conn_table const & t)
 {
   for (unsigned i = 0; i < t.conns_.size() ; i++) {
-    os << "img("<< i << ") number of neighbors: " << t.conns_[i].size() << vcl_endl;
+    os << "img("<< i << ") number of neighbors: " << t.conns_[i].size() << std::endl;
   }
   return os;
 }
@@ -303,13 +305,13 @@ vcl_ostream& operator<< (vcl_ostream& os, bapl_conn_table const & t)
 //: Binary io, NOT IMPLEMENTED, signatures defined to use bapl_keypoint_set as a brdb_value
 void vsl_b_write(vsl_b_ostream & /*os*/, bapl_conn_table const & /*ph*/)
 {
-  vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
+  std::cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
 }
 
 void vsl_b_read(vsl_b_istream & /*is*/, bapl_conn_table & /*ph*/)
 {
-  vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
+  std::cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value\n";
   return;
 }
 
@@ -324,12 +326,12 @@ void vsl_b_read(vsl_b_istream& is, bapl_conn_table* ph)
     vsl_b_read(is, *ph);
   }
   else
-    ph = 0;
+    ph = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const bapl_conn_table* &ph)
 {
-  if (ph==0)
+  if (ph==VXL_NULLPTR)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }

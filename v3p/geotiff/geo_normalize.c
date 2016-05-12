@@ -234,9 +234,9 @@ int GTIFGetPCSInfo( int nPCSCode, char **ppszEPSGName,
                     short *pnProjOp, short *pnUOMLengthCode,
                     short *pnGeogCS )
 {
-    char	**papszRecord;
-    char	szSearchKey[24];
-    const char	*pszFilename = CSVFilename( "pcs.csv" );
+    char        **papszRecord;
+    char        szSearchKey[24];
+    const char        *pszFilename = CSVFilename( "pcs.csv" );
 
 /* -------------------------------------------------------------------- */
 /*      Search the units database for this unit.  If we don't find      */
@@ -265,7 +265,7 @@ int GTIFGetPCSInfo( int nPCSCode, char **ppszEPSGName,
 /* -------------------------------------------------------------------- */
     if( pnUOMLengthCode != NULL )
     {
-        const char	*pszValue;
+        const char        *pszValue;
 
         pszValue =
             CSLGetField( papszRecord,
@@ -281,7 +281,7 @@ int GTIFGetPCSInfo( int nPCSCode, char **ppszEPSGName,
 /* -------------------------------------------------------------------- */
     if( pnProjOp != NULL )
     {
-        const char	*pszValue;
+        const char        *pszValue;
 
         pszValue =
             CSLGetField( papszRecord,
@@ -297,7 +297,7 @@ int GTIFGetPCSInfo( int nPCSCode, char **ppszEPSGName,
 /* -------------------------------------------------------------------- */
     if( pnGeogCS != NULL )
     {
-        const char	*pszValue;
+        const char        *pszValue;
 
         pszValue =
             CSLGetField( papszRecord,
@@ -319,16 +319,16 @@ int GTIFGetPCSInfo( int nPCSCode, char **ppszEPSGName,
 
 double GTIFAngleToDD( double dfAngle, int nUOMAngle )
 {
-    if( nUOMAngle == 9110 )	/* DDD.MMSSsss */
+    if( nUOMAngle == 9110 )        /* DDD.MMSSsss */
     {
-        char	szAngleString[32];
+        char        szAngleString[32];
 
         sprintf( szAngleString, "%12.7f", dfAngle );
         dfAngle = GTIFAngleStringToDD( szAngleString, nUOMAngle );
     }
     else
     {
-        double	dfInDegrees = 1.0;
+        double        dfInDegrees = 1.0;
 
         GTIFGetUOMAngleInfo( nUOMAngle, NULL, &dfInDegrees );
         dfAngle = dfAngle * dfInDegrees;
@@ -345,18 +345,18 @@ double GTIFAngleToDD( double dfAngle, int nUOMAngle )
 
 double GTIFAngleStringToDD( const char * pszAngle, int nUOMAngle )
 {
-    double	dfAngle;
+    double        dfAngle;
 
-    if( nUOMAngle == 9110 )	/* DDD.MMSSsss */
+    if( nUOMAngle == 9110 )        /* DDD.MMSSsss */
     {
-        char	*pszDecimal;
+        char        *pszDecimal;
 
         dfAngle = ABS(atoi(pszAngle));
         pszDecimal = strchr(pszAngle,'.');
         if( pszDecimal != NULL && strlen(pszDecimal) > 1 )
         {
-            char	szMinutes[3];
-            char	szSeconds[64];
+            char        szMinutes[3];
+            char        szSeconds[64];
 
             szMinutes[0] = pszDecimal[1];
             if( pszDecimal[2] >= '0' && pszDecimal[2] <= '9' )
@@ -388,19 +388,19 @@ double GTIFAngleStringToDD( const char * pszAngle, int nUOMAngle )
         if( pszAngle[0] == '-' )
             dfAngle *= -1;
     }
-    else if( nUOMAngle == 9105 || nUOMAngle == 9106 )	/* grad */
+    else if( nUOMAngle == 9105 || nUOMAngle == 9106 )        /* grad */
     {
         dfAngle = 180 * (atof(pszAngle ) / 200);
     }
-    else if( nUOMAngle == 9101 )	/* radians */
+    else if( nUOMAngle == 9101 )        /* radians */
     {
         dfAngle = 180 * (atof(pszAngle ) / PI);
     }
-    else if( nUOMAngle == 9103 )	/* arc-minute */
+    else if( nUOMAngle == 9103 )        /* arc-minute */
     {
         dfAngle = atof(pszAngle) / 60;
     }
-    else if( nUOMAngle == 9104 )	/* arc-second */
+    else if( nUOMAngle == 9104 )        /* arc-second */
     {
         dfAngle = atof(pszAngle) / 3600;
     }
@@ -425,8 +425,8 @@ double GTIFAngleStringToDD( const char * pszAngle, int nUOMAngle )
 int GTIFGetGCSInfo( int nGCSCode, char ** ppszName,
                     short * pnDatum, short * pnPM, short *pnUOMAngle )
 {
-    char	szSearchKey[24];
-    int 	nDatum, nPM, nUOMAngle;
+    char        szSearchKey[24];
+    int         nDatum, nPM, nUOMAngle;
 
 /* -------------------------------------------------------------------- */
 /*      Search the database for the corresponding datum code.           */
@@ -535,9 +535,9 @@ int GTIFGetGCSInfo( int nGCSCode, char ** ppszName,
 int GTIFGetEllipsoidInfo( int nEllipseCode, char ** ppszName,
                           double * pdfSemiMajor, double * pdfSemiMinor )
 {
-    char	szSearchKey[24];
-    double	dfSemiMajor, dfToMeters = 1.0;
-    int 	nUOMLength;
+    char        szSearchKey[24];
+    double        dfSemiMajor, dfToMeters = 1.0;
+    int         nUOMLength;
 
 /* -------------------------------------------------------------------- */
 /*      Get the semi major axis.                                        */
@@ -627,7 +627,7 @@ int GTIFGetEllipsoidInfo( int nEllipseCode, char ** ppszName,
 
         if( *pdfSemiMinor == 0.0 )
         {
-            double	dfInvFlattening;
+            double        dfInvFlattening;
 
             dfInvFlattening =
                 atof(CSVGetField( CSVFilename("ellipsoid.csv" ),
@@ -658,8 +658,8 @@ int GTIFGetEllipsoidInfo( int nEllipseCode, char ** ppszName,
 
 int GTIFGetPMInfo( int nPMCode, char ** ppszName, double *pdfOffset )
 {
-    char	szSearchKey[24];
-    int 	nUOMAngle;
+    char        szSearchKey[24];
+    int         nUOMAngle;
     const char *pszFilename = CSVFilename("prime_meridian.csv");
 
 /* -------------------------------------------------------------------- */
@@ -720,8 +720,8 @@ int GTIFGetPMInfo( int nPMCode, char ** ppszName, double *pdfOffset )
 
 int GTIFGetDatumInfo( int nDatumCode, char ** ppszName, short * pnEllipsoid )
 {
-    char	szSearchKey[24];
-    int 	nEllipsoid;
+    char        szSearchKey[24];
+    int         nEllipsoid;
     const char *pszFilename = CSVFilename( "datum.csv" );
     FILE       *fp;
 
@@ -809,9 +809,9 @@ int GTIFGetUOMLengthInfo( int nUOMLengthCode,
                           char **ppszUOMName,
                           double * pdfInMeters )
 {
-    char	**papszUnitsRecord;
-    char	szSearchKey[24];
-    int 	iNameField;
+    char        **papszUnitsRecord;
+    char        szSearchKey[24];
+    int         iNameField;
     const char *pszFilename;
 
 /* -------------------------------------------------------------------- */
@@ -857,7 +857,7 @@ int GTIFGetUOMLengthInfo( int nUOMLengthCode,
 /* -------------------------------------------------------------------- */
     if( pdfInMeters != NULL )
     {
-        int	iBFactorField, iCFactorField;
+        int        iBFactorField, iCFactorField;
 
         iBFactorField = CSVGetFileFieldId( pszFilename, "FACTOR_B" );
         iCFactorField = CSVGetFileFieldId( pszFilename, "FACTOR_C" );
@@ -880,10 +880,10 @@ int GTIFGetUOMAngleInfo( int nUOMAngleCode,
                          char **ppszUOMName,
                          double * pdfInDegrees )
 {
-    const char	*pszUOMName = NULL;
-    double	dfInDegrees = 1.0;
+    const char        *pszUOMName = NULL;
+    double        dfInDegrees = 1.0;
     const char *pszFilename = CSVFilename( "unit_of_measure.csv" );
-    char	szSearchKey[24];
+    char        szSearchKey[24];
 
     sprintf( szSearchKey, "%d", nUOMAngleCode );
     pszUOMName = CSVGetField( pszFilename,
@@ -1196,9 +1196,9 @@ int GTIFGetProjTRFInfo( /* COORD_OP_CODE from coordinate_operation.csv */
                         short * pnProjMethod,
                         double * padfProjParms )
 {
-    int 	nProjMethod, i, anEPSGCodes[7];
-    double	adfProjParms[7];
-    char	szTRFCode[16];
+    int         nProjMethod, i, anEPSGCodes[7];
+    double        adfProjParms[7];
+    char        szTRFCode[16];
     int         nCTProjMethod;
     char       *pszFilename = CPLStrdup(CSVFilename("projop_wparm.csv"));
 
@@ -1883,9 +1883,9 @@ system.<p>
 
 int GTIFGetDefn( GTIF * psGTIF, GTIFDefn * psDefn )
 {
-    int 	i;
-    short	nGeogUOMLinear;
-    double	dfInvFlattening;
+    int         i;
+    short        nGeogUOMLinear;
+    double        dfInvFlattening;
 
 /* -------------------------------------------------------------------- */
 /*      Initially we default all the information we can.                */
@@ -1949,8 +1949,8 @@ int GTIFGetDefn( GTIF * psGTIF, GTIFDefn * psDefn )
 /* -------------------------------------------------------------------- */
     if( psDefn->PCS != KvUserDefined && psDefn->ProjCode == KvUserDefined )
     {
-        int	nMapSys, nZone;
-        int	nGCS = psDefn->GCS;
+        int        nMapSys, nZone;
+        int        nGCS = psDefn->GCS;
 
         nMapSys = GTIFPCSToMapSys( psDefn->PCS, &nGCS, &nZone );
         if( nMapSys != KvUserDefined )
@@ -2153,13 +2153,13 @@ int GTIFGetDefn( GTIF * psGTIF, GTIFDefn * psDefn )
 const char *GTIFDecToDMS( double dfAngle, const char * pszAxis,
                           int nPrecision )
 {
-    int 	nDegrees, nMinutes;
-    double	dfSeconds;
-    char	szFormat[30];
+    int         nDegrees, nMinutes;
+    double        dfSeconds;
+    char        szFormat[30];
     static char szBuffer[50];
-    const char	*pszHemisphere = NULL;
-    double	dfRound;
-    int 	i;
+    const char        *pszHemisphere = NULL;
+    double        dfRound;
+    int         i;
 
     dfRound = 0.5/60;
     for( i = 0; i < nPrecision; i++ )
@@ -2199,7 +2199,7 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 /* -------------------------------------------------------------------- */
     if( psDefn->PCS != KvUserDefined )
     {
-        char	*pszPCSName = NULL;
+        char        *pszPCSName = NULL;
 
         GTIFGetPCSInfo( psDefn->PCS, &pszPCSName, NULL, NULL, NULL );
         if( pszPCSName == NULL )
@@ -2214,7 +2214,7 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 /* -------------------------------------------------------------------- */
     if( psDefn->ProjCode != KvUserDefined )
     {
-        char	*pszTRFName = NULL;
+        char        *pszTRFName = NULL;
 
         GTIFGetProjTRFInfo( psDefn->ProjCode, &pszTRFName, NULL, NULL );
         if( pszTRFName == NULL )
@@ -2231,8 +2231,8 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 /* -------------------------------------------------------------------- */
     if( psDefn->CTProjection != KvUserDefined )
     {
-        char	*pszName = GTIFValueName(ProjCoordTransGeoKey,
-            	                         psDefn->CTProjection);
+        char        *pszName = GTIFValueName(ProjCoordTransGeoKey,
+                                             psDefn->CTProjection);
         int     i;
 
         if( pszName == NULL )
@@ -2251,7 +2251,7 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 
             if( i < 4 )
             {
-                char	*pszAxisName;
+                char        *pszAxisName;
 
                 if( strstr(pszName,"Long") != NULL )
                     pszAxisName = "Long";
@@ -2276,7 +2276,7 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 /* -------------------------------------------------------------------- */
     if( psDefn->GCS != KvUserDefined )
     {
-        char	*pszName = NULL;
+        char        *pszName = NULL;
 
         GTIFGetGCSInfo( psDefn->GCS, &pszName, NULL, NULL, NULL );
         if( pszName == NULL )
@@ -2291,7 +2291,7 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 /* -------------------------------------------------------------------- */
     if( psDefn->Datum != KvUserDefined )
     {
-        char	*pszName = NULL;
+        char        *pszName = NULL;
 
         GTIFGetDatumInfo( psDefn->Datum, &pszName, NULL );
         if( pszName == NULL )
@@ -2306,7 +2306,7 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 /* -------------------------------------------------------------------- */
     if( psDefn->Ellipsoid != KvUserDefined )
     {
-        char	*pszName = NULL;
+        char        *pszName = NULL;
 
         GTIFGetEllipsoidInfo( psDefn->Ellipsoid, &pszName, NULL, NULL );
         if( pszName == NULL )
@@ -2323,7 +2323,7 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 /* -------------------------------------------------------------------- */
     if( psDefn->PM != KvUserDefined )
     {
-        char	*pszName = NULL;
+        char        *pszName = NULL;
 
         GTIFGetPMInfo( psDefn->PM, &pszName, NULL );
 
@@ -2343,7 +2343,7 @@ void GTIFPrintDefn( GTIFDefn * psDefn, FILE * fp )
 /* -------------------------------------------------------------------- */
     if( psDefn->UOMLength != KvUserDefined )
     {
-        char	*pszName = NULL;
+        char        *pszName = NULL;
 
         GTIFGetUOMLengthInfo( psDefn->UOMLength, &pszName, NULL );
         if( pszName == NULL )

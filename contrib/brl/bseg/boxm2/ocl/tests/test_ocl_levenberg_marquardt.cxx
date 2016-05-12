@@ -1,6 +1,7 @@
+#include <iostream>
 #include <vcl_where_root_dir.h>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <bocl/bocl_manager.h>
@@ -19,8 +20,8 @@ void ocl_levenberg_marquardt(vnl_vector<float> x,
   bocl_device_sptr device = mgr.gpus_[0];
 
   //compile pyramid test
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "onl/test_levenberg_marquardt.cl");
   src_paths.push_back(source_dir + "onl/cholesky_decomposition.cl");
   src_paths.push_back(source_dir + "onl/quadratic_example.cl");
@@ -58,8 +59,8 @@ void ocl_levenberg_marquardt(vnl_vector<float> x,
   outputbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set workspace
-  vcl_size_t lThreads[] = {16};
-  vcl_size_t gThreads[] = {16};
+  std::size_t lThreads[] = {16};
+  std::size_t gThreads[] = {16};
   //set first kernel args
   lm_test.set_arg( maxiterbuff.ptr() );
   lm_test.set_arg( nbuff.ptr() );
@@ -81,7 +82,7 @@ void ocl_levenberg_marquardt(vnl_vector<float> x,
   outputbuff->read_to_buffer(queue);
 
   for ( unsigned i = 0 ; i < 10; i++)
-    vcl_cout<<output[i]<<' ';
+    std::cout<<output[i]<<' ';
 }
 
 void test_ocl_levenberg_marquardt()

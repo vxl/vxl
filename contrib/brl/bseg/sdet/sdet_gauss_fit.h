@@ -9,7 +9,9 @@
 // \date August 12, 2007
 //
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vgl/vgl_point_3d.h>
@@ -25,7 +27,7 @@ class sdet_adjust_lsqr : public vnl_least_squares_function
 {
  public:
   //: Constructor
-  sdet_adjust_lsqr( vcl_vector<vgl_point_3d<double> > const& img_pts,
+  sdet_adjust_lsqr( std::vector<vgl_point_3d<double> > const& img_pts,
                     unsigned int num_unknowns, unsigned int num_residuals,
                     int n_peaks);
 
@@ -44,7 +46,7 @@ class sdet_adjust_lsqr : public vnl_least_squares_function
 
  protected:
  // 3 value vector;  1&2 are x&y indices of pixel, 3 is intensity of pixel;
-  vcl_vector<vgl_point_3d<double> > img_pts_;
+  std::vector<vgl_point_3d<double> > img_pts_;
   unsigned num_pixels_;
   int n_peaks_;
 };
@@ -54,10 +56,10 @@ class sdet_gauss_fit
  public:
   ~sdet_gauss_fit(){}
 
-  static vnl_vector<double> adjust(vcl_vector<vgl_point_3d<double> > img_pts,
-                                   vcl_vector<vsol_point_2d_sptr> ps_list,
+  static vnl_vector<double> adjust(std::vector<vgl_point_3d<double> > img_pts,
+                                   std::vector<vsol_point_2d_sptr> ps_list,
                                    int n_peaks,
-                                   vcl_ofstream& outfile,
+                                   std::ofstream& outfile,
                                    double xmin, double ymin);
 
   static vnl_vector<double> calculate_ellipse(vnl_vector<double> result,
@@ -65,7 +67,7 @@ class sdet_gauss_fit
                                               float y,
                                               int i,
                                               int n_peaks,
-                                              vcl_ofstream& outfile);
+                                              std::ofstream& outfile);
 
  protected:
   sdet_gauss_fit();

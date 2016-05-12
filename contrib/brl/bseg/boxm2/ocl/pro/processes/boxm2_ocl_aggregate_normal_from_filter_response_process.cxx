@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_aggregate_normal_from_filter_response_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,7 +13,7 @@
 // \author Ali Osman Ulusoy
 // \date Feb 13, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -32,25 +34,25 @@ namespace boxm2_ocl_aggregate_normal_from_filter_process_globals
   //declare the response data type used to store in boxm2CppFilterResponseProcess.
   typedef boxm2_data_traits<BOXM2_FLOAT> RESPONSE_DATATYPE;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "aggregate_filter_response.cl");
 
     //compilation options
-    vcl_string options = opts;
+    std::string options = opts;
 
     bocl_kernel* compute_vis = new bocl_kernel();
-    vcl_string seg_opts = options + " -D DODECAHEDRON";
+    std::string seg_opts = options + " -D DODECAHEDRON";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "aggregate", seg_opts, "aggregate");
     vec_kernels.push_back(compute_vis);
 
     return ;
   }
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_aggregate_normal_from_filter_process_cons(bprb_func_process& pro)
@@ -58,12 +60,12 @@ bool boxm2_ocl_aggregate_normal_from_filter_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_aggregate_normal_from_filter_process_globals;
 
   // process has 4 inputs and no outputs:
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "unsigned";   //number of filters
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
 }
@@ -73,7 +75,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
   using namespace boxm2_ocl_aggregate_normal_from_filter_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -86,10 +88,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
 
   //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   // create a command queue.
   int status=0;
@@ -101,10 +103,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
     return false;
 
   // compile the kernel if not already compiled
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
   if (kernels.find(identifier)==kernels.end()) {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,"");
     kernels[identifier]=ks;
   }
@@ -125,15 +127,15 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
   float transfer_time=0.0f;
   float gpu_time=0.0f;
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_cout << "Running boxm2_ocl_aggregate_normal_from_filter_process ..." << vcl_endl;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::cout << "Running boxm2_ocl_aggregate_normal_from_filter_process ..." << std::endl;
 
   //zip through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_cout << "Processing block: " << id << vcl_endl;
+    std::cout << "Processing block: " << id << std::endl;
 
     //get kernel
     bocl_kernel* kern =  kernels[identifier][0];
@@ -150,12 +152,12 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
     blk_info->write_to_buffer((queue));
 
     //store normals locations
-    vcl_size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
+    std::size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
     bocl_mem * normals    = opencl_cache->get_data(scene,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), info_buffer->data_buffer_length*normalsTypeSize,false);
 
 #if 0 // unused
     //get response type
-    vcl_size_t responseTypeSize = boxm2_data_info::datasize(RESPONSE_DATATYPE::prefix());
+    std::size_t responseTypeSize = boxm2_data_info::datasize(RESPONSE_DATATYPE::prefix());
 #endif
 
     transfer_time += (float) transfer.all();
@@ -170,7 +172,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
     kern->set_arg( dodecahedron_dir_lookup.ptr());
     kern->set_arg( normals );
     for (unsigned i = 0; i < num_kernels; i++) {
-      vcl_stringstream ss; ss << i;
+      std::stringstream ss; ss << i;
       bocl_mem * response    = opencl_cache->get_data(scene,id,RESPONSE_DATATYPE::prefix(ss.str()), 0, true);
       kern->set_arg( response );
     }

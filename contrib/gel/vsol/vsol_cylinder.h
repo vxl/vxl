@@ -17,12 +17,14 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_cylinder.h>
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_cylinder_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class vsol_cylinder : public  vsol_spatial_object_3d
 {
@@ -72,15 +74,15 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
-  void describe(vcl_ostream &strm, int blanking) const;
+  void describe(std::ostream &strm, int blanking) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("vsol_cylinder"); }
+  std::string is_a() const { return std::string("vsol_cylinder"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  bool is_class(const vcl_string& cls) const { return cls == is_a(); }
+  bool is_class(const std::string& cls) const { return cls == is_a(); }
 
    // implementing virtual methods of vsol_spatial_object_3d
   vsol_spatial_object_3d_type spatial_type() const { return vsol_spatial_object_3d::VOLUME; }

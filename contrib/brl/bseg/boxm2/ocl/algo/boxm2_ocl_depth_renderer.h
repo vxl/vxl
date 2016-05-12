@@ -10,10 +10,16 @@
 class boxm2_ocl_depth_renderer
 {
   public:
-    boxm2_ocl_depth_renderer(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, vcl_string ident="");
+    boxm2_ocl_depth_renderer(boxm2_scene_sptr scene,
+                             boxm2_opencl_cache_sptr ocl_cache,
+                             std::string ident="");
     ~boxm2_ocl_depth_renderer();
 
-    bool render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor=0.0f, float farfactor=1000000.0f);
+    bool render(vpgl_camera_double_sptr camera,
+                unsigned ni,
+                unsigned nj,
+                float nearfactor=0.0f,
+                float farfactor=1000000.0f);
 
     bool get_last_rendered(vil_image_view<float> &img);
     bool get_last_vis(vil_image_view<float> &vis_img);
@@ -22,7 +28,7 @@ class boxm2_ocl_depth_renderer
     boxm2_scene_sptr scene_;
     bocl_device_sptr device_;
     boxm2_opencl_cache_sptr opencl_cache_;
-    vcl_string data_type_;
+    std::string data_type_;
     bool buffers_allocated_;
     bool compile_kernels(bocl_device_sptr device);
     bool cleanup_render_buffers();

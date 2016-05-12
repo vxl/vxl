@@ -104,7 +104,7 @@ void vsol_box_2d::b_read(vsl_b_istream &is)
     vsl_b_read(is, box_);
     break;
    default:
-    vcl_cerr << "vsol_box_2d: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_box_2d: unknown I/O version " << ver << '\n';
   }
 }
 
@@ -115,13 +115,13 @@ short vsol_box_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_box_2d::print_summary(vcl_ostream &os) const
+void vsol_box_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
 
 //external functions
-vcl_ostream& operator<<(vcl_ostream& s, vsol_box_2d const& b)
+std::ostream& operator<<(std::ostream& s, vsol_box_2d const& b)
 {
   s << "[(" << b.get_min_x() << ' ' << b.get_min_y() << ")("
     << b.get_max_x() << ' ' << b.get_max_y() << ")]";
@@ -160,7 +160,7 @@ vsl_b_read(vsl_b_istream &is, vsol_box_2d_sptr &b)
       break;
      }
      default:
-      b = 0;
+      b = VXL_NULLPTR;
     }
   }
 }

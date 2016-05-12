@@ -10,7 +10,9 @@
 // \verbatim
 // \endverbatim
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
@@ -26,7 +28,7 @@ class brad_eigenspace_base : public vbl_ref_count
 
   virtual ~brad_eigenspace_base() {}
 
-  virtual vcl_string feature_vector_type() {return "unknown\n";}
+  virtual std::string feature_vector_type() {return "unknown\n";}
 };
 
 void vsl_b_write(vsl_b_ostream &os, const brad_eigenspace_sptr& /*eptr*/);
@@ -42,17 +44,17 @@ void vsl_b_read(vsl_b_istream &is, brad_eigenspace_sptr& /*eptr*/);
 if (es_ptr->feature_vector_type()=="brad_hist_prob_feature_vector") { \
   brad_eigenspace<brad_hist_prob_feature_vector>* ep = \
     dynamic_cast<brad_eigenspace<brad_hist_prob_feature_vector>* >(es_ptr.ptr());\
-  if (!f) { vcl_cout << m << '\n'; return false;} \
+  if (!f) { std::cout << m << '\n'; return false;} \
 }else if (es_ptr->feature_vector_type()=="brad_grad_hist_feature_vector") { \
   brad_eigenspace<brad_grad_hist_feature_vector>* ep = \
     dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());\
-  if (!f) { vcl_cout << m << '\n'; return false;} \
+  if (!f) { std::cout << m << '\n'; return false;} \
 }else if (es_ptr->feature_vector_type() == "brad_grad_int_feature_vector") { \
   brad_eigenspace<brad_grad_int_feature_vector>* ep = \
     dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());\
-  if (!f) { vcl_cout << m << '\n'; return false;} \
+  if (!f) { std::cout << m << '\n'; return false;} \
 }else{ \
-  vcl_cout << "unknown feature vector type\n"; \
+  std::cout << "unknown feature vector type\n"; \
   return false; \
 }
 
@@ -68,7 +70,7 @@ if (t=="brad_hist_prob_feature_vector") { \
   brad_grad_int_feature_vector func(0.0f, max_int, 0.0f, max_grad, nbins); \
   eptr = new brad_eigenspace<brad_grad_int_feature_vector>(nib,njb,func); \
 }else{ \
-  vcl_cout << "unknown feature vector type\n"; \
+  std::cout << "unknown feature vector type\n"; \
   return false; \
 }
 #endif // brad_eigenspace_base_h_

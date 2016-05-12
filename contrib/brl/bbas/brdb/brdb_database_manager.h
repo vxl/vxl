@@ -13,8 +13,10 @@
 // \endverbatim
 
 
-#include <vcl_set.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <set>
+#include <string>
+#include <vcl_compiler.h>
 #include <brdb/brdb_database.h>
 #include "brdb_export.h"
 
@@ -28,24 +30,24 @@ class brdb_database_manager
 
   //: a unique id
   static unsigned id() {return id_++;}
-  
+
   //: clear all relations
   static bool clear_all();
-  
+
   //: clear all relations except
-  static bool clear_all_except(const vcl_set<vcl_string>& relation_names);
+  static bool clear_all_except(const std::set<std::string>& relation_names);
 
   //: remove all relations except
-  static bool remove_all_except(const vcl_set<vcl_string>& relation_names);
+  static bool remove_all_except(const std::set<std::string>& relation_names);
 
   //: save the current database into a file
-  static bool save_database(const vcl_string& path);
+  static bool save_database(const std::string& path);
 
   //: load database from file
-  static bool load_database(const vcl_string& path);
+  static bool load_database(const std::string& path);
 
   //: load database from file and merge it with current database
-  static bool merge_database(const vcl_string& path);
+  static bool merge_database(const std::string& path);
 
  private:
   //: Constructor

@@ -2,6 +2,7 @@
 
 DECLARE( test_bignum );
 DECLARE( test_decnum );
+DECLARE( test_complexify );
 DECLARE( test_complex );
 DECLARE( test_inverse );
 DECLARE( test_diag_matrix );
@@ -10,7 +11,6 @@ DECLARE( test_file_matrix );
 DECLARE( test_finite );
 DECLARE( test_math );
 DECLARE( test_na );
-DECLARE( test_matlab );
 DECLARE( test_matrix );
 DECLARE( test_matrix_exp );
 DECLARE( test_matrix_fixed );
@@ -25,7 +25,6 @@ DECLARE( test_real_polynomial );
 DECLARE( test_real_npolynomial );
 DECLARE( test_resize );
 DECLARE( test_rotation_matrix );
-DECLARE( test_sample );
 DECLARE( test_sym_matrix );
 DECLARE( test_transpose );
 DECLARE( test_fastops );
@@ -49,6 +48,7 @@ register_tests()
 {
   REGISTER( test_bignum );
   REGISTER( test_decnum );
+  REGISTER( test_complexify );
   REGISTER( test_complex );
   REGISTER( test_inverse );
   REGISTER( test_diag_matrix );
@@ -56,7 +56,6 @@ register_tests()
   REGISTER( test_file_matrix );
   REGISTER( test_finite );
   REGISTER( test_math );
-  REGISTER( test_matlab );
   REGISTER( test_matrix );
   REGISTER( test_matrix_exp );
   REGISTER( test_matrix_fixed );
@@ -71,7 +70,6 @@ register_tests()
   REGISTER( test_real_npolynomial );
   REGISTER( test_resize );
   REGISTER( test_rotation_matrix );
-  REGISTER( test_sample );
   REGISTER( test_sym_matrix );
   REGISTER( test_transpose );
   REGISTER( test_fastops );
@@ -83,7 +81,7 @@ register_tests()
   REGISTER( test_alignment );
   REGISTER( test_hungarian_algorithm );
   REGISTER( test_integrant );
-  REGISTER( test_bessel );  
+  REGISTER( test_bessel );
   REGISTER( test_crs_index );
   REGISTER( test_sparse_lst_sqr_function );
   REGISTER( test_sparse_matrix );

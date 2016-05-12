@@ -1,5 +1,6 @@
 // This is mul/vimt3d/tests/test_image_3d_of.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <testlib/testlib_test.h>
@@ -10,7 +11,7 @@
 
 static void test_image_3d_of_byte()
 {
-  vcl_cout << "****************************\n"
+  std::cout << "****************************\n"
            << " Testing vimt3d_image_3d_of\n"
            << "****************************\n";
 

@@ -17,7 +17,8 @@
 //   23.05.2007 Matt Leotta  converted to QT3 compatibility functions to native QT4
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_map.h>
+#include <map>
+#include <vcl_compiler.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 #include <vgui/internals/vgui_overlay_helper.h>
@@ -52,7 +53,7 @@ class vgui_qt_adaptor :
    void post_redraw()  { updateGL(); }
    void post_overlay_redraw();
    void post_idle_request();
-   
+
    void post_timer(float, int );
    void kill_timer(int);
 
@@ -101,35 +102,35 @@ class vgui_qt_adaptor :
    bool use_overlay_helper;
    bool idle_request_posted_;
    QTimer* idle_timer_;
-   
+
    // map of timers currently in use
-   vcl_map<int, vgui_qt_internal_timer*>  timers_;
+   std::map<int, vgui_qt_internal_timer*>  timers_;
 
  private slots:
    void idle_slot();
 
  protected:
    void windowActivationChange (bool oldActive);
-   
+
    friend class vgui_qt_internal_timer;
 };
 
 
 
-//: A helper QObject to trigger numbered timer events 
+//: A helper QObject to trigger numbered timer events
 class vgui_qt_internal_timer: public QObject
 {
    Q_OBJECT
  public:
-   
+
    vgui_qt_adaptor* adaptor;
    int id;
-   
+
    vgui_qt_internal_timer() : adaptor(0), id(0) {}
    vgui_qt_internal_timer(vgui_qt_adaptor* a, int i) : adaptor(a), id(i) {}
-   
+
  public slots:
-   void activate(); 
+   void activate();
 };
 
 #endif // vgui_qt_adaptor_h_

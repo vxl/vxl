@@ -1,5 +1,6 @@
 // This is core/vil1/tests/test_load_gen.cxx
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_rgb.h>
@@ -11,7 +12,7 @@ static void test_rgb(char const *name, int w, int h,
 {
   vil1_image i = vil1_load(name);
 
-  vcl_cout << "vil1_image_impl: size " << i.width() << 'x' << i.height() << ", "
+  std::cout << "vil1_image_impl: size " << i.width() << 'x' << i.height() << ", "
            << i.components() << " component, " << i.bits_per_component() << " bit\n";
 
   TEST("width", i.width(), w);
@@ -22,12 +23,12 @@ static void test_rgb(char const *name, int w, int h,
   TEST("# bits per component", i.bits_per_component(), 8);
   TEST("component format", i.component_format(), VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
 
-  vcl_vector<vil1_rgb<vxl_byte> > image_buf(w*h);
+  std::vector<vil1_rgb<vxl_byte> > image_buf(w*h);
   TEST("get_section() on image", i.get_section(&image_buf[0], 0, 0, w, h), true);
 
   bool result = true;
 
-  for (vcl_vector<vil1_rgb<vxl_byte> >::iterator
+  for (std::vector<vil1_rgb<vxl_byte> >::iterator
        it= image_buf.begin(); it!=image_buf.end(); ++it)
     if (!(*it == vil1_rgb<vxl_byte>(r, g, b)))
     {
@@ -41,7 +42,7 @@ static void test_gray(char const *name, int w, int h, unsigned v)
 {
   vil1_image i = vil1_load(name);
 
-  vcl_cout << "vil1_image_impl: size " << i.width() << 'x' << i.height() << ", "
+  std::cout << "vil1_image_impl: size " << i.width() << 'x' << i.height() << ", "
            << i.components() << " component, " << i.bits_per_component() << " bit\n";
 
   TEST("width", i.width(), w);
@@ -52,12 +53,12 @@ static void test_gray(char const *name, int w, int h, unsigned v)
   TEST("# bits per component", i.bits_per_component(), 8);
   TEST("component format", i.component_format(), VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
 
-  vcl_vector<vxl_byte> image_buf(w*h);
+  std::vector<vxl_byte> image_buf(w*h);
   TEST ("get_section() on image", i.get_section(&image_buf[0], 0, 0, w, h), true);
 
   bool result = true;
 
-  for (vcl_vector<vxl_byte>::iterator
+  for (std::vector<vxl_byte>::iterator
        it= image_buf.begin(); it!=image_buf.end(); ++it)
     if (*it != v)
     {

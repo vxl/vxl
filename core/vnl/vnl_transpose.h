@@ -15,8 +15,10 @@
 //  LSB (Manchester) 19/3/01 Tidied documentation
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fastops.h>
+#include "vnl/vnl_export.h"
 
 //: Efficient matrix transpose
 //  vnl_transpose is an efficient way to write C = vnl_transpose(A) * B.
@@ -34,7 +36,7 @@
 //
 //  NOTE: This only works for arguments of type vnl_matrix<double>
 
-class vnl_transpose
+class VNL_EXPORT vnl_transpose
 {
   const vnl_matrix<double>& M_;
  public:
@@ -44,7 +46,7 @@ class vnl_transpose
 
   //: Noisily convert a vnl_transpose to a matrix
   operator vnl_matrix<double> () const {
-    vcl_cerr << "vnl_transpose being converted to matrix -- help! I don't wanna go!\n";
+    std::cerr << "vnl_transpose being converted to matrix -- help! I don't wanna go!\n";
     return M_.transpose();
   }
 

@@ -12,7 +12,7 @@
 float boxm2_change_blob::percent_overlap(boxm2_change_blob& blob)
 {
   //find number of matching pairs, divided by this area's size
-  vcl_vector<PairType> other = blob.get_pixels();
+  std::vector<PairType> other = blob.get_pixels();
   float numOverlap = 0.0f;
   for (unsigned int i=0; i<pixels_.size(); ++i) {
     for (unsigned int j=0; j<other.size(); ++j) {
@@ -32,7 +32,7 @@ float boxm2_change_blob::percent_overlap(boxm2_change_blob& blob)
 //  Takes in bundle.out file and image directory that created img_dir
 void boxm2_util_detect_change_blobs(vil_image_view<float>& change,
                                     float thresh,
-                                    vcl_vector<boxm2_change_blob>& blobs)
+                                    std::vector<boxm2_change_blob>& blobs)
 {
   //threshold
   vil_image_view<bool> bool_image(change.ni(), change.nj());
@@ -40,49 +40,49 @@ void boxm2_util_detect_change_blobs(vil_image_view<float>& change,
   vil_image_view<bool> imga(change.ni(), change.nj()),
                        imgb(change.ni(), change.nj());
 
-  //dilate and erode once 
-  boxm2_util_dilate_erode(bool_image, imga); 
+  //dilate and erode once
+  boxm2_util_dilate_erode(bool_image, imga);
 
   //find blobs
   bil_blob_finder finder(imga);
 
   //blob region is just a vector of vil_chords (rows in image)
-  vcl_vector<vil_chord> region;
+  std::vector<vil_chord> region;
   while (finder.next_4con_region(region))
   {
     //new blob
     boxm2_change_blob blob;
     //go over each row
-    vcl_vector<vil_chord>::iterator iter;
+    std::vector<vil_chord>::iterator iter;
     for (iter=region.begin(); iter!=region.end(); ++iter) {
       //add each pixel in this row to blob
       for (unsigned i=iter->ilo; i<iter->ihi+1; ++i)
         blob.add_pixel( PairType(i, iter->j) );
     }
-    
+
     //Only add blobs smaller than 400 pixels
     blobs.push_back(blob);
   }
-#if 0 
-  vcl_cout<<"Found "<<blobs.size()<<" blobs"<<vcl_endl;
+#if 0
+  std::cout<<"Found "<<blobs.size()<<" blobs"<<std::endl;
 #endif
 }
 
 //: Detects blobs given a bool image
 void boxm2_util_detect_blobs(const vil_image_view<bool>& imgIn,
-                             vcl_vector<boxm2_change_blob>& blobs)
+                             std::vector<boxm2_change_blob>& blobs)
 {
   //find blobs
   bil_blob_finder finder(imgIn);
 
   //blob region is just a vector of vil_chords (rows in image)
-  vcl_vector<vil_chord> region;
+  std::vector<vil_chord> region;
   while (finder.next_4con_region(region))
   {
     //new blob
     boxm2_change_blob blob;
     //go over each row
-    vcl_vector<vil_chord>::iterator iter;
+    std::vector<vil_chord>::iterator iter;
     for (iter=region.begin(); iter!=region.end(); ++iter) {
       //add each pixel in this row to blob
       for (unsigned i=iter->ilo; i<iter->ihi+1; ++i)
@@ -95,38 +95,38 @@ void boxm2_util_detect_blobs(const vil_image_view<bool>& imgIn,
 void boxm2_util_dilate_erode(const vil_image_view<bool>& imgIn,
                                    vil_image_view<bool>& imgOut)
 {
-  vil_image_view<bool> dest(imgIn.ni(), imgIn.nj()); 
+  vil_image_view<bool> dest(imgIn.ni(), imgIn.nj());
 
   //remove singletons
   boxm2_util_remove_singletons(imgIn, imgOut);
 
   //do a bunch of dilates
-  int numDilates = 1; 
+  int numDilates = 1;
   for(int i=0; i<numDilates; ++i) {
-    
+
     //dilate image
     vil_structuring_element selem;
     selem.set_to_disk(1.05);
     vil_binary_dilate(imgOut, dest, selem);
-        
+
     //erode image
     selem.set_to_disk(1.05);
     vil_binary_erode(dest, imgOut, selem);
   }
-  
-  //int numErodes = 3; 
+
+  //int numErodes = 3;
   //for(int i=0; i<numErodes; ++i) {
-    
+
     ////erode image
     //vil_structuring_element selem;
     //selem.set_to_disk(1.05);
     //vil_binary_erode(imgOut, dest, selem);
-        
+
     ////erode image
     //selem.set_to_disk(1.05);
     //vil_binary_erode(dest, imgOut, selem);
   //}
-  
+
 }
 
 //removes pixels that are surrounded by removed pixels
@@ -161,12 +161,12 @@ void boxm2_util_remove_singletons(const vil_image_view<bool>& imgIn,
 }
 
 
-void boxm2_util_blob_to_image(vcl_vector<boxm2_change_blob>& blobs,
+void boxm2_util_blob_to_image(std::vector<boxm2_change_blob>& blobs,
                               vil_image_view<vxl_byte>& imgOut)
 {
   //create a blob image
   imgOut.fill(0);
-  vcl_vector<boxm2_change_blob>::iterator iter;
+  std::vector<boxm2_change_blob>::iterator iter;
   for (iter=blobs.begin(); iter!=blobs.end(); ++iter) {
     //paint each blob pixel white
     for (unsigned int p=0; p<iter->blob_size(); ++p) {

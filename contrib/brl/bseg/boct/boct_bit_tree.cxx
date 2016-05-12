@@ -1,17 +1,17 @@
 //:
 // \file
+#include <iostream>
+#include <list>
+#include <algorithm>
+#include <cstring>
 #include "boct_bit_tree.h"
 #include "boct_tree_cell.h"
-#include <vcl_iostream.h>
-#include <vcl_list.h>
-#include <vcl_algorithm.h>
-#include <vcl_cstring.h> // for std::memcpy()
 
 //: default constructor
 boct_bit_tree::boct_bit_tree()
 {
   bits_ = new unsigned char[16];
-  vcl_memset(bits_, 0, 16);
+  std::memset(bits_, 0, 16);
 }
 
 //: copy constructor
@@ -19,7 +19,7 @@ boct_bit_tree::boct_bit_tree(const boct_bit_tree& other)
 {
   bits_ = new unsigned char[16];
   num_levels_ = other.number_levels();
-  vcl_memcpy(bits_, other.get_bits(), 16);
+  std::memcpy(bits_, other.get_bits(), 16);
 }
 
 //: constructor from an array of char bits
@@ -28,10 +28,10 @@ boct_bit_tree::boct_bit_tree(unsigned char* bits, int num_levels)
     bits_ = new unsigned char[16];
 
     //initialize num levels, bits
-    num_levels_ = vcl_min(4,num_levels);
+    num_levels_ = std::min(4,num_levels);
 
     //copy 16 bytes
-    vcl_memcpy(bits_, bits, 16);
+    std::memcpy(bits_, bits, 16);
 
     ////zero out bits to start
     //for (int i=0;i<16; i++)
@@ -41,7 +41,7 @@ boct_bit_tree::boct_bit_tree(unsigned char* bits, int num_levels)
 int boct_bit_tree::traverse(const vgl_point_3d<double> p, int deepest)
 {
   //deepest level to traverse is either
-  deepest = vcl_max(deepest-1, num_levels_-1);
+  deepest = std::max(deepest-1, num_levels_-1);
 
   //force 1 register: curr = (bit, child_offset, depth, c_offset)
   int curr_bit = (int)(bits_[0]);
@@ -62,9 +62,9 @@ int boct_bit_tree::traverse(const vgl_point_3d<double> p, int deepest)
     pointx += pointx;                                             //point = point*2
     pointy += pointy;
     pointz += pointz;
-    int codex=((int)vcl_floor(pointx)) & 1;
-    int codey=((int)vcl_floor(pointy)) & 1;
-    int codez=((int)vcl_floor(pointz)) & 1;
+    int codex=((int)std::floor(pointx)) & 1;
+    int codey=((int)std::floor(pointy)) & 1;
+    int codez=((int)std::floor(pointz)) & 1;
 
     int c_index = codex + (codey<<1) + (codez<<2);             //c_index = binary(zyx)
     bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
@@ -80,7 +80,7 @@ int boct_bit_tree::traverse(const vgl_point_3d<double> p, int deepest)
 int boct_bit_tree::traverse_to_level(const vgl_point_3d<double> p, int deepest)
 {
   //deepest level to traverse is either
-  deepest = vcl_min(deepest-1, num_levels_-1);
+  deepest = std::min(deepest-1, num_levels_-1);
 
   //force 1 register: curr = (bit, child_offset, depth, c_offset)
   int curr_bit = (int)(bits_[0]);
@@ -101,9 +101,9 @@ int boct_bit_tree::traverse_to_level(const vgl_point_3d<double> p, int deepest)
     pointx += pointx;                                             //point = point*2
     pointy += pointy;
     pointz += pointz;
-    int codex=((int)vcl_floor(pointx)) & 1;
-    int codey=((int)vcl_floor(pointy)) & 1;
-    int codez=((int)vcl_floor(pointz)) & 1;
+    int codex=((int)std::floor(pointx)) & 1;
+    int codey=((int)std::floor(pointy)) & 1;
+    int codez=((int)std::floor(pointz)) & 1;
 
     int c_index = codex + (codey<<1) + (codez<<2);             //c_index = binary(zyx)
     bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
@@ -158,11 +158,45 @@ bool boct_bit_tree::is_leaf(int bit_index)
   return this->valid_cell(bit_index) && (this->bit_at(bit_index)==0);
 }
 
-//returns bit indices of leaf nodes under rootBit
-vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit)
+//returns bit indices of all tree nodes under rootBit
+std::vector<int> boct_bit_tree::get_cell_bits(int rootBit)
 {
   //use num cells to accelerate (cut off for loop)
-  vcl_vector<int> leafBits;
+  std::vector<int> leafBits;
+
+  //special root case
+  if ( bits_[0] == 0 && rootBit == 0 )
+  {
+    leafBits.push_back(0);
+    return leafBits;
+  }
+
+  //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
+  std::vector<int> subTree;
+  std::list<unsigned> toVisit;
+  toVisit.push_back(rootBit);
+  while (!toVisit.empty()) 
+  {
+    int currBitIndex = toVisit.front();
+    toVisit.pop_front();
+
+    subTree.push_back(currBitIndex);
+
+    if (!this->is_leaf(currBitIndex) )
+    { //add children to the visit list
+      unsigned firstChild = 8 * currBitIndex + 1;
+      for (int ci = 0; ci < 8; ++ci)
+        toVisit.push_back( firstChild + ci );
+    }
+  }
+  return subTree;
+}
+
+//returns bit indices of leaf nodes under rootBit
+std::vector<int> boct_bit_tree::get_leaf_bits(int rootBit)
+{
+  //use num cells to accelerate (cut off for loop)
+  std::vector<int> leafBits;
 
   //special root case
   if ( bits_[0] == 0 && rootBit == 0 ) {
@@ -171,8 +205,8 @@ vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit)
   }
 
   //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
-  vcl_vector<int> subTree;
-  vcl_list<unsigned> toVisit;
+  std::vector<int> subTree;
+  std::list<unsigned> toVisit;
   toVisit.push_back(rootBit);
   while (!toVisit.empty()) {
     int currBitIndex = toVisit.front();
@@ -189,10 +223,10 @@ vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit)
   return subTree;
 }
 //returns bit indices of leaf nodes or nodes at the depth mentioned whichever comes first under rootBit
-vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit, int depth)
+std::vector<int> boct_bit_tree::get_leaf_bits(int rootBit, int depth)
 {
   //use num cells to accelerate (cut off for loop)
-  vcl_vector<int> leafBits;
+  std::vector<int> leafBits;
   int curr_depth = 0;
   //special root case
   if ( bits_[0] == 0 && rootBit == 0 ) {
@@ -201,8 +235,8 @@ vcl_vector<int> boct_bit_tree::get_leaf_bits(int rootBit, int depth)
   }
 
   //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
-  vcl_vector<int> subTree;
-  vcl_list<unsigned> toVisit;
+  std::vector<int> subTree;
+  std::list<unsigned> toVisit;
   toVisit.push_back(rootBit);
   while (!toVisit.empty() ) {
     int currBitIndex = toVisit.front();
@@ -304,7 +338,7 @@ void
 boct_bit_tree::set_bit_at(int index, bool val)
 {
   if (index > 72) {
-    vcl_cerr<<"No bit above 72, bad set call!\n";
+    std::cerr<<"No bit above 72, bad set call!\n";
     return;
   }
 
@@ -361,8 +395,8 @@ int boct_bit_tree::depth(){
 
   int max_depth = 3;
   int tree_depth = 0;
-  vcl_list<unsigned> toVisit;//maintain a queue of nodes and
-  vcl_list<int> visit_depth;// node depth
+  std::list<unsigned> toVisit;//maintain a queue of nodes and
+  std::list<int> visit_depth;// node depth
   toVisit.push_back(0);
   visit_depth.push_back(0);
   while (!toVisit.empty()) {
@@ -651,7 +685,7 @@ float boct_bit_tree::centerZ[] =
 
 
 //------ I/O ----------------------------------------------------------
-vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t)
+std::ostream& operator <<(std::ostream &s, boct_bit_tree &t)
 {
   s << "boct_bit_tree:\n"
     << "Tree bits:\n"

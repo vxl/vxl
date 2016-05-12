@@ -6,10 +6,12 @@
 // \author Daniel Crispell
 // \date 16 Sep 2014
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <boxm2/boxm2_scene.h>
@@ -31,14 +33,14 @@ namespace boxm2_ocl_render_gl_expected_depth_process_globals
 {
   const unsigned n_inputs_ = 10 ;
   const unsigned n_outputs_ = 1;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts="")
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts="")
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -50,7 +52,7 @@ namespace boxm2_ocl_render_gl_expected_depth_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = " -D RENDER_DEPTH ";
+    std::string options = " -D RENDER_DEPTH ";
     options +=  "-D DETERMINISTIC";
     options += " -D STEP_CELL=step_cell_render_depth2(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
 
@@ -66,7 +68,7 @@ namespace boxm2_ocl_render_gl_expected_depth_process_globals
     vec_kernels.push_back(ray_trace_kernel);
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "scene_info.cl");
 
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
@@ -89,7 +91,7 @@ bool boxm2_ocl_render_gl_expected_depth_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_gl_expected_depth_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -103,12 +105,12 @@ bool boxm2_ocl_render_gl_expected_depth_process_cons(bprb_func_process& pro)
 
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "float";
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
 
   return good;
 }
@@ -118,7 +120,7 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
   using namespace boxm2_ocl_render_gl_expected_depth_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -141,13 +143,13 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
 
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
     kernels[identifier]=ks;
   }
@@ -157,7 +159,7 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,  "vis image (single float) buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -203,18 +205,18 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //2. set workgroup size
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {cl_ni,cl_nj};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {cl_ni,cl_nj};
   float subblk_dim = 0.0;
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order;
-  if(cam->type_name() == "vpgl_geo_camera" ) 
+  std::vector<boxm2_block_id> vis_order;
+  if(cam->type_name() == "vpgl_geo_camera" )
       vis_order= scene->get_block_ids(); // order does not matter for a top down orthographic camera  and axis aligned blocks
   else if(cam->type_name() == "vpgl_perspective_camera")
       vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),ni,nj);
   else
       vis_order= scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     //choose correct render kernel

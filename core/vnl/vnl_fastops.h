@@ -20,11 +20,12 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include "vnl/vnl_export.h"
 
 //: Collection of C-style matrix functions for the most time-critical applications.
 // In general, however one should consider using the vnl_transpose envelope-letter
 // class to achieve the same results with about a 10% speed penalty.
-class vnl_fastops
+class VNL_EXPORT vnl_fastops
 {
  public:
   static void AtA(vnl_matrix<double>& out, const vnl_matrix<double>& A);
@@ -50,19 +51,6 @@ class vnl_fastops
   static void dec_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& A, const vnl_matrix<double>& B);
   static void dec_X_by_AtB(vnl_vector<double>& X, const vnl_matrix<double>& A, const vnl_vector<double>& b);
   static void dec_X_by_ABt(vnl_matrix<double>& X, const vnl_matrix<double>& A, const vnl_matrix<double>& B);
-
-#if 0 // deprecated; use the ref-style versions instead!
-  static void AtA(const vnl_matrix<double>& A, vnl_matrix<double>* out) {
-    VXL_DEPRECATED("vnl_fastops::AtA"); AtA(*out, A); }
-  static void AB (const vnl_matrix<double>& A, const vnl_matrix<double>& B, vnl_matrix<double>* out) {
-    VXL_DEPRECATED("vnl_fastops::AA"); AB(*out, A,B); }
-  static void AtB(const vnl_matrix<double>& A, const vnl_matrix<double>& B, vnl_matrix<double>* out) {
-    VXL_DEPRECATED("vnl_fastops::AtB"); AtB(*out, A,B); }
-  static void AtB(const vnl_matrix<double>& A, const vnl_vector<double>& b, vnl_vector<double>* out) {
-    VXL_DEPRECATED("vnl_fastops::AtB"); AtB(*out, A,b); }
-  static void ABt(const vnl_matrix<double>& A, const vnl_matrix<double>& B, vnl_matrix<double>* out) {
-    VXL_DEPRECATED("vnl_fastops::ABt"); ABt(*out, A,B); }
-#endif // 0
 
  private:
   // BLAS-like operations

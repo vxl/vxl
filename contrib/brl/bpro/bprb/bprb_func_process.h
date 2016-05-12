@@ -18,8 +18,9 @@
 //   Gamze D. Tunali    November 20, 2008  Initial version.
 // \endverbatim
 //------------------------------------------------------------------------------
+#include <iostream>
 #include <bprb/bprb_process_ext.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class bprb_func_process: public bprb_process_ext
 {
@@ -46,18 +47,18 @@ class bprb_func_process: public bprb_process_ext
 
   void set_finish_func(bool(*fpt)(bprb_func_process&)) { fpt_finish_ = fpt; }
 
-  virtual vcl_string name() const { return name_; }
+  virtual std::string name() const { return name_; }
 
   template <class T>
   T get_input(unsigned i)
   {
     if (input_types_.size()>i) {
       if (!input_data_[i]) {
-        vcl_cerr << "ERROR: input_data_[" << i << "] == NULL" << vcl_endl;
+        std::cerr << "ERROR: input_data_[" << i << "] == NULL" << std::endl;
         return 0;
       }
       if (!(input_data_[i]->is_a()==input_types_[i])) {
-        vcl_cerr << "Input: [" << i << "] has wrong INPUT TYPE! \n" << "Should be: " << input_types_[i] << " is: " <<input_data_[i]->is_a() << "\n";
+        std::cerr << "Input: [" << i << "] has wrong INPUT TYPE! \n" << "Should be: " << input_types_[i] << " is: " <<input_data_[i]->is_a() << "\n";
         return 0;
       }
     }
@@ -87,7 +88,7 @@ class bprb_func_process: public bprb_process_ext
   bool (*fpt_cons_)(bprb_func_process&);   // pointer to cons method (like constructor)
   bool (*fpt_init_)(bprb_func_process&);   // pointer to init method
   bool (*fpt_finish_)(bprb_func_process&); // pointer to finish method
-  vcl_string name_;
+  std::string name_;
 };
 
 #endif // bprb_func_process_h_

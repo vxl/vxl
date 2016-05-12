@@ -48,10 +48,10 @@
 //           bool update_edges(bvxm_image_metadata const& metadata);
 //
 //   Ibrahim Eden - 03/28/2008 - added the method:
-//           bool save_edges_raw(vcl_string filename);
+//           bool save_edges_raw(std::string filename);
 //
 //   Ibrahim Eden - 06/03/2008 - added the method:
-//           bool save_edges_vff(vcl_string filename);
+//           bool save_edges_vff(std::string filename);
 //
 //   Ozge C. Ozcanli - 04/18/2008 - added the method:
 //           bool mog_most_probable_image(bvxm_image_metadata const& camera, bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index);
@@ -70,10 +70,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <string>
+#include <vector>
+#include <set>
+#include <iostream>
+#include <sstream>
+#include <utility>
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_set.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_point_3d.h>
@@ -95,9 +98,7 @@
 
 // These includes are for the implementations of the templated methods,
 // which should be moved from the header file if possible.
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vul/vul_file_iterator.h>
 
@@ -154,7 +155,7 @@ class bvxm_voxel_world: public vbl_ref_count
                           unsigned scale_idx=0);
   //: update voxel grid edge probabilities with data from LIDAR/camera pair
   template<bvxm_voxel_type APM_T>
-  bool update_point_cloud(vcl_vector<vgl_point_3d<float> > & points);
+  bool update_point_cloud(std::vector<vgl_point_3d<float> > & points);
 
   //: generate the expected image from the specified viewpoint. the expected image and mask should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
@@ -234,7 +235,7 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type APM_T>
   bool heightmap(bvxm_image_metadata const& virtual_camera, vil_image_view<unsigned> &heightmap, unsigned bin_index = 0, unsigned scale_idx =0);
 
-  //: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho. 
+  //: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho.
   template<typename T>
   bool orthorectify(vil_image_view_base_sptr z_map, vpgl_camera_double_sptr z_map_camera, vil_image_view<T>& input_image, vpgl_camera_double_sptr input_camera, vil_image_view<T>& out_image, unsigned scale_idx=0);
 
@@ -260,11 +261,11 @@ class bvxm_voxel_world: public vbl_ref_count
   bvxm_voxel_grid_base_sptr get_grid(unsigned bin_index, unsigned scale, bool use_memory = false);
 
   //: save the occupancy grid as a 3-d tiff image
-  bool save_occupancy_vff(vcl_string filename, unsigned scale_idx=0);
+  bool save_occupancy_vff(std::string filename, unsigned scale_idx=0);
 
   //: save the occupancy grid in a ".raw" format readable by Drishti volume rendering software
   template<bvxm_voxel_type APM_T>
-  bool save_occupancy_raw(vcl_string filename, unsigned scale_idx=0);
+  bool save_occupancy_raw(std::string filename, unsigned scale_idx=0);
 
   //: remove all voxel data from disk - use with caution!
   bool clean_grids();
@@ -292,11 +293,11 @@ class bvxm_voxel_world: public vbl_ref_count
 
 #if 0
   //: appearance model voxel storage
-  vcl_map<bvxm_voxel_type, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > grid_map_;
+  std::map<bvxm_voxel_type, std::map<unsigned int, bvxm_voxel_grid_base_sptr> > grid_map_;
 #endif
 
   //: map of a map of a map of voxel grids which is indexed by voxel type,illumination bin and scale
-  vcl_map<bvxm_voxel_type, vcl_map<unsigned int, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > > grid_map_;
+  std::map<bvxm_voxel_type, std::map<unsigned int, std::map<unsigned int, bvxm_voxel_grid_base_sptr> > > grid_map_;
 
   //: the world parameters
   bvxm_world_params_sptr params_;
@@ -319,7 +320,7 @@ class bvxm_voxel_world: public vbl_ref_count
 
 
 //: output description of voxel world to stream.
-vcl_ostream&  operator<<(vcl_ostream& s, bvxm_voxel_world const& vox_world);
+std::ostream&  operator<<(std::ostream& s, bvxm_voxel_world const& vox_world);
 
 #if 0
 typedef vbl_smart_ptr<bvxm_voxel_world> bvxm_voxel_world_sptr;
@@ -371,23 +372,23 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
   if (grid_map_.find(VOX_T) == grid_map_.end())
   {
     // create map
-    vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr > > bin_map;
+    std::map<unsigned, std::map<unsigned, bvxm_voxel_grid_base_sptr > > bin_map;
 
     // look for existing appearance model grids in the directory
 
-    vcl_string storage_directory = params_->model_dir();
+    std::string storage_directory = params_->model_dir();
 
-    vcl_stringstream grid_glob;
-    vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
+    std::stringstream grid_glob;
+    std::string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
     grid_glob << storage_directory << '/' << fname_prefix << "*.vox";
 
     // insert grids
     for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it)
     {
-      vcl_string match_str = file_it.filename();
+      std::string match_str = file_it.filename();
       unsigned idx_start = match_str.find("scale") + 6;
       unsigned idx_end = match_str.find(".vox");
-      vcl_stringstream idx_str;
+      std::stringstream idx_str;
       idx_str << match_str.substr(idx_start,idx_end - idx_start);
       int scale = -1;
       idx_str >> scale;
@@ -396,13 +397,13 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
       unsigned bin_idx_start = match_str.find("bin") + 4;
       unsigned bin_idx_end = match_str.find("scale") - 1;
 
-      vcl_stringstream bin_idx_str;
+      std::stringstream bin_idx_str;
       bin_idx_str <<  match_str.substr(bin_idx_start,bin_idx_end - bin_idx_start);
       int bin_idx = -1;
       bin_idx_str >> bin_idx;
 
       if (scale < 0 || bin_idx <0) {
-        vcl_cerr << "error parsing filename " << file_it() << '\n';
+        std::cerr << "error parsing filename " << file_it() << '\n';
       }
       else
       {
@@ -414,33 +415,33 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
           grid = new bvxm_voxel_grid<voxel_datatype>(grid_size_scale, grid_size_scale.z());
         else
           grid = new bvxm_voxel_grid<voxel_datatype>(file_it(), grid_size_scale);
-        vcl_map<unsigned, bvxm_voxel_grid_base_sptr > scale_map;
-        scale_map.insert(vcl_make_pair((unsigned)scale, grid));
+        std::map<unsigned, bvxm_voxel_grid_base_sptr > scale_map;
+        scale_map.insert(std::make_pair((unsigned)scale, grid));
 
         if (bin_map.find(bin_idx)==bin_map.end())
-          bin_map.insert(vcl_make_pair((unsigned)bin_idx ,scale_map));
+          bin_map.insert(std::make_pair((unsigned)bin_idx ,scale_map));
         else
           bin_map[bin_idx][scale]=grid;
       }
     }
 
-    grid_map_.insert(vcl_make_pair(VOX_T, bin_map));
+    grid_map_.insert(std::make_pair(VOX_T, bin_map));
   }
 
   // retrieve map containing voxel_grid
-  vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr> > voxel_map = grid_map_[VOX_T];
+  std::map<unsigned, std::map<unsigned, bvxm_voxel_grid_base_sptr> > voxel_map = grid_map_[VOX_T];
 
   /* retrieve voxel_grid for current bin
   if no grid exists at bin location create one filled with default values*/
 
   if (voxel_map.find(bin_index) == voxel_map.end())
   {
-    vcl_map<unsigned, bvxm_voxel_grid_base_sptr> scale_map;
+    std::map<unsigned, bvxm_voxel_grid_base_sptr> scale_map;
 
-    vcl_string storage_directory = params_->model_dir();
+    std::string storage_directory = params_->model_dir();
 
-    vcl_stringstream apm_fname;
-    vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
+    std::stringstream apm_fname;
+    std::string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
     apm_fname << storage_directory << '/' << fname_prefix << "_bin_" << bin_index << "_scale_" << scale_idx  << ".vox";
 
     typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
@@ -451,29 +452,29 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
       grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
     // fill grid with default value
     if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
-      vcl_cerr << "error initializing voxel grid\n";
+      std::cerr << "error initializing voxel grid\n";
       return bvxm_voxel_grid_base_sptr(0);
     }
 
     // Insert voxel grid into map
     // bvxm_voxel_grid_base_sptr grid_sptr = grid;
     //
-    scale_map.insert(vcl_make_pair(scale_idx, grid));
+    scale_map.insert(std::make_pair(scale_idx, grid));
 
-    grid_map_[VOX_T].insert(vcl_make_pair(bin_index,scale_map));
+    grid_map_[VOX_T].insert(std::make_pair(bin_index,scale_map));
   }
 
-  vcl_map<unsigned, bvxm_voxel_grid_base_sptr> scale_map = grid_map_[VOX_T][bin_index];
+  std::map<unsigned, bvxm_voxel_grid_base_sptr> scale_map = grid_map_[VOX_T][bin_index];
 
   if (scale_map.find(scale_idx) == scale_map.end())
   {
 #ifdef DEBUG
-    vcl_cout<<"\n Scale not found ";
+    std::cout<<"\n Scale not found ";
 #endif // DEBUG
-    vcl_string storage_directory = params_->model_dir();
+    std::string storage_directory = params_->model_dir();
 
-    vcl_stringstream apm_fname;
-    vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
+    std::stringstream apm_fname;
+    std::string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
     apm_fname << storage_directory << '/' << fname_prefix << "_bin_" << bin_index << "_scale_" << scale_idx  << ".vox";
 
     typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
@@ -486,14 +487,14 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
 
     // fill grid with default value
     if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
-      vcl_cerr << "error initializing voxel grid\n";
+      std::cerr << "error initializing voxel grid\n";
       return bvxm_voxel_grid_base_sptr(0);
     }
 
     // Insert voxel grid into map
     bvxm_voxel_grid_base_sptr grid_sptr = grid;
 
-    grid_map_[VOX_T][bin_index].insert(vcl_make_pair(scale_idx, grid_sptr));
+    grid_map_[VOX_T][bin_index].insert(std::make_pair(scale_idx, grid_sptr));
   }
   return grid_map_[VOX_T][bin_index][scale_idx];
 }
@@ -517,10 +518,10 @@ bool bvxm_voxel_world::update(bvxm_image_metadata const& observation,
 {
   // check image sizes
   if ( (observation.img->ni() != pix_prob_density.ni()) || (observation.img->nj() != pix_prob_density.nj()) ) {
-    vcl_cerr << "error: metadata image size does not match probability image size.\n";
+    std::cerr << "error: metadata image size does not match probability image size.\n";
   }
   if ( (observation.img->ni() != mask.ni()) || (observation.img->nj() != mask.nj()) ) {
-    vcl_cerr << "error: metadata image size does not match mask image size.\n";
+    std::cerr << "error: metadata image size does not match mask image size.\n";
   }
   return this->update_impl<APM_T>(observation, true, pix_prob_density, true, mask, bin_index,  scale_idx, use_momory);
 }
@@ -548,8 +549,8 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   ocp_datatype max_vox_prob = params_->max_occupancy_prob();
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -563,7 +564,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)APM_T << '\n';
+    std::cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type " << (int)APM_T << '\n';
     return false;
   }
 
@@ -589,7 +590,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
 
-  vcl_cout << "Pass 1:" << vcl_endl;
+  std::cout << "Pass 1:" << std::endl;
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx, use_momory);
@@ -606,11 +607,11 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it, ++preX_slab_it, ++PIvisX_slab_it)
   {
-    vcl_cout << '.';
-    vcl_cout.flush();
+    std::cout << '.';
+    std::cout.flush();
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -679,14 +680,14 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
   bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
 #endif
-  vcl_cout << "\nPass 2:" << vcl_endl;
+  std::cout << "\nPass 2:" << std::endl;
   PIvisX_slab_it = PIvisX.begin();
   preX_slab_it = preX.begin();
   typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
   for (unsigned z = 0; z < (unsigned)grid_size.z(); ++z, ++PIvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2)
   {
-    vcl_cout << '.';
-    vcl_cout.flush();
+    std::cout << '.';
+    std::cout.flush();
     // transform preX_sum to current level
     bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[z], preX_accum_vox);
 
@@ -714,7 +715,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
         *PX_it = max_vox_prob;
     }
   }
-  vcl_cout << "\ndone." << vcl_endl;
+  std::cout << "\ndone." << std::endl;
 
   if (return_prob) {
     // fill pixel_probabilities with preX_accum
@@ -758,10 +759,10 @@ bool bvxm_voxel_world::update_lidar(bvxm_image_metadata const& observation,
 {
   // check image sizes
   if ( (observation.img->ni() != pix_prob_density.ni()) || (observation.img->nj() != pix_prob_density.nj()) ) {
-    vcl_cerr << "error: metadata image size does not match probability image size.\n";
+    std::cerr << "error: metadata image size does not match probability image size.\n";
   }
   if ( (observation.img->ni() != mask.ni()) || (observation.img->nj() != mask.nj()) ) {
-    vcl_cerr << "error: metadata image size does not match mask image size.\n";
+    std::cerr << "error: metadata image size does not match mask image size.\n";
   }
   return this->update_lidar_impl<APM_T>(observation, true, pix_prob_density, true, mask, scale);
 }
@@ -782,7 +783,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   double lidar_pixel_size = 1.0;
   if (dummy_cam->type_name()=="vpgl_geo_camera") {
     vpgl_geo_camera* lcam = static_cast<vpgl_geo_camera*>(dummy_cam.ptr());
-    vcl_cout << "Lidar Camera\n" << *lcam << vcl_endl;
+    std::cout << "Lidar Camera\n" << *lcam << std::endl;
     lidar_pixel_size = lcam->pixel_spacing();
   }
   // typedef bvxm_voxel_traits<LIDAR>::lidar_processor bvxm_lidar_processor;
@@ -794,8 +795,8 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   ocp_datatype max_vox_prob = params_->max_occupancy_prob();
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -809,7 +810,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
+    std::cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
     return false;
   }
 
@@ -841,7 +842,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
 
-  vcl_cout << "Pass 1:" << vcl_endl;
+  std::cout << "Pass 1:" << std::endl;
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<APM_T>(0,  scale);
@@ -863,13 +864,13 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it, ++preX_slab_it, ++PLvisX_slab_it)
   {
-    vcl_cout << k_idx << vcl_endl;
+    std::cout << k_idx << std::endl;
 
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[k_idx], frame_backproj);
 
 #ifdef DEBUG
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss << "./frame_backproj_" << k_idx <<".tiff";
     bvxm_util::write_slab_as_image(frame_backproj,ss.str());
 #endif
@@ -891,7 +892,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     {
       for (unsigned j_idx=0; j_idx<frame_backproj.ny(); j_idx++)
       {
-        vcl_vector<vgl_homg_point_2d<double> > vp(4);
+        std::vector<vgl_homg_point_2d<double> > vp(4);
         int i = i_idx+1;
         int j = j_idx-1;
         vp[0] = vgl_homg_point_2d<double>(i, j);
@@ -918,10 +919,10 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 #ifdef DEBUG
         if (p > p_max) {
           p_max = p;
-          vcl_cout << "-------------max_p=" << p << vcl_endl;
+          std::cout << "-------------max_p=" << p << std::endl;
         }
         if (p >1.0) {
-          vcl_cout << "ERROR!" << vcl_endl;
+          std::cout << "ERROR!" << std::endl;
 //       /   p=max_vox_prob;
         }
 #endif
@@ -939,7 +940,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     // multiply to get PLPX
     bvxm_util::multiply_slabs(*ocp_slab_it,PL,PLPX);
 #ifdef DEBUG
-    vcl_stringstream ss1, ss2, ss3;
+    std::stringstream ss1, ss2, ss3;
     ss1 << "PL_" << k_idx <<".tiff";
     ss2 <<"PX_" << k_idx <<".tiff";
     ss3 << "PL_P" << k_idx <<".tiff";
@@ -961,7 +962,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
       *preX_accum_it += (*PLPX_img_it) * (*visX_accum_it);
     }
 #ifdef DEBUG
-    vcl_stringstream plpx, vis, prex;
+    std::stringstream plpx, vis, prex;
     plpx << "PLPX_" << k_idx <<".tiff";
     vis  << "visX_" << k_idx <<".tiff";
     prex << "preX_" << k_idx <<".tiff";
@@ -993,20 +994,20 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   bvxm_voxel_slab<float> visX_accum_vox(grid_size.x(),grid_size.y(),1);
 
 #ifdef DEBUG
-  vcl_stringstream vis2, prex2;
+  std::stringstream vis2, prex2;
   vis2  << "visX2_.tiff";
   prex2 << "preX2_.tiff";
   bvxm_util::write_slab_as_image(visX_accum,vis2.str());
   bvxm_util::write_slab_as_image(preX_accum,prex2.str());
 #endif
 
-  vcl_cout << "\nPass 2:" << vcl_endl;
+  std::cout << "\nPass 2:" << std::endl;
   PLvisX_slab_it = PLvisX.begin();
   preX_slab_it = preX.begin();
   typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
   for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++PLvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2)
   {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // transform preX_sum to current level
     bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[k_idx], preX_accum_vox);
@@ -1037,7 +1038,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
         *PX_it = max_vox_prob;
     }
   }
-  vcl_cout << "\ndone." << vcl_endl;
+  std::cout << "\ndone." << std::endl;
 
   if (return_prob) {
     // fill pixel_probabilities with preX_accum
@@ -1072,13 +1073,13 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 }
 
 template<bvxm_voxel_type APM_T>
-bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & points)
+bool bvxm_voxel_world::update_point_cloud(std::vector<vgl_point_3d<float> > & points)
 {
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype ocp_datatype;
   // parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
 
-  vcl_cout<<"Get Grid"<<vcl_endl;
+  std::cout<<"Get Grid"<<std::endl;
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<APM_T>(0,0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
@@ -1101,9 +1102,9 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
   {
     vgl_vector_3d<float> index=(points[i]-params_->corner())/params_->voxel_length();
 
-    unsigned k=(unsigned)vcl_floor(grid_size.z()-1.f-index.z());
-    unsigned x=(unsigned)vcl_floor(index.x());
-    unsigned y=(unsigned)vcl_floor(index.y());
+    unsigned k=(unsigned)std::floor(grid_size.z()-1.f-index.z());
+    unsigned x=(unsigned)std::floor(index.x());
+    unsigned y=(unsigned)std::floor(index.y());
 
     if (k<grid_size.z() && x<grid_size.x() && y<grid_size.y()  )
     {
@@ -1140,7 +1141,7 @@ bool bvxm_voxel_world::update_point_cloud(vcl_vector<vgl_point_3d<float> > & poi
       }
     }
     if (i%10000==0)
-      vcl_cout<<".";
+      std::cout<<".";
   }
   ocp_slab_it = ocp_grid->begin();
   //: initializing the grid with 1
@@ -1177,8 +1178,8 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
@@ -1210,10 +1211,10 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
   typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
-  vcl_cout << "Generating Expected Image:" << vcl_endl;
+  std::cout << "Generating Expected Image:" << std::endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // get expected observation
     bvxm_voxel_slab<obs_datatype> expected_slice = apm_processor.expected_color(*apm_slab_it);
@@ -1238,7 +1239,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   typename bvxm_voxel_slab<obs_datatype>::iterator out_it = expected_slab.begin();
   typename bvxm_voxel_slab<float>::const_iterator W_it = PXvisX_accum.begin();
@@ -1286,14 +1287,14 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
 
   // check image sizes
   if ( (observation.img->ni() != inv_prob.ni()) || (observation.img->nj() != inv_prob.nj()) ) {
-    vcl_cerr << "error: observation image size does not match input image size.\n";
+    std::cerr << "error: observation image size does not match input image size.\n";
   }
 
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -1318,7 +1319,7 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
   bvxm_voxel_slab<float> PIPX_image(observation.img->ni(),observation.img->nj(),1);
   bvxm_voxel_slab<float> slice_prob_image(observation.img->ni(),observation.img->nj(),1);
 
-  vcl_cout << "Computing inverse probability of frame +- range: ";
+  std::cout << "Computing inverse probability of frame +- range: ";
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
@@ -1333,10 +1334,10 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
 
   for (int z=0; z<grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -1375,7 +1376,7 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
       *visX_it *= (1 - *PX_it);
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   return true;
 }
@@ -1395,14 +1396,14 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   // check image sizes
   if ( (observation.img->ni() != pixel_probability.ni()) || (observation.img->nj() != pixel_probability.nj()) ) {
-    vcl_cerr << "error: observation image size does not match input image size.\n";
+    std::cerr << "error: observation image size does not match input image size.\n";
   }
 
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -1436,7 +1437,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
 
-  vcl_cout << "Pass 1:" << vcl_endl;
+  std::cout << "Pass 1:" << std::endl;
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
@@ -1451,10 +1452,10 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -1505,7 +1506,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
     }
   }
 
-  vcl_cout << vcl_endl << "done." << vcl_endl;
+  std::cout << std::endl << "done." << std::endl;
 
   // fill pixel_probabilities with preX_accum
   typename vil_image_view<float>::iterator pix_prob_it = pixel_probability.begin();
@@ -1552,14 +1553,14 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
 
   // check image sizes
   if ( (observation.img->ni() != mask->ni()) || (observation.img->nj() != mask->nj()) ) {
-    vcl_cerr << "error: observation image size does not match input image size.\n";
+    std::cerr << "error: observation image size does not match input image size.\n";
   }
 
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
 
 #if 0
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
@@ -1584,7 +1585,7 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
   bvxm_voxel_slab<obs_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<float> mask_backproj(grid_size.x(),grid_size.y(),1);
 
-  vcl_cout << "Pass 1:" << vcl_endl;
+  std::cout << "Pass 1:" << std::endl;
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
@@ -1602,12 +1603,12 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it, ++PI_slab_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     compute_plane_image_H(observation.camera,z,Hp2i,Hi2p,scale_idx);
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
-      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
+      std::cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << '\n';
       return false;
     }
 
@@ -1616,7 +1617,7 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
     bvxm_util::warp_slab_bilinear(mask_slab, Hp2i, mask_backproj);
 
     if (debug) {
-      vcl_stringstream file;
+      std::stringstream file;
       file << "./warped" <<z << ".tif";
       bvxm_util::write_slab_as_image( mask_backproj, file.str());
     }
@@ -1625,7 +1626,7 @@ bool bvxm_voxel_world::region_probability_density(bvxm_image_metadata const& obs
     apm_processor.region_prob_density(*PI_slab_it, *apm_slab_it, frame_backproj,mask_backproj);
 
     if (debug) {
-      vcl_stringstream file;
+      std::stringstream file;
       file << "./p_slab_" <<z << ".tif";
       bvxm_util::write_slab_as_image( *PI_slab_it, file.str());
     }
@@ -1652,8 +1653,8 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
@@ -1713,7 +1714,7 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
     }
 
     if (!apm_processor.update(mog_slab, expected_slice_img, w)) {   // check "if (*I_it >= 0)" during update
-      vcl_cout << "In bvxm_voxel_world<APM_T>::mixture_of_gaussians_image() -- problems in appearance update\n";
+      std::cout << "In bvxm_voxel_world<APM_T>::mixture_of_gaussians_image() -- problems in appearance update\n";
       return false;
     }
   }
@@ -1742,8 +1743,8 @@ bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observ
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
@@ -1803,7 +1804,7 @@ bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observ
     }
 
     if (!apm_processor.update(mog_slab, slice_img, w)) {   // check "if (*I_it >= 0)" during update
-      vcl_cout << "In bvxm_voxel_world<APM_T>::mixture_of_gaussians_image() -- problems in appearance update\n";
+      std::cout << "In bvxm_voxel_world<APM_T>::mixture_of_gaussians_image() -- problems in appearance update\n";
       return false;
     }
   }
@@ -1834,8 +1835,8 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
@@ -1849,7 +1850,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   bvxm_voxel_slab<apm_datatype> slice_img(observation.img->ni(), observation.img->nj(),1);
   bvxm_voxel_slab<float> slice_ocp_img(observation.img->ni(),observation.img->nj(),1);
   bvxm_voxel_slab<float> visX_accum(observation.img->ni(), observation.img->nj(),1);
-  vcl_vector<bvxm_voxel_slab_base_sptr > visX;
+  std::vector<bvxm_voxel_slab_base_sptr > visX;
 
   visX_accum.fill(1.0f);
   mog_slab.fill(bvxm_voxel_traits<APM_T>::initial_val());
@@ -1884,9 +1885,9 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   }
 
   //: create {sample, prob} vector for each column (ray)
-  vcl_vector<float> prob_vec;
-  vcl_vector<vcl_vector<float> > tmp2(observation.img->nj(), prob_vec);
-  vcl_vector<vcl_vector<vcl_vector<float> > > column_probs(observation.img->ni(), tmp2);
+  std::vector<float> prob_vec;
+  std::vector<std::vector<float> > tmp2(observation.img->nj(), prob_vec);
+  std::vector<std::vector<std::vector<float> > > column_probs(observation.img->ni(), tmp2);
   tmp2.clear();
 
   //: normalize visX
@@ -1910,12 +1911,12 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   }
 
   //: create {sample, prob} vector for each column (ray)
-  vcl_vector<unsigned> s_vec;
-  vcl_vector<vcl_vector<unsigned> > tmp3(observation.img->nj(), s_vec);
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > > column_samples(observation.img->ni(), tmp3);
+  std::vector<unsigned> s_vec;
+  std::vector<std::vector<unsigned> > tmp3(observation.img->nj(), s_vec);
+  std::vector<std::vector<std::vector<unsigned> > > column_samples(observation.img->ni(), tmp3);
   tmp3.clear();
 
-  vcl_vector<unsigned> col_ids;
+  std::vector<unsigned> col_ids;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z)
     col_ids.push_back(z);
 
@@ -1928,8 +1929,8 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
     }
   }
 
-  vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
-           << vcl_endl;
+  std::cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
+           << std::endl;
 
   //: release column_probs
   for (unsigned i = 0; i < observation.img->ni(); i++)
@@ -1940,7 +1941,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   column_probs.clear();
 
   vnl_random rng;
-  vcl_vector<bvxm_voxel_slab_base_sptr > samples, weights;
+  std::vector<bvxm_voxel_slab_base_sptr > samples, weights;
   for (unsigned k = 0; k < n_samples; k++) {
     bvxm_voxel_slab_base_sptr v = new bvxm_voxel_slab<obs_datatype>(observation.img->ni(), observation.img->nj(),1);
     obs_datatype e;
@@ -1955,7 +1956,7 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
   typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++apm_slab_it)
   {
-    vcl_cout << '.' << vcl_flush;
+    std::cout << '.' << std::flush;
 
     apm_datatype init;
     slice_img.fill(init);
@@ -1978,15 +1979,15 @@ bool bvxm_voxel_world::mog_image_with_random_order_sampling(bvxm_image_metadata 
     }
   }
 
-  vcl_cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
-           << vcl_endl;
+  std::cout << "sampled " << n_samples << " from " << cnt << " columns with probs summing to 1.0"
+           << std::endl;
 
   //: now create the mixture image from the samples
   for (unsigned k = 0; k < n_samples; k++) {
     bvxm_voxel_slab<obs_datatype>* obs_samples = (bvxm_voxel_slab<obs_datatype>*)(samples[k].ptr());
     bvxm_voxel_slab<float>* w = (bvxm_voxel_slab<float>*)(weights[k].ptr());
     if (!apm_processor.update(mog_slab, *obs_samples, *w)) {
-      vcl_cout << "In mog_image_with_random_order_sampling() -- problems in appearance update\n";
+      std::cout << "In mog_image_with_random_order_sampling() -- problems in appearance update\n";
       return false;
     }
   }
@@ -2014,11 +2015,11 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
-  vcl_vector<vgl_h_matrix_2d<double> > H_virtual_img_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
+  std::vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_virtual_img_to_img;
 
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
@@ -2064,11 +2065,11 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   bvxm_voxel_slab<ocp_datatype> visX_accum_virtual_proj(virtual_view->ni(),virtual_view->nj(),1);
   visX_accum.fill(1.0f);
 
-  vcl_cout <<"Pass 2 - generating virtual image: ";
+  std::cout <<"Pass 2 - generating virtual image: ";
 
   ocp_slab_it = ocp_grid->begin();
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // project image to virtual image
     bvxm_voxel_slab<obs_datatype> image_slab(original_view.img->ni(),original_view.img->nj(),1);
@@ -2111,16 +2112,16 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     bvxm_util::write_slab_as_image(visX_accum,"C:/research/registration/output/visX_accum.tiff");
 #endif
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   // mask out pixels whose rays did not intersect any voxels in the original and virtual frames
-  vcl_cout << "Normalizing visibility probability. ";
+  std::cout << "Normalizing visibility probability. ";
   const float visX_thresh = 1.0f - params_->min_occupancy_prob();
 
   // set mask to 0 for all pixels whose corresponding pixel in the original image did not pass through a voxel.
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z)
   {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // project final visX_accum from image to virtual image
     bvxm_util::warp_slab_bilinear(visX_accum, H_virtual_img_to_img[z], visX_accum_virtual_proj);
@@ -2168,13 +2169,13 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_virtual_img;
+  std::vector<vgl_h_matrix_2d<double> > H_virtual_img_to_plane;
 
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(virtual_camera.img->ni(), virtual_camera.img->nj(), 1);
   if (!bvxm_util::img_to_slab(virtual_camera.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << APM_T << '\n';
+    std::cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << APM_T << '\n';
     return false;
   }
 
@@ -2207,10 +2208,10 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
   typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
-  vcl_cout << "generating height map from virtual camera:" << vcl_endl;
+  std::cout << "generating height map from virtual camera:" << std::endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_virtual_img[z], frame_backproj);
@@ -2236,11 +2237,11 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
       *visX_it *= (1.0f - *PX_it);
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
 #ifdef  DEBUG
   bvxm_util::write_slab_as_image(heightmap_rough,"heightmap_rough.tiff");
-  vcl_cerr << "Wrote height map to TIFF file heightmap_rough.tiff\n";
+  std::cerr << "Wrote height map to TIFF file heightmap_rough.tiff\n";
 #endif
   // now clean up height map
   unsigned n_smooth_iterations = 70;
@@ -2258,7 +2259,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
 
   // first, median filter heightmap
   vil_image_view<float> heightmap_med_img(heightmap.ni(),heightmap.nj());
-  vcl_vector<int> strel_vec;
+  std::vector<int> strel_vec;
   for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
     strel_vec.push_back(i);
   vil_structuring_element strel(strel_vec,strel_vec);
@@ -2270,7 +2271,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   vil_image_view<bool> inliers(heightmap.ni(),heightmap.nj());
   vil_threshold_below(med_abs_diff,inliers,med_diff_thresh);
 
-  vcl_cout << "smoothing height map: ";
+  std::cout << "smoothing height map: ";
   vil_image_view<float> heightmap_filtered_img(heightmap.ni(),heightmap.nj(),1);
   vil_image_view<bool> conf_mask(heightmap.ni(),heightmap.nj());
   // threshold confidence
@@ -2289,7 +2290,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
   }
 
   for (unsigned i=0; i< n_smooth_iterations; ++i) {
-    vcl_cout << '.';
+    std::cout << '.';
     // smooth heightmap
     vil_gauss_filter_2d(heightmap_filtered_img, heightmap_filtered_img, 1.0, 2, vil_convolve_constant_extend);
     // reset values we are confident in
@@ -2302,7 +2303,7 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   // finally, median filter final heightmap
   vil_image_view<float> heightmap_filtered_med(heightmap.ni(),heightmap.nj());
@@ -2323,12 +2324,12 @@ bool bvxm_voxel_world::heightmap(bvxm_image_metadata const& virtual_camera, vil_
 
 //: save the occupancy grid in a ".raw" format readable by Drishti volume rendering software
 template<bvxm_voxel_type APM_T>
-bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename,unsigned scale)
+bool bvxm_voxel_world::save_occupancy_raw(std::string filename,unsigned scale)
 {
   assert(scale<=params_->max_scale());
-  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening file " << filename << " for write!\n";
+    std::cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype ocp_datatype;
@@ -2354,14 +2355,14 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename,unsigned scale)
 
   typename bvxm_voxel_grid<ocp_datatype>::iterator ocp_it = ocp_grid->begin();
   for (unsigned k=0; ocp_it != ocp_grid->end(); ++ocp_it, ++k) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
       for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
         ocp_array[i*ny*nz + j*nz + k] = (unsigned char)((*ocp_it)(i,j) * 255.0);
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   ofs.write(reinterpret_cast<char*>(ocp_array),sizeof(unsigned char)*nx*ny*nz);
 
   ofs.close();
@@ -2371,20 +2372,20 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename,unsigned scale)
   return true;
 }
 
-//: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho. 
+//: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho.
 template <typename T>
-bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map, 
-                                    vpgl_camera_double_sptr z_map_camera, 
-                                    vil_image_view<T>& input_image, 
-                                    vpgl_camera_double_sptr input_camera, 
+bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
+                                    vpgl_camera_double_sptr z_map_camera,
+                                    vil_image_view<T>& input_image,
+                                    vpgl_camera_double_sptr input_camera,
                                     vil_image_view<T>& out_image, unsigned scale_idx)
 {
   // extract global parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
-  
+
   // compute homographies from voxel planes to image coordinates and vise-versa.
-  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
-  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  std::vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  std::vector<vgl_h_matrix_2d<double> > H_img_to_plane;
 
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
@@ -2397,7 +2398,7 @@ bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
   // allocate some images
   bvxm_voxel_slab<float> z_slab(z_map->ni(),z_map->nj(),1);
   if (!bvxm_util::img_to_slab(z_map,z_slab)) {
-    vcl_cerr << "error converting image to voxel slab!\n";
+    std::cerr << "error converting image to voxel slab!\n";
     return false;
   }
 
@@ -2423,26 +2424,26 @@ bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
   bvxm_voxel_slab<T> frame_backproj(grid_size.x(),grid_size.y(),1);
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z) {
-    vcl_cout << '.';
+    std::cout << '.';
 
     // backproject image onto voxel plane
     frame_backproj.fill(T(0));
     bvxm_util::warp_slab_nearest_neighbor(image_slab, H_plane_to_img[z], frame_backproj);
 
-    //vcl_stringstream s_temp; s_temp << "C:/projects/temp/temp_img_" << z << ".tif";
+    //std::stringstream s_temp; s_temp << "C:/projects/temp/temp_img_" << z << ".tif";
     //bvxm_util::write_slab_as_image(frame_backproj,s_temp.str());
-    
+
     typename bvxm_voxel_slab<T>::iterator frame_it = frame_backproj.begin();
     bvxm_voxel_slab<float>::iterator ortho_backproj_it = ortho_backproj.begin();
     typename bvxm_voxel_slab<T>::iterator out_slab_it = out_slab_temp.begin();
 
     for (; frame_it != frame_backproj.end(); ++ortho_backproj_it, ++frame_it, ++out_slab_it) {
-      unsigned val = (unsigned)(vcl_floor(*ortho_backproj_it+0.5f)); // truncate the height to nearest int
+      unsigned val = (unsigned)(std::floor(*ortho_backproj_it+0.5f)); // truncate the height to nearest int
       if (val >= z)
         *out_slab_it = *frame_it;
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   //vil_image_view_base_sptr outfloatimg = new vil_image_view<float>(out_image->ni(), out_image->nj(), 1);
 

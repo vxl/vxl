@@ -11,7 +11,7 @@
 // the parameters for this transform are
 // the Euler angle r1 r2 r2 and the translation t1 t2 t3
 
-pop_projective::pop_projective(vcl_vector<pop_parameter*> params,
+pop_projective::pop_projective(std::vector<pop_parameter*> params,
                                pop_vertex *cs1, pop_vertex *cs2) :
   pop_transform(params,cs1,cs2)
 {

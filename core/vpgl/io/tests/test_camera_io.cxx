@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -21,7 +22,7 @@ static double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
 
 static void test_camera_io()
 {
-  vcl_cout << "Testing base camera io" << vcl_endl;
+  std::cout << "Testing base camera io" << std::endl;
   vpgl_camera<double>* cam, *cam_r;
   //===========   proj_camera ==================
   // Some matrices for testing.
@@ -46,7 +47,7 @@ static void test_camera_io()
   }
   //  delete cam_r; cam_r = 0;
   //================= test smart pointer io ============
-  vpgl_camera_double_sptr cam_sptr = cam, cam_r_sptr=0;
+  vpgl_camera_double_sptr cam_sptr = cam, cam_r_sptr=VXL_NULLPTR;
   vsl_b_ofstream bp_outps("test_camera_sptr_io.tmp");
   vsl_b_write(bp_outps, cam_sptr);
   bp_outps.close();
@@ -133,7 +134,7 @@ static void test_camera_io()
 
   //===========   rational_camera ==================
 
-  vcl_vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
+  std::vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
   neu_u[0]=0.1; neu_u[10]=0.071; neu_u[7]=0.01;  neu_u[9]=0.3;
   neu_u[15]=1.0; neu_u[18]=1.0, neu_u[19]=0.75;
 

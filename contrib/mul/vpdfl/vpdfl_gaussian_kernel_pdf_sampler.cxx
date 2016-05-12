@@ -34,16 +34,16 @@ vpdfl_gaussian_kernel_pdf_sampler::~vpdfl_gaussian_kernel_pdf_sampler()
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_gaussian_kernel_pdf_sampler::is_a() const
+std::string vpdfl_gaussian_kernel_pdf_sampler::is_a() const
 {
-  return vcl_string("vpdfl_gaussian_kernel_pdf_sampler");
+  return std::string("vpdfl_gaussian_kernel_pdf_sampler");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_gaussian_kernel_pdf_sampler::is_class(vcl_string const& s) const
+bool vpdfl_gaussian_kernel_pdf_sampler::is_class(std::string const& s) const
 {
   return vpdfl_sampler_base::is_class(s) || s==vpdfl_gaussian_kernel_pdf_sampler::is_a();
 }
@@ -108,7 +108,7 @@ void vpdfl_gaussian_kernel_pdf_sampler::sample(vnl_vector<double>& x)
 //: Fill x with samples possibly chosen so as to represent the distribution
 //  Sample sequentially from each component.
 void vpdfl_gaussian_kernel_pdf_sampler::regular_samples(
-                       vcl_vector<vnl_vector<double> >& x)
+                       std::vector<vnl_vector<double> >& x)
 {
   const vpdfl_gaussian_kernel_pdf & kpdf = static_cast<const vpdfl_gaussian_kernel_pdf &>(model());
   int n_k = kpdf.centre().size();

@@ -16,8 +16,10 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <vcl_sstream.h>
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -51,7 +53,7 @@ class bmsh3d_face : public vispt_elm
 {
  protected:
   //: Pointer to the IFS vertices of this face.
-  vcl_vector<bmsh3d_vertex*> vertices_;
+  std::vector<bmsh3d_vertex*> vertices_;
 
   bmsh3d_halfedge* halfedge_;
 
@@ -93,8 +95,8 @@ class bmsh3d_face : public vispt_elm
 
   const bmsh3d_vertex* vertices(unsigned int i) const { return vertices_[i]; }
   bmsh3d_vertex* vertices(unsigned int i) { return vertices_[i]; }
-  const vcl_vector<bmsh3d_vertex*>& vertices() const { return vertices_; }
-  vcl_vector<bmsh3d_vertex*>& vertices() { return vertices_; }
+  const std::vector<bmsh3d_vertex*>& vertices() const { return vertices_; }
+  std::vector<bmsh3d_vertex*>& vertices() { return vertices_; }
 
   bmsh3d_halfedge* halfedge() const { return halfedge_; }
   bmsh3d_halfedge* & halfedge() { return halfedge_; }
@@ -114,8 +116,8 @@ class bmsh3d_face : public vispt_elm
 
   //###### Connectivity Query via Halfedges ######
 
-  void get_incident_HEs(vcl_vector<bmsh3d_halfedge*>& incident_HEs) const;
-  void get_incident_Es(vcl_vector<bmsh3d_edge*>& incident_Es) const;
+  void get_incident_HEs(std::vector<bmsh3d_halfedge*>& incident_HEs) const;
+  void get_incident_Es(std::vector<bmsh3d_edge*>& incident_Es) const;
   unsigned int n_incident_Es() const;
   bool is_E_incident(const bmsh3d_edge* inputE) const;
   bmsh3d_halfedge* find_bnd_HE() const;
@@ -141,16 +143,16 @@ class bmsh3d_face : public vispt_elm
 
   double angle_at_V(const bmsh3d_vertex* inputV) const;
 
-  int n_incident_Vs_in_set(vcl_set<bmsh3d_vertex*>& vertices) const;
-  bool all_Vs_incident(vcl_vector<bmsh3d_vertex*>& vertices) const;
+  int n_incident_Vs_in_set(std::set<bmsh3d_vertex*>& vertices) const;
+  bool all_Vs_incident(std::vector<bmsh3d_vertex*>& vertices) const;
 
-  void get_ordered_Vs(vcl_vector<bmsh3d_vertex*>& vertices) const;
-  void _get_ordered_Vs_MHE(vcl_vector<bmsh3d_vertex*>& vertices) const;
-  void _get_ordered_Vs_IFS(vcl_vector<bmsh3d_vertex*>& vertices) const;
+  void get_ordered_Vs(std::vector<bmsh3d_vertex*>& vertices) const;
+  void _get_ordered_Vs_MHE(std::vector<bmsh3d_vertex*>& vertices) const;
+  void _get_ordered_Vs_IFS(std::vector<bmsh3d_vertex*>& vertices) const;
 
-  void get_ordered_V_ids(vcl_vector<int>& vids) const;
-  void _get_ordered_V_ids_MHE(vcl_vector<int>& vids) const;
-  void _get_ordered_V_ids_IFS(vcl_vector<int>& vids) const;
+  void get_ordered_V_ids(std::vector<int>& vids) const;
+  void _get_ordered_V_ids_MHE(std::vector<int>& vids) const;
+  void _get_ordered_V_ids_IFS(std::vector<int>& vids) const;
 
   //###### Handle local list of incident vertices ######
   void _ifs_add_vertex(bmsh3d_vertex* V) { vertices_.push_back(V); }
@@ -198,7 +200,7 @@ class bmsh3d_face : public vispt_elm
   bool is_inside_box(const vgl_box_3d<double>& box) const;
   bool is_outside_box(const vgl_box_3d<double>& box) const;
   vgl_point_3d<double> compute_center_pt() const;
-  vgl_point_3d<double> compute_center_pt(const vcl_vector<bmsh3d_vertex*>& vertices) const;
+  vgl_point_3d<double> compute_center_pt(const std::vector<bmsh3d_vertex*>& vertices) const;
   vgl_vector_3d<double> compute_normal();
 
   //###### Connectivity Modification Functions ######
@@ -226,11 +228,11 @@ class bmsh3d_face : public vispt_elm
 
   //###### Other functions ######
 
-  virtual void getInfo(vcl_ostringstream& ostrm);
+  virtual void getInfo(std::ostringstream& ostrm);
 
   //###### For triangular face only ######
   TRIFACE_TYPE tri_get_topo_type() const;
-  vcl_string   tri_get_topo_string() const;
+  std::string   tri_get_topo_string() const;
 
   //###### For the face of a 2-manifold triangular mesh only ######
   //  these functions start with tag m2t (manifold-2-triangle)
@@ -258,30 +260,30 @@ void _delete_HE_chain(bmsh3d_halfedge* & he_head);
 //  Return: the set of incident edges that get disconnected.
 //  Also set the he_head to be NULL after calling it.
 void _delete_HE_chain(bmsh3d_halfedge* & he_head,
-                      vcl_vector<bmsh3d_edge*>& incident_edge_list);
+                      std::vector<bmsh3d_edge*>& incident_edge_list);
 
 //: Given the face, current halfedge, and current eV, find the next halfedge given in the vector<>.
 bmsh3d_halfedge* _find_next_halfedge(bmsh3d_halfedge* HE,
                                      bmsh3d_vertex* eV,
-                                     vcl_vector<bmsh3d_halfedge*>& inc_hes);
+                                     std::vector<bmsh3d_halfedge*>& inc_hes);
 
 //: Assume the mesh face is planar and compute a 2D planar coordinate for it.
-void get_2d_coord(const vcl_vector<bmsh3d_vertex*>& vertices,
+void get_2d_coord(const std::vector<bmsh3d_vertex*>& vertices,
                   vgl_vector_3d<double>& N, vgl_vector_3d<double>& AX,
                   vgl_vector_3d<double>& AY);
 
 //: Return ordered set of vertices in 2D (x,y) coord.
-void get_2d_polygon(const vcl_vector<bmsh3d_vertex*>& vertices,
-                    vcl_vector<double>& xs, vcl_vector<double>& ys);
+void get_2d_polygon(const std::vector<bmsh3d_vertex*>& vertices,
+                    std::vector<double>& xs, std::vector<double>& ys);
 
 //: Return the projected point in the local 2D (x,y) coord.
 vgl_point_2d<double> get_2d_proj_pt(vgl_point_3d<double> P, const vgl_point_3d<double>& A,
                                     const vgl_vector_3d<double>& AX,
                                     const vgl_vector_3d<double>& AY);
 
-vgl_point_3d<double> compute_cen(const vcl_vector<bmsh3d_vertex*>& vertices);
+vgl_point_3d<double> compute_cen(const std::vector<bmsh3d_vertex*>& vertices);
 
-vgl_vector_3d<double> compute_normal_ifs(const vcl_vector<bmsh3d_vertex*>& vertices);
+vgl_vector_3d<double> compute_normal_ifs(const std::vector<bmsh3d_vertex*>& vertices);
 
 //: Compute face normal using the given edge and starting node.
 vgl_vector_3d<double> compute_normal(const vgl_point_3d<double>& C,
@@ -289,7 +291,7 @@ vgl_vector_3d<double> compute_normal(const vgl_point_3d<double>& C,
                                      const bmsh3d_vertex* Es);
 
 //: Return true if vertices is a polygon or obtuse triangle.
-bool is_tri_non_acute(const vcl_vector<bmsh3d_vertex*>& vertices);
+bool is_tri_non_acute(const std::vector<bmsh3d_vertex*>& vertices);
 
 bool is_F_extraneous(bmsh3d_face* F);
 
@@ -300,31 +302,31 @@ bmsh3d_face* get_F_sharing_Es(bmsh3d_edge* E1, bmsh3d_edge* E2);
 inline void m2t_compute_tri_angles(const double& c, const double& l, const double& r,
                                    double& angle_cl, double& angle_cr, double& angle_lr)
 {
-  angle_cl = vcl_acos( (c*c + l*l - r*r)/(c*l*2) );
-  angle_cr = vcl_acos( (c*c + r*r - l*l)/(c*r*2) );
-  angle_lr = vcl_acos( (l*l + r*r - c*c)/(l*r*2) );
+  angle_cl = std::acos( (c*c + l*l - r*r)/(c*l*2) );
+  angle_cr = std::acos( (c*c + r*r - l*l)/(c*r*2) );
+  angle_lr = std::acos( (l*l + r*r - c*c)/(l*r*2) );
 }
 
 inline void m2t_compute_angles_cl_cr(const double& c, const double& l, const double& r,
                                      double& angle_cl, double& angle_cr)
 {
-  angle_cl = vcl_acos( (c*c + l*l - r*r)/(c*l*2) );
-  angle_cr = vcl_acos( (c*c + r*r - l*l)/(c*r*2) );
+  angle_cl = std::acos( (c*c + l*l - r*r)/(c*l*2) );
+  angle_cr = std::acos( (c*c + r*r - l*l)/(c*r*2) );
 }
 
 inline double m2t_compute_angle_cl(const double& c, const double& l, const double& r)
 {
-  return vcl_acos( (c*c + l*l - r*r)/(c*l*2) );
+  return std::acos( (c*c + l*l - r*r)/(c*l*2) );
 }
 
 inline double m2t_compute_angle_cr(const double& c, const double& l, const double& r)
 {
-  return vcl_acos( (c*c + r*r - l*l)/(c*r*2) );
+  return std::acos( (c*c + r*r - l*l)/(c*r*2) );
 }
 
 inline double m2t_compute_angle_lr(const double& c, const double& l, const double& r)
 {
-  return vcl_acos( (l*l + r*r - c*c)/(l*r*2) );
+  return std::acos( (l*l + r*r - c*c)/(l*r*2) );
 }
 
 #endif

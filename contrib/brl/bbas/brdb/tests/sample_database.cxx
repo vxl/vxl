@@ -1,9 +1,11 @@
 // This is brl/bbas/brdb/tests/sample_database.cxx
+#include <iostream>
+#include <sstream>
 #include "sample_database.h"
 //:
 // \file
 
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_database.h>
@@ -11,17 +13,17 @@
 //: a function to generate a sample database for testing
 brdb_database_sptr generate_sample_database()
 {
-  vcl_vector<vcl_string> r1_names(3);
-  vcl_vector<vcl_string> r1_types(3);
-  vcl_vector<brdb_tuple_sptr> r1_tuples(20);
+  std::vector<std::string> r1_names(3);
+  std::vector<std::string> r1_types(3);
+  std::vector<brdb_tuple_sptr> r1_tuples(20);
 
-  vcl_vector<vcl_string> r2_names(2);
-  vcl_vector<vcl_string> r2_types(2);
-  vcl_vector<brdb_tuple_sptr> r2_tuples(30);
+  std::vector<std::string> r2_names(2);
+  std::vector<std::string> r2_types(2);
+  std::vector<brdb_tuple_sptr> r2_tuples(30);
 
-  vcl_vector<vcl_string> r3_names(2);
-  vcl_vector<vcl_string> r3_types(2);
-  vcl_vector<brdb_tuple_sptr> r3_tuples(40);
+  std::vector<std::string> r3_names(2);
+  std::vector<std::string> r3_types(2);
+  std::vector<brdb_tuple_sptr> r3_tuples(40);
 
 
   r1_names[0] = "ID";
@@ -29,15 +31,15 @@ brdb_database_sptr generate_sample_database()
   r1_names[2] = "Gender";
 
   r1_types[0] = brdb_value_t<int>::type();
-  r1_types[1] = brdb_value_t<vcl_string>::type();
+  r1_types[1] = brdb_value_t<std::string>::type();
   r1_types[2] = brdb_value_t<bool>::type();
 
   for (int i=0; i<20; i++)
   {
     int ID = 100+i;
-    vcl_stringstream SS;
+    std::stringstream SS;
     SS << "zhao_yong_" << i;
-    vcl_string name;
+    std::string name;
     SS >> name;
     bool gender;
 
@@ -76,14 +78,14 @@ brdb_database_sptr generate_sample_database()
 
 
   r3_types[0] = brdb_value_t<int>::type();
-  r3_types[1] = brdb_value_t<vcl_string>::type();
+  r3_types[1] = brdb_value_t<std::string>::type();
 
   for (int i=0; i<40; i++)
   {
     int ID = 100+i;
-    vcl_stringstream SS;
+    std::stringstream SS;
     SS << "dempartment_" << i;
-    vcl_string dept;
+    std::string dept;
     SS >> dept;
 
     r3_tuples[i] = new brdb_tuple(ID, dept);
@@ -92,12 +94,12 @@ brdb_database_sptr generate_sample_database()
 
   brdb_relation_sptr r3 = new brdb_relation(r3_names, r3_tuples, r3_types);
 
-  vcl_vector<brdb_relation_sptr> test_relations;
+  std::vector<brdb_relation_sptr> test_relations;
   test_relations.push_back(r1);
   test_relations.push_back(r2);
   test_relations.push_back(r3);
 
-  vcl_vector<vcl_string> relation_names;
+  std::vector<std::string> relation_names;
   relation_names.push_back("name_gender");
   relation_names.push_back("age");
   relation_names.push_back("department");

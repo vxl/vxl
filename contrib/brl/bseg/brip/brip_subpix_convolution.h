@@ -45,9 +45,9 @@ inline void brip_subpix_convolve_2d(const vil_image_view<srcT>& src_im,
   dest_im.fill(0);
 
   //determine the step sizes
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  vcl_ptrdiff_t s_pstep = src_im.planestep();
-  vcl_ptrdiff_t d_istep = dest_im.istep(), d_jstep = dest_im.jstep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t s_pstep = src_im.planestep();
+  std::ptrdiff_t d_istep = dest_im.istep(), d_jstep = dest_im.jstep();
 
   // filter with shifted versions of the original filter
   // we need 2^(2N) convolutions to completely compute it
@@ -91,8 +91,8 @@ inline void brip_subpix_convolve_2d(const vil_image_view<srcT>& src_im,
 //: Convolve the image with the given kernel at the given subpixel locations (pts) only
 template <class srcT, class kernelT, class accumT>
 inline void brip_subpix_convolve_2d(const vil_image_view<srcT>& src_im,
-                                    const vcl_vector<vgl_point_2d<accumT> >& pts,
-                                    vcl_vector<accumT>& res,
+                                    const std::vector<vgl_point_2d<accumT> >& pts,
+                                    std::vector<accumT>& res,
                                     kernelT kernel, accumT ac,
                                     int /*N*/)
 {
@@ -100,13 +100,13 @@ inline void brip_subpix_convolve_2d(const vil_image_view<srcT>& src_im,
   int khs = (kernel.ni()-1)/2;
 
   //determine the step sizes for the src_image
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep(), s_pstep = src_im.planestep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep(), s_pstep = src_im.planestep();
   //for each subpixel point, we need to create a new kernel shifted to that location
   for (unsigned i=0; i<pts.size(); i++)
   {
     //determine closest integer coordinates of the current point
-    int x = (int) vcl_floor(pts[i].x());
-    int y = (int) vcl_floor(pts[i].y());
+    int x = (int) std::floor(pts[i].x());
+    int y = (int) std::floor(pts[i].y());
 
     //assert(x>=khs && y>=khs && x<src_im.ni()-khs && y<src_im.nj()-khs);
 
@@ -137,9 +137,9 @@ inline void brip_subpix_convolve_2d(const vil_image_view<srcT>& src_im,
 //: Convolve the image with the given kernel at the given subpixel locations (pts) only at the given orientation
 template <class srcT, class kernelT, class accumT>
 inline void brip_subpix_convolve_2d(const vil_image_view<srcT>& src_im,
-                                    const vcl_vector<vgl_point_2d<accumT> >& pts,
-                                    const vcl_vector<accumT>& thetas,
-                                    vcl_vector<accumT>& res,
+                                    const std::vector<vgl_point_2d<accumT> >& pts,
+                                    const std::vector<accumT>& thetas,
+                                    std::vector<accumT>& res,
                                     kernelT kernel, accumT ac,
                                     int /*N*/)
 {
@@ -147,13 +147,13 @@ inline void brip_subpix_convolve_2d(const vil_image_view<srcT>& src_im,
   int khs = (kernel.ni()-1)/2;
 
   //determine the step sizes for the src_image
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep(), s_pstep = src_im.planestep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep(), s_pstep = src_im.planestep();
   //for each subpixel point, we need to create a new kernel shifted to that location
   for (unsigned i=0; i<pts.size(); i++)
   {
     //determine closest integer coordinates of the current point
-    int x = (int) vcl_floor(pts[i].x());
-    int y = (int) vcl_floor(pts[i].y());
+    int x = (int) std::floor(pts[i].x());
+    int y = (int) std::floor(pts[i].y());
 
     //assert(x>=khs && y>=khs && x<src_im.ni()-khs && y<src_im.nj()-khs);
 
@@ -209,8 +209,8 @@ inline void brip_subpix_convolve_2d_sep(const vil_image_view<srcT>& src_im,
   dest_im.fill(0);
 
   //determine the step sizes
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  vcl_ptrdiff_t d_istep = dest_im.istep(), d_jstep = dest_im.jstep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t d_istep = dest_im.istep(), d_jstep = dest_im.jstep();
 
   // filter with shifted versions of the original filter
   // we need 2^(2N) convolutions to completely compute it

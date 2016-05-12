@@ -1,2 +1,2 @@
-ADD_EXECUTABLE(shapelib_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( shapelib_test_include shapelib )
+add_executable(shapelib_test_include test_include.cxx )
+target_link_libraries( shapelib_test_include shapelib )

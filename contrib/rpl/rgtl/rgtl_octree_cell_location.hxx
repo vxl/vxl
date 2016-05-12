@@ -11,9 +11,11 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <iostream>
+#include <iosfwd>
 #include "rgtl_compact_tree_index.hxx"
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Represent the logical index of an octree cell in D dimensions.
 //
@@ -76,7 +78,7 @@ bool operator>(rgtl_octree_cell_location<D> const& l,
 
 //: Print a logical cell location in a human-readable form.
 template <unsigned int D>
-vcl_ostream& operator<<(vcl_ostream& os,
+std::ostream& operator<<(std::ostream& os,
                         rgtl_octree_cell_location<D> const& cell);
 
 #endif // rgtl_octree_cell_location_hxx

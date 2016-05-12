@@ -24,8 +24,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <cstdlib>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include "PairMatchMultiIterator.h"
 
 template <class T> class vbl_sparse_array_2d;
@@ -43,7 +45,7 @@ class PairMatchMulti
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchMulti();
-  PairMatchMulti(vcl_istream& s);
+  PairMatchMulti(std::istream& s);
   PairMatchMulti(const PairMatchMulti& that);
  ~PairMatchMulti();
 
@@ -81,7 +83,7 @@ class PairMatchMulti
   //  Example usage: to print all matches for "target"
   // \code
   //   for (PairMatchMultiIterator p = mm.get_match_12(target); !p.done(); p.next())
-  //     vcl_cout << p.get_i1() << ' ' << p.get_i2() << vcl_endl;
+  //     std::cout << p.get_i1() << ' ' << p.get_i2() << std::endl;
   // \endcode
   // Complexity is O(log n).
   PairMatchMultiIterator get_match_12(int i1)
@@ -92,7 +94,7 @@ class PairMatchMulti
   //: Return an iterator which will run through the list of matches for feature index i2.
   // This may be expensive.  If it is used a lot, it may be worth maintaining
   // forward and backward maps.  Right now it's not even implemented.
-  PairMatchMultiIterator get_match_21(int/*i2*/) { vcl_abort(); return iter(); }
+  PairMatchMultiIterator get_match_21(int/*i2*/) { std::abort(); return iter(); }
 
   //: Return an iterator that traverses the entire match set
   PairMatchMultiIterator iter() {
@@ -108,10 +110,10 @@ class PairMatchMulti
   }
 
   bool load(char const* filename);
-  bool read_ascii(vcl_istream& s);
+  bool read_ascii(std::istream& s);
 };
 
-vcl_ostream& operator<< (vcl_ostream&, const PairMatchMulti&);
-vcl_istream& operator>> (vcl_istream&, PairMatchMulti&);
+std::ostream& operator<< (std::ostream&, const PairMatchMulti&);
+std::istream& operator>> (std::istream&, PairMatchMulti&);
 
 #endif // PairMatchMulti_h_

@@ -42,23 +42,23 @@ class boxm2_cache1: public vbl_ref_count
   virtual boxm2_block* get_block(boxm2_block_id id) = 0;
 
   //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-  virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true) = 0;
+  virtual boxm2_data_base* get_data_base(boxm2_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true) = 0;
 
   //: returns a data_base pointer which is initialized to the default value of the type.
   //  If a block for this type exists on the cache, it is removed and replaced with the new one.
   //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
-  virtual boxm2_data_base* get_data_base_new(boxm2_block_id id, vcl_string type=0, vcl_size_t num_bytes=0, bool read_only = true) = 0;
+  virtual boxm2_data_base* get_data_base_new(boxm2_block_id id, std::string type=0, std::size_t num_bytes=0, bool read_only = true) = 0;
 
   //: removes data from this cache (may or may not write to disk first)
   //  Note that this function does not delete the memory, just removes it from the cache
   //  and puts it in the garbage vector
-  virtual void remove_data_base(boxm2_block_id id, vcl_string type)=0;
+  virtual void remove_data_base(boxm2_block_id id, std::string type)=0;
 
-  virtual void replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement)=0;
+  virtual void replace_data_base(boxm2_block_id id, std::string type, boxm2_data_base* replacement)=0;
 
   //: returns data pointer to data specified by ID and data_type
   template <boxm2_data_type T>
-  boxm2_data<T>* get_data(boxm2_block_id id, vcl_size_t num_bytes=0, bool read_only=true);
+  boxm2_data<T>* get_data(boxm2_block_id id, std::size_t num_bytes=0, bool read_only=true);
 
   //: dumps writeable data onto disk
   // -- pure virtual method; see specialisations
@@ -71,7 +71,7 @@ class boxm2_cache1: public vbl_ref_count
   //: delete all the memory
   // Caution: make sure to call write to disk methods not to loose writable data
   virtual void clear_cache() = 0;
-  
+
   //: return scene sptr
   virtual boxm2_scene_sptr get_scene() { return scene_; }
 
@@ -98,7 +98,7 @@ class boxm2_cache1: public vbl_ref_count
 //: returns a boxm2_data<T>* from the cache
 //  This is a work around for the lack of support of virtual templated functions
 template <boxm2_data_type T>
-boxm2_data<T>* boxm2_cache1::get_data(boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
+boxm2_data<T>* boxm2_cache1::get_data(boxm2_block_id id, std::size_t num_bytes, bool read_only)
 {
   boxm2_data_base* base = this->get_data_base(id, boxm2_data_traits<T>::prefix(), num_bytes, read_only);
   return static_cast<boxm2_data<T>* >(base);

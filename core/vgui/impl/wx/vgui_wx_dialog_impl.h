@@ -13,13 +13,14 @@
 // \endverbatim
 //=========================================================================
 
+#include <string>
+#include <cstddef>
 #include <vgui/internals/vgui_dialog_impl.h>
 class  vgui_wx_adaptor;
 class  vgui_dialog_field;
 struct vgui_wx_dialog_choice;
 
-#include <vcl_string.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
 
 class wxDialog;
 class wxTextCtrl;
@@ -46,7 +47,7 @@ class vgui_wx_dialog_impl : public vgui_dialog_impl
 
   //: Create a choice widget.
   virtual void* choice_field_widget(const char* txt,
-                                    const vcl_vector<vcl_string>& labels,
+                                    const std::vector<std::string>& labels,
                                     int& val);
 
   //: Create the inline_tableau_widget (OpenGL area).
@@ -72,18 +73,18 @@ class vgui_wx_dialog_impl : public vgui_dialog_impl
   wxSizer* text_element     (vgui_dialog_field* field);
   wxSizer* text_with_button_element(vgui_dialog_field* field,
                                     wxTextCtrl*& text_control,
-                                    const vcl_string& button,
+                                    const std::string& button,
                                     int event_id);
   wxSizer* exit_buttons_element();
 
   //: Title of the dialog widget.
-  vcl_string title_;
+  std::string title_;
 
   //: Pointer to wxWidgets dialog widget.
   wxDialog* dialog_;
 
   //: Element count at the last dialog construction (i.e., ask()).
-  vcl_size_t last_element_count_;
+  std::size_t last_element_count_;
 
   //: The width of the largest label; used for graphical alignment.
   int max_label_width_;

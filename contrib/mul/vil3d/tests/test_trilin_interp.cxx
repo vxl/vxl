@@ -1,13 +1,14 @@
 // This is mul/vil3d/tests/test_trilin_interp.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_trilin_interp.h>
 
 
 static void test_trilin_interp_float()
 {
-  vcl_cout << "*************************************\n"
+  std::cout << "*************************************\n"
            << " Testing vil3d_trilin_interp <float>\n"
            << "*************************************\n";
 
@@ -22,9 +23,9 @@ static void test_trilin_interp_float()
       for (unsigned z=0;z<image0.nk();++z)
         image0(x,y,z) = x*0.1f+y+z*10;
 
-  vcl_ptrdiff_t istep = image0.istep();
-  vcl_ptrdiff_t jstep = image0.jstep();
-  vcl_ptrdiff_t kstep = image0.kstep();
+  std::ptrdiff_t istep = image0.istep();
+  std::ptrdiff_t jstep = image0.jstep();
+  std::ptrdiff_t kstep = image0.kstep();
 
   {
     double v1 = vil3d_trilin_interp_raw(3,3,3,image0.origin_ptr(),istep,jstep,kstep);
@@ -57,7 +58,7 @@ static void test_trilin_interp_float()
 
 static void test_trilin_interp_int()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing vil3d_trilin_interp <int>\n"
            << "***********************************\n";
 
@@ -72,9 +73,9 @@ static void test_trilin_interp_int()
       for (unsigned z=0;z<image0.nk();++z)
         image0(x,y,z) = x + y*10 + z*100;
 
-      vcl_ptrdiff_t istep = image0.istep();
-      vcl_ptrdiff_t jstep = image0.jstep();
-      vcl_ptrdiff_t kstep = image0.kstep();
+      std::ptrdiff_t istep = image0.istep();
+      std::ptrdiff_t jstep = image0.jstep();
+      std::ptrdiff_t kstep = image0.kstep();
 
       {
         double v1 = vil3d_trilin_interp_raw(3,3,3,image0.origin_ptr(),istep,jstep,kstep);

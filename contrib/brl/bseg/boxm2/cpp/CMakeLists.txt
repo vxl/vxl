@@ -1,12 +1,12 @@
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
-SET(boxm2_cpp_sources
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
+set(boxm2_cpp_sources
 
    )
-AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_sources)
-ADD_LIBRARY(boxm2_cpp  ${boxm2_cpp_sources})
+aux_source_directory(Templates boxm2_cpp_sources)
+vxl_add_library(LIBRARY_NAME boxm2_cpp LIBRARY_SOURCES  ${boxm2_cpp_sources})
 
-TARGET_LINK_LIBRARIES(boxm2_cpp boxm2 boxm2_basic boxm2_io boct brdb vbl_io expatpp vpgl vil_io vil vgl vgl_xio vbl vsl vcl rply)
+target_link_libraries(boxm2_cpp boxm2 boxm2_basic boxm2_io boct brdb ${VXL_LIB_PREFIX}vbl_io expatpp ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl rply)
 
 # cpp process APIs.
 add_subdirectory(pro)
@@ -15,6 +15,6 @@ add_subdirectory(pro)
 add_subdirectory(algo)
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

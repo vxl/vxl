@@ -190,7 +190,7 @@ void vgui_mfc_window::reposition(int x,int y)
   main_wnd->SetWindowPlacement(&w_placement);
 }
 
-void vgui_mfc_window::set_title(const vcl_string &s)
+void vgui_mfc_window::set_title(const std::string &s)
 {
   CWinApp *app = AfxGetApp();
   app->GetMainWnd()->SetWindowText(s.c_str());

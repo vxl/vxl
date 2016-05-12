@@ -28,10 +28,11 @@
 //   Sep 27, 2007 - Ricardo Fabbri - isotropic scaling set to sqrt(2) factor
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
 template <class T>
@@ -45,32 +46,32 @@ class vgl_norm_trans_2d: public vgl_h_matrix_2d<T>
   vgl_norm_trans_2d(const vgl_norm_trans_2d<T>& M);
   vgl_norm_trans_2d(vnl_matrix_fixed<T,3,3> const& M);
   vgl_norm_trans_2d(const T* t_matrix);
-  vgl_norm_trans_2d(vcl_istream& s);
+  vgl_norm_trans_2d(std::istream& s);
   vgl_norm_trans_2d(char const* filename);
  ~vgl_norm_trans_2d();
 
   // Operations----------------------------------------------------------------
 
   //: compute the normalizing transform
-  bool compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
+  bool compute_from_points(std::vector<vgl_homg_point_2d<T> > const& points,
                            bool isotropic = true);
-  bool compute_from_lines(vcl_vector<vgl_homg_line_2d<T>  > const& lines,
+  bool compute_from_lines(std::vector<vgl_homg_line_2d<T>  > const& lines,
                           bool isotropic = true);
   bool
-    compute_from_points_and_lines(vcl_vector<vgl_homg_point_2d<T> > const& pts,
-                                  vcl_vector<vgl_homg_line_2d<T> > const& lines
+    compute_from_points_and_lines(std::vector<vgl_homg_point_2d<T> > const& pts,
+                                  std::vector<vgl_homg_line_2d<T> > const& lines
                                   , bool isotropic = true);
 
  protected :
   //Utility functions
 
-  static bool scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in,
+  static bool scale_xyroot2(std::vector<vgl_homg_point_2d<T> > const& in,
                             T& radius);
 
-  static void center_of_mass(vcl_vector<vgl_homg_point_2d<T> > const& points,
+  static void center_of_mass(std::vector<vgl_homg_point_2d<T> > const& points,
                              T& cx, T& cy);
 
-  static bool scale_aniostropic(vcl_vector<vgl_homg_point_2d<T> > const& in,
+  static bool scale_aniostropic(std::vector<vgl_homg_point_2d<T> > const& in,
                                 T& sdx, T& sdy, T& c, T& s);
 };
 

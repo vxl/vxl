@@ -10,6 +10,8 @@
 //      Nov 2008 J Becker: Added a clone function.
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -17,7 +19,7 @@
 #include "rgrl_feature_sptr.h"
 #include "rgrl_feature_reader.h"
 #include "rgrl_object.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class rgrl_transformation;
 
@@ -70,11 +72,11 @@ class rgrl_feature
 
   //: read in feature
   virtual
-  bool read( vcl_istream& is, bool skip_tag=false ) = 0;
+  bool read( std::istream& is, bool skip_tag=false ) = 0;
 
   //: write out feature
   virtual
-  void write( vcl_ostream& os ) const = 0;
+  void write( std::ostream& os ) const = 0;
 
   //:  Projects the error to the normal space of the underlying surface.
   //
@@ -140,7 +142,7 @@ class rgrl_feature
   //
   // The dimension depends on the \a other feature type. Defaults to 0.
   //
-  virtual unsigned signature_error_dimension( const vcl_type_info& other_feature_type ) const;
+  virtual unsigned signature_error_dimension( const std::type_info& other_feature_type ) const;
 
   //:  Compute the signature weight between two features.
   //
@@ -161,7 +163,7 @@ class rgrl_feature
 
  protected:
 //   friend rgrl_feature_sptr
-//          rgrl_feature_reader( vcl_istream& is );
+//          rgrl_feature_reader( std::istream& is );
   friend class rgrl_feature_reader;
 
   vnl_vector<double> location_;

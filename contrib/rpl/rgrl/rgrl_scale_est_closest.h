@@ -6,9 +6,11 @@
 // \author Chuck Stewart
 // \date   25 Nov 2002
 
+#include <iostream>
+#include <memory>
 #include "rgrl_scale_estimator.h"
 
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 
 class rrel_objective;
@@ -34,7 +36,7 @@ class rgrl_scale_est_closest
   //robust scale.  The one that is commonly used is the MUSE objective
   //function. The flag \a do_signature_scale determines whether a signature
   //covariance will be estimated.
-  rgrl_scale_est_closest( vcl_auto_ptr<rrel_objective>  obj,
+  rgrl_scale_est_closest( std::auto_ptr<rrel_objective>  obj,
                           bool                          do_signature_scale = false );
 
   ~rgrl_scale_est_closest();
@@ -64,12 +66,12 @@ class rgrl_scale_est_closest
                            bool penalize_scaling ) const;
 
   bool
-  compute_signature_inv_covar( vnl_matrix<double>&covar, 
+  compute_signature_inv_covar( vnl_matrix<double>&covar,
                                rgrl_match_set const& match_set ) const;
 
  protected:
   bool do_signature_scale_;
-  vcl_auto_ptr<rrel_objective> obj_;
+  std::auto_ptr<rrel_objective> obj_;
 };
 
 #endif // rgrl_scale_est_closest_h_

@@ -2,15 +2,17 @@
 // \file
 // \author Tim Cootes
 // \brief Calculate and apply 2D rigid transformations (translation + rotation)
-// Note: Alignment calculated by estimating optimal similarity transformation, 
+// Note: Alignment calculated by estimating optimal similarity transformation,
 // then discarding scale.
 
+#include <iostream>
+#include <cstddef>
 #include "msm_rigid_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -19,7 +21,7 @@
 vnl_vector<double> msm_rigid_aligner::inverse(const vnl_vector<double>& t) const
 {
   vnl_vector<double> q(3);
-  double a=vcl_cos(t[0]), b=vcl_sin(t[0]);
+  double a=std::cos(t[0]), b=std::sin(t[0]);
   q[0] = -t[0];
   q[1] =  -a * t[1] - b * t[2];
   q[2] = b * t[1] - a * t[2];
@@ -32,7 +34,7 @@ void msm_rigid_aligner::apply_transform(const msm_points& points,
                                              msm_points& new_points) const
 {
   new_points.vector().set_size(points.vector().size());
-  double a=vcl_cos(trans[0]), b=vcl_sin(trans[0]), tx=trans[1], ty=trans[2];
+  double a=std::cos(trans[0]), b=std::sin(trans[0]), tx=trans[1], ty=trans[2];
 
   const double* v1=points.vector().data_block();
   const double* end_v=points.vector().end();
@@ -89,7 +91,7 @@ void msm_rigid_aligner::calc_transform_from_ref(const msm_points& ref_pts,
   }
 
   trans.set_size(3);
-  trans[0] = vcl_atan2(xy_sum,dot_sum);
+  trans[0] = std::atan2(xy_sum,dot_sum);
   trans[1] = cog2.x();
   trans[2] = cog2.y();
 }
@@ -121,10 +123,10 @@ void msm_rigid_aligner::calc_transform(const msm_points& pts1,
     dot_sum += dpx*dtx + dpy*dty;
     xy_sum += dpx*dty - dpy*dtx;
   }
-  
+
   trans.set_size(3);
-  trans[0] = vcl_atan2(xy_sum,dot_sum);
-  double a=vcl_cos(trans[0]), b=vcl_sin(trans[0]);
+  trans[0] = std::atan2(xy_sum,dot_sum);
+  double a=std::cos(trans[0]), b=std::sin(trans[0]);
   trans[1] = cog2.x() - (a*cog1.x() - b*cog1.y());
   trans[2] = cog2.y() - (b*cog1.x() + a*cog1.y());
 }
@@ -178,8 +180,8 @@ void msm_rigid_aligner::calc_transform_wt(const msm_points& pts1,
   }
 
   trans.set_size(3);
-  trans[0] = vcl_atan2(xy_sum,dot_sum);
-  double a=vcl_cos(trans[0]), b=vcl_sin(trans[0]);
+  trans[0] = std::atan2(xy_sum,dot_sum);
+  double a=std::cos(trans[0]), b=std::sin(trans[0]);
   trans[1] = cog2.x() - (a*cog1.x() - b*cog1.y());
   trans[2] = cog2.y() - (b*cog1.x() + a*cog1.y());
 
@@ -191,7 +193,7 @@ void msm_rigid_aligner::calc_transform_wt(const msm_points& pts1,
 void msm_rigid_aligner::calc_transform_wt_mat(
                               const msm_points& pts1,
                               const msm_points& pts2,
-                              const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                              const std::vector<msm_wt_mat_2d>& wt_mat,
                               vnl_vector<double>& trans) const
 {
   assert(pts2.size()==pts1.size());
@@ -213,7 +215,7 @@ void msm_rigid_aligner::calc_transform_wt_mat(
   const double* p1 = pts1.vector().begin();
   const double* p2 = pts2.vector().begin();
   const double* p1_end = pts1.vector().end();
-  vcl_vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
+  std::vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
 
   for (;p1!=p1_end;p1+=2,p2+=2,++w)
   {
@@ -267,9 +269,9 @@ void msm_rigid_aligner::calc_transform_wt_mat(
   }
 
   trans.set_size(3);
-  trans[0] = vcl_atan2(q[1],q[0]);
-  double a=vcl_cos(trans[0]), b=vcl_sin(trans[0]);
-  
+  trans[0] = std::atan2(q[1],q[0]);
+  double a=std::cos(trans[0]), b=std::sin(trans[0]);
+
   // Include effects of translations by CoG
   trans[1] = q[2] + cog2.x() - (a*cog1.x() - b*cog1.y());
   trans[2] = q[3] + cog2.y() - (b*cog1.x() + a*cog1.y());
@@ -278,11 +280,11 @@ void msm_rigid_aligner::calc_transform_wt_mat(
 
   //: Apply transform to weight matrices (ie ignore translation component)
 void msm_rigid_aligner::transform_wt_mat(
-                                const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                                const std::vector<msm_wt_mat_2d>& wt_mat,
                                 const vnl_vector<double>& trans,
-                                vcl_vector<msm_wt_mat_2d>& new_wt_mat) const
+                                std::vector<msm_wt_mat_2d>& new_wt_mat) const
 {
-  double a=vcl_cos(trans[0]), b=vcl_sin(trans[0]);
+  double a=std::cos(trans[0]), b=std::sin(trans[0]);
   new_wt_mat.resize(wt_mat.size());
   for (unsigned i=0;i<wt_mat.size();++i)
     new_wt_mat[i]=wt_mat[i].transform_by(a,b);
@@ -293,7 +295,7 @@ vnl_vector<double> msm_rigid_aligner::compose(
                          const vnl_vector<double>& pose1,
                          const vnl_vector<double>& pose2) const
 {
-  double a=vcl_cos(pose1[0]), b=vcl_sin(pose1[0]);
+  double a=std::cos(pose1[0]), b=std::sin(pose1[0]);
 
   vnl_vector<double> p(3);
   p[0]= pose1[0]+pose2[0];
@@ -317,13 +319,15 @@ void msm_rigid_aligner::normalise_shape(msm_points& points) const
 //  frame, pose_to_ref[i] maps points[i] into the reference
 //  frame (ie pose is the mapping from the reference frame to
 //  the target frames).
+// \param pose_source defines how orientation of ref_mean_shape is calculated
 // \param average_pose Average mapping from ref to target frame
-void msm_rigid_aligner::align_set(const vcl_vector<msm_points>& points,
+void msm_rigid_aligner::align_set(const std::vector<msm_points>& points,
                                        msm_points& ref_mean_shape,
-                                       vcl_vector<vnl_vector<double> >& pose_to_ref,
-                                       vnl_vector<double>& average_pose) const
+                                       std::vector<vnl_vector<double> >& pose_to_ref,
+                                       vnl_vector<double>& average_pose,
+                                       ref_pose_source pose_source) const
 {
-  vcl_size_t n_shapes = points.size();
+  std::size_t n_shapes = points.size();
   assert(n_shapes>0);
   pose_to_ref.resize(n_shapes);
 
@@ -362,6 +366,14 @@ void msm_rigid_aligner::align_set(const vcl_vector<msm_points>& points,
     // the mean and to rotation defined by the mean.
 
     change = (new_mean.vector()-ref_mean_shape.vector()).rms();
+
+    if (pose_source==mean_pose && n_its==0)
+    {
+      // Use the average pose to define the orientation of the mean in the ref frame
+      apply_transform(new_mean,average_pose/n_shapes,new_mean);
+      change=1.0;  // Force at least one more iteration
+    }
+
     n_its++;
   }
 
@@ -370,9 +382,9 @@ void msm_rigid_aligner::align_set(const vcl_vector<msm_points>& points,
 
 //=======================================================================
 
-vcl_string msm_rigid_aligner::is_a() const
+std::string msm_rigid_aligner::is_a() const
 {
-  return vcl_string("msm_rigid_aligner");
+  return std::string("msm_rigid_aligner");
 }
 
 //: Create a copy on the heap and return base class pointer

@@ -1,18 +1,19 @@
 // This is mul/vimt3d/tests/test_gauss_reduce.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vimt3d/vimt3d_gauss_reduce.h>
 
 
 static void test_gauss_reduce_float()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vimt3d_gauss_reduce\n"
            << "*****************************\n";
 
   unsigned ni = 20, nj = 20, nk = 20;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
+  std::cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<std::endl;
 
   vimt3d_image_3d_of<float> image0;
   image0.image().set_size(ni,nj,nk);

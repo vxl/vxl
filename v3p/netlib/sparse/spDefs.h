@@ -92,22 +92,22 @@
 #endif
 
 /* Define macros for validating matrix. */
-#define  SPARSE_ID			0xDeadBeef	/* Arbitrary. */
-#define  IS_SPARSE(matrix)		(((matrix) != NULL) AND \
-                                	 ((matrix)->ID == SPARSE_ID))
-#define  NO_ERRORS(matrix)		(((matrix)->Error >= spOKAY) AND \
-				 	 ((matrix)->Error < spFATAL))
-#define  IS_FACTORED(matrix)    	((matrix)->Factored AND \
-					 NOT (matrix)->NeedsOrdering)
+#define  SPARSE_ID                        0xDeadBeef        /* Arbitrary. */
+#define  IS_SPARSE(matrix)                (((matrix) != NULL) AND \
+                                         ((matrix)->ID == SPARSE_ID))
+#define  NO_ERRORS(matrix)                (((matrix)->Error >= spOKAY) AND \
+                                          ((matrix)->Error < spFATAL))
+#define  IS_FACTORED(matrix)            ((matrix)->Factored AND \
+                                         NOT (matrix)->NeedsOrdering)
 
-#define  ASSERT_IS_SPARSE(matrix)	vASSERT( IS_SPARSE(matrix), \
-					 spcMatrixIsNotValid )
-#define  ASSERT_NO_ERRORS(matrix)	vASSERT( NO_ERRORS(matrix), \
-					 spcErrorsMustBeCleared )
-#define  ASSERT_IS_FACTORED(matrix)	vASSERT( IS_FACTORED(matrix), \
-					 spcMatrixMustBeFactored )
-#define  ASSERT_IS_NOT_FACTORED(matrix)	vASSERT( NOT (matrix)->Factored, \
-					 spcMatrixMustNotBeFactored )
+#define  ASSERT_IS_SPARSE(matrix)        vASSERT( IS_SPARSE(matrix), \
+                                         spcMatrixIsNotValid )
+#define  ASSERT_NO_ERRORS(matrix)        vASSERT( NO_ERRORS(matrix), \
+                                         spcErrorsMustBeCleared )
+#define  ASSERT_IS_FACTORED(matrix)        vASSERT( IS_FACTORED(matrix), \
+                                         spcMatrixMustBeFactored )
+#define  ASSERT_IS_NOT_FACTORED(matrix)        vASSERT( NOT (matrix)->Factored, \
+                                         spcMatrixMustNotBeFactored )
 
 /* Macro commands */
 /* Macro functions that return the maximum or minimum independent of type. */
@@ -363,45 +363,45 @@
  */
 
 #if DEBUG
-#define ASSERT(condition)	\
-{   if (NOT(condition))		\
-    {   (void)fflush(stdout);	\
-	(void)fprintf(stderr, "sparse: internal error detected in file `%s' at line %d.\n    assertion `%s' failed.\n",\
-	__FILE__, __LINE__, spcQUOTE(condition) ); \
-        (void)fflush(stderr);	\
-	abort();		\
-    }				\
+#define ASSERT(condition)        \
+{   if (NOT(condition))                \
+    {   (void)fflush(stdout);        \
+        (void)fprintf(stderr, "sparse: internal error detected in file `%s' at line %d.\n    assertion `%s' failed.\n",\
+        __FILE__, __LINE__, spcQUOTE(condition) ); \
+        (void)fflush(stderr);        \
+        abort();                \
+    }                                \
 }
 #else
 #define ASSERT(condition)
 #endif
 
 #if DEBUG
-#define vASSERT(condition,message)	\
-{   if (NOT(condition))			\
-	vABORT(message);		\
+#define vASSERT(condition,message)        \
+{   if (NOT(condition))                        \
+        vABORT(message);                \
 }
 #else
 #define vASSERT(condition,message)
 #endif
 
 #if DEBUG
-#define  vABORT(message)	\
-{   (void)fflush(stdout);	\
+#define  vABORT(message)        \
+{   (void)fflush(stdout);        \
     (void)fprintf(stderr, "sparse: internal error detected in file `%s' at line %d.\n    %s.\n", __FILE__, __LINE__, message );\
-    (void)fflush(stderr);	\
-    abort();			\
+    (void)fflush(stderr);        \
+    abort();                        \
 }
 
-#define  ABORT()		\
-{   (void)fflush(stdout);	\
-    (void)fprintf(stderr, "sparse: internal error detected in file `%s' at line %d.\n", __FILE__, __LINE__ );	\
-    (void)fflush(stderr);	\
-    abort();			\
+#define  ABORT()                \
+{   (void)fflush(stdout);        \
+    (void)fprintf(stderr, "sparse: internal error detected in file `%s' at line %d.\n", __FILE__, __LINE__ );        \
+    (void)fflush(stderr);        \
+    abort();                        \
 }
 #else
-#define  vABORT(message)	abort()
-#define  ABORT()		abort()
+#define  vABORT(message)        abort()
+#define  ABORT()                abort()
 #endif
 
 
@@ -859,7 +859,7 @@ spcEXTERN ElementPtr spcGetElement( MatrixPtr );
 spcEXTERN ElementPtr spcGetFillin( MatrixPtr );
 spcEXTERN ElementPtr spcFindDiag( MatrixPtr, int );
 spcEXTERN ElementPtr spcCreateElement( MatrixPtr, int, int,
-				ElementPtr*, ElementPtr*, int );
+                                ElementPtr*, ElementPtr*, int );
 spcEXTERN void spcCreateInternalVectors( MatrixPtr );
 spcEXTERN void spcLinkRows( MatrixPtr );
 spcEXTERN void spcColExchange( MatrixPtr, int, int );

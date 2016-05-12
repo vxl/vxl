@@ -11,11 +11,13 @@
 // \author Brad King
 // \date February 2008
 
+#include <iosfwd>
+#include <iostream>
+#include <cstddef>
 #include "rgtl_serialize_direction.hxx"
 
 #include <vcl_compiler.h>
-#include <vcl_iosfwd.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
 
 //: Serialization load object that reads from a stream.
 //  See rgtl_serialize.txt for serialization interface details.
@@ -27,22 +29,22 @@ class rgtl_serialize_istream
   typedef rgtl_serialize_direction_load serialize_direction;
 
   //: Construct with a stream from which to read data.
-  rgtl_serialize_istream(vcl_istream& is);
+  rgtl_serialize_istream(std::istream& is);
 
   //: Safe conversion to a boolean type.
   operator safe_bool() const
   { return this->okay()? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Read data from the input stream.
-  rgtl_serialize_istream& read(void* data, vcl_size_t length);
+  rgtl_serialize_istream& read(void* data, std::size_t length);
 
   //: Get the current position in the stream.
-  vcl_size_t position();
+  std::size_t position();
  private:
   bool okay() const;
-  vcl_istream& stream_;
-  vcl_size_t buffer_left_;
-  vcl_size_t buffer_used_;
+  std::istream& stream_;
+  std::size_t buffer_left_;
+  std::size_t buffer_used_;
   static unsigned int const buffer_size = 1024;
   char buffer_[buffer_size];
 };

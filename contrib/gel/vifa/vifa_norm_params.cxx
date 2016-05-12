@@ -1,10 +1,11 @@
 // This is gel/vifa/vifa_norm_params.cxx
+#include <iostream>
+#include <algorithm>
 #include "vifa_norm_params.h"
 
 #undef ROI_SUPPORTED  // No TargetJr-style ROI supported yet
 
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include "vifa_image_histogram.h"
 #ifdef ROI_SUPPORTED
 #include <ImageClasses/RectROI.h>
@@ -81,10 +82,10 @@ get_norm_bounds(vil_image_view_base*  img,
     if (xsize * ysize > 4000000)
     {
       int  border_size = 1000;
-      int startx = vcl_max(roi->GetOrigX() - border_size, 0);
-      int starty = vcl_max(roi->GetOrigY() - border_size, 0);
-      int roi_sizex = vcl_min(roi->GetSizeX() + 2 * border_size, xsize);
-      int roi_sizey = vcl_min(roi->GetSizeY() + 2 * border_size, ysize);
+      int startx = std::max(roi->GetOrigX() - border_size, 0);
+      int starty = std::max(roi->GetOrigY() - border_size, 0);
+      int roi_sizex = std::min(roi->GetSizeX() + 2 * border_size, xsize);
+      int roi_sizey = std::min(roi->GetSizeY() + 2 * border_size, ysize);
       temp_roi = new RectROI(startx, starty, roi_sizex, roi_sizey);
     }
     else
@@ -111,13 +112,13 @@ get_norm_bounds(vil_image_view_base*  img,
 void vifa_norm_params::
 print_info(void)
 {
-  vcl_cout << "vifa_norm_params:\n"
-           << "  low % thresh    = " << plow << vcl_endl
-           << "  high % thresh   = " << phigh << vcl_endl
-           << "  low int thresh  = " << ilow << vcl_endl
-           << "  high int thresh = " << ihigh << vcl_endl
-           << "  int min         = " << imin_ << vcl_endl
-           << "  int max         = " << imax_ << vcl_endl;
+  std::cout << "vifa_norm_params:\n"
+           << "  low % thresh    = " << plow << std::endl
+           << "  high % thresh   = " << phigh << std::endl
+           << "  low int thresh  = " << ilow << std::endl
+           << "  high int thresh = " << ihigh << std::endl
+           << "  int min         = " << imin_ << std::endl
+           << "  int max         = " << imax_ << std::endl;
 }
 
 void vifa_norm_params::
@@ -144,6 +145,6 @@ calculate_clip_points(void)
   imin_ = (0.0f - b_) / slope_;
   imax_ = (1.0f - b_) / slope_;
 
-  //  vcl_cout << "slope: " << slope_ << " b: " << b_ << " imin: " << imin_
-  //           << " imax " << imax_ << vcl_endl;
+  //  std::cout << "slope: " << slope_ << " b: " << b_ << " imin: " << imin_
+  //           << " imax " << imax_ << std::endl;
 }

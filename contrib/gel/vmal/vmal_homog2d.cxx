@@ -10,8 +10,8 @@ vmal_homog2d::~vmal_homog2d()
 {
 }
 
-void vmal_homog2d::compute_homo(const vcl_vector<vnl_double_3 > &pima1,
-                                const vcl_vector<vnl_double_3 > &pima2,
+void vmal_homog2d::compute_homo(const std::vector<vnl_double_3 > &pima1,
+                                const std::vector<vnl_double_3 > &pima2,
                                 vnl_double_3x3 &hmatrix)
 {
   int numpoints=pima1.size();

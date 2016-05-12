@@ -3,10 +3,11 @@
 // \brief Functions to learn modes from subsets of data
 // \author Tim Cootes
 
+#include <iostream>
+#include <algorithm>
 #include "mcal_extract_mode.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>
 
@@ -19,8 +20,8 @@
 //
 //  The contribution of this vector is removed from each \p dv,
 //  \p dv[i]-=mode*b, where \p b=dv[i].mode
-void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
-                       const vcl_vector<unsigned>& used,
+void mcal_extract_mode(std::vector<vnl_vector<double> >& dv,
+                       const std::vector<unsigned>& used,
                        vnl_vector<double>& mode,
                        double& var)
 {
@@ -35,7 +36,7 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
   unsigned nd=dv[0].size();
 
   // Extract the elements into a new set of vectors
-  vcl_vector<vnl_vector<double> > v(ns);
+  std::vector<vnl_vector<double> > v(ns);
   for (unsigned i=0;i<ns;++i)
   {
     v[i].set_size(used.size());
@@ -73,7 +74,7 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
 //  covariance matrix.
 //  The contribution of this vector is removed from each \p dv,
 //  \p dv[i]-=mode*b, where \p b=dv[i].mode
-void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
+void mcal_extract_mode(std::vector<vnl_vector<double> >& dv,
                        vnl_vector<double>& mode,
                        double& var)
 {
@@ -104,8 +105,8 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
 //: Compute modes and associated variance of supplied data
 //  \param used[i] indicates the set of elements to be used for
 //  mode i.  Modes beyond \p used.size() will use all elements.
-void mcal_extract_modes(vcl_vector<vnl_vector<double> >& dv,
-                        const vcl_vector<vcl_vector<unsigned> >& used,
+void mcal_extract_modes(std::vector<vnl_vector<double> >& dv,
+                        const std::vector<std::vector<unsigned> >& used,
                         unsigned max_modes, double var_prop,
                         vnl_matrix<double>& modes,
                         vnl_vector<double>& mode_var)
@@ -120,8 +121,8 @@ void mcal_extract_modes(vcl_vector<vnl_vector<double> >& dv,
   total_var/=ns;
   double var_thresh = var_prop*total_var;
 
-  vcl_vector<vnl_vector<double> > mode_set(used.size());
-  vcl_vector<double> var_set(used.size());
+  std::vector<vnl_vector<double> > mode_set(used.size());
+  std::vector<double> var_set(used.size());
 
   double var_sum=0.0;
 

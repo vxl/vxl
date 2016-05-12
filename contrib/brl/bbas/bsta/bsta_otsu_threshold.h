@@ -14,7 +14,7 @@
 //   Templated and moved up to bsta - J.L. Mundy June 29, 2005
 // \endverbatim
 
-#include<vcl_vector.h>
+#include <vector>
 #include<bsta/bsta_histogram.h>
 
 template <class T> class bsta_otsu_threshold
@@ -23,7 +23,7 @@ template <class T> class bsta_otsu_threshold
   // constructor
   bsta_otsu_threshold(bsta_histogram<T> const& hist);
   //: takes vector of data as input
-  bsta_otsu_threshold(vcl_vector<T> data, T low , T high);
+  bsta_otsu_threshold(std::vector<T> data, T low , T high);
   // destructor
   ~bsta_otsu_threshold();
 
@@ -38,6 +38,6 @@ template <class T> class bsta_otsu_threshold
   bsta_histogram<T> distribution_1d_;
 };
 
-#define BSTA_OTSU_THRESHOLD_INSTANTIATE(T) extern "Please #include <bsta/bsta_otsu_threshold.txx>"
+#define BSTA_OTSU_THRESHOLD_INSTANTIATE(T) extern "Please #include <bsta/bsta_otsu_threshold.hxx>"
 
 #endif // bsta_otsu_threshold_h_

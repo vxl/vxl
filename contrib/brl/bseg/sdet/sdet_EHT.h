@@ -11,9 +11,11 @@
 //  Modifications
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vcl_set.h>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <set>
+#include <vcl_compiler.h>
 
 #include "sdet_edgel.h"
 #include "sdet_curvelet.h"
@@ -24,7 +26,7 @@ class sdet_EHT_node
 public :
   sdet_edgel* e;
   sdet_EHT_node* parent;
-  vcl_list<sdet_EHT_node*> children;
+  std::list<sdet_EHT_node*> children;
 
   sdet_EHT_node(sdet_edgel* new_e): e(new_e), parent(0), children(0) {}
   ~sdet_EHT_node()
@@ -55,7 +57,7 @@ public:
 
   //: constructor 1
   sdet_EHT(sdet_EHT_node* new_root=0): root(new_root) {}
-  
+
   //: constructor 2
   sdet_EHT(sdet_edgel* root_e){ root = new sdet_EHT_node(root_e); }
 
@@ -72,7 +74,7 @@ public:
 
       //: copy constructor
       path_iterator(const path_iterator& other) : ptr_(other.ptr_), cur_path_(other.cur_path_) {}
-      
+
       //operators
       sdet_EHT_node* operator*(){ return ptr_; }
       bool operator==(const path_iterator& other) { return ptr_ == other.ptr_; }
@@ -93,7 +95,7 @@ public:
         while (ptr_ && ptr_->children.size()>0)
           inc_ptr();
       }
-      
+
       void inc_ptr()
       {
         if (!ptr_)
@@ -133,11 +135,11 @@ public:
           }
 
           //next valid one can be set (find the current child on the parents list and set it to the next)
-          vcl_list<sdet_EHT_node*>::iterator nit = parent->children.begin();
+          std::list<sdet_EHT_node*>::iterator nit = parent->children.begin();
           for (; nit != parent->children.end(); nit++){
             if ((*nit)==cur){
               nit++;
-              
+
               //assert(cur->cvlet == cur_path_.back());
               cur_path_.pop_back(); //first remove the current cvlet from the path
 
@@ -154,11 +156,11 @@ public:
       }
 
       //: return the current path
-      vcl_vector<sdet_edgel*>& get_cur_path() { return cur_path_; }
+      std::vector<sdet_edgel*>& get_cur_path() { return cur_path_; }
 
     protected:
       sdet_EHT_node* ptr_;             //this is the node that the iterator is currently pointing to
-      vcl_vector<sdet_edgel*> cur_path_; // this is the path from point where the iterator was initialized to the current node
+      std::vector<sdet_edgel*> cur_path_; // this is the path from point where the iterator was initialized to the current node
   };
 
   //: Return an iterator to the first element
@@ -167,7 +169,7 @@ public:
   //: Return an iterator to a null pointer (only at the very last leaf node)
   path_iterator path_end() { return path_iterator(0); }
 
-  //delete a subtree pointed to by the given iterator 
+  //delete a subtree pointed to by the given iterator
   void delete_subtree(path_iterator& it)
   {
     sdet_EHT_node* node_to_del = *it;
@@ -176,7 +178,7 @@ public:
     it--;
     while ((*it)->children.size()==1 && (*it)!=root){
       node_to_del = (*it);
-      it--;      
+      it--;
     }
 
     //now delete the subtree

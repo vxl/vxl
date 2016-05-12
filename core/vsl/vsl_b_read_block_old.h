@@ -8,20 +8,14 @@
 //
 // This file should only be used by existing binary io code that
 // wishes to maintain backwards compatibility with existing VSL files.
-// Users should have no reason to include this file. 
+// Users should have no reason to include this file.
 //
 
+#include <iostream>
 #include <vxl_config.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
-
-// IMS Hack: MSVC6.0 has the annoying habit of occasionally forgetting that inline implies static.
-#ifdef VCL_VC_6
-#define VCL_VC_6_STATIC static
-#else
-#define VCL_VC_6_STATIC /**/
-#endif
 
 // Whilst this file should not be used by users, it will likely never be deleted,
 // and will remain in use by a number of files in vsl and vnl/io to provide
@@ -39,9 +33,9 @@
 // then just #include <vsl_binary_explicit_io.h>
 // \deprecated in favour of vsl_block_binary_read
 template <class T>
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   while (nelems--)
     vsl_b_read(is, *(begin++));
 }
@@ -52,9 +46,9 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, vc
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
   vsl_swap_bytes((char *)begin, sizeof(double), nelems);
 }
@@ -65,9 +59,9 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, double* begi
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
   vsl_swap_bytes((char *)begin, sizeof(float), nelems);
 }
@@ -80,24 +74,24 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   if (!is) return;
-  vcl_size_t nbytes;
+  std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * nelems];
     is.is().read(block, nbytes);
-    vcl_size_t n_bytes_converted =
+    std::size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., int*,..) :\n"
+      std::cerr << "\nI/O ERROR: vsl_b_read_block(.., int*,..) :\n"
                << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
 }
@@ -111,23 +105,23 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, 
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  vcl_size_t nbytes;
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
+  std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
     is.is().read(block, nbytes);
-    vcl_size_t n_bytes_converted =
+    std::size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned int*,..) :\n"
+      std::cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned int*,..) :\n"
                << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
 }
@@ -142,23 +136,23 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  vcl_size_t nbytes;
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
+  std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * nelems];
     is.is().read(block, nbytes);
-    vcl_size_t n_bytes_converted =
+    std::size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., short*,..) :\n"
+      std::cerr << "\nI/O ERROR: vsl_b_read_block(.., short*,..) :\n"
                << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
 }
@@ -173,23 +167,23 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  vcl_size_t nbytes;
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
+  std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
     is.is().read(block, nbytes);
-    vcl_size_t n_bytes_converted =
+    std::size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned short*,..) :\n"
+      std::cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned short*,..) :\n"
                << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
 }
@@ -204,23 +198,23 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned sho
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  vcl_size_t nbytes;
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
+  std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * nelems];
     is.is().read(block, nbytes);
-    vcl_size_t n_bytes_converted =
+    std::size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., long*,..) :\n"
+      std::cerr << "\nI/O ERROR: vsl_b_read_block(.., long*,..) :\n"
                << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
 }
@@ -235,23 +229,23 @@ VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin,
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, vcl_size_t nelems)
+inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
-  vcl_size_t nbytes;
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
+  std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
   {
     char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
     is.is().read(block, nbytes);
-    vcl_size_t n_bytes_converted =
+    std::size_t n_bytes_converted =
     vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
     delete [] block;
     if (n_bytes_converted != nbytes)
     {
-      vcl_cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned long*,..) :\n"
+      std::cerr << "\nI/O ERROR: vsl_b_read_block(.., unsigned long*,..) :\n"
                << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
   }
 }

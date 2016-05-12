@@ -1,3 +1,4 @@
+#include <cmath>
 #include "vil_j2k_pyramid_image_resource.h"
 //:
 // \file
@@ -5,14 +6,14 @@
 // Approved for public Release, distribution unlimited
 // DISTAR Case 14074
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 // By definition, each level is a factor of 2 reduced in scale
 static float scale_at_level(unsigned level)
 {
   if (level == 0)
     return 1.0f;
-  float s = vcl_pow(2.0f, -static_cast<float>(level));
+  float s = std::pow(2.0f, -static_cast<float>(level));
   return s;
 }
 
@@ -22,7 +23,7 @@ vil_j2k_pyramid_image_resource(vil_image_resource_sptr const& j2k): j2k_sptr_(j2
   ptr_ = 0;
   if (!j2k_sptr_)
     return;
-  vcl_string fmt = j2k_sptr_->file_format();
+  std::string fmt = j2k_sptr_->file_format();
   if (fmt=="j2k")
     ptr_=static_cast<vil_j2k_image*>(j2k_sptr_.ptr());
 }
@@ -91,8 +92,8 @@ unsigned vil_j2k_pyramid_image_resource::nlevels() const
   double scale = max_dim/1000.0;
   if (scale<=1.0)
     return 1;
-  double lscale = vcl_log(scale);
-  unsigned nlev = static_cast<unsigned>(lscale/vcl_log(2.0));
+  double lscale = std::log(scale);
+  unsigned nlev = static_cast<unsigned>(lscale/std::log(2.0));
   return nlev;
 }
 
@@ -125,7 +126,7 @@ vil_j2k_pyramid_image_resource::get_copy_view(unsigned i0, unsigned n_i,
     actual_scale = 1.0f;
     return this->get_copy_view(i0, n_i, j0, n_j, 0);
   }
-  float f_lev = -vcl_log(scale)/vcl_log(2.0f);
+  float f_lev = -std::log(scale)/std::log(2.0f);
   unsigned level = static_cast<unsigned>(f_lev);
   if (level>this->nlevels())
     level = this->nlevels()-1;

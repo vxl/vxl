@@ -1,16 +1,17 @@
 // This is core/vnl/vnl_bignum.cxx
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <vector>
+#include <iostream>
+#include <limits>
 #include "vnl_bignum.h"
 //:
 // \file
 
-#include <vcl_cstdlib.h>   // for vcl_atol
-#include <vcl_cstring.h>   // for vcl_strlen
-#include <vcl_cmath.h>     // for vcl_fmod
-#include <vcl_algorithm.h> // for vcl_copy
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
 #include <vnl/vnl_math.h> // for vnl_math::isfinite(double)
 
 typedef unsigned short Counter;
@@ -19,14 +20,14 @@ typedef unsigned short Data;
 //: Creates a zero vnl_bignum.
 
 vnl_bignum::vnl_bignum()
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
 }
 
 //: Creates a vnl_bignum from a long integer.
 
 vnl_bignum::vnl_bignum(long l)
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
   if (l < 0) {                  // Get correct sign
     l = -l;                     // Get absolute value of l
@@ -50,7 +51,7 @@ vnl_bignum::vnl_bignum(long l)
 //: Creates a vnl_bignum from an integer.
 
 vnl_bignum::vnl_bignum(int l)
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
   if (l < 0) {                  // Get correct sign
     l = -l;                     // Get absolute value of l
@@ -74,7 +75,7 @@ vnl_bignum::vnl_bignum(int l)
 //: Creates a vnl_bignum from an unsigned long integer.
 
 vnl_bignum::vnl_bignum(unsigned long l)
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
   Data buf[sizeof(l)];          // Temp buffer to store l in
   Counter i = 0;                // buffer index
@@ -94,7 +95,7 @@ vnl_bignum::vnl_bignum(unsigned long l)
 //: Creates a vnl_bignum from an unsigned integer.
 
 vnl_bignum::vnl_bignum(unsigned int l)
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
   Data buf[sizeof(l)];          // Temp buffer to store l in
   Counter i = 0;                // buffer index
@@ -114,7 +115,7 @@ vnl_bignum::vnl_bignum(unsigned int l)
 //: Creates a vnl_bignum from a single-precision floating point number.
 
 vnl_bignum::vnl_bignum(float f)
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
   double d = f;
   if (d < 0.0) {                // Get sign of d
@@ -131,22 +132,22 @@ vnl_bignum::vnl_bignum(float f)
   }
   else if (d >= 1.0) {
     // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
-    vcl_vector<Data> buf;
+    std::vector<Data> buf;
     while (d >= 1.0) {
-      buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
+      buf.push_back( Data(std::fmod(d,0x10000L)) );  // Get next data "digit" from d
       d /= 0x10000L;                                // Shift d right 1 data "digit"
     }
     // Allocate and copy into permanent buffer
-    this->data = buf.size()>0 ? new Data[buf.size()] : 0;
+    this->data = buf.size()>0 ? new Data[buf.size()] : VXL_NULLPTR;
     this->count = (unsigned short)(buf.size());
-    vcl_copy( buf.begin(), buf.end(), data );
+    std::copy( buf.begin(), buf.end(), data );
   }
 }
 
 //: Creates a vnl_bignum from a double floating point number.
 
 vnl_bignum::vnl_bignum(double d)
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
   if (d < 0.0) {                // Get sign of d
     d = -d;                     // Get absolute value of d
@@ -162,22 +163,22 @@ vnl_bignum::vnl_bignum(double d)
   }
   else if (d >= 1.0) {
     // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
-    vcl_vector<Data> buf;
+    std::vector<Data> buf;
     while (d >= 1.0) {
-      buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
+      buf.push_back( Data(std::fmod(d,0x10000L)) );  // Get next data "digit" from d
       d /= 0x10000L;                                // Shift d right 1 data "digit"
     }
     // Allocate and copy into permanent buffer
-    this->data = buf.size()>0 ? new Data[buf.size()] : 0;
+    this->data = buf.size()>0 ? new Data[buf.size()] : VXL_NULLPTR;
     this->count = (unsigned short)(buf.size());
-    vcl_copy( buf.begin(), buf.end(), data );
+    std::copy( buf.begin(), buf.end(), data );
   }
 }
 
 //: Creates a vnl_bignum from a "long double" floating point number.
 
 vnl_bignum::vnl_bignum(long double d)
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
   if (d < 0.0) {                // Get sign of d
     d = -d;                     // Get absolute value of d
@@ -193,79 +194,27 @@ vnl_bignum::vnl_bignum(long double d)
   }
   else if (d >= 1.0) {
     // Note: 0x10000L == 1 >> 16: the (assumed) size of unsigned short is 16 bits.
-    vcl_vector<Data> buf;
+    std::vector<Data> buf;
     while (d >= 1.0) {
-      buf.push_back( Data(vcl_fmod(d,0x10000L)) );  // Get next data "digit" from d
+      buf.push_back( Data(std::fmod(d,0x10000L)) );  // Get next data "digit" from d
       d /= 0x10000L;                                // Shift d right 1 data "digit"
     }
     // Allocate and copy into permanent buffer
     this->count = (unsigned short)(buf.size());
     if (this->count > 0) {
       this->data = new Data[this->count];
-      vcl_copy( buf.begin(), buf.end(), data );
+      std::copy( buf.begin(), buf.end(), data );
     }
     else {
-      this->data = 0;
+      this->data = VXL_NULLPTR;
     }
   }
 }
 
-#if 0 // Old, original Texas Instruments implementation - PVr
-      // Left here for ducumentation purposes only!
-
-static bool is_decimal(const char *s)
-{
-  if (*s == '+' || *s == '-') ++s;
-  if (*s < '1' || *s > '9') return false;
-  while (*s >= '0' && *s <= '9') ++s;
-  if (*s == 'l' || *s == 'L') ++s;
-  return *s == '\0';
-}
-
-static bool is_exponential(const char *s)
-{
-  if (*s == '+' || *s == '-') ++s;
-  if (*s < '1' || *s > '9') return false;
-  while (*s >= '0' && *s <= '9') ++s;
-  if (*s != 'e' && *s != 'E') return false;
-  ++s;
-  if (*s < '1' || *s > '9') return false;
-  while (*s >= '0' && *s <= '9') ++s;
-  return *s == '\0';
-}
-
-static bool is_hexadecimal(const char *s)
-{
-  if (*s == '+' || *s == '-') ++s;
-  if (*s != '0') return false;
-  ++s;
-  if (*s != 'x' && *s != 'X') return false;
-  ++s;
-  if ((*s < '0' || *s > '9') &&
-      (*s < 'a' || *s > 'f') &&
-      (*s < 'A' || *s > 'F')) return false;
-  while ((*s >= '0' && *s <= '9') ||
-         (*s >= 'a' && *s <= 'f') ||
-         (*s >= 'A' && *s <= 'F')) ++s;
-  if (*s == 'l' || *s == 'L') ++s;
-  return *s == '\0';
-}
-
-static bool is_octal(const char *s)
-{
-  if (*s == '+' || *s == '-') ++s;
-  if (*s != '0') return false;
-  while (*s >= '0' && *s <= '7') ++s;
-  if (*s == 'l' || *s == 'L') ++s;
-  return *s == '\0';
-}
-
-#else // new implementation, also to be used for operator>> - PVr
-
 static char rt[4096];
 static int rt_pos = 0;
 
-static char next(const char*& s, vcl_istream** is)
+static char next(const char*& s, std::istream** is)
 {
   if (!is || *s) { char c = *s; if (c) ++rt_pos, ++s; return c; }
   if (rt_pos == 4096) return '\0';
@@ -274,7 +223,7 @@ static char next(const char*& s, vcl_istream** is)
   rt[++rt_pos] = '\0'; return rt[rt_pos-1];
 }
 
-static bool is_decimal(const char* s, vcl_istream** is = 0)
+static bool is_decimal(const char* s, std::istream** is = VXL_NULLPTR)
 {
   rt_pos = 0;
   char c = next(s,is);
@@ -287,7 +236,7 @@ static bool is_decimal(const char* s, vcl_istream** is = 0)
   return is ? true : c == '\0';
 }
 
-static bool is_exponential(const char* s, vcl_istream** is = 0)
+static bool is_exponential(const char* s, std::istream** is = VXL_NULLPTR)
 {
   rt_pos = 0;
   char c = next(s,is);
@@ -304,7 +253,7 @@ static bool is_exponential(const char* s, vcl_istream** is = 0)
   return is ? true : c == '\0';
 }
 
-static bool is_hexadecimal(const char* s, vcl_istream** is = 0)
+static bool is_hexadecimal(const char* s, std::istream** is = VXL_NULLPTR)
 {
   rt_pos = 0;
   char c = next(s,is);
@@ -325,7 +274,7 @@ static bool is_hexadecimal(const char* s, vcl_istream** is = 0)
   return is ? true : c == '\0';
 }
 
-static bool is_octal(const char* s, vcl_istream** is = 0)
+static bool is_octal(const char* s, std::istream** is = VXL_NULLPTR)
 {
   rt_pos = 0;
   char c = next(s,is);
@@ -338,7 +287,7 @@ static bool is_octal(const char* s, vcl_istream** is = 0)
   return is ? true : c == '\0';
 }
 
-static bool is_plus_inf(const char* s, vcl_istream** is = 0)
+static bool is_plus_inf(const char* s, std::istream** is = VXL_NULLPTR)
 {
   rt_pos = 0;
   char c = next(s,is);
@@ -356,7 +305,7 @@ static bool is_plus_inf(const char* s, vcl_istream** is = 0)
   return is ? true : c == '\0';
 }
 
-static bool is_minus_inf(const char* s, vcl_istream** is = 0)
+static bool is_minus_inf(const char* s, std::istream** is = VXL_NULLPTR)
 {
   rt_pos = 0;
   char c = next(s,is);
@@ -374,12 +323,10 @@ static bool is_minus_inf(const char* s, vcl_istream** is = 0)
   return is ? true : c == '\0';
 }
 
-#endif // new implementation - PVr
-
 //: Creates a vnl_bignum from the character string representation.
 
 vnl_bignum::vnl_bignum(const char *s)
-: count(0), sign(1), data(0)
+: count(0), sign(1), data(VXL_NULLPTR)
 {
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
   // exponential: "^ *[-+]?[1-9][0-9]*[eE][+]?[0-9]+$"
@@ -400,19 +347,19 @@ vnl_bignum::vnl_bignum(const char *s)
   else if (is_octal(s))                 // If string is octal
     this->otoBigNum(s);                 // convert octal to vnl_bignum
   else {                                // Otherwise
-    vcl_cerr << "Cannot convert string " << s << " to vnl_bignum\n";
+    std::cerr << "Cannot convert string " << s << " to vnl_bignum\n";
   }
 }
 
 //: Reads a vnl_bignum from a stream
 
-vcl_istream& operator>>(vcl_istream& is, vnl_bignum& x)
+std::istream& operator>>(std::istream& is, vnl_bignum& x)
 {
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
   // exponential: "^ *[-+]?[1-9][0-9]*[eE][+]?[0-9]+$"
   // hexadecimal: "^ *[-+]?0[xX][0-9a-fA-F]+$"
   // octal:       "^ *[-+]?0[0-7]*$"
-  vcl_istream* isp = &is;
+  std::istream* isp = &is;
   rt[0] = '\0';
 
   x = 0L;
@@ -429,7 +376,7 @@ vcl_istream& operator>>(vcl_istream& is, vnl_bignum& x)
   else if (is_octal(rt,&isp))           // If string is octal
     x.otoBigNum(rt);                    // convert octal to vnl_bignum
   else {                                // Otherwise
-    vcl_cerr << "Cannot convert string " << rt << " to vnl_bignum\n";
+    std::cerr << "Cannot convert string " << rt << " to vnl_bignum\n";
   }
   return is; // FIXME - should probably push back read characters to istream
 }
@@ -445,7 +392,7 @@ vnl_bignum::vnl_bignum(const vnl_bignum& b)
       this->data[i] = b.data[i];
   }
   else {
-    this->data = 0;
+    this->data = VXL_NULLPTR;
   }
 }
 
@@ -469,7 +416,7 @@ vnl_bignum& vnl_bignum::operator=(const vnl_bignum& rhs)
         this->data[i] = rhs.data[i];
     }
     else {
-      this->data = 0;
+      this->data = VXL_NULLPTR;
     }
     this->sign = rhs.sign;                      // Copy rhs's sign
   }
@@ -645,7 +592,12 @@ bool vnl_bignum::operator==(const vnl_bignum& rhs) const
     if (this->sign != rhs.sign) return false;   // Different sign implies !=
     if (this->count != rhs.count) return false; // Different size implies !=
     for (Counter i = 0; i < this->count; i++)   // Each data element the same?
-      if (this->data[i] != rhs.data[i]) return false; // No. Return !=
+      {
+      if ( ( ! this->data ) || ( ! rhs.data ) || (this->data[i] != rhs.data[i]))
+        {
+        return false; // No. Return !=
+        }
+      }
   }
   return true;                                    // Yes. Return ==
 }
@@ -664,7 +616,7 @@ bool vnl_bignum::operator<(const vnl_bignum& rhs) const
 
 //: Formatted output for bignum.
 
-vcl_ostream& operator<<(vcl_ostream& os, const vnl_bignum& b)
+std::ostream& operator<<(std::ostream& os, const vnl_bignum& b)
 {
   vnl_bignum d = b;                     // Copy the input vnl_bignum
   if (d.sign == -1) {                   // If it's negative
@@ -690,10 +642,10 @@ vcl_ostream& operator<<(vcl_ostream& os, const vnl_bignum& b)
 
 //: Convert the number to a decimal representation in a string.
 
-vcl_string& vnl_bignum_to_string(vcl_string& s, const vnl_bignum& b)
+std::string& vnl_bignum_to_string(std::string& s, const vnl_bignum& b)
 {
   s.erase();
-  vcl_string::size_type insert_point = 0; // keep record of location of first number.
+  std::string::size_type insert_point = 0; // keep record of location of first number.
 
   vnl_bignum d = b;                     // Copy the input vnl_bignum
   if (d.sign == -1) {                   // If it's negative
@@ -714,7 +666,7 @@ vcl_string& vnl_bignum_to_string(vcl_string& s, const vnl_bignum& b)
 
 //: Convert the number from a decimal representation in a string.
 
-vnl_bignum& vnl_bignum_from_string(vnl_bignum& b, const vcl_string& s)
+vnl_bignum& vnl_bignum_from_string(vnl_bignum& b, const std::string& s)
 {
   // decimal:     "^ *[-+]?[1-9][0-9]*$"
   // Infinity:    "^ *[-+]?Inf(inity)?$"
@@ -763,7 +715,7 @@ vnl_bignum::operator float() const
   float f = 0.0f;
   for (Counter i = this->count; i > 0; )
     f = f*0x10000 + this->data[--i];
-  if (this->is_infinity()) f = vcl_numeric_limits<float>::infinity();
+  if (this->is_infinity()) f = std::numeric_limits<float>::infinity();
   return (this->sign < 0) ? -f : f;
 }
 
@@ -774,7 +726,7 @@ vnl_bignum::operator double() const
   double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
-  if (this->is_infinity()) d = vcl_numeric_limits<double>::infinity();
+  if (this->is_infinity()) d = std::numeric_limits<double>::infinity();
   return (this->sign < 0) ? -d : d;
 }
 
@@ -785,13 +737,13 @@ vnl_bignum::operator long double() const
   long double d = 0.0;
   for (Counter i = this->count; i > 0; )
     d = d*0x10000 + this->data[--i];
-  if (this->is_infinity()) d = vcl_numeric_limits<long double>::infinity();
+  if (this->is_infinity()) d = std::numeric_limits<long double>::infinity();
   return (this->sign < 0) ? -d : d;
 }
 
 //: dump the contents of a vnl_bignum to a stream, default cout.
 
-void vnl_bignum::dump(vcl_ostream& os) const
+void vnl_bignum::dump(std::ostream& os) const
 {
   os << "{count=" << this->count       // output count field
      << ", sign=" << this->sign        // output sign field
@@ -803,7 +755,7 @@ void vnl_bignum::dump(vcl_ostream& os) const
   //    {'%','0',char(2*2 + '0'),'X','%','s'};
   //  format_str[2] = char(2*2 + '0');
   if (this->count > 0) { // output data array
-    os << vcl_hex << (this->data[this->count-1]);
+    os << std::hex << (this->data[this->count-1]);
     for (Counter i = this->count - 1; i > 0; --i) {
       os  << ',';
       if (this->data[i-1] < 0x10) os << '0';
@@ -811,7 +763,7 @@ void vnl_bignum::dump(vcl_ostream& os) const
       if (this->data[i-1] < 0x1000) os << '0';
       os  << this->data[i-1];
     }
-    os << vcl_dec;
+    os << std::dec;
   }
   os << "}}\n";                         // close brackets
 }
@@ -840,7 +792,7 @@ void vnl_bignum::exptoBigNum(const char *s)
 {
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
   Counter pos = Counter(this->dtoBigNum(s) + 1); // Convert the base, skip [eE]
-  long pow = vcl_atol(s + pos);         // Convert the exponent to long
+  long pow = std::atol(s + pos);         // Convert the exponent to long
   while (pow-- > 0)                     // Raise vnl_bignum to the given
     *this = (*this) * 10L;              // power
 }
@@ -864,7 +816,7 @@ void vnl_bignum::xtoBigNum(const char *s)
 {
   this->resize(0); sign = 1;            // Reset number to 0.
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
-  Counter size = Counter(vcl_strlen(s));
+  Counter size = Counter(std::strlen(s));
   Counter len = 2;                      // skip leading "0x"
   while (len < size) {                  // While there are more chars
     (*this) = ((*this) * 16L) +         // Shift vnl_bignum left one hex
@@ -878,7 +830,7 @@ void vnl_bignum::otoBigNum(const char *s)
 {
   this->resize(0); sign = 1;           // Reset number to 0.
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
-  Counter size = Counter(vcl_strlen(s));
+  Counter size = Counter(std::strlen(s));
   Counter len = 0;                      // No chars converted yet
   while (len < size) {                  // While there are more chars
     (*this) = ((*this) * 8L) +          // Shift vnl_bignum left 1 oct dig.
@@ -892,12 +844,15 @@ void vnl_bignum::resize(short new_count)
 {
   assert(new_count >= 0);
   if (new_count == this->count) return;
-  Data *new_data = (new_count > 0 ? new Data[new_count] : 0); // Allocate data if necessary
+  Data *new_data = (new_count > 0 ? new Data[new_count] : VXL_NULLPTR); // Allocate data if necessary
 
   if (this->count <= new_count) {       // Copy old data into new
     short i = 0;
-    for (; i < this->count; i++)
-      new_data[i] = this->data[i];
+    if( this->data && new_data )
+      {
+      for (; i < this->count; i++)
+        new_data[i] = this->data[i];
+      }
     for (; i < new_count; i++)
       new_data[i] = 0;
   }
@@ -920,7 +875,7 @@ vnl_bignum& vnl_bignum::trim()
     if (this->data[i - 1] != 0) break;  //   that are zero
   if (i < this->count) {                // If there are some such words
     this->count = i;                    // Update the count
-    Data *new_data = (i > 0 ? new Data[i] : 0); // Allocate data if necessary
+    Data *new_data = (i > 0 ? new Data[i] : VXL_NULLPTR); // Allocate data if necessary
     for (; i > 0; i--)                  // Copy old data into new
       new_data[i - 1] = this->data[i - 1];
     delete [] this->data;               // Delete old data
@@ -945,19 +900,25 @@ void add(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum)
   sum.resize(bmax->count);              // Allocate data for their sum
   unsigned long temp, carry = 0;
   Counter i = 0;
-  while (i < bmin->count) {             // Add, element by element.
-    // Add both elements and carry
-    temp = (unsigned long)b1.data[i] + (unsigned long)b2.data[i] + carry;
-    carry = temp/0x10000L;              // keep track of the carry
-    sum.data[i] = Data(temp);           // store sum
-    i++;                                // go to next element
-  }
-  while (i < bmax->count) {             // bmin has no more elements
-    temp = bmax->data[i] + carry;       // propagate the carry through
-    carry = temp/0x10000L;              // the rest of bmax's elements
-    sum.data[i] = Data(temp);           // store sum
-    i++;
-  }
+  if( b1.data )
+    {
+    while (i < bmin->count) {             // Add, element by element.
+      // Add both elements and carry
+      temp = (unsigned long)b1.data[i] + (unsigned long)b2.data[i] + carry;
+      carry = temp/0x10000L;              // keep track of the carry
+      sum.data[i] = Data(temp);           // store sum
+      i++;                                // go to next element
+    }
+    }
+  if( bmax->data )
+    {
+    while (i < bmax->count ) {             // bmin has no more elements
+      temp = bmax->data[i] + carry;       // propagate the carry through
+      carry = temp/0x10000L;              // the rest of bmax's elements
+      sum.data[i] = Data(temp);           // store sum
+      i++;
+    }
+    }
   if (carry) {                          // if carry left over
     sum.resize(bmax->count + 1);        //   allocate another word
     sum.data[bmax->count] = 1;          //   save the carry in it
@@ -1246,14 +1207,14 @@ void divide(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignu
     else {                                      // Else full-blown divide
       vnl_bignum u,v;
 #ifdef DEBUG
-      vcl_cerr << "\nvnl_bignum::divide: b1 ="; b1.dump(vcl_cerr);
-      vcl_cerr << "vnl_bignum::divide: b2 ="; b2.dump(vcl_cerr);
+      std::cerr << "\nvnl_bignum::divide: b1 ="; b1.dump(std::cerr);
+      std::cerr << "vnl_bignum::divide: b2 ="; b2.dump(std::cerr);
 #endif
       Data d = normalize(b1,b2,u,v);            // Set u = b1*d, v = b2*d
 #ifdef DEBUG
-      vcl_cerr << "vnl_bignum::divide: d = " << d << vcl_hex << " (0x" << d << ")\n" << vcl_dec;
-      vcl_cerr << "vnl_bignum::divide: u = "; u.dump(vcl_cerr);
-      vcl_cerr << "vnl_bignum::divide: v = "; v.dump(vcl_cerr);
+      std::cerr << "vnl_bignum::divide: d = " << d << std::hex << " (0x" << d << ")\n" << std::dec;
+      std::cerr << "vnl_bignum::divide: u = "; u.dump(std::cerr);
+      std::cerr << "vnl_bignum::divide: v = "; v.dump(std::cerr);
 #endif
       Counter j = 0;
       while (j <= b1.count - b2.count) {        // Main division loop
@@ -1262,16 +1223,16 @@ void divide(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignu
           multiply_subtract(u,v,q_hat,j);
         j++;
 #ifdef DEBUG
-        vcl_cerr << "vnl_bignum::divide: q_hat = " << q_hat << vcl_hex << " (0x" << q_hat << ")\n" << vcl_dec;
-        vcl_cerr << "vnl_bignum::divide: u = "; u.dump(vcl_cerr);
+        std::cerr << "vnl_bignum::divide: q_hat = " << q_hat << std::hex << " (0x" << q_hat << ")\n" << std::dec;
+        std::cerr << "vnl_bignum::divide: u = "; u.dump(std::cerr);
 #endif
       }
       static Data dufus;                // dummy variable
       divide_aux(u,d,r,dufus);          // Unnormalize u for remainder
 
 #ifdef DEBUG
-      vcl_cerr << "vnl_bignum::divide: q = "; q.dump(vcl_cerr);
-      vcl_cerr << "vnl_bignum::divide: r = "; r.dump(vcl_cerr);
+      std::cerr << "vnl_bignum::divide: q = "; q.dump(std::cerr);
+      std::cerr << "vnl_bignum::divide: r = "; r.dump(std::cerr);
 #endif
     }
     q.trim();                           // Trim leading zeros of quot.

@@ -1,24 +1,21 @@
 # core/vpgl/io/Cmakelists.txt
 
-SET(vpgl_io_sources
-    vpgl_io_camera.h               vpgl_io_camera.txx      vpgl_io_camera.cxx
-    vpgl_io_proj_camera.h             vpgl_io_proj_camera.txx
-    vpgl_io_perspective_camera.h      vpgl_io_perspective_camera.txx
-    vpgl_io_affine_camera.h           vpgl_io_affine_camera.txx
-    vpgl_io_rational_camera.h         vpgl_io_rational_camera.txx
+set(vpgl_io_sources
+    vpgl_io_camera.h               vpgl_io_camera.hxx      vpgl_io_camera.cxx
+    vpgl_io_proj_camera.h             vpgl_io_proj_camera.hxx
+    vpgl_io_perspective_camera.h      vpgl_io_perspective_camera.hxx
+    vpgl_io_affine_camera.h           vpgl_io_affine_camera.hxx
+    vpgl_io_rational_camera.h         vpgl_io_rational_camera.hxx
     vpgl_io_lvcs.h                    vpgl_io_lvcs.cxx
-    vpgl_io_local_rational_camera.h   vpgl_io_local_rational_camera.txx
+    vpgl_io_local_rational_camera.h   vpgl_io_local_rational_camera.hxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vpgl_io_sources)
+aux_source_directory(Templates vpgl_io_sources)
 
-ADD_LIBRARY(vpgl_io ${vpgl_io_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpgl_io LIBRARY_SOURCES ${vpgl_io_sources})
 
-TARGET_LINK_LIBRARIES(vpgl_io vsl vpgl vnl vgl vgl_algo vgl_io vnl_io vbl_io)
+target_link_libraries(${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io)
 
-INSTALL_TARGETS(/lib vpgl_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/io ${vpgl_io_sources})
-
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

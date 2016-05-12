@@ -85,14 +85,14 @@ void vil3d_grad_1x3_i(const vil3d_image_view<srcT>& src_im,
                  n_k = src_im.nk(),
                  n_p = src_im.nplanes();
   const unsigned ni1 = n_i-1;
-  const vcl_ptrdiff_t s_istep = src_im.istep(),
+  const std::ptrdiff_t s_istep = src_im.istep(),
                     s_jstep = src_im.jstep(),
                     s_kstep = src_im.kstep(),
                     s_pstep = src_im.planestep();
 
   grad_im.set_size(n_i, n_j, n_k, n_p);
 
-  const vcl_ptrdiff_t d_istep = grad_im.istep(),
+  const std::ptrdiff_t d_istep = grad_im.istep(),
                       d_jstep = grad_im.jstep(),
                       d_kstep = grad_im.kstep(),
                       d_pstep = grad_im.planestep();

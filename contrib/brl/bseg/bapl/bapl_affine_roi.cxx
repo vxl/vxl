@@ -29,7 +29,7 @@ void
 bapl_affine_roi::rectify()
 {
   unsigned ni=rectified_img_.ni(), nj=rectified_img_.nj();
-  vcl_ptrdiff_t istep=rectified_img_.istep(), jstep=rectified_img_.jstep();
+  std::ptrdiff_t istep=rectified_img_.istep(), jstep=rectified_img_.jstep();
 
   vxl_byte* row = rectified_img_.top_left_ptr();
   for (unsigned j=0; j<nj; ++j,row+=jstep){

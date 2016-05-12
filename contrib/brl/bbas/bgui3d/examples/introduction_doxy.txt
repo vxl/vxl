@@ -6,9 +6,9 @@
 *
 * These examples show how to set up and use the basic and examiner viewers to view
 * 3D scenes.  You supply a root node of a scenegraph and the viewer renders it
-* on the screen.  There are many applications that can be done with bgui3d and 
-* more can be discovered at http://doc.coin3d.org/Coin/classes.html.  This site 
-* also has many examples of how to use its libraries as well.      
+* on the screen.  There are many applications that can be done with bgui3d and
+* more can be discovered at http://doc.coin3d.org/Coin/classes.html.  This site
+* also has many examples of how to use its libraries as well.
 *
 *
 */

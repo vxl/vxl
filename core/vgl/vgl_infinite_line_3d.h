@@ -14,7 +14,8 @@
 // Initial version July 25, 2009
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -101,12 +102,12 @@ class vgl_infinite_line_3d
 //: Write to stream
 // \relatesalso vgl_infinite_line_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_infinite_line_3d<Type>& p);
+std::ostream&  operator<<(std::ostream& s, const vgl_infinite_line_3d<Type>& p);
 
 //: Read from stream
 // \relatesalso vgl_infinite_line_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_infinite_line_3d<Type>& p);
+std::istream&  operator>>(std::istream& is,  vgl_infinite_line_3d<Type>& p);
 #define VGL_INFINITE_LINE_3D_INSTANTIATE(T) extern "please include vgl/vgl_infinite_line_3d.txx first"
 
 #endif // vgl_infinite_line_3d_h_

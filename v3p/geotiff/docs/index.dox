@@ -20,7 +20,7 @@ LIBGEOTIFF
 
 <h2>General Notes</h2>
 
-The libgeotiff library should compile cleanly with most ANSI-C or 
+The libgeotiff library should compile cleanly with most ANSI-C or
 ANSI C++ compilers.  All headers have appropriate <b>extern "C" {}</b>
 protection to ensure that entry points retain C linkage even if compiled
 with a C++ compiler. <p>
@@ -28,7 +28,7 @@ with a C++ compiler. <p>
 <h2>Source Tree</h2>
 
 The <a href="http://www.remotesensing.org/cgi-bin/cvsweb.cgi/osrs/geotiff">
-current CVS tree</a> is available on the web.  The source can be 
+current CVS tree</a> is available on the web.  The source can be
 downloaded anonymously using the <tt>cvs checkout osrs/geotiff/libgeotiff</tt>
 command after logging in using the instructions on the remotesensing.org
 <a href="/docs/howto-cvs.php3">CVS howto page</a>.<p>
@@ -39,10 +39,10 @@ command after logging in using the instructions on the remotesensing.org
 <li> xtiffio.h: the primary interface header file for all TIFF
 routines, using the extended GeoTIFF tags.<p>
 
-<li> geotiffio.h: the primary interface header file for all GTIF 
+<li> geotiffio.h: the primary interface header file for all GTIF
 routines, keys and code values.<p>
 
-<li> geotiff.h: an interface header file for all GTIF 
+<li> geotiff.h: an interface header file for all GTIF
 routines, if code values are not required.<p>
 
 <li> geokeys.h:   defines all valid GEOTIFF GeoKeys.<p>
@@ -54,13 +54,13 @@ to normalization of GeoTIFF information based on CSV files.<p>
 
 <h2>Licensing</h2>
 
-All the source code in this toolkit are either in the public domain, or under 
+All the source code in this toolkit are either in the public domain, or under
 an X style license.  In any event it is all considered to be free to use
-for any purpose (including commercial software).  No credit is required 
-though some of the code requires that the specific source code modules 
+for any purpose (including commercial software).  No credit is required
+though some of the code requires that the specific source code modules
 retain their existing copyright statements.  The CSV files, and other tables
 derived from the EPSG coordinate system database are also free for commercial
-and non-commercial use.  In particular, no part of this code is 
+and non-commercial use.  In particular, no part of this code is
 <i>copyleft</i>, nor does it imply any requirement for users to disclose
 this or their own source code.<p>
 

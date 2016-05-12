@@ -13,9 +13,9 @@
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 bool boxm2_vecf_ocl_store_nbrs::get_scene_appearance( boxm2_scene_sptr scene,
-                                    vcl_string& options)
+                                    std::string& options)
 {
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::vector<std::string> apps = scene->appearances();
     bool foundDataType = false;
     for (unsigned int i=0; i<apps.size(); ++i) {
         if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -32,7 +32,7 @@ bool boxm2_vecf_ocl_store_nbrs::get_scene_appearance( boxm2_scene_sptr scene,
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"ERROR: boxm2_vecf_ocl_store_nbrs: unsupported appearance type"<<vcl_endl;
+        std::cout<<"ERROR: boxm2_vecf_ocl_store_nbrs: unsupported appearance type"<<std::endl;
         return false;
     }
     //set apptype size
@@ -56,13 +56,13 @@ boxm2_vecf_ocl_store_nbrs::~boxm2_vecf_ocl_store_nbrs()
 }
 bool boxm2_vecf_ocl_store_nbrs::compile_kernel()
 {
-  vcl_string options;
+  std::string options;
   // sets apptypesize_ and app_type
   get_scene_appearance(source_scene_, options);
-  vcl_cout << options << '\n';
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
+  std::cout << options << '\n';
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::string vecf_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(vecf_source_dir + "store_neighbor_information.cl");
@@ -87,31 +87,31 @@ bool boxm2_vecf_ocl_store_nbrs::init_ocl_store()
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     status = 0;
     queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
-    ocl_depth = 0;
-    blk_info_source = 0;
-    info_buffer = 0;
-    info_buffer_source = 0;
-    blk_source = 0;
-    mog_source = 0;
+    ocl_depth = VXL_NULLPTR;
+    blk_info_source = VXL_NULLPTR;
+    info_buffer = VXL_NULLPTR;
+    info_buffer_source = VXL_NULLPTR;
+    blk_source = VXL_NULLPTR;
+    mog_source = VXL_NULLPTR;
     return true;
 }
-// input is a block (source scene) output is the source scene with neighbor information 
+// input is a block (source scene) output is the source scene with neighbor information
 // neighbor existence and expected intensity of neighbors
 bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
-  vcl_cout << "inside augment_1_blk" << vcl_endl;
+  std::cout << "inside augment_1_blk" << std::endl;
   int depth = 3;
-  vcl_size_t local_threads[1]={64};
-  static vcl_size_t global_threads[1]={1};   
+  std::size_t local_threads[1]={64};
+  static std::size_t global_threads[1]={1};
 
   ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
   ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-  vcl_vector<boxm2_block_id> blocks = source_scene_->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
+  std::vector<boxm2_block_id> blocks = source_scene_->get_block_ids();
+  std::vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   blk_source = opencl_cache_->get_block(source_scene_, *iter_blk);
   info_buffer = source_scene_->get_blk_metadata(*iter_blk);
-  blk_info_source  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
+  blk_info_source  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );
   blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-  
+
   if(app_type_ == "boxm2_mog3_grey") {
     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk,0,true);
   }
@@ -119,24 +119,24 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blk,0,true);
   }
   else {
-    vcl_cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
+    std::cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
     return false;
   }
   global_threads[0] = (unsigned) RoundUp(info_buffer->scene_dims[0]*info_buffer->scene_dims[1]*info_buffer->scene_dims[2],(int)local_threads[0]);
 
-  vcl_size_t nbytes_mog = mog_source->num_bytes();
-  vcl_size_t nvox = nbytes_mog/apptypesize_;
+  std::size_t nbytes_mog = mog_source->num_bytes();
+  std::size_t nvox = nbytes_mog/apptypesize_;
   alpha_source = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk, 0, true);
-  vcl_size_t ex_size = boxm2_data_traits<BOXM2_CHAR8>::datasize();
-  vcl_size_t nbytes_nbr_exint = ex_size*nvox;
+  std::size_t ex_size = boxm2_data_traits<BOXM2_CHAR8>::datasize();
+  std::size_t nbytes_nbr_exint = ex_size*nvox;
   nbr_exint = opencl_cache_->get_data_new(source_scene_, *iter_blk, boxm2_data_traits<BOXM2_CHAR8>::prefix("nbr_exint"), nbytes_nbr_exint, false);
-  vcl_size_t prob_size = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
-  vcl_size_t nbytes_nbr_prob = prob_size*nvox;
+  std::size_t prob_size = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
+  std::size_t nbytes_nbr_prob = prob_size*nvox;
   nbr_prob = opencl_cache_->get_data_new(source_scene_, *iter_blk, boxm2_data_traits<BOXM2_FLOAT8>::prefix("nbr_prob"), nbytes_nbr_prob, false);
-  vcl_size_t exist_size = boxm2_data_traits<BOXM2_CHAR8>::datasize();
-  vcl_size_t nbytes_nbr_exist = exist_size*nvox;
+  std::size_t exist_size = boxm2_data_traits<BOXM2_CHAR8>::datasize();
+  std::size_t nbytes_nbr_exist = exist_size*nvox;
   nbr_exists = opencl_cache_->get_data_new(source_scene_, *iter_blk, boxm2_data_traits<BOXM2_CHAR8>::prefix("nbr_exist"), nbytes_nbr_exist, false);
-  // set kernel args  
+  // set kernel args
   kern->set_arg(centerX.ptr());
   kern->set_arg(centerY.ptr());
   kern->set_arg(centerZ.ptr());
@@ -151,7 +151,7 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   kern->set_arg(ocl_depth);
   kern->set_arg(output.ptr());
   kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
-  kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local neighbor trees 
+  kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local neighbor trees
   kern->execute( queue, 1, local_threads, global_threads);
   clFinish( queue);
   check_val(status, MEM_FAILURE, "EXECUTE FAILED: " + error_to_string(status));
@@ -168,7 +168,7 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   ocl_depth->release_memory();
 #if 0
   for(int i = 0; i< 100; i+=2)
-    vcl_cout << output_buff[i] << ' ' << output_buff[i+1] << '\n';
+    std::cout << output_buff[i] << ' ' << output_buff[i+1] << '\n';
 #endif
   return true;
 }

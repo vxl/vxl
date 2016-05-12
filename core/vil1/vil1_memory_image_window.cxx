@@ -8,8 +8,9 @@
 // \date   19 Aug 96
 //-----------------------------------------------------------------------------
 
+#include <cmath>
 #include "vil1_memory_image_window.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 vil1_memory_image_window::vil1_memory_image_window(
            const vil1_memory_image_of<vxl_byte>& image,
@@ -205,8 +206,8 @@ double vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_
     }
   }
 
-  double std_dev_I1_uv = vcl_sqrt(result_I1);
-  double std_dev_I2_uv = vcl_sqrt(result_I2);
+  double std_dev_I1_uv = std::sqrt(result_I1);
+  double std_dev_I2_uv = std::sqrt(result_I2);
 
   ///////////////////////////////////////
   // calculate the correlation score
@@ -229,7 +230,7 @@ double vil1_memory_image_window::normalised_cross_correlation(const vil1_memory_
     }
   }
 
-  result /= vcl_sqrt(std_dev_I1_uv*std_dev_I1_uv*std_dev_I2_uv*std_dev_I2_uv);
+  result /= std::sqrt(std_dev_I1_uv*std_dev_I1_uv*std_dev_I2_uv*std_dev_I2_uv);
 
   return result;
 }

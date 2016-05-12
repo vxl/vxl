@@ -35,8 +35,9 @@
 //
 // \endverbatim
 
+#include <iostream>
 #include "bvpl_kernel_factory.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <bxml/bxml_document.h>
 
 class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
@@ -57,7 +58,7 @@ class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
 
   virtual ~bvpl_edge3d_kernel_factory() {}
 
-  static vcl_string name() {return "edge3d"; }
+  static std::string name() {return "edge3d"; }
 
   virtual bvpl_kernel_factory_sptr self(){return new bvpl_edge3d_kernel_factory(*this);}
 

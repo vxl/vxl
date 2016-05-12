@@ -1,3 +1,6 @@
+#include <limits>
+#include <iostream>
+#include <fstream>
 #include "volm_loc_hyp.h"
 //:
 // \file
@@ -6,9 +9,8 @@
 #include <bkml/bkml_write.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
 #include <vgl/vgl_distance.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 //: construct using a single dem file
 void volm_loc_hyp::add(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int inc_i, int inc_j, bool adjust_cam, char hemi, char dir)
@@ -41,18 +43,18 @@ bool volm_loc_hyp::add(double lat, double lon, double elev)
 
 
 //: construct by reading from a binary file
-volm_loc_hyp::volm_loc_hyp(vcl_string bin_file) : current_(0)
+volm_loc_hyp::volm_loc_hyp(std::string bin_file) : current_(0)
 {
   vsl_b_ifstream is(bin_file.c_str());
   if (!is) {
-    vcl_cerr << "In boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses() -- cannot open: " << bin_file << vcl_endl;
+    std::cerr << "In boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses() -- cannot open: " << bin_file << std::endl;
     return;
   }
   this->b_read(is);
   is.close();
 }
 
-bool volm_loc_hyp::write_hypotheses(vcl_string out_file)
+bool volm_loc_hyp::write_hypotheses(std::string out_file)
 {
   vsl_b_ofstream os(out_file.c_str());
   if (!os)
@@ -92,7 +94,7 @@ bool volm_loc_hyp::get_next(unsigned start, unsigned skip, vgl_point_3d<double>&
 //: get the hypothesis closest to the given and its id if get_next method were to be used,
 double volm_loc_hyp::get_closest(double lat, double lon, vgl_point_3d<double>& h, unsigned& hyp_id)
 {
-  double min_dist = vcl_numeric_limits<double>::max();
+  double min_dist = std::numeric_limits<double>::max();
   current_ = 0;
   for (unsigned i = 0; i < locs_.size(); ++i)
   {
@@ -146,9 +148,9 @@ void volm_loc_hyp::b_read(vsl_b_istream &is)
   switch (ver)
   {
    case 1: {
-     vcl_cerr << "I/O ERROR: boxm2_volm_loc_hypotheses::b_read(vsl_b_istream&)\n"
+     std::cerr << "I/O ERROR: boxm2_volm_loc_hypotheses::b_read(vsl_b_istream&)\n"
               << "           Version 1 is not supported anymore!\n";
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
            }
    case 2: {
@@ -165,18 +167,18 @@ void volm_loc_hyp::b_read(vsl_b_istream &is)
      break;
      }
    default:
-    vcl_cerr << "I/O ERROR: boxm2_volm_loc_hypotheses::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: boxm2_volm_loc_hypotheses::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
   return;
 }
 
 
 //: create a kml file, size is in seconds, e.g. 0.001
-void volm_loc_hyp::write_to_kml(vcl_string out_file, double size, bool const& write_as_dot)
+void volm_loc_hyp::write_to_kml(std::string out_file, double size, bool const& write_as_dot)
 {
-  vcl_ofstream ofs(out_file.c_str());
+  std::ofstream ofs(out_file.c_str());
   bkml_write::open_document(ofs);
 
   vnl_double_2 ul, ll, lr, ur;
@@ -187,7 +189,7 @@ void volm_loc_hyp::write_to_kml(vcl_string out_file, double size, bool const& wr
    double lon = locs_[i].x();
    double lat = locs_[i].y();
    double elev = locs_[i].z();
-   vcl_stringstream str; str << i << '_' << lat << '_' << lon << '_' << elev;
+   std::stringstream str; str << i << '_' << lat << '_' << lon << '_' << elev;
    if (write_as_dot) {
      vgl_point_2d<double> pt(lon, lat);
      bkml_write::write_location(ofs, pt, str.str(), "location", 0.4);

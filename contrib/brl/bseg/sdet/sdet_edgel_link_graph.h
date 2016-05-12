@@ -11,8 +11,10 @@
 //  Modifications
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <vcl_compiler.h>
 
 #include "sdet_edgel.h"
 #include "sdet_curvelet.h"
@@ -27,8 +29,8 @@ struct sdet_link {
   int deg_overlap;                  ///< to keep track of the degree of overlap
   bool flag;                        ///< a falg for miscellaneous purposes
 
-  vcl_list<sdet_curvelet*> curvelets; ///< list of curvelets containing this link
-  
+  std::list<sdet_curvelet*> curvelets; ///< list of curvelets containing this link
+
   //: constructor
   sdet_link(sdet_edgel* e1, sdet_edgel* e2): pe(e1), ce(e2), vote(0.0), deg_overlap(0), flag(false), curvelets(0){}
 
@@ -41,7 +43,7 @@ struct sdet_link {
     {
       sdet_curvelet* cvlet = (*cv_it);
 
-      sdet_curvelet_list_iter cv_it2 = cv_it; 
+      sdet_curvelet_list_iter cv_it2 = cv_it;
       cv_it2++;
       for (; cv_it2 != curvelets.end(); cv_it2++)
       {
@@ -50,7 +52,7 @@ struct sdet_link {
         //determine if this is duplicate
         if (cvlet->edgel_chain.size() != dup_cvlet->edgel_chain.size())
           continue;
-        
+
         bool duplicate = true; //reset flag
         for (unsigned k=0; k<cvlet->edgel_chain.size(); k++)
           duplicate = duplicate && (cvlet->edgel_chain[k]==dup_cvlet->edgel_chain[k]);
@@ -65,8 +67,8 @@ struct sdet_link {
 
 };
 
-typedef vcl_list<sdet_link*> sdet_link_list;
-typedef vcl_list<sdet_link*>::iterator sdet_link_list_iter;
+typedef std::list<sdet_link*> sdet_link_list;
+typedef std::list<sdet_link*>::iterator sdet_link_list_iter;
 
 //: This class represents the link graph formed from the edgels
 //  The links are described by an adjacency list organized by the id of the
@@ -74,14 +76,14 @@ typedef vcl_list<sdet_link*>::iterator sdet_link_list_iter;
 class sdet_edgel_link_graph
 {
 public:
-  vcl_vector<sdet_link_list> cLinks; ///< child links
-  vcl_vector<sdet_link_list> pLinks; ///< parent links
-  vcl_vector<bool> linked;            ///< flag to signal whether this edgel has been linked already
+  std::vector<sdet_link_list> cLinks; ///< child links
+  std::vector<sdet_link_list> pLinks; ///< parent links
+  std::vector<bool> linked;            ///< flag to signal whether this edgel has been linked already
 
   //temporary link graph created for finding selected edgel chains
-  vcl_vector<sdet_link_list> cLinks2; ///< child links
-  vcl_vector<sdet_link_list> pLinks2; ///< parent links
-  
+  std::vector<sdet_link_list> cLinks2; ///< child links
+  std::vector<sdet_link_list> pLinks2; ///< parent links
+
   //: constructor
   sdet_edgel_link_graph(int size=0): cLinks(size), pLinks(size), linked(size), cLinks2(size), pLinks2(size){}
 
@@ -93,7 +95,7 @@ public:
 
   //: resize the graph
   void resize(unsigned size)
-  { 
+  {
     if (size!=cLinks.size())
       clear();
 
@@ -118,7 +120,7 @@ public:
     cLinks.clear();
     pLinks.clear();
     linked.clear();
-    
+
     cLinks2.clear();
     pLinks2.clear();
   }
@@ -143,7 +145,7 @@ public:
             (pLinks[eA->id].size()==1 &&   //one link before it and
              cLinks[eA->id].size()==1) &&  //one link after it
              pLinks[eA->id].front()->pe != cLinks[eA->id].front()->ce //not a loop
-           ); 
+           );
   }
 
   //: is this edgel legal to be on an edgel chain
@@ -152,11 +154,11 @@ public:
     return (!linked[eA->id] &&            //not yet part of any edgel chain
              pLinks[eA->id].size()<=1 &&   //one link before it (or endpoint) and
              cLinks[eA->id].size()<=1      //one link after it (or endpoint)
-           ); 
+           );
   }
 
-  //: check if edgels are linked, 
-  //  if they are linked, return the link 
+  //: check if edgels are linked,
+  //  if they are linked, return the link
   sdet_link* are_linked(sdet_edgel* e1, sdet_edgel* e2)
   {
     sdet_link_list_iter cit = cLinks[e1->id].begin();

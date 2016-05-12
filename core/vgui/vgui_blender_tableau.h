@@ -63,10 +63,10 @@ class vgui_blender_tableau : public vgui_tableau
   bool handle(vgui_event const &e);
 
   //: Return the filename of the loaded image (if it was loaded from file).
-  vcl_string file_name() const;
+  std::string file_name() const;
 
   //: Return the type of this tableau ('vgui_blender_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Tell the blender that the image pixels have been changed.
   void reread_image();
@@ -96,7 +96,7 @@ class vgui_blender_tableau : public vgui_tableau
  ~vgui_blender_tableau();
 
   //: Filename (if the image was loaded from a file).
-  vcl_string filename_;
+  std::string filename_;
 };
 
 //: Creates a smart-pointer to a vgui_blender_tableau.

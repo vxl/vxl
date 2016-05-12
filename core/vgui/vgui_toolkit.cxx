@@ -7,32 +7,33 @@
 // \author fsm
 // \brief  See vgui_toolkit.h for a description of this file.
 
+#include <iostream>
+#include <cstdlib>
+#include <algorithm>
 #include "vgui_toolkit.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
 
 #include <vul/vul_trace.h>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_window.h>
 
-vcl_vector<vgui_toolkit*> *vgui_toolkit::registry()
+std::vector<vgui_toolkit*> *vgui_toolkit::registry()
 {
-  static vcl_vector<vgui_toolkit*> the_vector;
+  static std::vector<vgui_toolkit*> the_vector;
   return &the_vector;
 }
 
 vgui_toolkit *vgui_toolkit::lookup(char const *name)
 {
-  vcl_vector<vgui_toolkit*> *vv = registry();
+  std::vector<vgui_toolkit*> *vv = registry();
   for (unsigned int i=0; i<vv->size(); ++i)
     if ((*vv)[i]->name() == name)
       return (*vv)[i];
   vgui_macro_warning << "WARNING : no toolkit with name \'" << name << "\' found.\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //--------------------------------------------------------------------------------
@@ -49,7 +50,7 @@ vgui_toolkit::~vgui_toolkit()
   vul_trace;
 
   // deregister
-  vcl_vector<vgui_toolkit*>::iterator i = vcl_find(registry()->begin(),
+  std::vector<vgui_toolkit*>::iterator i = std::find(registry()->begin(),
                                                    registry()->end(),
                                                    this);
 
@@ -70,7 +71,7 @@ vgui_window *vgui_toolkit::produce_window(int /*width*/,
                                           char const* /*title*/)
 {
   vgui_macro_warning << "no implementation of produce_window supplied\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vgui_window *vgui_toolkit::produce_window(int /*width*/,
@@ -78,26 +79,26 @@ vgui_window *vgui_toolkit::produce_window(int /*width*/,
                                           char const* /*title*/)
 {
   vgui_macro_warning << "no implementation of produce_window supplied\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vgui_dialog_impl *vgui_toolkit::produce_dialog(char const*)
 {
   vgui_macro_warning << "no implementation of produce_dialog supplied\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vgui_dialog_extensions_impl *vgui_toolkit::produce_dialog_extension(char const*)
 {
   vgui_macro_warning << "no implementation of produce_dialog supplied\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 void vgui_toolkit::quit()
 {
   vgui_macro_warning << "vgui_toolkit::quit() called.\n"
                      << "calling exit()\n";
-  vcl_exit(0);
+  std::exit(0);
 }
 
 void vgui_toolkit::run()

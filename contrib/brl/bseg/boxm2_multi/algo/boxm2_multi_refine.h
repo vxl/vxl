@@ -14,8 +14,8 @@
 class boxm2_multi_refine
 {
   public:
-    typedef vcl_map<boxm2_block_id, bocl_mem_sptr> BlockMemMap;
-    typedef vcl_map<boxm2_block_id, int>           BlockIntMap;
+    typedef std::map<boxm2_block_id, bocl_mem_sptr> BlockMemMap;
+    typedef std::map<boxm2_block_id, int>           BlockIntMap;
 
     //three separate sub procedures (three separate map reduce tasks)
     static float refine( boxm2_multi_cache& cache, float thresh = .3f );
@@ -43,13 +43,13 @@ class boxm2_multi_refine
                                     BlockIntMap& newDataSizes,
                                     bocl_mem_sptr cl_output,
                                     bocl_mem_sptr lookup,
-                                    vcl_string data_type,
+                                    std::string data_type,
                                     int  apptypesize,
                                     bocl_mem_sptr prob_thresh );
 
 
     //does in place, zero based cumulative sum on cpu, returns total size
-    static int cumsum(int* buff, vcl_size_t len) {
+    static int cumsum(int* buff, std::size_t len) {
       //non zero based cumsum
       for (unsigned int i=1; i<len; ++i)
         buff[i] += buff[i-1];
@@ -62,15 +62,15 @@ class boxm2_multi_refine
     }
 
     //compile kernels and cache
-    static bocl_kernel* get_refine_tree_kernel(bocl_device_sptr device, vcl_string opts);
-    static bocl_kernel* get_refine_data_kernel(bocl_device_sptr device, vcl_string opts);
+    static bocl_kernel* get_refine_tree_kernel(bocl_device_sptr device, std::string opts);
+    static bocl_kernel* get_refine_data_kernel(bocl_device_sptr device, std::string opts);
 
     //map keeps track of all kernels compiled and cached
-    static vcl_map<vcl_string, bocl_kernel*> refine_tree_kernels_;
-    static vcl_map<vcl_string, bocl_kernel*> refine_data_kernels_;
+    static std::map<std::string, bocl_kernel*> refine_tree_kernels_;
+    static std::map<std::string, bocl_kernel*> refine_data_kernels_;
 
     //help with kernel compilation
-    static vcl_string get_option_string(int datasize);
+    static std::string get_option_string(int datasize);
 };
 
 #endif

@@ -25,11 +25,11 @@ bool boxm_remove_level0_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_remove_level0_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr"; //scene_in
   input_types_[1] = "vcl_string"; //block_prefix for scene out
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr"; //scene_out
 
   return pro.set_input_types(input_types_)
@@ -44,18 +44,18 @@ bool boxm_remove_level0_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << ": the number of inputs should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+    std::cout << pro.name() << ": the number of inputs should be " << n_inputs_
+             << " but instead it is " << pro.n_inputs() << std::endl;
     return false;
   }
 
   //get inputs:
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-  vcl_string block_pref = pro.get_input<vcl_string>(1);
+  std::string block_pref = pro.get_input<std::string>(1);
 
   //check input's validity
   if (!scene_base.ptr()) {
-    vcl_cout <<  " :-- Grid is not valid!\n";
+    std::cout <<  " :-- Grid is not valid!\n";
     return false;
   }
 
@@ -68,12 +68,12 @@ bool boxm_remove_level0_process(bprb_func_process& pro)
 
     scene_out->set_paths(scene_in->path(), block_pref);
     scene_out->set_appearance_model(scene_in->appearence_model());
-    vcl_cout << "Cloning\n";
+    std::cout << "Cloning\n";
     scene_in->clone_blocks(*scene_out);
 
-    vcl_cout << "Restructuring\n";
+    std::cout << "Restructuring\n";
     boxm_remove_level_0_leaves(scene_out);
-    vcl_cout << "Done\n";
+    std::cout << "Done\n";
 
     //write the scene after the number of levels has been adjusted
     scene_out->set_octree_levels(scene_in->max_level() - 1, scene_in->init_level());

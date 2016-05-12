@@ -10,13 +10,14 @@
 //     11 Oct 2002 Ian Scott - converted to vil
 //\endverbatim
 
+#include <iostream>
 #include "vil_jpeg_decompressor.h"
 #include "vil_jpeg_source_mgr.h"
 #include <vil/vil_stream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
-#define trace if (true) { } else vcl_cerr
+#define trace if (true) { } else std::cerr
 
 //: using jpeg decompressor objects :
 // -# supply an error manager, e.g. with jpeg_std_err().
@@ -36,7 +37,7 @@ vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
   : stream(s)
   , ready(false)
   , valid(false)
-  , biffer(0)
+  , biffer(VXL_NULLPTR)
 {
   stream->ref();
 
@@ -132,7 +133,7 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line)
       jpeg_abort_decompress(&jobj);
       ready = false;
       valid = false;
-      return 0;
+      return VXL_NULLPTR;
     }
   }
 
@@ -159,10 +160,10 @@ vil_jpeg_decompressor::~vil_jpeg_decompressor()
 
   //
   stream->unref();
-  stream = 0;
+  stream = VXL_NULLPTR;
 
   //
   if (biffer)
     delete [] biffer;
-  biffer = 0;
+  biffer = VXL_NULLPTR;
 }

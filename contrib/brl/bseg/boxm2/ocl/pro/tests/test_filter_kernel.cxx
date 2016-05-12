@@ -2,6 +2,12 @@
 // \file
 // \author Andrew Miller
 // \date May 24, 2011
+#include <iostream>
+#include <ios>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
@@ -23,12 +29,7 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 
-#include <vcl_iostream.h>
-#include <vcl_ios.h> // for std::ios::fixed
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <brdb/brdb_value.h>
@@ -38,10 +39,10 @@ void print_probs(boxm2_block* blk, float* alphas, boxm2_block_metadata data, int
 {
   //print in 3x3
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-  vcl_cout.precision(4);
-  vcl_cout.setf(vcl_ios_fixed, vcl_ios_floatfield);   // floatfield set to fixed
+  std::cout.precision(4);
+  std::cout.setf(std::ios::fixed, std::ios::floatfield);   // floatfield set to fixed
   for (int j=0; j<3; ++j) {
-    vcl_cout<<'|';
+    std::cout<<'|';
 
     float side_len = 1.0f;
     for (int i=0; i<3; ++i) {
@@ -51,7 +52,7 @@ void print_probs(boxm2_block* blk, float* alphas, boxm2_block_metadata data, int
       int idx = bit_tree.get_data_ptr();
 
       if ( bit_tree.is_leaf(0) ) {
-        prob = 1.0 - vcl_exp(-alphas[idx] * data.sub_block_dim_.x());
+        prob = 1.0 - std::exp(-alphas[idx] * data.sub_block_dim_.x());
       }
       else {
         float totalAlpha = 0.0f;
@@ -67,11 +68,11 @@ void print_probs(boxm2_block* blk, float* alphas, boxm2_block_metadata data, int
               totalAlpha += alphas[giStart+gi];
           }
         }
-        prob = 1.0-vcl_exp(-totalAlpha * data.sub_block_dim_.x() * side_len);
+        prob = 1.0-std::exp(-totalAlpha * data.sub_block_dim_.x() * side_len);
       }
-      vcl_cout<<'('<<i<<','<<j<<") = "<<prob<<'|';
+      std::cout<<'('<<i<<','<<j<<") = "<<prob<<'|';
     }
-    vcl_cout<<vcl_endl;
+    std::cout<<std::endl;
   }
 }
 
@@ -79,10 +80,10 @@ void print_alphas(boxm2_block* blk, float* alphas, boxm2_block_metadata /*data*/
 {
   //print in 3x3
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-  vcl_cout.precision(4);
-  vcl_cout.setf(vcl_ios_fixed, vcl_ios_floatfield);   // floatfield set to fixed
+  std::cout.precision(4);
+  std::cout.setf(std::ios::fixed, std::ios::floatfield);   // floatfield set to fixed
   for (int j=0; j<3; ++j) {
-    vcl_cout<<'|';
+    std::cout<<'|';
     for (int i=0; i<3; ++i) {
 
       float prob=0.0f;
@@ -106,9 +107,9 @@ void print_alphas(boxm2_block* blk, float* alphas, boxm2_block_metadata /*data*/
         }
         prob = totalAlpha;
       }
-      vcl_cout<<'('<<i<<','<<j<<") = "<<prob<<'|';
+      std::cout<<'('<<i<<','<<j<<") = "<<prob<<'|';
     }
-    vcl_cout<<vcl_endl;
+    std::cout<<std::endl;
   }
 }
 
@@ -163,19 +164,19 @@ void test_inner_cluster(boxm2_scene_sptr scene,
       }
 
       //store tree in blk
-      vcl_memcpy( tree.data_block(), bit_tree.get_bits(), 16 );
+      std::memcpy( tree.data_block(), bit_tree.get_bits(), 16 );
       trees(i,j,0) = tree;
     }
   }
   blk->set_trees(trees);
-  vcl_cout<<"Original probs ----------------------"<<vcl_endl;
+  std::cout<<"Original probs ----------------------"<<std::endl;
   print_probs(blk, alphas, data, dataSize);
-  vcl_cout<<"Original alphas"<<vcl_endl;
+  std::cout<<"Original alphas"<<std::endl;
   print_alphas(blk, alphas, data, dataSize);
-  vcl_cout<<"-------------------------------------\n\n";
+  std::cout<<"-------------------------------------\n\n";
 #ifdef DEBUG
   for (int i=0; i<dataSize; ++i)
-    vcl_cout<<"alpha "<<i<<':'<<alphas[i]<<vcl_endl;
+    std::cout<<"alpha "<<i<<':'<<alphas[i]<<std::endl;
 #endif // DEBUG
   /////////////////////////////////////////////////////////////////////////////
   //Prep opencl buffers and run kernel
@@ -185,7 +186,7 @@ void test_inner_cluster(boxm2_scene_sptr scene,
   alpha_buffer->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
 
   float* new_alpha_buffer = new float[ dataSize ];
-  vcl_fill(new_alpha_buffer, new_alpha_buffer + dataSize, 100.0f);
+  std::fill(new_alpha_buffer, new_alpha_buffer + dataSize, 100.0f);
   bocl_mem* new_alphas = new bocl_mem(device->context(), new_alpha_buffer,  dataSize*sizeof(float), "filtered alpha buffer ");
   new_alphas->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
 
@@ -210,8 +211,8 @@ void test_inner_cluster(boxm2_scene_sptr scene,
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //set workspace
-  vcl_size_t lThreads[] = {1, 1, 1};
-  vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
+  std::size_t lThreads[] = {1, 1, 1};
+  std::size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
                             RoundUp(data.sub_block_num_.y(), lThreads[1]),
                             RoundUp(data.sub_block_num_.z(), lThreads[2]) };
 
@@ -235,16 +236,16 @@ void test_inner_cluster(boxm2_scene_sptr scene,
   kern->clear_args();
 
   //check on output
-  vcl_cout<<"New probs::::"<<vcl_endl;
+  std::cout<<"New probs::::"<<std::endl;
   new_alphas->read_to_buffer(queue);
   print_probs(blk, new_alpha_buffer, data, dataSize);
 
-  vcl_cout<<"New alphas:::"<<vcl_endl;
+  std::cout<<"New alphas:::"<<std::endl;
   print_alphas(blk, new_alpha_buffer, data, dataSize);
 
 
   for (int i=0; i<dataSize; ++i)
-    vcl_cout<<"Newalpha: "<<new_alpha_buffer[i]<<vcl_endl;
+    std::cout<<"Newalpha: "<<new_alpha_buffer[i]<<std::endl;
 
   delete[] new_alpha_buffer;
   delete[] alphas;
@@ -301,16 +302,16 @@ void test_outer_cluster(boxm2_scene_sptr scene,
         count += (1+8+64);
       }
       //store tree in blk
-      vcl_memcpy( tree.data_block(), bit_tree.get_bits(), 16 );
+      std::memcpy( tree.data_block(), bit_tree.get_bits(), 16 );
       trees(i,j,0) = tree;
     }
   }
   blk->set_trees(trees);
-  vcl_cout<<"Original probs ----------------------"<<vcl_endl;
+  std::cout<<"Original probs ----------------------"<<std::endl;
   print_probs(blk, alphas, data, dataSize);
-  vcl_cout<<"Original alphas"<<vcl_endl;
+  std::cout<<"Original alphas"<<std::endl;
   print_alphas(blk, alphas, data, dataSize);
-  vcl_cout<<"-------------------------------------\n\n";
+  std::cout<<"-------------------------------------\n\n";
 
   ////////////////////////////////////////////////////////////////////////////
   //Prep opencl buffers and run kernel
@@ -320,7 +321,7 @@ void test_outer_cluster(boxm2_scene_sptr scene,
   alpha_buffer->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
 
   float* new_alpha_buffer = new float[ dataSize ];
-  vcl_fill(new_alpha_buffer, new_alpha_buffer + dataSize, 100.0f);
+  std::fill(new_alpha_buffer, new_alpha_buffer + dataSize, 100.0f);
   bocl_mem_sptr new_alphas = new bocl_mem(device->context(), new_alpha_buffer,  dataSize*sizeof(float), "filtered alpha buffer ");
   new_alphas->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
 
@@ -345,8 +346,8 @@ void test_outer_cluster(boxm2_scene_sptr scene,
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //set workspace
-  vcl_size_t lThreads[] = {1, 1, 1};
-  vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
+  std::size_t lThreads[] = {1, 1, 1};
+  std::size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
                             RoundUp(data.sub_block_num_.y(), lThreads[1]),
                             RoundUp(data.sub_block_num_.z(), lThreads[2]) };
 
@@ -370,11 +371,11 @@ void test_outer_cluster(boxm2_scene_sptr scene,
   kern->clear_args();
 
   //check on output
-  vcl_cout<<"New probs::::"<<vcl_endl;
+  std::cout<<"New probs::::"<<std::endl;
   new_alphas->read_to_buffer(queue);
   print_probs(blk, new_alpha_buffer, data, dataSize);
 
-  vcl_cout<<"New alphas:::"<<vcl_endl;
+  std::cout<<"New alphas:::"<<std::endl;
   print_alphas(blk, new_alpha_buffer, data, dataSize);
 
   delete[] new_alpha_buffer;
@@ -413,7 +414,7 @@ void test_filter_kernel()
   scene->set_local_origin( vgl_point_3d<double>(0,0,0) );
 
   //set scene block information
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks;
   boxm2_block_id id(0,0,0);
   boxm2_block_metadata data( id,                           //id
                              vgl_point_3d<double>(0,0,0),  //local_origin
@@ -427,7 +428,7 @@ void test_filter_kernel()
   scene->set_blocks(blocks);
 
   // list of appearance models/observation models used by this scene
-  vcl_vector<vcl_string> appearances;
+  std::vector<std::string> appearances;
   appearances.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   scene->set_appearances(appearances);
 
@@ -441,9 +442,9 @@ void test_filter_kernel()
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
 
   //RUN Tests
-  vcl_cout<<"Testing inner cluster"<<vcl_endl;
+  std::cout<<"Testing inner cluster"<<std::endl;
   test_inner_cluster(scene,blk,data,device,opencl_cache,id,kern,queue);
-  vcl_cout<<"Testing outer clusters"<<vcl_endl;
+  std::cout<<"Testing outer clusters"<<std::endl;
   test_outer_cluster(scene,blk,data,device,opencl_cache,id,kern,queue);
 }
 

@@ -1,31 +1,30 @@
 #This is brl/b3p/shapelib
 
-PROJECT( shapelib C )
+project( shapelib C )
 
-INCLUDE( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
+include( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
 
-IF(NOT VXL_USING_NATIVE_SHAPELIB)
+if(NOT VXL_USING_NATIVE_SHAPELIB)
 
-  IF (WIN32)
-    ADD_DEFINITIONS( -DXML_STATIC )
-    ADD_DEFINITIONS( -DCOMPILED_FROM_DSP )
-  ENDIF (WIN32)
+  if(WIN32)
+    add_definitions( -DXML_STATIC )
+    add_definitions( -DCOMPILED_FROM_DSP )
+  endif()
 
   #set the COMPILED_FROM_DSP definition
 
-  SET(shapelib_sources
+  set(shapelib_sources
      shapefil.h
      shptree.c
      shpopen.c
      dbfopen.c
   )
 
-  ADD_LIBRARY(shapelib ${shapelib_sources})
-  INSTALL_TARGETS(/lib shapelib)
+  vxl_add_library(LIBRARY_NAME shapelib LIBRARY_SOURCES ${shapelib_sources})
 
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
+  endif()
 
-ENDIF(NOT VXL_USING_NATIVE_SHAPELIB)
+endif()
 

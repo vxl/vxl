@@ -5,13 +5,14 @@
 #ifndef VIL_NITF2_TYPED_FIELD_FORMATTER_H
 #define VIL_NITF2_TYPED_FIELD_FORMATTER_H
 
+#include <iosfwd>
+#include <string>
+#include <sstream>
 #include "vil_nitf2_field_formatter.h"
 #include "vil_nitf2_tagged_record.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 // All subclasses of NITF field formatter derive from this template
 // The template handles both scalars and vectors of type T.
@@ -27,7 +28,7 @@ class vil_nitf2_typed_field_formatter : public vil_nitf2_field_formatter
   // Destructor
   virtual ~vil_nitf2_typed_field_formatter() {}
 
-  // Returns a vcl_vector field of specified dimensionality.
+  // Returns a std::vector field of specified dimensionality.
   vil_nitf2_array_field* create_array_field(
     int num_dimensions, vil_nitf2_field_definition* field_definition);
 
@@ -40,23 +41,23 @@ class vil_nitf2_typed_field_formatter : public vil_nitf2_field_formatter
   // Attempts to read one instance of field from vil_nitf2_istream into value.
   // Returns whether value is valid. Sets out_blank to indicate whether the
   // input read consisted entirely of blanks (in which case false is the
-  // return value). The default implementation converts to a vcl_stringstream
-  // and calls read(vcl_istream&). Subclasses either need to overload
+  // return value). The default implementation converts to a std::stringstream
+  // and calls read(std::istream&). Subclasses either need to overload
   // this method or read(vil_nitf2_istream&).
   virtual bool read(vil_nitf2_istream& input, T& out_value, bool& out_blank);
 
-  // Same as above, but reads value from a vcl_istream (which, unlike a
+  // Same as above, but reads value from a std::istream (which, unlike a
   // vil_nitf2_istream, supports formatted I/O).
-  virtual bool read_vcl_stream(vcl_istream& input, T& out_value, bool& out_blank);
+  virtual bool read_vcl_stream(std::istream& input, T& out_value, bool& out_blank);
 
   // Write value to a vil_nitf2_ostream.  Return success. The default
-  // implementation calls write(vcl_ostream&). Subclasses need to either
-  // overload this method or define write(vcl_ostream&).  Returns success.
+  // implementation calls write(std::ostream&). Subclasses need to either
+  // overload this method or define write(std::ostream&).  Returns success.
   virtual bool write(vil_nitf2_ostream& output, const T& value);
 
-  // Same as above, but writes value to a vcl_ostream (which, unlike
+  // Same as above, but writes value to a std::ostream (which, unlike
   // vil_nitf2_ostream, supports formatted I/O).
-  virtual bool write_vcl_stream(vcl_ostream& output, const T& value);
+  virtual bool write_vcl_stream(std::ostream& output, const T& value);
 };
 
 //=============================================================================
@@ -103,14 +104,14 @@ bool vil_nitf2_typed_field_formatter<T>::read(
   vil_nitf2_istream& input, T& out_value, bool& out_blank)
 {
   //hackery for non-binary data (convert to string and create a stringstream from it)
-  vcl_string str = vil_nitf2_field_formatter::read_string(input, field_width);
-  vcl_stringstream s(str);
+  std::string str = vil_nitf2_field_formatter::read_string(input, field_width);
+  std::stringstream s(str);
   return read_vcl_stream( s, out_value, out_blank );
 }
 
 template<typename T>
 bool vil_nitf2_typed_field_formatter<T>::read_vcl_stream(
-  vcl_istream& /* input */, T& /* out_value */, bool& /* out_blank */)
+  std::istream& /* input */, T& /* out_value */, bool& /* out_blank */)
 {
   assert(0);
   return false;
@@ -118,7 +119,7 @@ bool vil_nitf2_typed_field_formatter<T>::read_vcl_stream(
 
 template<typename T>
 bool vil_nitf2_typed_field_formatter<T>::write_vcl_stream(
-  vcl_ostream& /* output */, const T& /* value */)
+  std::ostream& /* output */, const T& /* value */)
 {
   assert( 0 );
   return false;
@@ -128,9 +129,9 @@ template<typename T>
 bool vil_nitf2_typed_field_formatter<T>::write(
   vil_nitf2_ostream& output, const T& value)
 {
-  vcl_stringstream strstr;
+  std::stringstream strstr;
   write_vcl_stream(strstr, value);
-  vcl_string str = strstr.str();
+  std::string str = strstr.str();
   output.write(str.c_str(), str.length());
   return output.ok();
 }
@@ -151,8 +152,8 @@ class vil_nitf2_integer_formatter : public vil_nitf2_typed_field_formatter<int>
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<int>::read;
   using vil_nitf2_typed_field_formatter<int>::write;
-  virtual bool read_vcl_stream(vcl_istream& input, int& out_value, bool& out_blank);
-  virtual bool write_vcl_stream(vcl_ostream& output, const int& value);
+  virtual bool read_vcl_stream(std::istream& input, int& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(std::ostream& output, const int& value);
 
   bool show_sign;
 };
@@ -167,8 +168,8 @@ class vil_nitf2_long_long_formatter : public vil_nitf2_typed_field_formatter<vil
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_long>::read;
   using vil_nitf2_typed_field_formatter<vil_nitf2_long>::write;
-  virtual bool read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank);
-  virtual bool write_vcl_stream(vcl_ostream& output, const vil_nitf2_long& value);
+  virtual bool read_vcl_stream(std::istream& input, vil_nitf2_long& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(std::ostream& output, const vil_nitf2_long& value);
 
   bool show_sign;
 };
@@ -186,8 +187,8 @@ class vil_nitf2_double_formatter : public vil_nitf2_typed_field_formatter<double
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<double>::read;
   using vil_nitf2_typed_field_formatter<double>::write;
-  virtual bool read_vcl_stream(vcl_istream& input, double& out_value, bool& out_blank);
-  virtual bool write_vcl_stream(vcl_ostream& output, const double& value);
+  virtual bool read_vcl_stream(std::istream& input, double& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(std::ostream& output, const double& value);
 
   int precision;
   bool show_sign;
@@ -207,8 +208,8 @@ class vil_nitf2_exponential_formatter : public vil_nitf2_typed_field_formatter<d
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<double>::read;
   using vil_nitf2_typed_field_formatter<double>::write;
-  virtual bool read_vcl_stream(vcl_istream& input, double& out_value, bool& out_blank);
-  virtual bool write_vcl_stream(vcl_ostream& output, const double& value);
+  virtual bool read_vcl_stream(std::istream& input, double& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(std::ostream& output, const double& value);
 
   int mantissa_width;
   int exponent_width;
@@ -227,8 +228,8 @@ class vil_nitf2_char_formatter : public vil_nitf2_typed_field_formatter<char>
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<char>::read;
   using vil_nitf2_typed_field_formatter<char>::write;
-  virtual bool read_vcl_stream(vcl_istream& input, char& out_value, bool& out_blank);
-  virtual bool write_vcl_stream(vcl_ostream& output, const char& value);
+  virtual bool read_vcl_stream(std::istream& input, char& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(std::ostream& output, const char& value);
 };
 
 // Reads and writes a binary data field
@@ -254,9 +255,9 @@ class vil_nitf2_binary_formatter : public vil_nitf2_typed_field_formatter<void*>
   virtual bool write(vil_nitf2_ostream& output, void*const& value);
 };
 
-// Reads and writes a vcl_string field.
+// Reads and writes a std::string field.
 //
-class vil_nitf2_string_formatter : public vil_nitf2_typed_field_formatter<vcl_string>
+class vil_nitf2_string_formatter : public vil_nitf2_typed_field_formatter<std::string>
 {
  public:
   // Character sets
@@ -271,26 +272,26 @@ class vil_nitf2_string_formatter : public vil_nitf2_typed_field_formatter<vcl_st
   virtual ~vil_nitf2_string_formatter() {}
 
   // partially overridden read/write methods
-  using vil_nitf2_typed_field_formatter<vcl_string>::read;
-  using vil_nitf2_typed_field_formatter<vcl_string>::write;
-  virtual bool read_vcl_stream(vcl_istream& input, vcl_string& out_value, bool& out_blank );
-  virtual bool write_vcl_stream(vcl_ostream& output, const vcl_string& value);
+  using vil_nitf2_typed_field_formatter<std::string>::read;
+  using vil_nitf2_typed_field_formatter<std::string>::write;
+  virtual bool read_vcl_stream(std::istream& input, std::string& out_value, bool& out_blank );
+  virtual bool write_vcl_stream(std::ostream& output, const std::string& value);
 
-  virtual bool is_valid(vcl_string value) const;
+  virtual bool is_valid(std::string value) const;
 
   // Member variable
   enum_char_set char_set;
 };
 
-// Helper class for vil_nitf2_enum_string_formatter. Represents a vcl_string enumeration.
+// Helper class for vil_nitf2_enum_string_formatter. Represents a std::string enumeration.
 //
-class vil_nitf2_enum_values : public vcl_map<vcl_string, vcl_string>
+class vil_nitf2_enum_values : public std::map<std::string, std::string>
 {
  public:
-  vil_nitf2_enum_values& value(vcl_string token, vcl_string pretty_name = "");
+  vil_nitf2_enum_values& value(std::string token, std::string pretty_name = "");
 };
 
-// Reads and writes an enumerated vcl_string field.
+// Reads and writes an enumerated std::string field.
 // To Do: Reimplement this to represent its value using a new class
 // NitfEnum_value, that outputs its pretty_name by default.
 //
@@ -303,7 +304,7 @@ class vil_nitf2_enum_string_formatter : public vil_nitf2_string_formatter
   vil_nitf2_field_formatter* copy() const;
 
   // Is specified value valid?
-  bool is_valid_value(vcl_string value) const;
+  bool is_valid_value(std::string value) const;
 
  private:
   void validate_value_map();
@@ -323,8 +324,8 @@ class vil_nitf2_date_time_formatter : public vil_nitf2_typed_field_formatter<vil
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_date_time>::read;
   using vil_nitf2_typed_field_formatter<vil_nitf2_date_time>::write;
-  virtual bool read_vcl_stream(vcl_istream& input, vil_nitf2_date_time& out_value, bool& out_blank);
-  virtual bool write_vcl_stream(vcl_ostream& output, const vil_nitf2_date_time& value);
+  virtual bool read_vcl_stream(std::istream& input, vil_nitf2_date_time& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(std::ostream& output, const vil_nitf2_date_time& value);
 };
 
 // Reads and writes a location field.
@@ -340,8 +341,8 @@ class vil_nitf2_location_formatter : public vil_nitf2_typed_field_formatter<vil_
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_location*>::read;
   using vil_nitf2_typed_field_formatter<vil_nitf2_location*>::write;
-  virtual bool read_vcl_stream(vcl_istream& input, vil_nitf2_location*& out_value, bool& out_blank);
-  virtual bool write_vcl_stream(vcl_ostream& output, vil_nitf2_location*const& value);
+  virtual bool read_vcl_stream(std::istream& input, vil_nitf2_location*& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(std::ostream& output, vil_nitf2_location*const& value);
 
   // Converts overall field width to seconds precision for DMSH formatted
   // field, ddmmss.sssHdddmmss.sssH

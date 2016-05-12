@@ -16,9 +16,10 @@
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //
 
+#include <vector>
+#include <iostream>
 #include "bsta_distribution.h"
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: forward declare vnl_vector_fixed
 template<class T, unsigned n> class vnl_vector_fixed;
@@ -60,7 +61,7 @@ class bsta_parzen : public bsta_distribution<T,n>
 {
  public:
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
-  typedef vcl_vector<vect_t > sample_vector;
+  typedef std::vector<vect_t > sample_vector;
   typedef typename sample_vector::const_iterator sv_const_it;
 
  protected:

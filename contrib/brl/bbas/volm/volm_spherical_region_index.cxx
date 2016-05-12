@@ -1,20 +1,22 @@
+#include <iostream>
+#include <vector>
 #include "volm_spherical_region_index.h"
 #include "volm_camera_space.h"
 #include <vsph/vsph_unit_sphere.h>
 #include <bpgl/depth_map/depth_map_scene.h>
 #include "volm_spherical_container.h"
 #include <bsol/bsol_algs.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsph/vsph_utils.h>
 #include <vsph/vsph_segment_sphere.h>
 #include <volm/volm_io.h>
 
 volm_spherical_region_index::
-volm_spherical_region_index(vcl_map<vcl_string,vcl_string> & index_file_paths,
-                            vcl_string usph_file_path)
+volm_spherical_region_index(std::map<std::string,std::string> & index_file_paths,
+                            std::string usph_file_path)
 {
-    vcl_map<vcl_string,vcl_string>::iterator iter = index_file_paths.begin();
+    std::map<std::string,std::string>::iterator iter = index_file_paths.begin();
     for (;iter!=index_file_paths.end(); iter++)
     {
         bool keep_sky = false;
@@ -37,7 +39,7 @@ volm_spherical_region_index(vcl_map<vcl_string,vcl_string> & index_file_paths,
         else
             continue;
 
-        vcl_vector<unsigned char> cdata;
+        std::vector<unsigned char> cdata;
         vsph_utils::read_ray_index_data(iter->second, cdata);
         data_.clear();
         int n = cdata.size();
@@ -53,8 +55,8 @@ volm_spherical_region_index(vcl_map<vcl_string,vcl_string> & index_file_paths,
         seg_->set_data(data_);
         seg_->segment();
         seg_->extract_region_bounding_boxes();
-        const vcl_map<int, vsph_sph_box_2d>& boxes = seg_->region_boxes();
-        vcl_map<int, vsph_sph_box_2d>::const_iterator bit = boxes.begin();
+        const std::map<int, vsph_sph_box_2d>& boxes = seg_->region_boxes();
+        std::map<int, vsph_sph_box_2d>::const_iterator bit = boxes.begin();
 
         for (; bit != boxes.end(); ++bit) {
             volm_spherical_region r(bit->second);
@@ -130,10 +132,10 @@ volm_spherical_region_index::volm_spherical_region_index(float * boxes,int num_d
     }
 }
 
-volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_vector<unsigned char> > & index_buffers,
+volm_spherical_region_index::volm_spherical_region_index(std::map<std::string,std::vector<unsigned char> > & index_buffers,
                                                          vsph_unit_sphere_sptr & usph)
 {
-    vcl_map<vcl_string,vcl_vector<unsigned char> >::iterator iter = index_buffers.begin();
+    std::map<std::string,std::vector<unsigned char> >::iterator iter = index_buffers.begin();
     for (;iter!=index_buffers.end(); iter++)
     {
         bool keep_sky = false;
@@ -155,8 +157,8 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
         }
         else
             continue;
-        vcl_vector<unsigned char> cdata = iter->second;
-        vcl_cout<<"Size of the data is "<<cdata.size()<<vcl_endl;
+        std::vector<unsigned char> cdata = iter->second;
+        std::cout<<"Size of the data is "<<cdata.size()<<std::endl;
         data_.clear();
         int n = cdata.size();
         for (int i = 0; i<n; ++i)
@@ -170,8 +172,8 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
         seg_->set_data(data_);
         seg_->segment();
         seg_->extract_region_bounding_boxes();
-        const vcl_map<int, vsph_sph_box_2d> boxes = seg_->region_boxes();
-        vcl_map<int, vsph_sph_box_2d>::const_iterator bit = boxes.begin();
+        const std::map<int, vsph_sph_box_2d> boxes = seg_->region_boxes();
+        std::map<int, vsph_sph_box_2d>::const_iterator bit = boxes.begin();
 
         for (; bit != boxes.end(); ++bit) {
             volm_spherical_region r(bit->second);
@@ -196,12 +198,12 @@ volm_spherical_region_index::volm_spherical_region_index(vcl_map<vcl_string,vcl_
     }
 }
 
-void volm_spherical_region_index::load_unitsphere(vcl_string usph_file_path)
+void volm_spherical_region_index::load_unitsphere(std::string usph_file_path)
 {
   vsl_b_ifstream is(usph_file_path);
   if (!is)
   {
-    vcl_cout<<"Cannot Open file "<<usph_file_path<<vcl_endl;
+    std::cout<<"Cannot Open file "<<usph_file_path<<std::endl;
     return;
   }
   vsl_b_read(is, usph_);
@@ -217,20 +219,20 @@ volm_spherical_region_index::index_regions()
   return sph_regions_;
 }
 
-void volm_spherical_region_index::print(vcl_ostream& os)
+void volm_spherical_region_index::print(std::ostream& os)
 {
-  vcl_vector<volm_spherical_region> regions = sph_regions_.regions();
-  vcl_vector<volm_spherical_region>::iterator iter =  regions.begin();
+  std::vector<volm_spherical_region> regions = sph_regions_.regions();
+  std::vector<volm_spherical_region>::iterator iter =  regions.begin();
   for (; iter != regions.end(); ++iter) {
     iter->print(os);
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
 }
 
-void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstream & odata)
+void volm_spherical_region_index::write_binary(std::ofstream & oconfig,std::ofstream & odata)
 {
-    vcl_vector<volm_spherical_region> regions = sph_regions_.regions();
-    vcl_vector<unsigned int> depth_regions =sph_regions_.attributed_regions_by_type_only(DEPTH_INTERVAL);
+    std::vector<volm_spherical_region> regions = sph_regions_.regions();
+    std::vector<unsigned int> depth_regions =sph_regions_.attributed_regions_by_type_only(DEPTH_INTERVAL);
 
     int num_regions[5];
     num_regions[1] =depth_regions.size();
@@ -250,7 +252,7 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
         odata.write(reinterpret_cast<char*>(&vals[0]),sizeof(float)*6);
     }
 
-    vcl_vector<unsigned int> orientation_regions =sph_regions_.attributed_regions_by_type_only(ORIENTATION);
+    std::vector<unsigned int> orientation_regions =sph_regions_.attributed_regions_by_type_only(ORIENTATION);
     num_regions[2] =orientation_regions.size();
     for (unsigned i = 0 ; i < orientation_regions.size();i++)
     {
@@ -266,7 +268,7 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
 
         odata.write(reinterpret_cast<char*>(&vals[0]),sizeof(float)*6);
     }
-    vcl_vector<unsigned int> nlcd_regions =sph_regions_.attributed_regions_by_type_only(NLCD);
+    std::vector<unsigned int> nlcd_regions =sph_regions_.attributed_regions_by_type_only(NLCD);
     num_regions[3] =nlcd_regions.size();
     for (unsigned i = 0 ; i < nlcd_regions.size();i++)
     {
@@ -282,7 +284,7 @@ void volm_spherical_region_index::write_binary(vcl_ofstream & oconfig,vcl_ofstre
 
         odata.write(reinterpret_cast<char*>(&vals[0]),sizeof(float)*6);
     }
-    vcl_vector<unsigned int> sky_regions =sph_regions_.attributed_regions_by_type_only(SKY);
+    std::vector<unsigned int> sky_regions =sph_regions_.attributed_regions_by_type_only(SKY);
     num_regions[4] =sky_regions.size();
     for (unsigned i = 0 ; i < sky_regions.size();i++)
     {

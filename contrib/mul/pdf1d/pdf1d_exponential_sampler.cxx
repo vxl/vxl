@@ -5,10 +5,12 @@
 // \author Tim Cootes
 // \brief Sampler class for Univariate exponential distributions
 
+#include <iostream>
+#include <cmath>
 #include "pdf1d_exponential_sampler.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <pdf1d/pdf1d_exponential.h>
 
 //=======================================================================
@@ -33,16 +35,16 @@ pdf1d_exponential_sampler::~pdf1d_exponential_sampler()
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_exponential_sampler::is_a() const
+std::string pdf1d_exponential_sampler::is_a() const
 {
-  return vcl_string("pdf1d_exponential_sampler");
+  return std::string("pdf1d_exponential_sampler");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_exponential_sampler::is_class(vcl_string const& s) const
+bool pdf1d_exponential_sampler::is_class(std::string const& s) const
 {
   return pdf1d_sampler::is_class(s) || s==pdf1d_exponential_sampler::is_a();
 }
@@ -80,7 +82,7 @@ double pdf1d_exponential_sampler::sample()
   const pdf1d_exponential & exponential = static_cast<const pdf1d_exponential &>(model());
   double L = exponential.lambda();
 
-  return  -1.0*vcl_log(rng_.drand64(0,1))/L;
+  return  -1.0*std::log(rng_.drand64(0,1))/L;
 }
 
 //: Fill x with samples possibly chosen so as to represent the distribution
@@ -95,7 +97,7 @@ void pdf1d_exponential_sampler::regular_samples(vnl_vector<double>& x)
   // Require CDF(x) = (1+i)/(n+1)
   // Thus exp(-Lx) = (n-i)/(n+1)
   for (int i=0;i<n;++i)
-    x[i] =  -1.0*vcl_log(double(n-i)/(n+1))/L;
+    x[i] =  -1.0*std::log(double(n-i)/(n+1))/L;
 }
 
 

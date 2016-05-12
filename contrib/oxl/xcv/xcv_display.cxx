@@ -1,4 +1,8 @@
 // This is oxl/xcv/xcv_display.cxx
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "xcv_display.h"
 //:
 // \file
@@ -12,10 +16,7 @@
 // \endverbatim
 //
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
 #include <vul/vul_sprintf.h>
@@ -44,7 +45,7 @@ vgui_roi_tableau_make_roi *xcv_display::roi_tableau_client_ = 0;
 #endif // 0
 extern void post_to_status_bar(const char*);
 extern void get_current(unsigned*, unsigned*);
-extern vcl_vector<xcv_image_tableau_sptr> get_image_list();
+extern std::vector<xcv_image_tableau_sptr> get_image_list();
 extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
 extern xcv_picker_tableau_sptr get_picker_tableau_at(unsigned, unsigned);
 extern vgui_composite_tableau_sptr get_composite_at(unsigned, unsigned);
@@ -99,9 +100,9 @@ void xcv_display::toggle_enhance()
     if (!easy) return;
 
     // Get the full list of images and get the user to select one:
-    vcl_vector<xcv_image_tableau_sptr> img_tabs = get_image_list();
+    std::vector<xcv_image_tableau_sptr> img_tabs = get_image_list();
     static int selected_image = 1;
-    vcl_vector<vcl_string> labels;
+    std::vector<std::string> labels;
     for (unsigned int i=0; i<img_tabs.size(); i++)
       labels.push_back(img_tabs[i]->file_name());
     vgui_dialog dl("Images");
@@ -120,7 +121,7 @@ void xcv_display::toggle_enhance()
   }
   else
   {
-    if (debug) vcl_cout << "removing enhance lens\n";
+    if (debug) std::cout << "removing enhance lens\n";
 
     vgui_parent_child_link::replace_child_everywhere(enhance, global_img);
     is_enhancing = false;
@@ -138,7 +139,7 @@ void xcv_display::toggle_magnify()
 
   if (!is_magnifying)
   {
-    if (debug) vcl_cerr << "adding magnify lens\n";
+    if (debug) std::cerr << "adding magnify lens\n";
 
     unsigned col, row;
     get_current(&col, &row);
@@ -153,9 +154,9 @@ void xcv_display::toggle_magnify()
   }
   else
   {
-    if (debug) vcl_cout << "removing magnify lens\n";
+    if (debug) std::cout << "removing magnify lens\n";
 
-    enhance->set_child(0);
+    enhance->set_child(VXL_NULLPTR);
     vgui_parent_child_link::replace_child_everywhere(enhance, comp);
     enhance = vgui_enhance_tableau_sptr(); // 0;
     is_magnifying = false;
@@ -227,7 +228,7 @@ void xcv_display::line_profile(const vil1_image& src, float x0, float y0, float 
 
   if ((sdepth != 8) /*&& (sdepth != 16)*/)
   {
-    vcl_cerr << sdepth << " bit profile not yet implemented.\n";
+    std::cerr << sdepth << " bit profile not yet implemented.\n";
     return;
   }
 
@@ -279,7 +280,7 @@ void xcv_display::show_line_slice()
     return;
 
   int num_points
-    = (int)(vnl_math::rnd(vcl_sqrt((double)((fx1-fx0)*(fx1-fx0)
+    = (int)(vnl_math::rnd(std::sqrt((double)((fx1-fx0)*(fx1-fx0)
     + (fy1-fy0)*(fy1-fy0)))));
 
   // Avoid divide by zero
@@ -302,7 +303,7 @@ void xcv_display::show_line_slice()
   vgui_dialog profile_dialog("Image Line Profile");
   profile_dialog.inline_tableau(vgui_shell_tableau_new(viewer), 700, 500);
   profile_dialog.set_ok_button("close");
-  profile_dialog.set_cancel_button(0);
+  profile_dialog.set_cancel_button(VXL_NULLPTR);
   profile_dialog.ask();
 
   delete [] x;

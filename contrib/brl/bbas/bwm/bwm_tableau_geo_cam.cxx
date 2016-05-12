@@ -1,9 +1,11 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_tableau_geo_cam.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
 #include <vul/vul_file.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 bool bwm_tableau_geo_cam::handle(const vgui_event &e)
 {
@@ -16,27 +18,27 @@ void bwm_tableau_geo_cam::get_popup(vgui_popup_params const &params, vgui_menu &
   bwm_tableau_cam::get_popup(params, menu);
 }
 
-vcl_string bwm_tableau_geo_cam::save_camera()
+std::string bwm_tableau_geo_cam::save_camera()
 {
 #if 0
-  vcl_string img_path = this->img_path();
-  vcl_string cam_path = my_observer_->camera_path();
+  std::string img_path = this->img_path();
+  std::string cam_path = my_observer_->camera_path();
 
   // see if the camera is adjusted
   if (my_observer_->camera_adjusted()) {
     //need to save the new camera
-    vcl_string new_cam_path = vul_file::strip_extension(cam_path);
-    vcl_string::size_type pos = new_cam_path.find("_v", 0);
-    if (pos != vcl_string::npos) {
+    std::string new_cam_path = vul_file::strip_extension(cam_path);
+    std::string::size_type pos = new_cam_path.find("_v", 0);
+    if (pos != std::string::npos) {
       new_cam_path.erase(pos, new_cam_path.length()-1);
     }
-    vcl_stringstream strm;
-    strm << vcl_fixed << timer_.real();
-    vcl_string str(strm.str());
+    std::stringstream strm;
+    strm << std::fixed << timer_.real();
+    std::string str(strm.str());
     new_cam_path += "_v" + str + vul_file::extension(cam_path);
     vpgl_camera<double>* cam = my_observer_->camera();
     if (!cam) {
-      vcl_cout << " Null camera in bwm_tableau_geo_cam::save_camera()\n";
+      std::cout << " Null camera in bwm_tableau_geo_cam::save_camera()\n";
       return "";
     }
     //check for appropriate type
@@ -46,7 +48,7 @@ vcl_string bwm_tableau_geo_cam::save_camera()
       pcam->save(new_cam_path);
     }
     else {
-      vcl_cout << " not projective camera type in bwm_tableau_geo_cam::save_camera()\n";
+      std::cout << " not projective camera type in bwm_tableau_geo_cam::save_camera()\n";
       return "";
     }
     // camera is saved and no need to save the next time

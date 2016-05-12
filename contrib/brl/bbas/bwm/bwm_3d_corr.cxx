@@ -1,12 +1,13 @@
+#include <iostream>
 #include "bwm_3d_corr.h"
 //:
 // \file
 #include <vgl/vgl_distance.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
-bool bwm_3d_corr::match(vcl_string const& site, vgl_point_3d<double> &pt) const
+bool bwm_3d_corr::match(std::string const& site, vgl_point_3d<double> &pt) const
 {
-  vcl_map<vcl_string, vgl_point_3d<double> >::const_iterator iter = matches_.begin();
+  std::map<std::string, vgl_point_3d<double> >::const_iterator iter = matches_.begin();
 
   iter = matches_.find(site);
   if (iter != matches_.end()) {
@@ -14,7 +15,7 @@ bool bwm_3d_corr::match(vcl_string const& site, vgl_point_3d<double> &pt) const
     return true;
   }
 
-  vcl_cerr << "Correspondence is not found for this site\n";
+  std::cerr << "Correspondence is not found for this site\n";
   return false;
 }
 
@@ -27,9 +28,9 @@ point_equal(vgl_point_3d<double> const & a, vgl_point_3d<double> const & b)
   return d<tol;
 }
 
-bool bwm_3d_corr::update_match(vcl_string const& site, vgl_point_3d<double> old_pt, vgl_point_3d<double> new_pt)
+bool bwm_3d_corr::update_match(std::string const& site, vgl_point_3d<double> old_pt, vgl_point_3d<double> new_pt)
 {
-  vcl_map<vcl_string , vgl_point_3d<double> >::iterator
+  std::map<std::string , vgl_point_3d<double> >::iterator
     iter = matches_.find(site);
 
   if (iter != matches_.end()) {
@@ -43,23 +44,23 @@ bool bwm_3d_corr::update_match(vcl_string const& site, vgl_point_3d<double> old_
   return false;
 }
 
-void bwm_3d_corr::set_match(vcl_string const& site, const double x, const double y, const double z)
+void bwm_3d_corr::set_match(std::string const& site, const double x, const double y, const double z)
 {
   vgl_point_3d<double> pt(x, y, z);
   matches_[site] = pt;
 }
 
 //: Deletes the correspondence with respect to the given site
-void bwm_3d_corr::erase(vcl_string const& site)
+void bwm_3d_corr::erase(std::string const& site)
 {
   matches_.erase(site);
 }
 
 //: return the list of sites being corresponded
-vcl_vector<vcl_string> bwm_3d_corr::sites() const
+std::vector<std::string> bwm_3d_corr::sites() const
 {
-  vcl_vector<vcl_string>  sites(0);
-  vcl_map<vcl_string, vgl_point_3d<double> >::const_iterator iter = matches_.begin();
+  std::vector<std::string>  sites(0);
+  std::map<std::string, vgl_point_3d<double> >::const_iterator iter = matches_.begin();
   while (iter != matches_.end()) {
     sites.push_back(iter->first);
     ++iter;
@@ -68,9 +69,9 @@ vcl_vector<vcl_string> bwm_3d_corr::sites() const
 }
 
 //: test if the site exists in the set of correspondences and if so return the associated 3-d point
-bool bwm_3d_corr::site_in(vcl_string const& site, vgl_point_3d<double> &corr) const
+bool bwm_3d_corr::site_in(std::string const& site, vgl_point_3d<double> &corr) const
 {
-  vcl_map<vcl_string, vgl_point_3d<double> >::const_iterator iter = matches_.begin();
+  std::map<std::string, vgl_point_3d<double> >::const_iterator iter = matches_.begin();
   while (iter != matches_.end()) {
     if (site == iter->first) {
       corr = iter->second;
@@ -83,12 +84,12 @@ bool bwm_3d_corr::site_in(vcl_string const& site, vgl_point_3d<double> &corr) co
 
 
 // return the set of correspondences as pairs
-vcl_vector<vcl_pair<vcl_string, vgl_point_3d<double> > > bwm_3d_corr::match_list() const
+std::vector<std::pair<std::string, vgl_point_3d<double> > > bwm_3d_corr::match_list() const
 {
-  vcl_vector<vcl_pair<vcl_string, vgl_point_3d<double> > > mlist;
-  vcl_map<vcl_string, vgl_point_3d<double> >::const_iterator iter = matches_.begin();
+  std::vector<std::pair<std::string, vgl_point_3d<double> > > mlist;
+  std::map<std::string, vgl_point_3d<double> >::const_iterator iter = matches_.begin();
   while (iter != matches_.end()) {
-   vcl_pair<vcl_string, vgl_point_3d<double> > pair;
+   std::pair<std::string, vgl_point_3d<double> > pair;
    pair.first = iter->first;
    pair.second = vgl_point_3d<double> (iter->second.x(), iter->second.y(), iter->second.z());
    mlist.push_back(pair);
@@ -97,10 +98,10 @@ vcl_vector<vcl_pair<vcl_string, vgl_point_3d<double> > > bwm_3d_corr::match_list
   return mlist;
 }
 // return the set of corresponded points over all sites
-vcl_vector<vgl_point_3d<double> >  bwm_3d_corr::matching_pts() const
+std::vector<vgl_point_3d<double> >  bwm_3d_corr::matching_pts() const
 {
-  vcl_vector<vgl_point_3d<double> > matches;
-  vcl_map<vcl_string, vgl_point_3d<double> >::const_iterator iter =
+  std::vector<vgl_point_3d<double> > matches;
+  std::map<std::string, vgl_point_3d<double> >::const_iterator iter =
     matches_.begin();
   while (iter != matches_.end()){
     matches.push_back(iter->second);
@@ -110,12 +111,12 @@ vcl_vector<vgl_point_3d<double> >  bwm_3d_corr::matching_pts() const
 }
 
 // output stream
-vcl_ostream& operator<<(vcl_ostream& s, bwm_3d_corr const& c)
+std::ostream& operator<<(std::ostream& s, bwm_3d_corr const& c)
 {
-  vcl_vector<vcl_pair<vcl_string, vgl_point_3d<double> > > mlist = c.match_list();
+  std::vector<std::pair<std::string, vgl_point_3d<double> > > mlist = c.match_list();
 
   s << "Number of Sites: " << mlist.size() << '\n';
-  vcl_vector<vcl_pair<vcl_string, vgl_point_3d<double> > >::const_iterator iter = mlist.begin();
+  std::vector<std::pair<std::string, vgl_point_3d<double> > >::const_iterator iter = mlist.begin();
   while (iter != mlist.end()) {
     s <<  "Site[ " << iter->first << " ]:( X: " << iter->second.x()
       << " Y: " << iter->second.y() << " Z: " << iter->second.z() << " )\n";

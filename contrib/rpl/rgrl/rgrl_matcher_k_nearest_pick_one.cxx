@@ -1,3 +1,6 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "rgrl_matcher_k_nearest_pick_one.h"
 //:
 // \file
@@ -9,8 +12,7 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_match_set.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 
 rgrl_matcher_k_nearest_pick_one::
@@ -41,7 +43,7 @@ compute_matches( rgrl_feature_set const&       from_set,
 
   DebugMacro( 2, "Compute matches between features "
                  << from_set.label().name() << "-->"
-                 << to_set.label().name() << vcl_endl; );
+                 << to_set.label().name() << std::endl; );
 
   // faster to check a boolean variable
   const bool allow_reuse_match = ( sqr_thres_for_reuse_match_ > 0) && (prev_xform_) && (old_matches);
@@ -49,7 +51,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   // create a map for from feature and the match iterator
   //
   typedef rgrl_match_set::const_from_iterator  from_feature_iterator;
-  vcl_map< rgrl_feature_sptr, from_feature_iterator > feature_sptr_iterator_map;
+  std::map< rgrl_feature_sptr, from_feature_iterator > feature_sptr_iterator_map;
   if ( allow_reuse_match )
   {
     for ( from_feature_iterator i=old_matches->from_begin(); i!=old_matches->from_end(); ++i )
@@ -64,7 +66,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   //  get the features in the current view
   feat_vector from;
   if ( !current_view.features_in_region( from, from_set ) ) {
-    DebugMacro( 1, "Cannot get features in current region!!!" << vcl_endl );
+    DebugMacro( 1, "Cannot get features in current region!!!" << std::endl );
     return matches_sptr;
   }
 
@@ -90,7 +92,7 @@ compute_matches( rgrl_feature_set const&       from_set,
       prev_xform_->map_location( (*fitr)->location(), prev_mapped );
 
       // if the mapping difference is smaller than this threshold
-      vcl_map< rgrl_feature_sptr, from_feature_iterator >::const_iterator map_itr;
+      std::map< rgrl_feature_sptr, from_feature_iterator >::const_iterator map_itr;
       if ( vnl_vector_ssd( prev_mapped, mapped->location() ) < sqr_thres_for_reuse_match_  &&
           (map_itr=feature_sptr_iterator_map.find( *fitr )) != feature_sptr_iterator_map.end() )
       {
@@ -110,12 +112,12 @@ compute_matches( rgrl_feature_set const&       from_set,
 
     if ( debug_flag()>=4 )
     {
-      vcl_cout << " From feature: ";
-      (*fitr)->write( vcl_cout );
-      vcl_cout << vcl_endl;
+      std::cout << " From feature: ";
+      (*fitr)->write( std::cout );
+      std::cout << std::endl;
       for ( unsigned i=0; i<matching_features.size(); ++i ) {
-        vcl_cout << " ###### " << i << " ###### " << vcl_endl;
-        matching_features[i]->write(vcl_cout);
+        std::cout << " ###### " << i << " ###### " << std::endl;
+        matching_features[i]->write(std::cout);
       }
     }
 
@@ -139,7 +141,7 @@ compute_matches( rgrl_feature_set const&       from_set,
         min_eucl_dist = eucl_dist;
         max_feature = *i;
       }
-      else if ( vcl_abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist )
+      else if ( std::abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist )
       {
         // when the weights are approximately the same,
         // but one point is closer than the other,
@@ -168,13 +170,13 @@ compute_matches( rgrl_feature_set const&       from_set,
       matches_sptr->add_feature_and_match( *fitr, mapped, max_feature, max_weight );
       DebugMacro( 4, " ====== Final Choice ======\n" );
       if ( debug_flag() >=4 ) {
-        max_feature->write(vcl_cout);
-        vcl_cout << vcl_endl;
+        max_feature->write(std::cout);
+        std::cout << std::endl;
       }
     }
   }
 
-  DebugMacro( 1, "There are " << reuse_match_count << " reuse of previous matches out of " << from.size() << vcl_endl );
+  DebugMacro( 1, "There are " << reuse_match_count << " reuse of previous matches out of " << from.size() << std::endl );
 
   // store xform
   prev_xform_ = current_view.xform_estimate();
@@ -210,7 +212,7 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   // compute the distance
   // REMEMBER: the to is from, from is to. Everything is inversed
   //
-  vcl_vector< internal_dist_node > dist_nodes;
+  std::vector< internal_dist_node > dist_nodes;
   dist_nodes.reserve( size );
   for ( nodes_vec_iterator itr = begin_iter; itr!=end_iter; ++itr )
   {
@@ -229,7 +231,7 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   // 1. Kth element based on distance
   //
   if ( size > k_ )
-    vcl_nth_element( dist_nodes.begin(), dist_nodes.begin()+k_, dist_nodes.end() );
+    std::nth_element( dist_nodes.begin(), dist_nodes.begin()+k_, dist_nodes.end() );
 
   // 2. Most similar feature
   //
@@ -254,7 +256,7 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
       min_eucl_dist = eucl_dist;
       max_feature = one_fea;
     }
-    else if ( vcl_abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist )
+    else if ( std::abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist )
     {
       // when the weights are approximately the same,
       // but one point is closer than the other,

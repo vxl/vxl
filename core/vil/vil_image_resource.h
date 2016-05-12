@@ -98,10 +98,10 @@ class vil_image_resource
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return 0; }
+  virtual char const* file_format() const { return VXL_NULLPTR; }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = 0) const =0;
+  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const =0;
 
  protected:
   // You probably should not use a vil_image_resource in a vbl_smart_ptr, so the

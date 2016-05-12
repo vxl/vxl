@@ -39,19 +39,19 @@ class bstm_cache: public vbl_ref_count
   virtual void replace_time_block(bstm_block_id id, bstm_time_block* replacement)=0;
 
   //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-  virtual bstm_data_base* get_data_base(bstm_block_id id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true) = 0;
+  virtual bstm_data_base* get_data_base(bstm_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true) = 0;
 
   //: returns a data_base pointer which is initialized to the default value of the type.
   //  If a block for this type exists on the cache, it is removed and replaced with the new one.
   //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
-  virtual bstm_data_base* get_data_base_new(bstm_block_id id, vcl_string type=0, vcl_size_t num_bytes=0, bool read_only = true) = 0;
+  virtual bstm_data_base* get_data_base_new(bstm_block_id id, std::string type=0, std::size_t num_bytes=0, bool read_only = true) = 0;
 
   //: removes data from this cache (may or may not write to disk first)
   //  Note that this function does not delete the memory, just removes it from the cache
   //  and puts it in the garbage vector
-  virtual void remove_data_base(bstm_block_id id, vcl_string type)=0;
+  virtual void remove_data_base(bstm_block_id id, std::string type)=0;
 
-  virtual void replace_data_base(bstm_block_id id, vcl_string type, bstm_data_base* replacement)=0;
+  virtual void replace_data_base(bstm_block_id id, std::string type, bstm_data_base* replacement)=0;
 
   //: dumps writeable data onto disk
   // -- pure virtual method; see specialisations
@@ -59,7 +59,7 @@ class bstm_cache: public vbl_ref_count
 
   //: delete all the memory
   virtual void clear_cache() = 0;
-  
+
   //: return scene sptr
   virtual bstm_scene_sptr get_scene() { return scene_; }
 

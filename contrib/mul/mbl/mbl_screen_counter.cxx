@@ -1,13 +1,14 @@
 // This is mul/mbl/mbl_screen_counter.cxx
+#include <iostream>
 #include "mbl_screen_counter.h"
 //:
 // \file
 // \brief Printing dots to the screen to indicate events
 // \author Ian Scott
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
-mbl_screen_counter::mbl_screen_counter(vcl_ostream & os):
+mbl_screen_counter::mbl_screen_counter(std::ostream & os):
 count_(0), symbol_('a'), skip_(1), os_(os)
 {
 }
@@ -17,7 +18,7 @@ count_(0), symbol_('a'), skip_(1), os_(os)
 mbl_screen_counter mbl_screen_counter::operator++ (int)
 {
   count_++;
-  if (count_ % skip_ == 0) os_ << symbol_ << vcl_flush;
+  if (count_ % skip_ == 0) os_ << symbol_ << std::flush;
 
   if (count_ / skip_ == 100)
   {

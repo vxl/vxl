@@ -21,8 +21,8 @@ class vpgl_orientation_lsqr : public vnl_least_squares_function
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_orientation_lsqr(const vpgl_calibration_matrix<double>& K,
                         const vgl_point_3d<double>& c,
-                        const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                        const vcl_vector<vgl_point_2d<double> >& image_points );
+                        const std::vector<vgl_homg_point_3d<double> >& world_points,
+                        const std::vector<vgl_point_2d<double> >& image_points );
   //: Destructor
   virtual ~vpgl_orientation_lsqr() {}
 
@@ -44,9 +44,9 @@ class vpgl_orientation_lsqr : public vnl_least_squares_function
   //: The fixed camera center
   vgl_point_3d<double> c_;
   //: The known points in the world
-  vcl_vector<vgl_homg_point_3d<double> > world_points_;
+  std::vector<vgl_homg_point_3d<double> > world_points_;
   //: The corresponding points in the image
-  vcl_vector<vgl_point_2d<double> > image_points_;
+  std::vector<vgl_point_2d<double> > image_points_;
 };
 
 
@@ -57,8 +57,8 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
   //: Constructor
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_orientation_position_lsqr(const vpgl_calibration_matrix<double>& K,
-                                 const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                 const vcl_vector<vgl_point_2d<double> >& image_points );
+                                 const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                 const std::vector<vgl_point_2d<double> >& image_points );
   //: Destructor
   virtual ~vpgl_orientation_position_lsqr() {}
 
@@ -78,9 +78,9 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
   //: The fixed internal camera calibration
   vpgl_calibration_matrix<double> K_;
   //: The known points in the world
-  vcl_vector<vgl_homg_point_3d<double> > world_points_;
+  std::vector<vgl_homg_point_3d<double> > world_points_;
   //: The corresponding points in the image
-  vcl_vector<vgl_point_2d<double> > image_points_;
+  std::vector<vgl_point_2d<double> > image_points_;
 };
 
 //: this class optimizes the rotation/translation/calibration of a perspective camera given an initial estimate
@@ -89,8 +89,8 @@ class vpgl_orientation_position_calibration_lsqr : public vnl_least_squares_func
  public:
   //: Constructor
   // \note image points are not homogeneous because require finite points to measure projection error
-  vpgl_orientation_position_calibration_lsqr(const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                             const vcl_vector<vgl_point_2d<double> >& image_points );
+  vpgl_orientation_position_calibration_lsqr(const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                             const std::vector<vgl_point_2d<double> >& image_points );
   //: Destructor
   virtual ~vpgl_orientation_position_calibration_lsqr() {}
 
@@ -108,10 +108,44 @@ class vpgl_orientation_position_calibration_lsqr : public vnl_least_squares_func
 
  protected:
   //: The known points in the world
-  vcl_vector<vgl_homg_point_3d<double> > world_points_;
+  std::vector<vgl_homg_point_3d<double> > world_points_;
   //: The corresponding points in the image
-  vcl_vector<vgl_point_2d<double> > image_points_;
+  std::vector<vgl_point_2d<double> > image_points_;
 };
+
+//: this class optimizes the rotation/translation/focal length of a perspective camera given an initial estimate
+class vpgl_orientation_position_focal_lsqr : public vnl_least_squares_function
+{
+ public:
+  //: Constructor
+  // \note image points are not homogeneous because require finite points to measure projection error
+  vpgl_orientation_position_focal_lsqr(const vpgl_calibration_matrix<double>& K_init,
+                                       const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                       const std::vector<vgl_point_2d<double> >& image_points );
+  //: Destructor
+  virtual ~vpgl_orientation_position_focal_lsqr() {}
+
+  //: The main function.
+  //  Given the parameter vector x, compute the vector of residuals fx.
+  //  Fx has been sized appropriately before the call.
+  //  The parameters in x are really two three component vectors {wx, wy, wz, tx, ty, tz}
+  //  where w is the Rodrigues vector of the rotation and t is the translation.
+  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+
+#if 0
+  //: Called after each LM iteration to print debugging etc.
+  virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);
+#endif
+
+ protected:
+  //: The initial calibration matrix
+  vpgl_calibration_matrix<double> K_init_;
+  //: The known points in the world
+  std::vector<vgl_homg_point_3d<double> > world_points_;
+  //: The corresponding points in the image
+  std::vector<vgl_point_2d<double> > image_points_;
+};
+
 
 
 class vpgl_optimize_camera
@@ -122,20 +156,27 @@ class vpgl_optimize_camera
   //: optimize orientation for a perspective camera
   static vpgl_perspective_camera<double>
     opt_orient(const vpgl_perspective_camera<double>& camera,
-               const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-               const vcl_vector<vgl_point_2d<double> >& image_points );
+               const std::vector<vgl_homg_point_3d<double> >& world_points,
+               const std::vector<vgl_point_2d<double> >& image_points );
 
   //: optimize orientation and position for a perspective camera
   static vpgl_perspective_camera<double>
     opt_orient_pos(const vpgl_perspective_camera<double>& camera,
-                   const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                   const vcl_vector<vgl_point_2d<double> >& image_points );
+                   const std::vector<vgl_homg_point_3d<double> >& world_points,
+                   const std::vector<vgl_point_2d<double> >& image_points );
+
+  //: optimize orientation, position and focal length for a perspective camera
+  static vpgl_perspective_camera<double>
+    opt_orient_pos_f(const vpgl_perspective_camera<double>& camera,
+                     const std::vector<vgl_homg_point_3d<double> >& world_points,
+                     const std::vector<vgl_point_2d<double> >& image_points,
+                     const double xtol = 0.0001, const unsigned nevals=10000);
 
   //: optimize orientation, position and internal calibration(no skew)for a perspective camera
   static vpgl_perspective_camera<double>
     opt_orient_pos_cal(const vpgl_perspective_camera<double>& camera,
-                       const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                       const vcl_vector<vgl_point_2d<double> >& image_points,
+                       const std::vector<vgl_homg_point_3d<double> >& world_points,
+                       const std::vector<vgl_point_2d<double> >& image_points,
                        const double xtol = 0.0001, const unsigned nevals=10000);
 
 

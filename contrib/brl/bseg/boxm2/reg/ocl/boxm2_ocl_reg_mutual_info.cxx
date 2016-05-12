@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_reg_mutual_info.h"
 //:
 // \file
@@ -16,7 +18,7 @@
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 
@@ -60,9 +62,9 @@ double boxm2_ocl_reg_mutual_info:: mutual_info(vnl_vector<double> const& x,  int
 
 bool boxm2_ocl_reg_mutual_info::compile_kernel()
 {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-    vcl_string reg_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/reg/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    std::string reg_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/reg/ocl/cl/";
     src_paths.push_back(source_dir     + "scene_info.cl");
     src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(reg_source_dir + "estimate_mi_blockwise_vol.cl");
@@ -103,8 +105,8 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     bocl_mem * joint_histogram = new bocl_mem(device_->context(), joint_histogram_buff, sizeof(int)*nbins*nbins, "joint histogram" );
     joint_histogram->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
     float translation_buff[4];
-    translation_buff[0] = tx.x();        
-    translation_buff[1] = tx.y();        
+    translation_buff[0] = tx.x();
+    translation_buff[1] = tx.y();
     translation_buff[2] = tx.z();
     translation_buff[3] = 0.0;
 
@@ -126,14 +128,14 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     bocl_mem_sptr ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
     ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-    vcl_vector<boxm2_block_id> blocks_A = sceneA_->get_block_ids();
-    vcl_vector<boxm2_block_id> blocks_B = sceneB_->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
-    vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
-    vcl_size_t local_threads[1]={64};
-    vcl_size_t global_threads[1]={1};
+    std::vector<boxm2_block_id> blocks_A = sceneA_->get_block_ids();
+    std::vector<boxm2_block_id> blocks_B = sceneB_->get_block_ids();
+    std::vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
+    std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+    std::size_t local_threads[1]={64};
+    std::size_t global_threads[1]={1};
     int status=0;    float gpu_time = 0.0;
-    //vcl_cout<<"Cache size "<<opencl_cache_->bytes_in_cache()/1024/1024<<" MB"<<vcl_endl;
+    //std::cout<<"Cache size "<<opencl_cache_->bytes_in_cache()/1024/1024<<" MB"<<std::endl;
     for (;iter_blks_A!=blocks_A.end(); iter_blks_A++)
     {
         //write the image values to the buffer
@@ -141,15 +143,22 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
         bocl_mem* alpha_A     = opencl_cache_->get_data<BOXM2_ALPHA>(sceneA_, *iter_blks_A,0,false);
         boxm2_scene_info* info_buffer = sceneA_->get_blk_metadata(*iter_blks_A);
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+            return false;
+        }
+
         info_buffer->data_buffer_length = (int) (alpha_A->num_bytes()/alphaTypeSize);
-        bocl_mem* blk_info_A  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
-        blk_info_A->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+        bocl_mem* blk_info_A  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );
+        blk_info_A->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
         vgl_box_3d<float> box_A(info_buffer->scene_origin[0],info_buffer->scene_origin[1],info_buffer->scene_origin[2],
                                 info_buffer->scene_origin[0]+info_buffer->scene_dims[0]*info_buffer->block_len,
                                 info_buffer->scene_origin[1]+info_buffer->scene_dims[1]*info_buffer->block_len,
                                 info_buffer->scene_origin[2]+info_buffer->scene_dims[2]*info_buffer->block_len);
-       
+
         vgl_box_3d<float> box_A_xformed;
         for(unsigned int k = 0 ; k<box_A.vertices().size(); k++)
         {
@@ -173,9 +182,16 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
                bocl_mem* blk_B       = opencl_cache_->get_block(sceneB_, *iter_blks_B);
                bocl_mem* alpha_B     = opencl_cache_->get_data<BOXM2_ALPHA>(sceneB_, *iter_blks_B,0,false);
                int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+               // check for invalid parameters
+               if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+               {
+                   std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+                   return false;
+               }
+
                info_buffer_B->data_buffer_length = (int) (alpha_B->num_bytes()/alphaTypeSize);
 
-               bocl_mem* blk_info_B  = new bocl_mem(device_->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );   
+               bocl_mem* blk_info_B  = new bocl_mem(device_->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );
                blk_info_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
                kern->set_arg(centerX.ptr());
@@ -202,7 +218,7 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
                kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
                if(!kern->execute(queue, 1, local_threads, global_threads))
                {
-                   vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+                   std::cout<<"Kernel Failed to Execute "<<std::endl;
                    return false;
                }
                int status = clFinish(queue);
@@ -231,11 +247,11 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     }
     float sum  = 0.0;
     // normalize joint histogram
-    for (int k = 0; k < nbins; k++) 
+    for (int k = 0; k < nbins; k++)
         for (int l = 0; l < nbins; l++)
             sum+=joint_histogram_buff[k*nbins+l];
     if(sum <= 0.0 )
-        mi = 0.0; 
+        mi = 0.0;
     else
     {
         for (int k = 0; k < nbins; k++) {
@@ -255,17 +271,17 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
         }
 
         float entropyA = 0;
-        for (int k = 0; k < nbins; k++) 
-            entropyA += -(histA[k]>0?histA[k]*vcl_log(histA[k]):0); // if prob=0 this value is defined as 0
+        for (int k = 0; k < nbins; k++)
+            entropyA += -(histA[k]>0?histA[k]*std::log(histA[k]):0); // if prob=0 this value is defined as 0
 
         float entropyB = 0;
-        for (int l = 0; l < nbins; l++) 
-            entropyB += -(histB[l]>0?histB[l]*vcl_log(histB[l]):0); // if prob=0 this value is defined as 0
+        for (int l = 0; l < nbins; l++)
+            entropyB += -(histB[l]>0?histB[l]*std::log(histB[l]):0); // if prob=0 this value is defined as 0
 
         float entropyAB =  0.0; ;
         for (int k = 0; k < nbins; k++)
             for (int l = 0; l < nbins; l++)
-                entropyAB += -(joint_histogram_float[k*nbins+l]>0?joint_histogram_float[k*nbins+l]*vcl_log(joint_histogram_float[k*nbins+l]):0);
+                entropyAB += -(joint_histogram_float[k*nbins+l]>0?joint_histogram_float[k*nbins+l]*std::log(joint_histogram_float[k*nbins+l]):0);
         mi = (entropyA +entropyB - entropyAB)/vnl_math::ln2;
     }
 
@@ -282,6 +298,6 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     //clReleaseCommandQueue(queue);
  return true;
 
- 
+
 }
 

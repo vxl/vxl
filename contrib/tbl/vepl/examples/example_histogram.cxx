@@ -8,30 +8,31 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
+#include <iostream>
 #include <vepl/vepl_histogram.h>
 
 // for I/O:
 #include <vil/vil_load.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 int
 main(int argc, char** argv) {
   if (argc < 2)
   {
-    vcl_cerr << "Syntax: example_histogram file_in\n";
+    std::cerr << "Syntax: example_histogram file_in\n";
     return 1;
   }
 
   // The input image:
   vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The filter:
-  vcl_vector<unsigned int> out = vepl_histogram(in);
+  std::vector<unsigned int> out = vepl_histogram(in);
 
   // Write output:
   for (unsigned int i=0; i<out.size(); ++i) if (out[i] != 0)
-    vcl_cout << i << ": " << out[i] << vcl_endl;
+    std::cout << i << ": " << out[i] << std::endl;
 
   return 0;
 }

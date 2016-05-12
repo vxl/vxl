@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/rt/pro/processes/boxm_rpc_registration_process.cxx
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,7 +12,7 @@
 #include <brdb/brdb_value.h>
 #include <boxm/algo/rt/boxm_rpc_registration.h>
 #include <vil/vil_image_view.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 
 //: globals
 namespace boxm_rpc_registration_process_globals
@@ -33,7 +35,7 @@ bool boxm_rpc_registration_process_cons(bprb_func_process& pro)
   // input[5]: Uncertainty in meters
   // input[6]: n_normal
   // input[7]: num_observation
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
@@ -46,7 +48,7 @@ bool boxm_rpc_registration_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: The optimized camera
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "vpgl_camera_double_sptr";
 
@@ -60,7 +62,7 @@ bool boxm_rpc_registration_process(bprb_func_process& pro)
 
   //check number of inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -90,7 +92,7 @@ bool boxm_rpc_registration_process(bprb_func_process& pro)
   // number of observations
   unsigned num_observation = pro.get_input<unsigned>(i++);
 
-  vcl_string edge_type="subpixel";//pro.get_input<vcl_string>(i++);
+  std::string edge_type="subpixel";//pro.get_input<std::string>(i++);
 
   vpgl_camera_double_sptr camera_out;
 

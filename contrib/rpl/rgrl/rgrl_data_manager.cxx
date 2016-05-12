@@ -43,7 +43,7 @@ add_data( unsigned stage,
           rgrl_weighter_sptr                       weighter,
           rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est,
           rgrl_scale_estimator_wgted_sptr          wgted_scale_est,
-          const vcl_string&                        label )
+          const std::string&                        label )
 {
   // Both feature sets are mandatory
   assert( from_set && to_set );
@@ -71,7 +71,7 @@ add_data( rgrl_feature_set_sptr                    from_set,
           rgrl_weighter_sptr                       weighter,
           rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est,
           rgrl_scale_estimator_wgted_sptr          wgted_scale_est,
-          const vcl_string&                        label )
+          const std::string&                        label )
 {
   assert( !multi_stage_ );
 
@@ -127,13 +127,13 @@ is_multi_feature() const
 void
 rgrl_data_manager::
 get_data_at_stage( unsigned stage,
-                   vcl_vector<rgrl_feature_set_sptr>             & from_sets,
-                   vcl_vector<rgrl_feature_set_sptr>             & to_sets,
-                   vcl_vector<rgrl_matcher_sptr>                 & matchers,
-                   vcl_vector<rgrl_weighter_sptr>                & weighters,
-                   vcl_vector<rgrl_scale_estimator_unwgted_sptr> & unwgted_scale_ests,
-                   vcl_vector<rgrl_scale_estimator_wgted_sptr>   & wgted_scale_ests,
-                   vcl_vector<rgrl_estimator_sptr>               & estimators) const
+                   std::vector<rgrl_feature_set_sptr>             & from_sets,
+                   std::vector<rgrl_feature_set_sptr>             & to_sets,
+                   std::vector<rgrl_matcher_sptr>                 & matchers,
+                   std::vector<rgrl_weighter_sptr>                & weighters,
+                   std::vector<rgrl_scale_estimator_unwgted_sptr> & unwgted_scale_ests,
+                   std::vector<rgrl_scale_estimator_wgted_sptr>   & wgted_scale_ests,
+                   std::vector<rgrl_estimator_sptr>               & estimators) const
 {
   from_sets.clear();
   to_sets.clear();
@@ -171,16 +171,16 @@ get_data_at_stage( unsigned stage,
                    rgrl_weighter_sptr                & weighter,
                    rgrl_scale_estimator_unwgted_sptr & unwgted_scale_est,
                    rgrl_scale_estimator_wgted_sptr   & wgted_scale_est,
-                   vcl_vector<rgrl_estimator_sptr>   & estimators ) const
+                   std::vector<rgrl_estimator_sptr>   & estimators ) const
 {
   assert( !multi_feature_ );
 
-  vcl_vector<rgrl_feature_set_sptr>             from_sets;
-  vcl_vector<rgrl_feature_set_sptr>             to_sets;
-  vcl_vector<rgrl_matcher_sptr>                 matchers;
-  vcl_vector<rgrl_weighter_sptr>                weighters;
-  vcl_vector<rgrl_scale_estimator_unwgted_sptr> unwgted_scale_ests;
-  vcl_vector<rgrl_scale_estimator_wgted_sptr>   wgted_scale_ests;
+  std::vector<rgrl_feature_set_sptr>             from_sets;
+  std::vector<rgrl_feature_set_sptr>             to_sets;
+  std::vector<rgrl_matcher_sptr>                 matchers;
+  std::vector<rgrl_weighter_sptr>                weighters;
+  std::vector<rgrl_scale_estimator_unwgted_sptr> unwgted_scale_ests;
+  std::vector<rgrl_scale_estimator_wgted_sptr>   wgted_scale_ests;
 
   rgrl_data_manager::get_data_at_stage( stage,
                                         from_sets,
@@ -202,13 +202,13 @@ get_data_at_stage( unsigned stage,
 //: For single-stage, multi-type
 void
 rgrl_data_manager::
-get_data( vcl_vector<rgrl_feature_set_sptr>             & from_sets,
-          vcl_vector<rgrl_feature_set_sptr>             & to_sets,
-          vcl_vector<rgrl_matcher_sptr>                 & matchers,
-          vcl_vector<rgrl_weighter_sptr>                & weighters,
-          vcl_vector<rgrl_scale_estimator_unwgted_sptr> & unwgted_scale_ests,
-          vcl_vector<rgrl_scale_estimator_wgted_sptr>   & wgted_scale_ests,
-          vcl_vector<rgrl_estimator_sptr>               & estimators) const
+get_data( std::vector<rgrl_feature_set_sptr>             & from_sets,
+          std::vector<rgrl_feature_set_sptr>             & to_sets,
+          std::vector<rgrl_matcher_sptr>                 & matchers,
+          std::vector<rgrl_weighter_sptr>                & weighters,
+          std::vector<rgrl_scale_estimator_unwgted_sptr> & unwgted_scale_ests,
+          std::vector<rgrl_scale_estimator_wgted_sptr>   & wgted_scale_ests,
+          std::vector<rgrl_estimator_sptr>               & estimators) const
 {
   assert( !multi_stage_ );
 
@@ -226,7 +226,7 @@ get_data( rgrl_feature_set_sptr             & from_set,
           rgrl_weighter_sptr                & weighter,
           rgrl_scale_estimator_unwgted_sptr & unwgted_scale_est,
           rgrl_scale_estimator_wgted_sptr   & wgted_scale_est,
-          vcl_vector<rgrl_estimator_sptr>   & estimators ) const
+          std::vector<rgrl_estimator_sptr>   & estimators ) const
 {
   assert( !multi_stage_ );
 
@@ -259,14 +259,14 @@ generate_defaults(  rgrl_matcher_sptr                  &matcher,
   //
   // weighter:
   if ( !weighter ) {
-    vcl_auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+    std::auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
     weighter = new rgrl_weighter_m_est(m_est_obj, false, false);
     DebugMacro( 1, "Default weighter set to rgrl_weighter_m_est\n");
   }
 
   // unweighted scale estimator:
   if ( !unwgted_scale_est ) {
-    vcl_auto_ptr<rrel_objective> lms_obj( new rrel_lms_obj(1) );
+    std::auto_ptr<rrel_objective> lms_obj( new rrel_lms_obj(1) );
     unwgted_scale_est = new rgrl_scale_est_closest( lms_obj );
     DebugMacro( 1, "Default unwgted scale estimator set to rgrl_scale_est_closest\n");
   }
@@ -276,7 +276,7 @@ generate_defaults(  rgrl_matcher_sptr                  &matcher,
 void
 rgrl_data_manager::
 get_label( unsigned stage,
-           vcl_vector<vcl_string>& labels) const
+           std::vector<std::string>& labels) const
 {
   labels.clear();
   labels.reserve(10);
@@ -294,7 +294,7 @@ get_label( unsigned stage,
 //: For single-stage, multi-type
 void
 rgrl_data_manager::
-get_label( vcl_vector<vcl_string>& labels) const
+get_label( std::vector<std::string>& labels) const
 {
   assert( !multi_stage_ );
 

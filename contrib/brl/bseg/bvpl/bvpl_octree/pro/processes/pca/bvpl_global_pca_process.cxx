@@ -24,11 +24,11 @@ bool bvpl_global_pca_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_global_pca_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";   //path pca_global_info file
   input_types_[1] = "vcl_string";   //path to statistics file
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -40,17 +40,17 @@ bool bvpl_global_pca_process(bprb_func_process& pro)
   using namespace bvpl_global_pca_process_globals;
 
   //get inputs
-  vcl_string pca_file = pro.get_input<vcl_string>(0);
-  vcl_string stats_file = pro.get_input<vcl_string>(1);
+  std::string pca_file = pro.get_input<std::string>(0);
+  std::string stats_file = pro.get_input<std::string>(1);
 
   //load file into matrices
   vnl_matrix_fixed<double, 125, 125> S(0.0);
   vnl_vector_fixed<double, 125> mean(0.0);
   unsigned long nfeatures =0;
   {
-    vcl_ifstream stats_ifs(stats_file.c_str());
+    std::ifstream stats_ifs(stats_file.c_str());
     if (!stats_ifs.is_open()) {
-      vcl_cerr << "Error: Failed to open stats file\n";
+      std::cerr << "Error: Failed to open stats file\n";
       return false;
     }
     stats_ifs >> nfeatures >> mean >> S;

@@ -12,8 +12,10 @@
 //   Initial version May 5, 2008
 // \endverbatim
 //
-#include <vcl_map.h>
-#include <vcl_set.h>
+#include <iostream>
+#include <map>
+#include <set>
+#include <vcl_compiler.h>
 
 class brip_label_equivalence
 {
@@ -28,22 +30,22 @@ class brip_label_equivalence
   void transitive_closure();
 
   //:the full set of labels
-  vcl_set<unsigned> labels() const;
+  std::set<unsigned> labels() const;
 
   //:the set of labels equivalent to a given label
-  vcl_map<unsigned, vcl_set<unsigned> >& equivalence_sets()
+  std::map<unsigned, std::set<unsigned> >& equivalence_sets()
     { return equivalence_sets_;}
 
  protected:
   unsigned max_label_;
-  bool get_next_label(vcl_set<unsigned> const& labels, unsigned int& label);
+  bool get_next_label(std::set<unsigned> const& labels, unsigned int& label);
 
-  bool merge_equivalence(vcl_map<unsigned int, vcl_set<unsigned int> >& tab,
+  bool merge_equivalence(std::map<unsigned int, std::set<unsigned int> >& tab,
                          unsigned int cur_label,
                          unsigned int label);
-  vcl_map<unsigned, vcl_set<unsigned> > forward_pairs_;
-  vcl_map<unsigned, vcl_set<unsigned> > reverse_pairs_;
-  vcl_map<unsigned, vcl_set<unsigned> > equivalence_sets_;
+  std::map<unsigned, std::set<unsigned> > forward_pairs_;
+  std::map<unsigned, std::set<unsigned> > reverse_pairs_;
+  std::map<unsigned, std::set<unsigned> > equivalence_sets_;
 };
 
 #endif // brip_label_equivalence_h_

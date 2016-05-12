@@ -34,7 +34,7 @@ class xcv_image_tableau : public vgui_image_tableau
   xcv_image_tableau(vil1_image const &);
   xcv_image_tableau(char const *);
 
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Return the vil1_image
   vil1_image get_image() const;

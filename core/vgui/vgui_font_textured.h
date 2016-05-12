@@ -29,13 +29,13 @@ class vgui_font_textured : public vgui_font
 #endif
 
   //: Constructor - from a font file (BMF font file only, for now).
-  vgui_font_textured(const vcl_string& font_file);
+  vgui_font_textured(const std::string& font_file);
 
   //: Draw a string of font symbols.
-  virtual void draw(const vcl_string& str) const;
+  virtual void draw(const std::string& str) const;
 
   //: Draw a string of font symbols.
-  virtual void draw(const vcl_string& str, unsigned int size) const;
+  virtual void draw(const std::string& str, unsigned int size) const;
 
 #if 0
  protected:
@@ -52,7 +52,7 @@ class vgui_font_textured : public vgui_font
   };
 
   //: Load font from BMF file.
-  bool load_bmf_font(const vcl_string &font_file);
+  bool load_bmf_font(const std::string &font_file);
 
   //: Load OpenGL texture for all symbols.
   void load_texture(const vil_image_view<GLubyte>& image);

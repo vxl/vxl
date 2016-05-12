@@ -5,12 +5,12 @@ doxygen_add_library(contrib/gel/pop
   PACKAGE contrib/gel
   )
 
-IF(WIN32)
- ADD_DEFINITIONS(-D_AFXDLL)
- SET(CMAKE_MFC_FLAG 6)
-ENDIF(WIN32)
+if(WIN32)
+ add_definitions(-D_AFXDLL)
+ set(CMAKE_MFC_FLAG 6)
+endif()
 
-SET(pop_sources
+set(pop_sources
     pop_edge.cxx                    pop_edge.h
     pop_geometric_cost_function.cxx pop_geometric_cost_function.h
     pop_geometric_object.cxx        pop_geometric_object.h
@@ -27,15 +27,13 @@ SET(pop_sources
     pop_vertex.cxx                  pop_vertex.h
 )
 
-ADD_LIBRARY(pop ${pop_sources})
-INSTALL_TARGETS(/lib pop)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/pop ${pop_sources})
-TARGET_LINK_LIBRARIES( pop vcl vnl vgl vnl_algo vgl_algo)
+vxl_add_library(LIBRARY_NAME pop LIBRARY_SOURCES ${pop_sources})
+target_link_libraries( pop ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_algo)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()

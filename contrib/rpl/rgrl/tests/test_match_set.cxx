@@ -1,10 +1,11 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 
 #include <rgrl/rgrl_match_set.h>
 
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector.h>
 
@@ -13,8 +14,8 @@
 
 namespace {
 
-typedef vcl_vector< rgrl_feature_sptr >  vec_feature;
-typedef vcl_vector< rgrl_feature_sptr >::iterator  vec_feature_iter;
+typedef std::vector< rgrl_feature_sptr >  vec_feature;
+typedef std::vector< rgrl_feature_sptr >::iterator  vec_feature_iter;
 
 vnl_vector<double>
 random_2d_vector( )
@@ -34,13 +35,13 @@ random_count( unsigned max )
 unsigned
 index_in( vec_feature const& data, rgrl_feature_sptr const& point )
 {
-  return unsigned(vcl_find( data.begin(), data.end(), point ) - data.begin());
+  return unsigned(std::find( data.begin(), data.end(), point ) - data.begin());
 }
 
 bool
 is_in( vec_feature const& data, rgrl_feature_sptr const& point )
 {
-  return vcl_find( data.begin(), data.end(), point ) != data.end();
+  return std::find( data.begin(), data.end(), point ) != data.end();
 }
 
 template< class match_set_type, class from_iter_type>
@@ -49,7 +50,7 @@ test_one_to_one_contents( match_set_type* ms,
                           from_iter_type* /*unused*/,
                           vec_feature const& from_pts,
                           vec_feature const& to_pts,
-                          vcl_vector<double> const& wgts )
+                          std::vector<double> const& wgts )
 {
   typedef typename from_iter_type::to_iterator   to_iter_type;
 
@@ -57,13 +58,13 @@ test_one_to_one_contents( match_set_type* ms,
   unsigned count = 0; // number of correspondences
   for ( from_iter_type fi = ms->from_begin(); fi != ms->from_end(); ++fi ) {
     if ( ! is_in( from_pts, fi.from_feature() ) ) {
-      vcl_cout << "From feature isn't in original list of features\n";
+      std::cout << "From feature isn't in original list of features\n";
       okay = false;
     } else {
       unsigned idx = index_in( from_pts, fi.from_feature() );
 
       if ( fi.mapped_from_feature() ) {
-        vcl_cout << "From feature "<<idx<<": mapped from feature is wrong\n";
+        std::cout << "From feature "<<idx<<": mapped from feature is wrong\n";
         okay = false;
       }
 
@@ -74,25 +75,25 @@ test_one_to_one_contents( match_set_type* ms,
         ++count;
       }
       if ( num_matches != 1 ) {
-        vcl_cout << "From feature "<<idx<<": has " << num_matches << " matches, not 1\n";
+        std::cout << "From feature "<<idx<<": has " << num_matches << " matches, not 1\n";
         okay = false;
       } else if ( fi.begin().to_feature() != to_pts[idx] ) {
-        vcl_cout << "From feature "<<idx<<": has incorrect to feature\n";
+        std::cout << "From feature "<<idx<<": has incorrect to feature\n";
         okay = false;
       } else if ( fi.begin().geometric_weight() != wgts[idx] ) {
-        vcl_cout << "From feature "<<idx<<": has incorrect geometric weight\n";
+        std::cout << "From feature "<<idx<<": has incorrect geometric weight\n";
         okay = false;
       } else if ( fi.begin().signature_weight() != wgts[idx] ) {
-        vcl_cout << "From feature "<<idx<<": has incorrect signature weight\n";
+        std::cout << "From feature "<<idx<<": has incorrect signature weight\n";
         okay = false;
       } else if ( fi.begin().cumulative_weight() != wgts[idx] ) {
-        vcl_cout << "From feature "<<idx<<": has incorrect cumulative weight\n";
+        std::cout << "From feature "<<idx<<": has incorrect cumulative weight\n";
         okay = false;
       }
     }
   }
   if ( count != from_pts.size() ) {
-    vcl_cout << "Total number of matches in set ("<<count<<") != actual number of matches ("<<from_pts.size()<<")\n";
+    std::cout << "Total number of matches in set ("<<count<<") != actual number of matches ("<<from_pts.size()<<")\n";
     okay = false;
   }
 
@@ -102,14 +103,14 @@ test_one_to_one_contents( match_set_type* ms,
 void
 test_one_to_one_correspondence()
 {
-  vcl_cout << "Testing one to one correspondence\n";
+  std::cout << "Testing one to one correspondence\n";
 
-  vcl_vector< rgrl_feature_sptr > from_pts;
-  vcl_vector< rgrl_feature_sptr > to_pts;
-  vcl_vector< double > wgts;
+  std::vector< rgrl_feature_sptr > from_pts;
+  std::vector< rgrl_feature_sptr > to_pts;
+  std::vector< double > wgts;
 
   unsigned num_corres = random_count( 100 );
-  vcl_cout << "Creating " << num_corres << " correspondences\n";
+  std::cout << "Creating " << num_corres << " correspondences\n";
   for ( unsigned i=0; i < num_corres; ++i ) {
     from_pts.        push_back( new rgrl_feature_point( random_2d_vector() ) );
     to_pts.          push_back( new rgrl_feature_point( random_2d_vector() ) );
@@ -121,16 +122,16 @@ test_one_to_one_correspondence()
 
   testlib_test_begin( "Adding the features" );
   for ( unsigned i=0; i < from_pts.size(); ++i ) {
-    ms->add_feature_and_match( from_pts[i], 0, to_pts[i], wgts[i] );
+    ms->add_feature_and_match( from_pts[i], VXL_NULLPTR, to_pts[i], wgts[i] );
   }
   testlib_test_perform( true );
 
   TEST( "Iterating over all the data",
-        test_one_to_one_contents( ms.as_pointer(), (rgrl_match_set::from_iterator*)0,
+        test_one_to_one_contents( ms.as_pointer(), (rgrl_match_set::from_iterator*)VXL_NULLPTR,
                                   from_pts, to_pts, wgts ), true);
 
   TEST( "Iterating over all the data (const iterator)",
-        test_one_to_one_contents( (rgrl_match_set const*)ms.as_pointer(), (rgrl_match_set::const_from_iterator*)0,
+        test_one_to_one_contents( (rgrl_match_set const*)ms.as_pointer(), (rgrl_match_set::const_from_iterator*)VXL_NULLPTR,
                                   from_pts, to_pts, wgts ), true);
 }
 

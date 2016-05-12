@@ -4,13 +4,14 @@
 // \file    This function refines the space-time data structures. A space cell is subdivided if it contains a cell (at any time) with prob. larger than provided threshold.
 //          A time cell is subdivided if it contains such a cell.
 
+#include <iostream>
 #include <bstm/bstm_data_traits.h>
 #include <bstm/bstm_time_tree.h>
 #include <bstm/bstm_data_base.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <bstm/io/bstm_cache.h>
 
 class bstm_merge_tt_function
@@ -26,9 +27,9 @@ class bstm_merge_tt_function
   bstm_merge_tt_function() {}
 
   //: initialize generic data base pointers as their data type
-  bool init_data(bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float prob_thresh);
+  bool init_data(bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh);
 
-  bool merge(vcl_vector<bstm_data_base*>& datas);
+  bool merge(std::vector<bstm_data_base*>& datas);
 
  private:
 
@@ -68,7 +69,7 @@ class bstm_merge_tt_function
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 void bstm_merge_tt_blk( bstm_time_block* t_blk, bstm_block* blk,
-                         vcl_vector<bstm_data_base*> & datas,
+                         std::vector<bstm_data_base*> & datas,
                          float prob_thresh);
 
 #endif //bstm_merge_tt_function_h

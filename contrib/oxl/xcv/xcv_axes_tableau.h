@@ -34,7 +34,7 @@ class xcv_axes_tableau : public vgui_tableau
 public:
 
   //: Constructor takes all the labels used on the graph.
-  xcv_axes_tableau(vcl_string heading, vcl_string x_axes_label, vcl_string y_axes_label);
+  xcv_axes_tableau(std::string heading, std::string x_axes_label, std::string y_axes_label);
   //: Destructor.
   ~xcv_axes_tableau();
   //: Add another point to be plotted on the graph.
@@ -42,7 +42,7 @@ public:
   //: Lay out the graph
   void compute_axes();
   //: Return the name of this tableau.
-  vcl_string type_name() const { return "xcv_axes_tableau";}
+  std::string type_name() const { return "xcv_axes_tableau";}
   //: Handles all events for this tableau.
   bool handle(const vgui_event&);
 
@@ -54,9 +54,9 @@ private:
   //: Range of values for x and y.
   float xlow_, xhigh_, ylow_, yhigh_;
   //: Labels for the axes.
-  vcl_string heading_, x_axes_label_, y_axes_label_;
+  std::string heading_, x_axes_label_, y_axes_label_;
   //: List of points.
-  vcl_vector<float> xpoints_, ypoints_;
+  std::vector<float> xpoints_, ypoints_;
   vgui_easy2D_tableau_sptr easy_;
   vgui_text_tableau_sptr text_;
   vgui_composite_tableau_sptr comp_;
@@ -67,7 +67,7 @@ private:
 struct xcv_axes_tableau_new : public xcv_axes_tableau_sptr
 {
   typedef xcv_axes_tableau_sptr base;
-  xcv_axes_tableau_new(vcl_string a="", vcl_string b="", vcl_string c="")
+  xcv_axes_tableau_new(std::string a="", std::string b="", std::string c="")
     : base(new xcv_axes_tableau(a,b,c)) { }
 };
 // <vgui_make_sptr>

@@ -28,7 +28,7 @@ class wx_docview_app : public wxApp
 
   //: Destructor.
   virtual ~wx_docview_app() {}
-  
+
   //: Called on app initialization.
   virtual bool OnInit();
 

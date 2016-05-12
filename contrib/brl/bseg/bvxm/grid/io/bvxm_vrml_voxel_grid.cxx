@@ -1,7 +1,7 @@
 #include "bvxm_vrml_voxel_grid.h"
 #include <vnl/vnl_float_4.h>
 
-void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
+void bvxm_vrml_voxel_grid::write_vrml_grid(std::ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
 {
   bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
 
@@ -26,7 +26,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<fl
   //write the coordinates
   grid_it = grid->begin();
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny(); ++j) {
         if ((*grid_it)(i,j) > threshold)
@@ -37,7 +37,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<fl
   str << "        ]\n     }\n   }\n}\n";
 }
 
-void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid, float threshold)
+void bvxm_vrml_voxel_grid::write_vrml_grid(std::ofstream& str, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid, float threshold)
 {
   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator grid_it = grid->begin();
 
@@ -62,7 +62,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bs
   //write the coordinates
   grid_it = grid->begin();
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny(); ++j) {
         if (((*grid_it)(i,j)).mean() > threshold)
@@ -74,7 +74,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bs
 }
 
 
-void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
+void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(std::ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
 {
   bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
   vgl_vector_3d<unsigned> dim=grid->grid_size();
@@ -99,7 +99,7 @@ unsigned s=3;
   }
 }
 
-void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
+void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(std::ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
 {
   bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
   //write the colors
@@ -115,7 +115,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
   }
 }
 
-void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
+void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(std::ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
 {
   bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
   vgl_point_3d<double> origin(0.0,0.0,0.0);

@@ -46,20 +46,21 @@
 // If s0 is not on the spherical shell then the target cell contents is unchanged.
 // Note that eye rotation always takes a shell cell into another shell cell.
 //
+#include <string>
+#include <vector>
+#include <iostream>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_scene.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_params.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "../boxm2_vecf_orbit_params.h"
 #include <bocl/bocl_kernel.h>
 #include "../boxm2_vecf_eyelid.h"
 #include "../boxm2_vecf_eyelid_crease.h"
 #include <vgl/vgl_point_3d.h>
-#include <vcl_set.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/vecf/ocl/boxm2_vecf_ocl_orbit_vector_field.h>
 #include "boxm2_vecf_ocl_transform_scene.h"
@@ -82,7 +83,15 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
-  boxm2_vecf_ocl_orbit_scene(vcl_string const& scene_file, bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache, bool is_single_instance = true, bool is_right = false);
+
+  boxm2_vecf_ocl_orbit_scene(std::string const& scene_file, bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache, bool is_single_instance = true, bool is_right = false);
+
+  //: refine target cells to match the refinement level of the source block
+  virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index){return -1;}//FIXME
+  //: compute inverse vector field for unrefined sub_block centers
+  virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts){}//FIXME
+  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const{return false;}//FIXME
+  virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf){return false;}//FIXME
 
   bool map_orbit_to_target_single_pass(boxm2_scene_sptr target_scene);
   //: map eye data to the target scene
@@ -92,17 +101,17 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
   void extract_appearance_from_target(boxm2_scene_sptr target_scene);
 
   //: compute an inverse vector field for rotation of the eye globe
-  void inverse_vector_field_eye(vgl_rotation_3d<double> const& rot, vcl_vector<vgl_vector_3d<double> >& vfield,
-                                vcl_vector<bool>& valid) const;
+  void inverse_vector_field_eye(vgl_rotation_3d<double> const& rot, std::vector<vgl_vector_3d<double> >& vfield,
+                                std::vector<bool>& valid) const;
 
   //: compute an inverse vector field for opening/closing of the eyelid, (0.0 <= t <= 1.0)
-  void inverse_vector_field_eyelid(double dt, vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<unsigned char>& valid) const;
+  void inverse_vector_field_eyelid(double dt, std::vector<vgl_vector_3d<double> >& vfield, std::vector<unsigned char>& valid) const;
 
   //: static lower lid for now
-  void inverse_vector_field_lower_eyelid(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const;
+  void inverse_vector_field_lower_eyelid(std::vector<vgl_vector_3d<double> >& vfield, std::vector<bool>& valid) const;
 
   //: static eyelid creasefor now
-  void  inverse_vector_field_eyelid_crease(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const;
+  void  inverse_vector_field_eyelid_crease(std::vector<vgl_vector_3d<double> >& vfield, std::vector<bool>& valid) const;
 
   //: test the anat_type (SPHERE, IRIS, ... ) of the voxel that contains a global point
  bool is_type_global(vgl_point_3d<double> const& global_pt, anat_type type) const;
@@ -120,9 +129,9 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
  void fill_target_block();
  //: interpolate the alpha and appearance data around the vector field source location
  void interpolate_vector_field(vgl_point_3d<double> const& src, unsigned sindx, unsigned dindx, unsigned tindx,
-                                vcl_vector<vgl_point_3d<double> > & cell_centers,
-                                vcl_map<unsigned, vcl_vector<unsigned> >& cell_neighbor_cell_index,
-                               vcl_map<unsigned, vcl_vector<unsigned> >&cell_neighbor_data_index);
+                                std::vector<vgl_point_3d<double> > & cell_centers,
+                                std::map<unsigned, std::vector<unsigned> >& cell_neighbor_cell_index,
+                               std::map<unsigned, std::vector<unsigned> >&cell_neighbor_data_index);
 
 
  // find nearest cell and return the data index of the nearest cell
@@ -161,15 +170,15 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
 
 
   //: scan over target cells and interpolate appearance and alpha from source
-  void apply_eye_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
-                                        vcl_vector<bool> const& valid);
-  void apply_eyelid_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
-                                           vcl_vector<unsigned char> const& valid);
-  void apply_lower_eyelid_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
-                                                 vcl_vector<bool> const& valid);
+  void apply_eye_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+                                        std::vector<bool> const& valid);
+  void apply_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+                                           std::vector<unsigned char> const& valid);
+  void apply_lower_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+                                                 std::vector<bool> const& valid);
 
-  void apply_eyelid_crease_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
-                                                  vcl_vector<bool> const& valid);
+  void apply_eyelid_crease_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+                                                  std::vector<bool> const& valid);
   // ==================  eyelid methods ==============
   //: construct eyelid (voxelize and paint)
   void create_eyelid();
@@ -221,7 +230,7 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
   boxm2_data<BOXM2_VIS_SCORE>* target_vis_score_data_;  //target nobs
   boxm2_data<BOXM2_VIS_SCORE>* source_vis_score_data_;  //target nobs
   boxm2_data<BOXM2_GAUSS_RGB>* target_color_data_;
-  vcl_vector<cell_info> box_cell_centers_;       // cell centers in the target block
+  std::vector<cell_info> box_cell_centers_;       // cell centers in the target block
   boxm2_vecf_orbit_params params_;               // parameter struct
   bool is_right_;
   vgl_vector_3d<double> estimated_look_dir_;
@@ -232,70 +241,70 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
   boxm2_data<BOXM2_PIXEL>* pupil_;       // is voxel a pupil point
   boxm2_data<BOXM2_FLOAT>* radial_distance_;       // is voxel a pupil point
 
-  vcl_vector<vgl_point_3d<double> > sphere_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> sphere_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > sphere_cell_centers_; // centers of spherical shell voxels
+  std::vector<unsigned> sphere_cell_data_index_;           // corresponding data indices
   //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each shell voxel
+  std::map<unsigned, std::vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each shell voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > data_index_to_cell_index_;             // data index to shell index
+  std::map<unsigned, unsigned > data_index_to_cell_index_;             // data index to shell index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
 
-  vcl_vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells
-  vcl_vector<unsigned> iris_cell_data_index_;                         // corresponding data index
+  std::vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells
+  std::vector<unsigned> iris_cell_data_index_;                         // corresponding data index
 
-  vcl_vector<vgl_point_3d<double> > pupil_cell_centers_;              // center of pupil cells
-  vcl_vector<unsigned> pupil_cell_data_index_;                        // corresponding data index
+  std::vector<vgl_point_3d<double> > pupil_cell_centers_;              // center of pupil cells
+  std::vector<unsigned> pupil_cell_data_index_;                        // corresponding data index
 
   //==== upper eyelid ======
   boxm2_vecf_eyelid eyelid_geo_;
 
   boxm2_data<BOXM2_PIXEL>* eyelid_;      // is voxel an eyelid point?
 
-  vcl_vector<vgl_point_3d<double> > eyelid_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> eyelid_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > eyelid_cell_centers_; // centers of spherical shell voxels
+  std::vector<unsigned> eyelid_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_cell_neighbor_cell_index_; // neighbors of each shell voxel
+  std::map<unsigned, std::vector<unsigned> > eyelid_cell_neighbor_cell_index_; // neighbors of each shell voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > eyelid_data_index_to_cell_index_;             // data index to shell index
+  std::map<unsigned, unsigned > eyelid_data_index_to_cell_index_;             // data index to shell index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > eyelid_cell_neighbor_data_index_; // data index to neighbor data indices
 
   //==== lower_eyelid ======
   boxm2_vecf_eyelid lower_eyelid_geo_;
 
   boxm2_data<BOXM2_PIXEL>* lower_eyelid_;      // is voxel an eyelid point?
 
-  vcl_vector<vgl_point_3d<double> > lower_eyelid_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> lower_eyelid_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > lower_eyelid_cell_centers_; // centers of spherical shell voxels
+  std::vector<unsigned> lower_eyelid_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > lower_eyelid_cell_neighbor_cell_index_; // neighbors of each shell voxel
+  std::map<unsigned, std::vector<unsigned> > lower_eyelid_cell_neighbor_cell_index_; // neighbors of each shell voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > lower_eyelid_data_index_to_cell_index_;             // data index to shell index
+  std::map<unsigned, unsigned > lower_eyelid_data_index_to_cell_index_;             // data index to shell index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > lower_eyelid_cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > lower_eyelid_cell_neighbor_data_index_; // data index to neighbor data indices
 
   //==== eyelid crease ======
   boxm2_vecf_eyelid_crease eyelid_crease_geo_;
 
   boxm2_data<BOXM2_PIXEL>* eyelid_crease_;      // is voxel an eyelid point?
 
-  vcl_vector<vgl_point_3d<double> > eyelid_crease_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> eyelid_crease_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > eyelid_crease_cell_centers_; // centers of spherical shell voxels
+  std::vector<unsigned> eyelid_crease_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_cell_index_; // neighbors of each shell voxel
+  std::map<unsigned, std::vector<unsigned> > eyelid_crease_cell_neighbor_cell_index_; // neighbors of each shell voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > eyelid_crease_data_index_to_cell_index_;             // data index to shell index
+  std::map<unsigned, unsigned > eyelid_crease_data_index_to_cell_index_;             // data index to shell index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > eyelid_crease_cell_neighbor_data_index_; // data index to neighbor data indices
   vnl_vector_fixed<unsigned char,8> random_color(bool yuv = true);
   bool update_source_gpu_buffers(bool write = false);
 private:
   bool compile_kernels();
-  bool get_scene_appearance( vcl_string& options);
+  bool get_scene_appearance( std::string& options);
   bool update_target_gpu_buffers(boxm2_scene_sptr target_scene, boxm2_block_id id,bool write = false);
 
-  vcl_string app_type_,color_app_type_id_;
+  std::string app_type_,color_app_type_id_;
   bool extrinsic_only_;
   bool intrinsic_change_;
   bool target_data_extracted_;
@@ -323,7 +332,7 @@ private:
   bocl_device_sptr device_;
   boxm2_vecf_ocl_orbit_vector_field vect_field_;
   boxm2_vecf_ocl_transform_scene_sptr scene_transformer_;
-  vcl_vector<bocl_kernel*> kernels;
+  std::vector<bocl_kernel*> kernels;
   cl_command_queue queue_;
  //: assign target cell centers that map to the source scene bounding box
   void determine_target_box_cell_centers();

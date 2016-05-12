@@ -3,11 +3,11 @@
 //:
 // \file
 // \brief Coordinate system to represent a location relative to the earth
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/29 François BERTEL Creation. Adapted from IUE
+//   2000/06/29 Francois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim

@@ -11,12 +11,13 @@
 //   15 Apr 2009 Created (A. Garrido)
 //\endverbatim
 
+#include <vector>
+#include <string>
+#include <iosfwd>
+#include <iostream>
 #include "vidl_v4l2_control.h"
-#include <vcl_vector.h>
-#include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 extern "C" {
 //#include <asm/types.h>          /* for videodev2.h */
 #include <sys/time.h>
@@ -35,7 +36,7 @@ class vidl_v4l2_input
   friend class vidl_v4l2_device;
  public:
   //: Return name of input
-  vcl_string name() const { return vcl_string((const char*) input_.name); }
+  std::string name() const { return std::string((const char*) input_.name); }
   //: Return if the input uses a tuner (RF modulator)
   bool is_tuner() const { return input_.type==V4L2_INPUT_TYPE_TUNER; }
 };
@@ -71,12 +72,12 @@ class vidl_v4l2_device
   struct v4l2_format fmt; // width=height=0 indicates not established
   double frame_rate;
 
-  vcl_string dev_name_;
-  vcl_string card_name_;
-  mutable vcl_string last_error;
+  std::string dev_name_;
+  std::string card_name_;
+  mutable std::string last_error;
   bool capturing; // see start_capturing
-  vcl_vector<vidl_v4l2_input> inputs_;
-  vcl_vector<vidl_v4l2_control *> controls_;
+  std::vector<vidl_v4l2_input> inputs_;
+  std::vector<vidl_v4l2_control *> controls_;
   void update_controls(); // must be called after input change
 
   // Reset the device to an initial state
@@ -109,9 +110,9 @@ class vidl_v4l2_device
   ~vidl_v4l2_device();
 
   //: Name of the associated file device (same as constructor)
-  vcl_string device_file() const { return dev_name_; }
+  std::string device_file() const { return dev_name_; }
   //: Friendly name of the device.
-  vcl_string card_name() const { return card_name_; }
+  std::string card_name() const { return card_name_; }
   //: Number of inputs in device
   unsigned int n_inputs() const { return inputs_.size(); }
   //: Inputs been used (0 to ninputs-1)
@@ -273,7 +274,7 @@ class vidl_v4l2_device
 
   // Return number in sequence associated to last frame, as indicated by driver
   unsigned int sequence() const { // return __u32
-    if (last_buffer==-1) vcl_cerr << "UPS\n";
+    if (last_buffer==-1) std::cerr << "UPS\n";
     return (last_buffer==-1)?0:buffers[last_buffer].buf.sequence;
   }
 
@@ -302,7 +303,7 @@ class vidl_v4l2_device
   { return (last_error.size()==0)? false : true; }
 
   //: Return last error if device is in a bad state. Empty if ok
-  vcl_string get_error() const { return last_error; }
+  std::string get_error() const { return last_error; }
 
   //-------------------------------------------------------
   // reference counting if used through sptr
@@ -329,8 +330,8 @@ class vidl_v4l2_device
 };
 
 
-vcl_ostream &
-operator << (vcl_ostream &os, const vidl_v4l2_device & dev);
+std::ostream &
+operator << (std::ostream &os, const vidl_v4l2_device & dev);
 
 
 #endif // vidl_v4l2_device_h_

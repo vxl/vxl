@@ -1,4 +1,5 @@
 // This is core/vbl/io/tests/golden_test_vbl_io.cxx
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -23,7 +24,7 @@
 #include <vbl/io/vbl_io_sparse_array_1d.h>
 #include <vbl/io/vbl_io_bounding_box.h>
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <testlib/testlib_root_dir.h>
 
 static void golden_test_vbl_io(bool save_file)
@@ -35,7 +36,7 @@ static void golden_test_vbl_io(bool save_file)
   // for comparison to the values read in.
   //------------------------------------------------------------------------
 
-  vcl_cout << "***********************************************************\n"
+  std::cout << "***********************************************************\n"
            << " Testing a golden data file for cross platform consistency\n"
            << "***********************************************************\n";
 
@@ -100,7 +101,7 @@ static void golden_test_vbl_io(bool save_file)
   // Save if option set
   if (save_file)
   {
-    vcl_cout << "Going to create the golden test file\n";
+    std::cout << "Going to create the golden test file\n";
     vsl_b_ofstream bfs_out("golden_test_vbl_io.bvl");
     TEST("Opened golden_test_vbl_io.bvl for writing ", ! bfs_out, false);
 
@@ -117,9 +118,9 @@ static void golden_test_vbl_io(bool save_file)
 
   // Read in file to each class in turn
 
-  vcl_cout << "Did we get this far ?\n";
+  std::cout << "Did we get this far ?\n";
 
-  vcl_string gold_path=testlib_root_dir()+"/core/vbl/io/tests/golden_test_vbl_io.bvl";
+  std::string gold_path=testlib_root_dir()+"/core/vbl/io/tests/golden_test_vbl_io.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
 
   TEST("Opened golden_test_vbl_io.bvl for reading ", ! bfs_in, false);
@@ -231,7 +232,7 @@ static void golden_test_vbl_io(bool save_file)
 
 static void golden_test_vbl_io(int argc, char* argv[])
 {
-  golden_test_vbl_io(argc==2 && vcl_string(argv[1])==vcl_string("create"));
+  golden_test_vbl_io(argc==2 && std::string(argv[1])==std::string("create"));
 }
 
 TESTMAIN_ARGS(golden_test_vbl_io);

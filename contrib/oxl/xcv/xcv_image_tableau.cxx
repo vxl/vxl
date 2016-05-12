@@ -1,4 +1,8 @@
 // This is oxl/xcv/xcv_image_tableau.cxx
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "xcv_image_tableau.h"
 //:
 // \file
@@ -11,9 +15,7 @@
 //    06-AUG-2002 K.Y.McGaul - Print RGB value on status bar.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_cmath.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_crop.h>
 #include <vil1/vil1_image.h>
@@ -36,7 +38,7 @@ xcv_image_tableau::xcv_image_tableau(vil1_image const &I)
 xcv_image_tableau::xcv_image_tableau(char const *f)
   : base(f), defined_(false) { }
 
-vcl_string xcv_image_tableau::type_name() const
+std::string xcv_image_tableau::type_name() const
 {
   return "xcv_image_tableau";
 }
@@ -140,7 +142,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
     float pointx, pointy;
     vgui_projection_inspector p_insp;
     p_insp.window_to_image_coordinates(e.wx, e.wy, pointx, pointy);
-    int intx = (int)vcl_floor(pointx), inty = (int)vcl_floor(pointy);
+    int intx = (int)std::floor(pointx), inty = (int)std::floor(pointy);
 
     // Get RGB value to display on status bar:
 
@@ -166,7 +168,7 @@ bool xcv_image_tableau::handle(vgui_event const &e)
                  &pixel);
 
     // Display on status bar:
-    vcl_ostringstream str;
+    std::ostringstream str;
     str << '('<<intx<<','<<inty<<")  R="<<int(pixel.r)<<",G="<<int(pixel.g)<<",B="<<int(pixel.b);
     post_to_status_bar(str.str().c_str());
   }
@@ -184,8 +186,8 @@ void vgui_roi_tableau_make_roi::add_box(float x0,float y0,float x1,float y1)
 {
   float sx = x0>x1 ? x1:x0;
   float sy = y0>y1 ? y1:y0;
-  float w = vcl_fabs(x1-x0),
-        h = vcl_fabs(y1-y0);
+  float w = std::fabs(x1-x0),
+        h = std::fabs(y1-y0);
 
   image_tableau_->set_roi(sx,sy,w,h);
   done_ = true;

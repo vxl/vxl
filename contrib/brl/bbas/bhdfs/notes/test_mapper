@@ -46,7 +46,7 @@ python s4_prepare_stdin_txt.py $hdfs_folder 00.png 01.png $hdfs_mapper_stdin_fil
 # copy offset files back to local folder
 python s3_copy_files_to_local.py $hdfs_folder _offsets.txt $test_images_folder
 # clean up the temp folders and files
-/usr/local/hadoop/bin/hadoop dfs -rmr $hdfs_folder_full_path 
+/usr/local/hadoop/bin/hadoop dfs -rmr $hdfs_folder_full_path
 rm $conf_file
 END_TIME=`date +%s`
 

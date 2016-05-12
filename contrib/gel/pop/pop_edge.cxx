@@ -44,7 +44,7 @@ pop_transform* pop_edge::get_transform()
 
 
 //: help search to find a destination vertex
-bool pop_edge::search(pop_vertex* destination, vcl_list<pop_edge*> &path)
+bool pop_edge::search(pop_vertex* destination, std::list<pop_edge*> &path)
 {
   if (v2_==destination) {
     // the path is complete

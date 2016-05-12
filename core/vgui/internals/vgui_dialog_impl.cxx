@@ -8,8 +8,9 @@
 // \date   25 Oct 1999
 // \brief  See vgui_dialog_impl.h for a description of this file
 
+#include <iostream>
 #include "vgui_dialog_impl.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>
@@ -29,7 +30,7 @@ vgui_dialog_impl::vgui_dialog_impl(const char* n)
 
 vgui_dialog_impl::~vgui_dialog_impl()
 {
-  for (vcl_vector<element>::iterator iter = elements.begin();
+  for (std::vector<element>::iterator iter = elements.begin();
        iter != elements.end(); ++iter)
   {
     delete iter->field;
@@ -121,8 +122,8 @@ void vgui_dialog_impl::double_field(const char* txt, double& val)
 }
 
 //------------------------------------------------------------------------------
-//: Add a vcl_string field to the dialog box.
-void vgui_dialog_impl::string_field(const char* txt, vcl_string& val)
+//: Add a std::string field to the dialog box.
+void vgui_dialog_impl::string_field(const char* txt, std::string& val)
 {
   vgui_string_field *field = new vgui_string_field(txt, val);
 
@@ -137,7 +138,7 @@ void vgui_dialog_impl::string_field(const char* txt, vcl_string& val)
 //------------------------------------------------------------------------------
 //: Add a choice field to the dialog box.
 void vgui_dialog_impl::choice_field(const char* txt,
-                                    const vcl_vector<vcl_string>& labels, int& val)
+                                    const std::vector<std::string>& labels, int& val)
 {
   vgui_int_field *field = new vgui_int_field(txt, val);
 
@@ -149,7 +150,7 @@ void vgui_dialog_impl::choice_field(const char* txt,
   elements.push_back(l);
 }
 
-void vgui_dialog_impl::file_browser(const char* txt, vcl_string& regexp, vcl_string& val)
+void vgui_dialog_impl::file_browser(const char* txt, std::string& regexp, std::string& val)
 {
   vgui_file_field *field = new vgui_file_field(txt, regexp, val);
 
@@ -161,8 +162,8 @@ void vgui_dialog_impl::file_browser(const char* txt, vcl_string& regexp, vcl_str
   elements.push_back(l);
 }
 
-void vgui_dialog_impl::inline_file_browser(const char *txt,vcl_string & regexp,
-                                           vcl_string& val)
+void vgui_dialog_impl::inline_file_browser(const char *txt,std::string & regexp,
+                                           std::string& val)
 {
   vgui_file_field *field = new vgui_file_field(txt, regexp, val);
 
@@ -174,7 +175,7 @@ void vgui_dialog_impl::inline_file_browser(const char *txt,vcl_string & regexp,
   elements.push_back(l);
 }
 
-void vgui_dialog_impl::color_chooser(const char* txt, vcl_string& val)
+void vgui_dialog_impl::color_chooser(const char* txt, std::string& val)
 {
   vgui_string_field *field = new vgui_string_field(txt, val);
 
@@ -186,7 +187,7 @@ void vgui_dialog_impl::color_chooser(const char* txt, vcl_string& val)
   elements.push_back(l);
 }
 
-void vgui_dialog_impl::inline_color_chooser(const char* txt, vcl_string& val)
+void vgui_dialog_impl::inline_color_chooser(const char* txt, std::string& val)
 {
   vgui_string_field *field = new vgui_string_field(txt, val);
 
@@ -208,7 +209,7 @@ void vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width,
   element l;
   l.type = inline_tabl;
   l.widget = inline_tableau_widget(tab, width, height);
-  l.field = 0;
+  l.field = VXL_NULLPTR;
 
   elements.push_back(l);
 }
@@ -236,20 +237,20 @@ void vgui_dialog_impl::line_break()
   elements.push_back(l);
 }
 
-void* vgui_dialog_impl::bool_field_widget(const char*, bool&) { return 0; }
-void* vgui_dialog_impl::int_field_widget(const char*, int&) { return 0; }
-void* vgui_dialog_impl::long_field_widget(const char*, long&) { return 0; }
-void* vgui_dialog_impl::float_field_widget(const char*, float&) { return 0; }
-void* vgui_dialog_impl::double_field_widget(const char*, double&) { return 0; }
-void* vgui_dialog_impl::string_field_widget(const char*, vcl_string&) { return 0; }
-void* vgui_dialog_impl::choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&) { return 0; }
-void* vgui_dialog_impl::text_message_widget(const char*) { return 0; }
-void* vgui_dialog_impl::file_browser_widget(const char*, vcl_string&, vcl_string&) { return 0; }
-void* vgui_dialog_impl::inline_file_browser_widget(const char*, vcl_string&, vcl_string&) { return 0; }
-void* vgui_dialog_impl::color_chooser_widget(const char* txt, vcl_string& val) { return string_field_widget(txt, val); }
-void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, vcl_string& val) { return string_field_widget(txt, val); }
-void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr, unsigned /*width*/, unsigned /*height*/) { return 0; }
-void* vgui_dialog_impl::pushbutton_field_widget(const char*, const void*) { return 0; }
+void* vgui_dialog_impl::bool_field_widget(const char*, bool&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::int_field_widget(const char*, int&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::long_field_widget(const char*, long&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::float_field_widget(const char*, float&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::double_field_widget(const char*, double&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::string_field_widget(const char*, std::string&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::choice_field_widget(const char*, const std::vector<std::string>&, int&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::text_message_widget(const char*) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::file_browser_widget(const char*, std::string&, std::string&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::inline_file_browser_widget(const char*, std::string&, std::string&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::color_chooser_widget(const char* txt, std::string& val) { return string_field_widget(txt, val); }
+void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, std::string& val) { return string_field_widget(txt, val); }
+void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr, unsigned /*width*/, unsigned /*height*/) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::pushbutton_field_widget(const char*, const void*) { return VXL_NULLPTR; }
 
 //------------------------------------------------------------------------------
 //: Changes the modality of the dialog.  True makes the dialog modal
@@ -257,5 +258,5 @@ void* vgui_dialog_impl::pushbutton_field_widget(const char*, const void*) { retu
 // False makes the dialog non-modal.
 void vgui_dialog_impl::modal(bool)
 {
-  vcl_cerr << "No function defined to change dialog modality, by default dialogs are modal\n";
+  std::cerr << "No function defined to change dialog modality, by default dialogs are modal\n";
 }

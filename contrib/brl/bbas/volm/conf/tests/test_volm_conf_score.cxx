@@ -1,26 +1,28 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <volm/conf/volm_conf_score.h>
 #include <volm/conf/volm_conf_buffer.h>
 #include <volm/conf/volm_conf_object.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #define EPISLON 1E-5
 
 static void test_volm_conf_score()
 {
-  vcl_vector<volm_conf_object> landmarks;
+  std::vector<volm_conf_object> landmarks;
   for (unsigned i = 0; i < 5; i++) {
     landmarks.push_back(volm_conf_object(i*0.1f, i*0.2f, i*0.3f, i));
   }
   volm_conf_score_sptr score_sptr = new volm_conf_score(0.12, -vnl_math::pi, landmarks);
-  score_sptr->print(vcl_cout);
-  vcl_cout << score_sptr->landmarks().size() << " landmarks in score:" << vcl_endl;
+  score_sptr->print(std::cout);
+  std::cout << score_sptr->landmarks().size() << " landmarks in score:" << std::endl;
   for (unsigned i = 0; i < score_sptr->landmarks().size(); i++)
-    score_sptr->landmarks()[i].print(vcl_cout);
-  vcl_cout << "direction relative to north: " << score_sptr->theta_to_north() << vcl_endl;
+    score_sptr->landmarks()[i].print(std::cout);
+  std::cout << "direction relative to north: " << score_sptr->theta_to_north() << std::endl;
   TEST_NEAR("Testing score value", score_sptr->score(), 0.12, EPISLON);
   TEST_NEAR("Testing angular value", score_sptr->theta_in_deg(), vnl_math::pi / vnl_math::pi_over_180, EPISLON);
   TEST_NEAR("Testing angular value to north", score_sptr->theta_to_north(), vnl_math::pi_over_2 / vnl_math::pi_over_180, EPISLON);
@@ -40,19 +42,19 @@ static void test_volm_conf_score()
   TEST("Testing binary IO", landmark_same, true);
 
   // Test score buffer
-  vcl_cout << " ---------------- Testing score buffer ----------------- " << vcl_endl;
+  std::cout << " ---------------- Testing score buffer ----------------- " << std::endl;
   float buffer_capacity = 200000.0f*2.0f* sizeof(volm_conf_score) /(1024.0f*1024.0f*1024.0f);  // buffer size that can store 200000 objects
   volm_conf_buffer<volm_conf_score> index(buffer_capacity);
-  vcl_cout << "Unit size of index of volm_conf_object: " << index.unit_size() << vcl_endl;
-  vcl_cout << "Maximum number of volm_conf_object can be stored in index buffer: " << index.buffer_size() << vcl_endl;
+  std::cout << "Unit size of index of volm_conf_object: " << index.unit_size() << std::endl;
+  std::cout << "Maximum number of volm_conf_object can be stored in index buffer: " << index.buffer_size() << std::endl;
 
   // randomly create a vector of volm_conf_score
   vnl_random rnd(19801231);
-  vcl_vector<volm_conf_score> scores;
+  std::vector<volm_conf_score> scores;
   unsigned data_size = rnd.lrand32(0,50);
   for (unsigned k = 0; k < data_size; k++)
   {
-    vcl_vector<volm_conf_object> landmarks;
+    std::vector<volm_conf_object> landmarks;
     unsigned size = rnd.lrand32(0,10);
     for (unsigned i = 0; i < size; i++)
       landmarks.push_back(volm_conf_object(rnd.drand32(0.0f, vnl_math::twopi), rnd.drand32(0.0f, 200.0f), rnd.drand32(0.0f, 32.f), rnd.lrand32(0,255)));
@@ -61,7 +63,7 @@ static void test_volm_conf_score()
   }
 
   // add scores into buffer
-  vcl_string filename = "./volm_conf_buffered_score.bin";
+  std::string filename = "./volm_conf_buffered_score.bin";
   TEST("Testing unit size of buffered score", index.unit_size(), sizeof(volm_conf_score));
   TEST("Testing initial mode of buffer", index.index_mode(), "NOT_INITIALIZED");
   TEST("Testing buffer size", index.buffer_size(), 200000);
@@ -74,7 +76,7 @@ static void test_volm_conf_score()
   TEST("Testing finalize buffer", index.finalize(), true);
 
   // read scores from buffer
-  vcl_vector<volm_conf_score> scores_in;
+  std::vector<volm_conf_score> scores_in;
   float buffer_capacity_in = 1.0f;
   volm_conf_buffer<volm_conf_score> index_in(buffer_capacity_in);
   TEST("Testing initialing buffer for READ operation", index_in.initialize_read(filename), true);
@@ -88,12 +90,12 @@ static void test_volm_conf_score()
   bool is_same = true;
   for (unsigned k = 0; k < data_size; k++) {
     if (k < 10) {
-      vcl_cout << "    input value " << k << ": ";  scores[k].print(vcl_cout);
-      vcl_cout << "   loaded value " << k << ": ";  scores_in[k].print(vcl_cout);
-      vcl_cout << "   input landmarks " << k << ": " << scores[k].landmarks().size() << ", loaded landmarks " << k  << ": " << scores_in[k].landmarks().size() << vcl_endl;
+      std::cout << "    input value " << k << ": ";  scores[k].print(std::cout);
+      std::cout << "   loaded value " << k << ": ";  scores_in[k].print(std::cout);
+      std::cout << "   input landmarks " << k << ": " << scores[k].landmarks().size() << ", loaded landmarks " << k  << ": " << scores_in[k].landmarks().size() << std::endl;
     }
-    is_same = is_same && ( vcl_fabs(scores[k].score()-scores_in[k].score())<EPISLON )
-                      && ( vcl_fabs(scores[k].theta()-scores_in[k].theta())<EPISLON );
+    is_same = is_same && ( std::fabs(scores[k].score()-scores_in[k].score())<EPISLON )
+                      && ( std::fabs(scores[k].theta()-scores_in[k].theta())<EPISLON );
     unsigned num_landmarks = scores[k].landmarks().size();
     for (unsigned i = 0; i < num_landmarks; i++)
       is_same = is_same && scores[k].landmarks()[i].is_same(scores_in[k].landmarks()[i]);

@@ -1,6 +1,7 @@
 // This is an example of how to use vgl_conic,
 // written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 5 October 2001.
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_box_2d.h>
@@ -14,8 +15,8 @@ int main()
 
   // circle, centre (1,2), radius 1, orientation irrelevant.
   vgl_conic<double> c(centre, 1,1, 0);
-  vcl_cout << c << vcl_endl;
-  vcl_string name = c.real_type();
+  std::cout << c << std::endl;
+  std::string name = c.real_type();
   assert(name == "real circle");
 
   // same circle, now given by its equation
@@ -30,7 +31,7 @@ int main()
   assert(c.contains(npt));
 
   // Tangent lines to the circle from npt: (only one, since npt lies on the circle)
-  vcl_list<vgl_homg_line_2d<double> > lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
+  std::list<vgl_homg_line_2d<double> > lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   assert(lines.front() == vgl_homg_line_2d<double>(1,0,0)); // The Y axis
 
   // Bounding box of this circle:
@@ -42,30 +43,30 @@ int main()
 
   // ellipse, centre (1,2), axes lengths 2,1, rotated by 1 radian counterclockwise:
   c = vgl_conic<double>(centre, 2,1, 1.0);
-  vcl_cout << c << vcl_endl;
+  std::cout << c << std::endl;
 
   // hyperbola, centre (1,2), axes lengths 2,1, not rotated:
   c = vgl_conic<double>(centre, 2,-1, 0.0); // assignment
-  vcl_cout << c << vcl_endl;
+  std::cout << c << std::endl;
 
   // parabola, "centre" (1,2,0) (at infinity), top (2,1), width parameter 3.
   c = vgl_conic<double>(vgl_homg_point_2d<double>(1,2,0), 2,1, 3);
-  vcl_cout << c << vcl_endl;
+  std::cout << c << std::endl;
   assert(c.centre() == vgl_homg_point_2d<double>(1,2,0));
 
   // imaginary circle, centre (1,2), radius 5i.
   c = vgl_conic<double>(1, 0, 1, -2, -4, 30);
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "imaginary circle");
 
   // imaginary ellipse, centre (1,2), axes lengths 5i, 10i, orientation (1,0).
   c = vgl_conic<double>(4, 0, 1, -8, -4, 108);
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "imaginary ellipse");
 
   // real parallel lines:
   c = vgl_conic<double>(1,4,4,8,16,15);
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "real parallel lines");
   vgl_homg_line_2d<double> l1(1,2,3), l2(1,2,5);
   // The components of a degenerate conic are the two constituent lines:
@@ -74,13 +75,13 @@ int main()
 
   // imaginary parallel lines:
   c = vgl_conic<double>(4,4,1,0,0,9); // lines 2x+y+/-3iw=0
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "complex parallel lines");
   lines = c.components(); assert(lines.size() == 0); // no real components
 
   // finite coincident lines
   c = vgl_conic<double>(1,4,4,6,12,9);
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "coincident lines");
   l1 = vgl_homg_line_2d<double>(1,2,3);
   lines = c.components();
@@ -88,7 +89,7 @@ int main()
 
   // infinite coincident lines
   c = vgl_conic<double>(0,0,0,0,0,1);
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "coincident lines");
   lines = c.components();
   l1 = vgl_homg_line_2d<double>(0,0,1); // the line at infinity
@@ -96,7 +97,7 @@ int main()
 
   // finite, real intersecting lines:
   c = vgl_conic<double>(2,3,-2,7,-1,3);
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "real intersecting lines");
   l1 = vgl_homg_line_2d<double>(1,2,3);
   l2 = vgl_homg_line_2d<double>(2,-1,1);
@@ -105,13 +106,13 @@ int main()
 
   // imaginary intersecting lines:
   c = vgl_conic<double>(4,0,1,12,0,9); // lines 2x+/-iy+3w=0
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "complex intersecting lines");
   lines = c.components(); assert(lines.size() == 0); // no real components
 
   // one finite and one infinite intersecting line:
   c = vgl_conic<double>(0,0,0,1,2,3);
-  vcl_cout << c << '\n';
+  std::cout << c << '\n';
   assert(c.real_type() == "real intersecting lines");
   l1 = vgl_homg_line_2d<double>(1,2,3);
   l2 = vgl_homg_line_2d<double>(0,0,1); // line at infinity

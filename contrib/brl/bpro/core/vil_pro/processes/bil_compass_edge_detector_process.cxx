@@ -13,14 +13,14 @@ bool bil_compass_edge_detector_process_cons(bprb_func_process& pro)
 {
   //this process takes four inputs:
 
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("unsigned"); // no of orientations
   input_types.push_back("double");   // sigma
   input_types.push_back("double");   // threshold
 
   //this process has 1 output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // output image
 
   return pro.set_input_types(input_types)
@@ -32,7 +32,7 @@ bool bil_compass_edge_detector_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 4) {
-    vcl_cout << "bil_compass_edge_detector_process: The number of inputs should be 4" << vcl_endl;
+    std::cout << "bil_compass_edge_detector_process: The number of inputs should be 4" << std::endl;
     return false;
   }
 
@@ -46,7 +46,7 @@ bool bil_compass_edge_detector_process(bprb_func_process& pro)
 
   if (img->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
-      vcl_cout<<img->ni()<<' '<<img->nj()<<vcl_endl;
+      std::cout<<img->ni()<<' '<<img->nj()<<std::endl;
       vil_image_view<vxl_byte> inimage = vil_convert_cast(vxl_byte(), img);
       vil_image_view<float> hist_grad(inimage.ni(),inimage.nj());
       vil_image_view<float> edgeimage=bil_detect_compass_edges(inimage, n_orient/2, sigma ,threshold, hist_grad);
@@ -65,7 +65,7 @@ bool bil_compass_edge_detector_process(bprb_func_process& pro)
   }
   else
   {
-      vcl_cout<<"The type is not supported:  please add the support"<<vcl_endl;
+      std::cout<<"The type is not supported:  please add the support"<<std::endl;
       return false;
   }
   return true;

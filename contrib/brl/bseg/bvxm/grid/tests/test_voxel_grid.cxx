@@ -1,6 +1,7 @@
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
 #include <vgl/vgl_vector_3d.h>
@@ -14,8 +15,8 @@
 static void test_voxel_grid()
 {
   // we need temporary disk storage for this test.
-  vcl_string storage_fname("bvxm_voxel_grid_test_temp.vox");
-  vcl_string storage_cached_fname("bvxm_voxel_grid_cached_test_temp.vox");
+  std::string storage_fname("bvxm_voxel_grid_test_temp.vox");
+  std::string storage_cached_fname("bvxm_voxel_grid_cached_test_temp.vox");
   // remove file if exists from previous test.
   if (vul_file::exists(storage_fname.c_str())) {
     vul_file::delete_file_glob(storage_fname.c_str());
@@ -28,8 +29,8 @@ static void test_voxel_grid()
   unsigned max_cache_size = grid_size.x()*grid_size.y()*18;
 
   // try test with all types of underlying storage.
-  vcl_vector<bvxm_voxel_grid<float>* > grids;
-  vcl_vector<vcl_string> grid_types; // for labeling tests
+  std::vector<bvxm_voxel_grid<float>* > grids;
+  std::vector<std::string> grid_types; // for labeling tests
   grids.push_back(new bvxm_voxel_grid<float>(storage_fname,grid_size)); // disk storage;
   grid_types.push_back("disk_storage");
   grids.push_back(new bvxm_voxel_grid<float>(grid_size)); // memory storage;
@@ -37,7 +38,7 @@ static void test_voxel_grid()
   grids.push_back(new bvxm_voxel_grid<float>(storage_cached_fname,grid_size,max_cache_size)); // cached disk storage
   grid_types.push_back("disk_cached_storage");
 
-  vcl_string test_name;
+  std::string test_name;
 
   for (unsigned i=0; i<grids.size(); i++) {
 
@@ -65,15 +66,15 @@ static void test_voxel_grid()
 
     // read in each slice, check that init_val was set, and fill with new value
     unsigned count = 0;
-    vcl_cout << "read/write: ";
+    std::cout << "read/write: ";
     bvxm_voxel_grid<float>::iterator slab_it;
     for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
-      vcl_cout << '.';
+      std::cout << '.';
       bvxm_voxel_slab<float>::iterator vit;
       for (vit = slab_it->begin(); vit != slab_it->end(); vit++, count++) {
         if (*vit != init_val) {
 #ifdef DEBUG
-          vcl_cerr << "error: read in value does not match init value! count = " << count << vcl_endl;
+          std::cerr << "error: read in value does not match init value! count = " << count << std::endl;
 #endif
           init_check = false;
         }
@@ -81,7 +82,7 @@ static void test_voxel_grid()
         *vit = static_cast<float>(count);
       }
     }
-    vcl_cout << "done." << vcl_endl;
+    std::cout << "done." << std::endl;
 
     test_name = grid_types[i] + ": Initialization correctly set voxel values?";
     TEST(test_name.c_str(),init_check,true);
@@ -93,21 +94,21 @@ static void test_voxel_grid()
 
     // read in each slice, check that written value is set. use const iterators.
     count = 0;
-    vcl_cout << "read: ";
+    std::cout << "read: ";
     bvxm_voxel_grid<float>::const_iterator slab_it_const;
     for (slab_it_const = grid->begin(); slab_it_const != grid->end(); ++slab_it_const) {
-      vcl_cout << '.';
+      std::cout << '.';
       bvxm_voxel_slab<float>::const_iterator vit;
       for (vit = slab_it_const->begin(); vit != slab_it_const->end(); vit++, count++) {
         if (*vit != static_cast<float>(count)) {
 #ifdef DEBUG
-          vcl_cerr << "error: read in value does not match written value! count = " << count << vcl_endl;
+          std::cerr << "error: read in value does not match written value! count = " << count << std::endl;
 #endif
           write_read_check = false;
         }
       }
     }
-    vcl_cout << "done." << vcl_endl;
+    std::cout << "done." << std::endl;
 
     test_name = grid_types[i] + ": Read in voxel values match written values?";
     TEST(test_name.c_str(),write_read_check,true);

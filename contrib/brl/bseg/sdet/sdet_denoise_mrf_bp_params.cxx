@@ -1,12 +1,13 @@
 // This is brl/bseg/sdet/sdet_denoise_mrf_bp_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_denoise_mrf_bp_params.h"
 //:
 // \file
 // See sdet_denoise_mrf_bp_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -43,7 +44,7 @@ InitParams(unsigned n_labels, unsigned n_iter, unsigned pyramid_levels,
   pyramid_levels_ = pyramid_levels;
   discontinuity_cost_ = discontinuity_cost;
   truncation_cost_ = truncation_cost;
-  kappa_ = kappa; 
+  kappa_ = kappa;
   lambda_ = lambda;
 }
 
@@ -54,8 +55,8 @@ bool sdet_denoise_mrf_bp_params::SanityCheck()
 {
   //  Note that msg << ends seems to restart the string and erase the
   //  previous string. We should only use it as the last call, use
-  //  vcl_endl otherwise.
-  vcl_stringstream msg;
+  //  std::endl otherwise.
+  std::stringstream msg;
   bool valid = true;
 
   if (n_labels_ < 2)
@@ -96,22 +97,22 @@ bool sdet_denoise_mrf_bp_params::SanityCheck()
       valid = false;
     }
 
-  msg << vcl_ends;
+  msg << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_denoise_mrf_bp_params& dmp)
+std::ostream& operator << (std::ostream& os, const sdet_denoise_mrf_bp_params& dmp)
 {
   return
   os << "sdet_denoise_mrf_bp_params:\n[---\n"
-     << "n labels " << dmp.n_labels_ << vcl_endl
-     << "n iterations " << dmp.n_iter_ << vcl_endl
-     << "pyramid levels " << dmp.pyramid_levels_ << vcl_endl
-     << "discontinuity cost " << dmp.discontinuity_cost_ << vcl_endl
-     << "truncation cost " << dmp.truncation_cost_ << vcl_endl
-     << "kappa  " << dmp.kappa_ << vcl_endl
-     << "lambda  " << dmp.lambda_ << vcl_endl
+     << "n labels " << dmp.n_labels_ << std::endl
+     << "n iterations " << dmp.n_iter_ << std::endl
+     << "pyramid levels " << dmp.pyramid_levels_ << std::endl
+     << "discontinuity cost " << dmp.discontinuity_cost_ << std::endl
+     << "truncation cost " << dmp.truncation_cost_ << std::endl
+     << "kappa  " << dmp.kappa_ << std::endl
+     << "lambda  " << dmp.lambda_ << std::endl
      << "---]\n";
 }

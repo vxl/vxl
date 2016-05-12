@@ -22,21 +22,23 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <cstddef>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vnl/vnl_numeric_traits.h>
-#include <vcl_cstddef.h> // for vcl_size_t
-#include <vcl_cmath.h> // for vcl_sqrt
+#include "vnl/vnl_export.h"
 
 // avoid messing about with aux_* functions for gcc 2.7 -- fsm
-template <class T, class S> void vnl_c_vector_one_norm(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_two_norm(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
-template <class T, class S> void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_one_norm(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_two_norm(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out);
 
 //: vnl_c_vector interfaces to lowlevel memory-block operations.
 VCL_TEMPLATE_EXPORT template <class T>
-class vnl_c_vector
+class VNL_EXPORT vnl_c_vector
 {
  public:
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
@@ -111,7 +113,7 @@ class vnl_c_vector
   // This method uses the 1/(n-1) normalisation, assuming that your
   // data is a sample of a population.
   static inline real_t std(T const *p, unsigned n) {
-    return vcl_sqrt(real_t(sum_sq_diff_means(p, n))/real_t(abs_t(n-1)));}
+    return std::sqrt(real_t(sum_sq_diff_means(p, n))/real_t(abs_t(n-1)));}
 
   //: The sum of squared differences from the mean
   static T sum_sq_diff_means(T const* v, unsigned n);
@@ -141,15 +143,15 @@ class vnl_c_vector
   static T euclid_dist_sq(T const *, T const *, unsigned);
 
   //: Memory allocation
-  static T** allocate_Tptr(vcl_size_t n);
-  static T*  allocate_T(vcl_size_t n);
-  static void deallocate(T**, vcl_size_t n_when_allocated);
-  static void deallocate(T*, vcl_size_t n_when_allocated);
+  static T** allocate_Tptr(std::size_t n);
+  static T*  allocate_T(std::size_t n);
+  static void deallocate(T**, std::size_t n_when_allocated);
+  static void deallocate(T*, std::size_t n_when_allocated);
 };
 
 //: Input & output
 // \relatesalso vnl_c_vector
-template <class T>
-vcl_ostream& print_vector(vcl_ostream&, T const*, unsigned);
+template <class T> VNL_EXPORT
+std::ostream& print_vector(std::ostream&, T const*, unsigned);
 
 #endif // vnl_c_vector_h_

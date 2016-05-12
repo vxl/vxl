@@ -28,14 +28,16 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <mvl/MatchSet.h>
 
 class PairMatchSet : public MatchSet
 {
   // Data Members--------------------------------------------------------------
-  vcl_vector<int> matches_;
+  std::vector<int> matches_;
   unsigned int match_count_;
  public:
   // Constants-----------------------------------------------------------------
@@ -63,7 +65,7 @@ class PairMatchSet : public MatchSet
   void update_feature_match_data();
   void clear();
 
-  void update(const vcl_vector<bool>& inliers);
+  void update(const std::vector<bool>& inliers);
 
   int  size() const;
 
@@ -99,13 +101,13 @@ class PairMatchSet : public MatchSet
   // ******* END ITERATOR
 
   // Input/Output--------------------------------------------------------------
-  void print_brief(vcl_ostream& s) const;
+  void print_brief(std::ostream& s) const;
   void print_brief() const;
-  void write_ascii(vcl_ostream& s) const;
-  bool read_ascii(vcl_istream& s);
+  void write_ascii(std::ostream& s) const;
+  bool read_ascii(std::istream& s);
 
-  friend vcl_ostream& operator<<(vcl_ostream& s, const PairMatchSet& cc);
-  friend vcl_istream& operator>>(vcl_istream& s, PairMatchSet& cc);
+  friend std::ostream& operator<<(std::ostream& s, const PairMatchSet& cc);
+  friend std::istream& operator>>(std::istream& s, PairMatchSet& cc);
 
   bool get_match(int at, int* i1, int* i2) const;
 };

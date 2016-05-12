@@ -1,4 +1,6 @@
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
@@ -28,7 +30,7 @@ static void test_vdgl_io()
   ec->add_edgel(e4);
 
   //Test edgel_chain binary I/O
-  vcl_cout << "Test simple edgel_chain io\n";
+  std::cout << "Test simple edgel_chain io\n";
   vsl_b_ofstream ec_out("test_edgel_chain_io.tmp");
   TEST("Created test_edgel_chain_io.tmp for writing",(!ec_out), false);
   vsl_b_write(ec_out, ec);
@@ -39,14 +41,14 @@ static void test_vdgl_io()
   vdgl_edgel_chain_sptr edgel_chain_in;
   vsl_b_read(ec_in, edgel_chain_in);
   if (edgel_chain_in)
-    vcl_cout << "Read edgel_chain " << *edgel_chain_in << '\n';
+    std::cout << "Read edgel_chain " << *edgel_chain_in << '\n';
   if (edgel_chain_in)
     TEST("Testing single edgel_chain io",ec && (*ec) == (*edgel_chain_in), true);
 
   // remove the temporary file
   vpl_unlink ("test_edgel_chain_io.tmp");
 
-  vcl_cout << "Test simple digital_curve io\n";
+  std::cout << "Test simple digital_curve io\n";
   vdgl_interpolator_sptr intp = new vdgl_interpolator_linear(ec);
   vdgl_digital_curve_sptr dc = new vdgl_digital_curve(intp);
   vsl_b_ofstream dc_out("test_digital_curve_io.tmp");
@@ -59,7 +61,7 @@ static void test_vdgl_io()
   vdgl_digital_curve_sptr digital_curve_in;
   vsl_b_read(dc_in, digital_curve_in);
   if (digital_curve_in)
-    vcl_cout << "Read digital_curve " << *digital_curve_in << '\n';
+    std::cout << "Read digital_curve " << *digital_curve_in << '\n';
   if (digital_curve_in)
     TEST("Testing single digital_curve io",dc && (*dc) == (*digital_curve_in), true);
   dc_in.close();
@@ -68,7 +70,7 @@ static void test_vdgl_io()
   vdgl_interpolator_sptr intpc = new vdgl_interpolator_cubic(ec);
   vdgl_digital_curve_sptr dca = new vdgl_digital_curve(intpc);
 
-  vcl_vector<vdgl_digital_curve_sptr> dcrvs, dcrvs_in;
+  std::vector<vdgl_digital_curve_sptr> dcrvs, dcrvs_in;
   dcrvs.push_back(dc);   dcrvs.push_back(dca);
   vsl_b_ofstream dcv_out("test_digital_curve_io.tmp");
   vsl_b_write(dcv_out, dcrvs);
@@ -80,7 +82,7 @@ static void test_vdgl_io()
 
   bool good = true;
   int k = 0;
-  for (vcl_vector<vdgl_digital_curve_sptr>::iterator dcit = dcrvs_in.begin();
+  for (std::vector<vdgl_digital_curve_sptr>::iterator dcit = dcrvs_in.begin();
        dcit != dcrvs_in.end(); dcit++, k++)
   {
     if (!(*dcit))
@@ -88,7 +90,7 @@ static void test_vdgl_io()
       good = false;
       continue;
     }
-    vcl_cout << "Saved digital_curve" << *dcrvs[k] << ' '
+    std::cout << "Saved digital_curve" << *dcrvs[k] << ' '
              << "Read digital_curve" << *(*dcit) << '\n';
     good = good && *(*dcit) == *dcrvs[k];
   }

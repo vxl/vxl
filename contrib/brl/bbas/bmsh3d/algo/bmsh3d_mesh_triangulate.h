@@ -17,7 +17,7 @@
 //               ids of the original face F, e.g.,
 //               f0: (v0, v1, v2), f1: (v0, v1, v2), ..., etc.
 //
-bool bmsh3d_triangulate_face (const bmsh3d_face* F, vcl_vector<vcl_vector<int> >& tri_faces);
+bool bmsh3d_triangulate_face (const bmsh3d_face* F, std::vector<std::vector<int> >& tri_faces);
 
 bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M);
 

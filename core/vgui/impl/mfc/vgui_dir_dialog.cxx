@@ -134,6 +134,8 @@
 //   double-clicking them (this is a DIRECTORY selection dialog after all)
 
 
+#include <cstring>
+#include <cctype>
 #include "stdafx.h"
 
 // If you don't want this as part of your project (eg to put in a library) remove
@@ -146,8 +148,7 @@
 #include <imagehlp.h>       // For ::MakeSureDirectoryPathExists()
 
 #include "vgui_dir_dialog.h"      // Our own header file
-#include <vcl_cstring.h>
-#include <vcl_cctype.h>
+#include <vcl_compiler.h>
 
 
 #ifdef _DEBUG
@@ -219,7 +220,7 @@ void CDlgWnd::OnOpen()
                 return;
             }
             else if (len >= 2 && ss[0] == '\\' && ss[1] == '\\' &&
-                     ( (ss2 = vcl_strchr((const char *)ss+2, '\\')) == NULL || vcl_strchr(ss2+1, '\\') == NULL) )
+                     ( (ss2 = std::strchr((const char *)ss+2, '\\')) == NULL || std::strchr(ss2+1, '\\') == NULL) )
             {
                 AfxMessageBox(ss + _T("\nThis is not a valid folder."));
                 pEdit->SetFocus();
@@ -366,7 +367,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
         int len = ss.GetLength();
 
         // Remove trailing backslash unless root directory or network root
-        if (vcl_strcmp(ss,"\\") != 0 && vcl_strcmp(ss,"\\\\") != 0 && vcl_strcmp((const char *)ss+1,":\\") != 0 &&
+        if (std::strcmp(ss,"\\") != 0 && std::strcmp(ss,"\\\\") != 0 && std::strcmp((const char *)ss+1,":\\") != 0 &&
             len > 0 && ss[len-1] == '\\' )
         {
             ss = ss.Left(--len);
@@ -374,7 +375,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
         if (len == 0 ||
             len == 1 && ss[0] == '\\' ||
-            len >= 2 && ss[0] == '\\' && ss[1] == '\\' && vcl_strchr((const char *)ss+2, '\\') == NULL ||
+            len >= 2 && ss[0] == '\\' && ss[1] == '\\' && std::strchr((const char *)ss+2, '\\') == NULL ||
             len == 2 && ss[1] == ':' ||
             len == 3 && ss[1] == ':' && ss[2] == '\\' )
         {
@@ -512,7 +513,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                 for (ii = 0; ii < strMatch.GetLength(); ++ii)
                 {
                     // Don't change if it contains spaces or lowercase letters
-                    if (vcl_isspace(strMatch[ii]) || vcl_islower(strMatch[ii]))
+                    if (std::isspace(strMatch[ii]) || std::islower(strMatch[ii]))
                         break;
                 }
 
@@ -539,7 +540,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                 {
                     // The user used different case to that of the corresponding character in
                     // the matched directory so change the matched name to be the user's case.
-                    if (vcl_isupper(ss[ss.GetLength()-1]))
+                    if (std::isupper(ss[ss.GetLength()-1]))
                         strMatch.MakeUpper();
                     else
                         strMatch.MakeLower();
@@ -617,7 +618,7 @@ vgui_dir_dialog::vgui_dir_dialog(LPCTSTR initial, LPCTSTR filter, CWnd* pParentW
 #if WINVER >= 0x0600
     : CFileDialog(TRUE, NULL, NULL,
                   OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,
-                  NULL, pParentWnd,0,0), // Set bVistaStyle to FALSE 
+                  NULL, pParentWnd,0,0), // Set bVistaStyle to FALSE
 #else
     : CFileDialog(TRUE, NULL, NULL,
                   OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,

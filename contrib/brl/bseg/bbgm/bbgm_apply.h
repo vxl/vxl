@@ -41,9 +41,9 @@ struct bbgm_apply_no_data
 
     result.set_size(ni,nj,np);
 
-    const vcl_ptrdiff_t planestep = result.planestep();
-    const vcl_ptrdiff_t istep = result.istep();
-    const vcl_ptrdiff_t jstep = result.jstep();
+    const std::ptrdiff_t planestep = result.planestep();
+    const std::ptrdiff_t istep = result.istep();
+    const std::ptrdiff_t jstep = result.jstep();
 
     return_T temp_val;
     typename bbgm_image_of<dist_>::const_iterator itr = dimg.begin();
@@ -87,8 +87,8 @@ struct bbgm_apply_no_data<dist_,functor_,T,true>
       return;
 
     result.set_size(ni,nj,1);
-    const vcl_ptrdiff_t istep = result.istep();
-    const vcl_ptrdiff_t jstep = result.jstep();
+    const std::ptrdiff_t istep = result.istep();
+    const std::ptrdiff_t jstep = result.jstep();
 
     return_T temp_val = return_T(0); // dummy initialisation, to avoid compiler warning; return_T could be bool, though...
     typename bbgm_image_of<dist_>::const_iterator itr = dimg.begin();
@@ -142,12 +142,12 @@ struct bbgm_apply_data
     assert(data.nplanes() == d_np);
 
     result.set_size(ni,nj,r_np);
-    const vcl_ptrdiff_t r_istep = result.istep();
-    const vcl_ptrdiff_t r_jstep = result.jstep();
-    const vcl_ptrdiff_t r_pstep = result.planestep();
-    const vcl_ptrdiff_t d_istep = data.istep();
-    const vcl_ptrdiff_t d_jstep = data.jstep();
-    const vcl_ptrdiff_t d_pstep = data.planestep();
+    const std::ptrdiff_t r_istep = result.istep();
+    const std::ptrdiff_t r_jstep = result.jstep();
+    const std::ptrdiff_t r_pstep = result.planestep();
+    const std::ptrdiff_t d_istep = data.istep();
+    const std::ptrdiff_t d_jstep = data.jstep();
+    const std::ptrdiff_t d_pstep = data.planestep();
 
     return_T temp_val;
     F sample;
@@ -197,11 +197,11 @@ struct bbgm_apply_data<dist_,functor_,dT,rT,true>
     assert(data.nplanes() == d_np);
 
     result.set_size(ni,nj,1);
-    const vcl_ptrdiff_t r_istep = result.istep();
-    const vcl_ptrdiff_t r_jstep = result.jstep();
-    const vcl_ptrdiff_t d_istep = data.istep();
-    const vcl_ptrdiff_t d_jstep = data.jstep();
-    const vcl_ptrdiff_t d_pstep = data.planestep();
+    const std::ptrdiff_t r_istep = result.istep();
+    const std::ptrdiff_t r_jstep = result.jstep();
+    const std::ptrdiff_t d_istep = data.istep();
+    const std::ptrdiff_t d_jstep = data.jstep();
+    const std::ptrdiff_t d_pstep = data.planestep();
 
     return_T temp_val;
     F sample;

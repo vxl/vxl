@@ -38,23 +38,23 @@ inline void vil3d_locally_z_normalise(const vil3d_image_view<T>& input,
 
   // k^half_width = 0.5
   // So k=exp(log(0.5)/half_width)
-  double ki = vcl_exp(vcl_log(0.5)/half_width_i);
-  double kj = vcl_exp(vcl_log(0.5)/half_width_j);
-  double kk = vcl_exp(vcl_log(0.5)/half_width_k);
+  double ki = std::exp(std::log(0.5)/half_width_i);
+  double kj = std::exp(std::log(0.5)/half_width_j);
+  double kk = std::exp(std::log(0.5)/half_width_k);
 
   vil3d_exp_filter(input,smth_im,ki,kj,kk);
   vil3d_math_image_product(input,input,sqr_im);
   vil3d_exp_filter(input,smth_sqr_im,ki,kj,kk);
 
   double min_var=1.0;
-  if (!vcl_numeric_limits<T>::is_integer)
+  if (!std::numeric_limits<T>::is_integer)
   {
     double sum=0, sum_sq=0;
     vil3d_math_sum(sum, input, 0);
     vil3d_math_sum(sum_sq, sqr_im, 0);
     double mean = sum/input.size();
-    min_var = vcl_max( sum_sq/(input.size()) - mean*mean,
-      static_cast<double>(vcl_sqrt(vcl_numeric_limits<T>::epsilon())) );
+    min_var = std::max( sum_sq/(input.size()) - mean*mean,
+      static_cast<double>(std::sqrt(std::numeric_limits<T>::epsilon())) );
   }
 
   vil_convert_round_pixel<double, T> round;
@@ -65,7 +65,7 @@ inline void vil3d_locally_z_normalise(const vil3d_image_view<T>& input,
     {
       double mean = smth_im(i,j,k);
       double var = smth_sqr_im(i,j,k)-mean*mean;
-      double sd = vcl_sqrt(vcl_max(min_var,var));
+      double sd = std::sqrt(std::max(min_var,var));
       double v = (input(i,j,k)-mean)/sd;
 
       round(v, output(i,j,k));

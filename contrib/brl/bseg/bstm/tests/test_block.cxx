@@ -2,6 +2,11 @@
 // \file
 // \author Ali Osman Ulusoy
 // \date 03-Aug-2012
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
@@ -10,16 +15,12 @@
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/bstm_time_block.h>
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 void test_block_id()
 {
-  vcl_vector<bstm_block_id> list;
-  vcl_map<bstm_block_id, vcl_string> bmap;
+  std::vector<bstm_block_id> list;
+  std::map<bstm_block_id, std::string> bmap;
 
   bstm_block_id zero(0,0,0,0);
   bstm_block_id one(0,0,0,1);
@@ -49,10 +50,10 @@ void test_block_id()
   bmap[one] = "one";
   bmap[four] = "four";
   bmap[eight] = "eight";
-  vcl_map<bstm_block_id, vcl_string>::iterator iter;
+  std::map<bstm_block_id, std::string>::iterator iter;
   for (iter = bmap.begin(); iter != bmap.end(); ++iter) {
     bstm_block_id b = (*iter).first;
-      vcl_cout << b <<','<< (*iter).second <<vcl_endl;
+      std::cout << b <<','<< (*iter).second <<std::endl;
   }
 }
 

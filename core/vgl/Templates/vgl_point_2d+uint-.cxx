@@ -6,5 +6,5 @@
 #endif //VCL_VC_DOTNET
 
 // Instantiation of vgl_point_2d<unsigned>
-#include <vgl/vgl_point_2d.txx>
+#include <vgl/vgl_point_2d.hxx>
 VGL_POINT_2D_INSTANTIATE(unsigned);

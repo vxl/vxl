@@ -1,4 +1,8 @@
 // This is mul/clsfy/tests/test_random_forest.cxx
+#include <iostream>
+#include <string>
+#include <numeric>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,10 +10,7 @@
 // \author dac
 // Test construction, IO etc
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_numeric.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_random_forest.h>
@@ -33,7 +34,7 @@
 //: Tests the clsfy_binary_threshold_1d class
 void test_random_forest()
 {
-    vcl_cout << "*******************************************\n"
+    std::cout << "*******************************************\n"
              << " Testing clsfy_random_forest_builder\n"
              << "*******************************************\n";
 
@@ -47,14 +48,14 @@ void test_random_forest()
 
     pdf1d_gaussian pdfx(mux,varx);
     pdf1d_gaussian pdfy(muy,vary);
-    pdf1d_sampler* pdfx_sampler = 0;
-    pdf1d_sampler* pdfy_sampler = 0;
+    pdf1d_sampler* pdfx_sampler = VXL_NULLPTR;
+    pdf1d_sampler* pdfy_sampler = VXL_NULLPTR;
 
     pdf1d_gaussian pdfz(muz,varz);
-    pdf1d_sampler* pdfz_sampler = 0;
+    pdf1d_sampler* pdfz_sampler = VXL_NULLPTR;
 
     pdf1d_gaussian pdferror(0.0,0.02*0.02);
-    pdf1d_sampler* pdferror_sampler = 0;
+    pdf1d_sampler* pdferror_sampler = VXL_NULLPTR;
 
     pdfx_sampler = pdfx.new_sampler();
 
@@ -72,11 +73,11 @@ void test_random_forest()
     pdferror_sampler = pdferror.new_sampler();
 
     const unsigned NPOINTS=500;
-    vcl_vector<vnl_vector<double > > data(NPOINTS);
+    std::vector<vnl_vector<double > > data(NPOINTS);
 
     vnl_vector<double> xerr(1);
     vnl_vector<double> yerr(1);
-    vcl_vector<unsigned > training_outputs(NPOINTS,0);
+    std::vector<unsigned > training_outputs(NPOINTS,0);
     unsigned label=0;
     vnl_vector<double > data1d(NPOINTS);
     for (unsigned i=0; i<NPOINTS; ++i)
@@ -118,18 +119,18 @@ void test_random_forest()
     builder.set_ntrees(10);
     clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
     TEST("Type is binary tree",
-         pBaseClassifier->is_a()==vcl_string("clsfy_random_forest"), true);
+         pBaseClassifier->is_a()==std::string("clsfy_random_forest"), true);
     clsfy_random_forest* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
-    TEST("Can cast to binary tree",pClassifier != 0,true);
+    TEST("Can cast to binary tree",pClassifier != VXL_NULLPTR,true);
 
     builder.build(*pClassifier,
                   training_set_inputs,
                   1,
                   training_outputs);
 
-    vcl_vector<vnl_vector<double > > testData(NPOINTS);
+    std::vector<vnl_vector<double > > testData(NPOINTS);
 
-    vcl_vector<unsigned > test_outputs(NPOINTS,0);
+    std::vector<unsigned > test_outputs(NPOINTS,0);
     const double epsilon=0.05;
     vnl_vector<double > error(1);
     unsigned tp=0;
@@ -193,23 +194,23 @@ void test_random_forest()
     double testTNR=double(tnr)/dtn;
     double testFNR=double(fnr)/dtp;
 
-    vcl_cout<<"True Positive Rate " <<testTPR<<'\n'
+    std::cout<<"True Positive Rate " <<testTPR<<'\n'
             <<"False Positive Rate "<<testFPR<<'\n'
             <<"True Negative Rate " <<testTNR<<'\n'
-            <<"False Negative Rate "<<testFNR<<vcl_endl;
+            <<"False Negative Rate "<<testFNR<<std::endl;
 
     // simple test for binary threshold
     TEST("tpr>0.9", testTPR>0.9, true);
     TEST("fpr<0.1", testFPR<0.1, true);
 
-    vcl_cout<<"======== TESTING I/O ===========\n";
+    std::cout<<"======== TESTING I/O ===========\n";
 
     // add binary loaders
     vsl_add_to_binary_loader(clsfy_random_forest());
     vsl_add_to_binary_loader(clsfy_binary_tree());
     vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
 
-    vcl_string test_path = "test_clsfy_random_forest.bvl.tmp";
+    std::string test_path = "test_clsfy_random_forest.bvl.tmp";
 
     vsl_b_ofstream bfs_out(test_path);
     TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -226,12 +227,12 @@ void test_random_forest()
     bfs_in.close();
 
     TEST("Type is random forest",
-         pBaseClassifierIn->is_a()==vcl_string("clsfy_random_forest"), true);
+         pBaseClassifierIn->is_a()==std::string("clsfy_random_forest"), true);
     clsfy_random_forest* pClassifierIn=dynamic_cast<clsfy_random_forest*>(pBaseClassifierIn);
-    TEST("Can cast to random forest",pClassifierIn != 0,true);
+    TEST("Can cast to random forest",pClassifierIn != VXL_NULLPTR,true);
 
     {
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
+        unsigned tp=std::count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -257,10 +258,10 @@ void test_random_forest()
         double dtp=double(tp);
         double dtn=double(NPOINTS-tp);
 
-        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+        std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
-                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
+                <<"False Negative Rate "<<double(fnr)/dtp<<std::endl;
 
         // simple test for binary threshold
         TEST("tpr>0.9", tpr>0.9*dtp, true);
@@ -269,7 +270,7 @@ void test_random_forest()
         TEST_NEAR("Same FPR as pre-IO ",testFPR, double(fpr)/dtn, 1e-6);
     }
 
-    vcl_cout<<"=========swap pos and neg samples round===========\n";
+    std::cout<<"=========swap pos and neg samples round===========\n";
 
     for (unsigned i=0; i<NPOINTS; ++i)
     {
@@ -295,7 +296,7 @@ void test_random_forest()
 
     {
         const unsigned NPOINTS=500;
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
+        unsigned tp=std::count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -320,21 +321,21 @@ void test_random_forest()
         }
         double dtp=double(tp);
         double dtn=double(NPOINTS-tp);
-        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+        std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
-                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
+                <<"False Negative Rate "<<double(fnr)/dtp<<std::endl;
 
         TEST("tpr>0.9", double(tpr)/dtp>0.9, true);
         TEST("fpr<0.1", double(fpr)/dtn<0.1, true);
     }
 
     {
-        vcl_cout<<"TESTING 3D Data..."<<vcl_endl;
+        std::cout<<"TESTING 3D Data..."<<std::endl;
 
         const unsigned NPOINTS=500;
-        vcl_vector<vnl_vector<double > > data(NPOINTS);
-        vcl_vector<unsigned  > training_outputs(NPOINTS,0);
+        std::vector<vnl_vector<double > > data(NPOINTS);
+        std::vector<unsigned  > training_outputs(NPOINTS,0);
 
         //Generate a 3d Gaussian ellipsoidal distribution on the x,y,z axes.
         //Rotate and add an offset
@@ -360,7 +361,7 @@ void test_random_forest()
         pca_model1.set(mean1,var1);
 
         pdf1d_flat flatDist;
-        pdf1d_sampler* flat_sampler=0;
+        pdf1d_sampler* flat_sampler=VXL_NULLPTR;
         flat_sampler = flatDist.new_sampler();
         vnl_vector<double  > example(3);
 
@@ -407,9 +408,9 @@ void test_random_forest()
             training_outputs[i]=label;
         }
 
-        unsigned ntpos=vcl_count(training_outputs.begin(),training_outputs.end(), 1U);
-        unsigned ntneg=vcl_count(training_outputs.begin(),training_outputs.end(), 0U);
-        vcl_cout<<"TRAINING Number of pos ="<<ntpos<<"\t num neg "<<ntneg<<vcl_endl;
+        unsigned ntpos=std::count(training_outputs.begin(),training_outputs.end(), 1U);
+        unsigned ntneg=std::count(training_outputs.begin(),training_outputs.end(), 0U);
+        std::cout<<"TRAINING Number of pos ="<<ntpos<<"\t num neg "<<ntneg<<std::endl;
 
         mbl_data_array_wrapper<vnl_vector<double> > training_set_inputs(data);
 
@@ -419,18 +420,18 @@ void test_random_forest()
 
         clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
         TEST("Type is random forest",
-             pBaseClassifier->is_a()==vcl_string("clsfy_random_forest"), true);
+             pBaseClassifier->is_a()==std::string("clsfy_random_forest"), true);
         clsfy_random_forest* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
-        TEST("Can cast to random forest",pClassifier != 0,true);
+        TEST("Can cast to random forest",pClassifier != VXL_NULLPTR,true);
 
         builder.build(*pClassifier,
                       training_set_inputs,
                       1,
                       training_outputs);
 
-        vcl_vector<vnl_vector<double > > testData(NPOINTS);
+        std::vector<vnl_vector<double > > testData(NPOINTS);
 
-        vcl_vector<unsigned > test_outputs(NPOINTS,0);
+        std::vector<unsigned > test_outputs(NPOINTS,0);
 //      const double epsilon=0.01;
         vnl_vector<double > error(1);
         unsigned tp=0;
@@ -462,9 +463,9 @@ void test_random_forest()
             test_outputs[i]=label;
         }
 
-        tp=vcl_count(test_outputs.begin(),test_outputs.end(), 1U);
-        unsigned tneg=vcl_count(test_outputs.begin(),test_outputs.end(), 0U);
-        vcl_cout<<"TESTING Number of pos ="<<tp<<"\t num neg "<<tneg<<vcl_endl;
+        tp=std::count(test_outputs.begin(),test_outputs.end(), 1U);
+        unsigned tneg=std::count(test_outputs.begin(),test_outputs.end(), 0U);
+        std::cout<<"TESTING Number of pos ="<<tp<<"\t num neg "<<tneg<<std::endl;
 
         unsigned tpr=0;
         unsigned tnr=0;
@@ -489,7 +490,7 @@ void test_random_forest()
                     ++fnr;
             }
         }
-        vcl_cout<<"tp "<<tp<<" tn"<<vcl_endl;
+        std::cout<<"tp "<<tp<<" tn"<<std::endl;
         double dtp=double(tp);
         double dtn=double(NPOINTS-tp);
         double testTPR=double(tpr)/dtp;
@@ -497,10 +498,10 @@ void test_random_forest()
         double testTNR=double(tnr)/dtn;
         double testFNR=double(fnr)/dtp;
 
-        vcl_cout<<"True Positive Rate " <<testTPR<<'\n'
+        std::cout<<"True Positive Rate " <<testTPR<<'\n'
                 <<"False Positive Rate "<<testFPR<<'\n'
                 <<"True Negative Rate " <<testTNR<<'\n'
-                <<"False Negative Rate "<<testFNR<<vcl_endl;
+                <<"False Negative Rate "<<testFNR<<std::endl;
 
         // simple test for binary threshold
         TEST("tpr>0.9", testTPR>0.9, true);
@@ -508,9 +509,9 @@ void test_random_forest()
     }
 
     {
-        vcl_cout<<"TESTING 5D-Hypersphere Data..."<<vcl_endl;
+        std::cout<<"TESTING 5D-Hypersphere Data..."<<std::endl;
         const unsigned NPOINTS=2000;
-        vcl_vector<vnl_vector<double > > data(NPOINTS);
+        std::vector<vnl_vector<double > > data(NPOINTS);
 
         pdf1d_gaussian pdferror2(0.0,0.02*0.02);
         pdf1d_sampler* pdferror_sampler2 = pdferror2.new_sampler();;
@@ -518,7 +519,7 @@ void test_random_forest()
         vnl_vector<double> xerr(1);
         vnl_vector<double> yerr(1);
         vnl_vector<double> zerr(1);
-        vcl_vector<unsigned > training_outputs(NPOINTS,0);
+        std::vector<unsigned > training_outputs(NPOINTS,0);
         unsigned label=0;
         vnl_vector<double > data1d(NPOINTS);
         for (unsigned i=0; i<NPOINTS; ++i)
@@ -551,10 +552,10 @@ void test_random_forest()
             double rz=z-muz;
             double rxx=xx-mux;
             double ryy=yy-muy;
-            double r=vcl_sqrt(rx*rx+ry*ry+rz*rz+rxx*rxx + ryy*ryy);
+            double r=std::sqrt(rx*rx+ry*ry+rz*rz+rxx*rxx + ryy*ryy);
 
             double err= pdferror_sampler2->sample();
-            if (r+err<0.9*vcl_sqrt(5.0))
+            if (r+err<0.9*std::sqrt(5.0))
                 label=0;
             else
                 label=1;
@@ -567,18 +568,18 @@ void test_random_forest()
         clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
         clsfy_random_forest* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
 
-        vcl_vector<vcl_vector<unsigned> > oobIndices;
+        std::vector<std::vector<unsigned> > oobIndices;
         builder.set_oob_indices(&oobIndices);
         double train_error= builder.build(*pClassifier,
                                           training_set_inputs,
                                           1,
                                           training_outputs);
-        vcl_cout<<"Training error on hypersphere= "<<train_error<<vcl_endl;
+        std::cout<<"Training error on hypersphere= "<<train_error<<std::endl;
 
         {
-            vcl_vector<vnl_vector<double > > testData(NPOINTS);
+            std::vector<vnl_vector<double > > testData(NPOINTS);
 
-            vcl_vector<unsigned > test_outputs(NPOINTS,0);
+            std::vector<unsigned > test_outputs(NPOINTS,0);
 //          const double epsilon=0.02;
             vnl_vector<double > error(1);
             unsigned tp=0;
@@ -612,10 +613,10 @@ void test_random_forest()
                 double rz=z-muz;
                 double rxx=xx-mux;
                 double ryy=yy-muy;
-                double r=vcl_sqrt(rx*rx+ry*ry+rz*rz+rxx*rxx + ryy*ryy);
+                double r=std::sqrt(rx*rx+ry*ry+rz*rz+rxx*rxx + ryy*ryy);
 
                 double err= pdferror_sampler2->sample();
-                if (r+err<0.9*vcl_sqrt(5.0))
+                if (r+err<0.9*std::sqrt(5.0))
                     label=0;
                 else
                     label=1;
@@ -626,7 +627,7 @@ void test_random_forest()
                     ++tp;
             }
 
-            vcl_cout<<"True positives in test = "<<tp<<vcl_endl;
+            std::cout<<"True positives in test = "<<tp<<std::endl;
             unsigned tpr=0;
             unsigned tnr=0;
             unsigned fpr=0;
@@ -656,10 +657,10 @@ void test_random_forest()
             double testTNR=double(tnr)/dtn;
             double testFNR=double(fnr)/dtp;
 
-            vcl_cout<<"True Positive Rate " <<testTPR<<'\n'
+            std::cout<<"True Positive Rate " <<testTPR<<'\n'
                     <<"False Positive Rate "<<testFPR<<'\n'
                     <<"True Negative Rate " <<testTNR<<'\n'
-                    <<"False Negative Rate "<<testFNR<<vcl_endl;
+                    <<"False Negative Rate "<<testFNR<<std::endl;
 
             // simple test for binary threshold
             TEST("tpr>0.9", testTPR>0.9, true);
@@ -667,9 +668,9 @@ void test_random_forest()
         }
         {
             //Now repeat with out of bag estimates
-            tp=vcl_count(training_outputs.begin(),training_outputs.end(), 1U);
+            tp=std::count(training_outputs.begin(),training_outputs.end(), 1U);
 
-            vcl_cout<<"True positives in training = "<<tp<<vcl_endl;
+            std::cout<<"True positives in training = "<<tp<<std::endl;
             unsigned tpr=0;
             unsigned tnr=0;
             unsigned fpr=0;
@@ -699,10 +700,10 @@ void test_random_forest()
             double testTNR=double(tnr)/dtn;
             double testFNR=double(fnr)/dtp;
 
-            vcl_cout<<"OOB True Positive Rate " <<testTPR<<'\n'
+            std::cout<<"OOB True Positive Rate " <<testTPR<<'\n'
                     <<"OOB False Positive Rate "<<testFPR<<'\n'
                     <<"OOB True Negative Rate " <<testTNR<<'\n'
-                    <<"OOB False Negative Rate "<<testFNR<<vcl_endl;
+                    <<"OOB False Negative Rate "<<testFNR<<std::endl;
 
             // simple test for binary threshold
             TEST("tpr>0.9", testTPR>0.9, true);
@@ -717,9 +718,9 @@ void test_random_forest()
                                           neg_samples, neg_wts
                                          );
 
-    b_thresh_clsfr2->print_summary(vcl_cout);
+    b_thresh_clsfr2->print_summary(std::cout);
 
-    vcl_cout<<"error2= "<<error2<<vcl_endl;
+    std::cout<<"error2= "<<error2<<std::endl;
 
     TEST_NEAR("error1 ~= error2", error1, error2, 0.001);
 
@@ -733,19 +734,19 @@ void test_random_forest()
 
     delete b_thresh_clsfr2;
 
-    vcl_cout<<"Applied to test set (with +ve and -ve other way round:\n";
+    std::cout<<"Applied to test set (with +ve and -ve other way round:\n";
     tpr=(tp*1.0)/n_neg, fpr= (fp*1.0)/n_pos;
-    vcl_cout<<"True positives= "<<tpr<<'\n'
-            <<"False positives= "<<fpr<<vcl_endl;
+    std::cout<<"True positives= "<<tpr<<'\n'
+            <<"False positives= "<<fpr<<std::endl;
 
     te= ((n_neg-tp+fp)*1.0)/(n_pos+n_neg);
-    vcl_cout<<"te= "<<te<<vcl_endl;
+    std::cout<<"te= "<<te<<std::endl;
 
     // simple test for binary threshold
     TEST( "tpr>0.7", tpr>0.7, true );
     TEST( "fpr<0.3", fpr<0.3, true );
 
-    vcl_cout << "***********************************\n"
+    std::cout << "***********************************\n"
              << " Testing clsfy_binary_threshold_1d\n"
              << "***********************************\n";
 
@@ -767,11 +768,11 @@ void test_random_forest()
 
     // Test loading clsfy_binary_threshold_1d by base class pointer
 
-    vcl_cout<<"======== TESTING I/O ===========\n";
+    std::cout<<"======== TESTING I/O ===========\n";
 
     // add binary loaders
     vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
-    vcl_string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
+    std::string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
 
     vsl_b_ofstream bfs_out(test_path);
     TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -789,20 +790,20 @@ void test_random_forest()
     vpl_unlink(test_path.c_str());
 #endif
 
-    vcl_cout<<"Saved :\n"
+    std::cout<<"Saved :\n"
             << *b_thresh_clsfr << '\n'
             <<"Loaded:\n"
-            << classifier_in << vcl_endl;
+            << classifier_in << std::endl;
 
     TEST("saved classifier = loaded classifier",
          b_thresh_clsfr ->params(), classifier_in->params());
 #endif // 85 lines commented out
 
-    vcl_cout<<"Deleting classifiers"<<vcl_endl;
+    std::cout<<"Deleting classifiers"<<std::endl;
     delete pClassifier;
-    vcl_cout<<"Deleting the second classifier"<<vcl_endl;
+    std::cout<<"Deleting the second classifier"<<std::endl;
     delete pClassifier2;
-    vcl_cout<<"have deleted classifiers"<<vcl_endl;
+    std::cout<<"have deleted classifiers"<<std::endl;
 
     delete pClassifierIn;
     vsl_delete_all_loaders();

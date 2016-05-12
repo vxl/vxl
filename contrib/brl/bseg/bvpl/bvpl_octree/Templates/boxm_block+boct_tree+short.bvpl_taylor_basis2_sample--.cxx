@@ -1,8 +1,8 @@
 #include <boct/boct_tree.h>
-#include <boxm/boxm_block.txx>
-#include <boxm/boxm_scene.txx>
+#include <boxm/boxm_block.hxx>
+#include <boxm/boxm_scene.hxx>
 #include <bvpl/bvpl_octree/sample/bvpl_taylor_basis_sample.h>
-#include <vbl/vbl_array_3d.txx>
+#include <vbl/vbl_array_3d.hxx>
 
 typedef boct_tree<short, bvpl_taylor_basis2_sample> tree_type;
 

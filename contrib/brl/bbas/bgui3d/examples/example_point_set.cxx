@@ -1,4 +1,6 @@
-#include <vcl_cstdio.h>
+#include <iostream>
+#include <cstdio>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h> // for pi_over_2
 
@@ -342,11 +344,11 @@ void buildScene(SoGroup *root)
 
 void read_raw_data_file()
 {
-  vcl_FILE *fp;
-  fp = vcl_fopen("E:\\MyDocs\\Temp\\filter_x=2.hdr", "r");
-  vcl_fscanf(fp, "%d %d %d\n", &m_w, &m_h, &m_d);
-  vcl_printf("width: %d\nheight: %d\ndepth: %d\n", m_w, m_h, m_d);
-  vcl_fclose(fp);
+  std::FILE *fp;
+  fp = std::fopen("E:\\MyDocs\\Temp\\filter_x=2.hdr", "r");
+  std::fscanf(fp, "%d %d %d\n", &m_w, &m_h, &m_d);
+  std::printf("width: %d\nheight: %d\ndepth: %d\n", m_w, m_h, m_d);
+  std::fclose(fp);
   data = (int ***)malloc(sizeof(int)*m_d);
   for (int k = 0; k < m_d; k++)
     data[k] = (int **)malloc(sizeof(int)*m_h);
@@ -356,18 +358,18 @@ void read_raw_data_file()
       data[k][j] = (int *)malloc(sizeof(int)*m_w);}}
 
   int x;
-  fp = vcl_fopen("E:\\MyDocs\\Temp\\filter_x=2.txt", "r");
+  fp = std::fopen("E:\\MyDocs\\Temp\\filter_x=2.txt", "r");
   for (int k = 0; k < m_d; k++)
   {
     for (int j = 0; j < m_h; j++)
     {
       for (int i = 0; i < m_w; i++) {
-        vcl_fscanf(fp, "%d", &x);
+        std::fscanf(fp, "%d", &x);
         data[k][j][i] = x;
       }
     }
   }
-  vcl_fclose(fp);
+  std::fclose(fp);
 }
 
 int main(int argc, char** argv)

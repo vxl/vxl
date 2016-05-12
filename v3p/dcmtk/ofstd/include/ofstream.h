@@ -27,19 +27,19 @@
 #ifndef __OFSTREAM_H
 #define __OFSTREAM_H
 
+#include <iostream>
+#include <ios>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
 #include "osconfig.h"
 
 #ifdef USE_STD_CXX_INCLUDES
 
-#include <iostream>
 #ifdef HAVE_IOS
-#include <ios>
 #endif
-#include <fstream>
-#include <iomanip>
 // For standard STREAMS library: preference for standard stringstream
 #if defined(HAVE_SSTREAM)
-#include <sstream>
 #define USE_STRINGSTREAM
 #elif defined(HAVE_STRSTREAM)
 #include <strstream>

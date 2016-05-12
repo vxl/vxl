@@ -10,14 +10,14 @@
 #include <msm/msm_curve.h>
 
 //: Draws current shape instance to an eps file
-//  Uses writer.draw_polygon() function to write 
+//  Uses writer.draw_polygon() function to write
 //  given curves to file in current colour, linewidth etc.
 void msm_draw_shape_to_eps(mbl_eps_writer& writer,
                            const msm_points& points,
                            const msm_curves& curves);
 
 //: Draws points to an eps file with given radius
-//  Uses writer.draw_disk() or .draw_circle() function to write 
+//  Uses writer.draw_disk() or .draw_circle() function to write
 //  points in current colour.
 void msm_draw_points_to_eps(mbl_eps_writer& writer,
                            const msm_points& points,

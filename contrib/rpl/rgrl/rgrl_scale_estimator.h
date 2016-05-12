@@ -94,10 +94,10 @@ class rgrl_scale_estimator
     public rgrl_scale_estimator_wgted
 {
  public:
-  static const vcl_type_info& type_id()
+  static const std::type_info& type_id()
   { return typeid(rgrl_scale_estimator); }
 
-  virtual bool is_type( const vcl_type_info& type ) const
+  virtual bool is_type( const std::type_info& type ) const
   { return (typeid(rgrl_scale_estimator) == type)!=0 ||
       this->rgrl_scale_estimator_unwgted::is_type(type) ||
       this->rgrl_scale_estimator_wgted::is_type(type);

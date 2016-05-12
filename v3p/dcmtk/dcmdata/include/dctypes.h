@@ -34,8 +34,8 @@
 #include "ofstdinc.h"
 
 
-typedef Uint8		    BYTE;
-typedef Sint8		    SBYTE;
+typedef Uint8                    BYTE;
+typedef Sint8                    SBYTE;
 
 
 /*

@@ -3,32 +3,32 @@
 /*
  * Copyright (c) 2012, Frank Warmerdam <warmerdam@pobox.com>
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
 /*
  * TIFF Library
  *
- * The objective of this test suite is to test the JPEGRawDecode() 
+ * The objective of this test suite is to test the JPEGRawDecode()
  * interface via TIFReadEncodedTile().  This function with YCbCr subsampling
- * is a frequent source of bugs. 
+ * is a frequent source of bugs.
  */
 
 #include "tif_config.h"
@@ -36,9 +36,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_UNISTD_H 
-# include <unistd.h> 
-#endif 
+#ifdef HAVE_UNISTD_H
+# include <unistd.h>
+#endif
 
 #include "tiffio.h"
 
@@ -56,16 +56,16 @@ static int check_cluster( int cluster, unsigned char *buffer, unsigned char *exp
     }
 
     fprintf( stderr, "Cluster %d did not match expected results.\n", cluster );
-    fprintf( stderr, 
+    fprintf( stderr,
          "Expect: %3d %3d   %3d   %3d\n"
-         "        %3d %3d\n", 
+         "        %3d %3d\n",
          expected_cluster[0], expected_cluster[1],
          expected_cluster[4], expected_cluster[5],
          expected_cluster[2], expected_cluster[3] );
-    fprintf( stderr, 
+    fprintf( stderr,
          "   Got: %3d %3d   %3d   %3d\n"
-         "        %3d %3d\n", 
-         target[0], target[1], 
+         "        %3d %3d\n",
+         target[0], target[1],
          target[4], target[5],
          target[2], target[3] );
     return 1;
@@ -73,7 +73,7 @@ static int check_cluster( int cluster, unsigned char *buffer, unsigned char *exp
 
 static int check_rgb_pixel( int pixel, int red, int green, int blue, unsigned char *buffer ) {
     unsigned char *rgb = buffer + 3 * pixel;
-    
+
     if( rgb[0] == red && rgb[1] == green && rgb[2] == blue ) {
         return 0;
     }
@@ -104,7 +104,7 @@ static int check_rgba_pixel( int pixel, int red, int green, int blue, int alpha,
 int
 main(int argc, char **argv)
 {
-    TIFF		*tif;
+    TIFF                *tif;
     static const char *srcfilerel = "images/quad-tile.jpg.tiff";
     char *srcdir = NULL;
     char srcfile[1024];
@@ -121,7 +121,7 @@ main(int argc, char **argv)
     if ((srcdir = getenv("srcdir")) == NULL) {
         if( argc >= 2 )
             srcdir = argv[1];
-        else 
+        else
             srcdir = ".";
     }
     if ((strlen(srcdir) + 1 + strlen(srcfilerel)) >= sizeof(srcfile)) {
@@ -160,8 +160,8 @@ main(int argc, char **argv)
      */
     szout = TIFFReadEncodedTile(tif,9,buffer,sz);
     if (szout != sz) {
-        fprintf( stderr, 
-             "Did not get expected result code from TIFFReadEncodedTile()(%d instead of %d)\n", 
+        fprintf( stderr,
+             "Did not get expected result code from TIFFReadEncodedTile()(%d instead of %d)\n",
              (int) szout, (int) sz );
         return 1;
     }
@@ -188,8 +188,8 @@ main(int argc, char **argv)
 
     szout = TIFFReadEncodedTile(tif,9,buffer,sz);
     if (szout != sz) {
-        fprintf( stderr, 
-             "Did not get expected result code from TIFFReadEncodedTile()(%d instead of %d)\n", 
+        fprintf( stderr,
+             "Did not get expected result code from TIFFReadEncodedTile()(%d instead of %d)\n",
              (int) szout, (int) sz );
         return 1;
     }
@@ -212,10 +212,10 @@ main(int argc, char **argv)
      * Reopen and test reading using the RGBA interface.
      */
     tif = TIFFOpen(srcfile,"r");
-    
+
     sz = 128 * 128 * sizeof(uint32);
     rgba_buffer = (uint32 *) malloc(sz);
-    
+
     if (!TIFFReadRGBATile( tif, 1*128, 2*128, rgba_buffer )) {
         fprintf( stderr, "TIFFReadRGBATile() returned failure code.\n" );
         return 1;
@@ -243,7 +243,7 @@ main(int argc, char **argv)
     if (pixel_status) {
         exit(1);
     }
-    
+
     exit( 0 );
 }
 

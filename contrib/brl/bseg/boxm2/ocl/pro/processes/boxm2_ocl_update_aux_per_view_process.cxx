@@ -6,10 +6,12 @@
 // \author Vishal Jain
 // \date Mar 25, 2011
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -38,11 +40,11 @@ namespace boxm2_ocl_update_aux_per_view_process_globals
     CONVERT_AUX_INT_FLOAT     = 1
   };
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -60,7 +62,7 @@ namespace boxm2_ocl_update_aux_per_view_process_globals
 
     //push back cast_ray_bit
     bocl_kernel* aux_len_int_vis = new bocl_kernel();
-    vcl_string aux_opt = opts + " -D AUX_LEN_INT_VIS -D STEP_CELL=step_cell_aux_len_int_vis(aux_args,data_ptr,llid,d) ";
+    std::string aux_opt = opts + " -D AUX_LEN_INT_VIS -D STEP_CELL=step_cell_aux_len_int_vis(aux_args,data_ptr,llid,d) ";
     aux_len_int_vis->create_kernel(&device->context(),device->device_id(), src_paths, "aux_len_int_vis_main", aux_opt, "batch_update::aux_len_int_vis_main");
     vec_kernels.push_back(aux_len_int_vis);
 
@@ -71,7 +73,7 @@ namespace boxm2_ocl_update_aux_per_view_process_globals
   }
 
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_update_aux_per_view_process_cons(bprb_func_process& pro)
@@ -79,7 +81,7 @@ bool boxm2_ocl_update_aux_per_view_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_aux_per_view_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -90,11 +92,11 @@ bool boxm2_ocl_update_aux_per_view_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the 6th input is not set
-  brdb_value_sptr idx5 = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx5 = new brdb_value_t<std::string>("");
   pro.set_input(5, idx5);
   // in case the 7th input is not set
   brdb_value_sptr idx6 = new brdb_value_t<vil_image_view_base_sptr>();
@@ -105,11 +107,11 @@ bool boxm2_ocl_update_aux_per_view_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_aux_per_view_process_globals;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -121,7 +123,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string suffix                     = pro.get_input<vcl_string>(i++);
+  std::string suffix                     = pro.get_input<std::string>(i++);
   vil_image_view_base_sptr mask_base    = pro.get_input<vil_image_view_base_sptr>(i++);
 
   vil_image_view<float> mask(img->ni(),img->nj());
@@ -134,7 +136,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       vil_convert_stretch_range_limited(*mask_float,mask, 0.0f, 1.0f, 0.0f, 1.0f);
     }
     else {
-      vcl_cerr << "ERROR: unknown mask pixel type\n";
+      std::cerr << "ERROR: unknown mask pixel type\n";
       return false;
     }
   }
@@ -144,11 +146,11 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   }
 
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   bool foundDataType = false;
-  vcl_string data_type,num_obs_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type,num_obs_type,options;
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -173,7 +175,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_UPDATE_AUX_PER_VIEW_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OCL_UPDATE_AUX_PER_VIEW_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
@@ -182,12 +184,12 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
   // compile the kernel if not already compiled
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,"");
     kernels[identifier]=ks;
   }
@@ -203,9 +205,9 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
   //set generic cam
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
-  vcl_cout << "allocating ray_o_buff: ni = " << cl_ni << ", nj = " << cl_nj << "  size = " << cl_ni*cl_nj*sizeof(cl_float4) << vcl_endl;
+  std::cout << "allocating ray_o_buff: ni = " << cl_ni << ", nj = " << cl_nj << "  size = " << cl_ni*cl_nj*sizeof(cl_float4) << std::endl;
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4) , ray_origins,"ray_origins buffer");
-  vcl_cout << "allocating ray_d_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  std::cout << "allocating ray_d_buff: ni = " << cl_ni << ", nj = " << cl_nj << std::endl;
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_directions,"ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
@@ -226,15 +228,15 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
       }
       ++count;
     }
-  vcl_cout << "allocating input_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  std::cout << "allocating input_buff: ni = " << cl_ni << ", nj = " << cl_nj << std::endl;
   bocl_mem_sptr in_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),input_buff,"input image buffer");
   in_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  vcl_cout << "allocating vis_buff: ni = " << cl_ni << ", nj = " << cl_nj << vcl_endl;
+  std::cout << "allocating vis_buff: ni = " << cl_ni << ", nj = " << cl_nj << std::endl;
   bocl_mem_sptr vis_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  vcl_cout << "Done allocating images" << vcl_endl;
+  std::cout << "Done allocating images" << std::endl;
 
   // Image Dimensions
   int img_dim_buff[4];
@@ -259,15 +261,15 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
 
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
 
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     //write the image values to the buffer
     vul_timer transfer;
     bocl_mem* blk       = opencl_cache->get_block(scene,*id);
-    vcl_cout<<(*id)<<' '<<opencl_cache->bytes_in_cache()<<vcl_endl;
+    std::cout<<(*id)<<' '<<opencl_cache->bytes_in_cache()<<std::endl;
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
@@ -364,7 +366,7 @@ bool boxm2_ocl_update_aux_per_view_process(bprb_func_process& pro)
     opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(suffix), true);
   }
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(in_image.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());

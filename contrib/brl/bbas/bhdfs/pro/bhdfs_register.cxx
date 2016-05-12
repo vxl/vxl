@@ -15,7 +15,7 @@ void bhdfs_register::register_datatype()
 
 void bhdfs_register::register_process()
 {
-  vcl_cout << "registering bhdfs!\n";
+  std::cout << "registering bhdfs!\n";
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bhdfs_create_fs_manager_process, "bhdfsCreateFSManagerProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bhdfs_fs_create_dir_process, "bhdfsCreateDirProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bhdfs_load_image_view_process, "bhdfsLoadImageViewProcess");

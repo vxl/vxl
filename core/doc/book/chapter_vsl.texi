@@ -25,7 +25,6 @@ combinations, but probably also works on most other platform/compiler combinatio
 @enumerate
 @item  Intel - Linux - gcc-2.95 and gcc-3.0
 @item  Intel - WindowsNT - vc++
-@item  SGI - MIPS - MipsPRO CC
 @item  Sun - Solaris - gcc-2.95
 @item  DEC alpha - OSF - gcc-2.95 and gcc 3.0 (64 bit!)
 @end enumerate
@@ -50,9 +49,9 @@ platform uses any of the following, then it will probably not work (as presently
 To save an object to a file, simply do the following:
 @example
   vxl_myclass my_object;
-  
+
   // Fill my_object
-  
+
   vsl_b_ofstream bfs("my_object.bvl");
   if (!bfs)
   @{
@@ -69,7 +68,7 @@ To load/restore the object from a file:
 
 @example
   vxl_myclass my_new_object;
-  
+
   vsl_b_ifstream bfs("my_object.bvl");
   if (!bfs)
   @{
@@ -104,7 +103,7 @@ Or for simplicity we provide the utility functions which would allow you to writ
 @example
   #include <vsl/vsl_quick_file.h>
   vxl_myclass my_object,my_new_object;
-  
+
   vsl_quick_file_save("my_object.bvl",my_object);
   vsl_quick_file_load("my_object.bvl",my_new_object);
 @end example
@@ -117,10 +116,10 @@ One can use exactly the same approach to save a set of objects
 @example
   vxl_myclass my_object;
   vxl_my_other_class my_other_object;
-  
+
   // Fill objects
   // ...
-  
+
   vsl_b_ofstream bfs("my_object.bvl");
   if (!bfs)
   @{
@@ -156,9 +155,9 @@ To save an object by baseclass:
 
 @example
   my_derived d;
-  
+
   my_base *b = &d;
-  
+
   vsl_b_ofstream bfs("data.bvl");
   vsl_b_write(bfs,b);
   ...
@@ -167,13 +166,13 @@ To save an object by baseclass:
 To restore an object:
 @example
   // Make application aware of possible classes that it might see in the file
-  
+
   vsl_add_to_binary_loader(my_derived());
   vsl_add_to_binary_loader(my_derived2());
   ...
-  
+
   my_base *b = 0;
-  
+
   vsl_b_ifstream bfs("data.bvl");
   vsl_b_read(bfs,b);
   // b now points to the correct class which has been created
@@ -223,7 +222,7 @@ An example template file, is shown below. It enables saving of a 2d array of "@c
 
 @example
   // This is my_module/hjk/Templates/vbl_array_2d_io+hjk_model~-.cxx
-  #include <vbl/io/vbl_io_array_2d.txx>
+  #include <vbl/io/vbl_io_array_2d.hxx>
   #include <hjk/hjk_model.h>
   VBL_IO_ARRAY_2D_INSTANTIATE(hjk_model);
 @end example
@@ -236,7 +235,7 @@ is shown below.
 
 @example
   // file = my_module/hjk/Templates/vsl_vector_io+vgl_point_2d~-.cxx
-  #include <vsl/vsl_vector_io.txx>
+  #include <vsl/vsl_vector_io.hxx>
   #include <vgl/io/vgl_io_point_2d.h>
   VSL_VECTOR_IO_INSTANTIATE(vgl_point_2d<double>);
 @end example
@@ -310,7 +309,7 @@ Example of use in class output:
    public:
     void print(vcl_ostream& os) const @{ os<<vsl_indent(os)<<"Fred's data"; @}
   @};
-  
+
   vcl_ostream& operator<<(vcl_ostream& os, Fred const& fred)
   @{
     os<<"Fred: "<<vcl_endl;
@@ -319,7 +318,7 @@ Example of use in class output:
     vsl_indent_dec(os);
     return os;
   @}
-  
+
   class Jim
   @{
    private:
@@ -331,7 +330,7 @@ Example of use in class output:
            vsl_indent()<<"Jim's other data";
     @}
   @};
-  
+
   vcl_ostream& operator<<(vcl_ostream& os, Jim const& jim)
   @{
     os<<"Jim: "<<vcl_endl;
@@ -340,7 +339,7 @@ Example of use in class output:
     vsl_indent_dec(os);
     return os;
   @}
-  
+
   main()
   @{
     Jim jim;

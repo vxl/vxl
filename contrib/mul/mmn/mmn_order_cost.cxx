@@ -3,8 +3,10 @@
 // \brief Functions to re-arrange cost data to match index rank
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include "mmn_order_cost.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: (i0,i1,i2) gives ordering of v0,v1,v2
 //  Each i is {0,1,2}, indicating rank of equivalent v
@@ -52,9 +54,9 @@ vil_image_view<double> mmn_order_cost(const vil_image_view<double>& c,
 {
   unsigned i1,i2,i3;
   mmn_get_rank(v1,v2,v3, i1,i2,i3);
-  vcl_vector<unsigned> n(3);
+  std::vector<unsigned> n(3);
   n[0]=c.ni(); n[1]=c.nj(); n[2]=c.nplanes();
-  vcl_vector<vcl_ptrdiff_t> step(3);
+  std::vector<std::ptrdiff_t> step(3);
   step[0]=c.istep(); step[1]=c.jstep(); step[2]=c.planestep();
 
   return vil_image_view<double>(c.top_left_ptr(),
@@ -72,9 +74,9 @@ vil_image_view<double> mmn_unorder_cost(const vil_image_view<double>& c,
 {
   unsigned i1,i2,i3;
   mmn_get_order(v1,v2,v3, i1,i2,i3);
-  vcl_vector<unsigned> n(3);
+  std::vector<unsigned> n(3);
   n[0]=c.ni(); n[1]=c.nj(); n[2]=c.nplanes();
-  vcl_vector<vcl_ptrdiff_t> step(3);
+  std::vector<std::ptrdiff_t> step(3);
   step[0]=c.istep(); step[1]=c.jstep(); step[2]=c.planestep();
 
   return vil_image_view<double>(c.top_left_ptr(),

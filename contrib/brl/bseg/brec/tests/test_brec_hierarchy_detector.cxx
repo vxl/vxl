@@ -1,7 +1,8 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <brec/brec_part_base.h>
 #include <brec/brec_part_base_sptr.h>
@@ -52,18 +53,18 @@ static void test_brec_hierarchy_detector()
   vgl_box_2d<float> bbc;
   vgl_point_2d<float> pb0c(0.25f, 0.25f), pb1c(0.75f, 0.75f);
   bbc.add(pb0c); bbc.add(pb1c);
-  vcl_vector<brec_part_instance_sptr> foundc;
+  std::vector<brec_part_instance_sptr> foundc;
   trc.get(bbc, foundc);
 
   TEST("test region search",foundc[0] , p3i);
   //test iterator
-  vcl_cout << "Traversing point_box rtree, num nodes = "<< trc.nodes()<< '\n';
+  std::cout << "Traversing point_box rtree, num nodes = "<< trc.nodes()<< '\n';
 
-  vcl_string file = "normalized0_cropped.png";
-  //vcl_string file = "normalized0_cropped_rot_30.tif";
-  //vcl_string file = "digits_small.png";
-  //vcl_string file = "normalized1.png";
-  //vcl_string file = "normalized1_crop2.png";
+  std::string file = "normalized0_cropped.png";
+  //std::string file = "normalized0_cropped_rot_30.tif";
+  //std::string file = "digits_small.png";
+  //std::string file = "normalized1.png";
+  //std::string file = "normalized1_crop2.png";
 
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
   TEST("test load img", !img, false);
@@ -73,22 +74,22 @@ static void test_brec_hierarchy_detector()
 
   unsigned ni = img->ni(); unsigned nj = img->nj();
 
-  vcl_cout << "image ni: " << ni << " nj: " << nj << vcl_endl;
+  std::cout << "image ni: " << ni << " nj: " << nj << std::endl;
 
   //brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_detector_roi1_2();
   //brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_eight_detector();
   brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_detector_roi1_0();
-  vcl_ofstream os("roi1_0_detector.xml");
+  std::ofstream os("roi1_0_detector.xml");
   h->write_xml(os);
   os.close();
 
   brec_part_hierarchy_sptr h_dummy = new brec_part_hierarchy();
-  vcl_ifstream is("roi1_0_detector.xml");
+  std::ifstream is("roi1_0_detector.xml");
   bool read_xml_fine = h_dummy->read_xml(is);
   TEST("test reading from xml", read_xml_fine, true);
   is.close();
   TEST("test reading from xml", h_dummy->dummy_primitive_instances_.size(), h->dummy_primitive_instances_.size());
-  vcl_ofstream os2("roi1_0_detector_test.xml");
+  std::ofstream os2("roi1_0_detector_test.xml");
   h_dummy->write_xml(os2);
   os2.close();
 
@@ -96,8 +97,8 @@ static void test_brec_hierarchy_detector()
   //hd.detect(img, 90.0f);
   hd.detect(img);
 
-  vcl_vector<brec_part_instance_sptr> parts_prims = hd.get_parts(0);
-  vcl_cout << "\t extracted " << parts_prims.size() << " primitives\n";
+  std::vector<brec_part_instance_sptr> parts_prims = hd.get_parts(0);
+  std::cout << "\t extracted " << parts_prims.size() << " primitives\n";
 
   // test vgl_rtree_point_box_2d on parts_prims
   typedef vgl_rtree_point_box_2d<float> C_; // the helper class
@@ -116,7 +117,7 @@ static void test_brec_hierarchy_detector()
   bool p0_in = tr_vxl.contains(p0);
   TEST("test contains", p0_in, true);
 
-  vcl_cout << "test use of rtree\n";
+  std::cout << "test use of rtree\n";
   Rtree_type* tr = hd.get_tree(0); // the rtree
   p1_in = tr->contains(parts_prims[0]);
   TEST("test contains", p1_in, true);
@@ -128,11 +129,11 @@ static void test_brec_hierarchy_detector()
   vgl_box_2d<float> bb;
   vgl_point_2d<float> pb0(parts_prims[0]->x_, parts_prims[0]->y_), pb1(parts_prims[1]->x_, parts_prims[1]->y_);
   bb.add(pb0); bb.add(pb1);
-  vcl_vector<brec_part_instance_sptr> found;
+  std::vector<brec_part_instance_sptr> found;
   tr->get(bb, found);
   unsigned n = found.size();
   //for (unsigned i = 0; i<n; ++i)
-  //  vcl_cout << "point(s) in region " << found[i] << '\n';;
+  //  std::cout << "point(s) in region " << found[i] << '\n';;
   //TEST("test region search", n, 2);
   if (n>=2) {
     TEST("test region search",found[0] , parts_prims[0]);
@@ -147,7 +148,7 @@ static void test_brec_hierarchy_detector()
     }
   }
 
-  vcl_cout << " part found at id: " << ii << vcl_endl;
+  std::cout << " part found at id: " << ii << std::endl;
 
   p1_in = tr->contains(parts_prims[ii]);
   TEST("test a specific part", p1_in, true);
@@ -164,19 +165,19 @@ static void test_brec_hierarchy_detector()
   //tr->get(bb2, found);
   //tr->print();
 
-  vcl_vector<vgl_point_2d<float> > found2;
+  std::vector<vgl_point_2d<float> > found2;
   tr_vxl.get(bb2, found2);
-  vcl_cout << "-----found: " << found2.size() << " points-----\n";
+  std::cout << "-----found: " << found2.size() << " points-----\n";
 
   unsigned highest = h->highest_layer_id();
-  vcl_vector<brec_part_instance_sptr> parts_upper_most = hd.get_parts(highest);
-  vcl_cout << "\t extracted " << parts_upper_most.size() << " parts from highest layer: " << highest << vcl_endl;
+  std::vector<brec_part_instance_sptr> parts_upper_most = hd.get_parts(highest);
+  std::cout << "\t extracted " << parts_upper_most.size() << " parts from highest layer: " << highest << std::endl;
 
   vil_image_view<float> output_map_float(ni, nj);
   brec_part_hierarchy::generate_output_map(parts_upper_most, output_map_float);
   float min, max;
   vil_math_value_range(output_map_float, min, max);
-  vcl_cout << "\toutput map float value range, min: " << min << " max: " << max << vcl_endl;
+  std::cout << "\toutput map float value range, min: " << min << " max: " << max << std::endl;
 
   vil_image_view<vxl_byte> output_map_byte(ni, nj);
   vil_convert_stretch_range_limited(output_map_float, output_map_byte, 0.0f, 1.0f);
@@ -190,17 +191,17 @@ static void test_brec_hierarchy_detector()
   //test rotation with a quaternion
   //vnl_float_2 v = pp->direction_vector(); // get orientation vector of central part: pi
   vnl_float_2 v = parts_prims[0]->direction_vector();
-  vcl_cout << " parts prims theta: " << parts_prims[0]->cast_to_gaussian()->theta_ << vcl_endl
-           << " direction vector 0: " << v[0] << " 1: " << v[1] << vcl_endl;
+  std::cout << " parts prims theta: " << parts_prims[0]->cast_to_gaussian()->theta_ << std::endl
+           << " direction vector 0: " << v[0] << " 1: " << v[1] << std::endl;
 
   // define a rotation about z axis (in the image plane)
   vnl_quaternion<float> q(0.0f, 0.0f, float(vnl_math::pi_over_2));
 
   vnl_float_3 v3d(v[0], v[1], 0.0f);
   vnl_float_3 out = q.rotate(v3d);
-  vcl_cout << " direction vector after rotation by 90 degrees 0: " << out[0] << " 1: " << out[1] << " 2: " << out[2] << vcl_endl;
+  std::cout << " direction vector after rotation by 90 degrees 0: " << out[0] << " 1: " << out[1] << " 2: " << out[2] << std::endl;
   vnl_float_3 out_dist = out*5.0f;
-  vcl_cout << " direction vector after scaling by 5: " << out_dist[0] << " 1: " << out_dist[1] << vcl_endl;
+  std::cout << " direction vector after scaling by 5: " << out_dist[0] << " 1: " << out_dist[1] << std::endl;
 
   // test orientation detection using cross_product
   vnl_vector_fixed<float, 2> vv(0.7f, -0.7f);

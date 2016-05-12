@@ -1,3 +1,4 @@
-#include <vcl_string.h>
-#include <vsl/vsl_vector_io.txx>
-VSL_VECTOR_IO_INSTANTIATE(vcl_string);
+#include <string>
+#include <vcl_compiler.h>
+#include <vsl/vsl_vector_io.hxx>
+VSL_VECTOR_IO_INSTANTIATE(std::string);

@@ -5,9 +5,10 @@
 // \brief Exceptions thrown by vil, and a mechanism for turning them off.
 // \author Ian Scott.
 
-#include <vcl_string.h>
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <cstdlib>
+#include <iostream>
+#include <vcl_compiler.h>
 #if VCL_HAS_EXCEPTIONS
 # include <vcl_stdexcept.h>
 #endif
@@ -23,8 +24,8 @@ void vil_exception_error(T exception)
 #if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
   throw exception;
 #else
-  vcl_cerr << "\nERROR: " << exception.what() << vcl_endl;
-  vcl_abort();
+  std::cerr << "\nERROR: " << exception.what() << std::endl;
+  std::abort();
 #endif
 }
 
@@ -37,23 +38,23 @@ void vil_exception_warning(T exception)
 #if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
   throw exception;
 #else
-  vcl_cerr << "\nWARNING: " << exception.what() << vcl_endl;
+  std::cerr << "\nWARNING: " << exception.what() << std::endl;
 #endif
 }
 
   //: Indicates that a function call failed because the pixel types were incompatible.
 class vil_exception_pixel_formats_incompatible
 #if VCL_HAS_EXCEPTIONS
-  : public vcl_logic_error
+  : public std::logic_error
 #endif
 {
  public:
   enum vil_pixel_format src_type, dest_type;
-  vcl_string operation_name;
+  std::string operation_name;
   vil_exception_pixel_formats_incompatible(
-    enum vil_pixel_format src, enum vil_pixel_format dest, const vcl_string& operation) :
+    enum vil_pixel_format src, enum vil_pixel_format dest, const std::string& operation) :
 #if VCL_HAS_EXCEPTIONS
-    vcl_logic_error(operation + ": Pixel formats incompatible."),
+    std::logic_error(operation + ": Pixel formats incompatible."),
 #endif
     src_type(src), dest_type(dest), operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
@@ -67,16 +68,16 @@ class vil_exception_pixel_formats_incompatible
 //: Indicates that a function call failed because a pixel format could not be handled.
 class vil_exception_unsupported_pixel_format
 #if VCL_HAS_EXCEPTIONS
-  : public vcl_logic_error
+  : public std::logic_error
 #endif
 {
  public:
   enum vil_pixel_format src_type;
-  vcl_string operation_name;
+  std::string operation_name;
   vil_exception_unsupported_pixel_format(
-    enum vil_pixel_format src, const vcl_string& operation) :
+    enum vil_pixel_format src, const std::string& operation) :
 #if VCL_HAS_EXCEPTIONS
-    vcl_logic_error(operation + ": Unsupported pixel format."),
+    std::logic_error(operation + ": Unsupported pixel format."),
 #endif
     src_type(src), operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
@@ -94,15 +95,15 @@ class vil_exception_unsupported_pixel_format
 // and inefficiency is very low.
 class vil_exception_out_of_bounds
 #if VCL_HAS_EXCEPTIONS
-  : public vcl_logic_error
+  : public std::logic_error
 #endif
 {
  public:
-  vcl_string operation_name;
+  std::string operation_name;
   vil_exception_out_of_bounds(
-    const vcl_string& operation) :
+    const std::string& operation) :
 #if VCL_HAS_EXCEPTIONS
-    vcl_logic_error(operation + ": Pixel access out-of-bounds."),
+    std::logic_error(operation + ": Pixel access out-of-bounds."),
 #endif
     operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
@@ -120,15 +121,15 @@ class vil_exception_out_of_bounds
 // and inefficiency is very low.
 class vil_exception_unsupported_operation
 #if VCL_HAS_EXCEPTIONS
-  : public vcl_logic_error
+  : public std::logic_error
 #endif
 {
  public:
-  vcl_string operation_name;
+  std::string operation_name;
   vil_exception_unsupported_operation(
-    const vcl_string& operation) :
+    const std::string& operation) :
 #if VCL_HAS_EXCEPTIONS
-    vcl_logic_error(operation + ": Unsupported operation."),
+    std::logic_error(operation + ": Unsupported operation."),
 #endif
     operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
@@ -142,20 +143,20 @@ class vil_exception_unsupported_operation
 //: Indicates that an image load or save operation failed.
 class vil_exception_image_io
 #if VCL_HAS_EXCEPTIONS
-  : public vcl_runtime_error
+  : public std::runtime_error
 #endif
 {
  public:
 #if !VCL_HAS_EXCEPTIONS
-  vcl_string full_what;
+  std::string full_what;
 #endif
-  vcl_string function_name, file_type, filename, details;
-  vil_exception_image_io(const vcl_string& function,
-                         const vcl_string& type,
-                         const vcl_string& file_name,
-                         const vcl_string& description = "") :
+  std::string function_name, file_type, filename, details;
+  vil_exception_image_io(const std::string& function,
+                         const std::string& type,
+                         const std::string& file_name,
+                         const std::string& description = "") :
 #if VCL_HAS_EXCEPTIONS
-    vcl_runtime_error
+    std::runtime_error
 #else
     full_what
 #endif
@@ -183,10 +184,10 @@ class vil_exception_corrupt_image_file
 #endif
 {
  public:
-  vil_exception_corrupt_image_file(const vcl_string& function,
-                                   const vcl_string& type,
-                                   const vcl_string& file_name,
-                                   const vcl_string& description = "")
+  vil_exception_corrupt_image_file(const std::string& function,
+                                   const std::string& type,
+                                   const std::string& file_name,
+                                   const std::string& description = "")
 #if VCL_HAS_EXCEPTIONS
   : vil_exception_image_io(function, type, file_name, description)
 #endif
@@ -208,10 +209,10 @@ class vil_exception_invalid_version
 #endif
 {
  public:
-  vil_exception_invalid_version(const vcl_string& function,
-                                const vcl_string& type,
-                                const vcl_string& file_name,
-                                const vcl_string& description = "")
+  vil_exception_invalid_version(const std::string& function,
+                                const std::string& type,
+                                const std::string& file_name,
+                                const std::string& description = "")
 #if VCL_HAS_EXCEPTIONS
   : vil_exception_image_io(function, type, file_name, description)
 #endif

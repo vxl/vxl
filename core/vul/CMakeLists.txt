@@ -7,8 +7,7 @@ doxygen_add_library(core/vul
   )
 
 
-SET(vul_sources
-  vul_export.h
+set(vul_sources
   vul_fwd.h
   vul_whereami.h
 
@@ -46,50 +45,52 @@ SET(vul_sources
 #
 # This workaround also occurs in vil
 #
-SET( vul_network_sources
+set( vul_network_sources
   vul_url.h                   vul_url.cxx
 )
 
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(vul_sequence_filename_map.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(vul_sequence_filename_map.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif()
 
-IF(APPLE)
-  ADD_LIBRARY(vul ${vul_sources})
-  INSTALL_TARGETS(/lib vul)
-ELSE(APPLE)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+if(APPLE)
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
+else()
 
-IF(NOT SOLARIS)
-  ADD_LIBRARY(vul ${vul_sources} ${vul_network_sources})
-  INSTALL_TARGETS(/lib vul)
-ELSE(NOT SOLARIS)
-  ADD_LIBRARY(vul ${vul_sources})
-  ADD_LIBRARY(vul_network ${vul_network_sources})
-  INSTALL_TARGETS(/lib vul vul_network)
-ENDIF(NOT SOLARIS)
+if(NOT SOLARIS)
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources} ${vul_network_sources})
+else()
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul_network LIBRARY_SOURCES ${vul_network_sources})
+endif()
 
-IF (NOT UNIX)
-  TARGET_LINK_LIBRARIES( vul ws2_32 )
-ENDIF (NOT UNIX)
+if(NOT UNIX)
+  target_link_libraries( ${VXL_LIB_PREFIX}vul ws2_32 )
+endif()
 
-IF (SOLARIS)
-  TARGET_LINK_LIBRARIES( vul nsl vul_network socket )
-ENDIF (SOLARIS)
+if(SOLARIS)
+  target_link_libraries( ${VXL_LIB_PREFIX}vul nsl ${VXL_LIB_PREFIX}vul_network socket )
+endif()
 
-ENDIF(APPLE)
+endif()
 
-TARGET_LINK_LIBRARIES( vul vcl )
-
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vul
-  ${vul_sources}
-  ${vul_network_sources}
+set(CURR_LIB_NAME vul)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
 )
 
-IF( BUILD_EXAMPLES )
-  add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+target_link_libraries( ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl )
 
-IF( BUILD_TESTING )
+if( BUILD_EXAMPLES )
+  add_subdirectory(examples)
+endif()
+
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

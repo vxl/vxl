@@ -15,7 +15,8 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 class bvxm_opinion
 {
@@ -89,6 +90,6 @@ inline bvxm_opinion operator/(float const& o1, bvxm_opinion const& o2) { return 
 
 inline bvxm_opinion operator/(bvxm_opinion const& o1, bvxm_opinion const& o2) { return bvxm_opinion(o1.b()/o2.b()); }
 
-inline vcl_ostream& operator<< (vcl_ostream& s, bvxm_opinion const& o) { s << "bvxm_opinion [b=" << o.b() << " u=" << o.u() << ']' << vcl_endl; return s; }
+inline std::ostream& operator<< (std::ostream& s, bvxm_opinion const& o) { s << "bvxm_opinion [b=" << o.b() << " u=" << o.u() << ']' << std::endl; return s; }
 
 #endif

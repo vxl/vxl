@@ -81,7 +81,7 @@ int main()
 @end example
 The alternative is somewhat scary.  It begins
 @smallexample
-#if defined(_WIN32) || (defined(__SUNPRO_CC) && (__SUNPRO_CC + 0) >= 0x500)
+#if defined(_WIN32)
 #include <string>
 #else
 #include ...
@@ -150,9 +150,6 @@ catch up with the language standard, the answer is "all but the following":
 @item exceptions in core libraries.
 @item nested classes (not supported very well by MSVC)
 @item wide characters (not supported by FreeBSD).
-@item member templates (not supported by SGI CC 7.2.x).
-@item partial template specializations (not supported by SGI CC 7.2.x).
-@item non-type parameters in function templates (not supported by SunPro 5.0).
 @item default template parameters which depend on previous template parameters.
 @end itemize
 
@@ -255,31 +252,17 @@ is obtained by capitalizing the name (of that class or function) and appending
 @code{_INSTANTIATE}.  For example, here is how to instantiate a
 @code{vcl_map<int, X>} where @code{X} is the name of some class:
 
-@smallexample
-// Templates/vcl_map+int.X-.cxx
-#include "X.h"         // declaration of class X.
-#include <vcl_map.txx> // the instantiation macro lives here.
-VCL_MAP_INSTANTIATE(int, X, vcl_less<int>);
-@end smallexample
-
 and here is how to instantiate @code{vcl_vector<X *>}:
-
-@smallexample
-// Templates/vcl_vector+X~-.cxx
-struct X; // forward declare the class.
-#include <vcl_vector.txx>
-VCL_VECTOR_INSTANTIATE(X *);
-@end smallexample
 
 The naming convention for such files is as follows:
 @itemize @bullet
-@item Take the full template instantiation, e.g. 
+@item Take the full template instantiation, e.g.
 @code{VSL_VECTOR_IO_INSTANTIATE( vcl_vector< vcl_pair< unsigned int, vxl_int_64 > > )}
-@item Strip the @code{_INSTANTIATE} and convert the Macro name to lowercase, e.g. 
+@item Strip the @code{_INSTANTIATE} and convert the Macro name to lowercase, e.g.
 @code{vsl_vector_io( vcl_vector< vcl_pair< unsigned int, vxl_int_64 > >)}
 @item Convert the macro's brackets @code{()} to angle brackets @code{<>} e.g.
 @code{vsl_vector_io< vcl_vector< vcl_pair< unsigned int, vxl_int_64 > > >}
-@item Replace '@code{unsigned *}' with '@code{u*}', i.e. '@code{unsigned int}' 
+@item Replace '@code{unsigned *}' with '@code{u*}', i.e. '@code{unsigned int}'
 with '@code{uint}', etc. e.g.
 @code{vsl_vector_io< vcl_vector< vcl_pair< uint, vxl_int_64 > > >}
 @item Strip '@code{vcl_}' prefixes from fixed width types. e.g.
@@ -287,7 +270,7 @@ with '@code{uint}', etc. e.g.
 @item Strip spaces and replace '@code{<}' with '@code{+}', '@code{>}' with
 '@code{-}', and '@code{,}' with '@code{.}' e.g.
 @code{vsl_vector_io+vcl_vector+vcl_pair+uint.uint---}
-@item 
+@item
 @end itemize
 
 If you are using the build system that comes with VXL and you aren't using

@@ -30,9 +30,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mipa_vector_normaliser& b)
 // The default implementation is for attribute-less normalisers,
 // and throws if it finds any data in the stream.
 void mipa_vector_normaliser::config_from_stream(
-  vcl_istream &is, const mbl_read_props_type &extra_props)
+  std::istream &is, const mbl_read_props_type &extra_props)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
   if (s.empty() || s=="{}") return;
 
   mbl_exception_parse_error x(
@@ -44,14 +44,14 @@ void mipa_vector_normaliser::config_from_stream(
 
 //=======================================================================
 //: Create a concrete mipa_vector_normaliser-derived object, from a text specification.
-vcl_auto_ptr<mipa_vector_normaliser>
+std::auto_ptr<mipa_vector_normaliser>
   mipa_vector_normaliser::new_normaliser_from_stream(
-    vcl_istream &is, const mbl_read_props_type &extra_props)
+    std::istream &is, const mbl_read_props_type &extra_props)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
 
-  vcl_auto_ptr<mipa_vector_normaliser> ps =
+  std::auto_ptr<mipa_vector_normaliser> ps =
     mbl_cloneables_factory<mipa_vector_normaliser>::get_clone(name);
 
   ps -> config_from_stream(is, extra_props);
@@ -67,7 +67,7 @@ void vsl_b_read(vsl_b_istream& bfs, mipa_vector_normaliser& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mipa_vector_normaliser& b)
+std::ostream& operator<<(std::ostream& os,const mipa_vector_normaliser& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -78,7 +78,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mipa_vector_normaliser& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mipa_vector_normaliser* b)
+std::ostream& operator<<(std::ostream& os,const mipa_vector_normaliser* b)
 {
   if (b)
     return os << *b;
@@ -88,14 +88,14 @@ vcl_ostream& operator<<(vcl_ostream& os,const mipa_vector_normaliser* b)
 
 //=======================================================================
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mipa_vector_normaliser& b)
+void vsl_print_summary(std::ostream& os,const mipa_vector_normaliser& b)
 {
   os << b;
 }
 
 //=======================================================================
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mipa_vector_normaliser* b)
+void vsl_print_summary(std::ostream& os,const mipa_vector_normaliser* b)
 {
   if (b)
     os << *b;

@@ -2,10 +2,12 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <iostream>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
@@ -59,7 +61,7 @@ void test_process_mains()
   TEST("Rendering Expected Image Initialized",good, true);
   good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
   TEST("Rendering Expected Color Image Initialized",good, true);
- 
+
 }
 
 TESTMAIN( test_process_mains );

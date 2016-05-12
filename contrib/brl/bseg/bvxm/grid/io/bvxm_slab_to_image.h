@@ -11,6 +11,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <vector>
+#include <iostream>
 #include "../bvxm_voxel_slab.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_float_3.h>
@@ -19,8 +21,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h> // for debug saving
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class bvxm_slab_to_image
 {
@@ -35,11 +36,11 @@ class bvxm_slab_to_image
 
   //: Simple function to save a slab into an image. Used for debugging where the type of output image is not so important
   template<class T>
-  static void write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string filename);
+  static void write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,std::string filename);
 
   //: Simple function to save a slab into an image. Used for debugging where the type of output image is not so important
   template<class T, unsigned N>
-  static void write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,vcl_string filename);
+  static void write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,std::string filename);
 };
 
 
@@ -50,7 +51,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
   // check image is preallocated to correct size
   if ( (slab.nx() != image->ni()) || (slab.ny() != image->nj()) )
   {
-    vcl_cerr << "error: slab and image are different sizes.\n";
+    std::cerr << "error: slab and image are different sizes.\n";
     return false;
   }
 
@@ -62,7 +63,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
       {
         if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr()))
         {
-          vcl_vector<vil_image_view<unsigned char>::iterator> img_its;
+          std::vector<vil_image_view<unsigned char>::iterator> img_its;
           for (unsigned p=0; p<N; ++p)
           {
             vil_image_view<unsigned char>::iterator plane_it = img_view->begin() + (p*img_view->planestep());
@@ -81,13 +82,13 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
         }
         else
         {
-          vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
+          std::cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
           return false;
         }
       }
       else
       {
-        vcl_cerr << "error in slab_to_image: incorrect number of image planes\n";
+        std::cerr << "error in slab_to_image: incorrect number of image planes\n";
         return false;
       }
       break;
@@ -108,7 +109,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
           if (N != 4)
           {
-            vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view: N should be 4\n";
+            std::cerr << "error in slab_to_image: failed to cast image_view_base to image_view: N should be 4\n";
             return false;
           }
           for (; slab_it != slab.end(); ++slab_it)
@@ -116,23 +117,23 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
             (*img_it) = vil_rgba<unsigned char>((unsigned char)(*slab_it)[0],
                                                 (unsigned char)(*slab_it)[1],
                                                 (unsigned char)(*slab_it)[2],
-                                                (unsigned char)vcl_floor((*slab_it)[3]));
+                                                (unsigned char)std::floor((*slab_it)[3]));
 #if 0
             *(img_its[p]) = (unsigned char)(((*slab_it)[p] * 127.0) + 0.5) + 127;
-            vcl_cout<<(int)(*img_it).R()<<' '<<(int)((unsigned char)(*slab_it)[3])<<vcl_endl;
+            std::cout<<(int)(*img_it).R()<<' '<<(int)((unsigned char)(*slab_it)[3])<<std::endl;
 #endif
             ++(img_it);
           }
         }
         else
         {
-          vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
+          std::cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
           return false;
         }
       }
       else
       {
-        vcl_cerr << "error in slab_to_image: incorrect number of image planes\n";
+        std::cerr << "error in slab_to_image: incorrect number of image planes\n";
         return false;
       }
       break;
@@ -142,7 +143,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
       {
           if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(image.ptr()))
           {
-              vcl_vector<vil_image_view<float>::iterator> img_its;
+              std::vector<vil_image_view<float>::iterator> img_its;
               for (unsigned p=0; p<N; ++p)
               {
                   vil_image_view<float>::iterator plane_it = img_view->begin() + (p*img_view->planestep());
@@ -161,13 +162,13 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
           }
         else
         {
-          vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
+          std::cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
           return false;
         }
       }
       else
       {
-        vcl_cerr << "error in slab_to_image: incorrect number of image planes\n";
+        std::cerr << "error in slab_to_image: incorrect number of image planes\n";
         return false;
       }
       break;
@@ -182,7 +183,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
           typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
           if (N != 3)
           {
-            vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view: N should be 3\n";
+            std::cerr << "error in slab_to_image: failed to cast image_view_base to image_view: N should be 3\n";
             return false;
           }
           for (; slab_it != slab.end(); ++slab_it)
@@ -195,20 +196,20 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > c
         }
         else
         {
-          vcl_cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
+          std::cerr << "error in slab_to_image: failed to cast image_view_base to image_view\n";
           return false;
         }
       }
       else
       {
-        vcl_cerr << "error in slab_to_image: incorrect number of image planes\n";
+        std::cerr << "error in slab_to_image: incorrect number of image planes\n";
         return false;
       }
       break;
 
 
     default:
-      vcl_cerr << "img_to_slab: unsupported pixel type\n";
+      std::cerr << "img_to_slab: unsupported pixel type\n";
       return false;
       break;
   }
@@ -228,7 +229,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
   // check image is preallocated to correct size
   if ( (slab.nx() != image->ni()) || (slab.ny() != image->nj()) )
   {
-    vcl_cerr << "error: slab and image are different sizes.\n";
+    std::cerr << "error: slab and image are different sizes.\n";
     return false;
   }
 
@@ -241,12 +242,12 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
         vil_image_view<unsigned char>::iterator img_it = img_view->begin();
         typename bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
         for (; img_it != img_view->end(); ++img_it, ++slab_it) {
-          *img_it =  (unsigned char)vcl_floor(((*slab_it)*255));
+          *img_it =  (unsigned char)std::floor(((*slab_it)*255));
         }
       }
       else
       {
-        vcl_cerr << "error: failed to cast image_view_base to image_view\n";
+        std::cerr << "error: failed to cast image_view_base to image_view\n";
         return false;
       }
       break;
@@ -262,13 +263,13 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
       }
       else
       {
-        vcl_cerr << "error: failed to cast image_view_base to image_view\n";
+        std::cerr << "error: failed to cast image_view_base to image_view\n";
         return false;
       }
       break;
 
     default:
-      vcl_cerr << "img_to_slab: unsupported pixel type\n";
+      std::cerr << "img_to_slab: unsupported pixel type\n";
       return false;
       break;
   }
@@ -278,10 +279,10 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
 
 // used for debugging
 template<class T, unsigned N>
-void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,vcl_string filename)
+void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,std::string filename)
 {
   vil_image_view<T> img(slab_in.nx(),slab_in.ny(),N);
-  vcl_vector<typename vil_image_view<T>::iterator> img_its;
+  std::vector<typename vil_image_view<T>::iterator> img_its;
   for (unsigned p=0; p < N; ++p) {
     typename vil_image_view<T>::iterator plane_it = img.begin() + (p*img.planestep());
     img_its.push_back(plane_it);
@@ -300,7 +301,7 @@ void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,
 
 // used for debugging
 template<class T>
-void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string filename)
+void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,std::string filename)
 {
   vil_image_view<T> img(slab_in.nx(),slab_in.ny(),1);
   typename vil_image_view<T>::iterator img_it = img.begin();

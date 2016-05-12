@@ -22,7 +22,7 @@ bool bvxm_update_lidar_process_cons(bprb_func_process& pro)
   //input[2]: The voxel world
   //input[3]: scale index
   //input[4]: use opinion ?
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
@@ -34,7 +34,7 @@ bool bvxm_update_lidar_process_cons(bprb_func_process& pro)
   //output has 1 output
   //output[0] : The updated probability map
   //output[1] : The mask of image pixels used in update
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]= "vil_image_view_base_sptr";
   output_types_[1]= "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
@@ -47,7 +47,7 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
   //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -60,17 +60,17 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
   bool use_opinion = pro.get_input<bool>(i++);
 
   if ( !img ) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if ( !camera ) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if ( !world ) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
@@ -92,7 +92,7 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
     if (!use_opinion)
       result =result && world->update_lidar<OCCUPANCY>(observation, prob_map, mask,curr_scale);
     else {
-      vcl_cout << "WOrking with opinion!" << vcl_endl;
+      std::cout << "WOrking with opinion!" << std::endl;
       result =result && world->update_lidar<OCCUPANCY_OPINION>(observation, prob_map, mask,curr_scale);
     } if (curr_scale==scale_idx)
     {
@@ -103,7 +103,7 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
     }
   }
   if (!result) {
-    vcl_cerr << "error bvxm_update_lidar_process: failed to update observation\n";
+    std::cerr << "error bvxm_update_lidar_process: failed to update observation\n";
     return false;
   }
   else

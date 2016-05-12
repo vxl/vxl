@@ -1,4 +1,8 @@
 // This is brl/bbas/imesh/algo/imesh_project.cxx
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <cmath>
 #include "imesh_project.h"
 //:
 // \file
@@ -16,16 +20,14 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 
 void
 imesh_project_verts(const imesh_vertex_array<3>& verts3d,
                     const vpgl_proj_camera<double>& camera,
-                    vcl_vector<vgl_point_2d<double> >& verts2d)
+                    std::vector<vgl_point_2d<double> >& verts2d)
 {
   verts2d.resize(verts3d.size());
   for (unsigned int i=0; i<verts3d.size(); ++i)
@@ -33,9 +35,9 @@ imesh_project_verts(const imesh_vertex_array<3>& verts3d,
 }
 
 void
-imesh_project_verts(const vcl_vector<vgl_point_3d<double> >& verts3d,
+imesh_project_verts(const std::vector<vgl_point_3d<double> >& verts3d,
                     const vpgl_proj_camera<double>& camera,
-                    vcl_vector<vgl_point_2d<double> >& verts2d)
+                    std::vector<vgl_point_2d<double> >& verts2d)
 {
   verts2d.resize(verts3d.size());
   for (unsigned int i=0; i<verts3d.size(); ++i)
@@ -44,10 +46,10 @@ imesh_project_verts(const vcl_vector<vgl_point_3d<double> >& verts3d,
 
 
 void
-imesh_project_verts(const vcl_vector<vgl_point_3d<double> >& verts3d,
+imesh_project_verts(const std::vector<vgl_point_3d<double> >& verts3d,
                     const vpgl_proj_camera<double>& camera,
-                    vcl_vector<vgl_point_2d<double> >& verts2d,
-                    vcl_vector<double>& depths)
+                    std::vector<vgl_point_2d<double> >& verts2d,
+                    std::vector<double>& depths)
 {
   verts2d.resize(verts3d.size());
   depths.resize(verts3d.size());
@@ -62,8 +64,8 @@ imesh_project_verts(const vcl_vector<vgl_point_3d<double> >& verts3d,
 void
 imesh_project_verts(const imesh_vertex_array<3>& verts3d,
                     const vpgl_proj_camera<double>& camera,
-                    vcl_vector<vgl_point_2d<double> >& verts2d,
-                    vcl_vector<double>& depths)
+                    std::vector<vgl_point_2d<double> >& verts2d,
+                    std::vector<double>& depths)
 {
   verts2d.resize(verts3d.size());
   depths.resize(verts3d.size());
@@ -76,9 +78,9 @@ imesh_project_verts(const imesh_vertex_array<3>& verts3d,
 
 
 void
-imesh_distort_verts(const vcl_vector<vgl_point_2d<double> >& in_verts,
+imesh_distort_verts(const std::vector<vgl_point_2d<double> >& in_verts,
                     const vpgl_lens_distortion<double>& lens,
-                    vcl_vector<vgl_point_2d<double> >& out_verts)
+                    std::vector<vgl_point_2d<double> >& out_verts)
 {
   out_verts.resize(in_verts.size());
   for (unsigned int i=0; i<in_verts.size(); ++i)
@@ -150,7 +152,7 @@ void imesh_render_triangle_interp(const vgl_point_2d<double>& v1,
 
 void
 imesh_render_triangles(const imesh_regular_face_array<3>& tris,
-                       const vcl_vector<vgl_point_2d<double> >& img_verts,
+                       const std::vector<vgl_point_2d<double> >& img_verts,
                        vil_image_view<bool>& image)
 {
   for (unsigned i=0; i<tris.size(); ++i) {
@@ -164,11 +166,11 @@ imesh_render_triangles(const imesh_regular_face_array<3>& tris,
 
 void
 imesh_render_faces(const imesh_mesh& mesh,
-                   const vcl_vector<vgl_point_2d<double> >& img_verts,
+                   const std::vector<vgl_point_2d<double> >& img_verts,
                    vil_image_view<bool>& image)
 {
   const imesh_face_array_base& faces = mesh.faces();
-  vcl_auto_ptr<imesh_regular_face_array<3> > tri_data;
+  std::auto_ptr<imesh_regular_face_array<3> > tri_data;
   const imesh_regular_face_array<3>* tris;
   if (faces.regularity() != 3) {
     tri_data = imesh_triangulate(faces);
@@ -183,8 +185,8 @@ imesh_render_faces(const imesh_mesh& mesh,
 
 void
 imesh_render_triangles_interp(const imesh_regular_face_array<3>& tris,
-                              const vcl_vector<vgl_point_2d<double> >& img_verts,
-                              const vcl_vector<double>& vals,
+                              const std::vector<vgl_point_2d<double> >& img_verts,
+                              const std::vector<double>& vals,
                               vil_image_view<double>& image)
 {
   for (unsigned i=0; i<tris.size(); ++i) {
@@ -201,12 +203,12 @@ imesh_render_triangles_interp(const imesh_regular_face_array<3>& tris,
 
 void
 imesh_render_faces_interp(const imesh_mesh& mesh,
-                          const vcl_vector<vgl_point_2d<double> >& img_verts,
-                          const vcl_vector<double>& vals,
+                          const std::vector<vgl_point_2d<double> >& img_verts,
+                          const std::vector<double>& vals,
                           vil_image_view<double>& image)
 {
   const imesh_face_array_base& faces = mesh.faces();
-  vcl_auto_ptr<imesh_regular_face_array<3> > tri_data;
+  std::auto_ptr<imesh_regular_face_array<3> > tri_data;
   const imesh_regular_face_array<3>* tris;
   if (faces.regularity() != 3) {
     tri_data = imesh_triangulate(faces);
@@ -229,7 +231,7 @@ void imesh_project(const imesh_mesh& mesh,
   assert(mesh.vertices().dim() == 3);
   const imesh_vertex_array<3>& verts3d =
       static_cast<const imesh_vertex_array<3>&>(mesh.vertices());
-  vcl_vector<vgl_point_2d<double> > verts2d;
+  std::vector<vgl_point_2d<double> > verts2d;
   imesh_project_verts(verts3d, camera, verts2d);
   imesh_distort_verts(verts2d, lens, verts2d);
   imesh_render_faces(mesh, verts2d, image);
@@ -240,14 +242,14 @@ void imesh_project(const imesh_mesh& mesh,
 //  Using the camera and lens distortion
 //  Set each pixel of the image to true if the mesh projects onto it
 void imesh_project(const imesh_mesh& mesh,
-                   const vcl_vector<vgl_vector_3d<double> >& normals,
+                   const std::vector<vgl_vector_3d<double> >& normals,
                    const vpgl_proj_camera<double>& camera,
                    const vpgl_lens_distortion<double>& lens,
                    vil_image_view<bool>& image,
                    vgl_box_2d<unsigned int>* bbox)
 {
   const imesh_face_array_base& faces = mesh.faces();
-  vcl_auto_ptr<imesh_regular_face_array<3> > tri_data;
+  std::auto_ptr<imesh_regular_face_array<3> > tri_data;
   const imesh_regular_face_array<3>* tri_ptr;
   if (faces.regularity() != 3) {
     tri_data = imesh_triangulate(faces);
@@ -259,7 +261,7 @@ void imesh_project(const imesh_mesh& mesh,
   const imesh_regular_face_array<3>& tris = *tri_ptr;
   const imesh_vertex_array<3>& verts3d = mesh.vertices<3>();
 
-  vcl_vector<vgl_point_2d<double> > verts2d;
+  std::vector<vgl_point_2d<double> > verts2d;
   imesh_project_verts(verts3d, camera, verts2d);
   imesh_distort_verts(verts2d, lens, verts2d);
 
@@ -273,7 +275,7 @@ void imesh_project(const imesh_mesh& mesh,
   if (c.w() < 0.0)
     c.rescale_w(-c.w());
 
-  typedef vcl_vector<vgl_vector_3d<double> >::const_iterator itr_n;
+  typedef std::vector<vgl_vector_3d<double> >::const_iterator itr_n;
   itr_n n = normals.begin();
   for (unsigned int i=0; i<tris.size(); ++i, ++n) {
     const vgl_point_3d<double>& v1 = verts3d[tris(i,0)];
@@ -297,7 +299,7 @@ void imesh_project(const imesh_mesh& mesh,
                    vil_image_view<bool>& image)
 {
   assert(mesh.vertices().dim() == 3);
-  vcl_vector<vgl_point_2d<double> > verts2d;
+  std::vector<vgl_point_2d<double> > verts2d;
   imesh_project_verts(mesh.vertices<3>(), camera, verts2d);
   imesh_render_faces(mesh, verts2d, image);
 }
@@ -310,9 +312,9 @@ void imesh_project_depth(const imesh_mesh& mesh,
                          vil_image_view<double>& image)
 {
   assert(mesh.vertices().dim() == 3);
-  vcl_vector<vgl_point_2d<double> > verts2d;
-  vcl_vector<double> depths;
-  image.fill(vcl_numeric_limits<double>::infinity());
+  std::vector<vgl_point_2d<double> > verts2d;
+  std::vector<double> depths;
+  image.fill(std::numeric_limits<double>::infinity());
   imesh_project_verts(mesh.vertices<3>(), camera, verts2d, depths);
   imesh_render_faces_interp(mesh, verts2d, depths, image);
 }
@@ -321,24 +323,24 @@ void imesh_project_depth(const imesh_mesh& mesh,
 //: Compute the bounds of the projection of a set of image points
 //  The returned bounds are the intersection of the input bounds
 // and the bounding box of the points
-void imesh_projection_bounds(const vcl_vector<vgl_point_2d<double> >& img_pts,
+void imesh_projection_bounds(const std::vector<vgl_point_2d<double> >& img_pts,
                              vgl_box_2d<unsigned int>& bbox)
 {
   assert(!img_pts.empty());
-  typedef vcl_vector<vgl_point_2d<double> >::const_iterator itr_p;
+  typedef std::vector<vgl_point_2d<double> >::const_iterator itr_p;
 
   int i0 = bbox.max_x(), i1 = bbox.min_x(),
       j0 = bbox.max_y(), j1 = bbox.min_y();
   for (itr_p p = img_pts.begin(); p != img_pts.end(); ++p) {
     double x = p->x(), y = p->y();
-    int v = static_cast<int>(vcl_ceil(x))-1;
+    int v = static_cast<int>(std::ceil(x))-1;
     if (v < i0) i0 = v;
-    v = static_cast<int>(vcl_floor(x))+1;
+    v = static_cast<int>(std::floor(x))+1;
     if (v > i1) i1 = v;
 
-    v = static_cast<int>(vcl_ceil(y))-1;
+    v = static_cast<int>(std::ceil(y))-1;
     if (v < j0) j0 = v;
-    v = static_cast<int>(vcl_floor(y))+1;
+    v = static_cast<int>(std::floor(y))+1;
     if (v > j1) j1 = v;
   }
   if (i0 > static_cast<int>(bbox.min_x())) bbox.set_min_x(static_cast<unsigned int>(i0));
@@ -351,8 +353,8 @@ void imesh_projection_bounds(const vcl_vector<vgl_point_2d<double> >& img_pts,
 //: back project an image point onto the mesh using the camera
 //  Return true if the ray intersects the mesh
 int imesh_project_onto_mesh(const imesh_mesh& mesh,
-                            const vcl_vector<vgl_vector_3d<double> >& normals,
-                            const vcl_vector<vgl_point_2d<double> >& verts2d,
+                            const std::vector<vgl_vector_3d<double> >& normals,
+                            const std::vector<vgl_point_2d<double> >& verts2d,
                             const vpgl_perspective_camera<double>& camera,
                             const vgl_point_2d<double>& pt_2d,
                             vgl_point_3d<double>& pt_3d)
@@ -374,9 +376,9 @@ int imesh_project_onto_mesh(const imesh_mesh& mesh,
   const imesh_vertex_array<3>& verts3d = mesh.vertices<3>();
 
   typedef imesh_regular_face_array<3>::const_iterator itr_t;
-  typedef vcl_vector<vgl_vector_3d<double> >::const_iterator itr_n;
+  typedef std::vector<vgl_vector_3d<double> >::const_iterator itr_n;
   itr_n n = normals.begin();
-  double depth = vcl_numeric_limits<double>::infinity();
+  double depth = std::numeric_limits<double>::infinity();
   int i = 0;
   for (itr_t itr = tris.begin(); itr != tris.end(); ++itr, ++n, ++i) {
     if (dot_product(*n,d) > 0.0)
@@ -405,13 +407,13 @@ int imesh_project_onto_mesh(const imesh_mesh& mesh,
 //: back project image points onto the mesh using the camera
 //  Returns a vector of all valid 3d points and indices to corresponding 2d points
 void imesh_project_onto_mesh(const imesh_mesh& mesh,
-                             const vcl_vector<vgl_vector_3d<double> >& normals,
+                             const std::vector<vgl_vector_3d<double> >& normals,
                              const vpgl_perspective_camera<double>& camera,
-                             const vcl_vector< vgl_point_2d<double> >& pts_2d,
-                             vcl_vector<unsigned int >& idx_2d,
-                             vcl_vector<vgl_point_3d<double> >& pts_3d)
+                             const std::vector< vgl_point_2d<double> >& pts_2d,
+                             std::vector<unsigned int >& idx_2d,
+                             std::vector<vgl_point_3d<double> >& pts_3d)
 {
-  vcl_vector<vgl_point_2d<double> > verts2d;
+  std::vector<vgl_point_2d<double> > verts2d;
   assert(mesh.vertices().dim() == 3);
   imesh_project_verts(mesh.vertices<3>(), camera, verts2d);
 
@@ -463,8 +465,8 @@ barycentric_to_xy(const vgl_point_2d<double>& pt_bary,
 //  The resulting point is in barycentric coordinates for the returned triangle
 //  Returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
-                                        const vcl_vector<vgl_vector_3d<double> >& normals,
-                                        const vcl_vector<vgl_point_2d<double> >& verts2d,
+                                        const std::vector<vgl_vector_3d<double> >& normals,
+                                        const std::vector<vgl_point_2d<double> >& verts2d,
                                         const vpgl_perspective_camera<double>& camera,
                                         const vgl_point_2d<double>& pt_img,
                                         vgl_point_2d<double>& pt_bary)
@@ -493,7 +495,7 @@ int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
 //  Assumes the mesh has both normals and texture coordinates
 //  \returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
-                                    const vcl_vector<vgl_point_2d<double> >& verts2d,
+                                    const std::vector<vgl_point_2d<double> >& verts2d,
                                     const vpgl_perspective_camera<double>& camera,
                                     const vgl_point_2d<double>& pt_img,
                                     vgl_point_2d<double>& pt_uv)
@@ -506,7 +508,7 @@ int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
   const imesh_regular_face_array<3>& tris =
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
 
-  const vcl_vector<vgl_point_2d<double> >& tex_coords = mesh.tex_coords();
+  const std::vector<vgl_point_2d<double> >& tex_coords = mesh.tex_coords();
 
   vgl_point_2d<double> pt_bary;
   int tri_idx = imesh_project_onto_mesh_barycentric(mesh, tris.normals(),
@@ -552,7 +554,7 @@ int imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   if (!mesh.has_tex_coords())
     return imesh_invalid_idx;
 
-  const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
+  const std::vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
 
   if (mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT)
   {
@@ -581,10 +583,10 @@ namespace{
 // intersect a straight line in texture space with the texture triangles
 bool trace_texture(const imesh_mesh& mesh,
                    const vgl_point_2d<double>& end_xy,
-                   vcl_vector<unsigned long>& idxs,
-                   vcl_vector<vgl_point_2d<double> >& isect_bary)
+                   std::vector<unsigned long>& idxs,
+                   std::vector<vgl_point_2d<double> >& isect_bary)
 {
-  const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
+  const std::vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
   assert(mesh.faces().regularity() == 3);
   const imesh_regular_face_array<3>& tris =
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
@@ -711,7 +713,7 @@ bool trace_texture(const imesh_mesh& mesh,
         vgl_vector_2d<double> d(tc[he[vi->pair_index()].vert_index()]
                                 - tc[vi->vert_index()]);
         // rotate to compute angle relative to dir
-        double ang = vcl_atan2(d.y()*dir.x()-d.x()*dir.y(),
+        double ang = std::atan2(d.y()*dir.x()-d.x()*dir.y(),
                                d.x()*dir.x()+d.y()*dir.y());
         if (ang > 0) ang -= vnl_math::twopi;
         if (ang > max_ang) {
@@ -756,7 +758,7 @@ bool trace_texture(const imesh_mesh& mesh,
     }
     else
     {
-      vcl_cout << "invalid intersection" << vcl_endl;
+      std::cout << "invalid intersection" << std::endl;
       return false;
     }
   }
@@ -779,10 +781,10 @@ bool trace_texture(const imesh_mesh& mesh,
 //  \returns a mapping from each original point into barycentric points.
 //  if an original point is not mapped the value is -1
 bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
-                                          const vcl_vector<vgl_point_2d<double> >& pts_2d,
-                                          vcl_vector<vgl_point_2d<double> >& pts_uv,
-                                          vcl_vector<unsigned long>& idxs,
-                                          vcl_vector<int>& map_back)
+                                          const std::vector<vgl_point_2d<double> >& pts_2d,
+                                          std::vector<vgl_point_2d<double> >& pts_uv,
+                                          std::vector<unsigned long>& idxs,
+                                          std::vector<int>& map_back)
 {
   bool clipped = false;
   const unsigned int npts = pts_2d.size();
@@ -829,9 +831,9 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   // if the curve was clipped, try tracing in reverse to get the rest
   if (!valid)
   {
-    vcl_vector<vgl_point_2d<double> > rev_pts_uv(1,pts_uv.front());
-    vcl_vector<unsigned long> rev_idxs(1,idxs.front());
-    vcl_vector<int> rev_map_back(pts_2d.size(),-1);
+    std::vector<vgl_point_2d<double> > rev_pts_uv(1,pts_uv.front());
+    std::vector<unsigned long> rev_idxs(1,idxs.front());
+    std::vector<int> rev_map_back(pts_2d.size(),-1);
     rev_map_back[i]=0;
     const unsigned int step = npts-1;
     for (unsigned int j=(i+step)%npts; j!=i; j=(j+step)%npts )
@@ -851,13 +853,13 @@ bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
         map_back[j] = rev_idxs.size()-1 - rev_map_back[j];
     }
 
-    vcl_reverse(rev_pts_uv.begin(),rev_pts_uv.end());
-    vcl_reverse(rev_idxs.begin(),rev_idxs.end());
+    std::reverse(rev_pts_uv.begin(),rev_pts_uv.end());
+    std::reverse(rev_idxs.begin(),rev_idxs.end());
     unsigned int num_new_pts = rev_pts_uv.size();
     rev_pts_uv.resize(rev_pts_uv.size()+pts_uv.size()-1);
-    vcl_copy(pts_uv.begin()+1, pts_uv.end(), rev_pts_uv.begin()+num_new_pts);
+    std::copy(pts_uv.begin()+1, pts_uv.end(), rev_pts_uv.begin()+num_new_pts);
     rev_idxs.resize(rev_idxs.size()+idxs.size()-1);
-    vcl_copy(idxs.begin()+1, idxs.end(), rev_idxs.begin()+num_new_pts);
+    std::copy(idxs.begin()+1, idxs.end(), rev_idxs.begin()+num_new_pts);
 
 
     idxs.swap(rev_idxs);
@@ -889,7 +891,7 @@ imesh_project_texture_to_3d_map(const imesh_mesh& mesh, unsigned int tidx)
   const imesh_regular_face_array<3>& triangles =
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
   const imesh_regular_face<3>& tri = triangles[tidx];
-  const vcl_vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
+  const std::vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
 
   vnl_matrix_fixed<double,3,3> M1;
@@ -961,7 +963,7 @@ imesh_project_barycentric_to_texture(const imesh_mesh& mesh,
                                      unsigned int idx)
 {
   assert(mesh.has_tex_coords());
-  const vcl_vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
+  const std::vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
   const vgl_point_2d<double>& a = tc[mesh.faces()(idx,0)];
   const vgl_point_2d<double>& b = tc[mesh.faces()(idx,1)];
   const vgl_point_2d<double>& c = tc[mesh.faces()(idx,2)];

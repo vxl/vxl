@@ -4,13 +4,14 @@
 #endif
 //:
 // \file
+#include <cstdlib>
 #include "vil_file_format.h"
 
 vil_file_format::~vil_file_format()
 {
 }
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vil/vil_config.h> // for list of configured file formats
 #include <vil/vil_exception.h>
 
@@ -141,16 +142,16 @@ struct vil_file_format_storage
     l[c++] = new vil_tiff_file_format;
     l[c++] = new vil_pyramid_image_list_format;
 #endif
-    l[c++] = 0;
+    l[c++] = VXL_NULLPTR;
   }
 
   ~vil_file_format_storage()
   {
     unsigned c=0;
-    while (l[c]!=0)
+    while (l[c]!=VXL_NULLPTR)
       delete l[c++];
     delete [] l;
-    l=0;
+    l=VXL_NULLPTR;
   }
 };
 
@@ -159,14 +160,14 @@ void vil_file_format::add_file_format(vil_file_format* ff)
 {
   vil_file_format** l=all();
   unsigned c=0;
-  while (c<MAX_FILE_FORMATS-1u && l[c]!=0) ++c;
-  if (l[c]!=0)
+  while (c<MAX_FILE_FORMATS-1u && l[c]!=VXL_NULLPTR) ++c;
+  if (l[c]!=VXL_NULLPTR)
   {
-    vcl_cerr << "ERROR vil_file_format::add_file_format Unable to add any more file formats\n";
-    vcl_abort();
+    std::cerr << "ERROR vil_file_format::add_file_format Unable to add any more file formats\n";
+    std::abort();
   }
   l[c] = ff;
-  l[c+1] = 0;
+  l[c+1] = VXL_NULLPTR;
 }
 
 

@@ -1,9 +1,10 @@
 #ifndef vbl_test_smart_ptr_h_
 #define vbl_test_smart_ptr_h_
 
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class base_impl : public vbl_ref_count
 {
@@ -15,7 +16,7 @@ class base_impl : public vbl_ref_count
   base_impl();
   base_impl(base_impl const& x) : vbl_ref_count(), n(x.n) {}
   ~base_impl();
-  void Print (vcl_ostream &str);
+  void Print (std::ostream &str);
   static bool checkcount ( int count = 0 );
 };
 

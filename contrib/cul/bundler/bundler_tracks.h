@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 
 #include <bundler/bundler_settings.h>
@@ -30,8 +32,8 @@ class bundler_tracks_propose_matches
  public:
   //: Performs the match list creation
   virtual void operator() (
-      const vcl_vector<bundler_inters_image_sptr> &features,
-      vcl_vector<bundler_inters_image_pair> &matches) = 0;
+      const std::vector<bundler_inters_image_sptr> &features,
+      std::vector<bundler_inters_image_pair> &matches) = 0;
 };
 
 
@@ -45,31 +47,31 @@ class bundler_tracks_match
   virtual void operator() (
       const bundler_inters_image_pair &to_match,
       bundler_inters_match_set &matches) = 0;
-}; 
+};
 
 
 //:
-// An abstract functor that takes in corresponding features between 
+// An abstract functor that takes in corresponding features between
 // two images, and refines them according to some thresholds.
 class bundler_tracks_refine
 {
  public:
   //: Performs the feature matching
   virtual void operator() (bundler_inters_match_set &matches) = 0;
-}; 
+};
 
 
 //:
-// An abstract functor that takes in all matched features between pairs 
+// An abstract functor that takes in all matched features between pairs
 // of images, and chains them together into tracks
 class bundler_tracks_chain_matches
 {
  public:
   //: Performs the track chaining
   virtual void operator() (
-      vcl_vector<bundler_inters_match_set> &match_sets,
-      vcl_vector<bundler_inters_image_sptr> &images,
-      vcl_vector<bundler_inters_track_sptr> &tracks) = 0;
+      std::vector<bundler_inters_match_set> &match_sets,
+      std::vector<bundler_inters_image_sptr> &images,
+      std::vector<bundler_inters_track_sptr> &tracks) = 0;
 };
 
 #endif // BUNDLER_TRACKS_H

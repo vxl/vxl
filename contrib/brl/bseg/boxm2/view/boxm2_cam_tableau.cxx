@@ -46,25 +46,25 @@ bool boxm2_cam_tableau::handle(vgui_event const &e)
   if (e.type == vgui_KEY_PRESS)
   {
     if (e.key == vgui_key('r')) {
-        vcl_cout<<"resetting to initial camera view"<<vcl_endl;
+        std::cout<<"resetting to initial camera view"<<std::endl;
         stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
         cam_.set_camera_center(default_cam_.get_camera_center());
         cam_.set_rotation(default_cam_.get_rotation());
     }
     else if (e.key == vgui_key('x')) {
-        vcl_cout<<"looking down X axis at the origin"<<vcl_endl;
+        std::cout<<"looking down X axis at the origin"<<std::endl;
         stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
         cam_.set_camera_center(vgl_point_3d<double>(stare_point_.x(),default_cam_.camera_center().y(),stare_point_.z()));
         cam_.look_at(stare_point_);
     }
     else if (e.key == vgui_key('y')) {
-        vcl_cout<<"looking down Y axis at the origin"<<vcl_endl;
+        std::cout<<"looking down Y axis at the origin"<<std::endl;
         stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
         cam_.set_camera_center(vgl_point_3d<double>(default_cam_.camera_center().x(),stare_point_.y(),stare_point_.z()));
         cam_.look_at(stare_point_);
     }
     else if (e.key == vgui_key('z')) {
-        vcl_cout<<"looking down Z axis at the origin"<<vcl_endl;
+        std::cout<<"looking down Z axis at the origin"<<std::endl;
         stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
         cam_.set_camera_center(vgl_point_3d<double>(stare_point_.x(),stare_point_.y(),default_cam_.camera_center().z()));
         cam_.look_at(stare_point_);
@@ -77,8 +77,8 @@ bool boxm2_cam_tableau::handle(vgui_event const &e)
       this->post_redraw();
   }
   if (e.type == vgui_KEY_PRESS && e.key == vgui_key('t')) {
-    vcl_cout<<"rendering trajectory..."<<vcl_endl;
-    render_trajectory_ = true; 
+    std::cout<<"rendering trajectory..."<<std::endl;
+    render_trajectory_ = true;
     this->post_idle_request();
   }
 
@@ -86,28 +86,28 @@ bool boxm2_cam_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_IDLE)
   {
     if(render_trajectory_) {
-      vpgl_camera_double_sptr& camSptr = *cam_iter_; 
-      vpgl_perspective_camera<double>* camPtr = (vpgl_perspective_camera<double>*) camSptr.ptr(); 
+      vpgl_camera_double_sptr& camSptr = *cam_iter_;
+      vpgl_perspective_camera<double>* camPtr = (vpgl_perspective_camera<double>*) camSptr.ptr();
       cam_ = *camPtr;
-    
+
       //increment cam iter
-      ++cam_iter_; 
+      ++cam_iter_;
       if(cam_iter_ == trajectory_->end())
-        cam_iter_ = trajectory_->begin(); 
-      
+        cam_iter_ = trajectory_->begin();
+
       //rerender
       this->post_redraw();
-      return true; 
+      return true;
     }
     else {
-      return false; 
+      return false;
     }
   }
   //see if drag should handle it
   event = e;
   if (vgui_drag_mixin::handle(e))
   {
-      render_trajectory_ = false; 
+      render_trajectory_ = false;
       return true;
   }
   if (vgui_tableau::handle(e))
@@ -132,7 +132,7 @@ bool boxm2_cam_tableau::mouse_down(int x, int y, vgui_button /*button*/, vgui_mo
 //: called on mouse movement while mousedown is true
 bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier)
 {
-  //vcl_cout<<"Cam @ "<<cam_.get_camera_center()<<vcl_endl;
+  //std::cout<<"Cam @ "<<cam_.get_camera_center()<<std::endl;
   // SPINNING
   if (c_mouse_rotate(button, modifier)) {
 
@@ -161,14 +161,14 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
     static const double angle_scale = 0.2;
     vgl_rotation_3d<double> Rx(cam_x * -dy * angle_scale);
     vgl_rotation_3d<double> Ry(cam_y * -dx * angle_scale);
-    
+
     // now compose all the transformations to get total movement of camera center
     vgl_h_matrix_3d<double> composed = T0.get_inverse() * Rx.as_h_matrix_3d() * Ry.as_h_matrix_3d() * T0;
 
     vgl_point_3d<double> new_center = composed * vgl_homg_point_3d<double>(cam_center);
     cam_.set_camera_center(new_center);
     cam_.look_at(stare_point_, vgl_vector_3d<double>(-cam_y[0], -cam_y[1], -cam_y[2]));
-   
+
     this->post_redraw();
     return true;
   }
@@ -194,7 +194,7 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
 
   // TRANSLATION
   if (c_mouse_translate(button, modifier)) {
-    //vcl_cout<<"Translating: begin ("<<beginx<<','<<beginy<<") -> ("<<x<<','<<y<<')'<<vcl_endl;
+    //std::cout<<"Translating: begin ("<<beginx<<','<<beginy<<") -> ("<<x<<','<<y<<')'<<std::endl;
 
     //get viewport height, and mouse dx, dy
     GLint vp[4];
@@ -203,7 +203,7 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
     double height = (double)vp[3];
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
-    double scale = .5 * vcl_sqrt(vcl_pow(dx,2.0) + vcl_pow(dy,2.0));
+    double scale = .5 * std::sqrt(std::pow(dx,2.0) + std::pow(dy,2.0));
 
 
     //get cam space points
@@ -218,7 +218,7 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
     wp1 += cam_center - vgl_point_3d<double>(0,0,0);
     vgl_vector_3d<double> worldVec = scale * normalized(wp0-wp1);
 
-    //vcl_cout<<"  new cam center: "<<cam_center + worldVec<<vcl_endl;
+    //std::cout<<"  new cam center: "<<cam_center + worldVec<<std::endl;
     stare_point_ += worldVec;
     cam_.set_camera_center(cam_center + worldVec);
 

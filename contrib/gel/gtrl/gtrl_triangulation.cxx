@@ -40,7 +40,7 @@ void gtrl_triangulation::run()
   //   like starting at 0
   const int offset = 100;
 
-  vcl_vector<gtrl_vertex_sptr> pointlist;
+  std::vector<gtrl_vertex_sptr> pointlist;
 
   for (int i=0; i< poly_.size(); i++)
     {
@@ -59,19 +59,19 @@ void gtrl_triangulation::run()
   in.pointmarkerlist= markers;
   in.numberofpointattributes= 0;
   in.numberofholes= 0;
-  in.trianglelist= 0;
+  in.trianglelist= VXL_NULLPTR;
 
   // output
   triangulateio out;
-  out.pointlist= 0;
-  out.trianglelist= 0;
-  out.pointmarkerlist= 0;
+  out.pointlist= VXL_NULLPTR;
+  out.trianglelist= VXL_NULLPTR;
+  out.pointmarkerlist= VXL_NULLPTR;
   out.numberofpointattributes= 0;
   out.numberofholes= 0;
   out.numberoftriangleattributes= 0;
 
   // do triangulation
-  triangulate( "-z -i -q", &in, &out, 0);
+  triangulate( "-z -i -q", &in, &out, VXL_NULLPTR);
 
   // create any new points that are necessary
   for (int i=0; i< out.numberofpoints; i++)

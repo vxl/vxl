@@ -1,7 +1,8 @@
 // This is core/vcsl/vcsl_cylindrical_to_cartesian_3d.cxx
+#include <cmath>
 #include "vcsl_cylindrical_to_cartesian_3d.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for sqrt(), cos(), sin()
+#include <vcl_compiler.h>
 
 //---------------------------------------------------------------------------
 // Is `this' invertible at time `time'?
@@ -34,8 +35,8 @@ vcsl_cylindrical_to_cartesian_3d::execute(const vnl_vector<double> &v,
   double theta=v.get(1);
   double z=v.get(2);
 
-  double x=rho*vcl_cos(theta);
-  double y=rho*vcl_sin(theta);
+  double x=rho*std::cos(theta);
+  double y=rho*std::sin(theta);
 
   result.put(0,x);
   result.put(1,y);
@@ -65,8 +66,8 @@ vcsl_cylindrical_to_cartesian_3d::inverse(const vnl_vector<double> &v,
   double y=v.get(1);
   double z=v.get(2);
 
-  double rho=vcl_sqrt(x*x+y*y);
-  double theta=vcl_atan2(y,x);
+  double rho=std::sqrt(x*x+y*y);
+  double theta=std::atan2(y,x);
 
   result.put(0,rho);
   result.put(1,theta);

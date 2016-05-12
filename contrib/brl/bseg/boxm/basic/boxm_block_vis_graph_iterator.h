@@ -2,12 +2,14 @@
 #define boxm_block_vis_graph_iterator_h_
 //:
 // \file
+#include <vector>
+#include <iostream>
+#include <map>
 #include "boxm_block_vis_graph_node.h"
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class boxm_block_vis_graph_iterator
@@ -20,23 +22,23 @@ class boxm_block_vis_graph_iterator
 
   bool next();
 
-  vcl_vector<boxm_block<T>*> frontier_blocks();
+  std::vector<boxm_block<T>*> frontier_blocks();
 
-  vcl_vector<vgl_point_3d<int> > frontier_indices() const {return to_process_indices_; }
+  std::vector<vgl_point_3d<int> > frontier_indices() const {return to_process_indices_; }
 
   void set_reverse_iter(bool reverse) { reverse_it_ = reverse; }
 
  private:
 
-  typedef vcl_map<vgl_point_3d<int>, boxm_block_vis_graph_node<T>, vgl_point_3d_cmp<int> > vis_graph_type;
+  typedef std::map<vgl_point_3d<int>, boxm_block_vis_graph_node<T>, vgl_point_3d_cmp<int> > vis_graph_type;
 
   //: visibility graph, indexed by the block indices
   vis_graph_type vis_graph_;
 
   //: blocks that can be seen by the camera unoccluded
-  vcl_vector<typename vis_graph_type::iterator> curr_blocks_;
+  std::vector<typename vis_graph_type::iterator> curr_blocks_;
 
-  vcl_vector<vgl_point_3d<int> > to_process_indices_;
+  std::vector<vgl_point_3d<int> > to_process_indices_;
 
   //: the camera
   vpgl_camera_double_sptr camera_;

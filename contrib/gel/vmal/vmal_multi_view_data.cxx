@@ -16,7 +16,7 @@ template <class T>
 vmal_multi_view_data<T>::vmal_multi_view_data(int nbviews):
 nbviews_(nbviews),size_vect_ft_(0),matchnum_(-1),closed_track_(true),MVM(0)
 {
-  //all_pts=new vcl_vector<T>();
+  //all_pts=new std::vector<T>();
 }
 
 template <class T>
@@ -77,14 +77,14 @@ void vmal_multi_view_data<T>::close_track()
 
 
 template <class T>
-bool vmal_multi_view_data<T>::get_first_track(vcl_map<int,T,vcl_less<int> > & track)
+bool vmal_multi_view_data<T>::get_first_track(std::map<int,T,std::less<int> > & track)
 {
   matchnum_=0;
   return get_next_track(track);
 }
 
 template <class T>
-bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T,vcl_less<int> > & track)
+bool vmal_multi_view_data<T>::get_next_track(std::map<int,T,std::less<int> > & track)
 {
   if (int(MVM.size())>matchnum_)
   {
@@ -95,7 +95,7 @@ bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T,vcl_less<int> > & tra
       if (value !=NViewMatch::nomatch)
       {
         T tmp_edge=all_pts[value];
-        typedef typename vcl_map<int,T,vcl_less<int> >::value_type value_type;
+        typedef typename std::map<int,T,std::less<int> >::value_type value_type;
         track.insert(value_type(i,tmp_edge));
       }
     }
@@ -109,13 +109,13 @@ bool vmal_multi_view_data<T>::get_next_track(vcl_map<int,T,vcl_less<int> > & tra
 //put in point_vector all the points that have been detected and
 //matched in at least two views in the view view_num
 template <class T>
-void vmal_multi_view_data<T>::get(int view_num,vcl_vector<T> &ft_vector)
+void vmal_multi_view_data<T>::get(int view_num,std::vector<T> &ft_vector)
 {
   if ((view_num>=0) && (view_num<nbviews_))
   {
   ft_vector.clear();
   NViewMatches::iterator iter;
-  vcl_cerr << "MVM->size():"<<MVM.size()<<vcl_endl;
+  std::cerr << "MVM->size():"<<MVM.size()<<std::endl;
   for (iter=MVM.begin();iter!=MVM.end();iter++)
   {
     int ft_num=(*iter)[view_num];
@@ -132,8 +132,8 @@ void vmal_multi_view_data<T>::get(int view_num,vcl_vector<T> &ft_vector)
 //have been matched between thoses 2 views.
 template <class T>
 void vmal_multi_view_data<T>::get(int view_num1,int view_num2,
-                  vcl_vector<T> &ft_vector1,
-                  vcl_vector<T> &ft_vector2)
+                  std::vector<T> &ft_vector1,
+                  std::vector<T> &ft_vector2)
 {
   if ((view_num1>=0) && (view_num1<nbviews_) &&
     (view_num2>=0) && (view_num2<nbviews_) && (view_num2!=view_num1))
@@ -158,9 +158,9 @@ void vmal_multi_view_data<T>::get(int view_num1,int view_num2,
 
 template <class T>
 void vmal_multi_view_data<T>::get(int view_num1,int view_num2,int view_num3,
-                  vcl_vector<T> &ft_vector1,
-                  vcl_vector<T> &ft_vector2,
-                  vcl_vector<T> &ft_vector3)
+                  std::vector<T> &ft_vector1,
+                  std::vector<T> &ft_vector2,
+                  std::vector<T> &ft_vector3)
 {
   if ((view_num1>=0) && (view_num1<nbviews_) &&
     (view_num2>=0) && (view_num2<nbviews_) &&
@@ -239,7 +239,7 @@ void vmal_multi_view_data<T>::remove(int view_num, T match)
 }
 
 template <class T>
-vcl_ostream& vmal_multi_view_data<T>::print(vcl_ostream& str)
+std::ostream& vmal_multi_view_data<T>::print(std::ostream& str)
 {
   for (unsigned int j=0;j<MVM.size();j++)
   {
@@ -252,7 +252,7 @@ vcl_ostream& vmal_multi_view_data<T>::print(vcl_ostream& str)
       str<<"  "<<MVM[j][i];
       else
       str<<" "<<MVM[j][i];
-    str<<vcl_endl;
+    str<<std::endl;
   }
   return str;
 }

@@ -1,4 +1,4 @@
 # core/vpgl/algo/examples/CMakeLists.txt
 
-ADD_EXECUTABLE(vpgl_synth_bundle_adjust vpgl_synth_bundle_adjust.cxx)
-TARGET_LINK_LIBRARIES( vpgl_synth_bundle_adjust vpgl_algo vgl_algo vnl vgl vul )
+add_executable(vpgl_synth_bundle_adjust vpgl_synth_bundle_adjust.cxx)
+target_link_libraries( vpgl_synth_bundle_adjust ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul )

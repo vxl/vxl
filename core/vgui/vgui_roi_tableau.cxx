@@ -8,8 +8,9 @@
 // \date   18 Jul 2000
 // \brief  See vgui_roi_tableau.h for a description of this file.
 
+#include <string>
 #include "vgui_roi_tableau.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_crop.h>
@@ -24,7 +25,7 @@
 vgui_roi_tableau::vgui_roi_tableau()
   : vgui_tableau()
 {
-  cropped_image_ = 0;
+  cropped_image_ = VXL_NULLPTR;
 }
 
 vgui_roi_tableau::vgui_roi_tableau(vil1_image const &I,char const *t_name,
@@ -40,18 +41,18 @@ vgui_roi_tableau::vgui_roi_tableau(vil1_image const &I,char const *t_name,
 
 vgui_roi_tableau::~vgui_roi_tableau() {}
 
-vcl_string vgui_roi_tableau::type_name() const
+std::string vgui_roi_tableau::type_name() const
 {
   return "vgui_roi_tableau";
 }
 
 
-vcl_string vgui_roi_tableau::file_name() const
+std::string vgui_roi_tableau::file_name() const
 {
   return name_;
 }
 
-vcl_string vgui_roi_tableau::pretty_name() const
+std::string vgui_roi_tableau::pretty_name() const
 {
   return type_name() + "[" + name_ + "]";
 }
@@ -64,9 +65,9 @@ vil1_image vgui_roi_tableau::get_image() const
 }
 #if 0
 // this removes the directory part of a filename :
-static inline vcl_string __FILE__rem_dir(const char *s)
+static inline std::string __FILE__rem_dir(const char *s)
 {
-  char const *slash = vcl_strrchr(s,'/');
+  char const *slash = std::strrchr(s,'/');
   return slash ? slash+1 : s;
 }
 #endif

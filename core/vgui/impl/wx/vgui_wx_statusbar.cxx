@@ -48,7 +48,7 @@ int vgui_wx_statusbar::write(const char* text, int n)
     else
     {
       linebuffer_.append(text, n);
-      if (linebuffer_.find('\n') != vcl_string::npos)
+      if (linebuffer_.find('\n') != std::string::npos)
       {
         // buffer filled, print to wxStatusBar and reset
         widget_->SetStatusText(wxString(linebuffer_.c_str(),wxConvUTF8));

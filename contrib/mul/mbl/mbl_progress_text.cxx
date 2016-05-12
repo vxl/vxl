@@ -13,7 +13,7 @@
 //========================================================================
 // Constructor
 //========================================================================
-mbl_progress_text::mbl_progress_text(vcl_ostream& os/*=vcl_cout*/)
+mbl_progress_text::mbl_progress_text(std::ostream& os/*=std::cout*/)
 : os_(os)
 {
 }
@@ -30,7 +30,7 @@ mbl_progress_text::~mbl_progress_text()
 //========================================================================
 // Name of the class
 //========================================================================
-vcl_string mbl_progress_text::is_a() const
+std::string mbl_progress_text::is_a() const
 {
   return "mbl_progress_text";
 }
@@ -39,29 +39,29 @@ vcl_string mbl_progress_text::is_a() const
 //========================================================================
 // Called when set_estimate_iterations() is called for a given identifier.
 //========================================================================
-void mbl_progress_text::on_set_estimated_iterations(const vcl_string& identifier,
+void mbl_progress_text::on_set_estimated_iterations(const std::string& identifier,
                                                     const int /*total_iterations*/)
 {
-  os_ << "Starting mbl_progress_text \"" << identifier << "\"" << vcl_endl;
+  os_ << "Starting mbl_progress_text \"" << identifier << "\"" << std::endl;
 }
 
 
 //========================================================================
 // Called when set_progress() is called for a given identifier.
 //========================================================================
-void mbl_progress_text::on_set_progress(const vcl_string& identifier,
+void mbl_progress_text::on_set_progress(const std::string& identifier,
                                         const int progress)
 {
   os_ << "Progress for mbl_progress_text \"" << identifier << "\" is " << progress
       << " (out of " << estimated_iterations(identifier) << ')'
-      << vcl_endl;
+      << std::endl;
 }
 
 
 //========================================================================
 // Called when end_progress() is called for a given identifier.
 //========================================================================
-void mbl_progress_text::on_end_progress(const vcl_string &identifier)
+void mbl_progress_text::on_end_progress(const std::string &identifier)
 {
-  os_ << "Finishing mbl_progress_text \"" << identifier << "\"" << vcl_endl;
+  os_ << "Finishing mbl_progress_text \"" << identifier << "\"" << std::endl;
 }

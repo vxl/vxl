@@ -31,11 +31,6 @@
  *  Copyright (c) 1985-2003
  *  by Kenneth S. Kundert
  */
-#if 0
-static char copyright[] =
-    "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
-#endif
-
 
 /*
  *  IMPORTS
@@ -70,7 +65,7 @@ static void SolveComplexTransposedMatrix( MatrixPtr,
 #elseif spCOMPLEX
 static void SolveComplexMatrix( MatrixPtr, RealVector, RealVector );
 static void SolveComplexTransposedMatrix( MatrixPtr,
-			RealVector, RealVector );
+                        RealVector, RealVector );
 #endif
 
 
@@ -144,8 +139,8 @@ spSolve(
     spREAL RHS[],
     spREAL Solution[]
 #   if spCOMPLEX AND spSEPARATED_COMPLEX_VECTORS
-	, spREAL iRHS[]
-	, spREAL iSolution[]
+        , spREAL iRHS[]
+        , spREAL iSolution[]
 #   endif
 )
 {
@@ -186,7 +181,7 @@ void SolveComplexMatrix();
 
 /* Forward elimination. Solves Lc = b.*/
     for (I = 1; I <= Size; I++)
-    {   
+    {
 /* This step of the elimination is skipped if Temp equals zero. */
         if ((Temp = Intermediate[I]) != 0.0)
         {   pPivot = Matrix->Diag[I];
@@ -289,8 +284,8 @@ SolveComplexMatrix(
     RealVector RHS,
     RealVector Solution
 #   if spSEPARATED_COMPLEX_VECTORS
-	, RealVector iRHS
-	, RealVector iSolution
+        , RealVector iRHS
+        , RealVector iSolution
 #   endif
 )
 {
@@ -456,8 +451,8 @@ spSolveTransposed(
     spREAL  RHS[],
     spREAL  Solution[]
 #   if spCOMPLEX AND spSEPARATED_COMPLEX_VECTORS
-	, spREAL iRHS[]
-	, spREAL iSolution[]
+        , spREAL iRHS[]
+        , spREAL iSolution[]
 #   endif
 )
 {
@@ -498,7 +493,7 @@ void SolveComplexTransposedMatrix();
 
 /* Forward elimination. */
     for (I = 1; I <= Size; I++)
-    {   
+    {
 /* This step of the elimination is skipped if Temp equals zero. */
         if ((Temp = Intermediate[I]) != 0.0)
         {   pElement = Matrix->Diag[I]->NextInRow;
@@ -603,8 +598,8 @@ SolveComplexTransposedMatrix(
     RealVector  RHS,
     RealVector  Solution
 #   if spSEPARATED_COMPLEX_VECTORS
-	, RealVector iRHS
-	, RealVector iSolution
+        , RealVector iRHS
+        , RealVector iSolution
 #   endif
 )
 {

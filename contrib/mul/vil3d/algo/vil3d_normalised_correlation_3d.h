@@ -6,9 +6,11 @@
 // \brief 3D normalised correlation
 // \author Tim Cootes
 
+#include <iostream>
+#include <cmath>
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>  // for vcl_sqrt()
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 
 //: Evaluate dot product between kernel and src_im
@@ -16,9 +18,9 @@
 // and unit variance
 // \relatesalso vil3d_image_view
 template <class srcT, class kernelT, class accumT>
-inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
-                                     vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_kstep,
-                                     vcl_ptrdiff_t s_pstep,
+inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, std::ptrdiff_t s_istep,
+                                     std::ptrdiff_t s_jstep, std::ptrdiff_t s_kstep,
+                                     std::ptrdiff_t s_pstep,
                                      const vil3d_image_view<kernelT>& kernel,
                                      accumT)
 {
@@ -27,7 +29,7 @@ inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
   unsigned nk = kernel.nk();
   unsigned np = kernel.nplanes();
 
-  vcl_ptrdiff_t k_istep = kernel.istep(),
+  std::ptrdiff_t k_istep = kernel.istep(),
                 k_jstep = kernel.jstep(),
                 k_kstep = kernel.kstep();
 
@@ -64,7 +66,7 @@ inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
   long n=ni*nj*nk*np;
   mean/=n;
   accumT var = sum_sq/n - mean*mean;
-  return var<=0 ? 0 : sum/vcl_sqrt(var);
+  return var<=0 ? 0 : sum/std::sqrt(var);
 }
 
 //: Normalised cross-correlation of (pre-normalised) kernel with srcT.
@@ -84,11 +86,11 @@ inline void vil3d_normalised_correlation_3d(const vil3d_image_view<srcT>& src_im
   unsigned ni = 1+src_im.ni()-kernel.ni(); assert(1+src_im.ni() >= kernel.ni());
   unsigned nj = 1+src_im.nj()-kernel.nj(); assert(1+src_im.nj() >= kernel.nj());
   unsigned nk = 1+src_im.nk()-kernel.nk(); assert(1+src_im.nk() >= kernel.nk());
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  vcl_ptrdiff_t s_kstep = src_im.kstep(), s_pstep = src_im.planestep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t s_kstep = src_im.kstep(), s_pstep = src_im.planestep();
 
   dest_im.set_size(ni,nj,nk,1);
-  vcl_ptrdiff_t d_istep = dest_im.istep(),
+  std::ptrdiff_t d_istep = dest_im.istep(),
                 d_jstep = dest_im.jstep(),
                 d_kstep = dest_im.kstep();
 

@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_export_oriented_point_cloud_process.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,13 +13,12 @@
 // \author Ali Osman Ulusoy
 // \date Oct 25, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_export_oriented_point_cloud.h>
-#include <vcl_sstream.h>
 #include <vgl/vgl_intersection.h>
 
 
@@ -31,8 +33,8 @@ bool boxm2_export_oriented_point_cloud_process_cons(bprb_func_process& pro)
   using namespace boxm2_export_oriented_point_cloud_process_globals;
 
   //process takes 8 inputs (3 required ones), no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string"; //filename
@@ -58,7 +60,7 @@ bool boxm2_export_oriented_point_cloud_process_cons(bprb_func_process& pro)
   brdb_value_sptr exp_t = new brdb_value_t<float>(0.0);
   pro.set_input(7, exp_t);
 
-  brdb_value_sptr bb_filename = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr bb_filename = new brdb_value_t<std::string>("");
   pro.set_input(8, bb_filename);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -70,7 +72,7 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
   using namespace boxm2_export_oriented_point_cloud_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -78,13 +80,13 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_string output_filename = pro.get_input<vcl_string>(i++);
+  std::string output_filename = pro.get_input<std::string>(i++);
   bool output_aux = pro.get_input<bool>(i++);
   float vis_t = pro.get_input<float>(i++);
   float nmag_t = pro.get_input<float>(i++);
   float prob_t = pro.get_input<float>(i++);
   float exp_t = pro.get_input<float>(i++);
-  vcl_string bb_filename = pro.get_input<vcl_string>(i++);
+  std::string bb_filename = pro.get_input<std::string>(i++);
 
   return boxm2_export_oriented_point_cloud::export_oriented_point_cloud(scene, cache, output_filename,
                                                                         output_aux, vis_t, nmag_t, prob_t, exp_t,

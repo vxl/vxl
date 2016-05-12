@@ -12,17 +12,17 @@
 bool vil_crop_image_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("unsigned"); 
-  input_types.push_back("unsigned"); 
-  input_types.push_back("unsigned"); 
-  input_types.push_back("unsigned"); 
+  std::vector<std::string> input_types;
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("unsigned");
+  input_types.push_back("unsigned");
+  input_types.push_back("unsigned");
+  input_types.push_back("unsigned");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); 
+  std::vector<std::string> output_types;
+  output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -33,7 +33,7 @@ bool vil_crop_image_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 5) {
-    vcl_cout << "vil_crop_image_process: The input number should be 5" << vcl_endl;
+    std::cout << "vil_crop_image_process: The input number should be 5" << std::endl;
     return false;
   }
 
@@ -48,10 +48,10 @@ bool vil_crop_image_process(bprb_func_process& pro)
   unsigned j0= pro.get_input<unsigned>(i++);
   unsigned ni= pro.get_input<unsigned>(i++);
   unsigned nj= pro.get_input<unsigned>(i++);
-  
+
   vil_image_resource_sptr out_img = vil_crop(image_ptr, i0, ni, j0, nj);
   vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(out_img->get_view()));
-  
+
   pro.set_output_val<vil_image_view_base_sptr>(0, out_sptr);
   return true;
 }
@@ -66,14 +66,14 @@ namespace vil_crop_image_res_process_globals
 bool vil_crop_image_res_process_cons(bprb_func_process& pro)
 {
   using namespace vil_crop_image_res_process_globals;
-  vcl_vector<vcl_string> input_types(n_inputs_);
+  std::vector<std::string> input_types(n_inputs_);
   input_types[0] = "vil_image_resource_sptr"; // image resource that require cropping
   input_types[1] = "unsigned";
   input_types[2] = "unsigned";
   input_types[3] = "unsigned";
   input_types[4] = "unsigned";
 
-  vcl_vector<vcl_string> output_types(n_outputs_);
+  std::vector<std::string> output_types(n_outputs_);
   output_types[0] = "vil_image_view_base_sptr";
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
@@ -84,7 +84,7 @@ bool vil_crop_image_res_process(bprb_func_process& pro)
   using namespace vil_crop_image_res_process_globals;
   // sanity check
   if (pro.n_inputs() != n_inputs_) {
-    vcl_cout << pro.name() << ": The input number should be 5" << vcl_endl;
+    std::cout << pro.name() << ": The input number should be 5" << std::endl;
     return false;
   }
 

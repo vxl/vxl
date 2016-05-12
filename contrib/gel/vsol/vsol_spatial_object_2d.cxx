@@ -1,9 +1,10 @@
 // This is gel/vsol/vsol_spatial_object_2d.cxx
+#include <iostream>
 #include "vsol_spatial_object_2d.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -22,7 +23,7 @@ const char * vsol_spatial_object_2d::SpatialTypes[] =
 };
 
 vsol_spatial_object_2d::vsol_spatial_object_2d()
-  : bounding_box_(0)
+  : bounding_box_(VXL_NULLPTR)
 {
   this->tag_ = 0;
   this->id_ = 0;
@@ -30,7 +31,7 @@ vsol_spatial_object_2d::vsol_spatial_object_2d()
 }
 
 vsol_spatial_object_2d::vsol_spatial_object_2d(vsol_spatial_object_2d const& s)
-  : vsol_spatial_object(s), bounding_box_(0)
+  : vsol_spatial_object(s), bounding_box_(VXL_NULLPTR)
 {
   this->tag_ = 0;
   this->id_ = s.get_id();
@@ -155,9 +156,9 @@ vsol_spatial_object_2d::b_read(vsl_b_istream &is)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsol_spatial_object_2d::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vsol_spatial_object_2d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/clsfy
   DESCRIPTION "Various statistical classifiers"
   )
 
-SET(clsfy_sources
+set(clsfy_sources
  clsfy_add_all_loaders.cxx                    clsfy_add_all_loaders.h
  clsfy_binary_hyperplane.cxx                  clsfy_binary_hyperplane.h
  clsfy_binary_hyperplane_ls_builder.cxx       clsfy_binary_hyperplane_ls_builder.h
@@ -50,13 +50,11 @@ SET(clsfy_sources
  clsfy_random_forest_builder.cxx                clsfy_random_forest_builder.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates clsfy_sources)
+aux_source_directory(Templates clsfy_sources)
 
-ADD_LIBRARY(clsfy ${clsfy_sources})
-INSTALL_TARGETS(/lib clsfy)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/clsfy ${clsfy_sources})
-TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vnl vbl vsl vul)
+vxl_add_library(LIBRARY_NAME clsfy LIBRARY_SOURCES ${clsfy_sources})
+target_link_libraries(clsfy vpdfl mbl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

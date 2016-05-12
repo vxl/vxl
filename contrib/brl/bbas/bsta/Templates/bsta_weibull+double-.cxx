@@ -1,3 +1,3 @@
-#include <bsta/bsta_weibull.txx>
+#include <bsta/bsta_weibull.hxx>
 
 BSTA_WEIBULL_INSTANTIATE(double);

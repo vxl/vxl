@@ -1,7 +1,8 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>
@@ -16,10 +17,10 @@
 
 static void test_brec_part_hierarchy_learner()
 {
-  vcl_string file = "test_view_0_cropped.png"; // "normalized0_cropped.png";
-  vcl_string gt_file = "normalized0_gt_cropped.png";
+  std::string file = "test_view_0_cropped.png"; // "normalized0_cropped.png";
+  std::string gt_file = "normalized0_gt_cropped.png";
   // load the mask img as well for foreground model construction
-  vcl_string mask_file = "test_view_0_mask_cropped.bin";
+  std::string mask_file = "test_view_0_mask_cropped.bin";
 
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
   TEST("test load img", !img, false);
@@ -32,7 +33,7 @@ static void test_brec_part_hierarchy_learner()
     return;
 
   unsigned ni = img->ni(); unsigned nj = img->nj();
-  vcl_cout << "image ni: " << ni << " nj: " << nj << vcl_endl;
+  std::cout << "image ni: " << ni << " nj: " << nj << std::endl;
 
   vsl_b_ifstream is(mask_file);
   vil_image_view_base_sptr mask_image;
@@ -47,13 +48,13 @@ static void test_brec_part_hierarchy_learner()
   dummy.fill(1.0f);
   vil_math_image_difference(dummy, gt_map, back_gt_map);
 
-  vcl_string prob_map_file = "test_view_0_prob_map_cropped.tiff";
+  std::string prob_map_file = "test_view_0_prob_map_cropped.tiff";
   vil_image_resource_sptr prob_map_img = vil_load_image_resource(prob_map_file.c_str());
   TEST("test load img", !prob_map_img, false);
   if (!prob_map_img)
     return;
   if (prob_map_img->ni() != ni || prob_map_img->nj() != nj) {
-    vcl_cout << "std dev img size not compatible!\n";
+    std::cout << "std dev img size not compatible!\n";
     return;
   }
   vil_image_view<float> back_prob_map = prob_map_img->get_view();
@@ -73,9 +74,9 @@ static void test_brec_part_hierarchy_learner()
   t.mark();
   // no need to convert prob map when passing gt_map cause vehicles have "high probs" (in background map, vehicles have low probs)
   //collector->collect_layer0_stats(inp_img, gt_map, mask_img);
-  vcl_cout << " update of one image took: " << t.real()/1000 << " seconds " << t.real()/ (60*1000) << " mins.\n";
+  std::cout << " update of one image took: " << t.real()/1000 << " seconds " << t.real()/ (60*1000) << " mins.\n";
   //collector->print();
-  vcl_string m_file = "out_figure.m";
+  std::string m_file = "out_figure.m";
   collector->print_to_m_file_layer0(m_file);
   collector = 0;
 
@@ -96,7 +97,7 @@ static void test_brec_part_hierarchy_learner()
     h.upcount(numbers[i], probs[i]);
   }
 
-  vcl_cout << "mean from histogram: " << h.mean() << " variance: " << h.variance() << vcl_endl;
+  std::cout << "mean from histogram: " << h.mean() << " variance: " << h.variance() << std::endl;
 
   // calculate yourself
   float x_sum = 0.0f, xsq_sum = 0.0f, p_sum = 0.0f;
@@ -108,7 +109,7 @@ static void test_brec_part_hierarchy_learner()
   mean = x_sum/p_sum; // estimate of mean
   float total_var = xsq_sum/p_sum; //estimate of total variance
   float var = total_var - mean*mean;
-  vcl_cout << "mean calculated: " << mean << " variance: " << var << vcl_endl;
+  std::cout << "mean calculated: " << mean << " variance: " << var << std::endl;
 }
 
 TESTMAIN( test_brec_part_hierarchy_learner );

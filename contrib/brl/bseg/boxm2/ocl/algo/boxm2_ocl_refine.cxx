@@ -5,8 +5,8 @@
 #include <vul/vul_timer.h>
 
 //declare bocl_kernel* maps
-vcl_map<vcl_string, bocl_kernel*> boxm2_ocl_refine::tree_kernels_;
-vcl_map<vcl_string, bocl_kernel*> boxm2_ocl_refine::data_kernels_;
+std::map<std::string, bocl_kernel*> boxm2_ocl_refine::tree_kernels_;
+std::map<std::string, bocl_kernel*> boxm2_ocl_refine::data_kernels_;
 
 int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
                                    boxm2_scene_sptr scene,
@@ -42,8 +42,8 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 
   //2. set workgroup size
   opencl_cache->clear_cache();
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     //----- IF THE BLOCK IS NOT RANDOMLY DISTRIBUTED, USE NEW METHOD -----------
@@ -62,7 +62,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
     opencl_cache->clear_cache();
     boxm2_block_metadata data = blk_iter->second;
     boxm2_block_id id = blk_iter->first;
-    vcl_cout<<"Refining Block "<< id << "...";
+    std::cout<<"Refining Block "<< id << "...";
     bocl_kernel* kern = get_refine_tree_kernel(device);
 
     ////////////////////////////////////////////////////////////////////////////
@@ -84,12 +84,12 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
     transfer_time += (float) transfer.all();
-    vcl_size_t lThreads[] = {64, 1};
-    vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
+    std::size_t lThreads[] = {64, 1};
+    std::size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
     float alphasize=(float)alpha->num_bytes()/1024/1024;
     if (alphasize >= (float)blk_iter->second.max_mb_/10.0) {
-      vcl_cout<<"  Refine STOP !!!"<<vcl_endl;
+      std::cout<<"  Refine STOP !!!"<<std::endl;
       opencl_cache->unref_mem(blk_copy.ptr());
       opencl_cache->unref_mem(tree_sizes.ptr());
       continue;
@@ -134,9 +134,9 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
     tree_sizes->write_to_buffer((queue));
     status = clFinish(queue);
     int dataLen = alpha->num_bytes()/sizeof(float);
-    vcl_cout<<"  new data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
+    std::cout<<"  new data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
             <<"  num refined: "<<(newDataSize-dataLen)/8<<'\n'
-            <<"  scan data sizes time: "<<scan_time.all()<<vcl_endl;
+            <<"  scan data sizes time: "<<scan_time.all()<<std::endl;
     transfer_time += scan_time.all();
     num_cells   += (unsigned) newDataSize;
     num_refined += (unsigned) ( (newDataSize-dataLen)/8 );
@@ -153,11 +153,11 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
     //    - delete the old BOCL_MEM*, and that's it...
     // POSSIBLE PROBLEMS: data may not exist in cache and may need to be initialized...
     //this vector will be passed in (listing data types to refine)
-    vcl_vector<vcl_string> data_types = scene->appearances();
+    std::vector<std::string> data_types = scene->appearances();
     data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     for (unsigned int i=0; i<data_types.size(); ++i)
     {
-      vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
+      std::cout<<"  Swapping data of type: "<<data_types[i]<<std::endl;
       bocl_kernel* kern = get_refine_data_kernel(device, data_types[i]);
 
       //get bocl_mem data independent of CPU pointer
@@ -165,8 +165,8 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 
       //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
       int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
-      vcl_cout<<"# of bytes "<<data_types[i]<<' '<<dataBytes<<vcl_endl;
-      bocl_mem* new_dat = opencl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
+      std::cout<<"# of bytes "<<data_types[i]<<' '<<dataBytes<<std::endl;
+      bocl_mem* new_dat = opencl_cache->alloc_mem(dataBytes, VXL_NULLPTR, "new data buffer " + data_types[i]);
       new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
       //grab the block out of the cache as well
@@ -205,8 +205,8 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       kern->set_local_arg( lThreads[0]*73*sizeof(cl_uchar) );
 
       //set workspace
-      vcl_size_t lThreads[] = {64, 1};
-      vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
+      std::size_t lThreads[] = {64, 1};
+      std::size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
       //execute kernel
       kern->execute( queue, 2, lThreads, gThreads);
@@ -233,8 +233,8 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
     opencl_cache->unref_mem(tree_sizes.ptr());
   }
   clFinish(queue);
-  vcl_cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<vcl_endl;
-  vcl_cout<<" Number of cells in scene (after refine): "<<num_cells<<vcl_endl;
+  std::cout<<" Refine GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<std::endl;
+  std::cout<<" Number of cells in scene (after refine): "<<num_cells<<std::endl;
   clReleaseCommandQueue(queue);
 
   //set output
@@ -243,18 +243,18 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 
 
 //compile kernels and place in static map
-bocl_kernel* boxm2_ocl_refine::get_refine_tree_kernel(bocl_device_sptr device, vcl_string opts)
+bocl_kernel* boxm2_ocl_refine::get_refine_tree_kernel(bocl_device_sptr device, std::string opts)
 {
   // find cached kernel
-  vcl_string identifier      = device->device_identifier();
-  vcl_string tree_identifier = identifier + "tree";
+  std::string identifier      = device->device_identifier();
+  std::string tree_identifier = identifier + "tree";
   if (tree_kernels_.find(tree_identifier)!=tree_kernels_.end())
     return tree_kernels_[tree_identifier];
 
   //otherwise compile
-  vcl_cout<<"== Compiling tree kernel for device "<<identifier<<"=="<<vcl_endl;
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::cout<<"== Compiling tree kernel for device "<<identifier<<"=="<<std::endl;
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "basic/linked_list.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -269,18 +269,18 @@ bocl_kernel* boxm2_ocl_refine::get_refine_tree_kernel(bocl_device_sptr device, v
   return tree_kernels_[tree_identifier];
 }
 
-bocl_kernel* boxm2_ocl_refine::get_refine_data_kernel(bocl_device_sptr device, vcl_string data_type)
+bocl_kernel* boxm2_ocl_refine::get_refine_data_kernel(bocl_device_sptr device, std::string data_type)
 {
-  vcl_string identifier = device->device_identifier();
-  vcl_string options = get_option_string(boxm2_data_info::datasize(data_type));
-  vcl_string data_identifier = identifier+options;
+  std::string identifier = device->device_identifier();
+  std::string options = get_option_string(boxm2_data_info::datasize(data_type));
+  std::string data_identifier = identifier+options;
   if (data_kernels_.find(data_identifier)!=data_kernels_.end())
     return data_kernels_[data_identifier];
 
   //otherwise compile data kernels
-  vcl_cout<<"== Compiling refine data kernel for device "<<identifier<<"=="<<vcl_endl;
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::cout<<"== Compiling refine data kernel for device "<<identifier<<"=="<<std::endl;
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "basic/linked_list.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -294,10 +294,10 @@ bocl_kernel* boxm2_ocl_refine::get_refine_data_kernel(bocl_device_sptr device, v
   return data_kernels_[data_identifier];
 }
 
-vcl_string boxm2_ocl_refine::get_option_string(int datasize)
+std::string boxm2_ocl_refine::get_option_string(int datasize)
 {
-  vcl_cout<<"DATA SIZE "<<datasize <<vcl_endl;
-  vcl_string options="";
+  std::cout<<"DATA SIZE "<<datasize <<std::endl;
+  std::string options="";
   switch (datasize)
   {
     case 2:

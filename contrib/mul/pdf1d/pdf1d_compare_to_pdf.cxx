@@ -110,22 +110,22 @@ double pdf1d_compare_to_pdf::bootstrap_compare_form(vnl_vector<double>& B,
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_compare_to_pdf::is_a() const
+std::string pdf1d_compare_to_pdf::is_a() const
 {
-  return vcl_string("pdf1d_compare_to_pdf");
+  return std::string("pdf1d_compare_to_pdf");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_compare_to_pdf::is_class(vcl_string const& s) const
+bool pdf1d_compare_to_pdf::is_class(std::string const& s) const
 {
   return s==pdf1d_compare_to_pdf::is_a();
 }
 
 
-void vsl_print_summary(vcl_ostream& os,const pdf1d_compare_to_pdf& b)
+void vsl_print_summary(std::ostream& os,const pdf1d_compare_to_pdf& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -135,7 +135,7 @@ void vsl_print_summary(vcl_ostream& os,const pdf1d_compare_to_pdf& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const pdf1d_compare_to_pdf* b)
+void vsl_print_summary(std::ostream& os,const pdf1d_compare_to_pdf* b)
 {
   if (b)
     vsl_print_summary(os, *b);

@@ -13,8 +13,9 @@
 // \endverbatim
 //=========================================================================
 
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <string>
+#include <map>
+#include <vcl_compiler.h>
 
 #include <atlbase.h>
 #include <dshow.h>
@@ -77,31 +78,31 @@ class vidl_dshow_istream_params //: public vidl_iostream_params
   void configure_filter(const CComPtr<IBaseFilter>& source);
 
   //: Print a list of parameters and proper value ranges.
-  static void print_parameter_help(const vcl_string& name);
+  static void print_parameter_help(const std::string& name);
 
   //: Print a list of parameters and proper value ranges.
   static void print_parameter_help(const CComPtr<IBaseFilter>& filter);
 
   //: Set properties from a map(string,value).
   vidl_dshow_istream_params& set_properties(
-    const vcl_map<vcl_string,vcl_string>& props);
+    const std::map<std::string,std::string>& props);
 
   // Read accessor functions
   // - general params (all dshow_params should have)
   bool register_in_rot()       const { return register_in_rot_;      }
   bool run_when_ready()        const { return run_when_ready_;       }
-  vcl_string save_graph_to()   const { return save_graph_to_;        }
-  vcl_string device_name()     const { return device_name_;          }
-  vcl_string output_filename() const { return output_filename_;      }
+  std::string save_graph_to()   const { return save_graph_to_;        }
+  std::string device_name()     const { return device_name_;          }
+  std::string output_filename() const { return output_filename_;      }
   GUID target_output_format()  const { return target_output_format_; }
 
   // Write accessor functions.
   // - general params (all dshow_params should have)
   vidl_dshow_istream_params& set_register_in_rot(bool);
   vidl_dshow_istream_params& set_run_when_ready(bool);
-  vidl_dshow_istream_params& set_save_graph_to(const vcl_string&);
-  vidl_dshow_istream_params& set_device_name(const vcl_string&);
-  vidl_dshow_istream_params& set_output_filename(const vcl_string&);
+  vidl_dshow_istream_params& set_save_graph_to(const std::string&);
+  vidl_dshow_istream_params& set_device_name(const std::string&);
+  vidl_dshow_istream_params& set_output_filename(const std::string&);
   vidl_dshow_istream_params& set_target_output_format(GUID);
   vidl_dshow_istream_params& set_load_filter_defaults(bool);
   // - IAMVideoProcAmp specific (see DirectShow documentation)
@@ -116,13 +117,13 @@ class vidl_dshow_istream_params //: public vidl_iostream_params
   bool run_when_ready_;
 
   //: Write the filter graph to filename 'save_graph_to_'.
-  vcl_string save_graph_to_;
+  std::string save_graph_to_;
 
   //: Device name.
-  vcl_string device_name_;
+  std::string device_name_;
 
   //: If non-empty create file writing section in the filter_graph.
-  vcl_string output_filename_;
+  std::string output_filename_;
 
   //: Target output format, as returned by current_frame.
   GUID target_output_format_;
@@ -131,7 +132,7 @@ class vidl_dshow_istream_params //: public vidl_iostream_params
   bool load_filter_defaults_;
 
   // IAMVideoProcAmp interface.
-  vcl_map<vcl_string,vpa_property_wrap> vpa_properties_;
+  std::map<std::string,vpa_property_wrap> vpa_properties_;
   //long brightness_;
   //long contrast_;
   //long hue_;

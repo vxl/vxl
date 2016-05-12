@@ -5,24 +5,25 @@
 //:
 // \file
 
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include "HomgInterestPointSet.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_memory_image_of.h>
 
 #include <mvl/HomgInterestPoint.h>
 #include <mvl/ImageMetric.h>
 
-class HomgInterestPointSetData : public vcl_vector<HomgInterestPoint>
+class HomgInterestPointSetData : public std::vector<HomgInterestPoint>
 {
  public:
   HomgInterestPointSetData() {}
   HomgInterestPointSetData(int n):
-    vcl_vector<HomgInterestPoint>(n, HomgInterestPoint())
+    std::vector<HomgInterestPoint>(n, HomgInterestPoint())
   {}
   ~HomgInterestPointSetData() { }
 };
@@ -32,7 +33,7 @@ HomgInterestPointSet::HomgInterestPointSet()
 {
   data_ = new HomgInterestPointSetData;
 
-  init_conditioner(0);
+  init_conditioner(VXL_NULLPTR);
 }
 
 //: Construct an empty corner set which will use the given conditioner to convert from image to homogeneous coordinates.
@@ -46,14 +47,14 @@ HomgInterestPointSet::HomgInterestPointSet(const HomgMetric& c)
 //: Load corners from ASCII disk file
 HomgInterestPointSet::HomgInterestPointSet(const char* filename, const HomgMetric& c)
 {
-  data_ = 0;
+  data_ = VXL_NULLPTR;
   read(filename, c);
   init_conditioner(c);
 }
 
 //: Construct corner set from container of vgl_homg_point_2d<double>, and set the conditioner.
 // The vgl_homg_point_2ds are assumed to already be in conditioned coordinates.
-HomgInterestPointSet::HomgInterestPointSet(vcl_vector<vgl_homg_point_2d<double> > const& points, ImageMetric* conditioner)
+HomgInterestPointSet::HomgInterestPointSet(std::vector<vgl_homg_point_2d<double> > const& points, ImageMetric* conditioner)
 {
   unsigned n = points.size();
   if (n > 0)
@@ -69,7 +70,7 @@ HomgInterestPointSet::HomgInterestPointSet(vcl_vector<vgl_homg_point_2d<double> 
 
 //: Construct corner set from container of HomgPoint2D, and set the conditioner.
 // The HomgPoint2Ds are assumed to already be in conditioned coordinates.
-HomgInterestPointSet::HomgInterestPointSet(const vcl_vector<HomgPoint2D>& points, ImageMetric* conditioner)
+HomgInterestPointSet::HomgInterestPointSet(const std::vector<HomgPoint2D>& points, ImageMetric* conditioner)
 {
   unsigned n = points.size();
   if (n > 0)
@@ -92,7 +93,7 @@ HomgInterestPointSet::HomgInterestPointSet(const HomgInterestPointSet& that)
   else
     data_ = new HomgInterestPointSetData();
 
-  vcl_cerr << "HomgInterestPointSet::copy ctor: size " << n << vcl_endl;
+  std::cerr << "HomgInterestPointSet::copy ctor: size " << n << std::endl;
 
   for (unsigned i = 0; i < n; ++i)
     (*data_)[i] = (*that.data_)[i];
@@ -136,7 +137,7 @@ void HomgInterestPointSet::clear()
 {
   delete data_;
   data_ = new HomgInterestPointSetData;
-  set_conditioner(0);
+  set_conditioner(VXL_NULLPTR);
 }
 
 //: Destructor
@@ -236,7 +237,7 @@ float HomgInterestPointSet::get_mean_intensity(int i) const
   assert(i >= 0 && i < int(data_->size()));
   float v = (*data_)[i].mean_intensity_;
   if (v == 0.0F) {
-    vcl_cerr << "HomgInterestPointSet: WARNING mean_intensity["<<i<<"] = 0\n";
+    std::cerr << "HomgInterestPointSet: WARNING mean_intensity["<<i<<"] = 0\n";
   }
   return v;
 }
@@ -250,16 +251,16 @@ float HomgInterestPointSet::get_mean_intensity(int i) const
 // homogeneous form.
 bool HomgInterestPointSet::read(const char* filename, const HomgMetric& c)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!f.good()) {
-    vcl_cerr << "HomgInterestPointSet::read() -- Failed to open \"" << filename << "\"\n";
+    std::cerr << "HomgInterestPointSet::read() -- Failed to open \"" << filename << "\"\n";
     return false;
   }
 
   return read(f, c);
 }
 
-bool HomgInterestPointSet::read(vcl_istream& f, const ImageMetric* c)
+bool HomgInterestPointSet::read(std::istream& f, const ImageMetric* c)
 {
   clear();
 
@@ -271,7 +272,7 @@ bool HomgInterestPointSet::read(vcl_istream& f, const ImageMetric* c)
     if (!f.good())
       break;
     add(x, y);
-    f >> vcl_ws;
+    f >> std::ws;
   }
   return true;
 }
@@ -285,15 +286,15 @@ bool HomgInterestPointSet::read(const char* filename, vil1_image const& /*src*/,
     return false;
 
 #if 1
-  vcl_cerr << "HomgInterestPointSet::read() not implemented in any sense of the word\n";
+  std::cerr << "HomgInterestPointSet::read() not implemented in any sense of the word\n";
 #else
-  //vcl_cerr << "HomgInterestPointSet: Computing mean intensities\n";
+  //std::cerr << "HomgInterestPointSet: Computing mean intensities\n";
   vil1_memory_image_of<unsigned char> imbuf(src);
   for (unsigned i=0; i< size(); i++) {
     ImageWindowOps winops(imbuf, get_int(i), 3);
     (*data_)[i].mean_intensity_ = winops.mean_intensity();
     if ((*data_)[i].mean_intensity_ == 0.0F) {
-      //vcl_cerr << " note " << i << " had mi of 0\n";
+      //std::cerr << " note " << i << " had mi of 0\n";
       (*data_)[i].mean_intensity_ = 1e6;
     }
   }
@@ -305,16 +306,16 @@ bool HomgInterestPointSet::read(const char* filename, vil1_image const& /*src*/,
 //: Save a corner set as a simple ASCII file of x y pairs.
 bool HomgInterestPointSet::write(const char* filename) const
 {
-  vcl_ofstream fout(filename);
+  std::ofstream fout(filename);
   if (!fout.good()) {
-    vcl_cerr << "HomgInterestPointSet::write() -- Failed to open \"" << filename << "\"\n";
+    std::cerr << "HomgInterestPointSet::write() -- Failed to open \"" << filename << "\"\n";
     return false;
   }
-  vcl_cerr << "HomgInterestPointSet: Saving corners to \"" << filename << "\"\n";
+  std::cerr << "HomgInterestPointSet: Saving corners to \"" << filename << "\"\n";
   return write(fout, get_conditioner());
 }
 
-bool HomgInterestPointSet::write(vcl_ostream& f, const ImageMetric*) const
+bool HomgInterestPointSet::write(std::ostream& f, const ImageMetric*) const
 {
   for (unsigned i=0; i < size(); i++) {
     const vnl_double_2& p = get_2d(i);

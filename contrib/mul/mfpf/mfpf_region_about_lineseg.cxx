@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mfpf_region_about_lineseg.h"
 //:
 // \file
@@ -6,7 +8,7 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -52,7 +54,7 @@ unsigned mfpf_region_about_lineseg::orig_ref_point_index() const
 //  Allows for re-numbering of the points used.
 //  Returns true if successful.
 bool mfpf_region_about_lineseg::replace_index(
-                        const vcl_vector<unsigned>& new_index)
+                        const std::vector<unsigned>& new_index)
 {
   if (i0_>=new_index.size()) return false;
   if (new_index[i0_]==mfpf_invalid_index) return false;
@@ -65,7 +67,7 @@ bool mfpf_region_about_lineseg::replace_index(
 
 //: Returns reference point for region, mid_point(pts[i0],pts[i1])
 vgl_point_2d<double> mfpf_region_about_lineseg::get_ref_point(
-             const vcl_vector<vgl_point_2d<double> >& pts) const
+             const std::vector<vgl_point_2d<double> >& pts) const
 {
   assert(i0_<pts.size());
   assert(i1_<pts.size());
@@ -74,7 +76,7 @@ vgl_point_2d<double> mfpf_region_about_lineseg::get_ref_point(
 
 //: Defines a region centred on a point
 mfpf_region_form mfpf_region_about_lineseg::set_up(
-            const vcl_vector<vgl_point_2d<double> >& pts)
+            const std::vector<vgl_point_2d<double> >& pts)
 {
   assert(i0_<pts.size());
   assert(i1_<pts.size());
@@ -94,7 +96,7 @@ mfpf_region_form mfpf_region_about_lineseg::set_up(
 //  The aspect ratio of the region will be the same as that
 //  from the last call to set_up.
 mfpf_region_form mfpf_region_about_lineseg::get_region(
-              const vcl_vector<vgl_point_2d<double> >& pts) const
+              const std::vector<vgl_point_2d<double> >& pts) const
 {
   assert(i0_<pts.size());
   assert(i1_<pts.size());
@@ -115,11 +117,11 @@ mfpf_region_form mfpf_region_about_lineseg::get_region(
 // Method: set_from_stream
 //=======================================================================
 //: Initialise from a string stream
-bool mfpf_region_about_lineseg::set_from_stream(vcl_istream &is)
+bool mfpf_region_about_lineseg::set_from_stream(std::istream &is)
 {
   // Cycle through stream and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   // Extract the properties
@@ -148,9 +150,9 @@ short mfpf_region_about_lineseg::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_region_about_lineseg::is_a() const
+std::string mfpf_region_about_lineseg::is_a() const
 {
-  return vcl_string("mfpf_region_about_lineseg");
+  return std::string("mfpf_region_about_lineseg");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -163,7 +165,7 @@ mfpf_region_definer* mfpf_region_about_lineseg::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_region_about_lineseg::print_summary(vcl_ostream& os) const
+void mfpf_region_about_lineseg::print_summary(std::ostream& os) const
 {
   os<<"{ i0: "<<i0_<<" i1: "<<i1_
     <<" rel_wi: "<<rel_wi_<<" rel_wj: "<<rel_wj_
@@ -207,9 +209,9 @@ void mfpf_region_about_lineseg::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,form_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------
 bool vcsl_angle_unit::compatible_units(vcsl_unit_sptr const& other) const
 {
-  return other->cast_to_angle_unit()!=0;
+  return other->cast_to_angle_unit()!=VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------

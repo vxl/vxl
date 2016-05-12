@@ -35,7 +35,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil1/vil1_image.h>
 #include <vil/vil_image_resource.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -52,7 +54,7 @@ class sdet_harris_detector : public sdet_harris_detector_params
   void set_image(vil1_image const& image);
   void set_image_resource(vil_image_resource_sptr const& image);
 
-  vcl_vector<vsol_point_2d_sptr>& get_points(){return points_;}
+  std::vector<vsol_point_2d_sptr>& get_points(){return points_;}
 
   //Utility Methods
   void extract_corners();
@@ -60,19 +62,19 @@ class sdet_harris_detector : public sdet_harris_detector_params
 
  protected:
   //protected methods
-  bool extract_corners_vil1(vcl_vector<float>& x_pos,
-                            vcl_vector<float>& y_pos,
-                            vcl_vector<float>& val);
+  bool extract_corners_vil1(std::vector<float>& x_pos,
+                            std::vector<float>& y_pos,
+                            std::vector<float>& val);
 
-  bool extract_corners_vil(vcl_vector<float>& x_pos,
-                           vcl_vector<float>& y_pos,
-                           vcl_vector<float>& val);
+  bool extract_corners_vil(std::vector<float>& x_pos,
+                           std::vector<float>& y_pos,
+                           std::vector<float>& val);
   //members
   bool points_valid_;      //process state flag
   bool use_vil_image_;
   vil1_image image_;  //input image
   vil_image_resource_sptr vimage_;  //input image
-  vcl_vector<vsol_point_2d_sptr> points_; //resulting corners
+  std::vector<vsol_point_2d_sptr> points_; //resulting corners
 };
 
 #endif // sdet_harris_detector_h_

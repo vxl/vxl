@@ -1,21 +1,21 @@
 #depends on OPENCL being found...
-INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+include_directories( ${OPENCL_INCLUDE_PATH} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR} )
 
 # TIFF and GEOTIFF needed for extracting coordinate information from buckeye lidar images
-INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-ENDIF(TIFF_FOUND)
+include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+if(TIFF_FOUND)
+  include_directories(${TIFF_INCLUDE_DIR})
+endif()
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
-IF(GEOTIFF_FOUND)
-  INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
-ENDIF(GEOTIFF_FOUND)
+include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+if(GEOTIFF_FOUND)
+  include_directories( ${GEOTIFF_INCLUDE_DIR} )
+endif()
 
 
-SET(boxm2_ocl_pro_sources
+set(boxm2_ocl_pro_sources
     boxm2_ocl_processes.h
     boxm2_ocl_register.h                     boxm2_ocl_register.cxx
     processes/boxm2_ocl_filter_process.h
@@ -23,17 +23,15 @@ SET(boxm2_ocl_pro_sources
     processes/boxm2_ocl_kernel_vector_filter_process.h
    )
 
-AUX_SOURCE_DIRECTORY(Templates boxm2_ocl_pro_sources)
-AUX_SOURCE_DIRECTORY(processes boxm2_ocl_pro_sources)
+aux_source_directory(Templates boxm2_ocl_pro_sources)
+aux_source_directory(processes boxm2_ocl_pro_sources)
 
-ADD_LIBRARY(boxm2_ocl_pro  ${boxm2_ocl_pro_sources} )
-TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl vgl vgl_xio vil vul vbl vsl vcl bvpl_kernels brad bsta_algo vpgl_pro)
+vxl_add_library(LIBRARY_NAME boxm2_ocl_pro LIBRARY_SOURCES  ${boxm2_ocl_pro_sources} )
+target_link_libraries(boxm2_ocl_pro boxm2_ocl_algo boct brdb ${VXL_LIB_PREFIX}vbl_io expatpp ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl bvpl_kernels brad bsta_algo vpgl_pro)
 # Need vpgl_pro only for the instantiation of brdb_value_t<vbl_smart_ptr<vpgl_camera<double> > >
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-INSTALL_TARGETS(/lib boxm2_ocl_pro)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl/pro ${boxm2_ocl_pro_sources})

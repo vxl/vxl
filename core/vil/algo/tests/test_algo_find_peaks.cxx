@@ -1,12 +1,13 @@
 // This is core/vil/algo/tests/test_algo_find_peaks.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_find_peaks.h>
 
 static void test_find_peaks_byte()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil_find_peaks\n"
            << "************************\n";
 
@@ -16,7 +17,7 @@ static void test_find_peaks_byte()
   image0(3,7)=18;  // One peak
   image0(7,5)=19;  // Another peak
 
-  vcl_vector<unsigned> pi,pj;
+  std::vector<unsigned> pi,pj;
   vil_find_peaks_3x3(pi,pj,image0,vxl_byte(0));
 
   TEST("Number of peaks", pi.size(), 2);

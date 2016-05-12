@@ -37,7 +37,7 @@ vgui_active_tableau::~vgui_active_tableau()
 
 //----------------------------------------------------------------------------
 //: Returns the type of this tableau ('vgui_active_tableau').
-vcl_string vgui_active_tableau::type_name() const
+std::string vgui_active_tableau::type_name() const
 {
   return "vgui_active_tableau";
 }
@@ -70,7 +70,7 @@ void vgui_active_tableau::add_popup(vgui_menu& menu)
 {
   vgui_menu popup;
 
-  vcl_string active_label("Toggle active ");
+  std::string active_label("Toggle active ");
   if (active_) active_label+="[on]";
   else active_label+="[off]";
 
@@ -78,7 +78,7 @@ void vgui_active_tableau::add_popup(vgui_menu& menu)
             new vgui_command_simple<vgui_active_tableau>(this, &vgui_active_tableau::toggle_active));
 
 
-  vcl_string visible_label("Toggle visible ");
+  std::string visible_label("Toggle visible ");
   if (visible_) visible_label+="[on]";
   else visible_label+="[off]";
 

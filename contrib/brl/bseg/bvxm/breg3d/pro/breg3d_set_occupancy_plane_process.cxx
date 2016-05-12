@@ -11,11 +11,11 @@
 
 breg3d_set_occupancy_plane_process::breg3d_set_occupancy_plane_process()
 {
-  // process takes 6 inputs: 
+  // process takes 6 inputs:
   //inputs[0-3]: The plane parameters (a,b,c,d) such that ax + by + cz + d = 0
   //input[4]: The standard deviation of the plane estimate
   //input[5]: The voxel world
-  input_data_.resize(6,brdb_value_sptr(0));
+  input_data_.resize(6,brdb_value_sptr(VXL_NULLPTR));
   input_types_.resize(6);
   input_types_[0] = "double";
   input_types_[1] = "double";
@@ -25,7 +25,7 @@ breg3d_set_occupancy_plane_process::breg3d_set_occupancy_plane_process()
   input_types_[5] = "bvxm_voxel_world_sptr";
 
   // process has 0 outputs.
-  output_data_.resize(0,brdb_value_sptr(0));
+  output_data_.resize(0,brdb_value_sptr(VXL_NULLPTR));
   output_types_.resize(0);
 }
 
@@ -36,22 +36,22 @@ bool breg3d_set_occupancy_plane_process::execute()
   if (!this->verify_inputs())
     return false;
 
-  brdb_value_t<double>* input0 = 
+  brdb_value_t<double>* input0 =
     static_cast<brdb_value_t<double>* >(input_data_[0].ptr());
 
-  brdb_value_t<double>* input1 = 
+  brdb_value_t<double>* input1 =
     static_cast<brdb_value_t<double>* >(input_data_[1].ptr());
 
-  brdb_value_t<double>* input2 = 
+  brdb_value_t<double>* input2 =
     static_cast<brdb_value_t<double>* >(input_data_[2].ptr());
 
-  brdb_value_t<double>* input3 = 
+  brdb_value_t<double>* input3 =
     static_cast<brdb_value_t<double>* >(input_data_[3].ptr());
 
-  brdb_value_t<double>* input4 = 
+  brdb_value_t<double>* input4 =
     static_cast<brdb_value_t<double>* >(input_data_[4].ptr());
 
-  brdb_value_t<bvxm_voxel_world_sptr>* input5 = 
+  brdb_value_t<bvxm_voxel_world_sptr>* input5 =
     static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[5].ptr());
 
 
@@ -68,7 +68,7 @@ bool breg3d_set_occupancy_plane_process::execute()
   bvxm_voxel_world_sptr vox_world = input5->value();
 
   // normalize plane parameters
-  double norm_val = vcl_sqrt(plane_a*plane_a + plane_b*plane_b + plane_c*plane_c);
+  double norm_val = std::sqrt(plane_a*plane_a + plane_b*plane_b + plane_c*plane_c);
   plane_a /= norm_val;
   plane_b /= norm_val;
   plane_c /= norm_val;
@@ -95,8 +95,8 @@ bool breg3d_set_occupancy_plane_process::execute()
 
         double dist = world_pt.x() * plane_a + world_pt.y() * plane_b + world_pt.z() * plane_c + plane_d;
 
-        ocp_datatype vox_prob = 
-          (ocp_datatype)( vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/plane_std) * vcl_exp(-(dist*dist)/(2*plane_std*plane_std)) );
+        ocp_datatype vox_prob =
+          (ocp_datatype)( vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/plane_std) * std::exp(-(dist*dist)/(2*plane_std*plane_std)) );
         if (vox_prob < min_prob)
           vox_prob = min_prob;
         if (vox_prob > max_prob)

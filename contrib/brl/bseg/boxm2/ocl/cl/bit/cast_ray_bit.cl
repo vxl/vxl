@@ -113,11 +113,27 @@ void cast_ray(
   float min_facez = (ray_dz < 0.0f) ? (linfo->dims.z) : 0.0f;
   float tblock = calc_tnear(ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz, min_facex, min_facey, min_facez);
 
+  float tblockfixed = tblock;
   //tblock = (tblock > 0) ? tblock :0;    //make sure tnear is at least 0...
 
   tblock = (tblock > tnearf) ? tblock :tnearf;    //make sure tnear is at least 0...
   tfar = (tfar <  tfarf ) ? tfar : tfarf;
+#ifdef REVERSE
+  {
+  //: code to reverse
+  ray_ox = ray_ox + 2*tfar*ray_dx;
+  ray_oy = ray_oy + 2*tfar*ray_dy;
+  ray_oz = ray_oz + 2*tfar*ray_dz;
 
+  ray_dx = -ray_dx;
+  ray_dy = -ray_dy;
+  ray_dz = -ray_dz;
+
+  float temp = tblock;
+  tblock = tfar;
+  tfar = 2*tfar - temp;
+  }
+#endif
   tfar -= BLOCK_EPSILON;   //make sure tfar is within the last block so texit surpasses it (and breaks from the outer loop)
 
   if (tfar <= tblock)
@@ -159,13 +175,14 @@ void cast_ray(
   // Begin traversing the blocks, break when any curr_block_index value is
   // illegal (not between 0 and scenedims)
   //----------------------------------------------------------------------------
-  while (tblock < tfar && (*vis) > .01f)
+  while (tblock < tfar )
   {
     //-------------------------------------------------------------------------
     //find entry point (adjusted) and the current block index
     float posx = calc_pos(tblock, ray_ox, ray_dx);
     float posy = calc_pos(tblock, ray_oy, ray_dy);
     float posz = calc_pos(tblock, ray_oz, ray_dz);
+
     if (tblock >= texit)
     {
       //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
@@ -207,6 +224,7 @@ void cast_ray(
     ////////////////////////////////////////////////////////////////////////////////
     // Step Cell Functor
     ////////////////////////////////////////////////////////////////////////////////
+
     STEP_CELL;
     ////////////////////////////////////////////////////////////////////////////////
     // END Step Cell Functor

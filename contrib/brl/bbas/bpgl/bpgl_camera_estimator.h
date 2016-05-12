@@ -12,11 +12,12 @@
 // \endverbatim
 
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <limits>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -114,14 +115,14 @@ vil_image_view<TR> bpgl_camera_estimator<exp_edge_func>::estimate_offsets_fd(con
 
   for (unsigned i=0; i<img_cc_mag.ni(); i++) {
     for (unsigned j=0; j<img_cc_mag.nj(); j++) {
-      float a = img_1_mag(i,j)*vcl_cos(img_1_phase(i,j));
-      float b = img_1_mag(i,j)*vcl_sin(img_1_phase(i,j));
-      float c = img_2_mag(i,j)*vcl_cos(img_2_phase(i,j));
-      float d = img_2_mag(i,j)*vcl_sin(img_2_phase(i,j));
+      float a = img_1_mag(i,j)*std::cos(img_1_phase(i,j));
+      float b = img_1_mag(i,j)*std::sin(img_1_phase(i,j));
+      float c = img_2_mag(i,j)*std::cos(img_2_phase(i,j));
+      float d = img_2_mag(i,j)*std::sin(img_2_phase(i,j));
       float res_real = (a*c)-(b*d);
       float res_img = (b*c)+(a*d);
-      float res_mag = vcl_sqrt((res_real*res_real)+(res_img*res_img));
-      float res_phase = vcl_atan2(res_img, res_real);
+      float res_mag = std::sqrt((res_real*res_real)+(res_img*res_img));
+      float res_phase = std::atan2(res_img, res_real);
 
       img_cc_mag(i,j) = res_mag;
       img_cc_phase(i,j) = res_phase;
@@ -130,7 +131,7 @@ vil_image_view<TR> bpgl_camera_estimator<exp_edge_func>::estimate_offsets_fd(con
 
   brip_vil_float_ops::inverse_fourier_transform(img_cc_mag,img_cc_phase,img_cc);
 
-  score = vcl_numeric_limits<float>::min();
+  score = std::numeric_limits<float>::min();
 
   for (unsigned i=0; i<img_cc.ni(); i++) {
     for (unsigned j=0; j<img_cc.nj(); j++) {

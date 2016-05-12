@@ -44,9 +44,9 @@ void update(bbgm_image_of<dist_>& dimg,
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
 
-  const vcl_ptrdiff_t planestep = image.planestep();
-  const vcl_ptrdiff_t istep = image.istep();
-  const vcl_ptrdiff_t jstep = image.jstep();
+  const std::ptrdiff_t planestep = image.planestep();
+  const std::ptrdiff_t istep = image.istep();
+  const std::ptrdiff_t jstep = image.jstep();
 
   typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
   const T* row = image.top_left_ptr();
@@ -79,11 +79,11 @@ void update_masked(bbgm_image_of<dist_>& dimg,
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
 
-  const vcl_ptrdiff_t planestep = image.planestep();
-  const vcl_ptrdiff_t istep = image.istep();
-  const vcl_ptrdiff_t jstep = image.jstep();
-  const vcl_ptrdiff_t m_istep = mask.istep();
-  const vcl_ptrdiff_t m_jstep = mask.jstep();
+  const std::ptrdiff_t planestep = image.planestep();
+  const std::ptrdiff_t istep = image.istep();
+  const std::ptrdiff_t jstep = image.jstep();
+  const std::ptrdiff_t m_istep = mask.istep();
+  const std::ptrdiff_t m_jstep = mask.jstep();
 
   typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
   const bool* m_row = mask.top_left_ptr();

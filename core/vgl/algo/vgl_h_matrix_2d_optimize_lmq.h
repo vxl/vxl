@@ -27,29 +27,29 @@ class vgl_h_matrix_2d_optimize_lmq : public vgl_h_matrix_2d_optimize
  protected: // -- internal utilities --
 
   //:the main routine for carrying out the optimization. (used by the others)
-  bool optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                  vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                  vgl_h_matrix_2d<double> const& h_initial, 
+  bool optimize_h(std::vector<vgl_homg_point_2d<double> > const& points1,
+                  std::vector<vgl_homg_point_2d<double> > const& points2,
+                  vgl_h_matrix_2d<double> const& h_initial,
                   vgl_h_matrix_2d<double>& h_optimized);
 
   //: compute from matched points
   virtual
-  bool optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                  vcl_vector<vgl_homg_point_2d<double> > const& points2,
+  bool optimize_p(std::vector<vgl_homg_point_2d<double> > const& points1,
+                  std::vector<vgl_homg_point_2d<double> > const& points2,
                   vgl_h_matrix_2d<double>& H);
 
   //:compute from matched lines
   virtual
-  bool optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                  vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+  bool optimize_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
+                  std::vector<vgl_homg_line_2d<double> > const& lines2,
                   vgl_h_matrix_2d<double>& H);
 
   //:compute from matched points and lines
   virtual
-  bool optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                   vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                   vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                   vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+  bool optimize_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
+                   std::vector<vgl_homg_point_2d<double> > const& points2,
+                   std::vector<vgl_homg_line_2d<double> > const& lines1,
+                   std::vector<vgl_homg_line_2d<double> > const& lines2,
                    vgl_h_matrix_2d<double>& H);
 };
 

@@ -1,6 +1,6 @@
 # rpl/rsdl/CMakeLists.txt
 
-SET(rsdl_sources
+set(rsdl_sources
  rsdl_fwd.h
 
  rsdl_bounding_box.cxx rsdl_bounding_box.h
@@ -14,17 +14,15 @@ SET(rsdl_sources
  rsdl_bins.txx         rsdl_bins.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates rsdl_sources)
+aux_source_directory(Templates rsdl_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(Templates/rsdl_bins_2d+double.int-.cxx PROPERTIES COMPILE_FLAGS -O1)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(Templates/rsdl_bins_2d+double.int-.cxx PROPERTIES COMPILE_FLAGS -O1)
+endif()
 
-ADD_LIBRARY(rsdl ${rsdl_sources})
-INSTALL_TARGETS(/lib rsdl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rsdl ${rsdl_sources})
-TARGET_LINK_LIBRARIES( rsdl vnl vbl )
+vxl_add_library(LIBRARY_NAME rsdl LIBRARY_SOURCES ${rsdl_sources})
+target_link_libraries( rsdl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl )
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

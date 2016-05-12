@@ -29,14 +29,9 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_clamp.h>
-
-#ifdef VCL_SUNPRO_CC
-# define InLine inline
-#else
-# define InLine
-#endif
 
 //: This is the appropriate pixel type for 24-bit colour images.
 //
@@ -122,7 +117,7 @@ vil1_rgb_call(macro)
 # undef macro
 
 # define macro(S) \
-  InLine vil1_rgb<T>& operator=(vil1_rgb<S > const& that);
+  vil1_rgb<T>& operator=(vil1_rgb<S > const& that);
 vil1_rgb_call(macro)
 # undef macro
 #endif
@@ -158,7 +153,7 @@ extern vil1_rgb<double> tickle_mi_fancy;
 
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil1_rgb<T> const& rgb)
+std::ostream& operator<<(std::ostream& s, vil1_rgb<T> const& rgb)
 {
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }

@@ -31,8 +31,8 @@ class vgui_button_field : public vgui_dialog_field
 
   ~vgui_button_field() {}
 
-  vcl_string current_value() const { return "OK"; }
-  bool update_value(const vcl_string& s) { return true; }
+  std::string current_value() const { return "OK"; }
+  bool update_value(const std::string& s) { return true; }
 
   // Pointer to the command to be executed.
   vgui_command_sptr cmnd;

@@ -12,12 +12,14 @@
 //   (none yet)
 // \endverbatim
 
-#include <vcl_cstddef.h>
+#include <iostream>
+#include <cstddef>
+#include <vcl_compiler.h>
 
 template <class T1, class T2, unsigned n>
 struct bbgm_planes_to_sample
 {
-  static void apply(const T1* data, T2& sample, vcl_ptrdiff_t step){
+  static void apply(const T1* data, T2& sample, std::ptrdiff_t step){
     typename T2::iterator s_itr = sample.begin();
     for (unsigned int p=0; p<n; ++p, data += step, ++s_itr){
       *s_itr = *data;
@@ -28,7 +30,7 @@ struct bbgm_planes_to_sample
 template <class T1, class T2>
 struct bbgm_planes_to_sample<T1,T2,3>
 {
-  static void apply(const T1* data, T2& sample, vcl_ptrdiff_t step){
+  static void apply(const T1* data, T2& sample, std::ptrdiff_t step){
   typename T2::iterator s_itr = sample.begin();
   *s_itr = *data;
   *(++s_itr) = *(data+=step);
@@ -39,7 +41,7 @@ struct bbgm_planes_to_sample<T1,T2,3>
 template <class T1, class T2>
 struct bbgm_planes_to_sample<T1,T2,1>
 {
-  static void apply(const T1* data, T2& sample, vcl_ptrdiff_t /*step*/){
+  static void apply(const T1* data, T2& sample, std::ptrdiff_t /*step*/){
     sample = *data;
   }
 };

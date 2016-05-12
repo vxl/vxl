@@ -15,12 +15,14 @@
 //
 //\endverbatim
 
+#include <vector>
+#include <iostream>
+#include <list>
+#include <set>
+#include <map>
+#include <utility>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vcl_set.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>
 
@@ -37,8 +39,8 @@
 //forward declaration
 class sdet_curvelet;
 
-typedef vcl_list<sdet_curvelet*> cvlet_list;
-typedef vcl_list<sdet_curvelet*>::iterator cvlet_list_iter;
+typedef std::list<sdet_curvelet*> cvlet_list;
+typedef std::list<sdet_curvelet*>::iterator cvlet_list_iter;
 
 //: The curvelet class: stores the ordered list of edgels defining the curvelet
 //  and also the curve model defined by the grouping
@@ -48,13 +50,13 @@ class sdet_curvelet
 public:
   sdet_edgel* ref_edgel;                        ///< ref edgel (the edgel to which it is anchored)
 
-  vcl_vector<sdet_edgel*> edgel_chain;          ///< the ordered list of edgels 
+  std::vector<sdet_edgel*> edgel_chain;          ///< the ordered list of edgels
   sdet_curve_model* curve_model;                ///< associated curve model
 
   bool forward;                                  ///< is this a forward cvlet or a reverse cvlet
   double length;                                 ///< length of the curvelet
   double quality;                                ///< the quality of this grouping (determined by various means)
-  
+
   bool used;                                     ///< to keep track of whether this curvelet was used in linking
 
   //: default constructor
@@ -64,15 +66,15 @@ public:
   sdet_curvelet(sdet_edgel* e) : ref_edgel(e), edgel_chain(0), curve_model(0), forward(true), length(0.0), quality(0.0), used(false){}
 
   //: constructor 2
-  sdet_curvelet(sdet_edgel* e, sdet_curve_model* cm, bool dir=true) : 
+  sdet_curvelet(sdet_edgel* e, sdet_curve_model* cm, bool dir=true) :
     ref_edgel(e), edgel_chain(0), curve_model(cm), forward(dir), length(0.0), quality(0.0), used(false){}
 
   //: constructor 3
-  sdet_curvelet(sdet_edgel* e, sdet_curve_model* cm, vcl_vector<sdet_edgel*> &echain, bool dir=true) : 
+  sdet_curvelet(sdet_edgel* e, sdet_curve_model* cm, std::vector<sdet_edgel*> &echain, bool dir=true) :
     ref_edgel(e), edgel_chain(echain), curve_model(cm), forward(dir), length(0.0), quality(0.0), used(false){}
 
   //: constructor 4
-  sdet_curvelet(sdet_edgel* e, sdet_curve_model* cm, vcl_deque<sdet_edgel*> &echain, bool dir=true) : 
+  sdet_curvelet(sdet_edgel* e, sdet_curve_model* cm, std::deque<sdet_edgel*> &echain, bool dir=true) :
     ref_edgel(e), curve_model(cm), forward(dir), length(0.0), quality(0.0), used(false)
   {
     edgel_chain.insert(edgel_chain.end(), echain.begin(), echain.end());
@@ -90,38 +92,38 @@ public:
   //: return the order of this grouping
   unsigned order() const { return edgel_chain.size(); }
 
-  //: add an edgel 
+  //: add an edgel
   void push_back(sdet_edgel* e) { edgel_chain.push_back(e); }
 
   //: add the associated curve model for this grouping
   void set_curve_model(sdet_curve_model* cm) { curve_model = cm; }
 
   //: replace the curve model associated with this grouping with a new one
-  void replace_curve_model(sdet_curve_model* cm) 
-  { 
-    if (!cm){ 
-      vcl_cout << "attempting to replace CB with NULL!" << vcl_endl; 
-      return; 
+  void replace_curve_model(sdet_curve_model* cm)
+  {
+    if (!cm){
+      std::cout << "attempting to replace CB with NULL!" << std::endl;
+      return;
     }
 
-    //assert(cm); 
-    if (curve_model) 
-      delete curve_model; 
-    
-    curve_model = cm; 
+    //assert(cm);
+    if (curve_model)
+      delete curve_model;
+
+    curve_model = cm;
   }
 
-  //: returns the forward(child) edgel_chain 
-  vcl_list<sdet_edgel*> child_chain();
+  //: returns the forward(child) edgel_chain
+  std::list<sdet_edgel*> child_chain();
 
-  //: returns the backward(child) edgel_chain 
-  vcl_list<sdet_edgel*> parent_chain();
+  //: returns the backward(child) edgel_chain
+  std::list<sdet_edgel*> parent_chain();
 
   //: compute properties of this curvelet once formed
   void compute_properties(double R, double token_len);
 
   //: print info to file
-  void print(vcl_ostream&);
+  void print(std::ostream&);
 };
 
 #endif // sdet_curvelet_h

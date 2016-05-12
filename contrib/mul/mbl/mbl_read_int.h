@@ -12,7 +12,7 @@
 //
 // - Function Name: mbl_read_int
 // - Synopsis:      int mbl_read_int(char* q_str, int default_int)
-// - Inputs:        q_str: A question 
+// - Inputs:        q_str: A question
 //                  default_int: Default answer
 //                  min_int: Min allowed value (optional)
 //                  max_int: Max allowed value (optional)
@@ -20,7 +20,7 @@
 // - Returns:       The answer or a default
 // - Description:   Asks question and waits for an answer.
 //                  If the answer is an integer, returns it.
-//                  If the answer is an empty vcl_string (return)
+//                  If the answer is an empty std::string (return)
 //                  then returns default.
 //                  Otherwise waits for another input.
 // - References:    -

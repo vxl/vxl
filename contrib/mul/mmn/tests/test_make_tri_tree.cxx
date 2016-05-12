@@ -1,16 +1,18 @@
 // This is mul/mmn/tests/test_make_tri_tree.cxx
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <mmn/mmn_make_tri_tree.h>
 
 
 void test_make_tri_tree_a()
 {
-  vcl_cout<<"==== test mmn_make_tri_tree (triangle) ====="<<vcl_endl;
+  std::cout<<"==== test mmn_make_tri_tree (triangle) ====="<<std::endl;
 
-  vcl_vector<mmn_arc> arcs;
+  std::vector<mmn_arc> arcs;
 
-  vcl_cout<<"Test case where all distances equal."<<vcl_endl;
+  std::cout<<"Test case where all distances equal."<<std::endl;
   vnl_matrix<double> D(3,3);
   D.fill(1.0);
   for (unsigned i=0;i<3;++i) D(i,i)=0.0;
@@ -18,39 +20,39 @@ void test_make_tri_tree_a()
   mmn_make_tri_tree(D,arcs);
   TEST("N.arcs",arcs.size(),3);
 
-  vcl_cout<<arcs<<vcl_endl;
+  std::cout<<arcs<<std::endl;
 
-  vcl_cout<<"Test case where all distances zero."<<vcl_endl;
+  std::cout<<"Test case where all distances zero."<<std::endl;
   D.fill(0.0);
 
   mmn_make_tri_tree(D,arcs);
   TEST("N.arcs",arcs.size(),3);
 
-  vcl_cout<<arcs<<vcl_endl;
+  std::cout<<arcs<<std::endl;
 
-  vcl_cout<<"Test case where all distances huge."<<vcl_endl;
+  std::cout<<"Test case where all distances huge."<<std::endl;
   D.fill(9.9e19);
 
   mmn_make_tri_tree(D,arcs);
   TEST("N.arcs",arcs.size(),3);
 
-  vcl_cout<<arcs<<vcl_endl;
+  std::cout<<arcs<<std::endl;
 }
 
 void test_make_tri_tree_b()
 {
-  vcl_cout<<"==== test mmn_make_tri_tree (line) ====="<<vcl_endl;
+  std::cout<<"==== test mmn_make_tri_tree (line) ====="<<std::endl;
   int n=4;
   vnl_matrix<double> D(n,n);
   for (int i=0;i<n;++i)
     for (int j=0;j<n;++j) D(i,j)=(i-j)*(i-j);
 
-  vcl_vector<mmn_arc> arcs;
+  std::vector<mmn_arc> arcs;
 
   mmn_make_tri_tree(D,arcs);
   TEST("N.arcs",arcs.size(),(unsigned int)(n*2-3));
 
-  vcl_cout<<arcs<<vcl_endl;
+  std::cout<<arcs<<std::endl;
   TEST("Arc 0",arcs[0],mmn_arc(0,1));
 }
 

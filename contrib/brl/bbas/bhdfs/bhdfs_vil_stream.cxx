@@ -21,7 +21,7 @@ bhdfs_vil_stream::bhdfs_vil_stream(wchar_t const* fn, char const* mode)
 
 bhdfs_vil_stream::~bhdfs_vil_stream()
 {
-  vcl_cout << "In bhdfs_vil_stream::~bhdfs_vil_stream()!\n";
+  std::cout << "In bhdfs_vil_stream::~bhdfs_vil_stream()!\n";
   f_->close();
   f_ = 0;
 }

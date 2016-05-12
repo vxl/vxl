@@ -19,6 +19,6 @@ void vsl_b_read(vsl_b_istream& is, vgl_homg_point_1d<T> & p);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os,vgl_homg_point_1d<T> const& p);
+void vsl_print_summary(std::ostream& os,vgl_homg_point_1d<T> const& p);
 
 #endif // vgl_io_homg_point_1d_h_

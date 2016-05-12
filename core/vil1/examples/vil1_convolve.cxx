@@ -3,8 +3,9 @@
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
 
-#include <vcl_cmath.h>   // vcl_fabs()
-#include <vcl_iostream.h>
+#include <cmath>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vul/vul_arg.h>
 
@@ -65,14 +66,14 @@ vil1_kernel_info kernels[] = {
   {"bar_y_5",     1, 5, &mask_bar_5[0][0]},
   {"gauss_x_17", 17, 1, &mask_gauss_17[0][0]},
   {"gauss_y_17", 1, 17, &mask_gauss_17[0][0]},
-  {0, 0, 0, 0}
+  {VXL_NULLPTR, 0, 0, VXL_NULLPTR}
 };
 
 int main(int argc, char ** argv)
 {
-  vul_arg<vcl_string> a_input_filename(0, "input");
-  vul_arg<vcl_string> a_output_filename(0, "output");
-  vul_arg<vcl_string> a_kernel(0, "kernel (choose from: sobel_x)", "sobel_x");
+  vul_arg<std::string> a_input_filename(VXL_NULLPTR, "input");
+  vul_arg<std::string> a_output_filename(VXL_NULLPTR, "output");
+  vul_arg<std::string> a_kernel(VXL_NULLPTR, "kernel (choose from: sobel_x)", "sobel_x");
   vul_arg_parse(argc, argv);
 
   // Load from disk into memory "inimg"
@@ -81,7 +82,7 @@ int main(int argc, char ** argv)
 
   // Build kernel in "kernelimg"
   vil1_memory_image_of<float> kernelimg(0,0);
-  vcl_string kernel(a_kernel());
+  std::string kernel(a_kernel());
   for (vil1_kernel_info* kp = kernels; kp->name; ++kp)
     if (kernel == kp->name) {
       kernelimg.resize(kp->w, kp->h);
@@ -89,7 +90,7 @@ int main(int argc, char ** argv)
       double power = 0;
       for (int y = 0; y < kp->h; ++y)
         for (int x = 0; x < kp->w; ++x) {
-          power += vcl_fabs(*v);
+          power += std::fabs(*v);
           kernelimg[y][x] = float(*v);
           ++v;
         }
@@ -100,7 +101,7 @@ int main(int argc, char ** argv)
           kernelimg[y][x] *= float(power);
     }
   if (kernelimg.width() == 0) {
-    vcl_cerr << "vil1_convolve: unknown kernel [" << kernel << "]\n";
+    std::cerr << "vil1_convolve: unknown kernel [" << kernel << "]\n";
     return -1;
   }
 
@@ -109,7 +110,7 @@ int main(int argc, char ** argv)
                                              in.height() + kernelimg.height());
   outimg.fill(0);
 
-  vil1_convolve_simple(inimg, kernelimg, (float*)0, outimg);
+  vil1_convolve_simple(inimg, kernelimg, (float*)VXL_NULLPTR, outimg);
 
   vil1_save(outimg, a_output_filename().c_str(), in.file_format());
   return 0;

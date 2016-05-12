@@ -2,16 +2,16 @@
 # Volumetric Matching and 3-d indexing library
 
 # volm depends on bkml and expat
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  IF(EXPATPP_FOUND)
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
-    INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-    INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-    INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+    include_directories( ${BRL_INCLUDE_DIR} )
+    include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
+    include_directories( ${GEL_INCLUDE_DIR} )
+    include_directories(${EXPAT_INCLUDE_DIRS} )
+    include_directories(${EXPATPP_INCLUDE_DIRS} )
 
-    SET(volm_sources
+    set(volm_sources
      volm_export.h
      volm_io.h                              volm_io.cxx
      volm_io_tools.h                        volm_io_tools.cxx
@@ -40,42 +40,42 @@ IF(EXPAT_FOUND)
      volm_geo_index2_node_base.h            volm_geo_index2_node_base.cxx
      volm_geo_index2_sptr.h
      volm_geo_index2.h                      volm_geo_index2.cxx
-     volm_geo_index2.txx
+     volm_geo_index2.hxx
      volm_category_io.h                     volm_category_io.cxx
      volm_satellite_resources.h             volm_satellite_resources.cxx
      volm_satellite_resources_sptr.h
-     volm_utils.h                           volm_utils.txx
+     volm_utils.h                           volm_utils.hxx
      volm_osm_parser.h                      volm_osm_parser.cxx
      volm_osm_objects.h                     volm_osm_objects.cxx
      volm_osm_object_point.h                volm_osm_object_point.cxx
      volm_osm_object_line.h                 volm_osm_object_line.cxx
      volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
      volm_candidate_region_parser.h         volm_candidate_region_parser.cxx
-     volm_utils.h                           volm_utils.txx                   volm_utils.cxx
+     volm_utils.h                           volm_utils.hxx                   volm_utils.cxx
     )
 
-    AUX_SOURCE_DIRECTORY(Templates volm_sources)
+    aux_source_directory(Templates volm_sources)
 
-    ADD_LIBRARY(volm  ${volm_sources})
+    vxl_add_library(LIBRARY_NAME volm LIBRARY_SOURCES  ${volm_sources})
 
-    TARGET_LINK_LIBRARIES(volm vsph bpgl vgl vgl_algo vgl_io vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map brad)
-    TARGET_LINK_LIBRARIES(volm ${EXPAT_LIBRARIES})
-    IF(APPLE)
-      TARGET_LINK_LIBRARIES(volm expat)
-    ENDIF(APPLE)
-    TARGET_LINK_LIBRARIES(volm ${EXPATPP_LIBRARIES})
+    target_link_libraries(volm vsph bpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vbl_io vsol bkml bvgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul bvrml depth_map brad)
+    target_link_libraries(volm ${EXPAT_LIBRARIES})
+    if(APPLE)
+      target_link_libraries(volm expat)
+    endif()
+    target_link_libraries(volm ${EXPATPP_LIBRARIES})
     # Base matcher, Proximity matcher, Visibility matcher related
     add_subdirectory(desc)
 
     # 2-d, 3-d Configurational matcher related
     add_subdirectory(conf)
 
-    IF(BUILD_TESTING)
+    if(BUILD_TESTING)
       add_subdirectory(tests)
-    ENDIF(BUILD_TESTING)
+    endif()
 
     add_subdirectory(exe)
 
     add_subdirectory(pro)
-  ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+  endif()
+endif()

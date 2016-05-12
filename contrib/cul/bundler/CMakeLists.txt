@@ -7,15 +7,14 @@ doxygen_add_library(contrib/cul/bundler
   DESCRIPTION "Structure-from-Motion Pipeline. Based off Noah Snavely's Bundler, more info at phototour.cs.washington.edu/bundler/"
   )
 
-INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${VXL_CUL_INCLUDE_DIR})
+include_directories(${VXL_CUL_INCLUDE_DIR})
 
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+include_directories(${GEL_INCLUDE_DIR})
+include_directories(${RPL_INCLUDE_DIR})
+include_directories(${BRL_INCLUDE_DIR})
+include_directories(${BRL_INCLUDE_DIR}/bbas)
 
-SET(bundler_sources
+set(bundler_sources
     bundler.h               bundler.cxx
 
     bundler_sfm.h
@@ -30,10 +29,10 @@ SET(bundler_sources
     bundler_inters.h        bundler_inters.cxx
    )
 
-ADD_LIBRARY(bundler ${bundler_sources})
+vxl_add_library(LIBRARY_NAME bundler LIBRARY_SOURCES ${bundler_sources})
 
-TARGET_LINK_LIBRARIES(bundler vpgl_algo bpgl_algo vpgl vpgl_file_formats vsol vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl)
+target_link_libraries(bundler ${VXL_LIB_PREFIX}vpgl_algo bpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl rrel bapl rsdl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

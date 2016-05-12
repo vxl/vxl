@@ -24,15 +24,15 @@ class vpgl_fm_compute_7_point
   // Put the resulting matrix into fm, return true if successful.
   // Points pr are associated with the RHS of the fundamental matrix
   // while the points pl are associated with the LHS.
-  bool compute( const vcl_vector< vgl_homg_point_2d<double> >& pr,
-                const vcl_vector< vgl_homg_point_2d<double> >& pl,
-                vcl_vector< vpgl_fundamental_matrix<double>* >& fm );
+  bool compute( const std::vector< vgl_homg_point_2d<double> >& pr,
+                const std::vector< vgl_homg_point_2d<double> >& pl,
+                std::vector< vpgl_fundamental_matrix<double>* >& fm );
 
  protected:
-  static vcl_vector<double> get_coeffs( vnl_double_3x3 const& F1,
+  static std::vector<double> get_coeffs( vnl_double_3x3 const& F1,
                                         vnl_double_3x3 const& F2 );
-  static vcl_vector<double> solve_quadratic( vcl_vector<double> v );
-  static vcl_vector<double> solve_cubic( vcl_vector<double> v );
+  static std::vector<double> solve_quadratic( std::vector<double> v );
+  static std::vector<double> solve_cubic( std::vector<double> v );
   bool precondition_;
 };
 

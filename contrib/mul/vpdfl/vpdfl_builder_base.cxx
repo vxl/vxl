@@ -38,42 +38,42 @@ void vsl_add_to_binary_loader(const vpdfl_builder_base& b)
 
 //=======================================================================
 
-vcl_string vpdfl_builder_base::is_a() const
+std::string vpdfl_builder_base::is_a() const
 {
-  return vcl_string("vpdfl_builder_base");
+  return std::string("vpdfl_builder_base");
 }
 
 //=======================================================================
 
-bool vpdfl_builder_base::is_class(vcl_string const& s) const
+bool vpdfl_builder_base::is_class(std::string const& s) const
 {
   return s==vpdfl_builder_base::is_a();
 }
 
 //: Create a vpdfl_builder_base object given a config stream
 // \throw vcl_runtime_exception if parse error.
-vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(vcl_istream &is)
+std::auto_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(std::istream &is)
 {
   // This function should really be replaced by a general loader scheme
   // Ask Ian for examples from Manchester's private code base.
 
   //: This will store the constructed builder.
-  vcl_auto_ptr<vpdfl_builder_base> builder;
+  std::auto_ptr<vpdfl_builder_base> builder;
 
-  vcl_string type;
+  std::string type;
   is >> type;
 
   if (type == "vpdfl_axis_gaussian_builder")
   {
-    builder = vcl_auto_ptr<vpdfl_builder_base>(new vpdfl_axis_gaussian_builder());
+    builder = std::auto_ptr<vpdfl_builder_base>(new vpdfl_axis_gaussian_builder());
   }
   else if (type == "vpdfl_gaussian_kernel_pdf_builder")
   {
-    builder = vcl_auto_ptr<vpdfl_builder_base>(new vpdfl_gaussian_kernel_pdf_builder());
+    builder = std::auto_ptr<vpdfl_builder_base>(new vpdfl_gaussian_kernel_pdf_builder());
   }
   else if (type == "vpdfl_gaussian_builder")
   {
-    builder = vcl_auto_ptr<vpdfl_builder_base>(new vpdfl_gaussian_builder());
+    builder = std::auto_ptr<vpdfl_builder_base>(new vpdfl_gaussian_builder());
   }
   else
     mbl_exception_error(mbl_exception_no_name_in_factory(type,
@@ -102,7 +102,7 @@ void vsl_b_read(vsl_b_istream& bfs, vpdfl_builder_base& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base& b)
+void vsl_print_summary(std::ostream& os,const vpdfl_builder_base& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -112,7 +112,7 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base* b)
+void vsl_print_summary(std::ostream& os,const vpdfl_builder_base* b)
 {
   if (b)
     vsl_print_summary(os, *b);
@@ -123,7 +123,7 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base* b)
 //=======================================================================
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base& b)
+std::ostream& operator<<(std::ostream& os,const vpdfl_builder_base& b)
 {
   vsl_print_summary(os,b);
   return os;
@@ -132,7 +132,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base& b)
 //=======================================================================
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base* b)
+std::ostream& operator<<(std::ostream& os,const vpdfl_builder_base* b)
 {
   vsl_print_summary(os,b);
   return os;
@@ -141,12 +141,12 @@ vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base* b)
 //=======================================================================
 //: Create a vpdfl_builder_base object given a config stream (recursive style)
 //  Creates object, then uses config_from_stream(is) to set up internals
-vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::
-  new_pdf_builder_from_stream(vcl_istream &is)
+std::auto_ptr<vpdfl_builder_base> vpdfl_builder_base::
+  new_pdf_builder_from_stream(std::istream &is)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
-  vcl_auto_ptr<vpdfl_builder_base> builder;
+  std::auto_ptr<vpdfl_builder_base> builder;
   try
   {
     builder = mbl_cloneables_factory<vpdfl_builder_base>::get_clone(name);
@@ -164,9 +164,9 @@ vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::
 // The default implementation merely checks that no properties have
 // been specified.
 void vpdfl_builder_base::config_from_stream(
-  vcl_istream & is)
+  std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
   if (s.empty() || s=="{}") return;
 
   throw mbl_exception_parse_error(

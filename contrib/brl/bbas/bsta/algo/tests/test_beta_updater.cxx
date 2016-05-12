@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 #include <bsta/bsta_mixture_fixed.h>
@@ -5,12 +8,11 @@
 #include <bsta/algo/bsta_beta_updater.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 
-#include <vcl_string.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
-void load_samples(vcl_string file, vcl_vector<float>& samples)
+void load_samples(std::string file, std::vector<float>& samples)
 {
-  vcl_ifstream is(file.data());
+  std::ifstream is(file.data());
   while (is.is_open() && !is.eof()) {
     float sample;
     is >> sample;
@@ -18,10 +20,10 @@ void load_samples(vcl_string file, vcl_vector<float>& samples)
   }
 }
 
-void random_sampling(vcl_vector<float> &samples, vcl_vector<float> in_samples,
+void random_sampling(std::vector<float> &samples, std::vector<float> in_samples,
                      int num, bsta_beta<float>& beta)
 {
-  vcl_vector<float> s;
+  std::vector<float> s;
   vnl_random rand;
   for (int i=0; i<num; ++i) {
     int index=rand.lrand32(0,in_samples.size()-1);
@@ -30,7 +32,7 @@ void random_sampling(vcl_vector<float> &samples, vcl_vector<float> in_samples,
   }
   bsta_beta<float> b(s);
   beta.set_alpha_beta(b.alpha(),b.beta());
-  vcl_cout << beta;
+  std::cout << beta;
 }
 
 float compare_betas(bsta_beta<float>& beta1, bsta_beta<float>& beta2)
@@ -47,9 +49,9 @@ float compare_betas(bsta_beta<float>& beta1, bsta_beta<float>& beta2)
 
 static void test_beta_updater()
 {
-  vcl_cout << "-------------------------------\n"
+  std::cout << "-------------------------------\n"
            << " float, 1-dimensional, 3-modal\n"
-           << "-------------------------------" <<vcl_endl;
+           << "-------------------------------" <<std::endl;
 
   //A tri-mixture of 1 dimensional beta distribution
   typedef bsta_num_obs<bsta_beta<float> > beta_type;
@@ -62,7 +64,7 @@ static void test_beta_updater()
   // single distribution update
   bsta_beta_updater<bsta_beta<float> > updater;
 
-  vcl_ifstream is("beta_distr_100_100.txt");
+  std::ifstream is("beta_distr_100_100.txt");
   double alpha_=100, beta_=100;
   while (is.is_open() && !is.eof()) {
     float sample;
@@ -71,7 +73,7 @@ static void test_beta_updater()
     updater(init_beta, obs);
   }
 
-  vcl_cout << init_beta;
+  std::cout << init_beta;
   TEST_NEAR("extracting alpha and beta from samples (100,100) - alpha", init_beta.alpha(), alpha_ ,10.0f);
   TEST_NEAR("extracting alpha and beta from samples (100,100) - beta ", init_beta.beta(), beta_ ,10.0f);
 
@@ -80,7 +82,7 @@ static void test_beta_updater()
   bsta_num_obs<mix_beta_type> model;
 
   bsta_mix_beta_updater<mix_beta> mix_updater(beta1,0.5f,3);
-  vcl_vector<float> samples100_100, samples10_100, samples100_10, samples;
+  std::vector<float> samples100_100, samples10_100, samples100_10, samples;
   load_samples("beta_distr_100_100.txt", samples100_100);
   load_samples("beta_distr_10_100.txt", samples10_100);
   load_samples("beta_distr_100_10.txt", samples100_10);
@@ -107,21 +109,21 @@ static void test_beta_updater()
     mix_updater(model, obs ); // FIXME
   }
 
-  vcl_cout << "W1=" << model.weight(0) << '\n'
+  std::cout << "W1=" << model.weight(0) << '\n'
            << "W2=" << model.weight(1) << '\n'
-           << "W3=" << model.weight(2) << '\n' << vcl_endl;
+           << "W3=" << model.weight(2) << '\n' << std::endl;
 
   beta_type d1 = model.distribution(0);
   float diff1 = compare_betas(d1, beta100_100);
-  vcl_cout << d1;
+  std::cout << d1;
   TEST_NEAR("diff1", diff1, 2000, 1000);
   beta_type d2 = model.distribution(1);
   float diff2 = compare_betas(d2, beta10_100);
-  vcl_cout << d2;
+  std::cout << d2;
   TEST_NEAR("diff2", diff2, 1000, 1000);
   beta_type d3 = model.distribution(2);
   float diff3 = compare_betas(d3, beta100_10);
-  vcl_cout << d3;
+  std::cout << d3;
   TEST("diff3", vnl_math::isnan(diff3), true);
 #endif
 }

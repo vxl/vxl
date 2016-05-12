@@ -54,7 +54,7 @@ $wholefile =~ s:(INCLUDE_DIRECTORIES\s*\(\s*)\${allvxl_SOURCE_DIR}/vcl:$1.delete
        );
 foreach $f (keys %map) {
     my $d = $map{$f};
-    $wholefile =~ s:\$\{(all)?vxl_SOURCE_DIR\}/$f:\$\{${d}_INCLUDE_DIR\}:gm;
+    $wholefile =~ s:\$\{(all)?CMAKE_SOURCE_DIR\}/$f:\$\{${d}_INCLUDE_DIR\}:gm;
 }
 
 # 2. Any remaning allvxl_SOURCE_DIR should be changed

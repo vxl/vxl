@@ -24,8 +24,9 @@
 //
 //=========================================================================
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 //: Throw an exception indicating a definite problem.
@@ -33,12 +34,12 @@
 //-------------------------------------------------------------------------
 template <class T> void vidl_exception_error(T exception)
 {
-  vcl_cerr << "\nERROR: " << exception.what() << vcl_endl;
+  std::cerr << "\nERROR: " << exception.what() << std::endl;
 
 #if !defined VIDL_EXCEPTIONS_DISABLE && VCL_HAS_EXCEPTIONS
   throw exception;
 #else
-  vcl_abort();
+  std::abort();
 #endif
 }
 
@@ -48,7 +49,7 @@ template <class T> void vidl_exception_error(T exception)
 //-------------------------------------------------------------------------
 template <class T> void vidl_exception_warning(T exception)
 {
-  vcl_cerr << "\nWARNING: " << exception.what() << vcl_endl;
+  std::cerr << "\nWARNING: " << exception.what() << std::endl;
 
 #if !defined VIDL_EXCEPTIONS_DISABLE && VCL_HAS_EXCEPTIONS
   throw exception;
@@ -62,19 +63,19 @@ template <class T> void vidl_exception_warning(T exception)
 class vidl_exception
 {
  public:
-  explicit vidl_exception(const vcl_string& msg) : msg_(msg) {}
+  explicit vidl_exception(const std::string& msg) : msg_(msg) {}
   virtual ~vidl_exception() {}
 
-  virtual const vcl_string& what() const { return msg_; }
+  virtual const std::string& what() const { return msg_; }
 
  private:
-  vcl_string msg_;
+  std::string msg_;
 };
 
 //: Base class for all the DShow related vidl exceptions.
 struct vidl_dshow_exception : public vidl_exception
 {
-  explicit vidl_dshow_exception(const vcl_string& msg)
+  explicit vidl_dshow_exception(const std::string& msg)
     : vidl_exception("DShow: " + msg) {}
 };
 

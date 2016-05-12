@@ -1,46 +1,46 @@
-PROJECT( dcmtk )
+project( dcmtk )
 
 # Since this a relatively big library, and because not many people will need
 # to read DICOM files, don't build it by default except for the dashboards
 
-OPTION( VXL_BUILD_DCMTK "Build the V3P DCMTK libraries for reading DICOM files?" ${BUILD_FOR_VXL_DASHBOARD} )
+option( VXL_BUILD_DCMTK "Build the V3P DCMTK libraries for reading DICOM files?" ${BUILD_FOR_VXL_DASHBOARD} )
 
-IF( VXL_BUILD_DCMTK )
+if( VXL_BUILD_DCMTK )
 
 # ---------------------------------------------------------------------------
 # Configuration
 
-INCLUDE( ${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake )
-INCLUDE( ${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake )
-INCLUDE( ${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake )
-INCLUDE( ${CMAKE_ROOT}/Modules/CheckTypeSize.cmake )
-INCLUDE( ${VXL_CMAKE_DIR}/CheckPrototypeExistsCXX.cmake )
+include( ${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake )
+include( ${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake )
+include( ${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake )
+include( ${CMAKE_ROOT}/Modules/CheckTypeSize.cmake )
+include( ${VXL_CMAKE_DIR}/CheckPrototypeExistsCXX.cmake )
 
 
 # The DCMTK HAVE_STD_NAMESPACE has a looser definition than the vcl
 # ALLOWS_STD_NAMESPACE
-IF( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
-  MESSAGE(STATUS "Checking if the compiler has namespace std")
-  FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
+if( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
+  message(STATUS "Checking if the compiler has namespace std")
+  file(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
        "#include <string>\n"
        "using namespace std;\n"
        "int main() { string a=\"a\"; return 0; }\n" )
-  TRY_COMPILE( DCMTK_HAVE_STD_NAMESPACE
+  try_compile( DCMTK_HAVE_STD_NAMESPACE
     ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/CMakeTmp/test_have_namespace.cxx
     CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${CMAKE_REQUIRED_FLAGS}
     OUTPUT_VARIABLE OUTPUT
   )
-  IF( DCMTK_HAVE_STD_NAMESPACE )
-    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
+  if( DCMTK_HAVE_STD_NAMESPACE )
+    file(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
          "Checking for namespace std passed with the following output:\n"
          "${OUTPUT}\n\n" )
-  ELSE( DCMTK_HAVE_STD_NAMESPACE )
-    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
+  else()
+    file(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
         "Checking for namespace std failed with the following output:\n"
         "${OUTPUT}\n\n" )
-  ENDIF( DCMTK_HAVE_STD_NAMESPACE )
-ENDIF( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
+  endif()
+endif()
 
 
 CHECK_TYPE_SIZE( long DCMTK_SIZEOF_LONG )
@@ -139,56 +139,56 @@ CHECK_PROTOTYPE_EXISTS_CXX(
 # Some platforms (e.g. MipsPRO with IRIX 6.5) don't have the standard
 # include files (cassert, iostream, etc), but instead have the older
 # iostream.h, etc.
-IF( DCMTK_HAVE_CASSERT )
-  SET( DCMTK_HAVE_STD_CXX_INCLUDES 1 )
-ELSE( DCMTK_HAVE_CASSERT )
-  SET( DCMTK_HAVE_STD_CXX_INCLUDES )
-ENDIF( DCMTK_HAVE_CASSERT )
+if( DCMTK_HAVE_CASSERT )
+  set( DCMTK_HAVE_STD_CXX_INCLUDES 1 )
+else()
+  set( DCMTK_HAVE_STD_CXX_INCLUDES )
+endif()
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
-IF( ZLIB_FOUND )
-  INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
-  SET( DCMTK_HAVE_ZLIB 1 )
-ELSE( ZLIB_FOUND )
-  SET( DCMTK_HAVE_ZLIB )
-ENDIF( ZLIB_FOUND )
+include( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
+if( ZLIB_FOUND )
+  include_directories( ${ZLIB_INCLUDE_DIR} )
+  set( DCMTK_HAVE_ZLIB 1 )
+else()
+  set( DCMTK_HAVE_ZLIB )
+endif()
 
-SET( DCMTK_DCM_DICT_DEFAULT_PATH "${PROJECT_SOURCE_DIR}/dcmdata/libsrc/dicom.dic" )
-IF( WIN32 )
-  SET( DCMTK_PATH_SEPARATOR "\\\\" )
-  SET( DCMTK_ENVIRONMENT_PATH_SEPARATOR ";" )
-ELSE( WIN32 )
-  SET( DCMTK_PATH_SEPARATOR "/" )
-  SET( DCMTK_ENVIRONMENT_PATH_SEPARATOR ":" )
-ENDIF( WIN32 )
+set( DCMTK_DCM_DICT_DEFAULT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dcmdata/libsrc/dicom.dic" )
+if( WIN32 )
+  set( DCMTK_PATH_SEPARATOR "\\\\" )
+  set( DCMTK_ENVIRONMENT_PATH_SEPARATOR ";" )
+else()
+  set( DCMTK_PATH_SEPARATOR "/" )
+  set( DCMTK_ENVIRONMENT_PATH_SEPARATOR ":" )
+endif()
 
-IF( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
-  FILE(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/CheckIncludeMath.cxx
+if( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
+  file(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/CheckIncludeMath.cxx
        "extern \"C\" { #include <math.h> }" )
-  TRY_COMPILE( DCMTK_INCLUDE_MATH_H_AS_CXX
+  try_compile( DCMTK_INCLUDE_MATH_H_AS_CXX
     ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/CMakeTmp/CheckIncludeMath.cxx
     CMAKE_FLAGS
     -DCOMPILE_DEFINITIONS:STRING=${CMAKE_REQUIRED_FLAGS}
     OUTPUT_VARIABLE OUTPUT)
-  IF( DCMTK_INCLUDE_MATH_H_AS_CXX )
-    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
+  if( DCMTK_INCLUDE_MATH_H_AS_CXX )
+    file(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
          "Determining math.h as cxx"
          "passed with the following output:\n"
          "${OUTPUT}\n\n" )
-    SET( DCMTK_INCLUDE_MATH_H_AS_CXX 1 CACHE INTERNAL "Can include math.h with extern C")
-  ELSE( DCMTK_INCLUDE_MATH_H_AS_CXX )
-    FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
+    set( DCMTK_INCLUDE_MATH_H_AS_CXX 1 CACHE INTERNAL "Can include math.h with extern C")
+  else()
+    file(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
          "Determining math.h as cxx"
          "failed with the following output:\n"
          "${OUTPUT}\n\n" )
-    SET( DCMTK_INCLUDE_MATH_H_AS_CXX "" CACHE INTERNAL "Can include math.h with extern C")
-  ENDIF( DCMTK_INCLUDE_MATH_H_AS_CXX )
-ENDIF( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
+    set( DCMTK_INCLUDE_MATH_H_AS_CXX "" CACHE INTERNAL "Can include math.h with extern C")
+  endif()
+endif()
 
-CONFIGURE_FILE(
-  ${PROJECT_SOURCE_DIR}/config/include/osconfig_cmake.h.in
-  ${PROJECT_BINARY_DIR}/osconfig.h
+vxl_configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/config/include/osconfig_cmake.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/osconfig.h v3p/dcmtk
 )
 
 
@@ -204,36 +204,35 @@ CONFIGURE_FILE(
 # Unfortunately, -Wno-unused-variable only applies to gcc 3.3; it is
 # not a valid gcc 2.94.3 option. AP
 
-IF ( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX MATCHES "DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX")
-  IF ( CMAKE_COMPILER_IS_GNUCXX )
-    EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE CMAKE_CXX_COMPILER_VERSION)
-    IF(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
-      MESSAGE( STATUS "gcc 2.x")
-      SET ( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX 1 CACHE INTERNAL "Are we using an version of gcc < 3.0")
-    ELSE(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
-      MESSAGE( STATUS "gcc not 2.x")
-      SET ( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX 0 CACHE INTERNAL "Are we using an version of gcc < 3.0")
-    ENDIF(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
-  ENDIF ( CMAKE_COMPILER_IS_GNUCXX )
-ENDIF ( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX MATCHES "DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX")
+if( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX MATCHES "DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX")
+  if( CMAKE_COMPILER_IS_GNUCXX )
+    exec_program(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE CMAKE_CXX_COMPILER_VERSION)
+    if(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
+      message( STATUS "gcc 2.x")
+      set( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX 1 CACHE INTERNAL "Are we using an version of gcc < 3.0")
+    else()
+      message( STATUS "gcc not 2.x")
+      set( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX 0 CACHE INTERNAL "Are we using an version of gcc < 3.0")
+    endif()
+  endif()
+endif()
 
-IF ( CMAKE_COMPILER_IS_GNUCXX )
-  IF ( NOT DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX )
-    SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-cast-qual -Wno-unused-variable")
-    SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-qual -Wno-unused-variable")
-  ENDIF ( NOT DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX )
-ENDIF ( CMAKE_COMPILER_IS_GNUCXX )
+if( CMAKE_COMPILER_IS_GNUCXX )
+  if( NOT DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX )
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-cast-qual -Wno-unused-variable")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-qual -Wno-unused-variable")
+  endif()
+endif()
 
 # ---------------------------------------------------------------------------
 # Source files
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/ofstd/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/dcmdata/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/dcmimgle/include )
 
-INCLUDE_DIRECTORIES( ${PROJECT_BINARY_DIR} )
-INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/ofstd/include )
-INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/dcmdata/include )
-INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/dcmimgle/include )
 
-
-SET( dcmtk_sources
+set( dcmtk_sources
   ofstd/libsrc/ofcond.cxx
   ofstd/libsrc/ofconsol.cxx
   ofstd/libsrc/ofcrc32.cxx
@@ -333,18 +332,16 @@ SET( dcmtk_sources
   dcmimgle/libsrc/diutils.cxx
 )
 
-ADD_LIBRARY( dcmtk ${dcmtk_sources} )
-IF(WIN32)
-  TARGET_LINK_LIBRARIES( dcmtk Netapi32 )
-ENDIF(WIN32)
-IF( DCMTK_HAVE_ZLIB )
-  TARGET_LINK_LIBRARIES( dcmtk ${ZLIB_LIBRARIES} )
-ENDIF( DCMTK_HAVE_ZLIB )
+vxl_add_library(LIBRARY_NAME dcmtk LIBRARY_SOURCES ${dcmtk_sources})
+if(WIN32)
+  target_link_libraries( dcmtk Netapi32 )
+endif()
+if( DCMTK_HAVE_ZLIB )
+  target_link_libraries( dcmtk ${ZLIB_LIBRARIES} )
+endif()
 
-INSTALL_TARGETS( /lib dcmtk )
-
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-ENDIF( VXL_BUILD_DCMTK )
+endif()

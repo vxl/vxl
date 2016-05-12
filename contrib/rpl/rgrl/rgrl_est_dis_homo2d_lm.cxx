@@ -194,7 +194,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
-    if ( (*matches_ptr_)[ms] != 0 ) { // if pointer is valid
+    if ( (*matches_ptr_)[ms] != VXL_NULLPTR ) { // if pointer is valid
 
       rgrl_match_set const& one_set = *((*matches_ptr_)[ms]);
 
@@ -216,7 +216,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
           vnl_double_2 to = ti.to_feature()->location();
           to -= to_centre_;
           error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
-          double const wgt = vcl_sqrt(ti.cumulative_weight());
+          double const wgt = std::sqrt(ti.cumulative_weight());
           vnl_double_2 diff = error_proj_sqrt * (dis_mapped - to);
 
           // fill in
@@ -289,7 +289,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();
           error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
-          double const wgt = vcl_sqrt(ti.cumulative_weight());
+          double const wgt = std::sqrt(ti.cumulative_weight());
 
           qd_k1_from = wgt * error_proj_sqrt * qd_k1_from;
           qd_k1_to   = wgt * error_proj_sqrt * qd_k1_to;
@@ -362,7 +362,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       rgrl_est_homography2d est_homo;
       rgrl_transformation_sptr tmp_trans= est_homo.estimate( matches, cur_transform );
       if ( !tmp_trans )
-        return 0;
+        return VXL_NULLPTR;
       rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( *tmp_trans );
       init_H = trans.H();
     }
@@ -397,7 +397,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     }
 
   DebugMacro( 3, "From center: " << from_centre_
-              << "  To center: " << to_centre_ << vcl_endl );
+              << "  To center: " << to_centre_ << std::endl );
 
   // normalize H
   init_H /= init_H.array_two_norm();
@@ -426,9 +426,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
     WarningMacro( "Levenberg-Marquardt failed" );
-    return 0;
+    return VXL_NULLPTR;
   }
-  // lm.diagnose_outcome(vcl_cout);
+  // lm.diagnose_outcome(std::cout);
 
   // convert parameters back into matrix form
   h2H( p, init_H );
@@ -447,7 +447,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   dis_homo_func.gradf( p, jac );
   //
   vnl_fastops::AtA( jtj, jac );
-  // vcl_cout << "Jacobian:\n" << jac << "\n\nJtJ:\n" << jtj << "\n\nReal JtJ:\n" << jac.transpose() * jac << vcl_endl;
+  // std::cout << "Jacobian:\n" << jac << "\n\nJtJ:\n" << jtj << "\n\nReal JtJ:\n" << jac.transpose() * jac << std::endl;
 
 
   // compute the inverse of scatter matrix
@@ -469,7 +469,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_svd<double> svd( vnl_transpose(compliment) * jtj *compliment, 1e-6 );
   if ( svd.rank() < 10 ) {
     WarningMacro( "The covariance of homography ranks less than 8! ");
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vnl_matrix<double>covar = compliment * svd.inverse() * compliment.transpose();
@@ -479,7 +479,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // compute inverse
   //
   vnl_svd<double> svd( jtj, 1e-6 );
-  DebugMacro(3, "SVD of JtJ: " << svd << vcl_endl);
+  DebugMacro(3, "SVD of JtJ: " << svd << std::endl);
   // the second least singular value shall be greater than 0
   // or Rank 11-1 = 10
   if ( svd.rank() < 10 ) {
@@ -487,9 +487,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
   // pseudo inverse only use first 10 singular values
   vnl_matrix<double> covar ( svd.pinverse(10) );
-  DebugMacro(3, "Covariance: " << covar << vcl_endl );
+  DebugMacro(3, "Covariance: " << covar << std::endl );
 
-  DebugMacro(2, "null vector: " << svd.nullvector() << "   estimate: " << p << vcl_endl );
+  DebugMacro(2, "null vector: " << svd.nullvector() << "   estimate: " << p << std::endl );
 #endif
 
   return new rgrl_trans_rad_dis_homo2d( init_H.as_ref(), k1_from, k1_to, covar, from_centre_.as_ref(), to_centre_.as_ref() );
@@ -517,7 +517,7 @@ set_centres( vnl_vector<double> const& from_centre,
   to_centre_ = to_centre;
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_dis_homo2d_lm::
 transformation_type() const
 {

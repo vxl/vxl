@@ -15,10 +15,12 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgOperator3D.h>
 #include <mvl/HomgPoint3D.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class HomgLineSeg3D : public HomgLine3D
 {
@@ -43,6 +45,6 @@ class HomgLineSeg3D : public HomgLine3D
   void set (const HomgPoint3D& point1, const HomgPoint3D& point2);
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg3D& );
+std::ostream& operator<<(std::ostream& s, const HomgLineSeg3D& );
 
 #endif // HomgLineSeg3D_h_

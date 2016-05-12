@@ -11,11 +11,12 @@
 //   14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x4.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //:
 class vgui_projection_inspector
@@ -37,7 +38,7 @@ class vgui_projection_inspector
   int const *viewport() const { return vp; }
 
   //: Send info on this projection_inspector to the given stream.
-  void print(vcl_ostream&) const;
+  void print(std::ostream&) const;
 
   //: Returns projection matrix multiplied by modelview matrix.
   vnl_double_4x4 total_transformation() const { return P*M; }
@@ -98,11 +99,11 @@ class vgui_projection_inspector
   bool back_project(double const x[3], double const p[4], double X[4]) const;
 
   //: Back-projection of a given point onto a given plane p.
-  //  Returns a 3-vcl_vector.
+  //  Returns a 3-std::vector.
   vnl_vector<double> back_project(double x,double y, vnl_double_4 const &p) const;
 
   //: Back-projection of a given point onto a given plane p.
-  //  Returns a 4-vcl_vector.
+  //  Returns a 4-std::vector.
   vnl_vector<double> back_project(double x,double y,double z,vnl_double_4 const &p) const;
 
   //: Back-projection of a given point onto a given plane p.

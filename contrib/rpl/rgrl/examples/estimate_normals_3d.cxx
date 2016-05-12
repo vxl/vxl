@@ -23,8 +23,9 @@
 //
 // EndLatex
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_scatter_3x3.h>
 
@@ -33,7 +34,7 @@
 typedef vnl_vector_fixed<double,3>       vector_3d;
 
 vector_3d
-approximate_normal(vcl_vector< vector_3d > const & points)
+approximate_normal(std::vector< vector_3d > const & points)
 {
   // Compute the center of the points
   //
@@ -65,7 +66,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 3 ) {
-    vcl_cerr << "Missing Parameters\n"
+    std::cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " InputFeatureFile OutputFeatureFile\n";
     return 1;
@@ -73,11 +74,11 @@ main( int argc, char* argv[] )
   const char*  in_filename=   argv[1];
   const char*  out_filename = argv[2];
 
-  vcl_vector< vector_3d > points;
-  vcl_ifstream istr( in_filename );
+  std::vector< vector_3d > points;
+  std::ifstream istr( in_filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<in_filename<<vcl_endl;
+    std::cerr<<"ERROR: Cannot open "<<in_filename<<std::endl;
     return 0;
   }
 
@@ -95,7 +96,7 @@ main( int argc, char* argv[] )
   // Store all the points in the kd-tree
   //
   const unsigned int nc = 3, na = 0;
-  vcl_vector<rsdl_point> search_pts(total);
+  std::vector<rsdl_point> search_pts(total);
   for (int i = 0; i<total; ++i) {
     search_pts[i].resize( nc, na );
     search_pts[i].set_cartesian(points[i].as_ref());
@@ -108,11 +109,11 @@ main( int argc, char* argv[] )
   // the best plane using the set of points. The normal to the plane
   // is taken as the normal to the data point.
   //
-  vcl_ofstream ostr( out_filename );
-  vcl_vector< vector_3d > near_neighbors;
-  vcl_vector<rsdl_point> near_neighbor_pts;
-  vcl_vector<int> near_neighbor_indices;
-  ostr<<total<<vcl_endl;
+  std::ofstream ostr( out_filename );
+  std::vector< vector_3d > near_neighbors;
+  std::vector<rsdl_point> near_neighbor_pts;
+  std::vector<int> near_neighbor_indices;
+  ostr<<total<<std::endl;
   int num_nb = 4;
   for (int i = 0; i<total; ++i) {
     rsdl_point query_pt( 3, 0);
@@ -123,7 +124,7 @@ main( int argc, char* argv[] )
       near_neighbors.push_back(points[near_neighbor_indices[j]]);
 
     vector_3d normal = approximate_normal(near_neighbors);
-    ostr<<points[i]<<' '<<normal<<vcl_endl;
+    ostr<<points[i]<<' '<<normal<<std::endl;
   }
   ostr.close();
 

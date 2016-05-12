@@ -49,13 +49,13 @@ bool boxm2_cam_ground_trajectory_tableau::handle(vgui_event const &e)
   if (e.type == vgui_KEY_PRESS)
   {
     if (e.key == vgui_key('r')) {
-        vcl_cout<<"resetting to initial camera view"<<vcl_endl;
+        std::cout<<"resetting to initial camera view"<<std::endl;
         stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
         cam_ = default_cam_;
         this->post_redraw();
-        return true; 
+        return true;
     }
-    if (e.key == vgui_CURSOR_LEFT || e.key == vgui_CURSOR_RIGHT || e.key == vgui_CHAR_w || e.key == vgui_CHAR_s) 
+    if (e.key == vgui_CURSOR_LEFT || e.key == vgui_CURSOR_RIGHT || e.key == vgui_CHAR_w || e.key == vgui_CHAR_s)
     {
 
         double dx = 0.0;
@@ -82,7 +82,7 @@ bool boxm2_cam_ground_trajectory_tableau::handle(vgui_event const &e)
         vgl_rotation_3d<double> dRy( qy ) ;
         cam_.set_rotation(R*dRy.inverse()*dRx.inverse());
         this->post_redraw();
-        return true; 
+        return true;
     }
     if(e.key == vgui_CURSOR_UP || e.key == vgui_CURSOR_DOWN)
     {
@@ -90,7 +90,7 @@ bool boxm2_cam_ground_trajectory_tableau::handle(vgui_event const &e)
             waypoint_iter++;
         if(e.key == vgui_CURSOR_DOWN && waypoint_iter!=waypoints_.begin())
             waypoint_iter--;
-        
+
         if(waypoint_iter== waypoints_.end())
             waypoint_iter--;
 
@@ -100,7 +100,7 @@ bool boxm2_cam_ground_trajectory_tableau::handle(vgui_event const &e)
     }
     if(e.key == vgui_CHAR_a || e.key == vgui_CHAR_d)
     {
-        double scale = 1.1;    
+        double scale = 1.1;
         vpgl_calibration_matrix<double> K=  cam_.get_calibration();
         double f = K.focal_length();
         double defaultf =default_cam_.get_calibration().focal_length();

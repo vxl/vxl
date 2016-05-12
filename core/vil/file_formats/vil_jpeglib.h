@@ -6,8 +6,9 @@
 // \brief Stuff for jpeg I/O
 // \author fsm
 
-#include <vcl_cstdio.h> // for FILE, used in jpeglib.h !!
-#include <vcl_cstddef.h> // for size_t, used in jpeglib.h !!
+#include <cstdio>
+#include <cstddef>
+#include <vcl_compiler.h>
 
 // ?
 extern "C" {

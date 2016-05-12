@@ -1,5 +1,7 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_multi_render.h"
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
@@ -24,11 +26,11 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
                                  vil_image_view<float>&  img,
                                  vpgl_camera_double_sptr cam)
 {
-  vcl_cout<<"------------ boxm2_multi_render -----------------------"<<vcl_endl;
+  std::cout<<"------------ boxm2_multi_render -----------------------"<<std::endl;
   //verify appearance model
   vul_timer rtime; rtime.mark();
-  vcl_size_t lthreads[2] = {8,8};
-  vcl_string data_type, options;
+  std::size_t lthreads[2] = {8,8};
+  std::string data_type, options;
   int apptypesize;
   if ( !get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) )
     return 0.0f;
@@ -46,13 +48,13 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
 #if 1 //Using first block method
 
   //set up image, command queue lists
-  vcl_vector<cl_command_queue> queues;
-  vcl_vector<bocl_mem*> exp_mems, vis_mems;
-  vcl_vector<bocl_mem_sptr> img_dims, outputs,
+  std::vector<cl_command_queue> queues;
+  std::vector<bocl_mem*> exp_mems, vis_mems;
+  std::vector<bocl_mem_sptr> img_dims, outputs,
                             ray_os, ray_ds, lookups,tnearfarptrs,max_omegas;
-  vcl_vector<vcl_vector<boxm2_block_id> > vis_orders;
-  vcl_size_t maxBlocks = 0;
-  vcl_vector<boxm2_opencl_cache1*>& ocl_caches = cache.ocl_caches();
+  std::vector<std::vector<boxm2_block_id> > vis_orders;
+  std::size_t maxBlocks = 0;
+  std::vector<boxm2_opencl_cache1*>& ocl_caches = cache.ocl_caches();
   for (unsigned int i=0; i<ocl_caches.size(); ++i)
   {
     //grab sub scene and it's cache
@@ -68,7 +70,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
                                                    &status );
     queues.push_back(queue);
     if (status!=0) {
-      vcl_cout<<"boxm2_multi_render::render unalbe to create command queue"<<vcl_endl;
+      std::cout<<"boxm2_multi_render::render unalbe to create command queue"<<std::endl;
       return 0.0f;
     }
 
@@ -80,21 +82,21 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
 
     //create exp image (TODO, make these patches to save mem)
     float* exp_buff = new float[cl_ni*cl_nj];
-    vcl_fill(exp_buff, exp_buff+cl_ni*cl_nj, 0.0f);
+    std::fill(exp_buff, exp_buff+cl_ni*cl_nj, 0.0f);
     bocl_mem * exp_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), exp_buff, "exp image buffer");
     exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     exp_mems.push_back(exp_image);
 
     // visibility image
     float* vis_buff = new float[cl_ni*cl_nj];
-    vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+    std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
     bocl_mem * vis_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "exp image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     vis_mems.push_back(vis_image);
 
     // Output Array
     float* output_arr = new float[cl_ni*cl_nj];
-    vcl_fill(output_arr, output_arr+cl_ni*cl_nj, 0.0f);
+    std::fill(output_arr, output_arr+cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr  cl_output = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, output_arr, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     outputs.push_back(cl_output);
@@ -108,7 +110,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     ray_ds.push_back(ray_d_buff);
 
     float* max_omega_buff = new float[cl_ni*cl_nj];
-    vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
+    std::fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr max_omega_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"max omega buffer");
     max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     max_omegas.push_back(max_omega_image);
@@ -124,13 +126,13 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     lookups.push_back(lookup);
 
     //grab visibility order
-    vcl_vector<boxm2_block_id> vis_order = sub_scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id> vis_order = sub_scene->get_vis_blocks(cam);
     vis_orders.push_back(vis_order);
-    maxBlocks = vcl_max(vis_order.size(), maxBlocks);
+    maxBlocks = std::max(vis_order.size(), maxBlocks);
   }
 
   //visibility order
-  vcl_vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
+  std::vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
   float cpu_time = 0.0f, gpu_time = 0.0f;
   vul_timer gpu_timer; gpu_timer.mark();
 
@@ -140,8 +142,8 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   //go through each scene's blocks in vis order
   for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
     boxm2_multi_cache_group& group = *grp[grpId];
-    vcl_vector<boxm2_block_id>& ids = group.ids();
-    vcl_vector<int> indices = group.order_from_cam(cam);
+    std::vector<boxm2_block_id>& ids = group.ids();
+    std::vector<int> indices = group.order_from_cam(cam);
     for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
@@ -152,7 +154,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
       //keep track of mems allocated, so you can unref them later
       vis_mems[i]->fill(queues[i], 1.0f, "float");
       exp_mems[i]->zero_gpu_buffer(queues[i]);
-      vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
+      std::vector<bocl_kernel*>& kerns = get_kernels(device, options);
       this->render_block(sub_scene, id, ocl_cache, queues[i],
                          ray_os[i], ray_ds[i], exp_mems[i], vis_mems[i],max_omegas[i], img_dims[i],
                          outputs[i],tnearfarptrs[i], lookups[i], data_type, kerns[0],
@@ -169,7 +171,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
       double minU=ni, minV=nj,
              maxU=0, maxV=0;
       vgl_box_3d<double>& blkBox = group.bbox(i);
-      vcl_vector<vgl_point_3d<double> > verts = blkBox.vertices();
+      std::vector<vgl_point_3d<double> > verts = blkBox.vertices();
       for (unsigned int vi=0; vi<verts.size(); ++vi) {
         double u, v;
         cam->project(verts[vi].x(), verts[vi].y(), verts[vi].z(), u, v);
@@ -264,20 +266,20 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   //report times
   //--------------------------------
   float wall_time = (float) rtime.all();
-  vcl_cout<<"\nMulti Render Time: "<< wall_time <<" ms\n"
+  std::cout<<"\nMulti Render Time: "<< wall_time <<" ms\n"
           <<"  cpu_time: "<<wall_time-gpu_time<<" ms\n"
-          <<"  gpu_time: "<<gpu_time<<" ms"<<vcl_endl;
+          <<"  gpu_time: "<<gpu_time<<" ms"<<std::endl;
   return (float) gpu_time;
 
 #endif //Using first block method
 #if 0 //Using second block method (commented out)
 
   //set up image lists
-  vcl_vector<cl_command_queue> queues;
-  vcl_vector<bocl_mem_sptr> exp_mems, vis_mems;
+  std::vector<cl_command_queue> queues;
+  std::vector<bocl_mem_sptr> exp_mems, vis_mems;
 
   //for each device/cache, run a render
-  vcl_vector<boxm2_opencl_cache1*> ocl_caches = cache.get_vis_sub_scenes(cam.ptr());
+  std::vector<boxm2_opencl_cache1*> ocl_caches = cache.get_vis_sub_scenes(cam.ptr());
   for (unsigned int i=0; i<ocl_caches.size(); ++i)
   {
     //grab sub scene and it's cache
@@ -286,7 +288,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     bocl_device_sptr        device    = ocl_cache->get_device();
 
     // compile the kernel/retrieve cached kernel for this device
-    vcl_vector<bocl_kernel*> kerns = get_kernels(device, options);
+    std::vector<bocl_kernel*> kerns = get_kernels(device, options);
 
     // create a command queue.
     int status=0;
@@ -296,7 +298,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
                                                    &status );
     queues.push_back(queue);
     if (status!=0) {
-      vcl_cout<<"boxm2_multi_render::render unalbe to create command queue"<<vcl_endl;
+      std::cout<<"boxm2_multi_render::render unalbe to create command queue"<<std::endl;
       return 0.0f;
     }
 
@@ -304,7 +306,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     unsigned cl_ni=RoundUp(ni,lthreads[0]);
     unsigned cl_nj=RoundUp(nj,lthreads[1]);
     float* buff = new float[cl_ni*cl_nj];
-    vcl_fill(buff, buff+cl_ni*cl_nj, 0.0f);
+    std::fill(buff, buff+cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
     exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     exp_mems.push_back(exp_image);
@@ -316,13 +318,13 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
 
     // visibility image
     float* vis_buff = new float[cl_ni*cl_nj];
-    vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+    std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
     bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "exp image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     vis_mems.push_back(vis_image);
 
     // run expected image function
-    vcl_cout<<"  rendering with device: "<<device<<vcl_endl;
+    std::cout<<"  rendering with device: "<<device<<std::endl;
     this->render_scene( sub_scene,
                         device,
                         ocl_cache,
@@ -344,7 +346,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     clFinish(queues[i]);
 
   //read all images in
-  vcl_vector<float*> exp_imgs, vis_imgs;
+  std::vector<float*> exp_imgs, vis_imgs;
   for (unsigned int i=0; i<exp_mems.size(); ++i) {
     // read out expected image
     exp_mems[i]->read_to_buffer(queues[i]);
@@ -378,9 +380,9 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     delete[] e;
   }
   float combine_time = (float) rtime.all();
-  vcl_cout<<"\nMulti Render Time: "<<combine_time + pre_time<<" ms\n"
+  std::cout<<"\nMulti Render Time: "<<combine_time + pre_time<<" ms\n"
           <<"  pre_time (gpu+overhead): "<<pre_time<<" ms\n"
-          <<"  combine time (end):      "<<combine_time<<" ms"<<vcl_endl;
+          <<"  combine time (end):      "<<combine_time<<" ms"<<std::endl;
   return (float) combine_time+pre_time;
 #endif //Using second block method (commented out)
 }
@@ -393,9 +395,9 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
                                         bocl_mem_sptr & exp_image,
                                         bocl_mem_sptr & vis_image,
                                         bocl_mem_sptr & exp_img_dim,
-                                        vcl_string data_type,
+                                        std::string data_type,
                                         bocl_kernel* kernel,
-                                        vcl_size_t * lthreads,
+                                        std::size_t * lthreads,
                                         unsigned cl_ni,
                                         unsigned cl_nj,
                                         int apptypesize )
@@ -406,7 +408,7 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
     //camera check
     if (cam->type_name()!= "vpgl_perspective_camera" &&
         cam->type_name()!= "vpgl_generic_camera" ) {
-      vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+      std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
       return 0.0f;
     }
 
@@ -430,11 +432,11 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout<<(*id);
+        std::cout<<(*id);
         //render_block(scene, *id, opencl_cache, queue,  ray_o_buff, ray_d_buff,
         //             exp_image, vis_image, exp_img_dim, cl_output, lookup, data_type, kernel,
         //             lthreads, cl_ni, cl_nj, apptypesize);
@@ -459,16 +461,16 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
                                         bocl_mem_sptr & cl_output,
                                         bocl_mem_sptr & tnearfar_mem_ptr,
                                         bocl_mem_sptr & lookup,
-                                        vcl_string data_type,
+                                        std::string data_type,
                                         bocl_kernel* kern,
-                                        vcl_size_t* lthreads,
+                                        std::size_t* lthreads,
                                         unsigned cl_ni,
                                         unsigned cl_nj,
                                         int apptypesize)
 {
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(id);
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
 
     //write the image values to the buffer
     vul_timer transfer;
@@ -477,6 +479,13 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id);
     int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     // data type string may contain an identifier so determine the buffer size
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+        std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+        return false;
+    }
+
     bocl_mem* mog       = opencl_cache->get_data(id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
     float transfer_time = (float) transfer.all();
 
@@ -510,23 +519,23 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
 
 
 //multi_render compile
-vcl_vector<bocl_kernel*>&
-boxm2_multi_render::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>&
+boxm2_multi_render::get_kernels(bocl_device_sptr device, std::string opts)
 {
     //store list
-  vcl_vector<bocl_kernel*> kerns;
+  std::vector<bocl_kernel*> kerns;
     // check to see if this device has compiled kernels already
-  vcl_string identifier = device->device_identifier()+opts;
+  std::string identifier = device->device_identifier()+opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //if not found, then compile and cache
-  vcl_cout<<"===========Compiling multi render kernels===========\n"
-          <<"  for device: "<<device->device_identifier()<<vcl_endl;
+  std::cout<<"===========Compiling multi render kernels===========\n"
+          <<"  for device: "<<device->device_identifier()<<std::endl;
 
   //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -539,7 +548,7 @@ boxm2_multi_render::get_kernels(bocl_device_sptr device, vcl_string opts)
 
   //set kernel options
   //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-  vcl_string options = opts + " -D RENDER ";
+  std::string options = opts + " -D RENDER ";
   options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
   //have kernel construct itself using the context and device
@@ -552,7 +561,7 @@ boxm2_multi_render::get_kernels(bocl_device_sptr device, vcl_string opts)
                                    "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
 
   //create normalize image kernel
-  vcl_vector<vcl_string> norm_src_paths;
+  std::vector<std::string> norm_src_paths;
   norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
   norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
   bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -575,12 +584,12 @@ boxm2_multi_render::get_kernels(bocl_device_sptr device, vcl_string opts)
 
 //pick out data type
 bool boxm2_multi_render::get_scene_appearances(boxm2_scene_sptr    scene,
-                                               vcl_string&         data_type,
-                                               vcl_string&         options,
+                                               std::string&         data_type,
+                                               std::string&         options,
                                                int&                apptypesize)
 {
   bool foundDataType = false;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
   apptypesize = 0;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -599,7 +608,7 @@ bool boxm2_multi_render::get_scene_appearances(boxm2_scene_sptr    scene,
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
   return true;

@@ -6,7 +6,9 @@
 //  \author Chuck Stewart
 //  \date   Summer 2001
 
-#include <vcl_iterator.h>
+#include <iostream>
+#include <iterator>
+#include <vcl_compiler.h>
 
 //: \brief Compute the median absolute deviation (MAD) scale estimate of the residuals.
 //
@@ -141,7 +143,7 @@ void rrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
                                             T & robust_mean, T & robust_std, T & inlier_frac,
                                             int dof=1 );
 
-#if defined(VCL_GCC_32) || defined(VCL_GCC_33) || defined(VCL_GCC_34) || defined(VCL_GCC_4) || defined(VCL_GCC_5)
+#if defined(VCL_GCC)
 # include "rrel_util.txx"
 #endif
 

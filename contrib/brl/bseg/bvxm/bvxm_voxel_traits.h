@@ -61,7 +61,7 @@ class bvxm_voxel_traits_mc
   typedef typename bvxm_mog_mc_processor<dim,modes>::obs_datatype obs_datatype;
   typedef typename bvxm_mog_mc_processor<dim,modes>::obs_mathtype obs_mathtype;
 
-  static inline vcl_string filename_prefix(){ return "apm_mog_mc"; }
+  static inline std::string filename_prefix(){ return "apm_mog_mc"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val()
   {
@@ -79,7 +79,7 @@ class bvxm_voxel_traits<OCCUPANCY>
   //:Datatype of the occupancy probabilities
   typedef float voxel_datatype;
 
-  static inline vcl_string filename_prefix(){ return "ocp"; }
+  static inline std::string filename_prefix(){ return "ocp"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val() { return 0.005f; }
 };
@@ -92,7 +92,7 @@ class bvxm_voxel_traits<OCCUPANCY_OPINION>
   //:Datatype of the occupancy probabilities
   typedef bvxm_opinion voxel_datatype;
 
-  static inline vcl_string filename_prefix(){ return "ocp_opinion"; }
+  static inline std::string filename_prefix(){ return "ocp_opinion"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val() { return bvxm_opinion(0.005f);}
 };
@@ -107,7 +107,7 @@ class bvxm_voxel_traits<APM_MOG_GREY>
   typedef bvxm_mog_grey_processor::obs_datatype obs_datatype;
   typedef bvxm_mog_grey_processor::obs_mathtype obs_mathtype;
 
-  static inline vcl_string filename_prefix() { return "apm_mog_grey"; }
+  static inline std::string filename_prefix() { return "apm_mog_grey"; }
   static inline bool is_multibin() { return true; }
   static inline voxel_datatype initial_val()
   {
@@ -127,7 +127,7 @@ class bvxm_voxel_traits<APM_MOG_RGB>
   typedef bvxm_mog_rgb_processor::obs_datatype obs_datatype;
   typedef bvxm_mog_rgb_processor::obs_mathtype obs_mathtype;
 
-  static inline vcl_string filename_prefix(){ return "apm_mog_rgb"; }
+  static inline std::string filename_prefix(){ return "apm_mog_rgb"; }
   static inline bool is_multibin() { return true; }
   static inline voxel_datatype initial_val()
   {
@@ -156,7 +156,7 @@ class bvxm_voxel_traits<EDGES>
   //:Datatype of the occupancy probabilities
   typedef float voxel_datatype;
 
-  static inline vcl_string filename_prefix() { return "edges"; }
+  static inline std::string filename_prefix() { return "edges"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val() { return 0.01f; }
 };
@@ -172,7 +172,7 @@ class bvxm_voxel_traits<LIDAR>
   //:Datatype of the occupancy probabilities
   typedef float voxel_datatype;
 
-  static inline vcl_string filename_prefix() { return "lidar"; }
+  static inline std::string filename_prefix() { return "lidar"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val() { return 0.0f; }
 };
@@ -188,7 +188,7 @@ class bvxm_voxel_traits<FLOAT>
   typedef bvxm_float_processor::obs_datatype obs_datatype;
   typedef bvxm_float_processor::obs_mathtype obs_mathtype;
 
-  static inline vcl_string filename_prefix(){ return "apm_float"; }
+  static inline std::string filename_prefix(){ return "apm_float"; }
   static inline bool is_multibin() { return true; }
   static inline voxel_datatype initial_val()
   {
@@ -205,7 +205,7 @@ class bvxm_voxel_traits<TANGENT_POS>
   typedef bvxm_von_mises_tangent_processor<float>::pos_dist_t voxel_datatype;
   typedef bvxm_von_mises_tangent_processor<float>::pos_t obs_type;
   typedef bvxm_von_mises_tangent_processor<float>::obs_math_t math_type;
-  static inline vcl_string filename_prefix(){ return "tan_pos"; }
+  static inline std::string filename_prefix(){ return "tan_pos"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val()
   {
@@ -222,7 +222,7 @@ class bvxm_voxel_traits<TANGENT_DIR>
   typedef bvxm_von_mises_tangent_processor<float>::dir_dist_t voxel_datatype;
   typedef bvxm_von_mises_tangent_processor<float>::dir_t obs_type;
   typedef bvxm_von_mises_tangent_processor<float>::obs_math_t math_type;
-  static inline vcl_string filename_prefix(){ return "tan_dir"; }
+  static inline std::string filename_prefix(){ return "tan_dir"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val()
   {

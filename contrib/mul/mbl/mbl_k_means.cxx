@@ -1,11 +1,13 @@
 // This is mul/mbl/mbl_k_means.cxx
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
+#include <vector>
 #include "mbl_k_means.h"
 //:
 //  \file
 
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Find k cluster centres
@@ -28,17 +30,17 @@
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
 unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
-                     vcl_vector<vnl_vector<double> >* cluster_centres,
-                     vcl_vector<unsigned> * partition //=0
+                     std::vector<vnl_vector<double> >* cluster_centres,
+                     std::vector<unsigned> * partition //=0
                     )
 {
-  vcl_vector<vnl_vector<double> > & centres = *cluster_centres;
+  std::vector<vnl_vector<double> > & centres = *cluster_centres;
 
-  vcl_vector<unsigned> * p_partition;
+  std::vector<unsigned> * p_partition;
   data.reset();
   unsigned  dims = data.current().size();
-  vcl_vector<vnl_vector<double> > sums(k, vnl_vector<double>(dims, 0.0));
-  vcl_vector<unsigned> nNearest(k,0);
+  std::vector<vnl_vector<double> > sums(k, vnl_vector<double>(dims, 0.0));
+  std::vector<unsigned> nNearest(k,0);
   unsigned i;
   unsigned iterations =0;
 
@@ -53,12 +55,12 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
     if (p_partition->size() != data.size())
     {
       p_partition->resize(data.size());
-      vcl_fill(p_partition->begin(), p_partition->end(), 0);
+      std::fill(p_partition->begin(), p_partition->end(), 0);
     }
     else initialise_from_clusters = true;
   }
   else
-    p_partition = new vcl_vector<unsigned>(int(data.size()), 0u);
+    p_partition = new std::vector<unsigned>(int(data.size()), 0u);
 
 
 // Calculate initial centres
@@ -85,8 +87,8 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
     for (i=0; i<k; ++i)
       centres[i] = sums[i]/nNearest[i];
     data.reset();
-    vcl_fill(sums.begin(), sums.end(), vnl_vector<double>(dims, 0.0));
-    vcl_fill(nNearest.begin(), nNearest.end(), 0);
+    std::fill(sums.begin(), sums.end(), vnl_vector<double>(dims, 0.0));
+    std::fill(nNearest.begin(), nNearest.end(), 0);
   }
 
   bool changed = true;
@@ -142,8 +144,8 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
 
     // and repeat
     data.reset();
-    vcl_fill(sums.begin(), sums.end(), vnl_vector<double>(dims, 0.0));
-    vcl_fill(nNearest.begin(), nNearest.end(), 0);
+    std::fill(sums.begin(), sums.end(), vnl_vector<double>(dims, 0.0));
+    std::fill(nNearest.begin(), nNearest.end(), 0);
     iterations ++;
   }
 
@@ -189,18 +191,18 @@ static inline void incXbyYv(vnl_vector<double> *X, const vnl_vector<double> &Y, 
 // \par
 // The algorithm has been optimised
 unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
-                              const vcl_vector<double>& wts,
-                              vcl_vector<vnl_vector<double> >* cluster_centres,
-                              vcl_vector<unsigned> * partition //=0
+                              const std::vector<double>& wts,
+                              std::vector<vnl_vector<double> >* cluster_centres,
+                              std::vector<unsigned> * partition //=0
                              )
 {
-  vcl_vector<vnl_vector<double> > & centres = *cluster_centres;
+  std::vector<vnl_vector<double> > & centres = *cluster_centres;
 
-  vcl_vector<unsigned> * p_partition;
+  std::vector<unsigned> * p_partition;
   data.reset();
   unsigned  dims = data.current().size();
-  vcl_vector<vnl_vector<double> > sums(k, vnl_vector<double>(dims, 0.0));
-  vcl_vector<double> nNearest(k,0.0);
+  std::vector<vnl_vector<double> > sums(k, vnl_vector<double>(dims, 0.0));
+  std::vector<double> nNearest(k,0.0);
   unsigned i;
   unsigned iterations =0;
 
@@ -216,14 +218,14 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
     if (p_partition->size() != data.size())
     {
       p_partition->resize(data.size());
-      vcl_fill(p_partition->begin(), p_partition->end(), 0);
+      std::fill(p_partition->begin(), p_partition->end(), 0);
     }
     else initialise_from_clusters = true;
   }
   else
-    p_partition = new vcl_vector<unsigned>(int(data.size()), 0u);
+    p_partition = new std::vector<unsigned>(int(data.size()), 0u);
 
-  const vnl_vector<double>  vcl_vector_double_dims_0(dims, 0.0);
+  const vnl_vector<double>  vector_double_dims_0(dims, 0.0);
 
 
 // Calculate initial centres
@@ -240,9 +242,9 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
 #else
         if (!data.next())
         {
-          vcl_cerr << "ERROR: mbl_k_means_weighted, while initialising centres from data\n"
+          std::cerr << "ERROR: mbl_k_means_weighted, while initialising centres from data\n"
                    << "Not enough non-zero-weighted data\n";
-          vcl_abort();
+          std::abort();
         }
 #endif //NDEBUG
       }
@@ -265,8 +267,8 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
     for (i=0; i<k; ++i)
       centres[i] = sums[i]/nNearest[i];
     data.reset();
-    vcl_fill(sums.begin(), sums.end(), vcl_vector_double_dims_0);
-    vcl_fill(nNearest.begin(), nNearest.end(), 0.0);
+    std::fill(sums.begin(), sums.end(), vector_double_dims_0);
+    std::fill(nNearest.begin(), nNearest.end(), 0.0);
   }
 
   bool changed = true;
@@ -326,8 +328,8 @@ unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsig
 
     // and repeat
     data.reset();
-    vcl_fill(sums.begin(), sums.end(), vcl_vector_double_dims_0);
-    vcl_fill(nNearest.begin(), nNearest.end(), 0.0);
+    std::fill(sums.begin(), sums.end(), vector_double_dims_0);
+    std::fill(nNearest.begin(), nNearest.end(), 0.0);
     iterations ++;
   }
 

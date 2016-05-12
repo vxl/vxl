@@ -1,15 +1,16 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include <testlib/testlib_test.h>
 #include <brad/brad_phongs_model_est.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 
 //: Test the sun_pos class
 static void test_phongs_model_est()
@@ -20,13 +21,13 @@ static void test_phongs_model_est()
 
     double gamma=6;
 
-    vnl_double_3 normal(vcl_sin(0.75)*vcl_cos(0.0),vcl_sin(0.75)*vcl_sin(0.0),vcl_cos(0.75));
+    vnl_double_3 normal(std::sin(0.75)*std::cos(0.0),std::sin(0.75)*std::sin(0.0),std::cos(0.75));
 
     double sun_elev = 0.325398;
     double sun_phi = -3.69;
-    vnl_double_3 lv(vcl_sin(sun_elev)*vcl_cos(sun_phi),
-                    vcl_sin(sun_elev)*vcl_sin(sun_phi),
-                    vcl_cos(sun_elev));
+    vnl_double_3 lv(std::sin(sun_elev)*std::cos(sun_phi),
+                    std::sin(sun_elev)*std::sin(sun_phi),
+                    std::cos(sun_elev));
     vnl_identity_3x3 I;
     vnl_double_3 rlv=(I-outer_product<double>(normal,normal)-outer_product<double>(normal,normal))*lv;
 
@@ -41,10 +42,10 @@ static void test_phongs_model_est()
     {
         double elev = rand.drand32(vnl_math::pi/6,vnl_math::pi/3);
         double azim = rand.drand32(vnl_math::twopi);
-        vnl_double_3 vv(vcl_sin(elev)*vcl_cos(azim),
-                        vcl_sin(elev)*vcl_sin(azim),
-                        vcl_cos(elev));
-        double obs = kd * dot_product(lv,normal) + ks* vcl_pow(dot_product<double>(vv,rlv),gamma);
+        vnl_double_3 vv(std::sin(elev)*std::cos(azim),
+                        std::sin(elev)*std::sin(azim),
+                        std::cos(elev));
+        double obs = kd * dot_product(lv,normal) + ks* std::pow(dot_product<double>(vv,rlv),gamma);
         samples[i]=obs;
         camera_elev[i]=elev;
         camera_azim[i]=azim;
@@ -86,7 +87,7 @@ static void test_phongs_model_est()
                 {
                     min_error=lm.get_end_error();
                     argminx=x;
-                    vcl_cout<<":"<<theta;
+                    std::cout<<":"<<theta;
                 }
             }
         }
@@ -94,15 +95,15 @@ static void test_phongs_model_est()
     //lm.minimize(x);
     //vnl_matrix<double> cv=lm.get_JtJ();
 
-    vcl_cout<<"\n Solution: "
+    std::cout<<"\n Solution: "
             <<argminx[0]<<','
             <<argminx[1]<<','
             <<argminx[2]<<','
             <<argminx[3]<<','
             <<argminx[4] <<'\n'
-            <<"St Error "<<min_error<<vcl_endl;
+            <<"St Error "<<min_error<<std::endl;
 
-    int a;vcl_cin>>a;
+    int a;std::cin>>a;
 }
 
 TESTMAIN( test_phongs_model_est );

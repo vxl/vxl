@@ -5,21 +5,22 @@
 #pragma interface
 #endif
 
+#include <fstream>
 #ifdef VIL_USE_FSTREAM64
 #include <vil/vil_stream_fstream64.h>
 #endif //VIL_USE_FSTREAM64
 
 //:
 // \file
-// \brief A vil_stream implementation using vcl_fstream
+// \brief A vil_stream implementation using std::fstream
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_stream.h>
 #include <vxl_config.h>
 
-//: A vil_stream implementation using vcl_fstream
+//: A vil_stream implementation using std::fstream
 class vil_stream_fstream : public vil_stream
 {
  public:
@@ -42,10 +43,10 @@ class vil_stream_fstream : public vil_stream
   ~vil_stream_fstream();
 
   // There are a (very few) occasions when access to the underlying stream is useful
-  vcl_fstream & underlying_stream() {return f_;}
+  std::fstream & underlying_stream() {return f_;}
  private:
-  vcl_ios_openmode flags_;
-  mutable vcl_fstream f_;
+  std::ios::openmode flags_;
+  mutable std::fstream f_;
   int id_;
   mutable vil_streampos end_;
 };

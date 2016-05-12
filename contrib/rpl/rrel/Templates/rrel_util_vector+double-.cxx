@@ -1,18 +1,20 @@
+#include <iostream>
+#include <vector>
 #include <vcl_compiler.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <rrel/rrel_util.txx>
 
-#if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_GCC_5) || defined(VCL_ICC) || defined(VCL_VC_8)
+#if defined(VCL_GCC) || defined(VCL_ICC)
 
 // Apply explicit instantiation
-// ICC 8.1 has problems with the following 
-// implicit trigger function. There are weak 
+// ICC 8.1 has problems with the following
+// implicit trigger function. There are weak
 // symbols(V type) generated. But they did not
-// get through linking stage. 
+// get through linking stage.
 //
-typedef vcl_vector<double>::iterator Iter;
+typedef std::vector<double>::iterator Iter;
 RREL_UTIL_INSTANTIATE_RAN_ITER(double, Iter);
- 
+
 #else
 
 // Trigger this implicitly, because on many compilers, the
@@ -23,14 +25,14 @@ RREL_UTIL_INSTANTIATE_RAN_ITER(double, Iter);
 // favour of the symbols in the pointer instantiation.
 //
 // This function must have external linkage (i.e. should not be static);
-// otherwise, an aggressive optimizer (VC7) will throw it away and never
+// otherwise, an aggressive optimizer will throw it away and never
 // emit the instantiations.
 
 void
 rrel_util_vector_double_iterator_instantiation_tickler()
 {
-  vcl_vector<double> v;
-  typedef vcl_vector<double>::iterator Iter;
+  std::vector<double> v;
+  typedef std::vector<double>::iterator Iter;
   Iter itr = v.begin(); // to avoid compiler warning on uninitialised variable
   double val = 0.0;
 

@@ -1,4 +1,5 @@
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
@@ -13,19 +14,19 @@ void p(vil1_image const& m)
     for (int x = 0; x < m.width(); ++x) {
       unsigned char val = 0;
       m.get_section(&val, x, y, 1, 1);
-      vcl_cout << "\t" << (int)val;
+      std::cout << "\t" << (int)val;
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 }
 
 int
 test_memory_image_main(int, char*[])
 {
-  vcl_string tmp_nam = vul_temp_filename();
-  vcl_string file1 = tmp_nam!="" ? tmp_nam + ".pgm" : vcl_string("vil1_test_memory_image_1.pgm");
+  std::string tmp_nam = vul_temp_filename();
+  std::string file1 = tmp_nam!="" ? tmp_nam + ".pgm" : std::string("vil1_test_memory_image_1.pgm");
   tmp_nam = vul_temp_filename();
-  vcl_string file2 = tmp_nam!="" ? tmp_nam + ".pgm" : vcl_string("vil1_test_memory_image_2.pgm");
+  std::string file2 = tmp_nam!="" ? tmp_nam + ".pgm" : std::string("vil1_test_memory_image_2.pgm");
 
   {
     vil1_memory_image m(3, 2, VIL1_BYTE);

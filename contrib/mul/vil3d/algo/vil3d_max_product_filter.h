@@ -15,7 +15,7 @@
 //  Assumes bound checking has already been done
 template <class T>
 inline T vil3d_max_product_filter(const T* im,
-                                  const vcl_ptrdiff_t* offset,
+                                  const std::ptrdiff_t* offset,
                                   const double* f, unsigned n)
 {
   T max_v = im[0];
@@ -33,7 +33,7 @@ inline T vil3d_max_product_filter(const T* im,
 template <class T>
 inline T vil3d_max_product_filter(const vil3d_image_view<T>& image,
                                   const vil3d_structuring_element& se,
-                                  const vcl_vector<double>& f,
+                                  const std::vector<double>& f,
                                   int i0, int j0, int k0)
 {
   unsigned n = se.p_i().size();
@@ -70,20 +70,20 @@ inline T vil3d_max_product_filter(const vil3d_image_view<T>& image,
 template<class T>
 void vil3d_max_product_filter(vil3d_image_view<T>& image,
                               const vil3d_structuring_element& se,
-                              const vcl_vector<double>& f)
+                              const std::vector<double>& f)
 {
   assert(image.nplanes()==1);  // Change this later
   unsigned ni = image.ni();
   unsigned nj = image.nj();
   unsigned nk = image.nk();
 
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
 
-  vcl_vector<vcl_ptrdiff_t> offset;
+  std::vector<std::ptrdiff_t> offset;
   vil3d_compute_offsets(offset,se,istep,jstep,kstep);
-  const vcl_ptrdiff_t *o_data = &offset[0];
+  const std::ptrdiff_t *o_data = &offset[0];
   const double *f_data = &f[0];
   const unsigned n = f.size();
   assert(n==offset.size());

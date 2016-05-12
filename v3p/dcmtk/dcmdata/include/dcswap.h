@@ -37,14 +37,14 @@
 
 // Swap byteLength bytes, if newByteOrder != oldByteOrder. The bytes are
 // parted in valWidth bytes, each swapped separately
-OFCondition swapIfNecessary(const E_ByteOrder newByteOrder, 
-			    const E_ByteOrder oldByteOrder,
-			    void * value, const Uint32 byteLength,
-			    const size_t valWidth);
+OFCondition swapIfNecessary(const E_ByteOrder newByteOrder,
+                            const E_ByteOrder oldByteOrder,
+                            void * value, const Uint32 byteLength,
+                            const size_t valWidth);
 
 
-void swapBytes(void * value, const Uint32 byteLength, 
-			   const size_t valWidth);
+void swapBytes(void * value, const Uint32 byteLength,
+                           const size_t valWidth);
 
 Uint16 swapShort(const Uint16 toSwap);
 

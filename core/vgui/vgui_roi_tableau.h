@@ -47,7 +47,7 @@ class vgui_roi_tableau : public vgui_tableau
  private:
   ROI roi_;
   vil1_image cropped_image_;
-  vcl_string name_;
+  std::string name_;
 
  public:
   //: Constructor - don't use this, use vgui_roi_tableau_new.
@@ -57,13 +57,13 @@ class vgui_roi_tableau : public vgui_tableau
   vgui_roi_tableau(vil1_image const &, char const *, float, float, float, float);
 
   //: Returns the type of this tableau ('vgui_roi_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Returns the filename of the image (if it knows it).
-  vcl_string file_name() const;
+  std::string file_name() const;
 
   //: Returns a nice version of the name, including the filename.
-  vcl_string pretty_name() const;
+  std::string pretty_name() const;
 
   //: Returns the image cropped by the ROI.
   vil1_image get_image() const;

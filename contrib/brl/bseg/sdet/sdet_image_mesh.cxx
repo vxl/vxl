@@ -64,7 +64,7 @@ bool sdet_image_mesh:: step_boundary(vgl_line_segment_2d<double> const& parent,
 
 // constructor from a parameter block (the only way)
 sdet_image_mesh::sdet_image_mesh(sdet_image_mesh_params& imp)
-  : sdet_image_mesh_params(imp), mesh_valid_(false), resc_(0)
+  : sdet_image_mesh_params(imp), mesh_valid_(false), resc_(VXL_NULLPTR)
 {
 }
 
@@ -74,7 +74,7 @@ sdet_image_mesh::~sdet_image_mesh()
 }
 
 bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr const& resc,
-                                            vcl_vector<vgl_line_segment_2d<double> > & segs)
+                                            std::vector<vgl_line_segment_2d<double> > & segs)
 {
   if (!resc) return false;
   mesh_valid_ = false;
@@ -86,9 +86,9 @@ bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr const& resc,
   sdet_detector det(dp);
   det.SetImage(resc);
   det.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges) {
-    vcl_cout<<"sdet_image_mesh:: could not detect edges in buffer"<<vcl_endl;
+    std::cout<<"sdet_image_mesh:: could not detect edges in buffer"<<std::endl;
     return false;
   }
 
@@ -100,7 +100,7 @@ bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr const& resc,
   fl.set_edges(*edges);
   bool fit_worked = fl.fit_lines();
   if (!fit_worked) {
-    vcl_cout<<"sdet_image_mesh:: could not fit lines on edges"<<vcl_endl;
+    std::cout<<"sdet_image_mesh:: could not fit lines on edges"<<std::endl;
     return false;
   }
 
@@ -113,7 +113,7 @@ bool sdet_image_mesh::compute_mesh()
   vil_image_view<unsigned char> line_img(resc_->ni(),resc_->nj());//some resource
   line_img.fill(255);
 
-  vcl_vector<vgl_line_segment_2d<double> > segs, segs_pair;
+  std::vector<vgl_line_segment_2d<double> > segs, segs_pair;
   sdet_detector_params dp;
   dp.smooth= smooth_;
   dp.noise_multiplier = thresh_;
@@ -122,8 +122,8 @@ bool sdet_image_mesh::compute_mesh()
   sdet_detector det(dp);
   det.SetImage(resc_);
   det.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
+  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
        eit != edges->end(); eit++)
   {
     vsol_curve_2d_sptr c = (*eit)->curve();
@@ -142,7 +142,7 @@ bool sdet_image_mesh::compute_mesh()
 
  bil_cedt dt(line_img);
  if (!dt.compute_cedt())
-  vcl_cout<<"Error in computing DT"<<vcl_endl;
+  std::cout<<"Error in computing DT"<<std::endl;
 
  vil_image_view<float> dtimg=dt.cedtimg();
  vil_image_view<unsigned char> dtimg_threshed(dtimg.ni(),dtimg.nj());dtimg_threshed.fill(0);
@@ -153,7 +153,7 @@ bool sdet_image_mesh::compute_mesh()
  vil_save(dtimg_threshed,"F:/visdt/dt_thresh.png");
 
  //segs_pair.clear();
- vcl_vector<vgl_line_segment_2d<double> > lines;
+ std::vector<vgl_line_segment_2d<double> > lines;
  this->compute_line_segments(vil_new_image_resource_of_view(dtimg_threshed),lines);
  segs_pair.insert(segs_pair.end(),lines.begin(),lines.end());
  line_img.fill(255);
@@ -178,16 +178,16 @@ bool sdet_image_mesh::compute_mesh()
 
  bil_cedt dt1(line_img);
  if (!dt1.compute_cedt())
-   vcl_cout<<"Error in computing DT"<<vcl_endl;
+   std::cout<<"Error in computing DT"<<std::endl;
 
   //generate a 2d mesh based on the edges
   vgl_point_2d<double> ul(0.0, 0.0), ur(resc_->ni()-1,0.0);
   vgl_point_2d<double> lr(resc_->ni()-1, resc_->nj()-1), ll(0.0, resc_->nj()-1);
 
-  vcl_vector<vgl_point_2d<double> > convex_hull;
+  std::vector<vgl_point_2d<double> > convex_hull;
   convex_hull.push_back(ul);   convex_hull.push_back(ur);
   convex_hull.push_back(lr);   convex_hull.push_back(ll);
-  vcl_vector<vgl_point_2d<double> > cvexh = convex_hull;
+  std::vector<vgl_point_2d<double> > cvexh = convex_hull;
   imesh_mesh mesh_one;
   imesh_generate_mesh_2d_2(convex_hull, segs_pair,anchor_points_, mesh_one);
 
@@ -212,7 +212,7 @@ bool sdet_image_mesh::compute_mesh()
     imesh_vertex<3> v3(verts[iv][0], verts[iv][1], height);
     verts3->push_back(v3);
   }
-  vcl_auto_ptr<imesh_vertex_array_base> v3(verts3);
+  std::auto_ptr<imesh_vertex_array_base> v3(verts3);
   mesh_one.set_vertices(v3);
   //mesh_valid_ = true;
 
@@ -221,7 +221,7 @@ bool sdet_image_mesh::compute_mesh()
   ///////////////////////////////////////////////////////
   this->set_anchor_points(mesh_one,dt1.cedtimg());
 
-  vcl_cout<<"Number of anchor points: "<<anchor_points_.size()<<vcl_endl;
+  std::cout<<"Number of anchor points: "<<anchor_points_.size()<<std::endl;
   imesh_generate_mesh_2d_2(cvexh, segs_pair, anchor_points_, mesh_);
   const imesh_vertex_array<2>& verts2 = mesh_.vertices<2>();
   imesh_vertex_array<3>* newVerts = new imesh_vertex_array<3>();
@@ -241,7 +241,7 @@ bool sdet_image_mesh::compute_mesh()
     imesh_vertex<3> v3(verts2[iv][0], verts2[iv][1], height);
     newVerts->push_back(v3);
   }
-  vcl_auto_ptr<imesh_vertex_array_base> v3_ptr(newVerts);
+  std::auto_ptr<imesh_vertex_array_base> v3_ptr(newVerts);
   mesh_.set_vertices(v3_ptr);
   mesh_valid_ = true;
 
@@ -298,7 +298,7 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
     double max_z_diff = (maxz-minz)/64.0;
     for (int i=0; i<ni; i+=4)
       for (int j=0; j<nj; j+=4)
-        if ( vcl_fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j) >= 3.5 )
+        if ( std::fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j) >= 3.5 )
           anchor_points_.push_back(vgl_point_2d<double>(i,j));
   }
 }
@@ -309,7 +309,7 @@ void sdet_image_mesh::set_image(vil_image_resource_sptr const& resource)
   resc_ = resource;
   if (resc_->pixel_format() != VIL_PIXEL_FORMAT_BYTE )
   {
-    vcl_cout<<"Converting image from "<<resc_->pixel_format()<<" to vxl_byte image"<<vcl_endl;
+    std::cout<<"Converting image from "<<resc_->pixel_format()<<" to vxl_byte image"<<std::endl;
 
     //make the float image on the range of [0,1];
     vil_image_view_base_sptr stretched = vil_convert_stretch_range( float(0.0f), resc_->get_view());

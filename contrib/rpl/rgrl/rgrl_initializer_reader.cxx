@@ -11,7 +11,7 @@
 
 
 rgrl_initializer_reader::
-rgrl_initializer_reader(vcl_istream& istr,
+rgrl_initializer_reader(std::istream& istr,
                         rgrl_mask_sptr             const& from_image_roi,
                         rgrl_mask_sptr             const& to_image_roi,
                         rgrl_scale_sptr            const& prior_scale,
@@ -52,15 +52,15 @@ rgrl_initializer_reader(vcl_istream& istr,
 
     while (true)
     {
-      vcl_streampos pos;
-      vcl_string tag_str;
+      std::streampos pos;
+      std::string tag_str;
 
       // skip any empty lines
       rgrl_util_skip_empty_lines( istr );
 
       // store current reading position
       pos = istr.tellg();
-      vcl_getline( istr, tag_str );
+      std::getline( istr, tag_str );
 
       if ( tag_str.find( "REGION" ) == 0 ) {
 

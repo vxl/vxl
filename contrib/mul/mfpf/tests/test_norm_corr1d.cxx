@@ -1,4 +1,6 @@
 // This is mul/mfpf/tests/test_norm_corr1d.cxx
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -10,8 +12,7 @@
 //
 //=======================================================================
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_norm_corr1d.h>
@@ -24,7 +25,7 @@
 
 void test_norm_corr1d_search(mfpf_point_finder_builder& b)
 {
-  vcl_cout<<"Testing building and search."<<vcl_endl;
+  std::cout<<"Testing building and search."<<std::endl;
 
   mfpf_point_finder* pf = b.new_finder();
 
@@ -44,7 +45,7 @@ void test_norm_corr1d_search(mfpf_point_finder_builder& b)
   b.add_example(image,p0,u);
   b.build(*pf);
 
-  vcl_cout<<"Built model: "<<pf<<vcl_endl;
+  std::cout<<"Built model: "<<pf<<std::endl;
 
   vgl_point_2d<double> new_p;
   vgl_vector_2d<double> new_u;
@@ -52,7 +53,7 @@ void test_norm_corr1d_search(mfpf_point_finder_builder& b)
   pf->set_search_area(3,0);
 
   pf->search(image,p1,u,new_p,new_u);
-  vcl_cout<<"Found point: "<<new_p<<vcl_endl;
+  std::cout<<"Found point: "<<new_p<<std::endl;
 
   TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
@@ -61,7 +62,7 @@ void test_norm_corr1d_search(mfpf_point_finder_builder& b)
   pf->evaluate_region(image,p1,u,response);
   TEST("Response ni",response.image().ni(),7);
   TEST("Response nj",response.image().nj(),1);
-  vcl_cout<<"World2im: "<<response.world2im()<<vcl_endl;
+  std::cout<<"World2im: "<<response.world2im()<<std::endl;
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
@@ -71,7 +72,7 @@ void test_norm_corr1d_search(mfpf_point_finder_builder& b)
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
+  std::cout<<r0<<','<<r1<<','<<r2<<std::endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
 
@@ -80,7 +81,7 @@ void test_norm_corr1d_search(mfpf_point_finder_builder& b)
 
 void test_norm_corr1d()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing mfpf_norm_corr1d\n"
            << "**************************\n";
 
@@ -95,21 +96,21 @@ void test_norm_corr1d()
   // -------------------------------------------
 
   {
-    vcl_istringstream ss(
+    std::istringstream ss(
           "mfpf_norm_corr1d_builder\n"
           "{\n"
           "  ilo: -3 ihi: 4\n"
           "  search_ni: 17\n"
           "}\n");
 
-    vcl_auto_ptr<mfpf_point_finder_builder>
+    std::auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_norm_corr1d_builder");
     if (pf->is_a()=="mfpf_norm_corr1d_builder")
     {
       mfpf_norm_corr1d_builder &a_pf = static_cast<mfpf_norm_corr1d_builder&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
+      std::cout<<a_pf<<std::endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("ilo configured",a_pf.ilo(),-3);
       TEST("ihi configured",a_pf.ihi(),4);
@@ -138,7 +139,7 @@ void test_norm_corr1d()
     bfs_out.close();
 
     mfpf_norm_corr1d norm_corr1d_in;
-    mfpf_point_finder *base_ptr_in = 0;
+    mfpf_point_finder *base_ptr_in = VXL_NULLPTR;
 
     vsl_b_ifstream bfs_in("test_norm_corr1d.bvl.tmp");
     TEST ("Opened test_norm_corr1d.bvl.tmp for reading", (!bfs_in), false);

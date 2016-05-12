@@ -1,9 +1,10 @@
 // This is brl/bbas/bgui3d/bgui3d_project2d_tableau.cxx
+#include <iostream>
 #include "bgui3d_project2d_tableau.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -47,7 +48,7 @@ bgui3d_project2d_tableau::~bgui3d_project2d_tableau()
 }
 
 
-vcl_string bgui3d_project2d_tableau::type_name() const
+std::string bgui3d_project2d_tableau::type_name() const
 {
   return "bgui3d_project2d_tableau";
 }
@@ -78,11 +79,11 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
     K.fill( 0.0 );
     vnl_double_3 r1, r2, r3, a1;
     r2[0] = ncamera[1][0]; r2[1] = ncamera[1][1]; r2[2] = ncamera[1][2];
-    K[1][1] = vcl_sqrt( r2[0]*r2[0]+r2[1]*r2[1]+r2[2]*r2[2] );
-    r2 /= vcl_sqrt( r2[0]*r2[0]+r2[1]*r2[1]+r2[2]*r2[2] );
+    K[1][1] = std::sqrt( r2[0]*r2[0]+r2[1]*r2[1]+r2[2]*r2[2] );
+    r2 /= std::sqrt( r2[0]*r2[0]+r2[1]*r2[1]+r2[2]*r2[2] );
     a1[0] = ncamera[0][0]; a1[1] = ncamera[0][1]; a1[2] = ncamera[0][2];
     r3 = vnl_cross_3d( a1, r2 );
-    r3 /= vcl_sqrt( r3[0]*r3[0]+r3[1]*r3[1]+r3[2]*r3[2] );
+    r3 /= std::sqrt( r3[0]*r3[0]+r3[1]*r3[1]+r3[2]*r3[2] );
     r1 = vnl_cross_3d( r2, r3 );
     K[0][0] = a1[0]*r1[0] + a1[1]*r1[1] + a1[2]*r1[2];
     if ( K[0][0] < 0 ) {
@@ -122,7 +123,7 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
     if (vnl_det(vnl_double_3x3(cmr.extract(3,3))) < 0)
       cmr *= -1.0;
     if (!bgui3d_decompose_camera(cmr, K, R, t)) {
-      vcl_cerr << "decomposition error\n\n";
+      std::cerr << "decomposition error\n\n";
       return false;
     }
   }
@@ -148,9 +149,9 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
 
   // The resulting left 3x3 submatrix must be upper triangle
   // check this condition and then force it to be exactly true.
-  assert(vcl_fabs(camera_z_(1,0))<1e-10);
-  assert(vcl_fabs(camera_z_(2,0))<1e-10);
-  assert(vcl_fabs(camera_z_(2,1))<1e-10);
+  assert(std::fabs(camera_z_(1,0))<1e-10);
+  assert(std::fabs(camera_z_(2,0))<1e-10);
+  assert(std::fabs(camera_z_(2,1))<1e-10);
   camera_z_(1,0) = camera_z_(2,0) = camera_z_(2,1) = 0.0;
 
   return true;
@@ -159,7 +160,7 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
 
 //: Get the scene camera
 // creates a vpgl camera (either perspective or affine) from the graphics camera
-vcl_auto_ptr<vpgl_proj_camera<double> >
+std::auto_ptr<vpgl_proj_camera<double> >
 bgui3d_project2d_tableau::camera() const
 {
   vnl_matrix<double> mm(4,4,16,model_matrix_);
@@ -168,12 +169,12 @@ bgui3d_project2d_tableau::camera() const
   t = R.inverse()*t;
   if (camera_z_[2][2] != 0) {
     vpgl_calibration_matrix<double> K(camera_z_.extract(3,3));
-    return vcl_auto_ptr<vpgl_proj_camera<double> >
+    return std::auto_ptr<vpgl_proj_camera<double> >
         ( new vpgl_perspective_camera<double>(K,t,R) );
   }
   else
     // FIXME - construct a vpgl_affine_camera
-    return vcl_auto_ptr<vpgl_proj_camera<double> >
+    return std::auto_ptr<vpgl_proj_camera<double> >
       ( new vpgl_proj_camera<double>(camera_z_*mm.transpose()) );
 }
 
@@ -310,7 +311,7 @@ class bgui3d_headlight_command : public vgui_command
 void bgui3d_project2d_tableau::get_popup(const vgui_popup_params& /*params*/, // unused - FIXME
                                          vgui_menu &menu)
 {
-  vcl_string headlight_item;
+  std::string headlight_item;
   if ( this->is_headlight() )
     headlight_item = "Disable Headlight";
   else

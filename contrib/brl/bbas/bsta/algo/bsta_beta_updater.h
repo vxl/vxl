@@ -19,10 +19,11 @@
 //  Modifications
 // \endverbatim
 
+#include <iostream>
+#include <algorithm>
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Update the statistics given a 1D beta distribution and a learning rate
 // \note if rho = 1/(num observations) then this is just an online cumulative average
@@ -55,7 +56,7 @@ void bsta_update_beta(bsta_beta<T>& beta_dist, T rho, const T& sample )
   //T beta=(1-new_mean)*t;
 
   if (alpha<1 && beta <1)
-    vcl_cout<<"Mean : "<<new_mean<< "  Var: "<<new_var<<'\n';
+    std::cout<<"Mean : "<<new_mean<< "  Var: "<<new_var<<'\n';
   beta_dist.set_alpha_beta(alpha, beta);
 }
 
@@ -179,8 +180,8 @@ class bsta_mix_beta_updater
     T beta=(1-sample)*t;
     init_dist_.set_alpha_beta(alpha,beta); ///??? this was setting mean
 #endif
-    //T lower = T(0.5-vcl_sqrt(1-4*var_)/2);
-    //T upper = T(0.5+vcl_sqrt(1-4*var_)/2);
+    //T lower = T(0.5-std::sqrt(1-4*var_)/2);
+    //T upper = T(0.5+std::sqrt(1-4*var_)/2);
 
     //vector_ val = sample;
     //if (sample < lower)

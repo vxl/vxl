@@ -64,7 +64,7 @@ void rgrl_trans_rigid::set_translation(double tx, double ty)
 void rgrl_trans_rigid::set_rotation(double theta, double alpha, double phi)
 {
   assert ( trans_.size() == 3);
-	rgrl_rotation_3d_to_matrix(theta, alpha, phi, R_);
+        rgrl_rotation_3d_to_matrix(theta, alpha, phi, R_);
 }
 
 void rgrl_trans_rigid::set_rotation(double theta)
@@ -77,7 +77,7 @@ void rgrl_trans_rigid::set_rotation(double theta)
 void rgrl_trans_rigid::determine_angles(double& phi, double& alpha, double& theta) const
 {
   assert (trans_.size() == 3);
-	rgrl_rotation_3d_from_matrix(R_, phi, alpha, theta);
+        rgrl_rotation_3d_from_matrix(R_, phi, alpha, theta);
 }
 
 void rgrl_trans_rigid::determine_angles( double& theta ) const
@@ -124,20 +124,20 @@ transfer_error_covar( vnl_vector<double> const& p  ) const
   vnl_matrix<double> Rthetad(3,3,0.0);
 
   // derivative matrices now
-  Rthetad(0,0) = -vcl_sin(theta);
-  Rthetad(0,1) = -vcl_cos(theta);
-  Rthetad(1,0) = vcl_cos(theta);
-  Rthetad(1,1) = -vcl_sin(theta);
+  Rthetad(0,0) = -std::sin(theta);
+  Rthetad(0,1) = -std::cos(theta);
+  Rthetad(1,0) = std::cos(theta);
+  Rthetad(1,1) = -std::sin(theta);
 
-  Ralphad(0,0) = -vcl_sin(alpha);
-  Ralphad(0,2) = vcl_cos(alpha);
-  Ralphad(2,0) = -vcl_cos(alpha);
-  Ralphad(2,2) = -vcl_sin(alpha);
+  Ralphad(0,0) = -std::sin(alpha);
+  Ralphad(0,2) = std::cos(alpha);
+  Ralphad(2,0) = -std::cos(alpha);
+  Ralphad(2,2) = -std::sin(alpha);
 
-  Rphid(1,1) = -vcl_sin(phi);
-  Rphid(1,2) = -vcl_cos(phi);
-  Rphid(2,1) = vcl_cos(phi);
-  Rphid(2,2) = -vcl_sin(phi);
+  Rphid(1,1) = -std::sin(phi);
+  Rphid(1,2) = -std::cos(phi);
+  Rphid(2,1) = std::cos(phi);
+  Rphid(2,2) = -std::sin(phi);
 
   jacobian.set_column(0,Rthetad*p);
   jacobian.set_column(1,Ralphad*p);
@@ -201,7 +201,7 @@ inv_map( const vnl_vector<double>& to,
   from = svd.inverse()*to - svd.inverse()*trans_;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_rigid::
 inverse_transform( ) const
 {
@@ -223,7 +223,7 @@ rgrl_transformation_sptr
 rgrl_trans_rigid::
 scale_by( double scale ) const
 {
-  rgrl_transformation_sptr xform 
+  rgrl_transformation_sptr xform
     = new rgrl_trans_rigid( R_, trans_ * scale,
                             covar_ );
   xform->set_scaling_factors( this->scaling_factors() );
@@ -232,13 +232,13 @@ scale_by( double scale ) const
 
 void
 rgrl_trans_rigid::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // tag
   os << "RIGID\n"
   // parameters
-     << trans_.size() << vcl_endl
-     << R_ << trans_ << vcl_endl;
+     << trans_.size() << std::endl
+     << R_ << trans_ << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -246,15 +246,15 @@ write( vcl_ostream& os ) const
 
 bool
 rgrl_trans_rigid::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   int dim;
 
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "RIGID" ) != 0 ) {
@@ -276,7 +276,7 @@ read( vcl_istream& is )
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_rigid::
 clone() const
 {

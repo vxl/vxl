@@ -17,6 +17,7 @@
 //   May 31, 2011  Peter Vanroose   Added homg-coord. "backproject()" method
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_point_3d.h>
@@ -24,7 +25,7 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_frustum_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 #include "vpgl_proj_camera.h"
 #include "vpgl_calibration_matrix.h"
@@ -77,7 +78,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   //: Destructor
   virtual ~vpgl_perspective_camera() {}
 
-  virtual vcl_string type_name() const { return "vpgl_perspective_camera"; }
+  virtual std::string type_name() const { return "vpgl_perspective_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -150,7 +151,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   // -------------------- I/O :---------------------
 
   //: Save in ascii format
-  virtual void save(vcl_string cam_path);
+  virtual void save(std::string cam_path);
 
 
   //: Return `this' if `this' is a vpgl_perspective_camera, 0 otherwise
@@ -172,15 +173,15 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
 
 //: Write vpgl_perspective_camera to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vpgl_perspective_camera<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, vpgl_perspective_camera<Type> const& p);
 
 //: Read vpgl_perspective_camera  from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, vpgl_perspective_camera<Type>& p);
+std::istream&  operator>>(std::istream& s, vpgl_perspective_camera<Type>& p);
 
 //: Write vpgl_perspective_camera to a vrml file, does not write a vrml header, only the camera, the camera center sphere has radius rad
 template <class Type>
-void vrml_write(vcl_ostream& s, vpgl_perspective_camera<Type> const& p, double rad);
+void vrml_write(std::ostream& s, vpgl_perspective_camera<Type> const& p, double rad);
 
 //: Decompose camera into parameter blocks.
 // Attempts to decompose a 3x4 camera matrix into the parameter blocks that describe
@@ -213,13 +214,13 @@ postmultiply( const vpgl_perspective_camera<T>& in_cam,
 
 //: Return a list of camera's, loaded from the (name sorted) files from the given directory
 template <class T>
-vcl_vector<vpgl_perspective_camera<T> > cameras_from_directory(vcl_string dir, T);
+std::vector<vpgl_perspective_camera<T> > cameras_from_directory(std::string dir, T);
 
 //: compute the frustrum of the camera view cone. The near plane
-//  the far plane distances are user defined. 
+//  the far plane distances are user defined.
 template <class T>
 vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam,
-			  T d_near, T d_far);
+                          T d_near, T d_far);
 
 template <class T>
 vgl_vector_3d<T> vpgl_persp_cam_base_line_vector( const vpgl_perspective_camera<T>& cam1, const vpgl_perspective_camera<T>& cam2);

@@ -16,11 +16,11 @@
  * representation of the key entry.
  */
 struct GeoKey {
-	int       gk_key;    /* GeoKey ID        */
-	size_t    gk_size;   /* data byte size   */
-	tagtype_t gk_type;   /* TIFF data type   */
-	long      gk_count;  /* number of values */
-	char*     gk_data;   /* pointer to data, or value */
+        int       gk_key;    /* GeoKey ID        */
+        size_t    gk_size;   /* data byte size   */
+        tagtype_t gk_type;   /* TIFF data type   */
+        long      gk_count;  /* number of values */
+        char*     gk_data;   /* pointer to data, or value */
 };
 typedef struct GeoKey GeoKey;
 
@@ -30,10 +30,10 @@ typedef struct GeoKey GeoKey;
  *  are aligned along 2-byte boundaries.
  */
 struct KeyEntry {
-	pinfo_t ent_key;        /* GeoKey ID            */
-	pinfo_t ent_location;   /* TIFF Tag ID or 0     */
-	pinfo_t ent_count;      /* GeoKey value count   */
-	pinfo_t ent_val_offset; /* value or tag offset  */
+        pinfo_t ent_key;        /* GeoKey ID            */
+        pinfo_t ent_location;   /* TIFF Tag ID or 0     */
+        pinfo_t ent_count;      /* GeoKey value count   */
+        pinfo_t ent_val_offset; /* value or tag offset  */
 };
 typedef struct KeyEntry KeyEntry;
 
@@ -45,10 +45,10 @@ typedef struct KeyEntry KeyEntry;
  *  incremented when only the set of Key-values is increased.
  */
 struct KeyHeader{
-	pinfo_t hdr_version;      /* GeoTIFF Version          */
-	pinfo_t hdr_rev_major;    /* GeoKey Major Revision #  */
-	pinfo_t hdr_rev_minor;    /* GeoKey Minor Revision #  */
-	pinfo_t hdr_num_keys;     /* Number of GeoKeys        */
+        pinfo_t hdr_version;      /* GeoTIFF Version          */
+        pinfo_t hdr_rev_major;    /* GeoKey Major Revision #  */
+        pinfo_t hdr_rev_minor;    /* GeoKey Minor Revision #  */
+        pinfo_t hdr_num_keys;     /* Number of GeoKeys        */
 };
 typedef struct KeyHeader KeyHeader;
 
@@ -68,26 +68,26 @@ struct gtiff {
    tiff_t*    gt_tif;      /* TIFF file descriptor  */
    TIFFMethod gt_methods;  /* TIFF i/o methods      */
    int        gt_flags;    /* file flags            */
-   
+
    pinfo_t    gt_version;  /* GeoTIFF Version       */
    pinfo_t    gt_rev_major;/* GeoKey Key Revision   */
    pinfo_t    gt_rev_minor;/* GeoKey Code Revision  */
-   
+
    int        gt_num_keys; /* number of keys        */
    GeoKey*    gt_keys;     /* array of keys         */
    int*       gt_keyindex; /* index of a key, if set*/
    int        gt_keymin;   /* smallest key set      */
    int        gt_keymax;   /* largest key set       */
-   
+
    pinfo_t*   gt_short;    /* array of SHORT vals   */
    double*    gt_double;   /* array of DOUBLE vals  */
    int        gt_nshorts;  /* number of SHORT vals  */
    int        gt_ndoubles; /* number of DOUBLE vals */
-};  
+};
 
 typedef enum {
-	FLAG_FILE_OPEN=1,
-	FLAG_FILE_MODIFIED=2
+        FLAG_FILE_OPEN=1,
+        FLAG_FILE_MODIFIED=2
 } gtiff_flags;
 
 #define MAX_KEYINDEX 65535   /* largest possible key    */

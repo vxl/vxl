@@ -1,9 +1,11 @@
 // SimpleTest.cpp : Defines the entry point for the console application.
 //
 #include "StdAfx.h"
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 #include <expatpplib.h> // resides in b3p/expatpp
-#include <vcl_cstring.h>
+#include <cstring>
 
 class myParser : public expatpp
 {
@@ -21,20 +23,20 @@ class myParser : public expatpp
 void myParser::WriteIndent()
 {
  for (int i=0; i<mDepth; i++)
-   vcl_putchar('\t');
+   std::putchar('\t');
 }
 
 
 void myParser::startElement(const char* name, const char** atts)
 {
   WriteIndent();
-  vcl_puts(name);
+  std::puts(name);
   if (atts) {  /* write list of attributes indented below element */
     int i;
     for (i=0; atts[i]; i++) {
       WriteIndent();
-      vcl_putchar('-'); vcl_putchar(' ');
-      vcl_puts(atts[i]);
+      std::putchar('-'); std::putchar(' ');
+      std::puts(atts[i]);
     }
   }
   mDepth++;
@@ -55,9 +57,9 @@ void myParser::charData(const XML_Char *s, int len)
   WriteIndent();
 
   /* write out the user data bracketed by ()*/
-  vcl_putchar('(');
-  vcl_fwrite(s, len, 1, stdout);
-  vcl_puts(")");
+  std::putchar('(');
+  std::fwrite(s, len, 1, stdout);
+  std::puts(")");
 }
 
 
@@ -68,15 +70,15 @@ int main(int argc, char* argv[])
   FILE* xmlFile;
   for (;;) {
     int depth = 0;
-    vcl_puts("\n\nXML test: enter filename");
-    vcl_gets(filename);
-    if (vcl_strlen(filename)==0)
+    std::puts("\n\nXML test: enter filename");
+    std::gets(filename);
+    if (std::strlen(filename)==0)
       break;
-    xmlFile = vcl_fopen(filename, "r");
+    xmlFile = std::fopen(filename, "r");
     if (!xmlFile)
       break;
     if (!parser.parseFile(xmlFile)) {
-      vcl_fprintf(stderr,
+      std::fprintf(stderr,
                   "%s at line %d\n",
                   XML_ErrorString(parser.XML_GetErrorCode()),
                   parser.XML_GetCurrentLineNumber()
@@ -84,6 +86,6 @@ int main(int argc, char* argv[])
       return 1;
     }
   }  // loop asking for and parsing files
-  vcl_puts("\nfinished!");
+  std::puts("\nfinished!");
   return 0;
 }

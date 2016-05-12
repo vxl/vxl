@@ -4,9 +4,7 @@
 // \file
 
 #ifdef _MSC_VER
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 #endif // _MSC_VER
 
 #include <bwm/bwm_tableau_sptr.h>
@@ -29,17 +27,17 @@ class bwm_tableau_mgr
 
   static bwm_tableau_mgr* instance();
 
-  void add_tableau(bwm_tableau_img* tab, vcl_string name);
+  void add_tableau(bwm_tableau_img* tab, std::string name);
 
   vgui_grid_tableau_sptr grid() { return grid_; }
 
   static void register_tableau(bwm_command_sptr tab_comm);
 
-  static bool is_registered(vcl_string const& name);
+  static bool is_registered(std::string const& name);
 
-  bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
+  bwm_command_sptr load_tableau_by_type(std::string tableau_type);
 
-  vcl_string save_camera(vcl_string tab_name);
+  std::string save_camera(std::string tab_name);
 
   void save_cameras();
 
@@ -49,9 +47,9 @@ class bwm_tableau_mgr
 
   void display_image_path(bool display) {display_image_path_=display;}
 
-  void add_corresp(vcl_string tab_name, bwm_corr_sptr corr, double X, double Y);
+  void add_corresp(std::string tab_name, bwm_corr_sptr corr, double X, double Y);
 
-  static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
+  static std::map<std::string, bwm_command_sptr> tab_types_;
 
   void redraw() { grid_->post_redraw(); }
 
@@ -75,7 +73,7 @@ class bwm_tableau_mgr
   static bwm_tableau_mgr* instance_;
 
   //: Tableaux are mapped to their names
-  vcl_map<vcl_string, vgui_tableau_sptr> tableaus_;
+  std::map<std::string, vgui_tableau_sptr> tableaus_;
 
   vgui_grid_tableau_sptr grid_;
 
@@ -89,7 +87,7 @@ class bwm_tableau_mgr
 
   void add_to_grid(vgui_tableau_sptr tab, unsigned& col, unsigned& row);
 
-  vgui_tableau_sptr find_tableau(vcl_string name);
+  vgui_tableau_sptr find_tableau(std::string name);
 
   void set_observer_draw_mode(int mode);
 };

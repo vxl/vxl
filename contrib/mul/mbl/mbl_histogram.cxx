@@ -1,12 +1,13 @@
 // This is mul/mbl/mbl_histogram.cxx
+#include <iostream>
+#include <cmath>
 #include "mbl_histogram.h"
 //:
 // \file
 // \brief Simple object to build histogram from supplied data.
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
 
@@ -82,7 +83,7 @@ bool mbl_histogram::operator==(const mbl_histogram& s) const
   for (int i=0;i<n;++i)
     if (s.freq_[i]!=freq_[i]) return false;
   for (int i=0;i<=n;++i)
-    if (vcl_fabs(s.bins_[i]-bins_[i])>MAX_ERROR) return false;
+    if (std::fabs(s.bins_[i]-bins_[i])>MAX_ERROR) return false;
 
   return true;
 }
@@ -120,14 +121,14 @@ void mbl_histogram::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,freq_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: mbl_histogram::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: mbl_histogram::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< file_version_no << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
-void mbl_histogram::print_summary(vcl_ostream& os) const
+void mbl_histogram::print_summary(std::ostream& os) const
 {
   os << "mbl_histogram: ";
   if (n_bins()==0) { os<< "No bins defined."; return; }
@@ -154,11 +155,11 @@ bool mbl_histogram::write_probabilities(const char* path)
   int n = n_bins();
   if (n==0) return false;
 
-  vcl_ofstream ofs(path);
+  std::ofstream ofs(path);
   if (!ofs) return false;
   for (int i=0;i<n_bins();++i)
   {
-    double dx=vcl_fabs(bins_[i+1]-bins_[i]);
+    double dx=std::fabs(bins_[i+1]-bins_[i]);
     ofs<<0.5*(bins_[i]+bins_[i+1])<<"  "<<double(freq_[i])/(dx*n_obs_)<<'\n';
   }
   ofs.close();
@@ -173,7 +174,7 @@ bool mbl_histogram::write_cdf(const char* path)
   int n = n_bins();
   if (n==0) return false;
 
-  vcl_ofstream ofs(path);
+  std::ofstream ofs(path);
   if (!ofs) return false;
   int sum=n_below_;
   for (int i=0;i<n_bins();++i)
@@ -185,14 +186,14 @@ bool mbl_histogram::write_cdf(const char* path)
   return true;
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const mbl_histogram& histo)
+std::ostream& operator<<(std::ostream& os, const mbl_histogram& histo)
 {
   histo.print_summary(os);
   return os;
 }
 
   //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mbl_histogram& histo)
+void vsl_print_summary(std::ostream& os,const mbl_histogram& histo)
 {
   histo.print_summary(os);
 }

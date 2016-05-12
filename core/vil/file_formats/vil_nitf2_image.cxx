@@ -2,15 +2,16 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <cstring>
+#include <algorithm>
+#include <cstdlib>
 #include "vil_nitf2_image.h"
 
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h> // for std::memcpy()
-#include <vcl_algorithm.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_property.h>
@@ -39,7 +40,7 @@ vil_image_resource_sptr  vil_nitf2_file_format::make_input_image(vil_stream *vs)
   vil_nitf2_image* im = new vil_nitf2_image( vs );
   if ( !im->parse_headers() ) {
     delete im;
-    im = 0;
+    im = VXL_NULLPTR;
   }
   return im;
 }
@@ -52,7 +53,7 @@ vil_image_resource_sptr
                                            enum vil_pixel_format /*format*/)
 {
   //write not supported
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //--------------------------------------------------------------------------------
@@ -105,8 +106,8 @@ vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec,
     index = num_segments;
     going_past_end = true;
   }
-  vcl_string sh = vil_nitf2_header::section_len_header_tag( sec );
-  vcl_string s  = vil_nitf2_header::section_len_data_tag( sec );
+  std::string sh = vil_nitf2_header::section_len_header_tag( sec );
+  std::string s  = vil_nitf2_header::section_len_data_tag( sec );
   int i;
   for (i = 0 ; i < index ; i++) {
     int current_header_size;
@@ -137,7 +138,7 @@ vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec,
 }
 
 vil_image_view_base_sptr ( *vil_nitf2_image::s_decode_jpeg_2000 )
-( vil_stream* vs, unsigned i0, unsigned ni, unsigned j0, unsigned nj, double i_factor, double j_factor ) = 0;
+( vil_stream* vs, unsigned i0, unsigned ni, unsigned j0, unsigned nj, double i_factor, double j_factor ) = VXL_NULLPTR;
 
 vil_nitf2_image::vil_nitf2_image(vil_stream* is)
   : m_stream(is),
@@ -146,7 +147,7 @@ vil_nitf2_image::vil_nitf2_image(vil_stream* is)
   m_stream->ref();
 }
 
-vil_nitf2_image::vil_nitf2_image(const vcl_string& filePath, const char* mode)
+vil_nitf2_image::vil_nitf2_image(const std::string& filePath, const char* mode)
   : m_current_image_index(0)
 {
 #ifdef VIL_USE_FSTREAM64
@@ -203,7 +204,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
   unsigned int image_index, unsigned int block_index_x,unsigned int block_index_y, int bandIndex) const
 {
   //band index is ignored when i_mode != "S"
-  vcl_string i_mode;
+  std::string i_mode;
   current_image_header()->get_property("IMODE", i_mode);
 
   //my image header precedes me.  Find out the offset to that, then add on the size of
@@ -377,7 +378,7 @@ unsigned vil_nitf2_image::nj() const
 
 enum vil_pixel_format vil_nitf2_image::pixel_format () const
 {
-  vcl_string pixel_type;
+  std::string pixel_type;
   int bits_per_pixel;
   if (current_image_header()->get_property("PVTYPE", pixel_type) &&
       current_image_header()->get_property("NBPP", bits_per_pixel))
@@ -477,7 +478,7 @@ void  compute_block_and_offset(unsigned j0, unsigned long block_size,
 
 bool vil_nitf2_image::is_jpeg_2000_compressed() const
 {
-  vcl_string compression_type;
+  std::string compression_type;
   //ISO/IEC BIFF profile BPJ2k01.00 says that M8 is actually invalid
   //(ie. you can't use a data mask with jpeg 2000 compression)
   //not sure why it is an option though
@@ -490,15 +491,15 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
 {
   // ACCORDING TO DOCUMENTATION, IF PARAMETERS ARE BAD, WE SHOULD RETURN NULL POINTER.
   if ((start_i + num_i > ni()) || (start_j + num_j > nj())) {
-    return 0;
+    return VXL_NULLPTR;
   }
   assert( is_jpeg_2000_compressed() );
   if ( ! s_decode_jpeg_2000 ) {
 #if HAS_J2K
     s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000;
 #else //HAS_J2K
-    vcl_cerr << "Cannot decode JPEG 2000 image. The J2K library was not built." << vcl_endl;
-    return 0;
+    std::cerr << "Cannot decode JPEG 2000 image. The J2K library was not built." << std::endl;
+    return VXL_NULLPTR;
 #endif //HAS_J2K
   }
 
@@ -514,12 +515,12 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
 {
   // ACCORDING TO DOCUMENTATION, IF PARAMETERS ARE BAD, WE SHOULD RETURN NULL POINTER.
   if ((start_i + num_i > ni()) || (start_j + num_j > nj())) {
-    return 0;
+    return VXL_NULLPTR;
   }
 
-  vcl_string compression_type;
+  std::string compression_type;
   if (!current_image_header()->get_property("IC", compression_type)) {
-    return 0;
+    return VXL_NULLPTR;
   }
 
   //right now we only plan to support uncompressed and JPEG2000
@@ -530,7 +531,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
     return get_copy_view_decimated_j2k( start_i, num_i, start_j, num_j, 1.0, 1.0 );
   }
   else {
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -561,16 +562,16 @@ template<> vil_memory_chunk_sptr maybe_byte_align_data<double> (
   vil_memory_chunk_sptr in_data, unsigned int /* num_samples */, unsigned int /* in_bits_per_sample */, double /*dummy*/)
 { return in_data; }
 
-template<> vil_memory_chunk_sptr maybe_byte_align_data< vcl_complex< float > > (
-  vil_memory_chunk_sptr in_data, unsigned int /*num_samples*/, unsigned int /*in_bits_per_sample*/, vcl_complex<float> /*dummy*/)
+template<> vil_memory_chunk_sptr maybe_byte_align_data< std::complex< float > > (
+  vil_memory_chunk_sptr in_data, unsigned int /*num_samples*/, unsigned int /*in_bits_per_sample*/, std::complex<float> /*dummy*/)
 { return in_data; }
 
 
 //:
 //  This function handles the case where the actual bits per pixel per band
-//  is less then the actual bpppb AND where the data is vcl_left justified.  This
+//  is less then the actual bpppb AND where the data is std::left justified.  This
 //  shifts the data so that it is right justified.
-//  As of now, this function is untests as I don't have any vcl_left justified data
+//  As of now, this function is untests as I don't have any std::left justified data
 //  (the NITF spec discourages using it -- probably because it is such a PITA)
 template< class T >
 void right_justify(T* data, unsigned int num_samples, unsigned int bitsToMove)
@@ -584,7 +585,7 @@ void right_justify(T* data, unsigned int num_samples, unsigned int bitsToMove)
 template<> void right_justify<bool>(bool* /* data */, unsigned int /* num_samples */, unsigned int /* bitsToMove */) {}
 template<> void right_justify<float>(float* /* data */, unsigned int /* num_samples */, unsigned int /* bitsToMove */) {}
 template<> void right_justify<double>(double* /* data */, unsigned int /* num_samples */, unsigned int /* bitsToMove */) {}
-template<> void right_justify< vcl_complex< float > >(vcl_complex< float >* /*data*/, unsigned int /*num_samples*/,
+template<> void right_justify< std::complex< float > >(std::complex< float >* /*data*/, unsigned int /*num_samples*/,
                                                       unsigned int /* bitsToMove */) {}
 
 template< class T >
@@ -618,7 +619,7 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
   }
   else {
     //in the rare case where the actual number of bits per pixel value (ABPP) is less than the number of bits
-    //used in the data (NBPP) AND the data is vcl_left justified... then we correct that here
+    //used in the data (NBPP) AND the data is std::left justified... then we correct that here
     if (need_to_right_justify)
       right_justify<T>(static_cast<T*>(image_memory->data()), (unsigned int)(image_memory->size()/sizeof(T)), extra_bits);
     //Nitf files store data in big endian... little endian machines need to convert
@@ -637,39 +638,39 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
 
 vil_image_view_base_sptr vil_nitf2_image::get_block_j2k( unsigned int blockIndexX, unsigned int blockIndexY ) const
 {
-  if ( ! is_jpeg_2000_compressed() ) return 0;
-  if ( blockIndexX >= n_block_i() ) return 0;
-  if ( blockIndexY >= n_block_j() ) return 0;
+  if ( ! is_jpeg_2000_compressed() ) return VXL_NULLPTR;
+  if ( blockIndexX >= n_block_i() ) return VXL_NULLPTR;
+  if ( blockIndexY >= n_block_j() ) return VXL_NULLPTR;
 
   //sometimes blocks don't align nicely with the image edge.  I'm not sure
   //if this is a bug in the file or if we need to handle it.  Anyway,
-  //we handle it by using vcl_min.  test file named p0_11xa,ntf exhibits
+  //we handle it by using std::min.  test file named p0_11xa,ntf exhibits
   //this issue
-  unsigned int i0 = vcl_min( blockIndexX * size_block_i(), ni() );
-  unsigned int num_i = vcl_min( size_block_i(), ni() - i0 );
-  unsigned int j0 = vcl_min( blockIndexY * size_block_j(), nj() );
-  unsigned int num_j = vcl_min( size_block_j(), nj() - j0 );
+  unsigned int i0 = (std::min)( blockIndexX * size_block_i(), ni() );
+  unsigned int num_i = (std::min)( size_block_i(), ni() - i0 );
+  unsigned int j0 = (std::min)( blockIndexY * size_block_j(), nj() );
+  unsigned int num_j = (std::min)( size_block_j(), nj() - j0 );
   return get_copy_view( i0, num_i, j0, num_j );
 }
 
 vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_y) const
 {
-  if (pixel_format() == VIL_PIXEL_FORMAT_UNKNOWN) return 0;
+  if (pixel_format() == VIL_PIXEL_FORMAT_UNKNOWN) return VXL_NULLPTR;
 
   if ( is_jpeg_2000_compressed() ) {
     return get_block_j2k( block_index_x, block_index_y );
   }
 
-  vcl_string image_mode_type;
-  if (!current_image_header()->get_property("IMODE", image_mode_type)) return 0;
+  std::string image_mode_type;
+  if (!current_image_header()->get_property("IMODE", image_mode_type)) return VXL_NULLPTR;
 
   //calculate the start position of the block that we need
   int bits_per_pixel_per_band, actualBitsPerPixelPerBand;
-  vcl_string bitJustification;
+  std::string bitJustification;
   if (!current_image_header()->get_property("NBPP", bits_per_pixel_per_band) ||
       !current_image_header()->get_property("ABPP", actualBitsPerPixelPerBand) ||
       !current_image_header()->get_property("PJUST", bitJustification)) {
-    return 0;
+    return VXL_NULLPTR;
   }
   int extra_bits = bits_per_pixel_per_band - actualBitsPerPixelPerBand;
   bool need_to_right_justify = bitJustification == "L" && (extra_bits > 0);
@@ -681,7 +682,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
   unsigned int pixels_per_block = size_block_i() * size_block_j();
   unsigned int bits_per_band = pixels_per_block * bits_per_pixel_per_band;
   unsigned int bytes_per_block_per_band = bits_per_band / 8;
-  if (bits_per_band % 8 != 0) bytes_per_block_per_band++;     //round up if remainder vcl_left over
+  if (bits_per_band % 8 != 0) bytes_per_block_per_band++;     //round up if remainder std::left over
   unsigned int block_size_bytes = bytes_per_block_per_band * nplanes();
   //allocate the memory that we need
   vil_memory_chunk_sptr image_memory = new vil_memory_chunk(block_size_bytes, pixel_format());
@@ -706,7 +707,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
         char* position_to_read_to = static_cast<char*>(image_memory->data());
         position_to_read_to += i*bytes_per_block_per_band;
         if (m_stream->read((void*)position_to_read_to, bytes_per_block_per_band) != static_cast<int>(bytes_per_block_per_band)) {
-          return 0;
+          return VXL_NULLPTR;
         }
       }
     }
@@ -726,7 +727,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
       m_stream->seek(current_offset);
       //read in the data
       if (m_stream->read(image_memory->data(), block_size_bytes) != static_cast<int>(block_size_bytes)) {
-        return 0;
+        return VXL_NULLPTR;
       }
     }
 
@@ -752,7 +753,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
   }
 
   //create image view of the data
-  vil_image_view_base_sptr view = 0;
+  vil_image_view_base_sptr view = VXL_NULLPTR;
   switch (vil_pixel_format_component_format(image_memory->pixel_format()))
   {
 #define GET_BLOCK_CASE(FORMAT, T)\
@@ -778,7 +779,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_BOOL, bool);
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
     GET_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
-    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_COMPLEX_FLOAT, vcl_complex<float>);
+    GET_BLOCK_CASE(VIL_PIXEL_FORMAT_COMPLEX_FLOAT, std::complex<float>);
 #undef GET_BLOCK_CASE
 
    default:
@@ -812,36 +813,36 @@ template<> bool* byte_align_data<bool>(bool* in_data, unsigned int num_samples, 
 
 #if 0
   // diagnostic info
-  vcl_cout << "\nBools: ";
+  std::cout << "\nBools: ";
   for (unsigned int i = 0 ; i < num_samples ; i++) {
-    vcl_cout << (out_data[i] ?  '1' : '0');
+    std::cout << (out_data[i] ?  '1' : '0');
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 #endif //0
   return out_data;
 }
 
 bool vil_nitf2_image::get_property (char const *tag, void *property_value) const
 {
-  if (vcl_strcmp(vil_property_size_block_i, tag)==0)
+  if (std::strcmp(vil_property_size_block_i, tag)==0)
   {
     if (property_value)
       *static_cast<unsigned*>(property_value) = this->size_block_i();
     return true;
   }
 
-  if (vcl_strcmp(vil_property_size_block_j, tag)==0)
+  if (std::strcmp(vil_property_size_block_j, tag)==0)
   {
     if (property_value)
       *static_cast<unsigned*>(property_value) = this->size_block_j();
     return true;
   }
-  vcl_string result;
+  std::string result;
   if (m_file_header.get_property(tag, result) ||
       (current_image_header() && current_image_header()->get_property(tag, result)))
   {
-    property_value = vcl_malloc(result.size());
-    vcl_memcpy(property_value, result.c_str(), result.size());
+    property_value = std::malloc(result.size());
+    std::memcpy(property_value, result.c_str(), result.size());
     return true;
   }
   return false;

@@ -6,9 +6,11 @@
 // \author Vishal Jain
 
 
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 
 
@@ -20,7 +22,7 @@ class bil_debayer_image
  static void bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image_view<vil_rgb<vxl_byte> > * outimage);
 
  static void bil_debayer_BGGR(vil_image_view_base_sptr& in_img,  vil_image_view<vil_rgb<vxl_byte> > * outimage);
-  
+
 };
 
 #endif

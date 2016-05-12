@@ -33,7 +33,7 @@ class bgui3d_project2d_tableau : public bgui3d_tableau
   virtual ~bgui3d_project2d_tableau();
 
   //: Return the type name of this tableau
-  virtual vcl_string type_name() const;
+  virtual std::string type_name() const;
 
   //: Handle vgui events
   virtual bool handle(const vgui_event& event);
@@ -44,7 +44,7 @@ class bgui3d_project2d_tableau : public bgui3d_tableau
 
   //: Get the scene camera
   // creates a vpgl camera (either perspective or affine) from the graphics camera
-  virtual vcl_auto_ptr<vpgl_proj_camera<double> > camera() const;
+  virtual std::auto_ptr<vpgl_proj_camera<double> > camera() const;
 
   //: Activate a headlight
   void set_headlight(bool enable) { draw_headlight_ = enable; this->post_redraw(); }

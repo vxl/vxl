@@ -4,7 +4,9 @@
 // \author  Gamze Tunali Cetintemel
 // \date    2005-03-03
 //
-#include <vcl_fstream.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 #include <bwm/bwm_plane_fitting_lsf.h>
@@ -15,15 +17,14 @@
 #include <vsol/vsol_point_2d.h>
 
 #if 0
-#include <vcl_iostream.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #endif
 
-static vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path)
+static vpgl_proj_camera<double> read_projective_camera(std::string cam_path)
 {
-  vcl_ifstream cam_stream(cam_path.data());
+  std::ifstream cam_stream(cam_path.data());
   vpgl_proj_camera<double> cam;
   cam_stream >> cam;
   return cam;
@@ -33,10 +34,10 @@ void test_move_proj_plane(int argc, char* argv[])
 {
   vgl_homg_plane_3d<double> plane1(0,0,1,10);
   vgl_homg_plane_3d<double> plane2(0,0,1,50);
-  vcl_string camera_path = argc < 2 ? "." : argv[1];
+  std::string camera_path = argc < 2 ? "." : argv[1];
   vpgl_proj_camera<double> master_cam = read_projective_camera(camera_path + "/jcp1_042799_0930.txt");
   vsol_point_2d_sptr master_img_pt = new vsol_point_2d(100, 100);
-  bwm_observer_proj_cam master_obs(0);
+  bwm_observer_proj_cam master_obs(VXL_NULLPTR);
   master_obs.set_camera(&master_cam, "");
 #if 0
   vpgl_proj_camera<double> second_cam = read_projective_camera(camera_path + "/jcp4_042799_1030.txt");
@@ -73,12 +74,12 @@ void test_move_proj_plane(int argc, char* argv[])
   lm.set_epsilon_function(0.01);
   lm.set_trace(true);
   lm.minimize_without_gradient(x);
-  lm.diagnose_outcome(vcl_cout);
+  lm.diagnose_outcome(std::cout);
 
-  vcl_cout << " minimization ended\n"
+  std::cout << " minimization ended\n"
            << "X value after--> " << x[0]
            << "\nError=" << lm.get_end_error()
-           << "\nnum_iterations=" << lm.get_num_iterations()<< vcl_endl;
+           << "\nnum_iterations=" << lm.get_num_iterations()<< std::endl;
 
   TEST_NEAR("D", x[0], 50, 2.0);
 #endif // 0

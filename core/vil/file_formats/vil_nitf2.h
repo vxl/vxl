@@ -15,7 +15,7 @@ typedef vil_stream vil_nitf2_ostream;
 
 // Some of the integer values stored in nitf 2.x headers can be
 // larger than 2^32.  That's why we have vil_nitf2_long_long_formatter.
-// We use this typedef so systems that don't have 64 bit integers 
+// We use this typedef so systems that don't have 64 bit integers
 // can still use the class.  Of course they will break if they try to
 // read a header that contains a value greater than 2^32.  Fortunately,
 // that is somewhat rare.
@@ -36,11 +36,11 @@ class vil_nitf2
   enum enum_field_type { type_undefined=0,
                          type_int, type_long_long, type_double,
                          type_char, type_string, type_binary,
-                         type_location, type_date_time, 
+                         type_location, type_date_time,
                          type_tagged_record_sequence };
 
-  // Controls the level of detail of logging to vcl_cout.
-  // All errors are logged to vcl_cerr, irrespective of log level.
+  // Controls the level of detail of logging to std::cout.
+  // All errors are logged to std::cerr, irrespective of log level.
   enum enum_log_level { log_none=0, log_info, log_debug };
 
   // Logging level for all vil_nitf classes. This could be generalized to an
@@ -49,8 +49,8 @@ class vil_nitf2
   /**
     * Call this function to flush all of the nitf2 classes statically
     * allocated memory.  Usually, you'd want to do this just before
-    * your application terminates or after you're done using vil_nitf2 
-    * related classes.  It's not a big deal if you call it too early (or often), 
+    * your application terminates or after you're done using vil_nitf2
+    * related classes.  It's not a big deal if you call it too early (or often),
     * the vil_nitf2 classes are smart enough to re-generate these members if
     * they are needed later
     */
@@ -61,6 +61,6 @@ class vil_nitf2
 
 
 #define VIL_NITF2_LOG(LEVEL) \
-  if (vil_nitf2::s_log_level < vil_nitf2::LEVEL) ; else vcl_cout
+  if (vil_nitf2::s_log_level < vil_nitf2::LEVEL) ; else std::cout
 
 #endif // VIL_NITF2_H

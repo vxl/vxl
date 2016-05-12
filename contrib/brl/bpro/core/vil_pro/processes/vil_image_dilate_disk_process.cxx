@@ -18,8 +18,8 @@ bool vil_image_dilate_disk_process_cons(bprb_func_process& pro)
 {
     using namespace vil_image_dilate_disk_process_globals;
 
-    vcl_vector<vcl_string> input_types_(n_inputs_);
-    vcl_vector<vcl_string> output_types_(n_outputs_);
+    std::vector<std::string> input_types_(n_inputs_);
+    std::vector<std::string> output_types_(n_outputs_);
 
     unsigned i = 0;
     input_types_[i++] = "vil_image_view_base_sptr";//original binary image
@@ -45,7 +45,7 @@ bool vil_image_dilate_disk_process(bprb_func_process& pro)
 
     if ( pro.n_inputs() < n_inputs_)
     {
-        vcl_cerr << "In vil_image_dilate_disk_process(.)\n"
+        std::cerr << "In vil_image_dilate_disk_process(.)\n"
                  << "\tMust provide at least 1 input\n";
         return false;
     }
@@ -57,14 +57,14 @@ bool vil_image_dilate_disk_process(bprb_func_process& pro)
 
     if ( imgPtr->pixel_format() != VIL_PIXEL_FORMAT_BOOL )
     {
-        vcl_cerr << "In vil_image_dilate_disk_process(.)\n"
+        std::cerr << "In vil_image_dilate_disk_process(.)\n"
                  << "\tMust provide boolean image.\n";
         return false;
     }
 
     if ( imgPtr->nplanes() > 1 )
     {
-        vcl_cerr << "In vil_image_dilate_disk_process(.)\n"
+        std::cerr << "In vil_image_dilate_disk_process(.)\n"
                  << "\tInput image must be a single plane.\n";
         return false;
     }

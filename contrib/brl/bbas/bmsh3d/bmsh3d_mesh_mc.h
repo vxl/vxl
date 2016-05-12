@@ -16,7 +16,9 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_map.h>
+#include <iostream>
+#include <map>
+#include <vcl_compiler.h>
 
 #include "bmsh3d_mesh.h"
 #include "bmsh3d_face_mc.h"
@@ -43,10 +45,10 @@ class bmsh3d_mesh_mc : public bmsh3d_mesh
 
   void add_inner_block(bmsh3d_face_mc* face) { set_face_[id_counter_++]=face; }
 
-  vcl_map<int, bmsh3d_face_mc*> get_inner_blocks() { return set_face_; }
+  std::map<int, bmsh3d_face_mc*> get_inner_blocks() { return set_face_; }
 
  private:
-  vcl_map<int, bmsh3d_face_mc*> set_face_;
+  std::map<int, bmsh3d_face_mc*> set_face_;
   int id_counter_;
 };
 
@@ -58,7 +60,7 @@ void mesh_break_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
 
 //: merges two meshes M1 amd M2 into M1. M1 and M2 do not have any intersection
 void merge_mesh (bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2);
-bmsh3d_face* copy_inner_face(vcl_vector<bmsh3d_edge*> incident_edges,
+bmsh3d_face* copy_inner_face(std::vector<bmsh3d_edge*> incident_edges,
                              bmsh3d_mesh_mc* mesh);
 
 #endif // bmsh3d_mesh_mc_h_

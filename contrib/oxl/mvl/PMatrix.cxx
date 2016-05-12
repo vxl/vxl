@@ -5,11 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <fstream>
+#include <cmath>
 #include "PMatrix.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
@@ -38,7 +39,7 @@
 //
 
 PMatrix::PMatrix ()
-  : svd_(0)
+  : svd_(VXL_NULLPTR)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
@@ -50,12 +51,12 @@ PMatrix::PMatrix ()
 
 //--------------------------------------------------------------
 //
-//: Construct by loading from vcl_istream.
+//: Construct by loading from std::istream.
 // \code
 //   PMatrix P(cin);
 // \endcode
-PMatrix::PMatrix (vcl_istream& i)
-  : svd_(0)
+PMatrix::PMatrix (std::istream& i)
+  : svd_(VXL_NULLPTR)
 {
   read_ascii(i);
 }
@@ -66,7 +67,7 @@ PMatrix::PMatrix (vcl_istream& i)
 
 PMatrix::PMatrix (vnl_double_3x4 const& pmatrix)
   : p_matrix_ (pmatrix),
-  svd_(0)
+  svd_(VXL_NULLPTR)
 {
 }
 
@@ -75,7 +76,7 @@ PMatrix::PMatrix (vnl_double_3x4 const& pmatrix)
 //: Construct from 3x3 matrix A and vector a. P = [A a].
 
 PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a)
-  : svd_(0)
+  : svd_(VXL_NULLPTR)
 {
   set(A,a);
 }
@@ -86,7 +87,7 @@ PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a)
 
 PMatrix::PMatrix (const double *c_matrix)
   : p_matrix_ (c_matrix),
-  svd_(0)
+  svd_(VXL_NULLPTR)
 {
 }
 
@@ -95,7 +96,7 @@ PMatrix::PMatrix (const double *c_matrix)
 // - Copy ctor
 
 PMatrix::PMatrix (const PMatrix& that)
-  : vbl_ref_count(), p_matrix_(that.get_matrix()), svd_(0)
+  : vbl_ref_count(), p_matrix_(that.get_matrix()), svd_(VXL_NULLPTR)
 {
 }
 
@@ -103,7 +104,7 @@ PMatrix::PMatrix (const PMatrix& that)
 PMatrix& PMatrix::operator=(const PMatrix& that)
 {
   p_matrix_ = that.get_matrix();
-  svd_ = 0;
+  svd_ = VXL_NULLPTR;
   return *this;
 }
 
@@ -112,7 +113,7 @@ PMatrix& PMatrix::operator=(const PMatrix& that)
 // - Destructor
 PMatrix::~PMatrix()
 {
-  delete svd_; svd_ = 0;
+  delete svd_; svd_ = VXL_NULLPTR;
 }
 
 // OPERATIONS
@@ -200,8 +201,8 @@ HomgPlane3D PMatrix::backproject (const HomgLine2D& l) const
 }
 
 //-----------------------------------------------------------------------------
-//: Print p on vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
+//: Print p on std::ostream
+std::ostream& operator<<(std::ostream& s, const PMatrix& p)
 {
   if (HomgPrettyPrint::pretty)
     return vnl_matlab_print(s, p.get_matrix(), "");
@@ -210,20 +211,20 @@ vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p)
 }
 
 //-----------------------------------------------------------------------------
-//: Load p from ascii vcl_istream
-vcl_istream& operator>>(vcl_istream& i, PMatrix& p)
+//: Load p from ascii std::istream
+std::istream& operator>>(std::istream& i, PMatrix& p)
 {
   p.read_ascii(i);
   return i;
 }
 
-static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
+static bool ok(std::istream& f) { return f.good() || f.eof(); }
 
 //: Load from file.
 // \code
 // P.read_ascii("file.P");
 // \endcode
-bool PMatrix::read_ascii(vcl_istream& f)
+bool PMatrix::read_ascii(std::istream& f)
 {
   vnl_matrix<double> hold(3,4);
   f >> hold;
@@ -235,7 +236,7 @@ bool PMatrix::read_ascii(vcl_istream& f)
   clear_svd();
 
   if (!ok(f)) {
-    vcl_cerr << "PMatrix::read_ascii: Failed to load P matrix from stream\n";
+    std::cerr << "PMatrix::read_ascii: Failed to load P matrix from stream\n";
     return false;
   }
 
@@ -249,21 +250,21 @@ bool PMatrix::read_ascii(vcl_istream& f)
 // \endcode
 PMatrix PMatrix::read(const char* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!ok(f)) {
-    vcl_cerr << "PMatrix::read: Failed to open P matrix file " << filename << '\n';
+    std::cerr << "PMatrix::read: Failed to open P matrix file " << filename << '\n';
     return PMatrix();
   }
 
   PMatrix P;
   if (!P.read_ascii(f))
-    vcl_cerr << "PMatrix::read: Failed to read P matrix file " << filename << '\n';
+    std::cerr << "PMatrix::read: Failed to read P matrix file " << filename << '\n';
 
   return P;
 }
 
-//: Load from vcl_istream
-PMatrix PMatrix::read(vcl_istream& s)
+//: Load from std::istream
+PMatrix PMatrix::read(std::istream& s)
 {
   PMatrix P;
   s >> P;
@@ -277,9 +278,8 @@ PMatrix PMatrix::read(vcl_istream& s)
 //: Compute the svd of this P and cache it, so that future operations that require it need not recompute it.
 vnl_svd<double>* PMatrix::svd() const
 {
-  if (svd_ == 0) {
-    // Need to make svd_ volatile for SGI g++ 2.7.2 optimizer bug.
-    svd_ = new vnl_svd<double>(p_matrix_.as_ref()); // mutable const
+  if (svd_ == VXL_NULLPTR) {
+    svd_ = new vnl_svd<double>(p_matrix_.as_ref());
   }
   return svd_;
 }
@@ -288,7 +288,7 @@ vnl_svd<double>* PMatrix::svd() const
 //  This is necessary only in order to recover the space used by it if the PMatrix is not being deleted.
 void PMatrix::clear_svd() const
 {
-  delete svd_; svd_ = 0;
+  delete svd_; svd_ = VXL_NULLPTR;
 }
 
 //-----------------------------------------------------------------------------
@@ -298,7 +298,7 @@ void PMatrix::clear_svd() const
 vgl_homg_point_3d<double> PMatrix::get_focal() const
 {
   if (svd()->singularities() > 1) {
-    vcl_cerr << "PMatrix::get_focal:\n"
+    std::cerr << "PMatrix::get_focal:\n"
              << "  Nullspace dimension is " << svd()->singularities()
              << "\n  Returning an invalid point (a vector of zeros)\n";
     return vgl_homg_point_3d<double>(0,0,0,0);
@@ -313,7 +313,7 @@ HomgPoint3D PMatrix::get_focal_point() const
 {
   // From st_compute_focal_point
   if (svd()->singularities() > 1) {
-    vcl_cerr << "PMatrix::get_focal_point:\n"
+    std::cerr << "PMatrix::get_focal_point:\n"
              << "  Nullspace dimension is " << svd()->singularities()
              << "\n  Returning a vector of zeros\n";
     return HomgPoint3D(0,0,0,0);
@@ -322,7 +322,7 @@ HomgPoint3D PMatrix::get_focal_point() const
   vnl_matrix<double> nullspace = svd()->nullspace();
 
   if (nullspace(3,0) == 0)
-    vcl_cerr << "PMatrix::get_focal_point: Focal point at infinity";
+    std::cerr << "PMatrix::get_focal_point: Focal point at infinity";
 
   return HomgPoint3D(nullspace(0,0),
                      nullspace(1,0),
@@ -351,7 +351,7 @@ bool PMatrix::is_canonical(double tol) const
   for (int r = 0; r < 3; ++r)
     for (int c = 0; c < 4; ++c) {
       double d = (r == c) ? (p_matrix_(r,c) - 1) : p_matrix_(r,c);
-      if (vcl_fabs(d) > tol)
+      if (std::fabs(d) > tol)
         return false;
     }
   return true;
@@ -567,8 +567,8 @@ PMatrix::fix_cheirality()
 
   double scale = 1;
 #if 0  // Used to scale by 1/det, but it's a bad idea if det is small
-  if (vcl_fabs(det - 1) > 1e-8)
-    vcl_cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << '\n';
+  if (std::fabs(det - 1) > 1e-8)
+    std::cerr << "PMatrix::fix_cheirality: Flipping, determinant is " << det << '\n';
     scale = 1/det;
 #else
   if (det < 0)
@@ -621,7 +621,7 @@ bool
 PMatrix::looks_conditioned()
 {
   double cond = svd()->W(0) / svd()->W(2);
-  // vcl_cerr << "PMatrix::looks_conditioned: cond = " << cond << '\n';
+  // std::cerr << "PMatrix::looks_conditioned: cond = " << cond << '\n';
   return cond < 100;
 }
 

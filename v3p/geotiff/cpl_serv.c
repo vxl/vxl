@@ -66,11 +66,11 @@
 void *CPLCalloc( int nCount, int nSize )
 
 {
-    void	*pReturn;
+    void        *pReturn;
 
     if( nSize == 0 )
         return NULL;
-    
+
     pReturn = VSICalloc( nCount, nSize );
     if( pReturn == NULL )
     {
@@ -89,11 +89,11 @@ void *CPLCalloc( int nCount, int nSize )
 void *CPLMalloc( int nSize )
 
 {
-    void	*pReturn;
+    void        *pReturn;
 
     if( nSize == 0 )
         return NULL;
-    
+
     pReturn = VSIMalloc( nSize );
     if( pReturn == NULL )
     {
@@ -112,13 +112,13 @@ void *CPLMalloc( int nSize )
 void * CPLRealloc( void * pData, int nNewSize )
 
 {
-    void	*pReturn;
+    void        *pReturn;
 
     if( pData == NULL )
         pReturn = VSIMalloc( nNewSize );
     else
         pReturn = VSIRealloc( pData, nNewSize );
-    
+
     if( pReturn == NULL )
     {
         CPLError( CE_Fatal, CPLE_OutOfMemory,
@@ -136,23 +136,23 @@ void * CPLRealloc( void * pData, int nNewSize )
 char *CPLStrdup( const char * pszString )
 
 {
-    char	*pszReturn;
+    char        *pszReturn;
 
     if( pszString == NULL )
         pszString = "";
 
     pszReturn = VSIMalloc( strlen(pszString)+1 );
-        
+
     if( pszReturn == NULL )
     {
         CPLError( CE_Fatal, CPLE_OutOfMemory,
                   "CPLStrdup(): Out of memory allocating %d bytes.\n",
                   strlen(pszString) );
-        
+
     }
 
     strcpy( pszReturn, pszString );
-    
+
     return( pszReturn );
 }
 
@@ -169,9 +169,9 @@ char *CPLStrdup( const char * pszString )
 const char *CPLReadLine( FILE * fp )
 
 {
-    static char	*pszRLBuffer = NULL;
-    static int	nRLBufferSize = 0;
-    int		nLength, nReadSoFar = 0;
+    static char        *pszRLBuffer = NULL;
+    static int        nRLBufferSize = 0;
+    int                nLength, nReadSoFar = 0;
 
 /* -------------------------------------------------------------------- */
 /*      Cleanup case.                                                   */
@@ -236,7 +236,7 @@ const char *CPLReadLine( FILE * fp )
     {
         pszRLBuffer[--nLength] = '\0';
     }
-    
+
     if( nLength > 0
         && (pszRLBuffer[nLength-1] == 10 || pszRLBuffer[nLength-1] == 13) )
     {
@@ -271,7 +271,7 @@ char **CSLAddString(char **papszStrList, const char *pszNewString)
     else
     {
         nItems = CSLCount(papszStrList);
-        papszStrList = (char**)CPLRealloc(papszStrList, 
+        papszStrList = (char**)CPLRealloc(papszStrList,
                                           (nItems+2)*sizeof(char*));
     }
 
@@ -406,19 +406,19 @@ char ** CSLTokenizeStringComplex( const char * pszString,
                                   int bHonourStrings, int bAllowEmptyTokens )
 
 {
-    char	**papszRetList = NULL;
-    char 	*pszToken;
-    int		nTokenMax, nTokenLen;
+    char        **papszRetList = NULL;
+    char         *pszToken;
+    int                nTokenMax, nTokenLen;
 
     pszToken = (char *) CPLCalloc(10,1);
     nTokenMax = 10;
-    
+
     while( pszString != NULL && *pszString != '\0' )
     {
-        int	bInString = FALSE;
+        int        bInString = FALSE;
 
         nTokenLen = 0;
-        
+
         /* Try to find the next delimeter, marking end of token */
         for( ; *pszString != '\0'; pszString++ )
         {
@@ -429,7 +429,7 @@ char ** CSLTokenizeStringComplex( const char * pszString,
                 pszString++;
                 break;
             }
-            
+
             /* If this is a quote, and we are honouring constant
                strings, then process the constant strings, with out delim
                but don't copy over the quotes */
@@ -508,7 +508,7 @@ void    CPLError(CPLErr eErrClass, int err_no, const char *fmt, ...)
 {
     va_list args;
 
-    /* Expand the error message 
+    /* Expand the error message
      */
     va_start(args, fmt);
     vsprintf(gszCPLLastErrMsg, fmt, args);

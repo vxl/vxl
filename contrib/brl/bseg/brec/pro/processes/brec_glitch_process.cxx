@@ -1,4 +1,5 @@
 // This is brl/bseg/brec/pro/processes/brec_glitch_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -13,7 +14,7 @@
 // \endverbatim
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
@@ -25,7 +26,7 @@ bool brec_glitch_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
   input_types.push_back("unsigned"); // size of the inner-square for the glitch mask (e.g. 5 means we're detecting foreground islands of 5x5 on background)
@@ -33,7 +34,7 @@ bool brec_glitch_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("vil_image_view_base_sptr");
@@ -49,14 +50,14 @@ bool brec_glitch_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 3){
-    vcl_cerr << " brec_glitch_process - invalid inputs\n";
+    std::cerr << " brec_glitch_process - invalid inputs\n";
     return false;
   }
 
   //: get input
   unsigned i = 0;
   vil_image_view_base_sptr temp = pro.get_input<vil_image_view_base_sptr>(i++);
-    
+
   vil_image_view<float> map = *vil_convert_cast(float(), temp);
   if (temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
     return false;
@@ -74,8 +75,8 @@ bool brec_glitch_process(bprb_func_process& pro)
   vil_image_view<float> g_b(ni, nj, 1), g_bb(ni, nj, 1), g_ff(ni, nj, 1), g_fb(ni, nj, 1);
   g_b.fill(-1.0f); g_bb.fill(-1.0f); g_ff.fill(-1.0f); g_fb.fill(-1.0f);
 
-  vcl_vector<vcl_pair<int, int> > neighborhood;
-  vcl_vector<vcl_pair<int, int> > neighborhood_outer;
+  std::vector<std::pair<int, int> > neighborhood;
+  std::vector<std::pair<int, int> > neighborhood_outer;
   brec_glitch::square_glitch(c_size, neighborhood, neighborhood_outer);
 
   for (unsigned j = 0; j<nj; ++j)
@@ -93,15 +94,15 @@ bool brec_glitch_process(bprb_func_process& pro)
               all_inside = false;
               break;
             }
-            
+
             if (i == 516 && j == 477) {
-              vcl_cout << "map(" << ii << ", " << jj << "): " << map(ii, jj) << vcl_endl;
+              std::cout << "map(" << ii << ", " << jj << "): " << map(ii, jj) << std::endl;
             }
             sum += map(ii,jj);
             prod_back *= (1.0f-map(ii, jj));
             prod_fore *= map(ii, jj);
             if (i == 516 && j == 477) {
-              vcl_cout << "prod_back: " << prod_back << " prod_fore: " << prod_fore << vcl_endl;
+              std::cout << "prod_back: " << prod_back << " prod_fore: " << prod_fore << std::endl;
             }
           }
         }
@@ -112,10 +113,10 @@ bool brec_glitch_process(bprb_func_process& pro)
           g_ff(i,j) = prod_fore;
           g_fb(i,j) = prod_back;
           if (i == 516 && j == 477) {
-            vcl_cout << "g_b(516, 477): " << g_b(i, j) << vcl_endl;
-            vcl_cout << "g_bb(516, 477): " << g_bb(i, j) << vcl_endl;
-            vcl_cout << "g_ff(516, 477): " << g_ff(i, j) << vcl_endl;
-            vcl_cout << "g_fb(516, 477): " << g_fb(i, j) << vcl_endl;
+            std::cout << "g_b(516, 477): " << g_b(i, j) << std::endl;
+            std::cout << "g_bb(516, 477): " << g_bb(i, j) << std::endl;
+            std::cout << "g_ff(516, 477): " << g_ff(i, j) << std::endl;
+            std::cout << "g_fb(516, 477): " << g_fb(i, j) << std::endl;
           }
         }
       }
@@ -140,42 +141,42 @@ bool brec_glitch_process(bprb_func_process& pro)
               break;
             }
             if (i == 516 && j == 477) {
-              vcl_cout << "map(" << ii << ", " << jj << "): " << map(ii, jj) << vcl_endl;
+              std::cout << "map(" << ii << ", " << jj << "): " << map(ii, jj) << std::endl;
             }
             sum += map(ii,jj);
             prod_back *= (1.0f-map(ii, jj));
             prod_fore *= map(ii, jj);
             if (i == 516 && j == 477) {
-              vcl_cout << "prod_back: " << prod_back << " prod_fore: " << prod_fore << vcl_endl;
+              std::cout << "prod_back: " << prod_back << " prod_fore: " << prod_fore << std::endl;
             }
           }
         }
         if (all_inside) {
-          out2(i,j) = (float)vcl_abs(sum-out(i,j));
+          out2(i,j) = (float)std::abs(sum-out(i,j));
           g_b(i,j) = g_b(i,j)*prod_back;
           g_bb(i,j) = g_bb(i,j)*prod_back;
           g_ff(i,j) = g_ff(i,j)*prod_fore;
           g_fb(i,j) = g_fb(i,j)*prod_fore;
           if (i == 516 && j == 477) {
-            vcl_cout << "g_b(516, 477): " << g_b(i, j) << vcl_endl;
-            vcl_cout << "g_bb(516, 477): " << g_bb(i, j) << vcl_endl;
-            vcl_cout << "g_ff(516, 477): " << g_ff(i, j) << vcl_endl;
-            vcl_cout << "g_fb(516, 477): " << g_fb(i, j) << vcl_endl;
+            std::cout << "g_b(516, 477): " << g_b(i, j) << std::endl;
+            std::cout << "g_bb(516, 477): " << g_bb(i, j) << std::endl;
+            std::cout << "g_ff(516, 477): " << g_ff(i, j) << std::endl;
+            std::cout << "g_fb(516, 477): " << g_fb(i, j) << std::endl;
           }
         }
       }
     }
 
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(out2)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(out2));
+
   float min, max;
   vil_math_value_range(out2, min, max);
-  vcl_cout << "\t glitch map min: " << min << " max: " << max << vcl_endl;
+  std::cout << "\t glitch map min: " << min << " max: " << max << std::endl;
   vil_image_view<vxl_byte> out_byte2(ni, nj, 1);
   vil_convert_stretch_range_limited(out2, out_byte2, 0.0f, max);
 
-  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<vxl_byte>(out_byte2)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<vxl_byte>(out_byte2));
+
   //: normalize the g_b map
   for (unsigned j = 0; j<nj; ++j) {
     for (unsigned i = 0; i<ni; ++i) {
@@ -189,15 +190,15 @@ bool brec_glitch_process(bprb_func_process& pro)
     }
   }
 
-  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<float>(g_b)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<float>(g_b));
+
   vil_math_value_range(g_b, min, max);
-  vcl_cout << "\t glitch normalized prob map min: " << min << " max: " << max << vcl_endl;
+  std::cout << "\t glitch normalized prob map min: " << min << " max: " << max << std::endl;
   vil_image_view<vxl_byte> out_byte3(ni, nj, 1);
   vil_convert_stretch_range_limited(g_b, out_byte3, 0.0f, max);
 
-  pro.set_output_val<vil_image_view_base_sptr>(3, new vil_image_view<vxl_byte>(out_byte3)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(3, new vil_image_view<vxl_byte>(out_byte3));
+
   return true;
 }
 

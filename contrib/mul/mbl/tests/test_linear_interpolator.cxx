@@ -1,5 +1,6 @@
 // This is mul/mbl/tests/test_linear_interpolator.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_linear_interpolator.h>
 #include <testlib/testlib_test.h>
@@ -18,15 +19,15 @@ double diff_li(const mbl_linear_interpolator &li, double x)
 
 void test_linear_interpolator()
 {
-  vcl_cout << "*********************************\n"
+  std::cout << "*********************************\n"
            << " Testing mbl_linear_interpolator\n"
            << "*********************************\n";
 
   mbl_linear_interpolator li;
 
   // tabulate line of y=3.2x-7
-  vcl_vector<double> x;
-  vcl_vector<double> y;
+  std::vector<double> x;
+  std::vector<double> y;
   double v1=-4;
   double v2=8;
   for (double i=v1;i<=v2;++i)

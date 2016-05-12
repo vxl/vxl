@@ -43,15 +43,15 @@ namespace rgtl
             {
             // Generate the combination with this bit of c set to 0
             // which has no corresponding bit of i.
-            meta::call1<RGTL_TYPENAME gen_calls<d-1>::template apply<k, c, i>, F>::invoke(arg1);
+            meta::call1<typename gen_calls<d-1>::template apply<k, c, i>, F>::invoke(arg1);
 
             // Generate the combination with this bit of c set to 1
             // and the corresponding bit of i set to 0.
-            meta::call1<RGTL_TYPENAME gen_calls<d-1>::template apply<k+1, (1<<(d-1))|c, (0<<k)|i>, F>::invoke(arg1);
+            meta::call1<typename gen_calls<d-1>::template apply<k+1, (1<<(d-1))|c, (0<<k)|i>, F>::invoke(arg1);
 
             // Generate the combination with this bit of c set to 1
             // and the corresponding bit of i set to 1.
-            meta::call1<RGTL_TYPENAME gen_calls<d-1>::template apply<k+1, (1<<(d-1))|c, (1<<k)|i>, F>::invoke(arg1);
+            meta::call1<typename gen_calls<d-1>::template apply<k+1, (1<<(d-1))|c, (1<<k)|i>, F>::invoke(arg1);
             }
         };
       };
@@ -97,8 +97,8 @@ namespace rgtl
             {
             // Generate a bit for j.  It goes into the input argument index
             // and its inverse goes into the child index.
-            meta::call2<RGTL_TYPENAME gen_args<D-1>::template apply<m, c, i, (j<<1)|0, (inarg<<1)|0, (child<<1)|1>, F>::invoke(arg1, arg2);
-            meta::call2<RGTL_TYPENAME gen_args<D-1>::template apply<m, c, i, (j<<1)|1, (inarg<<1)|1, (child<<1)|0>, F>::invoke(arg1, arg2);
+            meta::call2<typename gen_args<D-1>::template apply<m, c, i, (j<<1)|0, (inarg<<1)|0, (child<<1)|1>, F>::invoke(arg1, arg2);
+            meta::call2<typename gen_args<D-1>::template apply<m, c, i, (j<<1)|1, (inarg<<1)|1, (child<<1)|0>, F>::invoke(arg1, arg2);
             }
         };
 
@@ -113,7 +113,7 @@ namespace rgtl
           static void invoke(arg1_type arg1, arg2_type arg2)
             {
             // Take a bit from i.  It goes into the child index.
-            meta::call2<RGTL_TYPENAME gen_args<D-1>::template apply<m, (c>>1), (i>>1), j, inarg, (child<<1)|(i&1)>, F>::invoke(arg1, arg2);
+            meta::call2<typename gen_args<D-1>::template apply<m, (c>>1), (i>>1), j, inarg, (child<<1)|(i&1)>, F>::invoke(arg1, arg2);
             }
         };
 
@@ -128,8 +128,8 @@ namespace rgtl
           static void invoke(arg1_type arg1, arg2_type arg2)
             {
             // Generate a bit for j.  It goes into the child index.
-            meta::call2<RGTL_TYPENAME gen_args<D-1>::template apply<m, (c>>1), i, (j<<1)|0, inarg, (child<<1)|0>, F>::invoke(arg1, arg2);
-            meta::call2<RGTL_TYPENAME gen_args<D-1>::template apply<m, (c>>1), i, (j<<1)|1, inarg, (child<<1)|1>, F>::invoke(arg1, arg2);
+            meta::call2<typename gen_args<D-1>::template apply<m, (c>>1), i, (j<<1)|0, inarg, (child<<1)|0>, F>::invoke(arg1, arg2);
+            meta::call2<typename gen_args<D-1>::template apply<m, (c>>1), i, (j<<1)|1, inarg, (child<<1)|1>, F>::invoke(arg1, arg2);
             }
         };
 
@@ -280,7 +280,7 @@ namespace rgtl
         template <typename F>
         static void invoke(typename F::arg1_type arg1, F* = 0)
           {
-          meta::call1<RGTL_TYPENAME gen_calls<d>::template apply<0,0,0>, F>::invoke(arg1);
+          meta::call1<typename gen_calls<d>::template apply<0,0,0>, F>::invoke(arg1);
           }
       };
 
@@ -299,7 +299,7 @@ namespace rgtl
         static void invoke(typename F::arg1_type arg1,
                            typename F::arg2_type arg2, F* = 0)
           {
-          meta::call2<RGTL_TYPENAME gen_args<D>::template apply<m, c, i, 0, 0, 0>, F>::invoke(arg1, arg2);
+          meta::call2<typename gen_args<D>::template apply<m, c, i, 0, 0, 0>, F>::invoke(arg1, arg2);
           }
       };
 

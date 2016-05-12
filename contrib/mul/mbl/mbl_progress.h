@@ -9,8 +9,10 @@
 // \author Graham Vincent and Kevin de Souza
 // \date 25 Feb 2005
 
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <string>
+#include <iostream>
+#include <map>
+#include <vcl_compiler.h>
 
 //========================================================================
 //: An exception that can be thrown by an operation when cancelled.
@@ -56,9 +58,9 @@ class mbl_progress
   virtual ~mbl_progress() {}
 
   //: Estimated number of iterations for the given identifier.
-  void set_estimated_iterations(const vcl_string& identifier,
+  void set_estimated_iterations(const std::string& identifier,
                                 const int iterations,
-                                const vcl_string& display_text);
+                                const std::string& display_text);
 
   //: If true set_progress() will throw an exception if cancel has been set
   void set_throw_exception_on_cancel(bool t)
@@ -67,39 +69,39 @@ class mbl_progress
   //: Sets progress for the given identifier.
   // Checks whether cancel has been set; if so calls end_progress(),
   // and throws an exception if "throw_exception_on_cancel" is true.
-  void set_progress(const vcl_string& identifier,
+  void set_progress(const std::string& identifier,
                     const int progress);
 
   //: Increments progress for the given identifier by n.
-  void increment_progress(const vcl_string& identifier,
+  void increment_progress(const std::string& identifier,
                           const int n=1);
 
   //: Explicitly marks the end of loop for the given identifier.
-  void end_progress(const vcl_string& identifier);
+  void end_progress(const std::string& identifier);
 
   //: Gets progress for given identifier.
   //  \param identifier to query.
   //  \return progress (-i if identifier is not known by this object).
-  int progress(const vcl_string& identifier) const;
+  int progress(const std::string& identifier) const;
 
   //: Gets display text for given identifier.
   //  \param identifier to query.
-  vcl_string display_text(const vcl_string& identifier) const;
+  std::string display_text(const std::string& identifier) const;
 
   //: Gets estimated total iterations for given identifier.
   //  \param identifier to query.
   //  \return progress (-1 if identifier is not known by this object).
-  int estimated_iterations(const vcl_string& identifier) const;
+  int estimated_iterations(const std::string& identifier) const;
 
   //: Modify the flag to cancel the current process.
   //  \param identifier Progress object to cancel.
-  void set_cancelled(const vcl_string& identifier,
+  void set_cancelled(const std::string& identifier,
                      const bool cancel);
 
   //: Check whether progress object is marked as cancelled.
   //  \param identifier Progress object to check.
   //  \return True if a cancel flag is set for this progress object.
-  bool is_cancelled(const vcl_string& identifier) const;
+  bool is_cancelled(const std::string& identifier) const;
 
 
  protected:
@@ -107,34 +109,34 @@ class mbl_progress
   //: Called when set_estimated_iterations() is called for a given identifier.
   //  Derived classes may take some action here.
   //  \param identifier The operation being monitored.
-  virtual void on_set_estimated_iterations(const vcl_string& identifier,
+  virtual void on_set_estimated_iterations(const std::string& identifier,
                                            const int total_iterations) = 0;
 
   //: Called when set_progress() is called for a given identifier.
   //  Derived classes may take some action here.
   //  \param identifier The operation being monitored.
   //  \param progress The new progress status.
-  virtual void on_set_progress(const vcl_string& identifier,
+  virtual void on_set_progress(const std::string& identifier,
                                const int progress) = 0;
 
   //: Called when end_progress() is called for a given identifier.
   //  Derived classes may take some action here.
   //  \param identifier The operation being monitored.
-  virtual void on_end_progress(const vcl_string& identifier) = 0;
+  virtual void on_end_progress(const std::string& identifier) = 0;
 
  private:
 
   //: Stores display text for each identifier
-  vcl_map<vcl_string, vcl_string> identifier2displaytext_;
+  std::map<std::string, std::string> identifier2displaytext_;
 
   //: Stores estimated iterations for each identifier
-  vcl_map<vcl_string, int> identifier2estimatediterations_;
+  std::map<std::string, int> identifier2estimatediterations_;
 
   //: Stores current progress for each identifier
-  vcl_map<vcl_string, int> identifier2progress_;
+  std::map<std::string, int> identifier2progress_;
 
   //: Flags to indicate whether a request to cancel has been registered for each identifier
-  vcl_map<vcl_string, bool> identifier2cancel_;
+  std::map<std::string, bool> identifier2cancel_;
 
   //: If true set_progress() will throw an exception if cancel has been set.
   bool throw_exception_on_cancel_;

@@ -9,7 +9,7 @@
 
 inline vdgl_digital_curve osl_to_vdgl(osl_edgel_chain const& dc)
 {
-  vcl_vector<vdgl_edgel> edgels; edgels.reserve(dc.size());
+  std::vector<vdgl_edgel> edgels; edgels.reserve(dc.size());
   for (unsigned int i=0; i<dc.size(); ++i)
   {
     // Create a vdgl_edgel and push it on the edgel list:

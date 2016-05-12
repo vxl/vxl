@@ -8,9 +8,11 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -28,11 +30,11 @@ namespace boxm2_ocl_change_detection_globals
 {
   const float PROB_THRESH = 0.1f;
   bool get_scene_appearances(boxm2_scene_sptr    scene,
-                             vcl_string&         data_type,
-                             vcl_string&         num_obs_type,
-                             vcl_string&         options,
+                             std::string&         data_type,
+                             std::string&         num_obs_type,
+                             std::string&         options,
                              int&                apptypesize,
-                             vcl_string identifier);
+                             std::string identifier);
 };
 
 //Older, single pass, multi-res change detection
@@ -48,15 +50,15 @@ class boxm2_ocl_change_detection
                               vil_image_view_base_sptr  img,
                               vil_image_view_base_sptr  exp_img,
                               int                       n,
-                              vcl_string                norm_type,
-                              bool                      pmax, 
-                              vcl_string                identifier="",
-                              vcl_size_t                startI=0,
-                              vcl_size_t                startJ=0);
+                              std::string                norm_type,
+                              bool                      pmax,
+                              std::string                identifier="",
+                              std::size_t                startI=0,
+                              std::size_t                startJ=0);
 
   private:
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
     static void full_pyramid(vil_image_view_base_sptr in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj);
     static double mutual_information_2d(const vnl_vector<double>& X, const vnl_vector<double>& Y, int nbins);
 };
@@ -78,12 +80,12 @@ class boxm2_ocl_two_pass_change
                                 vil_image_view_base_sptr  img,
                                 vil_image_view_base_sptr  exp_img,
                                 int                       n,
-                                vcl_string                norm_type,
+                                std::string                norm_type,
                                 bool                      pmax=false);
 
   private:
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 
 class boxm2_ocl_aux_pass_change
@@ -96,11 +98,11 @@ class boxm2_ocl_aux_pass_change
                                 boxm2_opencl_cache_sptr   opencl_cache,
                                 vpgl_camera_double_sptr   cam,
                                 vil_image_view_base_sptr  img,
-                                vcl_string identifier= "",
+                                std::string identifier= "",
                                 bool max_density=false,float nearfactor = 100000.0f, float farfactor= 0.000001f);
 
   private:
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts, bool maxdensity =false);
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts, bool maxdensity =false);
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 #endif // boxm2_ocl_change_detection_h_

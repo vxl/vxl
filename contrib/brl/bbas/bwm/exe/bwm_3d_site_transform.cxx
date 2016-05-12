@@ -1,14 +1,15 @@
+#include <vector>
+#include <set>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/bwm_observer_mgr.h>
 #include <bwm/bwm_3d_corr.h>
 #include <bwm/bwm_3d_corr_sptr.h>
-#include <vcl_vector.h>
-#include <vcl_set.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
@@ -31,8 +32,8 @@ static bool compute_similarity(vnl_matrix<double> const& pts0,
   t = op.t();
   scale = op.s();
   if (! op.compute_ok()) return false;
-  vcl_cout << "Ortho procrustes error "
-           << vcl_sqrt(op.residual_mean_sq_error()) << '\n';
+  std::cout << "Ortho procrustes error "
+           << std::sqrt(op.residual_mean_sq_error()) << '\n';
   return true;
 }
 
@@ -83,15 +84,15 @@ transform_camera(vpgl_perspective_camera<double> const& cam,
 int main(int argc, char** argv)
 {
   //Get Inputs
-  vul_arg<vcl_string> corrs_path   ("-corrs", "corr input file",  "");
-  vul_arg<vcl_string> gps_file ("-gps", "gps text file (x y z in local coords per line)", "");
-  vul_arg<vcl_string> xform_file("-xform","xform file sRT ( 3x4) file ","");
-  vul_arg<vcl_string> input_cam_dir ("-in_cam_dir","directory to get cams","");
-  vul_arg<vcl_string> output_cam_dir ("-out_cam_dir","directory to store cams", "");
+  vul_arg<std::string> corrs_path   ("-corrs", "corr input file",  "");
+  vul_arg<std::string> gps_file ("-gps", "gps text file (x y z in local coords per line)", "");
+  vul_arg<std::string> xform_file("-xform","xform file sRT ( 3x4) file ","");
+  vul_arg<std::string> input_cam_dir ("-in_cam_dir","directory to get cams","");
+  vul_arg<std::string> output_cam_dir ("-out_cam_dir","directory to store cams", "");
 
   if (argc != 7) {
-    vcl_cout << "usage: bwm_3d_site_transform <-corrs <corr file>, -gps <gps file> > -in_cam_dir <dir> -out_cam_dir <dir>\n";
-    vcl_cout << "Use either -corrs to specify correspondences, or -gps to specify a text file with gps coordinates of the camera centers in local coordinates" << vcl_endl;
+    std::cout << "usage: bwm_3d_site_transform <-corrs <corr file>, -gps <gps file> > -in_cam_dir <dir> -out_cam_dir <dir>\n";
+    std::cout << "Use either -corrs to specify correspondences, or -gps to specify a text file with gps coordinates of the camera centers in local coordinates" << std::endl;
     return -1;
   }
 
@@ -100,58 +101,58 @@ int main(int argc, char** argv)
   // verify input camera dir
   if (!vul_file::is_directory(input_cam_dir().c_str()))
   {
-    vcl_cout<<"Input Camera directory does not exist"<<vcl_endl;
+    std::cout<<"Input Camera directory does not exist"<<std::endl;
     return -1;
   }
 
   // verify output camera dir
   if (!vul_file::is_directory(output_cam_dir().c_str()))
   {
-    vcl_cout<<"Output Camera directory does not exist"<<vcl_endl;
+    std::cout<<"Output Camera directory does not exist"<<std::endl;
     return -1;
   }
-  
+
   vnl_matrix<double> pts0, pts1;
   vgl_rotation_3d<double> R;
   vnl_vector_fixed<double, 3> t;
   double scale;
   if (corrs_path() != "") {
-    vcl_vector<bwm_3d_corr_sptr> corrs;
+    std::vector<bwm_3d_corr_sptr> corrs;
     bwm_observer_mgr::load_3d_corrs(corrs_path(), corrs);
     // assume correspondences between two sites only
     unsigned n = corrs.size();
-    pts0.set_size(3,n); 
+    pts0.set_size(3,n);
     pts1.set_size(3,n);
     for (unsigned i = 0; i<n; ++i) {
-      vcl_cout << *(corrs[i]);
-      vcl_vector<vgl_point_3d<double> > match_pts = corrs[i]->matching_pts();
+      std::cout << *(corrs[i]);
+      std::vector<vgl_point_3d<double> > match_pts = corrs[i]->matching_pts();
       pts0[0][i] = match_pts[0].x();  pts1[0][i] = match_pts[1].x();
       pts0[1][i] = match_pts[0].y();  pts1[1][i] = match_pts[1].y();
       pts0[2][i] = match_pts[0].z();  pts1[2][i] = match_pts[1].z();
     }
     if (!compute_similarity(pts0, pts1, R, t, scale)) {
-        vcl_cout << "similarity computation failed\n";
+        std::cout << "similarity computation failed\n";
         return -1;
     }
   }
   else if(gps_file() != "") {
-    vcl_cout << "Using GPS file to register cameras." << vcl_endl;
+    std::cout << "Using GPS file to register cameras." << std::endl;
     // create list of camera centers
-    vcl_vector<vgl_point_3d<double> > cam_centers_bundler;
-    vcl_vector<vgl_point_3d<double> > cam_centers_gps;
+    std::vector<vgl_point_3d<double> > cam_centers_bundler;
+    std::vector<vgl_point_3d<double> > cam_centers_gps;
     // get directory listing and sort
-    vcl_vector<vcl_string> filenames;
-    vcl_string in_dir = input_cam_dir() + "/*.txt";
+    std::vector<std::string> filenames;
+    std::string in_dir = input_cam_dir() + "/*.txt";
     for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
-      vcl_string fname = fn();
+      std::string fname = fn();
       filenames.push_back(fname);
     }
-    vcl_sort(filenames.begin(), filenames.end());
-    
-    vcl_string gps_fname = gps_file();
-    vcl_ifstream gps_ifs(gps_fname.c_str());
+    std::sort(filenames.begin(), filenames.end());
+
+    std::string gps_fname = gps_file();
+    std::ifstream gps_ifs(gps_fname.c_str());
     if (!gps_ifs.good()) {
-      vcl_cerr << "ERROR: error opening gps file " << gps_fname << vcl_endl;
+      std::cerr << "ERROR: error opening gps file " << gps_fname << std::endl;
       return -1;
     }
     unsigned int n_cams = filenames.size();
@@ -161,7 +162,7 @@ int main(int argc, char** argv)
       vgl_point_3d<double> gps_pt(gps_x, gps_y, gps_z);
       cam_centers_gps.push_back(gps_pt);
 
-      vcl_ifstream cam_ifs(filenames[i].c_str());
+      std::ifstream cam_ifs(filenames[i].c_str());
       vpgl_perspective_camera<double> cam;
       cam_ifs >> cam;
       cam_ifs.close();
@@ -177,23 +178,23 @@ int main(int argc, char** argv)
       pts0[2][i] = cam_centers_bundler[i].z();  pts1[2][i] = cam_centers_gps[i].z();
     }
     if (!compute_similarity(pts0, pts1, R, t, scale)) {
-        vcl_cout << "similarity computation failed\n";
+        std::cout << "similarity computation failed\n";
         return -1;
     }
   }
   else if(xform_file() != "")
   {
-      vcl_ifstream ifile( xform_file().c_str() ) ;
+      std::ifstream ifile( xform_file().c_str() ) ;
       if(!ifile)
       {
-          vcl_cout<<"Error: Cannot open" <<xform_file()<<vcl_endl;
-          return -1;  
+          std::cout<<"Error: Cannot open" <<xform_file()<<std::endl;
+          return -1;
       }
       ifile >> scale ;
       vnl_matrix<double> mat(4,4);
       ifile >> mat;
 
-      vnl_matrix<double> matr(3,3);  
+      vnl_matrix<double> matr(3,3);
       mat.extract(matr);
       matr = matr/scale;
 
@@ -207,30 +208,30 @@ int main(int argc, char** argv)
   }
   else
   {
-      vcl_cout<<"No Way to transform the cameras found "<<vcl_endl;
+      std::cout<<"No Way to transform the cameras found "<<std::endl;
       return -1;
   }
 
 
-  vcl_cout << "scale = " << scale << "\nR = " << R << "\nt = " << t << '\n';
+  std::cout << "scale = " << scale << "\nR = " << R << "\nt = " << t << '\n';
   //transform the cameras
-  vcl_string in_dir = input_cam_dir() + "/*.txt";
+  std::string in_dir = input_cam_dir() + "/*.txt";
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
-    vcl_string f = fn();
-    vcl_ifstream is(f.c_str());
+    std::string f = fn();
+    std::ifstream is(f.c_str());
     vpgl_perspective_camera<double> cam;
     is >> cam;
     is.close();
-    vcl_string fname = vul_file::strip_directory(f.c_str());
-    vcl_cout << fname << '\n';
+    std::string fname = vul_file::strip_directory(f.c_str());
+    std::cout << fname << '\n';
     vpgl_perspective_camera<double> tcam =
       transform_camera(cam, R, t, scale);
-    vcl_cout<<"CC : "<<tcam.camera_center()<<vcl_endl;
-    vcl_string out_dir = output_cam_dir() + "/";
-    vcl_string out_file = out_dir + fname;
-    vcl_ofstream os(out_file.c_str());
+    std::cout<<"CC : "<<tcam.camera_center()<<std::endl;
+    std::string out_dir = output_cam_dir() + "/";
+    std::string out_file = out_dir + fname;
+    std::ofstream os(out_file.c_str());
     os << tcam;
     os.close();
-  } 
+  }
   return 0;
 }

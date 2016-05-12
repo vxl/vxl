@@ -1,4 +1,7 @@
 // This is brl/bpro/core/brip_pro/processes/brip_blob_intersection_process.cxx
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -9,8 +12,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_chord.h>
 #include <bbas_pro/bbas_1d_array_float.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 namespace brip_blob_intersection_process_globals
 {
@@ -24,11 +26,11 @@ bool brip_blob_intersection_process_cons(bprb_func_process& pro)
   using namespace brip_blob_intersection_process_globals;
 
   // this process takes 2 inputs:
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // modeled blob map
   input_types.push_back("vil_image_view_base_sptr");  // ground truth map
   // this process takes 3 outputs:
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("int");  // num true positives
   output_types.push_back("int");  // num false positives
   output_types.push_back("int");  // num blobs in GT
@@ -44,7 +46,7 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
 
   // Sanity check
   if (pro.n_inputs() < n_inputs_) {
-    vcl_cerr << "brip_blob_intersection_process: The number of inputs should be 2\n";
+    std::cerr << "brip_blob_intersection_process: The number of inputs should be 2\n";
     return false;
   }
 
@@ -54,19 +56,19 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
 
   // check bounds to make sure they match
   if (blob_sptr->ni() != gt_sptr->ni() || blob_sptr->nj() != gt_sptr->nj()) {
-    vcl_cout<<"brip_blob_intersection_process:: detection map doesn't match ground truth map"<<vcl_endl;
+    std::cout<<"brip_blob_intersection_process:: detection map doesn't match ground truth map"<<std::endl;
     return false;
   }
 
   // cast to usable image views
   vil_image_view<vxl_byte> * gt_uchar = dynamic_cast<vil_image_view<vxl_byte> *>(gt_sptr.ptr());
   if ( !gt_uchar ) {
-    vcl_cout<<"brip_blob_intersection_process:: gt map is not an unsigned char map"<<vcl_endl;
+    std::cout<<"brip_blob_intersection_process:: gt map is not an unsigned char map"<<std::endl;
     return false;
   }
   vil_image_view<unsigned char> * blob_uchar =dynamic_cast<vil_image_view<unsigned char> *>(blob_sptr.ptr());
   if (!blob_uchar) {
-    vcl_cout<<"brip_blob_intersection_process:: blob map is not an unsigned char map"<<vcl_endl;
+    std::cout<<"brip_blob_intersection_process:: blob map is not an unsigned char map"<<std::endl;
     return false;
   }
 
@@ -82,11 +84,11 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
   // blob detect each image
   bil_blob_finder gt_finder(gt_map);
   bil_blob_finder mp_finder(blob_map);
-  typedef vcl_vector<vil_chord> blob_t;
-  vcl_vector<blob_t> gt_blobs, mp_blobs;
+  typedef std::vector<vil_chord> blob_t;
+  std::vector<blob_t> gt_blobs, mp_blobs;
 
   // blob region is just a vector of vil_chords (rows in image)
-  vcl_vector<vil_chord> region;
+  std::vector<vil_chord> region;
   while (gt_finder.next_4con_region(region))
     gt_blobs.push_back(region);
   while (mp_finder.next_4con_region(region))
@@ -95,7 +97,7 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
   // ---- cross check blobs ---------
   int numTP=0;
   bool* trueBlobs = new bool[mp_blobs.size()];
-  vcl_fill(trueBlobs, trueBlobs+mp_blobs.size(), false);
+  std::fill(trueBlobs, trueBlobs+mp_blobs.size(), false);
   for (unsigned int i=0; i<gt_blobs.size(); ++i) {
     bool gt_blob_found = false;
     for (unsigned int j=0; j<mp_blobs.size(); ++j) {
@@ -134,7 +136,6 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
       // determine true positive, false positive
       if (intersects && !gt_blob_found) {
         numTP++;
-        gt_blob_found = true;
         break;
       }
     }
@@ -147,7 +148,7 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
 
   // set outputs
   if (pro.n_outputs() < n_outputs_) {
-    vcl_cerr << "brip_blob_intersection_process: The number of outputs should be "<<n_outputs_<<'\n';
+    std::cerr << "brip_blob_intersection_process: The number of outputs should be "<<n_outputs_<<'\n';
     return false;
   }
   pro.set_output_val<int>(0, numTP);

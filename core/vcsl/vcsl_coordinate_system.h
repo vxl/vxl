@@ -4,20 +4,21 @@
 //:
 // \file
 // \brief Abstract coordinate system
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2002/01/22 Peter Vanroose - return type of from_cs_to_standard_units() and from_standard_units_to_cs() changed non-ptr
 //   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 //   2004/09/17 Peter Vanroose - made dimensionality() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vcsl/vcsl_coordinate_system_sptr.h>
 #include <vcsl/vcsl_axis_sptr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 class vcsl_spatial;
 
@@ -80,7 +81,7 @@ class vcsl_coordinate_system
   //***************************************************************************
 
   //: List of axes
-  vcl_vector<vcsl_axis_sptr> axes_;
+  std::vector<vcsl_axis_sptr> axes_;
 };
 
 #endif // vcsl_coordinate_system_h_

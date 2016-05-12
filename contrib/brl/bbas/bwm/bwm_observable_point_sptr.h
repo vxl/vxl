@@ -1,4 +1,4 @@
-#ifndef bwm_observable_point_sptr_h_ 
+#ifndef bwm_observable_point_sptr_h_
 #define bwm_observable_point_sptr_h_
 
 #include <bwm/bwm_observable_sptr.h>

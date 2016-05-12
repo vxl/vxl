@@ -13,7 +13,9 @@
 //   221198 - Peter Vanroose - Added CrossRatio() and Conjugate()
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 class Homg2D;
 class HomgLine2D;
 class HomgPoint2D;
@@ -56,7 +58,7 @@ class HomgOperator2D
                                              double x1, double y1);
 
   // "Intersect" a set of lines
-  static HomgPoint2D lines_to_point(const vcl_vector<HomgLine2D>&);
+  static HomgPoint2D lines_to_point(const std::vector<HomgLine2D>&);
 
   // cross ratio of four collinear points, or four concurrent lines
   static double CrossRatio(const Homg2D& p1, const Homg2D& p2,

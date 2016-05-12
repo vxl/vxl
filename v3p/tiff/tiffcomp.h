@@ -49,17 +49,10 @@
 #define __acornriscos
 #endif
 
-#if defined(__MWERKS__) || defined(THINK_C)
-#include <unix.h>
-#include <math.h>
-#endif
-
 #include <stdio.h>
 
 #if defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #include <types.h>
-#elif !defined(__MWERKS__) && !defined(THINK_C) && !defined(__acornriscos) && !defined(applec)
-#include <sys/types.h>
 #endif
 
 #if defined(VMS)
@@ -77,7 +70,7 @@
  * additional includes are also done to pull in the
  * appropriate definitions we're looking for.
  */
-#if defined(__MWERKS__) || defined(THINK_C) || defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
+#if defined(THINK_C) || defined(__PPCC__) || defined(__SC__) || defined(__MRC__)
 #include <stdlib.h>
 #define BSDTYPES
 #define HAVE_UNISTD_H 0

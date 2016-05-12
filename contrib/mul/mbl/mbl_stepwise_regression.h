@@ -6,7 +6,9 @@
 // \brief Conduct stepwise regression
 // \author Martin Roberts
 
-#include <vcl_set.h>
+#include <iostream>
+#include <set>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
@@ -30,9 +32,9 @@ class mbl_stepwise_regression
     //: [x,-1]'[y,-1]
     vnl_vector<double> XtY_;
     //: Basis (i.e. all significant variables)
-    vcl_set<unsigned> basis_ ;
+    std::set<unsigned> basis_ ;
     //: All non-basis variables
-    vcl_set<unsigned> basis_complement_ ;
+    std::set<unsigned> basis_complement_ ;
     //: The regression coefficients + constant (final term)
     vnl_vector<double> weights_;
 
@@ -87,7 +89,7 @@ class mbl_stepwise_regression
 
     //: return the basis variables
     // I.e. those determined to be significantly correlated with y in stepwise search
-    const vcl_set<unsigned > basis() const {return basis_;}
+    const std::set<unsigned > basis() const {return basis_;}
 
     //: Set the mode to forwards or backwards
     // Note backwards can take a long compute time in a space of high dimension
@@ -113,7 +115,7 @@ namespace mbl_stepwise_regression_helpers
         //: x'y
         const vnl_vector<double>& XtY_;
         //: the basis (note ordered by variable index)
-        vcl_set<unsigned> basis_ ;
+        std::set<unsigned> basis_ ;
         //: number of training examples (i.e. number of rows in x_)
         unsigned num_examples_;
         //: dimensionality - (i.e. number of columns in x_)
@@ -134,9 +136,9 @@ namespace mbl_stepwise_regression_helpers
                 num_vars_ = x.cols();
             }
         //: Set the basis
-        void set_basis(vcl_set<unsigned>& basis) {basis_ = basis;}
+        void set_basis(std::set<unsigned>& basis) {basis_ = basis;}
         //: return the basis
-        const vcl_set<unsigned>& basis() const {return basis_;}
+        const std::set<unsigned>& basis() const {return basis_;}
 
         //:Try adding variable k to the basis and then fit the extended basis, returning resid sum of squares
         // Note the basis is not actually updated, only temporarily for the duration of this call

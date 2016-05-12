@@ -1,4 +1,10 @@
 //this is /contrib/bm/bseg/bvpl/pro/bvpl_bundler_features_2d_compute_process.cxx
+#include <vector>
+#include <set>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iterator>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -19,13 +25,8 @@
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
 
-#include <vcl_vector.h>
-#include <vcl_set.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
 
 #include<vgl/vgl_point_2d.h>
 #include<vgl/vgl_point_3d.h>
@@ -62,7 +63,7 @@ struct kernel
   vgl_point_2d<float> min_pt;
   vgl_point_2d<float> max_pt;
   vnl_vector<double> w;
-  vcl_vector<vgl_point_2d<float> > locs;
+  std::vector<vgl_point_2d<float> > locs;
 };
 
 namespace bvpl_bundler_features_2d_compute_globals
@@ -75,8 +76,8 @@ bool bvpl_bundler_features_2d_compute_process_cons( bprb_func_process& pro )
 {
   using namespace bvpl_bundler_features_2d_compute_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   unsigned i = 0;
   input_types_[i++] = "vcl_string";//bundler output file
@@ -88,7 +89,7 @@ bool bvpl_bundler_features_2d_compute_process_cons( bprb_func_process& pro )
 
   if (!pro.set_input_types(input_types_))
   {
-    vcl_cerr << "----ERROR---- bvpl_bundler_features_2d_compute_process_cons\n"
+    std::cerr << "----ERROR---- bvpl_bundler_features_2d_compute_process_cons\n"
              << "\tCOULD NOT SET INPUT TYPES.\n"
              << __FILE__ << '\n'
              << __LINE__ << '\n';
@@ -97,7 +98,7 @@ bool bvpl_bundler_features_2d_compute_process_cons( bprb_func_process& pro )
 
   if (!pro.set_output_types(output_types_))
   {
-    vcl_cerr << "----ERROR---- bvpl_bundler_features_2d_compute_process_cons\n"
+    std::cerr << "----ERROR---- bvpl_bundler_features_2d_compute_process_cons\n"
              << "\tCOULD NOT SET OUTPUT TYPES.\n"
              << __FILE__ << '\n'
              << __LINE__ << '\n';
@@ -113,32 +114,32 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
   if ( pro.n_inputs() != n_inputs_ )
   {
-    vcl_cerr << pro.name()
+    std::cerr << pro.name()
              << " bvpl_bundler_features_2d_compute_process: NUMBER OF INPUTS SHOULD BE: "
-             << n_inputs_ << vcl_endl;
+             << n_inputs_ << std::endl;
     return false;
   }
 
   //get inputs
   unsigned i = 0;
-  vcl_string bundlerfile    = pro.get_input<vcl_string>(i++);
-  vcl_string img_glob    = pro.get_input<vcl_string>(i++);
-  vcl_string bad_cam_file   = pro.get_input<vcl_string>(i++);
-  vcl_string kernel_dir    = pro.get_input<vcl_string>(i++);
+  std::string bundlerfile    = pro.get_input<std::string>(i++);
+  std::string img_glob    = pro.get_input<std::string>(i++);
+  std::string bad_cam_file   = pro.get_input<std::string>(i++);
+  std::string kernel_dir    = pro.get_input<std::string>(i++);
 
   //------ PARSE BAD CAMERAS --------
-  vcl_ifstream bcfile( bad_cam_file.c_str() );
+  std::ifstream bcfile( bad_cam_file.c_str() );
 
   if ( !bcfile )
   {
-    vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
+    std::cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tERROR OPENING BAD CAMERA FILE.\n"
              << __FILE__ << '\n'
              << __LINE__ << '\n';
     return false;
   }
 
-  vcl_set<unsigned> bad_cams;
+  std::set<unsigned> bad_cams;
 
   while ( !bcfile.eof() )
   {
@@ -151,14 +152,14 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
   if ( !vul_file::is_directory(kernel_dir) )
   {
-    vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
+    std::cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tKERNEL DIRECTORY NOT VALID.\n"
              << __FILE__ << '\n'
              << __LINE__ << '\n';
     return false;
   }
 
-  vcl_vector<vcl_string> filenames;
+  std::vector<std::string> filenames;
   filenames.push_back("I0");
   filenames.push_back("Ix");
   filenames.push_back("Iy");
@@ -166,20 +167,20 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   filenames.push_back("Iyy");
   filenames.push_back("Ixy");
 
-  vcl_map<vcl_string, kernel > kernel_map;
+  std::map<std::string, kernel > kernel_map;
 
-  vcl_vector<vcl_string>::const_iterator
+  std::vector<std::string>::const_iterator
     k_itr, k_end = filenames.end();
 
   for ( k_itr = filenames.begin();
         k_itr != k_end; ++k_itr )
   {
-    vcl_string fname = kernel_dir + "//" + *k_itr + ".txt";
-    vcl_ifstream kernel_file(fname.c_str());
+    std::string fname = kernel_dir + "//" + *k_itr + ".txt";
+    std::ifstream kernel_file(fname.c_str());
 
     if ( !kernel_file.good() )
     {
-      vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
+      std::cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
                << "\tCOULD NOT OPEN KERNEL: " << *k_itr << '\n'
                << __FILE__ << '\n'
                << __LINE__ << '\n';
@@ -212,7 +213,6 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
       k.locs.push_back(loc);
       w[idx++] = weight;
     }//end kernel weight iteration
-    idx = 0;
     k.w.set_size(w.size());
     k.w = w;
     kernel_map[*k_itr] = k;
@@ -220,11 +220,11 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   }//end kernel file iteration
 
   //------ READING & PROCESSING BUNDLER FILE --------
-  vcl_ifstream bfile(bundlerfile.c_str());
+  std::ifstream bfile(bundlerfile.c_str());
 
   if (!bfile)
   {
-    vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
+    std::cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tERROR OPENING BUNDLER OUTPUT FILE.\n"
              << __FILE__ << '\n'
              << __LINE__ << '\n';
@@ -235,7 +235,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
   if (!video_stream.is_open())
   {
-    vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
+    std::cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tINVALID VIDEO STREAM.\n"
              << __FILE__ << '\n'
              << __LINE__ << '\n';
@@ -254,7 +254,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
 
   if (bfile.eof())
   {
-    vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
+    std::cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
              << "\tMISSING BUNDLER FILE DATA.\n"
              << __FILE__ << '\n'
              << __LINE__ << '\n';
@@ -276,12 +276,12 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     bfile>>R>>T;
   }//end num_cams iteration
 
-  vcl_vector<bwm_video_corr_sptr> corrs;
+  std::vector<bwm_video_corr_sptr> corrs;
 
   //relation view number - 2d point
-  vcl_map<unsigned, vcl_set<vgl_point_2d<double>,coord_compare_2d > > view_point_map;
+  std::map<unsigned, std::set<vgl_point_2d<double>,coord_compare_2d > > view_point_map;
 
-  vcl_cout << "Reading points..." << vcl_endl;
+  std::cout << "Reading points..." << std::endl;
 
   //to minimize loading time calculate all points in each image we
   //need to calculate the value of the kernel at then load each
@@ -289,7 +289,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   for ( unsigned  i = 0; i < num_pts; ++i )
   {
 //#ifdef _DEBUG
-//    vcl_cout << "Reading point: " << i << " of " << num_pts << vcl_endl;
+//    std::cout << "Reading point: " << i << " of " << num_pts << std::endl;
 //#endif//_DEBUG
     bwm_video_corr_sptr corr = new bwm_video_corr();
     //read the 3d point
@@ -327,7 +327,7 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
         corr->add(view_number,vgl_point_2d<double>(img_x,img_y));
         if ( !view_point_map.count(view_number) )
         {
-          vcl_set<vgl_point_2d<double>,coord_compare_2d > temp;
+          std::set<vgl_point_2d<double>,coord_compare_2d > temp;
           temp.insert(vgl_point_2d<double>(img_x,img_y));
           view_point_map[view_number] = temp;
         }
@@ -340,26 +340,26 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   }//end num_pts iteration
 
   //----------Compute Values of Kernels in Ea. View--------
-  vcl_map<unsigned, vcl_set<vgl_point_2d<double>, coord_compare_2d > >::const_iterator
+  std::map<unsigned, std::set<vgl_point_2d<double>, coord_compare_2d > >::const_iterator
     v_itr = view_point_map.begin(), v_end = view_point_map.end();
 
-  vcl_map<unsigned, vcl_map<vgl_point_2d<double>, vnl_vector<double>, coord_compare_2d> > view_pt_2d_feature_map;
+  std::map<unsigned, std::map<vgl_point_2d<double>, vnl_vector<double>, coord_compare_2d> > view_pt_2d_feature_map;
 
   //for ( v_itr = view_point_map.begin(); v_itr != v_end; ++v_itr )
 #ifdef _DEBUG
-  vcl_size_t org_size = view_point_map.size();
+  std::size_t org_size = view_point_map.size();
 #endif //_DEBUG
-  vcl_cout << "Computing Kernels on All Images:" << vcl_endl;
+  std::cout << "Computing Kernels on All Images:" << std::endl;
   while ( !view_point_map.empty() )
   {
 #ifdef _DEBUG
-    vcl_cout << "Computing Kernels on image: " << org_size - vcl_distance(v_itr,v_end) << " of " << org_size << vcl_endl;
+    std::cout << "Computing Kernels on image: " << org_size - std::distance(v_itr,v_end) << " of " << org_size << std::endl;
 #endif //_DEBUG
 
     //load the image
     if ( !video_stream.seek_frame(v_itr->first) )
     {
-      vcl_cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
+      std::cerr << "---ERROR---- bvpl_bundler_features_2d_compute_process\n"
                << "\tCOULD NOT FIND FRAME: " <<v_itr->first << '\n'
                << __FILE__ << '\n'
                << __LINE__ << '\n';
@@ -378,10 +378,10 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     }
 
     //calculate the value of the kernel at each point
-    vcl_set<vgl_point_2d<double>, coord_compare_2d >::const_iterator
+    std::set<vgl_point_2d<double>, coord_compare_2d >::const_iterator
       p_itr, p_end = v_itr->second.end();
 
-    vcl_map<vgl_point_2d<double>, vnl_vector<double>, coord_compare_2d> point_2d_feature_map;
+    std::map<vgl_point_2d<double>, vnl_vector<double>, coord_compare_2d> point_2d_feature_map;
     for ( p_itr = v_itr->second.begin(); p_itr != p_end; ++p_itr )
     {
       vnl_vector<double> feature_vector(filenames.size());
@@ -424,52 +424,52 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
           feature_vector[5] = f;
       }//end kernel filename iteration
 
-      point_2d_feature_map.insert(vcl_make_pair(*p_itr,feature_vector));
+      point_2d_feature_map.insert(std::make_pair(*p_itr,feature_vector));
     }//end point iteration
 
-    view_pt_2d_feature_map.insert(vcl_make_pair(v_itr->first,point_2d_feature_map));
+    view_pt_2d_feature_map.insert(std::make_pair(v_itr->first,point_2d_feature_map));
 
     //free the memory storing points and views
-    //vcl_cout << "\tErasing " << v_itr->first << vcl_endl;
+    //std::cout << "\tErasing " << v_itr->first << std::endl;
     view_point_map.erase(v_itr->first);
 
     if ( !view_point_map.empty() )
     {
-      //vcl_cout << "\t\tThe map is not empty." << vcl_endl;
+      //std::cout << "\t\tThe map is not empty." << std::endl;
       v_itr = view_point_map.begin();
       v_end = view_point_map.end();
     }
     //else
-      //vcl_cout << "\t\tThe map is empty." << vcl_endl;
+      //std::cout << "\t\tThe map is empty." << std::endl;
   }//end view iteration
 
   bvpl_bundler_features_2d_sptr bundler_features_sptr =
     new bvpl_bundler_features_2d();
   //iterate through correspondences and associate the correct
   //3d point with the 2d feature
-  vcl_vector<bwm_video_corr_sptr>::const_iterator c_itr, c_end = corrs.end();
+  std::vector<bwm_video_corr_sptr>::const_iterator c_itr, c_end = corrs.end();
 
-    vcl_cout << "Retrieving features associated with 3d points.\n" << vcl_endl;
+    std::cout << "Retrieving features associated with 3d points.\n" << std::endl;
   for ( c_itr = corrs.begin(); c_itr != c_end; ++c_itr)
   {
 #ifdef _DEBUG
-    vcl_cout << "Processing: " << corrs.size() - vcl_distance(c_itr,c_end) << " of " << corrs.size() << vcl_endl;
+    std::cout << "Processing: " << corrs.size() - std::distance(c_itr,c_end) << " of " << corrs.size() << std::endl;
 #endif //_DEBUG
-    vcl_map<unsigned, vgl_point_2d<double> > matches = (*c_itr)->matches();
+    std::map<unsigned, vgl_point_2d<double> > matches = (*c_itr)->matches();
 
-    vcl_map<unsigned, vgl_point_2d<double> >::iterator m_itr, m_end = matches.end();
+    std::map<unsigned, vgl_point_2d<double> >::iterator m_itr, m_end = matches.end();
 
-    vcl_map<unsigned, vnl_vector<double> > vf_map;
+    std::map<unsigned, vnl_vector<double> > vf_map;
     for ( m_itr = matches.begin(); m_itr != m_end; ++m_itr )
     {
-      vcl_map<vgl_point_2d<double>, vnl_vector<double>, coord_compare_2d>::const_iterator
+      std::map<vgl_point_2d<double>, vnl_vector<double>, coord_compare_2d>::const_iterator
         pf_itr = view_pt_2d_feature_map[m_itr->first].find(m_itr->second);
       if ( pf_itr != view_pt_2d_feature_map[m_itr->first].end() )
-        vf_map.insert(vcl_make_pair(m_itr->first,view_pt_2d_feature_map[m_itr->first][m_itr->second]));
+        vf_map.insert(std::make_pair(m_itr->first,view_pt_2d_feature_map[m_itr->first][m_itr->second]));
     }//end match iteration
     if ( !vf_map.empty() )
       bundler_features_sptr->pt_view_feature_map.insert(
-        vcl_make_pair((*c_itr)->world_pt(), vf_map) );
+        std::make_pair((*c_itr)->world_pt(), vf_map) );
   }
 
   pro.set_output_val(0, bundler_features_sptr);

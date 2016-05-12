@@ -10,7 +10,8 @@
 // \author awf@robots.ox.ac.uk
 // \date 15 Mar 00
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 #include <vil1/vil1_image.h>
 
 //: Load an image from disk
@@ -29,12 +30,12 @@ class vil1_file_image : public vil1_image
   //: Attempt to load named file
   vil1_file_image(char const* filename, verbosity v=verbose) {load(filename,v);}
   //: Attempt to load named file
-  vil1_file_image(vcl_string const& f, verbosity v=verbose) { load(f, v); }
+  vil1_file_image(std::string const& f, verbosity v=verbose) { load(f, v); }
 
   //: Attempt to load named file
   bool load(char const* filename, verbosity = verbose);
   //: Attempt to load named file
-  bool load(vcl_string const&, verbosity = verbose);
+  bool load(std::string const&, verbosity = verbose);
 };
 
 #endif // vil1_file_image_h_

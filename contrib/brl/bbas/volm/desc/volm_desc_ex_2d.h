@@ -14,8 +14,9 @@
 //   <none yet>
 // \endverbatim
 //
+#include <iostream>
 #include "volm_desc.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <volm_io.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
@@ -31,7 +32,7 @@ public:
   volm_desc_ex_2d() {}
 
   //: constructor to create an empty descriptor
-  volm_desc_ex_2d(vcl_vector<double> const& radius,
+  volm_desc_ex_2d(std::vector<double> const& radius,
                   double const& h_width = 360.0, double const& h_inc = 360.0,
                   unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                   unsigned char const& initial_mag = 0);
@@ -53,13 +54,13 @@ public:
   //: heading incremental
   double h_inc() const { return h_inc_; }
   //: the radius that defines the distance interval
-  vcl_vector<double>& radius(){ return radius_; }
+  std::vector<double>& radius(){ return radius_; }
   //: the heading intervals
-  vcl_vector<vcl_pair<double, double> >& heading_intervals() { return heading_intervals_; }
+  std::vector<std::pair<double, double> >& heading_intervals() { return heading_intervals_; }
 
   //: get the bin index from object distance, land type and heading direction (return index larger than nbins if invalid)
   //: multiple values exist due to heading bins overlap
-  vcl_vector<unsigned> bin_index(double const& dist, unsigned const& land, double const& heading) const;
+  std::vector<unsigned> bin_index(double const& dist, unsigned const& land, double const& heading) const;
 
   //: get the bin index from distance bin index, land bin index and heading index (return index larger than nbins if invalid)
   unsigned bin_index(unsigned const& dist_idx, unsigned const& land_idx, unsigned const& heading_idx) const;
@@ -99,10 +100,10 @@ private:
   unsigned nheadings_;
   double h_width_;
   double h_inc_;
-  vcl_vector<double> radius_;
-  vcl_vector<vcl_pair<double, double> > heading_intervals_;
+  std::vector<double> radius_;
+  std::vector<std::pair<double, double> > heading_intervals_;
 
-  unsigned locate_idx(double const& target, vcl_vector<double> const& arr) const;
+  unsigned locate_idx(double const& target, std::vector<double> const& arr) const;
 };
 
 

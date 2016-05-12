@@ -13,13 +13,14 @@
 // \endverbatim
 //=========================================================================
 
+#include <map>
 #include <vgui/vgui_menu.h>
 
 #include <wx/event.h>
 class wxMenu;
 class wxMenuBar;
 
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 //: The wxWidgets mapping of the vgui_menu.
@@ -45,7 +46,7 @@ private:
   wxMenu* create_wx_submenu(const vgui_menu& menu);
 
   //: Create the accelerator substring to add to the menu item name.
-  vcl_string create_accelerator_string(const vgui_menu_item& item) const;
+  std::string create_accelerator_string(const vgui_menu_item& item) const;
 
   //: Disconnect the Event Handlers from the event table.
   void disconnect_handlers();
@@ -56,7 +57,7 @@ private:
   static const int MENU_ID_OFFSET;
   int item_count_;
 
-  vcl_map<int,vgui_command_sptr> handlers_;
+  std::map<int,vgui_command_sptr> handlers_;
 };
 
 #endif // vgui_wx_menu_h_

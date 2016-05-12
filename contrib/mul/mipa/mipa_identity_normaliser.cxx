@@ -15,9 +15,9 @@ void mipa_identity_normaliser::normalise(vnl_vector<double>& ) const
 
 //=======================================================================
 
-vcl_string mipa_identity_normaliser::is_a() const
+std::string mipa_identity_normaliser::is_a() const
 {
-    return vcl_string("mipa_identity_normaliser");
+    return std::string("mipa_identity_normaliser");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -27,7 +27,7 @@ mipa_vector_normaliser* mipa_identity_normaliser::clone() const
 }
 
 //: Print class to os
-void mipa_identity_normaliser::print_summary(vcl_ostream& os) const
+void mipa_identity_normaliser::print_summary(std::ostream& os) const
 {
     os<<is_a()<<'\n';
 }

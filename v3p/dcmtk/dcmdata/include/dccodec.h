@@ -54,7 +54,7 @@ public:
 
     /// destructor
     virtual ~DcmCodecParameter() {}
-    
+
     /** this methods creates a copy of type DcmCodecParameter *
      *  it must be overweritten in every subclass.
      *  @return copy of this object
@@ -66,12 +66,12 @@ public:
      */
     virtual const char *className() const = 0;
 
-};                    
+};
 
 
 /** abstract base class for a codec object that can be registered
  *  in dcmdata and performs transfer syntax transformation (i.e.
- *  compressing, decompressing or transcoding between different 
+ *  compressing, decompressing or transcoding between different
  *  compressed transfer syntaxes).
  *  When dcmdata is requested to write a transfer syntax that differs
  *  from the current one (i.e. the one in which the object was read),
@@ -110,7 +110,7 @@ public:
    *  @param toRepParam representation parameter describing the desired
    *    compressed representation (e.g. JPEG quality)
    *  @param pixSeq compressed pixel sequence (pointer to new DcmPixelSequence object
-   *    allocated on heap) returned in this parameter upon success.   
+   *    allocated on heap) returned in this parameter upon success.
    *  @param cp codec parameters for this codec
    *  @param objStack stack pointing to the location of the pixel data
    *    element in the current dataset.
@@ -132,7 +132,7 @@ public:
    *  @param toRepParam representation parameter describing the desired
    *    new compressed representation (e.g. JPEG quality)
    *  @param toPixSeq compressed pixel sequence (pointer to new DcmPixelSequence object
-   *    allocated on heap) returned in this parameter upon success.   
+   *    allocated on heap) returned in this parameter upon success.
    *  @param cp codec parameters for this codec
    *  @param objStack stack pointing to the location of the pixel data
    *    element in the current dataset.
@@ -159,7 +159,7 @@ public:
       const E_TransferSyntax newRepType) const = 0;
 
 
-  // static helper methods that have proven useful in codec classes derived from DcmCodec 
+  // static helper methods that have proven useful in codec classes derived from DcmCodec
 
   /** helper function that inserts a string attribute with a given value into a dataset
    *  if missing in the dataset.
@@ -167,7 +167,7 @@ public:
    *  @param tag tag key of attribute to check/insert
    *  @param val string value, may be NULL.
    *  @return EC_Normal if successful, an error code otherwise
-   */   
+   */
   static OFCondition insertStringIfMissing(DcmItem *dataset, const DcmTagKey& tag, const char *val);
 
   /** helper function that converts a dataset containing a DICOM image
@@ -179,7 +179,7 @@ public:
    *  @param tag tag key of attribute to check/insert
    *  @param val string value, may be NULL.
    *  @return EC_Normal if successful, an error code otherwise
-   */   
+   */
   static OFCondition convertToSecondaryCapture(DcmItem *dataset);
 
   /** create new SOP instance UID and Source Image Sequence
@@ -215,17 +215,17 @@ public:
    *  This function must not be called before main() is started, e.g. from
    *  a constructor of a global object.
    *  This call is safe in multi-thread operations.
-   *  @param aCodec pointer to codec object.  
-   *    Must remain unmodified and valid until the codec has been deregistered. 
-   *  @param aDefaultRepParam default representation parameter. 
-   *    Must remain unmodified and valid until the codec has been deregistered. 
-   *  @param aCodecParameter codec parameter. 
+   *  @param aCodec pointer to codec object.
+   *    Must remain unmodified and valid until the codec has been deregistered.
+   *  @param aDefaultRepParam default representation parameter.
+   *    Must remain unmodified and valid until the codec has been deregistered.
+   *  @param aCodecParameter codec parameter.
    *    Must remain unmodified and valid until the codec has been deregistered or the
    *    parameter has been replaced by a call to updateCodecParameter()
    *  @return EC_Normal if successful, an error code otherwise
    */
   static OFCondition registerCodec(
-    const DcmCodec *aCodec,  
+    const DcmCodec *aCodec,
     const DcmRepresentationParameter *aDefaultRepParam,
     const DcmCodecParameter *aCodecParameter);
 
@@ -235,11 +235,11 @@ public:
    *  @return EC_Normal if successful, an error code otherwise
    */
   static OFCondition deregisterCodec(const DcmCodec *aCodec);
-    
+
   /** updates the codec parameters object for a codec that has been registered before.
    *  This call is safe in multi-thread operations.
    *  @param aCodec pointer to codec object that has been registered before
-   *  @param aCodecParameter codec parameter. 
+   *  @param aCodecParameter codec parameter.
    *    Must remain unmodified and valid until the codec has been deregistered or the
    *    parameter has been replaced by another call to updateCodecParameter()
    *  @return EC_Normal if successful, an error code otherwise
@@ -278,7 +278,7 @@ public:
    *  @param toRepParam representation parameter describing the desired
    *    compressed representation (e.g. JPEG quality)
    *  @param pixSeq compressed pixel sequence (pointer to new DcmPixelSequence object
-   *    allocated on heap) returned in this parameter upon success.   
+   *    allocated on heap) returned in this parameter upon success.
    *  @param pixelStack stack pointing to the location of the pixel data
    *    element in the current dataset.
    *  @return EC_Normal if successful, an error code otherwise.
@@ -304,15 +304,15 @@ public:
    *  @param toRepParam representation parameter describing the desired
    *    new compressed representation (e.g. JPEG quality)
    *  @param toPixSeq compressed pixel sequence (pointer to new DcmPixelSequence object
-   *    allocated on heap) returned in this parameter upon success.   
+   *    allocated on heap) returned in this parameter upon success.
    *  @param pixelStack stack pointing to the location of the pixel data
    *    element in the current dataset.
    *  @return EC_Normal if successful, an error code otherwise.
    */
   static OFCondition encode(
     const E_TransferSyntax fromRepType,
-    const DcmRepresentationParameter * fromParam, 
-    DcmPixelSequence * fromPixSeq, 
+    const DcmRepresentationParameter * fromParam,
+    DcmPixelSequence * fromPixSeq,
     const E_TransferSyntax toRepType,
     const DcmRepresentationParameter * toRepParam,
     DcmPixelSequence * & toPixSeq,
@@ -334,33 +334,33 @@ public:
 private:
 
   /** constructor
-   *  @param aCodec pointer to codec object.  
-   *  @param aDefaultRepParam default representation parameter. 
-   *  @param aCodecParameter codec parameter. 
+   *  @param aCodec pointer to codec object.
+   *  @param aDefaultRepParam default representation parameter.
+   *  @param aCodecParameter codec parameter.
    */
   DcmCodecList(
-    const DcmCodec *aCodec,  
+    const DcmCodec *aCodec,
     const DcmRepresentationParameter *aDefaultRepParam,
     const DcmCodecParameter *aCodecParameter);
 
-  /// private undefined copy constructor 
+  /// private undefined copy constructor
   DcmCodecList(const DcmCodecList &);
 
-  /// private undefined copy assignment operator 
+  /// private undefined copy assignment operator
   DcmCodecList &operator=(const DcmCodecList &);
 
   /// pointer to codec object
   const DcmCodec * codec;
-  
+
   /// pointer to default representation parameter
   const DcmRepresentationParameter * defaultRepParam;
-  
+
   /// pointer to codec parameter set
   const DcmCodecParameter * codecParameter;
 
   /// singleton list of registered codecs
   static OFList<DcmCodecList *> registeredCodecs;
-  
+
 #ifdef _REENTRANT
   /// read/write lock guarding access to singleton list
   static OFReadWriteLock codecLock;
@@ -370,6 +370,6 @@ private:
   // that this class only defines private constructors and has no friends.
   friend class DcmCodecListDummyFriend;
 };
- 
+
 
 #endif

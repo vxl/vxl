@@ -1,6 +1,7 @@
 // This is mul/vimt3d/tests/test_resample.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vimt3d/vimt3d_resample_trilinear.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 
@@ -8,7 +9,7 @@
 //========================================================================
 static void test_resample_trilinear_scale_2()
 {
-  vcl_cout << "*******************************************\n"
+  std::cout << "*******************************************\n"
            << " Testing vimt3d_resample_trilinear_scale_2\n"
            << "*******************************************\n";
 
@@ -29,8 +30,8 @@ static void test_resample_trilinear_scale_2()
 
 
   // Testing
-//  src.print_all(vcl_cout);
-//  dst.print_all(vcl_cout);
+//  src.print_all(std::cout);
+//  dst.print_all(std::cout);
   ///
 
   bool all_voxs_correct = true;
@@ -55,7 +56,7 @@ static void test_resample_trilinear_scale_2()
 //========================================================================
 static void test_resample_trilin_smoothing_edge_extend()
 {
-  vcl_cout << "******************************************************\n"
+  std::cout << "******************************************************\n"
            << " Testing vimt3d_resample_trilin_smoothing_edge_extend\n"
            << "******************************************************\n";
 
@@ -78,8 +79,8 @@ static void test_resample_trilin_smoothing_edge_extend()
 
 
   // Testing
- // src.print_all(vcl_cout);
- // dst.print_all(vcl_cout);
+ // src.print_all(std::cout);
+ // dst.print_all(std::cout);
   ///
 
   bool all_voxs_correct = true;

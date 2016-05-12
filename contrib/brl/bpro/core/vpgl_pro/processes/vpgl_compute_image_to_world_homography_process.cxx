@@ -1,7 +1,7 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_compute_image_to_world_homography_process.cxx
 //:
 // \file
-// \brief 
+// \brief
 // \date May 19, 2014
 
 #include <bprb/bprb_func_process.h>
@@ -16,14 +16,14 @@
 bool vpgl_compute_image_to_world_homography_process_cons(bprb_func_process& pro)
 {
   //set output types
-  vcl_vector<vcl_string> input_types_(3);
+  std::vector<std::string> input_types_(3);
   int i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";  // camera  -- pass local rational camera
   input_types_[i++] = "bbas_1d_array_float_sptr";    //world plane
-  input_types_[i++] = "bool"; 
+  input_types_[i++] = "bool";
   if (!pro.set_input_types(input_types_))
     return false;
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "bbas_1d_array_float_sptr";  // output affine camera
   return pro.set_output_types(output_types_);
 }
@@ -38,7 +38,7 @@ bool vpgl_compute_image_to_world_homography_process(bprb_func_process& pro)
   vgl_plane_3d<double> plane(plane_params[0],plane_params[1],plane_params[2],plane_params[3]);
 
   vgl_h_matrix_2d<double> H;
-  if(vpgl_perspective_camera<double> * pcam 
+  if(vpgl_perspective_camera<double> * pcam
        = dynamic_cast<vpgl_perspective_camera<double>* > (camera.ptr() ))
   {
       if(!inverse)

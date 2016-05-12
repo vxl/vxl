@@ -1,12 +1,13 @@
 // This is brl/bseg/sdet/sdet_symbolic_edge_linker_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_symbolic_edge_linker_params.h"
 //:
 // \file
 // See sdet_symbolic_edge_linker_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -71,7 +72,7 @@ void sdet_symbolic_edge_linker_params::InitParams(double nrad, double gap, bool 
   linking_algo_ = linking_algo;
   num_link_iters_ = num_link_iters;
   bGetfinalcontours_ = get_final_contours;
-  
+
   switch(cvlet_type) //set the grouping flags from the choice of cvlet type
   {
     case 0: //Anchor Centered
@@ -101,23 +102,23 @@ void sdet_symbolic_edge_linker_params::InitParams(double nrad, double gap, bool 
 //:   Checks that parameters are within acceptable bounds
 //    Note that msg << ends seems to restart the string and erase the
 //    previous string. We should only use it as the last call, use
-//    vcl_endl otherwise.
+//    std::endl otherwise.
 bool sdet_symbolic_edge_linker_params::SanityCheck()
 {
   //TODO
   return true;
 }
 
-vcl_ostream& operator<< (vcl_ostream& os, const sdet_symbolic_edge_linker_params& dp)
+std::ostream& operator<< (std::ostream& os, const sdet_symbolic_edge_linker_params& dp)
 {
 
-  return os << "Radius of neighborhood: " << dp.nrad_ << vcl_endl
-            << "Maximum pixel distance to complete: " << dp.gap_ << vcl_endl
-            << "Curve model: " << dp.curve_model_type_ << vcl_endl
-            << "Local grouping Algorithm: " << dp.grouping_algo_ << vcl_endl
-            << "Curvelet type: " << dp.cvlet_type_ << vcl_endl
-            << "Form linkgraph: " << dp.bFormLinkGraph_ << vcl_endl
-            << "Use all curvelets: " << dp.b_use_all_cvlets_ << vcl_endl
-            << "Extract final contours: " << dp.linkgraph_algo_ << vcl_endl
-            << "Get final contours: " << dp.bGetfinalcontours_ << vcl_endl;
+  return os << "Radius of neighborhood: " << dp.nrad_ << std::endl
+            << "Maximum pixel distance to complete: " << dp.gap_ << std::endl
+            << "Curve model: " << dp.curve_model_type_ << std::endl
+            << "Local grouping Algorithm: " << dp.grouping_algo_ << std::endl
+            << "Curvelet type: " << dp.cvlet_type_ << std::endl
+            << "Form linkgraph: " << dp.bFormLinkGraph_ << std::endl
+            << "Use all curvelets: " << dp.b_use_all_cvlets_ << std::endl
+            << "Extract final contours: " << dp.linkgraph_algo_ << std::endl
+            << "Get final contours: " << dp.bGetfinalcontours_ << std::endl;
 }

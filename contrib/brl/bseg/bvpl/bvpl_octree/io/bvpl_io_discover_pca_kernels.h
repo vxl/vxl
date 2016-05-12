@@ -13,9 +13,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/bvpl_octree/bvpl_discover_pca_kernels.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 //: Binary save parameters to stream.
@@ -26,7 +27,7 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_discover_pca_kernels const &);
 void vsl_b_read(vsl_b_istream & is, bvpl_discover_pca_kernels &m);
 
 
-void vsl_print_summary(vcl_ostream &os, const bvpl_discover_pca_kernels &m);
+void vsl_print_summary(std::ostream &os, const bvpl_discover_pca_kernels &m);
 
 
 void vsl_b_read(vsl_b_istream& is, bvpl_discover_pca_kernels* m);
@@ -34,7 +35,7 @@ void vsl_b_read(vsl_b_istream& is, bvpl_discover_pca_kernels* m);
 
 void vsl_b_write(vsl_b_ostream& os, const bvpl_discover_pca_kernels* &m);
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_discover_pca_kernels* &m);
+void vsl_print_summary(std::ostream& os, const bvpl_discover_pca_kernels* &m);
 
 
 #endif

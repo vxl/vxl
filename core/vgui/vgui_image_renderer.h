@@ -39,7 +39,7 @@ class vgui_image_renderer
   //: Are the range params those used to form the current buffer
   bool old_range_map_params(vgui_range_map_params_sptr const& rmp);
 
-  //: Create a buffer if necessary 
+  //: Create a buffer if necessary
   void create_buffer(vgui_range_map_params_sptr const& rmp);
 
   //: draw the pixels to the frame buffer

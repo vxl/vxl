@@ -22,6 +22,8 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_load by vil_load
 // \endverbatim
 //
+#include <iostream>
+#include <cstring>
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
 #include <vipl/vipl_histogram.h>
@@ -29,19 +31,14 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
-#include <vcl_cstring.h> // for memcpy()
+#include <vcl_compiler.h>
 
 #include <vxl_config.h> // for vxl_byte
-
-#ifdef VCL_VC_5
-#define vxl_byte int // this is a hack!!!  See the Description.
-#endif
 
 int
 main(int argc, char** argv)
 {
-  if (argc < 2) { vcl_cerr << "Syntax: example_histogram file_in\n"; return 1; }
+  if (argc < 2) { std::cerr << "Syntax: example_histogram file_in\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
@@ -50,8 +47,8 @@ main(int argc, char** argv)
   section<int,2> dst(1,256);
 
   // set the input image:
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
-  vcl_memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes());
+  if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
+  std::memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes());
 
   // The filter:
   vipl_histogram<section<vxl_byte,2>,section<int,2>,vxl_byte,int> op;
@@ -61,7 +58,7 @@ main(int argc, char** argv)
 
   // Write output:
   {for (int i=0; i<256; ++i) if (src.buffer[i] != 0)
-     vcl_cout << i << ": " << int(src.buffer[i]) << vcl_endl;
+     std::cout << i << ": " << int(src.buffer[i]) << std::endl;
   }
 
   return 0;

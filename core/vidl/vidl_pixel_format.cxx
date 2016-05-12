@@ -1,13 +1,14 @@
 // This is core/vidl/vidl_pixel_format.cxx
+#include <iostream>
 #include "vidl_pixel_format.h"
 //:
 // \file
 // \author Matt Leotta
 //
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #define vidl_ppi_mac(FMT)\
-const vcl_ptrdiff_t vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT>::offset[macro_pix_size][num_channels]
+const std::ptrdiff_t vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT>::offset[macro_pix_size][num_channels]
 
 // Define the packing order for each packed vidl_pixel_format
 // The main purpose of this struct is to define a static
@@ -51,7 +52,7 @@ struct check_types
       check_types<vidl_pixel_format(pix_type-1)>::traits(f,t);
   }
 
-  static inline vidl_pixel_format from_string(const vcl_string& s)
+  static inline vidl_pixel_format from_string(const std::string& s)
   {
     if (s == vidl_pixel_traits_of<pix_type>::name())
       return pix_type;
@@ -77,7 +78,7 @@ struct check_types<VIDL_PIXEL_FORMAT_UNKNOWN>
     t.chroma_shift_y = vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_UNKNOWN>::chroma_shift_y;
   }
 
-  static inline vidl_pixel_format from_string(const vcl_string& /*s*/)
+  static inline vidl_pixel_format from_string(const std::string& /*s*/)
   {
     return VIDL_PIXEL_FORMAT_UNKNOWN;
   }
@@ -120,7 +121,7 @@ vidl_pixel_format_traits(vidl_pixel_format f)
 
 
 //: Output a pretty string representing the pixel format.
-vcl_ostream & operator << (vcl_ostream &os, vidl_pixel_format f)
+std::ostream & operator << (std::ostream &os, vidl_pixel_format f)
 {
   // Template metaprogramming automatically generates the conditions
   // to check each enum value from VIDL_PIXEL_FORMAT_UNKNOWN
@@ -132,7 +133,7 @@ vcl_ostream & operator << (vcl_ostream &os, vidl_pixel_format f)
 
 //: Convert a string into a pixel format.
 // This uses the same encoding as operator<<.
-vidl_pixel_format vidl_pixel_format_from_string(const vcl_string& s)
+vidl_pixel_format vidl_pixel_format_from_string(const std::string& s)
 {
   // Template metaprogramming automatically generates the conditions
   // to check each enum value from VIDL_PIXEL_FORMAT_UNKNOWN

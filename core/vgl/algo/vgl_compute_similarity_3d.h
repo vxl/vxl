@@ -16,10 +16,11 @@
 //
 // \verbatim
 //  Modifications
-//   none
+//  dec: Factored out rigid transform computation to vgl_compute_rigid_3d
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -34,8 +35,8 @@ class vgl_compute_similarity_3d
 
    vgl_compute_similarity_3d() {}
 
-   vgl_compute_similarity_3d(vcl_vector<vgl_point_3d<T> > const& points1,
-                             vcl_vector<vgl_point_3d<T> > const& points2);
+   vgl_compute_similarity_3d(std::vector<vgl_point_3d<T> > const& points1,
+                             std::vector<vgl_point_3d<T> > const& points2);
 
   ~vgl_compute_similarity_3d() {}
 
@@ -66,17 +67,17 @@ class vgl_compute_similarity_3d
   // Internal functions--------------------------------------------------------
 
   //: center all the points at the origin, and return the applied translation
-  void center_points(vcl_vector<vgl_point_3d<T> >& pts,
+  void center_points(std::vector<vgl_point_3d<T> >& pts,
                      vgl_vector_3d<T>& t) const;
 
   //: normalize the scale of the points, and return the applied scale
   //  The average distance from the origin will be sqrt(3)
-  void scale_points(vcl_vector<vgl_point_3d<T> >& pts,
+  void scale_points(std::vector<vgl_point_3d<T> >& pts,
                     T& s) const;
 
   // Data Members--------------------------------------------------------------
-  vcl_vector<vgl_point_3d<T> > points1_;
-  vcl_vector<vgl_point_3d<T> > points2_;
+  std::vector<vgl_point_3d<T> > points1_;
+  std::vector<vgl_point_3d<T> > points2_;
   T scale_;
   vgl_rotation_3d<T> rotation_;
   vgl_vector_3d<T> translation_;

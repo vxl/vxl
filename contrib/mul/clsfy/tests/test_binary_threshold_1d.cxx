@@ -1,4 +1,6 @@
 // This is mul/clsfy/tests/test_binary_threshold_1d.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,8 +8,7 @@
 // \author dac
 // Test construction, IO etc
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
@@ -23,7 +24,7 @@
 //: Tests the clsfy_binary_threshold_1d class
 void test_binary_threshold_1d()
 {
-  vcl_cout << "*******************************************\n"
+  std::cout << "*******************************************\n"
            << " Testing clsfy_binary_threshold_1d_builder\n"
            << "*******************************************\n";
 
@@ -64,8 +65,8 @@ void test_binary_threshold_1d()
     neg_samples[i]=x(0);
   }
 
-  //vcl_cout<<"pos_samples= "<<pos_samples<<vcl_endl
-  //        <<"neg_samples= "<<neg_samples<<vcl_endl;
+  //std::cout<<"pos_samples= "<<pos_samples<<std::endl
+  //        <<"neg_samples= "<<neg_samples<<std::endl;
 
   // Generate lots of examples for test set
   vnl_vector<double>  pos_samples_test(n_pos), neg_samples_test(n_neg);
@@ -83,11 +84,11 @@ void test_binary_threshold_1d()
     neg_samples_test[i]=x(0);
   }
 
-  //vcl_cout<<"pos_samples_test= "<<pos_samples_test<<vcl_endl
-  //        <<"neg_samples_test= "<<neg_samples_test<<vcl_endl;
+  //std::cout<<"pos_samples_test= "<<pos_samples_test<<std::endl
+  //        <<"neg_samples_test= "<<neg_samples_test<<std::endl;
 
 
-  vcl_cout<<"=================test pos + neg samples ============\n";
+  std::cout<<"=================test pos + neg samples ============\n";
 
   clsfy_binary_threshold_1d_builder b_thresh_builder;
   clsfy_classifier_1d* b_thresh_clsfr=b_thresh_builder.new_classifier();
@@ -96,9 +97,9 @@ void test_binary_threshold_1d()
                                         pos_samples, pos_wts
                                        );
 
-  vcl_cout<<*b_thresh_clsfr<<vcl_endl;
-  //b_thresh_clsfr->print_summary(vcl_cout);
-  vcl_cout<<"error1= "<<error1<<vcl_endl;
+  std::cout<<*b_thresh_clsfr<<std::endl;
+  //b_thresh_clsfr->print_summary(std::cout);
+  std::cout<<"error1= "<<error1<<std::endl;
 
 
   //calc te (i.e. total error) on train set
@@ -111,7 +112,7 @@ void test_binary_threshold_1d()
 
 
   double te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
-  vcl_cout<<"te on training set= "<<te<<vcl_endl;
+  std::cout<<"te on training set= "<<te<<std::endl;
 
 
   // calc te (i.e. total error) on test set
@@ -122,14 +123,14 @@ void test_binary_threshold_1d()
   for (int i=0; i<n_neg; ++i)
     if ( b_thresh_clsfr->classify( neg_samples_test[i] ) == 1 ) fp++;
 
-  vcl_cout<<"Applied to test set:\n";
+  std::cout<<"Applied to test set:\n";
   double tpr=(tp*1.0)/n_pos, fpr= (fp*1.0)/n_neg;
-  vcl_cout<<"True positives= "<<tpr<<vcl_endl
-          <<"False positives= "<<fpr<<vcl_endl;
+  std::cout<<"True positives= "<<tpr<<std::endl
+          <<"False positives= "<<fpr<<std::endl;
 
 
   te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
-  vcl_cout<<"te= "<<te<<vcl_endl;
+  std::cout<<"te= "<<te<<std::endl;
 
 
   // simple test for binary threshold
@@ -137,7 +138,7 @@ void test_binary_threshold_1d()
   TEST("fpr<0.3", fpr<0.3, true);
 
 
-  vcl_cout<<"=========swap pos and neg samples round===========\n";
+  std::cout<<"=========swap pos and neg samples round===========\n";
 
   // Train again with +ve and -ve data swapped round + see if get same error
   clsfy_classifier_1d* b_thresh_clsfr2=b_thresh_builder.new_classifier();
@@ -146,10 +147,10 @@ void test_binary_threshold_1d()
                                         neg_samples, neg_wts
                                        );
 
-  b_thresh_clsfr2->print_summary(vcl_cout);
+  b_thresh_clsfr2->print_summary(std::cout);
 
 
-  vcl_cout<<"error2= "<<error2<<vcl_endl;
+  std::cout<<"error2= "<<error2<<std::endl;
 
   TEST_NEAR("error1 ~= error2", error1, error2, 0.001);
 
@@ -163,20 +164,20 @@ void test_binary_threshold_1d()
 
   delete b_thresh_clsfr2;
 
-  vcl_cout<<"Applied to test set (with +ve and -ve other way round:\n";
+  std::cout<<"Applied to test set (with +ve and -ve other way round:\n";
   tpr=(tp*1.0)/n_neg, fpr= (fp*1.0)/n_pos;
-  vcl_cout<<"True positives= "<<tpr<<vcl_endl
-          <<"False positives= "<<fpr<<vcl_endl;
+  std::cout<<"True positives= "<<tpr<<std::endl
+          <<"False positives= "<<fpr<<std::endl;
 
   te= ((n_neg-tp+fp)*1.0)/(n_pos+n_neg);
-  vcl_cout<<"te= "<<te<<vcl_endl;
+  std::cout<<"te= "<<te<<std::endl;
 
   // simple test for binary threshold
   TEST( "tpr>0.7", tpr>0.7, true );
   TEST( "fpr<0.3", fpr<0.3, true );
 
 
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing clsfy_binary_threshold_1d\n"
            << "***********************************\n";
 
@@ -199,11 +200,11 @@ void test_binary_threshold_1d()
 
   // Test loading clsfy_binary_threshold_1d by base class pointer
 
-  vcl_cout<<"======== TESTING I/O ===========\n";
+  std::cout<<"======== TESTING I/O ===========\n";
 
    // add binary loaders
   vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
-  vcl_string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
+  std::string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
 
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -221,10 +222,10 @@ void test_binary_threshold_1d()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Saved :\n"
-          << *b_thresh_clsfr << vcl_endl
+  std::cout<<"Saved :\n"
+          << *b_thresh_clsfr << std::endl
           <<"Loaded:\n"
-          << classifier_in << vcl_endl;
+          << classifier_in << std::endl;
 
   TEST("saved classifier = loaded classifier",
        b_thresh_clsfr ->params(), classifier_in->params());

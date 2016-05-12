@@ -17,7 +17,8 @@
 //   Ian Scott        12/06/2003: Added filen?m[abc].* notation to unix and dos version
 // \endverbatim
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 
 struct vul_file_iterator_data;
 
@@ -40,7 +41,7 @@ struct vul_file_iterator_data;
 // Valid glob patterns are unix-like - '?' matches precisely one character
 // '*' matches any sequence (including empty), [abc] matches either 'a' or 'b' or 'c'
 //
-// \note There is no implicit ordering of the files in a directory; 
+// \note There is no implicit ordering of the files in a directory;
 // the order is OS-dependent and is not guaranteed by this class.
 // You may wish, therefore, to store the filenames returned and sort them yourself,
 // if you want to process files in (for example) alphanumeric order.
@@ -49,13 +50,13 @@ class vul_file_iterator
   VCL_SAFE_BOOL_DEFINE;
  public:
 
-  vul_file_iterator() : p(0) {}
+  vul_file_iterator() : p(VXL_NULLPTR) {}
 
   //: Initialize, and scan to get first file from "glob"
   vul_file_iterator(char const* glob);
 
   //: Initialize, and scan to get first file from "glob"
-  vul_file_iterator(vcl_string const& glob);
+  vul_file_iterator(std::string const& glob);
 
   ~vul_file_iterator();
 

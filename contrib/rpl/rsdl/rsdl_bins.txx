@@ -5,14 +5,15 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <algorithm>
+#include <cstddef>
 #include "rsdl_bins.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_compiler.h>
 
 //:
 // This class is used in n_nearest_impl. It stores a pointer to an
@@ -75,7 +76,7 @@ void
 rsdl_bins<N,C,V>::
 clear()
 {
-  typedef typename vcl_vector< bin_type >::iterator vec_iter;
+  typedef typename std::vector< bin_type >::iterator vec_iter;
 
   for ( vec_iter i = bins_.begin(); i != bins_.end(); ++i ) {
     i->clear();
@@ -127,7 +128,7 @@ void
 rsdl_bins<N,C,V>::
 n_nearest( point_type const& pt,
            unsigned n,
-           vcl_vector< value_type >& values ) const
+           std::vector< value_type >& values ) const
 {
   n_nearest_impl( pt, n, values, 0 );
 }
@@ -138,8 +139,8 @@ void
 rsdl_bins<N,C,V>::
 n_nearest( point_type const& pt,
            unsigned n,
-           vcl_vector< point_type >& points,
-           vcl_vector< value_type >& values  ) const
+           std::vector< point_type >& points,
+           std::vector< value_type >& values  ) const
 {
   n_nearest_impl( pt, n, values, &points );
 }
@@ -150,7 +151,7 @@ void
 rsdl_bins<N,C,V>::
 n_nearest_exhaustive( point_type const& pt,
                       unsigned n,
-                      vcl_vector< value_type >& values ) const
+                      std::vector< value_type >& values ) const
 {
   n_nearest_exhaustive_impl( pt, n, values, 0 );
 }
@@ -161,8 +162,8 @@ void
 rsdl_bins<N,C,V>::
 n_nearest_exhaustive( point_type const& pt,
                       unsigned n,
-                      vcl_vector< point_type >& points,
-                      vcl_vector< value_type >& values  ) const
+                      std::vector< point_type >& points,
+                      std::vector< value_type >& values  ) const
 {
   n_nearest_exhaustive_impl( pt, n, values, &points );
 }
@@ -177,7 +178,7 @@ is_any_point_within_radius( point_type const& pt,
   // FIXME: re-implement points_within_radius_impl here, without the
   // push_backs...
 
-  vcl_vector< value_type > values;
+  std::vector< value_type > values;
   points_within_radius( pt, radius, values );
 
   return ! values.empty();
@@ -189,7 +190,7 @@ void
 rsdl_bins<N,C,V>::
 points_within_radius( point_type const& pt,
                       coord_type const& radius,
-                      vcl_vector< value_type >& values ) const
+                      std::vector< value_type >& values ) const
 {
   points_within_radius_impl( pt, radius, values, 0 );
 }
@@ -200,8 +201,8 @@ void
 rsdl_bins<N,C,V>::
 points_within_radius( point_type const& pt,
                       coord_type const& radius,
-                      vcl_vector< point_type >& points,
-                      vcl_vector< value_type >& values  ) const
+                      std::vector< point_type >& points,
+                      std::vector< value_type >& values  ) const
 {
   points_within_radius_impl( pt, radius, values, &points );
 }
@@ -212,7 +213,7 @@ void
 rsdl_bins<N,C,V>::
 points_in_bounding_box( point_type const& min_pt,
                         point_type const& max_pt,
-                        vcl_vector< value_type >& values ) const
+                        std::vector< value_type >& values ) const
 {
   points_in_bounding_box_impl( min_pt, max_pt, values, 0 );
 }
@@ -223,8 +224,8 @@ void
 rsdl_bins<N,C,V>::
 points_in_bounding_box( point_type const& min_pt,
                         point_type const& max_pt,
-                        vcl_vector< point_type >& points,
-                        vcl_vector< value_type >& values  ) const
+                        std::vector< point_type >& points,
+                        std::vector< value_type >& values  ) const
 {
   points_in_bounding_box_impl( min_pt, max_pt, values, &points );
 }
@@ -238,7 +239,7 @@ int
 rsdl_bins<N,C,V>::
 coord_to_bin( coord_type x, unsigned d ) const
 {
-  return int( vcl_floor( ( x - min_pt_[d] ) / bin_size_[d] ) );
+  return int( std::floor( ( x - min_pt_[d] ) / bin_size_[d] ) );
 }
 
 
@@ -362,7 +363,7 @@ closest_face ( point_type const& pt,
       else
         face_x = ( bin_hi[dim] + 1 ) * bin_size_[dim] + min_pt_[dim];
 
-      coord_type dist = vcl_fabs ( pt[dim] - face_x );
+      coord_type dist = std::fabs ( pt[dim] - face_x );
       if ( face_inf_dist || dist < best_dist ) {
         if (face_dim) *face_dim = dim;
         if (face_dir) *face_dir = dir;
@@ -380,8 +381,8 @@ void
 rsdl_bins<N,C,V>::
 n_nearest_impl( point_type const& pt,
                 unsigned n,
-                vcl_vector< value_type >& values,
-                vcl_vector< point_type >* points ) const
+                std::vector< value_type >& values,
+                std::vector< point_type >* points ) const
 {
   // The rectangular region of bins defined here starts out empty and
   // is iteratively expanded in the loop below.  This region is the
@@ -404,7 +405,7 @@ n_nearest_impl( point_type const& pt,
   coord_type nth_dist_sqr = 0;
 
   // the n closest points, with their distances to the test point
-  vcl_vector< point_dist_entry > distances;
+  std::vector< point_dist_entry > distances;
 
   bool done = false;
   while ( ! done )
@@ -422,7 +423,7 @@ n_nearest_impl( point_type const& pt,
     else {
       // sort the points we have found so far
       // we only need the closest n points
-      vcl_nth_element( distances.begin(),
+      std::nth_element( distances.begin(),
                        distances.begin() + (n-1),
                        distances.end() );
 
@@ -540,11 +541,11 @@ n_nearest_impl( point_type const& pt,
 
   // sort the points by distance
   // if ( distances.size() < n )
-  //   vcl_sort( distances.begin(), distances.end() );
+  //   std::sort( distances.begin(), distances.end() );
 
   // Copy into the output structures.
 
-  typedef typename vcl_vector< point_dist_entry >::iterator point_dist_iter;
+  typedef typename std::vector< point_dist_entry >::iterator point_dist_iter;
 
   assert( distances.size() <= n );
 
@@ -566,8 +567,8 @@ void
 rsdl_bins<N,C,V>::
 n_nearest_impl( point_type const& pt,
                 unsigned n,
-                vcl_vector< value_type >& values,
-                vcl_vector< point_type >* points ) const
+                std::vector< value_type >& values,
+                std::vector< point_type >* points ) const
 {
   // !!!!!!!!! BUG Notice !!!!!!!!!!
   //
@@ -594,7 +595,7 @@ n_nearest_impl( point_type const& pt,
 
   static bool rsdl_bins_bug_warning_s = false;
   if ( rsdl_bins_bug_warning_s ) {
-    vcl_cerr << "Warning: results from current rsdl_bins<N,C,V>::n_nearest_impl "
+    std::cerr << "Warning: results from current rsdl_bins<N,C,V>::n_nearest_impl "
              << "may be inaccurate.  Please contact developers for details.\n";
     rsdl_bins_bug_warning_s = false;
   }
@@ -627,7 +628,7 @@ n_nearest_impl( point_type const& pt,
       // above.
       unsigned k = (bin_hi[0] - bin_lo[0]) / 2;
       // find number of bins needed to expand the region
-      unsigned f = unsigned( vcl_ceil( double(k+1) * vcl_sqrt(double(N)) - double(k) ) );
+      unsigned f = unsigned( std::ceil( double(k+1) * std::sqrt(double(N)) - double(k) ) );
       for (unsigned j=0; j<f; ++j) {
         for (unsigned i=0; i<N; ++i) {
           // increase the region one bin at a time
@@ -659,7 +660,7 @@ n_nearest_impl( point_type const& pt,
   typedef typename bin_index_vector::iterator ind_iter;
   typedef typename bin_type::const_iterator entry_iter;
 
-  vcl_vector< point_dist_entry > distances;
+  std::vector< point_dist_entry > distances;
 
   for ( ind_iter bi = indices.begin(); bi != indices.end(); ++bi ) {
     bin_type const& bin = bins_[*bi];
@@ -671,12 +672,12 @@ n_nearest_impl( point_type const& pt,
   // 3. Extract the n-closest points and copy into the output
   // structures.
   //
-  typedef typename vcl_vector< point_dist_entry >::iterator point_dist_iter;
+  typedef typename std::vector< point_dist_entry >::iterator point_dist_iter;
 
   point_dist_iter mid;
   if ( distances.size() > n ) {
     mid = distances.begin() + n;
-    vcl_partial_sort( distances.begin(), mid, distances.end() );
+    std::partial_sort( distances.begin(), mid, distances.end() );
   }
   else {
     mid = distances.end();
@@ -694,14 +695,14 @@ n_nearest_impl( point_type const& pt,
   // point's real location.
 
   // get the longest distance between a given point and points that were found
-  double longest_distance = vcl_sqrt(double((mid-1)->sqr_dist_));
+  double longest_distance = std::sqrt(double((mid-1)->sqr_dist_));
 
   // find dimension of the region that has been searched
   double r = ((bin_hi[0] - bin_lo[0]) / 2) * bin_size_[0];
 
   // check if we have a point outside this searched region
   if (longest_distance > r) {
-    unsigned reg_incr = unsigned(vcl_ceil(longest_distance / bin_size_[0] - (bin_hi[0] - bin_lo[0])/2));
+    unsigned reg_incr = unsigned(std::ceil(longest_distance / bin_size_[0] - (bin_hi[0] - bin_lo[0])/2));
     for (unsigned j=0; j<reg_incr; ++j) {
       for (unsigned i=0; i<N; ++i) {
         // increase the region one bin at a time
@@ -721,7 +722,7 @@ n_nearest_impl( point_type const& pt,
     // sort points by their distance
     if ( distances.size() > n ) {
       mid = distances.begin() + n;
-      vcl_partial_sort( distances.begin(), mid, distances.end() );
+      std::partial_sort( distances.begin(), mid, distances.end() );
     }
     else {
       mid = distances.end();
@@ -745,14 +746,14 @@ void
 rsdl_bins<N,C,V>::
 n_nearest_exhaustive_impl( point_type const& pt,
                            unsigned n,
-                           vcl_vector< value_type >& values,
-                           vcl_vector< point_type >* points ) const
+                           std::vector< value_type >& values,
+                           std::vector< point_type >* points ) const
 {
-  typedef typename vcl_vector< bin_type >::const_iterator vec_iter;
+  typedef typename std::vector< bin_type >::const_iterator vec_iter;
   typedef typename bin_type::const_iterator entry_iter;
-  typedef typename vcl_vector< point_dist_entry >::iterator point_dist_iter;
+  typedef typename std::vector< point_dist_entry >::iterator point_dist_iter;
 
-  vcl_vector< point_dist_entry > distances;
+  std::vector< point_dist_entry > distances;
   coord_type nth_dist_sqr = 0;
 
   // for every bin
@@ -770,7 +771,7 @@ n_nearest_exhaustive_impl( point_type const& pt,
         distances.push_back( point_dist_entry( pt, &entry ) );
 
         if ( distances.size() >= n )
-          vcl_nth_element ( distances.begin(),
+          std::nth_element ( distances.begin(),
                             distances.begin() + (n-1),
                             distances.end() );
 
@@ -793,7 +794,7 @@ n_nearest_exhaustive_impl( point_type const& pt,
 
   // sort the points by distance
   // if ( distances.size() < n )
-  //   vcl_sort( distances.begin(), distances.end() );
+  //   std::sort( distances.begin(), distances.end() );
 
   // copy points to the output structures
   for ( point_dist_iter i = distances.begin(); i != distances.end(); ++i ) {
@@ -809,8 +810,8 @@ void
 rsdl_bins<N,C,V>::
 points_within_radius_impl( point_type const& pt,
                            coord_type const& radius,
-                           vcl_vector< value_type >& values,
-                           vcl_vector< point_type >* points ) const
+                           std::vector< value_type >& values,
+                           std::vector< point_type >* points ) const
 {
   // 1. Find the list of bins that may contain the points we
   // want. These are the bins overlapping
@@ -855,8 +856,8 @@ void
 rsdl_bins<N,C,V>::
 points_in_bounding_box_impl( point_type const& min_pt,
                              point_type const& max_pt,
-                             vcl_vector< value_type >& values,
-                             vcl_vector< point_type >* points ) const
+                             std::vector< value_type >& values,
+                             std::vector< point_type >* points ) const
 {
   // 1. Find the list of bins that may contain the points we
   // want.
@@ -924,12 +925,12 @@ points_in_bounding_box_impl( point_type const& min_pt,
 // \endverbatim
 //
 template<unsigned N, typename C, typename V>
-vcl_size_t
+std::size_t
 rsdl_bins<N,C,V>::
 scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
              bin_index_vector& indices ) const
 {
-  vcl_size_t found = 0;
+  std::size_t found = 0;
 
   if ( dim==N ) {
     // 0d region is a point, so just check this point.
@@ -938,8 +939,8 @@ scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
     found = bins_[ind].size();
   }
   else {
-    int bx = vcl_max( lo[dim], 0 );
-    int ex = vcl_min( hi[dim]+1, size_[dim] );
+    int bx = std::max( lo[dim], 0 );
+    int ex = std::min( hi[dim]+1, size_[dim] );
     for ( int x=bx; x < ex; ++x ) {
       cur[dim] = x;
       found += scan_region( lo, hi, cur, dim+1, indices );
@@ -979,8 +980,8 @@ scan_bdy( int lo[N], int hi[N], int cur[N], unsigned dim,
   // dim < N
   //
   if ( dim < N ) {
-    int bx = vcl_max( lo[dim], 0 );
-    int ex = vcl_min( hi[dim]+1, size_[dim] );
+    int bx = std::max( lo[dim], 0 );
+    int ex = std::min( hi[dim]+1, size_[dim] );
     int x = bx;
     if ( x==lo[dim] ) {
       cur[dim] = x;

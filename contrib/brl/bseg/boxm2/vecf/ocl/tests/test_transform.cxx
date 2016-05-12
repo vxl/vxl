@@ -4,8 +4,10 @@
 // \date 10/12/14
 
 
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
@@ -26,13 +28,13 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 void test_transform()
 {
   // Set up the scenes
-  //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/putin_face/";
-  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
-  vcl_string source_scene_path = base_dir_path + "source_scene.xml";
-  vcl_string target_scene_path = base_dir_path + "target_scene.xml";
+  //  std::string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/putin_face/";
+  std::string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
+  std::string source_scene_path = base_dir_path + "source_scene.xml";
+  std::string target_scene_path = base_dir_path + "target_scene.xml";
   if(!vul_file::exists(source_scene_path) || !vul_file::exists(target_scene_path) )
   {
-      vcl_cout<<"One or both of the secene files do not exist"<<vcl_endl;
+      std::cout<<"One or both of the secene files do not exist"<<std::endl;
       return;
   }
   boxm2_scene_sptr source_scene = new boxm2_scene(source_scene_path);
@@ -58,26 +60,26 @@ void test_transform()
    return;
 #if 0
    vil_image_view<float> exp, vis;
-  //  vcl_string cam_path = base_dir_path + "putin_cam.txt";
-    vcl_string cam_path = base_dir_path + "putin_small_cam.txt";
-    //    vcl_string cam_path = base_dir_path + "putin_side_cam.txt";
-  vcl_ifstream ist(cam_path.c_str());
+  //  std::string cam_path = base_dir_path + "putin_cam.txt";
+    std::string cam_path = base_dir_path + "putin_small_cam.txt";
+    //    std::string cam_path = base_dir_path + "putin_side_cam.txt";
+  std::ifstream ist(cam_path.c_str());
   vpgl_perspective_camera<double> cam;
   ist >> cam;
   vpgl_camera_double_sptr camptr = new vpgl_perspective_camera<double>(cam);
  trs.render_scene_appearance(camptr, exp, vis, ni, nj, true);
- vcl_string img_path = base_dir_path + "putin_trans_rend.tiff";
+ std::string img_path = base_dir_path + "putin_trans_rend.tiff";
   vil_save(exp, img_path.c_str());
   trs.transform_1_blk_interp(R, t, si, true);
-#endif   
+#endif
 
 #if 0
   int n = 1000;
   vul_timer tim;
    vil_image_view<float> exp, vis;
-  //  vcl_string cam_path = base_dir_path + "putin_cam.txt";
-  vcl_string cam_path = base_dir_path + "putin_small_cam.txt";
-  vcl_ifstream ist(cam_path.c_str());
+  //  std::string cam_path = base_dir_path + "putin_cam.txt";
+  std::string cam_path = base_dir_path + "putin_small_cam.txt";
+  std::ifstream ist(cam_path.c_str());
   vpgl_perspective_camera<double> cam;
   ist >> cam;
   vpgl_camera_double_sptr camptr = new vpgl_perspective_camera<double>(cam);
@@ -85,15 +87,15 @@ void test_transform()
     trs.transform_1_blk(R, t, s0, false);
     trs.render_scene_appearance(camptr, exp, vis, ni, nj, false);
   }
-  vcl_cout << "transform/render time " << tim.real()/(n*1000.0) << " sec\n" << vcl_flush;
+  std::cout << "transform/render time " << tim.real()/(n*1000.0) << " sec\n" << std::flush;
 #endif
 
 #if 0// The minimizer example
 
-  vcl_string img_path = base_dir_path + "putin_trans_rend.tiff";
+  std::string img_path = base_dir_path + "putin_trans_rend.tiff";
   vil_image_view<float> ref_img = vil_load(img_path.c_str());
-  vcl_string cam_path = base_dir_path + "putin_small_cam.txt";
-  vcl_ifstream ist(cam_path.c_str());
+  std::string cam_path = base_dir_path + "putin_small_cam.txt";
+  std::ifstream ist(cam_path.c_str());
   vpgl_perspective_camera<double> cam;
   ist >> cam;
   vpgl_camera_double_sptr camptr = new vpgl_perspective_camera<double>(cam);
@@ -102,11 +104,11 @@ void test_transform()
   double smin =0.9, smax = 1.1, sinc = 0.001;
   tm.error_surface_1d(0, smin, smax, sinc);
   vil_image_view<float> dif = tm.opt_diff();
-  vcl_string diff_img_path = base_dir_path + "putin_trans_diff.tiff";
+  std::string diff_img_path = base_dir_path + "putin_trans_diff.tiff";
   vil_save(dif, diff_img_path.c_str());
   tm.finish();
 #endif
 }
 
 TESTMAIN( test_transform );
- 
+

@@ -47,13 +47,13 @@ void test_corner_pair_finder()
   factory.set_angle(float(vnl_math::pi));
   vec_kernel->kernels_.push_back(new bvpl_kernel(factory.create()));
 
-  vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines= bvpl_corner_pair_finder::find_pairs(id_grid, vec_kernel, vec_kernel)->pairs_;
+  std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines= bvpl_corner_pair_finder::find_pairs(id_grid, vec_kernel, vec_kernel)->pairs_;
 
   //visualize
   bvxm_voxel_grid<float> *response_grid= new bvxm_voxel_grid<float>(grid_size);
   response_grid->initialize_data(1.0f);
   bvxm_voxel_grid<vnl_float_4> *out_grid = new bvxm_voxel_grid<vnl_float_4>(grid_size);
-   vcl_vector<float> colors;
+   std::vector<float> colors;
   float hue = 0.0f;
   for ( int i = 0; i < vec_kernel->size(); ++i) {
     colors.push_back(hue);
@@ -64,16 +64,16 @@ void test_corner_pair_finder()
   if (vul_file::exists("spheres.wrl"))
     vpl_unlink("spheres.wrl");
 
-  vcl_ofstream os2("spheres.wrl");
+  std::ofstream os2("spheres.wrl");
   bvxm_vrml_voxel_grid::write_vrml_header(os2);
   bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os2, out_grid, 0.0f);
 
-  //vcl_ofstream os2("lines.wrl");
+  //std::ofstream os2("lines.wrl");
   //bvxm_vrml_voxel_grid::write_vrml_header(os2);
 
-  vcl_cout << all_lines.size() << vcl_endl;
+  std::cout << all_lines.size() << std::endl;
   for (unsigned i=0; i<all_lines.size(); ++i){
-      vcl_cout << all_lines[i].size() << vcl_endl;
+      std::cout << all_lines[i].size() << std::endl;
     for (unsigned j=0; j<all_lines[i].size(); ++j);
        //bvxm_vrml_voxel_grid::write_vrml_line_segment(os2, all_lines[i][j], 0.5f, 0.5f, 0.5f, 0.f);
       }

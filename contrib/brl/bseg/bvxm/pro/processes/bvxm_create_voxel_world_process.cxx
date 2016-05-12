@@ -1,4 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_voxel_world_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
 #include "bvxm_create_voxel_world_process.h"
 //:
 // \file
@@ -11,9 +14,7 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -25,7 +26,7 @@ bool bvxm_create_voxel_world_process_cons(bprb_func_process& pro)
 {
   //set output types
   using namespace bvxm_create_voxel_world_process_globals;
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_world_sptr";
   return pro.set_output_types(output_types_);
 }
@@ -35,14 +36,14 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
 {
   using namespace bvxm_create_voxel_world_process_globals;
   //define and read in the parameters
-  vcl_string vox_dir;
+  std::string vox_dir;
   pro.parameters()->get_value(param_input_directory_, vox_dir);
   if (!vul_file::is_directory(vox_dir) || !vul_file::exists(vox_dir)) {
-    vcl_cerr << "In bvxm_create_voxel_world_process::execute() -- input directory "  << vox_dir << "is not valid!\n";
+    std::cerr << "In bvxm_create_voxel_world_process::execute() -- input directory "  << vox_dir << "is not valid!\n";
     return false;
   }
 
-  //vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: "  << vox_dir << vcl_endl;
+  //std::cout << "In bvxm_create_voxel_world_process::execute() -- input directory is: "  << vox_dir << std::endl;
 
 
 
@@ -65,15 +66,15 @@ bool bvxm_create_voxel_world_process(bprb_func_process& pro)
   float vox_len = 1.0f;
   pro.parameters()->get_value(param_voxel_length_, vox_len);
 
-  vcl_string lvcs_path;
+  std::string lvcs_path;
   pro.parameters()->get_value(param_lvcs_, lvcs_path);
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs();
   if (lvcs_path != "") {
-    vcl_ifstream is(lvcs_path.c_str());
+    std::ifstream is(lvcs_path.c_str());
     if (!is)
     {
-      vcl_cerr << " Error opening file  " << lvcs_path << vcl_endl;
+      std::cerr << " Error opening file  " << lvcs_path << std::endl;
       return false;
     }
     lvcs->read(is);

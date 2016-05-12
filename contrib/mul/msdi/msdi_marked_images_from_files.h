@@ -17,7 +17,7 @@
 //  If the load_as_float_ flag is true, then loads the named image and associated
 //  transformation into a vimt_image_2d_of<float>, using vimt_load(), with an additional
 //  scaling factor of unit_scaling_.  This allows converting from metres to mm if
-//  necessary. 
+//  necessary.
 class msdi_marked_images_from_files : public msdi_marked_images
 {
  private:
@@ -50,23 +50,23 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
   //: When true, load image into a float image
   bool load_as_float_;
-  
-  //: Scaling required to convert from units in image to desired world units 
+
+  //: Scaling required to convert from units in image to desired world units
   // (e.g. 1000 for mm if image units are metres)
   // Only used if load_as_float_ is true.
   float unit_scaling_;
 
   //: Image directory
-  vcl_string image_dir_;
+  std::string image_dir_;
 
   //: Image names
-  vcl_vector<vcl_string> image_name_;
+  std::vector<std::string> image_name_;
 
   //: Points directory
-  vcl_string points_dir_;
+  std::string points_dir_;
 
   //: Points file names
-  vcl_vector<vcl_string> points_name_;
+  std::vector<std::string> points_name_;
 
   //: Index of current image
   int index_;
@@ -90,36 +90,36 @@ class msdi_marked_images_from_files : public msdi_marked_images
   msdi_marked_images_from_files();
 
   //: Construct with directories and filenames
-  msdi_marked_images_from_files(const vcl_string& image_dir,
-                                const vcl_vector<vcl_string>& image_names,
-                                const vcl_string& points_dir,
-                                const vcl_vector<vcl_string>& points_names);
+  msdi_marked_images_from_files(const std::string& image_dir,
+                                const std::vector<std::string>& image_names,
+                                const std::string& points_dir,
+                                const std::vector<std::string>& points_names);
 
   //: Initialise with directories and filenames
-  void set(const vcl_string& image_dir,
-           const vcl_vector<vcl_string>& image_names,
-           const vcl_string& points_dir,
-           const vcl_vector<vcl_string>& points_names,
+  void set(const std::string& image_dir,
+           const std::vector<std::string>& image_names,
+           const std::string& points_dir,
+           const std::vector<std::string>& points_names,
            bool load_as_float=false);
 
   //: Initialise with directories and filenames
   //  \a points_names[i] is set to \a image_names[i]+".pts"
-  void set(const vcl_string& image_dir,
-           const vcl_vector<vcl_string>& image_names,
-           const vcl_string& points_dir);
-  
+  void set(const std::string& image_dir,
+           const std::vector<std::string>& image_names,
+           const std::string& points_dir);
+
   //: When true, all images converted to greyscale (1 plane) on loading
   void set_convert_to_greyscale(bool b);
-  
+
   //: When true, all images converted to greyscale on loading
   bool grey_only() const { return grey_only_; }
-  
-  //: Scaling required to convert from units in image to desired world units 
+
+  //: Scaling required to convert from units in image to desired world units
   // (e.g. 1000 for mm if image units are metres)
   // Only used if load_as_float_ is true.
   float unit_scaling() const { return unit_scaling_; }
 
-  //: Scaling required to convert from units in image to desired world units 
+  //: Scaling required to convert from units in image to desired world units
   // (e.g. 1000 for mm if image units are metres)
   // Only used if load_as_float_ is true.
   void set_unit_scaling(float);
@@ -155,10 +155,10 @@ class msdi_marked_images_from_files : public msdi_marked_images
   virtual const msm_points& points();
 
   //: Return current image file name
-  virtual vcl_string image_name() const;
+  virtual std::string image_name() const;
 
   //: Return current points file name
-  virtual vcl_string points_name() const;
+  virtual std::string points_name() const;
 };
 
 #endif // msdi_marked_images_from_files_h_

@@ -1,8 +1,10 @@
 #ifndef boxm_shadow_bayes_optimizer_h_
 #define boxm_shadow_bayes_optimizer_h_
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <boxm/boxm_aux_traits.h>
 #include <boxm/boxm_apm_traits.h>
@@ -15,8 +17,8 @@ class boxm_shadow_bayes_optimizer
 {
 public:
 
-  boxm_shadow_bayes_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene, 
-                              vcl_vector<vcl_string> const& image_ids,
+  boxm_shadow_bayes_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
+                              std::vector<std::string> const& image_ids,
                               float min_app_sigma,
                               float shadow_prior,
                               float shadow_mean, float shadow_sigma,
@@ -31,7 +33,7 @@ public:
 
 protected:
 
-  vcl_vector<vcl_string> image_ids_;
+  std::vector<std::string> image_ids_;
 
   boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene_;
 

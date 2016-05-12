@@ -53,9 +53,10 @@
 //  Ozge C. Ozcanli 11/15/08  Moved up to vxl, minor fixes
 // \endverbatim
 
-#include <vcl_list.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <list>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
@@ -69,8 +70,8 @@ class bgrl2_graph : public vbl_ref_count
 
  public:
 
-  typedef typename vcl_list<V_sptr>::iterator vertex_iterator;
-  typedef typename vcl_list<E_sptr>::iterator edge_iterator;
+  typedef typename std::list<V_sptr>::iterator vertex_iterator;
+  typedef typename std::list<E_sptr>::iterator edge_iterator;
 
   typedef typename V::edge_iterator vertex_edge_iterator;
 
@@ -137,7 +138,7 @@ class bgrl2_graph : public vbl_ref_count
   void purge_isolated_vertices();
 
   //: return all vertices with degree one
-  void get_all_degree_one_vertices(vcl_vector<V_sptr>& vertices);
+  void get_all_degree_one_vertices(std::vector<V_sptr>& vertices);
 
   //: clear all the nodes and edges of this graph
   virtual void clear();
@@ -153,10 +154,10 @@ class bgrl2_graph : public vbl_ref_count
   int number_of_edges() const { return edges_.size(); }
 
   //: returns the list V of all nodes of G
-  const vcl_list<V_sptr>& all_nodes() { return vertices_; }
+  const std::list<V_sptr>& all_nodes() { return vertices_; }
 
   //:  returns the list E of all edges of the shock graph.
-  const vcl_list<E_sptr>& all_edges() { return edges_; }
+  const std::list<E_sptr>& all_edges() { return edges_; }
 
   //: Returns an iterator to the beginning of the set of vertices
   vertex_iterator  vertices_begin() { return vertices_.begin(); }
@@ -223,7 +224,7 @@ class bgrl2_graph : public vbl_ref_count
   //-------------------------------------------------------------------
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
 #if 0 // these I/O methods commented out
   //: Return IO version number;
@@ -239,10 +240,10 @@ class bgrl2_graph : public vbl_ref_count
  protected:
 
   //: The list of vertices
-  vcl_list<V_sptr> vertices_;
+  std::list<V_sptr> vertices_;
 
   //: The list of edges
-  vcl_list<E_sptr> edges_;
+  std::list<E_sptr> edges_;
 };
 
 #endif // bgrl2_graph_h_

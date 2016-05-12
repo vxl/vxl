@@ -5,7 +5,8 @@
 // When this program is run, highlighting a line on the display by passing
 // the mouse pointer close to it will print a message saying its start point.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -21,7 +22,7 @@ struct my_tab : public vgui_easy2D_tableau
   // Look for mouse motion events and see if the highlighted object has changed.
   bool handle(vgui_event const &e)
   {
-    static vgui_soview* old_so = 0;
+    static vgui_soview* old_so = VXL_NULLPTR;
     if (e.type == vgui_MOTION)
     {
       vgui_soview* my_so = get_highlighted_soview();
@@ -31,7 +32,7 @@ struct my_tab : public vgui_easy2D_tableau
         {
           vgui_soview2D_lineseg* my_line = (vgui_soview2D_lineseg*)my_so;
           // cout its startpoint
-          vcl_cout << my_line->x0 << "," << my_line->y0 << vcl_endl;
+          std::cout << my_line->x0 << "," << my_line->y0 << std::endl;
           old_so = my_so;
         }
       }

@@ -13,8 +13,10 @@
 // None
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_2d.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_region_sptr.h>
@@ -46,28 +48,28 @@ class volm_spherical_layers
   // === accessors ===
 
   //: the minimum distance for each ray
-  const vcl_vector<unsigned char>& min_dist_layer() const
+  const std::vector<unsigned char>& min_dist_layer() const
     {return min_dist_layer_;}
   //: the maximum distance for each ray
-  const vcl_vector<unsigned char>& max_dist_layer() const
+  const std::vector<unsigned char>& max_dist_layer() const
     {return max_dist_layer_;}
   //: the region order for each ray
-  const vcl_vector<unsigned char>& order_layer() const
+  const std::vector<unsigned char>& order_layer() const
     {return order_layer_;}
   //: the set of rays intersecting the ground plane
-  const vcl_vector<unsigned>& ground_id_layer() const
+  const std::vector<unsigned>& ground_id_layer() const
     {return ground_id_layer_;}
   //: the ground plane distance for each ray
-  const vcl_vector<unsigned char>& ground_dist_layer() const
+  const std::vector<unsigned char>& ground_dist_layer() const
     {return ground_dist_layer_;}
   //: the ground plane land class for each gp ray
-  const vcl_vector<unsigned char>& ground_nlcd_layer() const
+  const std::vector<unsigned char>& ground_nlcd_layer() const
     {return ground_nlcd_layer_;}
   //: the set of rays intersecting sky
-  const vcl_vector<unsigned>& sky_id_layer() const
+  const std::vector<unsigned>& sky_id_layer() const
     {return sky_id_layer_;}
   //: the set of rays for each non-gp, non-sky region
-  const vcl_vector<vcl_vector<unsigned> >& dist_id_layer() const
+  const std::vector<std::vector<unsigned> >& dist_id_layer() const
     {return dist_id_layer_;}
   //: the current camera
   vpgl_perspective_camera<double> camera() const
@@ -84,9 +86,9 @@ class volm_spherical_layers
   void clear();
  private:
   unsigned char fetch_depth(double const& u, double const& v,
-                            vcl_vector<depth_map_region_sptr> const& depth_regions,
-                            vcl_vector<depth_map_region_sptr> const& ground_plane,
-                            vcl_vector<depth_map_region_sptr> const& sky,
+                            std::vector<depth_map_region_sptr> const& depth_regions,
+                            std::vector<depth_map_region_sptr> const& ground_plane,
+                            std::vector<depth_map_region_sptr> const& sky,
                             unsigned char& order, unsigned char& max_dist,
                             unsigned& object_id,  unsigned char& grd_nlcd,
                             bool& is_ground,  bool& is_sky,
@@ -97,7 +99,7 @@ class volm_spherical_layers
   vpgl_perspective_camera<double> cam_;
   depth_map_scene_sptr dm_scene_;
   //: the vector depth_map_regions sorted by their orders
-  vcl_vector<depth_map_region_sptr> scn_regs_;
+  std::vector<depth_map_region_sptr> scn_regs_;
   double altitude_;
   volm_spherical_container_sptr sph_vol_;
   volm_spherical_shell_container_sptr sph_shell_;
@@ -105,14 +107,14 @@ class volm_spherical_layers
   unsigned char default_sky_order_;
   unsigned log_downsample_ratio_;
   double d_threshold_;
-  vcl_vector<unsigned char> min_dist_layer_;
-  vcl_vector<unsigned char> max_dist_layer_;
-  vcl_vector<unsigned char> order_layer_;
-  vcl_vector<unsigned> ground_id_layer_;
-  vcl_vector<unsigned char> ground_dist_layer_;
-  vcl_vector<unsigned char> ground_nlcd_layer_;
-  vcl_vector<unsigned> sky_id_layer_;
-  vcl_vector<vcl_vector<unsigned> > dist_id_layer_;
+  std::vector<unsigned char> min_dist_layer_;
+  std::vector<unsigned char> max_dist_layer_;
+  std::vector<unsigned char> order_layer_;
+  std::vector<unsigned> ground_id_layer_;
+  std::vector<unsigned char> ground_dist_layer_;
+  std::vector<unsigned char> ground_nlcd_layer_;
+  std::vector<unsigned> sky_id_layer_;
+  std::vector<std::vector<unsigned> > dist_id_layer_;
   unsigned count_;
 };
 

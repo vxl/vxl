@@ -57,14 +57,14 @@ class vtol_intensity_face : public vtol_face_2d
   //: A constructor from a set of 2-d vtol_edge(s) with DigitalCurve geometry
   //  Here the vtol_edge(s) are constructed from edgel curves formed during
   //  region analysis.
-  vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges) : Face(edges) {}
+  vtol_intensity_face(std::vector<vtol_edge_sptr>* edges) : Face(edges) {}
   //: Uses given 2-d vtol_edges (not deep copy) with intensity information from dr.
-  vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr)
+  vtol_intensity_face(std::vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr)
   : vtol_face_2d(edges), vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij()) {}
 #endif
-  vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges);
+  vtol_intensity_face(std::vector<vtol_edge_sptr>* edges);
   vtol_intensity_face(one_chain_list & one_chains);
-  vtol_intensity_face(vcl_vector<vtol_one_chain_sptr>* chains, vdgl_digital_region const& dr);
+  vtol_intensity_face(std::vector<vtol_one_chain_sptr>* chains, vdgl_digital_region const& dr);
   vtol_intensity_face(vtol_intensity_face_sptr const& iface);
   vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
                       unsigned short const* pix);
@@ -77,10 +77,10 @@ class vtol_intensity_face : public vtol_face_2d
   virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_intensity_face"); }
+  virtual std::string is_a() const { return std::string("vtol_intensity_face"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const
+  virtual bool is_class(const std::string& cls) const
   { return cls==is_a() || vtol_face_2d::is_class(cls); }
 
  private:
@@ -153,7 +153,7 @@ class vtol_intensity_face : public vtol_face_2d
   float Diameter() const { return region_->Diameter(); }
   float AspectRatio() const { return region_->AspectRatio(); }
 #if 0
-  void PrincipalOrientation(vcl_vector<float>& axis) { region_->PrincipalOrientation(axis); }
+  void PrincipalOrientation(std::vector<float>& axis) { region_->PrincipalOrientation(axis); }
 #endif
   double Var() const { return region_->Var(); }
 

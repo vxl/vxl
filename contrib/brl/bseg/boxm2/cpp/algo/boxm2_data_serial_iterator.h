@@ -3,10 +3,11 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <boct/boct_bit_tree.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class F>
 void boxm2_data_serial_iterator(int data_buff_length,
@@ -15,7 +16,7 @@ void boxm2_data_serial_iterator(int data_buff_length,
     for (int i=0; i<data_buff_length; ++i)
     {
         // counter
-        if ( i%(data_buff_length/10) == 0 ) vcl_cout<<'.';
+        if ( i%(data_buff_length/10) == 0 ) std::cout<<'.';
         functor.process_cell(i);
     }
 }
@@ -29,15 +30,13 @@ void boxm2_data_leaves_serial_iterator(boxm2_block * blk,
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
     const boxm2_array_3d<uchar16>&  trees = blk->trees();
-    int counter_length = trees.size()/10;
+
     int currIndex = 0;                                //curr tree being looked at
     boxm2_array_3d<uchar16>::const_iterator blk_iter;
     for (blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter, ++currIndex)
     {
         uchar16 tree  = (*blk_iter);
         boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), 4);
-
-        if ( currIndex%counter_length == 0 ) vcl_cout<<'.';
 
         for (int i=0; i<585; i++)
         {

@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #ifdef BVXM_USE_FSTREAM64
 #include <vil/vil_stream_fstream64.h>
 #else
@@ -20,7 +22,7 @@ template <class T>
 class bvxm_voxel_storage_disk_cached : public bvxm_voxel_storage<T>
 {
  public:
-  bvxm_voxel_storage_disk_cached(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size, vxl_int_64 max_cache_size);
+  bvxm_voxel_storage_disk_cached(std::string storage_filename, vgl_vector_3d<unsigned int> grid_size, vxl_int_64 max_cache_size);
   virtual ~bvxm_voxel_storage_disk_cached();
 
   virtual bool initialize_data(T const& value);
@@ -41,11 +43,11 @@ class bvxm_voxel_storage_disk_cached : public bvxm_voxel_storage<T>
    bvxm_memory_chunk_sptr cache_mem_;
    unsigned n_cache_slices_;
 
-   //vcl_map<unsigned, T*> cache_map_;
+   //std::map<unsigned, T*> cache_map_;
    int first_cache_slice_;
    int last_cache_slice_;
 
-   vcl_string storage_fname_;
+   std::string storage_fname_;
 
   // input and output file stream
 #ifdef BVXM_USE_FSTREAM64

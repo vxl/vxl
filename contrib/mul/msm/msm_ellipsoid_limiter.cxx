@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "msm_ellipsoid_limiter.h"
 //:
 // \file
@@ -9,7 +11,7 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <vul/vul_string.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -47,7 +49,7 @@ void msm_ellipsoid_limiter::set_acceptance(double prop,
     M_max_=0.0;
     return;
   }
-  
+
   M_max_ = msm_chi2_for_cum_prob(prop,n_modes);
 }
 
@@ -77,7 +79,7 @@ double msm_ellipsoid_limiter::slide_closer(vnl_vector<double>& b,
   vnl_vector<double> b1 = y-s*u;
 
   // Scale it so that it is on the ellipsoid
-  b1 *= vcl_sqrt(M_max_/mahalanobis(b1));
+  b1 *= std::sqrt(M_max_/mahalanobis(b1));
 
   double d2=vnl_vector_ssd(b,b1)/n;
 
@@ -100,7 +102,7 @@ void msm_ellipsoid_limiter::apply_limit(vnl_vector<double>& b) const
   vnl_vector<double> b0=b;
 
   // Initial estimate: shrink towards origin so that M=M_max_
-  b*=vcl_sqrt(M_max_/M);
+  b*=std::sqrt(M_max_/M);
 
   // Now slide around ellipsoid by moving to nearest point
   // to b0 on the tangent plane at current b, then normalising
@@ -112,7 +114,7 @@ void msm_ellipsoid_limiter::apply_limit(vnl_vector<double>& b) const
 
 //=======================================================================
 //: Print class to os
-void msm_ellipsoid_limiter::print_summary(vcl_ostream& os) const
+void msm_ellipsoid_limiter::print_summary(std::ostream& os) const
 {
   os<<" { M_max: "<<M_max_ <<" accept_prop: "<<accept_prop_<<" } ";
 }
@@ -142,16 +144,16 @@ void msm_ellipsoid_limiter::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,M_max_);
       break;
     default:
-      vcl_cerr << "msm_ellipsoid_limiter::b_read() :\n"
+      std::cerr << "msm_ellipsoid_limiter::b_read() :\n"
                << "Unexpected version number " << version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
 
-vcl_string msm_ellipsoid_limiter::is_a() const
+std::string msm_ellipsoid_limiter::is_a() const
 {
-  return vcl_string("msm_ellipsoid_limiter");
+  return std::string("msm_ellipsoid_limiter");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -163,11 +165,11 @@ msm_param_limiter* msm_ellipsoid_limiter::clone() const
 //: Initialise from a text stream.
 // The default implementation is for attribute-less normalisers,
 // and throws if it finds any data in the stream.
-void msm_ellipsoid_limiter::config_from_stream(vcl_istream &is)
+void msm_ellipsoid_limiter::config_from_stream(std::istream &is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   accept_prop_=vul_string_atof(props.get_optional_property("accept_prop","0.98"));

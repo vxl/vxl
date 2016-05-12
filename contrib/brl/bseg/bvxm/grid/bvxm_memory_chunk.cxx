@@ -1,25 +1,27 @@
+#include <cstring>
+#include <iostream>
+#include <cstddef>
 #include "bvxm_memory_chunk.h"
 //:
 // \file
 // \brief Ref. counted block of data on the heap. Based on vil_memory_chunk.cxx
 // \author Dan Crispell
 
-#include <vcl_cstring.h>
-#include <vcl_cstddef.h> // for std::size_t
-#include <vbl/vbl_smart_ptr.txx>
+#include <vcl_compiler.h>
+#include <vbl/vbl_smart_ptr.hxx>
 
 //: Default constructor
-bvxm_memory_chunk::bvxm_memory_chunk() : data_(0), size_(0) {}
+bvxm_memory_chunk::bvxm_memory_chunk() : data_(VXL_NULLPTR), size_(0) {}
 
 //: Allocate n bytes of memory
 bvxm_memory_chunk::bvxm_memory_chunk(vxl_uint_64 n)
 {
   data_ = new (std::nothrow)char[(unsigned)n];
-  
-  if (data_ == 0) {
-    vcl_cout << "bvxm_memory_chunk: Could not allocate data!" << vcl_endl;
+
+  if (data_ == VXL_NULLPTR) {
+    std::cout << "bvxm_memory_chunk: Could not allocate data!" << std::endl;
   }
-  
+
   size_ = n;
 }
 
@@ -34,7 +36,7 @@ bvxm_memory_chunk::bvxm_memory_chunk(const bvxm_memory_chunk& d)
 : vbl_ref_count(),
   data_(new char[(unsigned)d.size()]), size_(d.size())
 {
-  vcl_memcpy(data_,d.data_,(vcl_size_t)size_);
+  std::memcpy(data_,d.data_,(std::size_t)size_);
 }
 
 //: Assignment operator
@@ -43,7 +45,7 @@ bvxm_memory_chunk& bvxm_memory_chunk::operator=(const bvxm_memory_chunk& d)
   if (this==&d) return *this;
 
   set_size(d.size());
-  vcl_memcpy(data_,d.data_,(vcl_size_t)size_);
+  std::memcpy(data_,d.data_,(std::size_t)size_);
   return *this;
 }
 
@@ -53,7 +55,7 @@ void bvxm_memory_chunk::set_size(vxl_uint_64 n)
 {
   if (size_==n) return;
   delete [] reinterpret_cast<char*>(data_);
-  data_ = 0;
+  data_ = VXL_NULLPTR;
   if (n>0)
     data_ = new char[(unsigned)n];
   size_ = n;

@@ -15,9 +15,11 @@
 // \endverbatim
 //=======================================================================
 
+#include <iostream>
+#include <iosfwd>
 #include <vpdfl/vpdfl_builder_base.h>
 #include <vnl/vnl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 
@@ -65,7 +67,7 @@ class vpdfl_gaussian_builder : public vpdfl_builder_base
   //: Build model from weighted data
   virtual void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
-                              const vcl_vector<double>& wts) const;
+                              const std::vector<double>& wts) const;
 
   //: Computes mean and covariance of given data
   void meanCovar(vnl_vector<double>& mean, vnl_matrix<double>& covar,
@@ -80,16 +82,16 @@ class vpdfl_gaussian_builder : public vpdfl_builder_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(std::string const&) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_builder_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -105,7 +107,7 @@ class vpdfl_gaussian_builder : public vpdfl_builder_base
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(vcl_istream & is);
+  virtual void config_from_stream(std::istream & is);
 
 };
 

@@ -1,5 +1,7 @@
+#include <iostream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 #include <bil/algo/bil_edt.h>
 
@@ -10,13 +12,13 @@
 
 void bil_edt_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d=false);
 void bil_edt_test_3D(vil_image_view<vxl_uint_32> &im, bool print);
-void bil_edt_test_specific(const vil_image_view<vxl_uint_32> &im, const vil_image_view<vxl_uint_32> dt_brute, bool print, vcl_string algo);
+void bil_edt_test_specific(const vil_image_view<vxl_uint_32> &im, const vil_image_view<vxl_uint_32> dt_brute, bool print, std::string algo);
 
 #define DATA(I) (I).top_left_ptr()
 
 static void test_bil_edt()
 {
-  vcl_cout << "Exact Euclidean Distance Transform Algorithms\n";
+  std::cout << "Exact Euclidean Distance Transform Algorithms\n";
 
   {
   unsigned r=5,c=7;
@@ -31,8 +33,8 @@ static void test_bil_edt()
   image(4,4)=0;
   DATA(image)[34]=0;
 
-  vcl_cout << "ORIGINAL IMAGE:\n" << vcl_endl;
-  vil_print_all(vcl_cout,image);
+  std::cout << "ORIGINAL IMAGE:\n" << std::endl;
+  vil_print_all(std::cout,image);
 
   bil_edt_test(image,true);
   }
@@ -85,8 +87,8 @@ static void test_bil_edt()
 
   image(2,3,1)=0;
 
-  vcl_cout << "ORIGINAL IMAGE:\n" << vcl_endl;
-  vil_print_all(vcl_cout,image);
+  std::cout << "ORIGINAL IMAGE:\n" << std::endl;
+  vil_print_all(std::cout,image);
 
   bil_edt_test(image,true,true);
   }
@@ -127,8 +129,8 @@ bil_edt_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d)
     bil_edt_brute_force_with_list(dt_brute);
 
   if (print) {
-     vcl_cout << "BRUTE DT:\n";
-     vil_print_all(vcl_cout,dt_brute);
+     std::cout << "BRUTE DT:\n";
+     vil_print_all(std::cout,dt_brute);
   }
 
   if (three_d) {
@@ -144,7 +146,7 @@ bil_edt_test_specific(
     const vil_image_view<vxl_uint_32> &im,
     const vil_image_view<vxl_uint_32> dt_brute,
     bool print,
-    vcl_string algo)
+    std::string algo)
 {
   vil_image_view <vxl_uint_32> dt_algo(vil_copy_deep(im));
 
@@ -155,11 +157,11 @@ bil_edt_test_specific(
   else if (algo == "Saito 3D")
     bil_edt_saito_3D(dt_algo);
   else
-    vcl_abort();
+    std::abort();
 
   if (print) {
-    vcl_cout << algo << " DT:\n";
-    vil_print_all(vcl_cout,dt_algo);
+    std::cout << algo << " DT:\n";
+    vil_print_all(std::cout,dt_algo);
   }
 
   bool algo_error=false;
@@ -168,12 +170,12 @@ bil_edt_test_specific(
     unsigned dst;
     dst = DATA(dt_brute)[i];
     if (dst != DATA(dt_algo)[i]) {
-      vcl_cout << "Error! " << algo << ": " << DATA(dt_algo)[i] << " EXACT: " << dst << vcl_endl;
+      std::cout << "Error! " << algo << ": " << DATA(dt_algo)[i] << " EXACT: " << dst << std::endl;
       algo_error = true;
       break;
     }
   }
 
-  vcl_string msg = vcl_string("Is ") + algo + vcl_string(" exact");
+  std::string msg = std::string("Is ") + algo + std::string(" exact");
   TEST(msg.c_str() , algo_error, false);
 }

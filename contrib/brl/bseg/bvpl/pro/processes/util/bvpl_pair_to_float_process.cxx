@@ -27,11 +27,11 @@ bool bvpl_pair_to_float_process_cons(bprb_func_process& pro)
   // process takes 2 inputs:
   //input[0]: The voxel_grid
   //input[1]: The filename to write to
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "vcl_string";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]="bvxm_voxel_grid_base_sptr";  // The resulting grid
 
   return pro.set_output_types(output_types_)&& pro.set_input_types(input_types_);
@@ -44,11 +44,11 @@ bool bvpl_pair_to_float_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << n_inputs_ << std::endl;
     return false;
   }
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
-  vcl_string volume_path = pro.get_input<vcl_string>(1);
+  std::string volume_path = pro.get_input<std::string>(1);
 
   // create the grid from in memory file and save
    if (bvxm_voxel_grid<bvpl_pair> *pair_grid = dynamic_cast< bvxm_voxel_grid<bvpl_pair >* >(grid_base.ptr()))
@@ -60,6 +60,6 @@ bool bvpl_pair_to_float_process(bprb_func_process& pro)
      return true;
    }
    else
-    vcl_cerr << "Grid type not supportted yet, but you can add one!\n";
+    std::cerr << "Grid type not supportted yet, but you can add one!\n";
   return false;
 }

@@ -26,7 +26,7 @@ vil_image_resource_sptr vepl_sobel(vil_image_resource_sptr image)
       img_out->put_view(out);
     }
     else
-      vcl_cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
+      std::cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
   }
 
   // byte greyscale
@@ -97,7 +97,7 @@ vil_image_resource_sptr vepl_sobel(vil_image_resource_sptr image)
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_sobel() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_sobel() not implemented for " << image << '\n';
 
   return img_out;
 }

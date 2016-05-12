@@ -1,10 +1,11 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_distance_transform.h>
 
 static void test_algo_distance_transform1()
 {
-  vcl_cout << "********************************\n"
+  std::cout << "********************************\n"
            << " Testing vil_distance_transform\n"
            << "********************************\n";
 
@@ -16,7 +17,7 @@ static void test_algo_distance_transform1()
   src_im(5,20)=0;
   vil_distance_transform(src_im);
 
-  const float sqrt2 = vcl_sqrt(2.0f);
+  const float sqrt2 = std::sqrt(2.0f);
 
   TEST_NEAR("(10,10)",src_im(10,10),0,1e-6);
   TEST_NEAR("(10,11)",src_im(10,11),1,1e-6);
@@ -29,7 +30,7 @@ static void test_algo_distance_transform1()
   TEST_NEAR("(11,11)",src_im(11,11),sqrt2,1e-6);
   TEST_NEAR("(11,12)",src_im(11,12),1+sqrt2,1e-6);
 
-  vcl_cout<<"Test edge\n";
+  std::cout<<"Test edge\n";
   TEST_NEAR("(0,5)",src_im(0,5),0,1e-6);
   TEST_NEAR("(0,3)",src_im(0,3),2,1e-6);
   TEST_NEAR("(0,4)",src_im(0,4),1,1e-6);
@@ -37,7 +38,7 @@ static void test_algo_distance_transform1()
   TEST_NEAR("(0,7)",src_im(0,7),2,1e-6);
   TEST_NEAR("(20,0)",src_im(20,0),sqrt2*10.0,1e-5);
 
-  vcl_cout<<"Test edge\n";
+  std::cout<<"Test edge\n";
   TEST_NEAR("(5,20)",src_im(5,20),0,1e-6);
   TEST_NEAR("(4,20)",src_im(4,20),1,1e-6);
   TEST_NEAR("(6,20)",src_im(6,20),1,1e-6);
@@ -46,7 +47,7 @@ static void test_algo_distance_transform1()
 
 static void test_algo_distance_transform2()
 {
-  vcl_cout << "********************************\n"
+  std::cout << "********************************\n"
            << " Testing vil_distance_transform\n"
            << "********************************\n";
 
@@ -58,8 +59,8 @@ static void test_algo_distance_transform2()
   src_im(5,20)=0;
   vil_distance_transform_r2(src_im);
 
-  const float sqrt2 = vcl_sqrt(2.0f);
-  const float sqrt5 = vcl_sqrt(5.0f);
+  const float sqrt2 = std::sqrt(2.0f);
+  const float sqrt5 = std::sqrt(5.0f);
 
   TEST_NEAR("(10,10)",src_im(10,10),0,1e-6);
   TEST_NEAR("(10,11)",src_im(10,11),1,1e-6);
@@ -73,7 +74,7 @@ static void test_algo_distance_transform2()
   TEST_NEAR("(11,12)",src_im(11,12),sqrt5,1e-6);
   TEST_NEAR("(12,11)",src_im(12,11),sqrt5,1e-6);
 
-  vcl_cout<<"Test edge\n";
+  std::cout<<"Test edge\n";
   TEST_NEAR("(0,3)",src_im(0,3),2,1e-6);
   TEST_NEAR("(0,4)",src_im(0,4),1,1e-6);
   TEST_NEAR("(0,5)",src_im(0,5),0,1e-6);
@@ -86,7 +87,7 @@ static void test_algo_distance_transform2()
   TEST_NEAR("(1,7)",src_im(1,7),sqrt5,1e-6);
   TEST_NEAR("(20,0)",src_im(20,0),sqrt2*10.0,1e-5);
 
-  vcl_cout<<"Test edge\n";
+  std::cout<<"Test edge\n";
   TEST_NEAR("(3,20)",src_im(3,20),2,1e-6);
   TEST_NEAR("(4,20)",src_im(4,20),1,1e-6);
   TEST_NEAR("(5,20)",src_im(5,20),0,1e-6);

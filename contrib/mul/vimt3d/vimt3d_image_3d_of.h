@@ -9,9 +9,11 @@
 // \author Tim Cootes
 
 
+#include <iostream>
+#include <iosfwd>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 
 //: Represent 3D image of type T together with a transform.
@@ -21,16 +23,16 @@ template<class T>
 class vimt3d_image_3d_of : public vimt3d_image_3d
 {
 private:
-  
+
   vil3d_image_view<T> image_;
 
   //: Shallow equality tester.
   //  The parameter must be identical type to this.
   bool equals(const vimt_image &) const;
- 
+
 
 public:
-  
+
   //: Construct an empty one-plane image.
   vimt3d_image_3d_of() {}
 
@@ -43,11 +45,11 @@ public:
 
   //: Construct from a view and a world-to-image transform.
   // The underlying pixel data is not duplicated.
-  vimt3d_image_3d_of(const vil3d_image_view<T>& view, 
+  vimt3d_image_3d_of(const vil3d_image_view<T>& view,
                      const vimt3d_transform_3d& w2i)
     : vimt3d_image_3d(w2i), image_(view) {}
- 
-  
+
+
   //: Destructor
   virtual ~vimt3d_image_3d_of() {}
 
@@ -85,10 +87,10 @@ public:
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
     //  Note that this will make a shallow copy of any contained images
@@ -99,10 +101,10 @@ public:
   virtual vimt_image* deep_clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: print all data to os (rounds output to int)
-  virtual void print_all(vcl_ostream& os) const;
+  virtual void print_all(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -114,7 +116,7 @@ public:
 
 //=======================================================================
 //: True if the transforms and the actual image data are identical.
-// The image pointers need not be identical, 
+// The image pointers need not be identical,
 // provided that the underlying image data are the same.
 // \relatesalso vimt3d_image_3d_of<T>
 // \relatesalso vil3d_image_view

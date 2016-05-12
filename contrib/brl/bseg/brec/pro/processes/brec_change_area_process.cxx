@@ -12,9 +12,10 @@
 //   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 
@@ -22,13 +23,13 @@
 bool brec_change_area_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float");  // expected area
   output_types.push_back("float");  // expected area as a percentage of the total number of pixels
   ok = pro.set_output_types(output_types);
@@ -40,7 +41,7 @@ bool brec_change_area_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2){
-    vcl_cerr << "In brec_change_area_process - invalid inputs\n";
+    std::cerr << "In brec_change_area_process - invalid inputs\n";
     return false;
   }
 

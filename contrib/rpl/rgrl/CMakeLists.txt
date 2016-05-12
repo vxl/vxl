@@ -4,13 +4,13 @@ doxygen_add_library(contrib/rpl/rgrl
   DESCRIPTION "Rensselaer (Generalized) Registration Library"
   )
 
-IF(vxl_SOURCE_DIR)
-  SET(VXL_MUL_INCLUDE_DIR ${MUL_INCLUDE_DIR})
-ENDIF(vxl_SOURCE_DIR)
+if(CMAKE_SOURCE_DIR)
+  set(VXL_MUL_INCLUDE_DIR ${MUL_INCLUDE_DIR})
+endif()
 
-INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/rpl )
-SET( rgrl_sources
+include_directories( ${VXL_MUL_INCLUDE_DIR} )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/rpl )
+set( rgrl_sources
   rgrl_export.h
   rgrl_fwd.h
   rgrl_object.h                        rgrl_object.cxx
@@ -160,22 +160,19 @@ SET( rgrl_sources
   rgrl_copyright.h
 )
 
-AUX_SOURCE_DIRECTORY( Templates rgrl_sources )
+aux_source_directory( Templates rgrl_sources )
 
-ADD_LIBRARY( rgrl ${rgrl_sources} )
+vxl_add_library(LIBRARY_NAME rgrl LIBRARY_SOURCES ${rgrl_sources} )
+target_link_libraries( rgrl rrel rsdl vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
+#find_package( ITK )
+#if( ITK_FOUND )
+#    target_link_libraries( rgrl ITKCommon )
+#endif()
 
-INSTALL_TARGETS(/lib rgrl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgrl ${rgrl_sources})
-TARGET_LINK_LIBRARIES( rgrl rrel rsdl vil3d vil vnl_algo vnl vbl vul)
-#FIND_PACKAGE( ITK )
-#IF( ITK_FOUND )
-#    TARGET_LINK_LIBRARIES( rgrl ITKCommon )
-#ENDIF( ITK_FOUND )
-
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()

@@ -1,14 +1,15 @@
 // This is rpl/rsdl/rsdl_point.cxx
+#include <iostream>
 #include "rsdl_point.h"
 //:
 //  \file
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 rsdl_point::rsdl_point( )
-  : Nc_(0), Na_(0), data_(0)
+  : Nc_(0), Na_(0), data_(VXL_NULLPTR)
 {
 }
 
@@ -27,7 +28,7 @@ rsdl_point::rsdl_point( const_iterator c_begin, const_iterator c_end,
   for ( unsigned int j=0; j<Na_; ++j ) data_[ Nc_ +j ]= * ( a_begin + j );
 }
 
- 
+
 rsdl_point::rsdl_point( const vnl_vector<double>& c, const vnl_vector<double>& a )
   : Nc_( c.size() ), Na_( a.size() ),  data_( new double[ Nc_ + Na_ ] )
 {
@@ -35,7 +36,7 @@ rsdl_point::rsdl_point( const vnl_vector<double>& c, const vnl_vector<double>& a
   for ( unsigned int j=0; j<Na_; ++j ) data_[ Nc_ + j ]= a[j];
 }
 
- 
+
 rsdl_point::rsdl_point( const rsdl_point& old )
   : Nc_( old.Nc_ ), Na_( old.Na_ ), data_( new double[ Nc_ + Na_ ] )
 {
@@ -57,8 +58,8 @@ rsdl_point::~rsdl_point()
   delete [] data_;
 }
 
- 
-void 
+
+void
 rsdl_point::set_cartesian( const vnl_vector<double>& c )
 {
   assert ( c.size() == Nc_ );
@@ -67,7 +68,7 @@ rsdl_point::set_cartesian( const vnl_vector<double>& c )
 }
 
 
-void 
+void
 rsdl_point::set_cartesian( const_iterator c )
 {
   for ( unsigned int i=0; i<Nc_; ++i, ++c )
@@ -75,7 +76,7 @@ rsdl_point::set_cartesian( const_iterator c )
 }
 
 
-void 
+void
 rsdl_point::set_angular( const vnl_vector<double>& a )
 {
   assert ( a.size() == Na_ );
@@ -84,7 +85,7 @@ rsdl_point::set_angular( const vnl_vector<double>& a )
 }
 
 //: \brief  Establish the cartesian and angular values from a vnl_vector.  Size is checked.
-void 
+void
 rsdl_point::set_all( const vnl_vector<double>& all )
 {
    assert ( all.size() == Nc_ + Na_ );
@@ -93,7 +94,7 @@ rsdl_point::set_all( const vnl_vector<double>& all )
 }
 
 
-void 
+void
 rsdl_point::set_angular( const_iterator a )
 {
   for ( unsigned int i=0; i<Na_; ++i, ++a )
@@ -132,21 +133,21 @@ rsdl_point::resize( unsigned int Nc, unsigned int Na )
   }
 }
 
-vcl_ostream& operator<< ( vcl_ostream& ostr, const rsdl_point& pt )
+std::ostream& operator<< ( std::ostream& ostr, const rsdl_point& pt )
 {
   int Nc = pt.num_cartesian();
   int Na = pt.num_angular();
   int i;
-  vcl_cout << "Cartesian: [";
+  std::cout << "Cartesian: [";
   for ( i=0; i<Nc; ++i ) {
-    vcl_cout << pt.cartesian(i);
-    if ( i<Nc-1 ) vcl_cout << ",";
+    std::cout << pt.cartesian(i);
+    if ( i<Nc-1 ) std::cout << ",";
   }
-  vcl_cout << "];  Angular: [";
+  std::cout << "];  Angular: [";
   for ( i=0; i<Na; ++i ) {
-    vcl_cout << pt.angular(i);
-    if ( i<Na-1 ) vcl_cout << ",";
+    std::cout << pt.angular(i);
+    if ( i<Na-1 ) std::cout << ",";
   }
-  vcl_cout << "]";
+  std::cout << "]";
   return ostr;
 }

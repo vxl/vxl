@@ -1,7 +1,8 @@
 // This is mul/vimt3d/tests/test_sample_grid_trilin.cxx
 // It also tests vimt3d_reconstruct_from_grid
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_na.h>
 #include <vgl/vgl_point_3d.h>
@@ -31,22 +32,22 @@ void compare_images(const vimt3d_image_3d_of<vxl_int_32> &image1,
           if (val1 != val2 && val1 != val2+1)
           {
             different=true;
-            vcl_cout << "Value in ["<<i<<','<<j<<','<<k<<"] differs: should be "
-                     << val1 << ", is " << val2 << vcl_endl;
+            std::cout << "Value in ["<<i<<','<<j<<','<<k<<"] differs: should be "
+                     << val1 << ", is " << val2 << std::endl;
           }
         }
       }
     }
   }
   else
-    vcl_cout << "world2im() differs\n";
+    std::cout << "world2im() differs\n";
 
   TEST("Reconstructed image equals original image", different, false);
 }
 
 static void test_sample_grid_trilin()
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << " Testing vimt3d_sample_grid_trilin_3d\n"
            << "**************************************\n";
 

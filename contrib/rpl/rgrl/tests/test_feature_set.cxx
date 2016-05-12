@@ -1,6 +1,8 @@
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_set_sptr.h>
@@ -15,7 +17,7 @@
 namespace {
 
 bool
-in_vec_2( vcl_vector< rgrl_feature_sptr > const& vec,
+in_vec_2( std::vector< rgrl_feature_sptr > const& vec,
           rgrl_feature_sptr p1,
           rgrl_feature_sptr p2 )
 {
@@ -27,7 +29,7 @@ in_vec_2( vcl_vector< rgrl_feature_sptr > const& vec,
 void
 test_feature_set_location_2( )
 {
-  vcl_vector< rgrl_feature_sptr > points, results;
+  std::vector< rgrl_feature_sptr > points, results;
 
   points.push_back( pf( vec2d( 0, 0 ) ) );  // 0
   points.push_back( pf( vec2d( 1, 0 ) ) );  // 1
@@ -111,7 +113,7 @@ test_feature_set_location_2( )
 void
 test_feature_set_location_3( )
 {
-  vcl_vector< rgrl_feature_sptr > points, results;
+  std::vector< rgrl_feature_sptr > points, results;
 
   points.push_back( pf( vec3d( 0, 0, 0 ) ) );  // 0
   points.push_back( pf( vec3d( 1, 0, 0 ) ) );  // 1

@@ -2,7 +2,7 @@
 //:
 // \file
 #include "grid/bvxm_voxel_slab.h"
-#include "grid/bvxm_voxel_slab.txx"
+#include "grid/bvxm_voxel_slab.hxx"
 #include "grid/bvxm_voxel_slab_iterator.h"
 #include <vcl_cassert.h>
 
@@ -124,7 +124,7 @@ bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::ex
 }
 
 //: color of the most probable mode in the mixtures in the slab
-bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear) 
+bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear)
 {
   //the output
    bvxm_voxel_slab<obs_datatype> color(appear.nx(),appear.ny(),appear.nz());

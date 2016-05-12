@@ -1,8 +1,9 @@
+#include <iostream>
 #include "vgui_qt_adaptor.h"
 #include "vgui_qt_menu.h"
 
 #include <vgui/vgui_popup_params.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <QMenu>
 
@@ -14,7 +15,7 @@ vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent)
    : QGLWidget(QGLFormat(DoubleBuffer|DepthBuffer|Rgba|AlphaChannel|
                          AccumBuffer|StencilBuffer|NoStereoBuffers|
                          DirectRendering), parent),
-     ovl_helper(0),
+     ovl_helper(VXL_NULLPTR),
      use_overlay_helper(true),
      idle_request_posted_(false)
 {
@@ -26,16 +27,16 @@ vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent)
    QGLFormat format = this-> format ();
 
    if (!format. doubleBuffer ())
-     vcl_cerr << "vgui_qt_adaptor: got single buffer\n";
+     std::cerr << "vgui_qt_adaptor: got single buffer\n";
 
    if (!format. depth ())
-     vcl_cerr << "vgui_qt_adaptor: no depth buffer\n";
+     std::cerr << "vgui_qt_adaptor: no depth buffer\n";
 
    if (!format. rgba ())
-     vcl_cerr << "vgui_qt_adaptor: index color\n";
+     std::cerr << "vgui_qt_adaptor: index color\n";
 
    if (!format. directRendering ())
-     vcl_cerr << "vgui_qt_adaptor: no direct rendering\n";
+     std::cerr << "vgui_qt_adaptor: no direct rendering\n";
 
    // Set up idle time
    idle_timer_ = new QTimer (this);
@@ -48,10 +49,10 @@ vgui_qt_adaptor::~vgui_qt_adaptor()
 {
    if (ovl_helper)
      delete ovl_helper;
-   ovl_helper = 0;
+   ovl_helper = VXL_NULLPTR;
    dispatch_to_tableau(vgui_DESTROY);
-   
-   for(vcl_map<int, vgui_qt_internal_timer*>::iterator it = timers_.begin();
+
+   for(std::map<int, vgui_qt_internal_timer*>::iterator it = timers_.begin();
        it != timers_.end(); ++it){
       delete it->second;
    }
@@ -107,8 +108,8 @@ void vgui_qt_adaptor::post_idle_request()
 //------------------------------------------------------------------------------
 void vgui_qt_adaptor::post_timer(float timeout, int name)
 {
-   vcl_map<int, vgui_qt_internal_timer*>::iterator it = timers_.find( name );
-   if( it == timers_.end() )  
+   std::map<int, vgui_qt_internal_timer*>::iterator it = timers_.find( name );
+   if( it == timers_.end() )
      timers_[name] = new vgui_qt_internal_timer(this,name);
    QTimer::singleShot(static_cast<int>(timeout), timers_[name], SLOT(activate()));
 }
@@ -116,7 +117,7 @@ void vgui_qt_adaptor::post_timer(float timeout, int name)
 //------------------------------------------------------------------------------
 void vgui_qt_adaptor::kill_timer(int name)
 {
-   vcl_map<int, vgui_qt_internal_timer*>::iterator it = timers_.find( name );
+   std::map<int, vgui_qt_internal_timer*>::iterator it = timers_.find( name );
    if( it != timers_.end() ){
       delete it->second;
       timers_.erase(it);
@@ -222,8 +223,8 @@ void vgui_qt_adaptor::windowActivationChange (bool oldActive)
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_internal_timer::activate() 
-{ 
+void vgui_qt_internal_timer::activate()
+{
    if(adaptor){
       vgui_event e(vgui_TIMER);
       e.timer_id = id;

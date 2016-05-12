@@ -5,10 +5,12 @@
 // \author Tim Cootes
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 
+#include <string>
+#include <iostream>
+#include <cmath>
 #include "pdf1d_compare_to_pdf_ks.h"
 
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vbl/vbl_qsort.h>
 #include <vnl/vnl_vector.h>
 
@@ -38,7 +40,7 @@ double pdf1d_compare_to_pdf_ks::compare(const double* data, int n,
 {
   if (!pdf.cdf_is_analytic())
   {
-    vcl_cerr<<"Warning: pdf1d_compare_to_pdf_ks::compare() "
+    std::cerr<<"Warning: pdf1d_compare_to_pdf_ks::compare() "
             <<"Incorrectly assuming an analytic form for CDF.\n";
     // Should use slightly different implementation when estimating CDF using samples
     // Not yet implemented though.
@@ -57,15 +59,15 @@ double pdf1d_compare_to_pdf_ks::compare(const double* data, int n,
   {
     double cdf = pdf.cdf(s[i]);
     double data_cdf = (1.0+i)/n;
-    double d = vcl_fabs(cdf-data_cdf);
+    double d = std::fabs(cdf-data_cdf);
     if (d>d_max) d_max=d;
-    d = vcl_fabs(cdf_last-data_cdf);
+    d = std::fabs(cdf_last-data_cdf);
     if (d>d_max) d_max=d;
 
     cdf_last = cdf;
   }
 
-  double root_n = vcl_sqrt(double(n));
+  double root_n = std::sqrt(double(n));
   return pdf1d_prob_ks((root_n+0.12+0.11/root_n)*d_max);
 }
 
@@ -74,16 +76,16 @@ double pdf1d_compare_to_pdf_ks::compare(const double* data, int n,
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_compare_to_pdf_ks::is_a() const
+std::string pdf1d_compare_to_pdf_ks::is_a() const
 {
-  return vcl_string("pdf1d_compare_to_pdf_ks");
+  return std::string("pdf1d_compare_to_pdf_ks");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_compare_to_pdf_ks::is_class(vcl_string const& s) const
+bool pdf1d_compare_to_pdf_ks::is_class(std::string const& s) const
 {
   return pdf1d_compare_to_pdf::is_class(s) || s==pdf1d_compare_to_pdf_ks::is_a();
 }
@@ -110,9 +112,9 @@ pdf1d_compare_to_pdf* pdf1d_compare_to_pdf_ks::clone() const
 // Method: print
 //=======================================================================
 
-void pdf1d_compare_to_pdf_ks::print_summary(vcl_ostream& /*os*/) const
+void pdf1d_compare_to_pdf_ks::print_summary(std::ostream& /*os*/) const
 {
-  vcl_cerr << "pdf1d_compare_to_pdf_ks::print_summary() NYI\n";
+  std::cerr << "pdf1d_compare_to_pdf_ks::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -139,9 +141,9 @@ void pdf1d_compare_to_pdf_ks::b_read(vsl_b_istream& bfs)
     case 1:
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_ks &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_compare_to_pdf_ks &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

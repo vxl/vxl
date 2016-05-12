@@ -1,9 +1,9 @@
-#include <vidl/vidl_v4l_ulong_fix.h> // include first to fix linux/videodev.h ulong problem
+#include <iostream>
 #include <vidl/vidl_v4l_istream.h>
 #include <vidl/vidl_image_list_ostream.h>
 
 #include <vul/vul_timer.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 int main()
 {
@@ -15,11 +15,11 @@ int main()
     while ( test.advance()
             && --i)
     {
-        vcl_cout << "Grabbing: " << i << vcl_endl;
+        std::cout << "Grabbing: " << i << std::endl;
         if (!test_out.write_frame(test.current_frame()))
-            vcl_cout << "Couldn't write frame\n";
+            std::cout << "Couldn't write frame\n";
     }
-    timer.print(vcl_cout);
+    timer.print(std::cout);
 
     return 0;
 }

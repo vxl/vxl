@@ -31,7 +31,7 @@ class vgui_adaptor_tableau : private vgui_tableau
   void set_child(vgui_tableau_sptr const& t) { slot.assign(t); }
   vgui_parent_child_link get_child() const { return slot; }
   bool handle(vgui_event const &e) { return slot.handle(e); }
-  vcl_string type_name() const { return "vgui_adaptor_tableau"; }
+  std::string type_name() const { return "vgui_adaptor_tableau"; }
 
 //even more private:
   vgui_adaptor *adaptor;

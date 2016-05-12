@@ -7,9 +7,9 @@ namespace {
 // create a test scene with world points, cameras, and ideal projections
 // of the points into the images
 void setup_scene(const vpgl_calibration_matrix<double>& K,
-                 vcl_vector<vgl_point_3d<double> >& world,
-                 vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                 vcl_vector<vgl_point_2d<double> >& image_points)
+                 std::vector<vgl_point_3d<double> >& world,
+                 std::vector<vpgl_perspective_camera<double> >& cameras,
+                 std::vector<vgl_point_2d<double> >& image_points)
 {
   world.clear();
   // The world points are the 8 corners of a unit cube
@@ -47,14 +47,14 @@ void setup_scene(const vpgl_calibration_matrix<double>& K,
 
 static void test_ba_fixed_k_lsqr()
 {
-  vcl_vector<vgl_point_3d<double> > world;
-  vcl_vector<vpgl_perspective_camera<double> > cameras;
-  vcl_vector<vgl_point_2d<double> > image_points;
+  std::vector<vgl_point_3d<double> > world;
+  std::vector<vpgl_perspective_camera<double> > cameras;
+  std::vector<vgl_point_2d<double> > image_points;
   // our known internal calibration
   vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384),1,0.7,2);
   setup_scene(K, world, cameras, image_points);
-  vcl_vector<vcl_vector<bool> > mask(cameras.size(), vcl_vector<bool>(world.size(),true) );
-  vcl_vector<vpgl_calibration_matrix<double> > Ks(cameras.size(),K);
+  std::vector<std::vector<bool> > mask(cameras.size(), std::vector<bool>(world.size(),true) );
+  std::vector<vpgl_calibration_matrix<double> > Ks(cameras.size(),K);
 
   vpgl_ba_fixed_k_lsqr func(Ks,image_points,mask);
 
@@ -112,10 +112,10 @@ static void test_ba_fixed_k_lsqr()
 
   func.set_residual_scale(10.0);
 
-  vcl_vector<vnl_matrix<double> > A(func.number_of_e(), vnl_matrix<double>(2,6));
-  vcl_vector<vnl_matrix<double> > B(func.number_of_e(), vnl_matrix<double>(2,3));
-  vcl_vector<vnl_matrix<double> > C(func.number_of_e(), vnl_matrix<double>(2,0));
-  vcl_vector<vnl_matrix<double> > fdA(A), fdB(B);
+  std::vector<vnl_matrix<double> > A(func.number_of_e(), vnl_matrix<double>(2,6));
+  std::vector<vnl_matrix<double> > B(func.number_of_e(), vnl_matrix<double>(2,3));
+  std::vector<vnl_matrix<double> > C(func.number_of_e(), vnl_matrix<double>(2,0));
+  std::vector<vnl_matrix<double> > fdA(A), fdB(B);
   func.jac_blocks(a2, b2, c, A, B, C);
 
   eps = 1e-8;

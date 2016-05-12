@@ -16,10 +16,12 @@
 //   theta_cap_  <= theta <=  (pi-theta_cap_)
 // the aziumuth range is:
 //  0 <= phi <= two_pi
-// 
+//
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_ray_3d.h>
@@ -31,8 +33,8 @@ class icam_spherical_map : public vbl_ref_count
   icam_spherical_map(): n_theta_(0), n_phi_(0), t_theta_(0.0), t_phi_(0.0),
     origin_(vgl_point_3d<double>()), radius_(1.0), theta_cap_(0){}
   icam_spherical_map(unsigned n_theta, unsigned nphi,
-		     vgl_point_3d<double> const& origin, double radius,
-		     double theta_cap):
+                     vgl_point_3d<double> const& origin, double radius,
+                     double theta_cap):
   n_theta_(n_theta), n_phi_(nphi), t_theta_(0.0), t_phi_(0.0),
     origin_(origin), radius_(radius), theta_cap_(theta_cap){}
 
@@ -40,15 +42,15 @@ class icam_spherical_map : public vbl_ref_count
   ~icam_spherical_map(){}
   //: images must be RGB byte. Cameras projective or perspective
 
-  void set_data(vcl_vector<vil_image_view<vxl_byte> > const& images,
-		vcl_vector<vpgl_camera_double_sptr > const& cams){
+  void set_data(std::vector<vil_image_view<vxl_byte> > const& images,
+                std::vector<vpgl_camera_double_sptr > const& cams){
     images_ = images; cams_ = cams;}
 
   //: find the camera with ray most aligned with the sphere normal at p
     bool closest_camera(vgl_ray_3d<double> const& sph_ray,
-			  vgl_point_3d<double> const& p,
-			unsigned& cam_index, double& dot_prod,
-			double& u, double& v) const;
+                          vgl_point_3d<double> const& p,
+                        unsigned& cam_index, double& dot_prod,
+                        double& u, double& v) const;
     //: translate the map in elevation(theta) and azimuth (phi)
     void set_trans(double t_theta, double t_phi)
     {t_theta_ = t_theta; t_phi_=t_phi;}
@@ -59,19 +61,19 @@ class icam_spherical_map : public vbl_ref_count
     // given point. Otherwise the intensity of the image is modulated
     // according to alignment with the sphere normal
     bool map_sphere(double angle_exponent = 0.0, bool use_image = true,
-		    vxl_byte fg_r = 0, vxl_byte fg_g = 255, vxl_byte fg_b = 0,
-		    vxl_byte bk_r = 20, vxl_byte bk_g = 20, vxl_byte bk_b = 20);
+                    vxl_byte fg_r = 0, vxl_byte fg_g = 255, vxl_byte fg_b = 0,
+                    vxl_byte bk_r = 20, vxl_byte bk_g = 20, vxl_byte bk_b = 20);
 
     vil_image_view<vxl_byte> sphere_map() const{
       return sph_map_;}
     //: render the sphere from a given theta and phi offset
     // the rendered sphere is inserted in the background image
     bool render_map(vil_image_view<vxl_byte>const& backgnd,
-		    vpgl_camera_double_sptr const& cam,
-		    double theta_off, double phi_off,
-		    vil_image_view<vxl_byte>& img,
-		    double scale = 1.0, float back_r = 0.0f,
-		    float back_g = 0.0f, float back_b = 255.0f);
+                    vpgl_camera_double_sptr const& cam,
+                    double theta_off, double phi_off,
+                    vil_image_view<vxl_byte>& img,
+                    double scale = 1.0, float back_r = 0.0f,
+                    float back_g = 0.0f, float back_b = 255.0f);
  protected:
   // number of samples in the map
   unsigned n_theta_;
@@ -87,9 +89,9 @@ class icam_spherical_map : public vbl_ref_count
   vil_image_view<vxl_byte> sph_map_;
   // input data
   // must be RGB byte images
-  vcl_vector<vil_image_view<vxl_byte> > images_;
+  std::vector<vil_image_view<vxl_byte> > images_;
   // currently projective/perspective cameras are supported
- vcl_vector<vpgl_camera_double_sptr > cams_;
+ std::vector<vpgl_camera_double_sptr > cams_;
 };
 
 

@@ -1,18 +1,18 @@
 # brl/bseg/boxm/util/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-SET(boxm_sample_algo_sources
+include_directories( ${MUL_INCLUDE_DIR} )
+set(boxm_sample_algo_sources
     boxm_mob_grey_processor.h        boxm_mob_grey_processor.cxx
     boxm_mog_grey_processor.h        boxm_mog_grey_processor.cxx
     boxm_simple_grey_processor.h     boxm_simple_grey_processor.cxx
     boxm_sigma_normalizer.h          boxm_sigma_normalizer.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates boxm_sample_algo_sources)
+aux_source_directory(Templates boxm_sample_algo_sources)
 
-ADD_LIBRARY(boxm_sample_algo ${boxm_sample_algo_sources})
+vxl_add_library(LIBRARY_NAME boxm_sample_algo LIBRARY_SOURCES ${boxm_sample_algo_sources})
 
-TARGET_LINK_LIBRARIES(boxm_sample_algo boxm_sample boxm boxm_util bsta bsta_algo vnl vgl_io vbl)
+target_link_libraries(boxm_sample_algo boxm_sample boxm boxm_util bsta bsta_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vbl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

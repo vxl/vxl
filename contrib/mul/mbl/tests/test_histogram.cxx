@@ -1,11 +1,12 @@
 // This is mul/mbl/tests/test_histogram.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <mbl/mbl_histogram.h>
 #include <testlib/testlib_test.h>
 
 void test_histogram()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing mbl_histogram\n"
            << "***********************\n";
 
@@ -29,7 +30,7 @@ void test_histogram()
   TEST("n_obs()",histo.n_obs(), 10);
   TEST("bin 1",histo.frequency()[0], 2);
 
-  vcl_cout<<histo<<vcl_endl;
+  std::cout<<histo<<std::endl;
 
   mbl_histogram histo2 = histo;
   TEST("Equality operator",histo, histo2);

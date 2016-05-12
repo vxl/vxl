@@ -17,21 +17,21 @@ int modeflags(char const* mode)
   if (*mode == 'a')
     return O_WRONLY | O_APPEND;
 #endif
-  vcl_cerr << vcl_endl << __FILE__ ": DODGY MODE " << mode << vcl_endl;
+  std::cerr << std::endl << __FILE__ ": DODGY MODE " << mode << std::endl;
   return 0;
 }
 
-bhdfs_fstream::bhdfs_fstream(vcl_string fn, char const* flags) : fname_(fn)
+bhdfs_fstream::bhdfs_fstream(std::string fn, char const* flags) : fname_(fn)
 {
   if (!bhdfs_manager::exists()) {
-    vcl_cerr << "bhdfs_manager instance does not exist! check hdfs connection!\n";
+    std::cerr << "bhdfs_manager instance does not exist! check hdfs connection!\n";
     throw 0;
   }
 
   f_ = hdfsOpenFile(bhdfs_manager::instance()->fs_, fn.c_str(), modeflags(flags), 0, 0, 0);
 
   if (!f_)  {
-      vcl_cerr << "Failed to open " << fn << " for writing!\n";
+      std::cerr << "Failed to open " << fn << " for writing!\n";
       throw 0;
   }
 }
@@ -39,14 +39,14 @@ bhdfs_fstream::bhdfs_fstream(vcl_string fn, char const* flags) : fname_(fn)
 bhdfs_fstream::~bhdfs_fstream()
 {
   if (ok() && hdfsCloseFile(bhdfs_manager::instance()->fs_, f_) < 0)
-    vcl_cerr << "warning: in bhdfs_fstream::close() - cannot close " << fname_ << vcl_endl;
+    std::cerr << "warning: in bhdfs_fstream::close() - cannot close " << fname_ << std::endl;
 }
 
 bool bhdfs_fstream::close()
 {
   int val = hdfsCloseFile(bhdfs_manager::instance()->fs_, f_);
   if (val < 0)
-    vcl_cerr << "warning: in bhdfs_fstream::close() - cannot close " << fname_ << vcl_endl;
+    std::cerr << "warning: in bhdfs_fstream::close() - cannot close " << fname_ << std::endl;
   f_ = 0; // now ok() returns false
   return val != -1;
 }
@@ -55,7 +55,7 @@ bhdfs_streampos bhdfs_fstream::write(void const* buf, bhdfs_streampos n)
 {
   tSize num_written_bytes = hdfsWrite(bhdfs_manager::instance()->fs_, f_, buf, n);
   if (hdfsFlush(bhdfs_manager::instance()->fs_, f_))  {
-     vcl_cerr << "Failed to 'flush' " << fname_ << '\n';
+     std::cerr << "Failed to 'flush' " << fname_ << '\n';
      throw 0;
    }
   return (bhdfs_streampos)num_written_bytes;
@@ -76,7 +76,7 @@ void bhdfs_fstream::seek(bhdfs_streampos pos)
 {
   int val = hdfsSeek(bhdfs_manager::instance()->fs_, f_, tOffset(pos));
   if (val < 0)
-    vcl_cerr << "warning: in bhdfs_fstream::seek() - cannot seek " << fname_ << " to pos: " << pos << vcl_endl;
+    std::cerr << "warning: in bhdfs_fstream::seek() - cannot seek " << fname_ << " to pos: " << pos << std::endl;
 }
 
 // caution: libhdfs does not always return actual size, so may only return 0

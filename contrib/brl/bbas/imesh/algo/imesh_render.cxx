@@ -1,9 +1,11 @@
 // This is brl/bbas/imesh/algo/imesh_render.cxx
+#include <iostream>
+#include <limits>
 #include "imesh_render.h"
 //:
 // \file
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <imesh/algo/imesh_project.h>
 #include <imesh/imesh_operations.h>
@@ -82,16 +84,16 @@ void imesh_render_textured(const imesh_mesh& mesh,
 {
   assert(mesh.vertices().dim() == 3);
   assert(mesh.has_tex_coords() == imesh_mesh::TEX_COORD_ON_VERT);
-  const vcl_vector<vgl_point_2d<double> >& tex_coords = mesh.tex_coords();
+  const std::vector<vgl_point_2d<double> >& tex_coords = mesh.tex_coords();
 
-  vcl_vector<vgl_point_2d<double> > verts2d;
-  vcl_vector<double> depths;
-  depth_img.fill(vcl_numeric_limits<double>::infinity());
+  std::vector<vgl_point_2d<double> > verts2d;
+  std::vector<double> depths;
+  depth_img.fill(std::numeric_limits<double>::infinity());
   imesh_project_verts(mesh.vertices<3>(), camera, verts2d, depths);
   assert(tex_coords.size() == verts2d.size());
 
   const imesh_face_array_base& faces = mesh.faces();
-  vcl_auto_ptr<imesh_regular_face_array<3> > tri_data;
+  std::auto_ptr<imesh_regular_face_array<3> > tri_data;
   const imesh_regular_face_array<3>* tris;
   if (faces.regularity() != 3) {
     tri_data = imesh_triangulate(faces);

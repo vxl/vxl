@@ -1,9 +1,10 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_ray_pyramid.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 //: Test changes
 static void test_bvgl_ray_pyramid()
@@ -24,9 +25,9 @@ static void test_bvgl_ray_pyramid()
   }
 
   //create pyramid
-  vcl_cout<<"Creating pyramid"<<vcl_endl;
+  std::cout<<"Creating pyramid"<<std::endl;
   bvgl_ray_pyramid pyramid(rays, 4);
-  vcl_cout<<"created"<<vcl_endl;
+  std::cout<<"created"<<std::endl;
 
   //////////////////////////////////////////////////////////////////////////////
   //calculate ground truth values
@@ -90,17 +91,17 @@ static void test_bvgl_ray_pyramid()
   float out2[2*2*4];
   float out3[1*1*4];
 
-  vcl_cout<<"Out1GT.."<<vcl_endl;
+  std::cout<<"Out1GT.."<<std::endl;
   print_column_major(out1GT, 4, 4, 4);
 
-  vcl_cout<<"Out2GT.."<<vcl_endl;
+  std::cout<<"Out2GT.."<<std::endl;
   print_column_major(out2GT, 2, 2, 4);
-  vcl_cout<<"Out2.."<<vcl_endl;
+  std::cout<<"Out2.."<<std::endl;
   print_column_major(out2, 2, 2, 4);
 
-  vcl_cout<<"Out3GT.."<<vcl_endl;
+  std::cout<<"Out3GT.."<<std::endl;
   print_column_major(out3GT,1,1,4);
-  vcl_cout<<"Out3..."<<vcl_endl;
+  std::cout<<"Out3..."<<std::endl;
   print_column_major(out3, 1,1,4);
 #endif
 
@@ -110,9 +111,9 @@ static void test_bvgl_ray_pyramid()
   for (int i=0; i<4; ++i) {
     for (int j=0; j<4; ++j) {
       vgl_ray_3d<float> ray = fbf(i,j);
-      if ( vcl_fabs(ray.direction().x() - out1GT[idx] ) > 1e-5f ) {
-        vcl_cout<<" img1 No match at "<<i<<','<< j << '\n'
-                <<"gt "<<out1GT[idx]<<" calc "<<ray.direction().x()<<vcl_endl;
+      if ( std::fabs(ray.direction().x() - out1GT[idx] ) > 1e-5f ) {
+        std::cout<<" img1 No match at "<<i<<','<< j << '\n'
+                <<"gt "<<out1GT[idx]<<" calc "<<ray.direction().x()<<std::endl;
       }
       idx+=4;
     }
@@ -123,9 +124,9 @@ static void test_bvgl_ray_pyramid()
   for (int j=0; j<2; ++j) {
     for (int i=0; i<2; ++i) {
       vgl_ray_3d<float> ray = fbf(i,j);
-      if ( vcl_fabs(ray.direction().x() - out2GT[idx] ) > 1e-5f ) {
-        vcl_cout<<" img2 No match at "<<i<<','<< j << '\n'
-                <<"gt "<<out2GT[idx]<<" calc "<<ray.direction().x()<<vcl_endl;
+      if ( std::fabs(ray.direction().x() - out2GT[idx] ) > 1e-5f ) {
+        std::cout<<" img2 No match at "<<i<<','<< j << '\n'
+                <<"gt "<<out2GT[idx]<<" calc "<<ray.direction().x()<<std::endl;
       }
       idx+=4;
     }
@@ -133,8 +134,8 @@ static void test_bvgl_ray_pyramid()
 #if 0
   //test 1x1 image
   for (int i=0; i<4*1*1; ++i) {
-    if ( vcl_fabs(out3GT[i] - out3[i]) > 1e-6f )
-      vcl_cout<<" img3 No match at "<<i<<':'<<out3GT[i]<<" != "<<out3[i]<<vcl_endl;
+    if ( std::fabs(out3GT[i] - out3[i]) > 1e-6f )
+      std::cout<<" img3 No match at "<<i<<':'<<out3GT[i]<<" != "<<out3[i]<<std::endl;
   }
 #endif
 }

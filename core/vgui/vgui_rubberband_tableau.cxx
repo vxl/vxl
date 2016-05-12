@@ -8,11 +8,12 @@
 // \date   31-MAR-2000
 // \brief  See vgui_rubberband_tableau.h for a description of this file.
 
+#include <cmath>
+#include <iostream>
 #include "vgui_rubberband_tableau.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_clip.h>
 #include <vnl/vnl_math.h> // for twopi
 
@@ -23,9 +24,9 @@
 vgui_rubberband_tableau::object_type vgui_rubberband_tableau::obj_type = none_enum;
 
 #ifdef __GNUC__ /* __FUNCTION__ is a GNU extension */
-# define function_macro { vcl_cerr << __FUNCTION__ << " not yet implemented\n"; }
+# define function_macro { std::cerr << __FUNCTION__ << " not yet implemented\n"; }
 #else
-# define function_macro { vcl_cerr << __FILE__ " : " << __LINE__ << " not yet implemented\n"; }
+# define function_macro { std::cerr << __FILE__ " : " << __LINE__ << " not yet implemented\n"; }
 #endif
 void vgui_rubberband_client::add_point(float, float) function_macro
 void vgui_rubberband_client::add_line(float,float,float,float) function_macro
@@ -188,7 +189,7 @@ void vgui_rubberband_tableau::draw_point(float x, float y)
   glColor3f(1,1,1);
   glBegin(GL_POINTS);
 #ifdef DEBUG
-   vcl_cerr << "vgui_rubberband_tableau::draw_point(" << x << ',' << y << ")\n";
+   std::cerr << "vgui_rubberband_tableau::draw_point(" << x << ',' << y << ")\n";
 #endif
   glVertex2f(x,y);
   glEnd();
@@ -237,7 +238,7 @@ void vgui_rubberband_tableau::draw_circle(float x, float y, float r)
 
   for (int i=0;i<100;++i) {
     double angle = vnl_math::twopi*0.01*i;
-    glVertex2d(vcl_cos(angle)*r + x, vcl_sin(angle)*r + y);
+    glVertex2d(std::cos(angle)*r + x, std::sin(angle)*r + y);
   }
   glEnd();
 }
@@ -369,7 +370,7 @@ bool vgui_rubberband_tableau::handle_circle(vgui_event const &e, float ix, float
     // hypot(x_coords[0] - lastx, y_coords[0]-lasty);
     float dx = x_coords[0] - lastx;
     float dy = y_coords[0] - lasty;
-    float radi = vcl_sqrt(dx*dx + dy*dy);
+    float radi = std::sqrt(dx*dx + dy*dy);
     draw_circle(x_coords[0], y_coords[0], radi);
     return true;
   }
@@ -378,7 +379,7 @@ bool vgui_rubberband_tableau::handle_circle(vgui_event const &e, float ix, float
     // Circle is completed, add to the client:
     float dx = x_coords[0] - ix;
     float dy = y_coords[0] - iy;
-    float radi = vcl_sqrt(dx*dx + dy*dy);
+    float radi = std::sqrt(dx*dx + dy*dy);
     client_->add_circle(x_coords[0],y_coords[0],radi);
     active = false;
     obj_type = none_enum;

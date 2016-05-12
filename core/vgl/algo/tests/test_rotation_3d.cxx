@@ -31,34 +31,34 @@ static void test_conversions(const vgl_rotation_3d<double>& rot)
   double diff1 = (qr_other - qr).magnitude();
   TEST_NEAR("Matrix conversion", diff1, 0.0, epsilon);
   if (diff1 > epsilon)
-    vcl_cout << "Matrix:\n" << R << vcl_endl;
+    std::cout << "Matrix:\n" << R << std::endl;
 
   qr_other = vgl_rotation_3d<double>(H).as_quaternion();
   if (qr_other.real() < 0.0) qr_other *= -1.0;
   double diff2 = (qr_other - qr).magnitude();
   TEST_NEAR("3D Homography conversion", diff2, 0.0, epsilon);
   if (diff2 > epsilon)
-    vcl_cout << "3D Homography:\n" << H << vcl_endl;
+    std::cout << "3D Homography:\n" << H << std::endl;
 
   qr_other = vgl_rotation_3d<double>(rr).as_quaternion();
   if (qr_other.real() < 0.0) qr_other *= -1.0;
   double diff3 = (qr_other - qr).magnitude();
   TEST_NEAR("Rodrigues conversion", diff3, 0.0, epsilon);
   if (diff3 > epsilon)
-    vcl_cout << "Rodrigues: " << rr << vcl_endl;
+    std::cout << "Rodrigues: " << rr << std::endl;
 
   qr_other = vgl_rotation_3d<double>(er[0], er[1], er[2]).as_quaternion();
   if (qr_other.real() < 0.0) qr_other *= -1.0;
   double diff4 = (qr_other - qr).magnitude();
   TEST_NEAR("Euler conversion", diff4, 0.0, epsilon);
   if (diff4 > epsilon)
-    vcl_cout << "Euler:  Rx=" << er[0]<< " Ry="<<er[1]<<" Rz="<<er[2] << vcl_endl;
+    std::cout << "Euler:  Rx=" << er[0]<< " Ry="<<er[1]<<" Rz="<<er[2] << std::endl;
   //Test the case of flipping the orientation of a vector (rotation by pi)
-  vgl_vector_3d<double> a(1.0, 1.0, 1.0), aflip(-1.0, -1.0, -1.0);  
+  vgl_vector_3d<double> a(1.0, 1.0, 1.0), aflip(-1.0, -1.0, -1.0);
   vgl_rotation_3d<double> flip(a, aflip);
   vgl_vector_3d<double> v = flip*a;
   vgl_vector_3d<double> null = v+a;
-  double err = vcl_fabs(null.x())+vcl_fabs(null.y())+vcl_fabs(null.z());
+  double err = std::fabs(null.x())+std::fabs(null.y())+std::fabs(null.z());
   TEST_NEAR("Flip vector",err , 0.0, epsilon);
 }
 
@@ -117,35 +117,35 @@ static void test_application(const vgl_rotation_3d<double>& rot)
 
   vgl_homg_line_3d_2_points<double> hl(hpt, vgl_homg_point_3d<double>(v.x(),v.y(),v.z(),0));
   vgl_homg_line_3d_2_points<double> r_hl = rot*hl;
-  vcl_cout << "rotated hl = " << r_hl << vcl_endl;
+  std::cout << "rotated hl = " << r_hl << std::endl;
   //FIXME  add test
 
   vgl_line_3d_2_points<double> l(pt, pt+v);
   vgl_line_3d_2_points<double> r_l = rot*l;
-  vcl_cout << "rotated l = " << r_l << vcl_endl;
+  std::cout << "rotated l = " << r_l << std::endl;
   //FIXME  add test
 
   vgl_line_segment_3d<double> s(pt, pt+v);
   vgl_line_segment_3d<double> r_s = rot*s;
-  vcl_cout << "rotated s = " << r_s << vcl_endl;
+  std::cout << "rotated s = " << r_s << std::endl;
   //FIXME  add test
 }
 
 
 void test_rotation_3d()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing vgl_rotation_3d\n"
            << "*************************\n";
 
-  vcl_cout << "\n1. Rotation about the x axis over 90 degrees.\n";
+  std::cout << "\n1. Rotation about the x axis over 90 degrees.\n";
   vgl_rotation_3d<double> rot_id;
   test_conversions(rot_id);
   test_inverse(rot_id);
   test_transpose(rot_id);
   test_application(rot_id);
 
-  vcl_cout << "\n2. Rotation about the x axis over 90 degrees.\n";
+  std::cout << "\n2. Rotation about the x axis over 90 degrees.\n";
 
   vgl_rotation_3d<double> rot_x90(vnl_math::pi_over_2, 0.0, 0.0);
   test_conversions(rot_x90);
@@ -155,7 +155,7 @@ void test_rotation_3d()
 
   vnl_random rnd;
   vgl_rotation_3d<double> rot_rand(rnd.normal(), rnd.normal(), rnd.normal());
-  vcl_cout << "\n3. Random rotation: " << rot_rand.as_quaternion() << vcl_endl;
+  std::cout << "\n3. Random rotation: " << rot_rand.as_quaternion() << std::endl;
   test_conversions(rot_rand);
   test_inverse(rot_rand);
   test_transpose(rot_rand);
@@ -189,7 +189,7 @@ void test_rotation_3d()
 #define sqr(x) (x)*(x)
   error1 = sqr(double(r_abi.as_quaternion()[0]))
          + sqr(double(r_abi.as_quaternion()[1]))
-         + sqr(double(r_abi.as_quaternion()[2]) + vnl_math::sqrt1_2) 
+         + sqr(double(r_abi.as_quaternion()[2]) + vnl_math::sqrt1_2)
          + sqr(double(r_abi.as_quaternion()[3]) - vnl_math::sqrt1_2);
   TEST_NEAR("rotation is 90 deg in XY plane", error1, 0.0, epsilon);
 #if VXL_INT_64_IS_LONG

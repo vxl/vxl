@@ -16,9 +16,11 @@
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_2x2.h>
 #include <vgl/vgl_homg_point_1d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class HMatrix1D
 {
@@ -34,10 +36,10 @@ class HMatrix1D
   HMatrix1D(const HMatrix1D&,const HMatrix1D&);// product of two HMatrix1Ds
   HMatrix1D(vnl_double_2x2 const& M);
   HMatrix1D(const double* t_matrix);
-  HMatrix1D(vcl_istream& s);
+  HMatrix1D(std::istream& s);
  ~HMatrix1D();
   static HMatrix1D read(char const* filename);
-  static HMatrix1D read(vcl_istream&);
+  static HMatrix1D read(std::istream&);
 
   // Operations----------------------------------------------------------------
 
@@ -69,7 +71,7 @@ class HMatrix1D
   void set_inverse (vnl_double_2x2 const& t21_matrix);
 };
 
-vcl_ostream& operator << (vcl_ostream& s, const HMatrix1D& H);
-vcl_istream& operator >> (vcl_istream& s, HMatrix1D& H);
+std::ostream& operator << (std::ostream& s, const HMatrix1D& H);
+std::istream& operator >> (std::istream& s, HMatrix1D& H);
 
 #endif // HMatrix1D_h_

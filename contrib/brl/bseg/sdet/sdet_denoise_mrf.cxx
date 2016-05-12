@@ -1,6 +1,8 @@
 // This is brl/bseg/sdet/sdet_denoise_mrf.cxx
+#include <iostream>
+#include <cstdlib>
 #include "sdet_denoise_mrf.h"
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -15,8 +17,8 @@
 
 // constructor from a parameter block (the only way)
 sdet_denoise_mrf::sdet_denoise_mrf(sdet_denoise_mrf_params& dmp)
-  : sdet_denoise_mrf_params(dmp), output_valid_(false), in_resc_(0),
-    var_resc_(0), out_resc_(0)
+  : sdet_denoise_mrf_params(dmp), output_valid_(false), in_resc_(VXL_NULLPTR),
+    var_resc_(VXL_NULLPTR), out_resc_(VXL_NULLPTR)
 {
   sigma_sq_inv_ = radius_/1.978; //so that exp(radius^2/sigma_^2) = 0.02
   sigma_sq_inv_ *= sigma_sq_inv_;
@@ -37,7 +39,7 @@ double sdet_denoise_mrf::weight(unsigned i0, unsigned j0,
   //first consider a max radius
   //weight due to inter-pixel distance
   double dsq = (i1-i0)*(i1-i0) + (j1-j0)*(j1-j0);
-  double d = vcl_sqrt(dsq);
+  double d = std::sqrt(dsq);
   if (d>(vnl_math::sqrt2*radius_)) return 0.0;
   //compute the minimum variance along the path between pix0 and pix1
   bool init = true;
@@ -77,7 +79,7 @@ double sdet_denoise_mrf::weight(unsigned i0, unsigned j0,
     v_avg1 = sum1/n1;
   //the difference between depth values averaged over the neighbrd
   double Delta = (v_avg1-v_avg0)*(v_avg1-v_avg0);
-  double w = vcl_exp(-dsq/sigma_sq_inv_ +
+  double w = std::exp(-dsq/sigma_sq_inv_ +
                      kappa_*min_var -
                      beta_*Delta);
   return w;
@@ -123,7 +125,7 @@ void sdet_denoise_mrf::compute_incidence_matrix()
         }
       }
       D_mat_.put(indx,indx, D) ;
-      D_inv_sqrt_.put(indx,indx,1.0/vcl_sqrt(D));
+      D_inv_sqrt_.put(indx,indx,1.0/std::sqrt(D));
     }
   }
 }
@@ -131,9 +133,9 @@ void sdet_denoise_mrf::compute_incidence_matrix()
 vil_image_resource_sptr sdet_denoise_mrf::Dimgr()
 {
   unsigned nr = D_mat_.rows();
-  if (!nr||!in_resc_) return 0;
+  if (!nr||!in_resc_) return VXL_NULLPTR;
   unsigned ni = in_resc_->ni(), nj = in_resc_->nj();
-  if (nr!=ni*nj) return 0;
+  if (nr!=ni*nj) return VXL_NULLPTR;
   vil_image_view<float> out(ni, nj);
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i) {
@@ -178,16 +180,16 @@ bool sdet_denoise_mrf::denoise()
   if (!in_resc_) return false;
   if (!var_resc_) return false;
   unsigned area = in_resc_->ni()*in_resc_->nj();
-  vcl_cout << " constructing mrf on " << area << " x " << area
+  std::cout << " constructing mrf on " << area << " x " << area
            << " incidence matrix\n";
   vul_timer t;
   this->compute_incidence_matrix();
   this->compute_laplacian_matrix();
-  vcl_cout << "formed incidence and auxiliary matrices in "
+  std::cout << "formed incidence and auxiliary matrices in "
            << t.real()/1000.0 << " seconds\n";
   t.mark();
   this->compute_F();
-  vcl_cout << "solved LU decomposition and back substitution in "
+  std::cout << "solved LU decomposition and back substitution in "
            << t.real()/1000.0 << " seconds\n";
   int ni = in_resc_->ni(), nj = in_resc_->nj();
   vil_image_view<float> out_view(ni, nj);

@@ -1,2 +1,2 @@
-#include <vil/algo/vil_median.txx>
+#include <vil/algo/vil_median.hxx>
 VIL_MEDIAN_INSTANTIATE(double);

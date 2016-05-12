@@ -1,4 +1,6 @@
 // This is vpgl/algo/vpgl_bundle_adjust_lsqr.cxx
+#include <iostream>
+#include <algorithm>
 #include "vpgl_bundle_adjust_lsqr.h"
 //:
 // \file
@@ -6,8 +8,7 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_double_3.h>
 
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 
@@ -16,8 +17,8 @@ vpgl_bundle_adjust_lsqr::
 vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
                         unsigned int num_params_per_b,
                         unsigned int num_params_c,
-                        const vcl_vector<vgl_point_2d<double> >& image_points,
-                        const vcl_vector<vcl_vector<bool> >& mask)
+                        const std::vector<vgl_point_2d<double> >& image_points,
+                        const std::vector<std::vector<bool> >& mask)
  : vnl_sparse_lst_sqr_function(mask.size(),num_params_per_a,
                                mask[0].size(),num_params_per_b,
                                num_params_c,mask,2,use_gradient,use_weights),
@@ -37,9 +38,9 @@ vpgl_bundle_adjust_lsqr::
 vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
                         unsigned int num_params_per_b,
                         unsigned int num_params_c,
-                        const vcl_vector<vgl_point_2d<double> >& image_points,
-                        const vcl_vector<vnl_matrix<double> >& inv_covars,
-                        const vcl_vector<vcl_vector<bool> >& mask)
+                        const std::vector<vgl_point_2d<double> >& image_points,
+                        const std::vector<vnl_matrix<double> >& inv_covars,
+                        const std::vector<std::vector<bool> >& mask)
  : vnl_sparse_lst_sqr_function(mask.size(),num_params_per_a,
                                mask[0].size(),num_params_per_b,
                                num_params_c,mask,2,use_gradient,use_weights),
@@ -54,19 +55,19 @@ vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
   {
     const vnl_matrix<double>& S = inv_covars[i];
     if (S(0,0) > 0.0) {
-      U(0,0) = vcl_sqrt(S(0,0));
+      U(0,0) = std::sqrt(S(0,0));
       U(0,1) = S(0,1)/U(0,0);
       double U11 = S(1,1)-S(0,1)*S(0,1)/S(0,0);
-      U(1,1) = (U11>0.0)?vcl_sqrt(U11):0.0;
+      U(1,1) = (U11>0.0)?std::sqrt(U11):0.0;
     }
     else if (S(1,1) > 0.0) {
       assert(S(0,1) == 0.0);
       U(0,0) = 0.0;
       U(0,1) = 0.0;
-      U(1,1) = vcl_sqrt(S(1,1));
+      U(1,1) = std::sqrt(S(1,1));
     }
     else {
-      vcl_cout << "warning: not positive definite"<<vcl_endl;
+      std::cout << "warning: not positive definite"<<std::endl;
       U.fill(0.0);
     }
     factored_inv_covars_.push_back(U);
@@ -157,9 +158,9 @@ void
 vpgl_bundle_adjust_lsqr::jac_blocks(vnl_vector<double> const& a,
                                     vnl_vector<double> const& b,
                                     vnl_vector<double> const& c,
-                                    vcl_vector<vnl_matrix<double> >& A,
-                                    vcl_vector<vnl_matrix<double> >& B,
-                                    vcl_vector<vnl_matrix<double> >& C)
+                                    std::vector<vnl_matrix<double> >& A,
+                                    std::vector<vnl_matrix<double> >& B,
+                                    std::vector<vnl_matrix<double> >& C)
 {
   typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
@@ -208,7 +209,7 @@ vpgl_bundle_adjust_lsqr::compute_weight_ij(int /*i*/, int /*j*/,
   weight = (u2 > 1.0) ? 0.0 : 1 - u2;
 
   // Cauchy
-  //weight = vcl_sqrt(1 / (1 + u2));
+  //weight = std::sqrt(1 / (1 + u2));
 }
 
 
@@ -289,9 +290,9 @@ void vpgl_bundle_adjust_lsqr::jac_camera_rotation(vnl_double_3x3 const& K,
   }
   else
   {
-    double m = vcl_sqrt(m2);  // Rodrigues magnitude = rotation angle
-    double c = vcl_cos(m);
-    double s = vcl_sin(m);
+    double m = std::sqrt(m2);  // Rodrigues magnitude = rotation angle
+    double c = std::cos(m);
+    double s = std::sin(m);
 
     // common trig terms
     double ct = (1-c)/m2;
@@ -360,9 +361,9 @@ vpgl_bundle_adjust_lsqr::rod_to_matrix(vnl_vector<double> const& r)
 {
   double x2 = r[0]*r[0], y2 = r[1]*r[1], z2 = r[2]*r[2];
   double m = x2 + y2 + z2;
-  double theta = vcl_sqrt(m);
-  double s = vcl_sin(theta) / theta;
-  double c = (1 - vcl_cos(theta)) / m;
+  double theta = std::sqrt(m);
+  double s = std::sin(theta) / theta;
+  double c = (1 - std::cos(theta)) / m;
 
   vnl_matrix_fixed<double,3,3> R(0.0);
   R(0,0) = R(1,1) = R(2,2) = 1.0;

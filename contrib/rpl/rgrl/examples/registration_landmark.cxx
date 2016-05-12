@@ -38,8 +38,9 @@
 // \endlatexonly
 
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vil/vil_load.h>
@@ -80,18 +81,18 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
+typedef std::vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,2>       vector_2d;
-typedef vcl_vector< vnl_vector<double> > vec_vec_type;
+typedef std::vector< vnl_vector<double> > vec_vec_type;
 
 void
 read_feature_file( const char* filename,
                    feature_vector& landmarks )
 {
-  vcl_ifstream istr( filename );
+  std::ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+    std::cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -113,7 +114,7 @@ read_feature_file( const char* filename,
   }
 
   istr.close();
-  vcl_cout<<"There are "<<landmarks.size()<<" landmarks"<<vcl_endl;
+  std::cout<<"There are "<<landmarks.size()<<" landmarks"<<std::endl;
 }
 
 // using command/observer pattern
@@ -133,15 +134,15 @@ class command_iteration_update: public rgrl_command
 
     if ( trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* affine_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-      vcl_cout<<"Initial xform: A =\n"<<affine_xform->A()<<"t = "<<affine_xform->t()<<vcl_endl;
+      std::cout<<"Initial xform: A =\n"<<affine_xform->A()<<"t = "<<affine_xform->t()<<std::endl;
     }
     else if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ) {
       rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
-        "t = "<<q_xform->t()<<vcl_endl;
+      std::cout<<"xform: Q\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
+        "t = "<<q_xform->t()<<std::endl;
     }
     else
-      vcl_cout<<"Unknown type"<<vcl_endl;
+      std::cout<<"Unknown type"<<std::endl;
   }
 };
 
@@ -149,7 +150,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 4 ) {
-    vcl_cerr << "Missing Parameters\n"
+    std::cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageLandmarkFile MovingImageLandmarkFile MaskImage\n";
     return 1;
@@ -221,7 +222,7 @@ main( int argc, char* argv[] )
                                 *dummy_scale);
   // EndCodeSnippet
 
-  vcl_cout<<"pruned match set = "<<pruned_match_set->from_size()<<vcl_endl;
+  std::cout<<"pruned match set = "<<pruned_match_set->from_size()<<std::endl;
 
   // \latexonly
   //
@@ -243,7 +244,7 @@ main( int argc, char* argv[] )
 
   rgrl_estimator_sptr affine_estimator = new rgrl_est_affine(dim);
 
-  vcl_auto_ptr<rrel_objective> obj_fun( new rrel_lms_obj(1) );
+  std::auto_ptr<rrel_objective> obj_fun( new rrel_lms_obj(1) );
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est =
     new rgrl_scale_est_closest( obj_fun );
 
@@ -271,7 +272,7 @@ main( int argc, char* argv[] )
   // \code{rgrl\_weighter\_m\_est}. Make sure
   // \code{signature\_precomputed} is allowed.
   //
-  vcl_auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+  std::auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
   bool use_signature_error = false;
   bool signature_precomputed = true;
   rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(m_est_obj,
@@ -335,11 +336,11 @@ main( int argc, char* argv[] )
   // Output Results
   //
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:\n";
+    std::cout<<"Final xform:\n";
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t = "<<q_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    std::cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t = "<<q_xform->t()<<std::endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<std::endl;
   }
 
   // \latexonly

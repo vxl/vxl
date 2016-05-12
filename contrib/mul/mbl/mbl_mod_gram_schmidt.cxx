@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_mod_gram_schmidt.cxx
+#include <iostream>
+#include <vector>
 #include "mbl_mod_gram_schmidt.h"
 //:
 // \file
@@ -19,7 +21,7 @@
 //   Mar. 2011 - Patrick Sauer - added variant that returns normalisation multipliers
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 //=======================================================================
@@ -32,8 +34,8 @@ void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
 
     //Note internally it is easier to deal with the basis as a vector of vnl_vectors
     //As matrices are stored row-wise
-    vcl_vector<vnl_vector<double > > vbasis(N);
-    vcl_vector<vnl_vector<double > > evecs(N);
+    std::vector<vnl_vector<double > > vbasis(N);
+    std::vector<vnl_vector<double > > evecs(N);
 
     //Copy into more convenient holding storage as vector of vectors
     //And also initialise output basis to input
@@ -75,8 +77,8 @@ void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
 
     //Note internally it is easier to deal with the basis as a vector of vnl_vectors
     //As matrices are stored row-wise
-    vcl_vector<vnl_vector<double > > vbasis(N);
-    vcl_vector<vnl_vector<double > > evecs(N);
+    std::vector<vnl_vector<double > > vbasis(N);
+    std::vector<vnl_vector<double > > evecs(N);
 
     //Copy into more convenient holding storage as vector of vectors
     //And also initialise output basis to input

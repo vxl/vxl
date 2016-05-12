@@ -13,8 +13,10 @@
 //  Modifications
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
 #include <bvxm/bvxm_voxel_world.h>

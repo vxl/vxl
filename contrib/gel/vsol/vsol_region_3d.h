@@ -6,11 +6,11 @@
 // \brief  Region of a 3D space
 //
 // \author
-// François BERTEL
+// Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/05/04 François BERTEL Creation
+//   2000/05/04 Francois BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2003/01/08 Peter Vanroose  Added pure virtual is_convex()
 //   2004/09/06 Peter Vanroose  Added safe cast methods to polygon_3d
@@ -75,10 +75,10 @@ class vsol_region_3d : public vsol_surface_3d
   virtual bool is_convex(void) const=0;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_region_3d"); }
+  virtual std::string is_a() const { return std::string("vsol_region_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const
+  virtual bool is_class(const std::string& cls) const
   { return cls==is_a() || vsol_surface_3d::is_class(cls); }
 };
 

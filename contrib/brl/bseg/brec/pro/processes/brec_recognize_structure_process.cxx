@@ -31,14 +31,14 @@
 bool brec_recognize_structure_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");      // input orig view
   input_types.push_back("unsigned");      // detector id for the type of structure to be recognized
   input_types.push_back("float");      // angle to rotate detector for the type of structure to be recognized
                                   // should be passed zero if the original orientation of the detector will be used
   if (pro.set_input_types(input_types))
   { //output
-    vcl_vector<vcl_string> output_types;
+    std::vector<std::string> output_types;
     output_types.push_back("vil_image_view_base_sptr"); // output prob map
     output_types.push_back("vil_image_view_base_sptr"); // output map overlayed on orig view as a byte image
     return pro.set_output_types(output_types);
@@ -52,7 +52,7 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 3) {
-    vcl_cerr << " brec_recognize_structure_process - invalid inputs\n";
+    std::cerr << " brec_recognize_structure_process - invalid inputs\n";
     return false;
   }
 
@@ -80,13 +80,13 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
     case 2: { h = brec_part_hierarchy_builder::construct_detector_roi1_2(); } break;
     case 3: { h = brec_part_hierarchy_builder::construct_detector_roi1_3(); } break;
     case 4: { h = brec_part_hierarchy_builder::construct_detector_roi1_4(); } break;
-    default: { vcl_cout << "In brec_recognize_structure_process::execute() -- Unrecognized detector type!!\n"; return false; }
+    default: { std::cout << "In brec_recognize_structure_process::execute() -- Unrecognized detector type!!\n"; return false; }
   }
 
 #if 0 // before detector class
   // now extract instances of primitive part types in h
-  vcl_vector<bvxm_part_instance_sptr> parts_0;
-  vcl_vector<bvxm_part_instance_sptr>& d_ins = h->get_dummy_primitive_instances();
+  std::vector<bvxm_part_instance_sptr> parts_0;
+  std::vector<bvxm_part_instance_sptr>& d_ins = h->get_dummy_primitive_instances();
   unsigned prev_size = parts_0.size();
   for (unsigned i = 0; i < d_ins.size(); i++) {
     if (d_ins[i]->kind_ != bvxm_part_instance_kind::GAUSSIAN)
@@ -99,16 +99,16 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
     if (!extract_gaussian_primitives(img, gp->lambda0_, gp->lambda1_, gp->theta_, gp->bright_, gp->cutoff_percentage_, gp->detection_threshold_, gp->type_, parts_0))
       return false;
 
-    vcl_cout << "extracted " << parts_0.size()-prev_size << " primitive parts of type: " << d_ins[i]->type_ << vcl_endl;
+    std::cout << "extracted " << parts_0.size()-prev_size << " primitive parts of type: " << d_ins[i]->type_ << std::endl;
     prev_size = parts_0.size();
   }
 
   unsigned highest = h->highest_layer_id();
-  vcl_vector<bvxm_part_instance_sptr> parts_upper_most(parts_0);
+  std::vector<bvxm_part_instance_sptr> parts_upper_most(parts_0);
   for (unsigned l = 1; l <= highest; l++) {
-    vcl_vector<bvxm_part_instance_sptr> parts_current;
+    std::vector<bvxm_part_instance_sptr> parts_current;
     h->extract_upper_layer(parts_upper_most, ni, nj, parts_current);
-    vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << '\n';
+    std::cout << "extracted " << parts_current.size() << " parts of layer " << l << '\n';
     parts_upper_most.clear();
     parts_upper_most = parts_current;
   }
@@ -116,7 +116,7 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
 
   brec_part_hierarchy_detector hd(h);
   hd.detect(img, angle);
-  vcl_vector<brec_part_instance_sptr>& parts_upper_most = hd.get_parts(h->highest_layer_id());
+  std::vector<brec_part_instance_sptr>& parts_upper_most = hd.get_parts(h->highest_layer_id());
 
   vil_image_view<float> output_map_float(ni, nj);
   brec_part_hierarchy::generate_output_map(parts_upper_most, output_map_float);
@@ -130,7 +130,7 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
   vil_image_view_base_sptr out_map_sptr1 = new vil_image_view<vxl_byte>(output_img);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr1);
 
-  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
+  std::cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }
@@ -140,7 +140,7 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
 bool brec_recognize_structure2_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");      // input orig view
   input_types.push_back("vil_image_view_base_sptr");      // input view's "foreground" probability map, float img with values in [0,1] range,
                                                           // CAUTION: Convert it before passing to this process if necessary, e.g. if only the background map is available
@@ -152,7 +152,7 @@ bool brec_recognize_structure2_process_cons(bprb_func_process& pro)
 
   if (pro.set_input_types(input_types)) {
     //output
-    vcl_vector<vcl_string> output_types;
+    std::vector<std::string> output_types;
     output_types.push_back("vil_image_view_base_sptr");      // output prob map
     output_types.push_back("vil_image_view_base_sptr");      // output map overlayed on orig view as a byte image
     output_types.push_back("brec_part_hierarchy_detector_sptr");      // output map overlayed on orig view as a byte image
@@ -167,7 +167,7 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 6) {
-    vcl_cerr << " brec_recognize_structure2_process - invalid inputs\n";
+    std::cerr << " brec_recognize_structure2_process - invalid inputs\n";
     return false;
   }
 
@@ -185,12 +185,12 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr inp_prob_map = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<float> fg_prob_map = *vil_convert_cast(float(), inp_prob_map);
-  vcl_cout << "CAUTION: Input prob map is assumed to be a \"foreground\" probability map, convert it before passing to this process if necessary! (e.g. if only the background map is available)\n";
+  std::cout << "CAUTION: Input prob map is assumed to be a \"foreground\" probability map, convert it before passing to this process if necessary! (e.g. if only the background map is available)\n";
 
   if (inp_prob_map->pixel_format() == VIL_PIXEL_FORMAT_BOOL) {
     float min, max;
     vil_math_value_range(fg_prob_map, min, max);
-    vcl_cout << "checking proper conversion of bool to float: min val in the image: " << min << " max: " << max << vcl_endl;
+    std::cout << "checking proper conversion of bool to float: min val in the image: " << min << " max: " << max << std::endl;
   }
 
   brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
@@ -201,20 +201,20 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
   vul_timer t2;
   t2.mark();
 
-  vcl_cout << "Hierarchy Detector will use the response models at: " << h->model_dir() << vcl_endl;
+  std::cout << "Hierarchy Detector will use the response models at: " << h->model_dir() << std::endl;
 
   brec_part_hierarchy_detector_sptr hd = new brec_part_hierarchy_detector(h);
 
   if (training) {
-    vcl_cout << "detect instances for training\n";
+    std::cout << "detect instances for training\n";
     hd->detect(img, fg_prob_map, angle, brec_detector_methods::DENSITY_FOR_TRAINING);
   }
   else {
-    vcl_cout << "detect instances for testing\n";
+    std::cout << "detect instances for testing\n";
     hd->detect(img, fg_prob_map, angle, brec_detector_methods::POSTERIOR, detection_radius);
   }
 
-  vcl_vector<brec_part_instance_sptr>& parts_upper_most = hd->get_parts(h->highest_layer_id());
+  std::vector<brec_part_instance_sptr>& parts_upper_most = hd->get_parts(h->highest_layer_id());
 
   vil_image_view<float> output_map_float(ni, nj);
   brec_part_hierarchy::generate_output_map(parts_upper_most, output_map_float);
@@ -230,7 +230,7 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
 
   pro.set_output_val<brec_part_hierarchy_detector_sptr>(2, hd);
 
-  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
+  std::cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }

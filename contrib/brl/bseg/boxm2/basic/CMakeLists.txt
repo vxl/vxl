@@ -1,27 +1,25 @@
 # contrib/brl/bseg/boxm/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${GEL_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
-SET(boxm2_basic_sources
-    boxm2_array_1d.h      boxm2_array_1d.txx
-    boxm2_array_2d.h      boxm2_array_2d.txx
-    boxm2_array_3d.h      boxm2_array_3d.txx
+set(boxm2_basic_sources
+    boxm2_array_1d.h      boxm2_array_1d.hxx
+    boxm2_array_2d.h      boxm2_array_2d.hxx
+    boxm2_array_3d.h      boxm2_array_3d.hxx
     boxm2_block_id.h      boxm2_block_id.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates boxm2_basic_sources)
+aux_source_directory(Templates boxm2_basic_sources)
 
-ADD_LIBRARY(boxm2_basic  ${boxm2_basic_sources})
-TARGET_LINK_LIBRARIES(boxm2_basic brdb baio expatpp vpgl vgl_xio vgl vnl vbl vsl vcl)
+vxl_add_library(LIBRARY_NAME boxm2_basic LIBRARY_SOURCES  ${boxm2_basic_sources})
+target_link_libraries(boxm2_basic brdb baio expatpp ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
-#install the .h .txx and libs
-INSTALL_TARGETS(/lib boxm2_basic)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/basic ${boxm2_basic_sources})
+#install the .h .hxx and libs
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

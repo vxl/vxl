@@ -12,9 +12,11 @@
 //   <none>
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Base class for all affine patch keypoints
 class bapl_keypoint : public vbl_ref_count
@@ -29,7 +31,7 @@ class bapl_keypoint : public vbl_ref_count
   virtual const vnl_vector_fixed<double,128>& descriptor() const = 0;
 
   //: Print a summary of the keypoint data to a stream
-  virtual void print_summary( vcl_ostream& os) const = 0;
+  virtual void print_summary( std::ostream& os) const = 0;
 
   void set_id(unsigned id) { id_ = id; }
   unsigned id() const { return id_; }
@@ -39,6 +41,6 @@ class bapl_keypoint : public vbl_ref_count
 };
 
 //: Print a summary of the keypoint data to a stream
-vcl_ostream& operator<< (vcl_ostream& os, bapl_keypoint const & k);
+std::ostream& operator<< (std::ostream& os, bapl_keypoint const & k);
 
 #endif // bapl_keypoint_h_

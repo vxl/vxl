@@ -12,7 +12,7 @@ void boxm2_vecf_appearance_extractor::reset(bool is_right){
   total_iris_app_.fill(0); vis_iris_ = 0.0f;
 
 
-  vcl_vector<boxm2_block_id> blocks = scene->get_block_ids();
+  std::vector<boxm2_block_id> blocks = scene->get_block_ids();
   boxm2_data_base* gray_app_db  = boxm2_cache::instance()->get_data_base(scene, blocks[0],gray_APM_prefix);
   boxm2_data_base* color_app_db = boxm2_cache::instance()->get_data_base(scene, blocks[0], color_APM_prefix + "_" + (head_model_.color_apm_id_));
   boxm2_block_metadata m_data = scene->get_block_metadata(blocks[0]);
@@ -36,16 +36,16 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
   boxm2_scene_sptr base_model = head_model_.scene();
   // for each block of the target scene
   boxm2_vecf_composite_head_parameters const& head_params = head_model_.get_params();
-  vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
-  vcl_vector<boxm2_block_id> source_blocks = base_model->get_block_ids();
+  std::vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
+  std::vector<boxm2_block_id> source_blocks = base_model->get_block_ids();
 
-  for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin();
+  for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin();
        sblk != source_blocks.end(); ++sblk) {
     boxm2_block * source_blk = boxm2_cache::instance()->get_block(base_model, *sblk);
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
 
     if(!this->extract_data(base_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
-        vcl_cout<<"Data extraction failed for scene "<< base_model << " in block "<<*sblk<<vcl_endl;
+        std::cout<<"Data extraction failed for scene "<< base_model << " in block "<<*sblk<<std::endl;
         return;
       }
 
@@ -53,12 +53,12 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
     typedef boxm2_block::uchar16 uchar16;
     const boxm2_array_3d<uchar16>& trees = source_blk->trees();
     // for each block of the base model
-    for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
+    for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
       boxm2_block * target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
       color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data;
 
     if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
-        vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
+        std::cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<std::endl;
         return;
       }
 
@@ -71,8 +71,8 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
             boct_bit_tree bit_tree((unsigned char*) tree.data_block(), source_blk->max_level());
 
             //FOR ALL LEAVES IN CURRENT TREE
-            vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-            vcl_vector<int>::iterator iter;
+            std::vector<int> leafBits = bit_tree.get_leaf_bits();
+            std::vector<int>::iterator iter;
             for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
               int bit_idx = (*iter);
               int data_idx = bit_tree.get_data_index(bit_idx);
@@ -104,8 +104,8 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
                 unsigned target_data_idx;
                 target_blk->data_index( fwd_scaled_cell_center, target_data_idx);
                 float alpha = target_alpha_data[target_data_idx];
-                float src_prob = static_cast<float>(1.0 - vcl_exp( - source_alpha_data[data_idx] * source_side_len));
-                double prob = static_cast<float>(1.0 - vcl_exp(-alpha*side_len));
+                float src_prob = static_cast<float>(1.0 - std::exp( - source_alpha_data[data_idx] * source_side_len));
+                //double prob = static_cast<float>(1.0 - std::exp(-alpha*side_len));
                 const double prob_thresh = 0.0;
 
                 if (src_prob >= prob_thresh) {
@@ -124,16 +124,16 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
       }
     } // for each source block
   } // for each target block
-  vcl_cout<<"extracted head appearance model from target in "<<t.real()/1000<<" seconds"<<vcl_endl;
+  std::cout<<"extracted head appearance model from target in "<<t.real()/1000<<" seconds"<<std::endl;
 }
 
 
 void boxm2_vecf_appearance_extractor::extract_orbit_appearance(){
 
-  vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
+  std::vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
   if (target_blocks.size()>1){
-    vcl_cout<< "visibility info cannot be used in current implementation if scene contains more than one block"<<vcl_endl;
-    current_vis_score_ = 0;
+    std::cout<< "visibility info cannot be used in current implementation if scene contains more than one block"<<std::endl;
+    current_vis_score_ = VXL_NULLPTR;
   }else{
     boxm2_data_base* vis_score_db = boxm2_cache::instance()->get_data_base(target_scene_,target_blocks[0],boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(head_model_.color_apm_id_));
     current_vis_score_ = reinterpret_cast<vis_score_t*>(vis_score_db->data_buffer());
@@ -217,14 +217,14 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right,bool
 
 
   boxm2_scene_sptr source_model = orbit.scene();
-  vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
+  std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
   unsigned n_source_cells = static_cast<unsigned>(orbit.iris_cell_centers_.size());
-  vcl_cout<<"iris cell centers: "<<n_source_cells<<vcl_endl;
-  for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
+  std::cout<<"iris cell centers: "<<n_source_cells<<std::endl;
+  for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
-      vcl_cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<vcl_endl;
+      std::cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<std::endl;
       return;
     }
 
@@ -236,15 +236,15 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right,bool
       //is a sphere voxel cell so define the vector field
       vgl_point_3d<double> mapped_p = rot * p + orbit_params.offset_ ;
       // find closest sphere voxel cell
-      vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
+      std::vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
       vgl_point_3d<double> local_tree_coords, target_cell_center; double target_side_len;
-      for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
+      for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
           color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
-            vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
+            std::cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<std::endl;
             return ;
           }
           target_blk->data_index( mapped_p, target_data_idx);
@@ -273,7 +273,7 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right,bool
     weighted_sum /= sum_vis;
     curr_iris = to_apm_t( weighted_sum );
 }
-    //  vcl_cout<<"Extracted iris appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+    //  std::cout<<"Extracted iris appearance in "<<t.real()/1000<<" seconds"<<std::endl;
 
 }
 void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bool extract){
@@ -309,15 +309,15 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bo
   }
 
   boxm2_scene_sptr source_model = orbit.scene();
-  vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
+  std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
 
   unsigned n_source_cells = static_cast<unsigned>(orbit.pupil_cell_centers_.size());
-  vcl_cout<<"pupil cell centers: "<<n_source_cells<<vcl_endl;
-  for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
+  std::cout<<"pupil cell centers: "<<n_source_cells<<std::endl;
+  for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
-      vcl_cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<vcl_endl;
+      std::cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<std::endl;
       return;
     }
 
@@ -329,15 +329,15 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bo
       //is a sphere voxel cell so define the vector field
       vgl_point_3d<double> mapped_p = rot * p + orbit_params.offset_ ;
       // find closest sphere voxel cell
-      vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
+      std::vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
       vgl_point_3d<double> local_tree_coords, target_cell_center; double target_side_len;
-      for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
+      for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
           color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
-            vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
+            std::cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<std::endl;
             return ;
           }
           target_blk->data_index( mapped_p, target_data_idx);
@@ -368,8 +368,8 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bo
     curr_pupil = to_apm_t( weighted_sum );
 }
   if(extract)
-    vcl_cout<<"Sum vis for current pupil is "<<sum_vis<<vcl_endl;
-  //  vcl_cout<<"Extracted pupil appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+    std::cout<<"Sum vis for current pupil is "<<sum_vis<<std::endl;
+  //  std::cout<<"Extracted pupil appearance in "<<t.real()/1000<<" seconds"<<std::endl;
 
 }
 void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right, bool extract){
@@ -389,7 +389,7 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right, bool
                                      orbit_params.eye_pointing_dir_.y(),
                                      orbit_params.eye_pointing_dir_.z());
   vgl_rotation_3d<double> rot(Z, to_dir);
-  vcl_vector<vgl_vector_3d<double> >vf;
+  std::vector<vgl_vector_3d<double> >vf;
 
   float sum_vis = 0;
   color_APM& curr_sclera = is_right ? right_sclera_app_ : left_sclera_app_;
@@ -405,13 +405,13 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right, bool
 
   boxm2_scene_sptr source_model = orbit.scene();
 
-  vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
+  std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
   unsigned n_source_cells = static_cast<unsigned>(orbit.sphere_cell_centers_.size());
-  vcl_cout<<"sphere cell centers: "<<n_source_cells<<vcl_endl;
-  for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
+  std::cout<<"sphere cell centers: "<<n_source_cells<<std::endl;
+  for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
-      vcl_cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<vcl_endl;
+      std::cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<std::endl;
       return;
     }
 
@@ -425,15 +425,15 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right, bool
       //is a sphere voxel cell so define the vector field
       vgl_point_3d<double> mapped_p = rot * p + orbit_params.offset_ ;
       // find closest sphere voxel cell
-      vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
+      std::vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
       vgl_point_3d<double> local_tree_coords, target_cell_center; double target_side_len;
-      for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
+      for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
           color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
-            vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
+            std::cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<std::endl;
             return ;
           }
           target_blk->data_index( mapped_p, target_data_idx);
@@ -464,7 +464,7 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right, bool
     weighted_sum /= sum_vis;
     curr_sclera = to_apm_t( weighted_sum );
 }
-  //  vcl_cout<<"Extracted eye sphere appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+  //  std::cout<<"Extracted eye sphere appearance in "<<t.real()/1000<<" seconds"<<std::endl;
 }
 void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_right, bool extract){
   vul_timer t;
@@ -482,14 +482,14 @@ void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_r
   float sum_vis = 0;
   color_APM& curr_eyelid_crease = is_right ? right_eyelid_crease_app_ : left_eyelid_crease_app_ ;
   float8 weighted_sum; weighted_sum.fill(0);
-  vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
+  std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
   unsigned n_source_cells = static_cast<unsigned>(orbit.eyelid_crease_cell_centers_.size());
-  vcl_cout<<"eyelid crease cell centers "<<n_source_cells<<vcl_endl;
+  std::cout<<"eyelid crease cell centers "<<n_source_cells<<std::endl;
 
-  for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
+  for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
-      vcl_cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<vcl_endl;
+      std::cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<std::endl;
       return;
     }
 
@@ -505,15 +505,15 @@ void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_r
         mapped_p = mapped_p + flip;
       }
 
-      vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
+      std::vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
       vgl_point_3d<double> local_tree_coords, target_cell_center; double target_side_len;
-      for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
+      for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
           color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
-            vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
+            std::cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<std::endl;
             return ;
           }
           target_blk->data_index( mapped_p, target_data_idx);
@@ -539,7 +539,7 @@ void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_r
   if(sum_vis != 0 && extract)
     weighted_sum /= sum_vis;
     curr_eyelid_crease = to_apm_t( weighted_sum );
-    //  vcl_cout<<"Extracted eyelid crease appearance in "<<t.real()/1000<<" seconds and sum_vis is "<<sum_vis<<vcl_endl;
+    //  std::cout<<"Extracted eyelid crease appearance in "<<t.real()/1000<<" seconds and sum_vis is "<<sum_vis<<std::endl;
 }
 
 void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right,bool extract){
@@ -558,14 +558,14 @@ void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right
   color_APM color =orbit.random_color();
   boxm2_scene_sptr source_model = orbit.scene();
   float8 weighted_sum; weighted_sum.fill(0); float sum_vis =0.0f;
-  vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
+  std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
   unsigned n_source_cells = static_cast<unsigned>(orbit.lower_eyelid_cell_centers_.size());
-  vcl_cout<<"lower lid cell centers "<<n_source_cells<<vcl_endl;
-  for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
+  std::cout<<"lower lid cell centers "<<n_source_cells<<std::endl;
+  for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
-      vcl_cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<vcl_endl;
+      std::cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<std::endl;
       return;
     }
 
@@ -583,15 +583,15 @@ void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right
       }
 
       // find closest sphere voxel cell
-      vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
+      std::vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
       vgl_point_3d<double> local_tree_coords, target_cell_center; double target_side_len;
-      for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
+      for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
           color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
-            vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
+            std::cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<std::endl;
             return ;
           }
           target_blk->data_index( mapped_p, target_data_idx);
@@ -621,7 +621,7 @@ void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right
     weighted_sum /= sum_vis;
     curr_lower_eyelid = to_apm_t( weighted_sum );
   }
-    //  vcl_cout<<"Extracted lower lid appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+    //  std::cout<<"Extracted lower lid appearance in "<<t.real()/1000<<" seconds"<<std::endl;
 }
 
 void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right,bool extract){
@@ -647,14 +647,14 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
   color_APM& curr_lower_lid = is_right ? right_lower_lid_app_ : left_lower_lid_app_ ;
   color_APM& curr_upper_lid = is_right ? right_upper_lid_app_ : left_upper_lid_app_ ;
 
-  vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
+  std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
-  for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
+  for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     boxm2_block *source_blk = boxm2_cache::instance()->get_block(source_model, *sblk);
     unsigned n_source_cells = static_cast<unsigned>(orbit.eyelid_cell_centers_.size());
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
-      vcl_cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<vcl_endl;
+      std::cout<<"Data extraction failed for scene "<< source_model << " in block "<<*sblk<<std::endl;
       return;
     }
 
@@ -666,18 +666,18 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
       if(!orbit.is_type_global(p, boxm2_vecf_orbit_scene::UPPER_LID)  ){
         //#if _DEBUG
         if(is_right)
-          vcl_cout<<"this right eyelid point "<<p<<" was not ok w.r.t label type"<<vcl_endl;
+          std::cout<<"this right eyelid point "<<p<<" was not ok w.r.t label type"<<std::endl;
         else
-          vcl_cout<<"this left eyelid point "<<p<<" was not ok w.r.t label type"<<vcl_endl;
+          std::cout<<"this left eyelid point "<<p<<" was not ok w.r.t label type"<<std::endl;
         continue;
         //#endif
 }
       if(!(source_blk->contains(p, loc_p) )){
 #if _DEBUG
         if(is_right)
-          vcl_cout<<"this right eyelid point "<<p<<" was not in bounds"<<vcl_endl;
+          std::cout<<"this right eyelid point "<<p<<" was not in bounds"<<std::endl;
         else
-          vcl_cout<<"this left eyelid point "<<p<<" was not in bounds"<<vcl_endl;
+          std::cout<<"this left eyelid point "<<p<<" was not in bounds"<<std::endl;
 #endif
         continue;
 
@@ -687,7 +687,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
       double tc = orbit.eyelid_geo_.t(p.x(), p.y());
       if(!orbit.eyelid_geo_.valid_t(tc)){
 #if _DEBUG
-        vcl_cout<<"this eyelid point "<<p<<" was not ok w.r.t tc"<<vcl_endl;
+        std::cout<<"this eyelid point "<<p<<" was not ok w.r.t tc"<<std::endl;
         continue;
 #endif
       }
@@ -705,15 +705,15 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
 
 
       // find closest sphere voxel cell
-      vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
+      std::vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
       vgl_point_3d<double> local_tree_coords, target_cell_center; double target_side_len;
-      for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
+      for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
           color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
-            vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
+            std::cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<std::endl;
             return ;
           }
 
@@ -744,9 +744,9 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
     weighted_sum /= sum_vis;
     curr_upper_lid = to_apm_t( weighted_sum );
 }
-    //  vcl_cout<<"Extracted upper lid appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+    //  std::cout<<"Extracted upper lid appearance in "<<t.real()/1000<<" seconds"<<std::endl;
 }
 void boxm2_vecf_appearance_extractor::bump_up_vis_scores(){
-    // for (vcl_vector<unsigned>::iterator it =vis_cells_.begin() ; it != vis_cells_.end(); it++)
+    // for (std::vector<unsigned>::iterator it =vis_cells_.begin() ; it != vis_cells_.end(); it++)
     // current_vis_score_[*it] = 1;
 }

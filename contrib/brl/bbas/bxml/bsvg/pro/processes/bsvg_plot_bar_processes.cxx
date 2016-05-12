@@ -24,7 +24,7 @@ bool bsvg_bar_plot_initialize_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("float");  // width of the drawing region in the svg file
   input_types.push_back("float");  // height
   input_types.push_back("vcl_string");  // title of the plot
@@ -32,7 +32,7 @@ bool bsvg_bar_plot_initialize_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("bxml_document_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
@@ -42,7 +42,7 @@ bool bsvg_bar_plot_initialize_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 3) {
-    vcl_cerr << "dbrec_image_parse_process - invalid inputs\n";
+    std::cerr << "dbrec_image_parse_process - invalid inputs\n";
     return false;
   }
 
@@ -50,7 +50,7 @@ bool bsvg_bar_plot_initialize_process(bprb_func_process& pro)
   unsigned i = 0;
   float w = pro.get_input<float>(i++);
   float h = pro.get_input<float>(i++);
-  vcl_string title = pro.get_input<vcl_string>(i++);
+  std::string title = pro.get_input<std::string>(i++);
 
   bsvg_plot* p = new bsvg_plot(w, h);
   bxml_document_sptr pd = p;
@@ -71,7 +71,7 @@ bool bsvg_bar_plot_add_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("bxml_document_sptr");
   input_types.push_back("float");  // height
   input_types.push_back("vcl_string");  // label
@@ -80,7 +80,7 @@ bool bsvg_bar_plot_add_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -89,7 +89,7 @@ bool bsvg_bar_plot_add_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 4) {
-    vcl_cerr << "dbrec_image_parse_process - invalid inputs\n";
+    std::cerr << "dbrec_image_parse_process - invalid inputs\n";
     return false;
   }
 
@@ -97,8 +97,8 @@ bool bsvg_bar_plot_add_process(bprb_func_process& pro)
   unsigned i = 0;
   bxml_document_sptr doc = pro.get_input<bxml_document_sptr>(i++);
   float h = pro.get_input<float>(i++);
-  vcl_string label = pro.get_input<vcl_string>(i++);
-  vcl_string color = pro.get_input<vcl_string>(i++);
+  std::string label = pro.get_input<std::string>(i++);
+  std::string color = pro.get_input<std::string>(i++);
 
   bsvg_plot* p = dynamic_cast<bsvg_plot*>(doc.ptr());
   p->add_bar(h, label, true, color);
@@ -109,12 +109,12 @@ bool bsvg_bar_plot_add_process(bprb_func_process& pro)
 bool bsvg_plot_write_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("bxml_document_sptr");
   input_types.push_back("vcl_string");  // out file
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -122,12 +122,12 @@ bool bsvg_plot_write_process_cons(bprb_func_process& pro)
 bool bsvg_plot_write_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() < 2) {
-    vcl_cerr << "dbrec_image_parse_process - invalid inputs\n";
+    std::cerr << "dbrec_image_parse_process - invalid inputs\n";
     return false;
   }
   unsigned i = 0;
   bxml_document_sptr doc = pro.get_input<bxml_document_sptr>(i++);
-  vcl_string out_file = pro.get_input<vcl_string>(i++);
+  std::string out_file = pro.get_input<std::string>(i++);
 
   bxml_write(out_file, *doc);
   return true;

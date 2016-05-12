@@ -12,7 +12,7 @@
 //  starting from the "next edge" of the given node wrt the given edge, add the next edges of successor nodes as a chain
 //  stop when the initial edge is re-encountered
 template <class G, class E, class V>
-void euler_tour(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n, vcl_vector<vbl_smart_ptr<E> >& edges)
+void euler_tour(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n, std::vector<vbl_smart_ptr<E> >& edges)
 {
   vbl_smart_ptr<E> current_edge = e;
   vbl_smart_ptr<V> current_node = n;
@@ -77,7 +77,7 @@ int depth_no_loop(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n)
 }
 
 #undef DBGRL_EULER_TOUR_INSTANTIATE
-#define DBGRL_EULER_TOUR_INSTANTIATE( G, E, V ) template void euler_tour(vbl_smart_ptr<G > g, vbl_smart_ptr<E > e, vbl_smart_ptr<V > n, vcl_vector<vbl_smart_ptr<E > >& edges)
+#define DBGRL_EULER_TOUR_INSTANTIATE( G, E, V ) template void euler_tour(vbl_smart_ptr<G > g, vbl_smart_ptr<E > e, vbl_smart_ptr<V > n, std::vector<vbl_smart_ptr<E > >& edges)
 
 #undef DBGRL_DEPTH_NO_LOOP_INSTANTIATE
 #define DBGRL_DEPTH_NO_LOOP_INSTANTIATE( G, E, V ) template int depth_no_loop(vbl_smart_ptr<G > g, vbl_smart_ptr<E > e, vbl_smart_ptr<V > n)

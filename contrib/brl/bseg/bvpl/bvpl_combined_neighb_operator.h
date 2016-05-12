@@ -58,7 +58,7 @@ class bvpl_combined_neighb_operator
           float ocp_val;
           bsta_num_obs<bsta_gauss_sf1> gauss_val;
           if (ocp_subgrid.voxel(idx, ocp_val) && app_subgrid.voxel(idx, gauss_val)) {
-            //vcl_cout<< val << "at " << idx <<vcl_endl;
+            //std::cout<< val << "at " << idx <<std::endl;
             bvpl_kernel_dispatch d = *kernel_iter;
             ocp_func_.apply(ocp_val, d);
             app_func_.apply(gauss_val,d);

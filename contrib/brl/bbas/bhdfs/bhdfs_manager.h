@@ -12,10 +12,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include "hdfs.h"
 
@@ -34,8 +36,8 @@ class bhdfs_manager: public vbl_ref_count
   //: create function used instead of constructor
   //  Pass 'default' as host (and port as 0) to use the 'configured' filesystem in ${HADOOP_HOME}/conf/core-default.xml
   //  Pass NULL as host (and port as 0) to use the filesystem on localhost
-  static void create(vcl_string host_name, int port);
-  static void create(vcl_string host_name, int port, vcl_string user_name);
+  static void create(std::string host_name, int port);
+  static void create(std::string host_name, int port, std::string user_name);
 
   static bool exists() { return bhdfs_manager::instance_!=0; }
 
@@ -47,36 +49,36 @@ class bhdfs_manager: public vbl_ref_count
   bool ok() { return fs_ != 0; }
 
   //: get the current working directory on hdfs
-  vcl_string get_working_dir();
+  std::string get_working_dir();
 
   //: delete the file, returns true on success, false on error.
-  bool rm(vcl_string path);
+  bool rm(std::string path);
 
   //: create a directory, returns true on success, false on error. create permission is rwx rwx --- by default
-  bool create_dir(vcl_string path, short mode =  S_IRWXU | S_IRWXG);
+  bool create_dir(std::string path, short mode =  S_IRWXU | S_IRWXG);
 
   //: remove a directory, returns true on success, false on error.
-  bool remove_dir(vcl_string path) { return rm(path); }
+  bool remove_dir(std::string path) { return rm(path); }
 
   //: check existence of a file or path,  returns true on success, false on error.
-  bool exists(vcl_string path);
+  bool exists(std::string path);
 
   //: copy file from local dir to hdfs folder
-  bool copy_to_hdfs(vcl_string local_file, vcl_string hdfs_folder);
+  bool copy_to_hdfs(std::string local_file, std::string hdfs_folder);
 
   //: copy file from hdfs to local dir, hdfs_file is the full path of the file on hdfs
-  bool copy_from_hdfs(vcl_string hdfs_file, vcl_string local_dir);
+  bool copy_from_hdfs(std::string hdfs_file, std::string local_dir);
 
   //: get a list of filenames in the given directory
-  bool get_dir_list(vcl_string dir, vcl_vector<vcl_string>& fnames);
+  bool get_dir_list(std::string dir, std::vector<std::string>& fnames);
 
   friend class bhdfs_fstream;
 
  protected:
 
   //: hidden constructor
-  bhdfs_manager(vcl_string host_name, int port);
-  bhdfs_manager(vcl_string host_name, int port, vcl_string user_name);
+  bhdfs_manager(std::string host_name, int port);
+  bhdfs_manager(std::string host_name, int port, std::string user_name);
 
   //: hidden destructor
   virtual ~bhdfs_manager() {}

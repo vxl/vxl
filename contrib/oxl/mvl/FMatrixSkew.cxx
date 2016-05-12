@@ -5,9 +5,10 @@
 //:
 //  \file
 
+#include <iostream>
+#include <cmath>
 #include "FMatrixSkew.h"
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
@@ -161,20 +162,20 @@ FMatrixSkew::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
 
   if (temp < 0)
   {
-    vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match\n"
+    std::cerr << "Error in FMatrixSkew::find_nearest_perfect_match\n"
              << "Imaginary solution obtained\n"
              << "No solution returned\n";
     return;
   }
 
-  double ttheta1 = (-b_qd + vcl_sqrt(temp))/(2*a_qd);
-  double ttheta2 = (-b_qd - vcl_sqrt(temp))/(2*a_qd);
+  double ttheta1 = (-b_qd + std::sqrt(temp))/(2*a_qd);
+  double ttheta2 = (-b_qd - std::sqrt(temp))/(2*a_qd);
 
-  double theta1 = vcl_atan(ttheta1);
-  double theta2 = vcl_atan(ttheta2);
+  double theta1 = std::atan(ttheta1);
+  double theta2 = std::atan(ttheta2);
 
-  double ctheta1 = vcl_cos(theta1), stheta1 = vcl_sin(theta1);
-  double ctheta2 = vcl_cos(theta2), stheta2 = vcl_sin(theta2);
+  double ctheta1 = std::cos(theta1), stheta1 = std::sin(theta1);
+  double ctheta2 = std::cos(theta2), stheta2 = std::sin(theta2);
 
   double dist11 = stheta1*u1 - ctheta1*v1;
   double dist12 = stheta1*u2 - ctheta1*v2;
@@ -182,7 +183,7 @@ FMatrixSkew::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
   double dist22 = stheta2*u2 - ctheta2*v2;
 
   // find correct solution with minimum distance - set to theta1
-  if (vcl_fabs(dist11) + vcl_fabs(dist12) > vcl_fabs(dist21) + vcl_fabs(dist22))
+  if (std::fabs(dist11) + std::fabs(dist12) > std::fabs(dist21) + std::fabs(dist22))
   {
     stheta1 = stheta2;
     ctheta1 = ctheta2;
@@ -232,20 +233,20 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
 
   if (temp < 0)
   {
-    vcl_cerr << "Error in FMatrixSkew::find_nearest_perfect_match\n"
+    std::cerr << "Error in FMatrixSkew::find_nearest_perfect_match\n"
              << "Imaginary solution obtained\n"
              << "No solution returned\n";
     return;
   }
 
-  double ttheta1 = (-b_qd + vcl_sqrt(temp))/(2*a_qd);
-  double ttheta2 = (-b_qd - vcl_sqrt(temp))/(2*a_qd);
+  double ttheta1 = (-b_qd + std::sqrt(temp))/(2*a_qd);
+  double ttheta2 = (-b_qd - std::sqrt(temp))/(2*a_qd);
 
-  double theta1 = vcl_atan(ttheta1);
-  double theta2 = vcl_atan(ttheta2);
+  double theta1 = std::atan(ttheta1);
+  double theta2 = std::atan(ttheta2);
 
-  double ctheta1 = vcl_cos(theta1), stheta1 = vcl_sin(theta1);
-  double ctheta2 = vcl_cos(theta2), stheta2 = vcl_sin(theta2);
+  double ctheta1 = std::cos(theta1), stheta1 = std::sin(theta1);
+  double ctheta2 = std::cos(theta2), stheta2 = std::sin(theta2);
 
   double dist11 = stheta1*u1 - ctheta1*v1;
   double dist12 = stheta1*u2 - ctheta1*v2;
@@ -253,7 +254,7 @@ FMatrixSkew::find_nearest_perfect_match(const HomgPoint2D& point1,
   double dist22 = stheta2*u2 - ctheta2*v2;
 
   // find correct solution with minimum distance - set to theta1
-  if (vcl_fabs(dist11) + vcl_fabs(dist12) > vcl_fabs(dist21) + vcl_fabs(dist22))
+  if (std::fabs(dist11) + std::fabs(dist12) > std::fabs(dist21) + std::fabs(dist22))
   {
     stheta1 = stheta2;
     ctheta1 = ctheta2;
@@ -293,7 +294,7 @@ bool FMatrixSkew::set (const double* f_matrix )
       (f_matrix[4] > tolerance) |
       (f_matrix[8] > tolerance) )
   {
-    vcl_cerr << "WARNING: F matrix not skew symmetric so cannot allocate to FMatrixSkew\n" ;
+    std::cerr << "WARNING: F matrix not skew symmetric so cannot allocate to FMatrixSkew\n" ;
     return false;
   }
 

@@ -48,51 +48,51 @@
  */
 
 /* Begin error macros. */
-#define  spOKAY		0  /*!<
-			    * Error code that indicates that no error has
-			    * occurred.
-			    */
-#define  spSMALL_PIVOT	1  /*!<
-			    * Non-fatal error code that indicates that, when
-			    * reordering the matrix, no element was found that
-			    * satisfies the absolute threshold criteria. The
-			    * largest element in the matrix was chosen as pivot.
-			    */
-#define  spZERO_DIAG	2  /*!<
-			    * Fatal error code that indicates that, a zero was
-			    * encountered on the diagonal the matrix. This does
-			    * not necessarily imply that the matrix is singular.
-			    * When this error occurs, the matrix should be
-			    * reconstructed and factored using
-			    * spOrderAndFactor().
-			    */
-#define  spSINGULAR	3  /*!<
-			    * Fatal error code that indicates that, matrix is
-			    * singular, so no unique solution exists.
-			    */
-#define  spMANGLED	4  /*!<
-			    * Fatal error code that indicates that, matrix has
-			    * been mangled, results of requested operation are
-			    * garbage.
-			    */
-#define  spNO_MEMORY	5  /*!<
-			    * Fatal error code that indicates that not enough
-			    * memory is available.
-			    */
-#define  spPANIC	6  /*!<
-			    * Fatal error code that indicates that the routines
-			    * are not prepared to handle the matrix that has
-			    * been requested.  This may occur when the matrix
-			    * is specified to be real and the routines are not
-			    * compiled for real matrices, or when the matrix is
-			    * specified to be complex and the routines are not
-			    * compiled to handle complex matrices.
-			    */
-#define  spFATAL	2  /*!<
-			    * Error code that is not an error flag, but rather
-			    * the dividing line between fatal errors and
-			    * warnings.
-			    */
+#define  spOKAY                0  /*!<
+                            * Error code that indicates that no error has
+                            * occurred.
+                            */
+#define  spSMALL_PIVOT        1  /*!<
+                            * Non-fatal error code that indicates that, when
+                            * reordering the matrix, no element was found that
+                            * satisfies the absolute threshold criteria. The
+                            * largest element in the matrix was chosen as pivot.
+                            */
+#define  spZERO_DIAG        2  /*!<
+                            * Fatal error code that indicates that, a zero was
+                            * encountered on the diagonal the matrix. This does
+                            * not necessarily imply that the matrix is singular.
+                            * When this error occurs, the matrix should be
+                            * reconstructed and factored using
+                            * spOrderAndFactor().
+                            */
+#define  spSINGULAR        3  /*!<
+                            * Fatal error code that indicates that, matrix is
+                            * singular, so no unique solution exists.
+                            */
+#define  spMANGLED        4  /*!<
+                            * Fatal error code that indicates that, matrix has
+                            * been mangled, results of requested operation are
+                            * garbage.
+                            */
+#define  spNO_MEMORY        5  /*!<
+                            * Fatal error code that indicates that not enough
+                            * memory is available.
+                            */
+#define  spPANIC        6  /*!<
+                            * Fatal error code that indicates that the routines
+                            * are not prepared to handle the matrix that has
+                            * been requested.  This may occur when the matrix
+                            * is specified to be real and the routines are not
+                            * compiled for real matrices, or when the matrix is
+                            * specified to be complex and the routines are not
+                            * compiled to handle complex matrices.
+                            */
+#define  spFATAL        2  /*!<
+                            * Error code that is not an error flag, but rather
+                            * the dividing line between fatal errors and
+                            * warnings.
+                            */
 
 
 /*
@@ -100,15 +100,15 @@
  */
 
 #define  spREAL double  /*!<
-			 * Defines the precision of the arithmetic used by
-			 * \a Sparse will use.  Double precision is suggested
-			 * as being most appropriate for circuit simulation
-			 * and for C.  However, it is possible to change spREAL
-			 * to a float for single precision arithmetic.  Note
-			 * that in C, single precision arithmetic is often
-			 * slower than double precision.  Sparse
-			 * internally refers to spREALs as RealNumbers.
-			 */
+                         * Defines the precision of the arithmetic used by
+                         * \a Sparse will use.  Double precision is suggested
+                         * as being most appropriate for circuit simulation
+                         * and for C.  However, it is possible to change spREAL
+                         * to a float for single precision arithmetic.  Note
+                         * that in C, single precision arithmetic is often
+                         * slower than double precision.  Sparse
+                         * internally refers to spREALs as RealNumbers.
+                         */
 
 
 /*
@@ -134,32 +134,32 @@
 
 /* Begin partition keywords. */
 
-#define spDEFAULT_PARTITION	0 /*!<
-			           * Partition code for spPartition().
-				   * Indicates that the default partitioning
-				   * mode should be used.
-				   * \see spPartition()
-				   */
-#define spDIRECT_PARTITION	1 /*!<
-			           * Partition code for spPartition().
-				   * Indicates that all rows should be placed
-				   * in the direct addressing partition.
-				   * \see spPartition()
-				   */
-#define spINDIRECT_PARTITION	2 /*!<
-			           * Partition code for spPartition().
-				   * Indicates that all rows should be placed
-				   * in the indirect addressing partition.
-				   * \see spPartition()
-				   */
-#define spAUTO_PARTITION	3 /*!<
-			           * Partition code for spPartition().
-				   * Indicates that \a Sparse should chose
-				   * the best partition for each row based
-				   * on some simple rules. This is generally
-				   * preferred.
-				   * \see spPartition()
-				   */
+#define spDEFAULT_PARTITION        0 /*!<
+                                   * Partition code for spPartition().
+                                   * Indicates that the default partitioning
+                                   * mode should be used.
+                                   * \see spPartition()
+                                   */
+#define spDIRECT_PARTITION        1 /*!<
+                                   * Partition code for spPartition().
+                                   * Indicates that all rows should be placed
+                                   * in the direct addressing partition.
+                                   * \see spPartition()
+                                   */
+#define spINDIRECT_PARTITION        2 /*!<
+                                   * Partition code for spPartition().
+                                   * Indicates that all rows should be placed
+                                   * in the indirect addressing partition.
+                                   * \see spPartition()
+                                   */
+#define spAUTO_PARTITION        3 /*!<
+                                   * Partition code for spPartition().
+                                   * Indicates that \a Sparse should chose
+                                   * the best partition for each row based
+                                   * on some simple rules. This is generally
+                                   * preferred.
+                                   * \see spPartition()
+                                   */
 
 /*
  *  MACRO FUNCTION DEFINITIONS
@@ -253,10 +253,10 @@ typedef int spError;
 
 /* Begin `spTemplate'. */
 struct  spTemplate
-{   spElement	*Element1;
-    spElement	*Element2;
-    spElement	*Element3Negated;
-    spElement	*Element4Negated;
+{   spElement        *Element1;
+    spElement        *Element2;
+    spElement        *Element3Negated;
+    spElement        *Element4Negated;
 };
 
 
@@ -275,13 +275,6 @@ spcEXTERN  void       spDeleteRowAndCol( spMatrix, int, int );
 spcEXTERN  void       spDestroy( spMatrix );
 spcEXTERN  int        spElementCount( spMatrix );
 spcEXTERN  spError    spErrorState( spMatrix );
-#if 0 // Remove Borland error
-#ifdef EOF
-    spcEXTERN void    spErrorMessage( spMatrix, FILE*, char* );
-#else
-#   define spErrorMessage(a,b,c) spcFUNC_NEEDS_FILE(_spErrorMessage,stdio)
-#endif
-#endif // Remove Borland error
 
 spcEXTERN  spError    spFactor( spMatrix );
 /*  Remove file IO due to archaic fopen method which gives warnings in windoz
@@ -291,13 +284,13 @@ spcEXTERN  int        spFileStats( spMatrix, char*, char* );
 spcEXTERN  int        spFillinCount( spMatrix );
 spcEXTERN  spElement *spFindElement( spMatrix, int, int );
 spcEXTERN  spError    spGetAdmittance( spMatrix, int, int,
-				struct spTemplate* );
+                                struct spTemplate* );
 spcEXTERN  spElement *spGetElement( spMatrix, int, int );
 spcEXTERN  spGenericPtr spGetInitInfo( spElement* );
 spcEXTERN  spError    spGetOnes( spMatrix, int, int, int,
-				struct spTemplate* );
+                                struct spTemplate* );
 spcEXTERN  spError    spGetQuad( spMatrix, int, int, int, int,
-				struct spTemplate* );
+                                struct spTemplate* );
 spcEXTERN  int        spGetSize( spMatrix, int );
 spcEXTERN  int        spInitialize( spMatrix, int (*pInit)(spElement *, spGenericPtr, int, int) );
 spcEXTERN  void       spInstallInitInfo( spElement*, spGenericPtr );
@@ -305,7 +298,7 @@ spcEXTERN  spREAL     spLargestElement( spMatrix );
 spcEXTERN  void       spMNA_Preorder( spMatrix );
 spcEXTERN  spREAL     spNorm( spMatrix );
 spcEXTERN  spError    spOrderAndFactor( spMatrix, spREAL[], spREAL,
-				spREAL, int );
+                                spREAL, int );
 spcEXTERN  void       spPartition( spMatrix, int );
 spcEXTERN  void       spPrint( spMatrix, int, int, int );
 spcEXTERN  void       spRowColOrder( spMatrix, int*, int*);
@@ -327,25 +320,25 @@ spcEXTERN  void       spDeterminant( spMatrix, int*, spREAL* );
 #if spCOMPLEX && spSEPARATED_COMPLEX_VECTORS
 /* Get rid of arcaic file IO
 spcEXTERN  int        spFileVector( spMatrix, char* ,
-				spREAL[], spREAL[]);
+                                spREAL[], spREAL[]);
 */
 spcEXTERN  void       spMultiply( spMatrix, spREAL[], spREAL[],
-				spREAL[], spREAL[] );
+                                spREAL[], spREAL[] );
 spcEXTERN  void       spMultTransposed( spMatrix, spREAL[], spREAL[],
-				spREAL[], spREAL[] );
+                                spREAL[], spREAL[] );
 spcEXTERN  void       spSolve( spMatrix, spREAL[], spREAL[], spREAL[],
-				spREAL[] );
+                                spREAL[] );
 spcEXTERN  void       spSolveTransposed( spMatrix, spREAL[], spREAL[],
-				spREAL[], spREAL[] );
+                                spREAL[], spREAL[] );
 #else /* NOT  (spCOMPLEX && spSEPARATED_COMPLEX_VECTORS) */
 /* Get rid of arcaic file IO
 spcEXTERN  int        spFileVector( spMatrix, char* , spREAL[] );
 */
 spcEXTERN  void       spMultiply( spMatrix, spREAL[], spREAL[] );
 spcEXTERN  void       spMultTransposed( spMatrix,
-				spREAL[], spREAL[] );
+                                spREAL[], spREAL[] );
 spcEXTERN  void       spSolve( spMatrix, spREAL[], spREAL[] );
 spcEXTERN  void       spSolveTransposed( spMatrix,
-				spREAL[], spREAL[] );
+                                spREAL[], spREAL[] );
 #endif /* NOT  (spCOMPLEX && spSEPARATED_COMPLEX_VECTORS) */
 #endif  /* spOKAY */

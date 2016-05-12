@@ -9,7 +9,7 @@
 //
 // \verbatim
 // Modifications
-// 2000.05.15 François BERTEL Added some missing <T>
+// 2000.05.15 Francois BERTEL Added some missing <T>
 // 2000.05.16 Peter Vanroose  Operators > < >= <= made const
 // 2000.09.13 fsm      Added rationale for unprotect().
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
@@ -18,7 +18,8 @@
 // 2002.9.20  Ian Scott       Copied into vil1, renamed and simplified.
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 //: A templated smart pointer class
 // This class requires that the class being templated over has
@@ -36,7 +37,7 @@ class vil_smart_ptr
   VCL_SAFE_BOOL_DEFINE;
  public:
   vil_smart_ptr ()
-    :  ptr_(0) { }
+    :  ptr_(VXL_NULLPTR) { }
 
   vil_smart_ptr (vil_smart_ptr<T> const &p)
     :  ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
@@ -49,7 +50,7 @@ class vil_smart_ptr
     // the strange order of events in this function is to avoid
     // heap corruption if unref() causes *this to be deleted.
     T *old_ptr = ptr_;
-    ptr_ = 0;
+    ptr_ = VXL_NULLPTR;
     if (old_ptr)
       unref(old_ptr);
   }
@@ -83,11 +84,11 @@ class vil_smart_ptr
 
   //: Cast to bool
   operator safe_bool () const
-    { return (ptr_ != (T*)0)? VCL_SAFE_BOOL_TRUE : 0; }
+    { return (ptr_ != VXL_NULLPTR) ? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
 
   //: Inverse bool
   bool operator!() const
-    { return (ptr_ != (T*)0)? false : true; }
+    { return (ptr_ != VXL_NULLPTR) ? false : true; }
 
   //: Dereferencing the pointer
   T &operator * () const { return *ptr_; }
@@ -155,11 +156,11 @@ inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
   return a.as_pointer() != p;
 }
 
-// Sunpro and GCC need a vcl_ostream operator. It need not be inline
+// GCC need a std::ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the
 // cost of a function call.
 template <class T>
-vcl_ostream& operator<< (vcl_ostream&, vil_smart_ptr<T> const&);
+std::ostream& operator<< (std::ostream&, vil_smart_ptr<T> const&);
 
 #define VIL_SMART_PTR_INSTANTIATE(T) \
 extern "please include vil/vil_smart_ptr.txx instead"

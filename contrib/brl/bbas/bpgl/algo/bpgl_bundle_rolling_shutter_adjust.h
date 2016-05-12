@@ -7,6 +7,8 @@
 // \author Matt Leotta
 // \date April 18, 2005
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_sparse_lst_sqr_function.h>
 #include <vgl/vgl_point_2d.h>
@@ -14,7 +16,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 
 //: Computes the residuals for bundle adjustment given that the cameras share a fixed internal calibration, shared rolling rate which needs to be estimated
@@ -23,19 +25,19 @@ class bpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
  public:
   //: Constructor
   // \note image points are not homogeneous because they require finite points to measure projection error
-  bpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                                       const vcl_vector<vcl_vector<bool> >& mask,
+  bpgl_bundle_rolling_shutter_adj_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+                                       const std::vector<vgl_point_2d<double> >& image_points,
+                                       const std::vector<std::vector<bool> >& mask,
                                        double rolling_rate,
                                        bool use_confidence_weights = true);
 
   //: Constructor
   //  Each image point is assigned an inverse covariance (error projector) matrix
   // \note image points are not homogeneous because they require finite points to measure projection error
-  bpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                                       const vcl_vector<vnl_matrix<double> >& inv_covars,
-                                       const vcl_vector<vcl_vector<bool> >& mask,
+  bpgl_bundle_rolling_shutter_adj_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+                                       const std::vector<vgl_point_2d<double> >& image_points,
+                                       const std::vector<vnl_matrix<double> >& inv_covars,
+                                       const std::vector<std::vector<bool> >& mask,
                                        bool use_confidence_weights = true);
 
   // Destructor
@@ -59,8 +61,8 @@ class bpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
 
   //: Compute the sparse Jacobian in block form.
   virtual void jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b,
-                          vcl_vector<vnl_matrix<double> >& A,
-                          vcl_vector<vnl_matrix<double> >& B);
+                          std::vector<vnl_matrix<double> >& A,
+                          std::vector<vnl_matrix<double> >& B);
 
   //: compute the Jacobian Aij
   void jac_Aij(vnl_double_3x4 const& Pi, vnl_double_3x3 const& K,
@@ -139,34 +141,34 @@ class bpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
 
   //: Create the parameter vector \p a from a vector of cameras
   static vnl_vector<double>
-    create_param_vector(const vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                        const vcl_vector<vnl_vector<double> > & motion);
+    create_param_vector(const std::vector<vpgl_perspective_camera<double> >& cameras,
+                        const std::vector<vnl_vector<double> > & motion);
 
   //: Create the parameter vector \p b from a vector of 3D points
   static vnl_vector<double>
-    create_param_vector(const vcl_vector<vgl_point_3d<double> >& world_points);
+    create_param_vector(const std::vector<vgl_point_3d<double> >& world_points);
 
 
   void reset() { iteration_count_ = 0; for (unsigned int i=0; i<weights_.size(); ++i) weights_[i] = 1.0; }
 
   //: return the current weights
-  vcl_vector<double> weights() const { return weights_; }
+  std::vector<double> weights() const { return weights_; }
 
  protected:
   //: The fixed internal camera calibration
-  vcl_vector<vpgl_calibration_matrix<double> > K_;
+  std::vector<vpgl_calibration_matrix<double> > K_;
   //: The fixed internal camera calibration in matrix form
-  vcl_vector<vnl_double_3x3> Km_;
+  std::vector<vnl_double_3x3> Km_;
   //: The corresponding points in the image
-  vcl_vector<vgl_point_2d<double> > image_points_;
+  std::vector<vgl_point_2d<double> > image_points_;
   //: The Cholesky factored inverse covariances for each image point
-  vcl_vector<vnl_matrix<double> > factored_inv_covars_;
+  std::vector<vnl_matrix<double> > factored_inv_covars_;
   //: Flag to enable covariance weighted errors
   bool use_covars_;
   //: Flag to enable confidence weighting
   bool use_weights_;
   //: The corresponding points in the image
-  vcl_vector<double> weights_;
+  std::vector<double> weights_;
   int iteration_count_;
   double rolling_rate_;
 };
@@ -197,17 +199,17 @@ class bpgl_bundle_rolling_shutter_adjust
   const vnl_vector<double>& point_params() const { return b_; }
 
   //: Bundle Adjust
-  bool optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                vcl_vector<vnl_vector<double> > & motion,
+  bool optimize(std::vector<vpgl_perspective_camera<double> >& cameras,
+                std::vector<vnl_vector<double> > & motion,
                 double & r,
-                vcl_vector<vgl_point_3d<double> >& world_points,
-                const vcl_vector<vgl_point_2d<double> >& image_points,
-                const vcl_vector<vcl_vector<bool> >& mask);
+                std::vector<vgl_point_3d<double> >& world_points,
+                const std::vector<vgl_point_2d<double> >& image_points,
+                const std::vector<std::vector<bool> >& mask);
 
   //: Write cameras and points to a file in VRML 2.0 for debugging
-  static void write_vrml(const vcl_string& filename,
-                         vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                         vcl_vector<vgl_point_3d<double> >& world_points);
+  static void write_vrml(const std::string& filename,
+                         std::vector<vpgl_perspective_camera<double> >& cameras,
+                         std::vector<vgl_point_3d<double> >& world_points);
 
  private:
   //: The bundle adjustment error function

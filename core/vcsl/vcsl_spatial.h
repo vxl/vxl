@@ -4,23 +4,24 @@
 //:
 // \file
 // \brief A spatial coordinate system
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/07/10 François BERTEL Creation
+//   2000/07/10 Francois BERTEL Creation
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/22 Peter Vanroose - return type of from_local_to_cs() changed from ptr to non-ptr
-//   2002/01/28 Peter Vanroose - vcl_vector members changed from ptr to non-ptr
+//   2002/01/28 Peter Vanroose - std::vector members changed from ptr to non-ptr
 //   2004/09/17 Peter Vanroose - made beat(), parent(), motion() non-virtual: they just return a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vcsl/vcsl_coordinate_system.h>
 #include <vcsl/vcsl_spatial_sptr.h>
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 #include <vcsl/vcsl_graph_sptr.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 class vcsl_cartesian_2d;
 class vcsl_polar;
 class vcsl_cartesian_3d;
@@ -30,13 +31,7 @@ class vcsl_spherical;
 
 // This is needed for icc-7.0 to solve a strange link problem.
 #include <vcl_compiler.h>
-#ifdef VCL_ICC
-// Link problem occurs with either vcl_vector<bool> or std::vector<bool>
-#define VCSL_SPATIAL_VECTOR_BOOL vcl_vector<int>
-#else
-#define VCSL_SPATIAL_VECTOR_BOOL vcl_vector<bool>
-#endif
-
+#define VCSL_SPATIAL_VECTOR_BOOL std::vector<bool>
 
 //: A spatial coordinate system
 // class invariants:
@@ -72,16 +67,16 @@ class vcsl_spatial
   //***************************************************************************
 
   //: Return the list of time clocks
-  vcl_vector<double> beat() const { return beat_; }
+  std::vector<double> beat() const { return beat_; }
 
   //: Return the time duration
   unsigned int duration() const { return (unsigned int)(beat_.size()); }
 
   //: Return the list of parent coordinate system along the time
-  vcl_vector<vcsl_spatial_sptr> parent() const { return parent_; }
+  std::vector<vcsl_spatial_sptr> parent() const { return parent_; }
 
   //: Return the list of transformations along the time
-  vcl_vector<vcsl_spatial_transformation_sptr> motion() const {return motion_;}
+  std::vector<vcsl_spatial_transformation_sptr> motion() const {return motion_;}
 
   //: Is `time' between the two time bounds ?
   bool valid_time(double time) const;
@@ -91,13 +86,13 @@ class vcsl_spatial
   //***************************************************************************
 
   //: Set the list of time clocks
-  void set_beat(vcl_vector<double> const& new_beat) { beat_=new_beat; }
+  void set_beat(std::vector<double> const& new_beat) { beat_=new_beat; }
 
   //: Set the list of parent coordinate system along the time
-  void set_parent(vcl_vector<vcsl_spatial_sptr> const& new_parent);
+  void set_parent(std::vector<vcsl_spatial_sptr> const& new_parent);
 
   //: Set the list of transformations along the time
-  void set_motion(vcl_vector<vcsl_spatial_transformation_sptr> const& m) { motion_=m; }
+  void set_motion(std::vector<vcsl_spatial_transformation_sptr> const& m) { motion_=m; }
 
   //: Set the unique parent and the unique motion
   //
@@ -161,7 +156,7 @@ class vcsl_spatial
   virtual void
   path_from_local_to_cs(const vcsl_spatial_sptr &other,
                         double time,
-                        vcl_vector<vcsl_spatial_transformation_sptr> &path,
+                        std::vector<vcsl_spatial_transformation_sptr> &path,
                         VCSL_SPATIAL_VECTOR_BOOL &sens);
 
   //: Find the sequence of transformations from `this' to `other'
@@ -169,20 +164,20 @@ class vcsl_spatial
   virtual bool
   recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
                                   double time,
-                                  vcl_vector<vcsl_spatial_transformation_sptr> &path,
+                                  std::vector<vcsl_spatial_transformation_sptr> &path,
                                   VCSL_SPATIAL_VECTOR_BOOL &sens);
 
   //: successive parents of `this' along the time
-  vcl_vector<vcsl_spatial_sptr> parent_;
+  std::vector<vcsl_spatial_sptr> parent_;
 
   //: Clock times
-  vcl_vector<double> beat_;
+  std::vector<double> beat_;
 
   //: successive transformations from `this' to `parent' along the time
-  vcl_vector<vcsl_spatial_transformation_sptr> motion_;
+  std::vector<vcsl_spatial_transformation_sptr> motion_;
 
   //: List of spatial coordinate system that can be child of `this' at a time
-  vcl_vector<vcsl_spatial_sptr> potential_children_;
+  std::vector<vcsl_spatial_sptr> potential_children_;
 
   //: List of all the spatial coordinate system of the graph
   vcsl_graph_sptr graph_;

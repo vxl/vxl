@@ -9,7 +9,8 @@
 //
 // Should template this class.
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -120,7 +121,7 @@ class vpgl_generic_camera_convert
   //: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera
   static bool convert( vpgl_geo_camera& geocam, int ni, int nj, double height,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
-  
+
   //: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera using the specified ray direction (not necessarily nadir rays)
   //  basically creates a camera with parallel rays but the rays can be in any direction
   static bool convert( vpgl_geo_camera& geocam, int ni, int nj, double height, vgl_vector_3d<double>& dir,
@@ -131,9 +132,9 @@ class vpgl_generic_camera_convert
  private:
   //: interpolate rays to fill next higher resolution pyramid layer
   static bool
-    upsample_rays(vcl_vector<vgl_ray_3d<double> > const& ray_nbrs,
+    upsample_rays(std::vector<vgl_ray_3d<double> > const& ray_nbrs,
                   vgl_ray_3d<double> const& ray,
-                  vcl_vector<vgl_ray_3d<double> >& interp_rays);
+                  std::vector<vgl_ray_3d<double> >& interp_rays);
   //: interpolate a span of rays base on a linear interpolation. n_grid is the step distance from r1. r0 and r1 are one unit apart.
   static vgl_ray_3d<double> interp_pair(vgl_ray_3d<double> const& r0,
                                         vgl_ray_3d<double> const& r1,
@@ -141,8 +142,8 @@ class vpgl_generic_camera_convert
   static bool pyramid_est(vpgl_local_rational_camera<double> const& rat_cam,
                                               int ni, int nj,int offseti, int offsetj,
                                                double local_z_min, double local_z_max,
-                                              int n_levels,vcl_vector<int> nr, vcl_vector<int> nc,
-                                              vcl_vector<unsigned int> scl,vcl_vector<vbl_array_2d<vgl_ray_3d<double> > > & ray_pyr );
+                                              int n_levels,std::vector<int> nr, std::vector<int> nc,
+                                              std::vector<unsigned int> scl,std::vector<vbl_array_2d<vgl_ray_3d<double> > > & ray_pyr );
 
   vpgl_generic_camera_convert();
 };

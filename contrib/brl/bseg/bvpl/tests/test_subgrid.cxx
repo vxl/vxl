@@ -11,8 +11,8 @@ static void test_subgrid()
 {
   // create the grid
   // we need temporary disk storage for this test.
-  vcl_string storage_fname("bvxm_voxel_grid_test_temp.vox");
-  vcl_string storage_cached_fname("bvxm_voxel_grid_cached_test_temp.vox");
+  std::string storage_fname("bvxm_voxel_grid_test_temp.vox");
+  std::string storage_cached_fname("bvxm_voxel_grid_cached_test_temp.vox");
   // remove file if exists from previous test.
   if (vul_file::exists(storage_fname.c_str())) {
     vul_file::delete_file_glob(storage_fname.c_str());
@@ -27,7 +27,7 @@ static void test_subgrid()
 
   // try test with all types of underlying storage.
   bvxm_voxel_grid<float>* grid = new bvxm_voxel_grid<float>(storage_fname,grid_size); // disk storage;
-  vcl_string test_name;
+  std::string test_name;
 
   // check num_observations
   TEST("num_observations()", grid->num_observations(), 0);
@@ -40,20 +40,20 @@ static void test_subgrid()
 
   // read in each slice, check that init_val was set, and fill with new value
   unsigned count = 0;
-  vcl_cout << "read/write: ";
+  std::cout << "read/write: ";
   bvxm_voxel_grid<float>::iterator slab_it;
   for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
     bvxm_voxel_slab<float>::iterator vit;
     for (vit = slab_it->begin(); vit != slab_it->end(); vit++, count++) {
       if (*vit != init_val) {
-        vcl_cerr << "error: read in value does not match init value! count = " << count << '\n';
+        std::cerr << "error: read in value does not match init value! count = " << count << '\n';
       }
       // write new value
       *vit = static_cast<float>(count);
     }
   }
-  vcl_cout << "done." << vcl_endl;
+  std::cout << "done." << std::endl;
 
   // get the subgrid iterator
   int kernel_x=11, kernel_y=11, kernel_z=11;

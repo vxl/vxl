@@ -6,11 +6,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
+#include <list>
+#include <algorithm>
 #include <vul/vul_arg.h>
-#include <vcl_cstring.h> // needed for strcmp()
-#include <vcl_iostream.h>
-#include <vcl_list.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 char const * my_argv_1[] =
@@ -30,7 +31,7 @@ char const * my_argv_1[] =
   "i",
   "j",
   "-req", "100",
-  0
+  VXL_NULLPTR
 };
 
 int list1_contents[] = { 1,2,10,21,24,-1,-3,-5,-7 };
@@ -54,13 +55,13 @@ void test_arg()
   vul_arg<bool> bool1(arglist, "-bool1", "And another", false);
   vul_arg<bool> bool2(arglist, "-bool2", "And another", true);
   vul_arg<bool> bool3(arglist, "-bool3", "And a final help test just to finish off...", true);
-  vul_arg<vcl_list<int> > list1(arglist, "-list1", "List...");
+  vul_arg<std::list<int> > list1(arglist, "-list1", "List...");
   vul_arg<char*> filename1(arglist);
-  vul_arg<vcl_vector<double> > list2(arglist, "-list2", "double List...");
+  vul_arg<std::vector<double> > list2(arglist, "-list2", "double List...");
   vul_arg<int> required (arglist, "-req", "Another one to declare a required flag", vul_arg<int>::is_required);
 
   int my_argc = count_my_args(my_argv_1);
-  vcl_cout << "vul_argc = " << my_argc
+  std::cout << "vul_argc = " << my_argc
            << ", int1 = " << int1()
            << ", int2 = " << int2()
            << ", bool1 = " << bool1()
@@ -69,7 +70,7 @@ void test_arg()
            << ", list1 size = " << list1().size()
            << ", list2 size = " << list2().size()
            << ", req = " << required()
-           << vcl_endl;
+           << std::endl;
   char **my_argv = (char**) my_argv_1; // casting away const !!!
 
   arglist.parse(my_argc, my_argv, true);
@@ -77,16 +78,16 @@ void test_arg()
   TEST("int1", int1(), 3);
   TEST("int2", int2(), 2);
   TEST("req", required(), 100);
-  TEST("filename == f", vcl_strcmp(filename1(), "f"), 0);
+  TEST("filename == f", std::strcmp(filename1(), "f"), 0);
 
   {
     unsigned true_list_length = sizeof list1_contents / sizeof list1_contents[0];
-    vcl_list<int> l = list1();
+    std::list<int> l = list1();
     TEST("list1 length", l.size(), true_list_length);
     bool ok = true;
     for (unsigned int i = 0; i < true_list_length; ++i) {
-      if (vcl_find(l.begin(), l.end(), list1_contents[i]) == l.end()) {
-        vcl_cout << "Integer [" << list1_contents[i] << "] not found in list\n";
+      if (std::find(l.begin(), l.end(), list1_contents[i]) == l.end()) {
+        std::cout << "Integer [" << list1_contents[i] << "] not found in list\n";
         ok = false;
       }
     }
@@ -94,12 +95,12 @@ void test_arg()
   }
   {
     unsigned true_list_length = sizeof list2_contents / sizeof list2_contents[0];
-    vcl_vector<double> l = list2();
+    std::vector<double> l = list2();
     TEST("list2 length", l.size(), true_list_length);
     bool ok = true;
     for (unsigned int i = 0; i < true_list_length; ++i) {
-      if (vcl_find(l.begin(), l.end(), list2_contents[i]) == l.end()) {
-        vcl_cout << "Value [" << list2_contents[i] << "] not found in list\n";
+      if (std::find(l.begin(), l.end(), list2_contents[i]) == l.end()) {
+        std::cout << "Value [" << list2_contents[i] << "] not found in list\n";
         ok = false;
       }
     }

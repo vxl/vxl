@@ -5,9 +5,10 @@
 //
 // Example usage:  example_draw_polygon -n 7 -b
 
+#include <cmath>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vul/vul_arg.h>
 
@@ -21,14 +22,14 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_projection_inspector.h>
 
-#define hypot(x,y) vcl_sqrt((x)*(x)+(y)*(y)) // hypot is not in C++98, and therefore not in vcl.
+#define hypot(x,y) std::sqrt((x)*(x)+(y)*(y)) // hypot is not in C++98, and therefore not in vcl.
 
 struct example_polygon_tableau : public vgui_tableau
 {
   bool boundary;
   int v;
-  vcl_vector<float> x;
-  vcl_vector<float> y;
+  std::vector<float> x;
+  std::vector<float> y;
 
   example_polygon_tableau(unsigned n, bool boundary_)
    : boundary(boundary_), v(-1)
@@ -36,8 +37,8 @@ struct example_polygon_tableau : public vgui_tableau
     for (unsigned i=0; i<n; ++i)
     {
       double t = vnl_math::twopi*i/n;
-      x.push_back(float(vcl_cos(t)));
-      y.push_back(float(vcl_sin(t)));
+      x.push_back(float(std::cos(t)));
+      y.push_back(float(std::sin(t)));
     }
   }
 

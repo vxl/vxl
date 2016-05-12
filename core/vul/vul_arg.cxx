@@ -13,22 +13,23 @@
 // functions (which can by static if you like) in myarg.cxx
 // \code
 //   void settype(vul_arg<T> &);
-//   void print_value(vul_arg<T> const &, vcl_ostream &);
+//   void print_value(vul_arg<T> const &, std::ostream &);
 //   int  parse(vul_arg<T>*, char**);
 // \endcode
 // and then instantiate the class vul_arg<T> as usual (in myarg.cxx).
 
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
+#include <vector>
+#include <list>
 #include "vul_arg.h"
 
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h> // exit()
-#include <vcl_cmath.h>   // floor()
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
 
 #include <vul/vul_sprintf.h>
 #include <vul/vul_string.h>
@@ -115,15 +116,15 @@ void vul_arg_base::set_help_description(char const* str)
 
 void vul_arg_base::display_usage(char const* msg)
 {
-  if (msg) vcl_cerr << "** WARNING ** " << msg << vcl_endl;
+  if (msg) std::cerr << "** WARNING ** " << msg << std::endl;
   current_list().display_help("");
 }
 
 void vul_arg_base::display_usage_and_exit(char const* msg)
 {
-  if (msg) vcl_cerr << "** ERROR ** " << msg << vcl_endl;
+  if (msg) std::cerr << "** ERROR ** " << msg << std::endl;
   current_list().display_help("");
-  vcl_exit(-1);
+  std::exit(-1);
 }
 
 // vul_arg_base constructors
@@ -153,8 +154,8 @@ void vul_arg_info_list::set_help_option(char const* str)
 {
   // check that the operator isn't already being used
   for (unsigned int i=0; i<args_.size(); i++) {
-    if (vcl_strcmp(args_[i]->option(),str) == 0) {
-      vcl_cerr << "vul_arg_info_list: WARNING: requested help operator already assigned\n";
+    if (std::strcmp(args_[i]->option(),str) == 0) {
+      std::cerr << "vul_arg_info_list: WARNING: requested help operator already assigned\n";
       return;
     }
   }
@@ -167,7 +168,7 @@ void vul_arg_info_list::set_help_option(char const* str)
 void vul_arg_info_list::add(vul_arg_base* argmt)
 {
   if ( argmt->option() && help_ == argmt->option() )
-    vcl_cerr << "vul_arg_info_list: WARNING: '-" << help_
+    std::cerr << "vul_arg_info_list: WARNING: '-" << help_
              << "' option reserved and will be ignored\n";
   else
     args_.push_back(argmt);
@@ -187,89 +188,89 @@ void vul_arg_info_list::include(vul_arg_info_list& l)
 void vul_arg_info_list::display_help( char const*progname)
 {
   if (progname)
-    vcl_cerr << "Usage: " << progname << ' ';
+    std::cerr << "Usage: " << progname << ' ';
   else
-    vcl_cerr << "Usage: <prog_name> ";
+    std::cerr << "Usage: <prog_name> ";
 
   // Print "prog [-a int] string string"
 
   for (unsigned int i=0; i< args_.size(); i++) {
     if (! args_[i]->option_.empty()) {
-      if (!args_[i]->required_) vcl_cerr << '[';
-      vcl_cerr << args_[i]->option();
-      if (vcl_strlen(args_[i]->type_)> 0)
-        vcl_cerr << ' ' << args_[i]->type_;
-      if (!args_[i]->required_) vcl_cerr << ']';
-      vcl_cerr << ' ';
+      if (!args_[i]->required_) std::cerr << '[';
+      std::cerr << args_[i]->option();
+      if (std::strlen(args_[i]->type_)> 0)
+        std::cerr << ' ' << args_[i]->type_;
+      if (!args_[i]->required_) std::cerr << ']';
+      std::cerr << ' ';
     }
     else {
       // options without switches are required.
-      vcl_cerr << args_[i]->type_ << ' ';
+      std::cerr << args_[i]->type_ << ' ';
     }
   }
 
-  vcl_cerr << vcl_endl << command_precis_ << vcl_endl;
+  std::cerr << std::endl << command_precis_ << std::endl;
 
   // Find longest option, type name, or default
-  vcl_size_t maxl_option  = vcl_max(vcl_size_t(8), help_.size()); // Length of "REQUIRED" or help option
-  vcl_size_t maxl_type = 4; // Length of "Type", minimum "bool"
+  std::size_t maxl_option  = std::max(std::size_t(8), help_.size()); // Length of "REQUIRED" or help option
+  std::size_t maxl_type = 4; // Length of "Type", minimum "bool"
   //  int maxl_default = 0;
   for (unsigned int i=0; i< args_.size(); i++)
     if (!args_[i]->help_.empty()) {
       if (!args_[i]->option_.empty()) {
-        vcl_size_t l = vcl_strlen(args_[i]->option());
+        std::size_t l = std::strlen(args_[i]->option());
         if (l > maxl_option) maxl_option = l;
       }
-      vcl_size_t l = vcl_strlen(args_[i]->type_);
+      std::size_t l = std::strlen(args_[i]->type_);
       if (l > maxl_type) maxl_type = l;
     }
 
   // Print long form of args
-  vcl_string fmtbuf = vul_sprintf("%%%ds %%-%ds %%s ", maxl_option, maxl_type);
+  std::string fmtbuf = vul_sprintf("%%%ds %%-%ds %%s ", maxl_option, maxl_type);
 
   // Do required args first
-  vul_printf(vcl_cerr, "REQUIRED:\n");
+  vul_printf(std::cerr, "REQUIRED:\n");
   for (unsigned int i=0; i< args_.size(); i++)  // First required without option string
     if (!args_[i]->help_.empty())
         if (args_[i]->option_.empty()&& !(args_[i]->required_)) {
-          vul_printf(vcl_cerr, fmtbuf.c_str(), "", args_[i]->type_, args_[i]->help_.c_str());
-          vcl_cerr << " ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
+          vul_printf(std::cerr, fmtbuf.c_str(), "", args_[i]->type_, args_[i]->help_.c_str());
+          std::cerr << " ["; args_[i]->print_value(std::cerr); std::cerr << "]\n"; // default
         }
   for (unsigned int i=0; i< args_.size(); i++) // Then required with option string
     if (!args_[i]->help_.empty())
         if (args_[i]->required_  && !args_[i]->option_.empty()) {
-          vul_printf(vcl_cerr, fmtbuf.c_str(), args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
-          vcl_cerr << '\n'; // ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
+          vul_printf(std::cerr, fmtbuf.c_str(), args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
+          std::cerr << '\n'; // ["; args_[i]->print_value(std::cerr); std::cerr << "]\n"; // default
         }
 
-  vcl_cerr << vcl_endl;
+  std::cerr << std::endl;
 
   // Then others
-  vul_printf(vcl_cerr, "Optional:\n");
-  vul_printf(vcl_cerr, fmtbuf.c_str(), "Switch", "Type", "Help [default value]") << vcl_endl << vcl_endl;
+  vul_printf(std::cerr, "Optional:\n");
+  vul_printf(std::cerr, fmtbuf.c_str(), "Switch", "Type", "Help [default value]") << std::endl << std::endl;
   for (unsigned int i=0; i< args_.size(); i++)
     if (!args_[i]->help_.empty())
       if (!args_[i]->option_.empty() && !(args_[i]->required_) ) {
-        vul_printf(vcl_cerr, fmtbuf.c_str(), args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
-        vcl_cerr << " ["; args_[i]->print_value(vcl_cerr); vcl_cerr << "]\n"; // default
+        vul_printf(std::cerr, fmtbuf.c_str(), args_[i]->option(), args_[i]->type_, args_[i]->help_.c_str());
+        std::cerr << " ["; args_[i]->print_value(std::cerr); std::cerr << "]\n"; // default
       }
-  vul_printf(vcl_cerr, fmtbuf.c_str(), help_.c_str(), "bool", "Print this message\n");
+  vul_printf(std::cerr, fmtbuf.c_str(), help_.c_str(), "bool", "Print this message\n");
 
-  if (!description_.empty()) vcl_cerr << '\n' << description_;
+  if (!description_.empty()) std::cerr << '\n' << description_;
 }
 
 //: Parse the command line, using the current list of args.
 //  Remove all recognised arguments from the command line by modifying argc and argv.
 void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecognized_arguments)
 {
-  vcl_vector<bool> done_once(args_.size(), false);
+  std::vector<bool> done_once(args_.size(), false);
 
   // 0. Check that there are no duplicate switches, O(n^2) as n is tiny.
   for (unsigned int i = 0; i < args_.size(); ++i)
     if (!args_[i]->option_.empty())
       for (unsigned int j = i+1; j < args_.size(); ++j)
         if (args_[i]->option_ == args_[j]->option_)
-          vcl_cerr << "vul_arg_info_list: WARNING: repeated switch ["
+          std::cerr << "vul_arg_info_list: WARNING: repeated switch ["
                    << args_[j]->option_ << "]\n";
 
   // 0a. Clear "set" flags on args
@@ -277,7 +278,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     args_[i]->set_ = false;
 
   // Generate shorter command name
-  char * cmdname = argv[0]+vcl_strlen(argv[0]);
+  char * cmdname = argv[0]+std::strlen(argv[0]);
   while (cmdname > argv[0] && *cmdname != '/' && *cmdname != '\\') --cmdname ;
   if (*cmdname == '\\' || *cmdname == '/') cmdname++;
 
@@ -294,7 +295,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       if (!args_[i]->option_.empty()) {
         if ( help_ == argmt ) { // look for the '-?' operator (i.e. HELP)
           display_help(cmdname);
-          vcl_exit(1);
+          std::exit(1);
         }
 
         if (args_[i]->option_==argmt) {
@@ -317,10 +318,10 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
   }
 
   if (verbose_) {
-    vcl_cerr << "args remaining:";
+    std::cerr << "args remaining:";
     for (char ** av = argv; *av; ++av)
-      vcl_cerr << " [" << *av << ']';
-    vcl_cerr << vcl_endl;
+      std::cerr << " [" << *av << ']';
+    std::cerr << std::endl;
   }
 
 
@@ -339,9 +340,9 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       else {
         display_help(cmdname);
 
-        vcl_cerr << "\nargParse::ERROR: Required arg " << (num_satisfied+1)
+        std::cerr << "\nargParse::ERROR: Required arg " << (num_satisfied+1)
                  << " not supplied\n\n";
-        vcl_exit(1);
+        std::exit(1);
       }
     }
 
@@ -352,16 +353,16 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     ++argc;
   for (int i = 1; i < argc; ++i)
     argv[i] = my_argv[i-1];
-  argv[argc] = 0;
+  argv[argc] = VXL_NULLPTR;
 
   // 4. Error checking.
   //
   // 4.2 Sometimes it's bad if all args weren't used (i.e. trailing args)
   if (autonomy_ == all) {
-    vcl_cerr << "vul_arg_info_list: Some arguments were unused: ";
+    std::cerr << "vul_arg_info_list: Some arguments were unused: ";
     for (char ** av = argv; *av; ++av)
-      vcl_cerr << ' ' << *av;
-    vcl_cerr << vcl_endl;
+      std::cerr << ' ' << *av;
+    std::cerr << std::endl;
     display_help(cmdname);
   }
 
@@ -370,7 +371,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     for (char ** av = argv; *av; ++av)
       if (**av == '-') {
         display_help(cmdname);
-        vcl_cerr << "vul_arg_info_list: WARNING: Unparsed switch [" << *av << "]\n";
+        std::cerr << "vul_arg_info_list: WARNING: Unparsed switch [" << *av << "]\n";
       }
 
   // 4.3 This is required arguments (including option) have been set
@@ -378,9 +379,9 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
       if (args_[i]->required_ && ! (args_[i]->set_) ) {
          display_help(cmdname);
 
-         vcl_cerr << "\nargParse::ERROR: Required arg " << args_[i]->option_
+         std::cerr << "\nargParse::ERROR: Required arg " << args_[i]->option_
                   << " not supplied\n\n";
-         vcl_exit(1);
+         std::exit(1);
       }
 
 
@@ -390,23 +391,23 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     // Print outcome
     for (unsigned int i = 0; i < args_.size(); ++i)
       if (args[i]->option_) {
-        vcl_cerr << "Switch " << args_[i]->option_ << ": "
+        std::cerr << "Switch " << args_[i]->option_ << ": "
                  << (!done_once[i] ? "not " : "") << "done, value [";
-        args[i]->print_value(vcl_cerr);
-        vcl_cerr << "]\n";
+        args[i]->print_value(std::cerr);
+        std::cerr << "]\n";
       }
 
     for (unsigned int i = 0; i < args.size(); ++i)
       if (!args[i]->option_) {
-        vcl_cerr << "Trailer: ";
-        args_[i]->print_value(vcl_cerr);
-        vcl_cerr << vcl_endl;
+        std::cerr << "Trailer: ";
+        args_[i]->print_value(std::cerr);
+        std::cerr << std::endl;
       }
 
-    vcl_cerr << "args remaining [argc = " << argc << "]:";
+    std::cerr << "args remaining [argc = " << argc << "]:";
     for (char ** av = argv; *av; ++av)
-      vcl_cerr << ' ' << *av;
-    vcl_cerr << "\n--------------\n";
+      std::cerr << ' ' << *av;
+    std::cerr << "\n--------------\n";
   }
 #endif
 }
@@ -426,14 +427,14 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
 //
 // Returns 1 on success and 0 on failure.
 //
-static int list_parse(vcl_list<int> &out, char ** argv)
+static int list_parse(std::list<int> &out, char ** argv)
 {
   out.clear();
 
   // Empty list specified as the last argument.
   if ( !argv[0] ) return 0; // failure
 
-  vcl_string str(argv[0]);
+  std::string str(argv[0]);
 
 #define REGEXP_INTEGER "\\-?[0123456789]+"
 
@@ -445,29 +446,29 @@ static int list_parse(vcl_list<int> &out, char ** argv)
   while (str.length() > 0 && range_regexp.find(str)) {
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
-    vcl_ptrdiff_t start= range_regexp.start(0);
-    vcl_ptrdiff_t endp = range_regexp.end(0);
+    std::ptrdiff_t start= range_regexp.start(0);
+    std::ptrdiff_t endp = range_regexp.end(0);
     if (start != 0) {
-      vcl_cerr << "vul_arg<vcl_list<int> >: Bad argument [" << argv[0] << "]\n";
+      std::cerr << "vul_arg<std::list<int> >: Bad argument [" << argv[0] << "]\n";
       return 0; // failure
     }
 
 #ifdef DEBUG
     // this is the current token.
-    vcl_string token = str.substr(start, endp);
-    vcl_cerr << "token = " << token << '\n';
+    std::string token = str.substr(start, endp);
+    std::cerr << "token = " << token << '\n';
 #endif
-    vcl_string match1 = range_regexp.match(1);
+    std::string match1 = range_regexp.match(1);
 #ifdef DEBUG
-    vcl_cerr << "match1 = " << match1 << '\n';
+    std::cerr << "match1 = " << match1 << '\n';
 #endif
-    vcl_string match2 = range_regexp.match(2);
+    std::string match2 = range_regexp.match(2);
 #ifdef DEBUG
-    vcl_cerr << "match2 = " << match2 << '\n';
+    std::cerr << "match2 = " << match2 << '\n';
 #endif
-    vcl_string match3 = range_regexp.match(3);
+    std::string match3 = range_regexp.match(3);
 #ifdef DEBUG
-    vcl_cerr << "match3 = " << match3 << '\n';
+    std::cerr << "match3 = " << match3 << '\n';
 #endif
 
     // Remove this match from the front of string.
@@ -475,7 +476,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     if (!str.empty() && str[0] == ',') str.erase(0, 1);
 
 #if 0
-    vcl_cerr << "Range regexp matched [" << token <<  "]: parts ["
+    std::cerr << "Range regexp matched [" << token <<  "]: parts ["
              << match1<<"] ["<<match2<<"] ["<<match3<<"]\n"
              << "  str->[" << str << "]\n";
 #endif
@@ -495,11 +496,11 @@ static int list_parse(vcl_list<int> &out, char ** argv)
       e = vul_string_atoi(match2.substr(1));
 
 #ifdef DEBUG
-    vcl_cerr << "  " << s << ':' << d << ':' << e << '\n';
+    std::cerr << "  " << s << ':' << d << ':' << e << '\n';
 #endif
     if (e >= s) {
       if (d < 0) {
-        vcl_cerr << "WARNING: d < 0\n";
+        std::cerr << "WARNING: d < 0\n";
         d = -d;
       }
       for (int i = s; i <= e; i += d)
@@ -507,7 +508,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     }
     else {
       if (d > 0) {
-        vcl_cerr << "WARNING: d > 0\n";
+        std::cerr << "WARNING: d > 0\n";
         d = -d;
       }
       for (int i = s; i >= e; i += d)
@@ -518,7 +519,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
   if (str.empty())
     return 1; // success
 
-  vcl_cerr << "vul_arg<vcl_list<int> >: Bad argument fragment  [" << str << "]\n";
+  std::cerr << "vul_arg<std::list<int> >: Bad argument fragment  [" << str << "]\n";
   return 0;
 }
 
@@ -537,7 +538,7 @@ static int list_parse(vcl_list<int> &out, char ** argv)
 //: bool
 VDS void settype(vul_arg<bool> &argmt) { argmt.type_ = "bool"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<bool> const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<bool> const &argmt)
 { s << (argmt() ? "set" : "not set"); }
 
 VDS int parse(vul_arg<bool>* argmt, char ** /*argv*/)
@@ -551,26 +552,26 @@ template class vul_arg<bool>;
 //: int
 VDS void settype(vul_arg<int> &argmt) { argmt.type_ = "integer"; }
 
-VDS void print_value(vcl_ostream  &s, vul_arg<int> const &argmt)
+VDS void print_value(std::ostream  &s, vul_arg<int> const &argmt)
 { s << argmt(); }
 
 VDS int parse(vul_arg<int>* argmt, char ** argv)
 {
   if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected integer, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected integer, none is provided.\n";
     return -1;
   }
 
-  char* endptr = 0;
-  double v = vcl_strtod(argv[0], &endptr);
+  char* endptr = VXL_NULLPTR;
+  double v = std::strtod(argv[0], &endptr);
   if (*endptr != '\0') {
     // There is junk after the number, or no number was found
-    vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse \"" << *argv << "\" as int\n";
+    std::cerr << "vul_arg_parse: WARNING: Attempt to parse \"" << *argv << "\" as int\n";
     return -1;
   }
-  if (v != vcl_floor(v)) {
-    vcl_cerr << "vul_arg_parse: Expected integer: saw " << argv[0] << vcl_endl;
+  if (v != std::floor(v)) {
+    std::cerr << "vul_arg_parse: Expected integer: saw " << argv[0] << std::endl;
     return -1;
   }
   argmt->value_ = int(v);
@@ -583,7 +584,7 @@ template class vul_arg<int>;
 #if VXL_HAS_INT_64
 VDS void settype(vul_arg<vxl_int_64> &argmt) { argmt.type_ = "integer64"; }
 
-VDS void print_value(vcl_ostream  &s, vul_arg<vxl_int_64> const &argmt)
+VDS void print_value(std::ostream  &s, vul_arg<vxl_int_64> const &argmt)
 { s << argmt(); }
 
 VDS int parse(vul_arg<vxl_int_64>* argmt, char ** argv)
@@ -591,12 +592,12 @@ VDS int parse(vul_arg<vxl_int_64>* argmt, char ** argv)
   if ( !argv ||  !argv[0] )
   {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected integer, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected integer, none is provided.\n";
     return -1;
   }
 
   // Ensure only digits are present allowing for the special case of an l or L suffix
-  unsigned long len = (unsigned long)vcl_strlen(argv[0]);
+  unsigned long len = (unsigned long)std::strlen(argv[0]);
   for (unsigned long i=0; i<len; ++i)
   {
     char tmp = argv[0][i];
@@ -604,12 +605,12 @@ VDS int parse(vul_arg<vxl_int_64>* argmt, char ** argv)
         ((tmp == 'l' || tmp == 'L') && i+1 != len) || // Or the trailing l or L suffix
         (tmp=='-' && i != 0L && len <= 2L)) // Or a leading minus sign
     {
-      vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse \"" << *argv << "\" as int64\n";
+      std::cerr << "vul_arg_parse: WARNING: Attempt to parse \"" << *argv << "\" as int64\n";
       return -1;
     }
   }
 
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss << argv[0];
   ss >> argmt->value_;
 
@@ -622,26 +623,26 @@ template class vul_arg<vxl_int_64>;
 //: unsigned
 VDS void settype(vul_arg<unsigned> &argmt) { argmt.type_ = "integer"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<unsigned> const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<unsigned> const &argmt)
 { s << argmt(); }
 
 VDS int parse(vul_arg<unsigned>* argmt, char ** argv)
 {
   if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected integer, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected integer, none is provided.\n";
     return -1;
   }
 
-  char* endptr = 0;
-  double v = vcl_strtod(argv[0], &endptr);
+  char* endptr = VXL_NULLPTR;
+  double v = std::strtod(argv[0], &endptr);
   if (*endptr != '\0') {
     // There is junk after the number, or no number was found
-    vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as int\n";
+    std::cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as int\n";
     return -1;
   }
-  if (v != vcl_floor(v)) {
-    vcl_cerr << "vul_arg_parse: Expected integer: saw " << argv[0] << vcl_endl;
+  if (v != std::floor(v)) {
+    std::cerr << "vul_arg_parse: Expected integer: saw " << argv[0] << std::endl;
     return -1;
   }
   argmt->value_ = unsigned(v);
@@ -653,23 +654,23 @@ template class vul_arg<unsigned>;
 //: float
 VDS void settype(vul_arg<float> &argmt) { argmt.type_ = "float"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<float> const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<float> const &argmt)
 { s << argmt(); }
 
 VDS int parse(vul_arg<float>* argmt, char ** argv)
 {
   if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected floating number, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected floating number, none is provided.\n";
     return -1;
   }
 
-  char* endptr = 0;
-  argmt->value_ = (float)vcl_strtod(argv[0], &endptr);
+  char* endptr = VXL_NULLPTR;
+  argmt->value_ = (float)std::strtod(argv[0], &endptr);
   if (*endptr == '\0')
     return 1;
   // There is junk after the number, or no number was found
-  vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as float\n";
+  std::cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as float\n";
   return -1;
 }
 
@@ -678,23 +679,23 @@ template class vul_arg<float>;
 //: double
 VDS void settype(vul_arg<double> &argmt) { argmt.type_ = "float"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<double> const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<double> const &argmt)
 { s << argmt(); }
 
 VDS int parse(vul_arg<double>* argmt, char ** argv)
 {
   if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected floating number, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected floating number, none is provided.\n";
     return -1;
   }
 
-  char* endptr = 0;
-  argmt->value_ = vcl_strtod(argv[0], &endptr);
+  char* endptr = VXL_NULLPTR;
+  argmt->value_ = std::strtod(argv[0], &endptr);
   if (*endptr == '\0')
     return 1;
   // There is junk after the number, or no number was found
-  vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as double\n";
+  std::cerr << "vul_arg_parse: WARNING: Attempt to parse " << *argv << " as double\n";
   return -1;
 }
 
@@ -703,7 +704,7 @@ template class vul_arg<double>;
 //: char *
 VDS void settype(vul_arg<char *> &argmt) { argmt.type_ = "string"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<char *> const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<char *> const &argmt)
 { s << '\'' << (argmt()?argmt():"(null)") << '\''; }
 
 VDS int parse(vul_arg<char*>* argmt, char ** argv)
@@ -711,7 +712,7 @@ VDS int parse(vul_arg<char*>* argmt, char ** argv)
   // Reached the end?
   if (!argv || !argv[0]) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected string, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected string, none is provided.\n";
     return -1;
   }
 
@@ -724,14 +725,14 @@ template class vul_arg<char*>;
 //: char const *
 VDS void settype(vul_arg<char const *> &argmt) { argmt.type_ = "string"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<char const *> const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<char const *> const &argmt)
 { s << '\'' << (argmt()?argmt():"(null)") << '\''; }
 
 VDS int parse(vul_arg<char const *>* argmt, char ** argv)
 {
   if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected string, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected string, none is provided.\n";
     return -1;
   }
 
@@ -741,17 +742,17 @@ VDS int parse(vul_arg<char const *>* argmt, char ** argv)
 
 template class vul_arg<char const*>;
 
-//: vcl_string
-VDS void settype(vul_arg<vcl_string> &argmt) { argmt.type_ = "string"; }
+//: std::string
+VDS void settype(vul_arg<std::string> &argmt) { argmt.type_ = "string"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<vcl_string> const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<std::string> const &argmt)
 { s << '\'' << argmt() << '\''; }
 
-VDS int parse(vul_arg<vcl_string>* argmt, char ** argv)
+VDS int parse(vul_arg<std::string>* argmt, char ** argv)
 {
   if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected string, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected string, none is provided.\n";
     return -1;
   }
 
@@ -760,87 +761,87 @@ VDS int parse(vul_arg<vcl_string>* argmt, char ** argv)
     return 1;
   }
   else {
-    vcl_cerr << __FILE__ ": no argument to string option\n";
+    std::cerr << __FILE__ ": no argument to string option\n";
     return 0;
   }
 }
 
-template class vul_arg<vcl_string>;
+template class vul_arg<std::string>;
 
-//: vcl_list<int>
-VDS void settype(vul_arg<vcl_list<int> > &argmt) { argmt.type_ = "integer list"; }
+//: std::list<int>
+VDS void settype(vul_arg<std::list<int> > &argmt) { argmt.type_ = "integer list"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<vcl_list<int> > const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<std::list<int> > const &argmt)
 {
-  for (vcl_list<int>::const_iterator i=argmt().begin(); i!=argmt().end(); ++i)
+  for (std::list<int>::const_iterator i=argmt().begin(); i!=argmt().end(); ++i)
     s << ' ' << *i;
 }
 
-VDS int parse(vul_arg<vcl_list<int> >* argmt, char ** argv)
+VDS int parse(vul_arg<std::list<int> >* argmt, char ** argv)
 {
   return list_parse(argmt->value_,argv);
 }
 
-template class vul_arg<vcl_list<int> >;
+template class vul_arg<std::list<int> >;
 
-//: vcl_vector<int>
-VDS void settype(vul_arg<vcl_vector<int> > &argmt) { argmt.type_ = "integer list"; }
+//: std::vector<int>
+VDS void settype(vul_arg<std::vector<int> > &argmt) { argmt.type_ = "integer list"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<int> > const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<std::vector<int> > const &argmt)
 {
   for (unsigned int i=0; i<argmt().size(); ++i)
     s << ' ' << argmt()[i];
 }
 
-VDS int parse(vul_arg<vcl_vector<int> >* argmt, char ** argv)
+VDS int parse(vul_arg<std::vector<int> >* argmt, char ** argv)
 {
-  vcl_list<int> tmp;
+  std::list<int> tmp;
   int retval = list_parse(tmp,argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
-  for (vcl_list<int>::iterator i=tmp.begin(); i!=tmp.end(); ++i)
+  for (std::list<int>::iterator i=tmp.begin(); i!=tmp.end(); ++i)
     argmt->value_.push_back( *i );
   return retval;
 }
 
-template class vul_arg<vcl_vector<int> >;
+template class vul_arg<std::vector<int> >;
 
-//: vcl_vector<unsigned>
-VDS void settype(vul_arg<vcl_vector<unsigned> > &argmt) { argmt.type_="integer list"; }
+//: std::vector<unsigned>
+VDS void settype(vul_arg<std::vector<unsigned> > &argmt) { argmt.type_="integer list"; }
 
-VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<unsigned> > const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<std::vector<unsigned> > const &argmt)
 {
   for (unsigned int i=0; i<argmt().size(); ++i)
     s << ' ' << argmt()[i];
 }
 
-VDS int parse(vul_arg<vcl_vector<unsigned> >* argmt, char ** argv)
+VDS int parse(vul_arg<std::vector<unsigned> >* argmt, char ** argv)
 {
-  vcl_list<int> tmp;
+  std::list<int> tmp;
   int retval = list_parse(tmp,argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
-  for (vcl_list<int>::iterator i=tmp.begin(); i!=tmp.end(); ++i)
+  for (std::list<int>::iterator i=tmp.begin(); i!=tmp.end(); ++i)
     argmt->value_.push_back( unsigned(*i) );
   return retval;
 }
 
-template class vul_arg<vcl_vector<unsigned> >;
+template class vul_arg<std::vector<unsigned> >;
 
-//: vcl_vector<double>
-VDS void settype(vul_arg<vcl_vector<double> > &argmt) {argmt.type_ = "double list";}
+//: std::vector<double>
+VDS void settype(vul_arg<std::vector<double> > &argmt) {argmt.type_ = "double list";}
 
-VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<double> > const &argmt)
+VDS void print_value(std::ostream &s, vul_arg<std::vector<double> > const &argmt)
 {
   for (unsigned int i=0; i<argmt().size(); ++i)
     s << ' ' << argmt()[i];
 }
 
-VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
+VDS int parse(vul_arg<std::vector<double> >* argmt, char ** argv)
 {
   if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected a vector of floating number, none is provided.\n";
+    std::cerr << "vul_arg_parse: Expected a vector of floating number, none is provided.\n";
     return -1;
   }
 
@@ -852,8 +853,8 @@ VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
   argmt->value_.clear();
   char *current = argv[0];
   while (current) {
-    char* endptr = 0;
-    double tmp = vcl_strtod(current, &endptr);
+    char* endptr = VXL_NULLPTR;
+    double tmp = std::strtod(current, &endptr);
     //argmt->value_
     if (*endptr == '\0') {
       argmt->value_.push_back(tmp);
@@ -872,11 +873,11 @@ VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
       break; // OK. end of list of doubles.
     else {
       // There is junk after the number, or no number was found
-      vcl_cerr << "vul_arg_parse: WARNING: Attempt to parse " << current << " as double\n";
+      std::cerr << "vul_arg_parse: WARNING: Attempt to parse " << current << " as double\n";
       return -1;
     }
   }
   return sucked;
 }
 
-template class vul_arg<vcl_vector<double> >;
+template class vul_arg<std::vector<double> >;

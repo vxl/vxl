@@ -20,7 +20,9 @@
 // has precedence over \a use_signature_error.
 //
 
-#include <vcl_memory.h>
+#include <iostream>
+#include <memory>
+#include <vcl_compiler.h>
 class rrel_m_est_obj;
 class rgrl_transformation;
 
@@ -31,7 +33,7 @@ class rgrl_weighter_m_est
 {
  public:
   //:  constructor takes a pointer to M estimator objective function
-  rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est,
+  rgrl_weighter_m_est( std::auto_ptr<rrel_m_est_obj>  m_est,
                        bool                          use_signature_error,
                        bool                          use_precomputed_signature_wgt = false );
 
@@ -40,7 +42,7 @@ class rgrl_weighter_m_est
   //: set true if desires to weight more on distinct match
   void set_weight_more_on_distinct_match( bool flag )
   {    weight_more_on_distinct_match_ = flag; }
-  
+
   virtual
   void
   compute_weights( rgrl_scale const&  scale,
@@ -51,7 +53,7 @@ class rgrl_weighter_m_est
 
   // Auxiliary functions related to the m_est
   virtual
-  double 
+  double
   aux_sum_weighted_residuals( rgrl_scale const&  scale,
                               rgrl_match_set&    match_set,
                               rgrl_transformation const&  xform );
@@ -61,19 +63,19 @@ class rgrl_weighter_m_est
                       rgrl_match_set&    match_set,
                       rgrl_transformation const&  xform);
   virtual
-  double 
+  double
   aux_neg_log_likelihood( rgrl_scale const&  scale,
                           rgrl_match_set&    match_set,
                           rgrl_transformation const&  xform );
 
   virtual
-  double 
+  double
   aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
                               rgrl_match_set&    match_set,
                               rgrl_transformation const&  xform );
 
  protected:
-  vcl_auto_ptr<rrel_m_est_obj> m_est_;
+  std::auto_ptr<rrel_m_est_obj> m_est_;
   bool use_signature_error_;
   bool signature_precomputed_;
   bool weight_more_on_distinct_match_;

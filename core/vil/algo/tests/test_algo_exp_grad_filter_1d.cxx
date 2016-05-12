@@ -1,24 +1,25 @@
 // This is core/vil/algo/tests/test_algo_exp_grad_filter_1d.cxx
+#include <vector>
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_exp_grad_filter_1d.h>
 #include <vil/vil_print.h>
 
 static void test_algo_exp_grad_filter_1d_byte_float()
 {
-  vcl_cout << "************************************************\n"
+  std::cout << "************************************************\n"
            << " Testing vil_algo_exp_grad_filter_1d byte-float\n"
            << "************************************************\n";
 
   const int n = 100;
-  vcl_vector<vxl_byte> src(n);
+  std::vector<vxl_byte> src(n);
   for (int i=0;i<n;++i) src[i]=0;
   src[50] = 100;
 
   float k = 0.25;
-  vcl_vector<float> dest_block(n+2);
+  std::vector<float> dest_block(n+2);
   float *dest = &dest_block[1];
   dest[-1]=9876; dest[n]=9876;  // Marks to check for over-runs
   vil_exp_grad_filter_1d(&src[0],1,&dest[0],1,n,k);
@@ -38,9 +39,9 @@ static void test_algo_exp_grad_filter_1d_byte_float()
 
   for (int i=0;i<10;++i) src[i]=static_cast<vxl_byte>(i);
   vil_exp_grad_filter_1d(&src[0],1,&dest[0],1,10,float(k));
-  vcl_cout<<"Applying to 0 1 2 3 ..\n";
-  for (int i=0;i<10;++i) vcl_cout<<' '<<dest[i];
-  vcl_cout<<vcl_endl;
+  std::cout<<"Applying to 0 1 2 3 ..\n";
+  for (int i=0;i<10;++i) std::cout<<' '<<dest[i];
+  std::cout<<std::endl;
 
   // Test application to whole images
   vil_image_view<vxl_byte> src_im(10,10);
@@ -65,7 +66,7 @@ static void test_algo_exp_grad_filter_1d_byte_float()
   TEST("Height",dest_im.nj(), src_im.nj());
   TEST_NEAR("dest_im(5,5)", dest_im(5,5), 10, 1e-2);
 
-  vil_print_all(vcl_cout,dest_im);
+  vil_print_all(std::cout,dest_im);
 }
 
 static void test_algo_exp_grad_filter_1d()

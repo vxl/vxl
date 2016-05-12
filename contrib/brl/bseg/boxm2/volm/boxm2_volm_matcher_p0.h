@@ -32,8 +32,8 @@ class boxm2_volm_matcher_p0
     float threshold_;
     unsigned int max_cam_per_loc_;
 
-    vcl_map<unsigned int, vcl_vector<vsph_sph_box_2d> > query_xformed_boxes_;
-    vcl_map<unsigned int,vsph_sph_box_2d > imbox_xformed_;
+    std::map<unsigned int, std::vector<vsph_sph_box_2d> > query_xformed_boxes_;
+    std::map<unsigned int,vsph_sph_box_2d > imbox_xformed_;
 };
 
 #endif

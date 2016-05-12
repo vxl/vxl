@@ -3,10 +3,12 @@
 // \brief A class for reading video files on windows platform
 // \author Louise Butcher
 
+#include <iostream>
+#include <cstdlib>
 #include "mvl2_video_from_avi_windows.h"
 #include <vil/vil_flip.h>
 #include <vil/vil_convert.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 mvl2_video_from_avi::mvl2_video_from_avi()
 {
@@ -18,9 +20,9 @@ mvl2_video_from_avi::~mvl2_video_from_avi()
 {
 }
 
-vcl_string mvl2_video_from_avi::is_a() const
+std::string mvl2_video_from_avi::is_a() const
 {
-  return vcl_string("mvl2_video_from_avi");
+  return std::string("mvl2_video_from_avi");
 }
 
 mvl2_video_reader* mvl2_video_from_avi::clone() const
@@ -30,9 +32,9 @@ mvl2_video_reader* mvl2_video_from_avi::clone() const
 
 // possible options : Grey
 bool mvl2_video_from_avi::initialize( int /* width */, int /* height */,
-                                      vcl_string format, vcl_string file_name)
+                                      std::string format, std::string file_name)
 {
-  if (!format.find(vcl_string("Grey"))) use_colour_=false;
+  if (!format.find(std::string("Grey"))) use_colour_=false;
   AVIFileInit();
   ppavi_=0;
   LPCTSTR szFile;
@@ -135,9 +137,9 @@ bool mvl2_video_from_avi::get_frame(vil_image_view<vxl_byte>& image)
   }
   else
   {
-    vcl_cout<<"ERROR: mvl2_video_from_avi_windows.cxx\n"
+    std::cout<<"ERROR: mvl2_video_from_avi_windows.cxx\n"
             <<"Requested colour video, but only grey scale available\n";
-    vcl_abort();
+    std::abort();
   }
 
   AVIStreamGetFrameClose(g_frame);
@@ -151,7 +153,7 @@ void mvl2_video_from_avi::reset_frame()
 
 void mvl2_video_from_avi::set_frame_rate(double /*frame_rate*/)
 {
-  vcl_cerr << "mvl2_video_from_avi::set_frame_rate() NYI\n";
+  std::cerr << "mvl2_video_from_avi::set_frame_rate() NYI\n";
 }
 
 double mvl2_video_from_avi::get_frame_rate() const
@@ -177,7 +179,7 @@ int mvl2_video_from_avi::get_height() const
 
 void mvl2_video_from_avi::set_capture_size(int /*width*/,int /*height*/)
 {
-  vcl_cerr << "mvl2_video_from_avi::set_capture_size() NYI\n";
+  std::cerr << "mvl2_video_from_avi::set_capture_size() NYI\n";
 }
 
 void mvl2_video_from_avi::getVideoFormat(BITMAPINFO& bmp_info ) const

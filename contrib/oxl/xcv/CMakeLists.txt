@@ -1,10 +1,10 @@
 # oxl/xcv/CMakeLists.txt
 
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-IF (HAS_VGUI)
+if(HAS_VGUI)
 
-SET(xcv_sources
+set(xcv_sources
  xcv_image_tableau.cxx      xcv_image_tableau.h  xcv_image_tableau_sptr.h
  xcv_file.cxx               xcv_file.h
  xcv_display.cxx            xcv_display.h
@@ -25,17 +25,17 @@ SET(xcv_sources
  xcv_axes_limits.cxx        xcv_axes_limits.h
 )
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(xcv_geometry.cxx PROPERTIES COMPILE_FLAGS "-O0 -ftemplate-depth-100")
-  SET_SOURCE_FILES_PROPERTIES(xcv_multiview.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(xcv_geometry.cxx PROPERTIES COMPILE_FLAGS "-O0 -ftemplate-depth-100")
+  set_source_files_properties(xcv_multiview.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif()
 
-ADD_EXECUTABLE(xcv ${xcv_sources})
-INSTALL_TARGETS(/bin xcv)
-TARGET_LINK_LIBRARIES(xcv osl mvl vgui vgl vil1 vnl vul vcl)
+add_executable(xcv ${xcv_sources})
+install_targets(/bin xcv)
+target_link_libraries(xcv osl mvl ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-ENDIF (HAS_VGUI)
+endif()

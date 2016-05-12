@@ -1,4 +1,4 @@
-#include <bgrl2/bgrl2_vertex.txx>
+#include <bgrl2/bgrl2_vertex.hxx>
 
 #include "../test_edge.h"
 

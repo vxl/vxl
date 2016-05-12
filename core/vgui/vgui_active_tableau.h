@@ -42,7 +42,7 @@ class vgui_active_tableau : public vgui_wrapper_tableau
   vgui_active_tableau(vgui_tableau_sptr const &, bool name_in_menu = false);
 
   //: Return the name of this tableau ('vgui_active_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Handle all events sent to this tableau.
   //  If visible, then use drawing events, else pass them to the child tableau.

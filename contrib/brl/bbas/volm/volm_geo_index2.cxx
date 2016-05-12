@@ -8,7 +8,7 @@
 #include "volm_io.h"
 
 // function to check whether the given box intersect with a line defined by a vector of points
-static bool is_intersect(vgl_box_2d<double> const& box, vcl_vector<vgl_point_2d<double> > const& line)
+static bool is_intersect(vgl_box_2d<double> const& box, std::vector<vgl_point_2d<double> > const& line)
 {
   if (box.min_x() == 0.375 && box.min_y() == 0.5)
     unsigned i = 1;
@@ -26,7 +26,7 @@ static bool is_intersect(vgl_box_2d<double> const& box, vcl_vector<vgl_point_2d<
 }
 
 // write node to kml
-void volm_geo_index2::write_to_kml_node(vcl_ofstream& ofs, volm_geo_index2_node_sptr n, unsigned current_depth, unsigned depth, vcl_string explanation)
+void volm_geo_index2::write_to_kml_node(std::ofstream& ofs, volm_geo_index2_node_sptr n, unsigned current_depth, unsigned depth, std::string explanation)
 {
   if (!n)
     return;
@@ -55,7 +55,7 @@ bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<dou
     if (!root->children_[i])
       continue;
     if (!prune_tree(root->children_[i], poly))  // the child does not intersect with the polygon
-      root->children_[i] = 0; // sptr de-allocates this child
+      root->children_[i] = VXL_NULLPTR; // sptr de-allocates this child
   }
   return true;
 }
@@ -81,14 +81,14 @@ bool volm_geo_index2::prune_by_zone(volm_geo_index2_node_sptr root, unsigned utm
     if (!root->children_[i])
       continue;
     if (!prune_by_zone(root->children_[i], utm_zone))  // the child i is not in the utm_zone
-      root->children_[i] = 0;  // sptr deallocates this child
+      root->children_[i] = VXL_NULLPTR;  // sptr deallocates this child
   }
   return true;
 }
 
-void volm_geo_index2::write_to_kml(volm_geo_index2_node_sptr root, unsigned depth, vcl_string const& file_name)
+void volm_geo_index2::write_to_kml(volm_geo_index2_node_sptr root, unsigned depth, std::string const& file_name)
 {
-  vcl_ofstream ofs(file_name.c_str());
+  std::ofstream ofs(file_name.c_str());
   bkml_write::open_document(ofs);
   write_to_kml_node(ofs, root, 0, depth);
   bkml_write::close_document(ofs);
@@ -109,12 +109,12 @@ unsigned volm_geo_index2::depth(volm_geo_index2_node_sptr node)
   return d+1;
 }
 
-void write_to_text(vcl_ofstream& ofs, volm_geo_index2_node_sptr n)
+void write_to_text(std::ofstream& ofs, volm_geo_index2_node_sptr n)
 {
-  ofs << vcl_setprecision(6) << vcl_fixed << n->extent_.min_point().x() << ' '
-      << vcl_setprecision(6) << vcl_fixed << n->extent_.min_point().y() << ' '
-      << vcl_setprecision(6) << vcl_fixed << n->extent_.max_point().x() << ' '
-      << vcl_setprecision(6) << vcl_fixed << n->extent_.max_point().y() << '\n'
+  ofs << std::setprecision(6) << std::fixed << n->extent_.min_point().x() << ' '
+      << std::setprecision(6) << std::fixed << n->extent_.min_point().y() << ' '
+      << std::setprecision(6) << std::fixed << n->extent_.max_point().x() << ' '
+      << std::setprecision(6) << std::fixed << n->extent_.max_point().y() << '\n'
       << n->children_.size() << '\n';
   for (unsigned i = 0; i < n->children_.size(); i++) {
     if (!n->children_[i]) ofs << " 0";
@@ -127,14 +127,14 @@ void write_to_text(vcl_ofstream& ofs, volm_geo_index2_node_sptr n)
   }
 }
 
-void volm_geo_index2::write(volm_geo_index2_node_sptr root, vcl_string const& file_name, double const& min_size)
+void volm_geo_index2::write(volm_geo_index2_node_sptr root, std::string const& file_name, double const& min_size)
 {
-  vcl_ofstream ofs(file_name.c_str());
+  std::ofstream ofs(file_name.c_str());
   ofs << min_size << '\n';
   write_to_text(ofs, root);
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves)
 {
   if (!root)
     return;
@@ -155,7 +155,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<double> const& area)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<double> const& area)
 {
   if (!root) // the node is empty
     return;
@@ -179,22 +179,22 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<float> const& area)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<float> const& area)
 {
   vgl_box_2d<double> area_double( (double)(area.min_point().x()), (double)(area.max_point().x()),
                                   (double)(area.min_point().y()), (double)(area.max_point().y()) );
   get_leaves(root, leaves, area_double);
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly)
 {
   if (!root) // the node is empty
     return;
-  
+
   // check whether the polygon intersects with current root
   if (!vgl_intersection(root->extent_, poly)) // the node does not intersect with given polygon
     return;
-  
+
   // the node intersects with the polygon
   if (!root->children_.size()) {  // the node intersects with the polygon and has no child
     leaves.push_back(root);
@@ -204,7 +204,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
     for (unsigned i = 0; i < root->children_.size(); i++) {
       if (!root->children_[i])    // the node has children but child i is empty
         continue;
-      else { 
+      else {
         get_leaves(root->children_[i], leaves, poly);    // check the intersection of child i and its following children with poly
         at_least_one_child = true;
       }
@@ -214,14 +214,14 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float> const& poly)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float> const& poly)
 {
   vgl_polygon<double> poly_double;
   volm_io::convert_polygons(poly, poly_double);
   get_leaves(root, leaves, poly_double);
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<double> > const& line)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, std::vector<vgl_point_2d<double> > const& line)
 {
   if (!root) // the tree is empty
     return;
@@ -247,10 +247,10 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<float> > const& line)
+void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, std::vector<vgl_point_2d<float> > const& line)
 {
   // transfer double to float since our tree bounding box is float
-  vcl_vector<vgl_point_2d<double> > line_double;
+  std::vector<vgl_point_2d<double> > line_double;
   unsigned num_pts = (unsigned)line.size();
   for (unsigned i = 0; i < num_pts; i++)
     line_double.push_back(vgl_point_2d<double>((double)line[i].x(), (double)line[i].y()));

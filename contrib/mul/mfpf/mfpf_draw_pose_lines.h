@@ -5,23 +5,25 @@
 // \brief Function to draw lines on an image
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <vxl_config.h>  // for vxl_byte
 #include <vimt/vimt_image_2d_of.h>
 #include <mfpf/mfpf_pose.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Draw an open polygon by jointing pose(ref_pts[i]) to pose(ref_pts[i+1])
 void mfpf_draw_pose_lines(vimt_image_2d_of<vxl_byte>& image,
                           const mfpf_pose& pose,
-                          const vcl_vector<vgl_point_2d<double> >& ref_pts,
+                          const std::vector<vgl_point_2d<double> >& ref_pts,
                           vxl_byte value,
                           unsigned width=1);
 
 //: Draw an open polygon by jointing pose(ref_pts[i]) to pose(ref_pts[i+1])
 void mfpf_draw_pose_lines(vimt_image_2d_of<vxl_byte>& image,
                           const mfpf_pose& pose,
-                          const vcl_vector<vgl_point_2d<double> >& ref_pts,
+                          const std::vector<vgl_point_2d<double> >& ref_pts,
                           vxl_byte r, vxl_byte g, vxl_byte b,
                           unsigned width=1);
 

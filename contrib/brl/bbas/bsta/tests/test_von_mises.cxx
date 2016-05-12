@@ -1,13 +1,15 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_von_mises.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h> // for pi
 
 // do not remove the following text
 // Approved for public release, distribution unlimited (DISTAR Case 14389)
 
 template <class T>
-void test_von_mises_type(T epsilon, const vcl_string& type_name)
+void test_von_mises_type(T epsilon, const std::string& type_name)
 {
   //test default constructor
   bsta_von_mises<T,2> vm2;
@@ -32,11 +34,11 @@ void test_von_mises_type(T epsilon, const vcl_string& type_name)
   T r2 = vm2.prob_density(v22)/T(0.3417104886234632);
   vm2.set_kappa(T(10));
   T r3 = vm2.prob_density(v32)/T(1.2450190581700005);
-  vcl_string test = "Probability density 2-d <"+type_name+">";
+  std::string test = "Probability density 2-d <"+type_name+">";
   TEST_NEAR(test.c_str(), r1+r2+r3, 3, epsilon);
   //  3-d case
   typename bsta_von_mises<T,3>::vector_type v13(T(0));
-  double s2d = 1.0/vcl_sqrt(2.0);
+  double s2d = 1.0/std::sqrt(2.0);
   T s2 = static_cast<T>(s2d);
   v13[0]=s2; v13[2]=s2;
   T r4 = vm3.prob_density(v03);
@@ -46,13 +48,13 @@ void test_von_mises_type(T epsilon, const vcl_string& type_name)
   vm3.set_kappa(T(10));
   T r6 = vm3.prob_density(v13);
   r6 /= T(0.08507482126667297);
-  vcl_string testb = "Probability density 3-d <"+type_name+">";
+  std::string testb = "Probability density 3-d <"+type_name+">";
   TEST_NEAR(testb.c_str(), r4+r5+r6, 3, epsilon);
   //test probability
   v03a[0]=T(0.707);v03a[2]=T(0.707);
   vm3.set_kappa(T(1));
   T prob = vm3.probability(v03a,T(vnl_math::pi));
-  vcl_string testa = "Probability 3-d <"+type_name+">";
+  std::string testa = "Probability 3-d <"+type_name+">";
   TEST_NEAR(testa.c_str(), prob, 0.998141, 1.0e-06);
 }
 

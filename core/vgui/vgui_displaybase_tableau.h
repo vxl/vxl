@@ -21,8 +21,9 @@
 //   06-OCT-2009 Ricardo Fabbri - add soview doesn't check for duplicates anymore
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <vector>
+#include <map>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_tableau.h>
@@ -45,7 +46,7 @@ struct vgui_displaybase_tableau_grouping
 {
   // list of objects belonging to this group
   // duplicates entry in main objects list
-  vcl_vector<vgui_soview*> objects;
+  std::vector<vgui_soview*> objects;
 
   // style that will be used for override features
   vgui_style_sptr style;
@@ -85,8 +86,8 @@ class vgui_displaybase_tableau : public vgui_tableau
 
   // selections
   bool is_selected(unsigned iden);
-  vcl_vector<unsigned> const & get_selected() const { return selections; }
-  vcl_vector<vgui_soview*>     get_selected_soviews() const;
+  std::vector<unsigned> const & get_selected() const { return selections; }
+  std::vector<vgui_soview*>     get_selected_soviews() const;
   bool select(unsigned iden);
   bool deselect(unsigned iden);
   bool deselect_all();
@@ -109,30 +110,30 @@ class vgui_displaybase_tableau : public vgui_tableau
   virtual void clear();
 
   // grouping
-  void set_current_grouping(vcl_string t_name) { current_grouping = t_name; }
-  vcl_string get_current_grouping() const { return current_grouping; }
-  vgui_displaybase_tableau_grouping* get_grouping_ptr( vcl_string t_name );
-  vcl_vector< vcl_string > get_grouping_names();
+  void set_current_grouping(std::string t_name) { current_grouping = t_name; }
+  std::string get_current_grouping() const { return current_grouping; }
+  vgui_displaybase_tableau_grouping* get_grouping_ptr( std::string t_name );
+  std::vector< std::string > get_grouping_names();
 
   //: Attach your own selection callback.
   // You are in charge of deleting it later.
   void set_selection_callback(vgui_displaybase_tableau_selection_callback* cb);
 
-  vcl_vector<vgui_soview*> const &get_all() const { return objects; }
-  vcl_vector<unsigned>            get_all_ids() const;
+  std::vector<vgui_soview*> const &get_all() const { return objects; }
+  std::vector<unsigned>            get_all_ids() const;
 
-  vgui_soview* contains_hit(vcl_vector<unsigned> hit);
+  vgui_soview* contains_hit(std::vector<unsigned> hit);
 
   unsigned get_id() const { return id; }
 
  protected:
-  vcl_vector<vgui_soview*> objects;
+  std::vector<vgui_soview*> objects;
 
-  vcl_map< vcl_string , vgui_displaybase_tableau_grouping > groupings;
+  std::map< std::string , vgui_displaybase_tableau_grouping > groupings;
 
-  vcl_string current_grouping;
+  std::string current_grouping;
 
-  vcl_vector<unsigned> selections;
+  std::vector<unsigned> selections;
   unsigned highlighted;
 
   int gl_display_list;

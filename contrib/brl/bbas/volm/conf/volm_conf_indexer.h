@@ -13,10 +13,12 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <volm/volm_geo_index.h>
@@ -33,25 +35,25 @@ class volm_conf_indexer : public vbl_ref_count
 public:
   // ================ constructor ===================
   volm_conf_indexer() : out_index_folder_(""), loc_root_(0), current_leaf_id_(0), tile_id_(0) { loc_leaves_.clear(); }
-  volm_conf_indexer(vcl_string const& out_index_folder)
+  volm_conf_indexer(std::string const& out_index_folder)
     : out_index_folder_(out_index_folder), loc_root_(0), current_leaf_id_(0), tile_id_(0) { loc_leaves_.clear(); }
 
   ~volm_conf_indexer() {}
 
   // =================== access =====================
   volm_geo_index_node_sptr loc_root()  const { return loc_root_; }
-  vcl_string out_folder()              const { return out_index_folder_; }
+  std::string out_folder()              const { return out_index_folder_; }
   unsigned tile_id()                   const { return tile_id_; }
   unsigned current_leaf_id()           const { return current_leaf_id_; }
-  vcl_vector<volm_geo_index_node_sptr>& loc_leaves() { return loc_leaves_; }
+  std::vector<volm_geo_index_node_sptr>& loc_leaves() { return loc_leaves_; }
 
   // ================== methods =====================
 
   //: load location database for given tile
-  bool load_loc_hypos(vcl_string const& geo_hypo_folder, unsigned const& tile_id);
+  bool load_loc_hypos(std::string const& geo_hypo_folder, unsigned const& tile_id);
 
   //: return the name of the indexer
-  virtual vcl_string get_index_name() const = 0;
+  virtual std::string get_index_name() const = 0;
 
   //: generate parameter files for different indexer
   virtual bool write_params_file();
@@ -63,16 +65,16 @@ public:
   bool index(float const& buffer_capacity, int const& min_leaf_id, int const& max_leaf_id);
 
   //: function to construct index for a location
-  virtual bool extract(double const& lon, double const& lat, double const& elev, vcl_vector<volm_conf_object>& values) = 0;
+  virtual bool extract(double const& lon, double const& lat, double const& elev, std::vector<volm_conf_object>& values) = 0;
 
 protected:
   //: output folder where the created indices will be stored
-  vcl_string out_index_folder_;
+  std::string out_index_folder_;
   //: output file pre
-  vcl_stringstream out_file_name_pre_;
+  std::stringstream out_file_name_pre_;
   //: 2d geo_index for location hypotheses
   volm_geo_index_node_sptr loc_root_;
-  vcl_vector<volm_geo_index_node_sptr> loc_leaves_;
+  std::vector<volm_geo_index_node_sptr> loc_leaves_;
   unsigned current_leaf_id_;
   unsigned tile_id_;
 };

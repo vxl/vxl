@@ -1,2 +1,2 @@
-#include <vbl/vbl_triple.txx>
+#include <vbl/vbl_triple.hxx>
 VBL_TRIPLE_INSTANTIATE(int, int, int);

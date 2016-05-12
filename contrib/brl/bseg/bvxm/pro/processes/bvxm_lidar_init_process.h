@@ -24,9 +24,11 @@
 //   Peter Vanroose  - Jul 10, 2009 - split into .h and .cxx
 // \endverbatim
 
+#include <iostream>
+#include <string>
+#include <vector>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <bvxm/bvxm_world_params.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
@@ -41,7 +43,7 @@ namespace bvxm_lidar_init_process_globals
   const unsigned n_outputs_ = 4;
 
   // parameters identifying strings
-  const vcl_string param_mask_thresh_ = "mask_thresh";
+  const std::string param_mask_thresh_ = "mask_thresh";
 
   // helper functions
   bool lidar_init(vil_image_resource_sptr lidar,
@@ -50,7 +52,7 @@ namespace bvxm_lidar_init_process_globals
                   vpgl_geo_camera*& camera);
 
   bool comp_trans_matrix(double sx1, double sy1, double sz1,
-                         vcl_vector<vcl_vector<double> > tiepoints,
+                         std::vector<std::vector<double> > tiepoints,
                          vnl_matrix<double>& trans_matrix);
 
   bool gen_mask(vil_image_view_base_sptr roi_first,

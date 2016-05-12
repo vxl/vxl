@@ -119,7 +119,7 @@ public:
      *  @return copy of tag key, by value
      */
     DcmTagKey getXTag() const { return *((DcmTagKey*)(this)); }
-    
+
     /** returns name of attribute tag.
      *  If name has not been accessed before, a dictionary lookup
      *  under consideration of the current private creator code

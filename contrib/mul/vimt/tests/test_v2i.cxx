@@ -1,5 +1,6 @@
 // This is mul/vimt/tests/test_v2i.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 #include <vnl/vnl_matrix.h> // for frobenius_norm()
 #include <vul/vul_temp_filename.h>
@@ -20,7 +21,7 @@
 
 static void test_v2i()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vimt_vil_v2i_format\n"
            << "*****************************\n";
 
@@ -31,7 +32,7 @@ static void test_v2i()
   mbl_stl_increments(im1.begin(), im1.end(), -2);
 
   // Try saving and laoding vil image.
-  vcl_string fname1 = vul_temp_filename() + ".v2i";
+  std::string fname1 = vul_temp_filename() + ".v2i";
   TEST("Successfully saved simple v2i image",vil_save(im1,fname1.c_str()), true);
   vil_image_resource_sptr ir1 =   vil_load_image_resource(fname1.c_str());
   TEST( "Successfully loaded simple v2i image",!ir1, false);
@@ -45,7 +46,7 @@ static void test_v2i()
   mbl_stl_increments(im2.begin(), im2.end(), -200.0f);
   vimt_transform_2d tr2;
   tr2.set_zoom_only(2.0, -5.0, -5.0);
-  vcl_string fname2 = vul_temp_filename() + ".v2i";
+  std::string fname2 = vul_temp_filename() + ".v2i";
   {
     vil_image_resource_sptr ir2 = vil_new_image_resource(
       fname2.c_str(), 3, 4, 6, VIL_PIXEL_FORMAT_FLOAT, "v2i");
@@ -76,7 +77,7 @@ static void test_v2i()
   vil_image_view<float> im4(3,4,6);
   mbl_stl_increments(im4.begin(), im4.end(), -200.0f);
 
-  vcl_string fname3 = vul_temp_filename() + ".v2i";
+  std::string fname3 = vul_temp_filename() + ".v2i";
   {
     vil_image_resource_sptr ir4 = vil_new_image_resource(
       fname3.c_str(), 3, 4, 6, VIL_PIXEL_FORMAT_FLOAT, "v2i");
@@ -107,7 +108,7 @@ static void test_v2i()
   vimt_image_2d_of<float> im6(3,4,6, tr6);
   mbl_stl_increments(im6.image().begin(), im6.image().end(), -200.0f);
 
-  vcl_string fname4 = vul_temp_filename() + ".v2i";
+  std::string fname4 = vul_temp_filename() + ".v2i";
   vsl_quick_file_save(im6, fname4);
 
   vil_image_resource_sptr ir7 = vil_load_image_resource(fname4.c_str());
@@ -121,8 +122,8 @@ static void test_v2i()
     TEST("vil_property_pixel_size is correct", size[0] == 0.0005f &&
          size[1] == 0.0005f, true);
     vimt_transform_2d tr7 = vimt_load_transform(ir7, 1000.0);
-    vcl_cout << "saved: " << tr6 << vcl_endl
-             << "loaded: " << tr7 << vcl_endl;
+    std::cout << "saved: " << tr6 << std::endl
+             << "loaded: " << tr7 << std::endl;
     TEST_NEAR("Loaded complicated image has correct transform",
               (tr6.matrix()- tr7.matrix()).frobenius_norm(), 0.0, 1e-6);
   }

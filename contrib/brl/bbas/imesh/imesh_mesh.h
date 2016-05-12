@@ -7,8 +7,10 @@
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date May 2, 2008
 
-#include <vcl_vector.h>
-#include <vcl_memory.h>
+#include <vector>
+#include <iostream>
+#include <memory>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <imesh/imesh_vertex.h>
@@ -31,7 +33,7 @@ class imesh_mesh : public vbl_ref_count
 
   //: Constructor from vertex and face arrays
   //  Takes ownership of these arrays
-  imesh_mesh(vcl_auto_ptr<imesh_vertex_array_base> verts, vcl_auto_ptr<imesh_face_array_base> faces)
+  imesh_mesh(std::auto_ptr<imesh_vertex_array_base> verts, std::auto_ptr<imesh_face_array_base> faces)
   : verts_(verts), faces_(faces), tex_coord_status_(TEX_COORD_NONE) {}
 
   //: Copy Constructor
@@ -79,10 +81,10 @@ class imesh_mesh : public vbl_ref_count
   imesh_face_array_base& faces() { return *faces_; }
 
   //: Set the vertices
-  void set_vertices(vcl_auto_ptr<imesh_vertex_array_base> verts) { verts_ = verts; }
+  void set_vertices(std::auto_ptr<imesh_vertex_array_base> verts) { verts_ = verts; }
 
   //: Set the faces
-  void set_faces(vcl_auto_ptr<imesh_face_array_base> faces) { faces_ = faces; }
+  void set_faces(std::auto_ptr<imesh_face_array_base> faces) { faces_ = faces; }
 
   //: Returns true if the mesh has computed half edges
   bool has_half_edges() const { return half_edges_.size() > 0; }
@@ -117,20 +119,20 @@ class imesh_mesh : public vbl_ref_count
   tex_coord_type has_tex_coords() const { return tex_coord_status_; }
 
   //: Return the texture coordinates
-  const vcl_vector<vgl_point_2d<double> >& tex_coords() const { return tex_coords_; }
+  const std::vector<vgl_point_2d<double> >& tex_coords() const { return tex_coords_; }
 
   //: Set the texture coordinates
-  void set_tex_coords(const vcl_vector<vgl_point_2d<double> >& tc);
-  
+  void set_tex_coords(const std::vector<vgl_point_2d<double> >& tc);
+
   //: set the texture sources
-  void set_tex_source(const vcl_string ts) { tex_source_ = ts; }
-  const vcl_string& tex_source() const { return tex_source_; }
+  void set_tex_source(const std::string ts) { tex_source_ = ts; }
+  const std::string& tex_source() const { return tex_source_; }
 
   //: Return a vector indicating which faces have texture
-  const vcl_vector<bool>& valid_tex_faces() const { return valid_tex_faces_; }
+  const std::vector<bool>& valid_tex_faces() const { return valid_tex_faces_; }
 
   //: Set the vector indicating which faces have texture
-  void set_valid_tex_faces(const vcl_vector<bool>& valid);
+  void set_valid_tex_faces(const std::vector<bool>& valid);
 
   //: Label all faces with positive (counter clockwise orientation) area as valid
   //  This requirement refers to the texture map coordinates
@@ -142,18 +144,18 @@ class imesh_mesh : public vbl_ref_count
 
 
  private:
-  vcl_auto_ptr<imesh_vertex_array_base> verts_;
-  vcl_auto_ptr<imesh_face_array_base> faces_;
+  std::auto_ptr<imesh_vertex_array_base> verts_;
+  std::auto_ptr<imesh_face_array_base> faces_;
   imesh_half_edge_set half_edges_;
 
   //: vector of texture coordinates
-  vcl_vector<vgl_point_2d<double> > tex_coords_;
-  
+  std::vector<vgl_point_2d<double> > tex_coords_;
+
   //: vector of texture sources
-  vcl_string tex_source_; 
-  
+  std::string tex_source_;
+
   //: indicate which faces have texture data
-  vcl_vector<bool> valid_tex_faces_;
+  std::vector<bool> valid_tex_faces_;
   //: the type of texture coordinates
   tex_coord_type tex_coord_status_;
 };

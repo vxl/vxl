@@ -1,10 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_perspective_cam_distance_processes.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -20,11 +21,11 @@ bool vpgl_persp_cam_distance_process_cons(bprb_func_process& pro)
 {
   using namespace vpgl_persp_cam_distance_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vpgl_camera_double_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "float"; // distance
 
   bool good = pro.set_input_types(input_types_) &&
@@ -37,7 +38,7 @@ bool vpgl_persp_cam_distance_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_persp_cam_distance_process: Invalid inputs\n";
+    std::cerr << "vpgl_persp_cam_distance_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -47,12 +48,12 @@ bool vpgl_persp_cam_distance_process(bprb_func_process& pro)
 
   vpgl_perspective_camera<double>* cam1 = dynamic_cast<vpgl_perspective_camera<double>*>(cam1_ptr.ptr());
   if (!cam1) {
-    vcl_cerr << "vpgl_persp_cam_distance_process: couldn't cast camera\n";
+    std::cerr << "vpgl_persp_cam_distance_process: couldn't cast camera\n";
     return false;
   }
   vpgl_perspective_camera<double>* cam2 = dynamic_cast<vpgl_perspective_camera<double>*>(cam2_ptr.ptr());
   if (!cam2) {
-    vcl_cerr << "vpgl_persp_cam_distance_process: couldn't cast camera\n";
+    std::cerr << "vpgl_persp_cam_distance_process: couldn't cast camera\n";
     return false;
   }
   double dist = vpgl_persp_cam_distance(*cam1, *cam2);

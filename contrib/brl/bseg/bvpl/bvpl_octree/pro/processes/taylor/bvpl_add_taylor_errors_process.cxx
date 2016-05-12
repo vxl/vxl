@@ -27,7 +27,7 @@ bool bvpl_add_taylor_errors_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_add_taylor_errors_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr";
   input_types_[i++] = "double";  ////fraction [0,1] of cells used in the computation
@@ -35,7 +35,7 @@ bool bvpl_add_taylor_errors_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int" ; //block index in y-dimension
   input_types_[i++] = "int" ; //block index in z-dimension
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -56,12 +56,12 @@ bool bvpl_add_taylor_errors_process(bprb_func_process& pro)
   int block_k = pro.get_input<int>(i++);
 
   if (!error_scene_base) {
-    vcl_cerr << "Error in bvpl_add_taylor_errors_process: Null error scene\n";
+    std::cerr << "Error in bvpl_add_taylor_errors_process: Null error scene\n";
     return false;
   }
   boxm_scene<boct_tree<short, float> >* error_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (error_scene_base.as_pointer());
   if (!error_scene) {
-    vcl_cerr << "Error in bvpl_add_taylor_errors_process: Error scene is of incorrect type\n";
+    std::cerr << "Error in bvpl_add_taylor_errors_process: Error scene is of incorrect type\n";
     return false;
   }
   //sum errors within block
@@ -74,13 +74,13 @@ bool bvpl_add_taylor_errors_process(bprb_func_process& pro)
   double error = 0.0;
   if (fraction_nsamples < 0.95) {
     unsigned long tree_nsamples = (unsigned long)((tree_ncells/scene_ncells)*nsamples);
-    vcl_cout << "Number of samples in  the scene " << scene_ncells << '\n'
-             << "Adding errors from " << tree_nsamples << " samples in block: " << block_i << ',' << block_j << ',' << block_k << vcl_endl;
+    std::cout << "Number of samples in  the scene " << scene_ncells << '\n'
+             << "Adding errors from " << tree_nsamples << " samples in block: " << block_i << ',' << block_j << ',' << block_k << std::endl;
     error = bvpl_taylor_basis::sum_errors(error_scene,block_i, block_j, block_k, tree_nsamples);
   }
   else {
     error = bvpl_average_value(error_scene,block_i, block_j, block_k);
-    vcl_cout << "Error at block: (" << block_i << ", " << block_j << ", " << block_k << ") is: " << error << vcl_endl;
+    std::cout << "Error at block: (" << block_i << ", " << block_j << ", " << block_k << ") is: " << error << std::endl;
   }
 
   //store output

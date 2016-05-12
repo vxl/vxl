@@ -7,17 +7,19 @@
 //
 // \verbatim
 //  Modifications
-//   Gehua Yang -- Modified from rgrl_feature_set_location class. 
+//   Gehua Yang -- Modified from rgrl_feature_set_location class.
 //      The reason is rsdl_bins has problems on finding k-nearest points
 // \endverbatim
 
+#include <iostream>
+#include <memory>
 #include <rsdl/rsdl_bins_2d.h>
 
 #include "rgrl_feature.h"
 #include "rgrl_feature_set.h"
 #include "rgrl_mask.h"
 
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
 
 //: A set of features grouped only by N-d location.
 //
@@ -70,7 +72,7 @@ class rgrl_feature_set_bins_2d
   bounding_box() const;
 
   //:  Return the type of feature
-  const vcl_type_info&
+  const std::type_info&
   type() const;
 
   // Defines type-related functions
@@ -79,12 +81,12 @@ class rgrl_feature_set_bins_2d
  private:
   typedef rsdl_bins_2d<double,rgrl_feature_sptr> bin2d_type;
 
-  const vcl_type_info* feature_type_;
+  const std::type_info* feature_type_;
 
   rgrl_mask_box bounding_box_;
 
   // Using bins as the data structure
-  vcl_auto_ptr< bin2d_type > bins_2d_;
+  std::auto_ptr< bin2d_type > bins_2d_;
   // bool use_bins_;
 
 };

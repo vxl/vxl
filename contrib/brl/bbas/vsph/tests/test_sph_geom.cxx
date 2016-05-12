@@ -1,10 +1,12 @@
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 #include <vsph/vsph_view_sphere.h>
 #include <vsph/vsph_sph_point_2d.h>
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_utils.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vul/vul_timer.h>
 #include <vgl/vgl_box_2d.h>
@@ -19,26 +21,26 @@ static void test_sph_geom()
   double ang1=0, ang2=0;
   double diff0 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-  double haer0 =  vcl_fabs(ang1-97.5)+vcl_fabs(ang2+82.5);
+  double haer0 =  std::fabs(ang1-97.5)+std::fabs(ang2+82.5);
   az_a = -15.0, az_b = -180.0;
   double diff1 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-  double haer1 =  vcl_fabs(ang1+97.5)+vcl_fabs(ang2-82.5);
+  double haer1 =  std::fabs(ang1+97.5)+std::fabs(ang2-82.5);
   az_a = -90.0, az_b = 91.0;
   double diff2 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-  double haer2 =  vcl_fabs(ang2+179.5)+vcl_fabs(ang1-0.5);
+  double haer2 =  std::fabs(ang2+179.5)+std::fabs(ang1-0.5);
   az_a = -179.0, az_b = 180.0;
   double diff3 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-  double haer3 =  vcl_fabs(ang2+179.5)+vcl_fabs(ang1-0.5);
+  double haer3 =  std::fabs(ang2+179.5)+std::fabs(ang1-0.5);
   az_a = 179.0, az_b = -180.0;
   double diff4 = vsph_utils::azimuth_diff(az_a, az_b, false);
   vsph_utils::half_angle(az_a, az_b, ang1, ang2, false);
-  double haer4 =  vcl_fabs(ang2-179.5)+vcl_fabs(ang1+0.5);
-  er = vcl_fabs(diff0-165.0) + vcl_fabs(diff1 + 165.0);
-  er += vcl_fabs(diff2+179.0) + vcl_fabs(diff3+1.0);
-  er += vcl_fabs(diff4-1.0);
+  double haer4 =  std::fabs(ang2-179.5)+std::fabs(ang1+0.5);
+  er = std::fabs(diff0-165.0) + std::fabs(diff1 + 165.0);
+  er += std::fabs(diff2+179.0) + std::fabs(diff3+1.0);
+  er += std::fabs(diff4-1.0);
   TEST_NEAR("angle difference ", er, 0.0, 0.01);
   er = haer0 + haer1 + haer2 + haer3 + haer4;
   TEST_NEAR("half angle ", er, 0.0, 0.01);
@@ -58,7 +60,7 @@ static void test_sph_geom()
   vsph_sph_point_2d p19(80.0, -10.0, false);
   vsph_sph_point_2d p20(80.0, 179.0, false);
   vsph_sph_box_2d bb_long(p10, p14, p15);
-  bb_long.print(vcl_cout, false);
+  bb_long.print(std::cout, false);
   bool c16 = bb_long.contains(p16);//true
   bool c11 = bb_long.contains(p11);//false
   bb_long.add(p11);
@@ -95,9 +97,9 @@ static void test_sph_geom()
   TEST("incremental update", test_inc, true);
   //test min, max points
   vsph_sph_point_2d pl_min = bb_long.min_point(false), pl_max = bb_long.max_point(false);
-  er = vcl_fabs(pl_min.phi_-165.0)+vcl_fabs(pl_max.phi_-10.0);
+  er = std::fabs(pl_min.phi_-165.0)+std::fabs(pl_max.phi_-10.0);
   vsph_sph_point_2d pl_inc_min = bb_inc_cut.min_point(false), pl_inc_max = bb_inc_cut.max_point(false);
-  er += vcl_fabs(pl_inc_min.phi_-166.0)+vcl_fabs(pl_inc_max.phi_+175.0);
+  er += std::fabs(pl_inc_min.phi_-166.0)+std::fabs(pl_inc_max.phi_+175.0);
   TEST_NEAR("min and max points", er, 0.0, 0.01);
   // test constructors
   // points in degrees
@@ -106,8 +108,8 @@ static void test_sph_geom()
   vsph_sph_box_2d bb(p0, p1, pc);
   double mnth = bb.min_theta(false), mxth = bb.max_theta(false);
   double mnph = bb.min_phi(false), mxph = bb.max_phi(false);
-  er = mnph + mnth + vcl_fabs(mxth-90.0)+ vcl_fabs(mxph-90.0);
-  er += vcl_abs(bb.min_theta()+ bb.min_phi());
+  er = mnph + mnth + std::fabs(mxth-90.0)+ std::fabs(mxph-90.0);
+  er += std::abs(bb.min_theta()+ bb.min_phi());
   TEST_NEAR("constructors", er, 0.0, 0.01);
   // test box area
   double area = bb.area();
@@ -129,10 +131,10 @@ static void test_sph_geom()
 
   double area_a = bba.area();
   double area_b = bbb.area();
-  er = vcl_fabs(area_a-0.179081) + vcl_fabs(area_b-0.121229);
+  er = std::fabs(area_a-0.179081) + std::fabs(area_b-0.121229);
   TEST_NEAR("areas spanning +-180", er, 0.0, 0.001);
   //test intersection of boxes spanning cut
-  vcl_vector<vsph_sph_box_2d> boxes;
+  std::vector<vsph_sph_box_2d> boxes;
   bool good = intersection(bba, bbb, boxes);
   vsph_sph_box_2d bint;
   if (good)
@@ -189,16 +191,16 @@ static void test_sph_geom()
   vsph_sph_box_2d tb1 = box_s1.transform(0.5, 0.25, 1.2, true);
   double tth_min = 1.96624, tth_max = 2.17535;
   double tph_min =-1.63496, tph_max = 2.13496, tphc = 0.25;
-  er = vcl_fabs(tb1.min_theta()-tth_min) + vcl_fabs(tb1.max_theta()-tth_max);
+  er = std::fabs(tb1.min_theta()-tth_min) + std::fabs(tb1.max_theta()-tth_max);
   double tb_a_ph = tb1.min_phi(), tb_b_phi = tb1.max_phi(), tb_c_phi = tb1.c_phi();
-  er += vcl_fabs(tph_min-tb_a_ph) + vcl_fabs(tph_max-tb_b_phi) +vcl_fabs(tphc-tb_c_phi);
+  er += std::fabs(tph_min-tb_a_ph) + std::fabs(tph_max-tb_b_phi) +std::fabs(tphc-tb_c_phi);
   TEST_NEAR("transform box no phi cut", er, 0.0, 0.001);
 
   vsph_sph_box_2d tb2 = bba.transform(0.5, 0.25, 1.2, true);
   double tb2_a_ph = tb2.a_phi(false), tb2_b_phi = tb2.b_phi(false), tb2_c_phi = tb2.c_phi(false);
   double tb2_ph_min = -168.676, tb2_ph_max = -132.676, tb2_c = -150.676;
-  er = vcl_fabs(tb2_ph_min-tb2_a_ph) + vcl_fabs(tb2_ph_max-tb2_b_phi) +
-       vcl_fabs(tb2_c-tb2_c_phi);
+  er = std::fabs(tb2_ph_min-tb2_a_ph) + std::fabs(tb2_ph_max-tb2_b_phi) +
+       std::fabs(tb2_c-tb2_c_phi);
   TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
 
   vsph_sph_box_2d tb1_about = box_s1.transform(0.5, 0.25, 1.6,1.57,2.2, true);
@@ -206,16 +208,16 @@ static void test_sph_geom()
   double tph_min_about = 0.18663706143591696,
          tph_max_about = 1.4432741228718344,
          tphc_about = -1.0700000000000003;
-  er = vcl_fabs(tb1_about.min_theta()-tth_min_about) + vcl_fabs(tb1_about.max_theta()-tth_max_about);
+  er = std::fabs(tb1_about.min_theta()-tth_min_about) + std::fabs(tb1_about.max_theta()-tth_max_about);
   double tb_a_ph_about = tb1_about.a_phi(), tb_b_phi_about = tb1_about.b_phi(), tb_c_phi_about = tb1_about.c_phi();
-  er += vcl_fabs(tph_min_about-tb_a_ph_about) + vcl_fabs(tph_max_about-tb_b_phi_about) +vcl_fabs(tphc_about-tb_c_phi_about);
+  er += std::fabs(tph_min_about-tb_a_ph_about) + std::fabs(tph_max_about-tb_b_phi_about) +std::fabs(tphc_about-tb_c_phi_about);
   TEST_NEAR("transform box about a point no phi cut", er, 0.0, 0.001);
 
   vsph_sph_box_2d tb3 = bba.transform(0.5, 0.25, 1.2, true);
   double tb3_a_ph = tb3.a_phi(false), tb3_b_phi = tb3.b_phi(false), tb3_c_phi = tb3.c_phi(false);
   double tb3_ph_min = -168.676, tb3_ph_max = -132.676, tb3_c = -150.676;
-  er = vcl_fabs(tb3_ph_min-tb3_a_ph) + vcl_fabs(tb3_ph_max-tb3_b_phi) +
-    vcl_fabs(tb3_c-tb3_c_phi);
+  er = std::fabs(tb3_ph_min-tb3_a_ph) + std::fabs(tb3_ph_max-tb3_b_phi) +
+    std::fabs(tb3_c-tb3_c_phi);
 
   TEST_NEAR("transform box contains +-180 cut", er, 0.0, 0.001);
   double grok_a_phi = -2.7617465101715433;
@@ -227,10 +229,10 @@ static void test_sph_geom()
   grok.set(grok_min_th, grok_max_th, grok_a_phi, grok_b_phi, grok_c_phi, true);
   vsph_sph_box_2d tb4 = grok.transform(0.75, -1.0, 1.2, true);
   double t_grok_a = 2.4925, t_grok_b = 2.83984;
-  er = vcl_fabs(t_grok_a-tb4.a_phi()) + vcl_fabs(t_grok_b-tb4.b_phi());
+  er = std::fabs(t_grok_a-tb4.a_phi()) + std::fabs(t_grok_b-tb4.b_phi());
   TEST_NEAR("negative trans with roll-over", er, 0.0, 0.001);
 
-  vcl_vector<vsph_sph_box_2d> sub_boxes;
+  std::vector<vsph_sph_box_2d> sub_boxes;
   grok.sub_divide(sub_boxes);
   unsigned nb = sub_boxes.size();
   TEST("number of boxes", nb, 4);
@@ -238,34 +240,34 @@ static void test_sph_geom()
     return;
 
   double a00 = sub_boxes[0].area(), sum = a00;
-  vcl_cout << "a00 " << a00 << '\n';
+  std::cout << "a00 " << a00 << '\n';
   er = 0.0;
   for (unsigned i = 1; i<nb; ++i) {
     double a = sub_boxes[i].area();
-    vcl_cout<< "a = " << a << '\n';
-    er += vcl_fabs(a00-a);
+    std::cout<< "a = " << a << '\n';
+    er += std::fabs(a00-a);
     sum += a;
   }
-  vcl_cout << "grok area  " << grok.area() << " sum " << sum << '\n';
-  er += vcl_fabs(sum - grok.area());
+  std::cout << "grok area  " << grok.area() << " sum " << sum << '\n';
+  er += std::fabs(sum - grok.area());
   TEST_NEAR("equal angle subdivision of a box", er, 0.0, 0.001);
   double grok_a = intersection_area(grok, grok);
   TEST_NEAR("box self-intersection area  ", grok_a, grok.area(), 0.001);
 
   double abba = bint.area();
   double abba_area = intersection_area(bba,bbb);
-  er = vcl_fabs(abba-abba_area);
+  er = std::fabs(abba-abba_area);
   TEST_NEAR("intersection area", er, 0.0, 0.001);
   double abba_area_utils = vsph_utils::sph_inter_area(bba, bbb);
-  er = vcl_fabs(abba-abba_area_utils);
+  er = std::fabs(abba-abba_area_utils);
   TEST_NEAR("intersection area utils", er, 0.0, 0.001);
   vsph_sph_box_2d prod_a, prod_b;
   prod_a.set(88.9573,  99.6052, 165.913, -179.858,173.027, false);
   prod_b.set(90.7031,  90.7073, 171.554, 180,172.258, false);
   double prod_area = intersection_area(prod_a,prod_b);
-  vcl_cout << "Prod area: " << prod_area << vcl_endl;
+  std::cout << "Prod area: " << prod_area << std::endl;
 
-  vcl_vector<vsph_sph_box_2d> bxs;
+  std::vector<vsph_sph_box_2d> bxs;
   nb = 100000000;
   vul_timer t;
 #if 0
@@ -279,7 +281,7 @@ static void test_sph_geom()
   }
 #endif
   double td_vsph = static_cast<double>(t.real())/(2.0*nb*1000.0);
-  vcl_cout << "vsph box intersection time = " << td_vsph << " secs\n";
+  std::cout << "vsph box intersection time = " << td_vsph << " secs\n";
   vgl_point_2d<double> vp0(0.0, 0.0), vp1(1.0, 1.0);
   vgl_point_2d<double> vp2(0.25, 0.0), vp3(0.75, 1.0);
   vgl_box_2d<double> b1, b2;
@@ -290,7 +292,7 @@ static void test_sph_geom()
     vgl_box_2d<double> tYn = vgl_intersection(b1, b2);
   }
   double td_vgl = static_cast<double>(t.real())/(2.0*nb*1000.0);
-  vcl_cout << "vgl box intersection time = " << td_vgl << " secs\n"
+  std::cout << "vgl box intersection time = " << td_vgl << " secs\n"
            << "ratio = " << td_vsph/td_vgl << '\n';
 }
 

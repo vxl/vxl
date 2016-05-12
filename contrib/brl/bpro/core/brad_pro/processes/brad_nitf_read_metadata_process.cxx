@@ -14,7 +14,7 @@
 //: set input and output types
 bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string"); // image name
   input_types.push_back("vcl_string"); // meta folder if exists
 
@@ -22,10 +22,10 @@ bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
     return false;
 
   // in case the 1st input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   pro.set_input(1, idx);
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("brad_image_metadata_sptr");
   return pro.set_output_types(output_types);
 }
@@ -34,27 +34,27 @@ bool brad_nitf_read_metadata_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()<1)
   {
-    vcl_cout << pro.name() << " The input number should be " << 1 << vcl_endl;
+    std::cout << pro.name() << " The input number should be " << 1 << std::endl;
     return false;
   }
 
   //get the inputs
-  vcl_string nitf_img_name = pro.get_input<vcl_string>(0);
-  vcl_string meta_folder = pro.get_input<vcl_string>(1);
+  std::string nitf_img_name = pro.get_input<std::string>(0);
+  std::string meta_folder = pro.get_input<std::string>(1);
 
   brad_image_metadata_sptr md = new brad_image_metadata;
-  
-  vcl_string ext = vul_file::extension(nitf_img_name);
+
+  std::string ext = vul_file::extension(nitf_img_name);
   if (ext.compare(".NTF") == 0 || ext.compare(".ntf") == 0) {
-    vcl_cout << "parse from metadata and image header: " << nitf_img_name << vcl_endl;
+    std::cout << "parse from metadata and image header: " << nitf_img_name << std::endl;
     if (!md->parse(nitf_img_name, meta_folder)) {
-      vcl_cout<<"nitf metadata parsing failed\n"<<vcl_endl;
+      std::cout<<"nitf metadata parsing failed\n"<<std::endl;
       return false;
     }
   }
   else {
     if (!md->parse_from_meta_file(nitf_img_name)) {
-      vcl_cout << "nitf metadata parsing failed\n" << vcl_endl;
+      std::cout << "nitf metadata parsing failed\n" << std::endl;
       return false;
     }
   }

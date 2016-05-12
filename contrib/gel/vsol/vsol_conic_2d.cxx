@@ -1,4 +1,6 @@
 // This is gel/vsol/vsol_conic_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_conic_2d.h"
 //:
 // \file
@@ -11,7 +13,7 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/io/vgl_io_conic.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vcl_cmath.h> // for vcl_abs(double)
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //---------------------------------------------------------------------------
@@ -21,9 +23,9 @@
 inline static bool are_equal(double x, double y)
 {
   // epsilon is a fixed fraction of the absolute average of x and y
-  const double epsilon=1e-6*(vcl_abs(x)+vcl_abs(y));
+  const double epsilon=1e-6*(std::abs(x)+std::abs(y));
   // <=epsilon but not <epsilon, to compare to null values
-  return vcl_abs(x-y)<=epsilon;
+  return std::abs(x-y)<=epsilon;
 }
 
 //---------------------------------------------------------------------------
@@ -31,7 +33,7 @@ inline static bool are_equal(double x, double y)
 //  The comparison uses a fixed epsilon, as the adaptive one from
 //  are_equal() makes no sense here.
 //---------------------------------------------------------------------------
-inline static bool is_zero(double x) { return vcl_abs(x)<=1e-6; }
+inline static bool is_zero(double x) { return std::abs(x)<=1e-6; }
 
 //***************************************************************************
 // Initialization
@@ -278,12 +280,12 @@ void vsol_conic_2d::ellipse_parameters(double &cx,
   if (are_equal(a0,c0)&&is_zero(b0))
     phi=0; // circle
   else
-    phi=vcl_atan2(-2*b0,c0-a0)/2; //ellipse
+    phi=std::atan2(-2*b0,c0-a0)/2; //ellipse
 
-  const double cosphi=vcl_cos(phi);
-  const double sinphi=vcl_sin(phi);
-  width =vcl_sqrt(1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
-  height=vcl_sqrt(1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
+  const double cosphi=std::cos(phi);
+  const double sinphi=std::sin(phi);
+  width =std::sqrt(1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
+  height=std::sqrt(1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
 }
 //-----------------------------------------------------------------------
 // Return the angular position given a point on the ellipse
@@ -308,8 +310,8 @@ double vsol_conic_2d::ellipse_angular_position(vsol_point_2d_sptr const& pt) con
 
   //In this shifted frame:
   double phi =
-    vcl_atan2(major_axis*(vcl_cos(angle)*y-vcl_sin(angle)*x),
-              minor_axis*(vcl_cos(angle)*x + vcl_sin(angle)*y));
+    std::atan2(major_axis*(std::cos(angle)*y-std::sin(angle)*x),
+              minor_axis*(std::cos(angle)*x + std::sin(angle)*y));
   if (phi<0.0)
     phi += vnl_math::twopi;
   return phi;
@@ -347,15 +349,15 @@ void vsol_conic_2d::hyperbola_parameters(double &cx,
   // Now rotate the hyperbola such that the main axis is horizontal.
   if (is_zero(b0)) { // axis already horizontal or vertical
     if (a0 > 0) phi = 0;
-    else        phi = vcl_atan2(0.0,1.0); // 90 degrees
+    else        phi = std::atan2(0.0,1.0); // 90 degrees
   }
   else
-    phi=vcl_atan2(2*b0,a0-c0)/2;
+    phi=std::atan2(2*b0,a0-c0)/2;
 
-  const double cosphi=vcl_cos(phi);
-  const double sinphi=vcl_sin(phi);
-  width = vcl_sqrt( 1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
-  height=-vcl_sqrt(-1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
+  const double cosphi=std::cos(phi);
+  const double sinphi=std::sin(phi);
+  width = std::sqrt( 1.0/(a0*cosphi*cosphi+2*b0*cosphi*sinphi+c0*sinphi*sinphi));
+  height=-std::sqrt(-1.0/(a0*sinphi*sinphi-2*b0*cosphi*sinphi+c0*cosphi*cosphi));
 }
 
 //---------------------------------------------------------------------------
@@ -376,12 +378,12 @@ void vsol_conic_2d::parabola_parameters(double & /* cx */,
   // Hence norm cannot be zero since the parabola is not degenerate:
   const double norm=a()+c();
   // The parabola direction is then (-m,n):
-  cosphi=-vcl_sqrt(c()/norm);
-  sinphi=vcl_sqrt(a()/norm);
+  cosphi=-std::sqrt(c()/norm);
+  sinphi=std::sqrt(a()/norm);
   // Finally, the top can be found as the point with tangent direction
   // orthogonal to the direction of the axis:
   // TODO
-  vcl_cerr << "vsol_conic_2d::parabola_parameters() not yet fully implemented\n";
+  std::cerr << "vsol_conic_2d::parabola_parameters() not yet fully implemented\n";
 }
 
 //---------------------------------------------------------------------------
@@ -412,10 +414,10 @@ double vsol_conic_2d::length() const
   for (double phi = start_angle; phi<=end_angle; phi+=dphi)
   {
     double temp1 =
-      minor_axis*vcl_cos(angle)*vcl_cos(phi)+ major_axis*vcl_sin(angle)*vcl_sin(phi);
-    double temp2 = major_axis*vcl_sin(angle+phi);
+      minor_axis*std::cos(angle)*std::cos(phi)+ major_axis*std::sin(angle)*std::sin(phi);
+    double temp2 = major_axis*std::sin(angle+phi);
     //the incremental arc length
-    double dl = vcl_sqrt(temp1*temp1 + temp2*temp2);
+    double dl = std::sqrt(temp1*temp1 + temp2*temp2);
     sum += dl*dphi;
   }
   return sum;
@@ -509,16 +511,16 @@ vsol_conic_2d::tangent_at_point(vsol_point_2d_sptr const& p) const
 //---------------------------------------------------------------------------
 //: Return the set of (real) intersection points of this conic with a line
 //---------------------------------------------------------------------------
-vcl_list<vsol_point_2d_sptr>
+std::list<vsol_point_2d_sptr>
 vsol_conic_2d::intersection(vsol_line_2d const& l) const
 {
   vgl_homg_point_2d<double> p0(l.p0()->x(), l.p0()->y(), 1.0),
                             p1(l.p1()->x(), l.p1()->y(), 1.0);
   vgl_homg_line_2d<double> line(p0,p1);
-  vcl_list<vgl_homg_point_2d<double> > vv =
+  std::list<vgl_homg_point_2d<double> > vv =
     vgl_homg_operators_2d<double>::intersection(*this,line);
-  vcl_list<vsol_point_2d_sptr> v;
-  vcl_list<vgl_homg_point_2d<double> >::iterator it = vv.begin();
+  std::list<vsol_point_2d_sptr> v;
+  std::list<vgl_homg_point_2d<double> >::iterator it = vv.begin();
   for (; !(it == vv.end()); ++it) {
     if ((*it).w() != 0)  v.push_back(new vsol_point_2d((*it)));
   }
@@ -528,13 +530,13 @@ vsol_conic_2d::intersection(vsol_line_2d const& l) const
 //---------------------------------------------------------------------------
 //: Return the set of (real) intersection points of two conics
 //---------------------------------------------------------------------------
-vcl_list<vsol_point_2d_sptr>
+std::list<vsol_point_2d_sptr>
 vsol_conic_2d::intersection(vsol_conic_2d const& c) const
 {
-  vcl_list<vgl_homg_point_2d<double> > vv =
+  std::list<vgl_homg_point_2d<double> > vv =
     vgl_homg_operators_2d<double>::intersection(*this,c);
-  vcl_list<vsol_point_2d_sptr> v;
-  vcl_list<vgl_homg_point_2d<double> >::iterator it = vv.begin();
+  std::list<vsol_point_2d_sptr> v;
+  std::list<vgl_homg_point_2d<double> >::iterator it = vv.begin();
   for (; !(it == vv.end()); ++it) {
     if ((*it).w() != 0)  v.push_back(new vsol_point_2d((*it)));
   }
@@ -553,7 +555,7 @@ vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
   // The nearest point must have a polar line which is orthogonal to its
   // connection line with the given point; all points with this property form
   // a certain conic  (actually a hyperbola) :
-  vcl_list<vsol_point_2d_sptr> candidates; // all intersection points
+  std::list<vsol_point_2d_sptr> candidates; // all intersection points
   if (b()==0 && a()==c()) {
     // this ellipse is a circle ==> degenerate hyperbola (line + line at infinity)
     candidates = intersection(vsol_line_2d(midpoint(),pt));
@@ -570,9 +572,9 @@ vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
     candidates = conic.intersection(*this);
   }
   // And find the intersection point closest to the given location:
-  vsol_point_2d_sptr p = 0;
+  vsol_point_2d_sptr p = VXL_NULLPTR;
   double dist = 1e31; // infinity
-  vcl_list<vsol_point_2d_sptr>::iterator it = candidates.begin();
+  std::list<vsol_point_2d_sptr>::iterator it = candidates.begin();
   for (; it != candidates.end(); ++it) {
     double d = (*it)->distance(pt);
     if (d < dist) { p = (*it); dist = d; }
@@ -597,12 +599,12 @@ vsol_line_2d_sptr vsol_conic_2d::axis() const
   double cx, cy, phi, wd, ht;
   if (this->is_real_ellipse()) {
     this->ellipse_parameters(cx, cy, phi, wd, ht);
-    vgl_vector_2d<double> v(vcl_cos(phi),vcl_sin(phi));
+    vgl_vector_2d<double> v(std::cos(phi),std::sin(phi));
     return new vsol_line_2d(v,midpoint());
   }
   else if (this->is_hyperbola()) {
     this->hyperbola_parameters(cx, cy, phi, wd, ht);
-    vgl_vector_2d<double> v(vcl_cos(phi),vcl_sin(phi));
+    vgl_vector_2d<double> v(std::cos(phi),std::sin(phi));
     return new vsol_line_2d(v,midpoint());
   }
   else if (this->is_parabola()) {
@@ -610,7 +612,7 @@ vsol_line_2d_sptr vsol_conic_2d::axis() const
     vgl_vector_2d<double> v(wd,ht);
     return new vsol_line_2d(v,new vsol_point_2d(cx,cy));
   }
-  else return 0;
+  else return VXL_NULLPTR;
 }
 
 //----------------------------------------------------------------
@@ -653,7 +655,7 @@ short vsol_conic_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_conic_2d::print_summary(vcl_ostream &os) const
+void vsol_conic_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -685,6 +687,6 @@ vsl_b_read(vsl_b_istream &is, vsol_conic_2d* &c)
     c->b_read(is);
   }
   else
-    c = 0;
+    c = VXL_NULLPTR;
 }
 

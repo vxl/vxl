@@ -1,7 +1,9 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "rgrl_convergence_on_median_error.h"
 
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include "rgrl_match_set.h"
@@ -32,7 +34,7 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   // Step1: Compute the errors of all matches
   //
   //rgrl_transformation_sptr current_xform = current_view.xform_estimate();
-  vcl_vector<double> errors;
+  std::vector<double> errors;
 
   for ( unsigned ds=0; ds < current_match_sets.size(); ++ds ) {
     rgrl_match_set const& ms = *current_match_sets[ds];
@@ -51,8 +53,8 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   //        of the transformed data points
   //
   assert ( errors.size() > 0 );
-  vcl_vector<double>::iterator middle = errors.begin() + errors.size()/2;
-  vcl_nth_element( errors.begin(), middle, errors.end() );
+  std::vector<double>::iterator middle = errors.begin() + errors.size()/2;
+  std::nth_element( errors.begin(), middle, errors.end() );
 
   double scaling = 1;
   if ( penalize_scaling ) {

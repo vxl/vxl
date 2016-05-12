@@ -5,6 +5,9 @@
 // \brief Base for classes which locate feature points
 // \author Tim Cootes
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -13,8 +16,7 @@
 #include <vxl_config.h>  // For vxl_byte
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class vimt_image_pyramid;
 
@@ -79,7 +81,7 @@ class mfpf_point_finder
   int search_nj() const { return search_nj_; }
 
   //: Set model to a new value when provided with a vector
-  virtual bool set_model(const vcl_vector<double>& v);
+  virtual bool set_model(const std::vector<double>& v);
 
   //: Number of dimensions in the model
   virtual unsigned model_dim();
@@ -92,7 +94,7 @@ class mfpf_point_finder
   virtual void get_sample_vector(const vimt_image_2d_of<float>& image,
                                  const vgl_point_2d<double>& p,
                                  const vgl_vector_2d<double>& u,
-                                 vcl_vector<double>& v);
+                                 std::vector<double>& v);
 
   //: Evaluate match at p, using u to define scale and orientation
   // Returns a quality of fit measure at the point (the smaller the better).
@@ -173,8 +175,8 @@ class mfpf_point_finder
   virtual void grid_search_one_pose(const vimt_image_2d_of<float>& image,
                                     const vgl_point_2d<double>& p,
                                     const vgl_vector_2d<double>& u,
-                                    vcl_vector<mfpf_pose>& pts,
-                                    vcl_vector<double>& fit);
+                                    std::vector<mfpf_pose>& pts,
+                                    std::vector<double>& fit);
 
   //: Search for local optima around given point/scale/angle
   //  Search in a grid around p (defined by search_ni and search_nj).
@@ -187,8 +189,8 @@ class mfpf_point_finder
                            const vimt_image_2d_of<float>& image,
                            const vgl_point_2d<double>& p,
                            const vgl_vector_2d<double>& u,
-                           vcl_vector<mfpf_pose>& pts,
-                           vcl_vector<double>& fit);
+                           std::vector<mfpf_pose>& pts,
+                           std::vector<double>& fit);
 
   //: Search for local optima around given point/scale/angle
   //  For each angle and scale (defined by internal nA,dA,ns,ds)
@@ -203,8 +205,8 @@ class mfpf_point_finder
   virtual void grid_search(const vimt_image_2d_of<float>& image,
                            const vgl_point_2d<double>& p,
                            const vgl_vector_2d<double>& u,
-                           vcl_vector<mfpf_pose>& poses,
-                           vcl_vector<double>& fit);
+                           std::vector<mfpf_pose>& poses,
+                           std::vector<double>& fit);
 
   //: Search for local optima around given point/scale/angle
   //  For each angle and scale (defined by internal nA,dA,ns,ds)
@@ -220,8 +222,8 @@ class mfpf_point_finder
   virtual void multi_search(const vimt_image_2d_of<float>& image,
                             const vgl_point_2d<double>& p,
                             const vgl_vector_2d<double>& u,
-                            vcl_vector<mfpf_pose>& poses,
-                            vcl_vector<double>& fits);
+                            std::vector<mfpf_pose>& poses,
+                            std::vector<double>& fits);
 
   //: Perform local optimisation to refine position,scale and angle
   //  On input fit is match at p,u.  On exit p,u and fit are updated.
@@ -239,7 +241,7 @@ class mfpf_point_finder
   //  Points of a contour around the shape.
   //  Used for display purposes.  Join the points with an open
   //  contour to get a representation.
-  virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const=0;
+  virtual void get_outline(std::vector<vgl_point_2d<double> >& pts) const=0;
 
   //: Computes the aligned bounding box for feature with given pose
   //  On exit box_pose.p() gives the centre, corners are given by
@@ -265,13 +267,13 @@ class mfpf_point_finder
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -290,9 +292,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mfpf_point_finder& b);
 void vsl_b_read(vsl_b_istream& bfs, mfpf_point_finder& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_point_finder& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder* b);
+std::ostream& operator<<(std::ostream& os,const mfpf_point_finder* b);
 
 #endif // mfpf_point_finder_h_

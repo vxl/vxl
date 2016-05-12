@@ -1,5 +1,6 @@
 // This is core/vgl/io/tests/test_conic_io.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_conic.h>
 #include <testlib/testlib_test.h>
@@ -7,7 +8,7 @@
 
 void test_conic_double_io()
 {
-  vcl_cout << "****************************\n"
+  std::cout << "****************************\n"
            << "Testing vgl_conic<double> io\n"
            << "****************************\n";
 
@@ -31,14 +32,14 @@ void test_conic_double_io()
 
   TEST ("p_out == p_in", p_out, p_in);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, p_out);
+  std::cout << std::endl;
   vsl_indent_clear_all_data();
 }
 
 void test_conic_float_io()
 {
-  vcl_cout << "***************************\n"
+  std::cout << "***************************\n"
            << "Testing vgl_conic<float> io\n"
            << "***************************\n";
 
@@ -62,8 +63,8 @@ void test_conic_float_io()
 
   TEST ("p_out == p_in", p_out, p_in);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, p_out);
+  std::cout << std::endl;
   vsl_indent_clear_all_data();
 }
 

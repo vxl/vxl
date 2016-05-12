@@ -9,17 +9,19 @@
 // A front end to the resampling functions that allows
 // an image to be rotated by any angle theta
 
+#include <iostream>
+#include <cmath>
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_resample_bilin.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cmath.h> // for vcl_fmod()
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Calculate theta in range 0 to x
 inline double calc_theta_mod(double theta, double x)
 {
   if (x<0) x=-x;
-  double theta_x = vcl_fmod(theta,x);
+  double theta_x = std::fmod(theta,x);
   if (theta_x<0)
     theta_x += x;
   return theta_x;
@@ -55,8 +57,8 @@ inline void vimt_rotate(const vimt_image_2d_of<sType>& src_image,
   // c---d
   int src_ni = src_image.image().ni();
   int src_nj = src_image.image().nj();
-  double c= vcl_cos(theta_90*vnl_math::pi_over_180);
-  double s= vcl_sin(theta_90*vnl_math::pi_over_180);
+  double c= std::cos(theta_90*vnl_math::pi_over_180);
+  double s= std::sin(theta_90*vnl_math::pi_over_180);
 
   // calc corners of grid to sample (in original image frame)
   double ai= -src_nj*s*c;

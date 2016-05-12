@@ -23,8 +23,8 @@ bwm_video_cam_ostream()
 
 //: Constructor - opens a stream
 bwm_video_cam_ostream::
-bwm_video_cam_ostream(const vcl_string& directory,
-                      const vcl_string& name_format,
+bwm_video_cam_ostream(const std::string& directory,
+                      const std::string& name_format,
                       const unsigned int init_index) : file_format_("vsl")
 {
   open(directory, name_format, init_index);
@@ -34,13 +34,13 @@ bwm_video_cam_ostream(const vcl_string& directory,
 //: Open the stream
 bool
 bwm_video_cam_ostream::
-open(const vcl_string& directory,
-     const vcl_string& name_format,
+open(const std::string& directory,
+     const std::string& name_format,
      const unsigned int init_index)
 {
   if (!vul_file::is_directory(directory)) {
     close();
-    vcl_cerr << __FILE__ ": Directory does not exist\n   "<<directory<<vcl_endl;
+    std::cerr << __FILE__ ": Directory does not exist\n   "<<directory<<std::endl;
     return false;
   }
 
@@ -72,7 +72,7 @@ is_open() const
 
 
 //: Return the next file name to be written to
-vcl_string
+std::string
 bwm_video_cam_ostream::
 next_file_name() const
 {
@@ -90,7 +90,7 @@ write_camera(const vpgl_perspective_camera<double>*  cam)
 {
   if (!cam)
     return false;
-  vcl_string file_name = next_file_name();
+  std::string file_name = next_file_name();
   ++index_;
   vsl_b_ofstream bp_out(file_name.c_str());
   if (!bp_out)
@@ -109,7 +109,7 @@ write_camera(const vpgl_proj_camera<double>*  cam)
 {
   if (!cam)
     return false;
-  vcl_string file_name = next_file_name();
+  std::string file_name = next_file_name();
   ++index_;
   vsl_b_ofstream bp_out(file_name.c_str());
   if (!bp_out)

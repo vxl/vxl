@@ -47,7 +47,7 @@ struct opj_bio;
 /**
 Tag node
 */
-typedef struct opj_tgt_node 
+typedef struct opj_tgt_node
 {
   struct opj_tgt_node *parent;
   OPJ_INT32 value;
@@ -58,13 +58,13 @@ typedef struct opj_tgt_node
 /**
 Tag tree
 */
-typedef struct opj_tgt_tree 
+typedef struct opj_tgt_tree
 {
   OPJ_UINT32  numleafsh;
   OPJ_UINT32  numleafsv;
   OPJ_UINT32 numnodes;
   opj_tgt_node_t *nodes;
-  OPJ_UINT32  nodes_size;		/* maximum size taken by nodes */
+  OPJ_UINT32  nodes_size;                /* maximum size taken by nodes */
 } opj_tgt_tree_t;
 
 /** @name Exported functions */
@@ -80,11 +80,11 @@ opj_tgt_tree_t *tgt_create(OPJ_UINT32 numleafsh, OPJ_UINT32 numleafsv);
 
 /**
  * Reinitialises a tag-tree from an exixting one.
- * 
- * @param	p_tree				the tree to reinitialize.
- * @param	p_num_leafs_h		the width of the array of leafs of the tree
- * @param	p_num_leafs_v		the height of the array of leafs of the tree
- * @return	a new tag-tree if successful, NULL otherwise
+ *
+ * @param        p_tree                                the tree to reinitialize.
+ * @param        p_num_leafs_h                the width of the array of leafs of the tree
+ * @param        p_num_leafs_v                the height of the array of leafs of the tree
+ * @return        a new tag-tree if successful, NULL otherwise
 */
 opj_tgt_tree_t *tgt_init(opj_tgt_tree_t * p_tree,OPJ_UINT32  p_num_leafs_h, OPJ_UINT32  p_num_leafs_v);
 

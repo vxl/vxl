@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/mmn
   DESCRIPTION "Manchester Markov Network library"
   )
 
-SET(mmn_sources
+set(mmn_sources
   mmn_arc.h
   mmn_triplet.h
   mmn_analyze_graph.h
@@ -25,15 +25,15 @@ SET(mmn_sources
   mmn_add_all_loaders.h      mmn_add_all_loaders.cxx
   mmn_parse_arcs.h      mmn_parse_arcs.cxx
 )
-AUX_SOURCE_DIRECTORY(Templates mmn_sources)
+aux_source_directory(Templates mmn_sources)
 
-ADD_LIBRARY(mmn ${mmn_sources})
-TARGET_LINK_LIBRARIES(mmn mbl)
+vxl_add_library(LIBRARY_NAME mmn LIBRARY_SOURCES ${mmn_sources})
+target_link_libraries(mmn mbl)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()
 
-IF(BUILD_MUL_TOOLS)
+if(BUILD_MUL_TOOLS)
 #  add_subdirectory(tools)
-ENDIF(BUILD_MUL_TOOLS)
+endif()

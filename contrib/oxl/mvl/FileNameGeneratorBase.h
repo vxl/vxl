@@ -15,8 +15,10 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <string>
 #include <vnl/vnl_unary_function.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 class FileNameGeneratorBase
 {
@@ -33,18 +35,18 @@ class FileNameGeneratorBase
   virtual ~FileNameGeneratorBase() { delete indexer_; }
 
   // Operations----------------------------------------------------------------
-  virtual vcl_string dirname()=0;
-  virtual vcl_string basename()=0;
-  virtual vcl_string image_extension()=0;
+  virtual std::string dirname()=0;
+  virtual std::string basename()=0;
+  virtual std::string image_extension()=0;
 
-  virtual vcl_string frame_basename(int i1)=0;
-  virtual vcl_string pair_basename(int i1, int i2)=0;
-  virtual vcl_string triplet_basename(int i1, int i2, int i3)=0;
+  virtual std::string frame_basename(int i1)=0;
+  virtual std::string pair_basename(int i1, int i2)=0;
+  virtual std::string triplet_basename(int i1, int i2, int i3)=0;
 
-  virtual vcl_string basename(const char* subdir)=0;
-  virtual vcl_string frame_basename(const char* subdir, int i1)=0;
-  virtual vcl_string pair_basename(const char* subdir, int i1, int i2)=0;
-  virtual vcl_string triplet_basename(const char* subdir, int i1, int i2, int i3)=0;
+  virtual std::string basename(const char* subdir)=0;
+  virtual std::string frame_basename(const char* subdir, int i1)=0;
+  virtual std::string pair_basename(const char* subdir, int i1, int i2)=0;
+  virtual std::string triplet_basename(const char* subdir, int i1, int i2, int i3)=0;
 
   virtual int get_real_index(int index) const;
 

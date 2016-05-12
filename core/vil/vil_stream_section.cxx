@@ -6,9 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil_stream_section.h"
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 // underlying_: pointer to underlying stream.
 // begin_     : start of section in the underlying stream.
@@ -43,7 +44,7 @@ vil_stream_section::~vil_stream_section()
   // unreffing the underlying stream might cause deletion of *this, so
   // zero out the pointer first.
   vil_stream *u = underlying_;
-  underlying_ = 0;
+  underlying_ = VXL_NULLPTR;
   u->unref();
 }
 
@@ -106,7 +107,7 @@ void vil_stream_section::seek(vil_streampos position)
   assert(position >= 0); // I would want to be told about this.
 
   if (end_ != -1L  &&  begin_ + position > end_) {
-    vcl_cerr << __FILE__ << ": attempt to seek past given section (failed).\n";
+    std::cerr << __FILE__ << ": attempt to seek past given section (failed).\n";
     return;
   }
   else

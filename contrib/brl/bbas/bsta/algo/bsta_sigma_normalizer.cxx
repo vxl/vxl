@@ -1,9 +1,10 @@
+#include <iostream>
 #include "bsta_sigma_normalizer.h"
 //:
 // \file
 // \brief A class for adjusting sample standard deviation values such that the probability of underestimation of the true std. dev. is fixed.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_gamma.h>
@@ -35,11 +36,11 @@ bsta_sigma_normalizer::bsta_sigma_normalizer(float under_estimation_probability,
 
   // sanity check on probability
   if (under_estimation_probability < 1e-4) {
-    vcl_cout << "error : boxm_sigma_normalizer : under_estimation_probability " << under_estimation_probability << " too low" << vcl_endl;
+    std::cout << "error : boxm_sigma_normalizer : under_estimation_probability " << under_estimation_probability << " too low" << std::endl;
     return;
   }
   if (under_estimation_probability > (1 - 1e-4)) {
-    vcl_cout << "error : boxm_sigma_normalizer : under_estimation_probability " << under_estimation_probability << " too high" << vcl_endl;
+    std::cout << "error : boxm_sigma_normalizer : under_estimation_probability " << under_estimation_probability << " too high" << std::endl;
     return;
   }
 
@@ -56,9 +57,9 @@ bsta_sigma_normalizer::bsta_sigma_normalizer(float under_estimation_probability,
     //minimizer.diagnose_outcome();
     double end_error = minimizer.get_end_error();
     if (end_error > 1e-3) {
-      vcl_cerr << "error: boxm_sigma_normalizer: levenberg_marquardt final error = " << end_error << '\n';
+      std::cerr << "error: boxm_sigma_normalizer: levenberg_marquardt final error = " << end_error << '\n';
     }
-    float unbias_constant = (float)vcl_sqrt((float)(n-1) / x[0]);
+    float unbias_constant = (float)std::sqrt((float)(n-1) / x[0]);
 
     unbias_const_[n] = unbias_constant;
   }
@@ -75,8 +76,8 @@ float bsta_sigma_normalizer::normalization_factor(float number_of_observations) 
   }
 
   // linearly interpolate between integer values
-  float nobs_floor = vcl_floor(number_of_observations);
-  float nobs_ceil = vcl_ceil(number_of_observations);
+  float nobs_floor = std::floor(number_of_observations);
+  float nobs_ceil = std::ceil(number_of_observations);
   float floor_weight = nobs_ceil - number_of_observations;
   float norm_factor = (normalization_factor_int((unsigned int)nobs_floor) * floor_weight) + (normalization_factor_int((unsigned int)nobs_ceil) * (1.0f - floor_weight));
 

@@ -1,7 +1,9 @@
 #ifndef bwm_reg_image_h_
 #define bwm_reg_image_h_
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -55,10 +57,10 @@ class bwm_reg_image : public vbl_ref_count
   bool compute_edges(float sigma, float noise_thresh,
                      double radius_3d);
   //: Edges on the image
-  bool edges_2d(vcl_vector<vsol_digital_curve_2d_sptr>& edges);
+  bool edges_2d(std::vector<vsol_digital_curve_2d_sptr>& edges);
 
   //: Edges projected onto the world plane
-  bool edges_3d(vcl_vector<vsol_digital_curve_3d_sptr>& edges);
+  bool edges_3d(std::vector<vsol_digital_curve_3d_sptr>& edges);
 
  protected:
   void compute_region_of_interest(float sigma);
@@ -71,8 +73,8 @@ class bwm_reg_image : public vbl_ref_count
   vgl_plane_3d<double> world_plane_;
   brip_roi roi_;
   double radius_;
-  vcl_vector<vsol_digital_curve_2d_sptr> edges_2d_;
-  vcl_vector<vsol_digital_curve_3d_sptr> edges_3d_;
+  std::vector<vsol_digital_curve_2d_sptr> edges_2d_;
+  std::vector<vsol_digital_curve_3d_sptr> edges_3d_;
 };
 
 #endif

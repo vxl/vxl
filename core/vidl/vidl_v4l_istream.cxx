@@ -9,12 +9,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vidl_v4l_ulong_fix.h" // include first to fix linux/videodev.h ulong problem
+#include <cstdio>
 #include "vidl_v4l_istream.h"
 #include "vidl_v4l_params.h"
 #include "vidl_pixel_format.h"
 #include "vidl_frame.h"
-#include <vcl_cstdio.h> // for std::perror()
+#include <vcl_compiler.h>
 
 //: Destructor
 vidl_v4l_istream::~vidl_v4l_istream()
@@ -23,7 +23,7 @@ vidl_v4l_istream::~vidl_v4l_istream()
 }
 
 //: open a device
-bool vidl_v4l_istream::open(const vcl_string &device_name)
+bool vidl_v4l_istream::open(const std::string &device_name)
 {
     close();
     frame_number_ = 0;
@@ -31,27 +31,27 @@ bool vidl_v4l_istream::open(const vcl_string &device_name)
     fd_ = ::open(device_name.c_str(), O_RDWR);
 
     if (fd_==-1)
-        vcl_perror("problem with v4l");
+        std::perror("problem with v4l");
 
     if (-1 == ioctl (fd_, VIDIOCGCAP, &vc)) {
-        vcl_perror ("VIDIOCGCAP");
+        std::perror ("VIDIOCGCAP");
         return false;
     }
-    vcl_cout << "name = " << vc.name << vcl_endl
-             << "type = " << vc.type << vcl_endl
-             << "channels = " << vc.channels << vcl_endl
-             << "maxwidth = " << vc.maxwidth << vcl_endl
-             << "maxheight = " << vc.maxheight << vcl_endl;
+    std::cout << "name = " << vc.name << std::endl
+             << "type = " << vc.type << std::endl
+             << "channels = " << vc.channels << std::endl
+             << "maxwidth = " << vc.maxwidth << std::endl
+             << "maxheight = " << vc.maxheight << std::endl;
 
     if (-1 == ioctl (fd_, VIDIOCGWIN, &vw)) {
-        vcl_perror ("VIDIOCGWIN");
+        std::perror ("VIDIOCGWIN");
         return false;
     }
     defaults_.ni_ = vw.width;
     defaults_.nj_ = vw.height;
 
     if (-1 == ioctl (fd_, VIDIOCGPICT, &vp)) {
-        vcl_perror ("VIDIOCGPICT");
+        std::perror ("VIDIOCGPICT");
         return false;
     }
 
@@ -66,14 +66,14 @@ bool vidl_v4l_istream::open(const vcl_string &device_name)
         defaults_.pixel_format_ = VIDL_PIXEL_FORMAT_YUV_420P;
 
     if (-1 == ioctl (fd_, VIDIOCGMBUF, &vm)) {
-        vcl_perror ("VIDIOCGMBUF");
+        std::perror ("VIDIOCGMBUF");
         return false;
     }
     // for the moment just use one mmapped frame
     buf = mmap(0, vm.size, PROT_READ|PROT_WRITE, MAP_SHARED, fd_,0);
     if (buf==(unsigned char *)-1)
     {
-        vcl_perror("problem with mmap");
+        std::perror("problem with mmap");
         close();
         return false;
     }
@@ -81,11 +81,11 @@ bool vidl_v4l_istream::open(const vcl_string &device_name)
     // this looks a bit redundant (and it is), but some other things
     // are also set in set_params besides the actual driver controls
     bool sp_ret = set_params(defaults_);
-    vcl_cerr << "sp_ret = " << sp_ret << vcl_endl;
+    std::cerr << "sp_ret = " << sp_ret << std::endl;
     // serious problems if we can't set the params to the defaults
     if (!sp_ret)
     {
-        vcl_cerr << "Problem in constructor, can't set camera to default\n"
+        std::cerr << "Problem in constructor, can't set camera to default\n"
                  << "Trying to continue anyway ...\n";
     }
 
@@ -122,18 +122,18 @@ bool vidl_v4l_istream::set_params(const vidl_v4l_params &p)
     vw.width = p.ni_;
     vw.height = p.nj_;
     if (-1 == ioctl (fd_, VIDIOCSWIN, &vw)) {
-        vcl_cerr << "VIDIOCSWIN\n";
-        vcl_perror ("VIDIOCGWIN");
+        std::cerr << "VIDIOCSWIN\n";
+        std::perror ("VIDIOCGWIN");
         return false;
     }
     if (-1 == ioctl (fd_, VIDIOCGWIN, &vw)) {
-        vcl_cerr << "VIDIOCGWIN\n";
-        vcl_perror ("VIDIOCGWIN");
+        std::cerr << "VIDIOCGWIN\n";
+        std::perror ("VIDIOCGWIN");
         return false;
     }
     if ((vw.width!=p.ni_)||(vw.height!=p.nj_))
     {
-        vcl_cerr << "width not equal to default\n";
+        std::cerr << "width not equal to default\n";
         success = false;
     }
 
@@ -145,57 +145,57 @@ bool vidl_v4l_istream::set_params(const vidl_v4l_params &p)
     vp.depth = p.depth_;
     vp.palette = vidl_v4l_params::vidlpf_to_v4lpf(p.pixel_format_);
     if (-1 == ioctl (fd_, VIDIOCSPICT, &vp)) {
-        vcl_cerr << "VIDIOCSPICT\n";
-        vcl_perror ("VIDIOCSPICT");
+        std::cerr << "VIDIOCSPICT\n";
+        std::perror ("VIDIOCSPICT");
         return false;
     }
     if (-1 == ioctl (fd_, VIDIOCGPICT, &vp)) {
-        vcl_cerr << "VIDIOCGPICT\n";
-        vcl_perror ("VIDIOCGPICT");
+        std::cerr << "VIDIOCGPICT\n";
+        std::perror ("VIDIOCGPICT");
         return false;
     }
 
     if (vp.brightness != p.brightness_)
     {
         success = false;
-        vcl_cerr << "vp.brightness = " << vp.brightness << vcl_endl
-                 << "p.brightness = " << p.brightness_ << vcl_endl;
+        std::cerr << "vp.brightness = " << vp.brightness << std::endl
+                 << "p.brightness = " << p.brightness_ << std::endl;
     }
     if (vp.hue != p.hue_)
     {
         success = false;
-        vcl_cerr << "vp.hue = " << vp.hue << vcl_endl
-                 << "p.hue = " << p.hue_ << vcl_endl;
+        std::cerr << "vp.hue = " << vp.hue << std::endl
+                 << "p.hue = " << p.hue_ << std::endl;
     }
     if (vp.colour != p.colour_)
     {
         success = false;
-        vcl_cerr << "vp.colour = " << vp.colour << vcl_endl
-                 << "p.colour = " << p.colour_ << vcl_endl;
+        std::cerr << "vp.colour = " << vp.colour << std::endl
+                 << "p.colour = " << p.colour_ << std::endl;
     }
     if (vp.contrast != p.contrast_)
     {
         success = false;
-        vcl_cerr << "vp.contrast = " << vp.contrast << vcl_endl
-                 << "p.contrast = " << p.contrast_ << vcl_endl;
+        std::cerr << "vp.contrast = " << vp.contrast << std::endl
+                 << "p.contrast = " << p.contrast_ << std::endl;
     }
     if (vp.whiteness != p.whiteness_)
     {
         success = false;
-        vcl_cerr << "vp.whiteness = " << vp.whiteness << vcl_endl
-                 << "p.whiteness = " << p.whiteness_ << vcl_endl;
+        std::cerr << "vp.whiteness = " << vp.whiteness << std::endl
+                 << "p.whiteness = " << p.whiteness_ << std::endl;
     }
     if (vp.depth != p.depth_)
     {
         success = false;
-        vcl_cerr << "vp.depth = " << vp.depth << vcl_endl
-                 << "p.depth = " << p.depth_ << vcl_endl;
+        std::cerr << "vp.depth = " << vp.depth << std::endl
+                 << "p.depth = " << p.depth_ << std::endl;
     }
     if (vp.palette != vidl_v4l_params::vidlpf_to_v4lpf(p.pixel_format_))
     {
         success = false;
-        vcl_cerr << "vp.palette = " << vp.palette << vcl_endl
-                 << "p.pixel_format = " << p.pixel_format_ << vcl_endl;
+        std::cerr << "vp.palette = " << vp.palette << std::endl
+                 << "p.pixel_format = " << p.pixel_format_ << std::endl;
     }
 
     mm.width = vw.width;
@@ -206,7 +206,7 @@ bool vidl_v4l_istream::set_params(const vidl_v4l_params &p)
     cur_frame_ = new vidl_shared_frame(
         buf, vw.width, vw.height, vidl_v4l_params::v4lpf_to_vidlpf(vp.palette));
 
-    vcl_cerr << "success = " << success << vcl_endl;
+    std::cerr << "success = " << success << std::endl;
     return success;
 }
 
@@ -217,7 +217,7 @@ bool vidl_v4l_istream::set_params(const vidl_v4l_params &p)
 bool vidl_v4l_istream::advance()
 {
     if (ioctl(fd_, VIDIOCMCAPTURE, &mm)<0) {
-        vcl_perror("VIDIOCMCAPTURE");
+        std::perror("VIDIOCMCAPTURE");
         return false;
     }
 
@@ -228,11 +228,11 @@ bool vidl_v4l_istream::advance()
     while (i < 0) {
         i = ioctl(fd_, VIDIOCSYNC, &mm.frame);
         if (i < 0 && errno == EINTR){
-            vcl_perror("VIDIOCSYNC problem");
+            std::perror("VIDIOCSYNC problem");
             continue;
         }
         if (i < 0) {
-            vcl_perror("VIDIOCSYNC");
+            std::perror("VIDIOCSYNC");
             // You may want to exit here, because something has gone
             // pretty badly wrong...
             return false;

@@ -20,10 +20,11 @@
 //   16-Oct-2009 Peter Vanroose - first (very minimal) version, only works for single-point input
 // \endverbatim
 
+#include <vector>
 #include <vgl/algo/vgl_orient_box_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class vgl_orient_box_3d_operators
@@ -35,9 +36,9 @@ class vgl_orient_box_3d_operators
     vgl_box_3d<T> bb; bb.add(p); return bb;
   }
 
-  static vgl_orient_box_3d<T> minimal_box(vcl_vector<vgl_point_3d<T> > const& plist);
+  static vgl_orient_box_3d<T> minimal_box(std::vector<vgl_point_3d<T> > const& plist);
 };
 
-#define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d_operators.txx> instead"
+#define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d_operators.hxx> instead"
 
 #endif // vgl_orient_box_3d_operators_h

@@ -12,9 +12,10 @@
 // None
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsl/vsl_binary_io.h>
@@ -26,9 +27,9 @@ class cam_angles
  cam_angles(double roll, double top_fov, double heading, double tilt):
   roll_(roll), top_fov_(top_fov), heading_(heading), tilt_(tilt) {}
   void print() const{
-    vcl_cout << "(r: " << roll_ << " f: " << top_fov_
+    std::cout << "(r: " << roll_ << " f: " << top_fov_
              << " h: " << heading_ << " t: " << tilt_ << ")\n";}
-  vcl_string get_string() const;
+  std::string get_string() const;
   double dif(cam_angles& b);
 
 
@@ -53,19 +54,19 @@ class volm_camera_space : public vbl_ref_count
     head_radius_(0.0), head_inc_(0.0),tilt_mid_(0.0), tilt_radius_(0.0),
     tilt_inc_(0.0), roll_mid_(0.0),roll_radius_(0.0), roll_inc_(0.0) {}
   // angle units in degrees
-  volm_camera_space(vcl_vector<double> const& top_fov, double altitude,
+  volm_camera_space(std::vector<double> const& top_fov, double altitude,
                     unsigned ni, unsigned nj,
                     double head_mid=0.0,  double head_radius=180.0, double head_inc=2.0,
                     double tilt_mid=90.0, double tilt_radius=20.0,  double tilt_inc=2.0,
                     double roll_mid=0.0,  double roll_radius=3.0,   double roll_inc=2.0);
-  
-  volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc, 
+
+  volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc,
                     double altitude,
                     unsigned ni, unsigned nj,
                     double head_mid=0.0,  double head_radius=180.0, double head_inc=2.0,
                     double tilt_mid=90.0, double tilt_radius=20.0,  double tilt_inc=2.0,
                     double roll_mid=0.0,  double roll_radius=3.0,   double roll_inc=2.0);
-  
+
   //: accessors
   double altitude() const {return altitude_;}
   //: image dimensions
@@ -87,20 +88,20 @@ class volm_camera_space : public vbl_ref_count
   double roll_inc() const {return roll_inc_;}
   unsigned n_roll() const {return n_roll_;}
 
-  double roll(unsigned roll_index) const 
+  double roll(unsigned roll_index) const
   { return (-roll_radius_ + roll_inc_*roll_index);}
 
-  double head(unsigned head_index) const 
+  double head(unsigned head_index) const
   { return (-head_radius_ + head_inc_*head_index);}
 
-  double tilt(unsigned tilt_index) const 
+  double tilt(unsigned tilt_index) const
   { return (-tilt_radius_ + tilt_inc_*tilt_index);}
 
-  double top_fov(unsigned fov_index) const 
+  double top_fov(unsigned fov_index) const
   { return top_fovs_[fov_index];}
 
   //: focal length space
-  vcl_vector<double> top_fovs() const {return top_fovs_;}
+  std::vector<double> top_fovs() const {return top_fovs_;}
   unsigned n_fovs() const {return n_fovs_;}
 
   //: camera at current state of iterator
@@ -129,14 +130,14 @@ class volm_camera_space : public vbl_ref_count
                      unsigned head_index, unsigned tilt_index) const;
 
   //: return the index of the camera with params closest to the input angles, only the cameras in the valid array are searched
-  vcl_pair<unsigned, cam_angles> cam_index_nearest_in_valid_array(cam_angles a);
+  std::pair<unsigned, cam_angles> cam_index_nearest_in_valid_array(cam_angles a);
 
   //: camera at specified index
   vpgl_perspective_camera<double> camera(unsigned cam_index) const;
 
   //: camera angles at specified index
   cam_angles camera_angles(unsigned cam_index) const;
-  vcl_string get_string(unsigned cam_index) const;
+  std::string get_string(unsigned cam_index) const;
 
   //: find 1-d index closest to specified camera angles, if -1 cangs were invalid
   int closest_index(cam_angles const& cangs);
@@ -151,7 +152,7 @@ class volm_camera_space : public vbl_ref_count
   bool remove_camera_index(unsigned cam_index);
 
   //: access valid camera indices
-  const vcl_vector<unsigned>& valid_indices() const{
+  const std::vector<unsigned>& valid_indices() const{
     return valid_camera_indices_;}
 
   void print_valid_cams() const;
@@ -169,9 +170,9 @@ class volm_camera_space : public vbl_ref_count
   bool next_cam();
 
   //: iterator for valid camera indices
-  vcl_vector<unsigned>::iterator valid_begin() {return valid_camera_indices_.begin();}
+  std::vector<unsigned>::iterator valid_begin() {return valid_camera_indices_.begin();}
 
-  vcl_vector<unsigned>::iterator valid_end() {return valid_camera_indices_.end();}
+  std::vector<unsigned>::iterator valid_end() {return valid_camera_indices_.end();}
 
   // ===========  binary I/O ================
 
@@ -207,7 +208,7 @@ class volm_camera_space : public vbl_ref_count
   double roll_inc_;
   unsigned n_roll_;
   //: focal length space
-  vcl_vector<double> top_fovs_;
+  std::vector<double> top_fovs_;
   unsigned n_fovs_;
   //: current camera state for iterator
   bool freeze_roll_;
@@ -219,7 +220,7 @@ class volm_camera_space : public vbl_ref_count
   unsigned roll_index_;
   unsigned fov_index_;
   unsigned index_;
-  vcl_vector<unsigned> valid_camera_indices_;
+  std::vector<unsigned> valid_camera_indices_;
 };
 
 class camera_space_iterator

@@ -16,7 +16,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 struct vul_redirector_data;
 
@@ -26,20 +27,20 @@ struct vul_redirector_data;
 class vul_redirector
 {
  public:
-  //: Attach redirector to vcl_ostream s, so that all future output to s goes through this->putchunk
-  vul_redirector(vcl_ostream& s);
+  //: Attach redirector to std::ostream s, so that all future output to s goes through this->putchunk
+  vul_redirector(std::ostream& s);
 
   //: Destroy redirector, restore stream to original.
   virtual ~vul_redirector();
 
   //: The filter function
   // Called with `n' characters in `buf', do with as you like.
-  virtual vcl_streamsize putchunk(char const* buf, vcl_streamsize n);
+  virtual std::streamsize putchunk(char const* buf, std::streamsize n);
 
  protected:
   //: Put characters to original stream.
   // Useful for derived classes which wish to filter a stream.
-  vcl_streamsize put_passthru(char const* buf, vcl_streamsize n);
+  std::streamsize put_passthru(char const* buf, std::streamsize n);
 
   //: Sync original stream.
   int sync_passthru();

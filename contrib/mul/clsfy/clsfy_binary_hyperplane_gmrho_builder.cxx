@@ -1,4 +1,11 @@
 // This is mul/clsfy/clsfy_binary_hyperplane_gmrho_builder.cxx
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <numeric>
+#include <cstddef>
 #include "clsfy_binary_hyperplane_gmrho_builder.h"
 //:
 // \file
@@ -8,14 +15,8 @@
 
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vcl_numeric.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_lbfgs.h>
 
@@ -76,7 +77,7 @@ namespace clsfy_binary_hyperplane_gmrho_builder_helpers
 //        const double y0;
 //        const double y1;
       public:
-        category_value(vcl_size_t /*num_category1*/, vcl_size_t /*num_total*/)
+        category_value(std::size_t /*num_category1*/, std::size_t /*num_total*/)
 //          : y0(-1.0*double(num_total-num_category1)/double(num_total)),
 //            y1(double(num_category1)/double(num_total))
         {}
@@ -98,7 +99,7 @@ namespace clsfy_binary_hyperplane_gmrho_builder_helpers
 double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& classifier,
                                                     mbl_data_wrapper<vnl_vector<double> >& inputs,
                                                     unsigned n_classes,
-                                                    const vcl_vector<unsigned>& outputs) const
+                                                    const std::vector<unsigned>& outputs) const
 {
     assert (n_classes == 1);
     return clsfy_binary_hyperplane_gmrho_builder::build(classifier, inputs, outputs);
@@ -109,7 +110,7 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
 // applying a Geman-McClure robust error function, rather than a least squares fit
 double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& classifier,
                                                     mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                                    const vcl_vector<unsigned>& outputs) const
+                                                    const std::vector<unsigned>& outputs) const
 {
     using clsfy_binary_hyperplane_gmrho_builder_helpers::category_value;
 
@@ -119,7 +120,7 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     num_examples_ = inputs.size();
     if (num_examples_ == 0)
     {
-        vcl_cerr<<"WARNING - clsfy_binary_hyperplane_gmrho_builder::build called with no data\n";
+        std::cerr<<"WARNING - clsfy_binary_hyperplane_gmrho_builder::build called with no data\n";
         return 0.0;
     }
 
@@ -131,14 +132,14 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     do
     {
         double* row=data[i++];
-        vcl_copy(inputs.current().begin(),inputs.current().end(),row);
+        std::copy(inputs.current().begin(),inputs.current().end(),row);
     } while (inputs.next());
 
     //Set up category regression values determined by output class
     vnl_vector<double> y(num_examples_,0.0);
-    vcl_transform(outputs.begin(),outputs.end(),
+    std::transform(outputs.begin(),outputs.end(),
                   y.begin(),
-                  category_value(vcl_count(outputs.begin(),outputs.end(),1u),outputs.size()));
+                  category_value(std::count(outputs.begin(),outputs.end(),1u),outputs.size()));
     weights_.set_size(num_vars_+1);
 
     //Initialise the weights using the standard least squares fit of my base class
@@ -157,7 +158,7 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     double kappa = 5.0;
     const double alpha_anneal=0.75;
     //Num of iterations to reduce back to 10% on top of required sigma
-    int N = 1+int(vcl_log(1.1/kappa)/vcl_log(alpha_anneal));
+    int N = 1+int(std::log(1.1/kappa)/std::log(alpha_anneal));
     if (N<1) N=1;
     double sigma_scale = kappa * sigma_scale_target;
 
@@ -215,27 +216,27 @@ double clsfy_binary_hyperplane_gmrho_builder::estimate_sigma(const vnl_matrix<do
     //of the misclassified values
     //The root(3) is because GM function reduces influence after sigma/sqrt(3)
 
-    vcl_vector<double > falsePosScores;
-    vcl_vector<double > falseNegScores;
+    std::vector<double > falsePosScores;
+    std::vector<double > falseNegScores;
 
     double b=weights_[num_vars_]; //constant stored as final variable
     for (unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
     {
         const double* px=data[i];
         double yval = y[i];
-        double ypred = vcl_inner_product(px,px+num_vars_,weights_.begin(),0.0) - b ;
+        double ypred = std::inner_product(px,px+num_vars_,weights_.begin(),0.0) - b ;
         if (yval>0.0)
         {
             if (ypred<0.0) // mis-classified false negative
             {
-                falseNegScores.push_back(vcl_fabs(ypred));
+                falseNegScores.push_back(std::fabs(ypred));
             }
         }
         else
         {
             if (ypred>0.0)//mis-classified false negative
             {
-                falsePosScores.push_back(vcl_fabs(ypred));
+                falsePosScores.push_back(std::fabs(ypred));
             }
         }
     }
@@ -243,20 +244,20 @@ double clsfy_binary_hyperplane_gmrho_builder::estimate_sigma(const vnl_matrix<do
     double delta0=0.0;
     if (!falsePosScores.empty())
     {
-        vcl_vector<double >::iterator medianIter=falsePosScores.begin() + falsePosScores.size()/2;
-        vcl_nth_element(falsePosScores.begin(),medianIter,falsePosScores.end());
+        std::vector<double >::iterator medianIter=falsePosScores.begin() + falsePosScores.size()/2;
+        std::nth_element(falsePosScores.begin(),medianIter,falsePosScores.end());
         delta0 = (*medianIter);
     }
     double delta1=0.0;
     if (!falseNegScores.empty())
     {
-        vcl_vector<double >::iterator medianIter=falseNegScores.begin() + falseNegScores.size()/2;
-        vcl_nth_element(falseNegScores.begin(),medianIter,falseNegScores.end());
+        std::vector<double >::iterator medianIter=falseNegScores.begin() + falseNegScores.size()/2;
+        std::nth_element(falseNegScores.begin(),medianIter,falseNegScores.end());
         delta1 = (*medianIter);
     }
-    sigma += vcl_max(delta0,delta1);
+    sigma += std::max(delta0,delta1);
 
-    sigma *= vcl_sqrt(3.0);
+    sigma *= std::sqrt(3.0);
     return sigma;
 }
 
@@ -283,22 +284,22 @@ void clsfy_binary_hyperplane_gmrho_builder::b_read(vsl_b_istream &bfs)
             clsfy_binary_hyperplane_ls_builder::b_read(bfs);
             break;
         default:
-            vcl_cerr << "I/O ERROR: clsfy_binary_hyperplane_gmrho_builder::b_read(vsl_b_istream&)\n"
+            std::cerr << "I/O ERROR: clsfy_binary_hyperplane_gmrho_builder::b_read(vsl_b_istream&)\n"
                      << "           Unknown version number "<< version << '\n';
-            bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+            bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
 }
 
 //=======================================================================
 
-vcl_string clsfy_binary_hyperplane_gmrho_builder::is_a() const
+std::string clsfy_binary_hyperplane_gmrho_builder::is_a() const
 {
-    return vcl_string("clsfy_binary_hyperplane_gmrho_builder");
+    return std::string("clsfy_binary_hyperplane_gmrho_builder");
 }
 
 //=======================================================================
 
-bool clsfy_binary_hyperplane_gmrho_builder::is_class(vcl_string const& s) const
+bool clsfy_binary_hyperplane_gmrho_builder::is_class(std::string const& s) const
 {
     return s == clsfy_binary_hyperplane_gmrho_builder::is_a() || clsfy_binary_hyperplane_ls_builder::is_class(s);
 }
@@ -312,7 +313,7 @@ short clsfy_binary_hyperplane_gmrho_builder::version_no() const
 
 //=======================================================================
 
-void clsfy_binary_hyperplane_gmrho_builder::print_summary(vcl_ostream& os) const
+void clsfy_binary_hyperplane_gmrho_builder::print_summary(std::ostream& os) const
 {
     os << is_a();
 }
@@ -358,7 +359,7 @@ double clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::f(vnl_vector<do
     for (unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
     {
         const double* px=x_[i];
-        double pred = vcl_inner_product(px,px+num_vars_,w.begin(),0.0) - b;
+        double pred = std::inner_product(px,px+num_vars_,w.begin(),0.0) - b;
         double e =  y_[i] - pred;
         double e2 = e*e;
         if ( ((y_[i] > 0.0) && (e <= 1.0)) ||
@@ -389,7 +390,7 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
     for (unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
     {
         const double* px=x_[i];
-        double pred = vcl_inner_product(px,px+num_vars_,w.begin(),0.0) - b;
+        double pred = std::inner_product(px,px+num_vars_,w.begin(),0.0) - b;
 
         double e =  y_[i] - pred;
         double e2 = e*e;
@@ -406,12 +407,12 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
         }
 
         double wtInv = -e/(wt*wt);
-        vcl_for_each(gradient.begin(),gradient.begin()+num_vars_,
+        std::for_each(gradient.begin(),gradient.begin()+num_vars_,
                      gm_grad_accum(px,wtInv));
 
         gradient[num_vars_] += (-wtInv); //dg/db, last term is for constant
     }
     //And multiply everything by 2sigma^2
-    vcl_transform(gradient.begin(),gradient.end(),gradient.begin(),
-                  vcl_bind2nd(vcl_multiplies<double>(),2.0*var_));
+    std::transform(gradient.begin(),gradient.end(),gradient.begin(),
+                  std::bind2nd(std::multiplies<double>(),2.0*var_));
 }

@@ -1,6 +1,7 @@
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_vector_3d.h>
 

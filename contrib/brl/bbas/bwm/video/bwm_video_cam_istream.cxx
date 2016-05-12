@@ -1,7 +1,9 @@
+#include <iostream>
+#include <algorithm>
 #include "bwm_video_cam_istream.h"
 //:
 // \file
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vsl/vsl_binary_io.h>
@@ -15,22 +17,22 @@ static const unsigned int INIT_INDEX = unsigned(-1);
 //: Constructor
 bwm_video_cam_istream::
 bwm_video_cam_istream()
-  : index_(INIT_INDEX), current_camera_(NULL) {}
+  : index_(INIT_INDEX), current_camera_(VXL_NULLPTR) {}
 
 
 //: Constructor
 bwm_video_cam_istream::
-bwm_video_cam_istream(const vcl_string& glob)
-  : index_(INIT_INDEX), current_camera_(NULL) { open(glob); }
+bwm_video_cam_istream(const std::string& glob)
+  : index_(INIT_INDEX), current_camera_(VXL_NULLPTR) { open(glob); }
 
 
 //: Open a new stream using a file glob (see vul_file_iterator)
 // \note files are loaded in alphanumeric order by path name
 bool
 bwm_video_cam_istream::
-open(const vcl_string& glob)
+open(const std::string& glob)
 {
-  vcl_vector<vcl_string> filenames;
+  std::vector<std::string> filenames;
 
   for (vul_file_iterator fit=glob; fit; ++fit) {
     // check to see if file is a directory.
@@ -45,7 +47,7 @@ open(const vcl_string& glob)
 
   // Sort - because the file iterator uses readdir() it does not
   //        iterate over files in alphanumeric order
-  vcl_sort(filenames.begin(),filenames.end());
+  std::sort(filenames.begin(),filenames.end());
 
   return open(filenames);
 }
@@ -54,14 +56,14 @@ open(const vcl_string& glob)
 //: Open a new stream using a vector of file paths
 bool
 bwm_video_cam_istream::
-open(const vcl_vector<vcl_string>& paths)
+open(const std::vector<std::string>& paths)
 {
   cam_paths_.clear();
   cam_paths_ = paths;
   index_ = INIT_INDEX;
   if (current_camera_)
     delete current_camera_;
-  current_camera_ = NULL;
+  current_camera_ = VXL_NULLPTR;
   return !cam_paths_.empty();
 }
 
@@ -75,7 +77,7 @@ close()
   index_ = INIT_INDEX;
   if (current_camera_)
     delete current_camera_;
-  current_camera_ = NULL;
+  current_camera_ = VXL_NULLPTR;
 }
 
 
@@ -86,7 +88,7 @@ advance()
 {
   if (current_camera_)
     delete current_camera_;
-  current_camera_ = NULL;
+  current_camera_ = VXL_NULLPTR;
   if (index_ < cam_paths_.size() || index_ == INIT_INDEX )
     return ++index_ < cam_paths_.size();
 
@@ -110,8 +112,8 @@ bwm_video_cam_istream::current_camera()
   if (is_valid()) {
     if (!current_camera_) {
       current_camera_=new vpgl_perspective_camera<double>();
-      //vcl_cout << " \t reading cam: " << cam_paths_[index_] << vcl_endl;
-      vcl_string ext = vul_file_extension(cam_paths_[index_].c_str());
+      //std::cout << " \t reading cam: " << cam_paths_[index_] << std::endl;
+      std::string ext = vul_file_extension(cam_paths_[index_].c_str());
       if (ext == ".vsl") // binary form
       {
         vsl_b_ifstream bp_in(cam_paths_[index_].c_str());
@@ -120,13 +122,13 @@ bwm_video_cam_istream::current_camera()
         return current_camera_;
       }
       //An ASCII stream for perspective camera
-      vcl_ifstream cam_stream(cam_paths_[index_].data());
+      std::ifstream cam_stream(cam_paths_[index_].data());
       cam_stream >> (*current_camera_);
       return current_camera_;
     }
     return current_camera_;
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 
@@ -140,7 +142,7 @@ seek_camera(unsigned int camera_number)
     if (index_ != camera_number)
       if (current_camera_) {
         delete current_camera_;
-        current_camera_ = NULL;
+        current_camera_ = VXL_NULLPTR;
       }
     index_ = camera_number;
     return true;

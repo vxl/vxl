@@ -24,7 +24,7 @@ brad_sun_dir_index::brad_sun_dir_index(double longitude_deg, double latitude_deg
   // the eigensystem of the covariance matrix
   vnl_symmetric_eigensystem<double> es(covar);
   vnl_vector<double> major_v = es.get_eigenvector(1);
-  double major_sd = vcl_sqrt(es.get_eigenvalue(1));
+  double major_sd = std::sqrt(es.get_eigenvalue(1));
   //the extent of each bin along the max eigenvector direction
   double dl_major = 1.75*major_sd/(bin_radius+0.5);
   cone_half_angle_ = dl_major/2.0;
@@ -43,7 +43,7 @@ brad_sun_dir_index::brad_sun_dir_index(double longitude_deg, double latitude_deg
 }
 
 int brad_sun_dir_index::index(double geo_sun_azimuth,
-                              double geo_sun_elevation,double & min_angle) 
+                              double geo_sun_elevation,double & min_angle)
 {
   //convert to standard spherical coordinates
   double sphere_az = 90.0 - geo_sun_azimuth + 360.0;
@@ -55,22 +55,22 @@ int brad_sun_dir_index::index(double geo_sun_azimuth,
   double half_ang = vnl_math::pi_over_180*cone_half_angle_;
 #endif
   // convert to Cartesian
-  double s = vcl_sin(el_rad);
-  double x = s*vcl_cos(az_rad);
-  double y = s*vcl_sin(az_rad);
-  double z = vcl_cos(el_rad);
+  double s = std::sin(el_rad);
+  double x = s*std::cos(az_rad);
+  double y = s*std::sin(az_rad);
+  double z = std::cos(el_rad);
   vnl_double_3 dir(x, y, z);
-  min_angle = vcl_fabs(angle(cone_axes_[0], dir));
+  min_angle = std::fabs(angle(cone_axes_[0], dir));
   int min_i = 0;
   for (unsigned i=1; i< n_sun_dir_bins(); ++i) {
-    double ang  = vcl_fabs(angle(cone_axes_[i], dir));
+    double ang  = std::fabs(angle(cone_axes_[i], dir));
     if (ang<min_angle) {
       min_angle = ang;
       min_i = i;
     }
   }
 #ifdef DEBUG
-  vcl_cout << "min dir angle["<< min_i << "]: " << min_ang*vnl_math::deg_per_rad
+  std::cout << "min dir angle["<< min_i << "]: " << min_ang*vnl_math::deg_per_rad
            << " (" << x << ' ' << y << ' ' << z << ")\n";
 #endif
   return min_i;
@@ -79,31 +79,31 @@ int brad_sun_dir_index::index(double geo_sun_azimuth,
 int brad_sun_dir_index::index(double x, double y, double z,double & min_angle) const
 {
   vnl_double_3 dir(x, y, z);
-  double min_ang = vcl_fabs(angle(cone_axes_[0], dir));
+  double min_ang = std::fabs(angle(cone_axes_[0], dir));
   int min_i = 0;
   for (unsigned i=1; i< n_sun_dir_bins(); ++i) {
-    double ang  = vcl_fabs(angle(cone_axes_[i], dir));
+    double ang  = std::fabs(angle(cone_axes_[i], dir));
     if (ang<min_ang) {
       min_ang = ang;
       min_i = i;
     }
   }
 #ifdef DEBUG
-  vcl_cout << "min dir angle["<< min_i << "]: " << min_ang*vnl_math::deg_per_rad << '\n';
+  std::cout << "min dir angle["<< min_i << "]: " << min_ang*vnl_math::deg_per_rad << '\n';
 #endif
   return min_i;
 }
 
-vcl_vector<vnl_double_3> brad_sun_dir_index::major_path()
+std::vector<vnl_double_3> brad_sun_dir_index::major_path()
 {
-  vcl_vector<vnl_double_3> ret;
+  std::vector<vnl_double_3> ret;
   double mean_az, mean_el;
   hist_.mean(mean_az, mean_el);
   vnl_matrix_fixed<double, 2, 2> covar = hist_.covariance_matrix();
   // the eigensystem of the covariance matrix
   vnl_symmetric_eigensystem<double> es(covar);
   vnl_vector<double> major_v = es.get_eigenvector(1);
-  double major_sd = vcl_sqrt(es.get_eigenvalue(1));
+  double major_sd = std::sqrt(es.get_eigenvalue(1));
   //the extent of each bin along the max eigenvector direction
   double dl_major = 2.0*major_sd/(bin_radius_+0.5);
   for (double r = -bin_radius_; r<=bin_radius_; r+=2.0/30.0) {
@@ -118,12 +118,12 @@ vcl_vector<vnl_double_3> brad_sun_dir_index::major_path()
   return ret;
 }
 
-void brad_sun_dir_index::print_to_vrml(vcl_ostream& os)
+void brad_sun_dir_index::print_to_vrml(std::ostream& os)
 {
   //output the sun dir histogram, also encodes the vrml header
   hist_.print_to_vrml(os, 0.25);
-  vcl_vector<vnl_double_3> path = this->major_path();
-  for (vcl_vector<vnl_double_3>::iterator vit = path.begin();
+  std::vector<vnl_double_3> path = this->major_path();
+  for (std::vector<vnl_double_3>::iterator vit = path.begin();
        vit != path.end(); ++vit) {
     double x = (*vit)[0], y = (*vit)[1], z = (*vit)[2];
     os<< "Transform {\n"
@@ -171,7 +171,7 @@ void brad_sun_dir_index::print_to_vrml(vcl_ostream& os)
   }
 }
 
-vcl_ostream&  operator<<(vcl_ostream& s, brad_sun_dir_index const& bdi)
+std::ostream&  operator<<(std::ostream& s, brad_sun_dir_index const& bdi)
 {
   s << "Earth position ( longitude:" << bdi.longitude_deg()<< " latitude:"
     << bdi.latitude_deg() << " )\n"

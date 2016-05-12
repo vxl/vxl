@@ -19,12 +19,14 @@
 ///////////////////////////////////////////////////////////////////////////
 
 
+#include <iostream>
+#include <cstdio>
 #ifdef EXPATPP_COMPATIBLE_EXPAT12 // earlier versions of expat up to v1.2
   #include <xmlparse.h>
 #else
   #include "expat.h"  // since some version of expat moved to SourceForge
 #endif
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 
@@ -294,7 +296,7 @@ void MultiFilterParser::endElement(const XML_Char *name)
 class expatppNesting : public expatpp
 {
  public:
-  expatppNesting(expatppNesting* parent=0);  ///< NOT a copy ctor!! this is a recursive situation
+  expatppNesting(expatppNesting* parent=VXL_NULLPTR);  ///< NOT a copy ctor!! this is a recursive situation
   virtual ~expatppNesting();
 
   void switchToNewSubParser( expatppNesting* pAdoptedChild );
@@ -351,7 +353,7 @@ inline void
 expatppNesting::OwnedChildOrphansItself(expatppNesting* callingChild)
 {
   assert(callingChild==mOwnedChild);
-  mOwnedChild = 0;
+  mOwnedChild = VXL_NULLPTR;
 }
 
 

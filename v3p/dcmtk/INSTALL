@@ -9,7 +9,7 @@ PRE-REQUISITES
 The DICOM ToolKit (DCMTK) needs to be compiled with a C++ compiler.
 We recommend using the GNU-C++ compiler in versions higher than 2.7
 (most of the development was done using GNU-C++ 2.95 on Solaris 7).
-The software is also known to compile using the SUNPro C++ compiler,
+The software is also known to compile using the
 the IBM C Set++ compiler and the Microsoft Visual C++ compiler.
 
 Compatibility with other C++ compilers is unknown, however, we have
@@ -49,19 +49,14 @@ given below:
 
     FreeBSD 4.6    / Intel x86       / Gnu gcc 2.95.3
     HP-UX 10.20    / HP PA-RISC      / Gnu gcc 2.95.2
-    IRIX 5.3       / SGI Indy        / Gnu gcc 2.95.3   (see note *2)
-    IRIX 6.5       / SGI Onyx        / Gnu gcc 2.95.2   (see note *4)
-    IRIX 6.5       / SGI Onyx        / MIPSpro 7.3.1.1m (see note *4)
     Linux 2.0.33   / Intel x86       / Gnu gcc 2.7.2.1
     Linux 2.2.16   / Intel x86       / Gnu gcc 2.95.2
     Linux 2.4.19   / Intel x86       / Gnu gcc 3.2
     MacOS X 10.1.5 / Power Mac G4    / Apple gcc-934.3 (gcc 2.95.2) (see note *5)
     MacOS X 10.2.2 / Power Mac G4    / Apple gcc-1173  (gcc 3.1)
-    NetBSD 1.5.2   / Intel x86       / Gnu egcs 1.1.2  (egcs-2.91.66)
     OSF/1 4.0      / DEC Alpha       / Compaq C++ V6.3-002
     OSF/1 4.0      / DEC Alpha       / Gnu gcc 2.95.3
     OpenBSD 3.0    / Intel x86       / Gnu gcc 2.95.3
-    Solaris 2.5.1  / Sun Sparc       / Gnu egcs 1.1.2  (egcs-2.91.66)
     Solaris 2.5.1  / Sun Sparc       / Sun SC 2.0.1 (SunPro C++ 3.0.1)
     Solaris 7      / Sun Sparc       / Gnu gcc 2.95.3
     Solaris 7      / Sun Sparc       / SunPro CC 4.2
@@ -98,15 +93,7 @@ Platform Notes
      config/Makefile.def, which is created by configure (see below).
 (*3) Requires -fpermissive when compiled with gcc due to the X11R5 header
      files which are not ANSI compliant.
-(*4) IRIX 6 users are recommended to consult SGI's Notes on building
-     Open Source software on IRIX, available from:
-     http://toolbox.sgi.com/TasteOfDT/public/freeware/shared/howto.html
-     In short, after running configure, the following modifications are required
-     in config/Makefile.def before DCMTK can be compiled:
-       - remove "-lsocket -lnsl" from LIBS
-     On IRIX, DCMTK should be built using GNU make (gmake), not with the IRIX
-     specific pmake/smake/make commands.
-(*5) MacOS X 10.1 requires DCMTK to be configured with --disable-threads
+(*4) MacOS X 10.1 requires DCMTK to be configured with --disable-threads
      because certain re-entrant Posix functions such as localtime_r
      are not available.
 
@@ -124,7 +111,7 @@ One", i.e. DICOM network transmission "tunneled" through a secure TLSv1
 transport connection.  DCMTK relies on the OpenSSL toolkit (www.openssl.org)
 for the underlying cryptographic routines and the TLS protocol
 
-implementation.  This release of DCMTK is known to compile with all 
+implementation.  This release of DCMTK is known to compile with all
 0.9.6x OpenSSL releases.  Due to security considerations we recommend that
 DCMTK should be compiled with OpenSSL 0.9.6g or 0.9.6h. DCMTK has not
 yet been tested with OpenSSL 0.9.7.
@@ -135,39 +122,39 @@ of DCMTK, and the OpenSSL support must be switched on explicitly.  By
 default, DCMTK compiles without OpenSSL support and disables all security
 enhancements.
 
-To enable OpenSSL support when compiling for Windows, select the target 
-"Win32 Release OpenSSL" in the Visual C++ workspace.  You may have to 
-adapt the include paths, which expect OpenSSL in a directory named 
-openssl-0.9.6g on the same directory level as the DCMTK root directory. 
-To enable OpenSSL support when compiling for Unix, see description for 
-Step 2 below.  We recommend that you also read the documentation in 
+To enable OpenSSL support when compiling for Windows, select the target
+"Win32 Release OpenSSL" in the Visual C++ workspace.  You may have to
+adapt the include paths, which expect OpenSSL in a directory named
+openssl-0.9.6g on the same directory level as the DCMTK root directory.
+To enable OpenSSL support when compiling for Unix, see description for
+Step 2 below.  We recommend that you also read the documentation in
 dcmtk/dcmtls/docs about using TLS with DCMTK.
 
 
 ZLIB SUPPORT
 ============
 
-Starting with release 3.5.2, DCMTK supports the "Deflated Explicit VR 
-Little Endian" Transfer Syntax, i.e. ZIP-compressed network transmission 
-and media storage.  DCMTK relies on the ZLIB toolkit (www.zlib.org) for 
-the underlying compression routines.  Due to security considerations, we 
+Starting with release 3.5.2, DCMTK supports the "Deflated Explicit VR
+Little Endian" Transfer Syntax, i.e. ZIP-compressed network transmission
+and media storage.  DCMTK relies on the ZLIB toolkit (www.zlib.org) for
+the underlying compression routines.  Due to security considerations, we
 recommend that DCMTK should only be used with ZLIB 1.1.4 or newer.
 
-On Unix platforms, if support for zlib compression is desired, a 
-compiled version of the zlib library and include files must be available 
-during compilation of DCMTK, and the ZLIB support must be switched on 
-explicitly. DCMTK compiles without ZLIB support and disables ZLIB 
+On Unix platforms, if support for zlib compression is desired, a
+compiled version of the zlib library and include files must be available
+during compilation of DCMTK, and the ZLIB support must be switched on
+explicitly. DCMTK compiles without ZLIB support and disables ZLIB
 compression by default.
 
-On Windows, the Visual C++ project files provided as part of the toolkit 
-expect a directory named "zlib-1.1.4" to be present in the same 
-directory where the DCMTK root directory (dcmtk) also resides. Include 
-files are expected in zlib-1.1.4/include. A debug version of the library 
-is expected in zlib-1.1.4/debug/zlib.lib, a release version in 
-zlib-1.1.4/release/zlib.lib. The debug version must be compiled for the 
-multithread debug version of the runtime (/MTd)", the release version 
-must be compiled for the non-debug multithread runtime (/MT). A 
-precompiled version of the library can be downloaded from 
+On Windows, the Visual C++ project files provided as part of the toolkit
+expect a directory named "zlib-1.1.4" to be present in the same
+directory where the DCMTK root directory (dcmtk) also resides. Include
+files are expected in zlib-1.1.4/include. A debug version of the library
+is expected in zlib-1.1.4/debug/zlib.lib, a release version in
+zlib-1.1.4/release/zlib.lib. The debug version must be compiled for the
+multithread debug version of the runtime (/MTd)", the release version
+must be compiled for the non-debug multithread runtime (/MT). A
+precompiled version of the library can be downloaded from
 http://dicom.offis.de/dcmtk/
 
 
@@ -179,20 +166,20 @@ to TIFF.  DCMTK relies on the libtiff toolkit (www.libtiff.org) for this
 purpose.  This release of DCMTK is known to compile with the current
 libtiff release 3.5.7, although older releases may work as well.
 
-On Unix platforms, if support for TIFF export is desired, a compiled 
-version of the libtiff libraries and include files must be available 
-during compilation of DCMTK, and the libtiff support must be switched on 
+On Unix platforms, if support for TIFF export is desired, a compiled
+version of the libtiff libraries and include files must be available
+during compilation of DCMTK, and the libtiff support must be switched on
 explicitly.  By default, DCMTK compiles without libtiff support.
 
-On Windows, the Visual C++ project files provided as part of the toolkit 
-expect a directory named "tiff-3.5.7" to be present in the same 
-directory where the DCMTK root directory (dcmtk) also resides. Include 
-files are expected in tiff-3.5.7/include. A debug version of the library 
-is expected in tiff-3.5.7/debug/libtiff.lib, a release version in 
-tiff-3.5.7/release/libtiff.lib. The debug version must be compiled for 
-the multithread debug version of the runtime (/MTd)", the release 
-version must be compiled for the non-debug multithread runtime (/MT). 
-A precompiled version of the library can be downloaded from 
+On Windows, the Visual C++ project files provided as part of the toolkit
+expect a directory named "tiff-3.5.7" to be present in the same
+directory where the DCMTK root directory (dcmtk) also resides. Include
+files are expected in tiff-3.5.7/include. A debug version of the library
+is expected in tiff-3.5.7/debug/libtiff.lib, a release version in
+tiff-3.5.7/release/libtiff.lib. The debug version must be compiled for
+the multithread debug version of the runtime (/MTd)", the release
+version must be compiled for the non-debug multithread runtime (/MT).
+A precompiled version of the library can be downloaded from
 http://dicom.offis.de/dcmtk/
 
 
@@ -229,19 +216,19 @@ configure.  E.g., if you wish to install underneath your home directory in
 
     ./configure --prefix=$HOME/dicom
 
-Step 2 is also the place where support for OpenSSL, libtiff and zlib can 
-be enabled. Use the --with-openssl switch to enable OpenSSL support. 
-The --with-opensslinc option allows to specify the directory in which 
-OpenSSL is installed.  This is usually the directory that has been used 
-as --prefix when compiling OpenSSL. For example, if you wish to enable 
-the security enhancements, and OpenSSL is installed in 
+Step 2 is also the place where support for OpenSSL, libtiff and zlib can
+be enabled. Use the --with-openssl switch to enable OpenSSL support.
+The --with-opensslinc option allows to specify the directory in which
+OpenSSL is installed.  This is usually the directory that has been used
+as --prefix when compiling OpenSSL. For example, if you wish to enable
+the security enhancements, and OpenSSL is installed in
 /usr/local/apps/openssl-0.9.6h, then you should start configure as:
 
     ./configure --with-openssl --with-opensslinc=/usr/local/apps/openssl-0.9.6h
 
-Configure will assume that the OpenSSL include files are installed in 
-/usr/local/apps/openssl-0.9.6h/include and will expect the library in 
-/usr/local/apps/openssl-0.9.6h/lib. Appropriate options will be passed 
+Configure will assume that the OpenSSL include files are installed in
+/usr/local/apps/openssl-0.9.6h/include and will expect the library in
+/usr/local/apps/openssl-0.9.6h/lib. Appropriate options will be passed
 to the compiler and the linker.
 
 Support for libtiff can be enabled in a similar way:
@@ -341,19 +328,19 @@ Known problems:
    network name and a TCP/IP address. If SLIP or PPP is used the applications
    can only work if a connection to a provider exists (since the internet
    addresses and names are given dynamically).
-4. Visual C++ contains two different implementations of iostreams which 
-   should never be mixed within one application because this may cause 
+4. Visual C++ contains two different implementations of iostreams which
+   should never be mixed within one application because this may cause
    nasal daemons, i.e. application errors that are hard to find.
-   The old, now deprecated implementation uses the traditional cfront 
-   header files <iostream.h> etc.  The new implementation uses 
-   <iostream> etc. as defined in ANSI/ISO C++. DCMTK can be configured 
-   to use either of the two interfaces. Currently, the old interface is 
-   used for Visual C++ 5.0 and the new interface is used for Visual C++ 
-   6.0 and .NET. This behaviour can be changed in 
-   config/include/cfwin32.h where the symbol USE_STD_CXX_INCLUDES is 
+   The old, now deprecated implementation uses the traditional cfront
+   header files <iostream.h> etc.  The new implementation uses
+   <iostream> etc. as defined in ANSI/ISO C++. DCMTK can be configured
+   to use either of the two interfaces. Currently, the old interface is
+   used for Visual C++ 5.0 and the new interface is used for Visual C++
+   6.0 and .NET. This behaviour can be changed in
+   config/include/cfwin32.h where the symbol USE_STD_CXX_INCLUDES is
    declared depending on the compiler version.
 
-   NOTE: Previous releases of DCMTK (3.5.1 and older) used the old 
+   NOTE: Previous releases of DCMTK (3.5.1 and older) used the old
    interface when compiled with Visual C++ 6.0.  When updating software
    that uses DCMTK as a library, make sure that the use of the iostream
    library is consistent throughout the complete application!

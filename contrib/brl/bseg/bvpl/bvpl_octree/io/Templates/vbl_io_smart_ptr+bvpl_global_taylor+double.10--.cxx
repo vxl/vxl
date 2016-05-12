@@ -1,4 +1,4 @@
-#include <vbl/io/vbl_io_smart_ptr.txx>
+#include <vbl/io/vbl_io_smart_ptr.hxx>
 #include <bvpl_octree/io/bvpl_io_global_taylor.h>
 
 typedef bvpl_global_taylor<double, 10> bvpl_global_taylor_double_10;

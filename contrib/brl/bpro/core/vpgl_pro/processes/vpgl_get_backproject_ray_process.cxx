@@ -1,10 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_get_backproject_ray_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsl/vsl_binary_io.h>
@@ -20,14 +21,14 @@ bool vpgl_get_backproject_ray_processs_cons(bprb_func_process& pro)
     using namespace vpgl_get_backproject_ray_processs_globals;
 
     //process takes 4 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "vpgl_camera_double_sptr";
     input_types_[1] = "float";
     input_types_[2] = "float";
 
 
     // process has 3 outputs
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     output_types_[0] = "float"; //dX
     output_types_[1] = "float"; //dY
     output_types_[2] = "float"; //dZ
@@ -41,7 +42,7 @@ bool vpgl_get_backproject_ray_processs(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_get_backproject_ray_processs: Invalid inputs\n";
+    std::cerr << "vpgl_get_backproject_ray_processs: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -49,11 +50,11 @@ bool vpgl_get_backproject_ray_processs(bprb_func_process& pro)
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
   float u = pro.get_input<float>(i++);
   float v = pro.get_input<float>(i++);
-  
+
 
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_get_backproject_ray_processs: couldn't cast camera\n";
+    std::cerr << "vpgl_get_backproject_ray_processs: couldn't cast camera\n";
     return false;
   }
 

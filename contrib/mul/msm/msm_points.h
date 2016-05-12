@@ -5,9 +5,11 @@
 // \brief Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
@@ -65,10 +67,10 @@ class msm_points
   }
 
   //: Set this to be equal to supplied points
-  void set_points(const vcl_vector<vgl_point_2d<double> >& pts);
+  void set_points(const std::vector<vgl_point_2d<double> >& pts);
 
   //: Copy points into pts
-  void get_points(vcl_vector<vgl_point_2d<double> >& pts) const;
+  void get_points(std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Return centre of gravity of points
   vgl_point_2d<double> cog() const;
@@ -101,20 +103,20 @@ class msm_points
 
   //: Write out points to named text file
   //  Returns true if successful.
-  bool write_text_file(const vcl_string& path) const;
+  bool write_text_file(const std::string& path) const;
 
   //: Read in points from named text file
   //  Returns true if successful.
-  bool read_text_file(const vcl_string& path);
+  bool read_text_file(const std::string& path);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -135,9 +137,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_points& pts);
 void vsl_b_read(vsl_b_istream& bfs, msm_points& pts);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_points& pts);
+std::ostream& operator<<(std::ostream& os,const msm_points& pts);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_points& pts);
+void vsl_print_summary(std::ostream& os,const msm_points& pts);
 
 #endif // msm_points_h_

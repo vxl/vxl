@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief Convert 3D cartesian coordinates to cylindrical coordinates
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 //   2004/09/17 Peter Vanroose - made "instance_" a local static variable of method instance()
 // \endverbatim

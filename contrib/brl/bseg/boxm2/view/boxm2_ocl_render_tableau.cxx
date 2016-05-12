@@ -1,9 +1,11 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_ocl_render_tableau.h"
 //:
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>
 
@@ -22,7 +24,7 @@
 //: Constructor
 boxm2_ocl_render_tableau::boxm2_ocl_render_tableau()
 {
-  is_bw_ = false; 
+  is_bw_ = false;
   pbuffer_=0;
   ni_=640;
   nj_=480;
@@ -49,7 +51,7 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
                                     boxm2_scene_sptr scene,
                                     unsigned ni,
                                     unsigned nj,
-                                    vpgl_perspective_camera<double> * cam, vcl_string identifier)
+                                    vpgl_perspective_camera<double> * cam, std::string identifier)
 {
     //set image dimensions, camera and scene
     ni_ = ni;
@@ -77,8 +79,8 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
     device_=device;
     do_init_ocl=true;
     render_trajectory_ = true;
-    trajectory_ = new boxm2_trajectory(30.0, 45.0, -1.0, scene_->bounding_box(), ni, nj); 
-    cam_iter_ = trajectory_->begin(); 
+    trajectory_ = new boxm2_trajectory(30.0, 45.0, -1.0, scene_->bounding_box(), ni, nj);
+    cam_iter_ = trajectory_->begin();
     render_depth_ = false;
     // set depth_scale_ and depth_offset_
     calibrate_depth_range();
@@ -107,30 +109,30 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 
     //calculate and write fps to status
-    vcl_stringstream str;
+    std::stringstream str;
     str<<".  rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
     if (status_) {
       status_->write(str.str().c_str());
     }
     return true;
   }
-  
-  
+
+
   //toggle color - this is a hack to get color models to show as grey
   if (e.type == vgui_KEY_PRESS) {
     if (e.key == vgui_key('c')) {
-      vcl_cout<<"Toggling b and w"<<vcl_endl;
-      is_bw_ = !is_bw_;  
-    } 
+      std::cout<<"Toggling b and w"<<std::endl;
+      is_bw_ = !is_bw_;
+    }
     else if (e.key == vgui_key('d')) {
-      vcl_cout << "Toggling depth and expected image" << vcl_endl;
+      std::cout << "Toggling depth and expected image" << std::endl;
       render_depth_ = !render_depth_;
       if (render_depth_) {
         calibrate_depth_range();
       }
     }
   }
-  
+
   if (boxm2_cam_tableau::handle(e)) {
     return true;
   }
@@ -141,7 +143,7 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
 void boxm2_ocl_render_tableau::calibrate_depth_range()
 {
   vgl_box_3d<double> bbox = scene_->bounding_box();
-  vcl_vector<vgl_point_3d<double> > bbox_verts;
+  std::vector<vgl_point_3d<double> > bbox_verts;
   bbox_verts.push_back(vgl_point_3d<double>(bbox.min_x(), bbox.min_y(), bbox.min_z()));
   bbox_verts.push_back(vgl_point_3d<double>(bbox.min_x(), bbox.min_y(), bbox.max_z()));
   bbox_verts.push_back(vgl_point_3d<double>(bbox.min_x(), bbox.max_y(), bbox.min_z()));
@@ -154,7 +156,7 @@ void boxm2_ocl_render_tableau::calibrate_depth_range()
   vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam_.camera_center());
   double min_dist = vnl_numeric_traits<double>::maxval;
   double max_dist = 0.0;
-  for (vcl_vector<vgl_point_3d<double> >::const_iterator vit=bbox_verts.begin(); vit!=bbox_verts.end(); ++vit) {
+  for (std::vector<vgl_point_3d<double> >::const_iterator vit=bbox_verts.begin(); vit!=bbox_verts.end(); ++vit) {
     double dist = (*vit - cam_center).length();
     if (dist > max_dist) {
       max_dist = dist;
@@ -182,9 +184,9 @@ float boxm2_ocl_render_tableau::render_frame()
     exp_img_->zero_gpu_buffer( queue_ );
     if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
         return -1.0f;
-    
-    vcl_cout<<cam_<<vcl_endl;
-        
+
+    std::cout<<cam_<<std::endl;
+
     //set up brdb_value_sptr arguments...
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device_);
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
@@ -197,9 +199,9 @@ float boxm2_ocl_render_tableau::render_frame()
     brdb_value_sptr brdb_depth_offset = new brdb_value_t<float>(depth_offset_);
     brdb_value_sptr exp_img = new brdb_value_t<bocl_mem_sptr>(exp_img_);
     brdb_value_sptr exp_img_dim = new brdb_value_t<bocl_mem_sptr>(exp_img_dim_);
-    brdb_value_sptr ident = new brdb_value_t<vcl_string>(identifier_);
+    brdb_value_sptr ident = new brdb_value_t<std::string>(identifier_);
 
-    bool good = true; 
+    bool good = true;
     if (render_depth_) {
       // set the depth_offset_ and depth_scale_ values
       calibrate_depth_range();
@@ -207,18 +209,18 @@ float boxm2_ocl_render_tableau::render_frame()
       good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedDepthProcess");
       //set process args
       good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene
+      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache);
       good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
       good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
       good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
       good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
       good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
-      good = good && bprb_batch_process_manager::instance()->set_input(8, brdb_depth_scale);   // depth scale 
+      good = good && bprb_batch_process_manager::instance()->set_input(8, brdb_depth_scale);   // depth scale
       good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_depth_offset);   // depth offset
     }
     else {
-    
+
       //if scene has RGB data type, use color render process
     if(scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()))
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlViewDepExpectedImageProcess");
@@ -228,48 +230,48 @@ float boxm2_ocl_render_tableau::render_frame()
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedColorProcess");
     else
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedImageProcess");
-        
+
       //set process args
       good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene
+      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache);
       good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
       good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
       good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
       good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
       good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
-      good = good && bprb_batch_process_manager::instance()->set_input(8, ident);   // string identifier to specify appearance data 
-      
+      good = good && bprb_batch_process_manager::instance()->set_input(8, ident);   // string identifier to specify appearance data
+
       //hack for toggling
       if(is_bw_) {
-        brdb_value_sptr brdb_is_bw = new brdb_value_t<bool>(true); 
-        good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_is_bw); 
+        brdb_value_sptr brdb_is_bw = new brdb_value_t<bool>(true);
+        good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_is_bw);
       }
     }
 
 
     good = good && bprb_batch_process_manager::instance()->run_process();
-    
+
     //grab float output from render gl process
     unsigned int time_id = 0;
     good = good && bprb_batch_process_manager::instance()->commit_output(0, time_id);
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, time_id);
     brdb_selection_sptr S = DATABASE->select("float_data", Q);
     if (S->size()!=1){
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
             << " no selections\n";
     }
     brdb_value_sptr value;
-    if (!S->get_value(vcl_string("value"), value)) {
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S->get_value(std::string("value"), value)) {
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
             << " didn't get value\n";
     }
     float time = value->val<float>();
-    
+
     //release gl buffer
     status = clEnqueueReleaseGLObjects(queue_, 1, &exp_img_->buffer(), 0, 0, 0);
     clFinish( queue_ );
-    
+
     return time;
 }
 
@@ -277,9 +279,9 @@ float boxm2_ocl_render_tableau::render_frame()
 bool boxm2_ocl_render_tableau::init_clgl()
 {
   //get relevant blocks
-  vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
+  std::cout<<"Data Path: "<<scene_->data_path()<<std::endl;
   device_->context() = boxm2_view_utils::create_clgl_context(*(device_->device_id()));
-  opencl_cache_->set_context(device_->context()); 
+  opencl_cache_->set_context(device_->context());
 
   int status_queue=0;
   queue_ =  clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status_queue);

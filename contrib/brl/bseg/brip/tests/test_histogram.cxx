@@ -1,6 +1,8 @@
+#include <vector>
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <brip/brip_histogram.h>
 
@@ -8,20 +10,20 @@ template <class T>
 void test_hist(const vil_image_view<T>& image,
                double min, double max, unsigned n_bins)
 {
-  vcl_vector<double> hist;
+  std::vector<double> hist;
 
   double sum = brip_histogram(image, hist, min, max, n_bins);
   double test_sum = 0.0;
 
-  //vcl_cout << "Histogram: ";
+  //std::cout << "Histogram: ";
   for (unsigned int i=0; i<hist.size(); ++i){
-    //vcl_cout << hist[i] << ' ';
+    //std::cout << hist[i] << ' ';
     test_sum += hist[i];
   }
-  //vcl_cout << vcl_endl;
-  //vcl_cout << "Sum: " << sum << vcl_endl;
+  //std::cout << std::endl;
+  //std::cout << "Sum: " << sum << std::endl;
 
-  vcl_stringstream test_name;
+  std::stringstream test_name;
   test_name << "Validate Sums (" << n_bins <<" bins)";
   TEST(test_name.str().c_str(), test_sum == sum && sum == image.ni()*image.nj()*image.nplanes(), true);
 }
@@ -37,18 +39,18 @@ void test_hist_weight(const vil_image_view<T>& image,
       for (unsigned int p=0; p<weights.nplanes(); ++p)
         test_sum += weights(i,j,p);
 
-  vcl_vector<double> hist;
+  std::vector<double> hist;
   double sum = brip_weighted_histogram(image, weights, hist, min, max, n_bins);
 
   double verify_sum = 0.0;
   for (unsigned int i=0; i<hist.size(); ++i)
     verify_sum += hist[i];
 
-  vcl_stringstream test_name;
+  std::stringstream test_name;
   test_name<<"Validate Weights ("<<n_bins<<" bins, range "<<min<<"--"<<max<<')';
   TEST_NEAR(test_name.str().c_str(), sum, test_sum, 1e-9);
 
-  vcl_stringstream t;
+  std::stringstream t;
   t<<"Validate histogram sum ("<<n_bins<<" bins, range "<<min<<"--"<<max<<')';
   TEST_NEAR(test_name.str().c_str(), verify_sum, test_sum, 1e-9);
 }
@@ -58,7 +60,7 @@ void test_hist_joint(const vil_image_view<T>& image1,
                      const vil_image_view<T>& image2,
                      double min, double max, unsigned n_bins)
 {
-  vcl_vector<vcl_vector<double> > hist;
+  std::vector<std::vector<double> > hist;
 
   double sum = brip_joint_histogram(image1, image2, hist, min, max, n_bins);
   double test_sum = 0.0;
@@ -66,14 +68,14 @@ void test_hist_joint(const vil_image_view<T>& image1,
   for (unsigned int i=0; i<n_bins; ++i) {
     for (unsigned int j=0; j<n_bins; ++j) {
       test_sum += hist[i][j];
-      //vcl_cout << hist[i][j] << ' ';
+      //std::cout << hist[i][j] << ' ';
     }
-    //vcl_cout << vcl_endl;
+    //std::cout << std::endl;
   }
 
-  //vcl_cout << "Sum: " << sum << vcl_endl;
+  //std::cout << "Sum: " << sum << std::endl;
 
-  vcl_stringstream test_name;
+  std::stringstream test_name;
   test_name << "Validate Joint Sums (" << n_bins <<"^2 bins)";
   TEST(test_name.str().c_str(),test_sum, sum);
 }

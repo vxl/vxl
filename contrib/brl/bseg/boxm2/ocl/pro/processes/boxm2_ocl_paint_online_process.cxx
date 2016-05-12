@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_paint_online_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/algo/boxm2_ocl_paint_online.h>
 //:
 // \file
@@ -14,8 +17,7 @@
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_util.h>
 #include <bprb/bprb_func_process.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 
 #include <vul/vul_timer.h>
@@ -35,7 +37,7 @@ bool boxm2_ocl_paint_online_process_cons(bprb_func_process& pro)
   // 1) cache
   // 2) stream cache
   // 3) the pre-computed sigma normalizer table, for fast access to normalizer values given number of images
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -43,7 +45,7 @@ bool boxm2_ocl_paint_online_process_cons(bprb_func_process& pro)
   input_types_[4] = "vpgl_camera_double_sptr";     //input image
 
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -54,7 +56,7 @@ bool boxm2_ocl_paint_online_process(bprb_func_process& pro)
 
   //using namespace boxm2_ocl_paint_online_process_globals;
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
       return false;
   }
   //get the inputs
@@ -66,20 +68,20 @@ bool boxm2_ocl_paint_online_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
 
   //get scene data type and appTypeSize
-  vcl_string data_type;
+  std::string data_type;
   int appTypeSize;
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
   if ( !boxm2_util::verify_appearance(*scene, valid_types, data_type, appTypeSize) ) {
-    vcl_cout<<"boxm2_ocl_paint_batch ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"boxm2_ocl_paint_batch ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
   // iterate the scene block by block and write to output
-  vul_timer totalTime; 
+  vul_timer totalTime;
   boxm2_ocl_paint_online::paint_scene(scene,device,ocl_cache,img,cam);
-  vcl_cout<<"boxm2_ocl_paint_online_process:: Total time - "<<(float) totalTime.all()/1000.0f<<" sec"<<vcl_endl; 
+  std::cout<<"boxm2_ocl_paint_online_process:: Total time - "<<(float) totalTime.all()/1000.0f<<" sec"<<std::endl;
 
   return true;
 }

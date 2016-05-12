@@ -15,28 +15,19 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_complex.h>
-
-#if 0 // The old implementation
-  //: Whether complex or not
-  enum { isreal = true };
-
-  //: Complex conjugation.
-  static T conjugate(T x);
-
-  //: Complexification.
-  static vcl_complex<T> complexify(T x);
-#endif
+#include <complex>
+#include <vcl_compiler.h>
+#include "vnl/vnl_export.h"
 
 template <class T> // the primary template is empty, by design.
 struct vnl_complex_traits;
 
 #define macro(T) \
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<T > \
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<T > \
 { \
   enum { isreal = true }; \
   static T conjugate(T x) { return x; } \
-  static vcl_complex<T> complexify(T x) { return vcl_complex<T >(x, (T)0); } \
+  static std::complex<T> complexify(T x) { return std::complex<T >(x, (T)0); } \
 }
 #define makro(T) \
 macro(signed T); \
@@ -52,78 +43,78 @@ makro(long long);
 #undef macro
 
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<float>
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<float>
 {
   enum { isreal = true };
   static float conjugate(float x) { return x; }
-  static vcl_complex<float> complexify(float x) { return vcl_complex<float>(x, 0.0f); }
+  static std::complex<float> complexify(float x) { return std::complex<float>(x, 0.0f); }
 };
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<double>
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<double>
 {
   enum { isreal = true };
   static double conjugate(double x) { return x; }
-  static vcl_complex<double> complexify(double x) { return vcl_complex<double>(x, 0.0); }
+  static std::complex<double> complexify(double x) { return std::complex<double>(x, 0.0); }
 };
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<long double>
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<long double>
 {
   enum { isreal = true };
   static long double conjugate(long double x) { return x; }
-  static vcl_complex<long double> complexify(long double x) { return vcl_complex<long double>(x, 0.0); }
+  static std::complex<long double> complexify(long double x) { return std::complex<long double>(x, 0.0); }
 };
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vcl_complex<float> >
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<std::complex<float> >
 {
   enum { isreal = false };
-  static vcl_complex<float> conjugate(vcl_complex<float> x) { return vcl_conj(x); }
-  static vcl_complex<float> complexify(float x) { return x; }
+  static std::complex<float> conjugate(std::complex<float> x) { return std::conj(x); }
+  static std::complex<float> complexify(float x) { return x; }
 };
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vcl_complex<double> >
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<std::complex<double> >
 {
   enum { isreal = false };
-  static vcl_complex<double> conjugate(vcl_complex<double> x) { return vcl_conj(x); }
-  static vcl_complex<double> complexify(double x) { return x; }
+  static std::complex<double> conjugate(std::complex<double> x) { return std::conj(x); }
+  static std::complex<double> complexify(double x) { return x; }
 };
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vcl_complex<long double> >
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<std::complex<long double> >
 {
   enum { isreal = false };
-  static vcl_complex<long double> conjugate(vcl_complex<long double> x) { return vcl_conj(x); }
-  static vcl_complex<long double> complexify(long double x) { return x; }
+  static std::complex<long double> conjugate(std::complex<long double> x) { return std::conj(x); }
+  static std::complex<long double> complexify(long double x) { return x; }
 };
 
 #include <vnl/vnl_bignum.h>
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vnl_bignum>
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<vnl_bignum>
 {
   enum { isreal = true };
   static vnl_bignum conjugate(vnl_bignum x) { return x; }
-  static vcl_complex<vnl_bignum> complexify(vnl_bignum x) { return vcl_complex<vnl_bignum>(x,vnl_bignum(0L)); }
+  static std::complex<vnl_bignum> complexify(vnl_bignum x) { return std::complex<vnl_bignum>(x,vnl_bignum(0L)); }
 };
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vcl_complex<vnl_bignum> >
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<std::complex<vnl_bignum> >
 {
   enum { isreal = false };
-  static vcl_complex<vnl_bignum> conjugate(vcl_complex<vnl_bignum> x) { return vcl_complex<vnl_bignum>(x.real(),-x.imag()); }
-  static vcl_complex<vnl_bignum> complexify(vcl_complex<vnl_bignum> x) { return x; }
+  static std::complex<vnl_bignum> conjugate(std::complex<vnl_bignum> x) { return std::complex<vnl_bignum>(x.real(),-x.imag()); }
+  static std::complex<vnl_bignum> complexify(std::complex<vnl_bignum> x) { return x; }
 };
 
 #include <vnl/vnl_rational.h>
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vnl_rational>
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<vnl_rational>
 {
   enum { isreal = true };
   static vnl_rational conjugate(vnl_rational x) { return x; }
-  static vcl_complex<vnl_rational> complexify(vnl_rational x) { return vcl_complex<vnl_rational>(x, vnl_rational(0,1)); }
+  static std::complex<vnl_rational> complexify(vnl_rational x) { return std::complex<vnl_rational>(x, vnl_rational(0,1)); }
 };
 
-VCL_DEFINE_SPECIALIZATION struct vnl_complex_traits<vcl_complex<vnl_rational> >
+VCL_DEFINE_SPECIALIZATION struct VNL_EXPORT vnl_complex_traits<std::complex<vnl_rational> >
 {
   enum { isreal = false };
-  static vcl_complex<vnl_rational> conjugate(vcl_complex<vnl_rational> x) {return vcl_complex<vnl_rational>(x.real(),-x.imag());}
-  static vcl_complex<vnl_rational> complexify(vcl_complex<vnl_rational> x) { return x; }
+  static std::complex<vnl_rational> conjugate(std::complex<vnl_rational> x) {return std::complex<vnl_rational>(x.real(),-x.imag());}
+  static std::complex<vnl_rational> complexify(std::complex<vnl_rational> x) { return x; }
 };
 
 #endif // vnl_complex_traits_h_

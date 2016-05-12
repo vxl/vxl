@@ -15,9 +15,11 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg3D.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class HomgPoint3D : public Homg3D
 {
@@ -51,6 +53,6 @@ class HomgPoint3D : public Homg3D
   double squared_radius() const { return get_double3().squared_magnitude(); }
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint3D& );
+std::ostream& operator<<(std::ostream& s, const HomgPoint3D& );
 
 #endif // HomgPoint3D_h_

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include "bwm_observer_mgr.h"
 //:
 // \file
@@ -14,14 +16,13 @@
 #include <vsol/vsol_polygon_3d.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_dialog.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
-bwm_observer_cam* bwm_observer_mgr::BWM_MASTER_OBSERVER = 0;
-bwm_observer_cam* bwm_observer_mgr::BWM_EO_OBSERVER = 0;
-bwm_observer_cam* bwm_observer_mgr::BWM_OTHER_MODE_OBSERVER = 0;
+bwm_observer_cam* bwm_observer_mgr::BWM_MASTER_OBSERVER = VXL_NULLPTR;
+bwm_observer_cam* bwm_observer_mgr::BWM_EO_OBSERVER = VXL_NULLPTR;
+bwm_observer_cam* bwm_observer_mgr::BWM_OTHER_MODE_OBSERVER = VXL_NULLPTR;
 
-bwm_observer_mgr* bwm_observer_mgr::instance_ = 0;
+bwm_observer_mgr* bwm_observer_mgr::instance_ = VXL_NULLPTR;
 
 bwm_observer_mgr* bwm_observer_mgr::instance()
 {
@@ -39,9 +40,9 @@ void bwm_observer_mgr::clear()
   corr_list_.clear();
 }
 
-vcl_vector<bwm_observer_cam*> bwm_observer_mgr::observers_cam() const
+std::vector<bwm_observer_cam*> bwm_observer_mgr::observers_cam() const
 {
-  vcl_vector<bwm_observer_cam*> v;
+  std::vector<bwm_observer_cam*> v;
   for (unsigned i=0; i< observers_.size(); i++) {
     if (observers_[i]->type_name().compare("bwm_observer_cam") == 0)
       v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
@@ -57,9 +58,9 @@ vcl_vector<bwm_observer_cam*> bwm_observer_mgr::observers_cam() const
   return v;
 }
 
-vcl_vector<bwm_observer_rat_cam*> bwm_observer_mgr::observers_rat_cam() const
+std::vector<bwm_observer_rat_cam*> bwm_observer_mgr::observers_rat_cam() const
 {
-  vcl_vector<bwm_observer_rat_cam*> v;
+  std::vector<bwm_observer_rat_cam*> v;
 
   for (unsigned i=0; i< observers_.size(); i++) {
     if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
@@ -74,7 +75,7 @@ void bwm_observer_mgr::add(bwm_observer* o)
   observers_.push_back(o);
 
   // make the connection between this observer and the available observables
-  vcl_vector<bwm_observable_sptr> objects = bwm_world::instance()->objects();
+  std::vector<bwm_observable_sptr> objects = bwm_world::instance()->objects();
 #if 0
   vgui_message msg;
   msg.data = "new";
@@ -82,7 +83,7 @@ void bwm_observer_mgr::add(bwm_observer* o)
   for (unsigned i=0; i<objects.size(); i++) {
     bwm_observable_sptr obj = objects[i];
     if (!obj)
-      vcl_cerr << "ERROR: world has an invalid (NULL) object!\n";
+      std::cerr << "ERROR: world has an invalid (NULL) object!\n";
     else {
       obj->attach(o);
       o->add_new_obj(obj);
@@ -150,23 +151,23 @@ void bwm_observer_mgr::set_world_pt(vgl_point_3d<double> world_pt)
 void bwm_observer_mgr::set_corr_mode()
 {
   vgui_dialog params ("Correspondence Mode");
-  vcl_string empty="";
-  vcl_vector<vcl_string> modes;
+  std::string empty="";
+  std::vector<std::string> modes;
   int mode = bwm_observer_mgr::instance()->corr_mode();
   modes.push_back("Image to Image");
   modes.push_back("World to Image");
 
-  vcl_vector<vcl_string> n_corrs;
+  std::vector<std::string> n_corrs;
   int n = bwm_observer_mgr::instance()->n_corrs();
   n_corrs.push_back("Single Correspondence ");
   n_corrs.push_back("Multiple Correspondence ");
 
-  vcl_vector<vcl_string> types;
+  std::vector<std::string> types;
   int t = bwm_observer_mgr::instance()->corr_type();
   types.push_back("Feature Correspondence ");
   types.push_back("Terrain Correspondence ");
 
-  vcl_string name, type;
+  std::string name, type;
   params.choice("Correspondence Mode", modes, mode);
   params.choice("Correspondence Type ", types, t);
   params.choice("Number of Correspondences ", n_corrs, n);
@@ -179,9 +180,9 @@ void bwm_observer_mgr::set_corr_mode()
       return;
     }
     else {
-      vcl_cout << "In bwm_observer_mgr::set_corr_mode() -\n"
+      std::cout << "In bwm_observer_mgr::set_corr_mode() -\n"
                << " can't use WORLD_TO_IMAGE mode since the 3-d world"
-               << " point is not defined" << vcl_endl;
+               << " point is not defined" << std::endl;
     }
   }
 
@@ -192,7 +193,7 @@ void bwm_observer_mgr::set_corr_mode()
     corr_type_ = bwm_observer_mgr::TERRAIN_CORR;
   }
   else
-    vcl_cout << "In bwm_observer_mgr::set_corr_mode() Undefined TYPE - " << t << vcl_endl;
+    std::cout << "In bwm_observer_mgr::set_corr_mode() Undefined TYPE - " << t << std::endl;
 
   corr_mode_ = bwm_observer_mgr::IMAGE_TO_IMAGE;
 
@@ -211,7 +212,7 @@ void bwm_observer_mgr::collect_corr()
     vgl_point_3d<double> wpt;
     if (!bwm_world::instance()->world_pt(wpt))
     {
-      vcl_cerr << " In bwm_observer_mgr::collect_corr() -"
+      std::cerr << " In bwm_observer_mgr::collect_corr() -"
                << " Can't do world to image, world pt invalid\n";
       return;
     }
@@ -219,10 +220,10 @@ void bwm_observer_mgr::collect_corr()
     corr->set_world_pt(wpt);
   }
   else
-    vcl_cerr << "Unknown correspondence mode!\n";
+    std::cerr << "Unknown correspondence mode!\n";
 
   bool found = false;
-  vcl_vector<bwm_observer_cam*> obs_cam = this->observers_cam();
+  std::vector<bwm_observer_cam*> obs_cam = this->observers_cam();
   for (unsigned i=0; i< obs_cam.size(); i++) {
     bwm_observer_cam* obs = obs_cam[i];
     if (obs->corr_pt(pt)) {
@@ -254,7 +255,7 @@ void bwm_observer_mgr::collect_corr()
       return;
     }
   }
-  vcl_cerr << "No Correspondence SET yet!!\n";
+  std::cerr << "No Correspondence SET yet!!\n";
 }
 
 void bwm_observer_mgr::set_corr(bwm_corr_sptr corr)
@@ -299,10 +300,10 @@ bool bwm_observer_mgr::obs_in_corr(bwm_observer_cam *obs)
 }
 
 //: returns the list correspondence points of a given observer
-vcl_vector<vgl_point_2d<double> >
+std::vector<vgl_point_2d<double> >
 bwm_observer_mgr::get_corr_points(bwm_observer_cam *obs)
 {
-  vcl_vector<vgl_point_2d<double> > corr_list;
+  std::vector<vgl_point_2d<double> > corr_list;
   for (unsigned i=0; i<corr_list_.size(); i++) {
     vgl_point_2d<double> corr;
     if (corr_list_[i]->obs_in(obs, corr)) {
@@ -312,20 +313,20 @@ bwm_observer_mgr::get_corr_points(bwm_observer_cam *obs)
   return corr_list;
 }
 
-void bwm_observer_mgr::save_corr(vcl_ostream& s)
+void bwm_observer_mgr::save_corr(std::ostream& s)
 {
   if (corr_list_.size() == 0)
-    vcl_cerr << "No correspondences to save yet!\n";
+    std::cerr << "No correspondences to save yet!\n";
   else
   {
 #if 0
-    vcl_string fname = bwm_utils::select_file();
-    vcl_ofstream s(fname.data());
+    std::string fname = bwm_utils::select_file();
+    std::ofstream s(fname.data());
 
-    s << "Cameras:" << vcl_endl;
+    s << "Cameras:" << std::endl;
 #endif
     // first write down the camera info
-    vcl_map<bwm_observer_cam*, unsigned> camera_map;
+    std::map<bwm_observer_cam*, unsigned> camera_map;
     for (unsigned i=0; i< observers_.size(); i++)
     {
       if ((observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0) ||
@@ -339,10 +340,10 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
             << "IMAGE: " << obs->image_tableau()->file_name() << '\n'
             << "CAMERA_TYPE: ";
           if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
-            s << "rational" << vcl_endl;
+            s << "rational" << std::endl;
           else if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
-            s << "projective" << vcl_endl;
-          s << "CAMERA_PATH: " << obs->camera_path() << '\n' << vcl_endl;
+            s << "projective" << std::endl;
+          s << "CAMERA_PATH: " << obs->camera_path() << '\n' << std::endl;
           camera_map[obs] = i;
         }
       }
@@ -351,45 +352,45 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
     s << "CORRESPONDENCES: " << corr_list_.size() << '\n'
       << "CORR_MODE: ";
     if (corr_mode_ == IMAGE_TO_IMAGE)
-      s << "IMAGE_TO_IMAGE" << vcl_endl;
+      s << "IMAGE_TO_IMAGE" << std::endl;
     else
-      s << "WORLD_TO_IMAGE" << vcl_endl;
+      s << "WORLD_TO_IMAGE" << std::endl;
     for (unsigned i=0; i< corr_list_.size(); i++)
     {
       bwm_corr_sptr corr = corr_list_[i];
-      s << "C: " << corr->num_matches() << vcl_endl;
+      s << "C: " << corr->num_matches() << std::endl;
 
-      vcl_vector<bwm_observer_cam*> obs = corr->observers();
+      std::vector<bwm_observer_cam*> obs = corr->observers();
 #if 0
-      s << obs.size() << vcl_endl;
+      s << obs.size() << std::endl;
 #endif
       if (! corr->mode()) { // WORLD TO IMAGE
         s << "WORLD_POINT: " << corr->world_pt().x() << ' ' << corr->world_pt().y()
-          << ' ' << corr->world_pt().z() << vcl_endl;
+          << ' ' << corr->world_pt().z() << std::endl;
       }
       for (unsigned j=0; j< obs.size(); j++) {
         vgl_point_2d<double> p;
         if (corr->match(obs[j], p))
-          s << camera_map[obs[j]] << ' ' << p.x() << ' ' << p.y() << vcl_endl;
+          s << camera_map[obs[j]] << ' ' << p.x() << ' ' << p.y() << std::endl;
       }
     }
-    s << "END" << vcl_endl;
+    s << "END" << std::endl;
   }
 }
 
 void bwm_observer_mgr::save_corr_XML()
 {
   if (corr_list_.size() == 0)
-    vcl_cerr << "No correspondences to save yet!\n";
+    std::cerr << "No correspondences to save yet!\n";
   else
   {
-    vcl_string fname = bwm_utils::select_file();
-    vcl_ofstream s(fname.data());
+    std::string fname = bwm_utils::select_file();
+    std::ofstream s(fname.data());
 
     s << "<BWM_CONFIG>" << '\n'
-      << "<TABLEAUS>" << vcl_endl;
+      << "<TABLEAUS>" << std::endl;
     // first write down the camera info
-    vcl_map<bwm_observer_cam*, unsigned> camera_map;
+    std::map<bwm_observer_cam*, unsigned> camera_map;
     for (unsigned i=0; i< observers_.size(); i++)
     {
       if ((observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0) ||
@@ -408,7 +409,7 @@ void bwm_observer_mgr::save_corr_XML()
           img_path.append_cdata(obs->image_tableau()->file_name());
           img_path.x_write(s);
 
-          vcl_string type;
+          std::string type;
           if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
             type = "rational";
           else if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
@@ -423,10 +424,10 @@ void bwm_observer_mgr::save_corr_XML()
         }
       }
     }
-    s << "</TABLEAUS>" << vcl_endl;
+    s << "</TABLEAUS>" << std::endl;
 
     // write out the correspondence list
-    vcl_string m = "";
+    std::string m = "";
     if (corr_mode_ == IMAGE_TO_IMAGE)
       m = "IMAGE_TO_IMAGE";
     else
@@ -434,7 +435,7 @@ void bwm_observer_mgr::save_corr_XML()
     vsl_basic_xml_element xml_element("correspondences");
     xml_element.add_attribute("mode", m);
 
-    vcl_string n = "";
+    std::string n = "";
     if (n_corrs_==MULTIPLE_CORRS)
       n = "MULTIPLE";
     else
@@ -445,11 +446,11 @@ void bwm_observer_mgr::save_corr_XML()
 
     for (unsigned i=0; i< corr_list_.size(); i++) {
       bwm_corr_sptr corr = corr_list_[i];
-      vcl_cout << corr->num_matches() << vcl_endl;
+      std::cout << corr->num_matches() << std::endl;
       corr->x_write(s);
     }
     xml_element.x_write_close(s);
-    s << "</BWM_CONFIG>" << vcl_endl;
+    s << "</BWM_CONFIG>" << std::endl;
   }
 }
 
@@ -459,7 +460,7 @@ void bwm_observer_mgr::delete_last_corr()
   if (i > 0) {
     // first notify the observer to delete the corr point on the screen
     bwm_corr_sptr corr = corr_list_[i-1];
-    vcl_vector<bwm_observer_cam*> obs = corr->observers();
+    std::vector<bwm_observer_cam*> obs = corr->observers();
     for (unsigned i=0; i<obs.size(); i++) {
       obs[i]->remove_corr_pt();
       obs[i]->post_redraw();
@@ -478,7 +479,7 @@ void bwm_observer_mgr::delete_all_corr()
 void bwm_observer_mgr::print_observers()
 {
   for (unsigned i=0; i< observers_.size(); i++) {
-    vcl_cout <<  i << " - " << observers_[i]->type_name() << vcl_endl;
+    std::cout <<  i << " - " << observers_[i]->type_name() << std::endl;
   }
 }
 
@@ -486,13 +487,13 @@ void bwm_observer_mgr::move_to_corr()
 {
   if (!corr_list_.size())
   {
-    vcl_cerr << "In bwm_observer_mgr::move_to_corr() -"
+    std::cerr << "In bwm_observer_mgr::move_to_corr() -"
              << " no correspondences to move to\n";
     return;
   }
   bwm_corr_sptr corr = corr_list_[0];
-  vcl_vector<bwm_observer_cam*> obs = corr->observers();
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+  std::vector<bwm_observer_cam*> obs = corr->observers();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obs.begin();
        oit != obs.end(); ++oit)
   {
     vgl_point_2d<double> p;
@@ -511,10 +512,10 @@ void bwm_observer_mgr::adjust_camera_offsets()
   if (!corr_list_.size())
     return;
   bwm_corr_sptr corr = corr_list_[0];
-  vcl_vector<bwm_observer_cam*> obs = corr->observers();
-  vcl_vector<vpgl_rational_camera<double> > rcams;
-  vcl_vector<vgl_point_2d<double> > cpoints;
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+  std::vector<bwm_observer_cam*> obs = corr->observers();
+  std::vector<vpgl_rational_camera<double> > rcams;
+  std::vector<vgl_point_2d<double> > cpoints;
+  for (std::vector<bwm_observer_cam*>::iterator oit = obs.begin();
        oit != obs.end(); ++oit)
   {
     if ((*oit)->type_name() != "bwm_observer_rat_cam")
@@ -528,32 +529,32 @@ void bwm_observer_mgr::adjust_camera_offsets()
   }
   if (cpoints.size()!=rcams.size())
   {
-    vcl_cerr << "In bwm_observer_mgr::adjust_image_offsets - "
+    std::cerr << "In bwm_observer_mgr::adjust_image_offsets - "
              << " inconsistent number of points and cameras\n";
     return;
   }
 
-  vcl_cout << "Executing adjust image offsets\n";
-  vcl_vector<vgl_vector_2d<double> > cam_trans;
+  std::cout << "Executing adjust image offsets\n";
+  std::vector<vgl_vector_2d<double> > cam_trans;
   vgl_point_3d<double> intersection;
   if (!vpgl_rational_adjust_onept::adjust(rcams, cpoints, cam_trans,
                                                 intersection))
   {
-    vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
+    std::cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
              << " adjustment failed\n";
     return;
   }
 
   vgl_plane_3d<double> world_plane(0,0,1,-intersection.z());
-  vcl_vector<vgl_vector_2d<double> >::iterator ti = cam_trans.begin();
-  vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+  std::vector<vgl_vector_2d<double> >::iterator ti = cam_trans.begin();
+  std::vector<bwm_observer_cam*>::iterator oit = obs.begin();
   for (; oit != obs.end() && ti != cam_trans.end(); ++oit, ++ti)
   {
     if ((*oit)->type_name() != "bwm_observer_rat_cam")
       continue;
     bwm_observer_rat_cam* obsrc =
       static_cast<bwm_observer_rat_cam*>(*oit);
-    vcl_cout << "Shifting camera[" << obsrc->camera_path() <<  "]:\n("
+    std::cout << "Shifting camera[" << obsrc->camera_path() <<  "]:\n("
              << (*ti).x() << ' ' << (*ti).y() << "):\n point_3d("
              << intersection.x() << ' ' << intersection.y()
              << ' ' << intersection.z() << ")\n";
@@ -566,8 +567,8 @@ void bwm_observer_mgr::adjust_camera_offsets()
   }
 
   // send the objects in the world the fact that they need to redisplay
-  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+  std::vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  for (std::vector<bwm_observable_sptr>::iterator oit = objs.begin();
        oit != objs.end(); ++oit)
     (*oit)->send_update();
 
@@ -577,7 +578,7 @@ void bwm_observer_mgr::adjust_camera_offsets()
   // changed back to "image_to_image" if a new image is added to the
   // site and the intersection point is re-computed
   //
-  for (vcl_vector<bwm_corr_sptr>::iterator cit = corr_list_.begin();
+  for (std::vector<bwm_corr_sptr>::iterator cit = corr_list_.begin();
        cit != corr_list_.end(); ++cit)
   {
     (*cit)->set_mode(false); //mode is set to world_to_image
@@ -588,17 +589,17 @@ void bwm_observer_mgr::adjust_camera_offsets()
   this->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
 }
 
-void bwm_observer_mgr::find_terrain_points(vcl_vector<vgl_point_3d<double> >& points)
+void bwm_observer_mgr::find_terrain_points(std::vector<vgl_point_3d<double> >& points)
 {
   if (!terrain_corr_list_.size())
     return;
 
   for (unsigned i=0; i<terrain_corr_list_.size(); i++) {
     bwm_corr_sptr corr = terrain_corr_list_[i];
-    vcl_vector<bwm_observer_cam*> obs = corr->observers();
-    vcl_vector<vpgl_rational_camera<double> > rcams;
-    vcl_vector<vgl_point_2d<double> > cpoints;
-    for (vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+    std::vector<bwm_observer_cam*> obs = corr->observers();
+    std::vector<vpgl_rational_camera<double> > rcams;
+    std::vector<vgl_point_2d<double> > cpoints;
+    for (std::vector<bwm_observer_cam*>::iterator oit = obs.begin();
          oit != obs.end(); ++oit)
     {
       if ((*oit)->type_name() != "bwm_observer_rat_cam")
@@ -612,18 +613,18 @@ void bwm_observer_mgr::find_terrain_points(vcl_vector<vgl_point_3d<double> >& po
     }
     if (cpoints.size()!=rcams.size())
     {
-      vcl_cerr << "In bwm_observer_mgr::adjust_image_offsets - "
+      std::cerr << "In bwm_observer_mgr::adjust_image_offsets - "
                << " inconsistent number of points and cameras\n";
       return;
     }
 
-    vcl_cout << "Executing adjust image offsets\n";
-    vcl_vector<vgl_vector_2d<double> > cam_trans;
+    std::cout << "Executing adjust image offsets\n";
+    std::vector<vgl_vector_2d<double> > cam_trans;
     vgl_point_3d<double> intersection;
     if (!vpgl_rational_adjust_onept::adjust(rcams, cpoints, cam_trans,
                                                   intersection))
     {
-      vcl_cerr << "In bwm_observer_rat_cam::find_terrain_points - "
+      std::cerr << "In bwm_observer_rat_cam::find_terrain_points - "
                << " adjustment failed\n";
       return;
     }
@@ -633,21 +634,21 @@ void bwm_observer_mgr::find_terrain_points(vcl_vector<vgl_point_3d<double> >& po
 }
 
 //: find all selected polygons across all observers
-vcl_vector<bwm_observable_sptr> bwm_observer_mgr::
-all_selected_observables(vcl_string const& soview_type) const
+std::vector<bwm_observable_sptr> bwm_observer_mgr::
+all_selected_observables(std::string const& soview_type) const
 {
-  vcl_vector<bwm_observable_sptr> sel_obsbls;
-  vcl_vector<bwm_observer_cam*> obs_cam = this->observers_cam();
+  std::vector<bwm_observable_sptr> sel_obsbls;
+  std::vector<bwm_observer_cam*> obs_cam = this->observers_cam();
 
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obs_cam.begin();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obs_cam.begin();
        oit != obs_cam.end(); ++oit) {
     bwm_observer_cam* obs = *oit;
     if (!obs) {
-    vcl_cout << "null observer in all_selected_observables\n";
+    std::cout << "null observer in all_selected_observables\n";
     return sel_obsbls;//empty
     }
-    vcl_vector<vgui_soview*> soviews = obs->get_selected_soviews();
-    for (vcl_vector<vgui_soview*>::iterator sit = soviews.begin();
+    std::vector<vgui_soview*> soviews = obs->get_selected_soviews();
+    for (std::vector<vgui_soview*>::iterator sit = soviews.begin();
          sit != soviews.end(); ++sit) {
       if ((*sit)->type_name().compare(soview_type)==0) {
         unsigned face_id;
@@ -657,7 +658,7 @@ all_selected_observables(vcl_string const& soview_type) const
     }
   }
 
- 
+
   return sel_obsbls;
 }
 
@@ -671,30 +672,30 @@ bool bwm_observer_mgr::add_3d_corr_vertex()
 //: requires exactly two selected polygons each in a unique site. Corresponds centroids of the polygons
 bool bwm_observer_mgr::add_3d_corr_centroid()
 {
-  vcl_vector<bwm_observable_sptr> obs =
+  std::vector<bwm_observable_sptr> obs =
     this->all_selected_observables("bgui_vsol_soview2D_polygon");
   if (obs.size()!=2) {
-    vcl_cout << "must have exactly two polygons selected\n";
+    std::cout << "must have exactly two polygons selected\n";
     return false;
   }
   bwm_observable_sptr obs0 = obs[0], obs1 = obs[1];
   if (obs0->site() == obs1->site()) {
-    vcl_cout << "each polygon must be from a different site\n";
+    std::cout << "each polygon must be from a different site\n";
     return false;
   }
-  vcl_map<int, vsol_polygon_3d_sptr> polys0 = obs0->extract_faces();
-  vcl_map<int, vsol_polygon_3d_sptr> polys1 = obs1->extract_faces();
+  std::map<int, vsol_polygon_3d_sptr> polys0 = obs0->extract_faces();
+  std::map<int, vsol_polygon_3d_sptr> polys1 = obs1->extract_faces();
   if (polys0.size() !=1 || polys1.size() !=1) {
-   vcl_cout << "must be exactly 1 polygon in each observable\n";
+   std::cout << "must be exactly 1 polygon in each observable\n";
     return false;
   }
-  vcl_map<int, vsol_polygon_3d_sptr>::iterator pit = polys0.begin();
+  std::map<int, vsol_polygon_3d_sptr>::iterator pit = polys0.begin();
   vsol_polygon_3d_sptr poly0 = (*pit).second;
   pit = polys1.begin();
   vsol_polygon_3d_sptr poly1 = (*pit).second;
   unsigned n0 = poly0->size(), n1 = poly1->size();
   if (!n0||!n1) {
-   vcl_cout << "poly with no vertices in add_3d_corr";
+   std::cout << "poly with no vertices in add_3d_corr";
     return false;
   }
   double xc0 = 0.0, yc0 = 0.0, zc0 = 0.0;
@@ -717,8 +718,8 @@ bool bwm_observer_mgr::add_3d_corr_centroid()
 //: save 3d_corrs
 void bwm_observer_mgr::save_3d_corrs() const
 {
-  vcl_string path = "";
-  vcl_string ext = "*.cor";
+  std::string path = "";
+  std::string ext = "*.cor";
   vgui_dialog corr_dlg("Save 3d Correspondences");
   corr_dlg.file("Corr file", ext, path);
   if (!corr_dlg.ask())
@@ -726,18 +727,18 @@ void bwm_observer_mgr::save_3d_corrs() const
   bwm_observer_mgr::save_3d_corrs(path, site_to_site_corr_list_);
 }
 
-void bwm_observer_mgr::save_3d_corrs(vcl_string const& path,
-                                     vcl_vector<bwm_3d_corr_sptr> const& corrs)
+void bwm_observer_mgr::save_3d_corrs(std::string const& path,
+                                     std::vector<bwm_3d_corr_sptr> const& corrs)
 {
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open())
   {
-    vcl_cout << "couldn't open 3d_corr file path\n";
+    std::cout << "couldn't open 3d_corr file path\n";
     return ;
   }
   unsigned n = corrs.size();
   if (!n) {
-    vcl_cout << "no 3d_corrs to save\n";
+    std::cout << "no 3d_corrs to save\n";
     return ;
   }
   os << "Ncorrs: " << n << '\n';
@@ -748,8 +749,8 @@ void bwm_observer_mgr::save_3d_corrs(vcl_string const& path,
 //: load 3d_corrs
 void bwm_observer_mgr::load_3d_corrs()
 {
-  vcl_string path = "";
-  vcl_string ext = "*.cor";
+  std::string path = "";
+  std::string ext = "*.cor";
   vgui_dialog corr_dlg("Load 3d Correspondences");
   corr_dlg.file("Corr file", ext, path);
   if (!corr_dlg.ask())
@@ -757,21 +758,21 @@ void bwm_observer_mgr::load_3d_corrs()
   bwm_observer_mgr::load_3d_corrs(path, site_to_site_corr_list_);
 }
 
-void bwm_observer_mgr::load_3d_corrs(vcl_string const& path,
-                                     vcl_vector<bwm_3d_corr_sptr>& corrs)
+void bwm_observer_mgr::load_3d_corrs(std::string const& path,
+                                     std::vector<bwm_3d_corr_sptr>& corrs)
 {
-  vcl_ifstream is(path.c_str());
+  std::ifstream is(path.c_str());
   if (!is.is_open())
   {
-    vcl_cout << "couldn't open 3d_corr file path\n";
+    std::cout << "couldn't open 3d_corr file path\n";
     return ;
   }
   //clear out any existing correspondences
   corrs.clear();
-  vcl_string temp, temp1, temp2;
+  std::string temp, temp1, temp2;
   is >> temp;
   if (temp!="Ncorrs:") {
-    vcl_cout << "error in 3d_corr file 1\n";
+    std::cout << "error in 3d_corr file 1\n";
     return;
   }
   unsigned n_corrs = 0;
@@ -779,36 +780,36 @@ void bwm_observer_mgr::load_3d_corrs(vcl_string const& path,
   for (unsigned i = 0; i<n_corrs; ++i) {
     is >> temp >> temp1 >> temp2;
     if (temp2!="Sites:") {
-      vcl_cout << "error in 3d_corr file 2\n";
+      std::cout << "error in 3d_corr file 2\n";
       return;
     }
     unsigned n_sites = 0;
     is >> n_sites;
     double x = 0.0, y = 0.0, z = 0.0;
-    vcl_string site;
+    std::string site;
     bwm_3d_corr_sptr corr = new bwm_3d_corr();
     for (unsigned s = 0; s<n_sites; ++s) {
       is >> temp >> temp1;
       if (temp != "Site[") {
-        vcl_cout << "error in 3d_corr file 3\n";
+        std::cout << "error in 3d_corr file 3\n";
         return;
       }
       site = temp1;
       is >> temp >> temp1;
       if (temp1 != "X:") {
-        vcl_cout << "error in 3d_corr file 4\n";
+        std::cout << "error in 3d_corr file 4\n";
         return;
       }
       is >> x;
       is >> temp;
       if (temp != "Y:") {
-        vcl_cout << "error in 3d_corr file 5\n";
+        std::cout << "error in 3d_corr file 5\n";
         return;
       }
       is >> y;
       is >> temp;
       if (temp != "Z:") {
-        vcl_cout << "error in 3d_corr file 6\n";
+        std::cout << "error in 3d_corr file 6\n";
         return;
       }
       is >> z;

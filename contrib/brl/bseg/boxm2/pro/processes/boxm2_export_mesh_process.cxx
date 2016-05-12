@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_export_mesh_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Mar 15, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
@@ -39,14 +41,14 @@ bool boxm2_export_mesh_process_cons(bprb_func_process& pro)
 
   //process takes 2 inputs
   int i=0;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[i++] = "vil_image_view_base_sptr";  //depth image
   input_types_[i++] = "vil_image_view_base_sptr";  //x image
   input_types_[i++] = "vil_image_view_base_sptr";  //y image
   input_types_[i++] = "vcl_string";                //output dir of saved mesh
 
   // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "imesh_mesh_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -56,7 +58,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_export_mesh_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -65,12 +67,12 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(argIdx++);
   vil_image_view_base_sptr ximg = pro.get_input<vil_image_view_base_sptr>(argIdx++);
   vil_image_view_base_sptr yimg = pro.get_input<vil_image_view_base_sptr>(argIdx++);
-  vcl_string out_dir           = pro.get_input<vcl_string>(argIdx++);
+  std::string out_dir           = pro.get_input<std::string>(argIdx++);
 
   //create the mesh directory
   if (out_dir != "") {
     if (!vul_file::make_directory_path(out_dir.c_str())) {
-      vcl_cout<<"Couldn't make directory path "<<out_dir<<vcl_endl;
+      std::cout<<"Couldn't make directory path "<<out_dir<<std::endl;
       return false;
     }
   }
@@ -105,11 +107,11 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   sdet_image_mesh im(imp);
   im.set_image(z_img_res);
   if (!im.compute_mesh()) {
-    vcl_cout<<"mesh could not be computed"<<vcl_endl;
+    std::cout<<"mesh could not be computed"<<std::endl;
     return 0;
   }
   imesh_mesh& mesh = im.get_mesh();
-  vcl_cout << "Number of vertices " << mesh.num_verts()
+  std::cout << "Number of vertices " << mesh.num_verts()
            << "  number of faces "<< mesh.num_faces()<< '\n';
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +127,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   // get min and max z values
   float minz=0, maxz=0;
   vil_math_value_range(*z_img, minz, maxz);
-  vcl_cout<<"Min z: "<<minz<<" Max z: "<<maxz<<vcl_endl;
+  std::cout<<"Min z: "<<minz<<" Max z: "<<maxz<<std::endl;
 
   //grab vertices in the mesh - convert them to scene coordinates (not image)
   imesh_vertex_array<3>& verts = mesh.vertices<3>();
@@ -149,7 +151,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
 //bool did_divide = true;
   //while (did_divide)
   {
-    vcl_set<unsigned int> sel_faces;
+    std::set<unsigned int> sel_faces;
     double maxLen = (maxz-minz) / 3.0;
     imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
     imesh_vertex_array<3>&       verts = mesh.vertices<3>();
@@ -158,7 +160,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
     for (unsigned iface = 0; iface<nfaces; ++iface)
     {
       //store three 3d points
-      vcl_vector<vgl_point_3d<double> > points;
+      std::vector<vgl_point_3d<double> > points;
       for (int i=0; i<3; ++i) {
         unsigned vertexId = faces[iface][i];
         double x = verts[vertexId][0];
@@ -181,10 +183,10 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
     if ( !sel_faces.empty() ) {
 //    did_divide = true;
 
-      vcl_cout<<"Subdividing mesh"<<vcl_endl;
+      std::cout<<"Subdividing mesh"<<std::endl;
       imesh_quad_subdivide(mesh, sel_faces);
 
-      vcl_cout<<"Re triangulating mesh"<<vcl_endl;
+      std::cout<<"Re triangulating mesh"<<std::endl;
       imesh_triangulate(mesh);
     }
 //  else {
@@ -197,8 +199,8 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   ////////////////////////////////////////////////////////////////////////////////
   //// Write out in VRML format
   ////////////////////////////////////////////////////////////////////////////////
-  vcl_string vrfile = out_dir + "/untextured.wrl";
-  vcl_ofstream os(vrfile.c_str());
+  std::string vrfile = out_dir + "/untextured.wrl";
+  std::ofstream os(vrfile.c_str());
   imesh_write_vrml(os, mesh);
   os.close();
 

@@ -1,4 +1,4 @@
-#include <boxm/boxm_block.txx>
+#include <boxm/boxm_block.hxx>
 #include <boct/boct_tree.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 

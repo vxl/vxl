@@ -1,10 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_convert_to_generic_camera_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process to convert perspective camera to rational camera.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
@@ -18,7 +19,7 @@ bool vpgl_convert_to_generic_camera_process_cons(bprb_func_process& pro)
   //  1) ni (# image columns)
   //  2) nj (# image rows)
   //  3) level (the pyramid scale)
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("unsigned"); // ni
   input_types.push_back("unsigned"); // nj
@@ -31,7 +32,7 @@ bool vpgl_convert_to_generic_camera_process_cons(bprb_func_process& pro)
 
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   output_types.push_back("unsigned");
   output_types.push_back("unsigned");
@@ -42,13 +43,13 @@ bool vpgl_convert_to_generic_camera_process_cons(bprb_func_process& pro)
 bool vpgl_convert_to_generic_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= 4) {
-    vcl_cout << "vpgl_convert_to_generic_camera_process: The number of inputs should be 4" << vcl_endl;
+    std::cout << "vpgl_convert_to_generic_camera_process: The number of inputs should be 4" << std::endl;
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   if (!camera) {
-    vcl_cout<<"Null camera input\n"<<vcl_endl;
+    std::cout<<"Null camera input\n"<<std::endl;
     return false;
   }
   unsigned ni = pro.get_input<unsigned>(1), nj = pro.get_input<unsigned>(2);
@@ -56,7 +57,7 @@ bool vpgl_convert_to_generic_camera_process(bprb_func_process& pro)
   vpgl_generic_camera<double> gcam;
 
   if (!vpgl_generic_camera_convert::convert(camera, (int)ni, (int)nj, gcam, level)) {
-   vcl_cout<<"camera conversion failed\n"<<vcl_endl;
+   std::cout<<"camera conversion failed\n"<<std::endl;
     return false;
   }
   vpgl_camera_double_sptr out = new vpgl_generic_camera<double>(gcam);
@@ -69,7 +70,7 @@ bool vpgl_convert_to_generic_camera_process(bprb_func_process& pro)
 //: Init function
 bool vpgl_convert_to_generic_camera_w_margin_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("unsigned");// ni
   input_types.push_back("unsigned");// nj
@@ -83,7 +84,7 @@ bool vpgl_convert_to_generic_camera_w_margin_process_cons(bprb_func_process& pro
 
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   output_types.push_back("unsigned");
   output_types.push_back("unsigned");
@@ -95,13 +96,13 @@ bool vpgl_convert_to_generic_camera_w_margin_process_cons(bprb_func_process& pro
 bool vpgl_convert_to_generic_camera_w_margin_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= 5) {
-    vcl_cout << "vpgl_convert_to_generic_camera_w_margin_process: The number of inputs should be 5" << vcl_endl;
+    std::cout << "vpgl_convert_to_generic_camera_w_margin_process: The number of inputs should be 5" << std::endl;
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   if (!camera) {
-    vcl_cout<<"Null camera input\n"<<vcl_endl;
+    std::cout<<"Null camera input\n"<<std::endl;
     return false;
   }
   unsigned ni = pro.get_input<unsigned>(1), nj = pro.get_input<unsigned>(2);
@@ -111,12 +112,12 @@ bool vpgl_convert_to_generic_camera_w_margin_process(bprb_func_process& pro)
 
   vpgl_perspective_camera<double> *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
   if (!cam) {
-    vcl_cout<<"Input camera is not perspective, not implemented for other camera types!\n";
+    std::cout<<"Input camera is not perspective, not implemented for other camera types!\n";
     return false;
   }
 
   if (!vpgl_generic_camera_convert::convert_with_margin(*cam,(int)ni,(int)nj,gcam,margin,level)) {
-    vcl_cout<<"camera conversion failed\n"<<vcl_endl;
+    std::cout<<"camera conversion failed\n"<<std::endl;
     return false;
   }
   //: adjust the calibration matrix
@@ -144,7 +145,7 @@ bool vpgl_convert_to_generic_camera_w_margin_process(bprb_func_process& pro)
 //: Init function
 bool vpgl_write_generic_camera_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("vcl_string"); // name of output vrml file
   input_types.push_back("unsigned"); // name of output vrml file
@@ -152,7 +153,7 @@ bool vpgl_write_generic_camera_process_cons(bprb_func_process& pro)
 
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_output_types(output_types);
 }
 
@@ -160,21 +161,21 @@ bool vpgl_write_generic_camera_process_cons(bprb_func_process& pro)
 bool vpgl_write_generic_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= 3) {
-    vcl_cout << "vpgl_write_generic_camera_process: The number of inputs should be 2" << vcl_endl;
+    std::cout << "vpgl_write_generic_camera_process: The number of inputs should be 2" << std::endl;
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   if (!camera) {
-    vcl_cout<<"Null camera input\n"<<vcl_endl;
+    std::cout<<"Null camera input\n"<<std::endl;
     return false;
   }
-  vcl_string out_name = pro.get_input<vcl_string>(1);
+  std::string out_name = pro.get_input<std::string>(1);
   unsigned level = pro.get_input<unsigned>(2);
 
   vpgl_generic_camera<double>* gcam = dynamic_cast<vpgl_generic_camera<double>* >(camera.ptr());
 
-  vcl_ofstream ofs(out_name.c_str());
+  std::ofstream ofs(out_name.c_str());
   ofs << "#VRML V2.0 utf8\n";
   gcam->print_to_vrml(level, ofs);
   ofs.close();
@@ -185,7 +186,7 @@ bool vpgl_write_generic_camera_process(bprb_func_process& pro)
 //: fetch the ray origin and direction for a given image pixel
 bool vpgl_get_generic_camera_ray_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("unsigned"); // u
   input_types.push_back("unsigned"); // v
@@ -193,7 +194,7 @@ bool vpgl_get_generic_camera_ray_process_cons(bprb_func_process& pro)
 
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("double");  // ray origin x
   output_types.push_back("double");  // ray origin y
   output_types.push_back("double");  // ray origin z
@@ -207,16 +208,16 @@ bool vpgl_get_generic_camera_ray_process_cons(bprb_func_process& pro)
 bool vpgl_get_generic_camera_ray_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= 3) {
-    vcl_cout << "vpgl_get_generic_camera_ray_process: The number of inputs should be 3" << vcl_endl;
+    std::cout << "vpgl_get_generic_camera_ray_process: The number of inputs should be 3" << std::endl;
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   if (!camera) {
-    vcl_cout<<"Null camera input\n"<<vcl_endl;
+    std::cout<<"Null camera input\n"<<std::endl;
     return false;
   }
-  
+
   unsigned u = pro.get_input<unsigned>(1);
   unsigned v = pro.get_input<unsigned>(2);
 

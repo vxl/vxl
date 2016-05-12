@@ -28,8 +28,8 @@ bool bvpl_create_corner2d_kernel_process_cons(bprb_func_process& pro)
   using namespace bvpl_create_corner2d_kernel_process_globals;
 
   //process takes 0 inputs and 1 output
-  vcl_vector<vcl_string> input_types_(n_inputs_);
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] ="bvpl_kernel_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -41,7 +41,7 @@ bool bvpl_create_corner2d_kernel_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -71,8 +71,8 @@ bool bvpl_create_corner2d_kernel_process(bprb_func_process& pro)
   factory.set_angle(angle);
 
   bvpl_kernel_sptr kernel_sptr = new bvpl_kernel(factory.create());
-  vcl_cout << "Creating corner kernel with axis " << kernel_sptr->axis() << " and angle " << kernel_sptr->angle() << vcl_endl
-           << "length: " << length << ", width: " << width << ", thickness: " << thickness << vcl_endl;
+  std::cout << "Creating corner kernel with axis " << kernel_sptr->axis() << " and angle " << kernel_sptr->angle() << std::endl
+           << "length: " << length << ", width: " << width << ", thickness: " << thickness << std::endl;
   //kernel_sptr->print();
   pro.set_output_val<bvpl_kernel_sptr>(0, kernel_sptr);
 

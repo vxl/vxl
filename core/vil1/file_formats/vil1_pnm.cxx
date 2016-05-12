@@ -5,12 +5,14 @@
 //:
 // \file
 
+#include <vector>
+#include <iostream>
+#include <cstring>
+#include <cstdio>
 #include "vil1_pnm.h"
 
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -19,7 +21,6 @@
 
 #include <vxl_config.h>
 #undef sprintf // This works around a bug in libintl.h
-#include <vcl_cstdio.h> // for sprintf
 
 char const* vil1_pnm_format_tag = "pnm";
 
@@ -42,7 +43,7 @@ vil1_image_impl* vil1_pnm_file_format::make_input_image(vil1_stream* vs)
              iseol(buf[2]) &&
              (buf[1] >= '1' && buf[2] <= '6'));
   if (!ok)
-    return 0;
+    return VXL_NULLPTR;
 
   return new vil1_pnm_generic_image(vs);
 }
@@ -73,10 +74,10 @@ vil1_pnm_generic_image::vil1_pnm_generic_image(vil1_stream* vs):
 
 bool vil1_pnm_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -252,13 +253,13 @@ bool vil1_pnm_generic_image::write_header()
   vs_->seek(0L);
 
   char buf[1024];
-  vcl_sprintf(buf, "P%d\n#vil1 pnm image, #c=%u, bpc=%u\n%u %u\n",
+  std::sprintf(buf, "P%d\n#vil1 pnm image, #c=%u, bpc=%u\n%u %u\n",
               magic_, components_, bits_per_component_, width_, height_);
-  vs_->write(buf, (vil1_streampos)vcl_strlen(buf));
+  vs_->write(buf, (vil1_streampos)std::strlen(buf));
   if (magic_ != 1 && magic_ != 4)
   {
-    vcl_sprintf(buf, "%lu\n", maxval_);
-    vs_->write(buf, (vil1_streampos)vcl_strlen(buf));
+    std::sprintf(buf, "%lu\n", maxval_);
+    vs_->write(buf, (vil1_streampos)std::strlen(buf));
   }
   start_of_data_ = vs_->tell();
   return true;
@@ -316,7 +317,7 @@ bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
       ConvertMSBToHost( buf, xs*ys*components_ );
     }
     else if ( bytes_per_sample > 2 ) {
-      vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
+      std::cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       return false;
     }
   }
@@ -377,7 +378,7 @@ bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 
 void operator<<(vil1_stream& vs, int a)
 {
-  char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,(vil1_streampos)vcl_strlen(buf));
+  char buf[128]; std::sprintf(buf, " %d\n", a); vs.write(buf,(vil1_streampos)std::strlen(buf));
 }
 
 bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
@@ -404,16 +405,16 @@ bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs
       // Little endian host; must convert words to have MSB first.
       // Can't convert the input buffer, because it's not ours.
       // Convert line by line to avoid duplicating a potentially large image.
-      vcl_vector<unsigned char> tempbuf( byte_out_width );
+      std::vector<unsigned char> tempbuf( byte_out_width );
       for (int y = 0; y < ys; ++y) {
         vs_->seek(byte_start + y * byte_width);
-        vcl_memcpy( &tempbuf[0], ob + y * byte_out_width, byte_out_width );
+        std::memcpy( &tempbuf[0], ob + y * byte_out_width, byte_out_width );
         ConvertHostToMSB( &tempbuf[0], xs*components_ );
         vs_->write(&tempbuf[0], byte_out_width);
       }
     }
     else {
-      vcl_cerr << "ERROR: pnm: writing rawbits format with > 16bit samples\n";
+      std::cerr << "ERROR: pnm: writing rawbits format with > 16bit samples\n";
       return false;
     }
   }

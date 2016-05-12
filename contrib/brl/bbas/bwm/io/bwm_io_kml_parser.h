@@ -1,6 +1,10 @@
 #ifndef bwm_io_kml_parser_h_
 #define bwm_io_kml_parser_h_
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
 #include "bwm_io_structs.h"
 
 
@@ -8,9 +12,7 @@
  #define _LIB
 #endif
 #include <expatpp.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 
 class bwm_io_kml_parser : public expatpp
@@ -37,13 +39,13 @@ class bwm_io_kml_parser : public expatpp
   virtual void endElement(const XML_Char* name);
   virtual void charData(const XML_Char* s, int len);
   void handleAtts(const XML_Char** atts);
-  void cdataHandler(vcl_string name, vcl_string data);
+  void cdataHandler(std::string name, std::string data);
   void init_params();
 
   //element parser
-  vcl_string last_tag;
+  std::string last_tag;
 
-  void trim_string(vcl_string& s);
+  void trim_string(std::string& s);
 };
 
 #endif

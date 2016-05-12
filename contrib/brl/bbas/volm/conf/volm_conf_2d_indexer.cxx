@@ -7,9 +7,9 @@
 #include <volm/volm_buffered_index.h>             // for parameter class
 #include <bkml/bkml_write.h>
 
-vcl_string volm_conf_2d_indexer::name_ = "conf_2d";
+std::string volm_conf_2d_indexer::name_ = "conf_2d";
 
-volm_conf_2d_indexer::volm_conf_2d_indexer(double const& radius, vcl_string const& out_folder, vcl_string const& land_map_folder, unsigned const& tile_id)
+volm_conf_2d_indexer::volm_conf_2d_indexer(double const& radius, std::string const& out_folder, std::string const& land_map_folder, unsigned const& tile_id)
   : radius_(radius), land_map_folder_(land_map_folder)
 {
   // calculate radius in degree
@@ -22,7 +22,7 @@ volm_conf_2d_indexer::volm_conf_2d_indexer(double const& radius, vcl_string cons
   out_file_name_pre_.clear();
   out_file_name_pre_ << out_index_folder_ << "conf_index_tile_" << tile_id_;
   // load land map 2d tree
-  vcl_stringstream file_name_pre;
+  std::stringstream file_name_pre;
   file_name_pre << land_map_folder << "/2d_geo_index_tile_" << tile_id_ << ".txt";
   bool file_exist = vul_file::exists(file_name_pre.str());
   assert(file_exist);
@@ -54,48 +54,48 @@ bool volm_conf_2d_indexer::get_next()
   bbox.set_min_x(min_x);  bbox.set_max_x(max_x);
   bbox.set_min_y(min_y);  bbox.set_max_y(max_y);
   // obtain the leaves
-  vcl_vector<bvgl_2d_geo_index_node_sptr> leaves;
+  std::vector<bvgl_2d_geo_index_node_sptr> leaves;
   bvgl_2d_geo_index::get_leaves(land_map_root_, leaves, bbox);
   // load the content
   for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
     bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leaves[l_idx].ptr());
-    vcl_stringstream content_bin_file;
+    std::stringstream content_bin_file;
     content_bin_file << land_map_folder_ << leaves[l_idx]->get_label_name("land_map_index","all");
     if (!vul_file::exists(content_bin_file.str()))
       continue;
     if (!leaf_ptr->contents_)
     {
       leaf_ptr->contents_ = new volm_conf_land_map_indexer(content_bin_file.str());
-      //vcl_cout << "l_idx: " << l_idx << " content_bin_file: " << content_bin_file.str() << vcl_endl;
+      //std::cout << "l_idx: " << l_idx << " content_bin_file: " << content_bin_file.str() << std::endl;
       // put leaf into database
       land_map_leaves_.push_back(leaves[l_idx]);
     }
   }
 #if 0
-  vcl_cout << land_map_leaves_.size() << " are added for location leaf " << current_leaf_id_ << ": " << loc_leaves_[current_leaf_id_]->extent_ << vcl_endl;
-  vcl_cout << "expand the loc leaf: "
+  std::cout << land_map_leaves_.size() << " are added for location leaf " << current_leaf_id_ << ": " << loc_leaves_[current_leaf_id_]->extent_ << std::endl;
+  std::cout << "expand the loc leaf: "
            << bbox.min_x() << "," << bbox.min_y() << ",0\n"
            << bbox.max_x() << "," << bbox.min_y() << ",0\n"
            << bbox.max_x() << "," << bbox.max_y() << ",0\n"
            << bbox.min_x() << "," << bbox.max_y() << ",0\n"
            << bbox.min_x() << "," << bbox.min_y() << ",0\n";
   for (unsigned i = 0; i < land_map_leaves_.size(); i++) {
-    vcl_stringstream content_bin_file;
+    std::stringstream content_bin_file;
     content_bin_file << land_map_folder_ << land_map_leaves_[i]->get_label_name("land_map_index","all");
-    vcl_string kml_file = vul_file::strip_extension(content_bin_file.str()) + ".kml";
-    vcl_cout << kml_file << vcl_flush << vcl_endl;
+    std::string kml_file = vul_file::strip_extension(content_bin_file.str()) + ".kml";
+    std::cout << kml_file << std::flush << std::endl;
   }
 #endif
   return true;
 }
 
 // function to create index for a location
-bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double const& elev, vcl_vector<volm_conf_object>& values)
+bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double const& elev, std::vector<volm_conf_object>& values)
 {
 #if 0
-  vcl_stringstream kml_file;
+  std::stringstream kml_file;
   kml_file << "index_test_" << lon << "_" << lat << ".kml";
-  vcl_ofstream ofs(kml_file.str().c_str());
+  std::ofstream ofs(kml_file.str().c_str());
   bkml_write::open_document(ofs);
 #endif
   // distance calculation requires a transformation from degree to meter
@@ -108,13 +108,13 @@ bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double 
   vgl_box_2d<double> bbox(lon_min, lon_max, lat_min, lat_max);
 
   // obtain the leaves that intersect current location ROI
-  vcl_vector<bvgl_2d_geo_index_node_sptr> leaves;
+  std::vector<bvgl_2d_geo_index_node_sptr> leaves;
   bvgl_2d_geo_index::get_leaves(land_map_root_, leaves, bbox);
   if ( leaves.empty() )
     return true;
   // further reduce the number of leaves by check the minimum distance and contents
-  vcl_vector<bvgl_2d_geo_index_node_sptr> valid_leaves;
-  vcl_vector<double> min_dist_vec;
+  std::vector<bvgl_2d_geo_index_node_sptr> valid_leaves;
+  std::vector<double> min_dist_vec;
   for (unsigned i = 0; i < leaves.size(); i++) {
     bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leaves[i].ptr());
     if (!leaf_ptr->contents_)
@@ -136,25 +136,25 @@ bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double 
     if (!leaf_ptr->contents_)
       continue;
 #if 0
-    vcl_stringstream content_bin_file;
+    std::stringstream content_bin_file;
     content_bin_file << land_map_folder_ << valid_leaves[i]->get_label_name("land_map_index","all");
-    vcl_string kml_file = vul_file::strip_extension(content_bin_file.str()) + ".kml";
-    vcl_cout << kml_file << vcl_flush << vcl_endl;
+    std::string kml_file = vul_file::strip_extension(content_bin_file.str()) + ".kml";
+    std::cout << kml_file << std::flush << std::endl;
 #endif
     volm_conf_loc_map loc_map = leaf_ptr->contents_->land_locs();
     for (volm_conf_loc_map::iterator mit = loc_map.begin(); mit != loc_map.end(); ++mit)
     {
       unsigned char land_id = mit->first;
-      vcl_vector<vgl_point_3d<double> > loc = mit->second;
-      for (vcl_vector<vgl_point_3d<double> >::iterator vit = loc.begin(); vit != loc.end(); ++vit)
+      std::vector<vgl_point_3d<double> > loc = mit->second;
+      for (std::vector<vgl_point_3d<double> >::iterator vit = loc.begin(); vit != loc.end(); ++vit)
       {
         // calculate distance and angle
         double lx, ly, lz;
         lvcs.global_to_local(vit->x(), vit->y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
         double square_dist = lx*lx+ly*ly;
         if (square_dist < square_radius_) {
-          double dist = vcl_sqrt(lx*lx+ly*ly);
-          double phi  = vcl_atan2(ly, lx);
+          double dist = std::sqrt(lx*lx+ly*ly);
+          double phi  = std::atan2(ly, lx);
           double height = vit->z();
           values.push_back(volm_conf_object(phi, dist, height, land_id));
 #if 0
@@ -196,6 +196,6 @@ double volm_conf_2d_indexer::min_dist_from_box_to_pt(vpgl_lvcs lvcs, vgl_box_2d<
   lvcs.global_to_local(lon, lat, 0.0, vpgl_lvcs::wgs84, plx, ply, plz);
   double clx, cly, clz;
   lvcs.global_to_local(closest_pt.x(), closest_pt.y(), 0.0, vpgl_lvcs::wgs84, clx, cly, clz);
-  double min_dist = vcl_sqrt((plx-clx)*(plx-clx)+(ply-cly)*(ply-cly));
+  double min_dist = std::sqrt((plx-clx)*(plx-clx)+(ply-cly)*(ply-cly));
   return min_dist;
 }

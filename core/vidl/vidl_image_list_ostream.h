@@ -11,8 +11,9 @@
 // \author Matt Leotta
 // \date 19 Dec 2005
 
+#include <string>
 #include "vidl_ostream.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //:A video output stream to a list of images
 class vidl_image_list_ostream
@@ -23,18 +24,18 @@ class vidl_image_list_ostream
   vidl_image_list_ostream();
 
   //: Constructor - opens a stream
-  vidl_image_list_ostream(const vcl_string& directory,
-                          const vcl_string& name_format = "%05d",
-                          const vcl_string& file_format = "tiff",
+  vidl_image_list_ostream(const std::string& directory,
+                          const std::string& name_format = "%05d",
+                          const std::string& file_format = "tiff",
                           const unsigned int init_index = 0);
 
   //: Destructor
   virtual ~vidl_image_list_ostream() { close(); }
 
   //: Open the stream
-  virtual bool open(const vcl_string& directory,
-                    const vcl_string& name_format = "%05d",
-                    const vcl_string& file_format = "tiff",
+  virtual bool open(const std::string& directory,
+                    const std::string& name_format = "%05d",
+                    const std::string& file_format = "tiff",
                     const unsigned int init_index = 0);
 
   //: Close the stream
@@ -47,7 +48,7 @@ class vidl_image_list_ostream
   unsigned int index() const { return index_; }
 
   //: Return the next file name to be written to
-  virtual vcl_string next_file_name() const;
+  virtual std::string next_file_name() const;
 
   //: Write and image to the stream
   // \retval false if the image could not be written
@@ -58,13 +59,13 @@ class vidl_image_list_ostream
   unsigned int index_;
 
   //: The directory to save images in
-  vcl_string dir_;
+  std::string dir_;
 
   //: The printf-style format string for filenames
-  vcl_string name_format_;
+  std::string name_format_;
 
   //: The image file format to use
-  vcl_string file_format_;
+  std::string file_format_;
 };
 
 #endif // vidl_image_list_ostream_h_

@@ -19,7 +19,7 @@ template <>
 bool bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::greater_than(const bsta_num_obs<bsta_gauss_sf1>& g1, const bsta_num_obs<bsta_gauss_sf1>& g2)
 {
   return (g1.mean() - g2.mean()) > 0.0f;
-  //return vcl_abs(g1.mean()) - vcl_abs(g2.mean()) > vcl_numeric_limits<float>::epsilon();
+  //return std::abs(g1.mean()) - std::abs(g2.mean()) > std::numeric_limits<float>::epsilon();
 }
 
 template <>
@@ -40,5 +40,5 @@ float bvpl_local_max_functor<bsta_num_obs<bsta_gauss_sf1> >::filter_response(uns
   if (id !=target_id)
     return 0.0f;
 
-  return vcl_abs(curr_val.mean());
+  return std::abs(curr_val.mean());
 }

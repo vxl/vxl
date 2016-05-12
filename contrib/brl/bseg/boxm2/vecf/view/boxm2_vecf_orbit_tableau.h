@@ -18,12 +18,12 @@ class boxm2_vecf_orbit_tableau : public vgui_wrapper_tableau
   boxm2_vecf_orbit_tableau(){this->init();}
   virtual ~boxm2_vecf_orbit_tableau() {}
   void init();
-  void set_params(vcl_string const& param_path, bool is_right);
-  bool set_image(vcl_string const& image_path);
-  bool set_dlib_parts(vcl_string const& dlib_path);
-  void draw_orbit(bool is_right);
+  void set_params(std::string const& param_path, bool is_right);
+  bool set_image(std::string const& image_path);
+  bool set_dlib_parts(std::string const& dlib_path);
+  void draw_orbit(bool is_right, unsigned int num_pts=0);
   void draw_dlib_parts(bool is_right);
-  void set_points_filename(vcl_string fname){
+  void set_points_filename(std::string fname){
     export_fname_base_ = fname;
   }
  private:
@@ -32,7 +32,7 @@ class boxm2_vecf_orbit_tableau : public vgui_wrapper_tableau
   boxm2_vecf_orbit_params left_params_;
   boxm2_vecf_orbit_params right_params_;
   boxm2_vecf_fit_orbit fo_;
-  vcl_string export_fname_base_;
+  std::string export_fname_base_;
 };
 
 //: declare smart pointer

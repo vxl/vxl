@@ -50,6 +50,6 @@ class vgl_triangle_scan_iterator : public vgl_region_scan_iterator
 #endif
 };
 
-#define VGL_TRIANGLE_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_triangle_scan_iterator.txx> instead"
+#define VGL_TRIANGLE_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_triangle_scan_iterator.hxx> instead"
 
 #endif // vgl_triangle_scan_iterator_h_

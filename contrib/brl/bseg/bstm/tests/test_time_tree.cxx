@@ -2,33 +2,34 @@
 // \file
 // \author Ali Osman Ulusoy
 // \date 05-Aug-2012
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
 #include <bstm/bstm_time_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 
 void test_time_tree()
 {
     //-------------------------------------------------------------
-    vcl_cout << "Initializing empty tree... " << vcl_endl;
+    std::cout << "Initializing empty tree... " << std::endl;
     unsigned char* array = new unsigned char[8];
     for(int i = 0; i < 8; i++)
       array[i] = 0;
     bstm_time_tree empty_tree(array,6);
 
-    vcl_cout << "Max number of cells: " << empty_tree.max_num_cells() << vcl_endl;
-    vcl_cout << "Max number of inner cells: " << empty_tree.max_num_inner_cells() << vcl_endl;
+    std::cout << "Max number of cells: " << empty_tree.max_num_cells() << std::endl;
+    std::cout << "Max number of inner cells: " << empty_tree.max_num_inner_cells() << std::endl;
     for(int i = 0; i < 63; i++)
-      vcl_cout << i << " depth: " << empty_tree.depth_at(i) << " parent: "
-                << empty_tree.parent_index(i) << " left most child: " << empty_tree.child_index(i) << " cell_len: " << empty_tree.cell_len(i) * bstm_time_tree::tree_range()  << " cell_center: " << empty_tree.cell_center(i) << vcl_endl;
+      std::cout << i << " depth: " << empty_tree.depth_at(i) << " parent: "
+                << empty_tree.parent_index(i) << " left most child: " << empty_tree.child_index(i) << " cell_len: " << empty_tree.cell_len(i) * bstm_time_tree::tree_range()  << " cell_center: " << empty_tree.cell_center(i) << std::endl;
 
     //-------------------------------------------------------------
     //Test get bit_at functionality
@@ -49,7 +50,7 @@ void test_time_tree()
     for (int i=0; i<31; i++) {
       good = good && (tree.bit_at(i) == bits[i]);
       if (!good)
-        vcl_cout<<i << " ";
+        std::cout<<i << " ";
     }
     TEST("Easy test, get bits works ", true, good);
 
@@ -71,7 +72,7 @@ void test_time_tree()
     for (int i=0; i<31; i++) {
       good = good && (tree2.bit_at(i) == bits2[i]);
       if (!good)
-        vcl_cout<<i << " ";
+        std::cout<<i << " ";
     }
     TEST("Hard case, get bits works ", true, good);
 
@@ -84,7 +85,7 @@ void test_time_tree()
       tree.set_bit_at(i,tmp);
       good = good && (tree.bit_at(i) == bits[i]);
       if (!good)
-        vcl_cout<<i << " ";
+        std::cout<<i << " ";
     }
     TEST("Easy case, set bits works ", true, good);
 
@@ -97,7 +98,7 @@ void test_time_tree()
       tree2.set_bit_at(i,(tmp) ? 0 : 1);
       good = good && (tree2.bit_at(i) != bits2[i]);
       if (!good)
-        vcl_cout<<i << " " ;
+        std::cout<<i << " " ;
     }
     TEST("Harder case, set bits works ", true, good);
 
@@ -166,7 +167,7 @@ void test_time_tree()
     TEST("Num cells works ", true, good);
 
 
-    vcl_vector<int> leaves  = tree.get_leaf_bits(0);
+    std::vector<int> leaves  = tree.get_leaf_bits(0);
     good = true;
     good = good && (leaves[0] == 7);
     good = good && (leaves[1] == 8);

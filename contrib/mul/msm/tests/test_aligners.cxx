@@ -4,6 +4,8 @@
 //  Copyright: (C) 2010 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -15,11 +17,11 @@
 #include <msm/msm_rigid_aligner.h>
 #include <msm/msm_similarity_aligner.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 void test_generic_aligner(const msm_aligner& aligner)
 {
-  vcl_cout<<"Testing "<<aligner.is_a()<<vcl_endl;
+  std::cout<<"Testing "<<aligner.is_a()<<std::endl;
 
   // Set up a square
   msm_points points0(4);
@@ -55,24 +57,24 @@ void test_generic_aligner(const msm_aligner& aligner)
   aligner.calc_transform_wt(points0,points1,wts,pose1);
   TEST_NEAR("calc_transform_wt",(pose1-pose0).rms(),0.0,1e-6);
 
-  vcl_cout<<"Testing varying weights"<<vcl_endl;
+  std::cout<<"Testing varying weights"<<std::endl;
   for (unsigned i=0;i<points0.size();++i) wts[i]*=(1+i);
   pose1.fill(0.0);
   aligner.calc_transform_wt(points0,points1,wts,pose1);
   TEST_NEAR("calc_transform_wt",(pose1-pose0).rms(),0.0,1e-6);
 
   pose1.fill(0.0);
-  vcl_vector<msm_wt_mat_2d> wt_mat(points0.size());
+  std::vector<msm_wt_mat_2d> wt_mat(points0.size());
   aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
   TEST_NEAR("calc_transform_wt_mat",(pose1-pose0).rms(),0.0,1e-6);
 
-  vcl_cout<<"Testing varying weight mats"<<vcl_endl;
+  std::cout<<"Testing varying weight mats"<<std::endl;
   for (unsigned i=0;i<points0.size();++i) wt_mat[i]*=(1+i);
   pose1.fill(0.0);
   aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
   TEST_NEAR("calc_transform_wt_mat",(pose1-pose0).rms(),0.0,1e-6);
 
-  vcl_cout<<"Set one point incorrect, then ignore with zero wt"<<vcl_endl;
+  std::cout<<"Set one point incorrect, then ignore with zero wt"<<std::endl;
   points1.set_point(3, 77,83);
   wts[3]=0;
   wt_mat[3]*=0.0;
@@ -96,7 +98,7 @@ void test_generic_aligner(const msm_aligner& aligner)
 
 //: Create set of shapes to align
 //  Creates a quadrilateral
-void create_shapes(vcl_vector<msm_points>& shapes)
+void create_shapes(std::vector<msm_points>& shapes)
 {
   unsigned n=10;
   msm_points points(4);
@@ -128,7 +130,7 @@ void test_translation_aligner()
   points1.set_point(0, 3,0);
   points1.set_point(1, 0,2);
 
-  vcl_vector<msm_wt_mat_2d> wt_mat(2);
+  std::vector<msm_wt_mat_2d> wt_mat(2);
   wt_mat[0].set_axes(1,0, 10, 0);   // Constrain along x
   wt_mat[1].set_axes(0,1, 10, 0);   // Constrain along y.
 
@@ -155,43 +157,43 @@ void test_zoom_aligner()
   points1.set_point(1, 4,0);
   points1.set_point(2, 0,3);
 
-  vcl_vector<msm_wt_mat_2d> wt_mat(3);
+  std::vector<msm_wt_mat_2d> wt_mat(3);
   wt_mat[0].set_axes(1,0, 10, 0);   // Constrain along x
   wt_mat[1].set_axes(1,0, 10, 0);   // Constrain along x.
   wt_mat[2].set_axes(0,1, 10, 0);   // Constrain along y.
 
   vnl_vector<double> pose1;
   aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
-  TEST_NEAR("wt_mat scale",pose1[0],vcl_log(2.0),1e-6);
+  TEST_NEAR("wt_mat scale",pose1[0],std::log(2.0),1e-6);
   TEST_NEAR("wt_mat x trans",pose1[1],2,1e-6);
   TEST_NEAR("wt_mat y trans",pose1[2],1,1e-6);
 
-  vcl_vector<msm_points> shapes;
+  std::vector<msm_points> shapes;
   create_shapes(shapes);
 
   msm_points ref_mean_shape;
-  vcl_vector<vnl_vector<double> > poses;
+  std::vector<vnl_vector<double> > poses;
   vnl_vector<double> average_pose;
-  aligner.align_set(shapes,ref_mean_shape,poses,average_pose);
+  aligner.align_set(shapes,ref_mean_shape,poses,average_pose,msm_aligner::first_shape);
 
-  vcl_cout<<"Aligned mean: "<<ref_mean_shape<<vcl_endl;
+  std::cout<<"Aligned mean: "<<ref_mean_shape<<std::endl;
 
   // Test orthogonality of aligned shape
   ref_mean_shape=shapes[0];
   aligner.normalise_shape(ref_mean_shape);
-  vcl_cout<<"mean scale: "<<ref_mean_shape.scale()<<vcl_endl;
+  std::cout<<"mean scale: "<<ref_mean_shape.scale()<<std::endl;
   aligner.calc_transform_from_ref(ref_mean_shape,shapes[3],pose1);
   msm_points points2;
   aligner.apply_transform(shapes[3],aligner.inverse(pose1),points2);
-  vcl_cout<<"Dot1: "<<dot_product(ref_mean_shape.vector(),
-                                  points2.vector())<<vcl_endl
-          <<"mean scale: "<<points2.scale()<<vcl_endl;
+  std::cout<<"Dot1: "<<dot_product(ref_mean_shape.vector(),
+                                  points2.vector())<<std::endl
+          <<"mean scale: "<<points2.scale()<<std::endl;
 }
 
 //=======================================================================
 void test_rigid_aligner()
 {
-  vcl_cout<<"==============================="<<vcl_endl;
+  std::cout<<"==============================="<<std::endl;
   msm_rigid_aligner aligner;
   test_generic_aligner(aligner);
 /*
@@ -206,31 +208,31 @@ void test_rigid_aligner()
   points1.set_point(1, 4,0);
   points1.set_point(2, 0,3);
 
-  vcl_vector<msm_wt_mat_2d> wt_mat(3);
+  std::vector<msm_wt_mat_2d> wt_mat(3);
   wt_mat[0].set_axes(1,0, 10, 0);   // Constrain along x
   wt_mat[1].set_axes(1,0, 10, 0);   // Constrain along x.
   wt_mat[2].set_axes(0,1, 10, 0);   // Constrain along y.
 
   vnl_vector<double> pose1;
   aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
-  TEST_NEAR("wt_mat orientation",pose1[0],vcl_log(2.0),1e-6);
+  TEST_NEAR("wt_mat orientation",pose1[0],std::log(2.0),1e-6);
   TEST_NEAR("wt_mat x trans",pose1[1],2,1e-6);
   TEST_NEAR("wt_mat y trans",pose1[2],1,1e-6);
 */
-  vcl_vector<msm_points> shapes;
+  std::vector<msm_points> shapes;
   create_shapes(shapes);
 
   msm_points ref_mean_shape;
-  vcl_vector<vnl_vector<double> > poses;
+  std::vector<vnl_vector<double> > poses;
   vnl_vector<double> average_pose;
-  aligner.align_set(shapes,ref_mean_shape,poses,average_pose);
+  aligner.align_set(shapes,ref_mean_shape,poses,average_pose,msm_aligner::first_shape);
 
-  vcl_cout<<"Aligned mean: "<<ref_mean_shape<<vcl_endl;
+  std::cout<<"Aligned mean: "<<ref_mean_shape<<std::endl;
 }
 
 
 double msm_wt_mat_diff(const msm_points& pts0, const msm_points& pts1,
-                       const vcl_vector<msm_wt_mat_2d>& wt)
+                       const std::vector<msm_wt_mat_2d>& wt)
 {
   double error=0.0;
   for (unsigned i=0;i<pts0.size();++i)
@@ -258,7 +260,7 @@ void test_similarity_aligner()
   points1.set_point(1, 2,0);
   points1.set_point(2, 0,2);
 
-  vcl_vector<msm_wt_mat_2d> wt_mat(3);
+  std::vector<msm_wt_mat_2d> wt_mat(3);
   wt_mat[0].set_axes(1,0, 1,1);
   wt_mat[1].set_axes(1,1, 0, 10);   // Constrain along (1,1)
   wt_mat[2].set_axes(1,1, 0, 10);   // Constrain along (1,1)
@@ -271,7 +273,7 @@ void test_similarity_aligner()
   TEST_NEAR("wt_mat x trans",pose1[2],2,1e-6);
   TEST_NEAR("wt_mat y trans",pose1[3],2,1e-6);
   aligner.apply_transform(points0,pose1,points2);
-  vcl_cout<<"Transformed points: "<<points2<<vcl_endl;
+  std::cout<<"Transformed points: "<<points2<<std::endl;
 
   points1.set_point(0, 3,1);
   points1.set_point(1, 2,0);
@@ -279,8 +281,8 @@ void test_similarity_aligner()
   wt_mat[0].set_axes(1,0, 100,  100);
   wt_mat[1].set_axes(1,1, 0, 100);   // Constrain to lie along (1,1)
   wt_mat[2].set_axes(1,1, 0, 100);   // Constrain to lie along (1,1)
-  vcl_cout<<points0<<vcl_endl
-          <<points1<<vcl_endl;
+  std::cout<<points0<<std::endl
+          <<points1<<std::endl;
 
   aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
   TEST_NEAR("wt_mat a",pose1[0]+1,2,1e-6);
@@ -288,20 +290,20 @@ void test_similarity_aligner()
   TEST_NEAR("wt_mat x trans",pose1[2],3,1e-6);
   TEST_NEAR("wt_mat y trans",pose1[3],1,1e-6);
   aligner.apply_transform(points0,pose1,points2);
-  vcl_cout<<"Transformed points: "<<points2<<vcl_endl;
+  std::cout<<"Transformed points: "<<points2<<std::endl;
 
   double error=msm_wt_mat_diff(points1,points2,wt_mat);
-  vcl_cout<<"Wtd Error: "<<error<<vcl_endl;
+  std::cout<<"Wtd Error: "<<error<<std::endl;
 
-  vcl_vector<msm_points> shapes;
+  std::vector<msm_points> shapes;
   create_shapes(shapes);
 
   msm_points ref_mean_shape;
-  vcl_vector<vnl_vector<double> > poses;
+  std::vector<vnl_vector<double> > poses;
   vnl_vector<double> average_pose;
-  aligner.align_set(shapes,ref_mean_shape,poses,average_pose);
+  aligner.align_set(shapes,ref_mean_shape,poses,average_pose,msm_aligner::first_shape);
 
-  vcl_cout<<"Aligned mean: "<<ref_mean_shape<<vcl_endl;
+  std::cout<<"Aligned mean: "<<ref_mean_shape<<std::endl;
 
   // Test orthogonality of aligned shape
   ref_mean_shape=shapes[0];
@@ -317,7 +319,7 @@ void test_similarity_aligner()
 
 void test_aligners()
 {
-  vcl_cout << "**********************\n"
+  std::cout << "**********************\n"
            << " Testing msm_aligners\n"
            << "**********************\n";
 

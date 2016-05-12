@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_color_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -14,7 +16,7 @@
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_new.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 namespace boxm2_ocl_update_color_process_globals
 {
@@ -27,7 +29,7 @@ bool boxm2_ocl_update_color_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_color_process_globals;
 
   //process takes 8 inputs (of which the three last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -38,11 +40,11 @@ bool boxm2_ocl_update_color_process_cons(bprb_func_process& pro)
   input_types_[7] = "bool";                         //do_update_alpha/don't update alpha
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   //set defaults inputs
-  brdb_value_sptr idx         = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx         = new brdb_value_t<std::string>("");
   brdb_value_sptr updateAlpha = new brdb_value_t<bool>(true);
   pro.set_input(5, idx);
   pro.set_input(6, idx);
@@ -54,7 +56,7 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_color_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -65,15 +67,15 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr   opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(argIdx++);
   vpgl_camera_double_sptr   cam = pro.get_input<vpgl_camera_double_sptr>(argIdx++);
   vil_image_view_base_sptr  img = pro.get_input<vil_image_view_base_sptr>(argIdx++);
-  vcl_string in_identifier = pro.get_input<vcl_string>(argIdx++);
-  vcl_string mask_filename = pro.get_input<vcl_string>(argIdx++);
+  std::string in_identifier = pro.get_input<std::string>(argIdx++);
+  std::string mask_filename = pro.get_input<std::string>(argIdx++);
   bool       updateAlpha   = pro.get_input<bool>(argIdx++);
 
   //make sure this image small enough (or else carve it into image pieces)
-  const vcl_size_t MAX_PIXELS = 16777216;
+  const std::size_t MAX_PIXELS = 16777216;
   if (img->ni()*img->nj() > MAX_PIXELS) {
-    vcl_size_t sni = RoundUp(img->ni(), 16);
-    vcl_size_t snj = RoundUp(img->nj(), 16);
+    std::size_t sni = RoundUp(img->ni(), 16);
+    std::size_t snj = RoundUp(img->nj(), 16);
     unsigned int numSegI = 1;
     unsigned int numSegJ = 1;
     while ( sni*snj*4 > MAX_PIXELS ) {
@@ -90,13 +92,13 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
     for (unsigned int i=0; i<=numSegI; ++i) {
       for (unsigned int j=0; j<=numSegJ; ++j) {
         //make sure the view doesn't extend past the original image
-        vcl_size_t startI = (vcl_size_t) i * sni;
-        vcl_size_t startJ = (vcl_size_t) j * snj;
-        vcl_size_t endI = vcl_min(startI + sni, (vcl_size_t) img->ni());
-        vcl_size_t endJ = vcl_min(startJ + snj, (vcl_size_t) img->nj());
+        std::size_t startI = (std::size_t) i * sni;
+        std::size_t startJ = (std::size_t) j * snj;
+        std::size_t endI = std::min(startI + sni, (std::size_t) img->ni());
+        std::size_t endJ = std::min(startJ + snj, (std::size_t) img->nj());
         if (endI <= startI || endJ <= startJ)
           break;
-        vcl_cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<vcl_endl;
+        std::cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<std::endl;
         vil_image_view_base_sptr view = ir->get_copy_view(startI, endI-startI, startJ, endJ-startJ);
 
         //run update

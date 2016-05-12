@@ -7,7 +7,8 @@
 // \file
 // \brief A simple object to test a container.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 class vbl_test_array_x
 {
@@ -19,10 +20,10 @@ class vbl_test_array_x
   vbl_test_array_x(int a, int b) : x_(a + b) { }
   vbl_test_array_x(float a, float b) : x_(a + b) { }
   vbl_test_array_x(double a, double b) : x_(a + b) { }
-  void method() const { vcl_cout << '[' << x_ << ']' << '\n' << vcl_flush; }
+  void method() const { std::cout << '[' << x_ << ']' << '\n' << std::flush; }
   bool operator==(vbl_test_array_x const& y) const { return x_ == y.x(); }
 };
 
-inline vcl_ostream& operator<<(vcl_ostream& is, vbl_test_array_x const& a) { return is << a.x(); }
-inline vcl_istream& operator>>(vcl_istream& is, vbl_test_array_x & a) { double d; is >> d; a.set_x(d); return is;}
+inline std::ostream& operator<<(std::ostream& is, vbl_test_array_x const& a) { return is << a.x(); }
+inline std::istream& operator>>(std::istream& is, vbl_test_array_x & a) { double d; is >> d; a.set_x(d); return is;}
 #endif

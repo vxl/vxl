@@ -7,6 +7,8 @@
 // See wx_xrc_frame.h for details.
 //=========================================================================
 
+#include <iostream>
+#include <cstdlib>
 #include "wx_xrc_frame.h"
 #include <wx/xrc/xmlres.h>
 
@@ -27,8 +29,7 @@
 
 #include <vgui/wx/wxSliderPanel.h>
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for std::exit()
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -65,7 +66,7 @@ class vgui_wx_observer: public vgui_observer
     frame->move_point(p->data()[0], p->data()[1]);
 
     int i = *static_cast<const int*>(m.data);
-    vgui::out << "updated index "<<i << vcl_endl;
+    vgui::out << "updated index "<<i << std::endl;
   }
   wx_xrc_frame* frame;
 };
@@ -90,27 +91,27 @@ wx_xrc_frame::wx_xrc_frame(wxWindow* parent,
 
   wxWindow* w = this->FindWindow(wxT("vgui_adaptor"));
   if (!w) {
-    vcl_cout << "could not find vgui_adaptor" << vcl_endl;
-    vcl_exit(-1);
+    std::cout << "could not find vgui_adaptor" << std::endl;
+    std::exit(-1);
   }
   canvas_ = dynamic_cast<vgui_wx_adaptor*>(w);
   if (!canvas_) {
-    vcl_cout << "In valid widget type for vgui adaptor" << vcl_endl;
-    vcl_exit(-1);
+    std::cout << "In valid widget type for vgui adaptor" << std::endl;
+    std::exit(-1);
   }
   this->SetSize(wxSize(600,400));
 
   w = this->FindWindow(wxT("slider_panel"));
   if (!w) {
-    vcl_cout << "could not find slider panel" << vcl_endl;
-    vcl_exit(-1);
+    std::cout << "could not find slider panel" << std::endl;
+    std::exit(-1);
   }
   sliders_ = dynamic_cast<wxSliderPanel*>(w);
   if (!sliders_) {
-    vcl_cout << "In valid widget type for slider panel" << vcl_endl;
-    vcl_exit(-1);
+    std::cout << "In valid widget type for slider panel" << std::endl;
+    std::exit(-1);
   }
-  vcl_vector<double> min_vals, max_vals, init_vals;
+  std::vector<double> min_vals, max_vals, init_vals;
   min_vals.push_back(1.0);
   min_vals.push_back(5.0);
   max_vals.push_back(300.0);

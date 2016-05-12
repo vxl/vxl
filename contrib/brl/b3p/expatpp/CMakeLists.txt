@@ -1,24 +1,22 @@
 #This is brl/b3p/expatpp
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF( EXPAT_FOUND )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if( EXPAT_FOUND )
 
-  IF( VXL_USING_NATIVE_EXPAT )
-    INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
-  ELSE( VXL_USING_NATIVE_EXPAT )
-    INCLUDE_DIRECTORIES( ${BRL_BINARY_DIR}/b3p/expat )
-  ENDIF( VXL_USING_NATIVE_EXPAT )
+  if( VXL_USING_NATIVE_EXPAT )
+    include_directories( ${EXPAT_INCLUDE_DIR} )
+  else()
+    include_directories( ${BRL_BINARY_DIR}/b3p/expat )
+  endif()
 
-  SET( expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
+  set( expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
 
-  ADD_LIBRARY( expatpp ${expatpp_sources} )
-  TARGET_LINK_LIBRARIES( expatpp ${EXPAT_LIBRARIES} )
+  vxl_add_library(LIBRARY_NAME expatpp LIBRARY_SOURCES ${expatpp_sources} )
+  target_link_libraries( expatpp ${EXPAT_LIBRARIES} )
 
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
+  endif()
 
-  INSTALL_TARGETS(/lib expatpp)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/b3p/expatpp/ ${expatpp_sources})
 
-ENDIF( EXPAT_FOUND )
+endif()

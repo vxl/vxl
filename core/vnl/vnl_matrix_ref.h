@@ -19,6 +19,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
+#include "vnl/vnl_export.h"
 
 //: vnl_matrix reference to user-supplied storage
 //    vnl_matrix_ref is a vnl_matrix for which the data space has been
@@ -35,7 +36,7 @@
 //    operator new, and are therefore unlikely to be the unwitting subject
 //    of an operator delete.
 template <class T>
-class vnl_matrix_ref : public vnl_matrix<T>
+class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
 {
   typedef vnl_matrix<T> Base;
 
@@ -64,7 +65,7 @@ class vnl_matrix_ref : public vnl_matrix<T>
   }
 
   ~vnl_matrix_ref() {
-    Base::data[0] = 0; // Prevent base dtor from releasing our memory
+    Base::data[0] = VXL_NULLPTR; // Prevent base dtor from releasing our memory
   }
 
   //: Reference to self to make non-const temporaries.
@@ -82,21 +83,6 @@ class vnl_matrix_ref : public vnl_matrix<T>
   // function. Otherwise, the underlying object will be destructed and
   // you'll be left with undefined behaviour.
   vnl_matrix_ref& non_const() { return *this; }
-
-#if 0
- private:
-  // Private operator new because deleting a pointer to
-  // one of these through a baseclass pointer will attempt
-  // to free this in-class memory.
-  // Therefore disallow newing of these -- if you're paying for
-  // one malloc, you can afford three.
-   // fsm: This was wrong for two reasons:
-   //  1. operator new may not return a null pointer.
-   //  2. it should be enabled for compilers that need it,
-   //     not disabled for compilers that don't need it.
-#include <vcl_new.h>
-  void* operator new(vcl_size_t) { return 0; }
-#endif
 
  private:
   //: Resizing is disallowed

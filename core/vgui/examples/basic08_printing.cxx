@@ -2,7 +2,8 @@
 // an image file.  In the PostScript file all the objects will be saved
 // separately from the image (look inside the .ps file to see what I mean).
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
@@ -17,14 +18,14 @@ static void print_ps()
 {
   // Printing to a post-script file:
   easy2D->print_psfile("kymfile.ps", 1, true);
-  vcl_cout << "Attempting to print to kymfile.ps" << vcl_endl;
+  std::cout << "Attempting to print to kymfile.ps" << std::endl;
 }
 
 static void save_jpg()
 {
   // Saving the OpenGL area as a jpeg image:
   vgui_utils::dump_colour_buffer("kymfile.jpg");
-  vcl_cout << "Attempting to print to kymfile.jpg" << vcl_endl;
+  std::cout << "Attempting to print to kymfile.jpg" << std::endl;
 }
 
 vgui_menu create_menu()
@@ -43,7 +44,7 @@ int main(int argc, char **argv)
   vgui::init(argc, argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line" << vcl_endl;
+    std::cerr << "Please give an image filename on the command line" << std::endl;
      return 1;
   }
 

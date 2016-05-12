@@ -27,8 +27,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <vector>
 #include <mvl/FMatrix.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <vgl/vgl_homg_point_2d.h>
 
@@ -47,29 +49,29 @@ class FMatrixCompute7Point
   // Return false if the calculation fails or there are fewer than seven point
   // matches in the list.
   //
-  bool compute(PairMatchSetCorner&, vcl_vector<FMatrix*>&);
+  bool compute(PairMatchSetCorner&, std::vector<FMatrix*>&);
 
   //: Interface to above using arrays of HomgPoint2D.
   //  Makes a PairMatchSetCorner, and then calls the compute method above.
-  bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, vcl_vector<FMatrix*>&);
+  bool compute(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, std::vector<FMatrix*>&);
 
   //: Interface to above using arrays of vgl_homg_point_2d.
   //  Makes a PairMatchSetCorner, and then calls the compute method with PairMatchSetCorner argument.
-  bool compute(vcl_vector<vgl_homg_point_2d<double> >& points1,
-               vcl_vector<vgl_homg_point_2d<double> >& points2,
-               vcl_vector<FMatrix*>&);
+  bool compute(std::vector<vgl_homg_point_2d<double> >& points1,
+               std::vector<vgl_homg_point_2d<double> >& points2,
+               std::vector<FMatrix*>&);
 
   //: Interface to above using preconditioned points
-  bool compute_preconditioned(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, vcl_vector<FMatrix*>&);
+  bool compute_preconditioned(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, std::vector<FMatrix*>&);
 
   //: Interface to above using preconditioned points
-  bool compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> >& points1,
-                              vcl_vector<vgl_homg_point_2d<double> >& points2,
-                              vcl_vector<FMatrix*>&);
+  bool compute_preconditioned(std::vector<vgl_homg_point_2d<double> >& points1,
+                              std::vector<vgl_homg_point_2d<double> >& points2,
+                              std::vector<FMatrix*>&);
  protected:
-  static vcl_vector<double> GetCoef(FMatrix const& F1, FMatrix const& F2);
-  static vcl_vector<double> solve_quadratic(vcl_vector<double> v);
-  static vcl_vector<double> solve_cubic(vcl_vector<double> v);
+  static std::vector<double> GetCoef(FMatrix const& F1, FMatrix const& F2);
+  static std::vector<double> solve_quadratic(std::vector<double> v);
+  static std::vector<double> solve_cubic(std::vector<double> v);
 
   bool precondition_;
   bool rank2_truncate_;

@@ -1,14 +1,14 @@
 # b3p/minizip/CMakeLists.txt
 # minizip package to zip and unzip files
 
-PROJECT( minizip C )
+project( minizip C )
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
-IF(ZLIB_FOUND)
-  INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
+include( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
+if(ZLIB_FOUND)
+  include_directories( ${ZLIB_INCLUDE_DIR} )
 
 
-SET( minizip_sources
+set( minizip_sources
   crypt.h
   ioapi.c      ioapi.h
   zip.h        zip.c
@@ -16,13 +16,12 @@ SET( minizip_sources
   mztools.c    mztools.h
 )
 
-IF(WIN32)
-  SET( minizip_sources ${minizip_sources}
+if(WIN32)
+  set( minizip_sources ${minizip_sources}
        iowin32.c    iowin32.h)
-ENDIF(WIN32)
+endif()
 
-ADD_LIBRARY( minizip ${minizip_sources} )
+vxl_add_library(LIBRARY_NAME minizip LIBRARY_SOURCES ${minizip_sources} )
 target_link_libraries(minizip z)
-INSTALL_TARGETS( /lib minizip )
 
-ENDIF(ZLIB_FOUND)
+endif()

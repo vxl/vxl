@@ -37,7 +37,7 @@ class vgui_viewer3D_tableau : public vgui_wrapper_tableau, public vgui_drag_mixi
   // vgui_tableau methods
   void draw_before_child();
   virtual bool handle(const vgui_event& event);
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   // Drag mixin methods
   bool key_press(int, int, vgui_key, vgui_modifier);

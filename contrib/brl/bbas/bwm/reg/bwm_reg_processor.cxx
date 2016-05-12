@@ -94,7 +94,7 @@ bool bwm_reg_processor::filter(double model_radius,
 {
   float model_sigma = 1.0f, other_mode_sigma = 1.0f;
   if (!scale(model_image_, other_mode_image_, model_sigma, other_mode_sigma)){
-    vcl_cerr << "In bwm_reg_processor::filter - scale computation failed\n";
+    std::cerr << "In bwm_reg_processor::filter - scale computation failed\n";
     return false;
   }
 
@@ -107,22 +107,22 @@ bool bwm_reg_processor::filter(double model_radius,
                                      model_radius+ proj_error);
 
   if (!success){
-    vcl_cerr << "In bwm_reg_processor::filter - edge detection failed\n";
+    std::cerr << "In bwm_reg_processor::filter - edge detection failed\n";
     return false;
   }
 
-  vcl_vector<vsol_digital_curve_3d_sptr> model_edges_3d;
+  std::vector<vsol_digital_curve_3d_sptr> model_edges_3d;
   if (!model_image_->edges_3d(model_edges_3d)){
-    vcl_cerr << "In bwm_reg_processor::filter - no model edges\n";
+    std::cerr << "In bwm_reg_processor::filter - no model edges\n";
     return false;
   }
 
   bwm_reg_utils::project_edges(model_edges_3d, other_mode_cam_,
                                trans_model_edges_);
 
-  vcl_vector<vsol_digital_curve_2d_sptr> other_edges;
+  std::vector<vsol_digital_curve_2d_sptr> other_edges;
   if (!other_mode_image_->edges_2d(other_edges)){
-    vcl_cerr << "In bwm_reg_processor::filter - no other mode edges\n";
+    std::cerr << "In bwm_reg_processor::filter - no other mode edges\n";
     return false;
   }
 
@@ -131,10 +131,10 @@ bool bwm_reg_processor::filter(double model_radius,
                      roi.cmin(0), roi.rmin(0),
                      roi.csize(0), roi.rsize(0),
                      other_edges);
-  vcl_vector<vsol_digital_curve_2d_sptr> close_edges;
+  std::vector<vsol_digital_curve_2d_sptr> close_edges;
   if (!rm.close_edges(filter_distance, angle_threshold, min_curve_length,
                      close_edges)){
-    vcl_cerr << "In bwm_reg_processor::filter - no close edges\n";
+    std::cerr << "In bwm_reg_processor::filter - no close edges\n";
     return false;
   }
 
@@ -147,7 +147,7 @@ bool bwm_reg_processor::match_edges(int& tcol, int& trow)
 {
   if (!filtered_model_edges_.size())
     if (!model_image_->edges_3d(filtered_model_edges_)){
-      vcl_cerr << "In bwm_reg_processor::match_edges - no model edges\n";
+      std::cerr << "In bwm_reg_processor::match_edges - no model edges\n";
       return false;
     }
 
@@ -155,9 +155,9 @@ bool bwm_reg_processor::match_edges(int& tcol, int& trow)
   bwm_reg_utils::project_edges(filtered_model_edges_, search_cam_,
                                trans_model_edges_);
 
-  vcl_vector<vsol_digital_curve_2d_sptr> search_edges;
+  std::vector<vsol_digital_curve_2d_sptr> search_edges;
   if (!search_image_->edges_2d(search_edges)){
-    vcl_cerr << "In bwm_reg_processor::match_edges - no search edges\n";
+    std::cerr << "In bwm_reg_processor::match_edges - no search edges\n";
     return false;
   }
 
@@ -196,7 +196,7 @@ bool bwm_reg_processor::match(double radius,
 
   float model_sigma = 1.0f, search_sigma = 1.0f;
   if (!scale(model_image_, search_image_, model_sigma, search_sigma)){
-    vcl_cerr << "In bwm_reg_processor::match - scale computation failed\n";
+    std::cerr << "In bwm_reg_processor::match - scale computation failed\n";
     return false;
   }
 
@@ -213,17 +213,17 @@ bool bwm_reg_processor::match(double radius,
                                  radius+ proj_error);
 
   if (!success) {
-    vcl_cerr << "In bwm_reg_processor::match - edge detection failed\n";
+    std::cerr << "In bwm_reg_processor::match - edge detection failed\n";
     return false;
   }
 
   return this->match_edges(tcol, trow);
 }
 
-vcl_vector<vsol_digital_curve_2d_sptr> bwm_reg_processor::search_curves()
+std::vector<vsol_digital_curve_2d_sptr> bwm_reg_processor::search_curves()
 {
-  vcl_vector<vsol_digital_curve_2d_sptr> curves;
+  std::vector<vsol_digital_curve_2d_sptr> curves;
   if (!search_image_->edges_2d(curves))
-    vcl_cerr << "In bwm_reg_processor::search_curves() - no curves\n";
+    std::cerr << "In bwm_reg_processor::search_curves() - no curves\n";
   return curves;
 }

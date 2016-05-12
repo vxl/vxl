@@ -11,13 +11,13 @@ breg3d_zero_occupancy_borders_process::breg3d_zero_occupancy_borders_process()
   // process takes 2 inputs:
   //input[0]: The border size
   //input[2]: The voxel world
-  input_data_.resize(2,brdb_value_sptr(0));
+  input_data_.resize(2,brdb_value_sptr(VXL_NULLPTR));
   input_types_.resize(2);
   input_types_[0] = "unsigned";
   input_types_[1] = "bvxm_voxel_world_sptr";
 
   // process has 0 outputs.
-  output_data_.resize(0,brdb_value_sptr(0));
+  output_data_.resize(0,brdb_value_sptr(VXL_NULLPTR));
   output_types_.resize(0);
 }
 

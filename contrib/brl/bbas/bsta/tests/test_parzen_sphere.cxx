@@ -1,14 +1,15 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_parzen_sphere.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vcl_string.h>
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 // Do not remove the following statement
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //
 template <class T>
-void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
+void test_parzen_sphere_type(T epsilon, const std::string& type_name)
 {
   bool good = bsta_parzen_sphere<T,3>::dimension == 3
            && bsta_parzen_sphere<T,1>::dimension == 1;
@@ -16,7 +17,7 @@ void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
 
   vnl_vector_fixed<T,3> s0(T(1.0), T(2.0), T(3.0));
   vnl_vector_fixed<T,3> s1(T(2.0), T(3.0), T(4.0));
-  vcl_vector<vnl_vector_fixed<T,3> > samples;
+  std::vector<vnl_vector_fixed<T,3> > samples;
   samples.push_back(s0); samples.push_back(s1);
   T bandwidth = T(0.5);
   bsta_parzen_sphere<T,3> parzen;
@@ -43,7 +44,7 @@ void test_parzen_sphere_type(T epsilon, const vcl_string& type_name)
   TEST_NEAR(("probability  <"+type_name+">").c_str(),
             parzen.probability(s0, s1), prob, epsilon);
 
-  vcl_vector<T> ssamps;
+  std::vector<T> ssamps;
   ssamps.push_back(1.0);   ssamps.push_back(2.0);   ssamps.push_back(3.0);
   bsta_parzen_sphere<T,1> sparzen;
   sparzen.set_bandwidth(bandwidth);

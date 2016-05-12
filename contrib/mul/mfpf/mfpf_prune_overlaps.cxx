@@ -8,9 +8,9 @@
 
 //: Find list of poses overlapping given pose
 void mfpf_find_overlaps(mfpf_point_finder& pf,
-                        const vcl_vector<mfpf_pose>& poses,
+                        const std::vector<mfpf_pose>& poses,
                         const mfpf_pose& pose,
-                        vcl_vector<unsigned>& overlaps)
+                        std::vector<unsigned>& overlaps)
 {
   overlaps.resize(0);
   for (unsigned i=0;i<poses.size();++i)
@@ -24,11 +24,11 @@ void mfpf_find_overlaps(mfpf_point_finder& pf,
 //  If it is near one, and its fit is better, then replace it.
 //  Uses pf.overlap() function to check for proximity
 bool mfpf_find_near_pose(mfpf_point_finder& pf,
-                         vcl_vector<mfpf_pose>& poses,
-                         vcl_vector<double>& fits,
+                         std::vector<mfpf_pose>& poses,
+                         std::vector<double>& fits,
                          const mfpf_pose& pose, double fit)
 {
-  vcl_vector<unsigned> index;
+  std::vector<unsigned> index;
   mfpf_find_overlaps(pf,poses,pose,index);
   if (index.size()==0) return false;  // No overlaps
 
@@ -70,8 +70,8 @@ bool mfpf_find_near_pose(mfpf_point_finder& pf,
   if (n_worse==0) return true; // New pose no better than any existing
 
   // Have to generate new lists
-  vcl_vector<mfpf_pose> poses0=poses;
-  vcl_vector<double> fits0=fits;
+  std::vector<mfpf_pose> poses0=poses;
+  std::vector<double> fits0=fits;
   unsigned n1 = poses.size()+1-index.size();
   poses.resize(n1);
   fits.resize(n1);
@@ -102,11 +102,11 @@ bool mfpf_find_near_pose(mfpf_point_finder& pf,
 
 //: Remove any overlapping matching responses (retaining best fit)
 void mfpf_prune_overlaps(mfpf_point_finder& pf,
-                         vcl_vector<mfpf_pose>& poses,
-                         vcl_vector<double>& fits)
+                         std::vector<mfpf_pose>& poses,
+                         std::vector<double>& fits)
 {
-  vcl_vector<mfpf_pose> poses0 = poses;
-  vcl_vector<double> fits0 = fits;
+  std::vector<mfpf_pose> poses0 = poses;
+  std::vector<double> fits0 = fits;
 
   poses.resize(0); fits.resize(0);
 
@@ -123,7 +123,7 @@ void mfpf_prune_overlaps(mfpf_point_finder& pf,
 
 //: Return true if pose overlaps with any of poses
 bool mfpf_any_overlaps(mfpf_point_finder& pf,
-                       const vcl_vector<mfpf_pose>& poses,
+                       const std::vector<mfpf_pose>& poses,
                        const mfpf_pose& pose)
 {
   for (unsigned i=0;i<poses.size();++i)
@@ -137,16 +137,16 @@ bool mfpf_any_overlaps(mfpf_point_finder& pf,
 //:  Sort responses and return list of non-overlapping responses
 //  If max_n>0 then return at most max_n
 void mfpf_prune_and_sort_overlaps(mfpf_point_finder& pf,
-                                  vcl_vector<mfpf_pose>& poses,
-                                  vcl_vector<double>& fits,
+                                  std::vector<mfpf_pose>& poses,
+                                  std::vector<double>& fits,
                                   unsigned max_n)
 {
-  vcl_vector<mfpf_pose> poses0 = poses;
-  vcl_vector<double> fits0 = fits;
+  std::vector<mfpf_pose> poses0 = poses;
+  std::vector<double> fits0 = fits;
 
   poses.resize(0); fits.resize(0);
 
-  vcl_vector<int> index;
+  std::vector<int> index;
   mbl_index_sort(fits0,index);
   for (unsigned i=0;i<index.size();++i)
   {

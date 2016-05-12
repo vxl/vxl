@@ -7,14 +7,16 @@
 // Can either perform leave-some-out experiments on training set, or apply the model
 // to a different set.
 
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
 
 #include <msm/msm_shape_model_builder.h>
@@ -56,10 +58,10 @@ images: {
 
 void print_usage()
 {
-  vcl_cout << "msm_build_shape_model -p param_file -t test_points_list.txt\n"
+  std::cout << "msm_build_shape_model -p param_file -t test_points_list.txt\n"
            << "Builds the shape model from the supplied data, tests on shapes in test_points_list.txt\n"
            << "If no test_points_list.txt provided, performs leave-some-out tests on training data."
-           << vcl_endl;
+           << std::endl;
 
   vul_arg_display_usage_and_exit();
 }
@@ -68,10 +70,10 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  vcl_auto_ptr<msm_aligner> aligner;
+  std::auto_ptr<msm_aligner> aligner;
 
   //: Object to apply limits to parameters
-  vcl_auto_ptr<msm_param_limiter> limiter;
+  std::auto_ptr<msm_param_limiter> limiter;
 
   //: Maximum number of shape modes
   unsigned max_modes;
@@ -81,35 +83,35 @@ struct tool_params
 
   //: Ref. point indices used to define reference length.
   unsigned ref0,ref1;
-  
+
   //: Number of chunks in n-fold cross validation
   unsigned n_chunks;
 
   //: Directory containing images
-  vcl_string image_dir;
+  std::string image_dir;
 
   //: Directory containing points
-  vcl_string points_dir;
+  std::string points_dir;
 
   //: List of image names
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
 
   //: List of points file names
-  vcl_vector<vcl_string> points_names;
+  std::vector<std::string> points_names;
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void tool_params::read_from_file(const vcl_string& path)
+void tool_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -125,17 +127,17 @@ void tool_params::read_from_file(const vcl_string& path)
   n_chunks=vul_string_atoi(props.get_optional_property("n_chunks","10"));
 
   {
-    vcl_string aligner_str
+    std::string aligner_str
        = props.get_required_property("aligner");
-    vcl_stringstream ss(aligner_str);
+    std::stringstream ss(aligner_str);
     aligner = msm_aligner::create_from_stream(ss);
   }
 
   {
-    vcl_string limiter_str
+    std::string limiter_str
        = props.get_optional_property("param_limiter",
                                      "msm_ellipsoid_limiter { accept_prop: 0.98 }");
-    vcl_stringstream ss(limiter_str);
+    std::stringstream ss(limiter_str);
     limiter = msm_param_limiter::create_from_stream(ss);
   }
 
@@ -149,30 +151,30 @@ void tool_params::read_from_file(const vcl_string& path)
 struct image_list_params
 {
   //: Directory containing images
-  vcl_string image_dir;
+  std::string image_dir;
 
   //: Directory containing points
-  vcl_string points_dir;
+  std::string points_dir;
 
   //: List of image names
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
 
   //: List of points file names
-  vcl_vector<vcl_string> points_names;
+  std::vector<std::string> points_names;
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void image_list_params::read_from_file(const vcl_string& path)
+void image_list_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -196,7 +198,7 @@ struct msm_test_stats {
   mbl_stats_1d rel_d_stats;
   //: Stats of mean distance in model reference frame
   mbl_stats_1d ref_d_stats;
-  
+
   //: Stats of residual x in reference frame
   mbl_stats_1d ref_x_stats;
   //: Stats of residual y in reference frame
@@ -215,7 +217,7 @@ void calc_point_distances(const msm_points& points1, // labelled
 
 
 void test_model(const msm_shape_model& shape_model, int n_modes,
-                const vcl_vector<msm_points>& points,
+                const std::vector<msm_points>& points,
                 unsigned ref0, unsigned ref1,
                 msm_test_stats& stats)
 {
@@ -231,7 +233,7 @@ void test_model(const msm_shape_model& shape_model, int n_modes,
   vnl_vector<double> d,inv_pose;
   const msm_aligner& aligner = shape_model.aligner();
   msm_points points_in_ref, dpoints;
-  
+
   for (unsigned i=0;i<points.size();++i)
   {
     sm_inst.fit_to_points(points[i]);
@@ -245,13 +247,13 @@ void test_model(const msm_shape_model& shape_model, int n_modes,
       double ref_d = (points[i][ref0]-points[i][ref1]).length();
       stats.rel_d_stats.obs(100*d.mean()/ref_d);
     }
-    
+
     // Evaluate in the reference frame
     inv_pose=aligner.inverse(sm_inst.pose());
     aligner.apply_transform(points[i],inv_pose,points_in_ref);
     calc_point_distances(sm_inst.model_points(),points_in_ref,d);
     stats.ref_d_stats.obs(d.mean());
-    
+
     dpoints.vector()=points_in_ref.vector()-sm_inst.model_points().vector();
     for (unsigned j=0;j<dpoints.size();++j)
     {
@@ -264,18 +266,18 @@ void test_model(const msm_shape_model& shape_model, int n_modes,
 
 // Perform leave-some-out experiments, chopping data into n_chunks chunks
 void leave_some_out_tests(msm_shape_model_builder& builder,
-                          const vcl_vector<msm_points>& points,
+                          const std::vector<msm_points>& points,
                           unsigned ref0, unsigned ref1,
                           unsigned n_chunks,
-                          vcl_vector<msm_test_stats>& test_stats)
+                          std::vector<msm_test_stats>& test_stats)
 {
   // Arrange to miss out consecutive examples.
   double chunk_size=double(points.size())/n_chunks;
   if (chunk_size<1) return;
-  
+
   for (unsigned ic=0;ic<n_chunks;++ic)
   {
-    vcl_vector<msm_points> trn_set,test_set;
+    std::vector<msm_points> trn_set,test_set;
     for (unsigned i=0;i<points.size();++i)
     {
       if (unsigned(i/chunk_size)==ic) test_set.push_back(points[i]);
@@ -293,8 +295,8 @@ void leave_some_out_tests(msm_shape_model_builder& builder,
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> param_path("-p","Parameter filename");
-  vul_arg<vcl_string> test_list_path("-t","List of points files to test on");
+  vul_arg<std::string> param_path("-p","Parameter filename");
+  vul_arg<std::string> test_list_path("-t","List of points files to test on");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -312,10 +314,10 @@ int main(int argc, char** argv)
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<'\n';
+    std::cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
-  
+
   image_list_params image_list;
   if (test_list_path()!="")
   {
@@ -325,7 +327,7 @@ int main(int argc, char** argv)
     }
     catch (mbl_exception_parse_error& e)
     {
-      vcl_cerr<<"Error: "<<e.what()<<'\n';
+      std::cerr<<"Error: "<<e.what()<<'\n';
       return 1;
     }
   }
@@ -336,19 +338,19 @@ int main(int argc, char** argv)
   builder.set_param_limiter(*params.limiter);
   builder.set_mode_choice(0,params.max_modes,params.var_prop);
 
-  vcl_vector<msm_points> shapes(params.points_names.size());
+  std::vector<msm_points> shapes(params.points_names.size());
   msm_load_shapes(params.points_dir,params.points_names,shapes);
 
-  vcl_vector<msm_test_stats> test_stats(params.max_modes+1);
-  
+  std::vector<msm_test_stats> test_stats(params.max_modes+1);
+
   if (test_list_path()!="")
   {
-    vcl_cout<<"Testing on "<<image_list.points_names.size()<<" examples from "<<test_list_path()<<vcl_endl;
+    std::cout<<"Testing on "<<image_list.points_names.size()<<" examples from "<<test_list_path()<<std::endl;
     msm_shape_model shape_model;
     builder.build_model(shapes,shape_model);
-    vcl_cout<<"Shape Model: "<<shape_model<<vcl_endl;
+    std::cout<<"Shape Model: "<<shape_model<<std::endl;
 
-    vcl_vector<msm_points> test_shapes(image_list.points_names.size());
+    std::vector<msm_points> test_shapes(image_list.points_names.size());
     msm_load_shapes(image_list.points_dir,image_list.points_names,test_shapes);
     // Test with differing numbers of modes
     for (unsigned nm=0;nm<=shape_model.n_modes();++nm)
@@ -358,24 +360,24 @@ int main(int argc, char** argv)
   }
   else
   {
-    vcl_cout<<"Performing "<<params.n_chunks<<"-fold cross validation on "<<shapes.size()<<" examples from training set."<<vcl_endl;
+    std::cout<<"Performing "<<params.n_chunks<<"-fold cross validation on "<<shapes.size()<<" examples from training set."<<std::endl;
     leave_some_out_tests(builder,shapes,params.ref0,params.ref1,params.n_chunks,test_stats);
   }
-  
-  vcl_cout<<"NModes WorldMean   RefMean ";
-  if (params.ref0!=params.ref1) vcl_cout<<"     RelMean(%)";
-  vcl_cout<<"RefXSD RefYSD ";
-  vcl_cout<<vcl_endl;
+
+  std::cout<<"NModes WorldMean   RefMean ";
+  if (params.ref0!=params.ref1) std::cout<<"     RelMean(%)";
+  std::cout<<"RefXSD RefYSD ";
+  std::cout<<std::endl;
   for (unsigned nm=0;nm<test_stats.size();++nm)
   {
     if (test_stats[nm].world_d_stats.nObs()==0) continue;
-    vcl_cout<<nm<<"      "<<test_stats[nm].world_d_stats.mean();
-    vcl_cout<<"    "<<test_stats[nm].ref_d_stats.mean();
+    std::cout<<nm<<"      "<<test_stats[nm].world_d_stats.mean();
+    std::cout<<"    "<<test_stats[nm].ref_d_stats.mean();
     if (params.ref0!=params.ref1)
-      vcl_cout<<"    "<<test_stats[nm].rel_d_stats.mean();
-    vcl_cout<<"    "<<test_stats[nm].ref_x_stats.sd();
-    vcl_cout<<"    "<<test_stats[nm].ref_y_stats.sd();
-    vcl_cout<<vcl_endl;
+      std::cout<<"    "<<test_stats[nm].rel_d_stats.mean();
+    std::cout<<"    "<<test_stats[nm].ref_x_stats.sd();
+    std::cout<<"    "<<test_stats[nm].ref_y_stats.sd();
+    std::cout<<std::endl;
   }
 
   return 0;

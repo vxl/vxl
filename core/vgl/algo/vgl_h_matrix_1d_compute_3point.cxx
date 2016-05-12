@@ -29,8 +29,8 @@ direct_compute(double T[2][2],
 }
 
 bool vgl_h_matrix_1d_compute_3point::
-compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >& points1,
-                  const vcl_vector<vgl_homg_point_1d<double> >& points2,
+compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >& points1,
+                  const std::vector<vgl_homg_point_1d<double> >& points2,
                   vgl_h_matrix_1d<double>& H)
 {
   assert(points1.size() == 3);

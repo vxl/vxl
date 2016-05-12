@@ -26,7 +26,7 @@ class boxm_aux_scene
    typedef  boct_tree<T_loc, T> tree_type;
    typedef  boct_tree<T_loc, T_AUX> aux_tree_type;
    boxm_aux_scene() : aux_scene_(NULL), aux_storage_dir_("") {}
-   boxm_aux_scene(boxm_scene<tree_type>* scene, vcl_string suffix,
+   boxm_aux_scene(boxm_scene<tree_type>* scene, std::string suffix,
                   tree_creation_type type, boxm_apm_type app_model=BOXM_APM_UNKNOWN);
 
    ~boxm_aux_scene(){ /*delete aux_scene_;*/ }
@@ -43,12 +43,12 @@ class boxm_aux_scene
    boct_tree_cell_reader<T_loc, T_AUX >* get_block_incremental(vgl_point_3d<int> block_idx);
 
    void write_active_block() { aux_scene_->write_active_block(); }
-  void unload_active_blocks() { aux_scene_->unload_active_blocks(); } 
+  void unload_active_blocks() { aux_scene_->unload_active_blocks(); }
    void clean_scene();
 
  private:
   boxm_scene<aux_tree_type>* aux_scene_;
-  vcl_string aux_storage_dir_;
+  std::string aux_storage_dir_;
 };
 
 #endif

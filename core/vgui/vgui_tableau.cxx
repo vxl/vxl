@@ -14,12 +14,13 @@
 //   08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
 // \endverbatim
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "vgui_tableau.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_event.h>
@@ -32,7 +33,7 @@
 //------------
 // Every tableau is on this array.
 // It must be a ptr as must live longer than any vgui_tableau_sptr
-static vgui_DLLDATA vcl_vector<vgui_tableau*>* all = 0;
+static vgui_DLLDATA std::vector<vgui_tableau*>* all = VXL_NULLPTR;
 
 //-----------------------------------------------------------------------------
 //: Constructor.
@@ -42,11 +43,11 @@ vgui_tableau::vgui_tableau()
   : references(0)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau constructor: this = " << (void*)this << '\n';
+  std::cerr << "vgui_tableau constructor: this = " << (void*)this << '\n';
 #endif
   // register :
-  if (all == 0) {
-    all = new vcl_vector<vgui_tableau*>;
+  if (all == VXL_NULLPTR) {
+    all = new std::vector<vgui_tableau*>;
   }
   all->push_back(this);
 }
@@ -56,21 +57,21 @@ vgui_tableau::vgui_tableau()
 vgui_tableau::~vgui_tableau()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau destructor : this = " << (void*)this << '\n';
+  std::cerr << "vgui_tableau destructor : this = " << (void*)this << '\n';
 #endif
 
   if (references != 0)
     vgui_macro_warning << "there are still " << references
-                       << " references. this=" << (void*)this << vcl_endl;
+                       << " references. this=" << (void*)this << std::endl;
 
   // deregister :
-  vcl_vector<vgui_tableau*>::iterator i=vcl_find(all->begin(), all->end(), this);
+  std::vector<vgui_tableau*>::iterator i=std::find(all->begin(), all->end(), this);
   assert(i != all->end());
   all->erase(i);
   if (all->size() == 0)
   {
     delete all;
-    all = 0;
+    all = VXL_NULLPTR;
   }
 }
 
@@ -126,7 +127,7 @@ bool vgui_tableau::handle(vgui_event const &event)
 bool vgui_tableau::mouse_down(int, int, vgui_button, vgui_modifier)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau::mouse_down\n";
+  std::cerr << "vgui_tableau::mouse_down\n";
 #endif
   return false;
 }
@@ -136,7 +137,7 @@ bool vgui_tableau::mouse_down(int, int, vgui_button, vgui_modifier)
 bool vgui_tableau::mouse_up(int, int, vgui_button, vgui_modifier)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau::mouse_up\n";
+  std::cerr << "vgui_tableau::mouse_up\n";
 #endif
   return false;
 }
@@ -146,7 +147,7 @@ bool vgui_tableau::mouse_up(int, int, vgui_button, vgui_modifier)
 bool vgui_tableau::motion(int, int)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau::motion\n";
+  std::cerr << "vgui_tableau::motion\n";
 #endif
   return false;
 }
@@ -156,7 +157,7 @@ bool vgui_tableau::motion(int, int)
 bool vgui_tableau::key_press(int, int, vgui_key, vgui_modifier)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau::key_press\n";
+  std::cerr << "vgui_tableau::key_press\n";
 #endif
   return false;
 }
@@ -166,7 +167,7 @@ bool vgui_tableau::key_press(int, int, vgui_key, vgui_modifier)
 bool vgui_tableau::help()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau::help\n";
+  std::cerr << "vgui_tableau::help\n";
 #endif
   return false;
 }
@@ -176,7 +177,7 @@ bool vgui_tableau::help()
 bool vgui_tableau::draw()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau::draw\n";
+  std::cerr << "vgui_tableau::draw\n";
 #endif
   return false;
 }
@@ -185,7 +186,7 @@ bool vgui_tableau::draw()
 bool vgui_tableau::idle()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tableau::idle\n";
+  std::cerr << "vgui_tableau::idle\n";
 #endif
   return false; // no idle processing
 }
@@ -204,7 +205,7 @@ bool vgui_tableau::get_bounding_box(float /*low*/[3], float /*high*/[3]) const
 //: Post a message event.
 void vgui_tableau::post_message(char const *msg, void const *data)
 {
-  vcl_vector<vgui_tableau_sptr> ps;
+  std::vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
   for (unsigned i=0; i<ps.size(); ++i)
     ps[i]->post_message(msg, data);
@@ -214,7 +215,7 @@ void vgui_tableau::post_message(char const *msg, void const *data)
 //: Post a draw event.
 void vgui_tableau::post_redraw()
 {
-  vcl_vector<vgui_tableau_sptr> ps;
+  std::vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
   for (unsigned i=0; i<ps.size(); ++i)
     ps[i]->post_redraw();
@@ -224,7 +225,7 @@ void vgui_tableau::post_redraw()
 //: Post an overlay redraw event.
 void vgui_tableau::post_overlay_redraw()
 {
-  vcl_vector<vgui_tableau_sptr> ps;
+  std::vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
   for (unsigned i=0; i<ps.size(); ++i)
     ps[i]->post_overlay_redraw();
@@ -234,7 +235,7 @@ void vgui_tableau::post_overlay_redraw()
 //-----------------------------------------------------------------------------
 void vgui_tableau::post_idle_request()
 {
-  vcl_vector<vgui_tableau_sptr> ps;
+  std::vector<vgui_tableau_sptr> ps;
   get_parents(&ps);
   for (unsigned i=0; i<ps.size(); ++i)
     ps[i]->post_idle_request();
@@ -245,7 +246,7 @@ void vgui_tableau::post_idle_request()
 //: Return the name of the most derived (tableau) class.
 //  Virtual. This ought never to be called as derived classes should
 //  implement type_name().
-vcl_string vgui_tableau::type_name() const
+std::string vgui_tableau::type_name() const
 {
   static bool warned=false;
   if (!warned) {
@@ -256,15 +257,15 @@ vcl_string vgui_tableau::type_name() const
 }
 
 //-----------------------------------------------------------------------------
-//: Push parents onto the given vcl_vector.
-void vgui_tableau::get_parents(vcl_vector<vgui_tableau_sptr> *v) const
+//: Push parents onto the given std::vector.
+void vgui_tableau::get_parents(std::vector<vgui_tableau_sptr> *v) const
 {
   vgui_parent_child_link::get_parents_of(const_cast<vgui_tableau*>(this),v);
 }
 
 //-----------------------------------------------------------------------------
-//: Push children onto the given vcl_vector.
-void vgui_tableau::get_children(vcl_vector<vgui_tableau_sptr> *v) const
+//: Push children onto the given std::vector.
+void vgui_tableau::get_children(std::vector<vgui_tableau_sptr> *v) const
 {
   vgui_parent_child_link::get_children_of(const_cast<vgui_tableau*>(this),v);
 }
@@ -273,7 +274,7 @@ void vgui_tableau::get_children(vcl_vector<vgui_tableau_sptr> *v) const
 //: Get the ith child, or return 0.
 vgui_tableau_sptr vgui_tableau::get_child(unsigned i) const
 {
-  vcl_vector<vgui_tableau_sptr> children;
+  std::vector<vgui_tableau_sptr> children;
   get_children(&children);
   return i<children.size() ? children[i] : vgui_tableau_sptr();
 }
@@ -332,7 +333,7 @@ void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 
   if (params.nested) { // nested menu style.
     // get list of children of this tableau.
-    vcl_vector<vgui_tableau_sptr> children;
+    std::vector<vgui_tableau_sptr> children;
     get_children(&children);
 
     if (params.defaults && !children.empty())
@@ -350,7 +351,7 @@ void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu)
       menu.include(submenu);
 
     if (params.recurse) {
-      vcl_vector<vgui_tableau_sptr> children;
+      std::vector<vgui_tableau_sptr> children;
       get_children(&children);
 
       for (unsigned i=0; i<children.size(); ++i)
@@ -363,17 +364,17 @@ void vgui_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 //-----------------------------------------------------------------------------
 //: Prints pretty name and address of tableau.
 //  eg : pig.jpg[vgui_composite:0xeffff728]
-vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t)
+std::ostream &operator<<(std::ostream &os, vgui_tableau_sptr const &t)
 {
   if (t)
     return os << t->pretty_name() << '[' << t->type_name() << ':' << static_cast<const void*>(t.operator->()) << ']';
   else
-    return os << "(empty vgui_tableau_sptr)" << vcl_flush;
+    return os << "(empty vgui_tableau_sptr)" << std::flush;
 }
 
 //-----------------------------------------------------------------------------
 //: Push all tableaux onto the given vector.
-void vgui_tableau::get_all(vcl_vector<vgui_tableau_sptr> *v)
+void vgui_tableau::get_all(std::vector<vgui_tableau_sptr> *v)
 {
   //v->insert(v->begin(), all->begin(), all->end());
   for (unsigned i=0; i<all->size(); ++i)
@@ -384,5 +385,5 @@ void vgui_tableau::get_all(vcl_vector<vgui_tableau_sptr> *v)
 //: Returns true if the given address points to a valid tableau.
 bool vgui_tableau::exists(vgui_tableau_sptr const& ptr)
 {
-  return vcl_find(all->begin(), all->end(), ptr.operator->()) != all->end();
+  return std::find(all->begin(), all->end(), ptr.operator->()) != all->end();
 }

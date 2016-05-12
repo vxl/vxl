@@ -7,15 +7,15 @@
 #include <vgl/vgl_homg_point_2d.h>
 
 
-rrel_homography2d_est_aff :: rrel_homography2d_est_aff( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
-                                                        const vcl_vector< vgl_homg_point_2d<double> > & to_pts )
+rrel_homography2d_est_aff :: rrel_homography2d_est_aff( const std::vector< vgl_homg_point_2d<double> > & from_pts,
+                                                        const std::vector< vgl_homg_point_2d<double> > & to_pts )
   : rrel_homography2d_est( from_pts, to_pts, 6)
 {
     // Do nothing here
 }
 
-rrel_homography2d_est_aff :: rrel_homography2d_est_aff( const vcl_vector< vnl_vector<double> > & from_pts,
-                                                        const vcl_vector< vnl_vector<double> > & to_pts )
+rrel_homography2d_est_aff :: rrel_homography2d_est_aff( const std::vector< vnl_vector<double> > & from_pts,
+                                                        const std::vector< vnl_vector<double> > & to_pts )
   : rrel_homography2d_est( from_pts, to_pts, 6)
 {
     // Do nothing here

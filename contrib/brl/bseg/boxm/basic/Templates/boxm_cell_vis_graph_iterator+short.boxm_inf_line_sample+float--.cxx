@@ -1,5 +1,5 @@
-#include <boxm/basic/boxm_cell_vis_graph_iterator.txx>
-#include <boct/boct_tree.txx>
+#include <boxm/basic/boxm_cell_vis_graph_iterator.hxx>
+#include <boct/boct_tree.hxx>
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <vgl/io/vgl_io_point_3d.h>
 

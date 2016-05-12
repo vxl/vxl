@@ -20,7 +20,7 @@
 //    ConditionListBody( fmt, typ );
 //    ConditionListFail
 //    {
-//       vcl_cerr << "don't know " << fmt << " and " << typ << "\n";
+//       std::cerr << "don't know " << fmt << " and " << typ << "\n";
 //       return false;
 //    }
 //
@@ -42,7 +42,7 @@
 //      ...
 // } else
 // {
-//   vcl_cerr << "don't know " << fmt << " and " << typ << "\n";
+//   std::cerr << "don't know " << fmt << " and " << typ << "\n";
 //   return false;
 // }
 // \endcode

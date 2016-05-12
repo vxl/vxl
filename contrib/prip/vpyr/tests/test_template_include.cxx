@@ -1,7 +1,7 @@
-#include <vpyr/vpyr_2_pyramid_level.txx>
-#include <vpyr/vpyr_2_pyramid.txx>
-#include <vpyr/vpyr_2_tpyramid_level.txx>
-#include <vpyr/vpyr_2_tpyramid.txx>
-#include <vpyr/vpyr_top_tmap.txx>
+#include <vpyr/vpyr_2_pyramid_level.hxx>
+#include <vpyr/vpyr_2_pyramid.hxx>
+#include <vpyr/vpyr_2_tpyramid_level.hxx>
+#include <vpyr/vpyr_2_tpyramid.hxx>
+#include <vpyr/vpyr_top_tmap.hxx>
 
 int main() { return 0; }
