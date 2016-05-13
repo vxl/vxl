@@ -32,8 +32,6 @@ extern "C" {
 #elif LIBAVFORMAT_BUILD < ((56<<16)+(6<<8)+1) // before ver 56.6.1
 # pragma message("FFMPEG is NOT supported for LIBAVFORMTAT version between 54.4.1 and 56.6.1")
 # include "vidl_ffmpeg_istream_stub.hxx"
-#elif LIBAVFORMAT_VERSION_MAJOR < 56            // before avformat ver 57.0
-# include "vidl_ffmpeg_istream_v2.5.hxx"
 #else
 # include "vidl_ffmpeg_istream_v56.hxx"
 #endif
