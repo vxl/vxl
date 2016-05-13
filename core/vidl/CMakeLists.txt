@@ -89,7 +89,6 @@ if( FFMPEG_FOUND )
                                      vidl_ffmpeg_ostream_v4.hxx
       vidl_ffmpeg_istream_v0.9.hxx   vidl_ffmpeg_ostream_v0.9.hxx
                                      vidl_ffmpeg_ostream_v0.11.hxx
-      vidl_ffmpeg_istream_v2.5.hxx   vidl_ffmpeg_ostream_v2.5.hxx
       vidl_ffmpeg_istream_v56.hxx    vidl_ffmpeg_ostream_v56.hxx
       vidl_ffmpeg_pixel_format.h     vidl_ffmpeg_pixel_format.cxx
      )

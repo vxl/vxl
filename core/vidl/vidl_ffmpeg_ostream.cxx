@@ -35,10 +35,8 @@ extern "C" {
 #elif LIBAVCODEC_BUILD < ((56<<16)+(0<<8)+100)  // before ver 56.0.100
 # pragma message("FFMPEG is NOT supported for LIBAVCODEC version between 55.28.1 and 56.0.100")
 # include "vidl_ffmpeg_ostream_stub.hxx"
-#elif LIBAVCODEC_BUILD < ((56<<16)+(5<<8)+2) // before ver 56.5.2
-# include "vidl_ffmpeg_ostream_v56.hxx"
 #else
-# include "vidl_ffmpeg_ostream_v2.5.hxx"
+# include "vidl_ffmpeg_ostream_v56.hxx"
 #endif
 
 #else // VIDL_HAS_FFMPEG

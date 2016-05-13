@@ -8,11 +8,12 @@
 #include "vidl_ffmpeg_pixel_format.h"
 //:
 // \file
+// \author Johan Andruejol
 // \author Gehua Yang
 // \author Matt Leotta
 // \author Amitha Perera
 // \author David Law
-// \date   5 Jan 2015
+// \date   6 April 2015
 //
 // Update implementation based on FFMPEG release version 2.8.4
 //
@@ -30,8 +31,10 @@ extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
 #include <libavformat/avformat.h>
 #include <libavutil/imgutils.h>
+#include <libavutil/opt.h>
 #else
 #include <ffmpeg/avformat.h>
+#include <ffmpeg/opt.h>
 #endif
 }
 
@@ -44,13 +47,15 @@ struct vidl_ffmpeg_ostream::pimpl
   : fmt_cxt_( 0 ),
   file_opened_( false ),
   codec_opened_( false ),
-  cur_frame_( 0 )
+  cur_frame_( 0 ),
+  video_rc_eq_( NULL )
   { }
 
   AVFormatContext* fmt_cxt_;
   bool file_opened_;
   bool codec_opened_;
   unsigned int cur_frame_;
+  char* video_rc_eq_;
 };
 
 
@@ -330,16 +335,15 @@ open()
   }
   video_enc->qmin = params_.video_qmin_;
   video_enc->qmax = params_.video_qmax_;
-  video_enc->lmin = params_.video_lmin_;
-  video_enc->lmax = params_.video_lmax_;
+  av_opt_set_int(video_enc, "lmin", params_.video_lmin_, AV_OPT_SEARCH_CHILDREN);
+  av_opt_set_int(video_enc, "lmax", params_.video_lmax_, AV_OPT_SEARCH_CHILDREN);
   video_enc->max_qdiff = params_.video_qdiff_;
   video_enc->qblur = params_.video_qblur_;
   video_enc->qcompress = params_.video_qcomp_;
 
   // delete when the stream is closed
-  //os_->video_rc_eq_ = new char[params_.video_rc_eq_.length()+1];
-  //std::strcpy(os_->video_rc_eq_, params_.video_rc_eq_.c_str());
-  //video_enc->rc_eq = os_->video_rc_eq_;
+  os_->video_rc_eq_ = new char[params_.video_rc_eq_.length() + 1];
+  av_opt_set(video_enc, "video_rc_eq_", params_.video_rc_eq_.c_str(), AV_OPT_SEARCH_CHILDREN);
 
   video_enc->debug = params_.debug_;
   video_enc->debug_mv = params_.debug_mv_;
@@ -347,9 +351,8 @@ open()
 
   video_enc->rc_max_rate = params_.video_rc_max_rate_;
   video_enc->rc_min_rate = params_.video_rc_min_rate_;
-  video_enc->rc_buffer_size = params_.video_rc_buffer_size_;
-  video_enc->rc_buffer_aggressivity= params_.video_rc_buffer_aggressivity_;
-  video_enc->rc_initial_cplx= params_.video_rc_initial_cplx_;
+  av_opt_set_double(video_enc, "rc_buffer_aggressivity", params_.video_rc_buffer_aggressivity_, AV_OPT_SEARCH_CHILDREN);
+  av_opt_set_double(video_enc, "rc_initial_cplx", params_.video_rc_initial_cplx_, AV_OPT_SEARCH_CHILDREN);
   video_enc->i_quant_factor = params_.video_i_qfactor_;
   video_enc->b_quant_factor = params_.video_b_qfactor_;
   video_enc->i_quant_offset = params_.video_i_qoffset_;
@@ -358,17 +361,15 @@ open()
   video_enc->inter_quant_bias = params_.video_inter_quant_bias_;
   video_enc->dct_algo = params_.dct_algo_;
   video_enc->idct_algo = params_.idct_algo_;
-  video_enc->me_threshold= params_.me_threshold_;
-  video_enc->mb_threshold= params_.mb_threshold_;
-  video_enc->intra_dc_precision= params_.intra_dc_precision_ - 8;
+  video_enc->intra_dc_precision = params_.intra_dc_precision_ - 8;
   video_enc->strict_std_compliance = params_.strict_;
-  video_enc->error_rate = params_.error_rate_;
-  video_enc->noise_reduction= params_.noise_reduction_;
-  video_enc->scenechange_threshold= params_.sc_threshold_;
+  av_opt_set_double(video_enc, "error_rate", params_.error_rate_, AV_OPT_SEARCH_CHILDREN);
+  video_enc->noise_reduction = params_.noise_reduction_;
+  video_enc->scenechange_threshold = params_.sc_threshold_;
   video_enc->me_range = params_.me_range_;
-  video_enc->coder_type= params_.coder_;
-  video_enc->context_model= params_.context_;
-  video_enc->prediction_method= params_.predictor_;
+  video_enc->coder_type = params_.coder_;
+  video_enc->context_model = params_.context_;
+  video_enc->prediction_method = params_.predictor_;
 
   if (params_.do_psnr_)
     video_enc->flags|= CODEC_FLAG_PSNR;
