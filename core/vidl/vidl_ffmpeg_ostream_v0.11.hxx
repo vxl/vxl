@@ -304,14 +304,25 @@ open()
   {
     video_enc->flags |= CODEC_FLAG_QPEL;
   }
+
   if (params_.use_qprd_)
   {
+#if defined CODEC_FLAG_QP_RD
     video_enc->flags |= CODEC_FLAG_QP_RD;
+#else
+    std::cerr << "WARNING: global parameter 'use_qprd_' no longer support by FFMPEG" << std::endl;
+#endif
   }
+
   if (params_.use_cbprd_)
   {
+#if defined CODEC_FLAG_CBP_RD
     video_enc->flags |= CODEC_FLAG_CBP_RD;
+#else
+    std::cerr << "WARNING: global parameter 'use_cbprd__' no longer support by FFMPEG" << std::endl;
+#endif
   }
+
   if (params_.b_frames_)
   {
     video_enc->max_b_frames = params_.b_frames_;
@@ -356,17 +367,17 @@ open()
   video_enc->inter_quant_bias = params_.video_inter_quant_bias_;
   video_enc->dct_algo = params_.dct_algo_;
   video_enc->idct_algo = params_.idct_algo_;
-  video_enc->me_threshold= params_.me_threshold_;
-  video_enc->mb_threshold= params_.mb_threshold_;
-  video_enc->intra_dc_precision= params_.intra_dc_precision_ - 8;
+  video_enc->me_threshold = params_.me_threshold_;
+  video_enc->mb_threshold = params_.mb_threshold_;
+  video_enc->intra_dc_precision = params_.intra_dc_precision_ - 8;
   video_enc->strict_std_compliance = params_.strict_;
   video_enc->error_rate = params_.error_rate_;
-  video_enc->noise_reduction= params_.noise_reduction_;
-  video_enc->scenechange_threshold= params_.sc_threshold_;
+  video_enc->noise_reduction = params_.noise_reduction_;
+  video_enc->scenechange_threshold = params_.sc_threshold_;
   video_enc->me_range = params_.me_range_;
-  video_enc->coder_type= params_.coder_;
-  video_enc->context_model= params_.context_;
-  video_enc->prediction_method= params_.predictor_;
+  video_enc->coder_type = params_.coder_;
+  video_enc->context_model = params_.context_;
+  video_enc->prediction_method = params_.predictor_;
 
   if (params_.do_psnr_)
     video_enc->flags|= CODEC_FLAG_PSNR;

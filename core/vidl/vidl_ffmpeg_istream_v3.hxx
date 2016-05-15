@@ -40,12 +40,14 @@ struct vidl_ffmpeg_istream::pimpl
   pimpl()
   : fmt_cxt_( NULL ),
     vid_index_( -1 ),
+    data_index_( -1 ),
     vid_str_( NULL ),
     last_dts( 0 ),
     frame_( NULL ),
     num_frames_( -2 ), // sentinel value to indicate not yet computed
     sws_context_( NULL ),
     cur_frame_( NULL ),
+    metadata_( 0 ),
     deinterlace_( false ),
     frame_number_offset_( 0 )
   {
@@ -54,6 +56,7 @@ struct vidl_ffmpeg_istream::pimpl
 
   AVFormatContext* fmt_cxt_;
   int vid_index_;
+  int data_index_;
   AVStream* vid_str_;
 
   //: Decode time of last frame.
@@ -90,6 +93,9 @@ struct vidl_ffmpeg_istream::pimpl
 
   //: The last successfully decoded frame.
   mutable vidl_frame_sptr cur_frame_;
+
+  //: the buffer of metadata from the data stream
+  std::deque<vxl_byte> metadata_;
 
   //: Apply deinterlacing on the frames?
   bool deinterlace_;
@@ -148,13 +154,17 @@ open(const std::string& filename)
     return false;
   }
 
-  // Find a video stream. Use the first one we find.
+  // Find a video stream, and optionally a data stream.
+  // Use the first ones we find.
   is_->vid_index_ = -1;
+  is_->data_index_ = -1;
   for ( unsigned i = 0; i < is_->fmt_cxt_->nb_streams; ++i ) {
     AVCodecContext *enc = is_->fmt_cxt_->streams[i]->codec;
-    if ( enc->codec_type == AVMEDIA_TYPE_VIDEO ) {
+    if ( enc->codec_type == AVMEDIA_TYPE_VIDEO && is_->vid_index_ < 0) {
       is_->vid_index_ = i;
-      break;
+    }
+    else if( enc->codec_type == AVMEDIA_TYPE_DATA && is_->data_index_ < 0) {
+      is_->data_index_ = i;
     }
   }
   if ( is_->vid_index_ == -1 ) {
@@ -212,6 +222,8 @@ close()
   is_->num_frames_ = -2;
   is_->contig_memory_ = 0;
   is_->vid_index_ = -1;
+  is_->data_index_ = -1;
+  is_->metadata_.clear();
   if ( is_->vid_str_ ) {
     avcodec_close( is_->vid_str_->codec );
     is_->vid_str_ = 0;
@@ -392,6 +404,9 @@ advance()
 
   int got_picture = 0;
 
+  // clear the metadata from the previous frame
+  is_->metadata_.clear();
+
   while ( got_picture == 0 ) {
     if ( av_read_frame( is_->fmt_cxt_, &is_->packet_ ) < 0 ) {
       break;
@@ -409,6 +424,11 @@ advance()
       }
       else
         break; // without freeing the packet
+    }
+    // grab the metadata from this packet if from the metadata stream
+    else if (is_->packet_.stream_index==is_->data_index_)
+    {
+      is_->metadata_.insert( is_->metadata_.end(), is_->packet_.data, is_->packet_.data+is_->packet_.size);
     }
     av_free_packet( &is_->packet_ );
   }
@@ -584,5 +604,46 @@ seek_frame(unsigned int frame)
     }
   }
 }
+
+
+//: Return the raw metadata bytes obtained while reading the current frame.
+//  This deque will be empty if there is no metadata stream
+//  Metadata is often encoded as KLV,
+//  but no attempt to decode KLV is made here
+std::deque<vxl_byte>
+vidl_ffmpeg_istream::
+current_metadata()
+{
+  return is_->metadata_;
+}
+
+
+//: Return true if the video also has a metadata stream
+bool
+vidl_ffmpeg_istream::
+has_metadata() const
+{
+  return is_open() && is_->data_index_ >= 0;
+}
+
+
+double
+vidl_ffmpeg_istream::
+current_pts() const
+{
+  return 0.0;
+}
+
+
+//: Return the current video packet's data, is used to get
+//  video stream embeded metadata.
+//  Not implemented for this version.
+std::vector<vxl_byte>
+vidl_ffmpeg_istream::
+current_packet_data() const
+{
+  return std::vector<vxl_byte>();
+}
+
 
 #endif // vidl_ffmpeg_istream_v3_hxx_
