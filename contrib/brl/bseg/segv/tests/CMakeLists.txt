@@ -1,5 +1,4 @@
 # brl/bbas/bseg/segv/tests/CMakeLists.txt
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR})
 include_directories( ${BRL_INCLUDE_DIR})
 

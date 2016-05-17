@@ -7,7 +7,6 @@ doxygen_add_library(core/vsl
 
 set(vsl_sources
   vsl_fwd.h
-  vsl_export.h
   vsl_binary_io.cxx vsl_binary_io.h
   vsl_binary_explicit_io.h
   vsl_binary_loader_base.cxx vsl_binary_loader_base.h
@@ -35,8 +34,17 @@ set(vsl_sources
 
 aux_source_directory(Templates vsl_sources)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vsl LIBRARY_SOURCES ${vsl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl )
+set(CURR_LIB_NAME vsl)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
+)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

@@ -8,7 +8,6 @@ if( PYTHON_FOUND )
     include_directories( ${BRL_INCLUDE_DIR}/bpro )
     include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
 
-    include_directories( ${VXLCORE_INCLUDE_DIR} )
     include_directories( ${GEL_INCLUDE_DIR}/mrc )
     include_directories( ${GEL_INCLUDE_DIR}/mrc/vpgl )
     include_directories( ${MUL_INCLUDE_DIR} )

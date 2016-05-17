@@ -23,7 +23,7 @@ vxl_configure_file( ${CMAKE_CURRENT_LIST_DIR}/vidl_config.h.in
 
 if( FFMPEG_FOUND )
   # Mark FFMPEG is found.  In future we can even export
-  # FFMPEG setting for external use. 
+  # FFMPEG setting for external use.
   SET(CORE_VIDEO_FFMPEG_FOUND ON CACHE INTERNAL "FFMPEG library has been found and is used in vidl")
   include_directories(${FFMPEG_INCLUDE_DIR})
 endif()
@@ -54,7 +54,6 @@ endif()
 
 set(vidl_sources
     vidl_pixel_format.h           vidl_pixel_format.cxx
-	vidl_export.h
     vidl_color.h                  vidl_color.cxx
     vidl_frame.h                  vidl_frame.cxx           vidl_frame_sptr.h
     vidl_pixel_iterator.h         vidl_pixel_iterator.cxx
@@ -126,7 +125,6 @@ if(VIDEODEV_FOUND)
    set(vidl_sources ${vidl_sources}
        vidl_v4l_params.h   vidl_v4l_params.cxx
        vidl_v4l_istream.h  vidl_v4l_istream.cxx
-       vidl_v4l_ulong_fix.h
       )
 endif()
 
@@ -142,7 +140,16 @@ endif()
 
 aux_source_directory(Templates vidl_sources)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vidl LIBRARY_SOURCES ${vidl_sources})
+set(CURR_LIB_NAME vidl)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
+)
 
 target_link_libraries( ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
 if( FFMPEG_FOUND )

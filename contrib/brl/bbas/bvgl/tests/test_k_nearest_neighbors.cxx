@@ -77,10 +77,21 @@ static void test_k_nearest_neighbors()
   if(good){
     vcl_cout << "K neighbors\n" << k_neighbors << '\n';
     vgl_point_3d<double> nb(1.0, 0.0, 0.0);
-        d = (nb-k_neighbors.p(4)).length();
-        TEST_NEAR("k neighbors", d, 0.0, 0.001);
-    }else
-        TEST("k neighbors", true, false);
+    d = (nb-k_neighbors.p(4)).length();
+    TEST_NEAR("k neighbors", d, 0.0, 0.001);
+  } else {
+    TEST("k neighbors", true, false);
+  }
+
+  // test index retrieval
+  vnl_vector<int> k_indices;
+  good = knn3d.knn_indices(q, k, k_indices);
+  if(good) {
+    vcl_cout << "K neighbor indices\n" << k_indices << '\n';
+    TEST_EQUAL("k indices", k_indices[4], 4);
+  } else {
+    TEST("k indices", true, false);
+  }
 #endif
 }
 

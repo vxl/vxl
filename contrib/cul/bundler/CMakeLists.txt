@@ -7,7 +7,6 @@ doxygen_add_library(contrib/cul/bundler
   DESCRIPTION "Structure-from-Motion Pipeline. Based off Noah Snavely's Bundler, more info at phototour.cs.washington.edu/bundler/"
   )
 
-include_directories(${VXLCORE_INCLUDE_DIR})
 include_directories(${VXL_CUL_INCLUDE_DIR})
 
 include_directories(${GEL_INCLUDE_DIR})

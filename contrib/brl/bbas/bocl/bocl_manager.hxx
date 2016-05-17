@@ -35,6 +35,7 @@ T& bocl_manager<T>::instance()
    * constructor.
    **/
   static T instance_;
+  T::instantiated_=true;
   return instance_;
 }
 
@@ -42,6 +43,9 @@ T& bocl_manager<T>::instance()
 template <class T>
 void bocl_manager<T>::clear_cl()
 {
+  this->curr_device_ = VXL_NULLPTR;
+  this->cpus_.clear();
+  this->gpus_.clear();
 }
 
 //: Destructor
@@ -367,6 +371,9 @@ bool bocl_manager<T>::create_buffer(void** buffer,std::string type, int elm_size
   }
   return true;
 }
+
+template<class T>
+bool bocl_manager<T>::instantiated_=false;
 
 #undef BOCL_MANAGER_INSTANTIATE
 #define BOCL_MANAGER_INSTANTIATE(T) \

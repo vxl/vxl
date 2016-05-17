@@ -16,7 +16,7 @@
 //
 // \verbatim
 //  Modifications
-//   none
+//  dec: Factored out rigid transform computation to vgl_compute_rigid_3d
 // \endverbatim
 
 #include <vector>

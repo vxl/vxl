@@ -13,6 +13,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
+#include "vgl_compute_rigid_3d.h"
 
 template <class T>
 vgl_compute_similarity_3d<T>::
@@ -91,44 +92,15 @@ bool vgl_compute_similarity_3d<T>::estimate()
   center_points(pts1, t1);
   center_points(pts2, t2);
 
-
   T s1, s2;
-  scale_points(pts1, s1);
   scale_points(pts2, s2);
+  scale_points(pts1, s1);
   scale_ = s1/s2;
 
-  // estimate rotation
-  vnl_matrix<T> M(3,3,0.0);
-  for (unsigned i=0; i<pts1.size(); ++i)
-  {
-    vgl_point_3d<T>& p1 = pts1[i];
-    vgl_point_3d<T>& p2 = pts2[i];
-    M(0,0) += p1.x()*p2.x();
-    M(0,1) += p1.x()*p2.y();
-    M(0,2) += p1.x()*p2.z();
-    M(1,0) += p1.y()*p2.x();
-    M(1,1) += p1.y()*p2.y();
-    M(1,2) += p1.y()*p2.z();
-    M(2,0) += p1.z()*p2.x();
-    M(2,1) += p1.z()*p2.y();
-    M(2,2) += p1.z()*p2.z();
-  }
+  vgl_compute_rigid_3d<T> rigid_comp(pts1, pts2);
+  rigid_comp.estimate();
 
-  vnl_matrix<T> N(4,4);
-  N(0,0) =   M(0,0) - M(1,1) - M(2,2);
-  N(1,1) = - M(0,0) + M(1,1) - M(2,2);
-  N(2,2) = - M(0,0) - M(1,1) + M(2,2);
-  N(3,3) =   M(0,0) + M(1,1) + M(2,2);
-  N(0,1) = N(1,0) = M(0,1) + M(1,0);
-  N(0,2) = N(2,0) = M(2,0) + M(0,2);
-  N(1,2) = N(2,1) = M(1,2) + M(2,1);
-  N(3,0) = N(0,3) = M(1,2) - M(2,1);
-  N(3,1) = N(1,3) = M(2,0) - M(0,2);
-  N(3,2) = N(2,3) = M(0,1) - M(1,0);
-
-  vnl_svd<T> svd(N);
-  vnl_double_4 q(svd.V().get_column(0));
-  rotation_ = vgl_rotation_3d<T>(vnl_quaternion<T>(q));
+  rotation_ = rigid_comp.rotation();
   translation_ = (scale_*(rotation_*t1) - t2);
 
   return true;

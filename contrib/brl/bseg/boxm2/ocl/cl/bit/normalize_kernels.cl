@@ -96,7 +96,30 @@ __kernel void normalize_render_depth_kernel(__global float * exp_img,
     var_img[imindex]=var;
 }
 #endif
+#ifdef NORMALIZE_HEIGHT_MAP
+__kernel void normalize_render_depth_kernel(__global float * exp_img,
+                                            __global float * var_img,
+                                            __global float* prob_img,
+                                            __global uint4* imgdims)
+{
+    int i = 0, j = 0;
+    i = get_global_id(0);
+    j = get_global_id(1);
+    int imindex = j*get_global_size(0) + i;
 
+    // check to see if the thread corresponds to an actual pixel as in some
+    // cases #of threads will be more than the pixels.
+    if (i >= (*imgdims).z || j >= (*imgdims).w)
+        return;
+    //normalize image with respect to visibility
+    float prob = prob_img[imindex];
+    float mean = exp_img[imindex];// (1 - max(0.000001, prob));
+    float var = var_img[imindex]- mean*mean; // (1 - max(0.000001, prob)) - mean*mean);
+
+    exp_img[imindex] = mean ;
+    var_img[imindex] = var ;
+}
+#endif
 #ifdef NORMALIZE_RENDER_GL
 __kernel void normalize_render_kernel_gl(__global uint * exp_img,
                                          __global float* vis_img,

@@ -24,7 +24,7 @@ double vgl_vector_3d<T>::length() const
 template <class T>
 vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s) const
 {
-  VXL_DEPRECATED("vgl_vector_3d<T>::orthogonal_vectors(double s)");
+  VXL_DEPRECATED_MACRO("vgl_vector_3d<T>::orthogonal_vectors(double s)");
   return ::orthogonal_vectors(*this, s);
 }
 

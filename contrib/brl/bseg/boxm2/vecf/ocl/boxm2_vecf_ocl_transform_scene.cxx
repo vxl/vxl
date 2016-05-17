@@ -791,13 +791,15 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
    bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL (INTERP) FAILED: " + error_to_string(status));
    if(!good_kern)
      return false;
-   mog_target_->read_to_buffer(queue_);
-   alpha_target_->read_to_buffer(queue_);
-   if(rgb_target_ && rgb_source){
-     rgb_target_->read_to_buffer(queue_);
+   if(finish){
+     mog_target_->read_to_buffer(queue_);
+     alpha_target_->read_to_buffer(queue_);
+     if(rgb_target_ && rgb_source){
+       rgb_target_->read_to_buffer(queue_);
+     }
+     //   output_->read_to_buffer(queue_);
+     status = clFinish(queue_);
    }
-   //   output_->read_to_buffer(queue_);
-   status = clFinish(queue_);
    trans_interp_trilin_kern->clear_args();
    // float* cpu_buff = (float*) output_f->cpu_buffer();
    // int out_count = 0;

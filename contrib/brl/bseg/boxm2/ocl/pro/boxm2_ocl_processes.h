@@ -107,4 +107,12 @@ DECLARE_FUNC_CONS(boxm2_ocl_ingest_label_with_cam_process);
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_depth_process);
 DECLARE_FUNC_CONS(boxm2_ocl_refine_scene_around_geometry_process);
 DECLARE_FUNC_CONS(boxm2_ocl_filter_scene_data_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_image_factor_process);
+DECLARE_FUNC_CONS(boxm2_ocl_fuse_factors_process);
+DECLARE_FUNC_CONS(boxm2_ocl_compute_pre_post_process);
+DECLARE_FUNC_CONS(boxm2_ocl_compute_height_factor_process);
+DECLARE_FUNC_CONS(boxm2_ocl_update_heightmap_factor_process);
+DECLARE_FUNC_CONS(boxm2_ocl_init_prob_uniform_process);
+DECLARE_FUNC_CONS(boxm2_ocl_remove_low_nobs_process);
+
 #endif

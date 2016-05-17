@@ -38,7 +38,7 @@ struct boxm2_scene_info
   int      scene_dims[4];            // number of blocks in each dimension
   float    block_len;                // size of each block (can only be 1 number now that we've established blocks are cubes)
   float    epsilon;                  // block_len/100.0 (placed here to avoid using a register)
-
+  float    pinit;
   // tree meta information
   int      root_level;               // root_level of trees
   int      num_buffer;               // number of buffers (both data and tree)

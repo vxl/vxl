@@ -25,7 +25,6 @@ set( BRL_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR}/bmods )
 # This is identical to BRL_CMAKE_DIR.  Perhaps we should eliminate BRL_MODULE_PATH?
 set( BRL_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/bmods )
 
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR} )
 
 # basic services package

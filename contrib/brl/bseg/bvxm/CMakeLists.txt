@@ -1,4 +1,3 @@
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${GEL_INCLUDE_DIR})
 include_directories( ${GEL_INCLUDE_DIR}/mrc )
 include_directories( ${MUL_INCLUDE_DIR} )

@@ -10,6 +10,7 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_tolerance.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vcl_cassert.h>
 
 //-------------------------------------------
@@ -181,6 +182,21 @@ backproject( const vgl_homg_point_2d<T>& image_point ) const
     std::cout << "Warning vpgl_affine_camera::backproject produced line at infinity\n";
   return ret;
 }
+
+template <class T>
+vgl_ray_3d<T> vpgl_affine_camera<T>::
+backproject_ray( const vgl_homg_point_2d<T>& image_point ) const
+{
+  vgl_homg_line_3d_2_points<T> line = backproject( image_point );
+  return vgl_ray_3d<T>(vgl_point_3d<T>(line.point_finite()), ray_dir_);
+}
+
+template <class T>
+vpgl_affine_camera<T>* vpgl_affine_camera<T>::clone(void) const
+{
+  return new vpgl_affine_camera<T>(*this);
+}
+
 
 //: Find the world plane parallel to the image plane intersecting the camera center.
 template <class T>

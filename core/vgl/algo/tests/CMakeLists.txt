@@ -4,6 +4,7 @@ add_executable( vgl_algo_test_all
   test_driver.cxx
 
   test_compute_similarity_3d.cxx
+  test_compute_rigid_3d.cxx
   test_conic.cxx
   test_convex_hull_2d.cxx
   test_ellipsoid.cxx
@@ -24,6 +25,7 @@ add_executable( vgl_algo_test_all
 target_link_libraries( vgl_algo_test_all ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vgl_test_compute_similarity_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_compute_similarity_3d )
+add_test( NAME vgl_test_compute_rigid_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_compute_rigid_3d )
 add_test( NAME vgl_test_conic COMMAND $<TARGET_FILE:vgl_algo_test_all> test_conic )
 add_test( NAME vgl_test_convex_hull_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_convex_hull_2d)
 add_test( NAME vgl_test_ellipsoid COMMAND $<TARGET_FILE:vgl_algo_test_all> test_ellipsoid)

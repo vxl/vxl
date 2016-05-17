@@ -145,6 +145,7 @@ vidl_ffmpeg_istream
   return vidl_frame_sptr();
 }
 
+
 vidl_frame_sptr
 vidl_ffmpeg_istream
 ::current_frame()
@@ -158,6 +159,38 @@ vidl_ffmpeg_istream
 ::seek_frame(unsigned int /* frame_nr */)
 {
   return false;
+}
+
+
+std::deque<vxl_byte>
+vidl_ffmpeg_istream
+::current_metadata()
+{
+  return std::deque<vxl_byte>();
+}
+
+
+bool
+vidl_ffmpeg_istream
+::has_metadata() const
+{
+  return false;
+}
+
+
+double
+vidl_ffmpeg_istream::
+current_pts() const
+{
+  return 0.0;
+}
+
+
+std::vector<vxl_byte>
+vidl_ffmpeg_istream::
+current_packet_data() const
+{
+  return std::vector<vxl_byte>();
 }
 
 #endif // vidl_ffmpeg_istream_stub_hxx_

@@ -9,8 +9,8 @@
 boxm2_opencl_cache::boxm2_opencl_cache(bocl_device_sptr device)
 : bytesInCache_(0), block_info_(VXL_NULLPTR), device_(device)
 {
-  // store max bytes allowed in cache - use only 80 percent of the memory
-  maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * 0.7);
+  // store max bytes allowed in cache - use only 70 percent of the memory
+  maxBytesInCache_ = (std::size_t) (device->info().total_global_memory_ * 0.7);
 
   // by default try to create an LRU cache
 
@@ -527,7 +527,7 @@ void boxm2_opencl_cache::deep_remove_data(boxm2_scene_sptr scene, boxm2_block_id
   }
 
   //remove from cpu_cache_
-  cpu_cache_->remove_data_base(scene, id, type);
+  cpu_cache_->remove_data_base(scene, id, type, write_out);
 #if 0
   remove from lru_order
   std::list<boxm2_block_id>::iterator loc = std::find(lru_order_.begin(), lru_order_.end(), id);

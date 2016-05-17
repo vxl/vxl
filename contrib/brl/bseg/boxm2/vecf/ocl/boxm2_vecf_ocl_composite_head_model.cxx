@@ -1,14 +1,14 @@
 #include "boxm2_vecf_ocl_composite_head_model.h"
 // #include "boxm2_vecf_eye_params.h"
 
-boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( std::string const& head_model_path, std::string const& eye_model_path,bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache)
-  : boxm2_vecf_ocl_head_model(head_model_path,device,opencl_cache),
+    boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( std::string const& head_model_path, std::string const& eye_model_path,bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache,bool optimize)
+    : boxm2_vecf_ocl_head_model(head_model_path,device,opencl_cache,optimize),
+
   params_()
 {
 #ifdef USE_ORBIT_CL
   right_orbit_= boxm2_vecf_ocl_orbit_scene(eye_model_path,device,opencl_cache,false,true);
   left_orbit_= boxm2_vecf_ocl_orbit_scene(eye_model_path,device,opencl_cache,false);
-  optimize_= true;
 #else
     right_orbit_= boxm2_vecf_orbit_scene(eye_model_path,false,true);
     left_orbit_= boxm2_vecf_orbit_scene(eye_model_path,false);
@@ -96,3 +96,14 @@ void boxm2_vecf_ocl_composite_head_model::update_gpu_target(boxm2_scene_sptr tar
 
   } // for each target block
 }
+// void boxm2_vecf_ocl_composite_head_model::inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts) {
+// }
+// int boxm2_vecf_ocl_composite_head_model::prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) {
+//   return true;
+// }
+// bool boxm2_vecf_ocl_composite_head_model::inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) {
+//   return true;
+// }
+// bool boxm2_vecf_ocl_composite_head_model::apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) {
+//   return true;
+// }

@@ -26,7 +26,7 @@
 #include <vcl_compiler.h>
 
 FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
-                                         bool debug_, char *devname)
+                                         bool debug_, const char * const devname)
   : current(0), width(width_), height(height_), debug(debug_)
 {
   if (debug)

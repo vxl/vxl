@@ -1,7 +1,6 @@
 # bpgl/algo/CMakeLists.txt
 # Photogrammetry Algorithms Library.
 
-include_directories(${VXLCORE_INCLUDE_DIR})
 include_directories( ${GEL_INCLUDE_DIR} )
 
 set( bpgl_algo_sources

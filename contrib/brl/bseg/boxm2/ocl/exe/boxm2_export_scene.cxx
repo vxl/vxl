@@ -189,8 +189,12 @@ int main(int argc,  char** argv)
     std::ofstream cam_file_stream(camstream.str().c_str());
     // determine increment along azimuth and elevation (incline)
     double az_incr = vnl_math::twopi/num_az();
-    double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
-    el_incr = el_incr * vnl_math::pi_over_180;  // radians
+    double el_incr = 0;
+    if (num_in() > 1) 
+    {
+       el_incr = (incline_0() - incline_1()) / (num_in() - 1); //degrees (to include both start and end)
+       el_incr = el_incr * vnl_math::pi_over_180;  // radians
+    }
     for (unsigned int el_i = 0.0; el_i < num_in(); ++el_i)
     {
         double el = vnl_math::pi_over_180 * incline_0() - el_i * el_incr;

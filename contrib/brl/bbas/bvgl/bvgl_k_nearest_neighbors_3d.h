@@ -11,6 +11,8 @@
 #include <bnabo/bnabo.h>
 #include <vcl_iosfwd.h>
 #include <vcl_limits.h>
+#include <algorithm> // for std::swap
+
 template <class Type>
 class bvgl_k_nearest_neighbors_3d
 {
@@ -25,6 +27,21 @@ class bvgl_k_nearest_neighbors_3d
       delete search_tree_;
     search_tree_ = 0;
   }
+  //: copy constructor
+  bvgl_k_nearest_neighbors_3d(bvgl_k_nearest_neighbors_3d const& other) :
+    tolerance_(other.tolerance_), ptset_(other.ptset_),
+    search_tree_(0)
+  {
+    // create handles init of M_ and search_tree_, and flags_
+    create();
+  }
+  //: assignment operator
+  bvgl_k_nearest_neighbors_3d& operator = (bvgl_k_nearest_neighbors_3d rhs)
+  {
+    swap(*this, rhs);
+    return *this;
+  }
+
   //: create search tree
   // use this method if adding a pointset to an existing default k_nearest_neighbors instance
   bool create();
@@ -39,6 +56,9 @@ class bvgl_k_nearest_neighbors_3d
   //: find k nearest neighbors. if the source pointset has normals they are included in the returned pointset
   bool knn(vgl_point_3d<Type> const& p, unsigned k, vgl_pointset_3d<Type>& neighbors) const;
 
+  //: find the indices of the k closest neighbors.
+  bool knn_indices(vgl_point_3d<Type> const& p, unsigned k, vnl_vector<int> &indices) const;
+
   //: accessors provide efficient access to a single pointset copy
   const vgl_pointset_3d<Type>& const_ptset() const {return ptset_;}
   vgl_pointset_3d<Type>& ptset(){return ptset_;}
@@ -46,6 +66,18 @@ class bvgl_k_nearest_neighbors_3d
     ptset_ = ptset;
     this->create();
   }
+
+  //: swap the two objects (used as part of "copy and swap" idiom)
+  friend void swap(bvgl_k_nearest_neighbors_3d<Type>& first,
+                   bvgl_k_nearest_neighbors_3d<Type>& second)
+  {
+    std::swap(first.tolerance_, second.tolerance_);
+    std::swap(first.search_tree, second.search_tree_);
+    std::swap(first.M_, second.M_);
+    std::swap(first.ptset_, second.ptset_);
+    std::swap(first.flags_, second.flags_);
+  }
+
   protected:
   Type tolerance_;
   Nabo::NearestNeighbourSearch<Type>* search_tree_;
@@ -79,6 +111,23 @@ bvgl_k_nearest_neighbors_3d<Type>::bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<T
 search_tree_(0), tolerance_(tolerance), ptset_(ptset){
   create();
 }
+
+template <class Type>
+bool bvgl_k_nearest_neighbors_3d<Type>::knn_indices(vgl_point_3d<Type> const& p, unsigned k, vnl_vector<int> &indices) const
+{
+  indices.set_size(k);
+  vnl_vector<Type> q(3),dists2(k);
+  q[0]=p.x();  q[1]=p.y();  q[2]=p.z();
+  if(!search_tree_) {
+    return false;
+  }
+  search_tree_->knn(q, indices, dists2, k, tolerance_, flags_);
+  if(dists2[k-1] == vcl_numeric_limits<Type>::infinity()||indices[k-1]<0) {
+    return false;
+  }
+  return true;
+}
+
 template <class Type>
 bool bvgl_k_nearest_neighbors_3d<Type>::closest_index(vgl_point_3d<Type> const& p, unsigned& index) const{
   unsigned k = 1;

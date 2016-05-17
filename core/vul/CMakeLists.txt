@@ -8,7 +8,6 @@ doxygen_add_library(core/vul
 
 
 set(vul_sources
-  vul_export.h
   vul_fwd.h
   vul_whereami.h
 
@@ -55,6 +54,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vul_sequence_filename_map.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 if(APPLE)
   vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
 else()
@@ -75,6 +75,15 @@ if(SOLARIS)
 endif()
 
 endif()
+
+set(CURR_LIB_NAME vul)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
+)
 
 target_link_libraries( ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl )
 

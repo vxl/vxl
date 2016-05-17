@@ -7,10 +7,8 @@ doxygen_add_library(core/vpgl
   DESCRIPTION "Photogrammetry Library"
   )
 
-include_directories(${VXLCORE_INCLUDE_DIR})
 
 set( vpgl_sources
-  vpgl_export.h
   vpgl_camera.h                    vpgl_camera_double_sptr.h
                                    vpgl_camera_float_sptr.h
   vpgl_proj_camera.h               vpgl_proj_camera.hxx
@@ -35,8 +33,17 @@ set( vpgl_sources
 
 aux_source_directory(Templates vpgl_sources)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpgl LIBRARY_SOURCES ${vpgl_sources})
 target_link_libraries(${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl)
+set(CURR_LIB_NAME vpgl)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
+)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

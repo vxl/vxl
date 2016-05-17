@@ -36,6 +36,9 @@ DECLARE_FUNC_CONS(boxm2_cpp_batch_update_nonsurface_model_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_compute_phong_model_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_compute_synoptic_function_1d_process);
 DECLARE_FUNC_CONS(boxm2_cpp_query_cell_brdf_process);
+DECLARE_FUNC_CONS(boxm2_cpp_query_cell_process);
+DECLARE_FUNC_CONS(boxm2_cpp_get_index_from_3d_point_process);
+DECLARE_FUNC_CONS(boxm2_cpp_get_3d_point_from_index_process);
 DECLARE_FUNC_CONS(boxm2_cpp_pre_infinity_opt2_phongs_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_update_opt2_phongs_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_update_nonray_process);
@@ -68,4 +71,7 @@ DECLARE_FUNC_CONS(boxm2_export_oriented_point_cloud_process);
 DECLARE_FUNC_CONS(boxm2_cpp_batch_compute_3d_points_process);
 DECLARE_FUNC_CONS(boxm2_cpp_cast_3d_point_hypothesis_process);
 DECLARE_FUNC_CONS(boxm2_cpp_cast_3d_point_hypothesis_process2);
+DECLARE_FUNC_CONS(boxm2_cpp_compute_3d_points_and_covs_process);
+DECLARE_FUNC_CONS(boxm2_cpp_compute_3d_points_and_covs_normalize_process);
+
 #endif

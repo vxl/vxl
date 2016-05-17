@@ -225,7 +225,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_scene_sptr & scene, bo
 }
 
 //: removes data from this cache (may or may not write to disk first)
-void boxm2_lru_cache::remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type)
+void boxm2_lru_cache::remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, bool write_out)
 {
   // grab a reference to the map of cached_data_
   std::map<boxm2_block_id, boxm2_data_base*>& data_map = this->cached_data_map(scene,type);
@@ -235,13 +235,14 @@ void boxm2_lru_cache::remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id 
   {
     // found the block,
     boxm2_data_base* litter = data_map[id];
-    if (!litter->read_only_) {
+    //if (!litter->read_only_) {
       // save it
-      std::cout<<"boxm2_lru_cache::remove_data_base "<<scene->xml_path()<<" type "<<type<<':'<<id<<"; saving to disk"<<std::endl;
-      boxm2_sio_mgr::save_block_data_base(scene->data_path(), id, litter, type);
-    }
-    else
-      std::cout<<"boxm2_lru_cache::remove_data_base "<<type<<':'<<id<<"; not saving to disk"<<std::endl;
+      //std::cout<<"boxm2_lru_cache::remove_data_base "<<scene->xml_path()<<" type "<<type<<':'<<id<<"; saving to disk"<<std::endl;
+    if (write_out)
+        boxm2_sio_mgr::save_block_data_base(scene->data_path(), id, litter, type);
+    //}
+    //else
+    //  std::cout<<"boxm2_lru_cache::remove_data_base "<<type<<':'<<id<<"; not saving to disk"<<std::endl;
     // now throw it away
     delete litter;
     data_map.erase(rem);

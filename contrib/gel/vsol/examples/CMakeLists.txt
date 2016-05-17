@@ -1,4 +1,3 @@
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 
 add_executable( vsol_spatial_object_example vsol_spatial_object_example.cxx )
 target_link_libraries( vsol_spatial_object_example vsol )

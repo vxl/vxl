@@ -3,7 +3,6 @@
 include_directories( ${BRL_INCLUDE_DIR}/bpro )
 include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
 include_directories( ${BRL_INCLUDE_DIR}/bbas )
-include_directories(${VXLCORE_INCLUDE_DIR})
 include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
 
 set(bvrml_pro_sources

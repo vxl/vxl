@@ -1,10 +1,8 @@
 #!/bin/sh
 set -e
 
-exit 0 ## Just short circuit
-
 REQUIRED_CMAKE_VERSION="2.8.9"
-export INSTALL_DIR=$HOME/deps
+export INSTALL_DIR=${HOME}/deps
 export PATH=$INSTALL_DIR/bin:$PATH
 
 if [ ! -f "${INSTALL_DIR}" ]; then
@@ -26,8 +24,10 @@ if [ ${INSTALL_NEW_CMAKE} -ne 0 ]; then
   ## NOTE: We are purposefully using the minimum supported cmake version
   ##       for testing. When cmake_minimum_version is updated in top
   ##       level CMakeLists.txt, this should also be updated.
-  wget --no-check-certificate https://cmake.org/files/v2.8/cmake-2.8.9-Linux-i386.sh
-  bash cmake-2.8.9-Linux-i386.sh --skip-license --prefix=$INSTALL_DIR/
+  ## This is 32bit and does not work: wget --no-check-certificate https://cmake.org/files/v2.8/cmake-2.8.9-Linux-i386.sh
+  ## Needed to build custom version of cmake for ubuntu 12.04 at 64 bit specifically for dashboards.
+  wget --no-check-certificate  http://slicer.kitware.com/midas3/download/bitstream/507778/cmake-2.8.9-Linux-x86_64.sh
+  bash cmake-2.8.9-Linux-x86_64.sh --skip-license --prefix=$INSTALL_DIR/
 else
   echo "Using cached CMake directory: $(cmake --version)"
 fi

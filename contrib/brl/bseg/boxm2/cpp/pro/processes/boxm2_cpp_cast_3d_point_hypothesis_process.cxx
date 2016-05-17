@@ -109,20 +109,20 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process(bprb_func_process& pro)
 
   std::vector<boxm2_block_id>::iterator id;
   boxm2_block_id bid;
-  int data_index;
+  int data_index = 0;
 
-// #if 1
-//   // for debugging purposes, TODO: remove this
-//   //survey point 271,163
-//   //vgl_point_3d<double> point(251.21295,310.2511,258.47885);
-//   vgl_point_3d<double> point(309.583,251.252,258.228);
-//   boxm2_block_id bid; int data_index; float side_len;
-//   if (!boxm2_util::get_point_index(scene,cache,point,bid,data_index,side_len)) {
-//     std::cout << "Cannot locate the point: " << point << " in the scene!\n";
-//     return false;
-//   } else
-//     std::cout << "point: " << point << " is in block: " << bid << " index: " << data_index << std::endl;
-// #endif
+#if 0
+   // for debugging purposes, TODO: remove this
+   //survey point 271,163
+   //vgl_point_3d<double> point(251.21295,310.2511,258.47885);
+   vgl_point_3d<double> point(309.583,251.252,258.228);
+   float side_len;
+   if (!boxm2_util::get_point_index(scene,cache,point,bid,data_index,side_len)) {
+     std::cout << "Cannot locate the point: " << point << " in the scene!\n";
+     return false;
+   } else
+     std::cout << "point: " << point << " is in block: " << bid << " index: " << data_index << std::endl;
+ #endif
 
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
@@ -134,8 +134,8 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process(bprb_func_process& pro)
     std::cout << "in blk: " << *id << " data buf len: " << buf_len/alphaTypeSize << "\n";
 
     //: first make sure that the database is removed from memory if it already exists
-    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(identifier));
-    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(identifier));
+    //cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(identifier));
+    //cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(identifier));
 
     //: now retrieve it with get_data_base_new method so that even if it exists on disc, a fresh one will be created
     boxm2_data_base *  pts = cache->get_data_base_new(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(identifier),buf_len/alphaTypeSize*pointTypeSize,false);
@@ -151,8 +151,8 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process(bprb_func_process& pro)
                                                                              cam,
                                                                              depth_img->ni(),
                                                                              depth_img->nj());
-    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(identifier));  // cache needs to be read-write cache for output blocks to be written before being discarded
-    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(identifier));
+    //cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(identifier));  // cache needs to be read-write cache for output blocks to be written before being discarded
+    //cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(identifier));
   }
 
   delete Rss;
@@ -234,7 +234,7 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process2(bprb_func_process& pro)
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
   boxm2_block_id bid;
-  int data_index;
+  int data_index = 0;
 
   std::vector<boxm2_block_id>::iterator id;
 // #if 1
@@ -266,7 +266,7 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process2(bprb_func_process& pro)
     boxm2_data_base *  aux = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(identifier),buf_len/alphaTypeSize*auxTypeSize,true);
 
     //: first make sure that the database is removed from memory if it already exists
-    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(identifier));
+    //cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(identifier));
 
     //: now retrieve it with get_data_base_new method so that even if it exists on disc, a fresh one will be created
     boxm2_data_base *  covs = cache->get_data_base_new(scene,*id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(identifier),buf_len/alphaTypeSize*covTypeSize,false);
@@ -279,8 +279,8 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process2(bprb_func_process& pro)
     std::cout << "in blk: " << *id << " data buf len: " << data_buf_len << "\n";
     boxm2_data_serial_iterator<boxm2_3d_point_hypothesis_cov_functor>(data_buf_len,pass2);
 
-    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(identifier)); // read-only flag is false so will be written to disc before being removed
-    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(identifier));
+    //cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(identifier)); // read-only flag is false so will be written to disc before being removed
+    //cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(identifier));
   }
 
   return true;

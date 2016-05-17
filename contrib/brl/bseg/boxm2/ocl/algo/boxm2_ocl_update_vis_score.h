@@ -23,7 +23,8 @@ class boxm2_ocl_update_vis_score
     boxm2_ocl_update_vis_score(boxm2_scene_sptr scene,
                                bocl_device_sptr device,
                                boxm2_opencl_cache_sptr ocl_cache,
-                               bool use_surface_normals);
+                               bool use_surface_normals,
+                               bool optimize_transfers_ = false);
 
     bool run( vpgl_camera_double_sptr camera,
               unsigned ni, unsigned nj,
@@ -34,7 +35,7 @@ class boxm2_ocl_update_vis_score
     bool compile_kernels();
 
     bool use_surface_normals_;
-
+    bool optimize_transfers_;
     boxm2_scene_sptr scene_;
     bocl_device_sptr device_;
     boxm2_opencl_cache_sptr ocl_cache_;

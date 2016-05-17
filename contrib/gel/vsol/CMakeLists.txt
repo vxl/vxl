@@ -58,7 +58,6 @@ set(vsol_sources
  vsol_tetrahedron.cxx       vsol_tetrahedron.h       vsol_tetrahedron_sptr.h
 )
 
-include_directories(${VXLCORE_INCLUDE_DIR})
 
 aux_source_directory(Templates vsol_sources)
 

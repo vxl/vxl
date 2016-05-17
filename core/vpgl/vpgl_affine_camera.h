@@ -82,8 +82,14 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   // The finite point of the ray is at the viewing distance from the origin
   virtual  vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
 
+  //: Find the 3d ray that goes through the camera center and the provided image point.
+  virtual vgl_ray_3d<T> backproject_ray( const vgl_homg_point_2d<T>& image_point ) const;
+
   //: Find the world plane perpendicular to the camera rays at viewing distance from the origin
   virtual  vgl_homg_plane_3d<T> principal_plane() const;
+
+  //: Clone `this': creation of a new object and initialization
+  virtual vpgl_affine_camera<T>* clone(void) const;
 
  private:
   T view_distance_; // distance from origin along rays

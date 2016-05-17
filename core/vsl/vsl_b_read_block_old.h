@@ -35,7 +35,7 @@
 template <class T>
 inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   while (nelems--)
     vsl_b_read(is, *(begin++));
 }
@@ -48,7 +48,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems
 VCL_DEFINE_SPECIALIZATION
 inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
   vsl_swap_bytes((char *)begin, sizeof(double), nelems);
 }
@@ -61,7 +61,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t n
 VCL_DEFINE_SPECIALIZATION
 inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
   vsl_swap_bytes((char *)begin, sizeof(float), nelems);
 }
@@ -76,7 +76,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t ne
 VCL_DEFINE_SPECIALIZATION
 inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   if (!is) return;
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
@@ -107,7 +107,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nele
 VCL_DEFINE_SPECIALIZATION
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -138,7 +138,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::si
 VCL_DEFINE_SPECIALIZATION
 inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -169,7 +169,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t ne
 VCL_DEFINE_SPECIALIZATION
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -200,7 +200,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::
 VCL_DEFINE_SPECIALIZATION
 inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)
@@ -231,7 +231,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nel
 VCL_DEFINE_SPECIALIZATION
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, std::size_t nelems)
 {
-  VXL_DEPRECATED( "vsl_b_read_block_old()" );
+  VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
   std::size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes)

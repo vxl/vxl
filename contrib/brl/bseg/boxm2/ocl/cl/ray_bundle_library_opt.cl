@@ -173,16 +173,18 @@ void pre_infinity_opt(  float    seg_len,
                                           );/* PI */
 
 
-    /* Calculate pre and vis infinity */
-    float diff_omega = exp(-alpha * seg_len);
-    float vis_prob_end = (*vis_inf) * diff_omega;
+        /* Calculate pre and vis infinity */
+        float diff_omega = exp(-alpha * seg_len);      //note that p = (1-exp(-alpha*seg_len), diff_omega = (1-p)
+        float vis_prob_end = (*vis_inf) * diff_omega; //vis(x+1) = vis(x)*(1-p)
 
-    /* updated pre                      Omega         *   PI  */
-    (*pre_inf) += ((*vis_inf) - vis_prob_end) *  PI;
+        // note vis_inf(1-(1-p) = vis_inf*p 
+        // pre_inf +=         vis_inf*p           *  PI
 
-    /* updated visibility probability */
-    (*vis_inf) = vis_prob_end;
-  }
+        (*pre_inf) += ((*vis_inf) - vis_prob_end) *  PI;
+
+        /* updated visibility probability */
+        (*vis_inf) = vis_prob_end;
+    }
 }
 
 
@@ -337,8 +339,10 @@ void compute_post_ind( float  seg_len, float block_len,
     (*vis_cont) = (*ray_vis) * seg_len;
     (*ray_vis) *= temp;
 }
-
-/* Aux Data = [cell_len, mean_obs*cell_len, beta, cum_vis]  */
+//
+// Aux Data = [cell_len, mean_obs*cell_len, beta, cum_vis] 
+//                .x          .y            .z      .w
+//
 void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma, float min_sigma)
 {
     float mu0 = (*data).s1, sigma0 = (*data).s2, w0 = (*data).s3;
@@ -352,10 +356,13 @@ void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma
 
     short Nobs0 = (short)(*data).s4, Nobs1 = (short)(*data).s8, Nobs2 = (short)(*data).sb;
     float Nobs_mix = (*data).sc;
-
+    //
+    // this update function is in ./statistics_library_functions.cl
+    //                            Nobs_mix is incremented by vis
+    //
     update_gauss_3_mixture(aux_data.y,              //mean observation
-                           aux_data.w,              //cell_visability
-                           t_match,
+                           aux_data.w,              //cell_visibility
+                           t_match,                 //match threshold
                            init_sigma,min_sigma,
                            &mu0,&sigma0,&w0,&Nobs0,
                            &mu1,&sigma1,&w1,&Nobs1,

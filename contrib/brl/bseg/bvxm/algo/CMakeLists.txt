@@ -1,5 +1,4 @@
 # Sources  for appearance and mixed grid algorithms
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR}/bbas)
 include_directories( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 

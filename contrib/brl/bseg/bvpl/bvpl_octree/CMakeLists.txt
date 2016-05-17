@@ -14,7 +14,6 @@ find_package( Threads )
 #                ${CMAKE_CURRENT_BINARY_DIR}/bvpl_octree_config.h include/vxl/contrib/brl/bseg/bvpl/bvpl_octree)
 
 include_directories( ${EXPAT_INCLUDE_DIR} )
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR}/bseg/boct )
 include_directories( ${BRL_INCLUDE_DIR}/bseg/boxm )
 include_directories( ${BRL_INCLUDE_DIR}/bseg/bvpl )

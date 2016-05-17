@@ -79,25 +79,9 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_FOR_SCOPE_HACK ";
-#ifdef VCL_FOR_SCOPE_HACK
-  std::cout << "is set to " << quote(VCL_FOR_SCOPE_HACK);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_DEFAULT_VALUE(x) ";
 #ifdef VCL_DEFAULT_VALUE
   std::cout << "is set to " << quote(VCL_DEFAULT_VALUE(x));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_CAN_STATIC_CONST_INIT_INT ";
-#ifdef VCL_CAN_STATIC_CONST_INIT_INT
-  std::cout << "is set to " << quote(VCL_CAN_STATIC_CONST_INIT_INT);
 #else
   std::cout << "is not set";
 #endif
@@ -119,22 +103,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_STATIC_CONST_INIT_INT_NO_DEFN ";
-#ifdef VCL_STATIC_CONST_INIT_INT_NO_DEFN
-  std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_NO_DEFN);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_CAN_STATIC_CONST_INIT_FLOAT ";
-#ifdef VCL_CAN_STATIC_CONST_INIT_FLOAT
-  std::cout << "is set to " << quote(VCL_CAN_STATIC_CONST_INIT_FLOAT);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_STATIC_CONST_INIT_FLOAT_DECL(x) ";
 #ifdef VCL_STATIC_CONST_INIT_FLOAT_DECL
   std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DECL(x));
@@ -146,14 +114,6 @@ void test_config()
   std::cout << "VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) ";
 #ifdef VCL_STATIC_CONST_INIT_FLOAT_DEFN
   std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DEFN(x));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN ";
-#ifdef VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
-  std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN);
 #else
   std::cout << "is not set";
 #endif
