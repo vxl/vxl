@@ -282,5 +282,3 @@ macro(GENERATE_TEST_INCLUDE LIB SOURCES PREFIX)
   add_executable(${LIB}_test_include ${CMAKE_CURRENT_BINARY_DIR}/test_include.cxx)
   target_link_libraries(${LIB}_test_include ${LIB})
 endmacro()
-
-
