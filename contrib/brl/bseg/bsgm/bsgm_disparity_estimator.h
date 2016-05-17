@@ -23,13 +23,6 @@
 //: A struct containing miscellaneous SGM parameters
 struct bsgm_disparity_estimator_params
 {
-  //: The minimum disparity to consider, can be negative.
-  int min_disparity;
-
-  //: The number of disparities to search over, range will be
-  // [ min_disparity, min_disparity + num_disparities )
-  int num_disparities;
-
   //: Use 16 directions in the dynamic programming, otherwise 8.  This 
   // roughly doubles computation time.
   bool use_16_directions;
@@ -83,8 +76,6 @@ struct bsgm_disparity_estimator_params
 
   //: Default parameters
   bsgm_disparity_estimator_params():
-    min_disparity(0),
-    num_disparities(20),
     use_16_directions(false),
     p1_scale(1.0f),
     p2_scale(1.0f),
@@ -118,12 +109,28 @@ class bsgm_disparity_estimator
   bool compute(
     const vil_image_view<vxl_byte>& img_target,
     const vil_image_view<vxl_byte>& img_ref,
-    vil_image_view<float>& disp_target );
+    vil_image_view<float>& disp_target,
+    int min_disparity,
+    int num_disparities );
+
+  //: Run SGM twice, once at a lower resolution to determine the active
+  // disparity range, and again at full-res using the reduced disparity range.
+  // Should improve speed and quality with respect to single-scale approach if
+  // tight disparity bounds are unknown.
+  bool compute_multiscale(
+    const vil_image_view<vxl_byte>& img_target,
+    const vil_image_view<vxl_byte>& img_ref,
+    vil_image_view<float>& disp_target,
+    int min_disparity,
+    int num_disparities,
+    int num_active_disparities,
+    int downscale_exponent = 2 );
 
   //: Write out the appearance or total cost volume as a set of images for 
   // debugging
   void write_cost_debug_imgs(
     const std::string& out_dir,
+    int num_disparities,
     bool write_total_cost = false );
 
  protected:
@@ -170,27 +177,35 @@ class bsgm_disparity_estimator
   void compute_invalid_map(
     const vil_image_view<vxl_byte>& img_target,
     const vil_image_view<vxl_byte>& img_ref,
-    vil_image_view<bool>& invalid_target );
+    vil_image_view<bool>& invalid_target,
+    int min_disparity,
+    int num_disparities );
 
   //: Allocate and setup cost volumes based on current w_ and h_
   void setup_cost_volume( 
     std::vector<unsigned char>& cost_data,
-    std::vector< std::vector< unsigned char* > >& cost );
+    std::vector< std::vector< unsigned char* > >& cost,
+    int num_disparities );
   void setup_cost_volume( 
     std::vector<unsigned short>& cost_data,
-    std::vector< std::vector< unsigned short* > >& cost );
+    std::vector< std::vector< unsigned short* > >& cost,
+    int num_disparities );
 
   //: Compute appearance data costs
   void compute_census_data(
     const vil_image_view<vxl_byte>& img_target,
     const vil_image_view<vxl_byte>& img_ref,
     const vil_image_view<bool>& invalid_target,
-    std::vector< std::vector< unsigned char* > >& app_cost );
+    std::vector< std::vector< unsigned char* > >& app_cost,
+    int min_disparity,
+    int num_disparities );
   void compute_xgrad_data(
     const vil_image_view<float>& grad_x_target,
     const vil_image_view<float>& grad_x_ref,
     const vil_image_view<bool>& invalid_target,
-    std::vector< std::vector< unsigned char* > >& app_cost );
+    std::vector< std::vector< unsigned char* > >& app_cost,
+    int min_disparity,
+    int num_disparities );
 
   //: Run the multi-directional dynamic programming that SGM uses
   void run_multi_dp(
@@ -198,7 +213,8 @@ class bsgm_disparity_estimator
     std::vector< std::vector<unsigned short*> >& total_cost,
     const vil_image_view<bool>& invalid_target,
     const vil_image_view<float>& grad_x,
-    const vil_image_view<float>& grad_y );
+    const vil_image_view<float>& grad_y,
+    int num_disparities );
 
   //: Pixel-wise directional cost
   inline void compute_dir_cost(
@@ -207,7 +223,8 @@ class bsgm_disparity_estimator
     unsigned short* cur_row_cost,
     unsigned short* total_cost,
     unsigned short p1,
-    unsigned short p2 );
+    unsigned short p2,
+    int num_disparities );
 
   //: Extract the min cost disparity at each pixel, using quadratic
   // interpolation if specified
@@ -215,7 +232,9 @@ class bsgm_disparity_estimator
     const std::vector< std::vector< unsigned short* > >& total_cost,
     const vil_image_view<bool>& invalid_target,
     vil_image_view<float>& disp_img,
-    vil_image_view<unsigned short>& disp_cost );
+    vil_image_view<unsigned short>& disp_cost,
+    int min_disparity,
+    int num_disparities );
 
   //: Use the OpenCV SGM uniqueness criteria to find bad disparities. This
   // is not quite the same as the left-right consistency check from the SGM
@@ -235,7 +254,9 @@ class bsgm_disparity_estimator
 
   //: Flip the sign of all valid disparities.
   void invert_disparities(
-    vil_image_view<float>& disp_img );
+    vil_image_view<float>& disp_img,
+    int min_disparity,
+    int num_disparities );
 
 
   //

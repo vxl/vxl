@@ -25,8 +25,10 @@ int main(int argc,char * argv[])
   params.print_timing = true;
 
   // Usage information
-  if( argc != 6 && argc != 7 ){
-    std::cout<<"Usage : bsgm_app.exe target_img ref_img disp_img min_disparity num_disparities error_check_mode\n";
+  if( argc != 7 && argc != 8 ){
+    std::cout << "Usage : bsgm_app.exe target_img ref_img disp_img "
+      << "min_disparity num_disparities num_active_disparities "
+      << "error_check_mode\n";
     return -1;
   }
     
@@ -36,7 +38,8 @@ int main(int argc,char * argv[])
   std::string disp_name(argv[3]);
   int min_disparity = atoi(argv[4]);
   int num_disparities = atoi(argv[5]);
-  int error_check_mode = (argc==6) ? 1 : atoi(argv[6]);
+  int num_active_disparities = atoi(argv[6]);
+  int error_check_mode = (argc==7) ? 1 : atoi(argv[7]);
 
   // Load images
   vil_image_view<vxl_byte> img_right = 
@@ -45,17 +48,26 @@ int main(int argc,char * argv[])
     vil_convert_to_grey_using_rgb_weighting( vil_load( left_name.c_str() ) );
 
   // Setup SGM
-  params.min_disparity = min_disparity;
-  params.num_disparities = num_disparities;
   params.error_check_mode = error_check_mode;
 
   bsgm_disparity_estimator sgm( params );
 
-  // Run SGM
+  // Run single-scale SGM if all disparities are active
   vil_image_view<float> disp_r;
-  if( !sgm.compute( img_right, img_left, disp_r ) ){
-    std::cerr << "SGM failed\n";
-    return 1;
+  if( num_active_disparities >= num_disparities ){
+    if( !sgm.compute( img_right, img_left, 
+        disp_r, min_disparity, num_disparities ) ){
+      std::cerr << "SGM failed\n";
+      return 1;
+    }
+
+  // Otherwise run multi-scale to find the valid disparity range
+  } else {
+    if( !sgm.compute_multiscale( img_right, img_left, 
+        disp_r, min_disparity, num_disparities, num_active_disparities ) ){
+      std::cerr << "SGM failed\n";
+      return 1;
+    }
   }
 
   // Convert floating point image to byte for saving
