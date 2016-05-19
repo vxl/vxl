@@ -88,7 +88,7 @@ void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string des
 }
 
 //: Write a box with color
-void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, std::string hex_color)
+void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, std::string hex_color, unsigned const& fill)
 {
   ofs << "<Placemark>\n"
       << "  <name>" << name << "</name>\n"
@@ -97,7 +97,7 @@ void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string des
       << "    <PolyStyle>\n"
       << "      <colorMode>normal</colorMode>\n"
       << "      <color>" << hex_color << "</color>\n"
-      << "      <fill>1</fill>\n"
+      << "      <fill>" << fill << "</fill>\n"
       << "    </PolyStyle>\n"
       << "    <LineStyle>\n"
       << "      <colorMode>normal</colorMode>\n"
@@ -125,10 +125,10 @@ void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string des
 
 // write a box with color
 void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
-                           unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a)
+                           unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a, unsigned const& fill)
 {
   std::string hex_color = rgb_color_to_hex_color((int)a, (int)r, (int)g, (int)b);
-  bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, hex_color);
+  bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, hex_color, fill);
 }
 
 // write a polygon with color (only outerBoundary)
@@ -208,7 +208,7 @@ void bkml_write::write_path(std::ofstream& ofs, std::vector<vgl_point_2d<double>
       << "      <coordinates>\n        ";
   for (std::vector<vgl_point_2d<double> >::iterator vit = path.begin(); vit != path.end(); ++vit)
     ofs << std::setprecision(12) << vit->x() << ',' << std::setprecision(12) << vit->y() << ",0 ";
-  ofs << "      </coordinates>\n"
+  ofs << "\n      </coordinates>\n"
       << "  </LineString>\n"
       << "</Placemark>\n";
 }

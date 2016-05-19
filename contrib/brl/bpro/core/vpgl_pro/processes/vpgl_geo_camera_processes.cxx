@@ -14,6 +14,64 @@
 #include <vil/vil_load.h>
 #include <vul/vul_file.h>
 
+
+//: process to create a geo camera given its lower left corner and image size
+bool vpgl_create_geo_camera_process_cons(bprb_func_process& pro)
+{
+  // this process takes 7 inputs
+  std::vector<std::string> input_types_;
+  input_types_.push_back("double");          // lower left lon
+  input_types_.push_back("double");          // lower left lat
+  input_types_.push_back("double");          // upper right lon
+  input_types_.push_back("double");          // upper right lat
+  input_types_.push_back("unsigned");        // image size ni
+  input_types_.push_back("unsigned");        // image size nj
+  input_types_.push_back("vpgl_lvcs_sptr");  // camera lvcs, empty by default
+  // this process takes 1 output
+  std::vector<std::string> output_types_;
+  output_types_.push_back("vpgl_camera_double_sptr");  // camera output
+
+  // set default lvcs
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
+  pro.set_input(6, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool vpgl_create_geo_camera_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    std::cerr << pro.name() << ": Wrong Input!\n";
+    return false;
+  }
+  // get the inputs
+  unsigned in_i = 0;
+  double ll_lon = pro.get_input<double>(in_i++);
+  double ll_lat = pro.get_input<double>(in_i++);
+  double ur_lon = pro.get_input<double>(in_i++);
+  double ur_lat = pro.get_input<double>(in_i++);
+  unsigned ni = pro.get_input<unsigned>(in_i++);
+  unsigned nj = pro.get_input<unsigned>(in_i++);
+  vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(in_i++);
+  if (ni == 0 || nj == 0) {
+    std::cerr << pro.name() << ": image size can not be zero -- ni: " << ni << ", nj: " << nj << "!\n";
+    return false;
+  }
+  double scale_x = (ur_lon - ll_lon) / ni;
+  double scale_y = (ll_lat - ur_lat) / nj;
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  trans_matrix[0][0] = scale_x;
+  trans_matrix[1][1] = scale_y;
+  trans_matrix[0][3] = ll_lon;
+  trans_matrix[1][3] = ur_lat;
+  vpgl_geo_camera* out_cam = new vpgl_geo_camera(trans_matrix, lvcs);
+  out_cam->set_scale_format(true);
+
+  // output
+  pro.set_output_val<vpgl_camera_double_sptr>(0, out_cam);
+  return true;
+}
+
+
 //: initialization
 bool vpgl_load_geo_camera_process_cons(bprb_func_process& pro)
 {
@@ -380,6 +438,45 @@ bool vpgl_geo_cam_global_to_img_process(bprb_func_process& pro)
   geocam->global_to_img(lon, lat, 0.0, u, v);
   pro.set_output_val<int>(0, (int)u);
   pro.set_output_val<int>(1, (int)v);
+  return true;
+}
+
+bool vpgl_geo_cam_img_to_global_process_cons(bprb_func_process& pro)
+{
+  // this process takes 3 inputs and two outputs
+  std::vector<std::string> input_types(3);
+  input_types[0] = "vpgl_camera_double_sptr";  // input geo camera
+  input_types[1] = "unsigned";                 // input pixel row
+  input_types[2] = "unsigned";                 // input pixel column
+  // this process takes 2 outputs
+  std::vector<std::string> output_types(2);
+  output_types[0] = "double";                  // lon
+  output_types[1] = "double";                  // lat
+  return pro.set_input_types(input_types) && pro.set_output_types(output_types);
+}
+
+bool vpgl_geo_cam_img_to_global_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    std::cerr << pro.name() << ": Wrong Inputs!\n";
+    return false;
+  }
+  // get inputs
+  unsigned in_i = 0;
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(in_i++);
+  unsigned i = pro.get_input<unsigned>(in_i++);
+  unsigned j = pro.get_input<unsigned>(in_i++);
+  // convert
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  if (!geocam) {
+    std::cerr << pro.name() << ": Can not convert input camera into a geo camera!\n";
+    return false;
+  }
+  double lon, lat;
+  geocam->img_to_global(i, j, lon, lat);
+  // output
+  pro.set_output_val<double>(0, lon);
+  pro.set_output_val<double>(1, lat);
   return true;
 }
 
