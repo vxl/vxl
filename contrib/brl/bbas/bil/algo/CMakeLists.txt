@@ -38,4 +38,3 @@ target_link_libraries( bil_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil $
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

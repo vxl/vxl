@@ -34,4 +34,3 @@ target_link_libraries(boxm2_ocl_pro boxm2_ocl_algo boct brdb ${VXL_LIB_PREFIX}vb
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

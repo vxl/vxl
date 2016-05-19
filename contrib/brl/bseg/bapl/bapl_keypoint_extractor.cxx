@@ -387,7 +387,6 @@ bapl_lowe_orientation::orient_at( float x, float y, float scale,
       float dx = 6.28319f/num_bins_;
       float angle = (float(peaks[i])+dy/d2y)*dx;
       orientations.push_back(angle);
-      
     }
   }
 }

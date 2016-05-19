@@ -21,4 +21,3 @@ target_link_libraries(bsta_io bsta ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

@@ -490,12 +490,12 @@ bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
   input_types.push_back("double");    // max point x (e.g. upper right corner of a scene bbox)
   input_types.push_back("double");    // max point y
   input_types.push_back("double");    // max point z
+  input_types.push_back("double");    // voxel size (e.g. 1 m for a geo-registered ortho map with GSD 1 meter
   input_types.push_back("vcl_string"); // input path to read H1
   input_types.push_back("vcl_string"); // input path to read H2
   std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // orthographic height map
   output_types.push_back("vil_image_view_base_sptr");  // disparity map for image1, print the txt input as an image
-  output_types.push_back("vil_image_view_base_sptr");  // orthorectified disparity map for image1
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -526,6 +526,7 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   double max_x = pro.get_input<double>(i++);
   double max_y = pro.get_input<double>(i++);
   double max_z = pro.get_input<double>(i++);
+  double voxel_size = pro.get_input<double>(i++);
   std::string path_H1 = pro.get_input<std::string>(i++);
   std::string path_H2 = pro.get_input<std::string>(i++);
 
@@ -558,37 +559,26 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   ifsd.close();
 
   vil_image_view<float> img2 = *vil_convert_cast(float(), img2_sptr);
-  //unsigned width = (unsigned)std::ceil(max_x-min_x)*2;
-  //unsigned depth = (unsigned)std::ceil(max_y-min_y)*2;
-  unsigned width = (unsigned)std::ceil(max_x-min_x);
-  unsigned depth = (unsigned)std::ceil(max_y-min_y);
+  double width = max_x-min_x;
+  double depth = max_y-min_y;
   double height = max_z - min_z;
-  vil_image_view<float> out_map(width, depth), out_map_img1(width, depth), out_map_disp1(width, depth), out_map_img2(width, depth);
-  out_map.fill(min_z);
-  out_map_img1.fill(0.0); out_map_img2.fill(0.0);
-  out_map_disp1.fill(0.0);
+  unsigned img_size_x = (unsigned)std::ceil(width/voxel_size);
+  unsigned img_size_y = (unsigned)std::ceil(depth/voxel_size);
+  vil_image_view<float> out_map(img_size_x, img_size_y);
+  out_map.fill((float)min_z);
 
-  for (unsigned x = 0; x < width; x++)
-    for (unsigned y = 0; y < depth; y++) {
+  for (double x = 0; x < width; x += voxel_size)
+    for (double y = 0; y < depth; y += voxel_size) {
       // try each height
       double min_dif = 2.0;  // 2 pixels error in projection
-      double best_z = 0;
-      for (double z = min_z + 0.5; z < height; z += 0.5) {
+      double best_z = min_z;
+      for (double z = min_z; z < height; z += (voxel_size/2.0)) {
         // project this x,y,z using the camera onto the images
         double u1,v1,u2,v2;
         cam1_rational->project(x+min_x, max_y-y, z, u1, v1);
         //cam1_rational->project(x/2.0+min_x, max_y-y/2.0, z, u1, v1);
         cam2_rational->project(x+min_x, max_y-y, z, u2, v2);
         //cam2_rational->project(x/2.0+min_x, max_y-y/2.0, z, u2, v2);
-
-
-        if (z == 5.5 && u1 >= 0 && v1 >= 0 && u1 < img1.ni() && v1 < img1.nj()) {
-          out_map_img1(x,y) = img1(u1, v1);
-        }
-
-        if (z == 5.5 && u2 >= 0 && v2 >= 0 && u2 < img2.ni() && v2 < img2.nj()) {
-          out_map_img2(x,y) = img2(u2, v2);
-        }
 
         // warp this point with H1, H2
         vnl_vector_fixed<double,3> p1(u1, v1, 1);
@@ -598,9 +588,6 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
 
         if (u1w >= img1_disp.ni() || v1w >= img1_disp.nj())
           continue;
-
-        if (z == 5.5)
-          out_map_disp1(x,y) = img1_disp(u1w, v1w);
 
         float disp = img1_disp(u1w, v1w);
         if (disp < min_disparity)
@@ -618,15 +605,14 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
           best_z = z;
         }
       }
-      out_map(x,y) = best_z;
+      unsigned xx = (unsigned)std::floor(x/voxel_size+0.5);
+      unsigned yy = (unsigned)std::floor(y/voxel_size+0.5);
+      if (xx < img_size_x && yy < img_size_y)
+        out_map(xx,yy) = (float)best_z;
     }
-
-  /*vil_save(out_map_img1, "./img1_ortho.tif");
-  vil_save(out_map_img2, "./img2_ortho.tif");*/
 
   vil_image_view_base_sptr out_sptr = new vil_image_view<float>(out_map);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_sptr);
   pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<float>(img1_disp));
-  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<float>(out_map_disp1));
   return true;
 }

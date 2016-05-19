@@ -20,4 +20,3 @@ target_link_libraries(bvrml_pro boxm2_cpp bvrml ${VXL_LIB_PREFIX}vpgl_algo ${VXL
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-
