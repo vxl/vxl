@@ -1,4 +1,12 @@
 from boxm2_register import boxm2_batch, dbvalue
+print 'Deprecated! See boxm2/vil_adaptor.py for correct access to vil_adaptors'
+# import sys
+# sys.path.append("<vxl_source_dir>/contrib/brl/bpro/core/pyscripts");
+# import init
+# import boxm2_batch
+# init.batch = boxm2_batch
+# init.core_register()
+# import vil_adaptor
 
 ###################################################
 # Vil loading and saving

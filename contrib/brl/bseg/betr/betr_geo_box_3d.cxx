@@ -33,3 +33,10 @@ bool betr_geo_box_3d::contains(double lon, double lat, double el) const{
   bool lat_lon_inside = sph_box_.contains(lat, lon, false);
   return el_inside && lat_lon_inside;
 }
+
+vgl_point_3d<double> betr_geo_box_3d::aux_point() const{
+  double c_phi = sph_box_.c_phi(false); //false means in degrees.
+  double lat_aux = (min_lat()+max_lat())/2.0;
+  double elev_aux =(min_elv_+max_elv_)/2.0;
+  return vgl_point_3d<double>(c_phi, lat_aux, elev_aux);
+}

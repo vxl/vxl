@@ -3,18 +3,22 @@
 
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
 include_directories( ${GEL_INCLUDE_DIR})
+include_directories( ${VCSL_INCLUDE_DIR})
 
 set(betr_sources
  betr_geo_box_3d.h   betr_geo_box_3d.cxx
  betr_geo_object_3d.h   betr_geo_object_3d.cxx
  betr_kml_utils.h    betr_kml_utils.cxx
  vsol_mesh_3d.h      vsol_mesh_3d.cxx #defined here to avoid brl/gel dependency
+ betr_site.h         betr_site.cxx
 )
 aux_source_directory(Templates betr_sources)
 
 vxl_add_library(LIBRARY_NAME betr LIBRARY_SOURCES  ${betr_sources})
 
-target_link_libraries(betr ${VXL_LIB_PREFIX}vsph ${VXL_LIB_PREFIX}vsol ${VXL_LIB_PREFIX}bmsh3d ${VXL_LIB_PREFIX}sdet ${VXL_LIB_PREFIX}brip ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
+target_link_libraries(betr ${VXL_LIB_PREFIX}vsph ${VXL_LIB_PREFIX}vsol ${VXL_LIB_PREFIX}bmsh3d ${VXL_LIB_PREFIX}bmsh3d_algo ${VXL_LIB_PREFIX}sdet ${VXL_LIB_PREFIX}brip ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vcsl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
+
+add_subdirectory(pro)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
