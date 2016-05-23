@@ -2,6 +2,14 @@ import bvxm_batch
 bvxm_batch.not_verbose()
 bvxm_batch.register_processes()
 bvxm_batch.register_datatypes()
+print 'Deprecated! See bvxm/bvxm_vil_adaptor.py for correct access to vil_adaptors'
+# import sys
+# sys.path.append("<vxl_source_dir>/contrib/brl/bpro/core/pyscripts");
+# import init
+# import boxm2_batch
+# init.batch = boxm2_batch
+# init.core_register()
+# import vil_adaptor
 
 
 class dbvalue:
@@ -288,13 +296,13 @@ def bvxm_truncate_image(img, min_value, max_value):
     img_out = dbvalue(id, type)
     return img_out
 
-
+# not in core vil_adaptor
 def normalize_image(img):
     bvxm_batch.init_process("vilImageNormaliseProcess")
     bvxm_batch.set_input_from_db(0, img)
     bvxm_batch.run_process()
 
-
+# same core vil_adaptor funcion called by "median_filter_image"
 def median_filter(img, operator_half_size):
     bvxm_batch.init_process("vilMedianFilterProcess")
     bvxm_batch.set_input_from_db(0, img)
@@ -327,7 +335,7 @@ def image_mean(img):
 # n is the neighborhood to compute mean and variance, e.g. pass 5 for a
 # 5x5 neighborhood to compute mean and variance of
 
-
+# not in core vil_adaptor
 def compute_mean_and_variance_image(img, n):
     bvxm_batch.init_process("vilMeanAndVarianceImageProcess")
     bvxm_batch.set_input_from_db(0, img)
@@ -521,7 +529,7 @@ def grey_to_rgb(img, color_txt):
         outimg = 0
     return outimg
 
-
+# not in core vil_adaptor
 def rgb_to_grey(img):
     bvxm_batch.init_process("vilRGBToGreyProcess")
     bvxm_batch.set_input_from_db(0, img)
@@ -607,7 +615,7 @@ def combine_planes_8_bands(img_coastal, img_blue, img_green, img_yellow, img_red
     else:
         return 0
 
-
+# not in core vil_adaptor
 def image_entropy(img, block_size=5, bins=16):
     bvxm_batch.init_process("vilBlockEntropyProcess")
     bvxm_batch.set_input_from_db(0, img)
@@ -621,7 +629,7 @@ def image_entropy(img, block_size=5, bins=16):
 # edge detection using vil_edge_detection_process (arguments are
 # parameters required by edge detection)
 
-
+# not in core vil_adaptor
 def edge_detection(img, noise_multiplier=1.5, smooth=1.5, auto_threshold=False, junctionp=False, aggressive_junc_closure=False):
     bvxm_batch.init_process("vilEdgeDetectionProcess")
     bvxm_batch.set_input_from_db(0, img)
@@ -647,7 +655,7 @@ def histogram_equalize(img):
     img_equalized = dbvalue(id, type)
     return img_equalized
 
-
+# not in core vil_adaptor
 def remove_nitf_margin(img_res):
     bvxm_batch.init_process("vilNITFRemoveMarginProcess")
     bvxm_batch.set_input_from_db(0, img_res)
