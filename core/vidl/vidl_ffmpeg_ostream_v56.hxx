@@ -5,7 +5,6 @@
 
 #include <cstring>
 #include "vidl_ffmpeg_ostream.h"
-#include "vidl_ffmpeg_pixel_format.h"
 //:
 // \file
 // \author Johan Andruejol
@@ -21,6 +20,7 @@
 
 #include "vidl_ffmpeg_init.h"
 #include "vidl_ffmpeg_convert.h"
+#include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_frame.h"
 #include "vidl_convert.h"
 #include <vcl_compiler.h>
