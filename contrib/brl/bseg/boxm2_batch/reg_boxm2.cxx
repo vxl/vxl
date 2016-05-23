@@ -12,6 +12,7 @@
 #include <bvgl_pro/bvgl_register.h>
 #include <sdet_pro/sdet_register.h>
 #include <brip_pro/brip_register.h>
+#include <bsgm/pro/bsgm_register.h>
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
 #include <bocl/bocl_manager.h>
@@ -48,6 +49,7 @@ PyObject *
     vil_register::register_process();
     bvgl_register::register_process();
     brip_register::register_process();
+    bsgm_register::register_process();
     bvpl_kernels_register::register_process();
 #if defined(HAS_OPENCL) && HAS_OPENCL
     bocl_register::register_process();
@@ -92,6 +94,7 @@ PyObject *
     vil_register::register_datatype();
     bvgl_register::register_datatype();
     brip_register::register_datatype();
+    bsgm_register::register_datatype();
     bvpl_kernels_register::register_datatype();
 #if defined(HAS_OPENCL) && HAS_OPENCL
     bocl_register::register_datatype();

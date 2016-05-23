@@ -11,6 +11,8 @@ target_link_libraries( bsgm ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${
 
 add_subdirectory( app )
 
+add_subdirectory( pro )
+
 #if( BUILD_TESTING )
 #  add_subdirectory(tests)
 #endif()
