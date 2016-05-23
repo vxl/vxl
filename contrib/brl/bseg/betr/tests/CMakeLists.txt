@@ -8,8 +8,11 @@ add_executable(betr_test_all
   test_driver.cxx
   test_geo_box.cxx
   test_geo_object.cxx
+  test_site.cxx
 )
 target_link_libraries(betr_test_all betr ${VXL_LIB_PREFIX}testlib)
 
 add_test( NAME betr_test_geo_box COMMAND $<TARGET_FILE:betr_test_all> test_geo_box )
-add_test( NAME betr_test_geo_object COMMAND $<TARGET_FILE:betr_test_all> test_geo_object )    
+add_test( NAME betr_test_geo_object COMMAND $<TARGET_FILE:betr_test_all> test_geo_object )
+add_test( NAME betr_test_site COMMAND $<TARGET_FILE:betr_test_all> test_site )
+

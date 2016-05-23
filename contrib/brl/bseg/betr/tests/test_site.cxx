@@ -12,7 +12,8 @@
 #include <vsol/vsol_point_3d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <betr/betr_kml_utils.h>
-void test_geo_object()
+#include <betr/betr_site.h>
+void test_site()
 {
   double lat0 = -16.490904, lon0 = 179.996115, elv0 = 99.0;
   double  latg0 = 51.484443, long0 = -0.002913, elvg0 = 20.0;
@@ -62,7 +63,6 @@ void test_geo_object()
   std::ofstream ostrmex(pathmex.c_str());
   betr_kml_utils::write_mesh(ostrmex, gobj);
   ostrmex.close();
-
 }
 
-TESTMAIN(test_geo_object);
+TESTMAIN(test_site);

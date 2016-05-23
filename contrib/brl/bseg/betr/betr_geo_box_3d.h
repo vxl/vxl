@@ -44,6 +44,16 @@ class betr_geo_box_3d
   double max_lon() const {return sph_box_.max_phi(false);}
   double min_lat() const {return sph_box_.min_theta(false);}
   double max_lat() const {return sph_box_.max_theta(false);}
+  vgl_point_3d<double> min_point() const{
+    vgl_point_3d<double> p(min_lon(), min_lat(), min_elv());
+    return p;
+  }
+  vgl_point_3d<double> max_point() const{
+    vgl_point_3d<double> p(max_lon(), max_lat(), max_elv());
+    return p;
+  }
+  //: auxillary point inside longitude interval to resolve arc ambiguity
+  vgl_point_3d<double> aux_point() const;
  private:
   double min_elv_;
   double max_elv_;

@@ -27,24 +27,22 @@ class vsol_mesh_3d : public vsol_volume_3d
  public:
  vsol_mesh_3d():mesh_(VXL_NULLPTR){}
   vsol_mesh_3d(vsol_box_3d_sptr box);
-  ~vsol_mesh_3d(){}
-  // required virtual functions for vsol
+  ~vsol_mesh_3d(){delete mesh_;}
+
+  //: required virtual functions for vsol
   virtual vsol_volume_3d_type volume_type(void) const { return vsol_volume_3d::MESH; }
-  virtual bool in(vsol_point_3d_sptr const& p) const{return true;}
+  virtual bool in(vsol_point_3d_sptr const& p) const;
   virtual double volume(void) const{return 0.0;}
   virtual void compute_bounding_box() const;
   virtual vsol_spatial_object_3d* clone() const{return VXL_NULLPTR;}
+
+  //: old style downcasting methods from vsol
   virtual vsol_mesh_3d* cast_to_mesh() { return this;}
   virtual vsol_mesh_3d const* cast_to_mesh() const { return this;}
-
 
   unsigned num_faces() const  { return mesh_->facemap().size(); }
   unsigned num_edges() const { return mesh_->edgemap().size(); }
   unsigned num_vertices() const { return mesh_->vertexmap().size(); }
-
-  void extrude(int face_id);
-
-  void extrude(int face_id, double dist);
 
   bmsh3d_mesh_mc* get_object() { return mesh_; }
 
@@ -83,6 +81,8 @@ class vsol_mesh_3d : public vsol_volume_3d
   int find_closest_face(vgl_point_3d<double> point);
 
   void create_interior();
+
+  void extrude(int face_id, double dist);
 
   //: requried for vsol serialization
   //: Return a platform independent string identifying the class

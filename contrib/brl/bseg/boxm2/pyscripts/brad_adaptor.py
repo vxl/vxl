@@ -1,3 +1,12 @@
+print 'Deprecated! See boxm2/brad_adaptor.py for correct access to brad_adaptors'
+# import sys
+# sys.path.append("<vxl_source_dir>/contrib/brl/bpro/core/pyscripts");
+# import init
+# import boxm2_batch
+# init.batch = boxm2_batch
+# init.core_register()
+# import brad_adaptor
+
 from boxm2_register import boxm2_batch, dbvalue
 
 #############################################################################
