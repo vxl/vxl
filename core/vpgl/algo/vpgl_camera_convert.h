@@ -20,8 +20,11 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
-#include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
+
+#if HAS_GEOTIFF
+#include <vpgl/file_formats/vpgl_geo_camera.h>
+#endif
 
 //: Basic least squares solution for a general projective camera given corresponding world and image points.
 class vpgl_proj_camera_convert
@@ -118,6 +121,7 @@ class vpgl_generic_camera_convert
   static bool convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
 
+#if HAS_GEOTIFF
   //: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera
   static bool convert( vpgl_geo_camera& geocam, int ni, int nj, double height,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
@@ -126,7 +130,7 @@ class vpgl_generic_camera_convert
   //  basically creates a camera with parallel rays but the rays can be in any direction
   static bool convert( vpgl_geo_camera& geocam, int ni, int nj, double height, vgl_vector_3d<double>& dir,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
-
+#endif
 
   // === utility methods ===
  private:

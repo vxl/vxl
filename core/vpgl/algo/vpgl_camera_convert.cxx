@@ -1348,6 +1348,8 @@ convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
   return false;
 }
 
+
+#if HAS_GEOTIFF
 //: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera
 bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int nj, double height,
                                            vpgl_generic_camera<double> & gen_cam, unsigned level)
@@ -1392,5 +1394,6 @@ bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int 
   return true;
 }
 
+#endif // HAS_GEOTIFF
 
 #endif // vpgl_camera_convert_cxx_
