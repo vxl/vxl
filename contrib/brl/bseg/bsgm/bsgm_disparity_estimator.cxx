@@ -572,8 +572,8 @@ bsgm_disparity_estimator::run_multi_dp(
   }
 
   //vil_image_view<vxl_byte> vis;
-  //vil_convert_stretch_range_limited( deriv_img[0], vis, 0.0f, 1.0f );
-  //vil_save( vis, "C:/data/results/a.png" );
+  //vil_convert_stretch_range_limited( grad_x, vis, -60.0f, 60.0f );
+  //vil_save( vis, "D:/results/a.png" );
 
   // These will be default P1, P2 costs if no gradient-weighted smoothing
   unsigned short p1 = (unsigned short)( p1_base_*cost_unit_*params_.p1_scale );

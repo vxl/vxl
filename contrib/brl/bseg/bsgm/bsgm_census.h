@@ -68,7 +68,7 @@ inline unsigned char bsgm_compute_hamming_lut(
     lut[diff & 0xff] + 
     lut[(diff >> 8) & 0xff] + 
     lut[(diff >> 16) & 0xff] + 
-    lut[diff >> 24]; 
+    lut[(diff >> 24) & 0xff]; 
 
   else return
     lut[diff & 0xff] + 
@@ -78,7 +78,7 @@ inline unsigned char bsgm_compute_hamming_lut(
     lut[(diff >> 32) & 0xff] + 
     lut[(diff >> 40) & 0xff] + 
     lut[(diff >> 48) & 0xff] + 
-    lut[diff >> 54];
+    lut[(diff >> 54) & 0xff];
 }
 
 //: Generate a bit-set look-up table for a pre-allocated array of size 256
