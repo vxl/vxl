@@ -1636,17 +1636,17 @@ vnl_matrix<T>& vnl_matrix<T>::inplace_transpose()
 //------------------------------------------------------------------------------
 
 #define VNL_MATRIX_INSTANTIATE(T) \
-template class vnl_matrix<T >; \
-template vnl_matrix<T > operator-(T const &, vnl_matrix<T > const &); \
+template class VNL_EXPORT vnl_matrix<T >; \
+template VNL_EXPORT vnl_matrix<T > operator-(T const &, vnl_matrix<T > const &); \
 VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator+(T const &, vnl_matrix<T > const &)); \
 VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator*(T const &, vnl_matrix<T > const &)); \
-template T dot_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
-template T inner_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
-template T cos_angle(vnl_matrix<T > const &, vnl_matrix<T > const &); \
-template vnl_matrix<T > element_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
-template vnl_matrix<T > element_quotient(vnl_matrix<T > const &, vnl_matrix<T > const &); \
-template int vnl_inplace_transpose(T*, unsigned, unsigned, char*, unsigned); \
-template std::ostream & operator<<(std::ostream &, vnl_matrix<T > const &); \
-template std::istream & operator>>(std::istream &, vnl_matrix<T >       &)
+template VNL_EXPORT T dot_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
+template VNL_EXPORT T inner_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
+template VNL_EXPORT T cos_angle(vnl_matrix<T > const &, vnl_matrix<T > const &); \
+template VNL_EXPORT vnl_matrix<T > element_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
+template VNL_EXPORT vnl_matrix<T > element_quotient(vnl_matrix<T > const &, vnl_matrix<T > const &); \
+template VNL_EXPORT int vnl_inplace_transpose(T*, unsigned, unsigned, char*, unsigned); \
+template VNL_EXPORT std::ostream & operator<<(std::ostream &, vnl_matrix<T > const &); \
+template VNL_EXPORT std::istream & operator>>(std::istream &, vnl_matrix<T >       &)
 
 #endif // vnl_matrix_hxx_
