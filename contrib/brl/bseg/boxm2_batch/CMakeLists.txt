@@ -1,4 +1,5 @@
 # contrib/brl/bseg/boxm2_batch/CMakeLists.txt
+if (HAS_GEOTIFF)
 project( boxm2_batch )
 
 include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
@@ -86,4 +87,7 @@ endif()
 include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 if(DIRECTSHOW_FOUND)
   add_definitions(-DHAS_DIRECTSHOW)
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/boxm2_batch: requires geotiff")
 endif()

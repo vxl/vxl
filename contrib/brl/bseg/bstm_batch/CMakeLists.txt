@@ -1,4 +1,5 @@
 # contrib/brl/bseg/bstm_batch/CMakeLists.txt
+if (HAS_GEOTIFF)
 project( bstm_batch )
 
 include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
@@ -63,6 +64,9 @@ if( PYTHON_FOUND )
       endif()
     endif()
   endif()
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/bstm_batch: requires geotiff")
 endif()
 
 

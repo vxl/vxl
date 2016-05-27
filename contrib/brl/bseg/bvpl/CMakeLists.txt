@@ -1,4 +1,5 @@
 # This is contrib/brl/bseg/bvpl/CMakeLists.txt
+if (HAS_GEOTIFF)
 project(bvpl)
 
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
@@ -29,4 +30,7 @@ add_subdirectory(functors)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/bvpl: requires geotiff")
 endif()

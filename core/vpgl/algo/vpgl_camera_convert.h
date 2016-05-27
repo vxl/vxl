@@ -22,6 +22,7 @@
 #include <vpgl/vpgl_generic_camera.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
+#include <vil/vil_config.h>
 #if HAS_GEOTIFF
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #endif

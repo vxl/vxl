@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_geo_camera_processes.cxx
+#include <vil/vil_config.h>
+#if HAS_GEOTIFF
 #include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
@@ -598,3 +600,4 @@ bool vpgl_save_geo_camera_tfw_process(bprb_func_process& pro)
 
   return true;
 }
+#endif
