@@ -1,7 +1,9 @@
 # world modeling application
 # brl/bbas/bwm/CMakeLists.txt
 
-
+include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+if(HAS_GEOTIFF)
+include_directories( ${GEOTIFF_INCLUDE_DIR} )
 
 
 project(bwm)
@@ -21,10 +23,6 @@ if(TIFF_FOUND)
   include_directories(${TIFF_INCLUDE_DIR})
 endif()
 
-include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
-if(GEOTIFF_FOUND)
-  include_directories( ${GEOTIFF_INCLUDE_DIR} )
-endif()
 
 include( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
 
@@ -150,3 +148,6 @@ endif()
 
 
 add_subdirectory(video)
+else()
+  message(STATUS "Skipping contrib/brl/bbas/bwm: requires geotiff")
+endif()

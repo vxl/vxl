@@ -3,6 +3,7 @@
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
+#include <vil/vil_config.h> // for HAS_GEOTIFF definition
 
 //the init functions
 DECLARE_FUNC_CONS(boxm2_load_scene_process);

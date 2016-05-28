@@ -10,6 +10,7 @@
 #include <boxm2/io/boxm2_stream_cache.h>
 
 #include <imesh/imesh_mesh.h>
+#include <vil/vil_config.h> // for HAS_GEOTIFF definition
 
 #include "boxm2_processes.h"
 

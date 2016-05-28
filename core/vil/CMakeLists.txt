@@ -86,9 +86,9 @@ if(TIFF_FOUND)
     file_formats/vil_tiff_header.cxx file_formats/vil_tiff_header.h
   )
 
+  option(VXL_USE_GEOTIFF "Use the GEOTIFF Library if available" True)
   include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   if(GEOTIFF_FOUND)
-    #add_definitions( -DHAS_GEOTIFF )
     set(HAS_GEOTIFF 1 )
     include_directories(${GEOTIFF_INCLUDE_DIR})
     set( vil_sources ${vil_sources}

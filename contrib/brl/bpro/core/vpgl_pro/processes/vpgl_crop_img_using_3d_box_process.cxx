@@ -6,6 +6,9 @@
 //
 //
 //
+#include <vil/vil_config.h>
+#if HAS_GEOTIFF
+
 #include <iostream>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
@@ -759,3 +762,4 @@ void vpgl_crop_img_using_3d_box_dem_process_globals::crop_and_find_min_max(std::
   }
   return;
 }
+#endif

@@ -1,4 +1,5 @@
 # contrib/brl/bseg/bvxm_batch/CMakeLists.txt
+if(HAS_GEOTIFF)
 include( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 if( PYTHON_FOUND )
   include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
@@ -48,4 +49,7 @@ endif()
 include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 if(DIRECTSHOW_FOUND)
   add_definitions(-DHAS_DIRECTSHOW)
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/bvxm_batch: requires geotiff")
 endif()

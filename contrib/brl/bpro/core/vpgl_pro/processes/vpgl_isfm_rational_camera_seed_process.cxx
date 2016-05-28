@@ -1,4 +1,6 @@
 // This is contrib/brl/bpro/core/vpgl_pro/processes/vpgl_isfm_rational_camera_seed_process.cxx
+#include <vil/vil_config.h>
+#if HAS_GEOTIFF
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -674,3 +676,4 @@ void vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(std::
   }
   return;
 }
+#endif

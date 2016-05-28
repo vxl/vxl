@@ -1,3 +1,4 @@
+if(HAS_GEOTIFF)
 include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 if(OPENCL_FOUND)
 
@@ -19,4 +20,7 @@ if(OPENCL_FOUND)
   endif()
 
 
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/bvxm_bridge: requires geotiff")
 endif()

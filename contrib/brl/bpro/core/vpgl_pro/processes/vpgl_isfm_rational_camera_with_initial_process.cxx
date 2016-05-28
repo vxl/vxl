@@ -1,4 +1,6 @@
 // This is contrib/brl/bpro/core/vpgl_pro/processes
+#include <vil/vil_config.h>
+#if HAS_GEOTIFF
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -526,3 +528,4 @@ vgl_box_2d<double> vpgl_isfm_rational_camera_with_initial_process_globals::inter
     new_boxes.push_back(boxes[i]);
   return vpgl_isfm_rational_camera_with_initial_process_globals::intersection(new_boxes);
 }
+#endif

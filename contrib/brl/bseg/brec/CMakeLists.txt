@@ -1,3 +1,4 @@
+if (HAS_GEOTIFF) # indirectly needed because of bvxm
 # This is contrib/brl/bseg/brec/CMakeLists.txt
 
 include_directories( ${GEL_INCLUDE_DIR} )
@@ -47,4 +48,7 @@ add_subdirectory(pro)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/brec: requires geotiff")
 endif()

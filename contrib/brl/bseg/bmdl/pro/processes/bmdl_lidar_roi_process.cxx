@@ -8,6 +8,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_box_2d.h>
 
+#include <vil/vil_config.h>  // for HAS_GEOTIFF definition
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
 #include <vil/file_formats/vil_tiff.h>
