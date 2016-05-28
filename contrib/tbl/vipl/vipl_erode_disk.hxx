@@ -30,12 +30,12 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   std::cout << " (" << startx << ':' << stopx << ',' << starty << ':' << stopy << ')';
   std::cout << " run over image ...";
 #endif
-  for (register int j = starty; j < stopy; ++j)
-    for (register int i = startx; i < stopx; ++i)
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx; i < stopx; ++i)
     {
       DataIn v = fgetpixel(in, i, j, DataIn(0)); // set v to min of surrounding pixels:
-      for (register int x=0; x<=size; ++x)
-      for (register int y=0; y<=size; ++y)
+      for (int x=0; x<=size; ++x)
+      for (int y=0; y<=size; ++y)
         if (mask()[x][y]) {
           v = std::min(v, getpixel(in, i+x, j+y, DataIn(0)));
           v = std::min(v, getpixel(in, i-x, j+y, DataIn(0)));

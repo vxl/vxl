@@ -246,6 +246,6 @@ bool boxm2_vecf_ocl_filter::filter(std::vector<float> const& weights, unsigned n
    delete info_buffer_source;
    blk_info_temp->release_memory();
    delete info_buffer;
-   delete output_buff;
+   delete[] output_buff;
    return true;
 }
