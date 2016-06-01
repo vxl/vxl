@@ -1,6 +1,6 @@
-// This is core/vil/vil_math_sse.txx
-#ifndef vil_math_sse_txx_
-#define vil_math_sse_txx_
+// This is core/vil/vil_math_sse.hxx
+#ifndef vil_math_sse_hxx_
+#define vil_math_sse_hxx_
 
 #ifndef vil_math_h_
 #error "This header cannot be included directly, only through vil_math_.h"
@@ -130,4 +130,4 @@ inline void vil_math_image_abs_difference_1d_sse<float,float,float>(
   }
 }
 
-#endif // vil_math_sse_txx_
+#endif // vil_math_sse_hxx_

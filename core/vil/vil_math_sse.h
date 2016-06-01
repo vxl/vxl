@@ -22,11 +22,11 @@
 //      implement the outer function which calls the SSE optimized function for
 //      the right set of types.
 //  3.  Add the implementation for vil_math_image_abs_difference_1d_sse
-//      specialized for the new type combination in vil_math_sse.txx
+//      specialized for the new type combination in vil_math_sse.hxx
 //
 // Note:
 //  The types need not all three be the same so long as the specialization
-//  of vil_math_image_abs_difference_1d_sse in vil_math_sse.txx is implemented
+//  of vil_math_image_abs_difference_1d_sse in vil_math_sse.hxx is implemented
 //  for the defined combination of types
 
 
