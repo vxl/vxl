@@ -389,6 +389,14 @@ vnl_matrix_fixed<T,nrows,ncols>::scale_column(unsigned column_index, T value)
   return *this;
 }
 
+template <class T, unsigned int nrows, unsigned int ncols>
+void
+vnl_matrix_fixed<T,nrows,ncols>
+::swap(vnl_matrix_fixed<T,nrows,ncols> &that)
+{
+  std::swap(this->data_, that.data_);
+}
+
 //: Returns a copy of n rows, starting from "row"
 template<class T, unsigned nrows, unsigned ncols>
 vnl_matrix<T>
@@ -447,6 +455,30 @@ vnl_vector_fixed<T,nrows> vnl_matrix_fixed<T,nrows,ncols>::get_column(unsigned c
   for (unsigned int j = 0; j < nrows; ++j)
     v[j] = this->data_[j][column_index];
   return v;
+}
+
+//: Create a vector out of row[row_index].
+template <class T, unsigned int nrows, unsigned int ncols>
+vnl_matrix<T>
+vnl_matrix_fixed<T,nrows,ncols>
+::get_rows(vnl_vector<unsigned int> i) const
+{
+  vnl_matrix<T> m(i.size(), this->cols());
+  for (unsigned int j = 0; j < i.size(); ++j)
+    m.set_row(j, this->get_row(i.get(j)));
+  return m;
+}
+
+//: Create a vector out of column[column_index].
+template <class T, unsigned int nrows, unsigned int ncols>
+vnl_matrix<T>
+vnl_matrix_fixed<T,nrows,ncols>
+::get_columns(vnl_vector<unsigned int> i) const
+{
+  vnl_matrix<T> m(this->rows(), i.size());
+  for (unsigned int j = 0; j < i.size(); ++j)
+    m.set_column(j, this->get_column(i.get(j)));
+  return m;
 }
 
 //: Return a vector with the content of the (main) diagonal
@@ -613,6 +645,24 @@ vnl_matrix_fixed<T,nrows,ncols>::is_zero() const
     for (unsigned int j = 0; j < ncols; ++j)
       if ( !( this->data_[i][ j] == zero) )
         return false;
+
+  return true;
+}
+
+template <class T, unsigned nrows, unsigned ncols>
+bool vnl_matrix_fixed<T,nrows,ncols>
+::is_equal(vnl_matrix_fixed<T,nrows,ncols> const& rhs, double tol) const
+{
+  if (this == &rhs)                                      // same object => equal.
+    return true;
+
+  if (this->rows() != rhs.rows() || this->cols() != rhs.cols())
+    return false;                                        // different sizes => not equal.
+
+  for (unsigned int i = 0; i < this->rows(); ++i)
+    for (unsigned int j = 0; j < this->columns(); ++j)
+      if (vnl_math::abs(this->data_[i][j] - rhs.data_[i][j]) > tol)
+        return false;                                    // difference greater than tol
 
   return true;
 }
