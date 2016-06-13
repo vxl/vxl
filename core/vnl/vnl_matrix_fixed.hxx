@@ -507,7 +507,7 @@ vnl_vector_fixed<T,nrows*ncols> vnl_matrix_fixed<T,nrows,ncols>::flatten_column_
   vnl_vector_fixed<T,nrows*ncols> v;
   for (unsigned int c = 0; c < ncols; ++c)
     for (unsigned int r = 0; r < nrows; ++r)
-      v[c*ncols+r] = this->data_[r][c];
+      v[c*nrows+r] = this->data_[r][c];
   return v;
 }
 
