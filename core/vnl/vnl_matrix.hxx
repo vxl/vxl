@@ -1028,7 +1028,7 @@ vnl_vector<T> vnl_matrix<T>::flatten_column_major() const
   vnl_vector<T> v(this->num_rows * this->num_cols);
   for (unsigned int c = 0; c < this->num_cols; ++c)
     for (unsigned int r = 0; r < this->num_rows; ++r)
-      v[c*this->num_cols+r] = this->data[r][c];
+      v[c*this->num_rows+r] = this->data[r][c];
   return v;
 }
 
