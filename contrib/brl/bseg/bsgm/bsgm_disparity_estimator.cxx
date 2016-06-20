@@ -423,8 +423,8 @@ bsgm_disparity_estimator::compute_census_data(
   bool only_32_bits = census_diam <= 5;
 
   // Compute census images
-  vil_image_view<unsigned long long> census_tar, census_ref;
-  vil_image_view<unsigned long long> census_conf_tar, census_conf_ref;
+  vil_image_view<vxl_uint_64> census_tar, census_ref;
+  vil_image_view<vxl_uint_64> census_conf_tar, census_conf_ref;
   bsgm_compute_census_img( 
     img_tar, census_diam, census_tar, census_conf_tar, params_.census_tol );
   bsgm_compute_census_img( 
@@ -459,10 +459,10 @@ bsgm_disparity_estimator::compute_census_data(
         *ac = 255;
 
       // Compute census costs for all valid disparities
-      unsigned long long cen_t = census_tar(x,y);
-      unsigned long long* cen_r = &census_ref(x2,y);
-      unsigned long long conf_t = census_conf_tar(x,y);
-      unsigned long long* conf_r = &census_conf_ref(x2,y);
+      vxl_uint_64 cen_t = census_tar(x,y);
+      vxl_uint_64* cen_r = &census_ref(x2,y);
+      vxl_uint_64 conf_t = census_conf_tar(x,y);
+      vxl_uint_64* conf_r = &census_conf_ref(x2,y);
 
       for( ; d < num_disparities; d++, x2++, ac++, cen_r++, conf_r++ ){
 

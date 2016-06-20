@@ -10,7 +10,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
-#include <bsgm\bsgm_disparity_estimator.h>
+#include <bsgm/bsgm_disparity_estimator.h>
 
 
 int main(int argc,char * argv[])
