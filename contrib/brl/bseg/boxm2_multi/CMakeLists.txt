@@ -1,3 +1,4 @@
+if(HAS_GEOTIFF)
 # contrib/brl/bseg/boxm2/CMakeLists.txt
 #set( boxm2_MULTI_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} )
 
@@ -34,4 +35,7 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/boxm2_multi: requires geotiff")
 endif()

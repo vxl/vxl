@@ -71,7 +71,7 @@ bool bvgl_2d_geo_index::convert_box(vgl_box_2d<double> const& in, vgl_box_2d<flo
 }
 
 // write node and its children to kml
-void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, std::string explanation)
+void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, std::string explanation, std::string name)
 {
   if (!n)
     return;
@@ -82,25 +82,25 @@ void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_
     ul[0] = n->extent_.max_point().y(); ul[1] = n->extent_.min_point().x();
     lr[0] = n->extent_.min_point().y(); lr[1] = n->extent_.max_point().x();
     ur[0] = n->extent_.max_point().y(); ur[1] = n->extent_.max_point().x();
-    bkml_write::write_box(ofs, " ", explanation, ul, ur, ll, lr);
+    bkml_write::write_box(ofs, name, explanation, ul, ur, ll, lr);
   }
   else {
     for (unsigned c_idx = 0; c_idx < n->children_.size(); c_idx++)
-      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth, explanation);
+      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth, explanation, name);
   }
 }
 
 // write the quadtree node structure at certain depth
-void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, std::string const& kml_file, std::string explanation)
+void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, std::string const& kml_file, std::string explanation, std::string name)
 {
   std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
-  write_to_kml_node(ofs, root, 0, depth, explanation);
+  write_to_kml_node(ofs, root, 0, depth, explanation, name);
   bkml_write::close_document(ofs);
 }
 
 // write node and its children to kml for quadtree having non geo coordinates
-void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vpgl_lvcs_sptr const& lvcs, std::string explanation)
+void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vpgl_lvcs_sptr const& lvcs, std::string explanation, std::string name)
 {
   if (!n)
     return;
@@ -113,19 +113,19 @@ void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_
     ul[0] = max_lat;  ul[1] = min_lon;
     lr[0] = min_lat;  lr[1] = max_lon;
     ur[0] = max_lat;  ur[1] = max_lon;
-    bkml_write::write_box(ofs, " ", explanation, ul, ur, ll, lr);
+    bkml_write::write_box(ofs, name, explanation, ul, ur, ll, lr);
   }
   else {
     for (unsigned c_idx = 0; c_idx < n->children_.size(); c_idx++)
-      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth, lvcs, explanation);
+      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth, lvcs, explanation, name);
   }
 }
 
-void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, std::string const& kml_file, vpgl_lvcs_sptr const& lvcs, std::string explanation)
+void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, std::string const& kml_file, vpgl_lvcs_sptr const& lvcs, std::string explanation, std::string name)
 {
   std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
-  write_to_kml_node(ofs, root, 0, depth, lvcs, explanation);
+  write_to_kml_node(ofs, root, 0, depth, lvcs, explanation, name);
   bkml_write::close_document(ofs);
 }
 

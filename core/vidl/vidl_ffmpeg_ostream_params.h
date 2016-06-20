@@ -130,8 +130,6 @@ struct vidl_ffmpeg_ostream_params
   int video_inter_quant_bias_;
   int dct_algo_;
   int idct_algo_;
-  int me_threshold_;
-  int mb_threshold_;
   int intra_dc_precision_;
   int strict_;
   int error_rate_;

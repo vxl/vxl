@@ -132,7 +132,7 @@ expatpp::parseFile(FILE* inFile)
       return parseStatus;
     }
   } while (!done);
-  delete buf;
+  delete[] buf;
   return XML_STATUS_OK;
 }
 

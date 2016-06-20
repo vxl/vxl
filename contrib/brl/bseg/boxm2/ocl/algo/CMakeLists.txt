@@ -46,4 +46,3 @@ target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl ${VXL_LIB_PREFIX}v
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

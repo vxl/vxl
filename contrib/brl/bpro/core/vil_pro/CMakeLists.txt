@@ -22,4 +22,3 @@ target_link_libraries(vil_pro bbas_pro bprb bil bil_algo brip sdet ${VXL_LIB_PRE
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

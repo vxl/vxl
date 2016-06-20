@@ -172,26 +172,35 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
     A( 2*i+1, 8 ) = (*w)[i] * -1 * norm_from[ i ][ 2 ] * norm_to[ i ][ 1 ];
   }
 
-  vnl_svd<double> svd( A, 1.0e-8 );
+  //make sure this matrix is finite before passing to svd which will assert.
+  bool result = A.is_finite();
 
-  bool result;
-  if ( svd.rank() < homog_dof_ ) {
-    result= false;
+  if ( result )
+  {
+    vnl_svd<double> svd( A, 1.0e-8 );
+
+    if ( svd.rank() < homog_dof_ ) {
+      result= false;
+    }
+    else
+    {
+      vnl_vector< double > nparams = svd.nullvector();
+      vnl_matrix< double > normH( 3, 3 );
+      params_to_homog(nparams, normH);
+
+      vnl_svd<double> svd_norm_to( norm_matrix_to );
+      assert( svd_norm_to.rank() == 3 );
+      vnl_matrix< double > H = svd_norm_to.inverse() * normH * norm_matrix_from;
+
+      params.set_size(9);
+      homog_to_params(H, params);
+
+      result = true;
+    }
   }
   else
   {
-    vnl_vector< double > nparams = svd.nullvector();
-    vnl_matrix< double > normH( 3, 3 );
-    params_to_homog(nparams, normH);
-
-    vnl_svd<double> svd_norm_to( norm_matrix_to );
-    assert( svd_norm_to.rank() == 3 );
-    vnl_matrix< double > H = svd_norm_to.inverse() * normH * norm_matrix_from;
-
-    params.set_size(9);
-    homog_to_params(H, params);
-
-    result = true;
+    vcl_cerr << "A.is_finite() FAILED." << vcl_endl;
   }
 
   if ( !weights )
@@ -244,6 +253,7 @@ rrel_homography2d_est :: normalize( const std::vector< vnl_vector<double> >& pts
     avg_distance += wgts[i] * std::sqrt( vnl_math::sqr( pts[i][0] / pts[i][2] - center[0] ) +
                                         vnl_math::sqr( pts[i][1] / pts[i][2] - center[1] ) );
   }
+
   avg_distance /= sum_wgt;
 
   norm_matrix( 0, 0 ) = 1.0 / avg_distance;

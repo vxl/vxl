@@ -18,12 +18,12 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
   int starty = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
   int stopx  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
   int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
-  for (register int j = starty, ej =  stopy; j < ej  ; ++j)
-    for (register int i = startx, ei = stopx; i < ei ; ++i)
+  for (int j = starty, ej =  stopy; j < ej  ; ++j)
+    for (int i = startx, ei = stopx; i < ei ; ++i)
     {
       DataIn v = fgetpixel(in, i, j, DataIn(0)); // set v to max of surrounding pixels:
-      for (register int x=0; x<=size; ++x)
-      for (register int y=0; y<=size; ++y)
+      for (int x=0; x<=size; ++x)
+      for (int y=0; y<=size; ++y)
         if (mask()[x][y]) {
           v = std::max(v, getpixel(in, i+x, j+y, DataIn(0)));
           v = std::max(v, getpixel(in, i-x, j+y, DataIn(0)));

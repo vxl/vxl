@@ -20,4 +20,3 @@ target_link_libraries(brad_pro brad_io brad bprb brdb brip ${VXL_LIB_PREFIX}vbl_
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

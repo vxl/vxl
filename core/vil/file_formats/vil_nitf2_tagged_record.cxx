@@ -360,7 +360,7 @@ bool vil_nitf2_tagged_record::test()
       std::cerr << "\nWrite failed!\n";
       error = true;
     }
-    delete buf;
+    delete[] buf;
     std::cerr << "Testing get_value:\n";
     int mti_dp;
     if (!record->get_value("MTI_DP", mti_dp) || mti_dp!=2) {

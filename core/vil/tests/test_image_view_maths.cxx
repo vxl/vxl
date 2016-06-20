@@ -2,10 +2,46 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_copy.h>
 #include <vil/vil_math.h>
 #include <vil/vil_print.h>
+
+template<class T>
+static void test_image_abs_diff(unsigned ni, unsigned nj, T min, T max, T tol)
+{
+  vil_image_view<vxl_byte> bdiff_A(ni, nj);
+  vil_image_view<vxl_byte> bdiff_B(ni, nj);
+  vil_image_view<vxl_byte> bdiff_D(ni, nj);
+  T diff = vcl_abs(max-min);
+
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      bdiff_A(i,j) = min + i + j + i%3;
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      bdiff_B(i,j) = max + i + j;
+
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      TEST_NEAR("|A-A|", bdiff_D(i,j), 0, tol);
+
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      TEST_NEAR("|A-B|(i,j)", bdiff_D(i,j), diff - i%3, tol);
+
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      TEST_NEAR("|B-A|(i,j)", bdiff_D(i,j), diff - i%3, tol);
+}
 
 static void test_image_view_maths_byte()
 {
@@ -322,11 +358,40 @@ static void test_image_view_maths_byte()
   TEST_NEAR("vil_math_image_min (d)",fim_min_out(1,2),4.2f,1e-6);
   TEST_NEAR("vil_math_image_min (e)",fim_min_out(2,2),4.2f,1e-6);
   TEST_NEAR("vil_math_image_min (f)",fim_min_out(2,3),-3.f,1e-6);
+
+  // dim > nxblock_size, n > 1
+  test_image_abs_diff<vxl_byte>(35, 53, 100, 113, 0);
+
+  // dim = nxblock_size, n > 1
+  test_image_abs_diff<vxl_byte>(32, 48, 100, 113, 0);
+
+  // dim = nxblock_size, n = 1
+  test_image_abs_diff<vxl_byte>(16, 16, 100, 113, 0);
+
+  // dim r< nxblock_size, n = 1
+  test_image_abs_diff<vxl_byte>(11, 13, 100, 113, 0);
+}
+
+
+static void test_image_view_maths_float()
+{
+  // dim > nxblock_size, n > 1
+  test_image_abs_diff<vxl_byte>(11, 13, 100.0f, 113.0f, 1e-8);
+
+  // dim = nxblock_size, n > 1
+  test_image_abs_diff<vxl_byte>(8, 12, 100.0f, 113.0f, 1e-8);
+
+  // dim = nxblock_size, n = 1
+  test_image_abs_diff<vxl_byte>(4, 4, 100.0f, 113.0f, 1e-8);
+
+  // dim r< nxblock_size, n = 1
+  test_image_abs_diff<vxl_byte>(2, 3, 100.0f, 113.0f, 1e-8);
 }
 
 static void test_image_view_maths()
 {
   test_image_view_maths_byte();
+  test_image_view_maths_float();
 }
 
 TESTMAIN(test_image_view_maths);

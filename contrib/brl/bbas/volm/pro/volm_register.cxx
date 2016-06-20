@@ -55,4 +55,13 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_stereo_height_fix_process, "volmStereoHeightFixProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_intersecting_sat_resources_process, "volmFindIntersectingSatResourcesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_ndsm_generation_process, "volmNdsmGenearationProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_dsm_ground_plane_estimation_process, "volmDsmGroundEstimationProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_dsm_ground_plane_estimation_edge_process, "volmDsmGroundEstimationEdgeProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_building_layer_extraction_process, "volmBuildingLayerExtractionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_layer_extraction_process, "volmLayerExtractionProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_render_kml_polygon_mask_process, "volmRenderKmlPolygonMaskProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_kml_from_binary_image_process, "volmGenerateKmlFromBinaryImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_downsample_binary_layer_process, "volmDownsampleLayerImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_dsm_ground_filter_mgf_process, "volmDsmGroundFilterMGFProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_detection_rate_roc_process, "volmDetectionRateROCProcess");
 }
