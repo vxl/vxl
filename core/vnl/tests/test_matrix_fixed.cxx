@@ -254,13 +254,13 @@ void test_int()
     vnl_matrix_fixed<int, 2, 8> lg(data);
     vnl_matrix_fixed<int, 8, 2> wd(data);
 
-    TEST("sq.flatten_row_major", flat.is_equal(sq.flatten_row_major(), 10e-6), true);
-    TEST("lg.flatten_row_major", flat.is_equal(lg.flatten_row_major(), 10e-6), true);
-    TEST("wd.flatten_row_major", flat.is_equal(wd.flatten_row_major(), 10e-6), true);
+    TEST("sq.flatten_row_major", flat.is_equal(sq.flatten_row_major().as_vector(), 10e-6), true);
+    TEST("lg.flatten_row_major", flat.is_equal(lg.flatten_row_major().as_vector(), 10e-6), true);
+    TEST("wd.flatten_row_major", flat.is_equal(wd.flatten_row_major().as_vector(), 10e-6), true);
 
-    TEST("sq.flatten_column_major", flat.is_equal(sq.transpose().flatten_column_major(), 10e-6), true);
-    TEST("lg.flatten_column_major", flat.is_equal(lg.transpose().flatten_column_major(), 10e-6), true);
-    TEST("wd.flatten_column_major", flat.is_equal(wd.transpose().flatten_column_major(), 10e-6), true);
+    TEST("sq.flatten_column_major", flat.is_equal(sq.transpose().flatten_column_major().as_vector(), 10e-6), true);
+    TEST("lg.flatten_column_major", flat.is_equal(lg.transpose().flatten_column_major().as_vector(), 10e-6), true);
+    TEST("wd.flatten_column_major", flat.is_equal(wd.transpose().flatten_column_major().as_vector(), 10e-6), true);
     }
 
 
