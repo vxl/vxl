@@ -116,19 +116,25 @@ def dump_binary_data_as_txt(poly_file, output_file):
 # def test_classifier(tclsf, img, block_size):
 
 
-def test_classifier(tclsf, block_size, category_id_file=""):
+def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
     bvxm_batch.init_process("sdetTextureClassifierProcess2")
     bvxm_batch.set_input_from_db(0, tclsf)
     bvxm_batch.set_input_unsigned(1, block_size)
     bvxm_batch.set_input_string(2, category_id_file)
-    bvxm_batch.run_process()
-    (out_id, out_type) = bvxm_batch.commit_output(0)
-    out = dbvalue(out_id, out_type)
-    (out_id, out_type) = bvxm_batch.commit_output(1)
-    out_color = dbvalue(out_id, out_type)
-    (out_id, out_type) = bvxm_batch.commit_output(2)
-    out_id = dbvalue(out_id, out_type)
-    return out, out_color, out_id
+    bvxm_batch.set_input_string(3, category_name)
+    status = bvxm_batch.run_process()
+    if status:
+      (out_id, out_type) = bvxm_batch.commit_output(0)
+      out_max_prob = dbvalue(out_id, out_type)
+      (out_id, out_type) = bvxm_batch.commit_output(1)
+      out_color_img = dbvalue(out_id, out_type)
+      (out_id, out_type) = bvxm_batch.commit_output(2)
+      out_id_img = dbvalue(out_id, out_type)
+      (out_id, out_type) = bvxm_batch.commit_output(3)
+      out_cat_prob = dbvalue(out_id, out_type)
+      return out_max_prob, out_color_img, out_id_img, out_cat_prob
+    else:
+      return None, None, None, None
 
 
 def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, percent_cat_name, category_id_file=""):
@@ -222,20 +228,22 @@ def generate_roc(tclsf, class_out_prob_img, class_out_color_img, orig_img, prefi
     bvxm_batch.set_input_string(6, category_id_file)
     bvxm_batch.run_process()
     (id, type) = bvxm_batch.commit_output(0)
-    tp = bvxm_batch.get_bbas_1d_array_float(id)
+    thres = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(1)
-    tn = bvxm_batch.get_bbas_1d_array_float(id)
+    tp = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(2)
-    fp = bvxm_batch.get_bbas_1d_array_float(id)
+    tn = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(3)
-    fn = bvxm_batch.get_bbas_1d_array_float(id)
+    fp = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(4)
-    tpr = bvxm_batch.get_bbas_1d_array_float(id)
+    fn = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(5)
-    fpr = bvxm_batch.get_bbas_1d_array_float(id)
+    tpr = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(6)
+    fpr = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(7)
     outimg = dbvalue(id, type)
-    return tp, tn, fp, fn, tpr, fpr, outimg
+    return thres, tp, tn, fp, fn, tpr, fpr, outimg
 
 # ROC analysis for a binary classifier
 
@@ -265,6 +273,32 @@ def generate_roc2(image, gt_pos_file, pos_sign="low"):
     else:
         return 0, 0, 0, 0, 0, 0, 0
 
+# generate ROC for the input probability image of ground truth category
+def generate_roc3(tclsf, in_prob_img, prefix_for_bin_files, positive_category_name):
+  bvxm_batch.init_process("sdetTextureClassifierROCProcess3")
+  bvxm_batch.set_input_from_db(0, tclsf)
+  bvxm_batch.set_input_from_db(1, in_prob_img)
+  bvxm_batch.set_input_string(2, prefix_for_bin_files)
+  bvxm_batch.set_input_string(3, positive_category_name)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    thres = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(1)
+    tp = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(2)
+    tn = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(3)
+    fp = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(4)
+    fn = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(5)
+    tpr = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(6)
+    fpr = bvxm_batch.get_bbas_1d_array_float(id)
+    return thres, tp, tn, fp, fn, tpr, fpr
+  else:
+    return None, None, None, None, None, None, None
 
 def segment_image(img, weight_thres, margin=0, min_size=50, sigma=1, neigh=8):
     bvxm_batch.init_process("sdetSegmentImageProcess")

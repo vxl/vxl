@@ -1310,7 +1310,17 @@ std::pair<std::string, float> sdet_texture_classifier::highest_prob_class(std::v
   return r;
 }
 
-
+//: get the probability of the input category from the given histogram
+//  If category name is not in the class, 0 will be returned
+float sdet_texture_classifier::get_class_prob(std::vector<float> const& hist, std::string const& class_name)
+{
+  std::map<std::string, float> class_map = this->texture_probabilities(hist);
+  std::map<std::string, float>::iterator iter = class_map.find(class_name);
+  if (iter != class_map.end())
+    return iter->second;
+  else
+    return 0.0f;
+}
 
 void sdet_texture_classifier::
 category_color_mix(std::map<std::string, float>  & probs,
