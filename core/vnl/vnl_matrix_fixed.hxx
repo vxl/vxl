@@ -764,12 +764,10 @@ vnl_matrix_fixed<T,nrows,ncols>::flipud()
 {
   for (unsigned int r1 = 0; 2*r1+1 < nrows; ++r1)
   {
-    unsigned int r2 = nrows - 1 - r1;
+    const unsigned int r2 = nrows - 1 - r1;
     for (unsigned int c = 0; c < ncols; ++c)
     {
-      T tmp = this->data_[r1][c];
-      this->data_[r1][c] = this->data_[r2][c];
-      this->data_[r2][c] = tmp;
+    std::swap(this->data_[r1][c], this->data_[r2][c]);
     }
   }
   return *this;
@@ -782,12 +780,10 @@ vnl_matrix_fixed<T,nrows,ncols>::fliplr()
 {
   for (unsigned int c1 = 0; 2*c1+1 < ncols; ++c1)
   {
-    unsigned int c2 = ncols - 1 - c1;
+    const unsigned int c2 = ncols - 1 - c1;
     for (unsigned int r = 0; r < nrows; ++r)
     {
-      T tmp = this->data_[r][c1];
-      this->data_[r][c1] = this->data_[r][c2];
-      this->data_[r][c2] = tmp;
+    std::swap(this->data_[r][c1], this->data_[r][c2]);
     }
   }
   return *this;
