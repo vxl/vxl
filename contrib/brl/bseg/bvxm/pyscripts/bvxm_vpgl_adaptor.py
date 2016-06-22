@@ -504,9 +504,9 @@ def convert_local_to_global_coordinates(lvcs, x, y, z):
 
 def create_lvcs(lat, lon, el, csname):
     bvxm_batch.init_process('vpglCreateLVCSProcess')
-    bvxm_batch.set_input_float(0, lat)
-    bvxm_batch.set_input_float(1, lon)
-    bvxm_batch.set_input_float(2, el)
+    bvxm_batch.set_input_double(0, lat)
+    bvxm_batch.set_input_double(1, lon)
+    bvxm_batch.set_input_double(2, el)
     bvxm_batch.set_input_string(3, csname)
     bvxm_batch.run_process()
     (id, type) = bvxm_batch.commit_output(0)

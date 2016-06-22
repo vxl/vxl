@@ -142,8 +142,23 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
       }
     }
   }
-  double thresholds[9] = {0.01, 0.001, 0.0001, 0.00001, 0.000001, 0.0000001, 0.00000001, 0.000000001, 0.0000000001};
-  const unsigned int num_thresholds = 9;
+  //double thresholds[12] = {0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001, 0.0000001, 0.00000001, 0.000000001, 0.0000000001, 0.00000000001, 0.000000000001};
+  float min_val = 0.0f;
+  float max_val = 1.0f;
+  //vil_math_value_range(input_prob_img, min_val, max_val);
+  std::vector<float> thresholds;
+  unsigned num_thres = 200;
+  float delta = (max_val-min_val) / num_thres;
+  for (unsigned i = 0; i < num_thres; i++)
+    thresholds.push_back(min_val + delta*i);
+  thresholds.push_back(max_val);
+  thresholds.push_back(max_val+delta);
+  const unsigned int num_thresholds = thresholds.size();
+  std::cout << "image min: " << min_val << ", max: " << max_val << "\n threshold: ";
+  for (unsigned i = 0; i < num_thresholds; i++)
+    std::cout << thresholds[i] << ' ';
+  std::cout << std::flush << std::endl;
+
   bbas_1d_array_float * tp=new bbas_1d_array_float(num_thresholds);
   bbas_1d_array_float * tn=new bbas_1d_array_float(num_thresholds);
   bbas_1d_array_float * fp=new bbas_1d_array_float(num_thresholds);
@@ -197,15 +212,20 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
     fpr->data_array[pnt]= fp->data_array[pnt] / (fp->data_array[pnt] + tn->data_array[pnt]);
   }
 
-  pro.set_output_val<bbas_1d_array_float_sptr>(0, tp);
-  pro.set_output_val<bbas_1d_array_float_sptr>(1, tn);
-  pro.set_output_val<bbas_1d_array_float_sptr>(2, fp);
-  pro.set_output_val<bbas_1d_array_float_sptr>(3, fn);
-  pro.set_output_val<bbas_1d_array_float_sptr>(4, tpr);
-  pro.set_output_val<bbas_1d_array_float_sptr>(5, fpr);
+  bbas_1d_array_float * thres_out=new bbas_1d_array_float(num_thresholds);
+  for (unsigned k = 0; k < num_thresholds; k++) {
+    thres_out->data_array[k] = thresholds[k];
+  }
+  pro.set_output_val<bbas_1d_array_float_sptr>(0, thres_out);
+  pro.set_output_val<bbas_1d_array_float_sptr>(1, tp);
+  pro.set_output_val<bbas_1d_array_float_sptr>(2, tn);
+  pro.set_output_val<bbas_1d_array_float_sptr>(3, fp);
+  pro.set_output_val<bbas_1d_array_float_sptr>(4, fn);
+  pro.set_output_val<bbas_1d_array_float_sptr>(5, tpr);
+  pro.set_output_val<bbas_1d_array_float_sptr>(6, fpr);
   // return the output image
   vil_image_view_base_sptr img_ptr = new vil_image_view<vil_rgb<vxl_byte> >(out_rgb);
-  pro.set_output_val<vil_image_view_base_sptr>(6, img_ptr);
+  pro.set_output_val<vil_image_view_base_sptr>(7, img_ptr);
   return true;
 }
 
@@ -420,3 +440,157 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
   return true;
 }
 
+//: process that takes a classification probability image of certain category and analyze its ROC,
+//  given series of labeled positive and negative ground truth
+bool sdet_texture_classifier_roc_process3_cons(bprb_func_process& pro)
+{
+  std::vector<std::string> input_types;
+  input_types.push_back("sdet_texture_classifier_sptr"); //texton dictionary, category names and colors are in the dictionary
+  input_types.push_back("vil_image_view_base_sptr"); // classification output - prob values for each outputted category
+  input_types.push_back("vcl_string"); // prefix for ground truth binary vsol spatial object files, <prefix>_<category_name>.bin
+  input_types.push_back("vcl_string"); // name of the category to use as positive (the rest of the available categories will be used as negatives)
+  if (!pro.set_input_types(input_types))
+    return false;
+  std::vector<std::string> output_types;
+  output_types.push_back("bbas_1d_array_float_sptr");  // threshold
+  output_types.push_back("bbas_1d_array_float_sptr");  // tp
+  output_types.push_back("bbas_1d_array_float_sptr");  // tn
+  output_types.push_back("bbas_1d_array_float_sptr");  // fp
+  output_types.push_back("bbas_1d_array_float_sptr");  // fn
+  output_types.push_back("bbas_1d_array_float_sptr");  // tpr
+  output_types.push_back("bbas_1d_array_float_sptr");  // fpr
+  output_types.push_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
+  return pro.set_output_types(output_types);
+}
+
+bool sdet_texture_classifier_roc_process3(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    std::cerr << pro.name() << ": Wrong Inputs!!!" << std::endl;
+    return false;
+  }
+  // get inputs
+  unsigned in_i = 0;
+  sdet_texture_classifier_sptr dict = pro.get_input<sdet_texture_classifier_sptr>(in_i++);
+  vil_image_view<float> input_prob_img(pro.get_input<vil_image_view_base_sptr>(in_i++));
+  std::string prefix = pro.get_input<std::string>(in_i++);
+  std::string pos_category = pro.get_input<std::string>(in_i++);
+
+  // load positive pixels
+  std::string pos_file_name = prefix + "_" + pos_category + ".bin";
+  std::vector<vgl_polygon<double> > positives = sdet_texture_classifier::load_polys(pos_file_name);
+  std::cout << "there are " << positives.size() << " positive example polygons read!\n";
+
+  // load the rest of labeled polygons as negative examples
+  std::vector<std::string> cats = dict->get_dictionary_categories();
+  std::vector<vgl_polygon<double> > negatives;
+  std::cout << " using : ";
+  for (unsigned kk = 0; kk < cats.size(); kk++) {
+    if (cats[kk].compare(pos_category) == 0)
+      continue;
+    std::string filename = prefix + "_" + cats[kk] + ".bin";
+    if (!vul_file::exists(filename))
+      continue;
+    std::vector<vgl_polygon<double> > negs = sdet_texture_classifier::load_polys(filename);
+    std::cout << cats[kk] << " ";
+    for (unsigned ii = 0; ii < negs.size(); ii++)
+      negatives.push_back(negs[ii]);
+  }
+  std::cout << " total of " << negatives.size() << " polygons as negatives!\n";
+
+  // go over the pixels and collect pixels of positives and negatives
+  unsigned ni = input_prob_img.ni(); unsigned nj = input_prob_img.nj();
+  std::vector<std::pair<int, int> > pos_pixels;
+  std::vector<std::pair<int, int> > neg_pixels;
+  for (unsigned ii = 0; ii < positives.size(); ii++) {
+    vgl_polygon_scan_iterator<double> psi(positives[ii]);
+    for (psi.reset(); psi.next(); ) {
+      int j = psi.scany();
+      for (int i  = psi.startx(); i <= psi.endx(); ++i) {
+        if (i < 0 || j < 0 || i >= ni || j >= nj)
+          continue;
+        pos_pixels.push_back(std::pair<int, int>(i,j));
+      }
+    }
+  }
+  for (unsigned ii = 0; ii < negatives.size(); ii++) {
+    vgl_polygon_scan_iterator<double> psi(negatives[ii]);
+    for (psi.reset(); psi.next(); ) {
+      int j = psi.scany();
+      for (int i  = psi.startx(); i <= psi.endx(); ++i) {
+        if (i < 0 || j < 0 || i >= ni || j >= nj)
+          continue;
+        neg_pixels.push_back(std::pair<int, int>(i,j));
+      }
+    }
+  }
+
+  // start to compute tp, fn, tn, fp
+  float min_val = 0.0f;
+  float max_val = 1.0f;
+  vil_math_value_range(input_prob_img, min_val, max_val);
+  std::vector<float> thresholds;
+  unsigned num_thres = 200;
+  float delta = (max_val-min_val) / num_thres;
+  for (unsigned i = 0; i <= num_thres; i++)
+    thresholds.push_back(min_val + delta*i);
+  const unsigned int num_thresholds = thresholds.size();
+  std::cout << "image min: " << min_val << ", max: " << max_val << ", number of thresholds used: " << num_thresholds << std::endl;
+  std::cout << "number of positive pixels: " << pos_pixels.size() << std::endl;
+  std::cout << "number of negative pixels: " << neg_pixels.size() << std::endl;
+  bbas_1d_array_float * tp=new bbas_1d_array_float(num_thresholds);
+  bbas_1d_array_float * tn=new bbas_1d_array_float(num_thresholds);
+  bbas_1d_array_float * fp=new bbas_1d_array_float(num_thresholds);
+  bbas_1d_array_float * fn=new bbas_1d_array_float(num_thresholds);
+  bbas_1d_array_float * tpr=new bbas_1d_array_float(num_thresholds);
+  bbas_1d_array_float * fpr=new bbas_1d_array_float(num_thresholds);
+
+  // initialize
+  for (unsigned k = 0; k < num_thresholds; k++) {
+    tp->data_array[k]  = 0.0f;  fp->data_array[k]  = 0.0f;
+    tn->data_array[k]  = 0.0f;  fn->data_array[k]  = 0.0f;
+    tpr->data_array[k] = 0.0f;  fpr->data_array[k] = 0.0f;
+  }
+  // count based on positive samples
+  for (unsigned ii = 0; ii < pos_pixels.size(); ii++)
+  {
+    unsigned i = pos_pixels[ii].first;
+    unsigned j = pos_pixels[ii].second;
+    for (unsigned k = 0; k < num_thresholds; k++)
+    {
+      if (input_prob_img(i,j) >= thresholds[k])
+        tp->data_array[k] += 1.0f;
+      else
+        fn->data_array[k] += 1.0f;
+    }
+  }
+  // count based on negative samples
+  for (unsigned ii = 0; ii < neg_pixels.size(); ii++)
+  {
+    unsigned i = neg_pixels[ii].first;
+    unsigned j = neg_pixels[ii].second;
+    for (unsigned k = 0; k < num_thresholds; k++) {
+      if (input_prob_img(i,j) >= thresholds[k])
+        fp->data_array[k] += 1.0f;
+      else
+        tn->data_array[k] += 1.0f;
+    }
+  }
+  // compute tpr and fpr
+  for (unsigned pnt = 0; pnt < num_thresholds; pnt++) {
+    tpr->data_array[pnt] = tp->data_array[pnt] / (tp->data_array[pnt] + fn->data_array[pnt]);
+    fpr->data_array[pnt] = fp->data_array[pnt] / (fp->data_array[pnt] + tn->data_array[pnt]);
+  }
+  bbas_1d_array_float * thres_out=new bbas_1d_array_float(num_thresholds);
+  for (unsigned k = 0; k < num_thresholds; k++) {
+    thres_out->data_array[k] = thresholds[k];
+  }
+  pro.set_output_val<bbas_1d_array_float_sptr>(0, thres_out);
+  pro.set_output_val<bbas_1d_array_float_sptr>(1, tp);
+  pro.set_output_val<bbas_1d_array_float_sptr>(2, tn);
+  pro.set_output_val<bbas_1d_array_float_sptr>(3, fp);
+  pro.set_output_val<bbas_1d_array_float_sptr>(4, fn);
+  pro.set_output_val<bbas_1d_array_float_sptr>(5, tpr);
+  pro.set_output_val<bbas_1d_array_float_sptr>(6, fpr);
+  return true;
+}
