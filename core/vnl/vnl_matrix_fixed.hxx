@@ -283,9 +283,7 @@ vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::copy_in(T const *p)
 {
   T* dp = this->data_block();
-  unsigned int i = nrows * ncols;
-  while (i--)
-    *dp++ = *p++;
+  std::copy( p, p + nrows * ncols, dp );
   return *this;
 }
 
@@ -293,9 +291,7 @@ template<class T, unsigned nrows, unsigned ncols>
 void vnl_matrix_fixed<T,nrows,ncols>::copy_out(T *p) const
 {
   T const* dp = this->data_block();
-  unsigned int i = nrows*ncols;
-  while (i--)
-    *p++ = *dp++;
+  std::copy( dp, dp + nrows * ncols, p );
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -659,8 +655,8 @@ bool vnl_matrix_fixed<T,nrows,ncols>
   if (this->rows() != rhs.rows() || this->cols() != rhs.cols())
     return false;                                        // different sizes => not equal.
 
-  for (unsigned int i = 0; i < this->rows(); ++i)
-    for (unsigned int j = 0; j < this->columns(); ++j)
+  for (unsigned int i = 0; i < nrows; ++i)
+    for (unsigned int j = 0; j < ncols; ++j)
       if (vnl_math::abs(this->data_[i][j] - rhs.data_[i][j]) > tol)
         return false;                                    // difference greater than tol
 
