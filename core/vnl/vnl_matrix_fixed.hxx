@@ -767,9 +767,7 @@ vnl_matrix_fixed<T,nrows,ncols>::flipud()
     const unsigned int r2 = nrows - 1 - r1;
     for (unsigned int c = 0; c < ncols; ++c)
     {
-      const T tmp = this->data_[r1][c];
-      this->data_[r1][c] = this->data_[r2][c];
-      this->data_[r2][c] = tmp;
+    std::swap(this->data_[r1][c], this->data_[r2][c]);
     }
   }
   return *this;
@@ -785,9 +783,7 @@ vnl_matrix_fixed<T,nrows,ncols>::fliplr()
     const unsigned int c2 = ncols - 1 - c1;
     for (unsigned int r = 0; r < nrows; ++r)
     {
-      const T tmp = this->data_[r][c1];
-      this->data_[r][c1] = this->data_[r][c2];
-      this->data_[r][c2] = tmp;
+    std::swap(this->data_[r][c1], this->data_[r][c2]);
     }
   }
   return *this;
