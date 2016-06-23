@@ -223,14 +223,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER ";
-#ifdef VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
-  std::cout << "is set to " << quote(VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_OVERLOAD_CAST(T,x) ";
 #ifdef VCL_OVERLOAD_CAST
   std::cout << "is set to " << quote(VCL_OVERLOAD_CAST(T,x));
