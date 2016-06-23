@@ -379,21 +379,6 @@ text { return ret; }
 //----------------------------------------------------------------------
 // overload resolution problems.
 
-//: VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
-//
-// On some compilers (in particular gcc 2.7.2.3), the compiler doesn't
-// know how to cast a templated derived class to a templated base class
-// (eg. vnl_matrix_fixed<3,3,double> -> vnl_matrix<double>) when doing overload
-// resolution. Making the overloaded function a friend of the class makes
-// the problem go away.
-//
-// True if the compiler needs this hack.
-
-//#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD 0
-//#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD 1
-#define VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD @VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD@
-
-
 //: VCL_OVERLOAD_CAST
 //
 // Some compilers (gcc 2.7.2.3) often won't perform

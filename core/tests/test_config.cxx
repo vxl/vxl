@@ -231,14 +231,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD ";
-#ifdef VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
-  std::cout << "is set to " << quote(VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_OVERLOAD_CAST(T,x) ";
 #ifdef VCL_OVERLOAD_CAST
   std::cout << "is set to " << quote(VCL_OVERLOAD_CAST(T,x));
