@@ -39,11 +39,7 @@ public:
   mbl_priority_bounded_queue(unsigned bound_size = 10, const O& comp = O()):
     b_size_(bound_size), comp_(comp) { }
 
-#if 0 // #if VCL_HAS_MEMBER_TEMPLATES
- template <class ITER>
-#else
   typedef const value_type *ITER;
-#endif
   //: Construct a bounded priority queue from a controlled sequence.
   // The bounded size will be the length of the sequence.
   mbl_priority_bounded_queue(

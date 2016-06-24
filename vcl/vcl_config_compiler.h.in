@@ -58,17 +58,6 @@
 //----------------------------------------------------------------------
 // various template issues.
 
-//: VCL_HAS_MEMBER_TEMPLATES
-//
-// True if the compiler supports template members of template classes.  e.g.
-// \code
-//     template <class U> class A {
-//       template <class V> void f(V);
-//     }
-// \endcode
-#define VCL_HAS_MEMBER_TEMPLATES @VCL_HAS_MEMBER_TEMPLATES@
-
-
 //: VCL_CAN_DO_PARTIAL_SPECIALIZATION
 //
 // True if the compiler supports partial specializations of templates. e.g.

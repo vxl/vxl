@@ -78,14 +78,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_HAS_MEMBER_TEMPLATES ";
-#ifdef VCL_HAS_MEMBER_TEMPLATES
-  std::cout << "is set to " << quote(VCL_HAS_MEMBER_TEMPLATES);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_CAN_DO_PARTIAL_SPECIALIZATION ";
 #ifdef VCL_CAN_DO_PARTIAL_SPECIALIZATION
   std::cout << "is set to " << quote(VCL_CAN_DO_PARTIAL_SPECIALIZATION);
