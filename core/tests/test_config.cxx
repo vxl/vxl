@@ -142,46 +142,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_UNINSTANTIATE_SPECIALIZATION(symbol) ";
-#ifdef VCL_UNINSTANTIATE_SPECIALIZATION
-  std::cout << "is set to " << quote(VCL_UNINSTANTIATE_SPECIALIZATION(symbol));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) ";
-#ifdef VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION
-  std::cout << "is set to " << quote(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_CAN_DO_STATIC_TEMPLATE_MEMBER ";
-#ifdef VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-  std::cout << "is set to " << quote(VCL_CAN_DO_STATIC_TEMPLATE_MEMBER);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) ";
-#ifdef VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER
-  std::cout << "is set to " << quote(VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) ";
-#ifdef VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER
-  std::cout << "is set to " << quote(VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_OVERLOAD_CAST(T,x) ";
 #ifdef VCL_OVERLOAD_CAST
   std::cout << "is set to " << quote(VCL_OVERLOAD_CAST(T,x));
