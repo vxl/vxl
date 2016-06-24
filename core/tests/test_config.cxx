@@ -46,14 +46,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_DEFAULT_VALUE(x) ";
-#ifdef VCL_DEFAULT_VALUE
-  std::cout << "is set to " << quote(VCL_DEFAULT_VALUE(x));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_STATIC_CONST_INIT_INT_DECL(x) ";
 #ifdef VCL_STATIC_CONST_INIT_INT_DECL
   std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DECL(x));

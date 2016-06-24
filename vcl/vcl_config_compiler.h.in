@@ -55,18 +55,6 @@
 #define VCL_COMPLEX_POW_WORKS @VCL_COMPLEX_POW_WORKS@
 
 
-//: VCL_DEFAULT_VALUE(x)
-//
-// Used to provide default values for function args in definition
-// Some compilers (GCC272) require defaults in template function definitions
-// Other compilers (VC50) disallow defaults in both decls and defs
-
-//#define VCL_DEFAULT_VALUE(x) /* no need */
-//#define VCL_DEFAULT_VALUE(x) = x
-#define VCL_DEFAULT_VALUE(x) @VCL_DEFAULT_VALUE@
-
-
-
 //----------------------------------------------------------------------
 // various template issues.
 
