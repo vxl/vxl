@@ -52,7 +52,6 @@ my $var_name;   # preprocessor variable name (no paren)
 for $var_exp (
 
   # from vcl_config_compiler.h
-  'VCL_HAS_DYNAMIC_CAST',
   'VCL_HAS_RTTI',
   'VCL_HAS_TYPENAME',
   'VCL_HAS_EXPORT',
