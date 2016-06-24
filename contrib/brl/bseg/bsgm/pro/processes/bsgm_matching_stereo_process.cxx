@@ -15,6 +15,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <bsgm/bsgm_disparity_estimator.h>
+#include <bsgm/bsgm_multiscale_disparity_estimator.h>
 
 //: Take two rectified images, generate their disparity map calculated using semi-global matching stereo algorithm
 namespace bsgm_matching_stereo_process_globals
@@ -74,6 +75,7 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   }
   vil_image_view<vxl_byte> img_right = vil_convert_to_grey_using_rgb_weighting(img_ref);
   vil_image_view<vxl_byte> img_left  = vil_convert_to_grey_using_rgb_weighting(img_tgr);
+  int img_width = img_right.ni(), img_height = img_right.nj();
 
   // setup sgm parameters
   bsgm_disparity_estimator_params params;
@@ -85,25 +87,50 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   params.print_timing = true;
   params.error_check_mode = error_check_mode;
 
-  // setup SGM
-  bsgm_disparity_estimator sgm( params );
+  // compute invalid map
+  vil_image_view<bool> invalid_right;
+  compute_invalid_map( img_right, img_left, 
+    invalid_right, min_disparity, num_disparity );
+
+  // Flip the sign of the disparities to match OpenCV implementation. Set the
+  // invalid disparity to one less than the min value, befor and after flip.
+  float invalid_disp = min_disparity - 1.0f;
+  float min_disparity_inv =  -( min_disparity + num_disparity - 1 );  
+  float invalid_disp_inv = min_disparity_inv - 1.0f;
+
+  vil_image_view<float> disp_right;
 
   // execute
   vil_image_view<float> disp_r;
   if (num_active_disparities >= num_disparity )  // run single-scale SGM if all disparities are active
   {
-    if (!sgm.compute(img_right, img_left, disp_r, min_disparity, num_disparity) ) {
+    bsgm_disparity_estimator sgm( 
+      params, img_width, img_height, num_disparity );
+
+    vil_image_view<int> min_disp_img( img_width, img_height );
+    min_disp_img.fill( min_disparity_inv );
+
+    if (!sgm.compute( img_right, img_left, invalid_right,
+        min_disp_img, invalid_disp_inv, disp_right ) ) {
       std::cerr << pro.name() << ": single-scale SGM failed!!\n";
       return false;
     }
   }
-  else                                           // otherwise run multi-scale to find the valid disparity range
+  else // otherwise run multi-scale to find the valid disparity range                                          
   {
-    if (!sgm.compute_multiscale(img_right, img_left, disp_r, min_disparity, num_disparity, num_active_disparities)) {
+    bsgm_multiscale_disparity_estimator sgm( 
+      params, img_width, img_height, num_disparity, num_active_disparities );
+
+    if (!sgm.compute( img_right, img_left, invalid_right,
+        min_disparity_inv, invalid_disp_inv, disp_right ) ){
       std::cerr << pro.name() << ": multi-scale SGM failed!!\n";
       return false;
     }
   }
+
+  // Flip the sign of the disparities to match OpenCV implementation.
+  bsgm_invert_disparities( disp_right, invalid_disp_inv, invalid_disp );
+
   // convert a text file to save all disparity value
   std::ofstream ofs(out_disparity_txt.c_str());
   std::cout << "disparity size row: " << disp_r.nj() << ", cols: " << disp_r.ni() << std::endl;

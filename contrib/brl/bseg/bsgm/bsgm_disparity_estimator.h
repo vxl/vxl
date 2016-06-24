@@ -48,10 +48,6 @@ struct bsgm_disparity_estimator_params
   // 2 bad pixels interpolated over
   int error_check_mode;
 
-  //: Identify rectification border pixels by this intensity and remove
-  // from computation.  Set < 0 to disable.
-  int border_val;
-
   //: Appearance costs computed by different algorithms are statically fused 
   // using these weights. Set any to <= 0 to prevent computation.
   float census_weight;
@@ -64,11 +60,6 @@ struct bsgm_disparity_estimator_params
 
   //: The length of the census kernal will be 2*census_rad+1. Must be 1,2,or 3.
   int census_rad;
-
-  //: Set this to treat all input/output disparities as the displacement
-  // of the target pixel with respect to the ref pixel, as the OpenCV 
-  // implementation does.
-  bool using_ref_to_target_disparities;
 
   //: Print detailed timing information to cerr.
   bool print_timing;
@@ -83,12 +74,10 @@ struct bsgm_disparity_estimator_params
     max_grad(32.0f),
     perform_quadratic_interp(true),
     error_check_mode(1),
-    border_val(0),
     census_weight(0.3f),
     xgrad_weight(0.7f),
     census_tol(2),
     census_rad(2),
-    using_ref_to_target_disparities(true),
     print_timing(false){}
 
 };
@@ -100,37 +89,31 @@ class bsgm_disparity_estimator
 
   //: Construct from parameters
   bsgm_disparity_estimator(
-    const bsgm_disparity_estimator_params& params );
+    const bsgm_disparity_estimator_params& params,
+    int img_width,
+    int img_height,
+    int num_disparities );
 
   //: Destructor
   ~bsgm_disparity_estimator();
 
-  //: Run the SGM algorithm
+  //: Run the SGM algorithm to compute a disparity map for the img_target,
+  // where disparities measure the displacement of the reference pixel from
+  // the target pixel i.e. 
+  //   img_target(x,y) <-> img_ref( x + disp_target(x,y), y )
+  // Note that this is the opposite of the OpenCV SGM implementation.
   bool compute(
     const vil_image_view<vxl_byte>& img_target,
     const vil_image_view<vxl_byte>& img_ref,
-    vil_image_view<float>& disp_target,
-    int min_disparity,
-    int num_disparities );
-
-  //: Run SGM twice, once at a lower resolution to determine the active
-  // disparity range, and again at full-res using the reduced disparity range.
-  // Should improve speed and quality with respect to single-scale approach if
-  // tight disparity bounds are unknown.
-  bool compute_multiscale(
-    const vil_image_view<vxl_byte>& img_target,
-    const vil_image_view<vxl_byte>& img_ref,
-    vil_image_view<float>& disp_target,
-    int min_disparity,
-    int num_disparities,
-    int num_active_disparities,
-    int downscale_exponent = 2 );
+    const vil_image_view<bool>& invalid_target,
+    const vil_image_view<int>& min_disparity,
+    float invalid_disparity,
+    vil_image_view<float>& disp_target );
 
   //: Write out the appearance or total cost volume as a set of images for 
   // debugging
   void write_cost_debug_imgs(
     const std::string& out_dir,
-    int num_disparities,
     bool write_total_cost = false );
 
  protected:
@@ -138,19 +121,19 @@ class bsgm_disparity_estimator
   //: Copy of the input params
   bsgm_disparity_estimator_params params_;
 
-  //: Size of last image
+  //: Size of image
   int w_, h_;
 
-  //: All appearance and smoothing costs will be represented as discrete 
-  // numbers such that this unit corresponds to 1.0 standard deviation of 
+  //: Number of disparities to search over.
+  int num_disparities_;
+
+  //: All appearance and smoothing costs will be normalized to discrete 
+  // values such that this unit corresponds to 1.0 standard deviation of 
   // expected appearance error.
   unsigned char cost_unit_;
 
   //: Hard-coded internal P1, P2 costs, as a scale factor of the cost_unit
   float p1_base_, p2_min_base_, p2_max_base_;
-
-  //: This value will indicate invalid disparities.
-  float invalid_disp_;
 
   //: Raw storage for the cost volumes
   // Element x,y,d is at location y*w_*num_disparities + x*num_disparities + d
@@ -172,24 +155,15 @@ class bsgm_disparity_estimator
   // Sub-routines called by SGM in order
   //
 
-  //: Compute a map of invalid pixels based on seeing the 'invalid_val'
-  // in either target or reference images.
-  void compute_invalid_map(
-    const vil_image_view<vxl_byte>& img_target,
-    const vil_image_view<vxl_byte>& img_ref,
-    vil_image_view<bool>& invalid_target,
-    int min_disparity,
-    int num_disparities );
-
   //: Allocate and setup cost volumes based on current w_ and h_
   void setup_cost_volume( 
     std::vector<unsigned char>& cost_data,
     std::vector< std::vector< unsigned char* > >& cost,
-    int num_disparities );
+    int depth );
   void setup_cost_volume( 
     std::vector<unsigned short>& cost_data,
     std::vector< std::vector< unsigned short* > >& cost,
-    int num_disparities );
+    int depth );
 
   //: Compute appearance data costs
   void compute_census_data(
@@ -197,15 +171,14 @@ class bsgm_disparity_estimator
     const vil_image_view<vxl_byte>& img_ref,
     const vil_image_view<bool>& invalid_target,
     std::vector< std::vector< unsigned char* > >& app_cost,
-    int min_disparity,
-    int num_disparities );
+    const vil_image_view<int>& min_disparity );
+
   void compute_xgrad_data(
     const vil_image_view<float>& grad_x_target,
     const vil_image_view<float>& grad_x_ref,
     const vil_image_view<bool>& invalid_target,
     std::vector< std::vector< unsigned char* > >& app_cost,
-    int min_disparity,
-    int num_disparities );
+    const vil_image_view<int>& min_disparity );
 
   //: Run the multi-directional dynamic programming that SGM uses
   void run_multi_dp(
@@ -214,7 +187,7 @@ class bsgm_disparity_estimator
     const vil_image_view<bool>& invalid_target,
     const vil_image_view<float>& grad_x,
     const vil_image_view<float>& grad_y,
-    int num_disparities );
+    const vil_image_view<int>& min_disparity );
 
   //: Pixel-wise directional cost
   inline void compute_dir_cost(
@@ -224,17 +197,18 @@ class bsgm_disparity_estimator
     unsigned short* total_cost,
     unsigned short p1,
     unsigned short p2,
-    int num_disparities );
+    int prev_min_disparity,
+    int cur_min_disparity );
 
   //: Extract the min cost disparity at each pixel, using quadratic
   // interpolation if specified
   void compute_best_disparity_img(
     const std::vector< std::vector< unsigned short* > >& total_cost,
+    const vil_image_view<int>& min_disparity,
     const vil_image_view<bool>& invalid_target,
+    float invalid_disparity, 
     vil_image_view<float>& disp_img,
-    vil_image_view<unsigned short>& disp_cost,
-    int min_disparity,
-    int num_disparities );
+    vil_image_view<unsigned short>& disp_cost );
 
   //: Use the OpenCV SGM uniqueness criteria to find bad disparities. This
   // is not quite the same as the left-right consistency check from the SGM
@@ -244,19 +218,15 @@ class bsgm_disparity_estimator
   void flag_nonunique(
     vil_image_view<float>& disp_img,
     const vil_image_view<unsigned short>& disp_cost,
+    float invalid_disparity,
     int disp_thresh = 1 );
 
   //: Fill in disparity pixels flagged as errors via multi-directional 
   // sampling.
   void interpolate_errors(
     vil_image_view<float>& disp_img,
-    const vil_image_view<bool>& invalid );
-
-  //: Flip the sign of all valid disparities.
-  void invert_disparities(
-    vil_image_view<float>& disp_img,
-    int min_disparity,
-    int num_disparities );
+    const vil_image_view<bool>& invalid,
+    float invalid_disparity );
 
 
   //
@@ -272,6 +242,24 @@ class bsgm_disparity_estimator
   bsgm_disparity_estimator(){}
 };
 
+
+// TO BE MOVED
+
+//: Compute a map of invalid pixels based on seeing the 'border_val'
+// in either target or reference images.
+void compute_invalid_map(
+  const vil_image_view<vxl_byte>& img_target,
+  const vil_image_view<vxl_byte>& img_ref,
+  vil_image_view<bool>& invalid_target,
+  int min_disparity,
+  int num_disparities,
+  vxl_byte border_val = (unsigned char)0 );
+
+//: Flip the sign of all disparities, swap invalid values.
+void bsgm_invert_disparities(
+  vil_image_view<float>& disp_img,
+  int old_invalid,
+  int new_invalid );
 
 
 #endif // bsgm_disparity_estimator_h_

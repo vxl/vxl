@@ -17,16 +17,27 @@
 
 //----------------------------------------------------------------------------
 bsgm_disparity_estimator::bsgm_disparity_estimator(
-  const bsgm_disparity_estimator_params& params ) :
+  const bsgm_disparity_estimator_params& params,
+  int img_width,
+  int img_height,
+  int num_disparities ) :
     params_( params ),
-    w_( 0 ),
-    h_( 0 ),
+    w_( img_width ),
+    h_( img_height ),
+    num_disparities_( num_disparities ),
     cost_unit_( 64 ),
     p1_base_( 1.0f ),
     p2_min_base_( 1.0f ),
     p2_max_base_( 8.0f )
 {
-
+  // Setup any necessary cost volumes
+  if( params_.census_weight > 0.0f )
+    setup_cost_volume( census_cost_data_, census_cost_, num_disparities );
+  if( params_.xgrad_weight > 0.0f )
+    setup_cost_volume( xgrad_cost_data_, xgrad_cost_, num_disparities );
+  if( params_.census_weight > 0.0f && params_.xgrad_weight > 0.0f )
+    setup_cost_volume( fused_cost_data_, fused_cost_, num_disparities );
+  setup_cost_volume( total_cost_data_, total_cost_, num_disparities );
 }
 
 
@@ -42,41 +53,24 @@ bool
 bsgm_disparity_estimator::compute(
   const vil_image_view<vxl_byte>& img_tar,
   const vil_image_view<vxl_byte>& img_ref,
-  vil_image_view<float>& disp_tar,
-  int min_disparity,
-  int num_disparities  ) 
-{
-  // This class was written under the assumption that disparities measure the 
-  // displacement of the reference pixel from the target pixel (i.e. 
-  // x_ref - x_target ).  In the case disparities are defined inversely (as
-  // the OpenCV version does), we flip signs of inputs/outputs before/after
-  // processing.
-  if( params_.using_ref_to_target_disparities )
-    min_disparity =  -( min_disparity + num_disparities - 1 );  
-  
-  // Set the invalid disparity to one less than the min value.
-  invalid_disp_ = min_disparity - 1.0f;
-  w_ = img_tar.ni(); h_ = img_tar.nj();
-  int num_voxels = w_*h_*num_disparities;
-
+  const vil_image_view<bool>& invalid_tar,
+  const vil_image_view<int>& min_disp,
+  float invalid_disp,
+  vil_image_view<float>& disp_tar ) 
+{   
   disp_tar.set_size( w_, h_ );
 
   // Validate images.
-  if( img_tar.ni() == 0 || img_tar.nj() == 0 || 
-      img_ref.ni() != w_ || img_ref.nj() != h_ ) return false;
+  if( img_tar.ni() != w_ || img_tar.nj() != h_ || 
+      img_ref.ni() != w_ || img_ref.nj() != h_ || 
+      invalid_tar.ni() != w_ || invalid_tar.nj() != h_ ) return false;
+
+  int num_voxels = w_*h_*num_disparities_;
 
   vul_timer timer, total_timer; 
   if( params_.print_timing ){
     timer.mark(); total_timer.mark();
   }
-
-  // Compute invalid map
-  vil_image_view<bool> invalid_tar;
-  compute_invalid_map( img_tar, img_ref, 
-    invalid_tar, min_disparity, num_disparities );
-
-  if( params_.print_timing ) 
-    print_time( "Invalid map computation", timer );
 
   // Compute gradient images.
   vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
@@ -89,19 +83,17 @@ bsgm_disparity_estimator::compute(
 
   // Compute appearance cost volume data.
   if( params_.census_weight > 0.0f ){
-    setup_cost_volume( census_cost_data_, census_cost_, num_disparities );
     active_app_cost_ = &census_cost_;
    
     compute_census_data( img_tar, img_ref, 
-      invalid_tar, census_cost_, min_disparity, num_disparities );
+      invalid_tar, census_cost_, min_disp );
   }
   if( params_.xgrad_weight > 0.0f ){
-    setup_cost_volume( xgrad_cost_data_, xgrad_cost_, num_disparities );
     active_app_cost_ = &xgrad_cost_;
 
     vil_sobel_3x3<vxl_byte,float>( img_ref, grad_x_ref, grad_y_ref );
     compute_xgrad_data( grad_x_tar, grad_x_ref, 
-      invalid_tar, xgrad_cost_, min_disparity, num_disparities );
+      invalid_tar, xgrad_cost_, min_disp );
   }
 
   if( params_.print_timing ) 
@@ -109,7 +101,6 @@ bsgm_disparity_estimator::compute(
 
   // Fuse appearance volumes if necessary.
   if( params_.census_weight > 0.0f && params_.xgrad_weight > 0.0f ){
-    setup_cost_volume( fused_cost_data_, fused_cost_, num_disparities );
     active_app_cost_ = &fused_cost_;
 
     for( int v = 0; v < num_voxels; v++ ){
@@ -124,10 +115,9 @@ bsgm_disparity_estimator::compute(
 
   // Run the multi-directional dynamic programming to obtain a total cost
   // volume incorporating appearance + smoothing.
-  setup_cost_volume( total_cost_data_, total_cost_, num_disparities );
   run_multi_dp( 
     *active_app_cost_, total_cost_, 
-    invalid_tar, grad_x_tar, grad_y_tar, num_disparities );
+    invalid_tar, grad_x_tar, grad_y_tar, min_disp );
 
   if( params_.print_timing ) 
     print_time( "Dynamic programming", timer );
@@ -135,8 +125,8 @@ bsgm_disparity_estimator::compute(
   // Find the lowest total cost disparity for each pixel, do quadratic
   // interpolation if configured.
   vil_image_view<unsigned short> disp_cost ;
-  compute_best_disparity_img( total_cost_, invalid_tar, disp_tar, 
-    disp_cost, min_disparity, num_disparities );
+  compute_best_disparity_img( total_cost_, min_disp, 
+    invalid_tar, invalid_disp, disp_tar, disp_cost );
 
   // Median filter to remove speckles
   vil_structuring_element se; se.set_to_disk( 1.9 );
@@ -149,15 +139,11 @@ bsgm_disparity_estimator::compute(
 
   // Find and fix errors if configured.
   if( params_.error_check_mode > 0 ){
-    flag_nonunique( disp_tar, disp_cost );
+    flag_nonunique( disp_tar, disp_cost, invalid_disp );
 
     if( params_.error_check_mode > 1 )
-      interpolate_errors( disp_tar, invalid_tar );
+      interpolate_errors( disp_tar, invalid_tar, invalid_disp );
   }
-
-  // Flip disparity sign if configured.
-  if( params_.using_ref_to_target_disparities )
-    invert_disparities( disp_tar, min_disparity, num_disparities );
 
   if( params_.print_timing ) 
     print_time( "Consistency check", timer );
@@ -170,96 +156,9 @@ bsgm_disparity_estimator::compute(
 
 
 //----------------------------------------------------------------------------
-bool 
-bsgm_disparity_estimator::compute_multiscale(
-  const vil_image_view<vxl_byte>& img_target,
-  const vil_image_view<vxl_byte>& img_ref,
-  vil_image_view<float>& disp_target,
-  int min_disparity,
-  int num_disparities,
-  int num_active_disparities,
-  int downscale_exp ) 
-{
-  if( downscale_exp <= 0 || downscale_exp > 4 ) downscale_exp = 2;
-
-  int ds_factor = std::pow( 2, downscale_exp );
-
-  // Downsample the images
-  vil_image_view<vxl_byte> img_t_ds, img_r_ds, temp_t_ds, temp_r_ds, working;
-
-  vil_gauss_reduce( img_target, img_t_ds, working );
-  vil_gauss_reduce( img_ref, img_r_ds, working );
-
-  for( int s = 1; s < downscale_exp; s++ ){
-    vil_gauss_reduce( img_t_ds, temp_t_ds, working );
-    img_t_ds.deep_copy( temp_t_ds );
-    vil_gauss_reduce( img_r_ds, temp_r_ds, working );
-    img_r_ds.deep_copy( temp_r_ds );
-  }
-
-  // Compute disparities on coarse scale images
-  int min_disp_ds = min_disparity / ds_factor;
-  int num_disp_ds = num_disparities / ds_factor;
-
-  vil_image_view<float> disp_t_ds;
-  if( !compute( img_t_ds, img_r_ds, disp_t_ds, min_disp_ds, num_disp_ds ) )
-    return false;
-
-  // Compute histogram of downsampled disparities
-  std::vector<long int> hist( num_disp_ds, 0 );
-  long int hist_count = 0;
-  for( int y = 0; y < h_; y++ ){
-    for( int x = 0; x < w_; x++ ){
-      int d_sample = (int)( disp_t_ds(x,y) - min_disp_ds );
-      if( d_sample < 0 || d_sample >= num_disp_ds ) continue;
-      hist[ d_sample ]++;
-      hist_count++;
-    }
-  }
-
-  // Find the median of the histogram
-  long int med_count = (long int)( hist_count*0.5 );
-  hist_count = 0;
-  int med_ds = 0;
-  for( int s = 0; s < num_disp_ds; s++ ){
-    hist_count += hist[s];
-    if( hist_count > med_count ){
-      med_ds = s;
-      break;
-    }
-  }
-
-  if( params_.print_timing ){
-    std::cerr << "Median disparity " << med_ds*ds_factor+min_disparity << '\n';
-  }
-
-  // Construct a disparity search window in the full-scale image
-  int min_disp_full = 
-    med_ds*ds_factor + min_disparity - num_active_disparities/2;
-
-  // Run full-scale SGM
-  if( !compute( img_target, img_ref, disp_target, 
-      min_disp_full, num_active_disparities ) )
-    return false;
-
-  // Re-label invalid disparities
-  invalid_disp_ = min_disparity-1.0f;
-  for( int y = 0; y < h_; y++ ){
-    for( int x = 0; x < w_; x++ ){
-      if( disp_target(x,y) < min_disp_full )
-        disp_target(x,y) = invalid_disp_;
-    }
-  }
-    
-  return true;
-}
-
-
-//----------------------------------------------------------------------------
 void 
 bsgm_disparity_estimator::write_cost_debug_imgs(
   const std::string& out_dir,
-  int num_disparities,
   bool write_total_cost )
 {
   float total_cost_scale = 0.25f;
@@ -268,7 +167,7 @@ bsgm_disparity_estimator::write_cost_debug_imgs(
 
   vil_image_view<vxl_byte> vis_img( w_, h_ );
 
-  for( int d = 0; d < num_disparities; d++ ){
+  for( int d = 0; d < num_disparities_; d++ ){
 
     // Gather costs for each disparity slice
     if( write_total_cost ){
@@ -292,96 +191,21 @@ bsgm_disparity_estimator::write_cost_debug_imgs(
 }
 
 
-//------------------------------------------------------------------------
-void
-bsgm_disparity_estimator::compute_invalid_map(
-  const vil_image_view<vxl_byte>& img_tar,
-  const vil_image_view<vxl_byte>& img_ref,
-  vil_image_view<bool>& invalid_tar,
-  int min_disparity,
-  int num_disparities )
-{
-  invalid_tar.set_size( w_, h_ );
-
-  // Quit early if disabled
-  if( params_.border_val < 0 ){
-    for( int y = 0; y < h_; y++ )
-      for( int x = 0; x < w_; x++ )
-        invalid_tar(x,y) = false;
-    return;
-  }
-
-  // Initialize map
-  for( int y = 0; y < h_; y++ )
-    for( int x = 0; x < w_; x++ )
-      invalid_tar(x,y) = false;
-
-   // Find the border in the target image
-  for( int y = 0; y < h_; y++ ){
-
-    // Find the left border
-    for( int x = 0; x < w_; x++ ){
-      invalid_tar(x,y) = true;
-      if( img_tar(x,y) != params_.border_val )
-        break;
-    } //x
-
-    // Find the right border
-    for( int x = w_-1; x >= 0; x-- ){
-      invalid_tar(x,y) = true;
-      if( img_tar(x,y) != params_.border_val )
-        break;
-    } //x
-  } //y
-
-  int max_disparity = min_disparity + num_disparities;
-
-  // Find the border in the reference image
-  for( int y = 0; y < h_; y++ ){
-
-    // Find the left border
-    int lb = 0;
-    for( int x = 0; x < w_; x++, lb++ )
-      if( img_ref(x,y) != params_.border_val )
-        break;
-
-    // Mask any pixels in the target image which map into the left border
-    for( int x = 0; x < std::min( w_, lb - min_disparity ); x++ )
-      invalid_tar(x,y) = true;
-
-    // Find the right border
-    int rb = w_-1;
-    for( int x = w_-1; x >= 0; x--, rb-- )
-      if( img_ref(x,y) != params_.border_val )
-        break;
-
-    // Mask any pixels in the target image which map into the right border
-    for( int x = std::max( 0, rb - max_disparity ); x < w_ ; x++ )
-      invalid_tar(x,y) = true;
-  } //y
-
-  //vil_image_view<vxl_byte> vis( w_, h_ );
-  //for( int y = 0; y < h_; y++ )
-  //  for( int x = 0; x < w_; x++ )
-  //    vis(x,y) = invalid_tar(x,y) ? 255 : 0;
-  //vil_save( vis, "D:/results/sattel/invalid.png" );
-}
-
 
 //------------------------------------------------------------------------
 void 
 bsgm_disparity_estimator::setup_cost_volume( 
   std::vector<unsigned char>& cost_data,
   std::vector< std::vector< unsigned char* > >& cost,
-  int num_disparities )
+  int depth )
 {
-  cost_data.resize( w_*h_*num_disparities );
+  cost_data.resize( w_*h_*depth );
   cost.resize( h_ );
 
   int idx = 0;
   for( int y = 0; y < h_; y++ ){
     cost[y].resize( w_ );
-    for( int x = 0; x < w_; x++, idx += num_disparities )
+    for( int x = 0; x < w_; x++, idx += depth )
       cost[y][x] = &cost_data[idx];
   }
 }
@@ -392,15 +216,15 @@ void
 bsgm_disparity_estimator::setup_cost_volume( 
   std::vector<unsigned short>& cost_data,
   std::vector< std::vector< unsigned short* > >& cost,
-  int num_disparities )
+  int depth )
 {
-  cost_data.resize( w_*h_*num_disparities );
+  cost_data.resize( w_*h_*depth );
   cost.resize( h_ );
 
   int idx = 0;
   for( int y = 0; y < h_; y++ ){
     cost[y].resize( w_ );
-    for( int x = 0; x < w_; x++, idx += num_disparities )
+    for( int x = 0; x < w_; x++, idx += depth )
       cost[y][x] = &cost_data[idx];
   }
 }
@@ -413,8 +237,7 @@ bsgm_disparity_estimator::compute_census_data(
   const vil_image_view<vxl_byte>& img_ref,
   const vil_image_view<bool>& invalid_tar,
   std::vector< std::vector< unsigned char* > >& app_cost,
-  int min_disparity,
-  int num_disparities )
+  const vil_image_view<int>& min_disparity )
 {
   int census_diam = 2*params_.census_rad + 1;
   if( census_diam > 7 ) census_diam = 7;
@@ -440,14 +263,14 @@ bsgm_disparity_estimator::compute_census_data(
 
       // If invalid pixel, fill with 255
       if( invalid_tar(x,y) ){
-        for( int d = 0; d < num_disparities; d++ )
+        for( int d = 0; d < num_disparities_; d++ )
           app_cost[y][x][d] = 255;
         continue;
       }
 
       // Start iterating through disparities
       int d = 0;
-      int x2 = x + min_disparity;
+      int x2 = x + min_disparity(x,y);
       
       // Pixels off left-side of image set to 255
       unsigned char* ac = &app_cost[y][x][0];
@@ -455,7 +278,7 @@ bsgm_disparity_estimator::compute_census_data(
         *ac = 255;
 
       // This needed in rare case that min_disparity > 0
-      for( ; x2 >= w_ && d < num_disparities; d++, x2++, ac++ )
+      for( ; x2 >= w_ && d < num_disparities_; d++, x2++, ac++ )
         *ac = 255;
 
       // Compute census costs for all valid disparities
@@ -464,7 +287,7 @@ bsgm_disparity_estimator::compute_census_data(
       unsigned long long conf_t = census_conf_tar(x,y);
       unsigned long long* conf_r = &census_conf_ref(x2,y);
 
-      for( ; d < num_disparities; d++, x2++, ac++, cen_r++, conf_r++ ){
+      for( ; d < num_disparities_; d++, x2++, ac++, cen_r++, conf_r++ ){
 
         // Check valid match pixel
         if( x2 >= w_ ) 
@@ -496,8 +319,7 @@ bsgm_disparity_estimator::compute_xgrad_data(
   const vil_image_view<float>& grad_x_ref,
   const vil_image_view<bool>& invalid_tar,
   std::vector< std::vector< unsigned char* > >& app_cost,
-  int min_disparity,
-  int num_disparities )
+  const vil_image_view<int>& min_disparity )
 {
   float grad_norm = cost_unit_/8.0f; 
 
@@ -509,14 +331,14 @@ bsgm_disparity_estimator::compute_xgrad_data(
 
       // If invalid pixel, fill with 255
       if( invalid_tar(x,y) ){
-        for( int d = 0; d < num_disparities; d++, ac++ )
+        for( int d = 0; d < num_disparities_; d++, ac++ )
           *ac = 255;
         continue;
       }
 
       // Otherwise compute all costs
-      int x2 = x + min_disparity;
-      for( int d = 0; d < num_disparities; d++, x2++, ac++ ){
+      int x2 = x + min_disparity(x,y);
+      for( int d = 0; d < num_disparities_; d++, x2++, ac++ ){
 
         // Check valid match pixel
         if( x2 < 0 || x2 >= w_ ) 
@@ -542,10 +364,10 @@ bsgm_disparity_estimator::run_multi_dp(
   const vil_image_view<bool>& invalid_tar,
   const vil_image_view<float>& grad_x,
   const vil_image_view<float>& grad_y,
-  int num_disparities )
+  const vil_image_view<int>& min_disparity )
 {
-  int volume_size = w_*h_*num_disparities;
-  int row_size = w_*num_disparities;
+  int volume_size = w_*h_*num_disparities_;
+  int row_size = w_*num_disparities_;
   int num_dirs = params_.use_16_directions ? 16 : 8;
   float sqrt2norm = 1.0f/sqrt(2.0f);
   float grad_norm = 1.0f/params_.max_grad;
@@ -584,7 +406,7 @@ bsgm_disparity_estimator::run_multi_dp(
   // Initialize total cost
   for( int y = 0; y < h_; y++ )
     for( int x = 0; x < w_; x++ )
-      for( int d = 0; d < num_disparities; d++ )
+      for( int d = 0; d < num_disparities_; d++ )
         total_cost[y][x][d] = 0;
 
   // Setup buffers
@@ -762,16 +584,18 @@ bsgm_disparity_estimator::run_multi_dp(
         // Compute the directional smoothing cost and add to total
         if( dy == 0 ) 
           compute_dir_cost( 
-            &dir_cost_cur[(x+dx)*num_disparities],
+            &dir_cost_cur[(x+dx)*num_disparities_],
             (*active_app_cost_)[y][x], 
-            &dir_cost_cur[x*num_disparities], 
-            total_cost[y][x], p1, p2, num_disparities );
+            &dir_cost_cur[x*num_disparities_], 
+            total_cost[y][x], p1, p2, 
+            min_disparity(x+dx,y+dy), min_disparity(x,y) );
         else
           compute_dir_cost( 
-            &dir_cost_prev[(x+dx)*num_disparities],
+            &dir_cost_prev[(x+dx)*num_disparities_],
             (*active_app_cost_)[y][x],
-            &dir_cost_cur[x*num_disparities], 
-            total_cost[y][x], p1, p2, num_disparities );
+            &dir_cost_cur[x*num_disparities_], 
+            total_cost[y][x], p1, p2, 
+            min_disparity(x+dx,y+dy), min_disparity(x,y) );
       } //x
 
       // Copy current row to previous
@@ -791,58 +615,52 @@ bsgm_disparity_estimator::compute_dir_cost(
   unsigned short* total_cost,
   unsigned short p1,
   unsigned short p2,
-  int num_disparities )
+  int prev_min_disparity,
+  int cur_min_disparity )
 {
+  // Compute the offset the aligns previous and current disparities
+  int prev_offset = cur_min_disparity - prev_min_disparity;
+
   const unsigned short* prc = prev_row_cost;
 
   // Compute jump cost from best previous disparity with p2 penalty
   unsigned short min_prev_cost = *prc; prc++;
 
-  for( int d = 1; d < num_disparities; d++, prc++ )
+  for( int d = 1; d < num_disparities_; d++, prc++ )
     min_prev_cost = *prc < min_prev_cost ? *prc : min_prev_cost;
   unsigned short jump_cost = min_prev_cost + p2;
 
   // Setup iteration pointers for coming loop
-  prc = prev_row_cost;
+  prc = prev_row_cost + prev_offset;
   const unsigned char* cac = cur_app_cost;
   unsigned short* crc = cur_row_cost;
   unsigned short* tc = total_cost;
-
-  unsigned short best_cost, nbr_cost;
   
-  // These are cached samples of prev_row_cost to prevent repeated lookup
-  unsigned prc_d, prc_dp1, prc_dm1;
+  // Main loop through disparities
+  for( int d = 0; d < num_disparities_; d++, prc++, cac++, crc++, tc++ ){
 
-  // Special case of below loop for d == 0
-  {
-    prc_d = *prc;
-    prc++;
-    prc_dp1 = *(prc);
-    
-    best_cost = prc_d < jump_cost ? prc_d : jump_cost;
-    nbr_cost = prc_dp1 + p1;
-    best_cost = nbr_cost < best_cost ? nbr_cost : best_cost;
-    *crc = *cac + best_cost - min_prev_cost;
-    *tc += *crc;
-    prc_dm1 = prc_d;
-    prc_d = prc_dp1;
-    prc++,cac++,crc++,tc++;
-  }
+    // This is the index of d in the previous cost vector
+    int d_off = d + prev_offset;
 
-  // Main loop through disparities, modulo end points
-  for( int d = 1; d < num_disparities-1; d++, prc++, cac++, crc++, tc++ ){
+    // The best cost for each disparity is the min of the jump with cost P2...
+    unsigned short best_cost = jump_cost;
 
-    prc_dp1 = *prc;
-
-    // The best cost for each disparity is the min of no disparity change with
-    // 0 cost, the jump with cost P2, ...
-    best_cost = prc_d < jump_cost ? prc_d: jump_cost;
+    // ...the min of no disparity change with 0 cost...
+    if( d_off >= 0 && d_off < num_disparities_ ){
+      unsigned short prc_d = *prc;
+      best_cost = prc_d < best_cost ? prc_d: best_cost;
+    }
 
     // ...and +/- 1 disparity with P1 cost
-    nbr_cost = prc_dm1 < prc_dp1 ? prc_dm1 : prc_dp1;
-    nbr_cost += p1;
-    best_cost = nbr_cost < best_cost ? nbr_cost : best_cost;
-
+    if( d_off > 0 && d_off <= num_disparities_ ){
+      unsigned short prc_dm1 = *(prc-1) + p1;
+      best_cost = prc_dm1 < best_cost ? prc_dm1: best_cost;
+    }
+    if( d_off >= -1 && d_off < num_disparities_-1 ){
+      unsigned short prc_dp1 = *(prc+1) + p1;
+      best_cost = prc_dp1 < best_cost ? prc_dp1: best_cost;
+    }
+  
     // Add the appearance cost and subtract off lowest cost to prevent 
     // numerical overflow
     *crc = *cac + best_cost - min_prev_cost;
@@ -850,19 +668,7 @@ bsgm_disparity_estimator::compute_dir_cost(
     // Add current cost to total
     *tc += *crc;
 
-    // Swap caches for next iteration
-    prc_dm1 = prc_d;
-    prc_d = prc_dp1;
   } //d
-
-  // Special case of above loop for d == params_.num_disparities-1
-  {
-    best_cost = prc_d < jump_cost ? prc_d : jump_cost;
-    nbr_cost = prc_dm1 + p1;
-    best_cost = nbr_cost < best_cost ? nbr_cost : best_cost;
-    *crc = *cac + best_cost - min_prev_cost;
-    *tc += *crc;
-  }
 
 }
 
@@ -871,11 +677,11 @@ bsgm_disparity_estimator::compute_dir_cost(
 void 
 bsgm_disparity_estimator::compute_best_disparity_img(
   const std::vector< std::vector< unsigned short* > >& total_cost,
+  const vil_image_view<int>& min_disparity,
   const vil_image_view<bool>& invalid_tar,
+  float invalid_disparity, 
   vil_image_view<float>& disp_img,
-  vil_image_view<unsigned short>& disp_cost,
-  int min_disparity,
-  int num_disparities )
+  vil_image_view<unsigned short>& disp_cost )
 {
   disp_img.set_size( w_, h_ );
   disp_cost.set_size( w_, h_ );
@@ -885,7 +691,7 @@ bsgm_disparity_estimator::compute_best_disparity_img(
 
       // Quit early for invalid pixel
       if( invalid_tar(x,y) ){
-        disp_img(x,y) = invalid_disp_;
+        disp_img(x,y) = invalid_disparity;
         disp_cost(x,y) = 65535;
         continue;
       }
@@ -894,7 +700,7 @@ bsgm_disparity_estimator::compute_best_disparity_img(
       int min_cost_idx = 0;
       
       // Find the min cost index for each pixel
-      for( int d = 1; d < num_disparities; d++ ){
+      for( int d = 1; d < num_disparities_; d++ ){
         if( total_cost[y][x][d] < min_cost ){
           min_cost = total_cost[y][x][d];
           min_cost_idx = d;
@@ -913,8 +719,8 @@ bsgm_disparity_estimator::compute_best_disparity_img(
         // to end point +/-0.5 to ensure a continuous range of disparities
         if( min_cost_idx == 0 ) 
           disp_img(x,y) = 0.5f;
-        else if( min_cost_idx == num_disparities-1 ) 
-          disp_img(x,y) = num_disparities-1.5f;
+        else if( min_cost_idx == num_disparities_-1 ) 
+          disp_img(x,y) = num_disparities_-1.5f;
 
         // In the typical case pick cost samples on either side of the min 
         // disparity, fit a quadratic, and solve for the min 
@@ -934,7 +740,7 @@ bsgm_disparity_estimator::compute_best_disparity_img(
       }
 
       // Add in the min disparity to make it an absolute disparity
-      disp_img(x,y) += min_disparity;
+      disp_img(x,y) += min_disparity(x,y);
     } //x
   } //y
 }
@@ -945,6 +751,7 @@ void
 bsgm_disparity_estimator::flag_nonunique(
   vil_image_view<float>& disp_img,
   const vil_image_view<unsigned short>& disp_cost,
+  float invalid_disparity,
   int disp_thresh )
 {
   std::vector<unsigned short> inv_cost( w_ );
@@ -961,7 +768,7 @@ bsgm_disparity_estimator::flag_nonunique(
     // Construct the inverse disparity map
     for( int x = 0; x < w_; x++ ){
 
-      if( disp_img(x,y) == invalid_disp_ ) continue;
+      if( disp_img(x,y) == invalid_disparity ) continue;
 
       // Get an integer disparity and location in reference image
       int d = (int)( disp_img(x,y)+0.5f );
@@ -979,7 +786,7 @@ bsgm_disparity_estimator::flag_nonunique(
     // Check the uniqueness of each disparity.
     for( int x = 0; x < w_; x++ ){
       
-      if( disp_img(x,y) == invalid_disp_ ) continue;
+      if( disp_img(x,y) == invalid_disparity ) continue;
 
       // Compute the floor and ceiling of each disparity
       int d_floor = (int)floor(disp_img(x,y));
@@ -992,7 +799,7 @@ bsgm_disparity_estimator::flag_nonunique(
       // Check if either inverse disparity is consistent and flag if not.
       if( abs( inv_disp[x_floor] - d_floor ) > disp_thresh &&
         abs( inv_disp[x_ceil] - d_ceil ) > disp_thresh )
-        disp_img(x,y) = invalid_disp_;
+        disp_img(x,y) = invalid_disparity;
     } //x
   } //y
                     
@@ -1003,7 +810,8 @@ bsgm_disparity_estimator::flag_nonunique(
 void 
 bsgm_disparity_estimator::interpolate_errors(
   vil_image_view<float>& disp_img,
-  const vil_image_view<bool>& invalid )
+  const vil_image_view<bool>& invalid,
+  float invalid_disparity )
 {
   int num_sample_dirs = 8;
   float sample_percentile = 0.5f;
@@ -1081,19 +889,19 @@ bsgm_disparity_estimator::interpolate_errors(
     
     // Initialize previous row 
     for( int v = 0; v < w_; v++ )
-      dir_sample_prev[v] = invalid_disp_;
+      dir_sample_prev[v] = invalid_disparity;
 
     // Loop through rows
     for( int y = y_start; y != y_end + y_inc; y += y_inc ){
 
       // Re-initialize current row in case dir follows row
       for( int x = 0; x < w_; x++ )
-        dir_sample_cur[x] = invalid_disp_;
+        dir_sample_cur[x] = invalid_disparity;
 
       for( int x = x_start; x != x_end + x_inc; x += x_inc ){
 
         // If good sample at this pixel, record it
-        if( disp_img(x,y) != invalid_disp_ ){
+        if( disp_img(x,y) != invalid_disparity ){
           dir_sample_cur[x] = disp_img(x,y);
 
         } else {
@@ -1105,7 +913,7 @@ bsgm_disparity_estimator::interpolate_errors(
             dir_sample_cur[x] = dir_sample_prev[x+dx];
 
           // And add sample to this pixel's sample set
-          if( dir_sample_cur[x] != invalid_disp_ ){
+          if( dir_sample_cur[x] != invalid_disparity ){
             sample_vol[ num_sample_dirs*(y*w_ + x) + sample_count(x,y) ] =
               dir_sample_cur[x];
             sample_count(x,y)++;
@@ -1137,20 +945,6 @@ bsgm_disparity_estimator::interpolate_errors(
 }
 
 
-//-----------------------------------------------------------------------
-void 
-bsgm_disparity_estimator::invert_disparities(
-  vil_image_view<float>& disp_img,
-  int min_disparity,
-  int num_disparities )
-{
-  float new_invalid = -( min_disparity + num_disparities );
-
-  for( int y = 0; y < h_; y++ )
-    for( int x = 0; x < w_; x++ )
-      disp_img(x,y) = disp_img(x,y) == invalid_disp_ ? new_invalid : -disp_img(x,y);
-}
-
 //----------------------------------------------------------------------
 void 
 bsgm_disparity_estimator::print_time(
@@ -1159,4 +953,88 @@ bsgm_disparity_estimator::print_time(
 {
   std::cerr << name << ": " << timer.real() << "ms\n";
   timer.mark();
+}
+
+
+//------------------------------------------------------------------------
+void
+compute_invalid_map(
+  const vil_image_view<vxl_byte>& img_tar,
+  const vil_image_view<vxl_byte>& img_ref,
+  vil_image_view<bool>& invalid_tar,
+  int min_disparity,
+  int num_disparities,
+  vxl_byte border_val )
+{
+  int w = img_tar.ni(), h = img_tar.nj();
+
+  invalid_tar.set_size( w, h );
+
+  // Initialize map
+  for( int y = 0; y < h; y++ )
+    for( int x = 0; x < w; x++ )
+      invalid_tar(x,y) = false;
+
+   // Find the border in the target image
+  for( int y = 0; y < h; y++ ){
+
+    // Find the left border
+    for( int x = 0; x < w; x++ ){
+      invalid_tar(x,y) = true;
+      if( img_tar(x,y) != border_val )
+        break;
+    } //x
+
+    // Find the right border
+    for( int x = w-1; x >= 0; x-- ){
+      invalid_tar(x,y) = true;
+      if( img_tar(x,y) != border_val )
+        break;
+    } //x
+  } //y
+
+  int max_disparity = min_disparity + num_disparities;
+
+  // Find the border in the reference image
+  for( int y = 0; y < h; y++ ){
+
+    // Find the left border
+    int lb = 0;
+    for( int x = 0; x < w; x++, lb++ )
+      if( img_ref(x,y) != border_val )
+        break;
+
+    // Mask any pixels in the target image which map into the left border
+    for( int x = 0; x < std::min( w, lb - min_disparity ); x++ )
+      invalid_tar(x,y) = true;
+
+    // Find the right border
+    int rb = w-1;
+    for( int x = w-1; x >= 0; x--, rb-- )
+      if( img_ref(x,y) != border_val )
+        break;
+
+    // Mask any pixels in the target image which map into the right border
+    for( int x = std::max( 0, rb - max_disparity ); x < w ; x++ )
+      invalid_tar(x,y) = true;
+  } //y
+
+  //vil_image_view<vxl_byte> vis( w_, h_ );
+  //for( int y = 0; y < h_; y++ )
+  //  for( int x = 0; x < w_; x++ )
+  //    vis(x,y) = invalid_tar(x,y) ? 255 : 0;
+  //vil_save( vis, "D:/results/sattel/invalid.png" );
+}
+
+
+//-----------------------------------------------------------------------
+void 
+bsgm_invert_disparities(
+  vil_image_view<float>& disp_img,
+  int old_invalid,
+  int new_invalid )
+{
+  for( int y = 0; y < (int)disp_img.nj(); y++ )
+    for( int x = 0; x < (int)disp_img.ni(); x++ )
+      disp_img(x,y) = disp_img(x,y) == old_invalid ? new_invalid : -disp_img(x,y);
 }

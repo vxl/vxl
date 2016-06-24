@@ -1,8 +1,9 @@
 include_directories( ${VXLCORE_INCLUDE_DIR} )
 
 set(bsgm_sources
-    bsgm_census.h                   bsgm_census.cxx
-    bsgm_disparity_estimator.h      bsgm_disparity_estimator.cxx
+    bsgm_census.h                          bsgm_census.cxx
+    bsgm_disparity_estimator.h             bsgm_disparity_estimator.cxx
+    bsgm_multiscale_disparity_estimator.h  bsgm_multiscale_disparity_estimator.cxx
    )
 
 vxl_add_library(LIBRARY_NAME bsgm LIBRARY_SOURCES ${bsgm_sources})
