@@ -23,14 +23,6 @@ void test_config()
 
   std::cout << "All macro definitions are shown inside parentheses\n";
 
-  std::cout << "VCL_HAS_BOOL ";
-#ifdef VCL_HAS_BOOL
-  std::cout << "is set to " << quote(VCL_HAS_BOOL);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_HAS_DYNAMIC_CAST ";
 #ifdef VCL_HAS_DYNAMIC_CAST
   std::cout << "is set to " << quote(VCL_HAS_DYNAMIC_CAST);

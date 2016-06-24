@@ -22,11 +22,6 @@
 #endif
 
 
-//: VCL_HAS_BOOL
-// Set to 1 if "bool" is accepted by the compiler as a built-in type.
-#define VCL_HAS_BOOL @VCL_HAS_BOOL@
-
-
 //: VCL_HAS_LONG_LONG
 // Set to 1 if "long long" is accepted by the compiler as a built-in type.
 #define VCL_HAS_LONG_LONG @VCL_HAS_LONG_LONG@
