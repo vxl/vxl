@@ -31,15 +31,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_HAS_TYPENAME ";
-#ifdef VCL_HAS_TYPENAME
-  std::cout << "is set to " << quote(VCL_HAS_TYPENAME);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_HAS_EXPORT ";
 #ifdef VCL_HAS_EXPORT
   std::cout << "is set to " << quote(VCL_HAS_EXPORT);
 #else

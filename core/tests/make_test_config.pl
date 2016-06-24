@@ -53,7 +53,6 @@ for $var_exp (
 
   # from vcl_config_compiler.h
   'VCL_HAS_RTTI',
-  'VCL_HAS_TYPENAME',
   'VCL_HAS_EXPORT',
   'VCL_HAS_MUTABLE',
   'VCL_HAS_EXPLICIT',
