@@ -38,14 +38,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_HAS_MUTABLE ";
-#ifdef VCL_HAS_MUTABLE
-  std::cout << "is set to " << quote(VCL_HAS_MUTABLE);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_HAS_EXPLICIT ";
 #ifdef VCL_HAS_EXPLICIT
   std::cout << "is set to " << quote(VCL_HAS_EXPLICIT);

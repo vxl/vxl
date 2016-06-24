@@ -40,13 +40,6 @@
 #define VCL_HAS_EXPORT @VCL_HAS_EXPORT@
 
 
-//: VCL_HAS_MUTABLE
-//
-// True if the compiler supports the "mutable" keyword
-//
-#define VCL_HAS_MUTABLE @VCL_HAS_MUTABLE@
-
-
 //: VCL_HAS_EXPLICIT
 //
 // True if the compiler supports the "explicit" keyword
