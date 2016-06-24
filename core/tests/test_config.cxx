@@ -23,14 +23,6 @@ void test_config()
 
   std::cout << "All macro definitions are shown inside parentheses\n";
 
-  std::cout << "VCL_HAS_RTTI ";
-#ifdef VCL_HAS_RTTI
-  std::cout << "is set to " << quote(VCL_HAS_RTTI);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
 #ifdef VCL_HAS_EXPORT
   std::cout << "is set to " << quote(VCL_HAS_EXPORT);
 #else
