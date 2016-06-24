@@ -68,7 +68,7 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits
 #endif
 
 #ifndef NO_STD_BOOL
-VCL_DEFINE_SPECIALIZATION
+template <>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<bool>
 {
  public:
@@ -87,12 +87,12 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<bool>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template <>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<bool const> : public vnl_numeric_traits<bool> {};
 #endif
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<char>
 {
  public:
@@ -120,11 +120,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<char>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<char const> : public vnl_numeric_traits<char> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char>
 {
  public:
@@ -143,11 +143,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char const> : public vnl_numeric_traits<unsigned char> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char>
 {
  public:
@@ -166,11 +166,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char const> : public vnl_numeric_traits<signed char> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short>
 {
  public:
@@ -189,11 +189,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short const> : public vnl_numeric_traits<short> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short>
 {
  public:
@@ -212,11 +212,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short const> : public vnl_numeric_traits<unsigned short> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int>
 {
  public:
@@ -235,11 +235,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int const> : public vnl_numeric_traits<int> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int>
 {
  public:
@@ -258,11 +258,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int const> : public vnl_numeric_traits<unsigned int> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long>
 {
  public:
@@ -281,11 +281,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long const> : public vnl_numeric_traits<long > {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long>
 {
  public:
@@ -305,12 +305,12 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {};
 #endif
 
 #if defined(_WIN64) && !VCL_HAS_LONG_LONG
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<size_t>
 {
  public:
@@ -329,13 +329,13 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<size_t>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<size_t const> : public vnl_numeric_traits<size_t> {};
 #endif
 #endif
 
 #if VCL_HAS_LONG_LONG
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long long>
 {
  public:
@@ -354,11 +354,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long long>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long long const> : public vnl_numeric_traits<long long> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long>
 {
  public:
@@ -377,12 +377,12 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long const> : public vnl_numeric_traits<unsigned long long> {};
 #endif
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<float>
 {
  public:
@@ -401,11 +401,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<float>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<float const> : public vnl_numeric_traits<float> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double>
 {
  public:
@@ -424,11 +424,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double const> : public vnl_numeric_traits<double> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double>
 {
  public:
@@ -447,11 +447,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double const> : public vnl_numeric_traits<long double> {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<float> >
 {
  public:
@@ -471,11 +471,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<float> >
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<float> const> : public vnl_numeric_traits<std::complex<float> > {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<double> >
 {
  public:
@@ -495,11 +495,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<double> >
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<double> const> : public vnl_numeric_traits<std::complex<double> > {};
 #endif
 
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<long double> >
 {
  public:
@@ -519,7 +519,7 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<long double> >
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<long double> const> : public vnl_numeric_traits<std::complex<long double> > {};
 #endif
 

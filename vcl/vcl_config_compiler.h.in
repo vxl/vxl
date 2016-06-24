@@ -61,26 +61,6 @@
 //
 #define VCL_CAN_DO_PARTIAL_SPECIALIZATION @VCL_CAN_DO_PARTIAL_SPECIALIZATION@
 
-
-//: VCL_DEFINE_SPECIALIZATION
-//
-// In order to *define* a template (function or class) specialization, the
-// definition must be preceded by "template <>" on ISO-conforming compilers.
-// Some compilers (eg gcc 2.7.2) make no distinction between an instance
-// of a templated function and a function with the same name and signature,
-// and so do not support the use of "template <>". Use VCL_DEFINE_SPECIALIZATION
-// instead.
-//
-// Note that you DO NOT need to forward declare a specialization. E.g. if
-// foo.h says "template <class T> void foo(T *);" and foo.cxx specializes
-// void foo<int>(int *), the client doesn't need to know that the template
-// symbol he links against is a specialization.
-
-//#define VCL_DEFINE_SPECIALIZATION /* template <> */
-//#define VCL_DEFINE_SPECIALIZATION template <>
-#define VCL_DEFINE_SPECIALIZATION @VCL_DEFINE_SPECIALIZATION@
-
-
 //: VCL_CANNOT_SPECIALIZE_CV
 //
 // Template specialization considers top-level cv-qualifiers of the
@@ -218,8 +198,7 @@
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) /* no need -- magic compiler */
 //FIXME #define VCL_DO_NOT_INSTANTIATE(text, ret) @VCL_DO_NOT_INSTANTIATE@
 #define VCL_DO_NOT_INSTANTIATE(text, ret) \
-VCL_DEFINE_SPECIALIZATION \
-text { return ret; }
+template <> text { return ret; }
 
 //----------------------------------------------------------------------
 // overload resolution problems.

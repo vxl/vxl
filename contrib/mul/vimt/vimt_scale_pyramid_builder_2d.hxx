@@ -403,7 +403,7 @@ void vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
 }
 
 #define VIMT_SCALE_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string vimt_scale_pyramid_builder_2d<T >::is_a() const \
+template <> std::string vimt_scale_pyramid_builder_2d<T >::is_a() const \
 {  return std::string("vimt_scale_pyramid_builder_2d<" #T ">"); }\
 template class vimt_scale_pyramid_builder_2d<T >
 

@@ -119,7 +119,7 @@ bool convert_generic(vidl_frame const& in_frame,
 // Write optimized conversion specializations below
 
 // RGB_24 to UYVY_422
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_UYVY_422>
 {
   enum { defined = true };
@@ -152,7 +152,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_UYVY_422>
 
 
 // UYVY_422 to RGB_24
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_RGB_24>
 {
   enum { defined = true };
@@ -185,7 +185,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_RGB_24>
 
 
 // UYVY_422 to MONO_8
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_MONO_8>
 {
   enum { defined = true };
@@ -211,7 +211,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_MONO_8>
 
 
 // RGB_24 to YUYV_422
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_YUYV_422>
 {
   enum { defined = true };
@@ -244,7 +244,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_YUYV_422>
 
 
 // YUYV_422 to RGB_24
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24>
 {
   enum { defined = true };
@@ -277,7 +277,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24>
 
 
 // RGB_24P to YUYV_422
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<VIDL_PIXEL_FORMAT_RGB_24P, VIDL_PIXEL_FORMAT_YUYV_422>
 {
   enum { defined = true };
@@ -311,7 +311,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24P, VIDL_PIXEL_FORMAT_YUYV_422>
 };
 
 // YUYV_422 to RGB_24P
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24P>
 {
   enum { defined = true };
@@ -345,7 +345,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24P>
 };
 
 // YUYV_422 to MONO_8
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_MONO_8>
 {
   enum { defined = true };
@@ -410,7 +410,7 @@ struct table_init
 
 
 //: The base case
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct table_init<0>
 {
   static inline void populate(converter_func table[VIDL_PIXEL_FORMAT_ENUM_END][VIDL_PIXEL_FORMAT_ENUM_END])

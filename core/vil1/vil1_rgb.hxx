@@ -8,7 +8,7 @@
 
 #undef SPECIALIZE_CLAMP_PIXEL
 #define SPECIALIZE_CLAMP_PIXEL(T) \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 vil1_rgb<T> vil1_clamp_pixel(vil1_rgb<T> const& d, double min, double max) \
 { \
   return vil1_rgb<T>(vil1_clamp_pixel(d.r, min , max), \

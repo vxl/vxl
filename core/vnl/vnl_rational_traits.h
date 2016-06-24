@@ -11,7 +11,7 @@
 #include <vcl_compiler.h>
 #include <vnl/vnl_export.h>
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 class vnl_numeric_traits<vnl_rational>
 {
  public:
@@ -33,7 +33,7 @@ class vnl_numeric_traits<vnl_rational>
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template <>
 class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rational>
 {
 };
@@ -41,7 +41,7 @@ class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rat
 
 std::ostream& operator<<(std::ostream&, std::complex<vnl_rational>);
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 class vnl_numeric_traits<std::complex<vnl_rational> >
 {
  public:
@@ -60,7 +60,7 @@ class vnl_numeric_traits<std::complex<vnl_rational> >
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
-VCL_DEFINE_SPECIALIZATION
+template <>
 class vnl_numeric_traits<std::complex<vnl_rational> const> : public vnl_numeric_traits<std::complex<vnl_rational> >
 {
 };

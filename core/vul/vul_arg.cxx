@@ -530,7 +530,7 @@ static int list_parse(std::list<int> &out, char ** argv)
 // In vi: "/^\/\/: unsigned"
 
 #if 1
-# define VDS VCL_DEFINE_SPECIALIZATION
+# define VDS template <>
 #else
 # define VDS /* template <> */
 #endif

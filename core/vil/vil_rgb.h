@@ -103,7 +103,7 @@ std::ostream& operator<<(std::ostream& s, vil_rgb<T> const& rgb)
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::ostream& operator<<(std::ostream& s, vil_rgb<unsigned char> const& rgb);
 
 

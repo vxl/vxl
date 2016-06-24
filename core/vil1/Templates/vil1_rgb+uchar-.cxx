@@ -1,6 +1,6 @@
 #include <vil1/vil1_rgb.hxx>
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::ostream& operator<<(std::ostream& s, const vil1_rgb<unsigned char>& rgb)
 {
  return s << '[' << (int)rgb.r << ' ' << (int)rgb.g << ' ' << (int)rgb.b << ']';

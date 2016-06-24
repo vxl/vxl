@@ -18,7 +18,7 @@
 template <class T>
 inline float as_float(T const &v) { return float(v); }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline float as_float(vil1_rgb<unsigned char> const &v) { return v.grey(); }
 
 //--------------------------------------------------------------------------------

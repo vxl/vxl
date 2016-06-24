@@ -78,9 +78,9 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_DEFINE_SPECIALIZATION ";
-#ifdef VCL_DEFINE_SPECIALIZATION
-  std::cout << "is set to " << quote(VCL_DEFINE_SPECIALIZATION);
+  std::cout << "template <> ";
+#ifdef template <>
+  std::cout << "is set to " << quote(template <>);
 #else
   std::cout << "is not set";
 #endif

@@ -112,8 +112,8 @@ struct vil_pixel_format_type_of
 
 //: Get the vil_pixel_format value for a given type.
 #define vil_pixel_format_macro(T,C,V)\
-VCL_DEFINE_SPECIALIZATION inline vil_pixel_format vil_pixel_format_of(T /*dummy*/) { return V; }\
-VCL_DEFINE_SPECIALIZATION struct vil_pixel_format_type_of<V> { typedef T type; typedef C component_type; }
+template <> inline vil_pixel_format vil_pixel_format_of(T /*dummy*/) { return V; }\
+template <> struct vil_pixel_format_type_of<V> { typedef T type; typedef C component_type; }
 
 #if VXL_HAS_INT_64
 vil_pixel_format_macro(vxl_uint_64, vxl_uint_64, VIL_PIXEL_FORMAT_UINT_64);
