@@ -17,6 +17,7 @@ static void test_poly_radial_distortion_constructors()
     }
     catch( std::exception& exception )
     {
+                std::cout << exception.what() << std::endl;
     }
     TEST( "Centre & Coefficients Constructor with NULL pointer", did_construct, true );
 

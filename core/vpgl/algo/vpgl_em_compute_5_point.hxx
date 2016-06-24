@@ -466,7 +466,7 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
     }
 
     // ----- Good input! Do the ransac
-    const unsigned num_points = right_points.size();
+    const size_t num_points = right_points.size();
 
     unsigned best_inlier_count = 0u;
 

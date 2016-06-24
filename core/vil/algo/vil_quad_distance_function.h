@@ -18,7 +18,7 @@ inline void vil_update_parabola_set(std::vector<double>& x,
                                     std::vector<double>& z, double a,
                                     double x0, double y0, double n)
 {
-  unsigned int k=x.size()-1;
+  size_t k=x.size()-1;
   while (true)
   {
     // Compute intercept of parabola centred at x0 with that at v[k]
@@ -55,7 +55,7 @@ inline void vil_update_parabola_set(std::vector<double>& x,
 //  Thus z.size()==x.size()+1
 template<class srcT>
 inline void vil_quad_envelope(const srcT* src,std::ptrdiff_t s_step,
-                              unsigned int n,
+                              size_t n,
                               std::vector<double>& x,
                               std::vector<double>& y,
                               std::vector<double>& z, double a)
@@ -68,7 +68,7 @@ inline void vil_quad_envelope(const srcT* src,std::ptrdiff_t s_step,
   {
     vil_update_parabola_set(x,y,z,a,x0,double(*src),double(n));
   }
-  z.push_back(n);
+  z.push_back(static_cast<double>(n));
 }
 
 //: Sample from lower envelope of a set of parabolas
@@ -80,7 +80,7 @@ inline void vil_sample_quad_envelope(const std::vector<double>& x,
                                      const std::vector<double>& y,
                                      const std::vector<double>& z, double a,
                                      destT* dest, std::ptrdiff_t d_step,
-                                     unsigned int n)
+                                     size_t n)
 {
   unsigned int k=0;
   for (unsigned int i=0;i<n;++i,dest+=d_step)
@@ -104,7 +104,7 @@ inline void vil_sample_quad_envelope_with_pos(const std::vector<double>& x,
                                               const std::vector<double>& z,
                                               double a,
                                               destT* dest, std::ptrdiff_t d_step,
-                                              unsigned int n,
+                                              size_t n,
                                               iT* pos, std::ptrdiff_t p_step)
 {
   unsigned int k=0;
@@ -124,7 +124,7 @@ inline void vil_sample_quad_envelope_with_pos(const std::vector<double>& x,
 //  dest(x) = dest[x*d_step], src(x)=src[x*s_step]
 template<class srcT, class destT>
 inline void vil_quad_distance_function_1D(const srcT* src,std::ptrdiff_t s_step,
-                                          unsigned int n,
+                                          size_t n,
                                           double a,
                                           destT* dest, std::ptrdiff_t d_step)
 {
