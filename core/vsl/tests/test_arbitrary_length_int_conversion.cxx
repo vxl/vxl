@@ -57,9 +57,9 @@ void test_arbitrary_length_int_conversion_int()
   TEST("Checking that the results are correct", i, 25000000);
   if (i != 25000000)
     std::cout << "Failed at number " << i <<std::endl;
-  delete a;
-  delete b;
-  delete buf;
+  delete[] a;
+  delete[] b;
+  delete[] buf;
 }
 
 

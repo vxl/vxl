@@ -13,8 +13,8 @@ bool vipl_x_gradient <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int starty = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
   int stopx  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
   int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
-  for (register int j = starty; j < stopy; ++j)
-    for (register int i = startx+1; i < stopx; ++i) {
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx+1; i < stopx; ++i) {
       DataIn w = fgetpixel(in, i,  j, DataIn(0))
                - fgetpixel(in, i-1,j, DataIn(0)) /* + shift() */;
 #if 0

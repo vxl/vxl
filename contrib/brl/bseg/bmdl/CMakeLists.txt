@@ -1,5 +1,8 @@
 # This is brl/seg/bmdl/CMakeLists.txt
 
+if(HAS_GEOTIFF)
+  include_directories( ${GEOTIFF_INCLUDE_DIR} )
+
 doxygen_add_library(contrib/brl/bseg/bmdl
   DEPENDS contrib/brl/bbas/imesh core/vil
   PACKAGE contrib/brl
@@ -24,4 +27,7 @@ add_subdirectory(pro)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/bmdl: requires geotiff")
 endif()

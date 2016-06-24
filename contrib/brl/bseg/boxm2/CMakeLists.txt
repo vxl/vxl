@@ -1,4 +1,5 @@
 # contrib/brl/bseg/boxm2/CMakeLists.txt
+if(HAS_GEOTIFF)
 doxygen_add_book(contrib/brl/bseg/boxm2 "BOXM2 overview documentation")
 doxygen_add_package(contrib/brl/bseg/boxm2 "BOXM2 Library")
 
@@ -81,3 +82,6 @@ if( BUILD_TESTING )
 endif()
 
 #install the .h .hxx and libs
+else()
+  message(STATUS "Skipping contrib/brl/bseg/boxm2: requires geotiff")
+endif()

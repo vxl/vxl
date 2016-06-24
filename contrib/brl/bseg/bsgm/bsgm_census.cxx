@@ -9,8 +9,8 @@ bool
 bsgm_compute_census_img(
   const vil_image_view<vxl_byte>& img,
   int nbhd_diam,
-  vil_image_view<unsigned long long>& census,
-  vil_image_view<unsigned long long>& census_conf,
+  vil_image_view<vxl_uint_64>& census,
+  vil_image_view<vxl_uint_64>& census_conf,
   int tol )
 {  
   int height = img.nj(), width = img.ni();

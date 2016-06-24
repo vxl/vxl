@@ -16,6 +16,7 @@
 
 #include "vidl_ffmpeg_init.h"
 #include "vidl_ffmpeg_convert.h"
+#include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_frame.h"
 #include "vidl_convert.h"
 #include <vcl_compiler.h>
@@ -348,8 +349,6 @@ open()
   video_enc->inter_quant_bias = params_.video_inter_quant_bias_;
   video_enc->dct_algo = params_.dct_algo_;
   video_enc->idct_algo = params_.idct_algo_;
-  video_enc->me_threshold= params_.me_threshold_;
-  video_enc->mb_threshold= params_.mb_threshold_;
   video_enc->intra_dc_precision= params_.intra_dc_precision_ - 8;
   video_enc->strict_std_compliance = params_.strict_;
   video_enc->error_rate = params_.error_rate_;

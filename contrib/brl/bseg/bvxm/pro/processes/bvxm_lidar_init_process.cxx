@@ -16,6 +16,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_box_2d.h>
 
+#include <vil/vil_config.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>

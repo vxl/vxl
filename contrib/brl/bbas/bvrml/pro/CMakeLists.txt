@@ -1,3 +1,4 @@
+if (HAS_GEOTIFF)
 # bsta's Process Library
 
 include_directories( ${BRL_INCLUDE_DIR}/bpro )
@@ -20,4 +21,6 @@ target_link_libraries(bvrml_pro boxm2_cpp bvrml ${VXL_LIB_PREFIX}vpgl_algo ${VXL
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-
+else()
+  message(STATUS "Skipping contrib/brl/bseg/bvrml/pro: requires geotiff")
+endif()

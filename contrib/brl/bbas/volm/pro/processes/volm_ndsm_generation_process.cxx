@@ -15,7 +15,7 @@
 //
 // \verbatim
 //  Modifications
-//    none yet
+//    Yi Dong Nov, 2015.  Modify the inputs to avoid usage of land cover image and land cover camera
 // \endverbatim
 
 #include <vcl_compiler.h>
@@ -30,34 +30,12 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <volm/volm_io_tools.h>
+#include <mbl/mbl_thin_plate_spline_3d.h>
 
 namespace volm_ndsm_generation_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 3;
-  // function to obtain ground pixel height values from land cover image and aggregated height images
-  bool obtain_ground_pixels(vil_image_view<vxl_byte>* land_img,
-                            vpgl_geo_camera* land_cam,
-                            vil_image_view<float>* out_dsm,
-                            vpgl_geo_camera* h_cam,
-                            unsigned const& start_ni, unsigned const& start_nj,
-                            unsigned const& end_ni,   unsigned const& end_nj,
-                            std::vector<unsigned>& ground_ids,
-                            std::vector<float>& ground_heights,
-                            vil_image_view<vxl_byte>& ground_mask);
-
-  // function to find ground height value from neighbor sub-pixels
-  float neighbor_height(std::map<std::pair<unsigned, unsigned>, float> const& window_min_height_map,
-                        unsigned const& w_idx_i, unsigned const& w_idx_j, unsigned const& search_range);
-
-  // function to find ground height value from neighbor sub-pixels
-  bool neighbor_ground_height(unsigned const& i, unsigned const& j,
-                              vil_image_view<vxl_byte>* land_img,
-                              vpgl_geo_camera* land_cam,
-                              vil_image_view<float>* h_img,
-                              vpgl_geo_camera* out_cam,
-                              std::vector<unsigned> const& ground_ids,
-                              float & grouhd_height);
+  const unsigned n_inputs_  = 11;
+  const unsigned n_outputs_ = 4;
 }
 
 bool volm_ndsm_generation_process_cons(bprb_func_process& pro)
@@ -65,87 +43,54 @@ bool volm_ndsm_generation_process_cons(bprb_func_process& pro)
   using namespace volm_ndsm_generation_process_globals;
   // this process takes 6 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0] = "vpgl_camera_double_sptr";  // land cover map geo camera
-  input_types_[1] = "vcl_string";               // land cover map file path
-  input_types_[2] = "vcl_string";               // geo index for height maps
-  input_types_[3] = "vcl_string";               // folder of height map tiles
-  input_types_[4] = "unsigned";                 // window size
-  input_types_[5] = "float";                    // maximum height limit
-  input_types_[6] = "vcl_string";               // a text file to define the land categories that can be treated as ground pixels
-  input_types_[7] = "vcl_string";               // ASTER DEM image folder, ensure the DEM images are converted to heights above WGS84 reference ellipsoid.
+  input_types_[0]  = "double";                   // lower left lon of the region
+  input_types_[1]  = "double";                   // lower left lat of the region
+  input_types_[2]  = "double";                   // upper right lon of the region
+  input_types_[3]  = "double";                   // upper right lat of the region
+  input_types_[4]  = "unsigned";                 // desired image size along latitude
+  input_types_[5]  = "unsigned";                 // desired image size along longitude
+  input_types_[6]  = "vcl_string";               // geo index for height maps
+  input_types_[7]  = "vcl_string";               // folder of height map tiles
+  input_types_[8]  = "vcl_string";               // folder of ground images
+  input_types_[9]  = "unsigned";                 // window size
+  input_types_[10] = "float";                    // maximum height limit
   // this process takes 2 outputs
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // normalized height image (byte image)
   output_types_[1] = "vil_image_view_base_sptr";  // original height image (float image)
-  output_types_[2] = "vpgl_camera_double_sptr";   // geo camera of the output image
+  output_types_[2] = "vil_image_view_base_sptr";  // ground plane image (float image)
+  output_types_[3] = "vpgl_camera_double_sptr";   // geo camera of the output image
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-#if 1
 bool volm_ndsm_generation_process(bprb_func_process& pro)
 {
   using namespace volm_ndsm_generation_process_globals;
-  // input check
   if (!pro.verify_inputs()) {
     std::cerr << pro.name() << ": Wrong Inputs!\n";
     return false;
   }
   // get the input
   unsigned in_i = 0;
-  vpgl_camera_double_sptr land_cam = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  std::string         land_img_file = pro.get_input<std::string>(in_i++);
-  std::string         geo_index_txt = pro.get_input<std::string>(in_i++);
-  std::string          h_map_folder = pro.get_input<std::string>(in_i++);
+  double                    ll_lon = pro.get_input<double>(in_i++);
+  double                    ll_lat = pro.get_input<double>(in_i++);
+  double                    ur_lon = pro.get_input<double>(in_i++);
+  double                    ur_lat = pro.get_input<double>(in_i++);
+  unsigned                    o_ni = pro.get_input<unsigned>(in_i++);
+  unsigned                    o_nj = pro.get_input<unsigned>(in_i++);
+  std::string        geo_index_txt = pro.get_input<std::string>(in_i++);
+  std::string         h_map_folder = pro.get_input<std::string>(in_i++);
+  std::string           grd_folder = pro.get_input<std::string>(in_i++);
   unsigned             window_size = pro.get_input<unsigned>(in_i++);
   float                h_max_limit = pro.get_input<float>(in_i++);
-  std::string            ground_txt = pro.get_input<std::string>(in_i++);
-  std::string            dem_folder = pro.get_input<std::string>(in_i++);
 
   if (!vul_file::exists(geo_index_txt)) {
     std::cerr << pro.name() << ": can not find geo index file " << geo_index_txt << "!\n";
     return false;
   }
-  // parse the ground ids
-  std::ifstream ifs(ground_txt.c_str());
-  if (!ifs) {
-    std::cerr << pro.name() << ": can not open ground txt: " << ground_txt << "!!\n";
-    return false;
-  }
-  std::vector<unsigned> ground_ids;
-  while (!ifs.eof()) {
-    unsigned id;
-    ifs >> id;
-    std::vector<unsigned>::iterator vit = std::find(ground_ids.begin(), ground_ids.end(), id);
-    if (vit == ground_ids.end())
-      ground_ids.push_back(id);
-  }
 
-  // obtain the lower left and upper right of land cover image
-  vil_image_resource_sptr img_res = vil_load_image_resource(land_img_file.c_str());
-  unsigned l_ni = img_res->ni();
-  unsigned l_nj = img_res->nj();
-  vpgl_geo_camera* l_geocam = dynamic_cast<vpgl_geo_camera*>(land_cam.ptr());
-  if (!l_geocam) {
-    std::cerr << pro.name() << ": input camera for land cover image is not valid!\n";
-    return false;
-  }
-  double ll_lon, ll_lat;
-  l_geocam->img_to_global(0,  l_nj,  ll_lon, ll_lat);
-  double ur_lon, ur_lat;
-  l_geocam->img_to_global(l_ni,  0, ur_lon, ur_lat);
-  vgl_box_2d<double> l_bbox(ll_lon, ur_lon, ll_lat, ur_lat);
-  // load the land image view
-  vil_image_view_base_sptr land_img_sptr = img_res->get_view(0, l_ni, 0, l_nj);
-  vil_image_view<vxl_byte>* land_img_view = dynamic_cast<vil_image_view<vxl_byte>*> (land_img_sptr.ptr());
-  if (!land_img_view) {
-    std::cerr << pro.name() << ": The land cover image pixle format: " << img_res->pixel_format() << " is not supported, available format is Byte!\n";
-    return false;
-  }
-
-  // generate output image has GSD that is half of the GSD of land cover image
-  unsigned o_ni = l_ni * 2;
-  unsigned o_nj = l_nj * 2;
+  // compute the output image resolution based on given region size and image size
   double scale_x =  (ur_lon - ll_lon)/o_ni;
   double scale_y = -(ur_lat - ll_lat)/o_nj;
   vnl_matrix<double> trans_matrix(4,4,0.0);
@@ -153,16 +98,20 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
   trans_matrix[1][1] = scale_y;
   trans_matrix[0][3] = ll_lon;
   trans_matrix[1][3] = ur_lat;
-  vpgl_geo_camera* out_cam = new vpgl_geo_camera(trans_matrix, l_geocam->lvcs());
+  vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+  vpgl_geo_camera* out_cam = new vpgl_geo_camera(trans_matrix, lvcs_dummy);
   out_cam->set_scale_format(true);
-  std::cerr << "land map region: " << l_bbox << std::endl;
+  std::cerr << "land map region -- lower_left: " << ll_lon << ',' << ll_lat << ", upper_right: " << ur_lon << ',' << ur_lat << std::endl;
   std::cout << "output image size is ni: " << o_ni << ", nj: " << o_nj << std::endl;
   vil_image_view<float>* out_dsm = new vil_image_view<float>(o_ni, o_nj);
   vil_image_view<vxl_byte>* out_ndsm = new vil_image_view<vxl_byte>(o_ni, o_nj);
+  vil_image_view<float>* grd_img = new vil_image_view<float>(o_ni, o_nj);
   out_dsm->fill(-1.0);
   out_ndsm->fill(255);
+  grd_img->fill(-1.0f);
 
   // obtain the height map image id that overlap with land cover image region
+  vgl_box_2d<double> l_bbox(ll_lon, ur_lon, ll_lat, ur_lat);
   double min_size;
   bvgl_2d_geo_index_node_sptr root = bvgl_2d_geo_index::read_and_construct<float>(geo_index_txt, min_size);
   std::vector<bvgl_2d_geo_index_node_sptr> leaves;
@@ -179,7 +128,8 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
     std::cout << "no height map intersects with land cover image region, return an empty NDSM" << std::endl;
     pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_ndsm));
     pro.set_output_val<vil_image_view_base_sptr>(1, vil_image_view_base_sptr(out_dsm));
-    pro.set_output_val<vpgl_camera_double_sptr>(2, out_cam);
+    pro.set_output_val<vil_image_view_base_sptr>(2, vil_image_view_base_sptr(grd_img));
+    pro.set_output_val<vpgl_camera_double_sptr>(3, out_cam);
     return true;
   }
 
@@ -198,6 +148,21 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
     volm_io_tools::load_geotiff_image(h_img_file, info, false);
     h_infos.push_back(info);
   }
+
+  // load all ground images
+  std::vector<volm_img_info> grd_infos;
+  for (unsigned leaf_idx = 0; leaf_idx < leaf_ids.size(); leaf_idx++)
+  {
+    std::stringstream img_file_stream;
+    img_file_stream << grd_folder << "/scene_" << leaf_ids[leaf_idx] << "_h_stereo_grd.tif";
+    std::string h_img_file = img_file_stream.str();
+    if (!vul_file::exists(h_img_file))
+      continue;
+    volm_img_info info;
+    volm_io_tools::load_geotiff_image(h_img_file, info, false);
+    grd_infos.push_back(info);
+  }
+
   // aggregate the height map
   std::cout << "Start to aggregate height images for land cover image region..." << std::endl;
   for (unsigned i = 0; i < o_ni; i++)
@@ -227,595 +192,118 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
     }
   }
 
-  // generate normalized image by finding nearest ground pixel height
-  // for each pixel, look for the minimum ground height
+  // generate ground image
+  std::cout << "\nStart to aggregate ground images for land cover image region..." << std::endl;
+  for (unsigned i = 0; i < o_ni; i++)
+  {
+    if (i%1000 == 0)
+      std::cout << i << '.' << std::flush;
+    for (unsigned j = 0; j < o_nj; j++)
+    {
+      double lon, lat;
+      out_cam->img_to_global(i, j, lon, lat);
+      bool found = false;
+      for (std::vector<volm_img_info>::iterator vit = grd_infos.begin(); (vit != grd_infos.end() && !found); ++vit) {
+        vgl_box_2d<double> bbox = vit->bbox;
+        bbox.expand_about_centroid(2E-5);
+        if (!bbox.contains(lon, lat))
+          continue;
+        double u, v;
+        vit->cam->global_to_img(lon, lat, 0.0, u, v);
+        unsigned uu = (unsigned)std::floor(u+0.5);
+        unsigned vv = (unsigned)std::floor(v+0.5);
+        if (uu < vit->ni && vv < vit->nj) {
+          found = true;
+          vil_image_view<float> g_img(vit->img_r);
+          (*grd_img)(i,j) = g_img(uu, vv);
+        }
+      }
+    }
+  }
+#if 0
+  // get ground image from dsm image
   std::cout << "  \nStart to normalize the original DSM" << std::endl;
   std::cout << "image size: " << o_ni << 'x' << o_nj << std::endl;
   std::cout << "sub-pixel size: " << window_size << std::endl;
-  std::cout << "  finding group height value by using ground pixels: ";
-  for (unsigned i = 0; i < ground_ids.size(); i++)
-    std::cout << ground_ids[i] << ", ";
-  std::cout << '\n';
-
-  vil_image_view<vxl_byte> grd_mask(o_ni, o_nj);
-  grd_mask.fill(0);
-  unsigned half_size = (unsigned)(std::floor(0.5*window_size + 0.5));
-  std::map<std::pair<unsigned, unsigned>, float> window_min_height_map;
-  window_min_height_map.clear();
-  for (unsigned i = 0; i < o_ni; i++)
+  std::cout << "  estimate ground plane... " << std::endl;
+  vil_image_view<float>* grd_img = new vil_image_view<float>(o_ni, o_nj);
+  grd_img->fill(-1.0f);
+  std::vector<vgl_point_3d<double> > src_pts, dst_pts;
+  int N = (int)(window_size);
+  for (int j = N; j < o_nj-N; j+=N)
   {
-    if (i%1000 == 0)
-    std::cout << i << '.' << std::flush;
-    int start_i = i - half_size;
-    if (start_i < 0)  start_i = 0;
-    unsigned end_i   = i + half_size;
-    if (end_i >= o_ni)   end_i = o_ni-1;
-    for (unsigned j = 0; j < o_nj; j++)
+    for (int i = N; i < o_ni-N; i+=N)
     {
-      // compute the search range
-      int start_j = j - half_size;
-      if (start_j < 0) start_j = 0;
-      unsigned end_j   = j + half_size;
-      if (end_j >= o_nj) end_j = o_nj-1;
-      if (i == 11000 && j == 10000) {
-        std::cout << "(" << i << "," << j << ") -- start: (" << start_i << "," << start_j << "), end: (" << end_i << "," << end_j << ")" << std::endl;
+      // find the minimum in the neighborhood as ground plane
+      float min = 10000000.0f;
+      for (int k = -N; k < N; k++) {
+        for (int m = -N; m < N; m++) {
+          int uu = i+k;
+          int vv = j+m;
+          if ((*out_dsm)(uu,vv) < 0)
+            continue;
+          if ((*out_dsm)(uu,vv) < min)
+            min = (*out_dsm)(uu,vv);
+        }
       }
-      std::vector<float> ground_heights;
-      ground_heights.clear();
-      if (!obtain_ground_pixels(land_img_view, l_geocam, out_dsm, out_cam, start_i, start_j, end_i, end_j, ground_ids, ground_heights, grd_mask))
-        continue;
-      std::sort(ground_heights.begin(), ground_heights.end());
-      std::pair<unsigned, unsigned> window_key(i, j);
-      window_min_height_map.insert(std::pair<std::pair<unsigned, unsigned>, float>(window_key, ground_heights[0]));
+      if (min < 10000000.0f) {
+        double img_val = (*out_dsm)(i,j);
+        if (img_val > 0) {
+          vgl_point_3d<double> pt1(i,j,img_val);
+          vgl_point_3d<double>  pt(i,j,min);
+          src_pts.push_back(pt1);
+          dst_pts.push_back(pt);
+        }
+      }
     }
   }
+  std::cout << "\nTotal dsm image pixel: " << o_ni * o_nj << ", size of pts used for ground estimation: " << src_pts.size() << std::endl;
+  for (unsigned i = 0; i < src_pts.size(); i++)
+    std::cout << "source: " << src_pts[i].x() << " " << src_pts[i].y() << " " << src_pts[i].z()
+             << " dest: "  << dst_pts[i].x() << " " << dst_pts[i].y() << " " << dst_pts[i].z() << std::endl;
 
-  if (window_min_height_map.empty()) {
-    std::cout << pro.name() << ": can not find any ground pixels from land cover image!\n";
-    return false;
+  // construct the spline object
+  mbl_thin_plate_spline_3d tps;
+  tps.build(src_pts, dst_pts);
+
+  // apply onto ground image
+  std::cout << "\n  generating ground plane image..." << std::endl;
+  for (int i = 0; i < o_ni; i++) {
+    if (i%1000 == 0)
+        std::cout << i << '.' << std::flush;
+    for (int j = 0; j < o_nj; j++) {
+      if ( (*out_dsm)(i,j) < 0)
+        continue;
+      vgl_point_3d<double> p(i,j,(*out_dsm)(i,j));
+      vgl_point_3d<double> new_p = tps(p);
+      (*grd_img)(i,j) = new_p.z();
+    }
   }
+#endif
 
-  std::cout << "\n  normalize the image" << std::endl;
-  vil_image_view<float> grd_img(o_ni, o_nj);
-  grd_img.fill(-1.0f);
-  unsigned search_range = o_ni;
-  if (search_range < o_nj)
-    search_range = o_nj;
+  // normalize the image using ground image
+  std::cout << "\n  normalize the image..." << std::flush << std::endl;
   for (unsigned i = 0; i < o_ni; i++)
   {
     if (i%1000 == 0)
-      std::cout << i << '.' << std::flush;
+        std::cout << i << '.' << std::flush;
     for (unsigned j = 0; j < o_nj; j++)
     {
-      if ( (*out_dsm)(i,j) < 0)
+      if ( (*out_dsm)(i, j) < 0 || (*grd_img)(i,j) < 0)
         continue;
-      if ( grd_mask(i,j) == 1) {
-        (*out_ndsm)(i,j) = 0;
-        continue;
-      }
-      // find the ground height for current pixel
-      float grd_h = -1.0f;
-      std::pair<unsigned, unsigned> window_key(i,j);
-      std::map<std::pair<unsigned, unsigned>, float>::iterator mit = window_min_height_map.find(window_key);
-      if (mit == window_min_height_map.end())
-        grd_h = neighbor_height(window_min_height_map, i, j, search_range);
-      else
-        grd_h = mit->second;
-      grd_img(i,j) = grd_h;
-      if (grd_h < 0)
-        continue;
-      float scale = 254.0f / (h_max_limit - grd_h);
-      float v = scale * ((*out_dsm)(i,j)-grd_h);
+      float v = (*out_dsm)(i,j)-(*grd_img)(i,j);
       if (v > 254.0f)
-        continue;
+        (*out_ndsm)(i,j) = 254;
       else if (v < 0.0f)
         (*out_ndsm)(i,j) = 0;
-      else
+      else 
         (*out_ndsm)(i,j) = (unsigned char)std::floor(v+0.5f);
     }
   }
-
-
-  vil_image_view<float> grd_img1(o_ni, o_nj);
-  grd_img1.fill(-1.0);
-  for (std::map<std::pair<unsigned, unsigned>, float>::iterator mit = window_min_height_map.begin(); mit != window_min_height_map.end(); ++mit)
-    grd_img1(mit->first.first, mit->first.second) = mit->second;
-
-  vil_save(grd_mask, "d:/work/find/ara_msi_tiling/DSM/AU/56H/s34e151/temp_continus_win_grd/grd_mask.tif");
-  vil_save(grd_img, "d:/work/find/ara_msi_tiling/DSM/AU/56H/s34e151/temp_continus_win_grd/grd_img.tif");
-  vil_save(grd_img1, "d:/work/find/ara_msi_tiling/DSM/AU/56H/s34e151/temp_continus_win_grd/grd_img1.tif");
   // output
   pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_ndsm));
   pro.set_output_val<vil_image_view_base_sptr>(1, vil_image_view_base_sptr(out_dsm));
-  pro.set_output_val<vpgl_camera_double_sptr>(2, out_cam);
-  return true;
-}
-#endif
-
-#if 0
-bool volm_ndsm_generation_process(bprb_func_process& pro)
-{
-  using namespace volm_ndsm_generation_process_globals;
-  // input check
-  if (!pro.verify_inputs()) {
-    std::cerr << pro.name() << ": Wrong Inputs!\n";
-    return false;
-  }
-  // get the input
-  unsigned in_i = 0;
-  vpgl_camera_double_sptr land_cam = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  std::string         land_img_file = pro.get_input<std::string>(in_i++);
-  std::string         geo_index_txt = pro.get_input<std::string>(in_i++);
-  std::string          h_map_folder = pro.get_input<std::string>(in_i++);
-  unsigned             window_size = pro.get_input<unsigned>(in_i++);
-  float                h_max_limit = pro.get_input<float>(in_i++);
-  std::string            ground_txt = pro.get_input<std::string>(in_i++);
-  std::string            dem_folder = pro.get_input<std::string>(in_i++);
-
-  if (!vul_file::exists(geo_index_txt)) {
-    std::cerr << pro.name() << ": can not find geo index file " << geo_index_txt << "!\n";
-    return false;
-  }
-
-  // parse the ground ids
-  std::ifstream ifs(ground_txt.c_str());
-  if (!ifs) {
-    std::cerr << pro.name() << ": can not open ground txt: " << ground_txt << "!!\n";
-    return false;
-  }
-  std::vector<unsigned> ground_ids;
-  while (!ifs.eof()) {
-    unsigned id;
-    ifs >> id;
-    ground_ids.push_back(id);
-  }
-
-  // obtain the lower left and upper right of land cover image
-  vil_image_resource_sptr img_res = vil_load_image_resource(land_img_file.c_str());
-  unsigned l_ni = img_res->ni();
-  unsigned l_nj = img_res->nj();
-  vpgl_geo_camera* l_geocam = dynamic_cast<vpgl_geo_camera*>(land_cam.ptr());
-  if (!l_geocam) {
-    std::cerr << pro.name() << ": input camera for land cover image is not valid!\n";
-    return false;
-  }
-  double ll_lon, ll_lat;
-  l_geocam->img_to_global(0,  l_nj,  ll_lon, ll_lat);
-  double ur_lon, ur_lat;
-  l_geocam->img_to_global(l_ni,  0, ur_lon, ur_lat);
-  vgl_box_2d<double> l_bbox(ll_lon, ur_lon, ll_lat, ur_lat);
-  // load the land image view
-  vil_image_view_base_sptr land_img_sptr = img_res->get_view(0, l_ni, 0, l_nj);
-  vil_image_view<vxl_byte>* land_img_view = dynamic_cast<vil_image_view<vxl_byte>*> (land_img_sptr.ptr());
-  if (!land_img_view) {
-    std::cerr << pro.name() << ": The land cover image pixle format: " << img_res->pixel_format() << " is not supported, available format is Byte!\n";
-    return false;
-  }
-
-  // initialize an image that has same GSD as height map and same coverage of land cover image
-#if 0 // generate output image has GSD 1 meter along longitude and latitude
-
-  std::string file_glob = h_map_folder + "//*.tif";
-  vul_file_iterator fn = file_glob.c_str();
-  std::string h_img_file = fn();
-  std::cout << "get GSD from image: " << h_img_file << std::endl;
-  vil_image_resource_sptr h_img_res = vil_load_image_resource(h_img_file.c_str());
-  vpgl_geo_camera* h_cam;
-  vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
-  vpgl_geo_camera::init_geo_camera(h_img_res, lvcs_dummy, h_cam);
-  if (!h_cam) {
-    std::cerr << pro.name() << ": can not load geo camera from height image " << h_img_file << "!\n";
-    return false;
-  }
-  // compute the image size
-  double scale_x = h_cam->trans_matrix()[0][0];
-  double scale_y = h_cam->trans_matrix()[1][1];
-  vnl_matrix<double> trans_matrix(4,4,0.0);
-  trans_matrix[0][0] = scale_x;
-  trans_matrix[1][1] = scale_y;
-  trans_matrix[0][3] = ll_lon;
-  trans_matrix[1][3] = ur_lat;
-  vpgl_geo_camera* out_cam = new vpgl_geo_camera(trans_matrix, lvcs_dummy);
-  out_cam->set_scale_format(true);
-  double o_u, o_v;
-  out_cam->global_to_img(ur_lon, ll_lat, 0, o_u, o_v);
-  unsigned o_ni = std::ceil(o_u);
-  unsigned o_nj = std::ceil(o_v);
-  std::cerr << "land map region: " << l_bbox << std::endl;
-  std::cout << "output image size is ni: " << o_ni << ", nj: " << o_nj << std::endl;
-  vil_image_view<float>* out_dsm = new vil_image_view<float>(o_ni, o_nj);
-  vil_image_view<vxl_byte>* out_ndsm = new vil_image_view<vxl_byte>(o_ni, o_nj);
-  out_dsm->fill(-1.0);
-  out_ndsm->fill(255);
-#endif
-
-#if 1 // generate output image has GSD that is half of the GSD of land cover image
-  unsigned o_ni = l_ni * 2;
-  unsigned o_nj = l_nj * 2;
-  double scale_x =  (ur_lon - ll_lon)/o_ni;
-  double scale_y = -(ur_lat - ll_lat)/o_nj;
-  vnl_matrix<double> trans_matrix(4,4,0.0);
-  trans_matrix[0][0] = scale_x;
-  trans_matrix[1][1] = scale_y;
-  trans_matrix[0][3] = ll_lon;
-  trans_matrix[1][3] = ur_lat;
-  vpgl_geo_camera* out_cam = new vpgl_geo_camera(trans_matrix, l_geocam->lvcs());
-  out_cam->set_scale_format(true);
-  std::cerr << "land map region: " << l_bbox << std::endl;
-  std::cout << "output image size is ni: " << o_ni << ", nj: " << o_nj << std::endl;
-  vil_image_view<float>* out_dsm = new vil_image_view<float>(o_ni, o_nj);
-  vil_image_view<vxl_byte>* out_ndsm = new vil_image_view<vxl_byte>(o_ni, o_nj);
-  out_dsm->fill(-1.0);
-  out_ndsm->fill(255);
-#endif
-
-  // obtain the height map image id that overlap with land cover image region
-  double min_size;
-  bvgl_2d_geo_index_node_sptr root = bvgl_2d_geo_index::read_and_construct<float>(geo_index_txt, min_size);
-  std::vector<bvgl_2d_geo_index_node_sptr> leaves;
-  bvgl_2d_geo_index::get_leaves(root, leaves);
-  // get the ids of intersected leaves
-  std::vector<unsigned> leaf_ids;
-  for (unsigned i = 0; i < leaves.size(); i++) {
-    if (vgl_intersection(l_bbox, leaves[i]->extent_).area() > 0)
-      leaf_ids.push_back(i);
-  }
-
-  std::cout << "Number of leaves: " << leaves.size() << std::endl;
-  if (leaf_ids.empty()) {
-    std::cout << "no height map intersects with land cover image region, return an empty NDSM" << std::endl;
-    pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_ndsm));
-    pro.set_output_val<vil_image_view_base_sptr>(1, vil_image_view_base_sptr(out_dsm));
-    pro.set_output_val<vpgl_camera_double_sptr>(2, out_cam);
-    return true;
-  }
-
-  std::cout << leaf_ids.size() << " height image tiles intersect with land cover image" << std::endl;
-#if 0
-  for (unsigned i = 0; i < leaf_ids.size(); i++)
-    std::cout << leaf_ids[i] << ' ';
-  std::cout << std::endl;
-#endif
-
-  // load all height maps
-  std::vector<volm_img_info> h_infos;
-  for (unsigned leaf_idx = 0; leaf_idx < leaf_ids.size(); leaf_idx++)
-  {
-    std::stringstream img_file_stream;
-    img_file_stream << h_map_folder << "/scene_" << leaf_ids[leaf_idx] << "_h_stereo.tif";
-    std::string h_img_file = img_file_stream.str();
-    if (!vul_file::exists(h_img_file))
-      continue;
-    volm_img_info info;
-    volm_io_tools::load_geotiff_image(h_img_file, info, false);
-    h_infos.push_back(info);
-  }
-  // aggregate the height map
-  std::cout << "Start to aggregate height images for land cover image region..." << std::endl;
-  for (unsigned i = 0; i < o_ni; i++)
-  {
-    if (i%1000 == 0)
-      std::cout << i << '.' << std::flush;
-    for (unsigned j = 0; j < o_nj; j++)
-    {
-      double lon, lat;
-      out_cam->img_to_global(i, j, lon, lat);
-      bool found = false;
-      for (std::vector<volm_img_info>::iterator vit = h_infos.begin(); (vit != h_infos.end() && !found); ++vit) {
-        vgl_box_2d<double> bbox = vit->bbox;
-        bbox.expand_about_centroid(2E-5);
-        if (!bbox.contains(lon, lat))
-          continue;
-        double u, v;
-        vit->cam->global_to_img(lon, lat, 0.0, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5);
-        unsigned vv = (unsigned)std::floor(v+0.5);
-        if (uu < vit->ni && vv < vit->nj) {
-          found = true;
-          vil_image_view<float> h_img(vit->img_r);
-          (*out_dsm)(i,j) = h_img(uu, vv);
-        }
-      }
-    }
-  }
-  // start to normalize the aggregated height map
-  // find the ground pixels for each sub-pixels
-  unsigned num_w_i = o_ni / window_size + 1;
-  unsigned num_w_j = o_nj / window_size + 1;
-  std::cout << "\nStart to normalize the original DSM..." << std::endl;
-  std::cout << "image size: " << o_ni << 'x' << o_nj << std::endl;
-  std::cout << "sub-pixel size: " << window_size << std::endl;
-  std::cout << "sup-pixel number: " << num_w_i << 'x' << num_w_j << std::endl;
-  std::cout << "  finding group height value by using ground pixels: ";
-  for (unsigned i = 0; i < ground_ids.size(); i++)
-    std::cout << ground_ids[i] << ", ";
-  std::cout << '\n';
-  // maps to store the ground height value of each sub pixel (key is the sub_pixel id)
-  std::map<std::pair<unsigned, unsigned>, float> window_min_height_map;
-  window_min_height_map.clear();
-  vil_image_view<vxl_byte> ground_mask(o_ni, o_nj);
-  ground_mask.fill(0);
-  for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
-  {
-    std::cout << w_idx_i << '.'; std::cout.flush();
-    unsigned start_ni, end_ni;
-    start_ni = w_idx_i * window_size;
-    end_ni = (w_idx_i+1) * window_size;
-    for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
-    {
-      std::pair<unsigned, unsigned> window_key(w_idx_i, w_idx_j);
-      unsigned start_nj, end_nj;
-      start_nj = w_idx_j * window_size;
-      end_nj = (w_idx_j+1) * window_size;
-      // obtain the ground pixels
-      std::vector<float> ground_heights;
-      ground_heights.clear();
-      if (!obtain_ground_pixels(land_img_view, l_geocam, out_dsm, out_cam, start_ni, start_nj, end_ni, end_nj, ground_ids, ground_heights, ground_mask)) {
-        std::cerr << pro.name() << "Finding ground pixel failed for sub-pixel: (" << w_idx_i << ',' << w_idx_j << ")!\n";
-        return false;
-      }
-
-      if (ground_heights.size()) {
-        // find the median height value
-        std::sort(ground_heights.begin(), ground_heights.end());
-        //float h_median = ground_heights[(unsigned)std::floor(ground_heights.size()/2.0)];
-        //window_min_height_map.insert(std::pair<std::pair<unsigned, unsigned>, float>(window_key, h_median));
-        float h_minimum = ground_heights[0];
-        window_min_height_map.insert(std::pair<std::pair<unsigned, unsigned>, float>(window_key, h_minimum));
-        //std::cout << "\nstart: (" << start_ni << ',' << start_nj << "), end: (" << end_ni << ',' << end_nj << ")" << std::endl;
-        //std::cout << "ground height values: ";
-        //for (std::vector<float>::iterator vit = ground_heights.begin(); vit != ground_heights.end(); ++vit)
-        //  std::cout << *vit << ", ";
-        //std::cout << "\n";
-        //std::cout << "ground median: " << h_minimum << std::endl;
-      }
-    }
-  }
-  if (window_min_height_map.empty()) {
-    std::cout << pro.name() << ": can not find any ground pixels from land cover image!\n";
-    return false;
-  }
-
-  //std::cout << "Ground height:" << std::endl;
-  vil_image_view<float> ground_img(o_ni, o_nj);
-  ground_img.fill(-1.0);
-  for (std::map<std::pair<unsigned, unsigned>, float>::iterator mit = window_min_height_map.begin(); mit != window_min_height_map.end(); ++mit) {
-    unsigned start_i = mit->first.first * window_size;
-    unsigned end_i   = (mit->first.first+1) * window_size;
-    unsigned start_j = mit->first.second * window_size;
-    unsigned end_j   = (mit->first.second+1) * window_size;
-    for (unsigned i = start_i; i < end_i; i++) {
-      for (unsigned j = start_j; j < end_j; j++) {
-        if (i >= o_ni || j >= o_nj)
-          continue;
-        ground_img(i,j) = mit->second;
-      }
-    }
-  }
-
-  std::cout << "  \ngenerating normalized DSM...";
-  unsigned search_range = num_w_i;
-  if (search_range > num_w_j) search_range = num_w_j;
-  for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
-  {
-    unsigned start_ni, end_ni;
-    start_ni = w_idx_i * window_size;
-    end_ni = (w_idx_i+1) * window_size;
-    for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
-    {
-      std::pair<unsigned, unsigned> window_key(w_idx_i, w_idx_j);
-      unsigned start_nj, end_nj;
-      start_nj = w_idx_j * window_size;
-      end_nj = (w_idx_j+1) * window_size;
-      // check whether pixels in current sub-pixel is all invalid
-      bool is_sub_valid = false;
-      for (unsigned p_i = start_ni; (p_i < end_ni && !is_sub_valid); p_i++) {
-        for (unsigned p_j = start_nj; (p_j < end_nj && !is_sub_valid); p_j++) {
-          if (p_i >= o_ni || p_j >= o_nj)
-            continue;
-          if ( (*out_dsm)(p_i, p_j) > 0.0)
-            is_sub_valid = true;
-        }
-      }
-      if (!is_sub_valid)
-        continue;
-      // find the ground height to normalize the DSM
-      float grd_height = -500.0f;
-      std::map<std::pair<unsigned, unsigned>, float>::iterator mit = window_min_height_map.find(window_key);
-      if (mit == window_min_height_map.end()) {
-        // obtain ground height from its nearest sub-pixel
-        grd_height = neighbor_height(window_min_height_map, w_idx_i, w_idx_j, search_range);
-      }
-      else {
-        grd_height = mit->second;
-      }
-      if (grd_height < -400.0f)  // can not find ground height, treat this window as invalid
-        continue;
-
-      // use ground height value to normalize the height image
-      float scale = 254.0f / (h_max_limit - grd_height);
-      for (unsigned i = start_ni; i < end_ni; i++) {
-        for (unsigned j = start_nj; j < end_nj; j++) {
-          if ( i >= o_ni || j >= o_nj)
-            continue;
-          if ( (*out_dsm)(i,j) == -1.0 )
-            continue;
-          if (ground_mask(i,j) == 1) {
-            (*out_ndsm)(i,j) = 0;
-            continue;
-          }
-          float v = scale*((*out_dsm)(i,j)-grd_height);
-          if (v < 0.0f)
-            (*out_ndsm)(i,j) = 0;
-          else if (v > 254.0f)
-            (*out_ndsm)(i,j) = 255;
-          else
-            (*out_ndsm)(i,j) = (unsigned char)std::floor(v+0.5f);
-          //ground_img(i,j) = grd_height;
-        }
-      }
-    }
-  }
-
-  //// generate dem image
-  //std::vector<volm_img_info> dem_infos;
-  //volm_io_tools::load_aster_dem_imgs(dem_folder, dem_infos);
-  //vil_image_view<float> dem_img(o_ni, o_nj);
-  //vil_image_view<float> dem_img_full(dem_infos[0].img_r);
-  //dem_img.fill(-1.0f);
-  //for (unsigned i = 0; i < o_ni; i++) {
-  //  for (unsigned j = 0; j < o_nj; j++) {
-  //    double lon, lat;
-  //    out_cam->img_to_global(i, j, lon, lat);
-  //    double u, v;
-  //    dem_infos[0].cam->global_to_img(lon, lat, 0, u, v);
-  //    unsigned uu = (unsigned)std::floor(u+0.5);
-  //    unsigned vv = (unsigned)std::floor(v+0.5);
-  //    if (uu < dem_infos[0].ni && vv < dem_infos[0].nj) {
-  //      dem_img(i,j) = dem_img_full(uu,vv);
-  //    }
-  //  }
-  //}
-
-  // output
-  pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_ndsm));
-  pro.set_output_val<vil_image_view_base_sptr>(1, vil_image_view_base_sptr(out_dsm));
-  pro.set_output_val<vpgl_camera_double_sptr>(2, out_cam);
-  return true;
-}
-#endif
-
-bool volm_ndsm_generation_process_globals::obtain_ground_pixels(vil_image_view<vxl_byte>* land_img,
-                                                                vpgl_geo_camera* land_cam,
-                                                                vil_image_view<float>* out_dsm,
-                                                                vpgl_geo_camera* out_cam,
-                                                                unsigned const& start_ni, unsigned const& start_nj,
-                                                                unsigned const& end_ni,   unsigned const& end_nj,
-                                                                std::vector<unsigned>& ground_ids,
-                                                                std::vector<float>& ground_heights,
-                                                                vil_image_view<vxl_byte>& ground_mask)
-{
-  ground_heights.clear();
-  unsigned l_ni = land_img->ni();
-  unsigned l_nj = land_img->nj();
-  unsigned h_ni = out_dsm->ni();
-  unsigned h_nj = out_dsm->nj();
-  for (unsigned i = start_ni; i < end_ni; i++)
-  {
-    for (unsigned j = start_nj; j < end_nj; j++)
-    {
-      if (i >= h_ni || j >= h_nj)
-        continue;
-      if ((*out_dsm)(i,j) < 0)
-        continue;
-      double lon, lat;
-      out_cam->img_to_global(i, j, lon, lat);
-      double u, v;
-      land_cam->global_to_img(lon, lat, 0.0, u, v);
-      unsigned uu = (unsigned)std::floor(u+0.5);
-      unsigned vv = (unsigned)std::floor(v+0.5);
-      if (uu >= l_ni || vv >= l_nj)
-        continue;
-      unsigned id = (*land_img)(uu,vv);
-      std::vector<unsigned>::iterator vit = std::find(ground_ids.begin(), ground_ids.end(), id);
-      if ( vit != ground_ids.end()) {
-        ground_heights.push_back((*out_dsm)(i,j));
-        ground_mask(i,j) = 1;
-      }
-    }
-  }
-  if (ground_heights.empty())
-    return false;
-  return true;
-}
-
-float volm_ndsm_generation_process_globals::neighbor_height(std::map<std::pair<unsigned, unsigned>, float> const& window_min_height_map,
-                                                            unsigned const& w_idx_i, unsigned const& w_idx_j, unsigned const& search_range)
-{
-  bool found_neigh_height = false;
-  unsigned num_nbrs = 8;
-  std::vector<float> neigh_heights;
-  // keep increasing search radius
-  for (int radius = 1; (radius < (int)search_range && !found_neigh_height); radius++)
-  {
-    neigh_heights.clear();
-    int nbrs8_delta[8][2] = { { radius, 0}, { radius,-radius}, { 0,-radius}, {-radius,-radius},
-                              {-radius, 0}, {-radius, radius}, { 0, radius}, { radius, radius} };
-    for (unsigned c = 0; c < num_nbrs; c++) {
-      int nbr_i = (int)w_idx_i + nbrs8_delta[c][0];
-      int nbr_j = (int)w_idx_j + nbrs8_delta[c][1];
-      std::map<std::pair<unsigned, unsigned>, float>::const_iterator mit=window_min_height_map.find(std::pair<unsigned, unsigned>(nbr_i, nbr_j));
-      if (mit != window_min_height_map.end())
-        neigh_heights.push_back(mit->second);
-    }
-    if (neigh_heights.size() != 0)
-      found_neigh_height = true;
-  }
-  if (neigh_heights.empty())
-    return -500.0f;
-
-  float grd_height = 0.0f;
-  for (unsigned i = 0; i < neigh_heights.size(); i++)
-    grd_height += neigh_heights[i];
-  return grd_height/neigh_heights.size();
-}
-
-bool volm_ndsm_generation_process_globals::neighbor_ground_height(unsigned const& li, unsigned const& lj,
-                                                                  vil_image_view<vxl_byte>* land_img,
-                                                                  vpgl_geo_camera* land_cam,
-                                                                  vil_image_view<float>* h_img,
-                                                                  vpgl_geo_camera* h_cam,
-                                                                  std::vector<unsigned> const& ground_ids,
-                                                                  float & grouhd_height)
-{
-  bool found_neigh_height = false;
-  unsigned num_nbrs = 8;
-  std::vector<float> neigh_heights;
-  unsigned l_ni = land_img->ni();
-  unsigned l_nj = land_img->nj();
-  unsigned h_ni = h_img->ni();
-  unsigned h_nj = h_img->nj();
-  unsigned search_range = l_ni;
-  if (search_range < l_nj)
-    search_range = l_nj;
-
-  for (int radius = 1; (radius < (int)search_range && !found_neigh_height); radius++)
-  {
-    neigh_heights.clear();
-    int nbrs8_delta[8][2] = { { radius, 0}, { radius,-radius}, { 0,-radius}, {-radius,-radius},
-                              {-radius, 0}, {-radius, radius}, { 0, radius}, { radius, radius} };
-    for (unsigned c = 0; c < num_nbrs; c++) {
-      int nbr_i = (int)li + nbrs8_delta[c][0];
-      int nbr_j = (int)lj + nbrs8_delta[c][1];
-      if (nbr_i < 0 || nbr_j < 0 || nbr_i >= (int)l_ni || nbr_j >= (int)l_nj)
-        continue;
-      std::vector<unsigned>::const_iterator vit = std::find(ground_ids.begin(), ground_ids.end(), (unsigned)(*land_img)(nbr_i, nbr_j));
-      if (vit != ground_ids.end()) {
-        // find the height value from height image
-        double lon, lat;
-        land_cam->img_to_global(nbr_i, nbr_j, lon, lat);
-        double u, v;
-        h_cam->global_to_img(lon, lat, 0.0, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5);
-        unsigned vv = (unsigned)std::floor(v+0.5);
-        if (uu < h_ni && vv < h_nj) {
-          neigh_heights.push_back((*h_img)(uu,vv));
-        }
-      }
-    }
-
-    if (neigh_heights.size()) {
-      found_neigh_height = true;
-    }
-  }
-
-  if (neigh_heights.empty())
-    return false;
-
-  // return the minimum ground height value
-
-  std::sort(neigh_heights.begin(), neigh_heights.end());
-  grouhd_height = neigh_heights[0];
-
+  pro.set_output_val<vil_image_view_base_sptr>(2, vil_image_view_base_sptr(grd_img));
+  pro.set_output_val<vpgl_camera_double_sptr>(3, out_cam);
   return true;
 }

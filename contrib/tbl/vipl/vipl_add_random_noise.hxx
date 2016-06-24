@@ -11,8 +11,8 @@ bool vipl_add_random_noise <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_app
   int starty = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
   int stopx = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
   int stopy = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
-  for (register int j = starty; j < stopy; ++j)
-    for (register int i = startx; i < stopx; ++i)
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx; i < stopx; ++i)
     {
       double rnd = type_ == UNIFORM_NOISE ? vnl_sample_uniform(-maxdev_,maxdev_)
                  : type_ == GAUSSIAN_NOISE ? vnl_sample_normal(0,maxdev_)

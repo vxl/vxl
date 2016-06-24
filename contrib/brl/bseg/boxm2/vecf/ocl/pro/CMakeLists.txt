@@ -30,4 +30,3 @@ target_link_libraries(boxm2_vecf_ocl_pro bprb boxm2_vecf_ocl boct brdb ${VXL_LIB
 if( BUILD_TESTING )
 #  add_subdirectory(tests)
 endif()
-

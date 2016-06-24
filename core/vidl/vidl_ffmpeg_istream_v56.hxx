@@ -1,23 +1,24 @@
-// This is core/vidl/vidl_ffmpeg_istream_v0.9.hxx
+// This is core/vidl/vidl_ffmpeg_istream_v56.hxx
 #ifndef vidl_ffmpeg_istream_v56_hxx_
 #define vidl_ffmpeg_istream_v56_hxx_
 #pragma once
 
-#include <string>
-#include <iostream>
-#include "vidl_ffmpeg_istream.h"
-#include "vidl_ffmpeg_pixel_format.h"
 //:
 // \file
+// \author Johan Andruejol
 // \author Gehua Yang
 // \author Matt Leotta
 // \author Amitha Perera
-// \date   5 Jan 2015
+// \date   6 April 2015
 //
 // Update implementation based on FFMPEG release version 2.8.4
 
 //-----------------------------------------------------------------------------
 
+#include <string>
+#include <iostream>
+#include "vidl_ffmpeg_istream.h"
+#include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_ffmpeg_init.h"
 #include "vidl_frame.h"
 #include "vidl_ffmpeg_convert.h"
@@ -43,27 +44,30 @@ struct vidl_ffmpeg_istream::pimpl
   pimpl()
   : fmt_cxt_( NULL ),
     vid_index_( -1 ),
+    data_index_( -1 ),
     vid_str_( NULL ),
-    last_dts( 0 ),
     frame_( NULL ),
     num_frames_( -2 ), // sentinel value to indicate not yet computed
     sws_context_( NULL ),
     cur_frame_( NULL ),
-    deinterlace_( false ),
-    frame_number_offset_( 0 )
+    metadata_( 0 ),
+    pts_( 0 ),
+    frame_number_offset_( 0 ),
+    video_enc_( 0 )
   {
     packet_.data = NULL;
   }
 
   AVFormatContext* fmt_cxt_;
   int vid_index_;
+  int data_index_;
   AVStream* vid_str_;
 
-  //: Decode time of last frame.
-  int64_t last_dts;
+  AVCodecContext *video_enc_;
 
-  //: Start time of the stream, to offset the dts when computing the frame number.
-  int64_t start_time;
+  //: Start time of the stream, to offset the pts when computing the frame number.
+  //  (in stream time base)
+  int64_t start_time_;
 
   //: The last successfully read frame.
   //
@@ -94,12 +98,25 @@ struct vidl_ffmpeg_istream::pimpl
   //: The last successfully decoded frame.
   mutable vidl_frame_sptr cur_frame_;
 
-  //: Apply deinterlacing on the frames?
-  bool deinterlace_;
+  //: the buffer of metadata from the data stream
+  std::deque<vxl_byte> metadata_;
 
   //: Some codec/file format combinations need a frame number offset.
   // These codecs have a delay between reading packets and generating frames.
   unsigned frame_number_offset_;
+
+  //: Presentation timestamp (in stream time base)
+  int64_t pts_;
+
+  //: Returns the double value to convert from a stream time base to
+  //  a frame number
+  double stream_time_base_to_frame()
+    {
+    assert(this->vid_str_);
+    return av_q2d(
+      av_inv_q(
+        av_mul_q(this->vid_str_->time_base, this->vid_str_->avg_frame_rate)));
+    }
 };
 
 
@@ -151,41 +168,64 @@ open(const std::string& filename)
     return false;
   }
 
-  // Find a video stream. Use the first one we find.
+  // Find a video stream, and optionally a data stream.
+  // Use the first ones we find.
   is_->vid_index_ = -1;
-  for ( unsigned i = 0; i < is_->fmt_cxt_->nb_streams; ++i ) {
+  is_->data_index_ = -1;
+  AVCodecContext* codec_context_origin = NULL;
+  for (unsigned i = 0; i < is_->fmt_cxt_->nb_streams; ++i) {
     AVCodecContext *enc = is_->fmt_cxt_->streams[i]->codec;
-    if ( enc->codec_type == AVMEDIA_TYPE_VIDEO ) {
+    if (enc->codec_type == AVMEDIA_TYPE_VIDEO && is_->vid_index_ < 0) {
       is_->vid_index_ = i;
-      break;
+      codec_context_origin = enc;
+    }
+    else if (enc->codec_type == AVMEDIA_TYPE_DATA && is_->data_index_ < 0) {
+      is_->data_index_ = i;
     }
   }
-  if ( is_->vid_index_ == -1 ) {
+
+  // Fallback for the DATA stream if incorrectly coded as UNKNOWN.
+  for (unsigned i = 0; i < is_->fmt_cxt_->nb_streams && is_->data_index_ < 0; ++i) {
+    AVCodecContext *enc = is_->fmt_cxt_->streams[i]->codec;
+    if (enc->codec_type == AVMEDIA_TYPE_UNKNOWN ) {
+      is_->data_index_ = i;
+    }
+  }
+
+  if (is_->vid_index_ == -1) {
     return false;
   }
+  assert(codec_context_origin);
 
   av_dump_format( is_->fmt_cxt_, 0, filename.c_str(), 0 );
-  AVCodecContext *enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
 
   // Open the stream
-  AVCodec* codec = avcodec_find_decoder(enc->codec_id);
-  if ( !codec || avcodec_open2( enc, codec, NULL ) < 0 ) {
+  AVCodec* codec = avcodec_find_decoder(codec_context_origin->codec_id);
+  if (!codec)
     return false;
-  }
+
+  // Copy context
+  is_->video_enc_ = avcodec_alloc_context3(codec);
+  if (avcodec_copy_context(is_->video_enc_, codec_context_origin) != 0)
+    return false;
+
+  // Open codec
+  if (avcodec_open2(is_->video_enc_, codec, NULL) < 0)
+    return false;
 
   is_->vid_str_ = is_->fmt_cxt_->streams[ is_->vid_index_ ];
   is_->frame_ = av_frame_alloc();
 
   if ( is_->vid_str_->start_time == int64_t(1)<<63 ) {
-    is_->start_time = 0;
+    is_->start_time_ = 0;
   }
   else {
-    is_->start_time = is_->vid_str_->start_time;
+    is_->start_time_ = is_->vid_str_->start_time;
   }
 
   // The MPEG 2 codec has a latency of 1 frame when encoded in an AVI
-  // stream, so the dts of the last packet (stored in last_dts) is
-  // actually the next frame's dts.
+  // stream, so the pts of the last packet (stored in pts) is
+  // actually the next frame's pts.
   if ( is_->vid_str_->codec->codec_id == AV_CODEC_ID_MPEG2VIDEO &&
        std::string("avi") == is_->fmt_cxt_->iformat->name ) {
     is_->frame_number_offset_ = 1;
@@ -205,24 +245,33 @@ void
 vidl_ffmpeg_istream::
 close()
 {
-  if( is_->packet_.data )
-    av_free_packet( &is_->packet_ );  // free last packet
+  if (is_->packet_.data) {
+    av_free_packet(&is_->packet_);  // free last packet
+  }
 
-  if ( is_->frame_ ) {
-    av_freep( &is_->frame_ );
+  if (is_->frame_) {
+    av_freep(&is_->frame_);
+  }
+
+  if (is_->video_enc_ && is_->video_enc_->opaque) {
+    av_freep(&is_->video_enc_->opaque);
   }
 
   is_->num_frames_ = -2;
   is_->contig_memory_ = 0;
   is_->vid_index_ = -1;
-  if ( is_->vid_str_ ) {
-    avcodec_close( is_->vid_str_->codec );
+  is_->data_index_ = -1;
+  is_->metadata_.clear();
+  if (is_->vid_str_) {
+    avcodec_close(is_->vid_str_->codec);
     is_->vid_str_ = 0;
   }
   if ( is_->fmt_cxt_ ) {
     avformat_close_input( &is_->fmt_cxt_ );
     is_->fmt_cxt_ = 0;
   }
+
+  is_->video_enc_ = 0;
 }
 
 
@@ -289,11 +338,10 @@ frame_number() const
     return static_cast<unsigned int>(-1);
   }
 
-  return (unsigned int)( ((is_->last_dts - is_->start_time)
-                          * is_->vid_str_->r_frame_rate.num / is_->vid_str_->r_frame_rate.den
-                          * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den/2)
-                           / is_->vid_str_->time_base.den
-                           - int(is_->frame_number_offset_) );
+  unsigned int frame_number = static_cast<unsigned int>(
+    (is_->pts_ - is_->start_time_) / is_->stream_time_base_to_frame()
+    - static_cast<int>(is_->frame_number_offset_));
+  return frame_number;
 }
 
 
@@ -353,7 +401,8 @@ vidl_ffmpeg_istream
     return 0.0;
   }
 
-  return static_cast<double>(is_->vid_str_->r_frame_rate.num) / is_->vid_str_->r_frame_rate.den;
+  AVRational frame_rate = is_->vid_str_->avg_frame_rate;
+  return av_q2d(frame_rate);
 }
 
 
@@ -366,8 +415,8 @@ vidl_ffmpeg_istream
   if ( !is_open() ) {
     return 0.0;
   }
-  return static_cast<double>(is_->vid_str_->time_base.num)/is_->vid_str_->time_base.den
-         * static_cast<double>(is_->vid_str_->duration);
+  return av_q2d(is_->vid_str_->time_base)
+    * static_cast<double>(is_->vid_str_->duration);
 }
 
 
@@ -388,30 +437,36 @@ advance()
     is_->num_frames_ = -1;
   }
 
-  AVCodecContext* codec = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
-
-  if( is_->packet_.data )
-    av_free_packet( &is_->packet_ );  // free previous packet
+  if (is_->packet_.data)
+    av_free_packet(&is_->packet_);  // free previous packet
 
   int got_picture = 0;
 
-  while ( got_picture == 0 ) {
-    if ( av_read_frame( is_->fmt_cxt_, &is_->packet_ ) < 0 ) {
-      break;
-    }
-    is_->last_dts = is_->packet_.dts;
+  // clear the metadata from the previous frame
+  is_->metadata_.clear();
 
+  while (got_picture == 0 && av_read_frame(is_->fmt_cxt_, &is_->packet_) >= 0)
+  {
     // Make sure that the packet is from the actual video stream.
-    if (is_->packet_.stream_index==is_->vid_index_)
+    if (is_->packet_.stream_index == is_->vid_index_)
     {
-      if ( avcodec_decode_video2( codec,
+      if ( avcodec_decode_video2( is_->video_enc_,
                                   is_->frame_, &got_picture,
                                   &is_->packet_ ) < 0 ) {
         std::cerr << "vidl_ffmpeg_istream: Error decoding packet!\n";
+        av_free_packet(&is_->packet_);
         return false;
       }
-      else
-        break; // without freeing the packet
+
+      is_->pts_ = av_frame_get_best_effort_timestamp(is_->frame_);
+      if (is_->pts_ == AV_NOPTS_VALUE)
+        is_->pts_ = 0;
+    }
+    // grab the metadata from this packet if from the metadata stream
+    else if (is_->packet_.stream_index == is_->data_index_)
+    {
+      is_->metadata_.insert(is_->metadata_.end(), is_->packet_.data,
+        is_->packet_.data + is_->packet_.size);
     }
     av_free_packet( &is_->packet_ );
   }
@@ -423,11 +478,12 @@ advance()
     av_init_packet(&is_->packet_);
     is_->packet_.data = NULL;
     is_->packet_.size = 0;
-    if ( avcodec_decode_video2( codec,
-                                is_->frame_, &got_picture,
-                                &is_->packet_ ) >= 0 ) {
-      is_->last_dts += int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den
-        / is_->vid_str_->time_base.num / is_->vid_str_->r_frame_rate.num;
+
+    if (avcodec_decode_video2(is_->video_enc_,
+      is_->frame_, &got_picture,
+      &is_->packet_) >= 0) {
+
+      is_->pts_ += static_cast<int64_t>(is_->stream_time_base_to_frame());
     }
   }
 
@@ -469,15 +525,6 @@ vidl_ffmpeg_istream::current_frame()
   {
     int width = enc->width;
     int height = enc->height;
-
-    // Deinterlace if requested
-    if ( is_->deinterlace_ ) {
-      assert(!"Implementation is incomplete!");
-      // avpicture_deinterlace cannot be found in the v57
-      // NOTE -GY- 1/5/2015
-      //avpicture_deinterlace( (AVPicture*)is_->frame_, (AVPicture*)is_->frame_,
-      //                       enc->pix_fmt, width, height );
-    }
 
     // If the pixel format is not recognized by vidl then convert the data into RGB_24
     vidl_pixel_format fmt = vidl_pixel_format_from_ffmpeg(enc->pix_fmt);
@@ -538,7 +585,7 @@ vidl_ffmpeg_istream::current_frame()
         avpicture_fill(&test_frame, (uint8_t*)is_->contig_memory_->data(), enc->pix_fmt, width, height);
         av_picture_copy(&test_frame, (AVPicture*)is_->frame_, enc->pix_fmt, width, height);
         // use a shared frame because the vil_memory_chunk is reused for each frame
-        is_->cur_frame_ = new vidl_shared_frame(is_->contig_memory_->data(),width,height,fmt);
+        is_->cur_frame_ = new vidl_shared_frame(is_->contig_memory_->data(), width, height, fmt);
       }
     }
   }
@@ -560,12 +607,9 @@ seek_frame(unsigned int frame)
 
   // We rely on the initial cast to make sure all the operations happen in int64.
   int64_t req_timestamp =
-    int64_t(frame + is_->frame_number_offset_)
-    * is_->vid_str_->time_base.den
-    * is_->vid_str_->r_frame_rate.den
-    / is_->vid_str_->time_base.num
-    / is_->vid_str_->r_frame_rate.num
-    + is_->start_time;
+    static_cast<int64_t>((frame + is_->frame_number_offset_)
+    / is_->stream_time_base_to_frame())
+    + is_->start_time_;
 
   // Seek to a keyframe before the timestamp that we want.
   int seek = av_seek_frame( is_->fmt_cxt_, is_->vid_index_, req_timestamp, AVSEEK_FLAG_BACKWARD );
@@ -581,14 +625,51 @@ seek_frame(unsigned int frame)
     if ( ! advance() ) {
       return false;
     }
-    if ( is_->last_dts >= req_timestamp ) {
-      if ( is_->last_dts > req_timestamp ) {
+    if (is_->pts_ >= req_timestamp) {
+      if (is_->pts_ > req_timestamp) {
         std::cerr << "Warning: seek went into the future!\n";
         return false;
       }
       return true;
     }
   }
+}
+
+
+//: Return the raw metadata bytes obtained while reading the current frame.
+//  This deque will be empty if there is no metadata stream
+//  Metadata is often encoded as KLV,
+//  but no attempt to decode KLV is made here
+std::deque<vxl_byte>
+vidl_ffmpeg_istream::
+current_metadata()
+{
+  return is_->metadata_;
+}
+
+
+//: Return true if the video also has a metadata stream
+bool
+vidl_ffmpeg_istream::
+has_metadata() const
+{
+  return is_open() && is_->data_index_ >= 0;
+}
+
+double
+vidl_ffmpeg_istream::
+current_pts() const
+{
+  return is_->pts_ * av_q2d(is_->vid_str_->time_base);
+}
+
+//: Return the current video packet's data, is used to get
+//  video stream embeded metadata.
+std::vector<vxl_byte>
+vidl_ffmpeg_istream::
+current_packet_data() const
+{
+  return std::vector<vxl_byte>(is_->packet_.data, is_->packet_.data + is_->packet_.size);
 }
 
 #endif // vidl_ffmpeg_istream_v56_hxx_

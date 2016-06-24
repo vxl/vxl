@@ -28,4 +28,3 @@ target_link_libraries(bsta_algo bsta ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

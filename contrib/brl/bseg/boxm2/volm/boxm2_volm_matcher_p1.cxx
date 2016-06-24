@@ -304,7 +304,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
       delete fallback_size_cl_mem_;
-      delete n_ind_cl_mem_;     delete [] n_ind_;
+      delete n_ind_cl_mem_;     delete n_ind_;
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
       delete [] index_orient_buff_;  delete [] index_land_buff_;
       //delete [] index_combine_buff_;
@@ -357,7 +357,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
       delete fallback_size_cl_mem_;
-      delete n_ind_cl_mem_;     delete [] n_ind_;
+      delete n_ind_cl_mem_;     delete n_ind_;
       delete index_cl_mem_;
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
       delete [] index_orient_buff_;  delete [] index_land_buff_;
@@ -388,7 +388,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
       delete fallback_size_cl_mem_;
-      delete n_ind_cl_mem_;     delete [] n_ind_;
+      delete n_ind_cl_mem_;     delete n_ind_;
       delete index_cl_mem_;
       delete [] index_buff_;    delete [] score_buff_;    delete [] mu_buff_;
       delete [] index_orient_buff_; delete index_orient_cl_mem_;
@@ -403,7 +403,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
       delete fallback_size_cl_mem_;
-      delete n_ind_cl_mem_;         delete [] n_ind_;
+      delete n_ind_cl_mem_;         delete n_ind_;
       delete index_cl_mem_;         delete [] index_buff_;
       delete index_orient_cl_mem_;  delete [] index_orient_buff_;
       delete index_land_cl_mem_;    delete [] index_land_buff_;
@@ -420,7 +420,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
       delete fallback_size_cl_mem_;
-      delete n_ind_cl_mem_;          delete [] n_ind_;
+      delete n_ind_cl_mem_;          delete n_ind_;
       delete index_cl_mem_;          delete [] index_buff_;
       /*delete index_combine_cl_mem_;  delete [] index_combine_buff_;*/
       delete index_orient_cl_mem_;   delete [] index_orient_buff_;
@@ -438,7 +438,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
       delete fallback_size_cl_mem_;
-      delete n_ind_cl_mem_;          delete [] n_ind_;
+      delete n_ind_cl_mem_;          delete n_ind_;
       delete index_cl_mem_;          delete [] index_buff_;
       /*delete index_combine_cl_mem_;  delete [] index_combine_buff_;*/
       delete index_orient_cl_mem_;   delete [] index_orient_buff_;
@@ -462,7 +462,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
       delete fallback_size_cl_mem_;
-      delete n_ind_cl_mem_;          delete [] n_ind_;
+      delete n_ind_cl_mem_;          delete n_ind_;
       delete index_cl_mem_;          delete [] index_buff_;
       //delete index_combine_cl_mem_;  delete [] index_combine_buff_;
       delete index_orient_cl_mem_;   delete [] index_orient_buff_;
@@ -830,7 +830,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   if (!kern->execute(queue, work_dim_, local_threads_, global_threads_)) {
     std::cerr << "\n ERROR: kernel execution failed\n";
     delete debug_cl_mem_;
-    delete debug_buff_;
+    delete[] debug_buff_;
     return false;
   }
   status = clFinish(queue);  // block to ensure kernel finishes

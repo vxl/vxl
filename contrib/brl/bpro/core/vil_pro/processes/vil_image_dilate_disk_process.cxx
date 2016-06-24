@@ -42,12 +42,9 @@ bool vil_image_dilate_disk_process_cons(bprb_func_process& pro)
 bool vil_image_dilate_disk_process(bprb_func_process& pro)
 {
     using namespace vil_image_dilate_disk_process_globals;
-
-    if ( pro.n_inputs() < n_inputs_)
-    {
-        std::cerr << "In vil_image_dilate_disk_process(.)\n"
-                 << "\tMust provide at least 1 input\n";
-        return false;
+    if (!pro.verify_inputs()) {
+      std::cerr << pro.name() << ": Wrong Inputs!\n";
+      return false;
     }
 
     unsigned i = 0;
@@ -55,27 +52,40 @@ bool vil_image_dilate_disk_process(bprb_func_process& pro)
                  = pro.get_input<vil_image_view_base_sptr>(i++);
     float radius = pro.get_input<float>(i++);
 
-    if ( imgPtr->pixel_format() != VIL_PIXEL_FORMAT_BOOL )
+    if ( imgPtr->nplanes() > 1 )
     {
-        std::cerr << "In vil_image_dilate_disk_process(.)\n"
-                 << "\tMust provide boolean image.\n";
+        std::cerr << pro.name()
+                 << ":\tInput image must be a single plane.\n";
         return false;
     }
 
-    if ( imgPtr->nplanes() > 1 )
-    {
-        std::cerr << "In vil_image_dilate_disk_process(.)\n"
-                 << "\tInput image must be a single plane.\n";
+    // load the image
+    vil_image_view<bool>* inView = dynamic_cast<vil_image_view<bool>*>(imgPtr.ptr());
+    vil_image_view_base_sptr img_bool;
+    if (!inView) { // try to generate a Boolean image from a byte image that has 0 and 255
+      vil_image_view<bool> temp(imgPtr->ni(), imgPtr->nj());
+      temp.fill(false);
+      vil_image_view<vxl_byte>* in_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(imgPtr.ptr());
+      if (!in_img_byte) {
+        std::cerr << pro.name() << ": Unsupported image pixel format -- " << imgPtr->pixel_format() << ", only Boolean and Byte (0 and 255) are supported!\n";
         return false;
+      }
+      for (unsigned i = 0; i < imgPtr->ni(); i++) {
+        for (unsigned j = 0; j < imgPtr->nj(); j++) {
+          if ((*in_img_byte)(i,j) == 255)
+            temp(i,j) = true;
+        }
+      }
+      img_bool = new vil_image_view<bool>(temp);
+      inView = dynamic_cast<vil_image_view<bool>*>(img_bool.ptr());
     }
-    vil_image_view<bool> inView(imgPtr);
 
     vil_image_view<bool>* oView = new vil_image_view<bool>(imgPtr->ni(), imgPtr->nj(), 1);
 
     vil_structuring_element disk;
     disk.set_to_disk(radius);
 
-    vil_binary_dilate(inView,*oView,disk);
+    vil_binary_dilate(*inView,*oView,disk);
 
     pro.set_output_val<vil_image_view_base_sptr>(0, oView);
 
