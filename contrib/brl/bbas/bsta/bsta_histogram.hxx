@@ -4,6 +4,7 @@
 // \file
 #include <iostream>
 #include <cmath>
+#include <limits>
 #include "bsta_histogram.h"
 
 #include <vcl_compiler.h>
@@ -101,7 +102,7 @@ void bsta_histogram<T>::upcount(T x, T mag)
 
 template <class T>
 
-int bsta_histogram<T>::bin_at_val(T x)
+int bsta_histogram<T>::bin_at_val(T x) const
 {
   if (x<min_||x>max_)
     return -1;
@@ -505,7 +506,89 @@ std::istream& bsta_histogram<T>::read(std::istream& s)
     s >> counts_[i] ;
   return  s;
 }
-
+template <class T>
+T js_divergence(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
+  unsigned na = ha.nbins(), nb = hb.nbins();
+  if(na != nb){
+    std::cout << "histograms do not have the same number of bins\n";
+    return std::numeric_limits<T>::max();
+  }
+  T sum = T(0);
+  for(unsigned i = 0; i<na; ++i){
+    T pa = ha.p(i), pb = hb.p(i);
+    T pavg = (pa + pb)/T(2);
+    T jsa = T(0), jsb = T(0);
+    if(pa != T(0))
+      jsa = pa*std::log(pa/pavg);
+    if(pb != T(0))
+      jsb = pb*std::log(pb/pavg);
+    sum += jsa + jsb;
+  }
+  return sum/T(2);
+}
+template <class T>
+bsta_histogram<T> scale(bsta_histogram<T> const& h, T s){
+  T min = h.min(), max = h.max(), delta = h.delta();
+  unsigned nbins = h.nbins();
+  // create return hist with same number of bins and range
+  bsta_histogram<T> hret(min, max, nbins);
+  if(s>T(1)) s = T(1);
+  for(T x = max-(delta/2.0); x>=(min+(delta/2.0)); x -= delta)
+    {
+      unsigned x_bin = static_cast<unsigned>(h.bin_at_val(x));
+        T trans_x = (x-min)*s + min;
+      unsigned trans_bin = static_cast<unsigned>(hret.bin_at_val(trans_x));
+      T tbin_val = hret.avg_bin_value(trans_bin);
+      //amount to distribute to adjacent bins
+      T offset = T(2)*(trans_x - tbin_val)/delta;
+      T x_counts = h.counts(x_bin);
+      // cases
+      if( offset <= T(0)){
+        if(offset<-T(1)) offset = -T(1);
+        if(trans_bin == 0){// 100% of the counts go in trans_bin
+          T ret_counts = hret.counts(trans_bin);
+          hret.set_count(trans_bin, ret_counts+x_counts);
+        }else{// distribute to bin below
+          T ret_counts = hret.counts(trans_bin);
+          T ret_counts_minus = hret.counts(trans_bin-1);
+          T counts_for_bin = (T(1)+offset)*x_counts;
+          T counts_for_minus_bin = -offset*x_counts;
+          hret.set_count(trans_bin, counts_for_bin+ret_counts);
+          hret.set_count(trans_bin-1, counts_for_minus_bin+ret_counts_minus);
+        }
+      }else{ // offset > 0
+        if(offset>T(1)) offset = T(1);
+        if(trans_bin == nbins-1){ // 100% of counts go in trans_bin
+          T ret_counts = hret.counts(trans_bin);
+          hret.set_count(trans_bin, ret_counts+x_counts);
+        }else{ // distribute to bin above
+          T ret_counts = hret.counts(trans_bin);
+          T ret_counts_plus = hret.counts(trans_bin+1);
+          T counts_for_bin = (T(1)-offset)*x_counts;
+          T counts_for_plus_bin = offset*x_counts;
+          hret.set_count(trans_bin, counts_for_bin+ret_counts);
+          hret.set_count(trans_bin+1, counts_for_plus_bin+ret_counts_plus);
+        }
+      }
+    }
+  return hret;
+}
+// find scale to minimize js_dirvergence
+template <class T>
+T minimum_js_divergence_scale(bsta_histogram<T> const& h_from, bsta_histogram<T> const& h_to,
+                              T min_scale){
+  T min_js_d = std::numeric_limits<T>::max(), scale_min = T(1);
+  T ds = min_scale/T(10);
+  for(T s = (T(1)-ds); s>=min_scale; s-=ds){
+    bsta_histogram<T> hs = scale(h_from, s);
+    T jsd = js_divergence(h_to, hs);
+    if(jsd<min_js_d){
+      scale_min = s;
+      min_js_d = jsd;
+    }
+  }
+  return scale_min;
+}
 //: Write to stream
 template <class T>
 std::ostream& operator<<(std::ostream& s, bsta_histogram<T> const& h)
@@ -523,8 +606,11 @@ std::istream& operator>>(std::istream& is, bsta_histogram<T>& h)
 
 #undef BSTA_HISTOGRAM_INSTANTIATE
 #define BSTA_HISTOGRAM_INSTANTIATE(T) \
-template class bsta_histogram<T >;\
-template std::istream& operator>>(std::istream&, bsta_histogram<T >&);\
+template class bsta_histogram<T >; \
+template T js_divergence(bsta_histogram<T> const& , bsta_histogram<T> const&); \
+template bsta_histogram<T> scale(bsta_histogram<T> const&, T ); \
+template T minimum_js_divergence_scale(bsta_histogram<T> const&, bsta_histogram<T> const&, T); \
+template std::istream& operator>>(std::istream&, bsta_histogram<T >&);  \
 template std::ostream& operator<<(std::ostream&, bsta_histogram<T > const&)
 
 #endif // bsta_histogram_hxx_
