@@ -19,4 +19,3 @@ target_link_libraries(bsta_pro bsta_algo bsta_io bsta bprb brdb brip ${VXL_LIB_P
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

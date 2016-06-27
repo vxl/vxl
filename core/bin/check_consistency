@@ -275,7 +275,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vcl_cwchar.h') { $i='vcl_(mbstate_t|wint_t|btowc|fgetwc|fgetws|fputwc|fputws|fwide|fwprintf|fwscanf|getwc|getwchar|mbrlen|mbrtowc|putwc|putwchar|swprintf|swscanf|ungetwc|vfwprintf|vswprintf|vwprintf|wcrtomb|wcscat|wcschr|wcscmp|wcscoll|wcscpy|wcscspn|wcsftime|wcslen|wcsncat|wcsncmp|wcsncpy|wcspbrk|wcsrchr|wcsrtombs|wcsspn|wcsstr|wcstod|wcstok|wcstol|wctoul|wcsxfrm|wctob|wmemchr|wmemcmp|wmemcpy|wmemmove|wmemset|wprintf|wscanf)'; }
     elsif ($j eq 'vcl_cwctype.h') { $i='vcl_(wctrans_t|wctype_t|wint_t|iswalnum|iswalpha|iswcntrl|iswctype|iswdigit|iswgraph|iswlower|iswprint|iswpunct|iswspace|iswupper|iswxdigit|iswctrans|iswupper|iswxdigit|towctrans|towlower|towupper|wctrans|wctype)'; }
     elsif ($j eq 'vcl_deque.h') { $i='vcl_(deque|swap)'; }
-    elsif ($j eq 'vcl_deprecated.h') { $i='vcl_deprecated_(warn|abort)|VXL_DEPRECATED'; }
+    elsif ($j eq 'vcl_deprecated.h') { $i='vcl_deprecated_(warn|abort)|VXL_DEPRECATED_MACRO'; }
     elsif ($j eq 'vcl_exception.h') { $i='vcl_(exception|bad_exception|throw|catch|catch(...))'; }
     elsif ($j eq 'vcl_fstream.h') { next if ($f =~ m!\bvcl/(Templates/f?stream|vcl_iostream)!); $i='vcl_(filebuf|fstream|ifstream|ofstream)'; }
     elsif ($j eq 'vcl_functional.h') { $i='vcl_((|pointer_to_)(unary|binary)_(function|negate)|plus|minus|multiplies|divides|modulus|negate|(|not_)equal_to|(greater|less)(|_equal)|logical_(and|or|not)|not(1|2)|bind(|er)(1st|2nd)|ptr_fun|(|const_)mem_fun(|1)(|_ref)(_t|)|transform)'; }

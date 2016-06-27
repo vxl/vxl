@@ -118,7 +118,7 @@ vnl_vector<T>::vnl_vector (unsigned len, int n, T const values[])
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py)
 {
-  VXL_DEPRECATED("vnl_vector<T>::vnl_vector(2, T const& px, T const& py)");
+  VXL_DEPRECATED_MACRO("vnl_vector<T>::vnl_vector(2, T const& px, T const& py)");
   assert(len==2);
   vnl_vector_construct_hack();
   vnl_vector_alloc_blah(2);
@@ -129,7 +129,7 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py)
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz)
 {
-  VXL_DEPRECATED("vnl_vector<T>::vnl_vector(3, T const& px, T const& py, T const& pz)");
+  VXL_DEPRECATED_MACRO("vnl_vector<T>::vnl_vector(3, T const& px, T const& py, T const& pz)");
   assert(len==3);
   vnl_vector_construct_hack();
   vnl_vector_alloc_blah(3);
@@ -141,7 +141,7 @@ vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz)
 template<class T>
 vnl_vector<T>::vnl_vector (unsigned len, T const& px, T const& py, T const& pz, T const& pw)
 {
-  VXL_DEPRECATED("vnl_vector<T>::vnl_vector(4, T const& px, T const& py, T const& pz, T const& pt)");
+  VXL_DEPRECATED_MACRO("vnl_vector<T>::vnl_vector(4, T const& px, T const& py, T const& pz, T const& pt)");
   assert(len==4);
   vnl_vector_construct_hack();
   vnl_vector_alloc_blah(4);
@@ -879,31 +879,31 @@ void vnl_vector<T>::inline_function_tickler()
 // shouldn't be instantiated for complex and/or integral types.
 
 #define VNL_VECTOR_INSTANTIATE_COMMON(T) \
-template class vnl_vector<T >; \
+template class VNL_EXPORT vnl_vector<T >; \
 /* arithmetic, comparison etc */ \
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator+(T const, vnl_vector<T > const &)); \
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator-(T const, vnl_vector<T > const &)); \
 VCL_INSTANTIATE_INLINE(vnl_vector<T > operator*(T const, vnl_vector<T > const &)); \
-template vnl_vector<T > operator*(vnl_matrix<T > const &, vnl_vector<T > const &); \
+template VNL_EXPORT vnl_vector<T > operator*(vnl_matrix<T > const &, vnl_vector<T > const &); \
 /* element-wise */ \
-template vnl_vector<T > element_product(vnl_vector<T > const &, vnl_vector<T > const &); \
-template vnl_vector<T > element_quotient(vnl_vector<T > const &, vnl_vector<T > const &); \
+template VNL_EXPORT vnl_vector<T > element_product(vnl_vector<T > const &, vnl_vector<T > const &); \
+template VNL_EXPORT vnl_vector<T > element_quotient(vnl_vector<T > const &, vnl_vector<T > const &); \
 /* dot products, angles etc */ \
-template T inner_product(vnl_vector<T > const &, vnl_vector<T > const &); \
-template T dot_product(vnl_vector<T > const &, vnl_vector<T > const &); \
-template T bracket(vnl_vector<T > const &, vnl_matrix<T > const &, vnl_vector<T > const &); \
-template vnl_matrix<T > outer_product(vnl_vector<T > const &,vnl_vector<T > const &); \
+template VNL_EXPORT T inner_product(vnl_vector<T > const &, vnl_vector<T > const &); \
+template VNL_EXPORT T dot_product(vnl_vector<T > const &, vnl_vector<T > const &); \
+template VNL_EXPORT T bracket(vnl_vector<T > const &, vnl_matrix<T > const &, vnl_vector<T > const &); \
+template VNL_EXPORT vnl_matrix<T > outer_product(vnl_vector<T > const &,vnl_vector<T > const &); \
 /* I/O */ \
-template std::ostream & operator<<(std::ostream &, vnl_vector<T > const &); \
-template std::istream & operator>>(std::istream &, vnl_vector<T >       &)
+template VNL_EXPORT std::ostream & operator<<(std::ostream &, vnl_vector<T > const &); \
+template VNL_EXPORT std::istream & operator>>(std::istream &, vnl_vector<T >       &)
 
 #define VNL_VECTOR_INSTANTIATE(T) \
 VNL_VECTOR_INSTANTIATE_COMMON(T); \
-template T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &); \
-template double angle(vnl_vector<T > const & , vnl_vector<T > const &)
+template VNL_EXPORT T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &); \
+template VNL_EXPORT double angle(vnl_vector<T > const & , vnl_vector<T > const &)
 
 #define VNL_VECTOR_INSTANTIATE_COMPLEX(T) \
 VNL_VECTOR_INSTANTIATE_COMMON(T); \
-template T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &)
+template VNL_EXPORT T cos_angle(vnl_vector<T > const & , vnl_vector<T > const &)
 
 #endif // vnl_vector_hxx_

@@ -5,9 +5,10 @@
 // \file
 
 #include <cstdio>
-#include <vcl_compiler.h>
+#include "vcl_compiler.h"
+#include "vpl/vpl_export.h"
 
 //: Return the file descriptor (int) of an open file stream (FILE *).
-int vpl_fileno(std::FILE *fp);
+extern VPL_EXPORT int vpl_fileno(std::FILE *fp);
 
 #endif

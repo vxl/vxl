@@ -21,6 +21,10 @@ class vsph_utils
   //differences greater in magnitude than 180 reverse sign
   // that is, the sense of the smallest circular arc is used
   static double azimuth_diff(double phi_a, double phi_b, bool in_radians = true);
+
+  //find the sum a + b. handles the case if a and a+b are on opposite sides of the +-pi cut
+  static double azimuth_sum(double phi_a, double phi_b, bool in_radians = true);
+
   //:find the angles half way between two angles on the circle, cut at +-pi
   // The result is ambiguous since two points on a circle define two arcs
   static void half_angle(double phi_a, double phi_b, double& ang_1,

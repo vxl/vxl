@@ -1,6 +1,5 @@
 # This is contrib/brl/bseg/bvpl/util/CMakeLists.txt
 
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR}/bseg/bvpl )
 
 set(bvpl_util_sources

@@ -26,7 +26,7 @@
 
 //: Abstract pixel iterator base class
 // A concrete pixel iterator for each pixel format is
-// derived from this class (see vidl_pixel_format.txx)
+// derived from this class (see vidl_pixel_format.hxx)
 class vidl_pixel_iterator
 {
   public:

@@ -227,9 +227,9 @@ void test_generic_camera_convert()
   vpgl_affine_camera<double> acam(view_dir, up, stare, 5, 5, 1.0, 1.0);
   acam.set_viewing_distance(1.0);
   vgl_homg_point_2d<double> ipt(0,0,1);
-  vgl_homg_line_3d_2_points<double> l0 = acam.backproject(ipt);
+  acam.backproject(ipt);
   ipt.set(5,5,1);
-  vgl_homg_line_3d_2_points<double> lc = acam.backproject(ipt);
+  acam.backproject(ipt);
   success = vpgl_generic_camera_convert::convert(acam, ni, nj, gcam);
   if (success) {
     vgl_ray_3d<double> rayc = gcam.ray(5,5), ray0 = gcam.ray(0, 0);

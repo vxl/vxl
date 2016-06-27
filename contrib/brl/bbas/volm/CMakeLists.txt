@@ -2,6 +2,10 @@
 # Volumetric Matching and 3-d indexing library
 
 # volm depends on bkml and expat
+
+include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+if(HAS_GEOTIFF)
+
 include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if(EXPAT_FOUND)
   if(EXPATPP_FOUND)
@@ -78,4 +82,7 @@ if(EXPAT_FOUND)
 
     add_subdirectory(pro)
   endif()
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bbas/volm: requires geotiff")
 endif()

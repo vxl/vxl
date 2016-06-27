@@ -28,6 +28,8 @@
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 
+#include <vil/vil_clamp.h>
+
 namespace boxm2_ocl_render_expected_depth_process_globals
 {
   const unsigned n_inputs_ = 6;
@@ -364,6 +366,10 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
       (*vis_out)(r,c)=vis_buff[c*cl_ni+r];
     }
   }
+
+  //Prevent negative numbers incase of rare rounding errors in
+  // sum(x)^2-sum(x^2) when abs(x)<<<1
+  vil_clamp_below(*exp_var_out, 0.0f);
 
   delete[] buff;
   delete[] var_buff;

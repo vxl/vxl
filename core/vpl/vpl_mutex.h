@@ -12,11 +12,12 @@
 // \endverbatim
 
 #include <cerrno>
-#include <vxl_config.h>
+#include "vxl_config.h"
+#include "vpl/vpl_export.h"
 
 #if VXL_HAS_PTHREAD_H
 # include <pthread.h>
-struct vpl_mutex
+struct VPL_EXPORT vpl_mutex
 {
   vpl_mutex() { pthread_mutex_init(&mutex_, VXL_NULLPTR); }
 

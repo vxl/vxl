@@ -12,11 +12,14 @@
 #include <bvgl_pro/bvgl_register.h>
 #include <sdet_pro/sdet_register.h>
 #include <brip_pro/brip_register.h>
+#include <bsgm/pro/bsgm_register.h>
 #if defined(HAS_OPENCL) && HAS_OPENCL
 #include <bocl/pro/bocl_register.h>
+#include <bocl/bocl_manager.h>
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
 #include <boxm2_multi/pro/boxm2_multi_register.h>
 #include <boxm2/vecf/ocl/pro/boxm2_vecf_ocl_register.h>
+#include <iostream>
 #if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif
@@ -46,6 +49,7 @@ PyObject *
     vil_register::register_process();
     bvgl_register::register_process();
     brip_register::register_process();
+    bsgm_register::register_process();
     bvpl_kernels_register::register_process();
 #if defined(HAS_OPENCL) && HAS_OPENCL
     bocl_register::register_process();
@@ -90,6 +94,7 @@ PyObject *
     vil_register::register_datatype();
     bvgl_register::register_datatype();
     brip_register::register_datatype();
+    bsgm_register::register_datatype();
     bvpl_kernels_register::register_datatype();
 #if defined(HAS_OPENCL) && HAS_OPENCL
     bocl_register::register_datatype();
@@ -122,6 +127,16 @@ PyObject *
     return Py_None;
 }
 
+#if defined(HAS_OPENCL) && HAS_OPENCL
+void release_ocl_contexts()
+{
+    if (bocl_manager_child::is_instantiated())
+    {
+      std::cout << "Py_AtExit::Releasing ocl contexts" << std::endl;
+      bocl_manager_child::instance().clear_cl();
+    }
+}
+#endif
 
 PyMODINIT_FUNC
     initboxm2_batch(void)
@@ -145,6 +160,9 @@ PyMODINIT_FUNC
         boxm2_batch_methods[i+2]=batch_methods[i];
     }
 
+#if defined(HAS_OPENCL) && HAS_OPENCL
+    Py_AtExit(release_ocl_contexts);
+#endif
     Py_InitModule("boxm2_batch", boxm2_batch_methods);
 }
 

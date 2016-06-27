@@ -1,4 +1,12 @@
 from boxm2_register import boxm2_batch, dbvalue
+print 'Deprecated! See boxm2/bvgl_adaptor.py for correct access to bvgl_adaptors'
+# import sys
+# sys.path.append("<vxl_source_dir>/contrib/brl/bpro/core/pyscripts");
+# import init
+# import boxm2_batch
+# init.batch = boxm2_batch
+# init.core_register()
+# import bvgl_adaptor
 
 ############################################################
 # obtain intersection of multiple 2d rectangular boxes

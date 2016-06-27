@@ -1,3 +1,4 @@
+if (HAS_GEOTIFF)
 # contrib/brl/bseg/bstm/CMakeLists.txt
 
 include_directories( ${BRL_INCLUDE_DIR}/bbas )
@@ -55,3 +56,6 @@ subdirs(util)
 
 #processes
 subdirs(pro)
+else()
+  message(STATUS "Skipping contrib/brl/bseg/bstm: requires geotiff")
+endif()

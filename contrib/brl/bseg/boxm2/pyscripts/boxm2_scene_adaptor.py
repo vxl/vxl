@@ -82,6 +82,22 @@ class boxm2_scene_adaptor(object):
     def cache():
         return self.cache
 
+    def _get_device_cache(self, device_string):
+        dev = self.device
+
+        if device_string:
+            # check if force gpu or cpu
+            if device_string[0:3] == "gpu" or device_string[0:3] == "cpu":
+                cache = self.opencl_cache
+            elif device_string == "cpp":
+                cache = self.cpu_cache
+                dev = None
+        else:
+            cache = self.active_cache
+
+        return (dev, cache)
+
+
     def transform_to_scene(self, to_scene, trans, rot, scale):
         if self.opencl_cache.type == "boxm2_opencl_cache_sptr":
             print("transforming scene")
@@ -124,33 +140,22 @@ class boxm2_scene_adaptor(object):
     # update wrapper, can pass in a Null device to use
 
     def update(self, cam, img, update_alpha=True, update_app=True, mask=None, device_string="", var=-1.0, ident_string="", tnear=100000.0, tfar=100000.0):
-        cache = self.active_cache
-        dev = self.device
-
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
-
+        dev,cache = self._get_device_cache(device_string)
         # run update grey or RGB
         if self.rgb:
             return update_rgb(self.scene, cache, cam, img, dev, "", update_alpha)
         else:
             return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var, update_app, tnear, tfar)
 
+
     # update wrapper, can pass in a Null device to use
     def update_app(self, cam, img, device_string="", force_grey=False):
-        cache = self.active_cache
-        dev = self.device
-
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
+        if device_string and device_string[0:3] == "cpp":
             print " Not  implemented in C++ yet "
             return
+
+        dev,cache = self._get_device_cache(device_string)
+
         if self.rgb and not force_grey:
             update_rgb(self.scene, cache, cam, img, dev, "", False)
         else:
@@ -158,38 +163,27 @@ class boxm2_scene_adaptor(object):
     # update skky wrapper, can pass in a Null device to use
 
     def update_sky(self, cam, img, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
+        if device_string and device_string[0:3] == "cpp":
             print " Not  implemented in C++ yet "
             return
+
+        dev,cache = self._get_device_cache(device_string)
+
         update_sky(self.scene, cache, cam, img, dev)
     # update skky wrapper, can pass in a Null device to use
 
     def update_sky2(self, cam, img, step, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        # check if force gpu or cpu
-        if device_string == "gpu" or device_string == "cpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
+        if device_string and device_string[0:3] == "cpp":
             print " Not  implemented in C++ yet "
             return
+
+        dev,cache = self._get_device_cache(device_string)
+
         update_sky2(self.scene, cache, cam, img, step, dev)
     # render wrapper, same as above
 
     def render(self, cam, ni=1280, nj=720, device_string="", ident_string="", tnear=1000000.0, tfar=1000000.0, ):
-        cache = self.active_cache
-        dev = self.device
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         if self.rgb:
             expimg, vis_image, status = render_rgb(
                 self.scene, cache, cam, ni, nj, dev, tnear, tfar)
@@ -201,14 +195,7 @@ class boxm2_scene_adaptor(object):
 
     # render wrapper, same as above
     def render_vis(self, cam, ni=1280, nj=720, device_string="", ident=""):
-        cache = self.active_cache
-        dev = self.device
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         if self.rgb:
             expimg, vis_image, status = render_rgb(
                 self.scene, cache, cam, ni, nj, dev)
@@ -219,14 +206,7 @@ class boxm2_scene_adaptor(object):
 
     # render depth image wrapper
     def render_depth(self, cam, ni=1280, nj=720, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         expimg, varimg, visimg = render_depth(
             self.scene, cache, cam, ni, nj, dev)
         return expimg, varimg, visimg
@@ -234,107 +214,56 @@ class boxm2_scene_adaptor(object):
     # render the depth of the surfaces with max probability of being the the
     # first visible and occupied surface along the rays
     def render_depth_of_max_prob_surface(self, cam, ni=1280, nj=720, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         expimg, probimg, visimg = render_depth_of_max_prob_surface(
             self.scene, cache, cam, ni, nj, dev)
         return expimg, probimg, visimg
 
     # render depth image with loading given region wrapper
     def render_depth_region(self, cam, lat, lon, elev, radius, ni=1280, nj=720, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         expimg, varimg, visimg = render_depth_region(
             self.scene, cache, cam, lat, lon, elev, radius, ni, nj, dev)
         return expimg, varimg, visimg
 
     # render z image wrapper
     def render_z_image(self, cam, ni=1280, nj=720, normalize=False, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         z_exp_img, z_var_img = render_z_image(
             self.scene, cache, cam, ni, nj, normalize, dev)
         return z_exp_img, z_var_img
 
     # render heigh map render
     def render_height_map(self, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
-        z_image, var_image, x_image, y_image, prob_image, app_image = render_height_map(
+        dev,cache = self._get_device_cache(device_string)
+        z_image, var_image, x_image, y_image, prob_image = render_height_map(
             self.scene, cache, dev)
-        return z_image, var_image, x_image, y_image, prob_image, app_image
+        return z_image, var_image, x_image, y_image, prob_image
 
     # ingest heigh map
     def ingest_height_map(self, x_img, y_img, z_img, zero_out_alpha=True, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         ingest_height_map(self.scene, cache, x_img, y_img,
                           z_img, zero_out_alpha, dev)
         return
 
     # ingest heigh map
     def ingest_height_map_space(self, x_img, y_img, z_img, crust_thickness, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         ingest_height_map_space(self.scene, cache, x_img,
                                 y_img, z_img, crust_thickness, dev)
         return
 
     # ingest to zero out alphas along the rays given by the input images
     def ingest_to_zero_out_alpha(self, x_img, y_img, z_img, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         ingest_to_zero_out_alpha(self.scene, cache, x_img, y_img, z_img, dev)
         return
 
     # ingest label map
     # def ingest_label_map(self,x_img,y_img,z_img,label_img,device_string="") :
     def ingest_label_map(self, x_img, y_img, z_img, label_img, ident, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         #ingest_label_map(self.scene, cache, x_img, y_img, z_img, label_img, dev);
         ingest_label_map(self.scene, cache, x_img, y_img,
                          z_img, label_img, ident, dev)
@@ -342,26 +271,14 @@ class boxm2_scene_adaptor(object):
 
     # ingest label map
     def ingest_osm_label_map(self, x_img, y_img, z_img, label_img, ident="land", device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         ingest_osm_label_map(self.scene, cache, x_img,
                              y_img, z_img, label_img, ident, dev)
         return
 
     # ingest buckeye-style dem
     def ingest_buckeye_dem(self, first_ret_fname, last_ret_fname, geoid_height, geocam, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         ingest_buckeye_dem(self.scene, cache, first_ret_fname,
                            last_ret_fname, geoid_height, geocam, dev)
         return
@@ -382,54 +299,29 @@ class boxm2_scene_adaptor(object):
 
     # detect change wrapper,
     def change_detect(self, cam, img, exp_img, n=1, raybelief="", max_mode=False, rgb=False, device_string="", ident=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         cd_img = change_detect(self.scene, cache, cam, img,
                                exp_img, dev, rgb, n, raybelief, max_mode, ident)
         return cd_img
 
     # detect change wrapper,
     def change_detect2(self, cam, img, identifier="", max_mode=False, tnear=10000000, tfar=0.00001, device_string=""):
-        cache = self.active_cache
-        dev = self.device
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
+        dev,cache = self._get_device_cache(device_string)
         cd_img, vis_img = change_detect2(
             self.scene, cache, cam, img, identifier, max_mode, tnear, tfar, dev)
         return cd_img, vis_img
 
     def refine(self, thresh=0.3, device_string=""):
-        if device_string == "":
-            nCells = refine(self.scene, self.active_cache, thresh, self.device)
-        elif device_string == "gpu":
-            nCells = refine(self.scene, self.opencl_cache, thresh, self.device)
-        elif device_string == "cpp":
-            nCells = refine(self.scene, self.cpu_cache, thresh, None)
-        return nCells
+        dev,cache = self._get_device_cache(device_string)
+        return refine(self.scene, cache, thresh, dev)
 
     def merge(self, thresh=0.3, device_string=""):
-        if device_string == "":
-            merge(self.scene, self.active_cache, thresh, self.device)
-        elif device_string == "gpu":
-            merge(self.scene, self.opencl_cache, thresh, self.device)
-        elif device_string == "cpp":
-            merge(self.scene, self.cpu_cache, thresh, None)
+        dev,cache = self._get_device_cache(device_string)
+        merge(self.scene, cache, thresh, dev)
 
     def median_filter(self, device_string=""):
-        if device_string == "":
-            median_filter(self.scene, self.active_cache, self.device)
-        elif device_string == "gpu":
-            median_filter(self.scene, self.opencl_cache, self.device)
-        elif device_string == "cpp":
-            median_filter(self.scene, self.cpu_cache, None)
+        dev,cache = self._get_device_cache(device_string)
+        median_filter(self.scene, cache, dev)
 
     # given the scene, chip the NITF and setup the camera
     def roi_init(self, NITF_path, camera, convert_to_8bit, params_fname, margin=0, clip_width=-1, clip_height=-1):
@@ -541,15 +433,8 @@ class boxm2_scene_adaptor(object):
 
     # create an imagewise aux buffer for cam/img
     def update_aux(self, img, cam, imgId, device_string="", mask=None):
-        if device_string == "":
-            update_aux_per_view(self.scene, self.active_cache,
-                                img, cam, imgId, self.device, mask)
-        elif device_string == "gpu":
-            update_aux_per_view(self.scene, self.opencl_cache,
-                                img, cam, imgId, self.device, mask)
-        elif device_string == "cpp":
-            update_aux_per_view(self.scene, self.cpu_cache,
-                                img, cam, imgId, None, mask)
+        dev,cache = self._get_device_cache(device_string)
+        update_aux_per_view(self.scene, cache, img, cam, imgId, dev, mask)
 
     # create an imagewise aux buffer for batch update of normal-albedo-array
     # appearance model
@@ -785,3 +670,36 @@ class boxm2_scene_adaptor(object):
         else:
             print "ERROR: Cache type not recognized: ", cache.type
             return False
+
+    def compute_pre_post(self, cam, img, view_identifier="",tnear = 100000.0, tfar = 100000.0) :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return boxm2_compute_pre_post(self.scene, dev,cache, cam, img,view_identifier,tnear,tfar);
+
+    def update_if(self, does_add=True, view_identifier="") :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return update_image_factor(self.scene, dev,cache, does_add, view_identifier);
+
+    def fuse_factors(self, view_idents,weights) :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return boxm2_fuse_factors(self.scene, dev,cache,view_idents,weights)
+  
+    def compute_hmapf(self, zimg,zvar,ximg,yimg,sradius=16) :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return compute_hmap_factor(self.scene, dev,cache,zimg,zvar,ximg,yimg,sradius);
+
+    def update_hf(self, does_add=True) :
+        dev = self.device;
+        cache = self.opencl_cache;
+        return update_hmap_factor(self.scene, dev,cache, does_add);
+
+    def init_uniform_prob(self):
+        return boxm2_init_uniform_prob(self.scene,self.device,self.opencl_cache) 
+
+    def remove_low_nobs(self, nobs_thresh_multiplier=3.0):
+        dev = self.device;
+        cache = self.opencl_cache;
+        return boxm2_remove_low_nobs(self.scene, dev,cache, nobs_thresh_multiplier)

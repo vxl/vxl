@@ -97,7 +97,7 @@ bool boxm2_vecf_estimate_camera_from_canthus::parse_files(std::string& left_dlib
   }
 
   if(!alfw_file){
-    std::cout<<" Could not open "<<alfw_file<<std::endl;
+    std::cout<<" Could not open "<<alfw_path<<std::endl;
     return -1;
   }
 

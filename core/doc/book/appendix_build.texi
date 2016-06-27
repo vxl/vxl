@@ -133,7 +133,6 @@ prefixed by '#' in CMake.
 # core vxl sections.
 
 INCLUDE_DIRECTORIES(
-  $@{VXLCORE_INCLUDE_DIR@}
   $@{GEL_INCLUDE_DIR@}
 )
 

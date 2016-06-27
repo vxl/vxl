@@ -14,6 +14,7 @@
 #include <volm/pro/volm_register.h>
 #include <brip_pro/brip_register.h>
 #include <bapl/pro/bapl_register.h>
+#include <bsgm/pro/bsgm_register.h>
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -29,6 +30,7 @@ register_processes(PyObject *self, PyObject *args)
   volm_register::register_process();
   brip_register::register_process();
   bapl_register::register_process();
+  bsgm_register::register_process();
 
   Py_INCREF(Py_None);
   return Py_None;
@@ -49,6 +51,7 @@ register_datatypes(PyObject *self, PyObject *args)
   volm_register::register_datatype();
   brip_register::register_datatype();
   bapl_register::register_datatype();
+  bsgm_register::register_datatype();
 
   Py_INCREF(Py_None);
   return Py_None;

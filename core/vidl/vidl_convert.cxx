@@ -61,13 +61,6 @@ bool copy_conversion(vidl_frame const& in_frame, vidl_frame& out_frame)
 }
 
 
-//: Convert to an intermediate RGB_24 frame
-// This is inefficient, but will provide the functionality until
-// an optimized version is written
-// defined later because it uses conversion_table
-bool intermediate_rgb24_conversion(vidl_frame const& in_frame, vidl_frame& out_frame);
-
-
 // Default pixel format conversion - it fails
 template <vidl_pixel_format in_Fmt, vidl_pixel_format out_Fmt>
 struct convert
@@ -453,6 +446,14 @@ class converter
 //: Instantiate a global conversion function table
 converter conversion_table;
 
+#if 0
+//: Convert to an intermediate RGB_24 frame
+// This is inefficient, but will provide the functionality until
+// an optimized version is written
+// defined later because it uses conversion_table
+bool intermediate_rgb24_conversion(vidl_frame const& in_frame, vidl_frame& out_frame);
+
+
 //: Convert to an intermediate RGB_24 frame
 // Defined here because it uses conversion_table
 bool intermediate_rgb24_conversion(vidl_frame const& in_frame, vidl_frame& out_frame)
@@ -463,6 +464,7 @@ bool intermediate_rgb24_conversion(vidl_frame const& in_frame, vidl_frame& out_f
   return conversion_table(in_frame, temp_frame) &&
       conversion_table(temp_frame, out_frame);
 }
+#endif
 
 } // end anonymous namespace
 

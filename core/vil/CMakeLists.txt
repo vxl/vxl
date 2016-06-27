@@ -86,9 +86,9 @@ if(TIFF_FOUND)
     file_formats/vil_tiff_header.cxx file_formats/vil_tiff_header.h
   )
 
+  option(VXL_USE_GEOTIFF "Use the GEOTIFF Library if available" True)
   include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   if(GEOTIFF_FOUND)
-    #add_definitions( -DHAS_GEOTIFF )
     set(HAS_GEOTIFF 1 )
     include_directories(${GEOTIFF_INCLUDE_DIR})
     set( vil_sources ${vil_sources}
@@ -271,6 +271,11 @@ set( vil_sources ${vil_sources}
   # Plugin for image loading
   vil_image_resource_plugin.cxx         vil_image_resource_plugin.h
 )
+if ( VXL_HAS_SSE2_HARDWARE_SUPPORT )
+  set( vil_sources ${vil_sources}
+    vil_math_sse.h vil_math_sse.hxx
+    )
+endif ()
 
 if(WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
 #This is a hack since win32 doesn't have transparent Large File Support.

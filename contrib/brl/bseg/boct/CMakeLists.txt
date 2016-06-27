@@ -21,4 +21,3 @@ target_link_libraries(boct ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_P
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-

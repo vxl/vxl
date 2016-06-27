@@ -1,4 +1,13 @@
 from boxm2_register import boxm2_batch, dbvalue
+print 'Deprecated! See boxm2/vpgl_adaptor.py for correct access to vpgl_adaptors'
+# import sys
+# sys.path.append("<vxl_source_dir>/contrib/brl/bpro/core/pyscripts");
+# import init
+# import boxm2_batch
+# init.batch = boxm2_batch
+# init.core_register()
+# import vpgl_adaptor
+
 #import math, numpy;
 import math
 
@@ -1172,3 +1181,53 @@ def create_perspective_camera_krt(k, r, t):
     (db_id, db_type) = boxm2_batch.commit_output(0)
     cam = dbvalue(db_id, db_type)
     return cam
+
+## input two sets of points that correspond to each other in two different coordinate systems
+## compute the similarity transformation that maps space of pts0 to space of pts1, the size of pts0 and pts1 better match!
+## outputs a 4 by 4 similarity matrix as a vector of size 16
+## construct the matrix as follows
+## 0  1  2  3
+## 4  5  6  7
+## 8  9  10 11
+## 12 13 14 15
+def compute_transformation(pts0_xs, pts0_ys, pts0_zs, 
+                           pts1_xs, pts1_ys, pts1_zs, 
+                           input_cam_folder, output_cam_folder):
+    boxm2_batch.init_process("vpglTransformSpaceProcess");
+    boxm2_batch.set_input_double_array(0, pts0_xs)
+    boxm2_batch.set_input_double_array(1, pts0_ys)
+    boxm2_batch.set_input_double_array(2, pts0_zs)
+    boxm2_batch.set_input_double_array(3, pts1_xs)
+    boxm2_batch.set_input_double_array(4, pts1_ys)
+    boxm2_batch.set_input_double_array(5, pts1_zs)
+    boxm2_batch.set_input_string(6, input_cam_folder)
+    boxm2_batch.set_input_string(7, output_cam_folder)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    matrix_as_array = boxm2_batch.get_output_double_array(id)
+    boxm2_batch.remove_data(id)
+    (id,type) = boxm2_batch.commit_output(1)
+    scale = boxm2_batch.get_output_double(id)
+    boxm2_batch.remove_data(id)
+    return matrix_as_array, scale
+
+## inputs a 4 by 4 similarity matrix as a vector of size 16
+## construct the matrix as follows
+## 0  1  2  3
+## 4  5  6  7
+## 8  9  10 11
+## 12 13 14 15
+def compute_transformed_box(min_pt, max_pt, matrix_as_array):
+    boxm2_batch.init_process("vpglTransformBoxProcess");
+    boxm2_batch.set_input_double_array(0, min_pt)
+    boxm2_batch.set_input_double_array(1, max_pt)
+    boxm2_batch.set_input_double_array(2, matrix_as_array)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    out_min_pt = boxm2_batch.get_output_double_array(id)
+    boxm2_batch.remove_data(id)
+    (id,type) = boxm2_batch.commit_output(1)
+    out_max_pt = boxm2_batch.get_output_double_array(id)
+    boxm2_batch.remove_data(id)
+    return out_min_pt, out_max_pt
+

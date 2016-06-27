@@ -25,6 +25,3 @@ target_link_libraries(vsph ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VX
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
-
-
-

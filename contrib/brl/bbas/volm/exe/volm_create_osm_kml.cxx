@@ -97,14 +97,17 @@ int main(int argc, char** argv)
   std::ofstream ofs(out_file().c_str());
   bkml_write::open_document(ofs);
   // write the bounding box
-  std::stringstream str_box;
   double lon_min, lat_min, lon_max, lat_max;
   vgl_box_2d<double> bbox = volm_osm_parser::parse_bbox(osm_file());
   lon_min = bbox.min_x();  lat_min = bbox.min_y();
   lon_max = bbox.max_x();  lat_max = bbox.max_y();
-  str_box << std::setprecision(6) << lat_min << 'x' << std::setprecision(6) << lon_min << "to"
-          << std::setprecision(6) << lat_max << 'x' << std::setprecision(6) << lon_max;
-  bkml_write::write_box(ofs, "region", "", bbox);
+  std::vector<vgl_point_2d<double> > outlines;
+  outlines.push_back(vgl_point_2d<double>(lon_min, lat_min));
+  outlines.push_back(vgl_point_2d<double>(lon_max, lat_min));
+  outlines.push_back(vgl_point_2d<double>(lon_max, lat_max));
+  outlines.push_back(vgl_point_2d<double>(lon_min, lat_max));
+  outlines.push_back(vgl_point_2d<double>(lon_min, lat_min));
+  bkml_write::write_path(ofs, outlines, "outline", "outline", 1.0, 3.0, 1.0, 255, 255, 255);
 
   std::vector<vgl_point_2d<double> > osm_pts;
   std::vector<std::vector<std::pair<std::string, std::string> > > osm_pt_keys;

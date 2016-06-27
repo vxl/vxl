@@ -17,6 +17,8 @@
 // \endverbatim
 
 #include <string>
+#include <vector>
+#include <deque>
 #include "vidl_istream.h"
 #include <vcl_compiler.h>
 
@@ -80,6 +82,22 @@ class vidl_ffmpeg_istream
 
   //: Return the current frame in the stream
   virtual vidl_frame_sptr current_frame();
+
+  //: Return the current presentation time stamp
+  virtual double current_pts() const;
+
+  //: Return the current video packet's data, is used to get
+  //  video stream embeded metadata.
+  virtual std::vector<vxl_byte> current_packet_data() const;
+
+  //: Return the raw metadata bytes obtained while reading the current frame.
+  //  This deque will be empty if there is no metadata stream
+  //  Metadata is often encoded as KLV,
+  //  but no attempt to decode KLV is made here
+  std::deque<vxl_byte> current_metadata();
+
+  //: Return true if the video also has a metadata stream
+  bool has_metadata() const;
 
   //: Seek to the given frame number
   // \returns true if successful

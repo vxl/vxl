@@ -53,6 +53,9 @@ add_subdirectory(boxm2_batch)
 # octree based modeling python interface
 add_subdirectory(boxm_batch)
 
+# semi-global matching
+add_subdirectory(bsgm)
+
 # voxel processing library
 add_subdirectory(bvpl)
 
@@ -77,3 +80,7 @@ add_subdirectory(bstm_batch)
 
 #the bridge lib to convert between bvxm and boxm2 scenes
 add_subdirectory(bvxm_bridge)
+
+#event trigger library
+add_subdirectory(betr)
+add_subdirectory(betr_batch)

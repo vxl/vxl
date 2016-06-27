@@ -20,7 +20,6 @@
 #include <cmath>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_compiler.h>
 
 class boct_bit_tree
 {
@@ -103,6 +102,10 @@ class boct_bit_tree
   //: returns bit indices of leaf nodes under rootBit
   std::vector<int> get_leaf_bits(int rootBit=0);
   std::vector<int> get_leaf_bits(int rootBit ,int depth);
+
+  //: returns bit indices of every node under rootBit
+  std::vector<int> get_cell_bits(int rootBit=0);
+
   //: returns parent index (invalid for bit_index = 0)
   int parent_index(int bit_index) { return (bit_index-1)>>3; }
 

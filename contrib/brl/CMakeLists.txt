@@ -20,12 +20,19 @@ set( BRL_INSTALL_INCLUDE_DIR
   CACHE INTERNAL "Brown University package include files"
 )
 
+# Many BRL modules require geotiff.  Include FindGEOTIFF once here.
+if (VXL_USE_GEOTIFF)
+  include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+  if (GEOTIFF_FOUND)
+    set(HAS_GEOTIFF 1 )
+  endif()
+endif()
+
 # Location of brl's private FindXXX.cmake CMake modules.
 set( BRL_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR}/bmods )
 # This is identical to BRL_CMAKE_DIR.  Perhaps we should eliminate BRL_MODULE_PATH?
 set( BRL_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/bmods )
 
-include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR} )
 
 # basic services package

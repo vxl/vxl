@@ -1119,9 +1119,9 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   // initialize the ray pyramid
   // convert the required number of levels
 
-  int mindim = gni < gnj ? gni : gnj;
-  int factor = 256;
-  int n_levels  = 6;
+  unsigned int mindim = gni < gnj ? gni : gnj;
+  unsigned int factor = 256;
+  unsigned int n_levels  = 6;
 
   while( mindim < factor )
   {
@@ -1130,8 +1130,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
 
       std::cout<<"."<<std::endl;
   }
-  int numi = gni/factor;
-  int numj = gnj/factor;
+  unsigned int numi = gni/factor;
+  unsigned int numj = gnj/factor;
 
   // construct pyramid of ray indices
   // the row and column dimensions at each level
@@ -1177,7 +1177,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
           }
       }
   }
-  if ((int)level < n_levels) {
+  if (level < n_levels) {
       gen_cam = vpgl_generic_camera<double>(finalrays);
       return true;
   }
@@ -1348,6 +1348,8 @@ convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
   return false;
 }
 
+
+#if HAS_GEOTIFF
 //: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera
 bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int nj, double height,
                                            vpgl_generic_camera<double> & gen_cam, unsigned level)
@@ -1392,5 +1394,6 @@ bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int 
   return true;
 }
 
+#endif // HAS_GEOTIFF
 
 #endif // vpgl_camera_convert_cxx_

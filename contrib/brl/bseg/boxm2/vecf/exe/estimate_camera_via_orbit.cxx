@@ -26,7 +26,7 @@ int main(int argc , char** argv){
   vgl_h_matrix_2d<double> H = estimator.homography();
   vcl_ofstream camera_file((base_dir_path() + "canthus_camera.txt").c_str());
   if(! camera_file){
-    vcl_cout<<" could not open file "<<camera_file<<vcl_endl;
+    vcl_cout<<" could not open file "<<"canthus_camera.txt"<<vcl_endl;
   }
     camera_file << H << vcl_endl;
     vcl_cout<< H.get_matrix() <<vcl_endl;

@@ -259,3 +259,306 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   return true;
 }
 
+//: process to compute ROC curve of classified probability image with respect to ground truth image
+//  Note that the operational threshold ranges from min and max of the input probability image.  
+//  Both ground truth image are binary mask with 0 and 255.
+//  If negative ground truth image is not given, then the negative ground truth are obtained from zero pixels in positive ground truth image
+namespace vil_pixelwise_roc_process2_globals
+{
+  const unsigned n_inputs_  = 5;
+  const unsigned n_outputs_ = 7;
+}
+
+bool vil_pixelwise_roc_process2_cons(bprb_func_process& pro)
+{
+  using namespace vil_pixelwise_roc_process2_globals;
+  // this process takes 5 inputs, mask image and positive sign is optional
+  std::vector<std::string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_view_base_sptr";  // probability image
+  input_types_[1] = "vil_image_view_base_sptr";  // positive ground truth image
+  input_types_[2] = "vil_image_view_base_sptr";  // negative ground truth image
+  input_types_[3] = "vil_image_view_base_sptr";  // mask image
+  input_types_[4] = "vcl_string";                // option to define ground truth being lower than threshold or higher than threshold
+  // this process takes 5 outputs
+  std::vector<std::string> output_types_(n_outputs_);
+  output_types_[0] = "bbas_1d_array_float_sptr";  // threshold array
+  output_types_[1] = "bbas_1d_array_float_sptr";  // tp
+  output_types_[2] = "bbas_1d_array_float_sptr";  // tn
+  output_types_[3] = "bbas_1d_array_float_sptr";  // fp
+  output_types_[4] = "bbas_1d_array_float_sptr";  // fp
+  output_types_[5] = "bbas_1d_array_float_sptr";  // tpr
+  output_types_[6] = "bbas_1d_array_float_sptr";  // fpr
+  // default arguments
+  brdb_value_sptr empty_neg_gt = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
+  pro.set_input(2, empty_neg_gt);
+  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
+  pro.set_input(3, empty_mask);
+  
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool vil_pixelwise_roc_process2(bprb_func_process& pro)
+{
+  using namespace vil_pixelwise_roc_process2_globals;
+  if (!pro.verify_inputs()) {
+    std::cerr << pro.name() << ": Wrong Inputs!\n";
+    return false;
+  }
+  // get the inputs
+  unsigned in_i = 0;
+  vil_image_view_base_sptr detection_map_sptr    = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr ground_truth_map_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr neg_gt_map_sptr  = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr mask_map_sptr         = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  std::string positive_sign = pro.get_input<std::string>(in_i++);
+
+  // catch a "null" mask (not really null because that throws an error)
+  bool use_mask = true;
+  if (mask_map_sptr->ni()==1 && mask_map_sptr->nj()==1) {
+    std::cout << "USE mask = false" << std::endl;
+    use_mask = false;
+  }
+
+  bool is_neg_gt = true;
+  if (neg_gt_map_sptr->ni() == 1 && neg_gt_map_sptr->nj() == 1) {
+    std::cout << "negative ground truth exist = false" << std::endl;
+    is_neg_gt = false;
+  }
+
+  // check bounds to make sure they match
+  if (detection_map_sptr->ni() != ground_truth_map_sptr->ni() || detection_map_sptr->nj() != ground_truth_map_sptr->nj() ) {
+    std::cerr << pro.name() << ": detection map doesn't match ground truth map" << std::endl;
+    return false;
+  }
+  if (use_mask) {
+    if (detection_map_sptr->ni()!=mask_map_sptr->ni() || detection_map_sptr->nj()!=mask_map_sptr->nj() ) {
+      std::cerr << pro.name() << ": detection map doesn't match mask map" << std::endl;
+      return false;
+    }
+  }
+  if (is_neg_gt) {
+    if (detection_map_sptr->ni() != neg_gt_map_sptr->ni() || detection_map_sptr->nj() != neg_gt_map_sptr->nj() ) {
+      std::cerr << pro.name() << ": detection map doesn't match negative ground truth map" << std::endl;
+      return false;
+    }
+    if (ground_truth_map_sptr->ni() != neg_gt_map_sptr->ni() || ground_truth_map_sptr->nj() != neg_gt_map_sptr->nj()) {
+      std::cerr << pro.name() << ": positive ground truth map doesn't match negative ground truth map" << std::endl;
+      return false;
+    }
+    if (use_mask) {
+      if (neg_gt_map_sptr->ni() != mask_map_sptr->ni() || neg_gt_map_sptr->nj() != mask_map_sptr->nj()) {
+        std::cerr << pro.name() << ": negative ground truth map doesn't match mask map" << std::endl;
+        return false;
+      }
+    }
+  }
+
+  // convert detection map to [0,1] float
+  vil_image_view<float> * detection_map;
+  if (vil_image_view<unsigned char> * detection_map_uchar=dynamic_cast<vil_image_view<unsigned char> *>(detection_map_sptr.ptr()))
+  {
+    detection_map =new vil_image_view<float>(detection_map_uchar->ni(),detection_map_uchar->nj());
+    vil_convert_stretch_range_limited<unsigned char>(*detection_map_uchar,*detection_map,0,255,0.0f,1.0f);
+  }
+  else if (dynamic_cast<vil_image_view<float>*>(detection_map_sptr.ptr()))
+  {
+    detection_map=dynamic_cast<vil_image_view<float>*>(detection_map_sptr.ptr());
+    std::cout << "detection map is float!\n";
+  }
+  else
+  {
+    std::cerr << pro.name() << ": detection map cannot be converted to float image" << std::endl;
+    return false;
+  }
+
+  // cast to usable image views
+  vil_image_view<unsigned char> * gt_map = dynamic_cast<vil_image_view<unsigned char> *>(ground_truth_map_sptr.ptr());
+  if ( !gt_map )
+  {
+    std::cerr << pro.name() << ": gt map is not an unsigned char map" << std::endl;
+    return false;
+  }
+  vil_image_view<unsigned char> * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
+  if (!mask_map)
+  {
+    std::cerr << pro.name() << ": mask map is not an unsigned char map" << std::endl;
+    return false;
+  }
+  vil_image_view<unsigned char> * neg_gt_map = dynamic_cast<vil_image_view<unsigned char>*>(neg_gt_map_sptr.ptr());
+  if (!neg_gt_map) {
+    std::cerr << pro.name() << ": negative ground truth map is not an unsigned char map" << std::endl;
+    return false;
+  }
+
+  // go over the ground truth image to collect positive and negative pixels
+  unsigned ni = gt_map->ni();
+  unsigned nj = gt_map->nj();
+  std::vector<std::pair<unsigned, unsigned> > pos_pixels;
+  std::vector<std::pair<unsigned, unsigned> > neg_pixels;
+  std::cout << "Collect ground truth positive and negative pixels..." << std::flush << std::endl;
+  if (is_neg_gt)
+  {
+    for (unsigned i = 0; i < ni; i++) {
+      for (unsigned j = 0; j < nj; j++) {
+        if (use_mask && (*mask_map)(i,j) == 0)
+          continue;
+        if ((*gt_map)(i,j))
+          pos_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+        if ((*neg_gt_map)(i,j))
+          neg_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+      }
+    }
+  }
+  else
+  {
+    for (unsigned i = 0; i < ni; i++) {
+      for (unsigned j = 0; j < nj; j++) {
+        if (use_mask && (*mask_map)(i,j) == 0)
+          continue;
+        if ((*gt_map)(i,j))
+          pos_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+        else
+          neg_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+      }
+    }
+  }
+  
+  
+  std::cout << "In ground truth map, " << pos_pixels.size() << " pixels are positive and " << neg_pixels.size() << " are negative." << std::endl;
+  
+  // create threshold based on image range
+  float min_val, max_val;
+  vil_math_value_range(*detection_map, min_val, max_val);
+  std::vector<float> thresholds;
+  unsigned num_thres = 200;
+  float delta = (max_val - min_val) / num_thres;
+  for (unsigned i = 0; i <= (num_thres+1); i++) {
+    thresholds.push_back(min_val + delta*i);
+  }
+  const unsigned n_thres = thresholds.size();
+  std::cout << "Start ROC count using " << n_thres << " thresholds, ranging from " << min_val << " to " << max_val << "..." << std::endl;
+
+  bbas_1d_array_float* tp  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* tn  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fp  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fn  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* tpr = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fpr = new bbas_1d_array_float(n_thres);
+
+  // initialize
+  for (unsigned i = 0; i < n_thres; i++) {
+    tp->data_array[i]  = 0.0f;  tn->data_array[i] = 0.0f;
+    fp->data_array[i]  = 0.0f;  fn->data_array[i] = 0.0f;
+    tpr->data_array[i] = 0.0f;
+    fpr->data_array[i] = 0.0f;
+  }
+
+  // count
+  if (positive_sign == "high")
+  {
+    for (unsigned pidx = 0; pidx < pos_pixels.size(); pidx++)
+    {
+      unsigned i = pos_pixels[pidx].first;
+      unsigned j = pos_pixels[pidx].second;
+      for (unsigned tidx = 0; tidx < n_thres; tidx++)
+      {
+        if ( (*detection_map)(i,j) >= thresholds[tidx] )  // ground truth is positive, detection is true  --> true positive
+          tp->data_array[tidx] += 1;
+        else                                              // ground truth is positive, detection is false --> false negative
+          fn->data_array[tidx] += 1;
+      }
+    }
+    for (unsigned nidx = 0; nidx < neg_pixels.size(); nidx++)
+    {
+      unsigned i = neg_pixels[nidx].first;
+      unsigned j = neg_pixels[nidx].second;
+      for (unsigned tidx = 0; tidx < n_thres; tidx++)
+      {
+        if ( (*detection_map)(i,j) >= thresholds[tidx] )  // ground truth is negative, detection is true  --> false positive
+          fp->data_array[tidx] += 1;
+        else                                              // ground truth is negative, detection is false --> true negative
+          tn->data_array[tidx] += 1;
+      }
+    }
+  }
+  else if (positive_sign == "low")
+  {
+    for (unsigned pidx = 0; pidx < pos_pixels.size(); pidx++)
+    {
+      unsigned i = pos_pixels[pidx].first;
+      unsigned j = pos_pixels[pidx].second;
+      for (unsigned tidx = 0; tidx < n_thres; tidx++)
+      {
+        if ( (*detection_map)(i,j) <= thresholds[tidx] )  // ground truth is positive, detection is true  --> true positive
+          tp->data_array[tidx] += 1;
+        else                                              // ground truth is positive, detection is false --> false negative
+          fn->data_array[tidx] += 1;
+      }
+    }
+    for (unsigned nidx = 0; nidx < neg_pixels.size(); nidx++)
+    {
+      unsigned i = neg_pixels[nidx].first;
+      unsigned j = neg_pixels[nidx].second;
+      for (unsigned tidx = 0; tidx < n_thres; tidx++)
+      {
+        if ( (*detection_map)(i,j) <= thresholds[tidx] )  // ground truth is negative, detection is true  --> false positive
+          fp->data_array[tidx] += 1;
+        else                                              // ground truth is negative, detection is false --> true negative
+          tn->data_array[tidx] += 1;
+      }
+    }
+  }
+  else if (positive_sign == "equal")
+  {
+    for (unsigned pidx = 0; pidx < pos_pixels.size(); pidx++)
+    {
+      unsigned i = pos_pixels[pidx].first;
+      unsigned j = pos_pixels[pidx].second;
+      for (unsigned tidx = 0; tidx < n_thres; tidx++)
+      {
+        if ( (*detection_map)(i,j) == thresholds[tidx] )  // ground truth is positive, detection is true  --> true positive
+          tp->data_array[tidx] += 1;
+        else                                              // ground truth is positive, detection is false --> false negative
+          fn->data_array[tidx] += 1;
+      }
+    }
+    for (unsigned nidx = 0; nidx < neg_pixels.size(); nidx++)
+    {
+      unsigned i = neg_pixels[nidx].first;
+      unsigned j = neg_pixels[nidx].second;
+      for (unsigned tidx = 0; tidx < n_thres; tidx++)
+      {
+        if ( (*detection_map)(i,j) == thresholds[tidx] )  // ground truth is negative, detection is true  --> false positive
+          fp->data_array[tidx] += 1;
+        else                                              // ground truth is negative, detection is false --> true negative
+          tn->data_array[tidx] += 1;
+      }
+    }
+  }
+  else {
+    std::cerr << pro.name() << ": Unknown positive sign -- " << positive_sign << ", only 'high', 'low', 'equal' are allowed!\n";
+    return false;
+  }
+
+  // calculate true positive rate and false positive rate
+  for (unsigned tidx = 0; tidx < n_thres; tidx++) {
+    tpr->data_array[tidx] = tp->data_array[tidx] / (tp->data_array[tidx] + fn->data_array[tidx]);
+    fpr->data_array[tidx] = fp->data_array[tidx] / (fp->data_array[tidx] + tn->data_array[tidx]);
+  }
+
+  bbas_1d_array_float * thres_out=new bbas_1d_array_float(n_thres);
+  for (unsigned k = 0; k < n_thres; k++) {
+    thres_out->data_array[k] = thresholds[k];
+  }
+
+  // output
+  unsigned out_i = 0;
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, thres_out);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, tp);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, tn);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, fp);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, fn);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, tpr);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, fpr);
+  return true;
+}

@@ -46,7 +46,7 @@ class boxm2_cache: public vbl_ref_count
   //: removes data from this cache (may or may not write to disk first)
   //  Note that this function does not delete the memory, just removes it from the cache
   //  and puts it in the garbage vector
-  virtual void remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type)=0;
+  virtual void remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, bool write_out=true) = 0;
 
   virtual void replace_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, boxm2_data_base* replacement)=0;
 

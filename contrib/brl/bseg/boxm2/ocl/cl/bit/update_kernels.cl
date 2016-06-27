@@ -7,6 +7,11 @@
 #endif
 
 #ifdef SEGLEN
+//
+// accumulate the length of rays intersecting a cell. Used by update algorithms
+// that weight the contribution of an observation in terms of the fraction of
+// ray segment length intersected by the ray carrying the observation
+//
 typedef struct
 {
     __global int* seg_len;
@@ -32,8 +37,8 @@ __kernel
     seg_len_main(__constant  RenderSceneInfo    * linfo,
     __global    int4               * tree_array,       // tree structure for each block
     __global    float              * alpha_array,      // alpha for each block
-    __global    int                * aux_array0,       // aux data array (four aux arrays strung together)
-    __global    int                * aux_array1,       // aux data array (four aux arrays strung together)
+    __global    int                * aux_array0,       // seg length (total for all rays intersecting cell)
+    __global    int                * aux_array1,       // mean observation( over all rays intersecting cell)
     __constant  uchar              * bit_lookup,       // used to get data_index
     __global    float4             * ray_origins,
     __global    float4             * ray_directions,
@@ -101,7 +106,8 @@ __kernel
     float rlen = output[imIndex];
     aux_args.ray_len = &rlen;
 #endif
-
+    // the step cell for SEGLEN is in ../update_functors.cl
+    // void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     cast_ray( i, j,
         ray_ox, ray_oy, ray_oz,
         ray_dx, ray_dy, ray_dz,
@@ -114,6 +120,11 @@ __kernel
 }
 #endif // SEGLEN
 
+
+// compute the pre term in the bayes update computation
+//  pre is computed by a forward traverse of the ray
+//  pre(x)(I) = pre(x-1)(I) + vis(x)* p(I|x in S) * P(x in S)
+//
 #ifdef PREINF
 typedef struct
 {
@@ -140,8 +151,8 @@ __kernel
     __global    float              * alpha_array,      // alpha for each block
     __global    MOG_TYPE           * mixture_array,    // mixture for each block
     __global    ushort4            * num_obs_array,    // num obs for each block
-    __global    int                * aux_array0,        // four aux arrays strung together
-    __global    int                * aux_array1,        // four aux arrays strung together
+    __global    int                * aux_array0,       // seg length (total over rays)
+    __global    int                * aux_array1,       // mean observation (over rays intesecting the cell)
     __constant  uchar              * bit_lookup,       // used to get data_index
     __global    float4             * ray_origins,
     __global    float4             * ray_directions,
@@ -204,7 +215,10 @@ __kernel
     aux_args.viewdir = viewdir;
     float nearplane = nearfarplanes[0]/linfo->block_len;
     float farplane = nearfarplanes[1]/linfo->block_len;
-
+    //
+    // the step cell for preinf is in ../update_functors.cl
+    // void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+    //
     cast_ray( i, j,
         ray_ox, ray_oy, ray_oz,
         ray_dx, ray_dy, ray_dz,
@@ -245,6 +259,11 @@ __kernel
 #endif //COMBINE_PRE_VIS
 
 #ifdef BAYES
+// the bayes update is as follows
+//                    pre(x-1)(I) + vis(x)* p(I|x in S) * P(x in S)
+// p(x in S | I) =    ----------------------------------------
+//                    pre(x-1)(I) + vis(x)* p(I|x in S) * P(x in S) + post(x)
+//
 typedef struct
 {
     __global float*   alpha;
@@ -413,21 +432,23 @@ __kernel
 
 #ifdef UPDATE_BIT_SCENE_MAIN
 // Update each cell using its aux data
+// given the observation this function updates the appearance distribution and the alpha
+// depending on the boolean values update_app and update alpha
 //
 __kernel
 void
-update_bit_scene_main(__global RenderSceneInfo  * info,
-                      __global float            * alpha_array,
-                      __global MOG_TYPE         * mixture_array,
-                      __global ushort4          * nobs_array,
-                      __global int              * aux_array0,
-                      __global int              * aux_array1,
-                      __global int              * aux_array2,
-                      __global int              * aux_array3,
-                      __global int              * update_alpha,     //update if not zero
-                      __global float            * mog_var,          //if 0 or less, variable var, otherwise use as fixed var
-                      __global int              * update_app,     //update if not zero
-                      __global float            * output)
+update_bit_scene_main(__global RenderSceneInfo  * info,           // scene information such as sub_block length
+                      __global float            * alpha_array,    // the occlusion density for this cell
+                      __global MOG_TYPE         * mixture_array,  // the intensity distribution
+                      __global ushort4          * nobs_array,     // related to number of images used to update
+                      __global int              * aux_array0,     // cumulative length
+                      __global int              * aux_array1,     // mean observation
+                      __global int              * aux_array2,     // visibility
+                      __global int              * aux_array3,     // beta term (bayes update ratio in terms of occlusion density)
+                      __global int              * update_alpha,   // update alpha if not zero
+                      __global float            * mog_var,        // if 0 or less, variable var, otherwise use as fixed var
+                      __global int              * update_app,     // update appearance if not zero
+                      __global float            * output)         // for debugging purposes
 {
     int gid=get_global_id(0);
     int datasize = info->data_len ;//* info->num_buffer;
@@ -471,7 +492,11 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
                                      (mixture.s3), (mixture.s4), (mixture.s5), (nobs.s1),
                                      (mixture.s6), (mixture.s7), (nobs.s2), (nobs.s3/100.0),
                                      0.0, 0.0, 0.0);
+            //
             //use aux data to update cells
+            // update cell is in ../ray_bundle_library_opt.cl
+            // void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma, float min_sigma)
+            //
             update_cell(&data, aux_data, 2.5f, 0.07f, 0.05f);
             if ( *update_app != 0 )
             {
@@ -985,3 +1010,54 @@ __kernel void update_P_using_Q(__constant RenderSceneInfo * linfo,__global uchar
 }
 
 #endif
+
+#ifdef REMOVE_LOW_NOBS
+//: function to compute new alpa from the cumulative factors.
+__kernel
+void remove_low_nobs_main(__constant RenderSceneInfo * linfo,
+                          __global uchar16 * trees,
+                          __global float* alpha,
+                          __global short4* num_obs, 
+                          __global float*  num_obs_thresh, 
+                          __constant uchar * lookup,
+                          __local uchar * cumsum,       // for computing data index 
+                          __local uchar16 * all_local_tree)
+{
+    //make sure local_tree points to the right one in shared memory
+    uchar llid = (uchar)(get_local_id(0) + (get_local_id(1) + get_local_id(2)*get_local_size(1))*get_local_size(0));
+    __local uchar16* local_tree    = &all_local_tree[llid];
+    __local uchar*   csum          = &cumsum[llid*10];
+
+    //global id should be the same as treeIndex
+    unsigned gidX = get_global_id(0);
+    unsigned gidY = get_global_id(1);
+    unsigned gidZ = get_global_id(2);
+
+    //tree Index is global id
+    unsigned treeIndex = calc_blkunisgned(gidX, gidY, gidZ, linfo->dims);
+    if (gidX < linfo->dims.x && gidY < linfo->dims.y && gidZ <linfo->dims.z) {
+        int MAX_INNER_CELLS, MAX_CELLS;
+        get_max_inner_outer(&MAX_INNER_CELLS, &MAX_CELLS, linfo->root_level);
+        //1. get current tree information
+        (*local_tree)    = trees[treeIndex];
+        //FOR ALL LEAVES IN CURRENT TREE
+        for (int i = 0; i < MAX_CELLS; ++i) {
+            if ( is_leaf(local_tree, i) ) {
+              ///////////////////////////////////////
+              //LEAF CODE
+              int currIdx = data_index_relative(local_tree, i, lookup) + data_index_root(local_tree);
+              float cur_alpha = alpha[currIdx];
+              float n0 = (float)(num_obs[currIdx].x);
+              float n1 = (float)(num_obs[currIdx].y);
+              float n2 = (float)(num_obs[currIdx].z);
+              float sum = n0+n1+n2;
+              if(sum<*num_obs_thresh)
+                cur_alpha = 0.0f;
+              alpha[currIdx] = cur_alpha;
+              //END LEAF CODE
+              ///////////////////////////////////////
+            } //end leaf IF
+        } //end leaf for
+    } //end global id IF
+}
+#endif //REMOVE_LOW_NOBS

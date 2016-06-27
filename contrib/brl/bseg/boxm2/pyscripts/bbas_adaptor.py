@@ -1,4 +1,14 @@
+print 'Deprecated! See boxm2/bbas_adaptor.py for correct access to bbas_adaptors'
+# import sys
+# sys.path.append("<vxl_source_dir>/contrib/brl/bpro/core/pyscripts");
+# import init
+# import boxm2_batch
+# init.batch = boxm2_batch
+# init.core_register()
+# import bbas_adaptor
+
 from boxm2_register import boxm2_batch, dbvalue
+
 
 #############################################################################
 # PROVIDES higher level bbas python functions to make boxm2_batch

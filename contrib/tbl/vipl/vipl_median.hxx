@@ -20,7 +20,7 @@ bool vipl_median <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
   int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
   for (int j = starty; j < stopy; ++j)
     for (int i = startx; i < stopx; ++i) {
-      register unsigned int count = 0;
+      unsigned int count = 0;
       v[count++] = fgetpixel(in, i, j, DataIn(0));
       for (int x=0; x<=size; ++x) for (int y=0; y<=size; ++y) if (mask()[x][y]) {
         v[count++] = getpixel(in, i+x, j+y, DataIn(0));

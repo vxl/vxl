@@ -10,7 +10,6 @@
 #include <fstream>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/boxm2_data_traits.h>
@@ -18,7 +17,7 @@
 namespace boxm2_describe_scene_process_globals
 {
   const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 2;
+  const unsigned n_outputs_ = 3;
 }
 
 bool boxm2_describe_scene_process_cons(bprb_func_process& pro)
@@ -33,6 +32,7 @@ bool boxm2_describe_scene_process_cons(bprb_func_process& pro)
   std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vcl_string";                    //path to model data
   output_types_[1] = "vcl_string";                    //appearance model type
+  output_types_[2] = "double";                        // also compute and return voxel size in LVCS units // assumes cube voxels
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -63,9 +63,24 @@ bool boxm2_describe_scene_process(bprb_func_process& pro)
   boxm2_util::verify_appearance(*scene, valid_types, data_type, appTypeSize);
   std::cout<<"DATA_TYPE:"<<data_type<<std::endl;
 
+  // compute voxel size using local bounding box
+  vgl_box_3d<double> bbox = scene->bounding_box();
+  
+  // obtain the scene finest resolution
+  // note that the sub block size is truncated to integer here
+  std::map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
+  double res_x = 1E5, res_y = 1E5;
+  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++)
+  {
+    // only use x dimension, assumes cube voxels so it shouldn't matter which dimension to use
+    double voxel_size_x = (iter->second.sub_block_dim_.x()) / (1 << (iter->second.max_level_ - iter->second.init_level_));
+    if (res_x > voxel_size_x) res_x = voxel_size_x;
+  }
+
   //set model dir as output
   std::string dataPath = scene->data_path();
   pro.set_output_val<std::string>(0, dataPath);
   pro.set_output_val<std::string>(1, data_type);
+  pro.set_output_val<double>(2,res_x);
   return true;
 }
