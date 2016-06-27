@@ -191,6 +191,13 @@ def load_rational_camera(file_path):
         cam = dbvalue(id, type)
     return status, cam
 
+def load_rational_camera_from_txt(file_path):
+    boxm2_batch.init_process("vpglLoadRationalCameraFromTXTProcess")
+    boxm2_batch.set_input_string(0, file_path)
+    status = boxm2_batch.run_process()
+    (id, type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(id, type)
+    return status, cam
 
 def load_rational_camera_nitf(file_path):
     boxm2_batch.init_process("vpglLoadRationalCameraNITFProcess")
