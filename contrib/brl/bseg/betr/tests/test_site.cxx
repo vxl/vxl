@@ -1,4 +1,4 @@
-// This is brl/bseg/betr/tests/test_geo_object.cxx
+// This is brl/bseg/betr/tests/test_site.cxx
 #include <iostream>
 #include <fstream>
 #include <testlib/testlib_test.h>

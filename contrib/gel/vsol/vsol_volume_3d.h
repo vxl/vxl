@@ -16,7 +16,7 @@
 
 class vsol_volume_3d;
 class vsol_polyhedron;
-class vsol_mesh_3d;
+class vsol_mesh_3d; // not in this library to avoid dependencies (see brl/bseg/betr)
 #include "vsol_volume_3d_sptr.h"
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>

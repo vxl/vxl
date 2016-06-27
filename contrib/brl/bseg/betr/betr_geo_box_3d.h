@@ -34,6 +34,9 @@ class betr_geo_box_3d
   // p.x() = lon, p.y() = lat, p.z()= elevation
   void add(vgl_point_3d<double> const& geo_pt);
 
+  // add another geo box
+  void add(betr_geo_box_3d const& geo_box);
+
   //: Does a geographic point lie inside or on the box
   bool contains(vgl_point_3d<double> const& geo_pt) const;
   bool contains(double lon, double lat, double el) const;
@@ -52,6 +55,7 @@ class betr_geo_box_3d
     vgl_point_3d<double> p(max_lon(), max_lat(), max_elv());
     return p;
   }
+
   //: auxillary point inside longitude interval to resolve arc ambiguity
   vgl_point_3d<double> aux_point() const;
  private:

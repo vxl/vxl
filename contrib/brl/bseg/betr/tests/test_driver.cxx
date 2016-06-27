@@ -3,6 +3,8 @@
 DECLARE(test_geo_box);
 DECLARE(test_geo_object);
 DECLARE(test_site);
+DECLARE(test_edgel_factory);
+DECLARE(test_event_trigger);
 
 void
 register_tests()
@@ -10,6 +12,8 @@ register_tests()
   REGISTER(test_geo_box);
   REGISTER(test_geo_object);
   REGISTER(test_site);
+  REGISTER(test_edgel_factory);
+  REGISTER(test_event_trigger);
 }
 
 DEFINE_MAIN;
