@@ -43,7 +43,7 @@ inline unsigned long long bsgm_compute_diff_string(
 // http://graphics.stanford.edu/~seander/bithacks.html
 
 
-//: Compute the hamming distance of a difference bit-string using Brian 
+//: Compute the hamming distance of a difference bit-string using Brian
 // Kernighan's algorithm.
 inline unsigned char bsgm_compute_hamming_bk(
   unsigned long long int diff )
@@ -65,19 +65,19 @@ inline unsigned char bsgm_compute_hamming_lut(
   bool only_32_bits = false )
 {
   if( only_32_bits ) return
-    lut[diff & 0xff] + 
-    lut[(diff >> 8) & 0xff] + 
-    lut[(diff >> 16) & 0xff] + 
-    lut[(diff >> 24) & 0xff]; 
+    lut[diff & 0xff] +
+    lut[(diff >> 8) & 0xff] +
+    lut[(diff >> 16) & 0xff] +
+    lut[(diff >> 24) & 0xff];
 
   else return
-    lut[diff & 0xff] + 
-    lut[(diff >> 8) & 0xff] + 
-    lut[(diff >> 16) & 0xff] + 
-    lut[(diff >> 24) & 0xff] + 
-    lut[(diff >> 32) & 0xff] + 
-    lut[(diff >> 40) & 0xff] + 
-    lut[(diff >> 48) & 0xff] + 
+    lut[diff & 0xff] +
+    lut[(diff >> 8) & 0xff] +
+    lut[(diff >> 16) & 0xff] +
+    lut[(diff >> 24) & 0xff] +
+    lut[(diff >> 32) & 0xff] +
+    lut[(diff >> 40) & 0xff] +
+    lut[(diff >> 48) & 0xff] +
     lut[(diff >> 54) & 0xff];
 }
 

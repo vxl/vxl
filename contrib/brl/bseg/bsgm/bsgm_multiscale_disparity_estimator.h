@@ -20,14 +20,17 @@
 // \brief A multi-scale implementation of SGM.
 // \author Thomas Pollard
 // \date June 7, 2016
-
+//
+//  Modifications
+//   Jun, 2016 Yi Dong - add input parameter for function 'compute'
+// \endverbatim
 
 
 class bsgm_multiscale_disparity_estimator
 {
  public:
 
-  //: Construct from parameters. Coarse scale SGM will run on images 
+  //: Construct from parameters. Coarse scale SGM will run on images
   // downsampled by 2^downscale_exponent
   bsgm_multiscale_disparity_estimator(
     const bsgm_disparity_estimator_params& params,
@@ -44,13 +47,18 @@ class bsgm_multiscale_disparity_estimator
   // disparity range, and again at full-res using the reduced disparity range.
   // Should improve speed and quality with respect to single-scale approach if
   // tight disparity bounds are unknown.
+  // mutli_scale_mode can be:
+  // 0 Single min disparity used for entire image
+  // 1 Single min disparity used within coarse image blocks
+  // 2 Different min disparity used at each pixel
   bool compute(
     const vil_image_view<vxl_byte>& img_target,
     const vil_image_view<vxl_byte>& img_ref,
-    const vil_image_view<bool>& invalid_target,    
+    const vil_image_view<bool>& invalid_target,
     int min_disparity,
     float invalid_disparity,
-    vil_image_view<float>& disp_target );
+    int const& multi_scale_mode,
+    vil_image_view<float>& disp_target);
 
  protected:
 

@@ -91,9 +91,9 @@ bsgm_multiscale_disparity_estimator::bsgm_multiscale_disparity_estimator(
   num_coarse_disparities_ = num_disparities / downscale_factor_;
 
   // Set up the single-scale SGMs
-  coarse_de_ = new bsgm_disparity_estimator( 
+  coarse_de_ = new bsgm_disparity_estimator(
     params, coarse_w_, coarse_h_, num_coarse_disparities_ );
-  fine_de_ = new bsgm_disparity_estimator( 
+  fine_de_ = new bsgm_disparity_estimator(
     params, fine_w_, fine_h_, num_active_disparities );
 }
 
@@ -107,33 +107,30 @@ bsgm_multiscale_disparity_estimator::~bsgm_multiscale_disparity_estimator()
 
 
 //----------------------------------------------------------------------------
-bool 
+bool
 bsgm_multiscale_disparity_estimator::compute(
   const vil_image_view<vxl_byte>& img_tar,
   const vil_image_view<vxl_byte>& img_ref,
-  const vil_image_view<bool>& invalid_tar,    
+  const vil_image_view<bool>& invalid_tar,
   int min_disp,
   float invalid_disp,
-  vil_image_view<float>& disp_tar ) 
+  int const& multi_scale_mode,
+  vil_image_view<float>& disp_tar)
 {
-  // 0 Single min disparity used for entire image
-  // 1 Single min disparity used within coarse image blocks 
-  // 2 Different min disparity used at each pixel
-  int multi_scale_mode = 1;  
+  //int multi_scale_mode = 1;
 
   // Size of block used in mode 1
   int block_size = 100;
-
   disp_tar.set_size( fine_w_, fine_h_ );
 
   // Validate images.
-  if( img_tar.ni() != fine_w_ || img_tar.nj() != fine_h_ || 
-      img_ref.ni() != fine_w_ || img_ref.nj() != fine_h_ || 
-      invalid_tar.ni() != fine_w_ || invalid_tar.nj() != fine_h_ ) 
+  if( img_tar.ni() != fine_w_ || img_tar.nj() != fine_h_ ||
+      img_ref.ni() != fine_w_ || img_ref.nj() != fine_h_ ||
+      invalid_tar.ni() != fine_w_ || invalid_tar.nj() != fine_h_ )
     return false;
 
   // Downsample the images
-  vil_image_view<vxl_byte> img_t_coarse, img_r_coarse, 
+  vil_image_view<vxl_byte> img_t_coarse, img_r_coarse,
     temp_t_coarse, temp_r_coarse, working;
 
   vil_gauss_reduce( img_tar, img_t_coarse, working );
@@ -155,7 +152,7 @@ bsgm_multiscale_disparity_estimator::compute(
 
   vil_image_view<int> min_disp_img_coarse( coarse_w_, coarse_h_ );
   vil_image_view<int> min_disp_img_fine( fine_w_, fine_h_ );
-    
+
   // Setup trivial coarse-scale min disparity image
   int min_disp_coarse = min_disp / downscale_factor_;
   min_disp_img_coarse.fill( min_disp_coarse );
@@ -164,27 +161,24 @@ bsgm_multiscale_disparity_estimator::compute(
 
   // Run SGM on coarse scale images
   vil_image_view<float> disp_t_coarse;
-  if( !coarse_de_->compute( img_t_coarse, img_r_coarse, invalid_t_coarse, 
+  if( !coarse_de_->compute( img_t_coarse, img_r_coarse, invalid_t_coarse,
       min_disp_img_coarse, invalid_disp_coarse, disp_t_coarse ) )
     return false;
 
-//DEBUG
-//vil_image_view<vxl_byte> vis;
-//vil_convert_stretch_range_limited( disp_t_coarse, vis, 
-//  (float)min_disp_coarse-1, (float)( min_disp_coarse+num_coarse_disparities_-1 ) );
-//vil_save( vis, "D:/results/1.png" );
+  //DEBUG
+  //vil_save( disp_t_coarse, "D:/temp/sgm/mountain_pair/disp_t_coarse.tif");
 
 
   // Mode 0 uses a constant min disparity for all pixels
   if( multi_scale_mode == 0 ){
 
     // Compute the median disparity for the
-    int med_ds = bsgm_compute_median_of_image( 
-      disp_t_coarse, invalid_t_coarse, 0, coarse_w_, 0, coarse_h_, 
+    int med_ds = bsgm_compute_median_of_image(
+      disp_t_coarse, invalid_t_coarse, 0, coarse_w_, 0, coarse_h_,
       min_disp_coarse, num_coarse_disparities_, invalid_disp_coarse );
 
     // Setup fine-scale min disparity image
-    min_disp_img_fine.fill( 
+    min_disp_img_fine.fill(
       med_ds*downscale_factor_ - num_active_disparities_/2 );
 
   // Mode 1 uses a fixed min disparity in large block regions
@@ -194,20 +188,20 @@ bsgm_multiscale_disparity_estimator::compute(
 
     for( int start_y = 0; start_y < coarse_h_; start_y+=coarse_block_size ){
       for( int start_x = 0; start_x < coarse_w_; start_x+=coarse_block_size ){
-    
+
         int end_x = min( coarse_w_, start_x+coarse_block_size );
         int end_y = min( coarse_h_, start_y+coarse_block_size );
 
         // Compute median of the box region
-        int med_ds = bsgm_compute_median_of_image( disp_t_coarse, 
-          invalid_t_coarse, start_x, end_x, start_y, end_y, 
+        int med_ds = bsgm_compute_median_of_image( disp_t_coarse,
+          invalid_t_coarse, start_x, end_x, start_y, end_y,
           min_disp_coarse, num_coarse_disparities_, invalid_disp_coarse );
 
-        // Set the min (fine-scale) disparity for each pixel in the box to a 
+        // Set the min (fine-scale) disparity for each pixel in the box to a
         // value centered on this median.
         for( int by = start_y; by < end_y; by++ ){
           for( int bx = start_x; bx < end_x; bx++ ){
-            min_disp_img_coarse(bx,by) = 
+            min_disp_img_coarse(bx,by) =
               med_ds*downscale_factor_ - num_active_disparities_/2;
           }
         }
@@ -215,17 +209,17 @@ bsgm_multiscale_disparity_estimator::compute(
     }
 
     // Upscale to full-res
-    vil_resample_bilin( 
+    vil_resample_bilin(
       min_disp_img_coarse, min_disp_img_fine, fine_w_, fine_h_ );
 
   // Mode 2 uses per pixel min disparity based on coarse disparity
   } else {
 
-    // Set the min (fine-scale) disparity for each pixel to a value 
+    // Set the min (fine-scale) disparity for each pixel to a value
     // value centered on this median.
     for( int y = 0; y < coarse_h_; y++ ){
       for( int x = 0; x < coarse_w_; x++ ){
-        min_disp_img_coarse(x,y) = 
+        min_disp_img_coarse(x,y) =
          disp_t_coarse(x,y)*downscale_factor_ - num_active_disparities_/2;
       }
     }
@@ -236,12 +230,12 @@ bsgm_multiscale_disparity_estimator::compute(
   }
 
   // Run fine-scale SGM
-  if( !fine_de_->compute( img_tar, img_ref, invalid_tar, 
+  if( !fine_de_->compute( img_tar, img_ref, invalid_tar,
       min_disp_img_fine, invalid_disp, disp_tar ) )
     return false;
 
   //fine_de_->write_cost_debug_imgs( std::string("C:/data/results"), true );
-    
+
   return true;
 }
 

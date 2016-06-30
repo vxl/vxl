@@ -5,14 +5,14 @@
 
 
 //---------------------------------------------------------
-bool 
+bool
 bsgm_compute_census_img(
   const vil_image_view<vxl_byte>& img,
   int nbhd_diam,
   vil_image_view<vxl_uint_64>& census,
   vil_image_view<vxl_uint_64>& census_conf,
   int tol )
-{  
+{
   int height = img.nj(), width = img.ni();
 
   // Can't handle bigger patch sizes with current implementation.
@@ -45,7 +45,7 @@ bsgm_compute_census_img(
           cen <<= 1;
           if( *img_x2y2 < img_xy ) cen++;
 
-          // Also record whether the pixel differs significantly from the 
+          // Also record whether the pixel differs significantly from the
           // center in a separate "confidence" bit
           conf <<= 1;
           if( *img_x2y2 <= center_min || *img_x2y2 >= center_max ) conf++;
@@ -60,7 +60,7 @@ bsgm_compute_census_img(
 
 
 //------------------------------------------------------------------------
-void 
+void
 bsgm_generate_bit_set_lut(
   unsigned char* lut )
 {
