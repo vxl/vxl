@@ -13,6 +13,7 @@
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_intersection.h>
 
+
 static vsol_polygon_3d_sptr move_poly_points_to_plane(vsol_polygon_3d_sptr polygon)
 {
   vgl_fit_plane_3d<double> fitter;
@@ -187,7 +188,7 @@ void vsol_mesh_3d::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   for (unsigned i=n; i<2*n; i++) {
     _connect_F_E_end (f1, e_list[i]);
   }
-  current_extr_face = f1;
+  current_extr_face_ = f1;
 
   // create the in between edges and faces
   std::vector<bmsh3d_edge* > e_btw_list(n);
@@ -215,6 +216,17 @@ void vsol_mesh_3d::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   }
 
   print_faces();
+}
+std::vector<vsol_point_3d_sptr> vsol_mesh_3d::vertices() const{
+  std::vector<vsol_point_3d_sptr> ret;
+  int n = this->num_vertices();
+  std::map<int, bmsh3d_vertex*>& vmap = mesh_->vertexmap();
+  for(int i = 0; i<n; ++i){
+    bmsh3d_vertex* mv = vmap[i];
+    vsol_point_3d_sptr v = new vsol_point_3d(mv->pt());
+    ret.push_back(v);
+  }
+  return ret;
 }
 void vsol_mesh_3d::attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly)
 {
@@ -407,9 +419,9 @@ bmsh3d_face_mc* vsol_mesh_3d::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F)
 
 void vsol_mesh_3d::move_extr_face(double z)
 {
-  if (current_extr_face) {
+  if (current_extr_face_) {
     std::vector<bmsh3d_vertex*> vertices;
-    vsol_polygon_3d_sptr polygon = extract_face(current_extr_face, vertices);
+    vsol_polygon_3d_sptr polygon = extract_face(current_extr_face_, vertices);
     // at this point, the halfedges already sorted in extract_face
 
     for (unsigned i=0; i<vertices.size(); i++) {
@@ -547,10 +559,9 @@ void vsol_mesh_3d::compute_bounding_box() const{
   add_to_bounding_box(maxpt.x(), maxpt.y(), maxpt.z());
 }
 
-bool vsol_mesh_3d::
-single_face_with_vertices(unsigned face_id,
-                          vsol_polygon_3d_sptr& poly,
-                          std::vector<bmsh3d_vertex*>& verts)
+bool vsol_mesh_3d::single_face_with_vertices(unsigned face_id,
+                                             vsol_polygon_3d_sptr& poly,
+                                             std::vector<bmsh3d_vertex*>& verts)
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*)mesh_->facemap(face_id);
   if (face && (mesh_->facemap().size() == 1)) {
@@ -842,12 +853,12 @@ void vsol_mesh_3d::extrude(int face_id, double dist)
         create_mesh_HE(poly, dist, inner_faces);
       }
       else {
-        current_extr_face = extrude_face(mesh_, face);
+        current_extr_face_ = extrude_face(mesh_, face);
         move_extr_face(dist);
       }
     }
     else
-      current_extr_face = VXL_NULLPTR;
+      current_extr_face_ = VXL_NULLPTR;
   }
 }
 void vsol_mesh_3d::divide_face(unsigned face_id,
