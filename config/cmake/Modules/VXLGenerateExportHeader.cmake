@@ -1,16 +1,27 @@
+# This version of GenerateExportHeader extends CMake's version to provide the
+# <module-name>_TEMPLATE_EXPORT macro. For templated class declarations, Windows
+# must not have the export specification, while GCC must have the export
+# specification.
+#
+# This macro is for templates with explicit instantiations built into a library.
+#
+# To avoid inadvertently overriding CMake's or another package's
+# GenerateExportHeader, this version is named differently and adds a prefix to
+# all global identifiers.
+
 #.rst:
-# GenerateExportHeader
+# VXLGenerateExportHeader
 # --------------------
 #
 # Function for generation of export macros for libraries
 #
-# This module provides the function GENERATE_EXPORT_HEADER().
+# This module provides the function VXL_GENERATE_EXPORT_HEADER().
 #
-# The ``GENERATE_EXPORT_HEADER`` function can be used to generate a file
+# The ``VXL_GENERATE_EXPORT_HEADER`` function can be used to generate a file
 # suitable for preprocessor inclusion which contains EXPORT macros to be
 # used in library classes::
 #
-#    GENERATE_EXPORT_HEADER( LIBRARY_TARGET
+#    VXL_GENERATE_EXPORT_HEADER( LIBRARY_TARGET
 #              [BASE_NAME <base_name>]
 #              [EXPORT_MACRO_NAME <export_macro_name>]
 #              [TEMPLATE_EXPORT_MACRO_NAME <template_export_macro_name>]
@@ -31,7 +42,7 @@
 # :variable:`CMAKE_CXX_VISIBILITY_PRESET <CMAKE_<LANG>_VISIBILITY_PRESET>` and
 # :variable:`CMAKE_VISIBILITY_INLINES_HIDDEN`.
 #
-# By default ``GENERATE_EXPORT_HEADER()`` generates macro names in a file
+# By default ``VXL_GENERATE_EXPORT_HEADER()`` generates macro names in a file
 # name determined by the name of the library.  This means that in the
 # simplest case, users of ``GenerateExportHeader`` will be equivalent to:
 #
@@ -40,7 +51,7 @@
 #    set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 #    set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 #    add_library(somelib someclass.cpp)
-#    generate_export_header(somelib)
+#    vxl_generate_export_header(somelib)
 #    install(TARGETS somelib DESTINATION ${LIBRARY_INSTALL_DIR})
 #    install(FILES
 #     someclass.h
@@ -71,7 +82,7 @@
 # .. code-block:: cmake
 #
 #    add_library(somelib someclass.cpp)
-#    generate_export_header(somelib
+#    vxl_generate_export_header(somelib
 #      BASE_NAME other_name
 #    )
 #
@@ -86,7 +97,7 @@
 # .. code-block:: cmake
 #
 #    add_library(somelib someclass.cpp)
-#    generate_export_header(somelib
+#    vxl_generate_export_header(somelib
 #      EXPORT_MACRO_NAME OTHER_NAME_EXPORT
 #    )
 #
@@ -97,7 +108,7 @@
 # .. code-block:: cmake
 #
 #    add_library(somelib someclass.cpp)
-#    generate_export_header(somelib
+#    vxl_generate_export_header(somelib
 #      DEPRECATED_MACRO_NAME KDE_DEPRECATED
 #    )
 #
@@ -115,7 +126,7 @@
 #
 #    add_library(shared_variant SHARED ${lib_SRCS})
 #    add_library(static_variant ${lib_SRCS})
-#    generate_export_header(shared_variant BASE_NAME libshared_and_static)
+#    vxl_generate_export_header(shared_variant BASE_NAME libshared_and_static)
 #    set_target_properties(static_variant PROPERTIES
 #      COMPILE_FLAGS -DLIBSHARED_AND_STATIC_STATIC_DEFINE)
 #
@@ -132,7 +143,7 @@
 #    if (EXCLUDE_DEPRECATED)
 #      set(NO_BUILD_DEPRECATED DEFINE_NO_DEPRECATED)
 #    endif()
-#    generate_export_header(somelib ${NO_BUILD_DEPRECATED})
+#    vxl_generate_export_header(somelib ${NO_BUILD_DEPRECATED})
 #
 #
 # And then in somelib:
@@ -161,7 +172,7 @@
 #
 # .. code-block:: cmake
 #
-#    generate_export_header(somelib PREFIX_NAME VTK_)
+#    vxl_generate_export_header(somelib PREFIX_NAME VTK_)
 #
 # Generates the macros ``VTK_SOMELIB_EXPORT`` etc.
 #
@@ -197,13 +208,13 @@ include(CMakeParseArguments)
 include(CheckCXXCompilerFlag)
 
 # TODO: Install this macro separately?
-macro(_check_cxx_compiler_attribute _ATTRIBUTE _RESULT)
+macro(_vxl_check_cxx_compiler_attribute _ATTRIBUTE _RESULT)
   check_cxx_source_compiles("${_ATTRIBUTE} int somefunc() { return 0; }
     int main() { return somefunc();}" ${_RESULT}
   )
 endmacro()
 
-macro(_test_compiler_hidden_visibility)
+macro(_vxl_test_compiler_hidden_visibility)
 
   if(CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.2")
     set(GCC_TOO_OLD TRUE)
@@ -231,7 +242,7 @@ macro(_test_compiler_hidden_visibility)
   endif()
 endmacro()
 
-macro(_test_compiler_has_deprecated)
+macro(_vxl_test_compiler_has_deprecated)
   if(CMAKE_CXX_COMPILER_ID MATCHES Borland
       OR CMAKE_CXX_COMPILER_ID MATCHES HP
       OR GCC_TOO_OLD
@@ -240,22 +251,22 @@ macro(_test_compiler_has_deprecated)
     set(COMPILER_HAS_DEPRECATED "" CACHE INTERNAL
       "Compiler support for a deprecated attribute")
   else()
-    _check_cxx_compiler_attribute("__attribute__((__deprecated__))"
+    _vxl_check_cxx_compiler_attribute("__attribute__((__deprecated__))"
       COMPILER_HAS_DEPRECATED_ATTR)
     if(COMPILER_HAS_DEPRECATED_ATTR)
       set(COMPILER_HAS_DEPRECATED "${COMPILER_HAS_DEPRECATED_ATTR}"
         CACHE INTERNAL "Compiler support for a deprecated attribute")
     else()
-      _check_cxx_compiler_attribute("__declspec(deprecated)"
+      _vxl_check_cxx_compiler_attribute("__declspec(deprecated)"
         COMPILER_HAS_DEPRECATED)
     endif()
   endif()
 endmacro()
 
-get_filename_component(_GENERATE_EXPORT_HEADER_MODULE_DIR
+get_filename_component(_VXL_GENERATE_EXPORT_HEADER_MODULE_DIR
   "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-macro(_DO_SET_MACRO_VALUES TARGET_LIBRARY)
+macro(_VXL_DO_SET_MACRO_VALUES TARGET_LIBRARY)
   set(DEFINE_DEPRECATED)
   set(DEFINE_EXPORT)
   set(DEFINE_IMPORT)
@@ -287,7 +298,7 @@ macro(_DO_SET_MACRO_VALUES TARGET_LIBRARY)
   endif()
 endmacro()
 
-macro(_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
+macro(_VXL_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
   # Option overrides
   set(options DEFINE_NO_DEPRECATED)
   set(oneValueArgs PREFIX_NAME BASE_NAME EXPORT_MACRO_NAME
@@ -319,7 +330,7 @@ macro(_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
     "${_GEH_PREFIX_NAME}${BASE_NAME_UPPER}_NO_DEPRECATED")
 
   if(_GEH_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "Unknown keywords given to GENERATE_EXPORT_HEADER(): \"${_GEH_UNPARSED_ARGUMENTS}\"")
+    message(FATAL_ERROR "Unknown keywords given to VXL_GENERATE_EXPORT_HEADER(): \"${_GEH_UNPARSED_ARGUMENTS}\"")
   endif()
 
   if(_GEH_EXPORT_MACRO_NAME)
@@ -380,11 +391,11 @@ macro(_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
     string(MAKE_C_IDENTIFIER ${EXPORT_IMPORT_CONDITION} EXPORT_IMPORT_CONDITION)
   endif()
 
-  configure_file("${_GENERATE_EXPORT_HEADER_MODULE_DIR}/exportheader.cmake.in"
+  configure_file("${_VXL_GENERATE_EXPORT_HEADER_MODULE_DIR}/vxlexportheader.cmake.in"
     "${EXPORT_FILE_NAME}" @ONLY)
 endmacro()
 
-function(GENERATE_EXPORT_HEADER TARGET_LIBRARY)
+function(VXL_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
   get_property(type TARGET ${TARGET_LIBRARY} PROPERTY TYPE)
   if(NOT ${type} STREQUAL "STATIC_LIBRARY"
       AND NOT ${type} STREQUAL "SHARED_LIBRARY"
@@ -393,19 +404,19 @@ function(GENERATE_EXPORT_HEADER TARGET_LIBRARY)
     message(WARNING "This macro can only be used with libraries")
     return()
   endif()
-  _test_compiler_hidden_visibility()
-  _test_compiler_has_deprecated()
-  _do_set_macro_values(${TARGET_LIBRARY})
-  _do_generate_export_header(${TARGET_LIBRARY} ${ARGN})
+  _vxl_test_compiler_hidden_visibility()
+  _vxl_test_compiler_has_deprecated()
+  _vxl_do_set_macro_values(${TARGET_LIBRARY})
+  _vxl_do_generate_export_header(${TARGET_LIBRARY} ${ARGN})
 endfunction()
 
-function(add_compiler_export_flags)
+function(vxl_add_compiler_export_flags)
   if(NOT CMAKE_MINIMUM_REQUIRED_VERSION VERSION_LESS 2.8.11)
-    message(DEPRECATION "The add_compiler_export_flags function is obsolete. Use the CXX_VISIBILITY_PRESET and VISIBILITY_INLINES_HIDDEN target properties instead.")
+    message(DEPRECATION "The vxl_add_compiler_export_flags function is obsolete. Use the CXX_VISIBILITY_PRESET and VISIBILITY_INLINES_HIDDEN target properties instead.")
   endif()
 
-  _test_compiler_hidden_visibility()
-  _test_compiler_has_deprecated()
+  _vxl_test_compiler_hidden_visibility()
+  _vxl_test_compiler_has_deprecated()
 
   if(NOT (USE_COMPILER_HIDDEN_VISIBILITY AND COMPILER_HAS_HIDDEN_VISIBILITY))
     # Just return if there are no flags to add.
