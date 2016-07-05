@@ -25,7 +25,7 @@
 class vsol_mesh_3d : public vsol_volume_3d
 {
  public:
- vsol_mesh_3d():mesh_(VXL_NULLPTR){}
+ vsol_mesh_3d():mesh_(VXL_NULLPTR),current_extr_face_(VXL_NULLPTR){}
   vsol_mesh_3d(vsol_box_3d_sptr box);
   ~vsol_mesh_3d(){delete mesh_;}
 
@@ -43,6 +43,8 @@ class vsol_mesh_3d : public vsol_volume_3d
   unsigned num_faces() const  { return mesh_->facemap().size(); }
   unsigned num_edges() const { return mesh_->edgemap().size(); }
   unsigned num_vertices() const { return mesh_->vertexmap().size(); }
+  std::vector<vsol_point_3d_sptr> vertices() const;
+  
 
   bmsh3d_mesh_mc* get_object() { return mesh_; }
 
@@ -92,7 +94,7 @@ class vsol_mesh_3d : public vsol_volume_3d
 
  protected:
   bmsh3d_mesh_mc* mesh_;
-  bmsh3d_face_mc* current_extr_face;
+  bmsh3d_face_mc* current_extr_face_;
 
 
   void create_mesh_HE(vsol_polygon_3d_sptr polygon, double dist, std::map<int, vsol_polygon_3d_sptr> inner_faces);

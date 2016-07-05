@@ -23,7 +23,7 @@
 //: A struct containing miscellaneous SGM parameters
 struct bsgm_disparity_estimator_params
 {
-  //: Use 16 directions in the dynamic programming, otherwise 8.  This 
+  //: Use 16 directions in the dynamic programming, otherwise 8.  This
   // roughly doubles computation time.
   bool use_16_directions;
 
@@ -48,13 +48,13 @@ struct bsgm_disparity_estimator_params
   // 2 bad pixels interpolated over
   int error_check_mode;
 
-  //: Appearance costs computed by different algorithms are statically fused 
+  //: Appearance costs computed by different algorithms are statically fused
   // using these weights. Set any to <= 0 to prevent computation.
   float census_weight;
   float xgrad_weight;
 
   //: Pixel differences less than this magnitude are not considered in the
-  // census computation.  Increase to prevent errors from sensor noise. 
+  // census computation.  Increase to prevent errors from sensor noise.
   // Set to 0 for textbook census implementation.
   int census_tol;
 
@@ -99,7 +99,7 @@ class bsgm_disparity_estimator
 
   //: Run the SGM algorithm to compute a disparity map for the img_target,
   // where disparities measure the displacement of the reference pixel from
-  // the target pixel i.e. 
+  // the target pixel i.e.
   //   img_target(x,y) <-> img_ref( x + disp_target(x,y), y )
   // Note that this is the opposite of the OpenCV SGM implementation.
   bool compute(
@@ -110,7 +110,7 @@ class bsgm_disparity_estimator
     float invalid_disparity,
     vil_image_view<float>& disp_target );
 
-  //: Write out the appearance or total cost volume as a set of images for 
+  //: Write out the appearance or total cost volume as a set of images for
   // debugging
   void write_cost_debug_imgs(
     const std::string& out_dir,
@@ -127,8 +127,8 @@ class bsgm_disparity_estimator
   //: Number of disparities to search over.
   int num_disparities_;
 
-  //: All appearance and smoothing costs will be normalized to discrete 
-  // values such that this unit corresponds to 1.0 standard deviation of 
+  //: All appearance and smoothing costs will be normalized to discrete
+  // values such that this unit corresponds to 1.0 standard deviation of
   // expected appearance error.
   unsigned char cost_unit_;
 
@@ -156,11 +156,11 @@ class bsgm_disparity_estimator
   //
 
   //: Allocate and setup cost volumes based on current w_ and h_
-  void setup_cost_volume( 
+  void setup_cost_volume(
     std::vector<unsigned char>& cost_data,
     std::vector< std::vector< unsigned char* > >& cost,
     int depth );
-  void setup_cost_volume( 
+  void setup_cost_volume(
     std::vector<unsigned short>& cost_data,
     std::vector< std::vector< unsigned short* > >& cost,
     int depth );
@@ -206,22 +206,22 @@ class bsgm_disparity_estimator
     const std::vector< std::vector< unsigned short* > >& total_cost,
     const vil_image_view<int>& min_disparity,
     const vil_image_view<bool>& invalid_target,
-    float invalid_disparity, 
+    float invalid_disparity,
     vil_image_view<float>& disp_img,
     vil_image_view<unsigned short>& disp_cost );
 
   //: Use the OpenCV SGM uniqueness criteria to find bad disparities. This
   // is not quite the same as the left-right consistency check from the SGM
   // paper.  Despite working well enough, this approach is problematic in part
-  // because the overflow-normalized disparity costs of different pixels 
-  // should not be directly compared, but they are. 
+  // because the overflow-normalized disparity costs of different pixels
+  // should not be directly compared, but they are.
   void flag_nonunique(
     vil_image_view<float>& disp_img,
     const vil_image_view<unsigned short>& disp_cost,
     float invalid_disparity,
     int disp_thresh = 1 );
 
-  //: Fill in disparity pixels flagged as errors via multi-directional 
+  //: Fill in disparity pixels flagged as errors via multi-directional
   // sampling.
   void interpolate_errors(
     vil_image_view<float>& disp_img,
@@ -231,11 +231,11 @@ class bsgm_disparity_estimator
 
   //
   // Other
-  // 
+  //
 
   //: Convenience function for printing time since last call to this function
   void print_time(
-    const char* name, 
+    const char* name,
     vul_timer& timer );
 
   //: Disable default constructor
