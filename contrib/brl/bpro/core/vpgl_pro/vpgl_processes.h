@@ -98,6 +98,7 @@ DECLARE_FUNC_CONS(vpgl_compute_utm_zone_process);
 DECLARE_FUNC_CONS(vpgl_rational_cam_img_to_global_process);
 DECLARE_FUNC_CONS(vpgl_get_backproject_ray_processs);
 DECLARE_FUNC_CONS(vpgl_construct_height_map_process);
+DECLARE_FUNC_CONS(vpgl_construct_disparity_map_process);
 DECLARE_FUNC_CONS(vpgl_rational_cam_nadirness_process);
 DECLARE_FUNC_CONS(vpgl_compute_image_to_world_homography_process);
 DECLARE_FUNC_CONS(vpgl_crop_ortho_using_3d_box_process);

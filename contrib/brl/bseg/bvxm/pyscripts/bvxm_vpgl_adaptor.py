@@ -931,6 +931,24 @@ def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_ra
   disparity_map = dbvalue(id, type);
   return out_map, disparity_map
 
+def construct_disparity_map_from_DEM(local_rational_cam1, local_rational_cam2, scene_DEM, scene_DEM_geocam, path_H1, path_H2, disp_img_ni, disp_img_nj, GSD_DEM, rough_GSD_rectified_img1):
+  bvxm_batch.init_process("vpglConstructDisparityMapProcess");
+  bvxm_batch.set_input_from_db(0, local_rational_cam1);
+  bvxm_batch.set_input_from_db(1, local_rational_cam2);
+  bvxm_batch.set_input_from_db(2, scene_DEM);
+  bvxm_batch.set_input_from_db(3, scene_DEM_geocam);
+  bvxm_batch.set_input_unsigned(4, disp_img_ni);
+  bvxm_batch.set_input_unsigned(5, disp_img_nj);
+  bvxm_batch.set_input_double(6, GSD_DEM);
+  bvxm_batch.set_input_double(7, rough_GSD_rectified_img1);
+  bvxm_batch.set_input_string(8, path_H1);
+  bvxm_batch.set_input_string(9, path_H2);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  disparity_map = dbvalue(id, type);
+  return disparity_map
+
+
 # use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
 # note that the input 3-d box is in unit of wgs84 geo coordinates
 
