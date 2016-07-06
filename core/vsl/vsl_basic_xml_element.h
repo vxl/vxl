@@ -45,7 +45,7 @@ class vsl_basic_xml_element
   void add_attribute(std::string attr_name, long value);
   void add_attribute(std::string attr_name, int value) { add_attribute(attr_name, (long)value); }
   void add_attribute(std::string attr_name, size_t value) { add_attribute(attr_name, (long)value); }
-#if !( defined(_WIN32) && defined(_MSC_VER) && !defined(_WIN64) )  // Cannot have this for Windows Vis
+#if !( defined(_WIN32) && defined(_MSC_VER) && !defined(_WIN64) )  // Cannot have this for Windows 32-bit build as it 
   void add_attribute(std::string attr_name, unsigned int value) { add_attribute(attr_name, (long)value); }
 #endif
   void add_attribute_list(std::vector<std::pair<std::string, std::string> > attrs);
