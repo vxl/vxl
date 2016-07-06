@@ -358,7 +358,7 @@ set(V3P_NETLIB_opt_SOURCES
      opt/lbfgsb.c opt/lbfgsb.h
    )
 set(V3P_NETLIB_linalg_SOURCES
-     linalg/lsqr.c linalg/lsqr.h
+     linalg/lsqrBase.cxx linalg/lsqrBase.h
    )
 set(V3P_NETLIB_toms_SOURCES
      toms/rpoly.c toms/rpoly.h

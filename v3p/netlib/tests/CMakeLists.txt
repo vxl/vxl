@@ -8,9 +8,9 @@ if(BUILD_TESTING)
   add_test( NAME netlib_test_lbfgsb COMMAND $<TARGET_FILE:netlib_lbfgsb_example> )
   target_link_libraries(netlib_lbfgsb_example ${VXL_LIB_PREFIX}v3p_netlib)
   # test
-  add_executable( netlib_lsqr_test lsqr-test.c )
-  add_test( NAME netlib_test_lsqr COMMAND $<TARGET_FILE:netlib_lsqr_test> )
-  target_link_libraries(netlib_lsqr_test ${VXL_LIB_PREFIX}v3p_netlib)
+#FIXME  add_executable( netlib_lsqr_test lsqr-test.c )
+#FIXME  add_test( NAME netlib_test_lsqr COMMAND $<TARGET_FILE:netlib_lsqr_test> )
+#FIXME  target_link_libraries(netlib_lsqr_test ${VXL_LIB_PREFIX}v3p_netlib)
   # test
   add_executable( netlib_slamch_test slamch-test.c )
   add_test( NAME netlib_test_slamch COMMAND $<TARGET_FILE:netlib_slamch_test> )
