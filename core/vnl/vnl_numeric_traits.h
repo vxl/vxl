@@ -86,10 +86,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<bool>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template <>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<bool const> : public vnl_numeric_traits<bool> {};
-#endif
 #endif
 
 template<>
@@ -119,10 +117,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<char>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<char const> : public vnl_numeric_traits<char> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char>
@@ -142,10 +138,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char const> : public vnl_numeric_traits<unsigned char> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char>
@@ -165,10 +159,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char const> : public vnl_numeric_traits<signed char> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short>
@@ -188,10 +180,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short const> : public vnl_numeric_traits<short> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short>
@@ -211,10 +201,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short const> : public vnl_numeric_traits<unsigned short> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int>
@@ -234,10 +222,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int const> : public vnl_numeric_traits<int> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int>
@@ -257,10 +243,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int const> : public vnl_numeric_traits<unsigned int> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long>
@@ -280,10 +264,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long const> : public vnl_numeric_traits<long > {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long>
@@ -304,10 +286,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {};
-#endif
 
 #if defined(_WIN64) && !VCL_HAS_LONG_LONG
 template<>
@@ -328,10 +308,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<size_t>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<size_t const> : public vnl_numeric_traits<size_t> {};
-#endif
 #endif
 
 #if VCL_HAS_LONG_LONG
@@ -353,10 +331,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long long>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long long const> : public vnl_numeric_traits<long long> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long>
@@ -376,10 +352,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long const> : public vnl_numeric_traits<unsigned long long> {};
-#endif
 #endif
 
 template<>
@@ -400,10 +374,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<float>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<float const> : public vnl_numeric_traits<float> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double>
@@ -423,10 +395,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double const> : public vnl_numeric_traits<double> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double>
@@ -446,10 +416,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double>
   typedef long double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double const> : public vnl_numeric_traits<long double> {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<float> >
@@ -470,10 +438,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<float> >
   typedef std::complex<float> real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<float> const> : public vnl_numeric_traits<std::complex<float> > {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<double> >
@@ -494,10 +460,8 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<double> >
   typedef std::complex<double> real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<double> const> : public vnl_numeric_traits<std::complex<double> > {};
-#endif
 
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<long double> >
@@ -518,9 +482,7 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<long double> >
   typedef std::complex<long double> real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template<>
 class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<long double> const> : public vnl_numeric_traits<std::complex<long double> > {};
-#endif
 
 #endif // vnl_numeric_traits_h_

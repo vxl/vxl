@@ -472,7 +472,9 @@ if(NOT VCL_DEFINE_SPECIALIZATION)
   message(FATAL_ERROR "Compiler does not support ISO compatible template speicalization")
 endif()
 PERFORM_CMAKE_TEST(${VXL_PLFM_TEST_FILE} VCL_CANNOT_SPECIALIZE_CV)
-  SET_INVERT(VCL_CANNOT_SPECIALIZE_CV "${VCL_CANNOT_SPECIALIZE_CV}")
+if(NOT VCL_CANNOT_SPECIALIZE_CV)
+  message(FATAL_ERROR "Compiler does not support ISO separation of types based on const")
+endif()
 set(CMAKE_REQUIRED_FLAGS)
 
 # Check if Windows have wchar_t defined

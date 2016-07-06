@@ -32,12 +32,10 @@ class vnl_numeric_traits<vnl_rational>
   typedef double real_t;
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template <>
 class vnl_numeric_traits<vnl_rational const> : public vnl_numeric_traits<vnl_rational>
 {
 };
-#endif
 
 std::ostream& operator<<(std::ostream&, std::complex<vnl_rational>);
 
@@ -59,12 +57,10 @@ class vnl_numeric_traits<std::complex<vnl_rational> >
   typedef std::complex<vnl_rational> real_t; // should be std::complex<double>, but that gives casting problems
 };
 
-#if !VCL_CANNOT_SPECIALIZE_CV
 template <>
 class vnl_numeric_traits<std::complex<vnl_rational> const> : public vnl_numeric_traits<std::complex<vnl_rational> >
 {
 };
-#endif
 
 namespace vnl_math
 {

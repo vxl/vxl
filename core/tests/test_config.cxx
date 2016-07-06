@@ -86,14 +86,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_CANNOT_SPECIALIZE_CV ";
-#ifdef VCL_CANNOT_SPECIALIZE_CV
-  std::cout << "is set to " << quote(VCL_CANNOT_SPECIALIZE_CV);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_NULL_TMPL_ARGS ";
 #ifdef VCL_NULL_TMPL_ARGS
   std::cout << "is set to " << quote(VCL_NULL_TMPL_ARGS);
