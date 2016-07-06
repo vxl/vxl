@@ -762,9 +762,10 @@ bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
         if (nns.size() > 1) {
           double total_weight = 0.0;
           double disp = 0.0;
+          // turn distances into weights: inverse distance weighting
           for (std::map<double, double>::iterator iter = nns.begin(); iter != nns.end(); iter++) {
-            disp += iter->first*iter->second;
-            total_weight += iter->first;
+            total_weight += (1.0/iter->first);
+            disp += (1.0/iter->first)*iter->second;
           }
           disp = disp/total_weight;
           out_disparity_map(i,j) = disp;
