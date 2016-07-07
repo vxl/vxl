@@ -30,6 +30,7 @@ class betr_edgel_factory{
   }
   //: set parameters (same for all images and rois)
   void set_parameters(float sigma, float noise_multiplier, double gradient_range, unsigned nbins);
+  void set_parameters(float sigma, float noise_multiplier){params_.smooth = sigma; params_.noise_multiplier = noise_multiplier;}
   // add images and rois
   bool add_image(std::string const& iname, vil_image_resource_sptr const& imgr);
   bool add_region(std::string const& iname, std::string const& region_name, vsol_box_2d_sptr const& box);
