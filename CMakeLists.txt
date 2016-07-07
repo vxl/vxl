@@ -35,11 +35,14 @@ endif()
 if( POLICY CMP0063 )
   cmake_policy(SET CMP0063 NEW)
 endif()
+# Honor visibility properties for static libraries
+if( POLICY CMP0063 )
+  cmake_policy(SET CMP0063 NEW)
+endif()
 
 project(vxl)
 
 include(CMakeDependentOption)
-include(GenerateExportHeader)
 
 
 find_program( MEMORYCHECK_COMMAND valgrind )
@@ -88,6 +91,7 @@ set(VXL_ROOT_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(VXL_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR}/config/cmake/Modules)
 
 include( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
+include( ${VXL_CMAKE_DIR}/VXLGenerateExportHeader.cmake )
 include( ${CMAKE_CURRENT_LIST_DIR}/config/cmake/config/vxl_utils.cmake )
 include(${CMAKE_CURRENT_LIST_DIR}/config/cmake/doxygen/doxygen.cmake)
 

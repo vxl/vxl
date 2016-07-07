@@ -17,6 +17,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_bounding_box.h>
 #include <vgl/vgl_closest_point.h>
 #include "bvgl_k_nearest_neighbors_3d.h"
 template <class Type>
@@ -30,6 +31,7 @@ class bvgl_knn_index_3d{
   //: the point contained in the grid closest to p or optionally to the normal plane passing through the closest point
   bool closest_point(vgl_point_3d<Type> const& p, vgl_point_3d<Type>& pc) const;
   bool closest_point(vgl_point_3d<Type> const& p, vgl_point_3d<Type>& pc, Type& scalar) const;
+  bool closest_point(vgl_point_3d<Type> const& p, vgl_point_3d<Type>& pc, vgl_vector_3d<Type> &pcn, Type& scalar) const;
   //: the distance from p to the closest point or optionally its normal plane
   Type distance(vgl_point_3d<Type> const& p) const;
   Type distance(vgl_point_3d<Type> const& p, Type& scalar) const;
@@ -70,6 +72,14 @@ has_scalars_(true), thresh_(thresh), scalars_(scalars){
 //: the point contained in the grid closest to p or optionally to the normal plane passing through the closest point
 template <class Type>
 bool bvgl_knn_index_3d<Type>::closest_point(vgl_point_3d<Type> const& p, vgl_point_3d<Type>& pc, Type& scalar) const{
+  vgl_vector_3d<Type> pcn;
+  return closest_point(p, pc, pcn, scalar);
+}
+
+//: the point contained in the grid closest to p or optionally to the normal plane passing through the closest point
+template <class Type>
+bool bvgl_knn_index_3d<Type>::closest_point(vgl_point_3d<Type> const& p, vgl_point_3d<Type>& pc,
+                                            vgl_vector_3d<Type> &pcn, Type& scalar) const{
   scalar = 0.0;
   const vgl_pointset_3d<Type>& pst = knn_.const_ptset();
   if(!pst.npts())
@@ -83,8 +93,8 @@ bool bvgl_knn_index_3d<Type>::closest_point(vgl_point_3d<Type> const& p, vgl_poi
       scalar = scalars_[index];
     return true;
   }
-  vgl_vector_3d<double> nc = pst.n(index);
-  vgl_plane_3d<Type> pl(nc, pmin);
+  pcn = pst.n(index);
+  vgl_plane_3d<Type> pl(pcn, pmin);
   pc = vgl_closest_point(pl, p);
   if((pc-pmin).length()>thresh_)
     pc = pmin;

@@ -82,7 +82,7 @@ template <class T, unsigned int n>
 bool
 vnl_vector_fixed<T,n>::read_ascii(std::istream& s)
 {
-  for (unsigned i = 0; i < this->size(); ++i)
+  for (size_type i = 0; i < this->size(); ++i)
     s >> (*this)(i);
 
   return s.good() || s.eof();
@@ -114,6 +114,6 @@ vnl_vector_fixed<T,n>::print(std::ostream& s) const
 // since they appear in the .h file and are inline.
 
 #define VNL_VECTOR_FIXED_INSTANTIATE(T,n) \
-template class vnl_vector_fixed<T,n >
+template class VNL_EXPORT vnl_vector_fixed<T,n >
 
 #endif // vnl_vector_fixed_hxx_

@@ -38,7 +38,7 @@ class bvgl_k_nearest_neighbors_3d
   //: assignment operator
   bvgl_k_nearest_neighbors_3d& operator = (bvgl_k_nearest_neighbors_3d rhs)
   {
-    swap(*this, rhs);
+    this->swap(rhs);
     return *this;
   }
 
@@ -68,14 +68,13 @@ class bvgl_k_nearest_neighbors_3d
   }
 
   //: swap the two objects (used as part of "copy and swap" idiom)
-  friend void swap(bvgl_k_nearest_neighbors_3d<Type>& first,
-                   bvgl_k_nearest_neighbors_3d<Type>& second)
+  void swap(bvgl_k_nearest_neighbors_3d<Type>& other)
   {
-    std::swap(first.tolerance_, second.tolerance_);
-    std::swap(first.search_tree, second.search_tree_);
-    std::swap(first.M_, second.M_);
-    std::swap(first.ptset_, second.ptset_);
-    std::swap(first.flags_, second.flags_);
+    std::swap(this->tolerance_, other.tolerance_);
+    std::swap(this->M_, other.M_);
+    std::swap(this->ptset_, other.ptset_);
+    std::swap(this->flags_, other.flags_);
+    std::swap(this->search_tree_, other.search_tree_);
   }
 
   protected:
@@ -85,6 +84,14 @@ class bvgl_k_nearest_neighbors_3d
   vgl_pointset_3d<Type> ptset_;
   unsigned flags_;//control various actions during queries
 };
+
+template<class Type>
+void swap(bvgl_k_nearest_neighbors_3d<Type>& first,
+          bvgl_k_nearest_neighbors_3d<Type>& second)
+{
+  first.swap(second);
+}
+
 template <class Type>
 bool bvgl_k_nearest_neighbors_3d<Type>::create(){
   if(search_tree_){

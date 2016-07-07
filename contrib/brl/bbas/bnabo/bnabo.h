@@ -199,8 +199,8 @@ namespace Nabo
       //! a matrix of indices to data points
       typedef vnl_matrix<Index> IndexMatrix;
 
-      //! the reference to the data-point cloud, which must remain valid during the lifetime of the NearestNeighbourSearch object
-      const CloudType& cloud;
+      //! the data-point cloud
+      const CloudType cloud;
       //! the dimensionality of the data-point cloud
       const Index dim;
       //! creation options
