@@ -45,7 +45,7 @@ class imesh_vertex
 
 
 //: A 2d vertex specialization with extra capabilities
-VCL_DEFINE_SPECIALIZATION
+template <>
 class imesh_vertex<2>
 {
  public:
@@ -89,7 +89,7 @@ class imesh_vertex<2>
 
 
 //: A 3d vertex specialization with extra capabilities
-VCL_DEFINE_SPECIALIZATION
+template <>
 class imesh_vertex<3>
 {
  public:

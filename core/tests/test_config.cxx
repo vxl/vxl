@@ -23,49 +23,8 @@ void test_config()
 
   std::cout << "All macro definitions are shown inside parentheses\n";
 
-  std::cout << "VCL_HAS_BOOL ";
-#ifdef VCL_HAS_BOOL
-  std::cout << "is set to " << quote(VCL_HAS_BOOL);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_HAS_DYNAMIC_CAST ";
-#ifdef VCL_HAS_DYNAMIC_CAST
-  std::cout << "is set to " << quote(VCL_HAS_DYNAMIC_CAST);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_HAS_RTTI ";
-#ifdef VCL_HAS_RTTI
-  std::cout << "is set to " << quote(VCL_HAS_RTTI);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_HAS_TYPENAME ";
-#ifdef VCL_HAS_TYPENAME
-  std::cout << "is set to " << quote(VCL_HAS_TYPENAME);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_HAS_EXPORT ";
 #ifdef VCL_HAS_EXPORT
   std::cout << "is set to " << quote(VCL_HAS_EXPORT);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_HAS_MUTABLE ";
-#ifdef VCL_HAS_MUTABLE
-  std::cout << "is set to " << quote(VCL_HAS_MUTABLE);
 #else
   std::cout << "is not set";
 #endif
@@ -74,14 +33,6 @@ void test_config()
   std::cout << "VCL_HAS_EXPLICIT ";
 #ifdef VCL_HAS_EXPLICIT
   std::cout << "is set to " << quote(VCL_HAS_EXPLICIT);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_DEFAULT_VALUE(x) ";
-#ifdef VCL_DEFAULT_VALUE
-  std::cout << "is set to " << quote(VCL_DEFAULT_VALUE(x));
 #else
   std::cout << "is not set";
 #endif
@@ -119,14 +70,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_HAS_MEMBER_TEMPLATES ";
-#ifdef VCL_HAS_MEMBER_TEMPLATES
-  std::cout << "is set to " << quote(VCL_HAS_MEMBER_TEMPLATES);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_CAN_DO_PARTIAL_SPECIALIZATION ";
 #ifdef VCL_CAN_DO_PARTIAL_SPECIALIZATION
   std::cout << "is set to " << quote(VCL_CAN_DO_PARTIAL_SPECIALIZATION);
@@ -135,17 +78,9 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_DEFINE_SPECIALIZATION ";
-#ifdef VCL_DEFINE_SPECIALIZATION
-  std::cout << "is set to " << quote(VCL_DEFINE_SPECIALIZATION);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_CANNOT_SPECIALIZE_CV ";
-#ifdef VCL_CANNOT_SPECIALIZE_CV
-  std::cout << "is set to " << quote(VCL_CANNOT_SPECIALIZE_CV);
+  std::cout << "template <> ";
+#ifdef template <>
+  std::cout << "is set to " << quote(template <>);
 #else
   std::cout << "is not set";
 #endif
@@ -178,62 +113,6 @@ void test_config()
   std::cout << "VCL_DO_NOT_INSTANTIATE(text,ret) ";
 #ifdef VCL_DO_NOT_INSTANTIATE
   std::cout << "is set to " << quote(VCL_DO_NOT_INSTANTIATE(text,ret));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_UNINSTANTIATE_SPECIALIZATION(symbol) ";
-#ifdef VCL_UNINSTANTIATE_SPECIALIZATION
-  std::cout << "is set to " << quote(VCL_UNINSTANTIATE_SPECIALIZATION(symbol));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) ";
-#ifdef VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION
-  std::cout << "is set to " << quote(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_CAN_DO_STATIC_TEMPLATE_MEMBER ";
-#ifdef VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-  std::cout << "is set to " << quote(VCL_CAN_DO_STATIC_TEMPLATE_MEMBER);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) ";
-#ifdef VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER
-  std::cout << "is set to " << quote(VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) ";
-#ifdef VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER
-  std::cout << "is set to " << quote(VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER ";
-#ifdef VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
-  std::cout << "is set to " << quote(VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD ";
-#ifdef VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
-  std::cout << "is set to " << quote(VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD);
 #else
   std::cout << "is not set";
 #endif

@@ -62,7 +62,7 @@ struct check_types
 
 
 //: The base case: unknown pixel type
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct check_types<VIDL_PIXEL_FORMAT_UNKNOWN>
 {
   static inline

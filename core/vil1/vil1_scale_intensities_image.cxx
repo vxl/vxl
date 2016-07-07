@@ -28,7 +28,7 @@ template bool vil1_scale_intensities_image(vil1_image const& base, double scale,
 
 #undef VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB
 #define VIL1_SPECIALIZE_SCALE_INTENSITIES_IMAGE_RGB(T) \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 bool vil1_scale_intensities_image(vil1_image const& base, double scale, double shift, \
                                   vil1_rgb<T> *buf, int x0, int y0, int w, int h) \
 { \

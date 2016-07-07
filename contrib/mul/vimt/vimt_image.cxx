@@ -27,11 +27,7 @@ short vimt_image::version_no() const
 // to the same image data with equal step sizes, etc.
 bool vimt_image::operator==(const vimt_image &im) const
 {
-#if VCL_HAS_RTTI && VCL_CXX_HAS_HEADER_TYPEINFO
   if (typeid(*this) == typeid(im))
-#else
-  if (this->is_class(im.is_a()))
-#endif
     return equals(im);
   else
     return false;

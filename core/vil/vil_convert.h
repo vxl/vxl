@@ -102,16 +102,16 @@ class vil_convert_cast_pixel
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // deal with conversions from floating point types to/from some compounds
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<in, vil_rgb<out > >::operator () (in v, vil_rgb<out >& d) const \
 { d.r = d.g = d.b = (out)v; } \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<vil_rgb<out >, in >::operator () (vil_rgb<out > v, in& d) const \
 { d = (in)(0.2125*v.r+0.7154*v.g+0.0721*v.b); } \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<in, vil_rgba<out > >::operator () (in v, vil_rgba<out >& d) const \
 { d.r = d.g = d.b = (out)v; d.a=1; } \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<vil_rgba<out >, in >::operator () (vil_rgba<out > v, in& d) const \
 { d = (in)(0.2125*v.r+0.7154*v.g+0.0721*v.b); }
 macro( vxl_byte , vxl_byte )
@@ -155,7 +155,7 @@ macro( double , vxl_uint_64 )
 #endif
 #undef macro
 #define macro( inout )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<inout, inout >::operator () ( \
   inout v, inout& d) const { d=v; }
 macro( vxl_byte )
@@ -171,17 +171,17 @@ macro( vxl_int_64 )
 macro( float )
 macro( double )
 #undef macro
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vil_convert_cast_pixel<vil_rgb<vxl_byte>, vil_rgb<vxl_byte> >::operator () (
   vil_rgb<vxl_byte> v, vil_rgb<vxl_byte>& d) const { d.r=v.r, d.g=v.g, d.b=v.b; }
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vil_convert_cast_pixel<vil_rgba<vxl_byte>, vil_rgba<vxl_byte> >::operator () (
   vil_rgba<vxl_byte> v, vil_rgba<vxl_byte>& d) const { d.r=v.r, d.g=v.g, d.b=v.b, d.a=v.a; }
 #define macro( in )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<in,std::complex<double> >::operator () (in v, std::complex<double>& d) const \
 { d = std::complex<double>(double(v),0.0); } \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<in,std::complex<float> >::operator () (in v, std::complex<float>& d) const \
 { d = std::complex<float>(float(v),0.0f); }
 macro( vxl_byte )
@@ -196,10 +196,10 @@ macro( vxl_uint_64 )
 #endif
 #undef macro
 #define macro( out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<std::complex<double>,out >::operator () (std::complex<double> d, out& v) const \
 { v = (out)(d.real()); } \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<std::complex<float>,out >::operator () (std::complex<float> d, out& v) const \
 { v = (out)(d.real()); }
 macro( vxl_byte )
@@ -323,7 +323,7 @@ class vil_convert_round_pixel
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // deal with conversions from floating point types to some compounds
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () ( \
   in v, out& d) const { \
   d.r = (out::value_type)(v.r+0.5); \
@@ -350,7 +350,7 @@ macro( vil_rgb<double> , vil_rgb<vxl_uint_64> )
 #endif
 #undef macro
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
   const { \
   d.r = (out::value_type)(v.r); \
@@ -360,7 +360,7 @@ macro( vil_rgb<float> , vil_rgb<float> )
 macro( vil_rgb<double> , vil_rgb<double> )
 #undef macro
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
   const { \
   d.r = (out::value_type)(v.r+0.5); \
@@ -387,7 +387,7 @@ macro( vil_rgba<double> , vil_rgba<vxl_uint_64> )
 #endif
 #undef macro
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
   const { \
   d.r = (out::value_type)(v.r); \
@@ -399,7 +399,7 @@ macro( vil_rgba<double> , vil_rgba<double> )
 #undef macro
 
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
 const { d = (out)(v > 0.0 ? v + 0.5 : v - 0.5); }
 macro( float , vxl_byte )

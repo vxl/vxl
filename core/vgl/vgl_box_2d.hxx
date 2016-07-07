@@ -177,7 +177,7 @@ template <class T>
 inline void set_dim_2d(T & minv, T& maxv, T spread);
 
 // All this code is to avoid drift in the centroid.
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void set_dim_2d(int & minv, int& maxv, int spread)
 {
   int sum = minv + maxv;

@@ -31,14 +31,13 @@ struct vbl_quadruple
     , second(b)
     , third (c)
     , fourth(d) { }
-#if VCL_HAS_MEMBER_TEMPLATES
-  template <class U1, class U2, class U3, class U4>
+
+template <class U1, class U2, class U3, class U4>
   vbl_quadruple(vbl_quadruple<U1, U2, U3, U4> const &that)
     : first (that.first )
     , second(that.second)
     , third (that.third )
     , fourth(that.fourth) { }
-#endif
 };
 
 template <class T1, class T2, class T3, class T4>

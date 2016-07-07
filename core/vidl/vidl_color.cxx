@@ -25,7 +25,7 @@ struct func_ptr
 template <class T>
 struct type_index;
 #define vidl_type_index_mac(T,NUM)\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 struct type_index<T> \
 {\
 enum { index = NUM };\
@@ -79,7 +79,7 @@ struct table_init
 
 
 //: The base case
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct table_init<0>
 {
   static inline void populate(vidl_color_conv_fptr table[VIDL_PIXEL_COLOR_ENUM_END][VIDL_PIXEL_COLOR_ENUM_END]
@@ -116,7 +116,7 @@ struct type_table_init
 
 
 //: The base case
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct type_table_init<0>
 {
   static inline void populate(const std::type_info* type_table[num_types])

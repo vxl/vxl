@@ -150,7 +150,7 @@ struct vidl_pixel_traits
 template <class T>
 struct vidl_pixel_limits;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<vxl_byte>
 {
   static inline vxl_byte min() {return 0x00;}
@@ -158,7 +158,7 @@ struct vidl_pixel_limits<vxl_byte>
   static inline vxl_byte chroma_zero() {return 0x80;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<bool>
 {
   static inline bool min() {return false;}
@@ -167,7 +167,7 @@ struct vidl_pixel_limits<bool>
   static inline bool chroma_zero() {return false;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<vxl_uint_16>
 {
   static inline vxl_uint_16 min() {return 0x0000;}
@@ -175,7 +175,7 @@ struct vidl_pixel_limits<vxl_uint_16>
   static inline vxl_uint_16 chroma_zero() {return 0x8000;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<float>
 {
   static inline float min() {return 0.0f;}
@@ -183,7 +183,7 @@ struct vidl_pixel_limits<float>
   static inline float chroma_zero() {return 0.0f;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<double>
 {
   static inline double min() {return 0.0;}
@@ -197,7 +197,7 @@ struct vidl_pixel_limits<double>
 template <vidl_pixel_color color_type>
     struct vidl_color_traits_of;
 #define vidl_ct_mac(COL,NC)\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 struct vidl_color_traits_of<VIDL_PIXEL_COLOR_##COL> \
 {\
   enum { num_channels = NC }; \
@@ -221,7 +221,7 @@ vidl_ct_mac( YUV,      3 );
 template <vidl_pixel_format pix_type>
 struct vidl_pixel_traits_of;
 #define vidl_pt_mac(FMT,NAME,T,BPP,CLR,ARNG,XCS,YCS)\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 struct vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT> \
 {\
   static inline std::string name() { return NAME; }\
@@ -285,7 +285,7 @@ vidl_pt_mac( RGB_F32P, "RGB float 32P", vxl_ieee_32, 96,  RGB,     PLANAR,  0,  
 template <vidl_pixel_format pix_type>
 struct vidl_pixel_pack_of;
 #define vidl_pp_mac(FMT)\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 struct vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT> \
 {\
   enum { macro_pix_size = 1<<vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::chroma_shift_x }; \
