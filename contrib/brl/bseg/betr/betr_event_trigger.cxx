@@ -5,8 +5,8 @@
 #include <vsol/vsol_region_3d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
-#include <vsol_polygon_2d.h>
-#include <vsol_polygon_3d.h>
+#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polygon_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/bmsh3d_mesh_mc.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
@@ -14,6 +14,14 @@
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
+#include "betr_edgel_change_detection.h"
+#include "betr_algorithm.h"
+#include <vpgl/vpgl_camera.h>
+
+void betr_event_trigger::register_algorithms(){
+  betr_algorithm_sptr alg = new betr_edgel_change_detection();
+  algorithms_[alg->name()] = alg;
+}
 void betr_event_trigger::update_local_bounding_box(){
   if(global_bbox_.is_empty())
     return;
@@ -36,10 +44,27 @@ void betr_event_trigger::update_local_bounding_box(){
                         lx, ly, lz);
   local_bbox_->add_point(lx, ly, lz);
 }
+bool betr_event_trigger::add_geo_object(std::string const& name, double lon, double lat ,
+                                        double elev, std::string const& geom_path, bool is_ref_obj){
+    bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();
+  bool good = bmsh3d_load_ply(mesh, geom_path.c_str());
+  if(!good){
+    std::cout << "invalid bmesh3d ply file - " << geom_path << '\n';
+    return false;
+  }
+  vsol_mesh_3d* vmesh = new vsol_mesh_3d();
+  bmsh3d_mesh_mc* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
+  vmesh->set_mesh(mesh_mc);
+  vsol_spatial_object_3d_sptr so = vmesh;
+  vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
+  betr_geo_object_3d_sptr geo_obj = new betr_geo_object_3d(so, lvcs);
+  this->add_geo_object(name, geo_obj, is_ref_obj);
+  return true;
+}
 //The object in general will have a different lvcs from the event trigger origin
 //but assume that X and Y translations are just given in the tangent plane
 // That is tx = dlon_rads*Rearth, ty = dlat_rads*Rearth, tz is the elevation difference
-void betr_event_trigger::add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object){
+void betr_event_trigger::add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object, bool is_ref_obj){
   betr_geo_box_3d box = geo_object->bounding_box();
   global_bbox_.add(box);
   this->update_local_bounding_box();
@@ -55,15 +80,32 @@ void betr_event_trigger::add_geo_object(std::string const& obj_name, betr_geo_ob
   double ty = (obj_lon - trig_lon)*Rearth;
   double tz = obj_elev - trig_elev;
   vgl_vector_3d<double> transl(tx, ty, tz);
-  trigger_objects_[obj_name]=geo_object;
+  if(is_ref_obj)
+    ref_trigger_objects_[obj_name]=geo_object;
+  else
+    evt_trigger_objects_[obj_name] = geo_object;
   local_trans_[obj_name]=transl;
 }
 bool betr_event_trigger::project_object(std::string const& obj_name, vsol_polygon_2d_sptr& poly_2d){
-  //for now only handle the case where the object is a 3-d polygon
-  betr_geo_object_3d_sptr obj = trigger_objects_[obj_name];
-  if(!obj){
-    std::cout << "no geo object with name " << obj_name << '\n';
-    return false;
+  // determine if object is a reference or event object
+  std::map<std::string, betr_geo_object_3d_sptr>::iterator oit;
+  bool is_ref_obj = false;
+  oit = ref_trigger_objects_.find(obj_name);
+  is_ref_obj = oit != ref_trigger_objects_.end();
+
+  betr_geo_object_3d_sptr obj;
+  if(is_ref_obj){
+    obj = ref_trigger_objects_[obj_name];
+    if(!obj){
+      std::cout << "no ref geo object with name " << obj_name << '\n';
+      return false;
+    }
+  }else{
+    obj = evt_trigger_objects_[obj_name];
+    if(!obj){
+      std::cout << "no evt geo object with name " << obj_name << '\n';
+      return false;
+    }
   }
   vgl_vector_3d<double> transl = local_trans_[obj_name];
   vsol_spatial_object_3d_sptr so_ptr = obj->obj();
@@ -80,7 +122,10 @@ bool betr_event_trigger::project_object(std::string const& obj_name, vsol_polygo
         std::cout << "only handle polygonal regions for now " << obj_name << " is not a vsol_polygon_3d\n";
         return false;
       } 
-      poly_2d = project_poly(poly_3d, transl);
+      if(is_ref_obj)
+        poly_2d = project_poly(ref_camera_, poly_3d, transl);
+      else
+        poly_2d = project_poly(evt_camera_, poly_3d, transl);
       return true;
     }else if(vol_ptr = so_ptr->cast_to_volume()){
       vsol_mesh_3d* mesh_3d = vol_ptr->cast_to_mesh();
@@ -93,9 +138,14 @@ bool betr_event_trigger::project_object(std::string const& obj_name, vsol_polygo
       for(std::vector<vsol_point_3d_sptr>::iterator vit = verts.begin();
           vit != verts.end(); ++vit){
         double u = 0, v = 0;
-        lcam_.project((*vit)->x()+transl.x(),
-                      (*vit)->y()+transl.y(),
-                      (*vit)->z()+transl.z(), u, v);
+        if(is_ref_obj)
+          ref_camera_->project((*vit)->x()+transl.x(),
+                            (*vit)->y()+transl.y(),
+                            (*vit)->z()+transl.z(), u, v);
+        else
+          evt_camera_->project((*vit)->x()+transl.x(),
+                               (*vit)->y()+transl.y(),
+                               (*vit)->z()+transl.z(), u, v);
         pts_2d.push_back(vgl_point_2d<double>(u, v));
       }
       vgl_convex_hull_2d<double> conv_hull(pts_2d);
@@ -110,7 +160,8 @@ bool betr_event_trigger::project_object(std::string const& obj_name, vsol_polygo
   }
  return false;
 }
-vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vsol_polygon_3d_sptr poly_3d,
+vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vpgl_camera_double_sptr const& camera,
+                                                       vsol_polygon_3d_sptr poly_3d,
                                                        vgl_vector_3d<double> const& transl){
  std::vector<vsol_point_2d_sptr> vertices;
   for (unsigned i=0; i<poly_3d->size(); i++) {
@@ -122,14 +173,61 @@ vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vsol_polygon_3d_sptr poly
                            poly_3d->vertex(i)->y(),
                            poly_3d->vertex(i)->z());
     p += transl;
-    lcam_.project(p.x(), p.y(), p.z(), u,v);
+    camera->project(p.x(), p.y(), p.z(), u,v);
     vsol_point_2d_sptr vp = new vsol_point_2d(u,v);
     vertices.push_back(vp);
   }
   vsol_polygon_2d_sptr poly_2d = new vsol_polygon_2d (vertices);
   return poly_2d;
 }
+bool betr_event_trigger::process(std::string alg_name, double& prob_change){
+  betr_algorithm_sptr alg = algorithms_[alg_name];
+  if(!alg){
+    std::cout <<"algorithm " << alg_name << " does not exist\n";
+    return false;
+  }
+  alg->clear();
+  if(!ref_imgr_ || !evt_imgr_ ){
+    std::cout << "reference or event image not set\n";
+      return false;
+  }
+  alg->set_reference_image(ref_imgr_);
+  alg->set_event_image(evt_imgr_);
 
+  // for now only one event object and one ref object
+  if(evt_trigger_objects_.size() != 1 && ref_trigger_objects_.size() != 1 ){
+    std::cout << "for now only one ref object and one evt object\n";
+    return false;
+  } 
+  std::map<std::string, betr_geo_object_3d_sptr>::iterator oit = ref_trigger_objects_.begin();
+  std::string ref_obj_name = oit->first;
+  oit = evt_trigger_objects_.begin();
+  std::string evt_obj_name = oit->first;
+  // project the objects
+  vsol_polygon_2d_sptr ref_poly, evt_poly;
+  if(!this->project_object(ref_obj_name, ref_poly)){
+    return false;
+  }
+  if(!this->project_object(evt_obj_name, evt_poly)){
+    return false;
+  }
+  alg->set_proj_ref_object(ref_poly);
+  alg->set_proj_evt_object(evt_poly);
+  if(!alg->process()){
+    prob_change = 0.0;
+    return false;
+  }
+  prob_change = alg->prob_change();
+  return true;
+}
+std::vector<std::string> betr_event_trigger::algorithms() const{
+  std::vector<std::string> ret;
+  std::map<std::string, betr_algorithm_sptr>::const_iterator ait = algorithms_.begin();
+  for(;ait!=algorithms_.end(); ++ait)
+    ret.push_back(ait->first);
+  return ret;
+}
+/// to support process database
 //: Binary write boxm2_event_trigger to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, betr_event_trigger const& /*bit_event_trigger*/) {}
 //: Binary write betr_event_trigger pointer to stream

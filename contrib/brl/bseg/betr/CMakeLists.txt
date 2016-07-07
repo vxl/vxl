@@ -13,7 +13,10 @@ set(betr_sources
  betr_site.h         betr_site.cxx
  betr_edgel_factory.h  betr_edgel_factory.cxx
  betr_event_trigger.h  betr_event_trigger.cxx
- betr_io.h           betr_io.cxx
+ betr_io.h             betr_io.cxx
+ betr_algorithm.h      betr_algorithm.cxx betr_algorithm_sptr.h
+ betr_edgel_change_detection.h  betr_edgel_change_detection.cxx
+
 )
 aux_source_directory(Templates betr_sources)
 

@@ -15,43 +15,72 @@
 #include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_ref_count.h>
+#include <vil/vil_image_resource_sptr.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include "betr_geo_box_3d.h"
 #include "betr_geo_object_3d.h"
 #include "betr_event_trigger_sptr.h"
 #include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
+#include "betr_algorithm.h"
 class betr_event_trigger : public vbl_ref_count{
  public:
- betr_event_trigger():lvcs_valid_(false), local_bbox_(VXL_NULLPTR){}
+  betr_event_trigger(): name_("no_name"), lvcs_valid_(false), local_bbox_(VXL_NULLPTR){register_algorithms();}
 
- betr_event_trigger(vpgl_lvcs const& lvcs): lvcs_(lvcs), lvcs_valid_(true), local_bbox_(VXL_NULLPTR){
+  betr_event_trigger(vpgl_lvcs const& lvcs): name_("no_name"), lvcs_(lvcs), lvcs_valid_(true), local_bbox_(VXL_NULLPTR){
+    register_algorithms();
   }
- betr_event_trigger(vpgl_lvcs const& lvcs, vpgl_local_rational_camera<double> const& lcam):
-  lvcs_(lvcs), lvcs_valid_(true), lcam_(lcam), local_bbox_(VXL_NULLPTR){
+  betr_event_trigger(std::string const& name, vpgl_lvcs const& lvcs): name_(name), lvcs_(lvcs), lvcs_valid_(true), local_bbox_(VXL_NULLPTR){
+    register_algorithms();
   }
   void set_lvcs(vpgl_lvcs const& lvcs){lvcs_=lvcs; lvcs_valid_=true;}
-  void set_local_rat_cam(vpgl_local_rational_camera<double> const& lcam){lcam_ = lcam;}
+  void set_ref_image(vil_image_resource_sptr ref_imgr){ref_imgr_ = ref_imgr;}
+  void set_evt_image(vil_image_resource_sptr evt_imgr){evt_imgr_ = evt_imgr;}
+  void set_ref_camera(vpgl_camera_double_sptr const& camera){ref_camera_ = camera;}
+  void set_evt_camera(vpgl_camera_double_sptr const& camera){evt_camera_ = camera;}
+
   // Add object and find translation vector from trigger origin to object origin.
-  void add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object);
+  void add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object, bool is_ref_obj);
+  bool add_geo_object(std::string const& name, double lon, double lat ,
+                      double elev, std::string const& geom_path, bool is_ref_obj);
+  //: execute change algorithm
+  bool process(std::string alg_name, double& prob_change);
+
+  //: acessors
+  std::string name() const {return name_;}
+  const std::map<std::string, betr_geo_object_3d_sptr>& ref_objects() const {return ref_trigger_objects_;}
+  const std::map<std::string, betr_geo_object_3d_sptr>& evt_objects() const {return evt_trigger_objects_;}
+  vpgl_lvcs lvcs() const {return lvcs_;}
+  std::vector<std::string> algorithms() const;
+
+  //utilities
   //: projected 2-d polygon for the 3-d trigger object
   bool project_object(std::string const& obj_name, vsol_polygon_2d_sptr& poly);
+
  private:
   void update_local_bounding_box();
-  vsol_polygon_2d_sptr project_poly(vsol_polygon_3d_sptr poly_3d,
+  vsol_polygon_2d_sptr project_poly(vpgl_camera_double_sptr const& camera,
+                                    vsol_polygon_3d_sptr poly_3d,
                                     vgl_vector_3d<double> const& transl);
+  void register_algorithms();
+  std::string name_;
   vpgl_lvcs lvcs_;
   bool lvcs_valid_;
   betr_geo_box_3d global_bbox_;//trigger bounding box in global WGS84
   vsol_box_3d_sptr local_bbox_;//trigger bounding box in local Cartesian coordinates
-  vpgl_local_rational_camera<double> lcam_;//camera for entire trigger region
-  std::map<std::string, betr_geo_object_3d_sptr> trigger_objects_;
+  vil_image_resource_sptr ref_imgr_; //ref image resouce
+  vil_image_resource_sptr evt_imgr_; //event image resouce
+  vpgl_camera_double_sptr ref_camera_;// ref image camera for entire trigger region
+  vpgl_camera_double_sptr evt_camera_;// evt image camera for entire trigger region
+  std::map<std::string, betr_geo_object_3d_sptr> evt_trigger_objects_;
+  std::map<std::string, betr_geo_object_3d_sptr> ref_trigger_objects_;
   std::map<std::string, vgl_vector_3d<double> > local_trans_;//translation to each object
+  std::map<std::string, betr_algorithm_sptr> algorithms_;//available change algorithms
 };
 #endif //guard
 //: Binary write boxm2_scene scene to stream

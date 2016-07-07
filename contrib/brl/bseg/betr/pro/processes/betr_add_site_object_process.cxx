@@ -1,11 +1,11 @@
-// This is brl/bseg/betr/pro/processes/betr_create_site_process.cxx
+// This is brl/bseg/betr/pro/processes/betr_add_site_object_process.cxx
 #include <iostream>
 #include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <vcl_string.h>
 //:
 // \file
-// \brief  A process for adding an event object to a site
+// \brief  A process for adding an site object to a site
 //
 
 
@@ -13,15 +13,15 @@
 #include <betr/betr_site.h>
 #include <vgl/vgl_point_3d.h>
 
-namespace betr_add_event_object_process_globals
+namespace betr_add_site_object_process_globals
 {
   const unsigned n_inputs_  = 6;
   const unsigned n_outputs_ = 0;
 }
 
-bool betr_add_event_object_process_cons(bprb_func_process& pro)
+bool betr_add_site_object_process_cons(bprb_func_process& pro)
 {
-  using namespace betr_add_event_object_process_globals;
+  using namespace betr_add_site_object_process_globals;
 
   //process takes 1 input
   std::vector<std::string> input_types_(n_inputs_);
@@ -36,9 +36,9 @@ bool betr_add_event_object_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-bool betr_add_event_object_process(bprb_func_process& pro)
+bool betr_add_site_object_process(bprb_func_process& pro)
 {
-  using namespace betr_add_event_object_process_globals;
+  using namespace betr_add_site_object_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
     std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
