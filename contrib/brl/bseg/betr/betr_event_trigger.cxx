@@ -5,8 +5,8 @@
 #include <vsol/vsol_region_3d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
-#include <vsol_polygon_2d.h>
-#include <vsol_polygon_3d.h>
+#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polygon_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/bmsh3d_mesh_mc.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>

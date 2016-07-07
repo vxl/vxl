@@ -33,7 +33,7 @@ if( PYTHON_FOUND )
 
       set_target_properties(betr_batch PROPERTIES PREFIX "")
 
-      target_link_libraries(betr_batch betr betr_pro vpgl_pro vil_pro brip_pro sdet_pro brad_pro brad_io bprb brdb bpro_batch)
+      target_link_libraries(betr_batch betr_pro vpgl_pro vil_pro brip_pro sdet_pro brad_pro brad_io bprb brdb bpro_batch)
 
       if(PYTHON_DEBUG_LIBRARIES)
         target_link_libraries( betr_batch debug ${PYTHON_DEBUG_LIBRARY})
