@@ -56,22 +56,25 @@ bool vil_tiff_file_format_probe(vil_stream* is)
     return false;
 
   // First two bytes specify the file byte-order (0x4D4D=big, 0x4949=little).
-  // Second two bytes specify the TIFF version (we expect 0x2A for some reason?).
+  // Second two bytes specify the TIFF version (we expect 0x2A for tiff and 0x2B for bigtiff).
+  // For information about BigTIFF refers to http://www.remotesensing.org/libtiff/bigtiffdesign.html
   // So,
-  //   0x4D 0x4D 0x2A 0x00
+  //   0x4D 0x4D 0x00 0x2A
 
   // and
-  //   0x49 0x49 0x00 0x2A
+  //   0x49 0x49 0x2A 0x00
+  // or
+  //   0x49 0x49 0x2B 0x00
   // are invalid TIFF headers.
   if (hdr[0]==0x4D && hdr[1]==0x4D &&
-      hdr[2]==0x00 && hdr[3]==0x2A)
+      hdr[2]==0x00 && (hdr[3]==0x2A || hdr[3] == 0x2B) )
     return true;
 
   else if (hdr[0]==0x49 && hdr[1]==0x49 &&
-           hdr[2]==0x2A && hdr[3]==0x00)
+           (hdr[2]==0x2A || hdr[2] == 0x2B) && hdr[3]==0x00)
     return true;
 
-  else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[1]==0x49 && hdr[1]==0x49)) &&
+  else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[0]==0x49 && hdr[1]==0x49)) &&
             ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) )  {
     std::cerr << __FILE__ ": suspicious TIFF header\n";
     return true; // allow it.
