@@ -147,7 +147,7 @@ bool brad_image_metadata::parse_from_imd(std::string const& filename)
     if (tag.compare("productType") == 0) {
       linestr >> tag;
       linestr >> tag;
-      if (tag.find("Basic") == std::string::npos)
+      if (tag.find("Basic") == std::string::npos && tag.find("Stereo") == std::string::npos)
         return false;
     }
     if (tag.compare("meanProductGSD") == 0 || tag.compare("meanCollectedGSD") == 0) {
@@ -288,7 +288,7 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
     if (tag.compare("productType") == 0) {
       linestr >> tag;
       linestr >> tag;
-      if (tag.find("Basic") == std::string::npos)
+      if (tag.find("Basic") == std::string::npos && tag.find("Stereo") == std::string::npos)
         return false;
     }
     // GSD
