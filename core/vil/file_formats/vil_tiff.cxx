@@ -316,7 +316,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
   tss->filesize = 0;
   vcl_string mode("w");
   vxl_uint_64 size_needed = vxl_uint_64(nx) * vxl_uint_64(ny) * vxl_uint_64(nplanes) * vil_pixel_format_sizeof_components(format) * vil_pixel_format_num_components(format);
-  bool const bigtiff_needed = size_needed >= vxl_uint_64(0xFFFFFFFF);
+  bool const bigtiff_needed = size_needed >= vxl_uint_64(0x7FFFFFFF);
   if (bigtiff_needed)
     mode += '8';   // enable bigtiff
   tss->tif = open_tiff(tss, mode.c_str());
