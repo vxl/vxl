@@ -409,6 +409,19 @@ bool vil_tiff_image::get_property(char const * tag, void * value) const
 
   return false;
 }
+
+bool vil_tiff_image::set_compression_method(compression_methods cm)
+{
+  TIFF* const tif = t_.tif();
+  if (tif)
+  {
+    int status = TIFFSetField(tif, TIFFTAG_COMPRESSION, int(cm));
+    return bool(status);
+  }
+  else
+    return false;
+}
+
 #if HAS_GEOTIFF
 vil_geotiff_header* vil_tiff_image::get_geotiff_header()
 {

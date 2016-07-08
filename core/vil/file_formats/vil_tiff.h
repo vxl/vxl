@@ -151,7 +151,25 @@ class vil_tiff_image : public vil_blocked_image_resource
 {
   friend class vil_tiff_file_format;
  public:
-
+  enum compression_methods
+  {
+    // the enum value must correspond to COMPRESSION_* constants defined in tiff.h.
+    // and has the same integer value.  For instance,  NONE corresponds to COMPRESSION_NONE
+    NONE = 1,             /* dump mode */
+    LZW = 5,             /* Lempel-Ziv  & Welch */
+    OJPEG = 6,           /* !6.0 JPEG */
+    JPEG = 7,            /* %JPEG DCT compression */
+    PACKBITS = 32773,    /* Macintosh RLE */
+    THUNDERSCAN = 32809, /* ThunderScan RLE */
+    PIXARFILM =32908,    /* Pixar companded 10bit LZW */
+    PIXARLOG = 32909,    /* Pixar companded 11bit ZIP */
+    DEFLATE = 32946,     /* Deflate compression */
+    ADOBE_DEFLATE = 8,   /* Deflate compression,
+                                as recognized by Adobe */
+    JP2000 =  34712,     /* Leadtools JPEG2000 */
+    LZMA =  34925        /* LZMA2 */
+  };
+ public:
   vil_tiff_image(tif_smart_ptr const& tif,
                  vil_tiff_header* th, const unsigned nimages = 1);
 
@@ -202,6 +220,8 @@ class vil_tiff_image : public vil_blocked_image_resource
 
   virtual bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
 
+  bool set_compression_method(compression_methods cm);
+
 #if HAS_GEOTIFF
   //* returns null if the tiff file does not include any geotiff tags
   vil_geotiff_header* get_geotiff_header();
@@ -218,7 +238,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   void set_index(const unsigned int index)
     {assert(index<nimages_); index_=index;}
   //: Get a smart pointer to opentiff object
-  tif_smart_ptr const& tiff() const 
+  tif_smart_ptr const& tiff() const
   {
     return t_;
   }
