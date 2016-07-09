@@ -56,22 +56,25 @@ bool vil_tiff_file_format_probe(vil_stream* is)
     return false;
 
   // First two bytes specify the file byte-order (0x4D4D=big, 0x4949=little).
-  // Second two bytes specify the TIFF version (we expect 0x2A for some reason?).
+  // Second two bytes specify the TIFF version (we expect 0x2A for tiff and 0x2B for bigtiff).
+  // For information about BigTIFF refers to http://www.remotesensing.org/libtiff/bigtiffdesign.html
   // So,
-  //   0x4D 0x4D 0x2A 0x00
+  //   0x4D 0x4D 0x00 0x2A
 
   // and
-  //   0x49 0x49 0x00 0x2A
+  //   0x49 0x49 0x2A 0x00
+  // or
+  //   0x49 0x49 0x2B 0x00
   // are invalid TIFF headers.
   if (hdr[0]==0x4D && hdr[1]==0x4D &&
-      hdr[2]==0x00 && hdr[3]==0x2A)
+      hdr[2]==0x00 && (hdr[3]==0x2A || hdr[3] == 0x2B) )
     return true;
 
   else if (hdr[0]==0x49 && hdr[1]==0x49 &&
-           hdr[2]==0x2A && hdr[3]==0x00)
+           (hdr[2]==0x2A || hdr[2] == 0x2B) && hdr[3]==0x00)
     return true;
 
-  else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[1]==0x49 && hdr[1]==0x49)) &&
+  else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[0]==0x49 && hdr[1]==0x49)) &&
             ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) )  {
     std::cerr << __FILE__ ": suspicious TIFF header\n";
     return true; // allow it.
@@ -311,7 +314,12 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
 
   tif_stream_structures* tss = new tif_stream_structures(vs);
   tss->filesize = 0;
-  tss->tif = open_tiff(tss, "w");
+  vcl_string mode("w");
+  vxl_uint_64 size_needed = vxl_uint_64(nx) * vxl_uint_64(ny) * vxl_uint_64(nplanes) * vil_pixel_format_sizeof_components(format) * vil_pixel_format_num_components(format);
+  bool const bigtiff_needed = size_needed >= vxl_uint_64(0x7FFFFFFF);
+  if (bigtiff_needed)
+    mode += '8';   // enable bigtiff
+  tss->tif = open_tiff(tss, mode.c_str());
   if (!tss->tif)
     return VXL_NULLPTR;
 
@@ -401,6 +409,19 @@ bool vil_tiff_image::get_property(char const * tag, void * value) const
 
   return false;
 }
+
+bool vil_tiff_image::set_compression_method(compression_methods cm)
+{
+  TIFF* const tif = t_.tif();
+  if (tif)
+  {
+    int status = TIFFSetField(tif, TIFFTAG_COMPRESSION, int(cm));
+    return bool(status);
+  }
+  else
+    return false;
+}
+
 #if HAS_GEOTIFF
 vil_geotiff_header* vil_tiff_image::get_geotiff_header()
 {
