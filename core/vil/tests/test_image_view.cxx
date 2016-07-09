@@ -23,7 +23,7 @@ void test_image_view_rgba(vil_image_view<S> & /*image2*/, vil_image_view<T> & /*
   // do nothing in general case
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float> &image7)
 {
   image2.set_size(10,10,2);
@@ -68,7 +68,7 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
   vil_print_all(std::cout, image7);
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> &image7)
 {
   image2.set_size(10,10,2);
@@ -575,12 +575,12 @@ class my_int
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<my_int> &,
                                            const vil_image_view_base &)
 { return false; }  // when lhs has scalar pixels, don't attempt conversion
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_print_value(std::ostream& os, const my_int& v, unsigned)
 { os<<double(v); }
 

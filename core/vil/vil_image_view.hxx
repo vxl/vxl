@@ -203,59 +203,59 @@ inline bool convert_components_from_planes(vil_image_view<T> &lhs,
 }
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<float> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}  // when lhs has scalar pixels, don't attempt conversion
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<double> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<bool> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<vxl_sbyte> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<vxl_byte> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<vxl_int_16> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<vxl_uint_16> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<vxl_int_32> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<vxl_uint_32> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
 #if VXL_HAS_INT_64
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<vxl_int_64> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<vxl_uint_64> & /*lhs*/,
                                            const vil_image_view_base & /*rhs_base*/)
 {return false;}
@@ -268,7 +268,7 @@ inline bool convert_planes_from_components(vil_image_view<T> & /*lhs*/,
                                            const vil_image_view_base & /*rhs*/)
 { return false;} // when lhs has non-scalar pixels, don't attempt conversion
 // except for the following typical cases
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vil_rgb<vxl_byte> > & lhs,
                                            const vil_image_view_base & rhs)
 {
@@ -286,7 +286,7 @@ inline bool convert_planes_from_components(vil_image_view<vil_rgb<vxl_byte> > & 
   return true;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vil_rgba<vxl_uint_16> > & lhs,
                                            const vil_image_view_base & rhs)
 {
@@ -305,7 +305,7 @@ inline bool convert_planes_from_components(vil_image_view<vil_rgba<vxl_uint_16> 
  return true;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vxl_byte> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -329,7 +329,7 @@ inline bool convert_planes_from_components(vil_image_view<vxl_byte> &lhs,
     return false;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vxl_sbyte> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -353,7 +353,7 @@ inline bool convert_planes_from_components(vil_image_view<vxl_sbyte> &lhs,
     return false;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vxl_uint_16> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -377,7 +377,7 @@ inline bool convert_planes_from_components(vil_image_view<vxl_uint_16> &lhs,
     return false;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vxl_int_16> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -401,7 +401,7 @@ inline bool convert_planes_from_components(vil_image_view<vxl_int_16> &lhs,
     return false;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vxl_uint_32> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -425,7 +425,7 @@ inline bool convert_planes_from_components(vil_image_view<vxl_uint_32> &lhs,
     return false;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vxl_int_32> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -451,7 +451,7 @@ inline bool convert_planes_from_components(vil_image_view<vxl_int_32> &lhs,
 
 #if VXL_HAS_INT_64
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vxl_uint_64> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -475,7 +475,7 @@ inline bool convert_planes_from_components(vil_image_view<vxl_uint_64> &lhs,
     return false;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<vxl_int_64> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -501,7 +501,7 @@ inline bool convert_planes_from_components(vil_image_view<vxl_int_64> &lhs,
 
 #endif // VXL_HAS_INT_64
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<float> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -525,7 +525,7 @@ inline bool convert_planes_from_components(vil_image_view<float> &lhs,
     return false;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_planes_from_components(vil_image_view<double> &lhs,
                                            const vil_image_view_base &rhs_base)
 {
@@ -882,7 +882,7 @@ std::string vil_image_view<T>::is_a() const
 }
 
 #define VIL_IMAGE_VIEW_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string vil_image_view_type_name(T*) \
+template <> std::string vil_image_view_type_name(T*) \
 { return std::string("vil_image_view<" #T ">"); } \
 template class vil_image_view<T >; \
 template bool vil_image_view_deep_equality(const vil_image_view<T >&, \

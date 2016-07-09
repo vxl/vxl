@@ -157,7 +157,7 @@ bool mbl_data_wrapper_mixer<T>::is_class(std::string const& s) const
 
 #undef MBL_DATA_WRAPPER_MIXER_INSTANTIATE
 #define MBL_DATA_WRAPPER_MIXER_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string mbl_data_wrapper_mixer<T >::is_a() const \
+template <> std::string mbl_data_wrapper_mixer<T >::is_a() const \
 { return std::string("mbl_data_wrapper_mixer<" #T ">"); } \
 template class mbl_data_wrapper_mixer< T >
 

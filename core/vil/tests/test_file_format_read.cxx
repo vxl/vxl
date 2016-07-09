@@ -208,7 +208,7 @@ read_value( std::istream& fin, TruePixelType& pix )
 
 // Specialization to make char read as small integers and not characters
 // See comments on template for return value.
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool
 read_value( std::istream& fin, char& pix )
 {
@@ -222,7 +222,7 @@ read_value( std::istream& fin, char& pix )
 
 // Specialization to make char read as small integers and not characters
 // See comments on template for return value.
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool
 read_value( std::istream& fin, unsigned char& pix )
 {
@@ -236,7 +236,7 @@ read_value( std::istream& fin, unsigned char& pix )
 
 // Specialization to make char read as small integers and not characters
 // See comments on template for return value.
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool
 read_value( std::istream& fin, signed char& pix )
 {
@@ -249,7 +249,7 @@ read_value( std::istream& fin, signed char& pix )
 
 // Specialization to make bool read as 0/1 integers
 // See comments on template for return value.
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool
 read_value( std::istream& fin, bool& pix )
 {

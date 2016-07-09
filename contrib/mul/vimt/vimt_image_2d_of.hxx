@@ -132,7 +132,7 @@ bool vimt_image_2d_of<T>::operator==(const vimt_image_2d_of<T> &other) const
 }
 
 #define VIMT_IMAGE_2D_OF_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string vimt_image_2d_of<T >::is_a() const \
+template <> std::string vimt_image_2d_of<T >::is_a() const \
 { return std::string("vimt_image_2d_of<" #T ">"); }\
 template class vimt_image_2d_of<T >
 

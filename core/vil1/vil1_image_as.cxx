@@ -254,7 +254,7 @@ template bool convert_rgba_to_rgb( const vil1_image&, void*, int, int, int, int,
 
 //--------------------------------------------------------------------------------
 
-VCL_DEFINE_SPECIALIZATION // specialize for byte.
+template <> // specialize for byte.
 bool vil1_image_as_impl<vxl_byte>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
   typedef vxl_byte Outtype;
@@ -288,14 +288,14 @@ bool vil1_image_as_impl<vxl_byte>::get_section(void *buf, int x0, int y0, int wi
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::string vil1_image_as_impl<vxl_byte>::is_a() const
 {
   static const std::string class_name_="vil1_image_as_impl<vxl_byte>";
   return class_name_;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool vil1_image_as_impl<vxl_byte>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vxl_byte>::is_a() || vil1_image_impl::is_class(s);
@@ -309,7 +309,7 @@ vil1_image vil1_image_as_byte(vil1_image const &image)
   return vil1_image(new vil1_image_as_impl<vxl_byte>(image));
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 vil1_image vil1_image_as(vil1_image const &image, vxl_byte*)
 {
   return vil1_image(new vil1_image_as_impl<vxl_byte>(image));
@@ -317,7 +317,7 @@ vil1_image vil1_image_as(vil1_image const &image, vxl_byte*)
 
 //--------------------------------------------------------------------------------
 
-VCL_DEFINE_SPECIALIZATION // specialize for vxl_uint_16.
+template <> // specialize for vxl_uint_16.
 bool vil1_image_as_impl<vxl_uint_16>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
   typedef vxl_uint_16 Outtype;
@@ -349,14 +349,14 @@ bool vil1_image_as_impl<vxl_uint_16>::get_section(void *buf, int x0, int y0, int
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::string vil1_image_as_impl<vxl_uint_16>::is_a() const
 {
   static const std::string class_name_="vil1_image_as_impl<vxl_uint_16>";
   return class_name_;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool vil1_image_as_impl<vxl_uint_16>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vxl_uint_16>::is_a() || vil1_image_impl::is_class(s);
@@ -370,7 +370,7 @@ vil1_image vil1_image_as_uint16(vil1_image const &image)
   return vil1_image(new vil1_image_as_impl<vxl_uint_16>(image));
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 vil1_image vil1_image_as(vil1_image const &image, vxl_uint_16*)
 {
   return vil1_image(new vil1_image_as_impl<vxl_uint_16>(image));
@@ -379,7 +379,7 @@ vil1_image vil1_image_as(vil1_image const &image, vxl_uint_16*)
 
 //--------------------------------------------------------------------------------
 
-VCL_DEFINE_SPECIALIZATION // specialize for int.
+template <> // specialize for int.
 bool vil1_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
   typedef int Outtype;
@@ -411,14 +411,14 @@ bool vil1_image_as_impl<int>::get_section(void *buf, int x0, int y0, int width, 
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::string vil1_image_as_impl<int>::is_a() const
 {
   static const std::string class_name_="vil1_image_as_impl<int>";
   return class_name_;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool vil1_image_as_impl<int>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<int>::is_a() || vil1_image_impl::is_class(s);
@@ -432,7 +432,7 @@ vil1_image vil1_image_as_int(vil1_image const &image)
   return vil1_image(new vil1_image_as_impl<int>(image));
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 vil1_image vil1_image_as(vil1_image const &image, int*)
 {
   return vil1_image(new vil1_image_as_impl<int>(image));
@@ -440,7 +440,7 @@ vil1_image vil1_image_as(vil1_image const &image, int*)
 
 //--------------------------------------------------------------------------------
 
-VCL_DEFINE_SPECIALIZATION // specialize for float.
+template <> // specialize for float.
 bool vil1_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
   typedef float Outtype;
@@ -472,14 +472,14 @@ bool vil1_image_as_impl<float>::get_section(void *buf, int x0, int y0, int width
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::string vil1_image_as_impl<float>::is_a() const
 {
   static const std::string class_name_="vil1_image_as_impl<float>";
   return class_name_;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool vil1_image_as_impl<float>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<float>::is_a() || vil1_image_impl::is_class(s);
@@ -493,7 +493,7 @@ vil1_image vil1_image_as_float(vil1_image const &image)
   return vil1_image(new vil1_image_as_impl<float>(image));
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 vil1_image vil1_image_as(vil1_image const &image, float*)
 {
   return vil1_image(new vil1_image_as_impl<float>(image));
@@ -501,7 +501,7 @@ vil1_image vil1_image_as(vil1_image const &image, float*)
 
 //--------------------------------------------------------------------------------
 
-VCL_DEFINE_SPECIALIZATION // specialize for double.
+template <> // specialize for double.
 bool vil1_image_as_impl<double>::get_section(void *buf, int x0, int y0, int width, int height) const
 {
   typedef double Outtype;
@@ -533,14 +533,14 @@ bool vil1_image_as_impl<double>::get_section(void *buf, int x0, int y0, int widt
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::string vil1_image_as_impl<double>::is_a() const
 {
   static const std::string class_name_="vil1_image_as_impl<double>";
   return class_name_;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool vil1_image_as_impl<double>::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<double>::is_a() || vil1_image_impl::is_class(s);
@@ -554,7 +554,7 @@ vil1_image vil1_image_as_double(vil1_image const &image)
   return vil1_image(new vil1_image_as_impl<double>(image));
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 vil1_image vil1_image_as(vil1_image const &image, double*)
 {
   return vil1_image(new vil1_image_as_impl<double>(image));
@@ -562,7 +562,7 @@ vil1_image vil1_image_as(vil1_image const &image, double*)
 
 //--------------------------------------------------------------------------------
 
-VCL_DEFINE_SPECIALIZATION // specialize for rgb.
+template <> // specialize for rgb.
 bool vil1_image_as_impl<vil1_rgb<unsigned char> >::get_section(void *buf,
                                                                int x0, int y0,
                                                                int width, int height) const
@@ -598,14 +598,14 @@ bool vil1_image_as_impl<vil1_rgb<unsigned char> >::get_section(void *buf,
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::string vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() const
 {
   static const std::string class_name_="vil1_image_as_impl<vil1_rgb<unsigned char> >";
   return class_name_;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool vil1_image_as_impl<vil1_rgb<unsigned char> >::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vil1_rgb<unsigned char> >::is_a() || vil1_image_impl::is_class(s);
@@ -619,7 +619,7 @@ vil1_image vil1_image_as_rgb_byte(vil1_image const &image)
   return vil1_image(new vil1_image_as_impl<vil1_rgb<unsigned char> >(image));
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<vxl_byte>*)
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_byte> >(image));
@@ -627,7 +627,7 @@ vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<vxl_byte>*)
 
 //--------------------------------------------------------------------------------
 
-VCL_DEFINE_SPECIALIZATION // specialize for rgb float.
+template <> // specialize for rgb float.
 bool vil1_image_as_impl<vil1_rgb<float> >::get_section(void *buf,
                                                        int x0, int y0,
                                                        int width, int height) const
@@ -663,14 +663,14 @@ bool vil1_image_as_impl<vil1_rgb<float> >::get_section(void *buf,
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::string vil1_image_as_impl<vil1_rgb<float> >::is_a() const
 {
   static const std::string class_name_="vil1_image_as_impl<vil1_rgb<float> >";
   return class_name_;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool vil1_image_as_impl<vil1_rgb<float> >::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vil1_rgb<float> >::is_a() || vil1_image_impl::is_class(s);
@@ -684,7 +684,7 @@ vil1_image vil1_image_as_rgb_float(vil1_image const &image)
   return vil1_image(new vil1_image_as_impl<vil1_rgb<float> >(image));
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<float>*)
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<float> >(image));
@@ -693,7 +693,7 @@ vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<float>*)
 
 //--------------------------------------------------------------------------------
 
-VCL_DEFINE_SPECIALIZATION // specialize for rgb 16-bit.
+template <> // specialize for rgb 16-bit.
 bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::get_section(void *buf,
                                                              int x0, int y0,
                                                              int width, int height) const
@@ -730,14 +730,14 @@ bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::get_section(void *buf,
 }
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::string vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_a() const
 {
   static const std::string class_name_="vil1_image_as_impl<vil1_rgb<vxl_uint_16> >";
   return class_name_;
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_class(std::string const& s) const
 {
   return s==vil1_image_as_impl<vil1_rgb<vxl_uint_16> >::is_a() || vil1_image_impl::is_class(s);
@@ -752,7 +752,7 @@ vil1_image vil1_image_as_rgb_uint16(vil1_image const &image)
   return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_uint_16> >(image));
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 vil1_image vil1_image_as(vil1_image const &image, vil1_rgb<vxl_uint_16>* )
 {
   return vil1_image(new vil1_image_as_impl<vil1_rgb<vxl_uint_16> >(image));

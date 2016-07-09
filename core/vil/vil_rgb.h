@@ -82,14 +82,6 @@ struct vil_rgb
   inline vil_rgb<T>& operator*= (T A) { r*=A,g*=A,b*=A; return *this; }
   inline vil_rgb<T>& operator/= (T A) { r/=A,g/=A,b/=A; return *this; }
 
-#define vil_rgb_call(m) \
-m(unsigned char) \
-m(int) \
-m(long) \
-m(double)
-
-// VC50 bombs with INTERNAL COMPILER ERROR on template member functions.
-#if VCL_HAS_MEMBER_TEMPLATES
   template <class S> inline
   vil_rgb(vil_rgb<S> const& that):
     r(T(that.r)),
@@ -102,40 +94,7 @@ m(double)
     b=T(that.b);
     return *this;
   }
-#else
-  // For dumb compilers, just special-case the commonly used types.
-# define macro(S) \
-  inline vil_rgb(vil_rgb<S > const& that) : \
-  r(T(that.r)), \
-  g(T(that.g)), \
-  b(T(that.b)) {}
-vil_rgb_call(macro)
-# undef macro
-
-# define macro(S) \
-  vil_rgb<T>& operator=(vil_rgb<S > const& that);
-vil_rgb_call(macro)
-# undef macro
-#endif
 };
-
-// see above
-#if VCL_HAS_MEMBER_TEMPLATES
-#else
-# define macro(S) \
-template <class T> inline \
-vil_rgb<T>& vil_rgb<T>::operator=(vil_rgb<S > const& that) { \
-  r=T(that.r); \
-  g=T(that.g); \
-  b=T(that.b); \
-  return *this; \
-}
-
-vil_rgb_call(macro)
-# undef macro
-#endif
-
-#undef vil_rgb_call
 
 template <class T>
 inline
@@ -144,7 +103,7 @@ std::ostream& operator<<(std::ostream& s, vil_rgb<T> const& rgb)
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 std::ostream& operator<<(std::ostream& s, vil_rgb<unsigned char> const& rgb);
 
 

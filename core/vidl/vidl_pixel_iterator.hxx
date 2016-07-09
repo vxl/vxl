@@ -286,11 +286,11 @@ class vidl_pixel_iterator_of : public vidl_pixel_iterator
 
 
 //: Iterator for monochrome boolean images
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_iterator_valid<VIDL_PIXEL_FORMAT_MONO_1>
 { enum { value = true }; };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 class vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>
   : public vidl_pixel_iterator
 {

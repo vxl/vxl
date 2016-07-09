@@ -503,31 +503,31 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_AE >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_AS >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_AT >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_CS >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_DA >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, long& value ) {
@@ -545,7 +545,7 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_DS >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, float& value ) {
@@ -579,7 +579,7 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_FD >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_ieee_64& value ) {
@@ -592,7 +592,7 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_FL >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_ieee_32& value ) {
@@ -605,7 +605,7 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_IS >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, long& value ) {
@@ -623,43 +623,43 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_LO >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_LT >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_OB >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_OW >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_PN >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_SH >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_SL >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_sint_32& value ) {
@@ -672,13 +672,13 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_SQ >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_SS >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_sint_16& value ) {
@@ -691,13 +691,13 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_ST >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_TM >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, float& value ) {
@@ -715,13 +715,13 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_UI >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_UL >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_uint_32& value ) {
@@ -734,13 +734,13 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_UN >
     : public try_set_to_string
   {
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_US >
   {
     static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vxl_uint_16& value ) {
@@ -769,7 +769,7 @@ namespace
     }
   };
 
-  VCL_DEFINE_SPECIALIZATION
+  template <>
   struct try_set< vil_dicom_header_UT >
     : public try_set_to_string
   {

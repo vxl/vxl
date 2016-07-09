@@ -167,7 +167,7 @@ bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs,
 
 
 #define VIMT3D_IMAGE_3D_OF_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string vimt3d_image_3d_of<T >::is_a() const \
+template <> std::string vimt3d_image_3d_of<T >::is_a() const \
 { return std::string("vimt3d_image_3d_of<" #T ">"); } \
 template class vimt3d_image_3d_of<T >; \
 template bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T >& lhs, \
