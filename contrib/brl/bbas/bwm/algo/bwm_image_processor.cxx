@@ -78,8 +78,9 @@ void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
       std::vector<double> pos;
       std::vector<std::vector<double> > vals;
       img->image_line(start_col, start_row, end_col, end_row, pos, vals);
-	  if(comp_format == VIL_PIXEL_FORMAT_UINT_16){//for RGBA maximum mask can be full 16 bit val
-		  double maxv = std::pow(2.0, 11.0);
+	  if(comp_format == VIL_PIXEL_FORMAT_UINT_16){
+            //for RGBA maximum mask can be full 16 bit val so scale it down to 11 bits max for display
+            double maxv = std::pow(2.0, 11.0)+100.0;
 		  for( std::vector<std::vector<double> >::iterator vit = vals.begin();
 			  vit != vals.end(); ++vit)
 			  for(std::vector<double>::iterator iit = vit->begin();

@@ -406,8 +406,9 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
     double delta = hist_[p].delta();
     if (delta<min_delta) min_delta = delta;
   }
-   if(comp_format == VIL_PIXEL_FORMAT_UINT_16){//for RGBA maximum mask can be full 16 bit val
-      double maxv = std::pow(2.0, 11.0);
+   if(comp_format == VIL_PIXEL_FORMAT_UINT_16){
+     //for RGBA maximum mask can be full 16 bit val so scale it down for display purposes
+     double maxv = std::pow(2.0, 11.0)+100.0;
       if(maxpos > maxv)
         maxpos = maxv;
     }
