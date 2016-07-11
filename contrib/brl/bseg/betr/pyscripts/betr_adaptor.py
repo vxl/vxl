@@ -1,8 +1,9 @@
 # import the batch module and dbvalue from init 
 # set the global variable, batch, on init before importing this file
-import init
-dbvalue = init.dbvalue;
-batch = init.batch
+import brl_init
+import betr_batch
+batch = betr_batch
+dbvalue = brl_init.dbvalue_factory(batch)
 
 #############################################################################
 # PROVIDES higher level betr python functions to make batch
