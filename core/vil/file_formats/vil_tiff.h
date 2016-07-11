@@ -222,6 +222,8 @@ class vil_tiff_image : public vil_blocked_image_resource
 
   bool set_compression_method(compression_methods cm);
 
+  bool set_compression_quality(int quality);
+
 #if HAS_GEOTIFF
   //* returns null if the tiff file does not include any geotiff tags
   vil_geotiff_header* get_geotiff_header();
