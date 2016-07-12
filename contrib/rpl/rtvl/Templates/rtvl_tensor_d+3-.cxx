@@ -3,5 +3,5 @@
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file rtvl_license_1_0.txt or copy at
    http://www.boost.org/LICENSE_1_0.txt) */
-#include <rtvl/rtvl_tensor_d.txx>
+#include <rtvl/rtvl_tensor_d.hxx>
 RTVL_TENSOR_D_INSTANTIATE(3);

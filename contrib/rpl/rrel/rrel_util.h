@@ -144,7 +144,7 @@ void rrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
                                             int dof=1 );
 
 #if defined(VCL_GCC)
-# include "rrel_util.txx"
+# include "rrel_util.hxx"
 #endif
 
 #endif // rrel_util_h_

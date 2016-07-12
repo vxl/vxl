@@ -1,7 +1,7 @@
 #include <testlib/testlib_test.h>
 
 #include <rgrl/rgrl_set_of.h>
-#include <rgrl/rgrl_set_of.txx>
+#include <rgrl/rgrl_set_of.hxx>
 
 static void test_set_of()
 {

@@ -10,7 +10,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include "rgtl_object_array_triangles_3d.hxx"
-#include "rgtl_sqt_space.txx"
+#include "rgtl_sqt_space.hxx"
 #include "rgtl_sqt_cell_bounds.hxx"
 #include "rgtl_sqt_cell_geometry.hxx"
 #include "rgtl_sqt_cell_location.hxx"

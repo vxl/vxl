@@ -14,7 +14,7 @@
 #include <vcl_compiler.h>
 
 // these two classes are helper classes for rsdl_bins, and should ideally
-// be declared in rsdl_bins and defined only in the .txx, but MSVC6 and 7
+// be declared in rsdl_bins and defined only in the .hxx, but MSVC6 and 7
 // don't handle nested templated classes well. So, they become external
 // classes.
 //
@@ -167,7 +167,7 @@ class rsdl_bins
  public:
   typedef rsdl_bins_bin_entry_type<N,CoordType,ValueType> bin_entry_type;
 
-  // See comment in .txx
+  // See comment in .hxx
   typedef rsdl_bins_point_dist_entry<N,CoordType,ValueType> point_dist_entry;
 
   //:
@@ -270,12 +270,12 @@ class rsdl_bins
                                     std::vector< value_type >& values,
                                     std::vector< point_type >* points ) const;
 
-  // documentation in .txx
+  // documentation in .hxx
   std::size_t scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
                           bin_index_vector& indices ) const;
 
 #if 0
-  // documentation in .txx
+  // documentation in .hxx
   unsigned scan_bdy( int lo[N], int hi[N], int cur[N], unsigned dim,
                      bin_index_vector& indices ) const;
 #endif
@@ -315,7 +315,7 @@ struct rsdl_bins_bin_entry_type
 {
   // For some reason, MSVC7 doesn't like rsdl_bins<N,CoordType,ValueType>::coord_type.
   // It complains that rsdl_bins is undefined, but doesn't complain about the same
-  // declaration in rsdl_bins_point_dist_entry (in the .txx). Go figure.
+  // declaration in rsdl_bins_point_dist_entry (in the .hxx). Go figure.
 
   typedef CoordType                       coord_type;
   typedef ValueType                       value_type;

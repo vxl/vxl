@@ -15,7 +15,7 @@
 #include <vcl_cassert.h>
 
 #include <rsdl/rsdl_bins.h>
-#include <rsdl/rsdl_bins.txx> // to avoid explicit instantiation
+#include <rsdl/rsdl_bins.hxx> // to avoid explicit instantiation
 
 #include <rgrl/rgrl_mask.h>
 
