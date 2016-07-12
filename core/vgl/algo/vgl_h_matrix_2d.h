@@ -17,7 +17,7 @@
 //   24 Jun 2003 - Peter Vanroose - added projective_basis() from 4 lines
 //   31 Jul 2010 - Peter Vanroose - made more similar to 1d and 3d variants
 //   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
-//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
+//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .hxx to .h
 // \endverbatim
 
 #include <vector>
@@ -216,6 +216,6 @@ template <class T> std::ostream& operator<<(std::ostream& s, vgl_h_matrix_2d<T> 
 template <class T> std::istream& operator>>(std::istream& s, vgl_h_matrix_2d<T>&       H)
 { H.read(s); return s; }
 
-#define VGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_2d.txx first"
+#define VGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_2d.hxx first"
 
 #endif // vgl_h_matrix_2d_h_

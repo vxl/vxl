@@ -45,9 +45,9 @@ inline std::ostream& operator<< (std::ostream& s, const vbl_sparse_array_1d<T>& 
 
 #ifndef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_base.txx instead"
+extern "please include vbl/vbl_sparse_array_base.hxx instead"
 #endif // VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_1D_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_1d.txx instead"
+extern "please include vbl/vbl_sparse_array_1d.hxx instead"
 
 #endif // vbl_sparse_array_1d_h_

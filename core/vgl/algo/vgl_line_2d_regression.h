@@ -88,6 +88,6 @@ class vgl_line_2d_regression
   bool fit_constrained(T x, T y);
 };
 
-#define VGL_LINE_2D_REGRESSION_INSTANTIATE(T) extern "please include vgl/algo/vgl_line_2d_regression.txx first"
+#define VGL_LINE_2D_REGRESSION_INSTANTIATE(T) extern "please include vgl/algo/vgl_line_2d_regression.hxx first"
 
 #endif // vgl_line_2d_regression_h_

@@ -25,7 +25,7 @@
 //   050598 PVr added several operators ( + += - -= (T) ).
 //   290798 AWF Member templates for fancy compilers
 //   140898 David Capel added clamping functions to ensure 0-255 range on bytes and vil1_rgb<byte>
-//   090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .txx file.
+//   090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .hxx file.
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
@@ -214,8 +214,8 @@ vil1_rgb<unsigned char> vil1_clamp(vil1_rgb<float> const& d, vil1_rgb<unsigned c
 #endif
 
 #define VIL1_RGB_INSTANTIATE(T) \
-extern "you must include vil1/vil1_rgb.txx first."
+extern "you must include vil1/vil1_rgb.hxx first."
 #define VIL1_RGB_INSTANTIATE_LS(T) \
-extern "you must include vil1/vil1_rgb.txx first."
+extern "you must include vil1/vil1_rgb.hxx first."
 
 #endif // vil1_rgb_h_

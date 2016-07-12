@@ -80,6 +80,6 @@ class vgl_compute_rigid_3d
 };
 
 #define VGL_COMPUTE_RIGID_3D_INSTANTIATE(T) \
-extern "please include vgl/algo/vgl_compute_rigid_3d.txx first"
+extern "please include vgl/algo/vgl_compute_rigid_3d.hxx first"
 
 #endif // vgl_compute_rigid_3d_h_

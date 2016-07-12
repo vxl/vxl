@@ -183,7 +183,7 @@ struct vgui_satellite_tableau_new : public vgui_tableau_sptr_t<vgui_satellite_ta
 };
 
 //----------------------------------------------------------------------------
-// these could be in the .txx file but there would be no point to that.
+// these could be in the .hxx file but there would be no point to that.
 #undef VGUI_SATELLITE_T_INSTANTIATE
 #define VGUI_SATELLITE_T_INSTANTIATE(C, A) \
 template struct vgui_satellite_tableau_t<C, A >; \

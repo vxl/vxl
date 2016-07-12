@@ -161,6 +161,6 @@ std::istream &operator>>(std::istream &is, l &p);
 
 #undef l
 
-#define VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE(T) extern "please include vgl/vgl_homg_line_3d_2_points.txx first"
+#define VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE(T) extern "please include vgl/vgl_homg_line_3d_2_points.hxx first"
 
 #endif // vgl_homg_line_3d_2_points_h_

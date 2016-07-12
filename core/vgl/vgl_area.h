@@ -34,6 +34,6 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly);
 // \relatesalso vgl_polygon
 template <class T> vgl_point_2d<T> vgl_centroid(vgl_polygon<T> const& poly);
 
-#define VGL_AREA_INSTANTIATE(T) extern "please include vgl/vgl_area.txx instead"
+#define VGL_AREA_INSTANTIATE(T) extern "please include vgl/vgl_area.hxx instead"
 
 #endif // vgl_area_h_

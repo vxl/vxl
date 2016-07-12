@@ -124,7 +124,7 @@ vil1_image vil1_convolve_separable(vil1_image const& in,
                                    I1 const* kernel,
                                    int N, I2*, AC*, O*);
 
-// *** the following function is implemented in vil1_convolve_1d_x.txx
+// *** the following function is implemented in vil1_convolve_1d_x.hxx
 
 //: Convolution in x-direction, using a symmetric kernel.
 template <class I1, class I2, class AC, class O>
@@ -135,7 +135,7 @@ void vil1_convolve_1d_x(I1 const *half_kernel, unsigned kernel_size,
                         vil1_convolve_boundary_option b,
                         vil1_convolve_boundary_option e);
 
-// *** the following function is implemented in vil1_convolve_1d_y.txx
+// *** the following function is implemented in vil1_convolve_1d_y.hxx
 
 //: Convolution in y-direction, using a symmetric kernel.
 template <class I1, class I2, class AC, class O>

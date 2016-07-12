@@ -61,7 +61,7 @@
 // It may be a good idea to provide vil_image_resource_sptr based
 // vil_converts as well.
 //
-// The ITK project (in Code/IO/itkConvertPixelBuffer.txx) has
+// The ITK project (in Code/IO/itkConvertPixelBuffer.hxx) has
 // functionality similar to the RGB to grayscale conversion here.  A
 // change was made in ITK so the computation is
 // (2125.0*r+7154.0*g+0721.0*b)/1000.0 instead of

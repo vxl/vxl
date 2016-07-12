@@ -273,6 +273,6 @@ void vgl_box_3d_bounds(ITER begin, ITER end, vgl_box_3d<T>& bounding_box)
     bounding_box.add(*begin);
 }
 
-#define VGL_BOX_3D_INSTANTIATE(T) extern "please include vgl/vgl_box_3d.txx first"
+#define VGL_BOX_3D_INSTANTIATE(T) extern "please include vgl/vgl_box_3d.hxx first"
 
 #endif // vgl_box_3d_h

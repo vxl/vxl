@@ -94,6 +94,6 @@ template <class T>
 vgl_polygon<T>
 vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type op, int *p_retval);
 
-#define VGL_CLIP_INSTANTIATE(T) extern "please include vgl/vgl_clip.txx instead"
+#define VGL_CLIP_INSTANTIATE(T) extern "please include vgl/vgl_clip.hxx instead"
 
 #endif // vgl_clip_h_
