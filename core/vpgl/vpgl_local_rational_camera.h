@@ -90,10 +90,14 @@ vpgl_lvcs lvcs_;
 template <class T>
 vpgl_local_rational_camera<T>* read_local_rational_camera(std::string cam_path);
 
-//: Creates a local rational camera from a file
+//: Creates a local rational camera from a stream (RPB format)
 // \relatesalso vpgl_local_rational_camera
 template <class T>
 vpgl_local_rational_camera<T>* read_local_rational_camera(std::istream& istr);
+
+//: read camera from txt file (small sat format)
+template <class T>
+vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::string cam_path);
 
 //: Write to stream
 // \relatesalso vpgl_local_rational_camera

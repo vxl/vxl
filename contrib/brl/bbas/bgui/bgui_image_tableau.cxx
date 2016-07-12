@@ -120,7 +120,9 @@ get_pixel_info_from_image(const int x, const int y,
     std::sprintf(msg, "(%d, %d)   ?", 0, 0);
     return;
   }
-  vil_pixel_format type = r->pixel_format();
+  //note: will treat RGBA as a four plane type
+  vil_pixel_format type = vil_pixel_format_component_format(r->pixel_format());
+
   switch (type )
   {
    case VIL_PIXEL_FORMAT_BOOL:
@@ -467,7 +469,9 @@ std::vector<double> bgui_image_tableau::get_color_pixel_value(const unsigned c, 
     val[0]=this->get_pixel_value(c, r);
     return val;
   }
-  vil_pixel_format type = rs->pixel_format();
+  //note: will treat RGBA as a four plane type
+  vil_pixel_format type = vil_pixel_format_component_format(rs->pixel_format());
+
   switch (type )
   {
     case  VIL_PIXEL_FORMAT_BYTE: {
@@ -483,7 +487,7 @@ std::vector<double> bgui_image_tableau::get_color_pixel_value(const unsigned c, 
       if (!v)
         return val;
       for (unsigned p = 0; p<n_p; ++p)
-        val[p]=static_cast<double>(v(0,0,p));
+	    val[p]=static_cast<double>(v(0,0,p));
       return val;
     }
     default:

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "vgui_vil_image_renderer.h"
+#include <vil/vil_new.h>
 //:
 // \file
 // \author Amitha Perera
@@ -195,7 +196,16 @@ render_directly(vgui_range_map_params_sptr const& rmp)
   //float values in the range [0,1]. If the map is defined, then OpenGL
   //can read the image pixels directly from the image.
 
-  vil_pixel_format format = the_image_->pixel_format();
+  //note: forces RGBA images to render as four band images
+  vil_pixel_format format = vil_pixel_format_component_format(the_image_->pixel_format());
+#if 0
+  // this nonsense is needed to force RGBA images to render as four band images
+  // probably best for examination purposes.
+  if(format == VIL_PIXEL_FORMAT_RGBA_UINT_16)
+    format = VIL_PIXEL_FORMAT_UINT_16;
+  if(format == VIL_PIXEL_FORMAT_RGBA_BYTE)
+    format = VIL_PIXEL_FORMAT_BYTE;
+#endif
   switch ( format )
   {
     case VIL_PIXEL_FORMAT_BYTE:

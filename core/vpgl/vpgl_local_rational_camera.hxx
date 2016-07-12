@@ -215,7 +215,42 @@ vpgl_local_rational_camera<T>* read_local_rational_camera(std::istream& istr)
   }
   return new vpgl_local_rational_camera<T>(lvcs, *rcam);
 }
+template <class T>
+vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::string cam_path){
 
+  vpgl_rational_camera<T>* rcam = read_rational_camera_from_txt<T>(cam_path);
+
+  if(! rcam){
+    std::cout << "Failed to read rational camera part of " << cam_path << '\n';
+    return 0;
+  }
+  std::ifstream file_inp;
+  file_inp.open(cam_path.c_str());
+  if (!file_inp.good()) {
+    std::cout << "error: bad filename: " << cam_path << std::endl;
+    return 0;
+  }
+  bool good = false;
+  vpgl_lvcs lvcs;
+  std::string input;
+  while (!file_inp.eof()&&!good) {
+   file_inp >> input;
+    if (input=="lvcs")
+    {
+      double longitude, latitude, elevation;
+      file_inp >> longitude >> latitude >> elevation;
+      lvcs = vpgl_lvcs(latitude, longitude, elevation,
+                       vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+      good = true;
+    }
+  }
+  if  (!good)
+  {
+    //std::cout << "error: not a composite rational camera file\n";
+    return 0;
+  }
+  return new vpgl_local_rational_camera<T>(lvcs, *rcam);
+}
 
 //: Write to stream
 template <class T>
@@ -232,6 +267,7 @@ std::ostream&  operator<<(std::ostream& s, const vpgl_local_rational_camera<T>& 
 template class vpgl_local_rational_camera<T >; \
 template std::ostream& operator<<(std::ostream&, const vpgl_local_rational_camera<T >&); \
 template vpgl_local_rational_camera<T >* read_local_rational_camera(std::string); \
+ template vpgl_local_rational_camera<T >* read_local_rational_camera_from_txt(std::string); \
 template vpgl_local_rational_camera<T >* read_local_rational_camera(std::istream&)
 
 #endif // vpgl_local_rational_camera_hxx_

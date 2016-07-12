@@ -47,11 +47,13 @@ static bool copy_base_resc(vil_image_resource_sptr const& base_image,
   vil_blocked_image_resource_sptr brsc = blocked_image_resource(base_image);
   if (!brsc||brsc->size_block_i()%2!=0||brsc->size_block_i()%2!=0)
     brsc = new vil_blocked_image_facade(base_image);
+  // handle case of RGBA as four planes
+  vil_pixel_format fmt = vil_pixel_format_component_format(brsc->pixel_format());
   vil_blocked_image_resource_sptr out_resc =
     vil_new_blocked_image_resource(full_filename.c_str(),
                                    brsc->ni(), brsc->nj(),
                                    brsc->nplanes(),
-                                   brsc->pixel_format(),
+                                   fmt,
                                    brsc->size_block_i(),
                                    brsc->size_block_j(),
                                    file_format);
