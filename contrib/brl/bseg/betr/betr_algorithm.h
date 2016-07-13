@@ -25,8 +25,10 @@ class betr_algorithm : public vbl_ref_count
   //: data inputs
   void set_reference_image(vil_image_resource_sptr const& ref_imgr){ref_imgr_ = ref_imgr;}
   void set_event_image(vil_image_resource_sptr const& evt_imgr){evt_imgr_ = evt_imgr;}
-  void set_proj_ref_object(vsol_polygon_2d_sptr const& ref_poly){ref_poly_ = ref_poly;}
-  void set_proj_evt_object(vsol_polygon_2d_sptr const& evt_poly){evt_poly_ = evt_poly;}
+  void set_proj_ref_ref_object(vsol_polygon_2d_sptr const& ref_poly){ref_ref_poly_ = ref_poly;}
+  void set_proj_ref_evt_object(vsol_polygon_2d_sptr const& evt_poly){ref_evt_poly_ = evt_poly;}
+  void set_proj_evt_ref_object(vsol_polygon_2d_sptr const& ref_poly){evt_ref_poly_ = ref_poly;}
+  void set_proj_evt_evt_object(vsol_polygon_2d_sptr const& evt_poly){evt_evt_poly_ = evt_poly;}
   //: accessors
   std::string name() const {return name_;}
   //: procedural  methods
@@ -35,15 +37,19 @@ class betr_algorithm : public vbl_ref_count
   virtual void clear(){
     ref_imgr_ = VXL_NULLPTR;
     evt_imgr_ = VXL_NULLPTR;
-    ref_poly_ = VXL_NULLPTR;
-    evt_poly_ = VXL_NULLPTR;
+    ref_ref_poly_ = VXL_NULLPTR;
+    ref_evt_poly_ = VXL_NULLPTR;
+	evt_ref_poly_ = VXL_NULLPTR;
+    evt_evt_poly_ = VXL_NULLPTR;
   }
   protected:
   std::string name_;//algorithm name
   vil_image_resource_sptr ref_imgr_;
   vil_image_resource_sptr evt_imgr_;
-  vsol_polygon_2d_sptr ref_poly_;
-  vsol_polygon_2d_sptr evt_poly_;
+  vsol_polygon_2d_sptr ref_ref_poly_;
+  vsol_polygon_2d_sptr ref_evt_poly_;
+  vsol_polygon_2d_sptr evt_ref_poly_;
+  vsol_polygon_2d_sptr evt_evt_poly_;
   //as in p_change = 1/(1+e^-alpha*(change-offset))
   double offset_;
   double alpha_;

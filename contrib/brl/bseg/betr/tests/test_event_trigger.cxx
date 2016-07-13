@@ -57,8 +57,8 @@ void test_event_trigger()
   etr.add_geo_object(ref_name, ref_obj, true);
   etr.add_geo_object(evt_name, evt_obj, false);
   vsol_polygon_2d_sptr ref_poly_2d, evt_poly_2d;
-  bool good = etr.project_object(ref_name, ref_poly_2d);
-  good = good&& etr.project_object(evt_name, evt_poly_2d);
+  bool good = etr.project_object(camera,ref_name, ref_poly_2d);
+  good = good&& etr.project_object(camera,evt_name, evt_poly_2d);
   //load vsol_spatial_object_3d from ply files
   std::string site_dir = "D:/tests/chiletest/site/chile-illum_objects/";
   std::string obj0_path = site_dir + "mesh_0.ply";
@@ -81,8 +81,8 @@ void test_event_trigger()
   etr_ply.add_geo_object(evt_name, ply_evt_obj, false);
   etr_ply.add_geo_object(name_3d, ply_3d_obj, false);
   vsol_polygon_2d_sptr ply_ref_poly_2d, ply_evt_poly_2d, ply_mesh_poly_2d;
-  good = etr_ply.project_object(ref_name, ply_ref_poly_2d);
-  good = good&& etr_ply.project_object(evt_name, ply_evt_poly_2d);
-  good = good&& etr_ply.project_object(name_3d, ply_mesh_poly_2d);
+  good = etr_ply.project_object(camera,ref_name, ply_ref_poly_2d);
+  good = good&& etr_ply.project_object(camera,evt_name, ply_evt_poly_2d);
+  good = good&& etr_ply.project_object(camera,name_3d, ply_mesh_poly_2d);
 }
 TESTMAIN(test_event_trigger);
