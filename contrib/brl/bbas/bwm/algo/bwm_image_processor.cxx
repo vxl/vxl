@@ -63,9 +63,10 @@ void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
                                             float start_col, float start_row,
                                             float end_col, float end_row)
 {
-  if (img)
+  if (img&&img->get_image_resource())
   {
     unsigned n_p = img->get_image_resource()->nplanes();
+	vil_pixel_format comp_format = vil_pixel_format_component_format(img->get_image_resource()->pixel_format());
     bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
     if (n_p==1) {
       std::vector<double> pos, vals;
@@ -77,6 +78,16 @@ void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
       std::vector<double> pos;
       std::vector<std::vector<double> > vals;
       img->image_line(start_col, start_row, end_col, end_row, pos, vals);
+	  if(comp_format == VIL_PIXEL_FORMAT_UINT_16){
+            //for RGBA maximum mask can be full 16 bit val so scale it down to 11 bits max for display
+            double maxv = std::pow(2.0, 11.0)+100.0;
+		  for( std::vector<std::vector<double> >::iterator vit = vals.begin();
+			  vit != vals.end(); ++vit)
+			  for(std::vector<double>::iterator iit = vit->begin();
+				  iit != vit->end(); ++iit)
+				  if(*iit > maxv)
+					  *iit = maxv;
+	  }
       std::vector<std::vector<double> > mpos(n_p, pos);
       g->update(mpos, vals);
     }

@@ -19,9 +19,12 @@
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_camera.h>
+#define chile 0
+#define rajaei 1
+
 void test_edgel_change_detection()
 {
-
+#if chile
   std::string img_dir = "D:/tests/chiletest/crop_dir/";
 
   std::string ref_image_name = "09DEC06145803-P1BS-052869858050_01_P002_bin_2";
@@ -73,5 +76,34 @@ void test_edgel_change_detection()
   etr_ply.set_evt_image(evt_imgr);
   double pchange = 0.0;
   etr_ply.process("edgel_change_detection", pchange);
-}
+#elif rajaei
+ std::string dir = "D:/tests/rajaei_test/trigger/";
+ std::string ref_name = "20160601_124249_0c47";
+ std::string evt_name = "20160609_094252_0c72";
+ std::string ref_img_path = dir + ref_name +"_0.tiff";
+ std::string evt_img_path = dir + evt_name +"_0.tiff";
+ std::string ref_cam_path = dir + ref_name + "_RPC.TXT";
+ std::string evt_cam_path = dir + evt_name + "_RPC.TXT";
+ std::string ref_obj_path = dir + "rajaei_trigger_objects/mesh_1.ply";
+ std::string evt_obj_path = dir + "rajaei_trigger_objects/mesh_2.ply";
+ vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
+ vil_image_resource_sptr evt_imgr = vil_load_image_resource(evt_img_path.c_str());
+ vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
+ vpgl_camera_double_sptr ref_camera = ref_lcam;
+ vpgl_local_rational_camera<double>* evt_lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
+ vpgl_camera_double_sptr evt_camera = evt_lcam;
+ vpgl_lvcs lvcs = ref_lcam->lvcs();
+ double lon, lat, elev;
+ lvcs.get_origin(lat, lon, elev);
+ betr_event_trigger etr("rajaei", lvcs);
+ etr.set_ref_camera(ref_camera);
+ etr.set_evt_camera(evt_camera);
+ etr.add_geo_object("pier_ref", lon, lat, elev, ref_obj_path, true);
+ etr.add_geo_object("pier_evt", lon, lat, elev, evt_obj_path, false);
+ etr.set_ref_image(ref_imgr);
+ etr.set_evt_image(evt_imgr);
+ double pchange = 0.0;
+ etr.process("edgel_change_detection", pchange);
+#endif
+  }
   TESTMAIN(test_edgel_change_detection);

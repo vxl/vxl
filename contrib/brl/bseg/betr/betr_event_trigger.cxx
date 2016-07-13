@@ -17,7 +17,8 @@
 #include "betr_edgel_change_detection.h"
 #include "betr_algorithm.h"
 #include <vpgl/vpgl_camera.h>
-
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_vector_io.h>
 void betr_event_trigger::register_algorithms(){
   betr_algorithm_sptr alg = new betr_edgel_change_detection();
   algorithms_[alg->name()] = alg;
@@ -86,7 +87,7 @@ void betr_event_trigger::add_geo_object(std::string const& obj_name, betr_geo_ob
     evt_trigger_objects_[obj_name] = geo_object;
   local_trans_[obj_name]=transl;
 }
-bool betr_event_trigger::project_object(std::string const& obj_name, vsol_polygon_2d_sptr& poly_2d){
+bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly_2d){
   // determine if object is a reference or event object
   std::map<std::string, betr_geo_object_3d_sptr>::iterator oit;
   bool is_ref_obj = false;
@@ -122,10 +123,7 @@ bool betr_event_trigger::project_object(std::string const& obj_name, vsol_polygo
         std::cout << "only handle polygonal regions for now " << obj_name << " is not a vsol_polygon_3d\n";
         return false;
       } 
-      if(is_ref_obj)
-        poly_2d = project_poly(ref_camera_, poly_3d, transl);
-      else
-        poly_2d = project_poly(evt_camera_, poly_3d, transl);
+      poly_2d = project_poly(cam, poly_3d, transl);
       return true;
     }else if(vol_ptr = so_ptr->cast_to_volume()){
       vsol_mesh_3d* mesh_3d = vol_ptr->cast_to_mesh();
@@ -138,14 +136,9 @@ bool betr_event_trigger::project_object(std::string const& obj_name, vsol_polygo
       for(std::vector<vsol_point_3d_sptr>::iterator vit = verts.begin();
           vit != verts.end(); ++vit){
         double u = 0, v = 0;
-        if(is_ref_obj)
-          ref_camera_->project((*vit)->x()+transl.x(),
-                            (*vit)->y()+transl.y(),
-                            (*vit)->z()+transl.z(), u, v);
-        else
-          evt_camera_->project((*vit)->x()+transl.x(),
-                               (*vit)->y()+transl.y(),
-                               (*vit)->z()+transl.z(), u, v);
+        cam->project((*vit)->x()+transl.x(),
+                     (*vit)->y()+transl.y(),
+                     (*vit)->z()+transl.z(), u, v);
         pts_2d.push_back(vgl_point_2d<double>(u, v));
       }
       vgl_convex_hull_2d<double> conv_hull(pts_2d);
@@ -194,9 +187,9 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change){
   alg->set_reference_image(ref_imgr_);
   alg->set_event_image(evt_imgr_);
 
-  // for now only one event object and one ref object
+  // for now only one ref object and one event object
   if(evt_trigger_objects_.size() != 1 && ref_trigger_objects_.size() != 1 ){
-    std::cout << "for now only one ref object and one evt object\n";
+    std::cout << "for now only two ref objects and two evt object\n";
     return false;
   } 
   std::map<std::string, betr_geo_object_3d_sptr>::iterator oit = ref_trigger_objects_.begin();
@@ -204,15 +197,39 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change){
   oit = evt_trigger_objects_.begin();
   std::string evt_obj_name = oit->first;
   // project the objects
-  vsol_polygon_2d_sptr ref_poly, evt_poly;
-  if(!this->project_object(ref_obj_name, ref_poly)){
+  vsol_polygon_2d_sptr ref_ref_poly, ref_evt_poly;
+  vsol_polygon_2d_sptr evt_ref_poly, evt_evt_poly;
+  if(!this->project_object(ref_camera_, ref_obj_name, ref_ref_poly)){
     return false;
   }
-  if(!this->project_object(evt_obj_name, evt_poly)){
+  if(!this->project_object(ref_camera_, evt_obj_name, ref_evt_poly)){
     return false;
   }
-  alg->set_proj_ref_object(ref_poly);
-  alg->set_proj_evt_object(evt_poly);
+  if(!this->project_object(evt_camera_, ref_obj_name, evt_ref_poly)){
+    return false;
+  }
+  if(!this->project_object(evt_camera_, evt_obj_name, evt_evt_poly)){
+    return false;
+  }
+  alg->set_proj_ref_ref_object(ref_ref_poly);
+  alg->set_proj_ref_evt_object(ref_evt_poly);
+  alg->set_proj_evt_ref_object(evt_ref_poly);
+  alg->set_proj_evt_evt_object(evt_evt_poly);
+  // for debug
+#if 0
+  std::string dir =  "D:/tests/rajaei_test/trigger/";
+  std::string ref_path = dir + "ref_polys.vsl";
+  std::string evt_path = dir + "evt_polys.vsl";
+  std::vector<vsol_polygon_2d_sptr> ref_polys;
+  std::vector<vsol_polygon_2d_sptr> evt_polys;
+  ref_polys.push_back(ref_ref_poly);
+  ref_polys.push_back(ref_evt_poly);
+  evt_polys.push_back(evt_ref_poly);
+  evt_polys.push_back(evt_evt_poly);
+  this->save_projected_polys(ref_path, ref_polys);
+  this->save_projected_polys(evt_path, evt_polys);
+#endif
+  //
   if(!alg->process()){
     prob_change = 0.0;
     return false;
@@ -227,6 +244,25 @@ std::vector<std::string> betr_event_trigger::algorithms() const{
     ret.push_back(ait->first);
   return ret;
 }
+
+bool betr_event_trigger::save_projected_polys(std::string const& path, std::vector<vsol_polygon_2d_sptr> const& polys){
+  vsl_b_ofstream ostr(path);
+  if(!ostr){
+    std::cout << "couldn't open binary stream for " << path << '\n';
+    return false;
+  }
+  // convert to spatial object 2d
+  std::vector<vsol_spatial_object_2d_sptr> sos;
+  for(std::vector<vsol_polygon_2d_sptr>::const_iterator pit = polys.begin();
+      pit!= polys.end(); ++pit){
+    vsol_spatial_object_2d_sptr ply = dynamic_cast<vsol_spatial_object_2d*>(pit->ptr());
+    sos.push_back(ply);
+  }
+  vsl_b_write(ostr, sos);
+  ostr.close();
+  return true;
+}
+
 /// to support process database
 //: Binary write boxm2_event_trigger to stream
 void vsl_b_write(vsl_b_ostream& /*os*/, betr_event_trigger const& /*bit_event_trigger*/) {}

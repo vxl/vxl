@@ -492,9 +492,12 @@ bool vil_tiff_header::compute_pixel_format()
               case 3:
                 nplanes = 3;
                 return true;
-              case 4:
-                nplanes = 4;
+              case 4:{
+			       nplanes = 4;
+				  if(extra_samples.valid && extra_samples.val==1)
+					pix_fmt = VIL_PIXEL_FORMAT_RGBA_BYTE;
                 return true;
+					 }
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                 return false;
@@ -506,9 +509,14 @@ bool vil_tiff_header::compute_pixel_format()
               case 3:
                 nplanes = 3;
                 return true;
-              case 4:
+              case 4:{
                 nplanes = 4;
+				// can be RBGA if extra samples and 
+				// so shouldn't be treated as a simple multiband image
+				if(extra_samples.valid && extra_samples.val==1)
+					pix_fmt = VIL_PIXEL_FORMAT_RGBA_UINT_16;
                 return true;
+				}
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                 return false;
