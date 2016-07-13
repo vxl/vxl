@@ -122,22 +122,25 @@ def dump_binary_data_as_txt(poly_file, output_file):
     batch.set_input_string(1, output_file)
     batch.run_process()
 
-# def test_classifier(tclsf, img, block_size):
 
-
-def test_classifier(tclsf, block_size, category_id_file=""):
+def test_classifier(tclsf, block_size, category_id_file = "", category_name = ""):
     batch.init_process("sdetTextureClassifierProcess2")
     batch.set_input_from_db(0, tclsf)
     batch.set_input_unsigned(1, block_size)
     batch.set_input_string(2, category_id_file)
-    batch.run_process()
-    (out_id, out_type) = batch.commit_output(0)
-    out = dbvalue(out_id, out_type)
-    (out_id, out_type) = batch.commit_output(1)
-    out_color = dbvalue(out_id, out_type)
-    (out_id, out_type) = batch.commit_output(2)
-    out_id = dbvalue(out_id, out_type)
-    return out, out_color, out_id
+    status = batch.run_process()
+    if status:
+        (out_id, out_type) = batch.commit_output(0)
+        out_max_prob_img = dbvalue(out_id, out_type)
+        (out_id, out_type) = batch.commit_output(1)
+        out_color_img = dbvalue(out_id, out_type)
+        (out_id, out_type) = batch.commit_output(2)
+        out_id_img = dbvalue(out_id, out_type)
+        (out_id, out_type) = batch.commit_output(3)
+        out_cat_prob_img = dbvalue(out_id, out_type)
+        return out_max_prob_img, out_color_img, out_id_img, out_cat_prob_img
+    else:
+        return None, None, None, None
 
 
 def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, percent_cat_name, category_id_file=""):
@@ -170,6 +173,34 @@ def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, 
         out_rgb_map = 0
         percent = 100
         return out_crop, out_id_map, out_rgb_map, percent
+
+
+def test_classifier_clouds2(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, percent_cat_name, category_id_file=""):
+    batch.init_process("sdetTextureClassifySatelliteCloudsProcess2")
+    batch.set_input_from_db(0, tclsf)
+    batch.set_input_string(1, dictionary_name)
+    batch.set_input_from_db(2, image_resource)
+    batch.set_input_unsigned(3, i)
+    batch.set_input_unsigned(4, j)
+    batch.set_input_unsigned(5, width)
+    batch.set_input_unsigned(6, height)
+    batch.set_input_unsigned(7, block_size)
+    batch.set_input_string(8, category_id_file)
+    batch.set_input_string(9, percent_cat_name)
+    status = batch.run_process()
+    if status:
+        (out_id, out_type) = batch.commit_output(0)
+        out_crop = dbvalue(out_id, out_type)
+        (out_id, out_type) = batch.commit_output(1)
+        out_id_map = dbvalue(out_id, out_type)
+        (out_id, out_type) = batch.commit_output(2)
+        out_rgb_map = dbvalue(out_id, out_type)
+        (out_id, out_type) = batch.commit_output(3)
+        percent = batch.get_output_float(out_id)
+        batch.remove_data(out_id)
+        return out_crop, out_id_map, out_rgb_map, percent
+    else:
+        return 0, 0, 0, 100
 
 
 def create_texture_classifier(lambda0, lambda1, n_scales, scale_interval, angle_interval, laplace_radius, gauss_radius, k, n_samples):
@@ -223,6 +254,60 @@ def generate_roc(tclsf, class_out_prob_img, class_out_color_img, orig_img, prefi
     (id, type) = batch.commit_output(6)
     outimg = dbvalue(id, type)
     return tp, tn, fp, fn, tpr, fpr, outimg
+
+
+def generate_roc2(image, gt_pos_file, pos_sign="low"):
+    batch.init_process("sdetTextureClassifierROCProcess2")
+    batch.set_input_from_db(0, image)
+    batch.set_input_string(1, gt_pos_file)
+    batch.set_input_string(2, pos_sign)
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        threshold = batch.get_bbas_1d_array_float(id)
+        (id, type) = batch.commit_output(1)
+        tp = batch.get_bbas_1d_array_float(id)
+        (id, type) = batch.commit_output(2)
+        tn = batch.get_bbas_1d_array_float(id)
+        (id, type) = batch.commit_output(3)
+        fp = batch.get_bbas_1d_array_float(id)
+        (id, type) = batch.commit_output(4)
+        fn = batch.get_bbas_1d_array_float(id)
+        (id, type) = batch.commit_output(5)
+        tpr = batch.get_bbas_1d_array_float(id)
+        (id, type) = batch.commit_output(6)
+        fpr = batch.get_bbas_1d_array_float(id)
+        return threshold, tp, tn, fp, fn, tpr, fpr
+    else:
+        return 0, 0, 0, 0, 0, 0, 0
+
+
+# generate ROC for the input probability image of ground truth category
+def generate_roc3(tclsf, in_prob_img, prefix_for_bin_files, positive_category_name):
+  batch.init_process("sdetTextureClassifierROCProcess3")
+  batch.set_input_from_db(0, tclsf)
+  batch.set_input_from_db(1, in_prob_img)
+  batch.set_input_string(2, prefix_for_bin_files)
+  batch.set_input_string(3, positive_category_name)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    thres = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(1)
+    tp = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(2)
+    tn = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(3)
+    fp = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(4)
+    fn = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(5)
+    tpr = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(6)
+    fpr = batch.get_bbas_1d_array_float(id)
+    return thres, tp, tn, fp, fn, tpr, fpr
+  else:
+    return None, None, None, None, None, None, None
 
 
 def segment_image(img, weight_thres, margin=0, min_size=50, sigma=1, neigh=8):
