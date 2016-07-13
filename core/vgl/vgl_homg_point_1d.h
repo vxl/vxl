@@ -211,6 +211,6 @@ vgl_homg_point_1d<T> centre(std::vector<vgl_homg_point_1d<T> > const& v)
   return vgl_homg_point_1d<T>(x,T(n));
 }
 
-#define VGL_HOMG_POINT_1D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_1d.txx first"
+#define VGL_HOMG_POINT_1D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_1d.hxx first"
 
 #endif // vgl_homg_point_1d_h_

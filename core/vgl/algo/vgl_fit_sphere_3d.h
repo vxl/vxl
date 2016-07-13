@@ -100,6 +100,6 @@ class vgl_fit_sphere_3d
   vgl_sphere_3d<T>& get_sphere_nonlinear_fit() {return sphere_non_lin_;}
 };
 
-#define VGL_FIT_SPHERE_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_sphere_3d.txx first"
+#define VGL_FIT_SPHERE_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_sphere_3d.hxx first"
 
 #endif // vgl_fit_sphere_3d_h_

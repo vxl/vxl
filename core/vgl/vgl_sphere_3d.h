@@ -102,6 +102,6 @@ template <class Type>
 std::istream& operator>>(std::istream& is, vgl_sphere_3d<Type>& sph);
 
 
-#define VGL_SPHERE_3D_INSTANTIATE(T) extern "please include vgl/vgl_sphere_3d.txx first"
+#define VGL_SPHERE_3D_INSTANTIATE(T) extern "please include vgl/vgl_sphere_3d.hxx first"
 
 #endif // vgl_sphere_3d_h

@@ -72,6 +72,6 @@ struct vil1_rgba
 };
 
 #define VIL1_RGBA_INSTANTIATE \
-extern "please include vil1/vil1_rgba.txx instead"
+extern "please include vil1/vil1_rgba.hxx instead"
 
 #endif // vil1_rgba_h_

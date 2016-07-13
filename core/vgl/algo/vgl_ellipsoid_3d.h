@@ -77,6 +77,6 @@ class vgl_ellipsoid_3d
 template <class T>
 std::ostream& operator<<(std::ostream& os, vgl_ellipsoid_3d<T> const& e) { e.print(os); return os; }
 
-#define VGL_ELLIPSOID_3D_INSTANTIATE(T) extern "please include vgl/vgl_ellipsoid_3d.txx first"
+#define VGL_ELLIPSOID_3D_INSTANTIATE(T) extern "please include vgl/vgl_ellipsoid_3d.hxx first"
 
 #endif // vgl_ellipsoid_3d_h_

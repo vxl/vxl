@@ -1,4 +1,4 @@
-// This is rpl/rrel/rrel_util.txx
+// This is rpl/rrel/rrel_util.hxx
 #ifndef rrel_util_txx_
 #define rrel_util_txx_
 

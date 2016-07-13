@@ -70,6 +70,6 @@ std::ostream& operator<<(std::ostream& os, const vgl_cylinder<T>& cyl);
 template <class T>
 std::istream& operator>>(std::istream& s, vgl_cylinder<T>& cyl);
 
-#define VGL_CYLINDER_INSTANTIATE(T) extern "please include vgl/vgl_cylinder.txx first"
+#define VGL_CYLINDER_INSTANTIATE(T) extern "please include vgl/vgl_cylinder.hxx first"
 
 #endif // vgl_cylinder_h_

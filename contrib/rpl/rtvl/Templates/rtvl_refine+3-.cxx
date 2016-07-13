@@ -3,5 +3,5 @@
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file rtvl_license_1_0.txt or copy at
    http://www.boost.org/LICENSE_1_0.txt) */
-#include <rtvl/rtvl_refine.txx>
+#include <rtvl/rtvl_refine.hxx>
 RTVL_REFINE_INSTANTIATE(3);

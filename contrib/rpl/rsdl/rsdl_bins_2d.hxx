@@ -1,4 +1,4 @@
-// This is rpl/rsdl/rsdl_bins_2d.txx
+// This is rpl/rsdl/rsdl_bins_2d.hxx
 #ifndef rsdl_bins_2d__txx_
 #define rsdl_bins_2d__txx_
 

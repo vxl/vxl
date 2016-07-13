@@ -35,7 +35,7 @@ set(rrel_sources
  rrel_ran_sam_search.cxx        rrel_ran_sam_search.h
  rrel_wgted_ran_sam_search.cxx  rrel_wgted_ran_sam_search.h
 
- rrel_util.txx                  rrel_util.h
+ rrel_util.hxx                  rrel_util.h
 
  rrel_objective.h
  rrel_wls_obj.h

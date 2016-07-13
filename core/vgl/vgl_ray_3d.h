@@ -104,6 +104,6 @@ double angle(vgl_ray_3d<Type> const& r0, vgl_ray_3d<Type> const& r1)
 {
   return angle(r0.direction(), r1.direction());
 }
-#define VGL_RAY_3D_INSTANTIATE(T) extern "please include vgl/vgl_ray_3d.txx first"
+#define VGL_RAY_3D_INSTANTIATE(T) extern "please include vgl/vgl_ray_3d.hxx first"
 
 #endif // vgl_ray_3d_h_
