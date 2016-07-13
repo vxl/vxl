@@ -30,7 +30,7 @@ class betr_edgel_factory{
   }
   //: set parameters (same for all images and rois)
   void set_parameters(float sigma, float noise_multiplier, double gradient_range, unsigned nbins);
-  void set_parameters(float sigma, float noise_multiplier){params_.smooth = sigma; params_.noise_multiplier = noise_multiplier;}
+  void set_parameters(float sigma, float noise_multiplier);
   // add images and rois
   bool add_image(std::string const& iname, vil_image_resource_sptr const& imgr);
   bool add_region(std::string const& iname, std::string const& region_name, vsol_box_2d_sptr const& box);
@@ -56,6 +56,8 @@ class betr_edgel_factory{
   bool grad_mags(std::string iname, std::string region_name, vsol_polygon_2d_sptr const& poly,
                  std::vector<double>& mags);
   const bsta_histogram<double>& hist(std::string iname, std::string region_name){return grad_hists_[iname][region_name];}
+  bool save_edgels(std::string const& dir) const;
+  bool save_edgels_in_poly(std::string const& dir);
  private:
   std::map<std::string, vil_image_resource_sptr> images_;
   std::map<std::string, brip_roi_sptr> rois_;

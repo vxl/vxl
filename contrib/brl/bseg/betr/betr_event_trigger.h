@@ -60,8 +60,8 @@ class betr_event_trigger : public vbl_ref_count{
 
   //utilities
   //: projected 2-d polygon for the 3-d trigger object
-  bool project_object(std::string const& obj_name, vsol_polygon_2d_sptr& poly);
-
+  bool project_object(vpgl_camera_double_sptr cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly);
+  bool save_projected_polys(std::string const& path, std::vector<vsol_polygon_2d_sptr> const& polys);  
  private:
   void update_local_bounding_box();
   vsol_polygon_2d_sptr project_poly(vpgl_camera_double_sptr const& camera,
