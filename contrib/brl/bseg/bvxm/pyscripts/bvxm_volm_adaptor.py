@@ -347,11 +347,12 @@ def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_fi
 # vpgl_geo_camera. no height map is necessary
 
 
-def project_osm_to_ortho_img(img_byte, ortho_cam, osm_file):
+def project_osm_to_ortho_img(img_byte, ortho_cam, osm_file, output_vsol_binary_name=""):
     bvxm_batch.init_process("volmMapOSMProcess")
     bvxm_batch.set_input_from_db(0, img_byte)
     bvxm_batch.set_input_from_db(1, ortho_cam)
     bvxm_batch.set_input_string(2, osm_file)
+    bvxm_batch.set_input_string(3, output_vsol_binary_name)
     # process returns true if any osm objects hit the image area in this tile
     hit = bvxm_batch.run_process()
     (id, type) = bvxm_batch.commit_output(0)

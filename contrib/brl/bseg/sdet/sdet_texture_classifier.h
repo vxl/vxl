@@ -46,6 +46,12 @@
 //               the large disparity in sample populations used to compute
 //               the histograms, e.g. 400,000 in training vs. 4096 for
 //               a test image block.
+//
+// \verbatim
+//  Modifications
+//   Yi Dong --- Jun, 2016  added a method that return the probability of given category
+// \endverbatim
+
 
 #include <vector>
 #include <map>
@@ -212,6 +218,9 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   //: get the class name and prob value with the highest probability for the given histogram
   std::pair<std::string, float> highest_prob_class(std::vector<float> const& hist);
+
+  //: get the prob value of the given category
+  float get_class_prob(std::vector<float> const& hist, std::string const& class_name);
 
   //: return the similarity value for two histograms, this method assumes the texton dictionary is computed, there is a weight for each texton
   //  the two input histograms are of the same size with the dictionary

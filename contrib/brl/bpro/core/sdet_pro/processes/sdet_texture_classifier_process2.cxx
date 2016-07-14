@@ -31,6 +31,7 @@ bool sdet_texture_classifier_process2_cons(bprb_func_process& pro)
   //input_types.push_back("vil_image_view_base_sptr"); //input image
   input_types.push_back("unsigned");   //texture block size
   input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
+  input_types.push_back("vcl_string");  // a category name whose probability image will be created
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -40,6 +41,7 @@ bool sdet_texture_classifier_process2_cons(bprb_func_process& pro)
   output_types.push_back("vil_image_view_base_sptr");  // out prob image
   output_types.push_back("vil_image_view_base_sptr");  // colored output image
   output_types.push_back("vil_image_view_base_sptr");  // output id image  (ids are passed in the input text file if available)
+  output_types.push_back("vil_image_view_base_sptr");  // output porb image for given category
   return pro.set_output_types(output_types);
 }
 
@@ -97,15 +99,21 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
     std::cout << iter->first << " " << (int)iter->second << std::endl;
   }
 
+  std::string category_name = pro.get_input<std::string>(3);
+
   vil_image_view<float> out(ni, nj);
   vil_image_view<vil_rgb<vxl_byte> > out_rgb(ni, nj);
   vil_image_view<unsigned char> out_id(ni, nj);
+  vil_image_view<float> out_cat_prob(ni, nj);
+
   out.fill(0); out_rgb.fill(vil_rgb<vxl_byte>(0,0,0)); out_id.fill((unsigned char)0);
+  out_cat_prob.fill(0.0f);
 
   vil_image_view<int> texton_img(dict->filter_responses().ni(), dict->filter_responses().nj());
   texton_img.fill(0);
   dict->compute_textons_of_pixels(texton_img);
   std::cout << " computed textons of pixels..!\n"; std::cout.flush();
+  std::cout << " category name is: " << category_name << std::endl;
   // find the local coords of each pixel to retrieve corresponding img pixels
   float weight = 1.0f / (4*bb*bb);
   std::vector<float> hist(ntextons);
@@ -123,6 +131,8 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
       out_rgb(i,j) = cat_color_map[hc.first];
       out_id(i,j) = cat_id_map[hc.first];
       out(i,j) = hc.second;
+      float cat_prob = dict->get_class_prob(hist, category_name);
+      out_cat_prob(i,j) = cat_prob;
     }
   }
 
@@ -133,5 +143,7 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(1, img_ptr2);
   vil_image_view_base_sptr img_ptr3 = new vil_image_view<unsigned char>(out_id);
   pro.set_output_val<vil_image_view_base_sptr>(2, img_ptr3);
+  vil_image_view_base_sptr img_ptr4 = new vil_image_view<float>(out_cat_prob);
+  pro.set_output_val<vil_image_view_base_sptr>(3, img_ptr4);
   return true;
 }

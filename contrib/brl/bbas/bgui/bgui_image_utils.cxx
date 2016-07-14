@@ -67,6 +67,13 @@ bool bgui_image_utils::range(double& min_value, double& max_value,
 
   min_value = this->compute_lower_bound(plane);
   max_value = this->compute_upper_bound(plane);
+  // handle the case where range is degenerate
+  if(min_value == max_value){
+	  if(min_value > 0.0)
+		  min_value = 0.0;
+	  if(max_value==0.0)
+		  max_value = 1.0;
+  }
   return min_value < max_value;
 }
 
@@ -104,7 +111,8 @@ bool bgui_image_utils::init_histogram_from_data()
   }
   unsigned np = image_->nplanes();
 
-  vil_pixel_format type = image_->pixel_format();
+  // force RBGA to be interpreted as a four-band image
+  vil_pixel_format type = vil_pixel_format_component_format(image_->pixel_format());
 
   if (np!=1&&np!=3&&np!=4)
   {
@@ -135,16 +143,30 @@ bool bgui_image_utils::init_histogram_from_data()
         if ((*dit)<minr[p]) minr[p] = *dit;
         if ((*dit)>maxr[p]) maxr[p] = *dit;
       }
-      // determine if the number of bins exceeds the limit
       unsigned short smin = static_cast<unsigned short>(minr[p]);
       unsigned short smax = static_cast<unsigned short>(maxr[p]);
+	  // handle case where data is all the same
+	  if(smin == smax){
+		  if(smin == 0)
+			  smax = static_cast<unsigned short>(10);
+		  else if(smax == max_val)
+			  smin = static_cast<unsigned short>(max_val);
+		  else
+			  smin = 0;
+	  }
       unsigned short nbins = static_cast<unsigned short>(smax-smin);
+	   // determine if the number of bins exceeds the limit
       if (nbins>bin_limit_) {
-        nbins = static_cast<unsigned short>(bin_limit_);
+        nbins = bin_limit_;
         // increase max value to make bin delta an integer
         double range = smax-smin;
         unsigned short del = static_cast<unsigned short>(std::ceil(range/nbins));
-        smax = static_cast<unsigned short>(smin + nbins*del);
+		unsigned idel = del;
+		idel*=nbins;
+		if(idel>max_val)
+			smax = max_val;
+		else
+          smax = static_cast<unsigned short>(smin + nbins*del);
       }
       hist_[p] = bsta_histogram<double>(static_cast<double>(smin),
                                         static_cast<double>(smax), nbins);
@@ -174,7 +196,8 @@ bool bgui_image_utils::set_data_from_view(vil_image_view_base_sptr const& view,
     std::cout << "set histogram failed in bgui_image_utils\n";
     return false;
   }
-  vil_pixel_format type = view->pixel_format();
+  // interpret RGBA as a four band image
+  vil_pixel_format type = vil_pixel_format_component_format(view->pixel_format());
   unsigned ni = view->ni(), nj = view->nj();
   float area_frac = static_cast<float>(ni*nj*fraction);
   unsigned np = view->nplanes();
@@ -338,7 +361,7 @@ double bgui_image_utils::compute_upper_bound( unsigned plane )
 bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
 {
   unsigned n_planes = image_->nplanes();
-
+  vil_pixel_format comp_format = vil_pixel_format_component_format(image_->pixel_format());
   if (!image_ || n_planes>4)
     return VXL_NULLPTR;
 
@@ -383,7 +406,12 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
     double delta = hist_[p].delta();
     if (delta<min_delta) min_delta = delta;
   }
-
+   if(comp_format == VIL_PIXEL_FORMAT_UINT_16){
+     //for RGBA maximum mask can be full 16 bit val so scale it down for display purposes
+     double maxv = std::pow(2.0, 11.0)+100.0;
+      if(maxpos > maxv)
+        maxpos = maxv;
+    }
   // start at a multiple of 10
   double min_ten = 10.0*static_cast<int>(minpos/10);
   double max_ten = 10.0*(static_cast<int>(maxpos/10)+1);

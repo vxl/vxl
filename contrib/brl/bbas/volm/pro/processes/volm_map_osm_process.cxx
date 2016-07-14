@@ -50,7 +50,7 @@ bool volm_map_osm_process(bprb_func_process& pro)
   vsl_add_to_binary_loader(vsol_polygon_2d());
   vsl_add_to_binary_loader(vsol_polyline_2d());
   vsl_add_to_binary_loader(vsol_point_2d());
-  if (pro.verify_inputs()) {
+  if (!pro.verify_inputs()) {
     std::cout << "volm_map_osm_process: Input Error" << std::endl;
     return false;
   }

@@ -1,8 +1,8 @@
 # import the batch module and dbvalue from init 
 # set the global variable, batch, on init before importing this file
-import init
-dbvalue = init.dbvalue;
-batch = init.batch
+import brl_init
+dbvalue = brl_init.DummyBatch()
+batch = brl_init.DummyBatch()
 
 #############################################################################
 # PROVIDES higher level bbas python functions to make batch

@@ -283,9 +283,7 @@ vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::copy_in(T const *p)
 {
   T* dp = this->data_block();
-  unsigned int i = nrows * ncols;
-  while (i--)
-    *dp++ = *p++;
+  std::copy( p, p + nrows * ncols, dp );
   return *this;
 }
 
@@ -293,9 +291,7 @@ template<class T, unsigned nrows, unsigned ncols>
 void vnl_matrix_fixed<T,nrows,ncols>::copy_out(T *p) const
 {
   T const* dp = this->data_block();
-  unsigned int i = nrows*ncols;
-  while (i--)
-    *p++ = *dp++;
+  std::copy( dp, dp + nrows * ncols, p );
 }
 
 template<class T, unsigned nrows, unsigned ncols>
@@ -394,7 +390,13 @@ void
 vnl_matrix_fixed<T,nrows,ncols>
 ::swap(vnl_matrix_fixed<T,nrows,ncols> &that)
 {
-  std::swap(this->data_, that.data_);
+  for (unsigned int r = 0; r < nrows; ++r)
+  {
+    for (unsigned int c = 0; c < ncols; ++c)
+    {
+    std::swap(this->data_[r][c], that.data_[r][c]);
+    }
+  }
 }
 
 //: Returns a copy of n rows, starting from "row"
@@ -659,8 +661,8 @@ bool vnl_matrix_fixed<T,nrows,ncols>
   if (this->rows() != rhs.rows() || this->cols() != rhs.cols())
     return false;                                        // different sizes => not equal.
 
-  for (unsigned int i = 0; i < this->rows(); ++i)
-    for (unsigned int j = 0; j < this->columns(); ++j)
+  for (unsigned int i = 0; i < nrows; ++i)
+    for (unsigned int j = 0; j < ncols; ++j)
       if (vnl_math::abs(this->data_[i][j] - rhs.data_[i][j]) > tol)
         return false;                                    // difference greater than tol
 
@@ -768,12 +770,10 @@ vnl_matrix_fixed<T,nrows,ncols>::flipud()
 {
   for (unsigned int r1 = 0; 2*r1+1 < nrows; ++r1)
   {
-    unsigned int r2 = nrows - 1 - r1;
+    const unsigned int r2 = nrows - 1 - r1;
     for (unsigned int c = 0; c < ncols; ++c)
     {
-      T tmp = this->data_[r1][c];
-      this->data_[r1][c] = this->data_[r2][c];
-      this->data_[r2][c] = tmp;
+    std::swap(this->data_[r1][c], this->data_[r2][c]);
     }
   }
   return *this;
@@ -786,12 +786,10 @@ vnl_matrix_fixed<T,nrows,ncols>::fliplr()
 {
   for (unsigned int c1 = 0; 2*c1+1 < ncols; ++c1)
   {
-    unsigned int c2 = ncols - 1 - c1;
+    const unsigned int c2 = ncols - 1 - c1;
     for (unsigned int r = 0; r < nrows; ++r)
     {
-      T tmp = this->data_[r][c1];
-      this->data_[r][c1] = this->data_[r][c2];
-      this->data_[r][c2] = tmp;
+    std::swap(this->data_[r][c1], this->data_[r][c2]);
     }
   }
   return *this;
@@ -857,12 +855,12 @@ outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b)
 }
 
 #define VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N ) \
-template vnl_matrix_fixed<T,M,N > outer_product(vnl_vector_fixed<T,M > const&,\
+template VNL_EXPORT vnl_matrix_fixed<T,M,N > outer_product(vnl_vector_fixed<T,M > const&,\
                                                 vnl_vector_fixed<T,N > const& )
 
 #undef VNL_MATRIX_FIXED_INSTANTIATE
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
-template class vnl_matrix_fixed<T,M,N >; \
+template class VNL_EXPORT vnl_matrix_fixed<T,M,N >; \
 VNL_OUTER_PRODUCT_FIXED_INSTANTIATE( T, M, N )
 
 #endif // vnl_matrix_fixed_hxx_

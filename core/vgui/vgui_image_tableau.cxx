@@ -293,7 +293,7 @@ width() const
 {
   if ( renderer_ )
     return renderer_->get_image().width();
-  else if ( vil_renderer_ )
+  else if ( vil_renderer_ && vil_renderer_->get_image_resource())
     return vil_renderer_->get_image_resource()->ni();
   else
     return 0;
@@ -307,7 +307,7 @@ height() const
 {
   if ( renderer_ )
     return renderer_->get_image().height();
-  else if ( vil_renderer_ )
+  else if ( vil_renderer_ && vil_renderer_->get_image_resource())
     return vil_renderer_->get_image_resource()->nj();
   else
     return 0;

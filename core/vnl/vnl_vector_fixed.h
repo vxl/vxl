@@ -85,7 +85,7 @@ VCL_TEMPLATE_EXPORT template <class T, unsigned int num_rows, unsigned int num_c
 // vnl_vector_fixed and vnl_vector, however, you will probably get a
 // vnl_vector result, with the corresponding malloc cost.
 template <class T, unsigned int n>
-class VNL_EXPORT vnl_vector_fixed
+class VNL_TEMPLATE_EXPORT vnl_vector_fixed
 {
  protected:
   T data_[n];
@@ -260,10 +260,10 @@ class VNL_EXPORT vnl_vector_fixed
   }
 
   //: Return the i-th element
-  T& operator[] ( unsigned int i ) { return data_[i]; }
+  T& operator[] ( const size_t i ) { return data_[i]; }
 
   //: Return the i-th element
-  const T& operator[] ( unsigned int i ) const { return data_[i]; }
+  const T& operator[] ( const size_t i ) const { return data_[i]; }
 
   //: Access the contiguous block storing the elements in the vector.
   //  O(1).
@@ -382,7 +382,7 @@ class VNL_EXPORT vnl_vector_fixed
   vnl_vector<T> as_vector() const { return extract(n); }
 
   //: Replaces elements with index beginning at start, by values of v. O(n).
-  vnl_vector_fixed& VNL_EXPORT update(vnl_vector<T> const&, unsigned int start=0);
+  vnl_vector_fixed& update(vnl_vector<T> const&, unsigned int start=0);
 
   // norms etc
   typedef typename vnl_c_vector<T>::abs_t abs_t;

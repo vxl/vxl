@@ -1,8 +1,8 @@
 # import the batch module and dbvalue from init 
 # set the global variable, batch, on init before importing this file
-import init
-dbvalue = init.dbvalue;
-batch = init.batch
+import brl_init
+dbvalue = brl_init.DummyBatch()
+batch = brl_init.DummyBatch()
 
 #############################################################################
 # PROVIDES higher level brad python functions to make batch
@@ -314,4 +314,17 @@ def get_metadata_info(mdata):
     (id, type) = batch.commit_output(11)
     view_el = batch.get_output_float(id)
     batch.remove_data(id)
-    return sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el
+    (id, type) = batch.commit_output(12)
+    band = batch.get_output_string(id)
+    batch.remove_data(id)
+    return sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band
+
+
+def get_cloud_coverage(mdata):
+    batch.init_process("bradGetCloudCoverageProcess")
+    batch.set_input_from_db(0, mdata)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    cloud_coverage = batch.get_output_float(id)
+    batch.remove_data(id)
+    return cloud_coverage

@@ -8,18 +8,30 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_save.h>
 #include <vil/vil_new.h>
 #include <bsol/bsol_algs.h>
 #include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_point_2d.h>
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_vector_io.h>
 void betr_edgel_factory::set_parameters(float sigma, float noise_multiplier, double gradient_range, unsigned nbins){
   sdet_detector_params params;
   params.smooth = sigma;
   params.noise_multiplier = noise_multiplier;
   params.aggressive_junction_closure=1;
+  params.filterFactor = 0.0;
   params.borderp = false;
   params_ = params;
   gradient_range_ = gradient_range;
   nbins_ = nbins;
+}
+void betr_edgel_factory::set_parameters(float sigma, float noise_multiplier){
+params_.smooth = sigma; 
+ params_.noise_multiplier = noise_multiplier;
+ params_.aggressive_junction_closure=1;
+ params_.filterFactor = 0.0;
+ params_.borderp = false;
 }
 bool betr_edgel_factory::add_image(std::string const& iname, vil_image_resource_sptr const& imgr){
   if (!imgr||!imgr->ni()||!imgr->nj())
@@ -89,6 +101,11 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   }
   int imin = roi->cmin(region_id);
   int jmin = roi->rmin(region_id);
+  //debug
+  int imax = imin + ni;
+  int jmax = jmin + nj;
+  std::cout << "region(" << iname << ':' << region_name << ")(" << imin << ',' << jmin << ")->(" << imax << ',' << jmax <<")\n";
+  //
   brip_roi_sptr temp_roi = new brip_roi();
   temp_roi->add_region(imin, jmin, ni, nj);
   vil_image_resource_sptr clip_resc;
@@ -100,6 +117,12 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
     vil_image_view<vxl_byte> view = brip_vil_float_ops::convert_to_byte(clip_resc);
     clip_resc = vil_new_image_resource_of_view(view);
   }
+#if 0
+  //debug
+  std::string dir =  "D:/tests/rajaei_test/trigger/";
+  std::string fname = dir + iname + "_" + region_name + ".tif";
+  vil_save_image_resource(clip_resc, fname.c_str());
+#endif
   sdet_detector det(params_);
     
   det.SetImage(clip_resc);
@@ -177,8 +200,9 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
     unsigned int n = ech->size();
     for (unsigned int i=0; i<n;i++)
     {
-      vdgl_edgel ed = (*ech)[i];
+      vdgl_edgel& ed = (*ech)[i];
       double x = ed.get_x()+x0, y = ed.get_y()+y0;
+      ed.set_x(x); ed.set_y(y);
       if(!vpoly.contains(x, y))
         continue;
       double grad_mag = ed.get_grad();
@@ -186,4 +210,75 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
     }
   }
   return true;
+}
+bool betr_edgel_factory::save_edgels(std::string const& dir) const {
+  std::map<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >::const_iterator iit = edgels_.begin();
+  for(; iit != edgels_.end(); ++iit){
+	  const std::pair<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >& emap = *iit;
+    for(std::map<std::string, std::vector< vdgl_digital_curve_sptr > >::const_iterator eit = emap.second.begin();
+        eit != emap.second.end(); ++eit){
+      std::string region_name = eit->first;
+      std::vector< vdgl_digital_curve_sptr > edges = eit->second;
+      std::vector<vsol_digital_curve_2d_sptr> vsol_edges = sdet_detector::convert_vdgl_to_vsol(edges);
+      // convert to spatial object 2d
+      std::vector<vsol_spatial_object_2d_sptr> sos;
+      for(std::vector<vsol_digital_curve_2d_sptr>::const_iterator cit = vsol_edges.begin();
+          cit!= vsol_edges.end(); ++cit){
+        vsol_spatial_object_2d_sptr ec = dynamic_cast<vsol_spatial_object_2d*>(cit->ptr());
+        sos.push_back(ec);
+      }
+      std::string path = dir + region_name + "_edges.vsl";
+      vsl_b_ofstream ostr(path);
+      if(!ostr){
+        std::cout << "couldn't open binary stream for " << path << '\n';
+        return false;
+      }
+      vsl_b_write(ostr, sos);
+      ostr.close();
+    }
+}
+  return true;
+}
+bool betr_edgel_factory::save_edgels_in_poly(std::string const& dir){
+  std::map<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >::const_iterator iit = edgels_.begin();
+  for(; iit != edgels_.end(); ++iit){
+    const std::pair<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >& emap = *iit;
+    std::string iname = emap.first;
+    for(std::map<std::string, std::vector< vdgl_digital_curve_sptr > >::const_iterator eit = emap.second.begin();
+        eit != emap.second.end(); ++eit){
+      std::string region_name = eit->first;
+      unsigned index = regions_[iname][region_name];
+      vsol_polygon_2d_sptr poly = polys_[iname][index];
+      if(!poly){
+        std::cout << "Null polygon in save_edgel_in_poly\n";
+        return false;
+      }
+      vgl_polygon<double>  vpoly = bsol_algs::vgl_from_poly(poly);
+      std::vector< vdgl_digital_curve_sptr > edges = eit->second;
+      std::vector<vsol_digital_curve_2d_sptr> vsol_edges = sdet_detector::convert_vdgl_to_vsol(edges);
+      // convert to spatial object 2d
+      std::vector<vsol_spatial_object_2d_sptr> sos;
+      for(std::vector<vsol_digital_curve_2d_sptr>::const_iterator cit = vsol_edges.begin();
+          cit!= vsol_edges.end(); ++cit){
+        unsigned n = (*cit)->size();
+        for(unsigned i = 0; i<n; ++i){
+          vsol_point_2d_sptr p = (*cit)->point(i);
+          if(!vpoly.contains(p->x(), p->y()))
+            continue;
+          vsol_spatial_object_2d_sptr sp = dynamic_cast<vsol_point_2d*>(p.ptr());
+        sos.push_back(sp);
+        }
+      }
+      std::string path = dir + region_name + "_edges.vsl";
+      vsl_b_ofstream ostr(path);
+      if(!ostr){
+        std::cout << "couldn't open binary stream for " << path << '\n';
+        return false;
+      }
+      vsl_b_write(ostr, sos);
+      ostr.close();
+    }
+}
+  return true;
+
 }

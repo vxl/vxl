@@ -1,8 +1,9 @@
 # import the batch module and dbvalue from init 
 # set the global variable, batch, on init before importing this file
-import init
-dbvalue = init.dbvalue;
-batch = init.batch
+import brl_init
+dbvalue = brl_init.DummyBatch()
+batch = brl_init.DummyBatch()
+
 #############################################################################
 # PROVIDES higher level vpgl python functions to make batch
 # code more readable/refactored
@@ -191,6 +192,15 @@ def load_rational_camera(file_path):
     return status, cam
 
 
+def load_local_rational_camera(file_path):
+    batch.init_process("vpglLoadLocalRationalCameraProcess")
+    batch.set_input_string(0, file_path)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    cam = dbvalue(id, type)
+    return cam
+
+
 def load_rational_camera_nitf(file_path):
     batch.init_process("vpglLoadRationalCameraNITFProcess")
     batch.set_input_string(0, file_path)
@@ -200,13 +210,13 @@ def load_rational_camera_nitf(file_path):
     return cam
 
 
-def load_local_rational_camera(file_path):
-    batch.init_process("vpglLoadLocalRationalCameraProcess")
+def load_rational_camera_from_txt(file_path):
+    batch.init_process("vpglLoadRationalCameraFromTXTProcess")
     batch.set_input_string(0, file_path)
-    batch.run_process()
+    status = batch.run_process()
     (id, type) = batch.commit_output(0)
     cam = dbvalue(id, type)
-    return cam
+    return status, cam
 
 
 def convert_local_rational_perspective_camera(local_cam):
@@ -850,6 +860,25 @@ def translate_geo_camera(geocam, x, y):
     return cam
 
 
+def create_geotiff_cam(ll_lon, ll_lat, ur_lon, ur_lat, ni, nj, lvcs = 0):
+    batch.init_process("vpglCreateGeoCameraProcess")
+    batch.set_input_double(0, ll_lon)
+    batch.set_input_double(1, ll_lat)
+    batch.set_input_double(2, ur_lon)
+    batch.set_input_double(3, ur_lat)
+    batch.set_input_unsigned(4, ni)
+    batch.set_input_unsigned(5, nj)
+    if lvcs != 0:
+        batch.set_input_from_db(6, lvcs)
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        cam = dbvalue(id, type)
+        return cam
+    else:
+        return None
+
+
 def geo2generic(geocam, ni, nj, scene_height, level):
     batch.init_process("vpglConvertGeoCameraToGenericProcess")
     batch.set_input_from_db(0, geocam)
@@ -893,7 +922,7 @@ def create_and_save_lvcs(lat, lon, elev, cs_name, lvcs_filename):
     batch.set_input_float(2, elev)
     batch.set_input_string(3, cs_name)
     batch.set_input_string(4, lvcs_filename)
-    return bvxm_batch.run_process()
+    return batch.run_process()
 
 
 def load_lvcs(lvcs_filename):
@@ -918,6 +947,22 @@ def geo_cam_global_to_img(geocam, lon, lat):
     v = batch.get_output_int(id)
     batch.remove_data(id)
     return u, v
+
+
+def geo_cam_img_to_global(geocam, i, j):
+    batch.init_process("vpglGeoImgToGlobalProcess")
+    batch.set_input_from_db(0, geocam)
+    batch.set_input_unsigned(1, i)
+    batch.set_input_unsigned(2, j)
+    status = batch.run_process()
+    if status:
+      (id, type) = batch.commit_output(0)
+      lon = batch.get_output_double(id)
+      (id, type) = batch.commit_output(1)
+      lat = batch.get_output_double(id)
+      return lon, lat
+    else:
+      return 0.0, 0.0
 
 
 def convert_perspective_to_nvm(cams_dir, imgs_dir, output_nvm):
@@ -957,7 +1002,7 @@ def compute_affine_from_local_rational(cropped_cam, min_x, min_y, min_z, max_x, 
 # minimally distortive alignment
 
 
-def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, min_z, max_x, max_y, max_z, n_points=100):
+def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, min_z, max_x, max_y, max_z, local_ground_plane_height=5 n_points=100):
     batch.init_process("vpglAffineRectifyImagesProcess")
     batch.set_input_from_db(0, img1)
     batch.set_input_from_db(1, affine_cam1)
@@ -970,6 +1015,7 @@ def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, mi
     batch.set_input_double(8, max_y)
     batch.set_input_double(9, max_z)
     batch.set_input_unsigned(10, n_points)
+    batch.set_input_double(11, local_ground_plane_height)
     batch.run_process()
     (id, type) = batch.commit_output(0)
     out_img1 = dbvalue(id, type)
@@ -980,6 +1026,78 @@ def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, mi
     (id, type) = batch.commit_output(3)
     out_cam2 = dbvalue(id, type)
     return out_img1, out_cam1, out_img2, out_cam2
+
+# use the affine cameras of the images to compute an affine fundamental matrix and rectify them (flatten epipolar lines to scan lines and align them)
+# use the 3-d box that the cameras see to compute correspondences for
+# minimally distortive alignment, use the local rational cameras to find
+# the correspondence points
+
+
+def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_cam2, local_rational_cam2, min_x, min_y, min_z, max_x, max_y, max_z, output_path_H1, output_path_H2, local_ground_plane_height=5, n_points=100):
+    batch.init_process("vpglAffineRectifyImagesProcess2")
+    batch.set_input_from_db(0, img1)
+    batch.set_input_from_db(1, affine_cam1)
+    batch.set_input_from_db(2, local_rational_cam1)
+    batch.set_input_from_db(3, img2)
+    batch.set_input_from_db(4, affine_cam2)
+    batch.set_input_from_db(5, local_rational_cam2)
+    batch.set_input_double(6, min_x)
+    batch.set_input_double(7, min_y)
+    batch.set_input_double(8, min_z)
+    batch.set_input_double(9, max_x)
+    batch.set_input_double(10, max_y)
+    batch.set_input_double(11, max_z)
+    batch.set_input_unsigned(12, n_points)
+    batch.set_input_double(13, local_ground_plane_height)
+    batch.set_input_string(14, output_path_H1)
+    batch.set_input_string(15, output_path_H2)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    out_img1 = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    out_cam1 = dbvalue(id, type)
+    (id, type) = batch.commit_output(2)
+    out_img2 = dbvalue(id, type)
+    (id, type) = batch.commit_output(3)
+    out_cam2 = dbvalue(id, type)
+    return out_img1, out_cam1, out_img2, out_cam2
+
+
+# use the affine cameras of the images to compute an affine fundamental
+# matrix and write the f matrix out
+
+
+def affine_f_matrix(affine_cam1, affine_cam2, output_path):
+    batch.init_process("vpglAffineFMatrixProcess")
+    batch.set_input_from_db(0, affine_cam1)
+    batch.set_input_from_db(1, affine_cam2)
+    batch.set_input_string(2, output_path)
+    batch.run_process()
+
+def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_rational_cam1, img2, local_rational_cam2,
+                                        min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2, voxel_size):
+    batch.init_process("vpglConstructHeightMapProcess");
+    batch.set_input_from_db(0, img1);
+    batch.set_input_from_db(1, local_rational_cam1);
+    batch.set_input_string(2, img1_disp);
+    batch.set_input_float(3, min_disparity);
+    batch.set_input_from_db(4, img2);
+    batch.set_input_from_db(5, local_rational_cam2);
+    batch.set_input_double(6, min_x);
+    batch.set_input_double(7, min_y);
+    batch.set_input_double(8, min_z);
+    batch.set_input_double(9, max_x);
+    batch.set_input_double(10, max_y);
+    batch.set_input_double(11, max_z);
+    batch.set_input_double(12, voxel_size);
+    batch.set_input_string(13, path_H1);
+    batch.set_input_string(14, path_H2);
+    batch.run_process();
+    (id, type) = batch.commit_output(0);
+    out_map = dbvalue(id, type);
+    (id, type) = batch.commit_output(1);
+    disparity_map = dbvalue(id, type);
+    return out_map, disparity_map
 
 
 def compute_camera_to_world_homography(cam, plane, inverse=False):
@@ -1029,6 +1147,70 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
         return status, local_cam, i0, j0, ni, nj
     else:
         return status, dbvalue(0, ""), 0, 0, 0, 0
+
+
+# use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
+# note that the elevation of 3-d box is obtained from DEM height map
+def crop_image_using_3d_box_dem(img_res, camera, ll_lon, ll_lat, ur_lon, ur_lat, dem_folder, extra_height, uncertainty, lvcs=0):
+    batch.init_process("vpglCropImgUsing3DboxDemProcess")
+    batch.set_input_from_db(0, img_res)
+    batch.set_input_from_db(1, camera)
+    batch.set_input_double(2, ll_lon)
+    batch.set_input_double(3, ll_lat)
+    batch.set_input_double(4, ur_lon)
+    batch.set_input_double(5, ur_lat)
+    batch.set_input_string(6, dem_folder)
+    batch.set_input_double(7, extra_height)
+    batch.set_input_double(8, uncertainty)
+    if lvcs != 0:
+        batch.set_input_from_db(9, lvcs)
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        local_cam = dbvalue(id, type)
+        (id, type) = batch.commit_output(1)
+        i0 = batch.get_output_unsigned(id)
+        (id, type) = batch.commit_output(2)
+        j0 = batch.get_output_unsigned(id)
+        (id, type) = batch.commit_output(3)
+        ni = batch.get_output_unsigned(id)
+        (id, type) = batch.commit_output(4)
+        nj = batch.get_output_unsigned(id)
+        return status, local_cam, i0, j0, ni, nj
+    else:
+        return status, dbvalue(0, ""), 0.0, 0.0, 0.0, 0.0
+
+# use the 3-d box to crop an ortho image using its geo camera
+# note that the input 3-d box is in unit of wgs84 geo coordinates
+
+
+def crop_ortho_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev):
+    batch.init_process("vpglCropOrthoUsing3DboxPRocess")
+    batch.set_input_from_db(0, img_res)
+    batch.set_input_from_db(1, camera)
+    batch.set_input_double(2, lower_left_lon)
+    batch.set_input_double(3, lower_left_lat)
+    batch.set_input_double(4, lower_left_elev)
+    batch.set_input_double(5, upper_right_lon)
+    batch.set_input_double(6, upper_right_lat)
+    batch.set_input_double(7, upper_right_elev)
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        local_geo_cam = dbvalue(id, type)
+        (id, type) = batch.commit_output(1)
+        i0 = batch.get_output_unsigned(id)
+        (id, type) = batch.commit_output(2)
+        j0 = batch.get_output_unsigned(id)
+        (id, type) = batch.commit_output(3)
+        ni = batch.get_output_unsigned(id)
+        (id, type) = batch.commit_output(4)
+        nj = batch.get_output_unsigned(id)
+        return status, local_geo_cam, i0, j0, ni, nj
+    else:
+        return status, dbvalue(0, ""), 0, 0, 0, 0
+
+
 # use the 3-d box to offset the local camera using image camera, given certain uncertainty value in meter unit
 # note that the input 3-d box is in unit of wgs84 geo coordinates
 
@@ -1064,6 +1246,140 @@ def offset_cam_using_3d_box(camera, lower_left_lon, lower_left_lat, lower_left_e
         return status, local_cam, i0, j0, ni, nj
     else:
         return status, dbvalue(0, ""), 0, 0, 0, 0
+
+
+# covert (lat, lon) to UTM coordinates
+def utm_coords(lon, lat):
+    batch.init_process("vpglComputeUTMZoneProcess")
+    batch.set_input_double(0, lon)
+    batch.set_input_double(1, lat)
+    result = batch.run_process()
+    if result:
+        (id, type) = batch.commit_output(0)
+        x = batch.get_output_double(id)
+        (id, type) = batch.commit_output(1)
+        y = batch.get_output_double(id)
+        (id, type) = batch.commit_output(2)
+        utm_zone = batch.get_output_int(id)
+        (id, type) = batch.commit_output(3)
+        northing = batch.get_output_int(id)
+        return x, y, utm_zone, northing
+    else:
+        return 0.0, 0.0, 0, 0
+
+
+# get the world point (wgs84) given the image point and rational camera
+# Pass default initial guess point (-1.0, -1.0, -1.0) and plane height
+# (-1.0) if initial is unknown at all
+def rational_cam_img_to_global(camera, i, j, init_lon=-1.0, init_lat=-1.0, init_elev=-1.0, pl_elev=-1.0, error_tol=0.05):
+    batch.init_process("vpglRationalImgToGlobalProcess")
+    batch.set_input_from_db(0, camera)
+    batch.set_input_unsigned(1, i)
+    batch.set_input_unsigned(2, j)
+    batch.set_input_double(3, init_lon)
+    batch.set_input_double(4, init_lat)
+    batch.set_input_double(5, init_elev)
+    batch.set_input_double(6, pl_elev)
+    batch.set_input_double(7, error_tol)
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        lon = batch.get_output_double(id)
+        (id, type) = batch.commit_output(1)
+        lat = batch.get_output_double(id)
+        (id, type) = batch.commit_output(2)
+        elev = batch.get_output_double(id)
+        return lon, lat, elev
+    else:
+        return -1.0, -1.0, -1.0
+
+
+def rational_cam_nadirness(camera, lat, lon, elev):
+    batch.init_process("vpglRationalCamNadirnessProcess")
+    batch.set_input_from_db(0, camera)
+    batch.set_input_double(1, lat)
+    batch.set_input_double(2, lon)
+    batch.set_input_double(3, elev)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    val = batch.get_output_double(id)
+    return val
+
+
+# calculate GSD from a rational camera
+def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance=1000):
+    # create a lvcs
+    lvcs = create_lvcs(lat1, lon1, elev1, "wgs84")
+    lat2, lon2, elev2 = convert_local_to_global_coordinates(
+        lvcs, distance, distance, 0.0)
+    # calculate image pixel
+    i1, j1 = project_point(rational_cam, lon1, lat1, elev1)
+    i2, j2 = project_point(rational_cam, lon2, lat2, elev2)
+    gsd_i = distance / (i2 - i1)
+    gsd_j = distance / (j2 - j1)
+    if (gsd_i < 0.0):
+        gsd_i = -1 * gsd_i
+    if (gsd_j < 0.0):
+        gsd_j = -1 * gsd_j
+    batch.remove_data(lvcs.id)
+    return gsd_i, gsd_j
+
+
+# geo-register series of rational cameras using their correspondence features
+def isfm_rational_camera(trackfile, output_folder, pixel_radius):
+    batch.init_process("vpglIsfmRationalCameraProcess")
+    batch.set_input_string(0, trackfile)
+    batch.set_input_string(1, output_folder)
+    # pixel radius to count for inliers
+    batch.set_input_float(2, pixel_radius)
+    if not batch.run_process():
+        return None, -1.0, -1.0
+    (id, type) = batch.commit_output(0)
+    cam = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    error = batch.get_output_float(id)
+    (id, type) = batch.commit_output(2)
+    inliers = batch.get_output_float(id)
+    return cam, error, inliers
+
+
+# geo-register a rational camera to group of geo-registered cameras
+def isfm_rational_camera_seed(track_file, out_folder, dem_folder, ll_lon=0.0, ll_lat=0.0, ur_lon=0.0, ur_lat=0.0, height_diff=20.0, pixel_radius=2.0, enforce_existing=False):
+    batch.init_process("vpglIsfmRationalCameraSeedProcess")
+    batch.set_input_string(0, track_file)
+    batch.set_input_string(1, out_folder)
+    batch.set_input_string(2, dem_folder)
+    batch.set_input_float(3, ll_lon)
+    batch.set_input_float(4, ll_lat)
+    batch.set_input_float(5, ur_lon)
+    batch.set_input_float(6, ur_lat)
+    batch.set_input_double(7, height_diff)
+    batch.set_input_float(8, pixel_radius)
+    batch.set_input_bool(9, enforce_existing)
+    status = batch.run_process()
+    return status
+
+
+def isfm_rational_camera_with_init(track_file, dem_folder, ll_lon=0.0, ll_lat=0.0, ur_lon=0.0, ur_lat=0.0, height_diff=20.0, pixel_radius=2.0):
+    batch.init_process("vpglIsfmRationalCameraWithInitialProcess")
+    batch.set_input_string(0, track_file)
+    batch.set_input_string(1, dem_folder)
+    batch.set_input_double(2, ll_lon)
+    batch.set_input_double(3, ll_lat)
+    batch.set_input_double(4, ur_lon)
+    batch.set_input_double(5, ur_lat)
+    batch.set_input_double(6, height_diff)
+    batch.set_input_float(7, pixel_radius)
+    if not batch.run_process():
+        return None, -1.0, -1.0
+    (id, type) = batch.commit_output(0)
+    cam = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    error = batch.get_output_float(id)
+    (id, type) = batch.commit_output(2)
+    inliers = batch.get_output_float(id)
+    return cam, error, inliers
+
 
 # rotate a camera around principle axis
 
@@ -1173,3 +1489,53 @@ def create_perspective_camera_krt(k, r, t):
     (db_id, db_type) = batch.commit_output(0)
     cam = dbvalue(db_id, db_type)
     return cam
+
+
+## input two sets of points that correspond to each other in two different coordinate systems
+## compute the similarity transformation that maps space of pts0 to space of pts1, the size of pts0 and pts1 better match!
+## outputs a 4 by 4 similarity matrix as a vector of size 16
+## construct the matrix as follows
+## 0  1  2  3
+## 4  5  6  7
+## 8  9  10 11
+## 12 13 14 15
+def compute_transformation(pts0_xs, pts0_ys, pts0_zs,
+                           pts1_xs, pts1_ys, pts1_zs,
+                           input_cam_folder, output_cam_folder):
+    batch.init_process("vpglTransformSpaceProcess");
+    batch.set_input_double_array(0, pts0_xs)
+    batch.set_input_double_array(1, pts0_ys)
+    batch.set_input_double_array(2, pts0_zs)
+    batch.set_input_double_array(3, pts1_xs)
+    batch.set_input_double_array(4, pts1_ys)
+    batch.set_input_double_array(5, pts1_zs)
+    batch.set_input_string(6, input_cam_folder)
+    batch.set_input_string(7, output_cam_folder)
+    batch.run_process()
+    (id,type) = batch.commit_output(0)
+    matrix_as_array = batch.get_output_double_array(id)
+    batch.remove_data(id)
+    (id,type) = batch.commit_output(1)
+    scale = batch.get_output_double(id)
+    batch.remove_data(id)
+    return matrix_as_array, scale
+
+## inputs a 4 by 4 similarity matrix as a vector of size 16
+## construct the matrix as follows
+## 0  1  2  3
+## 4  5  6  7
+## 8  9  10 11
+## 12 13 14 15
+def compute_transformed_box(min_pt, max_pt, matrix_as_array):
+    batch.init_process("vpglTransformBoxProcess");
+    batch.set_input_double_array(0, min_pt)
+    batch.set_input_double_array(1, max_pt)
+    batch.set_input_double_array(2, matrix_as_array)
+    batch.run_process()
+    (id,type) = batch.commit_output(0)
+    out_min_pt = batch.get_output_double_array(id)
+    batch.remove_data(id)
+    (id,type) = batch.commit_output(1)
+    out_max_pt = batch.get_output_double_array(id)
+    batch.remove_data(id)
+    return out_min_pt, out_max_pt

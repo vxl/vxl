@@ -168,7 +168,7 @@
 //
 
 template <class T, unsigned num_rows, unsigned num_cols>
-class VNL_EXPORT vnl_matrix_fixed_ref_const
+class VNL_TEMPLATE_EXPORT vnl_matrix_fixed_ref_const
 {
  protected:
   const T* data_;
@@ -392,7 +392,7 @@ class VNL_EXPORT vnl_matrix_fixed_ref_const
 
 
 template <class T, unsigned num_rows, unsigned num_cols>
-class VNL_EXPORT vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_cols>
+class VNL_TEMPLATE_EXPORT vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_cols>
 {
   typedef vnl_matrix_fixed_ref_const<T,num_rows,num_cols> base;
 
@@ -638,7 +638,7 @@ class VNL_EXPORT vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_
   //  \code
   //     M.flipud().fliplr();
   //  \endcode
-  vnl_matrix_fixed_ref const& flipud() const;
+  vnl_matrix_fixed_ref & flipud();
 
   //: Reverses the order of columns, and returns "*this".
   //  Returning "*this" allows "chaining" two or more operations:
@@ -646,7 +646,7 @@ class VNL_EXPORT vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_
   //  \code
   //     M.flipud().fliplr();
   //  \endcode
-  vnl_matrix_fixed_ref const& fliplr() const;
+  vnl_matrix_fixed_ref & fliplr();
 
   //: Normalizes each row so it is a unit vector, and returns "*this".
   //  Zero rows are not modified

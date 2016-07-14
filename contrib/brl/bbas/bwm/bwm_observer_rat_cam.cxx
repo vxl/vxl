@@ -49,12 +49,17 @@ vpgl_camera<double>* bwm_observer_rat_cam::read_camera(std::string cam_path,
   //rational camera may be local, therefore we check if it's local first
   vpgl_camera<double>* cam  = read_local_rational_camera<double>(cam_path);
 
+  if(!cam){
+    std::cout << "Rational cmaera isn't RPB ... trying TXT\n";
+    cam = read_local_rational_camera_from_txt<double>(cam_path);
+  }
   if ( !cam ) {
     std::cout << "Rational camera isn't local... trying global" << std::endl;
     cam = read_rational_camera<double>(cam_path);
+    if(!cam)
+      cam = read_rational_camera_from_txt<double>(cam_path);
     local = false;
   }
-
   if (!cam) {
     bwm_utils::show_error("[" + cam_path + "] is not a valid rational camera path");
     return VXL_NULLPTR;

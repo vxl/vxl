@@ -15,6 +15,8 @@
 #include <betr/betr_kml_utils.h>
 #include <betr/betr_event_trigger.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+#include <vpgl/vpgl_camera_double_sptr.h>
+#include <vpgl/vpgl_camera.h>
 void test_event_trigger()
 {
   //create vsol_spatial_object_3d directly from polygon vertices
@@ -44,17 +46,19 @@ void test_event_trigger()
   std::string cam_path = img_dir + image_name + ".rpb";
   vpgl_local_rational_camera<double>* lcam = read_local_rational_camera<double>(cam_path);
   vpgl_lvcs lvcs = lcam->lvcs();
+  vpgl_camera_double_sptr camera = lcam;
   betr_event_trigger etr;
   etr.set_lvcs(lvcs);
-  etr.set_local_rat_cam(*lcam);
+  etr.set_ref_camera(camera);
+  etr.set_evt_camera(camera);
   betr_geo_object_3d_sptr ref_obj = new betr_geo_object_3d(so_3d_ref, lvcs);
   betr_geo_object_3d_sptr evt_obj = new betr_geo_object_3d(so_3d_evt, lvcs);
   std::string ref_name = "ref_region", evt_name = "evt_region";
-  etr.add_geo_object(ref_name, ref_obj);
-  etr.add_geo_object(evt_name, evt_obj);
+  etr.add_geo_object(ref_name, ref_obj, true);
+  etr.add_geo_object(evt_name, evt_obj, false);
   vsol_polygon_2d_sptr ref_poly_2d, evt_poly_2d;
-  bool good = etr.project_object(ref_name, ref_poly_2d);
-  good = good&& etr.project_object(evt_name, evt_poly_2d);
+  bool good = etr.project_object(camera,ref_name, ref_poly_2d);
+  good = good&& etr.project_object(camera,evt_name, evt_poly_2d);
   //load vsol_spatial_object_3d from ply files
   std::string site_dir = "D:/tests/chiletest/site/chile-illum_objects/";
   std::string obj0_path = site_dir + "mesh_0.ply";
@@ -69,16 +73,16 @@ void test_event_trigger()
   betr_geo_object_3d_sptr ply_3d_obj = new betr_geo_object_3d(so_ply_3d, lvcs);
   betr_event_trigger etr_ply;
   etr_ply.set_lvcs(lvcs);
-  etr_ply.set_local_rat_cam(*lcam);
+  etr_ply.set_ref_camera(camera);
+  etr_ply.set_evt_camera(camera);
   ref_name = "ply_ref_region"; evt_name = "ply_evt_region";
   std::string name_3d ="mesh_volume";
-  etr_ply.add_geo_object(ref_name, ply_ref_obj);
-  etr_ply.add_geo_object(evt_name, ply_evt_obj);
-  etr_ply.add_geo_object(name_3d, ply_3d_obj);
+  etr_ply.add_geo_object(ref_name, ply_ref_obj, true);
+  etr_ply.add_geo_object(evt_name, ply_evt_obj, false);
+  etr_ply.add_geo_object(name_3d, ply_3d_obj, false);
   vsol_polygon_2d_sptr ply_ref_poly_2d, ply_evt_poly_2d, ply_mesh_poly_2d;
-  good = etr_ply.project_object(ref_name, ply_ref_poly_2d);
-  good = good&& etr_ply.project_object(evt_name, ply_evt_poly_2d);
-  good = good&& etr_ply.project_object(name_3d, ply_mesh_poly_2d);
-  delete lcam;
+  good = etr_ply.project_object(camera,ref_name, ply_ref_poly_2d);
+  good = good&& etr_ply.project_object(camera,evt_name, ply_evt_poly_2d);
+  good = good&& etr_ply.project_object(camera,name_3d, ply_mesh_poly_2d);
 }
 TESTMAIN(test_event_trigger);
