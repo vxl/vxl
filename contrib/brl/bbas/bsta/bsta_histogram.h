@@ -115,7 +115,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   //: Value for area fraction below value
   T value_with_area_below(const T area_fraction) const;
 
-  //: Value for area fraction below value
+  //: Value for area fraction above value
   T value_with_area_above(const T area_fraction) const;
 
   //: Entropy of p(x)

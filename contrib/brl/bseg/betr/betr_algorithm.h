@@ -16,9 +16,9 @@
 class betr_algorithm : public vbl_ref_count
 {
  public:
- betr_algorithm():name_("no_name"), offset_(0.0), alpha_(1.0){}
- betr_algorithm(std::string name): name_(name),offset_(0.0), alpha_(1.0){}
- betr_algorithm(std::string name, double offset, double alpha):name_(name), offset_(offset), alpha_(alpha){}
+ betr_algorithm():name_("no_name"), offset_(0.0), alpha_(1.0), verbose_(false){}
+ betr_algorithm(std::string name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false){}
+ betr_algorithm(std::string name, double offset, double alpha):name_(name), offset_(offset), alpha_(alpha), verbose_(false){}
   // performance parameters
   void set_offset(double offset){offset_ = offset;}
   void set_alpha(double alpha){alpha_ = alpha;}
@@ -34,6 +34,9 @@ class betr_algorithm : public vbl_ref_count
   //: procedural  methods
   virtual bool process(){return false;}
   virtual double prob_change() const {return 0.0;}
+  //: debug 
+  //======================
+  void set_verbose(bool verbose){verbose_ = verbose;}
   virtual void clear(){
     ref_imgr_ = VXL_NULLPTR;
     evt_imgr_ = VXL_NULLPTR;
@@ -53,6 +56,7 @@ class betr_algorithm : public vbl_ref_count
   //as in p_change = 1/(1+e^-alpha*(change-offset))
   double offset_;
   double alpha_;
+  bool verbose_;
 };
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_algorithm.
 #include "betr_algorithm_sptr.h"

@@ -184,6 +184,7 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change){
     std::cout << "reference or event image not set\n";
       return false;
   }
+  alg->set_verbose(verbose_);
   alg->set_reference_image(ref_imgr_);
   alg->set_event_image(evt_imgr_);
 
