@@ -99,6 +99,15 @@ def _register_batch(mod, batch):
     mod.batch.register_datatypes()
     mod.dbvalue = dbvalue_factory(mod.batch)
 
+def register_batch(batch):
+    #dbvalue factory for different batches
+    batch.register_processes()
+    batch.register_datatypes()
+    if batch not in register_batch.dbvalues:
+        register_batch.dbvalues[batch] = type('dbvalue', (dbvalue,), {'batch':batch})
+    return register_batch.dbvalues[batch]
+register_batch.dbvalues = {}
+
 def set_smart_register(value=True):
     set_smart_register.value = value
 set_smart_register.value=False
