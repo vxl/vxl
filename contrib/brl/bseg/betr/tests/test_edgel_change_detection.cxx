@@ -114,14 +114,7 @@ void test_edgel_change_detection()
  std::string evt_cam_path_2 = dir + evt_name_2 + "_RPC.TXT";
  vpgl_local_rational_camera<double>* evt_lcam_2 = read_local_rational_camera_from_txt<double>(evt_cam_path_2);
  vpgl_camera_double_sptr evt_camera_2 = evt_lcam_2;
- // processing a no change image
- betr_event_trigger etr2("rajaei", lvcs);
- etr.set_verbose(true);
- etr.set_ref_camera(ref_camera);
  etr.set_evt_camera(evt_camera_2);
- etr.add_geo_object("pier_ref", lon, lat, elev, ref_obj_path, true);
- etr.add_geo_object("pier_evt", lon, lat, elev, evt_obj_path, false);
- etr.set_ref_image(ref_imgr);
  etr.set_evt_image(evt_imgr_2);
  std::cout << "====PROCESSING WITH NO CHANGE =====\n";
  double pchange2 = 0.0;
