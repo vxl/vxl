@@ -1002,7 +1002,7 @@ def compute_affine_from_local_rational(cropped_cam, min_x, min_y, min_z, max_x, 
 # minimally distortive alignment
 
 
-def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, min_z, max_x, max_y, max_z, local_ground_plane_height=5 n_points=100):
+def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, min_z, max_x, max_y, max_z, local_ground_plane_height=5, n_points=100):
     batch.init_process("vpglAffineRectifyImagesProcess")
     batch.set_input_from_db(0, img1)
     batch.set_input_from_db(1, affine_cam1)
