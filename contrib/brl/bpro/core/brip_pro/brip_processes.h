@@ -13,5 +13,6 @@ DECLARE_FUNC_CONS(brip_solve_gain_offset_process);
 DECLARE_FUNC_CONS(brip_truncate_nitf_bit_process);
 DECLARE_FUNC_CONS(brip_solve_gain_offset_constraints_process);
 DECLARE_FUNC_CONS(brip_image_mutual_info_process);
+DECLARE_FUNC_CONS(brip_phase_correlation_process);
 
 #endif
