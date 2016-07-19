@@ -1539,3 +1539,20 @@ def compute_transformed_box(min_pt, max_pt, matrix_as_array):
     out_max_pt = batch.get_output_double_array(id)
     batch.remove_data(id)
     return out_min_pt, out_max_pt
+
+# get connected component of a geotiff image
+def find_connected_component(in_img, in_cam, threshold, out_kml):
+    batch.init_process("vpglFindConnectedComponentProcess")
+    batch.set_input_from_db(0, in_img)
+    batch.set_input_from_db(1, in_cam)
+    batch.set_input_float(2, threshold)
+    batch.set_input_string(3, out_kml)
+    status = batch.run_process()
+    if status:
+      (id, type) = batch.commit_output(0)
+      out_img = dbvalue(id, type)
+      (id, type) = batch.commit_output(1)
+      num_regions = batch.get_output_unsigned(id)
+      return out_img, num_regions
+    else:
+      return None, 0

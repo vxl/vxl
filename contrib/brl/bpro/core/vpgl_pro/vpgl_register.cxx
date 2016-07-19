@@ -83,6 +83,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_geo_cam_img_to_global_process, "vpglGeoImgToGlobalProcess");
 #if HAS_GEOTIFF
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_geo_camera_process2, "vpglLoadGeoCameraProcess2");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_find_connected_component_process, "vpglFindConnectedComponentProcess");
 #endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_export_cameras_to_nvm_process, "vpglExportCamerasToNvmProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_lvcs_process, "vpglCreateLVCSProcess");

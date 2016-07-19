@@ -54,7 +54,7 @@ bool volm_dsm_ground_plane_estimation_process(bprb_func_process& pro)
   int N = pro.get_input<int>(in_i++);
   int window_size = pro.get_input<int>(in_i++);
   float invalid_pixel = pro.get_input<float>(in_i++);
-  
+
   vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(img_res.ptr());
   if (!in_img) {
     std::cerr << pro.name() << ": Unsupported image pixel format -- " << img_res->pixel_format() << ", only float is supported!\n";
@@ -275,7 +275,7 @@ bool volm_dsm_ground_plane_estimation_edge_process(bprb_func_process& pro)
   // construct spline object
   mbl_thin_plate_spline_3d tps;
   tps.build(src_pts, dst_pts);
-  
+
   // apply to points
   out->fill(invalid_pixel);
   for (int i = 0; i < ni; i++) {

@@ -1,4 +1,4 @@
-// This is brl/bbas/volm/pro/processes/vpgl_crop_img_using_geo_coords.cxx
+// This is brl/brpo/core/vpgl_pro/processes/vpgl_crop_img_using_3d_box_process.cxx
 //:
 // \file
 //        Take a cam, an uncertainty value in meter unit and a 3D bounding box in wgs84 coordinates to generate a cropped image
