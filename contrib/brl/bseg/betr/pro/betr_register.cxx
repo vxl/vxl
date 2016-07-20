@@ -17,7 +17,7 @@ void betr_register::register_datatype()
 void betr_register::register_process()
 {
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_create_site_process, "betrCreateSiteProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_create_site_process, "betrCreateEventTriggerProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_create_event_trigger_process, "betrCreateEventTriggerProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_add_site_object_process, "betrAddSiteObjectProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_add_event_trigger_process, "betrAddEventTriggerProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_add_event_trigger_object_process, "betrAddEventTriggerObjectProcess");
