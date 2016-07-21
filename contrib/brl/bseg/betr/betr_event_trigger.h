@@ -30,12 +30,15 @@
 #include "betr_algorithm.h"
 class betr_event_trigger : public vbl_ref_count{
  public:
-  betr_event_trigger(): name_("no_name"), lvcs_valid_(false), local_bbox_(VXL_NULLPTR){register_algorithms();}
+ betr_event_trigger(): name_("no_name"), lvcs_valid_(false),
+    local_bbox_(VXL_NULLPTR), verbose_(false){register_algorithms();}
 
-  betr_event_trigger(vpgl_lvcs const& lvcs): name_("no_name"), lvcs_(lvcs), lvcs_valid_(true), local_bbox_(VXL_NULLPTR){
+  betr_event_trigger(vpgl_lvcs const& lvcs): name_("no_name"), lvcs_(lvcs), lvcs_valid_(true),
+    local_bbox_(VXL_NULLPTR), verbose_(false){
     register_algorithms();
   }
-  betr_event_trigger(std::string const& name, vpgl_lvcs const& lvcs): name_(name), lvcs_(lvcs), lvcs_valid_(true), local_bbox_(VXL_NULLPTR){
+  betr_event_trigger(std::string const& name, vpgl_lvcs const& lvcs): name_(name), lvcs_(lvcs), lvcs_valid_(true),
+    local_bbox_(VXL_NULLPTR), verbose_(false){
     register_algorithms();
   }
   void set_lvcs(vpgl_lvcs const& lvcs){lvcs_=lvcs; lvcs_valid_=true;}
@@ -62,12 +65,15 @@ class betr_event_trigger : public vbl_ref_count{
   //: projected 2-d polygon for the 3-d trigger object
   bool project_object(vpgl_camera_double_sptr cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly);
   bool save_projected_polys(std::string const& path, std::vector<vsol_polygon_2d_sptr> const& polys);  
+  // debug
+  void set_verbose(bool verbose){verbose_ = verbose;}
  private:
   void update_local_bounding_box();
   vsol_polygon_2d_sptr project_poly(vpgl_camera_double_sptr const& camera,
                                     vsol_polygon_3d_sptr poly_3d,
                                     vgl_vector_3d<double> const& transl);
   void register_algorithms();
+  bool verbose_;
   std::string name_;
   vpgl_lvcs lvcs_;
   bool lvcs_valid_;

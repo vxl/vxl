@@ -13,16 +13,22 @@ class betr_edgel_change_detection : public betr_algorithm
  public:
  betr_edgel_change_detection(): betr_algorithm("edgel_change_detection"), sigma_(1.0), noise_mul_(1.5), js_div_(0.0){}
 
- betr_edgel_change_detection(double sigma, double noise_mul): betr_algorithm("edgel_change_detection"), sigma_(sigma),noise_mul_(noise_mul), js_div_(0.0){}
+ betr_edgel_change_detection(double sigma, double noise_mul): betr_algorithm("edgel_change_detection"), sigma_(sigma),noise_mul_(noise_mul),
+    js_div_(0.0){}
 
- betr_edgel_change_detection(double sigma, double noise_mul, double offset, double alpha):
-  betr_algorithm("edgel_change_detection", offset, alpha), sigma_(sigma),noise_mul_(noise_mul), js_div_(0.0){}
+  // offset and alpha are  sigmoid parameters to convert js_divergence to a change probability
+ betr_edgel_change_detection(double sigma, double noise_mul, double offset, double alpha): betr_algorithm("edgel_change_detection", offset, alpha),
+    sigma_(sigma),noise_mul_(noise_mul), js_div_(0.0){}
   //: process change
   virtual bool process();
+
   //: resulting change probability
-  virtual double prob_change() const{return js_div_;} //for now
+  virtual double prob_change() const{return js_div_;} //for now not really a probability
+
  private:
+  //:results
   double js_div_;
+  //: parameters
   double sigma_;
   double noise_mul_;
 };

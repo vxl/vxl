@@ -96,6 +96,7 @@ void test_edgel_change_detection()
  double lon, lat, elev;
  lvcs.get_origin(lat, lon, elev);
  betr_event_trigger etr("rajaei", lvcs);
+ etr.set_verbose(true);
  etr.set_ref_camera(ref_camera);
  etr.set_evt_camera(evt_camera);
  etr.add_geo_object("pier_ref", lon, lat, elev, ref_obj_path, true);
@@ -103,7 +104,21 @@ void test_edgel_change_detection()
  etr.set_ref_image(ref_imgr);
  etr.set_evt_image(evt_imgr);
  double pchange = 0.0;
+ std::cout << "====PROCESSING WITH CHANGE =====\n";
  etr.process("edgel_change_detection", pchange);
+
+
+ std::string evt_name_2 = "20160625_031318_0c68";
+ std::string evt_img_path_2 = dir + evt_name_2 +"_0.tiff";
+ vil_image_resource_sptr evt_imgr_2 = vil_load_image_resource(evt_img_path_2.c_str());
+ std::string evt_cam_path_2 = dir + evt_name_2 + "_RPC.TXT";
+ vpgl_local_rational_camera<double>* evt_lcam_2 = read_local_rational_camera_from_txt<double>(evt_cam_path_2);
+ vpgl_camera_double_sptr evt_camera_2 = evt_lcam_2;
+ etr.set_evt_camera(evt_camera_2);
+ etr.set_evt_image(evt_imgr_2);
+ std::cout << "====PROCESSING WITH NO CHANGE =====\n";
+ double pchange2 = 0.0;
+ etr.process("edgel_change_detection", pchange2);
 #endif
   }
   TESTMAIN(test_edgel_change_detection);

@@ -49,6 +49,6 @@ bool betr_execute_event_trigger_process(bprb_func_process& pro)
     return false;
   double prob_change = 0.0;
   bool good = event_trigger->process(algorithm_name, prob_change);
-  pro.set_output_val<double>(0, prob_change);
+  pro.set_output_val<float>(0, prob_change);
   return good;
 }
