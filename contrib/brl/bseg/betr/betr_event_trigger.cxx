@@ -190,7 +190,7 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change){
 
   // for now only one ref object and one event object
   if(evt_trigger_objects_.size() != 1 && ref_trigger_objects_.size() != 1 ){
-    std::cout << "for now only two ref objects and two evt object\n";
+    std::cout << "for now only one ref objects and one evt object\n";
     return false;
   } 
   std::map<std::string, betr_geo_object_3d_sptr>::iterator oit = ref_trigger_objects_.begin();

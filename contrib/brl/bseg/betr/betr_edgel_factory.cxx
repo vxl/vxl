@@ -95,7 +95,8 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   unsigned region_id = regions_[iname][region_name];
   unsigned ni = roi->csize(region_id);
   unsigned nj = roi->rsize(region_id);
-  if(ni == 0 || nj ==0 ){
+  unsigned min_size = 10;
+  if(ni < min_size || nj <min_size ){
     std::cout << "roi " << region_id <<  " for " << iname << " is empty \n";
     return false;
   }
