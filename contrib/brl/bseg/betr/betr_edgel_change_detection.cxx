@@ -16,7 +16,11 @@ bool betr_edgel_change_detection::process(){
   good = good && ef.process("ref_image","ref_evt_poly");
   good = good && ef.process("evt_image","evt_ref_poly");
   good = good && ef.process("evt_image","evt_evt_poly"); 
-  //debug
+  if(!good){
+    std::cout << "edgel factory failed" << std::endl;
+    return false;
+  }
+    //debug
   if(verbose_){
     std::string dir =  "D:/tests/rajaei_test/trigger/";
     ef.save_edgels_in_poly(dir);
