@@ -81,7 +81,7 @@ def set_event_trigger_data(event_trigger, ref_imgr, ref_camera, event_imgr, even
     status = batch.run_process()
     return status
 
-# execute change detection
+# execute change detection with a single event region
 def execute_event_trigger(event_trigger, algorithm_name):
     batch.init_process("betrExecuteEventTriggerProcess")
     batch.set_input_from_db(0, event_trigger)
@@ -92,3 +92,17 @@ def execute_event_trigger(event_trigger, algorithm_name):
         (pc_id, pc_type) = batch.commit_output(0);
         prob_change = batch.get_output_float(pc_id);
     return (status, prob_change)
+
+# execute change detection with a multiple event regions
+def execute_event_trigger_multi(event_trigger, algorithm_name):
+    batch.init_process("betrExecuteEventTriggerMultiProcess")
+    batch.set_input_from_db(0, event_trigger)
+    batch.set_input_string(1, algorithm_name);
+    status = batch.run_process()
+    prob_change = None
+    if status:
+        (pc_id, pc_type) = batch.commit_output(0);
+        prob_change = batch.get_output_double_array(pc_id);
+        (name_id, name_type) = batch.commit_output(1);
+        evt_names = batch.get_bbas_1d_array_string(name_id);
+        return (status, prob_change, evt_names)

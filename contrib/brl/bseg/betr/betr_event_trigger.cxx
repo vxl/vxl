@@ -1,4 +1,5 @@
 #include <vcl_compiler.h>
+#include <stdlib.h>
 #include "betr_event_trigger.h"
 #include "betr_geo_object_3d.h"
 #include "vsol_mesh_3d.h"
@@ -19,6 +20,8 @@
 #include <vpgl/vpgl_camera.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
+unsigned betr_event_trigger::process_counter_ = 0;
+
 void betr_event_trigger::register_algorithms(){
   betr_algorithm_sptr alg = new betr_edgel_change_detection();
   algorithms_[alg->name()] = alg;
@@ -50,7 +53,7 @@ bool betr_event_trigger::add_geo_object(std::string const& name, double lon, dou
     bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();
   bool good = bmsh3d_load_ply(mesh, geom_path.c_str());
   if(!good){
-    std::cout << "invalid bmesh3d ply file - " << geom_path << '\n';
+    std::cout << "invalid bmesh3d ply file - " << geom_path << std::endl;
     return false;
   }
   vsol_mesh_3d* vmesh = new vsol_mesh_3d();
@@ -174,68 +177,74 @@ vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vpgl_camera_double_sptr c
   return poly_2d;
 }
 bool betr_event_trigger::process(std::string alg_name, double& prob_change){
+  std::vector<double> scores;
+  bool good = this->process(alg_name, scores);
+  if(good&&scores.size()>=1){
+    prob_change = scores[0];
+    return good;
+  }
+  prob_change = 0.0;
+  return false;
+}
+bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change){
+  
   betr_algorithm_sptr alg = algorithms_[alg_name];
   if(!alg){
-    std::cout <<"algorithm " << alg_name << " does not exist\n";
+    std::cout <<"algorithm " << alg_name << " does not exist" << std::endl;
     return false;
   }
-  alg->clear();
   if(!ref_imgr_ || !evt_imgr_ ){
-    std::cout << "reference or event image not set\n";
+    std::cout << "reference or event image not set";
       return false;
   }
-  alg->set_verbose(verbose_);
-  alg->set_reference_image(ref_imgr_);
-  alg->set_event_image(evt_imgr_);
-
-  // for now only one ref object and one event object
-  if(evt_trigger_objects_.size() != 1 && ref_trigger_objects_.size() != 1 ){
-    std::cout << "for now only one ref objects and one evt object\n";
+  // for now only one ref object and one or more event objects
+  if(evt_trigger_objects_.size() >= 1 && ref_trigger_objects_.size() != 1 ){
+    std::cout << "for now only one ref object and one or more evt object"<< std::endl;
     return false;
   } 
-  std::map<std::string, betr_geo_object_3d_sptr>::iterator oit = ref_trigger_objects_.begin();
-  std::string ref_obj_name = oit->first;
-  oit = evt_trigger_objects_.begin();
-  std::string evt_obj_name = oit->first;
-  // project the objects
-  vsol_polygon_2d_sptr ref_ref_poly, ref_evt_poly;
-  vsol_polygon_2d_sptr evt_ref_poly, evt_evt_poly;
+  prob_change.clear();
+  std::map<std::string, betr_geo_object_3d_sptr>::iterator rit = ref_trigger_objects_.begin();
+  std::string ref_obj_name = rit->first;
+  // project the reference object
+  vsol_polygon_2d_sptr ref_ref_poly,evt_ref_poly;
   if(!this->project_object(ref_camera_, ref_obj_name, ref_ref_poly)){
     return false;
   }
-  if(!this->project_object(ref_camera_, evt_obj_name, ref_evt_poly)){
-    return false;
-  }
   if(!this->project_object(evt_camera_, ref_obj_name, evt_ref_poly)){
-    return false;
+      return false;
   }
-  if(!this->project_object(evt_camera_, evt_obj_name, evt_evt_poly)){
-    return false;
+  for(std::map<std::string, betr_geo_object_3d_sptr>::iterator oit = evt_trigger_objects_.begin();
+	  oit != evt_trigger_objects_.end(); ++oit){
+    alg->clear();
+    alg->set_verbose(verbose_);
+    alg->set_reference_image(ref_imgr_);
+    alg->set_event_image(evt_imgr_);
+    std::string evt_obj_name = oit->first;
+    char buffer [33];
+    itoa(process_counter_,buffer,10);
+    std::string cnt(buffer);
+    alg->set_identifier(evt_obj_name + "_" + cnt);
+    std::cout << "Processing event object " << evt_obj_name << std::endl;
+    // project the event objects
+    vsol_polygon_2d_sptr ref_evt_poly, evt_evt_poly;
+    if(!this->project_object(ref_camera_, evt_obj_name, ref_evt_poly)){
+      return false;
+    }
+    if(!this->project_object(evt_camera_, evt_obj_name, evt_evt_poly)){
+      return false;
+    }
+    alg->set_proj_ref_ref_object(ref_ref_poly);
+    alg->set_proj_ref_evt_object(ref_evt_poly);
+    alg->set_proj_evt_ref_object(evt_ref_poly);
+    alg->set_proj_evt_evt_object(evt_evt_poly);
+    if(!alg->process()){
+      prob_change.push_back(0.0);
+      std::cout << "Algorithm failed " << std::endl;
+      return false;
+    }
+    prob_change.push_back(alg->prob_change());
   }
-  alg->set_proj_ref_ref_object(ref_ref_poly);
-  alg->set_proj_ref_evt_object(ref_evt_poly);
-  alg->set_proj_evt_ref_object(evt_ref_poly);
-  alg->set_proj_evt_evt_object(evt_evt_poly);
-  // for debug
-#if 0
-  std::string dir =  "D:/tests/rajaei_test/trigger/";
-  std::string ref_path = dir + "ref_polys.vsl";
-  std::string evt_path = dir + "evt_polys.vsl";
-  std::vector<vsol_polygon_2d_sptr> ref_polys;
-  std::vector<vsol_polygon_2d_sptr> evt_polys;
-  ref_polys.push_back(ref_ref_poly);
-  ref_polys.push_back(ref_evt_poly);
-  evt_polys.push_back(evt_ref_poly);
-  evt_polys.push_back(evt_evt_poly);
-  this->save_projected_polys(ref_path, ref_polys);
-  this->save_projected_polys(evt_path, evt_polys);
-#endif
-  //
-  if(!alg->process()){
-    prob_change = 0.0;
-    return false;
-  }
-  prob_change = alg->prob_change();
+  process_counter_++;
   return true;
 }
 std::vector<std::string> betr_event_trigger::algorithms() const{

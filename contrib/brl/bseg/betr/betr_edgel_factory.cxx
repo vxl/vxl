@@ -240,7 +240,7 @@ bool betr_edgel_factory::save_edgels(std::string const& dir) const {
 }
   return true;
 }
-bool betr_edgel_factory::save_edgels_in_poly(std::string const& dir){
+bool betr_edgel_factory::save_edgels_in_poly(std::string const& identifier, std::string const& dir){
   std::map<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >::const_iterator iit = edgels_.begin();
   for(; iit != edgels_.end(); ++iit){
     const std::pair<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >& emap = *iit;
@@ -270,7 +270,7 @@ bool betr_edgel_factory::save_edgels_in_poly(std::string const& dir){
         sos.push_back(sp);
         }
       }
-      std::string path = dir + region_name + "_edges.vsl";
+      std::string path = dir + identifier + "_" + region_name + "_edges.vsl";
       vsl_b_ofstream ostr(path);
       if(!ostr){
         std::cout << "couldn't open binary stream for " << path << '\n';

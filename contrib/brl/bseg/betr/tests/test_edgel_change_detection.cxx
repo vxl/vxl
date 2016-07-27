@@ -1,6 +1,7 @@
 // This is brl/bseg/betr/tests/test_edgel_change_detection.cxx
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include <vil/vil_load.h>
 #include <testlib/testlib_test.h>
 #include <betr/betr_geo_box_3d.h>
@@ -84,8 +85,11 @@ void test_edgel_change_detection()
  std::string evt_img_path = dir + evt_name +"_0.tiff";
  std::string ref_cam_path = dir + ref_name + "_RPC.TXT";
  std::string evt_cam_path = dir + evt_name + "_RPC.TXT";
- std::string ref_obj_path = dir + "rajaei_trigger_objects/mesh_1.ply";
- std::string evt_obj_path = dir + "rajaei_trigger_objects/mesh_2.ply";
+// std::string ref_obj_path = dir + "rajaei_trigger_objects/mesh_1.ply";
+// std::string evt_obj_path = dir + "rajaei_trigger_objects/mesh_2.ply";
+ std::string evt_obj0_path = dir + "rajaei_trigger_multi_event_objects/mesh_0.ply";
+ std::string evt_obj1_path = dir + "rajaei_trigger_multi_event_objects/mesh_1.ply";
+ std::string ref_obj_path = dir + "rajaei_trigger_multi_event_objects/mesh_2.ply";
  vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
  vil_image_resource_sptr evt_imgr = vil_load_image_resource(evt_img_path.c_str());
  vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
@@ -100,14 +104,21 @@ void test_edgel_change_detection()
  etr.set_ref_camera(ref_camera);
  etr.set_evt_camera(evt_camera);
  etr.add_geo_object("pier_ref", lon, lat, elev, ref_obj_path, true);
- etr.add_geo_object("pier_evt", lon, lat, elev, evt_obj_path, false);
+ etr.add_geo_object("pier_evt0", lon, lat, elev, evt_obj0_path, false);
+ etr.add_geo_object("pier_evt1", lon, lat, elev, evt_obj1_path, false);
  etr.set_ref_image(ref_imgr);
  etr.set_evt_image(evt_imgr);
- double pchange = 0.0;
+
  std::cout << "====PROCESSING WITH CHANGE =====\n";
+ std::vector<double> pchange;
  etr.process("edgel_change_detection", pchange);
-
-
+ unsigned i =0;
+ for(std::vector<double>::iterator pit = pchange.begin();
+     pit != pchange.end(); ++pit, i++)
+   std::cout << "pchange[" << i << "] = " << *pit << '\n';
+ double pr = 0.0;
+ //etr.process("edgel_change_detection", pr);
+ //std::cout << "pr = " << pr << '\n';
  std::string evt_name_2 = "20160625_031318_0c68";
  std::string evt_img_path_2 = dir + evt_name_2 +"_0.tiff";
  vil_image_resource_sptr evt_imgr_2 = vil_load_image_resource(evt_img_path_2.c_str());
@@ -117,8 +128,16 @@ void test_edgel_change_detection()
  etr.set_evt_camera(evt_camera_2);
  etr.set_evt_image(evt_imgr_2);
  std::cout << "====PROCESSING WITH NO CHANGE =====\n";
- double pchange2 = 0.0;
- etr.process("edgel_change_detection", pchange2);
+ pchange.clear();
+ etr.process("edgel_change_detection", pchange);
+ i = 0;
+ for(std::vector<double>::iterator pit = pchange.begin();
+     pit != pchange.end(); ++pit, i++)
+   std::cout << "pchange[" << i << "] = " << *pit << '\n';
+ pr = 0.0;
+ //etr.process("edgel_change_detection", pr);
+ //std::cout << "pr = " << pr << '\n';
+
 #endif
   }
   TESTMAIN(test_edgel_change_detection);

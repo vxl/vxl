@@ -51,8 +51,11 @@ class betr_event_trigger : public vbl_ref_count{
   void add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object, bool is_ref_obj);
   bool add_geo_object(std::string const& name, double lon, double lat ,
                       double elev, std::string const& geom_path, bool is_ref_obj);
-  //: execute change algorithm
+  //: execute change algorithm one event object
   bool process(std::string alg_name, double& prob_change);
+
+  //: execute change algorithm multiple event objects
+  bool process(std::string alg_name, std::vector<double>& prob_change);
 
   //: acessors
   std::string name() const {return name_;}
@@ -77,6 +80,7 @@ class betr_event_trigger : public vbl_ref_count{
   std::string name_;
   vpgl_lvcs lvcs_;
   bool lvcs_valid_;
+  static unsigned process_counter_;
   betr_geo_box_3d global_bbox_;//trigger bounding box in global WGS84
   vsol_box_3d_sptr local_bbox_;//trigger bounding box in local Cartesian coordinates
   vil_image_resource_sptr ref_imgr_; //ref image resouce
