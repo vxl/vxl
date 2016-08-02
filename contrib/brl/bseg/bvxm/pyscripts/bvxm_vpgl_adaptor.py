@@ -1180,12 +1180,13 @@ def isfm_rational_camera_with_init(track_file, dem_folder, ll_lon=0.0, ll_lat=0.
     return cam, error, inliers
 
 # get connected component of a geotiff image
-def find_connected_component(in_img, in_cam, threshold, out_kml):
+def find_connected_component(in_img, in_cam, threshold, out_kml, is_above=True):
     bvxm_batch.init_process("vpglFindConnectedComponentProcess")
     bvxm_batch.set_input_from_db(0, in_img)
     bvxm_batch.set_input_from_db(1, in_cam)
     bvxm_batch.set_input_float(2, threshold)
     bvxm_batch.set_input_string(3, out_kml)
+    bvxm_batch.set_input_bool(4, is_above)
     status = bvxm_batch.run_process()
     if status:
       (id, type) = bvxm_batch.commit_output(0)

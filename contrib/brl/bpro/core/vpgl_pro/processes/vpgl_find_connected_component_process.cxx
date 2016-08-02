@@ -7,6 +7,7 @@
 #include <bprb/bprb_func_process.h>
 #include <iostream>
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vil/algo/vil_find_4con_boundary.h>
@@ -16,7 +17,7 @@
 
 namespace vpgl_find_connected_component_process_globals
 {
-  const unsigned n_inputs_  = 4;
+  const unsigned n_inputs_  = 5;
   const unsigned n_outputs_ = 2;
 }
 
@@ -29,6 +30,7 @@ bool vpgl_find_connected_component_process_cons(bprb_func_process& pro)
   input_types_[1] = "vpgl_camera_double_sptr";     // input geo camera
   input_types_[2] = "float";                       // threshold
   input_types_[3] = "vcl_string";                  // output kml file
+  input_types_[4] = "bool";                        // option to select is above threshold or below
 
   output_types_[0] = "vil_image_view_base_sptr";   // output connected component image
   output_types_[1] = "unsigned";                   // number of connected component
@@ -49,6 +51,7 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
   float threshold = pro.get_input<float>(in_i++);
   std::string out_kml = pro.get_input<std::string>(in_i++);
+  bool is_above = pro.get_input<bool>(in_i++);
 
   // convert input image to float
   vil_image_view<float> in_img;
@@ -71,10 +74,18 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
 
   // collect pixels that larger than the given threshold
   std::vector<vgl_point_2d<int> > pixels;
-  for (int i = 0; i < in_img.ni(); i++)
-    for (int j = 0; j < in_img.nj(); j++)
-      if (in_img(i,j) > threshold)
-        pixels.push_back(vgl_point_2d<int>(i,j));
+  for (int i = 0; i < in_img.ni(); i++) {
+    for (int j = 0; j < in_img.nj(); j++) {
+      if (is_above) {
+        if (in_img(i,j) >= threshold)
+          pixels.push_back(vgl_point_2d<int>(i,j));
+      }
+      else {
+        if (in_img(i,j) <= threshold)
+          pixels.push_back(vgl_point_2d<int>(i,j));
+      }
+    }
+  }
 
   std::vector<vgl_polygon<double> > poly_region;
   unsigned num_pixels = (unsigned)pixels.size();
@@ -89,12 +100,20 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
       continue;
     // find the boundary
     std::vector<int> bi, bj;
-    vil_find_4con_boundary_above_threshold(bi, bj, in_img, float(threshold), u, v);
+    if (is_above)
+      vil_find_4con_boundary_above_threshold(bi, bj, in_img, float(threshold), u, v);
+    else
+      vil_find_4con_boundary_below_threshold(bi, bj, in_img, float(threshold), u, v);
+    if (bi.size() <= 2)
+      continue;
     vgl_polygon<double> poly;
     poly.new_sheet();
     for (unsigned i = 0; i < bi.size(); i++)
       if (!poly.contains((double)bi[i], (double)bj[i]))
         poly.push_back((double)bi[i], (double)bj[i]);
+    // check formed polygon geometry
+    if (vgl_area(poly) < 1E-3)
+      continue;
     poly_region.push_back(poly);
   }
 
@@ -102,14 +121,25 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
   vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(in_img.ni(), in_img.nj());
   out_img->fill(0);
   unsigned num_poly = poly_region.size();
+  std::vector<unsigned> poly_num_pixels;
+  std::vector<float>    poly_avg_height;
   for (unsigned sh_idx = 0; sh_idx < num_poly; sh_idx++) {
     vgl_polygon_scan_iterator<double> it(poly_region[sh_idx], true);
+    unsigned n_pixel = 0;
+    float total_h = 0.0f;
     for (it.reset(); it.next();  ) {
       int y = it.scany();
-      for (int x = it.startx(); x <= it.endx(); ++x)
-        if (x >= 0 && y >= 0 && x < out_img->ni() && y < out_img->ni())
+      for (int x = it.startx(); x <= it.endx(); ++x) {
+        if (x >= 0 && y >= 0 && x < out_img->ni() && y < out_img->nj()) {
           (*out_img)(x,y) = 255;
+          n_pixel++;
+          total_h += in_img(x, y);
+        }
+      }
     }
+    float avg_height = total_h / n_pixel;
+    poly_num_pixels.push_back(n_pixel);
+    poly_avg_height.push_back(avg_height);
   }
 
   // generate output kml
@@ -128,9 +158,10 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
       geocam->img_to_global(u, v, lon, lat);
       wgs_poly.push_back(lon, lat);
     }
-    std::stringstream name;
+    std::stringstream name, description;
     name << "zone_" << sh_idx << "_" << threshold;
-    bkml_write::write_polygon(ofs, wgs_poly, name.str(), name.str(), 1.0, 3.0, 1.0, 0, 255, 0);
+    description << "NumPixel_" << poly_num_pixels[sh_idx] << "_AvgHeight_" << poly_avg_height[sh_idx];
+    bkml_write::write_polygon(ofs, wgs_poly, name.str(), description.str(), 1.0, 3.0, 0.8, 0, 255, 0);
   }
   bkml_write::close_document(ofs);
   ofs.close();

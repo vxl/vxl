@@ -1541,12 +1541,13 @@ def compute_transformed_box(min_pt, max_pt, matrix_as_array):
     return out_min_pt, out_max_pt
 
 # get connected component of a geotiff image
-def find_connected_component(in_img, in_cam, threshold, out_kml):
+def find_connected_component(in_img, in_cam, threshold, out_kml, is_above=True):
     batch.init_process("vpglFindConnectedComponentProcess")
     batch.set_input_from_db(0, in_img)
     batch.set_input_from_db(1, in_cam)
     batch.set_input_float(2, threshold)
     batch.set_input_string(3, out_kml)
+    batch.set_input_bool(4, is_above)
     status = batch.run_process()
     if status:
       (id, type) = batch.commit_output(0)
