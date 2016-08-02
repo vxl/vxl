@@ -1,11 +1,14 @@
+import brl_init
+import boxm2_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
-from boxm2_adaptor import *
-from boxm2_tools_adaptor import *
-from boxm2_filtering_adaptor import *
-from vil_adaptor import *
-from vpgl_adaptor import *
-from os.path import basename, splitext
-import sys
+import boxm2_adaptor
+import boxm2_tools_adaptor
+import boxm2_filtering_adaptor
+import vil_adaptor_boxm2_batch as vil_adaptor
+import vpgl_adaptor_boxm2_batch as vpgl_adaptor
+
+import os
 
 #############################################################################
 # boxm2_scene_adaptor class offers super simple model manipulation syntax
@@ -34,22 +37,22 @@ class boxm2_scene_adaptor(object):
         # if device_string is gpu, load up opencl
         self.device_string = device_string
         if device_string[0:3] == "gpu" or device_string[0:3] == "cpu":
-            self.scene, self.cpu_cache, self.device, self.opencl_cache = load_opencl(
-                scene_str, device_string)
+            self.scene, self.cpu_cache, self.device, self.opencl_cache = \
+                boxm2_adaptor.load_opencl(scene_str, device_string)
             self.active_cache = self.opencl_cache
         elif device_string[0:3] == "cpp":
-            self.scene, self.cpu_cache = load_cpp(scene_str)
+            self.scene, self.cpu_cache = boxm2_adaptor.load_cpp(scene_str)
             self.active_cache = self.cpu_cache
         else:
             print "UNKNOWN device type: ", device_string
             print "exiting."
-            sys.exit(-1)
+            exit(-1)
         # store model directory for later use
-        self.bbox = scene_bbox(self.scene)
-        self.description = describe_scene(self.scene)
+        self.bbox = boxm2_adaptor.scene_bbox(self.scene)
+        self.description = boxm2_adaptor.describe_scene(self.scene)
         self.model_dir = self.description['dataPath']
         self.rgb = self.description['appType'] == "boxm2_gauss_rgb"
-        self.lvcs = scene_lvcs(self.scene)
+        self.lvcs = boxm2_adaptor.scene_lvcs(self.scene)
 
     def __del__(self):
         if self.scene is not None:
@@ -68,7 +71,7 @@ class boxm2_scene_adaptor(object):
         return self.description
 
     def modify_appearance(self, app1, app2):
-        status = modify_scene_appearance(self.scene, app1, app2)
+        status = boxm2_adaptor.modify_scene_appearance(self.scene, app1, app2)
         self.rgb = self.description['appType']
         return status
     # returns scene bounding box
@@ -129,13 +132,13 @@ class boxm2_scene_adaptor(object):
     def init_alpha(self, pinit=0.01, thresh=1.0):
         cache = self.opencl_cache
         dev = self.device
-        init_alpha(self.scene, cache, dev, pinit, thresh)
+        boxm2_adaptor.init_alpha(self.scene, cache, dev, pinit, thresh)
 
     # update with alternate explaination prior and appearance density
     def update_with_alt(self, cam, img, update_alpha=True, mask=None, var=-1.0, alt_prior=None, alt_density=None):
         cache = self.opencl_cache
         dev = self.device
-        update_grey_with_alt(self.scene, cache, cam, img, dev,
+        boxm2_adaptor.update_grey_with_alt(self.scene, cache, cam, img, dev,
                              "", mask, update_alpha, var, alt_prior, alt_density)
     # update wrapper, can pass in a Null device to use
 
@@ -143,9 +146,9 @@ class boxm2_scene_adaptor(object):
         dev,cache = self._get_device_cache(device_string)
         # run update grey or RGB
         if self.rgb:
-            return update_rgb(self.scene, cache, cam, img, dev, "", update_alpha)
+            return boxm2_adaptor.update_rgb(self.scene, cache, cam, img, dev, "", update_alpha)
         else:
-            return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var, update_app, tnear, tfar)
+            return boxm2_adaptor.update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var, update_app, tnear, tfar)
 
 
     # update wrapper, can pass in a Null device to use
@@ -157,9 +160,9 @@ class boxm2_scene_adaptor(object):
         dev,cache = self._get_device_cache(device_string)
 
         if self.rgb and not force_grey:
-            update_rgb(self.scene, cache, cam, img, dev, "", False)
+            boxm2_adaptor.update_rgb(self.scene, cache, cam, img, dev, "", False)
         else:
-            update_app_grey(self.scene, cache, cam, img, dev)
+            boxm2_adaptor.update_app_grey(self.scene, cache, cam, img, dev)
     # update skky wrapper, can pass in a Null device to use
 
     def update_sky(self, cam, img, device_string=""):
@@ -169,7 +172,7 @@ class boxm2_scene_adaptor(object):
 
         dev,cache = self._get_device_cache(device_string)
 
-        update_sky(self.scene, cache, cam, img, dev)
+        boxm2_adaptor.update_sky(self.scene, cache, cam, img, dev)
     # update skky wrapper, can pass in a Null device to use
 
     def update_sky2(self, cam, img, step, device_string=""):
@@ -179,35 +182,37 @@ class boxm2_scene_adaptor(object):
 
         dev,cache = self._get_device_cache(device_string)
 
-        update_sky2(self.scene, cache, cam, img, step, dev)
+        boxm2_adaptor.update_sky2(self.scene, cache, cam, img, step, dev)
     # render wrapper, same as above
 
-    def render(self, cam, ni=1280, nj=720, device_string="", ident_string="", tnear=1000000.0, tfar=1000000.0, ):
+    def render(self, cam, ni=1280, nj=720, device_string="", ident_string="", 
+               tnear=1000000.0, tfar=1000000.0, ):
         dev,cache = self._get_device_cache(device_string)
         if self.rgb:
-            expimg, vis_image, status = render_rgb(
+            expimg, vis_image, status = boxm2_adaptor.render_rgb(
                 self.scene, cache, cam, ni, nj, dev, tnear, tfar)
             boxm2_batch.remove_data(vis_image.id)
         else:
-            expimg = render_grey(self.scene, cache, cam,
-                                 ni, nj, dev, ident_string, tnear, tfar)
+            expimg = boxm2_adaptor.render_grey(self.scene, cache, cam,
+                                               ni, nj, dev, ident_string, 
+                                               tnear, tfar)
         return expimg
 
     # render wrapper, same as above
     def render_vis(self, cam, ni=1280, nj=720, device_string="", ident=""):
         dev,cache = self._get_device_cache(device_string)
         if self.rgb:
-            expimg, vis_image, status = render_rgb(
+            expimg, vis_image, status = boxm2_adaptor.render_rgb(
                 self.scene, cache, cam, ni, nj, dev)
         else:
-            expimg, vis_image = render_grey_and_vis(
+            expimg, vis_image = boxm2_adaptor.render_grey_and_vis(
                 self.scene, cache, cam, ni, nj, dev, ident)
         return expimg, vis_image
 
     # render depth image wrapper
     def render_depth(self, cam, ni=1280, nj=720, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        expimg, varimg, visimg = render_depth(
+        expimg, varimg, visimg = boxm2_adaptor.render_depth(
             self.scene, cache, cam, ni, nj, dev)
         return expimg, varimg, visimg
 
@@ -215,49 +220,50 @@ class boxm2_scene_adaptor(object):
     # first visible and occupied surface along the rays
     def render_depth_of_max_prob_surface(self, cam, ni=1280, nj=720, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        expimg, probimg, visimg = render_depth_of_max_prob_surface(
+        expimg, probimg, visimg = boxm2_adaptor.render_depth_of_max_prob_surface(
             self.scene, cache, cam, ni, nj, dev)
         return expimg, probimg, visimg
 
     # render depth image with loading given region wrapper
     def render_depth_region(self, cam, lat, lon, elev, radius, ni=1280, nj=720, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        expimg, varimg, visimg = render_depth_region(
+        expimg, varimg, visimg = boxm2_adaptor.render_depth_region(
             self.scene, cache, cam, lat, lon, elev, radius, ni, nj, dev)
         return expimg, varimg, visimg
 
     # render z image wrapper
     def render_z_image(self, cam, ni=1280, nj=720, normalize=False, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        z_exp_img, z_var_img = render_z_image(
+        z_exp_img, z_var_img = boxm2_adaptor.render_z_image(
             self.scene, cache, cam, ni, nj, normalize, dev)
         return z_exp_img, z_var_img
 
     # render heigh map render
     def render_height_map(self, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        z_image, var_image, x_image, y_image, prob_image = render_height_map(
-            self.scene, cache, dev)
+        z_image, var_image, x_image, y_image, prob_image = \
+                boxm2_adaptor.render_height_map(self.scene, cache, dev)
         return z_image, var_image, x_image, y_image, prob_image
 
     # ingest heigh map
     def ingest_height_map(self, x_img, y_img, z_img, zero_out_alpha=True, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        ingest_height_map(self.scene, cache, x_img, y_img,
+        boxm2_adaptor.ingest_height_map(self.scene, cache, x_img, y_img,
                           z_img, zero_out_alpha, dev)
         return
 
     # ingest heigh map
     def ingest_height_map_space(self, x_img, y_img, z_img, crust_thickness, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        ingest_height_map_space(self.scene, cache, x_img,
+        boxm2_adaptor.ingest_height_map_space(self.scene, cache, x_img,
                                 y_img, z_img, crust_thickness, dev)
         return
 
     # ingest to zero out alphas along the rays given by the input images
     def ingest_to_zero_out_alpha(self, x_img, y_img, z_img, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        ingest_to_zero_out_alpha(self.scene, cache, x_img, y_img, z_img, dev)
+        boxm2_adaptor.ingest_to_zero_out_alpha(self.scene, cache, x_img, y_img,
+                                               z_img, dev)
         return
 
     # ingest label map
@@ -265,110 +271,123 @@ class boxm2_scene_adaptor(object):
     def ingest_label_map(self, x_img, y_img, z_img, label_img, ident, device_string=""):
         dev,cache = self._get_device_cache(device_string)
         #ingest_label_map(self.scene, cache, x_img, y_img, z_img, label_img, dev);
-        ingest_label_map(self.scene, cache, x_img, y_img,
-                         z_img, label_img, ident, dev)
+        boxm2_adaptor.ingest_label_map(self.scene, cache, x_img, y_img,
+                                       z_img, label_img, ident, dev)
         return
 
     # ingest label map
     def ingest_osm_label_map(self, x_img, y_img, z_img, label_img, ident="land", device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        ingest_osm_label_map(self.scene, cache, x_img,
-                             y_img, z_img, label_img, ident, dev)
+        boxm2_adaptor.ingest_osm_label_map(self.scene, cache, x_img,
+                                           y_img, z_img, label_img, ident, dev)
         return
 
     # ingest buckeye-style dem
     def ingest_buckeye_dem(self, first_ret_fname, last_ret_fname, geoid_height, geocam, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        ingest_buckeye_dem(self.scene, cache, first_ret_fname,
-                           last_ret_fname, geoid_height, geocam, dev)
+        boxm2_adaptor.ingest_buckeye_dem(self.scene, cache, first_ret_fname,
+                                         last_ret_fname, geoid_height, geocam, 
+                                         dev)
         return
 
     def probability_of(self, cam, image):
         cache = self.active_cache
         dev = self.device
-        outimg = compute_probability_of_image(
+        outimg = boxm2_adaptor.compute_probability_of_image(
             self.device, self.scene, self.opencl_cache, cam, image)
         return outimg
 
     def cubic_probability_of(self, cam, image, model_ident, img_ident):
         cache = self.active_cache
         dev = self.device
-        outimg = cubic_compute_probability_of_image(
+        outimg = boxm2_adaptor.cubic_compute_probability_of_image(
             self.device, self.scene, self.opencl_cache, cam, image, model_ident, img_ident)
         return outimg
 
     # detect change wrapper,
     def change_detect(self, cam, img, exp_img, n=1, raybelief="", max_mode=False, rgb=False, device_string="", ident=""):
         dev,cache = self._get_device_cache(device_string)
-        cd_img = change_detect(self.scene, cache, cam, img,
+        cd_img = boxm2_adaptor.change_detect(self.scene, cache, cam, img,
                                exp_img, dev, rgb, n, raybelief, max_mode, ident)
         return cd_img
 
     # detect change wrapper,
     def change_detect2(self, cam, img, identifier="", max_mode=False, tnear=10000000, tfar=0.00001, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        cd_img, vis_img = change_detect2(
+        cd_img, vis_img = boxm2_adaptor.change_detect2(
             self.scene, cache, cam, img, identifier, max_mode, tnear, tfar, dev)
         return cd_img, vis_img
 
     def refine(self, thresh=0.3, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        return refine(self.scene, cache, thresh, dev)
+        return boxm2_adaptor.refine(self.scene, cache, thresh, dev)
 
     def merge(self, thresh=0.3, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        merge(self.scene, cache, thresh, dev)
+        boxm2_adaptor.merge(self.scene, cache, thresh, dev)
 
     def median_filter(self, device_string=""):
         dev,cache = self._get_device_cache(device_string)
-        median_filter(self.scene, cache, dev)
+        boxm2_adaptor.median_filter(self.scene, cache, dev)
 
     # given the scene, chip the NITF and setup the camera
     def roi_init(self, NITF_path, camera, convert_to_8bit, params_fname, margin=0, clip_width=-1, clip_height=-1):
-        return roi_init(NITF_path, camera, self.scene, convert_to_8bit, params_fname, margin, clip_width, clip_height)
+        return boxm2_adaptor.roi_init(NITF_path, camera, self.scene, convert_to_8bit, params_fname, margin, clip_width, clip_height)
 
     # Apply multiple filters to  scene
     def kernel_vector_filter(self, filters):
-        return apply_filters(self.scene, self.opencl_cache, self.device, filters)
+        return boxm2_filtering_adaptor.apply_filters(self.scene, 
+            self.opencl_cache, self.device, filters)
 
     # Interpolate normal from various responses
     def interpolate_normals(self, filters):
-        return interpolate_normals(self.scene, self.opencl_cache, self.device, filters)
+        return boxm2_filtering_adaptor.interpolate_normals(self.scene, 
+            self.opencl_cache, self.device, filters)
 
     # Extract cell centers to XYZ for fast access
     def extract_cell_centers(self, prob_thresh=0.0):
-        return extract_cell_centers(self.scene, self.cpu_cache, prob_thresh=0.0)
+        return boxm2_tools_adaptor.extract_cell_centers(self.scene, 
+            self.cpu_cache, prob_thresh=0.0)
 
     #  Flip normals towards direction of maximum visibility
     def flip_normals(self, use_sum=False):
-        return flip_normals(self.scene, self.opencl_cache, self.device, use_sum)
+        return boxm2_filtering_adaptor.flip_normals(self.scene,
+            self.opencl_cache, self.device, use_sum)
 
     # Export points and normals to a .PLY file or XYZ. Points and normals need
     # to be extracted first
-    def export_points_and_normals(self, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, exp_thresh=0.0, bbox_file=""):
-        return export_points_and_normals(self.scene, self.cpu_cache, file_out, save_aux, prob_thresh, vis_thresh, nmag_thresh, exp_thresh, bbox_file)
+    def export_points_and_normals(self, file_out, save_aux=True, 
+                                  prob_thresh=0.0, vis_thresh=0.0, 
+                                  nmag_thresh=0.0, exp_thresh=0.0, 
+                                  bbox_file=""):
+        return boxm2_tools_adaptor.export_points_and_normals(self.scene, 
+            self.cpu_cache, file_out, save_aux, prob_thresh, vis_thresh, 
+            nmag_thresh, exp_thresh, bbox_file)
 
     # Adds auxiliary data to vertices in a .PLY
     def add_aux_info_to_ply(self, file_in, file_out):
-        add_aux_info_to_ply(self.scene, self.cpu_cache, file_in, file_out)
+        boxm2_tools_adaptor.add_aux_info_to_ply(self.scene, self.cpu_cache, 
+                                                file_in, file_out)
 
     # only write the cpu_cache to disk
     def write_cache(self, do_clear=0):
-        write_cache(self.cpu_cache, do_clear)
+        boxm2_adaptor.write_cache(self.cpu_cache, do_clear)
 
     # clear cache (both caches if OPENCL scene)
     def clear_cache(self):
-        clear_cache(self.cpu_cache)
+        boxm2_adaptor.clear_cache(self.cpu_cache)
         if self.opencl_cache:
-            clear_cache(self.opencl_cache)
+            boxm2_adaptor.clear_cache(self.opencl_cache)
 
     ################################
     # get info functions
     def get_info_along_ray(self, cam, u, v, prefix, identifier=""):
-        return get_info_along_ray(self.scene, self.cpu_cache, cam, u, v, prefix, identifier)
+        return boxm2_tools_adaptor.get_info_along_ray(self.scene, 
+            self.cpu_cache, cam, u, v, prefix, identifier)
 
     def query_cell_brdf(self, point, model_type):
-        return query_cell_brdf(self.scene, self.cpu_cache, point, model_type)
+        return boxm2_tools_adaptor.query_cell_brdf(self.scene, self.cpu_cache,
+                                                   point, model_type)
 
     #####################################################################
     ######### BATCH UPDATE METHODS ######################################
@@ -384,8 +403,8 @@ class boxm2_scene_adaptor(object):
         # for i in imgRange:
         #  print >>fd, "img_%05d"%i
         for img in imgs:
-            fname, fextension = splitext(img)
-            bname = basename(fname)
+            fname, fextension = os.path.splitext(img)
+            bname = os.path.basename(fname)
             print >> fd, bname
         fd.close()
 
@@ -422,25 +441,28 @@ class boxm2_scene_adaptor(object):
             print "processing image " + imgs[idx]
 
             # load cam/img
-            img, ni, nj = load_image(imgs[idx])
-            pcam = load_perspective_camera(cams[idx])
-            gcam = persp2gen(pcam, ni, nj)
+            img, ni, nj = vil_adaptor.load_image(imgs[idx])
+            pcam = vpgl_adaptor.load_perspective_camera(cams[idx])
+            gcam = vpgl_adaptor.persp2gen(pcam, ni, nj)
 
             # update aux per view call
-            fname, fextension = splitext(imgs[idx])
-            imageID = basename(fname)
+            fname, fextension = os.path.splitext(imgs[idx])
+            imageID = os.path.basename(fname)
             self.update_aux(img, gcam, imageID)
 
     # create an imagewise aux buffer for cam/img
     def update_aux(self, img, cam, imgId, device_string="", mask=None):
         dev,cache = self._get_device_cache(device_string)
-        update_aux_per_view(self.scene, cache, img, cam, imgId, dev, mask)
+        boxm2_adaptor.update_aux_per_view(self.scene, cache, img, cam, imgId, 
+                                          dev, mask)
 
     # create an imagewise aux buffer for batch update of normal-albedo-array
     # appearance model
-    def update_aux_naa(self, img, cam, metadata, atm_params, imgId, alt_prior, alt_density):
-        update_aux_per_view_naa(self.scene, self.opencl_cache, img, cam,
-                                metadata, atm_params, imgId, alt_prior, alt_density, self.device)
+    def update_aux_naa(self, img, cam, metadata, atm_params, imgId, alt_prior,
+                       alt_density):
+        boxm2_adaptor.update_aux_per_view_naa(self.scene, self.opencl_cache, 
+            img, cam, metadata, atm_params, imgId, alt_prior, alt_density, 
+            self.device)
 
     # takes already created aux buffers (for each image) and fits a Mixture of 3
     # Gaussians to each cell, saves the appearance
@@ -498,9 +520,9 @@ class boxm2_scene_adaptor(object):
         for idx in range(0, len(imgs)):
 
             # load cam/img
-            img, ni, nj = load_image(imgs[idx])
-            pcam = load_perspective_camera(cams[idx])
-            gcam = persp2gen(pcam, ni, nj)
+            img, ni, nj = vil_adaptor.load_image(imgs[idx])
+            pcam = vpgl_adaptor.load_perspective_camera(cams[idx])
+            gcam = vpgl_adaptor.persp2gen(pcam, ni, nj)
 
             # create norm intensity (num rays...)
             boxm2_batch.init_process("boxm2CppCreateNormIntensitiesProcess")
@@ -623,21 +645,23 @@ class boxm2_scene_adaptor(object):
         return
 
     def compute_sun_affine_camera(self, sun_az, sun_el, astro_coords=True):
-        (camera, ni, nj) = compute_sun_affine_camera(
+        (camera, ni, nj) = boxm2_adaptor.compute_sun_affine_camera(
             self.scene, sun_az, sun_el, astro_coords)
         return (camera, ni, nj)
 
     def update_sun_visibilities(self, sun_camera, ni, nj, prefix_name=""):
-        update_sun_visibilities(self.scene, self.device, self.opencl_cache,
-                                self.cpu_cache, sun_camera, ni, nj, prefix_name)
+        boxm2_adaptor.update_sun_visibilities(self.scene, self.device, 
+            self.opencl_cache, self.cpu_cache, sun_camera, ni, nj, prefix_name)
 
     def render_shadow_map(self, camera, ni, nj, prefix_name=''):
-        shadow_map = render_shadow_map(
-            self.scene, self.device, self.opencl_cache, camera, ni, nj, prefix_name)
+        shadow_map = boxm2_adaptor.render_shadow_map(
+            self.scene, self.device, self.opencl_cache, camera, ni, nj, 
+            prefix_name)
         return shadow_map
 
     def render_scene_mask(self, camera, ni, nj, ground_plane_only=False):
-        mask = create_mask_image(self.scene, camera, ni, nj, ground_plane_only)
+        mask = boxm2_adaptor.create_mask_image(self.scene, camera, ni, nj, 
+                                               ground_plane_only)
         return mask
 
     def normals_to_id(self):
@@ -674,32 +698,32 @@ class boxm2_scene_adaptor(object):
     def compute_pre_post(self, cam, img, view_identifier="",tnear = 100000.0, tfar = 100000.0) :
         dev = self.device;
         cache = self.opencl_cache;
-        return boxm2_compute_pre_post(self.scene, dev,cache, cam, img,view_identifier,tnear,tfar);
+        return boxm2_adaptor.boxm2_compute_pre_post(self.scene, dev,cache, cam, img,view_identifier,tnear,tfar);
 
     def update_if(self, does_add=True, view_identifier="") :
         dev = self.device;
         cache = self.opencl_cache;
-        return update_image_factor(self.scene, dev,cache, does_add, view_identifier);
+        return boxm2_adaptor.update_image_factor(self.scene, dev,cache, does_add, view_identifier);
 
     def fuse_factors(self, view_idents,weights) :
         dev = self.device;
         cache = self.opencl_cache;
-        return boxm2_fuse_factors(self.scene, dev,cache,view_idents,weights)
+        return boxm2_adaptor.boxm2_fuse_factors(self.scene, dev,cache,view_idents,weights)
   
     def compute_hmapf(self, zimg,zvar,ximg,yimg,sradius=16) :
         dev = self.device;
         cache = self.opencl_cache;
-        return compute_hmap_factor(self.scene, dev,cache,zimg,zvar,ximg,yimg,sradius);
+        return boxm2_adaptor.compute_hmap_factor(self.scene, dev,cache,zimg,zvar,ximg,yimg,sradius);
 
     def update_hf(self, does_add=True) :
         dev = self.device;
         cache = self.opencl_cache;
-        return update_hmap_factor(self.scene, dev,cache, does_add);
+        return boxm2_adaptor.update_hmap_factor(self.scene, dev,cache, does_add);
 
     def init_uniform_prob(self):
-        return boxm2_init_uniform_prob(self.scene,self.device,self.opencl_cache) 
+        return boxm2_adaptor.boxm2_init_uniform_prob(self.scene,self.device,self.opencl_cache) 
 
     def remove_low_nobs(self, nobs_thresh_multiplier=3.0):
         dev = self.device;
         cache = self.opencl_cache;
-        return boxm2_remove_low_nobs(self.scene, dev,cache, nobs_thresh_multiplier)
+        return boxm2_adaptor.boxm2_remove_low_nobs(self.scene, dev,cache, nobs_thresh_multiplier)
