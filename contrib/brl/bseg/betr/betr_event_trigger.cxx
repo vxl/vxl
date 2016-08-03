@@ -1,5 +1,5 @@
 #include <vcl_compiler.h>
-#include <stdlib.h>
+#include <sstream>
 #include "betr_event_trigger.h"
 #include "betr_geo_object_3d.h"
 #include "vsol_mesh_3d.h"
@@ -220,10 +220,9 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     alg->set_reference_image(ref_imgr_);
     alg->set_event_image(evt_imgr_);
     std::string evt_obj_name = oit->first;
-    char buffer [33];
-    itoa(process_counter_,buffer,10);
-    std::string cnt(buffer);
-    alg->set_identifier(evt_obj_name + "_" + cnt);
+    std::stringstream ss;
+    ss<< betr_event_trigger::process_counter_;
+    alg->set_identifier(evt_obj_name + "_" + ss.str());
     std::cout << "Processing event object " << evt_obj_name << std::endl;
     // project the event objects
     vsol_polygon_2d_sptr ref_evt_poly, evt_evt_poly;

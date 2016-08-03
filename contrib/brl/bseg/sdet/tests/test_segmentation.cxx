@@ -5,7 +5,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
 #include <testlib/testlib_test.h>
-
+#include <string>
 static void test_segmentation(int argc, char * argv[])
 {
   vil_image_view<vxl_byte> img(4,4);
@@ -16,6 +16,13 @@ static void test_segmentation(int argc, char * argv[])
   TEST("out img pix 0 is not the same as pix 1", out_img(1,1) == out_img(2,1), true);
   TEST("out img pix 0 is not the same as pix 1", out_img(2,2) != out_img(2,1), true);
   TEST("out img pix 0 is not the same as pix 1", out_img(2,2) == out_img(1,2), true);
+  std::string in_path = "D:/tests/grouping/group_test_1.tif";
+  std::string out_path = "D:/tests/grouping/test_seg1.tif";
+  vil_image_view<vxl_byte> imgi = vil_load(in_path.c_str());
+  vil_image_view<vil_rgb<vxl_byte> > out_imgi;
+  sdet_segment_img<vxl_byte>(imgi, 10, 8, 50, 1, 10, out_imgi);
+  vil_save(out_imgi, out_path.c_str());
+
   /*
   std::string image_path = ".\\beach.png";
   std::cout << "Loading Image " << image_path << '\n';

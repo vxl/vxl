@@ -3,6 +3,9 @@
 #include <fstream>
 #include <vector>
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
+#include <vil/vil_convert.h>
+#include <bil/bil_convert_to_grey.h>
 #include <testlib/testlib_test.h>
 #include <betr/betr_geo_box_3d.h>
 #include <betr/betr_geo_object_3d.h>
@@ -137,7 +140,13 @@ void test_edgel_change_detection()
  pr = 0.0;
  //etr.process("edgel_change_detection", pr);
  //std::cout << "pr = " << pr << '\n';
-
+ // std::string img_name = "D:/voxel_globe/tmp_images/20160609_094252_0c72.tif";
+ std::string img_name = "D:/voxel_globe/tmp_images/edges.jpg";
+ vil_image_resource_sptr resc = vil_load_image_resource(img_name.c_str());
+ vil_image_resource_sptr grey_resc;
+ bil_convert_resource_to_grey(resc, grey_resc, false);
+ std::string outpath = "D:/voxel_globe/tmp_images/junk4.tif";
+ vil_save_image_resource(grey_resc, outpath.c_str());
 #endif
   }
   TESTMAIN(test_edgel_change_detection);

@@ -1,4 +1,5 @@
 #include "bil_image_bounds_from_histogram.h"
+#include <cstdlib>
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
 #include <vil/vil_blocked_image_resource.h>
@@ -98,8 +99,8 @@ bool bil_image_bounds_from_histogram::set_data_from_view(vil_image_view_base_spt
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(std::rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(std::rand()/(RAND_MAX+1.0)));
+        unsigned i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
         double val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
@@ -113,8 +114,8 @@ bool bil_image_bounds_from_histogram::set_data_from_view(vil_image_view_base_spt
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(std::rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(std::rand()/(RAND_MAX+1.0)));
+        unsigned i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
         double val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
@@ -128,8 +129,8 @@ bool bil_image_bounds_from_histogram::set_data_from_view(vil_image_view_base_spt
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(std::rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(std::rand()/(RAND_MAX+1.0)));
+        unsigned i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
+        unsigned j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
         double val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
@@ -150,8 +151,8 @@ set_data_by_random_blocks(const unsigned total_num_blocks,
   unsigned nbi = bir->n_block_i(), nbj = bir->n_block_j();
   for (unsigned ib = 0; ib<total_num_blocks; ++ib)
   {
-    unsigned bi = static_cast<unsigned>((nbi-1)*(std::rand()/(RAND_MAX+1.0)));
-    unsigned bj = static_cast<unsigned>((nbj-1)*(std::rand()/(RAND_MAX+1.0)));
+    unsigned bi = static_cast<unsigned>((nbi-1)*(rand()/(RAND_MAX+1.0)));
+    unsigned bj = static_cast<unsigned>((nbj-1)*(rand()/(RAND_MAX+1.0)));
     if (!this->set_data_from_view(bir->get_block(bi, bj), fraction))
       return false;
   }
