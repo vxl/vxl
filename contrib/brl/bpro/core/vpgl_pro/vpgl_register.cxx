@@ -115,6 +115,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_construct_height_map_process, "vpglConstructHeightMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_construct_disparity_map_process, "vpglConstructDisparityMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_rational_cam_nadirness_process, "vpglRationalCamNadirnessProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_rational_cam_rotation_to_north_process, "vpglRationalCamRotationToNorthProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_image_to_world_homography_process, "vpglComputeImageToWorldHomographyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_crop_ortho_using_3d_box_process, "vpglCropOrthoUsing3DboxPRocess");
 #if HAS_GEOTIFF

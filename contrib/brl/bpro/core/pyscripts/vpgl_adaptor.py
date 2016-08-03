@@ -1557,3 +1557,15 @@ def find_connected_component(in_img, in_cam, threshold, out_kml, is_above=True):
       return out_img, num_regions
     else:
       return None, 0
+
+# rotate a image north up based on its RPC camera.  The return value is rotation angle between -Pi to Pi
+def rational_camera_rotate_to_north(in_cam):
+    batch.init_process("vpglRationalCamRotationToNorthProcess")
+    batch.set_input_from_db(0, in_cam)
+    status = batch.run_process()
+    if status:
+      (id, type) = batch.commit_output(0)
+      ang_in_deg = batch.get_output_double(id)
+      return ang_in_deg
+    else:
+      return 0.0
