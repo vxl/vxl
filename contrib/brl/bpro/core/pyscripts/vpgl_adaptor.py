@@ -209,7 +209,9 @@ def load_rational_camera(file_path):
     if status:
         (id, type) = batch.commit_output(0)
         cam = dbvalue(id, type)
-    return status, cam
+        return cam
+    else:
+        return None
 
 
 def load_local_rational_camera(file_path):
@@ -234,9 +236,12 @@ def load_rational_camera_from_txt(file_path):
     batch.init_process("vpglLoadRationalCameraFromTXTProcess")
     batch.set_input_string(0, file_path)
     status = batch.run_process()
-    (id, type) = batch.commit_output(0)
-    cam = dbvalue(id, type)
-    return status, cam
+    if status:
+        (id, type) = batch.commit_output(0)
+        cam = dbvalue(id, type)
+        return cam
+    else:
+        return None
 
 
 def convert_local_rational_perspective_camera(local_cam):
