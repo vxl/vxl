@@ -158,6 +158,26 @@ def get_backprojected_ray(cam, u, v):
 # returns cartesian cam center from azimuth (degrees), elevation
 # (degrees), radius, look point;
 
+def get_rpc_backprojected_ray(cam, u, v, altitude, initial_lon, initial_lat, initial_alt):
+    batch.init_process("vpglGetRpcBackprojectRayProcess")
+    batch.set_input_from_db(0, cam)
+    batch.set_input_double(1, u)
+    batch.set_input_double(2, v)
+    batch.set_input_double(3, altitude)
+    batch.set_input_double(4, initial_lon)
+    batch.set_input_double(5, initial_lat)
+    batch.set_input_double(6, initial_alt)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    x = batch.get_output_double(id)
+    batch.remove_data(id)
+    (id, type) = batch.commit_output(1)
+    y = batch.get_output_double(id)
+    batch.remove_data(id)
+    (id, type) = batch.commit_output(2)
+    z = batch.get_output_double(id)
+    batch.remove_data(id)
+    return x, y, z
 
 def get_camera_center(azimuth, elevation, radius, lookPt):
     deg_to_rad = math.pi / 180.0
@@ -572,18 +592,18 @@ def convert_to_local_coordinates(lvcs_filename, lat, lon, el):
 def convert_to_local_coordinates2(lvcs, lat, lon, el):
     batch.init_process('vpglConvertToLocalCoordinatesProcess2')
     batch.set_input_from_db(0, lvcs)
-    batch.set_input_float(1, lat)
-    batch.set_input_float(2, lon)
-    batch.set_input_float(3, el)
+    batch.set_input_double(1, lat)
+    batch.set_input_double(2, lon)
+    batch.set_input_double(3, el)
     batch.run_process()
     (id, type) = batch.commit_output(0)
-    x = batch.get_output_float(id)
+    x = batch.get_output_double(id)
     batch.remove_data(id)
     (id, type) = batch.commit_output(1)
-    y = batch.get_output_float(id)
+    y = batch.get_output_double(id)
     batch.remove_data(id)
     (id, type) = batch.commit_output(2)
-    z = batch.get_output_float(id)
+    z = batch.get_output_double(id)
     batch.remove_data(id)
     return (x, y, z)
 # convert lat,lon,el to local coordinates;

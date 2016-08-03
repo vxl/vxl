@@ -89,7 +89,6 @@ def execute_event_trigger(event_trigger, algorithm_name):
     status = batch.run_process()
     prob_change = None
     if status:
-        (id, type) = batch.commit_output(0)
-        prob_change = batch.get_output_float(id);
-        batch.remove_data(id);
-    return prob_change
+        (pc_id, pc_type) = batch.commit_output(0);
+        prob_change = batch.get_output_float(pc_id);
+    return (status, prob_change)

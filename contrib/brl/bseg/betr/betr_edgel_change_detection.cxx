@@ -2,6 +2,7 @@
 #include "betr_edgel_factory.h"
 #include "betr_event_trigger.h"
 #include <bsta/bsta_histogram.h>
+#include <cmath>
 bool betr_edgel_change_detection::process(){
   betr_edgel_factory ef;
   ef.set_parameters(sigma_, noise_mul_);
@@ -15,26 +16,51 @@ bool betr_edgel_change_detection::process(){
   good = good && ef.process("ref_image","ref_evt_poly");
   good = good && ef.process("evt_image","evt_ref_poly");
   good = good && ef.process("evt_image","evt_evt_poly"); 
-  //debug
-  std::string dir =  "D:/tests/rajaei_test/trigger/";
-  ef.save_edgels_in_poly(dir);
+  if(!good){
+    std::cout << "edgel factory failed" << std::endl;
+    return false;
+  }
+    //debug
+  if(verbose_){
+    std::string dir =  "D:/tests/rajaei_test/trigger/";
+    ef.save_edgels_in_poly(dir);
+  }
   // end debug
   const bsta_histogram<double>& h_ref_ref = ef.hist("ref_image","ref_ref_poly");
   const bsta_histogram<double>& h_ref_evt = ef.hist("ref_image","ref_evt_poly");
-  std::cout << "h_ref_ref\n";
-  h_ref_ref.print();
-  std::cout << "\nh_ref_evt\n";
-  h_ref_evt.print();
   const bsta_histogram<double>& h_evt_ref = ef.hist("evt_image","evt_ref_poly");
   const bsta_histogram<double>& h_evt_evt = ef.hist("evt_image","evt_evt_poly");
-  std::cout << "h_evt_ref\n";
-  h_evt_ref.print();
-  std::cout << "\nh_evt_evt\n";
-  h_evt_evt.print();
-  // note need to find ref with highest gradients and then swap, but later
-  double s = minimum_js_divergence_scale(h_ref_ref, h_evt_ref);
-  bsta_histogram<double> scaled_evt_evt = scale(h_evt_evt, s);
-  js_div_ = js_divergence(h_ref_evt, scaled_evt_evt);
+  if(verbose_){ 
+    std::cout << "h_ref_ref\n";
+    h_ref_ref.print();
+    std::cout << "\nh_ref_evt\n";
+    h_ref_evt.print();
+    std::cout << "h_evt_ref\n";
+    h_evt_ref.print();
+    std::cout << "\nh_evt_evt\n";
+    h_evt_evt.print();
+  }
+  double fraction = 0.1;//maybe make a parameter
+  double vabove_ref_ref = h_ref_ref.value_with_area_above(fraction);
+  double vabove_evt_ref = h_evt_ref.value_with_area_above(fraction);
+  bsta_histogram<double> scaled_evt_evt = h_evt_evt, scaled_ref_evt = h_ref_evt;
+  if(vabove_ref_ref == vabove_evt_ref){// no scaling needed
+	  js_div_ = js_divergence(scaled_ref_evt, scaled_evt_evt);
+	  return true;
+  }else if(vabove_ref_ref>vabove_evt_ref){
+   double s = minimum_js_divergence_scale(h_ref_ref, h_evt_ref);
+    scaled_ref_evt = scale(h_ref_evt, s);
+  }else{
+    double s = minimum_js_divergence_scale(h_evt_ref, h_ref_ref);
+    scaled_evt_evt = scale(h_evt_evt, s);
+  }
+  js_div_ = js_divergence(scaled_ref_evt, scaled_evt_evt);
+  if(verbose_){ 
+    std::cout << "\n scaled h_ref_evt\n";
+    scaled_ref_evt.print();
+    std::cout << "\nscaled h_evt_evt\n";
+    scaled_evt_evt.print();
+  }
   return true;
   
 }
