@@ -4,6 +4,9 @@ import brl_init
 dbvalue = brl_init.DummyBatch()
 batch = brl_init.DummyBatch()
 
+class VpglException(brl_init.BrlException):
+    pass
+
 #############################################################################
 # PROVIDES higher level vpgl python functions to make batch
 # code more readable/refactored
@@ -211,7 +214,7 @@ def load_rational_camera(file_path):
         cam = dbvalue(id, type)
         return cam
     else:
-        return None
+        raise VpglException("Failed to load Rational Camera")
 
 
 def load_local_rational_camera(file_path):
@@ -241,7 +244,7 @@ def load_rational_camera_from_txt(file_path):
         cam = dbvalue(id, type)
         return cam
     else:
-        return None
+        raise VpglException("Failed to load Rational Camera from txt")
 
 
 def convert_local_rational_perspective_camera(local_cam):
@@ -272,7 +275,9 @@ def convert_to_local_rational_camera(rational_cam, lvcs):
     if status:
         (id, type) = batch.commit_output(0)
         cam = dbvalue(id, type)
-    return cam
+        return cam
+    else:
+        raise VpglException("Failed to convert local rational camera")
 
 # ;
 # camera saving;
@@ -331,7 +336,9 @@ def persp2gen(pcam, ni, nj, level=0):
     if status:
         (id, type) = batch.commit_output(0)
         gcam = dbvalue(id, type)
-    return gcam
+        return gcam
+    else:
+        raise VpglException("Failed to convert perspective camera to generic")
 
 
 def persp2genWmargin(pcam, ni, nj, margin, level=0):
@@ -508,7 +515,9 @@ def convert_to_generic_camera(cam_in, ni, nj, level=0):
     if status:
         (id, type) = batch.commit_output(0)
         generic_cam = dbvalue(id, type)
-    return generic_cam
+        return generic_cam
+    else:
+        raise VpglException("Failed to convert to generic camera")
 
 # create a generic camera from a local rational with user-specified z range;
 
@@ -829,7 +838,7 @@ def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename="", write_km
         ur_lat = batch.get_output_double(id)
         return ll_lon, ll_lat, ur_lon, ur_lat
     else:
-        return 0.0, 0.0, 0.0, 0.0
+        raise VpglException("Failed to get geographic camera footprint")
 
 
 def load_geotiff_cam(tfw_filename, lvcs=0, utm_zone=0, utm_hemisphere=0):
@@ -901,7 +910,7 @@ def create_geotiff_cam(ll_lon, ll_lat, ur_lon, ur_lat, ni, nj, lvcs = 0):
         cam = dbvalue(id, type)
         return cam
     else:
-        return None
+        raise VpglException("Failed to create geotiff camera")
 
 
 def geo2generic(geocam, ni, nj, scene_height, level):
@@ -981,13 +990,13 @@ def geo_cam_img_to_global(geocam, i, j):
     batch.set_input_unsigned(2, j)
     status = batch.run_process()
     if status:
-      (id, type) = batch.commit_output(0)
-      lon = batch.get_output_double(id)
-      (id, type) = batch.commit_output(1)
-      lat = batch.get_output_double(id)
-      return lon, lat
+        (id, type) = batch.commit_output(0)
+        lon = batch.get_output_double(id)
+        (id, type) = batch.commit_output(1)
+        lat = batch.get_output_double(id)
+        return lon, lat
     else:
-      return 0.0, 0.0
+        raise VpglException("Failed to convert geographic camera image to global")
 
 
 def convert_perspective_to_nvm(cams_dir, imgs_dir, output_nvm):
@@ -1171,7 +1180,7 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
         batch.remove_data(id)
         return status, local_cam, i0, j0, ni, nj
     else:
-        return status, dbvalue(0, ""), 0, 0, 0, 0
+        raise VpglException("Failed to crop image using 3D box")
 
 
 # use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
@@ -1203,7 +1212,7 @@ def crop_image_using_3d_box_dem(img_res, camera, ll_lon, ll_lat, ur_lon, ur_lat,
         nj = batch.get_output_unsigned(id)
         return status, local_cam, i0, j0, ni, nj
     else:
-        return status, dbvalue(0, ""), 0.0, 0.0, 0.0, 0.0
+        raise VpglException("Failed to crop image using 3D box DEM")
 
 # use the 3-d box to crop an ortho image using its geo camera
 # note that the input 3-d box is in unit of wgs84 geo coordinates
@@ -1233,7 +1242,7 @@ def crop_ortho_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_la
         nj = batch.get_output_unsigned(id)
         return status, local_geo_cam, i0, j0, ni, nj
     else:
-        return status, dbvalue(0, ""), 0, 0, 0, 0
+        raise VpglException("Failed to crop ortho image using 3D box")
 
 
 # use the 3-d box to offset the local camera using image camera, given certain uncertainty value in meter unit
@@ -1270,7 +1279,7 @@ def offset_cam_using_3d_box(camera, lower_left_lon, lower_left_lat, lower_left_e
         batch.remove_data(id)
         return status, local_cam, i0, j0, ni, nj
     else:
-        return status, dbvalue(0, ""), 0, 0, 0, 0
+        raise VpglException("Failed to offset camera using 3D box")
 
 
 # covert (lat, lon) to UTM coordinates
@@ -1316,7 +1325,7 @@ def rational_cam_img_to_global(camera, i, j, init_lon=-1.0, init_lat=-1.0, init_
         elev = batch.get_output_double(id)
         return lon, lat, elev
     else:
-        return -1.0, -1.0, -1.0
+        raise VpglException("Failed to convert rational camera image to global")
 
 
 def rational_cam_nadirness(camera, lat, lon, elev):
@@ -1581,7 +1590,7 @@ def find_connected_component(in_img, in_cam, threshold, out_kml, is_above=True):
       num_regions = batch.get_output_unsigned(id)
       return out_img, num_regions
     else:
-      return None, 0
+      raise VpglException("Failed to find connected components")
 
 # rotate a image north up based on its RPC camera.  The return value is rotation angle between -Pi to Pi
 def rational_camera_rotate_to_north(in_cam):
@@ -1593,4 +1602,4 @@ def rational_camera_rotate_to_north(in_cam):
       ang_in_deg = batch.get_output_double(id)
       return ang_in_deg
     else:
-      return 0.0
+      raise VpglException("Failed to get north angle from rational camera")
