@@ -3,6 +3,9 @@ import os
 import imp
 import sys
 
+class BrlException(Exception):
+    pass
+
 class MetaFinder(object):
     def __init__(self):
         self.modules = {}
