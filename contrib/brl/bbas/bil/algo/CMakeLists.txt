@@ -26,14 +26,15 @@ set( bil_algo_sources
      bil_blob_finder.cxx                bil_blob_finder.h
      bil_trace_4con_boundary.cxx        bil_trace_4con_boundary.h
      bil_trace_8con_boundary.cxx        bil_trace_8con_boundary.h
-         bil_debayer_image.cxx                                bil_debayer_image.h
-   )
+     bil_debayer_image.cxx              bil_debayer_image.h
+     bil_image_bounds_from_histogram.cxx bil_image_bounds_from_histogram.h
+)
 
 aux_source_directory(Templates bil_algo_sources)
 
 vxl_add_library(LIBRARY_NAME bil_algo LIBRARY_SOURCES ${bil_algo_sources} )
 
-target_link_libraries( bil_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl vsol)
+target_link_libraries( bil_algo ${VXL_LIB_PREFIX}bsta ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl vsol)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

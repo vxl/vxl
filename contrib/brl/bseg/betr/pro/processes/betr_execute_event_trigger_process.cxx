@@ -45,10 +45,16 @@ bool betr_execute_event_trigger_process(bprb_func_process& pro)
   unsigned i = 0;
   betr_event_trigger_sptr event_trigger = pro.get_input<betr_event_trigger_sptr>(i++);
   std::string algorithm_name = pro.get_input<std::string>(i);
-  if(!event_trigger)
+  if(!event_trigger){
+    std::cout << "NULL event trigger " << std::endl;
     return false;
-  double prob_change = 0.0;
+  }
+    double prob_change = 0.0;
   bool good = event_trigger->process(algorithm_name, prob_change);
+  if(!good){
+    std::cout << "event_trigger::process failed" << std::endl;
+    return false;
+  }
   pro.set_output_val<float>(0, prob_change);
   return good;
 }

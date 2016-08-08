@@ -16,7 +16,7 @@
 class betr_algorithm : public vbl_ref_count
 {
  public:
- betr_algorithm():name_("no_name"), offset_(0.0), alpha_(1.0), verbose_(false){}
+ betr_algorithm():name_("no_name"), identifier_("null"), offset_(0.0), alpha_(1.0), verbose_(false){}
  betr_algorithm(std::string name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false){}
  betr_algorithm(std::string name, double offset, double alpha):name_(name), offset_(offset), alpha_(alpha), verbose_(false){}
   // performance parameters
@@ -34,19 +34,22 @@ class betr_algorithm : public vbl_ref_count
   //: procedural  methods
   virtual bool process(){return false;}
   virtual double prob_change() const {return 0.0;}
-  //: debug 
-  //======================
-  void set_verbose(bool verbose){verbose_ = verbose;}
   virtual void clear(){
     ref_imgr_ = VXL_NULLPTR;
     evt_imgr_ = VXL_NULLPTR;
     ref_ref_poly_ = VXL_NULLPTR;
     ref_evt_poly_ = VXL_NULLPTR;
-	evt_ref_poly_ = VXL_NULLPTR;
+    evt_ref_poly_ = VXL_NULLPTR;
     evt_evt_poly_ = VXL_NULLPTR;
   }
-  protected:
+    //: debug 
+  //======================
+  void set_verbose(bool verbose){verbose_ = verbose;}
+  //: an identifier for a particular execution run
+  void set_identifier(std::string identifier){identifier_ = identifier;}
+ protected:
   std::string name_;//algorithm name
+  std::string identifier_;
   vil_image_resource_sptr ref_imgr_;
   vil_image_resource_sptr evt_imgr_;
   vsol_polygon_2d_sptr ref_ref_poly_;

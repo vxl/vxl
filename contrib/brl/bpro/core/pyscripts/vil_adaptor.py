@@ -51,6 +51,24 @@ def save_image(img, file_path):
     batch.run_process()
 
 
+def save_image_resource(resc, file_path):
+    batch.init_process("vilSaveImageResourceProcess")
+    batch.set_input_from_db(0, resc)
+    batch.set_input_string(1, file_path)
+    status = batch.run_process()
+    return status;
+
+def multi_plane_view_to_grey(resc,apply_mask = False):
+    batch.init_process("vilMultiPlaneViewToGreyProcess")
+    batch.set_input_from_db(0, resc);
+    batch.set_input_bool(1, apply_mask);
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        grey_resc = dbvalue(id, type)
+        return grey_resc
+    return None
+
 def convert_image(img, type="byte"):
     batch.init_process("vilConvertPixelTypeProcess")
     batch.set_input_from_db(0, img)

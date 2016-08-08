@@ -57,7 +57,7 @@ class betr_edgel_factory{
                  std::vector<double>& mags);
   const bsta_histogram<double>& hist(std::string iname, std::string region_name){return grad_hists_[iname][region_name];}
   bool save_edgels(std::string const& dir) const;
-  bool save_edgels_in_poly(std::string const& dir);
+  bool save_edgels_in_poly(std::string const& identifier, std::string const& dir);
  private:
   std::map<std::string, vil_image_resource_sptr> images_;
   std::map<std::string, brip_roi_sptr> rois_;
