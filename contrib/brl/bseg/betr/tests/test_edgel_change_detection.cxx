@@ -149,8 +149,9 @@ void test_edgel_change_detection()
  // reference region in middle of channel
  std::string evt0_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_1.ply";
  std::string evt1_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_2.ply";
- std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_0.ply";
- // std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_5.ply";
+ // std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_0.ply";
+ std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_5.ply";
+
  betr_event_trigger etr_self("rajaei_self", lvcs);
  etr_self.set_verbose(true);
  etr_self.set_ref_camera(ref_camera);
@@ -169,6 +170,7 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
  double pr = 0.0;
+<<<<<<< b88d959c0e142b6f1caed751c97ffb8a8478455a
 #endif // kill middle channel test
  // four small refernce regions
  dir = "D:/tests/rajaei_test/object-test/";

@@ -5,6 +5,7 @@
 #include <cmath>
 bool betr_edgel_reference_cd::process(){
   betr_edgel_factory ef;
+
   double upscale = 2.0;
   ef.set_parameters(sigma_, noise_mul_, upscale);
   ef.add_image("evt_image", evt_imgr_);
@@ -12,10 +13,13 @@ bool betr_edgel_reference_cd::process(){
   ef.add_region("evt_image", "evt_evt_poly", evt_evt_poly_);
   bool good = ef.process("evt_image","evt_ref_poly");
   good = good && ef.process("evt_image","evt_evt_poly"); 
+<<<<<<< b88d959c0e142b6f1caed751c97ffb8a8478455a
   if(!good){
     js_div_ = -1.0;
     return true;
   }
+=======
+>>>>>>> Added self reference cd
   //debug
   if(verbose_){
     std::string dir =  "D:/tests/rajaei_test/trigger/";
