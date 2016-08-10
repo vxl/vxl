@@ -16,6 +16,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include "betr_edgel_change_detection.h"
+#include "betr_edgel_reference_cd.h"
 #include "betr_algorithm.h"
 #include <vpgl/vpgl_camera.h>
 #include <vsl/vsl_binary_io.h>
@@ -23,9 +24,11 @@
 unsigned betr_event_trigger::process_counter_ = 0;
 
 void betr_event_trigger::register_algorithms(){
-  betr_algorithm_sptr alg = new betr_edgel_change_detection();
-  algorithms_[alg->name()] = alg;
-}
+  betr_algorithm_sptr alg0 = new betr_edgel_change_detection();
+  algorithms_[alg0->name()] = alg0;
+  betr_algorithm_sptr alg1 = new betr_edgel_reference_cd();
+  algorithms_[alg1->name()] = alg1;
+}  
 void betr_event_trigger::update_local_bounding_box(){
   if(global_bbox_.is_empty())
     return;
