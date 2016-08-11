@@ -149,8 +149,8 @@ void test_edgel_change_detection()
  // reference region in middle of channel
  std::string evt0_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_1.ply";
  std::string evt1_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_2.ply";
- // std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_0.ply";
- std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_5.ply";
+ std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_0.ply";
+ // std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_5.ply";
 
  betr_event_trigger etr_self("rajaei_self", lvcs);
  etr_self.set_verbose(true);
