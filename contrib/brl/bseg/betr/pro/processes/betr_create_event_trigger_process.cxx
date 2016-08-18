@@ -16,7 +16,7 @@
 
 namespace betr_create_event_trigger_process_globals
 {
-  const unsigned n_inputs_  = 4;
+  const unsigned n_inputs_  = 5;
   const unsigned n_outputs_ = 1;
 }
 
@@ -24,12 +24,13 @@ bool betr_create_event_trigger_process_cons(bprb_func_process& pro)
 {
   using namespace betr_create_event_trigger_process_globals;
 
-  //process takes 1 input
+  //process takes 5 inputs
   std::vector<std::string> input_types_(n_inputs_);
   input_types_[0]  = "float";
   input_types_[1]  = "float";
   input_types_[2]  = "float";
   input_types_[3]  = "vcl_string";
+  input_types_[4]  = "bool";
   // process has 1 output
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "betr_event_trigger_sptr";
@@ -49,9 +50,12 @@ bool betr_create_event_trigger_process(bprb_func_process& pro)
   float lon = pro.get_input<float>(i++);
   float lat = pro.get_input<float>(i++);
   float elev = pro.get_input<float>(i++);
-  std::string name = pro.get_input<vcl_string>(i);
+  std::string name = pro.get_input<vcl_string>(i++);
+  bool verbose = pro.get_input<bool>(i);
+
   vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
   betr_event_trigger_sptr event_trigger = new betr_event_trigger(name, lvcs);
+  event_trigger->set_verbose(verbose);
   pro.set_output_val<betr_event_trigger_sptr>(0, event_trigger);
   return true;
 }

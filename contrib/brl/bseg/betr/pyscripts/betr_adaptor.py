@@ -26,13 +26,14 @@ def create_betr_site( lon, lat, elev):
     raise BetrException("failed to create site")
 
 # create a betr event trigger to support change detection
-def create_betr_event_trigger( lon, lat, elev, name):
+def create_betr_event_trigger( lon, lat, elev, name, verbose = False):
     batch.init_process("betrCreateEventTriggerProcess")
     # set site location in wgs84 deg, deg, meters
     batch.set_input_float(0, lon)
     batch.set_input_float(1, lat)
     batch.set_input_float(2, elev)
     batch.set_input_string(3, name)
+    batch.set_input_bool(4, verbose)
     status = batch.run_process()
     if status:
         (id, type) = batch.commit_output(0)
