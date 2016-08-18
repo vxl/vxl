@@ -44,7 +44,8 @@ bool vil_multi_plane_view_to_grey_process(bprb_func_process& pro)
   vil_pixel_format fmt = vil_pixel_format_component_format(resc->pixel_format());
   std:: cout << "INPUT Pixel Format " << fmt << std::endl;
   vil_image_resource_sptr grey_resc;
-  bil_convert_resource_to_grey(resc, grey_resc, apply_mask);
+  bil_convert_resource_to_grey cnv;
+  cnv(resc, grey_resc, apply_mask);
   pro.set_output_val<vil_image_resource_sptr>(0, grey_resc);
   return true;
 }

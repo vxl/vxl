@@ -21,7 +21,17 @@
 #include <vpgl/vpgl_camera.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
+#include <bil/bil_convert_to_grey.h>
 unsigned betr_event_trigger::process_counter_ = 0;
+
+void betr_event_trigger::set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask){
+  bil_convert_resource_to_grey cnv;
+  cnv(ref_imgr, ref_imgr_, apply_mask);
+}
+void betr_event_trigger::set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask){
+	bil_convert_resource_to_grey cnv;
+  cnv(evt_imgr, evt_imgr_, apply_mask);
+}
 
 void betr_event_trigger::register_algorithms(){
   betr_algorithm_sptr alg0 = new betr_edgel_change_detection();
@@ -201,11 +211,15 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
       return false;
   }
   // for now only one ref object and one or more event objects
-  if(evt_trigger_objects_.size() >= 1 && ref_trigger_objects_.size() != 1 ){
+  if(evt_trigger_objects_.size() < 1 || ref_trigger_objects_.size() != 1 ){
     std::cout << "for now only one ref object and one or more evt object"<< std::endl;
     return false;
   } 
-  prob_change.clear();
+  if(verbose_){
+    std::cout << "Reference Image: " << ref_path_ << std::endl;
+    std::cout << "Event Image: " << evt_path_ << std::endl;
+  }
+    prob_change.clear();
   std::map<std::string, betr_geo_object_3d_sptr>::iterator rit = ref_trigger_objects_.begin();
   std::string ref_obj_name = rit->first;
   // project the reference object

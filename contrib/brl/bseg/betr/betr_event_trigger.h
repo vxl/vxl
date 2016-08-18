@@ -42,8 +42,10 @@ class betr_event_trigger : public vbl_ref_count{
     register_algorithms();
   }
   void set_lvcs(vpgl_lvcs const& lvcs){lvcs_=lvcs; lvcs_valid_=true;}
-  void set_ref_image(vil_image_resource_sptr ref_imgr){ref_imgr_ = ref_imgr;}
-  void set_evt_image(vil_image_resource_sptr evt_imgr){evt_imgr_ = evt_imgr;}
+  // the mask is for the case of RGBA images and it is desired to apply the alpha value
+  // by setting the intensity to zero when alpha = 0.
+  void set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask = false);
+  void set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask = false);
   void set_ref_camera(vpgl_camera_double_sptr const& camera){ref_camera_ = camera;}
   void set_evt_camera(vpgl_camera_double_sptr const& camera){evt_camera_ = camera;}
 
@@ -70,6 +72,8 @@ class betr_event_trigger : public vbl_ref_count{
   bool save_projected_polys(std::string const& path, std::vector<vsol_polygon_2d_sptr> const& polys);  
   // debug
   void set_verbose(bool verbose){verbose_ = verbose;}
+  void set_ref_path(std::string path){ref_path_ = path;}
+  void set_evt_path(std::string path){evt_path_ = path;}
  private:
   void update_local_bounding_box();
   vsol_polygon_2d_sptr project_poly(vpgl_camera_double_sptr const& camera,
@@ -87,6 +91,8 @@ class betr_event_trigger : public vbl_ref_count{
   vil_image_resource_sptr evt_imgr_; //event image resouce
   vpgl_camera_double_sptr ref_camera_;// ref image camera for entire trigger region
   vpgl_camera_double_sptr evt_camera_;// evt image camera for entire trigger region
+  std::string ref_path_;
+  std::string evt_path_;
   std::map<std::string, betr_geo_object_3d_sptr> evt_trigger_objects_;
   std::map<std::string, betr_geo_object_3d_sptr> ref_trigger_objects_;
   std::map<std::string, vgl_vector_3d<double> > local_trans_;//translation to each object
