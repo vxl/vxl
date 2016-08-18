@@ -170,7 +170,10 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
  double pr = 0.0;
+<<<<<<< 22700eeb3811ff0faae611f0d44a14e2bfa78481
 <<<<<<< b88d959c0e142b6f1caed751c97ffb8a8478455a
+=======
+>>>>>>> internal color to grey
 #endif // kill middle channel test
  // four small refernce regions
  dir = "D:/tests/rajaei_test/object-test/";
@@ -210,8 +213,11 @@ void test_edgel_change_detection()
  etr_self_small.set_evt_camera(camera);
  etr_self_small.set_ref_image(ref_imgr_s);
  etr_self_small.set_evt_image(imgr);
+<<<<<<< 22700eeb3811ff0faae611f0d44a14e2bfa78481
  etr_self_small.set_ref_path(ref_img_path_s);
  etr_self_small.set_evt_path(img_path);
+=======
+>>>>>>> internal color to grey
  std::vector<double> pchange;
  etr_self_small.process("edgel_change_detection", pchange);
  unsigned i =0;
@@ -237,6 +243,7 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
  
+
 #elif kandahar
  std::string dir = "D:/tests/kandahar_test/";
  std::string ref_name = "20160603_105531_1_0b0e.tif";
@@ -291,7 +298,6 @@ void test_edgel_change_detection()
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
-  
 #endif
 }
   TESTMAIN(test_edgel_change_detection);

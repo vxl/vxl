@@ -24,7 +24,6 @@
 #include <bil/bil_convert_to_grey.h>
 unsigned betr_event_trigger::process_counter_ = 0;
 
-
 void betr_event_trigger::set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask){
   bil_convert_resource_to_grey cnv;
   cnv(ref_imgr, ref_imgr_, apply_mask);

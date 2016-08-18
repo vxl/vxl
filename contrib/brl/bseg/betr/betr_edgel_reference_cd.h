@@ -11,7 +11,6 @@
 class betr_edgel_reference_cd : public betr_algorithm
 {
  public:
-
  betr_edgel_reference_cd(): betr_algorithm("edgel_reference_cd"), sigma_(1.0), noise_mul_(0.75), js_div_(0.0){}
 
  betr_edgel_reference_cd(double sigma, double noise_mul): betr_algorithm("edgel_reference_cd"), sigma_(sigma),noise_mul_(noise_mul),
