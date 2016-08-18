@@ -11,7 +11,7 @@
 class betr_edgel_change_detection : public betr_algorithm
 {
  public:
- betr_edgel_change_detection(): betr_algorithm("edgel_change_detection"), sigma_(1.0), noise_mul_(1.5), js_div_(0.0){}
+ betr_edgel_change_detection(): betr_algorithm("edgel_change_detection"), sigma_(1.0), noise_mul_(0.75), js_div_(0.0){}
 
  betr_edgel_change_detection(double sigma, double noise_mul): betr_algorithm("edgel_change_detection"), sigma_(sigma),noise_mul_(noise_mul),
     js_div_(0.0){}

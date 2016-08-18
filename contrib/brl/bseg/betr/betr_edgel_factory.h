@@ -19,7 +19,7 @@
 #include <bsta/bsta_histogram.h>
 class betr_edgel_factory{
  public:
- betr_edgel_factory(): gradient_range_(60.0), nbins_(20){
+ betr_edgel_factory(): gradient_range_(60.0), nbins_(20), upsample_factor_(1.0){
     params_.aggressive_junction_closure=1;
     params_.borderp = false;
   }
@@ -30,7 +30,7 @@ class betr_edgel_factory{
   }
   //: set parameters (same for all images and rois)
   void set_parameters(float sigma, float noise_multiplier, double gradient_range, unsigned nbins);
-  void set_parameters(float sigma, float noise_multiplier);
+  void set_parameters(float sigma, float noise_multiplier, double upsample_factor = 1.0);
   // add images and rois
   bool add_image(std::string const& iname, vil_image_resource_sptr const& imgr);
   bool add_region(std::string const& iname, std::string const& region_name, vsol_box_2d_sptr const& box);
@@ -67,6 +67,7 @@ class betr_edgel_factory{
   std::map<std::string, std::map<std::string, bsta_histogram<double> > > grad_hists_;
   unsigned nbins_;
   double gradient_range_;
+  double upsample_factor_;
   sdet_detector_params params_;
 };
 #endif //guard

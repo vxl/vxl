@@ -131,7 +131,7 @@ void test_edgel_change_detection()
  vpgl_camera_double_sptr evt_camera_2 = evt_lcam_2;
  etr.set_evt_camera(evt_camera_2);
  etr.set_evt_image(evt_imgr_2);
-#if 0
+#if 0 //Kill remote and middle channel test
  std::cout << "====PROCESSING WITH NO CHANGE =====\n";
  pchange.clear();
  etr.process("edgel_change_detection", pchange);
@@ -145,7 +145,7 @@ void test_edgel_change_detection()
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "reference_pchange[" << i << "] = " << *pit << '\n';
-#endif
+
  // reference region in middle of channel
  std::string evt0_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_1.ply";
  std::string evt1_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_2.ply";
@@ -169,6 +169,70 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
  double pr = 0.0;
+#endif // kill middle channel test
+ // four small refernce regions
+ dir = "D:/tests/rajaei_test/object-test/";
+ std::string evt0_small_path = dir + "object_detection_objects/evt_small_0.ply";
+ std::string evt1_small_path = dir + "object_detection_objects/evt_small_1.ply";
+ std::string evt2_small_path = dir + "object_detection_objects/evt_small_2.ply";
+ std::string evt3_small_path = dir + "object_detection_objects/evt_small_3.ply";
+ std::string ref_small_path  = dir + "object_detection_objects/self_ref_small.ply";
+ 
+ lon = 56.0671097675;
+ lat = 27.109287683;
+ elev = 0.0;
+ lvcs = vpgl_lvcs(27.109287683, 56.0671097675, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+ betr_event_trigger etr_self_small("rajaei_self", lvcs);
+ etr_self_small.add_geo_object("pier_self_ref", lon, lat, elev, ref_small_path, true);
+ etr_self_small.add_geo_object("pier_evt0_self", lon, lat, elev, evt0_small_path, false);
+ etr_self_small.add_geo_object("pier_evt1_self", lon, lat, elev, evt1_small_path, false);
+ etr_self_small.add_geo_object("pier_evt2_self", lon, lat, elev, evt2_small_path, false);
+ etr_self_small.add_geo_object("pier_evt3_self", lon, lat, elev, evt3_small_path, false);
+ etr_self_small.set_verbose(true);
+ std::string ref_iname = "20160601_124249_0c47";
+  std::string iname = "20160710_073428_0c1b";
+
+ std::string ref_img_path_s = dir + ref_iname + ".tif";
+ std::string ref_cam_path_s = dir + ref_iname + "_RPC.TXT";
+ vil_image_resource_sptr ref_imgr_s = vil_load_image_resource(ref_img_path_s.c_str());
+ vpgl_local_rational_camera<double>* ref_lcam_s = read_local_rational_camera_from_txt<double>(ref_cam_path_s);
+ vpgl_camera_double_sptr ref_camera_s = ref_lcam_s;
+
+ std::string img_path = dir + iname + ".tif";
+ std::string cam_path = dir + iname + "_RPC.TXT";
+ vil_image_resource_sptr imgr = vil_load_image_resource(img_path.c_str());
+ vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(cam_path);
+ vpgl_camera_double_sptr camera = lcam;
+
+ etr_self_small.set_ref_camera(ref_camera_s);
+ etr_self_small.set_evt_camera(camera);
+ etr_self_small.set_ref_image(ref_imgr_s);
+ etr_self_small.set_evt_image(imgr);
+ std::vector<double> pchange;
+ etr_self_small.process("edgel_change_detection", pchange);
+ unsigned i =0;
+ for(std::vector<double>::iterator pit = pchange.begin();
+     pit != pchange.end(); ++pit, i++)
+   std::cout << "pchange[" << i << "] = " << *pit << '\n';
+
+ iname ="20160609_094253_0c72";
+ img_path = dir + iname + ".tif";
+ cam_path = dir + iname + "_RPC.TXT";
+ imgr = vil_load_image_resource(img_path.c_str());
+ lcam = read_local_rational_camera_from_txt<double>(cam_path);
+ camera = lcam;
+ etr_self_small.set_ref_path(ref_img_path_s);
+ etr_self_small.set_evt_path(img_path);
+ etr_self_small.set_ref_camera(ref_camera_s);
+ etr_self_small.set_evt_camera(camera);
+ etr_self_small.set_ref_image(ref_imgr_s);
+ etr_self_small.set_evt_image(imgr);
+ etr_self_small.process("edgel_change_detection", pchange);
+ i =0;
+ for(std::vector<double>::iterator pit = pchange.begin();
+     pit != pchange.end(); ++pit, i++)
+   std::cout << "pchange[" << i << "] = " << *pit << '\n';
+ 
 #endif
   }
   TESTMAIN(test_edgel_change_detection);
