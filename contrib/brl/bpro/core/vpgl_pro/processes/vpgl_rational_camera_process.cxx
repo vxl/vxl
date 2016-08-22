@@ -205,3 +205,41 @@ bool vpgl_rational_cam_rotation_to_north_process(bprb_func_process& pro)
   return true;
 }
 
+bool vpgl_rational_cam_rotation_to_up_vector_process_cons(bprb_func_process& pro)
+{
+  std::vector<std::string> input_types_(1);
+  input_types_[0] = "vpgl_camera_double_sptr"; // rational camera
+  std::vector<std::string> output_types_(2);
+  output_types_[0] = "double"; // up direction in u
+  output_types_[1] = "double"; // up direction in v
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool vpgl_rational_cam_rotation_to_up_vector_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    std::cerr << pro.name() << ": Wrong Inputs!!\n";
+    return false;
+  }
+  // get the input
+  vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(0);  // input rational camera
+  vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
+  if (!rat_cam) {
+    std::cerr << pro.name() << ": the input camera is not a rational camera!!\n";
+    return false;
+  }
+  // get footprint of the rational camera
+  double lon = rat_cam->offset(vpgl_rational_camera<double>::X_INDX);
+  double lat = rat_cam->offset(vpgl_rational_camera<double>::Y_INDX);
+  double z_off = rat_cam->offset(vpgl_rational_camera<double>::Z_INDX);
+  double z_scale = rat_cam->scale(vpgl_rational_camera<double>::Z_INDX);
+  double elev = z_off - z_scale;
+  // project
+  double u1, v1, u2, v2;
+  rat_cam->project(lon, lat, elev, u1, v1);
+  rat_cam->project(lon, lat, elev+10, u2, v2);
+  pro.set_output_val<double>(0, u2-u1);
+  pro.set_output_val<double>(1, v2-v1);
+  return true;
+}
+

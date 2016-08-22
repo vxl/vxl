@@ -103,6 +103,7 @@ DECLARE_FUNC_CONS(vpgl_construct_height_map_process);
 DECLARE_FUNC_CONS(vpgl_construct_disparity_map_process);
 DECLARE_FUNC_CONS(vpgl_rational_cam_nadirness_process);
 DECLARE_FUNC_CONS(vpgl_rational_cam_rotation_to_north_process);
+DECLARE_FUNC_CONS(vpgl_rational_cam_rotation_to_up_vector_process);
 DECLARE_FUNC_CONS(vpgl_compute_image_to_world_homography_process);
 DECLARE_FUNC_CONS(vpgl_crop_ortho_using_3d_box_process);
 #if HAS_GEOTIFF

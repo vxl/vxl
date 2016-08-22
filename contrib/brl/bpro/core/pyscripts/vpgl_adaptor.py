@@ -1603,3 +1603,17 @@ def rational_camera_rotate_to_north(in_cam):
       return ang_in_deg
     else:
       raise VpglException("Failed to get north angle from rational camera")
+
+# rotate a image north up based on its RPC camera.  The return value is rotation angle between -Pi to Pi
+def rational_camera_get_up_vector(in_cam):
+    batch.init_process("vpglRationalCamRotationToUpVectorProcess")
+    batch.set_input_from_db(0, in_cam)
+    status = batch.run_process()
+    if status:
+      (id, type) = batch.commit_output(0)
+      u = batch.get_output_double(id)
+      (id, type) = batch.commit_output(1)
+      v = batch.get_output_double(id)
+      return u,v
+    else:
+      raise VpglException("Failed to get north angle from rational camera")
