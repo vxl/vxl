@@ -237,7 +237,7 @@ bool vpgl_rational_cam_rotation_to_up_vector_process(bprb_func_process& pro)
   // project
   double u1, v1, u2, v2;
   rat_cam->project(lon, lat, elev, u1, v1);
-  rat_cam->project(lon, lat, elev+10, u2, v2);
+  rat_cam->project(lon, lat, elev+1, u2, v2);
   pro.set_output_val<double>(0, u2-u1);
   pro.set_output_val<double>(1, v2-v1);
   return true;
