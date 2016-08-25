@@ -213,11 +213,16 @@ void test_edgel_change_detection()
  etr_self_small.set_evt_camera(camera);
  etr_self_small.set_ref_image(ref_imgr_s);
  etr_self_small.set_evt_image(imgr);
+<<<<<<< b7c99f0d6f50dd1419e03b01b5ab5f8bf28b5e49
 <<<<<<< 22700eeb3811ff0faae611f0d44a14e2bfa78481
  etr_self_small.set_ref_path(ref_img_path_s);
  etr_self_small.set_evt_path(img_path);
 =======
 >>>>>>> internal color to grey
+=======
+ etr_self_small.set_ref_path(ref_img_path_s);
+ etr_self_small.set_evt_path(img_path);
+>>>>>>> added gradient weighting
  std::vector<double> pchange;
  etr_self_small.process("edgel_change_detection", pchange);
  unsigned i =0;
@@ -243,7 +248,10 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
  
+<<<<<<< b7c99f0d6f50dd1419e03b01b5ab5f8bf28b5e49
 
+=======
+>>>>>>> added gradient weighting
 #elif kandahar
  std::string dir = "D:/tests/kandahar_test/";
  std::string ref_name = "20160603_105531_1_0b0e.tif";
