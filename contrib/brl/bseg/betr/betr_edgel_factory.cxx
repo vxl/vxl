@@ -168,7 +168,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   bsta_histogram<double> h(gradient_range_, nbins_);
   for( std::vector<double>::iterator git = gmags.begin();
        git != gmags.end();++git)
-    h.upcount(*git, 1.0);
+    h.upcount(*git, (1.0 + (*git)));
   
   if(h.area()<3.0*nbins_){
     std::cout << "insufficient edges in region " << region_name << " - fatal" << std::endl;
