@@ -290,6 +290,7 @@ void test_edgel_change_detection()
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
+
 #elif hamadan
  std::string dir = "D:/tests/hamadan_test/";
  std::string ref_name = "20160821_063826_0e20.tif";
@@ -357,7 +358,6 @@ void test_edgel_change_detection()
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
-
 #endif
 }
   TESTMAIN(test_edgel_change_detection);
