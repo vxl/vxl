@@ -137,7 +137,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   }
 #if 0
   //debug
-  std::string dir =  "D:/tests/rajaei_test/object-test/";
+  std::string dir =  "D:/tests/kandahar_test/";
   std::string fname = dir + iname + "_" + region_name + ".tif";
   vil_save_image_resource(clip_resc, fname.c_str());
 #endif
@@ -168,7 +168,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   bsta_histogram<double> h(gradient_range_, nbins_);
   for( std::vector<double>::iterator git = gmags.begin();
        git != gmags.end();++git)
-    h.upcount(*git, (1.0 + (*git)));
+    h.upcount(*git, (1.0 + (*git)));//increase weight to favor high gradient values (small objects)
   
   if(h.area()<3.0*nbins_){
     std::cout << "insufficient edges in region " << region_name << " - fatal" << std::endl;

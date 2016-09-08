@@ -92,12 +92,14 @@ create_buffer(vgui_range_map_params_sptr const& rmp)
              << "Rendering only the top left "<< dims << 'x' << dims << " corner\n";
     unsigned dims =
       static_cast<unsigned>(std::sqrt(static_cast<double>(buf_limit)));
-    if (ni<dims)
-      nj = (buf_limit/ni) -1 ;
-    else {ni=dims; nj = dims;}
-    if (nj<dims)
-      ni = (buf_limit/nj) -1 ;
-    else {ni=dims; nj = dims;}
+	unsigned nid = dims, njd = dims;
+    if(ni<dims){
+		nid = ni; dims = buf_limit/ni;
+	}
+	if(nj<dims)
+		njd = nj;
+	
+	ni = nid; nj = njd;
   }
   buffer_ = new vgui_section_buffer( 0, 0, ni, nj, GL_NONE, GL_NONE );
   buffer_->apply( the_image_, rmp );
