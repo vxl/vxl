@@ -56,15 +56,15 @@ class boxm2_scene_adaptor(object):
 
     def __del__(self):
         if self.scene is not None:
-            boxm2_batch.remove_data(self.scene.id)
+            batch.remove_data(self.scene.id)
         if self.cpu_cache is not None:
-            boxm2_batch.remove_data(self.cpu_cache.id)
+            batch.remove_data(self.cpu_cache.id)
         if self.device is not None:
-            boxm2_batch.remove_data(self.device.id)
+            batch.remove_data(self.device.id)
         if self.opencl_cache is not None:
-            boxm2_batch.remove_data(self.opencl_cache.id)
+            batch.remove_data(self.opencl_cache.id)
         if self.lvcs is not None:
-            boxm2_batch.remove_data(self.lvcs.id)
+            batch.remove_data(self.lvcs.id)
 
     # describe scene (returns data path)
     def describe(self):
@@ -104,27 +104,27 @@ class boxm2_scene_adaptor(object):
     def transform_to_scene(self, to_scene, trans, rot, scale):
         if self.opencl_cache.type == "boxm2_opencl_cache_sptr":
             print("transforming scene")
-            boxm2_batch.init_process("boxm2VecfOclTransformSceneProcess")
-            boxm2_batch.set_input_from_db(0, self.scene)
-            boxm2_batch.set_input_from_db(1, to_scene)
-            boxm2_batch.set_input_from_db(2, self.opencl_cache)
-            boxm2_batch.set_input_double(3, trans[0])
-            boxm2_batch.set_input_double(4, trans[1])
-            boxm2_batch.set_input_double(5, trans[2])
-            boxm2_batch.set_input_double(6,  rot[0][0])
-            boxm2_batch.set_input_double(7,  rot[0][1])
-            boxm2_batch.set_input_double(8,  rot[0][2])
-            boxm2_batch.set_input_double(9,  rot[1][0])
-            boxm2_batch.set_input_double(10, rot[1][1])
-            boxm2_batch.set_input_double(11, rot[1][2])
-            boxm2_batch.set_input_double(12, rot[2][0])
-            boxm2_batch.set_input_double(13, rot[2][1])
-            boxm2_batch.set_input_double(14, rot[2][2])
-            boxm2_batch.set_input_double(15, scale[0])
-            boxm2_batch.set_input_double(16, scale[1])
-            boxm2_batch.set_input_double(17, scale[2])
+            batch.init_process("boxm2VecfOclTransformSceneProcess")
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, to_scene)
+            batch.set_input_from_db(2, self.opencl_cache)
+            batch.set_input_double(3, trans[0])
+            batch.set_input_double(4, trans[1])
+            batch.set_input_double(5, trans[2])
+            batch.set_input_double(6,  rot[0][0])
+            batch.set_input_double(7,  rot[0][1])
+            batch.set_input_double(8,  rot[0][2])
+            batch.set_input_double(9,  rot[1][0])
+            batch.set_input_double(10, rot[1][1])
+            batch.set_input_double(11, rot[1][2])
+            batch.set_input_double(12, rot[2][0])
+            batch.set_input_double(13, rot[2][1])
+            batch.set_input_double(14, rot[2][2])
+            batch.set_input_double(15, scale[0])
+            batch.set_input_double(16, scale[1])
+            batch.set_input_double(17, scale[2])
 
-            return boxm2_batch.run_process()
+            return batch.run_process()
         else:
             print "ERROR: Cache type not recognized: ", self.opencl_cache.type
             return False
@@ -191,7 +191,7 @@ class boxm2_scene_adaptor(object):
         if self.rgb:
             expimg, vis_image, status = boxm2_adaptor.render_rgb(
                 self.scene, cache, cam, ni, nj, dev, tnear, tfar)
-            boxm2_batch.remove_data(vis_image.id)
+            batch.remove_data(vis_image.id)
         else:
             expimg = boxm2_adaptor.render_grey(self.scene, cache, cam,
                                                ni, nj, dev, ident_string, 
@@ -419,19 +419,19 @@ class boxm2_scene_adaptor(object):
         fd2.close()
 
         # open the stream cache, this is a read-only cache
-        boxm2_batch.init_process("boxm2CreateStreamCacheProcess")
-        boxm2_batch.set_input_from_db(0, self.scene)
-        boxm2_batch.set_input_string(1, type_id_fname)
-        boxm2_batch.set_input_string(2, image_id_fname)
-        boxm2_batch.set_input_float(3, max_gb)
-        boxm2_batch.run_process()
-        (cache_id, cache_type) = boxm2_batch.commit_output(0)
+        batch.init_process("boxm2CreateStreamCacheProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_string(1, type_id_fname)
+        batch.set_input_string(2, image_id_fname)
+        batch.set_input_float(3, max_gb)
+        batch.run_process()
+        (cache_id, cache_type) = batch.commit_output(0)
         self.str_cache = dbvalue(cache_id, cache_type)
 
     # remove stream cache object from database
     def destroy_stream_cache(self):
         if self.str_cache:
-            boxm2_batch.remove_data(self.str_cache.id)
+            batch.remove_data(self.str_cache.id)
             self.str_cache = None
 
     # writes aux data for each image in imgs array
@@ -473,33 +473,33 @@ class boxm2_scene_adaptor(object):
 
         # sigma norm table?
         under_estimation_probability = 0.2
-        boxm2_batch.init_process("bstaSigmaNormTableProcess")
-        boxm2_batch.set_input_float(0, under_estimation_probability)
-        boxm2_batch.run_process()
-        (id, type) = boxm2_batch.commit_output(0)
+        batch.init_process("bstaSigmaNormTableProcess")
+        batch.set_input_float(0, under_estimation_probability)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
         n_table = dbvalue(id, type)
 
         # call batch paint process
         if device_string == "":
-            boxm2_batch.init_process("boxm2OclPaintBatchProcess")
-            boxm2_batch.set_input_from_db(0, self.device)
-            boxm2_batch.set_input_from_db(1, self.scene)
-            boxm2_batch.set_input_from_db(2, self.opencl_cache)
-            boxm2_batch.set_input_from_db(3, self.str_cache)
-            boxm2_batch.set_input_from_db(4, n_table)
-            boxm2_batch.run_process()
+            batch.init_process("boxm2OclPaintBatchProcess")
+            batch.set_input_from_db(0, self.device)
+            batch.set_input_from_db(1, self.scene)
+            batch.set_input_from_db(2, self.opencl_cache)
+            batch.set_input_from_db(3, self.str_cache)
+            batch.set_input_from_db(4, n_table)
+            batch.run_process()
         elif device_string == "cpu":
-            boxm2_batch.init_process("boxm2CppBatchUpdateAppProcess")
-            boxm2_batch.set_input_from_db(0, self.scene)
-            boxm2_batch.set_input_from_db(1, self.cpu_cache)
-            boxm2_batch.set_input_from_db(2, self.str_cache)
-            boxm2_batch.set_input_from_db(3, n_table)
-            boxm2_batch.run_process()
+            batch.init_process("boxm2CppBatchUpdateAppProcess")
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, self.cpu_cache)
+            batch.set_input_from_db(2, self.str_cache)
+            batch.set_input_from_db(3, n_table)
+            batch.run_process()
 
         # close the files so that they can be reloaded after the next iteration
-        boxm2_batch.init_process("boxm2StreamCacheCloseFilesProcess")
-        boxm2_batch.set_input_from_db(0, self.str_cache)
-        boxm2_batch.run_process()
+        batch.init_process("boxm2StreamCacheCloseFilesProcess")
+        batch.set_input_from_db(0, self.str_cache)
+        batch.run_process()
 
         # write out afterwards
         self.write_cache()
@@ -510,10 +510,10 @@ class boxm2_scene_adaptor(object):
 
         # sigma norm table?
         under_estimation_probability = 0.2
-        boxm2_batch.init_process("bstaSigmaNormTableProcess")
-        boxm2_batch.set_input_float(0, under_estimation_probability)
-        boxm2_batch.run_process()
-        (id, type) = boxm2_batch.commit_output(0)
+        batch.init_process("bstaSigmaNormTableProcess")
+        batch.set_input_float(0, under_estimation_probability)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
         n_table = dbvalue(id, type)
 
         # loop over images creating aux data
@@ -525,123 +525,123 @@ class boxm2_scene_adaptor(object):
             gcam = vpgl_adaptor.persp2gen(pcam, ni, nj)
 
             # create norm intensity (num rays...)
-            boxm2_batch.init_process("boxm2CppCreateNormIntensitiesProcess")
-            boxm2_batch.set_input_from_db(0, self.scene)
-            boxm2_batch.set_input_from_db(1, self.cpu_cache)
-            boxm2_batch.set_input_from_db(2, gcam)
-            boxm2_batch.set_input_from_db(3, img)
-            boxm2_batch.set_input_string(4, "img_" + "%05d" % idx)
-            boxm2_batch.run_process()
+            batch.init_process("boxm2CppCreateNormIntensitiesProcess")
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, self.cpu_cache)
+            batch.set_input_from_db(2, gcam)
+            batch.set_input_from_db(3, img)
+            batch.set_input_string(4, "img_" + "%05d" % idx)
+            batch.run_process()
 
             # create aux
-            boxm2_batch.init_process("boxm2CppCreateAuxDataOPT2Process")
-            boxm2_batch.set_input_from_db(0, self.scene)
-            boxm2_batch.set_input_from_db(1, self.cpu_cache)
-            boxm2_batch.set_input_from_db(2, gcam)
-            boxm2_batch.set_input_from_db(3, img)
-            boxm2_batch.set_input_string(4, "img_" + "%05d" % idx)
-            boxm2_batch.run_process()
+            batch.init_process("boxm2CppCreateAuxDataOPT2Process")
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, self.cpu_cache)
+            batch.set_input_from_db(2, gcam)
+            batch.set_input_from_db(3, img)
+            batch.set_input_string(4, "img_" + "%05d" % idx)
+            batch.run_process()
             self.write_cache(True)
 
-        boxm2_batch.init_process("boxm2CppBatchUpdateOPT2Process")
-        boxm2_batch.set_input_from_db(0, self.scene)
-        boxm2_batch.set_input_from_db(1, self.cpu_cache)
-        boxm2_batch.set_input_from_db(2, self.str_cache)
-        boxm2_batch.set_input_from_db(3, n_table)
-        boxm2_batch.run_process()
+        batch.init_process("boxm2CppBatchUpdateOPT2Process")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_from_db(1, self.cpu_cache)
+        batch.set_input_from_db(2, self.str_cache)
+        batch.set_input_from_db(3, n_table)
+        batch.run_process()
 
         # close the files so that they can be reloaded after the next iteration
-        boxm2_batch.init_process("boxm2StreamCacheCloseFilesProcess")
-        boxm2_batch.set_input_from_db(0, self.str_cache)
-        boxm2_batch.run_process()
+        batch.init_process("boxm2StreamCacheCloseFilesProcess")
+        batch.set_input_from_db(0, self.str_cache)
+        batch.run_process()
 
         self.write_cache()
 
     def cpu_batch_compute_normal_albedo(self, metadata_filename_list, atmospheric_params_filename_list):
-        boxm2_batch.init_process("boxm2CppBatchComputeNormalAlbedoProcess")
-        boxm2_batch.set_input_from_db(0, self.scene)
-        boxm2_batch.set_input_from_db(1, self.cpu_cache)
-        boxm2_batch.set_input_from_db(2, self.str_cache)
-        boxm2_batch.set_input_string(3, metadata_filename_list)
-        boxm2_batch.set_input_string(4, atmospheric_params_filename_list)
-        boxm2_batch.run_process()
+        batch.init_process("boxm2CppBatchComputeNormalAlbedoProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_from_db(1, self.cpu_cache)
+        batch.set_input_from_db(2, self.str_cache)
+        batch.set_input_string(3, metadata_filename_list)
+        batch.set_input_string(4, atmospheric_params_filename_list)
+        batch.run_process()
 
         # close the files so that they can be reloaded after the next iteration
-        boxm2_batch.init_process("boxm2StreamCacheCloseFilesProcess")
-        boxm2_batch.set_input_from_db(0, self.str_cache)
-        boxm2_batch.run_process()
+        batch.init_process("boxm2StreamCacheCloseFilesProcess")
+        batch.set_input_from_db(0, self.str_cache)
+        batch.run_process()
 
     def ocl_batch_compute_normal_albedo(self, img_id_list, metadata_filename_list, atmospheric_params_filename_list):
-        boxm2_batch.init_process(
+        batch.init_process(
             "boxm2OclBatchComputeNormalAlbedoArrayProcess")
-        boxm2_batch.set_input_from_db(0, self.device)
-        boxm2_batch.set_input_from_db(1, self.scene)
-        boxm2_batch.set_input_from_db(2, self.opencl_cache)
-        boxm2_batch.set_input_string(3, img_id_list)
-        boxm2_batch.set_input_string(4, metadata_filename_list)
-        boxm2_batch.set_input_string(5, atmospheric_params_filename_list)
-        boxm2_batch.run_process()
+        batch.set_input_from_db(0, self.device)
+        batch.set_input_from_db(1, self.scene)
+        batch.set_input_from_db(2, self.opencl_cache)
+        batch.set_input_string(3, img_id_list)
+        batch.set_input_string(4, metadata_filename_list)
+        batch.set_input_string(5, atmospheric_params_filename_list)
+        batch.run_process()
 
     def render_expected_image_naa(self, camera, ni, nj, metadata, atmospheric_params):
-        boxm2_batch.init_process("boxm2OclRenderExpectedImageNAAProcess")
-        boxm2_batch.set_input_from_db(0, self.device)
-        boxm2_batch.set_input_from_db(1, self.scene)
-        boxm2_batch.set_input_from_db(2, self.opencl_cache)
-        boxm2_batch.set_input_from_db(3, camera)
-        boxm2_batch.set_input_unsigned(4, ni)
-        boxm2_batch.set_input_unsigned(5, nj)
-        boxm2_batch.set_input_from_db(6, metadata)
-        boxm2_batch.set_input_from_db(7, atmospheric_params)
-        boxm2_batch.run_process()
-        (id, type) = boxm2_batch.commit_output(0)
+        batch.init_process("boxm2OclRenderExpectedImageNAAProcess")
+        batch.set_input_from_db(0, self.device)
+        batch.set_input_from_db(1, self.scene)
+        batch.set_input_from_db(2, self.opencl_cache)
+        batch.set_input_from_db(3, camera)
+        batch.set_input_unsigned(4, ni)
+        batch.set_input_unsigned(5, nj)
+        batch.set_input_from_db(6, metadata)
+        batch.set_input_from_db(7, atmospheric_params)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
         exp_image = dbvalue(id, type)
-        (id, type) = boxm2_batch.commit_output(1)
+        (id, type) = batch.commit_output(1)
         mask_image = dbvalue(id, type)
         return(exp_image, mask_image)
 
     def update_alpha_naa(self, image, camera, metadata, atmospheric_params, alt_prior, alt_density):
-        boxm2_batch.init_process("boxm2OclUpdateAlphaNAAProcess")
-        boxm2_batch.set_input_from_db(0, self.device)
-        boxm2_batch.set_input_from_db(1, self.scene)
-        boxm2_batch.set_input_from_db(2, self.opencl_cache)
-        boxm2_batch.set_input_from_db(3, camera)
-        boxm2_batch.set_input_from_db(4, image)
-        boxm2_batch.set_input_from_db(5, metadata)
-        boxm2_batch.set_input_from_db(6, atmospheric_params)
-        boxm2_batch.set_input_from_db(7, alt_prior)
-        boxm2_batch.set_input_from_db(8, alt_density)
-        if not (boxm2_batch.run_process()):
+        batch.init_process("boxm2OclUpdateAlphaNAAProcess")
+        batch.set_input_from_db(0, self.device)
+        batch.set_input_from_db(1, self.scene)
+        batch.set_input_from_db(2, self.opencl_cache)
+        batch.set_input_from_db(3, camera)
+        batch.set_input_from_db(4, image)
+        batch.set_input_from_db(5, metadata)
+        batch.set_input_from_db(6, atmospheric_params)
+        batch.set_input_from_db(7, alt_prior)
+        batch.set_input_from_db(8, alt_density)
+        if not (batch.run_process()):
             print("ERROR: run_process() returned False")
         return
 
     def render_expected_albedo_normal(self, camera, ni, nj):
-        boxm2_batch.init_process("boxm2OclRenderExpectedAlbedoNormalProcess")
-        boxm2_batch.set_input_from_db(0, self.device)
-        boxm2_batch.set_input_from_db(1, self.scene)
-        boxm2_batch.set_input_from_db(2, self.opencl_cache)
-        boxm2_batch.set_input_from_db(3, camera)
-        boxm2_batch.set_input_unsigned(4, ni)
-        boxm2_batch.set_input_unsigned(5, nj)
-        boxm2_batch.run_process()
-        (id, type) = boxm2_batch.commit_output(0)
+        batch.init_process("boxm2OclRenderExpectedAlbedoNormalProcess")
+        batch.set_input_from_db(0, self.device)
+        batch.set_input_from_db(1, self.scene)
+        batch.set_input_from_db(2, self.opencl_cache)
+        batch.set_input_from_db(3, camera)
+        batch.set_input_unsigned(4, ni)
+        batch.set_input_unsigned(5, nj)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
         exp_albedo = dbvalue(id, type)
-        (id, type) = boxm2_batch.commit_output(1)
+        (id, type) = batch.commit_output(1)
         exp_normal = dbvalue(id, type)
-        (id, type) = boxm2_batch.commit_output(2)
+        (id, type) = batch.commit_output(2)
         mask_image = dbvalue(id, type)
         return(exp_albedo, exp_normal, mask_image)
 
     def transform(self, tx, ty, tz, rx, ry, rz, scale):
-        boxm2_batch.init_process("boxm2TransformModelProcess")
-        boxm2_batch.set_input_from_db(0, self.scene)
-        boxm2_batch.set_input_float(1, tx)
-        boxm2_batch.set_input_float(2, ty)
-        boxm2_batch.set_input_float(3, tz)
-        boxm2_batch.set_input_float(4, rx)
-        boxm2_batch.set_input_float(5, ry)
-        boxm2_batch.set_input_float(6, rz)
-        boxm2_batch.set_input_float(7, scale)
-        boxm2_batch.run_process()
+        batch.init_process("boxm2TransformModelProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_float(1, tx)
+        batch.set_input_float(2, ty)
+        batch.set_input_float(3, tz)
+        batch.set_input_float(4, rx)
+        batch.set_input_float(5, ry)
+        batch.set_input_float(6, rz)
+        batch.set_input_float(7, scale)
+        batch.run_process()
         return
 
     def compute_sun_affine_camera(self, sun_az, sun_el, astro_coords=True):
@@ -666,31 +666,31 @@ class boxm2_scene_adaptor(object):
 
     def normals_to_id(self):
         print("Normals to id ")
-        boxm2_batch.init_process("boxm2CppNormalsToIdProcess")
-        boxm2_batch.set_input_from_db(0, self.scene)
-        boxm2_batch.set_input_from_db(1, self.cpu_cache)
-        return boxm2_batch.run_process()
+        batch.init_process("boxm2CppNormalsToIdProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_from_db(1, self.cpu_cache)
+        return batch.run_process()
 
     def cache_neighbor_info(self):
-        boxm2_batch.init_process("boxm2VecfOclCacheNeighborInfoProcess")
-        boxm2_batch.set_input_from_db(0, self.scene)
-        boxm2_batch.set_input_from_db(1, self.opencl_cache)
-        return boxm2_batch.run_process()
+        batch.init_process("boxm2VecfOclCacheNeighborInfoProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_from_db(1, self.opencl_cache)
+        return batch.run_process()
 
     def refine_scene_around_geometry(self, filter_v, n_times, p_thresh, use_gpu):
         if self.opencl_cache.type == "boxm2_opencl_cache_sptr":
             print("Refining around surface geometry")
-            boxm2_batch.init_process(
+            batch.init_process(
                 "boxm2_ocl_refine_scene_around_geometry_process")
-            boxm2_batch.set_input_from_db(0, self.scene)
-            boxm2_batch.set_input_from_db(1, self.opencl_cache)
-            boxm2_batch.set_input_from_db(2, self.device)
-            boxm2_batch.set_input_from_db(3, filter_v)
-            boxm2_batch.set_input_int(4, n_times)
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, self.opencl_cache)
+            batch.set_input_from_db(2, self.device)
+            batch.set_input_from_db(3, filter_v)
+            batch.set_input_int(4, n_times)
             # use negative value to refine all
-            boxm2_batch.set_input_float(5, p_thresh)
-            boxm2_batch.set_input_bool(6, use_gpu)
-            return boxm2_batch.run_process()
+            batch.set_input_float(5, p_thresh)
+            batch.set_input_bool(6, use_gpu)
+            return batch.run_process()
         else:
             print "ERROR: Cache type not recognized: ", cache.type
             return False
