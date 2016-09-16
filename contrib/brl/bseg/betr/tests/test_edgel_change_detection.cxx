@@ -24,9 +24,9 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_camera.h>
 #define chile 0
-#define rajaei 0
+#define rajaei 1
 #define kandahar 0
-#define hamadan 1
+#define hamadan 0
 void test_edgel_change_detection()
 {
 #if chile
@@ -91,9 +91,10 @@ void test_edgel_change_detection()
  std::string evt_cam_path = dir + evt_name + "_RPC.TXT";
 // std::string ref_obj_path = dir + "rajaei_trigger_objects/mesh_1.ply";
 // std::string evt_obj_path = dir + "rajaei_trigger_objects/mesh_2.ply";
- std::string evt_obj0_path = dir + "rajaei_trigger_multi_event_objects/mesh_0.ply";
- std::string evt_obj1_path = dir + "rajaei_trigger_multi_event_objects/mesh_1.ply";
- std::string ref_obj_path = dir + "rajaei_trigger_multi_event_objects/mesh_2.ply";
+
+ std::string evt_obj0_path = dir + "rajaei_ref_channel_large_objects/mesh_1.ply";
+ std::string evt_obj1_path = dir + "rajaei_ref_channel_large_objects/mesh_1.ply";
+ std::string ref_obj_path = dir + "rajaei_ref_channel_large_objects/mesh_0.ply";
  vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
  vil_image_resource_sptr evt_imgr = vil_load_image_resource(evt_img_path.c_str());
  vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
@@ -112,7 +113,7 @@ void test_edgel_change_detection()
  etr.add_geo_object("pier_evt1", lon, lat, elev, evt_obj1_path, false);
  etr.set_ref_image(ref_imgr);
  etr.set_evt_image(evt_imgr);
-#if 0
+#if 10
  std::cout << "====PROCESSING WITH CHANGE =====\n";
  std::vector<double> pchange;
  etr.process("edgel_change_detection", pchange);
@@ -132,7 +133,7 @@ void test_edgel_change_detection()
  vpgl_camera_double_sptr evt_camera_2 = evt_lcam_2;
  etr.set_evt_camera(evt_camera_2);
  etr.set_evt_image(evt_imgr_2);
-#if 0 //Kill remote and middle channel test
+ //Kill remote and middle channel test
  std::cout << "====PROCESSING WITH NO CHANGE =====\n";
  pchange.clear();
  etr.process("edgel_change_detection", pchange);
@@ -140,6 +141,7 @@ void test_edgel_change_detection()
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
+#if 0
  pr = 0.0;
  std::cout << "====PROCESSING WITH REFERENCE ONLY =====\n";
  etr.process("edgel_reference_cd", pchange);
@@ -170,7 +172,7 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
  double pr = 0.0;
-#endif // kill middle channel test
+
  // four small refernce regions
  dir = "D:/tests/rajaei_test/object-test/";
  std::string evt0_small_path = dir + "object_detection_objects/evt_small_0.ply";
@@ -235,7 +237,7 @@ void test_edgel_change_detection()
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
- 
+#endif 
 #elif kandahar
  std::string dir = "D:/tests/kandahar_test/";
  std::string ref_name = "20160603_105531_1_0b0e.tif";
@@ -299,8 +301,8 @@ void test_edgel_change_detection()
  std::string evt_img_path = dir + evt_name ;
  std::string ref_cam_path = dir + ref_name + "_RPC.TXT";
  std::string evt_cam_path = dir + evt_name + "_RPC.TXT";
- std::string evt_obj_path = dir + "hamadan_objects/event.ply";
- // std::string evt2_obj_path = dir + "hamadan_objects/event2.ply";
+ std::string evt_obj_path = dir + "hamadan_objects/event_big.ply";
+ // std::string evt2_obj_path = dir + "hamadan_objects/event.ply";
  std::string ref_obj_path = dir + "hamadan_objects/ref.ply";
  vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
  vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
@@ -313,7 +315,7 @@ void test_edgel_change_detection()
  double lat = 35.1964842393; 
  double elev = 1678.81629561;
  vpgl_lvcs lvcs = vpgl_lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
- betr_event_trigger etr("kandahar", lvcs);
+ betr_event_trigger etr("hamadan", lvcs);
  etr.set_verbose(true);
  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
  etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
@@ -358,6 +360,23 @@ void test_edgel_change_detection()
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
+
+ evt_name = "20160817_135113_0c68.tif";
+ evt_img_path = dir + evt_name ;
+ evt_cam_path = dir + evt_name + "_RPC.TXT";
+ imgr = vil_load_image_resource(evt_img_path.c_str());
+ lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
+ camera = lcam;
+ etr.set_evt_camera(camera);
+ etr.set_evt_image(imgr);
+ std::cout <<"processing " << evt_name << '\n';
+ etr.process("edgel_change_detection", pchange);
+ i =0;
+ for(std::vector<double>::iterator pit = pchange.begin();
+     pit != pchange.end(); ++pit, i++)
+   std::cout << "pchange[" << i << "] = " << *pit << '\n';
+
+
 #endif
 }
   TESTMAIN(test_edgel_change_detection);
