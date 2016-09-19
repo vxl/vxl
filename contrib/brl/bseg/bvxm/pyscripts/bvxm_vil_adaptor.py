@@ -38,6 +38,11 @@ def bvxm_load_image(file_path):
     bvxm_batch.remove_data(nj_id)
     return img, ni, nj
 
+def bvxm_load_from_ascii(input_file, output_file):
+    bvxm_batch.init_process("vilLoadFromAsciiProcess")
+    bvxm_batch.set_input_string(0, input_file)
+    bvxm_batch.set_input_string(1, output_file)
+    bvxm_batch.run_process()
 
 def bvxm_load_image_resource(file_path):
     bvxm_batch.init_process("vilLoadImageResourceProcess")
