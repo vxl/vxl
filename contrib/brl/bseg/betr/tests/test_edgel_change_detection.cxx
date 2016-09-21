@@ -154,7 +154,6 @@ void test_edgel_change_detection()
  std::string evt1_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_2.ply";
  std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_0.ply";
  // std::string ref_self_path = dir + "rajaei_trigger_self_ref_objects/mesh_5.ply";
-
  betr_event_trigger etr_self("rajaei_self", lvcs);
  etr_self.set_verbose(true);
  etr_self.set_ref_camera(ref_camera);
@@ -173,6 +172,7 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
  double pr = 0.0;
+
 #endif // kill middle channel test
 
  // four small refernce regions
@@ -215,7 +215,10 @@ void test_edgel_change_detection()
  etr_self_small.set_evt_image(imgr);
  etr_self_small.set_ref_path(ref_img_path_s);
  etr_self_small.set_evt_path(img_path);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8ea8ffb3ff825bc869eafe5ef947bf6b7211f9be
  std::vector<double> pchange;
  etr_self_small.process("edgel_change_detection", pchange);
  unsigned i =0;
@@ -240,7 +243,6 @@ void test_edgel_change_detection()
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
-
 #elif kandahar
  std::string dir = "D:/tests/kandahar_test/";
  std::string ref_name = "20160603_105531_1_0b0e.tif";
