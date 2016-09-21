@@ -140,18 +140,19 @@ def test_classifier(tclsf, block_size, category_id_file=""):
     return out, out_color, out_id
 
 
-def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, percent_cat_name, category_id_file=""):
+def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, ni, nj, block_size, percent_cat_name, category_id_file="", scale_factor=1.0/2048.0):
     boxm2_batch.init_process("sdetTextureClassifySatelliteCloudsProcess")
     boxm2_batch.set_input_from_db(0, tclsf)
     boxm2_batch.set_input_string(1, dictionary_name)
     boxm2_batch.set_input_from_db(2, image_resource)
     boxm2_batch.set_input_unsigned(3, i)
     boxm2_batch.set_input_unsigned(4, j)
-    boxm2_batch.set_input_unsigned(5, width)
-    boxm2_batch.set_input_unsigned(6, height)
+    boxm2_batch.set_input_unsigned(5, ni)
+    boxm2_batch.set_input_unsigned(6, nj)
     boxm2_batch.set_input_unsigned(7, block_size)
     boxm2_batch.set_input_string(8, category_id_file)
     boxm2_batch.set_input_string(9, percent_cat_name)
+    boxm2_batch.set_input_float(10, scale_factor)
     status = boxm2_batch.run_process()
     if status:
         (out_id, out_type) = boxm2_batch.commit_output(0)
