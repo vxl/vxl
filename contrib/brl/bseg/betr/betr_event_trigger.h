@@ -46,8 +46,9 @@ class betr_event_trigger : public vbl_ref_count{
   // by setting the intensity to zero when alpha = 0.
   void set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask = false);
   void set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask = false);
-  void set_ref_camera(vpgl_camera_double_sptr const& camera){ref_camera_ = camera;}
-  void set_evt_camera(vpgl_camera_double_sptr const& camera){evt_camera_ = camera;}
+
+  void set_ref_camera(vpgl_camera_double_sptr const& camera);
+  void set_evt_camera(vpgl_camera_double_sptr const& camera);
 
   // Add object and find translation vector from trigger origin to object origin.
   void add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object, bool is_ref_obj);
