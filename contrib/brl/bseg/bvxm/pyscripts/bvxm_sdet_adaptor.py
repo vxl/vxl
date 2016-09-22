@@ -137,18 +137,19 @@ def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
       return None, None, None, None
 
 
-def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, width, height, block_size, percent_cat_name, category_id_file=""):
+def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, ni, nj, block_size, percent_cat_name, category_id_file="", scale_factor=1.0/2048.0):
     bvxm_batch.init_process("sdetTextureClassifySatelliteCloudsProcess")
     bvxm_batch.set_input_from_db(0, tclsf)
     bvxm_batch.set_input_string(1, dictionary_name)
     bvxm_batch.set_input_from_db(2, image_resource)
     bvxm_batch.set_input_unsigned(3, i)
     bvxm_batch.set_input_unsigned(4, j)
-    bvxm_batch.set_input_unsigned(5, width)
-    bvxm_batch.set_input_unsigned(6, height)
+    bvxm_batch.set_input_unsigned(5, ni)
+    bvxm_batch.set_input_unsigned(6, nj)
     bvxm_batch.set_input_unsigned(7, block_size)
     bvxm_batch.set_input_string(8, category_id_file)
     bvxm_batch.set_input_string(9, percent_cat_name)
+    bvxm_batch.set_input_float(10, scale_factor)
     status = bvxm_batch.run_process()
     if status:
         (out_id, out_type) = bvxm_batch.commit_output(0)
