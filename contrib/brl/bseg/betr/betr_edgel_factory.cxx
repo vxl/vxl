@@ -10,6 +10,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
+#include <vil/vil_resample_bicub.h>
 #include <bsol/bsol_algs.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_point_2d.h>
@@ -26,12 +27,13 @@ void betr_edgel_factory::set_parameters(float sigma, float noise_multiplier, dou
   gradient_range_ = gradient_range;
   nbins_ = nbins;
 }
-void betr_edgel_factory::set_parameters(float sigma, float noise_multiplier){
+void betr_edgel_factory::set_parameters(float sigma, float noise_multiplier, double upsample_factor){
 params_.smooth = sigma; 
  params_.noise_multiplier = noise_multiplier;
  params_.aggressive_junction_closure=1;
  params_.filterFactor = 0.0;
  params_.borderp = false;
+ upsample_factor_ = upsample_factor;
 }
 bool betr_edgel_factory::add_image(std::string const& iname, vil_image_resource_sptr const& imgr){
   if (!imgr||!imgr->ni()||!imgr->nj())
@@ -97,7 +99,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   unsigned nj = roi->rsize(region_id);
   unsigned min_size = 10;
   if(ni < min_size || nj <min_size ){
-    std::cout << "roi " << region_id <<  " for " << iname << " is empty \n";
+    std::cout << "roi " << region_name <<  " for " << iname << " is empty \n";
     return false;
   }
   int imin = roi->cmin(region_id);
@@ -118,9 +120,24 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
     vil_image_view<vxl_byte> view = brip_vil_float_ops::convert_to_byte(clip_resc);
     clip_resc = vil_new_image_resource_of_view(view);
   }
+  // check if chip needs to be upsampled
+  if(upsample_factor_ != 1.0){
+    double dni = static_cast<double>(clip_resc->ni()), dnj = static_cast<double>(clip_resc->nj());
+    dni *= upsample_factor_; dnj *= upsample_factor_;
+    unsigned ni = static_cast<unsigned>(dni), nj = static_cast<unsigned>(dnj);
+    if(clip_resc->pixel_format()==VIL_PIXEL_FORMAT_UINT_16){
+      vil_image_view<unsigned short> temp = clip_resc->get_view(), uptemp;
+      vil_resample_bicub(temp, uptemp, ni, nj);
+      clip_resc = vil_new_image_resource_of_view(uptemp);
+    }else if(clip_resc->pixel_format()==VIL_PIXEL_FORMAT_BYTE){
+      vil_image_view<unsigned char> temp = clip_resc->get_view(), uptemp;
+      vil_resample_bicub(temp, uptemp, ni, nj);
+      clip_resc = vil_new_image_resource_of_view(uptemp);
+    }
+  }
 #if 0
   //debug
-  std::string dir =  "D:/tests/rajaei_test/trigger/";
+  std::string dir =  "D:/tests/kandahar_test/";
   std::string fname = dir + iname + "_" + region_name + ".tif";
   vil_save_image_resource(clip_resc, fname.c_str());
 #endif
@@ -137,6 +154,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
     std::cout << "Detection worked but returned no edgels\n";
     return false;
   }
+ 
   edgels_[iname][region_name] = vd_edges;
 
   unsigned region_index = regions_[iname][region_name];
@@ -150,7 +168,12 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   bsta_histogram<double> h(gradient_range_, nbins_);
   for( std::vector<double>::iterator git = gmags.begin();
        git != gmags.end();++git)
-    h.upcount(*git, 1.0);
+    h.upcount(*git, (1.0 + (*git)));//increase weight to favor high gradient values (small objects)
+  
+  if(h.area()<3.0*nbins_){
+    std::cout << "insufficient edges in region " << region_name << " - fatal" << std::endl;
+    return false;
+  }
   grad_hists_[iname][region_name] = h;
   return true;
 }
@@ -202,7 +225,9 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
     for (unsigned int i=0; i<n;i++)
     {
       vdgl_edgel& ed = (*ech)[i];
-      double x = ed.get_x()+x0, y = ed.get_y()+y0;
+      double x = ed.get_x(), y = ed.get_y();
+      x/= upsample_factor_; y/=upsample_factor_;
+      x += x0, y += y0;
       ed.set_x(x); ed.set_y(y);
       if(!vpoly.contains(x, y))
         continue;

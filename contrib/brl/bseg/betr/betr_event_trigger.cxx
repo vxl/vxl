@@ -16,16 +16,79 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include "betr_edgel_change_detection.h"
+#include "betr_edgel_reference_cd.h"
 #include "betr_algorithm.h"
 #include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
+#include <bil/bil_convert_to_grey.h>
 unsigned betr_event_trigger::process_counter_ = 0;
 
-void betr_event_trigger::register_algorithms(){
-  betr_algorithm_sptr alg = new betr_edgel_change_detection();
-  algorithms_[alg->name()] = alg;
+void betr_event_trigger::set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask){
+  bil_convert_resource_to_grey cnv;
+  cnv(ref_imgr, ref_imgr_, apply_mask);
 }
+void betr_event_trigger::set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask){
+	bil_convert_resource_to_grey cnv;
+  cnv(evt_imgr, evt_imgr_, apply_mask);
+}
+
+void betr_event_trigger::set_ref_camera(vpgl_camera_double_sptr const& camera){
+  if(!camera){
+    std::cout <<"Fatal - Null reference camera" << std::endl;
+    return;
+  }
+  // if camera is already local do nothing
+  if(camera->type_name() == "vpgl_local_rational_camera"){
+    ref_camera_ = camera;
+    return;
+  }else  if(camera->type_name() == "vpgl_rational_camera"){
+    vpgl_rational_camera<double>* rat_cam_ptr = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
+    if(!rat_cam_ptr){
+      std::cout << "Fatal - can't convert camera to rational_camera" << std::endl;
+      return;
+    }
+    vpgl_local_rational_camera<double>* lcam_ptr = new vpgl_local_rational_camera<double>(lvcs_, *rat_cam_ptr);
+    ref_camera_  = lcam_ptr;
+  }else{
+      std::cout << "Fatal - camera not global or local rational_camera" << std::endl;
+      return;
+  }
+}
+void betr_event_trigger::set_evt_camera(vpgl_camera_double_sptr const& camera){
+    if(!camera){
+    std::cout <<"Fatal - Null reference camera" << std::endl;
+    return;
+  }
+  // if camera is already local do nothing
+  if(camera->type_name() == "vpgl_local_rational_camera"){
+    std::cout << " setting local camera " << std::endl;
+    evt_camera_ = camera;
+    return;
+  }else  if(camera->type_name() == "vpgl_rational_camera"){
+    std::cout << " converting to local camera " << std::endl;
+    vpgl_rational_camera<double>* rat_cam_ptr = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
+    if(!rat_cam_ptr){
+      std::cout << "Fatal - can't convert camera to rational_camera" << std::endl;
+      return;
+    }
+    std::cout << "LVCS " << lvcs_ << std::endl;
+    vpgl_local_rational_camera<double>* lcam_ptr = new vpgl_local_rational_camera<double>(lvcs_, *rat_cam_ptr);
+    evt_camera_  = lcam_ptr;
+  }else{
+      std::cout << "Fatal - camera not global or local rational_camera" << std::endl;
+      return;
+  }
+}
+
+void betr_event_trigger::register_algorithms(){
+  betr_algorithm_sptr alg0 = new betr_edgel_change_detection();
+  algorithms_[alg0->name()] = alg0;
+  betr_algorithm_sptr alg1 = new betr_edgel_reference_cd();
+  algorithms_[alg1->name()] = alg1;
+}  
 void betr_event_trigger::update_local_bounding_box(){
   if(global_bbox_.is_empty())
     return;
@@ -135,6 +198,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
         return false;
       } 
       std::vector<vsol_point_3d_sptr> verts = mesh_3d->vertices();
+
       std::vector<vgl_point_2d<double> > pts_2d;
       for(std::vector<vsol_point_3d_sptr>::iterator vit = verts.begin();
           vit != verts.end(); ++vit){
@@ -198,11 +262,15 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
       return false;
   }
   // for now only one ref object and one or more event objects
-  if(evt_trigger_objects_.size() >= 1 && ref_trigger_objects_.size() != 1 ){
+  if(evt_trigger_objects_.size() < 1 || ref_trigger_objects_.size() != 1 ){
     std::cout << "for now only one ref object and one or more evt object"<< std::endl;
     return false;
   } 
-  prob_change.clear();
+  if(verbose_){
+    std::cout << "Reference Image: " << ref_path_ << std::endl;
+    std::cout << "Event Image: " << evt_path_ << std::endl;
+  }
+    prob_change.clear();
   std::map<std::string, betr_geo_object_3d_sptr>::iterator rit = ref_trigger_objects_.begin();
   std::string ref_obj_name = rit->first;
   // project the reference object
