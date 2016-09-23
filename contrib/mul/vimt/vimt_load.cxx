@@ -117,4 +117,33 @@ void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& i
   }
 }
 
+//: Load image from path into float image, merging transparent image planes
+void vimt_load_to_float(const std::string& im_path, vimt_image_2d_of<float>& image,
+                       float unit_scaling)
+{
+  vil_image_resource_sptr ir = vil_load_image_resource(im_path.c_str());
 
+  if (ir.ptr()==VXL_NULLPTR)
+  {
+    image.image().set_size(0,0);
+    return;
+  }
+
+  if ((ir->pixel_format()==VIL_PIXEL_FORMAT_FLOAT) ||
+     (ir->pixel_format()==VIL_PIXEL_FORMAT_UINT_16) ||
+     (ir->pixel_format()==VIL_PIXEL_FORMAT_INT_16))
+  {
+    vimt_load_as_grey_or_rgb(im_path.c_str(),image, unit_scaling);
+  }
+  else if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+  {
+    vimt_image_2d_of<vxl_byte> byte_image;	  
+    vimt_load_as_grey_or_rgb(im_path.c_str(), byte_image, unit_scaling);
+	vimt_convert_cast(byte_image, image);
+  }
+  else
+  {
+    std::cerr<<"Unknown image pixel format ("<<ir->pixel_format()<<") for image "<<im_path.c_str()<<std::endl;
+    std::abort();
+  }
+}

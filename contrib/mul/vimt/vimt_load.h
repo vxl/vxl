@@ -27,11 +27,15 @@ vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr &im,
 vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr &im,
                                                  float unit_scaling=1.0f);
 
-//: Load image from path into byte image
+//: Load image from path into byte image, merging transparent image planes
 // If input image is float or int16 then stretch values to byte
 void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& image,
                        float unit_scaling);
 
+//: Load image from path into float image, merging transparent image planes
+void vimt_load_to_float(const std::string& im_path, vimt_image_2d_of<float>& image,
+                       float unit_scaling);
+					   
 //: Load image from path into given image (forcing to given pixel type)
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
 template<class T> inline
@@ -75,7 +79,7 @@ void vimt_load_as_grey_or_rgb(const std::string& path,
   {
     if ((nplanes == 2) || (nplanes == 4))
     {
-      vil_image_view_base_sptr image_ref = new vil_image_view<vxl_byte>(image.image());
+      vil_image_view_base_sptr image_ref = new vil_image_view<T>(image.image());
       vil_image_view<T> new_image_view = vil_convert_to_n_planes(nplanes-1, image_ref);
 
       vil_convert_merge_alpha(image.image(), new_image_view, nplanes);
