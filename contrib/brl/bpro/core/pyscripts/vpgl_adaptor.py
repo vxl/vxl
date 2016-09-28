@@ -1,5 +1,6 @@
 # import the batch module and dbvalue from init 
 # set the global variable, batch, on init before importing this file
+
 import brl_init
 dbvalue = brl_init.DummyBatch()
 batch = brl_init.DummyBatch()
@@ -1149,19 +1150,20 @@ def compute_camera_to_world_homography(cam, plane, inverse=False):
 # note that the input 3-d box is in unit of wgs84 geo coordinates
 
 
-def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=0):
+def crop_image_using_3d_box(img_res_ni, img_res_nj, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=0):
     batch.init_process("vpglCropImgUsing3DboxProcess")
-    batch.set_input_from_db(0, img_res)
-    batch.set_input_from_db(1, camera)
-    batch.set_input_double(2, lower_left_lon)
-    batch.set_input_double(3, lower_left_lat)
-    batch.set_input_double(4, lower_left_elev)
-    batch.set_input_double(5, upper_right_lon)
-    batch.set_input_double(6, upper_right_lat)
-    batch.set_input_double(7, upper_right_elev)
-    batch.set_input_double(8, uncertainty)
+    batch.set_input_unsigned(0, img_res_ni)
+    batch.set_input_unsigned(1, img_res_nj)
+    batch.set_input_from_db(2, camera)
+    batch.set_input_double(3, lower_left_lon)
+    batch.set_input_double(4, lower_left_lat)
+    batch.set_input_double(5, lower_left_elev)
+    batch.set_input_double(6, upper_right_lon)
+    batch.set_input_double(7, upper_right_lat)
+    batch.set_input_double(8, upper_right_elev)
+    batch.set_input_double(9, uncertainty)
     if lvcs:
-        batch.set_input_from_db(9, lvcs)
+        batch.set_input_from_db(10, lvcs)
     status = batch.run_process()
     if status:
         (id, type) = batch.commit_output(0)
