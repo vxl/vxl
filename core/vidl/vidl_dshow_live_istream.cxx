@@ -410,9 +410,9 @@ inline void vidl_dshow_live_istream<ParamsObject>::stop(void)
   wait_for_state_change(media_control_->Stop());
 }
 
-// ***** make these with the usual *.txx macros? *****
+// ***** make these with the usual *.hxx macros? *****
 // verify these steps with vil library before attempting
-// 1. put this file into vidl_dshow_istream.txx
+// 1. put this file into vidl_dshow_istream.hxx
 // 2. put the macros in vidl_dshow_istream.h
 // 3. put the templates in:
 //      templates/vidl_dshow_istream+vidl_dshow_istream_params-.cxx

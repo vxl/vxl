@@ -22,7 +22,7 @@ set( rgrl_sources
   rgrl_mask_sptr.h
 
   rgrl_cast.h
-  rgrl_set_of.h                        rgrl_set_of.txx
+  rgrl_set_of.h                        rgrl_set_of.hxx
   rgrl_rotation.h                      rgrl_rotation.cxx
 
   rgrl_feature.h                       rgrl_feature.cxx
@@ -40,8 +40,8 @@ set( rgrl_sources
 
   rgrl_feature_set.h                   rgrl_feature_set.cxx
   rgrl_feature_set_sptr.h
-  rgrl_feature_set_location.h          rgrl_feature_set_location.txx
-  rgrl_feature_set_bins.h              rgrl_feature_set_bins.txx
+  rgrl_feature_set_location.h          rgrl_feature_set_location.hxx
+  rgrl_feature_set_bins.h              rgrl_feature_set_bins.hxx
   rgrl_feature_set_bins_2d.h           rgrl_feature_set_bins_2d.cxx
   rgrl_feature_set_location_masked.h   rgrl_feature_set_location_masked.cxx
 
@@ -56,9 +56,9 @@ set( rgrl_sources
   rgrl_matcher_k_nearest_pick_one.h    rgrl_matcher_k_nearest_pick_one.cxx
   rgrl_matcher_k_nearest_random.h      rgrl_matcher_k_nearest_random.cxx
   rgrl_matcher_k_nearest_boundary.h    rgrl_matcher_k_nearest_boundary.cxx
-  rgrl_matcher_pseudo.h                rgrl_matcher_pseudo.txx
-  rgrl_matcher_pseudo_3d.h             rgrl_matcher_pseudo_3d.txx
-  rgrl_matcher_pseudo_int_3d.h         rgrl_matcher_pseudo_int_3d.txx
+  rgrl_matcher_pseudo.h                rgrl_matcher_pseudo.hxx
+  rgrl_matcher_pseudo_3d.h             rgrl_matcher_pseudo_3d.hxx
+  rgrl_matcher_pseudo_int_3d.h         rgrl_matcher_pseudo_int_3d.hxx
 
   rgrl_evaluator_sptr.h
   rgrl_evaluator.h
@@ -97,9 +97,9 @@ set( rgrl_sources
   rgrl_est_dis_homo2d_lm.h             rgrl_est_dis_homo2d_lm.cxx
 
   #generic estimator for homogeneous projection matrix
-  rgrl_est_proj_func.h                 rgrl_est_proj_func.txx
+  rgrl_est_proj_func.h                 rgrl_est_proj_func.hxx
   #generic estimator for homogeneous projection matrix w/ radial lens distortion
-  rgrl_est_proj_rad_func.h             rgrl_est_proj_rad_func.txx
+  rgrl_est_proj_rad_func.h             rgrl_est_proj_rad_func.hxx
 
   rgrl_est_homo2d_proj.h               rgrl_est_homo2d_proj.cxx
   rgrl_est_homo2d_proj_rad.h           rgrl_est_homo2d_proj_rad.cxx

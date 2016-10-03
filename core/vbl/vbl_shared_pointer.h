@@ -59,7 +59,6 @@ class vbl_shared_pointer
     up_ref();
   }
 
-#if VCL_HAS_MEMBER_TEMPLATES
   template<class U> friend class vbl_shared_pointer;
 
   //: Construct using smart pointer to derived class.
@@ -80,7 +79,6 @@ class vbl_shared_pointer
     return *this;
   }
 
-#endif
 
 #if 0
   // Remove these convenience methods because they conflict with the
@@ -88,7 +86,6 @@ class vbl_shared_pointer
   // able to do
   //    vbl_shared_pointer<base> p = new derived;
   // but these overloads prevent that.
-#if VCL_HAS_MEMBER_TEMPLATES
   // if T has a constructor T::T(3, "foo") then it's nice
   // to be able to say
   //   vbl_shared_pointer<T> sp(3, "foo");
@@ -109,7 +106,6 @@ class vbl_shared_pointer
   template <class V1, class V2, class V3, class V4>
   explicit vbl_shared_pointer(V1 const &v1, V2 const &v2, V3 const &v3, V4 const &v4)
     : data(new data_t(new T(v1, v2, v3, v4), 1)) { }
-#endif
 #endif
 
   self &operator=(self const &that) {

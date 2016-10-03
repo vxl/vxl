@@ -270,6 +270,6 @@ std::ostream&  operator<<(std::ostream& s, const vgl_conic_segment_2d<Type>& c_s
 template <class Type>
 std::istream& operator>>(std::istream& is, vgl_conic_segment_2d<Type>& c_s);
 
-#define VGL_CONIC_SEGMENT_2D_INSTANTIATE(T) extern "please include vgl/vgl_conic_segment_2d.txx first"
+#define VGL_CONIC_SEGMENT_2D_INSTANTIATE(T) extern "please include vgl/vgl_conic_segment_2d.hxx first"
 
 #endif // vgl_conic_segment_2d_h_

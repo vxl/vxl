@@ -45,7 +45,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, T* begin, std::size_t nelems
 //: Read a block of doubles from a vsl_b_istream
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t nelems)
 {
   VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
@@ -58,7 +58,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, double* begin, std::size_t n
 //: Read a block of floats from a vsl_b_istream
 // This function is very speed efficient.
 // \deprecated in favour of vsl_block_binary_read
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t nelems)
 {
   VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
@@ -73,7 +73,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, float* begin, std::size_t ne
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nelems)
 {
   VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
@@ -104,7 +104,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, int* begin, std::size_t nele
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::size_t nelems)
 {
   VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
@@ -135,7 +135,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned int* begin, std::si
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t nelems)
 {
   VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
@@ -166,7 +166,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, short* begin, std::size_t ne
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::size_t nelems)
 {
   VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
@@ -197,7 +197,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned short* begin, std::
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nelems)
 {
   VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );
@@ -228,7 +228,7 @@ inline void vsl_b_read_block_old(vsl_b_istream &is, long* begin, std::size_t nel
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 // \deprecated in favour of vsl_block_binary_read
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vsl_b_read_block_old(vsl_b_istream &is, unsigned long* begin, std::size_t nelems)
 {
   VXL_DEPRECATED_MACRO( "vsl_b_read_block_old()" );

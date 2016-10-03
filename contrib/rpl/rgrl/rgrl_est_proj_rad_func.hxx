@@ -10,7 +10,7 @@
 #include <vector>
 #include "rgrl_est_proj_rad_func.h"
 
-#include <rgrl/rgrl_est_proj_func.txx>
+#include <rgrl/rgrl_est_proj_func.hxx>
 #include <rgrl/rgrl_estimator.h>
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_set_of.h>

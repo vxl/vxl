@@ -26,7 +26,7 @@ struct two_pi_power
   { return vnl_math::twopi*two_pi_power<n-1>::value(); }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct two_pi_power<0>
 {
   static inline double value() { return 1.0; }

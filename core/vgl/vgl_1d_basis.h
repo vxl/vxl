@@ -39,8 +39,8 @@
 //
 // \warning the C++ standard requires that these functions are
 // declared before they are used, which, for this, means in the
-// definition of the functions in the .txx file. So, for maximum
-// portability, make sure they are at least declared before the .txx
+// definition of the functions in the .hxx file. So, for maximum
+// portability, make sure they are at least declared before the .hxx
 // file is included.
 //
 // \author Peter Vanroose
@@ -137,6 +137,6 @@ class vgl_1d_basis
 // \relatesalso vgl_1d_basis
 template <class T> std::ostream& operator<<(std::ostream& s, vgl_1d_basis<T> const&);
 
-#define VGL_1D_BASIS_INSTANTIATE(T) extern "please include vgl/vgl_1d_basis.txx first"
+#define VGL_1D_BASIS_INSTANTIATE(T) extern "please include vgl/vgl_1d_basis.hxx first"
 
 #endif // vgl_1d_basis_h_

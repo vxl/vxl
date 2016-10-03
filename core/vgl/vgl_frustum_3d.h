@@ -113,6 +113,6 @@ std::ostream&  operator<<(std::ostream& s, vgl_frustum_3d<Type> const& p);
 
 
 
-#define VGL_FRUSTUM_3D_INSTANTIATE(T) extern "please include vgl/vgl_frustum_3d.txx first"
+#define VGL_FRUSTUM_3D_INSTANTIATE(T) extern "please include vgl/vgl_frustum_3d.hxx first"
 
 #endif // vgl_frustum_3d_h

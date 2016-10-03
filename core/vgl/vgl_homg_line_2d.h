@@ -147,6 +147,6 @@ std::istream& operator>>(std::istream& s, l& line);
 
 #undef l
 
-#define VGL_HOMG_LINE_2D_INSTANTIATE(T) extern "please include vgl/vgl_homg_line_2d.txx first"
+#define VGL_HOMG_LINE_2D_INSTANTIATE(T) extern "please include vgl/vgl_homg_line_2d.hxx first"
 
 #endif //  vgl_homg_line_2d_h

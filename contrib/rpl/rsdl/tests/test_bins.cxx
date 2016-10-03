@@ -484,6 +484,6 @@ TESTMAIN(test_bins);
 
 // cases tested above, but not instantiated in ../Templates/
 // these are extreme cases for testing
-#include <rsdl/rsdl_bins.txx>
+#include <rsdl/rsdl_bins.hxx>
 INSTANTIATE_RSDL_BINS( 1, float, unsigned short );
 INSTANTIATE_RSDL_BINS( 7, float, unsigned short );

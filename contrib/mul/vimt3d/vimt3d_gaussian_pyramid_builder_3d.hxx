@@ -437,7 +437,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream& bfs)
 
 #undef VIMT3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE
 #define VIMT3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string vimt3d_gaussian_pyramid_builder_3d<T >::is_a() const \
+template <> std::string vimt3d_gaussian_pyramid_builder_3d<T >::is_a() const \
 { return std::string("vimt3d_gaussian_pyramid_builder_3d<" #T ">"); } \
 template class vimt3d_gaussian_pyramid_builder_3d<T >
 

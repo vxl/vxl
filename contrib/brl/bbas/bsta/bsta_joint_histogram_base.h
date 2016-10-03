@@ -35,7 +35,7 @@ class bsta_joint_histogram_traits
     return bsta_joint_histogram_base::HIST_TYPE_UNKNOWN;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 class bsta_joint_histogram_traits<float>
 {
  public:
@@ -43,7 +43,7 @@ class bsta_joint_histogram_traits<float>
     return bsta_joint_histogram_base::HIST_TYPE_FLOAT;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 class bsta_joint_histogram_traits<double>
 {
  public:

@@ -326,7 +326,7 @@ vgl_pointset_3d<T> vgl_intersection(vgl_pointset_3d<T> const& ptset, vgl_box_3d<
 template <class T>
 vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const& plane, vgl_pointset_3d<T> const& ptset, T tol);
 
-#define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
-#define VGL_INTERSECTION_BOX_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
+#define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.hxx first"
+#define VGL_INTERSECTION_BOX_INSTANTIATE(T) extern "please include vgl/vgl_intersection.hxx first"
 
 #endif // vgl_intersection_h_

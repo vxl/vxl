@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <rsdl/rsdl_bins_2d.txx>
+#include <rsdl/rsdl_bins_2d.hxx>
 #include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.hxx>
 

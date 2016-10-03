@@ -29,13 +29,12 @@ struct vbl_triple
     : first (a)
     , second(b)
     , third (c) { }
-#if VCL_HAS_MEMBER_TEMPLATES
+
   template <class U1, class U2, class U3>
   vbl_triple(vbl_triple<U1, U2, U3> const &that)
     : first (that.first )
     , second(that.second)
     , third (that.third ) { }
-#endif
 };
 
 template <class T1, class T2, class T3>

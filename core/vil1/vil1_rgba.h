@@ -47,8 +47,6 @@ struct vil1_rgba
   vil1_rgba(T red, T green, T blue, T alpha = 1):
     r(red), g(green), b(blue), a(alpha) {}
 
-  // VC50 bombs with INTERNAL COMPILER ERROR on template member functions
-#if VCL_HAS_MEMBER_TEMPLATES
   template <class S>
   vil1_rgba(const vil1_rgba<S>& that) {
     r=((T)that.r);
@@ -65,50 +63,6 @@ struct vil1_rgba
     a=((T)that.a);
     return *this;
   }
-#else
-  // Special-case for dumb compilers.
-  inline vil1_rgba(const vil1_rgba<double>& that)
-  {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
-  }
-  inline vil1_rgba(const vil1_rgba<unsigned char>& that)
-  {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
-  }
-
-  inline vil1_rgba<T>& operator=(const vil1_rgba<double>& that)
-  {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
-    return *this;
-  }
-
-  inline vil1_rgba<T>& operator=(const vil1_rgba<float>& that)
-  {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
-    return *this;
-  }
-
-  inline vil1_rgba<T>& operator=(const vil1_rgba<unsigned char>& that)
-  {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
-    return *this;
-  }
-#endif
 
   //: Convert vil1_rgba to gray using standard (.299, .587, .114) RGB weighting.
   T grey() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
@@ -118,6 +72,6 @@ struct vil1_rgba
 };
 
 #define VIL1_RGBA_INSTANTIATE \
-extern "please include vil1/vil1_rgba.txx instead"
+extern "please include vil1/vil1_rgba.hxx instead"
 
 #endif // vil1_rgba_h_

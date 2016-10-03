@@ -30,7 +30,7 @@ struct vil1_memory_image_of_format : public vil1_memory_image_format
   vil1_memory_image_of_format();
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<float> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -41,7 +41,7 @@ struct vil1_memory_image_of_format<float> : public vil1_memory_image_format
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<double> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -52,7 +52,7 @@ struct vil1_memory_image_of_format<double> : public vil1_memory_image_format
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<std::complex<float> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -63,7 +63,7 @@ struct vil1_memory_image_of_format<std::complex<float> > : public vil1_memory_im
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<std::complex<double> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -74,7 +74,7 @@ struct vil1_memory_image_of_format<std::complex<double> > : public vil1_memory_i
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<signed char> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -85,7 +85,7 @@ struct vil1_memory_image_of_format<signed char> : public vil1_memory_image_forma
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<bool> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -96,7 +96,7 @@ struct vil1_memory_image_of_format<bool> : public vil1_memory_image_format
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<unsigned char> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -107,7 +107,7 @@ struct vil1_memory_image_of_format<unsigned char> : public vil1_memory_image_for
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<unsigned short> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -118,7 +118,7 @@ struct vil1_memory_image_of_format<unsigned short> : public vil1_memory_image_fo
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<signed short> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -129,7 +129,7 @@ struct vil1_memory_image_of_format<signed short> : public vil1_memory_image_form
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<signed int> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -140,7 +140,7 @@ struct vil1_memory_image_of_format<signed int> : public vil1_memory_image_format
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<unsigned int> : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -151,7 +151,7 @@ struct vil1_memory_image_of_format<unsigned int> : public vil1_memory_image_form
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<vil1_rgb<unsigned char> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -162,7 +162,7 @@ struct vil1_memory_image_of_format<vil1_rgb<unsigned char> > : public vil1_memor
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<vil1_rgb<vxl_uint_16> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -173,7 +173,7 @@ struct vil1_memory_image_of_format<vil1_rgb<vxl_uint_16> > : public vil1_memory_
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<vil1_rgb<float> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -184,7 +184,7 @@ struct vil1_memory_image_of_format<vil1_rgb<float> > : public vil1_memory_image_
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<vil1_rgba<float> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
@@ -195,7 +195,7 @@ struct vil1_memory_image_of_format<vil1_rgba<float> > : public vil1_memory_image
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vil1_memory_image_of_format<vil1_rgb<double> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()

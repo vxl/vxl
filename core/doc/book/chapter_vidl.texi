@@ -810,7 +810,7 @@ specialization within the designated area in
 @code{vidl_convert.cxx}.
 The specialization should follow the example below.
 @example
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<IN_FMT, OUT_FMT>
 @{
   enum @{ defined = true @};

@@ -83,6 +83,6 @@ std::ostream&  operator<<(std::ostream& s, const vgl_line_segment_3d<Type>& p);
 // \relatesalso vgl_line_segment_3d
 template <class Type>
 std::istream&  operator>>(std::istream& is,  vgl_line_segment_3d<Type>& p);
-#define VGL_LINE_SEGMENT_3D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_3d.txx first"
+#define VGL_LINE_SEGMENT_3D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_3d.hxx first"
 
 #endif // vgl_line_segment_3d_h_

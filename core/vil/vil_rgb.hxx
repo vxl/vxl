@@ -8,7 +8,7 @@
 
 #undef SPECIALIZE_CLAMP_PIXEL
 #define SPECIALIZE_CLAMP_PIXEL(T) \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 vil_rgb<T> vil_clamp_pixel(vil_rgb<T> const& d, double min, double max) \
 { \
   return vil_rgb<T>(vil_clamp_pixel(d.r, min , max), \
@@ -31,7 +31,7 @@ VCL_INSTANTIATE_INLINE(vil_rgb<double > operator*(double b, const vil_rgb<T >& a
 // must do << separately for byte specialization
 #undef VIL_RGB_INSTANTIATE_LS
 #define VIL_RGB_INSTANTIATE_LS(T) \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 std::ostream& operator<<(std::ostream& s, vil_rgb<T > const& rgb) \
 { \
 return s<< '[' << (int)rgb.r << ' ' << (int)rgb.g << ' ' << (int)rgb.b << ']'; \

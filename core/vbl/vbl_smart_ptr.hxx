@@ -39,7 +39,7 @@ std::ostream& operator<< (std::ostream& os, vbl_smart_ptr<T> const& r)
 #undef  VBL_SMART_PTR_INSTANTIATE
 #define VBL_SMART_PTR_INSTANTIATE(T) \
 template class vbl_smart_ptr<T >; \
-VCL_DEFINE_SPECIALIZATION struct vbl_smart_ptr_T_as_string<T > \
+template <> struct vbl_smart_ptr_T_as_string<T > \
 { static char const *str() { return #T; } }; \
 template std::ostream& operator<< (std::ostream&, vbl_smart_ptr<T > const&)
 

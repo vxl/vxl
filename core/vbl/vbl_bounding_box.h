@@ -203,7 +203,6 @@ bool meet(vbl_bounding_box_base<T,DIM_> const &a,
           vbl_bounding_box_base<T,DIM_> const &b)
 { return ! disjoint(a, b); }
 
-// VC50 has trouble with this
 template <class T, class DIM_>
 std::ostream& operator << (std::ostream& s, const vbl_bounding_box_base<T,DIM_>& bbox);
 

@@ -227,6 +227,6 @@ template <class T> v             orthogonal_vectors(v const& a, double s);
 
 #undef v
 
-#define VGL_VECTOR_3D_INSTANTIATE(T) extern "please include vgl/vgl_vector_3d.txx first"
+#define VGL_VECTOR_3D_INSTANTIATE(T) extern "please include vgl/vgl_vector_3d.hxx first"
 
 #endif // vgl_vector_3d_h_

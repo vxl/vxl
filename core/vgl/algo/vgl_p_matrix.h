@@ -22,7 +22,7 @@
 //   23 Oct 2002 Peter Vanroose - using fixed 3x4 matrices throughout
 //   25 May 2003 J.L.M. converted to pure vgl infrastructure and made templated
 //   25 May 2003 J.L.M. made the interface more consistent with plane projective transformations
-//   27 Jun 2003 Peter Vanroose - moved doc from .txx to .h
+//   27 Jun 2003 Peter Vanroose - moved doc from .hxx to .h
 //   27 Jun 2003 Peter Vanroose - implemented 3 NYI methods (get, set, set_rows)
 //   24 Oct 2010 Peter Vanroose - mutators and setters now return *this
 // \endverbatim
@@ -210,6 +210,6 @@ template <class T> std::ostream& operator<<(std::ostream& s, const vgl_p_matrix<
 //: Load p from an ascii istream
 template <class T> std::istream& operator>>(std::istream& i, vgl_p_matrix<T>& p);
 
-#define VGL_P_MATRIX_INSTANTIATE(T) extern "please include vgl/algo/vgl_p_matrix.txx first"
+#define VGL_P_MATRIX_INSTANTIATE(T) extern "please include vgl/algo/vgl_p_matrix.hxx first"
 
 #endif // vgl_p_matrix_h_

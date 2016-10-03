@@ -68,6 +68,6 @@ inline bool vgl_lineseg_test_lineseg(vgl_line_segment_2d<T> const& l1,
                                   l2.point2().x(),l2.point2().y());
 }
 
-#define VGL_LINESEG_TEST_INSTANTIATE(T) extern "please include vgl/vgl_lineseg_test.txx instead"
+#define VGL_LINESEG_TEST_INSTANTIATE(T) extern "please include vgl/vgl_lineseg_test.hxx instead"
 
 #endif // vgl_lineseg_test_h_
