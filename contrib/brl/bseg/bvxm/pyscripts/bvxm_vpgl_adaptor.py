@@ -953,19 +953,20 @@ def construct_disparity_map_from_DEM(local_rational_cam1, local_rational_cam2, s
 # note that the input 3-d box is in unit of wgs84 geo coordinates
 
 
-def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=0):
+def crop_image_using_3d_box(img_res_ni, img_res_nj, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=0):
     bvxm_batch.init_process("vpglCropImgUsing3DboxProcess")
-    bvxm_batch.set_input_from_db(0, img_res)
-    bvxm_batch.set_input_from_db(1, camera)
-    bvxm_batch.set_input_double(2, lower_left_lon)
-    bvxm_batch.set_input_double(3, lower_left_lat)
-    bvxm_batch.set_input_double(4, lower_left_elev)
-    bvxm_batch.set_input_double(5, upper_right_lon)
-    bvxm_batch.set_input_double(6, upper_right_lat)
-    bvxm_batch.set_input_double(7, upper_right_elev)
-    bvxm_batch.set_input_double(8, uncertainty)
+    bvxm_batch.set_input_unsigned(0, img_res_ni)
+    bvxm_batch.set_input_unsigned(1, img_res_nj)
+    bvxm_batch.set_input_from_db(2, camera)
+    bvxm_batch.set_input_double(3, lower_left_lon)
+    bvxm_batch.set_input_double(4, lower_left_lat)
+    bvxm_batch.set_input_double(5, lower_left_elev)
+    bvxm_batch.set_input_double(6, upper_right_lon)
+    bvxm_batch.set_input_double(7, upper_right_lat)
+    bvxm_batch.set_input_double(8, upper_right_elev)
+    bvxm_batch.set_input_double(9, uncertainty)
     if lvcs != 0:
-        bvxm_batch.set_input_from_db(9, lvcs)
+        bvxm_batch.set_input_from_db(10, lvcs)
     status = bvxm_batch.run_process()
     if status:
         (id, type) = bvxm_batch.commit_output(0)

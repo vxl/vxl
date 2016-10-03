@@ -319,6 +319,44 @@ def get_metadata_info(mdata):
     batch.remove_data(id)
     return sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band
 
+def get_sat_name(mdata):
+    sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name = get_metadata_info(
+        mdata)
+    return sat_name
+
+
+def get_view_angles(mdata):
+    sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band = get_metadata_info2(
+        mdata)
+    return view_az, view_el
+
+
+def get_image_coverage(mdata):
+    batch.init_process("bradGetImageCoverageProcess")
+    batch.set_input_from_db(0, mdata)
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        ll_lon = batch.get_output_double(id)
+        batch.remove_data(id)
+        (id, type) = batch.commit_output(1)
+        ll_lat = batch.get_output_double(id)
+        batch.remove_data(id)
+        (id, type) = batch.commit_output(2)
+        ll_elev = batch.get_output_double(id)
+        batch.remove_data(id)
+        (id, type) = batch.commit_output(3)
+        ur_lon = batch.get_output_double(id)
+        batch.remove_data(id)
+        (id, type) = batch.commit_output(4)
+        ur_lat = batch.get_output_double(id)
+        batch.remove_data(id)
+        (id, type) = batch.commit_output(5)
+        ur_elev = batch.get_output_double(id)
+        batch.remove_data(id)
+        return ll_lon, ll_lat, ll_elev, ur_lon, ur_lat, ur_elev
+    else:
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 
 def get_cloud_coverage(mdata):
     batch.init_process("bradGetCloudCoverageProcess")
@@ -328,3 +366,83 @@ def get_cloud_coverage(mdata):
     cloud_coverage = batch.get_output_float(id)
     batch.remove_data(id)
     return cloud_coverage
+
+# create a new image_metadata object
+
+
+def create_image_metadata(gain=1.0, offset=0.0, view_az=0.0, view_el=90.0, sun_az=0.0, sun_el=90.0, sun_irrad=None):
+    batch.init_process("bradCreateImageMetadataProcess")
+    batch.set_input_float(0, gain)
+    batch.set_input_float(1, offset)
+    batch.set_input_float(2, view_az)
+    batch.set_input_float(3, view_el)
+    batch.set_input_float(4, sun_az)
+    batch.set_input_float(5, sun_el)
+    if sun_irrad != None:
+        batch.set_input_float(6, sun_irrad)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    mdata = dbvalue(id, type)
+    return mdata
+
+# create a new atmopsheric_parameters object
+
+
+def create_atmospheric_parameters(airlight=0.0, skylight=0.0, optical_depth=0.0):
+    batch.init_process("bradCreateAtmosphericParametersProcess")
+    batch.set_input_float(0, airlight)
+    batch.set_input_float(1, skylight)
+    batch.set_input_float(2, optical_depth)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    atm_params = dbvalue(id, type)
+    return atm_params
+
+
+def estimate_shadow_density(image, metadata, atmospheric_params):
+    batch.init_process("bradEstimateShadowsProcess")
+    batch.set_input_from_db(0, image)
+    batch.set_input_from_db(1, metadata)
+    batch.set_input_from_db(2, atmospheric_params)
+    batch.set_input_bool(3, True)  # True returns prob. density value
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    shadow_density = dbvalue(id, type)
+    return shadow_density
+
+
+def estimate_shadows(image, metadata, atmospheric_params):
+    batch.init_process("bradEstimateShadowsProcess")
+    batch.set_input_from_db(0, image)
+    batch.set_input_from_db(1, metadata)
+    batch.set_input_from_db(2, atmospheric_params)
+    batch.set_input_bool(3, False)  # False returns probability value
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    shadow_probs = dbvalue(id, type)
+    return shadow_probs
+
+
+def load_eigenspace(filename):
+    batch.init_process("bradLoadEigenspaceProcess")
+    batch.set_input_string(0, filename)
+    batch.run_process()
+    (eig_id, eig_type) = batch.commit_output(0)
+    eig = dbvalue(eig_id, eig_type)
+    return eig
+
+
+def classify_image(eig, h_no, h_atmos, input_image_filename, tile_ni, tile_nj):
+    batch.init_process("bradClassifyImageProcess")
+    batch.set_input_from_db(0, eig)
+    batch.set_input_from_db(1, h_no)
+    batch.set_input_from_db(2, h_atmos)
+    batch.set_input_string(3, input_image_filename)
+    batch.set_input_unsigned(4, tile_ni)
+    batch.set_input_unsigned(5, tile_nj)
+    batch.run_process()
+    (vid, vtype) = batch.commit_output(0)
+    q_img = dbvalue(vid, vtype)
+    (vid, vtype) = batch.commit_output(1)
+    q_img_orig_size = dbvalue(vid, vtype)
+    return q_img, q_img_orig_size
