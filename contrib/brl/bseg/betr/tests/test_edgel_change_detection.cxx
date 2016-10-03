@@ -215,10 +215,6 @@ void test_edgel_change_detection()
  etr_self_small.set_evt_image(imgr);
  etr_self_small.set_ref_path(ref_img_path_s);
  etr_self_small.set_evt_path(img_path);
-<<<<<<< HEAD
-
-=======
->>>>>>> 8ea8ffb3ff825bc869eafe5ef947bf6b7211f9be
  std::vector<double> pchange;
  etr_self_small.process("edgel_change_detection", pchange);
  unsigned i =0;
@@ -325,7 +321,7 @@ void test_edgel_change_detection()
  betr_event_trigger etr("hamadan", lvcs);
  etr.set_verbose(true);
  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
- etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
+ etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
 
  etr.set_ref_camera(ref_camera);
  etr.set_evt_camera(camera);
