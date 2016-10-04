@@ -130,12 +130,10 @@ bool betr_event_trigger::add_geo_object(std::string const& name, double lon, dou
 }
 //The object in general will have a different lvcs from the event trigger origin
 //but assume that X and Y translations are just given in the tangent plane
-// That is tx = dlon_rads*Rearth, ty = dlat_rads*Rearth, tz is the elevation difference
 void betr_event_trigger::add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object, bool is_ref_obj){
   betr_geo_box_3d box = geo_object->bounding_box();
   global_bbox_.add(box);
   this->update_local_bounding_box();
-  double Rearth = 6378135.0;//meters
   //assume local transform is identity and lvcs is in degrees and meters
   vpgl_lvcs obj_lvcs = geo_object->lvcs();
   double obj_lat = 0.0, obj_lon = 0.0, obj_elev =0.0;
@@ -228,9 +226,9 @@ vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vpgl_camera_double_sptr c
 #ifdef DEBUG
     std::cout << "3d point " << *(poly_3d->vertex(i)) << std::endl;
 #endif
-    vgl_point_3d<double> p(poly_3d->vertex(i)->x(),
-                           poly_3d->vertex(i)->y(),
-                           poly_3d->vertex(i)->z());
+    vgl_point_3d<double> p(poly_3d->vertex(i)->x()+transl.x(),
+                           poly_3d->vertex(i)->y()+transl.y(),
+                           poly_3d->vertex(i)->z()+transl.z());
     p += transl;
     camera->project(p.x(), p.y(), p.z(), u,v);
     vsol_point_2d_sptr vp = new vsol_point_2d(u,v);
