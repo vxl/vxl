@@ -20,6 +20,7 @@
 
 
 
+
 //: Compute the gain/offset that minimizes the least square distance between
 // target and reference images and then correct the reference image.
 bool baml_correct_gain_offset(

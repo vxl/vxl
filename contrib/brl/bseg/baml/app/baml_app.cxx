@@ -25,6 +25,7 @@
 
 int main(int argc,char * argv[])
 {
+
   //
   // Input params
   //
@@ -132,12 +133,12 @@ int main(int argc,char * argv[])
   baml_warp_via_ground_plane( 
     ref_img, ref_cam, region, 
     target_cam, z_ground, ref_warped );
-
   // Make valid image
   ref_valid.set_size( region.width(), region.height() );
   ref_valid.fill( true );
   for( int y = 0; y < region.height(); y++ ){
     for( int x = 0; x < region.width(); x++ ){
+
       if( tar_cropped(x,y)==0 || ref_warped(x,y)==0 ) ref_valid(x,y) = false;
     }
   }

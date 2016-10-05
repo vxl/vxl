@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <algorithm>
 
+
 #include <vnl/vnl_inverse.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
@@ -14,6 +15,7 @@
 #include "baml_birchfield_tomasi.h"
 #include "baml_detect_change.h"
 #include "baml_census.h"
+
 
 
 
@@ -82,12 +84,12 @@ bool baml_correct_gain_offset(
   return true;
 }
 
-
 //-------------------------------------------------------------------
 bool baml_detect_change_bt(
   const vil_image_view<vxl_uint_16>& img_tar,
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid_ref,
+
   vil_image_view<float>& tar_lh,
   float bt_std,
   int bt_rad )
@@ -97,6 +99,7 @@ bool baml_detect_change_bt(
   if( img_ref.ni() != width || img_ref.nj() != height ||
     valid_ref.ni() != width || valid_ref.nj() != height )
     return false;
+
 
   float gauss_var = bt_std*bt_std;
   float gauss_norm = log( 1.0f/(bt_std*sqrt(2*3.14159f)/255.0f) );
@@ -153,11 +156,11 @@ bool baml_detect_change_census(
   if( img_ref.ni() != width || img_ref.nj() != height ||
     valid_ref.ni() != width || valid_ref.nj() != height )
     return false;
-  
   // Bound-check census_rad
   if( census_rad <= 0 ) census_rad = 1;
   if( census_rad > 3 ) census_rad = 3;
   int census_diam = census_rad*2+1;
+
 
   // Get parameters for background Gaussian distribution
   float gauss_std = census_std*census_diam*census_diam;
@@ -170,6 +173,7 @@ bool baml_detect_change_census(
   bool only_32_bits = (census_diam <= 5);
 
   // Initialize output image
+
   tar_lh.set_size( width, height );
   tar_lh.fill( 1.0f );
 
@@ -182,6 +186,7 @@ bool baml_detect_change_census(
 
   // Convert 16-bit images to 8-bit
   // TEMPORARY until we have templated census function
+
   //vil_image_view<vxl_byte> img_tar_8u, img_ref_8u;
   //vil_convert_stretch_range_limited( img_tar, img_tar_8u, (vxl_uint_16)0, (vxl_uint_16)2000 );
   //vil_convert_stretch_range_limited( img_ref, img_ref_8u, (vxl_uint_16)0, (vxl_uint_16)2000 );
@@ -201,6 +206,7 @@ bool baml_detect_change_census(
         salience_tar(x,y), salience_ref(x,y) );
 
       unsigned char ham = baml_compute_hamming_lut( cen_diff, lut, only_32_bits );
+
       float lbg = gauss_norm - ham*(float)ham/gauss_var;
 
       tar_lh(x,y) = lfg - lbg;
@@ -214,6 +220,7 @@ bool baml_detect_change_census(
 
 
 //------------------------------------------------------------------------
+
 bool baml_detect_change_nonparam(
   const vil_image_view<vxl_uint_16>& img_tar,
   const vil_image_view<vxl_uint_16>& img_ref,
@@ -239,6 +246,7 @@ bool baml_detect_change_nonparam(
     return false;
 
   // Initialize output image
+
   tar_lh.set_size( width, height );
   tar_lh.fill( 0.0f );
 
@@ -262,6 +270,7 @@ bool baml_detect_change_nonparam(
       }
       tf_raw( tx, ty ) += 1.0;
 
+
       // Record min and max bin
       min_bin = std::min( min_bin, tx );
       max_bin = std::max( max_bin, tx );
@@ -274,6 +283,7 @@ bool baml_detect_change_nonparam(
   // Blur the transfer array to account for sampling issues
   vil_image_view<double> tf_blur;
   vil_gauss_filter_2d( tf_raw, tf_blur, gauss_sd, gauss_rad );
+
 
   vil_image_view<float> lbg( hist_range, hist_range ); 
   lbg.fill( 0.0f );
@@ -299,6 +309,7 @@ bool baml_detect_change_nonparam(
       if( !valid_ref(x,y) ) continue;
       int tx = (int)( img_tar(x,y)/img_bit_ds );
       int ty = (int)( img_ref(x,y)/img_bit_ds );
+
       tar_lh(x,y) = lfg - lbg( tx, ty );
     } //x
   } //y
@@ -310,6 +321,7 @@ vil_save( vis, "D:/results/b.png" );*/
 
   return true;
 }
+
 
 
 //----------------------------------------------------------
@@ -329,8 +341,6 @@ void baml_sigmoid(
     }
   }
 }
-
-
 //------------------------------------------------------------------
 bool baml_overlay_red(
   const vil_image_view<vxl_byte>& img,

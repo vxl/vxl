@@ -59,8 +59,7 @@ void baml_warp_perspective(
           wy < 0.0 || wy > img1_height_safe ) continue;
 
       // Interpolate
-      for( int p = 0; p < num_planes; p++ ){
-
+      for( unsigned int p = 0; p < num_planes; p++ ){
         // The below is code from vil_bilin_interp_safe
         int p1x=int(wx);
         double normx = wx-p1x;

@@ -5,6 +5,7 @@
 
 
 //---------------------------------------------------------
+
 template <class T>
 bool
 baml_compute_census_img(
@@ -23,11 +24,13 @@ baml_compute_census_img(
   census_sal.set_size( width, height );
 
   int nbhd_rad = (nbhd_diam-1)/2;
+
   int max_intensity = pow( 256, sizeof(T) )-1;
 
   // Iterate over each pixel
   for( int y = nbhd_rad; y < height-nbhd_rad; y++ ){
     for( int x = nbhd_rad; x < width-nbhd_rad; x++ ){
+
 
       T center_max = (T)( std::min( max_intensity, img(x,y) + tol ) );
       T center_min = (T)( std::max( 0, img(x,y) - tol ) );
@@ -36,6 +39,7 @@ baml_compute_census_img(
       unsigned long long sal = 0;
 
       int x_min = x-nbhd_rad, y_min = y-nbhd_rad;
+
 
       T img_xy = img(x,y);
       for( int dy = 0; dy < nbhd_diam; dy++ ){
@@ -59,6 +63,7 @@ baml_compute_census_img(
   }
   return true;
 };
+
 
 
 #undef BAML_COMPUTE_CENSUS_IMG_INSTANTIATE
