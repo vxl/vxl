@@ -3,11 +3,13 @@ batch = brl_init.DummyBatch()
 dbvalue = brl_init.DummyBatch()
 
 ##############
-## Take two rectified images, generate their disparity map calculated using 
-## semi-global matching stereo algorithm
-def sgm_matching_stereo(rect_img_1, rect_img_2, min_disparity, num_disparity, 
-                        out_disp_txt, num_active_disparity = 40, 
-                        error_check_mode = 1, multi_scale_mode = 1):
+# Take two rectified images, generate their disparity map calculated using
+# semi-global matching stereo algorithm
+
+
+def sgm_matching_stereo(rect_img_1, rect_img_2, min_disparity, num_disparity,
+                        out_disp_txt, num_active_disparity=40,
+                        error_check_mode=1, multi_scale_mode=1):
   batch.init_process("bsgmMatchingStereoProcess")
   batch.set_input_from_db(0, rect_img_1)
   batch.set_input_from_db(1, rect_img_2)

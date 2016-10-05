@@ -39,7 +39,7 @@ def render_changes(scene, img_glob, cam_glob, outdir, n=1, raybelief="", max_mod
     # render change detection
     cd_fname = outdir + "/cd_" + imgnum + ".tiff"
     cd_img = scene.change_detect(
-      pcam, rimg, expimg, n, raybelief, max_mode)
+        pcam, rimg, expimg, n, raybelief, max_mode)
     vil.save_image(cd_img, cd_fname)
 
     # clean up

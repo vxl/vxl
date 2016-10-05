@@ -1,8 +1,9 @@
-# import the batch module and dbvalue from init 
+# import the batch module and dbvalue from init
 # set the global variable, batch, on init before importing this file
 import brl_init
 dbvalue = brl_init.DummyBatch()
 batch = brl_init.DummyBatch()
+
 
 class VpglException(brl_init.BrlException):
   pass
@@ -161,6 +162,7 @@ def get_backprojected_ray(cam, u, v):
 # returns cartesian cam center from azimuth (degrees), elevation
 # (degrees), radius, look point;
 
+
 def get_rpc_backprojected_ray(cam, u, v, altitude, initial_lon, initial_lat, initial_alt):
   batch.init_process("vpglGetRpcBackprojectRayProcess")
   batch.set_input_from_db(0, cam)
@@ -181,6 +183,7 @@ def get_rpc_backprojected_ray(cam, u, v, altitude, initial_lon, initial_lat, ini
   z = batch.get_output_double(id)
   batch.remove_data(id)
   return x, y, z
+
 
 def get_camera_center(azimuth, elevation, radius, lookPt):
   deg_to_rad = math.pi / 180.0
@@ -797,7 +800,7 @@ def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance=1000.0):
   # create a local lvcs
   lvcs = create_lvcs(lat1, lon1, elev1, 'wgs84')
   lat2, lon2, elev2 = convert_local_to_global_coordinates(
-    lvcs, distance, distance, 0.0)
+      lvcs, distance, distance, 0.0)
   # calculate image pixel difference
   i1, j1 = project_point(rational_cam, lon1, lat1, elev1)
   i2, j2 = project_point(rational_cam, lon2, lat2, elev2)
@@ -894,7 +897,7 @@ def translate_geo_camera(geocam, x, y):
   return cam
 
 
-def create_geotiff_cam(ll_lon, ll_lat, ur_lon, ur_lat, ni, nj, lvcs = 0):
+def create_geotiff_cam(ll_lon, ll_lat, ur_lon, ur_lat, ni, nj, lvcs=0):
   batch.init_process("vpglCreateGeoCameraProcess")
   batch.set_input_double(0, ll_lon)
   batch.set_input_double(1, ll_lat)
@@ -1108,29 +1111,30 @@ def affine_f_matrix(affine_cam1, affine_cam2, output_path):
   batch.set_input_string(2, output_path)
   batch.run_process()
 
+
 def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_rational_cam1, img2, local_rational_cam2,
-                    min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2, voxel_size):
-  batch.init_process("vpglConstructHeightMapProcess");
-  batch.set_input_from_db(0, img1);
-  batch.set_input_from_db(1, local_rational_cam1);
-  batch.set_input_string(2, img1_disp);
-  batch.set_input_float(3, min_disparity);
-  batch.set_input_from_db(4, img2);
-  batch.set_input_from_db(5, local_rational_cam2);
-  batch.set_input_double(6, min_x);
-  batch.set_input_double(7, min_y);
-  batch.set_input_double(8, min_z);
-  batch.set_input_double(9, max_x);
-  batch.set_input_double(10, max_y);
-  batch.set_input_double(11, max_z);
-  batch.set_input_double(12, voxel_size);
-  batch.set_input_string(13, path_H1);
-  batch.set_input_string(14, path_H2);
-  batch.run_process();
-  (id, type) = batch.commit_output(0);
-  out_map = dbvalue(id, type);
-  (id, type) = batch.commit_output(1);
-  disparity_map = dbvalue(id, type);
+                                        min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2, voxel_size):
+  batch.init_process("vpglConstructHeightMapProcess")
+  batch.set_input_from_db(0, img1)
+  batch.set_input_from_db(1, local_rational_cam1)
+  batch.set_input_string(2, img1_disp)
+  batch.set_input_float(3, min_disparity)
+  batch.set_input_from_db(4, img2)
+  batch.set_input_from_db(5, local_rational_cam2)
+  batch.set_input_double(6, min_x)
+  batch.set_input_double(7, min_y)
+  batch.set_input_double(8, min_z)
+  batch.set_input_double(9, max_x)
+  batch.set_input_double(10, max_y)
+  batch.set_input_double(11, max_z)
+  batch.set_input_double(12, voxel_size)
+  batch.set_input_string(13, path_H1)
+  batch.set_input_string(14, path_H2)
+  batch.run_process()
+  (id, type) = batch.commit_output(0)
+  out_map = dbvalue(id, type)
+  (id, type) = batch.commit_output(1)
+  disparity_map = dbvalue(id, type)
   return out_map, disparity_map
 
 
@@ -1345,7 +1349,7 @@ def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance=1000):
   # create a lvcs
   lvcs = create_lvcs(lat1, lon1, elev1, "wgs84")
   lat2, lon2, elev2 = convert_local_to_global_coordinates(
-    lvcs, distance, distance, 0.0)
+      lvcs, distance, distance, 0.0)
   # calculate image pixel
   i1, j1 = project_point(rational_cam, lon1, lat1, elev1)
   i2, j2 = project_point(rational_cam, lon2, lat2, elev2)
@@ -1525,18 +1529,18 @@ def create_perspective_camera_krt(k, r, t):
   return cam
 
 
-## input two sets of points that correspond to each other in two different coordinate systems
-## compute the similarity transformation that maps space of pts0 to space of pts1, the size of pts0 and pts1 better match!
-## outputs a 4 by 4 similarity matrix as a vector of size 16
-## construct the matrix as follows
-## 0  1  2  3
-## 4  5  6  7
-## 8  9  10 11
-## 12 13 14 15
+# input two sets of points that correspond to each other in two different coordinate systems
+# compute the similarity transformation that maps space of pts0 to space of pts1, the size of pts0 and pts1 better match!
+# outputs a 4 by 4 similarity matrix as a vector of size 16
+# construct the matrix as follows
+# 0  1  2  3
+# 4  5  6  7
+# 8  9  10 11
+# 12 13 14 15
 def compute_transformation(pts0_xs, pts0_ys, pts0_zs,
-               pts1_xs, pts1_ys, pts1_zs,
-               input_cam_folder, output_cam_folder):
-  batch.init_process("vpglTransformSpaceProcess");
+                           pts1_xs, pts1_ys, pts1_zs,
+                           input_cam_folder, output_cam_folder):
+  batch.init_process("vpglTransformSpaceProcess")
   batch.set_input_double_array(0, pts0_xs)
   batch.set_input_double_array(1, pts0_ys)
   batch.set_input_double_array(2, pts0_zs)
@@ -1546,35 +1550,39 @@ def compute_transformation(pts0_xs, pts0_ys, pts0_zs,
   batch.set_input_string(6, input_cam_folder)
   batch.set_input_string(7, output_cam_folder)
   batch.run_process()
-  (id,type) = batch.commit_output(0)
+  (id, type) = batch.commit_output(0)
   matrix_as_array = batch.get_output_double_array(id)
   batch.remove_data(id)
-  (id,type) = batch.commit_output(1)
+  (id, type) = batch.commit_output(1)
   scale = batch.get_output_double(id)
   batch.remove_data(id)
   return matrix_as_array, scale
 
-## inputs a 4 by 4 similarity matrix as a vector of size 16
-## construct the matrix as follows
-## 0  1  2  3
-## 4  5  6  7
-## 8  9  10 11
-## 12 13 14 15
+# inputs a 4 by 4 similarity matrix as a vector of size 16
+# construct the matrix as follows
+# 0  1  2  3
+# 4  5  6  7
+# 8  9  10 11
+# 12 13 14 15
+
+
 def compute_transformed_box(min_pt, max_pt, matrix_as_array):
-  batch.init_process("vpglTransformBoxProcess");
+  batch.init_process("vpglTransformBoxProcess")
   batch.set_input_double_array(0, min_pt)
   batch.set_input_double_array(1, max_pt)
   batch.set_input_double_array(2, matrix_as_array)
   batch.run_process()
-  (id,type) = batch.commit_output(0)
+  (id, type) = batch.commit_output(0)
   out_min_pt = batch.get_output_double_array(id)
   batch.remove_data(id)
-  (id,type) = batch.commit_output(1)
+  (id, type) = batch.commit_output(1)
   out_max_pt = batch.get_output_double_array(id)
   batch.remove_data(id)
   return out_min_pt, out_max_pt
 
 # get connected component of a geotiff image
+
+
 def find_connected_component(in_img, in_cam, threshold, out_kml, is_above=True):
   batch.init_process("vpglFindConnectedComponentProcess")
   batch.set_input_from_db(0, in_img)
@@ -1592,7 +1600,10 @@ def find_connected_component(in_img, in_cam, threshold, out_kml, is_above=True):
   else:
     raise VpglException("Failed to find connected components")
 
-# rotate a image north up based on its RPC camera.  The return value is rotation angle between -Pi to Pi
+# rotate a image north up based on its RPC camera.  The return value is
+# rotation angle between -Pi to Pi
+
+
 def rational_camera_rotate_to_north(in_cam):
   batch.init_process("vpglRationalCamRotationToNorthProcess")
   batch.set_input_from_db(0, in_cam)
@@ -1604,7 +1615,10 @@ def rational_camera_rotate_to_north(in_cam):
   else:
     raise VpglException("Failed to get north angle from rational camera")
 
-# rotate a image north up based on its RPC camera.  The return value is rotation angle between -Pi to Pi
+# rotate a image north up based on its RPC camera.  The return value is
+# rotation angle between -Pi to Pi
+
+
 def rational_camera_get_up_vector(in_cam):
   batch.init_process("vpglRationalCamRotationToUpVectorProcess")
   batch.set_input_from_db(0, in_cam)
@@ -1614,6 +1628,6 @@ def rational_camera_get_up_vector(in_cam):
     u = batch.get_output_double(id)
     (id, type) = batch.commit_output(1)
     v = batch.get_output_double(id)
-    return u,v
+    return u, v
   else:
     raise VpglException("Failed to get north angle from rational camera")

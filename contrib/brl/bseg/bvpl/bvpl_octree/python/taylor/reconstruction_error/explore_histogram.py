@@ -9,6 +9,7 @@ import brl_init
 import bvpl_octree_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 class histogram_job():
 
   def __init__(self, scene_path):
@@ -73,7 +74,7 @@ if __name__ == "__main__":
 
   parser.add_option('--taylor_dir', action="store", dest="taylor_dir")
   parser.add_option('--num_cores', action="store",
-            dest="num_cores", type="int", default=4)
+                    dest="num_cores", type="int", default=4)
 
   options, args = parser.parse_args()
 
@@ -105,7 +106,7 @@ if __name__ == "__main__":
   # Enqueue jobs
   for curr_kernel in range(0, len(kernel_list)):
     scene_path = taylor_dir + "/" + \
-      kernel_list[curr_kernel] + "/float_response_scene.xml"
+        kernel_list[curr_kernel] + "/float_response_scene.xml"
     current_job = histogram_job(scene_path)
     job_list.append(current_job)
 

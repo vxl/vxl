@@ -1,4 +1,4 @@
-# import the batch module and dbvalue from init 
+# import the batch module and dbvalue from init
 # set the global variable, batch, on init before importing this file
 import brl_init
 dbvalue = brl_init.DummyBatch()
@@ -7,6 +7,8 @@ batch = brl_init.DummyBatch()
 ############################################################
 # obtain intersection of multiple 2d rectangular boxes
 ############################################################
+
+
 def box_2d_intersection(in_kml, out_kml=""):
   batch.init_process("bvgl2DBoxIntersectionProcess")
   batch.set_input_string(0,  in_kml)
@@ -44,7 +46,8 @@ def geo_index_region_resource(geo_index_txt, ll_lon, ll_lat, ur_lon, ur_lat, out
     return 0
 
 
-# obtain 2d quad tree geological leaves that intersect with given polygon region
+# obtain 2d quad tree geological leaves that intersect with given polygon
+# region
 def geo_index_region_poly_resource(geo_index_txt, poly_kml, out_file):
   batch.init_process("bvglGeoIndexRegionPolyResourceProcess")
   batch.set_input_string(0, geo_index_txt)

@@ -4,7 +4,7 @@ import bvxm_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
 
-def create_satellite_resouces(roi_kml, leaf_size=0.1, 
+def create_satellite_resouces(roi_kml, leaf_size=0.1,
                               eliminate_same_images=False):
   batch.init_process("volmCreateSatResourcesProcess")
   batch.set_input_string(0, roi_kml)
@@ -554,7 +554,9 @@ def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
 
 # process that generate normalized height map from multiple height map tiles created by bvxm 3-d reconstruction
 # the land cover image is used to define the ground pixel and coverage region
-def generate_ndsm(ll_lon, ll_lat, ur_lon, ur_lat, img_size_ni, img_size_nj, geo_index_txt, h_map_folder, grd_map_folder, window_size = 20, max_h_limit = 254.0):
+
+
+def generate_ndsm(ll_lon, ll_lat, ur_lon, ur_lat, img_size_ni, img_size_nj, geo_index_txt, h_map_folder, grd_map_folder, window_size=20, max_h_limit=254.0):
   batch.init_process("volmNdsmGenearationProcess")
   batch.set_input_double(0, ll_lon)
   batch.set_input_double(1, ll_lat)
@@ -581,13 +583,15 @@ def generate_ndsm(ll_lon, ll_lat, ur_lon, ur_lat, img_size_ni, img_size_nj, geo_
   else:
   return None, None, None, None
 
-## process to estimate ground plane from a height map
-def dsm_ground_estimation(dsm_image, invalid_pixel = -1.0, window_size=20, sample_size = 10):
+# process to estimate ground plane from a height map
+
+
+def dsm_ground_estimation(dsm_image, invalid_pixel=-1.0, window_size=20, sample_size=10):
   batch.init_process("volmDsmGroundEstimationProcess")
   batch.set_input_from_db(0, dsm_image)
-  batch.set_input_int(1,sample_size)
-  batch.set_input_int(2,window_size)
-  batch.set_input_float(3,invalid_pixel)
+  batch.set_input_int(1, sample_size)
+  batch.set_input_int(2, window_size)
+  batch.set_input_float(3, invalid_pixel)
   status = batch.run_process()
   if status:
   (id, type) = batch.commit_output(0)
@@ -596,7 +600,8 @@ def dsm_ground_estimation(dsm_image, invalid_pixel = -1.0, window_size=20, sampl
   else:
   return None
 
-def dsm_ground_estimation_edge(dsm_image, edge_img, invalid_pixel = -1.0, sample_size = 10):
+
+def dsm_ground_estimation_edge(dsm_image, edge_img, invalid_pixel=-1.0, sample_size=10):
   batch.init_process("volmDsmGroundEstimationEdgeProcess")
   batch.set_input_from_db(0, dsm_image)
   batch.set_input_from_db(1, edge_img)
@@ -610,7 +615,8 @@ def dsm_ground_estimation_edge(dsm_image, edge_img, invalid_pixel = -1.0, sample
   else:
   return None
 
-def dsm_mgf_ground_filtering(dsm_img, elev_thres, slope_thres, window_size = 3.0, pixel_res = 1.0):
+
+def dsm_mgf_ground_filtering(dsm_img, elev_thres, slope_thres, window_size=3.0, pixel_res=1.0):
   batch.init_process("volmDsmGroundFilterMGFProcess")
   batch.set_input_from_db(0, dsm_img)
   batch.set_input_float(1, window_size)
@@ -622,13 +628,15 @@ def dsm_mgf_ground_filtering(dsm_img, elev_thres, slope_thres, window_size = 3.0
   (id, type) = batch.commit_output(0)
   grd_mask = dbvalue(id, type)
   (id, type) = batch.commit_output(1)
-  grd_img  = dbvalue(id, type)
+  grd_img = dbvalue(id, type)
   return grd_mask, grd_img
   else:
   return None, None
 
-## process to mosaics a set of images that covers the given region
-def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_value = -1.0):
+# process to mosaics a set of images that covers the given region
+
+
+def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_value=-1.0):
   batch.init_process("volmCombineHeightMapProcess3")
   batch.set_input_string(0, in_img_folder)
   batch.set_input_double(1, ll_lon)
@@ -646,7 +654,9 @@ def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_v
   else:
   return None, None
 
-## process to generate building layers from land cover image and height image
+# process to generate building layers from land cover image and height image
+
+
 def generate_building_layers(land_img, land_cam, height_img, height_cam, land_txt, min_h, max_h):
   batch.init_process("volmBuildingLayerExtractionProcess")
   batch.set_input_from_db(0, land_img)
@@ -667,6 +677,7 @@ def generate_building_layers(land_img, land_cam, height_img, height_cam, land_tx
   return out_img, mask_img, out_cam
   else:
   return None, None, None
+
 
 def generate_layers(land_img, land_cam, height_img, height_cam, land_txt, min_h, max_h, beta=10.0):
   batch.init_process("volmLayerExtractionProcess")
@@ -692,9 +703,12 @@ def generate_layers(land_img, land_cam, height_img, height_cam, land_txt, min_h,
   else:
   return None, None, None, None
 
-## process to convert a polygons in KML to geotiff byte image
-## Note that this process will update the input image according to given polygon structures
-def render_kml_polygon_mask(in_kml, image, ll_lon, ll_lat, ur_lon, ur_lat, mask_value = 255):
+# process to convert a polygons in KML to geotiff byte image
+# Note that this process will update the input image according to given
+# polygon structures
+
+
+def render_kml_polygon_mask(in_kml, image, ll_lon, ll_lat, ur_lon, ur_lat, mask_value=255):
   batch.init_process("volmRenderKmlPolygonMaskProcess")
   batch.set_input_from_db(0, image)
   batch.set_input_double(1, ll_lon)
@@ -711,8 +725,10 @@ def render_kml_polygon_mask(in_kml, image, ll_lon, ll_lat, ur_lon, ur_lat, mask_
   else:
   return None
 
-## process to generate a kml file from a binary image
-def generate_kml_from_image(in_img, in_cam, out_kml, threshold = 127, r = 0, g = 255, b = 0):
+# process to generate a kml file from a binary image
+
+
+def generate_kml_from_image(in_img, in_cam, out_kml, threshold=127, r=0, g=255, b=0):
   batch.init_process("volmGenerateKmlFromBinaryImageProcess")
   batch.set_input_from_db(0, in_img)
   batch.set_input_from_db(1, in_cam)
@@ -729,7 +745,9 @@ def generate_kml_from_image(in_img, in_cam, out_kml, threshold = 127, r = 0, g =
   else:
   return None
 
-## process to downsample a binary layer image
+# process to downsample a binary layer image
+
+
 def downsample_binary_layer(in_img, in_mask, in_cam, out_img, out_mask, out_cam):
   batch.init_process("volmDownsampleLayerImageProcess")
   batch.set_input_from_db(0, in_img)
@@ -739,9 +757,11 @@ def downsample_binary_layer(in_img, in_mask, in_cam, out_img, out_mask, out_cam)
   batch.set_input_from_db(4, out_mask)
   batch.set_input_from_db(5, out_cam)
   status = batch.run_process()
-  return status 
+  return status
 
-## process to compute detection rate based ROC
+# process to compute detection rate based ROC
+
+
 def region_wise_roc_analysis(in_img, in_cam, positive_kml, negative_kml):
   batch.init_process("volmDetectionRateROCProcess")
   batch.set_input_from_db(0, in_img)

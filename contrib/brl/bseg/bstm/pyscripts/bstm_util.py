@@ -32,7 +32,7 @@ def read_imgs_from_folder(folder):
 def read_img_cam_silh(img_folder, cam_folder, silh_folder, cam_id, frame_id):
   curr_img_name = img_folder + "cam_%05d_frame_%05d.png" % (cam_id, frame_id)
   curr_silh_name = silh_folder + \
-    "cam_%05d_frame_%05d.png" % (cam_id, frame_id)
+      "cam_%05d_frame_%05d.png" % (cam_id, frame_id)
   curr_cam_name = cam_folder + "cam_%05d.txt" % cam_id
 
   [curr_img, ni, nj] = vil.load_image(curr_img_name)
@@ -51,7 +51,7 @@ def read_img_cam_silh(img_folder, cam_folder, silh_folder, cam_id, frame_id):
 def read_img_cam_silh_persp(img_folder, cam_folder, silh_folder, cam_id, frame_id):
   curr_img_name = img_folder + "cam_%05d_frame_%05d.bmp" % (cam_id, frame_id)
   curr_silh_name = silh_folder + \
-    "cam_%05d_frame_%05d.png" % (cam_id, frame_id)
+      "cam_%05d_frame_%05d.png" % (cam_id, frame_id)
   curr_cam_name = cam_folder + "cam_%05d.txt" % cam_id
 
   [curr_img, ni, nj] = vil.load_image(curr_img_name)

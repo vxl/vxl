@@ -16,13 +16,13 @@ if __name__ == "__main__":
   parser.add_option('--taylor_dir', action="store", dest="taylor_dir")
   parser.add_option('--kernel_path', action="store", dest="kernel_path")
   parser.add_option('--num_cores', action="store",
-            dest="num_cores", type="int", default=4)
+                    dest="num_cores", type="int", default=4)
   parser.add_option('--nblocks_x', action="store",
-            dest="nblocks_x", type="int")
+                    dest="nblocks_x", type="int")
   parser.add_option('--nblocks_y', action="store",
-            dest="nblocks_y", type="int")
+                    dest="nblocks_y", type="int")
   parser.add_option('--nblocks_z', action="store",
-            dest="nblocks_z", type="int")
+                    dest="nblocks_z", type="int")
 
   options, args = parser.parse_args()
 
@@ -87,12 +87,12 @@ if __name__ == "__main__":
           block_j = blocks_y[j]
           block_k = blocks_z[k]
           curr_kernel_path = kernel_path + "/" + \
-            kernel_list[curr_kernel] + ".txt"
+              kernel_list[curr_kernel] + ".txt"
           output_path = taylor_dir + "/" + kernel_list[curr_kernel]
           if not os.path.isdir(output_path + "/"):
             os.mkdir(output_path + "/")
           current_job = taylor_kernel_job(
-            scene, curr_kernel_path, block_i, block_j, block_k, output_path)
+              scene, curr_kernel_path, block_i, block_j, block_k, output_path)
           job_list.append(current_job)
 
   execute_jobs(job_list, num_cores)

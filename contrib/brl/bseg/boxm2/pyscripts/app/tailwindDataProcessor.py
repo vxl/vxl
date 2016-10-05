@@ -37,7 +37,7 @@ def getAllFilesInSubDirs(root, makeRelative=True):
     for fileName in files:
       if makeRelative:
         fileList.append(os.path.relpath(
-          os.path.join(path, fileName), root))
+            os.path.join(path, fileName), root))
       else:
         fileList.append(os.path.join(path, fileName))
 
@@ -93,7 +93,7 @@ def convertcamera(srcFileName, dstFileName):
   T = [0, 0, 0]
   for i in range(0, 3):
     T[i] = Rbae[i] * Cbae[0] + Rbae[i + 3] * \
-      Cbae[1] + Rbae[i + 6] * Cbae[2]
+        Cbae[1] + Rbae[i + 6] * Cbae[2]
   print>>filehandleout, -T[0], -T[1], -T[2]
   filehandleout.close()
 
@@ -116,14 +116,14 @@ class TailwindPipelineRunner():
   def runPipeline(self):
 
     steps = [
-      # Step 1. Find the PNGs in the data directory, convert them to JPGs
-      # and write them out to a new folder.
-      self.movePNGs,
-      self.runVisualSFM,  # Step 2. Run VisualSFM to generate a NVM file.
-      # Step 3. Create the scene using the .nvm file produced above.
-      self.createScene,
-      self.updateScene,  # Step 4. Update the scene
-      self.exportScene  # Step 5. Export the scene
+        # Step 1. Find the PNGs in the data directory, convert them to JPGs
+        # and write them out to a new folder.
+        self.movePNGs,
+        self.runVisualSFM,  # Step 2. Run VisualSFM to generate a NVM file.
+        # Step 3. Create the scene using the .nvm file produced above.
+        self.createScene,
+        self.updateScene,  # Step 4. Update the scene
+        self.exportScene  # Step 5. Export the scene
     ]
 
     for stepIndex in xrange(self.config.resumeAtStep, len(steps)):
@@ -139,13 +139,13 @@ class TailwindPipelineRunner():
   def runPipeline2(self):
 
     steps = [
-      # Step 1. Find the PNGs in the data directory, convert them to JPGs
-      # and write them out to a new folder.
-      self.moveData,
-      # Step 2. Create the scene using the .nvm file produced above.
-      self.createSceneFromBox,
-      self.updateScene,  # Step 3. Update the scene
-      self.exportScene   # Step 4. Export the scene
+        # Step 1. Find the PNGs in the data directory, convert them to JPGs
+        # and write them out to a new folder.
+        self.moveData,
+        # Step 2. Create the scene using the .nvm file produced above.
+        self.createSceneFromBox,
+        self.updateScene,  # Step 3. Update the scene
+        self.exportScene   # Step 4. Export the scene
     ]
     for stepIndex in xrange(self.config.resumeAtStep, len(steps)):
       retVal = steps[stepIndex](stepIndex + 1)
@@ -174,7 +174,7 @@ class TailwindPipelineRunner():
   def movePNGs(self, stepNum):
 
     srcDataFiles = getAllFilesInSubDirs(os.path.relpath(
-      self.config.SRCImageDirName), makeRelative=False)
+        self.config.SRCImageDirName), makeRelative=False)
     pngRegex = re.compile('.+\.png', re.IGNORECASE)
 
     # Create a directory called "jpeg" to store all the newly converted PNG
@@ -197,7 +197,7 @@ class TailwindPipelineRunner():
       fileName = os.path.basename(srcFileName)
       baseFileName, extension = os.path.splitext(fileName)
       newName = os.path.join(
-        self.config.JPEGDirName, baseFileName + ".jpg")
+          self.config.JPEGDirName, baseFileName + ".jpg")
       img.save(newName, "JPEG")
 
       log("Converted and moved %s to %s." % (srcFileName, newName))
@@ -241,9 +241,10 @@ class TailwindPipelineRunner():
 
     success = 0
     if(len(pts) == 6):
-      success = boxm2_adaptor.get_scene_from_box_cams(self.config.CAMDirName, 
-          pts[0], pts[1], pts[2], pts[3] - pts[0], pts[4] - pts[1], 
-          pts[5] - pts[2], ".")
+      success = boxm2_adaptor.get_scene_from_box_cams(self.config.CAMDirName,
+                                                      pts[0], pts[1], pts[2], pts[
+                                                          3] - pts[0], pts[4] - pts[1],
+                                                      pts[5] - pts[2], ".")
     if success:
       return 0
     else:
@@ -252,10 +253,10 @@ class TailwindPipelineRunner():
   def getSourceImageFileDimension(self):
 
     srcDataFiles = getAllFilesInSubDirs(os.path.relpath(
-      self.config.SRCImageDirName), makeRelative=False)
+        self.config.SRCImageDirName), makeRelative=False)
     if 0 == len(srcDataFiles):
       log("Unable to find any source image files %s" %
-        os.path.relpath(self.config.SRCImageDirName))
+          os.path.relpath(self.config.SRCImageDirName))
       return None
 
     pngRegex = re.compile('.+\.png', re.IGNORECASE)
@@ -275,22 +276,22 @@ class TailwindPipelineRunner():
       self.srcJPGDimensions = self.getSourceImageFileDimension()
       if None == self.srcJPGDimensions:
         log("Step %d - Unable to determine source image size dimensions for images here: %s." %
-          (stepNum, os.path.relpath(self.config.SRCImageDirName)))
+            (stepNum, os.path.relpath(self.config.SRCImageDirName)))
         return -stepNum
 
-    commandLineArgs = "sfm+k=%d,%d,%d,%d %s %s" % ( self.config.focalLength, self.srcJPGDimensions[0] / 2,
-                            self.config.focalLength, self.srcJPGDimensions[
-                              1] / 2,
-                            os.path.abspath(
-                              self.config.JPEGDirName),
-                            self.config.NVMFileName
-                            )
+    commandLineArgs = "sfm+k=%d,%d,%d,%d %s %s" % (self.config.focalLength, self.srcJPGDimensions[0] / 2,
+                                                   self.config.focalLength, self.srcJPGDimensions[
+        1] / 2,
+        os.path.abspath(
+        self.config.JPEGDirName),
+        self.config.NVMFileName
+    )
 
     retVal = self.callSystem(
-      "/home/vsi/projects/vsfm/vsfm/bin/VisualSFM", commandLineArgs)
+        "/home/vsi/projects/vsfm/vsfm/bin/VisualSFM", commandLineArgs)
     if 0 != retVal:
       log("Step %d - VisualSFM failed with return code %d!" %
-        (stepNum, retVal))
+          (stepNum, retVal))
       log("Processing will not proceed.")
       return -stepNum
 
@@ -306,13 +307,13 @@ class TailwindPipelineRunner():
       return -stepNum
 
     commandLineArgs = "-scene ./model/uscene.xml -dir %s -depth 1 -ni 1024 -nj 768 -num_in 5 -init_incline 45 -end_incline 5 -gsd %s " % (
-      self.config.finalExportDirName, finestCellsize)
+        self.config.finalExportDirName, finestCellsize)
     retVal = self.callSystem("boxm2_export_scene",
-                 commandLineArgs, force=True)
+                             commandLineArgs, force=True)
 
     if 0 != retVal:
       log("Step %d - boxm2_export_scene failed with return code %d!" %
-        (stepNum, retVal))
+          (stepNum, retVal))
       return -stepNum
 
     return 0
@@ -325,9 +326,9 @@ class TailwindPipelineRunner():
 
     # Get list of imgs and cams
     imgsDir = os.path.abspath(os.path.join(
-      self.config.NVMOutputDirName, "imgs"))
+        self.config.NVMOutputDirName, "imgs"))
     camsDir = os.path.abspath(os.path.join(
-      self.config.NVMOutputDirName, "cams"))
+        self.config.NVMOutputDirName, "cams"))
 
     if False == os.path.isdir(imgsDir):
       log("The folder %s does not exist." % (imgsDir))
@@ -361,7 +362,7 @@ class TailwindPipelineRunner():
 
       for idx, i in enumerate(frames):
         pcam = vpgl.load_perspective_camera(
-          os.path.join(camsDir, camFiles[i]))
+            os.path.join(camsDir, camFiles[i]))
         img, ni, nj = vil.load_image(os.path.join(imgsDir, imgFiles[i]))
 
         scene.update(pcam, img, 1, "", "gpu0")
@@ -377,19 +378,19 @@ class TailwindPipelineRunner():
 
     if False == os.path.isfile(self.config.uSceneFileName):
       log("Step %d - Cell size extraction failed because the uScene file can't be found at %s." %
-        (stepNum, self.config.uSceneFileName))
+          (stepNum, self.config.uSceneFileName))
       return False, None
 
     dom = parse(self.config.uSceneFileName)
     xmlTag = dom.getElementsByTagName("block")
     if 0 == len(xmlTag):
       log("Step %d - No \"block\" elements could be found in the XML document %s." %
-        (stepNum, self.config.uSceneFileName))
+          (stepNum, self.config.uSceneFileName))
       return False, None
 
     if False == xmlTag[0].hasAttribute("dim_x"):
       log("Step %d - The XML document %s Has a \"block\" element has no \"dim_x\" attribute." %
-        (stepNum, self.config.uSceneFileName))
+          (stepNum, self.config.uSceneFileName))
       return False, None
 
     dimXString = xmlTag[0].attributes["dim_x"].value
@@ -398,7 +399,7 @@ class TailwindPipelineRunner():
       dimXValue = float(dimXString) * 0.125
     except ValueError:
       log("Step %d - The parsed value of dimX %s appears to be invalid." %
-        (stepNum, dimXValue))
+          (stepNum, dimXValue))
       return False, None
 
     log("Finest cell size of %f found." % dimXValue)
@@ -412,13 +413,13 @@ class TailwindPipelineRunner():
 
     if False == os.path.isfile(bundleFile):
       log("Step %d - SceneCreation cannot begin because the NVM file %s is missing." %
-        (stepNum, bundleFile))
+          (stepNum, bundleFile))
       log("Processing will not proceed.")
       return -stepNum
 
     if False == os.path.isdir(imgDir):
       log("Step %d - SceneCreation cannot beging because the image directory %s cannot be found." %
-        (stepNum, imgDir))
+          (stepNum, imgDir))
       log("Processing will not proceed.")
       return -stepNum
 
@@ -489,12 +490,12 @@ class PipelineConfig():
       isOK = False
     if self.resumeAtStep < 0 or self.resumeAtStep > 3:
       log("The \"step\" value of %d is not valid. Valid values are in the range of 0-3 (inclusive)." %
-        self.resumeAtStep)
+          self.resumeAtStep)
       isOK = False
 
     if self.updateScenePassCount < 1:
       log("The \"updateScenePassCount\" value of %d is not valid. Valid values are 1 or greater." %
-        self.updateScenePassCount)
+          self.updateScenePassCount)
       isOK = False
 
     return isOK
@@ -506,7 +507,7 @@ if __name__ == '__main__':
 
   try:
     opts, args = getopt.getopt(sys.argv[1:], "d:b:i:e:rs:u:", [
-                   "dryrun", "bbfile=", "inputlist=", "exportDir=", "randomize", "step=", "updatePassCount="])
+        "dryrun", "bbfile=", "inputlist=", "exportDir=", "randomize", "step=", "updatePassCount="])
     print opts
   except getopt.GetoptError, err:
     print str(err) + "\n"
@@ -532,7 +533,7 @@ if __name__ == '__main__':
 
   if False == config.isConfigComplete():
     log("%s cannot be run until the above errors are fixed." %
-      (sys.argv[0]))
+        (sys.argv[0]))
     sys.exit(-100)
 
   pipeline = TailwindPipelineRunner(config)

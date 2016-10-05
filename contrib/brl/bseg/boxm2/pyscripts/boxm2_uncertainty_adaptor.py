@@ -22,7 +22,7 @@ class UncertainScene(boxm2_scene_adaptor):
   def render_uncertainty(self, cam, ni, nj):
     """ Render uncertainty - this requires a float8 to be present """
     img = boxm2_adaptor.render_grey(self.scene, self.opencl_cache,
-              cam, ni, nj, self.device, "cubic_model")
+                                    cam, ni, nj, self.device, "cubic_model")
     return img
 
   # update batch with one call
@@ -171,7 +171,7 @@ class UncertainScene(boxm2_scene_adaptor):
     batch.set_input_from_db(2, self.opencl_cache)
     batch.set_input_unsigned(3, len(self.imgList))
     batch.set_input_string(4, image_id_fname)
-    batch.set_input_float(5, 0.09 )
+    batch.set_input_float(5, 0.09)
     batch.run_process()
 
   def batch_synoptic_alpha_update(self):

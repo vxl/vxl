@@ -1,4 +1,4 @@
-# import the batch module and dbvalue from init 
+# import the batch module and dbvalue from init
 # set the global variable, batch,  on init before importing this file
 import brl_init
 dbvalue = brl_init.DummyBatch()
@@ -8,6 +8,7 @@ batch = brl_init.DummyBatch()
 # Vil loading and saving
 ###################################################
 # define the batch and dbvalue variables
+
 
 def load_image(file_path):
   batch.init_process("vilLoadImageViewProcess")
@@ -56,18 +57,20 @@ def save_image_resource(resc, file_path):
   batch.set_input_from_db(0, resc)
   batch.set_input_string(1, file_path)
   status = batch.run_process()
-  return status;
+  return status
 
-def multi_plane_view_to_grey(resc,apply_mask = False):
+
+def multi_plane_view_to_grey(resc, apply_mask=False):
   batch.init_process("vilMultiPlaneViewToGreyProcess")
-  batch.set_input_from_db(0, resc);
-  batch.set_input_bool(1, apply_mask);
+  batch.set_input_from_db(0, resc)
+  batch.set_input_bool(1, apply_mask)
   status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
     grey_resc = dbvalue(id, type)
     return grey_resc
   return None
+
 
 def convert_image(img, type="byte"):
   batch.init_process("vilConvertPixelTypeProcess")
@@ -196,9 +199,9 @@ def pixel_wise_roc(cd_img, gt_img, mask_img=None):
   (id, type) = batch.commit_output(3)
   fn = batch.get_bbas_1d_array_float(id)
   (id, type) = batch.commit_output(4)
-  tpr = batch.get_bbas_1d_array_float(id);
-  (id, type) = batch.commit_output(5);
-  fpr = batch.get_bbas_1d_array_float(id);
+  tpr = batch.get_bbas_1d_array_float(id)
+  (id, type) = batch.commit_output(5)
+  fpr = batch.get_bbas_1d_array_float(id)
   batch.remove_data(id)
   (id, type) = batch.commit_output(6)
   outimg = dbvalue(id, type)
@@ -232,6 +235,8 @@ def resize(img, ni, nj, pixel="float"):
   return img
 
 # get image dimensions
+
+
 def image_size(img):
   batch.init_process('vilImageSizeProcess')
   batch.set_input_from_db(0, img)
@@ -367,7 +372,7 @@ def compute_image_mean_and_variance(img, n):
     (id, type) = batch.commit_output(0)
     img_mean = dbvalue(id, type)
     (id, type) = batch.commit_output(1)
-    img_var  = dbvalue(id, type)
+    img_var = dbvalue(id, type)
     return img_mean, img_var
   else:
     return None, None
@@ -633,7 +638,7 @@ def combine_planes2(img_blue, img_green, img_red, img_nir):
 # combine 8 bands into one output image
 # note that the band order in output image is same as input and user is
 # responsible for the passing sequence of image bands
-def combine_planes_8_bands(img_coastal, img_blue, img_green, img_yellow, 
+def combine_planes_8_bands(img_coastal, img_blue, img_green, img_yellow,
                            img_red, img_red_edge, img_nir1, img_nir2):
   batch.init_process("vilCombinePlanes8BandsProcess")
   batch.set_input_from_db(0, img_coastal)
@@ -653,7 +658,7 @@ def combine_planes_8_bands(img_coastal, img_blue, img_green, img_yellow,
     return 0
 
 
-def image_entropy(img, block_size = 5, bins = 16):
+def image_entropy(img, block_size=5, bins=16):
   batch.init_process("vilBlockEntropyProcess")
   batch.set_input_from_db(0, img)
   batch.set_input_unsigned(1, block_size)
@@ -679,7 +684,7 @@ def edge_detection(img, noise_multiplier=1.5, smooth=1.5, auto_threshold=False,
   status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
-    edge_img   = dbvalue(id, type)
+    edge_img = dbvalue(id, type)
     return edge_img
   else:
     return None
@@ -734,15 +739,17 @@ def invert_float_image(img):
   return inverted_img
 
 # remote the invalid pixel region existed in satellite imagery
+
+
 def remote_nitf_margin():
   batch.init_process("vilNITFRemoveMarginProcess")
   batch.set_input_from_db(0, img_res)
   status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
-    vi  = batch.get_output_unsigned(id)
+    vi = batch.get_output_unsigned(id)
     (id, type) = batch.commit_output(1)
-    vj  = batch.get_output_unsigned(id)
+    vj = batch.get_output_unsigned(id)
     (id, type) = batch.commit_output(2)
     vni = batch.get_output_unsigned(id)
     (id, type) = batch.commit_output(3)
@@ -752,37 +759,39 @@ def remote_nitf_margin():
     return 0, 0, 0, 0
 
 
-# register a source image to a target image by explicitly minimizing the 
+# register a source image to a target image by explicitly minimizing the
 # root-mean-square-error (RMSE) of pixel value difference
-def img_registration_by_rmse(src_img, tgr_img, sx, sy, sz = 0.0, pixel_res=1.0,
+def img_registration_by_rmse(src_img, tgr_img, sx, sy, sz=0.0, pixel_res=1.0,
                              invalid_pixel=-9999.0, mask_img=None):
   batch.init_process("vilImageRegistrationProcess")
   batch.set_input_from_db(0, src_img)
   batch.set_input_from_db(1, tgr_img)
-  batch.set_input_unsigned(2,sx)
-  batch.set_input_unsigned(3,sy)
+  batch.set_input_unsigned(2, sx)
+  batch.set_input_unsigned(3, sy)
   batch.set_input_double(4, sz)
   batch.set_input_double(5, pixel_res)
-  batch.set_input_float(6,invalid_pixel)
+  batch.set_input_float(6, invalid_pixel)
   if mask_img:
-    batch.set_input_from_db(7,mask_img)
+    batch.set_input_from_db(7, mask_img)
   status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
-    trans_x    = batch.get_output_double(id)
+    trans_x = batch.get_output_double(id)
     (id, type) = batch.commit_output(1)
-    trans_y    = batch.get_output_double(id)
+    trans_y = batch.get_output_double(id)
     (id, type) = batch.commit_output(2)
-    trans_z    = batch.get_output_double(id)
+    trans_z = batch.get_output_double(id)
     (id, type) = batch.commit_output(3)
-    rmse_z     = batch.get_output_double(id)
+    rmse_z = batch.get_output_double(id)
     (id, type) = batch.commit_output(4)
-    var_z  = batch.get_output_double(id)
+    var_z = batch.get_output_double(id)
     return trans_x, trans_y, trans_z, rmse_z, var_z
   else:
     return -1.0, -1.0, -1.0, -1.0, -1.0
 
 # Dilate a binary image using a disk structural element
+
+
 def dilate_image_disk(in_img, disk_size):
   batch.init_process("vilImageDilateDiskProcess")
   batch.set_input_from_db(0, in_img)

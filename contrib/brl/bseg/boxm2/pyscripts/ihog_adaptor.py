@@ -4,6 +4,7 @@ dbvalue = brl_init.register_batch(batch)
 
 # compute offsets based on mutual information
 
+
 def register_translational(img0, img0_mask, img1, search_radius=0):
   batch.init_process('ihogRegisterTranslationalProcess')
   batch.set_input_from_db(0, img0)

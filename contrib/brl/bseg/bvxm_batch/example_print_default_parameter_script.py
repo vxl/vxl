@@ -10,11 +10,11 @@ dbvalue = brl_init.register_batch(batch)
 print("Print Default Params for Creating Voxel World")
 # print the defaults for the process given by name
 batch.process_print_default_params(
-  "bvxmCreateVoxelWorldProcess", "D:/projects/lockheed-voxel-world/CreateVoxelWorldProcessDefaults.xml")
+    "bvxmCreateVoxelWorldProcess", "D:/projects/lockheed-voxel-world/CreateVoxelWorldProcessDefaults.xml")
 
 print("Print Default Params for Normalize Image Process")
 batch.process_print_default_params(
-  "bvxmNormalizeImageProcess", "D:/projects/lockheed-voxel-world/bvxmNormalizeImageProcessDefaults.xml")
+    "bvxmNormalizeImageProcess", "D:/projects/lockheed-voxel-world/bvxmNormalizeImageProcessDefaults.xml")
 
 
 print("Done")

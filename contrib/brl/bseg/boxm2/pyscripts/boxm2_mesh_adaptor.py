@@ -2,6 +2,7 @@ import brl_init
 import boxm2_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 def load_mesh(filename):
   batch.init_process("boxm2LoadMeshProcess")
   batch.set_input_string(0, filename)
@@ -73,21 +74,23 @@ def gen_oriented_point_cloud(scene, cache, prob_t, norm_mag_t, filename):
   batch.set_input_float(2, prob_t)
   batch.set_input_float(3, norm_mag_t)
 
-def gen_error_point_cloud(scene,cache,filename,thresh = 0.3):
-  batch.init_process("boxm2ExportErrorPointCloudProcess");
-  batch.set_input_from_db(0,scene);
-  batch.set_input_from_db(1,cache);
-  batch.set_input_string(2,filename); #ply filename
-  batch.set_input_float(3,thresh); #prob threshold
-  batch.run_process();
 
-def export_stack(scene,cache,outdir,identifier):
-  batch.init_process("boxm2ExportStackImagesProcess");
-  batch.set_input_from_db(0,scene);
-  batch.set_input_from_db(1,cache);
-  batch.set_input_string(2,outdir);
-  batch.set_input_string(3,identifier);
-  batch.run_process();
+def gen_error_point_cloud(scene, cache, filename, thresh=0.3):
+  batch.init_process("boxm2ExportErrorPointCloudProcess")
+  batch.set_input_from_db(0, scene)
+  batch.set_input_from_db(1, cache)
+  batch.set_input_string(2, filename)  # ply filename
+  batch.set_input_float(3, thresh)  # prob threshold
+  batch.run_process()
+
+
+def export_stack(scene, cache, outdir, identifier):
+  batch.init_process("boxm2ExportStackImagesProcess")
+  batch.set_input_from_db(0, scene)
+  batch.set_input_from_db(1, cache)
+  batch.set_input_string(2, outdir)
+  batch.set_input_string(3, identifier)
+  batch.run_process()
 
 
 def paint_mesh(scene, cache, in_file, out_file):

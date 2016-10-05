@@ -1,4 +1,4 @@
-# import the batch module and dbvalue from init 
+# import the batch module and dbvalue from init
 # set the global variable, batch, on init before importing this file
 import brl_init
 dbvalue = brl_init.DummyBatch()

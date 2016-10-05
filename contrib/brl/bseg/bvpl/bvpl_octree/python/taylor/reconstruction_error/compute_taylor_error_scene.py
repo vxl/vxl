@@ -18,6 +18,7 @@ import brl_init
 import bvpl_octree_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 class taylor_error_job():
 
   def __init__(self, data_scene, taylor_scenes, block_i, block_j, block_k):
@@ -83,13 +84,13 @@ if __name__ == "__main__":
   parser.add_option('--model_dir', action="store", dest="model_dir")
   parser.add_option('--taylor_dir', action="store", dest="taylor_dir")
   parser.add_option('--num_cores', action="store",
-            dest="num_cores", type="int", default=4)
+                    dest="num_cores", type="int", default=4)
   parser.add_option('--nblocks_x', action="store",
-            dest="nblocks_x", type="int")
+                    dest="nblocks_x", type="int")
   parser.add_option('--nblocks_y', action="store",
-            dest="nblocks_y", type="int")
+                    dest="nblocks_y", type="int")
   parser.add_option('--nblocks_z', action="store",
-            dest="nblocks_z", type="int")
+                    dest="nblocks_z", type="int")
 
   options, args = parser.parse_args()
 
@@ -149,7 +150,7 @@ if __name__ == "__main__":
         block_j = blocks_y[j]
         block_k = blocks_z[k]
         current_job = taylor_error_job(
-          data_scene, taylor_scenes, block_i, block_j, block_k)
+            data_scene, taylor_scenes, block_i, block_j, block_k)
         job_list.append(current_job)
 
   execute_jobs(job_list, num_cores)

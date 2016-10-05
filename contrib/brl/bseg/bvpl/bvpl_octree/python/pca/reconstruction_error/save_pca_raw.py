@@ -8,6 +8,7 @@ import brl_init
 import bvpl_octree_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 class save_scene_job():
 
   def __init__(self, input_scene_path, output_scene_path):
@@ -73,11 +74,11 @@ if __name__ == "__main__":
   batch.register_datatypes()
 
   parser = optparse.OptionParser(
-    description='Save taylor responses to raw file')
+      description='Save taylor responses to raw file')
 
   parser.add_option('--pca_dir', action="store", dest="pca_dir")
   parser.add_option('--num_cores', action="store",
-            dest="num_cores", type="int", default=4)
+                    dest="num_cores", type="int", default=4)
 
   options, args = parser.parse_args()
 

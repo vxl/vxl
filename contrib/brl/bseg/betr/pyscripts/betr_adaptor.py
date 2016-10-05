@@ -1,8 +1,10 @@
-# import the batch module and dbvalue from init 
+# import the batch module and dbvalue from init
 # set the global variable, batch, on init before importing this file
 import brl_init
 import betr_batch as batch
 dbvalue = brl_init.register_batch(batch)
+
+
 class BetrException(brl_init.BrlException):
   pass
 #############################################################################
@@ -12,7 +14,7 @@ class BetrException(brl_init.BrlException):
 
 
 # create a betr site to hold event data such as event objects
-def create_betr_site( lon, lat, elev):
+def create_betr_site(lon, lat, elev):
   batch.init_process("betrCreateSiteProcess")
   # set site location in wgs84 deg, deg, meters
   batch.set_input_float(0, lon)
@@ -26,7 +28,9 @@ def create_betr_site( lon, lat, elev):
   raise BetrException("failed to create site")
 
 # create a betr event trigger to support change detection
-def create_betr_event_trigger( lon, lat, elev, name, verbose = False):
+
+
+def create_betr_event_trigger(lon, lat, elev, name, verbose=False):
   batch.init_process("betrCreateEventTriggerProcess")
   # set site location in wgs84 deg, deg, meters
   batch.set_input_float(0, lon)
@@ -42,6 +46,8 @@ def create_betr_event_trigger( lon, lat, elev, name, verbose = False):
   raise BetrException("failed to create event trigger")
 
 # add a geo object to the site, not associated with an event trigger
+
+
 def add_site_object(site, name, lon, lat, elev, geom_path):
   batch.init_process("betrAddEventObjectProcess")
   batch.set_input_from_db(0, site)
@@ -55,6 +61,8 @@ def add_site_object(site, name, lon, lat, elev, geom_path):
     raise BetrException("failed to add event object")
 
 # add an event trigger to the site
+
+
 def add_event_trigger(site, event_trigger):
   batch.init_process("betrAddEventTriggerProcess")
   batch.set_input_from_db(0, site)
@@ -64,6 +72,8 @@ def add_event_trigger(site, event_trigger):
     raise BetrException("failed to add event trigger")
 
 # add an event trigger object to the event trigger
+
+
 def add_event_trigger_object(event_trigger, name, lon, lat, elev, geom_path, is_reference):
   batch.init_process("betrAddEventTriggerObjectProcess")
   batch.set_input_from_db(0, event_trigger)
@@ -78,6 +88,8 @@ def add_event_trigger_object(event_trigger, name, lon, lat, elev, geom_path, is_
     raise BetrException("failed to add event trigger object")
 
 # set image and camera data on an event trigger
+
+
 def set_event_trigger_data(event_trigger, ref_imgr, ref_camera, event_imgr, event_camera):
   batch.init_process("betrSetEventTriggerDataProcess")
   batch.set_input_from_db(0, event_trigger)
@@ -90,35 +102,39 @@ def set_event_trigger_data(event_trigger, ref_imgr, ref_camera, event_imgr, even
     raise BetrException("failed to set event trigger data")
 
 # execute change detection with a single event region
+
+
 def execute_event_trigger(event_trigger, algorithm_name):
   batch.init_process("betrExecuteEventTriggerProcess")
   batch.set_input_from_db(0, event_trigger)
-  batch.set_input_string(1, algorithm_name);
+  batch.set_input_string(1, algorithm_name)
   status = batch.run_process()
   prob_change = None
   if status:
-    (pc_id, pc_type) = batch.commit_output(0);
-    prob_change = batch.get_output_float(pc_id);
+    (pc_id, pc_type) = batch.commit_output(0)
+    prob_change = batch.get_output_float(pc_id)
     return prob_change
   else:
     raise BetrException("failed to execute change detection")
     return prob_change
-  
+
 # execute change detection with a multiple event regions
+
+
 def execute_event_trigger_multi(event_trigger, algorithm_name):
   batch.init_process("betrExecuteEventTriggerMultiProcess")
   batch.set_input_from_db(0, event_trigger)
-  batch.set_input_string(1, algorithm_name);
+  batch.set_input_string(1, algorithm_name)
   status = batch.run_process()
   prob_change = None
   evt_names = None
   if status:
-    (pc_id, pc_type) = batch.commit_output(0);
-    prob_change = batch.get_output_double_array(pc_id);
-    (name_id, name_type) = batch.commit_output(1);
-    evt_names = batch.get_bbas_1d_array_string(name_id);
+    (pc_id, pc_type) = batch.commit_output(0)
+    prob_change = batch.get_output_double_array(pc_id)
+    (name_id, name_type) = batch.commit_output(1)
+    evt_names = batch.get_bbas_1d_array_string(name_id)
     return (prob_change, evt_names)
   else:
-    raise BetrException("failed to add execute trigger with multiple event regions")
+    raise BetrException(
+        "failed to add execute trigger with multiple event regions")
     return (prob_change, evt_names)
-  

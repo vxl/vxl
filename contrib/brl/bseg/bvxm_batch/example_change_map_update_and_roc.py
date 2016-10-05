@@ -115,7 +115,7 @@ for i in range(0, len(image_fnames), 1):
       batch.init_process("SaveImageViewProcess")
       batch.set_input_from_db(0, normalized_img_id)
       batch.set_input_string(
-        1, output_path + "normalized" + str(i) + ".png")
+          1, output_path + "normalized" + str(i) + ".png")
       batch.run_process()
 
       curr_image_id = normalized_img_id
@@ -136,34 +136,34 @@ for i in range(0, len(image_fnames), 1):
       batch.init_process("SaveImageViewProcess")
       batch.set_input_from_db(0, out_img_id)
       batch.set_input_string(
-        1, output_path + "density_map" + str(i) + ".tiff")
+          1, output_path + "density_map" + str(i) + ".tiff")
       batch.run_process()
 
       print("Saving Map Image")
       batch.init_process("SaveImageViewBinaryProcess")
       batch.set_input_from_db(0, mask_img_id)
       batch.set_input_string(
-        1, output_path + "density_mask" + str(i) + ".bin")
+          1, output_path + "density_mask" + str(i) + ".bin")
       batch.run_process()
     else:
       print("Loading normalized Image")
       batch.init_process("LoadImageViewProcess")
       batch.set_input_string(
-        0, output_path + "normalized" + str(i) + ".png")
+          0, output_path + "normalized" + str(i) + ".png")
       batch.run_process()
       curr_image_id = batch.commit_output(0)
 
       print("Loading Prob Image")
       batch.init_process("LoadImageViewProcess")
       batch.set_input_string(
-        0, output_path + "density_map" + str(i) + ".tiff")
+          0, output_path + "density_map" + str(i) + ".tiff")
       batch.run_process()
       out_img_id = batch.commit_output(0)
 
       print("Loading Map Image")
       batch.init_process("LoadImageViewBinaryProcess")
       batch.set_input_string(
-        0, output_path + "density_mask" + str(i) + ".bin")
+          0, output_path + "density_mask" + str(i) + ".bin")
       batch.run_process()
       mask_img_id = batch.commit_output(0)
 
@@ -188,7 +188,7 @@ for i in range(0, len(image_fnames), 1):
       batch.init_process("SaveImageViewProcess")
       batch.set_input_from_db(0, thres_img_id)
       batch.set_input_string(
-        1, output_path + "thres" + str(i) + "_" + str(j_arr[j]) + ".png")
+          1, output_path + "thres" + str(i) + "_" + str(j_arr[j]) + ".png")
       batch.run_process()
 
     # ground-truth polygons for change areas need to be prepared via tools in bwm_main and saved as binary files
@@ -199,9 +199,9 @@ for i in range(0, len(image_fnames), 1):
     print("Run the gt generator process")
     batch.init_process("bvglGenerateMaskProcess")
     batch.set_params_process(
-      "./params_generate_mask_test_img_" + str(i) + ".xml")
+        "./params_generate_mask_test_img_" + str(i) + ".xml")
     batch.set_input_string(
-      0, "./gt/test_img_" + str(i) + "_gt_" + change_type + ".bin")
+        0, "./gt/test_img_" + str(i) + "_gt_" + change_type + ".bin")
     batch.set_input_string(1, change_type)  # change type
     batch.run_process()
     gt_byte_id = batch.commit_output(0)
@@ -211,7 +211,7 @@ for i in range(0, len(image_fnames), 1):
     batch.init_process("SaveImageViewProcess")
     batch.set_input_from_db(0, gt_byte_id)
     batch.set_input_string(
-      1, output_path + "test_img_" + str(i) + "_gt.png")
+        1, output_path + "test_img_" + str(i) + "_gt.png")
     batch.run_process()
 
     print("Run the ROC process")
@@ -220,7 +220,7 @@ for i in range(0, len(image_fnames), 1):
     batch.set_input_from_db(1, mask_img_id)
     batch.set_input_from_db(2, gt_mask_id)
     batch.set_input_string(
-      3, output_path + "out_roc_" + str(i) + ".txt")
+        3, output_path + "out_roc_" + str(i) + ".txt")
     batch.run_process()
 
     npasses = 1
@@ -239,7 +239,7 @@ for i in range(0, len(image_fnames), 1):
     batch.init_process("SaveImageViewProcess")
     batch.set_input_from_db(0, out_updated_byte_img_id)
     batch.set_input_string(1, output_path + "change_map_updated_n" + str(
-      npasses) + "_sigma_" + str(sigma) + "_" + str(i) + ".png")
+        npasses) + "_sigma_" + str(sigma) + "_" + str(i) + ".png")
     batch.run_process()
 
     print("Run the ROC process")
@@ -248,5 +248,5 @@ for i in range(0, len(image_fnames), 1):
     batch.set_input_from_db(1, mask_img_id)
     batch.set_input_from_db(2, gt_mask_id)
     batch.set_input_string(3, output_path + "out_roc_updated_n_" + str(
-      npasses) + "_sigma_" + str(sigma) + "_" + str(i) + ".txt")
+        npasses) + "_sigma_" + str(sigma) + "_" + str(i) + ".txt")
     batch.run_process()

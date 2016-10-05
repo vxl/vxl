@@ -3,42 +3,45 @@ import os
 import imp
 import sys
 
+
 class BrlException(Exception):
   pass
 
+
 class MetaFinder(object):
+
   def __init__(self):
     self.modules = {}
 
   def find_module(self, fullname, path=None):
     try:
       assert(path is None)
-      #brl python vxl does not have subpackages, so it should always be 
-      #None
+      # brl python vxl does not have subpackages, so it should always be
+      # None
 
       adaptor, rest = fullname.split('_adaptor_')
       batch, _ = rest.split('_batch')
 
-      file, pathname, description = imp.find_module(adaptor+'_adaptor')
+      file, pathname, description = imp.find_module(adaptor + '_adaptor')
       code = file.read()
       file.close()
-      pathname = os.path.join(os.path.split(pathname)[0], fullname+'.py')
+      pathname = os.path.join(os.path.split(pathname)[0], fullname + '.py')
 
     except:
       return None
 
-    try: #This try except is separate from the rest to try to maintain a
-    #clear and useful debug message in case the adaptor has an error
+    try:  # This try except is separate from the rest to try to maintain a
+      # clear and useful debug message in case the adaptor has an error
       code = compile(code, pathname, "exec", dont_inherit=True)
       module = imp.new_module(fullname)
       exec code in module.__dict__
     except:
-      __import__(adaptor+'_adaptor')
+      __import__(adaptor + '_adaptor')
       return None
 
     try:
       assert isinstance(module.batch, DummyBatch)
-      #This is how we verify this is a PROPER VXL core module!!!
+      # This is how we verify this is a PROPER VXL core module!!!
 
       _register_batch(module, batch)
 
@@ -49,18 +52,20 @@ class MetaFinder(object):
       pass
 
   def load_module(self, fullname):
-    #I COULD pop self.modules... but it seems too risky. I don't know 
-    #enough about what calls load_modules
+    # I COULD pop self.modules... but it seems too risky. I don't know
+    # enough about what calls load_modules
 
     sys.modules[fullname] = self.modules[fullname]
-    #Add to the system dictionary
+    # Add to the system dictionary
 
     return self.modules[fullname]
 
 import sys
 sys.meta_path.append(MetaFinder())
 
+
 class DummyBatch(object):
+
   def __getattr__(self, *args, **kwargs):
     print 'Core adaptors MUST be imported differently. Your must specify'
     print 'what batch to use. For example:'
@@ -80,7 +85,7 @@ class DummyBatch(object):
     print
     print 'Where {Some} is the batch for that non-core adaptor, such as'
     print 'bvxm, boxm2, etc..'
-    print 
+    print
     print 'Contrib (non-core) adaptors are imported like normal, for'
     print 'example:'
     print
@@ -88,34 +93,40 @@ class DummyBatch(object):
 
     raise Exception('Batch not registered')
 
+
 def _register_batch(mod, batch):
   ''' This should be called by each adaptor'''
   if isinstance(batch, ModuleType):
     mod.batch = batch
   else:
     if not batch.endswith('_batch'):
-      batch+='_batch'
+      batch += '_batch'
     mod.batch = __import__(batch)
   mod.batch.register_processes()
   mod.batch.register_datatypes()
   mod.dbvalue = dbvalue_factory(mod.batch)
 
+
 def register_batch(batch):
-  #dbvalue factory for different batches
+  # dbvalue factory for different batches
   batch.register_processes()
   batch.register_datatypes()
   if batch not in register_batch.dbvalues:
-    register_batch.dbvalues[batch] = type('dbvalue', (dbvalue,), {'batch':batch})
+    register_batch.dbvalues[batch] = type(
+        'dbvalue', (dbvalue,), {'batch': batch})
   return register_batch.dbvalues[batch]
 register_batch.dbvalues = {}
 
+
 def set_smart_register(value=True):
   set_smart_register.value = value
-set_smart_register.value=False
+set_smart_register.value = False
+
 
 def dbvalue_factory(batch):
-  #dbvalue factory for different batches
-  return type('dbvalue', (dbvalue,), {'batch':batch})
+  # dbvalue factory for different batches
+  return type('dbvalue', (dbvalue,), {'batch': batch})
+
 
 class dbvalue(object):
   batch = DummyBatch()
@@ -140,6 +151,7 @@ class dbvalue(object):
   def __deepcopy__(self, memo):
     return self.__copy__()
 
+
 def remove_data(id):
   if set_smart_register.value:
     print 'Warning: remove_data disabled when using smart_register'
@@ -154,4 +166,4 @@ def get_output_float(id):
 
 def get_output_unsigned(id):
   uval = boxm2_batch.get_output_unsigned(id)
-return uval
+  return uval

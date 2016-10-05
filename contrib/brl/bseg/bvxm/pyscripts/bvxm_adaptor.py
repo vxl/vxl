@@ -25,7 +25,7 @@ def create_scene(scene_params_xml):
 
 
 def create_scene_xml(scene_xml, world_dir, lvcs, lvcs_file, dim_x, dim_y, dim_z, voxel_size=1.0, corner_x=0.0, corner_y=0.0, corner_z=0.0,
-           min_ocp_prob=0.001, max_ocp_prob=0.999, max_scale=1):
+                     min_ocp_prob=0.001, max_ocp_prob=0.999, max_scale=1):
   batch.init_process("bvxmCreateSceneXmlProcess")
   batch.set_input_string(0, scene_xml)
   batch.set_input_string(1, world_dir)
@@ -218,7 +218,7 @@ def rpc_registration(world, cropped_cam, cropped_edge_image, uncertainty, shift_
   cam = dbvalue(cam_id, cam_type)
   (expected_edge_image_id, expected_edge_image_type) = batch.commit_output(1)
   expected_edge_image = dbvalue(
-    expected_edge_image_id, expected_edge_image_type)
+      expected_edge_image_id, expected_edge_image_type)
   (offset_u_id, offset_u_type) = batch.commit_output(2)
   offset_u = batch.get_output_double(offset_u_id)
   (offset_v_id, offset_v_type) = batch.commit_output(3)
@@ -404,7 +404,7 @@ def name_suffix_for_camera(lower_left_lon, lower_left_lat, upper_right_lon, uppe
   else:
     name = name + "E" + str(lower_left_lon)
   name = name + "_S" + str(abs(upper_right_lat - lower_left_lat)) + \
-    "x" + str(abs(upper_right_lon - lower_left_lon))
+      "x" + str(abs(upper_right_lon - lower_left_lon))
   return name
 
 # Create x y z images for bvxm_scene from dem

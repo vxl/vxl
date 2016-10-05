@@ -17,9 +17,9 @@ print("Creating Lidar")
 batch.init_process("bvxmLidarInitProcess")
 batch.set_params_process("lidar_params.xml")
 batch.set_input_string(
-  0, "C:/test_images/BaghdadLIDAR/dem_1m_a1_baghdad_tile39.tif")
+    0, "C:/test_images/BaghdadLIDAR/dem_1m_a1_baghdad_tile39.tif")
 batch.set_input_string(
-  1, "C:/test_images/BaghdadLIDAR/dem_1m_a2_baghdad_tile39.tif")
+    1, "C:/test_images/BaghdadLIDAR/dem_1m_a2_baghdad_tile39.tif")
 batch.set_input_from_db(2, world)
 batch.run_process()
 (cam_id, cam_type) = batch.commit_output(0)
@@ -99,7 +99,7 @@ for i in range(0, len(image_fnames), 1):
     batch.init_process("vilSaveImageViewProcess")
     batch.set_input_from_db(0, cropped_image)
     batch.set_input_string(
-      1, "output_cropped_image_" + str_pad + str(i) + ".jpg")
+        1, "output_cropped_image_" + str_pad + str(i) + ".jpg")
     batch.run_process()
 
     batch.init_process("bvxmDetectEdgesProcess")
@@ -112,7 +112,7 @@ for i in range(0, len(image_fnames), 1):
     batch.init_process("vilSaveImageViewProcess")
     batch.set_input_from_db(0, cropped_edge_image)
     batch.set_input_string(
-      1, "output_cropped_edge_image_" + str_pad + str(i) + ".jpg")
+        1, "output_cropped_edge_image_" + str_pad + str(i) + ".jpg")
     batch.run_process()
 
     if i < num_train:
@@ -137,12 +137,12 @@ for i in range(0, len(image_fnames), 1):
       (expected_edge_image_id,
        expected_edge_image_type) = batch.commit_output(1)
       expected_edge_image = dbvalue(
-        expected_edge_image_id, expected_edge_image_type)
+          expected_edge_image_id, expected_edge_image_type)
 
       batch.init_process("vilSaveImageViewProcess")
       batch.set_input_from_db(0, expected_edge_image)
       batch.set_input_string(
-        1, "output_expected_edge_image_after_" + str_pad + str(i) + ".jpg")
+          1, "output_expected_edge_image_after_" + str_pad + str(i) + ".jpg")
       batch.run_process()
 
       map_type = "10bins_1d_radial"
@@ -160,7 +160,7 @@ for i in range(0, len(image_fnames), 1):
       # only to get (ni,nj)
       batch.init_process("vilLoadImageViewProcess")
       batch.set_input_string(
-        0, "output_cropped_image_" + str_pad + str(i) + ".jpg")
+          0, "output_cropped_image_" + str_pad + str(i) + ".jpg")
       batch.run_process()
       (ni_id, type) = batch.commit_output(1)
       (nj_id, type) = batch.commit_output(2)
@@ -199,7 +199,7 @@ for i in range(0, len(image_fnames), 1):
       batch.init_process("vilSaveImageViewProcess")
       batch.set_input_from_db(0, normalized_img)
       batch.set_input_string(
-        1, "./normalized/normalized" + str(i) + ".png")
+          1, "./normalized/normalized" + str(i) + ".png")
       batch.run_process()
 
       print("Updating World")

@@ -56,7 +56,7 @@ for i in range(0, len(image_fnames), 1):
     batch.run_process()
     (cropped_edge_image_id, cropped_edge_image_type) = batch.commit_output(0)
     cropped_edge_image = dbvalue(
-      cropped_edge_image_id, cropped_edge_image_type)
+        cropped_edge_image_id, cropped_edge_image_type)
 
     batch.init_process("bvxmRpcRegistrationProcess")
     batch.set_input_from_db(0, world)

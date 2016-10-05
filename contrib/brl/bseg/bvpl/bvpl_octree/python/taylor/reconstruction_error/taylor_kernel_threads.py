@@ -6,6 +6,7 @@ import brl_init
 import bvpl_octree_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 class taylor_kernel_job():
 
   def __init__(self, scene, kernel_path, block_i, block_j, block_k, output_path):

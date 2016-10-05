@@ -86,7 +86,7 @@ def interpolate_normals(scene, cache, device, filters):
   if cache.type == "boxm2_opencl_cache_sptr":
     print("Interpolating Normal")
     batch.init_process(
-      "boxm2_ocl_aggregate_normal_from_filter_vector_process")
+        "boxm2_ocl_aggregate_normal_from_filter_vector_process")
     batch.set_input_from_db(0, device)
     batch.set_input_from_db(1, scene)
     batch.set_input_from_db(2, cache)
@@ -174,7 +174,7 @@ def filter_scene_data(scene, cache, device, filters, filter_idx):
 def aggregate_normal_from_filter_vector(scene, cache, device, filter_vector):
   """ compute normals based on response of filter vector """
   batch.init_process(
-    "boxm2_ocl_aggregate_normal_from_filter_vector_process")
+      "boxm2_ocl_aggregate_normal_from_filter_vector_process")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
   batch.set_input_from_db(2, cache)

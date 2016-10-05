@@ -26,9 +26,9 @@ print("Creating Lidar")
 batch.init_process("bvxmLidarInitProcess")
 batch.set_params_process("lidar_params.xml")
 batch.set_input_string(
-  0, "E:/LIDAR/BaghdadLIDAR/dem_1m_a1_baghdad_tile39.tif")
+    0, "E:/LIDAR/BaghdadLIDAR/dem_1m_a1_baghdad_tile39.tif")
 batch.set_input_string(
-  1, "E:/LIDAR/BaghdadLIDAR/dem_1m_a2_baghdad_tile39.tif")
+    1, "E:/LIDAR/BaghdadLIDAR/dem_1m_a2_baghdad_tile39.tif")
 batch.set_input_from_db(2, voxel_world_id)
 batch.run_process()
 cam_id = batch.commit_output(0)
@@ -110,7 +110,7 @@ for i in range(1, len(image_fnames), 1):
       batch.set_input_bool(3, 1)
     batch.set_input_from_db(4, curr_scale_id)
     batch.set_params_process(
-      python_path + "rpc_registration_parameters.xml")
+        python_path + "rpc_registration_parameters.xml")
     batch.run_process()
     cam_id = batch.commit_output(0)
     voxel_image_id = batch.commit_output(1)
@@ -157,7 +157,7 @@ for i in range(1, len(image_fnames), 1):
     batch.init_process("SaveImageViewProcess")
     batch.set_input_from_db(0, normalized_img_id)
     batch.set_input_string(
-      1, "./normalized/normalized" + str(i) + ".png")
+        1, "./normalized/normalized" + str(i) + ".png")
     batch.run_process()
 
     curr_image_id = normalized_img_id

@@ -8,7 +8,9 @@ import brl_init
 import boxm_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 class id_pair:
+
   def __init__(self, first, second):
     self.first = first
     self.second = second
@@ -75,7 +77,7 @@ for i in range(0, img_cnt, 1):
   if keypoints_available:
     batch.init_process("baplLoadKeypointsProcess")
     batch.set_input_string(
-      0, output_path + out_key_name % (i * every_nth + 1))
+        0, output_path + out_key_name % (i * every_nth + 1))
     batch.run_process()
     (id, type) = batch.commit_output(0)
     out_set = dbvalue(id, type)
@@ -90,7 +92,7 @@ for i in range(0, img_cnt, 1):
     batch.init_process("baplExtractKeypointsProcess")
     batch.set_input_from_db(0, image)
     batch.set_input_string(
-      1, output_path + out_key_name % (i * every_nth + 1))
+        1, output_path + out_key_name % (i * every_nth + 1))
     batch.run_process()
     (id, type) = batch.commit_output(0)
     out_image = dbvalue(id, type)
@@ -180,16 +182,16 @@ for ii in range(0, len(pairs), 1):
 
   batch.init_process("vilSaveImageViewProcess")
   batch.set_input_from_db(0, out_img1)
-  batch.set_input_string(1, 
-      output_path + out_match_img_name % ((i * every_nth + 1), 
-                                          (j * every_nth + 1)))
+  batch.set_input_string(1,
+                         output_path + out_match_img_name % ((i * every_nth + 1),
+                                                             (j * every_nth + 1)))
   batch.run_process()
 
   batch.init_process("vilSaveImageViewProcess")
   batch.set_input_from_db(0, out_img2)
-  batch.set_input_string(1, 
-      output_path + out_match_img_name % ((j * every_nth + 1), 
-                                          (i * every_nth + 1)))
+  batch.set_input_string(1,
+                         output_path + out_match_img_name % ((j * every_nth + 1),
+                                                             (i * every_nth + 1)))
   batch.run_process()
 
   batch.remove_data(out_img1.id)
@@ -215,16 +217,16 @@ for ii in range(0, len(pairs), 1):
 
   batch.init_process("vilSaveImageViewProcess")
   batch.set_input_from_db(0, out_img1)
-  batch.set_input_string(1, 
-      output_path + out_match_img_refined_name % (i * every_nth + 1, 
-                                                  j * every_nth + 1))
+  batch.set_input_string(1,
+                         output_path + out_match_img_refined_name % (i * every_nth + 1,
+                                                                     j * every_nth + 1))
   batch.run_process()
 
   batch.init_process("vilSaveImageViewProcess")
   batch.set_input_from_db(0, out_img2)
-  batch.set_input_string(1, 
-      output_path + out_match_img_refined_name % (j * every_nth + 1, 
-                                                  i * every_nth + 1))
+  batch.set_input_string(1,
+                         output_path + out_match_img_refined_name % (j * every_nth + 1,
+                                                                     i * every_nth + 1))
   batch.run_process()
 
   # add this match set to the connectivity graph

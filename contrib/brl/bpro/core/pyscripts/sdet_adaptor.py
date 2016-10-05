@@ -1,4 +1,4 @@
-# import the batch module and dbvalue from init 
+# import the batch module and dbvalue from init
 # set the global variable, batch, on init before importing this file
 import brl_init
 dbvalue = brl_init.DummyBatch()
@@ -10,6 +10,7 @@ batch = brl_init.DummyBatch()
 #############################################################################
 
 import math
+
 
 def create_classifier(lambda0, lambda1, n_scales, scale_interval, angle_interval, laplace_radius, gauss_radius, k, n_samples):
   batch.init_process("sdetCreateTextureClassifierProcess")
@@ -123,7 +124,7 @@ def dump_binary_data_as_txt(poly_file, output_file):
   batch.run_process()
 
 
-def test_classifier(tclsf, block_size, category_id_file = "", category_name = ""):
+def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
   batch.init_process("sdetTextureClassifierProcess2")
   batch.set_input_from_db(0, tclsf)
   batch.set_input_unsigned(1, block_size)
@@ -143,7 +144,7 @@ def test_classifier(tclsf, block_size, category_id_file = "", category_name = ""
     return None, None, None, None
 
 
-def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, ni, nj, block_size, percent_cat_name, category_id_file="", scale_factor=1.0/2048.0):
+def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, ni, nj, block_size, percent_cat_name, category_id_file="", scale_factor=1.0 / 2048.0):
   batch.init_process("sdetTextureClassifySatelliteCloudsProcess")
   batch.set_input_from_db(0, tclsf)
   batch.set_input_string(1, dictionary_name)

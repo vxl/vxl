@@ -18,6 +18,7 @@ import brl_init
 import bvpl_octree_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 class pca_error_job():
 
   def __init__(self, pca_scenes, dim, fraction, block_i, block_j, block_k):
@@ -115,17 +116,17 @@ if __name__ == "__main__":
   parser.add_option('--model_dir', action="store", dest="model_dir")
   parser.add_option('--pca_dir', action="store", dest="pca_dir")
   parser.add_option('--num_cores', action="store",
-            dest="num_cores", type="int", default=4)
+                    dest="num_cores", type="int", default=4)
   parser.add_option('--fraction', action="store",
-            dest="fraction", type="float", default=0.0)
+                    dest="fraction", type="float", default=0.0)
   parser.add_option('--nblocks_x', action="store",
-            dest="nblocks_x", type="int")
+                    dest="nblocks_x", type="int")
   parser.add_option('--nblocks_y', action="store",
-            dest="nblocks_y", type="int")
+                    dest="nblocks_y", type="int")
   parser.add_option('--nblocks_z', action="store",
-            dest="nblocks_z", type="int")
+                    dest="nblocks_z", type="int")
   parser.add_option('--dimension', action="store",
-            dest="dimension", type="int")
+                    dest="dimension", type="int")
 
   options, args = parser.parse_args()
 
@@ -160,7 +161,7 @@ if __name__ == "__main__":
   batch.set_input_from_db(0, data_scene)
   batch.set_input_string(1, pca_dir)
   batch.set_input_unsigned(
-    2, pca_feature_dim)  # dimension pca feature
+      2, pca_feature_dim)  # dimension pca feature
   batch.run_process()
   (id, type) = batch.commit_output(0)
   pca_scenes = dbvalue(id, type)
@@ -173,7 +174,7 @@ if __name__ == "__main__":
     for block_j in range(0, nblocks_y):
       for block_k in range(0, nblocks_z):
         current_job = pca_error_job(
-          pca_scenes, dimension, fraction, block_i, block_j, block_k)
+            pca_scenes, dimension, fraction, block_i, block_j, block_k)
         job_list.append(current_job)
 
   # run

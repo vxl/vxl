@@ -10,6 +10,8 @@ import os
 #############################################################################
 
 # Print ocl info for all devices
+
+
 def ocl_info():
   #print("Init Manager");
   batch.init_process("boclInitManagerProcess")
@@ -129,8 +131,8 @@ def describe_scene(scene):
   voxel_size = batch.get_output_double(id)
   batch.remove_data(id)
   description = {'voxelLength': voxel_size,
-           'dataPath': dataPath,
-           'appType': appType}
+                 'dataPath': dataPath,
+                 'appType': appType}
   return description
 
 # modifies scene appearance, use case build the model in grey scale and
@@ -396,7 +398,7 @@ def render_height_map(scene, cache, device=None):
     #(id,type) = batch.commit_output(5);
     #app_image = dbvalue(id,type);
 
-    return z_image, var_image, x_image, y_image, prob_image#, app_image;
+    return z_image, var_image, x_image, y_image, prob_image  # , app_image;
   else:
     print "ERROR: Cache type not recognized: ", cache.type
   # Generic render, returns a dbvalue expected image
@@ -573,7 +575,7 @@ def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickne
 
 def initialize_ground(scene, global_ground_z, refine_cnt=2):
   (x_ground, y_ground, z_ground) = generate_xyz_for_ground_initialization(
-    scene.scene, global_ground_z)
+      scene.scene, global_ground_z)
 
   scene.ingest_height_map(x_ground, y_ground, z_ground, False)
   for i in range(0, refine_cnt, 1):
@@ -1308,9 +1310,9 @@ def save_multi_block_scene(params):
   # load params
   scene_dir = params['scene_dir'] if 'scene_dir' in params else os.getcwd()
   app_model = params[
-    'app_model'] if 'app_model' in params else "boxm2_mog3_grey"
+      'app_model'] if 'app_model' in params else "boxm2_mog3_grey"
   obs_model = params[
-    'obs_model'] if 'obs_model' in params else "boxm2_num_obs"
+      'obs_model'] if 'obs_model' in params else "boxm2_num_obs"
   orig_x = params['orig_x'] if 'orig_x' in params else 0.0
   orig_y = params['orig_y'] if 'orig_y' in params else 0.0
   orig_z = params['orig_z'] if 'orig_z' in params else 0.0
@@ -1323,14 +1325,14 @@ def save_multi_block_scene(params):
 
   # max mb per block, init level, and init prob
   max_data_mb = params[
-    'max_block_mb'] if 'max_block_mb' in params else 1000.0
+      'max_block_mb'] if 'max_block_mb' in params else 1000.0
   p_init = params['p_init'] if 'p_init' in params else .01
   max_level = params['max_tree_level'] if 'max_tree_level' in params else 4
   init_level = params[
-    'init_tree_level'] if 'init_tree_level' in params else 1
+      'init_tree_level'] if 'init_tree_level' in params else 1
   vox_length = params['vox_length'] if 'vox_length' in params else 1.0
   sb_length = params[
-    'sub_block_length'] if 'sub_block_length' in params else .125
+      'sub_block_length'] if 'sub_block_length' in params else .125
   fname = params['filename'] if 'filename' in params else "scene"
 
   # reconcile sub block length vs voxel length
@@ -1925,11 +1927,11 @@ def compute_derivatives_process(scene, cache, prob_threshold, normal_threshold, 
   batch.set_input_float(2, prob_threshold)  # prob threshold
   batch.set_input_float(3, normal_threshold)  # normal t
   batch.set_input_string(
-    4, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Ix.txt")
+      4, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Ix.txt")
   batch.set_input_string(
-    5, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Iy.txt")
+      5, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Iy.txt")
   batch.set_input_string(
-    6, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Iz.txt")
+      6, "C:/projects/vxl/vxl/contrib/brl/bseg/bvpl/doc/taylor2_5_5_5/Iz.txt")
   batch.set_input_int(7, i)
   batch.set_input_int(8, j)
   batch.set_input_int(9, k)
@@ -2005,8 +2007,8 @@ def compute_los_visibility(scene, cache, x0, y0, z0, x1, y1, z1, t=5):
 
 
 def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir,
-              lvcs_origin_lat=0.0, lvcs_origin_lon=0.0,
-              lvcs_origin_elev=0.0):
+                            lvcs_origin_lat=0.0, lvcs_origin_lon=0.0,
+                            lvcs_origin_elev=0.0):
 
   batch.init_process("boxm2SceneFromBoxCamsProcess")
   batch.set_input_string(0, camsdir)
@@ -2171,7 +2173,7 @@ def location_rank_in_pin_point(lon, lat, pin_point_kml):
 
 
 def cast_3d_point(scene, cache, perspective_camera, generic_camera,
-          depth_image, variance_image, appearance_model_name):
+                  depth_image, variance_image, appearance_model_name):
   batch.init_process("boxm2CppCast3dPointHypothesisProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, cache)
@@ -2184,7 +2186,7 @@ def cast_3d_point(scene, cache, perspective_camera, generic_camera,
 
 
 def cast_3d_point_pass2(scene, cache, generic_camera, appearance_model_name,
-            cov_c_path, cov_v_path):
+                        cov_c_path, cov_v_path):
   batch.init_process("boxm2CppCast3dPointHypothesisProcess2")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, cache)
@@ -2232,7 +2234,7 @@ def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
 
 
 def boxm2_compute_pre_post(scene, device, cache, cam, img, view_identifier, tnear=100000.0, tfar=100000.0):
-  #If no device is passed in, do cpu update
+  # If no device is passed in, do cpu update
   print("boxm2_batch GPU update")
   batch.init_process("boxm2OclComputePrePostProcess")
   batch.set_input_from_db(0, device)
@@ -2246,65 +2248,71 @@ def boxm2_compute_pre_post(scene, device, cache, cam, img, view_identifier, tnea
   return batch.run_process()
 
 
-def update_image_factor(scene, device, cache,sum,view_identifier):
-  #If no device is passed in, do cpu update
-  print("boxm2_batch GPU update");
-  batch.init_process("boxm2OclUpdateImageFactorProcess");
-  batch.set_input_from_db(0,device);
-  batch.set_input_from_db(1,scene);
-  batch.set_input_from_db(2,cache);
-  batch.set_input_bool(3,sum);
-  batch.set_input_string(4,view_identifier);
-  return batch.run_process();
+def update_image_factor(scene, device, cache, sum, view_identifier):
+  # If no device is passed in, do cpu update
+  print("boxm2_batch GPU update")
+  batch.init_process("boxm2OclUpdateImageFactorProcess")
+  batch.set_input_from_db(0, device)
+  batch.set_input_from_db(1, scene)
+  batch.set_input_from_db(2, cache)
+  batch.set_input_bool(3, sum)
+  batch.set_input_string(4, view_identifier)
+  return batch.run_process()
 
-def boxm2_fuse_factors(scene, device, cache, view_idents=[], weights= []) :
-  #If no device is passed in, do cpu update
-  print("boxm2_batch GPU update");
-  batch.init_process("boxm2OclFuseFactorsProcess");
-  batch.set_input_from_db(0,device);
-  batch.set_input_from_db(1,scene);
-  batch.set_input_from_db(2,cache);
-  batch.set_input_string_array(3,view_idents);
-  batch.set_input_float_array(4,weights);
-  return batch.run_process();
-def compute_hmap_factor(scene, device, cache,zimg,zvar,ximg,yimg,sradius):
-  #If no device is passed in, do cpu update
-  print("boxm2_batch GPU compute_hmap_factor");
-  batch.init_process("boxm2OclComputeHeightFactorProcess");
-  batch.set_input_from_db(0,device);
-  batch.set_input_from_db(1,scene);
-  batch.set_input_from_db(2,cache);
-  batch.set_input_from_db(3,zimg);
-  batch.set_input_from_db(4,zvar);
-  batch.set_input_from_db(5,ximg);
-  batch.set_input_from_db(6,yimg);
-  batch.set_input_int(7,sradius);
-  return batch.run_process();
 
-def update_hmap_factor(scene, device, cache,add):
-  #If no device is passed in, do cpu update
-  print("boxm2_batch GPU update");
-  batch.init_process("boxm2OclUpdateHeightMapFactorProcess");
-  batch.set_input_from_db(0,device);
-  batch.set_input_from_db(1,scene);
-  batch.set_input_from_db(2,cache);
-  batch.set_input_bool(3,add);
-  return batch.run_process();
+def boxm2_fuse_factors(scene, device, cache, view_idents=[], weights=[]):
+  # If no device is passed in, do cpu update
+  print("boxm2_batch GPU update")
+  batch.init_process("boxm2OclFuseFactorsProcess")
+  batch.set_input_from_db(0, device)
+  batch.set_input_from_db(1, scene)
+  batch.set_input_from_db(2, cache)
+  batch.set_input_string_array(3, view_idents)
+  batch.set_input_float_array(4, weights)
+  return batch.run_process()
+
+
+def compute_hmap_factor(scene, device, cache, zimg, zvar, ximg, yimg, sradius):
+  # If no device is passed in, do cpu update
+  print("boxm2_batch GPU compute_hmap_factor")
+  batch.init_process("boxm2OclComputeHeightFactorProcess")
+  batch.set_input_from_db(0, device)
+  batch.set_input_from_db(1, scene)
+  batch.set_input_from_db(2, cache)
+  batch.set_input_from_db(3, zimg)
+  batch.set_input_from_db(4, zvar)
+  batch.set_input_from_db(5, ximg)
+  batch.set_input_from_db(6, yimg)
+  batch.set_input_int(7, sradius)
+  return batch.run_process()
+
+
+def update_hmap_factor(scene, device, cache, add):
+  # If no device is passed in, do cpu update
+  print("boxm2_batch GPU update")
+  batch.init_process("boxm2OclUpdateHeightMapFactorProcess")
+  batch.set_input_from_db(0, device)
+  batch.set_input_from_db(1, scene)
+  batch.set_input_from_db(2, cache)
+  batch.set_input_bool(3, add)
+  return batch.run_process()
+
 
 def boxm2_init_uniform_prob(scene, device, cache):
-  #If no device is passed in, do cpu update
-  print("boxm2_batch GPU update");
-  batch.init_process("boxm2OclInitProbUniformProcess");
-  batch.set_input_from_db(0,device);
-  batch.set_input_from_db(1,scene);
-  batch.set_input_from_db(2,cache);
-  return batch.run_process();
+  # If no device is passed in, do cpu update
+  print("boxm2_batch GPU update")
+  batch.init_process("boxm2OclInitProbUniformProcess")
+  batch.set_input_from_db(0, device)
+  batch.set_input_from_db(1, scene)
+  batch.set_input_from_db(2, cache)
+  return batch.run_process()
+
 
 def boxm2_remove_low_nobs(scene, device, cache, nobs_thresh_multiplier):
-  print("boxm2_batch GPU process");
-  batch.init_process("boxm2OclRemoveLowNobsProcess");
-  batch.set_input_from_db(0,device);
-  batch.set_input_from_db(1,scene);
-  batch.set_input_from_db(2,cache);
-  batch.set_input_float(3,nobs_thresh_multiplier);
-  return batch.run_process();
+  print("boxm2_batch GPU process")
+  batch.init_process("boxm2OclRemoveLowNobsProcess")
+  batch.set_input_from_db(0, device)
+  batch.set_input_from_db(1, scene)
+  batch.set_input_from_db(2, cache)
+  batch.set_input_float(3, nobs_thresh_multiplier)
+  return batch.run_process()

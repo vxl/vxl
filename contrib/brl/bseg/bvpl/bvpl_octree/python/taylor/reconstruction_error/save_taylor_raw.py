@@ -8,6 +8,7 @@ import brl_init
 import bvpl_octree_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 class save_scene_job():
 
   def __init__(self, input_scene_path, output_scene_path):
@@ -58,7 +59,7 @@ class save_scene_worker(multiprocessing.Process):
       batch.init_process("boxmSaveSceneRawProcess")
       batch.set_input_from_db(0, scene)
       batch.set_input_string(
-        1, job.output_scene_path + "_float")
+          1, job.output_scene_path + "_float")
       batch.set_input_unsigned(2, 0)
       batch.set_input_unsigned(3, 1)
       batch.run_process()
@@ -93,11 +94,11 @@ if __name__ == "__main__":
   batch.register_datatypes()
 
   parser = optparse.OptionParser(
-    description='Save taylor responses to raw file')
+      description='Save taylor responses to raw file')
 
   parser.add_option('--taylor_dir', action="store", dest="taylor_dir")
   parser.add_option('--num_cores', action="store",
-            dest="num_cores", type="int", default=4)
+                    dest="num_cores", type="int", default=4)
 
   options, args = parser.parse_args()
 

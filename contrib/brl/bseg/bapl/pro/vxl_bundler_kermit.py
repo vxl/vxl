@@ -7,6 +7,7 @@ import brl_init
 import boxm_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
+
 class id_pair:
 
   def __init__(self, first, second):

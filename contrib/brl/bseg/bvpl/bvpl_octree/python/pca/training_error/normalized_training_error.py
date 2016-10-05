@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
   parser.add_option('--pca_dir', action="store", dest="pca_dir")
   parser.add_option('--train_fraction', action="store",
-            dest="train_fraction", type="float", default=0.0)
+                    dest="train_fraction", type="float", default=0.0)
   options, args = parser.parse_args()
 
   pca_dir = options.pca_dir
