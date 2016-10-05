@@ -139,3 +139,19 @@ class dbvalue(object):
 
   def __deepcopy__(self, memo):
     return self.__copy__()
+
+def remove_data(id):
+  if set_smart_register.value:
+    print 'Warning: remove_data disabled when using smart_register'
+  else:
+    boxm2_batch.remove_data(id)
+
+
+def get_output_float(id):
+  fval = boxm2_batch.get_output_float(id)
+  return fval
+
+
+def get_output_unsigned(id):
+  uval = boxm2_batch.get_output_unsigned(id)
+return uval
