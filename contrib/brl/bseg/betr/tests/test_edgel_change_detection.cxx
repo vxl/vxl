@@ -337,8 +337,8 @@ void test_edgel_change_detection()
  betr_event_trigger etr("hamadan", lvcs);
  etr.set_verbose(true);
  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
- etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
-//etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
+ // etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
+etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
 
  etr.set_ref_camera(ref_camera);
  etr.set_evt_camera(camera);

@@ -314,6 +314,7 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
     std::cout << "No edgels for " << iname << ':' << region_name << "\n";
     return VXL_NULLPTR;
   }
+
   double grad_scale = 255.0/params_.gradient_range_;
   for(std::vector< vdgl_digital_curve_sptr >::iterator vit = edges.begin();
       vit != edges.end(); ++vit){
