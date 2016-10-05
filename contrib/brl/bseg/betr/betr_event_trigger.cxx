@@ -142,9 +142,8 @@ void betr_event_trigger::add_geo_object(std::string const& obj_name, betr_geo_ob
   obj_lvcs.get_origin(obj_lat, obj_lon, obj_elev);
   double trig_lat = 0.0, trig_lon = 0.0, trig_elev =0.0;
   lvcs_.get_origin(trig_lat, trig_lon, trig_elev);
-  // translation to shift obj coordinates to trigger coordinates
-  double tx = (obj_lat - trig_lat)*Rearth;
-  double ty = (obj_lon - trig_lon)*Rearth;
+  double tx, ty;
+  lvcs_.angle_diff_to_cartesian_vector(trig_lon, trig_lat, obj_lon, obj_lat, tx, ty);
   double tz = obj_elev - trig_elev;
   vgl_vector_3d<double> transl(tx, ty, tz);
   if(is_ref_obj)
