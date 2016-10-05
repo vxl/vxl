@@ -34,6 +34,8 @@ class betr_algorithm : public vbl_ref_count
   //: procedural  methods
   virtual bool process(){return false;}
   virtual double prob_change() const {return 0.0;}
+  //: offset is with respect to the event image coordinate system
+  virtual vil_image_resource_sptr change_image(unsigned& i_offset, unsigned& j_offset) const {return VXL_NULLPTR;}
   virtual void clear(){
     ref_imgr_ = VXL_NULLPTR;
     evt_imgr_ = VXL_NULLPTR;

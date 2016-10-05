@@ -228,7 +228,7 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
       double x = ed.get_x(), y = ed.get_y();
       x/= upsample_factor_; y/=upsample_factor_;
       x += x0, y += y0;
-      ed.set_x(x); ed.set_y(y);
+     // ed.set_x(x); ed.set_y(y);
       if(!vpoly.contains(x, y))
         continue;
       double grad_mag = ed.get_grad();
@@ -307,4 +307,59 @@ bool betr_edgel_factory::save_edgels_in_poly(std::string const& identifier, std:
 }
   return true;
 
+}
+vil_image_resource_sptr betr_edgel_factory::
+edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsigned& j_offset){
+  brip_roi_sptr roi = rois_[iname];
+  if(!roi){
+    std::cout << "roi for " << iname << " not found in map \n";
+    return VXL_NULLPTR;
+  }
+  unsigned region_id = regions_[iname][region_name];
+  unsigned ni = roi->csize(region_id);
+  unsigned nj = roi->rsize(region_id);
+  i_offset = static_cast<unsigned>(roi->cmin(region_id));
+  j_offset = static_cast<unsigned>(roi->rmin(region_id));
+  vil_image_view<vxl_byte> view(ni, nj);
+  view.fill(vxl_byte(0));
+  vsol_polygon_2d_sptr poly = polys_[iname][region_id];
+  if(!poly){
+    std::cout << "Null polygon in edgel_image for " << iname << ':' << region_name << "\n";
+    return VXL_NULLPTR;
+  }
+  vgl_polygon<double>  vpoly = bsol_algs::vgl_from_poly(poly);
+  std::vector< vdgl_digital_curve_sptr > edges = edgels_[iname][region_name];
+  if(edges.size() == 0){
+    std::cout << "No edgels for " << iname << ':' << region_name << "\n";
+    return VXL_NULLPTR;
+  }
+  double grad_scale = 255.0/gradient_range_;
+  for(std::vector< vdgl_digital_curve_sptr >::iterator vit = edges.begin();
+      vit != edges.end(); ++vit){
+    vdgl_edgel_chain_sptr echain = (*vit)->get_interpolator()->get_edgel_chain();
+    if(!echain){
+      std::cout << "Null edgel chain " << iname << ':' << region_name << "\n";
+      return VXL_NULLPTR;
+    }
+    unsigned n = echain->size();
+    unsigned bdr = 3;
+    for(unsigned k = 0; k<n; ++k){
+      vdgl_edgel& e = echain->edgel(k);
+      double x = e.get_x(), y = e.get_y();
+      x/= upsample_factor_; y/=upsample_factor_;
+      if(!vpoly.contains(x+i_offset, y+j_offset))
+        continue;
+      unsigned i = static_cast<unsigned>(x), j = static_cast<unsigned>(y);
+	  // clean away border hash due to convolving and upsampling
+      if(i < bdr || j < bdr  || i > (ni-bdr-1) || j > (nj-bdr-1))
+        continue;
+      double g = e.get_grad();
+      double v = g*grad_scale;
+      if(v>255.0)
+        v= 255;
+      view(i,j) = static_cast<vxl_byte>(v);
+    }
+  }
+  vil_image_resource_sptr ret = vil_new_image_resource_of_view(view);
+  return ret;
 }

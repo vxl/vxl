@@ -32,6 +32,7 @@ bool betr_edgel_change_detection::process(){
   const bsta_histogram<double>& h_ref_evt = ef.hist("ref_image","ref_evt_poly");
   const bsta_histogram<double>& h_evt_ref = ef.hist("evt_image","evt_ref_poly");
   const bsta_histogram<double>& h_evt_evt = ef.hist("evt_image","evt_evt_poly");
+  change_img_ = ef.edgel_image("evt_image","evt_evt_poly", i_offset_, j_offset_);
   if(verbose_){ 
     std::cout << "h_ref_ref\n";
     h_ref_ref.print();

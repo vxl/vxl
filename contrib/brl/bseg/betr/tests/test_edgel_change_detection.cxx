@@ -1,6 +1,7 @@
 // This is brl/bseg/betr/tests/test_edgel_change_detection.cxx
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -322,21 +323,29 @@ void test_edgel_change_detection()
  betr_event_trigger etr("hamadan", lvcs);
  etr.set_verbose(true);
  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
- etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
-//etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
+ // etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
+etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
 
  etr.set_ref_camera(ref_camera);
  etr.set_evt_camera(camera);
  etr.set_ref_image(ref_imgr);
  etr.set_evt_image(imgr);
  std::vector<double> pchange;
+ std::vector<vgl_point_2d<unsigned> > offsets;
+ std::vector<vil_image_resource_sptr> rescs; 
+
  std::cout <<"===>processing " << evt_name << '\n';
- etr.process("edgel_change_detection", pchange);
+ etr.process("edgel_change_detection", pchange, rescs, offsets);
  int i =0;
  for(std::vector<double>::iterator pit = pchange.begin();
-     pit != pchange.end(); ++pit, i++)
+     pit != pchange.end(); ++pit, i++){
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
-
+   std::stringstream ss;
+   ss << i;
+   std::string change_path = dir + evt_name + "change_image_" + ss.str() +".tif";
+   vil_save_image_resource(rescs[i], change_path.c_str());
+ }
+ //============== end of processing
  evt_name = "20160705_092219_0c81.tif";
  evt_img_path = dir + evt_name ;
  evt_cam_path = dir + evt_name + "_RPC.TXT";
