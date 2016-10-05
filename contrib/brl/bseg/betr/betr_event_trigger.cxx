@@ -248,6 +248,31 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change){
   return false;
 }
 bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change){
+  std::vector<vil_image_resource_sptr> rescs;
+  std::vector<vgl_point_2d<unsigned> > offsets;
+  bool good = this->process(alg_name, prob_change, rescs, offsets);
+  return good;
+}
+bool betr_event_trigger::process(std::string alg_name, double& prob_change,
+                                 vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset){
+  std::vector<double> scores;
+  std::vector<vil_image_resource_sptr> rescs;
+  std::vector<vgl_point_2d<unsigned> > offsets;
+  bool good = this->process(alg_name, scores, rescs, offsets);
+  if(good&&scores.size()>=1){
+    prob_change = scores[0];
+    change_img = rescs[0];
+    offset = offsets[0];
+    return good;
+  }
+  prob_change = -1.0;
+  return false;
+}
+
+
+bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,
+                                 std::vector<vil_image_resource_sptr>& change_images,
+                                 std::vector<vgl_point_2d<unsigned> >& offsets){
   
   betr_algorithm_sptr alg = algorithms_[alg_name];
   if(!alg){
@@ -267,7 +292,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     std::cout << "Reference Image: " << ref_path_ << std::endl;
     std::cout << "Event Image: " << evt_path_ << std::endl;
   }
-    prob_change.clear();
+  prob_change.clear();
   std::map<std::string, betr_geo_object_3d_sptr>::iterator rit = ref_trigger_objects_.begin();
   std::string ref_obj_name = rit->first;
   // project the reference object
@@ -307,10 +332,16 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
       return false;
     }
     prob_change.push_back(alg->prob_change());
+    unsigned ioff, joff;
+    vil_image_resource_sptr resc = alg->change_image(ioff, joff);
+    vgl_point_2d<unsigned> offset(ioff, joff);
+    change_images.push_back(resc);    
+    offsets.push_back(offset);
   }
   process_counter_++;
   return true;
 }
+
 std::vector<std::string> betr_event_trigger::algorithms() const{
   std::vector<std::string> ret;
   std::map<std::string, betr_algorithm_sptr>::const_iterator ait = algorithms_.begin();

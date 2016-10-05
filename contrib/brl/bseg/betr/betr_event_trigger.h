@@ -16,6 +16,7 @@
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_resource_sptr.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include "betr_geo_box_3d.h"
@@ -60,6 +61,14 @@ class betr_event_trigger : public vbl_ref_count{
   //: execute change algorithm multiple event objects
   bool process(std::string alg_name, std::vector<double>& prob_change);
 
+  //: execute change algorithm one event object and change image with offset in event image
+  bool process(std::string alg_name, double& prob_change,
+               vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset);
+
+  //: execute change algorithm multiple event objects with change images and offsets return
+  bool process(std::string alg_name, std::vector<double>& prob_change,
+               std::vector<vil_image_resource_sptr>& change_images,
+               std::vector<vgl_point_2d<unsigned> >& offsets);
   //: acessors
   std::string name() const {return name_;}
   const std::map<std::string, betr_geo_object_3d_sptr>& ref_objects() const {return ref_trigger_objects_;}
