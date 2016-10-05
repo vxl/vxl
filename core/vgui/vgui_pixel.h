@@ -27,7 +27,7 @@ template <int a, int b, int g, int r> struct vgui_pixel_abgr;
 template <int b, int g, int r, int a> struct vgui_pixel_bgra;
 struct vgui_pixel_rgbfloat;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_rgb<8,8,8>
 {
   GLubyte R;
@@ -39,7 +39,7 @@ struct vgui_pixel_rgb<8,8,8>
 };
 typedef vgui_pixel_rgb<8,8,8> vgui_pixel_rgb888;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_rgb<16,16,16>
 {
   GLushort R;
@@ -56,7 +56,7 @@ typedef vgui_pixel_rgb<16,16,16> vgui_pixel_rgb161616;
 // but only because we're using 'short' (which is 2 bytes) as the bitfield
 // type. If one uses 'char' one gets a 3-byte structure. In one uses 'int'
 // the result is a 4-byte structure. So don't change 'short'!
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_rgb<5,6,5>
 {
 #if VXL_LITTLE_ENDIAN
@@ -79,7 +79,7 @@ struct vgui_pixel_rgb<5,6,5>
 
 typedef vgui_pixel_rgb<5,6,5> vgui_pixel_rgb565;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_bgr<5,6,5>
 {
 #if VXL_LITTLE_ENDIAN
@@ -102,7 +102,7 @@ struct vgui_pixel_bgr<5,6,5>
 
 typedef vgui_pixel_bgr<5,6,5> vgui_pixel_bgr565;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_bgr<8,8,8>
 {
   GLubyte B;
@@ -114,7 +114,7 @@ struct vgui_pixel_bgr<8,8,8>
 };
 typedef vgui_pixel_bgr<8,8,8> vgui_pixel_bgr888;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_rgba<5,5,5,1>
 {
   GLushort B:5;
@@ -127,7 +127,7 @@ struct vgui_pixel_rgba<5,5,5,1>
 };
 typedef vgui_pixel_rgba<5,5,5,1> vgui_pixel_bgra5551;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_rgba<8,8,8,8>
 {
   GLubyte R;
@@ -140,7 +140,7 @@ struct vgui_pixel_rgba<8,8,8,8>
 };
 typedef vgui_pixel_rgba<8,8,8,8> vgui_pixel_rgba8888;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_abgr<8,8,8,8>
 {
   GLubyte A;
@@ -153,7 +153,7 @@ struct vgui_pixel_abgr<8,8,8,8>
 };
 typedef vgui_pixel_abgr<8,8,8,8> vgui_pixel_abgr8888;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vgui_pixel_bgra<8,8,8,8>
 {
   GLubyte B;

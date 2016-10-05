@@ -163,6 +163,6 @@ template <class T>
 std::ostream& operator<< (std::ostream&, vil_smart_ptr<T> const&);
 
 #define VIL_SMART_PTR_INSTANTIATE(T) \
-extern "please include vil/vil_smart_ptr.txx instead"
+extern "please include vil/vil_smart_ptr.hxx instead"
 
 #endif // vil_smart_ptr_h_

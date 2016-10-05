@@ -170,6 +170,6 @@ std::istream &operator>>(std::istream &is, l &);
 
 #undef l
 
-#define VGL_LINE_3D_2_POINTS_INSTANTIATE(T) extern "please include vgl/vgl_line_3d_2_points.txx first"
+#define VGL_LINE_3D_2_POINTS_INSTANTIATE(T) extern "please include vgl/vgl_line_3d_2_points.hxx first"
 
 #endif // vgl_line_3d_2_points_h_

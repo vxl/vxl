@@ -18,7 +18,7 @@ void vil_math_median_unimplemented()
   std::abort();
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsigned p)
 {
   unsigned ni = im.ni();

@@ -6,7 +6,7 @@
 #include <vcl_config_compiler.h>
 
 //: Save to Drishti raw file
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid,  std::string filename)
 {
     std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);

@@ -309,7 +309,7 @@ ANU:
   general, implicit templates should be turned on system wide.
   * Should it be just for STL or for all vxl? It should be for all
     vxl, since a half-measure would probably create more confusion.
-  * Implicit templates => including .txx. How does this affect the
+  * Implicit templates => including .hxx. How does this affect the
     compile time?
   * Decision delayed pending further (email) discussion.
 

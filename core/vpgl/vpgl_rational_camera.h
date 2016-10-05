@@ -262,7 +262,7 @@ vpgl_rational_camera<T>* read_rational_camera(std::istream& istr);
 template <class T>
 vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path);
 
-#define VPGL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_rational_camera.txx first"
+#define VPGL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_rational_camera.hxx first"
 
 
 #endif // vpgl_rational_camera_h_

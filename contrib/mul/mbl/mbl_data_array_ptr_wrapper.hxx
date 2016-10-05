@@ -123,7 +123,7 @@ bool mbl_data_array_ptr_wrapper<T>::is_class(std::string const& s) const
 
 
 #define MBL_DATA_ARRAY_PTR_WRAPPER_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string mbl_data_array_ptr_wrapper<T >::is_a() const \
+template <> std::string mbl_data_array_ptr_wrapper<T >::is_a() const \
 { return std::string("mbl_data_array_ptr_wrapper<" #T ">"); } \
 template class mbl_data_array_ptr_wrapper< T >
 

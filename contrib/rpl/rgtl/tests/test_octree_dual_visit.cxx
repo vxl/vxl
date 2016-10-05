@@ -7,7 +7,7 @@
 
 #include <testlib/testlib_test.h>
 #include <rgtl/rgtl_octree_dual_visit.hxx>
-#include <rgtl/rgtl_octree_data_fixed.txx>
+#include <rgtl/rgtl_octree_data_fixed.hxx>
 
 template <class Tree2D>
 class dual_counter

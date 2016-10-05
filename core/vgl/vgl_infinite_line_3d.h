@@ -108,6 +108,6 @@ std::ostream&  operator<<(std::ostream& s, const vgl_infinite_line_3d<Type>& p);
 // \relatesalso vgl_infinite_line_3d
 template <class Type>
 std::istream&  operator>>(std::istream& is,  vgl_infinite_line_3d<Type>& p);
-#define VGL_INFINITE_LINE_3D_INSTANTIATE(T) extern "please include vgl/vgl_infinite_line_3d.txx first"
+#define VGL_INFINITE_LINE_3D_INSTANTIATE(T) extern "please include vgl/vgl_infinite_line_3d.hxx first"
 
 #endif // vgl_infinite_line_3d_h_

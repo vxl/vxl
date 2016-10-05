@@ -253,7 +253,7 @@ void mbl_file_data_collector<T>::b_read(vsl_b_istream& /*bfs*/)
 
 
 #define MBL_FILE_DATA_COLLECTOR_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string mbl_file_data_collector<T >::is_a() const \
+template <> std::string mbl_file_data_collector<T >::is_a() const \
 { return std::string("mbl_file_data_collector<" #T ">"); } \
 template class mbl_file_data_collector<T >
 

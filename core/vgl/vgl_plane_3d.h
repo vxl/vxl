@@ -160,6 +160,6 @@ std::ostream& operator<<(std::ostream& s, const vgl_plane_3d<T>& p);
 template <class T>
 std::istream& operator>>(std::istream& is, vgl_plane_3d<T>& p);
 
-#define VGL_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_plane_3d.txx first"
+#define VGL_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_plane_3d.hxx first"
 
 #endif // vgl_plane_3d_h

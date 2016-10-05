@@ -1,4 +1,4 @@
-#include <rgtl/rgtl_sqt_objects.txx>
+#include <rgtl/rgtl_sqt_objects.hxx>
 RGTL_SQT_OBJECTS_INSTANTIATE(3);
 RGTL_SQT_OBJECTS_FACE_INSTANTIATE(3, 0);
 RGTL_SQT_OBJECTS_FACE_INSTANTIATE(3, 1);

@@ -11,7 +11,7 @@
 
 //====================================================================================
 //: Write vector to binary stream
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_write(vsl_b_ostream& s, const std::vector<bool>& v)
 {
   const short version_no = 1;
@@ -24,7 +24,7 @@ void vsl_b_write(vsl_b_ostream& s, const std::vector<bool>& v)
 
 //====================================================================================
 //: Read vector from binary stream
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_read(vsl_b_istream& is, std::vector<bool>& v)
 {
   if (!is) return;
@@ -54,7 +54,7 @@ void vsl_b_read(vsl_b_istream& is, std::vector<bool>& v)
 
 //====================================================================================
 //: Output a human readable summary to the stream
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_print_summary(std::ostream& os, const std::vector<bool> &v)
 {
   os << "Vector length: " << v.size() << '\n';
