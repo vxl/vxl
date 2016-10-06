@@ -127,9 +127,6 @@ template <class T, uint N> class section : public section_<T>
   ~section(){ if (allocated) delete[] buffer; }
 
  private:
-  // Moved this inline into class so VC50 can compile it.  Otherwise
-  // it gets confused (poor darling) over the array with size N in the
-  // argument.  Sigh.
   void init(const uint sz[N], T* buf) {
     allocated = (buf == 0);
     offset[0] = 1;

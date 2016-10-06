@@ -75,6 +75,6 @@ class vgl_fit_conics_2d
               vgl_conic<T> const& conic);
 };
 
-#define VGL_FIT_CONICS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_conics_2d.txx first"
+#define VGL_FIT_CONICS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_conics_2d.hxx first"
 
 #endif // vgl_fit_conics_2d_h_

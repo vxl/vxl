@@ -5,7 +5,7 @@
 //:
 // \file
 // Note that even though this file defines instances of a templated
-// class, it is a .cxx file and not a .txx file because it does not
+// class, it is a .cxx file and not a .hxx file because it does not
 // supply a class definition for use by clients.
 //
 // If you need to define your own vul_arg<T>, you should #include vul_arg.h
@@ -530,7 +530,7 @@ static int list_parse(std::list<int> &out, char ** argv)
 // In vi: "/^\/\/: unsigned"
 
 #if 1
-# define VDS VCL_DEFINE_SPECIALIZATION
+# define VDS template <>
 #else
 # define VDS /* template <> */
 #endif

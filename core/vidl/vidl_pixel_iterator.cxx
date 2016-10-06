@@ -20,7 +20,7 @@ struct populate_has_iterator
 };
 
 //: The base case: unknown pixel type
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct populate_has_iterator<VIDL_PIXEL_FORMAT_UNKNOWN>
 {
   static inline void apply(bool* /*element*/)
@@ -67,7 +67,7 @@ struct make_pixel_iterator
 };
 
 //: The base case: unknown pixel type
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct make_pixel_iterator<VIDL_PIXEL_FORMAT_UNKNOWN>
 {
   static inline vidl_pixel_iterator* apply(vidl_frame const& /*frame*/)

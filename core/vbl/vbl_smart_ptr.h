@@ -210,6 +210,6 @@ template <class T>
 std::ostream& operator<< (std::ostream&, vbl_smart_ptr<T> const&);
 
 #define VBL_SMART_PTR_INSTANTIATE(T) \
-extern "please include vbl/vbl_smart_ptr.txx instead"
+extern "please include vbl/vbl_smart_ptr.hxx instead"
 
 #endif // vbl_smart_ptr_h_

@@ -20,6 +20,9 @@
 // For testing specific file formats
 #include <vil/vil_stream_fstream.h>
 
+// For indication whether BigTIFF is available (libtiff version >= 4.0)
+#include <tiff.h>
+
 // \author Amitha Perera
 // \date Apr 2002
 //
@@ -28,7 +31,8 @@
 //
 // \verbatim
 //  Modifications
-//   14 Nov 2011 - Gehua Yang     - added tests for loading 32bpp ARGB image
+//   14 Nov  2011 - Gehua Yang     - added tests for loading 32bpp ARGB image.
+//    7 July 2016 - Gehua Yang     - added tests for loading BigTIFF images.
 // \endverbatim
 
 static std::string image_base;
@@ -204,7 +208,7 @@ read_value( std::istream& fin, TruePixelType& pix )
 
 // Specialization to make char read as small integers and not characters
 // See comments on template for return value.
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool
 read_value( std::istream& fin, char& pix )
 {
@@ -218,7 +222,7 @@ read_value( std::istream& fin, char& pix )
 
 // Specialization to make char read as small integers and not characters
 // See comments on template for return value.
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool
 read_value( std::istream& fin, unsigned char& pix )
 {
@@ -232,7 +236,7 @@ read_value( std::istream& fin, unsigned char& pix )
 
 // Specialization to make char read as small integers and not characters
 // See comments on template for return value.
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool
 read_value( std::istream& fin, signed char& pix )
 {
@@ -245,7 +249,7 @@ read_value( std::istream& fin, signed char& pix )
 
 // Specialization to make bool read as 0/1 integers
 // See comments on template for return value.
-VCL_DEFINE_SPECIALIZATION
+template <>
 bool
 read_value( std::istream& fin, bool& pix )
 {
@@ -548,6 +552,17 @@ test_file_format_read( int argc, char* argv[] )
   TEST("8-bit RGBA without RowsPerStrip", CheckFile(CompareRGBA<vxl_byte>(), "no_rowsperstrip_true.txt", "no_rowsperstrip.tif" ), true);
   TEST("8-bit GA uncompressed", CheckFile(CompareGreyAlpha<vxl_byte>(), "ff_ga8bit_true.txt", "ff_ga8bit_uncompressed.tif" ), true);
   //TEST("16-bit GA uncompressed", CheckFile(CompareGreyAlpha<vxl_uint_16>(), "ff_ga16bit_true.txt", "ff_ga16bit_uncompressed.tif" ), true);
+
+#if defined(TIFF_VERSION_BIG)
+  TEST("8-bit RGB Classic", CheckFile(ComparePlanes<vxl_byte, 3>(), "bigtiff/Classic.txt", "bigtiff/Classic.tif"), true);
+  TEST("8-bit RGB BigTIFF", image_equals<vxl_byte>("bigtiff/BigTIFF.tif", "bigtiff/Classic.tif"), true);
+  TEST("8-bit RGB BigTIFF long", image_equals<vxl_byte>("bigtiff/BigTIFFLong.tif", "bigtiff/Classic.tif"), true);
+  TEST("8-bit RGB BigTIFF long8", image_equals<vxl_byte>("bigtiff/BigTIFFLong8.tif", "bigtiff/Classic.tif"), true);
+  TEST("8-bit RGB BigTIFF long8Tiles", image_equals<vxl_byte>("bigtiff/BigTIFFLong8Tiles.tif", "bigtiff/Classic.tif"), true);
+  TEST("8-bit RGB BigTIFF Motorola", image_equals<vxl_byte>("bigtiff/BigTIFFMotorola.tif", "bigtiff/Classic.tif"), true);
+  TEST("8-bit RGB BigTIFF SubIFD4", image_equals<vxl_byte>("bigtiff/BigTIFFSubIFD4.tif", "bigtiff/Classic.tif"), true);
+  TEST("8-bit RGB BigTIFF SubIFD8", image_equals<vxl_byte>("bigtiff/BigTIFFSubIFD8.tif", "bigtiff/Classic.tif"), true);
+#endif
 
   // The following tests are targeted to the vil_nitf2_image class which can read NITF 2.1, NITF 2.0 and
   // NSIF 1.0 files.  All three of these formats are covered here as well as all four different

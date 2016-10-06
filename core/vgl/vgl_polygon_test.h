@@ -14,6 +14,6 @@
 template <class T>
 bool vgl_polygon_test_inside(T const *xs, T const *ys, unsigned n, T x, T y);
 
-#define VGL_POLYGON_TEST_INSTANTIATE(T) extern "please include vgl/vgl_polygon_test.txx instead"
+#define VGL_POLYGON_TEST_INSTANTIATE(T) extern "please include vgl/vgl_polygon_test.hxx instead"
 
 #endif // vgl_polygon_test_h_

@@ -109,7 +109,7 @@ std::ostream& operator<<(std::ostream& s, const vpgl_local_rational_camera<T>& p
 template <class T>
 std::istream& operator>>(std::istream& is, vpgl_local_rational_camera<T>& p);
 
-#define VPGL_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_local_rational_camera.txx first"
+#define VPGL_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_local_rational_camera.hxx first"
 
 
 #endif // vpgl_local_rational_camera_h_

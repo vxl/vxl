@@ -114,6 +114,6 @@ std::ostream&  operator<<(std::ostream& s, const vgl_homg_plane_3d<Type>& p);
 template <class Type>
 std::istream&  operator>>(std::istream& is, vgl_homg_plane_3d<Type>& p);
 
-#define VGL_HOMG_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_homg_plane_3d.txx first"
+#define VGL_HOMG_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_homg_plane_3d.hxx first"
 
 #endif // vgl_homg_plane_3d_h

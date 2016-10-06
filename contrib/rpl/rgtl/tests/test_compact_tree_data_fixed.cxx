@@ -6,7 +6,7 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <rgtl/rgtl_compact_tree.txx>
+#include <rgtl/rgtl_compact_tree.hxx>
 #include <rgtl/rgtl_compact_tree_data_fixed.hxx>
 
 typedef rgtl_compact_tree_data_fixed<3> tt0;

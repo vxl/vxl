@@ -15,7 +15,7 @@
 //   22 Mar 2003 - J. L. Mundy  - prep for moving to vgl
 //   31 Jul 2010 - Peter Vanroose - made more similar to 1d and 2d variants
 //   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
-//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
+//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .hxx to .h
 //   26 Jul 2011 - Peter Vanroose - added correlation(),set_affine(),is_identity()
 // \endverbatim
 
@@ -219,6 +219,6 @@ template <class T> std::ostream& operator<<(std::ostream& s, vgl_h_matrix_3d<T> 
 template <class T> std::istream& operator>>(std::istream& s, vgl_h_matrix_3d<T>&       H)
 { H.read(s); return s; }
 
-#define VGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_3d.txx first"
+#define VGL_H_MATRIX_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_3d.hxx first"
 
 #endif // vgl_h_matrix_3d_h_

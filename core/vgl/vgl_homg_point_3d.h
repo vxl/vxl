@@ -315,6 +315,6 @@ vgl_homg_point_3d<Type> centre(std::vector<vgl_homg_point_3d<Type> > const& v)
   return vgl_homg_point_3d<Type>(x,y,z,(Type)n);
 }
 
-#define VGL_HOMG_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_3d.txx first"
+#define VGL_HOMG_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_3d.hxx first"
 
 #endif // vgl_homg_point_3d_h_

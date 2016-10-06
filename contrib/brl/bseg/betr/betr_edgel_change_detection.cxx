@@ -5,7 +5,8 @@
 #include <cmath>
 bool betr_edgel_change_detection::process(){
   betr_edgel_factory ef;
-  ef.set_parameters(sigma_, noise_mul_);
+  double upscale = 2.0;
+  ef.set_parameters(sigma_, noise_mul_, upscale);
   ef.add_image("ref_image", ref_imgr_);
   ef.add_image("evt_image", evt_imgr_);
   ef.add_region("ref_image", "ref_ref_poly", ref_ref_poly_);
@@ -17,8 +18,9 @@ bool betr_edgel_change_detection::process(){
   good = good && ef.process("evt_image","evt_ref_poly");
   good = good && ef.process("evt_image","evt_evt_poly"); 
   if(!good){
-    std::cout << "edgel factory failed" << std::endl;
-    return false;
+    std::cout << "warning edgel factory failed" << std::endl;
+    js_div_ = -1.0;
+    return true;
   }
     //debug
   if(verbose_){

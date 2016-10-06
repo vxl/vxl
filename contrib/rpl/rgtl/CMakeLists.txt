@@ -4,7 +4,7 @@
 #  http://www.boost.org/LICENSE_1_0.txt)
 
 set(rgtl_sources
-  rgtl_compact_tree.hxx                 rgtl_compact_tree.txx
+  rgtl_compact_tree.hxx                 rgtl_compact_tree.hxx
   rgtl_compact_tree_data_fixed.hxx
   rgtl_compact_tree_index.hxx
   rgtl_compact_tree_link.hxx
@@ -13,20 +13,20 @@ set(rgtl_sources
   rgtl_config.hxx
   rgtl_meta.hxx
   rgtl_object_array.hxx
-  rgtl_object_array_points.hxx          rgtl_object_array_points.txx
+  rgtl_object_array_points.hxx          rgtl_object_array_points.hxx
   rgtl_object_array_triangles_3d.hxx    rgtl_object_array_triangles_3d.cxx
   rgtl_object_closest_polygon_3d.hxx
   rgtl_object_once.hxx                  rgtl_object_once.cxx
-  rgtl_octree_cell_bounds.hxx           rgtl_octree_cell_bounds.txx
-  rgtl_octree_cell_location.hxx         rgtl_octree_cell_location.txx
-  rgtl_octree_data_fixed.hxx            rgtl_octree_data_fixed.txx
+  rgtl_octree_cell_bounds.hxx           rgtl_octree_cell_bounds.hxx
+  rgtl_octree_cell_location.hxx         rgtl_octree_cell_location.hxx
+  rgtl_octree_data_fixed.hxx            rgtl_octree_data_fixed.hxx
   rgtl_octree_dual.hxx
   rgtl_octree_dual_element.hxx
   rgtl_octree_dual_index.hxx
   rgtl_octree_dual_location.hxx
   rgtl_octree_dual_visit.hxx
-  rgtl_octree_objects.hxx               rgtl_octree_objects.txx
-  rgtl_octree_point_location.hxx        rgtl_octree_point_location.txx
+  rgtl_octree_objects.hxx               rgtl_octree_objects.hxx
+  rgtl_octree_point_location.hxx        rgtl_octree_point_location.hxx
   rgtl_separating_axis.hxx
   rgtl_separating_axis_projection.hxx
   rgtl_static_assert.hxx
@@ -47,14 +47,14 @@ set(rgtl_sources
 
   # Spherical Quad-Tree
   rgtl_sqt_base.hxx                     rgtl_sqt_base.cxx
-  rgtl_sqt_cell_bounds.hxx              rgtl_sqt_cell_bounds.txx
-  rgtl_sqt_cell_geometry.hxx            rgtl_sqt_cell_geometry.txx
-  rgtl_sqt_cell_location.hxx            rgtl_sqt_cell_location.txx
+  rgtl_sqt_cell_bounds.hxx              rgtl_sqt_cell_bounds.hxx
+  rgtl_sqt_cell_geometry.hxx            rgtl_sqt_cell_geometry.hxx
+  rgtl_sqt_cell_location.hxx            rgtl_sqt_cell_location.hxx
   rgtl_sqt_object_array.hxx
   rgtl_sqt_object_array_triangles_3d.cxx
   rgtl_sqt_object_array_triangles_3d.hxx
-  rgtl_sqt_objects.hxx                  rgtl_sqt_objects.txx
-  rgtl_sqt_space.hxx                    rgtl_sqt_space.txx
+  rgtl_sqt_objects.hxx                  rgtl_sqt_objects.hxx
+  rgtl_sqt_space.hxx                    rgtl_sqt_space.hxx
 
   # Explicit instantiations
   Templates/rgtl_object_array_points+2-.cxx

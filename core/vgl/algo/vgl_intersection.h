@@ -51,6 +51,6 @@ template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, std::list<vgl_point_3d<T> >& p);
 
 
-#define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.txx first"
+#define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.hxx first"
 
 #endif // vgl_algo_intersection_h_

@@ -8,16 +8,16 @@ set(rtvl_sources
   rtvl_intpow.hxx
   rtvl_terms.hxx
   rtvl_tokens.hxx
-  rtvl_vote.hxx                         rtvl_vote.txx
-  rtvl_votee.hxx                        rtvl_votee.txx
-  rtvl_votee_d.hxx                      rtvl_votee_d.txx
-  rtvl_voter.hxx                        rtvl_voter.txx
-  rtvl_refine.hxx                       rtvl_refine.txx
-  rtvl_tensor.hxx                       rtvl_tensor.txx
-  rtvl_tensor_d.hxx                     rtvl_tensor_d.txx
+  rtvl_vote.hxx                         rtvl_vote.hxx
+  rtvl_votee.hxx                        rtvl_votee.hxx
+  rtvl_votee_d.hxx                      rtvl_votee_d.hxx
+  rtvl_voter.hxx                        rtvl_voter.hxx
+  rtvl_refine.hxx                       rtvl_refine.hxx
+  rtvl_tensor.hxx                       rtvl_tensor.hxx
+  rtvl_tensor_d.hxx                     rtvl_tensor_d.hxx
   rtvl_weight.hxx
-  rtvl_weight_original.hxx              rtvl_weight_original.txx
-  rtvl_weight_smooth.hxx                rtvl_weight_smooth.txx
+  rtvl_weight_original.hxx              rtvl_weight_original.hxx
+  rtvl_weight_smooth.hxx                rtvl_weight_smooth.hxx
 
   Templates/rtvl_vote+2-.cxx
   Templates/rtvl_votee+2-.cxx

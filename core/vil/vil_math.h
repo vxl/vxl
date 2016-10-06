@@ -51,7 +51,7 @@ inline void vil_math_value_range(const vil_image_view<T>& view, T& min_value, T&
 }
 
 //: Compute minimum and maximum values over view
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vil_math_value_range(const vil_image_view<vil_rgb<vxl_byte> >& rgb_view,
                                  vil_rgb<vxl_byte>& min_value, vil_rgb<vxl_byte>& max_value)
 {
@@ -63,7 +63,7 @@ inline void vil_math_value_range(const vil_image_view<vil_rgb<vxl_byte> >& rgb_v
 }
 
 //: Compute minimum and maximum values over view
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vil_math_value_range(const vil_image_view<vil_rgb<float> >& rgb_view,
                                  vil_rgb<float>& min_value, vil_rgb<float>& max_value)
 {
@@ -284,7 +284,7 @@ inline void vil_math_median(imT& median, const vil_image_view<imT>& im, unsigned
 
 // Purposefully not documented via doxygen; let the general template's
 // documentation be the documentation.
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsigned p);
 
 

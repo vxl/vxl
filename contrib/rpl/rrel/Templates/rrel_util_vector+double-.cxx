@@ -2,7 +2,7 @@
 #include <vector>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <rrel/rrel_util.txx>
+#include <rrel/rrel_util.hxx>
 
 #if defined(VCL_GCC) || defined(VCL_ICC)
 

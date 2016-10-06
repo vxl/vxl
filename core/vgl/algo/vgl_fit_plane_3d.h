@@ -68,6 +68,6 @@ class vgl_fit_plane_3d
   vgl_homg_plane_3d<T>& get_plane() {return plane_;}
 };
 
-#define VGL_FIT_PLANE_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_plane_3d.txx first"
+#define VGL_FIT_PLANE_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_plane_3d.hxx first"
 
 #endif // vgl_fit_plane_3d_h_

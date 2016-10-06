@@ -7,8 +7,8 @@
 
 #include <testlib/testlib_test.h>
 
-#include <rgtl/rgtl_compact_tree.txx>
-#include <rgtl/rgtl_octree_data_fixed.txx>
+#include <rgtl/rgtl_compact_tree.hxx>
+#include <rgtl/rgtl_octree_data_fixed.hxx>
 
 typedef rgtl_compact_tree_data_fixed<2> tt0;
 template class rgtl_compact_tree<tt0::derived_arg0,

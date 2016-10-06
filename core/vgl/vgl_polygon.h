@@ -172,6 +172,6 @@ std::ostream& operator<< (std::ostream& os, vgl_polygon<T> const& p) { return p.
 template <class T>
 std::istream& operator>> (std::istream& is, vgl_polygon<T>& p) { return p.read(is); }
 
-#define VGL_POLYGON_INSTANTIATE(T) extern "please include vgl/vgl_polygon.txx instead"
+#define VGL_POLYGON_INSTANTIATE(T) extern "please include vgl/vgl_polygon.hxx instead"
 
 #endif // vgl_polygon_h_

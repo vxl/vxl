@@ -109,7 +109,7 @@ class brip_quadtree_node : public brip_quadtree_node_base
   T data_;// pixel value
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 class brip_quadtree_node<float> : public brip_quadtree_node_base
 {
  public:

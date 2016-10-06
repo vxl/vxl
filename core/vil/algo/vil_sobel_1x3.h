@@ -41,7 +41,7 @@ void vil_sobel_1x3_1plane(const srcT* src,
 //: Compute gradients of single plane of 2D data using 1x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
 //  1 pixel border around grad images is set to zero
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_sobel_1x3_1plane(const unsigned char* src,
                           std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
                           float* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
@@ -51,7 +51,7 @@ void vil_sobel_1x3_1plane(const unsigned char* src,
 //: Compute gradients of single plane of 2D data using 1x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data
 //  1 pixel border around grad images is set to zero
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_sobel_1x3_1plane(const unsigned char* src,
                           std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
                           double* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
@@ -61,7 +61,7 @@ void vil_sobel_1x3_1plane(const unsigned char* src,
 //: Compute gradients of single plane of 2D data using 1x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data.
 //  1 pixel border around grad images is set to zero
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_sobel_1x3_1plane(const float* src,
                           std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
                           float* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
@@ -71,7 +71,7 @@ void vil_sobel_1x3_1plane(const float* src,
 //: Compute gradients of single plane of 2D data using 1x3 Sobel filters
 //  Computes both i and j gradients of an ni x nj plane of data.
 //  1 pixel border around grad images is set to zero
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_sobel_1x3_1plane(const double* src,
                           std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
                           double* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,

@@ -283,6 +283,6 @@ bool coplanar(vgl_point_3d<Type> const& p1,
               vgl_point_3d<Type> const& p3,
               vgl_point_3d<Type> const& p4);
 
-#define VGL_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_point_3d.txx first"
+#define VGL_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_point_3d.hxx first"
 
 #endif // vgl_point_3d_h

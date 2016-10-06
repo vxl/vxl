@@ -174,7 +174,7 @@ open(const std::string& filename)
   is_->data_index_ = -1;
   AVCodecContext* codec_context_origin = NULL;
   for (unsigned i = 0; i < is_->fmt_cxt_->nb_streams; ++i) {
-    AVCodecContext *enc = is_->fmt_cxt_->streams[i]->codec;
+    AVCodecContext *const enc = is_->fmt_cxt_->streams[i]->codec;
     if (enc->codec_type == AVMEDIA_TYPE_VIDEO && is_->vid_index_ < 0) {
       is_->vid_index_ = i;
       codec_context_origin = enc;
@@ -617,7 +617,15 @@ seek_frame(unsigned int frame)
   if ( seek < 0 )
     return false;
 
-  avcodec_flush_buffers( is_->vid_str_->codec );
+  AVCodecContext * const codec = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
+  if (codec->internal)
+  {
+    // Flush buffers if codec has been used, e.g. in decoding frame
+    // Cannot call the function below if internal pointer is null, resulting in hard crash
+    // See avcodec_flush_buffers implementation at
+    // http://ffmpeg.org/doxygen/trunk/libavcodec_2utils_8c_source.html#l03349
+    avcodec_flush_buffers(codec); //is_->vid_str_->codec );
+  }
 
   // We got to a key frame. Forward until we get to the frame we want.
   while ( true )

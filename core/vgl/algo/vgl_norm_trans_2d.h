@@ -75,6 +75,6 @@ class vgl_norm_trans_2d: public vgl_h_matrix_2d<T>
                                 T& sdx, T& sdy, T& c, T& s);
 };
 
-#define VGL_NORM_TRANS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_norm_trans_2d.txx first"
+#define VGL_NORM_TRANS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_norm_trans_2d.hxx first"
 
 #endif // vgl_norm_trans_2d_h_

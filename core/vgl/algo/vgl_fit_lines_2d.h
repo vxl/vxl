@@ -75,6 +75,6 @@ class vgl_fit_lines_2d
   void output(unsigned int start_index, unsigned int end_index);
 };
 
-#define VGL_FIT_LINES_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_lines_2d.txx instead"
+#define VGL_FIT_LINES_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_lines_2d.hxx instead"
 
 #endif // vgl_fit_lines_2d_h_

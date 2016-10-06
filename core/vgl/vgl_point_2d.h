@@ -260,6 +260,6 @@ vgl_point_2d<Type> centre(std::vector<vgl_point_2d<Type> > const& v)
   return vgl_point_2d<Type>(x/n,y/n);
 }
 
-#define VGL_POINT_2D_INSTANTIATE(T) extern "please include vgl/vgl_point_2d.txx first"
+#define VGL_POINT_2D_INSTANTIATE(T) extern "please include vgl/vgl_point_2d.hxx first"
 
 #endif // vgl_point_2d_h

@@ -84,6 +84,6 @@ class vgl_compute_similarity_3d
 };
 
 #define VGL_COMPUTE_SIMILARITY_3D_INSTANTIATE(T) \
-extern "please include vgl/algo/vgl_compute_similarity_3d.txx first"
+extern "please include vgl/algo/vgl_compute_similarity_3d.hxx first"
 
 #endif // vgl_compute_similarity_3d_h_

@@ -50,6 +50,6 @@ class vgl_norm_trans_3d: public vgl_h_matrix_3d<T>
                              T& cx, T& cy, T& cz);
 };
 
-#define VGL_NORM_TRANS_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_norm_trans_3d.txx first"
+#define VGL_NORM_TRANS_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_norm_trans_3d.hxx first"
 
 #endif // vgl_norm_trans_3d_h_
