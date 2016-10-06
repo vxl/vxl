@@ -84,3 +84,6 @@ add_subdirectory(bvxm_bridge)
 #event trigger library
 add_subdirectory(betr)
 add_subdirectory(betr_batch)
+
+# VSI conflation tools
+add_subdirectory(vcon)
