@@ -14,6 +14,7 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_int.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_unsigned.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_byte.h>
 
 #include <vcl_compiler.h>
 #include <vcl_string.h>
@@ -52,6 +53,7 @@ static PyObject *clear(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_float(PyObject *self, PyObject *args);
 static PyObject *get_output_double_array(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_int(PyObject *self, PyObject *args);
+static PyObject *get_bbas_1d_array_byte(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_unsigned(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_string(PyObject *self, PyObject *args);
 static PyObject *set_stdout(PyObject *self, PyObject *args);
@@ -629,6 +631,48 @@ clear(PyObject * /*self*/, PyObject * /*args*/)
   return Py_None;
 }
 
+PyObject *get_bbas_1d_array_byte(PyObject * /*self*/, PyObject *args)
+{
+  unsigned id;
+  bbas_1d_array_byte_sptr value;
+  if (!PyArg_ParseTuple(args, "i:get_bbas_1d_array_byte", &id))
+    return NULL;
+
+  std::string relation_name = "bbas_1d_array_byte_sptr_data";
+
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+  PyObject *array_1d=0;
+  if (selec->size()!=1) {
+    std::cout << "in get_bbas_1d_array_byte() - no relation with type" << relation_name << " id: " << id << std::endl;
+
+    return array_1d;
+  }
+
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_bbas_1d_array_byte() didn't get value\n";
+    return array_1d;
+  }
+
+  if (!brdb_value) {
+    std::cout << "in get_bbas_1d_array_byte() - null value\n";
+    return array_1d;
+  }
+
+  brdb_value_t<bbas_1d_array_byte_sptr>* result_out = static_cast<brdb_value_t<bbas_1d_array_byte_sptr>* >(brdb_value.ptr());
+  value = result_out->value();
+
+  array_1d = PyList_New(value->data_array.size());
+  for (unsigned i=0;i<value->data_array.size();i++)
+  {
+    PyObject *x = Py_BuildValue("b", value->data_array[i]);
+    PyList_SetItem(array_1d, i,x);
+  }
+  return array_1d;
+}
+
 PyObject *get_bbas_1d_array_int(PyObject * /*self*/, PyObject *args)
 {
   unsigned id;
@@ -878,5 +922,6 @@ register_basic_datatypes()
   REGISTER_DATATYPE(bbas_1d_array_string_sptr);
   REGISTER_DATATYPE(bbas_1d_array_unsigned_sptr);
   REGISTER_DATATYPE(bbas_1d_array_int_sptr);
+  REGISTER_DATATYPE(bbas_1d_array_byte_sptr);
 }
 
