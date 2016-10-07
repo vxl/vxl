@@ -21,7 +21,7 @@ typedef struct
 } dbvalue;
 
 // METHOD_NUM defined as one more than the actual number of processes to include trailing NULL process
-const int METHOD_NUM = 39;
+const int METHOD_NUM = 40;
 void register_basic_datatypes();
 extern PyMethodDef batch_methods[];
 
