@@ -165,7 +165,6 @@ def execute_event_trigger_multi_with_change_imgs(event_trigger, algorithm_name):
         # one dimensional pixel array stored in column sequence
         (pix_id, pix_type) = batch.commit_output(3);
         pix = batch.get_bbas_1d_array_byte(pix_id)
-
         # unpack images
         n = len(prob_change)
         k = 0

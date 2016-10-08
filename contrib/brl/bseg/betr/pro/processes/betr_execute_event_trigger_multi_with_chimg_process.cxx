@@ -22,7 +22,6 @@
 namespace betr_execute_event_trigger_multi_with_chimg_process_globals
 {
   const unsigned n_inputs_  = 2;
-
   const unsigned n_outputs_ = 4;
 }
 
