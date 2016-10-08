@@ -146,6 +146,8 @@ def execute_event_trigger_multi_with_change_imgs(event_trigger, algorithm_name):
     status = batch.run_process()
     prob_change = None
     evt_names = None
+    offsets = None
+    images = None
     if status:
         (pc_id, pc_type) = batch.commit_output(0);
         prob_change = batch.get_output_double_array(pc_id);
@@ -155,8 +157,25 @@ def execute_event_trigger_multi_with_change_imgs(event_trigger, algorithm_name):
         dims_off = batch.get_bbas_1d_array_int(dims_off_id);
         (pix_id, pix_type) = batch.commit_output(3);
         pix = batch.get_bbas_1d_array_byte(pix_id)
-        # insert additional code here
-        return (prob_change, evt_names, dims_off, pix)
+        # unpack images
+        n = len(prob_change)
+        k = 0
+        img_index = 0
+        offsets = [[0. for i in range(2)] for j in range(n)]
+        images = []
+        for q in range(0, n):
+            ni = dims_off[k]
+            nj = dims_off[k+1]
+            area = ni*nj
+            offsets[q][0]= dims_off[k+2]
+            offsets[q][1]= dims_off[k+3]
+            image = [[0. for i in range(ni)] for j in range(nj)]
+            for j in range(0,nj):
+                for i in range(0,ni):
+                    image[j][i]=pix[img_index]
+                    img_index += 1
+            images.append(image)
+        return (prob_change, evt_names, offsets, images)
     else:
-        raise BetrException("failed to add execute trigger with multiple event regions")
-        return (prob_change, evt_names)
+        raise BetrException("failed to add execute trigger with multiple event regions and change images")
+        return (prob_change, evt_names, offsets, images)
