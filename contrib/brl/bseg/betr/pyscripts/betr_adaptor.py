@@ -133,14 +133,23 @@ def execute_event_trigger_multi_with_change_imgs(event_trigger, algorithm_name):
     offsets = None
     images = None
     if status:
+        # the change score not really a probability
         (pc_id, pc_type) = batch.commit_output(0);
         prob_change = batch.get_output_double_array(pc_id);
+
+        # the name of the event region being processed
         (name_id, name_type) = batch.commit_output(1);
         evt_names = batch.get_bbas_1d_array_string(name_id);
+
+        # the dimensions (num_columns, num_rows,) and offset (column offset, row offset) of the change images
+        # stored as [ [nc, nr, off_c, off_r], ...]
         (dims_off_id, dims_off_type) = batch.commit_output(2);
         dims_off = batch.get_bbas_1d_array_int(dims_off_id);
+
+        # one dimensional pixel array stored in column sequence
         (pix_id, pix_type) = batch.commit_output(3);
         pix = batch.get_bbas_1d_array_byte(pix_id)
+
         # unpack images
         n = len(prob_change)
         k = 0
@@ -153,6 +162,7 @@ def execute_event_trigger_multi_with_change_imgs(event_trigger, algorithm_name):
             area = ni*nj
             offsets[q][0]= dims_off[k+2]
             offsets[q][1]= dims_off[k+3]
+            k += 4
             image = [[0. for i in range(ni)] for j in range(nj)]
             for j in range(0,nj):
                 for i in range(0,ni):
