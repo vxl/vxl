@@ -6,7 +6,7 @@ from boxm2_scene_adaptor import boxm2_scene_adaptor
 import boxm2_adaptor
 import vil_adaptor_boxm2_batch as vil_adaptor
 import vpgl_adaptor_boxm2_batch as vpgl_adaptor
-from bbas_adaptor_boxm2_adaptor import remove_from_db
+from bbas_adaptor_boxm2_batch import remove_from_db
 
 
 class UncertainScene(boxm2_scene_adaptor):
