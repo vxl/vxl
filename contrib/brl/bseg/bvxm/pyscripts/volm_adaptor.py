@@ -571,17 +571,17 @@ def generate_ndsm(ll_lon, ll_lat, ur_lon, ur_lat, img_size_ni, img_size_nj, geo_
   batch.set_input_float(10, max_h_limit)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  out_ndsm = dbvalue(id, type)
-  (id, type) = batch.commit_output(1)
-  out_dsm = dbvalue(id, type)
-  (id, type) = batch.commit_output(2)
-  grd_img = dbvalue(id, type)
-  (id, type) = batch.commit_output(3)
-  out_cam = dbvalue(id, type)
-  return out_ndsm, out_dsm, grd_img, out_cam
+    (id, type) = batch.commit_output(0)
+    out_ndsm = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    out_dsm = dbvalue(id, type)
+    (id, type) = batch.commit_output(2)
+    grd_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(3)
+    out_cam = dbvalue(id, type)
+    return out_ndsm, out_dsm, grd_img, out_cam
   else:
-  return None, None, None, None
+    return None, None, None, None
 
 # process to estimate ground plane from a height map
 
@@ -594,11 +594,11 @@ def dsm_ground_estimation(dsm_image, invalid_pixel=-1.0, window_size=20, sample_
   batch.set_input_float(3, invalid_pixel)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  grd_img = dbvalue(id, type)
-  return grd_img
+    (id, type) = batch.commit_output(0)
+    grd_img = dbvalue(id, type)
+    return grd_img
   else:
-  return None
+    return None
 
 
 def dsm_ground_estimation_edge(dsm_image, edge_img, invalid_pixel=-1.0, sample_size=10):
@@ -609,11 +609,11 @@ def dsm_ground_estimation_edge(dsm_image, edge_img, invalid_pixel=-1.0, sample_s
   batch.set_input_float(3, invalid_pixel)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  grd_img = dbvalue(id, type)
-  return grd_img
+    (id, type) = batch.commit_output(0)
+    grd_img = dbvalue(id, type)
+    return grd_img
   else:
-  return None
+    return None
 
 
 def dsm_mgf_ground_filtering(dsm_img, elev_thres, slope_thres, window_size=3.0, pixel_res=1.0):
@@ -625,13 +625,13 @@ def dsm_mgf_ground_filtering(dsm_img, elev_thres, slope_thres, window_size=3.0, 
   batch.set_input_float(4, pixel_res)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  grd_mask = dbvalue(id, type)
-  (id, type) = batch.commit_output(1)
-  grd_img = dbvalue(id, type)
-  return grd_mask, grd_img
+    (id, type) = batch.commit_output(0)
+    grd_mask = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    grd_img = dbvalue(id, type)
+    return grd_mask, grd_img
   else:
-  return None, None
+    return None, None
 
 # process to mosaics a set of images that covers the given region
 
@@ -646,13 +646,13 @@ def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_v
   batch.set_input_float(5, init_value)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  out_img = dbvalue(id, type)
-  (id, type) = batch.commit_output(1)
-  out_cam = dbvalue(id, type)
-  return out_img, out_cam
+    (id, type) = batch.commit_output(0)
+    out_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    out_cam = dbvalue(id, type)
+    return out_img, out_cam
   else:
-  return None, None
+    return None, None
 
 # process to generate building layers from land cover image and height image
 
@@ -668,15 +668,15 @@ def generate_building_layers(land_img, land_cam, height_img, height_cam, land_tx
   batch.set_input_float(6, max_h)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  out_img = dbvalue(id, type)
-  (id, type) = batch.commit_output(1)
-  mask_img = dbvalue(id, type)
-  (id, type) = batch.commit_output(2)
-  out_cam = dbvalue(id, type)
-  return out_img, mask_img, out_cam
+    (id, type) = batch.commit_output(0)
+    out_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    mask_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(2)
+    out_cam = dbvalue(id, type)
+    return out_img, mask_img, out_cam
   else:
-  return None, None, None
+    return None, None, None
 
 
 def generate_layers(land_img, land_cam, height_img, height_cam, land_txt, min_h, max_h, beta=10.0):
@@ -691,17 +691,17 @@ def generate_layers(land_img, land_cam, height_img, height_cam, land_txt, min_h,
   batch.set_input_double(7, beta)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  out_prob_img = dbvalue(id, type)
-  (id, type) = batch.commit_output(1)
-  out_img = dbvalue(id, type)
-  (id, type) = batch.commit_output(2)
-  mask_img = dbvalue(id, type)
-  (id, type) = batch.commit_output(3)
-  out_cam = dbvalue(id, type)
-  return out_prob_img, out_img, mask_img, out_cam
+    (id, type) = batch.commit_output(0)
+    out_prob_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    out_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(2)
+    mask_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(3)
+    out_cam = dbvalue(id, type)
+    return out_prob_img, out_img, mask_img, out_cam
   else:
-  return None, None, None, None
+    return None, None, None, None
 
 # process to convert a polygons in KML to geotiff byte image
 # Note that this process will update the input image according to given
@@ -719,11 +719,11 @@ def render_kml_polygon_mask(in_kml, image, ll_lon, ll_lat, ur_lon, ur_lat, mask_
   batch.set_input_unsigned(6, mask_value)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  out_cam = dbvalue(id, type)
-  return out_cam
+    (id, type) = batch.commit_output(0)
+    out_cam = dbvalue(id, type)
+    return out_cam
   else:
-  return None
+    return None
 
 # process to generate a kml file from a binary image
 
@@ -739,11 +739,11 @@ def generate_kml_from_image(in_img, in_cam, out_kml, threshold=127, r=0, g=255, 
   batch.set_input_unsigned(6, b)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  n_connected_component = batch.get_output_unsigned(id)
-  return n_connected_component
+    (id, type) = batch.commit_output(0)
+    n_connected_component = batch.get_output_unsigned(id)
+    return n_connected_component
   else:
-  return None
+    return None
 
 # process to downsample a binary layer image
 
@@ -770,20 +770,20 @@ def region_wise_roc_analysis(in_img, in_cam, positive_kml, negative_kml):
   batch.set_input_string(3, negative_kml)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  thres_out = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(1)
-  tp = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(2)
-  tn = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(3)
-  fp = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(4)
-  fn = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(5)
-  tpr = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(6)
-  fpr = batch.get_bbas_1d_array_float(id)
-  return thres_out, tp, tn, fp, fn, tpr, fpr
+    (id, type) = batch.commit_output(0)
+    thres_out = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(1)
+    tp = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(2)
+    tn = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(3)
+    fp = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(4)
+    fn = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(5)
+    tpr = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(6)
+    fpr = batch.get_bbas_1d_array_float(id)
+    return thres_out, tp, tn, fp, fn, tpr, fpr
   else:
-  return None, None, None, None, None, None, None
+    return None, None, None, None, None, None, None
