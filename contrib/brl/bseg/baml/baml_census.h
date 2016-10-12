@@ -13,8 +13,9 @@
 
 
 //: Compute a census image and census salience image.
+template <class T>
 bool baml_compute_census_img(
-  const vil_image_view<vxl_byte>& img,
+  const vil_image_view<T>& img,
   int nbhd_diam,
   vil_image_view<vxl_uint_64>& census,
   vil_image_view<vxl_uint_64>& census_sal,
@@ -57,6 +58,7 @@ inline unsigned char baml_compute_hamming_bk(
   return ham;
 }
 
+
 //: Compute the hamming distance of a difference bit-string using a bit-set
 // look-up table.
 inline unsigned char baml_compute_hamming_lut(
@@ -81,9 +83,16 @@ inline unsigned char baml_compute_hamming_lut(
     lut[(diff >> 54) & 0xff];
 }
 
-//: Generate a bit-set look-up table for a pre-allocated array of size 256
-void baml_generate_bit_set_lut(
-  unsigned char* lut );
+
+//: Generate a bit-set look-up table for a pre-allocated array of size 256 for
+// use with the above function.
+inline void baml_generate_bit_set_lut(
+  unsigned char* lut )
+{
+  lut[0] = 0;
+  for (int b = 0; b < 256; b++ )
+    lut[b] = (b&1) + lut[b/2];
+}
 
 
 #endif // baml_census_h

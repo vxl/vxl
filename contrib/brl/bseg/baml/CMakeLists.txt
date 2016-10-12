@@ -1,10 +1,13 @@
 include_directories( ${VXLCORE_INCLUDE_DIR} )
 
 set(baml_sources
+    baml_birchfield_tomasi.h         baml_birchfield_tomasi.cxx
     baml_census.h                    baml_census.cxx
     baml_detect_change.h             baml_detect_change.cxx
     baml_warp.h                      baml_warp.cxx
    )
+   
+aux_source_directory(Templates baml_sources)
 
 vxl_add_library(LIBRARY_NAME baml LIBRARY_SOURCES ${baml_sources})
 
