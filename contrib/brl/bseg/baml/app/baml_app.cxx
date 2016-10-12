@@ -25,25 +25,14 @@
 
 int main(int argc,char * argv[])
 {
-  
+  //
+  // Input params
+  //
+
   vpgl_lvcs lvcs( 35.1996380169, 48.6745313514, 1670.27321333 );
   vgl_box_2d<int> region( 2900, 3600, 900, 1900 );
   //vgl_box_2d<int> region( 2000, 3000, 3500, 4375 );
-  //int region_length = 400;
   double z_ground = 25.0;
-
-  /*/ Usage information
-  if( argc != 6 ){
-    std::cout << "Usage : baml_app.exe target_img target_cam ref_img ref_cam output_namebase\n";
-    return -1;
-  }
-
-  // Read inputs
-  std::string target_img_file(argv[1]);
-  std::string target_cam_file(argv[2]);
-  std::string ref_img_file(argv[3]);
-  std::string ref_cam_file(argv[4]);
-  std::string output_namebase(argv[5]);*/
 
   std::string target_img_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif");
   std::string target_cam_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif_RPC.txt");
@@ -52,6 +41,9 @@ int main(int argc,char * argv[])
   std::string ref_img_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif");
   std::string ref_cam_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif_RPC.txt");
   std::string output_namebase("D:/results/a");
+
+
+
 
   // Load images
   vil_image_resource_sptr target_imgr = 
@@ -124,30 +116,35 @@ int main(int argc,char * argv[])
     ref_img, ref_cam, region, 
     target_cam, z_ground, ref_warped );
 
-  // Output the cropped images
-  vil_save( tar_blur, (output_namebase + "_img1.tif").c_str() );
-  vil_save( ref_warped, (output_namebase + "_img2.tif").c_str() );
-
   // Make valid image
   ref_valid.set_size( region.width(), region.height() );
   ref_valid.fill( true );
   for( int y = 0; y < region.height(); y++ ){
     for( int x = 0; x < region.width(); x++ ){
-      if( tar_cropped(x,y)==0 || ref_warped(x,y)==0 ) ref_valid = false;
+      if( tar_cropped(x,y)==0 || ref_warped(x,y)==0 ) ref_valid(x,y) = false;
     }
   }
 
+  // Correct gain/offset
+  vil_image_view<vxl_uint_16> ref_cor;
+  baml_correct_gain_offset( tar_blur, ref_warped, ref_valid, ref_cor );
+  
+  // Output the cropped images
+  vil_save( tar_blur, (output_namebase + "_img1.tif").c_str() );
+  vil_save( ref_warped, (output_namebase + "_img2.tif").c_str() );
+
   // Detect changes
-  vil_image_view<float> tar_prob;
-  //baml_detect_change_bt( tar_blur, ref_warped, ref_valid, tar_prob );
-  //baml_detect_change_census( tar_blur, ref_warped, ref_valid, tar_prob );
-  baml_detect_change_mi( tar_blur, ref_warped, ref_valid, tar_prob );
+  vil_image_view<float> tar_lh, tar_prob;
+  baml_detect_change_bt( tar_blur, ref_warped, ref_valid, tar_lh );
+  //baml_detect_change_census( tar_blur, ref_warped, ref_valid, tar_lh, 0.3f, 10 );
+  //baml_detect_change_nonparam( tar_blur, ref_warped, ref_valid, tar_lh );
+
+  baml_sigmoid( tar_lh, tar_prob, 0.001f );
 
   // Visualize and save
   vil_image_view<vxl_byte> change_vis;
   vil_convert_stretch_range_limited( tar_prob, change_vis, 0.0f, 1.0f );
   vil_save( change_vis, (output_namebase + "_change.tif").c_str() );
   
-
   return 0;
 };
