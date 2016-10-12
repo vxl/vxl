@@ -6,6 +6,8 @@ set(baml_sources
     baml_detect_change.h             baml_detect_change.cxx
     baml_warp.h                      baml_warp.cxx
    )
+   
+aux_source_directory(Templates baml_sources)
 
    
 aux_source_directory(Templates baml_sources)

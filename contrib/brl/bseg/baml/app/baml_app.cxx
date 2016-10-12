@@ -25,11 +25,15 @@
 
 int main(int argc,char * argv[])
 {
+<<<<<<< f81b2d29a709425af01bdaa2582cded1a9a5fee8
 
+=======
+>>>>>>> Cleaned up baml library, added additional functionality
   //
   // Input params
   //
 
+<<<<<<< f81b2d29a709425af01bdaa2582cded1a9a5fee8
   //vpgl_lvcs lvcs( 35.1996380169, 48.6745313514, 1670.27321333 );
   //vgl_box_2d<int> region( 2900, 3600, 900, 1900 );
   
@@ -43,6 +47,13 @@ int main(int argc,char * argv[])
   double z_ground = 0.0;*/
 
   vpgl_lvcs lvcs( 35.2080385626545, 48.70485305698821, 1675 );
+=======
+  vpgl_lvcs lvcs( 35.1996380169, 48.6745313514, 1670.27321333 );
+  vgl_box_2d<int> region( 2900, 3600, 900, 1900 );
+  //vgl_box_2d<int> region( 2000, 3000, 3500, 4375 );
+  double z_ground = 25.0;
+
+>>>>>>> Cleaned up baml library, added additional functionality
   std::string target_img_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif");
   std::string target_cam_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif_RPC.txt");
   std::string ref_img_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif");
@@ -60,6 +71,9 @@ int main(int argc,char * argv[])
   std::string output_namebase("D:/results/20160902_094643_0c19_20160911_063924_0e20");
   vgl_box_2d<int> region( 1900, 3800, 0, 1900 );
   double z_ground = 0.0;*/
+
+
+
 
 
 
@@ -133,12 +147,19 @@ int main(int argc,char * argv[])
   baml_warp_via_ground_plane( 
     ref_img, ref_cam, region, 
     target_cam, z_ground, ref_warped );
+<<<<<<< f81b2d29a709425af01bdaa2582cded1a9a5fee8
+=======
+
+>>>>>>> Cleaned up baml library, added additional functionality
   // Make valid image
   ref_valid.set_size( region.width(), region.height() );
   ref_valid.fill( true );
   for( int y = 0; y < region.height(); y++ ){
     for( int x = 0; x < region.width(); x++ ){
+<<<<<<< f81b2d29a709425af01bdaa2582cded1a9a5fee8
 
+=======
+>>>>>>> Cleaned up baml library, added additional functionality
       if( tar_cropped(x,y)==0 || ref_warped(x,y)==0 ) ref_valid(x,y) = false;
     }
   }
@@ -153,6 +174,7 @@ int main(int argc,char * argv[])
 
   // Detect changes
   vil_image_view<float> tar_lh, tar_prob;
+
   baml_detect_change_bt( tar_blur, ref_cor, ref_valid, tar_lh, 50.0f );
   //baml_detect_change_census( tar_blur, ref_warped, ref_valid, tar_lh, 0.3f, 10 );
   //baml_detect_change_nonparam( tar_blur, ref_warped, ref_valid, tar_lh );

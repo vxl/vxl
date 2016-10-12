@@ -20,20 +20,31 @@
 
 
 
+<<<<<<< f81b2d29a709425af01bdaa2582cded1a9a5fee8
 
+=======
+>>>>>>> Cleaned up baml library, added additional functionality
 //: Compute the gain/offset that minimizes the least square distance between
 // target and reference images and then correct the reference image.
 bool baml_correct_gain_offset(
   const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
+<<<<<<< f81b2d29a709425af01bdaa2582cded1a9a5fee8
   const vil_image_view<bool>& valid,
+=======
+  const vil_image_view<bool>& valid_ref,
+>>>>>>> Cleaned up baml library, added additional functionality
   vil_image_view<vxl_uint_16>& corrected_ref );
 
 //: Detect change using the Birchfield-Tomasi metric
 bool baml_detect_change_bt(
   const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
+<<<<<<< f81b2d29a709425af01bdaa2582cded1a9a5fee8
   const vil_image_view<bool>& valid,
+=======
+  const vil_image_view<bool>& valid_ref,
+>>>>>>> Cleaned up baml library, added additional functionality
   vil_image_view<float>& tar_lh,
   float bt_std = 20.0f,
   int bt_rad = 1 );
@@ -47,7 +58,11 @@ bool baml_detect_change_bt(
 bool baml_detect_change_census(
   const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
+<<<<<<< f81b2d29a709425af01bdaa2582cded1a9a5fee8
   const vil_image_view<bool>& valid,
+=======
+  const vil_image_view<bool>& valid_ref,
+>>>>>>> Cleaned up baml library, added additional functionality
   vil_image_view<float>& tar_lh,
   float census_std = 0.2f,
   int census_tol = 8,
