@@ -65,10 +65,10 @@ def blob_intersection(mp_img, gt_img):
 ###########################################################
 
 
-def truncate_nitf_image(img, is_short=True, is_scale=True):
+def truncate_nitf_image(img, is_byte=True, is_scale=True):
   batch.init_process("bripTruncateNITFBitProcess")
   batch.set_input_from_db(0, img)
-  batch.set_input_bool(1, is_short)
+  batch.set_input_bool(1, is_byte)
   batch.set_input_bool(2, is_scale)
   batch.run_process()
   (id, type) = batch.commit_output(0)

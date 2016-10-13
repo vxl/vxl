@@ -293,23 +293,23 @@ def generate_roc3(tclsf, in_prob_img, prefix_for_bin_files, positive_category_na
   batch.set_input_string(3, positive_category_name)
   status = batch.run_process()
   if status:
-  (id, type) = batch.commit_output(0)
-  thres = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(1)
-  tp = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(2)
-  tn = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(3)
-  fp = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(4)
-  fn = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(5)
-  tpr = batch.get_bbas_1d_array_float(id)
-  (id, type) = batch.commit_output(6)
-  fpr = batch.get_bbas_1d_array_float(id)
-  return thres, tp, tn, fp, fn, tpr, fpr
+    (id, type) = batch.commit_output(0)
+    thres = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(1)
+    tp = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(2)
+    tn = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(3)
+    fp = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(4)
+    fn = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(5)
+    tpr = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(6)
+    fpr = batch.get_bbas_1d_array_float(id)
+    return thres, tp, tn, fp, fn, tpr, fpr
   else:
-  return None, None, None, None, None, None, None
+    return None, None, None, None, None, None, None
 
 
 def segment_image(img, weight_thres, margin=0, min_size=50, sigma=1, neigh=8):
