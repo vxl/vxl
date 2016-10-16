@@ -16,25 +16,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
-void betr_edgel_factory::set_parameters(float sigma, float noise_multiplier, double gradient_range, unsigned nbins){
-  sdet_detector_params params;
-  params.smooth = sigma;
-  params.noise_multiplier = noise_multiplier;
-  params.aggressive_junction_closure=1;
-  params.filterFactor = 0.0;
-  params.borderp = false;
-  params_ = params;
-  gradient_range_ = gradient_range;
-  nbins_ = nbins;
-}
-void betr_edgel_factory::set_parameters(float sigma, float noise_multiplier, double upsample_factor){
-params_.smooth = sigma; 
- params_.noise_multiplier = noise_multiplier;
- params_.aggressive_junction_closure=1;
- params_.filterFactor = 0.0;
- params_.borderp = false;
- upsample_factor_ = upsample_factor;
-}
+
 bool betr_edgel_factory::add_image(std::string const& iname, vil_image_resource_sptr const& imgr){
   if (!imgr||!imgr->ni()||!imgr->nj())
   {
@@ -97,8 +79,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   unsigned region_id = regions_[iname][region_name];
   unsigned ni = roi->csize(region_id);
   unsigned nj = roi->rsize(region_id);
-  unsigned min_size = 10;
-  if(ni < min_size || nj <min_size ){
+  if(ni < params_.min_region_edge_length_ || nj <params_.min_region_edge_length_ ){
     std::cout << "roi " << region_name <<  " for " << iname << " is empty \n";
     return false;
   }
@@ -121,9 +102,9 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
     clip_resc = vil_new_image_resource_of_view(view);
   }
   // check if chip needs to be upsampled
-  if(upsample_factor_ != 1.0){
+  if(params_.upsample_factor_ != 1.0){
     double dni = static_cast<double>(clip_resc->ni()), dnj = static_cast<double>(clip_resc->nj());
-    dni *= upsample_factor_; dnj *= upsample_factor_;
+    dni *= params_.upsample_factor_; dnj *= params_.upsample_factor_;
     unsigned ni = static_cast<unsigned>(dni), nj = static_cast<unsigned>(dnj);
     if(clip_resc->pixel_format()==VIL_PIXEL_FORMAT_UINT_16){
       vil_image_view<unsigned short> temp = clip_resc->get_view(), uptemp;
@@ -141,7 +122,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   std::string fname = dir + iname + "_" + region_name + ".tif";
   vil_save_image_resource(clip_resc, fname.c_str());
 #endif
-  sdet_detector det(params_);
+  sdet_detector det(params_.det_params_);
     
   det.SetImage(clip_resc);
 
@@ -165,12 +146,12 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
     this->grad_mags(iname, region_name, gmags);
   }else
     this->grad_mags(iname, region_name, poly, gmags);
-  bsta_histogram<double> h(gradient_range_, nbins_);
+  bsta_histogram<double> h(params_.gradient_range_, params_.nbins_);
   for( std::vector<double>::iterator git = gmags.begin();
        git != gmags.end();++git)
     h.upcount(*git, (1.0 + (*git)));//increase weight to favor high gradient values (small objects)
   
-  if(h.area()<3.0*nbins_){
+  if(h.area()<3.0*params_.nbins_){
     std::cout << "insufficient edges in region " << region_name << " - fatal" << std::endl;
     return false;
   }
@@ -226,7 +207,7 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
     {
       vdgl_edgel& ed = (*ech)[i];
       double x = ed.get_x(), y = ed.get_y();
-      x/= upsample_factor_; y/=upsample_factor_;
+      x/= params_.upsample_factor_; y/=params_.upsample_factor_;
       x += x0, y += y0;
      // ed.set_x(x); ed.set_y(y);
       if(!vpoly.contains(x, y))
@@ -333,7 +314,7 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
     std::cout << "No edgels for " << iname << ':' << region_name << "\n";
     return VXL_NULLPTR;
   }
-  double grad_scale = 255.0/gradient_range_;
+  double grad_scale = 255.0/params_.gradient_range_;
   for(std::vector< vdgl_digital_curve_sptr >::iterator vit = edges.begin();
       vit != edges.end(); ++vit){
     vdgl_edgel_chain_sptr echain = (*vit)->get_interpolator()->get_edgel_chain();
@@ -346,7 +327,7 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
     for(unsigned k = 0; k<n; ++k){
       vdgl_edgel& e = echain->edgel(k);
       double x = e.get_x(), y = e.get_y();
-      x/= upsample_factor_; y/=upsample_factor_;
+      x/= params_.upsample_factor_; y/=params_.upsample_factor_;
       if(!vpoly.contains(x+i_offset, y+j_offset))
         continue;
       unsigned i = static_cast<unsigned>(x), j = static_cast<unsigned>(y);
