@@ -25,14 +25,14 @@
 bool baml_correct_gain_offset(
   const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
-  const vil_image_view<bool>& valid_ref,
+  const vil_image_view<bool>& valid,
   vil_image_view<vxl_uint_16>& corrected_ref );
 
 //: Detect change using the Birchfield-Tomasi metric
 bool baml_detect_change_bt(
   const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
-  const vil_image_view<bool>& valid_ref,
+  const vil_image_view<bool>& valid,
   vil_image_view<float>& tar_lh,
   float bt_std = 20.0f,
   int bt_rad = 1 );
@@ -46,7 +46,7 @@ bool baml_detect_change_bt(
 bool baml_detect_change_census(
   const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
-  const vil_image_view<bool>& valid_ref,
+  const vil_image_view<bool>& valid,
   vil_image_view<float>& tar_lh,
   float census_std = 0.2f,
   int census_tol = 8,
@@ -57,7 +57,7 @@ bool baml_detect_change_census(
 bool baml_detect_change_nonparam(
   const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
-  const vil_image_view<bool>& valid_ref,
+  const vil_image_view<bool>& valid,
   vil_image_view<float>& tar_lh,
   int img_bit_depth = 12,
   int hist_bit_depth = 10 );

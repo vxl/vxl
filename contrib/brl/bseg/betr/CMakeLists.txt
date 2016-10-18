@@ -17,6 +17,7 @@ set(betr_sources
  betr_algorithm.h      betr_algorithm.cxx betr_algorithm_sptr.h
  betr_edgel_change_detection.h  betr_edgel_change_detection.cxx
  betr_edgel_reference_cd.h  betr_edgel_reference_cd.cxx
+ betr_census_change_detection.h  betr_census_change_detection.cxx
 
 )
 aux_source_directory(Templates betr_sources)
