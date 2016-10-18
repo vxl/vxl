@@ -20,6 +20,7 @@ set(betr_sources
  betr_edgel_change_detection_params.h  betr_edgel_change_detection_params.cxx
  betr_edgel_reference_cd.h  betr_edgel_reference_cd.cxx
  betr_edgel_reference_cd_params.h    betr_edgel_reference_cd_params.cxx
+ betr_census_change_detection.h  betr_census_change_detection.cxx
 )
 aux_source_directory(Templates betr_sources)
 
