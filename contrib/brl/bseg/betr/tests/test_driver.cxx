@@ -10,11 +10,11 @@ DECLARE(test_edgel_change_detection);
 void
 register_tests()
 {
-  /*REGISTER(test_geo_box);
+  REGISTER(test_geo_box);
   REGISTER(test_geo_object);
   REGISTER(test_site);
   REGISTER(test_edgel_factory);
-  REGISTER(test_event_trigger);*/
+  REGISTER(test_event_trigger);
   REGISTER(test_edgel_change_detection);
 }
 
