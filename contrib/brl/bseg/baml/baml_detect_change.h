@@ -48,9 +48,16 @@ bool baml_detect_change_census(
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid,
   vil_image_view<float>& tar_lh,
-  float census_std = 0.2f,
-  int census_tol = 8,
+  float census_std = 0.3f,
+  int census_tol = 10,
   int census_rad = 3 );
+
+bool baml_detect_change_gradient(
+  const vil_image_view<vxl_uint_16>& img_tar,
+  const vil_image_view<vxl_uint_16>& img_ref,
+  const vil_image_view<bool>& valid_ref,
+  vil_image_view<float>& tar_lh,
+  float grad_std = 30.0f );
 
 //: Detect change using the approximate mutual information method described in
 // the original semi-global matching paper

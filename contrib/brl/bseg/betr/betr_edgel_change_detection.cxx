@@ -5,8 +5,11 @@
 #include <cmath>
 bool betr_edgel_change_detection::process(){
   betr_edgel_factory ef;
-  double upscale = 2.0;
-  ef.set_parameters(sigma_, noise_mul_, upscale);
+  betr_edgel_factory_params& efparams = ef.params();
+  betr_edgel_change_detection_params* params = dynamic_cast<betr_edgel_change_detection_params*>(params_.ptr());
+  efparams.det_params_.smooth = params->sigma_;
+  efparams.det_params_.noise_multiplier = params->noise_mul_;
+  efparams.upsample_factor_ = params->upsample_factor_;
   ef.add_image("ref_image", ref_imgr_);
   ef.add_image("evt_image", evt_imgr_);
   ef.add_region("ref_image", "ref_ref_poly", ref_ref_poly_);

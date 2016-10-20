@@ -295,7 +295,7 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
 #elif hamadan
- std::string dir = "D:/tests/hamadan_test/";
+ std::string dir = "D:/data/sattel/hamadan/";
  // std::string ref_name = "20160821_063826_0e20.tif";
  // std::string ref_name = "20160623_050936_0c64.tif";
  std::string ref_name = "20160902_094643_0c19.tif";
@@ -304,22 +304,29 @@ void test_edgel_change_detection()
  std::cout <<"Reference" << ref_name << '\n';
  std::string ref_img_path = dir + ref_name ;
  std::string evt_img_path = dir + evt_name ;
- std::string ref_cam_path = dir + ref_name + "_RPC.TXT";
- std::string evt_cam_path = dir + evt_name + "_RPC.TXT";
+ std::string ref_cam_path = dir + ref_name + "_RPC.txt";
+ std::string evt_cam_path = dir + evt_name + "_RPC.txt";
  std::string evt_obj_path = dir + "hamadan_objects/event_big.ply";
  // std::string evt2_obj_path = dir + "hamadan_objects/event.ply";
  std::string ref_obj_path = dir + "hamadan_objects/ref_full.ply";
- vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
- vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
- vpgl_camera_double_sptr ref_camera = ref_lcam;
 
- vil_image_resource_sptr imgr = vil_load_image_resource(evt_img_path.c_str());
- vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
- vpgl_camera_double_sptr camera = lcam;
  double lon = 48.6546831212;
  double lat = 35.1964842393;
  double elev =1678.81629561;
  vpgl_lvcs lvcs = vpgl_lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+
+ vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
+ //vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
+ vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
+ vpgl_local_rational_camera<double>* ref_lcam = new vpgl_local_rational_camera<double>( lvcs, *ref_rpccam );
+ vpgl_camera_double_sptr ref_camera( ref_lcam );
+
+ vil_image_resource_sptr imgr = vil_load_image_resource(evt_img_path.c_str());
+ //vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
+ vpgl_rational_camera<double>* rpccam = read_rational_camera_from_txt<double>(evt_cam_path);
+ vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>( lvcs, *rpccam );
+ vpgl_camera_double_sptr camera(lcam);
+
  betr_event_trigger etr("hamadan", lvcs);
  etr.set_verbose(true);
  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
@@ -335,7 +342,8 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
  std::vector<vil_image_resource_sptr> rescs; 
 
  std::cout <<"===>processing " << evt_name << '\n';
- etr.process("edgel_change_detection", pchange, rescs, offsets);
+ //etr.process("edgel_change_detection", pchange, rescs, offsets);
+ etr.process("pixelwise_change_detection", pchange, rescs, offsets);
  int i =0;
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++){

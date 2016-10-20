@@ -17,6 +17,7 @@
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include "betr_edgel_change_detection.h"
 #include "betr_edgel_reference_cd.h"
+#include "betr_pixelwise_change_detection.h"
 #include "betr_algorithm.h"
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -88,6 +89,8 @@ void betr_event_trigger::register_algorithms(){
   algorithms_[alg0->name()] = alg0;
   betr_algorithm_sptr alg1 = new betr_edgel_reference_cd();
   algorithms_[alg1->name()] = alg1;
+  betr_algorithm_sptr alg2 = new betr_pixelwise_change_detection();
+  algorithms_[alg2->name()] = alg2;
 }  
 void betr_event_trigger::update_local_bounding_box(){
   if(global_bbox_.is_empty())
@@ -209,9 +212,15 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
       vgl_polygon<double> h = conv_hull.hull();
       std::vector<vsol_point_2d_sptr> sverts;
       std::vector<vgl_point_2d<double> > hverts = h[0];
-      for(std::vector<vgl_point_2d<double> >::iterator vit = hverts.begin();
-          vit != hverts.end(); ++vit)
-        sverts.push_back(new vsol_point_2d(*vit));
+
+// HACK BY TPOLLARD
+      //for(std::vector<vgl_point_2d<double> >::iterator vit = hverts.begin();
+      //    vit != hverts.end(); ++vit)
+      //  sverts.push_back(new vsol_point_2d(*vit));
+      for( int vit = 0; vit < pts_2d.size(); vit++ )
+        sverts.push_back(new vsol_point_2d(pts_2d[vit]));
+// END HACK
+
       poly_2d = new vsol_polygon_2d(sverts);
       return true;
   }

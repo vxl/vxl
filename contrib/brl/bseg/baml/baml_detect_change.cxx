@@ -213,6 +213,72 @@ bool baml_detect_change_census(
 }
 
 
+//---------------------------------------------------------------
+bool baml_detect_change_gradient(
+  const vil_image_view<vxl_uint_16>& img_tar,
+  const vil_image_view<vxl_uint_16>& img_ref,
+  const vil_image_view<bool>& valid_ref,
+  vil_image_view<float>& tar_lh,
+  float grad_std )
+{
+  float mag_tol = 0.00001f;
+  int width = img_tar.ni(), height = img_tar.nj();
+
+  if( img_ref.ni() != width || img_ref.nj() != height ||
+    valid_ref.ni() != width || valid_ref.nj() != height )
+    return false;
+
+  // Get parameters for background Gaussian distribution
+  float gauss_var = grad_std*grad_std;
+  float gauss_norm = log( 1.0f/(grad_std*sqrt(2*3.14159f)) );
+
+  // Initialize output image
+  tar_lh.set_size( width, height );
+  tar_lh.fill( 1.0f );
+
+  // Compute foreground likelihood assuming uniform distribution on foreground
+  float lfg = log( 1.0f/(4*grad_std) );
+
+  // Compute gradient images
+  vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
+  vil_sobel_3x3<vxl_uint_16,float>( img_tar, grad_x_tar, grad_y_tar );
+  vil_sobel_3x3<vxl_uint_16,float>( img_ref, grad_x_ref, grad_y_ref );
+
+  // Compute hamming distance between images
+  for( int y = 0; y < height; y++ ){
+    for( int x = 0; x < width; x++ ){
+      if( valid_ref(x,y) == false ) continue;
+      
+      float grad_mag_tar = sqrt(
+        grad_x_tar(x,y)*grad_x_tar(x,y) + grad_y_tar(x,y)*grad_y_tar(x,y) );
+      float grad_mag_ref = sqrt( 
+        grad_x_ref(x,y)*grad_x_ref(x,y) + grad_y_ref(x,y)*grad_y_ref(x,y) );
+      float grad_ip = grad_x_tar(x,y)*grad_x_ref(x,y) + grad_y_tar(x,y)*grad_y_ref(x,y);
+      float angle_diff = 3.14159/2.0;
+      if( grad_mag_tar > mag_tol && grad_mag_ref > mag_tol )
+        angle_diff = acos( grad_ip/(grad_mag_tar*grad_mag_ref) );
+
+      //float grad_diff = pow( grad_mag_tar - grad_mag_ref, 2 );
+
+      //float grad_diff = pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 );
+
+      //float grad_diff = grad_mag_tar*grad_mag_ref - grad_ip;
+
+      float grad_diff = pow( std::max( grad_mag_tar, grad_mag_ref )*sin(angle_diff), 2 );
+      //float grad_diff = pow( 0.5f*( grad_mag_tar+grad_mag_ref )*fabs( sin(angle_diff) ), 2 );
+
+      float lbg = gauss_norm - grad_diff/gauss_var;
+
+      tar_lh(x,y) = lfg - lbg;
+
+      if( rand() < 0.001*RAND_MAX ) std::cerr << (int)angle_diff << ' ';
+    }
+  }
+
+  return true;
+}
+
+
 //------------------------------------------------------------------------
 bool baml_detect_change_nonparam(
   const vil_image_view<vxl_uint_16>& img_tar,
