@@ -295,7 +295,7 @@ void test_edgel_change_detection()
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
 #elif hamadan
- std::string dir = "D:/data/sattel/hamadan/";
+ std::string dir = "D:/tests/hamadan_test/";
  // std::string ref_name = "20160821_063826_0e20.tif";
  // std::string ref_name = "20160623_050936_0c64.tif";
  std::string ref_name = "20160902_094643_0c19.tif";
@@ -318,9 +318,12 @@ void test_edgel_change_detection()
  vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
  //vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
  vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
+ if(!ref_rpccam)
+	 return;
  vpgl_local_rational_camera<double>* ref_lcam = new vpgl_local_rational_camera<double>( lvcs, *ref_rpccam );
  vpgl_camera_double_sptr ref_camera( ref_lcam );
-
+ if(!ref_camera)
+	 return;
  vil_image_resource_sptr imgr = vil_load_image_resource(evt_img_path.c_str());
  //vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
  vpgl_rational_camera<double>* rpccam = read_rational_camera_from_txt<double>(evt_cam_path);

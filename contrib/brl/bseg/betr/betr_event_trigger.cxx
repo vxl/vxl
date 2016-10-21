@@ -198,7 +198,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
         return false;
       } 
       std::vector<vsol_point_3d_sptr> verts = mesh_3d->vertices();
-
+      
       std::vector<vgl_point_2d<double> > pts_2d;
       for(std::vector<vsol_point_3d_sptr>::iterator vit = verts.begin();
           vit != verts.end(); ++vit){
@@ -208,18 +208,18 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
                      (*vit)->z()+transl.z(), u, v);
         pts_2d.push_back(vgl_point_2d<double>(u, v));
       }
-      vgl_convex_hull_2d<double> conv_hull(pts_2d);
-      vgl_polygon<double> h = conv_hull.hull();
       std::vector<vsol_point_2d_sptr> sverts;
-      std::vector<vgl_point_2d<double> > hverts = h[0];
-
-// HACK BY TPOLLARD
-      //for(std::vector<vgl_point_2d<double> >::iterator vit = hverts.begin();
-      //    vit != hverts.end(); ++vit)
-      //  sverts.push_back(new vsol_point_2d(*vit));
-      for( int vit = 0; vit < pts_2d.size(); vit++ )
-        sverts.push_back(new vsol_point_2d(pts_2d[vit]));
-// END HACK
+      if(mesh_3d->num_faces()>1)
+        {
+          vgl_convex_hull_2d<double> conv_hull(pts_2d);
+          vgl_polygon<double> h = conv_hull.hull();
+          std::vector<vgl_point_2d<double> > hverts = h[0];
+          for(std::vector<vgl_point_2d<double> >::iterator vit = hverts.begin();
+              vit != hverts.end(); ++vit)
+            sverts.push_back(new vsol_point_2d(*vit));
+        }else
+        for( int vit = 0; vit < pts_2d.size(); vit++ )
+          sverts.push_back(new vsol_point_2d(pts_2d[vit]));
 
       poly_2d = new vsol_polygon_2d(sverts);
       return true;
