@@ -217,7 +217,6 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
         }else
         for( int vit = 0; vit < pts_2d.size(); vit++ )
           sverts.push_back(new vsol_point_2d(pts_2d[vit]));
-
       poly_2d = new vsol_polygon_2d(sverts);
       return true;
   }
