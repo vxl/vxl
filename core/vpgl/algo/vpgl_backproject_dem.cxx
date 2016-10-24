@@ -51,6 +51,7 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem):
   }
   if(!geo_cam_)
     return;
+
   //get the image of elevations
   dem_view_ = dem_->get_view();
   //get the bounds on elevation by sampling according to a fraction of the dem area
@@ -59,12 +60,14 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem):
   double area = ni*nj;
   double stride_area = area/min_samples_;
   unsigned stride_interval = static_cast<unsigned>(std::sqrt(stride_area));
+
   // get the center of the dem
   unsigned nhi = ni/2, nhj = nj/2;
   double lon, lat;
   geo_cam_->img_to_global(nhi, nhj, lon, lat);
   double elev = dem_view_(nhi, nhj);
   geo_center_.set(lon, lat, elev);
+
   // sample elevations
   std::vector<double> z_samples;
   float zmin=std::numeric_limits<float>::max(), zmax=-zmin;
@@ -85,6 +88,7 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem):
     if(z<zmin) zmin = z;
     if(z>zmax) zmax = z;
   }
+
   //the final elevation bounds
   z_min_ = zmin;
   z_max_ = zmax;
@@ -94,6 +98,7 @@ vpgl_backproject_dem::~vpgl_backproject_dem(){
     delete geo_cam_;
   geo_cam_ = VXL_NULLPTR;
 }
+
 // the function to backproject onto the dem using vgl objects
 bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,
                  vgl_point_2d<double> const& image_point,
@@ -101,11 +106,14 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,
                  vgl_point_3d<double> const& initial_guess,
                  vgl_point_3d<double> & world_point,
                  double error_tol){
+
   std::cout << "vpgl_backproj_dem " << image_point << " max_z " << max_z << " min_z " << min_z << " init_guess " << initial_guess << " error tol " << error_tol << std::endl;
+
   //compute the ray corresponding to the image point
   double dz = (max_z - min_z);
   vgl_point_2d<double> initial_xy(initial_guess.x(), initial_guess.y());
   vgl_ray_3d<double> ray;
+
   if(!vpgl_ray::ray(cam, image_point, initial_xy, max_z, dz, ray)){
     std::cout << " compute camera ray failed - Fatal!" << std::endl;
     return false;
@@ -139,12 +147,14 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,
   vnl_brent_minimizer brm(c);
   double tmin = brm.minimize(t);
   double error = brm.f_at_last_minimum();
+
   if(error>error_tol)
     return false;
   
   world_point = origin + tmin*dir;
 
   std::cout << "success! ray/dem intersection " << world_point  << std::endl;
+
   return true;
 }
 
