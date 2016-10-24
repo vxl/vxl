@@ -33,17 +33,25 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: if scale tag is false be sure that trans_matrix[0][0] and trans_matrix[1][1] is 1.0 otherwise set it to true
   vpgl_geo_camera(vnl_matrix<double> trans_matrix,
                   vpgl_lvcs_sptr lvcs)
-    : trans_matrix_(trans_matrix), is_utm(false), scale_tag_(false) { this->set_lvcs(lvcs); }
+    : trans_matrix_(trans_matrix), is_utm(false), scale_tag_(false) {if(lvcs) this->set_lvcs(lvcs); }
 
   // copy constructor
   vpgl_geo_camera(vpgl_geo_camera const& rhs);
 
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
+  //: uses lvcs to convert local x-y to global longitude and latitude
   static bool init_geo_camera(vil_image_resource_sptr const geotiff_img,
                               vpgl_lvcs_sptr lvcs,
                               vpgl_geo_camera*& camera);
 
+  //: Assumes geographic coordinates are global
+  static bool init_geo_camera(vil_image_resource_sptr const geotiff_img,
+                              vpgl_geo_camera*& camera){
+    vpgl_lvcs_sptr lvcs = VXL_NULLPTR;
+    return init_geo_camera(geotiff_img, lvcs, camera);
+  }
+    
   //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise
   //  for 'S' use -lat and for 'W' -lon
   //  TODO: generalize geo_camera so that img_to_global method makes this adjustment internally if camera is created using this method
@@ -55,6 +63,11 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: init using a tfw file, reads the transformation matrix from the tfw
   static bool init_geo_camera(std::string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera);
 
+  //: init without lvcs. Assumes geographic coordinates are global
+  static bool init_geo_camera(std::string tfw_name,  int utm_zone, unsigned northing, vpgl_geo_camera*& camera){
+    vpgl_lvcs_sptr lvcs = VXL_NULLPTR;
+    return init_geo_camera(tfw_name, lvcs, utm_zone, northing, camera);
+  }
   ~vpgl_geo_camera() {}
 
   virtual std::string type_name() const { return "vpgl_geo_camera"; }

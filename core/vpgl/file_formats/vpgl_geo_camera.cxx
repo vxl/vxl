@@ -537,11 +537,12 @@ bool vpgl_geo_camera::operator==(vpgl_geo_camera const& rhs) const
          *(this->lvcs_) == *(rhs.lvcs_);
 }
 
-//: Write vpgl_perspective_camera to stream
+//: Write vpgl_geo_camera to stream
 std::ostream&  operator<<(std::ostream& s,
                          vpgl_geo_camera const& p)
 {
-  s << p.trans_matrix_ << '\n'<< *(p.lvcs_) << '\n';
+  if(p.lvcs_) s << p.trans_matrix_ << '\n'<< *(p.lvcs_) << '\n';
+  else s << p.trans_matrix_ << '\n';
   if (p.is_utm) {
     s << "geocam is using UTM with zone: " << p.utm_zone_ << '\n';
   }
