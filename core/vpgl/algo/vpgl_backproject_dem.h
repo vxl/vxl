@@ -17,6 +17,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
+#include <vgl_point_3d.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_view.h>
 class vpgl_geo_camera; //forward declare for ptr
