@@ -1,4 +1,5 @@
 #include "vpgl_dem_manager.h"
+
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 vpgl_dem_manager::vpgl_dem_manager(vil_image_resource_sptr const& resc) : bproj_dem_(vpgl_backproject_dem(resc)){
