@@ -257,17 +257,11 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
     return false;
 
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
-  //if the scene doesn't contain point,
-  if (!scene->contains(vgl_point, id, local)) {
-    //std::cout << "Point " << vgl_point << " not present in scene! Skipping..." << std::endl;
+  
+  //the following method checks whether the scene contains the point or not
+  if (!calculateProbOfPoint(scene, blk, point, alpha, prob))
     return false;
-  }
-  //if the block passed isn't the block that contains the point, there is something wrong...
-  //this happens when the point data is empty (0,0,0,0) for instance, or simply wrong.
-  //if (blk->block_id() != id)
-  //  return false;
-
-  calculateProbOfPoint(scene, blk, point, alpha, prob);
+  
   // compute the eigenvalues
   vnl_matrix<double> pt_cov(3,3,0.0);
   pt_cov[0][0] = cov[0];
@@ -327,8 +321,12 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
                                                                       const float& alpha, float& prob)
 {
   vgl_point_3d<double> local;
-  boxm2_block_id id;
+  //boxm2_block_id id;
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
+  boxm2_block_id id = blk->block_id();
+  if (!scene->block_contains(vgl_point, id, local)) 
+    return false;
+  /*
   //if the scene doesn't contain point,
   if (!scene->contains(vgl_point, id, local)) {
     return false;
@@ -337,7 +335,7 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   //this happens when the point data is empty (0,0,0,0) for instance, or simply wrong.
   if (blk->block_id() != id)
     return false;
-
+  */
   int index_x=(int)std::floor(local.x());
   int index_y=(int)std::floor(local.y());
   int index_z=(int)std::floor(local.z());
