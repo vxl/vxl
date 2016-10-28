@@ -75,7 +75,14 @@ def gen_oriented_point_cloud(scene, cache, prob_t, norm_mag_t, filename):
   batch.set_input_float(3, norm_mag_t)
 
 
-def gen_error_point_cloud(scene, cache, filename, thresh=0.3):
+def gen_error_point_cloud(scene, cache, filename, thresh=0.3, depth=3):
+  batch.init_process("boxm2ExtractPointCloudProcess")
+  batch.set_input_from_db(0, scene)
+  batch.set_input_from_db(1, cache)
+  batch.set_input_float(2, thresh)  # prob threshold
+  batch.set_input_unsigned(3, depth)  # prob threshold
+  batch.run_process()
+
   batch.init_process("boxm2ExportErrorPointCloudProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, cache)
