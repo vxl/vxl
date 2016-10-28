@@ -55,6 +55,7 @@ class boxm2_export_oriented_point_cloud_function
                                    const float& alpha,
                                    float& prob, double& color,
                                    vnl_vector_fixed<double, 3>& axes, double& LE, double& CE);
+  static bool calculateLECEofPoint(const vnl_vector_fixed<float, 9>& cov,vnl_vector_fixed<double, 3>&axes, double& LE, double& CE);
 
 };
 
