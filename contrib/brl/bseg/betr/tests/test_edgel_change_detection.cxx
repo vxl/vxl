@@ -325,15 +325,17 @@ void test_edgel_change_detection()
  vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
  if(!ref_rpccam)
 	 return;
- vpgl_local_rational_camera<double>* ref_lcam = new vpgl_local_rational_camera<double>( lvcs, *ref_rpccam );
- vpgl_camera_double_sptr ref_camera( ref_lcam );
+  ref_lcam = new vpgl_local_rational_camera<double>( lvcs, *ref_rpccam );
+ ref_camera = ref_lcam ;
  if(!ref_camera)
 	 return;
- vil_image_resource_sptr imgr = vil_load_image_resource(evt_img_path.c_str());
+  imgr = vil_load_image_resource(evt_img_path.c_str());
  //vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
  vpgl_rational_camera<double>* rpccam = read_rational_camera_from_txt<double>(evt_cam_path);
+
  vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>( lvcs, *rpccam );
  vpgl_camera_double_sptr camera(lcam);
+
  betr_event_trigger etr("hamadan", lvcs);
  etr.set_verbose(true);
  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
