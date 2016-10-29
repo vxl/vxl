@@ -1663,4 +1663,3 @@ def DEM_backproj(dem_mgr, cam, u, v, err_tol = 1.0):
         z = batch.get_output_double(id)
         return (x, y, z)
     raise VpglException("failed to backproject onto the DEM")
-
