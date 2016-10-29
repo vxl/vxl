@@ -25,11 +25,15 @@ public:
     rayp = org + x[0]*dir;
     double lon = rayp.x(), lat = rayp.y(), elev = rayp.z();
     double ud, vd;
+    //determine the dem pixel coordinates and check bounds
     geo_cam_->project(lon, lat, elev, ud, vd);
-    unsigned u = static_cast<unsigned>(ud+0.5), v = static_cast<unsigned>(vd+0.5);
-    unsigned ni = dview_->ni(), nj = dview_->nj();
-    if(u>=ni||v>=nj)
+    int u = static_cast<int>(ud+0.5), v = static_cast<int>(vd+0.5);
+    int ni = dview_->ni(), nj = dview_->nj();
+    if(u<0||u>=ni||v<0||v>=nj){
+      std::cout << "warning: dem backprojection cost function - outside DEM bounds" << std::endl;
       return std::numeric_limits<double>::max();
+    }
+    // within bounds so get squared distance between dem z and ray z
     double z = (*dview_)(u,v);
     return (elev-z)*(elev-z);
   }
@@ -41,21 +45,27 @@ private:
 };
 vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem):dem_(dem), min_samples_(5000.0), tail_fract_(0.025)
 {
+  //construct a geo_camera for the dem (an orthographic view looking straight down)
   if(!vpgl_geo_camera::init_geo_camera(dem_, geo_cam_)){
     std::cout << "WARNING! - units unknown in vpgl_backproject_dem - assume degrees meters" << std::endl;
   }
   if(!geo_cam_)
     return;
+  //get the image of elevations
   dem_view_ = dem_->get_view();
+  //get the bounds on elevation by sampling according to a fraction of the dem area
+  //compute the pixel interval (stride) for sampling the fraction
   unsigned ni = dem_view_.ni(), nj = dem_view_.nj();
   double area = ni*nj;
   double stride_area = area/min_samples_;
   unsigned stride_interval = static_cast<unsigned>(std::sqrt(stride_area));
+  // get the center of the dem
   unsigned nhi = ni/2, nhj = nj/2;
   double lon, lat;
   geo_cam_->img_to_global(nhi, nhj, lon, lat);
   double elev = dem_view_(nhi, nhj);
   geo_center_.set(lon, lat, elev);
+  // sample elevations
   std::vector<double> z_samples;
   float zmin=std::numeric_limits<float>::max(), zmax=-zmin;
   for(unsigned j = 0; j<nj; j+=stride_interval)
@@ -75,6 +85,7 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem):
     if(z<zmin) zmin = z;
     if(z>zmax) zmax = z;
   }
+  //the final elevation bounds
   z_min_ = zmin;
   z_max_ = zmax;
 }
@@ -83,36 +94,57 @@ vpgl_backproject_dem::~vpgl_backproject_dem(){
     delete geo_cam_;
   geo_cam_ = VXL_NULLPTR;
 }
-
+// the function to backproject onto the dem using vgl objects
 bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,
                  vgl_point_2d<double> const& image_point,
                  double max_z, double min_z,
                  vgl_point_3d<double> const& initial_guess,
                  vgl_point_3d<double> & world_point,
                  double error_tol){
+  std::cout << "vpgl_backproj_dem " << image_point << " max_z " << max_z << " min_z " << min_z << " init_guess " << initial_guess << " error tol " << error_tol << std::endl;
   //compute the ray corresponding to the image point
   double dz = (max_z - min_z);
   vgl_point_2d<double> initial_xy(initial_guess.x(), initial_guess.y());
   vgl_ray_3d<double> ray;
-  if(!vpgl_ray::ray(cam, image_point, initial_xy, max_z, dz, ray))
+  if(!vpgl_ray::ray(cam, image_point, initial_xy, max_z, dz, ray)){
+    std::cout << " compute camera ray failed - Fatal!" << std::endl;
     return false;
+  }
+  vgl_point_3d<double> origin = ray.origin();
   //find min parameter on ray
   vgl_vector_3d<double> dir = ray.direction();
-  if(std::fabs(dir.z())<0.001)
+  if(std::fabs(dir.z())<0.001){
+    std::cout << "Ray parallel to XY plane - Fatal!" << std::endl;
     return false;
+  }
   //inital guess at ray parameter
   double t = (initial_guess.z() - max_z)/dir.z();
+
+  //check if guess is inside DEM - could be too conservative for very oblique cameras
+  vgl_point_3d<double> guess_point = origin + t*dir;
+  double lon = guess_point.x(), lat = guess_point.y(),elev = guess_point.z();
+  double ud, vd;
+  //Note that elevation has no effect in the project function - just required to meet the interface of an abstract camera
+  geo_cam_->project(lon, lat, elev, ud, vd); 
+  int u = static_cast<int>(ud+0.5), v = static_cast<int>(vd+0.5);
+  int ni = dem_view_.ni(), nj = dem_view_.nj();
+  if(u<0||u>=ni||v<0||v>=nj){
+    std::cout << "Initial guess for DEM intersection is outside DEM bounds - Fatal!" << std::endl;
+    return false;
+  }
+  // construct the brent minimizer
+  // note the brent minimzier is not fully integrated with the vil_nonlinear_minimizer interface
+  // thus the non standard call for error below
   dem_bproj_cost_function c(dem_view_, geo_cam_, ray);
   vnl_brent_minimizer brm(c);
   double tmin = brm.minimize(t);
   double error = brm.f_at_last_minimum();
-  //std::cout << "f at term " << error << std::endl;
   if(error>error_tol)
     return false;
-  vgl_point_3d<double> origin = ray.origin();
-  double z_final = origin.z() + tmin*dir.z();
-  //std::cout << " z at final " << z_final << std::endl;
+  
   world_point = origin + tmin*dir;
+
+  std::cout << "success! ray/dem intersection " << world_point  << std::endl;
   return true;
 }
 
@@ -125,8 +157,10 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam, vnl_double_
   img_pt.set(image_point[0], image_point[1]);
   init_guess.set(initial_guess[0],initial_guess[1],initial_guess[2]);
   bool good = this->bproj_dem(cam, img_pt, max_z, min_z, init_guess, wrld_pt, error_tol);
-  if(!good)
+  
+  if(!good){
     return false;
+  }
   world_point[0]=wrld_pt.x(); world_point[1]=wrld_pt.y(); world_point[2]=wrld_pt.z();
   return true;
 }
