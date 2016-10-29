@@ -51,6 +51,7 @@ int main(int argc,char * argv[])
   std::string ref_img_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif");
   std::string ref_cam_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif_RPC.txt");
   std::string output_namebase("D:/results/20160820_073052_0c76_20160831_063745_0e0d");
+  vgl_box_2d<int> region( 1700, 3800, 0, 1900 );//JOE HACKED THIS REGION IN - Seemed to be missing maybe git problem
   double z_ground = 0.0;
 
   /*/ Joe's region
