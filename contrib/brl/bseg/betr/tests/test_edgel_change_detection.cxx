@@ -354,6 +354,7 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++){
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
+   std::cout << "Offset "<< offsets[i] << " (" << rescs[i]->ni() << ' ' << rescs[i]->nj() <<")\n";
    std::stringstream ss;
    ss << i;
    std::string change_path = dir + evt_name + "change_image_" + ss.str() +".tif";

@@ -6,11 +6,14 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
-
+#include "vpgl_dem_manager.h"
 void vpgl_register::register_datatype()
 {
   REGISTER_DATATYPE( vpgl_camera_double_sptr );
   REGISTER_DATATYPE( vpgl_lvcs_sptr );
+#if HAS_GEOTIFF
+  REGISTER_DATATYPE( vpgl_dem_manager_sptr );
+#endif
 }
 
 void vpgl_register::register_process()
@@ -132,6 +135,8 @@ void vpgl_register::register_process()
 #if HAS_GEOTIFF
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_seed_process, "vpglIsfmRationalCameraSeedProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_with_initial_process, "vpglIsfmRationalCameraWithInitialProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_dem_manager_process, "vpglCreateDemManagerProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_backproject_dem_process, "vpglBackprojectDemProcess");
 #endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_rational_camera_from_txt_process, "vpglLoadRationalCameraFromTXTProcess");
 

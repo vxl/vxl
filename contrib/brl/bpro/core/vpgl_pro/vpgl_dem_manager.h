@@ -20,7 +20,7 @@
 class vpgl_dem_manager : public vbl_ref_count{
  public:
   vpgl_dem_manager(vil_image_resource_sptr const& resc);
-  bool back_project(vpgl_camera<double>* cam, double u, double v, double& x, double& y, double& z) const;
+  bool back_project(vpgl_camera<double>* cam, double u, double v, double& x, double& y, double& z, double err_tol = 1.0);
  private:
   vpgl_backproject_dem bproj_dem_;
 };
