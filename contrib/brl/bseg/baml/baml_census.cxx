@@ -25,7 +25,6 @@ baml_compute_census_img(
   int nbhd_rad = (nbhd_diam-1)/2;
   int max_intensity = pow( 256, sizeof(T) )-1;
 
-  int max_intensity = pow( 256, sizeof(T) )-1;
 
   // Iterate over each pixel
   for( int y = nbhd_rad; y < height-nbhd_rad; y++ ){

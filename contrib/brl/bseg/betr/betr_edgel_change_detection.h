@@ -12,16 +12,12 @@
 class betr_edgel_change_detection : public betr_algorithm
 {
  public:
-<<<<<<< abe378d5e16d276bf5686258afbb652f546d13c4
+
 
  betr_edgel_change_detection(): betr_algorithm("edgel_change_detection"),js_div_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){
 	 params_ =  new betr_edgel_change_detection_params();}
 
-=======
- betr_edgel_change_detection(): betr_algorithm("edgel_change_detection"),js_div_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){
-	 params_ =  new betr_edgel_change_detection_params();}
 
->>>>>>> Added parameter classes
  betr_edgel_change_detection(betr_edgel_change_detection_params const& params): betr_algorithm("edgel_change_detection"), 
     js_div_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){params_ =  new betr_edgel_change_detection_params();}
 
