@@ -11,7 +11,7 @@
 // \verbatim
 //  Modifications
 //   July 13 2004 - J.L. Mundy - Converted to vgl interface
-//                  from code by Ken Clarkson (see .txx file for details)
+//                  from code by Ken Clarkson (see .hxx file for details)
 // \endverbatim
 
 #include <vector>
@@ -34,6 +34,6 @@ class vgl_convex_hull_2d
   vgl_polygon<T> hull_;
 };
 
-#define VGL_CONVEX_HULL_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_convex_hull_2d.txx first"
+#define VGL_CONVEX_HULL_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_convex_hull_2d.hxx first"
 
 #endif

@@ -24,7 +24,7 @@ void vil_print_value(std::ostream& s, const T& value, unsigned=0);
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 #define vil_print_declare_specialization( T ) \
-  VCL_DEFINE_SPECIALIZATION \
+  template <> \
   void vil_print_value(std::ostream& os, const T & value, unsigned)
 
 vil_print_declare_specialization( bool );

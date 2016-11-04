@@ -229,7 +229,7 @@ template <vidl_pixel_color in_C, vidl_pixel_color out_C>
 struct vidl_color_converter;
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_MONO>
 {
   template <class T>
@@ -246,7 +246,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_MONO>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_RGB>
 {
   template <class T>
@@ -265,7 +265,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_RGB>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_RGBA>
 {
   template <class T>
@@ -285,7 +285,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_RGBA>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_RGB>
 {
   template <class T>
@@ -304,7 +304,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_RGB>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_RGBA>
 {
   template <class T>
@@ -325,7 +325,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_RGBA>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_YUV>
 {
   template <class T>
@@ -344,7 +344,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_YUV>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_YUV>
 {
   template <class inT, class outT>
@@ -380,7 +380,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_YUV>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_YUV>
 {
   template <class outT>
@@ -392,7 +392,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_YUV>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGB>
 {
   template <class inT, class outT>
@@ -428,7 +428,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGB>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGBA>
 {
   template <class outT>
@@ -441,7 +441,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGBA>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_MONO>
 {
   template <class T>
@@ -460,7 +460,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_MONO>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_YUV>
 {
   template <class T>
@@ -482,7 +482,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_YUV>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_MONO>
 {
   template <class inT, class outT>
@@ -505,7 +505,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_MONO>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_MONO>
 {
   template <class inT, class outT>
@@ -528,7 +528,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_MONO>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_RGB>
 {
   template <class inT, class outT>
@@ -540,7 +540,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_RGB>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_RGBA>
 {
   template <class inT, class outT>
@@ -595,7 +595,7 @@ struct vidl_color_component
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_component<VIDL_PIXEL_FORMAT_BGR_24>
 {
   // 0 -> 2
@@ -631,7 +631,7 @@ struct vidl_color_component<VIDL_PIXEL_FORMAT_BGR_24>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_555>
 {
   static inline
@@ -668,7 +668,7 @@ struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_555>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_565>
 {
   static inline
@@ -715,7 +715,7 @@ struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_565>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_component<VIDL_PIXEL_FORMAT_UYV_444>
 {
   // 0 -> 1

@@ -57,8 +57,6 @@ inline unsigned char baml_compute_hamming_bk(
 
   return ham;
 }
-
-
 //: Compute the hamming distance of a difference bit-string using a bit-set
 // look-up table.
 inline unsigned char baml_compute_hamming_lut(
@@ -82,8 +80,6 @@ inline unsigned char baml_compute_hamming_lut(
     lut[(diff >> 48) & 0xff] +
     lut[(diff >> 54) & 0xff];
 }
-
-
 //: Generate a bit-set look-up table for a pre-allocated array of size 256 for
 // use with the above function.
 inline void baml_generate_bit_set_lut(

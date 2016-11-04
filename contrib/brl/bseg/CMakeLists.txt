@@ -85,6 +85,8 @@ add_subdirectory(bvxm_bridge)
 add_subdirectory(betr)
 add_subdirectory(betr_batch)
 
+# VSI conflation tools
+add_subdirectory(vcon)
+
 # appearance modeling library
 add_subdirectory(baml)
-

@@ -9,9 +9,9 @@ set(rsdl_sources
                        rsdl_kd_tree_sptr.h
  rsdl_point.cxx        rsdl_point.h
 
- rsdl_bins_2d.txx      rsdl_bins_2d.h
- rsdl_borgefors.txx    rsdl_borgefors.h
- rsdl_bins.txx         rsdl_bins.h
+ rsdl_bins_2d.hxx      rsdl_bins_2d.h
+ rsdl_borgefors.hxx    rsdl_borgefors.h
+ rsdl_bins.hxx         rsdl_bins.h
 )
 
 aux_source_directory(Templates rsdl_sources)

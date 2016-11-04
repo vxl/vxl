@@ -284,6 +284,6 @@ std::ostream&  operator<<(std::ostream& s, vgl_conic<T> const& c);
 template <class T>
 std::istream&  operator>>(std::istream& s, vgl_conic<T>& c);
 
-#define VGL_CONIC_INSTANTIATE(T) extern "please include vgl/vgl_conic.txx first"
+#define VGL_CONIC_INSTANTIATE(T) extern "please include vgl/vgl_conic.hxx first"
 
 #endif // vgl_conic_h_

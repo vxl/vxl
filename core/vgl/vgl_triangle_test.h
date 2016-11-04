@@ -30,6 +30,6 @@ bool vgl_triangle_test_inside(T x1, T y1,
                               T x3, T y3,
                               T x , T y );
 
-#define VGL_TRIANGLE_TEST_INSTANTIATE(T) extern "please include vgl/vgl_triangle_test.txx instead"
+#define VGL_TRIANGLE_TEST_INSTANTIATE(T) extern "please include vgl/vgl_triangle_test.hxx instead"
 
 #endif // vgl_triangle_test_h_

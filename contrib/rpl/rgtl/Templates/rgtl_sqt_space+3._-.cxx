@@ -1,4 +1,4 @@
-#include <rgtl/rgtl_sqt_space.txx>
+#include <rgtl/rgtl_sqt_space.hxx>
 RGTL_SQT_SPACE_BASE_INSTANTIATE(3);
 RGTL_SQT_SPACE_INSTANTIATE(3, 0);
 RGTL_SQT_SPACE_INSTANTIATE(3, 1);

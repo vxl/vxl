@@ -9,7 +9,7 @@
 #include <vil/io/vil_io_image_view.h>
 
 //: Binary write image view base to stream
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 {
   switch (view_base->pixel_format())
@@ -79,7 +79,7 @@ void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 }
 
 //: Binary load image view base from stream.
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 {
   if (!is) return;
@@ -176,13 +176,13 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 //std::cerr << "warning: vsl_b_read not implemented for vil_image_view_base_sptr\n";
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_write(vsl_b_ostream & os, vil_image_resource_sptr const& view)
 {
   std::cerr << "warning: vsl_b_write not implemented for vil_image_resource_sptr\n";
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_read(vsl_b_istream & is, vil_image_resource_sptr &view)
 {
   std::cerr << "warning: vsl_b_read not implemented for vil_image_resource_sptr\n";

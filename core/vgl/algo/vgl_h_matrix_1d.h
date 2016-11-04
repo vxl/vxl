@@ -19,7 +19,7 @@
 //   13 Jun 2004 - Peter Vanroose - added set_identity() and projective_basis()
 //   31 Jul 2010 - Peter Vanroose - made more similar to 2d and 3d variants
 //   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
-//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
+//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .hxx to .h
 //   26 Jul 2011 - Peter Vanroose - added is_identity(),is_rotation(),is_euclidean(),
 //                                  correlation(),operator*(h_matrix),set(row,col,val),
 //                                  set_translation(),set_affine(), cf vgl_h_matrix_2d
@@ -154,6 +154,6 @@ template <class T> std::istream& operator>>(std::istream& s, vgl_h_matrix_1d<T>&
 { H.read(s); return s; }
 
 
-#define VGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_1d.txx first"
+#define VGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_1d.hxx first"
 
 #endif // vgl_h_matrix_1d_h_

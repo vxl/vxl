@@ -134,7 +134,6 @@ int main(int argc,char * argv[])
   baml_warp_via_ground_plane( 
     ref_img, ref_cam, region, 
     target_cam, z_ground, ref_warped );
-
   // Make valid image
   ref_valid.set_size( region.width(), region.height() );
   ref_valid.fill( true );

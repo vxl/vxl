@@ -140,7 +140,7 @@ void vil_gauss_reduce_1plane(const T* src_im,
 //
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_1plane(const vxl_byte* src_im,
                              unsigned src_nx, unsigned src_ny,
                              std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -156,7 +156,7 @@ void vil_gauss_reduce_1plane(const vxl_byte* src_im,
 //
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image.
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_1plane(const float* src_im,
                              unsigned src_nx, unsigned src_ny,
                              std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -172,14 +172,14 @@ void vil_gauss_reduce_1plane(const float* src_im,
 //
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image.
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_1plane(const int* src_im,
                              unsigned src_nx, unsigned src_ny,
                              std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
                              int* dest_im,
                              std::ptrdiff_t d_x_step, std::ptrdiff_t d_y_step);
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_1plane(const double* src_im,
                              unsigned src_nx, unsigned src_ny,
                              std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -195,7 +195,7 @@ void vil_gauss_reduce_1plane(const double* src_im,
 //
 //  By applying twice we can obtain a full gaussian smoothed and
 //  sub-sampled 2D image.
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_1plane(const vxl_int_16* src_im,
                              unsigned src_nx, unsigned src_ny,
                              std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -213,7 +213,7 @@ void vil_gauss_reduce_121_1plane(const T* src_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_121_1plane(const vxl_byte* src_im,
                                  unsigned src_nx, unsigned src_ny,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -222,7 +222,7 @@ void vil_gauss_reduce_121_1plane(const vxl_byte* src_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_121_1plane(const float* src_im,
                                  unsigned src_nx, unsigned src_ny,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -231,13 +231,13 @@ void vil_gauss_reduce_121_1plane(const float* src_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_121_1plane(const int* src_im,
                                  unsigned src_nx, unsigned src_ny,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
                                  int* dest_im,
                                  std::ptrdiff_t d_x_step, std::ptrdiff_t d_y_step);
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_121_1plane(const double* src_im,
                                  unsigned src_nx, unsigned src_ny,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -246,7 +246,7 @@ void vil_gauss_reduce_121_1plane(const double* src_im,
 
 //: Smooth and subsample single plane src_im in x to produce dest_im using 121 filter in x and y
 //  Smooths with a 3x3 filter and subsamples
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_121_1plane(const vxl_int_16* src_im,
                                  unsigned src_nx, unsigned src_ny,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -268,7 +268,7 @@ void vil_gauss_reduce_2_3_1plane(const T* src_im,
 //  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
 //
 //  Note, 131 filter only an approximation
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_2_3_1plane(const vxl_byte* src_im,
                                  unsigned src_ni, unsigned src_nj,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -279,7 +279,7 @@ void vil_gauss_reduce_2_3_1plane(const vxl_byte* src_im,
 //  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
 //
 //  Note, 131 filter only an approximation
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_2_3_1plane(const int* src_im,
                                  unsigned src_ni, unsigned src_nj,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -290,7 +290,7 @@ void vil_gauss_reduce_2_3_1plane(const int* src_im,
 //  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
 //
 //  Note, 131 filter only an approximation
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_2_3_1plane(const vxl_int_16* src_im,
                                  unsigned src_ni, unsigned src_nj,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -301,7 +301,7 @@ void vil_gauss_reduce_2_3_1plane(const vxl_int_16* src_im,
 //  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
 //
 //  Note, 131 filter only an approximation
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_2_3_1plane(const float* src_im,
                                  unsigned src_ni, unsigned src_nj,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
@@ -312,7 +312,7 @@ void vil_gauss_reduce_2_3_1plane(const float* src_im,
 //  every other pixel.  Fills [0,(2*ni+1)/3-1][0,nj-1] elements of dest
 //
 //  Note, 131 filter only an approximation
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_gauss_reduce_2_3_1plane(const double* src_im,
                                  unsigned src_ni, unsigned src_nj,
                                  std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,

@@ -272,7 +272,7 @@ void vsl_print_summary(std::ostream& os, const mbl_ar_process<T>* p)
 
 #undef MBL_AR_PROCESS_INSTANTIATE
 #define MBL_AR_PROCESS_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string mbl_ar_process<T >::is_a() const \
+template <> std::string mbl_ar_process<T >::is_a() const \
 { return std::string("mbl_ar_process<" #T ">"); } \
 template class mbl_ar_process<T >; \
 template void vsl_b_write(vsl_b_ostream& s, const mbl_ar_process<T >* arp); \

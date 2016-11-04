@@ -165,8 +165,8 @@ VCL_TEMPLATE_EXPORT template <class T> std::istream& operator>>(std::istream&,
                                                   vbl_array_3d<T >&);
 
 #define VBL_ARRAY_3D_INSTANTIATE \
-extern "please include vbl/vbl_array_3d.txx instead"
+extern "please include vbl/vbl_array_3d.hxx instead"
 #define VBL_ARRAY_3D_IO_INSTANTIATE \
-extern "please include vbl/vbl_array_3d.txx instead"
+extern "please include vbl/vbl_array_3d.hxx instead"
 
 #endif // vbl_array_3dh

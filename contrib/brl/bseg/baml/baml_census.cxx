@@ -36,7 +36,6 @@ baml_compute_census_img(
       unsigned long long sal = 0;
 
       int x_min = x-nbhd_rad, y_min = y-nbhd_rad;
-
       T img_xy = img(x,y);
       for( int dy = 0; dy < nbhd_diam; dy++ ){
         const T* img_x2y2 = &img( x_min, y_min + dy );
@@ -59,7 +58,6 @@ baml_compute_census_img(
   }
   return true;
 };
-
 
 #undef BAML_COMPUTE_CENSUS_IMG_INSTANTIATE
 #define BAML_COMPUTE_CENSUS_IMG_INSTANTIATE(T) \

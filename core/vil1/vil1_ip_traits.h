@@ -49,7 +49,7 @@ struct vil1_ip_traits<T * const*>
 #else
 // It's like the good old days... #define declare_list(T)
 #define VIL1_IP_TRAITS_DECLARE(T, RT, PT) \
-VCL_DEFINE_SPECIALIZATION struct vil1_ip_traits<T > {\
+template <> struct vil1_ip_traits<T > {\
  typedef PT pixel_type;\
  typedef RT row_type;\
  };

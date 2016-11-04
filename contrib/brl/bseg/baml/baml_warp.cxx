@@ -60,7 +60,6 @@ void baml_warp_perspective(
 
       // Interpolate
       for( int p = 0; p < num_planes; p++ ){
-
         // The below is code from vil_bilin_interp_safe
         int p1x=int(wx);
         double normx = wx-p1x;
@@ -157,3 +156,4 @@ bool baml_warp_via_dem(
   // Occlusion?
   return true;
 }
+

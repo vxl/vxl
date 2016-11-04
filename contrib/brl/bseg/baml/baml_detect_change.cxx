@@ -56,7 +56,6 @@ bool baml_change_detection::detect(
   return true;
 }
 
-
 //-------------------------------------------------------------------
 bool 
 baml_change_detection::detect_bt(
@@ -125,7 +124,6 @@ baml_change_detection::detect_census(
   if( img_ref.ni() != width || img_ref.nj() != height ||
     valid_ref.ni() != width || valid_ref.nj() != height )
     return false;
-  
   // Bound-check census_rad
   if( params_.census_rad <= 0 ) params_.census_rad = 1;
   if( params_.census_rad > 3 ) params_.census_rad = 3;
@@ -340,3 +338,4 @@ vil_save( vis, "D:/results/b.png" );*/
 
   return true;
 }
+

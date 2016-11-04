@@ -37,9 +37,9 @@ void vsl_b_write(vsl_b_ostream& s, const std::vector<T>& v)
 
 template <class T> bool vsl_is_char(const T&);
 
-VCL_DEFINE_SPECIALIZATION inline bool vsl_is_char(const unsigned char &)
+template <> inline bool vsl_is_char(const unsigned char &)
 { return true; }
-VCL_DEFINE_SPECIALIZATION inline bool vsl_is_char(const signed char &)
+template <> inline bool vsl_is_char(const signed char &)
 { return true; }
 template <class T> bool vsl_is_char(const T&) { return false; }
 

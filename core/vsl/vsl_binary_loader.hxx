@@ -98,7 +98,7 @@ vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = 0;
 
 #undef VSL_BINARY_LOADER_INSTANTIATE
 #define VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION std::string vsl_binary_loader<T >::is_a() const \
+template <> std::string vsl_binary_loader<T >::is_a() const \
 {  return std::string("vsl_binary_loader<" #T ">"); }\
 template class vsl_binary_loader<T >
 #define VSL_BINARY_LOADER_INSTANTIATE(T) \

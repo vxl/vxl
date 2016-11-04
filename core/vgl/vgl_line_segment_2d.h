@@ -105,6 +105,6 @@ std::ostream&  operator<<(std::ostream& s, const vgl_line_segment_2d<Type>& p);
 template <class Type>
 std::istream&  operator>>(std::istream& is,  vgl_line_segment_2d<Type>& p);
 
-#define VGL_LINE_SEGMENT_2D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_2d.txx first"
+#define VGL_LINE_SEGMENT_2D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_2d.hxx first"
 
 #endif // vgl_line_segment_2d_h_

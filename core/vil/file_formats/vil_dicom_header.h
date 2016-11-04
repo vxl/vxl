@@ -282,7 +282,7 @@ struct vil_dicom_header_type_of
 };
 
 #define vr_macro( VR, CPPT ) \
-  VCL_DEFINE_SPECIALIZATION struct  vil_dicom_header_type_of<VR> { typedef CPPT type; }
+  template <> struct  vil_dicom_header_type_of<VR> { typedef CPPT type; }
 
 vr_macro( vil_dicom_header_AE, std::string );
 vr_macro( vil_dicom_header_AS, std::string );
