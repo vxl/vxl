@@ -4,6 +4,7 @@ set(baml_sources
     baml_birchfield_tomasi.h         baml_birchfield_tomasi.cxx
     baml_census.h                    baml_census.cxx
     baml_detect_change.h             baml_detect_change.cxx
+    baml_utilities.h                 baml_utilities.cxx
     baml_warp.h                      baml_warp.cxx
    )
    

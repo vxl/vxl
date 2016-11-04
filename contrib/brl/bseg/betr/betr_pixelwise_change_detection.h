@@ -8,14 +8,9 @@
 //
 
 #include <string>
+
+#include <baml/baml_detect_change.h>
 #include "betr_algorithm.h"
-
-//: Metric used for pixel-wise comparison
-enum betr_pixelwise_cd_metric { 
-  BT, // Birchfield-Tomasi 
-  CENSUS,
-  GRAD };
-
 
 class betr_pixelwise_change_detection : public betr_algorithm
 {
@@ -23,21 +18,23 @@ public:
 
   betr_pixelwise_change_detection(): 
     betr_algorithm("pixelwise_change_detection"),
-    avg_prob_(0.0), metric_( GRAD ), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){}
+    avg_prob_(0.0), method_( CENSUS ),
+    i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){}
 
   //: select the pixelwise appearance metric
-  inline void set_metric( betr_pixelwise_cd_metric m ){
-    metric_ = m; }
+  inline void set_metric( baml_change_detection_method m ){
+    method_ = m; }
 
   //: process change
   virtual bool process();
 
   //: resulting change probability
-  virtual double prob_change() const{return avg_prob_;} //for now not really a probability
+  virtual double prob_change() const{return avg_prob_;}
 
   //: image of pixel-wise census probabilities
-  virtual vil_image_resource_sptr change_image(unsigned& i_offset, unsigned& j_offset) const{
-    i_offset = i_offset_; j_offset = j_offset_; return change_img_;}
+  virtual vil_image_resource_sptr change_image(
+    unsigned& i_offset, unsigned& j_offset) const{
+      i_offset = i_offset_; j_offset = j_offset_; return change_img_;}
 
 private:
   
@@ -45,7 +42,7 @@ private:
   double avg_prob_;
 
   //: parameters
-  betr_pixelwise_cd_metric metric_;
+  baml_change_detection_method method_;
   unsigned i_offset_;
   unsigned j_offset_;
   vil_image_resource_sptr change_img_;

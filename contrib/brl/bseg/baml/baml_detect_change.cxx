@@ -14,83 +14,56 @@
 #include "baml_birchfield_tomasi.h"
 #include "baml_detect_change.h"
 #include "baml_census.h"
+#include "baml_utilities.h"
 
 
-
-//----------------------------------------------------------
-bool baml_correct_gain_offset(
-  const vil_image_view<vxl_uint_16>& img_tar,
+//-------------------------------------------------------------------
+bool baml_change_detection::detect(
+  const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
-  const vil_image_view<bool>& valid_ref,
-  vil_image_view<vxl_uint_16>& corrected_ref )
+  const vil_image_view<bool>& valid,
+  vil_image_view<float>& change_prob_target )
 {
-  int width = img_tar.ni(), height = img_tar.nj();
+  // Correct gain/offset
+  vil_image_view<vxl_uint_16> corr_ref;
+  if( params_.correct_gain_offset )
+    baml_correct_gain_offset( img_target, img_ref, valid, corr_ref );
+  else
+    corr_ref.deep_copy( img_ref );
 
-  if( img_ref.ni() != width || img_ref.nj() != height ||
-    valid_ref.ni() != width || valid_ref.nj() != height )
-    return false;
+  bool dc_success = false;
 
-  // Initialize output image
-  corrected_ref.set_size( width, height );
-  corrected_ref.fill( 0.0 );
+  // Detect change using specified method
+  if( params_.method == BIRCHFIELD_TOMASI )
+    dc_success = detect_bt( 
+      img_target, corr_ref, valid, change_prob_target );
+  else if( params_.method == CENSUS )
+    dc_success = detect_census( 
+      img_target, corr_ref, valid, change_prob_target );
+  else if( params_.method == GRADIENT_DIFF )
+    dc_success = detect_gradient( 
+      img_target, corr_ref, valid, change_prob_target );
+  else if( params_.method == NON_PARAMETRIC )
+    dc_success = detect_nonparam( 
+      img_target, corr_ref, valid, change_prob_target );
 
-  // Compute statistics over the image
-  double sumw = 0, sumI1 = 0, sumI2 = 0;
-  double sumI1I2 = 0, sumI2Sq = 0;
+  if( !dc_success ) return false;
 
-  for( int y = 0; y < height; y++ ){
-    for( int x = 0; x < width; x++ ){
-      if( !valid_ref(x,y) ) continue;
-
-      float i1 = img_tar(x,y)/255.0f;
-      float i2 = img_ref(x,y)/255.0f;
-
-      sumw += 1.0;
-      sumI1 += i1;
-      sumI2 += i2;
-      sumI1I2 += i2*i1;
-      sumI2Sq += i2*i2;
-    }
-  }
-
-  // Check good stats
-  if( sumw < 1.0 ) return false;
-
-  // Compute weighted least squares estimate of gain/offset
-  vnl_matrix_fixed<double,2,2> A;
-  A(0,0) = sumI2Sq/sumw; A(0,1) = sumI2/sumw;
-  A(1,0) = sumI2/sumw; A(1,1) = 1.0;
-
-  vnl_matrix_fixed<double,2,1> b;
-  b(0,0) = sumI1I2/sumw; b(1,0) = sumI1/sumw;
-
-  vnl_matrix_fixed<double,2,1> c = vnl_inverse( A )*b;
-  double gain = c(0,0), offset = c(1,0)*255;
-
-  std::cerr << "Gain: " << gain << "  Offset: " << offset << '\n';
-
-  // Apply the gain offset
-  for( int y = 0; y < height; y++ ){
-    for( int x = 0; x < width; x++ ){
-      if( !valid_ref(x,y) ) continue;
-       
-      double r = std::max( 0.0, img_ref(x,y)*gain + offset );
-      corrected_ref(x,y) = (vxl_uint_16)r;
-    }
-  }
+  // Convert likelihood into probability
+  baml_sigmoid( 
+    change_prob_target, change_prob_target, params_.prior_change_prob );
 
   return true;
 }
 
 
 //-------------------------------------------------------------------
-bool baml_detect_change_bt(
+bool 
+baml_change_detection::detect_bt(
   const vil_image_view<vxl_uint_16>& img_tar,
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid_ref,
-  vil_image_view<float>& tar_lh,
-  float bt_std,
-  int bt_rad )
+  vil_image_view<float>& tar_lh )
 {
   int width = img_tar.ni(), height = img_tar.nj();
 
@@ -98,8 +71,8 @@ bool baml_detect_change_bt(
     valid_ref.ni() != width || valid_ref.nj() != height )
     return false;
 
-  float gauss_var = bt_std*bt_std;
-  float gauss_norm = log( 1.0f/(bt_std*sqrt(2*3.14159f)/255.0f) );
+  float gauss_var = params_.bt_std*params_.bt_std;
+  float gauss_norm = log( 1.0f/(params_.bt_std*sqrt(2*3.14159f)/255.0f) );
    
   // Initialize output image
   tar_lh.set_size( width, height );
@@ -121,7 +94,8 @@ bool baml_detect_change_bt(
 
   // Compute Birchfield-Tomasi score
   vil_image_view<vxl_uint_16> score;
-  if( !baml_compute_birchfield_tomasi( img_tar, img_ref, score, bt_rad ) )
+  if( !baml_compute_birchfield_tomasi( 
+    img_tar, img_ref, score, params_.bt_rad ) )
     return false;
 
   // Convert BT score to log likelihood ratio
@@ -139,14 +113,12 @@ bool baml_detect_change_bt(
 
 
 //---------------------------------------------------------------
-bool baml_detect_change_census(
+bool 
+baml_change_detection::detect_census(
   const vil_image_view<vxl_uint_16>& img_tar,
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid_ref,
-  vil_image_view<float>& tar_lh,
-  float census_std,
-  int census_tol,
-  int census_rad )
+  vil_image_view<float>& tar_lh )
 {
   int width = img_tar.ni(), height = img_tar.nj();
 
@@ -155,12 +127,12 @@ bool baml_detect_change_census(
     return false;
   
   // Bound-check census_rad
-  if( census_rad <= 0 ) census_rad = 1;
-  if( census_rad > 3 ) census_rad = 3;
-  int census_diam = census_rad*2+1;
+  if( params_.census_rad <= 0 ) params_.census_rad = 1;
+  if( params_.census_rad > 3 ) params_.census_rad = 3;
+  int census_diam = params_.census_rad*2+1;
 
   // Get parameters for background Gaussian distribution
-  float gauss_std = census_std*census_diam*census_diam;
+  float gauss_std = params_.census_std*census_diam*census_diam;
   float gauss_var = gauss_std*gauss_std;
   float gauss_norm = log( 1.0f/(gauss_std*sqrt(2*3.14159f)) );
 
@@ -180,16 +152,10 @@ bool baml_detect_change_census(
   vil_image_view<vxl_uint_64> census_tar, census_ref;
   vil_image_view<vxl_uint_64> salience_tar, salience_ref;
 
-  // Convert 16-bit images to 8-bit
-  // TEMPORARY until we have templated census function
-  //vil_image_view<vxl_byte> img_tar_8u, img_ref_8u;
-  //vil_convert_stretch_range_limited( img_tar, img_tar_8u, (vxl_uint_16)0, (vxl_uint_16)2000 );
-  //vil_convert_stretch_range_limited( img_ref, img_ref_8u, (vxl_uint_16)0, (vxl_uint_16)2000 );
-
   baml_compute_census_img( 
-    img_tar, census_diam, census_tar, salience_tar, census_tol );
+    img_tar, census_diam, census_tar, salience_tar, params_.census_tol );
   baml_compute_census_img( 
-    img_ref, census_diam, census_ref, salience_ref, census_tol );
+    img_ref, census_diam, census_ref, salience_ref, params_.census_tol );
 
   // Compute hamming distance between images
   for( int y = 0; y < height; y++ ){
@@ -214,12 +180,12 @@ bool baml_detect_change_census(
 
 
 //---------------------------------------------------------------
-bool baml_detect_change_gradient(
+bool 
+baml_change_detection::detect_gradient(
   const vil_image_view<vxl_uint_16>& img_tar,
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid_ref,
-  vil_image_view<float>& tar_lh,
-  float grad_std )
+  vil_image_view<float>& tar_lh )
 {
   float mag_tol = 0.00001f;
   int width = img_tar.ni(), height = img_tar.nj();
@@ -229,15 +195,15 @@ bool baml_detect_change_gradient(
     return false;
 
   // Get parameters for background Gaussian distribution
-  float gauss_var = grad_std*grad_std;
-  float gauss_norm = log( 1.0f/(grad_std*sqrt(2*3.14159f)) );
+  float gauss_var = params_.grad_std*params_.grad_std;
+  float gauss_norm = log( 1.0f/(params_.grad_std*sqrt(2*3.14159f)) );
 
   // Initialize output image
   tar_lh.set_size( width, height );
   tar_lh.fill( 1.0f );
 
   // Compute foreground likelihood assuming uniform distribution on foreground
-  float lfg = log( 1.0f/(4*grad_std) );
+  float lfg = log( 1.0f/(4*params_.grad_std) );
 
   // Compute gradient images
   vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
@@ -279,21 +245,20 @@ bool baml_detect_change_gradient(
 }
 
 //------------------------------------------------------------------------
-bool baml_detect_change_nonparam(
+bool 
+baml_change_detection::detect_nonparam(
   const vil_image_view<vxl_uint_16>& img_tar,
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid_ref,
-  vil_image_view<float>& tar_lh,
-  int img_bit_depth,
-  int hist_bit_depth )
+  vil_image_view<float>& tar_lh )
 {
   // Hardcoded params
   float gauss_rad_percent = 0.01f;
   double double_tol = 0.000000001;
 
-  int img_bit_ds = pow( 2, img_bit_depth-hist_bit_depth );
+  int img_bit_ds = pow( 2, params_.img_bit_depth-params_.hist_bit_depth );
 
-  int hist_range = pow( 2, hist_bit_depth );
+  int hist_range = pow( 2, params_.hist_bit_depth );
   int gauss_rad = (int)( gauss_rad_percent*hist_range );
   double gauss_sd = gauss_rad/3.0;
 
@@ -375,54 +340,3 @@ vil_save( vis, "D:/results/b.png" );*/
 
   return true;
 }
-
-
-//----------------------------------------------------------
-void baml_sigmoid(
-  const vil_image_view<float>& lh,
-  vil_image_view<float>& prob,
-  float prior_prob )
-{
-  int width = lh.ni(), height = lh.nj();
-
-  // Initialize output image
-  prob.set_size( width, height );
-
-  for( int y = 0; y < height; y++ ){
-    for( int x = 0; x < width; x++ ){
-      prob(x,y) = prior_prob/( prior_prob + (1.0f-prior_prob)*exp( -lh(x,y) ) );
-    }
-  }
-}
-
-
-//------------------------------------------------------------------
-bool baml_overlay_red(
-  const vil_image_view<vxl_byte>& img,
-  const vil_image_view<vxl_byte>& map,
-  vil_image_view<vxl_byte>& vis_img,
-  vxl_byte clear_map_val,
-  vxl_byte red_map_val )
-{
-  if( img.ni() != map.ni() || img.nj() != map.nj() )
-    return false;
-
-  vis_img.set_size( map.ni(), map.nj(), 3 );
-
-  float map_norm = 1.0f/(red_map_val-(float)clear_map_val);
-  
-  for( unsigned y = 0; y < map.nj(); y++ ){
-    for( unsigned x = 0; x < map.ni(); x++ ){
-      float relativeVal = std::min( 1.0f, std::max( 0.0f, 
-        map_norm*((float)map(x,y)) - (float)clear_map_val ));
-
-      vis_img(x,y,0) = vis_img(x,y,1) = (vxl_byte)( 
-        img(x,y)*(1.0-relativeVal) );
-      vis_img(x,y,2) = (vxl_byte)( 
-        img(x,y)*(1.0-relativeVal) + 255*relativeVal );
-    }
-  }
-
-  return true;
-}
-

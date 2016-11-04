@@ -34,7 +34,6 @@ int main(int argc,char * argv[])
   
   /*/ Hard case
   vpgl_lvcs lvcs( 35.2080385626545, 48.70485305698821, 1675 );
->>>>>>> b0333ae427b07c4c35b6c5be422a4ccbb7c9f10b
   std::string target_img_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif");
   std::string target_cam_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif_RPC.txt");
   std::string ref_img_file("D:/data/sattel/hamadan/20160817_135113_0c68.tif");
@@ -44,14 +43,13 @@ int main(int argc,char * argv[])
   double z_ground = 0.0;//*/
 
   // Easy case 1
-
   vpgl_lvcs lvcs( 35.2080385626545, 48.70485305698821, 1675 );
   std::string target_img_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif");
   std::string target_cam_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif_RPC.txt");
   std::string ref_img_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif");
   std::string ref_cam_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif_RPC.txt");
   std::string output_namebase("D:/results/20160820_073052_0c76_20160831_063745_0e0d");
-  vgl_box_2d<int> region( 1700, 3800, 0, 1900 );//JOE HACKED THIS REGION IN - Seemed to be missing maybe git problem
+  vgl_box_2d<int> region( 1700, 3800, 0, 1900 );
   double z_ground = 0.0;
 
   /*/ Joe's region
@@ -145,23 +143,16 @@ int main(int argc,char * argv[])
       if( tar_cropped(x,y)==0 || ref_warped(x,y)==0 ) ref_valid(x,y) = false;
     }
   }
-
-  // Correct gain/offset
-  vil_image_view<vxl_uint_16> ref_cor;
-  baml_correct_gain_offset( tar_blur, ref_warped, ref_valid, ref_cor );
   
   // Output the cropped images
   vil_save( tar_blur, (output_namebase + "_img1.tif").c_str() );
   vil_save( ref_warped, (output_namebase + "_img2.tif").c_str() );
 
   // Detect changes
-  vil_image_view<float> tar_lh, tar_prob;
-  //baml_detect_change_bt( tar_blur, ref_cor, ref_valid, tar_lh, 50.0f );
-  //baml_detect_change_census( tar_blur, ref_warped, ref_valid, tar_lh, 0.3f, 10 );
-  baml_detect_change_gradient( tar_blur, ref_warped, ref_valid, tar_lh, 30.0 );
-  //baml_detect_change_nonparam( tar_blur, ref_warped, ref_valid, tar_lh );
-
-  baml_sigmoid( tar_lh, tar_prob, 0.01f );
+  vil_image_view<float> tar_prob;
+  baml_change_detection_params params;
+  baml_change_detection cd( params );
+  cd.detect( tar_blur, ref_warped, ref_valid, tar_prob );
 
   // Visualize and save
   vil_image_view<vxl_byte> change_vis;

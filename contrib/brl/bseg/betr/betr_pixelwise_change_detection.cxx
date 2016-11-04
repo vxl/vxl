@@ -7,7 +7,6 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vsol/vsol_point_2d.h>
 
-#include <baml/baml_detect_change.h>
 #include <baml/baml_warp.h>
 
 #include "betr_pixelwise_change_detection.h"
@@ -67,24 +66,21 @@ bool betr_pixelwise_change_detection::process(){
   vil_image_view<vxl_uint_16> ref_cropped;
   baml_warp_perspective( ref_img, ref_to_evt_cropped, bb_width, bb_height, ref_cropped );
 
-vil_save( evt_img, "D:/results/chip1.tif" );
-vil_save( ref_cropped, "D:/results/chip2.tif" );
+//vil_save( evt_img, "D:/results/chip1.tif" );
+//vil_save( ref_cropped, "D:/results/chip2.tif" );
 
   // TODO: GET REFERENCE REGIONS FOR BT
 
   // Setup pixel-wise probability buffers
   vil_image_view<bool> valid( bb_width, bb_height );
   valid.fill( true );
-  vil_image_view<float> evt_lh;
+  vil_image_view<float> evt_change_prob;
   
   // Compute pixel-wise likelihood using specified metric
-  bool cd_success;
-  if( metric_ == BT )
-    cd_success = baml_detect_change_bt( evt_img, ref_cropped, valid, evt_lh );
-  else if( metric_ == CENSUS ) 
-    cd_success = baml_detect_change_census( evt_img, ref_cropped, valid, evt_lh );
-  else if( metric_ == GRAD ) 
-    cd_success = baml_detect_change_gradient( evt_img, ref_cropped, valid, evt_lh );
+  baml_change_detection_params cd_params;
+  cd_params.method = method_;
+  baml_change_detection cd( cd_params );
+  bool cd_success = cd.detect( evt_img, ref_cropped, valid, evt_change_prob );
     
   if(! cd_success ){
     std::cout << "warning betr_pixelwise_change_detection failed\n";
@@ -92,12 +88,9 @@ vil_save( ref_cropped, "D:/results/chip2.tif" );
     return true;
   }
 
-  // Convert likelihood to probability
-  baml_sigmoid( evt_lh, evt_lh, change_prior );
-
   // Convert to byte and save as prob map
   vil_image_view<vxl_byte> vis;
-  vil_convert_stretch_range_limited( evt_lh, vis, 0.0f, 1.0f );
+  vil_convert_stretch_range_limited( evt_change_prob, vis, 0.0f, 1.0f );
   change_img_ = vil_new_image_resource_of_view(vis);
 
   i_offset_ = bb_minx; j_offset_ = bb_miny;
@@ -108,7 +101,7 @@ vil_save( ref_cropped, "D:/results/chip2.tif" );
   for( int y = 0; y < bb_height; y++ ){
     for( int x = 0; x < bb_width; x++ ){
       // TODO: CHECK THAT EACH PIXEL IS IN POLYGON
-      psum += evt_lh(x,y);
+      psum += evt_change_prob(x,y);
       pcount++;
     }
   }
