@@ -25,10 +25,10 @@ baml_compute_census_img(
   int nbhd_rad = (nbhd_diam-1)/2;
   int max_intensity = pow( 256, sizeof(T) )-1;
 
-
   // Iterate over each pixel
   for( int y = nbhd_rad; y < height-nbhd_rad; y++ ){
     for( int x = nbhd_rad; x < width-nbhd_rad; x++ ){
+
       T center_max = (T)( std::min( max_intensity, img(x,y) + tol ) );
       T center_min = (T)( std::max( 0, img(x,y) - tol ) );
 

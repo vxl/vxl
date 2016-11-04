@@ -101,9 +101,7 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,
                  vgl_point_3d<double> const& initial_guess,
                  vgl_point_3d<double> & world_point,
                  double error_tol){
-
   std::cout << "vpgl_backproj_dem " << image_point << " max_z " << max_z << " min_z " << min_z << " init_guess " << initial_guess << " error tol " << error_tol << std::endl;
-
   //compute the ray corresponding to the image point
   double dz = (max_z - min_z);
   vgl_point_2d<double> initial_xy(initial_guess.x(), initial_guess.y());

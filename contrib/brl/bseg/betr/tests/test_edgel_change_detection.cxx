@@ -304,18 +304,12 @@ void test_edgel_change_detection()
  std::cout <<"Reference" << ref_name << '\n';
  std::string ref_img_path = dir + ref_name ;
  std::string evt_img_path = dir + evt_name ;
- std::string ref_cam_path = dir + ref_name + "_RPC.TXT";
- std::string evt_cam_path = dir + evt_name + "_RPC.TXT";
+ std::string ref_cam_path = dir + ref_name + "_RPC.txt";
+ std::string evt_cam_path = dir + evt_name + "_RPC.txt";
  std::string evt_obj_path = dir + "hamadan_objects/event_big.ply";
  // std::string evt2_obj_path = dir + "hamadan_objects/event.ply";
  std::string ref_obj_path = dir + "hamadan_objects/ref_full.ply";
- vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
- vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
- vpgl_camera_double_sptr ref_camera = ref_lcam;
 
- vil_image_resource_sptr imgr = vil_load_image_resource(evt_img_path.c_str());
- vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
- vpgl_camera_double_sptr camera = lcam;
  double lon = 48.6546831212;
  double lat = 35.1964842393;
  double elev =1678.81629561;
@@ -325,6 +319,7 @@ void test_edgel_change_detection()
  vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
  if(!ref_rpccam)
 	 return;
+
   ref_lcam = new vpgl_local_rational_camera<double>( lvcs, *ref_rpccam );
  ref_camera = ref_lcam ;
  if(!ref_camera)

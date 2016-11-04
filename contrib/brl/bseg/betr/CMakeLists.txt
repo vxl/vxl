@@ -21,12 +21,13 @@ set(betr_sources
  betr_edgel_reference_cd.h  betr_edgel_reference_cd.cxx
  betr_edgel_reference_cd_params.h    betr_edgel_reference_cd_params.cxx
  betr_census_change_detection.h  betr_census_change_detection.cxx
+ betr_pixelwise_change_detection.h  betr_pixelwise_change_detection.cxx
 )
 aux_source_directory(Templates betr_sources)
 
 vxl_add_library(LIBRARY_NAME betr LIBRARY_SOURCES  ${betr_sources})
 
-target_link_libraries(betr ${VXL_LIB_PREFIX}vsph ${VXL_LIB_PREFIX}vsol ${VXL_LIB_PREFIX}bmsh3d ${VXL_LIB_PREFIX}bmsh3d_algo ${VXL_LIB_PREFIX}sdet ${VXL_LIB_PREFIX}brip ${VXL_LIB_PREFIX}vdgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vcsl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
+target_link_libraries(betr ${VXL_LIB_PREFIX}vsph ${VXL_LIB_PREFIX}vsol ${VXL_LIB_PREFIX}bmsh3d ${VXL_LIB_PREFIX}bmsh3d_algo ${VXL_LIB_PREFIX}sdet ${VXL_LIB_PREFIX}brip ${VXL_LIB_PREFIX}vdgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vcsl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}baml)
 
 add_subdirectory(pro)
 

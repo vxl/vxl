@@ -13,7 +13,6 @@ class betr_edgel_change_detection : public betr_algorithm
 {
  public:
 
-
  betr_edgel_change_detection(): betr_algorithm("edgel_change_detection"),js_div_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){
 	 params_ =  new betr_edgel_change_detection_params();}
 
