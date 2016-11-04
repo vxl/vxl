@@ -32,7 +32,7 @@ enum baml_change_detection_method {
 struct baml_change_detection_params {
 
   //: The change detection method used.
-  baml_change_detection_method method = CENSUS;
+  baml_change_detection_method method;
 
   //: Estimate an optimal gain/offset to radiometrically align the reference
   // image to the target for methods that are intensity dependent.
@@ -70,6 +70,7 @@ struct baml_change_detection_params {
 
   //: Default parameters
   baml_change_detection_params():
+	method(CENSUS),
     correct_gain_offset( true ),
     registration_refinement_rad( 0 ),
     prior_change_prob( 0.01f ),
