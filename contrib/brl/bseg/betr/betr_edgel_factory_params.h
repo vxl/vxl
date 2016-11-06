@@ -13,7 +13,7 @@
 class betr_edgel_factory_params : public betr_params
 {
  public:
- betr_edgel_factory_params(): gradient_range_(60.0), nbins_(20), upsample_factor_(1.0){
+ betr_edgel_factory_params(): gradient_range_(60.0), nbins_(20), upsample_factor_(1.0), min_region_edge_length_(10){
     det_params_.aggressive_junction_closure=1;
     det_params_.filterFactor = 0.0;
     det_params_.borderp = false;

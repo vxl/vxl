@@ -57,6 +57,7 @@ bool betr_census_change_detection::process(){
   vil_image_view<bool> valid( bb_width, bb_height );
   valid.fill( true );
   vil_image_view<float> evt_lh;
+#if 0
   if( !baml_detect_change_census( evt_img, ref_cropped, valid, evt_lh ) ){
     std::cout << "warning census_change_detection failed" << std::endl;
     avg_prob_ = -1.0;
@@ -76,6 +77,7 @@ bool betr_census_change_detection::process(){
   }
 
   avg_prob_ = psum/pcount;
-
+#endif
+  avg_prob_ = 0.0;
   return true; 
 }
