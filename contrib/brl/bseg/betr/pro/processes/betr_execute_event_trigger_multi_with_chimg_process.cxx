@@ -77,8 +77,8 @@ bool betr_execute_event_trigger_multi_with_chimg_process(bprb_func_process& pro)
   for(unsigned i = 0; i<n; ++i, k+=4){
     vil_image_resource_sptr imgr = change_imgs[i];
     if(!imgr)
-      return false;
-	unsigned ni = imgr->ni(), nj = imgr->nj();
+      continue;
+    unsigned ni = imgr->ni(), nj = imgr->nj();
     unsigned area  = ni*nj;
     area_total += area;
     dims_offset->data_array[k]=ni;
@@ -91,7 +91,7 @@ bool betr_execute_event_trigger_multi_with_chimg_process(bprb_func_process& pro)
   for(unsigned k = 0; k<n; ++k){
     vil_image_resource_sptr imgr = change_imgs[k];
     if(!imgr)
-      return false;
+      continue;
     vil_image_view<vxl_byte> view = imgr->get_view();
     unsigned ni = imgr->ni(), nj = imgr->nj();
     for(unsigned j = 0; j<nj; ++j)
