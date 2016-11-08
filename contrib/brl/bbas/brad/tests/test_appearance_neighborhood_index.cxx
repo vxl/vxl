@@ -152,5 +152,7 @@ static void test_appearance_neighborhood_index()
   std::cout << "==== NEXT RANDOM INDEX =====\n";
   idx.compute_index();
   idx.print_index();
+  //test nadir sorting
+  std::vector<unsigned> views = idx.views_in_nadir_order();
 }
 TESTMAIN( test_appearance_neighborhood_index );

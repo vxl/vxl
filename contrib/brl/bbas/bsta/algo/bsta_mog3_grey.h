@@ -9,7 +9,8 @@
 // \date   Dec 27, 2010
 // \verbatim
 //  Modifications
-//  ported to bsta from bsta/cpp/algo  JLM
+//  ported to bsta from boxm2/cpp/algo  JLM
+//  April 2016
 // \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>

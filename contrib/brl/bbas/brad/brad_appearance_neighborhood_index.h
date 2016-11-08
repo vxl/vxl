@@ -27,7 +27,8 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #define BRAD_VTHR_LOW 0.20
 #define BRAD_VTHR_HIGH 0.35
-#define BRAD_ITHR 0.03
+//#define BRAD_ITHR 0.03
+#define BRAD_ITHR 0.15
 class brad_appearance_neighborhood_index
 {
  public:
@@ -70,13 +71,15 @@ class brad_appearance_neighborhood_index
   bool overlap_is_specified() const {return view_overlap_.size()> static_cast<std::size_t>(0);}
   unsigned n_dirs() const {return static_cast<unsigned>(view_dirs_.size());}
   unsigned most_nadir_view() const;
+  std::vector<unsigned> views_in_nadir_order() const;
   vgl_vector_3d<double> view_dir(unsigned indx) const{return view_dirs_[indx];}
   //: display contents of index  
   void print_index() const;
   void print_index_angles() const;
   void print_view_neighbors() const;
   void print_illum_neighbors() const;
-
+  //: operator for sorting
+  bool operator () (unsigned va, unsigned vb) const;
  private:
   double min_view_dir_thresh_;
   double max_view_dir_thresh_;

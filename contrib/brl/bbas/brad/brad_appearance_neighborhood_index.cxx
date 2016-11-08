@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+
 brad_appearance_neighborhood_index::brad_appearance_neighborhood_index(std::vector<brad_image_metadata_sptr> const& metadata)
 {
     std::vector<vgl_vector_3d<double > > local_view_dirs;
@@ -227,6 +228,24 @@ unsigned brad_appearance_neighborhood_index::most_nadir_view() const{
     }
   } 
   return ret;
+}
+//predicate functor operator for sorting
+bool brad_appearance_neighborhood_index::operator () (unsigned va, unsigned vb) const{
+  unsigned n = static_cast<unsigned>(view_dirs_.size());
+  vgl_vector_3d<double> down_z_dir(0.0, 0.0, -1.0);
+  if(va>=n || vb>=n)
+    return false;
+  double dpa = dot_product(view_dirs_[va], down_z_dir);
+  double dpb = dot_product(view_dirs_[vb], down_z_dir);
+  return dpa>dpb;
+}
+std::vector<unsigned> brad_appearance_neighborhood_index::views_in_nadir_order() const{
+  unsigned n = static_cast<unsigned>(view_dirs_.size());
+  std::vector<unsigned> views(n);
+  for(unsigned i = 0; i<n; ++i)
+    views[i]=i;
+  std::sort(views.begin(), views.end(), (*this));
+  return views;
 }
 void brad_appearance_neighborhood_index::print_index() const{
   for(std::map<unsigned, std::vector<unsigned> >::const_iterator iit = index_.begin();

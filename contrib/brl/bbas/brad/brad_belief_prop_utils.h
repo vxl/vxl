@@ -16,6 +16,7 @@
 #include <iostream>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_2d.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include "brad_appearance_neighborhood_index.h"
 struct brad_cell_data{
@@ -41,6 +42,7 @@ brad_ray(): dim_(1.0), min_z_(0.0), max_z_(10.0){}
   void init_ray(){
     unsigned n = static_cast<unsigned>((max_z_-min_z_)/dim_);
     double nm1 = 1.0/static_cast<double>(n);
+    ray_data_.clear();
     ray_data_.resize(n);
     double vis = 1.0;
     for(unsigned i=n; i>=1; i--){
@@ -90,9 +92,12 @@ brad_ray(): dim_(1.0), min_z_(0.0), max_z_(10.0){}
   void update_PinS();
   void update_vis();
   double expected_depth() const;
+  void compute_depth_map(vgl_box_2d<double>const& region, double cell_len, double z0);
+  bool save_depth_map(std::string const& depth_path) const;
   void print_zray() const {zray_.print();}
   void print_zray(unsigned ni) const;
   bool force_single_index(unsigned indx);
+  
  private:
   brad_ray zray_;
   std::vector<vil_image_view<float> > imgs_;
@@ -100,6 +105,7 @@ brad_ray(): dim_(1.0), min_z_(0.0), max_z_(10.0){}
   brad_appearance_neighborhood_index app_index_;
   std::map<unsigned, double> intensity_;
   std::map<unsigned, std::vector<double> > nbr_intensities_;
+  vil_image_view<float> depth_;
 };
 
 

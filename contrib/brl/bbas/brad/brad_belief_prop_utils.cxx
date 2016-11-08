@@ -1,6 +1,7 @@
 #include "brad_belief_prop_utils.h"
 #include <vpgl/vpgl_camera.h>
 #include <bsta/algo/bsta_mog3_grey.h>
+#include <vil/vil_save.h>
 #define BRAD_INIT_SIGMA 0.1f
 #define BRAD_MIN_SIGMA 0.05f
 #define BRAD_FIXED_SIGMA 0.02f
@@ -39,6 +40,7 @@ void brad_belief_prop_utils::project_intensities(vgl_point_3d<double> const& p){
     }
   }
 }
+
 void brad_belief_prop_utils::print_intensities() const{
   std::map<unsigned, double>::const_iterator inti = intensity_.begin();
   std::map<unsigned, std::vector<double> >::const_iterator ninti = nbr_intensities_.begin();
@@ -188,4 +190,36 @@ double brad_belief_prop_utils::expected_depth() const{
 }
 bool brad_belief_prop_utils::force_single_index(unsigned indx){
   return app_index_.force_single_index(indx);
+}
+
+void brad_belief_prop_utils::compute_depth_map(vgl_box_2d<double>const& region, double cell_len, double z0){
+  unsigned mnv = this->most_nadir_view();
+  std::vector<unsigned> ref_views =this->index(mnv);
+  double min_x = region.min_x(), max_x = region.max_x();
+  double min_y = region.min_y(), max_y = region.max_y();
+  unsigned ni = static_cast<unsigned>((max_x-min_x)/cell_len), nj = static_cast<unsigned>((max_y-min_y)/cell_len);
+  depth_.set_size(ni, nj);
+  depth_.fill(0.0f);
+  double y = min_y;
+  for(unsigned j = 0; j<nj; ++j){
+    double x = min_x;
+    for(unsigned i = 0; i<ni; ++i){
+      vgl_point_3d<double> pi(x, y, z0);
+      float Iray =0.0f;
+      this->pixel_intensity(imgs_[mnv], cams_[mnv], pi, Iray);
+      this->init_zray(Iray, ref_views, pi, 0.0, true);
+      this->zray_pre();
+      this->zray_post();
+      this->update_PinS();
+      this->update_vis();
+      float ed = static_cast<float>(this->expected_depth());
+      depth_(i,j) = ed;
+      x += cell_len;
+    }
+    y += cell_len;
+  }
+}
+
+bool brad_belief_prop_utils::save_depth_map(std::string const& depth_path) const{
+  return vil_save(depth_, depth_path.c_str());
 }

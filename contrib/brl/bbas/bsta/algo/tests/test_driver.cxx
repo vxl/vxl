@@ -9,6 +9,7 @@ DECLARE( test_beta_updater );
 DECLARE( test_rand_sampling );
 DECLARE( test_display_vrml );
 
+
 void
 register_tests()
 {
@@ -20,6 +21,7 @@ register_tests()
   REGISTER( test_beta_updater );
   REGISTER( test_rand_sampling );
   REGISTER( test_display_vrml );
+
 
 }
 

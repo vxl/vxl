@@ -8,7 +8,7 @@
 
 static void test_belief_prop_utils()
 {
-  START("test_belief_prop_utils");
+  //START("test_belief_prop_utils");
   // test belief prop functions
   brad_ray ray;
   ray.init_ray();
@@ -153,8 +153,10 @@ static void test_belief_prop_utils()
   }
   brad_belief_prop_utils utils;
   utils.set_metadata(metadata);
+
   unsigned mnv = utils.most_nadir_view();
   utils.force_single_index(mnv);
+#if 0
   std::vector<unsigned> ref_views =utils.index(mnv);
   vgl_vector_3d<double> nview = utils.view_dir(mnv);
   for(std::vector<unsigned>::iterator vit = ref_views.begin();
@@ -164,7 +166,7 @@ static void test_belief_prop_utils()
     double angle = std::acos(dp)*180.0/3.14159;
     std::cout << "angle[" << *vit << "]: " << angle << '\n';
   }
-
+#endif
   std::vector<vil_image_view<float> > imgs;
   std::vector<vpgl_camera_double_sptr> cams;
   for(unsigned i = 0; i<n; ++i){
@@ -181,13 +183,17 @@ static void test_belief_prop_utils()
   }
   utils.set_images(imgs);
   utils.set_cams(cams);
+ 
+#if 0
   vgl_point_3d<double>  p0(257.2, 107.9, 19.0);
   vgl_point_3d<double>  p1(334.3,244.5 , 13.6);
   vgl_point_3d<double>  p2(314.4,387.9 , 14.56);
   vgl_point_3d<double>  p2d(316.0, 388.0, 14.56);
   vgl_point_3d<double>  proad(228.7,342.7, 2.9);
+  vgl_point_3d<double>  proof(291.9,431.7, 14.56);
+  //vgl_point_3d<double>  proof(293,431.7, 14.56);
   float Iray =0.0f;
-  vgl_point_3d<double> p = proad;
+  vgl_point_3d<double> p = proof;
   utils.pixel_intensity(imgs[mnv], cams[mnv], p, Iray);
   std::cout << "Iray[" << mnv << "]: " << Iray << " RefInts[";
   std::vector<double> ref_intents = utils.ref_intensities(ref_views, p);
@@ -202,14 +208,31 @@ static void test_belief_prop_utils()
   std::cout << "P(Iray): " << pray << " mix-> ";
   utils.print_mog(mog3, nobs);
   ///
-  utils.init_zray(Iray, ref_views, p, -10.0, true);
-  utils.zray_pre();
-  utils.zray_post();
-  utils.update_PinS();
-  utils.update_vis();
-  utils.print_zray();
-  double ed = utils.expected_depth();
-  std::cout << "expected depth " << ed << '\n';
+  for(double dy = 0.0; dy<10.0; dy+=1.0){
+    vgl_point_3d<double> pi(p.x(), p.y()+dy, p.z());
+    utils.init_zray(Iray, ref_views, pi, -10.0, true);
+    utils.zray_pre();
+    utils.zray_post();
+    utils.update_PinS();
+    utils.update_vis();
+    utils.print_zray();
+    double ed = utils.expected_depth();
+    std::cout << "expected depth " << ed << '\n';
+  }
+#endif
+#if 0
+  //  double z0 = 9.36;
+  double z0 = 15.0;
+  vgl_point_2d<double> p0(399.13, 333.68);
+  vgl_point_2d<double> p1(117.65, 330.03);
+  vgl_point_2d<double> p2(113.3, 583.9);
+  vgl_point_2d<double> p3(397.5, 583.98);
+  vgl_box_2d<double> bb;
+  bb.add(p0);  bb.add(p1);  bb.add(p2);  bb.add(p3);
+  utils.compute_depth_map(bb, 1.0, z0);
+  std::string depth_path = "d:/tests/chiletest/depth.tif";
+  utils.save_depth_map(depth_path);
+#endif
 #if 0
   utils.project_intensities(p);
   utils.print_intensities();
