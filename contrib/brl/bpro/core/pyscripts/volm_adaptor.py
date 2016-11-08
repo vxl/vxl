@@ -1,7 +1,9 @@
-import math
+# import the batch module and dbvalue from init
+# set the global variable, batch, on init before importing this file
 import brl_init
-import bvxm_batch as batch
-dbvalue = brl_init.register_batch(batch)
+dbvalue = brl_init.DummyBatch()
+batch = brl_init.DummyBatch()
+import math
 
 
 def create_satellite_resouces(roi_kml, leaf_size=0.1,

@@ -156,7 +156,7 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   if (ni <= 0 || nj <= 0)
   {
     std::cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << std::endl;
-    return false;
+    return true;
   }
 
   // create the local camera

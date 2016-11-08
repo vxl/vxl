@@ -3,46 +3,40 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief Generate trafficability
+// \brief Compute trafficability of a given road segment using some land class image
+//        Note the pixel value '0' in class image means a road pixel.  any non-zero value
+//        is treated as non-road pixels
+//        The return is a trafficability value = n_grd_pixel / n_tot_pixel where n_tot_pixel is the number
+//        of pixels that road occupies
 //
 // \author Aaron Gokaslan
-// \date April 23, 2014
+// \date April 23, 2016
 // \verbatim
 //  Modifications
-//
+//    Yi Dong, Oct, 2016 -- update process
 // \endverbatim
 //
 
-#include <vcl_compiler.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
-#include <vul/vul_file.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
-#include <vnl/vnl_int_2.h>
-#include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_intersection.h>
-#include <vgl/vgl_line_segment_2d.h>
 #include <bbas_pro/bbas_1d_array_float.h>
-#include <vgl/vgl_vector_2d.h>
-#include <assert.h>
-#include <vector>
+#include <volm/volm_io_tools.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
+#include <vul/vul_file.h>
+#include <vil_save.h>
+#include <vil_load.h>
 
 
 // process to project/crop single ASTER DEM image to the given satellite viewpoint
 //: global variables and functions
 namespace vcon_calculate_trafficability_process_globals
 {
-  const unsigned n_inputs_  = 4;
+  const unsigned n_inputs_  = 5;
   const unsigned n_outputs_ = 2;
 
 }
@@ -52,17 +46,120 @@ bool vcon_calculate_trafficability_process_cons(bprb_func_process& pro)
   using namespace vcon_calculate_trafficability_process_globals;
   // process takes 4 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0] = "vcl_string";               // ASTER DEM image name
-  //input_types_[1] = "vpgl_camera_double_sptr";  // geocam if DEM image does not contain a camera.  Pass 0 means the camera will be loaded from geotiff header
-  input_types_[1] = "bbas_1d_array_float_sptr"; //The X value
-  input_types_[2] = "bbas_1d_array_float_sptr"; //The Y value
-  input_types_[3] = "double"; //The width of the road
+  input_types_[0] = "vil_image_view_base_sptr";  // some classification byte image that labels ground/non-ground pixels
+  input_types_[1] = "vpgl_camera_double_sptr";   // geo-camera of input classification image
+  input_types_[2] = "bbas_1d_array_float_sptr";  // longtitue value of the input OSM road points
+  input_types_[3] = "bbas_1d_array_float_sptr";  //  latitude value of the input OSM road points
+  input_types_[4] = "float";                    //  width of the road in meter -- default is 1 meter
   // process takes 0 input
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double";
-  output_types_[1] = "int";
+  output_types_[1] = "unsigned";
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
+
+bool vcon_calculate_trafficability_process(bprb_func_process& pro)
+{
+  using namespace vcon_calculate_trafficability_process_globals;
+  if (!pro.verify_inputs()) {
+    std::cerr << pro.name() << ": Wrong Inputs!!!\n";
+    return false;
+  }
+  // get the inputs
+  unsigned in_i = 0;
+  vil_image_view_base_sptr img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vpgl_camera_double_sptr  cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
+  bbas_1d_array_float_sptr pt_lon = pro.get_input<bbas_1d_array_float_sptr>(in_i++);
+  bbas_1d_array_float_sptr pt_lat = pro.get_input<bbas_1d_array_float_sptr>(in_i++);
+  float road_width = pro.get_input<float>(in_i++);
+
+  // load the image
+  if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
+    std::cerr << pro.name() << ": Unsupported pixel format: " << img_sptr->pixel_format() << ", only byte is allowed!\n";
+    return false;
+  }
+  vpgl_geo_camera *geocam = dynamic_cast<vpgl_geo_camera*>(cam_sptr.ptr());
+  if (!geocam) {
+    std::cerr << pro.name() << ": cannot cast the input cam to a vpgl_geo_camera!\n";
+    return false;
+  }
+
+  vil_image_view<vxl_byte> class_img(img_sptr);
+
+  // expend the road line into polygon based on given width
+  std::vector<vgl_point_2d<double> > road_wgs;
+  unsigned n_pts = pt_lon->data_array.size();
+  for (unsigned i = 0; i < n_pts; i++) {
+    vgl_point_2d<double> pt(pt_lon->data_array[i], pt_lat->data_array[i]);
+    road_wgs.push_back(pt);
+  }
+  // create a local lvcs
+  double ll_lon, ll_lat;
+  unsigned ni = class_img.ni();
+  unsigned nj = class_img.nj();
+  geocam->img_to_global(class_img.ni(), 0, ll_lon, ll_lat);
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(ll_lat, ll_lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  // convert wgs road to meter road
+  std::vector<vgl_point_2d<double> > road_in_meter;
+  for (unsigned i = 0; i < n_pts; i++) {
+    double lx, ly, lz;
+    double lon = pt_lon->data_array[i];
+    double lat = pt_lat->data_array[i];
+    lvcs->global_to_local(lon, lat, 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+    road_in_meter.push_back(vgl_point_2d<double>(lx, ly));
+  }
+  // expand the road
+  if (road_width < 1.0)
+    road_width = 1.1;
+  vgl_polygon<double> rd_poly_in_meter;
+  if (!volm_io_tools::expend_line(road_in_meter, road_width, rd_poly_in_meter)) {
+    std::cerr << pro.name() << "expand road with width " << road_width << " meter failed!!!\n";
+    return false;
+  }
+  // project the road poly into image domain
+  vgl_polygon<double> rd_poly_img;
+  unsigned n_verts = rd_poly_in_meter[0].size();
+  rd_poly_img.new_sheet();
+  for (unsigned i = 0; i < n_verts; i++) {
+    vgl_point_2d<double> pt = rd_poly_in_meter[0][i];
+    double lon, lat, elev;
+    lvcs->local_to_global(pt.x(), pt.y(), 0, vpgl_lvcs::wgs84, lon, lat, elev);
+    double uu, vv;
+    geocam->global_to_img(lon, lat, elev, uu, vv);
+    rd_poly_img.push_back(uu, vv);
+  }
+
+  // count the ground/non-ground pixel from class img
+  unsigned n_grd_pixel = 0;
+  unsigned n_tot_pixel = 0;
+  vgl_polygon_scan_iterator<double> it(rd_poly_img);
+  for (it.reset(); it.next(); )
+  {
+    int y = it.scany();
+    for (int x = it.startx(); x <= it.endx(); ++x) {
+      if ( x >= 0 && y >= 0 && x < ni && y < nj) {
+        n_tot_pixel++;
+        if (!class_img(x, y))
+          n_grd_pixel++;
+      }
+    }
+  }
+
+  // compute roughness
+  double roughness;
+  if (n_tot_pixel == 0) {
+    roughness = 0.0;
+  }
+  else
+    roughness = (double)n_grd_pixel / (double)n_tot_pixel;
+
+  // output
+  pro.set_output_val<double>(0, roughness);
+  pro.set_output_val<unsigned>(1, n_tot_pixel);
+  return true;
+}
+
+# if 0
 //: execute the process
 bool vcon_calculate_trafficability_process(bprb_func_process& pro)
 {
@@ -210,3 +307,4 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
   
   return true;
 }
+#endif
