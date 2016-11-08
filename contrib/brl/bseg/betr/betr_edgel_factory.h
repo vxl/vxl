@@ -12,25 +12,21 @@
 #include <map>
 #include <vil/vil_image_resource_sptr.h>
 #include <brip/brip_roi_sptr.h>
-#include <sdet/sdet_detector_params.h>
+#include <betr_edgel_factory_params.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <bsta/bsta_histogram.h>
 class betr_edgel_factory{
  public:
- betr_edgel_factory(): gradient_range_(60.0), nbins_(20), upsample_factor_(1.0){
-    params_.aggressive_junction_closure=1;
-    params_.borderp = false;
-  }
+  betr_edgel_factory(){}
   //: set parameters (same for all images and rois)
-  void set_edgel_parameters(sdet_detector_params const& params){
-    params_ = params; params_.aggressive_junction_closure=1;
-    params_.borderp = false;
+  void set_params(betr_edgel_factory_params const& params){
+    params_ = params; 
   }
-  //: set parameters (same for all images and rois)
-  void set_parameters(float sigma, float noise_multiplier, double gradient_range, unsigned nbins);
-  void set_parameters(float sigma, float noise_multiplier, double upsample_factor = 1.0);
+  //: modify parameters
+  betr_edgel_factory_params& params(){return params_;}
+
   // add images and rois
   bool add_image(std::string const& iname, vil_image_resource_sptr const& imgr);
   bool add_region(std::string const& iname, std::string const& region_name, vsol_box_2d_sptr const& box);
@@ -58,6 +54,8 @@ class betr_edgel_factory{
   const bsta_histogram<double>& hist(std::string iname, std::string region_name){return grad_hists_[iname][region_name];}
   bool save_edgels(std::string const& dir) const;
   bool save_edgels_in_poly(std::string const& identifier, std::string const& dir);
+  vil_image_resource_sptr edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsigned& j_offset);
+
  private:
   std::map<std::string, vil_image_resource_sptr> images_;
   std::map<std::string, brip_roi_sptr> rois_;
@@ -65,10 +63,7 @@ class betr_edgel_factory{
   std::map<std::string, std::map<unsigned, vsol_polygon_2d_sptr> > polys_;
   std::map<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > > edgels_;
   std::map<std::string, std::map<std::string, bsta_histogram<double> > > grad_hists_;
-  unsigned nbins_;
-  double gradient_range_;
-  double upsample_factor_;
-  sdet_detector_params params_;
+  betr_edgel_factory_params params_;
 };
 #endif //guard
 

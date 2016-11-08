@@ -5,8 +5,11 @@
 #include <cmath>
 bool betr_edgel_change_detection::process(){
   betr_edgel_factory ef;
-  double upscale = 2.0;
-  ef.set_parameters(sigma_, noise_mul_, upscale);
+  betr_edgel_factory_params& efparams = ef.params();
+  betr_edgel_change_detection_params* params = dynamic_cast<betr_edgel_change_detection_params*>(params_.ptr());
+  efparams.det_params_.smooth = params->sigma_;
+  efparams.det_params_.noise_multiplier = params->noise_mul_;
+  efparams.upsample_factor_ = params->upsample_factor_;
   ef.add_image("ref_image", ref_imgr_);
   ef.add_image("evt_image", evt_imgr_);
   ef.add_region("ref_image", "ref_ref_poly", ref_ref_poly_);
@@ -32,6 +35,7 @@ bool betr_edgel_change_detection::process(){
   const bsta_histogram<double>& h_ref_evt = ef.hist("ref_image","ref_evt_poly");
   const bsta_histogram<double>& h_evt_ref = ef.hist("evt_image","evt_ref_poly");
   const bsta_histogram<double>& h_evt_evt = ef.hist("evt_image","evt_evt_poly");
+  change_img_ = ef.edgel_image("evt_image","evt_evt_poly", i_offset_, j_offset_);
   if(verbose_){ 
     std::cout << "h_ref_ref\n";
     h_ref_ref.print();

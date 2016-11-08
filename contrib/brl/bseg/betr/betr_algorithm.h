@@ -13,15 +13,19 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#include "betr_params.h"
 class betr_algorithm : public vbl_ref_count
 {
  public:
- betr_algorithm():name_("no_name"), identifier_("null"), offset_(0.0), alpha_(1.0), verbose_(false){}
- betr_algorithm(std::string name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false){}
- betr_algorithm(std::string name, double offset, double alpha):name_(name), offset_(offset), alpha_(alpha), verbose_(false){}
+  betr_algorithm():name_("no_name"), identifier_("null"), offset_(0.0), alpha_(1.0), verbose_(false), params_(VXL_NULLPTR){}
+ betr_algorithm(std::string const& name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false), params_(VXL_NULLPTR){}
+ betr_algorithm(std::string const& name, double offset, double alpha): name_(name),offset_(offset), alpha_(alpha), verbose_(false), params_(VXL_NULLPTR){}
+ betr_algorithm(std::string const& name,betr_params_sptr const& params, double offset, double alpha): name_(name),offset_(offset), alpha_(alpha), verbose_(false), params_(params){}
+  
   // performance parameters
   void set_offset(double offset){offset_ = offset;}
   void set_alpha(double alpha){alpha_ = alpha;}
+  void set_params(betr_params_sptr const& params){params_ = params;}
   //: data inputs
   void set_reference_image(vil_image_resource_sptr const& ref_imgr){ref_imgr_ = ref_imgr;}
   void set_event_image(vil_image_resource_sptr const& evt_imgr){evt_imgr_ = evt_imgr;}
@@ -31,9 +35,12 @@ class betr_algorithm : public vbl_ref_count
   void set_proj_evt_evt_object(vsol_polygon_2d_sptr const& evt_poly){evt_evt_poly_ = evt_poly;}
   //: accessors
   std::string name() const {return name_;}
+  betr_params_sptr params(){return params_;}
   //: procedural  methods
   virtual bool process(){return false;}
   virtual double prob_change() const {return 0.0;}
+  //: offset is with respect to the event image coordinate system
+  virtual vil_image_resource_sptr change_image(unsigned& i_offset, unsigned& j_offset) const {return VXL_NULLPTR;}
   virtual void clear(){
     ref_imgr_ = VXL_NULLPTR;
     evt_imgr_ = VXL_NULLPTR;
@@ -47,6 +54,7 @@ class betr_algorithm : public vbl_ref_count
   void set_verbose(bool verbose){verbose_ = verbose;}
   //: an identifier for a particular execution run
   void set_identifier(std::string identifier){identifier_ = identifier;}
+
  protected:
   std::string name_;//algorithm name
   std::string identifier_;
@@ -60,6 +68,7 @@ class betr_algorithm : public vbl_ref_count
   double offset_;
   double alpha_;
   bool verbose_;
+  betr_params_sptr params_;
 };
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_algorithm.
 #include "betr_algorithm_sptr.h"

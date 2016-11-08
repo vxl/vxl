@@ -8,6 +8,7 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_distance.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -81,7 +82,24 @@ bool vpgl_ray::ray(const vpgl_camera<double>*  cam,
   ray.set(origin, dir);
   return true;
 }
-
+//construct a ray at a 3-d point with an origin lying in the origin_z plane and dir from dz
+bool vpgl_ray::ray(const vpgl_camera<double>*  cam,
+                   vgl_point_2d<double> image_pt,
+                   vgl_point_2d<double> const& initial_guess,
+                   double origin_z, double dz,
+                   vgl_ray_3d<double>& ray){
+  vgl_plane_3d<double> origin_plane(0.0, 0.0, 1.0, -origin_z);
+  vgl_plane_3d<double> tip_plane(0.0, 0.0, 1.0, -(origin_z-dz));//assuming looking downward from above
+  vgl_point_3d<double> initial_origin_guess(initial_guess.x(), initial_guess.y(), origin_z);
+  vgl_point_3d<double> initial_tip_guess(initial_guess.x(), initial_guess.y(), (origin_z-dz));
+  vgl_point_3d<double> origin, ray_tip;
+  if (!vpgl_backproject::bproj_plane(cam, image_pt, origin_plane, initial_origin_guess, origin))
+    return false;
+  if (!vpgl_backproject::bproj_plane(cam, image_pt, tip_plane, initial_tip_guess, ray_tip))
+    return false;
+  ray = vgl_ray_3d<double>(origin, ray_tip);
+  return true;
+}
 bool vpgl_ray::ray(vpgl_rational_camera<double> const& rcam,
                    vnl_double_3 const& point_3d,
                    vnl_double_3& ray)

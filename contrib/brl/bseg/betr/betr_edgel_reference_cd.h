@@ -8,17 +8,18 @@
 //
 #include <string>
 #include "betr_algorithm.h"
+#include "betr_edgel_reference_cd_params.h"
 class betr_edgel_reference_cd : public betr_algorithm
 {
  public:
- betr_edgel_reference_cd(): betr_algorithm("edgel_reference_cd"), sigma_(1.0), noise_mul_(0.75), js_div_(0.0){}
+ betr_edgel_reference_cd(): betr_algorithm("edgel_reference_cd"), js_div_(0.0){
+    params_ = new betr_edgel_reference_cd_params();}
 
- betr_edgel_reference_cd(double sigma, double noise_mul): betr_algorithm("edgel_reference_cd"), sigma_(sigma),noise_mul_(noise_mul),
-    js_div_(0.0){}
+ betr_edgel_reference_cd(betr_edgel_reference_cd_params const& params): betr_algorithm("edgel_reference_cd"),
+    js_div_(0.0){params_ = new betr_edgel_reference_cd_params(params);}
 
   // offset and alpha are  sigmoid parameters to convert js_divergence to a change probability
- betr_edgel_reference_cd(double sigma, double noise_mul, double offset, double alpha): betr_algorithm("edgel_reference_cd", offset, alpha),
-    sigma_(sigma),noise_mul_(noise_mul), js_div_(0.0){}
+ betr_edgel_reference_cd(betr_edgel_reference_cd_params const& params, double offset, double alpha): betr_algorithm("edgel_reference_cd", offset, alpha), js_div_(0.0){params_ = new betr_edgel_reference_cd_params(params);}
   //: process change
   virtual bool process();
 
