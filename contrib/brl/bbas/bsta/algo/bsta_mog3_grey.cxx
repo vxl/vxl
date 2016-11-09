@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
+#include "bsta_mog3_grey.h"
 //
 #define TMATCH 2.5f
 

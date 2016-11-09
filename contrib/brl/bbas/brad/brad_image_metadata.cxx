@@ -235,7 +235,7 @@ bool brad_image_metadata::parse_from_imd(std::string const& filename)
     }
   }
   n_bands_--; // there is an extra BEGIN_GROUP for some other image info not related to individual bands
-  if(verbose)
+  if(verbose_)
     std::cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
   gain_ = absCalfact/effectiveBand;
   offset_ = 0.0;
