@@ -1,5 +1,5 @@
 #include <testlib/testlib_register.h>
-
+#include <vil/vil_config.h>
 DECLARE( test_fm_compute );
 DECLARE( test_camera_compute );
 DECLARE( test_camera_convert );
@@ -17,6 +17,7 @@ DECLARE( test_bundle_adjust );
 DECLARE( test_ba_fixed_k_lsqr );
 DECLARE( test_ba_shared_k_lsqr );
 DECLARE( test_affine_rect );
+DECLARE( test_backproject_dem );
 
 void register_tests()
 {
@@ -37,7 +38,9 @@ REGISTER( test_bundle_adjust );
 REGISTER( test_ba_fixed_k_lsqr );
 REGISTER( test_ba_shared_k_lsqr );
 REGISTER( test_affine_rect );
-
+#if HAS_GEOTIFF
+ REGISTER( test_backproject_dem );
+#endif
 }
 
 DEFINE_MAIN;

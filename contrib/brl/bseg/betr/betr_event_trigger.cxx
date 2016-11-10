@@ -17,6 +17,7 @@
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include "betr_edgel_change_detection.h"
 #include "betr_edgel_reference_cd.h"
+#include "betr_pixelwise_change_detection.h"
 #include "betr_algorithm.h"
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -88,6 +89,8 @@ void betr_event_trigger::register_algorithms(){
   algorithms_[alg0->name()] = alg0;
   betr_algorithm_sptr alg1 = new betr_edgel_reference_cd();
   algorithms_[alg1->name()] = alg1;
+  betr_algorithm_sptr alg2 = new betr_pixelwise_change_detection();
+  algorithms_[alg2->name()] = alg2;
 }  
 void betr_event_trigger::update_local_bounding_box(){
   if(global_bbox_.is_empty())
@@ -130,12 +133,10 @@ bool betr_event_trigger::add_geo_object(std::string const& name, double lon, dou
 }
 //The object in general will have a different lvcs from the event trigger origin
 //but assume that X and Y translations are just given in the tangent plane
-// That is tx = dlon_rads*Rearth, ty = dlat_rads*Rearth, tz is the elevation difference
 void betr_event_trigger::add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object, bool is_ref_obj){
   betr_geo_box_3d box = geo_object->bounding_box();
   global_bbox_.add(box);
   this->update_local_bounding_box();
-  double Rearth = 6378135.0;//meters
   //assume local transform is identity and lvcs is in degrees and meters
   vpgl_lvcs obj_lvcs = geo_object->lvcs();
   double obj_lat = 0.0, obj_lon = 0.0, obj_elev =0.0;
@@ -197,7 +198,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
         return false;
       } 
       std::vector<vsol_point_3d_sptr> verts = mesh_3d->vertices();
-
+      
       std::vector<vgl_point_2d<double> > pts_2d;
       for(std::vector<vsol_point_3d_sptr>::iterator vit = verts.begin();
           vit != verts.end(); ++vit){
@@ -207,13 +208,18 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
                      (*vit)->z()+transl.z(), u, v);
         pts_2d.push_back(vgl_point_2d<double>(u, v));
       }
-      vgl_convex_hull_2d<double> conv_hull(pts_2d);
-      vgl_polygon<double> h = conv_hull.hull();
       std::vector<vsol_point_2d_sptr> sverts;
-      std::vector<vgl_point_2d<double> > hverts = h[0];
-      for(std::vector<vgl_point_2d<double> >::iterator vit = hverts.begin();
-          vit != hverts.end(); ++vit)
-        sverts.push_back(new vsol_point_2d(*vit));
+      if(mesh_3d->num_faces()>1)
+        {
+          vgl_convex_hull_2d<double> conv_hull(pts_2d);
+          vgl_polygon<double> h = conv_hull.hull();
+          std::vector<vgl_point_2d<double> > hverts = h[0];
+          for(std::vector<vgl_point_2d<double> >::iterator vit = hverts.begin();
+              vit != hverts.end(); ++vit)
+            sverts.push_back(new vsol_point_2d(*vit));
+        }else
+        for( int vit = 0; vit < pts_2d.size(); vit++ )
+          sverts.push_back(new vsol_point_2d(pts_2d[vit]));
       poly_2d = new vsol_polygon_2d(sverts);
       return true;
   }
@@ -228,9 +234,9 @@ vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vpgl_camera_double_sptr c
 #ifdef DEBUG
     std::cout << "3d point " << *(poly_3d->vertex(i)) << std::endl;
 #endif
-    vgl_point_3d<double> p(poly_3d->vertex(i)->x(),
-                           poly_3d->vertex(i)->y(),
-                           poly_3d->vertex(i)->z());
+    vgl_point_3d<double> p(poly_3d->vertex(i)->x()+transl.x(),
+                           poly_3d->vertex(i)->y()+transl.y(),
+                           poly_3d->vertex(i)->z()+transl.z());
     p += transl;
     camera->project(p.x(), p.y(), p.z(), u,v);
     vsol_point_2d_sptr vp = new vsol_point_2d(u,v);
@@ -250,6 +256,31 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change){
   return false;
 }
 bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change){
+  std::vector<vil_image_resource_sptr> rescs;
+  std::vector<vgl_point_2d<unsigned> > offsets;
+  bool good = this->process(alg_name, prob_change, rescs, offsets);
+  return good;
+}
+bool betr_event_trigger::process(std::string alg_name, double& prob_change,
+                                 vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset){
+  std::vector<double> scores;
+  std::vector<vil_image_resource_sptr> rescs;
+  std::vector<vgl_point_2d<unsigned> > offsets;
+  bool good = this->process(alg_name, scores, rescs, offsets);
+  if(good&&scores.size()>=1){
+    prob_change = scores[0];
+    change_img = rescs[0];
+    offset = offsets[0];
+    return good;
+  }
+  prob_change = -1.0;
+  return false;
+}
+
+
+bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,
+                                 std::vector<vil_image_resource_sptr>& change_images,
+                                 std::vector<vgl_point_2d<unsigned> >& offsets){
   
   betr_algorithm_sptr alg = algorithms_[alg_name];
   if(!alg){
@@ -269,7 +300,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     std::cout << "Reference Image: " << ref_path_ << std::endl;
     std::cout << "Event Image: " << evt_path_ << std::endl;
   }
-    prob_change.clear();
+  prob_change.clear();
   std::map<std::string, betr_geo_object_3d_sptr>::iterator rit = ref_trigger_objects_.begin();
   std::string ref_obj_name = rit->first;
   // project the reference object
@@ -309,10 +340,16 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
       return false;
     }
     prob_change.push_back(alg->prob_change());
+    unsigned ioff, joff;
+    vil_image_resource_sptr resc = alg->change_image(ioff, joff);
+    vgl_point_2d<unsigned> offset(ioff, joff);
+    change_images.push_back(resc);    
+    offsets.push_back(offset);
   }
   process_counter_++;
   return true;
 }
+
 std::vector<std::string> betr_event_trigger::algorithms() const{
   std::vector<std::string> ret;
   std::map<std::string, betr_algorithm_sptr>::const_iterator ait = algorithms_.begin();

@@ -370,7 +370,7 @@ void init_cum_main(__global RenderSceneInfo    * info,          // scene info
     if (gid<datasize)
     {
 		if(pinit > 0.0)
-			aux0_cum[gid] = log(pinit/(1-pinit));
+                  aux0_cum[gid] = log(pinit/(1-pinit));
     }
 }
 

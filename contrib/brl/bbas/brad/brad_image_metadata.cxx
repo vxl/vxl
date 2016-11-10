@@ -43,8 +43,10 @@ brad_image_metadata::brad_image_metadata(std::string const& nitf_filename, std::
       gsd_ = -1;
     }
   }
-  std::cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
-  std::cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
+  if(verbose_){
+    std::cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
+    std::cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
+  }
 }
 
 // Write brad_image_metadata to stream
@@ -233,7 +235,8 @@ bool brad_image_metadata::parse_from_imd(std::string const& filename)
     }
   }
   n_bands_--; // there is an extra BEGIN_GROUP for some other image info not related to individual bands
-  std::cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
+  if(verbose_)
+    std::cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
   gain_ = absCalfact/effectiveBand;
   offset_ = 0.0;
 
@@ -416,7 +419,8 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
     }
   }
   n_bands_--; // there is an extra BEGIN_GROUP for some other image info not related to individual bands
-  std::cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
+  if(verbose_)
+    std::cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
   gain_ = absCalfact/effectiveBand;
   offset_ = 0.0;
 
@@ -751,7 +755,8 @@ bool brad_image_metadata::parse_from_pvl(std::string const& filename)
 
   footprint_ = vgl_polygon<double>(footprint_corners);
 
-  std::cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
+  if(verbose_)
+    std::cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
   return true;
 }
 
@@ -772,7 +777,8 @@ bool brad_image_metadata::parse_from_pvl(std::string const& filename)
 // TODO extend with LRLat,LRLon, LRHAE, ULLat, ULLon, ULHAE
 bool brad_image_metadata::parse_from_txt(std::string const& filename, std::vector<double>& solar_irrads)
 {
-  std::cout << "parsing radiometric calibration and atmospheric normalization parameters from: " << filename << "...\n";
+  if(verbose_)
+    std::cout << "parsing radiometric calibration and atmospheric normalization parameters from: " << filename << "...\n";
   std::ifstream ifs( filename.c_str() );
   if (!ifs.good()){
     std::cerr << "Error opening file " << filename << std::endl;
@@ -892,7 +898,8 @@ bool brad_image_metadata::parse_from_txt(std::string const& filename, std::vecto
   }
 
   if(parsed_coverage_percentage_) {
-    std::cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
+    if(verbose_)
+      std::cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
   }
 
   return true;
@@ -927,8 +934,11 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   upper_right_.set(nitf_cam.upper_right()[nitf_cam.LON], nitf_cam.upper_right()[nitf_cam.LAT], 0);
   lower_left_.set(nitf_cam.lower_left()[nitf_cam.LON],   nitf_cam.lower_left()[nitf_cam.LAT], 0);
   //lower_right_ = nitf_cam.lower_right();
-  std::cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
-  std::cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
+  if(verbose_)
+  {
+    std::cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
+    std::cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
+  }
 
   vpgl_nitf_rational_camera::geopt_coord LON = vpgl_nitf_rational_camera::LON;
   vpgl_nitf_rational_camera::geopt_coord LAT = vpgl_nitf_rational_camera::LAT;
@@ -996,13 +1006,15 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   std::string dirname = vul_file::dirname(nitf_filename);
 
   std::string img_info = hdr->get_image_source();
-  std::cout << "img_info: " << img_info << std::endl;
+  if(verbose_)
+    std::cout << "img_info: " << img_info << std::endl;
 
   // look for metadata files with known formats recursively in the directory of the image
   // If we find one, check file name to see if it is for the same image, if so parse it
   std::string imagename = vul_file::strip_directory(nitf_filename);
   imagename = vul_file::strip_extension(imagename);
-  std::cout << "imagename: " << imagename << std::endl;
+  if(verbose_)
+    std::cout << "imagename: " << imagename << std::endl;
 
   std::string in_dir = dirname + "/*.*";
   std::string meta_filename = "";
@@ -1020,7 +1032,8 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
     }
   }
   if (meta_filename.size() == 0 && meta_folder.size() != 0) {
-    std::cout << " searching " << meta_folder << " for files with extensions .imd, .pvl or .txt" << std::endl;
+    if(verbose_)
+      std::cout << " searching " << meta_folder << " for files with extensions .imd, .pvl or .txt" << std::endl;
     std::string in_dir = meta_folder + "/*.*";
     for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
       std::string filename = fn();
@@ -1056,8 +1069,11 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
     std::string type = hdr->get_image_type(); // type mono is band PAN
     unsigned bpp = number_of_bits_;
     if (img_info.compare("IKONOS") == 0 && type.compare("MONO") == 0 && bpp == (unsigned)11) {
-      std::cout << "Ikonos: bpp " << bpp << " type: " << type << std::endl;
-      std::cout << "An 11-bit Panchromatic IKONOS image, setting gain & offset values according to tech document\n";
+      if(verbose_)
+      {
+        std::cout << "Ikonos: bpp " << bpp << " type: " << type << std::endl;
+        std::cout << "An 11-bit Panchromatic IKONOS image, setting gain & offset values according to tech document\n";
+      }
       n_bands_ = 1;
       gain_ = (10.0/161.0)/0.403;
       offset_ = 0.0;
@@ -1109,7 +1125,8 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
     }
 
     for (unsigned i = 0; i < gains_.size(); i++) {
-      std::cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << std::endl;
+      if(verbose_)
+        std::cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << std::endl;
     }
   }
   // solar irradiance is dependent on sensor because each has a different range of wavelengths they are sensitive to.
@@ -1237,24 +1254,32 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   // a solar irradiance has been found; scale it using Earth-Sun distance
   double d = brad_sun_distance(year, month, day, hour, min);
   if (n_bands_ == 1) {
-    std::cout << "solar_irradiance_: " << solar_irrad << " ";
+    if(verbose_)
+      std::cout << "solar_irradiance_: " << solar_irrad << " ";
     sun_irradiance_ = solar_irrad/(d*d);
-    std::cout << " after scaling with Earth-Sun distance: " << sun_irradiance_ << std::endl;
+    if(verbose_)
+      std::cout << " after scaling with Earth-Sun distance: " << sun_irradiance_ << std::endl;
   } else {
     assert(n_bands_ == solar_irrads.size());
+    if(verbose_){
     for (unsigned ii = 0; ii < solar_irrads.size(); ii++)
       std::cout << "solar_irradiance_values_[" << ii << "]: " << solar_irrads[ii] << std::endl;
+    }
     sun_irradiance_values_.resize(n_bands_, 1500.0);
     for (unsigned bandi = 0; bandi < n_bands_; bandi++)
       sun_irradiance_values_[bandi] = solar_irrads[bandi]/(d*d);
-    std::cout << " .. after scaling with Earth-Sun distance..: " << d << "\n";
+    if(verbose_)
+      std::cout << " .. after scaling with Earth-Sun distance..: " << d << "\n";
+    if(verbose_){
     for (unsigned ii = 0; ii < sun_irradiance_values_.size(); ii++)
       std::cout << "sun_irradiance_values_[" << ii << "]: " << sun_irradiance_values_[ii] << std::endl;
+    }
   }
 
-  std::cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << std::endl;
-  std::cout << *this;
-
+  if(verbose_){
+    std::cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << std::endl;
+    std::cout << *this;
+  }
   return true;
 }
 
@@ -1298,8 +1323,10 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
     std::cerr << " Problems parsing meta-data file " << meta_file << "!\n";
     return false;
   }
+  if(verbose_){
   for (unsigned i = 0; i < gains_.size(); i++) {
     std::cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << std::endl;
+  }
   }
   solar_irrads.resize(n_bands_, 1500.0);
   if ( satellite_name_.find("IKNOOS") != std::string::npos )
@@ -1416,25 +1443,37 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
   // a solar irradiance has been found; scale it using Earth-Sun distance
   double d = brad_sun_distance(t_.year, t_.month, t_.day, t_.hour, t_.min);
   if (n_bands_ == 1) {
-    std::cout << "solar_irradiance_: " << solar_irrad << ", time: ";  this->print_time();  std::cout << '\n';
+    if(verbose_)
+    {
+      std::cout << "solar_irradiance_: " << solar_irrad << ", time: ";  this->print_time();  std::cout << '\n';
+    }
     sun_irradiance_ = solar_irrad/(d*d);
-    std::cout << " after scaling with Earth-Sun distance: " << sun_irradiance_ << std::endl;
+    if(verbose_)
+      std::cout << " after scaling with Earth-Sun distance: " << sun_irradiance_ << std::endl;
   }
   else {
     assert(n_bands_ == solar_irrads.size());
+    if(verbose_){
     for (unsigned ii = 0; ii < solar_irrads.size(); ii++)
       std::cout << "solar_irradiance_values_[" << ii << "]: " << solar_irrads[ii] << std::endl;
     std::cout << "time: ";  this->print_time();  std::cout << '\n';
+    }
     sun_irradiance_values_.resize(n_bands_, 1500.0);
     for (unsigned bandi = 0; bandi < n_bands_; bandi++)
       sun_irradiance_values_[bandi] = solar_irrads[bandi]/(d*d);
-    std::cout << " .. after scaling with Earth-Sun distance..: " << d << "\n";
-    for (unsigned ii = 0; ii < sun_irradiance_values_.size(); ii++)
-      std::cout << "sun_irradiance_values_[" << ii << "]: " << sun_irradiance_values_[ii] << std::endl;
+    if(verbose_)
+    {
+      std::cout << " .. after scaling with Earth-Sun distance..: " << d << "\n";
+      for (unsigned ii = 0; ii < sun_irradiance_values_.size(); ii++)
+        std::cout << "sun_irradiance_values_[" << ii << "]: " << sun_irradiance_values_[ii] << std::endl;
+    }
   }
 
-  std::cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << std::endl;
-  std::cout << *this;
+  if(verbose_)
+  {
+    std::cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << std::endl;
+    std::cout << *this;
+  }
   return true;
 }
 

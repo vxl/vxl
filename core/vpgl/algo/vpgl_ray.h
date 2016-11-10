@@ -46,7 +46,16 @@ class vpgl_ray
                   double origin_z,
                   vgl_ray_3d<double>& ray);
 
-            // +++ concrete rational camera interfaces +++
+  //: vgl interface, origin_z defines an x-y plane wherein lies the ray origin
+  //  and dz defines a plane to compute a second intersection point for the ray direction
+  // the inital guess is for the x and y values where the ray intersects the z planes
+  static bool ray(const vpgl_camera<double>*  cam,
+                  vgl_point_2d<double> image_pt,
+                  vgl_point_2d<double> const& inital_guess,
+                  double origin_z, double dz,
+                  vgl_ray_3d<double>& ray);
+  
+  // +++ concrete rational camera interfaces +++
 
        // === vnl interface ===
 
