@@ -50,7 +50,7 @@ bool vcon_calculate_trafficability_process_cons(bprb_func_process& pro)
   input_types_[1] = "vpgl_camera_double_sptr";   // geo-camera of input classification image
   input_types_[2] = "bbas_1d_array_float_sptr";  // longtitue value of the input OSM road points
   input_types_[3] = "bbas_1d_array_float_sptr";  //  latitude value of the input OSM road points
-  input_types_[4] = "float";                    //  width of the road in meter -- default is 1 meter
+  input_types_[4] = "float";                     //  width of the road in meter -- default is 1 meter
   // process takes 0 input
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double";

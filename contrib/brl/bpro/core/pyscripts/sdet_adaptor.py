@@ -129,6 +129,7 @@ def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
   batch.set_input_from_db(0, tclsf)
   batch.set_input_unsigned(1, block_size)
   batch.set_input_string(2, category_id_file)
+  batch.set_input_string(3, category_name)
   status = batch.run_process()
   if status:
     (out_id, out_type) = batch.commit_output(0)
