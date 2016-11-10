@@ -3,7 +3,6 @@
 import brl_init
 dbvalue = brl_init.DummyBatch()
 batch = brl_init.DummyBatch()
-import math
 
 
 def create_satellite_resouces(roi_kml, leaf_size=0.1,
@@ -395,9 +394,11 @@ def project_osm_to_crop_img2(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_f
   if status:
     (id, type) = batch.commit_output(0)
     out_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    out_mask = dbvalue(id, type)
+    return out_img, out_mask
   else:
-    out_img = 0
-  return out_img
+    return None, None
 
 # process to project DEM images to a satellite image given the satellite viewpoint
 # modified to also input ortho camera (instead of a rational camera) so
