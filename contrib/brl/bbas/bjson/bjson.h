@@ -12,7 +12,37 @@
 
 /// Json-cpp amalgated header (http://jsoncpp.sourceforge.net/).
 /// It is intended to be used with #include "bjson/bjson.h"
-
+//
+//==== example of json seralization===
+// Json::Value root
+// root["x"]= 0.5
+// root["y"]= 4
+// Json::StyledWriter writer;
+// json_string = writer.write(root);
+//
+// === example of json deserializaton
+// Json::Value root
+// Json::Reader reader
+// bool good = reader.parse(json_str, root);
+// double x = root.get("x", 0.0).asDouble();// the second arg is the default value for x
+// double y = root.get("x", 1).asInt();
+//
+// ===== deseralizing an object ===
+// Json::Value null
+// Json::Value obj_json_val = root.get("obj_name", null); // null is the default
+// // apply method that deserializes the obj
+// Object obj;
+// obj.deserialize(obj_json_val); // object's members are now set to values from obj_json_val
+// ...
+// //Definition of deserialize
+// Object::deserialize(Json::Value& root){
+//  x_ = root.get("x", default_x); // here x_ is a class member
+//  y_ = root.get("y", default_y); // here y_ is a class member
+// }
+//
+// similarly, Object can have a ::serialize(Json::Value& root)  method. Such methods can be nested
+// for multiple levels of object membership
+//
 // //////////////////////////////////////////////////////////////////////
 // Beginning of content of file: LICENSE
 // //////////////////////////////////////////////////////////////////////

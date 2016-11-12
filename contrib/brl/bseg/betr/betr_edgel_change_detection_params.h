@@ -2,10 +2,24 @@
 #define betr_edgel_change_detection_params_h_
 //:
 // \file
-// \brief Parameters for edgel change_detection
+// \brief Parameters for the edgel change_detection algorithm
 // \author J.L. Mundy
 // \date October 16, 2016
 //
+// sigma - the Gaussian standard deviation for smoothing the image prior to edge_detection
+//         typically 1 pixel
+//
+// noise_mul - determines the threshold for detected edge points
+//             typically 2.0, but here 0.75 provides a more complete set of edges
+//             since a histogram is formed and the background gradient values
+//             accumulate in the low bins of the histogram and normally wouldn't
+//             contribute to change but just in case...
+//
+// betr_edgel_factory_params::upsample_factor_
+//   - upsample the image resolution using bilinear interpolation.
+//     Allows more resolved discrete pixel locations for gradient masks.
+//     A value of 2.0 means the image resolution is increased by 2X.
+//                                          
 #include <string>
 #include <iostream>
 #include <vcl_compiler.h>
