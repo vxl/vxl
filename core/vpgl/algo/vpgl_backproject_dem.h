@@ -25,7 +25,7 @@ class vpgl_backproject_dem
 {
  public:
   //: default constructor not allowed
-  vpgl_backproject_dem(vil_image_resource_sptr const& dem);
+  vpgl_backproject_dem(vil_image_resource_sptr const& dem, double zmin=0.0, double zmax=-1.0);
   ~vpgl_backproject_dem();
 
   //center of the DEM - useful for initializing non-linear search

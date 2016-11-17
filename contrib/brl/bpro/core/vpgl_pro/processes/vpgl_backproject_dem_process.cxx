@@ -17,8 +17,8 @@ bool vpgl_backproject_dem_process_cons(bprb_func_process& pro)
   std::vector<std::string> input_types;
   input_types.push_back("vpgl_dem_manager_sptr");
   input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("unsigned");
-  input_types.push_back("unsigned");
+  input_types.push_back("double");
+  input_types.push_back("double");
   input_types.push_back("double");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
@@ -46,8 +46,8 @@ bool vpgl_backproject_dem_process(bprb_func_process& pro)
   unsigned i = 0;
   vpgl_dem_manager_sptr dem_mgr = pro.get_input<vpgl_dem_manager_sptr>(i++);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned u = pro.get_input<unsigned>(i++);
-  unsigned v = pro.get_input<unsigned>(i++);
+  double u = pro.get_input<double>(i++);
+  double v = pro.get_input<double>(i++);
   double err_tol = pro.get_input<double>(i);
   if(!dem_mgr || !cam){
    std::cout << "vpgl_backproject_dem_process: Null input dem_mgr or camera" << std::endl;
@@ -56,7 +56,7 @@ bool vpgl_backproject_dem_process(bprb_func_process& pro)
   double x, y, z;
   // if err_tol = -1, use default
   bool good = true;
-  std::cout << "u v" << u << ' ' << v << "err tol " << err_tol << std::endl;
+  std::cout << "[u,v]=[" << u << ',' << v << "], err tol=" << err_tol << std::endl;
   if(err_tol>0){
     good = dem_mgr->back_project(cam.ptr(), u, v, x, y, z, err_tol);
     std::cout << "PX,PY,PZ " << x << ' ' << y << ' ' << z << std::endl;
