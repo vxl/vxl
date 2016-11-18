@@ -6,10 +6,12 @@
 #include <vnl/vnl_inverse.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
+#include <vil/vil_crop.h>
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_gauss_filter.h>
+#include <vil/vil_resample_bicub.h>
 
 #include "baml_utilities.h"
 
@@ -64,8 +66,6 @@ bool baml_correct_gain_offset(
   vnl_matrix_fixed<double,2,1> c = vnl_inverse( A )*b;
   double gain = c(0,0), offset = c(1,0)*255;
 
-  std::cerr << "Gain: " << gain << "  Offset: " << offset << '\n';
-
   // Apply the gain offset
   for( int y = 0; y < height; y++ ){
     for( int x = 0; x < width; x++ ){
@@ -79,6 +79,156 @@ bool baml_correct_gain_offset(
   return true;
 }
 
+//----------------------------------------------------------
+bool baml_correct_gain_offset_tiled(
+  const vil_image_view<vxl_uint_16>& img_tar,
+  const vil_image_view<vxl_uint_16>& img_ref,
+  const vil_image_view<bool>& valid_ref,
+  const int num_tiles,
+  vil_image_view<vxl_uint_16>& corrected_ref)
+{
+  // calculate gain/offset over whole image if the number of tiles is 0 or 1
+  if (num_tiles == 0 || num_tiles == 1)
+    return baml_correct_gain_offset(img_tar, img_ref, valid_ref, corrected_ref);
+
+  // initialization
+  int width = img_tar.ni(), height = img_tar.nj();
+  vil_image_view<float> gain;
+  vil_image_view<float> offset;
+  vil_image_view<float> gain_resized;
+  vil_image_view<float> offset_resized;
+  vnl_vector<int> boundaries_x;
+  vnl_vector<int> boundaries_y;
+  gain.set_size(num_tiles, num_tiles);
+  offset.set_size(num_tiles, num_tiles);
+  boundaries_x.set_size(num_tiles+1);
+  boundaries_y.set_size(num_tiles+1);
+  corrected_ref.set_size(width, height);
+  corrected_ref.fill(0);
+  gain_resized.set_size(width, height);
+  gain_resized.fill(0);
+  offset_resized.set_size(width, height);
+  offset_resized.fill(0);
+
+  // calculate tile boundaries
+  boundaries_x(0) = 0;
+  boundaries_y(0) = 0;
+  for (int i = 1; i <= num_tiles; i++) {
+    boundaries_x(i) = round(width*i / num_tiles);
+    boundaries_y(i) = round(height*i / num_tiles);
+  }
+
+  vil_image_view<vxl_uint_16> tar_crop;
+  vil_image_view<vxl_uint_16> ref_crop;
+  vil_image_view<bool> valid_ref_crop;
+
+  // loop over each tile, computing a gain/offset
+  for (int tile_row = 0; tile_row < num_tiles; tile_row++) {
+    for (int tile_col = 0; tile_col < num_tiles; tile_col++) {
+
+      tar_crop = vil_crop(img_tar, boundaries_x(tile_col), boundaries_x(tile_col + 1) - boundaries_x(tile_col),
+        boundaries_y(tile_row), boundaries_y(tile_row + 1) - boundaries_y(tile_row));
+      ref_crop = vil_crop(img_ref, boundaries_x(tile_col), boundaries_x(tile_col + 1) - boundaries_x(tile_col),
+        boundaries_y(tile_row), boundaries_y(tile_row + 1) - boundaries_y(tile_row));
+      valid_ref_crop = vil_crop(valid_ref, boundaries_x(tile_col), boundaries_x(tile_col + 1) - boundaries_x(tile_col),
+        boundaries_y(tile_row), boundaries_y(tile_row + 1) - boundaries_y(tile_row));
+
+      // Compute statistics over the image
+      double sumw = 0, sumI1 = 0, sumI2 = 0;
+      double sumI1I2 = 0, sumI2Sq = 0;
+
+      for (int y = 0; y < tar_crop.nj(); y++) {
+        for (int x = 0; x < tar_crop.ni(); x++) {
+          if (!valid_ref_crop(x, y)) continue;
+          float i1 = tar_crop(x, y) / 255.0f;
+          float i2 = ref_crop(x, y) / 255.0f;
+
+          sumw += 1.0;
+          sumI1 += i1;
+          sumI2 += i2;
+          sumI1I2 += i2*i1;
+          sumI2Sq += i2*i2;
+        }
+      }
+
+      // Check good stats
+      if (sumw < 1.0) return false;
+
+      // Compute weighted least squares estimate of gain/offset
+      vnl_matrix_fixed<double, 2, 2> A;
+      A(0, 0) = sumI2Sq / sumw; A(0, 1) = sumI2 / sumw;
+      A(1, 0) = sumI2 / sumw; A(1, 1) = 1.0;
+
+      vnl_matrix_fixed<double, 2, 1> b;
+      b(0, 0) = sumI1I2 / sumw; b(1, 0) = sumI1 / sumw;
+
+      // save the gain and offset to be interpolated later
+      vnl_matrix_fixed<double, 2, 1> c = vnl_inverse(A)*b;
+      gain(tile_row, tile_col) = c(0, 0);
+      offset(tile_row, tile_col) = c(1, 0) * 255;
+    }
+  }
+
+
+  // create padded versions of the gain and offset ( for input to bicubic interpolation function
+  int pad_size = 2;
+  vil_image_view<float> gain_pad;
+  gain_pad.set_size(gain.ni() + pad_size*2, gain.nj() + pad_size*2);
+  vil_image_view<float> offset_pad;
+  offset_pad.set_size(offset.ni() + pad_size*2, offset.nj() + pad_size*2);
+  for (int x = pad_size; x < gain_pad.ni() - pad_size; x++) {
+    for (int p = 0; p < pad_size; p++) {
+      gain_pad(p, x) = gain(0, x - pad_size);
+      gain_pad(gain_pad.ni() - 1 - p, x) = gain(gain.ni() - 1, x - pad_size);
+      gain_pad(x, p) = gain(x - pad_size, 0);
+      gain_pad(x, gain_pad.nj() - 1 - p) = gain(x - pad_size, gain.nj() - 1);
+
+      offset_pad(p, x) = offset(0, x - pad_size);
+      offset_pad(offset_pad.ni() - 1 - p, x) = offset(offset.ni() - 1, x - pad_size);
+      offset_pad(x, p) = offset(x - pad_size, 0);
+      offset_pad(x, offset_pad.nj() - 1 - p) = offset(x - pad_size, offset.nj() - 1);
+    }
+    for (int y = pad_size; y < gain_pad.nj() - pad_size; y++) {
+      gain_pad(x, y) = gain(x - pad_size, y - pad_size);
+      offset_pad(x, y) = offset(x - pad_size, y - pad_size);
+
+    }
+  }
+  for (int p1 = 0; p1 < pad_size; p1++) {
+    for (int p2 = 0; p2 < pad_size; p2++) {
+      gain_pad(p1, p2) = gain(0, 0);
+      gain_pad(p1, gain_pad.nj() - 1 - p2) = gain(0, gain.nj() - 1);
+      gain_pad(gain_pad.ni() - 1 - p1, p2) = gain(gain.ni() - 1, 0);
+      gain_pad(gain_pad.ni() - 1 - p1, gain_pad.nj() - 1 - p2) = gain(gain.ni() - 1, gain.nj() - 1);
+      offset_pad(p1, p2) = offset(0, 0);
+      offset_pad(p1, offset_pad.nj() - 1 - p2) = offset(0, offset.nj() - 1);
+      offset_pad(offset_pad.ni() - 1 - p1, p2) = offset(offset.ni() - 1, 0);
+      offset_pad(offset_pad.ni() - 1 - p1, offset_pad.nj() - 1 - p2) = offset(offset.ni() - 1, offset.nj() - 1);
+    }
+  }
+
+  // use padded versions to resize the images
+  double f = 1.0; 
+  double x0 = double(pad_size)-0.5;
+  double y0 = double(pad_size)-0.5;
+  double dx1 = f*(gain.ni())*1.0 / (width - 1);
+  double dy1 = 0;
+  double dx2 = 0;
+  double dy2 = f*(gain.nj())*1.0 / (height - 1);
+  vil_resample_bicub(gain_pad, gain_resized, x0, y0, dx1, dy1, dx2, dy2, width, height);
+  vil_resample_bicub(offset_pad, offset_resized, x0, y0, dx1, dy1, dx2, dy2, width, height);
+ 
+  // Apply the gain offset
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      if (!valid_ref(x, y)) continue;
+      float r = std::max(0.0f, img_ref(x, y)*gain_resized(x, y) + offset_resized(x, y));
+      corrected_ref(x, y) = (vxl_uint_16) r;
+    }
+  }
+
+  return true;
+}
 
 //----------------------------------------------------------
 void baml_sigmoid(

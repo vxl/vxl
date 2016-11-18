@@ -27,6 +27,16 @@ bool baml_correct_gain_offset(
   const vil_image_view<bool>& valid,
   vil_image_view<vxl_uint_16>& corrected_ref );
 
+//: Compute the gain/offset that minimizes the least square distance between
+// target and reference images and then correct the reference image using tiled 
+// image regression.
+bool baml_correct_gain_offset_tiled(
+  const vil_image_view<vxl_uint_16>& img_target,
+  const vil_image_view<vxl_uint_16>& img_ref,
+  const vil_image_view<bool>& valid,
+  const int num_tiles,
+  vil_image_view<vxl_uint_16>& corrected_ref);
+
 //: Compute the sigmoid function for every pixel in the image i.e.
 // prob(x,y) = 1.0/(1.0+exp(-prior_lh*lh(x,y)))
 void baml_sigmoid(
