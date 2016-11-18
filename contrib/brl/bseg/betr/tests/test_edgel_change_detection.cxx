@@ -344,9 +344,9 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
  std::vector<double> pchange;
  std::vector<vgl_point_2d<unsigned> > offsets;
  std::vector<vil_image_resource_sptr> rescs; 
-
+ std::string cd_json ="{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
  std::cout <<"===>processing " << evt_name << '\n';
- etr.process("edgel_change_detection", pchange, rescs, offsets);
+ etr.process("edgel_change_detection", pchange, rescs, offsets,cd_json);
  int i =0;
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++){
