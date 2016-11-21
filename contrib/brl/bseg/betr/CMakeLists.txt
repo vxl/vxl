@@ -22,6 +22,7 @@ set(betr_sources
  betr_edgel_reference_cd.h  betr_edgel_reference_cd.cxx
  betr_edgel_reference_cd_params.h    betr_edgel_reference_cd_params.cxx
  betr_pixelwise_change_detection.h  betr_pixelwise_change_detection.cxx
+ betr_pixelwise_change_detection_params.h  betr_pixelwise_change_detection_params.cxx
  betr_params.h              betr_params.cxx  betr_params_sptr.h
 )
 aux_source_directory(Templates betr_sources)

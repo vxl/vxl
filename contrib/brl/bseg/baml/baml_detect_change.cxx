@@ -257,7 +257,7 @@ bool detect_difference(const vil_image_view<vxl_uint_16>& img_tar,
         tar_lh(x, y) = img_tar(x, y) - img_ref(x, y);
     }
   }
-
+  return true;
 }
 
 //---------------------------------------------------------------
