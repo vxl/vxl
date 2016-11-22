@@ -19,8 +19,10 @@
 #include <vpgl/algo/vpgl_backproject_dem.h>
 class vpgl_dem_manager : public vbl_ref_count{
  public:
-  vpgl_dem_manager(vil_image_resource_sptr const& resc);
+  vpgl_dem_manager(vil_image_resource_sptr const& resc, double zmin=0.0, double zmax=-1.0);
   bool back_project(vpgl_camera<double>* cam, double u, double v, double& x, double& y, double& z, double err_tol = 1.0);
+  double zmin() const {return bproj_dem_.zmin();}
+  double zmax() const {return bproj_dem_.zmax();}  
  private:
   vpgl_backproject_dem bproj_dem_;
 };
