@@ -75,7 +75,7 @@ struct baml_change_detection_params {
   baml_change_detection_params():
 	  method(BIRCHFIELD_TOMASI),
     correct_gain_offset( true ),
-    num_tiles( 3 ),
+    num_tiles( 0 ),
     registration_refinement_rad( 0 ),
     prior_change_prob( 0.01f ),
     bt_std( 20.0f ),
@@ -87,15 +87,6 @@ struct baml_change_detection_params {
     img_bit_depth( 12 ),
     hist_bit_depth( 10 ){}
 
-  // A text string for each of the methods
-  std::string method_name() const{
-    switch( method ) {
-      case BIRCHFIELD_TOMASI: return "bt";
-      case GRADIENT_DIFF: return "grad";
-      case NON_PARAMETRIC: return "nonparam";
-      default: return "census";
-    }
-  };
 };
 
 

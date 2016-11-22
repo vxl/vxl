@@ -11,6 +11,7 @@
 
 #include <baml/baml_detect_change.h>
 #include "betr_algorithm.h"
+#include "betr_pixelwise_change_detection_params.h"
 
 class betr_pixelwise_change_detection : public betr_algorithm
 {
@@ -18,7 +19,9 @@ public:
 
   betr_pixelwise_change_detection(): 
     betr_algorithm("pixelwise_change_detection"),
-    avg_prob_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){}
+    avg_prob_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){
+    params_ =  new betr_pixelwise_change_detection_params();
+  }
 
   //: process change
   virtual bool process();

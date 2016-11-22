@@ -33,7 +33,7 @@ bool betr_pixelwise_change_detection::process(){
 
   if( bb_minx < 0 || bb_minx + bb_width >= evt_imgr_->ni() ||
     bb_miny < 0 || bb_miny + bb_height >= evt_imgr_->nj() ){
-    std::cout << "warning betr_pixelwise_change_detection failed\n";
+    std::cout << "WARNING: betr_pixelwise_change_detection failure 1\n";
     avg_prob_ = -1.0;
     return true;
   }
@@ -86,7 +86,7 @@ bool betr_pixelwise_change_detection::process(){
   bool cd_success = cd.detect( evt_img, ref_cropped, valid, evt_change_prob );
     
   if(! cd_success ){
-    std::cout << "warning betr_pixelwise_change_detection failed\n";
+    std::cout << "WARNING: betr_pixelwise_change_detection failure 2\n";
     avg_prob_ = -1.0;
     return true;
   }

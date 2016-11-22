@@ -6,13 +6,13 @@
 // \author Thomas Pollard
 // \date November 18, 2016
 //
-// method - a text string specifying the algorithm used, defined below and in
+// method - an integer specifying the algorithm used, defined below and in
 //          baml_detect_change.h
 //
-//  "bt"           Birchfield-Tomasi
-//  "census"       Census
-//  "grad"         Gradient difference
-//  "nonparam"     Non-parametric transfer function learning
+//  0 Census       
+//  1 Birchfield-Tomasi      
+//  2 Gradient difference
+//  3 Non-parametric transfer function learning
 //                                          
 #include <string>
 #include <iostream>
@@ -25,35 +25,39 @@ class betr_pixelwise_change_detection_params : public betr_params
 {
  public:
 
- betr_pixelwise_change_detection_params(){}
+  betr_pixelwise_change_detection_params(){
+    method_list_.push_back( CENSUS );
+    method_list_.push_back( BIRCHFIELD_TOMASI );
+    method_list_.push_back( GRADIENT_DIFF );
+    method_list_.push_back( NON_PARAMETRIC );
+  }
 
   //: check values of parameters to flag illegal values
   virtual bool sanity_check(std::string& errors) const;
 
   virtual void serialize( Json::Value& root ) const{
-    root["method"] = pw_params_.method_name();
+    int method_idx = 0;
+    for( int m = 0; m < method_list_.size(); m++ )
+      if( pw_params_.method == method_list_[m] ) method_idx = m;
+    root["method"] = method_idx;
+    root["registration_rad"] = pw_params_.registration_refinement_rad;
+    root["change_prior"] = pw_params_.prior_change_prob;
   }
+
   virtual void deserialize( Json::Value& root){
-
-    bool method_found = false;
-    for( int m = 0; m < 4 && !method_found; m++ ){
-      pw_params_.method;
-      if( m == 0 ) pw_params_.method = NON_PARAMETRIC; 
-      else if( m == 1 ) pw_params_.method = BIRCHFIELD_TOMASI; 
-      else if( m == 2 ) pw_params_.method = GRADIENT_DIFF;
-      else if( m == 3 ) pw_params_.method = CENSUS;
-      std::string method_name = pw_params_.method_name();
-      if( strcmp( root["method"].asCString(), method_name.c_str() )==0 ) 
-        method_found = true;
-    }
-
-    if( !method_found ) std::cerr << 
-      "ERROR: betr_pixelwise_change_detection_params::deserialize, invalid method string\n";
+    int method_idx = std::min( 
+      (int)method_list_.size(), std::max( 0, (int)root["method"].asInt() ) );
+    pw_params_.method = method_list_[method_idx];
+    pw_params_.registration_refinement_rad = root["registration_rad"].asInt();
+    pw_params_.prior_change_prob = root["change_prior"].asFloat();
   }
 
   //: parameter block
   baml_change_detection_params pw_params_;
 
+protected:
+
+  std::vector< baml_change_detection_method > method_list_;
 };
 
 std::ostream&  operator<<(std::ostream& s, betr_pixelwise_change_detection_params const& ecdp);
