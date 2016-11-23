@@ -296,6 +296,7 @@ void test_edgel_change_detection()
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
 #elif hamadan
  std::string dir = "D:/tests/hamadan_test/";
+ //std::string dir = "D:/data/sattel/hamadan/";
  // std::string ref_name = "20160821_063826_0e20.tif";
  // std::string ref_name = "20160623_050936_0c64.tif";
  std::string ref_name = "20160902_094643_0c19.tif";
@@ -345,8 +346,13 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
  std::vector<vgl_point_2d<unsigned> > offsets;
  std::vector<vil_image_resource_sptr> rescs; 
 
+ // Read json
+ std::string cd_json ="{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
+ //std::string cd_json ="{\"method\" : 2, \"registration_rad\" : 2, \"change_prior\" : 0.01 }";
+
  std::cout <<"===>processing " << evt_name << '\n';
- etr.process("edgel_change_detection", pchange, rescs, offsets);
+ etr.process("edgel_change_detection", pchange, rescs, offsets,cd_json);
+ //etr.process("pixelwise_change_detection", pchange, rescs, offsets,cd_json);
  int i =0;
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++){
@@ -357,7 +363,10 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
    std::string change_path = dir + evt_name + "change_image_" + ss.str() +".tif";
    vil_save_image_resource(rescs[i], change_path.c_str());
  }
+ //return;
  //============== end of processing
+
+
  evt_name = "20160705_092219_0c81.tif";
  evt_img_path = dir + evt_name ;
  evt_cam_path = dir + evt_name + "_RPC.TXT";

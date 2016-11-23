@@ -10,6 +10,7 @@
 #include <baml/baml_warp.h>
 
 #include "betr_pixelwise_change_detection.h"
+#include "betr_pixelwise_change_detection_params.h"
 #include "betr_event_trigger.h"
 
 #include <cmath>
@@ -20,6 +21,10 @@ bool betr_pixelwise_change_detection::process(){
   // Hardcoded variables
   float change_prior = 0.01f;
 
+  // Get params
+  betr_pixelwise_change_detection_params* cd_params = 
+    dynamic_cast<betr_pixelwise_change_detection_params*>(params_.ptr());
+
   // Get a bounding box for the event polygon
   vsol_box_2d_sptr evt_bb = evt_evt_poly_->get_bounding_box();
   //vsol_box_2d_sptr ref_bb = ref_evt_poly_->get_bounding_box();
@@ -28,7 +33,7 @@ bool betr_pixelwise_change_detection::process(){
 
   if( bb_minx < 0 || bb_minx + bb_width >= evt_imgr_->ni() ||
     bb_miny < 0 || bb_miny + bb_height >= evt_imgr_->nj() ){
-    std::cout << "warning betr_pixelwise_change_detection failed\n";
+    std::cout << "WARNING: betr_pixelwise_change_detection failure 1\n";
     avg_prob_ = -1.0;
     return true;
   }
@@ -77,13 +82,11 @@ bool betr_pixelwise_change_detection::process(){
   vil_image_view<float> evt_change_prob;
   
   // Compute pixel-wise likelihood using specified metric
-  baml_change_detection_params cd_params;
-  cd_params.method = method_;
-  baml_change_detection cd( cd_params );
+  baml_change_detection cd( cd_params->pw_params_ );
   bool cd_success = cd.detect( evt_img, ref_cropped, valid, evt_change_prob );
     
   if(! cd_success ){
-    std::cout << "warning betr_pixelwise_change_detection failed\n";
+    std::cout << "WARNING: betr_pixelwise_change_detection failure 2\n";
     avg_prob_ = -1.0;
     return true;
   }

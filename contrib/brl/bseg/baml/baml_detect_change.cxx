@@ -6,6 +6,7 @@
 #include <vnl/vnl_inverse.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
+#include <vil/vil_crop.h>
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_median.h>
@@ -27,26 +28,88 @@ bool baml_change_detection::detect(
   // Correct gain/offset
   vil_image_view<vxl_uint_16> corr_ref;
   if( params_.correct_gain_offset )
-    baml_correct_gain_offset( img_target, img_ref, valid, corr_ref );
+    baml_correct_gain_offset_tiled( img_target, img_ref, valid, params_.num_tiles, corr_ref );
   else
     corr_ref.deep_copy( img_ref );
 
+  // Bound the registration search
+  int reg_rad = std::min( 20, std::max( 0, 
+    params_.registration_refinement_rad ) );
+
   bool dc_success = false;
 
-  // Detect change using specified method
-  if( params_.method == BIRCHFIELD_TOMASI )
-    dc_success = detect_bt( 
-      img_target, corr_ref, valid, change_prob_target );
-  else if( params_.method == CENSUS )
-    dc_success = detect_census( 
-      img_target, corr_ref, valid, change_prob_target );
-  else if( params_.method == GRADIENT_DIFF )
-    dc_success = detect_gradient( 
-      img_target, corr_ref, valid, change_prob_target );
-  else if( params_.method == NON_PARAMETRIC )
-    dc_success = detect_nonparam( 
-      img_target, corr_ref, valid, change_prob_target );
+  // Find appropriate translational offsets
+  vil_image_view<vxl_uint_16> img_tar_crop;
+  vil_image_view<vxl_uint_16> img_ref_crop;
+  vil_image_view <bool> valid_crop;
+  vil_image_view<float> lh;
+  vil_image_view<float> lh_crop;
+  vil_image_view<float> lh_best;
+  lh.set_size(img_ref.ni(), img_ref.nj());
+  lh_best.set_size(img_ref.ni(), img_ref.nj());
+  int tar_x_off;
+  int tar_y_off;
+  int ref_x_off;
+  int ref_y_off;
+  int crop_n_i;
+  int crop_n_j;
+  float min_mean = pow(2, 16) - 1;
+  float mean_score = 0;
+  
+  // try all offsets within the selected translational radius
+  for (int x_off = -reg_rad; x_off <= reg_rad; x_off++) {
+    for (int y_off = -reg_rad; y_off <= reg_rad; y_off++) {
 
+      // determine cropping offsets and size
+      if (x_off < 0) {
+        ref_x_off = -x_off;
+        tar_x_off = 0;
+        crop_n_i = img_ref.ni() + x_off;
+      }
+      else {
+        ref_x_off = 0;
+        tar_x_off = x_off;
+        crop_n_i = img_ref.ni() - x_off;
+      }
+      if (y_off < 0) {
+        ref_y_off = -y_off;
+        tar_y_off = 0;
+        crop_n_j = img_ref.nj() + y_off;
+      }
+      else {
+        ref_y_off = 0;
+        tar_y_off = y_off;
+        crop_n_j = img_ref.nj() - y_off;
+      }
+      lh.fill(0.0);
+      img_tar_crop = vil_crop(img_target, tar_x_off, crop_n_i, tar_y_off, crop_n_j);
+      img_ref_crop = vil_crop(corr_ref, ref_x_off, crop_n_i, ref_y_off, crop_n_j);
+      valid_crop = vil_crop(valid, tar_x_off, crop_n_i, tar_y_off, crop_n_j);
+      lh_crop = vil_crop(lh, tar_x_off, crop_n_i, tar_y_off, crop_n_j);
+
+      // Detect change using specified method
+      if (params_.method == BIRCHFIELD_TOMASI)
+        dc_success = detect_bt(
+          img_tar_crop, img_ref_crop, valid_crop, lh_crop);
+      else if (params_.method == CENSUS)
+        dc_success = detect_census(
+          img_tar_crop, img_ref_crop, valid_crop, lh_crop);
+      else if (params_.method == GRADIENT_DIFF)
+        dc_success = detect_gradient(
+          img_tar_crop, img_ref_crop, valid_crop, lh_crop);
+      else if (params_.method == NON_PARAMETRIC)
+        dc_success = detect_nonparam(
+          img_tar_crop, img_ref_crop, valid_crop, lh_crop);
+
+      // save the score image if it improved the results 
+      vil_math_mean(mean_score, lh_crop, 0);
+      if (mean_score<min_mean) {
+        change_prob_target.deep_copy(lh);
+        min_mean = mean_score;
+      }
+    }
+
+  }
   if( !dc_success ) return false;
 
   // Convert likelihood into probability
@@ -96,6 +159,7 @@ baml_change_detection::detect_bt(
   if( !baml_compute_birchfield_tomasi( 
     img_tar, img_ref, score, params_.bt_rad ) )
     return false;
+  //vil_convert_cast(score, tar_lh);
 
   // Convert BT score to log likelihood ratio
   for( int y = 0; y < height; y++ ){
@@ -105,7 +169,7 @@ baml_change_detection::detect_bt(
       float lbg = gauss_norm - score(x,y)*(float)score(x,y)/gauss_var;
       tar_lh(x,y) = lfg - lbg;
     }
-  }
+ }
 
   return true;
 }
@@ -168,14 +232,39 @@ baml_change_detection::detect_census(
       float lbg = gauss_norm - ham*(float)ham/gauss_var;
 
       tar_lh(x,y) = lfg - lbg;
-
+      
       //if( rand() < 0.001*RAND_MAX ) std::cerr << (int)ham << ' ';
     }
   }
-
   return true;
 }
 
+//---------------------------------------------------------------
+bool detect_difference(const vil_image_view<vxl_uint_16>& img_tar,
+  const vil_image_view<vxl_uint_16>& img_ref,
+  const vil_image_view<bool>& valid_ref,
+  vil_image_view<float>& tar_lh)
+{
+  int width = img_tar.ni(), height = img_tar.nj();
+
+  if (img_ref.ni() != width || img_ref.nj() != height ||
+    valid_ref.ni() != width || valid_ref.nj() != height)
+    return false;
+
+  // Initialize output image
+  tar_lh.set_size(width, height);
+  tar_lh.fill(1.0f);
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      if (img_ref(x, y) > img_tar(x, y))
+        tar_lh(x, y) = img_ref(x, y) - img_tar(x, y);
+      else
+        tar_lh(x, y) = img_tar(x, y) - img_ref(x, y);
+    }
+  }
+  return true;
+}
 
 //---------------------------------------------------------------
 bool 
@@ -208,7 +297,7 @@ baml_change_detection::detect_gradient(
   vil_sobel_3x3<vxl_uint_16,float>( img_tar, grad_x_tar, grad_y_tar );
   vil_sobel_3x3<vxl_uint_16,float>( img_ref, grad_x_ref, grad_y_ref );
 
-  // Compute hamming distance between images
+  // Compute distance between images
   for( int y = 0; y < height; y++ ){
     for( int x = 0; x < width; x++ ){
       if( valid_ref(x,y) == false ) continue;
@@ -223,19 +312,16 @@ baml_change_detection::detect_gradient(
         angle_diff = acos( grad_ip/(grad_mag_tar*grad_mag_ref) );
 
       //float grad_diff = pow( grad_mag_tar - grad_mag_ref, 2 );
-
-      //float grad_diff = pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 );
-
+      float grad_diff = pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 );
       //float grad_diff = grad_mag_tar*grad_mag_ref - grad_ip;
-
-      float grad_diff = pow( std::max( grad_mag_tar, grad_mag_ref )*sin(angle_diff), 2 );
+      //float grad_diff = pow( std::max( grad_mag_tar, grad_mag_ref )*sin(angle_diff), 2 );
       //float grad_diff = pow( 0.5f*( grad_mag_tar+grad_mag_ref )*fabs( sin(angle_diff) ), 2 );
 
+      // Convert to likelihood ratio
       float lbg = gauss_norm - grad_diff/gauss_var;
-
       tar_lh(x,y) = lfg - lbg;
 
-      if( rand() < 0.001*RAND_MAX ) std::cerr << (int)angle_diff << ' ';
+      //if( rand() < 0.001*RAND_MAX ) std::cerr << (int)angle_diff << ' ';
     }
   }
 
@@ -284,7 +370,7 @@ baml_change_detection::detect_nonparam(
       int tx = (int)( img_tar(x,y)/img_bit_ds );
       int ty = (int)( img_ref(x,y)/img_bit_ds );
       if( tx >= hist_range || ty >= hist_range ){
-        std::cerr << "ERROR: baml_detect_change_mi, observed intensity "
+        std::cerr << "ERROR: baml_detect_change_nonparam, observed intensity "
           << img_tar(x,y) << ' ' << img_ref(x,y) << " larger than expected bit range, aborting\n";
         return false;
       }

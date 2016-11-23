@@ -29,7 +29,11 @@ bool baml_compute_birchfield_tomasi(
 
   // Compute neighborhood min and max
   vil_image_view<T> nbhd_min, nbhd_max;
-  vil_structuring_element se; se.set_to_disk( rad + 0.01 );
+  vil_structuring_element se; 
+  //se.set_to_disk( rad + 0.01 );
+  vcl_vector< int > v_p_i = { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+  vcl_vector< int > v_p_j = { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+  se.set(v_p_i, v_p_j);
   vil_greyscale_dilate<T>( img_ref, nbhd_max, se );
   vil_greyscale_erode<T>( img_ref, nbhd_min, se );
 
@@ -43,7 +47,6 @@ bool baml_compute_birchfield_tomasi(
         score(x,y) = (T)( img_tar(x,y) - nbhd_max(x,y) );
     }
   }
-
   return true;
 }
 

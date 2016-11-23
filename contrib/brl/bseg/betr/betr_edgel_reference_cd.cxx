@@ -9,7 +9,6 @@ bool betr_edgel_reference_cd::process(){
   betr_edgel_reference_cd_params* params = dynamic_cast<betr_edgel_reference_cd_params*>(params_.ptr());
   efparams.det_params_.smooth = params->sigma_;
   efparams.det_params_.noise_multiplier = params->noise_mul_;
-  efparams.upsample_factor_ = params->upsample_factor_;
   ef.add_image("evt_image", evt_imgr_);
   ef.add_region("evt_image", "evt_ref_poly", evt_ref_poly_);
   ef.add_region("evt_image", "evt_evt_poly", evt_evt_poly_);
