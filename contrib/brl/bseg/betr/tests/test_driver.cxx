@@ -6,7 +6,6 @@ DECLARE(test_site);
 DECLARE(test_edgel_factory);
 DECLARE(test_event_trigger);
 DECLARE(test_edgel_change_detection);
-DECLARE(test_json_params);
 
 void
 register_tests()
@@ -17,7 +16,6 @@ register_tests()
   REGISTER(test_edgel_factory);
   REGISTER(test_event_trigger);
   REGISTER(test_edgel_change_detection);
-  REGISTER(test_json_params);
 }
 
 DEFINE_MAIN;

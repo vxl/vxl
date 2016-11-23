@@ -42,54 +42,14 @@ int main(int argc,char * argv[])
   vgl_box_2d<int> region( 1700, 3800, 0, 1900 );
   double z_ground = 0.0;//*/
 
-  /*/ Easy case 1
-  std::string tar_name = "20160820_073052_0c76";
-  std::string ref_name = "20161011_064057_0e16";
+  // Easy case 1
   vpgl_lvcs lvcs( 35.2080385626545, 48.70485305698821, 1675 );
-  std::string target_img_file("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/" + tar_name + ".tif");
-  std::string target_cam_file("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/" + tar_name + "_RPC.txt");
-  std::string ref_img_file("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/" + ref_name + ".tif");
-  std::string ref_cam_file("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/" + ref_name + "_RPC.txt");
-  std::string output_namebase("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/output");
+  std::string target_img_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif");
+  std::string target_cam_file("D:/data/sattel/hamadan/20160820_073052_0c76.tif_RPC.txt");
+  std::string ref_img_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif");
+  std::string ref_cam_file("D:/data/sattel/hamadan/20160831_063745_0e0d.tif_RPC.txt");
+  std::string output_namebase("D:/results/20160820_073052_0c76_20160831_063745_0e0d");
   vgl_box_2d<int> region( 1700, 3800, 0, 1900 );
-  double z_ground = 0.0;*/
-
-  // small portion of runway
-  std::string tar_name("20160619_064846_0c72");
-
-  // std::string ref_name("20160623_050936_0c64");
-  // std::string ref_name("20160701_091757_0c64");
-  // std::string ref_name("20160701_091758_0c64");
-  // std::string ref_name("20160702_103254_0c59");
-  // std::string ref_name("20160705_092219_0c81");
-  // std::string ref_name("20160717_043904_0c19");
-  // std::string ref_name("20160817_135113_0c68");
-  // std::string ref_name("20160820_073052_0c76");
-  // std::string ref_name("20160821_063825_0e20");
-  // std::string ref_name("20160821_063826_0e20");
-  // std::string ref_name("20160822_064308_0c1b");
-  // std::string ref_name("20160827_120833_0c13");
-  // std::string ref_name("20160831_063745_0e0d");
-  // std::string ref_name("20160902_094643_0c19");
-  // std::string ref_name("20160911_063924_0e20");
-  // std::string ref_name("20160911_063925_0e20");
-  // std::string ref_name("20160915_044028_1_0c46");
-  // std::string ref_name("20160917_063903_0e30");
-  // std::string ref_name("20160926_064007_0e0f");
-  // std::string ref_name("20160926_064008_0e0f");
-  // std::string ref_name("20161007_064035_0e20");
-  // std::string ref_name("20161011_064057_0e16");
-  // std::string ref_name("20161014_092852_0c65");
-  // std::string ref_name("20161016_083937_0c22");
-   std::string ref_name("20161024_052928_0c19");
-
-  vpgl_lvcs lvcs(35.2080385626545, 48.70485305698821, 1675);
-  std::string target_img_file("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/" + tar_name + ".tif");
-  std::string target_cam_file("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/" + tar_name + "_RPC.txt");
-  std::string ref_img_file("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/" + ref_name + ".tif");
-  std::string ref_cam_file("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/" + ref_name + "_RPC.txt");
-  std::string output_namebase("C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/output");
-  vgl_box_2d<int> region(2922, 3037, 456, 551);
   double z_ground = 0.0;
 
   /*/ Joe's region
@@ -166,7 +126,7 @@ int main(int argc,char * argv[])
   vil_image_view<vxl_uint_16> tar_cropped = vil_crop( target_img, 
     region.min_x(), region.width(), region.min_y(), region.height() );
   vil_image_view<vxl_uint_16> tar_blur;
-  vil_gauss_filter_2d( tar_cropped, tar_blur, 1.0, 2, vil_convolve_reflect_extend );
+  vil_gauss_filter_2d( tar_cropped, tar_blur, 1.0, 2 );
 
   // Warp the reference image
   vil_image_view<vxl_uint_16> ref_warped;
@@ -187,11 +147,6 @@ int main(int argc,char * argv[])
   vil_save( tar_blur, (output_namebase + "_img1.tif").c_str() );
   vil_save( ref_warped, (output_namebase + "_img2.tif").c_str() );
 
-
-  // Output tar_cropped and tar_blur
-  vil_save(tar_blur, (output_namebase + "_tar_blur.tif").c_str());
-  vil_save(tar_cropped, (output_namebase + "_tar_cropped.tif").c_str());
-
   // Detect changes
   vil_image_view<float> tar_prob;
   baml_change_detection_params params;
@@ -203,5 +158,5 @@ int main(int argc,char * argv[])
   vil_convert_stretch_range_limited( tar_prob, change_vis, 0.0f, 1.0f );
   vil_save( change_vis, (output_namebase + "_change.tif").c_str() );
   
-    return 0;
+  return 0;
 };
