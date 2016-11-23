@@ -104,10 +104,11 @@ def set_event_trigger_data(event_trigger, ref_imgr, ref_camera, event_imgr, even
 # execute change detection with a single event region
 
 
-def execute_event_trigger(event_trigger, algorithm_name):
+def execute_event_trigger(event_trigger, algorithm_name, algorithm_params_json = '{}'):
   batch.init_process("betrExecuteEventTriggerProcess")
   batch.set_input_from_db(0, event_trigger)
   batch.set_input_string(1, algorithm_name)
+  batch.set_input_string(1, algorithm_name, algorithm_params_json)
   status = batch.run_process()
   prob_change = None
   if status:
@@ -121,10 +122,11 @@ def execute_event_trigger(event_trigger, algorithm_name):
 # execute change detection with a multiple event regions
 
 
-def execute_event_trigger_multi(event_trigger, algorithm_name):
+def execute_event_trigger_multi(event_trigger, algorithm_name, algorithm_params_json = '{}'):
     batch.init_process("betrExecuteEventTriggerMultiProcess")
     batch.set_input_from_db(0, event_trigger)
     batch.set_input_string(1, algorithm_name);
+    batch.set_input_string(2, algorithm_params_json);
     status = batch.run_process()
     prob_change = None
     evt_names = None
@@ -139,10 +141,11 @@ def execute_event_trigger_multi(event_trigger, algorithm_name):
         return (prob_change, evt_names)
     
 # execute change detection with a multiple event regions
-def execute_event_trigger_multi_with_change_imgs(event_trigger, algorithm_name):
+def execute_event_trigger_multi_with_change_imgs(event_trigger, algorithm_name, algorithm_params_json = '{}'):
     batch.init_process("betrExecuteEventTriggerMultiWithChImgProcess")
     batch.set_input_from_db(0, event_trigger)
     batch.set_input_string(1, algorithm_name);
+    batch.set_input_string(2, algorithm_params_json);
     status = batch.run_process()
     prob_change = None
     evt_names = None

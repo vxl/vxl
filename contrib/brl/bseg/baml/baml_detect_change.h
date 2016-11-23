@@ -35,8 +35,11 @@ struct baml_change_detection_params {
   baml_change_detection_method method;
 
   //: Estimate an optimal gain/offset to radiometrically align the reference
-  // image to the target for methods that are intensity dependent.
+  // image to the target for methods that are intensity dependent. Specify
+  // number of tiles wanted for tiled regression (setting num_tiles to 0 or 1
+  // yields the non-tiled result
   bool correct_gain_offset;
+  int num_tiles;
 
   //: If > 0, do a brute-force translational search in x and y with this radius 
   // to find the alignment which minimizes average change probability in the
@@ -70,8 +73,9 @@ struct baml_change_detection_params {
 
   //: Default parameters
   baml_change_detection_params():
-	method(CENSUS),
+	  method(BIRCHFIELD_TOMASI),
     correct_gain_offset( true ),
+    num_tiles( 0 ),
     registration_refinement_rad( 0 ),
     prior_change_prob( 0.01f ),
     bt_std( 20.0f ),
@@ -82,6 +86,7 @@ struct baml_change_detection_params {
     grad_std( 30.0f ),
     img_bit_depth( 12 ),
     hist_bit_depth( 10 ){}
+
 };
 
 
@@ -119,6 +124,13 @@ protected:
     const vil_image_view<bool>& valid,
     vil_image_view<float>& tar_lh );
 
+  //: Detect change using absolute difference
+  bool detect_difference(const vil_image_view<vxl_uint_16>& img_target,
+    const vil_image_view<vxl_uint_16>& img_ref,
+    const vil_image_view<bool>& valid,
+    vil_image_view<float>& tar_lh);
+
+  //: Detect change using gradient
   bool detect_gradient(
     const vil_image_view<vxl_uint_16>& img_tar,
     const vil_image_view<vxl_uint_16>& img_ref,
