@@ -21,7 +21,7 @@
 
 namespace betr_execute_event_trigger_multi_with_chimg_process_globals
 {
-  const unsigned n_inputs_  = 3;
+  const unsigned n_inputs_  = 2;
   const unsigned n_outputs_ = 4;
 }
 
@@ -33,7 +33,6 @@ bool betr_execute_event_trigger_multi_with_chimg_process_cons(bprb_func_process&
   std::vector<std::string> input_types_(n_inputs_);
   input_types_[0]  = "betr_event_trigger_sptr"; //event_trigger
   input_types_[1]  = "vcl_string"; //algorithm name
-  input_types_[2]  = "vcl_string"; //json prarameters
   // process has 4 outputs
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bbas_1d_array_double_sptr"; // change probability
@@ -54,11 +53,9 @@ bool betr_execute_event_trigger_multi_with_chimg_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   betr_event_trigger_sptr event_trigger = pro.get_input<betr_event_trigger_sptr>(i++);
-  std::string algorithm_name = pro.get_input<std::string>(i++);
-  std::string algorithm_params = pro.get_input<std::string>(i);
+  std::string algorithm_name = pro.get_input<std::string>(i);
   if(!event_trigger)
     return false;
-  std::cout << "executing " << algorithm_name << " with params " << algorithm_params << std::endl;
   const std::map<std::string, betr_geo_object_3d_sptr>& evt_objs = event_trigger->evt_objects();
   unsigned n = evt_objs.size();
   bbas_1d_array_string_sptr evt_names = new bbas_1d_array_string(n);
@@ -71,7 +68,7 @@ bool betr_execute_event_trigger_multi_with_chimg_process(bprb_func_process& pro)
   std::vector<double> prob_change;
   std::vector<vil_image_resource_sptr> change_imgs;
   std::vector<vgl_point_2d<unsigned> > offsets;
-  bool good = event_trigger->process(algorithm_name, prob_change, change_imgs, offsets, algorithm_params);
+  bool good = event_trigger->process(algorithm_name, prob_change, change_imgs, offsets);
   if(!good)
     return good;
   // get offset and size 
