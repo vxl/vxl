@@ -245,9 +245,10 @@ vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vpgl_camera_double_sptr c
   vsol_polygon_2d_sptr poly_2d = new vsol_polygon_2d (vertices);
   return poly_2d;
 }
-bool betr_event_trigger::process(std::string alg_name, double& prob_change){
+
+bool betr_event_trigger::process(std::string alg_name, double& prob_change,std::string const& params_json){
   std::vector<double> scores;
-  bool good = this->process(alg_name, scores);
+  bool good = this->process(alg_name, scores, params_json);
   if(good&&scores.size()>=1){
     prob_change = scores[0];
     return good;
@@ -255,18 +256,19 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change){
   prob_change = 0.0;
   return false;
 }
-bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change){
+bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,std::string const& params_json){
   std::vector<vil_image_resource_sptr> rescs;
   std::vector<vgl_point_2d<unsigned> > offsets;
-  bool good = this->process(alg_name, prob_change, rescs, offsets);
+  bool good = this->process(alg_name, prob_change, rescs, offsets, params_json);
   return good;
 }
 bool betr_event_trigger::process(std::string alg_name, double& prob_change,
-                                 vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset){
+                                 vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset,
+                                 std::string const& params_json){
   std::vector<double> scores;
   std::vector<vil_image_resource_sptr> rescs;
   std::vector<vgl_point_2d<unsigned> > offsets;
-  bool good = this->process(alg_name, scores, rescs, offsets);
+  bool good = this->process(alg_name, scores, rescs, offsets, params_json);
   if(good&&scores.size()>=1){
     prob_change = scores[0];
     change_img = rescs[0];
@@ -280,7 +282,7 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change,
 
 bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,
                                  std::vector<vil_image_resource_sptr>& change_images,
-                                 std::vector<vgl_point_2d<unsigned> >& offsets){
+                                 std::vector<vgl_point_2d<unsigned> >& offsets, std::string const& params_json){
   
   betr_algorithm_sptr alg = algorithms_[alg_name];
   if(!alg){
@@ -296,6 +298,13 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     std::cout << "for now only one ref object and one or more evt object"<< std::endl;
     return false;
   } 
+  // extract algorithm parameters
+  betr_params_sptr params = alg->params();
+  bool success = read_params_json(params_json, params);
+  if(!success){
+    std::cout << "Bad parse of json parameter string " << params_json << std::endl;
+    return false;
+  }
   if(verbose_){
     std::cout << "Reference Image: " << ref_path_ << std::endl;
     std::cout << "Event Image: " << evt_path_ << std::endl;

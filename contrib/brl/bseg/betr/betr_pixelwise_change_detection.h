@@ -11,6 +11,7 @@
 
 #include <baml/baml_detect_change.h>
 #include "betr_algorithm.h"
+#include "betr_pixelwise_change_detection_params.h"
 
 class betr_pixelwise_change_detection : public betr_algorithm
 {
@@ -18,12 +19,9 @@ public:
 
   betr_pixelwise_change_detection(): 
     betr_algorithm("pixelwise_change_detection"),
-    avg_prob_(0.0), method_( CENSUS ),
-    i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){}
-
-  //: select the pixelwise appearance metric
-  inline void set_metric( baml_change_detection_method m ){
-    method_ = m; }
+    avg_prob_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){
+    params_ =  new betr_pixelwise_change_detection_params();
+  }
 
   //: process change
   virtual bool process();
@@ -41,8 +39,7 @@ private:
    //:results
   double avg_prob_;
 
-  //: parameters
-  baml_change_detection_method method_;
+  //: member variables
   unsigned i_offset_;
   unsigned j_offset_;
   vil_image_resource_sptr change_img_;

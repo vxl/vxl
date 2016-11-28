@@ -56,19 +56,20 @@ class betr_event_trigger : public vbl_ref_count{
   bool add_geo_object(std::string const& name, double lon, double lat ,
                       double elev, std::string const& geom_path, bool is_ref_obj);
   //: execute change algorithm one event object
-  bool process(std::string alg_name, double& prob_change);
+  bool process(std::string alg_name, double& prob_change, std::string const& params_json = "{}");
 
   //: execute change algorithm multiple event objects
-  bool process(std::string alg_name, std::vector<double>& prob_change);
+  bool process(std::string alg_name, std::vector<double>& prob_change, std::string const& params_json = "{}");
 
   //: execute change algorithm one event object and change image with offset in event image
   bool process(std::string alg_name, double& prob_change,
-               vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset);
+               vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset, std::string const& params_json = "{}");
 
   //: execute change algorithm multiple event objects with change images and offsets return
   bool process(std::string alg_name, std::vector<double>& prob_change,
                std::vector<vil_image_resource_sptr>& change_images,
-               std::vector<vgl_point_2d<unsigned> >& offsets);
+               std::vector<vgl_point_2d<unsigned> >& offsets,
+               std::string const& params_json = "{}");
   //: acessors
   std::string name() const {return name_;}
   const std::map<std::string, betr_geo_object_3d_sptr>& ref_objects() const {return ref_trigger_objects_;}
