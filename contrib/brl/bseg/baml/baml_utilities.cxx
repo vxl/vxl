@@ -114,8 +114,8 @@ bool baml_correct_gain_offset_tiled(
   boundaries_x(0) = 0;
   boundaries_y(0) = 0;
   for (int i = 1; i <= num_tiles; i++) {
-    boundaries_x(i) = round(width*i / num_tiles);
-    boundaries_y(i) = round(height*i / num_tiles);
+    boundaries_x(i) = static_cast<int>(width*i / num_tiles+0.5);
+    boundaries_y(i) = static_cast<int>(height*i / num_tiles+0.5);
   }
 
   vil_image_view<vxl_uint_16> tar_crop;
