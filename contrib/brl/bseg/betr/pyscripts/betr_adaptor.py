@@ -101,9 +101,20 @@ def set_event_trigger_data(event_trigger, ref_imgr, ref_camera, event_imgr, even
   if(not status):
     raise BetrException("failed to set event trigger data")
 
+# set event trigger data with multiple reference images - image/camera paths are given not resources but as string arrays
+# inputs are all paths for consistency. Compare to previous adaptor, which passes pointers to images and cameras
+def set_event_trigger_data_multi_ref(event_trigger, ref_img_paths, ref_cam_paths, event_img_path, event_cam_path):
+  batch.init_process("betrSetEventTriggerDataMultiRefProcess")
+  batch.set_input_from_db(0, event_trigger)
+  batch.set_input_string_array(1, ref_img_paths)
+  batch.set_input_string_array(2, ref_cam_paths)
+  batch.set_input_string(3, event_img_path)
+  batch.set_input_string(4, event_cam_path)
+  status = batch.run_process()
+  if(not status):
+    raise BetrException("failed to set event trigger data")
+
 # execute change detection with a single event region
-
-
 def execute_event_trigger(event_trigger, algorithm_name, algorithm_params_json = '{}'):
   batch.init_process("betrExecuteEventTriggerProcess")
   batch.set_input_from_db(0, event_trigger)

@@ -46,9 +46,11 @@ class betr_event_trigger : public vbl_ref_count{
   // the mask is for the case of RGBA images and it is desired to apply the alpha value
   // by setting the intensity to zero when alpha = 0.
   void set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask = false);
+  void set_ref_images(std::vector<vil_image_resource_sptr> const& ref_rescs, bool apply_mask = false);
   void set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask = false);
 
   void set_ref_camera(vpgl_camera_double_sptr const& camera);
+  void set_ref_cameras(std::vector<vpgl_camera_double_sptr> const& cameras);
   void set_evt_camera(vpgl_camera_double_sptr const& camera);
 
   // Add object and find translation vector from trigger origin to object origin.
@@ -91,6 +93,7 @@ class betr_event_trigger : public vbl_ref_count{
                                     vsol_polygon_3d_sptr poly_3d,
                                     vgl_vector_3d<double> const& transl);
   void register_algorithms();
+  vpgl_camera_double_sptr cast_camera(vpgl_camera_double_sptr const& camera);
   bool verbose_;
   std::string name_;
   vpgl_lvcs lvcs_;
@@ -98,9 +101,9 @@ class betr_event_trigger : public vbl_ref_count{
   static unsigned process_counter_;
   betr_geo_box_3d global_bbox_;//trigger bounding box in global WGS84
   vsol_box_3d_sptr local_bbox_;//trigger bounding box in local Cartesian coordinates
-  vil_image_resource_sptr ref_imgr_; //ref image resouce
+  std::vector<vil_image_resource_sptr> ref_rescs_; //ref image resources
   vil_image_resource_sptr evt_imgr_; //event image resouce
-  vpgl_camera_double_sptr ref_camera_;// ref image camera for entire trigger region
+  std::vector<vpgl_camera_double_sptr> ref_cameras_;// ref image camera for entire trigger region
   vpgl_camera_double_sptr evt_camera_;// evt image camera for entire trigger region
   std::string ref_path_;
   std::string evt_path_;

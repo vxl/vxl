@@ -429,7 +429,7 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
-
+ TEST_NEAR("745_hamadan_test", pchange[0], 0.006, 0.0001);
 #endif
 }
-  TESTMAIN(test_edgel_change_detection);
+TESTMAIN(test_edgel_change_detection);

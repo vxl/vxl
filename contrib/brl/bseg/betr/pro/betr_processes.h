@@ -12,6 +12,7 @@ DECLARE_FUNC_CONS(betr_add_site_object_process);
 DECLARE_FUNC_CONS(betr_add_event_trigger_process);
 DECLARE_FUNC_CONS(betr_add_event_trigger_object_process);
 DECLARE_FUNC_CONS(betr_set_event_trigger_data_process);
+DECLARE_FUNC_CONS(betr_set_event_trigger_data_multi_ref_process);
 DECLARE_FUNC_CONS(betr_execute_event_trigger_process);
 DECLARE_FUNC_CONS(betr_execute_event_trigger_multi_process);
 DECLARE_FUNC_CONS(betr_execute_event_trigger_multi_with_chimg_process);

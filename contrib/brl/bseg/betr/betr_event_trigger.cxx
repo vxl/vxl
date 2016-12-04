@@ -28,38 +28,69 @@
 unsigned betr_event_trigger::process_counter_ = 0;
 
 void betr_event_trigger::set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask){
+  vil_image_resource_sptr temp;
   bil_convert_resource_to_grey cnv;
-  cnv(ref_imgr, ref_imgr_, apply_mask);
+  cnv(ref_imgr, temp, apply_mask);
+  ref_rescs_.clear();
+  ref_rescs_.push_back(temp);
+}
+void betr_event_trigger::set_ref_images(std::vector<vil_image_resource_sptr> const& ref_rescs, bool apply_mask){
+  ref_rescs_.clear();
+  bil_convert_resource_to_grey cnv;
+  for(std::vector<vil_image_resource_sptr>::const_iterator rit = ref_rescs.begin(); rit!=ref_rescs.end(); rit++){
+    vil_image_resource_sptr temp;
+    cnv((*rit), temp, apply_mask);
+    ref_rescs_.push_back(temp);
+  }
 }
 void betr_event_trigger::set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask){
-	bil_convert_resource_to_grey cnv;
+  bil_convert_resource_to_grey cnv;
   cnv(evt_imgr, evt_imgr_, apply_mask);
 }
-
-void betr_event_trigger::set_ref_camera(vpgl_camera_double_sptr const& camera){
+vpgl_camera_double_sptr betr_event_trigger::cast_camera(vpgl_camera_double_sptr const& camera){
+  vpgl_camera_double_sptr ret_cam;
   if(!camera){
-    std::cout <<"Fatal - Null reference camera" << std::endl;
-    return;
+    std::cout <<"Fatal - reference camera" << std::endl;
+    return ret_cam;
   }
   // if camera is already local do nothing
   if(camera->type_name() == "vpgl_local_rational_camera"){
-    ref_camera_ = camera;
-    return;
+    return camera;
   }else  if(camera->type_name() == "vpgl_rational_camera"){
     vpgl_rational_camera<double>* rat_cam_ptr = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
     if(!rat_cam_ptr){
       std::cout << "Fatal - can't convert camera to rational_camera" << std::endl;
-      return;
+      return ret_cam;
     }
     vpgl_local_rational_camera<double>* lcam_ptr = new vpgl_local_rational_camera<double>(lvcs_, *rat_cam_ptr);
-    ref_camera_  = lcam_ptr;
+    ret_cam  = lcam_ptr;
   }else{
-      std::cout << "Fatal - camera not global or local rational_camera" << std::endl;
+    std::cout << "Fatal - camera not global or local rational_camera" << std::endl;
+    return ret_cam;
+  }
+  return ret_cam;
+}
+void betr_event_trigger::set_ref_camera(vpgl_camera_double_sptr const& camera){
+  ref_cameras_.clear();
+  vpgl_camera_double_sptr temp = cast_camera(camera);  
+  if(temp)
+    ref_cameras_.push_back(temp);
+}
+void betr_event_trigger::set_ref_cameras(std::vector<vpgl_camera_double_sptr> const& cameras){
+  ref_cameras_.clear();
+  for(std::vector<vpgl_camera_double_sptr>::const_iterator cit = cameras.begin();
+  cit !=cameras.end(); ++cit){
+    vpgl_camera_double_sptr temp = cast_camera(*cit);  
+    if(temp)
+      ref_cameras_.push_back(temp);
+    else{
+      std::cout << "Can't set ref cameras - null cast" << std::endl;
       return;
+    }
   }
 }
 void betr_event_trigger::set_evt_camera(vpgl_camera_double_sptr const& camera){
-    if(!camera){
+  if(!camera){
     std::cout <<"Fatal - Null reference camera" << std::endl;
     return;
   }
@@ -289,8 +320,8 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     std::cout <<"algorithm " << alg_name << " does not exist" << std::endl;
     return false;
   }
-  if(!ref_imgr_ || !evt_imgr_ ){
-    std::cout << "reference or event image not set";
+  if(!ref_rescs_.size() || !evt_imgr_ ){
+    std::cout << "reference image(s) or event image not set";
       return false;
   }
   // for now only one ref object and one or more event objects
@@ -312,37 +343,58 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
   prob_change.clear();
   std::map<std::string, betr_geo_object_3d_sptr>::iterator rit = ref_trigger_objects_.begin();
   std::string ref_obj_name = rit->first;
-  // project the reference object
-  vsol_polygon_2d_sptr ref_ref_poly,evt_ref_poly;
-  if(!this->project_object(ref_camera_, ref_obj_name, ref_ref_poly)){
-    return false;
-  }
+  // project the reference object into both reference and event images
+  vsol_polygon_2d_sptr evt_ref_poly, ref_ref_poly;
+  std::vector<vsol_polygon_2d_sptr> ref_ref_polys;
+  for(std::vector<vpgl_camera_double_sptr>::iterator cit = ref_cameras_.begin();
+      cit != ref_cameras_.end(); ++cit){
+    if(!this->project_object(*cit, ref_obj_name, ref_ref_poly))
+      return false;
+      ref_ref_polys.push_back(ref_ref_poly);
+    }
+  alg->set_verbose(verbose_);
   if(!this->project_object(evt_camera_, ref_obj_name, evt_ref_poly)){
       return false;
   }
+  // iterate through the event objects and project them onto both reference and event images
   for(std::map<std::string, betr_geo_object_3d_sptr>::iterator oit = evt_trigger_objects_.begin();
 	  oit != evt_trigger_objects_.end(); ++oit){
+    // clear the algorithm data, since only one event region at a time is processed 
     alg->clear();
-    alg->set_verbose(verbose_);
-    alg->set_reference_image(ref_imgr_);
+    // reset the image resources
+    if(alg->requires_multiple_ref_images()){
+      alg->set_reference_images(ref_rescs_);
+     }else{
+      alg->set_reference_image(ref_rescs_[0]);
+     } 
     alg->set_event_image(evt_imgr_);
     std::string evt_obj_name = oit->first;
     std::stringstream ss;
     ss<< betr_event_trigger::process_counter_;
     alg->set_identifier(evt_obj_name + "_" + ss.str());
     std::cout << "Processing event object " << evt_obj_name << std::endl;
-    // project the event objects
-    vsol_polygon_2d_sptr ref_evt_poly, evt_evt_poly;
-    if(!this->project_object(ref_camera_, evt_obj_name, ref_evt_poly)){
+    // project the event objects into both reference and event images
+    std::vector<vsol_polygon_2d_sptr> ref_evt_polys;
+    vsol_polygon_2d_sptr  evt_evt_poly;
+    for(std::vector<vpgl_camera_double_sptr>::iterator cit = ref_cameras_.begin();
+      cit != ref_cameras_.end(); ++cit){
+      vsol_polygon_2d_sptr ref_evt_poly;
+      if(!this->project_object(*cit, evt_obj_name, ref_evt_poly))
       return false;
+      ref_evt_polys.push_back(ref_evt_poly);
+  }
+    if(alg->requires_multiple_ref_images()){
+      alg->set_proj_ref_ref_objects(ref_ref_polys);//same for all event objects
+      alg->set_proj_ref_evt_objects(ref_evt_polys);
+    }else{
+      alg->set_proj_ref_ref_object(ref_ref_polys[0]);//same for all event objects
+      alg->set_proj_ref_evt_object(ref_evt_polys[0]);
     }
-    if(!this->project_object(evt_camera_, evt_obj_name, evt_evt_poly)){
+    if(!this->project_object(evt_camera_, evt_obj_name, evt_evt_poly))
       return false;
-    }
-    alg->set_proj_ref_ref_object(ref_ref_poly);
-    alg->set_proj_ref_evt_object(ref_evt_poly);
-    alg->set_proj_evt_ref_object(evt_ref_poly);
+    alg->set_proj_evt_ref_object(evt_ref_poly);//same for all event objects
     alg->set_proj_evt_evt_object(evt_evt_poly);
+    // all the data has been assigned, so the algorithm can process
     if(!alg->process()){
       prob_change.push_back(0.0);
       std::cout << "Algorithm failed " << std::endl;
