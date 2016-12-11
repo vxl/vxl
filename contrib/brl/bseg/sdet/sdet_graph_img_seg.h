@@ -22,12 +22,20 @@
 #include <iosfwd>
 #include <string>
 #include <utility>
+#include <limits>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_new.h>
 #include <vbl/vbl_edge.h>
 #include <vbl/vbl_graph_partition.h>
-
+#include "sdet_detector.h"
+#include "sdet_detector_params.h"
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_edgel.h>
+#include <vsol/vsol_box_2d.h>
 class sdet_graph_img_seg : public vbl_ref_count
 {
  public:
@@ -190,6 +198,113 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
 
   delete ss;
 }
+// segment an image using VanDuc edge chains as high graph edge cost
+template <class T>
+void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned margin, int neigh, T weight_thres, float sigma, float vd_noise_mul, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img)
+{
+  sdet_detector_params det_params;
+  det_params.aggressive_junction_closure=1;
+  det_params.filterFactor = 0.0;
+  det_params.borderp = false;
+  det_params.smooth = sigma;
+  det_params.noise_multiplier = vd_noise_mul;
+  sdet_detector det(det_params);
+  vil_image_view_base const& vbase = dynamic_cast<vil_image_view_base const&>(img);
+  vil_image_resource_sptr resc = vil_new_image_resource_of_view(vbase);
+  det.SetImage(resc);
+  if(!det.DoContour()){
+    std::cout << "Edgel detection failed\n";
+    return;
+  }
+  std::vector<vdgl_digital_curve_sptr> vd_edges;
+  if (!det.get_vdgl_edges(vd_edges)){
+    std::cout << "Detection worked but returned no edgels\n";
+    return;
+  }
+  // form edge image
+  vil_image_view<bool> edge_map(img.ni(), img.nj());
+  edge_map.fill(false);
+  for (std::vector<vdgl_digital_curve_sptr>::iterator eit = vd_edges.begin();
+       eit != vd_edges.end(); ++eit)
+  {
+      //get the edgel chain
+    vdgl_interpolator_sptr itrp = (*eit)->get_interpolator();
+    vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
+    unsigned int n = ech->size();
+    for (unsigned int i=0; i<n;i++)
+    {
+      vdgl_edgel ed = (*ech)[i];
+      unsigned u = static_cast<unsigned>(ed.x() +0.5);
+      unsigned v = static_cast<unsigned>(ed.y() +0.5);
+      edge_map(u,v) = true;
+    }
+  }
+  
+  sdet_graph_img_seg* ss = new sdet_graph_img_seg(img.ni(), img.nj(), margin, neigh);
+
+  // smooth the image
+  vil_image_view<T> smoothed;
+
+  if (sigma <= 0)
+    smoothed = vil_copy_deep(img);
+  else {
+    // smooth source image using gaussian filter
+    vil_gauss_filter_5tap_params gauss_params(sigma);
+    vil_gauss_filter_5tap<T, T>(img, smoothed, gauss_params);
+  }
+
+  // set up the edge costs as color differences and with high weights across the edges
+  std::vector<vbl_edge>& edges = ss->get_edges();
+  for (unsigned i = 0; i < edges.size(); i++) {
+    std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
+    double c0 = (double)smoothed(pix0.first, pix0.second);
+    std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
+    double c1 = (double)smoothed(pix1.first, pix1.second);
+    double dif = c1-c0;
+    edges[i].w_ = (float)std::sqrt(dif*dif);
+
+    bool e0 = edge_map(pix0.first, pix0.second);
+    bool e1 = edge_map(pix1.first, pix1.second);
+    if(e0 || e1)
+      edges[i].w_ = std::numeric_limits<float>::max();
+  }
+
+  vbl_disjoint_sets ds;
+  ds.add_elements(ss->node_cnt());
+
+  // segment graph
+  vbl_graph_partition(ds, edges, weight_thres);
+
+  // combine the segments with number of elements less than min_size
+  // post process small components
+  for (unsigned int i = 0; i < edges.size(); i++) {
+      int v0 = ds.find_set(edges[i].v0_);
+      int v1 = ds.find_set(edges[i].v1_);
+      if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
+          ds.set_union(v0, v1);
+  }
+  std::cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
+
+  out_img.set_size(img.ni(), img.nj());
+  out_img.fill(vil_rgb<vxl_sbyte>(0,0,0));
+
+  int n_segments = ds.num_elements();  // the number of colors need to be in the number of initial number of nodes, cause the final segment ids are the ids of the nodes
+  std::vector<vil_rgb<vxl_byte> > colors;
+  // create unique colors for each set
+  sdet_graph_img_seg::create_colors(colors, n_segments);
+
+  for (unsigned i = 0; i<ss->node_cnt(); i++) {
+    int comp = ds.find_set(i);
+    std::pair<unsigned, unsigned> pix = ss->get_pixel(i);
+    out_img(pix.first, pix.second) = colors[comp];
+  }
+  vil_rgb<vxl_byte> black((vxl_byte)0, (vxl_byte)0, (vxl_byte)0);
+  for(unsigned j = 0; j<img.nj(); ++j)
+    for(unsigned i = 0; i<img.ni(); ++i)
+      if(edge_map(i,j))
+        out_img(i,j) = black;
+  delete ss;
+}
 
 // segment an image using two features, takes two normalized feature images as dimension 1 and dimension 2, calculates Euclidean distance
 // only works for float images in [0,1]
@@ -198,6 +313,5 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
 
 //: segment using two features and also respect the edges in the edge image
 void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_view<float> const& img2, vil_image_view<float> const& edge_img, unsigned margin, int neigh, float weight_thres, float sigma1, float sigma2, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img);
-
 
 #endif // sdet_graph_img_seg_h_

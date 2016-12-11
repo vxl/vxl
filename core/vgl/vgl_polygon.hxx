@@ -111,7 +111,41 @@ bool vgl_polygon<T>::contains(T x, T y) const
   }
   return c;
 }
-
+template <class T>
+T vgl_polygon<T>::area() const{
+  // assume the first sheet is the outer sheet
+  unsigned N = sheets_.size();
+  if(N == 0)
+    return T(0);
+  const sheet_t& s0 = sheets_[0];
+  unsigned n = s0.size();
+  if(n<3)
+    return T(0);
+  T a0 = T(0);
+  for(unsigned i = 0, j = n-1; i<n; ++i){
+    a0 += (s0[j].x() + s0[i].x())*(s0[j].y()-s0[i].y());
+    j = i;
+  }
+  a0 =  a0 * 0.5;
+  if(a0<T(0)) a0 = -a0;
+  if(N=1)
+    return a0;
+  // remove area of internal holes
+  for(unsigned k = 1; k<N; ++k){
+    const sheet_t& sk = sheets_[k];
+    n = sk.size();
+    T ak = T(0);    
+    for(unsigned i = 0, j = n-1; i<n; ++i){
+      ak += (sk[j].x() + sk[i].x())*(sk[j].y()-sk[i].y());
+      j = i;
+    }
+    ak =  ak * 0.5;
+    if(ak<T(0)) ak = -ak;
+    a0 -= ak;
+  }
+  return a0;
+}
+ 
 template <class T>
 std::ostream& vgl_polygon<T>::print(std::ostream& os) const
 {

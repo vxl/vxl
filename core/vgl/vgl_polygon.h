@@ -116,6 +116,7 @@ class vgl_polygon
     for (unsigned int i=0;i<num_sheets();++i) c += (unsigned int)(sheets_[i].size());
     return c;
   }
+  T area() const;
 
   //: Get the ith sheet
   inline sheet_t& operator[](int i) { return sheets_[i]; }
