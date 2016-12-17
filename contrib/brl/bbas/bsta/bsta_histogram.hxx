@@ -507,6 +507,23 @@ std::istream& bsta_histogram<T>::read(std::istream& s)
   return  s;
 }
 template <class T>
+T hist_intersect(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
+  unsigned na = ha.nbins(), nb = hb.nbins();
+  if(na != nb){
+    std::cout << "histograms do not have the same number of bins\n";
+    return std::numeric_limits<T>::max();
+  }
+  T sum = T(0);
+  for(unsigned i = 0; i<na; ++i){
+    T pa = ha.p(i), pb = hb.p(i);
+    if(pa<pb)
+      sum += pa;
+    else
+      sum+= pb;
+  }
+  return sum;
+}
+template <class T>
 T js_divergence(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
   unsigned na = ha.nbins(), nb = hb.nbins();
   if(na != nb){
@@ -610,6 +627,7 @@ template class bsta_histogram<T >; \
 template T js_divergence(bsta_histogram<T> const& , bsta_histogram<T> const&); \
 template bsta_histogram<T> scale(bsta_histogram<T> const&, T ); \
 template T minimum_js_divergence_scale(bsta_histogram<T> const&, bsta_histogram<T> const&, T); \
+template T hist_intersect(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb); \
 template std::istream& operator>>(std::istream&, bsta_histogram<T >&);  \
 template std::ostream& operator<<(std::ostream&, bsta_histogram<T > const&)
 

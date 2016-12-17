@@ -1,6 +1,7 @@
 // Some tests for vgl_oriented_box
 // J.L. Mundy Dec. 2016
 #include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_oriented_box_2d.h>
 #include <vgl/vgl_box_2d.h>
@@ -35,6 +36,12 @@ static void test_oriented_box_2d()
   vgl_box_2d<double> bb = rtbox1.bounding_box();
   double area = bb.area();
   TEST_NEAR("bounding box", area, 5000.0, 0.000001);
+  std::stringstream ss;
+  ob.write(ss);
+  vgl_oriented_box_2d<double> ibox;
+  ibox.read(ss);
+  bool eq = ibox == ob;
+  TEST("read/write equal", eq, true);
 }
 
 TESTMAIN(test_oriented_box_2d);

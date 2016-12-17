@@ -11,7 +11,8 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
-
+#include <vsol/vsol_polygon_2d.h>
+#include <vgl/vgl_oriented_box_2d.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_style.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -356,6 +357,37 @@ void bwm_tableau_img::load_pointset_2d_ascii()
     }
     istr.close();
   }
+  r = r+0.5f;
+}
+void bwm_tableau_img::load_oriented_boxes_2d_ascii()
+{
+  // the style toggling is just to
+  // allow comparison of two or three oriented boxes
+  static float r = 0.0;
+  if(r == 1.5f)
+    r = 0.0f;
+  vgui_style_sptr sty = vgui_style::new_style( r, 1.0f, 0.0f, 3.0, 2.0);
+
+  vgui_dialog load_dlg("Load Oriented Boxes");
+  std::string ext, pt_filename;
+  load_dlg.file("Obox Filename", ext, pt_filename);
+  if (!load_dlg.ask())
+    return;
+  std::ifstream istr(pt_filename.c_str());
+  while(!istr.eof()){
+    vgl_oriented_box_2d<float> obox;
+    obox.read(istr);
+    std::vector<vgl_point_2d<float> > corns = obox.corners();
+    if(!corns.size())
+      continue;
+    std::vector<vsol_point_2d_sptr> verts;
+    for(std::vector<vgl_point_2d<float> >::iterator cit = corns.begin();
+        cit != corns.end(); ++cit)
+      verts.push_back(new vsol_point_2d(cit->x(), cit->y()));
+    vsol_polygon_2d_sptr poly = new vsol_polygon_2d(verts);
+    my_observer_->add_vsol_polygon_2d(poly, sty);
+  }
+  istr.close();
   r = r+0.5f;
 }
 void bwm_tableau_img::help_pop()

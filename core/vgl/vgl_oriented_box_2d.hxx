@@ -237,12 +237,30 @@ vgl_point_2d<T> vgl_oriented_box_2d<T>::center() const{
   vgl_point_2d<T> c((pmaj0.x() + pmaj1.x())/T(2),(pmaj0.y() + pmaj1.y())/T(2));
   return c;
 }
+template <class T>
+void vgl_oriented_box_2d<T>::write(std::ostream& os) const{
+  os << major_axis_.point1().x() << ' ' << major_axis_.point1().y() << ' ' << major_axis_.point2().x() << ' '
+     << major_axis_.point2().y() << ' ' << minor_axis_.point1().x() << ' ' << minor_axis_.point1().y() << ' '
+     << minor_axis_.point2().x() << ' ' << minor_axis_.point2().y() << std::endl;
+}
+
+template <class T>
+void vgl_oriented_box_2d<T>::read(std::istream& is) {
+  T pmaj1x, pmaj1y, pmaj2x, pmaj2y, pmin1x, pmin1y, pmin2x, pmin2y;
+  is >> pmaj1x >>  pmaj1y >> pmaj2x >>  pmaj2y 
+     >> pmin1x  >> pmin1y  >> pmin2x >> pmin2y; 
+  vgl_point_2d<T> pmaj1(pmaj1x, pmaj1y), pmaj2(pmaj2x, pmaj2y);
+  vgl_point_2d<T> pmin1(pmin1x, pmin1y), pmin2(pmin2x, pmin2y);
+  major_axis_.set(pmaj1, pmaj2);
+  minor_axis_.set(pmin1, pmin2);
+}
 
 template <class T>
 std::ostream&  operator<<(std::ostream& os, const vgl_oriented_box_2d<T>& obox){
   os << "major axis:" << obox.major_axis() << " minor_axis:" << obox.minor_axis()<< "\n";
   return os;
 }
+
 template <class T>
 std::istream&  operator>>(std::istream& is,  vgl_oriented_box_2d<T>& obox){
   vgl_line_segment_2d<T> maj, min;

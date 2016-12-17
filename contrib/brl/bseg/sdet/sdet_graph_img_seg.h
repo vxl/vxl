@@ -60,7 +60,9 @@ class sdet_graph_img_seg : public vbl_ref_count
 #include <vil/vil_copy.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vnl/vnl_random.h>
-
+#include <vector>
+#include "sdet_region.h"
+#include "sdet_region_sptr.h"
 // segment a single plane image using value difference of neighbor pixels, neigh = 4 for 4-neighborhood, or 8
 template <class T>
 void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, T weight_thres, float sigma, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img)
@@ -200,7 +202,7 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
 }
 // segment an image using VanDuc edge chains as high graph edge cost
 template <class T>
-void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned margin, int neigh, T weight_thres, float sigma, float vd_noise_mul, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img)
+void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned margin, int neigh, T weight_thres, float sigma, float vd_noise_mul, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img, std::map<unsigned, sdet_region_sptr>& regions)
 {
   sdet_detector_params det_params;
   det_params.aggressive_junction_closure=1;
@@ -296,13 +298,46 @@ void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned marg
   for (unsigned i = 0; i<ss->node_cnt(); i++) {
     int comp = ds.find_set(i);
     std::pair<unsigned, unsigned> pix = ss->get_pixel(i);
-    out_img(pix.first, pix.second) = colors[comp];
+    vil_rgb<vxl_byte>& c = colors[comp];
+    out_img(pix.first, pix.second) = c;
   }
   vil_rgb<vxl_byte> black((vxl_byte)0, (vxl_byte)0, (vxl_byte)0);
   for(unsigned j = 0; j<img.nj(); ++j)
     for(unsigned i = 0; i<img.ni(); ++i)
       if(edge_map(i,j))
         out_img(i,j) = black;
+  // output regions
+  for (unsigned i = 0; i<ss->node_cnt(); i++) {
+    int comp = ds.find_set(i);
+    int n = ds.size(comp);
+    std::map<unsigned, sdet_region_sptr>::iterator rit;
+    rit = regions.find(comp);
+    if(rit == regions.end()){
+      regions[comp] = new sdet_region();
+      regions[comp]->set_label(comp);
+      regions[comp]->SetNpts(n);
+      regions[comp]->InitPixelArrays();
+    }
+    sdet_region_sptr& reg = regions[comp];
+    std::pair<unsigned, unsigned> pix = ss->get_pixel(i);
+    unsigned short intensity = static_cast<unsigned short>(img(pix.first, pix.second));
+    float u = static_cast<float>(pix.first), v = static_cast<float>(pix.second);
+    reg->IncrementMeans(u, v, intensity);
+    reg->InsertInPixelArrays(u,v,intensity);
+  }
+  edges = ss->get_edges();
+  for (unsigned i = 0; i < edges.size(); i++) {
+    int v0 = ds.find_set(edges[i].v0_);
+    int v1 = ds.find_set(edges[i].v1_);
+    if(v0 != v1){
+      int comp0 = ds.find_set(v0);
+      int comp1 = ds.find_set(v1);
+      sdet_region_sptr& reg0 = regions[comp0];
+      sdet_region_sptr& reg1 = regions[comp1];
+      reg0->add_neighbor(comp1);
+      reg1->add_neighbor(comp0);
+    }
+  }
   delete ss;
 }
 

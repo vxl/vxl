@@ -81,6 +81,13 @@ class vgl_oriented_box_2d {
   //: corners of the oriented rectangle
   std::vector<vgl_point_2d<T> > corners() const;
 
+  inline bool operator==(vgl_oriented_box_2d<T> const& obox) const {
+    return (this==&obox) || (major_axis_ == obox.major_axis()&&(minor_axis_ == obox.minor_axis())); }
+
+  //: write a compact ascii form (4 pts)
+  void write(std::ostream& os) const;
+  //: read a compact ascii form (4 pts)
+  void read(std::istream& is);
  private:
   vgl_line_segment_2d<T> major_axis_;
   vgl_line_segment_2d<T> minor_axis_;
