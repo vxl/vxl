@@ -64,6 +64,10 @@ class vbl_smart_ptr
   vbl_smart_ptr ()
     : protected_(true), ptr_(VXL_NULLPTR) { }
 
+  template<class Y>
+  vbl_smart_ptr (vbl_smart_ptr<Y> const &p)
+    : protected_(true), ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
+
   vbl_smart_ptr (vbl_smart_ptr<T> const &p)
     : protected_(true), ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
 
