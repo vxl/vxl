@@ -4,6 +4,7 @@
 #include <sstream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_oriented_box_2d.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_box_2d.h>
 #include <vcl_compiler.h>
 
@@ -34,7 +35,7 @@ static void test_oriented_box_2d()
   TEST_NEAR("rotate box", rot_trans_corns1[2].x()+rot_trans_corns1[2].y(), 425.0, 0.000001);
 
   vgl_box_2d<double> bb = rtbox1.bounding_box();
-  double area = bb.area();
+  double area = vgl_area(bb);
   TEST_NEAR("bounding box", area, 5000.0, 0.000001);
   std::stringstream ss;
   ob.write(ss);

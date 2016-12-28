@@ -3,6 +3,8 @@
 // \file
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_intersection.h>
+#include <vgl/vgl_area.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -11,6 +13,7 @@
 sdet_region::sdet_region()
 {
   boundary_ = VXL_NULLPTR;
+  bbox_valid_ = false;
   obox_valid_ = false;
   boundary_valid_ = false;
   region_label_ = 0;
@@ -20,6 +23,7 @@ sdet_region::sdet_region(int npts, const float* xp, const float* yp,
                          const unsigned short *pix)
   : vdgl_digital_region(npts, xp, yp, pix)
 {
+  bbox_valid_ = false;
   obox_valid_ = false;
   boundary_ = VXL_NULLPTR;
   boundary_valid_ = false;
@@ -29,6 +33,7 @@ sdet_region::sdet_region(int npts, const float* xp, const float* yp,
 sdet_region::sdet_region(vdgl_digital_region const& reg)
   :vdgl_digital_region(reg.Npix(), reg.Xj(), reg.Yj(), reg.Ij())
 {
+  bbox_valid_ = false;
   obox_valid_ = false;
   boundary_ = VXL_NULLPTR;
   boundary_valid_ = false;
@@ -53,6 +58,30 @@ bool sdet_region::compute_boundary()
   boundary_ = poly;
   boundary_valid_ = true;
   return true;
+}
+bool sdet_region::compute_bbox(){
+  if(Npix()==0)
+    return false;
+  for (this->reset(); this->next();)
+    bbox_.add(vgl_point_2d<float>(this->X(), this->Y()));
+  //expand by a margin of 0.5 to account for pixel granularity
+  vgl_point_2d<float> minp = bbox_.min_point(), maxp = bbox_.max_point();
+  bbox_.set_min_x(minp.x()-0.5f); bbox_.set_min_y(minp.y()-0.5f);
+  bbox_.set_max_x(maxp.x()+0.5f); bbox_.set_max_y(maxp.y()+0.5f);
+  bbox_valid_ = true;
+  return true;
+}
+float sdet_region::int_over_union(vgl_box_2d<float> bb){
+  if(!bbox_valid_)
+    this->compute_bbox();
+  if(!bbox_valid_)
+    return 0.0f;
+  vgl_box_2d<float> bint = vgl_intersection<float>(bbox_, bb);
+  if(bint.is_empty())
+    return 0.0f;
+  float aint = vgl_area(bint);
+  float aunion = vgl_area(bb) +  vgl_area(bbox_) - aint;
+  return aint/aunion;
 }
 bool sdet_region::compute_obox(){
   vnl_float_2 major_dir;
@@ -85,6 +114,20 @@ vgl_oriented_box_2d<float> sdet_region::obox(){
     if (!this->compute_obox())
       return temp;
   return obox_;
+}
+vgl_box_2d<float> sdet_region::bbox(){
+  vgl_box_2d<float> temp;
+  if (!bbox_valid_)
+    if (!this->compute_bbox())
+      return temp;
+  return bbox_;
+}
+void sdet_region::increment_neighbors(unsigned delta){
+  std::set<unsigned> new_nbrs;
+  for(std::set<unsigned>::iterator nit = nbrs_.begin();
+      nit != nbrs_.end(); ++nit)
+    new_nbrs.insert((*nit)+delta);
+  nbrs_ = new_nbrs;
 }
 sdet_region_sptr merge(sdet_region_sptr const& r1,sdet_region_sptr const& r2,
                        unsigned merged_label){

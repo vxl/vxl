@@ -22,6 +22,7 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vdgl/vdgl_digital_region.h>
+#include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_oriented_box_2d.h>
 #include <set>
 #include <bsta/bsta_histogram.h>
@@ -39,12 +40,15 @@ class sdet_region : public vdgl_digital_region
   unsigned int label() const {return region_label_;}
   void add_neighbor(const unsigned int nbr){nbrs_.insert(nbr);}
   void remove_neighbor(const unsigned int nbr){nbrs_.erase(nbr);}
+  void increment_neighbors(unsigned delta);
   const std::set<unsigned>& nbrs() const{return nbrs_;}
   //: boundary as convex hull of region
   void set_boundary(vsol_polygon_2d_sptr const& boundary){boundary_ = boundary;}
   vsol_polygon_2d_sptr boundary();
 
+  vgl_box_2d<float> bbox();
   vgl_oriented_box_2d<float> obox();
+
 
     //: old style cast
   vdgl_digital_region* cast_to_digital_region(){return (vdgl_digital_region*) this;}
@@ -54,6 +58,10 @@ class sdet_region : public vdgl_digital_region
   bool boundary_valid() const{ return boundary_valid_;}
   bool compute_obox();
   bool obox_valid() const{ return obox_valid_;}
+  bool compute_bbox();
+  bool bbox_valid() const{ return bbox_valid_;}
+  // intersection over union of bb with respect to this->bbox_
+  float int_over_union(vgl_box_2d<float> bb);
   //: must implement comparison since containers need this
   struct region_less
   {
@@ -68,9 +76,11 @@ class sdet_region : public vdgl_digital_region
   
  protected:
   unsigned int region_label_;
+  bool bbox_valid_;
   bool obox_valid_;
   bool boundary_valid_;
   vsol_polygon_2d_sptr boundary_;
+  vgl_box_2d<float> bbox_;//!< axis aligned box
   vgl_oriented_box_2d<float> obox_;//!< oriented box based on the pixel scatter matrix
   std::set<unsigned> nbrs_;
   bsta_histogram<float> hist_;

@@ -15,7 +15,8 @@
 // \author J.L. Mundy
 // \date 10 December 2016
 //
-
+//  Note: area is not defined on the oriented box class to keep a clean interface
+//  see vgl_area<T> 
 // public functions
 template <class T>
 class vgl_oriented_box_2d {
@@ -45,6 +46,11 @@ class vgl_oriented_box_2d {
   //: return length (point.x()) and width (point.y())
   vgl_point_2d<T> length_width() const;
 
+  //: aspect ratio of box: length/width
+  T aspect_ratio() const{
+    vgl_point_2d<T> lw = length_width();
+    return lw.x()/lw.y();
+  }
   //: line segment perpendicular to major axis at normalized major axis position u
   //  where u is in (-0.5, 0.5);
   vgl_line_segment_2d<T> perp_line_seg(double u) const;

@@ -6,6 +6,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_utm.h>
 #include <vgl/vgl_line_segment_2d.h>
+#include <vgl/vgl_area.h>
 
 // function to check whether the given box intersect with a line defined by a vector of points
 static bool is_intersect(vgl_box_2d<double> const& box, std::vector<vgl_point_2d<double> > const& line)
@@ -253,7 +254,7 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector
 {
   if (!root)  // empty tree
     return;
-  if (vgl_intersection(root->extent_, area).area() == 0.0f) // tree doesn't intersect with given region
+  if (vgl_area(vgl_intersection(root->extent_, area)) == 0.0f) // tree doesn't intersect with given region
     return;
 
   if (!root->children_.size())  // the node has no children and it intersects with box

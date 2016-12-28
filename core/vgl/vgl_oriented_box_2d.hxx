@@ -2,6 +2,8 @@
 #include <vgl/vgl_clip.h>
 #include <vgl/vgl_point_2d.h>
 #include <string>
+#include <math.h>
+#include <vgl/vgl_area.h>
 template <class T>
 vgl_oriented_box_2d<T>::vgl_oriented_box_2d(long length, long width, vgl_point_2d<T> center){
   T l = length/T(2), w = width/T(2);
@@ -30,7 +32,7 @@ vgl_point_2d<T> vgl_oriented_box_2d<T>::length_width() const{
   const vgl_point_2d<T>  pmaj1 = major_axis_.point2();
   double dx = static_cast<double>(pmaj1.x()-pmaj0.x());
   double dy = static_cast<double>(pmaj1.y()-pmaj0.y());
-  double len = std::sqrt(dx*dx + dy*dy);
+  double len = sqrt(dx*dx + dy*dy);
   //perpendicular vector
   double px = -dy/len, py = dx/len;
   // midpoint
@@ -46,20 +48,13 @@ vgl_point_2d<T> vgl_oriented_box_2d<T>::length_width() const{
   double v1y = (minor_axis_.point2()).y()-midy;
   // perp distance to second minor endpoint
   double r1 = v1x*px + v1y*py;
-  return vgl_point_2d<T>(static_cast<T>(len), static_cast<T>(std::fabs(r0)+std::fabs(r1)));
+  return vgl_point_2d<T>(static_cast<T>(len), static_cast<T>(fabs(r0)+fabs(r1)));
 }
-/*
-template <class T>
-double vgl_oriented_box_2d<T>::slope_radians(vgl_line_2d<T> const& seg){
-  double dy = static_cast<double>(seg.second.y()-seg.first.y());
-  double dx = static_cast<double>(seg.second.x()-seg.first.x());
-  return std::atan2(dy,dx);
-}
-*/
+
 template <class T>
 static vgl_point_2d<T> rotate_point(vgl_point_2d<T> cent, vgl_point_2d<T> p, T ang){
   vgl_vector_2d<T> v = p-cent;
-  T c = std::cos(ang), s = std::sin(ang);
+  T c = cos(ang), s = sin(ang);
   T vrx = v.x()*c - v.y()*s;
   T vry = v.x()*s + v.y()*c;
   vgl_vector_2d<T> pr(vrx, vry);
@@ -93,7 +88,7 @@ translate(T tx, T ty) const{
 // rotate the box until the major axis is pointing along the x-axis 0 or 180 deg
 template <class T>
 T vgl_oriented_box_2d<T>::align_major_axis(vgl_point_2d<T> const& rot_center, vgl_oriented_box_2d<T>& rot_box) const{
-  T right_ang = std::atan2(T(1), T(0));
+  T right_ang = atan2(T(1), T(0));
   T slope = major_axis_.slope_radians();
   // slope can be in cut domains [-180, -90), (90, 180]
   // or in the continuous domain [-90, 90]
@@ -127,7 +122,7 @@ vgl_line_segment_2d<T> vgl_oriented_box_2d<T>::perp_line_seg(double u) const{
   const vgl_point_2d<T>& pmaj1 = major_axis_.point2();
   double dx = static_cast<double>(pmaj1.x()-pmaj0.x());
   double dy = static_cast<double>(pmaj1.y()-pmaj0.y());
-  double len = std::sqrt(dx*dx + dy*dy);
+  double len = sqrt(dx*dx + dy*dy);
   //perpendicular unit vector
   double px = -dy/len, py = dx/len;
   // midpoint
@@ -196,7 +191,7 @@ std::vector<vgl_point_2d<T> > vgl_oriented_box_2d<T>::corners() const{
   const vgl_point_2d<T>& pmaj1 = major_axis_.point2();
   double dx = static_cast<double>(pmaj1.x()-pmaj0.x());
   double dy = static_cast<double>(pmaj1.y()-pmaj0.y());
-  double len = std::sqrt(dx*dx + dy*dy);
+  double len = sqrt(dx*dx + dy*dy);
   //perpendicular vector
   double px = -dy/len, py = dx/len;
   // midpoint
@@ -280,8 +275,8 @@ T obox_int_over_union(vgl_oriented_box_2d<T> const& ob0, vgl_oriented_box_2d<T> 
   vgl_polygon<T> p0(corners0), p1(corners1);
   vgl_polygon<T> poly_inter = vgl_clip(p0, p1, vgl_clip_type_intersect);
   vgl_polygon<T> poly_union = vgl_clip(p0, p1, vgl_clip_type_union);
-  T area_int = poly_inter.area();
-  T area_union = poly_union.area();
+  T area_int = vgl_area(poly_inter);
+  T area_union = vgl_area(poly_union);
   return area_int/area_union;
 }
 
@@ -311,7 +306,7 @@ vgl_point_2d<T> transform_to_obox(vgl_oriented_box_2d<T> const& obox, vgl_point_
   // major axis vector
   double vmajx = static_cast<double>(pmaj1.x()-pmaj0.x()), vmajy = static_cast<double>(pmaj1.y()-pmaj0.y());
   // convert to unit vector
-  double mag = std::sqrt(vmajx*vmajx + vmajy*vmajy);
+  double mag = sqrt(vmajx*vmajx + vmajy*vmajy);
   if(mag == 0.0){
     std::cout << "warning - zero length major axis, degenerate orientation\n";
     return vgl_point_2d<T>();

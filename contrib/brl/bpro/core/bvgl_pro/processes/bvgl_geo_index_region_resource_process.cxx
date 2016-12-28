@@ -7,6 +7,7 @@
 // processes to generate list of leaves that intersect with given region
 #include <vul/vul_file.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_area.h>
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
 #include <vcl_compiler.h>
@@ -67,7 +68,7 @@ bool bvgl_geo_index_region_resource_process(bprb_func_process& pro)
   std::cout << "bounding box: " << bbox << std::endl;
 
   for (unsigned i = 0; i < leaves.size(); i++) {
-    if (vgl_intersection(bbox, leaves[i]->extent_).area() > 0)
+    if (vgl_area(vgl_intersection(bbox, leaves[i]->extent_)) > 0)
       leaf_ids.push_back(i);
   }
 

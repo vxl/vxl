@@ -18,6 +18,7 @@
 #include <vul/vul_file_iterator.h>
 #include <vpgl/vpgl_utm.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_distance.h>
@@ -86,7 +87,7 @@ int main(int argc,  char** argv)
     volm_tile t(fit(), 0, 0); // pass ni, nj as 0 cause just need to parse the name string
     vgl_box_2d<double> bbox = t.bbox_double();
 
-    if (vgl_intersection(bbox, sbbox).area() <= 0)
+    if (vgl_area(vgl_intersection(bbox, sbbox)) <= 0)
       continue;
 
     vil_image_view_base_sptr img_sptr = vil_load(fit());
@@ -122,7 +123,7 @@ int main(int argc,  char** argv)
     volm_tile t(fit(), 0, 0); // pass ni, nj as 0 cause just need to parse the name string
     vgl_box_2d<double> bbox = t.bbox_double();
 
-    if (vgl_intersection(bbox, sbbox).area() <= 0)
+    if (vgl_area(vgl_intersection(bbox, sbbox)) <= 0)
       continue;
 
     vil_image_view_base_sptr img_sptr = vil_load(fit());

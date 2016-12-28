@@ -199,6 +199,10 @@ template <class T>
 T minimum_js_divergence_scale(bsta_histogram<T> const& h_from, bsta_histogram<T> const& h_to,
                               T min_scale = T(1)/T(4));
 
+// Histogram intersection (sum of min probabilies)
+template <class T>
+bool merge_hists(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb, bsta_histogram<T>& h_merged);
+
 //: Write histogram to stream
 // \relatesalso bsta_histogram
 template <class T>

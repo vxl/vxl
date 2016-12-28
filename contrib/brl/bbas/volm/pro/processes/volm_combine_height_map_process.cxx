@@ -19,6 +19,7 @@
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
 #include <vcl_compiler.h>
+#include <vgl/vgl_area.h>
 
 namespace volm_combine_height_map_process_globals
 {
@@ -143,7 +144,7 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
     std::vector<volm_img_info> leaf_h_info;
     for (std::vector<volm_img_info>::iterator vit = h_info.begin();  vit != h_info.end();  ++vit)
     {
-      if (vgl_intersection(vit->bbox, leaf_bbox_wgs).area() <= 0.0) {
+      if (vgl_area(vgl_intersection(vit->bbox, leaf_bbox_wgs)) <= 0.0) {
         continue;
       }
       if (vit->img_r->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
@@ -393,7 +394,7 @@ bool volm_combine_height_map_process3(bprb_func_process& pro)
   std::vector<volm_img_info> overlap_infos;
   for (unsigned i = 0; i < h_infos.size(); i++)
   {
-    if (vgl_intersection(region_box, h_infos[i].bbox).area() > 0)
+    if (vgl_area(vgl_intersection(region_box, h_infos[i].bbox)) > 0)
       overlap_infos.push_back(h_infos[i]);
   }
   if (overlap_infos.empty()) {
