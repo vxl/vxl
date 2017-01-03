@@ -14,7 +14,7 @@
 #include <sstream>
 #include <vcl_compiler.h>
 
-#include "sdet_EMD.h"
+#include <sdet/sdet_EMD.h>
 
 //: Base class for image appearance on edgels
 class sdet_appearance

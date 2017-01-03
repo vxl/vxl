@@ -33,8 +33,8 @@
 #include <vgl/vgl_area.h>
 
 #include <bvgl/algo/bvgl_eulerspiral.h>
-#include "sdet_edgel.h"
-#include "sdet_curve_model.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_curve_model.h>
 
 //forward declaration
 class sdet_curvelet;

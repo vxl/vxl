@@ -9,7 +9,7 @@
 //
 
 #include <vbl/vbl_smart_ptr.h>
-#include "sdet_sel_base.h"
+#include <sdet/sdet_sel_base.h>
 
 typedef vbl_smart_ptr<sdet_sel_base> sdet_sel_sptr;
 
