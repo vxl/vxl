@@ -22,6 +22,7 @@
 #include <vil/vil_image_view.h>
 #include "sdet_region.h"
 #include "sdet_region_classifier_params.h"
+#include "sdet_selective_search.h"
 #include <bsta/bsta_histogram.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_intersection.h>
@@ -87,25 +88,25 @@ class sdet_region_classifier : public sdet_region_classifier_params
   sdet_region_classifier(){}
   //:specify different parameters
  sdet_region_classifier(sdet_region_classifier_params& rpp):sdet_region_classifier_params(rpp){}
-  
   ~sdet_region_classifier(){};
   void set_diverse_regions(const std::map<unsigned, sdet_region_sptr >& regions){diverse_regions_ = regions;}
   const std::map<unsigned, sdet_region_sptr>& diverse_regions(){return diverse_regions_;}
   void set_diverse_hists(const std::map<unsigned, bsta_histogram<float> >& hists){diverse_hists_ = hists;}
   const std::map<unsigned, bsta_histogram<float> >& diverse_hists() {return diverse_hists_;}
   const std::map<unsigned, bsta_histogram<float> >& neighbors_hists() {return neighbors_hists_;}
-
-  void find_iou_clusters();
+  const std::map< unsigned, std::map<unsigned, float> >& iou_clusters(){return iou_clusters_;}
+  const std::map< unsigned, std::map<unsigned, region_sim> >& cluster_sim(){return cluster_similarity_;}
+  void find_iou_clusters(const std::map<unsigned, sdet_region_sptr >& regions);
   void remove_diverse_region(unsigned label);
-  void remove_identical_regions();
+  void compute_iou_cluster_similarity();
+  float compute_partition_quality(std::map< unsigned, std::map<unsigned, region_sim> > const& cluster_sim);
+  bool merge_similarity_map(std::map< unsigned, std::map<unsigned, region_sim> > const& sim_before,
+                            std::map< unsigned, std::map<unsigned, region_sim> >& sim_after,
+                            unsigned labi, unsigned labj, unsigned new_label);
   void compute_hist_of_nbrs();
   void compute_bright_regions();
   const std::set<unsigned>& bright_regions(){return bright_regions_;}
   void process(){
-  }
-  void remove_diverse_duplicates(){
-    find_iou_clusters();
-    remove_identical_regions();
   }
     //: io functions
  private:
@@ -113,7 +114,7 @@ class sdet_region_classifier : public sdet_region_classifier_params
   std::map<unsigned, bsta_histogram<float> >  diverse_hists_;
   std::map<unsigned, bsta_histogram<float> >  neighbors_hists_;
   std::set<unsigned> bright_regions_;
-  vgl_rtree<V_, B_, C_> tr_; // the rtree
   std::map< unsigned, std::map<unsigned, float> > iou_clusters_;
+  std::map< unsigned, std::map<unsigned, region_sim> > cluster_similarity_;
 };
 #endif // sdet_region_classifier_h_

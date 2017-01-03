@@ -26,23 +26,11 @@
 #include <set>
 #include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
-#include "sdet_region_sptr.h"
+#include "sdet_region.h"
 #include "sdet_selective_search_params.h"
 #include <bsta/bsta_histogram.h>
 #include <vgl/vgl_box_2d.h>
-//A structure for holding the similarity of neighboring regions
-class region_sim{
- public:
- region_sim():ri_(0), rj_(0), s_(0.0f){}
- region_sim(unsigned ri, unsigned rj, float s):ri_(ri), rj_(rj), s_(s){}
-  bool operator < (region_sim const& s) const{
-    return s_ < s.s_;}
-  bool operator > (region_sim const& s) const{
-    return s_ > s.s_;}
-  unsigned ri_;//!<index for region i
-  unsigned rj_;//!<index for region j
-  float s_;//!<similarity score for i,j (high s_ is more similar)
-};
+
 class sdet_selective_search : public sdet_selective_search_params
 {
  public:

@@ -13,6 +13,7 @@ void sdet_selective_search::initialize_hists(){
   for(std::map<unsigned, sdet_region_sptr>::iterator rit =  regions_.begin();
       rit != regions_.end(); ++rit){
     unsigned lab = (*rit).second->label();
+    (*rit).second->ComputeIntensityStdev();
     bsta_histogram<float> h(255.0f, nbins_);
     for((*rit).second->reset(); (*rit).second->next();){
       float v = static_cast<float>((*rit).second->I());
@@ -54,7 +55,7 @@ void sdet_selective_search::compute_initial_similarity(){
     sdet_region_sptr& ri = (*riti).second;
     unsigned labi = ri->label();
     bsta_histogram<float>& histi = hists[labi];
-    float npix_i = static_cast<float>(ri->Npix());
+    //float npix_i = static_cast<float>(ri->Npix());
     const std::set<unsigned>& nbrs = ri->nbrs();
     for(std::set<unsigned>::const_iterator nit =  nbrs.begin();
       nit != nbrs.end(); ++nit){
@@ -68,11 +69,12 @@ void sdet_selective_search::compute_initial_similarity(){
       std::pair<unsigned, unsigned> pn(*nit,labi);
       sim_pair_computed.insert(pi);//record pair in either order
       sim_pair_computed.insert(pn);
-      float npix_j = static_cast<float>(rnbr->Npix());
+      //float npix_j = static_cast<float>(rnbr->Npix());
       bsta_histogram<float>& histj = hists[*nit];
-      float sim_hist = hist_intersect(histi, histj);//min probability
-      float sim_size = 1.0f - (npix_i + npix_j)/image_area_;//small regions first
-      float st = sim_hist + sim_size;
+      // This computation of similarity is based on Uijlings et al
+      // and merges small, similarly sized regions before large regions 
+      // that have similar intensity distributions
+      float st = similarity(ri, histi, rnbr, histj, image_area_);
       sim_.push(region_sim(labi, *nit, st));//max similarity always at top of queue
     }
   }
@@ -81,7 +83,7 @@ void sdet_selective_search::compute_initial_similarity(){
 void sdet_selective_search::insert_similarities(sdet_region_sptr newr, std::set<unsigned>& removed_labels){
   unsigned lab = newr->label();
   const std::set<unsigned>& nbrs = newr->nbrs();
-  float npix_n = static_cast<float>(newr->Npix());
+  //float npix_n = static_cast<float>(newr->Npix());
   bsta_histogram<float>& hr = hists_[lab];
   for(std::set<unsigned>::const_iterator nit =  nbrs.begin();
       nit != nbrs.end(); ++nit){  
@@ -91,14 +93,18 @@ void sdet_selective_search::insert_similarities(sdet_region_sptr newr, std::set<
       continue;
     sdet_region_sptr& rnbr = regions_[*nit];
     if(!rnbr) continue;//null region - shouldn't happen
-    float npix_nb = static_cast<float>(rnbr->Npix());
+    //float npix_nb = static_cast<float>(rnbr->Npix());
     std::map<unsigned, bsta_histogram<float> >::iterator hitn = hists_.find(*nit);
     if(hitn == hists_.end())
       continue;//hist not found
     bsta_histogram<float>& hn = hitn->second;
-    float sim_hist = hist_intersect(hr, hn);//min probability
-    float sim_size = 1.0f - (npix_n + npix_nb)/image_area_;//small regions first
-    float st = sim_hist + sim_size;
+    // This computation of similarity is based on Uijlings et al
+    // and merges small, similarly sized regions before large regions 
+    // that have similar intensity distributions
+    //float sim_hist = hist_intersect(hr, hn);//min probability
+    //float sim_size = 1.0f - (npix_n + npix_nb)/image_area_;//small regions first
+    //float st = sim_hist + sim_size;
+    float st = similarity(newr, hr, rnbr, hn, image_area_);
     sim_.push(region_sim(lab, *nit, st));//max similarity always at top of queue
   }
 }

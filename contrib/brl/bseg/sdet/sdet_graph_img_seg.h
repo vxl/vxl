@@ -10,7 +10,7 @@
 // (International Journal of Computer Vision, Vol. 59, No. 2, September 2004) to compute segments in the image
 // the nodes are the pixels in the image
 // the edges are constructed by X-neighborhood of a pixel (.e.g for now only 8 or 4 neighborhood - in the future may have other types of neighborhoods)
-// the edge weights will be computed later using the methods provided by this class - weight represents the "dissimilarity" of its nodes (so higher weight edges will be removed)
+// the edge weights will be computed later using the methods provided by this class - weight represents the "dissimilarity" of its nodes (so lower weight edges will be removed)
 // the eventual segmentation algorithm finds a set of connected components in the graph by breaking up certain edges and keeping others
 //  a static method that segments grey scale images using color is provided
 //  each pixel/node is assigned to a connected component (segment) as a result

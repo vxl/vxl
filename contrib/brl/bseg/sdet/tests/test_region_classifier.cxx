@@ -12,11 +12,13 @@
 #include <string>
 #include <map>
 #include <fstream>
+#define do_tests 0
 #define test_rtree 0
 #define test_tanks 1
 #define tank_318 0
 static void test_region_classifier(int argc, char * argv[])
 {
+#if do_tests
   vil_image_view<vxl_byte> img(4,4);
   img.fill(0); img(1,2) = 255;  img(2,2) = 255;
   vil_image_view<vil_rgb<vxl_byte> > out_img;
@@ -48,7 +50,7 @@ static void test_region_classifier(int argc, char * argv[])
   sproc.save_bboxes(ostr);
   ostr.close();
   std::cout << "region boxes " << std::endl;
-   const std::map<unsigned, sdet_region_sptr>& sregions=sproc.diverse_regions();
+  const std::map<unsigned, sdet_region_sptr>& sregions=sproc.diverse_regions();
   std::map<unsigned, sdet_region_sptr>::const_iterator rit = sregions.begin();
   for(;rit != sregions.end(); ++rit){
 	vgl_box_2d<float>& bb =(*rit).second->bbox();
@@ -66,18 +68,23 @@ static void test_region_classifier(int argc, char * argv[])
 	  std::cout << (*nit)->label() << ' ' << (*nit)->bbox() << std::endl;
 #elif test_tanks
 #if tank_318
-  //std::string in_path = "D:/tests/grouping/rajaei-cargo-2x-mtanks_318.tif";
-  std::string in_path = "D:/tests/grouping/rajaei-crates-2x_318.tif";
+  std::string in_path = "D:/tests/grouping/rajaei-cargo-2x-mtanks_318.tif";
+  //std::string in_path = "D:/tests/grouping/rajaei-crates-2x_318.tif";
   std::string out_path = "D:/tests/grouping/test_rajaei_color_mss_318.tif";
-  std::string region_path = "D:/tests/grouping/rajaei_regions_318.txt";
+  //std::string region_path = "D:/tests/grouping/rajaei_regions_318.txt";
+  std::string bright_region_path = "D:/tests/grouping/rajaei_bright_regions_318.txt";
   std::string bbox_path = "D:/tests/grouping/rajaei_regions_318_bboxes.txt";
   std::string trouble_tank_in = "D:/tests/grouping/trouble-tank-318.tif";
 #else // tank 249
+  std::string in_path = "D:/tests/grouping/three-tanks-249.tif";
   //std::string in_path = "D:/tests/grouping/rajaei-cargo-2x-mtanks_249.tif";
-  std::string in_path = "D:/tests/grouping/rajaei-crates-2x_249.tif";
+  //std::string in_path = "D:/tests/grouping/rajaei-crates-2x_249.tif";
   //std::string in_path = "D:/tests/grouping/rajaei-cargo-2x-trouble-crates_249.tif";
   std::string out_path = "D:/tests/grouping/test_rajaei_color_mss_249.tif";
   std::string bright_region_path = "D:/tests/grouping/rajaei_bright_regions_249.txt";
+  std::string bright_region_cluster_path = "D:/tests/grouping/rajaei_bright_clusters_249.txt";
+  std::string three_tanks_bright_region_path = "D:/tests/grouping/three_tanks_bright_regions_249.txt";
+  std::string three_tanks_bright_region_cluster_path = "D:/tests/grouping/three_tanks_bright_clusters_249.txt";
 #endif
   vil_image_view<vxl_byte> imgi = vil_load(in_path.c_str());
   //  vil_image_view<vxl_byte> imgi = vil_load(trouble_tank_in.c_str());
@@ -113,8 +120,10 @@ static void test_region_classifier(int argc, char * argv[])
   const std::set<unsigned>& bright_regions = clasf.bright_regions();
   const std::map<unsigned, bsta_histogram<float> >& diverse_hists   =  clasf.diverse_hists();
   const std::map<unsigned, bsta_histogram<float> >& neighbors_hists = clasf.neighbors_hists();
-  std::ofstream os(bright_region_path.c_str());
-  float ar = 1.0f, amin = 400.0f, amax = 1000.0f;
+  std::map<unsigned, sdet_region_sptr> filtered_regions;
+  //std::ofstream os(bright_region_path.c_str());
+  std::ofstream os(three_tanks_bright_region_path.c_str());
+  float ar = 1.8f, amin = 200.0f, amax = 700.0f;
   for(std::map<unsigned, sdet_region_sptr>::const_iterator rit = regions.begin();
       rit != regions.end(); ++rit){
     std::set<unsigned>::iterator bit = bright_regions.find(rit->first);
@@ -125,12 +134,17 @@ static void test_region_classifier(int argc, char * argv[])
     vgl_oriented_box_2d<float> obox = r->obox();
     if(r->obox_valid()){
       float asp = obox.aspect_ratio();
-      if(asp<ar)
+      if(asp>ar)
         continue;
       float a = vgl_area(obox);
       if(a<amin || a>amax)
         continue;
       obox.write(os);
+	  filtered_regions[lab]=r;
+#if 0
+      vgl_point_2d<float> cent = obox.center();
+      std::cout << lab << ' ' << cent << std::endl; 
+
       float Io = r->Io();
       if(false&&Io < 120.0){
         std::cout << "\n====>Histograms[" << lab << "] at ("<< r->Xo() << ' ' << r->Yo() << ")" << std::endl; 
@@ -145,10 +159,60 @@ static void test_region_classifier(int argc, char * argv[])
           hn.print(std::cout);
         }
       }
+#endif
     }
   }
   os.close();
+  //std::ofstream bos(bright_region_cluster_path.c_str());
+  std::ofstream bos(three_tanks_bright_region_cluster_path.c_str());
+  clasf.find_iou_clusters(filtered_regions);
+  const std::map< unsigned, std::map<unsigned, float> >& ioucs = clasf.iou_clusters();
+  for(std::map< unsigned, std::map<unsigned, float> >::const_iterator iit = ioucs.begin();
+      iit != ioucs.end(); ++iit){
+    std::map<unsigned, sdet_region_sptr>::const_iterator rit = regions.find(iit->first);    
+    if(rit == regions.end())
+      continue;
+    vgl_oriented_box_2d<float> obox = (rit->second)->obox();    
+    std::cout << iit->first << ' ' << obox.center() << std::endl;
+    obox.write(bos);
+  }
+  bos.close();
+  clasf.compute_iou_cluster_similarity();
+  float csim = clasf.compute_partition_quality(clasf.cluster_sim());
+  std::map< unsigned, std::map<unsigned, region_sim> > sim_after, sim_after1, sim_after2;
+  unsigned labi = 6868, labj = 6874, lab_new = 15000;
+  bool good = clasf.merge_similarity_map(clasf.cluster_sim(), sim_after,labi, labj, lab_new);
+  float csim1 = clasf.compute_partition_quality(sim_after);
+  labi = 6869; labj = 15000; lab_new = 15001;
+  good = clasf.merge_similarity_map(sim_after,sim_after1, labi, labj, lab_new);
+  float csim2 = clasf.compute_partition_quality(sim_after1);
+  labi = 6864; labj = 13780; lab_new = 15002;
+  good = clasf.merge_similarity_map(sim_after1,sim_after2, labi, labj, lab_new);
+  float csim3 = clasf.compute_partition_quality(sim_after2);
+#if 0 //show histograms
+  for(std::map<unsigned, sdet_region_sptr>::iterator fit0 = filtered_regions.begin();
+	  fit0 != filtered_regions.end(); ++fit0)
+	  for(std::map<unsigned, sdet_region_sptr>::iterator fit1= filtered_regions.begin();
+	  fit1 != filtered_regions.end(); ++fit1){
+            unsigned lab0 = fit0->first, lab1 = fit1->first;
+            if(lab0 == lab1)
+              continue;
+            std::map<unsigned, bsta_histogram<float> >::const_iterator hit0 = diverse_hists.find(lab0);
+            if(hit0 == diverse_hists.end())
+              continue;
+            std::map<unsigned, bsta_histogram<float> >::const_iterator hit1 = diverse_hists.find(lab1);
+            if(hit1 == diverse_hists.end())
+              continue;
+            const bsta_histogram<float>& h0 = hit0->second;
+            const bsta_histogram<float>& h1 = hit1->second;
+            float s = similarity(fit0->second, h0, fit1->second, h1);
+            float iou = obox_int_over_union((fit0->second)->obox(), (fit1->second)->obox());
+            if(iou == 0.0f && s>1.0f)
+            std::cout << lab0 << ' ' << lab1 << ' ' << s << std::endl;
+	  }
+#endif //show histograms
 #endif //test_tanks
+#endif // do tests
 }
 
 TESTMAIN_ARGS(test_region_classifier);

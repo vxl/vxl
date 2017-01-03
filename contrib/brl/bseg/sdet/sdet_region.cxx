@@ -10,6 +10,7 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
 #include <vnl/vnl_float_2.h>
+#include <limits>
 sdet_region::sdet_region()
 {
   boundary_ = VXL_NULLPTR;
@@ -136,6 +137,7 @@ sdet_region_sptr merge(sdet_region_sptr const& r1,sdet_region_sptr const& r2,
   sdet_region_sptr ret = new sdet_region();
   vdgl_digital_region* r12_ptr = dynamic_cast<vdgl_digital_region*>(ret.ptr());
   merge(r1_ptr, r2_ptr, r12_ptr);
+  r12_ptr->ComputeIntensityStdev();
   const std::set<unsigned>& nbrs1 = r1->nbrs();
   const std::set<unsigned>& nbrs2 = r2->nbrs();
   unsigned lab1 = r1->label(), lab2 = r2->label();
@@ -154,4 +156,31 @@ sdet_region_sptr merge(sdet_region_sptr const& r1,sdet_region_sptr const& r2,
   // note that other regions may still have neighbor pointers to r1 or r2
   // these pointers must be externally removed after the merge
   return ret;
+}
+// not the same as the similarity definition of Uijlings et al (see sdet_selective_search.h)
+// here size similarity is not dependent on image area
+//
+float similarity(sdet_region_sptr const& r1, bsta_histogram<float> const& h1,
+                 sdet_region_sptr const& r2, bsta_histogram<float> const& h2){
+   float sim_intensity = hist_intersect(h1, h2);//min probability
+  float n1 = static_cast<float>(r1->Npix()), n2 = static_cast<float>(r2->Npix());
+  if(n1 == 0.0f || n2 == 0.0f)
+    return std::numeric_limits<float>::max();
+  float sim_size = n1/n2;
+  if(sim_size>1.0f)
+    sim_size = 1.0f/sim_size;
+  return sim_intensity + sim_size;
+}
+//
+// the similarity definition of Uijlings et al (see sdet_selective_search.h)
+//
+float similarity(sdet_region_sptr const& r1, bsta_histogram<float> const& h1,
+                 sdet_region_sptr const& r2, bsta_histogram<float> const& h2,
+                 float image_area){
+  float sim_intensity = hist_intersect(h1, h2);//min probability
+  float n1 = static_cast<float>(r1->Npix()), n2 = static_cast<float>(r2->Npix());
+  if(n1 == 0.0f || n2 == 0.0f)
+    return std::numeric_limits<float>::max();
+  float sim_size = 1.0f - ((n1 + n2)/image_area);
+  return sim_intensity + sim_size;
 }
