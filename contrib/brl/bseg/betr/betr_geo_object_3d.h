@@ -11,6 +11,8 @@
 #include <vbl/vbl_ref_count.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vsol/vsol_spatial_object_3d.h>
+#include <vsol/vsol_polygon_3d.h>
+#include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_box_3d.h>
 #include "betr_geo_box_3d.h"
 #include "betr_geo_object_3d_sptr.h"
@@ -41,7 +43,9 @@ class betr_geo_object_3d : public vbl_ref_count
     this->update_box_from_from_vsol_box(so_->get_bounding_box(), box);
     return box;
   }
-                                       
+  //: The polygon at the base of a 3-d mesh object. If the object is a single polygon, it is returned.
+  // the vertex coordinates are global lat, lon, elev
+  vsol_polygon_3d_sptr base_polygon();
   friend std::ostream& operator << (std::ostream& os, const betr_geo_object_3d& geo_obj);
 protected:
   void update_box_from_from_vsol_box(vsol_box_3d_sptr sbox, betr_geo_box_3d& box) const;

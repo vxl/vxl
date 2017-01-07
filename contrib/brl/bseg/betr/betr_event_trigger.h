@@ -57,6 +57,8 @@ class betr_event_trigger : public vbl_ref_count{
   void add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object, bool is_ref_obj);
   bool add_geo_object(std::string const& name, double lon, double lat ,
                       double elev, std::string const& geom_path, bool is_ref_obj);
+  bool add_gridded_event_poly(std::string const& name, double lon, double lat ,
+                              double elev, std::string const& geom_path, double grid_spacing);
   //: execute change algorithm one event object
   bool process(std::string alg_name, double& prob_change, std::string const& params_json = "{}");
 
@@ -72,13 +74,19 @@ class betr_event_trigger : public vbl_ref_count{
                std::vector<vil_image_resource_sptr>& change_images,
                std::vector<vgl_point_2d<unsigned> >& offsets,
                std::string const& params_json = "{}");
+  //: execute change algorithm multiple event objects with event names, scores, change images and offsets return
+  bool process(std::string alg_name, std::vector<double>& prob_change,
+               std::vector<std::string>& event_region_names,
+               std::vector<vil_image_resource_sptr>& change_images,
+               std::vector<vgl_point_2d<unsigned> >& offsets,
+               std::string const& params_json = "{}");
   //: acessors
   std::string name() const {return name_;}
   const std::map<std::string, betr_geo_object_3d_sptr>& ref_objects() const {return ref_trigger_objects_;}
   const std::map<std::string, betr_geo_object_3d_sptr>& evt_objects() const {return evt_trigger_objects_;}
   vpgl_lvcs lvcs() const {return lvcs_;}
   std::vector<std::string> algorithms() const;
-
+  
   //utilities
   //: projected 2-d polygon for the 3-d trigger object
   bool project_object(vpgl_camera_double_sptr cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly);
@@ -98,7 +106,7 @@ class betr_event_trigger : public vbl_ref_count{
   std::string name_;
   vpgl_lvcs lvcs_;
   bool lvcs_valid_;
-  static unsigned process_counter_;
+  static unsigned process_counter_; //unique id for different involcations of an algorithm
   betr_geo_box_3d global_bbox_;//trigger bounding box in global WGS84
   vsol_box_3d_sptr local_bbox_;//trigger bounding box in local Cartesian coordinates
   std::vector<vil_image_resource_sptr> ref_rescs_; //ref image resources

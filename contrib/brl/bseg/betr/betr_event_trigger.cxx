@@ -2,6 +2,7 @@
 #include <sstream>
 #include "betr_event_trigger.h"
 #include "betr_geo_object_3d.h"
+#include "betr_gridded_geo_polygon_3d.h"
 #include "vsol_mesh_3d.h"
 #include <vsol/vsol_region_3d.h>
 #include <vsol/vsol_point_2d.h>
@@ -147,7 +148,7 @@ void betr_event_trigger::update_local_bounding_box(){
 }
 bool betr_event_trigger::add_geo_object(std::string const& name, double lon, double lat ,
                                         double elev, std::string const& geom_path, bool is_ref_obj){
-    bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();
+  bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();
   bool good = bmsh3d_load_ply(mesh, geom_path.c_str());
   if(!good){
     std::cout << "invalid bmesh3d ply file - " << geom_path << std::endl;
@@ -160,6 +161,45 @@ bool betr_event_trigger::add_geo_object(std::string const& name, double lon, dou
   vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
   betr_geo_object_3d_sptr geo_obj = new betr_geo_object_3d(so, lvcs);
   this->add_geo_object(name, geo_obj, is_ref_obj);
+  return true;
+}
+bool betr_event_trigger::add_gridded_event_poly(std::string const& name, double lon, double lat ,
+                                                double elev, std::string const& geom_path,
+                                                double grid_spacing){
+  bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();
+  bool good = bmsh3d_load_ply(mesh, geom_path.c_str());
+  if(!good){
+    std::cout << "invalid bmesh3d ply file - " << geom_path << std::endl;
+    return false;
+  }
+  vsol_mesh_3d* vmesh = new vsol_mesh_3d();
+  bmsh3d_mesh_mc* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
+  vmesh->set_mesh(mesh_mc);
+  if(vmesh->num_faces() != 1){
+   std::cout << "Mesh is not a single polygon - can't be gridded" << geom_path << std::endl;
+    return false;
+  } 
+  // convert to a vsol_polygon_3d
+  std::vector<vsol_point_3d_sptr> verts = vmesh->vertices();
+  vsol_polygon_3d* poly = new vsol_polygon_3d(verts);
+  vsol_spatial_object_3d_sptr so = poly;
+  vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
+  // the grid polys are generated in the constructor below
+  betr_gridded_geo_polygon_3d geo_obj(so, lvcs, grid_spacing);
+  // add a single event geo object for each grid polygon
+  const std::vector<vsol_polygon_3d_sptr>& polys = geo_obj.grid_polys();
+  unsigned grid_count = 0;
+  for(std::vector<vsol_polygon_3d_sptr>::const_iterator pit = polys.begin();
+      pit != polys.end(); ++pit){
+    // create an event object for each poly
+    std::stringstream ss;
+    ss<< name << '_'<< grid_count++;
+    std::string grid_name = ss.str();
+    vsol_spatial_object_3d_sptr pso = new vsol_polygon_3d(**pit);
+    betr_geo_object_3d_sptr go = new betr_geo_object_3d(pso, lvcs);
+    // note added as a reference object 
+    this->add_geo_object(grid_name, go, false);
+  }
   return true;
 }
 //The object in general will have a different lvcs from the event trigger origin
@@ -284,7 +324,7 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change,std::
     prob_change = scores[0];
     return good;
   }
-  prob_change = 0.0;
+  prob_change = -1.0;
   return false;
 }
 bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,std::string const& params_json){
@@ -309,9 +349,15 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change,
   prob_change = -1.0;
   return false;
 }
-
+bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,
+                                 std::vector<vil_image_resource_sptr>& change_images,
+                                 std::vector<vgl_point_2d<unsigned> >& offsets, std::string const& params_json){
+  std::vector<std::string> event_region_names;
+  return process(alg_name, prob_change, event_region_names, change_images, offsets, params_json);
+}
 
 bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,
+                                 std::vector<std::string>& event_region_names,
                                  std::vector<vil_image_resource_sptr>& change_images,
                                  std::vector<vgl_point_2d<unsigned> >& offsets, std::string const& params_json){
   
@@ -396,10 +442,12 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     alg->set_proj_evt_evt_object(evt_evt_poly);
     // all the data has been assigned, so the algorithm can process
     if(!alg->process()){
-      prob_change.push_back(0.0);
+      event_region_names.push_back(evt_obj_name);
+      prob_change.push_back(-1.0);
       std::cout << "Algorithm failed " << std::endl;
       return false;
     }
+    event_region_names.push_back(evt_obj_name);
     prob_change.push_back(alg->prob_change());
     unsigned ioff, joff;
     vil_image_resource_sptr resc = alg->change_image(ioff, joff);
