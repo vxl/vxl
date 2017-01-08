@@ -148,16 +148,19 @@ void betr_event_trigger::update_local_bounding_box(){
 }
 bool betr_event_trigger::add_geo_object(std::string const& name, double lon, double lat ,
                                         double elev, std::string const& geom_path, bool is_ref_obj){
+  //load the mesh from the geometry file
   bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();
   bool good = bmsh3d_load_ply(mesh, geom_path.c_str());
   if(!good){
     std::cout << "invalid bmesh3d ply file - " << geom_path << std::endl;
     return false;
   }
+  //convert to a vsol_spatial_object_3d
   vsol_mesh_3d* vmesh = new vsol_mesh_3d();
   bmsh3d_mesh_mc* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
   vmesh->set_mesh(mesh_mc);
   vsol_spatial_object_3d_sptr so = vmesh;
+  //define the global origin and store in the map
   vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
   betr_geo_object_3d_sptr geo_obj = new betr_geo_object_3d(so, lvcs);
   this->add_geo_object(name, geo_obj, is_ref_obj);
@@ -166,12 +169,14 @@ bool betr_event_trigger::add_geo_object(std::string const& name, double lon, dou
 bool betr_event_trigger::add_gridded_event_poly(std::string const& name, double lon, double lat ,
                                                 double elev, std::string const& geom_path,
                                                 double grid_spacing){
+  //load the mesh from the geometry file
   bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();
   bool good = bmsh3d_load_ply(mesh, geom_path.c_str());
   if(!good){
     std::cout << "invalid bmesh3d ply file - " << geom_path << std::endl;
     return false;
   }
+  //convert to a vsol_mesh_3d
   vsol_mesh_3d* vmesh = new vsol_mesh_3d();
   bmsh3d_mesh_mc* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
   vmesh->set_mesh(mesh_mc);
@@ -179,25 +184,31 @@ bool betr_event_trigger::add_gridded_event_poly(std::string const& name, double 
    std::cout << "Mesh is not a single polygon - can't be gridded" << geom_path << std::endl;
     return false;
   } 
-  // convert to a vsol_polygon_3d
+  // convert mesh to a vsol_polygon_3d
   std::vector<vsol_point_3d_sptr> verts = vmesh->vertices();
   vsol_polygon_3d* poly = new vsol_polygon_3d(verts);
   vsol_spatial_object_3d_sptr so = poly;
+  // define global origin
   vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
+
   // the grid polys are generated in the constructor below
   betr_gridded_geo_polygon_3d geo_obj(so, lvcs, grid_spacing);
-  // add a single event geo object for each grid polygon
+
+  // add an event geo object for each grid polygon
   const std::vector<vsol_polygon_3d_sptr>& polys = geo_obj.grid_polys();
   unsigned grid_count = 0;
   for(std::vector<vsol_polygon_3d_sptr>::const_iterator pit = polys.begin();
       pit != polys.end(); ++pit){
-    // create an event object for each poly
+    // create the event object
     std::stringstream ss;
-    ss<< name << '_'<< grid_count++;
+    ss<< name << '_'<< grid_count++;//define a unique name extension
     std::string grid_name = ss.str();
     vsol_spatial_object_3d_sptr pso = new vsol_polygon_3d(**pit);
     betr_geo_object_3d_sptr go = new betr_geo_object_3d(pso, lvcs);
-    // note added as a reference object 
+    //
+    //added as an event object (not reference)
+    //                                    |
+    //                                    v
     this->add_geo_object(grid_name, go, false);
   }
   return true;

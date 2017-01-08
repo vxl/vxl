@@ -77,7 +77,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
   bbas_1d_array_double_sptr change_probs = new bbas_1d_array_double(n);
   bbas_1d_array_int_sptr dims_offset = new bbas_1d_array_int(4*n);
 
-  // get offset and size 
+  // get offset and change image size(in bytes)
   unsigned area_total = 0;
   unsigned k = 0;
   for(unsigned i = 0; i<n; ++i, k+=4){
@@ -92,6 +92,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
     dims_offset->data_array[k+2]=offsets[i].x();
     dims_offset->data_array[k+3]=offsets[i].y();
   }
+  //store image pixels in the 1-d byte array
   bbas_1d_array_byte_sptr pix = new bbas_1d_array_byte(area_total);
   unsigned byte_index = 0;
   for(unsigned k = 0; k<n; ++k){
@@ -104,6 +105,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
       for(unsigned i = 0; i<ni; ++i)
         pix->data_array[byte_index++]= view(i,j);
   }
+  // store the array of change scores
   unsigned j = 0;
   for(std::vector<double>::iterator pit = prob_change.begin();
       pit != prob_change.end(); ++pit, ++j)
@@ -115,17 +117,20 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
   
   for(unsigned j = 0; j<n; ++j){
     std::string enam = event_region_names[j];
+    //look up the geo object by name
     std::map<std::string, betr_geo_object_3d_sptr>::const_iterator oit = evt_objs.find(enam);
     if(oit == evt_objs.end()){
       std::cout << "In betr_execute_multi_chimg_evt_poly_process - event object " << enam << " not found" << std::endl;
       return false;
     }
+    //output the name
     evt_names->data_array[j]=enam;
     vsol_polygon_3d_sptr bpoly = (oit->second)->base_polygon();
     if(!bpoly){
       nverts.push_back(0);
       continue;
     }
+    //encode the polygon in the 1-d arrays
     unsigned nv = bpoly->size();
     nverts.push_back(nv);
     for(unsigned i = 0; i<nv; ++i){
@@ -135,7 +140,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
       verts.push_back(v->z());
     }
   }
-  // fill out 1d polygon arrays
+  // fill out output bbas_1d polygon arrays
   bbas_1d_array_int_sptr poly_nverts = new bbas_1d_array_int(nverts.size());
   bbas_1d_array_double_sptr poly_verts = new bbas_1d_array_double(verts.size());
   unsigned nv = 0;
@@ -146,7 +151,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
   for(std::vector<double>::iterator vit =  verts.begin();
       vit != verts.end(); ++vit, ++iv)
     poly_verts->data_array[iv]=*vit;
-
+  //save outputs and exit
   pro.set_output_val<bbas_1d_array_double_sptr>(0, change_probs);
   pro.set_output_val<bbas_1d_array_string_sptr>(1, evt_names);
   pro.set_output_val<bbas_1d_array_int_sptr>(2, dims_offset);

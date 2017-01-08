@@ -75,6 +75,7 @@ class betr_event_trigger : public vbl_ref_count{
                std::vector<vgl_point_2d<unsigned> >& offsets,
                std::string const& params_json = "{}");
   //: execute change algorithm multiple event objects with event names, scores, change images and offsets return
+  // note that event objects can be retrieved using the name as a key (see evt_trigger_objects_ below)
   bool process(std::string alg_name, std::vector<double>& prob_change,
                std::vector<std::string>& event_region_names,
                std::vector<vil_image_resource_sptr>& change_images,

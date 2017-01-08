@@ -7,6 +7,8 @@
 // \date January 5, 2017
 //
 // The polygon is, by definition, planar and assumed tangent to the Earth at the lvcs
+// The grid is strictly inside the polygon. That is no vertex of a grid cell lies outside
+// the defining polygon.
 #include <string>
 #include <vector>
 #include <iostream>

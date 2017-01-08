@@ -2,6 +2,8 @@
 #include <bsol/bsol_algs.h>
 #include "betr_gridded_geo_polygon_3d.h"
 void betr_gridded_geo_polygon_3d::construct_grid(){
+  grid_pts_.clear();
+  grid_polys_.clear();
   // convert vsol_polygon_3d to vgl_polygon in tangent plane
   if(!so_){
     std::cout << "CONTRUCT GRID FAILS - null spatial object" << std::endl;
