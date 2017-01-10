@@ -89,6 +89,9 @@ bool baml_change_detection::detect(
       else if (params_.method == CENSUS)
         dc_success = detect_census(
           img_tar_crop, img_ref_crop, valid_crop, lh_crop);
+      else if( params_.method == DIFFERENCE) 
+        dc_success = detect_difference(
+          img_tar_crop, img_ref_crop, valid_crop, lh_crop);
       else if (params_.method == GRADIENT_DIFF)
         dc_success = detect_gradient(
           img_tar_crop, img_ref_crop, valid_crop, lh_crop);
@@ -105,12 +108,14 @@ bool baml_change_detection::detect(
 
   }
   if( !dc_success ) return false;
-
+  /*for (int x = 0; x < change_prob_target.ni(); x++) {
+    for (int y = 0; y < change_prob_target.nj(); y++) {
+      std::cout << change_prob_target(x, y) << "\n";
+    }
+  }*/
   // Convert likelihood into probability
   baml_sigmoid( 
-    change_prob_target, change_prob_target, params_.prior_change_prob );
-
-  return true;
+    change_prob_target, change_prob_target, params_.prior_change_prob );  return true;
 }
 
 //-------------------------------------------------------------------
@@ -153,17 +158,15 @@ baml_change_detection::detect_bt(
   if( !baml_compute_birchfield_tomasi( 
     img_tar, img_ref, score, params_.bt_rad ) )
     return false;
-  vil_convert_cast(score, tar_lh);
 
-  //// Convert BT score to log likelihood ratio
-  //for( int y = 0; y < height; y++ ){
-  //  for( int x = 0; x < width; x++ ){
-  //    if( valid_ref(x,y) == false ) continue;
-
-  //    float lbg = gauss_norm - score(x,y)*(float)score(x,y)/gauss_var;
-  //    tar_lh(x,y) = lfg - lbg;
-  //  }
-  //}
+  // Convert BT score to log likelihood ratio
+  for( int y = 0; y < height; y++ ){
+    for( int x = 0; x < width; x++ ){
+      if( valid_ref(x,y) == false ) continue;
+      float lbg = gauss_norm - score(x,y)*(float)score(x,y)/gauss_var;
+      tar_lh(x,y) = lfg - lbg;
+    }
+  }
 
   return true;
 }
@@ -234,7 +237,7 @@ baml_change_detection::detect_census(
 }
 
 //---------------------------------------------------------------
-bool detect_difference(const vil_image_view<vxl_uint_16>& img_tar,
+bool baml_change_detection::detect_difference(const vil_image_view<vxl_uint_16>& img_tar,
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid_ref,
   vil_image_view<float>& tar_lh)
@@ -257,7 +260,7 @@ bool detect_difference(const vil_image_view<vxl_uint_16>& img_tar,
         tar_lh(x, y) = img_tar(x, y) - img_ref(x, y);
     }
   }
-
+  return true;
 }
 
 //---------------------------------------------------------------
@@ -301,6 +304,8 @@ baml_change_detection::detect_gradient(
       float grad_mag_ref = sqrt( 
         grad_x_ref(x,y)*grad_x_ref(x,y) + grad_y_ref(x,y)*grad_y_ref(x,y) );
       float grad_ip = grad_x_tar(x,y)*grad_x_ref(x,y) + grad_y_tar(x,y)*grad_y_ref(x,y);
+      // if the magnitudes are large enough compute their angle 
+      // difference, otherwise leave at default 90 degrees
       float angle_diff = 3.14159/2.0;
       if( grad_mag_tar > mag_tol && grad_mag_ref > mag_tol )
         angle_diff = acos( grad_ip/(grad_mag_tar*grad_mag_ref) );
@@ -309,16 +314,16 @@ baml_change_detection::detect_gradient(
 
       //float grad_diff = pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 );
 
-      //float grad_diff = grad_mag_tar*grad_mag_ref - grad_ip;
+      float grad_diff = grad_mag_tar*grad_mag_ref - grad_ip;
 
-      float grad_diff = pow( std::max( grad_mag_tar, grad_mag_ref )*sin(angle_diff), 2 );
+      //float grad_diff = pow( std::max( grad_mag_tar, grad_mag_ref )*sin(angle_diff), 2 );
       //float grad_diff = pow( 0.5f*( grad_mag_tar+grad_mag_ref )*fabs( sin(angle_diff) ), 2 );
 
       float lbg = gauss_norm - grad_diff/gauss_var;
 
-      tar_lh(x,y) = lfg - lbg;
-
-      if( rand() < 0.001*RAND_MAX ) std::cerr << (int)angle_diff << ' ';
+      tar_lh(x, y) = lfg - lbg;
+      if (rand() < 0.001*RAND_MAX) std::cerr << tar_lh(x, y) << "\n";
+      if( rand() < 0.001*RAND_MAX ) std::cerr << (int)angle_diff << "\n";
     }
   }
 

@@ -20,9 +20,10 @@
 
 
 //: Assorted pairwise image change detection algorithms.
-enum baml_change_detection_method { 
-  BIRCHFIELD_TOMASI, 
+enum baml_change_detection_method {
+  BIRCHFIELD_TOMASI,
   CENSUS,
+  DIFFERENCE,
   GRADIENT_DIFF,
   NON_PARAMETRIC
 };
@@ -73,17 +74,17 @@ struct baml_change_detection_params {
 
   //: Default parameters
   baml_change_detection_params():
-	method(BIRCHFIELD_TOMASI),
+	method(CENSUS),
     correct_gain_offset( true ),
-    num_tiles( 3 ),
+    num_tiles( 0 ),
     registration_refinement_rad( 0 ),
-    prior_change_prob( 0.01f ),
-    bt_std( 20.0f ),
+    prior_change_prob( 0.01f ), // try increasing this for BT 0.01f
+    bt_std( 20.0f ), // or this 20.0f
     bt_rad( 1 ),
     census_std( 0.3f ),
     census_tol( 10 ),
     census_rad( 3 ),
-    grad_std( 30.0f ),
+    grad_std( 3.0f ), // 30.0f
     img_bit_depth( 12 ),
     hist_bit_depth( 10 ){}
 };

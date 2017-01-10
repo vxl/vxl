@@ -250,6 +250,11 @@ void baml_sigmoid(
 
 
 //------------------------------------------------------------------
+// img: original image ( this will be the backgroud )
+// map: score image ( this will be the red portion )
+// vis_img: where the overlayed image will be stored
+// clear_map_val: scores below this value will be completely clear
+// red_map_val: scores above this value will be completely red
 bool baml_overlay_red(
   const vil_image_view<vxl_byte>& img,
   const vil_image_view<vxl_byte>& map,
@@ -269,9 +274,9 @@ bool baml_overlay_red(
       float relativeVal = std::min( 1.0f, std::max( 0.0f, 
         map_norm*((float)map(x,y)) - (float)clear_map_val ));
 
-      vis_img(x,y,0) = vis_img(x,y,1) = (vxl_byte)( 
+      vis_img(x,y,1) = vis_img(x,y,2) = (vxl_byte)( 
         img(x,y)*(1.0-relativeVal) );
-      vis_img(x,y,2) = (vxl_byte)( 
+      vis_img(x,y,0) = (vxl_byte)( 
         img(x,y)*(1.0-relativeVal) + 255*relativeVal );
     }
   }
