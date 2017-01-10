@@ -328,6 +328,35 @@ def get_view_angles(mdata):
   sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band = get_metadata_info2(mdata)
   return view_az, view_el
 
+def compute_appearance_index(filenames):
+  batch.init_process("bradComputeAppearanceIndexProcess");
+  batch.set_input_string_array(0, filenames);
+  batch.run_process();
+  (index_id,index_type)=batch.commit_output(0);
+  index_array = batch.get_bbas_1d_array_int(index_id);
+  targets = [];
+  neighbors = [];
+  n = len(index_array);
+  i = 0;
+  not_end = True;
+  while(not_end):
+    target_id = index_array[i];
+    targets.append(target_id);
+    i+=1;
+    neighbor_set = [];
+    neighbor_id = index_array[i];
+    while neighbor_id>=0 :
+      neighbor_set.append(neighbor_id);
+      i+=1;
+      neighbor_id = index_array[i];
+      if i >= n :
+        not_end = False;
+    neighbors.append(neighbor_set);
+    i+=1; # skip the -1 neighbor terminator
+    if i >= n :
+      not_end = False;
+  return targets, neighbors;
+
 
 def get_image_coverage(mdata):
   batch.init_process("bradGetImageCoverageProcess")

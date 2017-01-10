@@ -74,7 +74,8 @@ struct baml_change_detection_params {
 
   //: Default parameters
   baml_change_detection_params():
-	method(CENSUS),
+
+	  method(BIRCHFIELD_TOMASI),
     correct_gain_offset( true ),
     num_tiles( 0 ),
     registration_refinement_rad( 0 ),
@@ -87,6 +88,7 @@ struct baml_change_detection_params {
     grad_std( 3.0f ), // 30.0f
     img_bit_depth( 12 ),
     hist_bit_depth( 10 ){}
+
 };
 
 

@@ -17,6 +17,7 @@ sdet_graph_img_seg::sdet_graph_img_seg(unsigned ni, unsigned nj, unsigned margin
   pixel_ids_.fill(-1);
   int inner_i = ni-margin;
   int inner_j = nj-margin;
+  id_to_pix_.resize((ni-2*margin)*(nj-2*margin));
   node_cnt_ = 0;
   for (int i = margin; i < inner_i; i++)
     for (int j = margin; j < inner_j; j++) {
@@ -24,7 +25,7 @@ sdet_graph_img_seg::sdet_graph_img_seg(unsigned ni, unsigned nj, unsigned margin
       id_to_pix_[node_cnt_] = std::pair<unsigned, unsigned>(i,j);
       node_cnt_++;
     }
-
+  
   // create edges "to the right"
   for (int i = margin; i < inner_i-1; i++)
     for (int j = margin; j < inner_j; j++) {

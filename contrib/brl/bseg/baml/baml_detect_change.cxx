@@ -32,6 +32,10 @@ bool baml_change_detection::detect(
   else
     corr_ref.deep_copy( img_ref );
 
+  // Bound the registration search
+  int reg_rad = std::min( 20, std::max( 0, 
+    params_.registration_refinement_rad ) );
+
   bool dc_success = false;
 
   // Find appropriate translational offsets
@@ -53,8 +57,9 @@ bool baml_change_detection::detect(
   float mean_score = 0;
   
   // try all offsets within the selected translational radius
-  for (int x_off = -params_.registration_refinement_rad; x_off <= params_.registration_refinement_rad; x_off++) {
-    for (int y_off = -params_.registration_refinement_rad; y_off <= params_.registration_refinement_rad; y_off++) {
+  for (int x_off = -reg_rad; x_off <= reg_rad; x_off++) {
+    for (int y_off = -reg_rad; y_off <= reg_rad; y_off++) {
+
       // determine cropping offsets and size
       if (x_off < 0) {
         ref_x_off = -x_off;
@@ -98,10 +103,11 @@ bool baml_change_detection::detect(
       else if (params_.method == NON_PARAMETRIC)
         dc_success = detect_nonparam(
           img_tar_crop, img_ref_crop, valid_crop, lh_crop);
+
       // save the score image if it improved the results 
       vil_math_mean(mean_score, lh_crop, 0);
       if (mean_score<min_mean) {
-        change_prob_target.deep_copy(lh_crop);
+        change_prob_target.deep_copy(lh);
         min_mean = mean_score;
       }
     }
@@ -167,6 +173,7 @@ baml_change_detection::detect_bt(
       tar_lh(x,y) = lfg - lbg;
     }
   }
+
 
   return true;
 }
@@ -294,7 +301,7 @@ baml_change_detection::detect_gradient(
   vil_sobel_3x3<vxl_uint_16,float>( img_tar, grad_x_tar, grad_y_tar );
   vil_sobel_3x3<vxl_uint_16,float>( img_ref, grad_x_ref, grad_y_ref );
 
-  // Compute hamming distance between images
+  // Compute distance between images
   for( int y = 0; y < height; y++ ){
     for( int x = 0; x < width; x++ ){
       if( valid_ref(x,y) == false ) continue;
@@ -319,11 +326,12 @@ baml_change_detection::detect_gradient(
       //float grad_diff = pow( std::max( grad_mag_tar, grad_mag_ref )*sin(angle_diff), 2 );
       //float grad_diff = pow( 0.5f*( grad_mag_tar+grad_mag_ref )*fabs( sin(angle_diff) ), 2 );
 
+      // Convert to likelihood ratio
       float lbg = gauss_norm - grad_diff/gauss_var;
 
-      tar_lh(x, y) = lfg - lbg;
-      if (rand() < 0.001*RAND_MAX) std::cerr << tar_lh(x, y) << "\n";
-      if( rand() < 0.001*RAND_MAX ) std::cerr << (int)angle_diff << "\n";
+      tar_lh(x,y) = lfg - lbg;
+
+      //if( rand() < 0.001*RAND_MAX ) std::cerr << (int)angle_diff << ' ';
     }
   }
 
@@ -372,7 +380,7 @@ baml_change_detection::detect_nonparam(
       int tx = (int)( img_tar(x,y)/img_bit_ds );
       int ty = (int)( img_ref(x,y)/img_bit_ds );
       if( tx >= hist_range || ty >= hist_range ){
-        std::cerr << "ERROR: baml_detect_change_mi, observed intensity "
+        std::cerr << "ERROR: baml_detect_change_nonparam, observed intensity "
           << img_tar(x,y) << ' ' << img_ref(x,y) << " larger than expected bit range, aborting\n";
         return false;
       }

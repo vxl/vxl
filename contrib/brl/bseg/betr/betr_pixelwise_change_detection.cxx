@@ -10,6 +10,7 @@
 #include <baml/baml_warp.h>
 
 #include "betr_pixelwise_change_detection.h"
+#include "betr_pixelwise_change_detection_params.h"
 #include "betr_event_trigger.h"
 
 #include <cmath>
@@ -20,15 +21,18 @@ bool betr_pixelwise_change_detection::process(){
   // Hardcoded variables
   float change_prior = 0.01f;
 
+  // Get params
+  betr_pixelwise_change_detection_params* cd_params = 
+    dynamic_cast<betr_pixelwise_change_detection_params*>(params_.ptr());
+
   // Get a bounding box for the event polygon
   vsol_box_2d_sptr evt_bb = evt_evt_poly_->get_bounding_box();
-  //vsol_box_2d_sptr ref_bb = ref_evt_poly_->get_bounding_box();
   int bb_minx = evt_bb->get_min_x(), bb_miny = evt_bb->get_min_y();
   int bb_width = evt_bb->width(), bb_height = evt_bb->height();
 
-  if( bb_minx < 0 || bb_minx + bb_width >= evt_imgr_->ni() ||
-    bb_miny < 0 || bb_miny + bb_height >= evt_imgr_->nj() ){
-    std::cout << "warning betr_pixelwise_change_detection failed\n";
+  if( bb_minx < 0 || bb_minx + bb_width >= static_cast<int>(evt_imgr_->ni()) ||
+    bb_miny < 0 || bb_miny + bb_height >= static_cast<int>(evt_imgr_->nj()) ){
+    std::cout << "WARNING: betr_pixelwise_change_detection failure 1\n";
     avg_prob_ = -1.0;
     return true;
   }
@@ -41,12 +45,15 @@ bool betr_pixelwise_change_detection::process(){
   int num_vertices = evt_evt_poly_->size();
   std::vector< vgl_homg_point_2d<double> > vert_evt(num_vertices); 
   std::vector< vgl_homg_point_2d<double> > vert_ref(num_vertices);
-
+  if(ref_evt_polys_.size()!=1){
+    std::cout << "not exactly one reference ref_poly in pixelwise_change_detection\n";
+    return false;
+  }
   for( int p = 0; p < num_vertices; p++ ){
     vert_evt[p].set( 
       evt_evt_poly_->vertex(p)->x(), evt_evt_poly_->vertex(p)->y() );
     vert_ref[p].set( 
-      ref_evt_poly_->vertex(p)->x(), ref_evt_poly_->vertex(p)->y() );
+      ref_evt_polys_[0]->vertex(p)->x(), ref_evt_polys_[0]->vertex(p)->y() );
   }
 
   // Compute a homography from ref image to evt image using the polygons
@@ -62,7 +69,11 @@ bool betr_pixelwise_change_detection::process(){
   vgl_h_matrix_2d<double> ref_to_evt_cropped2 = evt_to_cropped*ref_to_evt;
 
   // Get the ref image and warp into the cropped event image
-  vil_image_view<vxl_uint_16> ref_img = ref_imgr_->get_view();
+  if(ref_rescs_.size()!=1){
+    std::cout << "not exactly one reference image\n";
+    return false;
+  }
+  vil_image_view<vxl_uint_16> ref_img = ref_rescs_[0]->get_view();
   vil_image_view<vxl_uint_16> ref_cropped;
   baml_warp_perspective( ref_img, ref_to_evt_cropped, bb_width, bb_height, ref_cropped );
 
@@ -77,13 +88,11 @@ bool betr_pixelwise_change_detection::process(){
   vil_image_view<float> evt_change_prob;
   
   // Compute pixel-wise likelihood using specified metric
-  baml_change_detection_params cd_params;
-  cd_params.method = method_;
-  baml_change_detection cd( cd_params );
+  baml_change_detection cd( cd_params->pw_params_ );
   bool cd_success = cd.detect( evt_img, ref_cropped, valid, evt_change_prob );
     
   if(! cd_success ){
-    std::cout << "warning betr_pixelwise_change_detection failed\n";
+    std::cout << "WARNING: betr_pixelwise_change_detection failure 2\n";
     avg_prob_ = -1.0;
     return true;
   }

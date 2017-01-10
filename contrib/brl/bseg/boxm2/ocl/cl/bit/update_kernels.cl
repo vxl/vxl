@@ -497,7 +497,8 @@ update_bit_scene_main(__global RenderSceneInfo  * info,           // scene infor
             // update cell is in ../ray_bundle_library_opt.cl
             // void update_cell(float16 * data, float4 aux_data,float t_match, float init_sigma, float min_sigma)
             //
-            update_cell(&data, aux_data, 2.5f, 0.07f, 0.05f);
+            //update_cell(&data, aux_data, 2.5f, 0.07f, 0.05f);
+            update_cell(&data, aux_data, 2.5f, 0.1f, 0.05f);
             if ( *update_app != 0 )
             {
                 //set appearance model (figure out if var is fixed or not)

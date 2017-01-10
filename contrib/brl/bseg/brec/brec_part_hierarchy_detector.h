@@ -22,8 +22,10 @@
 #include <vil/vil_image_view.h>
 
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_area.h>
 #include <vgl/algo/vgl_rtree.h>
 #include <vgl/algo/vgl_rtree_c.h>
+#include <vgl/vgl_intersection.h>
 
 // C must have the following (static method) signatures :
 // \code
@@ -60,24 +62,11 @@ class rtree_brec_instance_box_2d
   { vgl_point_2d<T> p(pi->x_, pi->y_);  return b.contains(p); }
 
   static bool  meet(vgl_box_2d<T> const& b0, vgl_box_2d<T> const& b1) {
-    vgl_point_2d<T> b0min = b0.min_point();
-    vgl_point_2d<T> b1min = b1.min_point();
-    vgl_point_2d<T> b0max = b0.max_point();
-    vgl_point_2d<T> b1max = b1.max_point();
-    vgl_point_2d<T> max_of_mins(b0min.x() > b1min.x() ? b0min.x() : b1min.x(), b0min.y() > b1min.y() ? b0min.y() : b1min.y());
-    vgl_point_2d<T> min_of_maxs(b0min.x() < b1min.x() ? b0min.x() : b1min.x(), b0min.y() < b1min.y() ? b0min.y() : b1min.y());
-
-    return b0.contains(b1min) || b0.contains(b1max) ||
-           b1.contains(b0min) || b1.contains(b0max) ||
-           ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) &&
-             (b1.contains(max_of_mins) || b1.contains(min_of_maxs)) );
-
-    //bool resultf =(b0.contains(b1.min_point()) || b0.contains(b1.max_point()));
-    //bool resultr =(b1.contains(b0.min_point()) || b1.contains(b0.max_point()));
-    //return resultf||resultr;
+    vgl_box_2d<T> bint = vgl_intersection<T>(b0, b1);
+    return !bint.is_empty();
   }
   static float volume(vgl_box_2d<T> const& b)
-  { return static_cast<float>(b.area()); }
+  { return static_cast<float>(vgl_area(b)); }
 
   // point meets for a polygon, used by generic rtree probe
   static bool meets(brec_part_instance_sptr const& pi, vgl_polygon<T> poly)

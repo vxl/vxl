@@ -22,7 +22,9 @@ set(betr_sources
  betr_edgel_reference_cd.h  betr_edgel_reference_cd.cxx
  betr_edgel_reference_cd_params.h    betr_edgel_reference_cd_params.cxx
  betr_pixelwise_change_detection.h  betr_pixelwise_change_detection.cxx
+ betr_pixelwise_change_detection_params.h  betr_pixelwise_change_detection_params.cxx
  betr_params.h              betr_params.cxx  betr_params_sptr.h
+ betr_gridded_geo_polygon_3d.h   betr_gridded_geo_polygon_3d.cxx
 )
 aux_source_directory(Templates betr_sources)
 

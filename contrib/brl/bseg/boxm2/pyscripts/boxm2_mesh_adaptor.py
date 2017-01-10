@@ -74,8 +74,9 @@ def gen_oriented_point_cloud(scene, cache, prob_t, norm_mag_t, filename):
   batch.set_input_float(2, prob_t)
   batch.set_input_float(3, norm_mag_t)
 
-
-def gen_error_point_cloud(scene, cache, filename, thresh=0.3, depth=3):
+# return points which have prob > prob_t and LE < LE_thres and CE < CE_thres
+# if LE_thres and/or CE_thres are passed as -1.0, then thresholding based on corresponding error value is not applied
+def gen_error_point_cloud(scene, cache, filename, thresh=0.3, LE_thresh=-1.0, CE_thresh=-1.0, depth=3):
   batch.init_process("boxm2ExtractPointCloudProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, cache)
@@ -88,6 +89,8 @@ def gen_error_point_cloud(scene, cache, filename, thresh=0.3, depth=3):
   batch.set_input_from_db(1, cache)
   batch.set_input_string(2, filename)  # ply filename
   batch.set_input_float(3, thresh)  # prob threshold
+  batch.set_input_float(4, LE_thresh)  # LE threshold
+  batch.set_input_float(5, CE_thresh)  # CE threshold
   batch.run_process()
 
 

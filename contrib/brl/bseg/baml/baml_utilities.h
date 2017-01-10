@@ -34,7 +34,7 @@ bool baml_correct_gain_offset_tiled(
   const vil_image_view<vxl_uint_16>& img_target,
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid,
-  const int num_tiles,
+  int num_tiles,
   vil_image_view<vxl_uint_16>& corrected_ref);
 
 //: Compute the sigmoid function for every pixel in the image i.e.

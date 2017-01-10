@@ -1,5 +1,6 @@
 // This is brl/bseg/betr/tests/test_edgel_change_detection.cxx
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -25,9 +26,9 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_camera.h>
 #define chile 0
-#define rajaei 0
+#define rajaei 1
 #define kandahar 0
-#define hamadan 1
+#define hamadan 0
 void test_edgel_change_detection()
 {
 #if chile
@@ -83,19 +84,23 @@ void test_edgel_change_detection()
   double pchange = 0.0;
   etr_ply.process("edgel_change_detection", pchange);
 #elif rajaei
- std::string dir = "D:/tests/rajaei_test/trigger/";
- std::string ref_name = "20160601_124249_0c47";
- std::string evt_name = "20160609_094252_0c72";
- std::string ref_img_path = dir + ref_name +"_0.tiff";
- std::string evt_img_path = dir + evt_name +"_0.tiff";
- std::string ref_cam_path = dir + ref_name + "_RPC.TXT";
- std::string evt_cam_path = dir + evt_name + "_RPC.TXT";
-// std::string ref_obj_path = dir + "rajaei_trigger_objects/mesh_1.ply";
-// std::string evt_obj_path = dir + "rajaei_trigger_objects/mesh_2.ply";
+  std::string dir = "D:/tests/rajaei_test/trigger/";
+  //std::string ref_name = "20160601_124249_0c47";
+ // std::string evt_name = "20160609_094252_0c72";
+  std::string evt_name = "20160601_124249_0c47";
+  std::string ref_name = "20160609_094252_0c72";
+  std::string ref_img_path = dir + ref_name +"_0.tiff";
+  std::string evt_img_path = dir + evt_name +"_0.tiff";
+  std::string ref_cam_path = dir + ref_name + "_RPC.TXT";
+  std::string evt_cam_path = dir + evt_name + "_RPC.TXT";
+  // std::string ref_obj_path = dir + "rajaei_trigger_objects/mesh_1.ply";
+  // std::string evt_obj_path = dir + "rajaei_trigger_objects/mesh_2.ply";
 
- std::string evt_obj0_path = dir + "rajaei_ref_channel_large_objects/mesh_1.ply";
- std::string evt_obj1_path = dir + "rajaei_ref_channel_large_objects/mesh_1.ply";
- std::string ref_obj_path = dir + "rajaei_ref_channel_large_objects/mesh_0.ply";
+// std::string evt_obj0_path = dir + "rajaei_ref_channel_large_objects/mesh_1.ply";
+// std::string evt_obj1_path = dir + "rajaei_ref_channel_large_objects/mesh_1.ply";
+// std::string ref_obj_path = dir + "rajaei_ref_channel_large_objects/mesh_0.ply";
+ std::string ref_obj_path = dir + "rajaei_grid_event_objects/mesh_0.ply";
+ std::string evt_grid_obj_path = dir + "rajaei_grid_event_objects/mesh_1.ply";
  vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
  vil_image_resource_sptr evt_imgr = vil_load_image_resource(evt_img_path.c_str());
  vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
@@ -105,26 +110,46 @@ void test_edgel_change_detection()
  vpgl_lvcs lvcs = ref_lcam->lvcs();
  double lon, lat, elev;
  lvcs.get_origin(lat, lon, elev);
+ std::cout << std::setprecision(10)<< "lat = " << lat << " lon = " << lon << " elev = " << elev << std::endl;
  betr_event_trigger etr("rajaei", lvcs);
  etr.set_verbose(true);
  etr.set_ref_camera(ref_camera);
  etr.set_evt_camera(evt_camera);
- etr.add_geo_object("pier_ref", lon, lat, elev, ref_obj_path, true);
- etr.add_geo_object("pier_evt0", lon, lat, elev, evt_obj0_path, false);
- etr.add_geo_object("pier_evt1", lon, lat, elev, evt_obj1_path, false);
+ etr.add_geo_object("grid_ref", lon, lat, elev, ref_obj_path, true);
+ etr.add_gridded_event_poly("grid_evt", lon, lat, elev, evt_grid_obj_path, 100.0);
  etr.set_ref_image(ref_imgr);
  etr.set_evt_image(evt_imgr);
-#if 10
+#if 1
  std::cout << "====PROCESSING WITH CHANGE =====\n";
  std::vector<double> pchange;
- etr.process("edgel_change_detection", pchange);
+ std::vector<vil_image_resource_sptr> change_images;
+ std::vector<vgl_point_2d<unsigned> > offsets;
+ std::vector<std::string> evt_region_names;
+ etr.process("edgel_change_detection", pchange, evt_region_names, change_images, offsets);
+ const std::map<std::string, betr_geo_object_3d_sptr>& evt_objs =etr.evt_objects();
  unsigned i =0;
  for(std::vector<double>::iterator pit = pchange.begin();
-     pit != pchange.end(); ++pit, i++)
-   std::cout << "pchange[" << i << "] = " << *pit << '\n';
+     pit != pchange.end(); ++pit, i++){
+   std::string ern = evt_region_names[i];
+   std::map<std::string, betr_geo_object_3d_sptr>::const_iterator oit = evt_objs.find(ern);
+   if(oit == evt_objs.end()){
+      std::cout << "In betr_execute_multi_chimg_evt_poly_process - event object " << ern << " not found" << std::endl;
+      return ;
+   }
+   vsol_polygon_3d_sptr bpoly = (oit->second)->base_polygon();
+   unsigned nv = bpoly->size();
+   std::cout << "for region " << ern << " pchange = " << *pit << std::endl;
+   std::cout << "poly[";
+   for(unsigned k =0; k<nv; ++k){
+     vsol_point_3d_sptr p = bpoly->vertex(k);
+     std::cout << '(' << p->x() << ' ' << p->y() << ' ' << p->z() << ") ";
+   }
+   std::cout << std::endl;
+ }
  double pr = 0.0;
  //etr.process("edgel_change_detection", pr);
  //std::cout << "pr = " << pr << '\n';
+ return;
 #endif
  std::string evt_name_2 = "20160625_031318_0c68";
  std::string evt_img_path_2 = dir + evt_name_2 +"_0.tiff";
@@ -138,7 +163,7 @@ void test_edgel_change_detection()
  std::cout << "====PROCESSING WITH NO CHANGE =====\n";
  pchange.clear();
  etr.process("edgel_change_detection", pchange);
- i = 0;
+  i = 0;
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
@@ -216,9 +241,10 @@ void test_edgel_change_detection()
  etr_self_small.set_evt_image(imgr);
  etr_self_small.set_ref_path(ref_img_path_s);
  etr_self_small.set_evt_path(img_path);
- std::vector<double> pchange;
+// std::vector<double> pchange;
  etr_self_small.process("edgel_change_detection", pchange);
- unsigned i =0;
+// unsigned i =0;
+ i =0;
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
@@ -296,6 +322,7 @@ void test_edgel_change_detection()
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
 #elif hamadan
  std::string dir = "D:/tests/hamadan_test/";
+ //std::string dir = "D:/data/sattel/hamadan/";
  // std::string ref_name = "20160821_063826_0e20.tif";
  // std::string ref_name = "20160623_050936_0c64.tif";
  std::string ref_name = "20160902_094643_0c19.tif";
@@ -344,9 +371,14 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
  std::vector<double> pchange;
  std::vector<vgl_point_2d<unsigned> > offsets;
  std::vector<vil_image_resource_sptr> rescs; 
+
+ // Read json
  std::string cd_json ="{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
+ //std::string cd_json ="{\"method\" : 2, \"registration_rad\" : 2, \"change_prior\" : 0.01 }";
+
  std::cout <<"===>processing " << evt_name << '\n';
  etr.process("edgel_change_detection", pchange, rescs, offsets,cd_json);
+ //etr.process("pixelwise_change_detection", pchange, rescs, offsets,cd_json);
  int i =0;
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++){
@@ -357,7 +389,10 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
    std::string change_path = dir + evt_name + "change_image_" + ss.str() +".tif";
    vil_save_image_resource(rescs[i], change_path.c_str());
  }
+ //return;
  //============== end of processing
+
+
  evt_name = "20160705_092219_0c81.tif";
  evt_img_path = dir + evt_name ;
  evt_cam_path = dir + evt_name + "_RPC.TXT";
@@ -420,7 +455,7 @@ etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
  for(std::vector<double>::iterator pit = pchange.begin();
      pit != pchange.end(); ++pit, i++)
    std::cout << "pchange[" << i << "] = " << *pit << '\n';
-
+ TEST_NEAR("745_hamadan_test", pchange[0], 0.006, 0.0001);
 #endif
 }
-  TESTMAIN(test_edgel_change_detection);
+TESTMAIN(test_edgel_change_detection);

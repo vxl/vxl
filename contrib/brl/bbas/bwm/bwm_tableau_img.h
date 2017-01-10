@@ -96,7 +96,8 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   void load_spatial_objects_2d();
   void load_pointset_2d_ascii();
   void save_pointset_2d_ascii();
-
+  void load_bounding_boxes_2d_ascii();
+  void load_oriented_boxes_2d_ascii();
   //: internal detail
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { my_observer_->set_viewer(viewer); }
 

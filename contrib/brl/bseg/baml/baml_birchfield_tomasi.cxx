@@ -31,8 +31,10 @@ bool baml_compute_birchfield_tomasi(
   vil_image_view<T> nbhd_min, nbhd_max;
   vil_structuring_element se; 
   //se.set_to_disk( rad + 0.01 );
-  vcl_vector< int > v_p_i = { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
-  vcl_vector< int > v_p_j = { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+  static const int v_p_i0[] = { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+  static const int v_p_j0[] = { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+  vcl_vector< int > v_p_i(v_p_i0, v_p_i0+sizeof(v_p_i0)/sizeof(v_p_i0[0]));
+  vcl_vector< int > v_p_j(v_p_j0, v_p_j0+sizeof(v_p_j0)/sizeof(v_p_j0[0]));
   se.set(v_p_i, v_p_j);
   vil_greyscale_dilate<T>( img_ref, nbhd_max, se );
   vil_greyscale_erode<T>( img_ref, nbhd_min, se );

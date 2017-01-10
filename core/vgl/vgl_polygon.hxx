@@ -111,7 +111,7 @@ bool vgl_polygon<T>::contains(T x, T y) const
   }
   return c;
 }
-
+ 
 template <class T>
 std::ostream& vgl_polygon<T>::print(std::ostream& os) const
 {

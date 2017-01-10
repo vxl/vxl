@@ -84,11 +84,11 @@ bool baml_correct_gain_offset_tiled(
   const vil_image_view<vxl_uint_16>& img_tar,
   const vil_image_view<vxl_uint_16>& img_ref,
   const vil_image_view<bool>& valid_ref,
-  const int num_tiles,
+  int num_tiles,
   vil_image_view<vxl_uint_16>& corrected_ref)
 {
-  // calculate gain/offset over whole image if the number of tiles is 0 or 1
-  if (num_tiles == 0 || num_tiles == 1)
+  // calculate gain/offset over whole image if the number of tiles is <= 1
+  if (num_tiles <= 1)
     return baml_correct_gain_offset(img_tar, img_ref, valid_ref, corrected_ref);
 
   // initialization
@@ -114,8 +114,8 @@ bool baml_correct_gain_offset_tiled(
   boundaries_x(0) = 0;
   boundaries_y(0) = 0;
   for (int i = 1; i <= num_tiles; i++) {
-    boundaries_x(i) = round(width*i / num_tiles);
-    boundaries_y(i) = round(height*i / num_tiles);
+    boundaries_x(i) = static_cast<int>(width*i / num_tiles+0.5);
+    boundaries_y(i) = static_cast<int>(height*i / num_tiles+0.5);
   }
 
   vil_image_view<vxl_uint_16> tar_crop;
