@@ -44,7 +44,7 @@ bool
 vidl_ffmpeg_ostream
 ::open()
 {
-  throw std::runtime_error( "vidl_ffmpeg_ostream: ffmpeg support is not compiled in";
+  throw std::runtime_error( "vidl_ffmpeg_ostream: ffmpeg support is not compiled in" );
 }
 
 
