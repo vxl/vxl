@@ -40,7 +40,7 @@ bool
 vidl_ffmpeg_istream
 ::open(const std::string& /*filename*/)
 {
-  throw std::runtime_error( "vidl_ffmpeg_istream: ffmpeg support is not compiled in";
+  throw std::runtime_error( "vidl_ffmpeg_istream: ffmpeg support is not compiled in" );
 }
 
 
