@@ -11,8 +11,12 @@
 #include "vimt_load.h"
 #include <vil/vil_property.h>
 #include <vil/vil_open.h>
-#include <vil/file_formats/vil_dicom_header.h>
 #include "vimt_convert.h"
+
+#ifdef _BUILD_DCMTK
+  #include <vil/file_formats/vil_dicom_header.h>
+  #include <vil/file_formats/vil_dicom.h>
+#endif // _BUILD_DCMTK
 
 
 // Create a transform from the properties of image resource.
@@ -116,19 +120,21 @@ bool vimt_is_image_dicom(vil_stream* is)
    if (is)
    {
      bool is_dicom = false;
-     try
-     {
-       char magic[ DCM_MagicLen ];
-       for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
-         is->seek(0);
-         is->seek( DCM_PreambleLen );
-         if ( is->read( magic, DCM_MagicLen ) == DCM_MagicLen ) {
-           if ( vcl_strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
-             return true;
+     #ifdef _BUILD_DCMTK
+       try
+       {
+         char magic[ DCM_MagicLen ];
+         for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+           is->seek(0);
+           is->seek( DCM_PreambleLen );
+           if ( is->read( magic, DCM_MagicLen ) == DCM_MagicLen ) {
+             if ( vcl_strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
+               return true;
+             }
            }
          }
-       }
-     } catch(const vil_exception_corrupt_image_file &e){}
+       } catch(const vil_exception_corrupt_image_file &e){}
+     #endif // _BUILD_DCMTK
    } else return false;
 
    return false;
@@ -144,16 +150,18 @@ bool vimt_is_monochrome1(const std::string& im_path)
 
   if (vimt_is_image_dicom(is))
   {
-    vil_dicom_image* dicom_image = new vil_dicom_image(is);
-    vil_dicom_header_info header = dicom_image->header();
+    #ifdef _BUILD_DCMTK
+      vil_dicom_image* dicom_image = new vil_dicom_image(is);
+      vil_dicom_header_info header = dicom_image->header();
 
-    if (strcmp(header.photo_interp_.c_str(), "MONOCHROME1") == 0)
-    {
-      isMONOCHROME1 = true;
-      vcl_cout<<"DICOM tag PhotometricInterpretation reads MONOCHROME1: image was automatically inverted." <<vcl_endl;
-    }
+      if (strcmp(header.photo_interp_.c_str(), "MONOCHROME1") == 0)
+      {
+        isMONOCHROME1 = true;
+        vcl_cout<<"DICOM tag PhotometricInterpretation reads MONOCHROME1: image was automatically inverted." <<vcl_endl;
+      }
 
-    delete dicom_image;
+      delete dicom_image;
+    #endif // _BUILD_DCMTK
   }
 
   if (is) { is->unref(); }
@@ -218,10 +226,8 @@ void vimt_load_to_float(const std::string& im_path, vimt_image_2d_of<float>& ima
 
   // check whether dicom image tag PhotometricInterpretation == MONOCHROME1
   bool isMONOCHROME1 = false;
-  float min_v,max_v;
   #ifdef _BUILD_DCMTK
     isMONOCHROME1 = vimt_is_monochrome1(im_path);
-    vil_math_value_range(image.image(),min_v,max_v);
   #endif // _BUILD_DCMTK
 
   if ((ir->pixel_format()==VIL_PIXEL_FORMAT_FLOAT) ||
@@ -244,5 +250,9 @@ void vimt_load_to_float(const std::string& im_path, vimt_image_2d_of<float>& ima
 
   // Automatically invert images where dicom tag
   // PhotometricInterpretation==MONOCHROME1
-  if (isMONOCHROME1) { invert_image(image.image(),max_v); }
+  if (isMONOCHROME1) {
+    float min_v,max_v;
+    vil_math_value_range(image.image(),min_v,max_v);
+    invert_image(image.image(),max_v);
+  }
 }

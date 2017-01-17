@@ -11,7 +11,6 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>
 #include <vil/vil_flatten.h>
-#include <vil/file_formats/vil_dicom.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vcl_compiler.h>
 
