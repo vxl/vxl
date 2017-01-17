@@ -4,8 +4,14 @@
 // \file
 // \author Martin Roberts
 
+#define DCM_Magic                       "DICM"
+#define DCM_MagicLen                    4
+#define DCM_PreambleLen                 128
+
 #include "vimt_load.h"
 #include <vil/vil_property.h>
+#include <vil/vil_open.h>
+#include <vil/file_formats/vil_dicom_header.h>
 #include "vimt_convert.h"
 
 
@@ -84,6 +90,77 @@ vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr& 
   return tx;
 }
 
+//: Invert the colours of an image
+template<class T>
+inline void invert_image(vil_image_view<T>& im_src, T max_val)
+{
+  unsigned ni = im_src.ni(), nj = im_src.nj(), np = im_src.nplanes();
+  vcl_ptrdiff_t istep=im_src.istep(), jstep=im_src.jstep(), pstep = im_src.planestep();
+
+  T* plane = im_src.top_left_ptr();
+  for (unsigned p=0;p<np;++p,plane += pstep)
+  {
+    T* row = plane;
+    for (unsigned j=0;j<nj;++j,row += jstep)
+    {
+      T* pixel = row;
+      for (unsigned i=0;i<ni;++i,pixel+=istep) *pixel = max_val-*pixel;
+    }
+  }
+}
+
+//: Check if an image is a DICOM image (returns true if image format can be confirmed
+//  as being DICOM)
+bool vimt_is_image_dicom(vil_stream* is)
+{
+   if (is)
+   {
+     bool is_dicom = false;
+     try
+     {
+       char magic[ DCM_MagicLen ];
+       for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+         is->seek(0);
+         is->seek( DCM_PreambleLen );
+         if ( is->read( magic, DCM_MagicLen ) == DCM_MagicLen ) {
+           if ( vcl_strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
+             return true;
+           }
+         }
+       }
+     } catch(const vil_exception_corrupt_image_file &e){}
+   } else return false;
+
+   return false;
+}
+
+//: Check for a DICOM image if tag PhotometricInterpretation is set to MONOCHROME1
+bool vimt_is_monochrome1(const std::string& im_path)
+{
+  bool isMONOCHROME1 = false;
+
+  vil_stream* is = vil_open(im_path.c_str(), "r");
+  is->ref();
+
+  if (vimt_is_image_dicom(is))
+  {
+    vil_dicom_image* dicom_image = new vil_dicom_image(is);
+    vil_dicom_header_info header = dicom_image->header();
+
+    if (strcmp(header.photo_interp_.c_str(), "MONOCHROME1") == 0)
+    {
+      isMONOCHROME1 = true;
+      vcl_cout<<"DICOM tag PhotometricInterpretation reads MONOCHROME1: image was automatically inverted." <<vcl_endl;
+    }
+
+    delete dicom_image;
+  }
+
+  if (is) { is->unref(); }
+
+  return isMONOCHROME1;
+}
+
 //: Load image from path into byte image, merging transparent image planes
 // If input image is float then stretch values to byte
 void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& image,
@@ -96,6 +173,12 @@ void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& i
     image.image().set_size(0,0);
     return;
   }
+
+  // check whether dicom image tag PhotometricInterpretation == MONOCHROME1
+  bool isMONOCHROME1 = false;
+  #ifdef _BUILD_DCMTK
+    isMONOCHROME1 = vimt_is_monochrome1(im_path);
+  #endif // _BUILD_DCMTK
 
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
@@ -115,6 +198,10 @@ void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& i
     std::cerr<<"Unknown image pixel format ("<<ir->pixel_format()<<") for image "<<im_path.c_str()<<std::endl;
     std::abort();
   }
+
+  // Automatically invert images where dicom tag
+  // PhotometricInterpretation==MONOCHROME1
+  if (isMONOCHROME1) { invert_image(image.image(),vxl_byte(255)); }
 }
 
 //: Load image from path into float image, merging transparent image planes
@@ -128,6 +215,14 @@ void vimt_load_to_float(const std::string& im_path, vimt_image_2d_of<float>& ima
     image.image().set_size(0,0);
     return;
   }
+
+  // check whether dicom image tag PhotometricInterpretation == MONOCHROME1
+  bool isMONOCHROME1 = false;
+  float min_v,max_v;
+  #ifdef _BUILD_DCMTK
+    isMONOCHROME1 = vimt_is_monochrome1(im_path);
+    vil_math_value_range(image.image(),min_v,max_v);
+  #endif // _BUILD_DCMTK
 
   if ((ir->pixel_format()==VIL_PIXEL_FORMAT_FLOAT) ||
      (ir->pixel_format()==VIL_PIXEL_FORMAT_UINT_16) ||
@@ -146,4 +241,8 @@ void vimt_load_to_float(const std::string& im_path, vimt_image_2d_of<float>& ima
     std::cerr<<"Unknown image pixel format ("<<ir->pixel_format()<<") for image "<<im_path.c_str()<<std::endl;
     std::abort();
   }
+
+  // Automatically invert images where dicom tag
+  // PhotometricInterpretation==MONOCHROME1
+  if (isMONOCHROME1) { invert_image(image.image(),max_v); }
 }
