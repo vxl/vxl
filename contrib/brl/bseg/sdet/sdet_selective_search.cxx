@@ -198,7 +198,8 @@ void sdet_selective_search::update_region_labels(){
     }
   }
 }
-void sdet_selective_search::create_color_region_view(){
+void sdet_selective_search::create_color_region_view(unsigned min_region_area,
+                                                     unsigned max_region_area){
   unsigned n = regions_.size();
   std::vector<vil_rgb<vxl_byte> > colors;
   sdet_graph_img_seg::create_colors(colors, n);
@@ -209,7 +210,9 @@ void sdet_selective_search::create_color_region_view(){
   for(std::map<unsigned, sdet_region_sptr>::iterator rit = regions_.begin();
       rit != regions_.end(); ++rit, ++k){
     sdet_region_sptr& ri = (*rit).second;
-	vil_rgb<vxl_byte> c = colors[k];
+    if(ri->Npix()<min_region_area || ri->Npix()>max_region_area)
+      continue;
+    vil_rgb<vxl_byte> c = colors[k];
 	std::cout << "label " << ri->label() << " " << c << std::endl;
     for(ri->reset(); ri->next();){
       unsigned u = static_cast<unsigned>(ri->X()), v = static_cast<unsigned>(ri->Y());

@@ -185,6 +185,10 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 template <class T>
 T hist_intersect(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb);
 
+// Bhattacharyya distance  -log(sum(sqrt(pa*pb)))
+template <class T>
+T bhatt_distance(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb);
+
 // Jensen-Shannon divergence 
 // 1/2 sum_i ( pa_i*log(2*pa_i/(pa_i+pb_i)+ pb_i*log(2*pb_i/(pa_i+pb_i)) )
 template <class T>
@@ -198,7 +202,6 @@ bsta_histogram<T> scale(bsta_histogram<T> const& h, T s);
 template <class T>
 T minimum_js_divergence_scale(bsta_histogram<T> const& h_from, bsta_histogram<T> const& h_to,
                               T min_scale = T(1)/T(4));
-
 // Histogram intersection (sum of min probabilies)
 template <class T>
 bool merge_hists(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb, bsta_histogram<T>& h_merged);

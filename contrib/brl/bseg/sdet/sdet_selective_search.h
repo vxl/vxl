@@ -73,7 +73,7 @@ class sdet_selective_search : public sdet_selective_search_params
   void compute_initial_similarity();
   void merge_regions();
   void find_max_label();
-  void create_color_region_view();
+  void create_color_region_view(unsigned min_region_area, unsigned max_region_area);
   //========================================
   // =======the main process function ======
   // typically executed a number of times with different parameters to create diversity

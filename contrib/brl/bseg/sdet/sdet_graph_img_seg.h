@@ -203,7 +203,7 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
 }
 // segment an image using VanDuc edge chains as high graph edge cost
 template <class T>
-void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned margin, int neigh, T weight_thres, float sigma, float vd_noise_mul, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img, std::map<unsigned, sdet_region_sptr>& regions, bool use_edges = true)
+void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned margin, int neigh, double weight_thres, float sigma, float vd_noise_mul, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img, std::map<unsigned, sdet_region_sptr>& regions, bool use_edges = true)
 {
   vul_timer t;
   // form edge image

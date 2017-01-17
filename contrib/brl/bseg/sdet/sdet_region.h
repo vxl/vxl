@@ -79,8 +79,10 @@ class sdet_region : public vdgl_digital_region
   bool obox_valid() const{ return obox_valid_;}
   bool compute_bbox();
   bool bbox_valid() const{ return bbox_valid_;}
-  // intersection over union of bb with respect to this->bbox_
+  //: intersection area over union aera of bb with respect to this->bbox_
   float int_over_union(vgl_box_2d<float> bb);
+  //: intersection area over the area of the smallest box with respect to this->bbox_
+  float int_over_min_area(vgl_box_2d<float> bb);
   //: must implement comparison since containers need this
   struct region_less
   {
