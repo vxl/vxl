@@ -32,6 +32,6 @@
 
 //: Set to 0 if you don't want to use SSE2 instructions to implement rounding, floor, and ceil functions.
 #define VIL_CONFIG_ENABLE_SSE2_ROUNDING @VIL_CONFIG_ENABLE_SSE2_ROUNDING@
-#define VXL_HAS_SSE2_HARDWARE_SUPPORT @VXL_HAS_SSE2_HARDWARE_SUPPORT@
+#cmakedefine VXL_HAS_SSE2_HARDWARE_SUPPORT
 
 #endif // vil_config_h_in_

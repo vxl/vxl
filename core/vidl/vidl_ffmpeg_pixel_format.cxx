@@ -62,6 +62,8 @@ extern "C" {
 #define AV_PIX_FMT_RGB8          PIX_FMT_RGB8
 #define AV_PIX_FMT_RGB4          PIX_FMT_RGB4
 #define AV_PIX_FMT_RGB4_BYTE     PIX_FMT_RGB4_BYTE
+#define AV_PIX_FMT_RGB565        PIX_FMT_RGB565
+#define AV_PIX_FMT_RGB555        PIX_FMT_RGB555
 #define AV_PIX_FMT_NV12          PIX_FMT_NV12
 #define AV_PIX_FMT_NV21          PIX_FMT_NV21
 

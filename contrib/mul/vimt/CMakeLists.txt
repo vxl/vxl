@@ -6,6 +6,10 @@ doxygen_add_library(contrib/mul/vimt
   DESCRIPTION "Polymorphic image + transform library"
   )
 
+IF (VXL_BUILD_DCMTK)
+  ADD_DEFINITIONS(-D_BUILD_DCMTK)
+ENDIF (VXL_BUILD_DCMTK)
+
 set(vimt_sources
     vimt_image.cxx                                vimt_image.h
     vimt_transform_2d.cxx                         vimt_transform_2d.h
