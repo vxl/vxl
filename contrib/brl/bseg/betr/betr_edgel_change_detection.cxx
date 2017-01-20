@@ -10,11 +10,23 @@ bool betr_edgel_change_detection::process(){
   efparams_ptr->det_params_.smooth = params->sigma_;
   efparams_ptr->det_params_.noise_multiplier = params->noise_mul_;
   ef.set_params(*efparams_ptr);
-  ef.add_image("ref_image", ref_imgr_);
+  if(ref_rescs_.size()!=1){
+    std::cout << "not exactly one reference image in edgel_change_detection\n";
+    return false;
+  }
+  ef.add_image("ref_image", ref_rescs_[0]);
   ef.add_image("evt_image", evt_imgr_);
-  ef.add_region("ref_image", "ref_ref_poly", ref_ref_poly_);
+  if(ref_ref_polys_.size()!=1){
+    std::cout << "not exactly one reference ref_poly in edgel_change_detection\n";
+    return false;
+  }
+  ef.add_region("ref_image", "ref_ref_poly", ref_ref_polys_[0]);
   ef.add_region("evt_image", "evt_ref_poly", evt_ref_poly_);
-  ef.add_region("ref_image", "ref_evt_poly", ref_evt_poly_);
+  if(ref_evt_polys_.size()!=1){
+    std::cout << "not exactly one reference evt_poly in edgel_change_detection\n";
+    return false;
+  }
+  ef.add_region("ref_image", "ref_evt_poly", ref_evt_polys_[0]);
   ef.add_region("evt_image", "evt_evt_poly", evt_evt_poly_);
   bool good = ef.process("ref_image","ref_ref_poly");
   good = good && ef.process("ref_image","ref_evt_poly");

@@ -22,6 +22,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/io/vgl_io_polygon.h>
 
@@ -1529,7 +1530,7 @@ bool brad_image_metadata::same_extent(brad_image_metadata& other)
 
   vgl_box_2d<double> b1(lower_left_.x(), lower_left_.y(), upper_right_.x(), upper_right_.y());
   vgl_box_2d<double> b2(other.lower_left_.x(), other.lower_left_.y(), other.upper_right_.x(), other.upper_right_.y());
-  if (std::abs(vgl_intersection(b1, b2).area() - b1.area()) < 0.000000001)
+  if (std::abs(vgl_area(vgl_intersection(b1, b2)) - vgl_area(b1)) < 0.000000001)
     return true;
 
   return false;

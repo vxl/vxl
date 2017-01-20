@@ -16,6 +16,7 @@ DECLARE( test_fat_pocket_scene);
 DECLARE( test_fit_face );
 DECLARE( test_fit_fat_pocket );
 DECLARE( test_orbicularis_oris);
+DECLARE( test_shuttle);
 
 void register_tests()
 {
@@ -35,6 +36,7 @@ void register_tests()
   REGISTER( test_fit_face );
   REGISTER( test_fit_fat_pocket );
   REGISTER( test_orbicularis_oris );
+  REGISTER( test_shuttle );
 }
 
 DEFINE_MAIN;

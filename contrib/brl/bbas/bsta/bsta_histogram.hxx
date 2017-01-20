@@ -507,6 +507,23 @@ std::istream& bsta_histogram<T>::read(std::istream& s)
   return  s;
 }
 template <class T>
+T hist_intersect(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
+  unsigned na = ha.nbins(), nb = hb.nbins();
+  if(na != nb){
+    std::cout << "histograms do not have the same number of bins\n";
+    return std::numeric_limits<T>::max();
+  }
+  T sum = T(0);
+  for(unsigned i = 0; i<na; ++i){
+    T pa = ha.p(i), pb = hb.p(i);
+    if(pa<pb)
+      sum += pa;
+    else
+      sum+= pb;
+  }
+  return sum;
+}
+template <class T>
 T js_divergence(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
   unsigned na = ha.nbins(), nb = hb.nbins();
   if(na != nb){
@@ -525,6 +542,29 @@ T js_divergence(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
     sum += jsa + jsb;
   }
   return sum/T(2);
+}
+template <class T>
+T bhatt_distance(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
+  unsigned na = ha.nbins(), nb = hb.nbins();
+  if(na != nb){
+    std::cout << "histograms do not have the same number of bins\n";
+    return std::numeric_limits<T>::max();
+  }
+  T sum = T(0);
+  for(unsigned i = 0; i<na; ++i){
+    T pa = ha.p(i), pb = hb.p(i);
+    if(pa<T(0) || pb<T(0)){
+      std::cout << "Fatal! - negative probablity\n";
+      return std::numeric_limits<T>::max();
+    }
+    sum += sqrt(pa*pb);
+  }
+  if(sum<T(0)){
+    std::cout << "Fatal! - negative sum\n";
+    return std::numeric_limits<T>::max();
+  }
+  return -log(sum);
+
 }
 template <class T>
 bsta_histogram<T> scale(bsta_histogram<T> const& h, T s){
@@ -589,7 +629,27 @@ T minimum_js_divergence_scale(bsta_histogram<T> const& h_from, bsta_histogram<T>
   }
   return scale_min;
 }
-//: Write to stream
+
+template <class T>
+bool merge_hists(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb, bsta_histogram<T>& h_merged){
+  // ha and hb must have the same number of bins and min max values 
+  if(ha.nbins() != hb.nbins()){
+    std::cout << "Can't merge histogams with different numbers of bins" << std::endl;
+    return false;
+  }
+  if(ha.min() != hb.min() || ha.max() != hb.max()){
+    std::cout << "Can't merge histogams with different value ranges" << std::endl;
+    return false;
+  }
+  bsta_histogram<T> temp(ha.min(), ha.max(), ha.nbins());
+  for(unsigned i = 0; i<ha.nbins(); ++i){
+    T counta = ha.counts(i), countb = hb.counts(i);
+    temp.set_count(i, counta + countb);
+  }
+  h_merged = temp;
+  return true;
+}
+  //: Write to stream
 template <class T>
 std::ostream& operator<<(std::ostream& s, bsta_histogram<T> const& h)
 {
@@ -608,8 +668,11 @@ std::istream& operator>>(std::istream& is, bsta_histogram<T>& h)
 #define BSTA_HISTOGRAM_INSTANTIATE(T) \
 template class bsta_histogram<T >; \
 template T js_divergence(bsta_histogram<T> const& , bsta_histogram<T> const&); \
-template bsta_histogram<T> scale(bsta_histogram<T> const&, T ); \
+template T bhatt_distance(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb); \
+template bsta_histogram<T> scale(bsta_histogram<T> const&, T );         \
 template T minimum_js_divergence_scale(bsta_histogram<T> const&, bsta_histogram<T> const&, T); \
+template T hist_intersect(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb); \
+template bool merge_hists(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb, bsta_histogram<T>& h_merged); \
 template std::istream& operator>>(std::istream&, bsta_histogram<T >&);  \
 template std::ostream& operator<<(std::ostream&, bsta_histogram<T > const&)
 
