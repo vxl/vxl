@@ -32,7 +32,7 @@ extern "C" {
 
 //--------------------------------------------------------------------------------
 
-#if LIBAVCODEC_VERSION_MAJOR < 56
+#if LIBAVCODEC_BUILD < ((54<<16)+(31<<8)+0) // before ver 54.31.0
 
 // The enum values in the old versions have the form PIX_FMT_*,
 // whereas the new ones are AV_PIX_FMT_*.
