@@ -65,6 +65,7 @@ set( vgl_sources
   vgl_polygon_test.h             vgl_polygon_test.hxx
   vgl_triangle_3d.h              vgl_triangle_3d.cxx
   vgl_frustum_3d.h               vgl_frustum_3d.hxx
+  vgl_affine_coordinates.h       vgl_affine_coordinates.hxx
 
   vgl_region_scan_iterator.h
   vgl_triangle_scan_iterator.h   vgl_triangle_scan_iterator.hxx
