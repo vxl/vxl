@@ -44,6 +44,17 @@ void baml_sigmoid(
   vil_image_view<float>& prob,
   float prior_prob = 0.1f );
 
+//: Transform scores into probabilities using a guassian distribution with
+// a standard deviation of sigma and a mean of 0
+void baml_gaussian(
+  const vil_image_view<float>& scores,
+  vil_image_view<float>& prob,
+  float sigma);
+
+//: Compute standarad deviation assuming that the mean scores is 0
+float baml_sigma(
+  const vil_image_view<float>& scores);
+
 //: Overlay a detection map on a grayscale image using a red coloring
 bool baml_overlay_red(
   const vil_image_view<vxl_byte>& img,

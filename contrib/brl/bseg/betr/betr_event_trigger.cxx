@@ -465,6 +465,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     vgl_point_2d<unsigned> offset(ioff, joff);
     change_images.push_back(resc);    
     offsets.push_back(offset);
+    std::cout << "Size of offsets is " << offsets.size() << "\n";
   }
   process_counter_++;
   return true;

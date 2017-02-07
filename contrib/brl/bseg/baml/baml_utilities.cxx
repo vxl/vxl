@@ -12,6 +12,7 @@
 #include <vil/algo/vil_median.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_resample_bicub.h>
+#include <vil/vil_resample_bilin.h>
 
 #include "baml_utilities.h"
 
@@ -169,8 +170,7 @@ bool baml_correct_gain_offset_tiled(
     }
   }
 
-
-  // create padded versions of the gain and offset ( for input to bicubic interpolation function
+  // create (replicate) padded versions of the gain and offset ( for input to bicubic interpolation function )
   int pad_size = 2;
   vil_image_view<float> gain_pad;
   gain_pad.set_size(gain.ni() + pad_size*2, gain.nj() + pad_size*2);
@@ -215,8 +215,8 @@ bool baml_correct_gain_offset_tiled(
   double dy1 = 0;
   double dx2 = 0;
   double dy2 = f*(gain.nj())*1.0 / (height - 1);
-  vil_resample_bicub(gain_pad, gain_resized, x0, y0, dx1, dy1, dx2, dy2, width, height);
-  vil_resample_bicub(offset_pad, offset_resized, x0, y0, dx1, dy1, dx2, dy2, width, height);
+  vil_resample_bilin(gain_pad, gain_resized, x0, y0, dx1, dy1, dx2, dy2, width, height);
+  vil_resample_bilin(offset_pad, offset_resized, x0, y0, dx1, dy1, dx2, dy2, width, height);
  
   // Apply the gain offset
   for (int y = 0; y < height; y++) {
@@ -226,11 +226,11 @@ bool baml_correct_gain_offset_tiled(
       corrected_ref(x, y) = (vxl_uint_16) r;
     }
   }
-
   return true;
 }
 
 //----------------------------------------------------------
+// convert scores to probability using sigmoid
 void baml_sigmoid(
   const vil_image_view<float>& lh,
   vil_image_view<float>& prob,
@@ -248,6 +248,52 @@ void baml_sigmoid(
   }
 }
 
+//------------------------------------------------------------------
+// convert scores to probability with gaussian
+void baml_gaussian(
+  const vil_image_view<float>& scores,
+  vil_image_view<float>& prob,
+  float sigma ) 
+{
+  int width = scores.ni();
+  int height = scores.nj();
+  // Initialize output image
+  prob.set_size(width, height);
+  prob.fill(0.0);
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      prob(x, y) = 1 / (sqrt(2 * 3.14159265358979323846)*sigma)*exp(-pow(scores(x, y), 2) / (2 * pow(sigma, 2)));
+    }
+  }
+}
+
+//------------------------------------------------------------------
+// estimate sigma for use in gaussian assuming data is zero mean
+float baml_sigma(
+  const vil_image_view<float>& scores ) 
+{
+  int width = scores.ni(); int height = scores.nj();
+  float sigma_sum = 0;
+  float max_score = FLT_MIN;
+  float min_score = FLT_MAX;
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
+        if (max_score < scores(x, y)) max_score = scores(x, y);
+        if (min_score > scores(x, y)) min_score = scores(x, y);
+        if (std::isnan(scores(x, y))) {
+          std::cerr << "score is nan";
+          return false;
+        }
+        if (std::isinf(scores(x, y))) {
+          std::cerr << "score is infinity";
+          return false;
+        }
+        sigma_sum += pow(scores(x, y), 2);
+      }
+    }
+    float sigma = sqrt(sigma_sum / (width*height - 1));
+    return sigma;
+}
 
 //------------------------------------------------------------------
 // img: original image ( this will be the backgroud )

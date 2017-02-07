@@ -1,4 +1,4 @@
-#ifndef betr_pixelwise_change_detection_params_h_
+ #ifndef betr_pixelwise_change_detection_params_h_
 #define betr_pixelwise_change_detection_params_h_
 //:
 // \file
@@ -26,10 +26,12 @@ class betr_pixelwise_change_detection_params : public betr_params
  public:
 
   betr_pixelwise_change_detection_params(){
-    method_list_.push_back( CENSUS );
-    method_list_.push_back( BIRCHFIELD_TOMASI );
-    method_list_.push_back( GRADIENT_DIFF );
-    method_list_.push_back( NON_PARAMETRIC );
+    method_list_.push_back(BIRCHFIELD_TOMASI);
+    method_list_.push_back(CENSUS);
+    method_list_.push_back(DIFFERENCE);
+    method_list_.push_back(GRADIENT_DIFF);
+    method_list_.push_back(NON_PARAMETRIC);
+    method_list_.push_back(HIST_CMP);
   }
 
   //: check values of parameters to flag illegal values
@@ -40,16 +42,50 @@ class betr_pixelwise_change_detection_params : public betr_params
     for( int m = 0; m < method_list_.size(); m++ )
       if( pw_params_.method == method_list_[m] ) method_idx = m;
     root["method"] = method_idx;
+    root["correct_gain_offset"] = pw_params_.correct_gain_offset;
+    root["num_tiles"] = pw_params_.num_tiles;
     root["registration_rad"] = pw_params_.registration_refinement_rad;
     root["change_prior"] = pw_params_.prior_change_prob;
+    root["bt_std"] = pw_params_.bt_std;
+    root["bt_rad"] = pw_params_.bt_rad;
+    root["census_std"] = pw_params_.census_std;
+    root["census_tol"] = pw_params_.census_tol;
+    root["census_rad"] = pw_params_.census_rad;
+    root["grad_std"] = pw_params_.grad_std;
+    root["img_bit_depth"] = pw_params_.img_bit_depth;
+    root["hist_bit_depth"] = pw_params_.hist_bit_depth;
+    root["neighborhood_size"] = pw_params_.neighborhood_size;
+    root["num_bins"] = pw_params_.num_bins;
+    root["grad_mag_on"] = pw_params_.grad_mag_on;
+    root["hist_method"] = pw_params_.hist_method;
+    root["multi_method"] = pw_params_.multi_method;
+    root["pGoodness"] = pw_params_.pGoodness;
+    root["pChange"] = pw_params_.pChange;
   }
 
   virtual void deserialize( Json::Value& root){
     int method_idx = std::min( 
       (int)method_list_.size(), std::max( 0, (int)root["method"].asInt() ) );
-    pw_params_.method = method_list_[method_idx];
+    pw_params_.method = method_list_[method_idx]; 
+    pw_params_.correct_gain_offset = root["correct_gain_offset"].asBool(); 
+    pw_params_.num_tiles = root["num_tiles"].asInt();
     pw_params_.registration_refinement_rad = root["registration_rad"].asInt();
     pw_params_.prior_change_prob = root["change_prior"].asFloat();
+    pw_params_.bt_std = root["bt_std"].asFloat();
+    pw_params_.bt_rad = root["bt_rad"].asInt();
+    pw_params_.census_std = root["census_std"].asFloat();
+    pw_params_.census_tol = root["census_tol"].asInt();
+    pw_params_.census_rad = root["census_rad"].asInt();
+    pw_params_.grad_std = root["grad_std"].asFloat();
+    pw_params_.img_bit_depth = root["img_bit_depth"].asInt();
+    pw_params_.hist_bit_depth = root["hist_bit_depth"].asInt();
+    pw_params_.neighborhood_size = root["neighborhood_size"].asInt();
+    pw_params_.num_bins = root["num_bins"].asInt();
+    pw_params_.grad_mag_on = root["grad_mag_on"].asBool ();
+    pw_params_.hist_method = root["hist_method"].asString();
+    pw_params_.multi_method = root["multi_method"].asString();
+    pw_params_.pGoodness = root["pGoodness"].asFloat();
+    pw_params_.pChange = root["pChange"].asFloat();
   }
 
   //: parameter block

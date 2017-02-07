@@ -32,7 +32,7 @@ class betr_algorithm : public vbl_ref_count
   //: data inputs
   //: reference image(s)
   void set_reference_image(vil_image_resource_sptr const& ref_imgr){ref_rescs_.clear(); ref_rescs_.push_back(ref_imgr);}
-  void set_reference_images(std::vector<vil_image_resource_sptr> const& ref_rescs){ref_rescs_ = ref_rescs;}
+  void set_reference_images(std::vector<vil_image_resource_sptr> const& ref_rescs){ref_rescs_ = ref_rescs;} 
   //: event image - an algorithm processes one event region per event image at a time
   void set_event_image(vil_image_resource_sptr const& evt_imgr){evt_imgr_ = evt_imgr;}
 
