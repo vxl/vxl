@@ -180,10 +180,10 @@ static void test_region_classifier(int argc, char * argv[])
   clasf.compute_iou_cluster_similarity();
   float csim = clasf.compute_partition_quality(clasf.cluster_sim());
   std::map< unsigned, std::map<unsigned, region_sim> > sim_after, sim_after1, sim_after2;
-  unsigned labi = 6868, labj = 6874, lab_new = 15000;
+  unsigned labi = 6869, labj = 6874, lab_new = 15000;
   bool good = clasf.merge_similarity_map(clasf.cluster_sim(), sim_after,labi, labj, lab_new);
   float csim1 = clasf.compute_partition_quality(sim_after);
-  labi = 6869; labj = 15000; lab_new = 15001;
+  labi = 6868; labj = 15000; lab_new = 15001;
   good = clasf.merge_similarity_map(sim_after,sim_after1, labi, labj, lab_new);
   float csim2 = clasf.compute_partition_quality(sim_after1);
   labi = 6864; labj = 13780; lab_new = 15002;

@@ -84,6 +84,21 @@ float sdet_region::int_over_union(vgl_box_2d<float> bb){
   float aunion = vgl_area(bb) +  vgl_area(bbox_) - aint;
   return aint/aunion;
 }
+float sdet_region::int_over_min_area(vgl_box_2d<float> bb){
+  if(!bbox_valid_)
+    this->compute_bbox();
+  if(!bbox_valid_)
+    return 0.0f;
+  vgl_box_2d<float> bint = vgl_intersection<float>(bbox_, bb);
+  if(bint.is_empty())
+    return 0.0f;
+  float aint = vgl_area(bint);
+  float a0 = vgl_area(bbox_), a1 = vgl_area(bb);
+  float min_area = a0;
+  if(min_area>a1)
+    min_area = a1;
+  return aint/min_area;
+}
 bool sdet_region::compute_obox(){
   vnl_float_2 major_dir;
   if (this->Npix() < 4) return false;
