@@ -6,6 +6,7 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vsol/vsol_point_2d.h>
+#include <bsol/bsol_algs.h>
 
 #include <baml/baml_warp.h>
 
@@ -23,7 +24,8 @@ bool betr_pixelwise_change_detection::process() {
   // Get params
   betr_pixelwise_change_detection_params* cd_params =
     dynamic_cast<betr_pixelwise_change_detection_params*>(params_.ptr());
-
+  //std::cout << "multiple_ref_ = " << multiple_ref_ << ", multiple_ref from params = " << cd_params->pw_params_.multiple_ref << "\n";
+  bool multiple_ref_ = cd_params->pw_params_.multiple_ref;
   // Get a bounding box for the event polygon
   vsol_box_2d_sptr evt_bb = evt_evt_poly_->get_bounding_box();
   int bb_minx = evt_bb->get_min_x(), bb_miny = evt_bb->get_min_y();
@@ -119,40 +121,44 @@ bool betr_pixelwise_change_detection::process() {
   i_offset_ = bb_minx; j_offset_ = bb_miny;
 
   // create integral image to find area of highest average probability of change
-  vil_image_view<float> integralIm;
-  integralIm.set_size(evt_change_prob.ni() + 1, evt_change_prob.nj() + 1);
-  integralIm.fill(0.0);
+  vil_image_view<float> integral_im;
+  integral_im.set_size(bb_width + 1, bb_height + 1);
+  integral_im.fill(0.0);
+  // create integral image of pixels in polygon to use for normalization to find area of highest average probability of change
+  vil_image_view<float> integral_im_poly;
+  integral_im_poly.set_size(bb_width + 1, bb_height + 1);
+  integral_im_poly.fill(0.0);
 
-  // Compute average probability over the area
-  float psum = 0.0f;
-  int pcount = 0;
+  //create vgl_polygon so that we can check if each pixel is in the polygon using with vgl contains function
+  vgl_polygon<double> evt_vgl_poly = bsol_algs::vgl_from_poly(evt_evt_poly_);
+
+
+  // create integral images
   for( int y = 0; y < bb_height; y++ ){
-    for( int x = 0; x < bb_width; x++ ){
-      // TODO: CHECK THAT EACH PIXEL IS IN POLYGON
-      integralIm( x + 1, y + 1 ) = evt_change_prob(x, y) + integralIm(x, y + 1) + integralIm(x + 1, y) - integralIm(x, y);
-      psum += evt_change_prob(x,y);
-      pcount++;
+    for (int x = 0; x < bb_width; x++) {
+      if (!evt_vgl_poly.contains(x + bb_minx, y + bb_miny)) {
+        integral_im_poly(x + 1, y + 1) = 0 + integral_im_poly(x, y + 1) + integral_im_poly(x + 1, y) - integral_im_poly(x, y);
+        evt_change_prob(x, y) = 0; // outside of the polygon there should be 0 probability of change
+      }
+      else {
+        integral_im_poly(x + 1, y + 1) = 1 + integral_im_poly(x, y + 1) + integral_im_poly(x + 1, y) - integral_im_poly(x, y);
+      }
+      integral_im( x + 1, y + 1 ) = evt_change_prob(x, y) + integral_im(x, y + 1) + integral_im(x + 1, y) - integral_im(x, y);
     }
   }
 
   // find region of highest probability
-  int eventHeight = 20;
-  int eventWidth = 20;
-  int bestX; // bestX, bestY correspond to the upper left hand corner of the best eventHeight x eventWidth area
-  int bestY;
-  float best = 0.0;
-  std::cout << "max x,y = " << evt_change_prob.ni() - eventWidth << ", " << evt_change_prob.nj() - eventHeight << "\n";
+  int eventHeight = cd_params->pw_params_.event_height;
+  int eventWidth = cd_params->pw_params_.event_width;
+  avg_prob_ = 0.0;
   for (int x = 1; x < evt_change_prob.ni() - eventWidth; x++) {
     for (int y = 1; y < evt_change_prob.nj() - eventHeight; y++) {
-      if (integralIm(x, y) + integralIm(x + eventWidth, y + eventHeight) - integralIm(x, y + eventHeight) - integralIm(x + eventWidth, y) > best) {
-        best = integralIm(x, y) + integralIm(x + eventWidth, y + eventHeight) - integralIm(x, y + eventHeight) - integralIm(x + eventWidth, y);
-        bestX = x - 1; // minus 1 because we want index with respect to evt_change_prob, not integralIm
-        bestY = y - 1;
+      float cur_average = (integral_im(x, y) + integral_im(x + eventWidth, y + eventHeight) - integral_im(x, y + eventHeight) - integral_im(x + eventWidth, y)) /
+        (integral_im_poly(x, y) + integral_im_poly(x + eventWidth, y + eventHeight) - integral_im_poly(x, y + eventHeight) - integral_im_poly(x + eventWidth, y));
+      if (cur_average > avg_prob_) {
+        avg_prob_ = cur_average;
       }
     }
   }
-
-  avg_prob_ = psum/pcount;
-
   return true; 
 }

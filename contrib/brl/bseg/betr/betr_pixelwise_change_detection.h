@@ -20,7 +20,6 @@ public:
   betr_pixelwise_change_detection(): 
     betr_algorithm("pixelwise_change_detection"),
     avg_prob_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){
-      multiple_ref_= true;//should be changed to true when you update the algorithm (JLM)
       params_ =  new betr_pixelwise_change_detection_params();
   }
 

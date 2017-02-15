@@ -50,10 +50,14 @@ struct baml_change_detection_params {
 
   //: Prior on change probability, will determine the scale of the posterior
   // change distribution.
-  float prior_change_prob;
+  float pChange;
+
+  //: Event trigger parameters
+  int event_width;
+  int event_height;
 
   // Birchfield-Tomasi specific parameters
-  float bt_std;
+ // float bt_std;
   int bt_rad;
 
   // Census parameters
@@ -62,12 +66,9 @@ struct baml_change_detection_params {
   //   Set to 0 for textbook census implementation.
   // census_rad: length of the census kernal will be 2*census_rad+1. Must be 
   //    1,2,or 3.
-  float census_std;
   int census_tol;
   int census_rad; 
 
-  // Gradient parameters
-  float grad_std;
 
   // Non-parametric parameters
   int img_bit_depth;
@@ -89,10 +90,9 @@ struct baml_change_detection_params {
   // Multi-image parameters
   // multi_method: multi-image fusion method ("product", "sum", "minimum")
   // pGoodness: probability of a given image being "good"
-  // pChange: probability of any given pixel being a changed pixel 
+  bool multiple_ref;
   std::string multi_method;
   float pGoodness;
-  float pChange;
 
   //: Default parameters
   baml_change_detection_params() :
@@ -100,19 +100,18 @@ struct baml_change_detection_params {
     correct_gain_offset(true),
     num_tiles(0),
     registration_refinement_rad(0),
-    prior_change_prob(0.01f), // try increasing this for BT 0.01f
-    bt_std(20.0f), // or this 20.0f
+    event_width(20),
+    event_height(20),
     bt_rad(1),
-    census_std(0.3f),
     census_tol(10),
     census_rad(3),
-    grad_std(3.0f), // 30.0f
     img_bit_depth(12),
     hist_bit_depth(10),
     neighborhood_size(11),
     num_bins(25), 
     grad_mag_on(false),
     hist_method("bhattacharyya"),
+    multiple_ref(true),
     multi_method("sum"),
     pGoodness(0.8),
     pChange(0.005) {}

@@ -31,7 +31,7 @@ bool baml_change_detection::detect(
   bool cd_success = baml_change_detection::detect_internal(img_target, img_ref, valid, change_prob_target);
   if (!cd_success) return false;
   // Convert likelihood into probability
-  baml_sigmoid(change_prob_target, change_prob_target, params_.prior_change_prob);
+  baml_sigmoid(change_prob_target, change_prob_target, params_.pChange);
   return true;
 }
 
@@ -253,7 +253,7 @@ baml_change_detection::multi_image_detect(
     valid_crop_vec.push_back(cur_valid_crop);
   }
 
-  params_.registration_refinement_rad = 0; // multi image change detection doesn't have alignment functionality
+  params_.registration_refinement_rad = 0; // We've already aligned our images
 
   vil_image_view<vxl_byte> change_vis;
   for (int i = 0; i < img_ref_crop_vec.size(); i++) {
@@ -301,6 +301,7 @@ baml_change_detection::multi_image_detect(
     std::cerr << "Multi-image fusion method not recognized";
     return false;
   }
+
   // return a probability map that is the same size as the target input. Any pixels that were cropped
   // for image alignment refinement are 0 probability
   change_prob_target.deep_copy(change_prob_target_big);
@@ -321,9 +322,6 @@ baml_change_detection::detect_bt(
   if (img_ref.ni() != width || img_ref.nj() != height ||
     valid_ref.ni() != width || valid_ref.nj() != height)
     return false;
-
-  float gauss_var = params_.bt_std*params_.bt_std;
-  float gauss_norm = log(1.0f / (params_.bt_std*sqrt(2 * 3.14159f) / 255.0f));
 
   // Initialize output image
   tar_lh.set_size(width, height);
@@ -349,12 +347,26 @@ baml_change_detection::detect_bt(
     img_tar, img_ref, score, params_.bt_rad))
     return false;
 
+  vil_image_view<float> score_fl;
+  score_fl.set_size(width, height);
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      score_fl(x, y) = (float)score(x, y);
+    }
+  }
+  // convert BT scores into probabilities
+  float sigma = baml_sigma(score_fl);
+  vil_image_view<float> prob;
+  baml_gaussian(score_fl, prob, sigma);
+
   // Convert BT score to log likelihood ratio
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
-      float lbg = gauss_norm - score(x, y)*(float)score(x, y) / gauss_var;
-      tar_lh(x, y) = lfg - lbg;
+      tar_lh(x, y) = lfg - log(prob(x, y));
+      if (isinf(tar_lh(x, y))) {
+        tar_lh(x, y) = lfg - log(0.00000000001);
+      }
     }
   }
   return true;
@@ -379,11 +391,6 @@ baml_change_detection::detect_census(
   if (params_.census_rad > 3) params_.census_rad = 3;
   int census_diam = params_.census_rad * 2 + 1;
 
-  // Get parameters for background Gaussian distribution
-  float gauss_std = params_.census_std*census_diam*census_diam;
-  float gauss_var = gauss_std*gauss_std;
-  float gauss_norm = log(1.0f / (gauss_std*sqrt(2 * 3.14159f)));
-
   // Pre-build a census lookup table
   unsigned char lut[256];
   baml_generate_bit_set_lut(lut);
@@ -404,7 +411,9 @@ baml_change_detection::detect_census(
   baml_compute_census_img(
     img_ref, census_diam, census_ref, salience_ref, params_.census_tol);
 
-  // Compute hamming distance between images
+  // Compute hamming distance between images and create score image
+  vil_image_view<float> score;
+  score.set_size(width, height);
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
@@ -413,12 +422,28 @@ baml_change_detection::detect_census(
         census_tar(x, y), census_ref(x, y),
         salience_tar(x, y), salience_ref(x, y));
 
-      unsigned char ham = baml_compute_hamming_lut(cen_diff, lut, only_32_bits);
-      float lbg = gauss_norm - ham*(float)ham / gauss_var;
+      score(x,y) = (float)baml_compute_hamming_lut(cen_diff, lut, only_32_bits);
+    }
+  }
+
+  // convert BT scores into probabilities
+  float sigma = baml_sigma(score);
+  // Get parameters for background Gaussian distribution
+  float gauss_std = sigma*census_diam*census_diam;
+  float gauss_var = gauss_std*gauss_std;
+  float gauss_norm = log(1.0f / (gauss_std*sqrt(2 * 3.14159f)));
+
+  // Convert BT score to log likelihood ratio
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      if (valid_ref(x, y) == false) continue;
+      float lbg = gauss_norm - score(x,y)*(float)score(x,y) / gauss_var;
 
       tar_lh(x, y) = lfg - lbg;
     }
   }
+  return true;
+
   return true;
 }
 
@@ -495,23 +520,21 @@ baml_change_detection::detect_gradient(
     valid_ref.ni() != width || valid_ref.nj() != height)
     return false;
 
-  // Get parameters for background Gaussian distribution
-  float gauss_var = params_.grad_std*params_.grad_std;
-  float gauss_norm = log(1.0f / (params_.grad_std*sqrt(2 * 3.14159f)));
 
   // Initialize output image
   tar_lh.set_size(width, height);
   tar_lh.fill(1.0f);
 
-  // Compute foreground likelihood assuming uniform distribution on foreground
-  float lfg = log(1.0f / (4 * params_.grad_std));
+
 
   // Compute gradient images
   vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
   vil_sobel_3x3<vxl_uint_16, float>(img_tar, grad_x_tar, grad_y_tar);
   vil_sobel_3x3<vxl_uint_16, float>(img_ref, grad_x_ref, grad_y_ref);
 
-  // Compute distance between images
+  // Compute distance between images and create score image
+  vil_image_view<float> score;
+  score.set_size(width, height);
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
@@ -527,21 +550,37 @@ baml_change_detection::detect_gradient(
       if (grad_mag_tar > mag_tol && grad_mag_ref > mag_tol)
         angle_diff = acos(grad_ip / (grad_mag_tar*grad_mag_ref));
 
-      //float grad_diff = pow( grad_mag_tar - grad_mag_ref, 2 );
+      //score(x,y) = pow( grad_mag_tar - grad_mag_ref, 2 );
 
-      //float grad_diff = pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 );
+      //score(x,y) = pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 );
 
-      float grad_diff = grad_mag_tar*grad_mag_ref - grad_ip;
+      score(x, y) = grad_mag_tar*grad_mag_ref - grad_ip;
 
-      //float grad_diff = pow( std::max( grad_mag_tar, grad_mag_ref )*sin(angle_diff), 2 );
-      //float grad_diff = pow( 0.5f*( grad_mag_tar+grad_mag_ref )*fabs( sin(angle_diff) ), 2 );
-
-      // Convert to likelihood ratio
-      float lbg = gauss_norm - grad_diff / gauss_var;
-      tar_lh(x, y) = lfg - lbg;
+      //score(x,y) = pow( std::max( grad_mag_tar, grad_mag_ref )*sin(angle_diff), 2 );
+      //score(x,y) = pow( 0.5f*( grad_mag_tar+grad_mag_ref )*fabs( sin(angle_diff) ), 2 );
     }
   }
 
+  // Covert score into probability
+  float sigma = baml_sigma(score);
+  vil_image_view<float> prob;
+  baml_gaussian(score, prob, sigma);
+
+  // Get parameters for background Gaussian distribution
+  float gauss_var = sigma*sigma;
+  float gauss_norm = log(1.0f / (sigma*sqrt(2 * 3.14159f)));
+
+  // Compute foreground likelihood assuming uniform distribution on foreground
+  float lfg = log(1.0f / (4 * sigma));
+  // Convert probability to log likelihood ratio
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      if (valid_ref(x, y) == false) continue;
+      // Convert to likelihood ratio
+      float lbg = gauss_norm - score(x, y) / gauss_var;
+      tar_lh(x, y) = lfg - lbg;
+    }
+  }
   return true;
 }
 

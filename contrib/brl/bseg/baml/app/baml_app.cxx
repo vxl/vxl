@@ -252,57 +252,57 @@ int main(int argc, char * argv[])
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // CHANGE DETECTION ON ALREADY CROPPED IMAGES
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//std::string img_dir = "C:/Users/sca0161/Documents/data/mischief reef/usable images/";
-//// declare all variables we will be using
-//std::string img_name, img_file, ref_file, ref_name;
-//vil_image_resource_sptr tarr, refr;
-//vil_image_view<vxl_uint_16> tar, ref;
-//vil_image_view<vxl_byte> score_in, img_in, overlay_img;
-//// load target
-//img_file = (img_dir + "tar_20161110_015817_0e0d_1B_Analytic_DN.tif").c_str();
-//tarr = vil_load_image_resource(img_file.c_str());
-//tar = tarr->get_view();
-//for (vul_file_iterator fn = (img_dir + "20161026*.tif").c_str(); fn; ++fn) {
-//  ref_file = fn();
-//  ref_name = vul_file::strip_directory(ref_file);
-//  std::cout << ref_name << "\n";
-//  // Load reference
-//  refr = vil_load_image_resource(ref_file.c_str());
-//  ref = refr->get_view();
-//
-//  // Make valid image
-//  vil_image_view<bool> ref_valid;
-//  ref_valid.set_size(tar.ni(), tar.nj());
-//  ref_valid.fill(true);
-//  for (int y = 0; y < tar.nj(); y++) {
-//    for (int x = 0; x < tar.ni(); x++) {
-//      if (tar(x, y) == 0 || tar(x, y) == 0) ref_valid(x, y) = false;
-//    }
-//  }
-//  // Detect changes
-//  vil_image_view<float> tar_prob;
-//  baml_change_detection_params params;
-//  params.method = NON_PARAMETRIC;
-//  params.correct_gain_offset = true;
-//  params.num_tiles = 5;
-//
-//  baml_change_detection cd(params);
-//  cd.detect(tar, ref, ref_valid, tar_prob);
-//
-//  int width = tar_prob.ni();
-//  int height = tar_prob.nj();
-//  float max = FLT_MIN;
-//  float min = FLT_MAX;
-//  for (int x = 0; x < width; x++) {
-//    for (int y = 0; y < height; y++) {
-//      max = std::max(max, tar_prob(x, y));
-//      min = std::min(min, tar_prob(x, y));
-//    }
-//  }
-//  vil_image_view<vxl_byte> change_vis;
-//  vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-//  vil_save(change_vis, ("C:/Users/sca0161/Documents/data/mischief reef/usable images/output/non parametric/tiles" + std::to_string(params.num_tiles) + "_" + ref_name).c_str());
-//}
+std::string img_dir = "C:/Users/sca0161/Documents/data/mischief reef/usable images/";
+// declare all variables we will be using
+std::string img_name, img_file, ref_file, ref_name;
+vil_image_resource_sptr tarr, refr;
+vil_image_view<vxl_uint_16> tar, ref;
+vil_image_view<vxl_byte> score_in, img_in, overlay_img;
+// load target
+img_file = (img_dir + "tar_20161110_015817_0e0d_1B_Analytic_DN.tif").c_str();
+tarr = vil_load_image_resource(img_file.c_str());
+tar = tarr->get_view();
+for (vul_file_iterator fn = (img_dir + "20161026*.tif").c_str(); fn; ++fn) {
+  ref_file = fn();
+  ref_name = vul_file::strip_directory(ref_file);
+  std::cout << ref_name << "\n";
+  // Load reference
+  refr = vil_load_image_resource(ref_file.c_str());
+  ref = refr->get_view();
+
+  // Make valid image
+  vil_image_view<bool> ref_valid;
+  ref_valid.set_size(tar.ni(), tar.nj());
+  ref_valid.fill(true);
+  for (int y = 0; y < tar.nj(); y++) {
+    for (int x = 0; x < tar.ni(); x++) {
+      if (tar(x, y) == 0 || tar(x, y) == 0) ref_valid(x, y) = false;
+    }
+  }
+  // Detect changes
+  vil_image_view<float> tar_prob;
+  baml_change_detection_params params;
+  params.method = NON_PARAMETRIC;
+  params.correct_gain_offset = true;
+  params.num_tiles = 5;
+
+  baml_change_detection cd(params);
+  cd.detect(tar, ref, ref_valid, tar_prob);
+
+  int width = tar_prob.ni();
+  int height = tar_prob.nj();
+  float max = FLT_MIN;
+  float min = FLT_MAX;
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      max = std::max(max, tar_prob(x, y));
+      min = std::min(min, tar_prob(x, y));
+    }
+  }
+  vil_image_view<vxl_byte> change_vis;
+  vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  vil_save(change_vis, ("C:/Users/sca0161/Documents/data/mischief reef/usable images/output/non parametric/tiles" + std::to_string(params.num_tiles) + "_" + ref_name).c_str());
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SINGLE-IMAGE CHANGE DETECTION ON ALREADY CROPPED IMAGES WITH A VARIETY OF PARAMETERS
@@ -411,219 +411,219 @@ int main(int argc, char * argv[])
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MULTI-IMAGE CHANGE DETECTION ON ALREADY CROPPED IMAGES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //std::string img_dir = "C:/Users/sca0161/Documents/data/hamadan/hamandan field/";
-  std::string img_dir = "C:/Users/sca0161/Documents/data/mischief reef/usable images/";
-  // declare all variables we will be using
-  std::string img_name, img_file, ref_file, ref_name;
-  vil_image_resource_sptr tarr, refr;
-  vil_image_view<vxl_uint_16> tar;
-  vil_image_view<vxl_byte> score_in, img_in, overlay_img;
-  // load target
-  img_file = (img_dir + "tar_20161110_015817_0e0d_1B_Analytic_DN.tif").c_str();
-  tarr = vil_load_image_resource(img_file.c_str());
-  tar = tarr->get_view();
-  int i = 0;
-  /* vil_image_view<vxl_uint_16> *ref = new vil_image_view<vxl_uint_16>[num_ref];
-   vil_image_view<bool> *ref_valid = new vil_image_view<bool>[num_ref];*/
-  std::vector<vil_image_view<vxl_uint_16>> ref;
-  std::vector<vil_image_view<bool>> ref_valid;
-  for (vul_file_iterator fn = (img_dir + "20*.tif").c_str(); fn; ++fn) {
-    //for (vul_file_iterator fn = (img_dir + "20*.tif").c_str(); fn; ++fn) {
-    ref_file = fn();
-    ref_name = vul_file::strip_directory(ref_file);
-    std::cout << ref_name << "\n";
-    // Load reference
-    refr = vil_load_image_resource(ref_file.c_str());
-    //ref[i] = refr->get_view();
-    ref.push_back(refr->get_view());
-    // make valid image
-    vil_image_view<bool> a;
-    ref_valid.push_back(a);
-    ref_valid[i].set_size(tar.ni(), tar.nj());
-    ref_valid[i].fill(true);
-    for (int y = 0; y < tar.nj(); y++) {
-      for (int x = 0; x < tar.ni(); x++) {
-        if (tar(x, y) == 0 || ref[i](x, y) == 0) ref_valid[i](x, y) = false;
-      }
-    }
-    i++;
-  }
-  // Detect changes
-  vil_image_view<float> tar_prob;
-  baml_change_detection_params params;
-  params.correct_gain_offset = true;
-  std::vector<std::string> fusion_method, hist_method;
-  std::vector<int> num_tiles = { 0, 5, 10 };
-  std::vector<int> bt_rad = { 1, 3, 5 };
-  std::vector<int> census_rad = { 1, 2, 3 };
-  std::vector<int> neighborhood = { 9, 11, 19, 25 };
-  std::vector<int> num_bins = { 18, 25, 35, 50 };
-  fusion_method.push_back("sum"); fusion_method.push_back("product"); fusion_method.push_back("minimum");
-  hist_method.push_back("bhattacharyya"); hist_method.push_back("jensen shannon"); hist_method.push_back("intersection");
-  int width = tar.ni();
-  int height = tar.nj();
-  float max, min;
-  vil_image_view<vxl_byte> change_vis;
-  // ---------------------------------gain/offset correction techniques----------------------------------
-  params.correct_gain_offset = true;
-  for (int fusion = 0; fusion < fusion_method.size(); fusion++) {
-    params.multi_method = fusion_method[fusion];
-    for (int tile = 0; tile < num_tiles.size(); tile++) {
-      params.num_tiles = num_tiles[tile];
-      // Difference with various gain/offset tiles numbers and fusion method
-      params.method = DIFFERENCE;
-      baml_change_detection cd(params);
-      cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
-      max = 0;
-      min = FLT_MAX;
-      for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
-          max = std::max(max, tar_prob(x, y));
-          min = std::min(min, tar_prob(x, y));
-        }
-      }
-      vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-      vil_save(change_vis, (img_dir + "output/fusion/difference_gainTiles" + std::to_string(params.num_tiles) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
+  ////std::string img_dir = "C:/Users/sca0161/Documents/data/hamadan/hamandan field/";
+  //std::string img_dir = "C:/Users/sca0161/Documents/data/mischief reef/usable images/";
+  //// declare all variables we will be using
+  //std::string img_name, img_file, ref_file, ref_name;
+  //vil_image_resource_sptr tarr, refr;
+  //vil_image_view<vxl_uint_16> tar;
+  //vil_image_view<vxl_byte> score_in, img_in, overlay_img;
+  //// load target
+  //img_file = (img_dir + "tar_20161110_015817_0e0d_1B_Analytic_DN.tif").c_str();
+  //tarr = vil_load_image_resource(img_file.c_str());
+  //tar = tarr->get_view();
+  //int i = 0;
+  ///* vil_image_view<vxl_uint_16> *ref = new vil_image_view<vxl_uint_16>[num_ref];
+  // vil_image_view<bool> *ref_valid = new vil_image_view<bool>[num_ref];*/
+  //std::vector<vil_image_view<vxl_uint_16>> ref;
+  //std::vector<vil_image_view<bool>> ref_valid;
+  //for (vul_file_iterator fn = (img_dir + "20*.tif").c_str(); fn; ++fn) {
+  //  //for (vul_file_iterator fn = (img_dir + "20*.tif").c_str(); fn; ++fn) {
+  //  ref_file = fn();
+  //  ref_name = vul_file::strip_directory(ref_file);
+  //  std::cout << ref_name << "\n";
+  //  // Load reference
+  //  refr = vil_load_image_resource(ref_file.c_str());
+  //  //ref[i] = refr->get_view();
+  //  ref.push_back(refr->get_view());
+  //  // make valid image
+  //  vil_image_view<bool> a;
+  //  ref_valid.push_back(a);
+  //  ref_valid[i].set_size(tar.ni(), tar.nj());
+  //  ref_valid[i].fill(true);
+  //  for (int y = 0; y < tar.nj(); y++) {
+  //    for (int x = 0; x < tar.ni(); x++) {
+  //      if (tar(x, y) == 0 || ref[i](x, y) == 0) ref_valid[i](x, y) = false;
+  //    }
+  //  }
+  //  i++;
+  //}
+  //// Detect changes
+  //vil_image_view<float> tar_prob;
+  //baml_change_detection_params params;
+  //params.correct_gain_offset = true;
+  //std::vector<std::string> fusion_method, hist_method;
+  //std::vector<int> num_tiles = { 0, 5, 10 };
+  //std::vector<int> bt_rad = { 1, 3, 5 };
+  //std::vector<int> census_rad = { 1, 2, 3 };
+  //std::vector<int> neighborhood = { 9, 11, 19, 25 };
+  //std::vector<int> num_bins = { 18, 25, 35, 50 };
+  //fusion_method.push_back("sum"); fusion_method.push_back("product"); fusion_method.push_back("minimum");
+  //hist_method.push_back("bhattacharyya"); hist_method.push_back("jensen shannon"); hist_method.push_back("intersection");
+  //int width = tar.ni();
+  //int height = tar.nj();
+  //float max, min;
+  //vil_image_view<vxl_byte> change_vis;
+  //// ---------------------------------gain/offset correction techniques----------------------------------
+  //params.correct_gain_offset = true;
+  //for (int fusion = 0; fusion < fusion_method.size(); fusion++) {
+  //  params.multi_method = fusion_method[fusion];
+  //  for (int tile = 0; tile < num_tiles.size(); tile++) {
+  //    params.num_tiles = num_tiles[tile];
+  //    // Difference with various gain/offset tiles numbers and fusion method
+  //    params.method = DIFFERENCE;
+  //    baml_change_detection cd(params);
+  //    cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
+  //    max = 0;
+  //    min = FLT_MAX;
+  //    for (int x = 0; x < width; x++) {
+  //      for (int y = 0; y < height; y++) {
+  //        max = std::max(max, tar_prob(x, y));
+  //        min = std::min(min, tar_prob(x, y));
+  //      }
+  //    }
+  //    vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  //    vil_save(change_vis, (img_dir + "output/fusion/difference_gainTiles" + std::to_string(params.num_tiles) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
 
-      ////histogram methods
-      //params.method = HIST_CMP;
-      //for (int neighbor = 0; neighbor < neighborhood.size(); neighbor++) {
-      //  params.neighborhood_size = neighborhood[neighbor];
-      //  for (int nbin = 0; nbin < num_bins.size(); nbin++) {
-      //    params.num_bins = num_bins[nbin];
-      //    // Histogram intensity methods with various gain/offset tiles numbers, neighborhood size, histogram bin numbers and fusion method
-      //    for (int hist = 0; hist < hist_method.size(); hist++) {
-      //      params.hist_method = hist_method[hist];
-      //      baml_change_detection cd(params);
-      //      cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
-      //      max = 0;
-      //      min = FLT_MAX;
-      //      for (int x = 0; x < width; x++) {
-      //        for (int y = 0; y < height; y++) {
-      //          max = std::max(max, tar_prob(x, y));
-      //          min = std::min(min, tar_prob(x, y));
-      //        }
-      //      }
-      //      vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-      //      vil_save(change_vis, (img_dir + "output/fusion/" + hist_method[hist] + "_gainTiles" + std::to_string(params.num_tiles) + "_neighborhood" + std::to_string(neighborhood[neighbor]) + "_histBin" + std::to_string(num_bins[nbin]) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
-      //    }
-      //  }
-      //}
-      
+  //    ////histogram methods
+  //    //params.method = HIST_CMP;
+  //    //for (int neighbor = 0; neighbor < neighborhood.size(); neighbor++) {
+  //    //  params.neighborhood_size = neighborhood[neighbor];
+  //    //  for (int nbin = 0; nbin < num_bins.size(); nbin++) {
+  //    //    params.num_bins = num_bins[nbin];
+  //    //    // Histogram intensity methods with various gain/offset tiles numbers, neighborhood size, histogram bin numbers and fusion method
+  //    //    for (int hist = 0; hist < hist_method.size(); hist++) {
+  //    //      params.hist_method = hist_method[hist];
+  //    //      baml_change_detection cd(params);
+  //    //      cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
+  //    //      max = 0;
+  //    //      min = FLT_MAX;
+  //    //      for (int x = 0; x < width; x++) {
+  //    //        for (int y = 0; y < height; y++) {
+  //    //          max = std::max(max, tar_prob(x, y));
+  //    //          min = std::min(min, tar_prob(x, y));
+  //    //        }
+  //    //      }
+  //    //      vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  //    //      vil_save(change_vis, (img_dir + "output/fusion/" + hist_method[hist] + "_gainTiles" + std::to_string(params.num_tiles) + "_neighborhood" + std::to_string(neighborhood[neighbor]) + "_histBin" + std::to_string(num_bins[nbin]) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
+  //    //    }
+  //    //  }
+  //    //}
+  //    
 
-      // Census with various gain/offset tiles numbers, radius size, and fusion method
-      params.method = CENSUS;
-      for (int radius = 0; radius < census_rad.size(); radius++) {
-        params.census_rad = census_rad[radius];
-        baml_change_detection cd(params);
-        cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
-        max = 0;
-        min = FLT_MAX;
-        for (int x = 0; x < width; x++) {
-          for (int y = 0; y < height; y++) {
-            max = std::max(max, tar_prob(x, y));
-            min = std::min(min, tar_prob(x, y));
-          }
-        }
-        vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-        vil_save(change_vis, (img_dir + "output/fusion/census_gainTiles" + std::to_string(params.num_tiles) + "_radius" + std::to_string(census_rad[radius]) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
-      }
+  //    // Census with various gain/offset tiles numbers, radius size, and fusion method
+  //    params.method = CENSUS;
+  //    for (int radius = 0; radius < census_rad.size(); radius++) {
+  //      params.census_rad = census_rad[radius];
+  //      baml_change_detection cd(params);
+  //      cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
+  //      max = 0;
+  //      min = FLT_MAX;
+  //      for (int x = 0; x < width; x++) {
+  //        for (int y = 0; y < height; y++) {
+  //          max = std::max(max, tar_prob(x, y));
+  //          min = std::min(min, tar_prob(x, y));
+  //        }
+  //      }
+  //      vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  //      vil_save(change_vis, (img_dir + "output/fusion/census_gainTiles" + std::to_string(params.num_tiles) + "_radius" + std::to_string(census_rad[radius]) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
+  //    }
 
-      // BT with various gain/offset tiles numbers, radius size and fusion method
-      params.method = BIRCHFIELD_TOMASI;
-      for (int radius = 0; radius < bt_rad.size(); radius++) {
-        params.bt_rad = bt_rad[radius];
-        baml_change_detection cd(params);
-        cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
-        max = 0;
-        min = FLT_MAX;
-        for (int x = 0; x < width; x++) {
-          for (int y = 0; y < height; y++) {
-            max = std::max(max, tar_prob(x, y));
-            min = std::min(min, tar_prob(x, y));
-          }
-        }
-        vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-        vil_save(change_vis, (img_dir + "output/fusion/BT_gainTiles" + std::to_string(params.num_tiles) + "_radius" + std::to_string(bt_rad[radius]) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
-      }
+  //    // BT with various gain/offset tiles numbers, radius size and fusion method
+  //    params.method = BIRCHFIELD_TOMASI;
+  //    for (int radius = 0; radius < bt_rad.size(); radius++) {
+  //      params.bt_rad = bt_rad[radius];
+  //      baml_change_detection cd(params);
+  //      cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
+  //      max = 0;
+  //      min = FLT_MAX;
+  //      for (int x = 0; x < width; x++) {
+  //        for (int y = 0; y < height; y++) {
+  //          max = std::max(max, tar_prob(x, y));
+  //          min = std::min(min, tar_prob(x, y));
+  //        }
+  //      }
+  //      vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  //      vil_save(change_vis, (img_dir + "output/fusion/BT_gainTiles" + std::to_string(params.num_tiles) + "_radius" + std::to_string(bt_rad[radius]) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
+  //    }
 
-      // Non parametric with various gain/offset tiles numbers and fusion method
-      params.method = NON_PARAMETRIC;
-      baml_change_detection cd1(params);
-      cd1.multi_image_detect(tar, ref, ref_valid, tar_prob);
-      max = 0;
-      min = FLT_MAX;
-      for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
-          max = std::max(max, tar_prob(x, y));
-          min = std::min(min, tar_prob(x, y));
-        }
-      }
-      vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-      vil_save(change_vis, (img_dir + "output/fusion/non parametric_gainTiles" + std::to_string(params.num_tiles) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
-    }
-  }
+  //    // Non parametric with various gain/offset tiles numbers and fusion method
+  //    params.method = NON_PARAMETRIC;
+  //    baml_change_detection cd1(params);
+  //    cd1.multi_image_detect(tar, ref, ref_valid, tar_prob);
+  //    max = 0;
+  //    min = FLT_MAX;
+  //    for (int x = 0; x < width; x++) {
+  //      for (int y = 0; y < height; y++) {
+  //        max = std::max(max, tar_prob(x, y));
+  //        min = std::min(min, tar_prob(x, y));
+  //      }
+  //    }
+  //    vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  //    vil_save(change_vis, (img_dir + "output/fusion/non parametric_gainTiles" + std::to_string(params.num_tiles) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
+  //  }
+  //}
 
 
-  //// ---------------------------------------gradient based techniques------------------------------------------------------
-  params.correct_gain_offset = false;
-  for (int fusion = 0; fusion < fusion_method.size(); fusion++) {
-    params.multi_method = fusion_method[fusion];
-    // Gradient Difference with various gain/offset tiles numbers and fusion method
-    params.method = GRADIENT_DIFF;
-    baml_change_detection cd(params);
-    cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
-    max = 0;
-    min = FLT_MAX;
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        max = std::max(max, tar_prob(x, y));
-        min = std::min(min, tar_prob(x, y));
-      }
-    }
-    vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-    vil_save(change_vis, (img_dir + "output/fusion/grad_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
+  ////// ---------------------------------------gradient based techniques------------------------------------------------------
+  //params.correct_gain_offset = false;
+  //for (int fusion = 0; fusion < fusion_method.size(); fusion++) {
+  //  params.multi_method = fusion_method[fusion];
+  //  // Gradient Difference with various gain/offset tiles numbers and fusion method
+  //  params.method = GRADIENT_DIFF;
+  //  baml_change_detection cd(params);
+  //  cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
+  //  max = 0;
+  //  min = FLT_MAX;
+  //  for (int x = 0; x < width; x++) {
+  //    for (int y = 0; y < height; y++) {
+  //      max = std::max(max, tar_prob(x, y));
+  //      min = std::min(min, tar_prob(x, y));
+  //    }
+  //  }
+  //  vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  //  vil_save(change_vis, (img_dir + "output/fusion/grad_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
 
-    // Non parametric with various gain/offset tiles numbers and fusion method
-    params.method = NON_PARAMETRIC;
-    baml_change_detection cd2(params);
-    cd2.multi_image_detect(tar, ref, ref_valid, tar_prob);
-    max = 0;
-    min = FLT_MAX;
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        max = std::max(max, tar_prob(x, y));
-        min = std::min(min, tar_prob(x, y));
-      }
-    }
-    vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-    vil_save(change_vis, (img_dir + "output/fusion/non parametric_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
+  //  // Non parametric with various gain/offset tiles numbers and fusion method
+  //  params.method = NON_PARAMETRIC;
+  //  baml_change_detection cd2(params);
+  //  cd2.multi_image_detect(tar, ref, ref_valid, tar_prob);
+  //  max = 0;
+  //  min = FLT_MAX;
+  //  for (int x = 0; x < width; x++) {
+  //    for (int y = 0; y < height; y++) {
+  //      max = std::max(max, tar_prob(x, y));
+  //      min = std::min(min, tar_prob(x, y));
+  //    }
+  //  }
+  //  vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  //  vil_save(change_vis, (img_dir + "output/fusion/non parametric_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
 
-    //// Histogram gradient methods with various gain/offset tiles numbers, neighborhood size, histogram bin numbers and fusion method
-    //params.method = HIST_CMP;
-    //params.grad_mag_on = true;
-    //for (int neighbor = 0; neighbor < neighborhood.size(); neighbor++) {
-    //  params.neighborhood_size = neighborhood[neighbor];
-    //  for (int nbin = 0; nbin < num_bins.size(); nbin++) {
-    //    params.num_bins = num_bins[nbin];
-    //    for (int hist = 0; hist < hist_method.size(); hist++) {
-    //      params.hist_method = hist_method[hist];
-    //      baml_change_detection cd(params);
-    //      cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
-    //      max = 0;
-    //      min = FLT_MAX;
-    //      for (int x = 0; x < width; x++) {
-    //        for (int y = 0; y < height; y++) {
-    //          max = std::max(max, tar_prob(x, y));
-    //          min = std::min(min, tar_prob(x, y));
-    //        }
-    //      }
-    //      vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-    //      vil_save(change_vis, (img_dir + "output/fusion/" + hist_method[hist] + "_neighborhood" + std::to_string(neighborhood[neighbor]) + "_histBin" + std::to_string(num_bins[nbin]) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
-    //    }
-    //  }
-    //}
-  }
+  //  //// Histogram gradient methods with various gain/offset tiles numbers, neighborhood size, histogram bin numbers and fusion method
+  //  //params.method = HIST_CMP;
+  //  //params.grad_mag_on = true;
+  //  //for (int neighbor = 0; neighbor < neighborhood.size(); neighbor++) {
+  //  //  params.neighborhood_size = neighborhood[neighbor];
+  //  //  for (int nbin = 0; nbin < num_bins.size(); nbin++) {
+  //  //    params.num_bins = num_bins[nbin];
+  //  //    for (int hist = 0; hist < hist_method.size(); hist++) {
+  //  //      params.hist_method = hist_method[hist];
+  //  //      baml_change_detection cd(params);
+  //  //      cd.multi_image_detect(tar, ref, ref_valid, tar_prob);
+  //  //      max = 0;
+  //  //      min = FLT_MAX;
+  //  //      for (int x = 0; x < width; x++) {
+  //  //        for (int y = 0; y < height; y++) {
+  //  //          max = std::max(max, tar_prob(x, y));
+  //  //          min = std::min(min, tar_prob(x, y));
+  //  //        }
+  //  //      }
+  //  //      vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+  //  //      vil_save(change_vis, (img_dir + "output/fusion/" + hist_method[hist] + "_neighborhood" + std::to_string(neighborhood[neighbor]) + "_histBin" + std::to_string(num_bins[nbin]) + "_" + fusion_method[fusion] + "_" + std::to_string(min) + "_" + std::to_string(max) + ".tif").c_str());
+  //  //    }
+  //  //  }
+  //  //}
+  //}
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // RED STAINING

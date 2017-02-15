@@ -384,10 +384,10 @@ void test_edgel_change_detection()
 
   // Read json
   //std::string cd_json ="{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
-  std::string cd_json = "{\"method\" : 0}";// "{\"method\" : 0, \"correct_gain_offset\" : true, \"num_tiles\" : 0, \"registration_rad\" : 5, \"change_prior\" : 0.01}";
-    //"\"bt_std\" : 20.0, \"bt_rad\" : 5, \"census_std\" : 0.3, \"census_tol\" : 10, \"census_rad\" : 3, \"grad_std\" : 3.0, "
-    //"\"img_bit_depth\" : 12, \"hist_bit_depth\" : 10, \"neighborhood_size\" : 11, \"num_bins\" : 25, \"grad_mag_on\" : false, "
-    //"\"hist_method\" : \"bhattacharyya\", \"multi_method\" : \"sum\", \"pGoodness\" : 0.8, \"pChange\" : 0.005 }";
+  // read in json file with all your necessary parameters
+  std::ifstream ifs("C:/Users/sca0161/Documents/change detection json/illuminationInvariantChange.json");
+  std::string cd_json((std::istreambuf_iterator<char>(ifs)),
+    (std::istreambuf_iterator<char>()));
 
   std::cout << "===>processing " << evt_name << '\n';
   //etr.process("edgel_change_detection", pchange, rescs, offsets,cd_json);
