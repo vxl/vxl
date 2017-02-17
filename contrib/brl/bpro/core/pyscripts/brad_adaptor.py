@@ -325,7 +325,7 @@ def get_sat_name(mdata):
 
 
 def get_view_angles(mdata):
-  sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band = get_metadata_info2(mdata)
+  sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band = get_metadata_info(mdata)
   return view_az, view_el
 
 def compute_appearance_index(filenames):
