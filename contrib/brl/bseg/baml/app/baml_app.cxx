@@ -301,7 +301,11 @@ for (vul_file_iterator fn = (img_dir + "20161026*.tif").c_str(); fn; ++fn) {
   }
   vil_image_view<vxl_byte> change_vis;
   vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-  vil_save(change_vis, ("C:/Users/sca0161/Documents/data/mischief reef/usable images/output/non parametric/tiles" + std::to_string(params.num_tiles) + "_" + ref_name).c_str());
+
+  std::ostringstream message("C:/Users/sca0161/Documents/data/mischief reef/usable images/output/non parametric/tiles");
+  message << params.num_tiles << "_" << ref_name;
+
+  vil_save(change_vis, message.str().c_str());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

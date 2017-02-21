@@ -142,11 +142,11 @@ bool baml_change_detection::detect_internal(
 bool 
 baml_change_detection::multi_image_detect(
   const vil_image_view<vxl_uint_16>& img_target,
-  const std::vector<vil_image_view<vxl_uint_16>> img_ref,
-  const std::vector<vil_image_view<bool>> valid,
+  const std::vector< vil_image_view<vxl_uint_16> > img_ref,
+  const std::vector< vil_image_view<bool> > valid,
   vil_image_view<float>& change_prob_target) {
   // perform change detect on each image
-  std::vector<vil_image_view<float>> scores;
+  std::vector< vil_image_view<float> > scores;
 
   std::vector<int> x_offsets, y_offsets;
   // Bound the registration search
@@ -244,8 +244,8 @@ baml_change_detection::multi_image_detect(
   int crop_width = img_target.ni() - max_x_off + min_x_off;
   int crop_height = img_target.nj() - max_y_off + min_y_off;
   img_tar_crop = vil_crop(img_target, max_x_off, crop_width, max_y_off, crop_height);
-  std::vector<vil_image_view<vxl_uint_16>> img_ref_crop_vec;
-  std::vector<vil_image_view<bool>> valid_crop_vec;
+  std::vector< vil_image_view<vxl_uint_16> > img_ref_crop_vec;
+  std::vector< vil_image_view<bool> > valid_crop_vec;
   for (int i = 0; i < img_ref.size(); i++) {
     vil_image_view<vxl_uint_16> cur_crop = vil_crop(img_ref[i], max_x_off-x_offsets[i], crop_width, max_y_off - y_offsets[i], crop_height);
     vil_image_view<bool> cur_valid_crop = vil_crop(valid[i], max_x_off - x_offsets[i], crop_width, max_y_off - y_offsets[i], crop_height);
@@ -958,7 +958,7 @@ baml_change_detection::build_hist( // adds or removes pixel specified in by (x1,
 //=================MULTI IMAGE CHANGE DETECTION METHODS==============================
 //---------------------------PRODUCT---------------------------------------------------
 bool baml_change_detection::multi_product(
-  const std::vector<vil_image_view<float>> lh,
+  const std::vector< vil_image_view<float> > lh,
   float sigma,
   vil_image_view<float>& probability
 ) {
@@ -984,7 +984,7 @@ bool baml_change_detection::multi_product(
 
 //---------------------------SUM---------------------------------------------------
 bool baml_change_detection::multi_sum(
-  const std::vector<vil_image_view<float>> lh,
+  const std::vector< vil_image_view<float> > lh,
   float sigma,
   vil_image_view<float>& probability
 ) {
@@ -1010,7 +1010,7 @@ bool baml_change_detection::multi_sum(
 
 //---------------------------SCORE MINIMIZATION---------------------------------------
 bool baml_change_detection::multi_min(
-  const std::vector<vil_image_view<float>> scores,
+  const std::vector< vil_image_view<float> > scores,
   vil_image_view<float>& probability
 ) {
   int num_ref = scores.size();
@@ -1025,7 +1025,7 @@ bool baml_change_detection::multi_min(
       float min = FLT_MAX;
       for (int t = 0; t < num_ref; t++) {
         s = scores[t]; // get score image at time t
-        min = std::min(min, 1 / exp(s(x, y)));
+        min = std::min(min, (float)(1 / exp(s(x, y))));
       }
       probability(x, y) = 1 / (1 + (1 - params_.pChange) / params_.pChange*min);
     }

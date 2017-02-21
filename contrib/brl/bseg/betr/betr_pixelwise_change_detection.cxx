@@ -51,8 +51,8 @@ bool betr_pixelwise_change_detection::process() {
   }
 
   // loop over all reference images and warp/crop to region of interest
-  std::vector<vil_image_view<vxl_uint_16>> ref_img(ref_rescs_.size());
-  std::vector<vil_image_view<vxl_uint_16>> ref_cropped(ref_rescs_.size());
+  std::vector< vil_image_view<vxl_uint_16> > ref_img(ref_rescs_.size());
+  std::vector< vil_image_view<vxl_uint_16> > ref_cropped(ref_rescs_.size());
   for (int i = 0; i < ref_cropped.size(); i++) {
     for (int p = 0; p < num_vertices; p++) {
       vert_evt[p].set(
@@ -91,7 +91,7 @@ bool betr_pixelwise_change_detection::process() {
   // TODO: GET REFERENCE REGIONS FOR BT
 
   // Setup pixel-wise probability buffers
-  std::vector<vil_image_view<bool>> valid(ref_rescs_.size());
+  std::vector< vil_image_view<bool> > valid(ref_rescs_.size());
   for (int i = 0; i < ref_rescs_.size(); i++) {
     valid[i].set_size(bb_width, bb_height);
     valid[i].fill(true);

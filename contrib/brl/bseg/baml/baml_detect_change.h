@@ -6,6 +6,7 @@
 #include <vector>
 #include <set>
 #include <utility>
+#include <float.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -140,10 +141,10 @@ public:
   //: Multi reference image change detection
   // calls detect_internal to do pairwise score calculations
   // then uses a multi-image fusion technique
-  bool baml_change_detection::multi_image_detect(
+  bool multi_image_detect(
     const vil_image_view<vxl_uint_16>& img_target,
-    const std::vector<vil_image_view<vxl_uint_16>> img_ref,
-    const std::vector<vil_image_view<bool>> valid,
+    const std::vector< vil_image_view<vxl_uint_16> > img_ref,
+    const std::vector< vil_image_view<bool> > valid,
     vil_image_view<float>& change_prob_target);
 
 protected:
@@ -202,7 +203,7 @@ protected:
     vil_image_view<float>& tar_lh);
   // -------------------histogram compare helper function-------------------------
   bool
-    baml_change_detection::build_hist(
+    build_hist(
       const vil_image_view<float>& img,
       const vil_image_view<int>& bin_img,
       const std::vector<double>& edges,
@@ -215,23 +216,23 @@ protected:
 
   //: Fuse score images using product method
   bool 
-    baml_change_detection::multi_product(
-    const std::vector<vil_image_view<float>> lh,
+    multi_product(
+    const std::vector< vil_image_view<float> > lh,
     float sigma,
     vil_image_view<float>& probability
   );
 
   //: Fuse score images using sum method
   bool 
-    baml_change_detection::multi_sum(
-    const std::vector<vil_image_view<float>> lh,
+    multi_sum(
+    const std::vector< vil_image_view<float> > lh,
     float sigma,
     vil_image_view<float>& probability
   );
 
   //: Fuse score images using score minization method
-  bool baml_change_detection::multi_min(
-    const std::vector<vil_image_view<float>> scores,
+  bool multi_min(
+    const std::vector< vil_image_view<float> > scores,
     vil_image_view<float>& probability
   );
 

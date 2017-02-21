@@ -327,7 +327,14 @@ void test_edgel_change_detection()
   //std::string dir = "D:/data/sattel/hamadan/";
   // std::string ref_name = "20160821_063826_0e20.tif";
   // std::string ref_name = "20160623_050936_0c64.tif";
-  std::vector<std::string> ref_name = { "20160902_094643_0c19.tif", "20160619_064846_0c72.tif", "20160623_050936_0c64.tif", "20160701_091757_0c64.tif", "20160701_091758_0c64.tif", "20160702_103254_0c59.tif" };
+  std::vector<std::string> ref_name;
+  ref_name.push_back("20160902_094643_0c19.tif");
+  ref_name.push_back("20160619_064846_0c72.tif");
+  ref_name.push_back("20160623_050936_0c64.tif");
+  ref_name.push_back("20160701_091757_0c64.tif");
+  ref_name.push_back("20160701_091758_0c64.tif");
+  ref_name.push_back("20160702_103254_0c59.tif");
+
   // std::string evt_name = "20160822_064308_0c1b.tif";
   std::string evt_name = "20160717_043904_0c19.tif";
 
