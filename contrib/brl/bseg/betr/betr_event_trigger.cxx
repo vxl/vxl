@@ -419,7 +419,11 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     // clear the algorithm data, since only one event region at a time is processed 
     alg->clear();
     // reset the image resources
-    if(alg->requires_multiple_ref_images()){
+
+    betr_pixelwise_change_detection_params* cd_params =
+      dynamic_cast<betr_pixelwise_change_detection_params*>(params.ptr());
+    
+    if (cd_params->pw_params_.multiple_ref){// alg->requires_multiple_ref_images()){
       alg->set_reference_images(ref_rescs_);
      }else{
       alg->set_reference_image(ref_rescs_[0]);
@@ -440,7 +444,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
       return false;
       ref_evt_polys.push_back(ref_evt_poly);
   }
-    if(alg->requires_multiple_ref_images()){
+    if(cd_params->pw_params_.multiple_ref){
       alg->set_proj_ref_ref_objects(ref_ref_polys);//same for all event objects
       alg->set_proj_ref_evt_objects(ref_evt_polys);
     }else{
@@ -465,6 +469,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     vgl_point_2d<unsigned> offset(ioff, joff);
     change_images.push_back(resc);    
     offsets.push_back(offset);
+    std::cout << "Size of offsets is " << offsets.size() << "\n";
   }
   process_counter_++;
   return true;

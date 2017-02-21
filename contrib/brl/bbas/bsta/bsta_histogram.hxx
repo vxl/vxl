@@ -544,22 +544,22 @@ T js_divergence(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
   return sum/T(2);
 }
 template <class T>
-T bhatt_distance(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb){
+T bhatt_distance(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb) {
   unsigned na = ha.nbins(), nb = hb.nbins();
-  if(na != nb){
+  if (na != nb) {
     std::cout << "histograms do not have the same number of bins\n";
     return std::numeric_limits<T>::max();
   }
   T sum = T(0);
-  for(unsigned i = 0; i<na; ++i){
+  for (unsigned i = 0; i<na; ++i) {
     T pa = ha.p(i), pb = hb.p(i);
-    if(pa<T(0) || pb<T(0)){
+    if (pa<T(0) || pb<T(0)) {
       std::cout << "Fatal! - negative probablity\n";
       return std::numeric_limits<T>::max();
     }
     sum += sqrt(pa*pb);
   }
-  if(sum<T(0)){
+  if (sum<T(0)) {
     std::cout << "Fatal! - negative sum\n";
     return std::numeric_limits<T>::max();
   }
@@ -668,8 +668,8 @@ std::istream& operator>>(std::istream& is, bsta_histogram<T>& h)
 #define BSTA_HISTOGRAM_INSTANTIATE(T) \
 template class bsta_histogram<T >; \
 template T js_divergence(bsta_histogram<T> const& , bsta_histogram<T> const&); \
-template T bhatt_distance(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb); \
-template bsta_histogram<T> scale(bsta_histogram<T> const&, T );         \
+template T bhatt_distance(bsta_histogram<T> const& , bsta_histogram<T> const&); \
+template bsta_histogram<T> scale(bsta_histogram<T> const&, T ); \
 template T minimum_js_divergence_scale(bsta_histogram<T> const&, bsta_histogram<T> const&, T); \
 template T hist_intersect(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb); \
 template bool merge_hists(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb, bsta_histogram<T>& h_merged); \

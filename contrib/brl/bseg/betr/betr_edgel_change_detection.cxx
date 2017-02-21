@@ -38,10 +38,10 @@ bool betr_edgel_change_detection::process(){
     return true;
   }
     //debug
-  if(verbose_){
+ /* if(verbose_){
     std::string dir =  "D:/tests/rajaei_test/trigger/";
     ef.save_edgels_in_poly(identifier_, dir);
-  }
+  }*/
   // end debug
   const bsta_histogram<double>& h_ref_ref = ef.hist("ref_image","ref_ref_poly");
   const bsta_histogram<double>& h_ref_evt = ef.hist("ref_image","ref_evt_poly");
