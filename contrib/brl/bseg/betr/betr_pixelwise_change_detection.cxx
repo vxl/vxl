@@ -24,8 +24,6 @@ bool betr_pixelwise_change_detection::process() {
   // Get params
   betr_pixelwise_change_detection_params* cd_params =
     dynamic_cast<betr_pixelwise_change_detection_params*>(params_.ptr());
-  //std::cout << "multiple_ref_ = " << multiple_ref_ << ", multiple_ref from params = " << cd_params->pw_params_.multiple_ref << "\n";
-  bool multiple_ref_ = cd_params->pw_params_.multiple_ref;
   // Get a bounding box for the event polygon
   vsol_box_2d_sptr evt_bb = evt_evt_poly_->get_bounding_box();
   int bb_minx = evt_bb->get_min_x(), bb_miny = evt_bb->get_min_y();
@@ -117,7 +115,6 @@ bool betr_pixelwise_change_detection::process() {
   vil_image_view<vxl_byte> vis;
   vil_convert_stretch_range_limited( evt_change_prob, vis, 0.0f, 1.0f );
   change_img_ = vil_new_image_resource_of_view(vis);
-
   i_offset_ = bb_minx; j_offset_ = bb_miny;
 
   // create integral image to find area of highest average probability of change
@@ -150,9 +147,11 @@ bool betr_pixelwise_change_detection::process() {
   // find region of highest probability
   int eventHeight = cd_params->pw_params_.event_height;
   int eventWidth = cd_params->pw_params_.event_width;
+  if (eventHeight > evt_change_prob.nj()) eventHeight = evt_change_prob.nj();
+  if (eventWidth > evt_change_prob.ni())eventWidth = evt_change_prob.ni();
   avg_prob_ = 0.0;
-  for (int x = 1; x < evt_change_prob.ni() - eventWidth; x++) {
-    for (int y = 1; y < evt_change_prob.nj() - eventHeight; y++) {
+  for (int x = 0; x < evt_change_prob.ni() - eventWidth + 1; x++) {
+    for (int y = 0; y < evt_change_prob.nj() - eventHeight + 1; y++) {
       float cur_average = (integral_im(x, y) + integral_im(x + eventWidth, y + eventHeight) - integral_im(x, y + eventHeight) - integral_im(x + eventWidth, y)) /
         (integral_im_poly(x, y) + integral_im_poly(x + eventWidth, y + eventHeight) - integral_im_poly(x, y + eventHeight) - integral_im_poly(x + eventWidth, y));
       if (cur_average > avg_prob_) {

@@ -48,19 +48,15 @@ class betr_pixelwise_change_detection_params : public betr_params
     root["pChange"] = pw_params_.pChange;
     root["event_width"] = pw_params_.event_width;
     root["event_height"] = pw_params_.event_height;
-    //root["bt_std"] = pw_params_.bt_std;
     root["bt_rad"] = pw_params_.bt_rad;
-    //root["census_std"] = pw_params_.census_std;
     root["census_tol"] = pw_params_.census_tol;
     root["census_rad"] = pw_params_.census_rad;
-    //root["grad_std"] = pw_params_.grad_std;
     root["img_bit_depth"] = pw_params_.img_bit_depth;
     root["hist_bit_depth"] = pw_params_.hist_bit_depth;
     root["neighborhood_size"] = pw_params_.neighborhood_size;
     root["num_bins"] = pw_params_.num_bins;
     root["grad_mag_on"] = pw_params_.grad_mag_on;
     root["hist_method"] = pw_params_.hist_method;
-    root["multiple_ref"] = pw_params_.multiple_ref; 
     root["multi_method"] = pw_params_.multi_method;
     root["pGoodness"] = pw_params_.pGoodness;
   }
@@ -75,19 +71,15 @@ class betr_pixelwise_change_detection_params : public betr_params
     pw_params_.pChange = root["pChange"].asFloat();
     pw_params_.event_width = root["event_width"].asInt();
     pw_params_.event_height = root["event_height"].asInt();
-    //pw_params_.bt_std = root["bt_std"].asFloat();
     pw_params_.bt_rad = root["bt_rad"].asInt();
-    //pw_params_.census_std = root["census_std"].asFloat();
     pw_params_.census_tol = root["census_tol"].asInt();
     pw_params_.census_rad = root["census_rad"].asInt();
-   // pw_params_.grad_std = root["grad_std"].asFloat();
     pw_params_.img_bit_depth = root["img_bit_depth"].asInt();
     pw_params_.hist_bit_depth = root["hist_bit_depth"].asInt();
     pw_params_.neighborhood_size = root["neighborhood_size"].asInt();
     pw_params_.num_bins = root["num_bins"].asInt();
     pw_params_.grad_mag_on = root["grad_mag_on"].asBool ();
     pw_params_.hist_method = root["hist_method"].asString();
-    pw_params_.multiple_ref = root["multiple_ref"].asBool(); 
     pw_params_.multi_method = root["multi_method"].asString();
     pw_params_.pGoodness = root["pGoodness"].asFloat();
   }

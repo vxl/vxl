@@ -91,7 +91,6 @@ struct baml_change_detection_params {
   // Multi-image parameters
   // multi_method: multi-image fusion method ("product", "sum", "minimum")
   // pGoodness: probability of a given image being "good"
-  bool multiple_ref;
   std::string multi_method;
   float pGoodness;
 
@@ -112,7 +111,6 @@ struct baml_change_detection_params {
     num_bins(25), 
     grad_mag_on(false),
     hist_method("bhattacharyya"),
-    multiple_ref(true),
     multi_method("sum"),
     pGoodness(0.8),
     pChange(0.005) {}

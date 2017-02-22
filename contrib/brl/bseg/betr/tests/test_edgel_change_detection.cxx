@@ -392,7 +392,7 @@ void test_edgel_change_detection()
   // Read json
   //std::string cd_json ="{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
   // read in json file with all your necessary parameters
-  std::ifstream ifs("C:/Users/sca0161/Documents/change detection json/illuminationInvariantChange.json");
+  std::ifstream ifs("C:/Users/sca0161/Documents/change detection json/texturelessChange.json");
   std::string cd_json((std::istreambuf_iterator<char>(ifs)),
     (std::istreambuf_iterator<char>()));
 
