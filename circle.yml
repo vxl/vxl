@@ -1,0 +1,57 @@
+version: 2
+executorType: docker
+containerInfo:
+  - image: vsiri/voxel_globe:vxl
+#  - image: alpine
+    cmd: ["bash"]
+stages:
+  build:
+    workDir: /vxl
+    steps:
+      - type: shell
+        pwd: /
+        name: Installing git
+        command: |
+          apt-get update
+          apt-get install -y git
+
+      - type: cache-restore
+        key: vxl_src
+      - type: checkout
+      - type: cache-save
+        key: vxl_src-{{ checksum "/vxl/core/vxl_version.h" }}
+        paths:
+          - /vxl/.git
+
+
+      - type: cache-restore
+        keys: 
+          - vxl_bin-{{ .Branch }}
+          - vxl_bin
+      - type: shell
+        name: Fix times on source
+        command: |
+          export OLDEST_DATE=$(find /build -type f -printf '%TD %TT\n' | sort | head -n 1)
+          if [ -f /build/vxl.md5 ]; then
+            md5sum -c /build/vxl.md5 | awk '{if ($NF == "OK") print substr($0, 1, length($0)-4)}' | xargs touch -d "${OLDEST_DATE}"
+          fi
+          mkdir -p /build
+          find /vxl -type f -print0 | xargs -0 md5sum > /build/vxl.md5
+      - type: shell
+        name: Build, test, and install
+        command: |
+          set -e
+          cmake --version
+          mkdir -p /build
+          mkdir -p /install
+          cd /build
+          cmake -G Ninja -DBUILD_BRL_PYTHON=1 -DBUILD_VGUI=1 -DCMAKE_INSTALL_PREFIX=/install -DCMAKE_CXX_STANDARD=98 /vxl
+          ctest -D ExperimentalStart
+          ctest -D ExperimentalConfigure
+          ctest -D ExperimentalBuild -j2
+          ctest -D ExperimentalTest --schedule-random -j2
+          ninja install
+      - type: cache-save
+        key: vxl_bin-{{ .Branch }}-{{ epoch }}
+        paths:
+          - /build
