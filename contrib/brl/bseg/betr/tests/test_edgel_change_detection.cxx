@@ -29,6 +29,7 @@
 #define rajaei 0
 #define kandahar 0
 #define hamadan 1
+#define hamadan_pixelwise 0
 void test_edgel_change_detection()
 {
 #if chile
@@ -321,84 +322,64 @@ void test_edgel_change_detection()
     pit != pchange.end(); ++pit, i++)
     std::cout << "pchange[" << i << "] = " << *pit << '\n';
 #elif hamadan
-  // set directory where cameras and images are held and declare the names of the target and reference(s)
-  std::string dir = "C:/Users/sca0161/Documents/data/hamadan/";
-  //std::string dir = "D:/tests/hamadan_test/";
+  std::string dir = "D:/tests/hamadan_test/";
   //std::string dir = "D:/data/sattel/hamadan/";
   // std::string ref_name = "20160821_063826_0e20.tif";
   // std::string ref_name = "20160623_050936_0c64.tif";
-  std::vector<std::string> ref_name;
-  ref_name.push_back("20160902_094643_0c19.tif");
-  ref_name.push_back("20160619_064846_0c72.tif");
-  ref_name.push_back("20160623_050936_0c64.tif");
-  ref_name.push_back("20160701_091757_0c64.tif");
-  ref_name.push_back("20160701_091758_0c64.tif");
-  ref_name.push_back("20160702_103254_0c59.tif");
-
+  std::string ref_name = "20160902_094643_0c19.tif";
   // std::string evt_name = "20160822_064308_0c1b.tif";
   std::string evt_name = "20160717_043904_0c19.tif";
-
-  // set up coordinate system
-  double lon = 48.6546831212;
-  double lat = 35.1964842393;
-  double elev = 1678.81629561;
-  vpgl_lvcs lvcs = vpgl_lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-
-  // set up the event image and all the things that aren't related to the reference image(s)
+  std::cout << "Reference" << ref_name << '\n';
+  std::string ref_img_path = dir + ref_name;
   std::string evt_img_path = dir + evt_name;
+  std::string ref_cam_path = dir + ref_name + "_RPC.txt";
   std::string evt_cam_path = dir + evt_name + "_RPC.txt";
   std::string evt_obj_path = dir + "hamadan_objects/event_big.ply";
   // std::string evt2_obj_path = dir + "hamadan_objects/event.ply";
   std::string ref_obj_path = dir + "hamadan_objects/ref_full.ply";
+
+  double lon = 48.6546831212;
+  double lat = 35.1964842393;
+  double elev = 1678.81629561;
+  vpgl_lvcs lvcs = vpgl_lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  vil_image_resource_sptr ref_imgr = vil_load_image_resource(ref_img_path.c_str());
+  //vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
+  vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
+  if (!ref_rpccam)
+  return;
+
+  vpgl_local_rational_camera<double>* ref_lcam = new vpgl_local_rational_camera<double>(lvcs, *ref_rpccam);
+  vpgl_camera_double_sptr ref_camera = ref_lcam;
+  if (!ref_camera)
+  return;
   vil_image_resource_sptr imgr = vil_load_image_resource(evt_img_path.c_str());
   //vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
   vpgl_rational_camera<double>* rpccam = read_rational_camera_from_txt<double>(evt_cam_path);
+
+  vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
+  vpgl_camera_double_sptr camera = dynamic_cast<vpgl_camera<double>* >(lcam);
+
   betr_event_trigger etr("hamadan", lvcs);
   etr.set_verbose(true);
   etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
   // etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
   etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
-  vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
-  vpgl_camera_double_sptr camera = dynamic_cast<vpgl_camera<double>*>(lcam);
-  etr.set_evt_camera(camera);
-  etr.set_evt_image(imgr);
 
-  // create a vector of reference images and reference cameras
-  std::vector<vil_image_resource_sptr> ref_imgr(ref_name.size());
-  std::vector<vpgl_camera_double_sptr> ref_camera(ref_name.size());
-  // fill vectors with images and cameras
-  for (int i = 0; i < ref_name.size(); i++) {
-    std::cout << "Reference" << ref_name[i] << '\n';
-    std::string ref_img_path = dir + ref_name[i];
-    std::string ref_cam_path = dir + ref_name[i] + "_RPC.txt";
-    ref_imgr[i] = vil_load_image_resource(ref_img_path.c_str());
-    //vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
-    vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
-    if (!ref_rpccam)
-      return;
-    vpgl_local_rational_camera<double>* ref_lcam = new vpgl_local_rational_camera<double>(lvcs, *ref_rpccam);
-    ref_camera[i] = ref_lcam;
-    if (!ref_camera[i])
-      return;
-  }
-  // set the reference images and cameras in the betr_event_trigger object
-  etr.set_ref_cameras(ref_camera);
-  etr.set_ref_images(ref_imgr);
-  
+  etr.set_ref_camera(ref_camera);
+  etr.set_evt_camera(camera);
+  etr.set_ref_image(ref_imgr);
+  etr.set_evt_image(imgr);
   std::vector<double> pchange;
   std::vector<vgl_point_2d<unsigned> > offsets;
   std::vector<vil_image_resource_sptr> rescs;
 
   // Read json
-  //std::string cd_json ="{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
-  // read in json file with all your necessary parameters
-  std::ifstream ifs("C:/Users/sca0161/Documents/change detection json/texturelessChange.json");
-  std::string cd_json((std::istreambuf_iterator<char>(ifs)),
-    (std::istreambuf_iterator<char>()));
+  std::string cd_json = "{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
+  //std::string cd_json ="{\"method\" : 2, \"registration_rad\" : 2, \"change_prior\" : 0.01 }";
 
   std::cout << "===>processing " << evt_name << '\n';
-  //etr.process("edgel_change_detection", pchange, rescs, offsets,cd_json);
-  etr.process("pixelwise_change_detection", pchange, rescs, offsets, cd_json);
+  etr.process("edgel_change_detection", pchange, rescs, offsets, cd_json);
+  //etr.process("pixelwise_change_detection", pchange, rescs, offsets,cd_json);
   int i = 0;
   for (std::vector<double>::iterator pit = pchange.begin();
     pit != pchange.end(); ++pit, i++) {
@@ -406,7 +387,7 @@ void test_edgel_change_detection()
     std::cout << "Offset " << offsets[i] << " (" << rescs[i]->ni() << ' ' << rescs[i]->nj() << ")\n";
     std::stringstream ss;
     ss << i;
-    std::string change_path = dir + "debug 20170202/change_imageS_" + ss.str() + ".tif";
+    std::string change_path = dir + evt_name + "change_image_" + ss.str() + ".tif";
     vil_save_image_resource(rescs[i], change_path.c_str());
   }
   return;
@@ -476,6 +457,97 @@ void test_edgel_change_detection()
     pit != pchange.end(); ++pit, i++)
     std::cout << "pchange[" << i << "] = " << *pit << '\n';
   TEST_NEAR("745_hamadan_test", pchange[0], 0.006, 0.0001);
+
+#elif hamadan_pixelwise
+  // set directory where cameras and images are held and declare the names of the target and reference(s)
+  std::string dir = "C:/Users/sca0161/Documents/data/hamadan/";
+  //std::string dir = "D:/tests/hamadan_test/";
+  //std::string dir = "D:/data/sattel/hamadan/";
+  // std::string ref_name = "20160821_063826_0e20.tif";
+  // std::string ref_name = "20160623_050936_0c64.tif";
+  std::vector<std::string> ref_name;
+  ref_name.push_back("20160902_094643_0c19.tif");
+  ref_name.push_back("20160619_064846_0c72.tif");
+  ref_name.push_back("20160623_050936_0c64.tif");
+  ref_name.push_back("20160701_091757_0c64.tif");
+  ref_name.push_back("20160701_091758_0c64.tif");
+  ref_name.push_back("20160702_103254_0c59.tif");
+
+  // std::string evt_name = "20160822_064308_0c1b.tif";
+  std::string evt_name = "20160717_043904_0c19.tif";
+
+  // set up coordinate system
+  double lon = 48.6546831212;
+  double lat = 35.1964842393;
+  double elev = 1678.81629561;
+  vpgl_lvcs lvcs = vpgl_lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+
+  // set up the event image and all the things that aren't related to the reference image(s)
+  std::string evt_img_path = dir + evt_name;
+  std::string evt_cam_path = dir + evt_name + "_RPC.txt";
+  std::string evt_obj_path = dir + "hamadan_objects/event_big.ply";
+  // std::string evt2_obj_path = dir + "hamadan_objects/event.ply";
+  std::string ref_obj_path = dir + "hamadan_objects/ref_full.ply";
+  vil_image_resource_sptr imgr = vil_load_image_resource(evt_img_path.c_str());
+  //vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
+  vpgl_rational_camera<double>* rpccam = read_rational_camera_from_txt<double>(evt_cam_path);
+  betr_event_trigger etr("hamadan", lvcs);
+  etr.set_verbose(true);
+  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
+  // etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
+  etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
+  vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
+  vpgl_camera_double_sptr camera = dynamic_cast<vpgl_camera<double>*>(lcam);
+  etr.set_evt_camera(camera);
+  etr.set_evt_image(imgr);
+
+  // create a vector of reference images and reference cameras
+  std::vector<vil_image_resource_sptr> ref_imgr(ref_name.size());
+  std::vector<vpgl_camera_double_sptr> ref_camera(ref_name.size());
+  // fill vectors with images and cameras
+  for (int i = 0; i < ref_name.size(); i++) {
+    std::cout << "Reference" << ref_name[i] << '\n';
+    std::string ref_img_path = dir + ref_name[i];
+    std::string ref_cam_path = dir + ref_name[i] + "_RPC.txt";
+    ref_imgr[i] = vil_load_image_resource(ref_img_path.c_str());
+    //vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
+    vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
+    if (!ref_rpccam)
+      return;
+    vpgl_local_rational_camera<double>* ref_lcam = new vpgl_local_rational_camera<double>(lvcs, *ref_rpccam);
+    ref_camera[i] = ref_lcam;
+    if (!ref_camera[i])
+      return;
+  }
+  // set the reference images and cameras in the betr_event_trigger object
+  etr.set_ref_cameras(ref_camera);
+  etr.set_ref_images(ref_imgr);
+
+  std::vector<double> pchange;
+  std::vector<vgl_point_2d<unsigned> > offsets;
+  std::vector<vil_image_resource_sptr> rescs;
+
+  // Read json
+  //std::string cd_json ="{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
+  // read in json file with all your necessary parameters
+  std::ifstream ifs("C:/Users/sca0161/Documents/change detection json/texturelessChange.json");
+  std::string cd_json((std::istreambuf_iterator<char>(ifs)),
+    (std::istreambuf_iterator<char>()));
+
+  std::cout << "===>processing " << evt_name << '\n';
+  //etr.process("edgel_change_detection", pchange, rescs, offsets,cd_json);
+  etr.process("pixelwise_change_detection", pchange, rescs, offsets, cd_json);
+  int i = 0;
+  for (std::vector<double>::iterator pit = pchange.begin();
+    pit != pchange.end(); ++pit, i++) {
+    std::cout << "pchange[" << i << "] = " << *pit << '\n';
+    std::cout << "Offset " << offsets[i] << " (" << rescs[i]->ni() << ' ' << rescs[i]->nj() << ")\n";
+    std::stringstream ss;
+    ss << i;
+    std::string change_path = dir + "debug 20170202/change_imageS_" + ss.str() + ".tif";
+    vil_save_image_resource(rescs[i], change_path.c_str());
+  }
+  return;
 #endif
 }
 TESTMAIN(test_edgel_change_detection);
