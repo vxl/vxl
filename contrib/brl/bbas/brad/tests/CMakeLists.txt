@@ -22,8 +22,8 @@ add_test( NAME test_feature_pca_brad_test_all            COMMAND $<TARGET_FILE:b
 add_test( NAME test_synoptic_function_brad_test_all      COMMAND $<TARGET_FILE:brad_test_all> test_synoptic_function)
 add_test( NAME test_image_metadata_brad_test_all         COMMAND $<TARGET_FILE:brad_test_all> test_image_metadata)
 add_test( NAME test_atmospheric_parameters_brad_test_all COMMAND $<TARGET_FILE:brad_test_all> test_atmospheric_parameters)
-ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_appearance_neighborhood_index)
-ADD_TEST( brad_test_all ${EXECUTABLE_OUTPUT_PATH}/brad_test_all test_belief_prop_utils)
+add_test( NAME test_appearance_neighborhood_index        COMMAND $<TARGET_FILE:brad_test_all> test_appearance_neighborhood_index)
+add_test( NAME test_belief_prop_utils                    COMMAND $<TARGET_FILE:brad_test_all> test_belief_prop_utils)
 
 if(0) # Previously this test was not run, and it fails
 add_test( NAME test_sun_hist_brad_test_all               COMMAND $<TARGET_FILE:brad_test_all> test_sun_hist)
