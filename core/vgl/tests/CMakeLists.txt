@@ -27,6 +27,7 @@ add_executable( vgl_test_all
   test_spline.cxx
   test_pointset.cxx
   test_oriented_box_2d.cxx
+  test_affine_coordinates.cxx
 )
 target_link_libraries( vgl_test_all ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
@@ -54,6 +55,7 @@ add_test( NAME vgl_test_intersection COMMAND $<TARGET_FILE:vgl_test_all> test_in
 add_test( NAME vgl_test_spline COMMAND $<TARGET_FILE:vgl_test_all> test_spline)
 add_test( NAME vgl_test_pointset COMMAND $<TARGET_FILE:vgl_test_all> test_pointset)
 add_test( NAME vgl_test_oriented_box_2d COMMAND $<TARGET_FILE:vgl_test_all> test_oriented_box_2d)
+add_test( NAME vgl_test_affine_coordinates COMMAND $<TARGET_FILE:vgl_test_all> test_affine_coordinates)
 add_executable( vgl_test_include test_include.cxx )
 target_link_libraries( vgl_test_include ${VXL_LIB_PREFIX}vgl )
 add_executable( vgl_test_template_include test_template_include.cxx )

@@ -3,6 +3,7 @@
 #define vidl_ffmpeg_istream_stub_hxx_
 #include <string>
 #include "vidl_ffmpeg_istream.h"
+#include <stdexcept>>
 //:
 // \file
 // \brief A null implementation for the ffmpeg video reader
@@ -20,11 +21,13 @@ struct vidl_ffmpeg_istream::pimpl
 vidl_ffmpeg_istream
 ::vidl_ffmpeg_istream()
 {
+  std::cerr << "vidl_ffmpeg_istream: warning: ffmpeg support is not compiled in\n";
 }
 
 vidl_ffmpeg_istream
 ::vidl_ffmpeg_istream(const std::string& /*filename*/)
 {
+  std::cerr << "vidl_ffmpeg_istream: warning: ffmpeg support is not compiled in\n";
 }
 
 
@@ -37,7 +40,7 @@ bool
 vidl_ffmpeg_istream
 ::open(const std::string& /*filename*/)
 {
-  return false;
+  throw std::runtime_error( "vidl_ffmpeg_istream: ffmpeg support is not compiled in" );
 }
 
 
