@@ -419,11 +419,8 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     // clear the algorithm data, since only one event region at a time is processed 
     alg->clear();
     // reset the image resources
-
-    betr_pixelwise_change_detection_params* cd_params =
-      dynamic_cast<betr_pixelwise_change_detection_params*>(params.ptr());
     
-    if (cd_params->pw_params_.multiple_ref){// alg->requires_multiple_ref_images()){
+    if (alg->requires_multiple_ref_images()){
       alg->set_reference_images(ref_rescs_);
      }else{
       alg->set_reference_image(ref_rescs_[0]);
@@ -444,7 +441,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
       return false;
       ref_evt_polys.push_back(ref_evt_poly);
   }
-    if(cd_params->pw_params_.multiple_ref){
+    if(alg->requires_multiple_ref_images()){
       alg->set_proj_ref_ref_objects(ref_ref_polys);//same for all event objects
       alg->set_proj_ref_evt_objects(ref_evt_polys);
     }else{

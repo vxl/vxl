@@ -19,8 +19,8 @@ class betr_algorithm : public vbl_ref_count
  public:
   betr_algorithm():name_("no_name"), identifier_("null"), offset_(0.0), alpha_(1.0), verbose_(false), params_(VXL_NULLPTR){}
  betr_algorithm(std::string const& name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false), params_(VXL_NULLPTR){}
- betr_algorithm(std::string const& name, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(VXL_NULLPTR) {}
- betr_algorithm(std::string const& name, betr_params_sptr const& params, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(params) {}
+ betr_algorithm(std::string const& name, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(VXL_NULLPTR), multiple_ref_(false) {}
+ betr_algorithm(std::string const& name, betr_params_sptr const& params, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(params), multiple_ref_(false) {}
   
   //: sigmoid performance parameters - may be specialized for each algorithm
   void set_offset(double offset){offset_ = offset;}
@@ -55,6 +55,7 @@ class betr_algorithm : public vbl_ref_count
   //: accessors
   std::string name() const {return name_;}
   betr_params_sptr params(){return params_;}
+  bool requires_multiple_ref_images() const { return multiple_ref_; }
 
   //: procedural  methods
   virtual bool process(){return false;}
@@ -112,6 +113,7 @@ class betr_algorithm : public vbl_ref_count
   double offset_;
   double alpha_;
   bool verbose_;
+  bool multiple_ref_;//does the algorithm require multiple reference images
   betr_params_sptr params_;
 };
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_algorithm.
