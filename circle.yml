@@ -48,8 +48,8 @@ stages:
           cmake -G Ninja -DBUILD_BRL_PYTHON=1 -DBUILD_VGUI=1 -DCMAKE_INSTALL_PREFIX=/install -DCMAKE_CXX_STANDARD=98 /vxl
           ctest -D ExperimentalStart
           ctest -D ExperimentalConfigure
-          ctest -D ExperimentalBuild -j2
-          ctest -D ExperimentalTest --schedule-random -j2
+          ctest -D ExperimentalBuild -j `nrpoc`
+          ctest -D ExperimentalTest --schedule-random -j `nproc`
           ninja install
       - type: cache-save
         key: vxl_bin-{{ .Branch }}-{{ epoch }}
