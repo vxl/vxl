@@ -17,10 +17,11 @@ class betr_pixelwise_change_detection : public betr_algorithm
 {
 public:
 
-  betr_pixelwise_change_detection(): 
+  betr_pixelwise_change_detection() :
     betr_algorithm("pixelwise_change_detection"),
-    avg_prob_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR){
-      params_ =  new betr_pixelwise_change_detection_params();
+    avg_prob_(0.0), i_offset_(0), j_offset_(0), change_img_(VXL_NULLPTR) {
+    multiple_ref_ = true;
+    params_ = new betr_pixelwise_change_detection_params();
   }
 
   //: process change
