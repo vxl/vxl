@@ -103,7 +103,7 @@ if(NETLIB_FOUND)
   aux_source_directory(Templates vnl_algo_sources)
 
   # If VXL_INSTALL_INCLUDE_DIR is the default value
-  if("$VXL_INSTALL_INCLUDE_DIR}" STREQUAL "include/vxl")
+  if("${VXL_INSTALL_INCLUDE_DIR}" STREQUAL "include/vxl")
     set(_algo_install_dir ${VXL_INSTALL_INCLUDE_DIR}/core/vnl/algo)
   else()
     set(_algo_install_dir ${VXL_INSTALL_INCLUDE_DIR}/vnl/algo)
