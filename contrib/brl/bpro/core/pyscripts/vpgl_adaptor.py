@@ -1625,23 +1625,30 @@ def rational_camera_get_up_vector(in_cam):
       raise VpglException("Failed to get north angle from rational camera")
 
 # create a DEM manager to support DEM utility functions
-def create_DEM_manager(dem_img_resc):
-  batch.init_process("vpglCreateDemManagerProcess")
-  batch.set_input_from_db(0, dem_img_resc)
-  status = batch.run_process()
-  if status:
-    (id, type) = batch.commit_output(0)
-    dem_mgr = dbvalue(id, type)
-    return dem_mgr
-  raise VpglException("failed to create a DEM manager")
+# note if zmin > zmax, these values will be calculated from the DEM
+def create_DEM_manager(dem_img_resc,zmin=0.0,zmax=-1.0):
+    batch.init_process("vpglCreateDemManagerProcess")
+    batch.set_input_from_db(0, dem_img_resc)
+    batch.set_input_double(1, zmin)
+    batch.set_input_double(2, zmax)   
+    status = batch.run_process()
+    if status:
+        (id0, type) = batch.commit_output(0)
+        dem_mgr = dbvalue(id0, type)
+        (id1, type) = batch.commit_output(1)
+        zmin = batch.get_output_double(id1)
+        (id2, type) = batch.commit_output(2)
+        zmax = batch.get_output_double(id2)
+        return (dem_mgr,zmin,zmax)
+    raise VpglException("failed to create a DEM manager")
 
 # Backproject an image point onto the DEM and return a 3-d point
 def DEM_backproj(dem_mgr, cam, u, v, err_tol = 1.0):
-  batch.init_process("vpglBackprojectDemProcess")
-  batch.set_input_from_db(0, dem_mgr)
-  batch.set_input_from_db(1, cam)
-  batch.set_input_unsigned(2, u)
-  batch.set_input_unsigned(3, v)
+    batch.init_process("vpglBackprojectDemProcess")
+    batch.set_input_from_db(0, dem_mgr)
+    batch.set_input_from_db(1, cam)
+    batch.set_input_double(2, u)
+    batch.set_input_double(3, v)
   batch.set_input_double(4, err_tol)
   status = batch.run_process()
   if status:

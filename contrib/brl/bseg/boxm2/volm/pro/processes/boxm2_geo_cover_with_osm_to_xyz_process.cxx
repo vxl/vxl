@@ -21,6 +21,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
@@ -91,7 +92,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   std::cout << " image bounding box in geo coords: " << bbox << std::endl;
 
   // check whether the image intersects with the scene
-  if (vgl_intersection(bbox, sbbox).area() <= 0) {
+  if (vgl_area(vgl_intersection(bbox, sbbox)) <= 0) {
     std::cout << " scene does not intersect with the image: " << img_fname << std::endl;
     return false;
   }

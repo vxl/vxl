@@ -74,7 +74,8 @@
 //                               MaxPosition
 // \endverbatim
 // \sa vgl_box_3d
-
+//  Note: area is not defined on the box class to keep a clean interface
+//  see vgl_area<T> 
 template <class Type>
 class vgl_box_2d
 {
@@ -125,8 +126,6 @@ class vgl_box_2d
   //: Get height of this box (= \a y dimension)
   Type height() const;
 
-  //: Get "volume" (=area) of this box
-  Type area() const { return width()*height(); }
   //: Get "volume" (=area) of this box
   Type volume() const { return width()*height(); }
 

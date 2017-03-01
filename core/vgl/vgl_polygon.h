@@ -30,6 +30,8 @@
 //   for (unsigned int p = 0; p < polygon[s].size(); ++p)
 //     do_something(polygon[s][p].x(), polygon[s][p].y());
 //
+//  Note: area is not defined on the polygon class to keep a clean interface
+//  see vgl_area<T> 
 template <class T>
 class vgl_polygon
 {
@@ -116,7 +118,6 @@ class vgl_polygon
     for (unsigned int i=0;i<num_sheets();++i) c += (unsigned int)(sheets_[i].size());
     return c;
   }
-
   //: Get the ith sheet
   inline sheet_t& operator[](int i) { return sheets_[i]; }
 

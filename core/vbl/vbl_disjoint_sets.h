@@ -16,12 +16,15 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#include "vbl_array_1d.h"
 // Disjoint Set Data Structure
 // Author: Emil Stefanov
 // Date: 03/28/06
 // Implementation is as described in http://en.wikipedia.org/wiki/Disjoint-set_data_structure
 // Copyrighted according to the MIT license
 // http://opensource.org/licenses/mit-license.html
+// 12/17/2016 - JLM
+// changed node storage to vbl_array_1d so that delete is fast
 class vbl_disjoint_sets
 {
  public:
@@ -62,16 +65,17 @@ class vbl_disjoint_sets
   // Internal node data structure used for representing an element
   struct node
   {
+  node():rank(0), index(0), size(1), parent(VXL_NULLPTR){}
     //: represents the approximate max height of the node in its subtree
     int rank;
     int index; // The index of the element the node represents
     node* parent; // The parent node of the node
     int size; // the number of elements in the set
   };
-
   int num_elements_; // the number of elements
   int num_sets_; // the number of sets
-  std::vector<node*> nodes_; // the list of nodes representing the elements
+  //  std::vector<node*> nodes_; // the list of nodes representing the elements
+  vbl_array_1d<node> nodes_; // changed to vbl_array since deleting was very slow
 };
 
 #endif // vbl_disjoint_sets_h_

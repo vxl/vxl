@@ -5,16 +5,28 @@
 #include <cmath>
 bool betr_edgel_change_detection::process(){
   betr_edgel_factory ef;
-  betr_edgel_factory_params& efparams = ef.params();
   betr_edgel_change_detection_params* params = dynamic_cast<betr_edgel_change_detection_params*>(params_.ptr());
-  efparams.det_params_.smooth = params->sigma_;
-  efparams.det_params_.noise_multiplier = params->noise_mul_;
-  efparams.upsample_factor_ = params->upsample_factor_;
-  ef.add_image("ref_image", ref_imgr_);
+  betr_edgel_factory_params* efparams_ptr = dynamic_cast<betr_edgel_factory_params*>(params->edgel_factory_params_.ptr());
+  efparams_ptr->det_params_.smooth = params->sigma_;
+  efparams_ptr->det_params_.noise_multiplier = params->noise_mul_;
+  ef.set_params(*efparams_ptr);
+  if(ref_rescs_.size()!=1){
+    std::cout << "not exactly one reference image in edgel_change_detection\n";
+    return false;
+  }
+  ef.add_image("ref_image", ref_rescs_[0]);
   ef.add_image("evt_image", evt_imgr_);
-  ef.add_region("ref_image", "ref_ref_poly", ref_ref_poly_);
+  if(ref_ref_polys_.size()!=1){
+    std::cout << "not exactly one reference ref_poly in edgel_change_detection\n";
+    return false;
+  }
+  ef.add_region("ref_image", "ref_ref_poly", ref_ref_polys_[0]);
   ef.add_region("evt_image", "evt_ref_poly", evt_ref_poly_);
-  ef.add_region("ref_image", "ref_evt_poly", ref_evt_poly_);
+  if(ref_evt_polys_.size()!=1){
+    std::cout << "not exactly one reference evt_poly in edgel_change_detection\n";
+    return false;
+  }
+  ef.add_region("ref_image", "ref_evt_poly", ref_evt_polys_[0]);
   ef.add_region("evt_image", "evt_evt_poly", evt_evt_poly_);
   bool good = ef.process("ref_image","ref_ref_poly");
   good = good && ef.process("ref_image","ref_evt_poly");
@@ -26,10 +38,10 @@ bool betr_edgel_change_detection::process(){
     return true;
   }
     //debug
-  if(verbose_){
+ /* if(verbose_){
     std::string dir =  "D:/tests/rajaei_test/trigger/";
     ef.save_edgels_in_poly(identifier_, dir);
-  }
+  }*/
   // end debug
   const bsta_histogram<double>& h_ref_ref = ef.hist("ref_image","ref_ref_poly");
   const bsta_histogram<double>& h_ref_evt = ef.hist("ref_image","ref_evt_poly");

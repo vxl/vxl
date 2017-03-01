@@ -80,6 +80,12 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   submenu.add( "Load Pointset 2D (ascii)",
                new vgui_command_simple<bwm_tableau_img>(img_tab,
                                                         &bwm_tableau_img::load_pointset_2d_ascii));
+  submenu.add( "Load bounding boxes (ascii)",
+             new vgui_command_simple<bwm_tableau_img>(img_tab,
+                                                      &bwm_tableau_img::load_bounding_boxes_2d_ascii));
+  submenu.add( "Load oriented boxes (ascii)",
+               new vgui_command_simple<bwm_tableau_img>(img_tab,
+                                                        &bwm_tableau_img::load_oriented_boxes_2d_ascii));
   // Delete 2D submenu
   vgui_menu selmenu;
   selmenu.add( "Delete Selected",

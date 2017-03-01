@@ -3,6 +3,7 @@
 #include "volm_desc_ex_2d_indexer.h"
 #include <vcl_compiler.h>
 #include <vil/vil_load.h>
+#include <vgl/vgl_area.h>
 
 std::string& volm_desc_ex_2d_indexer::get_name()
 {
@@ -51,7 +52,7 @@ bool volm_desc_ex_2d_indexer::get_next()
   extent.expand_about_centroid(largest_rad_seconds_);
 
   for (unsigned i = 0; i < classification_maps_.size(); i++) {
-    if (vgl_intersection(classification_maps_[i].bbox, extent).area() > 0) {
+    if (vgl_area(vgl_intersection(classification_maps_[i].bbox, extent)) > 0) {
       current_leaf_maps_.push_back(i);
       // load the image resource (if not already loaded)
       if (!classification_maps_[i].img_r) {

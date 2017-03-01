@@ -29,15 +29,12 @@ if( NOT CLIPPER_FOUND )
   # will not have the v3p clipper library, so make sure the headers
   # exist.
   #
-
   if( NOT CLIPPER_FOUND )
     if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/clipper/clipper.hpp)
-
       set( CLIPPER_FOUND "YES" )
       set( CLIPPER_INCLUDE_DIR ${clipper_BINARY_DIR} ${clipper_SOURCE_DIR})
       set( CLIPPER_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/clipper)
       set( CLIPPER_LIBRARIES clipper )
-
     endif()
   endif()
 

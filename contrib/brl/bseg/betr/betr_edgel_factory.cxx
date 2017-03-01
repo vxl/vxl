@@ -182,8 +182,8 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, s
 }
 bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, vsol_polygon_2d_sptr const& poly,
                                    std::vector<double>& mags){
-  vgl_polygon<double>  vpoly = bsol_algs::vgl_from_poly(poly);
-  brip_roi_sptr broi = rois_[iname];
+  vgl_polygon<double>  vpoly = bsol_algs::vgl_from_poly(poly); // THIS IS WHERE YOU CAN CHECK IF IT IS INSIDE POLY
+  brip_roi_sptr broi = rois_[iname]; 
   if(!broi){
     std::cout << "no roi for " << iname << '\n';
     return false;

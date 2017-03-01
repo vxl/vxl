@@ -18,6 +18,7 @@
 #include <bkml/bkml_parser.h>
 
 #include <vul/vul_file.h>
+#include <vgl/vgl_area.h>
 
 //: sets input and output types
 bool volm_create_satellite_resources_process_cons(bprb_func_process& pro)
@@ -770,7 +771,7 @@ bool volm_satellite_pair_intersection_process(bprb_func_process& pro)
                            meta2.lower_left_.y(), meta2.upper_right_.y());
 
   vgl_box_2d<double> intersection_bbox = vgl_intersection(bbox1, bbox2);
-  double area = intersection_bbox.area();
+  double area = vgl_area(intersection_bbox);
 
   // generate output
   unsigned i = 0;

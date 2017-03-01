@@ -116,7 +116,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
 void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                      boxm2_data_base* mog, boxm2_data_base* alpha,
                                                                      boxm2_data_base* points, boxm2_data_base* covariances, std::ofstream& file,
-                                                                     float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype)
+                                                                     float prob_t, float LE_t, float CE_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype)
 {
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_COVARIANCE>::datatype *  covs_data = (boxm2_data_traits<BOXM2_COVARIANCE>::datatype*) covariances->data_buffer();
@@ -153,6 +153,9 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
           //if (!calculateProbOfPoint(scene, blk, points_data[currIdx], covs_data[currIdx], alpha_data[currIdx], prob, exp_color, axes, LE, CE))
           //  continue;
           if (!calculateLECEofPoint(covs_data[currIdx], axes, LE, CE))
+            continue;
+          
+          if (LE >= LE_t || CE >= CE_t)
             continue;
         
           file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';

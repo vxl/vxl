@@ -30,8 +30,10 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
-    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0)
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0),npts_given_(false)
 {
+  if(r.Npix() == 0)
+    return;
   for (unsigned int i = 0; i<r.Npix(); ++i)
     this->IncrementMeans(r.Xj()[i], r.Yj()[i], r.Ij()[i]);
   this->InitPixelArrays();
@@ -47,7 +49,7 @@ vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float*
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
-    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0)
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0), npts_given_(false)
 {
   assert(npts > 0);
   for (int i = 0; i<npts; i++)
@@ -149,7 +151,8 @@ void vdgl_digital_region::ResetPixelData()
 void vdgl_digital_region::IncrementMeans(float x, float y,
                                          unsigned short pix)
 {
-  ++npts_;
+  if(!npts_given_)
+    ++npts_;
   xo_ += x;
   yo_ += y;
   io_ += pix;
@@ -184,19 +187,21 @@ void vdgl_digital_region::InitPixelArrays()
   min_ = (unsigned short)(-1);
   max_ = 0;
 }
-
+void vdgl_digital_region::SetNpts(int npts){
+  npts_ = npts;
+  npts_given_ = true;
+}
 //------------------------------------------------------------------------
 //: Insert pixel data into the face arrays.
 void vdgl_digital_region::InsertInPixelArrays(float x, float y,
                                               unsigned short pix)
 {
-  assert(npts_ > 0);
   if (pix_index_<0||pix_index_>(int)npts_) return;
   xp_[pix_index_] = x; yp_[pix_index_] = y;
   pix_[pix_index_] = pix;
   if (pix<min_) min_ = pix;
   if (pix>max_) max_ = pix;
-  ++pix_index_;
+  pix_index_++;
 }
 
 float vdgl_digital_region::Xo() const
@@ -313,7 +318,7 @@ float vdgl_digital_region::AspectRatio() const
 //------------------------------------------------------------
 //: Compute the principal orientation of the region.
 //   major_axis is a 2-d vector representing the orientation.
-void vdgl_digital_region::PrincipalOrientation(vnl_float_2& major_axis)
+bool vdgl_digital_region::PrincipalOrientation(vnl_float_2& major_axis)
 {
   // make sure the scatter matrix is valid
   if (!scatter_matrix_valid_)
@@ -322,7 +327,7 @@ void vdgl_digital_region::PrincipalOrientation(vnl_float_2& major_axis)
   {
     std::cout << "In vdgl_digital_region::PrincipalOrientation(..) Npts<4\n";
     major_axis[0]=1.0; major_axis[1]=0.0;
-    return;
+    return false;
   }
   // construct the lower right 2x2 matrix of S, s.
   vnl_matrix<double> s(2, 2, 0.0);
@@ -335,13 +340,14 @@ void vdgl_digital_region::PrincipalOrientation(vnl_float_2& major_axis)
   {
     std::cout << "In vdgl_digital_region::PrincipalOrientation(..) Insufficient rank\n";
     major_axis[0]=1.0; major_axis[1]=0.0;
-    return;
+    return false;
   }
   vnl_matrix<double> v = svd.V();
   //2 sigma gives a good estimate of axis length (sigma = principal eigenvalue)
   double radius = 2*std::sqrt(std::fabs(svd.W(0)));
   major_axis[0]=float(v(0,0)*radius);
   major_axis[1]=float(v(1,0)*radius);
+  return true;
 }
 
 double vdgl_digital_region::Ix() const
@@ -562,4 +568,50 @@ std::vector<unsigned int> vdgl_digital_region::residual_histogram(int nbins,
   for (this->reset(); this->next(); )
     ++hist[int((this->Ir()-mini)/step)];
   return hist;
+}
+//: ====  public functions ===
+//: merge two regions r12 must exist
+void merge(vdgl_digital_region* r1, vdgl_digital_region* r2, vdgl_digital_region*& r12 )
+{
+  if(!r1 || !r2){
+    r12 = VXL_NULLPTR;
+    return;
+  }
+  unsigned int n1 = r1->Npix(), n2 = r2->Npix();
+  if(n1 == 0 && n2 == 0){
+    r12 = VXL_NULLPTR;
+    return;
+  }
+  if (n1==0)
+    r12 = r2;
+  if (n2==0)
+    r12 = r1;
+  int n = n1 + n2;
+  r12->SetNpts(n);
+  r12->InitPixelArrays();
+  
+  float const* X1 = r1->Xj();
+  float const* Y1 = r1->Yj();
+  unsigned short const* I1 = r1->Ij();
+
+  float const* X2 = r2->Xj();
+  float const* Y2 = r2->Yj();
+  unsigned short const* I2 = r2->Ij();
+
+  for (unsigned i = 0; i<n2; i++)
+  {
+    r12->IncrementMeans(X2[i],Y2[i],I2[i]);
+    r12->InsertInPixelArrays(X2[i],Y2[i],I2[i]);
+  }
+  for (unsigned i = 0; i<n1; i++)
+  {
+    r12->IncrementMeans(X1[i],Y1[i],I1[i]);
+    r12->InsertInPixelArrays(X1[i],Y1[i],I1[i]);
+  }
+}
+
+vdgl_digital_region_sptr merge(vdgl_digital_region_sptr const& r1, vdgl_digital_region_sptr const& r2){
+  vdgl_digital_region* r12 = new vdgl_digital_region();
+  merge(r1.ptr(), r2.ptr(), r12);
+  return r12;
 }

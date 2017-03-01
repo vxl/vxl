@@ -27,6 +27,13 @@ vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr &im,
 vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr &im,
                                                  float unit_scaling=1.0f);
 
+//: Check if an image is a DICOM image (returns true if image format can be confirmed
+//  as being DICOM)
+bool vimt_is_image_dicom(vil_stream* is);
+
+//: Check for a DICOM image if tag PhotometricInterpretation is set to MONOCHROME1
+bool vimt_is_monochrome1(const std::string& im_path);
+
 //: Load image from path into byte image, merging transparent image planes
 // If input image is float or int16 then stretch values to byte
 void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& image,

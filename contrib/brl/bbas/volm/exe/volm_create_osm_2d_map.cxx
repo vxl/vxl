@@ -19,6 +19,7 @@
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_box_2d.h>
 #include <vil/vil_save.h>
@@ -1144,7 +1145,7 @@ int main(int argc, char** argv)
     // obtain LIDAR images that intersect with current leaf
     std::vector<std::pair<vil_image_view<float>, vpgl_geo_camera*> > lidar_imgs;
     for (std::vector<volm_img_info>::iterator vit = lidar_infos.begin(); vit != lidar_infos.end(); ++vit) {
-      if (vgl_intersection(vit->bbox, leaf_bbox_geo).area() <= 0.0)
+      if (vgl_area(vgl_intersection(vit->bbox, leaf_bbox_geo)) <= 0.0)
         continue;
       if (vit->img_r->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
         log << "ERROR: unsupported LIDAR image pixel format: " << vit->img_r->pixel_format() << '\n';  error(log_file, log.str());

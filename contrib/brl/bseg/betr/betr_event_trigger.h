@@ -46,36 +46,48 @@ class betr_event_trigger : public vbl_ref_count{
   // the mask is for the case of RGBA images and it is desired to apply the alpha value
   // by setting the intensity to zero when alpha = 0.
   void set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask = false);
+  void set_ref_images(std::vector<vil_image_resource_sptr> const& ref_rescs, bool apply_mask = false);
   void set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask = false);
 
   void set_ref_camera(vpgl_camera_double_sptr const& camera);
+  void set_ref_cameras(std::vector<vpgl_camera_double_sptr> const& cameras);
   void set_evt_camera(vpgl_camera_double_sptr const& camera);
 
   // Add object and find translation vector from trigger origin to object origin.
   void add_geo_object(std::string const& obj_name, betr_geo_object_3d_sptr const& geo_object, bool is_ref_obj);
   bool add_geo_object(std::string const& name, double lon, double lat ,
                       double elev, std::string const& geom_path, bool is_ref_obj);
+  bool add_gridded_event_poly(std::string const& name, double lon, double lat ,
+                              double elev, std::string const& geom_path, double grid_spacing);
   //: execute change algorithm one event object
-  bool process(std::string alg_name, double& prob_change);
+  bool process(std::string alg_name, double& prob_change, std::string const& params_json = "{}");
 
   //: execute change algorithm multiple event objects
-  bool process(std::string alg_name, std::vector<double>& prob_change);
+  bool process(std::string alg_name, std::vector<double>& prob_change, std::string const& params_json = "{}");
 
   //: execute change algorithm one event object and change image with offset in event image
   bool process(std::string alg_name, double& prob_change,
-               vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset);
+               vil_image_resource_sptr change_img, vgl_point_2d<unsigned> offset, std::string const& params_json = "{}");
 
   //: execute change algorithm multiple event objects with change images and offsets return
   bool process(std::string alg_name, std::vector<double>& prob_change,
                std::vector<vil_image_resource_sptr>& change_images,
-               std::vector<vgl_point_2d<unsigned> >& offsets);
+               std::vector<vgl_point_2d<unsigned> >& offsets,
+               std::string const& params_json = "{}");
+  //: execute change algorithm multiple event objects with event names, scores, change images and offsets return
+  // note that event objects can be retrieved using the name as a key (see evt_trigger_objects_ below)
+  bool process(std::string alg_name, std::vector<double>& prob_change,
+               std::vector<std::string>& event_region_names,
+               std::vector<vil_image_resource_sptr>& change_images,
+               std::vector<vgl_point_2d<unsigned> >& offsets,
+               std::string const& params_json = "{}");
   //: acessors
   std::string name() const {return name_;}
   const std::map<std::string, betr_geo_object_3d_sptr>& ref_objects() const {return ref_trigger_objects_;}
   const std::map<std::string, betr_geo_object_3d_sptr>& evt_objects() const {return evt_trigger_objects_;}
   vpgl_lvcs lvcs() const {return lvcs_;}
   std::vector<std::string> algorithms() const;
-
+  
   //utilities
   //: projected 2-d polygon for the 3-d trigger object
   bool project_object(vpgl_camera_double_sptr cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly);
@@ -90,16 +102,17 @@ class betr_event_trigger : public vbl_ref_count{
                                     vsol_polygon_3d_sptr poly_3d,
                                     vgl_vector_3d<double> const& transl);
   void register_algorithms();
+  vpgl_camera_double_sptr cast_camera(vpgl_camera_double_sptr const& camera);
   bool verbose_;
   std::string name_;
   vpgl_lvcs lvcs_;
   bool lvcs_valid_;
-  static unsigned process_counter_;
+  static unsigned process_counter_; //unique id for different involcations of an algorithm
   betr_geo_box_3d global_bbox_;//trigger bounding box in global WGS84
   vsol_box_3d_sptr local_bbox_;//trigger bounding box in local Cartesian coordinates
-  vil_image_resource_sptr ref_imgr_; //ref image resouce
+  std::vector<vil_image_resource_sptr> ref_rescs_; //ref image resources
   vil_image_resource_sptr evt_imgr_; //event image resouce
-  vpgl_camera_double_sptr ref_camera_;// ref image camera for entire trigger region
+  std::vector<vpgl_camera_double_sptr> ref_cameras_;// ref image camera for entire trigger region
   vpgl_camera_double_sptr evt_camera_;// evt image camera for entire trigger region
   std::string ref_path_;
   std::string evt_path_;

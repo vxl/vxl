@@ -1,5 +1,9 @@
 #include "betr_geo_object_3d.h"
 #include <vsol/vsol_box_3d.h>
+#include <vsol/vsol_point_3d.h>
+#include <vsol/vsol_region_3d.h>
+#include <vsol/vsol_volume_3d.h>
+#include <betr/vsol_mesh_3d.h>
 
   void betr_geo_object_3d::update_box_from_from_vsol_box(vsol_box_3d_sptr sbox, betr_geo_box_3d& box) const{
   if(!sbox)
@@ -24,12 +28,37 @@
                         lon, lat, elev);
   box.add(lon, lat, elev);
 }
-#if 0
-betr_geo_box_3d betr_geo_object_3d::bounding_box() const{
-  betr_geo_box_3d box;
-  if(!so_)
-    return box;//empty box
-  this->update_box_from_vsol_box(so_->get_bounding_box(), box);
-  return box;
+vsol_polygon_3d_sptr betr_geo_object_3d::base_polygon() {
+  vsol_polygon_3d_sptr local_base_poly;
+  vsol_region_3d* reg_ptr = VXL_NULLPTR;
+  vsol_volume_3d* vol_ptr = VXL_NULLPTR;
+  if(reg_ptr = so_->cast_to_region()){
+    vsol_polygon_3d* poly_3d = reg_ptr->cast_to_polygon();
+      if(!poly_3d){
+        std::cout << "only handle polygonal regions for now. Geo object is not a vsol_polygon_3d" << std::endl;
+        return VXL_NULLPTR;
+      } 
+      local_base_poly = poly_3d;
+  }else if(vol_ptr = so_->cast_to_volume()){
+    vsol_mesh_3d* mesh = vol_ptr->cast_to_mesh();
+    if(!mesh){
+        std::cout << "only handle mesh volumes for now. Geo object is not a vsol_mesh_3d" << std::endl;
+        return VXL_NULLPTR;
+      }
+    local_base_poly =  mesh->extract_bottom_face();
+  }else{
+    std::cout << "In base_polygon - spatial object is unknown " << std::endl;
+    return VXL_NULLPTR;
+  }
+  // convert coordinates to global
+  std::vector<vsol_point_3d_sptr> gverts;
+  unsigned n = local_base_poly->size();
+  for(unsigned i = 0; i<n; ++i){
+    vsol_point_3d_sptr v = local_base_poly->vertex(i);
+    double lon, lat, elev;
+    lvcs_.local_to_global(v->x(), v->y(), v->z(), vpgl_lvcs::wgs84, lon, lat, elev);
+    vsol_point_3d_sptr gv = new vsol_point_3d(lon, lat, elev);
+    gverts.push_back(gv);
+  }
+  return new vsol_polygon_3d(gverts);
 }
-#endif

@@ -43,7 +43,7 @@ private:
   vpgl_geo_camera* geo_cam_;
   const vil_image_view<float>* dview_; 
 };
-vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem):dem_(dem), min_samples_(5000.0), tail_fract_(0.025)
+vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, double zmin, double zmax):dem_(dem), min_samples_(5000.0), tail_fract_(0.025)
 {
   //construct a geo_camera for the dem (an orthographic view looking straight down)
   if(!vpgl_geo_camera::init_geo_camera(dem_, geo_cam_)){
@@ -53,41 +53,52 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem):
     return;
   //get the image of elevations
   dem_view_ = dem_->get_view();
-  //get the bounds on elevation by sampling according to a fraction of the dem area
-  //compute the pixel interval (stride) for sampling the fraction
-  unsigned ni = dem_view_.ni(), nj = dem_view_.nj();
-  double area = ni*nj;
-  double stride_area = area/min_samples_;
-  unsigned stride_interval = static_cast<unsigned>(std::sqrt(stride_area));
-  // get the center of the dem
-  unsigned nhi = ni/2, nhj = nj/2;
-  double lon, lat;
-  geo_cam_->img_to_global(nhi, nhj, lon, lat);
-  double elev = dem_view_(nhi, nhj);
-  geo_center_.set(lon, lat, elev);
-  // sample elevations
-  std::vector<double> z_samples;
-  float zmin=std::numeric_limits<float>::max(), zmax=-zmin;
-  for(unsigned j = 0; j<nj; j+=stride_interval)
-    for(unsigned i = 0; i<ni; i+=stride_interval){
-      float z = dem_view_(i,j);
-      if(z <= 0.0)
-        continue;
-      z_samples.push_back(z);
+
+  // check for appropriate zmin/zmax inputs
+  if (zmax > zmin) {
+    z_min_ = zmin;
+    z_max_ = zmax;
+
+  } else {
+    std::cout << "Calculating Z-range from DEM..." << std::endl;
+    //get the bounds on elevation by sampling according to a fraction of the dem area
+    //compute the pixel interval (stride) for sampling the fraction
+    unsigned ni = dem_view_.ni(), nj = dem_view_.nj();
+    double area = ni*nj;
+    double stride_area = area/min_samples_;
+    unsigned stride_interval = static_cast<unsigned>(std::sqrt(stride_area));
+    // get the center of the dem
+    unsigned nhi = ni/2, nhj = nj/2;
+    double lon, lat;
+    geo_cam_->img_to_global(nhi, nhj, lon, lat);
+    double elev = dem_view_(nhi, nhj);
+    geo_center_.set(lon, lat, elev);
+    // sample elevations
+    std::vector<double> z_samples;
+    float zmin_calc=std::numeric_limits<float>::max(), zmax_calc=-zmin_calc;
+    for(unsigned j = 0; j<nj; j+=stride_interval)
+      for(unsigned i = 0; i<ni; i+=stride_interval){
+        float z = dem_view_(i,j);
+        if(z <= 0.0)
+          continue;
+        z_samples.push_back(z);
+      }
+    // sort the samples to remove tails due to DEM errors
+    std::sort(z_samples.begin(), z_samples.end());
+    // remove the tails and compute min max elevations
+    double ns = static_cast<double>(z_samples.size());
+    unsigned band_size = static_cast<unsigned>(ns*tail_fract_);
+    for(unsigned k = band_size; k<(ns-band_size); ++k){
+      double z = z_samples[k];
+      if(z<zmin_calc) zmin_calc = z;
+      if(z>zmax_calc) zmax_calc = z;
     }
-  // sort the samples to remove tails due to DEM errors
-  std::sort(z_samples.begin(), z_samples.end());
-  // remove the tails and compute min max elevations
-  double ns = static_cast<double>(z_samples.size());
-  unsigned band_size = static_cast<unsigned>(ns*tail_fract_);
-  for(unsigned k = band_size; k<(ns-band_size); ++k){
-    double z = z_samples[k];
-    if(z<zmin) zmin = z;
-    if(z>zmax) zmax = z;
+    //the final elevation bounds
+    z_min_ = zmin_calc;
+    z_max_ = zmax_calc;    
   }
-  //the final elevation bounds
-  z_min_ = zmin;
-  z_max_ = zmax;
+
+  std::cout << "[ZMIN,ZMAX]=[" << z_min_ << "," << z_max_ << "]" << std::endl;
 }
 vpgl_backproject_dem::~vpgl_backproject_dem(){
   if(geo_cam_)
