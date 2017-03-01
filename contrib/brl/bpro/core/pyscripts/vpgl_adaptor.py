@@ -814,16 +814,6 @@ def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance=1000.0):
   batch.remove_data(lvcs.id)
   return gsd_i, gsd_j
 
-
-def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename, init_finish=True):
-  batch.init_process('vpglGeoFootprintProcess')
-  batch.set_input_from_db(0, geocam)
-  batch.set_input_string(1, geotiff_filename)
-  batch.set_input_string(2, out_kml_filename)
-  batch.set_input_bool(3, init_finish)
-  batch.run_process()
-
-
 def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename="", write_kml=False):
   batch.init_process("vpglGeoFootprintProcess2")
   batch.set_input_from_db(0, geocam)
