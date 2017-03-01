@@ -803,3 +803,33 @@ def dilate_image_disk(in_img, disk_size):
     return out_img
   else:
     return None
+
+def binarize_using_otsu_threshold(in_img, orange, obins, margin=0):
+  batch.init_process("vilBinarizeOtsuProcess")
+  batch.set_input_from_db(0, in_img)
+  batch.set_input_double(1, orange)
+  batch.set_input_int(2, obins)
+  batch.set_input_int(3, margin)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    out_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    dt = batch.get_output_double(id)
+    return out_img, dt
+  else:
+    return None, 0
+
+def blob_detection(img, min_size, max_size):
+  batch.init_process("vilBlobDetectionProcess")
+  batch.set_input_from_db(0, img)
+  batch.set_input_unsigned(1, min_size)
+  batch.set_input_unsigned(2, max_size)
+  batch.run_process()
+  (id, type) = batch.commit_output(0)
+  out = dbvalue(id, type)
+  (id, type) = batch.commit_output(1)
+  out_color = dbvalue(id, type)
+  (id, type) = batch.commit_output(2)
+  cnt = batch.get_output_unsigned(id)
+  return out, out_color, cnt

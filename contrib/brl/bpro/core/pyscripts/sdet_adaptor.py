@@ -370,3 +370,14 @@ def segment_image_using_height2(img, height_img, edge_img, weight_thres, margin=
   (id, type) = batch.commit_output(0)
   seg_img = dbvalue(id, type)
   return seg_img
+
+def ss_segment_image(img, weight_thres):
+  batch.init_process("sdetSelectiveSearchProcess")
+  batch.set_input_from_db(0, img)
+  batch.set_input_float(1, weight_thres)
+  batch.run_process()
+  (id, type) = batch.commit_output(0)
+  seg_img = dbvalue(id, type)
+  (id, type) = batch.commit_output(1)
+  bb_img = dbvalue(id, type)
+  return seg_img, bb_img

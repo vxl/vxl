@@ -82,5 +82,6 @@ DECLARE_FUNC_CONS(vil_invert_float_image_process);
 DECLARE_FUNC_CONS(vil_combine_palnes_8_bands_process);
 DECLARE_FUNC_CONS(vil_image_registration_process);
 DECLARE_FUNC_CONS(vil_multi_plane_view_to_grey_process);
+DECLARE_FUNC_CONS(vil_binarize_otsu_process);
 
 #endif
