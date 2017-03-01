@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include <vnl/vnl_inverse.h>
+#include <vnl/vnl_math.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_crop.h>
@@ -280,11 +281,11 @@ float baml_sigma(
       for (int y = 0; y < height; y++) {
         if (max_score < scores(x, y)) max_score = scores(x, y);
         if (min_score > scores(x, y)) min_score = scores(x, y);
-        if (std::isnan(scores(x, y))) {
+        if (vnl_math::isnan(scores(x, y))) {
           std::cerr << "score is nan";
           return false;
         }
-        if (std::isinf(scores(x, y))) {
+        if (vnl_math::isinf(scores(x, y))) {
           std::cerr << "score is infinity";
           return false;
         }
