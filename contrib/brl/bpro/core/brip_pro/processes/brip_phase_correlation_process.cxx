@@ -73,8 +73,8 @@ bool brip_phase_correlation_process(bprb_func_process& pro)
     for (unsigned j = 0; j < image_b.nj(); j++)
       if (image_b(i,j) != image_b(i,j)) // test for std::numeric_limits<float>::quiet_NaN())
         image_b(i,j) = 0.0f;
-  vil_save(image_a, "C:/projects/SatTel/Kandahar/scene_60/image_a.tif");
-  vil_save(image_b, "C:/projects/SatTel/Kandahar/scene_60/image_b.tif");
+  //vil_save(image_a, "C:/projects/SatTel/Kandahar/scene_60/image_a.tif");
+  //vil_save(image_b, "C:/projects/SatTel/Kandahar/scene_60/image_b.tif");
   brip_phase_correlation bpco(image_a, image_b, gauss_sigma, peak_radius, alpha);
   bool good = bpco.compute();
   if(!good) {

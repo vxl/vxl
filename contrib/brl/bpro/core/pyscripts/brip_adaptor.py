@@ -125,3 +125,27 @@ def image_mutual_info(image1, image2, min_val, max_val, n_bins):
     return mutual_info
   else:
     return -1.0
+
+##################################################################
+# Find the translation between two images using phase correlation
+##################################################################
+def image_phase_correlation(ref_img, tgr_img, gauss_sigma = 1.0, peak_radius = 2.0, alpha = 0.5):
+  batch.init_process("bripPhaseCorrelationProcess")
+  batch.set_input_from_db(0, ref_img)
+  batch.set_input_from_db(1, tgr_img)
+  batch.set_input_float(2, gauss_sigma)
+  batch.set_input_float(3, peak_radius)
+  batch.set_input_float(4, alpha)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    tu = batch.get_output_float(id)
+    (id, type) = batch.commit_output(1)
+    tv = batch.get_output_float(id)
+    (id, type) = batch.commit_output(2)
+    confidence = batch.get_output_float(id)
+    (id, type) = batch.commit_output(3)
+    corr_img = dbvalue(id, type)
+    return tu, tv, confidence, corr_img
+  else:
+    return None, None, None, None
