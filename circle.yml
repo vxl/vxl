@@ -15,8 +15,8 @@ stages:
           apt-get update
           apt-get install -y git
 
-#      - type: cache-restore
-#        key: vxl_src
+      - type: cache-restore
+        key: vxl_src
       - type: checkout
       - type: cache-save
         key: vxl_src-{{ checksum "/vxl/core/vxl_version.h" }}
