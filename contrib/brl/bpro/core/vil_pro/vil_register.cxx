@@ -98,5 +98,6 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_combine_palnes_8_bands_process, "vilCombinePlanes8BandsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_registration_process, "vilImageRegistrationProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_multi_plane_view_to_grey_process, "vilMultiPlaneViewToGreyProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_binarize_otsu_process, "vilBinarizeOtsuProcess");
 }
 

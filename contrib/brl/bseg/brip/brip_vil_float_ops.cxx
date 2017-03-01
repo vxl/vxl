@@ -4577,14 +4577,14 @@ fast_extrema_rotational(vil_image_view<float> const& input,
                         bool bright, bool mag_only,
                         bool signed_response, bool scale_invariant,
                         bool non_max_suppress,
-                        float cutoff) {
+                        float cutoff, float theta_init, float theta_end) {
   unsigned ni = input.ni(), nj = input.nj();
   vil_image_view<float> resp(ni, nj);
   resp.fill(0.0f);
 
     // elliptical operator has 180 degree rotational symmetry, so only the angles in the range [0,180] matter
-  float theta = 0; unsigned theta_i = 1;
-  for (; theta < 180; theta += theta_interval, theta_i++)
+  float theta = theta_init; unsigned theta_i = 1;
+  for (; theta < theta_end; theta += theta_interval, theta_i++)
   {
    vil_image_view<float> temp =
      fast_extrema(input, lambda0, lambda1, theta, bright,

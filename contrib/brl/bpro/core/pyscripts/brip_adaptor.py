@@ -125,3 +125,23 @@ def image_mutual_info(image1, image2, min_val, max_val, n_bins):
     return mutual_info
   else:
     return -1.0
+
+def extrema_operator(image, lambda0, lambda1, theta, theta_init=0, theta_end=180, bright=True, use_fast_algo=True):
+  batch.init_process("bripExtremaProcess")
+  batch.set_input_from_db(0, image)
+  batch.set_input_float(1, lambda0)
+  batch.set_input_float(2, lambda1)
+  batch.set_input_float(3, theta)
+  batch.set_input_float(4, theta_init)
+  batch.set_input_float(5, theta_end)
+  batch.set_input_bool(6, bright)
+  batch.set_input_bool(7, use_fast_algo)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    point_img = dbvalue(id, type)
+    (id, type) = batch.commit_output(1)
+    mask_img = dbvalue(id, type)
+    return point_img, mask_img
+  else:
+    return None, None 

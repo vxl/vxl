@@ -251,6 +251,8 @@ class brip_vil_float_ops
                                             float cutoff= 0.01f);
 
 
+  // by default rotates between theta_init = 0 to theta_end = 180 for full rotation invariance
+  // set theta_init and theta_end accordingly to detect rotational extrema response in a given angular range
   static vil_image_view<float>& resp,
     fast_extrema_rotational(vil_image_view<float> const& input,
                             float lambda0, float lambda1,
@@ -260,7 +262,9 @@ class brip_vil_float_ops
                             bool signed_response =true,
                             bool scale_invariant = true,
                             bool non_max_suppress = false,
-                            float cutoff=0.01f);
+                            float cutoff=0.01f,
+                            float theta_init = 0.0f, 
+                            float theta_end = 180.0f);
 
   //: Ix.Ix-transpose gradient matrix elements for an NxN region ($N = 2n+1$)
   // That is,
