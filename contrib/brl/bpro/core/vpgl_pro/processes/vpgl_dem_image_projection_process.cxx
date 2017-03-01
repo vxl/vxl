@@ -3,7 +3,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-
+#include <limits>
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
@@ -70,7 +70,7 @@ bool vpgl_dem_image_projection_process(bprb_func_process& pro)
 
   // generate output image
   vil_image_view<float> out_img(out_ni, out_nj);
-  out_img.fill(std::numeric_limits<float>::lowest());
+  out_img.fill(-1*std::numeric_limits<float>::max());
   if (err_tol <= 0)
     err_tol = 1.0;
   // start backprojection/projection
