@@ -56,6 +56,43 @@ bool sdet_extract_filter_bank_process(bprb_func_process& pro)
   return true;
 }
 
+//: this process extracts the filter bank of an image (assumes a float image in the range [0, 1])
+//  and saves it in the filter_bank object of the passed texture_classifier instance
+//  the params of the classifier instance are used
+bool sdet_extract_filter_bank_img_process_cons(bprb_func_process& pro)
+{
+  std::vector<std::string> input_types;
+  input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
+  input_types.push_back("vil_image_view_base_sptr"); // input image 
+  if (!pro.set_input_types(input_types))
+    return false;
+
+  std::vector<std::string> output_types;
+  return pro.set_output_types(output_types);
+}
+
+bool sdet_extract_filter_bank_img_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs())
+  {
+    std::cout << pro.name() << "sdet_extract_filter_bank_process inputs are not valid"<< std::endl;
+    return false;
+  }
+  // get inputs
+  sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
+  vil_image_view_base_sptr img_ptr = pro.get_input<vil_image_view_base_sptr>(1);
+  vil_image_view<float> img(img_ptr);
+  
+  // assumes to load a float image in [0,1] using the name, name should be full path to the image
+  if (!tc_ptr->compute_filter_bank(img))
+  {
+    std::cout << "problems computing filter bank on the image!\n";
+    return false;
+  }
+
+  return true;
+}
+
 
 //: this process extracts a "gauss" band from the input image and adds that as another layer to the filter_bank of the passed classifier
 //  practically increases the dimension of the textons

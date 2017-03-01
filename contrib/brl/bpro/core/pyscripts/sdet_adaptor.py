@@ -61,6 +61,13 @@ def extract_filter_bank(tclsf, img_name, filter_folder):
   batch.set_input_string(2, filter_folder)
   batch.run_process()
 
+# extract the filter bank from float image view without saving it, assumes the image is scaled to [0,1] appropriately
+def extract_filter_bank_img(tclsf, img):
+  batch.init_process("sdetExtractFilterBankImgProcess")
+  batch.set_input_from_db(0, tclsf)      # classifier instance
+  batch.set_input_from_db(1, img)
+  status = batch.run_process()
+  return status
 
 def add_to_filter_bank(tclsf, img_name, plane, filter_folder, filter_name, is_gauss_smooth=True):
   batch.init_process("sdetAddtoFilterBankProcess")
@@ -129,6 +136,7 @@ def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
   batch.set_input_from_db(0, tclsf)
   batch.set_input_unsigned(1, block_size)
   batch.set_input_string(2, category_id_file)
+  batch.set_input_string(3, category_name)
   status = batch.run_process()
   if status:
     (out_id, out_type) = batch.commit_output(0)
