@@ -18,7 +18,7 @@
 // \endverbatim
 
 #include <string>
-#include <iosfwd>
+#include <ostream>
 #include <vcl_compiler.h>
 #include <gtk/gtk.h>
 #include <vgui/vgui_statusbuf.h>
