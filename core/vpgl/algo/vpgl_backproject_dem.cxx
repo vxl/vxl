@@ -53,6 +53,14 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
     return;
   //get the image of elevations
   dem_view_ = dem_->get_view();
+  unsigned ni = dem_view_.ni(), nj = dem_view_.nj();
+
+  // get the center of the dem
+  unsigned nhi = ni/2, nhj = nj/2;
+  double lon, lat;
+  geo_cam_->img_to_global(nhi, nhj, lon, lat);
+  double elev = dem_view_(nhi, nhj);
+  geo_center_.set(lon, lat, elev);
 
   // check for appropriate zmin/zmax inputs
   if (zmax > zmin) {
@@ -63,16 +71,10 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
     std::cout << "Calculating Z-range from DEM..." << std::endl;
     //get the bounds on elevation by sampling according to a fraction of the dem area
     //compute the pixel interval (stride) for sampling the fraction
-    unsigned ni = dem_view_.ni(), nj = dem_view_.nj();
     double area = ni*nj;
     double stride_area = area/min_samples_;
     unsigned stride_interval = static_cast<unsigned>(std::sqrt(stride_area));
-    // get the center of the dem
-    unsigned nhi = ni/2, nhj = nj/2;
-    double lon, lat;
-    geo_cam_->img_to_global(nhi, nhj, lon, lat);
-    double elev = dem_view_(nhi, nhj);
-    geo_center_.set(lon, lat, elev);
+
     // sample elevations
     std::vector<double> z_samples;
     float zmin_calc=std::numeric_limits<float>::max(), zmax_calc=-zmin_calc;
