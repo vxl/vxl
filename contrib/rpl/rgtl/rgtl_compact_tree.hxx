@@ -1,220 +1,350 @@
-#ifndef rgtl_compact_tree_hxx
-#define rgtl_compact_tree_hxx
-//:
-// \file
-// \brief Compactly represent a tree.
-// \author Brad King
-// \date December 2006
-// \copyright
 // Copyright 2006-2009 Brad King, Chuck Stewart
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+#ifndef rgtl_compact_tree_hxx
+#define rgtl_compact_tree_hxx
 
-#include "rgtl_tagged_vector.hxx"
-#include "rgtl_compact_tree_link.hxx"
-#include "rgtl_compact_tree_index.hxx"
-#include "rgtl_compact_tree_policy.hxx"
-#include "rgtl_serialize_access.hxx"
-#include "rgtl_serialize_base.hxx"
+#include "rgtl_compact_tree.h"
 
 #include <vcl_cassert.h>
 
-//: Represent a tree structure compactly using a few contiguous arrays.
-//
-// The represented tree has 2^D children per internal node, where D is
-// the first template argument.  Data may be associated with the
-// leaves and internal nodes of the tree using the Policy template
-// arguments.
-//
-// This implementation overcomes several deficiencies in traditional
-// tree representations.  Tree structures often consume more memory
-// than they actually need due to storage of null pointers on the
-// bottom level, unused data on some nodes, and fragmented memory.  As
-// the tree is manipulated many small blocks of memory are allocated
-// and deallocated.  Fragmented tree traversal has poor locality of
-// reference.
-template <
-  unsigned int D,
-  typename Policy1 = rgtl_leaf_data_value_policy_empty,
-  typename Policy2 =
-  typename rgtl_compact_tree_policy_default<Policy1::policy_type>::policy>
-class rgtl_compact_tree:
-  protected rgtl_compact_tree_policy_lookup<Policy1>::policy,
-  protected rgtl_compact_tree_policy_lookup<Policy2>::policy
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+rgtl_compact_tree<D, Policy1, Policy2>
+::rgtl_compact_tree():
+  node_owners_(1, cell_index_type::invalid()),
+  child_links_(1),
+  leaf_data_owners_(0)
 {
- public:
-  typedef typename rgtl_compact_tree_policy_lookup<Policy1>::policy derived1;
-  typedef typename rgtl_compact_tree_policy_lookup<Policy2>::policy derived2;
+}
 
-  //: The branching dimension of the tree.  Internal nodes have 2^D children.
-  enum { dimension = D };
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+bool
+rgtl_compact_tree<D, Policy1, Policy2>
+::has_children(cell_index_type c) const
+{
+  link const& l = child_link(c);
+  return !l && l.index();
+}
 
-  //: Type-safe index of a child within a parent node.
-  typedef rgtl_child_index_type child_index_type;
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+typename rgtl_compact_tree<D, Policy1, Policy2>::cell_index_type
+rgtl_compact_tree<D, Policy1, Policy2>
+::get_child(cell_index_type c, child_index_type child_index) const
+{
+  // The given cell index consists of the node array index of its
+  // parent and the corresponding child number.  The child link entry
+  // in the parent for the cell contains the node array index of the
+  // cell itself.  Combined with the desired child number this gives
+  // the cell index of the child.
+  assert(has_children(c));
+  return cell_index_type(node_index_type(child_link(c).index()),
+                         child_index);
+}
 
-  //: Type-safe index of a leaf data entry.
-  typedef rgtl_leaf_data_index_type leaf_data_index_type;
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+typename rgtl_compact_tree<D, Policy1, Policy2>::cell_index_type
+rgtl_compact_tree<D, Policy1, Policy2>
+::get_parent(cell_index_type c) const
+{
+  // The owner entry of a node is the index of itself, consisting of
+  // the node array index of its parent and the child number
+  // corresponding to the node.  Therefore the owner entry of our
+  // parent is its own cell index.
+  return node_owner(c.parent());
+}
 
-  //: Type-safe index of an internal node data entry.
-  typedef rgtl_node_data_index_type node_data_index_type;
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+typename rgtl_compact_tree<D, Policy1, Policy2>::link
+rgtl_compact_tree<D, Policy1, Policy2>
+::leaf_data_get(cell_index_type c) const
+{
+  assert(!has_children(c));
+  return leaf_data_link(c);
+}
 
-  //: Type-safe index of an internal node.
-  typedef rgtl_node_index_type node_index_type;
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+typename rgtl_compact_tree<D, Policy1, Policy2>::link
+rgtl_compact_tree<D, Policy1, Policy2>
+::leaf_data_insert(cell_index_type c)
+{
+  assert(!has_children(c));
+  if (link& cl = child_link(c))
+    {
+    // The leaf data entry already exists.
+    return cl;
+    }
+  else
+    {
+    // Create a link to the new data location.
+    link l(leaf_data_count(), true);
 
-  //: Type to uniquely index any cell (node or leaf) in the tree.
-  typedef rgtl_compact_tree_index<D> cell_index_type;
+    // Tell the owner of the new data about its location.
+    leaf_data_link(c) = l;
 
-  //: Type of link into node data and leaf data arrays.
-  typedef rgtl_compact_tree_link link;
+    // Tell the new data about its owner.
+    leaf_data_owners_.push_back(c);
 
-  //: Default-construct a tree consisting of just a root leaf.
-  rgtl_compact_tree();
+    // Create the new leaf data value entry according to the leaf
+    // data value policy.
+    this->leaf_data_value_create();
 
-  //: Returns true if the given cell has children.
-  bool has_children(cell_index_type c) const;
+    return l;
+    }
+}
 
-  //: Return the index of a child of an internal node.
-  //  The given cell must have children.
-  cell_index_type get_child(cell_index_type c,
-                            child_index_type child_index) const;
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+void
+rgtl_compact_tree<D, Policy1, Policy2>
+::leaf_data_erase(cell_index_type c)
+{
+  assert(!has_children(c));
 
-  //: Return the index of the parent node of the given cell.
-  //  If the given cell is the root cell an invalid index is returned
-  //  such that conversion to boolean yields false.
-  cell_index_type get_parent(cell_index_type c) const;
+  // Erase the leaf data entry if it exists.  If it is not the last
+  // entry move the last entry into its place and then erase the
+  // last entry.
+  if (link& cl = child_link(c))
+    {
+    // Get the index of the leaf data entry.
+    leaf_data_index_type ldi(cl.index());
 
-  //: Return a link into the leaf data array for the given leaf.
-  //  The given cell must be a leaf.
-  //  If the leaf has no data the returned link will test false.
-  link leaf_data_get(cell_index_type c) const;
+    // The original owner of leaf data at this index no longer owns data.
+    leaf_data_link(leaf_data_owner(ldi)) = link(0, false);
 
-  //: Insert a leaf data entry for the given leaf.
-  //  The given cell must be a leaf.  If the leaf already has data there is
-  //  no effect.  Returns a link into the leaf data array for the given leaf.
-  link leaf_data_insert(cell_index_type c);
+    // Move the last data entry to fill in the hole.
+    if (ldi < leaf_data_count()-1)
+      {
+      // Tell the new location of the moved data about its owner.
+      leaf_data_index_type last(leaf_data_count()-1);
+      leaf_data_owner(ldi) = leaf_data_owner(last);
 
-  //: Erase a leaf data entry for the given leaf.
-  //  The given cell must be a leaf.
-  //  If the leaf has no data there is no effect.
-  void leaf_data_erase(cell_index_type c);
+      // Tell the owner of the moved data about its new location.
+      leaf_data_link(leaf_data_owner(ldi)) = link(ldi, true);
+      }
 
-  //: Return a link into the node data array for the given node.
-  //  The given cell must be an internal node.
-  //  If the node has no data the returned link will test false.
-  link node_data_get(cell_index_type c) const;
+    // Deallocate the owner portion of the unused leaf data entry.
+    leaf_data_owners_.erase(leaf_data_owners_.end()-1,
+                            leaf_data_owners_.end());
 
-  //: Insert a node data entry for the given node.
-  //  The given cell must be an internal node.
-  //  If the node already has data there is no effect.
-  //  Returns a link into the node data array for the given node.
-  link node_data_insert(cell_index_type c);
+    // Remove the old leaf data value entry according to the leaf
+    // data value policy.
+    this->leaf_data_value_destroy(ldi);
+    }
+}
 
-  //: Erase a node data entry for the given node.
-  //  The given cell must be an internal node.
-  //  If the node has no data there is no effect.
-  void node_data_erase(cell_index_type c);
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+typename rgtl_compact_tree<D, Policy1, Policy2>::link
+rgtl_compact_tree<D, Policy1, Policy2>
+::node_data_get(cell_index_type c) const
+{
+  assert(has_children(c));
 
-  //: Create children for the given leaf thus converting it to a node.
-  //  The given cell must be a leaf and have no data when this method
-  //  is invoked.
-  void subdivide(cell_index_type c);
+  // Invoke the internal implementation of this method according to
+  // the node data policy given.
+  return this->node_data_get_impl(node_index_type(child_link(c).index()));
+}
 
-  //: Remove children from the given node thus converting it to a leaf.
-  //  The given cell must be a node with no data and its children must
-  //  have no children or data of their own when this method is invoked.
-  void collapse(cell_index_type c);
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+typename rgtl_compact_tree<D, Policy1, Policy2>::link
+rgtl_compact_tree<D, Policy1, Policy2>
+::node_data_insert(cell_index_type c)
+{
+  assert(has_children(c));
 
- protected:
+  // Invoke the internal implementation of this method according to
+  // the node data policy given.
+  return this->node_data_insert_impl(node_index_type(child_link(c).index()));
+}
 
-  class child_links_entry
-  {
-   public:
-    link& operator[](child_index_type c) { return links_[c]; }
-    link const& operator[](child_index_type c) const { return links_[c]; }
-   private:
-    link links_[1<<D];
-    friend class rgtl_serialize_access;
-    template <class Serializer>
-    void serialize(Serializer& sr) { sr& links_; }
-  };
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+void
+rgtl_compact_tree<D, Policy1, Policy2>
+::node_data_erase(cell_index_type c)
+{
+  assert(has_children(c));
 
-  bool can_subdivide(cell_index_type c) const;
-  bool can_collapse(cell_index_type c) const;
-  bool has_data(cell_index_type c) const;
+  // Invoke the internal implementation of this method according to
+  // the node data policy given.
+  this->node_data_erase_impl(node_index_type(child_link(c).index()));
+}
 
- private:
-  rgtl_tagged_vector<rgtl_node_index_tag, cell_index_type> node_owners_;
-  node_index_type node_count() const
-  {
-    return node_index_type(node_owners_.size());
-  }
-  cell_index_type& node_owner(node_index_type node_index)
-  {
-    return node_owners_[node_index];
-  }
-  cell_index_type const& node_owner(node_index_type node_index) const
-  {
-    return node_owners_[node_index];
-  }
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+void
+rgtl_compact_tree<D, Policy1, Policy2>
+::subdivide(cell_index_type c)
+{
+  assert(can_subdivide(c));
 
- private:
-  rgtl_tagged_vector<rgtl_node_index_tag, child_links_entry> child_links_;
-  link& child_link(cell_index_type c)
-  {
-    return child_links_[c.parent()][c.child()];
-  }
-  link const& child_link(cell_index_type c) const
-  {
-    return child_links_[c.parent()][c.child()];
-  }
-  link& leaf_data_link(cell_index_type c)
-  {
-    return child_links_[c.parent()][c.child()];
-  }
-  link const& leaf_data_link(cell_index_type c) const
-  {
-    link const& ldl = child_links_[c.parent()][c.child()];
-    assert("child link is a leaf data link" && (ldl || !ldl.index()));
-    return ldl;
-  }
-  child_links_entry& child_links(node_index_type node_index)
-  {
-    return child_links_[node_index];
-  }
-  child_links_entry const& child_links(node_index_type node_index) const
-  {
-    return child_links_[node_index];
-  }
+  // Link the new parent to its children.
+  child_link(c) = link(node_count(), false);
 
- private:
-  rgtl_tagged_vector<rgtl_leaf_data_index_tag,
-                     cell_index_type> leaf_data_owners_;
+  // link the new children to their parent.
+  node_owners_.push_back(c);
 
-  cell_index_type& leaf_data_owner(leaf_data_index_type leaf_data_index)
-  {
-    return leaf_data_owners_[leaf_data_index];
-  }
-  cell_index_type const&
-  leaf_data_owner(leaf_data_index_type leaf_data_index) const
-  {
-    return leaf_data_owners_[leaf_data_index];
-  }
-  leaf_data_index_type leaf_data_count() const
-  {
-    return leaf_data_index_type(leaf_data_owners_.size());
-  }
+  // Create the entry for the children.
+  child_links_.push_back(child_links_entry());
 
-  friend class rgtl_serialize_access;
-  template <class Serializer>
-  void serialize(Serializer& sr)
-  {
-    sr& rgtl_serialize_base<derived1>(*this);
-    sr& rgtl_serialize_base<derived2>(*this);
-    sr& node_owners_;
-    sr& child_links_;
-    sr& leaf_data_owners_;
-  }
-};
+  // Create the entry for the node data.
+  this->node_data_link_create();
+}
 
-#endif // rgtl_compact_tree_hxx
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+void
+rgtl_compact_tree<D, Policy1, Policy2>
+::collapse(cell_index_type c)
+{
+  assert(can_collapse(c));
+
+  // Get the index of this node.
+  node_index_type node_index(child_link(c).index());
+
+  // Tell the parent of this cell that it is now an empty leaf.
+  child_link(c) = link(0, false);
+
+  // Move the last node to fill in the hole.
+  if (node_index < node_count()-1)
+    {
+    // Tell the new location of the moved node about its owner.
+    node_owner(node_index) = node_owner(node_count()-1);
+
+    // Tell the owner of the moved node about its new location.
+    child_link(node_owner(node_index)) = link(node_index, false);
+
+    // Tell the new location of the moved node about its children.
+    child_links(node_index) = child_links(node_count()-1);
+
+    // Tell the children of the moved node about its new location.
+    for (child_index_type i(0); i < (1<<D); ++i)
+      {
+      cell_index_type cr(node_index, i);
+      if (link& cl = child_link(cr))
+        {
+        leaf_data_owner(leaf_data_index_type(cl.index())) = cr;
+        }
+      else if (node_index_type ni = node_index_type(cl.index()))
+        {
+        node_owner(ni) = cr;
+        }
+      }
+
+    // TODO: Add a callback here in case the user wants to know about
+    // the moved node.  The node_data_link_destroy call below informs
+    // the node data link management structure about the moved node
+    // but does nothing if there are no node data.  We need to add a
+    // third policy argument that provides this callback.  The user
+    // may use that policy to inject an implementation of this
+    // callback for example to update cell_index_type instances when a
+    // node is moved (which would allow iterators to not be invalidated
+    // when a different node is removed).
+    //
+    // this->node_moved(node_count()-1, node_index);
+    }
+
+  // Deallocate the unused node entry.
+  node_owners_.erase(node_owners_.end()-1, node_owners_.end());
+  child_links_.erase(child_links_.end()-1, child_links_.end());
+  this->node_data_link_destroy(node_index);
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+bool
+rgtl_compact_tree<D, Policy1, Policy2>
+::can_subdivide(cell_index_type c) const
+{
+  if (link const& l = child_link(c))
+    {
+    // The cell is a leaf with data.  It cannot be divided.
+    return false;
+    }
+  else if (l.index())
+    {
+    // The cell is a node.  It cannot be divided again.
+    return false;
+    }
+  else
+    {
+    // The cell is a leaf with no data.  It can be divided.
+    return true;
+    }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+bool
+rgtl_compact_tree<D, Policy1, Policy2>
+::can_collapse(cell_index_type c) const
+{
+  if (link const& l = child_link(c))
+    {
+    // The cell is a leaf with data.  It cannot be collapsed.
+    return false;
+    }
+  else if (l.index())
+    {
+    // The cell is a node.
+    if (this->node_data_get_impl(node_index_type(l.index())))
+      {
+      // The node has data.  It cannot be collapsed.
+      return false;
+      }
+    else
+      {
+      // The node may be collapsed only if all children are leaf
+      // cells without data.
+      for (child_index_type i(0); i < (1<<D); ++i)
+        {
+        cell_index_type child = get_child(c, i);
+        if (link const& cl = child_link(child))
+          {
+          // This child is a leaf with data.  The parent cannot be
+          // collapsed.
+          return false;
+          }
+        else if (cl.index())
+          {
+          // This child is a node.  The parent cannot be collapsed.
+          return false;
+          }
+        }
+
+      // All children are empty leaves.  The node may be collapsed.
+      return true;
+      }
+    }
+  else
+    {
+    // The cell is a leaf with no data.  It cannot be collapsed.
+    return false;
+    }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int D, typename Policy1, typename Policy2>
+bool
+rgtl_compact_tree<D, Policy1, Policy2>
+::has_data(cell_index_type c) const
+{
+  if (link const& cl = child_link(c))
+    {
+    return true;
+    }
+  else
+    {
+    return this->node_data_get_impl(node_index_type(cl.index()));
+    }
+}
+
+#endif

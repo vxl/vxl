@@ -11,6 +11,7 @@
 #include <vcl_compiler.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_step.h>
+#include <gevd/gevd_fold.h>
 #include <gevd/gevd_bufferxy.h>
 #include <sdet/sdet_contour.h>
 #include <vil/vil_new.h>
@@ -113,11 +114,15 @@ void sdet_detector::ClearData()
 bool  sdet_detector::DoContour()
 {
   if (edges && vertices) return true;
-
-  if (!DoStep()) {
-    std::cout << "***Fail on DoContour.\n";
-    return false;
-  }
+  if(!sdet_detector_params::peaks_only && !sdet_detector_params::valleys_only){
+    if (!DoStep()) {
+      std::cout << "***Fail on DoContour (Step).\n";
+      return false;
+    }
+  }else if (!DoFold()){
+        std::cout << "***Fail on DoContour (Fold).\n";
+        return false;
+      }
 
   sdet_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
   sdet_contour contour(this->hysteresisFactor*this->noiseThreshold,
@@ -173,12 +178,10 @@ bool  sdet_detector::DoFoldContour()
 {
   if (edges && vertices) return true;
 
-#if 0
   if (!DoFold()) {
     std::cout << "***Fail on DoFoldContour.\n";
     return false;
   }
-#endif
   sdet_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
   sdet_contour contour(this->hysteresisFactor*this->noiseThreshold,
                        this->minLength, this->minJump*this->noiseThreshold,
@@ -249,7 +252,6 @@ bool sdet_detector::DoStep()
   return edgel!=VXL_NULLPTR;
 }
 
-#if 0 // commented out
 //---------------------------------------------------------------------------
 //
 //: Detect fold profiles in the image, using dG+NMS+extension.
@@ -257,18 +259,24 @@ bool sdet_detector::DoStep()
 bool sdet_detector::DoFold()
 {
   if (edgel) return true;
-
-  const BufferXY* source = GetBufferFromImage();
+  const gevd_bufferxy* source;
+  if (use_vil_image)
+    source = GetBufferFromVilImage();
+  else
+    source = GetBufferFromImage();
   if (!source) {
-    std::cout << " cannot get image buffer\n";
+    std::cout << " cannot get image buffer for fold processing\n";
     return false;
   }
 
-  Fold fold(this->smooth, this->noise,
+  gevd_fold fold(this->smooth, this->noise,
             this->contourFactor,
             this->junctionFactor);
+
   fold.DetectEdgels(*source, edgel, direction,
-                    locationx, locationy, true, //Flag to compute mag, angle
+                    locationx, locationy,
+                    sdet_detector_params::peaks_only,sdet_detector_params::valleys_only,
+                    true, //Flag to compute mag, angle
                     grad_mag, angle); //Reusing grad_mag, actually |d2G|
 
   if (this->junctionp) {                // extension to real/virtual contours
@@ -284,9 +292,10 @@ bool sdet_detector::DoFold()
   }
 
   this->noiseThreshold = fold.NoiseThreshold();
-  return edgel!=NULL;
+  delete source;//this fixes a leak
+  return edgel!=VXL_NULLPTR;
 }
-#endif // 0
+
 
 //--------------------------------------------------------------------------------
 //

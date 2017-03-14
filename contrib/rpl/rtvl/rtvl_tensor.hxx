@@ -1,71 +1,129 @@
-/* Copyright 2007-2010 Brad King
-   Copyright 2007-2008 Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rtvl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
 #ifndef rtvl_tensor_hxx
 #define rtvl_tensor_hxx
+// Copyright 2007-2010 Brad King
+// Copyright 2007-2008 Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rtvl_license_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
 
-template <class T, unsigned int n> class vnl_vector_fixed;
-template <class T, unsigned int nr, unsigned int nc> class vnl_matrix_fixed;
+#include "rtvl_tensor.h"
 
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-#include <rgtl/rgtl_serialize_access.hxx>
-#include <rgtl/rgtl_serialize_vnl_vector_fixed.hxx>
-
+//----------------------------------------------------------------------------
 template <unsigned int N>
-class rtvl_tensor
+rtvl_tensor<N>::rtvl_tensor()
 {
-public:
-  /** Construct with a unit ball tensor.  */
-  rtvl_tensor();
+  this->set_ball_tensor();
+}
 
-  /** Construct with a given tensor.  */
-  explicit rtvl_tensor(vnl_matrix_fixed<double, N, N> const& tensor);
+//----------------------------------------------------------------------------
+template <unsigned int N>
+rtvl_tensor<N>::rtvl_tensor(vnl_matrix_fixed<double, N, N> const& tensor)
+{
+  this->set_tensor(tensor);
+}
 
-  /** Store a given tensor.  */
-  void set_tensor(vnl_matrix_fixed<double, N, N> const& tensor);
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_tensor<N>::set_tensor(vnl_matrix_fixed<double, N, N> const& tensor)
+{
+  vnl_symmetric_eigensystem<double> eig(tensor);
+  for (unsigned int i=0; i < N; ++i)
+  {
+    this->lambda_[i] = eig.get_eigenvalue((N-1)-i);
+    this->basis_[i] = eig.get_eigenvector((N-1)-i);
+  }
+  this->lambda_[N] = 0;
+}
 
-  /** Store a canonical ball tensor.  */
-  void set_ball_tensor();
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_tensor<N>::set_ball_tensor()
+{
+  for (unsigned int i=0; i < N; ++i)
+  {
+    this->lambda_[i] = 1;
+    this->basis_[i].fill(0.0);
+    this->basis_[i][i] = 1;
+  }
+  this->lambda_[N] = 0;
+}
 
-  /** Scale to make the largest eigenvalue equal to 1.  */
-  void normalize();
-
-  /** Scale to make the largest eigenvalue at most the given limit.  */
-  void limit_saliency(double limit = 1);
-
-  /** Adjust the tensor towards a ball to move to the next scale.  */
-  void next_scale(double scale_multiplier, double max_saliency);
-
-  double lambda(unsigned int d) const
-    { return this->lambda_[d]; }
-
-  double saliency(unsigned int d) const
-    { return this->lambda_[d] - this->lambda_[d+1]; }
-
-  /** Remove the ballness from the tensor.  */
-  void remove_ballness(unsigned int d);
-
-  typedef vnl_vector_fixed<double, N> basis_type[N];
-  basis_type const& basis() const
-    { return this->basis_; }
-  vnl_vector_fixed<double, N> const& basis(unsigned int d) const
-    { return this->basis_[d]; }
-
-private:
-  basis_type basis_;
-  double lambda_[N+1];
-
-private:
-  friend class rgtl_serialize_access;
-  template <class Serializer>
-  void serialize(Serializer& sr)
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_tensor<N>::normalize()
+{
+  if (this->lambda_[0] > 0)
+  {
+    for (unsigned int i=1; i < N; ++i)
     {
-    sr & basis_;
-    sr & lambda_;
+      this->lambda_[i] /= this->lambda_[0];
     }
-};
+    this->lambda_[0] = 1;
+  }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_tensor<N>::limit_saliency(double limit)
+{
+  if (this->lambda_[0] > limit)
+  {
+    double factor = limit/this->lambda_[0];
+    for (unsigned int i=1; i < N; ++i)
+    {
+      this->lambda_[i] *= factor;
+    }
+    this->lambda_[0] = limit;
+  }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_tensor<N>::next_scale(double scale_multiplier, double max_saliency)
+{
+  double const z = 1.0/scale_multiplier;
+  if (z < 3 && this->lambda_[0] > 0.0)
+  {
+    // Downweight old information with increasing scale change.
+    double const w = z*z*(z-3)*(z-3)*(z-3)*(z-3)/16;
+
+    // Smoothly scale the old information to limit its saliency.
+    double f = max_saliency / this->lambda_[0];
+    if (f > 1)
+    {
+      double const t = 1.0 / f;
+      double const t2 = t*t;
+      double const h = 3*t2 - 2*t*t2;
+      f = f * h;
+    }
+
+    // Combine the scaled old information with a ball tensor.
+    double const factor = w * f;
+    for (unsigned int i=0; i < N; ++i)
+    {
+      this->lambda_[i] = 1 + this->lambda_[i] * factor;
+    }
+  }
+  else
+  {
+    // Current information is useless for the next scale, so use a
+    // canonical ball tensor.
+    this->set_ball_tensor();
+  }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_tensor<N>::remove_ballness(unsigned int d)
+{
+  this->lambda_[d] = 0;
+}
+
+//----------------------------------------------------------------------------
+#define RTVL_TENSOR_INSTANTIATE(N) \
+  template class rtvl_tensor<N >
 
 #endif

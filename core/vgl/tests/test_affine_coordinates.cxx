@@ -2,12 +2,15 @@
 // J.L. Mundy Jan 31, 2016
 
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_affine_coordinates.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_pointset_3d.h>
 #include <vector>
 #include <cmath>
 static double rnd(double r){
@@ -159,9 +162,11 @@ static void test_all()
   vgl_point_3d<double> c3(21.124300003052,37.831298828125,84.872703552246);//nose apex
   vgl_point_3d<double> c4(-18.988700866699,71.193702697754,39.596099853516);//right lateral canthus
   vgl_point_3d<double> c5(67.848396301270,69.642601013184,49.217899322510);//left lateral canthus
-  std::vector<vgl_point_3d<double> > Cpts;
-  Cpts.push_back(c0);   Cpts.push_back(c1);   Cpts.push_back(c2);
-  Cpts.push_back(c3);   Cpts.push_back(c4);   Cpts.push_back(c5);
+  std::vector<vgl_point_3d<double> > OrigCpts, Cpts;
+  OrigCpts.push_back(c0);   OrigCpts.push_back(c1);   OrigCpts.push_back(c2);
+  OrigCpts.push_back(c3);   OrigCpts.push_back(c4);   OrigCpts.push_back(c5);
+  Cpts.push_back(c3);   Cpts.push_back(c1); Cpts.push_back(c2);
+  Cpts.push_back(c0); Cpts.push_back(c4); Cpts.push_back(c5);
   std::vector<vgl_point_3d<double> > affine_C_coords;
   vgl_affine_coordinates_3d(Cpts, affine_C_coords);
   for(unsigned i = 0; i<Cpts.size(); ++i){
@@ -197,8 +202,26 @@ static void test_all()
   }
   TEST("Affine coordinates for face pts", good, true);
   //Determine coordinate sensitivity
-  unsigned nr = 100;
-  double r = 0.05;
+  vgl_box_2d<double> box1, box2;
+  for(unsigned i = 0; i<cpts1.size(); ++i){
+    vgl_point_2d<double> p1 = cpts1[i];
+    vgl_point_2d<double> p2 = cpts2[i];
+    box1.add(p1); box2.add(p2);
+  }
+  vgl_point_2d<double> min_p1 = box1.min_point();
+  vgl_point_2d<double> max_p1 = box1.max_point();
+  double diag1 = (max_p1-min_p1).length();
+  vgl_point_2d<double> min_p2 = box2.min_point();
+  vgl_point_2d<double> max_p2 = box2.max_point();
+  double diag2 = (max_p2-min_p2).length();
+  double diam = diag1;
+  if(diam<diag2)
+    diam = diag2;
+  unsigned nr = 1000;
+  double norm_radius = 0.02;
+  double r = norm_radius*diam;
+  std::cout << "diameter " << diam << " Norm radius " << norm_radius << " Abs radius " << r << std::endl;
+  vgl_pointset_3d<double> pset4, pset5;
   vgl_point_3d<double> z(0.0, 0.0, 0.0);
   double L4 = (affine_C_coords[4]-z).length();
   double L5 = (affine_C_coords[5]-z).length();
@@ -214,6 +237,8 @@ static void test_all()
     }
     std::vector<vgl_point_3d<double> > aff_pts_3d;
     vgl_affine_coordinates_3d(rpts1, rpts2, aff_pts_3d);
+    pset4.add_point(aff_pts_3d[4]);
+    pset5.add_point(aff_pts_3d[5]);
     double d1 = (aff_pts_3d[4] - affine_C_coords[4]).length();
     double d2 = (aff_pts_3d[5] - affine_C_coords[5]).length();
     d1/= L4; d2/=L5;
@@ -223,6 +248,15 @@ static void test_all()
       max_diff = d2;
   }
   std::cout << "max error " << max_diff << std::endl;
+  // write pset to file
+  std::string pfile4 = "D:/VisionSystems/Janus/Invariants/pt4_spread.txt";
+  std::string pfile5 = "D:/VisionSystems/Janus/Invariants/pt5_spread.txt";
+  std::ofstream ostr4(pfile4.c_str());
+  ostr4 << pset4;
+  ostr4.close();
+  std::ofstream ostr5(pfile5.c_str());
+  ostr5 << pset5;
+  ostr5.close();
   //  linden face test
   std::cout << "linden test" << std::endl;
   vgl_point_3d<double> l0(-100.140998840332,-63.093498229980,-97.007896423340);//right lobe
