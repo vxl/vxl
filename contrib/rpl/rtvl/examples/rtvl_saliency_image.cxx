@@ -64,11 +64,14 @@ int main(int argc, char** argv)
   // the votee locations are the same as the voter locations for sparse voting
   std::vector<vnl_vector_fixed<double, 2> > votee_locations = voter_locations;
   unsigned n_voters = voter_locations.size(), n_votees = votee_locations.size();
-  std::vector<rtvl_voter<2> > voters;
+  // It is necessary to use pointers for voter access since the voter members are references and can't be
+  // copied, i.e. no = operator is defined. It seems the design of the voter class based on references is
+  // intended to avoid duplicating location and tensor information, which can be costly in high-dimensional spaces
+  std::vector<rtvl_voter<2>* > voters;
   for(std::vector<vnl_vector_fixed<double, 2> >::iterator vit =  voter_locations.begin();
       vit != voter_locations.end(); ++vit){
       rtvl_tensor<2> voter_tensor(voter_matrix);
-      rtvl_voter<2> voter(*vit, voter_tensor);
+      rtvl_voter<2>* voter = new rtvl_voter<2>(*vit, voter_tensor);
       voters.push_back(voter);
   }
 
@@ -91,27 +94,27 @@ int main(int argc, char** argv)
   // vote between tokens. This step is called "sparse" voting in the literature
   bool use_smooth = smooth();
   for(unsigned i = 0; i<n_voters; ++i){
-     rtvl_voter<2>& voter = voters[i];
+     rtvl_voter<2>* voterp = voters[i];
     for(unsigned j = 0; j<n_votees; ++j){
       rtvl_votee<2>* voteep = votees[j];
-      if(voter.location() == voteep->location())
+      if(voterp->location() == voteep->location())
         continue;
       if(use_smooth)
-        rtvl_vote(voter, *voteep, tvwss);
+        rtvl_vote(*voterp, *voteep, tvwss);
       else
-        rtvl_vote(voter, *voteep, tvwso);
+        rtvl_vote(*voterp, *voteep, tvwso);
     }
   }
 
 
   // dense vote. The sparse votees now vote for every location in the output
   // The votees from the sparse voting step become the voters for the dense step.
-  std::vector<rtvl_voter<2> > dense_voters;
+  std::vector<rtvl_voter<2>* > dense_voters;
   for(unsigned i = 0; i<n_votees; ++i){
     const vnl_matrix_fixed<double, 2, 2>& mat = votee_matrices[i];
     rtvl_tensor<2> voter_tensor(mat);
-    rtvl_voter<2> voter(votees[i]->location(), voter_tensor);
-    dense_voters.push_back(voter);
+    rtvl_voter<2>* voterp = new rtvl_voter<2>(votees[i]->location(), voter_tensor);
+    dense_voters.push_back(voterp);
   }
   // form dense image of votee_matrices (tensor elements)
   // could be made more efficient by skipping locations far from any voter.
@@ -151,16 +154,16 @@ int main(int argc, char** argv)
 
   // carry out dense voting
   for(unsigned k = 0; k<dense_voters.size(); ++k){
-    rtvl_voter<2>& voter = dense_voters[k];
+    rtvl_voter<2>* voterp = dense_voters[k];
     for(unsigned j = 0; j<nj; ++j)
       for(unsigned i = 0; i<ni; ++i){
         rtvl_votee<2>* voteep = dense_votees[j][i];
-        if(voteep->location() == voter.location())
+        if(voteep->location() == voterp->location())
           continue;
         if(use_smooth)
-          rtvl_vote(voter, *voteep, tvwds);
+          rtvl_vote(*voterp, *voteep, tvwds);
         else
-          rtvl_vote(voter, *voteep, tvwdo);
+          rtvl_vote(*voterp, *voteep, tvwdo);
       }
   }
   // form the output dense tensor image.
@@ -209,6 +212,13 @@ int main(int argc, char** argv)
       }
     vil_save(tensor, saliency_path.c_str());
   }
+  //delete voters from the heap
+  for(std::vector<rtvl_voter<2>* >::iterator vit =  voters.begin();
+      vit!=voters.end(); ++vit)
+    delete *vit;
+  for(std::vector<rtvl_voter<2>* >::iterator vit =  dense_voters.begin();
+      vit!=dense_voters.end(); ++vit)
+    delete *vit;
   //delete votees from the heap
   for(std::vector<rtvl_votee<2>* >::iterator vit =  votees.begin();
       vit!=votees.end(); ++vit)
