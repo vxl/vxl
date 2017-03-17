@@ -268,9 +268,12 @@ void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, s
   bool found_it = false;
   for (unsigned i = 0; i < other_responses_names_.size(); i++) {
     if (other_responses_names_[i].compare(response_name) == 0) {
+      found_it = true;
       break;
     }
   }
+  if (found_it)
+    return;
   vil_image_view<float> out_gauss(img_f.ni(), img_f.nj());
   if (is_smooth)
     this->compute_gauss_response(img_f, out_gauss);
