@@ -1,67 +1,97 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 #ifndef rgtl_sqt_cell_location_hxx
 #define rgtl_sqt_cell_location_hxx
 
-//:
-// \file
-// \brief Represent the logical index of a spherical quad-tree cell.
-// \author Brad King
-// \date February 2007
-
 #include <iostream>
-#include <iosfwd>
-#include "rgtl_octree_cell_location.hxx"
+#include "rgtl_sqt_cell_location.h"
 
 #include <vcl_compiler.h>
 
-//: Represent the logical index of a spherical quad-tree cell.
-//
-// A spherical quad-tree contains D*2 quad-trees, one for each face of
-// the circumscribing cube.  The location of a cell can be uniquely
-// described by the index of the face whose quad-tree contains the
-// cell and the location of the cell within its quad-tree.
+//----------------------------------------------------------------------------
 template <unsigned int D>
-class rgtl_sqt_cell_location: public rgtl_octree_cell_location<D-1>
+rgtl_sqt_cell_location<D>
+::rgtl_sqt_cell_location(unsigned int face): derived(), face_(face)
 {
-public:
-  //: The type from which this class derives.
-  typedef rgtl_octree_cell_location<D-1> derived;
+}
 
-  //: Type-safe index of a child.
-  typedef typename derived::child_index_type child_index_type;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_sqt_cell_location<D>
+::rgtl_sqt_cell_location(derived const& d, unsigned int face):
+  derived(d), face_(face)
+{
+}
 
-  //: Construct with the root quad-tree cell on a given face.
-  rgtl_sqt_cell_location(unsigned int face);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_sqt_cell_location<D>
+rgtl_sqt_cell_location<D>::get_child(child_index_type child_index) const
+{
+  return rgtl_sqt_cell_location(this->derived::get_child(child_index),
+                                this->face_);
+}
 
-  //: Get the location of a child.
-  rgtl_sqt_cell_location get_child(child_index_type child_index) const;
-
-  //: Get the index of the circumscribing cube face containing the cell.
-  unsigned int face() const { return this->face_; }
-
-protected:
-  //: Constructor used internally.
-  rgtl_sqt_cell_location(derived const& d, unsigned int face);
-
-private:
-  //: Store the index of the face containing the cell.
-  unsigned int face_;
-};
-
-//: Define a total ordering to logical spherical quad-tree locations.
+//----------------------------------------------------------------------------
 template <unsigned int D>
 bool operator<(rgtl_sqt_cell_location<D> const& l,
-               rgtl_sqt_cell_location<D> const& r);
+               rgtl_sqt_cell_location<D> const& r)
+{
+  typedef typename rgtl_sqt_cell_location<D>::derived const& super;
+
+  // Order by face first.
+  if(l.face() < r.face()) { return true; }
+  else if(l.face() > r.face()) { return false; }
+
+  // Use the cell ordering within a face.
+  return static_cast<super>(l) < static_cast<super>(r);
+}
+
+//----------------------------------------------------------------------------
 template <unsigned int D>
 bool operator==(rgtl_sqt_cell_location<D> const& l,
-                rgtl_sqt_cell_location<D> const& r);
+                rgtl_sqt_cell_location<D> const& r)
+{
+  typedef typename rgtl_sqt_cell_location<D>::derived const& super;
+  if(l.face() != r.face()) { return false; }
+  return static_cast<super>(l) == static_cast<super>(r);
+}
 
-//: Print a logical cell location in a human-readable form.
+//----------------------------------------------------------------------------
 template <unsigned int D>
-std::ostream& operator<<(std::ostream& os,
-                        rgtl_sqt_cell_location<D> const& cell);
+std::ostream& operator<<(std::ostream& os, rgtl_sqt_cell_location<D> const& cell)
+{
+  // Decompose the face index into axis and side.
+  unsigned int axis = cell.face()>>1;
+  unsigned int side = cell.face()&1;
+
+  // Print the face axis.
+  switch(axis)
+    {
+    case 0: os << "X"; break;
+    case 1: os << "Y"; break;
+    case 2: os << "Z"; break;
+    default: os << "A" << axis; break;
+    }
+
+  // Print the face side.
+  os << (side? "+" : "-");
+
+  // Print the quad-tree cell location.
+  typedef typename rgtl_sqt_cell_location<D>::derived const& super;
+  return os << static_cast<super>(cell);
+}
+
+//----------------------------------------------------------------------------
+#define RGTL_SQT_CELL_LOCATION_INSTANTIATE(D) \
+  template class rgtl_sqt_cell_location< D >; \
+  template bool operator<(rgtl_sqt_cell_location< D > const&, \
+                          rgtl_sqt_cell_location< D > const&); \
+  template bool operator==(rgtl_sqt_cell_location< D > const&, \
+                           rgtl_sqt_cell_location< D > const&); \
+  template std::ostream& operator<<(std::ostream&, \
+                                   rgtl_sqt_cell_location< D > const&)
 
 #endif

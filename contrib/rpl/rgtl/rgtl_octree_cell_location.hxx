@@ -1,84 +1,152 @@
-#ifndef rgtl_octree_cell_location_hxx
-#define rgtl_octree_cell_location_hxx
-//:
-// \file
-// \brief Represent the logical index of an octree cell in D dimensions.
-// \author Brad King
-// \date February 2007
-// \copyright
 // Copyright 2006-2009 Brad King, Chuck Stewart
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+#ifndef rgtl_octree_cell_location_hxx
+#define rgtl_octree_cell_location_hxx
 
 #include <iostream>
-#include <iosfwd>
-#include "rgtl_compact_tree_index.hxx"
+#include "rgtl_octree_cell_location.h"
 
 #include <vcl_compiler.h>
 
-//: Represent the logical index of an octree cell in D dimensions.
-//
-// Each subdivision level in an octree can be indexed as a regular
-// grid of size 2^L along each axis where L is the level of
-// subdivision.  An octree cell can be completely indexed by the level
-// of subdivision and the regular grid index within that level.  The
-// subdivision level index is a single integer.  The regular grid
-// index within the subdivision level is a set of D integers.
+//----------------------------------------------------------------------------
 template <unsigned int D>
-class rgtl_octree_cell_location
+rgtl_octree_cell_location<D>::rgtl_octree_cell_location(): level_(0)
 {
- public:
-  //: Constructor initializes to root cell.
-  rgtl_octree_cell_location();
+  // Initialize to the root cell.
+  for(unsigned int i=0; i < D; ++i)
+    {
+    index_[i] = 0;
+    }
+}
 
-  typedef rgtl_child_index_type child_index_type;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void
+rgtl_octree_cell_location<D>
+::get_parent(rgtl_octree_cell_location& parent) const
+{
+  // The parent is one level shallower.
+  parent.level_ = level_ - 1;
 
-  //: Get the subdivision level of the cell.  The root cell is level 0.
-  int& level() { return level_; }
-  int level() const { return level_; }
+  // The least-significant-bit in the index for each axis is dropped.
+  for(unsigned int j=0; j < D; ++j)
+    {
+    parent.index_[j] = index_[j] >> 1;
+    }
+}
 
-  //: Get the regular grid index at the cell's subdivision level.
-  unsigned int* index() { return index_; }
-  unsigned int const* index() const { return index_; }
-  unsigned int& index(unsigned int i) { return index_[i]; }
-  unsigned int const& index(unsigned int i) const { return index_[i]; }
-  unsigned int& operator[](unsigned int j) { return index_[j]; }
-  unsigned int const& operator[](unsigned int j) const { return index_[j]; }
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_octree_cell_location<D>
+rgtl_octree_cell_location<D>::get_parent() const
+{
+  rgtl_octree_cell_location parent;
+  get_parent(parent);
+  return parent;
+}
 
-  //: Get the cell location of the parent cell.
-  void get_parent(rgtl_octree_cell_location& parent) const;
-  rgtl_octree_cell_location<D> get_parent() const;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void
+rgtl_octree_cell_location<D>::get_child(child_index_type child_index,
+                                        rgtl_octree_cell_location& child) const
+{
+  // The child is one level deeper.
+  child.level_ = level_ + 1;
 
-  //: Get the cell location of a child cell.
-  //  The child index must be in the range 0..(2^D-1).
-  void get_child(child_index_type child_index,
-                 rgtl_octree_cell_location& child) const;
-  rgtl_octree_cell_location<D> get_child(child_index_type child_index) const;
+  // The least-significant-bit in the index for each axis comes from
+  // the child index.  The rest come from the parent location.
+  for(unsigned int j=0; j < D; ++j)
+    {
+    child.index_[j] = (index_[j] << 1) | ((child_index >> j) & 1);
+    }
+}
 
- private:
-  //: The depth of the level of this cell in the tree.
-  //  Level zero is the root cell.  Negative levels are invalid indices.
-  int level_;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_octree_cell_location<D>
+rgtl_octree_cell_location<D>::get_child(child_index_type child_index) const
+{
+  rgtl_octree_cell_location child;
+  get_child(child_index, child);
+  return child;
+}
 
-  //: The index of the cell in the uniform grid defined at this level.
-  unsigned int index_[D];
-};
-
-//: Define a total ordering to logical octree locations.
+//----------------------------------------------------------------------------
 template <unsigned int D>
 bool operator<(rgtl_octree_cell_location<D> const& l,
-               rgtl_octree_cell_location<D> const& r);
-template <unsigned int D>
-bool operator==(rgtl_octree_cell_location<D> const& l,
-                rgtl_octree_cell_location<D> const& r);
+               rgtl_octree_cell_location<D> const& r)
+{
+  // Order by level first.
+  if(l.level() < r.level()) { return true; }
+  else if(l.level() > r.level()) { return false; }
+
+  // Within a level order along each axis.
+  for(unsigned int i=0; i < D; ++i)
+    {
+    if(l[i] < r[i]) { return true; }
+    else if(l[i] > r[i]) { return false; }
+    }
+
+  return false;
+}
+
+//----------------------------------------------------------------------------
 template <unsigned int D>
 bool operator>(rgtl_octree_cell_location<D> const& l,
-               rgtl_octree_cell_location<D> const& r);
+               rgtl_octree_cell_location<D> const& r)
+{
+  // Order by level first.
+  if(l.level() > r.level()) { return true; }
+  else if(l.level() < r.level()) { return false; }
 
-//: Print a logical cell location in a human-readable form.
+  // Within a level order along each axis.
+  for(unsigned int i=0; i < D; ++i)
+    {
+    if(l[i] > r[i]) { return true; }
+    else if(l[i] < r[i]) { return false; }
+    }
+
+  return false;
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int D>
+bool operator==(rgtl_octree_cell_location<D> const& l,
+                rgtl_octree_cell_location<D> const& r)
+{
+  if(l.level() != r.level()) { return false; }
+  for(unsigned int i=0; i < D; ++i)
+    {
+    if(l[i] != r[i]) { return false; }
+    }
+  return true;
+}
+
+//----------------------------------------------------------------------------
 template <unsigned int D>
 std::ostream& operator<<(std::ostream& os,
-                        rgtl_octree_cell_location<D> const& cell);
+                        rgtl_octree_cell_location<D> const& cell)
+{
+  os << "[" << cell.level() << ":" << cell[0];
+  for(unsigned int i=1; i < D; ++i)
+    {
+    os << "," << cell[i];
+    }
+  os << "]";
+  return os;
+}
 
-#endif // rgtl_octree_cell_location_hxx
+#undef RGTL_OCTREE_CELL_LOCATION_INSTANTIATE
+#define RGTL_OCTREE_CELL_LOCATION_INSTANTIATE( D ) \
+  template class rgtl_octree_cell_location< D >; \
+  template bool operator<(rgtl_octree_cell_location< D > const& l, \
+                          rgtl_octree_cell_location< D > const& r); \
+  template bool operator==(rgtl_octree_cell_location< D > const& l, \
+                           rgtl_octree_cell_location< D > const& r); \
+  template std::ostream& operator<<(std::ostream& os, \
+                                   rgtl_octree_cell_location< D > const& cell)
+
+#endif

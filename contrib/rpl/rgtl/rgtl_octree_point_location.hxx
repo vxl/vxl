@@ -1,75 +1,107 @@
-#ifndef rgtl_octree_point_location_hxx
-#define rgtl_octree_point_location_hxx
-//:
-// \file
-// \brief Represent the logical index of an octree corner point.
-// \author Brad King
-// \date March 2007
-// \copyright
 // Copyright 2006-2009 Brad King, Chuck Stewart
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+#ifndef rgtl_octree_point_location_hxx
+#define rgtl_octree_point_location_hxx
 
 #include <iostream>
-#include <iosfwd>
+#include "rgtl_octree_point_location.h"
+#include "rgtl_octree_cell_location.h"
+
 #include <vcl_compiler.h>
 
-template <unsigned int D> class rgtl_octree_cell_location;
-
-//: Represent the logical index of an octree corner point in D dimensions.
-//
-// Each subdivision level in an octree can be indexed as a regular
-// grid of points of size 2^L+1 along each axis where L is the level
-// of subdivision.  An octree corner point can be completely indexed
-// by the level of subdivision and the regular grid index within that
-// level.  The subdivision level index is a single integer.  The
-// regular grid index within the subdivision level is a set of D
-// integers.  Note that a point indexed at a given level has
-// additional valid indices at higher levels of subdivision.
+//----------------------------------------------------------------------------
 template <unsigned int D>
-class rgtl_octree_point_location
+rgtl_octree_point_location<D>
+::rgtl_octree_point_location():
+  level_(0)
 {
- public:
-  //: Type representing cell locations.
-  typedef rgtl_octree_cell_location<D> cell_location_type;
+  // Initialize to the root cell origin.
+  for(unsigned int i=0; i < D; ++i)
+    {
+    index_[i] = 0;
+    }
+}
 
-  //: Constructor initializes to the origin of the root cell.
-  rgtl_octree_point_location();
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_octree_point_location<D>
+::rgtl_octree_point_location(cell_location_type const& cell,
+                             unsigned int corner):
+  level_(cell.level())
+{
+  for(unsigned int a=0; a < D; ++a)
+    {
+    index_[a] = cell.index(a) + ((corner >> a) & 1);
+    }
+}
 
-  //: Construct to a corner of a cell.
-  rgtl_octree_point_location(cell_location_type const& cell,
-                             unsigned int corner=0);
-
-  //: Get the subdivision level in which the index is represented.
-  //  The root cell is level 0.
-  int level() const { return level_; }
-
-  //: Get the regular grid index at the current subdivision level.
-  unsigned int* index() { return index_; }
-  unsigned int const* index() const { return index_; }
-  unsigned int& index(unsigned int i) { return index_[i]; }
-  unsigned int const& index(unsigned int i) const { return index_[i]; }
-  unsigned int& operator[](unsigned int j) { return index_[j]; }
-  unsigned int const& operator[](unsigned int j) const { return index_[j]; }
-
- private:
-  //: The depth of the level of this point in the tree.
-  //  Level zero is the root cell.  Negative levels are invalid indices.
-  int level_;
-
-  //: The index of the point in the uniform grid defined at this level.
-  unsigned int index_[D];
-};
-
-//: Define a total ordering to logical octree locations.
+//----------------------------------------------------------------------------
 template <unsigned int D>
 bool operator<(rgtl_octree_point_location<D> const& l,
-               rgtl_octree_point_location<D> const& r);
+               rgtl_octree_point_location<D> const& r)
+{
+  // Compare indices on deepest of two levels.
+  if(l.level() > r.level())
+    {
+    // Within a level order along each axis.
+    unsigned int rshift = l.level() - r.level();
+    for(unsigned int a=0; a < D; ++a)
+      {
+      unsigned int lindex = l.index(a);
+      unsigned int rindex = (r.index(a) << rshift);
+      if(lindex < rindex) { return true; }
+      else if(lindex > rindex) { return false; }
+      }
+    }
+  else if(r.level() > l.level())
+    {
+    // Within a level order along each axis.
+    unsigned int lshift = r.level() - l.level();
+    for(unsigned int a=0; a < D; ++a)
+      {
+      unsigned int lindex = (l.index(a) << lshift);
+      unsigned int rindex = r.index(a);
+      if(lindex < rindex) { return true; }
+      else if(lindex > rindex) { return false; }
+      }
+    }
+  else
+    {
+    // Within a level order along each axis.
+    for(unsigned int a=0; a < D; ++a)
+      {
+      unsigned int lindex = l.index(a);
+      unsigned int rindex = r.index(a);
+      if(lindex < rindex) { return true; }
+      else if(lindex > rindex) { return false; }
+      }
+    }
 
-//: Print a logical point location in a human-readable form.
+  return false;
+}
+
+//----------------------------------------------------------------------------
 template <unsigned int D>
 std::ostream& operator<<(std::ostream& os,
-                        rgtl_octree_point_location<D> const& point);
+                        rgtl_octree_point_location<D> const& point)
+{
+  os << "[" << point.level() << ":" << point.index(0);
+  for(unsigned int i=1; i < D; ++i)
+    {
+    os << "," << point.index(i);
+    }
+  os << "]";
+  return os;
+}
 
-#endif // rgtl_octree_point_location_hxx
+#undef RGTL_OCTREE_POINT_LOCATION_INSTANTIATE
+#define RGTL_OCTREE_POINT_LOCATION_INSTANTIATE( D ) \
+  template class rgtl_octree_point_location< D >; \
+  template bool operator<(rgtl_octree_point_location< D > const& l, \
+                          rgtl_octree_point_location< D > const& r); \
+  template std::ostream& operator<<(std::ostream& os, \
+                                 rgtl_octree_point_location< D > const& point)
+
+#endif

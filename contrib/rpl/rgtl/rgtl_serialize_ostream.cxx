@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-#include "rgtl_serialize_ostream.hxx"
+#include "rgtl_serialize_ostream.h"
 //:
 // \file
 // Copyright 2006-2009 Brad King, Chuck Stewart
