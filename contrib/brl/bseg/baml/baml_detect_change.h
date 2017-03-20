@@ -6,7 +6,6 @@
 #include <vector>
 #include <set>
 #include <utility>
-#include <float.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -89,8 +88,9 @@ struct baml_change_detection_params {
   std::string hist_method;
 
   // Multi-image parameters
-  // multi_method: multi-image fusion method ("product", "sum", "minimum")
+  // multi_method: multi-image fusion method ("product", "sum", "maximum")
   // pGoodness: probability of a given image being "good"
+  bool multiple_ref;
   std::string multi_method;
   float pGoodness;
 
@@ -100,9 +100,10 @@ struct baml_change_detection_params {
     correct_gain_offset(true),
     num_tiles(0),
     registration_refinement_rad(0),
-    event_width(20),
-    event_height(20),
-    bt_rad(1),
+    pChange(0.005),
+    event_width(5),
+    event_height(5),
+    bt_rad(5),
     census_tol(10),
     census_rad(3),
     img_bit_depth(12),
@@ -111,9 +112,9 @@ struct baml_change_detection_params {
     num_bins(25), 
     grad_mag_on(false),
     hist_method("bhattacharyya"),
+    multiple_ref(true),
     multi_method("sum"),
-    pGoodness(0.8),
-    pChange(0.005) {}
+    pGoodness(0.8) {}
 };
 
 
@@ -138,12 +139,20 @@ public:
 
   //: Multi reference image change detection
   // calls detect_internal to do pairwise score calculations
-  // then uses a multi-image fusion technique
+  // then uses a multi-image fusion technique (change_prob_target)
   bool multi_image_detect(
     const vil_image_view<vxl_uint_16>& img_target,
-    const std::vector< vil_image_view<vxl_uint_16> > img_ref,
-    const std::vector< vil_image_view<bool> > valid,
+    const std::vector<vil_image_view<vxl_uint_16> > img_ref,
+    const std::vector<vil_image_view<bool> > valid,
     vil_image_view<float>& change_prob_target);
+
+  //: Computes an image with each value corresponding to the
+  // expected time of change at that pixel 
+  bool expected_time_change(
+    const vil_image_view<vxl_uint_16>& img_target,
+    const std::vector<vil_image_view<vxl_uint_16> > img_ref,
+    const std::vector<vil_image_view<bool> > valid,
+    vil_image_view<float>& change_time);
 
 protected:
   
@@ -153,36 +162,63 @@ protected:
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& change_prob_target);
+    vil_image_view<float>& change_prob_target,
+    float& foreground_dist);
+
+  //: multi image alignment and pairwise score calculation functionality contained in this function
+  bool detect_mutli_internal(
+    const vil_image_view<vxl_uint_16>& img_target,
+    const std::vector<vil_image_view<vxl_uint_16> >& img_ref,
+    const std::vector<vil_image_view<bool> >& valid,
+    std::vector<vil_image_view<float> >& probabilities,
+    vil_image_view<vxl_uint_16>& img_tar_crop,
+    std::vector<float>& foreground_dist,
+    int& max_x_off,
+    int& crop_width,
+    int& max_y_off,
+    int& crop_height);
 
   baml_change_detection_params params_;
   
+  // ----------------------------pairwise score methods-------------------------------
+  //: All detect_<method> use the same paramerters
+  //  img_target: target image (width x height)
+  //  img_ref: reference image (width x height)
+  //  valid: states whether pixel is valid or not (width x height)
+  //  probability: probability of change at each pixel using <method> (width x height)
+  //  foreground_dist: foreground distribution, which is uniform 
+  //    based on the range of pixel intensities in the target image 
+
   //: Detect change using the Birchfield-Tomasi metric
   bool detect_bt(
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& tar_lh );
+    vil_image_view<float>& probability,
+    float& foreground_dist);
 
   //: Detect change using census metric
   bool detect_census(
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& tar_lh );
+    vil_image_view<float>& probability,
+    float& foreground_dist);
 
   //: Detect change using absolute difference
   bool detect_difference(const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& tar_lh);
+    vil_image_view<float>& probability,
+    float& foreground_dist);
 
   //: Detect change using gradient
   bool detect_gradient(
     const vil_image_view<vxl_uint_16>& img_tar,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid_ref,
-    vil_image_view<float>& tar_lh );
+    vil_image_view<float>& probability,
+    float& foreground_dist);
 
   //: Detect change using the approximate mutual information method described in
   // the original semi-global matching paper
@@ -190,7 +226,8 @@ protected:
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& tar_lh );
+    vil_image_view<float>& probability,
+    float& foreground_dist);
 
   //: Detect change using a distance measure between histograms of the 
   // pixel values in the target and reference images
@@ -198,7 +235,8 @@ protected:
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& tar_lh);
+    vil_image_view<float>& probability,
+    float& foreground_dist);
   // -------------------histogram compare helper function-------------------------
   bool
     build_hist(
@@ -211,26 +249,27 @@ protected:
       const bool adding,
       std::vector <float>& hist);
 
-
+  // -----------------------fusion methods-------------------------
   //: Fuse score images using product method
   bool 
     multi_product(
-    const std::vector< vil_image_view<float> > lh,
-    float sigma,
-    vil_image_view<float>& probability
+    const std::vector<vil_image_view<float> >& pw_probabilities, // pairwise probabilities
+      const std::vector<float>& foreground_dist, // uniform foreground distribution
+    vil_image_view<float>& probability // fused probability
   );
 
   //: Fuse score images using sum method
   bool 
     multi_sum(
-    const std::vector< vil_image_view<float> > lh,
-    float sigma,
-    vil_image_view<float>& probability
+    const std::vector<vil_image_view<float> >& pw_probabilities, // pairwise probabilities 
+      const std::vector<float>& foreground_dist, // uniform foreground distribution
+    vil_image_view<float>& probability // fused probability
   );
 
   //: Fuse score images using score minization method
-  bool multi_min(
-    const std::vector< vil_image_view<float> > scores,
+  bool multi_max_prob(
+    const std::vector<vil_image_view<float> >& pw_probabilities,
+    const std::vector<float>& foreground_dist,
     vil_image_view<float>& probability
   );
 

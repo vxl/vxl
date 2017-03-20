@@ -252,61 +252,61 @@ int main(int argc, char * argv[])
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // CHANGE DETECTION ON ALREADY CROPPED IMAGES
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string img_dir = "C:/Users/sca0161/Documents/data/mischief reef/usable images/";
-// declare all variables we will be using
-std::string img_name, img_file, ref_file, ref_name;
-vil_image_resource_sptr tarr, refr;
-vil_image_view<vxl_uint_16> tar, ref;
-vil_image_view<vxl_byte> score_in, img_in, overlay_img;
-// load target
-img_file = (img_dir + "tar_20161110_015817_0e0d_1B_Analytic_DN.tif").c_str();
-tarr = vil_load_image_resource(img_file.c_str());
-tar = tarr->get_view();
-for (vul_file_iterator fn = (img_dir + "20161026*.tif").c_str(); fn; ++fn) {
-  ref_file = fn();
-  ref_name = vul_file::strip_directory(ref_file);
-  std::cout << ref_name << "\n";
-  // Load reference
-  refr = vil_load_image_resource(ref_file.c_str());
-  ref = refr->get_view();
-
-  // Make valid image
-  vil_image_view<bool> ref_valid;
-  ref_valid.set_size(tar.ni(), tar.nj());
-  ref_valid.fill(true);
-  for (int y = 0; y < tar.nj(); y++) {
-    for (int x = 0; x < tar.ni(); x++) {
-      if (tar(x, y) == 0 || tar(x, y) == 0) ref_valid(x, y) = false;
-    }
-  }
-  // Detect changes
-  vil_image_view<float> tar_prob;
-  baml_change_detection_params params;
-  params.method = NON_PARAMETRIC;
-  params.correct_gain_offset = true;
-  params.num_tiles = 5;
-
-  baml_change_detection cd(params);
-  cd.detect(tar, ref, ref_valid, tar_prob);
-
-  int width = tar_prob.ni();
-  int height = tar_prob.nj();
-  float max = FLT_MIN;
-  float min = FLT_MAX;
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      max = std::max(max, tar_prob(x, y));
-      min = std::min(min, tar_prob(x, y));
-    }
-  }
-  vil_image_view<vxl_byte> change_vis;
-  vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
-
-  std::ostringstream message("C:/Users/sca0161/Documents/data/mischief reef/usable images/output/non parametric/tiles");
-  message << params.num_tiles << "_" << ref_name;
-
-  vil_save(change_vis, message.str().c_str());
-}
+//std::string img_dir = "C:/Users/sca0161/Documents/data/mischief reef/usable images/";
+//// declare all variables we will be using
+//std::string img_name, img_file, ref_file, ref_name;
+//vil_image_resource_sptr tarr, refr;
+//vil_image_view<vxl_uint_16> tar, ref;
+//vil_image_view<vxl_byte> score_in, img_in, overlay_img;
+//// load target
+//img_file = (img_dir + "tar_20161110_015817_0e0d_1B_Analytic_DN.tif").c_str();
+//tarr = vil_load_image_resource(img_file.c_str());
+//tar = tarr->get_view();
+//for (vul_file_iterator fn = (img_dir + "20161026*.tif").c_str(); fn; ++fn) {
+//  ref_file = fn();
+//  ref_name = vul_file::strip_directory(ref_file);
+//  std::cout << ref_name << "\n";
+//  // Load reference
+//  refr = vil_load_image_resource(ref_file.c_str());
+//  ref = refr->get_view();
+//
+//  // Make valid image
+//  vil_image_view<bool> ref_valid;
+//  ref_valid.set_size(tar.ni(), tar.nj());
+//  ref_valid.fill(true);
+//  for (int y = 0; y < tar.nj(); y++) {
+//    for (int x = 0; x < tar.ni(); x++) {
+//      if (tar(x, y) == 0 || tar(x, y) == 0) ref_valid(x, y) = false;
+//    }
+//  }
+//  // Detect changes
+//  vil_image_view<float> tar_prob;
+//  baml_change_detection_params params;
+//  params.method = NON_PARAMETRIC;
+//  params.correct_gain_offset = true;
+//  params.num_tiles = 5;
+//
+//  baml_change_detection cd(params);
+//  cd.detect(tar, ref, ref_valid, tar_prob);
+//
+//  int width = tar_prob.ni();
+//  int height = tar_prob.nj();
+//  float max = FLT_MIN;
+//  float min = FLT_MAX;
+//  for (int x = 0; x < width; x++) {
+//    for (int y = 0; y < height; y++) {
+//      max = std::max(max, tar_prob(x, y));
+//      min = std::min(min, tar_prob(x, y));
+//    }
+//  }
+//  vil_image_view<vxl_byte> change_vis;
+//  vil_convert_stretch_range_limited(tar_prob, change_vis, min, max);
+//
+//  std::ostringstream message("C:/Users/sca0161/Documents/data/mischief reef/usable images/output/non parametric/tiles");
+//  message << params.num_tiles << "_" << ref_name;
+//
+//  vil_save(change_vis, message.str().c_str());
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SINGLE-IMAGE CHANGE DETECTION ON ALREADY CROPPED IMAGES WITH A VARIETY OF PARAMETERS
@@ -415,43 +415,70 @@ for (vul_file_iterator fn = (img_dir + "20161026*.tif").c_str(); fn; ++fn) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MULTI-IMAGE CHANGE DETECTION ON ALREADY CROPPED IMAGES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  ////std::string img_dir = "C:/Users/sca0161/Documents/data/hamadan/hamandan field/";
+  std::string img_dir = "C:/Users/sca0161/Documents/data/hamadan/hamadan field/";
   //std::string img_dir = "C:/Users/sca0161/Documents/data/mischief reef/usable images/";
-  //// declare all variables we will be using
-  //std::string img_name, img_file, ref_file, ref_name;
-  //vil_image_resource_sptr tarr, refr;
-  //vil_image_view<vxl_uint_16> tar;
-  //vil_image_view<vxl_byte> score_in, img_in, overlay_img;
-  //// load target
-  //img_file = (img_dir + "tar_20161110_015817_0e0d_1B_Analytic_DN.tif").c_str();
-  //tarr = vil_load_image_resource(img_file.c_str());
-  //tar = tarr->get_view();
-  //int i = 0;
-  ///* vil_image_view<vxl_uint_16> *ref = new vil_image_view<vxl_uint_16>[num_ref];
-  // vil_image_view<bool> *ref_valid = new vil_image_view<bool>[num_ref];*/
-  //std::vector<vil_image_view<vxl_uint_16>> ref;
-  //std::vector<vil_image_view<bool>> ref_valid;
-  //for (vul_file_iterator fn = (img_dir + "20*.tif").c_str(); fn; ++fn) {
-  //  //for (vul_file_iterator fn = (img_dir + "20*.tif").c_str(); fn; ++fn) {
-  //  ref_file = fn();
-  //  ref_name = vul_file::strip_directory(ref_file);
-  //  std::cout << ref_name << "\n";
-  //  // Load reference
-  //  refr = vil_load_image_resource(ref_file.c_str());
-  //  //ref[i] = refr->get_view();
-  //  ref.push_back(refr->get_view());
-  //  // make valid image
-  //  vil_image_view<bool> a;
-  //  ref_valid.push_back(a);
-  //  ref_valid[i].set_size(tar.ni(), tar.nj());
-  //  ref_valid[i].fill(true);
-  //  for (int y = 0; y < tar.nj(); y++) {
-  //    for (int x = 0; x < tar.ni(); x++) {
-  //      if (tar(x, y) == 0 || ref[i](x, y) == 0) ref_valid[i](x, y) = false;
-  //    }
-  //  }
-  //  i++;
-  //}
+  // declare all variables we will be using
+  std::string img_name, img_file, ref_file, ref_name;
+  vil_image_resource_sptr tarr, refr;
+  vil_image_view<vxl_uint_16> tar;
+  vil_image_view<vxl_byte> score_in, img_in, overlay_img;
+  // load target
+  img_file = (img_dir + "target image 20161014_092852_0c65.tif");// .c_str();
+  tarr = vil_load_image_resource(img_file.c_str());
+  tar = tarr->get_view();
+  int i = 0;
+  /* vil_image_view<vxl_uint_16> *ref = new vil_image_view<vxl_uint_16>[num_ref];
+   vil_image_view<bool> *ref_valid = new vil_image_view<bool>[num_ref];*/
+  std::vector<vil_image_view<vxl_uint_16> > ref;
+  std::vector<vil_image_view<bool> > ref_valid;
+  for (vul_file_iterator fn = (img_dir + "reference images/20*.tif").c_str(); fn; ++fn) {
+    if (i == 14) { // add bad reference image at this index (between 0 and 13)
+      std::cout << "bad reference\n";
+      vil_image_view<bool> a;
+      ref_valid.push_back(a);
+      ref_valid[i].set_size(tar.ni(), tar.nj());
+      ref_valid[i].fill(true);
+      vil_image_view<vxl_uint_16> bad_ref;
+      bad_ref.set_size(tar.ni(), tar.nj());
+      bad_ref.fill(2000);
+      ref.push_back(bad_ref); 
+      i++;
+    }
+    //for (vul_file_iterator fn = (img_dir + "20*.tif").c_str(); fn; ++fn) {
+    ref_file = fn();
+    ref_name = vul_file::strip_directory(ref_file);
+    std::cout << ref_name << "\n";
+    // Load reference
+    refr = vil_load_image_resource(ref_file.c_str());
+    //ref[i] = refr->get_view();
+    ref.push_back(refr->get_view());
+    // make valid image
+    vil_image_view<bool> a;
+    ref_valid.push_back(a);
+    ref_valid[i].set_size(tar.ni(), tar.nj());
+    ref_valid[i].fill(true);
+    for (int y = 0; y < tar.nj(); y++) {
+      for (int x = 0; x < tar.ni(); x++) {
+        if (tar(x, y) == 0 || ref[i](x, y) == 0) ref_valid[i](x, y) = false;
+      }
+    }
+    i++;
+  }
+  
+  //------------------temp------------------------------------------------
+  vil_image_view<float> tar_prob;
+  vil_image_view<float> expected_time;
+  baml_change_detection_params params;
+  params.method = BIRCHFIELD_TOMASI;
+  params.correct_gain_offset = true;
+  params.num_tiles = 5;
+  params.registration_refinement_rad = 0;
+  params.pChange = 0.05;
+  params.multi_method = "product";
+  params.pGoodness = 0.8;
+  baml_change_detection cd(params);
+  cd.multi_image_detect(tar, ref, ref_valid, expected_time);
+  //----------------end temp----------------------------------------------
   //// Detect changes
   //vil_image_view<float> tar_prob;
   //baml_change_detection_params params;

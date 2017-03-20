@@ -459,41 +459,51 @@ void test_edgel_change_detection()
   TEST_NEAR("745_hamadan_test", pchange[0], 0.006, 0.0001);
 
 #elif hamadan_pixelwise
-  // set directory where cameras and images are held and declare the names of the target and reference(s)
+  //// set directory where cameras and images are held and declare the names of the target and reference(s)
   std::string dir = "C:/Users/sca0161/Documents/data/hamadan/";
-  //std::string dir = "D:/tests/hamadan_test/";
-  //std::string dir = "D:/data/sattel/hamadan/";
-  // std::string ref_name = "20160821_063826_0e20.tif";
-  // std::string ref_name = "20160623_050936_0c64.tif";
+  //// std::string ref_name = "20160821_063826_0e20.tif";
+  //// std::string ref_name = "20160623_050936_0c64.tif";
   std::vector<std::string> ref_name;
   ref_name.push_back("20160902_094643_0c19.tif");
-  ref_name.push_back("20160619_064846_0c72.tif");
-  ref_name.push_back("20160623_050936_0c64.tif");
-  ref_name.push_back("20160701_091757_0c64.tif");
-  ref_name.push_back("20160701_091758_0c64.tif");
-  ref_name.push_back("20160702_103254_0c59.tif");
+  //ref_name.push_back("20160619_064846_0c72.tif");
+  //ref_name.push_back("20160623_050936_0c64.tif");
+  //ref_name.push_back("20160701_091757_0c64.tif");
+  //ref_name.push_back("20160701_091758_0c64.tif");
+  //ref_name.push_back("20160702_103254_0c59.tif");
+
+//std::string dir = "C:/Users/sca0161/Downloads/test_script/test_script/";
+//std::vector<std::string> ref_name;
+//ref_name.push_back("ref_image.tif");
+//std::string evt_name = "evt_image.tif";
+
 
   // std::string evt_name = "20160822_064308_0c1b.tif";
-  std::string evt_name = "20160717_043904_0c19.tif";
+  std::string evt_name = "20160717_043904_0c19.tif"; //---------------------------------------------------------
 
   // set up coordinate system
-  double lon = 48.6546831212;
-  double lat = 35.1964842393;
-  double elev = 1678.81629561;
+  double lon = 48.6546831212; //--------------------------------------------------------
+  double lat = 35.1964842393; //--------------------------------------------------------
+  double elev = 1678.81629561; //--------------------------------------------------------
+//double lon = 65.6942830165;
+//double lat = 31.6134971167;
+//double elev = 0.0;
   vpgl_lvcs lvcs = vpgl_lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
   // set up the event image and all the things that aren't related to the reference image(s)
   std::string evt_img_path = dir + evt_name;
-  std::string evt_cam_path = dir + evt_name + "_RPC.txt";
-  std::string evt_obj_path = dir + "hamadan_objects/event_big.ply";
+  std::string evt_cam_path = dir + evt_name + "_RPC.txt"; //--------------------------------------------------------
+  //std::string evt_cam_path = dir + "evt_rpc.txt";
+   std::string evt_obj_path = dir + "hamadan_objects/event_big.ply"; //-------------------------------------------------------- -
+  //std::string evt_obj_path = dir + "evt_poly.ply";
   // std::string evt2_obj_path = dir + "hamadan_objects/event.ply";
-  std::string ref_obj_path = dir + "hamadan_objects/ref_full.ply";
+   std::string ref_obj_path = dir + "hamadan_objects/ref_full.ply"; //-------------------------------------------------------- -
+ // std::string ref_obj_path = dir + "ref_poly.ply";
   vil_image_resource_sptr imgr = vil_load_image_resource(evt_img_path.c_str());
   //vpgl_local_rational_camera<double>* lcam = read_local_rational_camera_from_txt<double>(evt_cam_path);
   vpgl_rational_camera<double>* rpccam = read_rational_camera_from_txt<double>(evt_cam_path);
   betr_event_trigger etr("hamadan", lvcs);
   etr.set_verbose(true);
-  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
+  etr.add_geo_object("tarmac_ref", 65.6900995012, 31.6148879491, elev, ref_obj_path, true);
   // etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
   etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
   vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
@@ -504,11 +514,12 @@ void test_edgel_change_detection()
   // create a vector of reference images and reference cameras
   std::vector<vil_image_resource_sptr> ref_imgr(ref_name.size());
   std::vector<vpgl_camera_double_sptr> ref_camera(ref_name.size());
-  // fill vectors with images and cameras
+  // fill vectors with images and cameras ---------------------------------------------------------
   for (int i = 0; i < ref_name.size(); i++) {
     std::cout << "Reference" << ref_name[i] << '\n';
     std::string ref_img_path = dir + ref_name[i];
-    std::string ref_cam_path = dir + ref_name[i] + "_RPC.txt";
+    std::string ref_cam_path = dir + ref_name[i] + "_RPC.txt"; //---------------------------------------------------------
+    //std::string ref_cam_path = dir + "ref_rpc.txt";
     ref_imgr[i] = vil_load_image_resource(ref_img_path.c_str());
     //vpgl_local_rational_camera<double>* ref_lcam = read_local_rational_camera_from_txt<double>(ref_cam_path);
     vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
@@ -530,10 +541,10 @@ void test_edgel_change_detection()
   // Read json
   //std::string cd_json ="{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
   // read in json file with all your necessary parameters
-  std::ifstream ifs("C:/Users/sca0161/Documents/change detection json/texturelessChange.json");
+  std::ifstream ifs("C:/Users/sca0161/Documents/change detection json/test.json");
   std::string cd_json((std::istreambuf_iterator<char>(ifs)),
     (std::istreambuf_iterator<char>()));
-
+  std::cout << cd_json << "\n";
   std::cout << "===>processing " << evt_name << '\n';
   //etr.process("edgel_change_detection", pchange, rescs, offsets,cd_json);
   etr.process("pixelwise_change_detection", pchange, rescs, offsets, cd_json);
@@ -547,6 +558,7 @@ void test_edgel_change_detection()
     std::string change_path = dir + "debug 20170202/change_imageS_" + ss.str() + ".tif";
     vil_save_image_resource(rescs[i], change_path.c_str());
   }
+
   return;
 #endif
 }
