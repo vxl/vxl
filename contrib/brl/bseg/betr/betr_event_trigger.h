@@ -45,11 +45,11 @@ class betr_event_trigger : public vbl_ref_count{
   void set_lvcs(vpgl_lvcs const& lvcs){lvcs_=lvcs; lvcs_valid_=true;}
   // the mask is for the case of RGBA images and it is desired to apply the alpha value
   // by setting the intensity to zero when alpha = 0.
-  void set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask = false);
+  void set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask = false, bool keep_data = false);
   void set_ref_images(std::vector<vil_image_resource_sptr> const& ref_rescs, bool apply_mask = false);
   void set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask = false);
 
-  void set_ref_camera(vpgl_camera_double_sptr const& camera);
+  void set_ref_camera(vpgl_camera_double_sptr const& camera, bool keep_data = false);
   void set_ref_cameras(std::vector<vpgl_camera_double_sptr> const& cameras);
   void set_evt_camera(vpgl_camera_double_sptr const& camera);
 
