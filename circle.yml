@@ -36,7 +36,7 @@ stages:
             md5sum -c /build/vxl.md5 | awk '{if ($NF == "OK") print substr($0, 1, length($0)-4)}' | xargs touch -d "${OLDEST_DATE}"
           fi
           mkdir -p /build
-          find /vxl -type f -print0 | xargs -0 md5sum > /build/vxl.md5
+          find /vxl \( -type d -name .git \) -prune -o -type f -print0 | xargs -0 md5sum > /build/vxl.md5
       - type: shell
         name: Configure
         command: |
