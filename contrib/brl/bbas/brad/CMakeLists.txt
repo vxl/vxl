@@ -21,6 +21,8 @@
       brad_estimate_shadows.h         brad_estimate_shadows.cxx
       brad_appearance_neighborhood_index.h  brad_appearance_neighborhood_index.cxx
       brad_belief_prop_utils.h        brad_belief_prop_utils.cxx
+      brad_spectral_angle_mapper.h    brad_spectral_angle_mapper.cxx
+      brad_multispectral_functions.h  brad_multispectral_functions.cxx
 )
   aux_source_directory(Templates brad_sources)
   vxl_add_library(LIBRARY_NAME brad LIBRARY_SOURCES ${brad_sources} )
@@ -28,6 +30,8 @@
   target_link_libraries(brad brip bsta bsta_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul )
 
   add_subdirectory(io)
+
+  add_subdirectory(app)
 
 #tests
 if( BUILD_TESTING )

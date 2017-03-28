@@ -6,9 +6,6 @@ set(baml_sources
     baml_detect_change.h             baml_detect_change.cxx
     baml_utilities.h                 baml_utilities.cxx
     baml_warp.h                      baml_warp.cxx
-    baml_ms_aster.h                  baml_ms_aster.cxx
-    baml_ms_band_diff.h              baml_ms_band_diff.cxx
-    baml_ms_utilities.h              baml_ms_utilities.cxx
    )
    
 aux_source_directory(Templates baml_sources)

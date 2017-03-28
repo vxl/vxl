@@ -17,44 +17,56 @@
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
 #include <brad/brad_image_atmospherics_est.h>
-#include <baml/baml_ms_utilities.h>
-#include "baml_ms_aster.h"
+#include <brad/brad_multispectral_functions.h>
+#include "brad_spectral_angle_mapper.h"
 
 //---------------------------------------------------------------------------
 //: Constructor
 //---------------------------------------------------------------------------
-baml_ms_aster::baml_ms_aster(
-  const std::string aster_dir) {
-  dir_ = aster_dir;
-  baml_wv3_bands(bands_min_, bands_max_);
-  setup_libraries();
+brad_spectral_angle_mapper::brad_spectral_angle_mapper(std::vector<float>& bands_min, 
+  std::vector<float>& bands_max) {
+  bands_min_ = bands_min;
+  bands_max_ = bands_max;
 }
 
 //---------------------------------------------------------------------------
-//: Spectral Angle Map
+//: Create Spectral Angle Map
 //---------------------------------------------------------------------------
-bool baml_ms_aster::compute_sam_img(const vil_image_view<float>& image,
+bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& image,
   const std::string keyword, 
   vil_image_view<float>& spectral_angle)
 {
+  // set up
   int num_bands = bands_min_.size();
-  if (image.nplanes() != num_bands) return false;
+  if (image.nplanes() != num_bands) {
+    std::cerr << "Image does not have the correct number of spectral bands\n";
+    return false;
+  }
   spectral_angle.set_size(image.ni(), image.nj());
   spectral_angle.fill(0.0);
 
   // find all relevant spectra
   size_t found;
-  std::vector<std::vector<std::vector<float> > > spec;
+  bool found_keyword = false;
+  std::vector<std::vector<std::vector<float> > > spec; // each vector entry corresponds to a material categroy, which holds a vector of relevant spectra (which are also vectors)
+  spec.resize(1); // size is one because we are only looking at one material category, namely 'keyword'
   for (int i = 0; i < file_names_.size(); i++) {
     found = file_names_[i].find(keyword);
     if (found != std::string::npos) { // if our file contains the keyword, we want to compare it to our sample spectra
       spec[0].push_back(spectra_[i]); // get corresponding spectra
+      found_keyword = true;
     }
+  }
+
+  // make sure at least one relevant spectra was found
+  if (!found_keyword) {
+    std::cerr << "keyword not found in spectral library\n";
+    return false; 
   }
 
   // find the best spectral angle
   std::vector<float> img_vals;
-  std::vector<float> angle; // will be a vector of size 1
+  std::vector<float> angle; // will be a vector of size 1 (the max angle corresponding to our single material category, 'keyword')
   img_vals.resize(num_bands);
   for (int y = 0; y < image.nj(); y++) {
     for (int x = 0; x < image.ni(); x++) {
@@ -67,47 +79,72 @@ bool baml_ms_aster::compute_sam_img(const vil_image_view<float>& image,
   return true;
 }
 
-//!!!!!!!!!!!!!!!!!!!!!!STILL NEEDS DEBUGGING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //---------------------------------------------------------------------------
 //: Port of Cara's matClass.m which will use a fair amount of memory
 //---------------------------------------------------------------------------
-void baml_ms_aster::classify_material_cara(
+bool brad_spectral_angle_mapper::aster_classify_material(
   const vil_image_view<float>& image,
   const std::vector<std::string>& keywords,
+  const float threshold,
   vil_image_view<int>& class_img,
   vil_image_view<float>& conf_img)
 {
+  // set up
   int img_width = image.ni(), img_height = image.nj();
   int num_categories = keywords.size();
   int num_bands = bands_min_.size();
-
   class_img.set_size(img_width, img_height);
   conf_img.set_size(img_width, img_height);
 
-  // Make a very large volume to store spectral angle measurements for each
-  // pixel and sample.
+  // Ensure our library has at least one material
+  if (file_names_.size() == 0) {
+    std::cerr << "Spectral library empty\n";
+    return false;
+  }
+
+  // Ensure image correct number or spectral bands
+  if (image.nplanes() != num_bands) {
+    std::cerr << "Image does not have the correct number of spectral bands\n";
+    return false;
+  }
+
+  // Make a volume to store maximum spectral angle measurements for each
+  // pixel and sample category.
   vil_image_view<float> angle_volume(
     img_width, img_height, 1, num_categories);
 
   std::vector<float> img_vals(num_bands);
   std::vector<float> angles(num_categories);
 
+  // find all spectra that are representative of each keyword category
   size_t found;
-  std::vector<std::vector<std::vector<float> > > spec;
+  std::vector<std::vector<std::vector<float> > > spec; // each vector entry corresponds to a material categroy, which holds a vector of relevant spectra (which are also vectors)
+  spec.resize(num_categories);
+  bool found_keyword;
+  bool found_any_keyword = false;
   for (int c = 0; c < num_categories; c++) {
+    found_keyword = false;
     for (int i = 0; i < file_names_.size(); i++) {
       found = file_names_[i].find(keywords[c]);
       if (found != std::string::npos) { // if our file contains the keyword, we want to compare it to our sample spectra
+        found_keyword = true;
+        found_any_keyword = true;
         spec[c].push_back(spectra_[i]); // get corresponding spectra
       }
-    }
+    } // i
+    if (!found_keyword) std::cerr << "WARNING: did not find keyword " << keywords[c] << "\n";
+  } // c
+
+  if (!found_any_keyword) {
+    std::cerr << "No keyword was found\n";
+    return false;
   }
 
   // Populate the volume
   for (int y = 0; y < img_height; y++) {
     for (int x = 0; x < img_width; x++) {
 
-      // Copy the image values
+      // Copy the image spectra
       for (int b = 0; b < num_bands; b++)
         img_vals[b] = image(x, y, b);
 
@@ -115,39 +152,87 @@ void baml_ms_aster::classify_material_cara(
       compute_spectral_angles(img_vals, spec, angles);
 
       for (int c = 0; c < num_categories; c++) {
-
-        // Update running max
-        //max_angle[s] = std::max(max_angle[s], angles[s]);
-
-        // Convert to byte for compactness
-        //angle_volume(x, y, s) = (vxl_byte)(255 * angles[s]);
         angle_volume(x, y, c) = angles[c];
-      }
-    }
-  }
+      } // c
+    } // y
+  } // x
+
   // Compute the max index
   for (int y = 0; y < img_height; y++) {
     for (int x = 0; x < img_width; x++) {
       float max_angle = 0.0f;
-      int max_idx = 0;
+      int max_idx = -1;
       for (int c = 0; c < num_categories; c++) {
         if (angle_volume(x, y, c) < max_angle) continue;
-        max_idx = c;
         max_angle = angle_volume(x, y, c);
+        if (max_angle > threshold) max_idx = c; // class -1: no category had high enough angle measurement 
       }
       class_img(x, y) = max_idx;
       conf_img(x, y) = max_angle;
     }
   }
+  return true;
 }
 
 //---------------------------------------------------------------------------
-//: Set up function (should only be called in constructor)
+//: add a material to the library
 //---------------------------------------------------------------------------
-void baml_ms_aster::setup_libraries() {
+bool brad_spectral_angle_mapper::add_material(const std::string type,
+  const vil_image_view<float>& image,
+  const vil_image_view<bool>& mask)
+{
+
+  // ensure image correct number or spectral bands
+  int num_bands = bands_min_.size();
+  if (image.nplanes() != num_bands) {
+    std::cerr << "Image does not have the correct number of spectral bands\n";
+    return false;
+  }
+
+  // new spectra to be added to the library
+  std::vector<float> new_spectrum;
+  new_spectrum.resize(num_bands);
+  
+  //std::vector<std::vector<float> > img_spectra;
+  //std::vector<float> cur_spectrum;
+  //cur_spectrum.resize(num_bands);
+  int num_sample_spectra = 0;
+  std::vector<float> spectra_sum;
+  spectra_sum.resize(num_bands);
+  // obtain relevant spectra from image
+  for (int y = 0; y < image.nj(); y++) {
+    for (int x = 0; x < image.ni(); x++) {
+      if (mask(x, y)) { // if this spectrum is relevant then save it
+        num_sample_spectra++;
+        for (int s = 0; s < num_bands; s++) {
+          //cur_spectrum[s] = image(x, y, s);
+          spectra_sum[s] += image(x, y, s);
+        } // s
+        //img_spectra.push_back(cur_spectrum);
+      }
+    } // x
+  } // y
+
+  // combine relevant spectra into single representative spectra
+  for (int s = 0; s < num_bands; s++) {
+    new_spectrum[s] = spectra_sum[s] / num_sample_spectra;
+  } // s
+
+  // add spectra and type to our library
+  spectra_.push_back(new_spectrum);
+  file_names_.push_back(type);
+  return true;
+}
+
+//---------------------------------------------------------------------------
+//: Adds all valid files in the directory to the library
+//---------------------------------------------------------------------------
+void brad_spectral_angle_mapper::add_aster_dir(const std::string aster_dir) {
+
+  int num_bands = bands_min_.size();
 
   bool good_file;
-  for (vul_file_iterator fi(dir_); fi; ++fi) {
+  for (vul_file_iterator fi(aster_dir); fi; ++fi) {
     good_file = true;
     //ensure file is good before proceding
     std::ifstream is(fi());     // open file
@@ -161,7 +246,7 @@ void baml_ms_aster::setup_libraries() {
     is.close();
     if (good_file) { // file name and corresponding spectra
       file_names_.push_back(vul_file::strip_directory(fi()));
-      spectra_.push_back(std::vector<float>(bands_min_.size()));
+      spectra_.push_back(std::vector<float>(num_bands));
       parse_aster_file(fi(), spectra_.back());
     }
   }
@@ -171,7 +256,7 @@ void baml_ms_aster::setup_libraries() {
 //: Parse a single ASTER file to retrieve wavelength/spectra data and 
 // interpolate spectra for the given bands.
 //---------------------------------------------------------------------------
-bool baml_ms_aster::parse_aster_file(
+bool brad_spectral_angle_mapper::parse_aster_file(
   const std::string& file_name,
   std::vector<float>& sample_spectra)
 {
@@ -180,7 +265,7 @@ bool baml_ms_aster::parse_aster_file(
 
   int num_bands = bands_min_.size();
 
-  sample_spectra.resize(bands_min_.size());
+  sample_spectra.resize(num_bands);
 
   // Attempt to load the file
   std::ifstream ifs(file_name.c_str(), std::ios::in | std::ios::binary);
@@ -243,7 +328,7 @@ bool baml_ms_aster::parse_aster_file(
   }
 
   // normalize the spectra
-  baml_normalize_spectra(sample_spectra);
+  brad_normalize_spectra(sample_spectra);
 
   return true;
 };
@@ -252,7 +337,7 @@ bool baml_ms_aster::parse_aster_file(
 //: Compute spectral angle between two vectors of multi-spectral values
 // as per the spectral angle mapper algorithm for a set of spectra samples.
 //---------------------------------------------------------------------------
-void baml_ms_aster::compute_spectral_angles(
+void brad_spectral_angle_mapper::compute_spectral_angles(
   const std::vector<float>& img_vals,
   const std::vector<std::vector<std::vector<float> > >& normalized_spectra_samples,
   std::vector<float>& angles)
@@ -262,11 +347,11 @@ void baml_ms_aster::compute_spectral_angles(
   angles.resize(num_categories);
   // Normalize image vals
   std::vector<float> img_norm = img_vals;
-  baml_normalize_spectra(img_norm);
+  brad_normalize_spectra(img_norm);
   for (int c = 0; c < num_categories; c++) { // loop over categories
     float angle = 0.0;
     int num_samples = normalized_spectra_samples[c].size();
-    for (int s = 0; s < num_samples; s++) { // loop over smaple
+    for (int s = 0; s < num_samples; s++) { // loop over sample
       // Dot product 
       float sum = 0.0f;
       for (int b = 0; b < num_bands; b++)
