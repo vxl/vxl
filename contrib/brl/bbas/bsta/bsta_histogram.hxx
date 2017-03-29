@@ -117,8 +117,8 @@ int bsta_histogram<T>::bin_at_val(T x) const
 template <class T>
 void bsta_histogram<T>::compute_area() const
 {
-  area_ =0;
-  for (unsigned int i = 0; i<nbins_; ++i)
+  area_ = 0;
+  for (unsigned int i = 0; i < nbins_; ++i) 
     area_ += counts_[i];
   area_valid_ = true;
 }
