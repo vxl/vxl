@@ -54,7 +54,7 @@ class vgl_pointset_3d
 
   std::vector<vgl_point_3d<Type> > points() const {return points_;}
   std::vector<vgl_vector_3d<Type> > normals() const {return normals_;}
-
+  void clear(){points_.clear(); normals_.clear();}
   void set_points(std::vector<vgl_point_3d<Type> > const& points)
   { points_ = points; has_normals_=false;}
 
