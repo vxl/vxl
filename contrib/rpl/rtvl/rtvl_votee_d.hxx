@@ -6,22 +6,42 @@
 #ifndef rtvl_votee_d_hxx
 #define rtvl_votee_d_hxx
 
-#include "rtvl_votee.hxx"
+#include "rtvl_votee_d.h"
 
-template <class T, unsigned int n> class vnl_vector_fixed;
-template <class T, unsigned int nr, unsigned int nc> class vnl_matrix_fixed;
+#include "rtvl_vote.h"
 
+#include <vnl/vnl_matrix_fixed.h>
+
+//----------------------------------------------------------------------------
 template <unsigned int N>
-class rtvl_votee_d: public rtvl_votee<N>
+rtvl_votee_d<N>::
+rtvl_votee_d(vnl_vector_fixed<double, N> const& votee_location,
+             vnl_matrix_fixed<double, N, N>& votee_tensor,
+             vnl_matrix_fixed<double, N, N> (&votee_dtensor)[N]):
+  derived(votee_location, votee_tensor), dtensor_(votee_dtensor)
 {
-public:
-  typedef rtvl_votee<N> derived;
-  rtvl_votee_d(vnl_vector_fixed<double, N> const& votee_location,
-               vnl_matrix_fixed<double, N, N>& votee_tensor,
-               vnl_matrix_fixed<double, N, N> (&votee_dtensor)[N]);
-  virtual void go(rtvl_vote_internal<N>& vi, double saliency);
-private:
-  vnl_matrix_fixed<double, N, N> (&dtensor_)[N];
-};
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_votee_d<N>::go(rtvl_vote_internal<N>& vi, double saliency)
+{
+  this->derived::go(vi, saliency);
+
+  vnl_matrix_fixed<double, N, N> dvote[N];
+  rtvl_vote_component_d(vi, dvote);
+  for(unsigned int k=0; k < N; ++k)
+    {
+    dvote[k] *= saliency;
+    }
+  for(unsigned int k=0; k < N; ++k)
+    {
+    this->dtensor_[k] += dvote[k];
+    }
+}
+
+//----------------------------------------------------------------------------
+#define RTVL_VOTEE_D_INSTANTIATE(N) \
+  template class rtvl_votee_d<N>
 
 #endif

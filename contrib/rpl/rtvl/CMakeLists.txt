@@ -5,39 +5,39 @@
 #  http://www.boost.org/LICENSE_1_0.txt)
 
 set(rtvl_sources
-  rtvl_intpow.hxx
-  rtvl_terms.hxx
-  rtvl_tokens.hxx
-  rtvl_vote.hxx                         rtvl_vote.hxx
-  rtvl_votee.hxx                        rtvl_votee.hxx
-  rtvl_votee_d.hxx                      rtvl_votee_d.hxx
-  rtvl_voter.hxx                        rtvl_voter.hxx
-  rtvl_refine.hxx                       rtvl_refine.hxx
-  rtvl_tensor.hxx                       rtvl_tensor.hxx
-  rtvl_tensor_d.hxx                     rtvl_tensor_d.hxx
-  rtvl_weight.hxx
-  rtvl_weight_original.hxx              rtvl_weight_original.hxx
-  rtvl_weight_smooth.hxx                rtvl_weight_smooth.hxx
+  rtvl_intpow.h
+  rtvl_terms.h
+  rtvl_tokens.h
+  rtvl_vote.h                         rtvl_vote.hxx
+  rtvl_votee.h                        rtvl_votee.hxx
+  rtvl_votee_d.h                      rtvl_votee_d.hxx
+  rtvl_voter.h                        rtvl_voter.hxx
+  rtvl_refine.h                       rtvl_refine.hxx
+  rtvl_tensor.h                       rtvl_tensor.hxx
+  rtvl_tensor_d.h                     rtvl_tensor_d.hxx
+  rtvl_weight.h
+  rtvl_weight_original.h              rtvl_weight_original.hxx
+  rtvl_weight_smooth.h                rtvl_weight_smooth.hxx
 
-  Templates/rtvl_vote+2-.cxx
-  Templates/rtvl_votee+2-.cxx
-  Templates/rtvl_votee_d+2-.cxx
-  Templates/rtvl_voter+2-.cxx
-  Templates/rtvl_refine+2-.cxx
-  Templates/rtvl_tensor+2-.cxx
-  Templates/rtvl_tensor_d+2-.cxx
-  Templates/rtvl_weight_original+2-.cxx
-  Templates/rtvl_weight_smooth+2-.cxx
+   Templates/rtvl_vote+2-.cxx
+   Templates/rtvl_votee+2-.cxx
+   Templates/rtvl_votee_d+2-.cxx
+   Templates/rtvl_voter+2-.cxx
+   Templates/rtvl_refine+2-.cxx
+   Templates/rtvl_tensor+2-.cxx
+   Templates/rtvl_tensor_d+2-.cxx
+   Templates/rtvl_weight_original+2-.cxx
+   Templates/rtvl_weight_smooth+2-.cxx
 
-  Templates/rtvl_vote+3-.cxx
-  Templates/rtvl_votee+3-.cxx
-  Templates/rtvl_votee_d+3-.cxx
-  Templates/rtvl_voter+3-.cxx
-  Templates/rtvl_refine+3-.cxx
-  Templates/rtvl_tensor+3-.cxx
-  Templates/rtvl_tensor_d+3-.cxx
-  Templates/rtvl_weight_original+3-.cxx
-  Templates/rtvl_weight_smooth+3-.cxx
+   Templates/rtvl_vote+3-.cxx
+   Templates/rtvl_votee+3-.cxx
+   Templates/rtvl_votee_d+3-.cxx
+   Templates/rtvl_voter+3-.cxx
+  # Templates/rtvl_refine+3-.cxx
+   Templates/rtvl_tensor+3-.cxx
+   Templates/rtvl_tensor_d+3-.cxx
+   Templates/rtvl_weight_original+3-.cxx
+   Templates/rtvl_weight_smooth+3-.cxx
   )
 
 vxl_add_library(LIBRARY_NAME rtvl LIBRARY_SOURCES ${rtvl_sources})

@@ -1,15 +1,15 @@
-#include <rtvl/rtvl_tensor.hxx>
-#include <rtvl/rtvl_refine.hxx>
-#include <rtvl/rtvl_votee_d.hxx>
-#include <rtvl/rtvl_voter.hxx>
-#include <rtvl/rtvl_tensor_d.hxx>
-#include <rtvl/rtvl_weight_original.hxx>
-#include <rtvl/rtvl_weight.hxx>
-#include <rtvl/rtvl_tokens.hxx>
-#include <rtvl/rtvl_terms.hxx>
-#include <rtvl/rtvl_weight_smooth.hxx>
-#include <rtvl/rtvl_votee.hxx>
-#include <rtvl/rtvl_vote.hxx>
-#include <rtvl/rtvl_intpow.hxx>
+#include <rtvl/rtvl_tensor.h>
+#include <rtvl/rtvl_refine.h>
+#include <rtvl/rtvl_votee_d.h>
+#include <rtvl/rtvl_voter.h>
+#include <rtvl/rtvl_tensor_d.h>
+#include <rtvl/rtvl_weight_original.h>
+#include <rtvl/rtvl_weight.h>
+#include <rtvl/rtvl_tokens.h>
+#include <rtvl/rtvl_terms.h>
+#include <rtvl/rtvl_weight_smooth.h>
+#include <rtvl/rtvl_votee.h>
+#include <rtvl/rtvl_vote.h>
+#include <rtvl/rtvl_intpow.h>
 
 int main() { return 0; }

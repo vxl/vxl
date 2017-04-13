@@ -1,82 +1,127 @@
-#ifndef rgtl_octree_cell_bounds_hxx
-#define rgtl_octree_cell_bounds_hxx
-//:
-// \file
-// \brief Represent the bounding box for an octree cell in D dimensions.
-// \author Brad King
-// \date February 2007
-// \copyright
 // Copyright 2006-2009 Brad King, Chuck Stewart
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+#ifndef rgtl_octree_cell_bounds_hxx
+#define rgtl_octree_cell_bounds_hxx
 
-#include <vnl/vnl_vector_fixed.h>
+#include "rgtl_octree_cell_bounds.h"
 
-#include "rgtl_serialize_access.hxx"
-#include "rgtl_serialize_vnl_vector_fixed.hxx"
+#include "rgtl_octree_cell_location.h"
 
-template <unsigned int D> class rgtl_octree_cell_location;
-
-//: Represent an axis-aligned bounding hypercube for a cell.
+//----------------------------------------------------------------------------
 template <unsigned int D>
-class rgtl_octree_cell_bounds
+rgtl_octree_cell_bounds<D>::rgtl_octree_cell_bounds():
+  origin_(0.0), size_(1)
 {
- public:
-  //: Type used to represent the hypercube origin.
-  typedef vnl_vector_fixed<double, D> point_type;
+}
 
-  //: Construct with a unit hypercube.
-  rgtl_octree_cell_bounds();
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_octree_cell_bounds<D>::rgtl_octree_cell_bounds(double const o[D],
+                                                    double s):
+  origin_(o), size_(s)
+{
+}
 
-  //: Construct with the origin and size (edge length) of the hypercube.
-  rgtl_octree_cell_bounds(double const o[D], double s);
-  rgtl_octree_cell_bounds(point_type const& o, double s);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_octree_cell_bounds<D>::rgtl_octree_cell_bounds(point_type const& o,
+                                                    double s):
+  origin_(o), size_(s)
+{
+}
 
-  //: Set the origin and size (edge length) of the hypercube.
-  void set_bounds(double const o[D], double s);
-  void set_bounds(point_type const& o, double s);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_octree_cell_bounds<D>::set_bounds(double const o[D], double s)
+{
+  this->origin_.copy_in(o);
+  this->size_ = s;
+}
 
-  //:
-  //  Compute a bounding hypercube enclosing the given axis-aligned
-  //  bounding box with the longest axis scaled by the given factor.
-  //  The resulting cube will be centered around the original bounding
-  //  box along each axis.
-  void compute_bounds(double const (&bds)[D][2], double factor = 1);
-  void compute_bounds(double const bds[D*2], double factor = 1);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_octree_cell_bounds<D>::set_bounds(point_type const& o, double s)
+{
+  this->origin_ = o;
+  this->size_ = s;
+}
 
-  //: Compute the bounding hypercube for the given cell in a tree with the given root cell bounds.
-  void compute_bounds(rgtl_octree_cell_bounds<D> const& root_bounds,
-                      rgtl_octree_cell_location<D> const& cell);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+bool rgtl_octree_cell_bounds<D>::contains(double const p[D]) const
+{
+  for(unsigned int a=0; a < D; ++a)
+    {
+    if(p[a] < this->origin_[a] ||
+       p[a] > (this->origin_[a]+this->size_))
+      {
+      return false;
+      }
+    }
+  return true;
+}
 
-  //: Determine whether the bounding hypercube contains the given point.
-  bool contains(double const p[D]) const;
-  bool contains(point_type const& p) const;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+bool rgtl_octree_cell_bounds<D>::contains(point_type const& p) const
+{
+  return this->contains(p.data_block());
+}
 
-  //: Set the edge length of the hypercube.
-  void size(double s) { this->size_ = s; }
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_octree_cell_bounds<D>::compute_bounds(double const (&bds)[D][2],
+                                                double factor)
+{
+  this->compute_bounds(&bds[0][0], factor);
+}
 
-  //: Set the lower point of the hypercube.
-  void origin(point_type const& o) { this->origin_ = o; }
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_octree_cell_bounds<D>::compute_bounds(double const bds[D*2],
+                                                double factor)
+{
+  // Find the maximum size along any axis.
+  double max_size = 0;
+  for(unsigned int i=0; i < D; ++i)
+    {
+    double sz = bds[2*i+1]-bds[2*i];
+    if(sz > max_size)
+      {
+      max_size = sz;
+      }
+    }
+  if(max_size <= 0)
+    {
+    max_size = 1;
+    }
 
-  //: Get the edge length of the hypercube.
-  double size() const { return this->size_; }
+  // Construct a bounding cube around the entire input bounds.
+  this->size_ = max_size*factor;
+  for(unsigned int i=0; i < D; ++i)
+    {
+    this->origin_[i] = bds[2*i] - (this->size_-(bds[2*i+1]-bds[2*i]))/2;
+    }
+}
 
-  //: Get the lower point of the hypercube.
-  point_type const& origin() const { return this->origin_; }
-  double origin(unsigned int i) const { return this->origin_[i]; }
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void
+rgtl_octree_cell_bounds<D>
+::compute_bounds(rgtl_octree_cell_bounds<D> const& root_bounds,
+                 rgtl_octree_cell_location<D> const& cell)
+{
+  this->size_ = root_bounds.size() / (1<<cell.level());
+  for(unsigned int i=0; i < D; ++i)
+    {
+    this->origin_[i] = (root_bounds.origin(i) + cell.index(i)*this->size_);
+    }
+}
 
- private:
-  point_type origin_;
-  double size_;
+#undef RGTL_OCTREE_CELL_BOUNDS_INSTANTIATE
+#define RGTL_OCTREE_CELL_BOUNDS_INSTANTIATE( D ) \
+  template class rgtl_octree_cell_bounds< D >
 
-  friend class rgtl_serialize_access;
-  template <class Serializer>
-  void serialize(Serializer& sr)
-  {
-    sr& origin_;
-    sr& size_;
-  }
-};
-
-#endif // rgtl_octree_cell_bounds_hxx
+#endif

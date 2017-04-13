@@ -1,62 +1,110 @@
-#ifndef rgtl_sqt_space_hxx
-#define rgtl_sqt_space_hxx
-//:
-// \file
-// \brief Spherical space parameterization.
-// \author Brad King
-// \date April 2007
-// \copyright
 // Copyright 2006-2009 Brad King, Chuck Stewart
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+#ifndef rgtl_sqt_space_hxx
+#define rgtl_sqt_space_hxx
 
-#include "rgtl_config.hxx"
-#include "rgtl_static_assert.hxx"
+#include <iostream>
+#include <cmath>
+#include "rgtl_sqt_space.h"
 
-//: Implement methods not specific to a particular face.
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
+
+//----------------------------------------------------------------------------
 template <unsigned int D>
-class rgtl_sqt_space_base
+unsigned int
+rgtl_sqt_space_base<D>::direction_to_face(double const d[D])
 {
- public:
-  //: Get the canonical cube face containing the given direction.
-  static unsigned int direction_to_face(double const d[D]);
-};
+  // The face axis corresponds to the component of the direction that
+  // has the largest magnitude.
+  double max_d = std::fabs(d[0]);
+  unsigned int max_axis = 0;
+  unsigned int max_side = (d[0] >= 0)? 1:0;
+  for(unsigned int a=1; a < D; ++a)
+    {
+    double cur_d = std::fabs(d[a]);
+    if(cur_d > max_d)
+      {
+      max_d = cur_d;
+      max_axis = a;
+      max_side = ((d[a] >= 0)? 1:0);
+      }
+    }
+  return (max_axis<<1) | max_side;
+}
 
-//: Parameterize a D-dimensional hypersphere with an axis-aligned hypercube.
+//----------------------------------------------------------------------------
 template <unsigned int D, unsigned int Face>
-class rgtl_sqt_space: public rgtl_sqt_space_base<D>
+void
+rgtl_sqt_space<D, Face>
+::parameters_to_direction(double const u[D-1], double d[D])
 {
- public:
-  //: The embedding dimension of the hypersphere.
-  RGTL_STATIC_CONST(unsigned int, dimension = D);
+  for(unsigned int a=0; a < face_axis; ++a)
+    {
+    d[a] = std::tan(u[a]);
+    }
+  d[face_axis] = (face_side? +1:-1);
+  for(unsigned int a=face_axis+1; a < D; ++a)
+    {
+    d[a] = std::tan(u[a-1]);
+    }
+}
 
-  //: The index of the face.
-  RGTL_STATIC_CONST(unsigned int, face = Face);
+//----------------------------------------------------------------------------
+template <unsigned int D, unsigned int Face>
+void
+rgtl_sqt_space<D, Face>
+::direction_to_parameters(double const d[D], double u[D-1])
+{
+  double da = (face_side?+1:-1)*d[face_axis];
+  assert(da > 0);
+  for(unsigned int a=0; a < face_axis; ++a)
+    {
+    u[a] = std::atan(d[a]/da);
+    }
+  for(unsigned int a=face_axis+1; a < D; ++a)
+    {
+    u[a-1] = std::atan(d[a]/da);
+    }
+}
 
-  //: The index of the axis normal to the face.
-  RGTL_STATIC_CONST(unsigned int, face_axis = Face>>1);
+//----------------------------------------------------------------------------
+template <unsigned int D, unsigned int Face>
+void
+rgtl_sqt_space<D, Face>
+::isoplane_normal(unsigned int j, double u, double n[D])
+{
+  for(unsigned int a=0; a < face_axis; ++a)
+    {
+    if(a == j)
+      {
+      n[a] = std::cos(u);
+      }
+    else
+      {
+      n[a] = 0;
+      }
+    }
+  n[face_axis] = (face_side?-1:+1)*std::sin(u);
+  for(unsigned int a=face_axis+1; a < D; ++a)
+    {
+    if(a-1 == j)
+      {
+      n[a] = std::cos(u);
+      }
+    else
+      {
+      n[a] = 0;
+      }
+    }
+}
 
-  //: The side of the origin on which the face lies along the axis.
-  //  The negative side is 0 and the positive side is 1.
-  RGTL_STATIC_CONST(unsigned int, face_side = Face&1);
+//----------------------------------------------------------------------------
+#define RGTL_SQT_SPACE_BASE_INSTANTIATE(D) \
+  template class rgtl_sqt_space_base< D >
+#define RGTL_SQT_SPACE_INSTANTIATE(D, Face) \
+  template class rgtl_sqt_space< D , Face >
 
-  //: Convert from parameters on the current face to a full direction.
-  static void parameters_to_direction(double const u[D-1], double d[D]);
-
-  //: Convert from a full direction to parameters on the current face.
-  //  The component of the input direction corresponding to the
-  //  face_axis must be the largest magnitude component, and its sign
-  //  must be consistent with face_side.
-  static void direction_to_parameters(double const d[D], double u[D-1]);
-
-  //: Compute a normal to the isoplane on which the j-th parameter is constant at the given value.
-  //  The normal points in the direction of increasing parameter value.
-  static void isoplane_normal(unsigned int j, double u, double n[D]);
-
- private:
-  // Make sure the face index is in range.
-  RGTL_STATIC_ASSERT(Face < (D<<1));
-};
-
-#endif // rgtl_sqt_space_hxx
+#endif
