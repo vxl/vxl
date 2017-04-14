@@ -5,6 +5,7 @@
 #include <bsta/bsta_histogram.h>
 #include <vnl/vnl_math.h>
 
+#include <vil/vil_save.h> // temp
 #include <vil/vil_convert.h>
 #include <fstream>
 

@@ -16,6 +16,11 @@ void brad_wv3_bands(
   std::vector<float>& bands_min,
   std::vector<float>& bands_max);
 
+//: The spectral bands present in a World View 3 multi-spectral image with SWIR.
+void brad_wv3_bands_swir(
+  std::vector<float>& bands_min,
+  std::vector<float>& bands_max);
+
 //: Normalize a vector of spectra to a unit vector.
 void brad_normalize_spectra(
   std::vector<float>& spectra);
