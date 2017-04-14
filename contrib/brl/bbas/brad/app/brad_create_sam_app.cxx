@@ -57,35 +57,35 @@ int main(int argc, char * argv[])
   vil_convert_cast(mul_f_uint16, mul_f);
 
   // Load metadata
-  brad_image_metadata meta(vul_file::strip_extension(image_file)+".IMD");
+  brad_image_metadata meta(vul_file::strip_extension(image_file) + ".IMD");
 
   // Calibrate the image, lifted from 
   // brad_nitf_abs_radiometric_calibration_process
   for (int b = 0; b < mul_f.nplanes(); b++) {
-    vil_image_view<float> band = vil_plane(mul_f, b); 
+    vil_image_view<float> band = vil_plane(mul_f, b);
     vil_math_scale_and_offset_values(
       band, meta.gains_[b + 1].first, meta.gains_[b + 1].second);
   }
 
   // Correct for atmospherics
-  brad_atmospheric_parameters atmo;
   float mean_albedo = 0.3;
-  //brad_estimate_atmospheric_parameters_multi(mul_f, meta, atmo);
-  if (!brad_estimate_atmospheric_parameters_multi(mul_f, meta, mean_albedo, atmo)) {
-    std::cerr << "error estimating atmospheric parameters\n";
-    return 1;
-  }
-  if (!brad_estimate_reflectance_image_multi(mul_f, meta, atmo, mul_f)) {
+  vil_image_view<float> cal_img;
+  if (!brad_estimate_reflectance_image_no_meta(mul_f, mean_albedo, cal_img)) {
     std::cerr << "error estimating reflectance image\n";
     return 1;
   }
-
   std::cerr << "done with image corrections\n";
 
+
   vil_image_view<float> spectral_angle;
-  aster.compute_sam_img(mul_f, keyword, spectral_angle);
+  if (!aster.compute_sam_img(cal_img, keyword, spectral_angle)) {
+    std::cerr << "error computing spectral angle map";
+  }
   vil_image_view<vxl_byte> to_save;
-  vil_convert_stretch_range_limited(spectral_angle, to_save, (float) 0.0, (float) 1.0, (vxl_byte) 0, (vxl_byte) 255);
-  vil_save(to_save, out_file.c_str());
+  vil_convert_stretch_range_limited(spectral_angle, to_save, (float) 0.0, (float) 1.0, (vxl_byte)0, (vxl_byte)255);
+  if (!vil_save(to_save, out_file.c_str())) {
+    std::cerr << "error saving spectral angle map";
+    return 1;
+  }
   return 0;
 };

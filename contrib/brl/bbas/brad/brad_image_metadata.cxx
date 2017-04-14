@@ -115,6 +115,7 @@ bool brad_image_metadata::parse_from_imd(std::string const& filename)
     std::cerr << "Error opening file " << filename << std::endl;
     return false;
   }
+
   n_bands_ = 0;
   // now parse the IMD file
   vul_awk awk(ifs);
@@ -255,6 +256,21 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
     std::cerr << "Error opening file " << filename << std::endl;
     return false;
   }
+
+  // testing adding in the wv3 gain offset numbers-------------------
+  std::vector<float> wv3_gain, wv3_offset;
+  wv3_gain.resize(8);
+  wv3_offset.resize(8);
+  wv3_gain[0] = 0.863f; wv3_offset[0] = -7.154f; // Coastal
+  wv3_gain[1] = 0.905f; wv3_offset[1] = -4.189f; // Blue
+  wv3_gain[2] = 0.907f; wv3_offset[2] = -3.287f; // Green
+  wv3_gain[3] = 0.938f; wv3_offset[3] = -1.816f; // Yellow
+  wv3_gain[4] = 0.945f; wv3_offset[4] = -1.350f; // Red
+  wv3_gain[5] = 0.980f; wv3_offset[5] = -2.617f; // Red Edge
+  wv3_gain[6] = 0.982f; wv3_offset[6] = -3.752f; // Near-IR1
+  wv3_gain[7] = 0.954f; wv3_offset[7] = -1.507f; // Near-IR2
+  // ----------------------------------------------------------------
+
   n_bands_ = 0;
   cam_offset_.set(0,0,0);
   number_of_bits_ = 11;
@@ -279,7 +295,8 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
     if (tag.compare("effectiveBandwidth") == 0) {
       linestr >> tag;  // read =
       linestr >> effectiveBand;
-      gains_.push_back(std::pair<double, double>(absCalfact/effectiveBand, 0.0));
+      //gains_.push_back(std::pair<double, double>(absCalfact/effectiveBand, 0.0)); 
+      gains_.push_back(std::pair<double, double>(absCalfact / effectiveBand*wv3_gain[n_bands_-1], wv3_offset[n_bands_-1])); // using additional wv3 gain/offset
       continue;
     }
     // cloud coverage

@@ -43,31 +43,6 @@ int main(int argc, char * argv[])
   brad_spectral_angle_mapper aster(bands_min, bands_max);
   aster.add_aster_dir(aster_dir);
   std::cerr << "done with aster initialization\n";
-  double x_poly[7] = { 50, 50, 0, 458, 453, 789, 50 };
-  double y_poly[7] = { 50, 0, 253, 242, 456, 99, 50 };
-  vgl_polygon<double> poly(x_poly, y_poly, 7);
-  unsigned crop_x = 0, crop_y = 0, crop_w = 3500, crop_h = 2000;
-  //unsigned crop_x = 3500, crop_y = 500, crop_w = 3500, crop_h = 2000;
-
-  
-  //// Read the ASTER materials
-  //std::vector<std::string> sample_types;
-  //std::vector< std::vector<float> > sample_spectra;
-  //baml_parse_aster_dir( 
-  //  aster_dir, bands_min, bands_max, 2, sample_types, sample_spectra );
-  //int num_samples = sample_spectra.size();
-  //std::cerr << "Found " << num_samples << " ASTER files\n";
-  //
-  //// Find and print unique types
-  //std::vector< std::string > unique_types;
-  //std::vector< int > sample_idx;
-  //baml_condense_sample_types(sample_types, unique_types, sample_idx);
-  //std::cerr << "Unique types found:\n";
-  //for (int u = 0; u < unique_types.size(); u++)
-  //  std::cerr << u << ": " << unique_types[u] << '\n';
-
-  //for (int s = 0; s < num_samples; s++)
-  //  baml_normalize_spectra(sample_spectra[s]);
 
   // Load the images
   //vil_image_resource_sptr pan_img = vil_load_image_resource(pan_file.c_str());
@@ -75,7 +50,8 @@ int main(int argc, char * argv[])
   vil_image_resource_sptr mul_img = vil_load_image_resource(mul_file.c_str());
   std::cerr << "Loaded a " << mul_img->ni() << 'x' << mul_img->nj() 
     << " image with " << mul_img->nplanes() << " channels\n";
-
+  unsigned crop_x = 0, crop_y = 0, crop_w = mul_img->ni(), crop_h = mul_img->nj();
+  //unsigned crop_x = 3500, crop_y = 500, crop_w = 3500, crop_h = 2000;
   // Get a cropped view and convert to float
   vil_image_view<vxl_uint_16> mul_crop = 
     vil_crop( mul_img, crop_x, crop_w, crop_y, crop_h )->get_view();
@@ -95,28 +71,29 @@ int main(int argc, char * argv[])
   }
 
   // Correct for atmospherics
-  brad_atmospheric_parameters atmo;
   float mean_albedo = 0.3;
-  //brad_estimate_atmospheric_parameters_multi(mul_f, meta, atmo);
-  brad_estimate_atmospheric_parameters_multi(mul_f, meta, mean_albedo, atmo);
-  brad_estimate_reflectance_image_multi(mul_f, meta, atmo, mul_f);//*/
-
+  vil_image_view<float> cal_img;
+  brad_estimate_reflectance_image_no_meta(mul_f, mean_albedo, cal_img);
   std::cerr << "done with image corrections\n";
 
-  vil_image_view<bool> mask;
-  brad_polygon2mask(mul_f, poly, mask);
-  vil_image_view<float> mask_int;
-  mask_int.set_size(mask.ni(), mask.nj());
-  mask_int.fill(0.0);
-  for (int y = 0; y < mask.nj(); y++) {
-    for (int x = 0; x < mask.ni(); x++) {
-      if (mask(x, y)) mask_int(x, y) = 1.0;
-    }
-  }
-  vil_save(mask_int, (out_dir + "mask.tif").c_str());
-  aster.add_material("water", mul_f, mask);
+  // visible byte image to be used from saving
+  vil_image_view<vxl_byte> vis;
 
-  vil_image_view<float> spectral_angle;
+  vil_image_view<int> class_img;
+  vil_image_view<float> conf_img;
+  aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete", "vegetation" }, 0.95, class_img, conf_img);
+  vil_convert_stretch_range_limited(class_img , vis, -1, 3);
+  vil_save(vis, (out_dir + "class_img_asphalt_building_concrete_vegetation.png").c_str());
+  vil_convert_stretch_range_limited(conf_img, vis, -0.0f, 1.0f);
+  vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete_vegetation.png").c_str());
+
+  aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete" }, 0.95, class_img, conf_img);
+  vil_convert_stretch_range_limited(class_img, vis, -1, 3);
+  vil_save(vis, (out_dir + "class_img_asphalt_building_concrete.png").c_str());
+  vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
+  vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete.png").c_str());
+
+  /*vil_image_view<float> spectral_angle;
   aster.compute_sam_img(mul_f, "building", spectral_angle);
   vil_save(spectral_angle, (out_dir + "buildingapp.tif").c_str());
   aster.compute_sam_img(mul_f, "cement", spectral_angle);
@@ -133,39 +110,37 @@ int main(int argc, char * argv[])
 
   aster.aster_classify_material(mul_f, keywords, 0.95, classmap, max_angle);
   vil_save(classmap, (out_dir + "classmap.tif").c_str());
-  vil_save(max_angle, (out_dir + "max_angle.tif").c_str());
+  vil_save(max_angle, (out_dir + "max_angle.tif").c_str());*/
 
-  //// Create an RGB image for visualization
-  //std::cerr << "Saving RGB image\n";
-  //vil_image_view<float> rgb_img(crop_w, crop_h, 3);
-  //for (int y = 0; y < crop_h; y++)
-  //  for (int x = 0; x < crop_w; x++) {
-  //    rgb_img(x, y, 0) = mul_f(x, y, 4);
-  //    rgb_img(x, y, 1) = mul_f(x, y, 2);
-  //    rgb_img(x, y, 2) = mul_f(x, y, 1);
-  //  }
+  // Create an RGB image for visualization
+  std::cerr << "Saving RGB image\n";
+  vil_image_view<float> rgb_img(cal_img.ni(), cal_img.nj(), 3);
+  for (int y = 0; y < cal_img.nj(); y++)
+    for (int x = 0; x < cal_img.ni(); x++) {
+      rgb_img(x, y, 0) = cal_img(x, y, 4);
+      rgb_img(x, y, 1) = cal_img(x, y, 2);
+      rgb_img(x, y, 2) = cal_img(x, y, 1);
+    }
 
-  //vil_image_view<vxl_byte> vis;
-  //vil_convert_stretch_range_limited(
-  //  rgb_img, vis, 0.0f, 0.3f);
-  //vil_save(vis, (out_dir + "rgb.png").c_str());
+  vil_convert_stretch_range_limited(
+    rgb_img, vis, 0.0f, 1.0f);
+  vil_save(vis, (out_dir + "rgb.png").c_str());
 
-  //// Classify using normalized indices
-  //std::cerr << "Computing normalized index images\n";
-  //vil_image_view<float> ndwi, ndvi, ndsi, nhfd;
-
-  //baml_compute_normalized_index_image(mul_f, 0, 7, ndwi);
-  //vil_convert_stretch_range_limited(ndwi, vis, -1.0f, 1.0f);
-  //vil_save(vis, (out_dir + "ndwi.png").c_str());
-  //baml_compute_normalized_index_image(mul_f, 7, 4, ndvi);
-  //vil_convert_stretch_range_limited(ndvi, vis, -1.0f, 1.0f);
-  //vil_save(vis, (out_dir + "ndvi.png").c_str());
-  //baml_compute_normalized_index_image(mul_f, 2, 3, ndsi);
-  //vil_convert_stretch_range_limited(ndsi, vis, -1.0f, 1.0f);
-  //vil_save(vis, (out_dir + "ndsi.png").c_str());
-  //baml_compute_normalized_index_image(mul_f, 5, 0, nhfd);
-  //vil_convert_stretch_range_limited(nhfd, vis, -1.0f, 1.0f);
-  //vil_save(vis, (out_dir + "nhfd.png").c_str());
+  // Classify using normalized indices
+  std::cerr << "Computing normalized index images\n";
+  vil_image_view<float> ndwi, ndvi, ndsi, nhfd;
+  brad_compute_normalized_index_image(cal_img, 0, 7, ndwi);
+  vil_convert_stretch_range_limited(ndwi, vis, -1.0f, 1.0f);
+  vil_save(vis, (out_dir + "ndwi.png").c_str());
+  brad_compute_normalized_index_image(cal_img, 7, 4, ndvi);
+  vil_convert_stretch_range_limited(ndvi, vis, -1.0f, 1.0f);
+  vil_save(vis, (out_dir + "ndvi.png").c_str());
+  brad_compute_normalized_index_image(cal_img, 3, 2, ndsi);
+  vil_convert_stretch_range_limited(ndsi, vis, -1.0f, 1.0f);
+  vil_save(vis, (out_dir + "ndsi.png").c_str());
+  brad_compute_normalized_index_image(cal_img, 5, 0, nhfd);
+  vil_convert_stretch_range_limited(nhfd, vis, -1.0f, 1.0f);
+  vil_save(vis, (out_dir + "nhfd.png").c_str());
 
   //// Classify materials using ASTER
   //std::cerr << "Classifying materials via ASTER\n";

@@ -99,4 +99,3 @@ bool brad_compute_normalized_index_image(
   }
   return true;
 };
-

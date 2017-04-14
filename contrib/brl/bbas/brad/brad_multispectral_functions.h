@@ -36,5 +36,4 @@ bool brad_compute_normalized_index_image(
   unsigned b1,
   unsigned b2,
   vil_image_view<float>& idx);
-
 #endif // brad_multispectral_functions_h

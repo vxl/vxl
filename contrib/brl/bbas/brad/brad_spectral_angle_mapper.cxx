@@ -36,6 +36,12 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
   const std::string keyword, 
   vil_image_view<float>& spectral_angle)
 {
+  // Ensure our library has at least one material
+  if (file_names_.size() == 0) {
+    std::cerr << "Spectral library empty\n";
+    return false;
+  }
+
   // set up
   int num_bands = bands_min_.size();
   if (image.nplanes() != num_bands) {
@@ -80,6 +86,67 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
 }
 
 //---------------------------------------------------------------------------
+//: Compute Spectral Angle Difference
+//---------------------------------------------------------------------------
+bool brad_spectral_angle_mapper::compute_sdm_img(const vil_image_view<float>& image, 
+  std::string keyword, 
+  vil_image_view<float>& spectral_diff)
+{
+
+  // Ensure our library has at least one material
+  if (file_names_.size() == 0) {
+    std::cerr << "Spectral library empty\n";
+    return false;
+  }
+
+  // set up
+  int num_bands = bands_min_.size();
+  if (image.nplanes() != num_bands) {
+    std::cerr << "Image does not have the correct number of spectral bands\n";
+    return false;
+  }
+  spectral_diff.set_size(image.ni(), image.nj());
+  spectral_diff.fill(0.0);
+
+  // find all relevant spectra
+  size_t found;
+  bool found_keyword = false;
+  std::vector<std::vector<std::vector<float> > > spec; // each vector entry corresponds to a material categroy, which holds a vector of relevant spectra (which are also vectors)
+  spec.resize(1); // size is one because we are only looking at one material category, namely 'keyword'
+  for (int i = 0; i < file_names_.size(); i++) {
+    found = file_names_[i].find(keyword);
+    if (found != std::string::npos) { // if our file contains the keyword, we want to compare it to our sample spectra
+      spec[0].push_back(spectra_[i]); // get corresponding spectra
+      found_keyword = true;
+    }
+  }
+
+  // make sure at least one relevant spectra was found
+  if (!found_keyword) {
+    std::cerr << "keyword not found in spectral library\n";
+    return false;
+  }
+  std::vector<float> s = spectra_[0];
+  for (int i = 0; i < 8; i++) {
+    std::cout << s[i] << "\n";
+  }
+
+  // find the best spectral difference
+  std::vector<float> img_vals;
+  std::vector<float> angle; // will be a vector of size 1 (the max angle corresponding to our single material category, 'keyword')
+  img_vals.resize(num_bands);
+  for (int y = 0; y < image.nj(); y++) {
+    for (int x = 0; x < image.ni(); x++) {
+      for (int b = 0; b < num_bands; b++)
+        img_vals[b] = image(x, y, b);
+      compute_spectral_diffs(img_vals, spec, angle);
+      spectral_diff(x, y) = angle[0];
+    }
+  }
+  return true;
+}
+
+//---------------------------------------------------------------------------
 //: Port of Cara's matClass.m which will use a fair amount of memory
 //---------------------------------------------------------------------------
 bool brad_spectral_angle_mapper::aster_classify_material(
@@ -89,12 +156,14 @@ bool brad_spectral_angle_mapper::aster_classify_material(
   vil_image_view<int>& class_img,
   vil_image_view<float>& conf_img)
 {
+
   // set up
   int img_width = image.ni(), img_height = image.nj();
   int num_categories = keywords.size();
   int num_bands = bands_min_.size();
   class_img.set_size(img_width, img_height);
   conf_img.set_size(img_width, img_height);
+  conf_img.fill(0.0);
 
   // Ensure our library has at least one material
   if (file_names_.size() == 0) {
@@ -168,7 +237,7 @@ bool brad_spectral_angle_mapper::aster_classify_material(
         if (max_angle > threshold) max_idx = c; // class -1: no category had high enough angle measurement 
       }
       class_img(x, y) = max_idx;
-      conf_img(x, y) = max_angle;
+      if (max_idx != -1) conf_img(x, y) = max_angle;
     }
   }
   return true;
@@ -218,6 +287,9 @@ bool brad_spectral_angle_mapper::add_material(const std::string type,
     new_spectrum[s] = spectra_sum[s] / num_sample_spectra;
   } // s
 
+  // normalize the spectra
+  brad_normalize_spectra(new_spectrum);
+
   // add spectra and type to our library
   spectra_.push_back(new_spectrum);
   file_names_.push_back(type);
@@ -250,6 +322,14 @@ void brad_spectral_angle_mapper::add_aster_dir(const std::string aster_dir) {
       parse_aster_file(fi(), spectra_.back());
     }
   }
+}
+
+//---------------------------------------------------------------------------
+//: Clear the library of all materials
+//---------------------------------------------------------------------------
+void brad_spectral_angle_mapper::clear_library() {
+  file_names_.clear();
+  spectra_.clear();
 }
 
 //---------------------------------------------------------------------------
@@ -364,3 +444,33 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
   } // c
 };
 
+//---------------------------------------------------------------------------
+//: Compute spectral difference (sum of squared difference) between two vectors 
+//  of multi-spectral values
+//---------------------------------------------------------------------------
+void brad_spectral_angle_mapper::compute_spectral_diffs(
+  const std::vector<float>& img_vals,
+  const std::vector<std::vector<std::vector<float> > >& normalized_spectra_samples,
+  std::vector<float>& differences)
+{
+  int num_bands = img_vals.size();
+  int num_categories = normalized_spectra_samples.size();
+  differences.resize(num_categories);
+  // Normalize image vals
+  std::vector<float> img_norm = img_vals;
+  brad_normalize_spectra(img_norm);
+  for (int c = 0; c < num_categories; c++) { // loop over categories
+    float diff = 0.0;
+    int num_samples = normalized_spectra_samples[c].size();
+    for (int s = 0; s < num_samples; s++) { // loop over sample
+      // Sum of Squared Difference 
+      float sum = 0.0f;
+      for (int b = 0; b < num_bands; b++)
+        sum += pow(normalized_spectra_samples[c][s][b] - img_norm[b],2);
+
+      // Spectral angle
+      diff = std::max(diff, sqrt(sum));
+    } // s
+    differences[c] = diff;
+  } // c
+};
