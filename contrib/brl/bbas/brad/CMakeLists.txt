@@ -23,6 +23,7 @@
       brad_belief_prop_utils.h        brad_belief_prop_utils.cxx
       brad_spectral_angle_mapper.h    brad_spectral_angle_mapper.cxx
       brad_multispectral_functions.h  brad_multispectral_functions.cxx
+      brad_worldview3_functions.h     brad_worldview3_functions.cxx
 )
   aux_source_directory(Templates brad_sources)
   vxl_add_library(LIBRARY_NAME brad LIBRARY_SOURCES ${brad_sources} )
