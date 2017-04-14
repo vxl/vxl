@@ -28,6 +28,9 @@
 // Setting the scale=0.335 will yield a composite image of approximate 
 // resolution as the lower resolution SWIR band, which may be desirable.
 //
+// This function also performs the radiometric calibration using metadata as
+// done in brad_nitf_abs_radiometric_calibration_process if the flag is set.
+//
 // WARNING: as all images including the 16-band float image are stored in 
 // memory, this function may use many gigabytes of memory.
 bool brad_compose_16band_wv3_img(
@@ -50,5 +53,17 @@ bool brad_compose_16band_wv3_img(
   vil_image_view<float>& comp_img,
   float scale = -1.0f,
   vgl_box_2d<int> mul_region = vgl_box_2d<int>());
+
+
+//: The spectral bands present in a 8-band WorldView3 MUL image.
+void brad_wv3_bands(
+  std::vector<float>& bands_min,
+  std::vector<float>& bands_max);
+
+//: The spectral bands present in a 16-band WorldView3 composite MUL+SWIR
+// image.
+void brad_wv3_bands_swir(
+  std::vector<float>& bands_min,
+  std::vector<float>& bands_max);
 
 #endif

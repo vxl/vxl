@@ -19,6 +19,7 @@
 #include <brad/brad_image_atmospherics_est.h>
 #include <brad/brad_spectral_angle_mapper.h>
 #include <brad/brad_multispectral_functions.h>
+#include <brad/brad_worldview3_functions.h>
 
 int main(int argc, char * argv[])
 {

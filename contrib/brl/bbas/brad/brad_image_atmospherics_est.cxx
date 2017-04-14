@@ -403,22 +403,23 @@ bool brad_estimate_reflectance_image_no_meta(vil_image_view<float> const& radian
   double airlight_ave = h.value_with_area_below(frac);
 
   // calculate atmospheric parameters for each band
-  std::vector<double> airlight;
+  std::vector<float> airlight;
   airlight.resize(np);
   for (unsigned p = 0; p < np; p++)
   {
     vil_image_view<float> img = vil_plane(radiance, p);
+    double airlight_sum = 0.0;
     int count = 0;
     //compute airlight for this plane
     for (int j = 0; j < nj; j++) {
       for (int i = 0; i < ni; i++) {
         if (ave_im(i, j) < airlight_ave) {
-          airlight[p] += img(i, j);
+          airlight_sum += (float)img(i, j);
           count++;
         }
       }
     }
-    airlight[p] /= (double)count;
+    airlight[p] = (float)(airlight_sum / count);
   }
 
   // compute Lsat_horizontal average using the planes specified in planes_for_average
@@ -432,9 +433,11 @@ bool brad_estimate_reflectance_image_no_meta(vil_image_view<float> const& radian
       }
     }
     plane_ave /= cur_plane.ni()*cur_plane.nj();
-    Lsat_horizontal += (plane_ave - airlight[p]) / mean_reflectance;
+    Lsat_horizontal += (plane_ave - airlight[p]);
   }
   Lsat_horizontal /= (max_norm_band - min_norm_band + 1);
+
+  float norm_factor = (float)(mean_reflectance / Lsat_horizontal);
 
   cal_img.set_size(ni, nj, np);
   cal_img.fill(0.0);
@@ -442,8 +445,8 @@ bool brad_estimate_reflectance_image_no_meta(vil_image_view<float> const& radian
   for (int p = 0; p < radiance.nplanes(); p++) {
     for (int j = 0; j < radiance.nj(); j++) {
       for (int i = 0; i < radiance.ni(); i++) {
-        double normalized = (double(radiance(i, j, p)) - airlight[p]) / Lsat_horizontal;
-        cal_img(i, j, p) = std::min(std::max(0.0f, float(normalized)), 1.0f);
+        double normalized = (double(radiance(i, j, p)) - airlight[p]) * norm_factor;
+        cal_img(i, j, p) = std::max(0.0f, float(normalized));
       }
     }
   }

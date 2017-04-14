@@ -27,12 +27,15 @@ int main(int argc, char * argv[])
   //---------------------------with SWIR----------------------
   // Set arguments
   std::string mul_file(
-    "C:/Users/sca0161/Documents/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
+    //"C:/Users/sca0161/Documents/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
+    "D:/data/core3d/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
   std::string swir_file(
-    "C:/Users/sca0161/Documents/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
+   // "C:/Users/sca0161/Documents/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
+    "D:/data/core3d/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
 
   std::string out_dir(
-    "C:/Users/sca0161/Documents/sevastopol2/cpp result/");
+    //"C:/Users/sca0161/Documents/sevastopol2/cpp result/");
+    "D:/results/ms/");
   
   //float mean_albedo = 0.15f;
   vil_image_view<float> comp_img;
@@ -52,8 +55,8 @@ int main(int argc, char * argv[])
   //}
 
   std::string aster_dir(
-    "C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/new/*.spectrum.txt");
-  //"C:/Users/thomas.pollard/Desktop/170306_MaterialClassification/aster_data/new/*.txt");
+   // "C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/new/*.spectrum.txt");
+    "D:/data/core3d/ASTER/data/caras/*.txt");
 
   // Setup WV3 bands
   std::vector<float> bands_min, bands_max;
@@ -64,11 +67,11 @@ int main(int argc, char * argv[])
   std::cerr << "done with aster initialization\n";
 
   // Load metadata
-  brad_image_metadata meta_mul(vul_file::strip_extension(mul_file) + ".IMD");
-  brad_image_metadata meta_swir(vul_file::strip_extension(swir_file) + ".IMD");
+  //brad_image_metadata meta_mul(vul_file::strip_extension(mul_file) + ".IMD");
+  //brad_image_metadata meta_swir(vul_file::strip_extension(swir_file) + ".IMD");
 
 
-  // Calibrate the image, lifted from 
+  /*/ Calibrate the image, lifted from 
   // brad_nitf_abs_radiometric_calibration_process
   for (int b = 0; b < 8; b++) {
     vil_image_view<float> band = vil_plane(comp_img, b);
@@ -79,7 +82,7 @@ int main(int argc, char * argv[])
     vil_image_view<float> band = vil_plane(comp_img, b);
     vil_math_scale_and_offset_values(
       band, meta_swir.gains_[b + 1].first, meta_swir.gains_[b + 1].second);
-  }
+  }*/
 
   // Correct for atmospherics
   float mean_albedo = 0.3;
