@@ -28,38 +28,47 @@
 // Setting the scale=0.335 will yield a composite image of approximate 
 // resolution as the lower resolution SWIR band, which may be desirable.
 //
-// This function also performs the radiometric calibration using metadata as
-// done in brad_nitf_abs_radiometric_calibration_process if the flag is set.
-//
 // WARNING: as all images including the 16-band float image are stored in 
 // memory, this function may use many gigabytes of memory.
 bool brad_compose_16band_wv3_img(
-  const vil_image_view<vxl_uint_16>& mul_img,
+  const vil_image_view<float>& mul_img,
   const vpgl_rational_camera<double>& mul_rpc,
   const brad_image_metadata& mul_meta,
-  const vil_image_view<vxl_uint_16>& swir_img,
+  const vil_image_view<float>& swir_img,
   const vpgl_rational_camera<double>& swir_rpc,
   const brad_image_metadata& swir_meta,
   vil_image_view<float>& comp_img,
   float scale = -1.0f,
-  vgl_box_2d<int> mul_region = vgl_box_2d<int>(),
-  bool calibrate_radiometrically = true);
+  vgl_box_2d<int> mul_region = vgl_box_2d<int>() );
 
 
-//: A convenience wrapper function for dealing directly with filenames
+//: A convenience wrapper function for dealing directly with filenames.
+// When calibrate = true this function also performs the calibration defined
+// in brad_calibrate_wv3_img 
 bool brad_compose_16band_wv3_img(
   const std::string& mul_file,
   const std::string& swir_file,
   vil_image_view<float>& comp_img,
   float scale = -1.0f,
   vgl_box_2d<int> mul_region = vgl_box_2d<int>(),
-  bool calibrate_radiometrically = true );
+  bool calibrate = true );
 
 
-//: Apply the fixed gain/offset from the WorldView3 technical document:
-// Radiometric_Use_of_WorldView-3_v2.pdf
+//: Convert raw WV3 image from digital numbers to top-of-atmopshere 
+// reflectance using equations in Digital Globe's reference:
+//   Radiometric_Use_of_WorldView-3_v2.pdf
+bool brad_calibrate_wv3_img(
+  const brad_image_metadata& meta,
+  const vil_image_view<vxl_uint_16>& wv3_raw,
+  vil_image_view<float>& wv3_cal,
+  bool swir = false);
+
+
+//: Apply just the fixed gain/offset from the WorldView3 technical document:
+//   Radiometric_Use_of_WorldView-3_v2.pdf
 void brad_apply_wv3_fixed_calibration(
-  vil_image_view<float>& wv3_img);
+  vil_image_view<float>& wv3_img,
+  bool swir = false);
 
 
 //: The spectral bands present in a composite WorldView3 image.  An MUL image

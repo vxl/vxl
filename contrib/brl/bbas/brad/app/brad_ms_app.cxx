@@ -29,70 +29,65 @@ int main(int argc, char * argv[])
   std::string mul_file(
     //"C:/Users/sca0161/Documents/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
     "D:/data/core3d/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
+
   std::string swir_file(
    // "C:/Users/sca0161/Documents/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
     "D:/data/core3d/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
+
+  std::string aster_dir(
+    // "C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/new/*.spectrum.txt");
+    "D:/data/core3d/ASTER/data/caras/*.txt");
 
   std::string out_dir(
     //"C:/Users/sca0161/Documents/sevastopol2/cpp result/");
     "D:/results/ms/");
   
-  //float mean_albedo = 0.15f;
+  std::cerr << "Composing 16-band image\n";
   vil_image_view<float> comp_img;
   brad_compose_16band_wv3_img(
-    mul_file, swir_file, comp_img, 0.33f);// , vgl_box_2d<int>(2000, 3000, 3000, 4500) );
-
-  // Write bands
-  //std::cerr << "Writing output\n";
-  //for (int p = 0; p < 16; p++) {
-  //  vil_image_view<float> plane = vil_plane(comp_img, p);
-  //  std::stringstream ss;
-  //  ss << "C:/Users/sca0161/Documents/sevastopol2/cpp result/" << p << ".png";
-  //  vil_image_view<vxl_byte> vis;
-  //  vil_convert_stretch_range_limited(
-  //    plane, vis, 0.0f, 100.0f);
-  //  vil_save(vis, ss.str().c_str());
-  //}
-
-  std::string aster_dir(
-   // "C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/new/*.spectrum.txt");
-    "D:/data/core3d/ASTER/data/caras/*.txt");
-
-  // Setup WV3 bands
-  std::vector<float> bands_min, bands_max;
-  brad_wv3_bands(bands_min, bands_max);
-  // create aster objects
-  brad_spectral_angle_mapper aster(bands_min, bands_max);
-  aster.add_aster_dir(aster_dir);
-  std::cerr << "done with aster initialization\n";
-
-  // Load metadata
-  //brad_image_metadata meta_mul(vul_file::strip_extension(mul_file) + ".IMD");
-  //brad_image_metadata meta_swir(vul_file::strip_extension(swir_file) + ".IMD");
-
-
-  /*/ Calibrate the image, lifted from 
-  // brad_nitf_abs_radiometric_calibration_process
-  for (int b = 0; b < 8; b++) {
-    vil_image_view<float> band = vil_plane(comp_img, b);
-    vil_math_scale_and_offset_values(
-      band, meta_mul.gains_[b + 1].first, meta_mul.gains_[b + 1].second);
-  }
-  for (int b = 8; b < 16; b++) {
-    vil_image_view<float> band = vil_plane(comp_img, b);
-    vil_math_scale_and_offset_values(
-      band, meta_swir.gains_[b + 1].first, meta_swir.gains_[b + 1].second);
-  }*/
+    mul_file, swir_file, comp_img, 1.0f);
 
   // Correct for atmospherics
   float mean_albedo = 0.3;
   vil_image_view<float> cal_img;
-  brad_estimate_reflectance_image_no_meta(comp_img, mean_albedo, cal_img);
-  std::cerr << "done with image corrections\n";
+  brad_estimate_reflectance_image_multi(comp_img, mean_albedo, cal_img);
 
-  // visible byte image to be used from saving
+  // Create an RGB image for visualization
+  std::cerr << "Saving RGB image\n";
   vil_image_view<vxl_byte> vis;
+  vil_image_view<float> rgb_img(cal_img.ni(), cal_img.nj(), 3);
 
+  for (int y = 0; y < cal_img.nj(); y++)
+    for (int x = 0; x < cal_img.ni(); x++) {
+      rgb_img(x, y, 0) = cal_img(x, y, 4);
+      rgb_img(x, y, 1) = cal_img(x, y, 2);
+      rgb_img(x, y, 2) = cal_img(x, y, 1);
+    }
+
+  vil_convert_stretch_range_limited(rgb_img, vis, 0.0f, 1.0f);
+  vil_save(vis, (out_dir + "rgb.png").c_str());
+
+  // Write bands
+  std::cerr << "Saving band images\n";
+  for (int p = 0; p < 16; p++) {
+    vil_image_view<float> plane = vil_plane(cal_img, p);
+    std::stringstream ss;
+    ss << out_dir << p << ".png";
+    vil_image_view<vxl_byte> vis;
+    vil_convert_stretch_range_limited(plane, vis, 0.0f, 1.0f);
+    vil_save(vis, ss.str().c_str());
+  }
+
+  // Setup WV3 bands
+  std::vector<float> bands_min, bands_max;
+  brad_wv3_bands(bands_min, bands_max);
+
+  // create aster objects
+  std::cerr << "Loading ASTER directory\n";
+  brad_spectral_angle_mapper aster(bands_min, bands_max);
+  aster.add_aster_dir(aster_dir);
+
+  std::cerr << "Classifying materials\n";
   vil_image_view<int> class_img;
   vil_image_view<float> conf_img;
   aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete", "vegetation" }, 0.95, class_img, conf_img);
@@ -107,19 +102,6 @@ int main(int argc, char * argv[])
   vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
   vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete.png").c_str());
 
-  // Create an RGB image for visualization
-  std::cerr << "Saving RGB image\n";
-  vil_image_view<float> rgb_img(cal_img.ni(), cal_img.nj(), 3);
-  for (int y = 0; y < cal_img.nj(); y++)
-    for (int x = 0; x < cal_img.ni(); x++) {
-      rgb_img(x, y, 0) = cal_img(x, y, 4);
-      rgb_img(x, y, 1) = cal_img(x, y, 2);
-      rgb_img(x, y, 2) = cal_img(x, y, 1);
-    }
-
-  vil_convert_stretch_range_limited(
-    rgb_img, vis, 0.0f, 1.0f);
-  vil_save(vis, (out_dir + "rgb.png").c_str());
   return 0;
 
 

@@ -51,32 +51,23 @@ int main(int argc, char * argv[])
   std::cerr << "Loaded a " << mul_img->ni() << 'x' << mul_img->nj()
     << " image with " << mul_img->nplanes() << " channels\n";
 
-  // get float view
-  vil_image_view<vxl_uint_16> mul_f_uint16;
-  mul_f_uint16 = mul_img->get_view();
-  vil_image_view<float> mul_f;
-  vil_convert_cast(mul_f_uint16, mul_f);
-
   // Load metadata
   brad_image_metadata meta(vul_file::strip_extension(image_file) + ".IMD");
 
-  // Calibrate the image, lifted from 
-  // brad_nitf_abs_radiometric_calibration_process
-  for (int b = 0; b < mul_f.nplanes(); b++) {
-    vil_image_view<float> band = vil_plane(mul_f, b);
-    vil_math_scale_and_offset_values(
-      band, meta.gains_[b + 1].first, meta.gains_[b + 1].second);
-  }
+  // Calibrate image
+  vil_image_view<vxl_uint_16> mul_uint16;
+  mul_uint16 = mul_img->get_view();
+  vil_image_view<float> mul_f;
+  brad_calibrate_wv3_img(meta, mul_uint16, mul_f, false);
 
   // Correct for atmospherics
   float mean_albedo = 0.3;
   vil_image_view<float> cal_img;
-  if (!brad_estimate_reflectance_image_no_meta(mul_f, mean_albedo, cal_img)) {
+  if (!brad_estimate_reflectance_image_multi(mul_f, mean_albedo, cal_img)) {
     std::cerr << "error estimating reflectance image\n";
     return 1;
   }
   std::cerr << "done with image corrections\n";
-
 
   vil_image_view<float> spectral_angle;
   if (!aster.compute_sam_img(cal_img, keyword, spectral_angle)) {
