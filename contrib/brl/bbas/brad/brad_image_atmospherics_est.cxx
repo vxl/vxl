@@ -360,7 +360,7 @@ bool brad_estimate_reflectance_image_multi(vil_image_view<float> const& radiance
 bool brad_estimate_reflectance_image_no_meta(vil_image_view<float> const& radiance, float mean_reflectance, vil_image_view<float> &cal_img, int min_norm_band, int max_norm_band)
 {
   // set default min/max normalization and dark pixel bands
-  if (min_norm_band == -1 && max_norm_band==-1) { // wv3
+  if (min_norm_band < 0 || max_norm_band < 0) { // wv3
     if (radiance.nplanes() == 8 || radiance.nplanes() == 16) {
       min_norm_band = 1;
       max_norm_band = 4;
@@ -379,7 +379,7 @@ bool brad_estimate_reflectance_image_no_meta(vil_image_view<float> const& radian
   unsigned nj = radiance.nj();
   unsigned np = radiance.nplanes();
 
-  float frac = 0.0001f;
+  float frac = 0.001f; //0.0001
   // create average image
   vil_image_view<float> ave_im;
   ave_im.set_size(ni, nj);

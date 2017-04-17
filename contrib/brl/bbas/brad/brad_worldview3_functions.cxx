@@ -282,7 +282,8 @@ void brad_apply_wv3_fixed_calibration(
 //---------------------------------------------------------------------------
 void brad_wv3_bands(
   std::vector<float>& bands_min,
-  std::vector<float>& bands_max)
+  std::vector<float>& bands_max,
+  int num_bands )
 {
   bands_min.resize(16);
   bands_max.resize(16);
@@ -302,5 +303,9 @@ void brad_wv3_bands(
   bands_min[13] = 2.185f; bands_max[13] = 2.225f; // SWIR-6
   bands_min[14] = 2.235f; bands_max[14] = 2.285f; // SWIR-7
   bands_min[15] = 2.295f; bands_max[15] = 2.365f; // SWIR-8
+  if (num_bands > 0 && num_bands < 16) {
+    bands_min.resize(num_bands);
+    bands_max.resize(num_bands);
+  }
 };
 

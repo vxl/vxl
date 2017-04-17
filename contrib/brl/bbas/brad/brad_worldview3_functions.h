@@ -66,7 +66,8 @@ void brad_apply_wv3_fixed_calibration(
 // covers the first 8 bands, and SWIR covers the last 8 bands.
 void brad_wv3_bands(
   std::vector<float>& bands_min,
-  std::vector<float>& bands_max);
+  std::vector<float>& bands_max,
+  int num_bands = 16 );
 
 
 #endif
