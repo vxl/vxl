@@ -70,7 +70,7 @@ bool brad_compute_normalized_index_image(
 {
   float tol = 0.000000001f;
 
-  if (mul_img.nplanes() != 8) return false;
+  if (mul_img.nplanes() != 8 && mul_img.nplanes() != 16) return false;
   idx.set_size(mul_img.ni(), mul_img.nj());
 
   for (int y = 0; y < mul_img.nj(); y++) {

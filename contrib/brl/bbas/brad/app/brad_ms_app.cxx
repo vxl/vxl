@@ -27,15 +27,15 @@ int main(int argc, char * argv[])
   //---------------------------with SWIR----------------------
   // Set arguments
   std::string mul_file(
-    //"C:/Users/sca0161/Documents/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
-    "D:/data/core3d/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
+    "C:/Users/sca0161/Documents/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
+    //"D:/data/core3d/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
   std::string swir_file(
-   // "C:/Users/sca0161/Documents/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
-    "D:/data/core3d/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
+    "C:/Users/sca0161/Documents/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
+    //"D:/data/core3d/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
 
   std::string out_dir(
-    //"C:/Users/sca0161/Documents/sevastopol2/cpp result/");
-    "D:/results/ms/");
+    "C:/Users/sca0161/Documents/sevastopol2/cpp result/");
+    //"D:/results/ms/");
   
   //float mean_albedo = 0.15f;
   vil_image_view<float> comp_img;
@@ -55,8 +55,22 @@ int main(int argc, char * argv[])
   //}
 
   std::string aster_dir(
-   // "C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/new/*.spectrum.txt");
-    "D:/data/core3d/ASTER/data/caras/*.txt");
+    "C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/new/*.spectrum.txt");
+    //"D:/data/core3d/ASTER/data/caras/*.txt");
+
+  //load dock mask
+  std::string dock_mask_file("C:/Users/sca0161/Documents/sevastopol2/cpp result/mask_dock.png");
+  vil_image_resource_sptr dock_mask_rsc = vil_load_image_resource(dock_mask_file.c_str());
+
+  std::cerr << "Loading images\n";
+  vil_image_view<vxl_uint_8> dock_mask_16 = dock_mask_rsc->get_view();
+  vil_image_view<bool> dock_mask(dock_mask_16.ni(), dock_mask_16.nj());
+  dock_mask.fill(false);
+  for (int j = 0; j < dock_mask_16.nj(); j++) {
+    for (int i = 0; i < dock_mask_16.ni(); i++) {
+      if (dock_mask_16(i, j, 0) > 0) dock_mask(i, j) = true;
+    }
+  }
 
   // Setup WV3 bands
   std::vector<float> bands_min, bands_max;
@@ -65,6 +79,7 @@ int main(int argc, char * argv[])
   brad_spectral_angle_mapper aster(bands_min, bands_max);
   aster.add_aster_dir(aster_dir);
   std::cerr << "done with aster initialization\n";
+
 
   // Load metadata
   //brad_image_metadata meta_mul(vul_file::strip_extension(mul_file) + ".IMD");
@@ -90,36 +105,79 @@ int main(int argc, char * argv[])
   brad_estimate_reflectance_image_no_meta(comp_img, mean_albedo, cal_img);
   std::cerr << "done with image corrections\n";
 
+  aster.add_material("dock", cal_img, dock_mask);
+  std::cerr << "added material dock to aster\n";
   // visible byte image to be used from saving
   vil_image_view<vxl_byte> vis;
 
-  vil_image_view<int> class_img;
-  vil_image_view<float> conf_img;
-  aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete", "vegetation" }, 0.95, class_img, conf_img);
-  vil_convert_stretch_range_limited(class_img, vis, -1, 3);
-  vil_save(vis, (out_dir + "class_img_asphalt_building_concrete_vegetation.png").c_str());
-  vil_convert_stretch_range_limited(conf_img, vis, -0.0f, 1.0f);
-  vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete_vegetation.png").c_str());
+  //vil_image_view<int> class_img;
+  //vil_image_view<float> conf_img;
+  //aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete", "vegetation" }, 0.8, class_img, conf_img);
+  //vil_convert_stretch_range_limited(class_img, vis, -1, 3);
+  //vil_save(vis, (out_dir + "class_img_asphalt_building_concrete_vegetation.png").c_str());
+  //vil_convert_stretch_range_limited(conf_img, vis, -0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete_vegetation.png").c_str());
 
-  aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete" }, 0.95, class_img, conf_img);
-  vil_convert_stretch_range_limited(class_img, vis, -1, 3);
-  vil_save(vis, (out_dir + "class_img_asphalt_building_concrete.png").c_str());
-  vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
-  vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete.png").c_str());
+  //aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete" }, 0.8, class_img, conf_img);
+  //vil_convert_stretch_range_limited(class_img, vis, -1, 3);
+  //vil_save(vis, (out_dir + "class_img_asphalt_building_concrete.png").c_str());
+  //vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete.png").c_str());
 
-  // Create an RGB image for visualization
-  std::cerr << "Saving RGB image\n";
-  vil_image_view<float> rgb_img(cal_img.ni(), cal_img.nj(), 3);
-  for (int y = 0; y < cal_img.nj(); y++)
-    for (int x = 0; x < cal_img.ni(); x++) {
-      rgb_img(x, y, 0) = cal_img(x, y, 4);
-      rgb_img(x, y, 1) = cal_img(x, y, 2);
-      rgb_img(x, y, 2) = cal_img(x, y, 1);
-    }
 
-  vil_convert_stretch_range_limited(
-    rgb_img, vis, 0.0f, 1.0f);
-  vil_save(vis, (out_dir + "rgb.png").c_str());
+  vil_image_view<float> sam;
+  //aster.compute_sam_img(cal_img, "dock", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_dock.png").c_str());
+  //aster.compute_sam_img(cal_img, "asphalt", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_asphalt.png").c_str());
+  //aster.compute_sam_img(cal_img, "building", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_building.png").c_str());
+  //aster.compute_sam_img(cal_img, "concrete", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_concrete.png").c_str());
+  //aster.compute_sam_img(cal_img, "vegetation", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_vegetation.png").c_str());
+
+  aster.clear_library();
+  aster.add_material("dock", comp_img, dock_mask);
+  std::cerr << "added material dock (uncalibrated) to aster\n";
+  aster.compute_sam_img(comp_img, "dock", sam);
+  vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  vil_save(vis, (out_dir + "sam_dock_uncalibrated.png").c_str());
+
+  //// Create an RGB image for visualization
+  //std::cerr << "Saving RGB image\n";
+  //vil_image_view<float> rgb_img(cal_img.ni(), cal_img.nj(), 3);
+  //for (int y = 0; y < cal_img.nj(); y++)
+  //  for (int x = 0; x < cal_img.ni(); x++) {
+  //    rgb_img(x, y, 0) = cal_img(x, y, 4);
+  //    rgb_img(x, y, 1) = cal_img(x, y, 2);
+  //    rgb_img(x, y, 2) = cal_img(x, y, 1);
+  //  }
+
+  //vil_convert_stretch_range_limited(
+  //  rgb_img, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "rgb.png").c_str());
+
+    //// Classify using normalized indices
+    //std::cerr << "Computing normalized index images\n";
+    //vil_image_view<float> ndwi, ndvi, ndsi, nhfd;
+    //brad_compute_normalized_index_image(cal_img, 0, 7, ndwi);
+    //vil_convert_stretch_range_limited(ndwi, vis, -1.0f, 1.0f);
+    //vil_save(vis, (out_dir + "ndwi_swir.png").c_str());
+    //brad_compute_normalized_index_image(cal_img, 7, 4, ndvi);
+    //vil_convert_stretch_range_limited(ndvi, vis, -1.0f, 1.0f);
+    //vil_save(vis, (out_dir + "ndvi_swir.png").c_str());
+    //brad_compute_normalized_index_image(cal_img, 3, 2, ndsi);
+    //vil_convert_stretch_range_limited(ndsi, vis, -1.0f, 1.0f);
+    //vil_save(vis, (out_dir + "ndsi_swir.png").c_str());
+    //brad_compute_normalized_index_image(cal_img, 5, 0, nhfd);
+    //vil_convert_stretch_range_limited(nhfd, vis, -1.0f, 1.0f);
+    //vil_save(vis, (out_dir + "nhfd_swir.png").c_str());
   return 0;
 
 
