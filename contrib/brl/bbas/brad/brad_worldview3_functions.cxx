@@ -196,6 +196,10 @@ bool brad_compose_16band_wv3_img(
     } //y
 
   } //p
+
+  if (calibrate_radiometrically)
+    brad_apply_wv3_fixed_calibration(comp_img);
+
   return true;
 };
 
@@ -206,7 +210,8 @@ bool brad_compose_16band_wv3_img(
   const std::string& swir_file,
   vil_image_view<float>& comp_img,
   float scale,
-  vgl_box_2d<int> mul_region )
+  vgl_box_2d<int> mul_region,
+  bool calibrate_radiometrically )
 {
   int num_bands = 8;
 
@@ -237,36 +242,45 @@ bool brad_compose_16band_wv3_img(
   std::cerr << "Generating 16 band image\n";
   bool success = brad_compose_16band_wv3_img(
     mul_img, *mul_rpc, mul_meta, swir_img, *swir_rpc, swir_meta,
-    comp_img, scale, mul_region);
+    comp_img, scale, mul_region, calibrate_radiometrically );
 
   delete mul_rpc; delete swir_rpc;
   return success;
 };
 
 
-//---------------------------------------------------------------------------
-//: The spectral bands present in a World View 3 multi-spectral image.
-//---------------------------------------------------------------------------
-void brad_wv3_bands(
-  std::vector<float>& bands_min,
-  std::vector<float>& bands_max)
+//------------------------------------------------------------------------
+void brad_apply_wv3_fixed_calibration(
+  vil_image_view<float>& wv3_img)
 {
-  bands_min.resize(8);
-  bands_max.resize(8);
-  bands_min[0] = 0.400f; bands_max[0] = 0.450f; // Coastal
-  bands_min[1] = 0.450f; bands_max[1] = 0.510f; // Blue
-  bands_min[2] = 0.510f; bands_max[2] = 0.580f; // Green
-  bands_min[3] = 0.585f; bands_max[3] = 0.625f; // Yellow
-  bands_min[4] = 0.630f; bands_max[4] = 0.690f; // Red
-  bands_min[5] = 0.705f; bands_max[5] = 0.745f; // Red Edge
-  bands_min[6] = 0.770f; bands_max[6] = 0.895f; // Near-IR1
-  bands_min[7] = 0.860f; bands_max[7] = 1.040f; // Near-IR2
-};
+  std::vector<double> gain(16), offset(16);
+  gain[0] = 0.863; offset[0] = -7.154;
+  gain[1] = 0.905; offset[1] = -4.189;
+  gain[2] = 0.907; offset[2] = -3.287;
+  gain[3] = 0.938; offset[3] = -1.816;
+  gain[4] = 0.945; offset[4] = -1.350;
+  gain[5] = 0.980; offset[5] = -2.617;
+  gain[6] = 0.982; offset[6] = -3.752;
+  gain[7] = 0.954; offset[7] = -1.507;
+  gain[8] = 1.160; offset[8] = -4.479;
+  gain[9] = 1.184; offset[9] = -2.248;
+  gain[10] = 1.173; offset[10] = -1.806;
+  gain[11] = 1.187; offset[11] = -1.507;
+  gain[12] = 1.286; offset[12] = -0.622;
+  gain[13] = 1.336; offset[13] = -0.605;
+  gain[14] = 1.340; offset[14] = -0.423;
+  gain[15] = 1.392; offset[15] = -0.302;
+
+  for (int p = 0; p < wv3_img.nplanes(); p++) 
+    vil_math_scale_and_offset_values(
+      vil_plane(wv3_img, p), gain[p], offset[p]);
+}
+
 
 //---------------------------------------------------------------------------
 //: The spectral bands present in a World View 3 multi-spectral image with SWIR.
 //---------------------------------------------------------------------------
-void brad_wv3_bands_swir(
+void brad_wv3_bands(
   std::vector<float>& bands_min,
   std::vector<float>& bands_max)
 {

@@ -43,8 +43,8 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
   }
 
   // set up
-  int num_bands = bands_min_.size();
-  if (image.nplanes() != num_bands) {
+  int num_bands = image.nplanes(); ;
+  if (bands_min_.size() < num_bands) {
     std::cerr << "Image does not have the correct number of spectral bands\n";
     return false;
   }
@@ -100,8 +100,8 @@ bool brad_spectral_angle_mapper::compute_sdm_img(const vil_image_view<float>& im
   }
 
   // set up
-  int num_bands = bands_min_.size();
-  if (image.nplanes() != num_bands) {
+  int num_bands = image.nplanes(); ;
+  if (bands_min_.size() < num_bands) {
     std::cerr << "Image does not have the correct number of spectral bands\n";
     return false;
   }
@@ -160,7 +160,6 @@ bool brad_spectral_angle_mapper::aster_classify_material(
   // set up
   int img_width = image.ni(), img_height = image.nj();
   int num_categories = keywords.size();
-  int num_bands = bands_min_.size();
   class_img.set_size(img_width, img_height);
   conf_img.set_size(img_width, img_height);
   conf_img.fill(0.0);
@@ -172,7 +171,8 @@ bool brad_spectral_angle_mapper::aster_classify_material(
   }
 
   // Ensure image correct number or spectral bands
-  if (image.nplanes() != num_bands) {
+  int num_bands = image.nplanes(); ;
+  if (bands_min_.size() < num_bands) {
     std::cerr << "Image does not have the correct number of spectral bands\n";
     return false;
   }
@@ -252,8 +252,8 @@ bool brad_spectral_angle_mapper::add_material(const std::string type,
 {
 
   // ensure image correct number or spectral bands
-  int num_bands = bands_min_.size();
-  if (image.nplanes() != num_bands) {
+  int num_bands = image.nplanes(); ;
+  if (bands_min_.size() < num_bands) {
     std::cerr << "Image does not have the correct number of spectral bands\n";
     return false;
   }
