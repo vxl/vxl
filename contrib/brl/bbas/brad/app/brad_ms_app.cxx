@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
 
   // Setup WV3 bands
   std::vector<float> bands_min, bands_max;
-  brad_wv3_bands_swir(bands_min, bands_max);
+  brad_wv3_bands(bands_min, bands_max);
   // create aster objects
   brad_spectral_angle_mapper aster(bands_min, bands_max);
   aster.add_aster_dir(aster_dir);

@@ -12,11 +12,11 @@
 #ifndef __BRAD_WV3_FUNCTIONS_H
 #define __BRAD_WV3_FUNCTIONS_H
 
-
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_box_2d.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <brad/brad_image_metadata.h>
+
 
 //: Construct a 16-band composite image from a 8-band MUL image and an 8-band
 // SWIR image.  In our test data the MUL and SWIR images are not pre-aligned 
@@ -52,18 +52,22 @@ bool brad_compose_16band_wv3_img(
   const std::string& swir_file,
   vil_image_view<float>& comp_img,
   float scale = -1.0f,
-  vgl_box_2d<int> mul_region = vgl_box_2d<int>());
+  vgl_box_2d<int> mul_region = vgl_box_2d<int>(),
+  bool calibrate_radiometrically = true );
 
 
-//: The spectral bands present in a 8-band WorldView3 MUL image.
+//: Apply the fixed gain/offset from the WorldView3 technical document:
+// Radiometric_Use_of_WorldView-3_v2.pdf
+void brad_apply_wv3_fixed_calibration(
+  vil_image_view<float>& wv3_img);
+
+
+//: The spectral bands present in a composite WorldView3 image.  An MUL image
+// covers the first 8 bands, and SWIR covers the last 8 bands.
 void brad_wv3_bands(
   std::vector<float>& bands_min,
-  std::vector<float>& bands_max);
+  std::vector<float>& bands_max,
+  int num_bands = 16 );
 
-//: The spectral bands present in a 16-band WorldView3 composite MUL+SWIR
-// image.
-void brad_wv3_bands_swir(
-  std::vector<float>& bands_min,
-  std::vector<float>& bands_max);
 
 #endif
