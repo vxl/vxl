@@ -28,11 +28,14 @@
 
 #include <cstring>
 #include <iosfwd>
+#include <iostream>
+#include <cstdlib>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
 
 #include "vnl_matrix.h"
 #include "vnl_matrix_ref.h"
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h> // needed for e.g. vnl_matrix_fixed_mat_vec_mult()
 #include <vnl/vnl_c_vector.h>
@@ -83,8 +86,6 @@ VCL_TEMPLATE_EXPORT template <class T, unsigned int num_rows, unsigned int num_c
 // Of course, all this trickery is pre-processed away for conforming
 // compilers.
 //
-template <class T, unsigned int num_rows, unsigned int num_cols>
-class vnl_matrix_fixed;
 template <class T, unsigned M, unsigned N>
 inline
 vnl_vector_fixed<T, M> vnl_matrix_fixed_mat_vec_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_vector_fixed<T, N>& b);
@@ -417,7 +418,14 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
   vnl_matrix_fixed<T,num_cols,num_rows> transpose() const;
 
   //: Return conjugate transpose
-  vnl_matrix_fixed<T,num_cols,num_rows> conjugate_transpose() const;
+  inline vnl_matrix_fixed<T,num_cols,num_rows> conjugate_transpose() const
+  {
+    vnl_matrix_fixed<T,num_cols,num_rows> result(transpose());
+    vnl_c_vector<T>::conjugate(result.begin(),  // src
+                               result.begin(),  // dst
+                               result.size());  // size of block
+    return result;
+  }
 
   //: Set values of this matrix to those of M, starting at [top,left]
   vnl_matrix_fixed& update(vnl_matrix<T> const&, unsigned top=0, unsigned left=0);
@@ -451,16 +459,35 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
 
   //: Extract a sub-matrix of size r x c, starting at (top,left)
   //  Thus it contains elements  [top,top+r-1][left,left+c-1]
-  vnl_matrix<T> extract (unsigned r,  unsigned c,
-                         unsigned top=0, unsigned left=0) const;
+  inline vnl_matrix<T> extract (unsigned r,  unsigned c,
+                         unsigned top=0, unsigned left=0) const
+  {
+    vnl_matrix<T> result( r, c );
+    this->extract( result, top, left );
+    return result;
+  }
 
   //: Extract a sub-matrix starting at (top,left)
   //
   //  The output is stored in \a sub_matrix, and it should have the
   //  required size on entry.  Thus the result will contain elements
   //  [top,top+sub_matrix.rows()-1][left,left+sub_matrix.cols()-1]
-  void extract ( vnl_matrix<T>& sub_matrix,
-                 unsigned top=0, unsigned left=0) const;
+  inline void extract ( vnl_matrix<T>& sub_matrix,
+                 unsigned top=0, unsigned left=0) const
+  {
+    unsigned int rowz = sub_matrix.rows();
+    unsigned int colz = sub_matrix.cols();
+#ifndef NDEBUG
+    unsigned int bottom = top + rowz;
+    unsigned int right = left + colz;
+    if ((num_rows < bottom) || (num_cols < right))
+      vnl_error_matrix_dimension ("extract",
+                                  num_rows, num_cols, bottom, right);
+#endif
+    for (unsigned int i = 0; i < rowz; ++i)      // actual copy of all elements
+      for (unsigned int j = 0; j < colz; ++j)    // in submatrix
+        sub_matrix(i,j) = this->data_[top+i][left+j];
+  }
 
   //: Get a vector equal to the given row
   vnl_vector_fixed<T,num_cols> get_row   (unsigned row) const;
@@ -746,7 +773,16 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
   bool operator!=(vnl_matrix<T> const &that) const { return !this->operator_eq(that); }
 
   //: Print matrix to os in some hopefully sensible format
-  void print(std::ostream& os) const;
+  inline void print(std::ostream& os) const
+  {
+    for (unsigned int i = 0; i < num_rows; ++i)
+    {
+      os << this->data_[i][0];
+      for (unsigned int j = 1; j < num_cols; ++j)
+        os << ' ' << this->data_[i][j];
+      os << '\n';
+    }
+  }
 
 //--------------------------------------------------------------------------------
 
@@ -755,20 +791,94 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
   // the template parameters. The vector-vector operations are
   // element-wise.
 
-  static void add( const T* a, const T* b, T* r );
-  static void add( const T* a, T b, T* r );
-  static void sub( const T* a, const T* b, T* r );
-  static void sub( const T* a, T b, T* r );
-  static void sub( T a, const T* b, T* r );
-  static void mul( const T* a, const T* b, T* r );
-  static void mul( const T* a, T b, T* r );
-  static void div( const T* a, const T* b, T* r );
-  static void div( const T* a, T b, T* r );
+  inline static void add( const T* a, const T* b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = *(a++) + *(b++);
+  }
+  inline static void add( const T* a, T b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = *(a++) + b;
+  }
+  inline static void sub( const T* a, const T* b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = *(a++) - *(b++);
+  }
+  inline static void sub( const T* a, T b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = *(a++) - b;
+  }
+  inline static void sub( T a, const T* b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = a - *(b++);
+  }
+  inline static void mul( const T* a, const T* b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = *(a++) * *(b++);
+  }
+  inline static void mul( const T* a, T b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = *(a++) * b;
+  }
+  inline static void div( const T* a, const T* b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = *(a++) / *(b++);
+  }
+  inline static void div( const T* a, T b, T* r )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      *(r++) = *(a++) / b;
+  }
 
-  static bool equal( const T* a, const T* b );
+  inline static bool equal( const T* a, const T* b )
+  {
+    unsigned int count = num_rows*num_cols;
+    while ( count-- )
+      if ( *(a++) != *(b++) )  return false;
+    return true;
+  }
 
  private:
-  void assert_finite_internal() const;
+  inline void assert_finite_internal() const
+  {
+    if (is_finite())
+      return;
+
+    std::cerr << "\n\n" __FILE__ ": " << __LINE__ << ": matrix has non-finite elements\n";
+
+    if (rows() <= 20 && cols() <= 20)
+      std::cerr << __FILE__ ": here it is:\n" << *this << '\n';
+    else
+    {
+      std::cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")\n"
+               << __FILE__ ": in the following picture '-' means finite and '*' means non-finite:\n";
+
+      for (unsigned int i=0; i<rows(); ++i)
+      {
+        for (unsigned int j=0; j<cols(); ++j)
+          std::cerr << char(vnl_math::isfinite(this->data_[i][ j]) ? '-' : '*');
+        std::cerr << '\n';
+      }
+    }
+    std::cerr << __FILE__ ": calling abort()\n";
+    std::abort();
+  }
 
   void assert_size_internal(unsigned, unsigned) const;
 };

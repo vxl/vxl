@@ -4,108 +4,13 @@
 //:
 // \file
 #include <cmath>
-#include <iostream>
-#include <cstdlib>
 #include "vnl_matrix_fixed.h"
 
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_error.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::add( const T* a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) + *(b++);
-}
-
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::add( const T* a, T b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) + b;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::sub( const T* a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) - *(b++);
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::sub( const T* a, T b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) - b;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::sub( T a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = a - *(b++);
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::mul( const T* a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) * *(b++);
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::mul( const T* a, T b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) * b;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::div( const T* a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) / *(b++);
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::div( const T* a, T b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) / b;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-bool
-vnl_matrix_fixed<T,nrows,ncols>::equal( const T* a, const T* b )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    if ( *(a++) != *(b++) )  return false;
-  return true;
-}
 
 //------------------------------------------------------------
 
@@ -142,20 +47,6 @@ vnl_matrix_fixed<T,nrows,ncols>::set_diagonal(vnl_vector<T> const& diag)
   for (unsigned int i = 0; i < nrows && i < ncols; ++i)
     this->data_[i][i] = diag[i];
   return *this;
-}
-
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::print(std::ostream& os) const
-{
-  for (unsigned int i = 0; i < nrows; ++i)
-  {
-    os << this->data_[i][0];
-    for (unsigned int j = 1; j < ncols; ++j)
-      os << ' ' << this->data_[i][j];
-    os << '\n';
-  }
 }
 
 
@@ -218,17 +109,6 @@ vnl_matrix_fixed<T,nrows,ncols>::transpose() const
 }
 
 template<class T, unsigned nrows, unsigned ncols>
-vnl_matrix_fixed<T,ncols,nrows>
-vnl_matrix_fixed<T,nrows,ncols>::conjugate_transpose() const
-{
-  vnl_matrix_fixed<T,ncols,nrows> result(transpose());
-  vnl_c_vector<T>::conjugate(result.begin(),  // src
-                             result.begin(),  // dst
-                             result.size());  // size of block
-  return result;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
 vnl_matrix_fixed<T,nrows,ncols>&
 vnl_matrix_fixed<T,nrows,ncols>::update (vnl_matrix<T> const& m,
                                          unsigned top, unsigned left)
@@ -245,38 +125,6 @@ vnl_matrix_fixed<T,nrows,ncols>::update (vnl_matrix<T> const& m,
       this->data_[i][j] = m(i-top,j-left);
   return *this;
 }
-
-
-template<class T, unsigned nrows, unsigned ncols>
-vnl_matrix<T>
-vnl_matrix_fixed<T,nrows,ncols>::extract (unsigned rowz, unsigned colz,
-                                          unsigned top, unsigned left) const
-{
-  vnl_matrix<T> result(rowz, colz);
-  this->extract( result, top, left );
-  return result;
-}
-
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::extract (vnl_matrix<T>& sub_matrix,
-                                          unsigned top, unsigned left) const
-{
-  unsigned int rowz = sub_matrix.rows();
-  unsigned int colz = sub_matrix.cols();
-#ifndef NDEBUG
-  unsigned int bottom = top + rowz;
-  unsigned int right = left + colz;
-  if ((nrows < bottom) || (ncols < right))
-    vnl_error_matrix_dimension ("extract",
-                                nrows, ncols, bottom, right);
-#endif
-  for (unsigned int i = 0; i < rowz; ++i)      // actual copy of all elements
-    for (unsigned int j = 0; j < colz; ++j)    // in submatrix
-      sub_matrix(i,j) = this->data_[top+i][left+j];
-}
-
 
 template<class T, unsigned nrows, unsigned ncols>
 vnl_matrix_fixed<T,nrows,ncols>&
@@ -703,34 +551,6 @@ vnl_matrix_fixed<T,nrows,ncols>::is_finite() const
         return false;
 
   return true;
-}
-
-//: Abort if any element of M is inf or nan
-template <class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed<T,nrows,ncols>::assert_finite_internal() const
-{
-  if (is_finite())
-    return;
-
-  std::cerr << "\n\n" __FILE__ ": " << __LINE__ << ": matrix has non-finite elements\n";
-
-  if (rows() <= 20 && cols() <= 20)
-    std::cerr << __FILE__ ": here it is:\n" << *this << '\n';
-  else
-  {
-    std::cerr << __FILE__ ": it is quite big (" << rows() << 'x' << cols() << ")\n"
-             << __FILE__ ": in the following picture '-' means finite and '*' means non-finite:\n";
-
-    for (unsigned int i=0; i<rows(); ++i)
-    {
-      for (unsigned int j=0; j<cols(); ++j)
-        std::cerr << char(vnl_math::isfinite(this->data_[i][ j]) ? '-' : '*');
-      std::cerr << '\n';
-    }
-  }
-  std::cerr << __FILE__ ": calling abort()\n";
-  std::abort();
 }
 
 //: Abort unless M has the given size.
