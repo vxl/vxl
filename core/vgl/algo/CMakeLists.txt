@@ -6,6 +6,7 @@ project(vgl_algo)
 set( vgl_algo_sources
   vgl_algo_fwd.h
   vgl_rtree.hxx                            vgl_rtree.h
+  vgl_orient_box_2d.hxx                    vgl_orient_box_2d.h
   vgl_orient_box_3d.hxx                    vgl_orient_box_3d.h
   vgl_ellipsoid_3d.hxx                     vgl_ellipsoid_3d.h
   vgl_homg_operators_1d.hxx                vgl_homg_operators_1d.h

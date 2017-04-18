@@ -14,6 +14,7 @@ DECLARE( test_h_matrix_2d );
 DECLARE( test_h_matrix_3d );
 DECLARE( test_homg );
 DECLARE( test_intersection );
+DECLARE( test_orient_box_2d );
 DECLARE( test_orient_box_3d );
 DECLARE( test_p_matrix );
 DECLARE( test_rotation_3d );
@@ -36,6 +37,7 @@ register_tests()
   REGISTER( test_h_matrix_3d );
   REGISTER( test_homg );
   REGISTER( test_intersection );
+  REGISTER( test_orient_box_2d );
   REGISTER( test_orient_box_3d );
   REGISTER( test_p_matrix );
   REGISTER( test_rotation_3d );
