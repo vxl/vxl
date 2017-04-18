@@ -90,6 +90,21 @@ macro(PERFORM_CMAKE_TEST PLFM_TEST_FILE TEST)
 endmacro()
 
 #
+# Get the inverse result of calling PERFORM_CMAKE_TEST
+#
+# Sets the TEST to 0 if the corresponding program could be compiled
+# and linked
+#
+macro(PERFORM_CMAKE_INVERTTEST PLFM_TEST_FILE TEST)
+  if(NOT DEFINED "${TEST}" )
+    PERFORM_CMAKE_TEST( ${PLFM_TEST_FILE} ${TEST} )
+    SET_INVERT( ${TEST} "${${TEST}}")
+  else()
+    message( "Not performing test becaue ${TEST} already defined as ${${TEST}}" )
+  endif()
+endmacro()
+
+#
 # Perform a custom VXL try compile test with status output
 #
 # DIR is the directory containing the test project
