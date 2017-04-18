@@ -357,7 +357,12 @@ bool brad_estimate_reflectance_image_multi(vil_image_view<float> const& radiance
 //: Estimate the reflectance image without needing to access the meta data
 // should work for panchromatic or multispectral images
 //---------------------------------------------------------------------------
-bool brad_estimate_reflectance_image_no_meta(vil_image_view<float> const& radiance, float mean_reflectance, vil_image_view<float> &cal_img, int min_norm_band, int max_norm_band)
+bool brad_estimate_reflectance_image_multi(
+  vil_image_view<float> const& radiance, 
+  float mean_reflectance, 
+  vil_image_view<float> &cal_img, 
+  int min_norm_band, 
+  int max_norm_band)
 {
   // set default min/max normalization and dark pixel bands
   if (min_norm_band < 0 || max_norm_band < 0) { // wv3
@@ -451,4 +456,29 @@ bool brad_estimate_reflectance_image_no_meta(vil_image_view<float> const& radian
     }
   }
   return true;
+}
+
+
+//------------------------------------------------------------------
+bool brad_atmo_radiance_to_reflectance(
+  vil_image_view<float> const& radiance,
+  brad_image_metadata const& mdata,
+  vil_image_view<float> &reflectance )
+{
+  if (radiance.nplanes() != mdata.sun_irradiance_values_.size()) return false;
+
+  double sun_dot_norm = std::sin(mdata.sun_elevation_*vnl_math::pi_over_180);
+
+  for (unsigned b = 0; b < radiance.nplanes(); b++){
+
+    double band_norm = 1.0/(
+      mdata.sun_irradiance_values_[b] * sun_dot_norm / vnl_math::pi);
+
+    vil_image_view<float> rad_band = vil_plane(radiance, b);
+    vil_image_view<float> ref_band = vil_plane(reflectance, b);
+    ref_band.deep_copy(rad_band);
+    vil_math_scale_values(ref_band, band_norm);
+  }
+  return true;
+
 }

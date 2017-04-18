@@ -209,13 +209,16 @@ for (int j = 0; j < dock_mask_16.nj(); j++) {
   }
 }
 
+
   //std::string out_dir("C:/Users/sca0161/Documents/multispectral results/cpp/");
   //std::string out_dir("C:/Users/sca0161/Documents/sevastopol2/cpp result/just mul/");
   std::string out_dir("C:/Users/sca0161/Documents/multispectral results/cpp/port classification full image/");
   // Setup WV3 bands
   std::vector<float> bands_min, bands_max;
   brad_wv3_bands(bands_min, bands_max, 8);  
+
   // create aster objects
+  std::cerr << "Loading ASTER directory\n";
   brad_spectral_angle_mapper aster(bands_min, bands_max);
   aster.add_aster_dir(aster_dir);
   std::cerr << "done with aster initialization\n";
@@ -256,7 +259,8 @@ for (int j = 0; j < dock_mask_16.nj(); j++) {
   // visible byte image to be used from saving
   vil_image_view<vxl_byte> vis;
 
- /* vil_image_view<int> class_img;
+ /* std::cerr << "Classifying materials\n";
+  vil_image_view<int> class_img;
   vil_image_view<float> conf_img;
   aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete", "vegetation" }, 0.95, class_img, conf_img);
   vil_convert_stretch_range_limited(class_img , vis, -1, 3);

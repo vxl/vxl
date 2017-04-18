@@ -17,6 +17,7 @@
 #include <vpgl/vpgl_lvcs.h>
 
 #include "brad_worldview3_functions.h"
+#include "brad_image_atmospherics_est.h"
 
 
 //-------------------------------------------------------------------
@@ -24,16 +25,15 @@
 // scaled image is off by a pixel...
 // needs bluring before scaling
 bool brad_compose_16band_wv3_img(
-  const vil_image_view<vxl_uint_16>& mul_img,
+  const vil_image_view<float>& mul_img,
   const vpgl_rational_camera<double>& mul_rpc,
   const brad_image_metadata& mul_meta,
-  const vil_image_view<vxl_uint_16>& swir_img,
+  const vil_image_view<float>& swir_img,
   const vpgl_rational_camera<double>& swir_rpc,
   const brad_image_metadata& swir_meta,
   vil_image_view<float>& comp_img,
   float scale,
-  vgl_box_2d<int> mul_region,
-  bool calibrate_radiometrically )
+  vgl_box_2d<int> mul_region )
 {
   float border_val = 0.0f;
   double tol = 0.0000001;
@@ -128,12 +128,9 @@ bool brad_compose_16band_wv3_img(
   for (int p = 0; p < 8; p++) {
 
     //vil_convert_cast( vil_plane(mul_img,p), band);
-    vil_convert_cast(vil_crop(vil_plane(mul_img, p),
+    band = vil_crop(vil_plane(mul_img, p),
       mul_region.min_x(), mul_region.width(),
-      mul_region.min_y(), mul_region.height()), band);
-
-    if (calibrate_radiometrically) vil_math_scale_and_offset_values(
-      band, mul_meta.gains_[p + 1].first, mul_meta.gains_[p + 1].second);
+      mul_region.min_y(), mul_region.height());
 
     vil_image_view<float> comp_band = vil_plane(comp_img, p);
     if (scale > 0.0f)
@@ -149,9 +146,7 @@ bool brad_compose_16band_wv3_img(
   // Warp the swir image into the composite coordinate system
   for (int p = 0; p < 8; p++) {
 
-    vil_convert_cast(vil_plane(swir_img, p), band);
-    if (calibrate_radiometrically) vil_math_scale_and_offset_values(
-      band, swir_meta.gains_[p + 1].first, swir_meta.gains_[p + 1].second);
+    band = vil_plane(swir_img, p);
 
     vil_image_view<float> comp_band = vil_plane(comp_img, p + 8);
     comp_band.fill(border_val);
@@ -197,9 +192,6 @@ bool brad_compose_16band_wv3_img(
 
   } //p
 
-  if (calibrate_radiometrically)
-    brad_apply_wv3_fixed_calibration(comp_img);
-
   return true;
 };
 
@@ -229,49 +221,81 @@ bool brad_compose_16band_wv3_img(
 
   // Load the images
   vil_image_resource_sptr mul_rsc = vil_load_image_resource(mul_file.c_str());
-  std::cerr << "Found a " << mul_rsc->ni() << 'x' << mul_rsc->nj()
-    << " image with " << mul_rsc->nplanes() << " channels\n";
   vil_image_resource_sptr swir_rsc = vil_load_image_resource(swir_file.c_str());
-  std::cerr << "Found a " << swir_rsc->ni() << 'x' << swir_rsc->nj()
-    << " image with " << swir_rsc->nplanes() << " channels\n";
+  vil_image_view<float> mul_img, swir_img;
+  vil_image_view<vxl_uint_16> raw = mul_rsc->get_view();
+  brad_calibrate_wv3_img(mul_meta, raw, mul_img, false);
+  raw = swir_rsc->get_view();
+  brad_calibrate_wv3_img(swir_meta, raw, swir_img, true);
 
-  std::cerr << "Loading images\n";
-  vil_image_view<vxl_uint_16> mul_img = mul_rsc->get_view();
-  vil_image_view<vxl_uint_16> swir_img = swir_rsc->get_view();
-
-  std::cerr << "Generating 16 band image\n";
+  // Compose
   bool success = brad_compose_16band_wv3_img(
     mul_img, *mul_rpc, mul_meta, swir_img, *swir_rpc, swir_meta,
-    comp_img, scale, mul_region, calibrate_radiometrically );
+    comp_img, scale, mul_region );
 
   delete mul_rpc; delete swir_rpc;
   return success;
 };
 
 
+//-------------------------------------------------------------------
+bool brad_calibrate_wv3_img(
+  const brad_image_metadata& meta,
+  const vil_image_view<vxl_uint_16>& wv3_raw,
+  vil_image_view<float>& wv3_cal,
+  bool swir)
+{
+  if (wv3_raw.nplanes() != 8) return false;
+
+  wv3_cal = vil_image_view<float>(
+    wv3_raw.ni(), wv3_raw.nj(), wv3_raw.nplanes());
+
+  // Convert from digital numbers to top-of-atmosphere radiance
+  for (int b = 0; b < 8; b++) {
+    vil_convert_cast(vil_plane(wv3_raw, b), vil_plane(wv3_cal, b));
+    vil_math_scale_and_offset_values(vil_plane(wv3_cal, b),
+      meta.gains_[b + 1].first, meta.gains_[b + 1].second);
+  }
+
+  // Apply fixed gain/offset from params
+  brad_apply_wv3_fixed_calibration(wv3_cal, swir);
+
+  // Convert from radiance to reflectance
+  brad_atmo_radiance_to_reflectance(wv3_cal, meta, wv3_cal);
+
+  return true;
+}
+
+
 //------------------------------------------------------------------------
 void brad_apply_wv3_fixed_calibration(
-  vil_image_view<float>& wv3_img)
+  vil_image_view<float>& wv3_img,
+  bool swir )
 {
-  std::vector<double> gain(16), offset(16);
-  gain[0] = 0.863; offset[0] = -7.154;
-  gain[1] = 0.905; offset[1] = -4.189;
-  gain[2] = 0.907; offset[2] = -3.287;
-  gain[3] = 0.938; offset[3] = -1.816;
-  gain[4] = 0.945; offset[4] = -1.350;
-  gain[5] = 0.980; offset[5] = -2.617;
-  gain[6] = 0.982; offset[6] = -3.752;
-  gain[7] = 0.954; offset[7] = -1.507;
-  gain[8] = 1.160; offset[8] = -4.479;
-  gain[9] = 1.184; offset[9] = -2.248;
-  gain[10] = 1.173; offset[10] = -1.806;
-  gain[11] = 1.187; offset[11] = -1.507;
-  gain[12] = 1.286; offset[12] = -0.622;
-  gain[13] = 1.336; offset[13] = -0.605;
-  gain[14] = 1.340; offset[14] = -0.423;
-  gain[15] = 1.392; offset[15] = -0.302;
+  std::vector<double> gain(8), offset(8);
 
-  for (int p = 0; p < wv3_img.nplanes(); p++) 
+  if (!swir) {
+    gain[0] = 0.863; offset[0] = -7.154;
+    gain[1] = 0.905; offset[1] = -4.189;
+    gain[2] = 0.907; offset[2] = -3.287;
+    gain[3] = 0.938; offset[3] = -1.816;
+    gain[4] = 0.945; offset[4] = -1.350;
+    gain[5] = 0.980; offset[5] = -2.617;
+    gain[6] = 0.982; offset[6] = -3.752;
+    gain[7] = 0.954; offset[7] = -1.507;
+  }
+  else {
+    gain[0] = 1.160; offset[0] = -4.479;
+    gain[1] = 1.184; offset[1] = -2.248;
+    gain[2] = 1.173; offset[2] = -1.806;
+    gain[3] = 1.187; offset[3] = -1.507;
+    gain[4] = 1.286; offset[4] = -0.622;
+    gain[5] = 1.336; offset[5] = -0.605;
+    gain[6] = 1.340; offset[6] = -0.423;
+    gain[7] = 1.392; offset[7] = -0.302;
+  }
+
+  for (int p = 0; p < 8; p++) 
     vil_math_scale_and_offset_values(
       vil_plane(wv3_img, p), gain[p], offset[p]);
 }
@@ -308,4 +332,5 @@ void brad_wv3_bands(
     bands_max.resize(num_bands);
   }
 };
+
 
