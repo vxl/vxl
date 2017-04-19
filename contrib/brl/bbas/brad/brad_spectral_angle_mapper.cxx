@@ -257,6 +257,10 @@ bool brad_spectral_angle_mapper::add_material(const std::string type,
     std::cerr << "Image does not have the correct number of spectral bands\n";
     return false;
   }
+  if (image.ni() != mask.ni() || image.nj() != mask.nj()) {
+    std::cerr << "image and mask must be the same size. image is size " << image.ni() << " by " << image.nj() << " and mask is size " << image.ni() << " by " << image.nj() << "\n";
+    return false;
+  }
 
   // new spectra to be added to the library
   std::vector<float> new_spectrum;
@@ -274,10 +278,8 @@ bool brad_spectral_angle_mapper::add_material(const std::string type,
       if (mask(x, y)) { // if this spectrum is relevant then save it
         num_sample_spectra++;
         for (int s = 0; s < num_bands; s++) {
-          //cur_spectrum[s] = image(x, y, s);
           spectra_sum[s] += image(x, y, s);
         } // s
-        //img_spectra.push_back(cur_spectrum);
       }
     } // x
   } // y
@@ -382,13 +384,13 @@ bool brad_spectral_angle_mapper::parse_aster_file(
     // Compute the band mean
     float mean = 0.5f*(bands_min_[b] + bands_max_[b]);
 
-    // Check if mean is outside the wavelength range
+    // Check if mean is outside the wavelength range, set to -1 so that band is not used in SAM computation
     if (mean <= wavelengths.front() && mean <= wavelengths.back()) {
-      sample_spectra[b] = 0.0f;
+      sample_spectra[b] = -1.0f;
       continue;
     }
     else if (mean >= wavelengths.front() && mean >= wavelengths.back()) {
-      sample_spectra[b] = 0.0f;
+      sample_spectra[b] = -1.0f;
       continue;
     }
 
@@ -434,8 +436,10 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
     for (int s = 0; s < num_samples; s++) { // loop over sample
       // Dot product 
       float sum = 0.0f;
-      for (int b = 0; b < num_bands; b++)
+      for (int b = 0; b < num_bands; b++) {
+        if (normalized_spectra_samples[c][s][b] == -1.0) continue;
         sum += normalized_spectra_samples[c][s][b] * img_norm[b];
+      }
 
       // Spectral angle
       angle = std::max(angle, 1.0f - fabs(acosf(sum)) / (float)vnl_math::pi);

@@ -30,14 +30,18 @@ void brad_normalize_spectra(
   float tol = 0.000000001f;
 
   float sumsq = 0.0f;
-  for (int b = 0; b < spectra.size(); b++)
+  for (int b = 0; b < spectra.size(); b++) {
+    if (spectra[b] == -1.0) continue;
     sumsq += spectra[b] * spectra[b];
+  }
 
   float norm_factor = 0.0f;
   if (sumsq > tol) norm_factor = 1.0f / sqrt(sumsq);
 
-  for (int b = 0; b < spectra.size(); b++)
+  for (int b = 0; b < spectra.size(); b++) {
+    if (spectra[b] == -1.0) continue;
     spectra[b] *= norm_factor;
+  }
 }
 //---------------------------------------------------------------------------
 //: Convert so vgl_polygon to mask
