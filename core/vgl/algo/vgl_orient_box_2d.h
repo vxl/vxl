@@ -19,33 +19,39 @@ template <class T>
 class vgl_orient_box_2d {
  public:
   //:default constructor
- vgl_orient_box_2d():min_v_(T(1)), max_v_(-T(1)){}
+ vgl_orient_box_2d():half_height_(T(0)){}
 
-  //:construct from center, width (major axis), height (minor axis)
-  vgl_orient_box_2d(T width, T height, vgl_point_2d<T> const& center);
+  //:construct from center, width (major axis), height and orientation with respect to x-axis
+  // rotation is around the center point. width must be greater than height!!
+  vgl_orient_box_2d(T width, T height, vgl_point_2d<T> const& center, T angle_in_rad);
 
-  //:construct from major minor axis endpoints
-  // the orientation of the box is defined by the major axis
-  // the minor axis does not have to be perpendicular to the major axis
-  // the minor bounds(v) of the box are defined by the projection of the minor axis
-  // onto the perpendular vector to the major axis
-  vgl_orient_box_2d(vgl_point_2d<T> const& maj_p1, vgl_point_2d<T> const& maj_p2,
-                    vgl_point_2d<T> const& min_p1, vgl_point_2d<T> const& min_p2);
+  //:construct from major axis and height
+  // the center is the midpoint of the major axis
+  vgl_orient_box_2d(vgl_point_2d<T> const& maj_p1, vgl_point_2d<T> const& maj_p2, T height){
+    major_axis_.set(maj_p1, maj_p2); half_height_ = height/T(2);}
 
-  vgl_orient_box_2d(vgl_line_segment_2d<T> const& maj,
-                    vgl_line_segment_2d<T> const& min);
+  vgl_orient_box_2d(vgl_line_segment_2d<T> const& maj, T height){ major_axis_ = maj; half_height_ = height/T(2);}
 
+  //: construct from an axis aligned box
   vgl_orient_box_2d(const vgl_box_2d<T>& box);
 
-  //: major minor axes
+  //: construct from an axis aligned box with orientation 
+  // the major axis of the box is rotated by angle_in_rad around the centroid
+  vgl_orient_box_2d(const vgl_box_2d<T>& box, T angle_in_rad);
+
+  //: constructor from three corner points.
+  //  The two directions from p0 to the two other points must be
+  //  mutually orthogonal, i.e., a local box coordinate frame centered on p0
+  vgl_orient_box_2d(vgl_point_2d<T> const& p0, vgl_point_2d<T> const& p1, vgl_point_2d<T> const& p2);
+
+  //: major axis
   vgl_line_segment_2d<T> major_axis() const{ return major_axis_;}
-  vgl_line_segment_2d<T> minor_axis() const{ return minor_axis_;}
 
   //: center (midpoint of major axis)
   vgl_point_2d<T> centroid() const;
 
   //: return width (first) and height (second)
- std::pair<T, T> width_height() const;
+  std::pair<T, T> width_height() const;
 
   //: width - length of major axis
   T width() const {std::pair<T, T> p = this->width_height(); return p.first;}
@@ -56,18 +62,20 @@ class vgl_orient_box_2d {
   //::area
   T area() {std::pair<T, T> p = this->width_height(); return (p.first)*(p.second);}
   
+  bool operator==(vgl_orient_box_2d<T> const& ob) const {
+    return (this == &ob) || (ob.major_axis_ == this->major_axis_ && ob.half_height_ == this->half_height_);
+  }
+
   //: Return true if (x,y) is inside this box
   bool contains(T const& x, T const& y) const;
 
   //: Return true if point is inside this box
   bool contains(vgl_point_2d<T> const& p) const {return contains(p.x(), p.y());}
 
-  //: bounds on v (can be asymmetric)
-  std::pair<T, T> v_bounds() const {return std::pair<T, T>(min_v_, max_v_);}
 
-  void set(vgl_line_segment_2d<T> const& major, vgl_line_segment_2d<T> const& minor){
+  void set(vgl_line_segment_2d<T> const& major, T half_height){
     major_axis_ = major;
-    minor_axis_ = minor;
+    half_height_ = half_height;
   }
 
   //: axis-aligned bounding box for *this
@@ -81,9 +89,7 @@ class vgl_orient_box_2d {
 
     private:
   vgl_line_segment_2d<T> major_axis_;
-  vgl_line_segment_2d<T> minor_axis_;
-  T min_v_;
-  T max_v_;
+  T half_height_;
 };
 template <class T>
 std::ostream&  operator<<(std::ostream& os, const vgl_orient_box_2d<T>& obox);
