@@ -2,6 +2,7 @@
 #define vgl_convex_hull_2d_hxx_
 #include <cstdlib>
 #include "vgl_convex_hull_2d.h"
+#include <vgl/vgl_box_2d.h>
 
 #include <vcl_compiler.h>
 
@@ -143,7 +144,44 @@ vgl_polygon<T> vgl_convex_hull_2d<T>::hull()
     this->compute_hull();
   return hull_;
 }
-
+template <class T>
+vgl_orient_box_2d<T>  vgl_convex_hull_2d<T>::min_area_enclosing_rectangle(){
+  if (!hull_valid_)
+    this->compute_hull();
+  // the algorithm uses the fact that the smallest enclosing rectangle 
+  // has a side in common with and edge of the convex hull
+  std::vector<vgl_point_2d<T> > verts = hull_[0];
+  size_t n = verts.size();
+  vgl_box_2d<T> min_box;
+  T min_angle = T(0);
+  T min_area = std::numeric_limits<T>::max();
+  vgl_vector_2d<T> min_offset(T(0),T(0));
+  for(size_t i = 1; i<=n; ++i){
+    vgl_point_2d<T>& vm1 = verts[i-1];
+    vgl_vector_2d<T> dir = verts[i%n]-vm1;
+    T theta = atan2(dir.y(), dir.x());
+    T c = cos(-theta), s=sin(-theta);
+    vgl_box_2d<T> rbox;
+      // rotate the vertices about v_i-1
+      // the resulting box needs to be shifted by v_i-1
+    for(size_t j = 0; j<n; ++j){
+      vgl_vector_2d<T> vp = verts[j]-vm1;
+      vgl_point_2d<T> rpp((c*vp.x()-s*vp.y()),(s*vp.x() + c*vp.y()));
+      rbox.add(rpp);
+    }
+    T area = rbox.area();
+    if(area<min_area){
+      min_offset.set(vm1.x(), vm1.y());
+      min_area = rbox.area();
+      min_box = rbox;
+      min_angle = theta;
+    }
+  }
+  vgl_point_2d<T> min_pt = min_box.min_point(), max_pt = min_box.max_point();
+  min_box.set_min_point(min_pt + min_offset);
+  min_box.set_max_point(max_pt + min_offset);
+  return vgl_orient_box_2d<T>(min_box, min_angle);
+}
 //----------------------------------------------------------------------------
 #undef VGL_CONVEX_HULL_2D_INSTANTIATE
 #define VGL_CONVEX_HULL_2D_INSTANTIATE(T) \

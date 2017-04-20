@@ -110,7 +110,7 @@ vgl_point_2d<T> vgl_orient_box_2d<T>::centroid() const{
 }
 template <class T>
 std::ostream&  operator<<(std::ostream& os, const vgl_orient_box_2d<T>& obox){
-  os << "major axis:" << obox.major_axis() << " half_height:" << obox.width()/T(2)<< "\n";
+  os << "major axis:" << obox.major_axis() << " half_height:" << obox.height()/T(2)<< "\n";
   return os;
 }
 template <class T>
