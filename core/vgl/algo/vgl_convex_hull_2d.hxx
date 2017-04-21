@@ -177,11 +177,6 @@ vgl_orient_box_2d<T>  vgl_convex_hull_2d<T>::min_area_enclosing_rectangle(){
       min_angle = theta;
     }
   }
-  vgl_point_2d<T> min_pt = min_box.min_point(), max_pt = min_box.max_point();
-  std::cout << "min obox " << min_box << std::endl;
-  std::cout << "angle " << min_angle << std::endl;
-  std::cout << "offset " << min_offset << std::endl;
-  std::cout << "rot verts " << std::endl;
   T w = min_box.width(), h = min_box.height();
   vgl_point_2d<T> c = min_box.centroid();
   //select major axis such that width > height
