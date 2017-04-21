@@ -67,10 +67,10 @@ class vgl_orient_box_2d {
   }
 
   //: Return true if (x,y) is inside this box
-  bool contains(T const& x, T const& y) const;
+  bool contains(T const& x, T const& y) const{return this->contains(vgl_point_2d<T>(x, y));}
 
   //: Return true if point is inside this box
-  bool contains(vgl_point_2d<T> const& p) const {return contains(p.x(), p.y());}
+  bool contains(vgl_point_2d<T> const& p) const;
 
 
   void set(vgl_line_segment_2d<T> const& major, T half_height){

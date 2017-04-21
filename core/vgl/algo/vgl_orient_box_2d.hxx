@@ -2,7 +2,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <cmath>
-#include <math.h>
+#include <vgl/vgl_tolerance.h>
 
 template <class T>
 vgl_orient_box_2d<T>::vgl_orient_box_2d(T width, T height, vgl_point_2d<T> const& center, T angle_in_rad)
@@ -134,10 +134,11 @@ vgl_point_2d<T> vgl_orient_box_2d<T>::transform_to_obox(vgl_point_2d<T> const& p
   return vgl_point_2d<T>(u, v);
 }
 template <class T>
-bool vgl_orient_box_2d<T>::contains(T const& x, T const& y) const{
-  vgl_point_2d<T> p(x, y);
+bool vgl_orient_box_2d<T>::contains(vgl_point_2d<T> const& p) const{
+  T tol = vgl_tolerance<T>::position;
   vgl_point_2d<T> uv = this->transform_to_obox(p);
   T half = T(1)/T(2);
+  half += tol;
   if(uv.x()<-half || uv.x()>half)
     return false;
   if(uv.y()<-half || uv.y()>half)

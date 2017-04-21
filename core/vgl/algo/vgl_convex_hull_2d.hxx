@@ -178,9 +178,31 @@ vgl_orient_box_2d<T>  vgl_convex_hull_2d<T>::min_area_enclosing_rectangle(){
     }
   }
   vgl_point_2d<T> min_pt = min_box.min_point(), max_pt = min_box.max_point();
-  min_box.set_min_point(min_pt + min_offset);
-  min_box.set_max_point(max_pt + min_offset);
-  return vgl_orient_box_2d<T>(min_box, min_angle);
+  std::cout << "min obox " << min_box << std::endl;
+  std::cout << "angle " << min_angle << std::endl;
+  std::cout << "offset " << min_offset << std::endl;
+  std::cout << "rot verts " << std::endl;
+  T w = min_box.width(), h = min_box.height();
+  vgl_point_2d<T> c = min_box.centroid();
+  //select major axis such that width > height
+  T width = w, height = h;
+  vgl_point_2d<T> pmaj0(c.x()-width/T(2), c.y()), pmaj1(c.x()+width/T(2), c.y());
+  if(w<h){
+    width = h;
+    height = w;
+    pmaj0.set(c.x(), c.y()-width/T(2)); pmaj1.set(c.x(), c.y()+width/T(2));
+  }
+
+  // rotate major axis about v_i-1
+  T cs = cos(min_angle), s = sin(min_angle);
+  T pmaj0x = pmaj0.x(), pmaj0y = pmaj0.y();
+  T pmaj1x = pmaj1.x(), pmaj1y = pmaj1.y();
+  vgl_point_2d<T> pmaj0r(cs*pmaj0x - s*pmaj0y, s*pmaj0x + cs*pmaj0y);
+  vgl_point_2d<T> pmaj1r(cs*pmaj1x - s*pmaj1y, s*pmaj1x + cs*pmaj1y);
+  
+  // add back rotation center
+  pmaj0r += min_offset; pmaj1r += min_offset;
+  return vgl_orient_box_2d<T>(pmaj0r, pmaj1r, height);
 }
 //----------------------------------------------------------------------------
 #undef VGL_CONVEX_HULL_2D_INSTANTIATE
