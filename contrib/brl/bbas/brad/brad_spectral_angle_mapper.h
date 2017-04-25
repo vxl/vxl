@@ -69,7 +69,7 @@ protected:
 
   //: Compute spectral difference (sum of squared difference) between two vectors 
   //  of multi-spectral values
-  void brad_spectral_angle_mapper::compute_spectral_diffs(
+  void compute_spectral_diffs(
     const std::vector<float>& img_vals,                                                   // un-normalized image spectrum
     const std::vector<std::vector<std::vector<float> > >& normalized_spectra_samples,     // vector of vectors of spectra with each entry corresponding to a material 
     std::vector<float>& differences);                                                     // vector of angle differences each corresponding to a material in normalized_spectra_samples 

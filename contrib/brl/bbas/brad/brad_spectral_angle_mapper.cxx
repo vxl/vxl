@@ -442,7 +442,8 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
       }
 
       // Spectral angle
-      angle = std::max(angle, 1.0f - fabs(acosf(sum)) / (float)vnl_math::pi);
+      angle = std::max(angle, (float)(1.0f - fabs(acosf(sum))) / 
+        (float)vnl_math::pi);
     } // s
     angles[c] = angle;
   } // c
