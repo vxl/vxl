@@ -151,7 +151,9 @@ def test_classifier_unsupervised(tclsf):
   if status:
     (out_id, out_type) = batch.commit_output(0)
     out_color_img = dbvalue(out_id, out_type)
-    return out_color_img
+    (out_id, out_type) = batch.commit_output(1)
+    out_id_img = dbvalue(out_id, out_type)
+    return out_color_img, out_id_img
   else:
     return None
 

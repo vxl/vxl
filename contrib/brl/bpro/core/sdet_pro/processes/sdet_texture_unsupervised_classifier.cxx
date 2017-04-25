@@ -19,10 +19,11 @@ bool sdet_texture_unsupervised_classifier_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types))
     return false;
 
-  // process has 1 output:
+  // process has 2 outputs:
   // output[0]: output texture color image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.push_back("vil_image_view_base_sptr");  // rgb color image
+  output_types.push_back("vil_image_view_base_sptr");  // id image
   return pro.set_output_types(output_types);
 }
 
@@ -58,20 +59,23 @@ bool sdet_texture_unsupervised_classifier_process(bprb_func_process& pro)
 
   vil_image_view<vil_rgb<vxl_byte> > out_rgb(ni, nj);
   out_rgb.fill(vil_rgb<vxl_byte>(0,0,0)); 
-
-  vil_image_view<int> texton_img(dict->filter_responses().ni(), dict->filter_responses().nj());
-  texton_img.fill(0);
+  
+  vil_image_view<int> texton_img(ni, nj);
+  texton_img.fill(-1);
   dict->compute_textons_of_pixels(texton_img);
   std::cout << " computed textons of pixels..!\n"; std::cout.flush();
   
   for (int i = invalid; i < (int)ni-invalid; i++) {
     for (int j = invalid; j < (int)nj-invalid; j++) {
       int indx = texton_img(i, j);
+      if (indx < 0)
+        continue;
       out_rgb(i,j) = colors[indx];
     }
   }
 
   // return the output image
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vil_rgb<vxl_byte> >(out_rgb));
+  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<int >(texton_img));
   return true;
 }
