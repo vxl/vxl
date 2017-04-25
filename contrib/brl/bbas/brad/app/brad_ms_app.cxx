@@ -113,7 +113,11 @@ int main(int argc, char * argv[])
   vil_convert_stretch_range_limited(conf_img, vis, -0.0f, 1.0f);
   vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete_vegetation.png").c_str());*/
 
-  aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete" }, 0.8, class_img, conf_img);
+  std::vector<std::string> mat_list;
+  mat_list.push_back("asphalt");
+  mat_list.push_back("building");
+  mat_list.push_back("concrete");
+  aster.aster_classify_material(cal_img, mat_list, 0.8, class_img, conf_img);
   vil_convert_stretch_range_limited(class_img, vis, -1, 3);
   vil_save(vis, (out_dir + "class_img_asphalt_building_concrete.png").c_str());
   //vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
