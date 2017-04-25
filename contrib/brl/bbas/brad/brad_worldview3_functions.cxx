@@ -255,7 +255,7 @@ bool brad_calibrate_wv3_img(
     vil_image_view<vxl_uint_16> wv3_raw_plane = vil_plane(wv3_raw, b);
     vil_image_view<float> wv3_cal_plane = vil_plane(wv3_cal, b);
     vil_convert_cast(wv3_raw_plane, wv3_cal_plane);
-    vil_math_scale_and_offset_values(vil_plane(wv3_cal, b),
+    vil_math_scale_and_offset_values(wv3_cal_plane,
       meta.gains_[b + 1].first, meta.gains_[b + 1].second);
   }
 

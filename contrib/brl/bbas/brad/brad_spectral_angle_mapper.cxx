@@ -474,7 +474,7 @@ void brad_spectral_angle_mapper::compute_spectral_diffs(
         sum += pow(normalized_spectra_samples[c][s][b] - img_norm[b],2);
 
       // Spectral angle
-      diff = std::max(diff, sqrt(sum));
+      diff = std::max(diff, (float)sqrt(sum));
     } // s
     differences[c] = diff;
   } // c
