@@ -66,7 +66,7 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
 
   // make sure at least one relevant spectra was found
   if (!found_keyword) {
-    std::cerr << "keyword not found in spectral library\n";
+    std::cerr << "keyword (" + keyword + ") not found in spectral library\n";
     return false; 
   }
 
@@ -314,6 +314,7 @@ void brad_spectral_angle_mapper::add_aster_dir(const std::string aster_dir) {
     while (is.get(c)) {          // loop getting single characters
       if (c <= -1 || c >= 255) { // check if the file contains bad character
         good_file = false;
+        std::cerr << "File " << vul_file::strip_directory(fi()) << " is invalid\n";
         break;
       }
     }

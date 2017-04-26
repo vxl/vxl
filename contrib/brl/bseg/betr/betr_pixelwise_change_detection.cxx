@@ -30,7 +30,7 @@ bool betr_pixelwise_change_detection::process() {
   int bb_width = evt_bb->width(), bb_height = evt_bb->height();
   if (bb_minx < 0 || bb_minx + bb_width >= static_cast<int>(evt_imgr_->ni()) ||
     bb_miny < 0 || bb_miny + bb_height >= static_cast<int>(evt_imgr_->nj())) {
-    std::cout << "WARNING: betr_pixelwise_change_detection failure 1\n";
+    std::cout << "WARNING: invalid bounding box\n";
     avg_prob_ = -1.0;
     return true;
   }
@@ -96,6 +96,10 @@ bool betr_pixelwise_change_detection::process() {
   }
   vil_image_view<float> evt_change_prob;
 
+  std::string save_dir = "C:/Users/sca0161/Documents/hamadan_test/debug/";
+  vil_save(evt_img, (save_dir + "event.tif").c_str());
+  vil_save(ref_cropped[0], (save_dir + "ref.tif").c_str());
+
   // Compute pixel-wise likelihood using specified metric
   baml_change_detection cd( cd_params->pw_params_ );
   bool cd_success;
@@ -106,7 +110,7 @@ bool betr_pixelwise_change_detection::process() {
     cd_success = cd.multi_image_detect(evt_img, ref_cropped, valid, evt_change_prob);
   }
   if(! cd_success ){
-    std::cout << "WARNING: betr_pixelwise_change_detection failure 2\n";
+    std::cout << "WARNING: change detection failure\n";
     avg_prob_ = -1.0;
     return true;
   }
@@ -116,6 +120,8 @@ bool betr_pixelwise_change_detection::process() {
   vil_convert_stretch_range_limited( evt_change_prob, vis, 0.0f, 1.0f );
   change_img_ = vil_new_image_resource_of_view(vis);
   i_offset_ = bb_minx; j_offset_ = bb_miny;
+
+  vil_save(vis, (save_dir + "change_prob.tif").c_str());
 
   // create integral image to find area of highest average probability of change
   vil_image_view<float> integral_im;
@@ -150,14 +156,36 @@ bool betr_pixelwise_change_detection::process() {
   if (eventHeight > evt_change_prob.nj()) eventHeight = evt_change_prob.nj();
   if (eventWidth > evt_change_prob.ni())eventWidth = evt_change_prob.ni();
   avg_prob_ = 0.0;
+  bool valid_event = false;
   for (int x = 0; x < evt_change_prob.ni() - eventWidth + 1; x++) {
     for (int y = 0; y < evt_change_prob.nj() - eventHeight + 1; y++) {
-      float cur_average = (integral_im(x, y) + integral_im(x + eventWidth, y + eventHeight) - integral_im(x, y + eventHeight) - integral_im(x + eventWidth, y)) /
-        (integral_im_poly(x, y) + integral_im_poly(x + eventWidth, y + eventHeight) - integral_im_poly(x, y + eventHeight) - integral_im_poly(x + eventWidth, y));
-      if (cur_average > avg_prob_) {
-        avg_prob_ = cur_average;
+      if ((integral_im_poly(x, y) + integral_im_poly(x + eventWidth, y + eventHeight) - integral_im_poly(x, y + eventHeight) - integral_im_poly(x + eventWidth, y)) == (eventHeight*eventWidth)) {
+        float cur_average = (integral_im(x, y) + integral_im(x + eventWidth, y + eventHeight) - integral_im(x, y + eventHeight) - integral_im(x + eventWidth, y)) /
+          (eventHeight*eventWidth);
+        valid_event = true;
+        if (cur_average > avg_prob_) {
+          avg_prob_ = cur_average;
+        }
       }
     }
   }
-  return true; 
+  if (!valid_event) avg_prob_ = integral_im(bb_width, bb_height) / integral_im_poly(bb_width, bb_height);
+  return true;
+
+  //// find region of highest probability
+  //int eventHeight = cd_params->pw_params_.event_height;
+  //int eventWidth = cd_params->pw_params_.event_width;
+  //if (eventHeight > evt_change_prob.nj()) eventHeight = evt_change_prob.nj();
+  //if (eventWidth > evt_change_prob.ni())eventWidth = evt_change_prob.ni();
+  //avg_prob_ = 0.0;
+  //for (int x = 0; x < evt_change_prob.ni() - eventWidth + 1; x++) {
+  //  for (int y = 0; y < evt_change_prob.nj() - eventHeight + 1; y++) {
+  //    float cur_average = (integral_im(x, y) + integral_im(x + eventWidth, y + eventHeight) - integral_im(x, y + eventHeight) - integral_im(x + eventWidth, y)) /
+  //      (integral_im_poly(x, y) + integral_im_poly(x + eventWidth, y + eventHeight) - integral_im_poly(x, y + eventHeight) - integral_im_poly(x + eventWidth, y));
+  //    if (cur_average > avg_prob_) {
+  //      avg_prob_ = cur_average;
+  //    }
+  //  }
+  //}
+  //return true; 
 }

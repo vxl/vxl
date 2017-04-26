@@ -28,8 +28,8 @@
 #define chile 0
 #define rajaei 0
 #define kandahar 0
-#define hamadan 1
-#define hamadan_pixelwise 0
+#define hamadan 0
+#define hamadan_pixelwise 1
 void test_edgel_change_detection()
 {
 #if chile

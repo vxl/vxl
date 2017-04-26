@@ -77,7 +77,8 @@ int main(int argc, char * argv[])
   //}
 
   std::string aster_dir(
-    "C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/new/*.spectrum.txt");
+    "C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/sevastopol/*.spectrum.txt");
+    //"C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/new/*.spectrum.txt");
     //"D:/data/core3d/ASTER/data/caras/*.txt");
 
   ////load dock mask
@@ -99,7 +100,7 @@ int main(int argc, char * argv[])
   std::cerr << "Loading ASTER directory\n";
   brad_spectral_angle_mapper aster(bands_min, bands_max);
   aster.add_aster_dir(aster_dir);
-  //aster.add_aster_dir("C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/jhu.becknic.water/*.spectrum.txt");
+  //aster.add_aster_dir("C:/Users/sca0161/Documents/MATLAB/sevastopol_wv03/170306_MaterialClassification/aster_data/jhu.becknic.soil/*.spectrum.txt");
   //std::cerr << "Adding material dock to aster\n";
   //aster.add_material("dock", cal_img, dock_mask);
   
@@ -107,26 +108,38 @@ int main(int argc, char * argv[])
   std::cerr << "Classifying materials\n";
   vil_image_view<int> class_img;
   vil_image_view<float> conf_img;
-  /*aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete", "vegetation" }, 0.8, class_img, conf_img);
-  vil_convert_stretch_range_limited(class_img, vis, -1, 3);
-  vil_save(vis, (out_dir + "class_img_asphalt_building_concrete_vegetation.png").c_str());
-  vil_convert_stretch_range_limited(conf_img, vis, -0.0f, 1.0f);
-  vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete_vegetation.png").c_str());*/
+  //aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete", "vegetation" }, 0.8, class_img, conf_img);
+  //vil_convert_stretch_range_limited(class_img, vis, -1, 4);
+  //vil_save(vis, (out_dir + "class_img_asphalt_building_concrete_vegetation.png").c_str());
+  //vil_convert_stretch_range_limited(conf_img, vis, -0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete_vegetation.png").c_str());
 
-  aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete" }, 0.8, class_img, conf_img);
-  vil_convert_stretch_range_limited(class_img, vis, -1, 3);
-  vil_save(vis, (out_dir + "class_img_asphalt_building_concrete.png").c_str());
+  //aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete" }, 0.8, class_img, conf_img);
+  //vil_convert_stretch_range_limited(class_img, vis, -1, 4);
+  //vil_save(vis, (out_dir + "class_img_asphalt_building_concrete.png").c_str());
   //vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
   //vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete.png").c_str());
 
   //aster.aster_classify_material(cal_img, { "asphalt", "building", "concrete", "vegetation", "water" }, 0.8, class_img, conf_img);
-  //vil_convert_stretch_range_limited(class_img, vis, -1, 3);
+  //vil_convert_stretch_range_limited(class_img, vis, -1, 4);
   //vil_save(vis, (out_dir + "class_img_asphalt_building_concrete_vegetation_water.png").c_str());
   //vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
   //vil_save(vis, (out_dir + "conf_img_asphalt_building_concrete_vegetation_water.png").c_str());
 
-  //std::cerr << "Creating spectral angle maps\n";
-  //vil_image_view<float> sam;
+  aster.aster_classify_material(cal_img, { "manmade", "soil", "vegetation", "water" }, 0.8, class_img, conf_img);
+  vil_convert_stretch_range_limited(class_img, vis, -1, 4);
+  vil_save(vis, (out_dir + "class_img_manmade_soil_vegetation_water.png").c_str());
+  vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
+  vil_save(vis, (out_dir + "conf_img_manmade_soil_vegetation_water.png").c_str());
+
+  //aster.aster_classify_material(cal_img, { "alfisol", "aridisol", "entisol", "inceptisol", "lunar", "mollisol", "spodosol", "utilsol", "vertisol" }, 0.8, class_img, conf_img);
+  //vil_convert_stretch_range_limited(class_img, vis, -1, 8);
+  //vil_save(vis, (out_dir + "class_img_soil_subclasses.png").c_str());
+  //vil_convert_stretch_range_limited(conf_img, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "conf_img_soil_subclasses.png").c_str());
+
+  std::cerr << "Creating spectral angle maps\n";
+  vil_image_view<float> sam;
   //aster.compute_sam_img(cal_img, "dock", sam);
   //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
   //vil_save(vis, (out_dir + "sam_dock.png").c_str());
@@ -139,12 +152,47 @@ int main(int argc, char * argv[])
   //aster.compute_sam_img(cal_img, "concrete", sam);
   //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
   //vil_save(vis, (out_dir + "sam_concrete.png").c_str());
+  //aster.compute_sam_img(cal_img, "manmade", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_manmade.png").c_str());
+  //aster.compute_sam_img(cal_img, "soil", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_soil.png").c_str());
   //aster.compute_sam_img(cal_img, "vegetation", sam);
   //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
   //vil_save(vis, (out_dir + "sam_vegetation.png").c_str());
   //aster.compute_sam_img(cal_img, "water", sam);
   //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
   //vil_save(vis, (out_dir + "sam_water.png").c_str());
+
+  //// soil subclass sam
+  //aster.compute_sam_img(cal_img, "alfisol", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_alfisol.png").c_str());
+  //aster.compute_sam_img(cal_img, "aridisol", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_aridisol.png").c_str());
+  //aster.compute_sam_img(cal_img, "entisol", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_entisol.png").c_str());
+  //aster.compute_sam_img(cal_img, "inceptisol", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_inceptisol.png").c_str());
+  //aster.compute_sam_img(cal_img, "lunar", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_lunar.png").c_str());
+  //aster.compute_sam_img(cal_img, "mollisol", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_mollisol.png").c_str());
+  //aster.compute_sam_img(cal_img, "spodosol", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_spodosol.png").c_str());
+  //aster.compute_sam_img(cal_img, "utilisol", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_utilisol.png").c_str());
+  //aster.compute_sam_img(cal_img, "vertisol", sam);
+  //vil_convert_stretch_range_limited(sam, vis, 0.0f, 1.0f);
+  //vil_save(vis, (out_dir + "sam_vertisol.png").c_str());
 
   //aster.clear_library();
   //std::cerr << "cleared library\n";

@@ -500,6 +500,9 @@ bool baml_change_detection::detect_difference(const vil_image_view<vxl_uint_16>&
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
       tar_lh(x, y) = lfg - log( prob(x, y));
+      if (!std::isfinite(tar_lh(x, y))) {
+        tar_lh(x, y) = lfg - log(1e-10);
+      }
     }
   }
   return true;
