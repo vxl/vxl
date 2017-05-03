@@ -250,5 +250,11 @@ template <class T> inline
 double vgl_distance(vgl_point_3d<T> const& p,
                     vgl_line_segment_3d<T> const& l) { return vgl_distance(l,p); }
 
+//: closest distance from a point to a box (2d)
+template <class T>
+double vgl_distance(vgl_point_2d<T> const& p, vgl_box_2d<T> const& b);
+template <class T>
+double vgl_distance(vgl_box_2d<T> const& b, vgl_point_2d<T> const& p){return vgl_distance(p,b);}
+
 
 #endif // vgl_distance_h_

@@ -145,6 +145,28 @@ bool vgl_orient_box_2d<T>::contains(vgl_point_2d<T> const& p) const{
     return false;
   return true;
 }
+template <class T>
+bool vgl_orient_box_2d<T>::near_equal(vgl_orient_box_2d<T> const& ob, T tol) const{
+  if(*this == ob)
+    return true;
+  T ob_half_height = ob.height()/T(2);
+  if(fabs(ob_half_height - half_height_) > tol)
+    return false;
+  const vgl_line_segment_2d<T>& ma = ob.major_axis();
+  const vgl_point_2d<T>& obp1 = ma.point1();
+  const vgl_point_2d<T>& obp2 = ma.point2(); 
+  const vgl_point_2d<T>& tp1 = major_axis_.point1();
+  const vgl_point_2d<T>& tp2 = major_axis_.point2(); 
+  vgl_vector_2d<T> p1p1 = obp1-tp1;
+  vgl_vector_2d<T> p2p2 = obp2-tp2;
+  if(p1p1.length()<tol && p2p2.length()<tol)
+    return true;
+  vgl_vector_2d<T> p1p2 = obp1-tp2;
+  vgl_vector_2d<T> p2p1 = obp2-tp1;
+  if(p1p2.length()<tol && p2p1.length()<tol)
+    return true;
+  return false;
+}
 #undef VGL_ORIENT_BOX_2D_INSTANTIATE
 #define VGL_ORIENT_BOX_2D_INSTANTIATE(T) \
 template class vgl_orient_box_2d<T >; \

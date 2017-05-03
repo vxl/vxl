@@ -6,6 +6,7 @@
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_tolerance.h>
 #include <vector>
 #include <map>
 //:
@@ -60,11 +61,12 @@ class vgl_orient_box_2d {
   T height() const {std::pair<T, T> p = this->width_height(); return p.second;}
   
   //::area
-  T area() {std::pair<T, T> p = this->width_height(); return (p.first)*(p.second);}
+  T area() const {std::pair<T, T> p = this->width_height(); return (p.first)*(p.second);}
   
   bool operator==(vgl_orient_box_2d<T> const& ob) const {
     return (this == &ob) || (ob.major_axis_ == this->major_axis_ && ob.half_height_ == this->half_height_);
   }
+  bool near_equal(vgl_orient_box_2d<T> const& ob, T tol = vgl_tolerance<T>::position) const;
 
   //: Return true if (x,y) is inside this box
   bool contains(T const& x, T const& y) const{return this->contains(vgl_point_2d<T>(x, y));}
