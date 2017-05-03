@@ -69,7 +69,7 @@ template <class T>
 vgl_box_2d<T> vgl_orient_box_2d<T>::enclosing_box() const{
   vgl_box_2d<T> ret;
   std::vector<vgl_point_2d<T> > corns = this->corners();
-  for(std::vector<vgl_point_2d<T> >::iterator cit = corns.begin();
+  for(typename std::vector<vgl_point_2d<T> >::iterator cit = corns.begin();
       cit != corns.end(); ++cit)
     ret.add(*cit);
   return ret;
@@ -84,8 +84,8 @@ std::pair<T, T> vgl_orient_box_2d<T>::width_height() const{
 
 template <class T>
 std::vector<vgl_point_2d<T> > vgl_orient_box_2d<T>::corners() const{
-  vgl_point_2d<T>& pmaj0 = major_axis_.point1();
-  vgl_point_2d<T>& pmaj1 = major_axis_.point2();
+  const vgl_point_2d<T>& pmaj0 = major_axis_.point1();
+  const vgl_point_2d<T>& pmaj1 = major_axis_.point2();
   vgl_vector_2d<T> v = pmaj1-pmaj0;
   T len = v.length();
   v/=len;
@@ -103,8 +103,8 @@ std::vector<vgl_point_2d<T> > vgl_orient_box_2d<T>::corners() const{
 }
 template <class T>
 vgl_point_2d<T> vgl_orient_box_2d<T>::centroid() const{
-  vgl_point_2d<T>& pmaj0 = major_axis_.point1();
-  vgl_point_2d<T>& pmaj1 = major_axis_.point2();
+  const vgl_point_2d<T>& pmaj0 = major_axis_.point1();
+  const vgl_point_2d<T>& pmaj1 = major_axis_.point2();
   vgl_point_2d<T> c((pmaj0.x() + pmaj1.x())/T(2),(pmaj0.y() + pmaj1.y())/T(2));
   return c;
 }

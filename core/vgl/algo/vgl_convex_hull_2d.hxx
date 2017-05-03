@@ -6,6 +6,9 @@
 
 #include <vcl_compiler.h>
 
+#include <math.h>
+#include <limits>
+
 //:
 // \file
 // \brief two-dimensional convex hull
