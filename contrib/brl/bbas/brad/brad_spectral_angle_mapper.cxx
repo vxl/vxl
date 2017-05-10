@@ -86,7 +86,7 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
 }
 
 //---------------------------------------------------------------------------
-//: Compute Spectral Angle Difference
+/*/: Compute Spectral Angle Difference
 //---------------------------------------------------------------------------
 bool brad_spectral_angle_mapper::compute_sdm_img(const vil_image_view<float>& image, 
   std::string keyword, 
@@ -144,7 +144,7 @@ bool brad_spectral_angle_mapper::compute_sdm_img(const vil_image_view<float>& im
     }
   }
   return true;
-}
+}*/
 
 //---------------------------------------------------------------------------
 //: Port of Cara's matClass.m which will use a fair amount of memory
@@ -290,7 +290,7 @@ bool brad_spectral_angle_mapper::add_material(const std::string type,
   } // s
 
   // normalize the spectra
-  brad_normalize_spectra(new_spectrum);
+  brad_normalize_spectra(new_spectrum.data(), new_spectrum.size());
 
   // add spectra and type to our library
   spectra_.push_back(new_spectrum);
@@ -423,7 +423,7 @@ bool brad_spectral_angle_mapper::parse_aster_file(
   if (!good_band) return false; // file does not overlap spectral range of bands
 
   // normalize the spectra
-  brad_normalize_spectra(sample_spectra);
+  brad_normalize_spectra(sample_spectra.data(), sample_spectra.size());
   return true;
 };
 
@@ -436,17 +436,24 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
   const std::vector<std::vector<std::vector<float> > >& normalized_spectra_samples,
   std::vector<float>& angles)
 {
-  int num_bands = img_vals.size();
+  int num_channels = img_vals.size();
   int num_categories = normalized_spectra_samples.size();
   angles.resize(num_categories);
+
   // Normalize image vals
   std::vector<float> img_norm = img_vals;
-  brad_normalize_spectra(img_norm);
-  for (int c = 0; c < num_categories; c++) { // loop over categories
+  brad_normalize_spectra(img_norm.data(), img_norm.size());
+
+  // Loop over categories
+  for (int c = 0; c < num_categories; c++) { 
     float angle = 0.0;
     int num_samples = normalized_spectra_samples[c].size();
-    for (int s = 0; s < num_samples; s++) { // loop over sample
-      // Dot product 
+
+    // For each category, compute max angle
+    for (int s = 0; s < num_samples; s++) { 
+      angle = std::min(angle, brad_compute_spectral_angle(
+        img_norm.data(), normalized_spectra_samples[c][s].data(), num_channels));
+      /*/ Dot product 
       float sum = 0.0f;
       for (int b = 0; b < num_bands; b++) {
         if (normalized_spectra_samples[c][s][b] == -1.0) continue;
@@ -454,13 +461,13 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
       }
 
       // Spectral angle
-        angle = std::max(angle, (float)(1.0f) - (float)fabs(acosf(sum)) / (float)vnl_math::pi);
+        angle = std::max(angle, (float)(1.0f) - (float)fabs(acosf(sum)) / (float)vnl_math::pi);*/
     } // s
-    angles[c] = angle;
+    angles[c] = 1.0f - angle / vnl_math::pi;
   } // c
 };
 
-//---------------------------------------------------------------------------
+/*/---------------------------------------------------------------------------
 //: Compute spectral difference (sum of squared difference) between two vectors 
 //  of multi-spectral values
 //---------------------------------------------------------------------------
@@ -472,12 +479,15 @@ void brad_spectral_angle_mapper::compute_spectral_diffs(
   int num_bands = img_vals.size();
   int num_categories = normalized_spectra_samples.size();
   differences.resize(num_categories);
+
   // Normalize image vals
   std::vector<float> img_norm = img_vals;
-  brad_normalize_spectra(img_norm);
+  brad_normalize_spectra(img_norm.data(), img_norm.size());
+
   for (int c = 0; c < num_categories; c++) { // loop over categories
     float diff = 0.0;
     int num_samples = normalized_spectra_samples[c].size();
+
     for (int s = 0; s < num_samples; s++) { // loop over sample
       // Sum of Squared Difference 
       float sum = 0.0f;
@@ -489,4 +499,20 @@ void brad_spectral_angle_mapper::compute_spectral_diffs(
     } // s
     differences[c] = diff;
   } // c
+};*/
+
+
+//---------------------------------------------------------------------------
+float brad_compute_spectral_angle(
+  const float* norm_spectra1,
+  const float* norm_spectra2,
+  int num_channels )
+{
+  float sum = 0.0f;
+  for (int c = 0; c < num_channels; c++) {
+    if (norm_spectra1[c] < 0.0f || norm_spectra2[c] < 0.0f) continue;
+    sum += norm_spectra1[c] * norm_spectra2[c];
+  }
+
+  return (float)fabs(acosf(sum));
 };

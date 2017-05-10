@@ -29,7 +29,7 @@ bool brad_sam_template_match(
   int img_width = img.ni(), img_height = img.nj();
   int num_channels = img.nplanes();
 
-  std::vector<float> spectra(num_channels);
+  if (chip.nplanes() != num_channels) return false;
 
   // Initialize the output image
   sam.set_size(img_width, img_height);
@@ -40,17 +40,15 @@ bool brad_sam_template_match(
   for (int y = 0; y < img_height; y++) {
     for (int x = 0; x < img_height; x++) {
       for (int c = 0; c < num_channels; c++)
-        spectra[c] = img(x, y, c);
-      brad_normalize_spectra(spectra);
-      for (int c = 0; c < num_channels; c++)
-        norm_img(x,y,c) = spectra[c];
+        norm_img(x, y, c) = img(x, y, c);
+      brad_normalize_spectra(&norm_img(x, y), num_channels);
     }
   }
 
   vil_image_view<float> rot_chip, rot_mask;
 
   // Iterate over angles
-  for (float a = 0.0f; a < 90.0f; a += angle_step) {
+  for (float a = 0.0f; a < 360.0f; a += angle_step) {
 
     // Rotate the chip and mask
     if (a == 0.0f) {
@@ -63,18 +61,17 @@ bool brad_sam_template_match(
     }
 
     int chip_width = rot_chip.ni(), chip_height = rot_chip.nj();
-    int off_width = chip_width / 2, off_height = chip_height / 2;
+    int off_x = chip_width / 2, off_y = chip_height / 2;
 
     std::cerr << rot_chip.ni() << ' ' << rot_chip.nj() << '\n';
 
     // Setup a normalized channel-aligned chip
+    vil_image_view<float> norm_chip(chip_width, chip_height, 1, num_channels);
     for (int y = 0; y < chip_height; y++) {
       for (int x = 0; x < chip_height; x++) {
         for (int c = 0; c < num_channels; c++)
-          spectra[c] = rot_chip(x, y, c);
-        brad_normalize_spectra(spectra);
-        for (int c = 0; c < num_channels; c++)
-          rot_chip(x, y, c) = spectra[c];
+          norm_chip(x, y, c) = rot_chip(x, y, c);
+        brad_normalize_spectra(&norm_chip(x, y), num_channels);
       }
     }
 
@@ -83,13 +80,20 @@ bool brad_sam_template_match(
       for (int x = 0; x < img_width - chip_width; x++) {
         for (int dy = 0; dy < chip_height; dy++) {
           for (int dx = 0; dx < chip_width; dx++) {
-            for (int c = 0; c < num_channels; c++) {
-              
-            }
-          }
-        }
-      }
-    }
-  }
 
+            // Skip if not in mask
+            if (rot_mask(dx, dy) == (vxl_byte)0) continue;
+
+            // Compute spectral angle and take min
+            float s = brad_compute_spectral_angle(
+              &norm_chip(x, y), &norm_img(x + dx, y + dy), num_channels);
+            sam(x + off_x, y + off_y) = std::min(s, sam(x + off_x, y + off_y));
+          } //dx
+        } //dy
+      } //x
+    } //y
+
+  } // a
+
+  return true;
 }
