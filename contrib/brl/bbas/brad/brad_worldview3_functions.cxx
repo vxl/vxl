@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>
 #include <vil/vil_crop.h>
@@ -212,12 +213,12 @@ bool brad_compose_16band_wv3_img(
   brad_image_metadata swir_meta(vul_file::strip_extension(swir_file) + ".IMD");
 
   // Load cameras
-  vpgl_rational_camera<double>* mul_rpc =
-    read_rational_camera<double>(std::ifstream((
-      vul_file::strip_extension(mul_file) + ".RPB").c_str()));
+  std::ifstream mul_ifs((vul_file::strip_extension(mul_file) + ".RPB").c_str());
+  std::ifstream swir_ifs((vul_file::strip_extension(swir_file) + ".RPB").c_str());
+  vpgl_rational_camera<double>* mul_rpc = 
+    read_rational_camera<double>(mul_ifs);
   vpgl_rational_camera<double>* swir_rpc =
-    read_rational_camera<double>(std::ifstream((
-      vul_file::strip_extension(swir_file) + ".RPB").c_str()));
+    read_rational_camera<double>(swir_ifs);
 
   // Load the images
   vil_image_resource_sptr mul_rsc = vil_load_image_resource(mul_file.c_str());
@@ -252,8 +253,10 @@ bool brad_calibrate_wv3_img(
 
   // Convert from digital numbers to top-of-atmosphere radiance
   for (int b = 0; b < 8; b++) {
-    vil_convert_cast(vil_plane(wv3_raw, b), vil_plane(wv3_cal, b));
-    vil_math_scale_and_offset_values(vil_plane(wv3_cal, b),
+    vil_image_view<vxl_uint_16> wv3_raw_plane = vil_plane(wv3_raw, b);
+    vil_image_view<float> wv3_cal_plane = vil_plane(wv3_cal, b);
+    vil_convert_cast(wv3_raw_plane, wv3_cal_plane);
+    vil_math_scale_and_offset_values(wv3_cal_plane,
       meta.gains_[b + 1].first, meta.gains_[b + 1].second);
   }
 
@@ -295,9 +298,10 @@ void brad_apply_wv3_fixed_calibration(
     gain[7] = 1.392; offset[7] = -0.302;
   }
 
-  for (int p = 0; p < 8; p++) 
-    vil_math_scale_and_offset_values(
-      vil_plane(wv3_img, p), gain[p], offset[p]);
+  for (int p = 0; p < 8; p++) {
+    vil_image_view<float> wv3_plane = vil_plane(wv3_img, p);
+    vil_math_scale_and_offset_values( wv3_plane, gain[p], offset[p]);
+  }
 }
 
 
@@ -333,4 +337,38 @@ void brad_wv3_bands(
   }
 };
 
+void save_corrected_wv3(
+  const vil_image_view<float> corr_img, 
+  const std::string save_dir)
+{
+  int np = corr_img.nplanes();
+  vil_image_view<float> cur_plane;
+  for (int i = 0; i < np; i++) {
+    cur_plane = vil_plane(corr_img, i);
+    if (i < 10) vil_save(cur_plane, (save_dir + "/band0" + std::to_string(i) + ".tif").c_str());
+    else vil_save(cur_plane, (save_dir + "/band" + std::to_string(i) + ".tif").c_str());
+  }
+};
+
+void load_corrected_wv3(
+  const std::string img_dir,
+  vil_image_view<float>& cal_img) {
+
+  vil_image_resource_sptr cal_rsc = vil_load_image_resource((img_dir + "/band00.tif").c_str());
+  cal_img = cal_rsc->get_view();
+  int np = 0;
+  int ni = cal_img.ni();
+  int nj = cal_img.nj();
+  for (vul_file_iterator fi((img_dir + "band*.tif").c_str()); fi; ++fi) {
+    np++;
+  }
+  cal_img.set_size(ni, nj, np);
+  vil_image_view<float> cur_plane;
+  for (int i = 0; i < np; i++) {
+    cur_plane = vil_plane(cal_img, i);
+    if(i<10) cal_rsc = vil_load_image_resource((img_dir + "/band0" + std::to_string(i) + ".tif").c_str());
+    else cal_rsc = vil_load_image_resource((img_dir + "/band" + std::to_string(i) + ".tif").c_str());
+    cur_plane = cal_rsc->get_view();
+  }
+}
 
