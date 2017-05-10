@@ -271,11 +271,11 @@ baml_change_detection::multi_image_detect(
     s = scores[t]; // get score image at time t
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
-        if (std::isnan(s(x, y))) {
+        if (vnl_math::isnan(s(x, y))) {
           std::cerr << "score is nan";
           return false;
         }
-        if (std::isinf(s(x, y))) {
+        if (vnl_math::isinf(s(x, y))) {
           std::cerr << "score is infinity";
           return false;
         }
@@ -364,7 +364,7 @@ baml_change_detection::detect_bt(
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
       tar_lh(x, y) = lfg - log(prob(x, y));
-      if (isinf(tar_lh(x, y))) {
+      if (vnl_math::isinf(tar_lh(x, y))) {
         tar_lh(x, y) = lfg - log(0.00000000001);
       }
     }
@@ -500,7 +500,7 @@ bool baml_change_detection::detect_difference(const vil_image_view<vxl_uint_16>&
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
       tar_lh(x, y) = lfg - log( prob(x, y));
-      if (!std::isfinite(tar_lh(x, y))) {
+      if (!vnl_math::isfinite(tar_lh(x, y))) {
         tar_lh(x, y) = lfg - log(1e-10);
       }
     }
@@ -834,7 +834,7 @@ baml_change_detection::detect_histcmp(
           std::cerr << "histogram comparison technique not recognized\n";
           return false;
         }
-        if (std::isinf(scores(x, y))) {
+        if (vnl_math::isinf(scores(x, y))) {
           scores(x, y) = 100;
         }
     }
