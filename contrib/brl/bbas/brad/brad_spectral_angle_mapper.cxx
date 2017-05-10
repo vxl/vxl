@@ -66,7 +66,7 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
 
   // make sure at least one relevant spectra was found
   if (!found_keyword) {
-    std::cerr << "keyword not found in spectral library\n";
+    std::cerr << "keyword (" + keyword + ") not found in spectral library\n";
     return false; 
   }
 
@@ -314,16 +314,23 @@ void brad_spectral_angle_mapper::add_aster_dir(const std::string aster_dir) {
     while (is.get(c)) {          // loop getting single characters
       if (c <= -1 || c >= 255) { // check if the file contains bad character
         good_file = false;
+        std::cerr << "File " << vul_file::strip_directory(fi()) << " contains an invalid character. Continuing to next file...\n";
         break;
       }
     }
     is.close();
     if (good_file) { // file name and corresponding spectra
-      file_names_.push_back(vul_file::strip_directory(fi()));
-      spectra_.push_back(std::vector<float>(num_bands));
-      parse_aster_file(fi(), spectra_.back());
+      std::vector<float> sample_spec;
+      if (parse_aster_file(fi(), sample_spec)) { // attempt to parse aster file
+        file_names_.push_back(vul_file::strip_directory(fi()));
+        spectra_.push_back(sample_spec);
+      }
+      else {
+        std::cerr << "File " << vul_file::strip_directory(fi()) << " could not be parsed correctly. Continuing to next file...\n";
+      }
     }
   }
+
 }
 
 //---------------------------------------------------------------------------
@@ -378,6 +385,7 @@ bool brad_spectral_angle_mapper::parse_aster_file(
   }
   if (wavelengths.size() == 0) return false;
 
+  bool good_band = false; // make sure at least one spectrum contains valid reflectance
   // Loop through wavelength bands
   for (int b = 0; b < num_bands; b++) {
 
@@ -394,6 +402,8 @@ bool brad_spectral_angle_mapper::parse_aster_file(
       continue;
     }
 
+    good_band = true;
+
     // Otherwise find the two wavelengths in the list that contain the mean
     int idx = 1;
     for (; idx < wavelengths.size(); idx++)
@@ -406,12 +416,14 @@ bool brad_spectral_angle_mapper::parse_aster_file(
       alpha = (mean - wavelengths[idx - 1]) / dw;
     sample_spectra[b] = 0.01f* // Convert to percent
       (spectra[idx - 1] + alpha*(spectra[idx] - spectra[idx - 1]));
+    if (sample_spectra[b] < 0) return false; // aster file should not have negative reflectance values
     //std::cerr << bands_spectra[b] << '\n';
   }
 
+  if (!good_band) return false; // file does not overlap spectral range of bands
+
   // normalize the spectra
   brad_normalize_spectra(sample_spectra);
-
   return true;
 };
 
@@ -442,8 +454,7 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
       }
 
       // Spectral angle
-      angle = std::max(angle, (float)(1.0f - fabs(acosf(sum))) / 
-        (float)vnl_math::pi);
+        angle = std::max(angle, (float)(1.0f) - (float)fabs(acosf(sum)) / (float)vnl_math::pi);
     } // s
     angles[c] = angle;
   } // c
