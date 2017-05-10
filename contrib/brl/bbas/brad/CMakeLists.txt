@@ -21,6 +21,7 @@
       brad_estimate_shadows.h         brad_estimate_shadows.cxx
       brad_appearance_neighborhood_index.h  brad_appearance_neighborhood_index.cxx
       brad_belief_prop_utils.h        brad_belief_prop_utils.cxx
+      brad_sam_template_match.h       brad_sam_template_match.cxx
       brad_spectral_angle_mapper.h    brad_spectral_angle_mapper.cxx
       brad_multispectral_functions.h  brad_multispectral_functions.cxx
       brad_worldview3_functions.h     brad_worldview3_functions.cxx
