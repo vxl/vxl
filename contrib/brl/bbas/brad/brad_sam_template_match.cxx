@@ -33,19 +33,20 @@ bool brad_sam_template_match(
 
   // Initialize the output image
   sam.set_size(img_width, img_height);
-  sam.fill(1.0);
+  sam.fill(0.0); 
 
   // Setup a normalized channel-aligned image
   vil_image_view<float> norm_img(img_width, img_height, 1, num_channels);
   for (int y = 0; y < img_height; y++) {
-    for (int x = 0; x < img_height; x++) {
+    for (int x = 0; x < img_width; x++) {
       for (int c = 0; c < num_channels; c++)
         norm_img(x, y, c) = img(x, y, c);
       brad_normalize_spectra(&norm_img(x, y), num_channels);
     }
   }
 
-  vil_image_view<float> rot_chip, rot_mask;
+  vil_image_view<float> rot_chip;
+  vil_image_view<vxl_byte> rot_mask;
 
   // Iterate over angles
   for (float a = 0.0f; a < 360.0f; a += angle_step) {
@@ -68,16 +69,30 @@ bool brad_sam_template_match(
     // Setup a normalized channel-aligned chip
     vil_image_view<float> norm_chip(chip_width, chip_height, 1, num_channels);
     for (int y = 0; y < chip_height; y++) {
-      for (int x = 0; x < chip_height; x++) {
+      for (int x = 0; x < chip_width; x++) {
         for (int c = 0; c < num_channels; c++)
           norm_chip(x, y, c) = rot_chip(x, y, c);
         brad_normalize_spectra(&norm_chip(x, y), num_channels);
       }
     }
 
+    float temp = 0;
+    // calculate number of valid pixels in mask
+    int num_valid = 0;
+    for (int dy = 0; dy < chip_height; dy++) {
+      for (int dx = 0; dx < chip_width; dx++) {
+
+        // Skip if not in mask
+        if (rot_mask(dx, dy) == (vxl_byte)0) continue;
+        num_valid++;
+      } //dx
+    } //dy
+
     // Iterate over the image
     for (int y = 0; y < img_height - chip_height; y++) {
       for (int x = 0; x < img_width - chip_width; x++) {
+        float s = 0.0f;
+
         for (int dy = 0; dy < chip_height; dy++) {
           for (int dx = 0; dx < chip_width; dx++) {
 
@@ -85,15 +100,46 @@ bool brad_sam_template_match(
             if (rot_mask(dx, dy) == (vxl_byte)0) continue;
 
             // Compute spectral angle and take min
-            float s = brad_compute_spectral_angle(
-              &norm_chip(x, y), &norm_img(x + dx, y + dy), num_channels);
-            sam(x + off_x, y + off_y) = std::min(s, sam(x + off_x, y + off_y));
+            s += brad_compute_cos_spectral_angle(
+              &norm_chip(dx, dy), &norm_img(x + dx, y + dy), num_channels);
+
           } //dx
         } //dy
+        sam(x + off_x, y + off_y) = s / num_valid; 
       } //x
     } //y
-
   } // a
 
   return true;
+}
+
+//------------------------------------------------------------
+// bounding box
+//------------------------------------------------------------
+void brad_template_bb(const vil_image_view<vxl_byte>& mask, 
+  int& crop_x, 
+  int& crop_y, 
+  int& crop_width, 
+  int& crop_height)
+{
+  int maxx = 0;
+  int maxy = 0;
+  int minx = mask.ni() - 1;
+  int miny = mask.nj() - 1;
+  for (int y = 0; y < mask.nj(); y++) {
+    for (int x = 0; x < mask.ni(); x++) {
+      // Skip if not in mask
+      if (mask(x, y) == (vxl_byte)0) continue;
+
+      if (maxx < x) maxx = x;
+      if (maxy < y) maxy = y;
+      if (minx > x) minx = x;
+      if (miny > y) miny = y;
+
+    }
+  }
+  crop_x = minx;
+  crop_y = miny;
+  crop_width = maxx - minx + 1;
+  crop_height = maxy - miny + 1;
 }

@@ -82,5 +82,12 @@ float brad_compute_spectral_angle(
   const float* norm_spectra2,
   int num_channels);
 
+// Compute the cosine of the spectral angel between two pre-normalized spectra 
+// note: no checks to excluded invalid aster file bands
+float brad_compute_cos_spectral_angle(
+  const float* norm_spectra1,
+  const float* norm_spectra2,
+  int num_channels);
+
 
 #endif // brad_spectral_angle_mapper_h

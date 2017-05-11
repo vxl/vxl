@@ -516,3 +516,16 @@ float brad_compute_spectral_angle(
 
   return (float)fabs(acosf(sum));
 };
+
+//---------------------------------------------------------------------------
+float brad_compute_cos_spectral_angle(
+  const float* norm_spectra1,
+  const float* norm_spectra2,
+  int num_channels)
+{
+  float sum = 0.0f;
+  for (int c = 0; c < num_channels; c++) {
+    sum += norm_spectra1[c] * norm_spectra2[c];
+  }
+  return sum;
+};
