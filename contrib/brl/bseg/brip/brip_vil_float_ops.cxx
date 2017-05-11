@@ -4189,13 +4189,16 @@ extrema_rotational(vil_image_view<float> const& input, float lambda0,
         if (std::fabs(res_img(i,j)) < std::fabs(res)) {
           res_img(i,j) = res;
           res_angle(i,j) = theta_i;
+          output(i,j,0) = res;
+          output(i,j,1) = theta_i;
         }
       }
     }
     std::cout << '.';
   }
   std::cout << '\n';
-  if (!non_max_suppress) return res_img;
+  //if (!non_max_suppress) return res_img;
+  if (!non_max_suppress) return output;
   // now we have pixel-wise best angle, run the non-max suppression around each non-zero pixel using the angles mask
   vil_image_view<float> res(res_img);
 
@@ -4579,7 +4582,7 @@ fast_extrema_rotational(vil_image_view<float> const& input,
                         bool non_max_suppress,
                         float cutoff, float theta_init, float theta_end) {
   unsigned ni = input.ni(), nj = input.nj();
-  vil_image_view<float> resp(ni, nj);
+  vil_image_view<float> resp(ni, nj, 3);
   resp.fill(0.0f);
 
     // elliptical operator has 180 degree rotational symmetry, so only the angles in the range [0,180] matter
@@ -4593,8 +4596,8 @@ fast_extrema_rotational(vil_image_view<float> const& input,
     for (unsigned j = 0; j<nj; ++j)
       for (unsigned i = 0; i<ni; ++i) {
         float v = temp(i,j);
-        if (std::fabs(v)>std::fabs(resp(i,j)))
-          resp(i,j) = v;
+        if (std::fabs(v)>std::fabs(resp(i,j,0)))
+          resp(i,j,0) = v;
       }
   }
   return resp;
