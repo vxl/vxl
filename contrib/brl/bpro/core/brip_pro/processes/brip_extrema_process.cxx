@@ -87,7 +87,7 @@ bool brip_extrema_process(bprb_func_process& pro)
   bool scale_invariant = false;
   bool non_max_suppress = true;
   float cutoff = 0.01f;
-  vil_image_view<float> out(ni, nj, 2);
+  vil_image_view<float> out(ni, nj, 3);
   if (fast)
     //out = brip_vil_float_ops::fast_extrema(gimage, lambda0, lambda1,
     //                                       theta, bright, false, true);
