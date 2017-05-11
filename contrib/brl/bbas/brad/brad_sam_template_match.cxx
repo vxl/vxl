@@ -105,7 +105,7 @@ bool brad_sam_template_match(
 
           } //dx
         } //dy
-        sam(x + off_x, y + off_y) = s / num_valid; 
+        sam(x + off_x, y + off_y) = (s / num_valid > sam(x + off_x, y + off_y)) ? s / num_valid : sam(x + off_x, y + off_y);//std::max(s / num_valid, sam(x + off_x, y + off_y));
       } //x
     } //y
   } // a
