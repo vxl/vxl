@@ -52,6 +52,18 @@ static void test_pointset()
   good = io_ptset == ptset;
   TEST("pointset_ I/O", good, true);
   vpl_unlink(path.c_str());
+  //test space separated pointset IO
+  std::ofstream sostr(path.c_str());
+  sostr << p0.x() << ' ' << p0.y() << ' ' << p0.z() << std::endl;
+  sostr << p1.x() << ' ' << p1.y() << ' ' << p1.z() << std::endl;
+  sostr << p2.x() << ' ' << p2.y() << ' ' << p2.z() << std::endl;
+  sostr.close();
+  vgl_pointset_3d<double> spset;
+  std::ifstream sistr(path.c_str());
+  sistr>>spset;
+  good = spset.npts() == 3;
+  good = good && spset.p(0) == p0;
+  TEST("spaced pointset_ I/O", good, true);
 }
 
 TESTMAIN(test_pointset);

@@ -143,7 +143,7 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
   std::vector<vgl_vector_3d<Type> > normals;
   char buf[100];
   bool has_normals = false;
-  //determine if file has three comma-separated double values or six
+  //determine if file has three or six comma or space separated values
   bool first_line = true;
   while(istr.getline(buf,100)){
       std::string buf_str;
@@ -157,7 +157,7 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
             continue;
           }else{
             buf_str.push_back(c);
-            if(c == ',')
+            if(c == ','||c==' ')
               comma_count++;
           }
         }
@@ -165,6 +165,7 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
         has_normals = comma_count > 2;
         first_line = false;
       }else{
+        // scan in the file line by line
         bool done = false;
         for(unsigned i =0; i<100&&!done; ++i){
           char c = buf[i];
@@ -175,16 +176,19 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
           buf_str.push_back(c);
         }
       }
+      // create a stream from the valid line characters
       std::stringstream isstr(buf_str);
+      isstr >>std::noskipws;//accept spaces as separators
+      // parse the line for point and normal values
       Type x, y, z, nx, ny, nz;
       unsigned char c;
       isstr >> x >> c;
-      if(c!=','){
+      if(!(c==','||c==' ')){
         std::cout << "stream parse error\n";
         return istr;
       }
       isstr >> y >> c;
-      if(c!=','){
+      if(!(c==','||c==' ')){
         std::cout << "stream parse error\n";
         return istr;
       }
@@ -192,19 +196,19 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
         isstr >> z;
       else{
         isstr >> z >> c;
-        if(c!=','){
+        if(!(c==','||c==' ')){
           std::cout << "stream parse error\n";
           return istr;
         }
       }
       if(has_normals){
         isstr >> nx >> c;
-        if(c!=','){
+        if(!(c==','||c==' ')){
           std::cout << "stream parse error\n";
           return istr;
         }
         isstr >> ny >> c;
-        if(c!=','){
+        if(!(c==','||c==' ')){
           std::cout << "stream parse error\n";
           return istr;
         }
