@@ -5,6 +5,12 @@ include_directories( ${BRL_INCLUDE_DIR}/bpro )
 include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
 include_directories(${GEL_INCLUDE_DIR})
 include_directories(${VTHREEP_INCLUDE_DIR})
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  include_directories(${EXPAT_INCLUDE_DIRS} )
+  include_directories(${EXPATPP_INCLUDE_DIRS} )
+ endif()
+endif()
 
 set(sdet_pro_sources
     sdet_processes.h

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <vil/vil_image_view.h>
+#include <vgl_polygon.h>
 
 //:
 // \file
@@ -14,7 +15,8 @@
 
 //: Normalize a vector of spectra to a unit vector.
 void brad_normalize_spectra(
-  std::vector<float>& spectra);
+  float* spectra,
+  int num_channels );
 
 //: Convert so vgl_polygon to mask
 void brad_polygon2mask(const vil_image_view<float>& image,

@@ -34,6 +34,8 @@ target_link_libraries(betr ${VXL_LIB_PREFIX}vsph ${VXL_LIB_PREFIX}vsol ${VXL_LIB
 
 add_subdirectory(pro)
 
+add_subdirectory( app )
+
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()

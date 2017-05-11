@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>
 #include <vil/vil_crop.h>
@@ -336,4 +337,43 @@ void brad_wv3_bands(
   }
 };
 
+void save_corrected_wv3(
+  const vil_image_view<float> corr_img, 
+  const std::string save_dir)
+{
+  int np = corr_img.nplanes();
+  vil_image_view<float> cur_plane;
+  for (int i = 0; i < np; i++) {
+    cur_plane = vil_plane(corr_img, i);
+    if (i < 10) vil_save(cur_plane, (save_dir + "/band0" + std::to_string(i) + ".tif").c_str());
+    else vil_save(cur_plane, (save_dir + "/band" + std::to_string(i) + ".tif").c_str());
+  }
+};
+
+void load_corrected_wv3(
+  const std::string img_dir,
+  vil_image_view<float>& cal_img) {
+
+  // load first band to get the image size
+  vil_image_resource_sptr cal_rsc = vil_load_image_resource((img_dir + "/band00.tif").c_str());
+  cal_img = cal_rsc->get_view();
+  int np = 0;
+  int ni = cal_img.ni();
+  int nj = cal_img.nj();
+  // count the number of band images in the directory to get the number of planes
+  std::string band_dir = (img_dir + "/band*.tif");
+  for (vul_file_iterator fi(band_dir); fi; ++fi) { //fi((img_dir + "band*.tif").c_str()); fi; ++fi) {
+    std::cout << vul_file::strip_directory(fi()) << "\n";
+    np++;
+  }
+  // initialize the calibrated image and fill with band images
+  cal_img.set_size(ni, nj, np);
+  vil_image_view<float> cur_plane;
+  for (int i = 0; i < np; i++) {
+    cur_plane = vil_plane(cal_img, i);
+    if(i<10) cal_rsc = vil_load_image_resource((img_dir + "/band0" + std::to_string(i) + ".tif").c_str());
+    else cal_rsc = vil_load_image_resource((img_dir + "/band" + std::to_string(i) + ".tif").c_str());
+    cur_plane.deep_copy(cal_rsc->get_view());
+  }
+}
 

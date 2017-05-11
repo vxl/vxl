@@ -24,9 +24,9 @@ public:
     vil_image_view<float>& spectral_angle);                 // spectral angle map
 
   //: Compare image to a specific spectrum by taking the sum of squared differences
-  bool compute_sdm_img(const vil_image_view<float>& image,  // image to compare to spectrum of material in library
-    const std::string keyword,                              // material of interest
-    vil_image_view<float>& spectral_diff);                  // spectral difference map
+  //bool compute_sdm_img(const vil_image_view<float>& image,  // image to compare to spectrum of material in library
+  //  const std::string keyword,                              // material of interest
+  //  vil_image_view<float>& spectral_diff);                  // spectral difference map
 
   //: Port of Cara's matClass.m which will use a fair amount of memory
   // in class_img value -1 corresponds to unknown category (when no category meets threshold)
@@ -69,9 +69,25 @@ protected:
 
   //: Compute spectral difference (sum of squared difference) between two vectors 
   //  of multi-spectral values
-  void compute_spectral_diffs(
-    const std::vector<float>& img_vals,                                                   // un-normalized image spectrum
-    const std::vector<std::vector<std::vector<float> > >& normalized_spectra_samples,     // vector of vectors of spectra with each entry corresponding to a material 
-    std::vector<float>& differences);                                                     // vector of angle differences each corresponding to a material in normalized_spectra_samples 
+  //void compute_spectral_diffs(
+  //  const std::vector<float>& img_vals,                                                   // un-normalized image spectrum
+  //  const std::vector<std::vector<std::vector<float> > >& normalized_spectra_samples,     // vector of vectors of spectra with each entry corresponding to a material 
+  //  std::vector<float>& differences);                                                     // vector of angle differences each corresponding to a material in normalized_spectra_samples 
 };
+
+
+// Compute the spectral angle between two pre-normalized spectra
+float brad_compute_spectral_angle(
+  const float* norm_spectra1,
+  const float* norm_spectra2,
+  int num_channels);
+
+// Compute the cosine of the spectral angel between two pre-normalized spectra 
+// note: no checks to excluded invalid aster file bands
+float brad_compute_cos_spectral_angle(
+  const float* norm_spectra1,
+  const float* norm_spectra2,
+  int num_channels);
+
+
 #endif // brad_spectral_angle_mapper_h
