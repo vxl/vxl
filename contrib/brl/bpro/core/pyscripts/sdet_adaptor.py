@@ -381,3 +381,16 @@ def ss_segment_image(img, weight_thres):
   (id, type) = batch.commit_output(1)
   bb_img = dbvalue(id, type)
   return seg_img, bb_img
+
+def fit_oriented_box(color_blob_image):
+  batch.init_process("sdetFitOrientedBoxesProcess")
+  batch.set_input_from_db(0, color_blob_image)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    cnt = batch.get_output_unsigned(id)
+    (id, type) = batch.commit_output(1)
+    corners = batch.get_bbas_1d_array_float(id)
+    return cnt, corners
+  else:
+    return 0, 0
