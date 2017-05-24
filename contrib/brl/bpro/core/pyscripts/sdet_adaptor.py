@@ -129,6 +129,7 @@ def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
   batch.set_input_from_db(0, tclsf)
   batch.set_input_unsigned(1, block_size)
   batch.set_input_string(2, category_id_file)
+  batch.set_input_string(3, category_name)
   status = batch.run_process()
   if status:
     (out_id, out_type) = batch.commit_output(0)
@@ -391,6 +392,8 @@ def fit_oriented_box(color_blob_image):
     cnt = batch.get_output_unsigned(id)
     (id, type) = batch.commit_output(1)
     corners = batch.get_bbas_1d_array_float(id)
-    return cnt, corners
+    (id, type) = batch.commit_output(2)
+    box_dimension = batch.get_bbas_1d_array_float(id)
+    return cnt, corners, box_dimension
   else:
-    return 0, 0
+    return 0, 0, 0
