@@ -38,8 +38,8 @@ bool sdet_fit_oriented_boxes_process_cons(bprb_func_process& pro)
   
   std::vector<std::string> output_types;
   output_types.push_back("unsigned");  // return the number of blobs, N
-  output_types.push_back("bbas_1d_array_float_sptr");  // an array of size N*8, four points with (u,v) image coordinates for each corner of each oriented box 
-                                                       
+  output_types.push_back("bbas_1d_array_float_sptr");  // an array of size N*8, four points with (u,v) image coordinates for each corner of each oriented box
+  output_types.push_back("bbas_1d_array_float_sptr");  // an array of size N*2, which output the length and width of the fitting oriented box
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -78,7 +78,7 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
         color_map[current] = tmp;
       }
     }
-  
+
   std::map<vil_rgb<vxl_byte>, std::vector<vgl_point_2d<float> > >::iterator iter = color_map.begin();
   int cnt = 0;
   for ( ; iter != color_map.end(); iter++) 
@@ -86,7 +86,7 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
 
   std::cout << "Found " << cnt << " blobs!" << std::endl;
   bbas_1d_array_float * corners = new bbas_1d_array_float(cnt*8);
-
+  bbas_1d_array_float * box_dim = new bbas_1d_array_float(cnt*2);
   iter = color_map.begin();
   cnt = 0;
   for ( ; iter != color_map.end(); iter++) {
@@ -98,22 +98,31 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
     for (unsigned i = 0; i < v.size(); i++) {
       xp[i] = v[i].x();
       yp[i] = v[i].y();
-      Ip[i] = 100;  
+      Ip[i] = 100;
     }
     sdet_region sr(v.size(), xp, yp, Ip);
     vgl_oriented_box_2d<float> box = sr.obox();
     std::vector<vgl_point_2d<float> > cc = box.corners();
+#if 0
+    std::cout << "color: " << iter->first << ", corners: " << std::endl;
+    for (std::vector<vgl_point_2d<float> >::iterator vit = cc.begin(); vit != cc.end(); ++vit)
+      std::cout << "  " << *vit << std::endl;
+    std::cout << "axis length: " << box.length_width() << std::endl;
+#endif
     for (unsigned i = 0; i < cc.size(); i++) {
        corners->data_array[8*cnt+2*i] = cc[i].x();
        corners->data_array[8*cnt+2*i+1] = cc[i].y();
     }
+    box_dim->data_array[2*cnt]   = box.length_width().x();
+    box_dim->data_array[2*cnt+1] = box.length_width().y();
     cnt++;
     delete [] xp;
     delete [] yp;
     delete [] Ip;
   }
-  
+
   pro.set_output_val<unsigned>(0, cnt);
   pro.set_output_val<bbas_1d_array_float_sptr>(1, corners);
+  pro.set_output_val<bbas_1d_array_float_sptr>(2, box_dim);
   return true;
 }

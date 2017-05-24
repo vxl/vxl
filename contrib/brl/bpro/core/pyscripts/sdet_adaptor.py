@@ -391,6 +391,8 @@ def fit_oriented_box(color_blob_image):
     cnt = batch.get_output_unsigned(id)
     (id, type) = batch.commit_output(1)
     corners = batch.get_bbas_1d_array_float(id)
-    return cnt, corners
+    (id, type) = batch.commit_output(2)
+    box_dimension = batch.get_bbas_1d_array_float(id)
+    return cnt, corners, box_dimension
   else:
-    return 0, 0
+    return 0, 0, 0
