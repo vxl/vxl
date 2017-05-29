@@ -9232,6 +9232,8 @@ int arraysize;
   }
   /* Choose a random pivot to split the array. */
   pivot = (int) randomnation((unsigned int) arraysize);
+  if (pivot == arraysize)//JLM without this test, pivot can equal arraysize and segfault
+	  pivot--;
   pivotx = sortarray[pivot][0];
   pivoty = sortarray[pivot][1];
   /* Split the array. */
