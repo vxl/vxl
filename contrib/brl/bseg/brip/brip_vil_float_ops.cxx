@@ -4589,7 +4589,7 @@ fast_extrema_rotational(vil_image_view<float> const& input,
    vil_image_view<float> temp =
      fast_extrema(input, lambda0, lambda1, theta, bright,
                   mag_only, false, signed_response,
-                  scale_invariant, false, cutoff);
+       scale_invariant, non_max_suppress, cutoff);//scale_invariant, false, cutoff);
     for (unsigned j = 0; j<nj; ++j)
       for (unsigned i = 0; i<ni; ++i) {
         float v = temp(i,j);

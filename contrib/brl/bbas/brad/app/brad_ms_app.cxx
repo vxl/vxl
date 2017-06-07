@@ -27,28 +27,32 @@ int main(int argc, char * argv[])
 
   // =========================template matching=======================
    // Set arguments
-   //std::string mul_file(
-   //  "C:/Users/sca0161/Documents/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
-   //  //"D:/data/core3d/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
-   //std::string swir_file(
-   //  "C:/Users/sca0161/Documents/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
-   //  //"D:/data/core3d/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
+  std::string mul_file(
+    "C:/Users/sca0161/Documents/data/sevastopol/2015_08_21_WV03/D_20150821_090655_1040010010A4C400_P002_MUL/15AUG21090655-M1BS-056107310010_01_P002.NTF");
+     //"C:/Users/sca0161/Documents/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
+     //"D:/data/core3d/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
+  std::string swir_file(
+    "C:/Users/sca0161/Documents/data/sevastopol/2015_08_21_WV03/D_20150821_090654_104A010010A4C400_P001_SWR/15AUG21090654-A1BS-056530600010_01_P001.NTF");
+     //"C:/Users/sca0161/Documents/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
+     //"D:/data/core3d/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
 
-   //
-   //std::cerr << "Composing 16-band image\n";
-   //vil_image_view<float> comp_img;
-   //brad_compose_16band_wv3_img(
-   //  mul_file, swir_file, comp_img, 1.0f);
+   
+   std::cerr << "Composing 16-band image\n";
+   vil_image_view<float> comp_img;
+   brad_compose_16band_wv3_img(
+     mul_file, swir_file, comp_img, 1.0f);
 
-   //// Correct for atmospherics
-   //float mean_albedo = 0.3;
-   //vil_image_view<float> cal_img;
-   //brad_estimate_reflectance_image_multi(comp_img, mean_albedo, cal_img);
-   //std::cerr << "done with image corrections\n";
-
+   // Correct for atmospherics
+   float mean_albedo = 0.3;
+   vil_image_view<float> cal_img;
+   brad_estimate_reflectance_image_multi(comp_img, mean_albedo, cal_img);
+   std::cerr << "done with image corrections\n";
+   save_corrected_wv3(cal_img, "C:/Users/sca0161/Documents/data/sevastopol/2015_08_21_WV03/tif band float P002_MUL P001_SWR/");
+   
+   return 0;
    std::string out_dir(
      "C:/Users/sca0161/Documents/sevastopol2/cpp result/template matching/");
-  vil_image_view<float> cal_img;
+ // vil_image_view<float> cal_img;
   load_corrected_wv3("C:/Users/sca0161/Documents/sevastopol2/cpp result/tif band float/", cal_img);
 
   vil_image_view<float> sam;
