@@ -1,6 +1,7 @@
 # basic radiometery library
 
   include_directories( ${BRL_INCLUDE_DIR}/bbas )
+  include_directories(${GEL_INCLUDE_DIR})
 
   set(brad_sources
       brad_illum_util.h               brad_illum_util.cxx

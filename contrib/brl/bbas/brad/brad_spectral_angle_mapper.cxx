@@ -299,6 +299,46 @@ bool brad_spectral_angle_mapper::add_material(const std::string type,
 }
 
 //---------------------------------------------------------------------------
+//: add a material to the library
+//---------------------------------------------------------------------------
+bool brad_spectral_angle_mapper::add_material_per_pixel(const std::string type,
+  const vil_image_view<float>& image,
+  const vil_image_view<bool>& mask)
+{
+
+  // ensure image correct number or spectral bands
+  int num_bands = image.nplanes(); ;
+  if (bands_min_.size() < num_bands) {
+    std::cerr << "Image does not have the correct number of spectral bands\n";
+    return false;
+  }
+  if (image.ni() != mask.ni() || image.nj() != mask.nj()) {
+    std::cerr << "image and mask must be the same size. image is size " << image.ni() << " by " << image.nj() << " and mask is size " << image.ni() << " by " << image.nj() << "\n";
+    return false;
+  }
+
+  // obtain relevant spectra from image
+  for (int y = 0; y < image.nj(); y++) {
+    for (int x = 0; x < image.ni(); x++) {
+      if (mask(x, y)) { // if this spectrum is relevant then save it
+        std::vector<float> new_spectrum;
+        new_spectrum.resize(num_bands);
+        for (int s = 0; s < num_bands; s++) {
+          new_spectrum[s] += image(x, y, s);
+        } // s
+          // normalize the spectra
+        brad_normalize_spectra(new_spectrum.data(), new_spectrum.size());
+
+        // add spectra and type to our library
+        spectra_.push_back(new_spectrum);
+        file_names_.push_back(type);
+      }
+    } // x
+  } // y
+  return true;
+}
+
+//---------------------------------------------------------------------------
 //: Adds all valid files in the directory to the library
 //---------------------------------------------------------------------------
 void brad_spectral_angle_mapper::add_aster_dir(const std::string aster_dir) {
@@ -446,7 +486,7 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
 
   // Loop over categories
   for (int c = 0; c < num_categories; c++) { 
-    float angle = 0.0;
+    float angle = vnl_math::pi;
     int num_samples = normalized_spectra_samples[c].size();
 
     // For each category, compute max angle
