@@ -26,7 +26,6 @@
       brad_spectral_angle_mapper.h    brad_spectral_angle_mapper.cxx
       brad_multispectral_functions.h  brad_multispectral_functions.cxx
       brad_worldview3_functions.h     brad_worldview3_functions.cxx
-      brad_blob_detection.h           brad_blob_detection.cxx
 )
   aux_source_directory(Templates brad_sources)
   vxl_add_library(LIBRARY_NAME brad LIBRARY_SOURCES ${brad_sources} )

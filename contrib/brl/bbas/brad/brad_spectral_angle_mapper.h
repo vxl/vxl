@@ -4,7 +4,7 @@
 
 #include <vector>
 #include <vil/vil_image_view.h>
-#include <brad_multispectral_functions.h>
+#include <brad/brad_multispectral_functions.h>
 
 //:
 // \file

@@ -125,27 +125,13 @@ def dump_binary_data_as_txt(poly_file, output_file):
 
 
 def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
-  print 'inputs:'###
-  print tclsf###
-  print block_size###
-  print category_id_file###
-  print category_name###
-  print '0'###
   batch.init_process("sdetTextureClassifierProcess2")
-  print '1'###
   batch.set_input_from_db(0, tclsf)
-  print '2'###
   batch.set_input_unsigned(1, block_size)
-  print '3'###
   batch.set_input_string(2, category_id_file)
   batch.set_input_string(3, category_name)
-  print '4'###
-  print category_name###
   status = batch.run_process()
-  print '5'###
-  print status###
   if status:
-    print 'in if'###
     (out_id, out_type) = batch.commit_output(0)
     out_max_prob_img = dbvalue(out_id, out_type)
     (out_id, out_type) = batch.commit_output(1)
@@ -156,7 +142,6 @@ def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
     out_cat_prob_img = dbvalue(out_id, out_type)
     return out_max_prob_img, out_color_img, out_id_img, out_cat_prob_img
   else:
-    print 'in else'###
     return None, None, None, None
 
 
@@ -397,3 +382,18 @@ def ss_segment_image(img, weight_thres):
   (id, type) = batch.commit_output(1)
   bb_img = dbvalue(id, type)
   return seg_img, bb_img
+
+def fit_oriented_box(color_blob_image):
+  batch.init_process("sdetFitOrientedBoxesProcess")
+  batch.set_input_from_db(0, color_blob_image)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    cnt = batch.get_output_unsigned(id)
+    (id, type) = batch.commit_output(1)
+    corners = batch.get_bbas_1d_array_float(id)
+    (id, type) = batch.commit_output(2)
+    box_dimension = batch.get_bbas_1d_array_float(id)
+    return cnt, corners, box_dimension
+  else:
+    return 0, 0, 0

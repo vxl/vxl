@@ -10,7 +10,7 @@
 #include <vil/algo/vil_colour_space.h>
 #include <brad/brad_spectral_angle_mapper.h>
 #include <brad/brad_worldview3_functions.h>
-#include <brad/brad_blob_detection.h>
+#include <brip/brip_ms_blob_detection.h>
 
 int main(int argc, char * argv[])
 {

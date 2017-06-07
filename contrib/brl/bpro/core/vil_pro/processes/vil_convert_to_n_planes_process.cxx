@@ -113,9 +113,14 @@ bool vil_get_plane_process(bprb_func_process& pro)
     vil_image_view<vxl_uint_16> band = vil_plane(img_f, plane_id);
     vil_image_view_base_sptr out_img_ptr = new vil_image_view<vxl_uint_16>(band);
     pro.set_output_val<vil_image_view_base_sptr>(0, out_img_ptr);
+  } else if (img->pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
+    vil_image_view<vil_rgb<vxl_byte> > img_f(img);
+    vil_image_view<vxl_byte> band = vil_plane(img_f, plane_id);
+    vil_image_view_base_sptr out_img_ptr = new vil_image_view<vxl_byte>(band);
+    pro.set_output_val<vil_image_view_base_sptr>(0, out_img_ptr);
   }
   else {
-    std::cerr << "In vil_get_plane_process() - for now only supports FLOAT format!\n";
+    std::cerr << "In vil_get_plane_process() - unsupport image pixel format: " << img->pixel_format() << "!\n";
     return false;
   }
 

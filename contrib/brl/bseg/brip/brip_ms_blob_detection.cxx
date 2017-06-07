@@ -20,9 +20,9 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <brip/brip_vil_float_ops.h>
 
-#include "brad_blob_detection.h"
-#include "brad_worldview3_functions.h"
-#include "brad_spectral_angle_mapper.h"
+#include "brip_ms_blob_detection.h"
+#include <brad/brad_worldview3_functions.h>
+#include <brad/brad_spectral_angle_mapper.h>
 
 
 //===================================================================
@@ -149,94 +149,7 @@ void brad_blob_connect_comp_bb(
   }
 }
 
-//===================================================================
-// brad_blob_local_max
-//===================================================================
-void brad_blob_local_max(
-  const vil_image_view<float>& image,
-  const vil_image_view<bool>& material_mask,
-  const vil_image_view<bool>& valid_mask,
-  const float lambda0,
-  const float lambda1,
-  vil_image_view<bool>& blob_local_max
-) {
 
-  int ni = image.ni();
-  int nj = image.nj();
-
-  if (material_mask.ni() != ni || material_mask.nj() != nj || valid_mask.ni() != ni || valid_mask.nj() != nj) {
-    std::cerr << "image, material_mask, and valid_mask all must have the same number of rows and columns";
-    return;
-  }
-
-  // Setup WV3 bands
-  std::vector<float> bands_min, bands_max;
-  brad_wv3_bands(bands_min, bands_max, 8);
-  brad_spectral_angle_mapper sam(bands_min, bands_max);
-  sam.add_material_per_pixel("mat", image, material_mask);
-
-  // creating spectral angle map
-  vil_image_view<float> conf_img;
-  sam.compute_sam_img(image, "mat", conf_img);
-
-
-  // perform blob detection on sam
-  float theta_interval = 5.0f;
-  float cutoff_ratio = 0.01f;
-  vil_image_view<float> blob = brip_vil_float_ops::fast_extrema_rotational(
-    conf_img,
-    lambda0, lambda1, theta_interval,
-    true,/*bright*/
-    false,/*mag*/
-    false,/*signed*/
-    true,/*scale invariant*/
-    false,/*non_max_suppress*/
-    cutoff_ratio);
-
-  // find local maximums
-  blob_local_max.set_size(blob.ni(), blob.nj());
-  blob_local_max.fill(false);
-
-  vil_image_view<vxl_byte> blob_max_byte(blob.ni(), blob.nj());
-  blob_max_byte.fill(0);
-
-  // for every pixel in blob image, compare to four nearest neighbors and theshold
-  float blob_thresh = 0.02f;
-  for (int j = 0; j < image.nj(); j++) {
-    for (int i = 0; i < image.ni(); i++) {
-      bool is_max = true;
-      if (blob(i, j) <= blob_thresh) continue; // if this pixel does not excede our theshold, continue
-      // otherwise, check its neighbors
-      if (j != 0) { 
-        if (blob(i, j - 1) > blob(i, j)) is_max = false;
-      }
-      if (i != 0) {
-        if (blob(i - 1, j) > blob(i, j)) is_max = false;
-      }
-      if (j != nj - 1) {
-        if (blob(i, j + 1) > blob(i, j)) is_max = false;
-      }
-      if (i != ni - 1) {
-        if (blob(i + 1, j) > blob(i, j)) is_max = false;
-      }
-      if (is_max) {
-        blob_local_max(i, j) = true;
-        blob_max_byte(i, j) = 255;
-      }
-    }
-  }
-
-  // set all invalid pixels to 0
-  for (int j = 0; j < nj; j++) {
-    for (int i = 0; i < ni; i++) {
-      if (!valid_mask(i, j)) blob_local_max(i, j) = false;
-      if (!valid_mask(i, j)) blob_max_byte(i, j) = 0;
-    }
-  }
-
-
-  
-}
 
 //===================================================================
 // brad_blob_local_max_bb
