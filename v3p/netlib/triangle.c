@@ -9310,6 +9310,8 @@ int axis;
   }
   /* Choose a random pivot to split the array. */
   pivot = (int) randomnation((unsigned int) arraysize);
+  if (pivot == arraysize)//JLM/SES without this test, pivot can equal arraysize and segfault
+	  pivot--;
   pivot1 = sortarray[pivot][axis];
   pivot2 = sortarray[pivot][1 - axis];
   /* Split the array. */
