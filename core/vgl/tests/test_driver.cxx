@@ -23,6 +23,7 @@ DECLARE( test_frustum_3d );
 DECLARE( test_intersection );
 DECLARE( test_spline );
 DECLARE( test_pointset );
+DECLARE( test_quadric );
 
 void
 register_tests()
@@ -50,6 +51,7 @@ register_tests()
   REGISTER( test_intersection );
   REGISTER( test_spline );
   REGISTER( test_pointset );
+  REGISTER( test_quadric );
 }
 
 DEFINE_MAIN;

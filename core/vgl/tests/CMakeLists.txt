@@ -26,6 +26,7 @@ add_executable( vgl_test_all
   test_intersection.cxx
   test_spline.cxx
   test_pointset.cxx
+  test_quadric.cxx
 )
 target_link_libraries( vgl_test_all ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
@@ -52,6 +53,7 @@ add_test( NAME vgl_test_frustum_3d COMMAND $<TARGET_FILE:vgl_test_all> test_frus
 add_test( NAME vgl_test_intersection COMMAND $<TARGET_FILE:vgl_test_all> test_intersection)
 add_test( NAME vgl_test_spline COMMAND $<TARGET_FILE:vgl_test_all> test_spline)
 add_test( NAME vgl_test_pointset COMMAND $<TARGET_FILE:vgl_test_all> test_pointset)
+add_test( NAME vgl_test_quadric COMMAND $<TARGET_FILE:vgl_test_all> test_quadric)
 add_executable( vgl_test_include test_include.cxx )
 target_link_libraries( vgl_test_include ${VXL_LIB_PREFIX}vgl )
 add_executable( vgl_test_template_include test_template_include.cxx )
