@@ -4,6 +4,9 @@
 include_directories( ${BRL_INCLUDE_DIR}/brad )
 include_directories(${GEL_INCLUDE_DIR})
 
+add_executable( brad_calibrate_wv3_app brad_calibrate_wv3_app.cxx)
+target_link_libraries( brad_calibrate_wv3_app brad ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpgl )
+
 add_executable( brad_ms_app brad_ms_app.cxx)
 target_link_libraries( brad_ms_app brad ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpgl )
 
