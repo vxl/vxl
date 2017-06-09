@@ -26,9 +26,9 @@
 
 
 //===================================================================
-// brad_blob_connect_comp_bb
+// brip_blob_connect_comp_bb
 //===================================================================
-void brad_blob_connect_comp_bb(
+void brip_blob_connect_comp_bb(
   const vil_image_view<float>& image,
   const vil_image_view<bool>& material_mask,
   const vil_image_view<bool>& valid_mask,
@@ -152,9 +152,9 @@ void brad_blob_connect_comp_bb(
 
 
 //===================================================================
-// brad_blob_local_max_bb
+// brip_blob_local_max_bb
 //===================================================================
-void brad_blob_local_max_bb(
+void brip_blob_local_max_bb(
   const vil_image_view<float>& image,
   const vil_image_view<bool>& material_mask,
   const vil_image_view<bool>& valid_mask,

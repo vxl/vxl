@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
   std::vector<unsigned> j_max;
   std::vector<vgl_polygon<double> > poly;
   std::vector<float> conf;
-  brad_blob_local_max_bb(cal_img, mask_b, valid_mask_b, lambda0, lambda1, neighborhood_radius, i_min, j_min, i_max, j_max, poly, conf);
+  brip_blob_local_max_bb(cal_img, mask_b, valid_mask_b, lambda0, lambda1, neighborhood_radius, i_min, j_min, i_max, j_max, poly, conf);
 
   // create rgb image and overlay bounding boxes
   std::cerr << "Saving bounding box image\n";
