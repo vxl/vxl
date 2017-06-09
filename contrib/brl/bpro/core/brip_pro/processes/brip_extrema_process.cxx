@@ -85,7 +85,7 @@ bool brip_extrema_process(bprb_func_process& pro)
   bool mag_only = false;
   bool signed_response = false;
   bool scale_invariant = false;
-  bool non_max_suppress = true;
+  bool non_max_suppress = false;
   float cutoff = 0.01f;
   vil_image_view<float> out(ni, nj, 3);
   if (fast)
