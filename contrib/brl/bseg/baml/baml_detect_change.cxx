@@ -45,7 +45,7 @@ bool baml_change_detection::detect(
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       if (valid(x, y) == false) continue;
-      change_prob_target(x, y) = fg - log( prob(x, y));
+      change_prob_target(x, y) = log(fg) - log( prob(x, y));
     }
   }
   // Convert likelihood into probability
