@@ -136,6 +136,7 @@ bool betr_pixelwise_change_detection::process() {
   for( int y = 0; y < bb_height; y++ ){
     for (int x = 0; x < bb_width; x++) {
       if (!evt_vgl_poly.contains(x + bb_minx, y + bb_miny)) {
+        change_img_(x, y) = static_cast<vxl_byte>(0);
         integral_im_poly(x + 1, y + 1) = 0 + integral_im_poly(x, y + 1) + integral_im_poly(x + 1, y) - integral_im_poly(x, y);
         evt_change_prob(x, y) = 0; // outside of the polygon there should be 0 probability of change
       }
