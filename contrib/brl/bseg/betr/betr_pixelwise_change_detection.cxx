@@ -114,7 +114,7 @@ bool betr_pixelwise_change_detection::process() {
   // Convert to byte and save as prob map
   vil_image_view<vxl_byte> vis;
   vil_convert_stretch_range_limited( evt_change_prob, vis, 0.0f, 1.0f );
-  change_img_ = vil_new_image_resource_of_view(vis);
+ 
   i_offset_ = bb_minx; j_offset_ = bb_miny;
 
   // create integral image to find area of highest average probability of change
@@ -136,7 +136,7 @@ bool betr_pixelwise_change_detection::process() {
   for( int y = 0; y < bb_height; y++ ){
     for (int x = 0; x < bb_width; x++) {
       if (!evt_vgl_poly.contains(x + bb_minx, y + bb_miny)) {
-        change_img_(x, y) = static_cast<vxl_byte>(0);
+        vis(x, y) = static_cast<vxl_byte>(0);
         integral_im_poly(x + 1, y + 1) = 0 + integral_im_poly(x, y + 1) + integral_im_poly(x + 1, y) - integral_im_poly(x, y);
         evt_change_prob(x, y) = 0; // outside of the polygon there should be 0 probability of change
       }
@@ -147,6 +147,7 @@ bool betr_pixelwise_change_detection::process() {
       integral_im( x + 1, y + 1 ) = evt_change_prob(x, y) + integral_im(x, y + 1) + integral_im(x + 1, y) - integral_im(x, y);
     }
   }
+  change_img_ = vil_new_image_resource_of_view(vis);
   // find region of highest probability
   int eventHeight = cd_params->pw_params_.event_height;
   int eventWidth = cd_params->pw_params_.event_width;
