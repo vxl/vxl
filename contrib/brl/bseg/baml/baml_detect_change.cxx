@@ -913,7 +913,7 @@ baml_change_detection::detect_histcmp(
         bsta_histogram<float> hist_r(min_int, max_int, hist_ref, 0);
         // select appropriate histogram comparison method
         if (strcmp((params_.hist_method).c_str(), "intersection") == 0) {
-          score(x, y) = 1/hist_intersect(hist_r, hist_t);
+          score(x, y) = -log(hist_intersect(hist_r, hist_t));
         }
         else if (strcmp((params_.hist_method).c_str(), "jensen shannon") == 0) {
           score(x, y) = js_divergence(hist_r, hist_t);
