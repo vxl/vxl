@@ -34,6 +34,7 @@ bool baml_change_detection::detect(
   vil_image_view<float> score;
   bool cd_success = baml_change_detection::detect_internal(img_target, img_ref, valid, score, fg);
   if (!cd_success) return false;
+
   // Covert score into probability
   float sigma = baml_sigma(score);
   vil_image_view<float> prob;
@@ -59,9 +60,8 @@ baml_change_detection::multi_image_detect(
   const vil_image_view<vxl_uint_16>& img_target,
   const std::vector<vil_image_view<vxl_uint_16> > img_ref,
   const std::vector<vil_image_view<bool> > valid,
-  vil_image_view<float>& change_prob_target) {
-  
-  // use internal change detection function to align/obtain scores
+  vil_image_view<float>& change_prob_target) 
+{  
   std::vector<vil_image_view<float> > scores;
   vil_image_view<vxl_uint_16> img_tar_crop;
   std::vector<float> foreground_dist;
@@ -69,7 +69,12 @@ baml_change_detection::multi_image_detect(
   int crop_width = 0;
   int max_y_off = 0;
   int crop_height = 0;
-  detect_mutli_internal(img_target, img_ref, valid, scores, img_tar_crop, foreground_dist, max_x_off, crop_width, max_y_off, crop_height);
+
+  // use internal change detection function to align/obtain scores
+  bool cd_success = detect_mutli_internal(
+    img_target, img_ref, valid, scores, img_tar_crop,
+    foreground_dist, max_x_off, crop_width, max_y_off, crop_height);
+  if (!cd_success) return false;
 
   vil_image_view<float> change_prob_target_big; // a change probability map that is the same size as the input target image
   change_prob_target_big.set_size(img_target.ni(), img_target.nj());
@@ -185,6 +190,8 @@ bool baml_change_detection::expected_time_change(
   }
   return true;
 }
+
+
 //-------SINGLE IMAGE CHANGE DETECTION INTERNAL, WHICH DOES THE ACTUAL CHANGE SCORES------------
 bool baml_change_detection::detect_internal(
   const vil_image_view<vxl_uint_16>& img_target,
@@ -275,6 +282,7 @@ bool baml_change_detection::detect_internal(
       else if (params_.method == HIST_CMP)
         dc_success = detect_histcmp(
           img_tar_crop, img_ref_crop, valid_crop, score_crop, foreground_dist);
+      if (!dc_success) return false;
 
       // save the score image if it improved the results 
       // NOTE: score and score_crop point to the same area of memory
@@ -285,7 +293,6 @@ bool baml_change_detection::detect_internal(
       }
     }
   }
-  if (!dc_success) return false;
   return true;
 }
 
@@ -366,6 +373,7 @@ bool baml_change_detection::detect_mutli_internal(
         // Detect change using difference because it is the simplest/fastest method so we use it for alignment
         float fg = 0;//don't actual need here
         dc_success = detect_difference(img_tar_crop, img_ref_crop, valid_crop, score_crop, fg);
+        if (!dc_success) return false;
 
         // save the score image if it improved the results 
         // NOTE: score and score_crop point to the same area of memory
@@ -410,19 +418,23 @@ bool baml_change_detection::detect_mutli_internal(
   }
   params_.registration_refinement_rad = 0; // We've already aligned our images
 
-                                           // perform pairwise change detect on each reference image
+  // perform pairwise change detect on each reference image
   vil_image_view<vxl_byte> change_vis;
   for (int i = 0; i < img_ref_crop_vec.size(); i++) {
     vil_image_view<float> prob;
     float fg = 0;
-    detect_internal(img_tar_crop, img_ref_crop_vec[i], valid_crop_vec[i], prob, fg);
+    bool dc_success = detect_internal(img_tar_crop, img_ref_crop_vec[i], valid_crop_vec[i], prob, fg);
+    if (!dc_success) return false;
     probabilities.push_back(prob);
     foreground_dist.push_back(fg);
   }
   return true;
 }
 
+
 //=================CHANGE DETECTION METHODS===========================================
+
+
 //-----------------BIRCHFIELD TOMASI--------------------------------------------------
 bool
 baml_change_detection::detect_bt(
