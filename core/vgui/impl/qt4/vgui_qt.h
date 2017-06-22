@@ -18,6 +18,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <iostream>
 #include <vgui/vgui_toolkit.h>
 
 class vgui_qt_adaptor;

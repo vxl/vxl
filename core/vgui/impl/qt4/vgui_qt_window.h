@@ -14,6 +14,7 @@
 //   23.05.2007 Matt Leotta  converted to QT3 compatibility functions to native QT4
 // \endverbatim
 
+#include <iostream>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_menu.h>
 

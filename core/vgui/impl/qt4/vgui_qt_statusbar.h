@@ -16,6 +16,7 @@
 
 #include <string>
 #include <iosfwd>
+#include <iostream>
 #include <vcl_compiler.h>
 
 #include <vgui/vgui_statusbuf.h>
