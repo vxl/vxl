@@ -112,5 +112,5 @@ class sdet_mrf_site_bp : public vbl_ref_count
   float obs_label_;
 };
 
-#include "sdet_mrf_site_bp_sptr.h"
+#include <sdet/sdet_mrf_site_bp_sptr.h>
 #endif // sdet_mrf_site_bp_h_

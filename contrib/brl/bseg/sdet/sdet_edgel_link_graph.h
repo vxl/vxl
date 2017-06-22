@@ -16,8 +16,8 @@
 #include <list>
 #include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_curvelet.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_curvelet.h>
 
 //: structure to describe an edgel link in the link graph
 struct sdet_link {

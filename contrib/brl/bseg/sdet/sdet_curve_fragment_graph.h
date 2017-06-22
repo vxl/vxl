@@ -22,9 +22,9 @@
 #include <list>
 #include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_edgemap.h"
-#include "sdet_CFTG.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_edgemap.h>
+#include <sdet/sdet_CFTG.h>
 
 //: This class represents the curve fragment graph formed from the edgels
 //  The links are curve fragments represented by edgel chains.
