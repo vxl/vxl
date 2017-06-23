@@ -124,7 +124,8 @@ bool vimt_is_image_dicom(vil_stream* is)
        try
        {
          char magic[ DCM_MagicLen ];
-         for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+         std::list<vil_file_format*>& l = vil_file_format::all();
+         for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
            is->seek(0);
            is->seek( DCM_PreambleLen );
            if ( is->read( magic, DCM_MagicLen ) == DCM_MagicLen ) {
