@@ -17,6 +17,7 @@
 #include <string>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#include <math.h>
 
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -175,6 +176,6 @@ void eigen(T m[n][n], T l[n], T vc[n][n]);
 template <class T, size_t n>
 void twst(T m[n][n], T c, T s, int i, int j);
 
-#define VGL_QUADRIC_3D_INSTANTIATE(T) extern "please include vgl/vgl_quadric_3d.hxx first"
+#define VGL_QUADRIC_3D_INSTANTIATE(T) extern //"please include vgl/vgl_quadric_3d.hxx first"
 
 #endif // vgl_quadric_3d_h_

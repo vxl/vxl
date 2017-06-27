@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <string>
 #include "vgl_polygon.h"
+#include <math.h>
 //:
 // \file
 

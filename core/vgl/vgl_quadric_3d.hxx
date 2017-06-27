@@ -1,11 +1,11 @@
 // This is core/vgl/vgl_quadric_3d.hxx
 #ifndef vgl_quadric_3d_hxx_
 #define vgl_quadric_3d_hxx_
-
 #include "vgl_quadric_3d.h"
 #include "vgl_tolerance.h"
+#include <iostream>
 #include <algorithm>
-#include <functional> 
+#include <functional>
 
 static const char* quadric_class_name[]{
   "invalid_quadric",
@@ -322,11 +322,12 @@ void eigen(R m[n][n], R l[n], R vc[n][n]){
     while(j--) l[j] = m2[j][j];
   }
 }
+
 template <class T>
 std::ostream& operator<<(std::ostream& os, const vgl_quadric_3d<T >& q){
-  os << "vgl_quadric_3d: a=" << q.a() << " b=" << q.b() << " c=" << q.c()<< " d="
-     << q.d()<< " e=" << q.e()<< " f=" << q.f() << " g=" << q.g()
-     << " h=" << q.h()<< " i=" << q.i()<< " j=" << q.j() << std::endl;
+  os << "vgl_quadric_3d: a=" << q.a() << " b=" << q.b() << " c=" << q.c() << " d="
+     << q.d() << " e=" << q.e()<< " f=" << q.f() << " g=" << q.g()
+     << " h=" << q.h() << " i=" << q.i() << " j=" << q.j() << std::endl;
   return os;
 }
 
