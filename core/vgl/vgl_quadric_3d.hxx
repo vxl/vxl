@@ -84,10 +84,13 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::coef_matrix() const{
 template <class T>
 bool vgl_quadric_3d<T>::contains(vgl_homg_point_3d<T> const& pt, T tol) const{
   T x = pt.x(), y = pt.y(), z = pt.z();
-  T mag_coefs = (fabs(a_)+fabs(b_)+fabs(c_)+fabs(d_)+fabs(e_)+fabs(f_)+fabs(g_)+fabs(h_)+fabs(i_)+fabs(j_))/T(10);
   T algebraic_dist = a_*x*x + b_*y*y + c_*z*z + d_*x*y + e_*x*z + f_*y*z + g_*x + h_*y + i_*z +j_;
-  algebraic_dist /= mag_coefs;
-  if(fabs(algebraic_dist) < tol)
+  T grad_x = (T(2)*a_*x + d_*y * e_*z + g_);
+  T grad_y = (T(2)*b_*y + d_*x * f_*z + h_);
+  T grad_z = (T(2)*c_*z + e_*x * f_*y + i_ );
+  T grad_mag_sqrd = grad_x*grad_x + grad_y*grad_y + grad_z*grad_z;
+  T sampson_dist_sqrd = (algebraic_dist*algebraic_dist)/grad_mag_sqrd;
+  if(sqrt(sampson_dist_sqrd) < tol)
     return true;
   return false;
 }

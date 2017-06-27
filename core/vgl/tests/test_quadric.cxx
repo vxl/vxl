@@ -115,7 +115,7 @@ static void test_quadric()
   vgl_quadric_3d<double>::vgl_quadric_type typ = test2.type_by_name("real_elliptic_cone");
   good = typ == test2.type();
   TEST("type_by_name", good, true);
-  good = real_elliptic_cone.contains(vgl_homg_point_3d<double>(1.0, 2.0, sqrt(5)), 100.0*vgl_tolerance<double>::position);
+  good = real_elliptic_cone.contains(vgl_homg_point_3d<double>(1.0, 2.0, sqrt(5)), vgl_tolerance<double>::position);
   TEST("contains ", good, true);
   // stream ops
   std::stringstream ss;
