@@ -21,5 +21,5 @@ add_test( NAME betr_test_geo_object COMMAND $<TARGET_FILE:betr_test_all> test_ge
 add_test( NAME betr_test_site COMMAND $<TARGET_FILE:betr_test_all> test_site )
 add_test( NAME betr_test_edgel_factory COMMAND $<TARGET_FILE:betr_test_all> test_edgel_factory )
 # add_test( NAME betr_test_event_trigger COMMAND $<TARGET_FILE:betr_test_all> test_event_trigger )
-add_test( NAME betr_test_edgel_change_detection COMMAND $<TARGET_FILE:betr_test_all> test_edgel_change_detection )
+# add_test( NAME betr_test_edgel_change_detection COMMAND $<TARGET_FILE:betr_test_all> test_edgel_change_detection )
 # add_test( NAME betr_test_json_params COMMAND $<TARGET_FILE:betr_test_all> test_json_params )
