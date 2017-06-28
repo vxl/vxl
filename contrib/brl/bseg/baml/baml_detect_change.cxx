@@ -666,11 +666,11 @@ baml_change_detection::detect_gradient(
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
 
-      float grad_mag_tar = sqrt(
-        grad_x_tar(x, y)*grad_x_tar(x, y) + grad_y_tar(x, y)*grad_y_tar(x, y));
-      float grad_mag_ref = sqrt(
-        grad_x_ref(x, y)*grad_x_ref(x, y) + grad_y_ref(x, y)*grad_y_ref(x, y));
-      float grad_ip = grad_x_tar(x, y)*grad_x_ref(x, y) + grad_y_tar(x, y)*grad_y_ref(x, y);
+      //float grad_mag_tar = sqrt(
+      //  grad_x_tar(x, y)*grad_x_tar(x, y) + grad_y_tar(x, y)*grad_y_tar(x, y));
+      //float grad_mag_ref = sqrt(
+      //  grad_x_ref(x, y)*grad_x_ref(x, y) + grad_y_ref(x, y)*grad_y_ref(x, y));
+      //float grad_ip = grad_x_tar(x, y)*grad_x_ref(x, y) + grad_y_tar(x, y)*grad_y_ref(x, y);
 
       // If the magnitudes are large enough compute their angle 
       // difference, otherwise leave at default 90 degrees
@@ -680,8 +680,8 @@ baml_change_detection::detect_gradient(
 
       //score(x,y) = pow( grad_mag_tar - grad_mag_ref, 2 );
 
-      score(x,y) = pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + 
-        pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 );
+      score(x,y) = sqrt( pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + 
+        pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 ) );
 
       //score(x, y) = grad_mag_tar*grad_mag_ref - grad_ip;
 

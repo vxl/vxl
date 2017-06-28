@@ -247,7 +247,7 @@ void baml_sigmoid(
   for( int y = 0; y < height; y++ ){
     for( int x = 0; x < width; x++ ){
       //prob(x,y) = prior_prob/( prior_prob + (1.0f-prior_prob)*exp( -lh(x,y) ) );
-      prob(x, y) = 1.0f / (1.0f + exp(-log_prior*lh(x, y)));
+      prob(x, y) = 1.0f / (1.0f + exp(-(log_prior+lh(x, y))));
     }
   }
 }
