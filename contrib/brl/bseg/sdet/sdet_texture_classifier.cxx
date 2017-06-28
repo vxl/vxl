@@ -268,9 +268,12 @@ void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, s
   bool found_it = false;
   for (unsigned i = 0; i < other_responses_names_.size(); i++) {
     if (other_responses_names_[i].compare(response_name) == 0) {
+      found_it = true;
       break;
     }
   }
+  if (found_it)
+    return;
   vil_image_view<float> out_gauss(img_f.ni(), img_f.nj());
   if (is_smooth)
     this->compute_gauss_response(img_f, out_gauss);
@@ -471,22 +474,39 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category,
   //std::cout << " texton dimension: " << dim + 2  << '\n' << std::flush;
   unsigned dim_total = other_responses_.size() + dim + 2;
   std::cout << " texton dimension: " << dim_total  << '\n' << std::flush;
+
+  // collect all pixels, then we'll shuffle and pick n_samples_ pixels from it to ensure we don't collect a pixel more than once 
+  std::vector<std::pair<int, int> > pixels;
   vgl_polygon_scan_iterator<double> psi(texture_region);
   for (psi.reset(); psi.next(); ) {
     int j = psi.scany();
     for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-      //vnl_vector<double> tx(dim+2);
+      pixels.push_back(std::pair<int, int>(i,j));
+      /*//vnl_vector<double> tx(dim+2);
       vnl_vector<double> tx(dim_total);
       for (unsigned f = 0; f<dim; ++f)
         tx[f]=filter_responses_.response(f)(i,j);
       tx[dim]=laplace_(i,j); tx[dim+1]=gauss_(i,j);
       for (unsigned f = 0; f<other_responses_.size(); ++f)
         tx[dim+2+f]=(other_responses_[f])(i,j);
-      training_data.push_back(tx);
+      training_data.push_back(tx);*/
     }
   }
+  // now shuffle and retrieve first n_samples_ elements
+  std::random_shuffle(pixels.begin(), pixels.end());
+  for (unsigned kkk = 0; kkk < n_samples_; kkk++) {
+    int i = pixels[kkk].first;
+    int j = pixels[kkk].second;
+    vnl_vector<double> tx(dim_total);
+    for (unsigned f = 0; f<dim; ++f)
+      tx[f]=filter_responses_.response(f)(i,j);
+    tx[dim]=laplace_(i,j); tx[dim+1]=gauss_(i,j);
+    for (unsigned f = 0; f<other_responses_.size(); ++f)
+      tx[dim+2+f]=(other_responses_[f])(i,j);
+    training_data.push_back(tx);
+  }
   // reduce the number of samples to specified size
-  unsigned ns = training_data.size();
+  /*unsigned ns = training_data.size();
   if (ns>n_samples_) {
     for (unsigned i = 0; i<n_samples_; ++i) {
       unsigned s = static_cast<unsigned>((n_samples_-1)*(std::rand()/(RAND_MAX+1.0)));
@@ -494,7 +514,7 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category,
     }
     training_data.clear();
     training_data = sampled_data;
-  }
+  }*/
   std::map< std::string, std::vector<vnl_vector<double> > >::iterator dit;
   dit = training_data_.find(category);
   if (dit == training_data_.end()) {
