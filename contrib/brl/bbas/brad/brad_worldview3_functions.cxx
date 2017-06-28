@@ -344,9 +344,11 @@ void save_corrected_wv3(
   int np = corr_img.nplanes();
   vil_image_view<float> cur_plane;
   for (int i = 0; i < np; i++) {
+    std::ostringstream buffer;
     cur_plane = vil_plane(corr_img, i);
-    if (i < 10) vil_save(cur_plane, (save_dir + "/band0" + std::to_string(i) + ".tif").c_str());
-    else vil_save(cur_plane, (save_dir + "/band" + std::to_string(i) + ".tif").c_str());
+    if (i < 10) buffer << save_dir << "/band0" << i << ".tif";
+    else buffer << save_dir << "/band" << i << ".tif";
+    vil_save(cur_plane,buffer.str().c_str());
   }
 };
 
@@ -370,9 +372,11 @@ void load_corrected_wv3(
   cal_img.set_size(ni, nj, np);
   vil_image_view<float> cur_plane;
   for (int i = 0; i < np; i++) {
+    std::ostringstream buffer;
     cur_plane = vil_plane(cal_img, i);
-    if(i<10) cal_rsc = vil_load_image_resource((img_dir + "/band0" + std::to_string(i) + ".tif").c_str());
-    else cal_rsc = vil_load_image_resource((img_dir + "/band" + std::to_string(i) + ".tif").c_str());
+    if(i<10) buffer << img_dir << "/band0" << i << ".tif";
+    else buffer << img_dir << "/band" << i << ".tif";
+    cal_rsc = vil_load_image_resource(buffer.str().c_str());
     cur_plane.deep_copy(cal_rsc->get_view());
   }
 }
