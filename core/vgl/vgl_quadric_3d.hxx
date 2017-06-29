@@ -7,7 +7,8 @@
 #include <algorithm>
 #include <functional>
 
-static const char* quadric_class_name[]{
+static const char* quadric_class_name[] = 
+{
   "invalid_quadric",
     "coincident_planes",   
     "imaginary_ellipsoid",
@@ -306,9 +307,11 @@ void eigen(R m[n][n], R l[n], R vc[n][n]){
       }
     }
     if(mod < 0.00000000001) break;
-    if(db) printf("mii=%e, mjj=%e\n", m2[i][i], m2[j][j]);
+    // if(db) printf("mii=%e, mjj=%e\n", m2[i][i], m2[j][j]);
+    if(db) std::cout << "mii=" << m2[i][i] << "mjj=" << m2[j][j] << std::endl;
     R th = 0.5*atan(2*m2[i][j]/(m2[i][i] - m2[j][j]));
-    if(db) printf("th=%e, i=%d, j=%d\n", th, i, j);
+    // if(db) printf("th=%e, i=%d, j=%d\n", th, i, j);
+    if(db) std::cout << "th=" << th << "i" << i << "j=" << j << std::endl;
     {
       R c = cos(th), s = sin(th);
       {int k=n; while(k--){
