@@ -118,8 +118,8 @@ struct baml_change_detection_params {
 };
 
 
-//: Main class for computing change probabilities between pairs of images 
-// using a variety of methods.
+//: Main class for computing change probabilities between a target image and
+// reference image(s) using a variety of methods.
 class baml_change_detection {
 
 public:
@@ -128,9 +128,7 @@ public:
     const baml_change_detection_params& params ) :
       params_( params ){}
 
-  //: Single refrence image change detection
-  // calls detect_internal to do score calculation
-  // then converts to probability with sigmoid
+  //: Single reference image change detection
   bool detect(
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
@@ -138,87 +136,87 @@ public:
     vil_image_view<float>& change_prob_target );
 
   //: Multi reference image change detection
-  // calls detect_internal to do pairwise score calculations
-  // then uses a multi-image fusion technique (change_prob_target)
   bool multi_image_detect(
     const vil_image_view<vxl_uint_16>& img_target,
-    const std::vector<vil_image_view<vxl_uint_16> > img_ref,
-    const std::vector<vil_image_view<bool> > valid,
+    const std::vector<vil_image_view<vxl_uint_16> >& img_ref,
+    const std::vector<vil_image_view<bool> >& valid,
     vil_image_view<float>& change_prob_target);
 
-  //: Computes an image with each value corresponding to the
-  // expected time of change at that pixel 
+  //: Experimental: computes an image with each value corresponding to the
+  // expected time of change at that pixel. (time is based on index of 
+  // reference image NOT on actual time)
   bool expected_time_change(
     const vil_image_view<vxl_uint_16>& img_target,
-    const std::vector<vil_image_view<vxl_uint_16> > img_ref,
-    const std::vector<vil_image_view<bool> > valid,
+    const std::vector<vil_image_view<vxl_uint_16> >& img_ref,
+    const std::vector<vil_image_view<bool> >& valid,
     vil_image_view<float>& change_time);
 
 protected:
-  
-  //: Used by both detect and multi_image_detect
-  // pairwise score calculation functionality contained in this function
+
+  baml_change_detection_params params_;
+
+  //: Pairwise probability calculation 
+  // Used by both detect and multi_image_detect
   bool detect_internal(
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& change_prob_target,
-    float& foreground_dist);
+    vil_image_view<float>& bg_prob,
+    float& fg_prob);
 
-  //: multi image alignment and pairwise score calculation functionality contained in this function
-  bool detect_mutli_internal(
+  //: Multi-image alignment and pairwise probability calculation 
+  // Used by both multi_image_detect and expected_time_change
+  bool detect_multi_internal(
     const vil_image_view<vxl_uint_16>& img_target,
     const std::vector<vil_image_view<vxl_uint_16> >& img_ref,
     const std::vector<vil_image_view<bool> >& valid,
-    std::vector<vil_image_view<float> >& probabilities,
-    vil_image_view<vxl_uint_16>& img_tar_crop,
-    std::vector<float>& foreground_dist,
+    std::vector<vil_image_view<float> >& bg_probs,
+    std::vector<float>& fg_probs,
     int& max_x_off,
     int& crop_width,
     int& max_y_off,
     int& crop_height);
 
-  baml_change_detection_params params_;
   
-  // ----------------------------pairwise score methods-------------------------------
+  // ----------------------------Pairwise methods----------------------------
   //: All detect_<method> use the same paramerters
   //  img_target: target image (width x height)
   //  img_ref: reference image (width x height)
   //  valid: states whether pixel is valid or not (width x height)
-  //  probability: probability of change at each pixel using <method> (width x height)
-  //  foreground_dist: foreground distribution, which is uniform 
-  //    based on the range of pixel intensities in the target image 
+  //  bg_prob: probability of change using <method> (width x height)
+  //  fg_prob: foreground distribution, which is uniform based on the score
 
   //: Detect change using the Birchfield-Tomasi metric
   bool detect_bt(
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& probability,
-    float& foreground_dist);
+    vil_image_view<float>& bg_prob,
+    float& fg_prob );
 
   //: Detect change using census metric
   bool detect_census(
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& probability,
-    float& foreground_dist);
+    vil_image_view<float>& bg_prob,
+    float& fg_prob );
 
   //: Detect change using absolute difference
-  bool detect_difference(const vil_image_view<vxl_uint_16>& img_target,
+  bool detect_difference(
+    const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& probability,
-    float& foreground_dist);
+    vil_image_view<float>& bg_prob,
+    float& fg_prob );
 
   //: Detect change using gradient
   bool detect_gradient(
-    const vil_image_view<vxl_uint_16>& img_tar,
+    const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid_ref,
-    vil_image_view<float>& probability,
-    float& foreground_dist);
+    vil_image_view<float>& bg_prob,
+    float& fg_prob );
 
   //: Detect change using the approximate mutual information method described in
   // the original semi-global matching paper
@@ -226,8 +224,8 @@ protected:
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& probability,
-    float& foreground_dist);
+    vil_image_view<float>& bg_prob,
+    float& fg_prob );
 
   //: Detect change using a distance measure between histograms of the 
   // pixel values in the target and reference images
@@ -235,43 +233,43 @@ protected:
     const vil_image_view<vxl_uint_16>& img_target,
     const vil_image_view<vxl_uint_16>& img_ref,
     const vil_image_view<bool>& valid,
-    vil_image_view<float>& probability,
-    float& foreground_dist);
-  // -------------------histogram compare helper function-------------------------
-  bool
-    build_hist(
-      const vil_image_view<float>& img,
-      const vil_image_view<int>& bin_img,
-      const std::vector<double>& edges,
-      const int x1,
-      const int y1,
-      const float step_size,
-      const bool adding,
-      std::vector <float>& hist);
+    vil_image_view<float>& bg_prob,
+    float& fg_prob );
 
-  // -----------------------fusion methods-------------------------
-  //: Fuse score images using product method
-  bool 
-    multi_product(
-    const std::vector<vil_image_view<float> >& pw_probabilities, // pairwise probabilities
-      const std::vector<float>& foreground_dist, // uniform foreground distribution
-    vil_image_view<float>& probability // fused probability
-  );
 
-  //: Fuse score images using sum method
-  bool 
-    multi_sum(
-    const std::vector<vil_image_view<float> >& pw_probabilities, // pairwise probabilities 
-      const std::vector<float>& foreground_dist, // uniform foreground distribution
-    vil_image_view<float>& probability // fused probability
-  );
+  // -----------------------Fusion methods-------------------------
 
-  //: Fuse score images using score minization method
+  //: Fuse probability images using product method
+  bool multi_product(
+    const std::vector<vil_image_view<float> >& bg_probs, 
+    const std::vector<float>& fg_probs,
+    vil_image_view<float>& change_prob);
+
+  //: Fuse probability images using sum method
+  bool multi_sum(
+    const std::vector<vil_image_view<float> >& bg_probs,
+    const std::vector<float>& fg_probs,
+    vil_image_view<float>& change_prob);
+
+  //: Fuse probability images using max method
   bool multi_max_prob(
-    const std::vector<vil_image_view<float> >& pw_probabilities,
-    const std::vector<float>& foreground_dist,
-    vil_image_view<float>& probability
-  );
+    const std::vector<vil_image_view<float> >& bg_probs,
+    const std::vector<float>& fg_probs,
+    vil_image_view<float>& change_prob);
+
+
+  // -----------------------Other methods-------------------------
+
+  //: Histogram compare helper function
+  bool build_hist(
+    const vil_image_view<float>& img,
+    const vil_image_view<int>& bin_img,
+    const std::vector<double>& edges,
+    const int x1,
+    const int y1,
+    const float step_size,
+    const bool adding,
+    std::vector <float>& hist);
 
   // Disable default/copy constructors
   baml_change_detection(){}

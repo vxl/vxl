@@ -239,12 +239,15 @@ void baml_sigmoid(
 {
   int width = lh.ni(), height = lh.nj();
 
+  float log_prior = log(prior_prob / (1.0f - prior_prob));
+
   // Initialize output image
   prob.set_size( width, height );
 
   for( int y = 0; y < height; y++ ){
     for( int x = 0; x < width; x++ ){
-      prob(x,y) = prior_prob/( prior_prob + (1.0f-prior_prob)*exp( -lh(x,y) ) );
+      //prob(x,y) = prior_prob/( prior_prob + (1.0f-prior_prob)*exp( -lh(x,y) ) );
+      prob(x, y) = 1.0f / (1.0f + exp(-(log_prior+lh(x, y))));
     }
   }
 }
