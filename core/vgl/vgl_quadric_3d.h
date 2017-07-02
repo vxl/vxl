@@ -149,9 +149,9 @@ class vgl_quadric_3d
   //: Returns true if this quadric is degenerate
   bool is_degenerate() const{return det_zero_;}
 
-  //: Returns true if the point pt belongs to the quadric.
+  //: Returns true if the point pt belongs to the quadric surface.
   //  I.e., if it  satisfies the quadric equation within algebraic distance, i.e. pt^t Q pt < tol;
-  bool contains(vgl_homg_point_3d<T> const& pt, T tol = T(0)) const;
+  bool on(vgl_homg_point_3d<T> const& pt, T tol = T(0)) const;
 
  private:
   //--------------------------------------------------------------------------

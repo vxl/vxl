@@ -83,7 +83,7 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::coef_matrix() const{
   return Q;
 }
 template <class T>
-bool vgl_quadric_3d<T>::contains(vgl_homg_point_3d<T> const& pt, T tol) const{
+bool vgl_quadric_3d<T>::on(vgl_homg_point_3d<T> const& pt, T tol) const{
   T x = pt.x(), y = pt.y(), z = pt.z();
   T algebraic_dist = a_*x*x + b_*y*y + c_*z*z + d_*x*y + e_*x*z + f_*y*z + g_*x + h_*y + i_*z +j_;
   T grad_x = (T(2)*a_*x + d_*y * e_*z + g_);
