@@ -119,7 +119,7 @@ void test_bsta_histogram()
   double vol = jh_m.volume();
   double pv = jh_m.p(0.0, 0.0);
   double pb = jh_m.p(r0, c0);
-  TEST_NEAR("test min, max joint histogram ", (vol-1.0)+(pv-pb), 0.0, 0.0001);
+  TEST_NEAR("test min, max joint histogram ", fabs(vol-1.0)+fabs(pv-pb), 0.0, 0.0001);
 
   //Test smart pointer
   bsta_histogram_sptr hptr = new bsta_histogram<double>(10.0, 10);
@@ -136,6 +136,31 @@ void test_bsta_histogram()
   double mutual_information_error = joint_histogram_mi.mutual_information() - double(0.005802149014346);
   TEST_NEAR("Mutual Information",mutual_information_error,0.0,0.0001);
 
+  //--- test conditional probability
+  bsta_joint_histogram<double> joint_histogram_cond(1.0,2);
+  joint_histogram_cond.upcount(0.0, 0.05, 0.0, 0.05);
+  joint_histogram_cond.upcount(1.0, 0.1, 0.0, 0.1);
+  joint_histogram_cond.upcount(0.0, 0.2, 1.0, 0.2);
+  joint_histogram_cond.upcount(1.0, 0.3, 1.0, 0.3);
+  std::cout << "p_b_given_a(0.0, 0.0)-> " << joint_histogram_cond.p_b_given_a(0.0, 0.0) << std::endl;
+  std::cout << "p_b_given_a(0.0, 1.0)-> " << joint_histogram_cond.p_b_given_a(0.0, 1.0)<< std::endl;
+  std::cout << "p_b_given_a(1.0, 0.0)-> " << joint_histogram_cond.p_b_given_a(1.0, 0.0)<< std::endl;
+  std::cout << "p_b_given_a(1.0, 1.0)-> " << joint_histogram_cond.p_b_given_a(1.0, 1.0)<< std::endl;
+  double er0 = fabs(joint_histogram_cond.p_b_given_a(0.0, 0.0) - 0.2);
+  er0 += fabs(joint_histogram_cond.p_b_given_a(0.0, 1.0) - 0.8);
+  er0 += fabs(joint_histogram_cond.p_b_given_a(1.0, 0.0) - 0.25);
+  er0 += fabs(joint_histogram_cond.p_b_given_a(1.0, 1.0) - 0.75);
+
+  std::cout << "p_a_given_b(0.0, 0.0)-> " << joint_histogram_cond.p_a_given_b(0.0, 0.0) << std::endl;
+  std::cout << "p_a_given_b(0.0, 1.0)-> " << joint_histogram_cond.p_a_given_b(0.0, 1.0)<< std::endl;
+  std::cout << "p_a_given_b(1.0, 0.0)-> " << joint_histogram_cond.p_a_given_b(1.0, 0.0)<< std::endl;
+  std::cout << "p_a_given_b(1.0, 1.0)-> " << joint_histogram_cond.p_a_given_b(1.0, 1.0)<< std::endl;
+
+  double er1 = fabs(joint_histogram_cond.p_a_given_b(0.0, 0.0) - 1.0/3.0);
+  er1 += fabs(joint_histogram_cond.p_a_given_b(0.0, 1.0) - 0.4);
+  er1 += fabs(joint_histogram_cond.p_a_given_b(1.0, 0.0) - 2.0/3.0);
+  er1 += fabs(joint_histogram_cond.p_a_given_b(1.0, 1.0) - 0.6);
+  TEST_NEAR("conditional prob", er0 + er1, 0.0, 0.001);
   // ---- test bsta_joint_histogram_3d
   bsta_joint_histogram_3d<float> hist_default;
   bsta_joint_histogram_3d<float> hist_cons1(1.0, 10);
