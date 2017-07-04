@@ -15,8 +15,8 @@
 #include <algorithm>
 class dem_bproj_cost_function : public vnl_cost_function{
 public:
-  dem_bproj_cost_function(vil_image_view<float> const& dem_view, vpgl_geo_camera* geo_cam, vgl_ray_3d<double> const& ray) :
-    vnl_cost_function(1), geo_cam_(geo_cam), dview_(&dem_view),ray_(ray){}
+  dem_bproj_cost_function(vil_image_view<float> const& dem_view, vpgl_geo_camera* geo_cam, vgl_ray_3d<double> const& ray, bool verbose=false) :
+    vnl_cost_function(1), geo_cam_(geo_cam), dview_(&dem_view),ray_(ray), verbose_(verbose){}
   //: x is the parameter that runs along the ray, with x=0 at the ray origin
   virtual double f(vnl_vector<double> const& x){
     //get the lon and lat values for a given parameter value
@@ -30,7 +30,7 @@ public:
     int u = static_cast<int>(ud+0.5), v = static_cast<int>(vd+0.5);
     int ni = dview_->ni(), nj = dview_->nj();
     if(u<0||u>=ni||v<0||v>=nj){
-      std::cout << "warning: dem backprojection cost function - outside DEM bounds" << std::endl;
+      if(verbose_) std::cout << "warning: dem backprojection cost function - outside DEM bounds" << std::endl;
       return std::numeric_limits<double>::max();
     }
     // within bounds so get squared distance between dem z and ray z
@@ -42,12 +42,13 @@ private:
   vgl_ray_3d<double> ray_;
   vpgl_geo_camera* geo_cam_;
   const vil_image_view<float>* dview_; 
+  bool verbose_;
 };
-vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, double zmin, double zmax):dem_(dem), min_samples_(5000.0), tail_fract_(0.025)
+vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, double zmin, double zmax):dem_(dem), min_samples_(5000.0), tail_fract_(0.025), verbose_(false)
 {
   //construct a geo_camera for the dem (an orthographic view looking straight down)
   if(!vpgl_geo_camera::init_geo_camera(dem_, geo_cam_)){
-    std::cout << "WARNING! - units unknown in vpgl_backproject_dem - assume degrees meters" << std::endl;
+    if(verbose_) std::cout << "WARNING! - units unknown in vpgl_backproject_dem - assume degrees meters" << std::endl;
   }
   if(!geo_cam_)
     return;
@@ -62,13 +63,30 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
   double elev = dem_view_(nhi, nhj);
   geo_center_.set(lon, lat, elev);
 
+  // get the corners of the dem
+  geo_cam_->img_to_global(0, 0, lon, lat);
+  elev = dem_view_(0, 0);
+  dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
+
+  geo_cam_->img_to_global(ni-1, 0, lon, lat);
+  elev = dem_view_(ni-1, 0);
+  dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
+
+  geo_cam_->img_to_global(ni-1, nj-1, lon, lat);
+  elev = dem_view_(ni-1, nj-1);
+  dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
+  
+  geo_cam_->img_to_global(0, nj-1, lon, lat);
+  elev = dem_view_(0, nj-1);
+  dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
+  
   // check for appropriate zmin/zmax inputs
   if (zmax > zmin) {
     z_min_ = zmin;
     z_max_ = zmax;
 
   } else {
-    std::cout << "Calculating Z-range from DEM..." << std::endl;
+    if(verbose_) std::cout << "Calculating Z-range from DEM..." << std::endl;
     //get the bounds on elevation by sampling according to a fraction of the dem area
     //compute the pixel interval (stride) for sampling the fraction
     double area = ni*nj;
@@ -100,7 +118,7 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
     z_max_ = zmax_calc;    
   }
 
-  std::cout << "[ZMIN,ZMAX]=[" << z_min_ << "," << z_max_ << "]" << std::endl;
+  if(verbose_) std::cout << "[ZMIN,ZMAX]=[" << z_min_ << "," << z_max_ << "]" << std::endl;
 }
 vpgl_backproject_dem::~vpgl_backproject_dem(){
   if(geo_cam_)
@@ -114,20 +132,20 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,
                  vgl_point_3d<double> const& initial_guess,
                  vgl_point_3d<double> & world_point,
                  double error_tol){
-  std::cout << "vpgl_backproj_dem " << image_point << " max_z " << max_z << " min_z " << min_z << " init_guess " << initial_guess << " error tol " << error_tol << std::endl;
+if(verbose_) std::cout << "vpgl_backproj_dem " << image_point << " max_z " << max_z << " min_z " << min_z << " init_guess " << initial_guess << " error tol " << error_tol << std::endl;
   //compute the ray corresponding to the image point
   double dz = (max_z - min_z);
   vgl_point_2d<double> initial_xy(initial_guess.x(), initial_guess.y());
   vgl_ray_3d<double> ray;
   if(!vpgl_ray::ray(cam, image_point, initial_xy, max_z, dz, ray)){
-    std::cout << " compute camera ray failed - Fatal!" << std::endl;
+    if(verbose_) std::cout << " compute camera ray failed - Fatal!" << std::endl;
     return false;
   }
   vgl_point_3d<double> origin = ray.origin();
   //find min parameter on ray
   vgl_vector_3d<double> dir = ray.direction();
   if(std::fabs(dir.z())<0.001){
-    std::cout << "Ray parallel to XY plane - Fatal!" << std::endl;
+    if(verbose_) std::cout << "Ray parallel to XY plane - Fatal!" << std::endl;
     return false;
   }
   //inital guess at ray parameter
@@ -142,13 +160,13 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,
   int u = static_cast<int>(ud+0.5), v = static_cast<int>(vd+0.5);
   int ni = dem_view_.ni(), nj = dem_view_.nj();
   if(u<0||u>=ni||v<0||v>=nj){
-    std::cout << "Initial guess for DEM intersection is outside DEM bounds - Fatal!" << std::endl;
+    if(verbose_) std::cout << "Initial guess for DEM intersection is outside DEM bounds - Fatal!" << std::endl;
     return false;
   }
   // construct the brent minimizer
   // note the brent minimzier is not fully integrated with the vil_nonlinear_minimizer interface
   // thus the non standard call for error below
-  dem_bproj_cost_function c(dem_view_, geo_cam_, ray);
+  dem_bproj_cost_function c(dem_view_, geo_cam_, ray, verbose_);
   vnl_brent_minimizer brm(c);
   double tmin = brm.minimize(t);
   double error = brm.f_at_last_minimum();
@@ -157,7 +175,7 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,
   
   world_point = origin + tmin*dir;
 
-  std::cout << "success! ray/dem intersection " << world_point  << std::endl;
+  if(verbose_) std::cout << "success! ray/dem intersection " << world_point  << std::endl;
   return true;
 }
 

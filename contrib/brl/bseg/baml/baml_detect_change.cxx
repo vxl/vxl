@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <algorithm>
+#include <vnl/vnl_math.h>//for more portable isinf
 
 #include <vnl/vnl_inverse.h>
 #include <vil/vil_save.h>

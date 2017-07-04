@@ -32,6 +32,13 @@ void baml_warp_perspective(
   vil_image_view<vxl_uint_16>& img2,
   bool inverse_homography = false );
 
+void baml_warp_perspective(
+  const vil_image_view<float>& img1,
+  const vgl_h_matrix_2d<double>& img1_to_img2,
+  int img2_width,
+  int img2_height,
+  vil_image_view<float>& img2,
+  bool inverse_homography = false );
 //: Warp image 1 into image 2 assuming a planar mapping.
 bool baml_warp_via_ground_plane(
   const vil_image_view<vxl_uint_16>& img1,
