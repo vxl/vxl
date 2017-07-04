@@ -83,7 +83,7 @@ class gevd_bufferxy;
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <brip/brip_roi.h>
-#include "sdet_detector_params.h"
+#include <sdet/sdet_detector_params.h>
 
 class sdet_detector : public sdet_detector_params
 {

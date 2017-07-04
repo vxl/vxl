@@ -17,8 +17,8 @@
 #include <set>
 #include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_curvelet.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_curvelet.h>
 
 //: A hyp tree made of edgels
 class sdet_EHT_node

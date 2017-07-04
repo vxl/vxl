@@ -3,7 +3,8 @@
 #define vidl_ffmpeg_ostream_stub_hxx_
 #include <iostream>
 #include "vidl_ffmpeg_ostream.h"
-#include <stdexcept>>
+#include <stdexcept>
+
 //:
 // \file
 // \brief A stub implementation when ffmpeg is not available.

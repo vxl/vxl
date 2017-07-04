@@ -18,8 +18,8 @@
 #include <list>
 #include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_edgemap.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_edgemap.h>
 
 class sdet_CFTG_link
 {

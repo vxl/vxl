@@ -3,7 +3,8 @@
 #define vidl_ffmpeg_istream_stub_hxx_
 #include <string>
 #include "vidl_ffmpeg_istream.h"
-#include <stdexcept>>
+#include <stdexcept>
+
 //:
 // \file
 // \brief A null implementation for the ffmpeg video reader

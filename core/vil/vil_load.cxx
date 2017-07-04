@@ -20,7 +20,8 @@
 vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
                                                     bool verbose)
 {
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+  std::list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
 #if 0 // debugging
     std::cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 #endif
@@ -33,7 +34,7 @@ vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
   // failed.
   if (verbose) {
     std::cerr << __FILE__ ": Unable to load image;\ntried";
-    for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
       // 'flush' in case of segfault next time through loop. Else, we
       // will not see those printed tags still in the stream buffer.
       std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
@@ -103,7 +104,8 @@ vil_image_resource_sptr vil_load_image_resource_plugin(char const* filename)
 vil_pyramid_image_resource_sptr
 vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
 {
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+  std::list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
 #if 0 // debugging
     std::cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 
@@ -118,7 +120,7 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
   // failed.
   if (verbose) {
     std::cerr << __FILE__ ": Unable to load pyramid image;\ntried";
-    for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
       // 'flush' in case of segfault next time through loop. Else, we
       // will not see those printed tags still in the stream buffer.
       std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;

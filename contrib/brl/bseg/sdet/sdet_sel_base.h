@@ -41,21 +41,21 @@
 #include <vbl/vbl_array_2d.h>
 #include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_edgemap_sptr.h"
-#include "sdet_edgemap.h"
-#include "sdet_curve_model.h"
-#include "sdet_curvelet.h"
-#include "sdet_curvelet_map.h"
-#include "sdet_edgel_link_graph.h"
-#include "sdet_curve_fragment_graph.h"
-#include "sdet_sel_utils.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_edgemap_sptr.h>
+#include <sdet/sdet_edgemap.h>
+#include <sdet/sdet_curve_model.h>
+#include <sdet/sdet_curvelet.h>
+#include <sdet/sdet_curvelet_map.h>
+#include <sdet/sdet_edgel_link_graph.h>
+#include <sdet/sdet_curve_fragment_graph.h>
+#include <sdet/sdet_sel_utils.h>
 
-#include "sdet_hyp_tree_graph.h"
+#include <sdet/sdet_hyp_tree_graph.h>
 
-#include "sdet_EHT.h"
-#include "sdet_CFTG.h"
-//#include "sdet_sel_knot.h"
+#include <sdet/sdet_EHT.h>
+#include <sdet/sdet_CFTG.h>
+//#include <sdet/sdet_sel_knot.h>
 
 //: Base class for the "Symbolic edge linking algorithm" (as described in POCV 06).
 //  It contains the following things:

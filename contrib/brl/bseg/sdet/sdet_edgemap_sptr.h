@@ -9,7 +9,7 @@
 //
 
 #include <vbl/vbl_smart_ptr.h>
-#include "sdet_edgemap.h"
+#include <sdet/sdet_edgemap.h>
 
 typedef vbl_smart_ptr<sdet_edgemap> sdet_edgemap_sptr;
 

@@ -9,10 +9,12 @@
 // \brief Base class for image formats
 // \author awf
 
+#include <list>
 #include <vil/vil_fwd.h> // for vil_stream
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
+
 //: Base class for image formats.
 //  There is one derived class for each handled file format in the
 // directory file_formats. E.g. vil/file_formats/vil_pnm.h etc
@@ -79,7 +81,8 @@ class vil_file_format
     {return VXL_NULLPTR;}
 
  public:
-  static vil_file_format** all();
+  typedef std::list<vil_file_format*>::iterator iterator;
+  static std::list<vil_file_format*>& all();
   static void add_file_format(vil_file_format* ff);
 };
 
