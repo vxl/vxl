@@ -128,8 +128,7 @@ class vgl_quadric_3d
   // Q =  | e/2  f/2   c   i/2 |
   //      | g/2  h/2  i/2   j  |
   //       -                  -
-  //  Note that X^t Q X = 0 , where X^t =[x y z w].
-  //  This matrix expressionis the same as implicit equation 1) above.
+  //  Note that X^t Q X = 0 , where X^t =[x y z w] is the same as implicit equation 1) above.
   // 
   std::vector<std::vector<T> > coef_matrix() const;
 
@@ -177,6 +176,6 @@ void eigen(T m[n][n], T l[n], T vc[n][n]);
 template <class T, size_t n>
 void twst(T m[n][n], T c, T s, int i, int j);
 
-#define VGL_QUADRIC_3D_INSTANTIATE(T) extern //"please include vgl/vgl_quadric_3d.hxx first"
+#define VGL_QUADRIC_3D_INSTANTIATE(T) extern "please include vgl/vgl_quadric_3d.hxx first"
 
 #endif // vgl_quadric_3d_h_
