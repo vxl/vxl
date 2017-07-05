@@ -19,7 +19,7 @@ class vpgl_affine_rectification
   static vpgl_affine_camera<double>* compute_affine_cam(const std::vector< vgl_point_2d<double> >& image_pts,
                                                         const std::vector< vgl_point_3d<double> >& world_pts);
 
-  //:Backproject an image point onto a plane, start with initial_guess
+  //:extract the fundamental matrix from a pair of affine cameras
   static bool compute_affine_f(const vpgl_affine_camera<double>* cam1,
                                const vpgl_affine_camera<double>* cam2,
                                vpgl_affine_fundamental_matrix<double>& FA);

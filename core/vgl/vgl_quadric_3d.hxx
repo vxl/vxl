@@ -7,7 +7,8 @@
 #include <algorithm>
 #include <functional>
 
-static const char* quadric_class_name[]{
+static const char* quadric_class_name[] = 
+{
   "invalid_quadric",
     "coincident_planes",   
     "imaginary_ellipsoid",
@@ -82,7 +83,7 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::coef_matrix() const{
   return Q;
 }
 template <class T>
-bool vgl_quadric_3d<T>::contains(vgl_homg_point_3d<T> const& pt, T tol) const{
+bool vgl_quadric_3d<T>::on(vgl_homg_point_3d<T> const& pt, T tol) const{
   T x = pt.x(), y = pt.y(), z = pt.z();
   T algebraic_dist = a_*x*x + b_*y*y + c_*z*z + d_*x*y + e_*x*z + f_*y*z + g_*x + h_*y + i_*z +j_;
   T grad_x = (T(2)*a_*x + d_*y * e_*z + g_);
@@ -306,9 +307,11 @@ void eigen(R m[n][n], R l[n], R vc[n][n]){
       }
     }
     if(mod < 0.00000000001) break;
-    if(db) printf("mii=%e, mjj=%e\n", m2[i][i], m2[j][j]);
+    // if(db) printf("mii=%e, mjj=%e\n", m2[i][i], m2[j][j]);
+    if(db) std::cout << "mii=" << m2[i][i] << "mjj=" << m2[j][j] << std::endl;
     R th = 0.5*atan(2*m2[i][j]/(m2[i][i] - m2[j][j]));
-    if(db) printf("th=%e, i=%d, j=%d\n", th, i, j);
+    // if(db) printf("th=%e, i=%d, j=%d\n", th, i, j);
+    if(db) std::cout << "th=" << th << "i" << i << "j=" << j << std::endl;
     {
       R c = cos(th), s = sin(th);
       {int k=n; while(k--){
