@@ -1,11 +1,19 @@
+import os
+import re
+import shutil
+import sys
+from xml.etree.ElementTree import ElementTree
+from os.path import basename, splitext
+
+from prompt_toolkit import cache
 
 from boxm2_adaptor import *
-from boxm2_tools_adaptor import *
 from boxm2_filtering_adaptor import *
-from vil_adaptor import *
-from vpgl_adaptor import *
-from os.path import basename, splitext
-import sys
+from boxm2_tools_adaptor import *
+from vil_adaptor import load_image
+from vpgl_adaptor import (boxm2_batch, dbvalue, load_perspective_camera,
+                          persp2gen)
+
 
 #############################################################################
 # boxm2_scene_adaptor class offers super simple model manipulation syntax
@@ -79,9 +87,6 @@ class boxm2_scene_adaptor(object):
     def lvcs(self):
         return self.lvcs
 
-    def cache():
-        return self.cache
-
     def transform_to_scene(self, to_scene, trans, rot, scale):
         if self.opencl_cache.type == "boxm2_opencl_cache_sptr":
             print("transforming scene")
@@ -136,10 +141,14 @@ class boxm2_scene_adaptor(object):
 
         # run update grey or RGB
         if self.rgb:
-            return update_rgb(self.scene, cache, cam, img, dev, "", update_alpha)
+            return update_rgb(self.scene, cache, cam,
+                              img, dev, "", update_alpha)
+        elif self.description['appType'].startswith('boxm2_mog6_view'):
+            return update_grey_view_dep(self.scene, cache, cam, img, dev,
+                                        ident_string, mask, update_alpha, var)
         else:
-            return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var, update_app, tnear, tfar)
-
+            return update_grey(self.scene, cache, cam, img, dev, ident_string,
+                               mask, update_alpha, var, update_app, tnear, tfar)
 
     # update wrapper, can pass in a Null device to use
     def update_app(self, cam, img, device_string="", force_grey=False):
@@ -195,6 +204,9 @@ class boxm2_scene_adaptor(object):
             expimg, vis_image, status = render_rgb(
                 self.scene, cache, cam, ni, nj, dev, tnear, tfar)
             boxm2_batch.remove_data(vis_image.id)
+        elif self.description['appType'].startswith('boxm2_mog6_view'):
+            expimg = render_grey_view_dep(self.scene, cache, cam,
+                                          ni, nj, dev, ident_string)
         else:
             expimg = render_grey(self.scene, cache, cam,
                                  ni, nj, dev, ident_string, tnear, tfar)
@@ -819,3 +831,83 @@ class boxm2_scene_adaptor(object):
         dev = self.device;
         cache = self.opencl_cache;
         return boxm2_remove_low_nobs(self.scene, dev,cache, nobs_thresh_multiplier)
+
+
+def compactify_mog6_view_scene(boxm2_dir, save_dir=None):
+    if save_dir is None:
+        save_dir = os.path.join(boxm2_dir, "sav")
+    original_scene_file = os.path.join(boxm2_dir, 'scene.xml')
+    compact_scene_file = os.path.join(boxm2_dir, 'compact_scene.xml')
+
+    # load scene
+    scene = boxm2_scene_adaptor(original_scene_file)
+    compactify_mog6_view(scene.scene, scene.cpu_cache)
+    scene.write_cache()
+
+    # create new compact scene file with updated appearance model
+    tree = ElementTree()
+    tree.parse(original_scene_file)
+    root = tree.getroot()
+    for apm in root.iter('appearance'):
+        if "mog6" in apm.get('apm'):
+            apm.set('apm', 'boxm2_mog6_view_compact')
+        else:
+            root.remove(apm)
+    tree.write(compact_scene_file)
+
+    # remove un-compactified data files
+    old_data_files_pattern = r"boxm2_(mog6_view_id|num_obs|vis)"
+    for f in os.listdir(boxm2_dir):
+        if re.search(old_data_files_pattern, f):
+            os.remove(os.path.join(boxm2_dir, f))
+
+    # copy files to save directory
+    if not os.path.isdir(save_dir):
+        os.mkdir(save_dir)
+    else:
+        for f in os.listdir(save_dir):
+            if re.search(r".*\.bin", f):
+                os.remove(os.path.join(save_dir, f))
+
+    id_pat = [r'^id_', r'^boxm2_mog6_view_compact_id', r'^alpha_id_']
+    for pat in id_pat:
+        save_pattern(boxm2_dir, pat, save_dir)
+    shutil.copy(os.path.join(boxm2_dir, 'compact_scene.xml'), save_dir)
+    rewriteScenePath(save_dir, 'compact_scene.xml')
+
+
+def save_pattern(search_dir, pattern, save_dir):
+    """Copies all files in `search_dir` that match the given `pattern`
+    into `save_dir`. If `save_dir` does not exist then nothing is
+    done.
+
+    :param search_dir: Directory from which to copy files
+    :param pattern: Regex string to match files in `search_dir`
+    :param save_dir: Absolute path in which to save copied files from
+    `search_dir`
+    """
+    if not os.path.exists(save_dir):
+        return
+
+    for f in os.listdir(search_dir):
+        if re.search(pattern, f):
+            shutil.copy(os.path.join(search_dir, f), save_dir)
+
+
+def rewriteScenePath(boxm2_dir, scene_file):
+    """Rewrites a given scene XML file with a new scene_paths element
+    that points to its containing directory.
+
+    :param boxm2_dir: The directory containing the given scene file.
+    :param scene_file: Relative path from `boxm2_dir` to the given
+    XML file to modify.
+
+    """
+    abs_name = os.path.join(boxm2_dir, scene_file)
+    if os.path.isfile(abs_name):
+        tree = ElementTree()
+        tree.parse(abs_name)
+        root = tree.getroot()
+        for path in root.iter('scene_paths'):
+            path.set('path', boxm2_dir + '/')
+        tree.write(abs_name)

@@ -519,6 +519,11 @@ update_bit_scene_main(__global RenderSceneInfo  * info,           // scene infor
             if ( *update_alpha != 0 )
                 alpha_array[gid] = max(alphamin,data.s0);
         }
+#ifdef WITH_MASK
+        // If a mask is specified, zero out cells outside of the mask.
+        else // Added for silhouettes, NEED TO REMOVE LATER
+          alpha_array[gid] = 0;
+#endif // WITH_MASK
 
         //clear out aux data
         aux_array0[gid] = 0;

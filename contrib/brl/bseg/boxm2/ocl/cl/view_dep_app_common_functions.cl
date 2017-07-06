@@ -66,7 +66,7 @@ void compute_app_model_weights(float* app_model_weights, float4 viewdir,__consta
         sum_weights += app_model_weights[i];
     }
 
-//#define NORMALIZE_VIEW_WEIGHTS
+#define NORMALIZE_VIEW_WEIGHTS
 #ifdef NORMALIZE_VIEW_WEIGHTS
     for(short i = 0; i < 8; i++) {
       app_model_weights[i] /= sum_weights;

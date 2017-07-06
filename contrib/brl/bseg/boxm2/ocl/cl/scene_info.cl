@@ -46,11 +46,10 @@
     #define NORM 255
 #endif
 #ifdef MOG_VIEW_DEP_COMPACT
-    #define VIEW_NUM 8
     #define MOG_TYPE uchar16
-    #define NORM 255
-    #define CONVERT_FUNC_FLOAT16(lhs,data) float16 lhs = convert_float16( data ) / NORM
-    #define CONVERT_FUNC_UCHAR16(lhs,data) lhs = convert_uchar16_sat_rte( data * NORM )
+    #define CONVERT_FUNC_FLOAT16(lhs,data) float16 lhs = convert_float16( as_uchar16(data) )
+    #define EXPECTED_INT(lhs, data) lhs = (data.s0 + data.s2 + data.s4 + data.s6 +data.s8 + data.sA + data.sC + data.sE)/8.0f
+    #define NORM 255.0f
 #endif
 #ifdef MOG_VIEW_DEP_COLOR
     #define MOG_TYPE int16

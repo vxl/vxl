@@ -226,6 +226,17 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       opencl_cache->unref_mem(new_dat);
     }
 
+    // write trees to cpu mem (triggers block.recompute_cells() which recalculates cached cell counts for the block)
+    // TODO seems like the trees are already copied over to cpu mem,
+    // so it'd be nice to create a way to trigger recompute_cells() without set_trees, which does a mempcy
+    boxm2_array_3d<boxm2_block::uchar16> refined_tree_array(data.sub_block_num_.x(),
+                                                            data.sub_block_num_.y(),
+                                                            data.sub_block_num_.z(),
+                                                            static_cast<boxm2_block::uchar16*>(blk->cpu_buffer()));
+    boxm2_block *cpu_blk = opencl_cache->get_cpu_cache()->get_block(scene, id);
+    cpu_blk->set_trees(refined_tree_array);
+    blk->write_to_buffer(queue);
+
     //tree copy had CPU mem allocated, needs to be deleted
     delete[] (cl_uint16*) blk_copy->cpu_buffer();
     delete[] (cl_int*) tree_sizes->cpu_buffer();

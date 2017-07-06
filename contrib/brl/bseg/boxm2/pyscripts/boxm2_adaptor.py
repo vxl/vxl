@@ -1,5 +1,8 @@
-from boxm2_register import boxm2_batch, dbvalue
 import os
+from xml.etree.ElementTree import ElementTree
+
+from boxm2_register import boxm2_batch, dbvalue
+
 #############################################################################
 # PROVIDES higher level python functions to make boxm2_batch
 # code more readable/refactored
@@ -236,10 +239,28 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
         print "ERROR: Cache type not recognized: ", cache.type
         return False
 
+
+# Updates with view-dependent grayscale appearance model.
+def update_grey_view_dep(scene, cache, cam, img, device=None, ident="",
+                         mask=None, update_alpha=True, var=-1.0):
+    print "boxm2_batch GPU update (greyscale, view dependent)"
+    boxm2_batch.init_process("boxm2OclUpdateViewDepAppProcess")
+    boxm2_batch.set_input_from_db(0, device)
+    boxm2_batch.set_input_from_db(1, scene)
+    boxm2_batch.set_input_from_db(2, cache)
+    boxm2_batch.set_input_from_db(3, cam)
+    boxm2_batch.set_input_from_db(4, img)
+    boxm2_batch.set_input_string(5, ident)
+    if mask:
+        boxm2_batch.set_input_from_db(6, mask)
+    boxm2_batch.set_input_bool(7, update_alpha)
+    boxm2_batch.set_input_float(8, var)
+    return boxm2_batch.run_process()
+
+
 # Update with alternate possible pixel explanation - uses GPU
-
-
-def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0, alt_prior=None, alt_density=None):
+def update_grey_with_alt(scene, cache, cam, img, device=None, ident="",
+                         mask=None, update_alpha=True, var=-1.0, alt_prior=None, alt_density=None):
     # If no device is passed in, do cpu update
     if cache.type == "boxm2_cache_sptr":
         print "ERROR: CPU update not implemented for update_with_alt"
@@ -355,7 +376,8 @@ def update_sky2(scene, cache, cam, img, step, device):
         boxm2_batch.set_input_from_db(4, img)
     boxm2_batch.set_input_int(5, step)
     boxm2_batch.run_process()
-    # Generic render, returns a dbvalue expected image
+
+# Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 
 
@@ -649,7 +671,28 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string=""
         print "ERROR: Cache type not recognized: ", cache.type
 
 
-def render_scene_uncertainty(scene, cache,  ni=1280, nj=720, device=None, ident_string=""):
+# boxm2_ocl_render_view_dep_expected_image_process.cxx
+def render_grey_view_dep(scene, cache, cam, ni=1280, nj=720, device=None,
+                         ident_string=""):
+    if cache.type == "boxm2_opencl_cache_sptr" and device:
+        boxm2_batch.init_process("boxm2OclRenderViewDepExpectedImageProcess")
+        boxm2_batch.set_input_from_db(0, device)
+        boxm2_batch.set_input_from_db(1, scene)
+        boxm2_batch.set_input_from_db(2, cache)
+        boxm2_batch.set_input_from_db(3, cam)
+        boxm2_batch.set_input_unsigned(4, ni)
+        boxm2_batch.set_input_unsigned(5, nj)
+        boxm2_batch.set_input_string(6, ident_string)
+        boxm2_batch.run_process()
+        (id, type) = boxm2_batch.commit_output(0)
+        exp_image = dbvalue(id, type)
+        return exp_image
+    else:
+        print "ERROR: Cache type not recognized: ", cache.type
+
+
+def render_scene_uncertainty(
+        scene, cache, ni=1280, nj=720, device=None, ident_string=""):
     if cache.type == "boxm2_opencl_cache_sptr" and device:
         boxm2_batch.init_process("boxm2OclRenderSceneUncertaintyMapProcess")
         boxm2_batch.set_input_from_db(0, device)
@@ -2302,3 +2345,15 @@ def boxm2_remove_low_nobs(scene, device, cache, nobs_thresh_multiplier):
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_float(3,nobs_thresh_multiplier);
     return boxm2_batch.run_process();
+
+
+def compactify_mog6_view(scene, cache):
+    """Converts a MOG6_VIEW scene to a compactified representation, in
+    which each gaussian's mean and variance are stored with one byte
+    of precision.
+
+    """
+    boxm2_batch.init_process("boxm2CompactifyMog6ViewProcess")
+    boxm2_batch.set_input_from_db(0, scene)
+    boxm2_batch.set_input_from_db(1, cache)
+    boxm2_batch.run_process()
