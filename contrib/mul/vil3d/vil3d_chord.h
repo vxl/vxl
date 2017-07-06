@@ -10,6 +10,9 @@
 #include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#include <vil3d/vil3d_image_view.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 
 //: Horizontal line used in 3D images, with integer co-ordinates
 class vil3d_chord
@@ -128,5 +131,55 @@ inline void vsl_print_summary(std::ostream& os, const vil3d_chord& t)
 {
   os<<t;
 }
+
+//: Represent a 3D voxel region as a vector of chords.
+class vil3d_region : public vcl_vector<vil3d_chord>
+{
+public:
+  //: Number of voxels in region
+  unsigned volume() const
+  {
+    unsigned v=0;
+    for (unsigned i=0;i<size();++i)
+      v+=unsigned(operator[](i).length());
+    return v;
+  }
+  
+  //: Bounding box of this region
+  vgl_box_3d<int> bounds() const
+  {
+    vgl_box_3d<int> box;
+    for (unsigned i=0;i<size();++i)
+    {
+      const vil3d_chord& c=operator[](i);
+      box.add(vgl_point_3d<int>(c.start_x(),c.y(),c.z()));
+      box.add(vgl_point_3d<int>(c.end_x(),c.y(),c.z()));
+    }
+    
+    return box;
+  }
+};
+
+//: Write value v into pixels defined by chord.
+template<class T>
+inline void vil3d_fill_chord(vil3d_image_view<T>& image, const vil3d_chord& c, T v)
+{
+  if (image.size()==0) return;
+  if (c.y()<0 || c.y()>=image.nj()) return;
+  if (c.z()<0 || c.z()>=image.nk()) return;
+  int ilo=c.start_x();  if (ilo<0) ilo=0;
+  int ihi=c.end_x(); if (ihi>=image.ni()) ihi=image.ni()-1;
+  for (int i=ilo;i<=ihi;++i) image(i,c.y(),c.z())=v;
+}
+
+//: Write value v into pixels defined by set of chords in region.
+template<class T>
+inline void vil3d_fill_region(vil3d_image_view<T>& image, const vil3d_region& r, T v)
+{
+  for (unsigned i=0;i<r.size();++i)
+    vil3d_fill_chord(image,r[i],v);
+}
+
+  
 
 #endif // vil3d_chord_h_
