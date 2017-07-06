@@ -15,6 +15,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
+#include <vil/vil_save.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -23,10 +24,11 @@
 #include <baml/baml_census.h>
 #include <baml/baml_warp.h>
 #include <bsta/bsta_joint_histogram.h>
+#include <brip/brip_filter_bank.h>
 
 #define inten 0
 #define grad_x 0
-#define condp 1
+#define condp 0
 static float min_diff(vil_image_view<float> const & view0, float v1, size_t i1, size_t j1, int radius=1){
   int ni = view0.ni(), nj = view0.nj();
   float min_d = std::numeric_limits<float>::max(), min_v;
@@ -51,12 +53,43 @@ static float min_diff(vil_image_view<float> const & view0, float v1, size_t i1, 
 static void update_hist_dem(vil_image_resource_sptr img0, vpgl_rational_camera<double>* cam0, 
                             vil_image_resource_sptr img1, vpgl_rational_camera<double>* cam1,
                             vil_image_resource_sptr dem_resc,
-                            bsta_joint_histogram<float>& h){
+                            bsta_joint_histogram<float>& h, bool use_inten = true/* vs x_grad*/){
     if(!img0||!img1||!cam0||!cam1||!dem_resc)
       return;
     
-    vil_image_view<float> view0 = img0->get_view();
-    vil_image_view<float> view1 = img1->get_view();
+    vil_image_view<float> view0_int = img0->get_view();
+    vil_image_view<float> view1_int = img1->get_view();
+    
+
+    vil_image_view<float> view0 = view0_int, view1 = view1_int;
+    if(!use_inten){
+#if 0
+      brip_filter_bank fb0( 1, 1.0, 3.0f, 1.0f, 5.0, 0.05, view0_int);
+      vil_image_view<float> filt0 = fb0.response(0);
+      brip_filter_bank fb1( 1, 1.0, 3.0f, 1.0f, 5.0, 0.05, view1_int);
+      vil_image_view<float> filt1 = fb1.response(0);
+#endif
+#if 1
+      vil_image_view<float> grad_x_view0, grad_y_view0, grad_x_view1, grad_y_view1;
+      vil_sobel_3x3<float,float>( view0_int, grad_x_view0, grad_y_view0 );
+      vil_sobel_3x3<float,float>( view1_int, grad_x_view1, grad_y_view1 );
+      size_t ni0 = grad_x_view0.ni(), nj0 = grad_x_view0.nj();
+      size_t ni1 = grad_x_view1.ni(), nj1 = grad_x_view1.nj();
+      vil_image_view<float> grad_mag_view0(ni0, nj0), grad_mag_view1(ni1, nj1);
+      grad_mag_view0.fill(0.0f); grad_mag_view1.fill(0.0f);
+      for(size_t j = 0; j<nj0; ++j)
+        for(size_t i = 0; i<ni0; ++i)
+          grad_mag_view0(i, j)= sqrt(grad_x_view0(i,j)*grad_x_view0(i,j) + grad_y_view0(i,j)*grad_y_view0(i,j));
+      std::string filt_path = "D:/tests/chiletest/9DECgrad_mag.tif";
+      vil_save(grad_mag_view0, filt_path.c_str());
+      for(size_t j = 0; j<nj1; ++j)
+        for(size_t i = 0; i<ni1; ++i)
+          grad_mag_view1(i, j)= sqrt(grad_x_view1(i,j)*grad_x_view1(i,j) + grad_y_view1(i,j)*grad_y_view1(i,j));
+    
+      view0 = grad_mag_view0; view1 = grad_mag_view1;
+#endif 
+      //      view0 = filt0; view1 = filt1;
+    }
     vpgl_backproject_dem bdem(dem_resc);
     double max_z = bdem.zmax(), min_z =  bdem.zmin();
     vgl_point_3d<double> gc = bdem.geo_center();
@@ -87,8 +120,6 @@ static void update_hist_dem(vil_image_resource_sptr img0, vpgl_rational_camera<d
     vgl_polygon<double> poly(verts);
     for(size_t j = js; j<=je; ++j)
       for(size_t i = is; i<ie; ++i){
-		  if(i == (is + ie)/2 && j == (js + je)/2)
-			  std::cout << ',';
         vgl_point_2d<double> image_pt(i, j);
         if(!poly.contains(image_pt))
           continue;
@@ -108,7 +139,7 @@ static void test_dem_appear()
   std::string mesh_dir = "D:/tests/chiletest/app_exp/app_exp_objects/";
   std::string img_dir = "D:/tests/chiletest/crop_dir/";
   std::string dem_path = "D:/tests/chiletest/CL_roi.tif";
-  std::string vrml_path = "D:/tests/chiletest/09DEC_10NOV.wrl";
+  std::string vrml_path = "D:/tests/chiletest/9DEC_10NOV_grad_mag.wrl";
   std::string i0p = "09DEC06145803-P1BS-052869858050_01_P002_bin_2.tif";
   std::string c0p = "09DEC06145803-P1BS-052869858050_01_P002_bin_2.rpb";
   //std::string i1p = "10JAN27150215-P1BS-052869798020_01_P004_bin_2.tif";
@@ -126,9 +157,10 @@ static void test_dem_appear()
   vil_image_resource_sptr dem_resc = vil_load_image_resource(dem_path.c_str());
   if(!img0||!img1||!cam0||!cam1||!dem_resc)
     return;
-  bsta_joint_histogram<float> h(1.0f, 50);
-  update_hist_dem(img0, &cam0g, img1, &cam1g, dem_resc, h);
-  h.parzen(5.0f);
+  bsta_joint_histogram<float> h(0.25f, 50);
+  //bsta_joint_histogram<float> h(-0.15f, 0.15f, 50, -0.15f, 0.15f, 50);
+  update_hist_dem(img0, &cam0g, img1, &cam1g, dem_resc, h, false);
+  h.parzen(1.0f);
   std::ofstream vstr(vrml_path.c_str());
   h.print_cond_prob_to_vrml(vstr, false);
   vstr.close();

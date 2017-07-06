@@ -445,7 +445,7 @@ void bsta_joint_histogram<T>::print_to_vrml(std::ostream& os) const
       os << "Transform {\n"
          << "  translation " << a << ' ' << b << ' ' << height << '\n'
          << "  children Shape {\n"
-         << "    geometry Sphere { radius 0.2 }\n"
+         << "    geometry Sphere { radius 0.5 }\n"
          << "    appearance DEF A1 Appearance {"
          << "      material Material {\n"
          << "        diffuseColor 1 0 0\n"
@@ -459,7 +459,7 @@ void bsta_joint_histogram<T>::print_to_vrml(std::ostream& os) const
          << "  rotation 1 0 0 " << vnl_math::pi/2.0 << '\n'
          << "  children Shape {\n"
          << "    appearance USE A1\n"
-         << "    geometry Cylinder { radius 0.05 height " << height << " }\n"
+         << "    geometry Cylinder { radius 0.5 height " << height << " }\n"
          << "  }\n"
          << "}\n";
     }
@@ -530,7 +530,7 @@ void bsta_joint_histogram<T>::print_cond_prob_to_vrml(std::ostream& os, bool a_g
       os << "Transform {\n"
          << "  translation " << a << ' ' << b << ' ' << height << '\n'
          << "  children Shape {\n"
-         << "    geometry Sphere { radius 0.2 }\n"
+         << "    geometry Sphere { radius 0.5 }\n"
          << "    appearance DEF A1 Appearance {"
          << "      material Material {\n"
          << "        diffuseColor 1 0 0\n"
@@ -544,7 +544,7 @@ void bsta_joint_histogram<T>::print_cond_prob_to_vrml(std::ostream& os, bool a_g
          << "  rotation 1 0 0 " << vnl_math::pi/2.0 << '\n'
          << "  children Shape {\n"
          << "    appearance USE A1\n"
-         << "    geometry Cylinder { radius 0.05 height " << height << " }\n"
+         << "    geometry Cylinder { radius 0.5 height " << height << " }\n"
          << "  }\n"
          << "}\n";
     }

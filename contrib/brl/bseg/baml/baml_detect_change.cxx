@@ -323,7 +323,7 @@ bool baml_change_detection::detect_multi_internal(
   bool dc_success = false;
 
   // Loop over all of our reference images
-  for (int img_num = 0; img_num < img_ref.size(); img_num++) {
+  for (int img_num = 0; img_num < static_cast<int>(img_ref.size()); img_num++) {
     best_x = 100; best_y = 100;
     max_mean = 0;
 
@@ -402,7 +402,7 @@ bool baml_change_detection::detect_multi_internal(
   int min_x_off = 0;
   max_y_off = 0;
   int min_y_off = 0;
-  for (int i = 0; i < img_ref.size(); i++) {
+  for (int i = 0; i < static_cast<int>(img_ref.size()); i++) {
     if (x_offsets[i] > max_x_off) max_x_off = x_offsets[i];
     if (x_offsets[i] < min_x_off) min_x_off = x_offsets[i];
     if (y_offsets[i] > max_y_off) max_y_off = y_offsets[i];
@@ -417,7 +417,7 @@ bool baml_change_detection::detect_multi_internal(
     max_x_off, crop_width, max_y_off, crop_height);
   std::vector<vil_image_view<vxl_uint_16> > img_ref_crop_vec;
   std::vector<vil_image_view<bool> > valid_crop_vec;
-  for (int i = 0; i < img_ref.size(); i++) {
+  for (int i = 0; i < static_cast<int>(img_ref.size()); i++) {
     vil_image_view<vxl_uint_16> cur_crop = vil_crop(img_ref[i],
       max_x_off - x_offsets[i], crop_width, 
       max_y_off - y_offsets[i], crop_height);
@@ -435,7 +435,7 @@ bool baml_change_detection::detect_multi_internal(
 
   // Perform pairwise change detect on each reference image and store
   vil_image_view<vxl_byte> change_vis;
-  for (int i = 0; i < img_ref_crop_vec.size(); i++) {
+  for (int i = 0; i < static_cast<int>(img_ref_crop_vec.size()); i++) {
     vil_image_view<float> bg_prob;
     float fg_prob = 0;
     bool dc_success = detect_internal(
@@ -951,7 +951,7 @@ baml_change_detection::detect_histcmp(
         std::cerr << "histogram comparison technique not recognized\n";
         return false;
       }
-      if (std::isinf(score(x, y))) {
+      if (vnl_math::isinf(score(x, y))) {
         score(x, y) = 100;
       }
     }
