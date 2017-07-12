@@ -10,23 +10,23 @@
 static const char* quadric_class_name[] = 
 {
   "invalid_quadric",
-    "coincident_planes",   
-    "imaginary_ellipsoid",
-    "real_ellipsoid",
-    "imaginary_elliptic_cone",
-    "real_elliptic_cone",
-    "imaginary_elliptic_cylinder",
-    "real_elliptic_cylinder",
-    "elliptic_paraboloid",
-    "hyperbolic_cylinder",
-    "hyperbolic_paraboloid",
-    "hyperboloid_of_one_sheet",
-    "hyperboloid_of_two_sheets",
-    "imaginary_intersecting_planes",
-    "real_intersecting_planes",
-    "parabolic_cylinder",
-    "imaginary_parallel_planes",
-    "real_parallel planes"
+  "real_ellipsoid",
+  "imaginary_ellipsoid",
+  "hyperboloid_of_one_sheet",
+  "hyperboloid_of_two_sheets",
+  "real_elliptic_cone",
+  "imaginary_elliptic_cone",
+  "elliptic_paraboloid",
+  "hyperbolic_paraboloid",
+  "real_elliptic_cylinder",
+  "imaginary_elliptic_cylinder",
+  "hyperbolic_cylinder",
+  "real_intersecting_planes",
+  "imaginary_intersecting_planes",
+  "parabolic_cylinder",
+  "real_parallel_planes",
+  "imaginary_parallel_planes",
+  "coincident_planes"
 };
 template <class T>
 std::string vgl_quadric_3d<T>::type_by_number(vgl_quadric_type const& type) { return quadric_class_name[(size_t)type]; }
@@ -83,21 +83,62 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::coef_matrix() const{
   return Q;
 }
 template <class T>
-bool vgl_quadric_3d<T>::on(vgl_homg_point_3d<T> const& pt, T tol) const{
-  T x = pt.x(), y = pt.y(), z = pt.z();
-  T algebraic_dist = a_*x*x + b_*y*y + c_*z*z + d_*x*y + e_*x*z + f_*y*z + g_*x + h_*y + i_*z +j_;
-  T grad_x = (T(2)*a_*x + d_*y * e_*z + g_);
-  T grad_y = (T(2)*b_*y + d_*x * f_*z + h_);
-  T grad_z = (T(2)*c_*z + e_*x * f_*y + i_ );
+T vgl_quadric_3d<T>::sampson_dist(vgl_homg_point_3d<T> const& pt) const{
+  T x = pt.x(), y = pt.y(), z = pt.z(), w = pt.w();
+  T algebraic_dist = a_*x*x + b_*y*y + c_*z*z + d_*x*y + e_*x*z + f_*y*z + g_*x*w + h_*y*w + i_*z*w +j_*w*w;
+  T grad_x = (T(2)*a_*x + d_*y * e_*z + g_*w);
+  T grad_y = (T(2)*b_*y + d_*x * f_*z + h_*w);
+  T grad_z = (T(2)*c_*z + e_*x * f_*y + i_*w );
   T grad_mag_sqrd = grad_x*grad_x + grad_y*grad_y + grad_z*grad_z;
   T sampson_dist_sqrd = (algebraic_dist*algebraic_dist)/grad_mag_sqrd;
-  if(sqrt(sampson_dist_sqrd) < tol)
+  return sqrt(sampson_dist_sqrd);
+}
+template <class T>
+bool vgl_quadric_3d<T>::on(vgl_homg_point_3d<T> const& pt, T tol) const{
+  T d = this->sampson_dist(pt);
+  if(d < tol)
     return true;
   return false;
 }
 template <class T>
+bool vgl_quadric_3d<T>::center(vgl_point_3d<T>& center) const{
+ T h = T(1)/T(2);
+  //              _            _
+  //             |  a   d/2  e/2|   
+  // upper3x3 =  | d/2   b   f/2|  
+  //             | e/2  f/2   c |
+  //              -            -
+  T upper_det = a_*b_*c_ - a_*h*f_*h*f_ - h*d_*h*d_*c_ + d_*h*f_*h*e_*h + e_*h*d_*h*f_*h - e_*h*b_*e_*h;
+  if(fabs(upper_det)<vgl_tolerance<T>::position){
+    return false;
+  }
+  T det_inv = T(1)/upper_det;
+ 
+  T d[9];// inverse of upper 3x3
+  d[0] = (b_*c_ -f_*f_*h*h)*det_inv;
+  d[1] = (f_*h*e_*h -c_*d_*h)*det_inv;
+  d[2] = (d_*h*f_*h -e_*h*b_)*det_inv;
+  d[3] = (f_*h*e_*h  -d_*h*c_)*det_inv;
+  d[4] = (a_*c_ -e_*h*e_*h)*det_inv;
+  d[5] = (d_*h*e_*h -f_*h*a_)*det_inv;
+  d[6] = (d_*h*f_*h -b_*e_*h)*det_inv;
+  d[7] = (d_*h*e_*h -a_*f_*h)*det_inv;
+  d[8] = (a_*b_ -d_*h*d_*h)*det_inv;
+  
+  // tx   1  d0  d1  d2   g_
+  // ty = -  d3  d4  d5   h_ 
+  // tz   2  d6  d7  d8   i_
+
+  T tx = h*(d[0]*g_ + d[1]*h_ + d[2]*i_);
+  T ty = h*(d[3]*g_ + d[4]*h_ + d[5]*i_);
+  T tz = h*(d[6]*g_ + d[7]*h_ + d[8]*i_);
+  center.set(-tx, -ty, -tz);
+  return true;
+}
+  template <class T>
 void vgl_quadric_3d<T>::compute_type(){
   type_ = no_type;
+  T tol = vgl_tolerance<T>::position;
   std::vector<std::vector<T> > Q = this->coef_matrix();
   T m[4][4]; T l[4]; T vc[4][4];
   for(size_t r = 0; r<4; ++r)
@@ -113,7 +154,7 @@ void vgl_quadric_3d<T>::compute_type(){
   eigen<T, 4>( m, l, vc);
 std::vector<T> lv;
   //determine the rank of Q
-  T rank_tol = T(1) / T(1000);
+  T rank_tol = T(1000)*tol;
   std::vector<T> eig_vals;
   for(size_t i =0; i<4; ++i){
     eig_vals.push_back(fabs(l[i]));
@@ -210,7 +251,6 @@ T det =  Q[0][0]*Q[1][1]*Q[2][2]*Q[3][3]
     - Q[3][0]*Q[2][1]*Q[0][2]*Q[1][3]
     + Q[3][0]*Q[2][1]*Q[1][2]*Q[0][3];
  
- T tol = vgl_tolerance<T>::position;
  if(fabs(det)<T(100)*tol)
    det_zero_ = true;
  bool gt_0 = det>z;

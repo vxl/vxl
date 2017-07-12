@@ -9,6 +9,7 @@ DECLARE( test_fit_conics_2d );
 DECLARE( test_fit_lines_2d );
 DECLARE( test_fit_plane_3d );
 DECLARE( test_fit_sphere_3d );
+DECLARE( test_fit_quadric_3d );
 DECLARE( test_h_matrix_1d );
 DECLARE( test_h_matrix_2d );
 DECLARE( test_h_matrix_3d );
@@ -32,6 +33,7 @@ register_tests()
   REGISTER( test_fit_lines_2d );
   REGISTER( test_fit_plane_3d );
   REGISTER( test_fit_sphere_3d );
+  REGISTER( test_fit_quadric_3d );
   REGISTER( test_h_matrix_1d );
   REGISTER( test_h_matrix_2d );
   REGISTER( test_h_matrix_3d );

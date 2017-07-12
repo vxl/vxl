@@ -128,6 +128,36 @@ static void test_quadric()
   TEST("stream ops", good , true);
   good = good && qstr == real_elliptic_cone;
   TEST("equal", good , true);
+  // test translation
+  // note transform quadric is T^t Q T to avoid inverses but should be T^-t Q T^-1 to translate the quadric
+  // to a new center, so use negative translations
+  std::vector<std::vector<double> >  Qe = real_ellipsoid.coef_matrix(), Qet, QeE,QeET, QeETT;
+  std::vector<std::vector< double> > Te(4, std::vector<double>(4, 0.0));
+  Te[0][0] = 1.0; Te[1][1] = 1.0; Te[2][2] = 1.0; Te[0][3]=-tx;
+  Te[1][3]=-ty;
+  Te[2][3]=-tz;
+  Te[3][3] = 1.0;
+  // a simple sphere case
+  Qet = transform_quadric(Te,Qe);
+  vgl_quadric_3d<double> tran_quad(Qet);
+  vgl_point_3d<double> cent, true_cent(tx, ty, tz);
+  good = tran_quad.center(cent) && cent == true_cent;
+  // full eccentric ellipsoid 
+  vgl_quadric_3d<double> eccentric_ellipsoid(0.5, 0.25, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+   QeE = eccentric_ellipsoid.coef_matrix();
+   QeET = transform_quadric(T,QeE);
+   vgl_quadric_3d<double> tran_ecc_quad(QeET);
+   vgl_point_3d<double> rot_cent;
+   good = good &&  tran_ecc_quad.center(rot_cent);
+   // to prove the center is correct, translate to move the center to the origin
+   // and show that the translation dependent terms of the quadric vanish.
+   Te[0][3]=rot_cent.x(); Te[1][3] = rot_cent.y(); Te[2][3] = rot_cent.z();
+   // note again the tranform quadric function requires the inverse of the desired translation,
+   // which is just the center itself. 
+   QeETT = transform_quadric(Te,QeET);//should have g = h = i == 0
+   double sum_ghi = fabs(QeETT[0][3])+ fabs(QeETT[1][3])+ fabs(QeETT[2][3]);
+   good = good & sum_ghi < 1.0e-8;
+   TEST("center", good , true);
 }
 
 TESTMAIN(test_quadric);

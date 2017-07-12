@@ -31,7 +31,7 @@ template <class T>
 class vgl_quadric_3d
 {
  public:
-  enum vgl_quadric_type {
+   enum vgl_quadric_type {
     no_type=0,
     real_ellipsoid,
     imaginary_ellipsoid,
@@ -148,9 +148,17 @@ class vgl_quadric_3d
   //: Returns true if this quadric is degenerate
   bool is_degenerate() const{return det_zero_;}
 
+  //: Sampson distance d_sampson(p) = ||p^t Q p||^2/||grad(p*t Q p)||^2
+  // a first order approximation to Euclidean distance
+  T sampson_dist(vgl_homg_point_3d<T> const& pt) const;
+
   //: Returns true if the point pt belongs to the quadric surface.
   //  I.e., if it  satisfies the quadric equation within algebraic distance, i.e. pt^t Q pt < tol;
   bool on(vgl_homg_point_3d<T> const& pt, T tol = T(0)) const;
+
+  //: if the upper 3x3 submatrix of Q is full rank then the center of the quadric can be defined
+  // otherwise the center is not defined for degenerate quadrics
+  bool center(vgl_point_3d<T>& center) const;
 
  private:
   //--------------------------------------------------------------------------
