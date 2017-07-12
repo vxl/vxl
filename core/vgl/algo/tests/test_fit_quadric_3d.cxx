@@ -300,7 +300,6 @@ static void test_linear_fit_Allaire_saddle_shape()
 }
 static void test_fit_quadric_3d()
 {
-#if 0
   test_linear_fit_sphere_taubin();
   test_linear_fit_taubin_sphere_rand_error();
   test_linear_fit_Taubin_parabolid();
@@ -309,7 +308,6 @@ static void test_fit_quadric_3d()
   test_linear_fit_sphere_Alliare();
   test_linear_fit_Allaire_sphere_rand_error();
   test_linear_fit_Allaire_thin_ellipsoid_rand_error();
-#endif
   test_linear_fit_Allaire_saddle_shape();
 }
 
