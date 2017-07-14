@@ -783,7 +783,7 @@ inline void vil3d_math_integral_sqr_image(const vil3d_image_view<aT>& imA,
 
 // Scale and offset each voxel value so each plane has zero mean and unit variance.
 template<class T>
-inline void vil3d_math_normalise(vil3d_image_view<float>& im)
+inline void vil3d_math_normalise(vil3d_image_view<T>& im)
 {
   double mean,var;
   for (unsigned p=0;p<im.nplanes();++p)
