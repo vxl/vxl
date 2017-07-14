@@ -781,5 +781,19 @@ inline void vil3d_math_integral_sqr_image(const vil3d_image_view<aT>& imA,
 
 }
 
+// Scale and offset each voxel value so each plane has zero mean and unit variance.
+template<class T>
+inline void vil3d_math_normalise(vil3d_image_view<float>& im)
+{
+  double mean,var;
+  for (unsigned p=0;p<im.nplanes();++p)
+  {
+    vil3d_math_mean_and_variance(mean,var,im,p);
+    double sum_sq=var*im.ni()*im.nj()*im.nk();
+    double s=1.0/vcl_max(1e-6,vcl_sqrt(sum_sq));
+    vil3d_image_view<float> imp=vil3d_plane(im,p);
+    vil3d_math_scale_and_offset_values(imp,s,-mean*s);
+  }
+}
 
 #endif
