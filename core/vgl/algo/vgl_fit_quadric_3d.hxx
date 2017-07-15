@@ -3,6 +3,7 @@
 #define vgl_fit_quadric_3d_hxx_
 //:
 // \file
+#include <limits>
 #include <math.h>
 #include <iostream>
 #include "vgl_fit_quadric_3d.h"
