@@ -6,7 +6,8 @@
 #include <iostream>
 #include <algorithm>
 #include <functional>
-
+#define RANK_FACTOR 100000
+#define DET_FACTOR 100
 static const char* quadric_class_name[] = 
 {
   "invalid_quadric",
@@ -102,14 +103,18 @@ bool vgl_quadric_3d<T>::on(vgl_homg_point_3d<T> const& pt, T tol) const{
 }
 template <class T>
 bool vgl_quadric_3d<T>::center(vgl_point_3d<T>& center) const{
- T h = T(1)/T(2);
+  if(!(type_ == real_ellipsoid || type_==real_elliptic_cone ||
+       type_ == hyperboloid_of_one_sheet || type_ == hyperboloid_of_two_sheets)
+     )
+    return false;
+  T h = T(1)/T(2);
   //              _            _
   //             |  a   d/2  e/2|   
   // upper3x3 =  | d/2   b   f/2|  
   //             | e/2  f/2   c |
   //              -            -
   T upper_det = a_*b_*c_ - a_*h*f_*h*f_ - h*d_*h*d_*c_ + d_*h*f_*h*e_*h + e_*h*d_*h*f_*h - e_*h*b_*e_*h;
-  if(fabs(upper_det)<vgl_tolerance<T>::position){
+  if(fabs(upper_det)<T(DET_FACTOR)*vgl_tolerance<T>::position){
     return false;
   }
   T det_inv = T(1)/upper_det;
@@ -154,7 +159,7 @@ void vgl_quadric_3d<T>::compute_type(){
   eigen<T, 4>( m, l, vc);
 std::vector<T> lv;
   //determine the rank of Q
-  T rank_tol = T(1000)*tol;
+  T rank_tol = T(RANK_FACTOR)*tol;
   std::vector<T> eig_vals;
   for(size_t i =0; i<4; ++i){
     eig_vals.push_back(fabs(l[i]));
@@ -251,7 +256,7 @@ T det =  Q[0][0]*Q[1][1]*Q[2][2]*Q[3][3]
     - Q[3][0]*Q[2][1]*Q[0][2]*Q[1][3]
     + Q[3][0]*Q[2][1]*Q[1][2]*Q[0][3];
  
- if(fabs(det)<T(100)*tol)
+ if(fabs(det)<T(DET_FACTOR)*tol)
    det_zero_ = true;
  bool gt_0 = det>z;
 /*
@@ -310,6 +315,225 @@ bool vgl_quadric_3d<T>::operator==(vgl_quadric_3d<T> const& that) const
     fabs(h_*mag_coefs_that - that.h()*mag_coefs)<tol &&
     fabs(i_*mag_coefs_that - that.i()*mag_coefs)<tol &&
     fabs(j_*mag_coefs_that - that.j()*mag_coefs)<tol;
+}
+template <class T>
+void vgl_quadric_3d<T>::upper_3x3_eigensystem(std::vector<T>& eigenvalues, std::vector<std::vector<T> >& eigenvectors) const{
+  std::vector<std::vector<T> > Q = this->coef_matrix();  
+  T mu[3][3]; T lu[3]; T vcu[3][3];
+  for(size_t r = 0; r<3; ++r)
+    for(size_t c = 0; c<3; ++c)
+      mu[r][c] = Q[r][c];
+
+  eigen<T, 3>( mu, lu, vcu);
+  for(size_t i =0; i<3; ++i){
+    eigenvalues.push_back(lu[i]);
+  }
+  eigenvectors.resize(3, std::vector<T>(3, T(0)));
+  for(size_t r = 0; r<3; ++r)
+    for(size_t c = 0; c<3; ++c)
+      eigenvectors[r][c]=vcu[r][c];
+}
+template <class T>
+bool vgl_quadric_3d<T>::canonical_central_quadric(std::vector<T>& diag, std::vector<std::vector<T> >& H) const{
+  diag.resize(4, T(0));
+  H.resize(4, std::vector<T>(4, T(0)));
+  vgl_point_3d<T> cent;
+  bool good = this->center(cent);//the quadric origin
+  if(!good)
+    return false;
+  H[0][3] = cent.x(); H[1][3] = cent.y(); H[2][3] = cent.z();
+  H[3][3] = T(1);
+  // the constant term in the centered coordinate frame
+  T centered_j = j_ + (cent.x()*g_ + cent.y()*h_ + cent.z()*i_)/T(2);
+  // find the upper 3x3 coordinate system
+  std::vector<T> eigenvalues;
+  std::vector<std::vector<T> > eigenvectors;
+  this->upper_3x3_eigensystem(eigenvalues, eigenvectors);
+
+  for(size_t r = 0; r<3; ++r)
+    for(size_t c = 0; c<3; ++c)
+      H[r][c]=eigenvectors[c][r];
+
+  for(size_t i = 0; i<3; ++i)
+    diag[i]=eigenvalues[i];
+  diag[3] = centered_j;
+  return true;
+}
+template <class T>
+std::vector<std::vector<T> > vgl_quadric_3d<T>::canonical_quadric(std::vector<std::vector<T> >& H) const{
+  std::vector<std::vector<T> > ret(4, std::vector<T>(4, T(0)));
+  std::vector<T> tr(3, T(0));
+  if(type_ == no_type){
+    std::cout << "Invalid quadric" << std::endl;
+    return ret;
+  }
+  //check first for a central quadric
+  if(type_ == real_ellipsoid || type_==real_elliptic_cone ||
+     type_ == hyperboloid_of_one_sheet || type_ == hyperboloid_of_two_sheets){
+    std::vector<T> diag;
+    if(canonical_central_quadric(diag, H)){
+      for(size_t i = 0; i<4; ++i)
+        ret[i][i] = diag[i];
+      return ret;
+    }else{
+      std::cout << "Shouldn't happen! Inconsistent quadric type assignment " << type_by_number(type_) << std::endl;
+      return ret;
+    }
+  }
+
+  H.resize(4, std::vector<T>(4, T(0)));
+
+  // not a central quadric get the eigensystem for the upper 3x3
+  std::vector<T> lambda, sorted_eigenvalues(3,T(0));
+  std::vector<std::vector<T> > E;
+  this->upper_3x3_eigensystem(lambda, E);  
+
+  // to rotate the canonical form back to the original frame
+  for(size_t r = 0; r<3; ++r)
+    for(size_t c = 0; c<3; ++c)
+      H[r][c] = E[c][r];
+  H[3][3] = T(1);
+
+  for(size_t i = 0; i<3; ++i)
+    sorted_eigenvalues[i]=fabs(lambda[i]);
+  std::sort(sorted_eigenvalues.begin(), sorted_eigenvalues.end(), std::greater<T>());
+  T largest_eigenval = sorted_eigenvalues[0];
+  T rtol = T(RANK_FACTOR)*vgl_tolerance<T>::position;
+  size_t rank = 3;
+  for(size_t i = 0; i<3; ++i)
+    if(fabs(lambda[i]/largest_eigenval) < rtol){
+      lambda[i]=T(0);
+      rank--;
+    }
+  if(rank == 3 || rank == 0){
+    std::cout << "Shouldn't happen! rank == 3 or rank ==0 " << type_by_number(type_) << std::endl;
+    return ret;
+  }
+  // fill in the diagonalized upper 3x3
+  for(size_t i = 0; i<3; ++i)
+    ret[i][i] = lambda[i];
+  //compute transformed quadric matrix g, h, i coefficients gp, hp, ip
+  // where,
+  //    gp         g
+  //    hp = 1/2 E h 
+  //    ip         i
+ T gp = (E[0][0]*g_ + E[0][1]*h_ + E[0][2]*i_)/T(2);
+ T hp = (E[1][0]*g_ + E[1][1]*h_ + E[1][2]*i_)/T(2);
+ T ip = (E[2][0]*g_ + E[2][1]*h_ + E[2][2]*i_)/T(2);
+
+  std::vector<bool> t_known(3, false);
+  T sum = T(0);
+  if(lambda[0] != T(0)){
+    tr[0] = gp/lambda[0];
+    t_known[0]=true;
+    sum += gp*tr[0];
+  }else{
+    ret[0][3] = gp;
+    ret[3][0] = gp;
+  }
+  if(lambda[1] != T(0)){
+    tr[1] = hp/lambda[1];
+    t_known[1]=true;
+    sum += hp*tr[1];
+  }else{
+    ret[1][3] = hp;
+    ret[3][1] = hp;
+  }
+  if(lambda[2] != T(0)){
+    tr[2] = ip/lambda[2];
+    t_known[2]=true;
+    sum += ip*tr[2];
+  }else{
+    ret[2][3] = ip;
+    ret[3][2] = ip;
+  }
+  // compute the unknown translation to set j' = 0 
+  if(rank == 2){
+    if(!t_known[0]){
+      if(fabs(gp) < rtol){
+        ret[3][3] = j_;
+        ret[0][3] = T(0);
+        ret[3][0] = T(0);
+      }else{
+        tr[0] = (j_ - sum)/(T(2)*gp);
+      }
+    }else if(!t_known[1]){
+      if(fabs(hp) < rtol){
+        ret[3][3] = j_;
+        ret[1][3] = T(0);
+        ret[3][1] = T(0);
+      }else{
+        tr[1] = (j_ - sum)/(T(2)*hp);
+      }
+    }else if(!t_known[2]){
+      if(fabs(ip) < rtol){
+        ret[3][3] = j_;
+        ret[2][3] = T(0);
+        ret[3][2] = T(0);
+      }else{
+        tr[2] = (j_ - sum)/(T(2)*ip);
+      }
+    }
+    H[0][3] = -(E[0][0]*tr[0] + E[1][0]*tr[1] + E[2][0]*tr[2]);
+    H[1][3] = -(E[0][1]*tr[0] + E[1][1]*tr[1] + E[2][1]*tr[2]);
+    H[2][3] = -(E[0][2]*tr[0] + E[1][2]*tr[1] + E[2][2]*tr[2]);
+    return ret;
+  }
+  // two translational degrees of freedom to reduce j to zero
+  if(rank == 1){
+    // handle cases, tedious but necessary
+    if(!t_known[0]&&!t_known[1]){
+      if((fabs(gp) < rtol)&& (fabs(hp) < rtol)){
+        ret[3][3] = j_;
+      }else if((fabs(gp) >=  rtol) && (fabs(hp) >= rtol)){
+        T temp = (j_ - sum)/(T(2)*(gp+hp));
+        tr[0] = temp; tr[1] = temp;
+      }else if((fabs(gp) >= rtol)&&(fabs(hp) < rtol)){
+        tr[0] = (j_ - sum)/(T(2)*gp);
+        ret[1][3] = T(0);
+        ret[3][1] = T(0);
+      }else if((fabs(gp) < rtol)&&(fabs(hp) >= rtol)){
+        tr[1] = (j_ - sum)/(T(2)*hp);
+        ret[0][3] = T(0);
+        ret[3][0] = T(0);
+      }
+    }else if(!t_known[0]&&!t_known[2]){
+      if((fabs(gp) < rtol)&& (fabs(ip) < rtol)){
+        ret[3][3] = j_;
+      }else if((fabs(gp) >=  rtol) && (fabs(ip) >= rtol)){
+        T temp = (j_ - sum)/(T(2)*(gp+ip));
+        tr[0] = temp; tr[2] = temp;
+      }else if((fabs(gp) >= rtol)&&(fabs(ip) < rtol)){
+        tr[0] = (j_ - sum)/(T(2)*gp);
+        ret[2][3] = T(0);
+        ret[3][2] = T(0);
+      }else if((fabs(gp) < rtol)&&(fabs(ip) >= rtol)){
+        tr[2] = (j_ - sum)/(T(2)*ip);
+        ret[0][3] = T(0);
+        ret[3][0] = T(0);
+      }
+    }else if(!t_known[1]&&!t_known[2]){
+      if((fabs(hp) < rtol) && (fabs(ip) < rtol)){
+        ret[3][3] = j_;
+      }else if((fabs(hp) >=  rtol) && (fabs(ip) >=  rtol)){
+        T temp = (j_ - sum)/(T(2)*(hp+ip));
+        tr[1] = temp; tr[2] = temp;
+      }else if((fabs(hp) >= rtol) && (fabs(ip) < rtol)){
+        tr[1] = (j_ - sum)/(T(2)*hp);
+        ret[2][3] = T(0);
+        ret[3][2] = T(0);
+      }else if((fabs(hp) < rtol) && (fabs(ip) >= rtol)){
+        tr[2] = (j_ - sum)/(T(2)*ip);
+        ret[1][3] = T(0);
+        ret[3][1] = T(0);
+      }
+    }
+    H[0][3] = -(E[0][0]*tr[0] + E[1][0]*tr[1] + E[2][0]*tr[2]);
+    H[1][3] = -(E[0][1]*tr[0] + E[1][1]*tr[1] + E[2][1]*tr[2]);
+    H[2][3] = -(E[0][2]*tr[0] + E[1][2]*tr[1] + E[2][2]*tr[2]);
+    return ret;
+  }
+  return ret;
 }
 // The eigensystem computation below is described at
 //http://www.cap-lore.com/MathPhys/eigen/

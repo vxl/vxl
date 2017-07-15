@@ -160,6 +160,18 @@ class vgl_quadric_3d
   // otherwise the center is not defined for degenerate quadrics
   bool center(vgl_point_3d<T>& center) const;
 
+  //:: eigenvalues and eigenvectors of the upper 3x3 quadric matrix 
+  void upper_3x3_eigensystem(std::vector<T>& eigenvalues, std::vector<std::vector<T> >& eigenvectors) const;
+
+  //:: The quadric in its canonical frame if the center is defined, i.e. the upper 3x3 quadric matrix is full rank
+  // In this case the quadric coefficient matrix in the canonical frame is
+  // a 4x4 diagonal matrix, e.g. ax^2 + by^2 + cz^2 - j = 0.
+  // H is a homogenous(4x4)transformation from canonical coordinate space back to the original space.
+  bool canonical_central_quadric(std::vector<T>& diag, std::vector<std::vector<T> >& H) const;
+
+  //: The quadric coefficient matrix in the canonical frame, whether or not the quadric is central
+  // H is a homogenous(4x4)transformation from canonical coordinate space back to the original space.
+  std::vector<std::vector<T> > canonical_quadric(std::vector<std::vector<T> >& H) const;
  private:
   //--------------------------------------------------------------------------
   //: set quadric type from polynomial coefficients and store in member type_

@@ -168,6 +168,10 @@ T vgl_fit_quadric_3d<T>::fit_ellipsoid_linear_Allaire(std::ostream* errstream){
     M += p*(p.transpose());
   }
   M/=n;
+  // condition the M matrix to be positive definite
+  double tol = 100.0*vgl_tolerance<double>::position;
+  for(size_t i = 0; i<10; ++i)
+    M[i][i]+=tol;
   // for ellipsoid the constraint is as follows:
   // let the coeficient matrix
   //      _     _
