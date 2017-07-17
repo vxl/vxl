@@ -105,12 +105,48 @@ void msm_curve::config_from_stream(std::istream& is)
 // Method: print
 //=======================================================================
 
+//: If indices starting at index[i] ascend, write them out as first:last 
+bool write_stepped_list(std::ostream& os, const std::vector<unsigned>& index,
+                          unsigned& i, int step)
+{
+  if (i>=index.size()-2) return false;
+  if (index[i+1]!=index[i]+step) return false;
+  if (index[i+2]!=index[i]+2*step) return false;
+  // i,i+1,i+2 are in sequence.
+  // Find end of sequence
+  unsigned j=i+2;
+  while (j+1<index.size() && (index[j+1]==unsigned(index[j]+step))) ++j;
+  
+  // Sequence runs from index i to index j
+  os<<index[i]<<":"<<index[j]<<" ";
+  i=j+1;
+  return true;
+}
+
+//: Write index values to a stream, using X:Y format for ascending or descending sequences
+inline void write_indices(std::ostream& os, const std::vector<unsigned>& index)
+{
+  unsigned i=0;
+  while (i<index.size())
+  {
+    if (!write_stepped_list(os,index,i,+1))
+    {
+      if (!write_stepped_list(os,index,i,-1))
+      {
+        os<<index[i]<<" ";
+        ++i;
+      }
+    }
+  }
+}
+
 void msm_curve::print_summary(std::ostream& os) const
 {
   os<<" { name: "<<name_<<" open: ";
   if (open_) os<<"true"; else os<<"false";
   os<<" indices: { ";
-  for (unsigned i=0;i<index_.size();++i) os<<index_[i]<<' ';
+  write_indices(os,index_);
+//  for (unsigned i=0;i<index_.size();++i) os<<index_[i]<<' ';
   os<<"} } ";
 }
 
