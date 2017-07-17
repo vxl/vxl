@@ -158,6 +158,16 @@ public:
     
     return box;
   }
+  
+  //: Translate region by given amount
+  void translate_by(int x, int y, int z)
+  {
+    for (unsigned i=0;i<size();++i)
+    {
+      vil3d_chord& c=operator[](i);
+      c=vil3d_chord(c.start_x()+x,c.end_x()+x,c.y()+y,c.z()+z);
+    }
+  }
 };
 
 //: Write value v into pixels defined by chord.

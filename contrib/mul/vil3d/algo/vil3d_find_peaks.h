@@ -67,4 +67,32 @@ inline void vil3d_find_peaks_26(std::vector<vgl_point_3d<int> >& peaks,
   }
 }
 
+//: Return position of highest value in the image
+// Or first instance of highest value if multiple voxels with same value.
+template <class T>
+inline vgl_point_3d<int> vil3d_find_max(const vil3d_image_view<T>& image)
+{
+  if (image.size()==0) return vgl_point_3d<int>();
+  
+  const unsigned ni=image.ni(),nj=image.nj(),nk=image.nk();
+  const std::ptrdiff_t istep = image.istep(),jstep=image.jstep(),kstep=image.kstep();
+  const T* plane = image.origin_ptr();
+  vgl_point_3d<int> best_p(0,0,0);
+  T best_v=image(0,0,0);
+  
+  for (unsigned k=0;k<nk;++k,plane+=kstep)
+  {
+    const T* row = plane;
+    for (unsigned j=0;j<nj;++j,row+=jstep)
+    {
+      const T* pixel = row;
+      for (unsigned i=0;i<ni;++i,pixel+=istep)
+        if (*pixel>=best_v)
+        { best_p=vgl_point_3d<int>(i,j,k); best_v= *pixel; }
+    }
+  }
+  return best_p;
+}
+
+
 #endif // vil3d_find_peaks_h_

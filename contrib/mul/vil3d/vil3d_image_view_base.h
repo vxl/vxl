@@ -22,6 +22,7 @@
 #include <vcl_compiler.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_smart_ptr.h>
+#include <vgl/vgl_box_3d.h>
 
 //: An abstract base class of smart pointers to actual image data in memory.
 // If you want an actual image, try instantiating vil3d_image_view<T>.
@@ -57,6 +58,13 @@ class vil3d_image_view_base
   unsigned nk()  const {return nk_;}
   //: Number of planes
   unsigned nplanes() const {return nplanes_;}
+  
+  //: Return a box describing the voxel region
+  vgl_box_3d<int> bounds() const
+  { 
+    if (size()==0) return vgl_box_3d<int>();  // Empty
+    return vgl_box_3d<int>(0,0,0,ni()-1,nj()-1,nk()-1); 
+  }
 
   //: The number of pixels.
   std::size_t size() const { return static_cast<std::size_t>(ni_) * nj_ * nk_ * nplanes_; }

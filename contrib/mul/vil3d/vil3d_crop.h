@@ -32,9 +32,9 @@ vil3d_image_view<T> vil3d_crop(const vil3d_image_view<T>& im,
 template <class T>
 vil3d_image_view<T> vil3d_crop(const vil3d_image_view<T>& im, const vgl_box_3d<int>& b)
 {
-  return vil3d_crop(im,b.min_x(),1+b.min_x()-b.max_x(),
-                       b.min_y(),1+b.min_y()-b.max_y(),
-                       b.min_z(),1+b.min_z()-b.max_z());
+  return vil3d_crop(im,b.min_x(),1+b.max_x()-b.min_x(),
+                       b.min_y(),1+b.max_y()-b.min_y(),
+                       b.min_z(),1+b.max_z()-b.min_z());
 }
 
 //: Crop to a region of src.
