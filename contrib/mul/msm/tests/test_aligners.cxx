@@ -16,6 +16,7 @@
 #include <msm/msm_zoom_aligner.h>
 #include <msm/msm_rigid_aligner.h>
 #include <msm/msm_similarity_aligner.h>
+#include <msm/msm_affine_aligner.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
 
@@ -316,6 +317,15 @@ void test_similarity_aligner()
 }
 
 //=======================================================================
+void test_affine_aligner()
+{
+  msm_affine_aligner aligner;
+  test_generic_aligner(aligner);
+  
+  // Need additional tests of calc_transform_wt_mat
+
+}
+//=======================================================================
 
 void test_aligners()
 {
@@ -327,6 +337,7 @@ void test_aligners()
   test_zoom_aligner();
   test_similarity_aligner();
   test_rigid_aligner();
+  test_affine_aligner();
 }
 
 TESTMAIN(test_aligners);
