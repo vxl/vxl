@@ -2,9 +2,7 @@
 // \file
 // \author Tim Cootes
 // \brief Calculate and apply 2D affine transformations
-
-// Note: Should add more tests for calc_transform_wt_mat
-
+  
 #include <iostream>
 #include <cstddef>
 #include "msm_affine_aligner.h"
