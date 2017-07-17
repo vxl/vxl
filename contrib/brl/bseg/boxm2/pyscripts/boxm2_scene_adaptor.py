@@ -56,7 +56,9 @@ class boxm2_scene_adaptor(object):
         self.bbox = scene_bbox(self.scene)
         self.description = describe_scene(self.scene)
         self.model_dir = self.description['dataPath']
-        self.rgb = self.description['appType'] == "boxm2_gauss_rgb"
+        # stores whether appearance model contains RGB - also includes view_dep
+        self.rgb = self.description['appType'].startswith("boxm2_gauss_rgb")
+        self.view = ("view" in self.description['appType'])
         self.lvcs = scene_lvcs(self.scene)
 
     def __del__(self):
@@ -141,14 +143,19 @@ class boxm2_scene_adaptor(object):
 
         # run update grey or RGB
         if self.rgb:
-            return update_rgb(self.scene, cache, cam,
-                              img, dev, "", update_alpha)
-        elif self.description['appType'].startswith('boxm2_mog6_view'):
-            return update_grey_view_dep(self.scene, cache, cam, img, dev,
-                                        ident_string, mask, update_alpha, var)
+            if self.view:
+                return update_rgb_view_dep(self.scene, cache, cam, img, dev,
+                                           ident_string, mask, update_alpha, var)
+            else:
+                return update_rgb(self.scene, cache, cam,
+                                  img, dev, "", update_alpha)
         else:
-            return update_grey(self.scene, cache, cam, img, dev, ident_string,
-                               mask, update_alpha, var, update_app, tnear, tfar)
+            if self.view:
+                return update_grey_view_dep(self.scene, cache, cam, img, dev,
+                                            ident_string, mask, update_alpha, var)
+            else:
+                return update_grey(self.scene, cache, cam, img, dev, ident_string,
+                                   mask, update_alpha, var, update_app, tnear, tfar)
 
     # update wrapper, can pass in a Null device to use
     def update_app(self, cam, img, device_string="", force_grey=False):
@@ -201,15 +208,20 @@ class boxm2_scene_adaptor(object):
             cache = self.cpu_cache
             dev = None
         if self.rgb:
-            expimg, vis_image, status = render_rgb(
-                self.scene, cache, cam, ni, nj, dev, tnear, tfar)
-            boxm2_batch.remove_data(vis_image.id)
-        elif self.description['appType'].startswith('boxm2_mog6_view'):
-            expimg = render_grey_view_dep(self.scene, cache, cam,
-                                          ni, nj, dev, ident_string)
+            if self.view:
+                expimg = render_rgb_view_dep(self.scene, cache, cam,
+                                             ni, nj, dev, ident_string)
+            else:
+                expimg, vis_image, status = render_rgb(
+                    self.scene, cache, cam, ni, nj, dev, tnear, tfar)
+                boxm2_batch.remove_data(vis_image.id)
         else:
-            expimg = render_grey(self.scene, cache, cam,
-                                 ni, nj, dev, ident_string, tnear, tfar)
+            if self.view:
+                expimg = render_grey_view_dep(self.scene, cache, cam,
+                                              ni, nj, dev, ident_string)
+            else:
+                expimg = render_grey(self.scene, cache, cam,
+                                     ni, nj, dev, ident_string, tnear, tfar)
         return expimg
 
     # render wrapper, same as above

@@ -136,7 +136,7 @@ compress_rgb(__global RenderSceneInfo * info,
 #ifdef YUV
     int packed = pack_yuv(mean_obs);
 #else
-    int packed = pack_uchar4(convert_uchar4_sat_rte(mean_obs * 255.0));
+    int packed = pack_uchar4(convert_uchar4_sat_rte(mean_obs * 255.0f));
 #endif
     aux_mean_obsY[gid] = packed; //aux_array[datasize + gid] = as_int(packed);
 

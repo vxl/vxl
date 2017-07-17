@@ -49,13 +49,16 @@ namespace boxm2_ocl_render_view_dep_expected_color_process_globals
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "view_dep_app_color_helper_functions.cl");
+    src_paths.push_back(source_dir + "view_dep_app_common_functions.cl");
+    // src_paths.push_back(source_dir + "view_dep_app_rgb_helper_functions.cl");
     src_paths.push_back(source_dir + "bit/render_view_dep_rgb.cl");
     //src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     {
       std::string options = opts;
-      options += " -D RENDER_VIEW_DEP ";
+      std::cout << "***** OPTIONS " << options << std::endl;
+      options += " -D RENDER_VIEW_DEP";
       options += " -D STEP_CELL=step_cell_render(aux_args,data_ptr,d*linfo->block_len)";
       // options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,aux_args.app_model_weights,d*linfo->block_len,vis,aux_args.expint)";
       //have kernel construct itself using the context and device
@@ -140,10 +143,9 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
   std::vector<std::string> valid_types;
   valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix());
   if ( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-    std::cout<<"boxm2_ocl_render_gl_view_dep_color_app_expected_image_process ERROR: scene doesn't have BOXM2_MOG6_VIEW data type"<<std::endl;
+    std::cout<<"boxm2_ocl_render_gl_view_dep_color_app_expected_image_process ERROR: scene doesn't have BOXM2_GAUSS_RGB_VIEW data type"<<std::endl;
     return false;
   }
-
   std::string options = boxm2_ocl_util::mog_options(data_type);
 
   if (ident.size() > 0) {
@@ -207,6 +209,7 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
   render_expected_image(scene, device, opencl_cache, queue,
                         cam, exp_image, vis_image, max_omega_image,exp_img_dim,
                         data_type, kernels[identifier][0], lthreads, cl_ni, cl_nj,apptypesize,tnearfar_mem_ptr);
+
   // normalize
   if (kernels[identifier].size()>1)
   {
@@ -226,20 +229,16 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
   exp_image->read_to_buffer(queue);
   vis_image->read_to_buffer(queue);
 
+  //vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
+  // for (unsigned c=0;c<nj;c++)
+  //   for (unsigned r=0;r<ni;r++)
+  //     (*exp_img_out)(r,c)=buff[c*cl_ni+r];
 
-
-
-
- //vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
- // for (unsigned c=0;c<nj;c++)
- //   for (unsigned r=0;r<ni;r++)
- //     (*exp_img_out)(r,c)=buff[c*cl_ni+r];
-
- vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(ni,nj);
+  vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(cl_ni,cl_nj);
   int numFloats = 4;
   int count = 0;
-  for (unsigned c=0;c<nj;++c) {
-    for (unsigned r=0;r<ni;++r,count+=numFloats) {
+  for (unsigned c=0;c<cl_nj;++c) {
+    for (unsigned r=0;r<cl_ni;++r,count+=numFloats) {
       (*exp_img_out)(r,c) =
       vil_rgba<vxl_byte> ( (vxl_byte) (buff[count]  * 255.0f),
                            (vxl_byte) (buff[count+1]*255.0f),
@@ -247,9 +246,9 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
                            (vxl_byte) 255 );
     }
   }
-  vil_image_view<float>* vis_img_out=new vil_image_view<float>(ni,nj);
-  for (unsigned c=0;c<nj;c++)
-    for (unsigned r=0;r<ni;r++)
+  vil_image_view<float>* vis_img_out=new vil_image_view<float>(cl_ni,cl_nj);
+  for (unsigned c=0;c<cl_nj;c++)
+    for (unsigned r=0;r<cl_ni;r++)
       (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
 
 
@@ -257,9 +256,11 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
   delete [] vis_buff;
   delete [] buff;
   delete [] max_omega_buff;
+  delete [] tnearfar_mem_ptr.ptr();
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(exp_image.ptr());
   opencl_cache->unref_mem(max_omega_image.ptr());
+  opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
   clReleaseCommandQueue(queue);
   i=0;
   // store scene smaprt pointer

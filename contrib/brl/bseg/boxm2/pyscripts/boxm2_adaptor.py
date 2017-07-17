@@ -331,6 +331,24 @@ def update_rgb(scene, cache, cam, img, device=None, mask="", updateAlpha=True):
         print "ERROR: Cache type not recognized: ", cache.type
 
 
+# Updates with view-dependent rgb appearance model.
+def update_rgb_view_dep(scene, cache, cam, img, device=None, ident="",
+                        mask=None, update_alpha=False, var=-1.0):
+    print "boxm2_batch GPU update (rgb, view dependent)"
+    boxm2_batch.init_process("boxm2OclUpdateViewDepAppColorProcess")
+    boxm2_batch.set_input_from_db(0, device)
+    boxm2_batch.set_input_from_db(1, scene)
+    boxm2_batch.set_input_from_db(2, cache)
+    boxm2_batch.set_input_from_db(3, cam)
+    boxm2_batch.set_input_from_db(4, img)
+    boxm2_batch.set_input_string(5, ident)
+    if mask:
+        boxm2_batch.set_input_from_db(6, mask)
+    boxm2_batch.set_input_bool(7, update_alpha)
+    boxm2_batch.set_input_float(8, var)
+    return boxm2_batch.run_process()
+
+
 def update_with_quality(scene, cache, cam, img, q_img, identifier=""):
     boxm2_batch.init_process("boxm2CppUpdateUsingQualityProcess")
     boxm2_batch.set_input_from_db(0, scene)

@@ -98,7 +98,9 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_ingest_dem_space_process, "boxm2OclIngestDemSpaceProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_view_dep_app_process, "boxm2OclUpdateViewDepAppProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_view_dep_app_color_process, "boxm2OclUpdateViewDepAppColorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_view_dep_expected_image_process, "boxm2OclRenderViewDepExpectedImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_view_dep_expected_color_process, "boxm2OclRenderViewDepExpectedColorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_view_dep_app_expected_image_process, "boxm2OclRenderGlViewDepExpectedImageProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_make_inside_voxels_empty_process, "boxm2OclMakeInsideVoxelsEmptyProcess");

@@ -53,7 +53,10 @@
 #endif
 #ifdef MOG_VIEW_DEP_COLOR
     #define MOG_TYPE int16
+    #define CONVERT_FUNC_FLOAT16(lhs,data) float16 lhs = convert_float16( as_int16(data) )
+    #define CONVERT_FUNC_SAT_RTE(lhs,data) lhs = ( convert_int16_sat_rte(data * 255.0f) )
     #define NORM 255
+    #define NUM_OBS_TYPE float8
 #endif
 #ifdef MOG_VIEW_DEP_COLOR_COMPACT
     #define MOG_TYPE int8
