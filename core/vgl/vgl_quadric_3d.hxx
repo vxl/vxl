@@ -447,7 +447,10 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::canonical_quadric(std::vector<st
     ret[2][3] = ip;
     ret[3][2] = ip;
   }
-  // compute the unknown translation to set j' = 0 
+  // for rank == 2, determine the one remaining
+  // unknown translation component to set j' = 0 
+  // consider the possibility that g,h,i, coefficients
+  // are too small to be used (i.e. < rtol)
   if(rank == 2){
     if(!t_known[0]){
       if(fabs(gp) < rtol){
@@ -474,14 +477,13 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::canonical_quadric(std::vector<st
         tr[2] = (j_ - sum)/(T(2)*ip);
       }
     }
-    H[0][3] = -(E[0][0]*tr[0] + E[1][0]*tr[1] + E[2][0]*tr[2]);
-    H[1][3] = -(E[0][1]*tr[0] + E[1][1]*tr[1] + E[2][1]*tr[2]);
-    H[2][3] = -(E[0][2]*tr[0] + E[1][2]*tr[1] + E[2][2]*tr[2]);
-    return ret;
   }
-  // two translational degrees of freedom to reduce j to zero
+  // for rank == 1, determine the two translational
+  // degrees of freedom to reduce j to zero
+  // consider the possibility that g,h,i, coefficients
+  // are too small to be used (i.e. < rtol)
   if(rank == 1){
-    // handle cases, tedious but necessary
+    // handle all cases of small coefficients, tedious but necessary
     if(!t_known[0]&&!t_known[1]){
       if((fabs(gp) < rtol)&& (fabs(hp) < rtol)){
         ret[3][3] = j_;
@@ -528,11 +530,10 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::canonical_quadric(std::vector<st
         ret[3][1] = T(0);
       }
     }
-    H[0][3] = -(E[0][0]*tr[0] + E[1][0]*tr[1] + E[2][0]*tr[2]);
-    H[1][3] = -(E[0][1]*tr[0] + E[1][1]*tr[1] + E[2][1]*tr[2]);
-    H[2][3] = -(E[0][2]*tr[0] + E[1][2]*tr[1] + E[2][2]*tr[2]);
-    return ret;
   }
+  H[0][3] = -(E[0][0]*tr[0] + E[1][0]*tr[1] + E[2][0]*tr[2]);
+  H[1][3] = -(E[0][1]*tr[0] + E[1][1]*tr[1] + E[2][1]*tr[2]);
+  H[2][3] = -(E[0][2]*tr[0] + E[1][2]*tr[1] + E[2][2]*tr[2]);
   return ret;
 }
 // The eigensystem computation below is described at

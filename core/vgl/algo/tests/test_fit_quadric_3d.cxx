@@ -460,7 +460,7 @@ static void test_linear_fit_Allaire_saddle_shape()
 
 
   vnl_random ran;
-  double e = 0.25;
+  double e = 0.0;
   std::cout << "error " << e << std::endl;
   for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit){
@@ -469,6 +469,15 @@ static void test_linear_fit_Allaire_saddle_shape()
   }
   vgl_fit_quadric_3d<double> fit_sad(pts);
   double error = fit_sad.fit_saddle_shaped_quadric_linear_Allaire(&std::cout);
+  vgl_quadric_3d<double>& q = fit_sad.quadric_Allaire_fit();
+  std::cout << "Fit error = " << error << " Quadric type " << q.type_by_number(q.type()) << std::endl;
+  std::vector<double> diag;
+  std::vector<std::vector<double> > H;
+  q.canonical_central_quadric(diag, H);
+  std::cout << "canonical q diag[ " << diag[0] << ' ' << diag[1] << ' ' <<  diag[2] << ' ' << diag[3] << " ]" << std::endl;
+   std::cout << "H" << std::endl;
+  for(size_t r = 0; r<4 ; ++r)
+    std::cout << H[r][0] << ' '<< H[r][1] << ' '<< H[r][2]<< ' '<< H[r][3] << std::endl;
   TEST_NEAR("linear fit Allaire saddle", error, 0.0, 0.5);
 }
 static void test_linear_fit_Allaire_ellipsoid_actual_pts()
