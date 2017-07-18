@@ -780,6 +780,25 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None, tnear=100000.0, 
     else:
         print "ERROR: Cache type not recognized: ", cache.type
 
+
+def render_rgb_view_dep(scene, cache, cam, ni=1280, nj=720, device=None,
+                        ident_string=""):
+    if cache.type == "boxm2_opencl_cache_sptr" and device:
+        boxm2_batch.init_process("boxm2OclRenderViewDepExpectedColorProcess")
+        boxm2_batch.set_input_from_db(0, device)
+        boxm2_batch.set_input_from_db(1, scene)
+        boxm2_batch.set_input_from_db(2, cache)
+        boxm2_batch.set_input_from_db(3, cam)
+        boxm2_batch.set_input_unsigned(4, ni)
+        boxm2_batch.set_input_unsigned(5, nj)
+        boxm2_batch.set_input_string(6, ident_string)
+        boxm2_batch.run_process()
+        (id, type) = boxm2_batch.commit_output(0)
+        exp_image = dbvalue(id, type)
+        return exp_image
+    else:
+        print "ERROR: Cache type not recognized: ", cache.type
+
 #####################################################################
 # render depth map
 #####################################################################

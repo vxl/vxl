@@ -256,7 +256,7 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
   delete [] vis_buff;
   delete [] buff;
   delete [] max_omega_buff;
-  delete [] tnearfar_mem_ptr.ptr();
+  // delete [] tnearfar_mem_ptr.ptr(); // Apparently unnecessary, and causes a segfault
   opencl_cache->unref_mem(vis_image.ptr());
   opencl_cache->unref_mem(exp_image.ptr());
   opencl_cache->unref_mem(max_omega_image.ptr());
