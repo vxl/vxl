@@ -336,7 +336,7 @@ vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T> const &p)
   }
   else
   {
-    for(int i = 0; i < p.num_sheets();i++)
+    for(size_t i = 0; i < p.num_sheets();i++)
     {
       std::vector<vgl_point_2d<T> > verts = p[i];
       if(vgl_polygon_sheet_is_counter_clockwise(verts))
@@ -358,7 +358,7 @@ bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts)
 {
   //converting to double for precision in estimating interior/exterior
   std::vector<vgl_point_2d<double> > doubPts;
-  for(int x = 0; x <verts.size(); x++)
+  for(size_t x = 0; x <verts.size(); x++)
   {
     vgl_point_2d<T> p = verts.at(x);
     vgl_point_2d<double> t(static_cast<double>(p.x()),static_cast<double>(p.y()));
@@ -371,7 +371,7 @@ bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts)
     return false;//no boundary
   }
   std::vector<int> intextvals;
-  for(int j = 0;j<doubPts.size()-1;j++)
+  for(size_t j = 0;j<doubPts.size()-1;j++)
   {
     vgl_point_2d<double> pt1, pt2;
     pt1 = doubPts.at(j);
