@@ -6,6 +6,7 @@
 #include <set>
 #include <cmath>
 #include <algorithm>
+#include <numeric>    
 #include <string>
 #include "vgl_polygon.h"
 #include <math.h>
@@ -112,7 +113,7 @@ bool vgl_polygon<T>::contains(T x, T y) const
   }
   return c;
 }
-
+ 
 template <class T>
 std::ostream& vgl_polygon<T>::print(std::ostream& os) const
 {
@@ -319,6 +320,80 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
   }
 }
 
+//turn all sheets into counterclockwise polygons
+template <class T>
+vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T> const &p)
+{
+  vgl_polygon<T> outPolygon;
+  //std::vector<std::vector<vgl_point_2d<T> > > outPolySheets;
+  std::vector<std::pair<unsigned,unsigned> > e1, e2;
+  std::vector<vgl_point_2d<T> > ip;
+  vgl_selfintersections(p, e1, e2, ip);
+  if(!e1.empty() && !e2.empty() && !ip.empty())
+  {
+    //Self intersecting/non simple polygons cannot be said to be clockwise or not
+    //hence they are not added and we get an empty polygon.
+  }
+  else
+  {
+    for(int i = 0; i < p.num_sheets();i++)
+    {
+      std::vector<vgl_point_2d<T> > verts = p[i];
+      if(vgl_polygon_sheet_is_counter_clockwise(verts))
+      {
+        outPolygon.push_back(verts);
+      }
+      else
+      {
+        std::reverse(verts.begin(), verts.end());
+        outPolygon.push_back(verts);
+      }
+    }
+  }
+  return outPolygon;
+}
+
+template <class T>
+bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts)
+{
+  //converting to double for precision in estimating interior/exterior
+  std::vector<vgl_point_2d<double> > doubPts;
+  for(int x = 0; x <verts.size(); x++)
+  {
+    vgl_point_2d<T> p = verts.at(x);
+    vgl_point_2d<double> t(static_cast<double>(p.x()),static_cast<double>(p.y()));
+    doubPts.push_back(t);
+  }
+  vgl_polygon<double> currSheetPoly(doubPts); 
+  //seems dumb... but we need a polygon for intersection and this is per sheet
+  if(verts.size()==0) 
+  {
+    return false;//no boundary
+  }
+  std::vector<int> intextvals;
+  for(int j = 0;j<doubPts.size()-1;j++)
+  {
+    vgl_point_2d<double> pt1, pt2;
+    pt1 = doubPts.at(j);
+    pt2 = doubPts.at(j+1);
+    double angle = atan2((pt2.y()-pt1.y()),(pt2.x()-pt1.x()));
+    double segLength = 0.5*sqrt(pow((pt2.y()-pt1.y()),2)+pow((pt2.x()-pt1.x()),2));
+    double probeAngle = angle + 0.000048; //~1 arc second 
+    vgl_point_2d<double> probePt((segLength*cos(probeAngle)+pt1.x()),((segLength*sin(probeAngle))+pt1.y())); 
+    if(currSheetPoly.contains(probePt))
+    {
+      intextvals.push_back(1);
+    }
+    else
+    {
+      intextvals.push_back(-1);
+    }
+  }
+  double average = std::accumulate(intextvals.begin(),intextvals.end(),0)/static_cast<double>(intextvals.size()); 
+  //averaging in case of thin geometry
+  return average>=0;
+}
+
 
 #undef VGL_POLYGON_INSTANTIATE
 #define VGL_POLYGON_INSTANTIATE(T) \
@@ -329,6 +404,8 @@ template std::istream& operator>>(std::istream&,vgl_polygon<T >&); \
 template void vgl_selfintersections(vgl_polygon<T > const& p, \
                                     std::vector<std::pair<unsigned int,unsigned int> >& e1, \
                                     std::vector<std::pair<unsigned int,unsigned int> >& e2, \
-                                    std::vector<vgl_point_2d<T > >& ip)
+                                    std::vector<vgl_point_2d<T > >& ip); \
+template vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T > const &p); \
+template bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T > > verts)
 
 #endif // vgl_polygon_hxx_
