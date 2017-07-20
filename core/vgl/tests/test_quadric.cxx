@@ -101,7 +101,7 @@ static void test_quadric()
   T[1][0] = cq*sp; T[1][1] = cp*cq; T[1][2]=-sq; T[1][3]=ty;
   T[2][0] = sp*sq; T[2][1] = cp*sq; T[2][2]= cq; T[2][3]=tz;
   T[3][3] = 1.0;
-  Qtrans = transform_quadric(T,Q);
+  Qtrans = transform_quadric(T,Q);//Note T is actually the inverse transformation since transform_quadric == T^tQT
   vgl_quadric_3d<double> test(Qtrans);
   good = test.type() == vgl_quadric_3d<double>::elliptic_paraboloid;
   Q = real_elliptic_cone.coef_matrix();
@@ -156,8 +156,18 @@ static void test_quadric()
    // which is just the center itself. 
    QeETT = transform_quadric(Te,QeET);//should have g = h = i == 0
    double sum_ghi = fabs(QeETT[0][3])+ fabs(QeETT[1][3])+ fabs(QeETT[2][3]);
-   good = good & sum_ghi < 1.0e-8;
+   good = good && sum_ghi < 1.0e-8;
    TEST("center", good , true);
+   Q = elliptic_paraboloid.coef_matrix();
+   std::vector<std::vector<double> > Tq(4, std::vector<double>(4, 0.0));
+   Tq[0][0]=0.5;Tq[1][1]=1.0;Tq[2][2]=0.5;Tq[3][3]=1.0;
+   Tq[0][2] = -0.866;Tq[2][0] = 0.866;
+   Tq[0][3] = 1.0; Tq[2][3] = 2.0; Tq[2][3] = 3.0;
+   vgl_quadric_3d<double> tr_elliptic_para(Q,Tq);
+   std::vector<std::vector<double> > Hg;
+   std::vector<std::vector<double> > Qg = tr_elliptic_para.canonical_quadric(Hg);
+   vgl_quadric_3d<double> pqst_q(Qg);
+    TEST("canonical frame ", pqst_q.type() == vgl_quadric_3d<double>::elliptic_paraboloid, true);
 }
 
 TESTMAIN(test_quadric);

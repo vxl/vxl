@@ -4,7 +4,6 @@ DECLARE( test_compute_similarity_3d );
 DECLARE( test_compute_rigid_3d );
 DECLARE( test_conic );
 DECLARE( test_convex_hull_2d );
-DECLARE( test_ellipsoid );
 DECLARE( test_fit_conics_2d );
 DECLARE( test_fit_lines_2d );
 DECLARE( test_fit_plane_3d );
@@ -28,7 +27,6 @@ register_tests()
   REGISTER( test_compute_rigid_3d );
   REGISTER( test_conic );
   REGISTER( test_convex_hull_2d );
-  REGISTER( test_ellipsoid );
   REGISTER( test_fit_conics_2d );
   REGISTER( test_fit_lines_2d );
   REGISTER( test_fit_plane_3d );

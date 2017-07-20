@@ -132,6 +132,20 @@ class vgl_quadric_3d
   // 
   std::vector<std::vector<T> > coef_matrix() const;
 
+  //: constructor from a canonical 4x4 matrix and a 4x4 homogeneous matrix, H 
+  // representing the Euclidean transformation from the canonical frame to the global frame
+  //                  _    _
+  //                 |R    t|  where t is a 3x1 translation vector and R is a rotation matrix 
+  //             H = |      |  0^t is a 1x3 zero vector.
+  //                 |0^t  1|  
+  //                  -    -
+  vgl_quadric_3d(std::vector<std::vector<T> > const& canonical_quadric, std::vector<std::vector<T> > const& H);
+
+  //: constructor for central quadrics (e.g. ellipsoid) the diagonal
+  //  of the 4x4 quadric coefficient matrix and a 4x4 homogeneous matrix,
+  //  H representing the Euclidean transformation from the canonical frame to the global frame
+  vgl_quadric_3d(std::vector<T> const& diag, std::vector<std::vector<T> > const& H);
+
   //: set or reset the quadric using polynomial coefficients.
   void set(T a, T b, T c, T d, T e, T f, T g, T h, T i, T j);
 

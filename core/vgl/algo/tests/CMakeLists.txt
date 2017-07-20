@@ -6,7 +6,6 @@ add_executable( vgl_algo_test_all
   test_compute_rigid_3d.cxx
   test_conic.cxx
   test_convex_hull_2d.cxx
-  test_ellipsoid.cxx
   test_fit_conics_2d.cxx
   test_fit_lines_2d.cxx
   test_fit_plane_3d.cxx
@@ -31,7 +30,6 @@ add_test( NAME vgl_orient_box_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_o
 add_test( NAME vgl_orient_box_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_orient_box_3d )
 add_test( NAME vgl_test_conic COMMAND $<TARGET_FILE:vgl_algo_test_all> test_conic )
 add_test( NAME vgl_test_convex_hull_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_convex_hull_2d)
-add_test( NAME vgl_test_ellipsoid COMMAND $<TARGET_FILE:vgl_algo_test_all> test_ellipsoid)
 add_test( NAME vgl_test_fit_conics_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_conics_2d)
 add_test( NAME vgl_test_fit_lines_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_lines_2d)
 add_test( NAME vgl_test_fit_plane_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_fit_plane_3d)

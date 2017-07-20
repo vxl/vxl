@@ -61,12 +61,73 @@ vgl_quadric_3d<T>::vgl_quadric_3d(std::vector<std::vector<T> > const& Q):det_zer
   this->set(Q[0][0], Q[1][1], Q[2][2], T(2)*Q[0][1], T(2)*Q[0][2],
     T(2)*Q[1][2], T(2)*Q[0][3], T(2)*Q[1][3], T(2)*Q[2][3], Q[3][3]);
 }
-
 template <class T>
+vgl_quadric_3d<T>::vgl_quadric_3d(std::vector<std::vector<T> > const& canonical_quadric,
+                                  std::vector<std::vector<T> > const& H){
+  //The 4x4 coefficient matrix, Qg,  in the globa frame is given by
+  // Qg =  H^-t Qc H^-1
+  // where Qc = canonical_quadric;
+  std::vector<std::vector<T> > R(3,std::vector<T>(3, T(0)));
+  std::vector<std::vector<T> > Qg(4, std::vector<T>(4, T(0)));
+  std::vector<std::vector<T> > qr(3,std::vector<T>(3, T(0)));
+  std::vector<T> qu(3,T(0)), t(3, T(0)), c(3,T(0)), Rc(3,T(0)),
+    RqRt(3, T(0)), Rtrt(3,T(0));
+  for(size_t r = 0; r<3; ++r){
+    t[r]=H[r][3];
+    qu[r] = canonical_quadric[r][r];
+    c[r]=canonical_quadric[r][3];
+    for(size_t c = 0; c<3; ++c)
+      R[r][c] = H[r][c];
+  }
+  qr[0][0]=R[0][0]*qu[0]*R[0][0] +R[0][1]*qu[1]*R[0][1] +R[0][2]*qu[2]*R[0][2];
+  qr[1][0]=R[1][0]*qu[0]*R[0][0] +R[1][1]*qu[1]*R[0][1] +R[1][2]*qu[2]*R[0][2];
+  qr[2][0]=R[2][0]*qu[0]*R[0][0] +R[2][1]*qu[1]*R[0][1] +R[2][2]*qu[2]*R[0][2];
+  qr[1][1]=R[1][0]*qu[0]*R[1][0] +R[1][1]*qu[1]*R[1][1] +R[1][2]*qu[2]*R[1][2];
+  qr[2][1]=R[2][0]*qu[0]*R[1][0] +R[2][1]*qu[1]*R[1][1] +R[2][2]*qu[2]*R[1][2];
+  qr[2][2]=R[2][0]*qu[0]*R[2][0] +R[2][1]*qu[1]*R[2][1] +R[2][2]*qu[2]*R[2][2];
+  qr[0][1]=qr[1][0]; qr[0][2]=qr[2][0]; qr[2][1]=qr[1][2];
+
+  Rc[0] = R[0][0]*c[0] + R[0][1]*c[1] + R[0][2]*c[2];
+  Rc[1] = R[1][0]*c[0] + R[1][1]*c[1] + R[1][2]*c[2];
+  Rc[2] = R[2][0]*c[0] + R[2][1]*c[1] + R[2][2]*c[2];
+
+  Rtrt[0]=R[0][0]*t[0] + R[1][0]*t[1] + R[2][0]*t[2];
+  Rtrt[1]=R[0][1]*t[0] + R[1][1]*t[1] + R[2][1]*t[2];
+  Rtrt[2]=R[0][2]*t[0] + R[1][2]*t[1] + R[2][2]*t[2];
+
+  RqRt[0] = (qr[0][0]*t[0] + qr[0][1]*t[1] + qr[0][2]*t[2]);
+  RqRt[1] = (qr[1][0]*t[0] + qr[1][1]*t[1] + qr[1][2]*t[2]);
+  RqRt[2] = (qr[2][0]*t[0] + qr[2][1]*t[1] + qr[2][2]*t[2]);
+  
+  T tRqRt = t[0]*RqRt[0] + t[1]*RqRt[1] + t[2]*RqRt[2];
+  T tRc = t[0]*Rc[0] + t[1]*Rc[1] + t[2]*Rc[2];
+  T ctrRtrt = c[0]*Rtrt[0] + c[1]*Rtrt[1] + c[2]*Rtrt[2];
+
+    Qg[0][3] = Rc[0]-RqRt[0];
+  Qg[1][3] = Rc[1]-RqRt[1];
+  Qg[2][3] = Rc[2]-RqRt[2];
+  Qg[3][0] = Qg[0][3];  Qg[3][1] = Qg[1][3];  Qg[3][2] = Qg[2][3];
+
+  for(size_t r = 0; r<3; ++r)
+    Qg[r][r] = qr[r][r];
+
+  Qg[1][0] = qr[1][0];  Qg[2][0] = qr[2][0];  Qg[2][1] = qr[2][1];
+  Qg[0][1] = Qg[1][0];  Qg[0][2] = Qg[2][0];  Qg[1][2] = Qg[2][1];
+  Qg[3][3] = canonical_quadric[3][3]- ctrRtrt + tRqRt - tRc;
+  *this = vgl_quadric_3d<T>(Qg);
+}
+template <class T>
+vgl_quadric_3d<T>::vgl_quadric_3d(std::vector<T> const& diag,
+                                  std::vector<std::vector<T> > const& H){
+  std::vector<std::vector<T> > Qg(4, std::vector<T>(4, T(0)));
+  Qg[0][0] = diag[0];Qg[1][1] = diag[1];Qg[2][2] = diag[2];Qg[3][3] = diag[3];
+  *this = vgl_quadric_3d<T>(Qg, H);
+}
+  template <class T>
 void vgl_quadric_3d<T>::set(T a, T b, T c, T d, T e, T f, T g, T h, T i, T j){
   a_ = a; b_ = b; c_ = c; d_ = d; e_ = e; f_ = f;
   g_ = g; h_ = h; i_ = i; j_ = j;
-  this->compute_type();
+ this->compute_type();
 }
 template <class T>
 void vgl_quadric_3d<T>::set(std::vector<std::vector<T> > const& Q){
@@ -417,6 +478,7 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::canonical_quadric(std::vector<st
   //    gp         g
   //    hp = 1/2 E h 
   //    ip         i
+
  T gp = (E[0][0]*g_ + E[0][1]*h_ + E[0][2]*i_)/T(2);
  T hp = (E[1][0]*g_ + E[1][1]*h_ + E[1][2]*i_)/T(2);
  T ip = (E[2][0]*g_ + E[2][1]*h_ + E[2][2]*i_)/T(2);
