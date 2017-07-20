@@ -132,7 +132,7 @@ class vgl_quadric_3d
   // 
   std::vector<std::vector<T> > coef_matrix() const;
 
-  //: constructor from a canonical 4x4 matrix and a 4x4 homogeneous matrix, H 
+  //: constructor from a canonical 4x4 quadric coefficient matrix and a 4x4 homogeneous matrix, H 
   // representing the Euclidean transformation from the canonical frame to the global frame
   //                  _    _
   //                 |R    t|  where t is a 3x1 translation vector and R is a rotation matrix 
@@ -141,9 +141,9 @@ class vgl_quadric_3d
   //                  -    -
   vgl_quadric_3d(std::vector<std::vector<T> > const& canonical_quadric, std::vector<std::vector<T> > const& H);
 
-  //: constructor for central quadrics (e.g. ellipsoid) the diagonal
-  //  of the 4x4 quadric coefficient matrix and a 4x4 homogeneous matrix,
-  //  H representing the Euclidean transformation from the canonical frame to the global frame
+  //: constructor for central quadrics e.g. ellipsoid, ax^2+ by^2+ cz*2 + j = 0, where diag = [a,b,c,j]
+  // are the diagonal elements of the 4x4 quadric coefficient matrix and a 4x4 homogeneous matrix, and
+  //  H represents the Euclidean transformation from the canonical frame to the global frame (see above)
   vgl_quadric_3d(std::vector<T> const& diag, std::vector<std::vector<T> > const& H);
 
   //: set or reset the quadric using polynomial coefficients.
@@ -179,7 +179,8 @@ class vgl_quadric_3d
 
   //:: The quadric in its canonical frame if the center is defined, i.e. the upper 3x3 quadric matrix is full rank
   // In this case the quadric coefficient matrix in the canonical frame is
-  // a 4x4 diagonal matrix, e.g. ax^2 + by^2 + cz^2 - j = 0.
+  // a 4x4 diagonal matrix, e.g. ax^2 + by^2 + cz^2 + j = 0. Note that the canonical frame is not unique as
+  // alignment of quadric axes with the orthogonal frame has numerous possible arrangements.
   // H is a homogenous(4x4)transformation from canonical coordinate space back to the original space.
   bool canonical_central_quadric(std::vector<T>& diag, std::vector<std::vector<T> >& H) const;
 
