@@ -48,8 +48,8 @@ subdirs(ocl)
 
 #view section
 # this is causing confusing compiler errors with Visual Studio 2013 Professional;
-# also had to comment out ocl/exe
-#subdirs(view)
+# also had to comment out ocl/exe in the ocl CMakeLists.txt
+subdirs(view)
 
 #util
 subdirs(util)

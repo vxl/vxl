@@ -1,5 +1,5 @@
 from bstm_register import bstm_batch, dbvalue
-import os
+
 #############################################################################
 # PROVIDES higher level python functions to make bstm_batch
 # code more readable/refactored
@@ -9,7 +9,7 @@ import os
 
 
 def ocl_info():
-    #print("Init Manager");
+    # print("Init Manager");
     bstm_batch.init_process("boclInitManagerProcess")
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
@@ -22,7 +22,7 @@ def ocl_info():
 
 
 def load_scene(scene_str):
-    #print("Loading a Scene from file: ", scene_str);
+    # print("Loading a Scene from file: ", scene_str);
     bstm_batch.init_process("bstmLoadSceneProcess")
     bstm_batch.set_input_string(0, scene_str)
     bstm_batch.run_process()
@@ -38,7 +38,7 @@ def load_opencl(scene_str, device_string="gpu"):
     ###############################################################
     # Create cache, opencl manager, device, and gpu cache
     ###############################################################
-    #print("Create Main Cache");
+    # print("Create Main Cache");
     bstm_batch.init_process("bstmCreateCacheProcess")
     bstm_batch.set_input_from_db(0, scene)
     bstm_batch.set_input_string(1, "lru")
@@ -46,21 +46,20 @@ def load_opencl(scene_str, device_string="gpu"):
     (id, type) = bstm_batch.commit_output(0)
     cache = dbvalue(id, type)
 
-    #print("Init Manager");
+    # print("Init Manager");
     bstm_batch.init_process("boclInitManagerProcess")
-    bstm_batch.run_process()
-    (id, type) = bstm_batch.commit_output(0)
-    mgr = dbvalue(id, type)
+    success = bstm_batch.run_process()
+    if not success:
+        raise Exception('boxm2InitManagerProcess returned false')
 
-    #print("Get Gpu Device");
+    # print("Get Gpu Device");
     bstm_batch.init_process("boclGetDeviceProcess")
     bstm_batch.set_input_string(0, device_string)
-    bstm_batch.set_input_from_db(1, mgr)
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
     device = dbvalue(id, type)
 
-    #print("Create Gpu Cache");
+    # print("Create Gpu Cache");
     bstm_batch.init_process("bstmOclCreateCacheProcess")
     bstm_batch.set_input_from_db(0, device)
     bstm_batch.set_input_from_db(1, scene)
@@ -68,15 +67,49 @@ def load_opencl(scene_str, device_string="gpu"):
     (id, type) = bstm_batch.commit_output(0)
     openclcache = dbvalue(id, type)
 
-    return scene, cache, mgr, device, openclcache
+    return scene, cache, device, openclcache
+
+
+# Just loads up CPP cache
+def load_cpp(scene_str):
+    scene = load_scene(scene_str)
+    bstm_batch.init_process("bstmCreateCacheProcess")
+    bstm_batch.set_input_from_db(0, scene)
+    bstm_batch.set_input_string(1, "lru")
+    bstm_batch.run_process()
+    (id, type) = bstm_batch.commit_output(0)
+    cache = dbvalue(id, type)
+    return scene, cache
+
+
+def describe_scene(scene):
+    bstm_batch.init_process("bstmDescribeSceneProcess")
+    bstm_batch.set_input_from_db(0, scene)
+    bstm_batch.run_process()
+    (id, type) = bstm_batch.commit_output(0)
+    dataPath = bstm_batch.get_output_string(id)
+    bstm_batch.remove_data(id)
+    (id, type) = bstm_batch.commit_output(1)
+    appType = bstm_batch.get_output_string(id)
+    bstm_batch.remove_data(id)
+    (id, type) = bstm_batch.commit_output(2)
+    voxel_size = bstm_batch.get_output_double(id)
+    bstm_batch.remove_data(id)
+    description = {'voxelLength': voxel_size,
+                   'dataPath': dataPath,
+                   'appType': appType}
+    return description
+
 
 #####################################################################
+#
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 #####################################################################
 
 
-def render(scene, device, cache, cam, time=0, ni=1624, nj=1224, render_label=False):
+def render(scene, device, cache, cam, time=0,
+           ni=1624, nj=1224, render_label=False):
     if cache.type == "bstm_cache_sptr":
         print "bstm_batch CPU render grey and vis not yet implemented"
         return
@@ -187,7 +220,8 @@ def trajectory_size(trajectory):
 
 
 # detect change wrapper,
-def change_detect(scene, device, cache, cam, img, time, mask_img=None, raybelief="", max_mode=False):
+def change_detect(scene, device, cache, cam, img, time,
+                  mask_img=None, raybelief="", max_mode=False):
     bstm_batch.init_process("bstmOclChangeDetectionProcess")
     bstm_batch.set_input_from_db(0, device)
     bstm_batch.set_input_from_db(1, scene)
@@ -220,7 +254,8 @@ def label_change(scene, device, cache, cam, change_img, change_t, label, time):
 # detect change wrapper,
 
 
-def update(scene, device, cache, cam, img, time, mog_var=-1, mask_img=None, update_alpha=True, update_changes_only=False):
+def update(scene, device, cache, cam, img, time, mog_var=-1,
+           mask_img=None, update_alpha=True, update_changes_only=False):
     bstm_batch.init_process("bstmOclUpdateProcess")
     bstm_batch.set_input_from_db(0, device)
     bstm_batch.set_input_from_db(1, scene)
@@ -238,7 +273,8 @@ def update(scene, device, cache, cam, img, time, mog_var=-1, mask_img=None, upda
 # detect change wrapper,
 
 
-def update_color(scene, device, cache, cam, img, time, mog_var=-1, mask_img=None, update_alpha=True, update_changes_only=False):
+def update_color(scene, device, cache, cam, img, time, mog_var=-1,
+                 mask_img=None, update_alpha=True, update_changes_only=False):
     bstm_batch.init_process("bstmOclUpdateColorProcess")
     bstm_batch.set_input_from_db(0, device)
     bstm_batch.set_input_from_db(1, scene)
@@ -333,6 +369,30 @@ def change_btw_frames(scene, cpu_cache, time0, time1):
     bstm_batch.run_process()
 
 
+def scene_bbox(scene):
+    bstm_batch.init_process("bstmSceneBboxProcess")
+    bstm_batch.set_input_from_db(0, scene)
+    bstm_batch.run_process()
+    out = []
+    for outIdx in range(6):
+        (id, type) = bstm_batch.commit_output(outIdx)
+        pt = bstm_batch.get_output_double(id)
+        bstm_batch.remove_data(id)
+        out.append(pt)
+    minPt = (out[0], out[1], out[2])
+    maxPt = (out[3], out[4], out[5])
+    return (minPt, maxPt)
+
+
+def scene_lvcs(scene):
+    bstm_batch.init_process("bstmSceneLVCSProcess")
+    bstm_batch.set_input_from_db(0, scene)
+    bstm_batch.run_process()
+    (lvcs_id, lvcs_type) = bstm_batch.commit_output(0)
+    lvcs = dbvalue(lvcs_id, lvcs_type)
+    return lvcs
+
+
 def scene_statistics(scene, cache):
     bstm_batch.init_process("bstmSceneStatisticsProcess")
     bstm_batch.set_input_from_db(0, scene)
@@ -354,7 +414,8 @@ def label_tt_depth(scene, cache):
     bstm_batch.run_process()
 
 
-def export_pt_cloud(scene, cache, output_filename, prob_t, time, output_aux=True):
+def export_pt_cloud(scene, cache, output_filename,
+                    prob_t, time, output_aux=True):
     bstm_batch.init_process("bstmCppExtractPointCloudProcess")
     bstm_batch.set_input_from_db(0, scene)
     bstm_batch.set_input_from_db(1, cache)
@@ -373,7 +434,8 @@ def export_pt_cloud(scene, cache, output_filename, prob_t, time, output_aux=True
     return
 
 
-def bundle2scene(bundle_file, img_dir, app_model="bstm_mog3_grey", isalign=True, out_dir="", timeSteps=32):
+def bundle2scene(bundle_file, img_dir, app_model="bstm_mog3_grey",
+                 isalign=True, out_dir="", timeSteps=32):
     if app_model == "bstm_mog3_grey":
         nobs_model = "bstm_num_obs"
     else:
@@ -401,3 +463,17 @@ def boxm22scene(boxm2_filename, bstm_datapath, timeSteps=32):
     bstm_batch.set_input_string(1, bstm_datapath)
     bstm_batch.set_input_unsigned(2, timeSteps)
     bstm_batch.run_process()
+
+
+def ingest_boxm2_scene(bstm_scene, bstm_cache, boxm2_scene,
+                       boxm2_cache, time, p_threshold, app_threshold):
+    bstm_batch.init_process("bstmCppIngestBoxm2SceneProcess")
+    bstm_batch.set_input_from_db(0, bstm_scene)
+    bstm_batch.set_input_from_db(1, bstm_cache)
+    bstm_batch.set_input_from_db(2, boxm2_scene)
+    bstm_batch.set_input_from_db(3, boxm2_cache)
+    bstm_batch.set_input_double(4, time)
+    bstm_batch.set_input_double(5, p_threshold)
+    bstm_batch.set_input_double(6, app_threshold)
+    if not bstm_batch.run_process():
+        raise Exception("Failed to run CPP Ingest BOXM2 Scene Process")

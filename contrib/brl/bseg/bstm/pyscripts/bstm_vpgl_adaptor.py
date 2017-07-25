@@ -52,9 +52,29 @@ def load_perspective_camera_from_kml_file(NI, NJ, kml_file):
     return cam, longitude, latitude, altitude
 
 
+def create_perspective_camera(scale, ppoint, center, look_pt, up=[0, 1, 0]):
+    bstm_batch.init_process("vpglCreatePerspectiveCameraProcess")
+    bstm_batch.set_input_double(0, scale[0])
+    bstm_batch.set_input_double(1, ppoint[0])
+    bstm_batch.set_input_double(2, scale[1])
+    bstm_batch.set_input_double(3, ppoint[1])
+    bstm_batch.set_input_double(4, center[0])
+    bstm_batch.set_input_double(5, center[1])
+    bstm_batch.set_input_double(6, center[2])
+    bstm_batch.set_input_double(7, look_pt[0])
+    bstm_batch.set_input_double(8, look_pt[1])
+    bstm_batch.set_input_double(9, look_pt[2])
+    bstm_batch.run_process()
+    (id, type) = bstm_batch.commit_output(0)
+    cam = dbvalue(id, type)
+    return cam
+
+
 #################################################
 # perspective go generic conversion
 #################################################
+
+
 def persp2gen(pcam, ni, nj, level=0):
     bstm_batch.init_process("vpglConvertToGenericCameraProcess")
     bstm_batch.set_input_from_db(0, pcam)

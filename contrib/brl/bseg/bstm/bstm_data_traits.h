@@ -24,6 +24,7 @@ enum bstm_data_type
   BSTM_NUM_OBS_VIEW_COMPACT,
   BSTM_MOG6_VIEW_COMPACT,
   BSTM_GAUSS_RGB,
+  BSTM_GAUSS_RGB_VIEW,
   BSTM_GAUSS_RGB_VIEW_COMPACT,
   BSTM_NUM_OBS_SINGLE,
   BSTM_NUM_OBS,
@@ -94,6 +95,17 @@ class bstm_data_traits<BSTM_GAUSS_RGB>
 };
 
 template<>
+class bstm_data_traits<BSTM_GAUSS_RGB_VIEW>
+{
+ public:
+  typedef boxm2_mog6_view_processor processor;
+  typedef vnl_vector_fixed<int, 16> datatype;
+  static vcl_size_t datasize() { return sizeof(datatype); }
+  static vcl_string prefix(const vcl_string& identifier = "")
+  { if (!identifier.size()) return "bstm_gauss_rgb_view"; else return "bstm_gauss_rgb_view_"+identifier; }
+};
+
+template<>
 class bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>
 {
  public:
@@ -102,7 +114,6 @@ class bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>
   static std::string prefix(const std::string& identifier = "")
   { if (!identifier.size()) return "bstm_gauss_rgb_view_compact"; else return "bstm_gauss_rgb_view_compact_"+identifier; }
 };
-
 
 template<>
 class bstm_data_traits<BSTM_MOG3_GREY>

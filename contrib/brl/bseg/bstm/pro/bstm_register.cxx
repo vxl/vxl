@@ -29,6 +29,8 @@ void bstm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_scene_statistics_process, "bstmSceneStatisticsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_bundle_to_scene_process, "bstmBundleToSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_boxm2_scene_to_bstm_process, "bstmBoxm2SceneToBstmProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_describe_scene_process, "bstmDescribeSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_scene_bbox_process, "bstmSceneBboxProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bstm_scene_lvcs_process, "bstmSceneLVCSProcess");
 
 }
