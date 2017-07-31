@@ -41,6 +41,16 @@ enum space_time_enum { STE_SPACE, STE_TIME };
 
 vcl_string ste_as_string(space_time_enum ste);
 
+// Returns whether or not string is valid. If string is valid, stores result in ste.
+bool ste_from_string(const vcl_string& s, space_time_enum& ste);
+
+// Accepts a list of subdivisions separated by commas, e.g. 'space,time,space,time,space'
+vcl_vector<space_time_enum> parse_subdivisions(const vcl_string& s);
+
+// Prints subdivisions as a comma-separated list of space_time_enum
+// values (i.e. either 'space' or 'time'.)
+vcl_string print_subdivisions(const vcl_vector<space_time_enum>& subdivisions);
+
 class bstm_multi_block_metadata : public vbl_ref_count {
 public:
   bstm_multi_block_metadata() {}
@@ -124,10 +134,14 @@ public:
   //: Writes this block's metadata to an XML element which can later
   // be written to a file, e.g. as part of a scene.
   void to_xml(vsl_basic_xml_element &block) const;
+
+  static bstm_multi_block_metadata from_xml(const char **atts);
 };
 
 //: Smart_Pointer typedef for bstm_block
 typedef vbl_smart_ptr<bstm_multi_block_metadata> bstm_multi_block_metadata_sptr;
+
+vcl_ostream &operator<<(vcl_ostream &s, bstm_multi_block_metadata &metadata);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream &os, bstm_multi_block_metadata const &scene);

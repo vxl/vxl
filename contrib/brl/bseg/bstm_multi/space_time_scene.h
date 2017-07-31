@@ -1,7 +1,7 @@
 #ifndef bstm_multi_space_time_scene_h_
 #define bstm_multi_space_time_scene_h_
 
-//: \file
+//: \file space_time_scene.h
 //
 // \brief space_time_scene is a scene that represents a 3D
 // volume of space over time. It contains a 4D grid of blocks that
@@ -21,7 +21,6 @@
 // \date 26 Jul 2017
 //
 
-#include <bstm/basic/bstm_block_id.h>
 
 #include <vcl_compiler.h>
 #include <vcl_iosfwd.h>
@@ -40,6 +39,9 @@
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
+#include <bstm/basic/bstm_block_id.h>
+#include <bstm_multi/space_time_scene_parser.hxx>
+
 //: space_time_scene: simple scene model that maintains (in world coordinates)
 //      - scene origin
 //      - number of blocks in each dimension
@@ -49,23 +51,23 @@
 // NOTE: This uses bstm_block_id as a generic ID for 4D blocks. The block type
 // itself must implement:
 // - Block::metadata - type alias for corresponding metadata type
-// - Block::parser - Parser for loading a scene made up of Block's.
 // - Block::metadata must contain:
 //     - a method vgl_box_3d<double> bbox()
-//     - a method 'void to_xml(vsl_basic_xml_element&) const' that creates
-//     attributes for a given XML tag to represent the block in question.
+//     - a method 'void to_xml(vsl_basic_xml_element&) const' that fills a
+//     <block></block> XML tag with the metadata as attributes.
+//     - a static method 'Block::metadata from_xml(const char **atts)' that
+//     creates a metadata object from a given XML <block></block> tag.
 template <typename Block> class space_time_scene : public vbl_ref_count {
 public:
   typedef typename Block::metadata block_metadata;
-  // TODO right now scene_parser is specified by block type. It might
-  // also make sense to pass in parser as another template parameter.
-  typedef typename Block::parser scene_parser;
+  typedef space_time_scene_parser<Block> scene_parser;
   typedef vbl_smart_ptr<space_time_scene<Block> > sptr;
 
   //: empty scene, needs to be initialized manually
   space_time_scene() {}
 
-  space_time_scene(vcl_string data_path, vgl_point_3d<double> const &origin,
+  space_time_scene(vcl_string data_path,
+                   vgl_point_3d<double> const &origin,
                    int version = 2);
 
   //: initializes scene from xmlFile
@@ -144,8 +146,10 @@ public:
 
   //: If a block contains a 3-d point, set the block id, else return false. The
   // local coordinates of the point are also returned
-  bool contains(vgl_point_3d<double> const &p, bstm_block_id &bid,
-                vgl_point_3d<double> &local_coords, double const t,
+  bool contains(vgl_point_3d<double> const &p,
+                bstm_block_id &bid,
+                vgl_point_3d<double> &local_coords,
+                double const t,
                 double &local_time) const;
 
   //: returns the local time if t is contained in scene

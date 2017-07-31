@@ -5,9 +5,9 @@ include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
 set(bstm_multi_sources
-  space_time_scene.h space_time_scene.hxx
-  bstm_multi_scene_parser.h bstm_multi_scene_parser.cxx
   bstm_multi_block_metadata.h bstm_multi_block_metadata.cxx
+  space_time_scene_parser.h space_time_scene_parser.hxx
+  space_time_scene.h space_time_scene.hxx
   bstm_multi_block.h bstm_multi_block.cxx)
 
 include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )

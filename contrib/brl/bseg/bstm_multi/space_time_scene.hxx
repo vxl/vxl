@@ -455,7 +455,7 @@ void x_write(vcl_ostream &os, space_time_scene<Block> &scene, vcl_string name) {
   vcl_map<bstm_block_id, block_metadata> blocks = scene.blocks();
   typename vcl_map<bstm_block_id, block_metadata>::iterator iter;
   for (iter = blocks.begin(); iter != blocks.end(); ++iter) {
-    const bstm_block_metadata &data = iter->second;
+    const block_metadata &data = iter->second;
     // creat tag from metadata & write to stream
     vsl_basic_xml_element block(BLOCK_TAG);
     data.to_xml(block);
@@ -500,16 +500,7 @@ vcl_ostream &operator<<(vcl_ostream &s, space_time_scene<Block> &scene) {
   for (typename vcl_map<bstm_block_id, block_metadata>::iterator bit =
            blk.begin();
        bit != blk.end(); ++bit) {
-    s << (*bit).second.id_ << ' ';
-    vgl_point_3d<double> org = (*bit).second.local_origin_;
-    s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ' '
-      << (*bit).second.local_origin_t_ << ") ";
-    vgl_vector_3d<double> dim = (*bit).second.sub_block_dim_;
-    s << ", dim( " << dim.x() << ' ' << dim.y() << ' ' << dim.z() << ' '
-      << (*bit).second.sub_block_dim_t_ << ") ";
-    vgl_vector_3d<unsigned> num = (*bit).second.sub_block_num_;
-    s << ", num( " << num.x() << ' ' << num.y() << ' ' << num.z() << ' '
-      << (*bit).second.sub_block_num_t_ << ")\n";
+    s << bit->second << "\n";
   }
   s << "<=====:end blocks\n";
   return s;

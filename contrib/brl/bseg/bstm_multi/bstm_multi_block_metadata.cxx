@@ -1,4 +1,11 @@
+#include <vcl_cstring.h>
+
 #include "bstm_multi_block_metadata.h"
+
+template <typename T> void convert(const char *t, T &d) {
+  vcl_stringstream strm(t);
+  strm >> d;
+}
 
 vcl_string ste_as_string(space_time_enum ste) {
   switch (ste) {
@@ -9,6 +16,46 @@ vcl_string ste_as_string(space_time_enum ste) {
   default:
     return "INVALID STE";
   }
+}
+
+bool ste_from_string(const vcl_string &s, space_time_enum &ste) {
+  if (s == "space") {
+    ste = STE_SPACE;
+  } else if (s == "time") {
+    ste = STE_TIME;
+  } else {
+    return false;
+  }
+  return true;
+}
+
+vcl_vector<space_time_enum> parse_subdivisions(const vcl_string &s) {
+  vcl_vector<space_time_enum> result;
+  vcl_stringstream ss(s);
+  while (ss.good() > 0) {
+    vcl_string substr;
+    space_time_enum ste;
+    vcl_getline(ss, substr, ',');
+    if (!ste_from_string(substr, ste)) {
+      // skip any invalid subdivisions that are not 'space' or 'time'
+      continue;
+    }
+    result.push_back(ste);
+  }
+  return result;
+}
+
+vcl_string print_subdivisions(const vcl_vector<space_time_enum> &subdivisions) {
+  vcl_string subdivs_str;
+  for (vcl_vector<space_time_enum>::const_iterator iter = subdivisions.begin();
+       iter != subdivisions.end();
+       ++iter) {
+    if (iter != subdivisions.begin()) {
+      subdivs_str += ",";
+    }
+    subdivs_str += ste_as_string(*iter);
+  }
+  return subdivs_str;
 }
 
 void append_bbox_to_xml(vsl_basic_xml_element &block,
@@ -33,7 +80,7 @@ bool bstm_multi_block_metadata::contains_t(const double t,
 
 bool bstm_multi_block_metadata::
 operator==(const bstm_multi_block_metadata &m) const {
-  return (this->id_ == m.id_) && (this->bbox_ == m.bbox_);
+  return (this->id_ == m.id_) && (this->bbox_ == m.bbox_) && (this->bbox_t_ == m.bbox_t_);
 }
 
 bool bstm_multi_block_metadata::
@@ -64,14 +111,70 @@ void bstm_multi_block_metadata::to_xml(vsl_basic_xml_element &block) const {
   // Write subdivision information to tag. Right now each block is required to
   // be one tag, so need to fit a vector of values into a single attribute. This
   // should be fixed.
-  vcl_string subdivs_attr;
-  for (vcl_vector<space_time_enum>::const_iterator iter = subdivisions_.begin();
-       iter != subdivisions_.end();
-       ++iter) {
-    if (iter != subdivisions_.begin()) {
-      subdivs_attr += ",";
-    }
-    subdivs_attr += ste_as_string(*iter);
+  block.add_attribute("subdivisions", print_subdivisions(subdivisions_));
+}
+
+bstm_multi_block_metadata
+bstm_multi_block_metadata::from_xml(const char **atts) {
+  bstm_multi_block_metadata metadata;
+  int idi, idj, idk, idt;
+  double ox, oy, oz, ot;
+  double min_x, min_y, min_z, min_t, max_x, max_y, max_z, max_t;
+  vcl_string subdivs;
+
+  // iterate over attributes...
+  for (int i = 0; atts[i]; i += 2) {
+    if (vcl_strcmp(atts[i], "id_i") == 0)
+      convert(atts[i + 1], idi);
+    else if (vcl_strcmp(atts[i], "id_j") == 0)
+      convert(atts[i + 1], idj);
+    else if (vcl_strcmp(atts[i], "id_k") == 0)
+      convert(atts[i + 1], idk);
+    else if (vcl_strcmp(atts[i], "id_t") == 0)
+      convert(atts[i + 1], idt);
+    else if (vcl_strcmp(atts[i], "min_x") == 0)
+      convert(atts[i + 1], ox);
+    else if (vcl_strcmp(atts[i], "origin_y") == 0)
+      convert(atts[i + 1], oy);
+    else if (vcl_strcmp(atts[i], "origin_z") == 0)
+      convert(atts[i + 1], oz);
+    else if (vcl_strcmp(atts[i], "origin_t") == 0)
+      convert(atts[i + 1], ot);
+    else if (vcl_strcmp(atts[i], "min_x") == 0)
+      convert(atts[i + 1], min_x);
+    else if (vcl_strcmp(atts[i], "min_y") == 0)
+      convert(atts[i + 1], min_y);
+    else if (vcl_strcmp(atts[i], "min_z") == 0)
+      convert(atts[i + 1], min_z);
+    else if (vcl_strcmp(atts[i], "min_t") == 0)
+      convert(atts[i + 1], min_t);
+    else if (vcl_strcmp(atts[i], "max_x") == 0)
+      convert(atts[i + 1], max_x);
+    else if (vcl_strcmp(atts[i], "max_y") == 0)
+      convert(atts[i + 1], max_y);
+    else if (vcl_strcmp(atts[i], "max_z") == 0)
+      convert(atts[i + 1], max_z);
+    else if (vcl_strcmp(atts[i], "max_t") == 0)
+      convert(atts[i + 1], max_t);
+    else if (vcl_strcmp(atts[i], "max_mb") == 0)
+      convert(atts[i + 1], metadata.max_mb_);
+    else if (vcl_strcmp(atts[i], "p_init") == 0)
+      convert(atts[i + 1], metadata.p_init_);
+    else if (vcl_strcmp(atts[i], "subdivisions") == 0)
+      convert(atts[i + 1], subdivs);
   }
-  block.add_attribute("subdivisions", subdivs_attr);
+  metadata.id_ = bstm_block_id(idi, idj, idk, idt);
+  metadata.bbox_ = vgl_box_3d<double>(min_x, min_y, min_z, max_x, max_y, max_z);
+  metadata.bbox_t_ = vcl_pair<double, double>(min_t, max_t);
+  metadata.subdivisions_ = parse_subdivisions(subdivs);
+  return metadata;
+}
+
+vcl_ostream &operator<<(vcl_ostream &s, bstm_multi_block_metadata &metadata) {
+  s << metadata.id_ << ' ';
+  s << ", bbox( " << metadata.bbox_ << ") ";
+  s << ", bbox_t( " << metadata.bbox_t_.first << ", " << metadata.bbox_t_.second
+    << ") ";
+  s << "subdivs( " << print_subdivisions(metadata.subdivisions_) << " ) ";
+  return s;
 }

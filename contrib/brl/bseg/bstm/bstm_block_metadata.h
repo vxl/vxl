@@ -129,6 +129,8 @@ class bstm_block_metadata:  public vbl_ref_count
 //: Smart_Pointer typedef for bstm_block
 typedef vbl_smart_ptr<bstm_block_metadata> bstm_block_metadata_sptr;
 
+vcl_ostream &operator<<(vcl_ostream &s, bstm_block_metadata &metadata);
+
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, bstm_block_metadata const& scene);
 void vsl_b_write(vsl_b_ostream& os, const bstm_block_metadata* &p);

@@ -1,3 +1,7 @@
+#ifndef bstm_multi_space_time_scene_parser_hxx_
+#define bstm_multi_space_time_scene_parser_hxx_
+
+
 //:
 // \file
 // \brief Parses the configuration file for bwm tool.
@@ -7,8 +11,11 @@
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
+#include <vcl_utility.h>
 
-#include "bstm_scene_parser.h"
+#include <bstm/bstm_scene_parser.h>
+
+#include "space_time_scene_parser.h"
 
 // --------------
 // --- PARSER ---
@@ -18,9 +25,8 @@ template <typename T> void convert(const char *t, T &d) {
   strm >> d;
 }
 
-bstm_scene_parser::bstm_scene_parser() { init_params(); }
-
-bool bstm_scene_parser::lvcs(vpgl_lvcs &lvcs) {
+template <typename Block>
+bool space_time_scene_parser<Block>::lvcs(vpgl_lvcs &lvcs) {
   vpgl_lvcs::cs_names cs_name = vpgl_lvcs::str_to_enum(lvcs_cs_name_.data());
   vpgl_lvcs::LenUnits len_unit;
   vpgl_lvcs::AngUnits geo_unit;
@@ -39,7 +45,7 @@ bool bstm_scene_parser::lvcs(vpgl_lvcs &lvcs) {
     geo_unit = vpgl_lvcs::DEG;
   } else {
     vcl_cout << "LVCS Geo Angle Unit " << lvcs_geo_angle_unit_
-              << " is not valid\n";
+             << " is not valid\n";
     return false;
   }
 
@@ -57,25 +63,6 @@ bool bstm_scene_parser::lvcs(vpgl_lvcs &lvcs) {
   return true;
 }
 
-void bstm_scene_parser::init_params() {
-  lvcs_cs_name_ = "";
-  lvcs_origin_lon_ = 0;
-  lvcs_origin_lat_ = 0;
-  lvcs_origin_elev_ = 0;
-  lvcs_lon_scale_ = 0;
-  lvcs_lat_scale_ = 0;
-  lvcs_XYZ_unit_ = "";
-  lvcs_geo_angle_unit_ = "";
-  lvcs_local_origin_x_ = 0;
-  lvcs_local_origin_y_ = 0;
-  lvcs_theta_ = 0;
-  // world origin
-  origin_ = vgl_point_3d<double>(0, 0, 0);
-  path_ = "";
-  name_ = "";
-  version_ = 1;
-}
-
 //-----------------------------------------------------------------------------
 //: Start Element needs to parse the following tags
 // - scene level metadata
@@ -91,7 +78,9 @@ void bstm_scene_parser::init_params() {
 //   * TREE_MAX_LEVEL_TAG "tree_max_level"
 //   * P_INIT_TAG "p_init"
 //   * MAX_MB_TAG "max_mb"
-void bstm_scene_parser::startElement(const char *name, const char **atts) {
+template <typename Block>
+void space_time_scene_parser<Block>::startElement(const char *name,
+                                           const XML_Char **atts) {
 #if 0
   vcl_cout<< "element=" << name << '\n'
           << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
@@ -164,68 +153,10 @@ void bstm_scene_parser::startElement(const char *name, const char **atts) {
   }
   //---------- BLOCK TAG -------------------------------------------------------
   else if (vcl_strcmp(name, BLOCK_TAG) == 0) {
-    bstm_block_metadata metadata;
-    int idi, idj, idk, idt;
-    double ox, oy, oz, ot;
-    double dim_x, dim_y, dim_z, dim_t;
-    unsigned num_x, num_y, num_z, num_t;
-
-    // iterate over attributes...
-    for (int i = 0; atts[i]; i += 2) {
-
-      if (vcl_strcmp(atts[i], "id_i") == 0)
-        convert(atts[i + 1], idi);
-      else if (vcl_strcmp(atts[i], "id_j") == 0)
-        convert(atts[i + 1], idj);
-      else if (vcl_strcmp(atts[i], "id_k") == 0)
-        convert(atts[i + 1], idk);
-      else if (vcl_strcmp(atts[i], "id_t") == 0)
-        convert(atts[i + 1], idt);
-      else if (vcl_strcmp(atts[i], "origin_x") == 0)
-        convert(atts[i + 1], ox);
-      else if (vcl_strcmp(atts[i], "origin_y") == 0)
-        convert(atts[i + 1], oy);
-      else if (vcl_strcmp(atts[i], "origin_z") == 0)
-        convert(atts[i + 1], oz);
-      else if (vcl_strcmp(atts[i], "origin_t") == 0)
-        convert(atts[i + 1], ot);
-      else if (vcl_strcmp(atts[i], "dim_x") == 0)
-        convert(atts[i + 1], dim_x);
-      else if (vcl_strcmp(atts[i], "dim_y") == 0)
-        convert(atts[i + 1], dim_y);
-      else if (vcl_strcmp(atts[i], "dim_z") == 0)
-        convert(atts[i + 1], dim_z);
-      else if (vcl_strcmp(atts[i], "dim_t") == 0)
-        convert(atts[i + 1], dim_t);
-      else if (vcl_strcmp(atts[i], "num_x") == 0)
-        convert(atts[i + 1], num_x);
-      else if (vcl_strcmp(atts[i], "num_y") == 0)
-        convert(atts[i + 1], num_y);
-      else if (vcl_strcmp(atts[i], "num_z") == 0)
-        convert(atts[i + 1], num_z);
-      else if (vcl_strcmp(atts[i], "num_t") == 0)
-        convert(atts[i + 1], num_t);
-      else if (vcl_strcmp(atts[i], "init_level") == 0)
-        convert(atts[i + 1], metadata.init_level_);
-      else if (vcl_strcmp(atts[i], "init_level_t") == 0)
-        convert(atts[i + 1], metadata.init_level_t_);
-      else if (vcl_strcmp(atts[i], "max_level") == 0)
-        convert(atts[i + 1], metadata.max_level_);
-      else if (vcl_strcmp(atts[i], "max_level_t") == 0)
-        convert(atts[i + 1], metadata.max_level_t_);
-      else if (vcl_strcmp(atts[i], "max_mb") == 0)
-        convert(atts[i + 1], metadata.max_mb_);
-      else if (vcl_strcmp(atts[i], "p_init") == 0)
-        convert(atts[i + 1], metadata.p_init_);
-    }
-    metadata.id_ = bstm_block_id(idi, idj, idk, idt);
-    metadata.local_origin_ = vgl_point_3d<double>(ox, oy, oz);
-    metadata.local_origin_t_ = ot;
-    metadata.sub_block_dim_ = vgl_vector_3d<double>(dim_x, dim_y, dim_z);
-    metadata.sub_block_dim_t_ = dim_t;
-    metadata.sub_block_num_ = vgl_vector_3d<unsigned>(num_x, num_y, num_z);
-    metadata.sub_block_num_t_ = num_t;
+    bstm_multi_block_metadata metadata = bstm_multi_block_metadata::from_xml(atts);
     metadata.version_ = version_;
     blocks_[metadata.id_] = metadata;
   }
 }
+
+#endif // bstm_multi_space_time_scene_parser_hxx_

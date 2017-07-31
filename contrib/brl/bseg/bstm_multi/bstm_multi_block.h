@@ -11,12 +11,10 @@
 
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm_multi/bstm_multi_block_metadata.h>
-#include <bstm_multi/bstm_multi_scene_parser.h>
 
 class bstm_multi_block : public vbl_ref_count {
 public:
   typedef bstm_multi_block_metadata metadata;
-  typedef bstm_multi_scene_parser parser;
 
 public:
   // TODO should we use char buffer, or vcl_vector of multiple buffers?
