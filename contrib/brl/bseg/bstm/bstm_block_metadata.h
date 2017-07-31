@@ -27,6 +27,8 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
+#include <vsl/vsl_basic_xml_element.h>
+
 #include <boxm2/boxm2_block_metadata.h>
 class bstm_block_metadata:  public vbl_ref_count
 {
@@ -118,6 +120,10 @@ class bstm_block_metadata:  public vbl_ref_count
 
   bool operator==(bstm_block_metadata const& m) const;
   bool operator==(boxm2_block_metadata const& m) const;
+
+  //: Writes this block's metadata to an XML element which can later
+  //be written to a file, e.g. as part of a scene.
+  void to_xml(vsl_basic_xml_element& block) const;
 };
 
 //: Smart_Pointer typedef for bstm_block

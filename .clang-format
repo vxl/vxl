@@ -1,0 +1,9 @@
+﻿---
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BreakConstructorInitializersBeforeComma: 'true'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+ReflowComments: 'true'
+Standard: Cpp03
+
+...

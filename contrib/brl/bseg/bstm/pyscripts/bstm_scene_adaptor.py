@@ -499,8 +499,11 @@ class bstm_scene_adaptor(object):
             print "ERROR: Cache type not recognized: ", cache.type
             return False
 
+    def scene_statistics(self):
+        return bstm_adaptor.scene_statistics(self.scene, self.cpu_cache)
+
     def ingest_boxm2_scene(self, boxm2_scene, boxm2_cpu_cache, time,
-                           p_threshold=0.3, app_threshold=0.1):
+                           p_threshold=0.1, app_threshold=0.1):
         """ Ingests a BOXM2 scene for a certain time step.
         @param boxm2_scene - a boxm2_scene_adaptor object
         @param time - the timestemp in which to insert the BOXM2 scene
@@ -513,3 +516,15 @@ class bstm_scene_adaptor(object):
             time,
             p_threshold,
             app_threshold)
+
+    def analyze_coherency(self, center, lengths, initial_time,
+                          end_time, p_threshold, output_filename):
+        bstm_adaptor.analyze_coherency(
+            self.scene,
+            self.cpu_cache,
+            center,
+            lengths,
+            initial_time,
+            end_time,
+            p_threshold,
+            output_filename)

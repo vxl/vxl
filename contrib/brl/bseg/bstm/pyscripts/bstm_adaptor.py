@@ -1,19 +1,103 @@
-from bstm_register import bstm_batch, dbvalue
+import bstm_register
+from bstm_register import bstm_batch
 
 #############################################################################
 # PROVIDES higher level python functions to make bstm_batch
 # code more readable/refactored
 #############################################################################
 
+
+# small enum for type names
+T_DOUBLE = "double"
+T_FLOAT = "float"
+T_INT = "int"
+T_LONG = "long"
+T_UNSIGNED = "unsigned"
+
+
+def get_input_types(inputs, float_name=T_DOUBLE, int_name=T_INT):
+    """Converts a list of values to a list of tuples (type_name, value).
+    It is designed so that each value can be passed in to a process
+    using bstm_batch.set_input_<type_name>(index, value).
+    e.g. if typename is "double", bstm_batch.set_input_double() is called.
+
+    NOTE: This function is not able to distinguish between float and
+    double, or between types of integers. As such, float_name and
+    int_name must be specified to choose what type_name to give to
+    numeric variables. This also means that it may not always be
+    possible to use this function for a process, for instance if it
+    accepts some variables as doubles and some as ints.
+
+    :returns: A list of tuples (type_name, value) that can be passed
+    in to execute_process.
+
+    """
+    def get_type(var):
+        if isinstance(var, str):
+            return "string"
+        elif isinstance(var, int):
+            return int_name
+        elif isinstance(var, float):
+            return float_name
+        elif isinstance(var, bool):
+            return "bool"
+        elif isinstance(var, bstm_register.dbvalue):
+            return "from_db"
+        elif isinstance(var, list):
+            return get_type(var[0]) + "_array"
+        else:
+            raise ValueError(
+                "Could not convert argument of type: " +
+                type(var))
+    return map(lambda v: (get_type(v), v), inputs)
+
+
+def execute_process(name, n_outputs, inputs):
+    """Convenience function for running a process with the given name and
+    inputs.  Initializes the process, sets the inputs, runs the
+    process, and returns the given number of outputs.
+    Raises an exception of process fails to run.
+
+    NOTE: Only returns dbvalue's. Caller might need to use
+    bstm_batch.get_output_float(id) or similar afterwards.
+
+    :param name: The name of the process to run
+    :param n_outputs: The number of outputs to recover
+    :param inputs: A list of tuples (type_name, value) representing
+    inputs to the process. The type_name determines which "set_input"
+    function is called: e.g. if the type name is "string",
+    bstm_batch.set_input_string will be called. If the typename is
+    "from_db", bstm_batch.set_input_from_db is called. It is important
+    that the names exactly match what is required by the corresponding
+    process's C++ code. To automatically generate this list when
+    possible, see `get_input_types`.
+    :returns: A list of the outputs, of length n_outputs. If there are no outputs, returns None.
+
+    """
+    bstm_batch.init_process(name)
+    for i, (t, v) in enumerate(inputs):
+        method_name = "set_input_" + t
+        getattr(bstm_batch, method_name)(i, v)
+
+    if not bstm_batch.run_process():
+        raise Exception("Failed to run " + name)
+
+    outputs = []
+    for i in range(n_outputs):
+        (out_id, out_type) = bstm_batch.commit_output(i)
+        outputs.append(bstm_register.dbvalue(out_id, out_type))
+    if len(outputs) > 0:
+        return outputs
+    return
+
+
 # Print ocl info for all devices
-
-
 def ocl_info():
     # print("Init Manager");
     bstm_batch.init_process("boclInitManagerProcess")
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    mgr = dbvalue(id, type)
+    mgr = bstm_register.dbvalue(id, type)
 
     print("Get OCL info")
     bstm_batch.init_process("bocl_info_process")
@@ -27,7 +111,7 @@ def load_scene(scene_str):
     bstm_batch.set_input_string(0, scene_str)
     bstm_batch.run_process()
     (scene_id, scene_type) = bstm_batch.commit_output(0)
-    scene = dbvalue(scene_id, scene_type)
+    scene = bstm_register.dbvalue(scene_id, scene_type)
     return scene
 
 
@@ -44,7 +128,7 @@ def load_opencl(scene_str, device_string="gpu"):
     bstm_batch.set_input_string(1, "lru")
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    cache = dbvalue(id, type)
+    cache = bstm_register.dbvalue(id, type)
 
     # print("Init Manager");
     bstm_batch.init_process("boclInitManagerProcess")
@@ -57,7 +141,7 @@ def load_opencl(scene_str, device_string="gpu"):
     bstm_batch.set_input_string(0, device_string)
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    device = dbvalue(id, type)
+    device = bstm_register.dbvalue(id, type)
 
     # print("Create Gpu Cache");
     bstm_batch.init_process("bstmOclCreateCacheProcess")
@@ -65,7 +149,7 @@ def load_opencl(scene_str, device_string="gpu"):
     bstm_batch.set_input_from_db(1, scene)
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    openclcache = dbvalue(id, type)
+    openclcache = bstm_register.dbvalue(id, type)
 
     return scene, cache, device, openclcache
 
@@ -78,7 +162,7 @@ def load_cpp(scene_str):
     bstm_batch.set_input_string(1, "lru")
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    cache = dbvalue(id, type)
+    cache = bstm_register.dbvalue(id, type)
     return scene, cache
 
 
@@ -103,7 +187,7 @@ def describe_scene(scene):
 
 #####################################################################
 #
-# Generic render, returns a dbvalue expected image
+# Generic render, returns a bstm_register.dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 #####################################################################
 
@@ -125,9 +209,9 @@ def render(scene, device, cache, cam, time=0,
         bstm_batch.set_input_bool(7, render_label)
         bstm_batch.run_process()
         (id, type) = bstm_batch.commit_output(0)
-        exp_image = dbvalue(id, type)
+        exp_image = bstm_register.dbvalue(id, type)
         (id, type) = bstm_batch.commit_output(1)
-        vis_image = dbvalue(id, type)
+        vis_image = bstm_register.dbvalue(id, type)
         return exp_image, vis_image
     else:
         print "ERROR: Cache type not recognized: ", cache.type
@@ -148,7 +232,7 @@ def render_change(scene, device, cache, cam, time=0, ni=1624, nj=1224):
         bstm_batch.set_input_float(6, time)
         bstm_batch.run_process()
         (id, type) = bstm_batch.commit_output(0)
-        exp_image = dbvalue(id, type)
+        exp_image = bstm_register.dbvalue(id, type)
         return exp_image
     else:
         print "ERROR: Cache type not recognized: ", cache.type
@@ -196,7 +280,7 @@ def init_trajectory(scene, startInc, endInc, radius, ni=1280, nj=720):
     bstm_batch.set_input_unsigned(5, nj)  # nj
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    trajectory = dbvalue(id, type)
+    trajectory = bstm_register.dbvalue(id, type)
     return trajectory
 
 
@@ -205,7 +289,7 @@ def trajectory_next(trajectory):
     bstm_batch.set_input_from_db(0, trajectory)
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    cam = dbvalue(id, type)
+    cam = bstm_register.dbvalue(id, type)
     return cam
 
 
@@ -235,7 +319,7 @@ def change_detect(scene, device, cache, cam, img, time,
 
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    cd_img = dbvalue(id, type)
+    cd_img = bstm_register.dbvalue(id, type)
     return cd_img
 
 
@@ -302,7 +386,7 @@ def update_change(scene, device, cache, cam, img, time, mask_img=None):
     bstm_batch.set_input_float(6, time)
     bstm_batch.run_process()
     (id, type) = bstm_batch.commit_output(0)
-    cd_img = dbvalue(id, type)
+    cd_img = bstm_register.dbvalue(id, type)
     return cd_img
 
     # return
@@ -385,52 +469,32 @@ def scene_bbox(scene):
 
 
 def scene_lvcs(scene):
-    bstm_batch.init_process("bstmSceneLVCSProcess")
-    bstm_batch.set_input_from_db(0, scene)
-    bstm_batch.run_process()
-    (lvcs_id, lvcs_type) = bstm_batch.commit_output(0)
-    lvcs = dbvalue(lvcs_id, lvcs_type)
-    return lvcs
+    outputs = execute_process("bstmSceneLVCSProcess", 1,
+                              get_input_types([scene]))
+    return outputs[0]
 
 
 def scene_statistics(scene, cache):
-    bstm_batch.init_process("bstmSceneStatisticsProcess")
-    bstm_batch.set_input_from_db(0, scene)
-    bstm_batch.set_input_from_db(1, cache)
-    bstm_batch.run_process()
-    (s1_id, s1_type) = bstm_batch.commit_output(0)
-    (s2_id, s2_type) = bstm_batch.commit_output(1)
-    (s3_id, s3_type) = bstm_batch.commit_output(2)
-    s1 = bstm_batch.get_output_float(s1_id)
-    s2 = bstm_batch.get_output_float(s2_id)
-    s3 = bstm_batch.get_output_unsigned(s3_id)
+    process_name = "bstmSceneStatisticsProcess"
+    outputs = execute_process(process_name, 3, get_input_types([scene, cache]))
+    s1 = bstm_batch.get_output_float(outputs[0].id)
+    s2 = bstm_batch.get_output_float(outputs[1].id)
+    s3 = bstm_batch.get_output_unsigned(outputs[2].id)
     return [s1, s2, s3]
 
 
 def label_tt_depth(scene, cache):
-    bstm_batch.init_process("bstmCppLabelTTDepthProcess")
-    bstm_batch.set_input_from_db(0, scene)
-    bstm_batch.set_input_from_db(1, cache)
-    bstm_batch.run_process()
+    execute_process("bstmCppLabelTTDepthProcess", 0,
+                    get_input_types([scene, cache]))
 
 
 def export_pt_cloud(scene, cache, output_filename,
                     prob_t, time, output_aux=True):
-    bstm_batch.init_process("bstmCppExtractPointCloudProcess")
-    bstm_batch.set_input_from_db(0, scene)
-    bstm_batch.set_input_from_db(1, cache)
-    bstm_batch.set_input_float(2, prob_t)
-    bstm_batch.set_input_float(3, time)
-    bstm_batch.run_process()
+    execute_process("bstmCppExtractPointCloudProcess", 0, get_input_types(
+        [scene, cache, float(prob_t), float(time)], float_name=T_FLOAT))
 
-    bstm_batch.init_process("bstmCppExportPointCloudProcess")
-    bstm_batch.set_input_from_db(0, scene)
-    bstm_batch.set_input_from_db(1, cache)
-    bstm_batch.set_input_string(2, output_filename)
-    bstm_batch.set_input_bool(3, output_aux)
-    bstm_batch.set_input_float(4, time)
-
-    bstm_batch.run_process()
+    execute_process("bstmCppExportPointCloudProcess", 0, get_input_types(
+        [scene, cache, output_filename, output_aux, float(time)], float_name=T_FLOAT))
     return
 
 
@@ -442,38 +506,38 @@ def bundle2scene(bundle_file, img_dir, app_model="bstm_mog3_grey",
         print "ERROR appearance model not recognized!!!", app_model
         return
 
-    # run process
-    bstm_batch.init_process("bstmBundleToSceneProcess")
-    bstm_batch.set_input_string(0, bundle_file)
-    bstm_batch.set_input_string(1, img_dir)
-    bstm_batch.set_input_string(2, app_model)
-    bstm_batch.set_input_string(3, nobs_model)
-    bstm_batch.set_input_bool(4, isalign)
-    bstm_batch.set_input_unsigned(5, timeSteps)
-    bstm_batch.set_input_string(6, out_dir)
-    bstm_batch.run_process()
-    (scene_id, scene_type) = bstm_batch.commit_output(0)
-    uscene = dbvalue(scene_id, scene_type)
-    return uscene
+    process_name = "bstmBundleToSceneProcess"
+    inputs = [
+        bundle_file,
+        img_dir,
+        app_model,
+        nobs_model,
+        isalign,
+        int(timeSteps),
+        out_dir]
+    inputs = get_input_types(inputs, int_name=T_UNSIGNED)
+    outputs = execute_process(process_name, 1, inputs)
+    return outputs[0]
 
 
 def boxm22scene(boxm2_filename, bstm_datapath, timeSteps=32):
-    bstm_batch.init_process("bstmBoxm2SceneToBstmProcess")
-    bstm_batch.set_input_string(0, boxm2_filename)
-    bstm_batch.set_input_string(1, bstm_datapath)
-    bstm_batch.set_input_unsigned(2, timeSteps)
-    bstm_batch.run_process()
+    execute_process("bstmBoxm2SceneToBstmProcess", 0,
+                    get_input_types([boxm2_filename, bstm_datapath, timeSteps]))
 
 
 def ingest_boxm2_scene(bstm_scene, bstm_cache, boxm2_scene,
                        boxm2_cache, time, p_threshold, app_threshold):
-    bstm_batch.init_process("bstmCppIngestBoxm2SceneProcess")
-    bstm_batch.set_input_from_db(0, bstm_scene)
-    bstm_batch.set_input_from_db(1, bstm_cache)
-    bstm_batch.set_input_from_db(2, boxm2_scene)
-    bstm_batch.set_input_from_db(3, boxm2_cache)
-    bstm_batch.set_input_double(4, time)
-    bstm_batch.set_input_double(5, p_threshold)
-    bstm_batch.set_input_double(6, app_threshold)
-    if not bstm_batch.run_process():
-        raise Exception("Failed to run CPP Ingest BOXM2 Scene Process")
+    execute_process("bstmCppIngestBoxm2SceneProcess", 0,
+                    get_input_types([bstm_scene, bstm_cache, boxm2_scene,
+                                     boxm2_cache, float(time), p_threshold, app_threshold], float_name=T_DOUBLE))
+
+
+def analyze_coherency(bstm_scene, bstm_cpu_cache, center, lengths,
+                      initial_time, end_time, p_threshold, output_filename):
+    process_name = "bstmCppAnalyzeCoherencyProcess"
+    inputs = [bstm_scene, bstm_cpu_cache]
+    inputs += map(float, center + lengths +
+                  [initial_time, end_time, p_threshold])
+    inputs += [output_filename]
+    inputs = get_input_types(inputs, float_name=T_FLOAT)
+    execute_process(process_name, 0, inputs)

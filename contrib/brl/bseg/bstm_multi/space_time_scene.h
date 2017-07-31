@@ -1,0 +1,251 @@
+#ifndef bstm_multi_space_time_scene_h_
+#define bstm_multi_space_time_scene_h_
+
+//: \file
+//
+// \brief space_time_scene is a scene that represents a 3D
+// volume of space over time. It contains a 4D grid of blocks that
+// each model a region of that space. The scene data structure is
+// templated over block type, and different types of blocks may use
+// different implementations for representing the space itself, such
+// as space-time trees (e.g. BSTM) or something else.
+//
+// This is closely based off of bstm/bstm_scene.h. Really the only
+// difference is the substitution of template parameters where
+// necessary, and that the implementation does not make use of
+// bstm_block_metadata's internal members (i.e. only calls functions
+// such as bbox()).
+//
+// \author Raphael Kargon
+//
+// \date 26 Jul 2017
+//
+
+#include <bstm/basic/bstm_block_id.h>
+
+#include <vcl_compiler.h>
+#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vul/vul_file.h>
+
+// smart pointer stuff
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+
+// vpgl camera
+#include <vpgl/vpgl_generic_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
+
+//: space_time_scene: simple scene model that maintains (in world coordinates)
+//      - scene origin
+//      - number of blocks in each dimension
+//      - size of each block in each dimension
+//      - lvcs information
+//      - xml path on disk and data path (directory) on disk
+// NOTE: This uses bstm_block_id as a generic ID for 4D blocks. The block type
+// itself must implement:
+// - Block::metadata - type alias for corresponding metadata type
+// - Block::parser - Parser for loading a scene made up of Block's.
+// - Block::metadata must contain:
+//     - a method vgl_box_3d<double> bbox()
+//     - a method 'void to_xml(vsl_basic_xml_element&) const' that creates
+//     attributes for a given XML tag to represent the block in question.
+template <typename Block> class space_time_scene : public vbl_ref_count {
+public:
+  typedef typename Block::metadata block_metadata;
+  // TODO right now scene_parser is specified by block type. It might
+  // also make sense to pass in parser as another template parameter.
+  typedef typename Block::parser scene_parser;
+  typedef vbl_smart_ptr<space_time_scene<Block> > sptr;
+
+  //: empty scene, needs to be initialized manually
+  space_time_scene() {}
+
+  space_time_scene(vcl_string data_path, vgl_point_3d<double> const &origin,
+                   int version = 2);
+
+  //: initializes scene from xmlFile
+  space_time_scene(vcl_string filename);
+
+  //: destructor
+  ~space_time_scene() {}
+
+  //: save scene xml file
+  void save_scene();
+
+  //: return a vector of block ids in visibility order
+  vcl_vector<bstm_block_id> get_vis_blocks(vpgl_generic_camera<double> *cam);
+  vcl_vector<bstm_block_id>
+  get_vis_blocks(vpgl_perspective_camera<double> *cam);
+  vcl_vector<bstm_block_id> get_vis_blocks(vpgl_camera_double_sptr &cam) {
+    if (cam->type_name() == "vpgl_generic_camera")
+      return this->get_vis_blocks((vpgl_generic_camera<double> *)cam.ptr());
+    else if (cam->type_name() == "vpgl_perspective_camera")
+      return this->get_vis_blocks((vpgl_perspective_camera<double> *)cam.ptr());
+    else
+      vcl_cout
+          << "space_time_scene::get_vis_blocks doesn't support camera type "
+          << cam->type_name() << vcl_endl;
+    // else return empty
+    vcl_vector<bstm_block_id> empty;
+    return empty;
+  }
+  //: visibility order from point, blocks must intersect with cam box
+  vcl_vector<bstm_block_id>
+  get_vis_order_from_pt(vgl_point_3d<double> const &pt,
+                        vgl_box_2d<double> camBox = vgl_box_2d<double>());
+
+  //: return a heap pointer to a scene info
+  bool block_exists(bstm_block_id id) const {
+    return blocks_.find(id) != blocks_.end();
+  }
+  bool block_on_disk(bstm_block_id id) const {
+    return vul_file::exists(data_path_ + id.to_string() + ".bin");
+  }
+  bool data_on_disk(bstm_block_id id, vcl_string data_type) {
+    return vul_file::exists(data_path_ + data_type + "_" + id.to_string() +
+                            ".bin");
+  }
+
+  //: a list of block metadata...
+  vcl_map<bstm_block_id, block_metadata> &blocks() { return blocks_; }
+  unsigned num_blocks() const { return (unsigned)blocks_.size(); }
+
+  //: mutable reference
+  block_metadata &get_block_metadata(bstm_block_id id) { return blocks_[id]; }
+  //: const so return a copy
+  block_metadata get_block_metadata_const(bstm_block_id id) const;
+
+  vcl_vector<bstm_block_id> get_block_ids() const;
+
+  //: returns the block ids of blocks that intersect the given bounding box at
+  // given time, as well as the local time
+  vcl_vector<bstm_block_id> get_block_ids(vgl_box_3d<double> bb,
+                                          float time) const;
+
+  //: gets a tight bounding box for the scene
+  vgl_box_3d<double> bounding_box() const;
+  //: gets a tight bounding box for the scene
+  vgl_box_3d<int> bounding_box_blk_ids() const;
+
+  //: gets a tight bounding box for the scene
+  void bounding_box_t(double &min_t, double &max_t) const;
+
+  //: gets a tight bounding box of the block ids
+  void blocks_ids_bounding_box_t(unsigned &min_block_id,
+                                 unsigned &max_block_id) const;
+
+  // returns the dimesnsion of the scene grid where each grid element is a block
+  vgl_vector_3d<unsigned int> scene_dimensions() const;
+
+  //: If a block contains a 3-d point, set the block id, else return false. The
+  // local coordinates of the point are also returned
+  bool contains(vgl_point_3d<double> const &p, bstm_block_id &bid,
+                vgl_point_3d<double> &local_coords, double const t,
+                double &local_time) const;
+
+  //: returns the local time if t is contained in scene
+  bool local_time(double const t, double &local_time) const;
+
+  //: scene dimensions accessors
+  vgl_point_3d<double> local_origin() const { return local_origin_; }
+  vgl_point_3d<double> rpc_origin() const { return rpc_origin_; }
+  vpgl_lvcs lvcs() const { return lvcs_; }
+
+  //: scene path accessors
+  vcl_string xml_path() const { return xml_path_; }
+  vcl_string data_path() const { return data_path_; }
+
+  //: appearance model accessor
+  vcl_vector<vcl_string> appearances() const { return appearances_; }
+  bool has_data_type(vcl_string data_type);
+
+  //: scene version number
+  int version() { return version_; }
+  void set_version(int v) { version_ = v; }
+
+  //: scene mutators
+  void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
+  void set_rpc_origin(vgl_point_3d<double> rpc) { rpc_origin_ = rpc; }
+  void set_lvcs(vpgl_lvcs lvcs) { lvcs_ = lvcs; }
+  void set_blocks(vcl_map<bstm_block_id, block_metadata> blocks) {
+    blocks_ = blocks;
+  }
+  void add_block_metadata(block_metadata data);
+  void set_appearances(vcl_vector<vcl_string> const &appearances) {
+    this->appearances_ = appearances;
+  }
+
+  //: scene path mutators
+  void set_xml_path(vcl_string path) { xml_path_ = path; }
+  void set_data_path(vcl_string path) { data_path_ = path + "/"; }
+
+private:
+  //: world scene information
+  vpgl_lvcs lvcs_;
+  vgl_point_3d<double> local_origin_;
+  vgl_point_3d<double> rpc_origin_;
+
+  //: location on disk of xml file and data/block files
+  vcl_string data_path_, xml_path_;
+
+  //: list of block meta data available to this scene
+  vcl_map<bstm_block_id, block_metadata> blocks_;
+
+  //: list of appearance models/observation models used by this scene
+  vcl_vector<vcl_string> appearances_;
+  int version_;
+};
+
+//: utility class for sorting id's by their distance
+class space_time_dist_id_pair {
+public:
+  space_time_dist_id_pair(double dist, bstm_block_id id)
+      : dist_(dist), id_(id) {}
+  double dist_;
+  bstm_block_id id_;
+
+  inline bool operator<(space_time_dist_id_pair const &v) const {
+    return dist_ < v.dist_;
+  }
+};
+
+//: scene output stream operator
+template <typename Block>
+vcl_ostream &operator<<(vcl_ostream &s, space_time_scene<Block> &scene);
+
+//: scene xml write function
+template <typename Block>
+void x_write(vcl_ostream &os, space_time_scene<Block> &scene, vcl_string name);
+
+//--- IO read/write for sptrs--------------------------------------------------
+//: Binary write space_time_scene scene to stream
+// TODO unimplemented for now -- same as for BSTM scene.
+template <typename Block>
+void vsl_b_write(vsl_b_ostream &os, space_time_scene<Block> const &scene) {}
+template <typename Block>
+void vsl_b_write(vsl_b_ostream &os, const space_time_scene<Block> *&p) {}
+template <typename Block>
+void vsl_b_write(vsl_b_ostream &os,
+                 typename space_time_scene<Block>::sptr &sptr) {}
+template <typename Block>
+void vsl_b_write(vsl_b_ostream &os,
+                 typename space_time_scene<Block>::sptr const &sptr) {}
+
+//: Binary load space_time_scene scene from stream.
+template <typename Block>
+void vsl_b_read(vsl_b_istream &is, space_time_scene<Block> &scene) {}
+template <typename Block>
+void vsl_b_read(vsl_b_istream &is, space_time_scene<Block> *p) {}
+template <typename Block>
+void vsl_b_read(vsl_b_istream &is,
+                typename space_time_scene<Block>::sptr &sptr) {}
+template <typename Block>
+void vsl_b_read(vsl_b_istream &is,
+                typename space_time_scene<Block>::sptr const &sptr) {}
+
+#endif // bstm_multi_space_time_scene_h_
