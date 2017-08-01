@@ -12,7 +12,8 @@
 
 void test_space_time_scene()
 {
-  space_time_scene<bstm_multi_block> scene;
+  // Test template instantiation
+  space_time_scene<bstm_multi_block> scene_multi;
   space_time_scene<bstm_block> scene_bstm;
 }
 

@@ -118,7 +118,6 @@ bstm_multi_block_metadata
 bstm_multi_block_metadata::from_xml(const char **atts) {
   bstm_multi_block_metadata metadata;
   int idi, idj, idk, idt;
-  double ox, oy, oz, ot;
   double min_x, min_y, min_z, min_t, max_x, max_y, max_z, max_t;
   vcl_string subdivs;
 
@@ -132,14 +131,6 @@ bstm_multi_block_metadata::from_xml(const char **atts) {
       convert(atts[i + 1], idk);
     else if (vcl_strcmp(atts[i], "id_t") == 0)
       convert(atts[i + 1], idt);
-    else if (vcl_strcmp(atts[i], "min_x") == 0)
-      convert(atts[i + 1], ox);
-    else if (vcl_strcmp(atts[i], "origin_y") == 0)
-      convert(atts[i + 1], oy);
-    else if (vcl_strcmp(atts[i], "origin_z") == 0)
-      convert(atts[i + 1], oz);
-    else if (vcl_strcmp(atts[i], "origin_t") == 0)
-      convert(atts[i + 1], ot);
     else if (vcl_strcmp(atts[i], "min_x") == 0)
       convert(atts[i + 1], min_x);
     else if (vcl_strcmp(atts[i], "min_y") == 0)

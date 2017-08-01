@@ -6,6 +6,7 @@
 
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
+#include <vcl_iostream.h>
 #include <vcl_string.h>
 
 #include <bstm_multi/bstm_multi_block_metadata.h>
@@ -69,16 +70,31 @@ void test_block_metadata_contains_t() {
   metadata.bbox_ = vgl_box_3d<double>(0, 0, 0, 10, 11, 12);
   metadata.bbox_t_ = vcl_pair<double, double>(0, 4.5);
   double local_time;
-  TEST("block time containment (t, min, max)", metadata.contains_t(-5, local_time), false);
-  TEST("block time containment (min, max, t)", metadata.contains_t(55, local_time), false);
-  TEST("block time containment (min, t, max)", metadata.contains_t(2.25, local_time), true);
+  TEST("block time containment (t, min, max)",
+       metadata.contains_t(-5, local_time),
+       false);
+  TEST("block time containment (min, max, t)",
+       metadata.contains_t(55, local_time),
+       false);
+  TEST("block time containment (min, t, max)",
+       metadata.contains_t(2.25, local_time),
+       true);
   TEST("block local time", local_time, 0.5);
+}
+
+void test_block_metadata_printing() {
+  bstm_multi_block_metadata metadata;
+  metadata.id_ = bstm_block_id(0, 0, 0, 1);
+  metadata.bbox_ = vgl_box_3d<double>(0, 0, 0, 10, 11, 12);
+  metadata.bbox_t_ = vcl_pair<double, double>(0, 4.5);
+  vcl_cout << metadata << vcl_endl;
 }
 
 void test_bstm_multi_block_metadata() {
   test_space_time_enum();
   test_block_metadata_equality();
   test_block_metadata_contains_t();
+  test_block_metadata_printing();
 }
 
 TESTMAIN(test_bstm_multi_block_metadata);

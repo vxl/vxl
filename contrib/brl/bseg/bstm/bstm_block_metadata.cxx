@@ -4,7 +4,7 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
+#include <vcl_cstring.h>
 
 // the local time is [0,sub_block_num_t_)
 bool bstm_block_metadata::contains_t(double const t, double &local_time) const {
@@ -31,7 +31,7 @@ bool bstm_block_metadata::operator==(boxm2_block_metadata const &m) const {
          (this->sub_block_num_ == m.sub_block_num_);
 }
 
-vgl_box_3d<double> bstm_block_metadata::bbox() {
+vgl_box_3d<double> bstm_block_metadata::bbox() const {
   // max point
   vgl_point_3d<double> max_pt(
       local_origin_.x() + sub_block_num_.x() * sub_block_dim_.x(),
@@ -84,7 +84,77 @@ void bstm_block_metadata::to_xml(vsl_basic_xml_element &block) const {
   block.add_attribute("random", 0);
 }
 
-vcl_ostream &operator<<(vcl_ostream &s, bstm_block_metadata &metadata) {
+template <typename T> void convert(const char *t, T &d) {
+  vcl_stringstream strm(t);
+  strm >> d;
+}
+
+bstm_block_metadata bstm_block_metadata::from_xml(const char **atts) {
+  bstm_block_metadata metadata;
+  int idi, idj, idk, idt;
+  double ox, oy, oz, ot;
+  double dim_x, dim_y, dim_z, dim_t;
+  unsigned num_x, num_y, num_z, num_t;
+
+  // iterate over attributes...
+  for (int i = 0; atts[i]; i += 2) {
+
+    if (vcl_strcmp(atts[i], "id_i") == 0)
+      convert(atts[i + 1], idi);
+    else if (vcl_strcmp(atts[i], "id_j") == 0)
+      convert(atts[i + 1], idj);
+    else if (vcl_strcmp(atts[i], "id_k") == 0)
+      convert(atts[i + 1], idk);
+    else if (vcl_strcmp(atts[i], "id_t") == 0)
+      convert(atts[i + 1], idt);
+    else if (vcl_strcmp(atts[i], "origin_x") == 0)
+      convert(atts[i + 1], ox);
+    else if (vcl_strcmp(atts[i], "origin_y") == 0)
+      convert(atts[i + 1], oy);
+    else if (vcl_strcmp(atts[i], "origin_z") == 0)
+      convert(atts[i + 1], oz);
+    else if (vcl_strcmp(atts[i], "origin_t") == 0)
+      convert(atts[i + 1], ot);
+    else if (vcl_strcmp(atts[i], "dim_x") == 0)
+      convert(atts[i + 1], dim_x);
+    else if (vcl_strcmp(atts[i], "dim_y") == 0)
+      convert(atts[i + 1], dim_y);
+    else if (vcl_strcmp(atts[i], "dim_z") == 0)
+      convert(atts[i + 1], dim_z);
+    else if (vcl_strcmp(atts[i], "dim_t") == 0)
+      convert(atts[i + 1], dim_t);
+    else if (vcl_strcmp(atts[i], "num_x") == 0)
+      convert(atts[i + 1], num_x);
+    else if (vcl_strcmp(atts[i], "num_y") == 0)
+      convert(atts[i + 1], num_y);
+    else if (vcl_strcmp(atts[i], "num_z") == 0)
+      convert(atts[i + 1], num_z);
+    else if (vcl_strcmp(atts[i], "num_t") == 0)
+      convert(atts[i + 1], num_t);
+    else if (vcl_strcmp(atts[i], "init_level") == 0)
+      convert(atts[i + 1], metadata.init_level_);
+    else if (vcl_strcmp(atts[i], "init_level_t") == 0)
+      convert(atts[i + 1], metadata.init_level_t_);
+    else if (vcl_strcmp(atts[i], "max_level") == 0)
+      convert(atts[i + 1], metadata.max_level_);
+    else if (vcl_strcmp(atts[i], "max_level_t") == 0)
+      convert(atts[i + 1], metadata.max_level_t_);
+    else if (vcl_strcmp(atts[i], "max_mb") == 0)
+      convert(atts[i + 1], metadata.max_mb_);
+    else if (vcl_strcmp(atts[i], "p_init") == 0)
+      convert(atts[i + 1], metadata.p_init_);
+  }
+  metadata.id_ = bstm_block_id(idi, idj, idk, idt);
+  metadata.local_origin_ = vgl_point_3d<double>(ox, oy, oz);
+  metadata.local_origin_t_ = ot;
+  metadata.sub_block_dim_ = vgl_vector_3d<double>(dim_x, dim_y, dim_z);
+  metadata.sub_block_dim_t_ = dim_t;
+  metadata.sub_block_num_ = vgl_vector_3d<unsigned>(num_x, num_y, num_z);
+  metadata.sub_block_num_t_ = num_t;
+  return metadata;
+}
+
+vcl_ostream &operator<<(vcl_ostream &s, const bstm_block_metadata &metadata) {
   s << metadata.id_ << ' ';
   vgl_point_3d<double> org = metadata.local_origin_;
   s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ' '

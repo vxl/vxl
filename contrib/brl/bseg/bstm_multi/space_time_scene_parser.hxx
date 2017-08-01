@@ -153,7 +153,7 @@ void space_time_scene_parser<Block>::startElement(const char *name,
   }
   //---------- BLOCK TAG -------------------------------------------------------
   else if (vcl_strcmp(name, BLOCK_TAG) == 0) {
-    bstm_multi_block_metadata metadata = bstm_multi_block_metadata::from_xml(atts);
+    block_metadata metadata = block_metadata::from_xml(atts);
     metadata.version_ = version_;
     blocks_[metadata.id_] = metadata;
   }
