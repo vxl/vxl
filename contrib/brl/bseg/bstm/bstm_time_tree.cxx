@@ -8,14 +8,14 @@
 #include <vcl_compiler.h>
 
 //: default constructor
-bstm_time_tree::bstm_time_tree()
+bstm_time_tree::bstm_time_tree() : is_owning_(true)
 {
   bits_ = new unsigned char[TT_NUM_BYTES];
   std::memset(bits_, 0, TT_NUM_BYTES);
 }
 
 //: copy constructor
-bstm_time_tree::bstm_time_tree(const bstm_time_tree& other)
+bstm_time_tree::bstm_time_tree(const bstm_time_tree& other) : is_owning_(true)
 {
   bits_ = new unsigned char[TT_NUM_BYTES];
   num_levels_ = other.number_levels();
@@ -23,7 +23,7 @@ bstm_time_tree::bstm_time_tree(const bstm_time_tree& other)
 }
 
 //: constructor from an array of char bits
-bstm_time_tree::bstm_time_tree(const unsigned char* bits, int num_levels)
+bstm_time_tree::bstm_time_tree(const unsigned char* bits, int num_levels) : is_owning_(true)
 {
     bits_ = new unsigned char[TT_NUM_BYTES];
 
@@ -440,4 +440,3 @@ std::ostream& operator <<(std::ostream &s, bstm_time_tree &t)
   return s;
 }
 #endif // 0
-

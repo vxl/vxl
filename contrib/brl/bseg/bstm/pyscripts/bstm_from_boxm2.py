@@ -136,7 +136,7 @@ def get_boxm2_frames(boxm2_dir):
     """
 Returns a sorted list of directories containing boxm2 frames. Assumes that `boxm2_dir` contains a set of folders, all named frame_<number>_boxm2
     """
-    return sorted(glob.glob(os.path.join(boxm2_dir, "frame_*_boxm2")))
+    return sorted(glob.glob(os.path.join(boxm2_dir, "frame_*_boxm2")))[:10]
 
 
 def main():

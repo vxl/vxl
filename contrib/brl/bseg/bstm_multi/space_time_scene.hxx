@@ -78,15 +78,6 @@ space_time_scene<Block>::space_time_scene(vcl_string filename) {
   version_ = parser.version();
 }
 
-//: add a block meta data...
-template <typename Block>
-void space_time_scene<Block>::add_block_metadata(block_metadata data) {
-  if (blocks_.find(data.id_) != blocks_.end()) {
-    vcl_cout << "BSTM MULTI SCENE: Overwriting block metadata for id: "
-             << data.id_ << vcl_endl;
-  }
-  blocks_[data.id_] = data;
-}
 
 template <typename Block>
 vcl_vector<bstm_block_id> space_time_scene<Block>::get_block_ids() const {
@@ -117,14 +108,13 @@ space_time_scene<Block>::get_block_ids(vgl_box_3d<double> bb,
 
 template <typename Block>
 typename space_time_scene<Block>::block_metadata
-space_time_scene<Block>::get_block_metadata_const(bstm_block_id id) const {
-  typename vcl_map<bstm_block_id, block_metadata>::const_iterator iter;
-  for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
-    if ((*iter).first == id) {
-      return (*iter).second;
-    }
+space_time_scene<Block>::get_block_metadata(const bstm_block_id& id) const {
+  typename vcl_map<bstm_block_id, block_metadata>::const_iterator iter = blocks_.find(id);
+  if (iter == blocks_.end()){
+    return block_metadata();
+  } else {
+    return iter->second;
   }
-  return block_metadata();
 }
 
 template <typename Block>

@@ -29,10 +29,12 @@ class bstm_time_tree
   bstm_time_tree();
   bstm_time_tree(const unsigned char* bits, int num_levels=6);
   bstm_time_tree(const bstm_time_tree& other);
+  bstm_time_tree(unsigned char *bits)
+      : is_owning_(false), bits_(bits), num_levels_(6) {}
 
   //: Destructor
   ~bstm_time_tree() {
-    if (bits_) {
+    if (is_owning_ && bits_) {
       delete[] bits_; bits_ = NULL;
     }
   }
@@ -114,6 +116,7 @@ class bstm_time_tree
   std::vector<int> max_depth_leaves() const;
 
  private:
+  bool is_owning_;
   //: Tree structure stored as "bits" = really a char array
   unsigned char* bits_;
   //: Maximum number of levels in the time tree

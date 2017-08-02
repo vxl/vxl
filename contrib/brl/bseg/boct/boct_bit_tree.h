@@ -25,14 +25,17 @@ class boct_bit_tree
 {
  public:
 
+  // These constructor are owning
   //: Default constructor
   boct_bit_tree();
-  boct_bit_tree(unsigned char* bits, int num_levels=4);
+  boct_bit_tree(const unsigned char* bits, int num_levels=4);
   boct_bit_tree(const boct_bit_tree& other);
+  //: non-owning constructor
+  boct_bit_tree(unsigned char *bits) :is_owning_(false), bits_(bits), num_levels_(4) {}
 
   //: Destructor
   ~boct_bit_tree() {
-    if (bits_) {
+    if (is_owning_ && bits_) {
       delete[] bits_; bits_ = NULL;
     }
   }
@@ -91,7 +94,7 @@ class boct_bit_tree
 
   //get bits and data
   unsigned char* get_bits() { return bits_; }
-  unsigned char* get_bits() const { return bits_; }
+  const unsigned char* get_bits() const { return bits_; }
 
   //: gets pointers stored in bits 10, 11, 12, 13
   int get_data_ptr(bool is_random=false);
@@ -119,6 +122,8 @@ class boct_bit_tree
   static float         centerZ[585];
  private:
 
+  // Whether this tree owns the underlying buffer and should delete it on destruction.
+  bool is_owning_;
   //: Tree structure stored as "bits" = really a char array
   unsigned char* bits_;
   //: Maximum number of levels in the octree

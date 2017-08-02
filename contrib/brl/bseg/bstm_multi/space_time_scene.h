@@ -117,10 +117,8 @@ public:
   vcl_map<bstm_block_id, block_metadata> &blocks() { return blocks_; }
   unsigned num_blocks() const { return (unsigned)blocks_.size(); }
 
-  //: mutable reference
-  block_metadata &get_block_metadata(bstm_block_id id) { return blocks_[id]; }
-  //: const so return a copy
-  block_metadata get_block_metadata_const(bstm_block_id id) const;
+  //: returns a copy of the metadata of the given block ID.
+  block_metadata get_block_metadata(const bstm_block_id& id) const;
 
   vcl_vector<bstm_block_id> get_block_ids() const;
 
@@ -179,7 +177,6 @@ public:
   void set_blocks(vcl_map<bstm_block_id, block_metadata> blocks) {
     blocks_ = blocks;
   }
-  void add_block_metadata(block_metadata data);
   void set_appearances(vcl_vector<vcl_string> const &appearances) {
     this->appearances_ = appearances;
   }
