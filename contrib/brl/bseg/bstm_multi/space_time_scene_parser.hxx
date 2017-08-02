@@ -1,11 +1,13 @@
 #ifndef bstm_multi_space_time_scene_parser_hxx_
 #define bstm_multi_space_time_scene_parser_hxx_
 
-
 //:
 // \file
 // \brief Parses the configuration file for bwm tool.
 //
+
+#include "space_time_scene_parser.h"
+
 #include <vcl_compiler.h>
 #include <vcl_cstdio.h>
 #include <vcl_cstring.h>
@@ -14,8 +16,6 @@
 #include <vcl_utility.h>
 
 #include <bstm/bstm_scene_parser.h>
-
-#include "space_time_scene_parser.h"
 
 // --------------
 // --- PARSER ---
@@ -80,7 +80,7 @@ bool space_time_scene_parser<Block>::lvcs(vpgl_lvcs &lvcs) {
 //   * MAX_MB_TAG "max_mb"
 template <typename Block>
 void space_time_scene_parser<Block>::startElement(const char *name,
-                                           const XML_Char **atts) {
+                                                  const XML_Char **atts) {
 #if 0
   vcl_cout<< "element=" << name << '\n'
           << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;

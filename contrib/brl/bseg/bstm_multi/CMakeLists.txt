@@ -5,10 +5,14 @@ include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
 set(bstm_multi_sources
+  bstm_multi_block.h bstm_multi_block.cxx
   bstm_multi_block_metadata.h bstm_multi_block_metadata.cxx
-  space_time_scene_parser.h space_time_scene_parser.hxx
+  bstm_multi_typedefs.h
+  space_time_data.h
+  space_time_data_base.h
   space_time_scene.h space_time_scene.hxx
-  bstm_multi_block.h bstm_multi_block.cxx)
+  space_time_scene_parser.h space_time_scene_parser.hxx
+  )
 
 include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if (EXPAT_FOUND)
@@ -32,8 +36,8 @@ endif()
 # #basic
 #subdirs(basic)
 
-# #io
-#subdirs(io)
+#io
+subdirs(io)
 
 # #c plus plus library
 #subdirs(cpp)
@@ -49,8 +53,9 @@ endif()
 # #util
 #subdirs(util)
 
-# #processes
-#subdirs(pro)
+#processes
+subdirs(pro)
+
 else()
   message(STATUS "Skipping contrib/brl/bseg/bstm_multi: requires geotiff")
 endif()

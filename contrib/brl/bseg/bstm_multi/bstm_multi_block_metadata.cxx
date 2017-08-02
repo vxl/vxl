@@ -1,6 +1,6 @@
-#include <vcl_cstring.h>
-
 #include "bstm_multi_block_metadata.h"
+
+#include <vcl_cstring.h>
 
 template <typename T> void convert(const char *t, T &d) {
   vcl_stringstream strm(t);
@@ -80,7 +80,8 @@ bool bstm_multi_block_metadata::contains_t(const double t,
 
 bool bstm_multi_block_metadata::
 operator==(const bstm_multi_block_metadata &m) const {
-  return (this->id_ == m.id_) && (this->bbox_ == m.bbox_) && (this->bbox_t_ == m.bbox_t_);
+  return (this->id_ == m.id_) && (this->bbox_ == m.bbox_) &&
+         (this->bbox_t_ == m.bbox_t_);
 }
 
 bool bstm_multi_block_metadata::

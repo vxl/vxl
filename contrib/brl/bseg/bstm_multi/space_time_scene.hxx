@@ -3,33 +3,24 @@
 
 #include "space_time_scene.h"
 
-#include <bstm/bstm_scene_parser.h>
-
-//:
-// \file
-
-#include <vcl_compiler.h>
-
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
 #include <vcl_map.h>
 #include <vcl_string.h>
 
-/* xml includes */
-#include <vgl/xio/vgl_xio_point_3d.h>
-#include <vgl/xio/vgl_xio_vector_3d.h>
-#include <vsl/vsl_basic_xml_element.h>
-
-#include <vpgl/xio/vpgl_xio_lvcs.h>
-
-// vgl includes
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_vector_3d.h>
 
-// vsph include
+#include <vgl/xio/vgl_xio_point_3d.h>
+#include <vgl/xio/vgl_xio_vector_3d.h>
+#include <vpgl/xio/vpgl_xio_lvcs.h>
+#include <vsl/vsl_basic_xml_element.h>
+
 #include <vsph/vsph_camera_bounds.h>
+
+#include <bstm/bstm_scene_parser.h>
 
 template <typename Block>
 space_time_scene<Block>::space_time_scene(vcl_string data_path,
@@ -78,7 +69,6 @@ space_time_scene<Block>::space_time_scene(vcl_string filename) {
   version_ = parser.version();
 }
 
-
 template <typename Block>
 vcl_vector<bstm_block_id> space_time_scene<Block>::get_block_ids() const {
   typename vcl_map<bstm_block_id, block_metadata>::const_iterator iter;
@@ -108,9 +98,10 @@ space_time_scene<Block>::get_block_ids(vgl_box_3d<double> bb,
 
 template <typename Block>
 typename space_time_scene<Block>::block_metadata
-space_time_scene<Block>::get_block_metadata(const bstm_block_id& id) const {
-  typename vcl_map<bstm_block_id, block_metadata>::const_iterator iter = blocks_.find(id);
-  if (iter == blocks_.end()){
+space_time_scene<Block>::get_block_metadata(const bstm_block_id &id) const {
+  typename vcl_map<bstm_block_id, block_metadata>::const_iterator iter =
+      blocks_.find(id);
+  if (iter == blocks_.end()) {
     return block_metadata();
   } else {
     return iter->second;
@@ -229,7 +220,8 @@ bool space_time_scene<Block>::contains(vgl_point_3d<double> const &p,
                                        double &local_time) const {
   vcl_vector<bstm_block_id> block_ids = this->get_block_ids();
   for (vcl_vector<bstm_block_id>::iterator id = block_ids.begin();
-       id != block_ids.end(); ++id) {
+       id != block_ids.end();
+       ++id) {
     block_metadata md = this->get_block_metadata_const(*id);
     vgl_vector_3d<double> dims(md.sub_block_dim_.x() * md.sub_block_num_.x(),
                                md.sub_block_dim_.y() * md.sub_block_num_.y(),
@@ -391,8 +383,8 @@ vgl_vector_3d<unsigned int> space_time_scene<Block>::scene_dimensions() const {
   max_j++;
   max_k++;
 
-  return vgl_vector_3d<unsigned int>((max_i - min_i), (max_j - min_j),
-                                     (max_k - min_k));
+  return vgl_vector_3d<unsigned int>(
+      (max_i - min_i), (max_j - min_j), (max_k - min_k));
 }
 
 //: returns true if the scene has specified data type (simple linear search)
@@ -489,7 +481,8 @@ vcl_ostream &operator<<(vcl_ostream &s, space_time_scene<Block> &scene) {
   s << " blocks:==>\n";
   for (typename vcl_map<bstm_block_id, block_metadata>::iterator bit =
            blk.begin();
-       bit != blk.end(); ++bit) {
+       bit != blk.end();
+       ++bit) {
     s << bit->second << "\n";
   }
   s << "<=====:end blocks\n";

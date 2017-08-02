@@ -60,4 +60,5 @@ private:
   bool read_only_;
 };
 
+
 #endif // bstm_multi_block_h_
