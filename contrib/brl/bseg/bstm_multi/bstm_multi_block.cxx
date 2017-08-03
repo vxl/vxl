@@ -14,9 +14,11 @@
     }                                                                          \
   }
 
+// Returns size of tree of requested type.
 vcl_size_t tree_size(space_time_enum ste) {
   switch (ste) {
   case STE_SPACE:
+    return sizeof(bstm_multi_block::space_tree_b);
   case STE_TIME:
     return sizeof(bstm_multi_block::time_tree_b);
   default:
@@ -24,6 +26,8 @@ vcl_size_t tree_size(space_time_enum ste) {
   }
 }
 
+// Initializes top-level buffer to an unrefined tree, sets other
+// buffers to null. Top level's data pointer is also set to null.
 bstm_multi_block::bstm_multi_block(const metadata_t &data)
     : metadata_(data)
     , buffers_(data.subdivisions_.size(), VXL_NULLPTR)

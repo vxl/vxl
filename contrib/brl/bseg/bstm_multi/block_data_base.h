@@ -6,6 +6,11 @@
 // block metadata. Essentially just contains a data buffer and its length. The
 // underlying buffer is owned by this class and deleted upon destruction.
 //
+// Based off of boxm2_data_base.h
+//
+// \author Raphael Kargon
+// \date Aug 03, 2017
+//
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -26,9 +31,8 @@ public:
       , buffer_length_(length)
       , data_buffer_(data_buffer) {}
 
-  // Initializes this data block with length 0 and a NULLPTR data pointer.
-  block_data_base(const vcl_string& data_type, bool read_only)
-      : read_only_(read_only), buffer_length_(0), data_buffer_(VXL_NULLPTR) {}
+  //: Initializes this data block with length 0 and a NULLPTR data pointer.
+  block_data_base(bool read_only = true) : read_only_(read_only) {}
 
   // NOTE unlike in BSTM/BOXM2, block_data_base creates new buffers as
   // empty. Thus there is no need to initialize them.
@@ -43,12 +47,23 @@ public:
 
   //: accessor for low level byte buffer kept by the data_base
   char *data_buffer() { return data_buffer_; }
+  const char *data_buffer() const { return data_buffer_; }
   vcl_size_t buffer_length() const { return buffer_length_; }
 
   //: returns copy of portion of buffer corresponding a cell. Returns
   // cell_size bytes starting at index i of data buffer. Returns
-  // VXL_NULLPTR if request goes outside of bounds.
-  char *cell_buffer(vcl_size_t i, vcl_size_t cell_size);
+  // VXL_NULLPTR if request goes outside of bounds. Caller owns returns data.
+  char *cell_buffer(vcl_size_t i, vcl_size_t cell_size) const {
+    if ((i + cell_size - 1) < buffer_length_) {
+      char *out = new char[cell_size];
+      for (vcl_size_t j = 0; j < cell_size; j++) {
+        out[j] = data_buffer_[i + j];
+      }
+      return out;
+    } else {
+      return VXL_NULLPTR;
+    }
+  }
 
   //: by default data is read-only, i.e. cache doesn't save it before destroying
   // it

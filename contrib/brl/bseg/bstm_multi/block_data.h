@@ -2,9 +2,11 @@
 #define bstm_multi_block_data_h
 //:
 // \file
-// \brief A class that represents a data buffer for a block, templated on the
-// datra type.
-// Based on boxm2_data.h
+// \brief A class that represents an owning data buffer for a block, templated on the
+// data type. Inheriting from block_data_base, this class adds a wrapper for the
+// data buffer, data_array_, which provides types array access, instead of a
+// char pointer. Please also see block_data_base.h.
+// (Based on boxm2_data.h)
 //
 // \author Raphael Kargon
 // \date Aug 01, 2017
@@ -37,6 +39,7 @@ public:
   const boxm2_array_1d<datatype> &data() const { return data_array_; }
 
 protected:
+  // Wraps around underyling data_buffer_.
   boxm2_array_1d<datatype> data_array_;
 };
 
