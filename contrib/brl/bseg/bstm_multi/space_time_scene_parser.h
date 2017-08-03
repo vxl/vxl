@@ -31,7 +31,7 @@
 template <typename Block> class space_time_scene_parser : public expatpp {
 
 public:
-  typedef typename Block::metadata block_metadata;
+  typedef typename Block::metadata_t block_metadata;
 
   space_time_scene_parser() : version_(1) {}
   ~space_time_scene_parser(void) {}

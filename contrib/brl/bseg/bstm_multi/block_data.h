@@ -1,5 +1,5 @@
-#ifndef space_time_data_h
-#define space_time_data_h
+#ifndef bstm_multi_block_data_h
+#define bstm_multi_block_data_h
 //:
 // \file
 // \brief A class that represents a data buffer for a block, templated on the
@@ -13,25 +13,23 @@
 #include <vcl_iostream.h>
 
 #include <boxm2/basic/boxm2_array_1d.h>
-#include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_data_traits.h>
-#include <bstm_multi/space_time_data_base.h>
+#include <bstm_multi/block_data_base.h>
 
 //: Specific, templated derived class for data blocks
-template <bstm_data_type T>
-class space_time_data : public space_time_data_base {
+template <bstm_data_type T> class block_data : public block_data_base {
 public:
   //: type of data (float for alpha, bytes for mixture model, etc)
   typedef typename bstm_data_traits<T>::datatype datatype;
 
-  //: creates space_time_data object from byte buffer and id
-  space_time_data(char *data_buffer, vcl_size_t length, bstm_block_id id)
-      : space_time_data_base(data_buffer, length, id)
+  //: creates block_data object from byte buffer and id
+  block_data(char *data_buffer, vcl_size_t length)
+      : block_data_base(data_buffer, length)
       , data_array_(buffer_length_ / sizeof(datatype),
                     reinterpret_cast<datatype *>(data_buffer)) {}
 
   //: destructor
-  virtual ~space_time_data() {}
+  virtual ~block_data() {}
 
   //: data array accessor
   boxm2_array_1d<datatype> &data() { return data_array_; }
@@ -42,4 +40,4 @@ protected:
   boxm2_array_1d<datatype> data_array_;
 };
 
-#endif // space_time_data_h
+#endif // bstm_multi_block_data_h

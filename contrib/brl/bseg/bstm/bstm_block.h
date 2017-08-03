@@ -28,7 +28,8 @@
 class bstm_block : public vbl_ref_count
 {
  public:
-  typedef bstm_block_metadata metadata;
+  typedef bstm_block_metadata metadata_t;
+  typedef bstm_block_id id_t;
   typedef vnl_vector_fixed<unsigned short, 2> ushort2;    //defines a block pointer
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
   typedef unsigned short                      ushort;

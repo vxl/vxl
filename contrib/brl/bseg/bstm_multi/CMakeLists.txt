@@ -5,11 +5,11 @@ include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
 set(bstm_multi_sources
+  block_data.h
+  block_data_base.h
   bstm_multi_block.h bstm_multi_block.cxx
   bstm_multi_block_metadata.h bstm_multi_block_metadata.cxx
   bstm_multi_typedefs.h
-  space_time_data.h
-  space_time_data_base.h
   space_time_scene.h space_time_scene.hxx
   space_time_scene_parser.h space_time_scene_parser.hxx
   )

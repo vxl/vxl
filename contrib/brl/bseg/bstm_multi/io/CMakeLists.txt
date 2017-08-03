@@ -4,8 +4,8 @@ include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
 set(bstm_multi_io_sources
-    space_time_cache.h
-    space_time_sio_mgr.h        space_time_sio_mgr.hxx
+    block_cache.h
+    block_sio_mgr.h        block_sio_mgr.hxx
     # space_time_lru_cache.h        space_time_lru_cache.cxx
    )
 aux_source_directory(Templates bstm_multi_io_sources)

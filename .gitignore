@@ -9,6 +9,7 @@ contrib/brl/bseg/bvxm/pyscripts/*pyc
 # back-up files
 *~
 *.bak
+\#*\#
 # vim swp files
 *.swp
 ## Ignore files that are used for auto_completion with clang

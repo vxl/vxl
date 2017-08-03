@@ -59,7 +59,7 @@
 //     creates a metadata object from a given XML <block></block> tag.
 template <typename Block> class space_time_scene : public vbl_ref_count {
 public:
-  typedef typename Block::metadata block_metadata;
+  typedef typename Block::metadata_t block_metadata;
   typedef space_time_scene_parser<Block> scene_parser;
   typedef vbl_smart_ptr<space_time_scene<Block> > sptr;
 
@@ -132,10 +132,10 @@ public:
   //: gets a tight bounding box for the scene
   vgl_box_3d<int> bounding_box_blk_ids() const;
 
-  //: gets a tight bounding box for the scene
+  //: gets tight time bounds for the scene
   void bounding_box_t(double &min_t, double &max_t) const;
 
-  //: gets a tight bounding box of the block ids
+  //: gets a tight time bounds of the block ids
   void blocks_ids_bounding_box_t(unsigned &min_block_id,
                                  unsigned &max_block_id) const;
 

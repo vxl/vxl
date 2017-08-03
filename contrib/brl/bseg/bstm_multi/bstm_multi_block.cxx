@@ -24,7 +24,7 @@ vcl_size_t tree_size(space_time_enum ste) {
   }
 }
 
-bstm_multi_block::bstm_multi_block(const metadata &data)
+bstm_multi_block::bstm_multi_block(const metadata_t &data)
     : metadata_(data)
     , buffers_(data.subdivisions_.size(), VXL_NULLPTR)
     , read_only_(false) {

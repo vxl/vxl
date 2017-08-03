@@ -3,7 +3,7 @@
 
 //:
 // \file
-// \brief Parses the configuration file for bwm tool.
+// \brief Parses a scene.xml file for a 4D space-time scene that uses the given Block type.
 //
 
 #include "space_time_scene_parser.h"
