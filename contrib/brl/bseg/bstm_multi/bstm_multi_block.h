@@ -41,6 +41,8 @@ public:
   id_t &block_id() { return metadata_.id_; }
   vcl_vector<unsigned char *> buffers() { return buffers_; }
   long byte_count() const { return byte_count_; }
+  // TODO num_cells
+
   //: mutators
   void set_block_id(id_t id) { metadata_.id_ = id; }
   void set_byte_count(long bc) { byte_count_ = bc; }

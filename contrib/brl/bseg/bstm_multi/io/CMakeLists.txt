@@ -5,6 +5,7 @@ include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
 set(bstm_multi_io_sources
     block_cache.h
+    block_simple_cache.h   block_simple_cache.hxx
     block_sio_mgr.h        block_sio_mgr.hxx
     # space_time_lru_cache.h        space_time_lru_cache.cxx
    )

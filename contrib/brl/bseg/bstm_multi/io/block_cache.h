@@ -128,22 +128,9 @@ protected:
   block_sio_mgr<Block> io_mgr_;
 };
 
-// //: Binary write block_cache  to stream
-// void vsl_b_write(vsl_b_ostream& os, block_cache const& scene);
-// //: Binary write block_cache  to stream
-// void vsl_b_write(vsl_b_ostream& os, const block_cache* &p);
-// //: Binary write block_cache smart pointer to stream
-// void vsl_b_write(vsl_b_ostream& os, block_cache_sptr& sptr);
-// //: Binary write block_cache smart pointer to stream
-// void vsl_b_write(vsl_b_ostream& os, block_cache_sptr const& sptr);
-
-// //: Binary load block_cache  from stream.
-// void vsl_b_read(vsl_b_istream& is, block_cache &scene);
-// //: Binary load block_cache  from stream.
-// void vsl_b_read(vsl_b_istream& is, block_cache* p);
-// //: Binary load block_cache smart pointer from stream.
-// void vsl_b_read(vsl_b_istream& is, block_cache_sptr& sptr);
-// //: Binary load block_cache smart pointer from stream.
-// void vsl_b_read(vsl_b_istream& is, block_cache_sptr const& sptr);
+// define static members
+template <typename Scene, typename Block>
+vbl_smart_ptr<block_cache<Scene, Block> > block_cache<Scene, Block>::instance_ =
+    VXL_NULLPTR;
 
 #endif // bstm_multi_block_cache_h_

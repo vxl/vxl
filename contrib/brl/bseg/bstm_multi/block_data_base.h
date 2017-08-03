@@ -27,11 +27,12 @@ public:
       , data_buffer_(data_buffer) {}
 
   // Initializes this data block with length 0 and a NULLPTR data pointer.
-  block_data_base(const vcl_string data_type, bool read_only)
+  block_data_base(const vcl_string& data_type, bool read_only)
       : read_only_(read_only), buffer_length_(0), data_buffer_(VXL_NULLPTR) {}
 
-  // void set_default_value(vcl_string data_type); // TODO not sure if we need
-  // this
+  // NOTE unlike in BSTM/BOXM2, block_data_base creates new buffers as
+  // empty. Thus there is no need to initialize them.
+  // void set_default_value(vcl_string data_type);
 
   //: This destructor is correct - by our design the original data_buffer
   // becomes OWNED by the data_base class

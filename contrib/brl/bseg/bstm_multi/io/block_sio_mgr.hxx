@@ -73,9 +73,12 @@ void block_sio_mgr<Block>::save_block_data_base(const vcl_string &dir,
                                                 const vcl_string &prefix) {
   vcl_string filename = dir + prefix + "_" + block_id.to_string() + ".bin";
 
-  char *bytes = data->data_buffer();
   vcl_ofstream myFile(filename.c_str(), vcl_ios::out | vcl_ios::binary);
-  myFile.write(bytes, data->buffer_length());
+  // only write if data length is non-zero (and data buffer is non-null)
+  if (data->buffer_length() > 0) {
+    char *bytes = data->data_buffer();
+    myFile.write(bytes, data->buffer_length());
+  }
   myFile.close();
   return;
 }
