@@ -1,10 +1,14 @@
 //:
 // \file bstm_multi_create_scene_process.cxx
-// \brief  A process for creating a scene XML file for a bstm_multi_scene.
+// \brief  Processes for creating and saving bstm_multi scene files.
 //
+// \author Raphael Kargon
+// \date 04 Aug 2017
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
 #include <vul/vul_file.h>
 
 #include <bprb/bprb_func_process.h>
@@ -19,15 +23,15 @@ const unsigned n_outputs_ = 1;
 bool bstm_multi_create_scene_process_cons(bprb_func_process &pro) {
   using namespace bstm_multi_create_scene_process_globals;
 
-  std::vector<std::string> input_types_(n_inputs_);
+  vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // datapath
   input_types_[1] = "vcl_string"; // appearance model
   input_types_[2] = "vcl_string"; // occupancy model
-  input_types_[3] = "float"; // origin x
-  input_types_[4] = "float"; // origin y
-  input_types_[5] = "float"; // origin z
+  input_types_[3] = "float";      // origin x
+  input_types_[4] = "float";      // origin y
+  input_types_[5] = "float";      // origin z
 
-  std::vector<std::string> output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bstm_multi_scene_sptr";
 
   return pro.set_input_types(input_types_) &&
@@ -38,24 +42,23 @@ bool bstm_multi_create_scene_process(bprb_func_process &pro) {
   using namespace bstm_multi_create_scene_process_globals;
 
   if (pro.n_inputs() < n_inputs_) {
-    std::cout << pro.name() << ": The input number should be " << n_inputs_
-              << std::endl;
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_
+             << vcl_endl;
     return false;
   }
   // get the inputs
-  std::vector<std::string> appearance(1, "");
+  vcl_vector<vcl_string> appearance(1, "");
   unsigned i = 0;
-  std::string datapath = pro.get_input<std::string>(i++);
-  appearance[0] = pro.get_input<std::string>(i++); // Appearance Model String
-  std::string opt_app =
-      pro.get_input<std::string>(i++); // Occupancy Model String
+  vcl_string datapath = pro.get_input<vcl_string>(i++);
+  appearance[0] = pro.get_input<vcl_string>(i++); // Appearance Model String
+  vcl_string opt_app = pro.get_input<vcl_string>(i++); // Occupancy Model String
   float origin_x = pro.get_input<float>(i++);
   float origin_y = pro.get_input<float>(i++);
   float origin_z = pro.get_input<float>(i++);
 
   if (!vul_file::make_directory_path(datapath.c_str()))
     return false;
-  bstm_multi_scene_sptr scene = new space_time_scene<bstm_multi_block>(
+  bstm_multi_scene_sptr scene = new bstm_multi_scene(
       datapath, vgl_point_3d<double>(origin_x, origin_y, origin_z), 2);
   scene->set_local_origin(vgl_point_3d<double>(origin_x, origin_y, origin_z));
 
@@ -77,17 +80,17 @@ bool bstm_multi_write_scene_xml_process_cons(bprb_func_process &pro) {
   using namespace bstm_multi_write_scene_xml_process_globals;
 
   // process takes 2 inputs
-  std::vector<std::string> input_types_(n_inputs_);
+  vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bstm_multi_scene_sptr";
   input_types_[1] = "vcl_string";
 
   // process has 1 output
-  std::vector<std::string> output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   bool ok =
       pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // default arguments - default filename is "scene"
-  brdb_value_sptr filename = new brdb_value_t<std::string>("scene");
+  brdb_value_sptr filename = new brdb_value_t<vcl_string>("scene");
   pro.set_input(1, filename);
   return ok;
 }
@@ -96,22 +99,22 @@ bool bstm_multi_write_scene_xml_process(bprb_func_process &pro) {
   using namespace bstm_multi_write_scene_xml_process_globals;
 
   if (pro.n_inputs() < n_inputs_) {
-    std::cout << pro.name() << ": The input number should be " << n_inputs_
-              << std::endl;
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_
+             << vcl_endl;
     return false;
   }
   // get the inputs
   unsigned i = 0;
   bstm_multi_scene_sptr scene = pro.get_input<bstm_multi_scene_sptr>(i++);
-  std::string filename = pro.get_input<std::string>(i++);
+  vcl_string filename = pro.get_input<vcl_string>(i++);
 
   // set xml path to reflect fname
-  std::string xmlPath = scene->xml_path();
-  std::string xmlDir = vul_file::dirname(xmlPath);
+  vcl_string xmlPath = scene->xml_path();
+  vcl_string xmlDir = vul_file::dirname(xmlPath);
   scene->set_xml_path(xmlDir + "/" + filename + ".xml");
 
   // make file and x_write to file
-  std::ofstream ofile(scene->xml_path().c_str());
+  vcl_ofstream ofile(scene->xml_path().c_str());
   x_write(ofile, (*scene.ptr()), "scene");
   return true;
 }

@@ -34,11 +34,10 @@ vcl_vector<space_time_enum> parse_subdivisions(const vcl_string &s) {
     vcl_string substr;
     space_time_enum ste;
     vcl_getline(ss, substr, ',');
-    if (!ste_from_string(substr, ste)) {
-      // skip any invalid subdivisions that are not 'space' or 'time'
-      continue;
+    // skip any invalid subdivisions that are not 'space' or 'time'
+    if (ste_from_string(substr, ste)) {
+      result.push_back(ste);
     }
-    result.push_back(ste);
   }
   return result;
 }

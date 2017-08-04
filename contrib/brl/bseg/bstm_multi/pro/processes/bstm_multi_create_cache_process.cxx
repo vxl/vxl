@@ -1,64 +1,57 @@
-// This is brl/bseg/bstm/pro/processes/bstm_create_cache_process.cxx
+// This is brl/bseg/bstm_multi/pro/processes/bstm_multi_create_cache_process.cxx
 //:
 // \file
-// \brief  A process for creating cache.
+// \brief  A process for creating a cache for a bstm_multi scene.
 //
-// \author Ali Osman Ulusoy
-// \date Nov 27, 2012
+// \author Raphael Kargon
+// \date 04 Aug 2017
 
-#include <iostream>
-#include <fstream>
 #include <bprb/bprb_func_process.h>
+#include <vcl_fstream.h>
+#include <vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
 
-#include <vcl_compiler.h>
-#include <bstm/bstm_scene.h>
-#include <bstm/io/bstm_cache.h>
-#include <bstm/io/bstm_lru_cache.h>
+#include <bstm_multi/bstm_multi_block.h>
+#include <bstm_multi/bstm_multi_typedefs.h>
+#include <bstm_multi/io/block_simple_cache.h>
+#include <bstm_multi/space_time_scene.h>
 
-
-
-namespace bstm_create_cache_process_globals
-{
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+namespace {
+const unsigned n_inputs_ = 2;
+const unsigned n_outputs_ = 1;
 }
-bool bstm_create_cache_process_cons(bprb_func_process& pro)
-{
-  using namespace bstm_create_cache_process_globals;
 
-  //process takes 1 input
-  std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0] = "bstm_scene_sptr";
-  input_types_[1] = "vcl_string";
+bool bstm_multi_create_cache_process_cons(bprb_func_process &pro) {
+  vcl_vector<vcl_string> input_types_(::n_inputs_);
+  input_types_[0] = "bstm_multi_scene_sptr"; // scene sptr
+  input_types_[1] = "vcl_string";            // cache type
 
-  // process has 1 output:
-  std::vector<std::string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(::n_outputs_);
   output_types_[0] = "bstm_cache_sptr";
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_) &&
+         pro.set_output_types(output_types_);
 }
 
-bool bstm_create_cache_process(bprb_func_process& pro)
-{
-  using namespace bstm_create_cache_process_globals;
+bool bstm_multi_create_cache_process(bprb_func_process &pro) {
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
+  if (pro.n_inputs() < ::n_inputs_) {
+    vcl_cout << pro.name() << ": The input number should be " << ::n_inputs_
+             << vcl_endl;
     return false;
   }
-  //get the inputs
+  // get the inputs
   unsigned i = 0;
-  bstm_scene_sptr scene= pro.get_input<bstm_scene_sptr>(i++);
-  std::string cache_type= pro.get_input<std::string>(i++);
-  if(cache_type=="lru")
-    bstm_lru_cache::create(scene);
-  else
-  {
-    std::cerr << "Don't recognize cache type " << cache_type << " exiting..." << std::endl;
+  bstm_multi_scene_sptr scene = pro.get_input<bstm_multi_scene_sptr>(i++);
+  vcl_string cache_type = pro.get_input<vcl_string>(i++);
+  if (cache_type == "simple")
+    block_simple_cache<bstm_multi_scene, bstm_multi_block>::create(scene);
+  else {
+    vcl_cerr << "Don't recognize cache type " << cache_type << " exiting..."
+             << vcl_endl;
     return false;
   }
 
-  // store scene smaprt pointer
-  pro.set_output_val<bstm_cache_sptr>(0, bstm_cache::instance());
+  pro.set_output_val<bstm_multi_cache_sptr>(0, bstm_multi_cache::instance());
   return true;
 }
-

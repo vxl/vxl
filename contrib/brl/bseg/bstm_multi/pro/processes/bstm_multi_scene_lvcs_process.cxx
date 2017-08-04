@@ -4,46 +4,45 @@
 // \brief  A process for accessing scene LVCS
 //
 // \author Raphael Kargon
-// \date July 11, 2017
+// \date 04 Aug 2017
 
-#include <bprb/bprb_func_process.h>
-
-#include <bstm/bstm_scene.h>
+#include <vcl_iostream.h>
+#include <vcl_string.h>
+#include <vcl_vector.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 
-namespace bstm_scene_lvcs_process_globals
-{
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+#include <bprb/bprb_func_process.h>
+#include <bstm_multi/bstm_multi_typedefs.h>
+#include <bstm_multi/space_time_scene.h>
+
+namespace {
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 1;
 }
-bool bstm_scene_lvcs_process_cons(bprb_func_process& pro)
-{
-  using namespace bstm_scene_lvcs_process_globals;
-  //process takes 1 input, the scene
-  std::vector<std::string> input_types_(n_inputs_);
+
+bool bstm_scene_lvcs_process_cons(bprb_func_process &pro) {
+  vcl_vector<vcl_string> input_types_(::n_inputs_);
   input_types_[0] = "bstm_scene_sptr";
 
-  // process has 3 outputs:
-  std::vector<std::string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(::n_outputs_);
   output_types_[0] = "vpgl_lvcs_sptr";
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  return pro.set_input_types(input_types_) &&
+         pro.set_output_types(output_types_);
 }
 
-bool bstm_scene_lvcs_process(bprb_func_process& pro)
-{
-  using namespace bstm_scene_lvcs_process_globals;
-
-  if ( pro.n_inputs() < n_inputs_ ){
-    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
+bool bstm_scene_lvcs_process(bprb_func_process &pro) {
+  if (pro.n_inputs() < ::n_inputs_) {
+    vcl_cout << pro.name() << ": The input number should be " << ::n_inputs_
+             << vcl_endl;
     return false;
   }
 
-  //get the inputs
-  bstm_scene_sptr   scene = pro.get_input<bstm_scene_sptr>(0);
+  // get the inputs
+  bstm_multi_scene_sptr scene = pro.get_input<bstm_multi_scene_sptr>(0);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
 
   // store outputs
-  int i=0;
+  int i = 0;
   pro.set_output_val<vpgl_lvcs_sptr>(i++, lvcs);
   return true;
 }

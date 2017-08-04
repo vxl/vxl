@@ -99,7 +99,6 @@ public:
   get_vis_order_from_pt(vgl_point_3d<double> const &pt,
                         vgl_box_2d<double> camBox = vgl_box_2d<double>());
 
-  //: return a heap pointer to a scene info
   bool block_exists(bstm_block_id id) const {
     return blocks_.find(id) != blocks_.end();
   }
@@ -113,6 +112,9 @@ public:
 
   //: a list of block metadata...
   vcl_map<bstm_block_id, block_metadata> &blocks() { return blocks_; }
+  const vcl_map<bstm_block_id, block_metadata> &blocks() const {
+    return blocks_;
+  }
   unsigned num_blocks() const { return (unsigned)blocks_.size(); }
 
   //: returns a copy of the metadata of the given block ID.
@@ -162,21 +164,21 @@ public:
 
   //: appearance model accessor
   vcl_vector<vcl_string> appearances() const { return appearances_; }
-  bool has_data_type(vcl_string data_type);
+  bool has_data_type(const vcl_string &data_type) const;
 
   //: scene version number
-  int version() { return version_; }
+  int version() const { return version_; }
   void set_version(int v) { version_ = v; }
 
   //: scene mutators
   void set_local_origin(vgl_point_3d<double> org) { local_origin_ = org; }
   void set_rpc_origin(vgl_point_3d<double> rpc) { rpc_origin_ = rpc; }
   void set_lvcs(vpgl_lvcs lvcs) { lvcs_ = lvcs; }
-  void set_blocks(vcl_map<bstm_block_id, block_metadata> blocks) {
+  void set_blocks(const vcl_map<bstm_block_id, block_metadata> &blocks) {
     blocks_ = blocks;
   }
-  void set_appearances(vcl_vector<vcl_string> const &appearances) {
-    this->appearances_ = appearances;
+  void set_appearances(const vcl_vector<vcl_string> &appearances) {
+    appearances_ = appearances;
   }
 
   //: scene path mutators

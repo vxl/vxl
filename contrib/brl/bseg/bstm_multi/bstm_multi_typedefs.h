@@ -15,9 +15,9 @@
 #include <bstm_multi/io/block_cache.h>
 #include <bstm_multi/space_time_scene.h>
 
-typedef space_time_scene<bstm_multi_block> bstm_scene;
-typedef vbl_smart_ptr<bstm_scene> bstm_multi_scene_sptr;
-typedef vbl_smart_ptr<block_cache<bstm_scene, bstm_multi_block> >
-    bstm_multi_cache_sptr;
+typedef space_time_scene<bstm_multi_block> bstm_multi_scene;
+typedef vbl_smart_ptr<bstm_multi_scene> bstm_multi_scene_sptr;
+typedef block_cache<bstm_multi_scene, bstm_multi_block> bstm_multi_cache;
+typedef vbl_smart_ptr<bstm_multi_cache> bstm_multi_cache_sptr;
 
 #endif // bstm_multi_typedefs_h_

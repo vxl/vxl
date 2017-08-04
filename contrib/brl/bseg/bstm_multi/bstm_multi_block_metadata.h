@@ -38,7 +38,7 @@ bool ste_from_string(const vcl_string &s, space_time_enum &ste);
 
 //: Accepts a list of subdivisions separated by commas, e.g.
 // 'space,time,space,time,space' and returns a vector of corresponding enum
-// values.
+// values. Note that this skips invalid values.
 vcl_vector<space_time_enum> parse_subdivisions(const vcl_string &s);
 
 //: Prints subdivisions as a comma-separated list of space_time_enum
@@ -48,8 +48,8 @@ vcl_string print_subdivisions(const vcl_vector<space_time_enum> &subdivisions);
 class bstm_multi_block_metadata : public vbl_ref_count {
 public:
   bstm_multi_block_metadata() {}
-  bstm_multi_block_metadata(const bstm_block_id& id,
-                            const vgl_box_3d<double>& bbox,
+  bstm_multi_block_metadata(const bstm_block_id &id,
+                            const vgl_box_3d<double> &bbox,
                             vcl_pair<double, double> bbox_t,
                             double max_mb,
                             double p_init,
