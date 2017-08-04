@@ -4,7 +4,8 @@
 //:
 // \file block_sio_mgr.h
 // \brief Loads blocks and data from ID's and data_types with blocking.
-//  If file is not available, will return null. Closely based off of bstm/io/bstm_sio_manager.h
+//  If file is not available, will return null. Closely based off of
+//  bstm/io/bstm_sio_manager.h
 //
 // \author Raphael Kargon
 // \date Aug 02 2017

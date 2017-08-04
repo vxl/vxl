@@ -13,8 +13,6 @@ vcl_string ste_as_string(space_time_enum ste) {
     return "space";
   case STE_TIME:
     return "time";
-  default:
-    return "INVALID STE";
   }
 }
 

@@ -7,7 +7,7 @@
 // Closely based off of boxm2_cache.h.
 //
 // \author Raphael Kargon
-// \date August 1st, 2017
+// \date 01 Aug 2017
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>

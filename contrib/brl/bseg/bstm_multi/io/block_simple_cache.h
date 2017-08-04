@@ -4,7 +4,11 @@
 //:
 // \file block_simple_cache.h
 // \brief block_simple_cache is a singleton, derived from
-// abstract class bstm_cache
+// abstract class block_cache. Simply stores blocks and data buffers in a map:
+// {scene -> {id -> block or data}}
+//
+// \author Raphael Kargon
+// \date 03 Aug 2017
 
 #include <vcl_cstddef.h>
 #include <vcl_iostream.h>
@@ -15,16 +19,6 @@
 #include <bstm_multi/io/block_cache.h>
 
 #define MAX_BYTES 1024 * 1024 * 1024 * 4 // 4 gigs of memory is max...
-
-// // seems unecessary -- smart pointers already define comparison types based
-// on
-// // underlying pointer.
-// struct ltstr1 {
-//   bool operator()(const boxm2_scene_sptr s1, const boxm2_scene_sptr s2) const
-//   {
-//     return s1.ptr() < s2.ptr();
-//   }
-// };
 
 //: A cache that keeps the most recently used blocks and data, while kicking out
 // the least recently used blocks and data to make more room.

@@ -62,19 +62,19 @@ private:
   double lvcs_local_origin_x_;
   double lvcs_local_origin_y_;
   double lvcs_theta_;
-  // world origin
+  //: world origin
   vgl_point_3d<double> origin_;
 
-  // scene directory (path)
+  //: scene directory (path)
   vcl_string path_;
 
-  // scene name (string)
+  //: scene name (string)
   vcl_string name_;
 
-  // block list
+  //: block list
   vcl_map<bstm_block_id, block_metadata> blocks_;
 
-  // list of appearances
+  //: list of appearances
   vcl_vector<vcl_string> appearances_;
 
   int version_;

@@ -21,7 +21,6 @@
 // \date 26 Jul 2017
 //
 
-
 #include <vcl_compiler.h>
 #include <vcl_iosfwd.h>
 #include <vcl_iostream.h>
@@ -34,7 +33,6 @@
 // smart pointer stuff
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-
 // vpgl camera
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -118,7 +116,7 @@ public:
   unsigned num_blocks() const { return (unsigned)blocks_.size(); }
 
   //: returns a copy of the metadata of the given block ID.
-  block_metadata get_block_metadata(const bstm_block_id& id) const;
+  block_metadata get_block_metadata(const bstm_block_id &id) const;
 
   vcl_vector<bstm_block_id> get_block_ids() const;
 
@@ -222,31 +220,5 @@ vcl_ostream &operator<<(vcl_ostream &s, space_time_scene<Block> &scene);
 //: scene xml write function
 template <typename Block>
 void x_write(vcl_ostream &os, space_time_scene<Block> &scene, vcl_string name);
-
-//--- IO read/write for sptrs--------------------------------------------------
-//: Binary write space_time_scene scene to stream
-// TODO unimplemented for now -- same as for BSTM scene.
-template <typename Block>
-void vsl_b_write(vsl_b_ostream &os, space_time_scene<Block> const &scene) {}
-template <typename Block>
-void vsl_b_write(vsl_b_ostream &os, const space_time_scene<Block> *&p) {}
-template <typename Block>
-void vsl_b_write(vsl_b_ostream &os,
-                 typename space_time_scene<Block>::sptr &sptr) {}
-template <typename Block>
-void vsl_b_write(vsl_b_ostream &os,
-                 typename space_time_scene<Block>::sptr const &sptr) {}
-
-//: Binary load space_time_scene scene from stream.
-template <typename Block>
-void vsl_b_read(vsl_b_istream &is, space_time_scene<Block> &scene) {}
-template <typename Block>
-void vsl_b_read(vsl_b_istream &is, space_time_scene<Block> *p) {}
-template <typename Block>
-void vsl_b_read(vsl_b_istream &is,
-                typename space_time_scene<Block>::sptr &sptr) {}
-template <typename Block>
-void vsl_b_read(vsl_b_istream &is,
-                typename space_time_scene<Block>::sptr const &sptr) {}
 
 #endif // bstm_multi_space_time_scene_h_
