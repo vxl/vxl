@@ -261,6 +261,23 @@ class msdi_marked_images_from_files : public msdi_marked_images
   // reflection_symmetry, reflection_state and ref_prefix.
   void set_from_props(mbl_read_props_type& props);
 
+  //: Parse named text file to read in data
+  //  Throws a mbl_exception_parse_error if fails
+  //  Expects something like:
+  //  \verbatim
+  //  reflection_state: ReflectSym
+  //  reflection_symmetry: { 7 6 5 4 3 2 1 0 }
+  //  ref_prefix: ref-
+  //  max_im_pyr_levels: 5
+  //  image_dir: /home/images/
+  //  points_dir: /home/points/
+  //  images: {
+  //    image1.pts : image1.jpg
+  //    image2.pts : image2.jpg
+  //  }
+  //  \endverbatim
+  void read_from_file(const vcl_string& path);
+
 };
 
 //: Fill in elements of params object from props

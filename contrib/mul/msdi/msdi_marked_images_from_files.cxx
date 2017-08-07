@@ -474,3 +474,19 @@ void msdi_marked_images_from_files::set_from_props(mbl_read_props_type& props)
   
   set_reflection_state_from_props(props);
 }
+
+//: Parse named text file to read in data
+//  Throws a mbl_exception_parse_error if fails
+void msdi_marked_images_from_files::read_from_file(const vcl_string& path)
+{
+  vcl_ifstream ifs(path.c_str());
+  if (!ifs)
+  {
+    vcl_string error_msg = "Failed to open file: "+path;
+    throw (mbl_exception_parse_error(error_msg));
+  }
+
+  mbl_read_props_type props = mbl_read_props_ws(ifs);
+
+  set_from_props(props);
+}
