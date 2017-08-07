@@ -431,7 +431,7 @@ void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_pro
   // For backwards compatability
   bool only_reflect=vul_string_to_bool(props.get_optional_property("only_reflect","false"));
   
-  vcl_string ref_prefix=props.get_optional_property("ref_prefix","ref-");
+  ref_prefix_=props.get_optional_property("ref_prefix","ref-");
 
   vcl_string ref_state_str=props.get_optional_property("reflection_state","Undefined");
   if (ref_state_str=="Undefined")
