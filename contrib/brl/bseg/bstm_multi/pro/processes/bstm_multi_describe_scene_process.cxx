@@ -98,8 +98,10 @@ bool bstm_multi_describe_scene_process(bprb_func_process &pro) {
       switch (ste) {
       case STE_SPACE:
         voxel_sizes /= 8.0;
+        break;
       case STE_TIME:;
         voxel_time_range /= 32.0;
+        break;
       }
     }
   } else {

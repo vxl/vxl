@@ -1,5 +1,5 @@
 if (HAS_GEOTIFF)
-#contrib / brl / bseg / bstm / CMakeLists.txt
+#contrib / brl / bseg / bstm_multi / CMakeLists.txt
 
 include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
@@ -39,15 +39,13 @@ endif()
 #io
 subdirs(io)
 
-# #c plus plus library
-#subdirs(cpp)
+#c plus plus library
+subdirs(cpp)
 
 # #opencl section
 #subdirs(ocl)
 
 # #view section
-# #this is causing confusing compiler errors with Visual Studio 2013 Professional;
-# #also had to comment out ocl / exe in the ocl CMakeLists.txt
 #subdirs(view)
 
 # #util

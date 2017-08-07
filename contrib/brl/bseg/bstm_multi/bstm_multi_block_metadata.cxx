@@ -81,9 +81,30 @@ operator==(const bstm_multi_block_metadata &m) const {
          (this->bbox_t_ == m.bbox_t_);
 }
 
+vcl_pair<vgl_vector_3d<double>, double>
+bstm_multi_block_metadata::resolution() const {
+  vgl_vector_3d<double> voxel_sizes =
+      this->bbox().max_point() - this->bbox().min_point();
+  double time_step = bbox_t_.second - bbox_t_.first;
+  for (vcl_vector<space_time_enum>::const_iterator iter = subdivisions_.begin();
+       iter != subdivisions_.end();
+       ++iter) {
+    switch (*iter) {
+    case STE_SPACE:
+      voxel_sizes /= 8.0;
+      break;
+    case STE_TIME:
+      time_step /= 32.0;
+      break;
+    }
+  }
+  return vcl_pair<vgl_vector_3d<double>, double>(voxel_sizes, time_step);
+}
+
 bool bstm_multi_block_metadata::
 operator==(const boxm2_block_metadata &m) const {
-  return (this->id_ == m.id_) && (this->bbox_ == m.bbox());
+  return (this->id_ == m.id_) && (this->bbox_ == m.bbox()) &&
+         voxel_resolutions_match(*this, m);
 }
 
 void bstm_multi_block_metadata::to_xml(vsl_basic_xml_element &block) const {
@@ -166,4 +187,9 @@ vcl_ostream &operator<<(vcl_ostream &s, bstm_multi_block_metadata &metadata) {
     << ") ";
   s << "subdivs( " << print_subdivisions(metadata.subdivisions_) << " ) ";
   return s;
+}
+
+bool voxel_resolutions_match(const bstm_multi_block_metadata &metadata,
+                             const boxm2_block_metadata &boxm2_metadata) {
+  return metadata.resolution().first == (boxm2_metadata.sub_block_dim_ / 8.0);
 }

@@ -112,6 +112,9 @@ public:
     max_t = bbox_t_.second;
   }
   vcl_pair<double, double> bbox_t() const { return bbox_t_; }
+  // Returns size of smallest space voxel and time step representable by this
+  // block.
+  vcl_pair<vgl_vector_3d<double>, double> resolution() const;
 
   bool operator==(bstm_multi_block_metadata const &m) const;
   bool operator==(boxm2_block_metadata const &m) const;
@@ -142,5 +145,10 @@ void vsl_b_read(vsl_b_istream &is, bstm_multi_block_metadata &scene);
 void vsl_b_read(vsl_b_istream &is, bstm_multi_block_metadata *p);
 void vsl_b_read(vsl_b_istream &is, bstm_multi_block_metadata_sptr &sptr);
 void vsl_b_read(vsl_b_istream &is, bstm_multi_block_metadata_sptr const &sptr);
+
+// Compares spatial sizes of smallest regions of space representable by these
+// two blocks.
+bool voxel_resolutions_match(const bstm_multi_block_metadata &metadata,
+                             const boxm2_block_metadata &boxm2_metadata);
 
 #endif

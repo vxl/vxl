@@ -18,8 +18,6 @@
 #include <bstm_multi/block_data_base.h>
 #include <bstm_multi/io/block_cache.h>
 
-#define MAX_BYTES 1024 * 1024 * 1024 * 4 // 4 gigs of memory is max...
-
 //: A cache that keeps the most recently used blocks and data, while kicking out
 // the least recently used blocks and data to make more room.
 //  Currently just stores blocks in a map, not caring about space
