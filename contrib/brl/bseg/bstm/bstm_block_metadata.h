@@ -113,11 +113,14 @@ class bstm_block_metadata:  public vbl_ref_count
   //: checks if this block contains the given t, if yes, returns local_time
   bool                    contains_t  (double const t, double& local_time) const;
 
+  bstm_block_id id() const { return id_; }
   //: bounding box for this block
   vgl_box_3d<double>      bbox() const;
   void   bbox_t(double& min_t, double& max_t) const {min_t = local_origin_t_; max_t = local_origin_t_ + sub_block_num_t_*sub_block_dim_t_; };
   vcl_pair<double, double> bbox_t() const { vcl_pair<double,double> p; bbox_t(p.first, p.second); return p; }
-
+  vcl_pair<vgl_vector_3d<double>,double> resolution() const {
+    return vcl_pair<vgl_vector_3d<double>,double>(sub_block_dim_ / 8.0, sub_block_dim_t_ / 32.0);
+  }
 
   bool operator==(bstm_block_metadata const& m) const;
   bool operator==(boxm2_block_metadata const& m) const;

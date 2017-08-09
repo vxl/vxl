@@ -19,11 +19,13 @@
 #include <vector>
 #include <cmath>
 #include <vgl/vgl_point_3d.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_box_3d.h>
 
 class boct_bit_tree
 {
  public:
+  typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   // These constructor are owning
   //: Default constructor
@@ -32,6 +34,10 @@ class boct_bit_tree
   boct_bit_tree(const boct_bit_tree& other);
   //: non-owning constructor
   boct_bit_tree(unsigned char *bits) :is_owning_(false), bits_(bits), num_levels_(4) {}
+  boct_bit_tree(uchar16& bits)
+    : is_owning_(false)
+    , bits_(reinterpret_cast<unsigned char*>(&bits))
+    , num_levels_(4) {}
 
   //: Destructor
   ~boct_bit_tree() {

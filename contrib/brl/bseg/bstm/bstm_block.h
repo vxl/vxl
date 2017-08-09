@@ -56,10 +56,13 @@ class bstm_block : public vbl_ref_count
 
   //: accessors
   bstm_block_id&            block_id()          { return block_id_; }         //somehow make this a const return..
+  const bstm_block_id&      block_id()          const { return block_id_; }
   char*                     buffer()            { return buffer_; }
   boxm2_array_3d<uchar16>&  trees()             { return trees_; }
+  const boxm2_array_3d<uchar16>&  trees()       const { return trees_; }
   vgl_vector_3d<double>&    sub_block_dim()     { return sub_block_dim_; }
   vgl_vector_3d<unsigned>&  sub_block_num()     { return sub_block_num_; }
+  const vgl_vector_3d<unsigned>&  sub_block_num() const { return sub_block_num_; }
   int                       tree_buff_length()  const { return (int)trees_.size(); }
   int                       init_level()        const { return init_level_; }
   int                       max_level()         const { return max_level_; }

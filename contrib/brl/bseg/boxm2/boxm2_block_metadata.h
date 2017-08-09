@@ -85,6 +85,7 @@ public:
   double max_mb_;  // each total block mb
   double p_init_;  // initialize occupancy probs with this
   int version_;    // Only valid version numbers are 1 & 2
+  boxm2_block_id id() const { return id_; }
   //: bounding box for this block
   vgl_box_3d<double> bbox() const;
   vgl_box_3d<double> bbox(int x, int y, int z) const {
