@@ -34,7 +34,7 @@ if ( BUILD_TESTING )
 endif()
 
 # #basic
-#subdirs(basic)
+subdirs(basic)
 
 #io
 subdirs(io)
