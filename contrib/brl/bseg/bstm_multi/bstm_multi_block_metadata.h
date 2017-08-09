@@ -21,6 +21,7 @@
 #include <vsl/vsl_basic_xml_element.h>
 
 #include <boxm2/boxm2_block_metadata.h>
+#include <bstm/bstm_block_metadata.h>
 #include <bstm/basic/bstm_block_id.h>
 
 //: Used to distinguish between time and space subdivisions in a block.
@@ -117,7 +118,8 @@ public:
   vcl_pair<vgl_vector_3d<double>, double> resolution() const;
 
   bool operator==(bstm_multi_block_metadata const &m) const;
-  bool operator==(boxm2_block_metadata const &m) const;
+
+  template <typename Metadata> bool operator==(Metadata const &m) const;
 
   //: Writes this block's metadata to an XML element which can later
   // be written to a file, e.g. as part of a scene.
@@ -150,5 +152,8 @@ void vsl_b_read(vsl_b_istream &is, bstm_multi_block_metadata_sptr const &sptr);
 // two blocks.
 bool voxel_resolutions_match(const bstm_multi_block_metadata &metadata,
                              const boxm2_block_metadata &boxm2_metadata);
+
+bool voxel_resolutions_match(const bstm_multi_block_metadata &metadata,
+                             const bstm_block_metadata &bstm_metadata);
 
 #endif

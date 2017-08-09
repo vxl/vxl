@@ -51,8 +51,19 @@ public:
 
   //: accessors
   id_t &block_id() { return metadata_.id_; }
+  const metadata_t &metadata() const { return metadata_; }
   vcl_vector<unsigned char *> buffers() { return buffers_; }
-  long byte_count() const { return byte_count_; }
+  // Sets this block's buffer for a given level.
+  unsigned char *get_buffer(std::size_t level) { return buffers_[level]; }
+  void set_buffer(unsigned char *new_buffer, std::size_t level) {
+    unsigned char *old_buffer = buffers_[level];
+    buffers_[level] = new_buffer;
+    if (old_buffer != new_buffer) {
+      delete[] old_buffer;
+    }
+  }
+  // TODO byte count
+  // long byte_count() const { return byte_count_; }
   // TODO num_cells -- calculate the total number of leaf cells in this block
 
   //: mutators
@@ -78,5 +89,8 @@ private:
   //: Whether this block is read-only
   bool read_only_;
 };
+
+// Returns size of tree of requested type.
+vcl_size_t tree_size(space_time_enum ste);
 
 #endif // bstm_multi_block_h_

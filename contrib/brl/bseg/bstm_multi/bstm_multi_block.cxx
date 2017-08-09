@@ -10,11 +10,10 @@
     case STE_SPACE:                                                            \
       boct_bit_tree(buffer).function_call;                                     \
     case STE_TIME:                                                             \
-      boct_bit_tree(buffer).function_call;                                     \
+      bstm_time_tree(buffer).function_call;                                     \
     }                                                                          \
   }
 
-// Returns size of tree of requested type.
 vcl_size_t tree_size(space_time_enum ste) {
   switch (ste) {
   case STE_SPACE:

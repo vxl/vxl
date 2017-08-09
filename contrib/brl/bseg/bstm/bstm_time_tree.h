@@ -18,19 +18,28 @@
 #include <cmath>
 #include <vcl_compiler.h>
 
+#include <vnl_vector_fixed.h>
+
 #define TT_NUM_BYTES  8
 #define TT_NUM_LVLS  6
 
 class bstm_time_tree
 {
  public:
+  typedef vnl_vector_fixed<unsigned char, 8> uchar8;    //defines the underlying bits of a time tree
 
   //: Default constructor
   bstm_time_tree();
   bstm_time_tree(const unsigned char* bits, int num_levels=6);
   bstm_time_tree(const bstm_time_tree& other);
+  // non-owning constructor
   bstm_time_tree(unsigned char *bits)
       : is_owning_(false), bits_(bits), num_levels_(6) {}
+
+  bstm_time_tree(uchar8 &bits)
+      : is_owning_(false)
+      , bits_(reinterpret_cast<unsigned char *>(&bits))
+      , num_levels_(6) {}
 
   //: Destructor
   ~bstm_time_tree() {

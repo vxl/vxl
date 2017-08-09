@@ -27,6 +27,9 @@ Multi-BSTM is still incomplete. The following needs to be done:
 
 ### bugs/notes/etc
 
+ - Currently, BSTM ingestion requires that multi-BSTM blocks have same size as BSTM blocks. This means that BSTM block sizes (i.e. number of sub-blocks) must be a power of 512 (i.e. 8 in each dimension). Similarly, the number of frames should be a power of 32.
+
+ - use namespaces instead of prefixes everywhere?
 
 ## Contact
 

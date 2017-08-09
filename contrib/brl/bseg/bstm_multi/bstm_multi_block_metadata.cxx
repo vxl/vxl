@@ -75,12 +75,6 @@ bool bstm_multi_block_metadata::contains_t(const double t,
     return false;
 }
 
-bool bstm_multi_block_metadata::
-operator==(const bstm_multi_block_metadata &m) const {
-  return (this->id_ == m.id_) && (this->bbox_ == m.bbox_) &&
-         (this->bbox_t_ == m.bbox_t_);
-}
-
 vcl_pair<vgl_vector_3d<double>, double>
 bstm_multi_block_metadata::resolution() const {
   vgl_vector_3d<double> voxel_sizes =
@@ -102,9 +96,14 @@ bstm_multi_block_metadata::resolution() const {
 }
 
 bool bstm_multi_block_metadata::
-operator==(const boxm2_block_metadata &m) const {
-  return (this->id_ == m.id_) && (this->bbox_ == m.bbox()) &&
-         voxel_resolutions_match(*this, m);
+operator==(const bstm_multi_block_metadata &m) const {
+  return (this->id_ == m.id_) && (this->bbox_ == m.bbox_) &&
+         (this->bbox_t_ == m.bbox_t_);
+}
+
+template <typename Metadata>
+bool bstm_multi_block_metadata::operator==(Metadata const &m) const {
+  return (this->id_ == m.id()) && (this->bbox_ == m.bbox());
 }
 
 void bstm_multi_block_metadata::to_xml(vsl_basic_xml_element &block) const {

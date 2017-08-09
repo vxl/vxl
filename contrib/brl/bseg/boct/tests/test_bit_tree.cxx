@@ -80,6 +80,21 @@ void test_print_centers()
 
 static void test_bit_tree()
 {
+
+  {  // test set bit and parents to true
+    boct_bit_tree tree;
+    tree.set_bit_and_parents_to_true(17);
+    bool good = true;
+    for (int i = 0; i < 73; i++) {
+      if (i == 17 || i == 2 || i == 0) {
+        good &= (tree.bit_at(i) == 1);
+      } else {
+        good &= (tree.bit_at(i) == 0);
+      }
+    }
+    TEST("Set bits and parents to true", good, true);
+  }
+
     unsigned char bits[73] = {  1,
                                 //{1-8}  depth 1
                                 1,1,1,1,1,1,1,1,
@@ -104,6 +119,7 @@ static void test_bit_tree()
         std::cout<<"i";
     }
     TEST("Set bits and get bits works ", true, good);
+
 
   //---------------------------------------------------------------------------
   //test traverse

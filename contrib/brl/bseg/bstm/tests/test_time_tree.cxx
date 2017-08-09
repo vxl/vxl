@@ -140,6 +140,17 @@ void test_time_tree()
     //Test traverse functionality
     good = true;
 
+    bstm_time_tree new_tree = bstm_time_tree();
+    vcl_cout << "tree range " << bstm_time_tree::tree_range() << vcl_endl;
+    vcl_cout << new_tree.traverse(0) << vcl_endl;
+    vcl_cout << new_tree.traverse(.999) << vcl_endl;
+    vcl_memset(new_tree.get_bits(), 255, TT_NUM_BYTES);
+    for(int i=0; i<=bstm_time_tree::tree_range(); ++i){
+      double t = i / bstm_time_tree::tree_range();
+      int idx = new_tree.traverse(t);
+      int bit_at = new_tree.bit_at(idx);
+      vcl_cout << "frame " << i << "/32 = " << t << " has traverse idx " << idx << " and bit_at " << bit_at << vcl_endl;
+    }
 
     good = good && (tree2_copy.traverse(0 / bstm_time_tree::tree_range())  == 15);
     good = good && (tree2_copy.traverse(1 / bstm_time_tree::tree_range())  == 15);

@@ -353,6 +353,14 @@ boct_bit_tree::set_bit_at(int index, bool val)
   bits_[byte_index] = (val)? (byte | mask) : (byte & (mask ^ 0xFF));
 }
 
+void boct_bit_tree::set_bit_and_parents_to_true(int index) {
+  while (index > 0) {
+    this->set_bit_at(index, true);
+    index = parent_index(index);
+  }
+  this->set_bit_at(0, true);
+}
+
 // A local implementation for floor(log(a)/log(8)) with integer argument a;
 // this is a more straightforward (and not too inefficient) alternative for
 //  std::floor(std::log(double a)/std::log(8.0)).
