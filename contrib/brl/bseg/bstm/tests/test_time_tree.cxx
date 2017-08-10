@@ -139,19 +139,6 @@ void test_time_tree()
     //-------------------------------------------------------------
     //Test traverse functionality
     good = true;
-
-    bstm_time_tree new_tree = bstm_time_tree();
-    vcl_cout << "tree range " << bstm_time_tree::tree_range() << vcl_endl;
-    vcl_cout << new_tree.traverse(0) << vcl_endl;
-    vcl_cout << new_tree.traverse(.999) << vcl_endl;
-    vcl_memset(new_tree.get_bits(), 255, TT_NUM_BYTES);
-    for(int i=0; i<=bstm_time_tree::tree_range(); ++i){
-      double t = i / bstm_time_tree::tree_range();
-      int idx = new_tree.traverse(t);
-      int bit_at = new_tree.bit_at(idx);
-      vcl_cout << "frame " << i << "/32 = " << t << " has traverse idx " << idx << " and bit_at " << bit_at << vcl_endl;
-    }
-
     good = good && (tree2_copy.traverse(0 / bstm_time_tree::tree_range())  == 15);
     good = good && (tree2_copy.traverse(1 / bstm_time_tree::tree_range())  == 15);
     good = good && (tree2_copy.traverse(2 / bstm_time_tree::tree_range())  == 33);
@@ -208,6 +195,144 @@ void test_time_tree()
     good = good && (leaves[11] == 30);
     good = good && (leaves.size() == 12);
     TEST("Harder case, get leaves in pre-order traversal works ", true, good);
+
+    //  test fill cells
+    {
+      bool frames[32];
+      vcl_memset(frames, false, 32);
+      frames[7] = true;
+      frames[8] = true;
+      frames[9] = true;
+      frames[10] = true;
+      frames[11] = true;
+      frames[12] = true;
+      frames[13] = true;
+      frames[14] = true;
+      // frames[21] = true;
+      bstm_time_tree tree;
+      tree.fill_cells(frames);
+      unsigned char bits[31] = {  //{0} depth 0
+                                1,
+                                //{1-2}  depth 1
+                                1,0,
+                                //{3-6}  depth 2
+                                1,1,0,0,
+                                //{7-14} depth 3
+                                0,1,1,1,0,0,0,0,
+                                //{15-30} depth 4
+                                0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0};
+      bool good = true;
+      for(int i=0; i<=30; i++) {
+        good &= (tree.bit_at(i) == bits[i]);
+      }
+      TEST("testing fill_cells, with 8 different frames in the middle", good, true);
+    }
+    {
+      bool frames[32];
+      vcl_memset(frames, false, 32);
+      bstm_time_tree tree;
+      tree.fill_cells(frames);
+      unsigned char bits[31] = {0};
+
+      bool good = true;
+      for(int i=0; i<=30; i++) {
+        good &= (tree.bit_at(i) == bits[i]);
+      }
+      TEST("testing fill_cells, all frames the same", good, true);
+    }
+    {
+      bool frames[32];
+      vcl_memset(frames, false, 32);
+      frames[1] = true;
+      bstm_time_tree tree;
+      tree.fill_cells(frames);
+      unsigned char bits[31] = {  //{0} depth 0
+                                1,
+                                //{1-2}  depth 1
+                                1,0,
+                                //{3-6}  depth 2
+                                1,0,0,0,
+                                //{7-14} depth 3
+                                1,0,0,0,0,0,0,0,
+                                //{15-30} depth 4
+                                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+      bool good = true;
+      for(int i=0; i<=30; i++) {
+        good &= (tree.bit_at(i) == bits[i]);
+      }
+      TEST("testing fill_cells, second frame is different", good, true);
+    }
+    {
+      bool frames[32];
+      vcl_memset(frames, false, 32);
+      frames[2] = true;
+      bstm_time_tree tree;
+      tree.fill_cells(frames);
+      unsigned char bits[31] = {  //{0} depth 0
+                                1,
+                                //{1-2}  depth 1
+                                1,0,
+                                //{3-6}  depth 2
+                                1,0,0,0,
+                                //{7-14} depth 3
+                                1,0,0,0,0,0,0,0,
+                                //{15-30} depth 4
+                                0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+      bool good = true;
+      for(int i=0; i<=30; i++) {
+        good &= (tree.bit_at(i) == bits[i]);
+      }
+      TEST("testing fill_cells, third frame is different", good, true);
+    }
+    {
+      bool frames[32];
+      vcl_memset(frames, false, 32);
+      frames[8] = true;
+      frames[16] = true;
+      bstm_time_tree tree;
+      tree.fill_cells(frames);
+      unsigned char bits[31] = {  //{0} depth 0
+                                1,
+                                //{1-2}  depth 1
+                                1,0,
+                                //{3-6}  depth 2
+                                0,0,0,0,
+                                //{7-14} depth 3
+                                0,0,0,0,0,0,0,0,
+                                //{15-30} depth 4
+                                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+      bool good = true;
+      for(int i=0; i<=30; i++) {
+        good &= (tree.bit_at(i) == bits[i]);
+      }
+      TEST("testing fill_cells, middle eight frames are all one different frame", good, true);
+    }{
+      bool frames[32];
+      vcl_memset(frames, false, 32);
+      frames[10] = true;
+      frames[21] = true;
+      bstm_time_tree tree;
+      tree.fill_cells(frames);
+      unsigned char bits[31] = {  //{0} depth 0
+                                1,
+                                //{1-2}  depth 1
+                                1,1,
+                                //{3-6}  depth 2
+                                0,1,1,0,
+                                //{7-14} depth 3
+                                0,0,1,0,0,1,0,0,
+                                //{15-30} depth 4
+                                0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0};
+
+      bool good = true;
+      for(int i=0; i<=30; i++) {
+        good &= (tree.bit_at(i) == bits[i]);
+      }
+      TEST("testing fill_cells, frames 10 and 21 are different from predecessor", good, true);
+    }
 }
 
 

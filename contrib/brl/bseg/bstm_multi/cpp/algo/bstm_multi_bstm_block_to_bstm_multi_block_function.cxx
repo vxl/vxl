@@ -80,6 +80,15 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
   }
 }
 
+bool get_root_bit(unsigned char *bytes, space_time_enum tree_type) {
+  switch (tree_type) {
+  case STE_SPACE:
+    return boct_bit_tree(bytes).bit_at(0);
+  case STE_TIME:
+    return bstm_time_tree(bytes).bit_at(0);
+  }
+}
+
 // Given a space tree and a buffer of lower-level trees, sets the
 // structure bits of the given space tree to represent the low-level
 // trees. i.e. if a whole bunch of the lower-level trees are
@@ -139,15 +148,7 @@ void make_unrefined_space_tree(
             child_level_buffer + (sub_tree_index * tree_size(child_level_type));
         // check root bit. If not zero, we need to keep current
         // space tree refined.
-        bool root_bit;
-        switch (child_level_type) {
-        case STE_SPACE:
-          root_bit = boct_bit_tree(sub_tree_bytes).bit_at(0);
-          break;
-        case STE_TIME:
-          root_bit = bstm_time_tree(sub_tree_bytes).bit_at(0);
-          break;
-        }
+        bool root_bit = get_root_bit(sub_tree_bytes, child_level_type);
         // we want this to be the case some times. Fail so I can notice that
         // it's possible.
         assert(!root_bit);
@@ -168,47 +169,36 @@ void make_unrefined_time_tree(
     const vec4 &coords,
     unsigned char *child_level_buffer,
     space_time_enum child_level_type) {
-
+  // stores true if frame is different than the last, false otherwise.
+  bool frame_data[32];
   array_4d<int> child_indices(VXL_NULLPTR,
                               num_regions.first.x(),
                               num_regions.first.y(),
                               num_regions.first.z(),
                               num_regions.second * 32);
-  // cast pointer to disambiguate non-const constructor
   unsigned char *last_different_subtree_bytes;
+  // leaf index of previous frame that was marked as different (or the first
+  // frame)
+  vcl_size_t last_different_idx;
   // this time tree covers 32 "frames" from the lower level.
   for (vcl_size_t t_sub = 0; t_sub < 32; ++t_sub) {
     vcl_size_t sub_tree_index = child_indices.index_from_coords(
         coords.i, coords.j, coords.k, coords.t * 32 + t_sub);
     unsigned char *sub_tree_bytes =
         child_level_buffer + (sub_tree_index * tree_size(child_level_type));
-    vcl_size_t leaf_node_index = 15 + (t_sub / 2);
-    // special case for first frame - store it as "last different
-    // frame", and store in first leaf node bit whether this frame was
-    // refined at all.
+    // 15 is start index of leaf nodes, and each leaf node
+    // contains two time steps
+    int leaf_node_index = 15 + (t_sub / 2);
     if (t_sub == 0) {
+      frame_data[t_sub] = true;
+      last_different_idx = leaf_node_index;
       last_different_subtree_bytes = sub_tree_bytes;
-      bool root_bit;
-      switch (child_level_type) {
-      case STE_SPACE:
-        root_bit = boct_bit_tree(last_different_subtree_bytes).bit_at(0);
-      case STE_TIME:
-        root_bit = bstm_time_tree(last_different_subtree_bytes).bit_at(0);
-      }
-      if (root_bit) {
-        // 15 is start index of leaf nodes, and each leaf node
-        // contains two time steps
-        current_tree.set_bit_at(leaf_node_index, true);
-      }
-      continue;
-    }
-
-    // For other frames - compare to previous frame that was marked as different
-    if (/* !is_same(sub_tree_bytes, last_different_subtree_bytes) */1) {
-      current_tree.set_bit_at(leaf_node_index, true);
-      last_different_subtree_bytes = sub_tree_bytes;
+    } else {
+      frame_data[t_sub] =
+          compare_frames(sub_tree_bytes, last_different_subtree_bytes);
     }
   }
+  current_tree.fill_cells(frame_data);
 }
 
 // TODO CURRENT ASSUMPTIONS:

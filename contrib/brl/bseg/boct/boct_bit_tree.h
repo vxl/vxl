@@ -28,17 +28,21 @@ public:
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   // These constructor are owning
-  //: Default constructor
-  boct_bit_tree();
+  //: default constructor
+  boct_bit_tree() : is_owning_(true), bits_(new unsigned char[16]()) {}
   boct_bit_tree(const unsigned char *bits, int num_levels = 4);
   boct_bit_tree(const boct_bit_tree &other);
-  //: non-owning constructor
-  boct_bit_tree(unsigned char *bits)
-      : is_owning_(false), bits_(bits), num_levels_(4) {}
-  boct_bit_tree(uchar16 &bits)
+  // non-owning constructors
+  boct_bit_tree(unsigned char *bits, int num_levels = 4)
+      : is_owning_(false), bits_(bits), num_levels_(num_levels) {}
+  boct_bit_tree(uchar16 &bits, int num_levels = 4)
       : is_owning_(false)
       , bits_(reinterpret_cast<unsigned char *>(&bits))
-      , num_levels_(4) {}
+      , num_levels_(num_levels) {}
+  //: constructor with all parameters
+  // This creates a tree that wraps,  and optionally owns, the bits pointed to.
+  boct_bit_tree(unsigned char *bits, bool is_owning, int num_levels)
+      : is_owning_(is_owning), bits_(bits), num_levels_(num_levels) {}
 
   //: Destructor
   ~boct_bit_tree() {
@@ -58,8 +62,8 @@ public:
   int traverse(const vgl_point_3d<double> p, int deepest = 4);
 
   //: traverse tree to get leaf index that contains point
-
   int traverse_to_level(const vgl_point_3d<double> p, int deepest = 4);
+
   //: gets the cell center (octree is assumed to be [0,1]x[0,1]x[0,1]
   vgl_point_3d<double> cell_center(int bit_index);
 

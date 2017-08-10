@@ -7,13 +7,6 @@
 #include "boct_bit_tree.h"
 #include "boct_tree_cell.h"
 
-//: default constructor
-boct_bit_tree::boct_bit_tree():is_owning_(true)
-{
-  bits_ = new unsigned char[16];
-  std::memset(bits_, 0, 16);
-}
-
 //: copy constructor
 boct_bit_tree::boct_bit_tree(const boct_bit_tree& other) :is_owning_(true)
 {
