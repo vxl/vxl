@@ -100,7 +100,7 @@ public:
   int get_relative_index(int bit_index) const;
 
   //: gets pointers stored in bits 4,5,6,7
-  int get_data_ptr();
+  int get_data_ptr() const;
 
   //: sets pointers stored in bits 4,5,6,7
   void set_data_ptr(int ptr);
@@ -130,9 +130,7 @@ public:
   std::vector<int> max_depth_leaves() const;
 
   // Appropriately sets up a time tree given a sequence of frames,
-  // each marked as the same or different from the previous one. The
-  // root bit is also specified. (e.g. for a totally empty interval,
-  // the root bit could be 0)
+  // each marked as the same or different from the previous one.
   void fill_cells(bool (&frames)[32]);
 
 private:

@@ -309,7 +309,8 @@ void test_time_tree()
         good &= (tree.bit_at(i) == bits[i]);
       }
       TEST("testing fill_cells, middle eight frames are all one different frame", good, true);
-    }{
+    }
+    {
       bool frames[32];
       vcl_memset(frames, false, 32);
       frames[10] = true;
@@ -332,6 +333,12 @@ void test_time_tree()
         good &= (tree.bit_at(i) == bits[i]);
       }
       TEST("testing fill_cells, frames 10 and 21 are different from predecessor", good, true);
+    }
+    {
+      bstm_time_tree t1;
+      t1.set_bit_and_parents_to_true(13);
+      vcl_vector<int> leaves = t1.get_leaf_bits();
+      vcl_cout << "num cells: " << t1.num_cells() << " num_leaves(): " << t1.num_leaves() << " get_leaf_bits(): " << leaves.size() << vcl_endl;
     }
 }
 

@@ -7,6 +7,8 @@
 #include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 
+#include <boxm2/boxm2_data_traits.h>
+
 class boxm2_mog3_grey_processor;
 class boxm2_gauss_grey_processor;
 class boxm2_gauss_rgb_processor;
@@ -317,5 +319,124 @@ class bstm_data_info
   }
 };
 
+template <boxm2_data_type BOXM2_TYPE> struct boxm2_to_bstm_type;
+
+template <> struct boxm2_to_bstm_type<BOXM2_ALPHA> {
+  static const bstm_data_type bstm_type = BSTM_ALPHA;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_MOG3_GREY> {
+  static const bstm_data_type bstm_type = BSTM_MOG3_GREY;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_MOG3_GREY_16> {
+  static const bstm_data_type bstm_type = BSTM_MOG3_GREY_16;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_MOG6_VIEW> {
+  static const bstm_data_type bstm_type = BSTM_MOG6_VIEW;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_NUM_OBS_VIEW> {
+  static const bstm_data_type bstm_type = BSTM_NUM_OBS_VIEW;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_NUM_OBS_VIEW_COMPACT> {
+  static const bstm_data_type bstm_type = BSTM_NUM_OBS_VIEW_COMPACT;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_MOG6_VIEW_COMPACT> {
+  static const bstm_data_type bstm_type = BSTM_MOG6_VIEW_COMPACT;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_GAUSS_RGB> {
+  static const bstm_data_type bstm_type = BSTM_GAUSS_RGB;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_GAUSS_RGB_VIEW> {
+  static const bstm_data_type bstm_type = BSTM_GAUSS_RGB_VIEW;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_GAUSS_RGB_VIEW_COMPACT> {
+  static const bstm_data_type bstm_type = BSTM_GAUSS_RGB_VIEW_COMPACT;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_NUM_OBS_SINGLE> {
+  static const bstm_data_type bstm_type = BSTM_NUM_OBS_SINGLE;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_NUM_OBS> {
+  static const bstm_data_type bstm_type = BSTM_NUM_OBS;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_RAY_DIR> {
+  static const bstm_data_type bstm_type = BSTM_RAY_DIR;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_POINT> {
+  static const bstm_data_type bstm_type = BSTM_POINT;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_AUX0> {
+  static const bstm_data_type bstm_type = BSTM_AUX0;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_AUX1> {
+  static const bstm_data_type bstm_type = BSTM_AUX1;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_AUX2> {
+  static const bstm_data_type bstm_type = BSTM_AUX2;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_AUX3> {
+  static const bstm_data_type bstm_type = BSTM_AUX3;
+};
+template <> struct boxm2_to_bstm_type<BOXM2_UNKNOWN> {
+  static const bstm_data_type bstm_type = BSTM_UNKNOWN;
+};
+
+template <bstm_data_type BSTM_TYPE> struct bstm_to_boxm2_type;
+
+template <> struct bstm_to_boxm2_type<BSTM_ALPHA> {
+  static const boxm2_data_type boxm2_type = BOXM2_ALPHA;
+};
+template <> struct bstm_to_boxm2_type<BSTM_MOG3_GREY> {
+  static const boxm2_data_type boxm2_type = BOXM2_MOG3_GREY;
+};
+template <> struct bstm_to_boxm2_type<BSTM_MOG3_GREY_16> {
+  static const boxm2_data_type boxm2_type = BOXM2_MOG3_GREY_16;
+};
+template <> struct bstm_to_boxm2_type<BSTM_MOG6_VIEW> {
+  static const boxm2_data_type boxm2_type = BOXM2_MOG6_VIEW;
+};
+template <> struct bstm_to_boxm2_type<BSTM_NUM_OBS_VIEW> {
+  static const boxm2_data_type boxm2_type = BOXM2_NUM_OBS_VIEW;
+};
+template <> struct bstm_to_boxm2_type<BSTM_NUM_OBS_VIEW_COMPACT> {
+  static const boxm2_data_type boxm2_type = BOXM2_NUM_OBS_VIEW_COMPACT;
+};
+template <> struct bstm_to_boxm2_type<BSTM_MOG6_VIEW_COMPACT> {
+  static const boxm2_data_type boxm2_type = BOXM2_MOG6_VIEW_COMPACT;
+};
+template <> struct bstm_to_boxm2_type<BSTM_GAUSS_RGB> {
+  static const boxm2_data_type boxm2_type = BOXM2_GAUSS_RGB;
+};
+template <> struct bstm_to_boxm2_type<BSTM_GAUSS_RGB_VIEW> {
+  static const boxm2_data_type boxm2_type = BOXM2_GAUSS_RGB_VIEW;
+};
+template <> struct bstm_to_boxm2_type<BSTM_GAUSS_RGB_VIEW_COMPACT> {
+  static const boxm2_data_type boxm2_type = BOXM2_GAUSS_RGB_VIEW_COMPACT;
+};
+template <> struct bstm_to_boxm2_type<BSTM_NUM_OBS_SINGLE> {
+  static const boxm2_data_type boxm2_type = BOXM2_NUM_OBS_SINGLE;
+};
+template <> struct bstm_to_boxm2_type<BSTM_NUM_OBS> {
+  static const boxm2_data_type boxm2_type = BOXM2_NUM_OBS;
+};
+template <> struct bstm_to_boxm2_type<BSTM_RAY_DIR> {
+  static const boxm2_data_type boxm2_type = BOXM2_RAY_DIR;
+};
+template <> struct bstm_to_boxm2_type<BSTM_POINT> {
+  static const boxm2_data_type boxm2_type = BOXM2_POINT;
+};
+template <> struct bstm_to_boxm2_type<BSTM_AUX0> {
+  static const boxm2_data_type boxm2_type = BOXM2_AUX0;
+};
+template <> struct bstm_to_boxm2_type<BSTM_AUX1> {
+  static const boxm2_data_type boxm2_type = BOXM2_AUX1;
+};
+template <> struct bstm_to_boxm2_type<BSTM_AUX2> {
+  static const boxm2_data_type boxm2_type = BOXM2_AUX2;
+};
+template <> struct bstm_to_boxm2_type<BSTM_AUX3> {
+  static const boxm2_data_type boxm2_type = BOXM2_AUX3;
+};
+template <> struct bstm_to_boxm2_type<BSTM_UNKNOWN> {
+  static const boxm2_data_type boxm2_type = BOXM2_UNKNOWN;
+};
 
 #endif

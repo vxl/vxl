@@ -65,6 +65,22 @@ public:
     }
   }
 
+  // Replaces buffer with the given new buffer and length and deletes the old
+  // data.
+  void set_data_buffer(char *new_buffer, vcl_size_t new_len) {
+    delete[] data_buffer_;
+    data_buffer_ = new_buffer;
+    buffer_length_ = new_len;
+  }
+
+  // Replaces buffer with a newly allocated and zero-initialized buffer of the
+  // given length. Deletes old data.
+  void new_data_buffer(vcl_size_t new_len) {
+    delete[] data_buffer_;
+    buffer_length_ = new_len;
+    data_buffer_ = new char[new_len]();
+  }
+
   //: by default data is read-only, i.e. cache doesn't save it before destroying
   // it
   bool read_only_;

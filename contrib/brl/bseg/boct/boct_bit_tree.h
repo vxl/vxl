@@ -31,6 +31,8 @@ public:
   //: default constructor
   boct_bit_tree() : is_owning_(true), bits_(new unsigned char[16]()) {}
   boct_bit_tree(const unsigned char *bits, int num_levels = 4);
+  // Copy constructor -- copies ownership type as well, and if other is owning,
+  // then creates and owns a copy of the data.
   boct_bit_tree(const boct_bit_tree &other);
   // non-owning constructors
   boct_bit_tree(unsigned char *bits, int num_levels = 4)
@@ -42,7 +44,8 @@ public:
   //: constructor with all parameters
   // This creates a tree that wraps,  and optionally owns, the bits pointed to.
   boct_bit_tree(unsigned char *bits, bool is_owning, int num_levels)
-      : is_owning_(is_owning), bits_(bits), num_levels_(num_levels) {}
+      : is_owning_(is_owning), bits_(bits), num_levels_(num_levels) {
+  }
 
   //: Destructor
   ~boct_bit_tree() {
@@ -51,6 +54,9 @@ public:
       bits_ = NULL;
     }
   }
+
+  // Copy assignment operator
+  boct_bit_tree &operator=(boct_bit_tree that);
 
   //: Returns index of data for given bit
   int get_data_index(int bit_index, bool is_random = false) const;
@@ -74,13 +80,13 @@ public:
            double len = 1.0);
 
   //: returns octree cell length on one side (assumed [0,1]^3)
-  double cell_len(int bit_index);
+  double cell_len(int bit_index) const;
 
   //: tells you if a valid cell is at bit_index (if and only if its parent is 1)
-  bool valid_cell(int bit_index);
+  bool valid_cell(int bit_index) const;
 
   //: tells you if the bit_index is a leaf
-  bool is_leaf(int bit_index);
+  bool is_leaf(int bit_index) const;
 
   //: Return the maximum number of levels, which is root_level+1
   unsigned short number_levels() const { return num_levels_; }
@@ -120,17 +126,22 @@ public:
   int set_data_ptr(int ptr, bool is_random = false);
 
   //: returns bit indices of leaf nodes under rootBit
-  std::vector<int> get_leaf_bits(int rootBit = 0);
-  std::vector<int> get_leaf_bits(int rootBit, int depth);
+  std::vector<int> get_leaf_bits(int rootBit = 0) const ;
+  std::vector<int> get_leaf_bits(int rootBit, int depth) const;
 
   //: returns bit indices of every node under rootBit
-  std::vector<int> get_cell_bits(int rootBit = 0);
+  std::vector<int> get_cell_bits(int rootBit = 0) const;
 
   //: returns parent index (invalid for bit_index = 0)
   int parent_index(int bit_index) { return (bit_index - 1) >> 3; }
 
   //: returns bit index of first child
   int child_index(int bit_index) { return (bit_index << 3) + 1; }
+
+  //: Compares structure bits of the two trees
+  static bool same_structure(const boct_bit_tree &t1, const boct_bit_tree &t2) {
+    return vcl_memcmp(t1.get_bits(), t2.get_bits(), 10) == 0;
+  }
 
   // cached arrays are public - make em const too
   static unsigned char bit_lookup[256];

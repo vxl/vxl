@@ -38,7 +38,7 @@ bool operator<=(const vec4 &v1, const vec4 &v2) { return cmp(v1, v2) <= 0; }
 bool operator>=(const vec4 &v1, const vec4 &v2) { return cmp(v1, v2) >= 0; }
 
 // \brief a non-owning wrapper around a buffer that provides access using 4D
-// coordinates. Intended for representing space-time blocks.
+// coordinates. Intended for representing space-time blocks. Indexing is done in row-major order.
 template <class T> class array_4d {
 public:
   typedef T *iterator;

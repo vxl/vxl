@@ -120,6 +120,114 @@ static void test_bit_tree()
     }
     TEST("Set bits and get bits works ", true, good);
 
+  //---------------------------------------------------------------------------
+  //test copy assignment operator
+  //---------------------------------------------------------------------------
+    {
+      {
+        // both non-owning
+        unsigned char *bits1 = new unsigned char[16]();
+        unsigned char *bits2 = new unsigned char[16]();
+        boct_bit_tree t1(bits1, false, 4);
+        boct_bit_tree t2(bits2, false, 4);
+        t1.set_bit_at(4, true);
+        t1.set_data_ptr(1);
+        t2.set_bit_at(5, true);
+        t2.set_data_ptr(2);
+        t2 = t1;
+        good = t2.bit_at(4) && !t2.bit_at(5) && (t2.get_data_ptr() == 1);
+        // This buffer should no longer affect t2.
+        bits2[0] = 0xff;
+        good &= !t2.bit_at(0);
+        // This buffer should.
+        bits1[0] = 0xff;
+        good &= t2.bit_at(0);
+        TEST("TEST copy-assignment between two non-owning trees", good, true);
+
+        delete[] bits1;
+        delete[] bits2;
+      }
+      {
+        // both owning
+        unsigned char *bits1 = new unsigned char[16]();
+        unsigned char *bits2 = new unsigned char[16]();
+        boct_bit_tree t1(bits1, true, 4);
+        boct_bit_tree t2(bits2, true, 4);
+        t1.set_bit_at(4, true);
+        t1.set_data_ptr(1);
+        t2.set_bit_at(5, true);
+        t2.set_data_ptr(2);
+        t2 = t1;
+        // bits2 is deleted at this point
+        good = t2.bit_at(4) && !t2.bit_at(5) && (t2.get_data_ptr() == 1);
+        // This buffer should not affect t2 - t2 created a copy.
+        bits1[0] = 0xff;
+        good &= !t2.bit_at(0);
+        TEST("TEST copy-assignment between two owning trees", good, true);
+      }
+
+      {
+        // only t1 is owning
+        unsigned char *bits1 = new unsigned char[16]();
+        unsigned char *bits2 = new unsigned char[16]();
+        boct_bit_tree t1(bits1, true, 4);
+        boct_bit_tree t2(bits2, false, 4);
+        t1.set_bit_at(4, true);
+        t1.set_data_ptr(1);
+        t2.set_bit_at(5, true);
+        t2.set_data_ptr(2);
+        t2 = t1;
+        good = t2.bit_at(4) && !t2.bit_at(5) && (t2.get_data_ptr() == 1);
+        // This buffer should no longer affect t2.
+        bits2[0] = 0xff;
+        good &= !t2.bit_at(0);
+        // This buffer also should not - t2 created a copy.
+        bits1[0] = 0xff;
+        good &= !t2.bit_at(0);
+        TEST("TEST tree copy-assignment t2 = t1 when t1 is owning", good, true);
+        // Not sure how to test this, but bits2 should still be un-deleted, since t2 was non-owning.
+        TEST("TEST old t2's buffer is still valid", boct_bit_tree(bits2).bit_at(5), true);
+        delete[] bits2;
+      }
+
+      {
+        // only t2 is owning
+        unsigned char *bits1 = new unsigned char[16]();
+        unsigned char *bits2 = new unsigned char[16]();
+        boct_bit_tree t1(bits1, false, 4);
+        boct_bit_tree t2(bits2, true, 4);
+        t1.set_bit_at(4, true);
+        t1.set_data_ptr(1);
+        t2.set_bit_at(5, true);
+        t2.set_data_ptr(2);
+        t2 = t1;
+        // bits2 deleted at this point
+        good = t2.bit_at(4) && !t2.bit_at(5) && (t2.get_data_ptr() == 1);
+        // This buffer should affect t2
+        bits1[0] = 0xff;
+        good &= t2.bit_at(0);
+        TEST("TEST tree copy-assignment t2 = t1 when t2 is owning", good, true);
+        delete[] bits1;
+      }
+      {
+        // self assignment, owning
+        unsigned char *bits1 = new unsigned char[16]();
+        boct_bit_tree t1(bits1, true, 4);
+        boct_bit_tree t2(bits1, false, 4);
+        t1.set_bit_at(4, true);
+        t1.set_data_ptr(1);
+        t2.set_bit_at(5, true);
+        t2.set_data_ptr(2);
+        t1 = t2;
+        // bits1 not deleted at this point
+        good = t2.bit_at(4) && t2.bit_at(5) && (t2.get_data_ptr() == 2);
+        // This buffer should affect t2
+        bits1[0] = 0xff;
+        good &= t2.bit_at(0);
+        TEST("TEST tree copy-assignment t2 = t1 when t2 is owning", good, true);
+        delete[] bits1;
+      }
+    }
 
   //---------------------------------------------------------------------------
   //test traverse
@@ -166,7 +274,48 @@ static void test_bit_tree()
   int size = tree.num_cells();
   TEST("Size of tree = 89", size, 89);
 
+  //---------------------------------------------------------------------------
+  // Test structure comparison
+  //---------------------------------------------------------------------------
+  {
+    boct_bit_tree t1, t2, t3;
+    t1.set_bit_at(4, true);
+    t2.set_bit_at(4, true);
+    t3.set_bit_at(4, true);
+
+    t1.set_bit_at(5, true);
+    t2.set_bit_at(5, true);
+
+    t1.set_bit_at(11, true);
+    t2.set_bit_at(11, true);
+
+    // Totally different data pointers
+    t1.set_data_ptr(4);
+    t2.set_data_ptr(-1);
+    t3.set_data_ptr(4);
+
+    TEST("Space trees with same structure bits",
+         boct_bit_tree::same_structure(t1, t2),
+         true);
+    TEST("Space trees with different structure bits",
+         boct_bit_tree::same_structure(t1, t3),
+         false);
+  }
+
   test_print_centers();
+
+  {
+    // Test  to experiment with get_cell_bits and get_leaf_bits
+    boct_bit_tree t1;
+    t1.set_bit_and_parents_to_true(70);
+    vcl_cout << "PPP " << t1.get_data_ptr() << vcl_endl;
+    vcl_vector<int> cells = t1.get_cell_bits();
+    vcl_cout << "num_cells() " << t1.num_cells()
+             << " get_cell_bits(): " << cells.size() << vcl_endl;
+    for(int i=0; i<cells.size(); ++i){
+      vcl_cout << "i: " << i << " cells[i]: " << cells[i] << " data index: " << t1.get_data_index(cells[i]) << vcl_endl;
+    }
+  }
 }
 
 TESTMAIN(test_bit_tree);

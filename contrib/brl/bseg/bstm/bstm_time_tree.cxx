@@ -96,7 +96,7 @@ void bstm_time_tree::erase_cells() {
   this->set_data_ptr(data_ptr);
 }
 
-int bstm_time_tree::get_data_ptr() {
+int bstm_time_tree::get_data_ptr() const {
   return int((bits_[7] << 24) | (bits_[6] << 16) | (bits_[5] << 8) |
              (bits_[4]));
 }

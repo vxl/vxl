@@ -25,11 +25,25 @@ Multi-BSTM is still incomplete. The following needs to be done:
 - Code & processes for rendering
 - Benchmarks comparing performance to BSTM
 
-### bugs/notes/etc
+### bugs/reminders/etc ###
 
- - Currently, BSTM ingestion requires that multi-BSTM blocks have same size as BSTM blocks. This means that BSTM block sizes (i.e. number of sub-blocks) must be a power of 512 (i.e. 8 in each dimension). Similarly, the number of frames should be a power of 32.
+ - Currently, BSTM ingestion requires that multi-BSTM blocks have same
+   size as BSTM blocks. This means that BSTM block sizes (i.e. number
+   of sub-blocks) must be a power of 512 (i.e. 8 in each
+   dimension). Similarly, the number of frames should be a power of
+   32.
 
  - use namespaces instead of prefixes everywhere?
+
+### random technical notes (will have to put these somewhere) ###
+
+`bstm_time_tree` and `boct_bit_tree` have functions `num_cells()`,
+`num_leaves()` for iterating over the nodes of the trees. However,
+only *one* of these functions corresponds to iterating over all the
+data elements of the associated buffer.
+
+- For `boct_bit_tree`, use `num_cells()`, `get_cell_bits()`
+- For `bstm_time_tree`, use `num_leaves()`, `get_leaf_bits()`
 
 ## Contact
 
