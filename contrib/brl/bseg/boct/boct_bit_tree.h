@@ -123,7 +123,7 @@ public:
   int get_data_ptr(bool is_random = false);
 
   //: sets pointers stored in bits 10, 11, 12, 13
-  int set_data_ptr(int ptr, bool is_random = false);
+  void set_data_ptr(int ptr, bool is_random = false);
 
   //: returns bit indices of leaf nodes under rootBit
   std::vector<int> get_leaf_bits(int rootBit = 0) const ;

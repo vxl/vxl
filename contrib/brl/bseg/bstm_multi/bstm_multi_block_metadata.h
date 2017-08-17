@@ -11,7 +11,6 @@
 //
 
 #include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <vcl_string.h>
 #include <vcl_utility.h>
 #include <vcl_vector.h>
@@ -21,30 +20,9 @@
 #include <vsl/vsl_basic_xml_element.h>
 
 #include <boxm2/boxm2_block_metadata.h>
-#include <bstm/bstm_block_metadata.h>
 #include <bstm/basic/bstm_block_id.h>
-
-//: Used to distinguish between time and space subdivisions in a block.
-enum space_time_enum { STE_SPACE, STE_TIME };
-
-//: Returns "space" or "time"
-vcl_string ste_as_string(space_time_enum ste);
-
-//: Converts a string that is either "space" or "time" to a corresponding enum
-// value.
-// \param s      the string to convert
-// \param ste    stores resulting value
-// \returns      whether or not string is valid
-bool ste_from_string(const vcl_string &s, space_time_enum &ste);
-
-//: Accepts a list of subdivisions separated by commas, e.g.
-// 'space,time,space,time,space' and returns a vector of corresponding enum
-// values. Note that this skips invalid values.
-vcl_vector<space_time_enum> parse_subdivisions(const vcl_string &s);
-
-//: Prints subdivisions as a comma-separated list of space_time_enum
-// values (i.e. either 'space' or 'time'.)
-vcl_string print_subdivisions(const vcl_vector<space_time_enum> &subdivisions);
+#include <bstm/bstm_block_metadata.h>
+#include <bstm_multi/bstm_multi_tree_util.h>
 
 class bstm_multi_block_metadata : public vbl_ref_count {
 public:

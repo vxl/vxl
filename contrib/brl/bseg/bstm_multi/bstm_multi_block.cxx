@@ -2,28 +2,7 @@
 
 #include <boct/boct_bit_tree.h>
 #include <bstm/bstm_time_tree.h>
-
-// TODO this is jank, hopefully I don't need to use this
-#define SPACE_TIME_TREE_WRAP(ste, buffer, function_call)                       \
-  {                                                                            \
-    switch (ste) {                                                             \
-    case STE_SPACE:                                                            \
-      boct_bit_tree(buffer).function_call;                                     \
-    case STE_TIME:                                                             \
-      bstm_time_tree(buffer).function_call;                                     \
-    }                                                                          \
-  }
-
-vcl_size_t tree_size(space_time_enum ste) {
-  switch (ste) {
-  case STE_SPACE:
-    return sizeof(bstm_multi_block::space_tree_b);
-  case STE_TIME:
-    return sizeof(bstm_multi_block::time_tree_b);
-  default:
-    return -1;
-  }
-}
+#include <bstm_multi/bstm_multi_tree_util.h>
 
 // Initializes top-level buffer to an unrefined tree, sets other
 // buffers to null. Top level's data pointer is also set to null.

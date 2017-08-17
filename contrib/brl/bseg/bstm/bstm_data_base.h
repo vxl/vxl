@@ -48,6 +48,7 @@ public:
 
   //: accessor for low level byte buffer kept by the data_base
   char *data_buffer() { return data_buffer_; }
+  const char *data_buffer() const { return data_buffer_; }
   std::size_t buffer_length() const { return buffer_length_; }
   bstm_block_id &block_id() { return id_; }
   //: accessor to a portion of the byte buffer

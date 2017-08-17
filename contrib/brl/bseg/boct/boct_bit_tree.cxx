@@ -480,7 +480,7 @@ int boct_bit_tree::get_data_ptr(bool is_random)
   }
 }
 
-int boct_bit_tree::set_data_ptr(int ptr, bool is_random)
+void boct_bit_tree::set_data_ptr(int ptr, bool is_random)
 {
   if (is_random)
   {
@@ -496,7 +496,6 @@ int boct_bit_tree::set_data_ptr(int ptr, bool is_random)
     this->bits_[12] = (ptr>>16) & 0xff;
     this->bits_[13] = (ptr>>24) & 0xff;
   }
-  return 0;
 }
 
 

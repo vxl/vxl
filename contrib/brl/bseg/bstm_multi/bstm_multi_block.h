@@ -28,10 +28,6 @@ class bstm_multi_block : public vbl_ref_count {
 public:
   typedef bstm_block_id id_t;
   typedef bstm_multi_block_metadata metadata_t;
-  typedef vnl_vector_fixed<unsigned char, 16> space_tree_b;
-  typedef vnl_vector_fixed<unsigned char, 8> time_tree_b;
-  static const vcl_size_t space_tree_size = sizeof(space_tree_b);
-  static const vcl_size_t time_tree_size = sizeof(time_tree_b);
 
 public:
   //: constructs block from given data.
@@ -91,8 +87,5 @@ private:
   //: Whether this block is read-only
   bool read_only_;
 };
-
-// Returns size of tree of requested type.
-vcl_size_t tree_size(space_time_enum ste);
 
 #endif // bstm_multi_block_h_
