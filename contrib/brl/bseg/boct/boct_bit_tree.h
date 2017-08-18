@@ -94,6 +94,9 @@ public:
   //: Return number of cells in this tree
   int num_cells() const;
 
+  // returns the number of leaf cells
+  int num_leaves() const;
+
   //: return maximum number of cells in this tree
   int max_num_cells();
   int max_num_inner_cells();

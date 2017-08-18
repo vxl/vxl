@@ -18,6 +18,9 @@
 // \author: Raphael Kargon
 // \date: Aug 01, 2017
 
+#include <vcl_cstddef.h>
+#include <vcl_vector.h>
+
 #include <vbl/vbl_ref_count.h>
 #include <vnl/vnl_vector_fixed.h>
 
@@ -31,42 +34,64 @@ public:
 
 public:
   //: constructs block from given data.
+  // TODO this copies the buffers, might not be what we want
   bstm_multi_block(const metadata_t &data,
-                   const vcl_vector<unsigned char *> &buffers)
+                   const vcl_vector<vcl_vector<unsigned char> > &buffers)
       : metadata_(data), buffers_(buffers), read_only_(false) {}
 
   //: creates empty block from metadata
   bstm_multi_block(const metadata_t &data);
 
-  //: default destructor
-  virtual ~bstm_multi_block() {
-    for (vcl_vector<unsigned char *>::iterator iter = buffers_.begin();
-         iter != buffers_.end();
-         ++iter) {
-      delete[](*iter);
-    }
-  }
-
   //: accessors
   id_t &block_id() { return metadata_.id_; }
   const metadata_t &metadata() const { return metadata_; }
-  vcl_vector<unsigned char *> buffers() { return buffers_; }
-  // Sets this block's buffer for a given level.
-  unsigned char *get_buffer(std::size_t level) { return buffers_[level]; }
-  void set_buffer(unsigned char *new_buffer, std::size_t level) {
-    unsigned char *old_buffer = buffers_[level];
-    buffers_[level] = new_buffer;
-    if (old_buffer != new_buffer) {
-      delete[] old_buffer;
-    }
+  vcl_vector<vcl_vector<unsigned char> > &buffers() { return buffers_; }
+  const vcl_vector<vcl_vector<unsigned char> > &buffers() const {
+    return buffers_;
   }
+  vcl_vector<unsigned char> &get_buffer(int level) { return buffers_[level]; }
+  const vcl_vector<unsigned char> &get_buffer(int level) const {
+    return buffers_[level];
+  }
+  // Returns underlying buffer data
+  unsigned char *get_data(int level) { return &buffers_[level].front(); }
+  const unsigned char *get_data(int level) const {
+    return &buffers_[level].front();
+  }
+
   // TODO byte count
-  // long byte_count() const { return byte_count_; }
-  // TODO num_cells -- calculate the total number of leaf cells in this block
+  vcl_size_t byte_count() const {
+    vcl_size_t total_bytes = 0;
+    for (vcl_vector<vcl_vector<unsigned char> >::const_iterator iter =
+             buffers_.begin();
+         iter != buffers_.end();
+         ++iter) {
+      total_bytes += iter->size();
+    }
+    return total_bytes;
+  }
+
+  space_time_enum level_type(int level) const {
+    return metadata_.subdivisions_[level];
+  }
+
+  // TODO num_cells -- calculate the total number of leaf cells in this
+  // block
 
   //: mutators
   void set_block_id(id_t id) { metadata_.id_ = id; }
-  void set_byte_count(long bc) { byte_count_ = bc; }
+
+  // Sets the buffer for the given level to the contents of new_buffer, and sets
+  // new_buffer to own the old buffer contents.
+  void set_buffer(vcl_vector<unsigned char> &new_buffer, int level) {
+    buffers_[level].swap(new_buffer);
+  }
+
+  // creates new zero-initialized buffer
+  void new_buffer(vcl_size_t new_size, int level) {
+    vcl_vector<unsigned char> new_vec(new_size, 0);
+    buffers_[level].swap(new_vec);
+  }
 
   //: regardless of the way the instance is constructed, enable write
   void enable_write() { read_only_ = false; }
@@ -79,10 +104,7 @@ private:
   //: Buffers for trees of each level. Note that buffers_[0] correspond to the
   // *top* (root) level, while buffers_[buffers_.size()] is the bottom, "leaf"
   // level.
-  vcl_vector<unsigned char *> buffers_;
-
-  //: number of bytes this block takes up (on disk and ram)
-  long byte_count_;
+  vcl_vector<vcl_vector<unsigned char> > buffers_;
 
   //: Whether this block is read-only
   bool read_only_;

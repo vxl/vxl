@@ -4,41 +4,14 @@
 #include <vcl_cstddef.h>
 #include <vcl_cstdlib.h>
 
-struct vec4 {
-  vec4() : i(0), j(0), k(0), t(0) {}
-  vec4(vcl_size_t x, vcl_size_t y, vcl_size_t z, vcl_size_t t1)
-      : i(x), j(y), k(z), t(t1) {}
-  union {
-    struct {
-      vcl_size_t i, j, k, t;
-    };
-    vcl_size_t size[4];
-  };
-};
+#include <vgl/vgl_vector_3d.h>
+#include <vnl/vnl_vector_fixed.h>
 
-// implements lexicographical comparison
-
-int cmp(vcl_size_t a, vcl_size_t b) { return (b < a) - (a < b); }
-
-int cmp(const vec4 &v1, const vec4 &v2) {
-  int c;
-  for (int i = 0; i < 3; ++i) {
-    if ((c = cmp(v1.size[i], v2.size[i])) != 0) {
-      return c;
-    }
-  }
-  return cmp(v1.size[3], v2.size[3]);
-}
-
-bool operator==(const vec4 &v1, const vec4 &v2) { return cmp(v1, v2) == 0; }
-bool operator!=(const vec4 &v1, const vec4 &v2) { return cmp(v1, v2) != 0; }
-bool operator<(const vec4 &v1, const vec4 &v2) { return cmp(v1, v2) < 0; }
-bool operator>(const vec4 &v1, const vec4 &v2) { return cmp(v1, v2) > 0; }
-bool operator<=(const vec4 &v1, const vec4 &v2) { return cmp(v1, v2) <= 0; }
-bool operator>=(const vec4 &v1, const vec4 &v2) { return cmp(v1, v2) >= 0; }
+typedef vnl_vector_fixed<vcl_size_t, 4> index_4d;
 
 // \brief a non-owning wrapper around a buffer that provides access using 4D
-// coordinates. Intended for representing space-time blocks. Indexing is done in row-major order.
+// coordinates. Intended for representing space-time blocks. Indexing is done in
+// row-major order.
 template <class T> class array_4d {
 public:
   typedef T *iterator;
@@ -48,8 +21,15 @@ public:
   array_4d(T *buffer, vcl_size_t x, vcl_size_t y, vcl_size_t z, vcl_size_t t)
       : buffer_(buffer), x_(x), y_(y), z_(z), t_(t) {}
   // no delegating constructors before C++11 :-(
-  array_4d(T *buffer, const vec4 &dims)
-      : buffer_(buffer), x_(dims.i), y_(dims.j), z_(dims.k), t_(dims.t) {}
+  array_4d(T *buffer, const index_4d &dims)
+      : buffer_(buffer), x_(dims[0]), y_(dims[1]), z_(dims[2]), t_(dims[3]) {}
+  array_4d(T *buffer,
+           const vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions)
+      : buffer_(buffer)
+      , x_(num_regions.first.x())
+      , y_(num_regions.first.y())
+      , z_(num_regions.first.z())
+      , t_(num_regions.second) {}
 
   array_4d<T> &operator=(const array_4d<T> &that) {
     buffer_ = that.buffer_;
@@ -78,11 +58,11 @@ public:
   T &operator[](vcl_size_t idx) { return buffer_[idx]; }
   const T &operator[](vcl_size_t idx) const { return buffer_[idx]; }
 
-  T &operator()(vec4 coords) {
-    return buffer_[index_from_coords(coords.i, coords.j, coords.k, coords.t)];
+  T &operator()(const index_4d &coords) {
+    return buffer_[index_from_coords(coords)];
   }
-  const T &operator()(vec4 coords) const {
-    return buffer_[index_from_coords(coords.i, coords.j, coords.k, coords.t)];
+  const T &operator()(const index_4d &coords) const {
+    return buffer_[index_from_coords(coords)];
   }
 
   T &operator()(vcl_size_t i, vcl_size_t j, vcl_size_t k, vcl_size_t ti) {
@@ -98,16 +78,19 @@ public:
   index_from_coords(vcl_size_t i, vcl_size_t j, vcl_size_t k, vcl_size_t ti) {
     return ((i * size_[1] + j) * size_[2] + k) * size_[3] + ti;
   }
+  vcl_size_t index_from_coords(const index_4d &coords) {
+    return index_from_coords(coords[0], coords[1], coords[2], coords[3]);
+  }
 
-  vec4 coords_from_index(vcl_size_t idx) {
-    vec4 coords;
+  index_4d coords_from_index(vcl_size_t idx) {
+    index_4d coords;
     ldiv_t div = vcl_div(static_cast<long>(idx), (y_ * z_ * t_));
-    coords.i = div.quot;
+    coords[0] = div.quot;
     div = vcl_div(div.rem, (z_ * t_));
-    coords.j = div.quot;
+    coords[1] = div.quot;
     div = vcl_div(div.rem, t_);
-    coords.k = div.quot;
-    coords.t = div.rem;
+    coords[2] = div.quot;
+    coords[3] = div.rem;
     return coords;
   }
 

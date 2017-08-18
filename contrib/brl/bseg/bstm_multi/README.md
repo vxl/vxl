@@ -35,15 +35,17 @@ Multi-BSTM is still incomplete. The following needs to be done:
 
  - use namespaces instead of prefixes everywhere?
 
+ - store data elements for inner nodes?
+  - TODO: remove inner node data from BSTM space trees when
+    converting. (doesn't seem to be in issue - need to test this. It
+    looks like the inner nodes are removed for space trees, since they
+    don't point to actual data..)
+
 ### random technical notes (will have to put these somewhere) ###
 
-`bstm_time_tree` and `boct_bit_tree` have functions `num_cells()`,
-`num_leaves()` for iterating over the nodes of the trees. However,
-only *one* of these functions corresponds to iterating over all the
-data elements of the associated buffer.
-
-- For `boct_bit_tree`, use `num_cells()`, `get_cell_bits()`
-- For `bstm_time_tree`, use `num_leaves()`, `get_leaf_bits()`
+Use `num_leaves()` and `get_leaf_bits()` to iterate over the data
+elements of both space and time trees. Unlike BOXM2, here we don't
+store data in inner nodes.
 
 ## Contact
 

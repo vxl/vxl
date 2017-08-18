@@ -31,8 +31,13 @@ public:
       , buffer_length_(length)
       , data_buffer_(data_buffer) {}
 
-  //: Initializes this data block with length 0 and a NULLPTR data pointer.
-  block_data_base(bool read_only = true) : read_only_(read_only) {}
+  block_data_base(vcl_size_t length, bool read_only = true)
+      : read_only_(read_only)
+      , buffer_length_(length)
+      , data_buffer_(new char[length]()) {}
+
+  // //: Initializes this data block with length 0 and a NULLPTR data pointer.
+  // block_data_base(bool read_only = true) : read_only_(read_only) {}
 
   // NOTE unlike in BSTM/BOXM2, block_data_base creates new buffers as
   // empty. Thus there is no need to initialize them.

@@ -309,11 +309,14 @@ static void test_bit_tree()
     boct_bit_tree t1;
     t1.set_bit_and_parents_to_true(70);
     vcl_cout << "PPP " << t1.get_data_ptr() << vcl_endl;
-    vcl_vector<int> cells = t1.get_cell_bits();
-    vcl_cout << "num_cells() " << t1.num_cells()
-             << " get_cell_bits(): " << cells.size() << vcl_endl;
-    for(int i=0; i<cells.size(); ++i){
-      vcl_cout << "i: " << i << " cells[i]: " << cells[i] << " data index: " << t1.get_data_index(cells[i]) << vcl_endl;
+    vcl_cout << "PPP " << t1.max_num_cells() << vcl_endl;
+    vcl_cout << "PPP " << t1.max_num_inner_cells() << vcl_endl;
+    vcl_vector<int> cells = t1.get_leaf_bits();
+    vcl_cout << "num_cells() " << t1.num_leaves()
+             << " get_leaf_bits(): " << t1.get_leaf_bits().size() << vcl_endl;
+    for (int i = 0; i < cells.size(); ++i) {
+      vcl_cout << "i: " << i << " cells[i]: " << cells[i]
+               << " data index: " << t1.get_data_index(cells[i]) << vcl_endl;
     }
   }
 }

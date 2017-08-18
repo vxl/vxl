@@ -9,6 +9,7 @@
 
 #include <boct/boct_bit_tree.h>
 #include <bstm/bstm_time_tree.h>
+#include <bstm_multi/basic/array_4d.h>
 
 typedef vnl_vector_fixed<unsigned char, 16> space_tree_b;
 typedef vnl_vector_fixed<unsigned char, 8> time_tree_b;
@@ -136,21 +137,46 @@ public:
   int get_data_ptr() const { return GENERIC_TREE_CALL(get_data_ptr()); }
   void set_data_ptr(int ptr) { GENERIC_TREE_CALL(set_data_ptr(ptr)); }
 
-  //: \brief returns the number of data elements this tree (either a
-  // space or time tree) points to.
-  //
-  // Apparently space/time trees use different functions to get number
-  // of elements. num_cells supposedly counts inner nodes as well or
-  // something. However, not sure how this relates to number of data
-  // elements, unless boct_bit_tree stores data elements for inner nodes
-  // as well, which was not my impression.
-  int num_data_elements() const {
+  vcl_vector<int> get_leaf_bits() const {
+    return GENERIC_TREE_CALL(get_leaf_bits());
+  }
+
+  // number of leaf cells (not number of inner nodes). In multi-BSTM,
+  // this always corresponds to the number of data elements in the
+  // underlying data buffer, because we don't store data in inner nodes.
+  int num_leaves() const { return GENERIC_TREE_CALL(num_leaves()); }
+
+  index_4d dimensions() const {
     switch (type_) {
     case STE_SPACE:
-      return space_tree_.num_cells();
+      return index_4d(8, 8, 8, 1);
     case STE_TIME:
-      return time_tree_.num_leaves();
+      return index_4d(1, 1, 1, 32);
     }
+  }
+
+  // Given an index to a leaf of a tree, returns the offsets of that
+  // leaf into a row-major-ordered 4D grid corresponding to the
+  // current tree. That is, a space tree is an 8x8x8x1 grid and a time
+  // tree is a 1x1x1x32 grid.
+  index_4d local_leaf_coords(int leaf_index) const {
+    switch (type_) {
+    case STE_SPACE:
+      return array_4d<int>(VXL_NULLPTR, this->dimensions())
+          .coords_from_index(leaf_index - 73);
+    case STE_TIME:
+      return array_4d<int>(VXL_NULLPTR, this->dimensions())
+          .coords_from_index(leaf_index - 31);
+    }
+  }
+
+  // Wraps a const pointer in a const generic_tree. Unforunately has
+  // to call const_cast to properly pass in pointer, but const
+  // correctness of member methods guarantees that the underlying data
+  // is not modified.
+  static const generic_tree wrap_const_ptr(const unsigned char *bits,
+                                           space_time_enum type) {
+    return generic_tree(const_cast<unsigned char *>(bits), type);
   }
 
 private:
