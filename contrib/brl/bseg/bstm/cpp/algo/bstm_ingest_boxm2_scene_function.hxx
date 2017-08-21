@@ -471,15 +471,14 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest() {
         int boxm2_data_offset = boxm2_curr_tree.get_data_index(i_boxm2, false);
 
         // refine all the time trees associated with curr cell.
-        bool refined_time_tree =
-            this->refine_all_time_trees(bstm_data_offset,
-                                        boxm2_data_offset,
-                                        dataIndex,
-                                        currIndex,
-                                        dataSize,
-                                        curr_tree.depth_at(i),
-                                        boxm2_curr_tree.depth_at(i_boxm2),
-                                        is_leaf);
+        this->refine_all_time_trees(bstm_data_offset,
+                                    boxm2_data_offset,
+                                    dataIndex,
+                                    currIndex,
+                                    dataSize,
+                                    curr_tree.depth_at(i),
+                                    boxm2_curr_tree.depth_at(i_boxm2),
+                                    is_leaf);
         num_processed_cells++;
       }
     }

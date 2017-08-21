@@ -21,10 +21,6 @@
 #include <bstm_multi/bstm_multi_typedefs.h>
 #include <bstm_multi/space_time_scene.h>
 
-template <typename T> T volume(const vcl_pair<vgl_vector_3d<T>, T> &v) {
-  return v.first.x() * v.first.y() * v.first.z() * v.second;
-}
-
 void get_bstm_data_buffers(
     const vcl_map<vcl_string, bstm_data_base *> &bstm_datas,
     bstm_data_base *&alpha,
@@ -115,10 +111,12 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
   // sizeof(datatype)
   vcl_size_t data_buffer_offset = 0;
   // Create time_trees_per_space_voxel copies of each space tree, in order.
+  // Note that BSTM space trees store time trees at inner nodes. Later stages of
+  // conversion will remove those.
   for (; tree_iter != trees.end(); ++tree_iter) {
     boct_bit_tree current_tree(*tree_iter);
-    int num_space_cells = current_tree.num_cells();
     vcl_vector<int> cells = current_tree.get_cell_bits();
+    int num_space_cells = cells.size();
 
     // copy over time trees
     for (vcl_size_t cell_idx = 0; cell_idx <= cells.size(); ++cell_idx) {
@@ -361,76 +359,160 @@ void make_unrefined_time_tree(bstm_time_tree &current_tree,
   current_tree.fill_cells(frame_data);
 }
 
-// TODO CURRENT ASSUMPTIONS:
-// - bstm block is same size as bstm multi block
-// - bstm multi block has space,time subdivisions as its two lowest subdiv
-// levels
-// - bstm block is already properly refined as per the given thresholds
-// - - this means all we're doing right now is copying over BSTM data, and
-// un-refining levels above as necessary.
-bool bstm_block_to_bstm_multi_block(
-    bstm_multi_block *blk,
-    vcl_map<vcl_string, block_data_base *> &datas,
-    bstm_block *bstm_blk,
-    bstm_time_block *bstm_blk_t,
-    const vcl_map<vcl_string, bstm_data_base *> &bstm_datas,
-    double p_threshold,
-    double app_threshold) {
-  // extract BSTM data buffers
-  bstm_data_base *alpha = VXL_NULLPTR, *appearance = VXL_NULLPTR;
-  vcl_string appearance_type;
-  get_bstm_data_buffers(bstm_datas, alpha, appearance, appearance_type);
-  if (alpha == VXL_NULLPTR || appearance == VXL_NULLPTR) {
-    vcl_cerr << "Could not find either alpha or appearance model in bstm_datas."
-             << vcl_endl;
-    return false;
-  }
-  // Keeps track of the number of space/time regions at each level
-  // This starts out equal to the number of blocks in the BSTM block, but one
-  // level up.
-  vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
-      bstm_blk->sub_block_num(), bstm_blk_t->sub_block_num());
-  if (volume(num_regions) == 0) {
-    vcl_cerr << "Scene has 0 volume, i.e. scene is empty, doing nothing."
-             << vcl_endl;
-    return true;
-  }
-
-  // the first two levels are BSTM data -- need to rearrange them into row-major
-  // order.
+void coalesce_trees(bstm_multi_block *blk,
+                    vcl_map<vcl_string, block_data_base *> &datas,
+                    vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions,
+                    const vcl_string &appearance_type) {
   int num_levels = blk->buffers().size();
-  int current_level = num_levels - 1;
-  convert_bstm_space_trees(blk,
-                           bstm_blk,
-                           bstm_blk_t,
-                           current_level,
-                           alpha,
-                           datas["BSTM_ALPHA"],
-                           appearance,
-                           datas[appearance_type],
-                           appearance_type);
-  current_level -= 2;
-  // get per-frame differences over time of every voxel at lowest
-  // level. This will be used to hierarchially coaelsce the scene over
-  // time.
-  vcl_vector<bool> time_differences_vec =
-      dispatch_time_differences_from_bstm_trees(
-          blk->get_data(current_level + 2),
-          blk->get_data(current_level + 1),
-          num_regions,
-          datas["BSTM_ALPHA"],
-          datas[appearance_type],
-          appearance_type,
-          p_threshold,
-          app_threshold);
-  if (time_differences_vec.size() == 0) {
-    vcl_cerr << "Invalid appearance type " << appearance_type << "."
-             << vcl_endl;
-    return false;
+  block_data_base *alpha = datas["BSTM_ALPHA"];
+  block_data_base *appearance = datas[appearance_type];
+
+  // TODO currently, top level should only have one tree
+  // this is just for debug
+  assert(volume(num_regions) == 1);
+
+  for (int level = 0; level < num_levels - 2; ++level) {
+    space_time_enum level_type = blk->level_type(level);
+    space_time_enum child_level_type = blk->level_type(level + 1);
+    vcl_size_t t_size = tree_size(level_type);
+    vcl_size_t child_t_size = tree_size(child_level_type);
+    vcl_pair<vgl_vector_3d<unsigned>, unsigned> child_num_regions = num_regions;
+    switch (level_type) {
+    case STE_SPACE:
+      child_num_regions.first *= 8;
+    case STE_TIME:
+      child_num_regions.second *= 32;
+    }
+    array_4d<int> current_level_array(VXL_NULLPTR, num_regions);
+    array_4d<int> child_level_array(VXL_NULLPTR, child_num_regions);
+    vcl_vector<unsigned char> &buffer = blk->get_buffer(level);
+    vcl_vector<unsigned char> &child_buffer = blk->get_buffer(level + 1);
+    vcl_vector<unsigned char> new_child_buffer = vcl_vector<unsigned char>();
+    vcl_size_t num_trees = buffer.size() / t_size;
+
+    int child_offset = 0;
+    for (int tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
+      generic_tree tree(&buffer[0] + (tree_idx * t_size), level_type);
+      // For first level, trees are already in proper order
+      int tree_buffer_idx = tree_idx;
+      // For other levels, the tree's index in the old (row-major order) buffer
+      // is stored in data_ptr;
+      if (level > 0) {
+        tree_buffer_idx = tree.get_data_ptr();
+      }
+      index_4d tree_coords =
+          current_level_array.coords_from_index(tree_buffer_idx);
+      vcl_vector<int> leaf_indices = tree.get_leaf_bits();
+      for (int leaf_idx = 0; leaf_idx < leaf_indices.size(); ++leaf_idx) {
+        // If this is a space tree, only care about leaves that are lowest-level
+        // voxels
+        if (level_type == STE_SPACE && leaf_idx < 73) {
+          continue;
+        }
+        index_4d local_coords = tree.local_voxel_coords(leaf_idx);
+        index_4d child_coords =
+            element_product(tree_coords, tree.dimensions()) + local_coords;
+        int child_index = child_level_array.index_from_coords(child_coords);
+        unsigned char *child_tree_ptr =
+            &child_buffer[0] + child_index * child_t_size;
+        // If the child level is the original BSTM space trees, they already
+        // have correct data pointers.
+        if (level < num_levels - 3) {
+          generic_tree(child_tree_ptr, child_level_type)
+              .set_data_ptr(child_index);
+        }
+        new_child_buffer.insert(new_child_buffer.end(),
+                                child_tree_ptr,
+                                child_tree_ptr + child_t_size);
+      }
+      tree.set_data_ptr(child_offset);
+      child_offset += leaf_indices.size();
+    }
+    child_buffer.swap(new_child_buffer);
+    num_regions = child_num_regions;
   }
 
+  {
+    // Special case for penultimate level -- the original BSTM space trees
+    vcl_vector<unsigned char> &space_buffer = blk->get_buffer(num_levels - 2);
+    vcl_vector<unsigned char> &time_buffer = blk->get_buffer(num_levels - 1);
+    vcl_vector<unsigned char> new_time_buffer;
+    space_tree_b *space_trees =
+        reinterpret_cast<space_tree_b *>(&space_buffer[0]);
+    unsigned char *old_time_tree_ptr = &time_buffer[0];
+    vcl_size_t num_trees = space_buffer.size() / space_tree_size;
+    vcl_size_t num_data_elements = 0;
+    // BSTM space tree has time trees at inner nodes as well, but we
+    // only want to copy over the leaf nodes' time trees.
+    for (vcl_size_t tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
+      boct_bit_tree current_space_tree(space_trees[tree_idx]);
+      vcl_vector<int> leaves = current_space_tree.get_leaf_bits();
+      int num_leaves = leaves.size();
+      for (int leaf_idx = 0; leaf_idx < num_leaves; ++leaf_idx) {
+        int data_idx = current_space_tree.get_data_index(leaves[leaf_idx]);
+        unsigned char *start = old_time_tree_ptr + data_idx * time_tree_size;
+        new_time_buffer.insert(
+            new_time_buffer.end(), start, start + time_tree_size);
+      }
+      current_space_tree.set_data_ptr(num_data_elements);
+      num_data_elements += num_leaves;
+    }
+  }
+
+  // we know the bottom level contains time trees, since we imported a BSTM
+  // block
+  // first, calculate size of data buffers
+  // TODO we only need this because it's inconvenient to resize the data
+  // buffers.
+  {
+    vcl_vector<unsigned char> &bottom_buffer = blk->get_buffer(num_levels - 1);
+    time_tree_b *time_trees =
+        reinterpret_cast<time_tree_b *>(&bottom_buffer[0]);
+    vcl_size_t num_trees = bottom_buffer.size() / time_tree_size;
+    vcl_size_t num_data_elements = 0;
+    for (vcl_size_t tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
+      bstm_time_tree current_time_tree(time_trees[tree_idx]);
+      num_data_elements += current_time_tree.num_leaves();
+    }
+
+    vcl_size_t app_type_size = bstm_data_info::datasize(appearance_type);
+    vcl_size_t alpha_type_size = bstm_data_traits<BSTM_ALPHA>::datasize();
+    block_data_base new_alpha =
+        block_data_base(num_data_elements * alpha_type_size);
+    block_data_base new_appearance =
+        block_data_base(num_data_elements * app_type_size);
+
+    // Now actually copy over data BSTM data has its own data pointers
+    // into existing data array, so we can use those
+    int new_data_ptr = 0;
+    for (vcl_size_t tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
+      bstm_time_tree current_time_tree(time_trees[tree_idx]);
+      int num_leaves = current_time_tree.num_leaves();
+      int old_data_ptr = current_time_tree.get_data_ptr();
+      vcl_memcpy(new_alpha.data_buffer() + new_data_ptr * alpha_type_size,
+                 alpha->data_buffer() + old_data_ptr * alpha_type_size,
+                 num_leaves * alpha_type_size);
+      vcl_memcpy(new_appearance.data_buffer() + new_data_ptr * app_type_size,
+                 appearance->data_buffer() + old_data_ptr * app_type_size,
+                 num_leaves * app_type_size);
+      // set data ptr
+      current_time_tree.set_data_ptr(new_data_ptr);
+      new_data_ptr += num_leaves;
+    }
+
+    // Swap data buffers
+    alpha->swap(new_alpha);
+    appearance->swap(new_appearance);
+  }
+}
+
+void compute_trees_structure(
+    bstm_multi_block *blk,
+    vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
+    vcl_vector<bool> &time_differences_vec) {
   // moving upwards through levels:
-  for (; current_level >= 0; --current_level) {
+  for (int current_level = blk->buffers().size() - 3; current_level >= 0;
+       --current_level) {
     space_time_enum current_level_type = blk->level_type(current_level);
     space_time_enum child_level_type = blk->level_type(current_level + 1);
     unsigned char *child_level_buffer = blk->get_data(current_level + 1);
@@ -494,134 +576,88 @@ bool bstm_block_to_bstm_multi_block(
     }
     }
   }
+}
 
-  // TODO currently, top level should only have one tree
-  // this is just for debug
-  assert(volume(num_regions) == 1);
-
-  // XXX TODO last two levels (i.e. BSTM levels are not necessarily organized
-  // this way)
-  for (int level = 0; level < num_levels - 2; ++level) {
-    space_time_enum level_type = blk->level_type(level);
-    space_time_enum child_level_type = blk->level_type(level + 1);
-    vcl_size_t t_size = tree_size(level_type);
-    vcl_size_t child_t_size = tree_size(child_level_type);
-    vcl_pair<vgl_vector_3d<unsigned>, unsigned> child_num_regions = num_regions;
-    switch (level_type) {
-    case STE_SPACE:
-      child_num_regions.first *= 8;
-    case STE_TIME:
-      child_num_regions.second *= 32;
-    }
-    array_4d<int> current_level_array(VXL_NULLPTR, num_regions);
-    array_4d<int> child_level_array(VXL_NULLPTR, child_num_regions);
-    vcl_vector<unsigned char> &buffer = blk->get_buffer(level);
-    vcl_vector<unsigned char> &child_buffer = blk->get_buffer(level + 1);
-    vcl_vector<unsigned char> new_child_buffer = vcl_vector<unsigned char>();
-    vcl_size_t num_trees = buffer.size() / t_size;
-
-    int child_offset = 0;
-    for (int tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
-      generic_tree tree(&buffer[0] + (tree_idx * t_size), level_type);
-      // For first level, trees are already in proper order
-      int tree_buffer_idx = tree_idx;
-      // For other levels, the tree's index in the old (row-major order) buffer
-      // is stored in data_ptr;
-      if (level > 0) {
-        tree_buffer_idx = tree.get_data_ptr();
-      }
-      index_4d tree_coords =
-          current_level_array.coords_from_index(tree_buffer_idx);
-      vcl_vector<int> leaf_indices = tree.get_leaf_bits();
-      for (int leaf_idx = 0; leaf_idx < leaf_indices.size(); ++leaf_idx) {
-        index_4d local_coords = tree.local_leaf_coords(leaf_idx);
-        index_4d child_coords =
-            element_product(tree_coords, tree.dimensions()) + local_coords;
-        int child_index = child_level_array.index_from_coords(child_coords);
-        unsigned char *child_tree_ptr =
-            &child_buffer[0] + child_index * child_t_size;
-        // If the child level is the original BSTM space trees, they already
-        // have correct data pointers.
-        if (level < num_levels - 3) {
-          generic_tree(child_tree_ptr, child_level_type)
-              .set_data_ptr(child_index);
-        }
-        new_child_buffer.insert(new_child_buffer.end(),
-                                child_tree_ptr,
-                                child_tree_ptr + child_t_size);
-      }
-      tree.set_data_ptr(child_offset);
-      child_offset += leaf_indices.size();
-    }
-    child_buffer.swap(new_child_buffer);
-    num_regions = child_num_regions;
+// TODO CURRENT ASSUMPTIONS:
+// - bstm block is same size as bstm multi block
+// - bstm multi block has space,time subdivisions as its two lowest subdiv
+// levels
+// - bstm block is already properly refined as per the given thresholds
+// - - this means all we're doing right now is copying over BSTM data, and
+// un-refining levels above as necessary.
+bool bstm_block_to_bstm_multi_block(
+    bstm_multi_block *blk,
+    vcl_map<vcl_string, block_data_base *> &datas,
+    bstm_block *bstm_blk,
+    bstm_time_block *bstm_blk_t,
+    const vcl_map<vcl_string, bstm_data_base *> &bstm_datas,
+    double p_threshold,
+    double app_threshold) {
+  // extract BSTM data buffers
+  bstm_data_base *alpha = VXL_NULLPTR, *appearance = VXL_NULLPTR;
+  vcl_string appearance_type;
+  get_bstm_data_buffers(bstm_datas, alpha, appearance, appearance_type);
+  if (alpha == VXL_NULLPTR || appearance == VXL_NULLPTR) {
+    vcl_cerr << "Could not find either alpha or appearance model in bstm_datas."
+             << vcl_endl;
+    return false;
+  }
+  if (datas["BSTM_ALPHA"] == VXL_NULLPTR ||
+      datas[appearance_type] == VXL_NULLPTR) {
+    vcl_cerr << "Multi-BSTM scene is lacking data buffers either for "
+                "BSTM_ALPHA or for "
+             << appearance_type << "." << vcl_endl;
+    return false;
   }
 
-  {
-    // Special case for penultimate level -- the original BSTM space trees
-    vcl_vector<unsigned char> &space_buffer = blk->get_buffer(num_levels - 2);
-    vcl_vector<unsigned char> &time_buffer = blk->get_buffer(num_levels - 1);
-    vcl_vector<unsigned char> new_time_buffer;
-    space_tree_b *space_trees =
-        reinterpret_cast<space_tree_b *>(&space_buffer[0]);
-    unsigned char *old_time_tree_ptr = &time_buffer[0];
-    vcl_size_t num_trees = space_buffer.size() / space_tree_size;
-    vcl_size_t num_data_elements = 0;
-    for (vcl_size_t tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
-      boct_bit_tree current_space_tree(space_trees[tree_idx]);
-      int num_leaves = current_space_tree.num_leaves();
-      int data_ptr = current_space_tree.get_data_ptr();
-      unsigned char *start = old_time_tree_ptr + data_ptr * time_tree_size;
-      new_time_buffer.insert(
-          new_time_buffer.end(), start, start + num_leaves * time_tree_size);
-      current_space_tree.set_data_ptr(num_data_elements);
-      num_data_elements += num_leaves;
-    }
+  // Keeps track of the number of space/time regions at each level
+  // This starts out equal to the number of blocks in the BSTM block, but one
+  // level up.
+  vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
+      bstm_blk->sub_block_num(), bstm_blk_t->sub_block_num());
+  if (volume(num_regions) == 0) {
+    vcl_cerr << "Scene has 0 volume, i.e. scene is empty, doing nothing."
+             << vcl_endl;
+    return true;
   }
 
-  // we know the bottom level contains time trees, since we imported a BSTM
-  // block
-  // first, calculate size of data buffers
-  // TODO we only need this because it's inconvenient to resize the data
-  // buffers.
-  {
-    vcl_vector<unsigned char> &bottom_buffer = blk->get_buffer(num_levels - 1);
-    time_tree_b *time_trees =
-        reinterpret_cast<time_tree_b *>(&bottom_buffer[0]);
-    vcl_size_t num_trees = bottom_buffer.size() / time_tree_size;
-    vcl_size_t num_data_elements = 0;
-    for (vcl_size_t tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
-      bstm_time_tree current_time_tree(time_trees[tree_idx]);
-      num_data_elements += current_time_tree.num_leaves();
-    }
-
-    vcl_size_t app_type_size = bstm_data_info::datasize(appearance_type);
-    vcl_size_t alpha_type_size = bstm_data_traits<BSTM_ALPHA>::datasize();
-    block_data_base *new_alpha =
-        new block_data_base(num_data_elements * alpha_type_size);
-    block_data_base *new_appearance =
-        new block_data_base(num_data_elements * app_type_size);
-
-    // Now actually copy over data
-    // BSTM data has its own data pointers into existing data array, so we can
-    // use
-    // those
-    int new_data_ptr = 0;
-    for (vcl_size_t tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
-      bstm_time_tree current_time_tree(time_trees[tree_idx]);
-      int num_leaves = current_time_tree.num_leaves();
-      int old_data_ptr = current_time_tree.get_data_ptr();
-      vcl_memcpy(new_alpha->data_buffer() + new_data_ptr * alpha_type_size,
-                 alpha->data_buffer() + old_data_ptr * alpha_type_size,
-                 num_leaves * alpha_type_size);
-      vcl_memcpy(new_appearance->data_buffer() + new_data_ptr * app_type_size,
-                 appearance->data_buffer() + old_data_ptr * app_type_size,
-                 num_leaves * app_type_size);
-      // set data ptr
-      current_time_tree.set_data_ptr(new_data_ptr);
-      new_data_ptr += num_leaves;
-    }
+  // the first two levels are BSTM data -- need to rearrange them into row-major
+  // order.
+  int num_levels = blk->buffers().size();
+  int current_level = num_levels - 1;
+  convert_bstm_space_trees(blk,
+                           bstm_blk,
+                           bstm_blk_t,
+                           current_level,
+                           alpha,
+                           datas["BSTM_ALPHA"],
+                           appearance,
+                           datas[appearance_type],
+                           appearance_type);
+  current_level -= 2;
+  // get per-frame differences over time of every voxel at lowest
+  // level. This will be used to hierarchially coaelsce the scene over
+  // time.
+  vcl_vector<bool> time_differences_vec =
+      dispatch_time_differences_from_bstm_trees(
+          blk->get_data(current_level + 2),
+          blk->get_data(current_level + 1),
+          num_regions,
+          datas["BSTM_ALPHA"],
+          datas[appearance_type],
+          appearance_type,
+          p_threshold,
+          app_threshold);
+  if (time_differences_vec.size() == 0) {
+    vcl_cerr << "Invalid appearance type " << appearance_type << "."
+             << vcl_endl;
+    return false;
   }
+
+  compute_trees_structure(blk, num_regions, time_differences_vec);
+
+  coalesce_trees(blk, datas, num_regions, appearance_type);
+
   // We're done!
   return true;
 }

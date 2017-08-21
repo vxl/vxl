@@ -17,6 +17,7 @@
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
+#include <vcl_algorithm.h>
 #include <vsl/vsl_binary_io.h>
 
 #include <bstm/bstm_data_traits.h>
@@ -84,6 +85,15 @@ public:
     delete[] data_buffer_;
     buffer_length_ = new_len;
     data_buffer_ = new char[new_len]();
+  }
+
+  void swap(block_data_base &other) {
+    vcl_swap(buffer_length_, other.buffer_length_);
+    vcl_swap(data_buffer_, other.data_buffer_);
+  }
+
+  void swap(block_data_base *other){
+    this->swap(*other);
   }
 
   //: by default data is read-only, i.e. cache doesn't save it before destroying

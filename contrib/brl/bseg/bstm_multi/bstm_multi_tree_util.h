@@ -155,18 +155,27 @@ public:
     }
   }
 
-  // Given an index to a leaf of a tree, returns the offsets of that
-  // leaf into a row-major-ordered 4D grid corresponding to the
-  // current tree. That is, a space tree is an 8x8x8x1 grid and a time
+  // Given an index to a node of a tree, returns the location of that
+  // node in the underlying grid, with row-major-ordered 4D
+  // coordinates. That is, a space tree is an 8x8x8x1 grid and a time
   // tree is a 1x1x1x32 grid.
-  index_4d local_leaf_coords(int leaf_index) const {
+  //
+  // If the node is not a voxel node (i.e. lowest-level node), then the location of the first
+  // voxel node it contains is returned.
+  index_4d local_voxel_coords(int index) const {
     switch (type_) {
     case STE_SPACE:
+      while (index > 73) {
+        index = space_tree_.child_index(index);
+      }
       return array_4d<int>(VXL_NULLPTR, this->dimensions())
-          .coords_from_index(leaf_index - 73);
+          .coords_from_index(index - 73);
     case STE_TIME:
+      while (index < 31) {
+        index = time_tree_.child_index(index);
+      }
       return array_4d<int>(VXL_NULLPTR, this->dimensions())
-          .coords_from_index(leaf_index - 31);
+          .coords_from_index(index - 31);
     }
   }
 

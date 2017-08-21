@@ -20,10 +20,22 @@ correspond to a 4D scene or any other type of scene.
 ## TODO
 
 Multi-BSTM is still incomplete. The following needs to be done:
+
 - Basic processes for creating and managing scenes
 - Code & processes for conversion of BOXM2/BSTM scenes into Multi-BSTM
 - Code & processes for rendering
 - Benchmarks comparing performance to BSTM
+
+- Coalescing of space trees - right now sub-trees with no root node
+  are considered empty, even though they might have exactly one valid
+  node. Need to check data values before coalescing.
+
+### minor things ###
+
+- set up STL-style iterator for space & time trees? A
+  RandomAccessIterator over leaf nodes, inner nodes, and data
+  elements.
+- set up STL-style iterator for traversing multi-BSTM scene?
 
 ### bugs/reminders/etc ###
 
@@ -40,6 +52,7 @@ Multi-BSTM is still incomplete. The following needs to be done:
     converting. (doesn't seem to be in issue - need to test this. It
     looks like the inner nodes are removed for space trees, since they
     don't point to actual data..)
+  - BSTM space trees store time trees at inner nodes(?) but multi-BSTM space trees do not.
 
 ### random technical notes (will have to put these somewhere) ###
 

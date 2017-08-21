@@ -19,7 +19,9 @@
 // Returns the volume of a 4D region given as a vector of <x,y,z> coordinates
 // and a time length.
 // This is a just product of all the given dimension.
-template <typename T> T volume(const vcl_pair<vgl_vector_3d<T>, T> &v);
+template <typename T> T volume(const vcl_pair<vgl_vector_3d<T>, T> &v) {
+  return v.first.x() * v.first.y() * v.first.z() * v.second;
+}
 
 // \brief Gets an appearance and an alpha model from a collection of
 // data buffers. If there are multiple appearance models, only the
@@ -202,12 +204,65 @@ void make_unrefined_time_tree(bstm_time_tree &current_tree,
                               const vcl_vector<bool> &time_differences_vec);
 
 //: Data structure for representing a node in a bstm_multi_block. This is
-// returend by iterators traversing the block's data.
+// returned by iterators traversing the block's data.
 struct bstm_multi_block_tree_node {
   const generic_tree tree;
   index_4d coords;
   int level;
 };
+
+//: \brief Computes the structure of trees at higher levels of a multi-BSTM
+// scene given BSTM data.
+//
+// Creates buffers of space or time trees arranged in row-major order
+// that each represent a region of space-time in the undelrying buffer
+// of the level below. Each level will have a fixed number of trees
+// based on the structure of the scene, and there will be many
+// "oprhan" trees at various levels that are not pointed to by any
+// trees at higher levels. This is cleaned up in coalesce_trees.
+//
+// Assumes that bottom two levels contain output from
+// convert_bstm_trees. Only modifies the levels above those two.
+//
+// \param blk - The given Multi-BSTM scene
+// \param num_regions - The number of BSTM space trees in each dimension.
+// \param time_differences_vec - A row-major array of booleans that stores, for
+// each space time region (cooresponding to a single BSTM space tree), whether
+// that region is different in the previous frame / time interval. This array is
+// coalesced and resized as this function progresses through each level.
+void compute_trees_structure(
+    bstm_multi_block *blk,
+    vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
+    vcl_vector<bool> &time_differences_vec);
+
+// \brief Rearranges trees & data in a multi-BSTM scene so that each
+// tree's children are contiguous in memory and so that elements not
+// pointed to by trees are removed.
+//
+// This takes a scene in which every level except the last two has its
+// trees in row-major (x,y,z,t) order. The last two levels are
+// imported from a BSTM scene, and thus should be in the same format
+// as if they were produced by convert_bstm_space_trees(...). Data
+// pointers in the non-BSTM levels do not need to be correct, as they
+// are created by this function.
+//
+// \param blk - Multi-BSTM block. The buffers in this block are
+// updated with the rearranged data. The old memory is deleted.
+//
+// \param datas - Data buffers for this scene. The "BSTM_ALPHA" and
+// appearance_type buffers are updated by this function. The old
+// buffers are deleted.
+//
+// \param num_regions - Represents number of blocks in each dimension
+// at top level. TODO: right now assumed to be one, so a) allow
+// multiple top-level blocks and b) create member function
+// bstm_multi_block::get_num_regions().
+//
+// \param appearance_type - Appearance data type
+void coalesce_trees(bstm_multi_block *blk,
+                    vcl_map<vcl_string, block_data_base *> &datas,
+                    vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions,
+                    const vcl_string &appearance_type);
 
 bool bstm_block_to_bstm_multi_block(
     bstm_multi_block *blk,
