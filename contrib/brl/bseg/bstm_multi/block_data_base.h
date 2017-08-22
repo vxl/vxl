@@ -111,14 +111,4 @@ protected:
 //: Smart_Pointer typedef for bstm_data_base
 typedef vbl_smart_ptr<block_data_base> block_data_base_sptr;
 
-void vsl_b_write(vsl_b_ostream &os, block_data_base const &scene) {}
-void vsl_b_write(vsl_b_ostream &os, const block_data_base *&p) {}
-void vsl_b_write(vsl_b_ostream &os, block_data_base_sptr &sptr) {}
-void vsl_b_write(vsl_b_ostream &os, block_data_base_sptr const &sptr) {}
-
-void vsl_b_read(vsl_b_istream &is, block_data_base &scene) {}
-void vsl_b_read(vsl_b_istream &is, block_data_base *p) {}
-void vsl_b_read(vsl_b_istream &is, block_data_base_sptr &sptr) {}
-void vsl_b_read(vsl_b_istream &is, block_data_base_sptr const &sptr) {}
-
 #endif // bstm_multi_block_data_base_h_

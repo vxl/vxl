@@ -125,8 +125,8 @@ public:
   //: returns buffer size
   vcl_size_t tree_size() const { return ::tree_size(type_); }
 
-  unsigned char *bits() { return data_; }
-  const unsigned char *bits() const { return data_; }
+  unsigned char *bits() { return GENERIC_TREE_CALL(get_bits()); }
+  const unsigned char *bits() const { return GENERIC_TREE_CALL(get_bits()); }
 
   bool root_bit() const { return GENERIC_TREE_CALL(bit_at(0)); }
   bool bit_at(int index) const { return GENERIC_TREE_CALL(bit_at(index)); }
@@ -160,22 +160,25 @@ public:
   // coordinates. That is, a space tree is an 8x8x8x1 grid and a time
   // tree is a 1x1x1x32 grid.
   //
-  // If the node is not a voxel node (i.e. lowest-level node), then the location of the first
+  // If the node is not a voxel node (i.e. lowest-level node), then the location
+  // of the first
   // voxel node it contains is returned.
   index_4d local_voxel_coords(int index) const {
     switch (type_) {
-    case STE_SPACE:
-      while (index > 73) {
+    case STE_SPACE: {
+      while (index < 73) {
         index = space_tree_.child_index(index);
       }
-      return array_4d<int>(VXL_NULLPTR, this->dimensions())
-          .coords_from_index(index - 73);
+      vgl_box_3d<double> bbox = space_tree_.cell_box(index);
+      bbox.scale_about_origin(8);
+      vgl_point_3d<double> pt = bbox.min_point();
+      return index_4d(pt.x(), pt.y(), pt.z(), 0);
+    }
     case STE_TIME:
       while (index < 31) {
         index = time_tree_.child_index(index);
       }
-      return array_4d<int>(VXL_NULLPTR, this->dimensions())
-          .coords_from_index(index - 31);
+      return index_4d(0, 0, 0, index - 31);
     }
   }
 

@@ -23,7 +23,11 @@ public:
   typedef typename bstm_data_traits<T>::datatype datatype;
 
   //: Wraps a block_data_base object
-  block_data(block_data_base &data);
+  block_data(block_data_base &data) : block_data_base_(data) {
+    unsigned array_length = data.buffer_length() / sizeof(datatype);
+    data_array_ = boxm2_array_1d<datatype>(
+        array_length, reinterpret_cast<datatype *>(data.data_buffer()));
+  }
 
   //: data array accessor
   boxm2_array_1d<datatype> &data() { return data_array_; }

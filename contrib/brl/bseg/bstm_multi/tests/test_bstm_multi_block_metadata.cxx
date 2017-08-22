@@ -11,30 +11,6 @@
 
 #include <bstm_multi/bstm_multi_block_metadata.h>
 
-void test_space_time_enum() {
-  TEST("STE_SPACE to string", ste_as_string(STE_SPACE), "space");
-  TEST("STE_TIME to string", ste_as_string(STE_TIME), "time");
-  space_time_enum ste;
-  TEST("STE_TIME from string success", ste_from_string("time", ste), true);
-  TEST("STE_TIME from string", ste, STE_TIME);
-  TEST("STE_SPACE from string success", ste_from_string("space", ste), true);
-  TEST("STE_SPACE from string", ste, STE_SPACE);
-  TEST("STE from string failure", ste_from_string("lol", ste), false);
-
-  // last one should be skipped since it's a typo
-  vcl_string subdivs = "time,space,time,space,spaec";
-  vcl_vector<space_time_enum> subdivisions = parse_subdivisions(subdivs);
-  TEST("parse subdivisions skip incorrect", subdivisions.size(), 4);
-  TEST("parse subdivisions", subdivisions[0], STE_TIME);
-  TEST("parse subdivisions", subdivisions[1], STE_SPACE);
-  TEST("parse subdivisions", subdivisions[2], STE_TIME);
-  TEST("parse subdivisions", subdivisions[3], STE_SPACE);
-
-  TEST("print subdivisions",
-       print_subdivisions(subdivisions),
-       "time,space,time,space");
-}
-
 void test_block_metadata_equality() {
   bstm_multi_block_metadata metadata;
   metadata.id_ = bstm_block_id(0, 0, 0, 1);
@@ -58,7 +34,7 @@ void test_block_metadata_equality() {
 
   bstm_multi_block_metadata metadata_subdivs;
   metadata_subdivs.bbox_ = vgl_box_3d<double>(0, 0, 0, 16, 32, 16);
-  metadata_subdivs.bbox_t_ = vcl_pair<double,double>(0, 32);
+  metadata_subdivs.bbox_t_ = vcl_pair<double, double>(0, 32);
   metadata_subdivs.subdivisions_.push_back(STE_SPACE);
   metadata_subdivs.subdivisions_.push_back(STE_TIME);
   metadata_subdivs.subdivisions_.push_back(STE_SPACE);
@@ -76,8 +52,13 @@ void test_block_metadata_equality() {
   TEST("block metadata inequality",
        metadata == metadata_different_bounds,
        false);
-  TEST("block resolution value", metadata_subdivs.resolution(), expected_resolution);
-  TEST("block resolution equality", voxel_resolutions_match(metadata_subdivs, boxm2_metadata_same_resolution), true);
+  TEST("block resolution value",
+       metadata_subdivs.resolution(),
+       expected_resolution);
+  TEST(
+      "block resolution equality",
+      voxel_resolutions_match(metadata_subdivs, boxm2_metadata_same_resolution),
+      true);
 }
 
 void test_block_metadata_contains_t() {
@@ -107,7 +88,6 @@ void test_block_metadata_printing() {
 }
 
 void test_bstm_multi_block_metadata() {
-  test_space_time_enum();
   test_block_metadata_equality();
   test_block_metadata_contains_t();
   test_block_metadata_printing();

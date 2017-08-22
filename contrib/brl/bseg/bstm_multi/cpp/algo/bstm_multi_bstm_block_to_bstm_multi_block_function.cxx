@@ -8,12 +8,12 @@
 #include <vnl_vector_fixed.h>
 
 #include <boct/boct_bit_tree.h>
+#include <boxm2/basic/boxm2_array_3d.h>
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/bstm_data.h>
 #include <bstm/bstm_data_traits.h>
 #include <bstm/bstm_util.h>
-#include <bstm/cpp/algo/bstm_data_similarity_traits.h>
 
 #include <bstm_multi/basic/array_4d.h>
 #include <bstm_multi/bstm_multi_block_metadata.h>
@@ -204,85 +204,6 @@ vcl_vector<bool> dispatch_time_differences_from_bstm_trees(
 #undef TIME_DIFFERENCES_INSTANTIATE
 #undef TIME_DIFFERENCES_CASE
 
-template <bstm_data_type APP_TYPE>
-vcl_vector<bool> time_differences_from_bstm_trees(
-    unsigned char *time_buffer,
-    unsigned char *space_buffer,
-    const vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
-    const block_data<BSTM_ALPHA> &alpha,
-    const block_data<APP_TYPE> &appearance,
-    double p_threshold,
-    double app_threshold) {
-  typedef typename bstm_data_traits<BSTM_ALPHA>::datatype alpha_data_type;
-  typedef typename bstm_data_traits<APP_TYPE>::datatype app_data_type;
-  // used for converting between 4D coordinates and array indices
-  array_4d<space_tree_b> space_trees_array(
-      reinterpret_cast<space_tree_b *>(space_buffer),
-      num_regions.first.x(),
-      num_regions.first.y(),
-      num_regions.first.z(),
-      num_regions.second);
-  vcl_vector<bool> time_differences(space_trees_array.size(), false);
-  for (vcl_size_t i = 0; i < space_trees_array.x(); ++i) {
-    for (vcl_size_t j = 0; j < space_trees_array.y(); ++j) {
-      for (vcl_size_t k = 0; k < space_trees_array.z(); ++k) {
-        // arrays are stored in row-major order, so we can directly iterate over
-        // time dimension.
-        vcl_size_t first_frame_idx =
-            space_trees_array.index_from_coords(i, j, k, 0);
-        boct_bit_tree last_same_tree(space_trees_array[first_frame_idx]);
-        for (vcl_size_t idx = first_frame_idx; idx < first_frame_idx + 32;
-             ++idx) {
-          boct_bit_tree current_tree(space_trees_array[idx]);
-          // If trees have different structure, then naturally they are
-          // different.
-          if (!boct_bit_tree::same_structure(last_same_tree, current_tree)) {
-            time_differences[idx] = true;
-            last_same_tree = current_tree;
-            continue;
-          }
-
-          // Same as leaf bit indices in last_same_tree
-          vcl_vector<int> leaf_bits = current_tree.get_leaf_bits();
-          for (vcl_vector<int>::const_iterator iter = leaf_bits.begin();
-               iter != leaf_bits.end();
-               ++iter) {
-            vcl_size_t current_tt_idx = current_tree.get_data_index(*iter);
-            vcl_size_t previous_tt_idx = last_same_tree.get_data_index(*iter);
-            bstm_time_tree current_tt(time_buffer + current_tt_idx);
-            bstm_time_tree previous_tt(time_buffer + previous_tt_idx);
-            // If time trees are refined at all, then they have more than one
-            // frame and are not a single identical region. Do not refine.
-            if (current_tt.bit_at(0) || previous_tt.bit_at(0)) {
-              time_differences[idx] = true;
-              last_same_tree = current_tree;
-              break;
-            }
-            // Now compare actual data values
-            vcl_size_t current_data_idx = current_tt.get_data_index(0);
-            vcl_size_t previous_data_idx = previous_tt.get_data_index(0);
-            const alpha_data_type &current_alpha = alpha[current_data_idx];
-            const alpha_data_type &previous_alpha = alpha[previous_data_idx];
-            const app_data_type &current_app = appearance[current_data_idx];
-            const app_data_type &previous_app = appearance[previous_data_idx];
-            if (!is_similar<APP_TYPE>(previous_app,
-                                      current_app,
-                                      previous_alpha,
-                                      current_alpha,
-                                      p_threshold,
-                                      app_threshold)) {
-              time_differences[idx] = true;
-              last_same_tree = current_tree;
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-  return time_differences;
-}
-
 bool make_unrefined_space_tree(
     boct_bit_tree &current_tree,
     const vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
@@ -325,11 +246,15 @@ bool make_unrefined_space_tree(
             generic_tree(sub_tree_bytes, child_level_type).root_bit();
         // we want this to be the case some times. Fail so I can notice that
         // it's possible.
-        assert(!root_bit);
+        // assert(!root_bit);// TODO removed when making my own tests, but
+        // should put back when running on actual BSTM data.
         // Set corresponding leaf node on our main tree
         if (root_bit) {
-          vcl_size_t leaf_index =
-              leaf_node_indices.linear_index(i_sub / 2, j_sub / 2, k_sub / 2);
+          int leaf_index = current_tree.traverse(
+              vgl_point_3d<double>(i_sub / 8.0, j_sub / 8.0, k_sub / 8.0),
+              4,
+              true);
+          leaf_index = current_tree.parent_index(leaf_index);
           current_tree.set_bit_and_parents_to_true(leaf_index);
         }
         if (time_differences_vec[sub_tree_index]) {
@@ -364,7 +289,7 @@ void coalesce_trees(bstm_multi_block *blk,
                     vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions,
                     const vcl_string &appearance_type) {
   int num_levels = blk->buffers().size();
-  block_data_base *alpha = datas["BSTM_ALPHA"];
+  block_data_base *alpha = datas["alpha"];
   block_data_base *appearance = datas[appearance_type];
 
   // TODO currently, top level should only have one tree
@@ -569,7 +494,7 @@ void compute_trees_structure(
         //      but the first frame is different. This means it
         //      different from the *previous* region at this level.
         time_differences_coalesced[i] =
-            current_tree.bit_at(0) || time_differences_vec[i];
+            current_tree.bit_at(0) || time_differences_vec[i * 32];
       }
       time_differences_vec.swap(time_differences_coalesced);
       break;
@@ -595,14 +520,15 @@ bool bstm_block_to_bstm_multi_block(
     double app_threshold) {
   // extract BSTM data buffers
   bstm_data_base *alpha = VXL_NULLPTR, *appearance = VXL_NULLPTR;
-  vcl_string appearance_type;
+  vcl_string appearance_type,
+      alpha_prefix = bstm_data_traits<BSTM_ALPHA>::prefix();
   get_bstm_data_buffers(bstm_datas, alpha, appearance, appearance_type);
   if (alpha == VXL_NULLPTR || appearance == VXL_NULLPTR) {
     vcl_cerr << "Could not find either alpha or appearance model in bstm_datas."
              << vcl_endl;
     return false;
   }
-  if (datas["BSTM_ALPHA"] == VXL_NULLPTR ||
+  if (datas[alpha_prefix] == VXL_NULLPTR ||
       datas[appearance_type] == VXL_NULLPTR) {
     vcl_cerr << "Multi-BSTM scene is lacking data buffers either for "
                 "BSTM_ALPHA or for "
@@ -630,7 +556,7 @@ bool bstm_block_to_bstm_multi_block(
                            bstm_blk_t,
                            current_level,
                            alpha,
-                           datas["BSTM_ALPHA"],
+                           datas[alpha_prefix],
                            appearance,
                            datas[appearance_type],
                            appearance_type);
@@ -643,7 +569,7 @@ bool bstm_block_to_bstm_multi_block(
           blk->get_data(current_level + 2),
           blk->get_data(current_level + 1),
           num_regions,
-          datas["BSTM_ALPHA"],
+          datas[alpha_prefix],
           datas[appearance_type],
           appearance_type,
           p_threshold,

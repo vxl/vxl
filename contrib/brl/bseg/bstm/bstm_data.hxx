@@ -4,9 +4,9 @@
 
 template <bstm_data_type T>
 bstm_data<T>::bstm_data(bstm_data_base &data) : bstm_data_base_(data) {
-  unsigned array_length = this->buffer_length() / sizeof(datatype);
+  unsigned array_length = data.buffer_length() / sizeof(datatype);
   data_array_ = boxm2_array_1d<datatype>(
-      array_length, reinterpret_cast<datatype *>(this->data_buffer()));
+      array_length, reinterpret_cast<datatype *>(data.data_buffer()));
 }
 
 #undef BSTM_DATA_INSTANTIATE
