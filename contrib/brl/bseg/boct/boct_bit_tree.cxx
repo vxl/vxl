@@ -55,7 +55,7 @@ boct_bit_tree &boct_bit_tree::operator=(boct_bit_tree that) {
   return *this;
 }
 
-int boct_bit_tree::traverse(const vgl_point_3d<double> p, int deepest) {
+int boct_bit_tree::traverse(const vgl_point_3d<double> p, int deepest, bool full) {
   // deepest level to traverse is either
   deepest = std::max(deepest - 1, num_levels_ - 1);
 
@@ -73,7 +73,7 @@ int boct_bit_tree::traverse(const vgl_point_3d<double> p, int deepest) {
   double pointz = p.z(); // clamp(p.z(), 0.0001f, 0.9999f);
 
   // while the curr node has children
-  while (curr_bit && depth < deepest) {
+  while ((curr_bit || full) && (depth < deepest)) {
     // determine child offset and bit index for given point
     pointx += pointx; // point = point*2
     pointy += pointy;

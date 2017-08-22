@@ -29,7 +29,7 @@ public:
 
   // These constructor are owning
   //: default constructor
-  boct_bit_tree() : is_owning_(true), bits_(new unsigned char[16]()) {}
+  boct_bit_tree() : is_owning_(true), bits_(new unsigned char[16]()), num_levels_(4) {}
   boct_bit_tree(const unsigned char *bits, int num_levels = 4);
   // Copy constructor -- copies ownership type as well, and if other is owning,
   // then creates and owns a copy of the data.
@@ -64,8 +64,10 @@ public:
   //: returns bit index assuming root data is located at 0
   int get_relative_index(int bit_index) const;
 
-  //: traverse tree to get leaf index that contains point
-  int traverse(const vgl_point_3d<double> p, int deepest = 4);
+  //: traverse tree to get leaf index that contains point. If full is
+  //true, this ignored whether bits are refined or not and just goes
+  //down to the lowest level.
+  int traverse(const vgl_point_3d<double> p, int deepest = 4, bool full=false);
 
   //: traverse tree to get leaf index that contains point
   int traverse_to_level(const vgl_point_3d<double> p, int deepest = 4);
