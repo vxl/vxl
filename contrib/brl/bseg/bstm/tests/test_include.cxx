@@ -1,6 +1,5 @@
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_block_metadata.h>
-#include <bstm/bstm_data.hxx>
 #include <bstm/bstm_data_base.h>
 #include <bstm/bstm_data_traits.h>
 #include <bstm/bstm_scene.h>

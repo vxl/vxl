@@ -82,7 +82,7 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
   // Create new space buffer
   vcl_size_t num_space_bytes = bstm_blk->byte_count() * num_time_trees;
   blk->new_buffer(num_space_bytes, current_level - 1);
-  unsigned char *new_space_buffer = blk->get_data(current_level);
+  unsigned char *new_space_buffer = blk->get_data(current_level - 1);
 
   // Create copies of BSTM data buffers
   alpha_new->new_data_buffer(alpha->buffer_length());
@@ -107,7 +107,7 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
   // space tree.
   vcl_size_t time_tree_offset = 0;
   // Essentially the number of elements already inserted into new data buffer.
-  // Actually array index (.e.g to pass to memcpy) is data_buffer_offset *
+  // Actual array index (.e.g to pass to memcpy) is data_buffer_offset *
   // sizeof(datatype)
   vcl_size_t data_buffer_offset = 0;
   // Create time_trees_per_space_voxel copies of each space tree, in order.
@@ -119,7 +119,7 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
     int num_space_cells = cells.size();
 
     // copy over time trees
-    for (vcl_size_t cell_idx = 0; cell_idx <= cells.size(); ++cell_idx) {
+    for (vcl_size_t cell_idx = 0; cell_idx < cells.size(); ++cell_idx) {
       boxm2_array_1d<time_tree_b> cell_time_trees = bstm_blk_t->get_cell_all_tt(
           current_tree.get_data_index(cells[cell_idx]));
       // copy time trees
@@ -138,12 +138,13 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
     vcl_size_t space_tree_data_offset = 0;
     // Copy over data buffers in proper order and update time tree data pointers
     for (int tt_offset = time_tree_offset;
-         tt_offset < num_space_cells * num_time_trees;
+         tt_offset < time_tree_offset + num_space_cells * num_time_trees;
          ++tt_offset) {
       bstm_time_tree tt(time_buffer_ptr[tt_offset]);
       int num_leaves = tt.num_leaves();
       int data_ptr = tt.get_data_ptr();
       int new_data_ptr = data_buffer_offset + space_tree_data_offset;
+
       // copy alpha and appearance from data_ptr to new_data_ptr
       vcl_memcpy(alpha_new->data_buffer() + alpha_type_size * new_data_ptr,
                  alpha->data_buffer() + alpha_type_size * data_ptr,

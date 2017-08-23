@@ -9,7 +9,7 @@ set(bstm_sources bstm_block_metadata.h bstm_block_metadata.cxx
                  bstm_scene.h bstm_scene.cxx
                  bstm_scene_parser.h bstm_scene_parser.cxx
                  bstm_data_base.h bstm_data_base.cxx
-                 bstm_data.h bstm_data.hxx
+                 bstm_data.h
                  bstm_block.h bstm_block.cxx
                  bstm_data_traits.h
                  bstm_time_block.h bstm_time_block.cxx

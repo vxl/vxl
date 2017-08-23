@@ -26,6 +26,7 @@
 
 class bstm_multi_block_metadata : public vbl_ref_count {
 public:
+  // default constructor does not initialize anything
   bstm_multi_block_metadata() {}
   bstm_multi_block_metadata(const bstm_block_id &id,
                             const vgl_box_3d<double> &bbox,

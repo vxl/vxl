@@ -10,6 +10,9 @@
 // This differs in implementation from boxm2_data.h, which is a owning class
 // that inherits from boxm2_data_base.
 //
+// NOTE that changing the underlying buffer's data pointer will invalidate this
+// data class's data_array_.
+//
 // \author Raphael Kargon
 // \date Aug 14, 2017
 
@@ -24,9 +27,7 @@ public:
 
   //: Wraps a block_data_base object
   block_data(block_data_base &data) : block_data_base_(data) {
-    unsigned array_length = data.buffer_length() / sizeof(datatype);
-    data_array_ = boxm2_array_1d<datatype>(
-        array_length, reinterpret_cast<datatype *>(data.data_buffer()));
+    update_data_array();
   }
 
   //: data array accessor
@@ -37,19 +38,33 @@ public:
   block_data_base &get_data_base() { return block_data_base_; }
   const block_data_base &get_data_base() const { return block_data_base_; }
 
-  // Has science gone too far?
-  block_data_base *operator->() { return &block_data_base_; }
+  // const only since changing block_data_base's underlying pointer will
+  // invalidate data_array_. Will add non-const if really needed.
   const block_data_base *operator->() const { return &block_data_base_; }
 
   // typed array access
   datatype &operator[](vcl_size_t i) { return data_array_[i]; }
   const datatype &operator[](vcl_size_t i) const { return data_array_[i]; }
 
+  vcl_size_t size() const { return data_array_.size(); }
+
+  // creates new buffer for underlying base, and updates data array.
+  void new_buffer(vcl_size_t length) {
+    block_data_base_.new_data_buffer(length);
+    update_data_array();
+  }
+
   static const block_data const_wrapper(const block_data_base &data) {
     return block_data(const_cast<block_data_base &>(data));
   }
 
 private:
+  void update_data_array() {
+    data_array_ = boxm2_array_1d<datatype>(
+        block_data_base_.buffer_length() / sizeof(datatype),
+        reinterpret_cast<datatype *>(block_data_base_.data_buffer()));
+  }
+
   block_data_base &block_data_base_;
   boxm2_array_1d<datatype> data_array_;
 };

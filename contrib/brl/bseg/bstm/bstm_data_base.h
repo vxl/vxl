@@ -22,25 +22,36 @@
 class bstm_data_base : public vbl_ref_count {
 public:
   //: Constructor - beware that the data_buffer becomes OWNED (and will be
-  //deleted) by this class!
+  // deleted) by this class!
   bstm_data_base(char *data_buffer,
-                 std::size_t length,
+                 vcl_size_t length,
                  bstm_block_id id,
                  bool read_only = true)
       : read_only_(read_only)
       , id_(id)
-      , data_buffer_(data_buffer)
-      , buffer_length_(length) {}
+      , buffer_length_(length)
+      , data_buffer_(data_buffer) {}
+
+  //: Constructs a buffer of the appropriate size to hold the given
+  // number of elements of the given type.
+  bstm_data_base(vcl_size_t num_elements,
+                 const vcl_string &data_type,
+                 bstm_block_id id,
+                 bool read_only = true)
+      : read_only_(read_only)
+      , id_(id)
+      , buffer_length_(bstm_data_info::datasize(data_type) * num_elements)
+      , data_buffer_(new char[buffer_length_]()) {}
 
   //: initializes empty data buffer
   bstm_data_base(bstm_block_metadata data,
-                 std::string type,
+                 vcl_string type,
                  bool read_only = true);
 
-  void set_default_value(std::string data_type, bstm_block_metadata data);
+  void set_default_value(vcl_string data_type, bstm_block_metadata data);
 
   //: This destructor is correct - by our design the original data_buffer
-  //becomes OWNED by the data_base class
+  // becomes OWNED by the data_base class
   virtual ~bstm_data_base() {
     if (data_buffer_)
       delete[] data_buffer_;
@@ -49,15 +60,15 @@ public:
   //: accessor for low level byte buffer kept by the data_base
   char *data_buffer() { return data_buffer_; }
   const char *data_buffer() const { return data_buffer_; }
-  std::size_t buffer_length() const { return buffer_length_; }
+  vcl_size_t buffer_length() const { return buffer_length_; }
   bstm_block_id &block_id() { return id_; }
   //: accessor to a portion of the byte buffer
-  char *cell_buffer(int i, std::size_t cell_size);
+  char *cell_buffer(int i, vcl_size_t cell_size);
 
   //: setter for swapping out data buffer
 
   //: by default data is read-only, i.e. cache doesn't save it before destroying
-  //it
+  // it
   bool read_only_;
   void enable_write() { read_only_ = false; }
   void disable_write() { read_only_ = true; }
@@ -67,8 +78,8 @@ protected:
   bstm_block_id id_;
 
   //: byte buffer and its size
+  vcl_size_t buffer_length_;
   char *data_buffer_;
-  std::size_t buffer_length_;
 };
 
 //: Smart_Pointer typedef for bstm_data_base

@@ -30,7 +30,12 @@ Multi-BSTM is still incomplete. The following needs to be done:
   are considered empty, even though they might have exactly one valid
   node. Need to check data values before coalescing.
 
+- Un-refining of original BSTM space trees after time trees are split up
+
 ### minor things ###
+
+ - use namespaces instead of prefixes everywhere?
+ - Upgrade to C++11
 
 - set up STL-style iterator for space & time trees? A
   RandomAccessIterator over leaf nodes, inner nodes, and data
@@ -45,14 +50,13 @@ Multi-BSTM is still incomplete. The following needs to be done:
    dimension). Similarly, the number of frames should be a power of
    32.
 
- - use namespaces instead of prefixes everywhere?
-
  - store data elements for inner nodes?
   - TODO: remove inner node data from BSTM space trees when
     converting. (doesn't seem to be in issue - need to test this. It
     looks like the inner nodes are removed for space trees, since they
     don't point to actual data..)
   - BSTM space trees store time trees at inner nodes(?) but multi-BSTM space trees do not.
+
 
 ### random technical notes (will have to put these somewhere) ###
 

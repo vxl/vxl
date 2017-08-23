@@ -47,149 +47,81 @@ public:
       : vcl_runtime_error("Tree does not have type: " + ste_as_string(ste)) {}
 };
 
-#define GENERIC_TREE_CALL(function_call)                                       \
-  (type_ == STE_SPACE ? space_tree_.function_call : time_tree_.function_call)
-
-//: Class that wraps either a BSTM time tree or a BOCT bit tree. This is
+//: \brief Class that wraps either a BSTM time tree or a BOCT bit tree. This is
 // essentially a tagged union.
 class generic_tree {
 public:
-  generic_tree(unsigned char *bits, space_time_enum type)
-      : type_(type)
-      , space_tree_(reinterpret_cast<boct_bit_tree &>(data_[0]))
-      , time_tree_(reinterpret_cast<bstm_time_tree &>(data_[0])) {
-    switch (type_) {
-    case STE_SPACE:
-      new (&space_tree_) boct_bit_tree(bits);
-      return;
-    case STE_TIME:
-      new (&time_tree_) bstm_time_tree(bits);
-      return;
-    }
-  }
+  //: \brief creates non-owning tree of appropriate type
+  generic_tree(unsigned char *bits, space_time_enum type);
 
-  // calls appropriate destructor
-  ~generic_tree() {
-    switch (type_) {
-    case STE_SPACE:
-      space_tree_.~boct_bit_tree();
-    case STE_TIME:
-      time_tree_.~bstm_time_tree();
-    }
-  }
+  //: \brief creates non-owning space tree that points to bits of the given tree
+  generic_tree(boct_bit_tree& tree);
+  //: \brief creates non-owning time tree that points to bits of the given tree
+  generic_tree(bstm_time_tree& tree);
 
-  //: returns tree type
-  space_time_enum type() const { return type_; }
+  //: \brief calls appropriate destructor
+  ~generic_tree();
+
+  //: \brief returns tree type
+  space_time_enum type() const;
 
   // getters - these throw an exception if tree is of the wrong type
 
-  const boct_bit_tree &space_tree() const {
-    if (type_ == STE_SPACE) {
-      return space_tree_;
-    } else {
-      throw tree_type_exception(STE_SPACE);
-    }
-  }
-  boct_bit_tree &space_tree() {
-    if (type_ == STE_SPACE) {
-      return space_tree_;
-    } else {
-      throw tree_type_exception(STE_SPACE);
-    }
-  }
+  const boct_bit_tree &space_tree() const;
+  boct_bit_tree &space_tree();
 
-  bstm_time_tree &time_tree() {
-    if (type_ == STE_TIME) {
-      return time_tree_;
-    } else {
-      throw tree_type_exception(STE_TIME);
-    }
-  }
-  const bstm_time_tree &time_tree() const {
-    if (type_ == STE_TIME) {
-      return time_tree_;
-    } else {
-      throw tree_type_exception(STE_TIME);
-    }
-  }
+  bstm_time_tree &time_tree();
+  const bstm_time_tree &time_tree() const;
 
   // These getters do not throw and do not check if tree is of proper
   // type. Use only when you know type of tree.
 
-  boct_bit_tree &space_tree(std::nothrow_t) { return space_tree_; }
-  const boct_bit_tree &space_tree(std::nothrow_t) const { return space_tree_; }
+  boct_bit_tree &space_tree(std::nothrow_t);
+  const boct_bit_tree &space_tree(std::nothrow_t) const;
 
-  bstm_time_tree &time_tree(std::nothrow_t) { return time_tree_; }
-  const bstm_time_tree &time_tree(std::nothrow_t) const { return time_tree_; }
+  bstm_time_tree &time_tree(std::nothrow_t);
+  const bstm_time_tree &time_tree(std::nothrow_t) const;
 
   //: returns buffer size
-  vcl_size_t tree_size() const { return ::tree_size(type_); }
+  vcl_size_t tree_size() const;
 
-  unsigned char *bits() { return GENERIC_TREE_CALL(get_bits()); }
-  const unsigned char *bits() const { return GENERIC_TREE_CALL(get_bits()); }
+  unsigned char *bits();
+  const unsigned char *bits() const;
 
-  bool root_bit() const { return GENERIC_TREE_CALL(bit_at(0)); }
-  bool bit_at(int index) const { return GENERIC_TREE_CALL(bit_at(index)); }
-  void set_bit_at(int index, bool val) {
-    GENERIC_TREE_CALL(set_bit_at(index, val));
-  }
+  bool root_bit() const;
+  bool bit_at(int index) const;
+  void set_bit_at(int index, bool val);
 
-  int get_data_ptr() const { return GENERIC_TREE_CALL(get_data_ptr()); }
-  void set_data_ptr(int ptr) { GENERIC_TREE_CALL(set_data_ptr(ptr)); }
+  int get_data_ptr() const;
+  void set_data_ptr(int ptr);
 
-  vcl_vector<int> get_leaf_bits() const {
-    return GENERIC_TREE_CALL(get_leaf_bits());
-  }
+  vcl_vector<int> get_leaf_bits() const;
 
-  // number of leaf cells (not number of inner nodes). In multi-BSTM,
-  // this always corresponds to the number of data elements in the
-  // underlying data buffer, because we don't store data in inner nodes.
-  int num_leaves() const { return GENERIC_TREE_CALL(num_leaves()); }
+  //: \brief number of leaf cells (not number of inner nodes).
+  //
+  // In multi-BSTM, this always corresponds to the number of data
+  // elements in the underlying data buffer, because we don't store
+  // data in inner nodes.
+  int num_leaves() const;
 
-  index_4d dimensions() const {
-    switch (type_) {
-    case STE_SPACE:
-      return index_4d(8, 8, 8, 1);
-    case STE_TIME:
-      return index_4d(1, 1, 1, 32);
-    }
-  }
+  index_4d dimensions() const;
 
+  //: \brief get local coordinates of node in tree.
+  //
   // Given an index to a node of a tree, returns the location of that
   // node in the underlying grid, with row-major-ordered 4D
   // coordinates. That is, a space tree is an 8x8x8x1 grid and a time
   // tree is a 1x1x1x32 grid.
   //
-  // If the node is not a voxel node (i.e. lowest-level node), then the location
-  // of the first
-  // voxel node it contains is returned.
-  index_4d local_voxel_coords(int index) const {
-    switch (type_) {
-    case STE_SPACE: {
-      while (index < 73) {
-        index = space_tree_.child_index(index);
-      }
-      vgl_box_3d<double> bbox = space_tree_.cell_box(index);
-      bbox.scale_about_origin(8);
-      vgl_point_3d<double> pt = bbox.min_point();
-      return index_4d(pt.x(), pt.y(), pt.z(), 0);
-    }
-    case STE_TIME:
-      while (index < 31) {
-        index = time_tree_.child_index(index);
-      }
-      return index_4d(0, 0, 0, index - 31);
-    }
-  }
+  // If the node is not a voxel node (i.e. lowest-level node), then
+  // the location of the first voxel node it contains is returned.
+  index_4d local_voxel_coords(int index) const;
 
-  // Wraps a const pointer in a const generic_tree. Unforunately has
-  // to call const_cast to properly pass in pointer, but const
-  // correctness of member methods guarantees that the underlying data
-  // is not modified.
+  //: \brief Wraps a const pointer in a const generic_tree.
   static const generic_tree wrap_const_ptr(const unsigned char *bits,
-                                           space_time_enum type) {
-    return generic_tree(const_cast<unsigned char *>(bits), type);
-  }
+                                           space_time_enum type);
+  static const generic_tree wrap_tree(const boct_bit_tree &t);
+  static const generic_tree wrap_tree(const bstm_time_tree &t);
 
 private:
   const space_time_enum type_;
@@ -199,7 +131,5 @@ private:
   boct_bit_tree &space_tree_;
   bstm_time_tree &time_tree_;
 };
-
-#undef GENERIC_TREE_CALL
 
 #endif // bstm_multi_tree_util_h_

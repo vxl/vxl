@@ -25,7 +25,11 @@ public:
   typedef typename bstm_data_traits<T>::datatype datatype;
 
   //: Wraps a bstm_data_base object
-  bstm_data(bstm_data_base &data);
+  bstm_data(bstm_data_base &data) : bstm_data_base_(data) {
+    unsigned array_length = data.buffer_length() / sizeof(datatype);
+    data_array_ = boxm2_array_1d<datatype>(
+        array_length, reinterpret_cast<datatype *>(data.data_buffer()));
+  }
 
   //: data array accessor
   boxm2_array_1d<datatype> &data() { return data_array_; }
@@ -36,9 +40,10 @@ public:
   const bstm_data_base &get_data_base() const { return bstm_data_base_; }
 
   // Has science gone too far?
-  bstm_data_base* operator->() {
-    return &bstm_data_base_;
-  }
+  bstm_data_base *operator->() { return &bstm_data_base_; }
+
+  datatype &operator[](vcl_size_t idx) { return data_array_[idx]; }
+  const datatype &operator[](vcl_size_t idx) const { return data_array_[idx]; }
 
 private:
   bstm_data_base &bstm_data_base_;

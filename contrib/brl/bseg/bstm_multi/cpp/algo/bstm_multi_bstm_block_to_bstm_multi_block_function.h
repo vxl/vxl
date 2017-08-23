@@ -17,14 +17,15 @@
 #include <bstm_multi/bstm_multi_typedefs.h>
 #include <bstm_multi/space_time_scene.h>
 
-// Returns the volume of a 4D region given as a vector of <x,y,z> coordinates
-// and a time length.
+//: \brief Returns the volume of a 4D region given as a vector of
+// <x,y,z> coordinates and a time length.
+//
 // This is a just product of all the given dimension.
 template <typename T> T volume(const vcl_pair<vgl_vector_3d<T>, T> &v) {
   return v.first.x() * v.first.y() * v.first.z() * v.second;
 }
 
-// \brief Gets an appearance and an alpha model from a collection of
+//: \brief Gets an appearance and an alpha model from a collection of
 // data buffers. If there are multiple appearance models, only the
 // first one is used. The buffers are stored in-place in 'alpha' and
 // 'appearance', respectively.
@@ -45,7 +46,7 @@ void get_bstm_data_buffers(
     bstm_data_base *&appearance,
     vcl_string &appearance_type);
 
-// \brief Imports space and time trees from a BSTM block into a multi-BSTM
+//: \brief Imports space and time trees from a BSTM block into a multi-BSTM
 // block.
 //
 // This is not a simple memcpy. BSTM's space trees are stored in row-major of
@@ -84,14 +85,14 @@ void get_bstm_data_buffers(
 void convert_bstm_space_trees(bstm_multi_block *blk,
                               bstm_block *bstm_blk,
                               bstm_time_block *bstm_blk_t,
-                              vcl_size_t current_level,
+                              int current_level,
                               const bstm_data_base *alpha,
                               block_data_base *alpha_new,
                               const bstm_data_base *appearance,
                               block_data_base *appearance_new,
                               const vcl_string &appearance_type);
 
-// \brief convenience function for choosing a template specialization
+//: \brief convenience function for choosing a template specialization
 // (based on appearance data type) at run-time using the appearance
 // type string.
 //
@@ -107,7 +108,7 @@ vcl_vector<bool> dispatch_time_differences_from_bstm_trees(
     double p_threshold,
     double app_threshold);
 
-// \brief Given BSTM data, creates a 4D array of booleans that
+// : \brief Given BSTM data, creates a 4D array of booleans that
 // determines, for each region of space (corresponding to a space tree
 // in BSTM), whether that region is the same as the corresponding
 // region of space in the previous time frame.  This array is used to
@@ -220,6 +221,8 @@ vcl_vector<bool> time_differences_from_bstm_trees(
   return time_differences;
 }
 
+//: \brief computes structure of a space tree given underlying buffer.
+//
 // Given a space tree and a buffer of lower-level trees, sets the
 // structure bits of the given space tree to represent the low-level
 // trees. i.e. if a whole bunch of the lower-level trees are
@@ -256,7 +259,7 @@ bool make_unrefined_space_tree(
     space_time_enum child_level_type,
     const vcl_vector<bool> &time_differences_vec);
 
-// \brief Similar to make_unrefined_space_tree, except coalesces over
+//: \brief Similar to make_unrefined_space_tree, except coalesces over
 // time. The difference here is that instead of coalescing based on
 // whether sub-regions are refined or not, this coalesces based on
 // similarity over time.
@@ -305,7 +308,7 @@ void compute_trees_structure(
     vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
     vcl_vector<bool> &time_differences_vec);
 
-// \brief Rearranges trees & data in a multi-BSTM scene so that each
+//: \brief Rearranges trees & data in a multi-BSTM scene so that each
 // tree's children are contiguous in memory and so that elements not
 // pointed to by trees are removed.
 //
