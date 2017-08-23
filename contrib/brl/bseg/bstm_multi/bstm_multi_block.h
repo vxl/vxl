@@ -22,6 +22,7 @@
 #include <vcl_vector.h>
 
 #include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.hxx>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <bstm/basic/bstm_block_id.h>
@@ -109,5 +110,7 @@ private:
   //: Whether this block is read-only
   bool read_only_;
 };
+
+typedef vbl_smart_ptr<bstm_multi_block> bstm_multi_block_sptr;
 
 #endif // bstm_multi_block_h_

@@ -7,6 +7,7 @@
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 
+#include <vbl/vbl_smart_ptr.hxx>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_utility.h>
@@ -68,7 +69,7 @@ void test_convert_bstm_space_trees() {
                                   9000,
                                   0.01,
                                   subdivs);
-  bstm_multi_block *blk = new bstm_multi_block(mdata);
+  bstm_multi_block_sptr blk = new bstm_multi_block(mdata);
 
   /* Set up bstm blocks */
   bstm_block_metadata bstm_mdata(bstm_block_id(),
@@ -91,20 +92,21 @@ void test_convert_bstm_space_trees() {
   int num_data_elements = num_time_trees * 2;
 
   char *bstm_buff = new char[num_space_trees * space_tree_size]();
-  bstm_block *bstm_blk = new bstm_block(bstm_mdata.id(), bstm_mdata, bstm_buff);
-  bstm_time_block *bstm_blk_t =
+  bstm_block_sptr bstm_blk =
+      new bstm_block(bstm_mdata.id(), bstm_mdata, bstm_buff);
+  bstm_time_block_sptr bstm_blk_t =
       new bstm_time_block(bstm_block_id(), bstm_mdata, num_time_trees);
 
   /* Set up data buffers */
   vcl_size_t alpha_size = bstm_data_traits<BSTM_ALPHA>::datasize();
   vcl_size_t app_size = bstm_data_traits<BSTM_MOG3_GREY>::datasize();
-  bstm_data_base *alpha =
+  bstm_data_base_sptr alpha =
       new bstm_data_base(num_data_elements, "alpha", bstm_mdata.id());
-  block_data_base *alpha_new = new block_data_base(0);
+  block_data_base_sptr alpha_new = new block_data_base(0);
   vcl_string appearance_type = bstm_data_traits<BSTM_MOG3_GREY>::prefix();
-  bstm_data_base *appearance =
+  bstm_data_base_sptr appearance =
       new bstm_data_base(num_data_elements, appearance_type, bstm_mdata.id());
-  block_data_base *appearance_new = new block_data_base(0);
+  block_data_base_sptr appearance_new = new block_data_base(0);
 
   /* Initialize data buffers */
   boxm2_array_3d<space_tree_b> &trees = bstm_blk->trees();
@@ -169,14 +171,14 @@ void test_convert_bstm_space_trees() {
     }
   }
 
-  convert_bstm_space_trees(blk,
-                           bstm_blk,
-                           bstm_blk_t,
+  convert_bstm_space_trees(blk.ptr(),
+                           bstm_blk.ptr(),
+                           bstm_blk_t.ptr(),
                            1,
-                           alpha,
-                           alpha_new,
-                           appearance,
-                           appearance_new,
+                           alpha.ptr(),
+                           alpha_new.ptr(),
+                           appearance.ptr(),
+                           appearance_new.ptr(),
                            appearance_type);
 
   bstm_data<BSTM_ALPHA> alpha_wrap(*alpha);
@@ -235,6 +237,21 @@ void test_convert_bstm_space_trees() {
   TEST("convert_bstm_space_trees -- data elements layout",
        data_layout_good,
        true);
+}
+
+void test_time_differences_from_bstm_trees() {
+  int num_space_trees = 3 * 3 * 3 * 3;
+  int num_time_trees = num_space_trees * 8;
+  int num_data_elements = num_time_trees * 2;
+
+  // test completely empty scene
+  {}
+
+  // test scene with differently refined space trees
+
+  // test scene with differently refined times trees
+
+  // test scene with different data values
 }
 
 void test_make_unrefined_time_tree() {
@@ -341,7 +358,7 @@ void test_bstm_to_multi_bstm_block_function() {
   test_volume();
   test_get_bstm_data_buffers();
   test_convert_bstm_space_trees();
-  // test_time_differences_from_bstm_trees();
+  test_time_differences_from_bstm_trees();
   test_make_unrefined_space_tree();
   test_make_unrefined_time_tree();
   // test_compute_trees_structure();

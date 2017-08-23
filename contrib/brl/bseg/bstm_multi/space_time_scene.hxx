@@ -389,7 +389,7 @@ vgl_vector_3d<unsigned int> space_time_scene<Block>::scene_dimensions() const {
 
 //: returns true if the scene has specified data type (simple linear search)
 template <typename Block>
-bool space_time_scene<Block>::has_data_type(const vcl_string& data_type) const {
+bool space_time_scene<Block>::has_data_type(const vcl_string &data_type) const {
   for (unsigned int i = 0; i < appearances_.size(); ++i)
     if (appearances_[i] == data_type)
       return true;
