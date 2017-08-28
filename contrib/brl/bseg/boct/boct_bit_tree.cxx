@@ -477,6 +477,13 @@ void boct_bit_tree::set_data_ptr(int ptr, bool is_random) {
   }
 }
 
+
+const boct_bit_tree boct_bit_tree::wrap_const(const uchar16 &data, int num_levels) {
+  // (uchar16 &bits, int num_levels = 4)
+  return boct_bit_tree(const_cast<uchar16 &>(data), num_levels);
+}
+
+
 unsigned char boct_bit_tree::bit_lookup[] = {
     0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4,
     2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,

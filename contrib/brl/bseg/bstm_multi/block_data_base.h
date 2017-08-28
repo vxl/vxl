@@ -14,10 +14,10 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
+#include <vcl_algorithm.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_algorithm.h>
 #include <vsl/vsl_binary_io.h>
 
 #include <bstm/bstm_data_traits.h>
@@ -36,6 +36,13 @@ public:
       : read_only_(read_only)
       , buffer_length_(length)
       , data_buffer_(new char[length]()) {}
+
+  block_data_base(vcl_size_t num_elements,
+                  const vcl_string &datatype,
+                  bool read_only = true)
+      : read_only_(read_only)
+      , buffer_length_(num_elements * bstm_data_info::datasize(datatype))
+      , data_buffer_(new char[buffer_length_]()) {}
 
   // //: Initializes this data block with length 0 and a NULLPTR data pointer.
   // block_data_base(bool read_only = true) : read_only_(read_only) {}
@@ -92,9 +99,7 @@ public:
     vcl_swap(data_buffer_, other.data_buffer_);
   }
 
-  void swap(block_data_base *other){
-    this->swap(*other);
-  }
+  void swap(block_data_base *other) { this->swap(*other); }
 
   //: by default data is read-only, i.e. cache doesn't save it before destroying
   // it

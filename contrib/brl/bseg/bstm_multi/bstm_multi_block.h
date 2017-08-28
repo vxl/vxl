@@ -43,7 +43,7 @@ public:
   //: creates empty block from metadata
   bstm_multi_block(const metadata_t &data);
 
-  //: accessors
+  // accessors
   id_t &block_id() { return metadata_.id_; }
   const metadata_t &metadata() const { return metadata_; }
   vcl_vector<vcl_vector<unsigned char> > &buffers() { return buffers_; }
@@ -60,17 +60,17 @@ public:
     return &buffers_[level].front();
   }
 
-  // TODO byte count
-  vcl_size_t byte_count() const {
-    vcl_size_t total_bytes = 0;
-    for (vcl_vector<vcl_vector<unsigned char> >::const_iterator iter =
-             buffers_.begin();
-         iter != buffers_.end();
-         ++iter) {
-      total_bytes += iter->size();
-    }
-    return total_bytes;
-  }
+  // Typed data accessors - return data buffer with appropriate type, or throw
+  // an error
+  space_tree_b *get_space_data(int level);
+  time_tree_b *get_time_data(int level);
+
+  // nothrow versions of typed accessors -- return null if wrong type
+  space_tree_b *get_space_data(int level, std::nothrow_t);
+  time_tree_b *get_time_data(int level, std::nothrow_t);
+
+  //: returns number of bytes taken up by this block
+  vcl_size_t byte_count() const;
 
   space_time_enum level_type(int level) const {
     return metadata_.subdivisions_[level];
@@ -102,9 +102,9 @@ private:
   //: Block metadata
   metadata_t metadata_;
 
-  //: Buffers for trees of each level. Note that buffers_[0] correspond to the
-  // *top* (root) level, while buffers_[buffers_.size()] is the bottom, "leaf"
-  // level.
+  //: Buffers for trees of each level. Note that buffers_[0]
+  // correspond to the *top* (root) level, while
+  // buffers_[buffers_.size()] is the bottom, "leaf" level.
   vcl_vector<vcl_vector<unsigned char> > buffers_;
 
   //: Whether this block is read-only

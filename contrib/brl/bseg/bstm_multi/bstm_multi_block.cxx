@@ -15,3 +15,51 @@ bstm_multi_block::bstm_multi_block(const metadata_t &data)
   space_time_enum root_type = metadata_.subdivisions_[0];
   buffers_[0].insert(buffers_[0].begin(), tree_size(root_type), 0);
 }
+
+space_tree_b *bstm_multi_block::get_space_data(int level) {
+  switch (this->metadata().subdivisions_[level]) {
+  case STE_SPACE:
+    return reinterpret_cast<space_tree_b *>(this->get_data(level));
+  case STE_TIME:
+    throw tree_type_exception(STE_SPACE);
+  }
+}
+
+time_tree_b *bstm_multi_block::get_time_data(int level) {
+  switch (this->metadata().subdivisions_[level]) {
+  case STE_SPACE:
+    throw tree_type_exception(STE_TIME);
+  case STE_TIME:
+    return reinterpret_cast<time_tree_b *>(this->get_data(level));
+  }
+}
+
+// nothrow versions of typed accessors -- return null if wrong type
+space_tree_b *bstm_multi_block::get_space_data(int level, std::nothrow_t) {
+  switch (this->metadata().subdivisions_[level]) {
+  case STE_SPACE:
+    return reinterpret_cast<space_tree_b *>(this->get_data(level));
+  case STE_TIME:
+    return VXL_NULLPTR;
+  }
+}
+
+time_tree_b *bstm_multi_block::get_time_data(int level, std::nothrow_t) {
+  switch (this->metadata().subdivisions_[level]) {
+  case STE_SPACE:
+    return VXL_NULLPTR;
+  case STE_TIME:
+    return reinterpret_cast<time_tree_b *>(this->get_data(level));
+  }
+}
+
+vcl_size_t bstm_multi_block::byte_count() const {
+  vcl_size_t total_bytes = 0;
+  for (vcl_vector<vcl_vector<unsigned char> >::const_iterator iter =
+           buffers_.begin();
+       iter != buffers_.end();
+       ++iter) {
+    total_bytes += iter->size();
+  }
+  return total_bytes;
+}

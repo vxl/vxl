@@ -385,10 +385,12 @@ void bstm_time_tree::fill_cells(bool (&frames)[32]) {
           c1_has_children =
               this->bit_at(c1_child_idx) || this->bit_at(c1_child_idx + 1);
         } else {
-          // in level 3, we need to check for the individual frames covered two levels down.
-          // If the odd-numbered frame is different, then child 1 can't be merged.
-          int frame_idx = (child1_idx -  15) * 2;
-          c1_has_children = frames[frame_idx+1];
+          // in level 3, we need to check for the individual frames covered two
+          // levels down.
+          // If the odd-numbered frame is different, then child 1 can't be
+          // merged.
+          int frame_idx = (child1_idx - 15) * 2;
+          c1_has_children = frames[frame_idx + 1];
         }
         this->set_bit_at(idx, true);
         this->set_bit_at(child1_idx, c1_has_children);
@@ -400,12 +402,17 @@ void bstm_time_tree::fill_cells(bool (&frames)[32]) {
 
   // prune leaf nodes - in bstm_time_trees, nodes with no children should be 0's
   // -- 1's indicate a fully refine node with two children.
-  for(int idx=0; idx < 15; idx++){
-    if (this->bit_at(this->child_index(idx)) || this->bit_at(this->child_index(idx)+1)){
+  for (int idx = 0; idx < 15; idx++) {
+    if (this->bit_at(this->child_index(idx)) ||
+        this->bit_at(this->child_index(idx) + 1)) {
       continue;
     }
     this->set_bit_at(idx, 0);
   }
+}
+
+const bstm_time_tree bstm_time_tree::wrap_const(const uchar8 &data) {
+  return bstm_time_tree(const_cast<uchar8 &>(data));
 }
 
 unsigned char bstm_time_tree::bit_lookup[] = {

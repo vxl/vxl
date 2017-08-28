@@ -51,8 +51,8 @@ public:
   /* Iterators */
   iterator begin() { return buffer_; }
   iterator end() { return begin() + size(); }
-  const_iterator cbegin() { return buffer_; }
-  const_iterator cend() { return end(); }
+  const_iterator cbegin() const { return buffer_; }
+  const_iterator cend() const { return end(); }
 
   /* Accessors */
   T &operator[](vcl_size_t idx) { return buffer_[idx]; }
@@ -75,14 +75,14 @@ public:
 
   /* Util */
   vcl_size_t
-  index_from_coords(vcl_size_t i, vcl_size_t j, vcl_size_t k, vcl_size_t ti) {
+  index_from_coords(vcl_size_t i, vcl_size_t j, vcl_size_t k, vcl_size_t ti) const {
     return ((i * size_[1] + j) * size_[2] + k) * size_[3] + ti;
   }
-  vcl_size_t index_from_coords(const index_4d &coords) {
+  vcl_size_t index_from_coords(const index_4d &coords)  const {
     return index_from_coords(coords[0], coords[1], coords[2], coords[3]);
   }
 
-  index_4d coords_from_index(vcl_size_t idx) {
+  index_4d coords_from_index(vcl_size_t idx) const {
     index_4d coords;
     ldiv_t div = vcl_div(static_cast<long>(idx), (y_ * z_ * t_));
     coords[0] = div.quot;

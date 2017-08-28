@@ -11,6 +11,7 @@
 // \verbatim
 //  Modifications
 //    15 Jan 2012 Modified to store data for leaf cells only.
+//    02 Aug 2017 Added non-owning version
 // \endverbatim
 
 #include <cmath>
@@ -132,6 +133,8 @@ public:
   // Appropriately sets up a time tree given a sequence of frames,
   // each marked as the same or different from the previous one.
   void fill_cells(bool (&frames)[32]);
+
+  static const bstm_time_tree wrap_const(const uchar8 &data);
 
 private:
   bool is_owning_;

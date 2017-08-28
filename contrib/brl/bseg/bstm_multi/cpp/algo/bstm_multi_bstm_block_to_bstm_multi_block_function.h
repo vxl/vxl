@@ -99,8 +99,8 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
 // \returns output of time_differences_from_bstm_trees(...) if data
 // type is valid. If not, returns an empty vcl_vector<bool>.
 vcl_vector<bool> dispatch_time_differences_from_bstm_trees(
-    unsigned char *time_buffer,
-    unsigned char *space_buffer,
+    time_tree_b *time_buffer,
+    space_tree_b *space_buffer,
     const vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
     const block_data_base *alpha,
     const block_data_base *appearance,
@@ -144,13 +144,84 @@ vcl_vector<bool> dispatch_time_differences_from_bstm_trees(
 // (x,y,z,t-1) and false otherwise.
 template <bstm_data_type APP_TYPE>
 vcl_vector<bool> time_differences_from_bstm_trees(
-    unsigned char *time_buffer,
-    unsigned char *space_buffer,
+    time_tree_b *time_buffer,
+    space_tree_b *space_buffer,
     const vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
     const block_data<BSTM_ALPHA> &alpha,
     const block_data<APP_TYPE> &appearance,
     double p_threshold,
-    double app_threshold);
+    double app_threshold) {
+  typedef typename bstm_data_traits<BSTM_ALPHA>::datatype alpha_data_type;
+  typedef typename bstm_data_traits<APP_TYPE>::datatype app_data_type;
+
+  // used for converting between 4D coordinates and array indices
+  array_4d<space_tree_b> space_trees_array(space_buffer,
+                                           num_regions.first.x(),
+                                           num_regions.first.y(),
+                                           num_regions.first.z(),
+                                           num_regions.second);
+  vcl_vector<bool> time_differences(space_trees_array.size(), false);
+  for (vcl_size_t i = 0; i < space_trees_array.x(); ++i) {
+    for (vcl_size_t j = 0; j < space_trees_array.y(); ++j) {
+      for (vcl_size_t k = 0; k < space_trees_array.z(); ++k) {
+        // arrays are stored in row-major order, so we can directly iterate over
+        // time dimension.
+        vcl_size_t first_frame_idx =
+            space_trees_array.index_from_coords(i, j, k, 0);
+        boct_bit_tree last_same_tree(space_trees_array[first_frame_idx]);
+        for (vcl_size_t idx = first_frame_idx;
+             idx < first_frame_idx + num_regions.second;
+             ++idx) {
+          boct_bit_tree current_tree(space_trees_array[idx]);
+          // If trees have different structure, then naturally they are
+          // different.
+          if (!boct_bit_tree::same_structure(last_same_tree, current_tree)) {
+            time_differences[idx] = true;
+            last_same_tree = current_tree;
+            continue;
+          }
+
+          // Same as leaf bit indices in last_same_tree
+          vcl_vector<int> leaf_bits = current_tree.get_leaf_bits();
+          for (vcl_vector<int>::const_iterator iter = leaf_bits.begin();
+               iter != leaf_bits.end();
+               ++iter) {
+            vcl_size_t current_tt_idx = current_tree.get_data_index(*iter);
+            vcl_size_t previous_tt_idx = last_same_tree.get_data_index(*iter);
+            bstm_time_tree current_tt(time_buffer[current_tt_idx]);
+            bstm_time_tree previous_tt(time_buffer[previous_tt_idx]);
+            // If time trees are refined at all, then they have more than one
+            // frame and are not a single identical region. Do not refine.
+            if (current_tt.bit_at(0) || previous_tt.bit_at(0)) {
+              time_differences[idx] = true;
+              last_same_tree = current_tree;
+              break;
+            }
+            // Now compare actual data values
+            vcl_size_t current_data_idx = current_tt.get_data_index(0);
+            vcl_size_t previous_data_idx = previous_tt.get_data_index(0);
+            const alpha_data_type &current_alpha = alpha[current_data_idx];
+            const alpha_data_type &previous_alpha = alpha[previous_data_idx];
+            const app_data_type &current_app = appearance[current_data_idx];
+            const app_data_type &previous_app = appearance[previous_data_idx];
+            if (!is_similar<APP_TYPE>(previous_app,
+                                      current_app,
+                                      previous_alpha,
+                                      current_alpha,
+                                      p_threshold,
+                                      app_threshold)) {
+
+              time_differences[idx] = true;
+              last_same_tree = current_tree;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+  return time_differences;
+}
 
 //: \brief computes structure of a space tree given underlying buffer.
 //

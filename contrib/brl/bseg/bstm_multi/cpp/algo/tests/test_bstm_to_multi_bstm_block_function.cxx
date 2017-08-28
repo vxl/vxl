@@ -203,8 +203,6 @@ void test_convert_bstm_space_trees() {
     index_4d space_tree_coords = multi_bstm_space_trees.coords_from_index(idx);
     boct_bit_tree current_space_tree(multi_bstm_space_trees[idx]);
     generic_tree gen_tree(current_space_tree);
-    // perhaps a better test would be to have several time trees per
-    // space tree, e.g. if space trees were more refined.
     space_idxs_good &= (current_space_tree.get_data_ptr() == idx * 9);
     for (int i = 0; i < 9; ++i) {
       bstm_time_tree current_time_tree(multi_bstm_time_trees[idx * 9 + i]);
@@ -240,18 +238,229 @@ void test_convert_bstm_space_trees() {
 }
 
 void test_time_differences_from_bstm_trees() {
-  int num_space_trees = 3 * 3 * 3 * 3;
-  int num_time_trees = num_space_trees * 8;
-  int num_data_elements = num_time_trees * 2;
+  vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
+      vgl_vector_3d<unsigned>(3, 3, 3), 3);
+  int num_space_trees = volume(num_regions);
 
   // test completely empty scene
-  {}
+  {
+    int num_time_trees = num_space_trees * 9;
+    int num_data_elements = num_time_trees;
+    // initialize data buffers
+    space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
+    vcl_memset(space_buffer, 0, num_space_trees * space_tree_size);
+    time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
+    vcl_memset(time_buffer, 0, num_time_trees * time_tree_size);
+    block_data_base alpha =
+        block_data_base(num_data_elements, vcl_string("alpha"));
+    block_data<BSTM_ALPHA> alpha_wrap(alpha);
+    vcl_string appearance_type = "bstm_mog3_grey";
+    block_data_base appearance =
+        block_data_base(num_data_elements, appearance_type);
+    block_data<BSTM_MOG3_GREY> appearance_wrap(appearance);
+
+    // initialize tree structure - each tree has only root bit set
+    for (int i = 0; i < num_space_trees; ++i) {
+      boct_bit_tree space_tree(space_buffer[i]);
+      space_tree.set_bit_at(0, true);
+      space_tree.set_data_ptr(i * 9);
+    }
+    for (int i = 0; i < num_time_trees; ++i) {
+      bstm_time_tree time_tree(time_buffer[i]);
+      time_tree.set_data_ptr(i);
+    }
+
+    vcl_vector<bool> diffs =
+        dispatch_time_differences_from_bstm_trees(time_buffer,
+                                                  space_buffer,
+                                                  num_regions,
+                                                  &alpha,
+                                                  &appearance,
+                                                  appearance_type,
+                                                  0.01,
+                                                  0.01);
+    TEST("time differences result length", diffs.size(), num_space_trees);
+    bool time_diff_any = false;
+    for (int i = 0; i < diffs.size(); ++i) {
+      time_diff_any |= diffs[i];
+    }
+    TEST("time differences - empty scene with unrefined time trees",
+         time_diff_any,
+         false);
+
+    delete[] time_buffer;
+    delete[] space_buffer;
+  }
 
   // test scene with differently refined space trees
+  {
+    int num_time_trees = num_space_trees +
+                         9 * 3; // First two space trees have 8 extra time trees
+    int num_data_elements = num_time_trees;
+    // initialize data buffers
+    space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
+    vcl_memset(space_buffer, 0, num_space_trees * space_tree_size);
+    time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
+    vcl_memset(time_buffer, 0, num_time_trees * time_tree_size);
+    block_data_base alpha =
+        block_data_base(num_data_elements, vcl_string("alpha"));
+    block_data<BSTM_ALPHA> alpha_wrap(alpha);
+    vcl_string appearance_type = "bstm_mog3_grey";
+    block_data_base appearance =
+        block_data_base(num_data_elements, appearance_type);
+    block_data<BSTM_MOG3_GREY> appearance_wrap(appearance);
 
-  // test scene with differently refined times trees
+    // initialize tree structure - each tree has only root bit set
+    int ptr = 0;
+    for (int i = 0; i < num_space_trees; ++i) {
+      boct_bit_tree space_tree(space_buffer[i]);
+      if (i < 2 || i == 4) {
+        space_tree.set_bit_at(0, true);
+        ptr += 9;
+      } else {
+        ptr++;
+      }
+      space_tree.set_data_ptr(ptr);
+    }
+    for (int i = 0; i < num_time_trees; ++i) {
+      bstm_time_tree time_tree(time_buffer[i]);
+      time_tree.set_data_ptr(i);
+    }
+
+    vcl_vector<bool> diffs =
+        dispatch_time_differences_from_bstm_trees(time_buffer,
+                                                  space_buffer,
+                                                  num_regions,
+                                                  &alpha,
+                                                  &appearance,
+                                                  appearance_type,
+                                                  0.01,
+                                                  0.01);
+    bool diffs_good = true;
+    for (int i = 0; i < diffs.size(); ++i) {
+      if (i == 1 || i == 4 || i == 5) {
+        diffs_good &= (diffs[i] == true);
+      } else {
+        diffs_good &= (diffs[i] == false);
+      }
+    }
+    TEST("time differences - different space tree refinements",
+         diffs_good,
+         true);
+
+    delete[] time_buffer;
+    delete[] space_buffer;
+  }
+
+  // test scene with refined times trees
+  {
+    int num_time_trees = num_space_trees * 9;
+    int num_data_elements = num_time_trees * 2;
+    // initialize data buffers
+    space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
+    vcl_memset(space_buffer, 0, num_space_trees * space_tree_size);
+    time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
+    vcl_memset(time_buffer, 0, num_time_trees * time_tree_size);
+    block_data_base alpha =
+        block_data_base(num_data_elements, vcl_string("alpha"));
+    block_data<BSTM_ALPHA> alpha_wrap(alpha);
+    vcl_string appearance_type = "bstm_mog3_grey";
+    block_data_base appearance =
+        block_data_base(num_data_elements, appearance_type);
+    block_data<BSTM_MOG3_GREY> appearance_wrap(appearance);
+
+    // initialize tree structure - each tree has only root bit set
+    for (int i = 0; i < num_space_trees; ++i) {
+      boct_bit_tree space_tree(space_buffer[i]);
+      space_tree.set_bit_at(0, true);
+      space_tree.set_data_ptr(i * 9);
+    }
+    for (int i = 0; i < num_time_trees; ++i) {
+      bstm_time_tree time_tree(time_buffer[i]);
+      time_tree.set_bit_at(0, true);
+      time_tree.set_data_ptr(i * 2);
+    }
+
+    vcl_vector<bool> diffs =
+        dispatch_time_differences_from_bstm_trees(time_buffer,
+                                                  space_buffer,
+                                                  num_regions,
+                                                  &alpha,
+                                                  &appearance,
+                                                  appearance_type,
+                                                  0.01,
+                                                  0.01);
+    bool time_diff_all = true;
+    for (int i = 0; i < diffs.size(); ++i) {
+      time_diff_all &= diffs[i];
+    }
+    TEST("time differences - all time trees refined", time_diff_all, true);
+
+    delete[] time_buffer;
+    delete[] space_buffer;
+  }
 
   // test scene with different data values
+  {
+    int num_time_trees = num_space_trees * 9; // 8 leaf nodes and 1 inner node
+    int num_data_elements = num_time_trees;
+    // initialize data buffers
+    space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
+    vcl_memset(space_buffer, 0, num_space_trees * space_tree_size);
+    time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
+    vcl_memset(time_buffer, 0, num_time_trees * time_tree_size);
+    block_data_base alpha =
+        block_data_base(num_data_elements, vcl_string("alpha"));
+    block_data<BSTM_ALPHA> alpha_wrap(alpha);
+    vcl_string appearance_type = "bstm_mog3_grey";
+    block_data_base appearance =
+        block_data_base(num_data_elements, appearance_type);
+    block_data<BSTM_MOG3_GREY> appearance_wrap(appearance);
+
+    // initialize tree structure - each tree has only root bit set
+    for (int i = 0; i < num_space_trees; ++i) {
+      boct_bit_tree space_tree(space_buffer[i]);
+      space_tree.set_bit_at(0, true);
+      space_tree.set_data_ptr(i * 9);
+    }
+    for (int i = 0; i < num_time_trees; ++i) {
+      bstm_time_tree time_tree(time_buffer[i]);
+      time_tree.set_data_ptr(i);
+    }
+
+    // set up differences in alpha and appearance - first and last cells should
+    // be different
+    alpha_wrap[1] = 1.0;
+    alpha_wrap[alpha_wrap.size() - 1] = 1.0;
+    vcl_memset(&(appearance_wrap[appearance_wrap.size() - 1]),
+               128,
+               bstm_data_traits<BSTM_MOG3_GREY>::datasize());
+
+    vcl_vector<bool> diffs =
+        dispatch_time_differences_from_bstm_trees(time_buffer,
+                                                  space_buffer,
+                                                  num_regions,
+                                                  &alpha,
+                                                  &appearance,
+                                                  appearance_type,
+                                                  0.01,
+                                                  0.01);
+    bool diffs_good = true;
+    for (int i = 0; i < diffs.size(); ++i) {
+      // only first and last cells should be different
+      if (i == 1 || i == num_space_trees - 1) {
+        diffs_good &= (diffs[i] == true);
+      } else {
+        diffs_good &= (diffs[i] == false);
+      }
+    }
+    TEST("time differences - first and last data cells different",
+         diffs_good,
+         true);
+
+    delete[] time_buffer;
+    delete[] space_buffer;
+  }
 }
 
 void test_make_unrefined_time_tree() {
