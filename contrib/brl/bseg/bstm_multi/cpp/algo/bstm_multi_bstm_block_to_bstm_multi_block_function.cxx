@@ -383,11 +383,14 @@ void coalesce_trees(bstm_multi_block *blk,
       current_space_tree.set_data_ptr(num_data_elements);
       num_data_elements += num_leaves;
     }
+    blk->set_buffer(new_time_buffer, num_levels-1);
   }
 
-  // we know the bottom level contains time trees, since we imported a BSTM
-  // block
+  // we know the bottom level contains time trees, since we imported a
+  // BSTM block
+  //
   // first, calculate size of data buffers
+  //
   // TODO we only need this because it's inconvenient to resize the data
   // buffers.
   {

@@ -62,7 +62,7 @@ void test_convert_bstm_space_trees() {
   /*  set up Multi-BSTM block  */
   vcl_vector<space_time_enum> subdivs(2);
   subdivs[0] = STE_SPACE;
-  subdivs[0] = STE_TIME;
+  subdivs[1] = STE_TIME;
   bstm_multi_block_metadata mdata(bstm_block_id(),
                                   vgl_box_3d<double>(0, 0, 0, 1, 1, 1),
                                   vcl_pair<double, double>(0, 1),
@@ -314,13 +314,13 @@ void test_time_differences_from_bstm_trees() {
     int ptr = 0;
     for (int i = 0; i < num_space_trees; ++i) {
       boct_bit_tree space_tree(space_buffer[i]);
+      space_tree.set_data_ptr(ptr);
       if (i < 2 || i == 4) {
         space_tree.set_bit_at(0, true);
         ptr += 9;
       } else {
         ptr++;
       }
-      space_tree.set_data_ptr(ptr);
     }
     for (int i = 0; i < num_time_trees; ++i) {
       bstm_time_tree time_tree(time_buffer[i]);
@@ -338,7 +338,7 @@ void test_time_differences_from_bstm_trees() {
                                                   0.01);
     bool diffs_good = true;
     for (int i = 0; i < diffs.size(); ++i) {
-      if (i == 1 || i == 4 || i == 5) {
+      if (i == 2 || i == 4 || i == 5) {
         diffs_good &= (diffs[i] == true);
       } else {
         diffs_good &= (diffs[i] == false);
@@ -562,6 +562,67 @@ void test_make_unrefined_space_tree() {
   }
 }
 
+void test_compute_trees_structure() {
+  vcl_vector<space_time_enum> subdivs(4);
+  subdivs[0] = STE_SPACE;
+  subdivs[1] = STE_TIME;
+  subdivs[2] = STE_SPACE;
+  subdivs[3] = STE_TIME;
+  bstm_multi_block_metadata mdata(bstm_block_id(),
+                                  vgl_box_3d<double>(0, 0, 0, 1, 1, 1),
+                                  vcl_pair<double, double>(0, 1),
+                                  9000,
+                                  0.01,
+                                  subdivs);
+  vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
+      vgl_vector_3d<unsigned>(8, 8, 8), 32);
+  bstm_multi_block_sptr blk = new bstm_multi_block(mdata);
+
+  // set up BSTM space trees
+  int num_bstm_space_trees = 512 * 32;
+  blk->new_buffer(num_bstm_space_trees * space_tree_size, 2);
+  vcl_vector<unsigned char> &bstm_space_buffer = blk->get_buffer(2);
+  space_tree_b *trees = &reinterpret_cast<space_tree_b &>(bstm_space_buffer[0]);
+  // for first 16 time intervals, refine top corner (0,0,0,t) of scene. For rest
+  // of time, keep it unrefined.
+  int ptr = 0;
+  for (int i = 0; i < bstm_space_buffer.size() / space_tree_size; ++i) {
+    boct_bit_tree current_tree(trees[i]);
+    current_tree.set_data_ptr(ptr);
+    if (i < 16) {
+      current_tree.set_bit_at(0, true);
+      ptr += 9;
+    } else {
+      ptr++;
+    }
+  }
+
+  // set up BSTM time trees
+  int num_bstm_time_trees = ptr;
+  blk->new_buffer(num_bstm_time_trees * time_tree_size, 3);
+  time_tree_b *time_trees =
+      &reinterpret_cast<time_tree_b &>(blk->get_buffer(3)[0]);
+  for (int i = 0; i < num_bstm_time_trees; ++i) {
+    bstm_time_tree(time_trees[i]).set_data_ptr(i);
+  }
+
+  // set up data elements
+  block_data_base alpha(num_bstm_time_trees, vcl_string("alpha"));
+  block_data_base appearance(num_bstm_time_trees, vcl_string("bstm_mog3_grey"));
+
+  vcl_vector<bool> diffs =
+      dispatch_time_differences_from_bstm_trees(time_trees,
+                                                trees,
+                                                num_regions,
+                                                &alpha,
+                                                &appearance,
+                                                "bstm_mog3_grey",
+                                                0.01,
+                                                0.01);
+
+  compute_trees_structure(blk.ptr(), num_regions, diffs);
+}
+
 void test_bstm_to_multi_bstm_block_function() {
   // test implementation sub-routines...
   test_volume();
@@ -570,7 +631,7 @@ void test_bstm_to_multi_bstm_block_function() {
   test_time_differences_from_bstm_trees();
   test_make_unrefined_space_tree();
   test_make_unrefined_time_tree();
-  // test_compute_trees_structure();
+  test_compute_trees_structure();
   // test_coalesce_trees();
 
   // test empty scene
