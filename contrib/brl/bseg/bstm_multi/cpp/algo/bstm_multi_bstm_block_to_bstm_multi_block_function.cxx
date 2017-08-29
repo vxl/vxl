@@ -306,8 +306,10 @@ void coalesce_trees(bstm_multi_block *blk,
     switch (level_type) {
     case STE_SPACE:
       child_num_regions.first *= 8;
+      break;
     case STE_TIME:
       child_num_regions.second *= 32;
+      break;
     }
     array_4d<int> current_level_array(VXL_NULLPTR, num_regions);
     array_4d<int> child_level_array(VXL_NULLPTR, child_num_regions);
@@ -329,7 +331,8 @@ void coalesce_trees(bstm_multi_block *blk,
       index_4d tree_coords =
           current_level_array.coords_from_index(tree_buffer_idx);
       vcl_vector<int> leaf_indices = tree.get_leaf_bits();
-      for (int leaf_idx = 0; leaf_idx < leaf_indices.size(); ++leaf_idx) {
+      for (int i = 0; i < leaf_indices.size(); ++i) {
+        int leaf_idx = leaf_indices[i];
         // If this is a space tree, only care about leaves that are lowest-level
         // voxels
         if (level_type == STE_SPACE && leaf_idx < 73) {
@@ -369,31 +372,35 @@ void coalesce_trees(bstm_multi_block *blk,
     vcl_size_t num_trees = space_buffer.size() / space_tree_size;
     vcl_size_t num_data_elements = 0;
     // BSTM space tree has time trees at inner nodes as well, but we
-    // only want to copy over the leaf nodes' time trees.
+    // only want to copy over the leaf nodes' time trees
+    // (specifically, leaf nodes at the lowest level).
     for (vcl_size_t tree_idx = 0; tree_idx < num_trees; ++tree_idx) {
       boct_bit_tree current_space_tree(space_trees[tree_idx]);
       vcl_vector<int> leaves = current_space_tree.get_leaf_bits();
-      int num_leaves = leaves.size();
-      for (int leaf_idx = 0; leaf_idx < num_leaves; ++leaf_idx) {
+      int num_leaves = 0;
+      for (int leaf_idx = 0; leaf_idx < leaves.size(); ++leaf_idx) {
+        if (leaves[leaf_idx] < 73) {
+          continue;
+        }
         int data_idx = current_space_tree.get_data_index(leaves[leaf_idx]);
         unsigned char *start = old_time_tree_ptr + data_idx * time_tree_size;
         new_time_buffer.insert(
             new_time_buffer.end(), start, start + time_tree_size);
+        num_leaves++;
       }
       current_space_tree.set_data_ptr(num_data_elements);
       num_data_elements += num_leaves;
     }
-    blk->set_buffer(new_time_buffer, num_levels-1);
+    blk->set_buffer(new_time_buffer, num_levels - 1);
   }
 
   // we know the bottom level contains time trees, since we imported a
   // BSTM block
   //
-  // first, calculate size of data buffers
-  //
   // TODO we only need this because it's inconvenient to resize the data
   // buffers.
   {
+    // first, calculate size of data buffers
     vcl_vector<unsigned char> &bottom_buffer = blk->get_buffer(num_levels - 1);
     time_tree_b *time_trees =
         reinterpret_cast<time_tree_b *>(&bottom_buffer[0]);

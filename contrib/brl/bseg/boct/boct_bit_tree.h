@@ -169,6 +169,6 @@ private:
   unsigned short num_levels_;
 };
 
-std::ostream &operator<<(std::ostream &s, boct_bit_tree &t);
+std::ostream &operator<<(std::ostream &s, const boct_bit_tree &t);
 
 #endif // boct_bit_tree_h_

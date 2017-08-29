@@ -562,7 +562,9 @@ void test_make_unrefined_space_tree() {
   }
 }
 
-void test_compute_trees_structure() {
+//: Tests compute_tree_structure and coalesce_trees for a sample scene, that is
+// the output of convert_bstm_trees.
+void test_compute_and_coalesce_trees() {
   vcl_vector<space_time_enum> subdivs(4);
   subdivs[0] = STE_SPACE;
   subdivs[1] = STE_TIME;
@@ -590,20 +592,18 @@ void test_compute_trees_structure() {
     boct_bit_tree current_tree(trees[i]);
     current_tree.set_data_ptr(ptr);
     if (i < 16) {
-      current_tree.set_bit_at(0, true);
-      ptr += 9;
-    } else {
-      ptr++;
+      current_tree.set_bit_and_parents_to_true(9);
     }
+    ptr += current_tree.num_cells();
   }
 
   // set up BSTM time trees
   int num_bstm_time_trees = ptr;
   blk->new_buffer(num_bstm_time_trees * time_tree_size, 3);
-  time_tree_b *time_trees =
+  time_tree_b *bstm_time_trees =
       &reinterpret_cast<time_tree_b &>(blk->get_buffer(3)[0]);
   for (int i = 0; i < num_bstm_time_trees; ++i) {
-    bstm_time_tree(time_trees[i]).set_data_ptr(i);
+    bstm_time_tree(bstm_time_trees[i]).set_data_ptr(i);
   }
 
   // set up data elements
@@ -611,7 +611,7 @@ void test_compute_trees_structure() {
   block_data_base appearance(num_bstm_time_trees, vcl_string("bstm_mog3_grey"));
 
   vcl_vector<bool> diffs =
-      dispatch_time_differences_from_bstm_trees(time_trees,
+      dispatch_time_differences_from_bstm_trees(bstm_time_trees,
                                                 trees,
                                                 num_regions,
                                                 &alpha,
@@ -621,6 +621,303 @@ void test_compute_trees_structure() {
                                                 0.01);
 
   compute_trees_structure(blk.ptr(), num_regions, diffs);
+
+  // The structure of the scene should now be as follows:
+  // At the top level, 1 space tree. The space tree should have only the 0'th
+  // leaf voxel refined, and and its parents.
+  // That leaf voxel should have a time tree
+  // divided into two sections: [0,16) and [16,32).
+
+  TEST("compute_trees_structure -- top level only has one region",
+       volume(num_regions),
+       1);
+
+  boct_bit_tree top_tree(&blk->get_buffer(0)[0]);
+  boct_bit_tree new_tree;
+  new_tree.set_bit_and_parents_to_true(9);
+  TEST("compute_trees_structure -- top tree has only corner refined",
+       boct_bit_tree::same_structure(top_tree, new_tree) &&
+           (top_tree.get_data_ptr() == 0),
+       true);
+
+  bool tt_good = true;
+  array_4d<time_tree_b> time_trees(
+      reinterpret_cast<time_tree_b *>(&(blk->get_buffer(1)[0])), 8, 8, 8, 1);
+  for (int i = 0; i < time_trees.size(); ++i) {
+    bstm_time_tree tt(time_trees[i]);
+    vcl_vector<int> leaves = tt.get_leaf_bits();
+    if (i == 0) {
+      tt_good &= (leaves.size() == 2);
+      tt_good &= (leaves[0] == 1 && leaves[1] == 2);
+    } else {
+      tt_good &= (leaves.size() == 1);
+      tt_good &= (leaves[0] == 0);
+    }
+  }
+  TEST("compute_trees_structure --  time trees above BSTM levels are correct",
+       tt_good,
+       true);
+
+  /* TEST COALESCE TREES  */
+  // now we need actual data buffers
+  bstm_time_tree last_bstm_tt(bstm_time_trees[num_bstm_time_trees - 1]);
+  vcl_size_t num_elements =
+      last_bstm_tt.get_data_ptr() + last_bstm_tt.num_leaves();
+  vcl_map<vcl_string, block_data_base *> datas;
+  datas["alpha"] = new block_data_base(num_elements, vcl_string("alpha"));
+  datas["bstm_mog3_grey"] =
+      new block_data_base(num_elements, vcl_string("bstm_mog3_grey"));
+  coalesce_trees(blk.ptr(), datas, num_regions, "bstm_mog3_grey");
+
+  // test first level - space trees
+  vcl_vector<int> top_time_trees_idxs;
+  vcl_vector<int> bstm_space_trees_idxs;
+  vcl_vector<int> bstm_time_trees_idxs;
+  {
+    vcl_vector<unsigned char> &top_space_buff = blk->get_buffer(0);
+    TEST("coalesce -- top space buffer has one tree",
+         top_space_buff.size(),
+         space_tree_size);
+    boct_bit_tree top_space_tree(
+        reinterpret_cast<space_tree_b &>(top_space_buff[0]));
+    vcl_vector<int> top_space_leaves = top_space_tree.get_leaf_bits();
+    // test leaf indices
+    bool top_space_level_good = true;
+    // correct data ptr
+    top_space_level_good &= (top_space_tree.get_data_ptr() == 0);
+    // only first 8 leaf voxels refined
+    for (int i = 0; i < top_space_leaves.size(); ++i) {
+      if (top_space_leaves[i] < 73) {
+        continue;
+      } else {
+        top_space_level_good &= (top_space_leaves[i] < 73 + 8);
+        top_time_trees_idxs.push_back(top_space_leaves[i] - 73);
+      }
+    }
+    TEST("coalesce - top space buffer tree is correct",
+         top_space_level_good,
+         true);
+  }
+
+  // test second level - time trees
+  {
+    bool top_time_level_good = true;
+    vcl_vector<unsigned char> &top_time_buff = blk->get_buffer(1);
+    TEST("coalesce -- top time buffer has correct number of trees",
+         top_time_buff.size(),
+         top_time_trees_idxs.size() * time_tree_size);
+    int child_ptr = 0;
+    for (int tt_idx = 0; tt_idx < top_time_trees_idxs.size(); ++tt_idx) {
+      int tt_ptr = top_time_trees_idxs[tt_idx];
+      bstm_time_tree top_time_tree(reinterpret_cast<time_tree_b &>(
+          top_time_buff[tt_ptr * time_tree_size]));
+      vcl_vector<int> top_time_leaves = top_time_tree.get_leaf_bits();
+      if (tt_idx == 0) {
+        top_time_level_good &= (top_time_leaves.size() == 2);
+      } else {
+        top_time_level_good &= (top_time_leaves.size() == 1);
+      }
+      top_time_level_good &= (child_ptr == top_time_tree.get_data_ptr());
+      child_ptr += top_time_leaves.size();
+      // add data ptr's of children (correspond to BSTM Space Trees)
+      for (int i = 0; i < top_time_leaves.size(); ++i) {
+        bstm_space_trees_idxs.push_back(
+            top_time_tree.get_data_index(top_time_leaves[i]));
+      }
+    }
+    TEST("coalesce -- top time buffer trees are correct",
+         top_time_level_good,
+         true);
+  }
+
+  // test BSTM space level trees
+  {
+    bool bstm_space_level_good = true;
+    vcl_vector<unsigned char> &bstm_space_buff = blk->get_buffer(2);
+    TEST("coalesce -- BSTM space buffer has correct number of trees",
+         bstm_space_buff.size(),
+         bstm_space_trees_idxs.size() * space_tree_size);
+    int child_ptr = 0;
+    for (int st_idx = 0; st_idx < bstm_space_trees_idxs.size(); ++st_idx) {
+      int st_ptr = bstm_space_trees_idxs[st_idx];
+      boct_bit_tree bstm_space_tree(reinterpret_cast<space_tree_b &>(
+          bstm_space_buff[st_ptr * space_tree_size]));
+      // get leaf indices -- we want to skip leaves that aren't on bottom level
+      vcl_vector<int> bstm_space_leaf_voxels;
+      {
+        vcl_vector<int> bstm_space_leaves = bstm_space_tree.get_leaf_bits();
+        for (int i = 0; i < bstm_space_leaves.size(); ++i) {
+          if (bstm_space_leaves[i] >= 73) {
+            bstm_space_leaf_voxels.push_back(bstm_space_leaves[i]);
+          }
+        }
+      }
+      if (st_idx == 0) {
+        bstm_space_level_good &= (bstm_space_leaf_voxels.size() == 8);
+      } else {
+        bstm_space_level_good &= (bstm_space_leaf_voxels.size() == 0);
+      }
+      bstm_space_level_good &= (bstm_space_tree.get_data_ptr() == child_ptr);
+      child_ptr += bstm_space_leaf_voxels.size();
+      // add data ptr's of children (correspond to BSTM Time Trees)
+      for (int i = 0; i < bstm_space_leaf_voxels.size(); ++i) {
+        bstm_time_trees_idxs.push_back(bstm_space_tree.get_data_ptr() + i);
+      }
+    }
+    TEST("coalesce -- bstm space level's trees are correct",
+         bstm_space_level_good,
+         true);
+  }
+
+  // test BSTM time level trees
+  {
+    bool bstm_time_level_good = true;
+    vcl_vector<unsigned char> &bstm_time_buff = blk->get_buffer(3);
+    TEST("coalesce -- BSTM timebuffer has correct number of trees",
+         bstm_time_buff.size(),
+         bstm_time_trees_idxs.size() * time_tree_size);
+
+    for (int tt_idx = 0; tt_idx < bstm_time_trees_idxs.size(); ++tt_idx) {
+      int tt_ptr = bstm_time_trees_idxs[tt_idx];
+      bstm_time_tree bstm_current_tt(reinterpret_cast<time_tree_b &>(
+          bstm_time_buff[tt_ptr * time_tree_size]));
+      // get leaf
+      vcl_vector<int> bstm_time_leaves = bstm_current_tt.get_leaf_bits();
+      bstm_time_level_good &= (bstm_time_leaves.size() == 1);
+      bstm_time_level_good &= (bstm_current_tt.get_data_ptr() == tt_idx);
+    }
+    TEST("coalesce -- bstm time level's trees are correct",
+         bstm_time_level_good,
+         true);
+  }
+
+  // test data elements
+  {
+    TEST("coalesce -- appropriate number of data elements",
+         datas["alpha"]->buffer_length(),
+         bstm_time_trees_idxs.size() *
+             bstm_data_traits<BSTM_ALPHA>::datasize());
+    TEST("coalesce -- appropriate number of data elements",
+         datas["bstm_mog3_grey"]->buffer_length(),
+         bstm_time_trees_idxs.size() *
+             bstm_data_traits<BSTM_MOG3_GREY>::datasize());
+  }
+
+  // display scene size
+  for (int i = 0; i < blk->buffers().size(); ++i) {
+    vcl_cout << "level " << i << ": " << blk->get_buffer(i).size() << vcl_endl;
+  }
+  vcl_cout << "original number of BSTM space trees: " << num_bstm_space_trees
+           << vcl_endl;
+  vcl_cout << "original number of BSTM time trees: " << num_bstm_time_trees
+           << vcl_endl;
+  vcl_cout << "alpha bytes: "
+           << num_bstm_time_trees * bstm_data_info::datasize("alpha")
+           << " became: " << datas["alpha"]->buffer_length() << vcl_endl;
+  vcl_cout << "appearance bytes: "
+           << num_bstm_time_trees * bstm_data_info::datasize("bstm_mog3_grey")
+           << " became: " << datas["bstm_mog3_grey"]->buffer_length()
+           << vcl_endl;
+}
+
+void test_fly_problem() {
+  /*  set up Multi-BSTM block  */
+  vcl_vector<space_time_enum> subdivs(4);
+  subdivs[0] = STE_SPACE;
+  subdivs[1] = STE_TIME;
+  subdivs[2] = STE_SPACE;
+  subdivs[3] = STE_TIME;
+  bstm_multi_block_metadata mdata(bstm_block_id(),
+                                  vgl_box_3d<double>(0, 0, 0, 1, 1, 1),
+                                  vcl_pair<double, double>(0, 1),
+                                  9000,
+                                  0.01,
+                                  subdivs);
+  bstm_multi_block_sptr blk = new bstm_multi_block(mdata);
+
+  /* Set up bstm blocks */
+  bstm_block_metadata bstm_mdata(
+      bstm_block_id(),
+      vgl_point_3d<double>(0, 0, 0),
+      0,
+      vgl_vector_3d<double>(1 / 8.0, 1 / 8.0, 1 / 8.0),
+      1 / 32.0,
+      vgl_vector_3d<unsigned>(8, 8, 8),
+      32,
+      1,
+      4,
+      9000,
+      .01);
+
+  int num_space_trees = 8 * 8 * 8;
+  char *bstm_space_buff = new char[num_space_trees * space_tree_size]();
+  bstm_block_sptr bstm_blk =
+      new bstm_block(bstm_mdata.id(), bstm_mdata, bstm_space_buff);
+
+  // temporary buffers that we grow as necessary, and then copy into final
+  // buffers
+  vcl_vector<time_tree_b> bstm_time_trees;
+  vcl_vector<bstm_data_traits<BSTM_ALPHA>::datatype> alpha;
+  vcl_vector<bstm_data_traits<BSTM_MOG3_GREY>::datatype> appearance;
+
+  // refine space trees - refine a point diagonally across each space tree over
+  // time
+  boxm2_array_3d<space_tree_b> bstm_space_trees(
+      8, 8, 8, reinterpret_cast<space_tree_b *>(bstm_space_buff));
+  for (int i = 0; i < 8; ++i) {
+    boct_bit_tree current_tree(bstm_space_trees(i, i, i));
+    // leaf idxs of refined points - these will actually have non-empty time
+    // trees
+    vcl_vector<int> refined_idxs;
+    // as it happens all these indexes are in increasing order.
+    for (int j = 0; j < 4; ++j) {
+      int idx = current_tree.traverse(
+          vgl_point_3d<double>(2 * j / 8.0, 2 * j / 8.0, 2 * j / 8.0), 4, true);
+      current_tree.set_bit_and_parents_to_true(current_tree.parent_index(idx));
+      refined_idxs.push_back(idx);
+    }
+
+    // set up time trees
+    vcl_vector<int>::const_iterator idxs_iter = refined_idxs.begin();
+    vcl_vector<int> cell_bits = current_tree.get_cell_bits();
+    for (int cell_idx = 0; cell_idx < cell_bits.size(); ++cell_idx) {
+      bstm_time_trees.push_back(time_tree_b((unsigned char)0));
+      int cell = cell_bits[cell_idx];
+      if (idxs_iter != refined_idxs.end() && cell == *idxs_iter) {
+        // this time tree should be refined
+        bstm_time_tree tt(bstm_time_trees.back());
+        bool frames[32] = {};
+        for (int j = 0; j < 4; ++j) {
+          int f = i * 4 + j;
+          frames[f] = true;
+          // mark next frame as different as well, where applicable
+          if (f + 1 < 32) {
+            frames[f + 1] = true;
+          }
+        }
+        tt.fill_cells(frames);
+
+        // now create data elements accordingly
+
+        idxs_iter++;
+      }
+    }
+  }
+
+  // bstm_time_block_sptr bstm_blk_t =
+  //     new bstm_time_block(bstm_block_id(), bstm_mdata, num_time_trees);
+
+  // /* Set up data buffers */
+  // vcl_size_t alpha_size = bstm_data_traits<BSTM_ALPHA>::datasize();
+  // vcl_size_t app_size = bstm_data_traits<BSTM_MOG3_GREY>::datasize();
+  // bstm_data_base_sptr alpha =
+  //     new bstm_data_base(num_data_elements, "alpha", bstm_mdata.id());
+  // block_data_base_sptr alpha_new = new block_data_base(0);
+  // vcl_string appearance_type = bstm_data_traits<BSTM_MOG3_GREY>::prefix();
+  // bstm_data_base_sptr appearance =
+  //     new bstm_data_base(num_data_elements, appearance_type,
+  //     bstm_mdata.id());
+  // block_data_base_sptr appearance_new = new block_data_base(0);
 }
 
 void test_bstm_to_multi_bstm_block_function() {
@@ -631,11 +928,11 @@ void test_bstm_to_multi_bstm_block_function() {
   test_time_differences_from_bstm_trees();
   test_make_unrefined_space_tree();
   test_make_unrefined_time_tree();
-  test_compute_trees_structure();
-  // test_coalesce_trees();
+  test_compute_and_coalesce_trees();
 
   // test empty scene
   // test actual BSTM scene
+  test_fly_problem();
 }
 
 TESTMAIN(test_bstm_to_multi_bstm_block_function);

@@ -21,8 +21,6 @@ correspond to a 4D scene or any other type of scene.
 
 Multi-BSTM is still incomplete. The following needs to be done:
 
-- Basic processes for creating and managing scenes
-- Code & processes for conversion of BOXM2/BSTM scenes into Multi-BSTM
 - Code & processes for rendering
 - Benchmarks comparing performance to BSTM
 
@@ -31,6 +29,9 @@ Multi-BSTM is still incomplete. The following needs to be done:
   node. Need to check data values before coalescing.
 
 - Un-refining of original BSTM space trees after time trees are split up
+
+- Choose level types (i.e. space or time) intelligently at each
+  level. Perhaps a greedy algorithm?
 
 ### minor things ###
 
@@ -57,6 +58,7 @@ Multi-BSTM is still incomplete. The following needs to be done:
     don't point to actual data..)
   - BSTM space trees store time trees at inner nodes(?) but multi-BSTM space trees do not.
 
+ - buffers are `std::vectors`, and so may have excess capacity.
 
 ### random technical notes (will have to put these somewhere) ###
 

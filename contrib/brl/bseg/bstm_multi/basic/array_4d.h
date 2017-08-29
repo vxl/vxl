@@ -5,7 +5,7 @@
 #include <vcl_cstdlib.h>
 
 #include <vgl/vgl_vector_3d.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_vector_fixed.hxx>
 
 typedef vnl_vector_fixed<vcl_size_t, 4> index_4d;
 

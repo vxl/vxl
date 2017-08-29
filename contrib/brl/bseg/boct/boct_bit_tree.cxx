@@ -699,7 +699,7 @@ float boct_bit_tree::centerZ[] = {
     0.9375, 0.8125, 0.8125, 0.8125, 0.8125, 0.9375, 0.9375, 0.9375, 0.9375};
 
 //------ I/O ----------------------------------------------------------
-std::ostream &operator<<(std::ostream &s, boct_bit_tree &t) {
+std::ostream &operator<<(std::ostream &s, const boct_bit_tree &t) {
   s << "boct_bit_tree:\n"
     << "Tree bits:\n"
     << "depth 0: " << (int)(t.bit_at(0)) << '\n';
