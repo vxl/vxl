@@ -8,6 +8,7 @@
 #include <testlib/testlib_test.h>
 
 #include <vbl/vbl_smart_ptr.hxx>
+#include <vbl/vbl_triple.hxx>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_utility.h>
@@ -16,6 +17,59 @@
 #include <bstm/bstm_data.h>
 
 #include <bstm_multi/cpp/algo/bstm_multi_bstm_block_to_bstm_multi_block_function.h>
+
+template <bstm_data_type ALPHA, bstm_data_type APPEARANCE>
+struct voxel_functor {
+  typedef vcl_pair<typename bstm_data_traits<ALPHA>::datatype,
+                   typename bstm_data_traits<APPEARANCE>::datatype> (
+      *fptr_type)(index_4d);
+};
+
+template <bstm_data_type ALPHA, bstm_data_type APPEARANCE>
+vbl_triple<bstm_block *,
+           bstm_time_block *,
+           vcl_map<vcl_string, bstm_data_base *> >
+bstm_scene_from_point_func(
+    const bstm_block_metadata &mdata,
+    typename voxel_functor<ALPHA, APPEARANCE>::fptr_type f) {
+  typedef typename bstm_data_traits<ALPHA>::datatype alpha_t;
+  typedef typename bstm_data_traits<APPEARANCE>::datatype appearance_t;
+
+  bstm_block *blk = new bstm_block(mdata);
+  vcl_vector<time_tree_b> time_trees;
+  vcl_vector<alpha_t> alpha;
+  vcl_vector<appearance_t> appearance;
+  boxm2_array_3d<space_tree_b> &space_trees = blk->trees();
+  int num_time_intervals = mdata.sub_block_num_t_;
+  for (int space_idx = 0; space_idx < space_trees.size(); ++space_idx) {
+    vcl_size_t x, y, z;
+    space_trees.coords_from_index(space_idx, x, y, z);
+    boct_bit_tree current_tree(space_trees(x, y, z));
+    current_tree.set_data_ptr(time_trees.size() / num_time_intervals);
+
+    // refine bits of current space tree
+    for (int st_x = 0; st_x < 8; ++st_x) {
+      for (int st_y = 0; st_y < 8; ++st_y) {
+        for (int st_z = 0; st_z < 8; ++st_z) {
+          bool space_cell_refined = false;
+          vcl_vector<bool> frames_refined(32 * num_time_intervals, false);
+          vcl_vector<alpha_t> cell_alphas(frames_refined.size(), false);
+          vcl_vector<appearance_t> cell_appearances(frames_refined.size(),
+                                                    false);
+          for (int t = 0; t < num_time_intervals * 32; ++t) {
+            vcl_pair<alpha_t, appearance_t> voxel_data =
+                f(index_4d(x * 8 + st_x, y * 8 + st_y, z * 8 + st_z, t));
+            cell_alphas[t] = voxel_data.first;
+            cell_appearances[t] = voxel_data.second;
+            if (voxel_data.first > 0) {
+              frames_refined[t] = true;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 void test_volume() {
   vcl_pair<vgl_vector_3d<int>, int> region(vgl_vector_3d<int>(2, 3, 4), 5);
@@ -428,7 +482,8 @@ void test_time_differences_from_bstm_trees() {
       time_tree.set_data_ptr(i);
     }
 
-    // set up differences in alpha and appearance - first and last cells should
+    // set up differences in alpha and appearance - first and last cells
+    // should
     // be different
     alpha_wrap[1] = 1.0;
     alpha_wrap[alpha_wrap.size() - 1] = 1.0;
@@ -475,7 +530,8 @@ void test_make_unrefined_time_tree() {
   }
   {
     bstm_time_tree t;
-    // three sets of time trees, but 't' corresponds to the middle one, index=1
+    // three sets of time trees, but 't' corresponds to the middle one,
+    // index=1
     vcl_vector<bool> diffs(32 * 3, false);
     diffs[32 + 16] = true;
     make_unrefined_time_tree(t, 1, diffs);
@@ -485,7 +541,8 @@ void test_make_unrefined_time_tree() {
   }
   {
     bstm_time_tree t;
-    // three sets of time trees, but 't' corresponds to the middle one, index=1
+    // three sets of time trees, but 't' corresponds to the middle one,
+    // index=1
     vcl_vector<bool> diffs(32 * 3, false);
     vcl_fill(diffs.begin(), diffs.end(), true);
     make_unrefined_time_tree(t, 1, diffs);
@@ -532,7 +589,8 @@ void test_make_unrefined_space_tree() {
     boct_bit_tree(current_children_start + space_tree_size * 2)
         .set_bit_at(0, 1);
 
-    // first two cells (in row major order) should be refined, as well as their
+    // first two cells (in row major order) should be refined, as well as
+    // their
     // parents ofc.
 
     bool res = make_unrefined_space_tree(
@@ -562,7 +620,8 @@ void test_make_unrefined_space_tree() {
   }
 }
 
-//: Tests compute_tree_structure and coalesce_trees for a sample scene, that is
+//: Tests compute_tree_structure and coalesce_trees for a sample scene, that
+// is
 // the output of convert_bstm_trees.
 void test_compute_and_coalesce_trees() {
   vcl_vector<space_time_enum> subdivs(4);
@@ -585,7 +644,8 @@ void test_compute_and_coalesce_trees() {
   blk->new_buffer(num_bstm_space_trees * space_tree_size, 2);
   vcl_vector<unsigned char> &bstm_space_buffer = blk->get_buffer(2);
   space_tree_b *trees = &reinterpret_cast<space_tree_b &>(bstm_space_buffer[0]);
-  // for first 16 time intervals, refine top corner (0,0,0,t) of scene. For rest
+  // for first 16 time intervals, refine top corner (0,0,0,t) of scene. For
+  // rest
   // of time, keep it unrefined.
   int ptr = 0;
   for (int i = 0; i < bstm_space_buffer.size() / space_tree_size; ++i) {
@@ -742,7 +802,8 @@ void test_compute_and_coalesce_trees() {
       int st_ptr = bstm_space_trees_idxs[st_idx];
       boct_bit_tree bstm_space_tree(reinterpret_cast<space_tree_b &>(
           bstm_space_buff[st_ptr * space_tree_size]));
-      // get leaf indices -- we want to skip leaves that aren't on bottom level
+      // get leaf indices -- we want to skip leaves that aren't on bottom
+      // level
       vcl_vector<int> bstm_space_leaf_voxels;
       {
         vcl_vector<int> bstm_space_leaves = bstm_space_tree.get_leaf_bits();
@@ -860,64 +921,134 @@ void test_fly_problem() {
   vcl_vector<bstm_data_traits<BSTM_ALPHA>::datatype> alpha;
   vcl_vector<bstm_data_traits<BSTM_MOG3_GREY>::datatype> appearance;
 
-  // refine space trees - refine a point diagonally across each space tree over
+  // refine space trees - refine a point diagonally across each space tree
+  // over
   // time
   boxm2_array_3d<space_tree_b> bstm_space_trees(
       8, 8, 8, reinterpret_cast<space_tree_b *>(bstm_space_buff));
-  for (int i = 0; i < 8; ++i) {
-    boct_bit_tree current_tree(bstm_space_trees(i, i, i));
-    // leaf idxs of refined points - these will actually have non-empty time
-    // trees
-    vcl_vector<int> refined_idxs;
-    // as it happens all these indexes are in increasing order.
-    for (int j = 0; j < 4; ++j) {
-      int idx = current_tree.traverse(
-          vgl_point_3d<double>(2 * j / 8.0, 2 * j / 8.0, 2 * j / 8.0), 4, true);
-      current_tree.set_bit_and_parents_to_true(current_tree.parent_index(idx));
-      refined_idxs.push_back(idx);
-    }
 
-    // set up time trees
-    vcl_vector<int>::const_iterator idxs_iter = refined_idxs.begin();
-    vcl_vector<int> cell_bits = current_tree.get_cell_bits();
-    for (int cell_idx = 0; cell_idx < cell_bits.size(); ++cell_idx) {
-      bstm_time_trees.push_back(time_tree_b((unsigned char)0));
-      int cell = cell_bits[cell_idx];
-      if (idxs_iter != refined_idxs.end() && cell == *idxs_iter) {
-        // this time tree should be refined
-        bstm_time_tree tt(bstm_time_trees.back());
-        bool frames[32] = {};
-        for (int j = 0; j < 4; ++j) {
-          int f = i * 4 + j;
-          frames[f] = true;
-          // mark next frame as different as well, where applicable
-          if (f + 1 < 32) {
-            frames[f + 1] = true;
+  for (int space_idx = 0; space_idx < bstm_space_trees.size(); ++space_idx) {
+    // check if tree is along diagonal
+    vcl_size_t x, y, z;
+    bstm_space_trees.coords_from_index(space_idx, x, y, z);
+    boct_bit_tree current_tree(bstm_space_trees(x, y, z));
+    current_tree.set_data_ptr(bstm_time_trees.size() / 32);
+    if (x == y && y == z) {
+      int i = x;
+      // leaf idxs of refined points - these will actually have non-empty time
+      // trees
+      vcl_vector<int> refined_idxs;
+      // as it happens all these indexes are in increasing order.
+      for (int j = 0; j < 8; ++j) {
+        int idx = current_tree.traverse(
+            vgl_point_3d<double>(j / 8.0, j / 8.0, j / 8.0), 4, true);
+        current_tree.set_bit_and_parents_to_true(
+            current_tree.parent_index(idx));
+        refined_idxs.push_back(idx);
+      }
+
+      // set up time trees
+      vcl_vector<int>::const_iterator idxs_iter = refined_idxs.begin();
+      vcl_vector<int> cell_bits = current_tree.get_cell_bits();
+      for (int cell_idx = 0; cell_idx < cell_bits.size(); ++cell_idx) {
+        int cell = cell_bits[cell_idx];
+        bool is_refined_cell = false;
+        int cell_pos; // position in space tree of cell, along diagonal, in
+                      // [0,8).
+        if (idxs_iter != refined_idxs.end() && cell == *idxs_iter) {
+          cell_pos = vcl_distance(static_cast<vcl_vector<int>::const_iterator>(
+                                      refined_idxs.begin()),
+                                  idxs_iter);
+          ++idxs_iter;
+          is_refined_cell = true;
+        }
+        // create 32 time trees for cell
+        for (int tt_idx = 0; tt_idx < 32; ++tt_idx) {
+          bstm_time_trees.push_back(time_tree_b((unsigned char)0));
+          bstm_time_tree tt(bstm_time_trees.back());
+          tt.set_data_ptr(alpha.size());
+
+          // check if this time tree should be refined
+          bool is_refined_tt =
+              is_refined_cell && ((i * 8 + cell_pos) / 2 == tt_idx);
+          bool frames[32] = {};
+          frames[0] = frames[1] = frames[16] = frames[17] = is_refined_tt;
+          tt.fill_cells(frames);
+
+          // now create data elements accordingly
+          vcl_vector<int> tt_leaves = tt.get_leaf_bits();
+          for (vcl_vector<int>::const_iterator tt_leaf_iter = tt_leaves.begin();
+               tt_leaf_iter != tt_leaves.end();
+               ++tt_leaf_iter) {
+            int frame = *tt_leaf_iter - 31;
+
+            // data element is non-zero if it corresponds to a refined point
+            bool is_refined_frame =
+                is_refined_tt && (frame == 0 || frame == 16);
+            alpha.push_back(is_refined_frame ? 1.0 : 0.0);
+            appearance.push_back(bstm_data_traits<BSTM_MOG3_GREY>::datatype(
+                (unsigned char)(is_refined_frame ? 128 : 0)));
           }
         }
-        tt.fill_cells(frames);
-
-        // now create data elements accordingly
-
-        idxs_iter++;
+      }
+    } else {
+      // if not along diagonal, make this tree empty and add 32 time trees
+      // & data elements.
+      for (int t = 0; t < 32; ++t) {
+        bstm_time_trees.push_back(time_tree_b((unsigned char)0));
+        bstm_time_tree(bstm_time_trees.back()).set_data_ptr(alpha.size());
+        alpha.push_back(0.0);
+        appearance.push_back(
+            bstm_data_traits<BSTM_MOG3_GREY>::datatype((unsigned char)0));
       }
     }
   }
 
-  // bstm_time_block_sptr bstm_blk_t =
-  //     new bstm_time_block(bstm_block_id(), bstm_mdata, num_time_trees);
+  // copy time tree and data buffers
+  vcl_size_t time_buff_size = bstm_time_trees.size() * time_tree_size;
+  char *time_buffer = new char[time_buff_size];
+  vcl_memcpy(time_buffer, &(bstm_time_trees[0]), time_buff_size);
+  bstm_time_block_sptr bstm_blk_t = new bstm_time_block(
+      bstm_block_id(), bstm_mdata, time_buffer, time_buff_size);
 
-  // /* Set up data buffers */
-  // vcl_size_t alpha_size = bstm_data_traits<BSTM_ALPHA>::datasize();
-  // vcl_size_t app_size = bstm_data_traits<BSTM_MOG3_GREY>::datasize();
-  // bstm_data_base_sptr alpha =
-  //     new bstm_data_base(num_data_elements, "alpha", bstm_mdata.id());
-  // block_data_base_sptr alpha_new = new block_data_base(0);
-  // vcl_string appearance_type = bstm_data_traits<BSTM_MOG3_GREY>::prefix();
-  // bstm_data_base_sptr appearance =
-  //     new bstm_data_base(num_data_elements, appearance_type,
-  //     bstm_mdata.id());
-  // block_data_base_sptr appearance_new = new block_data_base(0);
+  vcl_size_t alpha_buff_size =
+      alpha.size() * bstm_data_traits<BSTM_ALPHA>::datasize();
+  char *alpha_buffer = new char[alpha_buff_size];
+  vcl_memcpy(alpha_buffer, &(alpha[0]), alpha_buff_size);
+
+  vcl_size_t appearance_buff_size =
+      appearance.size() * bstm_data_traits<BSTM_MOG3_GREY>::datasize();
+  char *appearance_buffer = new char[appearance_buff_size];
+  vcl_memcpy(appearance_buffer, &(appearance[0]), appearance_buff_size);
+
+  vcl_map<vcl_string, bstm_data_base *> bstm_datas;
+  vcl_map<vcl_string, block_data_base *> datas;
+
+  bstm_datas["alpha"] =
+      new bstm_data_base(alpha_buffer, alpha_buff_size, bstm_blk->block_id());
+  bstm_datas["bstm_mog3_grey"] = new bstm_data_base(
+      appearance_buffer, appearance_buff_size, bstm_blk->block_id());
+  datas["alpha"] = new block_data_base(0);
+  datas["bstm_mog3_grey"] = new block_data_base(0);
+
+  vcl_cout << "********** " << bstm_space_trees.size() << ", "
+           << bstm_time_trees.size() << ", " << alpha.size() << ", "
+           << appearance.size() << vcl_endl;
+
+  bstm_block_to_bstm_multi_block(blk.ptr(),
+                                 datas,
+                                 bstm_blk.ptr(),
+                                 bstm_blk_t.ptr(),
+                                 bstm_datas,
+                                 0.01,
+                                 0.01);
+
+  vcl_cout << "********** " << vcl_endl;
+  for (int i = 0; i < blk->buffers().size(); ++i) {
+    vcl_cout << blk->get_buffer(i).size() /
+                    tree_size(blk->metadata().subdivisions_[i])
+             << vcl_endl;
+  }
 }
 
 void test_bstm_to_multi_bstm_block_function() {

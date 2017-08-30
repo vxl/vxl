@@ -341,7 +341,7 @@ void coalesce_trees(bstm_multi_block *blk,
 
 bool bstm_block_to_bstm_multi_block(
     bstm_multi_block *blk,
-    const vcl_map<vcl_string, block_data_base *> &datas,
+    vcl_map<vcl_string, block_data_base *> &datas,
     bstm_block *bstm_blk,
     bstm_time_block *bstm_blk_t,
     const vcl_map<vcl_string, bstm_data_base *> &bstm_datas,

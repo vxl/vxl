@@ -84,7 +84,7 @@ public:
 
   index_4d coords_from_index(vcl_size_t idx) const {
     index_4d coords;
-    ldiv_t div = vcl_div(static_cast<long>(idx), (y_ * z_ * t_));
+    ldiv_t div = vcl_ldiv((idx), (y_ * z_ * t_));
     coords[0] = div.quot;
     div = vcl_div(div.rem, (z_ * t_));
     coords[1] = div.quot;
