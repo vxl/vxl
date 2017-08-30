@@ -47,8 +47,8 @@ class vgl_pointset_3d
   }
   //: accessors
   bool has_normals() const {return has_normals_;}
-  size_t npts() const {points_.size();}
-  size_t size() const {points_.size();}
+  size_t npts() const {return points_.size();}
+  size_t size() const {return points_.size();}
   vgl_point_3d<Type> p(unsigned i) const {return points_[i];}
   vgl_vector_3d<Type> n(unsigned i) const
   {if(has_normals_) return normals_[i]; return vgl_vector_3d<Type>();}
