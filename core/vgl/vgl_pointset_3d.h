@@ -47,7 +47,8 @@ class vgl_pointset_3d
   }
   //: accessors
   bool has_normals() const {return has_normals_;}
-  unsigned npts() const {return static_cast<unsigned>(points_.size());}
+  size_t npts() const {points_.size();}
+  size_t size() const {points_.size();}
   vgl_point_3d<Type> p(unsigned i) const {return points_[i];}
   vgl_vector_3d<Type> n(unsigned i) const
   {if(has_normals_) return normals_[i]; return vgl_vector_3d<Type>();}
@@ -162,7 +163,7 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
           }
         }
         // three values have two separating commas
-        has_normals = comma_count > 2;
+        has_normals = comma_count >= 5;
         first_line = false;
       }else{
         // scan in the file line by line
