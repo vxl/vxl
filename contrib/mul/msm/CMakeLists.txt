@@ -38,6 +38,7 @@ set(msm_sources
   msm_pose_maker.h            msm_pose_maker.cxx
 
   msm_cubic_bezier.h          msm_cubic_bezier.cxx
+  msm_equally_space.h         msm_equally_space.cxx
 )
 
 aux_source_directory(Templates msm_sources)
