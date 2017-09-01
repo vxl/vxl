@@ -18,11 +18,24 @@
 
 #include <bstm_multi/cpp/algo/bstm_multi_bstm_block_to_bstm_multi_block_function.h>
 
+/* A function for creating a BSTM scene, given a function that
+   represents the data for each voxel. Useful for creting artifical
+   BSTM Scenes for testing.
+
+   TODO: doesn't quite match up with the results from test_fly_problem
+   (different numbers of data elements, although tree counts are the
+   same.) so may not be fully correct.
+
+   Also, this is rather slow. It might help to have another function
+   to specify whether a space tree is entirely empty so we can skip
+   it.
+ */
+
 template <bstm_data_type ALPHA, bstm_data_type APPEARANCE>
 struct voxel_functor {
   typedef vcl_pair<typename bstm_data_traits<ALPHA>::datatype,
                    typename bstm_data_traits<APPEARANCE>::datatype> (
-      *fptr_type)(index_4d);
+      *fptr_type)(const index_4d &);
 };
 
 template <bstm_data_type ALPHA, bstm_data_type APPEARANCE>
@@ -31,7 +44,9 @@ vbl_triple<bstm_block *,
            vcl_map<vcl_string, bstm_data_base *> >
 bstm_scene_from_point_func(
     const bstm_block_metadata &mdata,
-    typename voxel_functor<ALPHA, APPEARANCE>::fptr_type f) {
+    typename voxel_functor<ALPHA, APPEARANCE>::fptr_type f,
+    double p_threshold = 0.01,
+    double app_threshold = 0.01) {
   typedef typename bstm_data_traits<ALPHA>::datatype alpha_t;
   typedef typename bstm_data_traits<APPEARANCE>::datatype appearance_t;
 
@@ -51,24 +66,107 @@ bstm_scene_from_point_func(
     for (int st_x = 0; st_x < 8; ++st_x) {
       for (int st_y = 0; st_y < 8; ++st_y) {
         for (int st_z = 0; st_z < 8; ++st_z) {
-          bool space_cell_refined = false;
-          vcl_vector<bool> frames_refined(32 * num_time_intervals, false);
-          vcl_vector<alpha_t> cell_alphas(frames_refined.size(), false);
-          vcl_vector<appearance_t> cell_appearances(frames_refined.size(),
-                                                    false);
+          int space_cell_idx = current_tree.traverse(
+              vgl_point_3d<double>(st_x / 8.0, st_y / 8.0, st_z / 8.0),
+              4,
+              true);
           for (int t = 0; t < num_time_intervals * 32; ++t) {
             vcl_pair<alpha_t, appearance_t> voxel_data =
                 f(index_4d(x * 8 + st_x, y * 8 + st_y, z * 8 + st_z, t));
-            cell_alphas[t] = voxel_data.first;
-            cell_appearances[t] = voxel_data.second;
             if (voxel_data.first > 0) {
-              frames_refined[t] = true;
+              current_tree.set_bit_and_parents_to_true(
+                  current_tree.parent_index(space_cell_idx));
+              break;
             }
           }
         }
       }
     }
+
+    vcl_vector<int> cells = current_tree.get_cell_bits();
+    for (int i = 0; i < cells.size(); ++i) {
+      int cell_idx = cells[i];
+      if (cell_idx >= 73) {
+        vgl_point_3d<double> p = current_tree.cell_box(cell_idx).min_point();
+        int st_x = p.x() * 8;
+        int st_y = p.y() * 8;
+        int st_z = p.z() * 8;
+        for (int tt_idx = 0; tt_idx < num_time_intervals; ++tt_idx) {
+          // initialize time tree
+          time_trees.push_back(time_tree_b());
+          bstm_time_tree tt(time_trees.back());
+          tt.set_data_ptr(alpha.size());
+
+          bool diffs[32]; // whether each frame is different from the last
+          alpha_t alpha_frames[32];
+          appearance_t appearance_frames[32];
+          // get data for each frame
+          for (int t = 0; t < 32; ++t) {
+            // TODO find clean way to do this w/o calling f twice.
+            vcl_pair<alpha_t, appearance_t> voxel_data = f(index_4d(
+                x * 8 + st_x, y * 8 + st_y, z * 8 + st_z, 32 * tt_idx + t));
+            alpha_frames[t] = voxel_data.first;
+            appearance_frames[t] = voxel_data.second;
+            if (t > 0) {
+              diffs[t] = !is_similar<APPEARANCE>(appearance_frames[t - 1],
+                                                 appearance_frames[t],
+                                                 alpha_frames[t - 1],
+                                                 alpha_frames[t],
+                                                 p_threshold,
+                                                 app_threshold);
+            }
+          }
+          tt.fill_cells(diffs);
+          vcl_vector<int> tt_leaves = tt.get_leaf_bits();
+          for (vcl_vector<int>::const_iterator tt_leaf_iter = tt_leaves.begin();
+               tt_leaf_iter != tt_leaves.end();
+               ++tt_leaf_iter) {
+            if (*tt_leaf_iter < 31) {
+              alpha.push_back(alpha_t(0));
+              appearance.push_back(appearance_t((unsigned char)0));
+            } else {
+              int t = *tt_leaf_iter - 31;
+              alpha.push_back(alpha_frames[t]);
+              appearance.push_back(appearance_frames[t]);
+            }
+          }
+        }
+      } else {
+        // add empty time trees and data elements to this non-leaf cell
+        for (int tt_idx = 0; tt_idx < num_time_intervals; ++tt_idx) {
+          time_trees.push_back(time_tree_b((unsigned char)0));
+          bstm_time_tree(time_trees.back()).set_data_ptr(alpha.size());
+          alpha.push_back(alpha_t(0));
+          appearance.push_back(appearance_t((unsigned char)0));
+        }
+      }
+    }
   }
+
+  vcl_size_t time_buff_size = time_trees.size() * time_tree_size;
+  char *time_buffer = new char[time_buff_size];
+  vcl_memcpy(time_buffer, &(time_trees[0]), time_buff_size);
+  bstm_time_block *blk_t =
+      new bstm_time_block(bstm_block_id(), mdata, time_buffer, time_buff_size);
+
+  vcl_size_t alpha_buff_size =
+      alpha.size() * bstm_data_traits<BSTM_ALPHA>::datasize();
+  char *alpha_buffer = new char[alpha_buff_size];
+  vcl_memcpy(alpha_buffer, &(alpha[0]), alpha_buff_size);
+
+  vcl_size_t appearance_buff_size =
+      appearance.size() * bstm_data_traits<BSTM_MOG3_GREY>::datasize();
+  char *appearance_buffer = new char[appearance_buff_size];
+  vcl_memcpy(appearance_buffer, &(appearance[0]), appearance_buff_size);
+
+  vcl_map<vcl_string, bstm_data_base *> datas;
+
+  datas["alpha"] =
+      new bstm_data_base(alpha_buffer, alpha_buff_size, blk->block_id());
+  datas["bstm_mog3_grey"] = new bstm_data_base(
+      appearance_buffer, appearance_buff_size, blk->block_id());
+
+  return vbl_make_triple(blk, blk_t, datas);
 }
 
 void test_volume() {
@@ -1049,6 +1147,81 @@ void test_fly_problem() {
                     tree_size(blk->metadata().subdivisions_[i])
              << vcl_endl;
   }
+  vcl_cout << datas["alpha"]->buffer_length() /
+                  bstm_data_traits<BSTM_ALPHA>::datasize()
+           << vcl_endl;
+}
+
+vcl_pair<bstm_data_traits<BSTM_ALPHA>::datatype,
+         bstm_data_traits<BSTM_MOG3_GREY>::datatype>
+fly_scene_generate(const index_4d &coords) {
+  if (coords[0] == coords[1] && coords[1] == coords[2]) {
+    if (coords[3] % 16 == 0 && coords[3] / 16 == coords[0]) {
+      vcl_cout << coords << vcl_endl;
+      return vcl_make_pair(1, (unsigned char)128);
+    }
+  }
+  return vcl_make_pair(0, (unsigned char)0);
+}
+
+void test_fly_problem2() {
+  /*  set up Multi-BSTM block  */
+  vcl_vector<space_time_enum> subdivs(4);
+  subdivs[0] = STE_SPACE;
+  subdivs[1] = STE_TIME;
+  subdivs[2] = STE_SPACE;
+  subdivs[3] = STE_TIME;
+  bstm_multi_block_metadata mdata(bstm_block_id(),
+                                  vgl_box_3d<double>(0, 0, 0, 1, 1, 1),
+                                  vcl_pair<double, double>(0, 1),
+                                  9000,
+                                  0.01,
+                                  subdivs);
+  bstm_multi_block_sptr blk = new bstm_multi_block(mdata);
+  vcl_map<vcl_string, block_data_base *> datas;
+  datas["alpha"] = new block_data_base(0);
+  datas["bstm_mog3_grey"] = new block_data_base(0);
+
+  bstm_block_metadata bstm_mdata(
+      bstm_block_id(),
+      vgl_point_3d<double>(0, 0, 0),
+      0,
+      vgl_vector_3d<double>(1 / 8.0, 1 / 8.0, 1 / 8.0),
+      1 / 32.0,
+      vgl_vector_3d<unsigned>(8, 8, 8),
+      32,
+      1,
+      4,
+      9000,
+      .01);
+
+  vbl_triple<bstm_block *,
+             bstm_time_block *,
+             vcl_map<vcl_string, bstm_data_base *> >
+      bstm_values = bstm_scene_from_point_func<BSTM_ALPHA, BSTM_MOG3_GREY>(
+          bstm_mdata, fly_scene_generate);
+
+  vcl_cout << "********** " << bstm_values.first->trees().size() << ", "
+           << bstm_values.second->time_trees().size() << ", "
+           << bstm_values.third["alpha"]->buffer_length() << vcl_endl;
+
+  bstm_block_to_bstm_multi_block(blk.ptr(),
+                                 datas,
+                                 bstm_values.first,
+                                 bstm_values.second,
+                                 bstm_values.third,
+                                 0.01,
+                                 0.01);
+
+  vcl_cout << "********** " << vcl_endl;
+  for (int i = 0; i < blk->buffers().size(); ++i) {
+    vcl_cout << blk->get_buffer(i).size() /
+                    tree_size(blk->metadata().subdivisions_[i])
+             << vcl_endl;
+  }
+  vcl_cout << datas["alpha"]->buffer_length() /
+                  bstm_data_traits<BSTM_ALPHA>::datasize()
+           << vcl_endl;
 }
 
 void test_bstm_to_multi_bstm_block_function() {
@@ -1062,8 +1235,10 @@ void test_bstm_to_multi_bstm_block_function() {
   test_compute_and_coalesce_trees();
 
   // test empty scene
+
   // test actual BSTM scene
   test_fly_problem();
+  // test_fly_problem2();
 }
 
 TESTMAIN(test_bstm_to_multi_bstm_block_function);

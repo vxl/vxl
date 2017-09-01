@@ -1,7 +1,6 @@
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
 set(bstm_multi_cpp_algo_sources
-    bstm_multi_ingest_boxm2_scene_function.h bstm_multi_ingest_boxm2_scene_function.cxx
     bstm_multi_bstm_block_to_bstm_multi_block_function.h bstm_multi_bstm_block_to_bstm_multi_block_function.cxx)
 
 aux_source_directory(Templates bstm_multi_cpp_algo_sources)

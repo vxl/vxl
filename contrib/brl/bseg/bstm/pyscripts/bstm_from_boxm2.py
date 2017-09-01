@@ -1,6 +1,7 @@
 import glob
 import os
 import argparse
+import math
 
 from bstm_scene_adaptor import bstm_scene_adaptor
 import bstm_adaptor as bstm
@@ -176,11 +177,21 @@ def main():
 
     bstm_scene = bstm_scene_adaptor(scene_file, "gpu0")
     for i, frame_dir in enumerate(boxm2_frames):
+        theta = 6.28 * float(i) / len(boxm2_frames)
+        render_cam = vpgl.create_perspective_camera(scale=[2000, 2000],
+                                                    ppoint=ppoint,
+                                                    center=[
+                                                        6.5 * math.sin(theta), 6.5 * math.cos(theta), theta / 3],
+                                                    look_pt=[0, 0, 1.0],
+                                                    up=[0, 0, 1]
+                                                    )
+        print "***** %s" % ([
+            5 * math.sin(theta), 5 * math.cos(theta), 0],)
         print "***** INGESTING FRAME %s" % frame_dir
         boxm2_scene_file = os.path.join(frame_dir, args.boxm2_scene_filename)
         boxm2_scene, boxm2_cpu_cache, boxm2_device, boxm2_opencl_cache = boxm2_load_opencl(
             boxm2_scene_file, "gpu0")
-        bstm_scene.ingest_boxm2_scene(boxm2_scene, boxm2_cpu_cache, i)
+        # bstm_scene.ingest_boxm2_scene(boxm2_scene, boxm2_cpu_cache, i)
 
         # render BSTM scene
         exp_img, vis_img = bstm_scene.render(

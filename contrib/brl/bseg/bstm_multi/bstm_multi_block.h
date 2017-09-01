@@ -15,6 +15,18 @@
 // are owned by this class. Leaf nodes at the bottom level point into
 // a data buffer that is maintained separately from this class.
 //
+// At the top level, trees are arranged in row-major order in a 4D
+// grid. (Currently, only one tree is allowed at the top level, but
+// this will be easy to change.) At lower levels, trees with the same
+// parent are stored contiguously.
+//
+// To iterate over the children of a space tree: use get_leaf_bits(),
+// but only consider indices greater than 72. This corresponds to
+// voxels at the lowest level of the bit tree. Leaf nodes at higher
+// levels indicate regions of empty space.
+//
+// To iterate over the children of a time tree: use get_leaf_bits().
+//
 // \author: Raphael Kargon
 // \date: Aug 01, 2017
 

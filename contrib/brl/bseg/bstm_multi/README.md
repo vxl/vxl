@@ -7,6 +7,8 @@ detailed explanation of BSTM is given in [Ulusoy et al, 2013](http://www.cv-foun
 
 ## Data Structure
 
+For now, see description in file comment for [`bstm_multi_block.h`](bstm_multi_block.h).
+
 ## Implementation Details
 
 ### File structure

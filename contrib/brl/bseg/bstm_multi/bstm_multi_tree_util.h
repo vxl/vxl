@@ -47,17 +47,17 @@ public:
       : vcl_runtime_error("Tree does not have type: " + ste_as_string(ste)) {}
 };
 
-//: \brief Class that wraps either a BSTM time tree or a BOCT bit tree. This is
-// essentially a tagged union.
+//: \brief Class that wraps either a BSTM time tree or a BOCT bit
+// tree. This is essentially a tagged union.
 class generic_tree {
 public:
   //: \brief creates non-owning tree of appropriate type
   generic_tree(unsigned char *bits, space_time_enum type);
 
   //: \brief creates non-owning space tree that points to bits of the given tree
-  generic_tree(boct_bit_tree& tree);
+  generic_tree(boct_bit_tree &tree);
   //: \brief creates non-owning time tree that points to bits of the given tree
-  generic_tree(bstm_time_tree& tree);
+  generic_tree(bstm_time_tree &tree);
 
   //: \brief calls appropriate destructor
   ~generic_tree();
