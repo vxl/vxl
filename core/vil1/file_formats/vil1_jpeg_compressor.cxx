@@ -55,7 +55,8 @@ bool vil1_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline
     jpeg_set_defaults(&jobj);
 
     // start compression
-    bool write_all_tables = true;
+    //JPEG boolean is not compatible with c++ bool
+    const jpeg_boolean write_all_tables = TRUE;
     jpeg_start_compress (&jobj, write_all_tables);
 
     //
