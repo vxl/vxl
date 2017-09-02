@@ -339,4 +339,23 @@ void vsl_b_read(vsl_b_istream& bfs, msm_curves& c)
   }
 }
 
+//: If curve_data starts with { then parse, else assume it is a filename and load.
+// If curves_data="-" return empty curves
+void msm_curves::parse_or_load(const vcl_string& curves_data)
+{
+  if (curves_data=="-")
+    resize(0);
+  else
+  if (curves_data[0]=='{')
+  {
+    vcl_istringstream crv_ss(curves_data);
+    config_from_stream(crv_ss);
+  }
+  else
+  if (!read_text_file(curves_data))
+  {
+    vcl_string err_msg="Failed to load curves from "+curves_data;
+    throw mbl_exception_parse_error(err_msg);
+  }
+}
 
