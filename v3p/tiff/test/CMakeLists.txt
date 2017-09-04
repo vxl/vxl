@@ -1,5 +1,6 @@
 # v3p/tiff/test/CMakeLists.txt
 
+
 # Include the generated headers
 include_directories(${TIFF_INCLUDE_DIR})
 
@@ -33,6 +34,6 @@ add_test( NAME tiff_long_tag   COMMAND tiff_long_tag   )
 add_test( NAME tiff_short_tag  COMMAND tiff_short_tag   )
 add_test( NAME tiff_strip_rw   COMMAND tiff_strip_rw   )
 add_test( NAME tiff_rewrite    COMMAND tiff_rewrite   )
-add_test( NAME tiff_raw_decode COMMAND tiff_raw_decode  "${CMAKE_CURRENT_SOURCE_DIR}"  )
+add_test( NAME tiff_raw_decode COMMAND tiff_raw_decode WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"  )
 add_test( NAME tiff_custom_dir COMMAND tiff_custom_dir   )
 
