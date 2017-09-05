@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <string>
 #include "vgl_line_segment_2d.h"
 #include <vcl_compiler.h>
 // stream operators
@@ -16,8 +17,13 @@ std::ostream& operator<<(std::ostream& s, vgl_line_segment_2d<Type> const & p)
 template <class Type>
 std::istream& operator>>(std::istream& s, vgl_line_segment_2d<Type>& p)
 {
+  s.skipws;
+  std::string temp;
+  s >> temp;
   vgl_point_2d<Type> p1, p2;
-  s >> p1 >> p2;
+  s >> p1;
+  s >> temp;
+  s >> p2 >> temp;
   p.set(p1, p2);
   return s;
 }

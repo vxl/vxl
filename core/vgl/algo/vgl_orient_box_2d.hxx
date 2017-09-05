@@ -3,7 +3,8 @@
 #include <vgl/vgl_vector_2d.h>
 #include <cmath>
 #include <vgl/vgl_tolerance.h>
-
+#include <iostream>
+#include <string>
 template <class T>
 vgl_orient_box_2d<T>::vgl_orient_box_2d(T width, T height, vgl_point_2d<T> const& center, T angle_in_rad)
 {
@@ -110,14 +111,17 @@ vgl_point_2d<T> vgl_orient_box_2d<T>::centroid() const{
 }
 template <class T>
 std::ostream&  operator<<(std::ostream& os, const vgl_orient_box_2d<T>& obox){
-  os << "major axis:" << obox.major_axis() << " half_height:" << obox.height()/T(2)<< "\n";
+  os << "major axis: " << obox.major_axis() << " half_height: " << obox.height()/T(2)<< "\n";
   return os;
 }
 template <class T>
 std::istream&  operator>>(std::istream& is,  vgl_orient_box_2d<T>& obox){
+  is.skipws;
   vgl_line_segment_2d<T> maj;
   T half_height = T(0);
-  is >> maj >> half_height;
+  std::string temp;
+  is >> temp >> temp;
+  is >>  maj >> temp >>  half_height;
   obox.set(maj, half_height);
   return is;
 }
