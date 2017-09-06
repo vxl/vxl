@@ -181,6 +181,7 @@ int main(int argc, char** argv)
   for (unsigned j=0;j<may_move.size();++j) if (may_move[j]) n_moved++;
 
   std::cout<<"Number of points which may be moved: "<<n_moved<<vcl_endl;
+  std::cout<<"Writing new points to "<<params.out_points_dir<<vcl_endl;
 
   if (verbose())
     std::cout<<"Movement per file:"<<std::endl;
