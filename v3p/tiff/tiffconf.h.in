@@ -51,12 +51,9 @@
 
 /* Define as 0 or 1 according to the floating point format suported by the
    machine */
-/* Hard-coded to 1 (vxl actually doesn't think we have this header, but tiff
-   won't compile if this is not defined) */
 #define HAVE_IEEEFP 1
 
 /* Set the native cpu bit order (FILLORDER_LSB2MSB or FILLORDER_MSB2LSB) */
-/* Hard-coded to little-endian (Intel)  for now */
 #define HOST_FILLORDER FILLORDER_LSB2MSB
 
 /* Native cpu byte order: 1 if big-endian (Motorola) or 0 if little-endian
