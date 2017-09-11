@@ -570,7 +570,7 @@ def grey_to_rgb(img, color_txt):
 def rgb_to_grey(img):
   batch.init_process("vilRGBToGreyProcess")
   batch.set_input_from_db(0, img)
-  status = batch.run_process
+  status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
     outimg = dbvalue(id, type)
