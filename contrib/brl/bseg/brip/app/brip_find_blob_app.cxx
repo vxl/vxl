@@ -14,7 +14,7 @@
 
 int main(int argc, char * argv[])
 {
-  if (argc != 8) {
+  if (argc != 9) {
     for (int i = 0; i < argc; i++) {
       std::cout << argv[i] << "\n";
     }
@@ -24,7 +24,7 @@ int main(int argc, char * argv[])
 
   std::cerr << "Loading image and mask\n";
   //get our arguments
-  std::string image_band_dir, material_mask_file, valid_mask_file, out_file;
+  std::string image_band_dir, material_mask_file, valid_mask_file, out_file, out_geo_file;
   float lambda0, lambda1;
   int neighborhood_radius;
   image_band_dir = argv[1];                 // pre-calibrated band images (float), which can be created using functionality in brad_wv3_functions
@@ -34,6 +34,7 @@ int main(int argc, char * argv[])
   lambda1 = (float)std::atof(argv[5]);      // determines width of object being searched for
   neighborhood_radius = (int)std::atoi(argv[6]); // radius of neighbor to search for local maxima in
   out_file = argv[7];                       // where our output will be saved
+  out_geo_file = argv[8];                   // a geojson output to store the polygon in pixel domain
 
   // Load the image
   vil_image_view<float> cal_img;
@@ -142,6 +143,45 @@ int main(int argc, char * argv[])
       }
     }
   }
+
+  // print out the vgl_polygon and associated conf values
+  std::ofstream ofs;
+  ofs.open(out_geo_file.c_str());
+  ofs << "{\n"
+      << "  \"type\": \"FeatureCollection\",\n"
+      << "  \"features\": [\n";
+  for (int i = 0; i < i_min.size(); i++) {
+    unsigned n_pt = poly[i][0].size();
+    ofs << "    {\n"
+        << "      \"geometry\": {\n"
+        << "        \"type\": \"Polygon\",\n"
+        << "        \"coordinates\": [\n"
+        << "          [\n";
+    for (unsigned p_idx = 0; p_idx < n_pt; p_idx++) {
+      ofs << "            [\n"
+          << "              " << poly[i][0][p_idx].x() << ",\n"
+          << "              " << poly[i][0][p_idx].y() << "\n";
+      if (p_idx == (n_pt-1))
+        ofs << "            ]\n";
+      else
+        ofs << "            ],\n";
+    }
+    ofs << "          ]\n"
+        << "        ]\n"
+        << "      },\n"
+        << "      \"type\": \"Feature\",\n"
+        << "      \"properties\": {\n"
+        << "        \"confidence\": " << conf[i] << "\n"
+        << "      }\n";
+    if (i == i_min.size() - 1)
+      ofs << "    }\n";
+    else
+      ofs << "    },\n";
+  }
+  ofs << "  ]\n"
+      << "}\n";
+
+  ofs.close();
 
   // convert back to rgb image and then convert to vxl_byte for saving
   vil_image_view<float> rgb_img_bb;

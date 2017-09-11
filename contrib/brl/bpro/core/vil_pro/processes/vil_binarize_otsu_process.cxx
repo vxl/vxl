@@ -17,8 +17,9 @@ bool vil_binarize_otsu_process_cons(bprb_func_process& pro)
   std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("double");  // range
-  input_types.push_back("int");  // number of bins
-  input_types.push_back("int"); // margin
+  input_types.push_back("int");     // number of bins
+  input_types.push_back("int");     // margin
+  input_types.push_back("double");  // pixel vals that will be ignored
 
   std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // binary RGB image with black and white pixels
@@ -42,6 +43,8 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
   double range = pro.get_input<double>(i++);
   int bins = pro.get_input<int>(i++);
   int margin = pro.get_input<int>(i++);
+  double invalid_pix = pro.get_input<double>(i++);
+
   //double range = 0.1;  
   //int bins = 10000;  
 
@@ -63,7 +66,8 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
   bsta_histogram<double> h(range, bins);
   for (unsigned j = margin; j < nj-margin; ++j) {
     for (unsigned i = margin; i < ni-margin; ++i) {
-      h.upcount(view(i,j), 1.0);
+      if (std::fabs(view(i,j) - invalid_pix) > 1E-3)
+        h.upcount(view(i,j), 1.0);
     }
   }
   bsta_otsu_threshold<double> ot(h);

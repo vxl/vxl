@@ -570,7 +570,7 @@ def grey_to_rgb(img, color_txt):
 def rgb_to_grey(img):
   batch.init_process("vilRGBToGreyProcess")
   batch.set_input_from_db(0, img)
-  status = batch.run_process
+  status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
     outimg = dbvalue(id, type)
@@ -804,12 +804,13 @@ def dilate_image_disk(in_img, disk_size):
   else:
     return None
 
-def binarize_using_otsu_threshold(in_img, orange, obins, margin=0):
+def binarize_using_otsu_threshold(in_img, orange, obins, margin=0, invalid_pix = 0.0):
   batch.init_process("vilBinarizeOtsuProcess")
   batch.set_input_from_db(0, in_img)
   batch.set_input_double(1, orange)
   batch.set_input_int(2, obins)
   batch.set_input_int(3, margin)
+  batch.set_input_double(4, invalid_pix)
   status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
