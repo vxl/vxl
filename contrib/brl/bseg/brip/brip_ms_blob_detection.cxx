@@ -96,7 +96,8 @@ void brip_blob_connect_comp_bb(
 
   // connected components
   vil_image_view<unsigned> label;
-  vil_blob_labels(thresh, vil_blob_connectivity::vil_blob_4_conn, label);
+  vil_blob_connectivity conn = vil_blob_4_conn;
+  vil_blob_labels(thresh, conn, label);
   unsigned max_label = 0;
   for (int j = 0; j < label.nj(); j++) {
     for (int i = 0; i < label.ni(); i++) {

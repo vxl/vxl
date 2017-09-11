@@ -30,9 +30,9 @@ int main(int argc, char * argv[])
   image_band_dir = argv[1];                 // pre-calibrated band images (float), which can be created using functionality in brad_wv3_functions
   material_mask_file = argv[2];             // material to use when computing SAM (each masked pixel will be own sample in library)
   valid_mask_file = argv[3];                // valid pixels i.e. they are in the area of interest
-  lambda0 = std::stof(argv[4]);             // determines length of object being searched for
-  lambda1 = std::stof(argv[5]);             // determines width of object being searched for
-  neighborhood_radius = std::stoi(argv[6]); // radius of neighbor to search for local maxima in
+  lambda0 = (float)std::atof(argv[4]);      // determines length of object being searched for
+  lambda1 = (float)std::atof(argv[5]);      // determines width of object being searched for
+  neighborhood_radius = (int)std::atoi(argv[6]); // radius of neighbor to search for local maxima in
   out_file = argv[7];                       // where our output will be saved
   out_geo_file = argv[8];                   // a geojson output to store the polygon in pixel domain
 

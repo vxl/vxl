@@ -144,6 +144,18 @@ def test_classifier(tclsf, block_size, category_id_file="", category_name=""):
   else:
     return None, None, None, None
 
+def test_classifier_unsupervised(tclsf):
+  batch.init_process("sdetTextureUnsupervisedClassifierProcess")
+  batch.set_input_from_db(0, tclsf)
+  status = batch.run_process()
+  if status:
+    (out_id, out_type) = batch.commit_output(0)
+    out_color_img = dbvalue(out_id, out_type)
+    (out_id, out_type) = batch.commit_output(1)
+    out_id_img = dbvalue(out_id, out_type)
+    return out_color_img, out_id_img
+  else:
+    return None
 
 def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, ni, nj, block_size, percent_cat_name, category_id_file="", scale_factor=1.0 / 2048.0):
   batch.init_process("sdetTextureClassifySatelliteCloudsProcess")
