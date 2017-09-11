@@ -17,11 +17,15 @@ std::ostream& operator<<(std::ostream& s, vgl_line_segment_2d<Type> const & p)
 template <class Type>
 std::istream& operator>>(std::istream& s, vgl_line_segment_2d<Type>& p)
 {
-  s.skipws;
   std::string temp;
-  s >> temp;
+  s.skipws;
+  if(s.peek()=='<')
+    s >> temp;
+ 
   vgl_point_2d<Type> p1, p2;
-  s >> p1;
+  s >> p1>>std::ws;
+  char c = s.peek();
+  if(s.peek()=='t')
   s >> temp;
   s >> p2 >> temp;
   p.set(p1, p2);
