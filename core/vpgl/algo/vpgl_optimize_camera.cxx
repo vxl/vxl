@@ -338,13 +338,7 @@ vpgl_optimize_camera::opt_orient_pos_f(const vpgl_perspective_camera<double>& ca
   vgl_point_3d<double> c = camera.get_camera_center();
   vgl_vector_3d<double> t= camera.get_translation();
   const vgl_rotation_3d<double>& R = camera.get_rotation();
-  //vnl_double_3 w = R.as_rodrigues();
   vnl_quaternion<double> q = R.as_quaternion();
-
-  std::cout << "opt_orient_pos_f..." << std::endl;
-  std::cout << "cam center: " << c << std::endl;
-  std::cout << "rotation : " << R.as_matrix() << std::endl;
-  std::cout << "translation: " << t << std::endl;
 
   vpgl_orientation_position_focal_lsqr lsqr_func(K, world_points,image_points);
   vnl_levenberg_marquardt lm(lsqr_func);
