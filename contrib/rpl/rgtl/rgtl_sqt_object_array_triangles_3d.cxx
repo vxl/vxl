@@ -1,7 +1,7 @@
 #include <iostream>
 #include <limits>
 #include <vector>
-#include "rgtl_sqt_object_array_triangles_3d.hxx"
+#include "rgtl_sqt_object_array_triangles_3d.h"
 //:
 // \file
 // Copyright 2006-2009 Brad King, Chuck Stewart
@@ -9,11 +9,11 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include "rgtl_object_array_triangles_3d.hxx"
-#include "rgtl_sqt_space.hxx"
-#include "rgtl_sqt_cell_bounds.hxx"
-#include "rgtl_sqt_cell_geometry.hxx"
-#include "rgtl_sqt_cell_location.hxx"
+#include "rgtl_object_array_triangles_3d.h"
+#include "rgtl_sqt_space.h"
+#include "rgtl_sqt_cell_bounds.h"
+#include "rgtl_sqt_cell_geometry.h"
+#include "rgtl_sqt_cell_location.h"
 
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_double_3.h>

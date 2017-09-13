@@ -6,25 +6,33 @@
 #ifndef rtvl_votee_hxx
 #define rtvl_votee_hxx
 
-template <class T, unsigned int n> class vnl_vector_fixed;
-template <class T, unsigned int nr, unsigned int nc> class vnl_matrix_fixed;
+#include "rtvl_votee.h"
 
-template <unsigned int N> class rtvl_vote_internal;
+#include "rtvl_vote.h"
 
+#include <vnl/vnl_matrix_fixed.h>
+
+//----------------------------------------------------------------------------
 template <unsigned int N>
-class rtvl_votee
+rtvl_votee<N>::
+rtvl_votee(vnl_vector_fixed<double, N> const& votee_location,
+           vnl_matrix_fixed<double, N, N>& votee_tensor):
+  location_(votee_location), tensor_(votee_tensor)
 {
-public:
-  rtvl_votee(vnl_vector_fixed<double, N> const& votee_location,
-             vnl_matrix_fixed<double, N, N>& votee_tensor);
+}
 
-  vnl_vector_fixed<double, N> const& location()
-    { return this->location_; }
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void rtvl_votee<N>::go(rtvl_vote_internal<N>& vi, double saliency)
+{
+  vnl_matrix_fixed<double, N, N> vote;
+  rtvl_vote_component(vi, vote);
+  vote *= saliency;
+  this->tensor_ += vote;
+}
 
-  virtual void go(rtvl_vote_internal<N>& vi, double saliency);
-private:
-  vnl_vector_fixed<double, N> const& location_;
-  vnl_matrix_fixed<double, N, N>& tensor_;
-};
+//----------------------------------------------------------------------------
+#define RTVL_VOTEE_INSTANTIATE(N) \
+  template class rtvl_votee<N>
 
 #endif

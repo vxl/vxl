@@ -6,33 +6,45 @@
 #ifndef rtvl_voter_hxx
 #define rtvl_voter_hxx
 
-template <class T, unsigned int n> class vnl_vector_fixed;
-template <class T, unsigned int nr, unsigned int nc> class vnl_matrix_fixed;
+#include "rtvl_voter.h"
 
-template <unsigned int N> class rtvl_tensor;
+#include "rtvl_tensor.h"
 
+//----------------------------------------------------------------------------
 template <unsigned int N>
-class rtvl_voter
+rtvl_voter<N>::
+rtvl_voter(vnl_vector_fixed<double, N> const& voter_location,
+           rtvl_tensor<N> const& voter_tensor):
+  location_(voter_location), tensor_(voter_tensor)
 {
-public:
-  rtvl_voter(vnl_vector_fixed<double, N> const& voter_location,
-             rtvl_tensor<N> const& voter_tensor);
+}
 
-  vnl_vector_fixed<double, N> const& location() const
-    { return this->location_; }
+//----------------------------------------------------------------------------
+template <unsigned int N>
+double
+rtvl_voter<N>::lambda(unsigned int d) const
+{
+  return this->tensor_.lambda(d);
+}
 
-  rtvl_tensor<N> const& tensor() const
-    { return this->tensor_; }
+//----------------------------------------------------------------------------
+template <unsigned int N>
+typename rtvl_voter<N>::basis_const_reference
+rtvl_voter<N>::basis() const
+{
+  return this->tensor_.basis();
+}
 
-  double lambda(unsigned int d) const;
+//----------------------------------------------------------------------------
+template <unsigned int N>
+vnl_vector_fixed<double, N> const&
+rtvl_voter<N>::basis(unsigned int d) const
+{
+  return this->tensor_.basis(d);
+}
 
-  typedef vnl_vector_fixed<double, N> const (&basis_const_reference)[N];
-  basis_const_reference basis() const;
-  vnl_vector_fixed<double, N> const& basis(unsigned int d) const;
-
-private:
-  vnl_vector_fixed<double, N> const& location_;
-  rtvl_tensor<N> const& tensor_;
-};
+//----------------------------------------------------------------------------
+#define RTVL_VOTER_INSTANTIATE(N) \
+  template class rtvl_voter<N>
 
 #endif

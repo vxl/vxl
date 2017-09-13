@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
-#include "rgtl_serialize_istream.hxx"
+#include "rgtl_serialize_istream.h"
 //:
 // \file
 // Copyright 2006-2009 Brad King, Chuck Stewart

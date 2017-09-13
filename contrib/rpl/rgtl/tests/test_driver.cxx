@@ -7,19 +7,19 @@
 
 #include <testlib/testlib_register.h>
 
-DECLARE( test_compact_tree_data_fixed );
-DECLARE( test_octree_data_fixed );
-DECLARE( test_octree_dual_visit );
-DECLARE( test_octree_objects );
-DECLARE( test_sqt_base );
+ DECLARE( test_compact_tree_data_fixed );
+ DECLARE( test_octree_data_fixed );
+ DECLARE( test_octree_dual_visit );
+ DECLARE( test_octree_objects );
+ DECLARE( test_sqt_base );
 
 void register_tests()
 {
-  REGISTER( test_compact_tree_data_fixed );
-  REGISTER( test_octree_data_fixed );
-  REGISTER( test_octree_dual_visit );
-  REGISTER( test_octree_objects );
-  REGISTER( test_sqt_base );
+ REGISTER( test_compact_tree_data_fixed );
+ REGISTER( test_octree_data_fixed );
+ REGISTER( test_octree_dual_visit );
+ REGISTER( test_octree_objects );
+ REGISTER( test_sqt_base );
 }
 
 DEFINE_MAIN;

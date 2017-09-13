@@ -707,7 +707,7 @@ sdet_edgemap_sptr sdet_third_order_edge_det::edgemap() {
 
   for (unsigned i=0; i<edgels_.size(); i++)
   {
-    sdet_edgel* new_edgel = new sdet_edgel(edgels_[i].get_pt(), std::tan(edgels_[i].get_theta()), edgels_[i].get_grad());
+    sdet_edgel* new_edgel = new sdet_edgel(edgels_[i].get_pt(), edgels_[i].get_theta(), edgels_[i].get_grad());
     edge_map->insert(new_edgel);
   }
   return edge_map;

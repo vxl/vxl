@@ -1,76 +1,183 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 #ifndef rgtl_octree_cell_geometry_hxx
 #define rgtl_octree_cell_geometry_hxx
 
-//:
-// \file
-// \brief Represent the geometry of an octree cell.
-// \author Brad King
-// \date February 2007
+#include <iostream>
+#include <cmath>
+#include "rgtl_octree_cell_geometry.h"
 
-#include "rgtl_octree_cell_location.hxx"
+#include "rgtl_octree_cell_bounds.h"
+#include "rgtl_sqt_space.hxx"
 
-template <unsigned int D> class rgtl_octree_cell_bounds;
+#include <vcl_compiler.h>
 
-//: Represent the geometry of an octree cell.
-//
-// This class efficiently maintains octree cell geometry as the tree
-// is traversed.
+#define RGTL_OCTREE_CELL_GEOMETRY_CONE_SPECIALIZE_3
+
+//----------------------------------------------------------------------------
 template <unsigned int D>
-class rgtl_octree_cell_geometry
+rgtl_octree_cell_geometry<D>
+::rgtl_octree_cell_geometry(): location_()
 {
-public:
-  //: Type representing a logical cell location.
-  typedef rgtl_octree_cell_location<D> cell_location_type;
+}
 
-  //: Type representing the octree cell bounds.
-  typedef rgtl_octree_cell_bounds<D> cell_bounds_type;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_octree_cell_geometry<D>
+::rgtl_octree_cell_geometry(cell_location_type const& cell,
+                            cell_bounds_type const& root_bounds):
+  location_(cell)
+{
+  // Compute the bounds of this cell.
+  cell_bounds_type cell_bounds;
+  cell_bounds.compute_bounds(root_bounds, cell);
 
-  //: Default constructor used only to create array.
-  rgtl_octree_cell_geometry();
+  // Compute the lower and upper bounds for each axis.
+  for (unsigned int a=0; a < D; ++a)
+  {
+    this->lower_[a] = cell_bounds.origin(a);
+    this->upper_[a] = this->lower_[a] + cell_bounds.size();
+  }
 
-  //: Construct the geometry of a given cell location.
-  explicit rgtl_octree_cell_geometry(cell_location_type const& cell,
-                                     cell_bounds_type const& root_bounds);
+  // Compute the cell bounding sphere.
+  double half_size = cell_bounds.size()/2;
+  for (unsigned int a=0; a < D; ++a)
+  {
+    this->center_[a] = this->lower_[a] + half_size;
+  }
+  this->radius_ = std::sqrt(D*half_size*half_size);
 
-  //: Get the logical cell location.
-  cell_location_type const& location() const;
+  // Compute the corner locations.
+  this->compute_corners();
+}
 
-  //: Get the cell bounding sphere.
-  void get_sphere(double center[D], double& radius) const;
-  double const* get_sphere_center() const;
-  double get_sphere_radius() const;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+typename rgtl_octree_cell_geometry<D>::cell_location_type const&
+rgtl_octree_cell_geometry<D>
+::location() const
+{
+  return this->location_;
+}
 
-  //: Get the cell bounding box range on each axis.
-  double const* get_lower() const;
-  double const* get_upper() const;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void
+rgtl_octree_cell_geometry<D>
+::get_sphere(double center[D], double& radius) const
+{
+  for (unsigned int k=0; k < D; ++k)
+  {
+    center[k] = this->center_[k];
+  }
+  radius = this->radius_;
+}
 
-  //: Get the cell bounding box corners.
-  double const* get_corner(unsigned int i) const;
-  double const (*get_corners() const)[D] { return this->corners_; }
+//----------------------------------------------------------------------------
+template <unsigned int D>
+double const* rgtl_octree_cell_geometry<D>::get_sphere_center() const
+{
+  return this->center_;
+}
 
-  //: Compute the child cell geometries.
-  void get_children(rgtl_octree_cell_geometry children[1<<D]) const;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+double rgtl_octree_cell_geometry<D>::get_sphere_radius() const
+{
+  return this->radius_;
+}
 
-private:
+//----------------------------------------------------------------------------
+template <unsigned int D>
+double const* rgtl_octree_cell_geometry<D>::get_lower() const
+{
+  return this->lower_;
+}
 
-  void compute_corners();
+//----------------------------------------------------------------------------
+template <unsigned int D>
+double const* rgtl_octree_cell_geometry<D>::get_upper() const
+{
+  return this->upper_;
+}
 
-  // Type-safe index to a child.
-  typedef typename cell_location_type::child_index_type child_index_type;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+double const* rgtl_octree_cell_geometry<D>::get_corner(unsigned int i) const
+{
+  return this->corners_[i];
+}
 
-  // The cell location.
-  cell_location_type location_;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void
+rgtl_octree_cell_geometry<D>
+::get_children(rgtl_octree_cell_geometry children[1<<D]) const
+{
+  for (unsigned int i=0; i < (1<<D); ++i)
+  {
+    // Compute the child location.
+    children[i].location_ = this->location_.get_child(child_index_type(i));
 
-  // The cell geometry.
-  double center_[D];        // Bounding sphere center.
-  double radius_;           // Bounding sphere radius.
-  double lower_[D];         // Lower bounding plane positions.
-  double upper_[D];         // Upper bounding plane positions.
-  double corners_[1<<D][D]; // Bounding box corners.
-};
+    // Compute the child bounding sphere.
+    for (unsigned int a=0; a < D; ++a)
+    {
+      if ((i>>a)&1)
+      {
+        children[i].center_[a] = (this->center_[a]+this->upper_[a])/2;
+      }
+      else
+      {
+        children[i].center_[a] = (this->lower_[a]+this->center_[a])/2;
+      }
+    }
+    children[i].radius_ = this->radius_ / 2;
+
+    // Compute the child bounding plane positions.
+    for (unsigned int a=0; a < D; ++a)
+    {
+      if ((i>>a)&1)
+      {
+        children[i].lower_[a] = this->center_[a];
+        children[i].upper_[a] = this->upper_[a];
+      }
+      else
+      {
+        children[i].lower_[a] = this->lower_[a];
+        children[i].upper_[a] = this->center_[a];
+      }
+    }
+
+    // Compute the child corners.
+    children[i].compute_corners();
+  }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_octree_cell_geometry<D>::compute_corners()
+{
+  for (unsigned int i=0; i < (1<<D); ++i)
+  {
+    double* corner = this->corners_[i];
+    for (unsigned int a=0; a < D; ++a)
+    {
+      if ((i>>a)&1)
+      {
+        corner[a] = this->upper_[a];
+      }
+      else
+      {
+        corner[a] = this->lower_[a];
+      }
+    }
+  }
+}
+
+//----------------------------------------------------------------------------
+#define RGTL_OCTREE_CELL_GEOMETRY_INSTANTIATE(D) \
+  template class rgtl_octree_cell_geometry< D >
 
 #endif
