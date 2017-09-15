@@ -19,15 +19,16 @@ std::istream& operator>>(std::istream& s, vgl_line_segment_2d<Type>& p)
 {
   std::string temp;
   s.skipws;
-  if(s.peek()=='<')
+  s >> std::ws;
+  char c = s.peek();
+  if(c=='<')
     s >> temp;
- 
   vgl_point_2d<Type> p1, p2;
   s >> p1>>std::ws;
-  char c = s.peek();
-  if(s.peek()=='t')
+  c = s.peek();
+  if(c=='t')
   s >> temp;
-  s >> p2 >> temp;
+  s >> std::ws >> p2 >> temp;
   p.set(p1, p2);
   return s;
 }
