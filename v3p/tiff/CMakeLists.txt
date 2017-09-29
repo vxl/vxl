@@ -36,7 +36,6 @@ if(NOT VXL_USING_NATIVE_TIFF)
     tiffiop.h
     uvcode.h
     tif_fax3.h
-    port.h
 
   # source files
     tif_aux.c
@@ -164,7 +163,6 @@ if(NOT VXL_USING_NATIVE_TIFF)
       add_definitions( -DTIF_PLATFORM_CONSOLE)
       set( tiff_sources ${tiff_sources}
         tif_win32.c
-       #fax3sm_winnt.c
       )
     endif()
   endif()
