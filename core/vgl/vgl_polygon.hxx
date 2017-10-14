@@ -333,6 +333,7 @@ vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T> const &p)
   {
     //Self intersecting/non simple polygons cannot be said to be clockwise or not
     //hence they are not added and we get an empty polygon.
+    std::cout<< "WARNING - self intersecting polygon"<<std::endl;
   }
   else
   {
@@ -356,6 +357,26 @@ vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T> const &p)
 template <class T>
 bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts)
 {
+  double sum = 0.0;
+  vgl_point_2d<T> v1;
+  vgl_point_2d<T> v2;
+  double term1, term2;
+  for(size_t x = 1; x <verts.size(); x++)
+  {
+    v1 = verts.at(x-1);
+    v2 = verts.at(x);
+    term1 = double(v2.x())-double(v1.x());
+    term2 = double(v2.y())+double(v1.y());
+    sum += term1*term2;
+  }
+  v1 = verts.at(verts.size()-1);
+  v2 = verts.at(0);
+  term1 = double(v2.x())-double(v1.x());
+  term2 = double(v2.y())+double(v1.y());
+  sum += term1*term2;
+  std::cout<< "sum is " << sum<< std::endl; 
+  return sum < 0.0;
+  /*
   //converting to double for precision in estimating interior/exterior
   std::vector<vgl_point_2d<double> > doubPts;
   for(size_t x = 0; x <verts.size(); x++)
@@ -392,6 +413,7 @@ bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts)
   double average = std::accumulate(intextvals.begin(),intextvals.end(),0)/static_cast<double>(intextvals.size()); 
   //averaging in case of thin geometry
   return average>=0;
+  */
 }
 
 
