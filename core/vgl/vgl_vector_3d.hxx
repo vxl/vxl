@@ -174,7 +174,13 @@ std::istream& vgl_vector_3d<T>::read(std::istream& is)
       return is;
     }else is.ignore();
   }else{
-    is >> tx >> ty >> tz;
+	  is >> tx >> std::ws;
+	c = is.peek();
+	if(c == ',') is.ignore();
+	is >> std::ws >> ty >> std::ws;
+	c = is.peek();
+	if(c == ',') is.ignore();
+    is >> std::ws >> tz >> std::ws;
   }
   set(tx,ty,tz);
   return is;

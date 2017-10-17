@@ -106,7 +106,10 @@ std::istream& vgl_vector_2d<T>::read(std::istream& is)
       return is;
     }else is.ignore();
   }else{
-    is >> tx >> ty;
+    is >> tx >> std::ws;
+	c = is.peek();
+	if(c == ',') is.ignore();
+	is >> std::ws >> ty; 
   }
   set(tx,ty);
   return is;
