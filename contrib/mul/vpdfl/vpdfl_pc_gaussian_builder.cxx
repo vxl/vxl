@@ -162,7 +162,13 @@ void vpdfl_pc_gaussian_builder::build(vpdfl_pdf_base& model,
   vpdfl_pc_gaussian& g = gaussian(model);
 
   unsigned long n_samples = data.size();
-  assert (n_samples>=2L);
+  
+  if (n_samples==1)
+  {
+    // Use single example as mean and build a default model.
+    build(model,data.current());
+    return;
+  }
 
   int n = data.current().size();
 
