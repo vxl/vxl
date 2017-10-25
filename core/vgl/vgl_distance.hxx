@@ -342,6 +342,14 @@ double vgl_distance(vgl_ray_3d<T> const& r, vgl_point_3d<T> const& p)
   vgl_point_3d<T> q = vgl_closest_point(r, p);
   return vgl_distance(p,q);
 }
+//: return the closest distance from a point to an infinite line
+template <class T>
+double vgl_distance(vgl_infinite_line_3d<T> const& l,
+                    vgl_point_3d<T> const& p){
+  vgl_point_3d<T> q = vgl_closest_point(l, p);
+  return vgl_distance(p,q);
+}
+
 template <class T>
 double vgl_distance(vgl_point_2d<T> const& p, vgl_box_2d<T> const& b){
   //create line segments for the box boundary
@@ -398,6 +406,7 @@ template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \
 template double vgl_distance(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template double vgl_distance(vgl_ray_3d<T > const& r, vgl_point_3d<T > const& p); \
+template double vgl_distance(vgl_infinite_line_3d<T > const& l, vgl_point_3d<T > const& p); \
 template double vgl_distance(vgl_homg_point_3d<T > const&,vgl_homg_line_3d_2_points<T > const&); \
 template double vgl_distance(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
 template double vgl_distance(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&); \
