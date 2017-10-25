@@ -374,46 +374,8 @@ bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts)
   term1 = double(v2.x())-double(v1.x());
   term2 = double(v2.y())+double(v1.y());
   sum += term1*term2;
-  std::cout<< "sum is " << sum<< std::endl; 
   return sum < 0.0;
-  /*
-  //converting to double for precision in estimating interior/exterior
-  std::vector<vgl_point_2d<double> > doubPts;
-  for(size_t x = 0; x <verts.size(); x++)
-  {
-    vgl_point_2d<T> p = verts.at(x);
-    vgl_point_2d<double> t(static_cast<double>(p.x()),static_cast<double>(p.y()));
-    doubPts.push_back(t);
-  }
-  vgl_polygon<double> currSheetPoly(doubPts); 
-  //seems dumb... but we need a polygon for intersection and this is per sheet
-  if(verts.size()==0) 
-  {
-    return false;//no boundary
-  }
-  std::vector<int> intextvals;
-  for(size_t j = 0;j<doubPts.size()-1;j++)
-  {
-    vgl_point_2d<double> pt1, pt2;
-    pt1 = doubPts.at(j);
-    pt2 = doubPts.at(j+1);
-    double angle = atan2((pt2.y()-pt1.y()),(pt2.x()-pt1.x()));
-    double segLength = 0.5*sqrt(pow((pt2.y()-pt1.y()),2)+pow((pt2.x()-pt1.x()),2));
-    double probeAngle = angle + 0.000048; //~1 arc second 
-    vgl_point_2d<double> probePt((segLength*cos(probeAngle)+pt1.x()),((segLength*sin(probeAngle))+pt1.y())); 
-    if(currSheetPoly.contains(probePt))
-    {
-      intextvals.push_back(1);
-    }
-    else
-    {
-      intextvals.push_back(-1);
-    }
-  }
-  double average = std::accumulate(intextvals.begin(),intextvals.end(),0)/static_cast<double>(intextvals.size()); 
-  //averaging in case of thin geometry
-  return average>=0;
-  */
+ 
 }
 
 
