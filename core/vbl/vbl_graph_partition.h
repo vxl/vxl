@@ -31,7 +31,5 @@
 //  to form disconnected sets
 void vbl_graph_partition(vbl_disjoint_sets& ds, std::vector<vbl_edge>& edges, float t);
 
-// a partitioning function that uses an edge image so that the component shapes follow edges as much as possible
-void vbl_graph_partition(vbl_disjoint_sets& ds, std::vector<vbl_edge>& edges, float t, vil_image_view<float>& edge_img);
 
 #endif // vbl_graph_partition_h_

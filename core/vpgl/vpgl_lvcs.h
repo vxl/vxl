@@ -100,6 +100,15 @@ class vpgl_lvcs : public vbl_ref_count
   double radians_to_degrees(const double val);
   void degrees_to_dms(double, int& degrees, int& minutes, double& seconds);
   void radians_to_dms(double, int& degrees, int& minutes, double& seconds);
+  // uses the units defined for *this lvcs, e.g. deg and meters. computes cartesian vector (p1 - p0)
+  void angle_diff_to_cartesian_vector(const double lon0, const double lat0, const double lon1, const double lat1,
+                                                 double& cart_dx, double& cart_dy) {
+  double l0x, l0y, l0z, l1x, l1y, l1z;
+  this->global_to_local(lon0, lat0, 0.0, local_cs_name_, l0x, l0y, l0z);
+  this->global_to_local(lon1, lat1, 0.0, local_cs_name_, l1x, l1y, l1z);
+  cart_dx = l1x-l0x;
+  cart_dy = l1y-l0y;
+}
 
   // accessors
   void get_origin(double& lat, double& lon, double& elev) const;

@@ -75,6 +75,44 @@ void test_bsta_histogram()
   std::cout << "Uniform Entropy for " << bins << " bins = " << ent  << " bits.\n";
   TEST_NEAR("test histogram uniform distribution entropy", ent, 31.0/8, 1e-9);
 
+  //Test Jensen-Shannon divergence, a symmetric form of Kullback-Liebler divergence
+  bsta_histogram<double> ha(range, bins), hb(range, bins);
+  unsigned enda = (bins*5)/8;
+  unsigned startb = (bins*3)/8;
+  for (unsigned a =0; a<=enda; a++)
+    ha.set_count(a, 10.0);
+  std::cout << "Histogram a\n";
+  ha.print();
+  for (unsigned b =startb; b<static_cast<unsigned>(bins); b++)
+    hb.set_count(b, 10.0);
+  std::cout << "\nHistogram b\n";
+  hb.print();
+  std::cout << '\n';
+  double js_div = js_divergence(ha, hb);
+  std::cout << "js_divergence = " << js_div << '\n';
+  TEST_NEAR("jensen-shannon divergence", js_div, 0.362868, 0.0001);
+
+  //Scaling a histogram
+  // hb from above is a resonable test
+  double s = 0.5;
+  bsta_histogram<double> scaled_hb_0 = scale(hb, s);
+  std::cout << "Scaled Hist b at s = " << s << '\n';
+  scaled_hb_0.print(); std::cout << '\n';
+  s = 0.25;
+  bsta_histogram<double> scaled_hb_1 = scale(hb, s);
+  std::cout << "Scaled Hist b at s = " << s << '\n';
+  scaled_hb_1.print(); std::cout << '\n';
+
+  s = 0.75;
+  bsta_histogram<double> scaled_hb_2 = scale(hb, s);
+  std::cout << "Scaled Hist b at s = " << s << '\n';
+  scaled_hb_2.print(); std::cout << '\n';
+
+  double smin_2 = minimum_js_divergence_scale(hb, scaled_hb_2);
+  double smin_1 = minimum_js_divergence_scale(hb, scaled_hb_1);
+  double smin_0 = minimum_js_divergence_scale(hb, scaled_hb_0);
+  double er = std::fabs(smin_2-0.75)+std::fabs(smin_1-0.25)+std::fabs(smin_0-0.5);
+  TEST_NEAR("scaling and min_scale", er, 0.0, 0.05);
   //Joint Histogram Tests
   bsta_joint_histogram<double> jh(range, bins);
   double va = 0;

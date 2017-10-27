@@ -14,6 +14,7 @@ set(bbas_pro_sources
     bbas_1d_array_int.h         bbas_1d_array_int.cxx
     bbas_1d_array_unsigned.h    bbas_1d_array_unsigned.cxx
     bbas_1d_array_string.h      bbas_1d_array_string.cxx
+    bbas_1d_array_byte.h        bbas_1d_array_byte.cxx
    )
 
 aux_source_directory(Templates bbas_pro_sources)

@@ -28,8 +28,9 @@ script:
   - mkdir -p ${HERE}/install
   - cd ${HERE}/build
   - ${HOME}/deps/bin/cmake
-          -DCMAKE_INSTALL_PREFIX=${HERE}/install
-          -DCMAKE_CXX_STANDARD=98
+          -DCMAKE_INSTALL_PREFIX:PATH=${HERE}/install
+          -DCMAKE_CXX_STANDARD:STRING=98
+          -DBUILD_BRL:BOOL=OFF
           ../
   - ${HOME}/deps/bin/ctest -D ExperimentalStart
   - ${HOME}/deps/bin/ctest -D ExperimentalConfigure

@@ -6,6 +6,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vpgl/vpgl_utm.h>
 #include "volm_io.h"
+#include <vgl/vgl_area.h>
 
 // function to check whether the given box intersect with a line defined by a vector of points
 static bool is_intersect(vgl_box_2d<double> const& box, std::vector<vgl_point_2d<double> > const& line)
@@ -159,7 +160,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<vol
 {
   if (!root) // the node is empty
     return;
-  if (vgl_intersection(root->extent_,area).area() == 0.0f) // the node doesn't intersect with box
+  if (vgl_area(vgl_intersection(root->extent_,area)) == 0.0f) // the node doesn't intersect with box
     return;
 
   if (!root->children_.size())  // the node has no children and it intersects with box

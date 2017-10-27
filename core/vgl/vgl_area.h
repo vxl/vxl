@@ -5,7 +5,8 @@
 
 template <class T> class vgl_polygon;
 template <class T> class vgl_point_2d;
-
+template <class T> class vgl_box_2d;
+template <class T> class vgl_oriented_box_2d;
 //: Computes the signed area of a polygon.
 // The sign is positive if the polygon is oriented counter-clockwise
 // (in RH coordinate system) and negative otherwise. For "polygons"
@@ -33,6 +34,12 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly);
 //  In general this is different than the mean of the polygon's vertices
 // \relatesalso vgl_polygon
 template <class T> vgl_point_2d<T> vgl_centroid(vgl_polygon<T> const& poly);
+
+//: The area of an axis-aligned box
+template <class T> T vgl_area(vgl_box_2d<T> const& box);
+
+//: area of an oriented box
+template <class T> T vgl_area(vgl_oriented_box_2d<T> const& obox);
 
 #define VGL_AREA_INSTANTIATE(T) extern "please include vgl/vgl_area.hxx instead"
 

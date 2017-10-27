@@ -53,6 +53,10 @@ set(sdet_sources
     sdet_atmospheric_image_classifier.cxx
     sdet_atmospheric_image_classifier.h
     sdet_graph_img_seg.cxx               sdet_graph_img_seg.h sdet_graph_img_seg_sptr.h
+    sdet_selective_search.h              sdet_selective_search.cxx
+    sdet_selective_search_params.h       sdet_selective_search_params.cxx
+    sdet_region_classifier.h             sdet_region_classifier.cxx
+    sdet_region_classifier_params.h      sdet_region_classifier_params.cxx
 # SEL Class
     sdet_sel.cxx                         sdet_sel.h
     sdet_sel_base.cxx                    sdet_sel_base.h

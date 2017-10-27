@@ -11,9 +11,8 @@ import sys
 from collections import OrderedDict
 
 
-
-## slight modification from grep command
-info_for_conversion="""
+# slight modification from grep command
+info_for_conversion = """
 vcl_algorithm.h,vcl_adjacent_find,std::adjacent_find
 vcl_algorithm.h,vcl_and,std::and
 vcl_algorithm.h,vcl_binary,std::binary
@@ -674,49 +673,50 @@ vcl_replace_manual = OrderedDict()
 
 
 for line in info_for_conversion.splitlines():
-    linevalues = line.split(",")
-    if len(linevalues) != 3:
-        #print("SKIPPING: " + str(linevalues))
-        continue
-    fname=linevalues[0]
-    new_name=fname.replace("vcl_","").replace(".h","")
-    vcl_replace_head_names['#include "{0}"'.format(fname)]='#include "{0}"'.format(new_name)
-    vcl_replace_head_names['#include <{0}>'.format(fname)]='#include <{0}>'.format(new_name)
-    vcl_pat=linevalues[1]
-    new_pat=linevalues[2]
-    vcl_replace_functionnames[vcl_pat]=new_pat
-    # Need to fix the fact that both std::ios is a base and a prefix
-    if "std::ios::" in new_pat:
-        vcl_replace_manual[new_pat.replace("std::ios::","std::ios_")] = new_pat
+  linevalues = line.split(",")
+  if len(linevalues) != 3:
+    #print("SKIPPING: " + str(linevalues))
+    continue
+  fname = linevalues[0]
+  new_name = fname.replace("vcl_", "").replace(".h", "")
+  vcl_replace_head_names['#include "{0}"'.format(
+      fname)] = '#include "{0}"'.format(new_name)
+  vcl_replace_head_names['#include <{0}>'.format(
+      fname)] = '#include <{0}>'.format(new_name)
+  vcl_pat = linevalues[1]
+  new_pat = linevalues[2]
+  vcl_replace_functionnames[vcl_pat] = new_pat
+  # Need to fix the fact that both std::ios is a base and a prefix
+  if "std::ios::" in new_pat:
+    vcl_replace_manual[new_pat.replace("std::ios::", "std::ios_")] = new_pat
 
 
+# print(vcl_replace_head_names)
+# print(vcl_replace_functionnames)
 
+cfile = sys.argv[1]
 
-#print(vcl_replace_head_names)
-#print(vcl_replace_functionnames)
-
-cfile=sys.argv[1]
-
-file_as_string=""
+file_as_string = ""
 print("Processing: " + cfile)
-with open(cfile,"r") as rfp:
-    file_as_string=rfp.read()
+with open(cfile, "r") as rfp:
+  file_as_string = rfp.read()
 
 if file_as_string.find("std::cout") or file_as_string.find("std::cerr") or file_as_string.find("std::cin"):
-    required_header="#include <vcl_compiler.h>\n#include <iostream>\n"
+  required_header = "#include <vcl_compiler.h>\n#include <iostream>\n"
 else:
-    required_header="#include <vcl_compiler.h>\n"
+  required_header = "#include <vcl_compiler.h>\n"
 
-for searchval,replaceval in vcl_replace_head_names.items():
-   file_as_string_new = file_as_string.replace(searchval,required_header+replaceval)
-   if file_as_string_new != file_as_string:
-       required_header=""
-   file_as_string=file_as_string_new
+for searchval, replaceval in vcl_replace_head_names.items():
+  file_as_string_new = file_as_string.replace(
+      searchval, required_header + replaceval)
+  if file_as_string_new != file_as_string:
+    required_header = ""
+  file_as_string = file_as_string_new
 
 
-for searchval,replaceval in vcl_replace_functionnames.items():
-   file_as_string = file_as_string.replace(searchval,replaceval)
-for searchval,replaceval in vcl_replace_manual.items():
-   file_as_string = file_as_string.replace(searchval,replaceval)
-with open(cfile,"w") as wfp:
-   wfp.write(file_as_string)
+for searchval, replaceval in vcl_replace_functionnames.items():
+  file_as_string = file_as_string.replace(searchval, replaceval)
+for searchval, replaceval in vcl_replace_manual.items():
+  file_as_string = file_as_string.replace(searchval, replaceval)
+with open(cfile, "w") as wfp:
+  wfp.write(file_as_string)

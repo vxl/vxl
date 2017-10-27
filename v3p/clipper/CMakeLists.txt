@@ -11,7 +11,7 @@ if( NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
 endif()
 
 set( clipper_sources
-     clipper.cpp clipper.hxx
+     clipper.cpp clipper.hpp
 )
 
 add_definitions( -D_FILE_OFFSET_BITS )

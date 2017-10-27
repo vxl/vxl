@@ -9,6 +9,7 @@ doxygen_add_library(contrib/brl/bseg/brip
 
 include_directories(${BRL_INCLUDE_DIR} )
 include_directories(${BRL_INCLUDE_DIR}/bseg )
+ include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories(${GEL_INCLUDE_DIR})
 include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
@@ -38,12 +39,15 @@ set(brip_sources
    brip_filter_bank.h        brip_filter_bank.cxx
    brip_gain_offset_solver.h    brip_gain_offset_solver.cxx
    brip_phase_correlation.h    brip_phase_correlation.cxx
+   brip_ms_blob_detection.h    brip_ms_blob_detection.cxx
 )
 aux_source_directory(Templates brip_sources)
 
 vxl_add_library(LIBRARY_NAME brip LIBRARY_SOURCES ${brip_sources})
 
 target_link_libraries(brip gevd bsta bsol vsol ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpgl bil_algo)
+
+add_subdirectory(app)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

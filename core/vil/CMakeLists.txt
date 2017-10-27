@@ -96,18 +96,21 @@ if(TIFF_FOUND)
     )
   endif()
 endif()
+
+# Let users decide if they should include DCMTK since we don't build against all versions.
+option(VXL_USE_DCMTK "" TRUE)
 set( HAS_DCMTK 0 )
-include(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
-if(DCMTK_FOUND)
-  message("DCMTK Dir")
-  message(${DCMTK_INCLUDE_DIR})
-  include_directories(${DCMTK_INCLUDE_DIR})
-  set( HAS_DCMTK 1 )
-  set( vil_sources ${vil_sources}
-    file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
-    file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
-    file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
-  )
+if (VXL_USE_DCMTK)
+  include(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
+  if(DCMTK_FOUND)
+    include_directories(${DCMTK_INCLUDE_DIR})
+    set( HAS_DCMTK 1 )
+    set( vil_sources ${vil_sources}
+      file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
+      file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
+      file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
+      )
+  endif()
 endif()
 
 option(VIL_CONFIG_ENABLE_SSE2_ROUNDING

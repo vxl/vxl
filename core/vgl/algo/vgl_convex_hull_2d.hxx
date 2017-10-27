@@ -105,6 +105,9 @@ void vgl_convex_hull_2d<T>::compute_hull()
 {
   //convert points to internal data structure
   int N = points_.size();
+  if (N < 1)
+    return;
+
   double * array = new double[2*N];
   double** points = new double*[N];
   double** P = new double*[N+1];

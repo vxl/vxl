@@ -116,7 +116,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
 void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                      boxm2_data_base* mog, boxm2_data_base* alpha,
                                                                      boxm2_data_base* points, boxm2_data_base* covariances, std::ofstream& file,
-                                                                     float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype)
+                                                                     float prob_t, float LE_t, float CE_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype)
 {
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_COVARIANCE>::datatype *  covs_data = (boxm2_data_traits<BOXM2_COVARIANCE>::datatype*) covariances->data_buffer();
@@ -135,18 +135,29 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
     //check if the point data is valid
     //if (covs_data[currIdx][0] >= 0.0)
     //{
-      float prob = 0.0f;
-      vnl_vector_fixed<double, 3> axes;
-      //vnl_vector_fixed<double, 3> eval;
-      double LE, CE, exp_color;
-      if (!calculateProbOfPoint(scene, blk, points_data[currIdx], covs_data[currIdx], alpha_data[currIdx], prob, exp_color, axes, LE, CE))
-        continue;
 
-      if (prob >= prob_t)
+      //check bounding box
+      if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
       {
-        //check bounding box
-        if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
-        {
+
+        //float prob = 0.0f;
+        float prob = points_data[currIdx][3]; // during extractPointCloud process the prob of this point should be saved in this field
+                                              // that process actually also checks whether the prob is below threshold and marks this field as -1.0
+        
+        if (prob >= prob_t)
+        {  
+        
+          vnl_vector_fixed<double, 3> axes;
+          //vnl_vector_fixed<double, 3> eval;
+          double LE, CE, exp_color;
+          //if (!calculateProbOfPoint(scene, blk, points_data[currIdx], covs_data[currIdx], alpha_data[currIdx], prob, exp_color, axes, LE, CE))
+          //  continue;
+          if (!calculateLECEofPoint(covs_data[currIdx], axes, LE, CE))
+            continue;
+          
+          if (LE >= LE_t || CE >= CE_t)
+            continue;
+        
           file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
 
           if(datatype == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -198,9 +209,11 @@ void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const 
         throw 0;
     }
     for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
-        float prob = 0.0f;
-        if (!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
-            continue;
+        float prob = points_data[currIdx][3]; // during extractPointCloud process the prob of this point should be saved in this field
+                                              // that process also checks whether the prob is below threshold and marks this field as -1.0
+        // the probability check should have already been done by ExtractPointCloud processes  
+        //if (!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
+        //    continue;
         if (prob >= prob_t)
         {
             //check bounding box
@@ -250,24 +263,26 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   vgl_point_3d<double> local;
   boxm2_block_id id;
 
-  if (point[3] <= 0.0 || vnl_math::isinf(cov[0]) || vnl_math::isnan(cov[0]))  // the covariance matrices with such values cause problems for eigen value calculation, skip these points!
-                                                                              // if pt[3] == 0 then this point is uninitialized, skipping is fine
-                                                                              // if the covariance has invalid values, then over or under flows might have happened during cov computation using float point precision
-                                                                              // ideally we should switch to double point precision during covariance calculations
-    return false;
-
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
-  //if the scene doesn't contain point,
-  if (!scene->contains(vgl_point, id, local)) {
-    //std::cout << "Point " << vgl_point << " not present in scene! Skipping..." << std::endl;
+  
+  //the following method checks whether the scene contains the point or not
+  if (!calculateProbOfPoint(scene, blk, point, alpha, prob))
     return false;
-  }
-  //if the block passed isn't the block that contains the point, there is something wrong...
-  //this happens when the point data is empty (0,0,0,0) for instance, or simply wrong.
-  //if (blk->block_id() != id)
-  //  return false;
+  
+  if (!calculateLECEofPoint(cov, axes, LE, CE))
+    return false;
 
-  calculateProbOfPoint(scene, blk, point, alpha, prob);
+  return true;
+}
+
+bool boxm2_export_oriented_point_cloud_function::calculateLECEofPoint(const vnl_vector_fixed<float, 9>& cov,
+                                                                      vnl_vector_fixed<double, 3>&axes, double& LE, double& CE)
+{
+  if (vnl_math::isinf(cov[0]) || vnl_math::isnan(cov[0]))  // the covariance matrices with such values cause problems for eigen value calculation, skip these points!
+                                                           // if the covariance has invalid values, then over or under flows might have happened during cov computation using float point precision
+                                                           // ideally we should switch to double point precision during covariance calculations
+    return false;
+
   // compute the eigenvalues
   vnl_matrix<double> pt_cov(3,3,0.0);
   pt_cov[0][0] = cov[0];
@@ -309,18 +324,8 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
 
   CE = CEx > CEy ? CEx : CEy;
 
-  //if (LE > 2.5)
-  //{
-  //  return false;
-  //}
-  //if (CE > 2.5)
-  //{
-  //  return false;
-  //}
-
   return true;
 }
-
 
 bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
                                                                       const vnl_vector_fixed<float, 4>& point,
@@ -329,15 +334,19 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   vgl_point_3d<double> local;
   boxm2_block_id id;
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
+  //boxm2_block_id id = blk->block_id();
+  //if (!scene->block_contains(vgl_point, id, local)) 
+  //  return false;
+  
   //if the scene doesn't contain point,
   if (!scene->contains(vgl_point, id, local)) {
     return false;
   }
   //if the block passed isn't the block that contains the point, there is something wrong...
   //this happens when the point data is empty (0,0,0,0) for instance, or simply wrong.
-  if (blk->block_id() != id)
+  /*if (blk->block_id() != id)
     return false;
-
+  */
   int index_x=(int)std::floor(local.x());
   int index_y=(int)std::floor(local.y());
   int index_z=(int)std::floor(local.z());

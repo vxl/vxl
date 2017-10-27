@@ -24,6 +24,8 @@ DECLARE( test_intersection );
 DECLARE( test_spline );
 DECLARE( test_pointset );
 DECLARE( test_quadric );
+DECLARE( test_oriented_box_2d );
+DECLARE( test_affine_coordinates );
 
 void
 register_tests()
@@ -52,6 +54,8 @@ register_tests()
   REGISTER( test_spline );
   REGISTER( test_pointset );
   REGISTER( test_quadric );
+  REGISTER( test_oriented_box_2d );
+  REGISTER( test_affine_coordinates );
 }
 
 DEFINE_MAIN;

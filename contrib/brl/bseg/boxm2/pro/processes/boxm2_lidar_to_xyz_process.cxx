@@ -24,6 +24,7 @@
 
 #include <brip/brip_roi.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_area.h>
 
 namespace boxm2_lidar_to_xyz_process_globals
 {
@@ -224,7 +225,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz);
   vgl_box_2d<float> sbbox((float)min_lon, (float)max_lon, (float)min_lat, (float)max_lat);
   //std::cout << " scene bbox in geo coords: " << sbbox << std::endl;
-  if (vgl_intersection(bbox, sbbox).area() <= 0)
+  if (vgl_area(vgl_intersection(bbox, sbbox)) <= 0)
   {
     //std::cout << "scene does not intersect with the image: " << fname << " with box: " << bbox << std::endl;
     return false;
