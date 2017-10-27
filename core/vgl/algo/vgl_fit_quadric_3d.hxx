@@ -4,7 +4,7 @@
 //:
 // \file
 #include <limits>
-#include <math.h>
+#include <vnl/vnl_math.h>
 #include <iostream>
 #include "vgl_fit_quadric_3d.h"
 #include <vgl/algo/vgl_norm_trans_3d.h>

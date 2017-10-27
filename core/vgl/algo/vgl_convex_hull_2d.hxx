@@ -6,7 +6,7 @@
 
 #include <vcl_compiler.h>
 
-#include <math.h>
+#include <vnl/vnl_math.h>
 #include <limits>
 
 //:

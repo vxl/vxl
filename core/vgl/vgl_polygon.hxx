@@ -9,7 +9,7 @@
 #include <numeric>    
 #include <string>
 #include "vgl_polygon.h"
-#include <math.h>
+#include <vnl/vnl_math.h>
 //:
 // \file
 

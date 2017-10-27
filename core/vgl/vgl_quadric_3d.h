@@ -17,7 +17,7 @@
 #include <string>
 #include <iosfwd>
 #include <vcl_compiler.h>
-#include <math.h>
+#include <vnl/vnl_math.h>
 
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
