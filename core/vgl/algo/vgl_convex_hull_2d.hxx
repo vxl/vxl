@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "vgl_convex_hull_2d.h"
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_area.h>
 
 #include <vcl_compiler.h>
 
@@ -175,10 +176,10 @@ vgl_orient_box_2d<T>  vgl_convex_hull_2d<T>::min_area_enclosing_rectangle(){
       vgl_point_2d<T> rpp((c*vp.x()-s*vp.y()),(s*vp.x() + c*vp.y()));
       rbox.add(rpp);
     }
-    T area = rbox.area();
+    T area = vgl_area(rbox);
     if(area<min_area){
       min_offset.set(vm1.x(), vm1.y());
-      min_area = rbox.area();
+      min_area = vgl_area(rbox);
       min_box = rbox;
       min_angle = theta;
     }
