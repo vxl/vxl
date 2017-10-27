@@ -12,6 +12,7 @@
 #include <vcl_compiler.h>
 
 #include <vil3d/vil3d_image_view.h>
+#include <vil3d/vil3d_math.h>
 
 namespace
 {
@@ -206,3 +207,37 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
         dst(i,j,k) = renumbering[dst(i,j,k)];
 }
 
+
+
+//: Convert a label image into a list of chorded regions.
+// A blob label value of n will be returned in dest_regions[n-1].
+void vil3d_blob_labels_to_regions(const vil3d_image_view<unsigned>& src_label,
+                                vcl_vector<vil3d_region>& regions)
+{
+  regions.clear();
+  unsigned ni=src_label.ni();
+  unsigned nj=src_label.nj();
+  unsigned nk=src_label.nk();
+  
+  unsigned min_v,max_v;
+  vil3d_math_value_range(src_label,min_v,max_v);
+  if (max_v==0) return;  // No blobs.
+  
+  regions.resize(max_v);
+
+  for (unsigned k=0; k<nk; ++k)
+   for (unsigned j=0; j<nj; ++j)
+    for (unsigned i=0; i<ni;) // don't auto increment i, since the loop body does it.
+    {
+      unsigned label = src_label(i,j,k);
+      if (!label)
+      { // if not a label - go to next pixel.
+        ++i;
+        continue;
+      }
+      unsigned i_start=i;
+      // Find end of chord.
+      while (++i < ni && src_label(i,j,k)==label);
+      regions[label-1].push_back(vil3d_chord(i_start, i-1, j,k));
+    }
+}

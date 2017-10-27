@@ -59,6 +59,7 @@ int main( int argc, char* argv[] )
   vul_arg<double> pt_radius("-pr","Point radius",2.0);
   vul_arg<double> scale("-s","Scaling to apply",1.0);
   vul_arg<double> border_prop("-bwp","Border width (proportion)",-1);
+  vul_arg<std::string> num_colour("-nc","Number colour","none");
 
   vul_arg_parse(argc,argv);
 
@@ -155,6 +156,21 @@ int main( int argc, char* argv[] )
     writer.set_colour(line_colour());
     msm_draw_shape_to_eps(writer,points,curves);
   }
+  
+  if (num_colour()!="none")
+  {
+    // Write point numbers beside each point
+    writer.set_colour(num_colour());
+    writer.ofs()<<"/Times-Roman findfont"<<std::endl;
+    writer.ofs()<<"12 scalefont setfont"<<std::endl;
+    writer.ofs()<<"newpath"<<std::endl;
+    for (unsigned i=0;i<points.size();++i)
+    {
+      writer.ofs()<<points[i].x()+5<<" "<<bbox.height()-points[i].y()-5
+                  <<" M ("<<i<<") show"<<std::endl;
+    }
+  }
+  
   writer.close();
 
   std::cout<<"Graphics saved to "<<out_path()<<std::endl;

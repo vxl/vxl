@@ -7,10 +7,13 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <rgtl/rgtl_compact_tree.hxx>
-#include <rgtl/rgtl_compact_tree_data_fixed.hxx>
+#include <rgtl/rgtl_compact_tree_data_fixed.h>
+
 
 typedef rgtl_compact_tree_data_fixed<3> tt0;
+
 template class rgtl_compact_tree_data_fixed<3>;
+
 template class rgtl_compact_tree<tt0::derived_arg0,
                                  tt0::derived_arg1,
                                  tt0::derived_arg2>;

@@ -2,6 +2,12 @@
 // \file
 // \brief Tool to build a shape model from data in files.
 // \author Tim Cootes
+// Given a set of shapes, align them then apply PCA to build a shape model.
+// Note that more sophisticated control over individual modes can be
+// defined using the mode_part: { ... } options. These enable particular
+// modes to only affect certain subsets of points.
+// Although the resulting model will be less compact, it can be helpful
+// to know that some modes are focused on particular regions.
 
 #include <sstream>
 #include <iostream>
@@ -9,6 +15,8 @@
 #include <string>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
+#include <mbl/mbl_parse_int_list.h>
+#include <mbl/mbl_parse_string_list.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
@@ -16,6 +24,8 @@
 #include <vsl/vsl_quick_file.h>
 
 #include <msm/msm_shape_model_builder.h>
+#include <msm/msm_reflect_shape.h>
+#include <msm/msm_curve.h>
 
 #include <msm/msm_add_all_loaders.h>
 
@@ -38,8 +48,27 @@ max_modes: 99
 // Proportion of shape variation to explain
 var_prop: 0.95
 
+//: Path to curves file defining parts to be used for individual modes
+parts_for_modes_path: parts.crvs
+
+//: Define which parts to be used for first modes
+//  Where defined, only the points in the parts will be used to compute
+//  that mode.  Thus some modes will only affect a subset of points.
+//  Thus in the following, the third mode will only affect the points
+//  listed in the mouth part in the curves file.
+mode_part: { all all mouth eyebrows }
+
+
 //: File to save model to
 shape_model_path: shape_model.bfs
+
+//: Define renumbering required under reflection
+//  If defined, a reflected version of each shape is included in build
+reflection_symmetry: { 7 6 5 4 3 2 1 0 }
+
+//: When true, only use reflection. When false, use both reflection and original.
+only_reflect: false
+
 
 image_dir: /home/images/
 points_dir: /home/points/
@@ -76,6 +105,22 @@ struct tool_params
 
   //: Proportion of shape variation to explain
   double var_prop;
+
+  //: Path to curves file defining parts to be used for individual modes
+  vcl_string parts_for_modes_path;
+
+  //: Define which parts to be used for first modes
+  //  Where defined, only the points in the parts will be used
+  //  to compute that mode.  Thus some modes will only affect a
+  //  subset of points.
+  vcl_vector<vcl_string> mode_part;
+
+  //: Define renumbering required under reflection
+  //  If defined, a reflected version of each shape is included in build
+  vcl_vector<unsigned> reflection_symmetry;
+
+  //: When true, only use reflection. When false, use both reflection and original.
+  bool only_reflect;
 
   //: Directory containing images
   std::string image_dir;
@@ -143,15 +188,61 @@ void tool_params::read_from_file(const std::string& path)
     limiter = msm_param_limiter::create_from_stream(ss);
   }
 
+  parts_for_modes_path=props.get_optional_property("parts_for_modes_path","");
+  vcl_string mode_part_str=props.get_optional_property("mode_part","");
+  mode_part.resize(0);
+  if (mode_part_str!="")
+    mbl_parse_string_list(mode_part_str,mode_part);
+
+  vcl_string ref_sym_str=props.get_optional_property("reflection_symmetry","-");
+  reflection_symmetry.resize(0);
+  if (ref_sym_str!="-")
+  {
+    vcl_stringstream ss(ref_sym_str);
+    mbl_parse_int_list(ss, vcl_back_inserter(reflection_symmetry),
+                       unsigned());
+  }
+
+  only_reflect=vul_string_to_bool(props.get_optional_property("only_reflect","false"));
+
+
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
 
   // Don't look for unused props so can use a single common parameter file.
 }
 
+//: Use curves object to store the different parts
+//  If mode_parts[i]==parts[j].name(),
+//  then used[i] computed from parts[j].index()
+//  If modes_parts[i]==all, then all elements used.
+void get_pts_used_for_modes(const msm_curves& parts,
+                        const vcl_vector<vcl_string>& mode_parts,
+                        vcl_vector<vcl_vector<unsigned> >& pts_used)
+{
+  pts_used.resize(mode_parts.size());
+
+  for (unsigned i=0;i<mode_parts.size();++i)
+  {
+    int p = parts.which_curve(mode_parts[i]);
+    if (mode_parts[i]=="all" || p<0)
+    {
+      // Indicate that we should use all points
+      pts_used[i].resize(0);
+    }
+    else
+    {
+      // Use indices from part p
+      pts_used[i]=parts[p].index();
+    }
+  }
+}
+
+
 int main(int argc, char** argv)
 {
   vul_arg<std::string> param_path("-p","Parameter filename");
+  vul_arg<std::string> out_path("-o","Path to which to save model (over-riding param file)");
   vul_arg<std::string> mode_var_path("-vp","Path for output of mode variances");
   vul_arg_parse(argc,argv);
 
@@ -174,6 +265,39 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  if (out_path()!="")
+    params.shape_model_path=out_path();
+
+  // Load in curves if required
+  msm_curves parts_for_modes;
+  if (params.parts_for_modes_path!="")
+  {
+    if (!parts_for_modes.read_text_file(params.parts_for_modes_path))
+    {
+      vcl_cerr<<"Failed to read in parts from "
+              <<params.parts_for_modes_path<<vcl_endl;
+      return 2;
+    }
+  }
+
+  // === Load in all the shapes ===
+  unsigned n=params.points_names.size();
+  vcl_vector<msm_points> shapes(n);
+  msm_load_shapes(params.points_dir,params.points_names,shapes);
+
+  if (params.reflection_symmetry.size()>0)
+  {
+    // Use reflections
+    msm_points ref_points;
+    for (unsigned i=0;i<n;++i)
+    {
+      msm_reflect_shape_along_x(shapes[i],params.reflection_symmetry,
+                                ref_points,shapes[i].cog().x());
+      if (params.only_reflect) shapes[i]=ref_points;
+      else                     shapes.push_back(ref_points);
+    }
+  }
+
   msm_shape_model_builder builder;
   msm_shape_model shape_model;
 
@@ -181,9 +305,20 @@ int main(int argc, char** argv)
   builder.set_ref_pose_source(params.ref_pose_source);
   builder.set_param_limiter(*params.limiter);
   builder.set_mode_choice(0,params.max_modes,params.var_prop);
-  builder.build_from_files(params.points_dir,
-                           params.points_names,
-                           shape_model);
+
+  vcl_cout<<"Building shape model from "<<shapes.size()<<" examples."<<vcl_endl;
+
+  if (params.mode_part.size()==0)
+  {
+    builder.build_model(shapes,shape_model);
+  }
+  else
+  {
+    vcl_vector<vcl_vector<unsigned> > pts_used;
+    get_pts_used_for_modes(parts_for_modes,params.mode_part,pts_used);
+    builder.build_model(shapes,pts_used,shape_model);
+  }
+
 
   std::cout<<"Built model: "<<shape_model<<std::endl;
 

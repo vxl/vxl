@@ -1,4 +1,4 @@
-#include "rgtl_sqt_base.hxx"
+#include "rgtl_sqt_base.h"
 //:
 // \file
 // Copyright 2006-2009 Brad King, Chuck Stewart

@@ -450,9 +450,16 @@ advance()
     // Make sure that the packet is from the actual video stream.
     if (is_->packet_.stream_index == is_->vid_index_)
     {
-      if ( avcodec_decode_video2( is_->video_enc_,
-                                  is_->frame_, &got_picture,
-                                  &is_->packet_ ) < 0 ) {
+       int err = avcodec_decode_video2( is_->video_enc_,
+                                       is_->frame_, &got_picture,
+                                       &is_->packet_); 
+       if (err == AVERROR_INVALIDDATA)
+       {// Ignore the frame and move to the next
+         av_free_packet(&is_->packet_);
+         continue;
+       }
+      if (err<0)
+      {
         std::cerr << "vidl_ffmpeg_istream: Error decoding packet!\n";
         av_free_packet(&is_->packet_);
         return false;
@@ -468,7 +475,10 @@ advance()
       is_->metadata_.insert(is_->metadata_.end(), is_->packet_.data,
         is_->packet_.data + is_->packet_.size);
     }
-    av_free_packet( &is_->packet_ );
+    if (!got_picture)
+    {
+      av_free_packet( &is_->packet_ );
+    }
   }
 
   // From ffmpeg apiexample.c: some codecs, such as MPEG, transmit the

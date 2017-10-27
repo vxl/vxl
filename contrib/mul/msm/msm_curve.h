@@ -141,6 +141,12 @@ class msm_curves : public std::vector<msm_curve>
   // \endverbatim
   void config_from_stream(std::istream&);
 
+  //: Either read from file or parse parameters in string.
+  // If curve_data starts with { then parse using config_from_stream, 
+  // else assume it is a filename and load.
+  // If curves_data="-" then empty curves
+  void parse_or_load(const vcl_string& curves_data);
+
   //: Save to text file
   // Writes in format:
   // \verbatim

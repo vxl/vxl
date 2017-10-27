@@ -72,7 +72,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
     jpeg_set_quality(&jobj, quality, TRUE);
 
     // start compression
-    bool write_all_tables = true;
+    jpeg_boolean write_all_tables = TRUE;
     jpeg_start_compress (&jobj, write_all_tables);
 
     //

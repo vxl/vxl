@@ -25,6 +25,7 @@ set(msm_sources
   msm_zoom_aligner.h          msm_zoom_aligner.cxx
   msm_similarity_aligner.h    msm_similarity_aligner.cxx
   msm_rigid_aligner.h         msm_rigid_aligner.cxx
+  msm_affine_aligner.h        msm_affine_aligner.cxx
 
   msm_curve.h                 msm_curve.cxx
 
@@ -37,6 +38,7 @@ set(msm_sources
   msm_pose_maker.h            msm_pose_maker.cxx
 
   msm_cubic_bezier.h          msm_cubic_bezier.cxx
+  msm_equally_space.h         msm_equally_space.cxx
 )
 
 aux_source_directory(Templates msm_sources)

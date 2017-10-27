@@ -49,6 +49,22 @@ void msm_wt_mat_2d::eigen_values(double& EV1, double& EV2)
   EV2=hac-d;
 }
 
+//: Calculate eigenvector associated with largest eigenvalue.
+//  Other evec given by (-evec1.y(),evec1.x())
+void msm_wt_mat_2d::eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, double& eval2)
+{
+  double dac=m11_-m22_;
+  double d=0.5*std::sqrt(dac*dac+4*m12_*m12_);
+  double hac = 0.5*(m11_+m22_);
+  eval1=hac+d;
+  eval2=hac-d;
+  evec1=vgl_vector_2d<double>(m12_,eval1-m11_);
+  double L=evec1.length();
+  if (L>1e-6) evec1/=L;
+  else evec1=vgl_vector_2d<double>(1,0);
+}
+
+
 //: Calculates W2=T'WT where T is 2x2 matrix (a,-b;b,a)
 msm_wt_mat_2d msm_wt_mat_2d::transform_by(double a, double b) const
 {

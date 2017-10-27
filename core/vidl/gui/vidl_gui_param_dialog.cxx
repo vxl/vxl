@@ -160,8 +160,10 @@ namespace vidl_gui_param_dialog
   // provide a list of choices for valid file formats
   static std::vector<std::string> fmt_choices;
   if (fmt_choices.empty()) {
-    for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+    std::list<vil_file_format*>& l = vil_file_format::all();
+    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
       fmt_choices.push_back((*p)->tag());
+    }
   }
   static int fmt_idx = 0;
   dlg.choice("Image File Format",fmt_choices,fmt_idx);

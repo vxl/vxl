@@ -24,8 +24,8 @@
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
-#include "sdet_edgel.h"
-#include "sdet_sel_utils.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_sel_utils.h>
 
 //: The base class for curve models used by the linking algorithm.
 //  It contains the following:

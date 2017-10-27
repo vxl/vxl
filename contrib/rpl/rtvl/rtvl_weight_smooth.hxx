@@ -6,32 +6,100 @@
 #ifndef rtvl_weight_smooth_hxx
 #define rtvl_weight_smooth_hxx
 
-#include "rtvl_weight.hxx"
+#include <iostream>
+#include <cstdlib>
+#include "rtvl_weight_smooth.h"
 
-template <unsigned int N> class rtvl_terms;
+#include "rtvl_terms.h"
+#include "rtvl_intpow.h"
 
+#include <vnl/vnl_vector_fixed.h>
+#include <vcl_compiler.h>
+
+//----------------------------------------------------------------------------
 template <unsigned int N>
-class rtvl_weight_smooth: public rtvl_weight<N>
+rtvl_weight_smooth<N>::rtvl_weight_smooth(double gs, unsigned int n):
+  derived(gs)
 {
-public:
-  typedef rtvl_weight<N> derived;
-  rtvl_weight_smooth(double gs = 1, unsigned int n = 4);
-protected:
-  virtual double compute_flat(rtvl_terms<N> const& terms);
-  virtual void compute_flat_d(rtvl_terms<N> const& terms,
-                              vnl_vector_fixed<double, N>& dwflat);
-  virtual double compute_curved(rtvl_terms<N> const& terms);
-  virtual void compute_curved_d(rtvl_terms<N> const& terms,
-                                vnl_vector_fixed<double, N>& dwcurve);
-private:
-  using derived::geodesic_scale;
-  double z;
-  double zm3p3;
-  double zm3p4;
-  double wangle;
-  double cos_theta_2nm1;
-  double (*intpow)(double);
-  unsigned int cos_power;
-};
+  cos_power = 2*n;
+  switch(n)
+    {
+    // n ==> 2*n-1
+    case 1: this->intpow = rtvl_intpow_impl<double, 1>::compute; break;
+    case 2: this->intpow = rtvl_intpow_impl<double, 3>::compute; break;
+    case 3: this->intpow = rtvl_intpow_impl<double, 5>::compute; break;
+    case 4: this->intpow = rtvl_intpow_impl<double, 7>::compute; break;
+    case 5: this->intpow = rtvl_intpow_impl<double, 9>::compute; break;
+    case 6: this->intpow = rtvl_intpow_impl<double, 11>::compute; break;
+    case 7: this->intpow = rtvl_intpow_impl<double, 13>::compute; break;
+    case 8: this->intpow = rtvl_intpow_impl<double, 15>::compute; break;
+    default: std::abort();
+    }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int N>
+double
+rtvl_weight_smooth<N>
+::compute_flat(rtvl_terms<N> const& terms)
+{
+  z = terms.vlen / geodesic_scale;
+  if(z < 3)
+    {
+    double zm3 = z-3;
+    double zm3p2 = zm3*zm3;
+    zm3p3 = zm3p2*zm3;
+    zm3p4 = zm3p3*zm3;
+    return z*z*zm3p4/16;
+    }
+  else
+    {
+    return 0;
+    }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void
+rtvl_weight_smooth<N>
+::compute_flat_d(rtvl_terms<N> const& terms,
+                 vnl_vector_fixed<double, N>& dwflat)
+{
+  if(z < 3)
+    {
+    dwflat = terms.vhat*(z*(zm3p4 + 2*z*zm3p3)/(8*geodesic_scale));
+    }
+  else
+    {
+    dwflat.fill(0.0);
+    }
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int N>
+double
+rtvl_weight_smooth<N>
+::compute_curved(rtvl_terms<N> const& terms)
+{
+  cos_theta_2nm1 = intpow(terms.cos_theta);
+  wangle = terms.cos_theta * cos_theta_2nm1;
+  return terms.wflat*wangle;
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int N>
+void
+rtvl_weight_smooth<N>
+::compute_curved_d(rtvl_terms<N> const& terms,
+                   vnl_vector_fixed<double, N>& dwcurve)
+{
+  vnl_vector_fixed<double, N> dwangle =
+    terms.dtheta * (-terms.sin_theta*cos_power*cos_theta_2nm1);
+  dwcurve = terms.dwflat*wangle + dwangle*terms.wflat;
+}
+
+//----------------------------------------------------------------------------
+#define RTVL_WEIGHT_SMOOTH_INSTANTIATE(N) \
+  template class rtvl_weight_smooth<N>
 
 #endif
