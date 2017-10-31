@@ -824,12 +824,12 @@ def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename, init_finish
   batch.run_process()
 
 
-def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename="", write_kml=False):
+def get_geocam_footprint_with_value(geocam, geotiff_filename, out_kml_filename="", write_kml=False):
   batch.init_process("vpglGeoFootprintProcess2")
   batch.set_input_from_db(0, geocam)
   batch.set_input_string(1, geotiff_filename)
   batch.set_input_string(2, out_kml_filename)
-  batch.set_input_string(3, write_kml)
+  batch.set_input_bool(3, write_kml)
   status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
