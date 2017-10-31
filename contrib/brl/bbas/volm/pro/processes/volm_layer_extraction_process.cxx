@@ -455,7 +455,7 @@ bool volm_generate_kml_from_binary_image_process(bprb_func_process& pro)
   // write to kml
   std::ofstream ofs(out_file.c_str());
   if (!ofs.is_open()) {
-    std::cerr << pro.name() << ": Failed to write " << out_file << "\n!";
+    std::cerr << pro.name() << ": Failed to write " << out_file << "!\n";
     return false;
   }
   bkml_write::open_document(ofs);
