@@ -409,3 +409,19 @@ def fit_oriented_box(color_blob_image):
     return cnt, corners, box_dimension
   else:
     return 0, 0, 0
+
+def fit_oriented_box_from_geotiff(byte_img, in_cam, out_kml, pixel_thres = 30):
+  batch.init_process("sdetFitOrientedBoxesFromGeotiffProcess")
+  batch.set_input_from_db(0, byte_img)
+  batch.set_input_from_db(1, in_cam)
+  batch.set_input_unsigned(2, pixel_thres)
+  batch.set_input_string(3, out_kml)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    cnt = batch.get_output_unsigned(id)
+    (id, type) = batch.commit_output(1)
+    box_img = dbvalue(id, type)
+    return cnt, box_img
+  else:
+    return None, None
