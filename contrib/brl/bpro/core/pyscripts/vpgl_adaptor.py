@@ -1673,3 +1673,17 @@ def DEM_backproj(dem_mgr, cam, u, v, err_tol = 1.0):
         batch.remove_data(id2)
         return (x, y, z)
     raise VpglException("failed to backproject onto the DEM")
+
+# convert a geotiff image to a ASCII xyz point cloud file via a LVCS conversion
+def dem_to_pts_lvcs(img, cam, lvcs, out_file):
+  batch.init_process("vpglConvertGeotiffToPointCloudProcess")
+  batch.set_input_from_db(0, img)
+  batch.set_input_from_db(1, cam)
+  batch.set_input_from_db(2, lvcs)
+  batch.set_input_string(3, out_file)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    n_pts = batch.get_output_unsigned(id)
+    return n_pts
+  raise VpglException("failed to convert geotiff to point clouds")
