@@ -18,11 +18,12 @@
 bool vpgl_convert_geotiff_to_point_cloud_process_cons(bprb_func_process& pro)
 {
   // This process takes 4 inputs
-  std::vector<std::string> input_types_(4);
+  std::vector<std::string> input_types_(5);
   input_types_[0] = "vil_image_view_base_sptr";  // input float image
   input_types_[1] = "vpgl_camera_double_sptr";   // input geo camera
   input_types_[2] = "vpgl_lvcs_sptr";            // input lvcs
   input_types_[3] = "vcl_string";                // output xyz filename
+  input_types_[4] = "bool";                      // option to choose whether convert z value
   // process takes 1 outputs
   std::vector<std::string> output_types_(1);
   output_types_[0] = "unsigned";                 // number of converted pixels
@@ -43,6 +44,7 @@ bool vpgl_convert_geotiff_to_point_cloud_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  in_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
   vpgl_lvcs_sptr           lvcs_sptr   = pro.get_input<vpgl_lvcs_sptr>(in_i++);
   std::string out_filename = pro.get_input<std::string>(in_i++);
+  bool is_convert_z = pro.get_input<bool>(in_i++);
 
   // check and covert inputs
   vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(in_img_sptr.ptr());
@@ -70,6 +72,8 @@ bool vpgl_convert_geotiff_to_point_cloud_process(bprb_func_process& pro)
       double x, y, z;
       lvcs_sptr->global_to_local(lon, lat, elev, vpgl_lvcs::wgs84, x, y, z, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
       vgl_point_3d<double>pt(x, y, z);
+      if (!is_convert_z)
+        pt.set(x, y, elev);
       pts.push_back(pt);
     }
   }
