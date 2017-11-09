@@ -113,6 +113,11 @@ struct vidl_ffmpeg_istream::pimpl
   double stream_time_base_to_frame()
     {
     assert(this->vid_str_);
+    if(this->vid_str_->avg_frame_rate.num == 0.0)
+    {
+      return av_q2d(av_inv_q(av_mul_q(this->vid_str_->time_base,
+                                      this->vid_str_->r_frame_rate)));
+    }
     return av_q2d(
       av_inv_q(
         av_mul_q(this->vid_str_->time_base, this->vid_str_->avg_frame_rate)));
