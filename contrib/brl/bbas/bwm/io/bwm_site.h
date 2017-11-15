@@ -37,7 +37,11 @@ class bwm_site : public vbl_ref_count
 
   void tableaus(std::vector<bwm_io_tab_config* > &tableaus) { tableaus = tableaus_; }
 
+
   void objects(std::vector<std::pair<std::string, std::string> > &obj) {obj = objects_; }
+
+  //: load objects from single OBJ file (groups) and write multiple ply files
+  void convert_object_groups_obj_to_multiple_ply(std::string const& obj_path);
 
   void x_write(std::ostream& s);
 
