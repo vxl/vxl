@@ -1,6 +1,7 @@
 #include "vgl_fit_orient_box_2d.h"
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_area.h>
 template <class T>
 vgl_fit_orient_box_2d<T>::vgl_fit_orient_box_2d(vgl_polygon<T> const& poly, double dtheta):dtheta_(dtheta), fit_valid_(false){
   // extract points
@@ -31,7 +32,7 @@ void vgl_fit_orient_box_2d<T>::fit_obox(){
       vgl_point_2d<T> rpp((c*vp.x()-s*vp.y()),(s*vp.x() + c*vp.y()));
       box.add(rpp);
     }
-    if(box.area() < min_area){
+    if(vgl_area(box) < min_area){
     T w = box.width(), h = box.height();
     vgl_point_2d<T> cent = box.centroid();
     //select major axis such that width > height
