@@ -1,4 +1,4 @@
-// This is core/vgl/algo/vgl_orient_box.h
+// This is core/vgl/algo/vgl_orient_box_2d.h
 #ifndef vgl_orient_box_2d_h_
 #define vgl_orient_box_2d_h_
 
@@ -63,6 +63,9 @@ class vgl_orient_box_2d {
   //::area
   T area() const {std::pair<T, T> p = this->width_height(); return (p.first)*(p.second);}
   
+  //:: orientation of major axis on the range +- pi (as returned by atan2)
+  T angle_in_rad() const;
+
   bool operator==(vgl_orient_box_2d<T> const& ob) const {
     return (this == &ob) || (ob.major_axis_ == this->major_axis_ && ob.half_height_ == this->half_height_);
   }
@@ -86,6 +89,11 @@ class vgl_orient_box_2d {
   //: corners of the oriented rectangle
   std::vector<vgl_point_2d<T> > corners() const;
 
+  //: polygon corresponding to obox boundary
+  vgl_polygon<T> obox_boundary() const{
+    std::vector<vgl_point_2d<T> > corns = this->corners();
+    return vgl_polygon<T>(corns);
+  }
   //: map a point to the (u, v) coordinate system of the oriented box
   vgl_point_2d<T> transform_to_obox(vgl_point_2d<T> const& p) const;
 

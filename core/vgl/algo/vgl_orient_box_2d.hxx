@@ -171,6 +171,15 @@ bool vgl_orient_box_2d<T>::near_equal(vgl_orient_box_2d<T> const& ob, T tol) con
     return true;
   return false;
 }
+template <class T>
+T vgl_orient_box_2d<T>::angle_in_rad() const{
+  const vgl_point_2d<T>& tp1 = major_axis_.point1();
+  const vgl_point_2d<T>& tp2 = major_axis_.point2();
+  vgl_vector_2d<T> v = tp2-tp1;
+  v /= v.length();
+  return atan2(v.y(), v.x());
+}
+
 #undef VGL_ORIENT_BOX_2D_INSTANTIATE
 #define VGL_ORIENT_BOX_2D_INSTANTIATE(T) \
 template class vgl_orient_box_2d<T >; \

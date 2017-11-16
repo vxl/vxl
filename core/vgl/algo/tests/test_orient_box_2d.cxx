@@ -4,6 +4,7 @@
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/algo/vgl_orient_box_2d.h>
+#include <vgl/algo/vgl_fit_orient_box_2d.h>
 
 void test_orient_box_2d()
 {
@@ -45,5 +46,19 @@ void test_orient_box_2d()
   vgl_orient_box_2d<float> ob2(b, -3.1415926535897932384626433832795f/2.0f);
   vgl_orient_box_2d<float> ob3(br, 0.0f);
   TEST("test rotation constructors", ob2==ob3, true);
+  vgl_point_2d<float> p0a(0.0f, 0.0f), p1a(100.0f, 57.73503f),p2a(-25.0f, 43.30127f);
+  vgl_orient_box_2d<float> obang(p0a, p1a, p2a);
+  float ang = obang.angle_in_rad();
+  TEST_NEAR("orientation angle", ang, 0.523599f, 0.001);
+  // test fiting an oriented box to points
+  vgl_point_2d<double> p00(0.0, 0.0), p01(2.0, 0.0), p02(2.0, 1.0), p03(0.0, 1.0);
+  std::vector<vgl_point_2d<double> > verts;
+  verts.push_back(p00);  verts.push_back(p01);   verts.push_back(p02);   verts.push_back(p03);
+  vgl_polygon<double> poly(verts);
+  vgl_fit_orient_box_2d<double> fob(poly);
+  vgl_orient_box_2d<double> obf = fob.fitted_box();
+  double angf = obf.angle_in_rad(), wth = obf.width(), hht = obf.height();
+  double er = fabs(angf) + fabs(wth-2), fabs(hht-1);
+  TEST_NEAR("fit oriented box to pts", er, 0.0, 0.001);
 }
 TESTMAIN(test_orient_box_2d);
