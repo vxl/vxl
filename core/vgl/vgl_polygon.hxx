@@ -334,6 +334,7 @@ vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T> const &p)
     //Self intersecting/non simple polygons cannot be said to be clockwise or not
     //hence they are not added and we get an empty polygon.
     std::cout<< "WARNING - self intersecting polygon"<<std::endl;
+    return p;
   }
   else
   {
@@ -346,7 +347,8 @@ vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T> const &p)
       }
       else
       {
-        std::reverse(verts.begin(), verts.end());
+        if(i == 0)
+        {std::reverse(verts.begin(), verts.end());}
         outPolygon.push_back(verts);
       }
     }
