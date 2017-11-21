@@ -139,10 +139,10 @@ bsgm_disparity_estimator::compute(
 
   // Find and fix errors if configured.
   if( params_.error_check_mode > 0 ){
-    flag_nonunique( disp_tar, disp_cost, invalid_disp );
+    flag_nonunique( disp_tar, disp_cost, img_tar, invalid_disp );
 
     if( params_.error_check_mode > 1 )
-      interpolate_errors( disp_tar, invalid_tar, invalid_disp );
+      interpolate_errors( disp_tar, invalid_tar, img_tar, invalid_disp );
   }
 
   if( params_.print_timing )
@@ -751,6 +751,7 @@ void
 bsgm_disparity_estimator::flag_nonunique(
   vil_image_view<float>& disp_img,
   const vil_image_view<unsigned short>& disp_cost,
+  const vil_image_view<vxl_byte>& img,
   float invalid_disparity,
   int disp_thresh )
 {
@@ -788,6 +789,12 @@ bsgm_disparity_estimator::flag_nonunique(
 
       if( disp_img(x,y) == invalid_disparity ) continue;
 
+      // Label dark pixels as invalid, if thresh=0 nothing happens
+      if (img(x, y) < params_.shadow_thresh) {
+        disp_img(x, y) = invalid_disparity;
+        continue;
+      }
+
       // Compute the floor and ceiling of each disparity
       int d_floor = (int)floor(disp_img(x,y));
       int d_ceil = (int)ceil(disp_img(x,y));
@@ -811,10 +818,12 @@ void
 bsgm_disparity_estimator::interpolate_errors(
   vil_image_view<float>& disp_img,
   const vil_image_view<bool>& invalid,
+  const vil_image_view<vxl_byte>& img,
   float invalid_disparity )
 {
   int num_sample_dirs = 8;
   float sample_percentile = 0.5f;
+  float shadow_sample_percentile = 0.75f;
 
   std::vector<float> sample_vol( w_*h_*num_sample_dirs, 0.0f );
   vil_image_view<vxl_byte> sample_count( w_, h_ );
@@ -937,7 +946,14 @@ bsgm_disparity_estimator::interpolate_errors(
 
       std::sort( sample_itr, sample_itr + sample_count(x,y) );
 
-      int interp_idx = (int)( sample_percentile*sample_count(x,y) );
+      int interp_idx;
+
+      // Choose a sample index depending on whether pixel is shadow or not
+      if (img(x, y) < params_.shadow_thresh)
+        interp_idx = (int)(shadow_sample_percentile*sample_count(x, y));
+      else 
+        interp_idx = (int)(sample_percentile*sample_count(x, y));
+
       disp_img(x,y) = *( sample_itr + interp_idx );
     }
   }
