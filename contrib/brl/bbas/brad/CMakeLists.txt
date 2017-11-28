@@ -1,5 +1,20 @@
 # basic radiometery library
 
+  # Set up brad_where_brl_lib_dir.h to have a macro set to $CMAKE_LIBRARY_OUTPUT_DIRECTORY
+  vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/brad_where_brl_lib_dir.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/brad_where_brl_lib_dir.h include/vxl/bbas/brad
+  )
+
+  # Copy the Eulerspiral lookup-table file to the BRL library folder
+  if(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+    vxl_configure_file_copyonly( ${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_calibration_table.txt
+      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/brad_sat_img_calibration_table.txt include/vxl/bbas/brad
+    )
+  endif()
+
+  add_definitions(-DBRAD_WHERE_BRL_LIB_DIR_H_EXISTS)
+  include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+
   include_directories( ${BRL_INCLUDE_DIR}/bbas )
   include_directories(${GEL_INCLUDE_DIR})
 
