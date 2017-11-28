@@ -8,6 +8,7 @@
 // \date   18 Dec 99
 // \brief  See vgui_gtk2_window.h for a description of this file.
 
+#include <iostream>
 #include "vgui_gtk2_window.h"
 
 #include <vgui/vgui.h>
