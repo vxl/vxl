@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "mfpf_profile_pdf_builder.h"
 //:
 // \file
@@ -10,8 +13,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -68,7 +70,7 @@ void mfpf_profile_pdf_builder::set(int ilo, int ihi,
 void mfpf_profile_pdf_builder::set_region_size(double wi, double)
 {
   wi/=step_size();
-  ihi_ = vcl_max(1,int(0.99+wi));
+  ihi_ = std::max(1,int(0.99+wi));
   ilo_ = -ihi_;
 }
 
@@ -102,7 +104,7 @@ void mfpf_profile_pdf_builder::build(mfpf_point_finder& pf)
   mfpf_profile_pdf& nc = static_cast<mfpf_profile_pdf&>(pf);
   nc.set_search_area(search_ni_,0);
 
-  vcl_cout<<"Building from "<<data_.size()<<" examples."<<vcl_endl;
+  std::cout<<"Building from "<<data_.size()<<" examples."<<std::endl;
 
   vpdfl_pdf_base *pdf = pdf_builder().new_model();
   mbl_data_array_wrapper<vnl_vector<double> > data(&data_[0],data_.size());
@@ -122,11 +124,11 @@ void mfpf_profile_pdf_builder::build(mfpf_point_finder& pf)
 //=======================================================================
 
 //: Initialise from a string stream
-bool mfpf_profile_pdf_builder::set_from_stream(vcl_istream &is)
+bool mfpf_profile_pdf_builder::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   set_defaults();
@@ -147,8 +149,8 @@ bool mfpf_profile_pdf_builder::set_from_stream(vcl_istream &is)
 
   if (props.find("pdf_builder")!=props.end())
   {
-    vcl_istringstream b_ss(props["pdf_builder"]);
-    vcl_auto_ptr<vpdfl_builder_base> bb =
+    std::istringstream b_ss(props["pdf_builder"]);
+    std::auto_ptr<vpdfl_builder_base> bb =
          vpdfl_builder_base::new_pdf_builder_from_stream(b_ss);
     pdf_builder_ = bb->clone();
     props.erase("pdf_builder");
@@ -164,9 +166,9 @@ bool mfpf_profile_pdf_builder::set_from_stream(vcl_istream &is)
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_profile_pdf_builder::is_a() const
+std::string mfpf_profile_pdf_builder::is_a() const
 {
-  return vcl_string("mfpf_profile_pdf_builder");
+  return std::string("mfpf_profile_pdf_builder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -179,7 +181,7 @@ mfpf_point_finder_builder* mfpf_profile_pdf_builder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_profile_pdf_builder::print_summary(vcl_ostream& os) const
+void mfpf_profile_pdf_builder::print_summary(std::ostream& os) const
 {
   os << "{ size: [" << ilo_ << ',' << ihi_ << ']' <<'\n';
   mfpf_point_finder_builder::print_summary(os);
@@ -222,9 +224,9 @@ void mfpf_profile_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,data_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

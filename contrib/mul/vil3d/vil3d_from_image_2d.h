@@ -26,13 +26,13 @@ inline vil3d_image_view<T> vil3d_from_image_2d(const vil_image_view<T>& im)
 {
   if (im.is_contiguous())
   {
-    vcl_ptrdiff_t kstep = im.ni()*im.nj();
+    std::ptrdiff_t kstep = im.ni()*im.nj();
     unsigned nk = 1;
-    vcl_ptrdiff_t pstep = im.planestep();
+    std::ptrdiff_t pstep = im.planestep();
 
     // Insist on a particular ordering of input image data
     assert(pstep == kstep);
-  
+
     return vil3d_image_view<T>(im.memory_chunk(),
                                im.top_left_ptr(),
                                im.ni(), im.nj(), nk, im.nplanes(),

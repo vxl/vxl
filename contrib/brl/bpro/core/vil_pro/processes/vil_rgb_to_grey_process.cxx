@@ -21,12 +21,12 @@ bool vil_rgb_to_grey_process_cons(bprb_func_process& pro)
 
   //this process takes one input:
   //input (0): the vil_image_view_base_sptr
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
 
   //this process takes one output:
   //output (0): the vil_image_view_base_sptr
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -37,7 +37,7 @@ bool vil_rgb_to_grey_process(bprb_func_process& pro)
   using namespace vil_rgb_to_grey_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -62,11 +62,11 @@ bool vil_rgb_to_grey_process(bprb_func_process& pro)
         vil_convert_planes_to_grey(img_view_plane,*img_view_grey);
         pro.set_output_val<vil_image_view_base_sptr>(0,img_view_grey);
         return true;
-      }   
+      }
     }
   }
   else {
-      vcl_cerr << "Error in vil_rgb_to_grey_process: Unsupported input image\n";
+      std::cerr << "Error in vil_rgb_to_grey_process: Unsupported input image\n";
       return false;
   }
 

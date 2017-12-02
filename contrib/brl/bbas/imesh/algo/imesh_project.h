@@ -20,31 +20,31 @@
 #include <vgl/vgl_box_2d.h>
 
 //: project the 3D vertices into 2D using the camera
-void imesh_project_verts(const vcl_vector<vgl_point_3d<double> >& verts3d,
+void imesh_project_verts(const std::vector<vgl_point_3d<double> >& verts3d,
                          const vpgl_proj_camera<double>& camera,
-                         vcl_vector<vgl_point_2d<double> >& verts2d);
+                         std::vector<vgl_point_2d<double> >& verts2d);
 
 //: project the 3D vertices into 2D using the camera
 void imesh_project_verts(const imesh_vertex_array<3>& verts3d,
                          const vpgl_proj_camera<double>& camera,
-                         vcl_vector<vgl_point_2d<double> >& verts2d);
+                         std::vector<vgl_point_2d<double> >& verts2d);
 
 //: project the 3D vertices into 2D vertices and depths using the camera
-void imesh_project_verts(const vcl_vector<vgl_point_3d<double> >& verts3d,
+void imesh_project_verts(const std::vector<vgl_point_3d<double> >& verts3d,
                          const vpgl_proj_camera<double>& camera,
-                         vcl_vector<vgl_point_2d<double> >& verts2d,
-                         vcl_vector<double>& depths);
+                         std::vector<vgl_point_2d<double> >& verts2d,
+                         std::vector<double>& depths);
 
 //: project the 3D mesh vertices into 2D vertices and depths using the camera
 void imesh_project_verts(const imesh_vertex_array<3>& verts3d,
                          const vpgl_proj_camera<double>& camera,
-                         vcl_vector<vgl_point_2d<double> >& verts2d,
-                         vcl_vector<double>& depths);
+                         std::vector<vgl_point_2d<double> >& verts2d,
+                         std::vector<double>& depths);
 
 //: distort the 2D vertices using the lens
-void imesh_distort_verts(const vcl_vector<vgl_point_2d<double> >& in_verts,
+void imesh_distort_verts(const std::vector<vgl_point_2d<double> >& in_verts,
                          const vpgl_lens_distortion<double>& lens,
-                         vcl_vector<vgl_point_2d<double> >& out_verts);
+                         std::vector<vgl_point_2d<double> >& out_verts);
 
 //: project the mesh onto the image plane using the camera and lens distortion
 //  Set each pixel of the image to true if the mesh projects onto it
@@ -58,7 +58,7 @@ void imesh_project(const imesh_mesh& mesh,
 //  Set each pixel of the image to true if the mesh projects onto it
 //  The optional \p bbox returns a 2D bounding box for the projection in the image
 void imesh_project(const imesh_mesh& mesh,
-                   const vcl_vector<vgl_vector_3d<double> >& normals,
+                   const std::vector<vgl_vector_3d<double> >& normals,
                    const vpgl_proj_camera<double>& camera,
                    const vpgl_lens_distortion<double>& lens,
                    vil_image_view<bool>& image,
@@ -86,27 +86,27 @@ void imesh_render_triangle_interp(const vgl_point_2d<double>& v1,
 //: Render the faces of the mesh into the image by interpolating the values at the vertices
 //  The minimum value is kept at each pixel (as in computing a depth map)
 void imesh_render_triangles_interp(const imesh_regular_face_array<3>& tris,
-                                   const vcl_vector<vgl_point_2d<double> >& img_verts,
-                                   const vcl_vector<double>& vals,
+                                   const std::vector<vgl_point_2d<double> >& img_verts,
+                                   const std::vector<double>& vals,
                                    vil_image_view<double>& image);
 
 //: Triangulates the faces and then calls imesh_render_triangles_interp
 void imesh_render_faces_interp(const imesh_mesh& mesh,
-                               const vcl_vector<vgl_point_2d<double> >& img_verts,
-                               const vcl_vector<double>& vals,
+                               const std::vector<vgl_point_2d<double> >& img_verts,
+                               const std::vector<double>& vals,
                                vil_image_view<double>& image);
 
 //: Compute the bounds of the projection of a set of image points
 //  The returned bounds are the intersection of the input bounds
 //  and the bounding box of the points
-void imesh_projection_bounds(const vcl_vector<vgl_point_2d<double> >& img_pts,
+void imesh_projection_bounds(const std::vector<vgl_point_2d<double> >& img_pts,
                              vgl_box_2d<unsigned int>& bbox);
 
 //: back project an image point onto the mesh using the camera
 //  Returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh(const imesh_mesh& mesh,
-                            const vcl_vector<vgl_vector_3d<double> >& normals,
-                            const vcl_vector<vgl_point_2d<double> >& verts2d,
+                            const std::vector<vgl_vector_3d<double> >& normals,
+                            const std::vector<vgl_point_2d<double> >& verts2d,
                             const vpgl_perspective_camera<double>& camera,
                             const vgl_point_2d<double>& pt_2d,
                             vgl_point_3d<double>& pt_3d);
@@ -130,10 +130,10 @@ int imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
 //  \returns a mapping from each original point into barycentric points.
 //  if an original point is not mapped the value is -1
 bool imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
-                                          const vcl_vector<vgl_point_2d<double> >& pts_2d,
-                                          vcl_vector<vgl_point_2d<double> >& pts_uv,
-                                          vcl_vector<unsigned long>& idxs,
-                                          vcl_vector<int>& map_back);
+                                          const std::vector<vgl_point_2d<double> >& pts_2d,
+                                          std::vector<vgl_point_2d<double> >& pts_uv,
+                                          std::vector<unsigned long>& idxs,
+                                          std::vector<int>& map_back);
 
 //: compute the matrix that maps texture points to 3-d for a given triangle index
 // $(x,y,1)$ maps into 3-d $(x,y,z)$
@@ -166,18 +166,18 @@ imesh_project_barycentric_to_mesh(const imesh_mesh& mesh,
 //: back project image points onto the mesh using the camera
 //  Returns a vector of all valid 3d points and indices to corresponding 2d points
 void imesh_project_onto_mesh(const imesh_mesh& mesh,
-                             const vcl_vector<vgl_vector_3d<double> >& normals,
+                             const std::vector<vgl_vector_3d<double> >& normals,
                              const vpgl_perspective_camera<double>& camera,
-                             const vcl_vector< vgl_point_2d<double> >& pts_2d,
-                             vcl_vector<unsigned int >& idx_2d,
-                             vcl_vector<vgl_point_3d<double> >& pts_3d);
+                             const std::vector< vgl_point_2d<double> >& pts_2d,
+                             std::vector<unsigned int >& idx_2d,
+                             std::vector<vgl_point_3d<double> >& pts_3d);
 
 //: back project an image point onto the mesh using the camera
 //  The resulting point is in barycentric coordinates for the returned triangle
 //  Returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
-                                        const vcl_vector<vgl_vector_3d<double> >& normals,
-                                        const vcl_vector<vgl_point_2d<double> >& verts2d,
+                                        const std::vector<vgl_vector_3d<double> >& normals,
+                                        const std::vector<vgl_point_2d<double> >& verts2d,
                                         const vpgl_perspective_camera<double>& camera,
                                         const vgl_point_2d<double>& pt_img,
                                         vgl_point_2d<double>& pt_bary);
@@ -187,7 +187,7 @@ int imesh_project_onto_mesh_barycentric(const imesh_mesh& mesh,
 //  Assumes the mesh has both normals and texture coordinates
 //  Returns the index of the intersected triangle, or -1 for no intersection
 int imesh_project_onto_mesh_texture(const imesh_mesh& mesh,
-                                    const vcl_vector<vgl_point_2d<double> >& verts2d,
+                                    const std::vector<vgl_point_2d<double> >& verts2d,
                                     const vpgl_perspective_camera<double>& camera,
                                     const vgl_point_2d<double>& pt_img,
                                     vgl_point_2d<double>& pt_uv);

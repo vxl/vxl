@@ -24,7 +24,7 @@ bool bvpl_pca_global_statistics_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_pca_global_statistics_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i =0;
   input_types_[i++] = "bvpl_global_pca_125_sptr" ; //global pca class
   input_types_[i++] = "int"; //scene_id (this can be confirmed in xml file pca_info.xml)
@@ -33,7 +33,7 @@ bool bvpl_pca_global_statistics_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int";
   input_types_[i++] = "vcl_string"; //path to file to hold statistics of this block
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -51,21 +51,21 @@ bool bvpl_pca_global_statistics_process(bprb_func_process& pro)
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
-  vcl_string stats_file = pro.get_input<vcl_string>(i++);
+  std::string stats_file = pro.get_input<std::string>(i++);
 
   if(!global_pca)
   {
-    vcl_cerr << "Global PCA is NULL \n";
+    std::cerr << "Global PCA is NULL \n";
     return false;
   }
   vnl_matrix_fixed<double, 125, 125> S(0.0);
   vnl_vector_fixed<double, 125> mean(0.0);
   unsigned long nfeatures = 0;
-  
-    
+
+
   if(global_pca->sample_statistics(scene_id, block_i, block_j, block_k, S, mean, nfeatures))
   {
-    vcl_ofstream stats_ofs(stats_file.c_str());
+    std::ofstream stats_ofs(stats_file.c_str());
     stats_ofs.precision(15);
     stats_ofs << nfeatures << '\n' << mean << '\n' << S;
     stats_ofs.close();

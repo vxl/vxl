@@ -23,6 +23,8 @@
 // There is a minimum acceptable cumulative probability of edges lying within
 // the distance threshold, to produce a successful match.
 
+#include <iostream>
+#include <vector>
 #include "bwm_reg_image_sptr.h"
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_digital_curve_3d.h>
@@ -31,7 +33,7 @@
 #include <brip/brip_roi.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class bwm_reg_processor
 {
@@ -82,9 +84,9 @@ bool match(double radius,
            float search_noise_threshold,
            int& tcol, int& trow);
 
-  vcl_vector<vsol_digital_curve_2d_sptr> search_curves();
+  std::vector<vsol_digital_curve_2d_sptr> search_curves();
 
-  vcl_vector<vsol_digital_curve_2d_sptr> trans_model_curves()
+  std::vector<vsol_digital_curve_2d_sptr> trans_model_curves()
   { return trans_model_edges_; }
 
     // protected:
@@ -119,8 +121,8 @@ bool match(double radius,
   bwm_reg_image_sptr search_image_;
   vgl_point_3d<double> world_point_;
   vgl_plane_3d<double> world_plane_;
-  vcl_vector<vsol_digital_curve_2d_sptr> trans_model_edges_;
-  vcl_vector<vsol_digital_curve_3d_sptr> filtered_model_edges_;
+  std::vector<vsol_digital_curve_2d_sptr> trans_model_edges_;
+  std::vector<vsol_digital_curve_3d_sptr> filtered_model_edges_;
 };
 
 #endif

@@ -1,4 +1,5 @@
 // This is mul/mfpf/tests/test_mr_point_finder.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -10,7 +11,7 @@
 //
 //=======================================================================
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_norm_corr2d.h>
@@ -29,7 +30,7 @@
 void test_mr_point_finder_search(mfpf_mr_point_finder_builder& b,
                                  double d_thresh)
 {
-  vcl_cout<<"Testing building and search."<<vcl_endl;
+  std::cout<<"Testing building and search."<<std::endl;
 
   mfpf_mr_point_finder pf;
 
@@ -57,7 +58,7 @@ void test_mr_point_finder_search(mfpf_mr_point_finder_builder& b,
   b.add_example(image_pyr,p0,u);
   b.build(pf);
 
-  vcl_cout<<"Built model: "<<pf<<vcl_endl;
+  std::cout<<"Built model: "<<pf<<std::endl;
 
   mfpf_pose pose0(p0,u);
   mfpf_pose pose1(p1,u1);
@@ -65,37 +66,37 @@ void test_mr_point_finder_search(mfpf_mr_point_finder_builder& b,
   mfpf_pose new_pose;
   pf.search(image_pyr,pose1,new_pose);
 
-  vcl_cout<<"Initial pose: "<<pose1<<vcl_endl
-          <<"Ideal   pose: "<<pose0<<vcl_endl
-          <<"Final   pose: "<<new_pose<<vcl_endl;
+  std::cout<<"Initial pose: "<<pose1<<std::endl
+          <<"Ideal   pose: "<<pose0<<std::endl
+          <<"Final   pose: "<<new_pose<<std::endl;
 
   TEST_NEAR("search: Correct location",
             (new_pose.p()-p0).length(),0.0,d_thresh);
 
-  vcl_vector<mfpf_pose> poses;
-  vcl_vector<double> fits;
+  std::vector<mfpf_pose> poses;
+  std::vector<double> fits;
   pf.multi_search(image_pyr,pose1,poses,fits);
 
-  vcl_cout<<"Number of responses (no pruning) = "
-          <<poses.size()<<vcl_endl;
+  std::cout<<"Number of responses (no pruning) = "
+          <<poses.size()<<std::endl;
 
   pf.multi_search_and_prune(image_pyr,pose1,poses,fits,-2);
 
-  vcl_cout<<"Number of responses (with pruning) = "
-          <<poses.size()<<vcl_endl;
+  std::cout<<"Number of responses (with pruning) = "
+          <<poses.size()<<std::endl;
 
   for (unsigned i=0;i<poses.size();++i)
-    vcl_cout<<i<<") "<<poses[i]<<" fit: "<<fits[i]<<vcl_endl;
+    std::cout<<i<<") "<<poses[i]<<" fit: "<<fits[i]<<std::endl;
 }
 
 void test_mr_point_finder()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing mfpf_mr_point_finder\n"
            << "**************************\n";
 
   {
-    vcl_cout<<"*** Test using mfpf_norm_corr2d_builder ***"<<vcl_endl;
+    std::cout<<"*** Test using mfpf_norm_corr2d_builder ***"<<std::endl;
 
     mfpf_norm_corr2d_builder nc_builder;
     nc_builder.set_kernel_size(7,7);
@@ -110,7 +111,7 @@ void test_mr_point_finder()
   }
 
   {
-    vcl_cout<<"*** Test using mfpf_region_finder_builder ***"<<vcl_endl;
+    std::cout<<"*** Test using mfpf_region_finder_builder ***"<<std::endl;
 
     mfpf_sad_vec_cost_builder sad_vec_cost_builder;
 
@@ -121,7 +122,7 @@ void test_mr_point_finder()
     rf_builder.set_search_scale_range(3,1.1);
     rf_builder.set_search_angle_range(3,0.05);
 
-    vcl_cout<<"Base builder: "<<rf_builder<<vcl_endl;
+    std::cout<<"Base builder: "<<rf_builder<<std::endl;
 
     mfpf_mr_point_finder_builder mr_builder;
     mr_builder.set(rf_builder,3,1.0,2.0);

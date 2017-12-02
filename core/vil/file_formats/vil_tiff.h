@@ -25,9 +25,10 @@
 //   KNOWN BUG - bool pixel format write - crashes due to incorrect block size
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <vil/vil_config.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
@@ -116,7 +117,7 @@ struct tif_ref_cnt
 //The smart pointer to the tiff handle
 struct tif_smart_ptr
 {
-  tif_smart_ptr(): tptr_(0){}
+  tif_smart_ptr(): tptr_(VXL_NULLPTR){}
 
   tif_smart_ptr(tif_ref_cnt* tptr):tptr_(tptr)
   { if (tptr_) tptr_->ref(); }
@@ -129,18 +130,18 @@ struct tif_smart_ptr
     // the strange order of events in this function is to avoid
     // heap corruption if unref() causes *this to be deleted.
     tif_ref_cnt* old_ptr = tptr_;
-    tptr_ = 0;
+    tptr_ = VXL_NULLPTR;
     if (old_ptr)
       old_ptr->unref();
   }
   //: Inverse bool
   bool operator!() const
   {
-    return (tptr_ != (tif_ref_cnt*)0)? false : true;
+    return (tptr_ != VXL_NULLPTR)? false : true;
   }
 
   //: Convenient get TIFF* for header construction; assumes temporary use
-  TIFF* tif() const {if (tptr_) return tptr_->tif(); return (TIFF*)0;}
+  TIFF* tif() const {if (tptr_) return tptr_->tif(); return VXL_NULLPTR;}
  private:
   tif_ref_cnt* tptr_;
 };
@@ -150,7 +151,25 @@ class vil_tiff_image : public vil_blocked_image_resource
 {
   friend class vil_tiff_file_format;
  public:
-
+  enum compression_methods
+  {
+    // the enum value must correspond to COMPRESSION_* constants defined in tiff.h.
+    // and has the same integer value.  For instance,  NONE corresponds to COMPRESSION_NONE
+    NONE = 1,             /* dump mode */
+    LZW = 5,             /* Lempel-Ziv  & Welch */
+    OJPEG = 6,           /* !6.0 JPEG */
+    JPEG = 7,            /* %JPEG DCT compression */
+    PACKBITS = 32773,    /* Macintosh RLE */
+    THUNDERSCAN = 32809, /* ThunderScan RLE */
+    PIXARFILM =32908,    /* Pixar companded 10bit LZW */
+    PIXARLOG = 32909,    /* Pixar companded 11bit ZIP */
+    DEFLATE = 32946,     /* Deflate compression */
+    ADOBE_DEFLATE = 8,   /* Deflate compression,
+                                as recognized by Adobe */
+    JP2000 =  34712,     /* Leadtools JPEG2000 */
+    LZMA =  34925        /* LZMA2 */
+  };
+ public:
   vil_tiff_image(tif_smart_ptr const& tif,
                  vil_tiff_header* th, const unsigned nimages = 1);
 
@@ -199,7 +218,11 @@ class vil_tiff_image : public vil_blocked_image_resource
   //  "quantisation_depth" - number of relevant bits per pixel
   //  "size_block_i" and "size_block_j" - block dimensions
 
-  virtual bool get_property(char const *tag, void *prop = 0) const;
+  virtual bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
+
+  bool set_compression_method(compression_methods cm);
+
+  bool set_compression_quality(int quality);
 
 #if HAS_GEOTIFF
   //* returns null if the tiff file does not include any geotiff tags
@@ -216,6 +239,11 @@ class vil_tiff_image : public vil_blocked_image_resource
   //:point to a particular image in the file
   void set_index(const unsigned int index)
     {assert(index<nimages_); index_=index;}
+  //: Get a smart pointer to opentiff object
+  tif_smart_ptr const& tiff() const
+  {
+    return t_;
+  }
  private:
   //: the TIFF handle to the open resource file
   tif_smart_ptr t_;
@@ -259,7 +287,7 @@ class vil_tiff_image : public vil_blocked_image_resource
                          unsigned end_block_i,
                          unsigned start_block_j,
                          unsigned end_block_j,
-                         vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const;
+                         std::vector< std::vector< vil_image_view_base_sptr > >& blocks ) const;
 #endif
   bool put_block(unsigned bi, unsigned bj, unsigned i0,
                  unsigned j0, const vil_image_view_base& im);
@@ -330,7 +358,7 @@ struct tiff_pyramid_level
   unsigned cur_level_;
 
   void print(const unsigned l)
-  { vcl_cout << "level[" << l <<  "] hindex " << header_index_ << " scale: " << scale_ << "  width: " << ni_ << vcl_endl; }
+  { std::cout << "level[" << l <<  "] hindex " << header_index_ << " scale: " << scale_ << "  width: " << ni_ << std::endl; }
 };
 
 //:Pyramid resource built on the multi-image capability of the TIFF format
@@ -413,7 +441,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   tif_smart_ptr t_;
 
   //The set of images in the pyramid. levels_[0] is the base image
-  vcl_vector<tiff_pyramid_level*> levels_;
+  std::vector<tiff_pyramid_level*> levels_;
 }; //End of pyramid image
 
 
@@ -440,12 +468,12 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
   int strip_right = ( sizeof( T ) * 8 ) - ( bit_offset + ni );
   T temp = in_val[sample_offset];
   if ( strip_left > 0 ){
-    //strip off the appropriate bits from the vcl_left (replacing them with zeros)
+    //strip off the appropriate bits from the std::left (replacing them with zeros)
     temp <<= strip_left;
     temp >>= strip_left;
   }
   if ( strip_right > 0 ){
-    //strip off the appropriate bits from the vcl_right
+    //strip off the appropriate bits from the std::right
     //the bit shift operator wasn't having the correct effect, so that'w
     //why the for loop
     for ( int i = 0 ; i < strip_right ; i++ ) temp /= 2;
@@ -470,7 +498,7 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
 #endif
   }
 #ifdef DEBUG
-  vcl_cout << "Out val = " << vcl_hex << temp << vcl_dec << '\n';
+  std::cout << "Out val = " << std::hex << temp << std::dec << '\n';
 #endif
   return temp;
 }
@@ -511,7 +539,7 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
 // out_data[2] = 15   (0000000000001111) [shown in big endian for illustrative purposes only]
 // out_data[3] = 240  (0000000011110000) [shown in big endian for illustrative purposes only]
 //
-// Because of the fact that this function uses bit shifting operators, and the behavior of the vcl_right
+// Because of the fact that this function uses bit shifting operators, and the behavior of the std::right
 // shift operator is implementation specific when applied to a negative number, you should probably
 // only use this function on unsigned data.
 //

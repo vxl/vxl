@@ -17,7 +17,7 @@ unsigned int volm_desc::get_area()
   return area;
 }
 
-void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
+void volm_desc::visualize(std::string outfile, unsigned char const& y_max) const
 {
   // use bsvg_plot to visualize the bin
   // define the width and height from descriptor
@@ -29,7 +29,7 @@ void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
   bsvg_plot pl(width, height);
   pl.set_font_size(font_size_label);
 
-  vcl_stringstream msg1;
+  std::stringstream msg1;
   msg1 << "nbins : " << nbins_;
 
   // add text msg
@@ -42,8 +42,8 @@ void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
   // add axes
   pl.add_axes(0.0f, (float)nbins_, 0.0f, (float)y_max, false, stroke_width);
 
-  vcl_vector<float> ps;
-  vcl_vector<float> x_labels;
+  std::vector<float> ps;
+  std::vector<float> x_labels;
   for (unsigned i = 0; i < nbins_; i++) {
     ps.push_back(float(h_[i]));
     x_labels.push_back(float(i));
@@ -56,12 +56,12 @@ void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
 
 void volm_desc::print() const
 {
-  vcl_cout << "descriptor name: " << name_ << '\n';
-  vcl_cout << "number of total bins:" << nbins_ << '\n'
+  std::cout << "descriptor name: " << name_ << '\n';
+  std::cout << "number of total bins:" << nbins_ << '\n'
            << "counts: ";
   for (unsigned i = 0; i < nbins_; i++)
-    vcl_cout << (int)h_[i] << ' ';
-  vcl_cout << vcl_endl;
+    std::cout << (int)h_[i] << ' ';
+  std::cout << std::endl;
 }
 
 void volm_desc::b_write(vsl_b_ostream& os)
@@ -84,12 +84,12 @@ void volm_desc::b_read(vsl_b_istream& is)
     vsl_b_read(is, h_);
   }
   else {
-    vcl_cout << "volm_descriptor -- unknown binary io version " << ver << '\n';
+    std::cout << "volm_descriptor -- unknown binary io version " << ver << '\n';
     return;
   }
 }
 
-void volm_desc::get_char_array(vcl_vector<unsigned char>& values) const
+void volm_desc::get_char_array(std::vector<unsigned char>& values) const
 {
   values.resize(nbins_);
   values = h_;

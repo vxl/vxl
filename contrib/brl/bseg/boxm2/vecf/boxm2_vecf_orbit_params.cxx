@@ -1,19 +1,23 @@
+#include <iostream>
 #include "boxm2_vecf_orbit_params.h"
-#include <vcl_iostream.h>
-double boxm2_vecf_orbit_params::height_to_width_ratio(){
+#include <vcl_compiler.h>
+double
+boxm2_vecf_orbit_params
+::height_to_width_ratio()
+{
   double width = eye_radius_*(x_max_-x_min_)*scale_x();
   vnl_vector_fixed<double, 5> mm = this->m(0.0);
   vnl_vector_fixed<double, 5> c0 = eyelid_coefs_t0();
   vnl_vector_fixed<double, 5> c1 = eyelid_coefs_t1();
   double dp0 = dot_product(mm, c0 ), dp1 = dot_product(mm, c1 );
   double height = dp0-dp1;
-  height_to_width_ratio_ = (height*vcl_cos(dphi_rad_)*scale_y())/width;
+  height_to_width_ratio_ = (height*std::cos(dphi_rad_)*scale_y())/width;
   return height_to_width_ratio_;
 }
 
-vcl_ostream&  operator<<(vcl_ostream& s, boxm2_vecf_orbit_params const& prc){
+std::ostream&  operator<<(std::ostream& s, boxm2_vecf_orbit_params const& prc){
   if(!s){
-    vcl_cout << "Bad parameter file stream\n";
+    std::cout << "Bad parameter file stream\n";
     return s;
   }
   // bad practice --- but easy
@@ -47,12 +51,12 @@ vcl_ostream&  operator<<(vcl_ostream& s, boxm2_vecf_orbit_params const& prc){
   return s;
 }
 
-vcl_istream&  operator >>(vcl_istream& s, boxm2_vecf_orbit_params& pr){
+std::istream&  operator >>(std::istream& s, boxm2_vecf_orbit_params& pr){
   if(!s){
-    vcl_cout << "Bad parameter file stream\n";
+    std::cout << "Bad parameter file stream\n";
     return s;
   }
-  vcl_string st;
+  std::string st;
   double val;
   s >> st >> pr.eye_radius_;
   s >> st >> pr.iris_radius_;

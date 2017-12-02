@@ -32,20 +32,20 @@ class volm_geo_index2_node : public volm_geo_index2_node_base
 public:
   //: Default constructor
   volm_geo_index2_node() {}
-  
+
   //: Constructor
   volm_geo_index2_node(vgl_box_2d<double> const& extent, volm_geo_index2_node_sptr& parent)
   {
-    extent_ = extent; 
+    extent_ = extent;
     parent_ = parent;
   }
-  
+
   volm_geo_index2_node(vgl_box_2d<double> const& extent)
   {
     extent_ = extent;
     parent_ = 0;
   }
-  
+
   //: Destructor
   ~volm_geo_index2_node() { }
 
@@ -76,7 +76,7 @@ public:
   //: create the quadtree from text file.  Note even if a child has zero pointer, it's order in the children array remains same such that
   //  the children have consistent clockwise geographic sequence
   template <class Type>
-  static volm_geo_index2_node_sptr read_and_construct(vcl_string const& file_name, double& min_size);
+  static volm_geo_index2_node_sptr read_and_construct(std::string const& file_name, double& min_size);
 
   //: prune the children which do not intersect with given polygon
   static bool prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<float>  const& poly);
@@ -85,39 +85,39 @@ public:
   static bool prune_by_zone(volm_geo_index2_node_sptr root, unsigned utm_zone);
 
   //: write the bboxes of the nodes at the give depth to kml file
-  static void write_to_kml(volm_geo_index2_node_sptr root, unsigned depth, vcl_string const& file_name);
-  static void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index2_node_sptr n, unsigned current_depth, unsigned depth, vcl_string explanation = "location");
+  static void write_to_kml(volm_geo_index2_node_sptr root, unsigned depth, std::string const& file_name);
+  static void write_to_kml_node(std::ofstream& ofs, volm_geo_index2_node_sptr n, unsigned current_depth, unsigned depth, std::string explanation = "location");
 
   //: write the quadtree structure into a text file, only the tree structure and not the content on the leaf
-  static void write(volm_geo_index2_node_sptr root, vcl_string const& file_name, double const& min_size);
+  static void write(volm_geo_index2_node_sptr root, std::string const& file_name, double const& min_size);
 
   //: return all leaves of the quadtree
-  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves);
+  static void get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves);
 
   //: return all leaves that intersect with a given rectangular area
-  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<float>  const& area);
-  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<double> const& area);
+  static void get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<float>  const& area);
+  static void get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<double> const& area);
 
   //: return all leaves that intersect with a given polygon
-  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float>  const& poly);
-  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly);
+  static void get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float>  const& poly);
+  static void get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly);
 
   //: return all leaves that intersect with a line (this line is a list of points)
-  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<float> > const& line);
-  static void get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm_geo_index2_node_sptr>& leaves, vcl_vector<vgl_point_2d<double> > const& line);
+  static void get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, std::vector<vgl_point_2d<float> > const& line);
+  static void get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, std::vector<vgl_point_2d<double> > const& line);
 
   //: return the leave that contains the given loc point
   static void get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<float> const& point);
   static void get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<double> const& point);
-  
+
   //: return the depth of quadtree at level node
   static unsigned depth(volm_geo_index2_node_sptr node);
 
-  
+
 
 };
 
 #include <volm/volm_geo_index2_sptr.h>
-#define VOLM_GEO_INDEX2_INSTANTIATE(T) extern "Please #include <volm/volm_geo_index2.txx>"
+#define VOLM_GEO_INDEX2_INSTANTIATE(T) extern "Please #include <volm/volm_geo_index2.hxx>"
 
 #endif // volm_geo_index2_h_

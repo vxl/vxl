@@ -1,30 +1,28 @@
 # brl/bpro/bprb/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
 
 
-SET(bprb_sources
+set(bprb_sources
    bprb_parameters.cxx             bprb_parameters.h            bprb_parameters_sptr.h
-   bprb_parameters.txx
+   bprb_parameters.hxx
    bprb_process.cxx                bprb_process.h               bprb_process_sptr.h
    bprb_process_ext.cxx            bprb_process_ext.h
-   bprb_process_manager.txx        bprb_process_manager.h
+   bprb_process_manager.hxx        bprb_process_manager.h
    bprb_batch_process_manager.cxx  bprb_batch_process_manager.h
    bprb_null_process.cxx           bprb_null_process.h
    bprb_func_process.h
    bprb_macros.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates bprb_sources)
+aux_source_directory(Templates bprb_sources)
 
-ADD_LIBRARY(bprb ${bprb_sources})
+vxl_add_library(LIBRARY_NAME bprb LIBRARY_SOURCES ${bprb_sources})
 
-TARGET_LINK_LIBRARIES(bprb brdb bxml vbl vsl)
+target_link_libraries(bprb brdb bxml ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()
 
-#install the .h .txx and libs
-INSTALL_TARGETS(/lib bprb)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bprb/ ${bprb_sources})
+#install the .h .hxx and libs

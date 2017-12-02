@@ -6,16 +6,14 @@ doxygen_add_library(contrib/gel/geml
   DESCRIPTION "Match marked points in second image"
   )
 
-SET(geml_sources
+set(geml_sources
  geml_matcher.cxx             geml_matcher.h
  geml_matcher_correlation.cxx geml_matcher_correlation.h
 )
 
-ADD_LIBRARY(geml ${geml_sources})
-INSTALL_TARGETS(/lib geml)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/geml ${geml_sources})
-TARGET_LINK_LIBRARIES(geml vil1 vnl)
+vxl_add_library(LIBRARY_NAME geml LIBRARY_SOURCES ${geml_sources})
+target_link_libraries(geml ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

@@ -11,7 +11,6 @@
 //: These are coded directly into vil
 #define HAS_PNM   1
 #define HAS_VIFF  1
-#define HAS_IRIS  1
 #define HAS_MIT   1
 #define HAS_BMP   1
 #define HAS_RAS   1
@@ -33,6 +32,6 @@
 
 //: Set to 0 if you don't want to use SSE2 instructions to implement rounding, floor, and ceil functions.
 #define VIL_CONFIG_ENABLE_SSE2_ROUNDING @VIL_CONFIG_ENABLE_SSE2_ROUNDING@
-
+#cmakedefine VXL_HAS_SSE2_HARDWARE_SUPPORT
 
 #endif // vil_config_h_in_

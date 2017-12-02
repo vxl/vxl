@@ -16,7 +16,7 @@ bool bvxm_pmap_ratio_process_cons(bprb_func_process& pro)
   using namespace bvxm_pmap_ratio_process_globals;
 
   // This process has 3 inputs:
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   int i=0;
   input_types_[i++] = "vcl_string";    // path to the prob. map image of LIDAR
   input_types_[i++] = "vcl_string";    // path to the prob. map image of NON_LIDAR
@@ -32,22 +32,22 @@ bool bvxm_pmap_ratio_process(bprb_func_process& pro)
 
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
   // get the inputs:
   unsigned i = 0;
-  vcl_string pmap1 = pro.get_input<vcl_string>(i++);
-  vcl_string pmap2 =  pro.get_input<vcl_string>(i++);
-  vcl_string path =  pro.get_input<vcl_string>(i++);
+  std::string pmap1 = pro.get_input<std::string>(i++);
+  std::string pmap2 =  pro.get_input<std::string>(i++);
+  std::string path =  pro.get_input<std::string>(i++);
 
   compute(pmap1, pmap2, path);
 
   return true;
 }
 
-bool bvxm_pmap_ratio_process_globals::compute(vcl_string pmap1,vcl_string pmap2, vcl_string path)
+bool bvxm_pmap_ratio_process_globals::compute(std::string pmap1,std::string pmap2, std::string path)
 {
   vil_image_view_base_sptr lidar_img = vil_load(pmap1.c_str());
   vil_image_view_base_sptr nonlidar_img = vil_load(pmap2.c_str());
@@ -75,7 +75,7 @@ bool bvxm_pmap_ratio_process_globals::compute(vcl_string pmap1,vcl_string pmap2,
         float p=0.0f, p2 = (*img_view2)(ni, nj);
 
         if ((p1>0) && (p2>0) && vnl_math::isfinite(p1) && vnl_math::isfinite(p2))
-          p=vcl_log10(p1/p2);
+          p=std::log10(p1/p2);
         if (p>pmax)
           pmax=p;
         vil_image_view<float> v = *(ratio_img->get_view());
@@ -84,7 +84,7 @@ bool bvxm_pmap_ratio_process_globals::compute(vcl_string pmap1,vcl_string pmap2,
       }
     }
   }
-  vcl_cout << "Pmax=" << pmax << vcl_endl;
+  std::cout << "Pmax=" << pmax << std::endl;
   vil_save_image_resource(ratio_img, path.c_str());
   return true;
 }

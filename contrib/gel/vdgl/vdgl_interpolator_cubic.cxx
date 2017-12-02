@@ -5,9 +5,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "vdgl_interpolator_cubic.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for sqrt()
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
@@ -192,7 +194,7 @@ double vdgl_interpolator_cubic::get_tangent_angle(double index)
          xp = x0*index*index + x1*index + x2/3, // derived point at index
          yp = y0*index*index + y1*index + y2/3;
 
-  return vnl_math::deg_per_rad*vcl_atan2(yp, xp);
+  return vnl_math::deg_per_rad*std::atan2(yp, xp);
 }
 
 
@@ -229,7 +231,7 @@ double vdgl_interpolator_cubic::get_curvature(double index)
 
   double t2 = 3 * P(0) * x_new * x_new + 2 * P(1) * x_new + P(2);
   double t3 = 1 + t2 * t2;
-  return t2/t3/vcl_sqrt(t3);
+  return t2/t3/std::sqrt(t3);
 }
 
 
@@ -326,13 +328,13 @@ closest_point_on_curve ( vsol_point_2d_sptr p )
 {
   unsigned int n = chain_->size();
   if (n==0)
-    return 0;
+    return VXL_NULLPTR;
   double px = p->x(), py = p->y(), dmin = vnl_numeric_traits<double>::maxval;
   int imin = 0;
   for (unsigned int i = 0; i<n; i++)
   {
     double x = (*chain_)[i].x(), y = (*chain_)[i].y();
-    double d = vcl_sqrt((x-px)*(x-px) + (y-py)*(y-py));
+    double d = std::sqrt((x-px)*(x-px) + (y-py)*(y-py));
     if (d<dmin)
     {
       dmin = d;

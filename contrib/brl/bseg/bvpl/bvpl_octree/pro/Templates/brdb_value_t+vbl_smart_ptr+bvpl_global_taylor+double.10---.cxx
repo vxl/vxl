@@ -1,4 +1,4 @@
-#include <brdb/brdb_value.txx>
+#include <brdb/brdb_value.hxx>
 
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <bvpl/bvpl_octree/bvpl_global_taylor.h>

@@ -17,6 +17,9 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_load by vil_load
 // \endverbatim
 //
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
 
@@ -29,18 +32,16 @@ typedef section<vxl_byte,2> img_type;
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for atoi()
-#include <vcl_cstring.h> // for memcpy()
+#include <vcl_compiler.h>
 
 int
 main(int argc, char** argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example2_threshold file_in file_out [threshold]\n"; return 1; }
+  if (argc < 3) { std::cerr << "Syntax: example2_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
   vil_image_view<vxl_byte> out(in.ni(),in.nj(),in.nplanes());
@@ -50,12 +51,12 @@ main(int argc, char** argv)
   int ys = in.nj();
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(vcl_atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(std::atoi(argv[3]));
 
   img_type src(xs,ys); // in-memory 2D image
 
   // set the input image:
-  vcl_memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes());
+  std::memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes());
 
   // perform thresholding:
   vipl_threshold<img_type,img_type,vxl_byte,vxl_byte> op(threshold,0,255);
@@ -64,9 +65,9 @@ main(int argc, char** argv)
   op.filter();
 
   // Write output:
-  vcl_memcpy(out.memory_chunk()->data(), src.buffer, out.size_bytes());
+  std::memcpy(out.memory_chunk()->data(), src.buffer, out.size_bytes());
   vil_save(out, argv[2], "pnm");
-  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
+  std::cout << "Written image of type PGM to " << argv[2] << std::endl;
 
   return 0;
 }

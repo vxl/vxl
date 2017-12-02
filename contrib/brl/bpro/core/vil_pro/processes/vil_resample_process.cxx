@@ -14,7 +14,7 @@ bool vil_resample_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types(4);
+  std::vector<std::string> input_types(4);
   input_types[0] = "vil_image_view_base_sptr"; // input image
   input_types[1] = "int"; // ni of target image
   input_types[2] = "int"; // nj of target image
@@ -23,12 +23,12 @@ bool vil_resample_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vil_image_view_base_sptr"; // gauss smoothed image(float)
   ok = pro.set_output_types(output_types);
 
   //default arguments - returns float
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("float");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("float");
   pro.set_input(3, idx);
   return ok;
 }
@@ -52,7 +52,7 @@ bool vil_resample_process(bprb_func_process& pro)
   int tnj = pro.get_input<int>(2);
 
   //Retrieve output type
-  vcl_string out_type = pro.get_input<vcl_string>(3);
+  std::string out_type = pro.get_input<std::string>(3);
 
   ////////////////////////////////////////////////////////////////////
   //Convert to float image
@@ -114,7 +114,7 @@ bool vil_resample_process(bprb_func_process& pro)
   }
 
   //default - return float imgae
-  vcl_cout<<"vil_resample_process::unrecognized output type, returning float image"<<vcl_endl;
+  std::cout<<"vil_resample_process::unrecognized output type, returning float image"<<std::endl;
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img);
   return true;
 }

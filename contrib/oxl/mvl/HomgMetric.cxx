@@ -5,9 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgMetric.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_2.h>
@@ -40,8 +41,8 @@ HomgMetric::~HomgMetric()
   // metric_;
 }
 
-//: Print HomgMetric to vcl_ostream.
-vcl_ostream& HomgMetric::print(vcl_ostream & s) const
+//: Print HomgMetric to std::ostream.
+std::ostream& HomgMetric::print(std::ostream & s) const
 {
   if (metric_)
     s << "[HomgMetric: " << *metric_ << ']';
@@ -299,7 +300,7 @@ double HomgMetric::homg_to_image_distance(double image_distance) const
 double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
 {
   if (metric_)
-    return vnl_math::sqr(metric_->image_to_homg_distance(vcl_sqrt(image_distance_2)));
+    return vnl_math::sqr(metric_->image_to_homg_distance(std::sqrt(image_distance_2)));
   else
     return image_distance_2;
 }
@@ -308,14 +309,14 @@ double HomgMetric::image_to_homg_distance_sqr(double image_distance_2) const
 double HomgMetric::homg_to_image_distance_sqr(double image_distance) const
 {
   if (metric_)
-    return vnl_math::sqr(metric_->homg_to_image_distance(vcl_sqrt(image_distance)));
+    return vnl_math::sqr(metric_->homg_to_image_distance(std::sqrt(image_distance)));
   else
     return image_distance;
 }
 
-static vcl_ostream& warning(char const * fn)
+static std::ostream& warning(char const * fn)
 {
-  return vcl_cerr << "HomgMetric::" << fn << "() WARNING: ";
+  return std::cerr << "HomgMetric::" << fn << "() WARNING: ";
 }
 
 // Static functions to condition/decondition image relations-----------------

@@ -11,10 +11,12 @@
 //  Modifications
 //\endverbatim
 
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <vcl_compiler.h>
 
-//#include "sdet_BS.h"
+//#include <sdet/sdet_BS.h>
 
 //for grayscale
 #define NBINS 8
@@ -52,11 +54,11 @@ double sdet_color_chi_sq_dist(const sdet_color_sig &sig1, const sdet_color_sig &
 double sdet_color_bhat_dist(const sdet_color_sig &sig1, const sdet_color_sig &sig2);
 //------------------------------------------------------------------------------------------
 
-//: This code implements the basic Binary Splitting algorithm described in 
+//: This code implements the basic Binary Splitting algorithm described in
 // the 1991 IEEE Trans. on Sig. Proc. article "Color Quantization of Images"
 // by Michael Orchard and Charles Bouman, pp. 2677-90.
 //
-// The input is a 1-D array of data points.  The #define'd constant CDIM 
+// The input is a 1-D array of data points.  The #define'd constant CDIM
 // holds the number of dimensions.  The output is a set of cluster centers
 // and is also a 1-D array.  The number of clusters is also returned.
 void bs(float *, int, int, int *, float **, int *);
@@ -72,7 +74,7 @@ public:
   sdet_signature()
   {
     for (int i=0; i<NBINS; i++){
-      bins[i].value=0; 
+      bins[i].value=0;
       bins[i].weight=0;
       bins[i].wsum=0;
     }
@@ -80,21 +82,21 @@ public:
   ~sdet_signature(){}
 
   //: The EMD dist is the default distance between two signatures
-  double operator-(const sdet_signature& sig) const 
-  { 
-    //return sdet_chi_sq_dist(bins, sig.bins); 
-    return sdet_gray_EMD(bins, sig.bins); 
+  double operator-(const sdet_signature& sig) const
+  {
+    //return sdet_chi_sq_dist(bins, sig.bins);
+    return sdet_gray_EMD(bins, sig.bins);
   }
 
   //: This operator sums two signatures
-  void operator +=(sdet_signature const& sig) 
-  { 
+  void operator +=(sdet_signature const& sig)
+  {
     for (int i=0; i<NBINS; i++){
       bins[i].weight += sig.bins[i].weight;
       bins[i].weight /= 2.0;
       bins[i].wsum += sig.bins[i].wsum;
       //renormalize
-      bins[i].value = sig.bins[i].wsum/bins[i].weight; 
+      bins[i].value = sig.bins[i].wsum/bins[i].weight;
     }
   }
 
@@ -108,16 +110,16 @@ class sdet_color_sig
 public:
   int n; //number of features
   double Features[MAXCLUSTERS]; //fixed number of features for now (this is not strictly required)
-  double Weights[MAXCLUSTERS]; 
+  double Weights[MAXCLUSTERS];
 
   sdet_color_sig(){}
   ~sdet_color_sig(){}
 
   //: The EMD dist is the default distance between two signatures
-  double operator-(const sdet_color_sig& /*sig1*/) const 
-  { 
-    //return sdet_chi_sq_dist(bins, sig1.bins); 
-    //return sdet_color_EMD(*this, sig1, NULL, NULL); 
+  double operator-(const sdet_color_sig& /*sig1*/) const
+  {
+    //return sdet_chi_sq_dist(bins, sig1.bins);
+    //return sdet_color_EMD(*this, sig1, NULL, NULL);
     return 0;
   }
 

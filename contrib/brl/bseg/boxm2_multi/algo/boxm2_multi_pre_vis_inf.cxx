@@ -1,9 +1,11 @@
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <iomanip>
 #include "boxm2_multi_pre_vis_inf.h"
 #include <boxm2_multi_util.h>
 
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
@@ -25,7 +27,7 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vul/vul_timer.h>
 
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_multi_pre_vis_inf::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_multi_pre_vis_inf::kernels_;
 
 
 //-------------------------------------------------------------
@@ -37,10 +39,10 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
                                             float*                          norm_img,
                                             boxm2_multi_update_helper&      helper)
 {
-  vcl_cout<<"  -- boxm2_pre_vis_inf map --"<<vcl_endl;
+  std::cout<<"  -- boxm2_pre_vis_inf map --"<<std::endl;
   //verify appearance model
-  vcl_size_t lthreads[2] = {8,8};
-  vcl_string data_type, options;
+  std::size_t lthreads[2] = {8,8};
+  std::string data_type, options;
   int apptypesize;
   if ( !boxm2_multi_util::get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) )
     return 0.0f;
@@ -50,46 +52,46 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       nj=img.nj();
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
-  vcl_size_t gThreads[] = {cl_ni,cl_nj};
+  std::size_t gThreads[] = {cl_ni,cl_nj};
 
   //vis inf and pre inf buffers
   float* visImg = new float[cl_ni*cl_nj];
   float* preImg = new float[cl_ni*cl_nj];
-  vcl_fill(visImg, visImg+cl_ni*cl_nj, 1.0f);
-  vcl_fill(preImg, preImg+cl_ni*cl_nj, 0.0f);
+  std::fill(visImg, visImg+cl_ni*cl_nj, 1.0f);
+  std::fill(preImg, preImg+cl_ni*cl_nj, 0.0f);
 
   //-------------------------------------------------------
   //prepare buffers for each device
   //-------------------------------------------------------
-  vcl_vector<cl_command_queue>& queues = helper.queues_;
-  vcl_vector<bocl_mem_sptr>& out_imgs = helper.outputs_,
+  std::vector<cl_command_queue>& queues = helper.queues_;
+  std::vector<bocl_mem_sptr>& out_imgs = helper.outputs_,
                              img_dims = helper.img_dims_,
                              ray_ds = helper.ray_ds_,
                              ray_os = helper.ray_os_,
                              lookups = helper.lookups_,
                              tnearfarptrs=  helper.tnearfarptrs_;
-  vcl_vector<boxm2_opencl_cache1*>& ocl_caches = helper.vis_caches_;
-  vcl_vector<bocl_mem_sptr> vis_mems, pre_mems, visInfMems, preInfMems;
+  std::vector<boxm2_opencl_cache1*>& ocl_caches = helper.vis_caches_;
+  std::vector<bocl_mem_sptr> vis_mems, pre_mems, visInfMems, preInfMems;
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
     boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
 
     //pre/vis images
     float* vis_buff = new float[cl_ni*cl_nj];
-    vcl_fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
+    std::fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
     bocl_mem_sptr vis_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     vis_mems.push_back(vis_image);
 
     float* pre_buff = new float[cl_ni*cl_nj];
-    vcl_fill(pre_buff, pre_buff+cl_ni*cl_nj, 0.0f);
+    std::fill(pre_buff, pre_buff+cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr pre_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), pre_buff,"pre image buffer");
     pre_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     pre_mems.push_back(pre_image);
   }
 
   //initialize per group images (vis/pre)
-  vcl_vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
+  std::vector<boxm2_multi_cache_group*> grp = helper.group_orders_; //cache.get_vis_groups(cam);
   vul_timer t; t.mark();
   float gpu_time = 0.0f, cpu_time = 0.0f;
 
@@ -99,8 +101,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   for (unsigned int grpId=0; grpId<grp.size(); ++grpId)
   {
     boxm2_multi_cache_group& group = *grp[grpId];
-    vcl_vector<boxm2_block_id>& ids = group.ids();
-    vcl_vector<int> indices = group.order_from_cam(cam);
+    std::vector<boxm2_block_id>& ids = group.ids();
+    std::vector<int> indices = group.order_from_cam(cam);
     for (unsigned int idx=0; idx<indices.size(); ++idx) {
       int i = indices[idx];
       //grab sub scene and it's cache
@@ -109,7 +111,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       bocl_device_sptr    device    = ocl_cache->get_device();
 
       // compile the kernel/retrieve cached kernel for this device
-      vcl_vector<bocl_kernel*> kerns = get_kernels(device, options);
+      std::vector<bocl_kernel*> kerns = get_kernels(device, options);
 
       //Run block store aux
       boxm2_block_id id = ids[i]; //vis_order[blk];
@@ -131,8 +133,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
       vul_timer cpuTimer; cpuTimer.mark();
       //first store vis/pre images for first member of group
-      vcl_memcpy(group.get_vis(i), visImg, cl_ni*cl_nj*sizeof(float));
-      vcl_memcpy(group.get_pre(i), preImg, cl_ni*cl_nj*sizeof(float));
+      std::memcpy(group.get_vis(i), visImg, cl_ni*cl_nj*sizeof(float));
+      std::memcpy(group.get_pre(i), preImg, cl_ni*cl_nj*sizeof(float));
       //next update the vis and pre images
       clFinish(queues[i]);
 
@@ -153,8 +155,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
       float* p = (float*) preInfMems[i]->enqueue_map(queues[i]);
       float* v = (float*) visInfMems[i]->enqueue_map(queues[i]);
       clFinish(queues[i]);
-      vcl_memcpy(group.get_vis(i), v, cl_ni*cl_nj*sizeof(float));
-      vcl_memcpy(group.get_pre(i), p/*preImg*/, cl_ni*cl_nj*sizeof(float));
+      std::memcpy(group.get_vis(i), v, cl_ni*cl_nj*sizeof(float));
+      std::memcpy(group.get_pre(i), p/*preImg*/, cl_ni*cl_nj*sizeof(float));
 
       bocl_device_sptr device = ocl_caches[i]->get_device();
       bocl_kernel*     kern   = get_kernels(device, options)[2];
@@ -180,7 +182,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   t.mark();
   //---- This instead of the reduce step ----
   //Norm image create on CPU
-  for (int c=0; c<cl_ni*cl_nj; ++c)
+  for (unsigned int c=0; c<cl_ni*cl_nj; ++c)
     norm_img[c] = visImg[c] + preImg[c];
 
   //grab accurate GPU time (includes transfers)
@@ -191,14 +193,15 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   vil_image_view<float> nimg(ni,nj), vimg(ni,nj), pimg(ni,nj);
   int c=0;
 
-  for (int j=0; j<cl_nj; ++j)
-    for (int i=0; i<cl_ni; ++i) {
-      if( i < ni && j < nj )
-    {
-      nimg(i,j) = norm_img[c];
-      vimg(i,j) = visImg[c];
-      pimg(i,j) = preImg[c];
-    }
+  for (unsigned int j=0; j<cl_nj; ++j)
+    for (unsigned int i=0; i<cl_ni; ++i)
+      {
+      if ( i < ni && j < nj )
+        {
+        nimg(i,j) = norm_img[c];
+        vimg(i,j) = visImg[c];
+        pimg(i,j) = preImg[c];
+        }
       c++;
     }
   vil_save(nimg, "e:/norm_image.tiff");
@@ -231,7 +234,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
                                                  boxm2_scene_sptr      scene,
                                                  boxm2_opencl_cache1*   opencl_cache,
                                                  cl_command_queue&     queue,
-                                                 vcl_string            data_type,
+                                                 std::string            data_type,
                                                  bocl_kernel*          kern,
                                                  bocl_mem_sptr&        vis_image,
                                                  bocl_mem_sptr&        pre_image,
@@ -241,8 +244,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
                                                  bocl_mem_sptr&        tnearfarptr,
                                                  bocl_mem_sptr&        cl_output,
                                                  bocl_mem_sptr&        lookup,
-                                                 vcl_size_t*           lthreads,
-                                                 vcl_size_t*           gThreads)
+                                                 std::size_t*           lthreads,
+                                                 std::size_t*           gThreads)
 {
   vul_timer ttime; ttime.mark();
 
@@ -255,7 +258,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
   bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id,0,false);
 
   //calc data buffer length (write it in blk_info)
-  vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes()/boxm2_data_traits<BOXM2_ALPHA>::datasize());
+  std::size_t dataLen = (std::size_t) (alpha->num_bytes()/boxm2_data_traits<BOXM2_ALPHA>::datasize());
   boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
   info_buffer->data_buffer_length = (int) dataLen;
   blk_info->write_to_buffer(queue);
@@ -265,7 +268,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
   bocl_mem* mog  = opencl_cache->get_data(id,data_type, dataLen*apptypesize,false);
 
   //grab NumObs
-  vcl_string numObsType = boxm2_data_traits<BOXM2_NUM_OBS>::prefix();
+  std::string numObsType = boxm2_data_traits<BOXM2_NUM_OBS>::prefix();
   int nobsTypeSize = (int) boxm2_data_info::datasize(numObsType);
   bocl_mem* num_obs = opencl_cache->get_data(id,numObsType, dataLen*nobsTypeSize,false);
 
@@ -293,7 +296,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
   kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
   float transfer_time = ttime.all();
 
- 
+
   //execute kernel
   kern->execute(queue, 2, lthreads, gThreads);
   //clear render kernel args so it can reset em on next execution
@@ -306,20 +309,20 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
 //-----------------------------------------------------------------
 // returns vector of bocl_kernels for this specific device
 //-----------------------------------------------------------------
-vcl_vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // check to see if this device has compiled kernels already
-  vcl_string identifier = device->device_identifier()+opts;
+  std::string identifier = device->device_identifier()+opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //if not, compile and cache them
-  vcl_cout<<"===========Compiling multi update kernels===========\n"
-          <<"  for device: "<<device->device_identifier()<<vcl_endl;
+  std::cout<<"===========Compiling multi update kernels===========\n"
+          <<"  for device: "<<device->device_identifier()<<std::endl;
 
   //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "cell_utils.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -328,28 +331,28 @@ vcl_vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr 
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "bit/update_kernels.cl");
 
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
   src_paths.push_back(source_dir + "update_functors.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = opts+"";
+  std::string options = opts+"";
   //create all passes
   bocl_kernel* pre_inf = new bocl_kernel();
-  vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
+  std::string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
   pre_inf->create_kernel(&device->context(),device->device_id(), src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
   bocl_kernel* proc_img = new bocl_kernel();
-  vcl_string proc_opts = options + " -D PROC_NORM ";
+  std::string proc_opts = options + " -D PROC_NORM ";
   proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_opts, "update::proc_norm_image");
 
   bocl_kernel* combine_pre_vis = new bocl_kernel();
-  vcl_string comb_opts = options + " -D COMBINE_PRE_VIS ";
+  std::string comb_opts = options + " -D COMBINE_PRE_VIS ";
   combine_pre_vis->create_kernel(&device->context(), device->device_id(), non_ray_src, "combine_pre_vis", comb_opts, "update::combine_pre_vis");
 
   //vector of kernels:
-  vcl_vector<bocl_kernel*> kerns(3);
+  std::vector<bocl_kernel*> kerns(3);
   kerns[0] = pre_inf;
   kerns[1] = proc_img;
   kerns[2] = combine_pre_vis;
@@ -360,9 +363,9 @@ vcl_vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr 
 }
 
 
-void boxm2_multi_pre_vis_inf::write_imgs_out(vcl_map<bocl_device*, float*>& img_map, int ni, int nj, vcl_string name)
+void boxm2_multi_pre_vis_inf::write_imgs_out(std::map<bocl_device*, float*>& img_map, int ni, int nj, std::string name)
 {
-  vcl_map<bocl_device*, float*>::iterator iter;
+  std::map<bocl_device*, float*>::iterator iter;
   for (iter=img_map.begin(); iter!=img_map.end(); ++iter) {
     float* img = iter->second;
     int count=0;
@@ -371,7 +374,7 @@ void boxm2_multi_pre_vis_inf::write_imgs_out(vcl_map<bocl_device*, float*>& img_
       for (int i=0; i<ni; ++i)
         outImg(i,j) = img[count++];
 
-    vcl_string outName = name + iter->first->device_identifier() + ".tiff";
+    std::string outName = name + iter->first->device_identifier() + ".tiff";
     vil_save(outImg, outName.c_str());
   }
 }

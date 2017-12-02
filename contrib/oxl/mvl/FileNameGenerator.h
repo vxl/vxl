@@ -14,19 +14,21 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <mvl/FileNameGeneratorBase.h>
 
 class FileNameGenerator
 {
   FileNameGeneratorBase* fng_;
-  vcl_string subdir_;
-  vcl_string suffix_;
+  std::string subdir_;
+  std::string suffix_;
 
   // default copy ctor OK
  public:
   FileNameGenerator(FileNameGeneratorBase* fng,
-                    vcl_string const& suffix)
+                    std::string const& suffix)
   : fng_(fng), subdir_(), suffix_(suffix)
   {
   }
@@ -38,8 +40,8 @@ class FileNameGenerator
   }
 
   FileNameGenerator(FileNameGeneratorBase* fng,
-                    vcl_string const& subdir,
-                    vcl_string const& suffix)
+                    std::string const& subdir,
+                    std::string const& suffix)
   : fng_(fng), subdir_(), suffix_(suffix)
   {
     if (fng->use_subdirs) subdir_ = subdir;
@@ -54,31 +56,31 @@ class FileNameGenerator
   }
 
   FileNameGeneratorBase* get_base() const { return fng_; }
-  vcl_string get_subdir() const { return subdir_; }
-  vcl_string get_suffix() const { return suffix_; }
+  std::string get_subdir() const { return subdir_; }
+  std::string get_suffix() const { return suffix_; }
   bool uses_subdir() const { return subdir_.c_str()[0]!='\0'; }
 
-  vcl_string subdir_name() const { return fng_->dirname() + "/" + subdir_; }
+  std::string subdir_name() const { return fng_->dirname() + "/" + subdir_; }
 
-  vcl_string name() {
+  std::string name() {
     return (subdir_.c_str()[0]=='\0') ?
       fng_->basename() + suffix_    :
       fng_->basename(subdir_.c_str()) + suffix_;
   }
 
-  vcl_string frame_name(int i1) {
+  std::string frame_name(int i1) {
     return (subdir_.c_str()[0]=='\0') ?
       fng_->frame_basename(i1) + suffix_ :
       fng_->frame_basename(subdir_.c_str(), i1) + suffix_;
   }
 
-  vcl_string pair_name(int i1, int i2) {
+  std::string pair_name(int i1, int i2) {
     return (subdir_.c_str()[0]=='\0') ?
       fng_->pair_basename(i1, i2) + suffix_ :
       fng_->pair_basename(subdir_.c_str(), i1, i2) + suffix_;
   }
 
-  vcl_string triplet_name(int i1, int i2, int i3) {
+  std::string triplet_name(int i1, int i2, int i3) {
     return (subdir_.c_str()[0]=='\0') ?
       fng_->triplet_basename(i1, i2, i3) + suffix_ :
       fng_->triplet_basename(subdir_.c_str(), i1, i2, i3) + suffix_;

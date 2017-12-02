@@ -22,7 +22,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vil1/vil1_image.h>
 #include <vdgl/vdgl_digital_region.h>
@@ -40,7 +42,7 @@ public:
 //  void set_roi_proc(lung_roi_proc_ref& roi_proc){roi_proc_ = roi_proc;}
 
   // vector<gevd_poly_intensity_face_sptr>& get_regions(){return regions_;}
-  vcl_vector<vdgl_digital_region *>& get_regions(){return regions_;}
+  std::vector<vdgl_digital_region *>& get_regions(){return regions_;}
 
   //Utility Methods
   void extract_regions();
@@ -68,6 +70,6 @@ protected:
   gevd_bufferxy* buf_;
   //lung_roi_proc_ref roi_proc_; //Lung roi processor
   //vector<gevd_poly_intensity_face_ref> regions_; //resulting intensity faces
-  vcl_vector<vdgl_digital_region *> regions_; //resulting digital regions
+  std::vector<vdgl_digital_region *> regions_; //resulting digital regions
 };
 #endif // gevd_region_proc_h_

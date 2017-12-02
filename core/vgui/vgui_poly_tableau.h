@@ -82,7 +82,7 @@ class vgui_poly_tableau : public vgui_tableau
   vgui_poly_tableau();
 
   //: Returns the type of this tableau ('vgui_poly_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Get popup menu.
   void get_popup(vgui_popup_params const &, vgui_menu &);
@@ -103,7 +103,7 @@ class vgui_poly_tableau : public vgui_tableau
     bool inside(GLint const vp[4], int x, int y) const;
   };
 
-  typedef vcl_vector<item> container;
+  typedef std::vector<item> container;
   typedef container::iterator iterator;
   typedef container::const_iterator const_iterator;
 
@@ -169,7 +169,7 @@ class vgui_poly_tableau : public vgui_tableau
   int current;
 
   //: List of items displayed by this tableau.
-  vcl_vector<item> sub;
+  std::vector<item> sub;
 
   bool may_switch_child;
 };

@@ -1,12 +1,13 @@
 // This is mul/mbl/tests/test_gram_schmidt.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <mbl/mbl_mod_gram_schmidt.h>
 #include <vnl/vnl_vector.h>
 #include <testlib/testlib_test.h>
 
 void test_gram_schmidt()
 {
-    vcl_cout << "**************************\n"
+    std::cout << "**************************\n"
              << " Testing mbl_gram_schmidt\n"
              << "**************************\n";
 
@@ -49,10 +50,10 @@ void test_gram_schmidt()
     TEST_NEAR("mbl_gram_schmidt e0 and e1 orthogonal", dot_product(f0,f1), 0.0, 1e-8);
     TEST_NEAR("mbl_gram_schmidt e0 and e2 orthogonal", dot_product(f0,f2), 0.0, 1e-8);
     TEST_NEAR("mbl_gram_schmidt e1 and e2 orthogonal", dot_product(f1,f2), 0.0, 1e-8);
-    
+
     TEST_EQUAL("basis variants e0, f0", e0==f0, true);
     TEST_EQUAL("basis variants e1, f1", e1==f1, true);
-    TEST_EQUAL("basis variants e2, f2", e2==f2, true);    
+    TEST_EQUAL("basis variants e2, f2", e2==f2, true);
 }
 
 TESTMAIN(test_gram_schmidt);

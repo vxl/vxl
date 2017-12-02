@@ -35,12 +35,12 @@ class DcmOverlayData : public DcmPolymorphOBOW
 {
 public:
     DcmOverlayData(
-	const DcmTag & tag, 
-	const Uint32 len = 0)
-	: DcmPolymorphOBOW(tag, len) {}
+        const DcmTag & tag,
+        const Uint32 len = 0)
+        : DcmPolymorphOBOW(tag, len) {}
     DcmOverlayData(
-	const DcmOverlayData & oldObj)
-	: DcmPolymorphOBOW(oldObj) {}
+        const DcmOverlayData & oldObj)
+        : DcmPolymorphOBOW(oldObj) {}
     virtual ~DcmOverlayData() {}
 
     DcmOverlayData &operator=(const DcmOverlayData &obj) { DcmPolymorphOBOW::operator=(obj); return *this; }

@@ -11,7 +11,6 @@ vil1_file_format::~vil1_file_format()
 
 #define HAS_PNM  1
 #define HAS_VIFF 1
-#define HAS_IRIS 1
 #define HAS_MIT  1
 #define HAS_BMP  1
 #define HAS_GIF  1
@@ -24,10 +23,6 @@ vil1_file_format::~vil1_file_format()
 
 #if HAS_PNM
 #include <vil1/file_formats/vil1_pnm.h>
-#endif
-
-#if HAS_IRIS
-#include <vil1/file_formats/vil1_iris.h>
 #endif
 
 #if HAS_MIT
@@ -67,10 +62,10 @@ vil1_file_format::~vil1_file_format()
 #endif
 
 
-static vil1_file_format** storage = 0;
+static vil1_file_format** storage = VXL_NULLPTR;
 vil1_file_format** vil1_file_format::all()
 {
-  if (storage == 0)
+  if (storage == VXL_NULLPTR)
   {
     storage = new vil1_file_format*[256];
     int c = 0;
@@ -86,9 +81,6 @@ vil1_file_format** vil1_file_format::all()
 #endif
 #if HAS_PNM
     storage[c++] = new vil1_pnm_file_format;
-#endif
-#if HAS_IRIS
-    storage[c++] = new vil1_iris_file_format;
 #endif
 #if HAS_MIT
     storage[c++] = new vil1_mit_file_format;
@@ -109,7 +101,7 @@ vil1_file_format** vil1_file_format::all()
     storage[c++] = new vil1_gen_file_format;
 #endif
 
-    storage[c] = 0;
+    storage[c] = VXL_NULLPTR;
   }
   return storage;
 }
@@ -119,7 +111,7 @@ class vil1_file_format_list_destroyer
  public:
   ~vil1_file_format_list_destroyer()
   {
-    if (storage==0) return;
+    if (storage==VXL_NULLPTR) return;
     unsigned i=0;
     while (storage[i])
       delete storage[i++];

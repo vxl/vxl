@@ -2,6 +2,9 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <vector>
+#include <iostream>
+#include <map>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
@@ -10,8 +13,7 @@
 #include <testlib/testlib_root_dir.h>
 #include "test_utils.h"
 
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 void test_asio_data()
 {
@@ -31,10 +33,10 @@ void test_asio_data()
   }
 
   // check to see which block is ready, do some computation
-  typedef vcl_map<boxm2_block_id, boxm2_data<BOXM2_ALPHA>* > alphamap_t;
-  typedef vcl_map<boxm2_block_id, boxm2_data<BOXM2_MOG3_GREY>* > mogmap_t;
-  vcl_vector<boxm2_data<BOXM2_MOG3_GREY>* > mog_list;
-  vcl_vector<boxm2_data<BOXM2_ALPHA>* > alpha_list;
+  typedef std::map<boxm2_block_id, boxm2_data<BOXM2_ALPHA>* > alphamap_t;
+  typedef std::map<boxm2_block_id, boxm2_data<BOXM2_MOG3_GREY>* > mogmap_t;
+  std::vector<boxm2_data<BOXM2_MOG3_GREY>* > mog_list;
+  std::vector<boxm2_data<BOXM2_ALPHA>* > alpha_list;
   int flopCount = 0;
   while (mog_list.size() < 8 || alpha_list.size() < 8)
   {
@@ -53,7 +55,7 @@ void test_asio_data()
   }
 
   // make sure id's are unique
-  vcl_cout<<"flop count: "<<flopCount<<vcl_endl;
+  std::cout<<"flop count: "<<flopCount<<std::endl;
   for (unsigned int i=0; i<mog_list.size(); ++i) {
     for (unsigned int j=0; j<mog_list.size(); ++j) {
       if (i!=j && mog_list[i]->block_id() == mog_list[j]->block_id()) {
@@ -85,7 +87,7 @@ void test_asio_data()
 static void test_asio_blocks()
 {
   // load one block from disk with blocking (like we'd imagine startup)'
-  vcl_map<boxm2_block_id,boxm2_block_metadata> mdata = boxm2_test_utils::generate_simple_metadata();
+  std::map<boxm2_block_id,boxm2_block_metadata> mdata = boxm2_test_utils::generate_simple_metadata();
 
   boxm2_block* loaded = boxm2_sio_mgr::load_block("", boxm2_block_id(0,0,0),mdata[boxm2_block_id(0,0,0)]);
 
@@ -101,10 +103,10 @@ static void test_asio_blocks()
   mgr.load_block("", boxm2_block_id(1,1,1),mdata[boxm2_block_id(1,1,1)]);
 
   // check to see which block is ready, do some computation
-  vcl_vector<boxm2_block*> block_list;
+  std::vector<boxm2_block*> block_list;
   int flopCount = 0;
   while (block_list.size() < 6)  {
-    typedef vcl_map<boxm2_block_id, boxm2_block*> maptype;
+    typedef std::map<boxm2_block_id, boxm2_block*> maptype;
     maptype lmap = mgr.get_loaded_blocks();
     maptype::iterator iter;
     for (iter = lmap.begin(); iter != lmap.end(); ++iter)
@@ -113,9 +115,9 @@ static void test_asio_blocks()
   }
 
   // report flop count and block ids
-  vcl_cout<<"flop count: "<<flopCount<<vcl_endl;
+  std::cout<<"flop count: "<<flopCount<<std::endl;
   for (unsigned int i=0; i<block_list.size(); ++i) {
-    vcl_cout<<block_list[i]->block_id()<<vcl_endl;
+    std::cout<<block_list[i]->block_id()<<std::endl;
   }
 
   // test two of the blocks - make sure they're the same

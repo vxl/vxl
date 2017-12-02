@@ -42,13 +42,6 @@
  *  Copyright (c) 1985-2003 by Kenneth S. Kundert
  */
 
-#if 0
-static char copyright[] =
-    "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
-#endif
-
-
-
 
 /*
  *  IMPORTS
@@ -160,7 +153,7 @@ register  int  I;
  *  A pointer to the desired element, or \a NULL if it does not exist.
  *
  *  \param eMatrix
- *	Pointer to matrix.
+ *        Pointer to matrix.
  *  \param Row
  *      Row index for element.
  *  \param Col
@@ -183,10 +176,10 @@ spFindElement(
 MatrixPtr  Matrix = (MatrixPtr)eMatrix;
 register ElementPtr  pElement;
 int StartAt=0, Min = LARGEST_INTEGER;
-#define BorderRight 0	/* Start at left border, move right. */
-#define BorderDown  1	/* Start at top border, move down. */
-#define DiagRight   2	/* Start at diagonal, move right. */
-#define DiagDown    3	/* Start at diagonal, move down. */
+#define BorderRight 0        /* Start at left border, move right. */
+#define BorderDown  1        /* Start at top border, move down. */
+#define DiagRight   2        /* Start at diagonal, move right. */
+#define DiagDown    3        /* Start at diagonal, move down. */
 
 /* Begin `spFindElement'. */
     if (Row == Col) return &Matrix->Diag[Row]->Real;
@@ -194,48 +187,48 @@ int StartAt=0, Min = LARGEST_INTEGER;
 /* Determine where to start the search. */
     if (Matrix->RowsLinked)
     {   if ((Col >= Row) AND Matrix->Diag[Row])
-	{   Min = Col - Row;
-	    StartAt = DiagRight;
-	}
-	else
-	{   Min = Col;
-	    StartAt = BorderRight;
-	}
+        {   Min = Col - Row;
+            StartAt = DiagRight;
+        }
+        else
+        {   Min = Col;
+            StartAt = BorderRight;
+        }
     }
     if ((Row >= Col) AND Matrix->Diag[Col])
     {   if (Row - Col < Min)
-	    StartAt = DiagDown;
+            StartAt = DiagDown;
     }
     else if (Row < Min)
-	StartAt = BorderDown;
-    
+        StartAt = BorderDown;
+
 /* Search column for element. */
     if ((StartAt == BorderDown) OR (StartAt == DiagDown))
     {   if (StartAt == BorderDown)
-	    pElement = Matrix->FirstInCol[Col];
-	else
-	    pElement = Matrix->Diag[Col];
+            pElement = Matrix->FirstInCol[Col];
+        else
+            pElement = Matrix->Diag[Col];
 
-	while ((pElement != NULL) AND (pElement->Row < Row))
+        while ((pElement != NULL) AND (pElement->Row < Row))
             pElement = pElement->NextInCol;
-	if (pElement AND (pElement->Row == Row))
-	    return &pElement->Real;
-	else
-	    return NULL;
+        if (pElement AND (pElement->Row == Row))
+            return &pElement->Real;
+        else
+            return NULL;
     }
 
 /* Search row for element. */
     if (StartAt == BorderRight)
-	pElement = Matrix->FirstInRow[Row];
+        pElement = Matrix->FirstInRow[Row];
     else
-	pElement = Matrix->Diag[Row];
+        pElement = Matrix->Diag[Row];
 
     while ((pElement != NULL) AND (pElement->Col < Col))
-	pElement = pElement->NextInRow;
+        pElement = pElement->NextInRow;
     if (pElement AND (pElement->Col == Col))
-	return &pElement->Real;
+        return &pElement->Real;
     else
-	return NULL;
+        return NULL;
 }
 
 
@@ -299,7 +292,7 @@ ElementPtr pElement;
 
 #if NOT TRANSLATE
     vASSERT( NOT Matrix->Reordered,
-	     "Set TRANSLATE to add elements to a reordered matrix" );
+             "Set TRANSLATE to add elements to a reordered matrix" );
 #endif
 
 #if TRANSLATE
@@ -310,7 +303,7 @@ ElementPtr pElement;
 #if NOT TRANSLATE
 #if NOT EXPANDABLE
     vASSERT( (Row <= Matrix->Size) AND (Col <= Matrix->Size),
-	     "Row or column number too large" );
+             "Row or column number too large" );
 #endif
 
 #if EXPANDABLE
@@ -323,12 +316,12 @@ ElementPtr pElement;
 
     if ((Row != Col) OR ((pElement = Matrix->Diag[Row]) == NULL))
     {   /*
-	 * Element does not exist or does not reside along diagonal.  Search
-	 * for element and if it does not exist, create it.
-	 */
+         * Element does not exist or does not reside along diagonal.  Search
+         * for element and if it does not exist, create it.
+         */
         pElement = spcCreateElement( Matrix, Row, Col,
-				     &(Matrix->FirstInRow[Row]),
-				     &(Matrix->FirstInCol[Col]), NO );
+                                     &(Matrix->FirstInRow[Row]),
+                                     &(Matrix->FirstInCol[Col]), NO );
     }
 /*
  * Cast pointer into a pointer to a RealNumber.  This requires that Real
@@ -378,7 +371,7 @@ ElementPtr pElement;
  */
 
 static void
-Translate( 
+Translate(
     MatrixPtr Matrix,
     int *Row,
     int *Col
@@ -679,7 +672,7 @@ spGetOnes(
  *
  *  >>> Arguments:
  *  Matrix  <input>  (MatrixPtr)
- *	Pointer to matrix.
+ *        Pointer to matrix.
  *  Index  <input>  (int)
  *      Row, Col index for diagonal element.
  *
@@ -701,11 +694,11 @@ register ElementPtr  pElement;
 
 /* Search column for element. */
     while ((pElement != NULL) AND (pElement->Row < Index))
-	pElement = pElement->NextInCol;
+        pElement = pElement->NextInCol;
     if (pElement AND (pElement->Row == Index))
-	return pElement;
+        return pElement;
     else
-	return NULL;
+        return NULL;
 }
 
 
@@ -726,21 +719,21 @@ register ElementPtr  pElement;
  *
  *  >>> Arguments:
  *  Matrix  <input>  (MatrixPtr)
- *	Pointer to matrix.
+ *        Pointer to matrix.
  *  Row  <input>  (int)
  *      Row index for element.
  *  Col  <input>  (int)
  *      Column index for element.
  *  ppToLeft  <input-output>  (ElementPtr *)
  *      This contains the address of the pointer to an element to the left
- *	of the one being created.  It is used to speed the search and if it
- *	is immediately to the left, it is updated with address of the
- *	created element.
+ *        of the one being created.  It is used to speed the search and if it
+ *        is immediately to the left, it is updated with address of the
+ *        created element.
  *  ppAbove  <input-output> (ElementPtr *)
  *      This contains the address of the pointer to an element above the
  *      one being created.  It is used to speed the search and it if it
- *	is immediatley above, it is updated with address of the created
- *	element.
+ *        is immediatley above, it is updated with address of the created
+ *        element.
  *  Fillin  <input>  (BOOLEAN)
  *      Flag that indicates if created element is to be a fill-in.
  *
@@ -772,39 +765,39 @@ register ElementPtr  pElement, pCreatedElement;
     pElement = *ppAbove;
     while ((pElement != NULL) AND (pElement->Row < Row))
     {   ppAbove = &pElement->NextInCol;
-	pElement = *ppAbove;
+        pElement = *ppAbove;
     }
     if ((pElement != NULL) AND (pElement->Row == Row))
-	return pElement;
+        return pElement;
 
 /* The desired element does not exist, create it. */
     if (Fillin)
     {   pCreatedElement = spcGetFillin( Matrix );
-	Matrix->Fillins++;
+        Matrix->Fillins++;
 
 /* Update Markowitz counts and products. */
-	++Matrix->MarkowitzRow[Row];
-	spcMarkoProd( Matrix->MarkowitzProd[Row],
-		      Matrix->MarkowitzRow[Row],
-		      Matrix->MarkowitzCol[Row] );
-	if ((Matrix->MarkowitzRow[Row] == 1) AND
-	    (Matrix->MarkowitzCol[Row] != 0))
-	{
-	    Matrix->Singletons--;
-	}
-	++Matrix->MarkowitzCol[Col];
-	spcMarkoProd( Matrix->MarkowitzProd[Col],
-		      Matrix->MarkowitzCol[Col],
-		      Matrix->MarkowitzRow[Col] );
-	if ((Matrix->MarkowitzRow[Col] != 0) AND
-	    (Matrix->MarkowitzCol[Col] == 1))
-	{
-	    Matrix->Singletons--;
-	}
+        ++Matrix->MarkowitzRow[Row];
+        spcMarkoProd( Matrix->MarkowitzProd[Row],
+                      Matrix->MarkowitzRow[Row],
+                      Matrix->MarkowitzCol[Row] );
+        if ((Matrix->MarkowitzRow[Row] == 1) AND
+            (Matrix->MarkowitzCol[Row] != 0))
+        {
+            Matrix->Singletons--;
+        }
+        ++Matrix->MarkowitzCol[Col];
+        spcMarkoProd( Matrix->MarkowitzProd[Col],
+                      Matrix->MarkowitzCol[Col],
+                      Matrix->MarkowitzRow[Col] );
+        if ((Matrix->MarkowitzRow[Col] != 0) AND
+            (Matrix->MarkowitzCol[Col] == 1))
+        {
+            Matrix->Singletons--;
+        }
     }
     else
     {   pCreatedElement = spcGetElement( Matrix );
-	Matrix->NeedsOrdering = YES;
+        Matrix->NeedsOrdering = YES;
     }
     if (pCreatedElement == NULL) return NULL;
     Matrix->Elements++;
@@ -830,17 +823,17 @@ register ElementPtr  pElement, pCreatedElement;
 /* Find Element immediately to the left of the fill-in. */
     if (Matrix->RowsLinked)
     {   pElement = *ppToLeft;
-	while (pElement != NULL)
-	{   if (pElement->Col < Col)
-	    {   ppToLeft = &pElement->NextInRow;
-		pElement = *ppToLeft;
-	    }
-	    else break; /* while loop */
-	}
+        while (pElement != NULL)
+        {   if (pElement->Col < Col)
+            {   ppToLeft = &pElement->NextInRow;
+                pElement = *ppToLeft;
+            }
+            else break; /* while loop */
+        }
 
 /* Splice element into row. */
-	pCreatedElement->NextInRow = *ppToLeft;
-	*ppToLeft = pCreatedElement;
+        pCreatedElement->NextInRow = *ppToLeft;
+        *ppToLeft = pCreatedElement;
     }
     return pCreatedElement;
 }
@@ -888,7 +881,7 @@ register  int  Col;
 /* Begin `spcLinkRows'. */
     FirstInRowArray = Matrix->FirstInRow;
     for (Col = Matrix->Size; Col >= 1; Col--)
-	FirstInRowArray[Col] = NULL;
+        FirstInRowArray[Col] = NULL;
 
     for (Col = Matrix->Size; Col >= 1; Col--)
     {
@@ -1091,7 +1084,7 @@ register int I, OldAllocatedSize = Matrix->AllocatedExtSize;
  *   the matrix to be \a spMANGLED, and returns the error code.
  *
  *   \return
- *	Returns the return value of the \a pInit() function.
+ *        Returns the return value of the \a pInit() function.
  *   \param eMatrix
  *      Pointer to matrix.
  *   \param pInit
@@ -1104,10 +1097,10 @@ int
 spInitialize(
     spMatrix eMatrix,
     int (*pInit)(
-	spElement *pElement,
-	spGenericPtr pInitInfo,
-	int Row,
-	int Col
+        spElement *pElement,
+        spGenericPtr pInitInfo,
+        int Row,
+        int Col
     )
 )
 {
@@ -1200,7 +1193,7 @@ spInstallInitInfo(
 
 /*!
  *   This function returns a pointer to a data structure that is used
- *   to contain initialization information to a matrix element. 
+ *   to contain initialization information to a matrix element.
  *
  *   \return
  *       The pointer to the initialiation information data structure

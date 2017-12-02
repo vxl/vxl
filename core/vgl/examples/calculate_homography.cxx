@@ -1,7 +1,7 @@
 // \file
 //
 // \version 1.0
-// \author  Gastón Araguás UTN Cordoba, Argentina
+// \author  Gaston Araguas UTN Cordoba, Argentina
 // \date    3 March, 2008
 
 #include <vgui/vgui.h>
@@ -16,8 +16,8 @@
 int main(int argc, char **argv)
 {
   vgui::init(argc, argv);
-  vcl_vector<vgl_homg_point_2d<double> > pointsA;
-  vcl_vector<vgl_homg_point_2d<double> > pointsB;
+  std::vector<vgl_homg_point_2d<double> > pointsA;
+  std::vector<vgl_homg_point_2d<double> > pointsB;
 
   // Use an easy2D tableau which allows us to draw 2D objects:
   vgui_easy2D_tableau_new easy2D("Homography between two point sets");

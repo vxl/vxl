@@ -1,46 +1,44 @@
 # boxm2's Process Library
 
 # bprb depends on expat and boxm2_pro depends on bprb primarily
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-  INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+  include_directories( ${BRL_INCLUDE_DIR}/bpro )
+  include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+  include_directories( ${BRL_INCLUDE_DIR}/bseg )
+  include_directories( ${BRL_INCLUDE_DIR}/bbas )
+  include_directories( ${GEL_INCLUDE_DIR}/mrc/vpgl )
+  include_directories( ${GEL_INCLUDE_DIR}/mrc )
+  include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
 
-  SET(boxm2_pro_sources
+  set(boxm2_pro_sources
       boxm2_processes.h
       boxm2_register.h   boxm2_register.cxx
      )
 
-  AUX_SOURCE_DIRECTORY(Templates boxm2_pro_sources)
-  AUX_SOURCE_DIRECTORY(processes boxm2_pro_sources)
+  aux_source_directory(Templates boxm2_pro_sources)
+  aux_source_directory(processes boxm2_pro_sources)
 
-  INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
-  IF(TIFF_FOUND)
-    INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-    SET( HAS_TIFF 1 )
-  ENDIF(TIFF_FOUND)
-  INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
-  IF(GEOTIFF_FOUND)
-    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
-    SET (HAS_GEOTIFF 1 )
-  ENDIF(GEOTIFF_FOUND)
+  include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+  if(TIFF_FOUND)
+    include_directories(${TIFF_INCLUDE_DIR})
+    set( HAS_TIFF 1 )
+  endif()
+  include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+  if(GEOTIFF_FOUND)
+    include_directories(${GEOTIFF_INCLUDE_DIR})
+    set(HAS_GEOTIFF 1 )
+  endif()
 
-  ADD_LIBRARY(boxm2_pro ${boxm2_pro_sources})
+  vxl_add_library(LIBRARY_NAME boxm2_pro LIBRARY_SOURCES ${boxm2_pro_sources})
 
-  #install the .h .txx and libs
-  INSTALL_TARGETS(/lib boxm2_pro)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/pro ${boxm2_pro_sources})
+  #install the .h .hxx and libs
 
-  TARGET_LINK_LIBRARIES(boxm2_pro boxm2 boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml bmsh3d_algo rply)
+  target_link_libraries(boxm2_pro boxm2 boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul bvrml bmsh3d_algo rply)
 
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
+  endif()
 
-ENDIF(EXPAT_FOUND)
+endif()

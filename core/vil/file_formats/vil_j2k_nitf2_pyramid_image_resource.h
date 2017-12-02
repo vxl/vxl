@@ -14,7 +14,8 @@
 // Approved for public Release, distribution unlimited
 // DISTAR Case 14074
 //
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 

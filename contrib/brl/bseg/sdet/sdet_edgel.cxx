@@ -1,11 +1,12 @@
+#include <iostream>
+#include <fstream>
+#include <deque>
+#include <algorithm>
 #include "sdet_edgel.h"
 #include "sdet_sel_utils.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <vcl_cassert.h>
-#include <vcl_deque.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------------
 // sdet_edgel methods
@@ -13,16 +14,16 @@
 
 //: constructor
 sdet_edgel::sdet_edgel(
-    vgl_point_2d<double> new_pt, double tan, double conf, double der, double uncer, 
-    sdet_appearance* lapp, sdet_appearance* rapp) 
-: 
-  id(-1), 
-  pt(new_pt), 
-  tangent(sdet_angle0To2Pi(tan)), 
-  strength(conf), 
-  deriv(der), 
-  uncertainty(uncer), 
-  left_app(lapp), 
+    vgl_point_2d<double> new_pt, double tan, double conf, double der, double uncer,
+    sdet_appearance* lapp, sdet_appearance* rapp)
+:
+  id(-1),
+  pt(new_pt),
+  tangent(sdet_angle0To2Pi(tan)),
+  strength(conf),
+  deriv(der),
+  uncertainty(uncer),
+  left_app(lapp),
   right_app(rapp)
 {
 }
@@ -42,7 +43,7 @@ sdet_edgel::sdet_edgel(const sdet_edgel& other)
   right_app = other.right_app->clone();
 }
 
-sdet_edgel & 
+sdet_edgel &
 sdet_edgel::
 operator=(const sdet_edgel &rhs)
 {
@@ -52,7 +53,7 @@ operator=(const sdet_edgel &rhs)
   tangent = rhs.tangent;
   strength = rhs.strength;
   deriv = rhs.deriv;
-  
+
   gpt = rhs.gpt;
 
   //: Copy pointers, taking care for when rhs is *this

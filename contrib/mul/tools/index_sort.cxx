@@ -4,9 +4,10 @@
 //  \brief Perform an index sort on a list of scalar numeric data
 
 
-#include <vcl_exception.h>
-#include <vcl_iostream.h>
-#include <vcl_iterator.h>
+#include <iostream>
+#include <exception>
+#include <iterator>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <mbl/mbl_log.h>
@@ -28,11 +29,11 @@ static mbl_logger& logger()
 //========================================================================
 int main2(int argc, char*argv[])
 {
-  const vcl_string sep="\n";
+  const std::string sep="\n";
 
   // Parse the program arguments
-  vul_arg<vcl_string> in_file(0, "input filename (contains whitespace-separated scalar numeric values");
-  vul_arg<vcl_string> out_file("-o", "output filename (contains zero-based indices into input list.", "");
+  vul_arg<std::string> in_file(VXL_NULLPTR, "input filename (contains whitespace-separated scalar numeric values");
+  vul_arg<std::string> out_file("-o", "output filename (contains zero-based indices into input list.", "");
   vul_arg<bool> reverse("-r", "Sort into descending order (default is ascending order)", false);
   vul_arg_parse(argc, argv);
 
@@ -47,32 +48,32 @@ int main2(int argc, char*argv[])
   // Validate the program arguments
   if (in_file().empty() || !vul_file::exists(in_file()))
   {
-    vcl_cerr << "ERROR: invalid input filename" << vcl_endl;
+    std::cerr << "ERROR: invalid input filename" << std::endl;
     return 1;
   }
 
   // Load the input data
-  vcl_ifstream ifs(in_file().c_str());
+  std::ifstream ifs(in_file().c_str());
   MBL_LOG(DEBUG, logger(), "Opened input file: " << in_file());
-  vcl_vector<double> data;
-  data.assign(vcl_istream_iterator<double>(ifs), vcl_istream_iterator<double>());
+  std::vector<double> data;
+  data.assign(std::istream_iterator<double>(ifs), std::istream_iterator<double>());
   if (data.empty())
   {
-    vcl_cerr << "ERROR: Could not parse input data file." << vcl_endl;
+    std::cerr << "ERROR: Could not parse input data file." << std::endl;
     return 2;
   }
   ifs.close();
   MBL_LOG(INFO, logger(), "Loaded " << data.size() << " values.");
-  
+
   // Perform the index sort - default is ascending order
-  vcl_vector<unsigned> indices;
+  std::vector<unsigned> indices;
   mbl_index_sort(data, indices);
 
   // Reverse the order of the index list if descending order was requested
   if (reverse())
   {
     MBL_LOG(DEBUG, logger(), "Reversing order of index list");
-    vcl_reverse(indices.begin(), indices.end());
+    std::reverse(indices.begin(), indices.end());
   }
 
   // Print the results to stdout or save to file
@@ -80,11 +81,11 @@ int main2(int argc, char*argv[])
   {
     if (out_file().empty())
     {
-      vcl_cerr << "ERROR: invalid output filename" << vcl_endl;
+      std::cerr << "ERROR: invalid output filename" << std::endl;
       return 3;
     }
-    vcl_ofstream ofs(out_file().c_str());
-    for (vcl_vector<unsigned>::const_iterator it=indices.begin(), end=indices.end(); it!=end; ++it)
+    std::ofstream ofs(out_file().c_str());
+    for (std::vector<unsigned>::const_iterator it=indices.begin(), end=indices.end(); it!=end; ++it)
     {
       ofs << *it << sep;
     }
@@ -93,9 +94,9 @@ int main2(int argc, char*argv[])
   }
   else
   {
-    for (vcl_vector<unsigned>::const_iterator it=indices.begin(), end=indices.end(); it!=end; ++it)
+    for (std::vector<unsigned>::const_iterator it=indices.begin(), end=indices.end(); it!=end; ++it)
     {
-      vcl_cout << *it << sep;
+      std::cout << *it << sep;
     }
   }
 
@@ -115,14 +116,14 @@ int main(int argc, char*argv[])
   {
     main2(argc, argv);
   }
-  catch (vcl_exception& e)
+  catch (std::exception& e)
   {
-    vcl_cerr << "Caught exception " << e.what() << vcl_endl;
+    std::cerr << "Caught exception " << e.what() << std::endl;
     return -1;
   }
   catch (...)
   {
-    vcl_cerr << "Caught unknown exception " << vcl_endl;
+    std::cerr << "Caught unknown exception " << std::endl;
     return -2;
   }
 

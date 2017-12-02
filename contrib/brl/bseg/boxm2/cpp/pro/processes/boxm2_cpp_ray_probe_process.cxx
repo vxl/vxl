@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_ray_probe_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date June 3, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -34,7 +36,7 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     using namespace boxm2_cpp_ray_probe_process_globals;
 
     //process takes 7 inputs:
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
     input_types_[1] = "boxm2_cache_sptr";
     input_types_[2] = "vpgl_camera_double_sptr";
@@ -44,7 +46,7 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     input_types_[6] = "vcl_string";// identifier (optional)
 
     // process has 6 outputs:
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     output_types_[0] = "bbas_1d_array_float_sptr"; //seg_len
     output_types_[1] = "bbas_1d_array_float_sptr"; //alpha
     output_types_[2] = "bbas_1d_array_float_sptr"; //vis
@@ -56,7 +58,7 @@ bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
     bool good = pro.set_input_types(input_types_) &&
                 pro.set_output_types(output_types_);
     // in case the 6th or 7th input are not set
-    brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+    brdb_value_sptr idx = new brdb_value_t<std::string>("");
     pro.set_input(5, idx);
     pro.set_input(6, idx);
     return good;
@@ -67,7 +69,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     using namespace boxm2_cpp_ray_probe_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     //get the inputs
@@ -77,11 +79,11 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(k++);
     unsigned pi=pro.get_input<unsigned>(k++);
     unsigned pj=pro.get_input<unsigned>(k++);
-    vcl_string prefix = pro.get_input<vcl_string>(k++);
-    vcl_string identifier = pro.get_input<vcl_string>(k++);
+    std::string prefix = pro.get_input<std::string>(k++);
+    std::string identifier = pro.get_input<std::string>(k++);
 
-    vcl_string data_type;
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::string data_type;
+    std::vector<std::string> apps = scene->appearances();
     for (unsigned int i=0; i<apps.size(); ++i) {
         if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
             data_type = apps[i];
@@ -93,16 +95,16 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         data_type += "_" + identifier;
     }
 
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_perspective_camera<double>*)(cam.ptr()));
+    std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_perspective_camera<double>*)(cam.ptr()));
     double cone_half_angle, solid_angle;vgl_ray_3d<double> ray_ij;
     vsph_camera_bounds::pixel_solid_angle(*(vpgl_perspective_camera<double>*)(cam.ptr()), pi, pj, ray_ij, cone_half_angle, solid_angle);
 
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id>::iterator id;
 
-    vcl_vector<float> seg_lengths;
-    vcl_vector<float> alphas;
-    vcl_vector<float> abs_depth;
-    vcl_vector<float> data_to_return;
+    std::vector<float> seg_lengths;
+    std::vector<float> alphas;
+    std::vector<float> abs_depth;
+    std::vector<float> data_to_return;
     int nelems = 0; // initialise here, in case the "for" loop is empty
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -112,12 +114,12 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int data_buffer_length = (int) (alph->buffer_length()/alphaTypeSize);
 
- 
-        vcl_vector<boxm2_data_base*> datas;
+
+        std::vector<boxm2_data_base*> datas;
         datas.push_back(alph);
         if (prefix!="")
         {
-            vcl_string name = prefix;
+            std::string name = prefix;
             int dataTypeSize = (int)boxm2_data_info::datasize(name);
             if (identifier!="")
                 name+= ("_"+identifier);
@@ -148,9 +150,9 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         alpha_array->data_array[i]=alphas[i];
 
         vis_array->data_array[i]=vis;
-        vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
-        
-        res_depth_array->data_array[i] = abs_depth[i]*vcl_tan(cone_half_angle)*2;
+        vis*=std::exp(-seg_lengths[i]*alphas[i]);
+
+        res_depth_array->data_array[i] = abs_depth[i]*std::tan(cone_half_angle)*2;
         for (int j=0 ; j<nelems; ++j)
             data_to_return_array->data_array[i*nelems+j] = data_to_return[i*nelems+j];
 

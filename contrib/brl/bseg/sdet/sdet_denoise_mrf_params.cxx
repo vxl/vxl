@@ -1,12 +1,13 @@
 // This is brl/bseg/sdet/sdet_denoise_mrf_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_denoise_mrf_params.h"
 //:
 // \file
 // See sdet_denoise_mrf_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -42,8 +43,8 @@ bool sdet_denoise_mrf_params::SanityCheck()
 {
   //  Note that msg << ends seems to restart the string and erase the
   //  previous string. We should only use it as the last call, use
-  //  vcl_endl otherwise.
-  vcl_stringstream msg;
+  //  std::endl otherwise.
+  std::stringstream msg;
   bool valid = true;
 
   if (radius_ < 1.0)
@@ -61,18 +62,18 @@ bool sdet_denoise_mrf_params::SanityCheck()
       msg << "ERROR: beta can't be negative\n";
       valid = false;
     }
-  msg << vcl_ends;
+  msg << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_denoise_mrf_params& dmp)
+std::ostream& operator << (std::ostream& os, const sdet_denoise_mrf_params& dmp)
 {
   return
   os << "sdet_denoise_mrf_params:\n[---\n"
-     << "radius" << dmp.radius_ << vcl_endl
-     << "kappa " << dmp.kappa_ << vcl_endl
-     << "beta " << dmp.beta_ << vcl_endl
+     << "radius" << dmp.radius_ << std::endl
+     << "kappa " << dmp.kappa_ << std::endl
+     << "beta " << dmp.beta_ << std::endl
      << "---]\n";
 }

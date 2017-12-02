@@ -8,7 +8,7 @@
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_3d.h>
 
-void sdet_vrml_display::write_vrml_header(vcl_ofstream& str)
+void sdet_vrml_display::write_vrml_header(std::ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -26,7 +26,7 @@ void sdet_vrml_display::write_vrml_header(vcl_ofstream& str)
       << "}\n";
 }
 
-static void write_index_preamble(vcl_ofstream& str)
+static void write_index_preamble(std::ofstream& str)
 {
   str << "Transform {\n"
       << "translation 0 0  0\n"
@@ -45,7 +45,7 @@ static void write_index_preamble(vcl_ofstream& str)
       << "   point[\n";
 }
 
-static void write_coor_index(vcl_ofstream& str, unsigned n)
+static void write_coor_index(std::ofstream& str, unsigned n)
 {
   str << " coordIndex [\n";
   for (unsigned i = 0; i<n; ++i)
@@ -57,10 +57,10 @@ static void write_coor_index(vcl_ofstream& str, unsigned n)
 }
 
 void sdet_vrml_display::
-write_intensity_regions_3d(vcl_ofstream& str,
-                           vcl_vector<vtol_intensity_face_sptr> const& faces)
+write_intensity_regions_3d(std::ofstream& str,
+                           std::vector<vtol_intensity_face_sptr> const& faces)
 {
-  for (vcl_vector<vtol_intensity_face_sptr>::const_iterator fit = faces.begin();
+  for (std::vector<vtol_intensity_face_sptr>::const_iterator fit = faces.begin();
       fit != faces.end(); ++fit)
   {
     vtol_intensity_face_sptr f = (*fit);
@@ -94,10 +94,10 @@ write_intensity_regions_3d(vcl_ofstream& str,
 }
 
 void sdet_vrml_display::
-write_vsol_polys_3d(vcl_ofstream& str,
-                    vcl_vector<vsol_polygon_3d_sptr> const& polys)
+write_vsol_polys_3d(std::ofstream& str,
+                    std::vector<vsol_polygon_3d_sptr> const& polys)
 {
-  for (vcl_vector<vsol_polygon_3d_sptr>::const_iterator pit = polys.begin();
+  for (std::vector<vsol_polygon_3d_sptr>::const_iterator pit = polys.begin();
       pit != polys.end(); ++pit)
   {
     vsol_polygon_3d_sptr poly = *pit;
@@ -116,7 +116,7 @@ write_vsol_polys_3d(vcl_ofstream& str,
 }
 
 void sdet_vrml_display::
-write_vrml_height_map(vcl_ofstream& str,
+write_vrml_height_map(std::ofstream& str,
                       vil_image_view<float> const & z_of_xy,
                       float r, float g, float b)
 {

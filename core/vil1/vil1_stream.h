@@ -10,7 +10,7 @@
 // \author  awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
-typedef long int vil1_streampos; // should be identical to vcl_istream::streampos
+typedef long int vil1_streampos; // should be identical to std::istream::streampos
 
 //: Stream interface for VIL image loaders
 // This allows the loaders to be used with any type of stream.

@@ -1,24 +1,25 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_convert_local_to_global_coordinates_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 
 //: initialization
 bool vpgl_convert_local_to_global_coordinates_process_cons(bprb_func_process& pro)
 {
-  //this process takes four inputs: 
+  //this process takes four inputs:
   // 0: (string) lvcs filename
   // 1: (double)  latitude
   // 2: (double)  longitude
   // 3: (double)  elevation
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
-  input_types.push_back("vpgl_lvcs_sptr"); 
+  std::vector<std::string> input_types;
+  input_types.push_back("vpgl_lvcs_sptr");
   input_types.push_back("double");
   input_types.push_back("double");
   input_types.push_back("double");
@@ -29,13 +30,13 @@ bool vpgl_convert_local_to_global_coordinates_process_cons(bprb_func_process& pr
   // 0: (double) x
   // 1: (double) y
   // 2: (double) z
-  vcl_vector<vcl_string> output_types;
-  output_types.push_back("double");  
-  output_types.push_back("double");  
-  output_types.push_back("double");  
+  std::vector<std::string> output_types;
+  output_types.push_back("double");
+  output_types.push_back("double");
+  output_types.push_back("double");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
+
   return true;
 
 }
@@ -44,7 +45,7 @@ bool vpgl_convert_local_to_global_coordinates_process_cons(bprb_func_process& pr
 bool vpgl_convert_local_to_global_coordinates_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() != pro.input_types().size()) {
-    vcl_cout << "vpgl_convert_local_to_global_coordinates_process: The number of inputs should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "vpgl_convert_local_to_global_coordinates_process: The number of inputs should be " << pro.input_types().size() << std::endl;
     return false;
   }
 
@@ -54,7 +55,7 @@ bool vpgl_convert_local_to_global_coordinates_process(bprb_func_process& pro)
   double y = pro.get_input<double>(2);
   double z = pro.get_input<double>(3);
 
- 
+
   double lat,lon,el;
   lvcs->local_to_global(x,y,z,vpgl_lvcs::wgs84,lon,lat,el,vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 

@@ -1,6 +1,6 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/io/vil_io_image_view.h>
-#include <brdb/brdb_value.txx>
+#include <brdb/brdb_value.hxx>
 
 //stubs for binary IO, since we don't need to use it
 void vsl_b_read(vsl_b_istream&, vil_image_view_base_sptr&) {}

@@ -13,7 +13,7 @@
 // \endverbatim
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || \
-    defined(UNIX) || defined(linux)
+    defined(UNIX) || defined(__linux__)
   #include <CL/cl.h>
   #include <CL/cl_gl.h>
   #define GL_SHARING_EXTENSION "cl_khr_gl_sharing"

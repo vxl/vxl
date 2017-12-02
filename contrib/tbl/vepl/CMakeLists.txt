@@ -6,9 +6,9 @@ doxygen_add_library(contrib/tbl/vepl
   DESCRIPTION "Easy Image Processing Library using vil"
   )
 
-INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
+include_directories(${MUL_INCLUDE_DIR})
 
-SET(vepl_sources
+set(vepl_sources
  vepl_threshold.cxx            vepl_threshold.h
  vepl_add_random_noise.cxx     vepl_add_random_noise.h
  vepl_monadic.cxx              vepl_monadic.h
@@ -25,41 +25,39 @@ SET(vepl_sources
  vepl_moment.cxx               vepl_moment.h
  vepl_histogram.cxx            vepl_histogram.h
 
- vepl_convert.txx              vepl_convert.h
+ vepl_convert.hxx              vepl_convert.h
 
  accessors/vipl_accessors_vil_image_view_base.h
- accessors/vipl_accessors_vil_image_view_base.txx
- section/vipl_filterable_section_container_generator_vil_image_view_base.txx
+ accessors/vipl_accessors_vil_image_view_base.hxx
+ section/vipl_filterable_section_container_generator_vil_image_view_base.hxx
 )
 
-ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
+add_definitions(-DINSTANTIATE_TEMPLATES)
 # [only when INSTANTIATE_TEMPLATES not defined:]
-# AUX_SOURCE_DIRECTORY(Templates vepl_sources)
+# aux_source_directory(Templates vepl_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(vepl_gaussian_convolution.cxx PROPERTIES COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(vepl_threshold.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl_add_random_noise.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl_dyadic.cxx PROPERTIES COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(vepl_dilate_disk.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl_erode_disk.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl_median.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl_moment.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(vepl_histogram.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vepl_convert+uchar-.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vepl_convert+short-.cxx PROPERTIES COMPILE_FLAGS -O1)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vepl_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(vepl_gaussian_convolution.cxx PROPERTIES COMPILE_FLAGS -O0)
+  set_source_files_properties(vepl_threshold.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(vepl_add_random_noise.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(vepl_dyadic.cxx PROPERTIES COMPILE_FLAGS -O0)
+  set_source_files_properties(vepl_dilate_disk.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(vepl_erode_disk.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(vepl_median.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(vepl_moment.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(vepl_histogram.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(Templates/vepl_convert+uchar-.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(Templates/vepl_convert+short-.cxx PROPERTIES COMPILE_FLAGS -O1)
+  set_source_files_properties(Templates/vepl_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
+endif()
 
-ADD_LIBRARY(vepl ${vepl_sources})
-INSTALL_TARGETS(/lib vepl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl ${vepl_sources})
-TARGET_LINK_LIBRARIES(vepl vipl vil ${CMAKE_THREAD_LIBS})
+vxl_add_library(LIBRARY_NAME vepl LIBRARY_SOURCES ${vepl_sources})
+target_link_libraries(vepl vipl ${VXL_LIB_PREFIX}vil ${CMAKE_THREAD_LIBS})
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

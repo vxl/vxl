@@ -33,9 +33,9 @@ vidl_image_list_ostream()
 
 //: Constructor - opens a stream
 vidl_image_list_ostream::
-vidl_image_list_ostream(const vcl_string& directory,
-                        const vcl_string& name_format,
-                        const vcl_string& file_format,
+vidl_image_list_ostream(const std::string& directory,
+                        const std::string& name_format,
+                        const std::string& file_format,
                         const unsigned int init_index)
 {
   open(directory, name_format, file_format, init_index);
@@ -45,19 +45,20 @@ vidl_image_list_ostream(const vcl_string& directory,
 //: Open the stream
 bool
 vidl_image_list_ostream::
-open(const vcl_string& directory,
-     const vcl_string& name_format,
-     const vcl_string& file_format,
+open(const std::string& directory,
+     const std::string& name_format,
+     const std::string& file_format,
      const unsigned int init_index)
 {
   if (!vul_file::is_directory(directory)) {
     close();
-    vcl_cerr << __FILE__ ": Directory does not exist\n   "<<directory<<vcl_endl;
+    std::cerr << __FILE__ ": Directory does not exist\n   "<<directory<<std::endl;
     return false;
   }
 
   bool valid_file_format = false;
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+  std::list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
     if (file_format == (*p)->tag()) {
       valid_file_format = true;
       break;
@@ -66,11 +67,13 @@ open(const vcl_string& directory,
 
   if (!valid_file_format) {
     close();
-    vcl_cerr << __FILE__ ": File format \'"<<file_format<<"\' not supported\n"
+    std::cerr << __FILE__ ": File format \'"<<file_format<<"\' not supported\n"
              << "   valid formats are: ";
-    for (vil_file_format** p = vil_file_format::all(); *p; ++p)
-      vcl_cerr << " \'" << (*p)->tag() << "\' " << vcl_flush;
-    vcl_cerr << vcl_endl;
+    std::list<vil_file_format*>& l = vil_file_format::all();
+    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
+      std::cerr << " \'" << (*p)->tag() << "\' " << std::flush;
+    }
+    std::cerr << std::endl;
     return false;
   }
 
@@ -104,7 +107,7 @@ is_open() const
 
 
 //: Return the next file name to be written to
-vcl_string
+std::string
 vidl_image_list_ostream::
 next_file_name() const
 {
@@ -120,7 +123,7 @@ bool
 vidl_image_list_ostream::
 write_frame(const vidl_frame_sptr& frame)
 {
-  vcl_string file_name = next_file_name();
+  std::string file_name = next_file_name();
   ++index_;
   if (!frame)
     return false;
@@ -128,9 +131,9 @@ write_frame(const vidl_frame_sptr& frame)
   if (!v){
     vil_image_view<vxl_byte> image;
     vidl_convert_to_view(*frame,image,VIDL_PIXEL_COLOR_RGB);
-    return vil_save(image,file_name.c_str(),file_format_.c_str()); 
+    return vil_save(image,file_name.c_str(),file_format_.c_str());
   }
 
-  return vil_save(*v,file_name.c_str(),file_format_.c_str());                
+  return vil_save(*v,file_name.c_str(),file_format_.c_str());
 }
 

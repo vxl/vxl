@@ -14,7 +14,8 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 #include "vgui_dialog_impl.h"
 
 //: vgui_dialog_extensions_impl is the abstract base class for dialog extensions implementation.
@@ -32,13 +33,13 @@ class vgui_dialog_extensions_impl : public vgui_dialog_impl
   virtual ~vgui_dialog_extensions_impl();
 
   //: Add a popup directory browser to the dialog box.
-  void dir_browser(const char*, vcl_string&, vcl_string&);
+  void dir_browser(const char*, std::string&, std::string&);
 
   //: Add a line break to the dialog box
   void line_break();
 
   //: Pointer to a GUI widget for a directory browser.
-  virtual void* dir_browser_widget(const char*, vcl_string&, vcl_string&);
+  virtual void* dir_browser_widget(const char*, std::string&, std::string&);
 
   //: Display the dialog box with user added line breaks and a layout and collect data from the user.
   // Dialog elements are added next to each other until a line break element is found.

@@ -1,40 +1,38 @@
 # world modeling application
 # brl/bbas/bwm/CMakeLists.txt
 
+include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+if(HAS_GEOTIFF)
+include_directories( ${GEOTIFF_INCLUDE_DIR} )
 
 
+project(bwm)
 
-PROJECT(bwm)
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl)
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${GEL_INCLUDE_DIR} )
+include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
+if(DIRECTSHOW_FOUND)
+include_directories(${DIRECTSHOW_INCLUDE_DIRS})
+endif()
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl)
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
-IF(DIRECTSHOW_FOUND)
-INCLUDE_DIRECTORIES(${DIRECTSHOW_INCLUDE_DIRS})
-ENDIF(DIRECTSHOW_FOUND)
+include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+if(TIFF_FOUND)
+  include_directories(${TIFF_INCLUDE_DIR})
+endif()
 
-INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-ENDIF(TIFF_FOUND)
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
-IF(GEOTIFF_FOUND)
-  INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
-ENDIF(GEOTIFF_FOUND)
+include( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
 
-INCLUDE( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
-
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 
 # Set CMake options for using vgui
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
-IF(HAS_VGUI)
+include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+if(HAS_VGUI)
 
-SET(bwm_sources
+set(bwm_sources
    bwm_macros.h
    bwm_def.h
    bwm_input.h
@@ -48,14 +46,15 @@ SET(bwm_sources
    bwm_plane_fitting_lsf.cxx        bwm_plane_fitting_lsf.h  # moved from algo to fix cyclic dependency
 )
 
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-  INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
-  IF(SHAPELIB_FOUND)
-    ADD_DEFINITIONS( -DHAS_SHAPELIB=1 )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/shapelib)
-    SET(bwm_sources ${bwm_sources}
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+
+  include_directories(${EXPAT_INCLUDE_DIRS} )
+  include_directories(${EXPATPP_INCLUDE_DIRS} )
+  if(SHAPELIB_FOUND)
+    add_definitions( -DHAS_SHAPELIB=1 )
+    include_directories( ${BRL_INCLUDE_DIR}/b3p/shapelib)
+    set(bwm_sources ${bwm_sources}
        bwm_command_macros.h
        bwm_load_commands.h
        bwm_process_commands.h
@@ -90,38 +89,38 @@ IF(EXPAT_FOUND)
        bwm_corr.cxx                     bwm_corr.h          bwm_corr_sptr.h
        bwm_3d_corr.cxx                  bwm_3d_corr.h       bwm_3d_corr_sptr.h
     )
-  ENDIF(SHAPELIB_FOUND)
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+  endif()
+ endif()
+endif()
 
-IF(NOT MINGW)
+if(NOT MINGW)
   # MFC is not available in MinGW.
   # This should be fixed in FindMFC.cmake and then this IF can be removed
   find_package(MFC)
-ENDIF(NOT MINGW)
+endif()
 
-IF(MFC_FOUND)
+if(MFC_FOUND)
   # add stuff to use MFC in this executable
-  ADD_DEFINITIONS( "-D_AFXDLL" )
-  ADD_DEFINITIONS( -DHAS_MFC=1 )
-  SET(CMAKE_MFC_FLAG 2)
-  SET(bwm_sources ${bwm_sources}
+  add_definitions( "-D_AFXDLL" )
+  add_definitions( -DHAS_MFC=1 )
+  set(CMAKE_MFC_FLAG 2)
+  set(bwm_sources ${bwm_sources}
      process/bwm_process.cxx           process/bwm_process.h
      process/bwm_site_process.cxx      process/bwm_site_process.h
   )
-ENDIF(MFC_FOUND)
+endif()
 
-AUX_SOURCE_DIRECTORY(Templates bwm_sources)
+aux_source_directory(Templates bwm_sources)
 
-ADD_LIBRARY(bwm ${bwm_sources})
+vxl_add_library(LIBRARY_NAME bwm LIBRARY_SOURCES ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io vsph depth_map bsta_io bmsh3d bmsh3d_algo bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl_algo vnl vpgl vpgl_algo vpgl_io vpgl_file_formats bvgl vul)
+target_link_libraries( bwm bwm_video bwm_reg bwm_algo bwm_io vsph depth_map bsta_io bmsh3d bmsh3d_algo bsol vsol vdgl bgui ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_file_formats bvgl ${VXL_LIB_PREFIX}vul)
 
-IF(EXPAT_FOUND)
-  IF(EXPATPP_FOUND)
-    TARGET_LINK_LIBRARIES(bwm volm)
-  ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
+    target_link_libraries(bwm volm)
+  endif()
+endif()
 
 add_subdirectory(algo)
 add_subdirectory(pro)
@@ -129,25 +128,26 @@ add_subdirectory(io)
 add_subdirectory(reg)
 
 
-#install the .h .txx and libs
-INSTALL_TARGETS(/lib bwm)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/ ${bwm_sources})
+#install the .h .hxx and libs
 
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  IF(WIN32)
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  if(WIN32)
    add_subdirectory(wxWidgets)
-  ENDIF(WIN32)
-  IF(SHAPELIB_FOUND)
+  endif()
+  if(SHAPELIB_FOUND)
    add_subdirectory(exe)
-   IF( BUILD_TESTING )
+   if( BUILD_TESTING )
     add_subdirectory(tests)
-   ENDIF( BUILD_TESTING )
-  ENDIF(SHAPELIB_FOUND)
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+   endif()
+  endif()
+ endif()
+endif()
 
-ENDIF(HAS_VGUI)
+endif()
 
 
 add_subdirectory(video)
+else()
+  message(STATUS "Skipping contrib/brl/bbas/bwm: requires geotiff")
+endif()

@@ -1,14 +1,15 @@
+#include <iostream>
 #include "vil_io_image_view_base.h"
 //:
 // \file
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/io/vil_io_image_view.h>
 
 //: Binary write image view base to stream
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 {
   switch (view_base->pixel_format())
@@ -61,37 +62,37 @@ void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
      break; }
    // No version 1 complex images were ever written. Now added. It should work. Fix if necessary
    case VIL_PIXEL_FORMAT_COMPLEX_FLOAT: {
-    vil_image_view<vcl_complex<float> > v(view_base);
+    vil_image_view<std::complex<float> > v(view_base);
     vsl_b_write(os, v);
     break; }
    case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE: {
-    vil_image_view<vcl_complex<double> > v(view_base);
+    vil_image_view<std::complex<double> > v(view_base);
     vsl_b_write(os, v);
     break; }
    default: {
-      vcl_cerr << "I/O ERROR: vsl_b_write(vsl_b_ostream &, vil_image_view_base_sptr const&)\n"
+      std::cerr << "I/O ERROR: vsl_b_write(vsl_b_ostream &, vil_image_view_base_sptr const&)\n"
                << "           Unknown pixel format "<< view_base->pixel_format() << '\n';
-      os.os().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      os.os().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return; }
   }
-  //vcl_cerr << "warning: vsl_b_write not implemented for vil_image_view_base_sptr\n";
+  //std::cerr << "warning: vsl_b_write not implemented for vil_image_view_base_sptr\n";
 }
 
 //: Binary load image view base from stream.
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 {
   if (!is) return;
 
   unsigned ni,nj,np;
-  vcl_ptrdiff_t istep,jstep,pstep;
+  std::ptrdiff_t istep,jstep,pstep;
   vil_memory_chunk_sptr chunk;
-  vcl_ptrdiff_t offset;
+  std::ptrdiff_t offset;
 
   short w;
   vsl_b_read(is, w);
   if (w != 1) {
-    vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view binary io version: " << w <<  '\n';
+    std::cerr << "warning: vsl_b_read not implemented for vil_image_view binary io version: " << w <<  '\n';
     return;
   }
 
@@ -102,7 +103,7 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
   vsl_b_read(is, jstep);
   vsl_b_read(is, pstep);
   if (ni*nj*np==0) {
-    vcl_cerr << "warning: vsl_b_read image ni*nj*np = 0\n";
+    std::cerr << "warning: vsl_b_read image ni*nj*np = 0\n";
     //image.set_size(0,0,0);
   }
   else {
@@ -158,45 +159,45 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
        break; }
     // No version 1 complex images were ever written. Now added. It should work. Fix if necessary
    case VIL_PIXEL_FORMAT_COMPLEX_FLOAT: {
-       const vcl_complex<float>* data = reinterpret_cast<const vcl_complex<float>*>(chunk->data());
-       view_base = new vil_image_view<vcl_complex<float> >(chunk,data+offset,ni,nj,np,istep,jstep,pstep);
+       const std::complex<float>* data = reinterpret_cast<const std::complex<float>*>(chunk->data());
+       view_base = new vil_image_view<std::complex<float> >(chunk,data+offset,ni,nj,np,istep,jstep,pstep);
        break; }
    case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE: {
-       const vcl_complex<double>* data = reinterpret_cast<const vcl_complex<double>*>(chunk->data());
-       view_base = new vil_image_view<vcl_complex<double> >(chunk,data+offset,ni,nj,np,istep,jstep,pstep);
+       const std::complex<double>* data = reinterpret_cast<const std::complex<double>*>(chunk->data());
+       view_base = new vil_image_view<std::complex<double> >(chunk,data+offset,ni,nj,np,istep,jstep,pstep);
        break; }
    default: {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_image_view<T>&)\n"
              << "           Unknown version number "<< w << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return; }
     }
   }
-//vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view_base_sptr\n";
+//std::cerr << "warning: vsl_b_read not implemented for vil_image_view_base_sptr\n";
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_write(vsl_b_ostream & os, vil_image_resource_sptr const& view)
 {
-  vcl_cerr << "warning: vsl_b_write not implemented for vil_image_resource_sptr\n";
+  std::cerr << "warning: vsl_b_write not implemented for vil_image_resource_sptr\n";
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vsl_b_read(vsl_b_istream & is, vil_image_resource_sptr &view)
 {
-  vcl_cerr << "warning: vsl_b_read not implemented for vil_image_resource_sptr\n";
+  std::cerr << "warning: vsl_b_read not implemented for vil_image_resource_sptr\n";
 }
 
 #if 0
 //: Binary write voxel world to stream
 void vsl_b_write(vsl_b_ostream & , vil_image_view_base const&)
 {
-  vcl_cerr << "warning: vsl_b_write not implemented for vil_image_view_base\n";
+  std::cerr << "warning: vsl_b_write not implemented for vil_image_view_base\n";
 }
 
 //: Binary load voxel world from stream.
 void vsl_b_read(vsl_b_istream &, vil_image_view_base &)
 {
-  vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view_base\n";
+  std::cerr << "warning: vsl_b_read not implemented for vil_image_view_base\n";
 }
 #endif // 0

@@ -18,7 +18,7 @@ bool sdet_texture_training_process_cons(bprb_func_process& pro)
 {
   vsl_add_to_binary_loader(vsol_polygon_2d());
   // process takes 6 inputs:
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); //texture classifier
   input_types.push_back("bool"); //if true, compute textons for category,
   //otherwise append filter responses from the image to the training data
@@ -32,7 +32,7 @@ bool sdet_texture_training_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: the current state of the texture classifier
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("sdet_texture_classifier_sptr");
   return pro.set_output_types(output_types);
 }
@@ -41,7 +41,7 @@ bool sdet_texture_training_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "texture classifier process inputs are not valid"<< std::endl;
     return false;
   }
 
@@ -58,7 +58,7 @@ bool sdet_texture_training_process(bprb_func_process& pro)
     pro.get_input<vil_image_view_base_sptr>(2);
   if (!view_ptr)
   {
-    vcl_cout << "null image in sdet_texture_classifier_process\n";
+    std::cout << "null image in sdet_texture_classifier_process\n";
     return false;
   }
   //assumes a float image on the range [0, 1] so cast without checking
@@ -66,21 +66,21 @@ bool sdet_texture_training_process(bprb_func_process& pro)
 
   //go ahead and compute the filter bank as well as laplace and Gauss filters
   if (!tc_ptr->compute_filter_bank(fview)){
-    vcl_cout << "failed to compute filter bank\n";
+    std::cout << "failed to compute filter bank\n";
     return false;
   }
 
   //remaining arguments
   //== polygon region delineating samples of the texture
-  vcl_string poly_path = pro.get_input<vcl_string>(3);
+  std::string poly_path = pro.get_input<std::string>(3);
 
   //== the string name of the texture category
-  vcl_string category = pro.get_input<vcl_string>(4);
+  std::string category = pro.get_input<std::string>(4);
 
   // extract the training data from the current image filter responses
   if (!tc_ptr->compute_training_data(category, poly_path))
   {
-    vcl_cout << "failed to compute training data\n";
+    std::cout << "failed to compute training data\n";
     return false;
   }
   // if the last training image for the category then complete the
@@ -103,20 +103,20 @@ bool sdet_texture_training_process_finish(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "texture classifier process inputs are not valid"<< std::endl;
     return false;
   }
   // get inputs
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
   if (!tc_ptr){
-    vcl_cout << "In finishing texture training - null texture_classifier\n";
+    std::cout << "In finishing texture training - null texture_classifier\n";
     return false;
   }
-  vcl_string dict_path = pro.get_input<vcl_string>(5);
+  std::string dict_path = pro.get_input<std::string>(5);
   if (dict_path == "")
     return false;
   tc_ptr->compute_category_histograms();
-  vcl_cout << "Saving dictionary\n";
+  std::cout << "Saving dictionary\n";
   if (!tc_ptr->save_dictionary(dict_path))
     return false;
   return true;
@@ -128,7 +128,7 @@ bool sdet_texture_training_process2_cons(bprb_func_process& pro)
 {
   vsl_add_to_binary_loader(vsol_polygon_2d());
   // process takes 5 inputs:
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); //texture classifier
   input_types.push_back("bool"); //if true, compute textons for category,
   //otherwise append filter responses from the image to the training data
@@ -139,7 +139,7 @@ bool sdet_texture_training_process2_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types))
     return false;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("sdet_texture_classifier_sptr");
   return pro.set_output_types(output_types);
 }
@@ -148,7 +148,7 @@ bool sdet_texture_training_process2(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process2 inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "texture classifier process2 inputs are not valid"<< std::endl;
     return false;
   }
 
@@ -162,15 +162,15 @@ bool sdet_texture_training_process2(bprb_func_process& pro)
 
   //remaining arguments
   //== polygon region delineating samples of the texture
-  vcl_string poly_path = pro.get_input<vcl_string>(2);
+  std::string poly_path = pro.get_input<std::string>(2);
 
   //== the string name of the texture category
-  vcl_string category = pro.get_input<vcl_string>(3);
+  std::string category = pro.get_input<std::string>(3);
 
   // extract the training data from the current image filter responses
   if (!tc_ptr->compute_training_data(category, poly_path))
   {
-    vcl_cout << "failed to compute training data\n";
+    std::cout << "failed to compute training data\n";
     return false;
   }
   // if the last training image for the category then complete the
@@ -193,20 +193,20 @@ bool sdet_texture_training_process2_finish(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "texture classifier process inputs are not valid"<< std::endl;
     return false;
   }
   // get inputs
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
   if (!tc_ptr){
-    vcl_cout << "In finishing texture training - null texture_classifier\n";
+    std::cout << "In finishing texture training - null texture_classifier\n";
     return false;
   }
-  vcl_string dict_path = pro.get_input<vcl_string>(4);
+  std::string dict_path = pro.get_input<std::string>(4);
   if (dict_path == "")
     return false;
   tc_ptr->compute_category_histograms();
-  vcl_cout << "Saving dictionary\n";
+  std::cout << "Saving dictionary\n";
   if (!tc_ptr->save_dictionary(dict_path))
     return false;
   return true;
@@ -217,13 +217,13 @@ bool sdet_dump_vsol_binary_data_process_cons(bprb_func_process& pro)
 {
   vsl_add_to_binary_loader(vsol_polygon_2d());
   // process takes 5 inputs:
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string"); //polygon file
   input_types.push_back("vcl_string"); //output file name
   if (!pro.set_input_types(input_types))
     return false;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_output_types(output_types);
 }
 
@@ -231,27 +231,27 @@ bool sdet_dump_vsol_binary_data_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process2 inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "texture classifier process2 inputs are not valid"<< std::endl;
     return false;
   }
 
   //== polygon region delineating samples of the texture
-  vcl_string poly_path = pro.get_input<vcl_string>(0);
+  std::string poly_path = pro.get_input<std::string>(0);
 
   //== the string name of the texture category
-  vcl_string output_file = pro.get_input<vcl_string>(1);
-  vcl_ofstream ofs(output_file.c_str());
+  std::string output_file = pro.get_input<std::string>(1);
+  std::ofstream ofs(output_file.c_str());
   if (!ofs) {
-    vcl_cout << " In sdet_dump_vsol_binary_data_process() -- cannot open file: " << output_file << vcl_endl;
+    std::cout << " In sdet_dump_vsol_binary_data_process() -- cannot open file: " << output_file << std::endl;
     return false;
   }
 
   // dummy classifier
   sdet_texture_classifier_params param;
   sdet_texture_classifier_sptr tc_ptr = new sdet_texture_classifier(param);
-  vcl_vector<vgl_polygon<double> > polys;
+  std::vector<vgl_polygon<double> > polys;
   polys = tc_ptr->load_polys(poly_path);
- 
+
   for (unsigned i = 0; i < polys.size(); i++) {
     for (unsigned j = 0; j < polys[i].num_sheets(); j++)
       for (unsigned k = 0; k < polys[i][j].size(); k++)

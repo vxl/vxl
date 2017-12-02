@@ -41,7 +41,7 @@ bool bvpl_block_kernel_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_block_kernel_operator_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++] = "boxm_scene_base_sptr";
   input_types_[i++] = "bvpl_kernel_sptr";
@@ -52,7 +52,7 @@ bool bvpl_block_kernel_operator_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vcl_string";
   input_types_[i++] = "double";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -63,7 +63,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cerr << pro.name() << ": the input number should be " << n_inputs_
+    std::cerr << pro.name() << ": the input number should be " << n_inputs_
              << " but instead it is " << pro.n_inputs() << '\n';
     return false;
   }
@@ -75,26 +75,26 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
-  vcl_string functor_name = pro.get_input<vcl_string>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  std::string functor_name = pro.get_input<std::string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
   double cell_length = pro.get_input<double>(i++);
   //short level = 0;
 
   //print inputs
-  vcl_cout << "In bvpl_block_kernel_operator:\n"
+  std::cout << "In bvpl_block_kernel_operator:\n"
            << "Index(i,j,k) : (" << block_i << ',' << block_j << ',' << block_k << ")\n"
            << "Functor Name: " << functor_name << '\n'
            << "Output path: " << output_path  << '\n'
-           << "Cell length" << cell_length << vcl_endl;
+           << "Cell length" << cell_length << std::endl;
 
   //check input's validity
   if (!scene_base.ptr()) {
-    vcl_cerr <<  " :-- Grid is not valid!\n";
+    std::cerr <<  " :-- Grid is not valid!\n";
     return false;
   }
 
   if (!kernel) {
-    vcl_cerr << pro.name() << " :-- Kernel is not valid!\n";
+    std::cerr << pro.name() << " :-- Kernel is not valid!\n";
     return false;
   }
 
@@ -201,7 +201,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
       break;
     }
     default:
-      vcl_cout << "bvpl_block_kernel_operator_process: undefined APM type" << vcl_endl;
+      std::cout << "bvpl_block_kernel_operator_process: undefined APM type" << std::endl;
       return false;
   }
   return false;

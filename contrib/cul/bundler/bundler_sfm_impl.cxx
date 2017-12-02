@@ -1,13 +1,14 @@
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
+#include <algorithm>
 #include "bundler_sfm_impl.h"
 //
 #include <bundler/bundler_inters.h>
 #include <bundler/bundler_utils.h>
 
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/algo/vpgl_em_compute_5_point.h>
@@ -59,10 +60,10 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
     // First step: Find the two images to base the reconstruction on.
     // We do this by selecting the match in the set that is modeled the
     // worst by a homography (i.e. has the fewest number of inliers).
-    bundler_inters_match_set *best_match = NULL;
+    bundler_inters_match_set *best_match = VXL_NULLPTR;
     double best_inlier_p = 1.0;
 
-    vcl_vector<bundler_inters_match_set>::iterator i;
+    std::vector<bundler_inters_match_set>::iterator i;
     for (i = recon.match_sets.begin(); i != recon.match_sets.end(); ++i)
     {
         const bool replace_best = can_be_initial_recon(*i) &&
@@ -77,7 +78,7 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
     // If we didn't find anything that can be in the initial
     // reconstruction, panic.
     if (! best_match) {
-        vcl_cerr<< "Unable to create an initial reconstruction!\n"
+        std::cerr<< "Unable to create an initial reconstruction!\n"
                 << "There is not a match set that both has an initial guess from EXIF tags and at least "
                 << settings.min_number_of_matches_homography
                 << " matches.\n";
@@ -101,9 +102,9 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
         settings.inlier_threshold_e_matrix,
         false);
 
-    vcl_vector<vgl_point_2d<double> > right_points(
+    std::vector<vgl_point_2d<double> > right_points(
         best_match->num_features());
-    vcl_vector<vgl_point_2d<double> > left_points(
+    std::vector<vgl_point_2d<double> > left_points(
         best_match->num_features());
 
     for (int i = 0; i < best_match->num_features(); ++i) {
@@ -196,7 +197,7 @@ static int count_observed_points(
 
     assert( ! to_check->in_recon );
 
-    vcl_vector<bundler_inters_feature_sptr>::const_iterator ii;
+    std::vector<bundler_inters_feature_sptr>::const_iterator ii;
     for (ii = to_check->features.begin();
          ii != to_check->features.end(); ++ii)
     {
@@ -211,13 +212,13 @@ static int count_observed_points(
 // Takes in reconstruction and track_set, fills to_add as a return val.
 bool bundler_sfm_impl_select_next_images::operator()(
     bundler_inters_reconstruction &recon,
-    vcl_vector<bundler_inters_image_sptr> &to_add)
+    std::vector<bundler_inters_image_sptr> &to_add)
 {
     // Look at every image
     int most_observed_points = 0;
     bundler_inters_image_sptr next_image;
 
-    vcl_vector<bundler_inters_image_sptr>::const_iterator i;
+    std::vector<bundler_inters_image_sptr>::const_iterator i;
     for (i = recon.feature_sets.begin(); i != recon.feature_sets.end(); ++i)
     {
         // Only look at images not in the reconstruction.
@@ -253,7 +254,7 @@ class image_adder
 {
   public:
     image_adder(
-        vcl_vector<bundler_inters_image_sptr> *added_cameras,
+        std::vector<bundler_inters_image_sptr> *added_cameras,
         int r,
         double t) :
         added_cameras(added_cameras),
@@ -271,7 +272,7 @@ class image_adder
     }
 
   private:
-    vcl_vector<bundler_inters_image_sptr> *added_cameras;
+    std::vector<bundler_inters_image_sptr> *added_cameras;
     int rounds;
     double thresh;
 };
@@ -279,10 +280,10 @@ class image_adder
 
 // Adds to_add_set to the reconstruction.
 void bundler_sfm_impl_add_next_images::operator()(
-    const vcl_vector<bundler_inters_image_sptr> &to_add,
+    const std::vector<bundler_inters_image_sptr> &to_add,
 
     bundler_inters_reconstruction &reconstruction,
-    vcl_vector<bundler_inters_image_sptr> &added_cameras)
+    std::vector<bundler_inters_image_sptr> &added_cameras)
 {
     // Create an image adder
     image_adder adder(
@@ -291,7 +292,7 @@ void bundler_sfm_impl_add_next_images::operator()(
         settings.inlier_size_multiplier);
 
     // Add every image in the set.
-    vcl_for_each(to_add.begin(), to_add.end(), adder);
+    std::for_each(to_add.begin(), to_add.end(), adder);
 
     assert(added_cameras.size() == to_add.size());
 }
@@ -306,12 +307,11 @@ static bool can_be_added(
     int num_observed_thresh,
     double angle_thresh)
 {
-    double max_angle = 180;
-    int num_observed;
+    static const double max_angle = 180;
+    int num_observed=0;
 
     //TODO: Check angle
-
-    vcl_vector<bundler_inters_feature_sptr>::iterator f;
+    std::vector<bundler_inters_feature_sptr>::iterator f;
     for (f = track->points.begin(); f != track->points.end(); ++f) {
         if ( (*f)->image->in_recon ) { ++num_observed; }
     }
@@ -329,7 +329,7 @@ static void add_new_track(
     // Count the number of points this track now observes.
     unsigned int num_observing_points = 0;
 
-    vcl_vector<bundler_inters_feature_sptr>::const_iterator p;
+    std::vector<bundler_inters_feature_sptr>::const_iterator p;
     for (p = track->points.begin(); p != track->points.end(); ++p) {
         if ((*p)->image->in_recon) {
             ++num_observing_points;
@@ -361,12 +361,12 @@ static void add_new_track(
 
 void bundler_sfm_impl_add_new_points::operator()(
     bundler_inters_reconstruction &recon,
-    const vcl_vector<bundler_inters_image_sptr> &added)
+    const std::vector<bundler_inters_image_sptr> &added)
 {
     int num_points_added = 0;
 
     //Look at every image that was added in the last round.
-    vcl_vector<bundler_inters_image_sptr>::const_iterator i;
+    std::vector<bundler_inters_image_sptr>::const_iterator i;
     for (i = added.begin(); i != added.end(); ++i)
     {
         // Look at every feature in this image. If the track that
@@ -376,7 +376,7 @@ void bundler_sfm_impl_add_new_points::operator()(
         // we need to check if we should add it. We add the track if it
         // has at least two features that are part of an added image, and
         // if the triangulation is well-defined.
-        vcl_vector<bundler_inters_feature_sptr>::iterator f;
+        std::vector<bundler_inters_feature_sptr>::iterator f;
         for (f = (*i)->features.begin(); f != (*i)->features.end(); ++f)
         {
             if ( ! (*f)->track ) {
@@ -398,14 +398,14 @@ void bundler_sfm_impl_add_new_points::operator()(
         }
     }
 
-    vcl_vector<bundler_inters_track_sptr>::const_iterator t;
+    std::vector<bundler_inters_track_sptr>::const_iterator t;
     for (t = recon.tracks.begin(); t != recon.tracks.end(); ++t) {
         if ( (*t)->observed) {
             bundler_utils_triangulate_points(*t);
         }
     }
 
-    vcl_cout << "Added " << num_points_added << " points\n";
+    std::cout << "Added " << num_points_added << " points\n";
 }
 
 
@@ -436,8 +436,8 @@ static bool find_point_in_image(
     // Try and find the world_point in img.
     track_membership_tester pred(world_point);
 
-    vcl_vector<bundler_inters_feature_sptr>::iterator found =
-        vcl_find_if (img->features.begin(), img->features.end(), pred);
+    std::vector<bundler_inters_feature_sptr>::iterator found =
+        std::find_if (img->features.begin(), img->features.end(), pred);
 
 
     // If we found a feature, fill pt with its location in the image.
@@ -459,9 +459,9 @@ void bundler_sfm_impl_bundle_adjust::operator()(
 
     // Get a list of the perspective cameras currently in
     // the reconstruction
-    vcl_vector<vpgl_perspective_camera<double> > cameras;
+    std::vector<vpgl_perspective_camera<double> > cameras;
 
-    vcl_vector<bundler_inters_image_sptr>::const_iterator i;
+    std::vector<bundler_inters_image_sptr>::const_iterator i;
     for (i = recon.feature_sets.begin(); i != recon.feature_sets.end(); ++i)
     {
         if ( (*i)->in_recon ) {
@@ -471,9 +471,9 @@ void bundler_sfm_impl_bundle_adjust::operator()(
 
 
     // Get a list of all the currently estimated 3D points.
-    vcl_vector<vgl_point_3d<double> > world_points;
+    std::vector<vgl_point_3d<double> > world_points;
 
-    vcl_vector<bundler_inters_track_sptr>::const_iterator t;
+    std::vector<bundler_inters_track_sptr>::const_iterator t;
     for (t = recon.tracks.begin(); t != recon.tracks.end(); ++t)
     {
         if ( (*t)->observed ) {
@@ -488,10 +488,10 @@ void bundler_sfm_impl_bundle_adjust::operator()(
     //
     // mask= [[is point 0 visible in cam 0, is point 0 visible in cam 1],
     //     is point 1 visible in cam 0, is point 1 visible in cam 1]]
-    vcl_vector< vgl_point_2d<double> > image_points;
+    std::vector< vgl_point_2d<double> > image_points;
 
-    vcl_vector<vcl_vector<bool> > mask( cameras.size(),
-                                        vcl_vector<bool>(world_points.size(), false) );
+    std::vector<std::vector<bool> > mask( cameras.size(),
+                                        std::vector<bool>(world_points.size(), false) );
 
     unsigned int camera_ind = 0; // Which entry in cameras are we on.
     for (i = recon.feature_sets.begin(); i != recon.feature_sets.end(); ++i)

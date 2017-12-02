@@ -31,10 +31,10 @@ bool boxm_fill_internal_cells_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_fill_internal_cells_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -46,8 +46,8 @@ bool boxm_fill_internal_cells_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << ": the number of inputs should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+    std::cout << pro.name() << ": the number of inputs should be " << n_inputs_
+             << " but instead it is " << pro.n_inputs() << std::endl;
     return false;
   }
 
@@ -56,7 +56,7 @@ bool boxm_fill_internal_cells_process(bprb_func_process& pro)
 
   //check input's validity
   if (!scene_base.ptr()) {
-    vcl_cout <<  " :-- Grid is not valid!\n";
+    std::cout <<  " :-- Grid is not valid!\n";
     return false;
   }
 
@@ -67,7 +67,7 @@ bool boxm_fill_internal_cells_process(bprb_func_process& pro)
     return true;
   }
 
-  vcl_cerr << "In boxm_fill_internal_cells_process: Unsupportted scene type\n";
+  std::cerr << "In boxm_fill_internal_cells_process: Unsupportted scene type\n";
   return false;
 }
 

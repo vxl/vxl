@@ -6,8 +6,9 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vil1/vil1_load.h>
 
@@ -20,32 +21,32 @@
 int main(int argc, char **argv)
 {
   vul_arg<int>        canny("-canny", "which canny? (0:oxford, 1:rothwell1, 2:rothwell2)", 0);
-  vul_arg<vcl_string> in   ("-in", "input image", "");
-  vul_arg<vcl_string> out  ("-out", "output file (default is stdout)", "");
+  vul_arg<std::string> in   ("-in", "input image", "");
+  vul_arg<std::string> out  ("-out", "output file (default is stdout)", "");
   vul_arg_parse(argc, argv);
 
-  vcl_string* in_file = new vcl_string(in());
+  std::string* in_file = new std::string(in());
   if (*in_file == "") {
-    vcl_cout << "input image file: ";
+    std::cout << "input image file: ";
     char tmp[1024];
-    vcl_cin >> tmp;
+    std::cin >> tmp;
     delete in_file;
-    in_file = new vcl_string(tmp);
+    in_file = new std::string(tmp);
   }
   assert(*in_file != "");
 
   vil1_image image = vil1_load(in_file->c_str());
   if (!image)
     return 1;
-  vcl_cerr << in_file << " : " << image << vcl_endl;
+  std::cerr << in_file << " : " << image << std::endl;
 
-  vcl_list<osl_edge*> edges;
+  std::list<osl_edge*> edges;
   osl_easy_canny(canny(), image, &edges);
 
   if (out() == "")
-    osl_save_topology(vcl_cout, edges, vcl_list<osl_Vertex*>());
+    osl_save_topology(std::cout, edges, std::list<osl_Vertex*>());
   else
-    osl_save_topology(out().c_str(), edges, vcl_list<osl_Vertex*>());
+    osl_save_topology(out().c_str(), edges, std::list<osl_Vertex*>());
 
   return 0;
 }

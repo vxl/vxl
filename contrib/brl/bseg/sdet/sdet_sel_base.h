@@ -12,9 +12,9 @@
 //  Amir Tamrakar 09/05/06   Removed all the other classes to their own files
 //  Amir Tamrakar 09/07/06   Templatized this class to enable it to operate on
 //                           different curve models
-//  Amir Tamrakar 09/11/06   Made a base class that is not templatized so that 
+//  Amir Tamrakar 09/11/06   Made a base class that is not templatized so that
 //                           a common smart pointer can be used for all subclasses
-//  Amir Tamrakar 09/16/06   Now using the edgemap class instead of edge list so 
+//  Amir Tamrakar 09/16/06   Now using the edgemap class instead of edge list so
 //                           there is no need to form edgel neighborhoods
 //  Amir Tamrakar 07/20/07   Added upper bound specification for curve bundles
 //
@@ -30,30 +30,32 @@
 //
 //\endverbatim
 
+#include <vector>
+#include <iostream>
+#include <list>
+#include <set>
+#include <map>
+#include <queue>
+#include <utility>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_array_2d.h>
-#include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vcl_set.h>
-#include <vcl_map.h>
-#include <vcl_queue.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_edgemap_sptr.h"
-#include "sdet_edgemap.h"
-#include "sdet_curve_model.h"
-#include "sdet_curvelet.h"
-#include "sdet_curvelet_map.h"
-#include "sdet_edgel_link_graph.h"
-#include "sdet_curve_fragment_graph.h"
-#include "sdet_sel_utils.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_edgemap_sptr.h>
+#include <sdet/sdet_edgemap.h>
+#include <sdet/sdet_curve_model.h>
+#include <sdet/sdet_curvelet.h>
+#include <sdet/sdet_curvelet_map.h>
+#include <sdet/sdet_edgel_link_graph.h>
+#include <sdet/sdet_curve_fragment_graph.h>
+#include <sdet/sdet_sel_utils.h>
 
-#include "sdet_hyp_tree_graph.h"
+#include <sdet/sdet_hyp_tree_graph.h>
 
-#include "sdet_EHT.h"
-#include "sdet_CFTG.h"
-//#include "sdet_sel_knot.h"
+#include <sdet/sdet_EHT.h>
+#include <sdet/sdet_CFTG.h>
+//#include <sdet/sdet_sel_knot.h>
 
 //: Base class for the "Symbolic edge linking algorithm" (as described in POCV 06).
 //  It contains the following things:
@@ -65,8 +67,8 @@
 //
 //      c) Algorithms to convert a link graph into an image contour topology
 //
-//  The linking algorithm needs to be able to work with various curve models. 
-//  This class is therefore subclasses in a templatized fashion to enable it to work 
+//  The linking algorithm needs to be able to work with various curve models.
+//  This class is therefore subclasses in a templatized fashion to enable it to work
 //  with various curve models.
 //
 class sdet_sel_base : public vbl_ref_count
@@ -74,9 +76,9 @@ class sdet_sel_base : public vbl_ref_count
 public:
 
   //: constructor
-  sdet_sel_base(sdet_edgemap_sptr edgemap, 
-                 sdet_curvelet_map& cvlet_map, 
-                 sdet_edgel_link_graph& edge_link_graph, 
+  sdet_sel_base(sdet_edgemap_sptr edgemap,
+                 sdet_curvelet_map& cvlet_map,
+                 sdet_edgel_link_graph& edge_link_graph,
                  sdet_curve_fragment_graph& curve_frag_graph,
                  sdet_curvelet_params cvlet_params=sdet_curvelet_params());  //various parameters
 
@@ -93,7 +95,7 @@ public:
   unsigned maxN() { return maxN_; }
 
   //: return a reference to the edgel buckets
-  vbl_array_2d<vcl_vector<sdet_edgel*> > & cells() { return edgemap_->edge_cells; }
+  vbl_array_2d<std::vector<sdet_edgel*> > & cells() { return edgemap_->edge_cells; }
 
   //: return the cvlet map
   sdet_curvelet_map& cvlet_map() { return curvelet_map_; }
@@ -135,47 +137,47 @@ public:
 
     //: form an edgel grouping by adding a pair to the existing curvelet
     void form_an_edgel_grouping(sdet_edgel* /*eA*/, sdet_curvelet* /*cvlet*/, sdet_curvelet* /*pair*/){}
-    
+
     //: form curvelets around each edgel in a greedy fashion
     void build_curvelets_greedy(unsigned max_size_to_group, bool use_flag=false,  bool clear_existing=true, bool verbose=false);
     //: form curvelets around the given edgel in a greedy fashion
-    virtual void build_curvelets_greedy_for_edge(sdet_edgel* eA, unsigned max_size_to_group, 
+    virtual void build_curvelets_greedy_for_edge(sdet_edgel* eA, unsigned max_size_to_group,
         bool use_flag=false, bool forward=true,  bool centered=true, bool leading=true) = 0;
 
     //: form an edgel grouping from an ordered list of edgemap_->edgels
-    virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain, 
+    virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, std::deque<sdet_edgel*> &edgel_chain,
         bool forward=true,  bool centered=true, bool leading=true) = 0;
 
     //: check to see if curvelets are balanced
-    bool curvelet_is_balanced(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain);
+    bool curvelet_is_balanced(sdet_edgel* ref_e, std::deque<sdet_edgel*> &edgel_chain);
 
     //: form the full curvelet map (curvelet map lists all the curvelets it participated in and not just the ones anchored to it)
     void form_full_cvlet_map();
-  
+
     //: prune the curvelets that are below the quality threshold and hence considered spurious
     void prune_the_curvelets(double quality_threshold);
     void recompute_curvelet_quality();
-    
+
     //: prune the curvelets with lengths (extent) smaller than the one specified
     void prune_curvelets_by_length(double length_threshold);
-  
+
     //: prune the curvelets with gaps larger than the one specified
     void prune_curvelets_by_gaps(double gap_threshold);
-  
+
     //: prne the curvelets that are not locally geometrically consistent (i.e., c1)
     void prune_curvelets_by_c1_condition();
-  
+
     //: set the flags to detecmine if appearance is to be used for forming curvelets
     void set_appearance_usage(unsigned app_usage) { app_usage_ = app_usage; }
     void set_appearance_threshold(double app_thresh) { app_thresh_ = app_thresh; }
-  
+
     //************************************************************************************//
     // Functions for forming a Link Graph from Curvelets perform local grouping of edgemap_->edgels
     //************************************************************************************//
-  
+
     //: construct a simple link grpah by connectng edgels to all its neighbors
     void construct_naive_link_graph(double proximity_threshold=3.0, double affinity_threshold=10.0);
-  
+
     //: form the link graph from the existing edgel groupings
     void construct_the_link_graph(unsigned min_group_size=4, int method=0);
 
@@ -196,11 +198,11 @@ public:
 
     //: check to see if link is reciprocal and supported by other edgemap_->edgels (i.e., x-A->b-y && x-a->B-y)
     bool link_is_supported(sdet_edgel* eA, sdet_edgel* eB, unsigned min_group_size);
-    bool link_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* eY, sdet_edgel* ref_e, 
+    bool link_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* eY, sdet_edgel* ref_e,
                            unsigned min_group_size);
 
     //: check to see if this triplet is supported
-    bool triplet_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel* eY, 
+    bool triplet_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel* eY,
                               unsigned min_group_size);
 
     //: prune the link graph by removing links from sub-standard cvlets
@@ -228,14 +230,14 @@ public:
 
     //: extract the one chains from a given link graph
     void extract_one_chains_from_the_link_graph(sdet_edgel_link_graph& ELG);
-  
+
     //: determine if this links from the link grpah is valid
     bool link_valid(sdet_link* link);
     //: set the min_deg_to_link
     void set_min_deg_to_link(unsigned deg){ min_deg_to_link_ = deg; }
     //: get the min deg to link
     unsigned min_deg_to_link() { return min_deg_to_link_; }
-  
+
   //********************************************************************//
   // Functions for fitting C^1 polyarcs to edgel chains
   //********************************************************************//
@@ -255,7 +257,7 @@ public:
 
   //: seperate the link graph into two separate ones based on linking direction
   void separate_link_graphs_and_cvlet_maps();
-    
+
     //: DFS search over the links to label the links and curvelets in a connected component scheme
     void DFS_CC_links(sdet_link* link);
     //: BFS search over the links to label the links and curvelets in a connected component scheme
@@ -273,10 +275,10 @@ public:
   void propagate_HTs_N_steps(int N);
 
     void propagate_HT_from_the_next_leaf_node();
-      vcl_set<sdet_hyp_tree_node*> check_for_interaction(sdet_hyp_tree_node* node);
+      std::set<sdet_hyp_tree_node*> check_for_interaction(sdet_hyp_tree_node* node);
       bool C1_CPL_interaction(sdet_hyp_tree_node* node1, sdet_hyp_tree_node* node2);
 
-    //bool explore_continuations(vcl_queue<sdet_hyp_tree_node*>& BFS_queue, sdet_edgel* e);
+    //bool explore_continuations(std::queue<sdet_hyp_tree_node*>& BFS_queue, sdet_edgel* e);
     void explore_continuations(sdet_hyp_tree_node* cur_node, sdet_link* link);
 
       int dist_from_edge(sdet_curvelet* cvlet, sdet_edgel* e);
@@ -306,18 +308,18 @@ public:
       void claim_best_path(sdet_hyp_tree* HT);
         void claim_edgels(sdet_hyp_tree_node* node);
 
-    void resolve_HT(sdet_hyp_tree* HT); 
+    void resolve_HT(sdet_hyp_tree* HT);
 
-    double compute_path_metric(vcl_vector<sdet_curvelet*>& path);
-    void back_propagate_solution(vcl_vector<sdet_curvelet*>& path, vgl_point_2d<double> sol);
-    
+    double compute_path_metric(std::vector<sdet_curvelet*>& path);
+    void back_propagate_solution(std::vector<sdet_curvelet*>& path, vgl_point_2d<double> sol);
+
   void print_all_trees();
 
   //***********************************************************************//
   // Edgel based Hypothesis trees and CFTGs
   //***********************************************************************//
 
-  //: construct a hyp tree from a given edgel 
+  //: construct a hyp tree from a given edgel
   sdet_EHT* construct_hyp_tree(sdet_edgel* e);
 
   //: by Yuliang, a filter befor building hypothesis tree, rule out some strang pathe from regular contours, and merge some contours, not deal with junction
@@ -336,12 +338,12 @@ public:
   void Post_Process();
 
   //: perform a geometric consistency check to determine whether a given temp path is valid
-  bool is_EHT_path_legal(vcl_vector<sdet_edgel*>& edgel_chain);
+  bool is_EHT_path_legal(std::vector<sdet_edgel*>& edgel_chain);
 
   //: compute a simple path metric based on the chain and its neighboring support chains
-  double compute_path_metric2(vcl_vector<sdet_edgel*>& Pchain, 
-                             vcl_vector<sdet_edgel*>& Tchain, 
-                             vcl_vector<sdet_edgel*>& Cchain);
+  double compute_path_metric2(std::vector<sdet_edgel*>& Pchain,
+                             std::vector<sdet_edgel*>& Tchain,
+                             std::vector<sdet_edgel*>& Cchain);
 
   //: disambiguate the CFG, basically to produce a disjoint set
   void disambiguate_the_CFTG();
@@ -403,7 +405,7 @@ protected:
   double max_k_;  ///< maximum curvature of curves in the curve bundle
   double max_gamma_; ///< maximum curvature derivative of curves in the curve bundle
 
-  unsigned nrad_; ///< the range of edgel cells to search (this should contain all edgemap_->edgels within rad_) 
+  unsigned nrad_; ///< the range of edgel cells to search (this should contain all edgemap_->edgels within rad_)
   double gap_; ///<Distance between two consecutive edges in a link
   unsigned maxN_; ///< largest curvelet size to form
   bool centered_; ///< curvelets centered on the anchor edgel
@@ -411,23 +413,23 @@ protected:
 
   //linking parameters
   bool use_anchored_curvelets_; ///< the curvelet set to use for linking
-  unsigned min_deg_to_link_; ///< minimum degree of a link before it is linked 
+  unsigned min_deg_to_link_; ///< minimum degree of a link before it is linked
 
   //for the connected components algo to separate the link graph and the cvlet map
-  vcl_set<sdet_curvelet*> cv_set1;
-  vcl_map<vcl_pair<int, int>, sdet_link*> link_map;
-  vcl_queue<sdet_link*> BFS_links_queue;
-  vcl_map<sdet_link*, sdet_link*> link_pairs;
+  std::set<sdet_curvelet*> cv_set1;
+  std::map<std::pair<int, int>, sdet_link*> link_map;
+  std::queue<sdet_link*> BFS_links_queue;
+  std::map<sdet_link*, sdet_link*> link_pairs;
 
 public: //temp
 
   //for the hybrid algorithm
-  bool use_hybrid_; 
-  vcl_vector<int> cId_; ///< id of the contour that each edgel belongs to
+  bool use_hybrid_;
+  std::vector<int> cId_; ///< id of the contour that each edgel belongs to
 
   //for the DHT algorithm
   sdet_HT_graph HTG;             ///< The global HTG
-  vcl_queue<sdet_hyp_tree_node*> BFS_queue_global; ///< BFS queue for propagating the HTs simultaneously
+  std::queue<sdet_hyp_tree_node*> BFS_queue_global; ///< BFS queue for propagating the HTs simultaneously
 
   sdet_edgel_labels ELs;         ///< edgel labels for contour ownership
 
@@ -438,7 +440,7 @@ public: //temp
 
 //: data structure to hold pairwise hypothesis around an edgel
 struct sel_hyp {
-  bool ref_first;           ///< the direction of groouping    
+  bool ref_first;           ///< the direction of groouping
   double d;                 ///< distance between them
   bool flag;                ///< if this hypothesis has been considered before
   sdet_edgel* eN;          ///< neighboring edgel

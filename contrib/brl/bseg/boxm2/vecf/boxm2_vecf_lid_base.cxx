@@ -1,6 +1,8 @@
+#include <limits>
+#include <iostream>
+#include <cmath>
 #include "boxm2_vecf_lid_base.h"
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -10,25 +12,25 @@
 // the rotated x position, xp, is input and a 2nd order approximation to the margin or crease polynomials is used to
 // recover the polynomial sweeping parameter, beta.
 double boxm2_vecf_lid_base::beta(double xp, double a0, double a1, double a2) const{
-  if(vcl_fabs(dphi_rad_)<0.001)
+  if(std::fabs(dphi_rad_)<0.001)
     return xp;
   double sy = opr_.scale_y();
-  double ss = vcl_sin(dphi_rad_);
-  double cs = vcl_cos(dphi_rad_);
+  double ss = std::sin(dphi_rad_);
+  double cs = std::cos(dphi_rad_);
   double temp0 = a0*sy*ss, temp1 = a1*sy*ss, temp2 = a2*sy*ss;
   double temp3 = 1.0-(temp1/cs);
   double temp4 = -(4.0*temp2*(xp + temp0)/(cs*cs))+temp3*temp3;
   if(temp4<0.0)
     temp4 = 0.0;
-  double neu = temp1 + cs*(-1.0 + vcl_sqrt(temp4));
+  double neu = temp1 + cs*(-1.0 + std::sqrt(temp4));
   double ret = -neu/(2.0*temp2);
   return ret;
 }
 // find the extreme value in y for a 2nd order polynomial approximation of the margin and crease polynomials
 // also report the x position where the extremum happens
 void boxm2_vecf_lid_base::extrema(double sy, double a0, double a1, double a2, double& yext, double& xext) const{
-  double ss = vcl_sin(dphi_rad_);
-  double cs = vcl_cos(dphi_rad_);
+  double ss = std::sin(dphi_rad_);
+  double cs = std::cos(dphi_rad_);
   double tan = ss/cs;
   double temp0 = (a1*a1 -4.0*a0*a2)*sy*sy*cs;
   double temp1 = ss*(2.0*a1*sy + tan);
@@ -122,7 +124,7 @@ double boxm2_vecf_lid_base::zlim(double xp) const{
   //double er = opr_.lid_sph_.radius();
   double arg = er*er - xlim*xlim;
   if(arg<0.0) return 0.0;
-  double zr = vcl_sqrt(arg);
+  double zr = std::sqrt(arg);
   return zr;
 }
 
@@ -134,33 +136,33 @@ double boxm2_vecf_lid_base::zu(double xp, double t) const{
   double g0 = gi(xp,t);
   double arg = r02-g0*g0-xp*xp;
   if(arg<0.0) arg =0.0;
-  return vcl_sqrt(arg);
+  return std::sqrt(arg);
 }
 double boxm2_vecf_lid_base::r(double xp, double t) const{
   double zv = z(xp,t);
   double gv = gi(xp,t);
-  return vcl_sqrt(zv*zv + gv*gv + xp*xp);
+  return std::sqrt(zv*zv + gv*gv + xp*xp);
 }
 
 double boxm2_vecf_lid_base::theta(double xp, double t) const{
   double zv = z(xp,t);
   double rv = r(xp,t);
-  return vcl_acos(zv/rv);
+  return std::acos(zv/rv);
 }
 double boxm2_vecf_lid_base::phi(double xp, double t) const{
-  return vcl_atan2(gi(xp,t), xp);
+  return std::atan2(gi(xp,t), xp);
 }
 
 double boxm2_vecf_lid_base::X(double xp,double t) const{
-  return (r(xp,t)*vcl_sin(theta(xp,t))*vcl_cos(phi(xp,t)));
+  return (r(xp,t)*std::sin(theta(xp,t))*std::cos(phi(xp,t)));
 }
 
 double boxm2_vecf_lid_base::Y(double xp,double t) const{
-  return (r(xp,t)*vcl_sin(theta(xp,t))*vcl_sin(phi(xp,t)));
+  return (r(xp,t)*std::sin(theta(xp,t))*std::sin(phi(xp,t)));
 }
 
 double boxm2_vecf_lid_base::Z(double xp,double t) const{
-  return (r(xp,t)*vcl_cos(theta(xp,t)));
+  return (r(xp,t)*std::cos(theta(xp,t)));
 }
 
 vgl_vector_3d<double>  boxm2_vecf_lid_base::vf(double xp, double t, double dt) const{
@@ -201,10 +203,10 @@ double boxm2_vecf_lid_base::curve_distance(double t, double x, double y) const{
   double margin  = 1.5;
   double xminus = -opr_.medial_socket_radius()*margin;
   double xplus = opr_.lateral_socket_radius()*margin;
-  double dmin = vcl_numeric_limits<double>::max();
+  double dmin = std::numeric_limits<double>::max();
   for(double xp = xminus; xp<=xplus; xp+=0.1){
     double dx = xp-x, dy = y-gi(xp,t);
-    double d = vcl_sqrt(dx*dx + dy*dy);
+    double d = std::sqrt(dx*dx + dy*dy);
     if(d<dmin)
       dmin = d;
   }
@@ -214,13 +216,12 @@ double boxm2_vecf_lid_base::curve_distance(double t, double x, double y, double 
   double margin  = 1.5;
   double xminus = -opr_.medial_socket_radius()*margin;
   double xplus = opr_.lateral_socket_radius()*margin;
-  double dmin = vcl_numeric_limits<double>::max();
+  double dmin = std::numeric_limits<double>::max();
   double xmin, ymin, zmin;// for debug purposes
   for(double xp = xminus; xp<=xplus; xp+=0.1){
     double dx = xp-x, dy = y-gi(xp,t), dz = z-Z(xp, t);
-    double d = vcl_sqrt(dx*dx + dy*dy + dz*dz);
+    double d = std::sqrt(dx*dx + dy*dy + dz*dz);
     if(d<dmin){
-      xmin = xp; ymin = gi(xp,t); zmin = Z(xp,t);
       dmin = d;
     }
   }

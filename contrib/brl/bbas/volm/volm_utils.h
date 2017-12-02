@@ -12,10 +12,12 @@
 //   <none yet>
 // \endverbatim
 //
+#include <iostream>
+#include <string>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 class volm_utils
 {
@@ -25,20 +27,20 @@ public:
   template <class T>
   static bool poly_contains(vgl_polygon<T> const& poly, vgl_box_2d<T> const& b);
   template <class T>
-  static bool poly_contains(vcl_vector<vgl_point_2d<T> > const& sheet, vgl_box_2d<T> const& b);
+  static bool poly_contains(std::vector<vgl_point_2d<T> > const& sheet, vgl_box_2d<T> const& b);
 
   //: return polygon sheet that lie entirely inside the polygon p_out
   template <class T>
   static vgl_polygon<T> poly_contains(vgl_polygon<T> const& p_out, vgl_polygon<T> const& p_in);
   template <class T>
-  static vgl_polygon<T> poly_contains(vcl_vector<vgl_point_2d<T> > const& p_out, vgl_polygon<T> const& p_in);
+  static vgl_polygon<T> poly_contains(std::vector<vgl_point_2d<T> > const& p_out, vgl_polygon<T> const& p_in);
 
-  static vcl_string volm_src_root();
+  static std::string volm_src_root();
 
 private:  // only static function in this class: disallow instantiation
   volm_utils();
 };
 
-#define VOLM_UTILS_INSTANTIATE(T) extern "Please #include <volm/volm_utils.txx>"
+#define VOLM_UTILS_INSTANTIATE(T) extern "Please #include <volm/volm_utils.hxx>"
 
 #endif // volm_utils_h_

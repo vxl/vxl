@@ -13,7 +13,9 @@
 //  It also stores a list of blocks to process (in a given order).
 //  When run is called, it will run the same process on each set of blocks
 //  (this may need to be pushed down to the processor)
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 //open cl includes
 #include <bocl/bocl_cl.h>
@@ -29,37 +31,37 @@ class bocl_command_queue_mgr: public bocl_manager<bocl_command_queue_mgr>
 {
  public:
 
-    bool init_kernel(); 
+    bool init_kernel();
     bool test_async_command_queue();
-    bool test_dual_command_queue(); 
+    bool test_dual_command_queue();
 
  protected:
 
-    int memLength_; 
+    int memLength_;
     int memHalf_;
-    
+
     bocl_mem*  pinned_in_;
-    bocl_mem*  input_; 
-    
+    bocl_mem*  input_;
+
     bocl_mem*  pinned_out_;
-    bocl_mem*  output_; 
-    
+    bocl_mem*  output_;
+
     //: boxm2 command queues, two, one for in and one for out
     cl_command_queue queue_a_;
-    cl_command_queue queue_b_; 
+    cl_command_queue queue_b_;
     bocl_kernel kernel_a_;
-    bocl_kernel kernel_b_; 
-    
-    bocl_mem*  offsets_[NUM_QUEUES]; 
-    cl_command_queue queues_[NUM_QUEUES]; 
-    bocl_kernel kernels_[NUM_QUEUES]; 
+    bocl_kernel kernel_b_;
+
+    bocl_mem*  offsets_[NUM_QUEUES];
+    cl_command_queue queues_[NUM_QUEUES];
+    bocl_kernel kernels_[NUM_QUEUES];
 
  private:
     friend class bocl_manager<bocl_command_queue_mgr>;
     // don't allow users to create their own instances (force use of instance())
     bocl_command_queue_mgr() {}
     ~bocl_command_queue_mgr(){}
-    
+
 };
 
 #endif

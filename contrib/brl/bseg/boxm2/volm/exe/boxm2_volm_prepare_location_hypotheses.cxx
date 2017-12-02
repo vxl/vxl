@@ -18,41 +18,41 @@
 
 int main(int argc,  char** argv)
 {
-  vul_arg<vcl_string> scene_file("-scene", "scene xml filename", "");
-  vul_arg<vcl_string> dem_file("-dem", "dem name, assume there is a tfw file in the same folder ", "");
-  vul_arg<vcl_string> out_file("-out", "prefix for names of output binary files", "");
+  vul_arg<std::string> scene_file("-scene", "scene xml filename", "");
+  vul_arg<std::string> dem_file("-dem", "dem name, assume there is a tfw file in the same folder ", "");
+  vul_arg<std::string> out_file("-out", "prefix for names of output binary files", "");
   vul_arg<unsigned> int_i("-int_i", "interval in +x direction (East) in pixels in the output tiles", (unsigned)10);
   vul_arg<unsigned> int_j("-int_j", "interval in +y direction (North) in pixels in the output tiles", (unsigned)10);
   vul_arg<float> alt("-altitude", "altitude (in meters) from above ground to generate the elevation of each hyptohesis, default is 1.6", 1.6f);
   vul_arg_parse(argc, argv);
 
-  vcl_cout << "argc: " << argc << vcl_endl;
+  std::cout << "argc: " << argc << std::endl;
   if (scene_file().compare("") == 0 || dem_file().compare("") == 0 || out_file().compare("") == 0) {
-    vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
+    std::cerr << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
     return 0;
   }
   boxm2_scene_sptr scene = new boxm2_scene(scene_file());
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
 
-  vcl_vector<vil_image_view<float> > dems;
-  vcl_vector<vpgl_geo_camera* > cams;
+  std::vector<vil_image_view<float> > dems;
+  std::vector<vpgl_geo_camera* > cams;
   vil_image_resource_sptr dem_res = vil_load_image_resource(dem_file().c_str());
   vil_image_view<float> dem = dem_res->get_view();
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
 
   dems.push_back(dem);
   cams.push_back(geocam);
 
-  vcl_cout << "generating hypotheses for scene: " << scene_file() << " using " << dem_file() << vcl_endl;
+  std::cout << "generating hypotheses for scene: " << scene_file() << " using " << dem_file() << std::endl;
 
   //: just generate dummy output
-  //vcl_vector<volm_tile> tiles = volm_tile::generate_p1_tiles();
-  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles();
+  //std::vector<volm_tile> tiles = volm_tile::generate_p1_tiles();
+  std::vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles();
 
   for (unsigned i = 0; i < tiles.size(); i++) {
-    vcl_string out_name = out_file() + "_volm_" + tiles[i].get_string() + ".kml";
+    std::string out_name = out_file() + "_volm_" + tiles[i].get_string() + ".kml";
     tiles[i].write_kml(out_name, 1000);
   }
 
@@ -60,29 +60,29 @@ int main(int argc,  char** argv)
     //boxm2_volm_loc_hypotheses_sptr h = new boxm2_volm_loc_hypotheses(lvcs, tiles[i], int_i(), int_j(), alt(), dems, cams);
     boxm2_volm_loc_hypotheses_sptr h = new boxm2_volm_loc_hypotheses(tiles[i]);
     h->add_dems(scene, int_i(), int_j(), alt(), dems, cams);
-    vcl_cout << "constructed: " << h->locs_.size() << " hypotheses for tile: " << tiles[i].get_string() << vcl_endl;
-    vcl_string out_name = out_file() + "_" + tiles[i].get_string() + ".bin";
+    std::cout << "constructed: " << h->locs_.size() << " hypotheses for tile: " << tiles[i].get_string() << std::endl;
+    std::string out_name = out_file() + "_" + tiles[i].get_string() + ".bin";
     h->write_hypotheses(out_name);
 
 #if 0
     vil_image_view<unsigned int> out(3601, 3601);
     out.fill(volm_io::UNEVALUATED);
-    vcl_vector<float> dummy_scores(h.locs_.size(), 1.0f);
+    std::vector<float> dummy_scores(h.locs_.size(), 1.0f);
     h.generate_output_tile(dummy_scores, 5*int_i()/12, 5*int_j()/12, 0.5f, out);
-    vcl_string out_name = out_file() + "_volm_" + tiles[i].get_string() + ".tif";
+    std::string out_name = out_file() + "_volm_" + tiles[i].get_string() + ".tif";
     vil_save(out, out_name.c_str());
 #endif
   }
 #if 0
   for (unsigned i = 0; i < tiles.size(); i++) {
-    vcl_string out_name = out_file() + "_" + tiles[i].get_string() + ".bin";
+    std::string out_name = out_file() + "_" + tiles[i].get_string() + ".bin";
     boxm2_volm_loc_hypotheses_sptr h = new boxm2_volm_loc_hypotheses(out_name);
-    vcl_cout << "read: " << h->locs_.size() << " hypotheses for tile: " << tiles[i].get_string() << vcl_endl;
-    vcl_string out_name_kml = out_file() + "_" + tiles[i].get_string() + ".kml";
+    std::cout << "read: " << h->locs_.size() << " hypotheses for tile: " << tiles[i].get_string() << std::endl;
+    std::string out_name_kml = out_file() + "_" + tiles[i].get_string() + ".kml";
     h->write_hypotheses_kml(scene, out_name_kml);
   }
 #endif
-  
-  vcl_cout << "returning SUCCESS!\n";
+
+  std::cout << "returning SUCCESS!\n";
   return volm_io::SUCCESS;
 }

@@ -5,12 +5,13 @@
 //:
 // \file
 
+#include <iostream>
 #include "FMPlanarComputeNonLinear.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/PairSetCorner.h>
 #include <mvl/FMatrixPlanar.h>
 #include <mvl/FMPlanarNonLinFun.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Constructor.
 // The parameter outlier_threshold is not currently used, but
@@ -32,22 +33,22 @@ bool FMPlanarComputeNonLinear::compute_planar(PairMatchSetCorner& matches, FMatr
   return compute_planar(inliers.points1, inliers.points2, F);
 }
 
-//: Compute from given pair of vcl_vector<HomgPoint2D>
-bool FMPlanarComputeNonLinear::compute_planar(vcl_vector<HomgPoint2D>& points1,
-                                              vcl_vector<HomgPoint2D>& points2,
+//: Compute from given pair of std::vector<HomgPoint2D>
+bool FMPlanarComputeNonLinear::compute_planar(std::vector<HomgPoint2D>& points1,
+                                              std::vector<HomgPoint2D>& points2,
                                               FMatrixPlanar* F)
 {
-  vcl_cerr << "FMPlanarComputeNonLinear: Fitting planar-motion F matrix [e1]_x [l]_x [e2]_x\n";
+  std::cerr << "FMPlanarComputeNonLinear: Fitting planar-motion F matrix [e1]_x [l]_x [e2]_x\n";
   FMPlanarNonLinFun computor(image_metric1_, image_metric2_, outlier_distance_squared_, points1, points2);
   return computor.compute(F);
 }
 
-//: Compute from given pair of vcl_vector<vgl_homg_point_2d<double> >
-bool FMPlanarComputeNonLinear::compute_planar(vcl_vector<vgl_homg_point_2d<double> >& points1,
-                                              vcl_vector<vgl_homg_point_2d<double> >& points2,
+//: Compute from given pair of std::vector<vgl_homg_point_2d<double> >
+bool FMPlanarComputeNonLinear::compute_planar(std::vector<vgl_homg_point_2d<double> >& points1,
+                                              std::vector<vgl_homg_point_2d<double> >& points2,
                                               FMatrixPlanar& F)
 {
-  vcl_cerr << "FMPlanarComputeNonLinear: Fitting planar-motion F matrix [e1]_x [l]_x [e2]_x\n";
+  std::cerr << "FMPlanarComputeNonLinear: Fitting planar-motion F matrix [e1]_x [l]_x [e2]_x\n";
   FMPlanarNonLinFun computor(image_metric1_, image_metric2_, outlier_distance_squared_, points1, points2);
   return computor.compute(&F);
 }
@@ -64,8 +65,8 @@ bool FMPlanarComputeNonLinear::compute(PairMatchSetCorner& matches, FMatrix* F)
   return true;
 }
 
-bool FMPlanarComputeNonLinear::compute(vcl_vector<HomgPoint2D>& points1,
-                                       vcl_vector<HomgPoint2D>& points2,
+bool FMPlanarComputeNonLinear::compute(std::vector<HomgPoint2D>& points1,
+                                       std::vector<HomgPoint2D>& points2,
                                        FMatrix* F)
 {
   FMatrixPlanar fplanar;
@@ -78,8 +79,8 @@ bool FMPlanarComputeNonLinear::compute(vcl_vector<HomgPoint2D>& points1,
   return true;
 }
 
-bool FMPlanarComputeNonLinear::compute(vcl_vector<vgl_homg_point_2d<double> >& points1,
-                                       vcl_vector<vgl_homg_point_2d<double> >& points2,
+bool FMPlanarComputeNonLinear::compute(std::vector<vgl_homg_point_2d<double> >& points1,
+                                       std::vector<vgl_homg_point_2d<double> >& points2,
                                        FMatrix& F)
 {
   FMatrixPlanar fplanar;

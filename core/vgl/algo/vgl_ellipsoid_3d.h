@@ -22,9 +22,10 @@
 //   Jun 2009 created
 // \endverbatim
 
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class vgl_ellipsoid_3d
@@ -69,13 +70,13 @@ class vgl_ellipsoid_3d
   bool operator==(vgl_ellipsoid_3d<T> const& e) const;
 
   //: Writes "<vgl_ellipsoid_3d center=(x0,y0,z0), orientation, size=(x_hl,y_hl,z_hl)" to stream
-  vcl_ostream& print(vcl_ostream& s) const;
+  std::ostream& print(std::ostream& s) const;
 };
 
 //: Writes "<vgl_ellipsoid_3d center=(x0,y0,z0), orientation, size=(x_hl,y_hl,z_hl)" to stream
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, vgl_ellipsoid_3d<T> const& e) { e.print(os); return os; }
+std::ostream& operator<<(std::ostream& os, vgl_ellipsoid_3d<T> const& e) { e.print(os); return os; }
 
-#define VGL_ELLIPSOID_3D_INSTANTIATE(T) extern "please include vgl/vgl_ellipsoid_3d.txx first"
+#define VGL_ELLIPSOID_3D_INSTANTIATE(T) extern "please include vgl/vgl_ellipsoid_3d.hxx first"
 
 #endif // vgl_ellipsoid_3d_h_

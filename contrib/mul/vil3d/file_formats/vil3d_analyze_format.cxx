@@ -16,10 +16,12 @@
 //
 //   The main work of loading and saving happens in vil3d_analyze_image
 
+#include <cstring>
+#include <cstdio>
+#include <iostream>
+#include <cstddef>
 #include "vil3d_analyze_format.h"
-#include <vcl_cstring.h> // for std::strcmp() and std::memset()
-#include <vcl_cstdio.h>  // for std::sprintf
-#include <vcl_cstddef.h>  // for std::size_t
+#include <vcl_compiler.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
@@ -70,7 +72,7 @@ const int ObligatorySize = sizeof(vil3d_analyze_header::Key) +
 
 void vil3d_analyze_header::Key::reset()
 {
-  vcl_memset(this, (char)0, sizeof(*this));
+  std::memset(this, (char)0, sizeof(*this));
 
   // obligatory fields
   sizeof_hdr = OptionalSize;
@@ -81,14 +83,14 @@ void vil3d_analyze_header::Key::reset()
 
 void vil3d_analyze_header::Dimensions::reset()
 {
-  vcl_memset(this, (char)0, sizeof(*this));
+  std::memset(this, (char)0, sizeof(*this));
 }
 
 
 void vil3d_analyze_header::History::reset()
 {
-  vcl_memset(this, (char)0, sizeof(*this));
-  vcl_sprintf(descrip," VXL generated file, some data fields may be missing");
+  std::memset(this, (char)0, sizeof(*this));
+  std::sprintf(descrip," VXL generated file, some data fields may be missing");
 }
 
 
@@ -100,20 +102,20 @@ void vil3d_analyze_header::reset()
 }
 
 // This function centralises the compiler warning concerning "const cast":
-static inline void do_write(vcl_ofstream& bfs, const void* data, unsigned int sz)
+static inline void do_write(std::ofstream& bfs, const void* data, unsigned int sz)
 {
   bfs.write((char*)data, sz);
 }
 #define WRITE(X) do_write(bfs, &X, sizeof(X))
 
-bool vil3d_analyze_header::write_file(const vcl_string& path) const
+bool vil3d_analyze_header::write_file(const std::string& path) const
 {
-  vcl_ofstream bfs(path.c_str(),vcl_ios_binary);
+  std::ofstream bfs(path.c_str(),std::ios::binary);
   if (!bfs) return false;
 
   if (key.sizeof_hdr != OptionalSize)
   {
-    vcl_cerr << "vil3d_analyze_header::write_file: Header file is not the correct size.\n";
+    std::cerr << "vil3d_analyze_header::write_file: Header file is not the correct size.\n";
     return false;
   }
   else
@@ -184,9 +186,9 @@ bool vil3d_analyze_header::write_file(const vcl_string& path) const
   return true;
 }
 
-bool vil3d_analyze_header::read_file(const vcl_string& path)
+bool vil3d_analyze_header::read_file(const std::string& path)
 {
-  vcl_ifstream bfs(path.c_str(),vcl_ios_binary);
+  std::ifstream bfs(path.c_str(),std::ios::binary);
   if (!bfs) return false;
 
   bfs.read((char *)&key.sizeof_hdr, sizeof(key.sizeof_hdr));
@@ -219,7 +221,7 @@ bool vil3d_analyze_header::read_file(const vcl_string& path)
   if (key.sizeof_hdr != ObligatorySize &&
       key.sizeof_hdr != OptionalSize)
   {
-    vcl_cerr << "vil3d_analyze_header::load: Header file is not the correct size.\n";
+    std::cerr << "vil3d_analyze_header::load: Header file is not the correct size.\n";
     return false;
   }
   else
@@ -425,7 +427,7 @@ enum vil_pixel_format vil3d_analyze_header::pixel_format() const
 }
 
 //: Print out some parts of header
-void vil3d_analyze_header::print_summary(vcl_ostream& os) const
+void vil3d_analyze_header::print_summary(std::ostream& os) const
 {
   os<<"vil3d_analyze_header:\n";
   vsl_indent_inc(os);
@@ -436,7 +438,7 @@ void vil3d_analyze_header::print_summary(vcl_ostream& os) const
 }
 
 //: Print out some parts of header
-vcl_ostream& operator<<(vcl_ostream& os, const vil3d_analyze_header& header)
+std::ostream& operator<<(std::ostream& os, const vil3d_analyze_header& header)
 {
   header.print_summary(os);
   return os;
@@ -456,16 +458,16 @@ vil3d_analyze_format::~vil3d_analyze_format()
 vil3d_image_resource_sptr vil3d_analyze_format::make_input_image(const char *filename1) const
 {
   vil3d_analyze_header header;
-  vcl_string filename(filename1);
-  vcl_string base_filename;
-  vcl_size_t n=filename.size();
+  std::string filename(filename1);
+  std::string base_filename;
+  std::size_t n=filename.size();
   if (n>=4 && (filename.substr(n-4,4)==".hdr" || filename.substr(n-4,4)==".img"))
     base_filename = filename.substr(0,n-4);
   else
     base_filename = filename;
 
-  if (!header.read_file(vcl_string(base_filename)+".hdr")) return 0;
-  vcl_cout<<"vil3d_analyze_format::make_input_image() Header: "<<header<<vcl_endl;
+  if (!header.read_file(std::string(base_filename)+".hdr")) return VXL_NULLPTR;
+  std::cout<<"vil3d_analyze_format::make_input_image() Header: "<<header<<std::endl;
 
   return new vil3d_analyze_image(header,base_filename);
 }
@@ -485,9 +487,9 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
       format != VIL_PIXEL_FORMAT_FLOAT  && format != VIL_PIXEL_FORMAT_DOUBLE &&
       format != VIL_PIXEL_FORMAT_INT_32 )
   {
-    vcl_cerr << "vil3d_analyze_format::make_output_image() WARNING\n"
-             << "  Unable to deal with pixel format : " << format << vcl_endl;
-    return 0;
+    std::cerr << "vil3d_analyze_format::make_output_image() WARNING\n"
+             << "  Unable to deal with pixel format : " << format << std::endl;
+    return VXL_NULLPTR;
   }
 
   vil3d_analyze_header header;
@@ -496,14 +498,14 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
   header.set_voxel_size(1.0f,1.0f,1.0f);
   header.set_pixel_format(format);
 
-  vcl_string filename(filename1);
-  vcl_string base_filename;
-  vcl_size_t n=filename.size();
+  std::string filename(filename1);
+  std::string base_filename;
+  std::size_t n=filename.size();
   if (n>=4 && (filename.substr(n-4,4)==".hdr" || filename.substr(n-4,4)==".img"))
     base_filename = filename.substr(0,n-4);
   else
     base_filename = filename;
-  if (!header.write_file(vcl_string(base_filename)+".hdr")) return 0;
+  if (!header.write_file(std::string(base_filename)+".hdr")) return VXL_NULLPTR;
   return new vil3d_analyze_image(header,base_filename);
 }
 
@@ -512,7 +514,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
 // ==================================================================
 
 vil3d_analyze_image::vil3d_analyze_image(const vil3d_analyze_header& header,
-                                         const vcl_string& base_path)
+                                         const std::string& base_path)
 {
   header_ = header;
   base_path_ = base_path;
@@ -563,11 +565,11 @@ vil3d_image_view_base_sptr vil3d_analyze_image::get_copy_view(
   // Can only cope with loading whole image at present.
   if (i0!=0 || int(ni)!=header_.ni() ||
       j0!=0 || int(nj)!=header_.nj() ||
-      k0!=0 || int(nk)!=header_.nk()   ) return 0;
+      k0!=0 || int(nk)!=header_.nk()   ) return VXL_NULLPTR;
 
-  vcl_string image_data_path=base_path_+".img";
+  std::string image_data_path=base_path_+".img";
   vil_smart_ptr<vil_stream> is = new vil_stream_fstream(image_data_path.c_str(),"r");
-  if (!is->ok()) return 0;
+  if (!is->ok()) return VXL_NULLPTR;
 
 // NOTE: See GIPL loader for more general data reading
 #define read_data_of_type(type) \
@@ -611,13 +613,13 @@ vil3d_image_view_base_sptr vil3d_analyze_image::get_copy_view(
     return new vil3d_image_view<double>(im);
    }
    case VIL_PIXEL_FORMAT_BOOL:
-    vcl_cout<<"ERROR: vil3d_analyze_format::get_copy_view()"
+    std::cout<<"ERROR: vil3d_analyze_format::get_copy_view()"
             <<pixel_format() << " pixel type not yet implemented\n";
-    return 0;
+    return VXL_NULLPTR;
    default:
-    vcl_cout<<"ERROR: vil3d_analyze_format::get_copy_view()\n"
-            <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
-    return 0;
+    std::cout<<"ERROR: vil3d_analyze_format::get_copy_view()\n"
+            <<"Can't deal with pixel type " << pixel_format() << std::endl;
+    return VXL_NULLPTR;
   }
 }
 
@@ -625,7 +627,7 @@ vil3d_image_view_base_sptr vil3d_analyze_image::get_copy_view(
 //: Get the properties (of the first slice)
 bool vil3d_analyze_image::get_property(char const *key, void * value) const
 {
-  if (vcl_strcmp(vil3d_property_voxel_size, key)==0)
+  if (std::strcmp(vil3d_property_voxel_size, key)==0)
   {
     float* array = static_cast<float*>(value);
     // analyze stores data in mm
@@ -635,7 +637,7 @@ bool vil3d_analyze_image::get_property(char const *key, void * value) const
     return true;
   }
 
-  if (vcl_strcmp(vil3d_property_origin_offset, key)==0)
+  if (std::strcmp(vil3d_property_origin_offset, key)==0)
   {
     // Don't know how to get origin offset from header yet!
     float* array = static_cast<float*>(value);
@@ -654,16 +656,16 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
 {
   if (!view_fits(view, i0, j0, k0))
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    std::cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
     return false;
   }
   if (view.ni()!=ni() || view.nj()!=nj() || view.nk()!=nk())
   {
-    vcl_cerr<<"Can only write whole image at once.\n";
+    std::cerr<<"Can only write whole image at once.\n";
     return false;
   }
 
-  vcl_string image_data_path=base_path_+".img";
+  std::string image_data_path=base_path_+".img";
   vil_smart_ptr<vil_stream> os = new vil_stream_fstream(image_data_path.c_str(),"w");
   if (!os->ok()) return 0;
 
@@ -718,8 +720,8 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
      return true;
    }
    default:
-    vcl_cout<<"ERROR: vil3d_analyze_format::put_view()\n"
-            <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
+    std::cout<<"ERROR: vil3d_analyze_format::put_view()\n"
+            <<"Can't deal with pixel type " << pixel_format() << std::endl;
   }
 
   return false;

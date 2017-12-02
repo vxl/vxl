@@ -12,10 +12,11 @@
 //   Mar.2009 - Dirk Steckhan - bug fix in vgl_lineseg_test_point (missing sqrt)
 // \endverbatim
 
+#include <cmath>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_cmath.h> // for std::sqrt()
+#include <vcl_compiler.h>
 
 // The old signature vgl_lineseg_test() was incorrectly documented. Its
 // meaning was the same as the new vgl_lineseg_test_line(). Only you can
@@ -67,6 +68,6 @@ inline bool vgl_lineseg_test_lineseg(vgl_line_segment_2d<T> const& l1,
                                   l2.point2().x(),l2.point2().y());
 }
 
-#define VGL_LINESEG_TEST_INSTANTIATE(T) extern "please include vgl/vgl_lineseg_test.txx instead"
+#define VGL_LINESEG_TEST_INSTANTIATE(T) extern "please include vgl/vgl_lineseg_test.hxx instead"
 
 #endif // vgl_lineseg_test_h_

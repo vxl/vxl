@@ -52,8 +52,8 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
 //  \code
 //    double theta = grad_mag_orient_offset(i,j,1);
 //    double offset = grad_mag_orient_offset(i,j,2);
-//    double x = i + vcl_cos(theta)*offset;
-//    double y = j + vcl_sin(theta)*offset;
+//    double x = i + std::cos(theta)*offset;
+//    double y = j + std::sin(theta)*offset;
 //  \endcode
 //
 //  Note: Currently assumes single plane only.

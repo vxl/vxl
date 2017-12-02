@@ -41,10 +41,11 @@
 // defined in this file.  So you don't need to modify these functions
 // when you add a new pixel format into this header file.
 
-#include <vcl_string.h>
-#include <vcl_cstddef.h>
-#include <vcl_iosfwd.h>
-#include <vcl_typeinfo.h>
+#include <string>
+#include <cstddef>
+#include <iosfwd>
+#include <typeinfo>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vidl/vidl_export.h>
 
@@ -124,8 +125,8 @@ enum vidl_pixel_arrangement
 // - packed are the pixels packed into macro pixels
 struct vidl_pixel_traits
 {
-  vcl_string name;
-  const vcl_type_info* type;
+  std::string name;
+  const std::type_info* type;
   unsigned bits_per_pixel;
   unsigned num_channels;
   vidl_pixel_color color;
@@ -149,7 +150,7 @@ struct vidl_pixel_traits
 template <class T>
 struct vidl_pixel_limits;
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<vxl_byte>
 {
   static inline vxl_byte min() {return 0x00;}
@@ -157,7 +158,7 @@ struct vidl_pixel_limits<vxl_byte>
   static inline vxl_byte chroma_zero() {return 0x80;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<bool>
 {
   static inline bool min() {return false;}
@@ -166,7 +167,7 @@ struct vidl_pixel_limits<bool>
   static inline bool chroma_zero() {return false;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<vxl_uint_16>
 {
   static inline vxl_uint_16 min() {return 0x0000;}
@@ -174,7 +175,7 @@ struct vidl_pixel_limits<vxl_uint_16>
   static inline vxl_uint_16 chroma_zero() {return 0x8000;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<float>
 {
   static inline float min() {return 0.0f;}
@@ -182,7 +183,7 @@ struct vidl_pixel_limits<float>
   static inline float chroma_zero() {return 0.0f;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_pixel_limits<double>
 {
   static inline double min() {return 0.0;}
@@ -196,7 +197,7 @@ struct vidl_pixel_limits<double>
 template <vidl_pixel_color color_type>
     struct vidl_color_traits_of;
 #define vidl_ct_mac(COL,NC)\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 struct vidl_color_traits_of<VIDL_PIXEL_COLOR_##COL> \
 {\
   enum { num_channels = NC }; \
@@ -220,10 +221,10 @@ vidl_ct_mac( YUV,      3 );
 template <vidl_pixel_format pix_type>
 struct vidl_pixel_traits_of;
 #define vidl_pt_mac(FMT,NAME,T,BPP,CLR,ARNG,XCS,YCS)\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 struct vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT> \
 {\
-  static inline vcl_string name() { return NAME; }\
+  static inline std::string name() { return NAME; }\
   typedef T type;\
   enum { bits_per_pixel = BPP };\
   enum { num_channels = vidl_color_traits_of<VIDL_PIXEL_COLOR_##CLR>::num_channels };\
@@ -284,12 +285,12 @@ vidl_pt_mac( RGB_F32P, "RGB float 32P", vxl_ieee_32, 96,  RGB,     PLANAR,  0,  
 template <vidl_pixel_format pix_type>
 struct vidl_pixel_pack_of;
 #define vidl_pp_mac(FMT)\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 struct vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT> \
 {\
   enum { macro_pix_size = 1<<vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::chroma_shift_x }; \
   enum { num_channels = vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::num_channels }; \
-  static VIDL_EXPORT const vcl_ptrdiff_t offset[macro_pix_size][num_channels]; \
+  static VIDL_EXPORT const std::ptrdiff_t offset[macro_pix_size][num_channels]; \
 }
 
 vidl_pp_mac( YUYV_422 );
@@ -317,7 +318,7 @@ vidl_pixel_format_traits(vidl_pixel_format f);
 
 
 //: Return the typeid of the pixel format datatype
-inline const vcl_type_info&
+inline const std::type_info&
 vidl_pixel_format_typeid(vidl_pixel_format f)
 {
   return *vidl_pixel_format_traits(f).type;
@@ -372,12 +373,12 @@ vidl_pixel_format_chroma_shift_y(vidl_pixel_format f)
 
 
 //: Output a pretty string representing the pixel format.
-vcl_ostream &
-operator << (vcl_ostream &os, vidl_pixel_format f);
+std::ostream &
+operator << (std::ostream &os, vidl_pixel_format f);
 
 
 //: Convert a string into a pixel format.
-inline vcl_string
+inline std::string
 vidl_pixel_format_to_string(vidl_pixel_format f)
 {
   return vidl_pixel_format_traits(f).name;
@@ -386,7 +387,7 @@ vidl_pixel_format_to_string(vidl_pixel_format f)
 
 //: Convert a string into a pixel format.
 vidl_pixel_format
-vidl_pixel_format_from_string(const vcl_string& s);
+vidl_pixel_format_from_string(const std::string& s);
 
 
 //: Compute the size (in bytes) of a \a ni x \a nj image buffer of pixel format \a f

@@ -6,10 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "osl_easy_canny.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <osl/osl_topology.h>
 
@@ -24,7 +25,7 @@
 
 void osl_easy_canny(int which_canny,
                     vil1_image const &image,
-                    vcl_list<osl_edge*> *edges,
+                    std::list<osl_edge*> *edges,
                     double sigma)
 {
   assert(edges!=0);
@@ -55,7 +56,7 @@ void osl_easy_canny(int which_canny,
   } break;
 
   default:
-    vcl_cerr << __FILE__ ": unrecognised which_canny=" << which_canny << vcl_endl;
+    std::cerr << __FILE__ ": unrecognised which_canny=" << which_canny << std::endl;
     break;
   }
 }

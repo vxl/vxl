@@ -2,16 +2,18 @@
 #define bbas_1d_array_string_h
 //:
 // \file
+#include <iostream>
+#include <string>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/vbl_array_1d.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 class bbas_1d_array_string: public vbl_ref_count
 {
  public:
   bbas_1d_array_string(unsigned n):data_array(n, ""){}
-  vbl_array_1d<vcl_string> data_array;
+  vbl_array_1d<std::string> data_array;
 };
 
 typedef vbl_smart_ptr<bbas_1d_array_string> bbas_1d_array_string_sptr;

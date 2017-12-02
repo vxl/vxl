@@ -1,27 +1,28 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_aggregate_normal_from_filter_vector.cxx
+#include <stdexcept>
+#include <map>
+#include <iostream>
+#include <fstream>
 #include "boxm2_ocl_aggregate_normal_from_filter_vector.h"
 
-#include <vcl_stdexcept.h>
-#include <vcl_map.h>
-#include <vcl_iostream.h>
 
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 
 //utilities
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 
 
 boxm2_ocl_aggregate_normal_from_filter_vector::
-boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector) :
-  scene_(scene), ocl_cache_(ocl_cache), device_(device), filter_vector_(filter_vector)
+boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector,bool optimize_transfers) :
+  scene_(scene), ocl_cache_(ocl_cache), device_(device), filter_vector_(filter_vector),optimize_transfers_(optimize_transfers)
 {
   unsigned num_filters = filter_vector->kernels_.size();
 
-  vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-  vcl_cout << "device name = " << device->info().device_name_ << vcl_endl;
+  std::cout<<"===========Compiling kernels==========="<<std::endl;
+  std::cout << "device name = " << device->info().device_name_ << std::endl;
   bool status = false;
   if (num_filters == 3 ) {
     status = compile_kernel(kernel_, "-D XYZ");
@@ -30,20 +31,20 @@ boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_open
     status = compile_kernel(kernel_, "-D DODECAHEDRON");
   }
   else {
-    vcl_cerr << "Aggregate kernel is not available for the requested number of responses\n";
-    throw vcl_runtime_error("Unexpected number of filters");
+    std::cerr << "Aggregate kernel is not available for the requested number of responses\n";
+    throw std::runtime_error("Unexpected number of filters");
   }
   if (!status) {
-    throw vcl_runtime_error("ERROR compiling kernel in boxm2_ocl_aggregate_normal_from_filter_vector");
+    throw std::runtime_error("ERROR compiling kernel in boxm2_ocl_aggregate_normal_from_filter_vector");
 
   }
 }
 
 
-bool boxm2_ocl_aggregate_normal_from_filter_vector::compile_kernel(bocl_kernel &aggregate_kernel ,vcl_string opts)
+bool boxm2_ocl_aggregate_normal_from_filter_vector::compile_kernel(bocl_kernel &aggregate_kernel ,std::string opts)
 {
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "aggregate_filter_response.cl");
 
@@ -60,10 +61,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
   }
 
   long bytes_in_cache = ocl_cache_->bytes_in_cache();
-  vcl_cout<<"MBs in cache: "<<bytes_in_cache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"MBs in cache: "<<bytes_in_cache/(1024.0*1024.0)<<std::endl;
 
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   // create a command queue.
   int status=0;
@@ -89,8 +90,8 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
     bvpl_kernel_sptr filter = filter_vector_->kernels_[k];
     vnl_float_3 dir = filter->axis();
     dir.normalize();
-    if ( vcl_abs(dir.magnitude() - 1.0f) > 1e-7 )
-      vcl_cout << "Warning: In aggregate, direction doesn't have unit magnitude" << vcl_endl;
+    if ( std::abs(dir.magnitude() - 1.0f) > 1e-7 )
+      std::cout << "Warning: In aggregate, direction doesn't have unit magnitude" << std::endl;
 
     directions[count+0] = dir[0];
     directions[count+1] = dir[1];
@@ -104,14 +105,14 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
   float transfer_time=0.0f;
   float gpu_time=0.0f;
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
 
   //zip through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_cout << "Processing block: " << id << vcl_endl;
+    std::cout << "Processing block: " << id << std::endl;
 
     //load tree and alpha
     boxm2_block_metadata data = blk_iter->second;
@@ -121,14 +122,28 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
     bocl_mem* alpha     = ocl_cache_->get_data<BOXM2_ALPHA>(scene_,blk_iter->first,0,true);
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+      return false;
+    }
+
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
     blk_info->write_to_buffer((queue));
 
     //store normals locations
-    vcl_size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
+    std::size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
+    // check for invalid parameters
+    if( normalsTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      std::cout << "ERROR: normalsTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+      return false;
+    }
+
     bocl_mem * normals    = ocl_cache_->get_data(scene_,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), info_buffer->data_buffer_length*normalsTypeSize,false);
 
-    vcl_cout<<"MBs in cache: "<< (ocl_cache_->bytes_in_cache()/(1024.0*1024.0)) << vcl_endl;
+    std::cout<<"MBs in cache: "<< (ocl_cache_->bytes_in_cache()/(1024.0*1024.0)) << std::endl;
 
     //set global and local threads
     local_threads[0] = 64;
@@ -141,21 +156,21 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
     kernel_.set_arg( normals );
     for (unsigned i = 0; i < num_filters; i++) {
       bvpl_kernel_sptr filter = filter_vector_->kernels_[i];
-      vcl_stringstream filter_ident;
+      std::stringstream filter_ident;
       filter_ident << filter->name() << '_' << filter->id();
-      vcl_string response_data_type = RESPONSE_DATATYPE::prefix(filter_ident.str());
-      vcl_cout << "reponse_data_type = " << response_data_type << vcl_endl;
+      std::string response_data_type = RESPONSE_DATATYPE::prefix(filter_ident.str());
+      std::cout << "reponse_data_type = " << response_data_type << std::endl;
       bocl_mem * response = ocl_cache_->get_data(scene_,id, response_data_type, 0, true);
       kernel_.set_arg( response );
     }
-    vcl_cout<<"MBs in cache: "<< (ocl_cache_->bytes_in_cache()/(1024.0*1024.0)) << vcl_endl;
+    std::cout<<"MBs in cache: "<< (ocl_cache_->bytes_in_cache()/(1024.0*1024.0)) << std::endl;
 
     transfer_time += (float) transfer.all();
 
     //execute kernel
     bool good_exec = kernel_.execute(queue, 2, local_threads, global_threads);
     if (!good_exec) {
-      vcl_cerr << "ERROR: boxm2_ocl_aggregate_normal_from_filter_vector::run() kernel_.execute() returned false" << vcl_endl;
+      std::cerr << "ERROR: boxm2_ocl_aggregate_normal_from_filter_vector::run() kernel_.execute() returned false" << std::endl;
     }
     int status = clFinish(queue);
     check_val(status, MEM_FAILURE, "AGGREGATE NORMAL EXECUTE FAILED: " + error_to_string(status));
@@ -163,14 +178,15 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
 
     //clear render kernel args so it can reset em on next execution
     kernel_.clear_args();
-
     //read normals and vis from gpu
-    normals->read_to_buffer(queue);
-    status = clFinish(queue);
-    check_val(status, MEM_FAILURE, "READ NORMALS FAILED: " + error_to_string(status));
+    if (!optimize_transfers_){
+      normals->read_to_buffer(queue);
+      status = clFinish(queue);
+      check_val(status, MEM_FAILURE, "READ NORMALS FAILED: " + error_to_string(status));
+    }
   }
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
 
   // these buffers should be cleared as soon as they go out of scope
   ocl_cache_->unref_mem(lookup.ptr());
@@ -187,10 +203,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::reset(){
   if (status!=0)
     return false;
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
 
   //zip through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter){
     boxm2_block_id id = blk_iter->first;
     bocl_mem * normals  = ocl_cache_->get_data(scene_,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(),false);
@@ -200,9 +216,9 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::reset(){
     unsigned num_filters = filter_vector_->size();
     for (unsigned i = 0; i < num_filters; i++) {
       bvpl_kernel_sptr filter = filter_vector_->kernels_[i];
-      vcl_stringstream filter_ident;
+      std::stringstream filter_ident;
       filter_ident << filter->name() << '_' << filter->id();
-      vcl_string response_data_type = RESPONSE_DATATYPE::prefix(filter_ident.str());
+      std::string response_data_type = RESPONSE_DATATYPE::prefix(filter_ident.str());
       bocl_mem * response = ocl_cache_->get_data(scene_,id, response_data_type, 0, true);
       response->zero_gpu_buffer(queue);
       status = clFinish(queue);

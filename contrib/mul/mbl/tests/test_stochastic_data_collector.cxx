@@ -1,12 +1,13 @@
 // This is mul/mbl/tests/test_stochastic_data_collector.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Ian Scott
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/io/vnl_io_vector.h>
@@ -30,7 +31,7 @@ void configure()
 //: The main control program
 void test_stochastic_data_collector()
 {
-  vcl_cout << "***************************************\n"
+  std::cout << "***************************************\n"
            << " Testing mbl_stochastic_data_collector\n"
            << "***************************************\n";
 
@@ -39,8 +40,8 @@ void test_stochastic_data_collector()
   mbl_stochastic_data_collector<vnl_vector<double> > collector(100);
   collector.reseed(14545);
 
-  vcl_cout << "===========Generate data\n";
-  vcl_vector<unsigned> hist(10, 0u);
+  std::cout << "===========Generate data\n";
+  std::vector<unsigned> hist(10, 0u);
   const int n_expts = 50;
   for (int i=0;i<n_expts;++i)
   {
@@ -63,9 +64,9 @@ void test_stochastic_data_collector()
     while (data.next());
   }
 
-  vcl_cout << "Histogram output, over " << n_expts << "experiments\n";
+  std::cout << "Histogram output, over " << n_expts << "experiments\n";
   for (int i=0; i < 10; i++)
-    vul_printf(vcl_cout, "From %4d to %4d there were on average %4f items stored.\n",
+    vul_printf(std::cout, "From %4d to %4d there were on average %4f items stored.\n",
                i * 500, i*500 + 499, ((double)hist[i])/((double)n_expts))  ;
 
   unsigned correct_hist[] = {501, 543, 499, 495, 461, 539, 490, 515, 460, 497};
@@ -73,13 +74,13 @@ void test_stochastic_data_collector()
   TEST("Found correct values",
        vnl_c_vector<unsigned>::euclid_dist_sq(&hist[0], correct_hist, 10), 0);
 
-  vcl_cout << "=========Testing IO\n";
+  std::cout << "=========Testing IO\n";
 
   mbl_stochastic_data_collector<vnl_vector<double> > collector2;
-  mbl_data_collector_base *collector3=0;
+  mbl_data_collector_base *collector3=VXL_NULLPTR;
 
-  vcl_string path = "test_stochastic_data_collector.bvl.tmp";
-  vcl_cout<<"Saving : "<<collector<<'\n';
+  std::string path = "test_stochastic_data_collector.bvl.tmp";
+  std::cout<<"Saving : "<<collector<<'\n';
   vsl_b_ofstream bfs_out(path);
   TEST(("Opened " + path + " for writing").c_str(), (!bfs_out ), false);
   vsl_b_write(bfs_out,collector);
@@ -96,7 +97,7 @@ void test_stochastic_data_collector()
   vpl_unlink(path.c_str());
 #endif
 
-  vcl_cout << "Loaded : " << collector2 << '\n';
+  std::cout << "Loaded : " << collector2 << '\n';
 
   TEST("Loaded collector size = saved collector size",
        collector.data_wrapper().size(), collector2.data_wrapper().size());
@@ -114,7 +115,7 @@ void test_stochastic_data_collector()
   } while (w2.next());
   TEST("Loaded collector = saved collector", test_res, true);
 
-  vcl_cout << "Loaded by pointer: "<<collector3<<'\n';
+  std::cout << "Loaded by pointer: "<<collector3<<'\n';
   delete collector3;
 
   vsl_delete_all_loaders();

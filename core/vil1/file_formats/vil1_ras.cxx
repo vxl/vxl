@@ -5,11 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstring>
 #include "vil1_ras.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -81,7 +82,7 @@ vil1_image_impl* vil1_ras_file_format::make_input_image(vil1_stream* vs)
   vs->read(buf, 4);
   if ( ! ( buf[0] == RAS_MAGIC[0] && buf[1] == RAS_MAGIC[1] &&
            buf[2] == RAS_MAGIC[2] && buf[3] == RAS_MAGIC[3]  ) )
-    return 0;
+    return VXL_NULLPTR;
 
   return new vil1_ras_generic_image(vs);
 }
@@ -112,15 +113,15 @@ vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream* vs):
 
 bool vil1_ras_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   // The default raw colour format is BGR. The default indexed colour
   // format is RGB. Go figure.
-  if (0==vcl_strcmp(tag, vil1_property_component_order_is_BGR)) {
+  if (0==std::strcmp(tag, vil1_property_component_order_is_BGR)) {
     if ( prop )
       (*(bool*)prop) = ( map_type_ == RMT_NONE && type_ != RT_FORMAT_RGB );
     return true;
@@ -147,15 +148,15 @@ vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream* vs, int planes,
   height_ = height;
 
   if ( planes != 1 ) {
-    vcl_cerr << __FILE__ << ": can only handle 1 plane\n";
+    std::cerr << __FILE__ << ": can only handle 1 plane\n";
     return;
   }
   if ( components != 3 && components != 1 ) {
-    vcl_cerr << __FILE__ << ": can't handle " << components << " components\n";
+    std::cerr << __FILE__ << ": can't handle " << components << " components\n";
     return;
   }
   if ( bits_per_component != 8 ) {
-    vcl_cerr << __FILE__ << ": can't handle " << bits_per_component << " bits per component\n";
+    std::cerr << __FILE__ << ": can't handle " << bits_per_component << " bits per component\n";
     return;
   }
 
@@ -171,7 +172,7 @@ vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream* vs, int planes,
   map_type_ = RMT_NONE;
   map_length_ = 0;
   length_ = compute_length( width_, height_, depth_ );
-  col_map_ = 0;
+  col_map_ = VXL_NULLPTR;
 
   write_header();
 }
@@ -209,20 +210,20 @@ bool vil1_ras_generic_image::read_header()
 
   if (type_ != RT_OLD && type_ != RT_STANDARD &&
       type_ != RT_BYTE_ENCODED && type_ != RT_FORMAT_RGB ) {
-    vcl_cerr << __FILE__ << ": unknown type " << type_ << vcl_endl;
+    std::cerr << __FILE__ << ": unknown type " << type_ << std::endl;
     return false;
   }
   if ( map_type_ != RMT_NONE && map_type_ != RMT_EQUAL_RGB ) {
-    vcl_cerr << __FILE__ << ": unknown map type " << map_type_ << vcl_endl;
+    std::cerr << __FILE__ << ": unknown map type " << map_type_ << std::endl;
     return false;
   }
   if ( map_type_ == RMT_NONE && map_length_ != 0 ) {
-    vcl_cerr << __FILE__ << ": No colour map according to header, but there is a map!\n";
+    std::cerr << __FILE__ << ": No colour map according to header, but there is a map!\n";
     return false;
   }
 
   if ( depth_ != 8 && depth_ != 24 ) {
-    vcl_cerr << __FILE__ << ": depth " << depth_ << " not implemented\n";
+    std::cerr << __FILE__ << ": depth " << depth_ << " not implemented\n";
     return false;
   }
 
@@ -231,12 +232,12 @@ bool vil1_ras_generic_image::read_header()
     length_ = compute_length( width_, height_, depth_ );
   }
   if ( length_ == 0 ) {
-    vcl_cerr << __FILE__ << ": header says image has length zero\n";
+    std::cerr << __FILE__ << ": header says image has length zero\n";
     return false;
   }
   if ( type_ != RT_BYTE_ENCODED && length_ != compute_length( width_, height_, depth_ ) ) {
-    vcl_cerr << __FILE__ << ": length " << length_ << " does not match wxhxd = "
-             << compute_length( width_, height_, depth_ ) << vcl_endl;
+    std::cerr << __FILE__ << ": length " << length_ << " does not match wxhxd = "
+             << compute_length( width_, height_, depth_ ) << std::endl;
     return false;
   }
 
@@ -245,7 +246,7 @@ bool vil1_ras_generic_image::read_header()
     col_map_ = new vxl_uint_8[ map_length_ ];
     vs_->read( col_map_, (vil1_streampos)map_length_ );
   } else {
-    col_map_ = 0;
+    col_map_ = VXL_NULLPTR;
   }
 
   start_of_data_ = vs_->tell();
@@ -332,15 +333,15 @@ bool vil1_ras_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 bool vil1_ras_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
   if ( col_map_ ) {
-    vcl_cerr << __FILE__ << ": writing to file with a colour map is not implemented\n";
+    std::cerr << __FILE__ << ": writing to file with a colour map is not implemented\n";
     return false;
   }
   if ( type_ == RT_BYTE_ENCODED ) {
-    vcl_cerr << __FILE__ << ": writing to a run-length encoded file is not implemented\n";
+    std::cerr << __FILE__ << ": writing to a run-length encoded file is not implemented\n";
     return false;
   }
   if ( components_ == 3 && type_ != RT_FORMAT_RGB ) {
-    vcl_cerr << __FILE__ << ": writing BGR format is not implemented\n";
+    std::cerr << __FILE__ << ": writing BGR format is not implemented\n";
     return false;
   }
 

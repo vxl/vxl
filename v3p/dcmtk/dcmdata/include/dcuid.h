@@ -19,7 +19,7 @@
  *
  *  Author:  Andrew Hewett
  *
- *  Purpose: 
+ *  Purpose:
  *  Definitions of "well known" DICOM Unique Indentifiers,
  *  routines for finding and creating UIDs.
  *
@@ -61,7 +61,7 @@ const char * dcmFindUIDFromName(const char * name);
 
 
 /*
-** The global variable dcmStorageSOPClassUIDs is an array of 
+** The global variable dcmStorageSOPClassUIDs is an array of
 ** string pointers containing the UIDs of all known Storage SOP
 ** Classes.  The global variable numberOfDcmStorageStopClassUIDs
 ** defines the size of the array.
@@ -78,7 +78,7 @@ extern const int numberOfDcmStorageSOPClassUIDs;
 OFBool dcmIsaStorageSOPClassUID(const char* uid);
 
 /*
-** The global variable dcmImageSOPClassUIDs is an array of 
+** The global variable dcmImageSOPClassUIDs is an array of
 ** string pointers containing the UIDs of all known Image SOP
 ** Classes.  The global variable numberOfDcmImageSOPClassUIDs
 ** defines the size of the array.
@@ -89,13 +89,13 @@ extern const char* dcmImageSOPClassUIDs[];
 extern const int numberOfDcmImageSOPClassUIDs;
 
 
-/*              
+/*
 ** char* generateUniqueIdentifier(char* uid)
 ** Creates a Unique Identifer in uid and returns uid.
 ** uid must be at least 65 bytes. Care is taken to make sure
 ** that the generated UID is 64 characters or less.
-** 
-** If a prefix string is not passed as the second argument a 
+**
+** If a prefix string is not passed as the second argument a
 ** default of SITE_INSTANCE_UID_ROOT (see below) will be used.
 ** Otherwise the supplied prefix string will appear at the beginning
 ** of uid.
@@ -108,7 +108,7 @@ extern const int numberOfDcmImageSOPClassUIDs;
 */
 char* dcmGenerateUniqueIdentifier(char* uid, const char* prefix=NULL);
 
-/* 
+/*
  * dcmSOPClassUIDToModality
  * performs a table lookup and returns a short modality identifier
  * that can be used for building file names etc.
@@ -119,7 +119,7 @@ const char *dcmSOPClassUIDToModality(const char *sopClassUID);
 
 /*
  * dcmGuessModalityBytes
- * performs a table lookup and returns a guessed average 
+ * performs a table lookup and returns a guessed average
  * file size for the given SOP class.
  * Average sizes are defined for all storage SOP classes.
  */
@@ -129,7 +129,7 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 ** String Constants
 */
 
-/* 
+/*
 ** OFFIS UID is: 1.2.276.0.7230010
 ** UID Root for dcmtk DICOM project:   1.2.276.0.7230010.3
 **          for OFFIS GO-Kard project: 1.2.276.0.7230010.8
@@ -164,7 +164,7 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 ** Useful UID prefixes. These can be whatever you want.
 **
 ** These site UIDs are arbitrary, non-standard, with no meaning
-** and can be changed at any time.  Do _not_ rely on these values.  
+** and can be changed at any time.  Do _not_ rely on these values.
 ** Do _not_ assume any semantics when using these suffixes.
 **
 */
@@ -199,7 +199,7 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 /* JPEG Baseline (Process 1): Default Transfer Syntax
    for Lossy JPEG 8 Bit Image Compression */
 #define UID_JPEGProcess1TransferSyntax          "1.2.840.10008.1.2.4.50"
-/* JPEG Extended (Process 2 & 4): Default Transfer Syntax 
+/* JPEG Extended (Process 2 & 4): Default Transfer Syntax
    for Lossy JPEG 12 Bit Image Compression (Process 4 only) */
 #define UID_JPEGProcess2_4TransferSyntax        "1.2.840.10008.1.2.4.51"
 /* JPEG Extended (Process 3 & 5) */
@@ -232,7 +232,7 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 #define UID_JPEGProcess28TransferSyntax         "1.2.840.10008.1.2.4.65"
 /* JPEG Lossless, Hierarchical (Process 29) */
 #define UID_JPEGProcess29TransferSyntax         "1.2.840.10008.1.2.4.66"
-/* JPEG Lossless, Non-Hierarchical, First-Order Prediction (Process 14 
+/* JPEG Lossless, Non-Hierarchical, First-Order Prediction (Process 14
    [Selection Value 1]): Default Transfer Syntax for Lossless JPEG Image Compression */
 #define UID_JPEGProcess14SV1TransferSyntax      "1.2.840.10008.1.2.4.70"
 /* JPEG-LS Lossless Image Compression */
@@ -287,15 +287,15 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 #define UID_XRayFluoroscopyImageStorage                            "1.2.840.10008.5.1.4.1.1.12.2"
 #define UID_RETIRED_XRayAngiographicBiPlaneImageStorage            "1.2.840.10008.5.1.4.1.1.12.3"
 #define UID_NuclearMedicineImageStorage                            "1.2.840.10008.5.1.4.1.1.20"
-#define UID_RETIRED_VLImageStorage                                 "1.2.840.10008.5.1.4.1.1.77.1" 
+#define UID_RETIRED_VLImageStorage                                 "1.2.840.10008.5.1.4.1.1.77.1"
 #define UID_VLEndoscopicImageStorage                               "1.2.840.10008.5.1.4.1.1.77.1.1"
 #define UID_VLMicroscopicImageStorage                              "1.2.840.10008.5.1.4.1.1.77.1.2"
 #define UID_VLSlideCoordinatesMicroscopicImageStorage              "1.2.840.10008.5.1.4.1.1.77.1.3"
 #define UID_VLPhotographicImageStorage                             "1.2.840.10008.5.1.4.1.1.77.1.4"
 #define UID_RETIRED_VLMultiFrameImageStorage                       "1.2.840.10008.5.1.4.1.1.77.2"
 #define UID_BasicTextSR                                            "1.2.840.10008.5.1.4.1.1.88.11"
-#define UID_EnhancedSR                                             "1.2.840.10008.5.1.4.1.1.88.22" 
-#define UID_ComprehensiveSR                                        "1.2.840.10008.5.1.4.1.1.88.33" 
+#define UID_EnhancedSR                                             "1.2.840.10008.5.1.4.1.1.88.22"
+#define UID_ComprehensiveSR                                        "1.2.840.10008.5.1.4.1.1.88.33"
 #define UID_PETImageStorage                                        "1.2.840.10008.5.1.4.1.1.128"
 #define UID_PETCurveStorage                                        "1.2.840.10008.5.1.4.1.1.129"
 #define UID_RTImageStorage                                         "1.2.840.10008.5.1.4.1.1.481.1"
@@ -307,8 +307,8 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 #define UID_RTTreatmentSummaryRecordStorage                        "1.2.840.10008.5.1.4.1.1.481.7"
 
 // Storage SOP Classes from Supplement 49 (final text)
-#define UID_EnhancedMRImageStorage                                  "1.2.840.10008.5.1.4.1.1.4.1" 
-#define UID_MRSpectroscopyStorage                                   "1.2.840.10008.5.1.4.1.1.4.2" 
+#define UID_EnhancedMRImageStorage                                  "1.2.840.10008.5.1.4.1.1.4.1"
+#define UID_MRSpectroscopyStorage                                   "1.2.840.10008.5.1.4.1.1.4.2"
 #define UID_RawDataStorage                                          "1.2.840.10008.5.1.4.1.1.66"
 
 // Storage SOP Class from Supplement 50 (final text)
@@ -336,7 +336,7 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 #define UID_GETPatientStudyOnlyQueryRetrieveInformationModel       "1.2.840.10008.5.1.4.1.2.3.3"
 #define UID_FINDModalityWorklistInformationModel                   "1.2.840.10008.5.1.4.31"
 // Supplement 52 (final text)
-#define UID_FINDGeneralPurposeWorklistInformationModel "1.2.840.10008.5.1.4.32.1" 
+#define UID_FINDGeneralPurposeWorklistInformationModel "1.2.840.10008.5.1.4.32.1"
 
 // Print
 #define UID_BasicFilmSessionSOPClass                               "1.2.840.10008.5.1.1.1"
@@ -400,7 +400,7 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 #define UID_DICOMControlledTerminologyCodingScheme                 "1.2.840.10008.2.16.4"
 
 // Private DCMTK UIDs
-// Private SOP Class UID used to shutdown external network applications 
+// Private SOP Class UID used to shutdown external network applications
 #define UID_PrivateShutdownSOPClass                                "1.2.276.0.7230010.3.4.1915765545.18030.917282194.0"
 
 
@@ -414,8 +414,8 @@ unsigned long dcmGuessModalityBytes(const char *sopClassUID);
 
 /* Supplement 23 Frozen Draft (November 1997) */
 #define UID_DRAFT_SRTextStorage                                    "1.2.840.10008.5.1.4.1.1.88.1"
-#define UID_DRAFT_SRAudioStorage                                   "1.2.840.10008.5.1.4.1.1.88.2" 
-#define UID_DRAFT_SRDetailStorage                                  "1.2.840.10008.5.1.4.1.1.88.3" 
+#define UID_DRAFT_SRAudioStorage                                   "1.2.840.10008.5.1.4.1.1.88.2"
+#define UID_DRAFT_SRDetailStorage                                  "1.2.840.10008.5.1.4.1.1.88.3"
 #define UID_DRAFT_SRComprehensiveStorage                           "1.2.840.10008.5.1.4.1.1.88.4"
 
 /* Supplement 30 Draft 08 for Demonstration (October 1997) */

@@ -1,4 +1,6 @@
-#include "rgtl_object_once.hxx"
+#include <iostream>
+#include <cstddef>
+#include "rgtl_object_once.h"
 //:
 // \file
 // Copyright 2006-2009 Brad King, Chuck Stewart
@@ -6,13 +8,13 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include "rgtl_serialize_access.hxx"
-#include "rgtl_serialize_split.hxx"
-#include "rgtl_serialize_istream.hxx"
-#include "rgtl_serialize_ostream.hxx"
+#include "rgtl_serialize_access.h"
+#include "rgtl_serialize_split.h"
+#include "rgtl_serialize_istream.h"
+#include "rgtl_serialize_ostream.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 rgtl_object_once::rgtl_object_once(): marks_(), mark_(0)
@@ -38,7 +40,7 @@ void rgtl_object_once::reset() const
   // Rollover the counter if necessary.
   if (this->mark_ == 0xFFFFFFFF)
   {
-    vcl_size_t s = this->marks_.size();
+    std::size_t s = this->marks_.size();
     this->mark_ = 0;
     this->marks_.resize(0);
     this->marks_.resize(s, 0);

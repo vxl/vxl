@@ -12,7 +12,7 @@
 * find the minima.
 *
 * Where the graph has a limited number of closed loops, other
-* fairly efficient algorithms can be used. 
+* fairly efficient algorithms can be used.
 *
 * The mmn_dp_solver computes minima for graphs which can be
 * reduced to empty sets by repeatedly removing any node with
@@ -21,7 +21,7 @@
 * in the worst case (every node depending on two others).
 *
 * The mmn_graph_rep1 stores a representation of the graph
-* optimised for computing the dependancies of the nodes 
+* optimised for computing the dependancies of the nodes
 * suitable for solving in a sequential manner.
 *
 */

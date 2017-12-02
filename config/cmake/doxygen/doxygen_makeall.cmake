@@ -17,7 +17,7 @@ function(doxygen_module_has_changed _module _modname _changed)
           OUTPUT_VARIABLE svn_log_output
           OUTPUT_STRIP_TRAILING_WHITESPACE
           )
-        
+
         if(NOT svn_log_output)
           set(changed FALSE)
         endif()
@@ -31,9 +31,9 @@ function(doxygen_module_has_changed _module _modname _changed)
         )
     endif()
   endif()
-  
+
   set(${_changed} ${changed} PARENT_SCOPE)
-endfunction(doxygen_module_has_changed)
+endfunction()
 
 function(_print_header _index_html)
   set(title "VXL Documentation")
@@ -45,7 +45,7 @@ function(_print_header _index_html)
 <hr />"
     )
   set(${_index_html} "${index_html}" PARENT_SCOPE)
-endfunction(_print_header)
+endfunction()
 
 function(_print_book_links _index_html)
   set(index_html "${${_index_html}}")
@@ -59,7 +59,7 @@ function(_print_book_links _index_html)
       )
   endforeach()
   set(${_index_html} "${index_html}" PARENT_SCOPE)
-endfunction(_print_book_links)
+endfunction()
 
 function(_print_library_links _index_html)
   set(index_html "${${_index_html}}")
@@ -92,7 +92,7 @@ function(_print_library_links _index_html)
     endif()
   endforeach()
   set(${_index_html} "${index_html}" PARENT_SCOPE)
-endfunction(_print_library_links)
+endfunction()
 
 function(_print_footer _index_html)
   set(index_html "${${_index_html}}")
@@ -137,7 +137,7 @@ on ${date}.
 </html>"
     )
   set(${_index_html} "${index_html}" PARENT_SCOPE)
-endfunction(_print_footer)
+endfunction()
 
 #---------------------------------------------------------------------
 # Initial configuration.
@@ -164,14 +164,14 @@ foreach(book ${DOXYGEN_BOOK_LIST})
   doxygen_module_has_changed(${book}/doc/book ${bname}_book changed)
   if(changed)
     message(STATUS "Texi2html: ${book} being processed.")
-        
+
     set(book_source_dir "${DOXYGEN_SOURCE_DIR}/${book}/doc/book")
     set(book_output_dir "${DOXYGEN_OUTPUT_DIR}/html/books/${book}")
-    
+
     file(GLOB image_list "${book_source_dir}/*.eps")
     foreach(image ${image_list})
       get_filename_component(output_image ${image} NAME_WE)
-      
+
       # copy if acceptable format is in source
       set(image_copied FALSE)
       foreach(ext png jpg jpeg)
@@ -185,7 +185,7 @@ foreach(book ${DOXYGEN_BOOK_LIST})
           break()
         endif()
       endforeach()
-      
+
       # convert eps image to png
       if(NOT image_copied)
         if(NetPBM_FOUND)
@@ -203,7 +203,7 @@ foreach(book ${DOXYGEN_BOOK_LIST})
         endif()
       endif()
     endforeach()
-    
+
     # copy texi files; else texi2html uses absolute paths for images
     file(GLOB texifile_list RELATIVE "${book_source_dir}"
       "${book_source_dir}/*.texi"
@@ -215,7 +215,7 @@ foreach(book ${DOXYGEN_BOOK_LIST})
         COPYONLY
         )
     endforeach()
-    
+
     execute_process(
       COMMAND ${TEXI2HTML_EXECUTABLE}
         -split=chapter -l2h -number -output=. -I=. book.texi
@@ -236,7 +236,7 @@ endforeach()
 file(MAKE_DIRECTORY "${DOXYGEN_OUTPUT_DIR}/tags")
 foreach(library ${DOXYGEN_LIBRARY_LIST})
   string(REPLACE / _ libname ${library})
-  
+
   doxygen_module_has_changed(${library} ${libname} changed)
   if(changed)
     message(STATUS "Doxygen: ${library} being processed.")

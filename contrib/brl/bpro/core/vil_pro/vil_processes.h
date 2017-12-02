@@ -30,10 +30,11 @@ DECLARE_FUNC_CONS(vil_resample_process);
 DECLARE_FUNC_CONS(vil_filter_image_process);
 DECLARE_FUNC_CONS(vil_blob_detection_process);
 DECLARE_FUNC_CONS(vil_pixelwise_roc_process);
+DECLARE_FUNC_CONS(vil_pixelwise_roc_process2);
 DECLARE_FUNC_CONS(vil_rgb_to_grey_process);
 DECLARE_FUNC_CONS(vil_nitf_date_time_process);
 DECLARE_FUNC_CONS(vil_nitf_remove_margin_process);
-DECLARE_FUNC_CONS(vil_convert_pixel_type_process); 
+DECLARE_FUNC_CONS(vil_convert_pixel_type_process);
 DECLARE_FUNC_CONS(vil_median_filter_process);
 DECLARE_FUNC_CONS(vil_gradient_angle_process);
 DECLARE_FUNC_CONS(vil_image_ssd_process);
@@ -78,5 +79,5 @@ DECLARE_FUNC_CONS(vil_combine_planes_process2);
 DECLARE_FUNC_CONS(vil_histogram_equalize_process);
 DECLARE_FUNC_CONS(vil_invert_float_image_process);
 DECLARE_FUNC_CONS(vil_combine_palnes_8_bands_process);
-
+DECLARE_FUNC_CONS(vil_image_registration_process);
 #endif

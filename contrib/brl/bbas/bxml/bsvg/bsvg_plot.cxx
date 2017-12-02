@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bsvg_plot.h"
 //:
 // \file
@@ -6,8 +8,7 @@
 
 #include <bxml/bxml_find.h>
 #include <bxml/bsvg/bsvg_element.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, float stroke_width)
 {
@@ -35,21 +36,21 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
   this->add_element(line_x);
 
   // add text to denote x_min
-  vcl_stringstream ss; ss << x_min;
+  std::stringstream ss; ss << x_min;
   bsvg_text* t = new bsvg_text(ss.str());
   t->set_location(axes_orig_x_, axes_orig_y_+margin_);
   t->set_font_size(font_size_);
   this->add_element(t);
 
   // add text to denote y_min
-  vcl_stringstream ssy; ssy << y_min;
+  std::stringstream ssy; ssy << y_min;
   bsvg_text* ty = new bsvg_text(ssy.str());
   ty->set_location(axes_orig_x_-margin_, axes_orig_y_);
   ty->set_font_size(font_size_);
   this->add_element(ty);
 
   // add text to denote x_max
-  vcl_stringstream ssx; ssx << x_max;
+  std::stringstream ssx; ssx << x_max;
   bsvg_text* txm = new bsvg_text(ssx.str());
   txm->set_location(axes_orig_x_+h2_x, axes_orig_y_+margin_);
   txm->set_font_size(font_size_);
@@ -62,7 +63,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
   this->add_element(line_xm);
 
   // add text to denote y_max
-  vcl_stringstream ssym; ssym << y_max;
+  std::stringstream ssym; ssym << y_max;
   bsvg_text* tym = new bsvg_text(ssym.str());
   tym->set_location(axes_orig_x_-margin_, axes_orig_y_-h2_y);
   tym->set_font_size(font_size_);
@@ -90,7 +91,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
 
 void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, bool is_scale_x, float stroke_width)
 {
-  if (is_scale_x) 
+  if (is_scale_x)
     this->add_axes(x_min, x_max, y_min, y_max, stroke_width);
   else {
     float height_y = y_max - y_min;
@@ -117,21 +118,21 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
     this->add_element(line_x);
 
     // add text to denote x_min
-    vcl_stringstream ss; ss << x_min;
+    std::stringstream ss; ss << x_min;
     bsvg_text* t = new bsvg_text(ss.str());
     t->set_location(axes_orig_x_, axes_orig_y_+margin_);
     t->set_font_size(font_size_);
     this->add_element(t);
 
     // add text to denote y_min
-    vcl_stringstream ssy; ssy << y_min;
+    std::stringstream ssy; ssy << y_min;
     bsvg_text* ty = new bsvg_text(ssy.str());
     ty->set_location(axes_orig_x_-margin_, axes_orig_y_);
     ty->set_font_size(font_size_);
     this->add_element(ty);
 
     // add text to denote x_max
-    vcl_stringstream ssx; ssx << x_max;
+    std::stringstream ssx; ssx << x_max;
     bsvg_text* txm = new bsvg_text(ssx.str());
     txm->set_location(axes_orig_x_+h2_x, axes_orig_y_+margin_);
     txm->set_font_size(font_size_);
@@ -144,7 +145,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
     this->add_element(line_xm);
 
     // add text to denote y_max
-    vcl_stringstream ssym; ssym << y_max;
+    std::stringstream ssym; ssym << y_max;
     bsvg_text* tym = new bsvg_text(ssym.str());
     tym->set_location(axes_orig_x_-margin_, axes_orig_y_-h2_y);
     tym->set_font_size(font_size_);
@@ -169,10 +170,10 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
     a2->set_stroke_color("black");
     this->add_element(a2);
   }
-  
+
 }
 
-void bsvg_plot::add_title(const vcl_string& t)
+void bsvg_plot::add_title(const std::string& t)
 {
   bsvg_text* title = new bsvg_text(t);
   float w = float(font_size_*t.size());
@@ -216,15 +217,15 @@ void bsvg_plot::add_y_increments(float y_inc, float stroke_width)
   this->add_element(g);
 }
 
-void bsvg_plot::add_line(const vcl_vector<float>& xs, const vcl_vector<float>& ys, const vcl_string& color, float stroke_width)
+void bsvg_plot::add_line(const std::vector<float>& xs, const std::vector<float>& ys, const std::string& color, float stroke_width)
 {
   // scale the points to our plot
   if (xs.size() != ys.size()) {
-    vcl_cout << " Error: bsvg_plot::add_line() - input vectors are not of the same size\n";
+    std::cout << " Error: bsvg_plot::add_line() - input vectors are not of the same size\n";
     return;
   }
-  vcl_vector<float> xs_copy(xs);
-  vcl_vector<float> ys_copy(ys);
+  std::vector<float> xs_copy(xs);
+  std::vector<float> ys_copy(ys);
   for (unsigned i = 0; i < xs.size(); i++) {
     xs_copy[i] = xs_copy[i]*scale_factor_ + axes_orig_x_;
     ys_copy[i] = axes_orig_y_ - ys_copy[i]*scale_factor_;
@@ -238,7 +239,7 @@ void bsvg_plot::add_line(const vcl_vector<float>& xs, const vcl_vector<float>& y
   this->add_element(pl);
 }
 
-bsvg_group* bsvg_plot::add_bars_helper(const vcl_vector<float>& heights, const vcl_string& color)
+bsvg_group* bsvg_plot::add_bars_helper(const std::vector<float>& heights, const std::string& color)
 {
   bsvg_group* g = new bsvg_group();
   g->set_fill_color(color);
@@ -256,7 +257,7 @@ bsvg_group* bsvg_plot::add_bars_helper(const vcl_vector<float>& heights, const v
   return g;
 }
 
-bsvg_group* bsvg_plot::add_x_labels_helper(const vcl_vector<vcl_string>& x_labels, const vcl_string& color, bool vertical_labels)
+bsvg_group* bsvg_plot::add_x_labels_helper(const std::vector<std::string>& x_labels, const std::string& color, bool vertical_labels)
 {
   bsvg_group* g = new bsvg_group();
   g->set_fill_color(color);
@@ -278,13 +279,13 @@ bsvg_group* bsvg_plot::add_x_labels_helper(const vcl_vector<vcl_string>& x_label
 }
 
 //: add equally spaced and equal width bars with the given heights
-void bsvg_plot::add_bars(const vcl_vector<float>& heights, const vcl_string& color)
+void bsvg_plot::add_bars(const std::vector<float>& heights, const std::string& color)
 {
   bsvg_group* g = add_bars_helper(heights, color);
   this->add_element(g);
 }
 
-void bsvg_plot::add_bars(const vcl_vector<float>& heights, const vcl_vector<vcl_string>& x_labels, bool vertical_labels, const vcl_string& color)
+void bsvg_plot::add_bars(const std::vector<float>& heights, const std::vector<std::string>& x_labels, bool vertical_labels, const std::string& color)
 {
   bsvg_group* g = add_bars_helper(heights, color);
   this->add_element(g);
@@ -292,13 +293,13 @@ void bsvg_plot::add_bars(const vcl_vector<float>& heights, const vcl_vector<vcl_
   this->add_element(tg);
 }
 
-void bsvg_plot::add_bars(const vcl_vector<float>& heights, const vcl_vector<float>& x_labels, bool vertical_labels, const vcl_string& color)
+void bsvg_plot::add_bars(const std::vector<float>& heights, const std::vector<float>& x_labels, bool vertical_labels, const std::string& color)
 {
   bsvg_group* g = add_bars_helper(heights, color);
   this->add_element(g);
-  vcl_vector<vcl_string> x_ls;
+  std::vector<std::string> x_ls;
   for (unsigned i = 0; i < x_labels.size(); i++) {
-    vcl_stringstream ss; ss << x_labels[i];
+    std::stringstream ss; ss << x_labels[i];
     x_ls.push_back(ss.str());
   }
   bsvg_group* tg = add_x_labels_helper(x_ls, color, vertical_labels);
@@ -339,12 +340,12 @@ int bsvg_plot::number_of_bars()
 //: add bars sequentially with a fixed interval and width.
 //  use margin_ as the width of each bar and leave margin_/3 intervals in between
 //  the total width of the plot needs to be adjusted during initialization to contain all desired number of bars
-int bsvg_plot::add_bar(const float height, const vcl_string& color)
+int bsvg_plot::add_bar(const float height, const std::string& color)
 {
   // first find the next available bar location (count the number of rects in the document)
   int cnt = this->number_of_bars();
   if (cnt < 0) {
-    vcl_cerr << "In bsvg_plot::add_bar() -- problems with the plot document!\n";
+    std::cerr << "In bsvg_plot::add_bar() -- problems with the plot document!\n";
     return -1;
   }
   float x = axes_orig_x_ + margin_/3.0f; // left-point of first bar
@@ -356,11 +357,11 @@ int bsvg_plot::add_bar(const float height, const vcl_string& color)
   return cnt;
 }
 
-int bsvg_plot::add_bar(const float height, const vcl_string& label, bool vertical_label, const vcl_string& color)
+int bsvg_plot::add_bar(const float height, const std::string& label, bool vertical_label, const std::string& color)
 {
   int cnt = add_bar(height, color);
   if (cnt < 0) {
-    vcl_cerr << "In bsvg_plot::add_bar() -- problems with the plot document!\n";
+    std::cerr << "In bsvg_plot::add_bar() -- problems with the plot document!\n";
     return -1;
   }
   float x = axes_orig_x_ + margin_/2.0f + margin_/3.0f; // mid-point of first text
@@ -374,14 +375,14 @@ int bsvg_plot::add_bar(const float height, const vcl_string& label, bool vertica
   return cnt;
 }
 
-int bsvg_plot::add_bar(const float height, const float x_label, bool vertical_label, const vcl_string& color)
+int bsvg_plot::add_bar(const float height, const float x_label, bool vertical_label, const std::string& color)
 {
-  vcl_stringstream ss; ss << x_label;
+  std::stringstream ss; ss << x_label;
   return add_bar(height, ss.str(), vertical_label, color);
 }
 
 //: add splices for a pie chart
-void bsvg_plot::add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, const vcl_string& color)
+void bsvg_plot::add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, const std::string& color)
 {
   bsvg_splice* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);
   splice_g->set_fill_color(color);

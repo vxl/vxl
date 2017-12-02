@@ -2,6 +2,7 @@
 #define boxm_fill_in_mesh_h_
 //:
 // \file
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_block.h>
@@ -12,12 +13,12 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 bool is_mesh_in_block(imesh_mesh & mesh, vgl_box_3d<double> block_bbox,vpgl_lvcs& lvcs, bool use_lvcs)
 {
   imesh_face_array_base& fs = mesh.faces();
-  vcl_list<vgl_point_3d<double> > v_list;
+  std::list<vgl_point_3d<double> > v_list;
   vgl_box_3d<double> bb_global;
 
   for (unsigned i=0; i < fs.size(); ++i)
@@ -47,14 +48,14 @@ bool is_mesh_in_block(imesh_mesh & mesh, vgl_box_3d<double> block_bbox,vpgl_lvcs
 }
 
 template <class T_loc, class T_data>
-bool are_meshes_in_block(vcl_vector<imesh_mesh>  meshes, vgl_box_3d<double> block_bbox,vpgl_lvcs& lvcs, bool use_lvcs)
+bool are_meshes_in_block(std::vector<imesh_mesh>  meshes, vgl_box_3d<double> block_bbox,vpgl_lvcs& lvcs, bool use_lvcs)
 {
   bool flag=false;
   for (unsigned k=0;k<meshes.size();k++)
   {
     meshes[k].compute_face_normals(true);
     imesh_face_array_base& fs = meshes[k].faces();
-    vcl_list<vgl_point_3d<double> > v_list;
+    std::list<vgl_point_3d<double> > v_list;
     vgl_box_3d<double> bb_global;
 
     for (unsigned i=0; i < fs.size(); ++i)
@@ -85,7 +86,7 @@ bool are_meshes_in_block(vcl_vector<imesh_mesh>  meshes, vgl_box_3d<double> bloc
 
 template <class T_loc, class T_data>
 void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
-                                  vcl_vector<imesh_mesh> meshes, vpgl_lvcs& lvcs, bool use_lvcs, T_data val)
+                                  std::vector<imesh_mesh> meshes, vpgl_lvcs& lvcs, bool use_lvcs, T_data val)
 {
   typedef boct_tree<T_loc, T_data> tree_type;
   tree_type* tree = block->get_tree();
@@ -93,7 +94,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
   for (unsigned k=0;k<meshes.size();k++)
   {
     imesh_face_array_base& fs = meshes[k].faces();
-    vcl_list<vgl_point_3d<double> > v_list;
+    std::list<vgl_point_3d<double> > v_list;
     vgl_box_3d<double> bb_scale, bb_global;
     for (unsigned i=0; i < fs.size(); ++i)
     {
@@ -128,7 +129,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
     boct_tree_cell<T_loc,T_data>* region=tree->locate_region(inters);
     if (region) {
       // test all the children for intersection
-      vcl_vector<boct_tree_cell<T_loc,T_data>*> children;
+      std::vector<boct_tree_cell<T_loc,T_data>*> children;
       if (!region->is_leaf())
         region->leaf_children(children);
       else // insert the node itself, if no children
@@ -145,9 +146,9 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
 }
 
 //: this is to copy mesh into existing tree and replacing the appearance model of the existing tree.
-VCL_DEFINE_SPECIALIZATION
+template <>
 void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > *block,
-                                  vcl_vector<imesh_mesh> meshes, vpgl_lvcs& lvcs,
+                                  std::vector<imesh_mesh> meshes, vpgl_lvcs& lvcs,
                                   bool use_lvcs, boxm_sample<BOXM_APM_MOG_GREY> val)
 {
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
@@ -158,7 +159,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
     if (is_mesh_in_block(meshes[k], block_bb,lvcs, use_lvcs))
     {
       imesh_face_array_base& fs = meshes[k].faces();
-      vcl_list<vgl_point_3d<double> > v_list;
+      std::list<vgl_point_3d<double> > v_list;
       vgl_box_3d<double> bb_scale, bb_global;
 
       for (unsigned i=0; i < fs.size(); ++i)
@@ -198,7 +199,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
       if (region)
       {
         // test all the children for intersection
-        vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >*> children;
+        std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >*> children;
         if (!region->is_leaf())
           region->leaf_children(children);
         else // insert the node itself, if no children
@@ -219,9 +220,9 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
   }
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > > *block,
-                                  vcl_vector<imesh_mesh> meshes, vpgl_lvcs& lvcs,
+                                  std::vector<imesh_mesh> meshes, vpgl_lvcs& lvcs,
                                   bool use_lvcs, boxm_sample<BOXM_APM_SIMPLE_GREY> val)
 {
   typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
@@ -232,7 +233,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
     if (is_mesh_in_block(meshes[k], block_bb,lvcs, use_lvcs))
     {
       imesh_face_array_base& fs = meshes[k].faces();
-      vcl_list<vgl_point_3d<double> > v_list;
+      std::list<vgl_point_3d<double> > v_list;
       vgl_box_3d<double> bb_scale, bb_global;
 
       for (unsigned i=0; i < fs.size(); ++i)
@@ -272,7 +273,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
       if (region)
       {
         // test all the children for intersection
-        vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >*> children;
+        std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >*> children;
         if (!region->is_leaf())
           region->leaf_children(children);
         else // insert the node itself, if no children
@@ -295,7 +296,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
 
 template <class T_loc, class T_data>
 void boxm_fill_in_mesh_into_scene(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                  vcl_vector<imesh_mesh> meshes, bool use_lvcs, T_data val)
+                                  std::vector<imesh_mesh> meshes, bool use_lvcs, T_data val)
 {
   typedef boct_tree<T_loc, T_data > tree_type;
   vpgl_lvcs lvcs=scene.lvcs();

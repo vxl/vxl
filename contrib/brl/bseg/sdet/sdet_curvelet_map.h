@@ -9,7 +9,7 @@
 //
 //\verbatim
 //  Modifications
-//    Amir Tamrakar  Instead of storing the curvelets with the edgels, I've created this 
+//    Amir Tamrakar  Instead of storing the curvelets with the edgels, I've created this
 //                   data structure to hold them so that the edgel classes are lighter and
 //                   more relevant to other algorithms.
 //
@@ -17,12 +17,14 @@
 //
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_curvelet.h"
-#include "sdet_edgemap_sptr.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_curvelet.h>
+#include <sdet/sdet_edgemap_sptr.h>
 
 //: curvelet formation parameters
 class sdet_curvelet_params
@@ -37,19 +39,36 @@ public:
   double token_len_; ///< Length of the edgel token (puts bounds on legal curvature)
   double max_k_;  ///< maximum curvature of curves in the curve bundle
   double max_gamma_; ///< maximum curvature derivative of curves in the curve bundle
-
-  unsigned nrad_; ///< the range of edgel cells to search (this should contain all edgels within rad_) 
+  unsigned nrad_; ///< the range of edgel cells to search (this should contain all edgels within rad_)
   double gap_;
   unsigned maxN_; ///< largest curvelet size to form
   bool centered_; ///< anchored centered curvelet
   bool bidirectional_; ///< form curvelets in both directions from the anchored
 
-  sdet_curvelet_params(sdet_curve_model::curve_type ctype=sdet_curve_model::CC2, double rad=7.0, double gap=1.0,double dtheta=15, 
-                        double dpos=0.5, bool adap_uncer=true, double token_len=0.7, double max_k=0.5, double max_gamma=0.05,
-                        bool centered=true, bool bidir=false): 
-    C_type(ctype), rad_(rad),gap_(gap),dtheta_(dtheta), dpos_(dpos), badap_uncer_(adap_uncer), token_len_(token_len), 
-    max_k_(max_k), max_gamma_(max_gamma), nrad_((unsigned) vcl_ceil(rad)+1), maxN_(2*nrad_), 
-    centered_(centered), bidirectional_(bidir)
+  sdet_curvelet_params(sdet_curve_model::curve_type ctype=sdet_curve_model::CC2,
+                       double rad=7.0,
+                       double gap=1.0,
+                       double dtheta=15,
+                       double dpos=0.5,
+                       bool adap_uncer=true,
+                       double token_len=0.7,
+                       double max_k=0.5,
+                       double max_gamma=0.05,
+                       bool centered=true,
+                       bool bidir=false):
+    C_type(ctype),
+    rad_(rad),
+    dtheta_(dtheta),
+    dpos_(dpos),
+    badap_uncer_(adap_uncer),
+    token_len_(token_len),
+    max_k_(max_k),
+    max_gamma_(max_gamma),
+    nrad_((unsigned) std::ceil(rad)+1),
+    gap_(gap),
+    maxN_(2*nrad_),
+    centered_(centered),
+    bidirectional_(bidir)
   {}
 
   ~sdet_curvelet_params(){}
@@ -60,18 +79,18 @@ public:
 class sdet_curvelet_map
 {
 public:
-  //: The edgemap on which these curvelets have been formed 
+  //: The edgemap on which these curvelets have been formed
   //  (due to this smart pointer to the edgemap, the curvelets remain valid even if the edgemap is deleted elsewhere)
-  sdet_edgemap_sptr EM_; 
+  sdet_edgemap_sptr EM_;
 
   //: various parameters used for forming this map
   sdet_curvelet_params params_;
 
   //: The curvelet map, indexed by edgel IDs
-  vcl_vector<cvlet_list > map_;
+  std::vector<cvlet_list > map_;
 
   //: The curvelet map for the other direction (only for DHT mode)
-  vcl_vector<cvlet_list > map2_;
+  std::vector<cvlet_list > map2_;
 
   //: constructor
   sdet_curvelet_map(sdet_edgemap_sptr EM=0, sdet_curvelet_params params=sdet_curvelet_params());
@@ -113,7 +132,7 @@ public:
   void delete_all_curvelets(sdet_edgel* e);
 
   //: does this curvelet exist at this edgel?
-  sdet_curvelet* does_curvelet_exist(sdet_edgel* e, vcl_deque<sdet_edgel*> & chain);
+  sdet_curvelet* does_curvelet_exist(sdet_edgel* e, std::deque<sdet_edgel*> & chain);
 
   //: does the given pair exist on the ref edgel?
   sdet_curvelet* find_pair(sdet_edgel* ref, sdet_edgel* eA, sdet_edgel* eB);

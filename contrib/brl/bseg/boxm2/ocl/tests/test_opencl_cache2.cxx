@@ -30,7 +30,7 @@ bool test_opencl_cache2()
   unsigned gpu_idx = 0;
 
   if (mgr.numGPUs()<1) {
-    vcl_cerr << "No GPU available\n";
+    std::cerr << "No GPU available\n";
     return false;
   }
   if (mgr.numGPUs()==1) gpu_idx = 0;
@@ -41,31 +41,31 @@ bool test_opencl_cache2()
   boxm2_lru_cache::create(scene1);
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
   //iterate through response blocks
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks1 = scene1->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter1;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks1 = scene1->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter1;
   bool result = true;
   for (blk_iter1 = blocks1.begin(); blk_iter1 != blocks1.end(); ++blk_iter1)
   {
       boxm2_block_id id = blk_iter1->first;
-      vcl_cout << "Printing results for block " << id << ':' << vcl_endl;
+      std::cout << "Printing results for block " << id << ':' << std::endl;
       bocl_mem*  blk_mem = opencl_cache->get_block(scene1, id);
-      vcl_cout<<"Status "<<opencl_cache->to_string()<<vcl_endl;
-      if(!blk_mem)     result = result && false;  
-      
+      std::cout<<"Status "<<opencl_cache->to_string()<<std::endl;
+      if(!blk_mem)     result = result && false;
+
       opencl_cache->unref_mem(blk_mem);
   }
   TEST("Scene 1 getting blocks ", result, true );
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks2 = scene2->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter2;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks2 = scene2->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter2;
   for (blk_iter2 = blocks2.begin(); blk_iter2 != blocks2.end(); ++blk_iter2)
   {
       boxm2_block_id id = blk_iter2->first;
-      vcl_cout << "Printing results for block " << id << ':' << vcl_endl;
+      std::cout << "Printing results for block " << id << ':' << std::endl;
       bocl_mem*  blk_mem = opencl_cache->get_block(scene2, id);
 
-       
-      vcl_cout<<"Status "<<opencl_cache->to_string()<<vcl_endl;
-      if(!blk_mem)      result = result && false; 
+
+      std::cout<<"Status "<<opencl_cache->to_string()<<std::endl;
+      if(!blk_mem)      result = result && false;
 
       opencl_cache->unref_mem(blk_mem);
   }
@@ -75,4 +75,4 @@ bool test_opencl_cache2()
 }
 
 TESTMAIN( test_opencl_cache2 );
- 
+

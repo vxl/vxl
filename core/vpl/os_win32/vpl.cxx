@@ -7,7 +7,7 @@
 #include <windows.h>
 
 char *
-vpl_getcwd( char *buf, vcl_size_t buf_size )
+vpl_getcwd( char *buf, std::size_t buf_size )
 {
   return _getcwd( buf, (int)buf_size );
 }
@@ -22,31 +22,19 @@ vpl_mkdir( const char *dir, unsigned short /*mode*/ )
 int
 vpl_rmdir( const char *dir )
 {
-#if _MSC_VER >= 1400
   return _rmdir( dir );
-#else
-  return rmdir( dir );
-#endif
 }
 
 int
 vpl_chdir( const char *dir )
 {
-#if _MSC_VER >= 1400
   return _chdir( dir );
-#else
-  return chdir( dir );
-#endif
 }
 
 int
 vpl_unlink( const char *file )
 {
-#if defined(VCL_BORLAND)
-  return unlink( file );
-#else
   return _unlink( file );
-#endif
 }
 
 unsigned int
@@ -66,24 +54,16 @@ vpl_usleep( unsigned int t )
 unsigned
 vpl_getpid( )
 {
-#if defined(VCL_BORLAND)
-  return getpid();
-#else
   return _getpid();
-#endif
 }
 
 int vpl_putenv ( const char * envvar )
 {
-#if defined(VCL_BORLAND)
-  return putenv(envvar);
-#else
   return _putenv(envvar);
-#endif
 }
 
 
-int vpl_gethostname(char *name, vcl_size_t len)
+int vpl_gethostname(char *name, std::size_t len)
 {
 #if defined(VCL_VC)
   static bool wsa_initialised = false;

@@ -3,6 +3,7 @@
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
+#include <vil/vil_config.h> // for HAS_GEOTIFF definition
 
 //the init functions
 DECLARE_FUNC_CONS(boxm2_load_scene_process);
@@ -63,6 +64,7 @@ DECLARE_FUNC_CONS(boxm2_create_camera_from_kml_path_process);  // August 23, 201
 DECLARE_FUNC_CONS(boxm2_ortho_geo_cam_from_scene_process);
 DECLARE_FUNC_CONS(boxm2_import_point_cloud_process);  // August 23, 2013 Yi Dong
 DECLARE_FUNC_CONS(boxm2_export_color_point_cloud_process);
+DECLARE_FUNC_CONS(boxm2_export_error_point_cloud_process);
 //DECLARE_FUNC_CONS(boxm2_scene_fetch_alpha_process);
 //DECLARE_FUNC_CONS(boxm2_create_crop_img_process);
 #endif

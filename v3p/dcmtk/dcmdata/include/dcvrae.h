@@ -75,8 +75,8 @@ class DcmApplicationEntity
      *  @return status, EC_Normal if successful, an error code otherwise
      */
     virtual OFCondition getOFString(OFString &stringVal,
-	                                const unsigned long pos,
-	                                OFBool normalize = OFTrue);
+                                        const unsigned long pos,
+                                        OFBool normalize = OFTrue);
 };
 
 

@@ -68,7 +68,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                                unsigned ni, unsigned nj,
                                                unsigned nplanes,
                                                vil_pixel_format format,
-                                               char const* file_format = 0);
+                                               char const* file_format = VXL_NULLPTR);
 
 //: Make a new image.
 // \relatesalso vil_image_resource
@@ -166,7 +166,7 @@ vil_new_pyramid_image_list_from_base(char const* directory,
 template <class T>
 vil_image_view<T> vil_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigned nplanes, T /*dummy*/)
 {
-  VXL_DEPRECATED("vil_new_image_view_j_i_plane");
+  VXL_DEPRECATED_MACRO("vil_new_image_view_j_i_plane");
   vil_pixel_format fmt = vil_pixel_format_of(T());
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(ni*nj*nplanes*sizeof(T),
                                                      vil_pixel_format_component_format(fmt));

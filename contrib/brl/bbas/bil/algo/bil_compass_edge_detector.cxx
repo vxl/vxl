@@ -1,12 +1,14 @@
 // This is brl/bbas/bil/algo/bil_compass_edge_detector.cxx
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include "bil_compass_edge_detector.h"
 //:
 // \file
 
 #include <bil/algo/bil_nms.h>
 
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h> // for vnl_math::pi
 #include <vil/vil_convert.h>
 
@@ -18,8 +20,8 @@
 // is included so that the area below Y is ignored.
 double CArea(double Xhigh, double Xlow, double Y, double r)
 {
-  return 0.5 * ((Xhigh * vcl_sqrt(r*r - Xhigh * Xhigh) + r*r * vcl_asin(Xhigh / r)) -
-                (Xlow  * vcl_sqrt(r*r - Xlow * Xlow)   + r*r * vcl_asin(Xlow  / r))   )
+  return 0.5 * ((Xhigh * std::sqrt(r*r - Xhigh * Xhigh) + r*r * std::asin(Xhigh / r)) -
+                (Xlow  * std::sqrt(r*r - Xlow * Xlow)   + r*r * std::asin(Xlow  / r))   )
          - Y * (Xhigh - Xlow);
 }
 
@@ -39,7 +41,7 @@ double CArea(double Xhigh, double Xlow, double Y, double r)
 double* MakeQtrMask(double r, int n_wedges)
 {
   // size of the quadrant
-  int R = (int) vcl_ceil(r);
+  int R = (int) std::ceil(r);
 
   // allocate the array to hold the mask
   double* mask = new double[R*R*n_wedges];
@@ -68,8 +70,8 @@ double* MakeQtrMask(double r, int n_wedges)
       else { /* Tricky part; circle intersects pixel */
         ULC = x * x + (y+1) * (y+1) <= r * r;
         LRC = (x+1) * (x+1) + y * y <= r * r;
-        BXC = vcl_sqrt(r * r - y * y);
-        TXC = vcl_sqrt(r * r - (y+1) * (y+1));
+        BXC = std::sqrt(r * r - y * y);
+        TXC = std::sqrt(r * r - (y+1) * (y+1));
         if (!ULC && !LRC)
           CA = CArea(BXC, x, y, r);
         else if (ULC && !LRC)
@@ -85,7 +87,7 @@ double* MakeQtrMask(double r, int n_wedges)
       for (int i = 0; i < n_wedges; ++i) {
         /* Compute area above lower radial line of wedge */
         lowangle = i * vnl_math::pi / (2 * n_wedges);
-        mlow = vcl_tan(lowangle);
+        mlow = std::tan(lowangle);
         TXL = (y+1)/mlow;
         BXL = y/mlow;
         if (TXL <= x)
@@ -111,7 +113,7 @@ double* MakeQtrMask(double r, int n_wedges)
         /* Compute area below upper radial line of wedge */
         /* The cases are reversed from the lower line cases */
         highangle = (i+1) * vnl_math::pi / (2 * n_wedges);
-        mhigh = vcl_tan(highangle);
+        mhigh = std::tan(highangle);
         TXH = (y+1)/mhigh;
         BXH = y/mhigh;
         RYH = mhigh*(x+1);
@@ -150,8 +152,8 @@ double* MakeQtrMask(double r, int n_wedges)
 
         /* We can now assert (~InCircle && (HighLine || LowLine)) */
         /* But this does not ensure the circular arc intersects the line */
-        LYC = vcl_sqrt(r * r - x * x);
-        RYC = vcl_sqrt(r * r - (x+1) * (x+1));
+        LYC = std::sqrt(r * r - x * x);
+        RYC = std::sqrt(r * r - (x+1) * (x+1));
         LowIntersect = LowLine &&
           ((!ULC && !LRC && ((LLL && BXL < BXC) || (!LLL && LYL < LYC))) ||
           (!ULC && LRC) || (ULC && !LRC) ||
@@ -164,8 +166,8 @@ double* MakeQtrMask(double r, int n_wedges)
 
         /* Recompute BA and AA (now BAC and AAC) given the intersection */
         if (LowIntersect) {
-          XLC = vcl_cos(lowangle) * r;
-          YLC = vcl_sin(lowangle) * r;
+          XLC = std::cos(lowangle) * r;
+          YLC = std::sin(lowangle) * r;
           if (!LRC && LLL)
             AAC = CA - 0.5 * (XLC - BXL) * (YLC - y) - CArea(BXC, XLC, y, r);
           else if (!LRC && !LLL)
@@ -179,8 +181,8 @@ double* MakeQtrMask(double r, int n_wedges)
         }
 
         if (HighIntersect) {
-          XHC = vcl_cos(highangle) * r;
-          YHC = vcl_sin(highangle) * r;
+          XHC = std::cos(highangle) * r;
+          YHC = std::sin(highangle) * r;
           if (!LRC && !LLH)
             BAC = 0.5 * (XHC - BXH) * (YHC - y) + CArea(BXC, XHC, y, r);
           else if (!LRC && LLH)
@@ -259,7 +261,7 @@ double* MakeQtrMask(double r, int n_wedges)
         }
         else {
 #ifdef DEBUG
-           vcl_cout << "Big nasty horrible bug just happened\n";
+           std::cout << "Big nasty horrible bug just happened\n";
 #endif // DEBUG
           mask[i * R*R + x * R + R - 1 - y] = 0.0;
         }
@@ -283,13 +285,13 @@ double CreateMask(double sigma, int n_wedges, int masksz, int weight_type, doubl
   for (int i = 0; i < masksz; ++i) {
     for (int j = 0; j < masksz; ++j)
     {
-      double r = vcl_sqrt((masksz-i-0.5) * (masksz-i-0.5) + (j+0.5) * (j+0.5));
+      double r = std::sqrt((masksz-i-0.5) * (masksz-i-0.5) + (j+0.5) * (j+0.5));
 
       // Various pixel weighting masks
       if (weight_type==1)
-        gauss[j*masksz+i] = r * vcl_exp(-(r*r)/(2*sigma*sigma));  // RAYLEIGH
+        gauss[j*masksz+i] = r * std::exp(-(r*r)/(2*sigma*sigma));  // RAYLEIGH
       else if (weight_type==2)
-        gauss[j*masksz+i] = vcl_exp(-(r*r)/(2*sigma*sigma)); // GAUSSIAN
+        gauss[j*masksz+i] = std::exp(-(r*r)/(2*sigma*sigma)); // GAUSSIAN
       else
         gauss[j*masksz+i] = 1 - r / masksz;  // LINEAR
     }
@@ -329,7 +331,7 @@ void AddWeight(vil_image_view<vxl_byte>& image, double weight,
   vxl_byte intensity = image(col, row);
 
   // quantize this intensity value to the specified bins
-  int min_index = (int) vcl_floor(intensity*(NBINS - 1)/MAX_VAL);
+  int min_index = (int) std::floor(intensity*(NBINS - 1)/MAX_VAL);
 
   // accumulate it at the correct bin
   hist[min_index].weight += weight;
@@ -402,10 +404,10 @@ void compute_strength_and_orient(double* dist, int n_orient, float& strength, do
   double c = dist[(strindex+n_orient+1) % n_orient];
 
   double d = (b + c - 2 * a);
-  if (vcl_fabs(d) > 1e-3) { // not degenerate
+  if (std::fabs(d) > 1e-3) { // not degenerate
     double x = (wedgesize/2)*(b - c)/d;
     strength = float(a + x*(c - b)/(2*wedgesize) + x*x*d/(2*wedgesize*wedgesize));
-    orientation = vcl_fmod(maxEMDori + x + vnl_math::twopi, vnl_math::pi);
+    orientation = std::fmod(maxEMDori + x + vnl_math::twopi, vnl_math::pi);
   }
   else { // Uncertainty bounds
     strength = float(a);
@@ -432,10 +434,10 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
 
   // determine some relevant parameters
   int n_orient = 2*n_wedges; // number of orientations
-  int masksz = (int) vcl_ceil(3 * sigma); // mask size
+  int masksz = (int) std::ceil(3 * sigma); // mask size
 
   // allocate space for histogram gradients at various orientations
-  vcl_vector<vil_image_view<double> > hist_dist(n_orient);
+  std::vector<vil_image_view<double> > hist_dist(n_orient);
   for (int i=0; i<n_orient; ++i) {
     hist_dist[i].set_size(img.ni(), img.nj());
     hist_dist[i].fill(0.0);
@@ -538,7 +540,7 @@ void bil_compute_compass_gradient( vil_image_view<vxl_byte>& image, int spacing,
 
   // Filter the responses at each orientation using Savistzky-Golay filtering
   //  Allocate space for the filtered responses
-  vcl_vector<vil_image_view<double> > filt_hist_dist(n_orient);
+  std::vector<vil_image_view<double> > filt_hist_dist(n_orient);
 
   // loop over all the pixels in the image to compute NMS over orientations
   double* dist = new double[n_orient];
@@ -577,7 +579,7 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
 
   // determine some relevant parameters
   int n_orient = 2*n_wedges; // number of orientations
-  int masksz = (int) vcl_ceil(3 * sigma); // mask size
+  int masksz = (int) std::ceil(3 * sigma); // mask size
 
   // allocate space for computing the final contrast magnitude and orientation
   vil_image_view<double> hist_ori(img.ni(), img.nj());
@@ -691,17 +693,17 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
   double* Gy = dy.top_left_ptr();
 
   for (unsigned long i=0; i<hist_ori.size(); i++) {
-    Gx[i] = vcl_sin(Ori[i]);
-    Gy[i] = vcl_cos(Ori[i]);
+    Gx[i] = std::sin(Ori[i]);
+    Gy[i] = std::cos(Ori[i]);
   }
   bil_nms NMS(bil_nms_params(threshold, bil_nms_params::PFIT_3_POINTS), dx, dy, hist_grad);
   NMS.apply();
 
   // garbage collection
   delete mask;
-  delete masksum;
-  delete wHist;
-  delete dist;
+  delete [] masksum;
+  delete [] wHist;
+  delete[] dist;
   vil_image_view<float> magimg=NMS.mag();
 
   return  magimg;
@@ -778,9 +780,9 @@ double bil_gray_EMD(const bil_bin dirt[], const bil_bin hole[])
 
     // Compute the work done moving the smaller amount of mass and decide
     // how much is left over in each bin.
-    double massmoved = vcl_min(dirt_amt, hole_amt);
+    double massmoved = std::min(dirt_amt, hole_amt);
 
-    work += massmoved * (1 - vcl_exp(-vcl_fabs(hole[j].value - dirt[i].value) / GAMMA));
+    work += massmoved * (1 - std::exp(-std::fabs(hole[j].value - dirt[i].value) / GAMMA));
 
     leftoverdirt = dirt_amt - massmoved;
     leftoverhole = hole_amt - massmoved;

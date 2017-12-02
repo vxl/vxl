@@ -14,12 +14,12 @@
 // and with non-homogeneous Euclidean 2D geometry terminology instead of
 // homogeneous 3-tuples.
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-04-28
 //
 // \verbatim
 //  Modifications
-//   2000-04-28 François BERTEL Creation
+//   2000-04-28 Francois BERTEL Creation
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001-08-29 Peter Vanroose  midpoint() added
 //   2001-08-29 Peter Vanroose  conic intersection added (implemented in vgl)
@@ -33,6 +33,8 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <list>
+#include <iostream>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_conic.h> // parent class
 #include <vgl/vgl_conic_segment_2d.h>
@@ -42,8 +44,7 @@
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vcl_list.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Euclidean general conic class, part of the vsol_curve_2d hierarchy
 
@@ -205,7 +206,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Return the real type of the conic from its coefficients
   //---------------------------------------------------------------------------
   vsol_conic_type real_type() const;
-  vcl_string real_conic_type() const { return static_cast<vgl_conic<double> >(*this).real_type(); }
+  std::string real_conic_type() const { return static_cast<vgl_conic<double> >(*this).real_type(); }
 
   //---------------------------------------------------------------------------
   //: Is `this' a real ellipse ?
@@ -352,12 +353,12 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return the set of (real) intersection points of this conic with a line
   //---------------------------------------------------------------------------
-  vcl_list<vsol_point_2d_sptr> intersection(vsol_line_2d const& line) const;
+  std::list<vsol_point_2d_sptr> intersection(vsol_line_2d const& line) const;
 
   //---------------------------------------------------------------------------
   //: Return the set of (real) intersection points of two conics
   //---------------------------------------------------------------------------
-  vcl_list<vsol_point_2d_sptr> intersection(vsol_conic_2d const& co) const;
+  std::list<vsol_point_2d_sptr> intersection(vsol_conic_2d const& co) const;
 
   //---------------------------------------------------------------------------
   //: Return the point on the conic boundary which is closest to the given point
@@ -372,11 +373,11 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  inline void describe(vcl_ostream &strm, int blanking=0) const
+  inline void describe(std::ostream &strm, int blanking=0) const
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "vsol_conic_2d<" << static_cast<vgl_conic<double> >(*this)
-         << '>' << vcl_endl;
+         << '>' << std::endl;
   }
 
   //---------------------------------------------------------------------------
@@ -397,13 +398,13 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return "vsol_conic_2d"; }
+  virtual std::string is_a() const { return "vsol_conic_2d"; }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_conic_2d* to stream.

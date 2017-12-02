@@ -28,8 +28,10 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <bugl/bugl_normal_point_3d_sptr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class bugl_curve_3d
 {
@@ -37,10 +39,10 @@ class bugl_curve_3d
   unsigned int num_neighbors_;
 
   //: data
-  vcl_vector<vcl_vector<bugl_normal_point_3d_sptr > > data_;
+  std::vector<std::vector<bugl_normal_point_3d_sptr > > data_;
 
   //: starting position index for each fragment
-  vcl_vector<int> index_;
+  std::vector<int> index_;
 
  public:
 
@@ -51,7 +53,7 @@ class bugl_curve_3d
   int get_num_fragments() const { return index_.size(); }
 
   //: add a vector of point as a curve
-  void add_curve(vcl_vector<bugl_normal_point_3d_sptr > &pts);
+  void add_curve(std::vector<bugl_normal_point_3d_sptr > &pts);
 
   bugl_curve_3d(unsigned int neighbors = 2) : num_neighbors_(neighbors) {}
 
@@ -61,7 +63,7 @@ class bugl_curve_3d
   bugl_normal_point_3d_sptr get_point(unsigned int index) const;
 
   //: get a point with neighbors
-  vcl_vector<bugl_normal_point_3d_sptr> get_neighbors(unsigned int index) const;
+  std::vector<bugl_normal_point_3d_sptr> get_neighbors(unsigned int index) const;
 
   //: get a neighbor point
   bugl_normal_point_3d_sptr get_neighbor(unsigned int self, int offset) const;

@@ -6,9 +6,9 @@
 // \author K.Y.McGaul
 // \brief  Tableau to pick points and lines.
 //
-//  The difference between this picker tableau and vgui_rubberbander is that 
-//  this keeps control of the event loop until the object has been picked.  
-//  The functions pick_point/pick_line will only return once the user has 
+//  The difference between this picker tableau and vgui_rubberbander is that
+//  this keeps control of the event loop until the object has been picked.
+//  The functions pick_point/pick_line will only return once the user has
 //  picked a point/line.
 //
 // \verbatim
@@ -32,7 +32,7 @@ public:
   xcv_picker_tableau(vgui_tableau_sptr const&);
   //: Destructor.
   ~xcv_picker_tableau();
-  vcl_string type_name() const { return "xcv_picker_tableau";}
+  std::string type_name() const { return "xcv_picker_tableau";}
 
   //: Gets a user selected point.
   bool pick_point(float* x, float* y);

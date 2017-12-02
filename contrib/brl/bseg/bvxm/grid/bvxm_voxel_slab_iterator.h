@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_iterator.h>
+#include <iostream>
+#include <iterator>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_vector_3d.h>
 
@@ -41,7 +43,7 @@ class bvxm_voxel_slab_iterator_base
 template <class T>
 
 class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
-  public vcl_iterator<vcl_bidirectional_iterator_tag, T>
+  public std::iterator<std::bidirectional_iterator_tag, T>
 {
  public:
   bvxm_voxel_slab_iterator()
@@ -76,7 +78,7 @@ class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
 
 template <class T>
 class bvxm_voxel_slab_const_iterator : public bvxm_voxel_slab_iterator_base<T>,
-                                       public vcl_iterator<vcl_bidirectional_iterator_tag, T>
+                                       public std::iterator<std::bidirectional_iterator_tag, T>
 {
  public:
   bvxm_voxel_slab_const_iterator() : bvxm_voxel_slab_iterator_base<T>() {}

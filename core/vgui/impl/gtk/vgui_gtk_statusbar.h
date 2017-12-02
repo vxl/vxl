@@ -11,14 +11,15 @@
 // \date   21 Nov 99
 //
 //  Contains class  vgui_gtk_statusbar
-// 
+//
 // \verbatim
 //  Modifications
 //   13-SEP-2002 K.Y.McGaul - Changed to Doxygen style documentation.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <gtk/gtk.h>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
@@ -30,7 +31,7 @@ class vgui_gtk_statusbar : public vgui_statusbar
  public:
   //: Constructor, creates a GTK status bar and displays it.
   vgui_gtk_statusbar();
- 
+
   //: Destructor.
  ~vgui_gtk_statusbar();
 
@@ -41,9 +42,9 @@ class vgui_gtk_statusbar : public vgui_statusbar
   int write(const char* text);
 
   GtkWidget *widget;
-  vcl_string linebuffer;
+  std::string linebuffer;
   vgui_statusbuf* statusbuf;
-  vcl_ostream out;
+  std::ostream out;
 };
 
 #endif // vgui_gtk_statusbar_h_

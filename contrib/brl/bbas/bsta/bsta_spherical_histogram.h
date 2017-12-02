@@ -37,9 +37,10 @@
 //
 //
 
-#include <vcl_map.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <map>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 //: A histogram on the unit sphere
@@ -150,7 +151,7 @@ class bsta_spherical_histogram
   void std_dev(T& std_dev_az, T& std_dev_el);
 
   //: linear index of bins which have centers lying inside the cone
-  vcl_vector<int> bins_intersecting_cone(T center_az, T center_el,
+  std::vector<int> bins_intersecting_cone(T center_az, T center_el,
                                          T cone_half_angle);
 
 
@@ -159,16 +160,16 @@ class bsta_spherical_histogram
   static T rad_to_deg(T ang) {return static_cast<T>(vnl_math::deg_per_rad*ang);}
 
   //:output of bin ranges and counts (zero counts not output)
-  void write_counts_with_interval(vcl_ostream& os, int azimuth_index,
+  void write_counts_with_interval(std::ostream& os, int azimuth_index,
                                   int elevation_index);
   //:output of bin center and counts (zero counts not output)
-  void write_counts_with_center(vcl_ostream& os, int azimuth_index,
+  void write_counts_with_center(std::ostream& os, int azimuth_index,
                                 int elevation_index);
   //: write bin centers (azimuth elevation) and non_zero counts to stream
-  void print_to_text(vcl_ostream& os);
+  void print_to_text(std::ostream& os);
 
   //: display counts in vrml with reference sphere
-  void print_to_vrml(vcl_ostream& os, T transparency = T(0));
+  void print_to_vrml(std::ostream& os, T transparency = T(0));
 
   //: convenient utilities
   void convert_to_cartesian(T azimuth, T elevation, T& x, T& y, T& z) const;
@@ -188,18 +189,18 @@ class bsta_spherical_histogram
   ang_units units_;
   bool total_counts_valid_;
   T total_counts_;
-  vcl_map<int, T> counts_;
+  std::map<int, T> counts_;
 };
 
 //: Write histogram to stream
 // \relatesalso bsta_spherical_histogram
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, bsta_spherical_histogram<T> const& h);
+std::ostream&  operator<<(std::ostream& s, bsta_spherical_histogram<T> const& h);
 
 //: Read histogram from stream
 // \relatesalso bsta_spherical_histogram
 template <class T>
-vcl_istream&  operator>>(vcl_istream& is,  bsta_spherical_histogram<T>& h);
+std::istream&  operator>>(std::istream& is,  bsta_spherical_histogram<T>& h);
 
 
 #endif // bsta_spherical_histogram_h_

@@ -14,9 +14,9 @@
 //------------------------------------------------------------------------------
 
 template <int M, int N> struct vgui_pixel_assert;
-VCL_DEFINE_SPECIALIZATION struct vgui_pixel_assert<2, 2> { };
-VCL_DEFINE_SPECIALIZATION struct vgui_pixel_assert<3, 3> { };
-VCL_DEFINE_SPECIALIZATION struct vgui_pixel_assert<4, 4> { };
+template <> struct vgui_pixel_assert<2, 2> { };
+template <> struct vgui_pixel_assert<3, 3> { };
+template <> struct vgui_pixel_assert<4, 4> { };
 struct vgui_pixel_generates_no_code
 {
 #define as(T, sz) vgui_pixel_assert<sizeof(T), sz> T##_is_##sz

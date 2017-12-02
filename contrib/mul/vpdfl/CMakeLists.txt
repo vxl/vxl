@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/vpdfl
   DESCRIPTION "Multivariate Probability Density Function Library"
   )
 
-SET(vpdfl_sources
+set(vpdfl_sources
  vpdfl_all.h
  vpdfl_resample.cxx                    vpdfl_resample.h
  vpdfl_calc_mean_var.cxx               vpdfl_calc_mean_var.h
@@ -34,13 +34,11 @@ SET(vpdfl_sources
  vpdfl_add_all_binary_loaders.cxx      vpdfl_add_all_binary_loaders.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vpdfl_sources)
+aux_source_directory(Templates vpdfl_sources)
 
-ADD_LIBRARY(vpdfl ${vpdfl_sources})
-INSTALL_TARGETS(/lib vpdfl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vpdfl ${vpdfl_sources})
-TARGET_LINK_LIBRARIES(vpdfl mbl vnl_algo vnl_io vnl vsl vul)
+vxl_add_library(LIBRARY_NAME vpdfl LIBRARY_SOURCES ${vpdfl_sources})
+target_link_libraries(vpdfl mbl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

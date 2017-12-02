@@ -10,7 +10,7 @@ boxm2_ocl_reg_minfo_func2::boxm2_ocl_reg_minfo_func2( boxm2_opencl_cache_sptr& c
                                                     double scale)
 : vnl_cost_function(6), boxm2_ocl_reg_mutual_info2(cacheA,cacheB,device,nbins, scale)
 {
-  
+
 }
 
 double boxm2_ocl_reg_minfo_func2::f(vnl_vector<double> const& x)

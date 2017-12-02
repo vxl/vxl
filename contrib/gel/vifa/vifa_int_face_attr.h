@@ -15,7 +15,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face.h>
@@ -61,9 +63,9 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
   // ---
 
   bool         ComputeAttributes();
-  bool         GetAttributes(vcl_vector<float>&  attrs);
-  static void  GetAttributeNames(vcl_vector<vcl_string>&  names);
-  bool         GetNativeAttributes(vcl_vector<float>&  attrs);
+  bool         GetAttributes(std::vector<float>&  attrs);
+  static void  GetAttributeNames(std::vector<std::string>&  names);
+  bool         GetNativeAttributes(std::vector<float>&  attrs);
 
   // Data access for non-attributes
   vtol_intensity_face_sptr  GetFace() const { return face_; }
@@ -126,8 +128,8 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
 
 typedef vbl_smart_ptr<vifa_int_face_attr>  vifa_int_face_attr_sptr;
 
-typedef vcl_vector<vifa_int_face_attr_sptr>            attr_list;
-typedef vcl_vector<vifa_int_face_attr_sptr>::iterator  attr_iterator;
+typedef std::vector<vifa_int_face_attr_sptr>            attr_list;
+typedef std::vector<vifa_int_face_attr_sptr>::iterator  attr_iterator;
 
 
 #endif  // VIFA_INT_FACE_ATTR_H_

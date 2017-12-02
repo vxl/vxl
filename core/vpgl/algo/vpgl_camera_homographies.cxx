@@ -120,14 +120,14 @@ transform_camera_to_plane(vpgl_proj_camera<double> const& cam,
   return tcam;
 }
 
-vcl_vector<vgl_point_3d<double> > vpgl_camera_homographies::
+std::vector<vgl_point_3d<double> > vpgl_camera_homographies::
 transform_points_to_plane(vgl_plane_3d<double> const& plane,
                           vgl_point_3d<double> const& ref_point,
-                          vcl_vector<vgl_point_3d<double> > const& pts )
+                          std::vector<vgl_point_3d<double> > const& pts )
 {
-  vcl_vector<vgl_point_3d<double> > tr_pts;
+  std::vector<vgl_point_3d<double> > tr_pts;
   vgl_h_matrix_3d<double> Tr = plane_trans(plane, ref_point);
-  for (vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+  for (std::vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
        pit != pts.end(); ++pit)
   {
     vgl_homg_point_3d<double> hp(*pit);

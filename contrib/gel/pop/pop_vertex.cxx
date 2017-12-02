@@ -6,7 +6,7 @@
 
 
 // make the static
-static vcl_list<pop_vertex*> all_vertex_;
+static std::list<pop_vertex*> all_vertex_;
 
 //: constructor
 pop_vertex::pop_vertex()
@@ -33,14 +33,14 @@ void pop_vertex::add_edge(pop_edge* ed)
 void pop_vertex::clear()
 {
   // mark all vertex as un touched
-  vcl_list<pop_vertex*>::iterator it;
+  std::list<pop_vertex*>::iterator it;
   for (it= all_vertex_.begin();it!=all_vertex_.end();it++) {
     (*it)->touched_ = false;
   }
 }
 
 //: find a path to another vertex
-bool pop_vertex::search(pop_vertex *destination, vcl_list<pop_edge*> &path)
+bool pop_vertex::search(pop_vertex *destination, std::list<pop_edge*> &path)
 {
   // if this vertex has already been touched return false;
   if (touched_) {
@@ -52,7 +52,7 @@ bool pop_vertex::search(pop_vertex *destination, vcl_list<pop_edge*> &path)
 
   // search all edges
 
-  vcl_list<pop_edge*>::iterator ei;
+  std::list<pop_edge*>::iterator ei;
 
   // perform a depth first search
 
@@ -66,7 +66,7 @@ bool pop_vertex::search(pop_vertex *destination, vcl_list<pop_edge*> &path)
 }
 
 //: find a path of edges to the following vertex
-bool pop_vertex::find_path(pop_vertex *destination, vcl_list<pop_edge*> &path)
+bool pop_vertex::find_path(pop_vertex *destination, std::list<pop_edge*> &path)
 {
   // clear all the vertex touched flags
   clear();

@@ -1,4 +1,5 @@
 // This is brl/bbas/brdb/brdb_tuple.cxx
+#include <iostream>
 #include "brdb_tuple.h"
 //:
 // \file
@@ -7,7 +8,7 @@
 // Apr 4th, 2007
 // make it work with the database initially
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 
@@ -15,8 +16,8 @@
 
 
 //: Constructor using a vector of db value references
-brdb_tuple::brdb_tuple(const vcl_vector<brdb_value*>& values)
-: values_(values.size(),NULL)
+brdb_tuple::brdb_tuple(const std::vector<brdb_value*>& values)
+: values_(values.size(),VXL_NULLPTR)
 {
   for (unsigned int i=0; i<values.size(); ++i){
     values_[i] = values[i]->clone();
@@ -26,19 +27,19 @@ brdb_tuple::brdb_tuple(const vcl_vector<brdb_value*>& values)
 
 //: Prototype factory using a vector type name
 brdb_tuple_sptr
-brdb_tuple::make_prototype(const vcl_vector<vcl_string>& types)
+brdb_tuple::make_prototype(const std::vector<std::string>& types)
 {
-  typedef vcl_map<vcl_string, const brdb_value*> reg_t;
+  typedef std::map<std::string, const brdb_value*> reg_t;
   const reg_t& reg =  brdb_value::registry();
 
-  vcl_vector<brdb_value* > values(types.size(),NULL);
+  std::vector<brdb_value* > values(types.size(),VXL_NULLPTR);
   for (unsigned int i=0; i<types.size(); ++i){
     reg_t::const_iterator f = reg.find(types[i]);
     if (f != reg.end())
       values[i] = f->second->clone();
     else{
-      vcl_cerr << "brdb_tuple: can not create instance of unknown type: "<< types[i] << vcl_endl;
-      return NULL;
+      std::cerr << "brdb_tuple: can not create instance of unknown type: "<< types[i] << std::endl;
+      return VXL_NULLPTR;
     }
   }
 
@@ -48,7 +49,7 @@ brdb_tuple::make_prototype(const vcl_vector<vcl_string>& types)
 
 //: Copy Constructor
 brdb_tuple::brdb_tuple(const brdb_tuple& other)
-: vbl_ref_count(), values_(other.values_.size(),NULL)
+: vbl_ref_count(), values_(other.values_.size(),VXL_NULLPTR)
 {
   for (unsigned int i=0; i<other.values_.size(); ++i){
     if (other.values_[i])
@@ -94,7 +95,7 @@ brdb_tuple::set_value(unsigned int index, const brdb_value& value)
   // check for whether this value exists
   if (!values_[index]){
     values_[index] = value.clone();
-    return values_[index] != NULL;
+    return values_[index] != VXL_NULLPTR;
   }
   // check the type of the existing value
   assert(value.is_a() == values_[index]->is_a());
@@ -102,7 +103,7 @@ brdb_tuple::set_value(unsigned int index, const brdb_value& value)
   // remove the old value;
 //  delete values_[index];
   values_[index] = value.clone();
-  return values_[index] != NULL;
+  return values_[index] != VXL_NULLPTR;
 }
 
 //: Get a value by index
@@ -164,7 +165,7 @@ brdb_tuple::print() const
   {
     values_[i]->print();
   }
-  vcl_cout<< vcl_endl;
+  std::cout<< std::endl;
 }
 
 
@@ -173,7 +174,7 @@ brdb_tuple::print() const
 void
 brdb_tuple::b_read_values(vsl_b_istream &is)
 {
-  for (vcl_vector<brdb_value_sptr>::iterator i=values_.begin();
+  for (std::vector<brdb_value_sptr>::iterator i=values_.begin();
        i!=values_.end(); ++i)
     (*i)->b_read_value(is);
 }
@@ -184,7 +185,7 @@ brdb_tuple::b_read_values(vsl_b_istream &is)
 void
 brdb_tuple::b_write_values(vsl_b_ostream &os) const
 {
-  for (vcl_vector<brdb_value_sptr>::const_iterator i=values_.begin();
+  for (std::vector<brdb_value_sptr>::const_iterator i=values_.begin();
        i!=values_.end(); ++i)
     (*i)->b_write_value(os);
 }

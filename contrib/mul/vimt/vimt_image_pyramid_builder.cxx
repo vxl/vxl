@@ -36,14 +36,14 @@ void vsl_add_to_binary_loader(const vimt_image_pyramid_builder& b)
 
 //=======================================================================
 
-vcl_string vimt_image_pyramid_builder::is_a() const
+std::string vimt_image_pyramid_builder::is_a() const
 {
-  return vcl_string("vimt_image_pyramid_builder");
+  return std::string("vimt_image_pyramid_builder");
 }
 
 //=======================================================================
 
-bool vimt_image_pyramid_builder::is_class(vcl_string const& s) const
+bool vimt_image_pyramid_builder::is_class(std::string const& s) const
 {
   return s==vimt_image_pyramid_builder::is_a();
 }
@@ -64,7 +64,7 @@ void vsl_b_read(vsl_b_istream& bfs, vimt_image_pyramid_builder& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const vimt_image_pyramid_builder& b)
+std::ostream& operator<<(std::ostream& os,const vimt_image_pyramid_builder& b)
 {
     os << b.is_a() << ": ";
     vsl_indent_inc(os);
@@ -75,7 +75,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const vimt_image_pyramid_builder& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const vimt_image_pyramid_builder* b)
+std::ostream& operator<<(std::ostream& os,const vimt_image_pyramid_builder* b)
 {
     if (b)
         return os << *b;

@@ -12,9 +12,11 @@
 //    15 Jan 2012 Modified to store data for leaf cells only.
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h> // for std::pow()
+#include <iosfwd>
+#include <vector>
+#include <iostream>
+#include <cmath>
+#include <vcl_compiler.h>
 
 #define TT_NUM_BYTES  8
 #define TT_NUM_LVLS  6
@@ -91,7 +93,7 @@ class bstm_time_tree
   int traverse(const double t, int deepest=6) const;
 
   //: returns bit indices of leaf nodes under rootBit, using pre-order traversal
-  vcl_vector<int> get_leaf_bits(int rootBit=0) const;
+  std::vector<int> get_leaf_bits(int rootBit=0) const;
 
   //: gets the cell center (tree is assumed to be [0,1)
   float cell_center(int bit_index) const;
@@ -109,7 +111,7 @@ class bstm_time_tree
   int max_depth(int rootBit) const;
 
   //: returns the leaves residing at the maximum depth
-  vcl_vector<int> max_depth_leaves() const;
+  std::vector<int> max_depth_leaves() const;
 
  private:
   //: Tree structure stored as "bits" = really a char array
@@ -121,6 +123,6 @@ class bstm_time_tree
   static float cell_centers[63];
 };
 
-vcl_ostream& operator <<(vcl_ostream &s, bstm_time_tree &t);
+std::ostream& operator <<(std::ostream &s, bstm_time_tree &t);
 
 #endif // bstm_time_tree_h_

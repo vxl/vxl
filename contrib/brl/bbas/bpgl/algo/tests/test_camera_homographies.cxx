@@ -123,12 +123,12 @@ static void test_camera_homographies()
   double diw1_23 = vgl_distance(hwi0_23, hwi1_23);
   double diw2_23 = vgl_distance(hwi0_23, hwi2_23);
   //the average error in camera to world distances (in units of gsd)
-  double error =   vcl_fabs(dw1-diw1);
-  error +=  vcl_fabs(dw2-diw2);
-  error +=  vcl_fabs(dw1-diw1_45);
-  error +=  vcl_fabs(dw2-diw2_45);
-  error +=  vcl_fabs(dw1-diw1_23);
-  error +=  vcl_fabs(dw2-diw2_23);
+  double error =   std::fabs(dw1-diw1);
+  error +=  std::fabs(dw2-diw2);
+  error +=  std::fabs(dw1-diw1_45);
+  error +=  std::fabs(dw2-diw2_45);
+  error +=  std::fabs(dw1-diw1_23);
+  error +=  std::fabs(dw2-diw2_23);
   error /= 6;
   TEST_NEAR("Map from image to world average distance error", error, 0.0, 0.2);
 }

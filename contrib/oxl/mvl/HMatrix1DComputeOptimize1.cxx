@@ -1,9 +1,10 @@
+#include <iostream>
+#include <iomanip>
 #include "HMatrix1DComputeOptimize1.h"
 #include "HMatrix1DComputeDesign.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -20,27 +21,27 @@
 class XXX : public vnl_least_squares_function
 {
   unsigned N;
-  const vcl_vector<double> &z1,z2;
+  const std::vector<double> &z1,z2;
  public:
-  XXX(const vcl_vector<double> &z1_,const vcl_vector<double> &z2_)
+  XXX(const std::vector<double> &z1_,const std::vector<double> &z2_)
     : vnl_least_squares_function(3, z1_.size(), no_gradient)
     , N(z1_.size())
     , z1(z1_) , z2(z2_)
     {
       assert(N == z1.size());
       assert(N == z2.size());
-      //      vcl_cerr << "N=" << N << vcl_endl;
+      //      std::cerr << "N=" << N << std::endl;
     }
   ~XXX() { N=0; }
 
   void boo(const vnl_vector<double> &x) {
     assert(x.size()==3);
-    vcl_cerr << vcl_showpos << vcl_fixed; // <iomanip>
+    std::cerr << std::showpos << std::fixed; // <iomanip>
     double z,y;
     for (unsigned i=0;i<N;i++) {
       z=z1[i];
       y=(z+x[0])/(x[1]*z+1+x[2]);
-      vcl_cerr << z << ' ' << y << '[' << z2[i] << ']' << vcl_endl;
+      std::cerr << z << ' ' << y << '[' << z2[i] << ']' << std::endl;
     }
   }
 
@@ -59,7 +60,7 @@ class XXX : public vnl_least_squares_function
 };
 
 static
-void do_compute(const vcl_vector<double> &z1,const vcl_vector<double> &z2,HMatrix1D &M)
+void do_compute(const std::vector<double> &z1,const std::vector<double> &z2,HMatrix1D &M)
 {
   //
   // **** minimise over the set of 2x2 matrices of the form [  1     x[0] ] ****
@@ -92,15 +93,15 @@ HMatrix1DComputeOptimize1::HMatrix1DComputeOptimize1(void) : HMatrix1DCompute() 
 HMatrix1DComputeOptimize1::~HMatrix1DComputeOptimize1() { }
 
 bool
-HMatrix1DComputeOptimize1::compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&p1,
-                                             const vcl_vector<vgl_homg_point_1d<double> >&p2,
+HMatrix1DComputeOptimize1::compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >&p1,
+                                             const std::vector<vgl_homg_point_1d<double> >&p2,
                                              HMatrix1D *M)
 {
   unsigned N=p1.size();
   assert(N==p2.size());
   if (N<3) return false;
 
-  vcl_vector<double> z1(N,0.0),z2(N,0.0);
+  std::vector<double> z1(N,0.0),z2(N,0.0);
   HMatrix1DComputeDesign C;
   C.compute(p1,p2,M);
 

@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief  Eigendecomposition
-// \author  jdfunaro based off of matlab code by Gabriel Peyré
+// \author  jdfunaro based off of matlab code by Gabriel Peyre
 // \verbatim
 //  Modifications
 //   <none yet>

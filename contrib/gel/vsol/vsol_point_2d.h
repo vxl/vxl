@@ -6,13 +6,13 @@
 // \file
 // \brief Point in 2D space
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-04-14
 //
 // \verbatim
 //  Modifications
-//   2000-04-14 François BERTEL Creation
-//   2000-05-12 François BERTEL Replacement of vnl_vector_fixed<double,2> by vnl_double_2
+//   2000-04-14 Francois BERTEL Creation
+//   2000-05-12 Francois BERTEL Replacement of vnl_vector_fixed<double,2> by vnl_double_2
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2000-09-18 Peter Tu        using vgl_point_2d instead of vnl_vector
 //   2001-06-30 Peter Vanroose  Added constructor from vgl_point_2d
@@ -28,12 +28,13 @@ class vsol_point_2d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class vsol_point_2d : public vsol_spatial_object_2d
 {
@@ -193,21 +194,21 @@ class vsol_point_2d : public vsol_spatial_object_2d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_point_2d"); }
+  virtual std::string is_a() const { return std::string("vsol_point_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  inline void describe(vcl_ostream &strm, int blanking=0) const
+  inline void describe(std::ostream &strm, int blanking=0) const
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-    strm << '(' << x() << ' ' << y() << ')' << vcl_endl;
+    strm << '(' << x() << ' ' << y() << ')' << std::endl;
   }
 };
 

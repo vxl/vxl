@@ -30,7 +30,7 @@ bool bvxm_locate_region_process_cons(bprb_func_process& pro)
   //          -apm_mog_mc_3_3
   //          -apm_mog_mc_4_3
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vil_image_view_base_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";
@@ -52,7 +52,7 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -60,7 +60,7 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
   unsigned i = 0;
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
   if ( !img ) {
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
+      std::cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << std::endl;
       return false;
   }
   vil_image_view_base_sptr mask = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -70,16 +70,16 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
   //vil_save(mask,"./binary_mask");
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   if ( !camera ) {
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
+      std::cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << std::endl;
       return false;
   }
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   if ( !world ) {
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
+      std::cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << std::endl;
       return false;
   }
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
-  vcl_string voxel_type = pro.get_input<vcl_string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
+  std::string voxel_type = pro.get_input<std::string>(i++);
   unsigned bin_index = 0;
   unsigned scale = 0;
 
@@ -96,7 +96,7 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
   if (voxel_type == "apm_mog_grey")
     result = world->region_probability_density<APM_MOG_GREY>(observation,mask,grid_out, bin_index,scale);
   else
-    vcl_cerr << "Error in: bvxm_locate_region_processor: Unsuppported appearance model\n";
+    std::cerr << "Error in: bvxm_locate_region_processor: Unsuppported appearance model\n";
 
   return result;
 }

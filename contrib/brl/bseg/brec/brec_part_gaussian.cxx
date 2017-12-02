@@ -1,3 +1,7 @@
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <sstream>
 #include "brec_part_gaussian.h"
 //:
 // \file
@@ -14,11 +18,8 @@
 #include <vnl/vnl_math.h>
 
 #include <bxml/bxml_find.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_gamma.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
 
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <bsta/bsta_histogram.h>
@@ -28,7 +29,7 @@
 #include <vul/vul_psfile.h>
 
 //: strength_threshold in [0,1] - min strength to declare the part as detected
-bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<brec_part_instance_sptr>& parts)
+bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, std::vector<brec_part_instance_sptr>& parts)
 {
   vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, false,true);
@@ -50,7 +51,7 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
   vil_math_value_range(res, min, max);
 
 #if 0
-  vcl_cout << "res min: " << min << " max: " << max << vcl_endl;
+  std::cout << "res min: " << min << " max: " << max << std::endl;
   vil_image_view<vxl_byte> res_o(ni, nj);
   vil_convert_stretch_range_limited(res, res_o, min, max);
   vil_save(res_o, "./temp.png");
@@ -60,13 +61,13 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
 #if 0
   // find the top 10 percentile of the output map and convert it into a prob map (scale to [0,1] range) accordingly
   vil_math_value_range_percentile(res, 1.0, val);
-  vcl_cout << "res top 10 percentile value: " << val << vcl_endl;
+  std::cout << "res top 10 percentile value: " << val << std::endl;
 #endif // 0
   vil_image_view<float> strength_map(ni, nj);
   vil_convert_stretch_range_limited(res, strength_map, 0.0f, val, 0.0f, 1.0f);
 #if 0
   vil_math_value_range(strength_map, min, max);
-  vcl_cout << "strength_map min: " << min << " max: " << max << vcl_endl;
+  std::cout << "strength_map min: " << min << " max: " << max << std::endl;
   vil_convert_stretch_range_limited(strength_map, res_o, min, max);
   vil_save(res_o, "./strength_map.png");
 #endif
@@ -90,9 +91,9 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
       brip_vil_float_ops::combine_color_planes(img_resc, res_resc, msk_resc);
     vil_save(rgb, "./temp.png");
   vil_math_value_range(fimg, min, max);
-  vcl_cout << "img min: " << min << " max: " << max << vcl_endl;
+  std::cout << "img min: " << min << " max: " << max << std::endl;
   vil_math_value_range(mask, min, max);
-  vcl_cout << "mask min: " << min << " max: " << max << vcl_endl;
+  std::cout << "mask min: " << min << " max: " << max << std::endl;
 
   vil_image_view<bool> res_bool;
   vil_threshold_above(res, res_bool, max/2);
@@ -145,10 +146,10 @@ bool brec_part_gaussian::mark_receptive_field(vil_image_view<vxl_byte>& img, uns
   unsigned nrows = mask.rows();
   unsigned ncols = mask.cols();
 
-  int js = (int)vcl_floor(y_ - (float)nrows/2.0f + 0.5f);
-  int is = (int)vcl_floor(x_ - (float)ncols/2.0f + 0.5f);
-  int je = (int)vcl_floor(y_ + (float)nrows/2.0f + 0.5f);
-  int ie = (int)vcl_floor(x_ + (float)ncols/2.0f + 0.5f);
+  int js = (int)std::floor(y_ - (float)nrows/2.0f + 0.5f);
+  int is = (int)std::floor(x_ - (float)ncols/2.0f + 0.5f);
+  int je = (int)std::floor(y_ + (float)nrows/2.0f + 0.5f);
+  int ie = (int)std::floor(x_ + (float)ncols/2.0f + 0.5f);
 
   int ni = (int)img.ni();
   int nj = (int)img.nj();
@@ -175,10 +176,10 @@ bool brec_part_gaussian::mark_receptive_field(vil_image_view<float>& img, float 
   unsigned nrows = mask.rows();
   unsigned ncols = mask.cols();
 
-  int js = (int)vcl_floor(y_ - (float)nrows/2.0f + 0.5f);
-  int is = (int)vcl_floor(x_ - (float)ncols/2.0f + 0.5f);
-  int je = (int)vcl_floor(y_ + (float)nrows/2.0f + 0.5f);
-  int ie = (int)vcl_floor(x_ + (float)ncols/2.0f + 0.5f);
+  int js = (int)std::floor(y_ - (float)nrows/2.0f + 0.5f);
+  int is = (int)std::floor(x_ - (float)ncols/2.0f + 0.5f);
+  int je = (int)std::floor(y_ + (float)nrows/2.0f + 0.5f);
+  int ie = (int)std::floor(x_ + (float)ncols/2.0f + 0.5f);
 
   int ni = (int)img.ni();
   int nj = (int)img.nj();
@@ -203,8 +204,8 @@ bool brec_part_gaussian::mark_center(vil_image_view<float>& img, float val)
   int ni = (int)img.ni();
   int nj = (int)img.nj();
 
-  int ic = (int)vcl_floor(x_ + 0.5f);
-  int jc = (int)vcl_floor(y_ + 0.5f);
+  int ic = (int)std::floor(x_ + 0.5f);
+  int jc = (int)std::floor(y_ + 0.5f);
   if (ic >= 0 && jc >= 0 && ic < ni && jc < nj)
     if (img(ic, jc) < val)
       img(ic, jc) = val;
@@ -220,8 +221,8 @@ bool brec_part_gaussian::mark_center(vil_image_view<vxl_byte>& img, unsigned pla
   int ni = (int)img.ni();
   int nj = (int)img.nj();
 
-  int ic = (int)vcl_floor(x_ + 0.5f);
-  int jc = (int)vcl_floor(y_ + 0.5f);
+  int ic = (int)std::floor(x_ + 0.5f);
+  int jc = (int)std::floor(y_ + 0.5f);
   if (ic >= 0 && jc >= 0 && ic < ni && jc < nj)
     img(ic, jc, plane) = (vxl_byte)(strength_*255);
 
@@ -233,8 +234,8 @@ brec_part_gaussian::direction_vector(void)  // return a unit vector that gives d
 {
   vnl_vector_fixed<float,2> v;
   double theta_rad = theta_*vnl_math::pi_over_180;
-  v(0) = (float)vcl_cos(theta_rad);
-  v(1) = (float)vcl_sin(theta_rad);
+  v(0) = (float)std::cos(theta_rad);
+  v(1) = (float)std::sin(theta_rad);
   return v;
 }
 
@@ -313,10 +314,10 @@ bool brec_part_gaussian::xml_parse_element(bxml_data_sptr data)
     return false;
 }
 
-vcl_string brec_part_gaussian::string_identifier()
+std::string brec_part_gaussian::string_identifier()
 {
-  vcl_stringstream l0, l1, theta; l0 << lambda0_; l1 << lambda1_; theta << theta_;
-  vcl_string str = "gaussian_"+l0.str()+"_"+l1.str()+"_"+theta.str()+"_";
+  std::stringstream l0, l1, theta; l0 << lambda0_; l1 << lambda1_; theta << theta_;
+  std::string str = "gaussian_"+l0.str()+"_"+l1.str()+"_"+theta.str()+"_";
   if (bright_)
     str = str+"bright";
   else
@@ -442,7 +443,7 @@ bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& 
         p_sum_non_class += prob_non_class;
 
         if (prob_class>0.9)
-          h.upcount(vcl_log10(op_res), 1.0f);
+          h.upcount(std::log10(op_res), 1.0f);
       }
     }
 
@@ -450,33 +451,33 @@ bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& 
   double mean = x_sum/p_sum; // estimate of mean
   double total_var = xsq_sum/p_sum; // estimate of total variance
   double var = total_var - mean*mean;
-  double std_dev = vcl_sqrt(var);
-  vcl_cout << "Class mean = " << mean << "  std_dev = " << std_dev << '\n';
+  double std_dev = std::sqrt(var);
+  std::cout << "Class mean = " << mean << "  std_dev = " << std_dev << '\n';
   bsta_weibull_cost_function wcf(mean, std_dev);
   bsta_fit_weibull<double> fw(&wcf);
   k = 1.001;
   fw.init(k);
   fw.solve(k);
 
-  vcl_cout << "Class Weibull k fit with residual " << fw.residual() << '\n';
+  std::cout << "Class Weibull k fit with residual " << fw.residual() << '\n';
   lambda = fw.lambda(k);
-  vcl_cout << "Class k = " << k << "  lambda = " << lambda << '\n';
+  std::cout << "Class k = " << k << "  lambda = " << lambda << '\n';
 
   // calculate non-class parameters
   mean = x_sum_non_class/p_sum_non_class; // estimate of mean
   total_var = xsq_sum_non_class/p_sum_non_class; // estimate of total variance
   var = total_var - mean*mean;
-  std_dev = vcl_sqrt(var);
-  vcl_cout << "Non-class mean = " << mean << "  std_dev = " << std_dev << '\n';
+  std_dev = std::sqrt(var);
+  std::cout << "Non-class mean = " << mean << "  std_dev = " << std_dev << '\n';
   bsta_weibull_cost_function wcfn(mean, std_dev);
   bsta_fit_weibull<double> fwn(&wcfn);
   k_non_class = 1.001;
   fwn.init(k_non_class);
   fwn.solve(k_non_class);
 
-  vcl_cout << "Class Weibull k fit with residual " << fwn.residual() << '\n';
+  std::cout << "Class Weibull k fit with residual " << fwn.residual() << '\n';
   lambda_non_class = fwn.lambda(k_non_class);
-  vcl_cout << "Class k = " << k_non_class << "  lambda = " << lambda_non_class << '\n';
+  std::cout << "Class k = " << k_non_class << "  lambda = " << lambda_non_class << '\n';
 
   return true;
 }
@@ -484,15 +485,15 @@ bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& 
 //: for gaussian operators we use weibull distribution as the parametric model
 bool brec_part_gaussian::fit_distribution_to_response_hist(bsta_histogram<float>& fg_h)
 {
-  float mean = fg_h.mean(); float std_dev = (float)vcl_sqrt(fg_h.variance());
+  float mean = fg_h.mean(); float std_dev = (float)std::sqrt(fg_h.variance());
   bsta_weibull_cost_function wcf(mean, std_dev);
   bsta_fit_weibull<float> fw(&wcf);
   k_ = 1.0f;
   if (fw.init(k_)) {
     fw.solve(k_);
-    vcl_cout << "Weibull k fit with residual " << fw.residual() << '\n';
+    std::cout << "Weibull k fit with residual " << fw.residual() << '\n';
     lambda_ = fw.lambda(k_);
-    vcl_cout << "k = " << k_ << "  lambda = " << lambda_ << '\n';
+    std::cout << "k = " << k_ << "  lambda = " << lambda_ << '\n';
 
     fitted_weibull_ = true;
   }
@@ -551,7 +552,7 @@ bool brec_part_gaussian::update_response_hist(vil_image_view<float>& img, vil_im
           continue;
         float prob_fore = fg_prob_operator(fg_prob_img, i,j);
         if (prob_fore>0.9)
-          fg_h.upcount(op_res, 1.0f); // was: vcl_log10(op_res)
+          fg_h.upcount(op_res, 1.0f); // was: std::log10(op_res)
       }
     }
 
@@ -566,7 +567,7 @@ bool brec_part_gaussian::update_response_hist(vil_image_view<float>& img, vil_im
 //  fg_prob_image is the probability of being foreground for each pixel
 //  pb_zero is the constant required for the background response model (probability of zero response)
 bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_image,
-                                 float rot_angle, vcl_string model_dir, vcl_vector<brec_part_instance_sptr>& instances, float prior_class)
+                                 float rot_angle, std::string model_dir, std::vector<brec_part_instance_sptr>& instances, float prior_class)
 {
   unsigned ni = img.ni();
   unsigned nj = img.nj();
@@ -576,8 +577,8 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
   if (op_res.ni() != ni || op_res.nj() != nj)
     return false;
 
-  vcl_string str_id = string_identifier();
-  vcl_string name;
+  std::string str_id = string_identifier();
+  std::string name;
 #if 1
   name = "./op_response_img" + str_id + ".tiff";
   vil_save(op_res, name.c_str());
@@ -587,35 +588,35 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
 
   name = model_dir+str_id+"_bg_mu_img.tiff";
   if (!vul_file::exists(name)) {
-    vcl_cerr << "In brec_part_gaussian::extract() -- Problem: Cannot find model parameter file: " << name << "\nNote: train the models and save model param directory in the hierarchy\n;\n";
+    std::cerr << "In brec_part_gaussian::extract() -- Problem: Cannot find model parameter file: " << name << "\nNote: train the models and save model param directory in the hierarchy\n;\n";
     return false;
   }
   vil_image_view<float> mu_img = vil_load(name.c_str());
 
   name = model_dir+str_id+"_bg_sigma_img.tiff";
   if (!vul_file::exists(name)) {
-    vcl_cerr << "In brec_part_gaussian::extract() -- Problem: Cannot find model parameter file: " << name << "\nNote: train the models and save model param directory in the hierarchy\n;\n";
+    std::cerr << "In brec_part_gaussian::extract() -- Problem: Cannot find model parameter file: " << name << "\nNote: train the models and save model param directory in the hierarchy\n;\n";
     return false;
   }
   vil_image_view<float> sigma_img = vil_load(name.c_str());
 
   double lambda, k, lambda_non_class, k_non_class;
   if (fitted_weibull_) {
-    vcl_cout << "using fitted weibull parameters lambda: " << lambda_ << " k: " << k_ << " lambda_nc: " << lambda_non_class_ << " k_nc: " << k_non_class_ << " of the part for the foreground response model!\n";
+    std::cout << "using fitted weibull parameters lambda: " << lambda_ << " k: " << k_ << " lambda_nc: " << lambda_non_class_ << " k_nc: " << k_non_class_ << " of the part for the foreground response model!\n";
     lambda = lambda_;  lambda_non_class = lambda_non_class_;
     k = k_;  k_non_class = k_non_class_;
   }
   else {
     name = model_dir+str_id+"_fg_params.txt";
 
-    vcl_cout << "using weibull parameters from the file: " << name << " for the foreground response model!\n";
+    std::cout << "using weibull parameters from the file: " << name << " for the foreground response model!\n";
     // load the model parameters, check if they exist
     if (!vul_file::exists(name)) {
-      vcl_cerr << "In brec_part_gaussian::extract() -- Problem: Cannot find model parameter file: " << name << "\nNote: train the models and save model param directory in the hierarchy\n;\n";
+      std::cerr << "In brec_part_gaussian::extract() -- Problem: Cannot find model parameter file: " << name << "\nNote: train the models and save model param directory in the hierarchy\n;\n";
       return false;
     }
 
-    vcl_ifstream ifs(name.c_str(), vcl_ios::in);
+    std::ifstream ifs(name.c_str(), std::ios::in);
     ifs >> k; ifs >> lambda;
     ifs >> k_non_class; ifs >> lambda_non_class;
     ifs.close();
@@ -664,9 +665,9 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
       pos_c_f /= den; pos_nc_f /= den; pos_c_b /= den; pos_nc_b /= den;
 
 #ifdef DEBUG
-      vcl_cout << "i: " << i << " j: " << j << " response: " << res
+      std::cout << "i: " << i << " j: " << j << " response: " << res
                << " pf: " << pf << " pdf: " << pdf << " pdb: " << pdb
-               << " neu: " << neu << " den: " << den << " post: " << posterior << vcl_endl;
+               << " neu: " << neu << " den: " << den << " post: " << posterior << std::endl;
 #endif // DEBUG
       brec_part_gaussian_sptr dp = new brec_part_gaussian((float)i, (float)j, res, lambda0_, lambda1_, theta_+rot_angle, bright_, type_);
       dp->rho_c_f_ = pos_c_f;
@@ -681,8 +682,8 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
           (i == 229 && j == 366) || (i == 223 && j == 358) || (i == 230 && j == 368) || (i == 227 && j == 364) ||
           (i == 239 && j == 370) || (i == 240 && j == 373) || (i == 235 && j == 369)
          ) {
-        vcl_cout << " i == " << i << " && j == " << j << " \nk_fore: " << k_fore << " lam_fore: " << lambda_fore << " mu_bk: " << mu_bk << " sigma_bk: " << sigma_bk << '\n'
-                 << " res: " << res << " pb: " << pb << " pdb: " << pdb << " pdf: " << pdf << " den: " << den << " neu: " << neu << " posterior: " << posterior << vcl_endl;
+        std::cout << " i == " << i << " && j == " << j << " \nk_fore: " << k_fore << " lam_fore: " << lambda_fore << " mu_bk: " << mu_bk << " sigma_bk: " << sigma_bk << '\n'
+                 << " res: " << res << " pb: " << pb << " pdb: " << pdb << " pdf: " << pdf << " den: " << den << " neu: " << neu << " posterior: " << posterior << std::endl;
       }
 #endif
     }
@@ -693,7 +694,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
 //: extract and set rho to class probability density of the response
 //  Assumes weibull parameters have already been fitted (i.e. fitted_weibull_ = true)
 //  This method is to be used during training and it returns an instance if class_prob >= 0.9
-bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<float>& class_prob_image, float rot_angle, vcl_vector<brec_part_instance_sptr>& instances)
+bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<float>& class_prob_image, float rot_angle, std::vector<brec_part_instance_sptr>& instances)
 {
   unsigned ni = img.ni();
   unsigned nj = img.nj();
@@ -704,7 +705,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
     return false;
 
   if (!fitted_weibull_) {
-    vcl_cout << "ERROR: Foreground response model's parameters have not been set! Run parameter fitting routine first!\n";
+    std::cout << "ERROR: Foreground response model's parameters have not been set! Run parameter fitting routine first!\n";
     return false;
   }
 
@@ -751,7 +752,7 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
                                                      vil_image_view<float>& std_dev_img)
 {
 #if 0
-  vcl_cout << "before update, instance rho_: " << rho_ << '\n'
+  std::cout << "before update, instance rho_: " << rho_ << '\n'
            << "before update, instance cnt_: " << cnt_ << '\n';
 #endif // 0
 
@@ -766,7 +767,7 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
   vil_image_view<float> mu_img(mean_img.ni(), mean_img.nj());
   vil_image_view<float> sigma_img(mean_img.ni(), mean_img.nj());
   if (!construct_bg_response_model_gauss(mean_img, std_dev_img, mu_img, sigma_img)) {
-    vcl_cout << "In brec_part_gaussian::update_foreground_posterior() - problems in construction of background response model params!\n";
+    std::cout << "In brec_part_gaussian::update_foreground_posterior() - problems in construction of background response model params!\n";
     return false;
   }
 
@@ -807,19 +808,19 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
       double neu = pdf; // was: = pdf*prob_fore;
       double rho = 0.0f;
       if (den > 0.0f)
-        rho = vcl_log10(neu/den); // foreground and background posterior ratio
+        rho = std::log10(neu/den); // foreground and background posterior ratio
 
       if (rho > 0.0f) {
         cnt_ = cnt_ + 1;
         rho_c_f_ = ((cnt_-1)*rho_c_f_ + rho)/cnt_;
 #ifdef DEBUG
-        vcl_cout << "after update, instance rho_: " << rho_ << " cnt_: " << cnt_
+        std::cout << "after update, instance rho_: " << rho_ << " cnt_: " << cnt_
                  << " rho: " << rho << " neu: " << neu << " den: " << den << '\n';
 #endif // DEBUG
       }
     }
 #ifdef DEBUG
-  vcl_cout << "after update, instance rho_: " << rho_ << '\n'
+  std::cout << "after update, instance rho_: " << rho_ << '\n'
            << "after update, instance cnt_: " << cnt_ << '\n';
 #endif // DEBUG
   return true;

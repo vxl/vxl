@@ -6,9 +6,11 @@
 // \brief Simplest possible 1D classifier: A single thresholding function
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_classifier_1d.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Simplest possible 1D classifier: A single thresholding function.
 //  Returns class zero if s_*x<threshold_
@@ -22,7 +24,7 @@ class clsfy_binary_threshold_1d : public clsfy_classifier_1d
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
-  virtual void class_probabilities(vcl_vector<double> &outputs, double input) const;
+  virtual void class_probabilities(std::vector<double> &outputs, double input) const;
 
   //: Classify the input vector.
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
@@ -54,13 +56,13 @@ class clsfy_binary_threshold_1d : public clsfy_classifier_1d
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to a binary File Stream
   virtual void b_write(vsl_b_ostream& bfs) const;

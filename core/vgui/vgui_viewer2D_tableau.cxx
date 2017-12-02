@@ -8,9 +8,10 @@
 // \date   14 Sep 1999
 // \brief  See vgui_viewer2D_tableau.h for a description of this file.
 
+#include <cmath>
 #include "vgui_viewer2D_tableau.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vbl/vbl_bool_ostream.h>
 
 #include <vgui/vgui_gl.h>
@@ -130,7 +131,7 @@ void vgui_viewer2D_tableau::center_image(int w, int h)
 }
 
 
-vcl_string vgui_viewer2D_tableau::type_name() const {return "vgui_viewer2D_tableau";}
+std::string vgui_viewer2D_tableau::type_name() const {return "vgui_viewer2D_tableau";}
 
 static void draw_rect(float x0, float y0, float x1, float y1)
 {
@@ -246,7 +247,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
   if (c_pan(button, modifier))
   {
 #ifdef DEBUG
-    vcl_cerr << "vgui_viewer2D_tableau::mouse_down: middle\n";
+    std::cerr << "vgui_viewer2D_tableau::mouse_down: middle\n";
 #endif
     prev_x = x;
     prev_y = y;
@@ -258,7 +259,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
     if (button == vgui_LEFT && (modifier & vgui_CTRL))
     {
 #ifdef DEBUG
-      vcl_cerr << "vgui_viewer2D_tableau::mouse_down: left\n";
+      std::cerr << "vgui_viewer2D_tableau::mouse_down: left\n";
 #endif
       this->zoomin(zoom_factor, int(x), int(y));
       this->post_redraw();
@@ -267,7 +268,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
     else if (button == vgui_RIGHT && (modifier & vgui_CTRL))
     {
 #ifdef DEBUG
-      vcl_cerr << "vgui_viewer2D_tableau::mouse_down: right\n";
+      std::cerr << "vgui_viewer2D_tableau::mouse_down: right\n";
 #endif
       this->zoomout(zoom_factor, int(x), int(y));
       this->post_redraw();
@@ -279,7 +280,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
     if (button == vgui_LEFT && (modifier & vgui_CTRL))
     {
 #ifdef DEBUG
-      vcl_cerr << "vgui_viewer2D_tableau::mouse_down: left\n";
+      std::cerr << "vgui_viewer2D_tableau::mouse_down: left\n";
 #endif
       prev_x = x;
       prev_y = y;
@@ -301,11 +302,11 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
     zoom_y = y;
     sweep_zooming = true;
 #ifdef DEBUG
-    vcl_cerr << "copy_back_to_front...";
+    std::cerr << "copy_back_to_front...";
 #endif
     vgui_utils::copy_back_to_front();
 #ifdef DEBUG
-    vcl_cerr << "done\n";
+    std::cerr << "done\n";
 #endif
 
     return true;
@@ -317,7 +318,7 @@ bool vgui_viewer2D_tableau::mouse_down(int x, int y, vgui_button button, vgui_mo
 bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vgui_modifier /*modifier*/)
 {
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": vgui_viewer2D_tableau_handler::mouse_drag\n";
+  std::cerr << __FILE__ ": vgui_viewer2D_tableau_handler::mouse_drag\n";
 #endif
 
   if (!panning && !smooth_zooming && !sweep_zooming)
@@ -352,16 +353,16 @@ bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vg
     vgui_matrix_state gl_state;  gl_state.save();
 
 #ifdef DEBUG
-    vcl_cerr << "begin_sw_overlay...";
+    std::cerr << "begin_sw_overlay...";
 #endif
     vgui_utils::begin_sw_overlay();
 #ifdef DEBUG
-    vcl_cerr << "done\n"
+    std::cerr << "done\n"
              << "copy_back_to_front...";
 #endif
     vgui_utils::copy_back_to_front();
 #ifdef DEBUG
-    vcl_cerr << "done\n";
+    std::cerr << "done\n";
 #endif
 
     // set projection*modelview matrices to render in **viewport** coordinates :
@@ -385,8 +386,8 @@ bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vg
     new_y = y;
 
     // compute the size of the sweep area in pixels on the screen :
-    float xdiff = vcl_fabs(zoom_x - new_x);
-    float ydiff = vcl_fabs(zoom_y - new_y);
+    float xdiff = std::fabs(zoom_x - new_x);
+    float ydiff = std::fabs(zoom_y - new_y);
 
     // this bit here makes sure the swept out region has the
     // same shape as the viewport :
@@ -421,7 +422,7 @@ bool vgui_viewer2D_tableau::mouse_drag(int x, int y,  vgui_button /*button*/, vg
 bool vgui_viewer2D_tableau::mouse_up(int /*x*/, int /*y*/,  vgui_button button, vgui_modifier /*modifier*/)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_viewer2D_tableau_handler::mouse_up\n";
+  std::cerr << "vgui_viewer2D_tableau_handler::mouse_up\n";
 #endif
 
   if (sweep_zooming && button == vgui_LEFT)
@@ -466,7 +467,7 @@ bool vgui_viewer2D_tableau::mouse_up(int /*x*/, int /*y*/,  vgui_button button, 
 
 bool vgui_viewer2D_tableau::help()
 {
-  vcl_cerr << "\n-- vgui_viewer2D_tableau ----------\n"
+  std::cerr << "\n-- vgui_viewer2D_tableau ----------\n"
            << "|     mouse               |\n"
            << "| ctrl+left       zoom in |\n"
            << "| ctrlt+middle        pan |\n"
@@ -499,7 +500,7 @@ bool vgui_viewer2D_tableau::image_size(int& width, int& height)
   else
   {
     width = 0; height = 0;
-    vcl_cerr << __FILE__ " : no image found\n";
+    std::cerr << __FILE__ " : no image found\n";
   }
   return false;
 }
@@ -514,7 +515,7 @@ void vgui_viewer2D_tableau::center_event()
 bool vgui_viewer2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modifier modifier)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_viewer2D_tableau_handler::key_press " << key << '\n';
+  std::cerr << "vgui_viewer2D_tableau_handler::key_press " << key << '\n';
 #endif
   if (modifier & vgui_CTRL) vgui::out << "CTRL+" << char(key) << " pressed: CTRL ignored\n";
   switch (key)

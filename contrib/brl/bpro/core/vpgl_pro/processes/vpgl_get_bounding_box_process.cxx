@@ -1,11 +1,12 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_get_bounding_box_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vsph/vsph_camera_bounds.h>
@@ -20,9 +21,9 @@
 bool vpgl_get_bounding_box_process_cons(bprb_func_process& pro)
 {
   //this process takes one input and has no output:
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");    //directory of perspective cameras
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -31,27 +32,27 @@ bool vpgl_get_bounding_box_process_cons(bprb_func_process& pro)
 bool vpgl_get_bounding_box_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()<1) {
-    vcl_cout << "vpgl_get_bounding_box_process: The number of inputs should be 1 (a string)" << vcl_endl;
+    std::cout << "vpgl_get_bounding_box_process: The number of inputs should be 1 (a string)" << std::endl;
     return false;
   }
 
   // get the inputs
   int i=0;
-  vcl_string cam_dir = pro.get_input<vcl_string>(i);
+  std::string cam_dir = pro.get_input<std::string>(i);
   float      zplane  = 0.0;
 
   //populate vector of cameras
   //: returns a list of cameras from specified directory
-  vcl_vector<vpgl_perspective_camera<double> > cams = cameras_from_directory(cam_dir, 0.0);
-  vcl_cout << "found " << cams.size() << " cameras in the directory..\n";
+  std::vector<vpgl_perspective_camera<double> > cams = cameras_from_directory(cam_dir, 0.0);
+  std::cout << "found " << cams.size() << " cameras in the directory..\n";
 
   //run planar bounding box
   vgl_box_2d<double> bbox;
   bool good = vsph_camera_bounds::planar_bounding_box(cams,bbox,zplane);
   if (good)
-    vcl_cout<<"Bounding box found: "<<bbox<<vcl_endl;
+    std::cout<<"Bounding box found: "<<bbox<<std::endl;
   else
-    vcl_cout<<"Bounding box not found."<<vcl_endl;
+    std::cout<<"Bounding box not found."<<std::endl;
 
 
   //---------------------------------------------------------------------------
@@ -71,7 +72,7 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   unsigned ni = (unsigned) (bbox.width()/res);
   unsigned nj = (unsigned) (bbox.height()/res);
   vil_image_view<vxl_byte> cntimg(ni, nj);
-  vcl_cout<<"Created Box size: "<<ni<<','<<nj<<vcl_endl;
+  std::cout<<"Created Box size: "<<ni<<','<<nj<<std::endl;
   for (unsigned int i=0; i<cams.size(); ++i)
   {
     //project the four corners to the ground plane
@@ -92,6 +93,9 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
     good = good && vgl_intersection(ur, zp, urp);
     good = good && vgl_intersection(bl, zp, blp);
     good = good && vgl_intersection(br, zp, brp);
+    if (!good) {
+        std::cout << "ERROR: lines do not intersect" << __FILE__ << __LINE__ << std::endl;
+    }
 
     //convert the four corners into image coordinates
     typedef vgl_polygon<double>::point_t        Point_type;
@@ -116,7 +120,7 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
         }
 #ifdef DEBUG
         else {
-          vcl_cout<<"X and Y in scan iterator are out of bounds: "<<x<<','<<y<<vcl_endl;
+          std::cout<<"X and Y in scan iterator are out of bounds: "<<x<<','<<y<<std::endl;
         }
 #endif
       }

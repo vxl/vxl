@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "bwm_algo.h"
 //:
 // \file
@@ -18,8 +20,7 @@
 #include <vil/vil_load.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for std::malloc()
+#include <vcl_compiler.h>
 
 // The well-known square function
 static inline double square(double x) { return x * x; }
@@ -29,12 +30,12 @@ void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
                                float **x, float **y)
 {
   int n = poly2d->size();
-  *x = (float*) vcl_malloc(sizeof(float) * n);
-  *y = (float*) vcl_malloc(sizeof(float) * n);
+  *x = (float*) std::malloc(sizeof(float) * n);
+  *y = (float*) std::malloc(sizeof(float) * n);
   for (int i=0; i<n; i++) {
     (*x)[i] = (float) poly2d->vertex(i)->x();
     (*y)[i] = (float) poly2d->vertex(i)->y();
-   //vcl_cout << "X=" << poly2d->vertex(i)->x() << " Y=" << poly2d->vertex(i)->y() << vcl_endl;
+   //std::cout << "X=" << poly2d->vertex(i)->x() << " Y=" << poly2d->vertex(i)->y() << std::endl;
   }
 }
 
@@ -43,12 +44,12 @@ void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
                                double **x, double **y)
 {
   int n = poly2d->size();
-  *x = (double*) vcl_malloc(sizeof(double) * n);
-  *y = (double*) vcl_malloc(sizeof(double) * n);
+  *x = (double*) std::malloc(sizeof(double) * n);
+  *y = (double*) std::malloc(sizeof(double) * n);
   for (int i=0; i<n; i++) {
     (*x)[i] = (double) poly2d->vertex(i)->x();
     (*y)[i] = (double) poly2d->vertex(i)->y();
-   //vcl_cout << "X=" << poly2d->vertex(i)->x() << " Y=" << poly2d->vertex(i)->y() << vcl_endl;
+   //std::cout << "X=" << poly2d->vertex(i)->x() << " Y=" << poly2d->vertex(i)->y() << std::endl;
   }
 }
 
@@ -57,12 +58,12 @@ void bwm_algo::get_vertices_xy(vsol_polyline_2d_sptr poly2d,
                                float **x, float **y)
 {
   int n = poly2d->size();
-  *x = (float*) vcl_malloc(sizeof(float) * n);
-  *y = (float*) vcl_malloc(sizeof(float) * n);
+  *x = (float*) std::malloc(sizeof(float) * n);
+  *y = (float*) std::malloc(sizeof(float) * n);
   for (int i=0; i<n; i++) {
     (*x)[i] = (float) poly2d->vertex(i)->x();
     (*y)[i] = (float) poly2d->vertex(i)->y();
-   //vcl_cout << "X=" << poly2d->vertex(i)->x() << " Y=" << poly2d->vertex(i)->y() << vcl_endl;
+   //std::cout << "X=" << poly2d->vertex(i)->x() << " Y=" << poly2d->vertex(i)->y() << std::endl;
   }
 }
 
@@ -70,14 +71,14 @@ void bwm_algo::get_vertices_xyz(vsol_polygon_3d_sptr poly3d,
                                 double **x, double **y, double **z)
 {
   int n = poly3d->size();
-  *x = (double*) vcl_malloc(sizeof(double) * n);
-  *y = (double*) vcl_malloc(sizeof(double) * n);
-  *z = (double*) vcl_malloc(sizeof(double) * n);
+  *x = (double*) std::malloc(sizeof(double) * n);
+  *y = (double*) std::malloc(sizeof(double) * n);
+  *z = (double*) std::malloc(sizeof(double) * n);
   for (int i=0; i<n; i++) {
     (*x)[i] = poly3d->vertex(i)->x();
     (*y)[i] = poly3d->vertex(i)->y();
     (*z)[i] = poly3d->vertex(i)->z();
-    //vcl_cout << i << ' ' << *(poly3d->vertex(i)) << vcl_endl;
+    //std::cout << i << ' ' << *(poly3d->vertex(i)) << std::endl;
   }
 }
 
@@ -92,19 +93,19 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vsol_polygon_3d_sptr polygon
 
   vgl_homg_plane_3d<double> plane;
 
-  if (fitter.fit(0.1, &vcl_cerr)) {
+  if (fitter.fit(0.1, &std::cerr)) {
   //fitter.fit();
 
   plane = fitter.get_plane();
   }
   else {
-    vcl_cout << "NO FITTING" << vcl_endl;
-    return 0;
+    std::cout << "NO FITTING" << std::endl;
+    return VXL_NULLPTR;
   }
 
 
   // find the closest point on the plane and replace it for each point
-  vcl_vector<vsol_point_3d_sptr> points;
+  std::vector<vsol_point_3d_sptr> points;
   for (unsigned i=0; i<polygon->size(); i++) {
     vgl_homg_point_3d<double> hp(polygon->vertex(i)->x(),
                                  polygon->vertex(i)->y(),
@@ -116,31 +117,31 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vsol_polygon_3d_sptr polygon
   return new_polygon;
 }
 
-vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vcl_vector<vsol_point_3d_sptr> points)
+vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(std::vector<vsol_point_3d_sptr> points)
 {
   vgl_fit_plane_3d<double> fitter;
-  vcl_cout << "fitting----------------" << vcl_endl;
+  std::cout << "fitting----------------" << std::endl;
   for (unsigned i=0; i<points.size(); i++) {
     fitter.add_point(points[i]->x(),
                      points[i]->y(),
                      points[i]->z());
-    vcl_cout << *(points[i]) << vcl_endl;
+    std::cout << *(points[i]) << std::endl;
   }
 
   vgl_homg_plane_3d<double> plane;
 
-  if (fitter.fit(1.0, &vcl_cerr)) {
+  if (fitter.fit(1.0, &std::cerr)) {
   // fitter.fit();
   plane = fitter.get_plane();
   }
   else {
-    vcl_cout << "NO FITTING" << vcl_endl;
-    return 0;
+    std::cout << "NO FITTING" << std::endl;
+    return VXL_NULLPTR;
   }
 
 
   // find the closest point on the plane and replace it for each point
-  vcl_vector<vsol_point_3d_sptr> new_points;
+  std::vector<vsol_point_3d_sptr> new_points;
   for (unsigned i=0; i<points.size(); i++) {
     vgl_homg_point_3d<double> hp(points[i]->x(), points[i]->y(), points[i]->z());
     vgl_homg_point_3d<double> p = vgl_closest_point(plane, hp);
@@ -174,7 +175,7 @@ bwm_algo::fit_sphere_to_corner(vgl_point_3d<double> P1, vgl_vector_3d<double> N1
   return (vgl_point_3d<double> (Q.x()/Q.w(), Q.y()/Q.w(), Q.z()/Q.w()));
 }
 
-bool bwm_algo::fit_circle(const vcl_list<vgl_point_2d<double> > &points,
+bool bwm_algo::fit_circle(const std::list<vgl_point_2d<double> > &points,
                           double &radius, vgl_point_2d<double> &center)
 {
   int rows = points.size();
@@ -188,7 +189,7 @@ bool bwm_algo::fit_circle(const vcl_list<vgl_point_2d<double> > &points,
   vnl_vector<double> col3(rows);
   vnl_vector<double> col4(rows);
 
-  vcl_list<vgl_point_2d<double> >::const_iterator it = points.begin();
+  std::list<vgl_point_2d<double> >::const_iterator it = points.begin();
   for (int i = 0; it != points.end(); ++it, ++i)
   {
       col2.put(i, (*it).y());
@@ -220,7 +221,7 @@ bool bwm_algo::fit_circle(const vcl_list<vgl_point_2d<double> > &points,
   double c = u(3);
 
   center.set(-b(1) / 2 / a, -b(0) / 2 / a);
-  radius = vcl_sqrt(square(center.x()) + square(center.y()) - c / a);
+  radius = std::sqrt(square(center.x()) + square(center.y()) - c / a);
   return true;
 }
 
@@ -229,26 +230,26 @@ bwm_algo::extract_nitf_camera(vil_image_resource_sptr img)
 {
   if (!img)
   {
-    vcl_cerr << "Null image in bwm_tableau_mgr::extract_nitf_camera\n";
-    return 0;
+    std::cerr << "Null image in bwm_tableau_mgr::extract_nitf_camera\n";
+    return VXL_NULLPTR;
   }
 
-  vil_nitf2_image* nitf = 0;
-  vcl_string format = img->file_format();
-  vcl_string prefix = format.substr(0,4);
+  vil_nitf2_image* nitf = VXL_NULLPTR;
+  std::string format = img->file_format();
+  std::string prefix = format.substr(0,4);
   if (prefix == "nitf") {
     nitf = (vil_nitf2_image*)img.ptr();
     vpgl_nitf_rational_camera* rpcam = new vpgl_nitf_rational_camera(nitf, true);
     return rpcam;
   }
   else {
-    vcl_cout << "The image is not an NITF" << vcl_endl;
-    return 0;
+    std::cout << "The image is not an NITF" << std::endl;
+    return VXL_NULLPTR;
   }
 }
 
 vpgl_rational_camera<double> *
-bwm_algo::extract_nitf_camera(vcl_string img_path)
+bwm_algo::extract_nitf_camera(std::string img_path)
 {
   vil_image_resource_sptr img_res = vil_load_image_resource(img_path.c_str());
   //vil_image_resource_sptr img_res = load_image(img_path, params);

@@ -246,7 +246,7 @@ typedef PNG_CONST png_uint_16p FAR * png_const_uint_16pp;
    /* Modern compilers support restrict, but assume not for anything not
     * recognized here:
     */
-#  if defined __GNUC__ || defined _MSC_VER || defined __WATCOMC__
+#  if defined __GNUC__ || defined _MSC_VER
 #     define PNG_RESTRICT restrict
 #  else
 #     define PNG_RESTRICT
@@ -322,18 +322,7 @@ typedef PNG_CONST png_uint_16p FAR * png_const_uint_16pp;
     */
 #  include <float.h>
 
-#  if (defined(__MWERKS__) && defined(macintosh)) || defined(applec) || \
-    defined(THINK_C) || defined(__SC__) || defined(TARGET_OS_MAC)
-     /* We need to check that <math.h> hasn't already been included earlier
-      * as it seems it doesn't agree with <fp.h>, yet we should really use
-      * <fp.h> if possible.
-      */
-#    if !defined(__MATH_H__) && !defined(__MATH_H) && !defined(__cmath__)
-#      include <fp.h>
-#    endif
-#  else
-#    include <math.h>
-#  endif
+#  include <math.h>
 #  if defined(_AMIGA) && defined(__SASC) && defined(_M68881)
      /* Amiga SAS/C: We must include builtin FPU functions when compiling using
       * MATH=68881
@@ -1584,7 +1573,7 @@ PNG_EXTERN void png_ascii_from_fixed PNGARG((png_structp png_ptr,
 #define PNG_FP_IS_ZERO(state) (((state) & PNG_FP_Z_MASK) == PNG_FP_SAW_DIGIT)
 #define PNG_FP_IS_POSITIVE(state) (((state) & PNG_FP_NZ_MASK) == PNG_FP_Z_MASK)
 #define PNG_FP_IS_NEGATIVE(state) (((state) & PNG_FP_NZ_MASK) == PNG_FP_NZ_MASK)
- 
+
 /* The actual parser.  This can be called repeatedly, it updates
  * the index into the string and the state variable (which must
  * be initialzed to 0).  It returns a result code, as above.  There

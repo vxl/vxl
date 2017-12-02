@@ -24,11 +24,11 @@ bool bvpl_init_global_taylor_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_init_global_taylor_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // path to taylor_global_info file
   input_types_[1] = "int"; // dimension (3 for xyz derivatives, 10 for all 1st and 2nd order derivatives)
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -40,20 +40,20 @@ bool bvpl_init_global_taylor_process(bprb_func_process& pro)
   using namespace bvpl_init_global_taylor_process_globals;
 
   //get inputs
-  vcl_string taylor_dir = pro.get_input<vcl_string>(0);
+  std::string taylor_dir = pro.get_input<std::string>(0);
   int dim = pro.get_input<int>(1);
- 
+
   switch (dim) {
     case 3:
     {
-      vcl_string kernel_names[] = {"Ix", "Iy", "Iz"};
+      std::string kernel_names[] = {"Ix", "Iy", "Iz"};
       bvpl_global_taylor<float, 3> global_taylor(taylor_dir, kernel_names);
       global_taylor.init();
       break;
     }
     case 10:
     {
-      const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+      const std::string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
       bvpl_global_taylor<double, 10> global_taylor(taylor_dir, kernel_names);
       global_taylor.init();
       break;
@@ -62,7 +62,7 @@ bool bvpl_init_global_taylor_process(bprb_func_process& pro)
       break;
   }
 
-  
-  
+
+
   return true;
 }

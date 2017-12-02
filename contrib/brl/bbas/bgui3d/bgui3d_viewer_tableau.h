@@ -39,7 +39,7 @@ class bgui3d_viewer_tableau : public bgui3d_tableau
   virtual bool handle(const vgui_event& event) = 0;
 
   //: Return the type name of this tableau
-  virtual vcl_string type_name() const = 0;
+  virtual std::string type_name() const = 0;
 
   //: Set the scene root
   virtual void set_scene_root(SoNode* scene_root);
@@ -56,7 +56,7 @@ class bgui3d_viewer_tableau : public bgui3d_tableau
 
   //: Get the scene camera
   // Creates a vpgl camera (either perspective or affine) from the active SoCamera
-  virtual vcl_auto_ptr<vpgl_proj_camera<double> > camera() const;
+  virtual std::auto_ptr<vpgl_proj_camera<double> > camera() const;
 
   //: Set the camera viewing the scene
   virtual void set_camera(SoCamera *camera);
@@ -102,11 +102,11 @@ class bgui3d_viewer_tableau : public bgui3d_tableau
 
   //-------------Text Methods-------------------
   //: set the text
-  void setText( const vcl_string& string );
+  void setText( const std::string& string );
 
  protected:
   //: Find the parent nodes in the scene graph
-  vcl_vector<SoGroup*> get_parents_of_node(SoNode * node);
+  std::vector<SoGroup*> get_parents_of_node(SoNode * node);
 
   //: Convert to perspective
   void convertOrtho2Perspective(const SoOrthographicCamera * in,
@@ -116,7 +116,7 @@ class bgui3d_viewer_tableau : public bgui3d_tableau
                                 SoOrthographicCamera * out);
 
   //: Find the camera nodes in the scenegraph
-  vcl_vector<SoCamera*> find_cameras(SoNode* root) const;
+  std::vector<SoCamera*> find_cameras(SoNode* root) const;
 
   //: Find the VRML viewpoint nodes in the scenegraph and make camera
   // The cameras are added to the camera group (outside the user scene)

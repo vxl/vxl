@@ -13,8 +13,11 @@
 //   23 Aug 2003 Peter Vanroose - added asserts in get_pointer() to trace down test errors
 // \endverbatim
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "vmap_types.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //:
@@ -165,7 +168,7 @@ class vmap_ptr_sequence
   template <class Predicate_>
   iterator reorder(const Predicate_ & arg)
   {
-    iterator middle=vcl_stable_partition(begin_,end_,arg) ;
+    iterator middle=std::stable_partition(begin_,end_,arg) ;
     for (iterator tmp=begin_;tmp!=end_;++tmp)
     {
       (*tmp)->set_sequence_index(tmp-begin_) ;
@@ -190,7 +193,7 @@ class vmap_ptr_sequence
   //:
   void swap(int i, int j)
   {
-    vcl_swap(get_pointer(i),get_pointer(j)) ;
+    std::swap(get_pointer(i),get_pointer(j)) ;
     get_pointer(i)->set_sequence_index(i) ;
     get_pointer(j)->set_sequence_index(j) ;
   }
@@ -313,7 +316,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
  private:
 
   //:
-  vcl_vector<element_type> storage_ ;
+  std::vector<element_type> storage_ ;
 };
 
 #endif

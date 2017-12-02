@@ -9,9 +9,10 @@
 // \brief A block cache with block population prioritized by age
 // \author J. L. Mundy
 //
-#include <vcl_iostream.h>
-#include <vcl_queue.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 
 // \verbatim
@@ -20,7 +21,7 @@
 //   container for simplicity, January 01, 2012
 // \endverbatim
 
-//container for blocks to maintain a timestamp 
+//container for blocks to maintain a timestamp
 //note that the larger value of time corresponds to the newest block
 struct bcell
 {
@@ -38,12 +39,12 @@ struct bcell
   //:update the age of a block
   void touch(){birthdate_=time_++;}
   //: for debug
-  void print() const { vcl_cout << '[' << bindex_i_ << ' ' << bindex_j_
+  void print() const { std::cout << '[' << bindex_i_ << ' ' << bindex_j_
                                 << "](" << birthdate_ << ")\n"; }
  private:
   static unsigned long time_; //static timekeeper
 };
-// the ordering predicate for block birthdate. Oldest block is at 
+// the ordering predicate for block birthdate. Oldest block is at
 // blocks_.begin()
 class bcell_less
 {
@@ -73,7 +74,7 @@ class vil_block_cache
   unsigned block_size() const{return nblocks_;}
  private:
   //:block index member
-  vcl_vector<bcell*> blocks_;
+  std::vector<bcell*> blocks_;
   //:capacity in blocks
   unsigned nblocks_;
   //:remove the lowest priority block

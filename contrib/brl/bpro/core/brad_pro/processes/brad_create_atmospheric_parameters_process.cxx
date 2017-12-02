@@ -1,17 +1,19 @@
 // This is brl/bpro/core/brad_pro/processes/brad_create_atmospheric_parameters_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_atmospheric_parameters.h>
 //:
 // \file
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 //: Constructor
 bool brad_create_atmospheric_parameters_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("float");
   input_types.push_back("float");
   input_types.push_back("float");
@@ -19,8 +21,8 @@ bool brad_create_atmospheric_parameters_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types; 
-  output_types.push_back("brad_atmospheric_parameters_sptr"); 
+  std::vector<std::string> output_types;
+  output_types.push_back("brad_atmospheric_parameters_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -31,7 +33,7 @@ bool brad_create_atmospheric_parameters_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() != pro.input_types().size()) {
-    vcl_cout << "brad_create_atmospheric_parameters_process: The input number should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "brad_create_atmospheric_parameters_process: The input number should be " << pro.input_types().size() << std::endl;
     return false;
   }
 

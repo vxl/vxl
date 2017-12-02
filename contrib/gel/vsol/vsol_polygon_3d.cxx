@@ -1,10 +1,11 @@
 // This is gel/vsol/vsol_polygon_3d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_polygon_3d.h"
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -16,12 +17,12 @@
 //***************************************************************************
 void vsol_polygon_3d::compute_plane()
 {
-  vcl_vector<vgl_homg_point_3d<double> > pts;
-  for (vcl_vector<vsol_point_3d_sptr>::iterator pit = storage_->begin();
+  std::vector<vgl_homg_point_3d<double> > pts;
+  for (std::vector<vsol_point_3d_sptr>::iterator pit = storage_->begin();
        pit != storage_->end(); ++pit)
     pts.push_back(vgl_homg_point_3d<double>((*pit)->x(),(*pit)->y(),(*pit)->z(),1.0));
   vgl_fit_plane_3d<double> fp(pts);
-  fp.fit(0.1, &vcl_cerr);
+  fp.fit(0.1, &std::cerr);
   plane_ = fp.get_plane();
   plane_.normalize();
 }
@@ -30,21 +31,21 @@ void vsol_polygon_3d::compute_plane()
 // Default constructor
 //----------------------------------------------------------------
 vsol_polygon_3d::vsol_polygon_3d()
-: storage_(0)
+: storage_(VXL_NULLPTR)
 {
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector (not a geometric vector but a list of points).
+//: Constructor from a std::vector (not a geometric vector but a list of points).
 // Require: new_vertices.size()>=3 and valid_vertices(new_vertices)
 //---------------------------------------------------------------------------
-vsol_polygon_3d::vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr> const& new_vertices)
+vsol_polygon_3d::vsol_polygon_3d(std::vector<vsol_point_3d_sptr> const& new_vertices)
 {
   // require
   assert(new_vertices.size()>=3);
   assert(valid_vertices(new_vertices));
 
-  storage_=new vcl_vector<vsol_point_3d_sptr>(new_vertices);
+  storage_=new std::vector<vsol_point_3d_sptr>(new_vertices);
   this->compute_plane();
 }
 
@@ -56,7 +57,7 @@ vsol_polygon_3d::vsol_polygon_3d(vsol_polygon_3d const& other)
 {
   //vsol_point_3d_sptr p;
 
-  storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_point_3d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_3d(*((*other.storage_)[i]));
   plane_ = other.plane_;
@@ -160,7 +161,7 @@ void vsol_polygon_3d::compute_bounding_box(void) const
 double vsol_polygon_3d::area(void) const
 {
   // TO DO
-  vcl_cerr << "Warning: vsol_polygon_3d::area() has not been implemented yet\n";
+  std::cerr << "Warning: vsol_polygon_3d::area() has not been implemented yet\n";
   return -1;
 }
 
@@ -223,7 +224,7 @@ bool vsol_polygon_3d::is_convex(void) const
 //: Are `new_vertices' valid vertices to build a polygon of the current type?
 //  That is are all vertices in the same plane ?
 //---------------------------------------------------------------------------
-bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
+bool vsol_polygon_3d::valid_vertices(const std::vector<vsol_point_3d_sptr> new_vertices) const
 {
   double tol = 1e-06;
   if (new_vertices.size() <= 3) return true; // a triangle is always in a plane
@@ -251,7 +252,7 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
     if (dot_product(n,v2)!=0)
       return false;
 #endif
-    double dp = vcl_fabs(dot_product(n,v2));
+    double dp = std::fabs(dot_product(n,v2));
     if (dp>tol)
       return false;
   }
@@ -269,7 +270,7 @@ bool vsol_polygon_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_ve
 //---------------------------------------------------------------------------
 bool vsol_polygon_3d::in(vsol_point_3d_sptr const& ) const
 {
-  vcl_cerr << "Warning: vsol_polygon_3d::in() has not been implemented yet\n";
+  std::cerr << "Warning: vsol_polygon_3d::in() has not been implemented yet\n";
   return false;
 }
 
@@ -294,7 +295,7 @@ vgl_vector_3d<double> vsol_polygon_3d::normal() const
 //***************************************************************************
 
 
-inline void vsol_polygon_3d::describe(vcl_ostream &strm, int blanking) const
+inline void vsol_polygon_3d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   if (size() == 0)
@@ -306,7 +307,7 @@ inline void vsol_polygon_3d::describe(vcl_ostream &strm, int blanking) const
       strm << " p" << i << ':' << *(vertex(i));
     strm << ']';
   }
-  strm << vcl_endl;
+  strm << std::endl;
 }
 
 //----------------------------------------------------------------
@@ -338,7 +339,7 @@ void vsol_polygon_3d::b_read(vsl_b_istream &is)
     vsol_spatial_object_3d::b_read(is);
 
     delete storage_;
-    storage_ = new vcl_vector<vsol_point_3d_sptr>();
+    storage_ = new std::vector<vsol_point_3d_sptr>();
     bool valid_ptr;
     vsl_b_read(is, valid_ptr);
     if (!valid_ptr)
@@ -347,7 +348,7 @@ void vsol_polygon_3d::b_read(vsl_b_istream &is)
     this->compute_plane();
     break;
    default:
-    vcl_cerr << "vsol_polygon_3d: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_polygon_3d: unknown I/O version " << ver << '\n';
   }
 }
 
@@ -358,7 +359,7 @@ short vsol_polygon_3d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_polygon_3d::print_summary(vcl_ostream &os) const
+void vsol_polygon_3d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -367,7 +368,7 @@ void vsol_polygon_3d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, vsol_polygon_3d const* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -384,10 +385,10 @@ vsl_b_read(vsl_b_istream &is, vsol_polygon_3d* &p)
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr) {
-   // p = new vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr>());
+   // p = new vsol_polygon_3d(std::vector<vsol_point_3d_sptr>());
     p = new vsol_polygon_3d();
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }

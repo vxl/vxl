@@ -7,10 +7,10 @@
 #include <vcl_cassert.h>
 
 static void  update_best_arcs(const vnl_matrix<double>& D,
-                              const vcl_vector<bool>& node_free,
-                              vcl_vector<mmn_arc>& arcs, unsigned a,
-                              vcl_vector<unsigned>& best_arc,
-                              vcl_vector<double>& best_d)
+                              const std::vector<bool>& node_free,
+                              std::vector<mmn_arc>& arcs, unsigned a,
+                              std::vector<unsigned>& best_arc,
+                              std::vector<double>& best_d)
 {
   unsigned v1=arcs[a].v1;
   unsigned v2=arcs[a].v2;
@@ -43,19 +43,19 @@ static void  update_best_arcs(const vnl_matrix<double>& D,
 //  \param arcs: Output 2n-3 arcs defining the graph.
 //  \param v0: If input as < D.rows() then defines one node of the first arc
 void mmn_make_tri_tree(const vnl_matrix<double>& D,
-                       vcl_vector<mmn_arc>& arcs,
+                       std::vector<mmn_arc>& arcs,
                        unsigned int v0)
 {
   unsigned n = D.rows();
   assert(D.cols()==n);
 
-  vcl_vector<bool> node_free(n,true);
+  std::vector<bool> node_free(n,true);
 
   // Record of index of best arc for each node
   // arcs[best_arc[i]] is arc whose nodes are closest to i
   // best_d[i] is the sum of D(i,v1)+D(i,v2)
-  vcl_vector<unsigned> best_arc(n);
-  vcl_vector<double> best_d(n);
+  std::vector<unsigned> best_arc(n);
+  std::vector<double> best_d(n);
 
   arcs.resize(0);
 
@@ -138,26 +138,26 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
 //  \param arcs: Output 2n-3 arcs defining the graph.
 //  \param v0: If input as < D.rows() then defines one node of the first arc
 void mmn_make_tri_tree(const vnl_matrix<double>& D,
-                       vcl_vector<mmn_arc>& arcs,
-                       vcl_vector<mmn_triplet>& triplets,
-                       vcl_vector<mmn_dependancy>& deps,
+                       std::vector<mmn_arc>& arcs,
+                       std::vector<mmn_triplet>& triplets,
+                       std::vector<mmn_dependancy>& deps,
                        unsigned int v0)
 {
   unsigned n = D.rows();
   assert(D.cols()==n);
 
-  vcl_vector<bool> node_free(n,true);
+  std::vector<bool> node_free(n,true);
 
   // Record of index of best arc for each node
   // arcs[best_arc[i]] is arc whose nodes are closest to i
   // best_d[i] is the sum of D(i,v1)+D(i,v2)
-  vcl_vector<unsigned> best_arc(n);
-  vcl_vector<double> best_d(n);
+  std::vector<unsigned> best_arc(n);
+  std::vector<double> best_d(n);
 
   arcs.resize(0);
   triplets.resize(0);
 
-  vcl_vector<mmn_dependancy> deps0;
+  std::vector<mmn_dependancy> deps0;
 
   // Deduce the first arc
   mmn_arc arc(0,1);

@@ -6,12 +6,14 @@
 //  \brief Create windows into vimt3d_images.
 //  \author Kevin de Souza, Tim Cootes, Ian Scott
 
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vil3d/vil3d_crop.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //: Create windowed view of given image by specifying a cropping region in image co-ords.
 //  The world2im transform is set so that this appears identical to im when addressed in world co-ords.
@@ -57,19 +59,19 @@ vimt3d_image_3d_of<T> vimt3d_crop(const vimt3d_image_3d_of<T>& im,
   // Get the lower and upper corner points, rounding down and up respectively.
   pi = bbox_img.min_point();
   qi = bbox_img.max_point();
-  pi.set(vcl_floor(pi.x()), vcl_floor(pi.y()), vcl_floor(pi.z()));
-  qi.set(vcl_ceil(qi.x()),  vcl_ceil(qi.y()),  vcl_ceil(qi.z()));
+  pi.set(std::floor(pi.x()), std::floor(pi.y()), std::floor(pi.z()));
+  qi.set(std::ceil(qi.x()),  std::ceil(qi.y()),  std::ceil(qi.z()));
 
   // Restrict to image bounds - perhaps we could use vgl_box intersection instead?
   unsigned ni = im.image().ni();
   unsigned nj = im.image().nj();
   unsigned nk = im.image().nk();
-  unsigned pix = vcl_min(vcl_max((int) pi.x(), 0), (int)ni-1);
-  unsigned piy = vcl_min(vcl_max((int) pi.y(), 0), (int)nj-1);
-  unsigned piz = vcl_min(vcl_max((int) pi.z(), 0), (int)nk-1);
-  unsigned qix = vcl_min(vcl_max((int) qi.x(), 0), (int)ni-1);
-  unsigned qiy = vcl_min(vcl_max((int) qi.y(), 0), (int)nj-1);
-  unsigned qiz = vcl_min(vcl_max((int) qi.z(), 0), (int)nk-1);
+  unsigned pix = std::min(std::max((int) pi.x(), 0), (int)ni-1);
+  unsigned piy = std::min(std::max((int) pi.y(), 0), (int)nj-1);
+  unsigned piz = std::min(std::max((int) pi.z(), 0), (int)nk-1);
+  unsigned qix = std::min(std::max((int) qi.x(), 0), (int)ni-1);
+  unsigned qiy = std::min(std::max((int) qi.y(), 0), (int)nj-1);
+  unsigned qiz = std::min(std::max((int) qi.z(), 0), (int)nk-1);
 
   // Crop image
   assert (qix>=pix && qiy>=piy && qiz>=piz);

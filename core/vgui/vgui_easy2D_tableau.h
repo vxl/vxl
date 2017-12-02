@@ -79,24 +79,24 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   bool handle(const vgui_event& e);
 
   //: Returns the name given to this tableau in the constructor.
-  vcl_string name() const { return name_; }
+  std::string name() const { return name_; }
 
   //: Returns the filename of the child image if there is one, else the name.
-  vcl_string file_name() const;
+  std::string file_name() const;
 
   //: Returns a nice version of the type, including details of any image file.
-  vcl_string pretty_name() const;
+  std::string pretty_name() const;
 
   //: Returns the type of this tableau ('vgui_easy2D_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Set the child tableau to be the given image_tableau.
-  void set_image(vcl_string const& image);
+  void set_image(std::string const& image);
 
   //: Set the child tableau to be the given tableau.
   void set_child(vgui_tableau_sptr const&);
 
-  //: get the child tableau 
+  //: get the child tableau
   vgui_tableau_sptr child() const;
 
   //: Set the colour of objects to the given red, green, blue, alpha values.
@@ -157,7 +157,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   void clear() { vgui_displaybase_tableau::clear(); }
 
   //: Returns a list of all soviews on the display.
-  vcl_vector<vgui_soview*> const &get_all() const
+  std::vector<vgui_soview*> const &get_all() const
   { return vgui_displaybase_tableau::get_all(); }
 
   //: If the child tableau is an image_tableau, return this.
@@ -167,7 +167,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   //  Specify the optional arguments in case this tableau does not contain
   //  an image tableau, or if you want a smaller part of the image printed.
   //  If wd or ht are 0, no image is printed at all.
-  void print_psfile(vcl_string filename, int reduction_factor,
+  void print_psfile(std::string filename, int reduction_factor,
                     bool print_geom_objs, int wd=-1, int ht=-1);
 
 #if 0 // deprecated method
@@ -200,7 +200,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   vgui_image_tableau_sptr image_image;
 
   //: Name of this tableau.
-  vcl_string name_;
+  std::string name_;
 
   //: the style of the objects
   vgui_style_sptr style_;

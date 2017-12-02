@@ -1,14 +1,16 @@
 // This is mul/mmn/tests/test_csp_solver.cxx
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <numeric>
+#include <iterator>
+#include <cmath>
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
 #include <mmn/mmn_graph_rep1.h>
 #include <mmn/mmn_csp_solver.h>
 #include <mmn/mmn_dp_solver.h>
 #include <mmn/mmn_lbp_solver.h>
-#include <vcl_algorithm.h>
-#include <vcl_numeric.h>
-#include <vcl_iterator.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -27,21 +29,21 @@ namespace test_csp_bits
         vgl_point_2d<double> loc;
         double amplitude; //DP "value" is a function of this
     };
-    void convert_to_minus_log_probs(vcl_vector<vnl_vector<double> >& node_cost);
+    void convert_to_minus_log_probs(std::vector<vnl_vector<double> >& node_cost);
 };
 
 using namespace test_csp_bits;
-void test_csp_bits::convert_to_minus_log_probs(vcl_vector<vnl_vector<double> >& node_cost)
+void test_csp_bits::convert_to_minus_log_probs(std::vector<vnl_vector<double> >& node_cost)
 {
     for (unsigned i=0; i<node_cost.size();++i)
     {
-        double sum=vcl_accumulate(node_cost[i].begin(),
+        double sum=std::accumulate(node_cost[i].begin(),
                                   node_cost[i].end(),
                                   0.0);
         node_cost[i]/=sum;
         for (unsigned j=0; j<node_cost[i].size();j++)
         {
-            node_cost[i][j] = -vcl_log(node_cost[i][j]);
+            node_cost[i][j] = -std::log(node_cost[i][j]);
         }
     }
 }
@@ -49,18 +51,18 @@ void test_csp_bits::convert_to_minus_log_probs(vcl_vector<vnl_vector<double> >& 
 
 void test_csp_solver_a()
 {
-    vcl_cout<<"==== test test_csp_solver (reversed chain with one loop) ====="<<vcl_endl;
+    std::cout<<"==== test test_csp_solver (reversed chain with one loop) ====="<<std::endl;
 
     unsigned n=5;
     // Generate linked list
-    vcl_vector<mmn_arc> arcs(n-1);
+    std::vector<mmn_arc> arcs(n-1);
     for (unsigned i=0;i<n-1;++i)
         arcs[i]=mmn_arc(i+1,i);
 
     arcs.push_back(mmn_arc(0,n-1));
-    vcl_cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<vcl_endl;
+    std::cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<std::endl;
 
-    vcl_vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
+    std::vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
     for (unsigned i=0; i<n;i++)
     {
         node_labels_subset[i].insert(i);
@@ -69,54 +71,54 @@ void test_csp_solver_a()
         node_labels_subset[i].insert(4+i);
     }
 
-    vcl_vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs.size());
+    std::vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs.size());
     for (unsigned a=0;a<arcs.size();++a)
     {
         unsigned v1=arcs[a].min_v();
         unsigned v2=arcs[a].max_v();
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(v1,v2)); //ensure consistency
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(3+v1,3+v2));
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(2,1));
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(1,2));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(v1,v2)); //ensure consistency
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(3+v1,3+v2));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(2,1));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(1,2));
     }
 
     mmn_csp_solver solver(n,arcs);
     solver.set_verbose(true);
-    vcl_cout<<"Run CSP solver."<<vcl_endl;
+    std::cout<<"Run CSP solver."<<std::endl;
     bool arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is Arc Consistent",arcConsistent,true);
 
-    const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=solver.kernel_node_labels();
+    const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=solver.kernel_node_labels();
     assert(kernel_node_labels.size()==n);
     for (unsigned i=0; i<n;i++)
     {
-        vcl_cout<<vcl_endl<<"Node "<<i<<vcl_endl;
+        std::cout<<std::endl<<"Node "<<i<<std::endl;
         TEST("Unique label on each node ",kernel_node_labels[i].size(),1);
         if (!kernel_node_labels[i].empty())
         {
             TEST("Correct max label on each node",(*(kernel_node_labels[i].begin())),i);
             if (kernel_node_labels[i].size()>1)
             {
-                vcl_cout<<"Dumping all labels for node "<<i<<vcl_endl;
-                vcl_copy(kernel_node_labels[i].begin(),kernel_node_labels[i].end(),
-                         vcl_ostream_iterator<unsigned >(vcl_cout,"\t"));
-                vcl_cout<<vcl_endl;
+                std::cout<<"Dumping all labels for node "<<i<<std::endl;
+                std::copy(kernel_node_labels[i].begin(),kernel_node_labels[i].end(),
+                         std::ostream_iterator<unsigned >(std::cout,"\t"));
+                std::cout<<std::endl;
             }
         }
         else
         {
-            vcl_cout<<"kernel_node_labels is empty"<<vcl_endl;
+            std::cout<<"kernel_node_labels is empty"<<std::endl;
         }
     }
 
     unsigned middle=3;
     node_labels_subset[middle].erase(middle);
-    vcl_cout<<"Now erase the middle nodes max label to create inconsistent problem"<<vcl_endl;
+    std::cout<<"Now erase the middle nodes max label to create inconsistent problem"<<std::endl;
     arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is now NOT Arc Consistent",arcConsistent,false);
-    const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
+    const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
     assert(kernel_node_labels2.size()==n);
     for (unsigned i=0; i<n;i++)
     {
@@ -127,14 +129,14 @@ void test_csp_solver_a()
 
 void test_csp_solver_loop_b(unsigned n)
 {
-    vcl_cout<<"==== test test_csp_solver (loop) ====="<<vcl_endl;
+    std::cout<<"==== test test_csp_solver (loop) ====="<<std::endl;
 
     // Generate arcs
-    vcl_vector<mmn_arc> arcs(n);
+    std::vector<mmn_arc> arcs(n);
     for (unsigned i=0;i<n;++i)
         arcs[i]=mmn_arc(i,(i+1)%n);
 
-    vcl_vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
+    std::vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
     for (unsigned i=0; i<n;i++)
     {
         node_labels_subset[i].insert(i);
@@ -143,27 +145,27 @@ void test_csp_solver_loop_b(unsigned n)
         node_labels_subset[i].insert(5+i);
     }
 
-    vcl_vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs.size());
+    std::vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs.size());
     for (unsigned a=0;a<arcs.size();++a)
     {
         unsigned v1=arcs[a].min_v();
         unsigned v2=arcs[a].max_v();
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(v1,v2)); //ensure consistency
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(3+v1,3+v2));
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(2,1));
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(1,2));
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(999,0)); //definitely invalid
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(0,999));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(v1,v2)); //ensure consistency
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(3+v1,3+v2));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(2,1));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(1,2));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(999,0)); //definitely invalid
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(0,999));
     }
 
     mmn_csp_solver solver(n,arcs);
     solver.set_verbose(true);
-    vcl_cout<<"Run CSP solver."<<vcl_endl;
+    std::cout<<"Run CSP solver."<<std::endl;
     bool arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is Arc Consistent",arcConsistent,true);
 
-    const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=solver.kernel_node_labels();
+    const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=solver.kernel_node_labels();
     assert(kernel_node_labels.size()==n);
     for (unsigned i=0; i<n;i++)
     {
@@ -173,19 +175,19 @@ void test_csp_solver_loop_b(unsigned n)
 
     unsigned middle=2;
     node_labels_subset[middle].erase(middle);
-    vcl_cout<<"Now erase the middle nodes arc to create inconsistent problem"<<vcl_endl;
+    std::cout<<"Now erase the middle nodes arc to create inconsistent problem"<<std::endl;
     arcConsistent=solver(node_labels_subset,links_subset);
     TEST("now NOT Arc Consistent",arcConsistent,false);
     {
         unsigned v1=arcs[middle].min_v();
         unsigned v2=arcs[middle].max_v();
-        links_subset[middle].erase(vcl_pair<unsigned ,unsigned >(v1,v2)); //ensure consistency
+        links_subset[middle].erase(std::pair<unsigned ,unsigned >(v1,v2)); //ensure consistency
     }
-    vcl_cout<<"Run CSP solver."<<vcl_endl;
+    std::cout<<"Run CSP solver."<<std::endl;
     arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is now NOT Arc Consistent",arcConsistent,false);
-    const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
+    const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
     assert(kernel_node_labels2.size()==n);
     for (unsigned i=0; i<n;i++)
     {
@@ -197,16 +199,16 @@ void test_best_xydp_line()
 {
     const unsigned NSTAGES=5;
     const unsigned NPOINTS_PER_STAGE=10;
-    vcl_cout<<"==== test test_csp_solver best y line ====="<<vcl_endl;
+    std::cout<<"==== test test_csp_solver best y line ====="<<std::endl;
 
     unsigned n=NSTAGES;
     // Generate linked list
-    vcl_vector<mmn_arc> arcs(n-1);
+    std::vector<mmn_arc> arcs(n-1);
     for (unsigned i=0;i<n-1;++i)
         arcs[i]=mmn_arc(i,i+1);
 
-    vcl_vector<vnl_vector<double> > node_cost(n);
-    vcl_vector<vnl_matrix<double> > pair_cost(arcs.size());
+    std::vector<vnl_vector<double> > node_cost(n);
+    std::vector<vnl_matrix<double> > pair_cost(arcs.size());
 
     //Create some point data
 
@@ -236,12 +238,12 @@ void test_best_xydp_line()
 
     //--------- Now loop over all stages and create some raw data, then transform it to input data form
 
-    vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(NSTAGES);
+    std::vector<std::vector<vgl_point_2d<double > > > locations(NSTAGES);
 
-    vcl_vector<point_data> prev_raw_data(NPOINTS_PER_STAGE);
+    std::vector<point_data> prev_raw_data(NPOINTS_PER_STAGE);
     for (unsigned int istage=0;istage<NSTAGES;++istage)
     {
-        vcl_vector<point_data> raw_data(NPOINTS_PER_STAGE);
+        std::vector<point_data> raw_data(NPOINTS_PER_STAGE);
         vnl_vector<double> amps(NPOINTS_PER_STAGE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
@@ -266,7 +268,7 @@ void test_best_xydp_line()
         for (unsigned j=0;j<NPOINTS_PER_STAGE;++j)
         {
             const double STRENGTH_FACTOR=1/20.0;
-            double ampprob=1.0-vcl_exp(-raw_data[j].amplitude * STRENGTH_FACTOR);
+            double ampprob=1.0-std::exp(-raw_data[j].amplitude * STRENGTH_FACTOR);
             if (ampprob<1.0E-8)
                 ampprob=1.0E-8;
             node_cost[istage][j]=ampprob;
@@ -285,7 +287,7 @@ void test_best_xydp_line()
                     vnl_vector<double > delta(2);
                     delta[0] = d.x(); delta[1]=d.y();
                     double linkProb=pdf_model(delta);
-                    pair_cost[arcId][kprev][k]=vcl_log(linkProb);
+                    pair_cost[arcId][kprev][k]=std::log(linkProb);
                 }
             }
         }
@@ -296,7 +298,7 @@ void test_best_xydp_line()
     convert_to_minus_log_probs(node_cost);
 
     //Also test using Markov alg
-    vcl_vector<vnl_matrix<double  > > pair_costs_neg=pair_cost;
+    std::vector<vnl_matrix<double  > > pair_costs_neg=pair_cost;
 
     for (unsigned i=0;i<pair_costs_neg.size();++i)
     {
@@ -311,18 +313,18 @@ void test_best_xydp_line()
 
     mmn_graph_rep1 graph;
     graph.build(n,arcs);
-    vcl_vector<mmn_dependancy> deps;
+    std::vector<mmn_dependancy> deps;
     graph.compute_dependancies(deps);
 
     mmn_dp_solver dpSolver;
     dpSolver.set_dependancies(deps,n,graph.max_n_arcs());
 
-    vcl_cout<<"Run DP solver."<<vcl_endl;
+    std::cout<<"Run DP solver."<<std::endl;
 
-    vcl_vector<unsigned> xDP;
+    std::vector<unsigned> xDP;
     /* double min_costdp = */ dpSolver.solve(node_cost,pair_costs_neg,xDP);
 
-    vcl_vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
+    std::vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
     for (unsigned i=0; i<n;i++)
     {
         node_labels_subset[i].insert(i);
@@ -331,26 +333,26 @@ void test_best_xydp_line()
         node_labels_subset[i].insert(xDP[i]);
     }
 
-    vcl_vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs.size());
+    std::vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs.size());
     for (unsigned a=0;a<arcs.size();++a)
     {
         unsigned v1=arcs[a].min_v();
         unsigned v2=arcs[a].max_v();
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(xDP[v1],xDP[v2])); //ensure consistency
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(3+v1,3+v2));
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(2,1));
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(1,2));
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(999,0)); //definitely invalid
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(xDP[v1],xDP[v2])); //ensure consistency
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(3+v1,3+v2));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(2,1));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(1,2));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(999,0)); //definitely invalid
     }
 
     mmn_csp_solver solver(n,arcs);
     //solver.set_verbose(true);
-    vcl_cout<<"Run CSP solver."<<vcl_endl;
+    std::cout<<"Run CSP solver."<<std::endl;
     bool arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is Arc Consistent",arcConsistent,true);
 
-    const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=solver.kernel_node_labels();
+    const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=solver.kernel_node_labels();
     assert(kernel_node_labels.size()==n);
     for (unsigned i=0; i<n;i++)
     {
@@ -359,17 +361,17 @@ void test_best_xydp_line()
     }
 
     unsigned middle=2;
-    vcl_cout<<"Now erase the middle nodes arc to create inconsistent problem"<<vcl_endl;
+    std::cout<<"Now erase the middle nodes arc to create inconsistent problem"<<std::endl;
     {
         unsigned v1=arcs[middle].min_v();
         unsigned v2=arcs[middle].max_v();
-        links_subset[middle].erase(vcl_pair<unsigned ,unsigned >(xDP[v1],xDP[v2])); //ensure inconsistency
+        links_subset[middle].erase(std::pair<unsigned ,unsigned >(xDP[v1],xDP[v2])); //ensure inconsistency
     }
-    vcl_cout<<"Run CSP solver."<<vcl_endl;
+    std::cout<<"Run CSP solver."<<std::endl;
     arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is now NOT Arc Consistent",arcConsistent,false);
-    const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
+    const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
     assert(kernel_node_labels2.size()==n);
     for (unsigned i=0; i<n;i++)
     {
@@ -381,11 +383,11 @@ void test_5x5grid()
 {
     const unsigned NSTAGES=5;
     const unsigned NPOINTS_PER_NODE=10;
-    vcl_cout<<"==== test test_csp_solver 5x5 grid ====="<<vcl_endl;
+    std::cout<<"==== test test_csp_solver 5x5 grid ====="<<std::endl;
 
     unsigned n=NSTAGES*NSTAGES;
     // Generate linked list
-    vcl_vector<mmn_arc> arcs;
+    std::vector<mmn_arc> arcs;
     const double DG=100.0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
@@ -406,10 +408,10 @@ void test_5x5grid()
         }
     }
 
-    vcl_vector<vnl_vector<double> > node_costs(n);
-    vcl_vector<vnl_matrix<double> > pair_costs(arcs.size());
+    std::vector<vnl_vector<double> > node_costs(n);
+    std::vector<vnl_matrix<double> > pair_costs(arcs.size());
 
-    vcl_cout<<"All arcs added, total number of arcs= "<<arcs.size()<<vcl_endl;
+    std::cout<<"All arcs added, total number of arcs= "<<arcs.size()<<std::endl;
 
     //Create some point data
 
@@ -443,7 +445,7 @@ void test_5x5grid()
 
     //--------- Now loop over all grid points and create some raw data, then transform it to input data form
 
-    vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(n);
+    std::vector<std::vector<vgl_point_2d<double > > > locations(n);
 
     for (unsigned int inode=0;inode<n;++inode)
     {
@@ -452,7 +454,7 @@ void test_5x5grid()
         unsigned nodeId=NSTAGES*iy+ix;
         assert(nodeId==inode);
 
-        vcl_vector<point_data> raw_data(NPOINTS_PER_NODE);
+        std::vector<point_data> raw_data(NPOINTS_PER_NODE);
         vnl_vector<double> amps(NPOINTS_PER_NODE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
@@ -471,7 +473,7 @@ void test_5x5grid()
                                                                   gridPoint.y()+error[1]);
 
             locations[nodeId].push_back(location);
-            double ampprob=1.0-vcl_exp(-amplitude * STRENGTH_FACTOR);
+            double ampprob=1.0-std::exp(-amplitude * STRENGTH_FACTOR);
             if (ampprob<1.0E-8)
                 ampprob=1.0E-8;
 
@@ -480,7 +482,7 @@ void test_5x5grid()
 
         //Raw data points are go.......
     }
-    vcl_cout<<"Have created points grid and node costs..."<<vcl_endl;
+    std::cout<<"Have created points grid and node costs..."<<std::endl;
 
     for (unsigned i=0; i<arcs.size();i++)
     {
@@ -507,20 +509,20 @@ void test_5x5grid()
                 }
                 else
                 {
-                    vcl_cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<'\t'<<node2<<vcl_endl;
+                    std::cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<'\t'<<node2<<std::endl;
                     assert(0);
                 }
                 delta[0] = d.x()-dgx; delta[1]=d.y()-dgy;
                 double linkProb=pdf_model(delta);
-                pairCost=vcl_log(linkProb);
+                pairCost=std::log(linkProb);
             }
         }
     }
 
-    vcl_cout<<"Have computed all node and arc costs"<<vcl_endl;
+    std::cout<<"Have computed all node and arc costs"<<std::endl;
     convert_to_minus_log_probs(node_costs);
 
-    vcl_vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
+    std::vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
 
     for (unsigned i=0;i<pair_costs_neg.size();++i)
     {
@@ -536,15 +538,15 @@ void test_5x5grid()
     mmn_lbp_solver LBPsolver;
     LBPsolver.set_arcs(n,arcs);
 
-    vcl_cout<<"Run Loopy Belief Solver."<<vcl_endl;
+    std::cout<<"Run Loopy Belief Solver."<<std::endl;
 
-    vcl_vector<unsigned> x;
+    std::vector<unsigned> x;
     /* double min_cost = */ LBPsolver(node_costs,pair_costs_neg,x);
 
     vnl_vector<double> states(n);
     usampler->get_samples(states);
 
-    vcl_vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
+    std::vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
     for (unsigned i=0; i<n;i++)
     {
         node_labels_subset[i].insert(unsigned(states[i]+0.49999));
@@ -553,30 +555,30 @@ void test_5x5grid()
         node_labels_subset[i].insert(x[i]);
     }
 
-    vcl_vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs.size());
+    std::vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs.size());
     for (unsigned a=0;a<arcs.size();++a)
     {
         vnl_vector<double> states(2);
 
         unsigned v1=arcs[a].min_v();
         unsigned v2=arcs[a].max_v();
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(x[v1],x[v2])); //ensure consistency
-        links_subset[a].insert(vcl_pair<unsigned ,unsigned >(9,0));
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(x[v1],x[v2])); //ensure consistency
+        links_subset[a].insert(std::pair<unsigned ,unsigned >(9,0));
         for (unsigned k=0;k<5;++k)
         {
             usampler->get_samples(states);
-            links_subset[a].insert(vcl_pair<unsigned ,unsigned >(unsigned(states[0]+0.5),unsigned(states[1]+0.5)));
+            links_subset[a].insert(std::pair<unsigned ,unsigned >(unsigned(states[0]+0.5),unsigned(states[1]+0.5)));
         }
     }
 
     mmn_csp_solver solver(n,arcs);
     //solver.set_verbose(true);
-    vcl_cout<<"Run CSP solver."<<vcl_endl;
+    std::cout<<"Run CSP solver."<<std::endl;
     bool arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is Arc Consistent",arcConsistent,true);
 
-    const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=solver.kernel_node_labels();
+    const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=solver.kernel_node_labels();
     assert(kernel_node_labels.size()==n);
     for (unsigned i=0; i<n;i++)
     {
@@ -586,20 +588,20 @@ void test_5x5grid()
 
     //------------------------------------ Erase middle arc and test for consistency
     unsigned middle=2;
-    vcl_cout<<"Now erase the middle nodes arc to create inconsistent problem"<<vcl_endl;
+    std::cout<<"Now erase the middle nodes arc to create inconsistent problem"<<std::endl;
     {
         unsigned v1=arcs[middle].min_v();
         unsigned v2=arcs[middle].max_v();
-        links_subset[middle].erase(vcl_pair<unsigned ,unsigned >(x[v1],x[v2])); //ensure inconsistency
+        links_subset[middle].erase(std::pair<unsigned ,unsigned >(x[v1],x[v2])); //ensure inconsistency
         if (x[v1] != x[v2])
-            links_subset[middle].insert(vcl_pair<unsigned ,unsigned >(x[v2],x[v1])); //
+            links_subset[middle].insert(std::pair<unsigned ,unsigned >(x[v2],x[v1])); //
     }
 
-    vcl_cout <<"Now retest for inconsistency with one middle arc removed"<<vcl_endl;
+    std::cout <<"Now retest for inconsistency with one middle arc removed"<<std::endl;
     arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is now NOT Arc Consistent",arcConsistent,false);
-    const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
+    const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
     assert(kernel_node_labels2.size()==n);
     for (unsigned i=0; i<n;i++)
     {
@@ -610,16 +612,16 @@ void test_5x5grid()
     {
         unsigned v1=arcs[middle].min_v();
         unsigned v2=arcs[middle].max_v();
-        links_subset[middle].insert(vcl_pair<unsigned ,unsigned >(x[v1],x[v2])); //ensure consistency in arcs
+        links_subset[middle].insert(std::pair<unsigned ,unsigned >(x[v1],x[v2])); //ensure consistency in arcs
         node_labels_subset[v2].erase(x[v2]); //But now erase target node state
     }
 
-    vcl_cout <<"Now retest for inconsistency with one target node label removed"<<vcl_endl;
+    std::cout <<"Now retest for inconsistency with one target node label removed"<<std::endl;
     arcConsistent=solver(node_labels_subset,links_subset);
 
     TEST("CSP is now NOT Arc Consistent",arcConsistent,false);
     {
-        const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
+        const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels2=solver.kernel_node_labels();
         assert(kernel_node_labels2.size()==n);
         for (unsigned i=0; i<n;i++)
         {

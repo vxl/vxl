@@ -10,7 +10,8 @@
 // \brief Templated rtree class and associated classes and functions
 //--------------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 // forward declare all classes.
 template <class V, class B, class C> class vgl_rtree_probe;
 template <class V, class B, class C> class vgl_rtree_node;
@@ -77,13 +78,13 @@ class vgl_rtree_node
   ~vgl_rtree_node();
 
   // get all Vs which meet the given region.
-  void get(B const &region, vcl_vector<V> &) const;
+  void get(B const &region, std::vector<V> &) const;
 
   // get all Vs whose bounds meet the given probe.
-  void get(vgl_rtree_probe<V, B, C> const &region, vcl_vector<V> &) const;
+  void get(vgl_rtree_probe<V, B, C> const &region, std::vector<V> &) const;
 
   // get all Vs.
-  void get_all(vcl_vector<V> &vs) const;
+  void get_all(std::vector<V> &vs) const;
 
   // find node containing a V equal to the given one.
   bool find(V const &v, node **n, int *i) const;
@@ -310,19 +311,19 @@ class vgl_rtree
   }
 
   //: get elements in the given region.
-  void get(B const &region, vcl_vector<V> &vs) const {
+  void get(B const &region, std::vector<V> &vs) const {
     if (root)
       root->get(region, vs);
   }
 
   //: get elements which meet the given probe.
-  void get(vgl_rtree_probe<V, B, C> const &region, vcl_vector<V> &vs) const {
+  void get(vgl_rtree_probe<V, B, C> const &region, std::vector<V> &vs) const {
     if (root)
       root->get(region, vs);
   }
 
   //: get all elements in the tree.
-  void get_all(vcl_vector<V> &vs) const {
+  void get_all(std::vector<V> &vs) const {
     if (root)
       root->get_all(vs);
   }
@@ -357,6 +358,6 @@ class vgl_rtree
   vgl_rtree(vgl_rtree<V, B, C> const &) { }
 };
 
-#define VGL_RTREE_INSTANTIATE(V, B, C) extern "you must include vgl_rtree.txx first"
+#define VGL_RTREE_INSTANTIATE(V, B, C) extern "you must include vgl_rtree.hxx first"
 
 #endif // vgl_rtree_h_

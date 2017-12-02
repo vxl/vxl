@@ -15,10 +15,11 @@
 //   May.2009 - Matt Leotta - added a function to find self-intersections
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vgl/vgl_point_2d.h> // needed for vcl_vector instantiations
-#include <vcl_vector.h>
-#include <vcl_utility.h> // for vcl_pair
+#include <iosfwd>
+#include <vector>
+#include <utility>
+#include <vcl_compiler.h>
+#include <vgl/vgl_point_2d.h> // needed for std::vector instantiations
 
 //: Store a polygon.
 // May have holes or multiple sections.  The polygon is stored as a list
@@ -35,7 +36,7 @@ class vgl_polygon
  public:
   typedef vgl_point_2d<T> point_t;
 
-  typedef vcl_vector<point_t> sheet_t;
+  typedef std::vector<point_t> sheet_t;
 
   // Constructors/Destructor---------------------------------------------------
 
@@ -64,7 +65,7 @@ class vgl_polygon
   explicit vgl_polygon(sheet_t const& points, unsigned n_sheets=1) : sheets_(n_sheets,points) {}
 
   //: Construct by specifying all of its sheets
-  explicit vgl_polygon(vcl_vector<sheet_t> const& sheets) : sheets_(sheets) {}
+  explicit vgl_polygon(std::vector<sheet_t> const& sheets) : sheets_(sheets) {}
 
   // Copy constructor
   vgl_polygon(vgl_polygon const& a) : sheets_(a.sheets_) {}
@@ -123,14 +124,14 @@ class vgl_polygon
   inline sheet_t const& operator[](int i) const { return sheets_[i]; }
 
   //: Pretty print
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 
   //: read this polygon from ascii stream
-  vcl_istream& read(vcl_istream&);
+  std::istream& read(std::istream&);
  protected:
 
   // Data Members--------------------------------------------------------------
-  vcl_vector<sheet_t> sheets_;
+  std::vector<sheet_t> sheets_;
 };
 
 //: A commonly required (single-sheet) polygon representation.
@@ -160,17 +161,17 @@ struct vgl_polygon_sheet_as_array
 // point is returned in ip[k].
 template <class T>
 void vgl_selfintersections(vgl_polygon<T> const& p,
-                           vcl_vector<vcl_pair<unsigned,unsigned> >& e1,
-                           vcl_vector<vcl_pair<unsigned,unsigned> >& e2,
-                           vcl_vector<vgl_point_2d<T> >& ip);
+                           std::vector<std::pair<unsigned,unsigned> >& e1,
+                           std::vector<std::pair<unsigned,unsigned> >& e2,
+                           std::vector<vgl_point_2d<T> >& ip);
 
 // \relatesalso vgl_polygon
 template <class T>
-vcl_ostream& operator<< (vcl_ostream& os, vgl_polygon<T> const& p) { return p.print(os); }
+std::ostream& operator<< (std::ostream& os, vgl_polygon<T> const& p) { return p.print(os); }
 
 template <class T>
-vcl_istream& operator>> (vcl_istream& is, vgl_polygon<T>& p) { return p.read(is); }
+std::istream& operator>> (std::istream& is, vgl_polygon<T>& p) { return p.read(is); }
 
-#define VGL_POLYGON_INSTANTIATE(T) extern "please include vgl/vgl_polygon.txx instead"
+#define VGL_POLYGON_INSTANTIATE(T) extern "please include vgl/vgl_polygon.hxx instead"
 
 #endif // vgl_polygon_h_

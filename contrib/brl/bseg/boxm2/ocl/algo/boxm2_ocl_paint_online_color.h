@@ -23,7 +23,7 @@ class boxm2_ocl_paint_online_color
                              boxm2_opencl_cache_sptr  opencl_cache,
                              vil_image_view_base_sptr img,
                              vpgl_camera_double_sptr  cam,
-                             vcl_string const& apm_id="");
+                             std::string const& apm_id="");
 
     static bool paint_scene_with_weights( boxm2_scene_sptr         scene,
                                           bocl_device_sptr         device,
@@ -31,16 +31,16 @@ class boxm2_ocl_paint_online_color
                                           vil_image_view_base_sptr img,
                                           vil_image_view<float> const& weights,
                                           vpgl_camera_double_sptr  cam,
-                                          vcl_string const& apm_id="");
+                                          std::string const& apm_id="");
 
-  static bool reset( boxm2_scene_sptr scene,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,vcl_string amp_id ="");
+  static bool reset( boxm2_scene_sptr scene,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,std::string amp_id ="");
 
   private:
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*> compile_kernels( bocl_device_sptr device, vcl_string opts="" );
+    static std::vector<bocl_kernel*> compile_kernels( bocl_device_sptr device, std::string opts="" );
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 
 #endif // boxm2_ocl_paint_online_color_h_

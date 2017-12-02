@@ -324,14 +324,14 @@ higher_order_terms(vnl_vector<double> p) const
 
 void
 rgrl_trans_quadratic::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   vnl_vector<double> origin(from_centre_.size(), 0.0);
   // tag
   os << "QUADRATIC\n"
   // parameters
      << t().size() << '\n'
-     << Q_<< A_ << trans_ << ' ' << origin << vcl_endl;
+     << Q_<< A_ << trans_ << ' ' << origin << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -339,13 +339,13 @@ write( vcl_ostream& os ) const
 
 bool
 rgrl_trans_quadratic::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "QUADRATIC" ) != 0 ) {
@@ -381,7 +381,7 @@ rgrl_trans_quadratic::
 inverse_transform( ) const
 {
   assert ( ! "rgrl_trans_quadratic::inverse_transform() is not defined" );
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: make a clone copy

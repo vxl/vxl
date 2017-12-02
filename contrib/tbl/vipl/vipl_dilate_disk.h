@@ -72,7 +72,7 @@ class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,Pixel
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_dilate_disk.txx"
+#include "vipl_dilate_disk.hxx"
 #endif
 
 #endif // vipl_dilate_disk_h_

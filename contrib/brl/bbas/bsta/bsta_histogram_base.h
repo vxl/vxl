@@ -26,7 +26,7 @@ class bsta_histogram_base : public vbl_ref_count
   bsta_histogram_base(): type_(HIST_TYPE_UNKNOWN){}
 
   virtual ~bsta_histogram_base() {}
-  
+
   bsta_hist_type type_;
 };
 
@@ -38,7 +38,7 @@ class bsta_histogram_traits
     return bsta_histogram_base::HIST_TYPE_UNKNOWN;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 class bsta_histogram_traits<float>
 {
  public:
@@ -46,7 +46,7 @@ class bsta_histogram_traits<float>
     return bsta_histogram_base::HIST_TYPE_FLOAT;}
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 class bsta_histogram_traits<double>
 {
  public:

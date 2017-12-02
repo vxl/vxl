@@ -5,10 +5,12 @@
 // \author Tim Cootes
 // \brief Basic snake, using dynamic programming to update.
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Basic snake, using dynamic programming to update.
 // Contains a single mfpf_point_finder, which is used to locate
@@ -23,11 +25,11 @@ class mfpf_dp_snake
   mbl_cloneable_ptr<mfpf_point_finder> finder_;
 
   //: Current set of boundary points (a closed curve)
-  vcl_vector<vgl_point_2d<double> > pts_;
+  std::vector<vgl_point_2d<double> > pts_;
 
   //: Compute the average of each point and its neighbours
-  void smooth_curve(vcl_vector<vgl_point_2d<double> >& src_pts,
-                    vcl_vector<vgl_point_2d<double> >& dest_pts);
+  void smooth_curve(std::vector<vgl_point_2d<double> >& src_pts,
+                    std::vector<vgl_point_2d<double> >& dest_pts);
 
  public:
 
@@ -51,7 +53,7 @@ class mfpf_dp_snake
   mfpf_point_finder& finder();
 
   //: Current set of boundary points (a closed curve)
-  const vcl_vector<vgl_point_2d<double> >& points() const { return pts_; }
+  const std::vector<vgl_point_2d<double> >& points() const { return pts_; }
 
   //: Perform one iteration of snake search algorithm
   //  Return the mean movement of each point
@@ -76,10 +78,10 @@ class mfpf_dp_snake
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -89,7 +91,7 @@ class mfpf_dp_snake
 };
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_dp_snake& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_dp_snake& b);
 
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_dp_snake& b);

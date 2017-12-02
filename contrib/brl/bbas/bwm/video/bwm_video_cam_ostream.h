@@ -28,15 +28,15 @@ class bwm_video_cam_ostream : public vbl_ref_count
   bwm_video_cam_ostream();
 
   //: Constructor - opens a stream
-  bwm_video_cam_ostream(const vcl_string& directory,
-                        const vcl_string& name_format = "%05d",
+  bwm_video_cam_ostream(const std::string& directory,
+                        const std::string& name_format = "%05d",
                         const unsigned int init_index = 0);
 
   //: Destructor
    ~bwm_video_cam_ostream() { close(); }
   //: Open the stream
-   bool open(const vcl_string& directory,
-             const vcl_string& name_format = "%05d",
+   bool open(const std::string& directory,
+             const std::string& name_format = "%05d",
              const unsigned int init_index = 0);
 
   //: Close the stream
@@ -49,7 +49,7 @@ class bwm_video_cam_ostream : public vbl_ref_count
   unsigned int index() const { return index_; }
 
   //: Return the next file name to be written to
-  vcl_string next_file_name() const;
+  std::string next_file_name() const;
 
   //: Write and image to the stream
   // \retval false if the image could not be written
@@ -70,13 +70,13 @@ class bwm_video_cam_ostream : public vbl_ref_count
   unsigned int index_;
 
   //: The directory to save images in
-  vcl_string dir_;
+  std::string dir_;
 
   //: The printf-style format string for filenames
-  vcl_string name_format_;
+  std::string name_format_;
 
   //: The camera file format to use (currently vsl binary io)
-  vcl_string file_format_;
+  std::string file_format_;
 };
 
 #endif

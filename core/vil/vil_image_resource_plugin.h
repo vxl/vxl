@@ -12,7 +12,8 @@
 // \author      Franck Bettinger
 // \date        Sun Mar 17 22:57:00 2002
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource.h>
 
@@ -32,7 +33,7 @@ class vil_image_resource_plugin : public vil_image_resource
   virtual ~vil_image_resource_plugin() {}
 
   //: Name of the class
-  virtual vcl_string is_a() const { return "vil_image_resource_plugin"; }
+  virtual std::string is_a() const { return "vil_image_resource_plugin"; }
 
   virtual vil_pixel_format pixel_format() const { return VIL_PIXEL_FORMAT_UNKNOWN; }
 
@@ -48,7 +49,7 @@ class vil_image_resource_plugin : public vil_image_resource
 
   //: Attempt to load image from named file.
   // \return  true if successful
-  virtual bool load_the_image(vil_image_view_base_sptr& image, const vcl_string & path)
+  virtual bool load_the_image(vil_image_view_base_sptr& image, const std::string & path)
   { return load_the_image(image,path,filetype_,colour_); }
 
   //: Attempt to load image from named file.
@@ -57,9 +58,9 @@ class vil_image_resource_plugin : public vil_image_resource
   //        Options are '' (i.e. rely on image), 'Grey' or 'RGB'
   // \return  true if successful
   virtual bool load_the_image(vil_image_view_base_sptr& image,
-                              const vcl_string & path,
-                              const vcl_string & filetype,
-                              const vcl_string & colour);
+                              const std::string & path,
+                              const std::string & filetype,
+                              const std::string & colour);
 
   //: Register a vil_image_resource_plugin to the list of plugins
   static void register_plugin(vil_image_resource_plugin* plugin);
@@ -71,21 +72,21 @@ class vil_image_resource_plugin : public vil_image_resource
   virtual void set_size(int width, int height) { width_=width; height_=height; }
 
   //: Check whether a filename is a potential candidate for loading and if it is available.
-  virtual bool can_be_loaded(const vcl_string& filename);
+  virtual bool can_be_loaded(const std::string& filename);
 
   //: Set the colour options
-  void set_colour(const vcl_string& colour) { colour_=colour; }
+  void set_colour(const std::string& colour) { colour_=colour; }
 
   //: Set the filetype options
-  void set_filetype(const vcl_string& filetype) { filetype_=filetype; }
+  void set_filetype(const std::string& filetype) { filetype_=filetype; }
 
  protected:
 
   //: file type
-  vcl_string filetype_;
+  std::string filetype_;
 
   //: colour
-  vcl_string colour_;
+  std::string colour_;
 
   vil_pixel_format pixel_format_;
   unsigned int ni_;

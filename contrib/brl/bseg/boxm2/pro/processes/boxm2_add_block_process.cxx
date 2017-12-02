@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_add_block_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Mar 15, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 
 namespace boxm2_add_block_process_globals
@@ -21,7 +23,7 @@ bool boxm2_add_block_process_cons(bprb_func_process& pro)
   using namespace boxm2_add_block_process_globals;
 
   //process takes 2 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0]  = "boxm2_scene_sptr";
   input_types_[1]  = "int";
   input_types_[2]  = "int";
@@ -39,7 +41,7 @@ bool boxm2_add_block_process_cons(bprb_func_process& pro)
   input_types_[14]  = "unsigned"; // init tree depth
 
   // process has 1 output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -49,7 +51,7 @@ bool boxm2_add_block_process(bprb_func_process& pro)
   using namespace boxm2_add_block_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -75,11 +77,11 @@ bool boxm2_add_block_process(bprb_func_process& pro)
   unsigned init_level     =pro.get_input<unsigned>        (i++);
 
   boxm2_block_id id(index_i,index_j,index_k);
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blks=scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata> blks=scene->blocks();
 
   if (blks.find(id)!=blks.end())
   {
-      vcl_cout<<"block already exists"<<vcl_endl;
+      std::cout<<"block already exists"<<std::endl;
       return false;
   }
 

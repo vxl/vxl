@@ -57,31 +57,43 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_persp_cam_pa_covariance_process, "vpglComputePerspCamPACovarianceProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process2, "vpglCreatePerspectiveCameraProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_perspective_cam_center_process, "vpglGetPerspectiveCamCenterProcess");
+#if HAS_GEOTIFF
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_geo_camera_process, "vpglLoadGeoCameraProcess");
+#endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process3, "vpglCreatePerspectiveCameraProcess3");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process4, "vpglCreatePerspectiveCameraProcess4");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process5, "vpglCreatePerspectiveCameraProcess5");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_perturb_uniform_persp_cam_orient_process, "vpglPerturbUniformPerspCamOrientProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bpgl_transform_perspective_cameras_process, "bpglTransformPerspectiveCamerasProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_transform_space_process, "vpglTransformSpaceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_transform_box_process, "vpglTransformBoxProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_affine_camera_process, "vpglLoadAffineCameraProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_geo_footprint_process, "vpglGeoFootprintProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_geo_footprint_process2, "vpglGeoFootprintProcess2");
+#if HAS_GEOTIFF
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_translate_geo_camera_process, "vpglTranslateGeoCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_geo_camera_to_generic_process, "vpglConvertGeoCameraToGenericProcess");
+#endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_from_kml_process, "vpglCreatePerspCameraFromKMLProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_to_local_coordinates_process2, "vpglConvertToLocalCoordinatesProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_perspective_camera_from_kml_file_process, "vpglLoadPerspCameraFromKMLFileProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_geo_cam_global_to_img_process, "vpglGeoGlobalToImgProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_geo_cam_img_to_global_process, "vpglGeoImgToGlobalProcess");
+#if HAS_GEOTIFF
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_geo_camera_process2, "vpglLoadGeoCameraProcess2");
+#endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_export_cameras_to_nvm_process, "vpglExportCamerasToNvmProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_lvcs_process, "vpglCreateLVCSProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_local_to_global_coordinates_process, "vpglConvertLocalToGlobalCoordinatesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_local_to_global_coordinates_array_process, "vpglConvertLocalToGlobalCoordinatesArrayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_local_rational_to_perspective_process, "vpglConvertLocalRationalToPerspectiveProcess");
+#if HAS_GEOTIFF
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_geo_camera_process, "vpglCreateGeoCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_geo_camera_process3, "vpglLoadGeotiffCamFromHeaderProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_save_geo_camera_tfw_process, "vpglSaveGeoCameraTFWProcess");
+#endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_interpolate_perspective_cameras_process, "vpglInterpolatePerspectiveCamerasProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_lvcs_process, "vpglLoadLVCSProcess");
@@ -103,14 +115,19 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_rational_cam_nadirness_process, "vpglRationalCamNadirnessProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_image_to_world_homography_process, "vpglComputeImageToWorldHomographyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_crop_ortho_using_3d_box_process, "vpglCropOrthoUsing3DboxPRocess");
+#if HAS_GEOTIFF
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_non_nadir_geo_camera_to_generic_process, "vpglConvertNonNadirGeoCameraToGenericProcess");
+#endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_generic_camera_ray_process, "vpglGetGenericCamRayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_persp_cam_from_photo_overlay_process, "vpglPerspCameraFromPhotoOverlayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_affine_f_matrix_process, "vpglAffineFMatrixProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_generic_camera_ray_process, "vpglGetGenericCamRayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_process, "vpglIsfmRationalCameraProcess");
+#if HAS_GEOTIFF
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_seed_process, "vpglIsfmRationalCameraSeedProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_with_initial_process, "vpglIsfmRationalCameraWithInitialProcess");
+#endif
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_rational_camera_from_txt_process, "vpglLoadRationalCameraFromTXTProcess");
+
 }

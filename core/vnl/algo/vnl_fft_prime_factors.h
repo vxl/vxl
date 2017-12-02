@@ -13,6 +13,8 @@
 // \endverbatim
 
 #include <vcl_compiler.h> // for "export" keyword
+#include "vnl/vnl_export.h"
+#include <vnl/algo/vnl_algo_export.h>
 
 //: Holds prime factor information
 // Helper class used by the vnl_fft_xd<> FFT routines
@@ -44,7 +46,7 @@ public:
   long const *pqr () const { return pqr_; }
 
   operator safe_bool () const
-    { return (trigs_ && info_ >= 0)? VCL_SAFE_BOOL_TRUE : 0; }
+    { return (trigs_ && info_ >= 0)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
   bool operator!() const
     { return (trigs_ && info_ >= 0)? false : true; }
 

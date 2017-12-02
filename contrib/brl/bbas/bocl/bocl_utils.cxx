@@ -1,7 +1,9 @@
+#include <iostream>
 #include "bocl_utils.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <sstream>
 
-vcl_size_t RoundUp(int global_size,int group_size)
+std::size_t RoundUp(int global_size,int group_size)
 {
     if (group_size==0)
         return global_size;
@@ -16,9 +18,9 @@ vcl_size_t RoundUp(int global_size,int group_size)
     }
 }
 
-vcl_string error_to_string(cl_int  status )
+std::string error_to_string(cl_int  status )
 {
-    vcl_string output="";
+    std::string output="";
 
     if      ( status == 0) output="CL_SUCCESS";
     else if ( status == CL_DEVICE_NOT_FOUND)  output="CL_DEVICE_NOT_FOUND";
@@ -66,7 +68,11 @@ vcl_string error_to_string(cl_int  status )
     else if ( status == CL_INVALID_GL_OBJECT) output="CL_INVALID_GL_OBJECT";
     else if ( status == CL_INVALID_BUFFER_SIZE) output="CL_INVALID_BUFFER_SIZE";
     else if ( status == CL_INVALID_MIP_LEVEL) output="CL_INVALID_MIP_LEVEL";
-    else output="Unknown Error";
+    else {
+      std::ostringstream message("Unknown Error (");
+      message << status << ")";
+      output = message.str();
+    }
 
     return output;
 }
@@ -74,7 +80,7 @@ vcl_string error_to_string(cl_int  status )
 int check_val(cl_int status, cl_int result, std::string message)
 {
   if (status != result) {
-    vcl_cout << message << '\n';
+    std::cout << message << '\n';
     return 0;
   }
   else

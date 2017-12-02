@@ -5,10 +5,13 @@
 // \brief Represents 2x2 symmetric matrix, used as weight matrix
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
+#include <vgl/vgl_vector_2d.h>
 
 //: Represents 2x2 symmetric matrix, used as weight matrix
 //  Stores the 3 unique elements and contains various utility
@@ -49,6 +52,10 @@ class msm_wt_mat_2d
   //: Calculate eigenvalues
   void eigen_values(double& EV1, double& EV2);
 
+  //: Calculate eigenvector associated with largest eigenvalue.
+  //  Other evec given by (-evec1.y(),evec1.x())
+  void eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, double& eval2);
+
   //: Calculates W2=T'WT where T is 2x2 matrix (a,-b;b,a)
   msm_wt_mat_2d transform_by(double a, double b) const;
 
@@ -69,7 +76,7 @@ class msm_wt_mat_2d
   msm_wt_mat_2d inverse() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -89,9 +96,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_wt_mat_2d& pts);
 void vsl_b_read(vsl_b_istream& bfs, msm_wt_mat_2d& pts);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_wt_mat_2d& pts);
+std::ostream& operator<<(std::ostream& os,const msm_wt_mat_2d& pts);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_wt_mat_2d& pts);
+void vsl_print_summary(std::ostream& os,const msm_wt_mat_2d& pts);
 
 #endif // msm_wt_mat_2d_h_

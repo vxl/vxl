@@ -1,4 +1,6 @@
 // This is gel/gevd/gevd_region_proc_params.cxx
+#include <iostream>
+#include <sstream>
 #include "gevd_region_proc_params.h"
 //:
 // \file
@@ -6,8 +8,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -53,10 +54,10 @@ void gevd_region_proc_params::InitParams(float expand_scale,
 //:   Checks that parameters are within acceptable bounds
 //    Note that msg << ends seems to restart the string and erase the
 //    previous string. We should only use it as the last call, use
-//    vcl_endl otherwise.
+//    std::endl otherwise.
 bool gevd_region_proc_params::SanityCheck()
 {
-  vcl_stringstream msg;
+  std::stringstream msg;
   bool valid = true;
 
   if (expand_scale_ <0.5 || expand_scale_ >2) {
@@ -70,20 +71,20 @@ bool gevd_region_proc_params::SanityCheck()
   }
 
   valid = valid && dp_.SanityCheck();
-  msg << dp_.GetErrorMsg() << vcl_ends;
+  msg << dp_.GetErrorMsg() << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const gevd_region_proc_params& rpp)
+std::ostream& operator << (std::ostream& os, const gevd_region_proc_params& rpp)
 {
   return
   os << "gevd_region_proc_params:\n[---\n"
   // << rpp.dp_ << "\n  ---\n"
-     << "expand scale factor  " << rpp.expand_scale_ << vcl_endl
-     << "burt_adelson_factor " << rpp.burt_adelson_factor_ << vcl_endl
-     << "debug " << rpp.debug_ << vcl_endl
-     << "verbose " << rpp.verbose_ << vcl_endl
-     << "---]" << vcl_endl;
+     << "expand scale factor  " << rpp.expand_scale_ << std::endl
+     << "burt_adelson_factor " << rpp.burt_adelson_factor_ << std::endl
+     << "debug " << rpp.debug_ << std::endl
+     << "verbose " << rpp.verbose_ << std::endl
+     << "---]" << std::endl;
 }

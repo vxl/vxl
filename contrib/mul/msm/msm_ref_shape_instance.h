@@ -5,11 +5,13 @@
 // \brief Representation of an instance of a shape model in ref frame.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_points.h>
 #include <msm/msm_wt_mat_2d.h>
 #include <msm/msm_param_limiter.h>
 #include <mbl/mbl_cloneable_ptr.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class msm_ref_shape_model;
 
@@ -17,7 +19,7 @@ class msm_ref_shape_model;
 //  Includes functions to fit instances to sets of points
 //  and to generate sets of points.
 //
-//  By default, all shape parameters are used and params() returns 
+//  By default, all shape parameters are used and params() returns
 //  a vector of length equal to the full number of shape modes.
 //  To use fewer modes, create a parameter vector with the desired
 //  number, and call set_params(b).
@@ -62,7 +64,7 @@ class msm_ref_shape_instance
   void set_param_limiter(const msm_param_limiter& limiter);
 
   //: Current object which limits parameters
-  const msm_param_limiter& param_limiter() const 
+  const msm_param_limiter& param_limiter() const
   { return param_limiter_; }
 
   //: Current object which limits parameters (non-const)
@@ -85,7 +87,7 @@ class msm_ref_shape_instance
   const msm_ref_shape_model* model_ptr() const { return model_; }
 
   //: Reference to current model
-  const msm_ref_shape_model& model() const 
+  const msm_ref_shape_model& model() const
   { assert(model_!=0); return *model_; }
 
   //: Current shape parameters
@@ -115,16 +117,16 @@ class msm_ref_shape_instance
   //  the shape parameters, and assume that wt_mat are
   //  inverse covariances.
   void fit_to_points_wt_mat(const msm_points& pts,
-                        const vcl_vector<msm_wt_mat_2d>& wt_mat);
+                        const std::vector<msm_wt_mat_2d>& wt_mat);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -142,9 +144,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_ref_shape_instance& pts);
 void vsl_b_read(vsl_b_istream& bfs, msm_ref_shape_instance& pts);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_ref_shape_instance& pts);
+std::ostream& operator<<(std::ostream& os,const msm_ref_shape_instance& pts);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_ref_shape_instance& pts);
+void vsl_print_summary(std::ostream& os,const msm_ref_shape_instance& pts);
 
 #endif // msm_ref_shape_instance_h_

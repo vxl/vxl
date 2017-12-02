@@ -5,7 +5,8 @@
 // \author Kevin de Souza
 // \date 2005-02-02
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <mbl/mbl_table.h>
 #include <testlib/testlib_test.h>
 
@@ -14,24 +15,24 @@
 //========================================================================
 void test_table1()
 {
-  vcl_cout << "\n\n"
+  std::cout << "\n\n"
            << "--------------------------------\n"
            << " Testing piecemeal construction\n"
            << "--------------------------------\n";
 
   char delim = '\t';
-  vcl_vector<vcl_string> headers(3);
+  std::vector<std::string> headers(3);
   headers[0] = "x coord";
   headers[1] = "y coord";
   headers[2] = "z coord";
 
   mbl_table table(delim, headers);
-  vcl_vector<double> row0(3);
+  std::vector<double> row0(3);
   row0[0] = 1.23;
   row0[1] = 3.45;
   row0[2] = 6.78;
   table.append_row(row0);
-  vcl_vector<double> row1(3);
+  std::vector<double> row1(3);
   row1[0] = -1.23;
   row1[1] = -3.45;
   row1[2] = -6.78;
@@ -39,19 +40,19 @@ void test_table1()
   TEST("ncols==3", table.num_cols()==3, true);
   TEST("nrows==2", table.num_rows()==2, true);
 
-  vcl_vector<double> col_vals;
+  std::vector<double> col_vals;
   TEST("get_column(): success", table.get_column(headers[1], col_vals), true);
   TEST("get_column(): size", col_vals.size()==2, true);
   TEST("get_column(): values", (col_vals[0]==3.45 && col_vals[1]==-3.45), true);
 
-  vcl_vector<double> row_vals;
+  std::vector<double> row_vals;
   TEST("get_row(): success", table.get_row(1, row_vals), true);
   TEST("get_row(): size", row_vals.size()==3, true);
   TEST("get_row(): values", (row_vals[0]==-1.23 &&
                              row_vals[1]==-3.45 &&
                              row_vals[2]==-6.78), true);
 
-  vcl_vector<double> col(3, 1.23456);
+  std::vector<double> col(3, 1.23456);
   bool success = table.append_column("x coord", col);
   unsigned ncols = table.num_cols();
   TEST("Try to append existing column", success==false && ncols==3, true);
@@ -67,24 +68,24 @@ void test_table1()
 //========================================================================
 void test_table2()
 {
-  vcl_cout << "\n\n"
+  std::cout << "\n\n"
            << "-----------------------------\n"
            << " Testing equality operations\n"
            << "-----------------------------\n";
 
   char delim = '\t';
-  vcl_vector<vcl_string> headers(3);
+  std::vector<std::string> headers(3);
   headers[0] = "x coord";
   headers[1] = "y coord";
   headers[2] = "z coord";
 
   mbl_table table0(delim, headers);
-  vcl_vector<double> row0(3);
+  std::vector<double> row0(3);
   row0[0] = 1.23;
   row0[1] = 3.45;
   row0[2] = 6.78;
   table0.append_row(row0);
-  vcl_vector<double> row1(3);
+  std::vector<double> row1(3);
   row1[0] = -1.23;
   row1[1] = -3.45;
   row1[2] = -6.78;
@@ -96,7 +97,7 @@ void test_table2()
 
   mbl_table table2(delim, headers);
   table2.append_row(row0);
-  vcl_vector<double> row1_mod(3);
+  std::vector<double> row1_mod(3);
   row1_mod[0] = -1.23;
   row1_mod[1] = -3.45;
   row1_mod[2] = -6.78 + 1e-16;
@@ -106,7 +107,7 @@ void test_table2()
 
   mbl_table table3(delim, headers);
   table3.append_row(row0);
-  vcl_vector<double> row1_mod2(3);
+  std::vector<double> row1_mod2(3);
   row1_mod2[0] = -1.23 + 1e-13;
   row1_mod2[1] = -3.45 - 1e-14;
   row1_mod2[2] = -6.78 + 1e-14;
@@ -125,24 +126,24 @@ void test_table2()
 //========================================================================
 void test_table3()
 {
-  vcl_cout << "\n\n"
+  std::cout << "\n\n"
            << "-------------------------\n"
            << " Testing get/set methods\n"
            << "-------------------------\n";
 
   char delim = '\t';
-  vcl_vector<vcl_string> headers(3);
+  std::vector<std::string> headers(3);
   headers[0] = "x coord";
   headers[1] = "y coord";
   headers[2] = "z coord";
 
   mbl_table table(delim, headers);
-  vcl_vector<double> row0(3);
+  std::vector<double> row0(3);
   row0[0] = 1.23;
   row0[1] = 3.45;
   row0[2] = 6.78;
   table.append_row(row0);
-  vcl_vector<double> row1(3);
+  std::vector<double> row1(3);
   row1[0] = -1.23;
   row1[1] = -3.45;
   row1[2] = -6.78;
@@ -179,24 +180,24 @@ void test_table3()
 //========================================================================
 void test_table4()
 {
-  vcl_cout << "\n\n"
+  std::cout << "\n\n"
            << "--------------------------------------\n"
            << " Testing append empty col/row methods\n"
            << "--------------------------------------\n";
 
   char delim = '\t';
-  vcl_vector<vcl_string> headers(3);
+  std::vector<std::string> headers(3);
   headers[0] = "x coord";
   headers[1] = "y coord";
   headers[2] = "z coord";
 
   mbl_table table(delim, headers);
-  vcl_vector<double> row0(3);
+  std::vector<double> row0(3);
   row0[0] = 1.23;
   row0[1] = 3.45;
   row0[2] = 6.78;
   table.append_row(row0);
-  vcl_vector<double> row1(3);
+  std::vector<double> row1(3);
   row1[0] = -1.23;
   row1[1] = -3.45;
   row1[2] = -6.78;
@@ -222,26 +223,26 @@ void test_table4()
 //========================================================================
 void test_table5()
 {
-  vcl_cout << "\n\n"
+  std::cout << "\n\n"
            << "-----------------------------\n"
            << " Testing equality operations\n"
            << "-----------------------------\n";
 
   char delim = '\t';
-  vcl_vector<vcl_string> headers(3);
+  std::vector<std::string> headers(3);
   headers[0] = "x coord";
   headers[1] = "y coord";
   headers[2] = "z coord";
 
-  vcl_vector<double> col0(4, 2.3);
-  vcl_vector<double> col1(4, 4.7);
-  vcl_vector<double> col2(4, 8.9);
+  std::vector<double> col0(4, 2.3);
+  std::vector<double> col1(4, 4.7);
+  std::vector<double> col2(4, 8.9);
 
   mbl_table table0(delim);
   table0.append_column(headers[0],col0);
   table0.append_column(headers[1],col1);
   table0.append_column(headers[2],col2);
-  vcl_vector<vcl_string> subheaders(2);
+  std::vector<std::string> subheaders(2);
   subheaders[0] = headers[0];
   subheaders[1] = headers[1];
   mbl_table subtable;
@@ -259,7 +260,7 @@ void test_table5()
 //========================================================================
 void test_table()
 {
-  vcl_cout << "===================\n"
+  std::cout << "===================\n"
            << " Testing mbl_table\n"
            << "===================\n";
 

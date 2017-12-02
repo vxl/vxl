@@ -1,4 +1,5 @@
 // This is brl/bbas/volm/processes/vlm_project_dem_to_sat_img_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,7 +11,7 @@
 // \endverbatim
 //
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vul/vul_file.h>
@@ -33,15 +34,15 @@ bool volm_find_overlapping_sat_resources_process_cons(bprb_func_process& pro)
 {
   using namespace volm_find_overlapping_sat_resources_process_globals;
   // process takes 4 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "volm_satellite_resources_sptr"; // satellite resource
   input_types_[1] = "vcl_string";                    // kml polygon filename
-  input_types_[2] = "float";                         // factor by which to downsample resource footprints when 
+  input_types_[2] = "float";                         // factor by which to downsample resource footprints when
                                                      // computing the raster (smaller factor takes more time & memory)
   input_types_[3] = "vcl_string";                    // output file to print the list
 
   // process takes 0 outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_); 
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -51,17 +52,17 @@ bool volm_find_overlapping_sat_resources_process(bprb_func_process& pro)
   using namespace volm_find_overlapping_sat_resources_process_globals;
   // sanity check
   if (pro.n_inputs() != n_inputs_) {
-    vcl_cout << pro.name() << ": there should be " << n_inputs_ << " inputs" << vcl_endl;
+    std::cout << pro.name() << ": there should be " << n_inputs_ << " inputs" << std::endl;
     return false;
   }
   // get the input
   unsigned in_i = 0;
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
-  vcl_string kml_file = pro.get_input<vcl_string>(1);
+  std::string kml_file = pro.get_input<std::string>(1);
   float downsample_factor = pro.get_input<float>(2);
-  vcl_string out_file = pro.get_input<vcl_string>(3);
-  
-  vcl_vector<vcl_string> overlapping_res;
+  std::string out_file = pro.get_input<std::string>(3);
+
+  std::vector<std::string> overlapping_res;
   res->highly_overlapping_resources(overlapping_res, res, kml_file, downsample_factor);
 
 
@@ -69,9 +70,9 @@ bool volm_find_overlapping_sat_resources_process(bprb_func_process& pro)
   unsigned cnt = overlapping_res.size();
   if (out_file.compare("") == 0)
     return true;
-  vcl_ofstream ofs(out_file.c_str());
+  std::ofstream ofs(out_file.c_str());
   if (!ofs) {
-    vcl_cerr << pro.name() << " ERROR: cannot open file: " << out_file << vcl_endl;
+    std::cerr << pro.name() << " ERROR: cannot open file: " << out_file << std::endl;
     return false;
   }
   for (unsigned i = 0; i < overlapping_res.size(); i++)

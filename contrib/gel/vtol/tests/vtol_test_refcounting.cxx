@@ -43,8 +43,8 @@ static void vtol_test_refcounting()
   TEST("single edge has refcount 0", e2->get_references(), 0);
   TEST("single edge has refcount 0", e3->get_references(), 0);
 
-  v1->describe(vcl_cout,8);
-  e1->describe(vcl_cout,8);
+  v1->describe(std::cout,8);
+  e1->describe(std::cout,8);
 
   // create a triangle (face) from 3 vertices
   vertex_list vl1; vl1.push_back(v1); vl1.push_back(v2); vl1.push_back(v3);
@@ -60,10 +60,10 @@ static void vtol_test_refcounting()
   TEST("1-chain of triangle has refcount 1", oc1->get_references(), 1);
   TEST("single face has refcount 0", f1->get_references(), 0);
 
-  v1->describe(vcl_cout,8);
-  e1->describe(vcl_cout,8);
-  oc1->describe(vcl_cout,8);
-  f1->describe(vcl_cout,8);
+  v1->describe(std::cout,8);
+  e1->describe(std::cout,8);
+  oc1->describe(std::cout,8);
+  f1->describe(std::cout,8);
 
   // create a rectangle (face) from 4 vertices
   vl1.push_back(new vtol_vertex_2d(0.0,0.0));
@@ -80,7 +80,7 @@ static void vtol_test_refcounting()
   TEST("edge on triangle has refcount 1", e2->get_references(), 1);
   TEST("edge on triangle has refcount 1", e3->get_references(), 1);
 
-  f2->describe(vcl_cout,8);
+  f2->describe(std::cout,8);
 
   // create a face with a hole from 2 1-chains
   one_chain_list ol1;
@@ -94,7 +94,7 @@ static void vtol_test_refcounting()
   TEST("edge on triangle has refcount 1", e2->get_references(), 1);
   TEST("edge on triangle has refcount 1", e3->get_references(), 1);
 
-  f3->describe(vcl_cout,8);
+  f3->describe(std::cout,8);
 
   // create a block from the 3 faces created above
   face_list fl1;

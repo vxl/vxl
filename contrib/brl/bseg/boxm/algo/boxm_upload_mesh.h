@@ -2,6 +2,7 @@
 #define boxm_render_mesh_h_
 //:
 // \file
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_block.h>
@@ -11,7 +12,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class T_loc, class T_data>
 void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
@@ -23,7 +24,7 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
   imesh_face_array_base& fs = mesh.faces();
   for (unsigned i=0; i < fs.size(); ++i)
   {
-    vcl_list<vgl_point_3d<double> > v_list;
+    std::list<vgl_point_3d<double> > v_list;
     imesh_vertex_array<3>& vertices = mesh.vertices<3>();
     vgl_box_3d<double> bb_scale, bb_global;
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
@@ -55,7 +56,7 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
     boct_tree_cell<T_loc,T_data>* region=tree->locate_region(inters);
     if (region) {
       // test all the children for intersection
-      vcl_vector<boct_tree_cell<T_loc,T_data>*> children;
+      std::vector<boct_tree_cell<T_loc,T_data>*> children;
       if (!region->is_leaf())
         region->leaf_children(children);
       else // insert the node itself, if no children
@@ -72,7 +73,7 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
 }
 
 //: this is to copy mesh into existing tree and replacing the appearance model of the existing tree.
-VCL_DEFINE_SPECIALIZATION
+template <>
 void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > *block,
                                  imesh_mesh& mesh, vpgl_lvcs& lvcs,
                                  bool use_lvcs, boxm_sample<BOXM_APM_MOG_GREY> val)
@@ -83,7 +84,7 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_AP
   imesh_face_array_base& fs = mesh.faces();
   for (unsigned i=0; i < fs.size(); ++i)
   {
-    vcl_list<vgl_point_3d<double> > v_list;
+    std::list<vgl_point_3d<double> > v_list;
     imesh_vertex_array<3>& vertices = mesh.vertices<3>();
     vgl_box_3d<double> bb_scale, bb_global;
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
@@ -115,7 +116,7 @@ void boxm_upload_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_AP
     boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* region=tree->locate_region(inters);
     if (region) {
       // test all the children for intersection
-      vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >*> children;
+      std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >*> children;
       if (!region->is_leaf())
         region->leaf_children(children);
       else // insert the node itself, if no children

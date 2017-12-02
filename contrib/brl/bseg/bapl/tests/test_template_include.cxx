@@ -1,3 +1,3 @@
-#include <bapl/bapl_lowe_pyramid.txx>
+#include <bapl/bapl_lowe_pyramid.hxx>
 
 int main() { return 0; }

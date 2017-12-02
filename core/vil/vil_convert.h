@@ -61,7 +61,7 @@
 // It may be a good idea to provide vil_image_resource_sptr based
 // vil_converts as well.
 //
-// The ITK project (in Code/IO/itkConvertPixelBuffer.txx) has
+// The ITK project (in Code/IO/itkConvertPixelBuffer.hxx) has
 // functionality similar to the RGB to grayscale conversion here.  A
 // change was made in ITK so the computation is
 // (2125.0*r+7154.0*g+0721.0*b)/1000.0 instead of
@@ -80,9 +80,10 @@
 //   30 Mar.2007 - Peter Vanroose - Commented out deprecated versions of vil_convert_cast & vil_convert_to_grey_using_average
 // \endverbatim
 
+#include <limits>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vil/vil_transform.h>
 #include <vil/vil_math.h>
 #include <vil/vil_plane.h>
@@ -101,16 +102,16 @@ class vil_convert_cast_pixel
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // deal with conversions from floating point types to/from some compounds
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<in, vil_rgb<out > >::operator () (in v, vil_rgb<out >& d) const \
 { d.r = d.g = d.b = (out)v; } \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<vil_rgb<out >, in >::operator () (vil_rgb<out > v, in& d) const \
 { d = (in)(0.2125*v.r+0.7154*v.g+0.0721*v.b); } \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<in, vil_rgba<out > >::operator () (in v, vil_rgba<out >& d) const \
 { d.r = d.g = d.b = (out)v; d.a=1; } \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<vil_rgba<out >, in >::operator () (vil_rgba<out > v, in& d) const \
 { d = (in)(0.2125*v.r+0.7154*v.g+0.0721*v.b); }
 macro( vxl_byte , vxl_byte )
@@ -154,7 +155,7 @@ macro( double , vxl_uint_64 )
 #endif
 #undef macro
 #define macro( inout )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_cast_pixel<inout, inout >::operator () ( \
   inout v, inout& d) const { d=v; }
 macro( vxl_byte )
@@ -170,19 +171,19 @@ macro( vxl_int_64 )
 macro( float )
 macro( double )
 #undef macro
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vil_convert_cast_pixel<vil_rgb<vxl_byte>, vil_rgb<vxl_byte> >::operator () (
   vil_rgb<vxl_byte> v, vil_rgb<vxl_byte>& d) const { d.r=v.r, d.g=v.g, d.b=v.b; }
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline void vil_convert_cast_pixel<vil_rgba<vxl_byte>, vil_rgba<vxl_byte> >::operator () (
   vil_rgba<vxl_byte> v, vil_rgba<vxl_byte>& d) const { d.r=v.r, d.g=v.g, d.b=v.b, d.a=v.a; }
 #define macro( in )\
-VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<in,vcl_complex<double> >::operator () (in v, vcl_complex<double>& d) const \
-{ d = vcl_complex<double>(double(v),0.0); } \
-VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<in,vcl_complex<float> >::operator () (in v, vcl_complex<float>& d) const \
-{ d = vcl_complex<float>(float(v),0.0f); }
+template <> \
+inline void vil_convert_cast_pixel<in,std::complex<double> >::operator () (in v, std::complex<double>& d) const \
+{ d = std::complex<double>(double(v),0.0); } \
+template <> \
+inline void vil_convert_cast_pixel<in,std::complex<float> >::operator () (in v, std::complex<float>& d) const \
+{ d = std::complex<float>(float(v),0.0f); }
 macro( vxl_byte )
 macro( vxl_sbyte )
 macro( vxl_int_16 )
@@ -195,11 +196,11 @@ macro( vxl_uint_64 )
 #endif
 #undef macro
 #define macro( out )\
-VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<vcl_complex<double>,out >::operator () (vcl_complex<double> d, out& v) const \
+template <> \
+inline void vil_convert_cast_pixel<std::complex<double>,out >::operator () (std::complex<double> d, out& v) const \
 { v = (out)(d.real()); } \
-VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<vcl_complex<float>,out >::operator () (vcl_complex<float> d, out& v) const \
+template <> \
+inline void vil_convert_cast_pixel<std::complex<float>,out >::operator () (std::complex<float> d, out& v) const \
 { v = (out)(d.real()); }
 macro( vxl_byte )
 macro( vxl_sbyte )
@@ -322,7 +323,7 @@ class vil_convert_round_pixel
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // deal with conversions from floating point types to some compounds
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () ( \
   in v, out& d) const { \
   d.r = (out::value_type)(v.r+0.5); \
@@ -349,7 +350,7 @@ macro( vil_rgb<double> , vil_rgb<vxl_uint_64> )
 #endif
 #undef macro
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
   const { \
   d.r = (out::value_type)(v.r); \
@@ -359,7 +360,7 @@ macro( vil_rgb<float> , vil_rgb<float> )
 macro( vil_rgb<double> , vil_rgb<double> )
 #undef macro
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
   const { \
   d.r = (out::value_type)(v.r+0.5); \
@@ -386,7 +387,7 @@ macro( vil_rgba<double> , vil_rgba<vxl_uint_64> )
 #endif
 #undef macro
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
   const { \
   d.r = (out::value_type)(v.r); \
@@ -398,7 +399,7 @@ macro( vil_rgba<double> , vil_rgba<double> )
 #undef macro
 
 #define macro( in , out )\
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 inline void vil_convert_round_pixel<in, out >::operator () (in v, out& d) \
 const { d = (out)(v > 0.0 ? v + 0.5 : v - 0.5); }
 macro( float , vxl_byte )
@@ -479,7 +480,7 @@ inline void vil_convert_merge_alpha(const vil_image_view<inP>& src,
 
   for (unsigned j = 0; j < src.nj(); ++j)
     for (unsigned i = 0; i < src.ni(); ++i)
-      for (unsigned k = 0; k < nplanes-1; ++k)	
+      for (unsigned k = 0; k < nplanes-1; ++k)
       { vil_convert_round_pixel<double,outP>()(src(i,j,nplanes-1)/255.0*src(i,j,k), dest(i,j,k)); }
 }
 
@@ -494,7 +495,7 @@ inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src,
                                     vil_image_view<outP >&dest,
                                     double rw=0.2125, double gw=0.7154, double bw=0.0721)
 {
-  vil_convert_rgb_to_grey_pixel<VCL_DISAPPEARING_TYPENAME rgbP::value_type, outP>
+  vil_convert_rgb_to_grey_pixel<typename rgbP::value_type, outP>
     func(rw, gw, bw);
   assert(src.nplanes() == 1);
   vil_transform2(src, dest, func);
@@ -776,7 +777,7 @@ template <class outP>
 inline void vil_convert_cast(const vil_image_view_base_sptr& src,
                              vil_image_view<outP >&dest)
 {
-  VXL_DEPRECATED( "void vil_convert_cast(const vil_image_view_base_sptr&,"
+  VXL_DEPRECATED_MACRO( "void vil_convert_cast(const vil_image_view_base_sptr&,"
                   " vil_image_view<outP>&)" );
 
   switch ( src->pixel_format() )
@@ -915,7 +916,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
     default:
       vil_exception_warning(vil_exception_unsupported_pixel_format(
         src->pixel_format(), "vil_convert_to_compound_order") );
-      dest=0;
+      dest=VXL_NULLPTR;
   }
   return dest;
 }
@@ -937,7 +938,7 @@ template <class outP>
 inline vil_image_view<outP> vil_convert_to_grey_using_average(
   const vil_image_view_base_sptr &src, outP /*dummy*/)
 {
-  VXL_DEPRECATED( "vil_convert_to_grey_using_average<outP>("
+  VXL_DEPRECATED_MACRO( "vil_convert_to_grey_using_average<outP>("
                   "const vil_image_view_base_sptr &, outP)" );
 
   // Check output is scalar component image.
@@ -1014,7 +1015,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
     return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64 && !defined(VCL_VC_6)
+#if VXL_HAS_INT_64
   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
@@ -1029,7 +1030,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
   default:
     vil_exception_warning(vil_exception_unsupported_pixel_format(
       src->pixel_format(), "vil_convert_to_grey_using_average") );
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -1064,7 +1065,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
     return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64 && !defined(VCL_VC_6)
+#if VXL_HAS_INT_64
   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
@@ -1119,7 +1120,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
                           double gw=0.7154,
                           double bw=0.0721)
 {
-  VXL_DEPRECATED( "vil_convert_to_grey_using_rgb_weighting<outP>("
+  VXL_DEPRECATED_MACRO( "vil_convert_to_grey_using_rgb_weighting<outP>("
                   "const vil_image_view_base_sptr &, outP)" );
 
   // Check output is scalar component image.
@@ -1183,10 +1184,10 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
 // \code
 // vil_image_view<vil_rgb<float> > =
 //   vil_convert_cast(
-//     float(), 
+//     float(),
 //     vil_convert_to_component_order(
 //       vil_convert_to_n_planes(
-//         3, 
+//         3,
 //         vil_load(filename)
 //       )
 //     )
@@ -1263,10 +1264,10 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
 
   double hi,lo;
 
-  if (vcl_numeric_limits<outP>::is_integer)
+  if (std::numeric_limits<outP>::is_integer)
   {
-    hi = vcl_numeric_limits<outP>::max()+0.999;
-    lo = vcl_numeric_limits<outP>::min();
+    hi = std::numeric_limits<outP>::max()+0.999;
+    lo = std::numeric_limits<outP>::min();
   }
   else
   {
@@ -1289,7 +1290,7 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
     break; }
    macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
    macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64 && !defined(VCL_VC_6)
+#if VXL_HAS_INT_64
    macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
    macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif

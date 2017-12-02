@@ -1,4 +1,4 @@
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 #include <volm/desc/volm_desc_matcher.h>
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_io.h>

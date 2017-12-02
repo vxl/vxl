@@ -16,8 +16,9 @@
 //   Matt Leotta   3 Jan 2006   Adapted from code by Amitha Perera
 // \endverbatim
 
+#include <string>
 #include "vidl_ostream.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include "vidl_ffmpeg_ostream_params.h"
 
 
@@ -34,7 +35,7 @@ class vidl_ffmpeg_ostream
   vidl_ffmpeg_ostream();
 
   //: Constructor - opens a stream
-  vidl_ffmpeg_ostream(const vcl_string& filenam,
+  vidl_ffmpeg_ostream(const std::string& filenam,
                       const vidl_ffmpeg_ostream_params& parms);
 
   //: Destructor
@@ -54,13 +55,13 @@ class vidl_ffmpeg_ostream
   virtual bool write_frame(const vidl_frame_sptr& frame);
 
   //: Set the filename
-  void set_filename(const vcl_string& filenam) { filename_ = filenam; }
+  void set_filename(const std::string& filenam) { filename_ = filenam; }
 
   //: Set the parameters
   void set_params(const vidl_ffmpeg_ostream_params& parms) { params_ = parms; }
 
   //: Access the filename
-  vcl_string filename() const { return filename_; }
+  std::string filename() const { return filename_; }
 
   //: Access the parameters
   const vidl_ffmpeg_ostream_params& params() const { return params_; }
@@ -72,7 +73,7 @@ class vidl_ffmpeg_ostream
   pimpl* os_;
 
   //: The filename to open
-  vcl_string filename_;
+  std::string filename_;
 
   //: The parameters
   vidl_ffmpeg_ostream_params params_;

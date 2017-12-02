@@ -17,8 +17,10 @@
 // Make it work with the whole database initially based on Matt's sketch.
 
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_tuple_sptr.h>
 #include <brdb/brdb_relation_sptr.h>
@@ -37,15 +39,15 @@ class brdb_relation : public vbl_ref_count
   brdb_relation();
 
   //: Constructor - create an empty relation but define the columns
-  brdb_relation( const vcl_vector<vcl_string>& names,
-                 const vcl_vector<vcl_string>& types );
+  brdb_relation( const std::vector<std::string>& names,
+                 const std::vector<std::string>& types );
 
   //: Constructor - create a relation populated with tuples
   //  If types are not provided they will be inferred from the tuples.
   //  All tuples must have the same types and arity.
-  brdb_relation( const vcl_vector<vcl_string>& names,
-                 const vcl_vector<brdb_tuple_sptr>& tuples,
-                 const vcl_vector<vcl_string>& types = vcl_vector<vcl_string>() );
+  brdb_relation( const std::vector<std::string>& names,
+                 const std::vector<brdb_tuple_sptr>& tuples,
+                 const std::vector<std::string>& types = std::vector<std::string>() );
 
   // Destructor
   virtual ~brdb_relation();
@@ -59,26 +61,26 @@ class brdb_relation : public vbl_ref_count
 
   //: Return the name for \p index
   // \note returns the empty string if the index is out of range
-  vcl_string name(unsigned int index) const;
+  std::string name(unsigned int index) const;
 
   //: Return the index for the attribute with \p name
   // \note returns the arity (max index + 1) if name is not found
-  unsigned int index(const vcl_string& name) const;
+  unsigned int index(const std::string& name) const;
 
   //: Return the type by attribute name
-  vcl_string type(const vcl_string& name) const;
+  std::string type(const std::string& name) const;
 
   //: Return the type by index
-  vcl_string type(unsigned int index) const;
+  std::string type(unsigned int index) const;
 
   //: Return true if there is an attribute in the relation with such a name
-  bool exists(const vcl_string& name) const;
+  bool exists(const std::string& name) const;
 
   //: Return true if there are no tuples in the relation.
   bool empty() const {return tuples_.empty();}
 
   //: Sort the tuples by a certain attribute name
-  bool order_by(const vcl_string& name, bool ascending=true);
+  bool order_by(const std::string& name, bool ascending=true);
 
   //: Sort the tuples by a certain attribute index
   bool order_by(unsigned int index, bool ascending=true);
@@ -91,33 +93,33 @@ class brdb_relation : public vbl_ref_count
   bool add_tuple(const brdb_tuple_sptr& new_tuple);
 
   //: insert a tuple at certain position
-  bool insert_tuple(const brdb_tuple_sptr& new_tuple, const vcl_vector<brdb_tuple_sptr>::iterator& pos);
+  bool insert_tuple(const brdb_tuple_sptr& new_tuple, const std::vector<brdb_tuple_sptr>::iterator& pos);
 
   //: remove a tuple at certain position from the relation
-  bool remove_tuple(const vcl_vector<brdb_tuple_sptr>::iterator& pos);
+  bool remove_tuple(const std::vector<brdb_tuple_sptr>::iterator& pos);
 
   //: Set a value by name
-  bool set_value(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name, const brdb_value& value);
+  bool set_value(std::vector<brdb_tuple_sptr>::iterator pos, const std::string& name, const brdb_value& value);
 
   //: Convenience function for setting a value by name
   template<class T>
-  bool set( vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name , const T& value );
+  bool set( std::vector<brdb_tuple_sptr>::iterator pos, const std::string& name , const T& value );
 
   //: Get a value by name
-  bool get_value(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name, brdb_value& value) const;
+  bool get_value(std::vector<brdb_tuple_sptr>::iterator pos, const std::string& name, brdb_value& value) const;
 
   //: Convenience function for getting a value by name
   template<class T>
-  bool get(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name , const T& value ) ;
+  bool get(std::vector<brdb_tuple_sptr>::iterator pos, const std::string& name , const T& value ) ;
 
   //: print out the relation
   void print() const;
 
   //: Return an iterator to the beginning of the relation
-  vcl_vector<brdb_tuple_sptr>::iterator begin() { return tuples_.begin(); }
+  std::vector<brdb_tuple_sptr>::iterator begin() { return tuples_.begin(); }
 
   //: Return an iterator to the end of the relation
-  vcl_vector<brdb_tuple_sptr>::iterator end() { return tuples_.end(); }
+  std::vector<brdb_tuple_sptr>::iterator end() { return tuples_.end(); }
 
   //: binary io read
   void b_read(vsl_b_istream &is);
@@ -152,11 +154,11 @@ class brdb_relation : public vbl_ref_count
   //: The time stamp of this relation
   unsigned long time_stamp_;
   //: The names of the attributes
-  vcl_vector<vcl_string> names_;
+  std::vector<std::string> names_;
   //: The types of the attributes
-  vcl_vector<vcl_string> types_;
+  std::vector<std::string> types_;
   //: The tuples of the attributes
-  vcl_vector<brdb_tuple_sptr> tuples_;
+  std::vector<brdb_tuple_sptr> tuples_;
 };
 
 

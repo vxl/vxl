@@ -15,7 +15,8 @@
 //   os << "Blah: " << vsl_stream_summary(blah);
 // \endcode
 
-#include <vcl_ostream.h>
+#include <ostream>
+#include <vcl_compiler.h>
 
 
 //: Convert a vsl_print_summary function call to a streamable object.
@@ -35,7 +36,7 @@ inline vsl_stream_summary_t<S> vsl_stream_summary(const S& xx)
 
 //: Insert conversion object into stream
 template <class T>
-inline vcl_ostream& operator <<(vcl_ostream &os, const vsl_stream_summary_t<T>& sss)
+inline std::ostream& operator <<(std::ostream &os, const vsl_stream_summary_t<T>& sss)
 {
   vsl_print_summary(os, sss.x);
   return os;

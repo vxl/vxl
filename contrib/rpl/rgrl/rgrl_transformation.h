@@ -6,9 +6,11 @@
 // \author Chuck Stewart
 // \date 15 Nov 2002
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 #include <rgrl/rgrl_object.h>
 #include <rgrl/rgrl_set_of.h>
@@ -123,7 +125,7 @@ class rgrl_transformation
   //: log of determinant of the covariance
   virtual double
   log_det_covar() const;
-  
+
   //:  set parameter covariance matrix
   void set_covar( const vnl_matrix<double>& covar );
 
@@ -145,18 +147,18 @@ class rgrl_transformation
   //: Return the jacobian of the transform
   //  use only as backward compatibility
   vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
-                                                                                      
+
   //: Compute jacobian w.r.t. location
   virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const = 0;
-  
+
   //:  transform the transformation for images of different resolution
   virtual rgrl_transformation_sptr scale_by( double scale ) const = 0;
 
   //: output transformation
-  virtual void write( vcl_ostream& os ) const;
+  virtual void write( std::ostream& os ) const;
 
   //: input transformation
-  virtual bool read( vcl_istream& is );
+  virtual bool read( std::istream& is );
 
   //: make a clone copy
   virtual rgrl_transformation_sptr clone() const=0;
@@ -193,11 +195,11 @@ class rgrl_transformation
   //: a slightly better way of computing log of determinant
   double
   log_det_sym_matrix( vnl_matrix<double> const& m ) const;
-  
+
   //: compute the log of determinant of the covariance when the matrix is rank deficient
   double
   log_det_covar_deficient( int rank ) const;
-  
+
  protected:
 
   //: covariance matrix
@@ -214,7 +216,7 @@ class rgrl_transformation
   vnl_vector<double> scaling_factors_;
 };
 
-vcl_ostream&
-operator<< (vcl_ostream& os, rgrl_transformation const& xform );
+std::ostream&
+operator<< (std::ostream& os, rgrl_transformation const& xform );
 
 #endif

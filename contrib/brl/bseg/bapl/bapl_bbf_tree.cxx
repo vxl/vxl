@@ -1,12 +1,13 @@
 // This is brl/bseg/bapl/bapl_bbf_tree.cxx
+#include <limits>
+#include <utility>
+#include <iostream>
+#include <algorithm>
 #include "bapl_bbf_tree.h"
 //:
 // \file
 
-#include <vcl_limits.h>
-#include <vcl_utility.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -76,7 +77,7 @@ bapl_bbf_dist_sq( const bapl_keypoint_sptr p, const bapl_bbf_box& b )
 
 
 //: Constructor
-bapl_bbf_tree::bapl_bbf_tree(const vcl_vector< bapl_keypoint_sptr >& points, int points_per_leaf)
+bapl_bbf_tree::bapl_bbf_tree(const std::vector< bapl_keypoint_sptr >& points, int points_per_leaf)
  : leaf_count_(0), leaves_examined_(0), internal_count_(0),
    internal_examined_(0), points_(points)
 {
@@ -89,27 +90,27 @@ bapl_bbf_tree::bapl_bbf_tree(const vcl_vector< bapl_keypoint_sptr >& points, int
   }
 
   // 1.  Build the initial bounding box.
-  vnl_vector_fixed<double,128> low(-vcl_numeric_limits<double>::min());
-  vnl_vector_fixed<double,128> high(vcl_numeric_limits<double>::max());
+  vnl_vector_fixed<double,128> low(-std::numeric_limits<double>::min());
+  vnl_vector_fixed<double,128> high(std::numeric_limits<double>::max());
   bapl_bbf_box box( low, high );
 
   // 2. create the vector of ids
-  vcl_vector< int > indices( points_.size() );
+  std::vector< int > indices( points_.size() );
   for ( unsigned int i=0; i<indices.size(); ++i ) indices[ i ] = i;
 
   // 3. call recursive function to do the real work
   root_ = build_tree( points_per_leaf, box, 0, indices );
 
-  vcl_cout << "total leaves = " << leaf_count_ << '\n'
-           << "total internal = " << internal_count_ << vcl_endl;
+  std::cout << "total leaves = " << leaf_count_ << '\n'
+           << "total internal = " << internal_count_ << std::endl;
 }
 
 
 //: For sorting pairs by their first element
 namespace{
     bool
-    first_less( const vcl_pair<double,int>& left_pair,
-                const vcl_pair<double,int>& right_pair )
+    first_less( const std::pair<double,int>& left_pair,
+                const std::pair<double,int>& right_pair )
     {
       return left_pair.first < right_pair.first;
     }
@@ -121,7 +122,7 @@ bapl_bbf_node_sptr
 bapl_bbf_tree::build_tree( int points_per_leaf,
                            const bapl_bbf_box& outer_box,
                            int depth,
-                           vcl_vector< int >& indices )
+                           std::vector< int >& indices )
 {
   unsigned int i;
 
@@ -142,10 +143,10 @@ bapl_bbf_tree::build_tree( int points_per_leaf,
   // 4. Form and then sort a vector of temporary pairs, containing the
   //    indices and the values along the selected dim of the data.
   //    Sort by the values.
-  vcl_vector< vcl_pair< double, int > > values( indices.size() );
+  std::vector< std::pair< double, int > > values( indices.size() );
   for ( i=0; i<indices.size(); ++i )
-    values[i] = vcl_pair<double, int> ( points_[ indices[i] ]->descriptor()[dim], indices[i] );
-  vcl_sort( values.begin(), values.end(), first_less );
+    values[i] = std::pair<double, int> ( points_[ indices[i] ]->descriptor()[dim], indices[i] );
+  std::sort( values.begin(), values.end(), first_less );
 
   // 5. Partition the vector and the bounding box along the dimension.
   unsigned int med_loc = (indices.size()-1) / 2;
@@ -155,7 +156,7 @@ bapl_bbf_tree::build_tree( int points_per_leaf,
   left_outer_box.max_point_[dim] = median_value;
   right_outer_box.min_point_[dim] = median_value;
 
-  vcl_vector< int > left_indices( med_loc+1 ), right_indices( indices.size()-med_loc-1 );
+  std::vector< int > left_indices( med_loc+1 ), right_indices( indices.size()-med_loc-1 );
   for ( i=0; i<=med_loc; ++i ) left_indices[i] = values[i].second;
   for ( ; i<indices.size(); ++i ) right_indices[i-med_loc-1] = values[i].second;
 
@@ -170,7 +171,7 @@ bapl_bbf_tree::build_tree( int points_per_leaf,
 
 //: Build an inner bounding box
 bapl_bbf_box
-bapl_bbf_tree::build_inner_box( const vcl_vector< int >& indices )
+bapl_bbf_tree::build_inner_box( const std::vector< int >& indices )
 {
   assert( indices.size() > 0 );
   vnl_vector_fixed<double,128> min_point( points_[ indices[ 0 ] ]->descriptor() );
@@ -190,7 +191,7 @@ bapl_bbf_tree::build_inner_box( const vcl_vector< int >& indices )
 
 //: Find the dimension with the greatest variation
 int
-bapl_bbf_tree::greatest_variation( const vcl_vector<int>& indices )
+bapl_bbf_tree::greatest_variation( const std::vector<int>& indices )
 {
   int dim = -1;
   double interval_size = 0.0;
@@ -216,18 +217,18 @@ bapl_bbf_tree::greatest_variation( const vcl_vector<int>& indices )
 //: Return an estimate of the n closest points to the query point
 void
 bapl_bbf_tree::n_nearest( const bapl_keypoint_sptr query_point,
-                          vcl_vector< bapl_keypoint_sptr >& closest_points,
+                          std::vector< bapl_keypoint_sptr >& closest_points,
                           int n, int max_search_nodes)
 {
-  vcl_vector< int > closest_indices( n );
+  std::vector< int > closest_indices( n );
   this->n_nearest(query_point, closest_points, closest_indices, n, max_search_nodes);
 }
 
 //: Return an estimate of the n closest points to the query point
 void
 bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
-                         vcl_vector< bapl_keypoint_sptr >& closest_points,
-                         vcl_vector< int >& closest_indices,
+                         std::vector< bapl_keypoint_sptr >& closest_points,
+                         std::vector< int >& closest_indices,
                          int n, int max_search_nodes)
 {
   assert(n>0);
@@ -238,8 +239,8 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
   if ( closest_indices.size() != (unsigned int)n )
     closest_indices.resize( n );
 
-  vcl_vector< double > sq_distances( n );
-  vcl_vector< bapl_bbf_queue_entry > priority_queue;
+  std::vector< double > sq_distances( n );
+  std::vector< bapl_bbf_queue_entry > priority_queue;
   priority_queue.reserve( 100 );    // should be more than enough
 
   int num_found = 0;
@@ -262,29 +263,29 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
       current = current->right_ ;
     }
   }
-  vcl_make_heap( priority_queue.begin(), priority_queue.end() );
+  std::make_heap( priority_queue.begin(), priority_queue.end() );
   sq_dist = 0;
 
-   /*vcl_cout << "\nAfter initial trip down the tree, here's the heap\n";
+   /*std::cout << "\nAfter initial trip down the tree, here's the heap\n";
    int i;
    for ( i=0; i<priority_queue.size(); ++i )
-     vcl_cout << "  " << i << ":  sq distance " << priority_queue[i].dist_
-              << ", node depth " << priority_queue[i].node_->depth_ << vcl_endl;*/
+     std::cout << "  " << i << ":  sq distance " << priority_queue[i].dist_
+              << ", node depth " << priority_queue[i].node_->depth_ << std::endl;*/
 
   bool first_leaf = true;
 
   do {
-     //vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_ << '\n';
+     //std::cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_ << '\n';
              //<< current->outer_box_ << "\ninner_box: "
           //<< current->inner_box_ << '\n';
-     //vcl_cout << "heap size: " << heap_vec.size() << vcl_endl;
+     //std::cout << "heap size: " << heap_vec.size() << std::endl;
     if ( num_found < n || sq_dist < sq_distances[ num_found-1 ] ) {
       if ( ! current->left_ ) {  // a leaf node
-         //vcl_cout << "Leaf\n";
+         //std::cout << "Leaf\n";
         leaves_examined_ ++ ;
         update_closest( query_point, n, current, closest_indices, sq_distances, num_found );
         if ( first_leaf ) {  // check if we can quit just at this leaf node.
-           //vcl_cout << "First leaf\n";
+           //std::cout << "First leaf\n";
           first_leaf = false;
           if ( this-> bounded_at_leaf( query_point, n, current, sq_distances, num_found ) )
             break;
@@ -292,44 +293,44 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
       }
 
       else {
-         //vcl_cout << "Internal\n";
+         //std::cout << "Internal\n";
         internal_examined_ ++ ;
 
         left_box_sq_dist = bapl_bbf_dist_sq( query_point, current->left_->inner_box_ );
-         //vcl_cout << "left sq distance = " << left_box_sq_dist << vcl_endl;
+         //std::cout << "left sq distance = " << left_box_sq_dist << std::endl;
         if ( num_found < n || sq_distances[ num_found-1 ] > left_box_sq_dist ) {
-           //vcl_cout << "pushing left onto the heap\n";
+           //std::cout << "pushing left onto the heap\n";
           priority_queue.push_back( bapl_bbf_queue_entry( left_box_sq_dist, current->left_ ) );
-          vcl_push_heap( priority_queue.begin(), priority_queue.end() );
+          std::push_heap( priority_queue.begin(), priority_queue.end() );
         };
 
         right_box_sq_dist = bapl_bbf_dist_sq( query_point, current->right_->inner_box_ );
-         //vcl_cout << "right sq distance = " << right_box_sq_dist << vcl_endl;
+         //std::cout << "right sq distance = " << right_box_sq_dist << std::endl;
         if ( num_found < n || sq_distances[ num_found-1 ] > right_box_sq_dist ) {
-           //vcl_cout << "pushing right onto the heap\n";
+           //std::cout << "pushing right onto the heap\n";
           priority_queue.push_back( bapl_bbf_queue_entry( right_box_sq_dist, current->right_ ) );
-          vcl_push_heap( priority_queue.begin(), priority_queue.end() );
+          std::push_heap( priority_queue.begin(), priority_queue.end() );
         }
       }
     }
-    // else vcl_cout << "skipping node\n";
+    // else std::cout << "skipping node\n";
 
     if ( leaves_examined_ >= max_search_nodes && max_search_nodes > 0)
       break;
     else if ( priority_queue.size() == 0 )
       break;
     else {
-      vcl_pop_heap( priority_queue.begin(), priority_queue.end() );
+      std::pop_heap( priority_queue.begin(), priority_queue.end() );
       sq_dist = priority_queue.back().dist_;
       current = priority_queue.back().node_;
       priority_queue.pop_back();
     }
   } while ( true );
 
-  /*vcl_cout << "\nAfter n_nearest, leaves_examined_ = " << leaves_examined_
+  /*std::cout << "\nAfter n_nearest, leaves_examined_ = " << leaves_examined_
            << ", fraction = " << float(leaves_examined_) / leaf_count_
            << "\n     internal_examined_ = " << internal_examined_
-           << ", fraction = " << float(internal_examined_) / internal_count_ << vcl_endl;*/
+           << ", fraction = " << float(internal_examined_) / internal_count_ << std::endl;*/
 
   assert(num_found >= 0);
   if ( closest_points.size() != (unsigned int)num_found )
@@ -344,23 +345,23 @@ void
 bapl_bbf_tree::update_closest( const bapl_keypoint_sptr query_point,
                                int n,
                                bapl_bbf_node_sptr p,
-                               vcl_vector< int >& closest_indices,
-                               vcl_vector< double >& sq_distances,
+                               std::vector< int >& closest_indices,
+                               std::vector< double >& sq_distances,
                                int & num_found )
 {
   assert(n>0);
 #ifdef DEBUG
-  vcl_cout << "Update_closest for leaf" << '\n'
+  std::cout << "Update_closest for leaf" << '\n'
            << " query_point = " << query_point << '\n'
            << " inner bounding box =\n" << p->inner_box_ << '\n'
-           << " sq_dist = " << rsdl_dist_sq( query_point, p->inner_box_ ) << vcl_endl;
+           << " sq_dist = " << rsdl_dist_sq( query_point, p->inner_box_ ) << std::endl;
 #endif
 
   for ( unsigned int i=0; i < p->point_indices_.size(); ++i ) {  // check each id
     int id = p->point_indices_[i];
     double sq_dist = vnl_vector_ssd( query_point->descriptor(), points_[ id ]->descriptor() );
-    // vcl_cout << "  id = " << id << ", point = " << points_[ id ]
-    //          << ", sq_dist = " << sq_dist << vcl_endl;
+    // std::cout << "  id = " << id << ", point = " << points_[ id ]
+    //          << ", sq_dist = " << sq_dist << std::endl;
 
     // if enough points have been found and the distance of this point is
     // too large then skip it.
@@ -386,11 +387,11 @@ bapl_bbf_tree::update_closest( const bapl_keypoint_sptr query_point,
     closest_indices[ j+1 ] = id;
     sq_distances[ j+1 ] = sq_dist;
   }
-  // vcl_cout << "  End of leaf computation, num_found =  " << num_found
-  //          << ", and they are:" << vcl_endl;
+  // std::cout << "  End of leaf computation, num_found =  " << num_found
+  //          << ", and they are:" << std::endl;
   // for ( int k=0; k<num_found; ++k )
-  //   vcl_cout << "     " << k << ":  indices: " << closest_indices[ k ]
-  //            << ", sq_dist " << sq_distances[ k ] << vcl_endl;
+  //   std::cout << "     " << k << ":  indices: " << closest_indices[ k ]
+  //            << ", sq_dist " << sq_distances[ k ] << std::endl;
 }
 
 
@@ -403,18 +404,18 @@ bool
 bapl_bbf_tree::bounded_at_leaf( const bapl_keypoint_sptr query_point,
                                 int n,
                                 bapl_bbf_node_sptr current,
-                                const vcl_vector< double >& sq_distances,
+                                const std::vector< double >& sq_distances,
                                 int & num_found )
 {
   assert(n>0);
-  // vcl_cout << "bounded_at_leaf\n"
+  // std::cout << "bounded_at_leaf\n"
   //          << "num_found = " << num_found << '\n';
 
   if ( num_found != n ) {
     return false;
   }
 
-  double radius = vcl_sqrt( sq_distances[ n-1 ] );
+  double radius = std::sqrt( sq_distances[ n-1 ] );
 
   for ( unsigned int i=0; i < query_point->descriptor().size(); ++i ) {
     double x = query_point->descriptor()[ i ];

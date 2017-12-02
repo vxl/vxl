@@ -6,5 +6,5 @@
   begin with the name of the toolkit, glut, gtk, mfc).
 
 - The lines with DOXYGEN_SHOULD_SKIP_THIS should be ignored.  They have been
-  added to prevent Doxygen from generating documentation from these example 
+  added to prevent Doxygen from generating documentation from these example
   files.

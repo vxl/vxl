@@ -22,7 +22,7 @@ rgrl_trans_homo2d_proj_rad()
 
 rgrl_trans_homo2d_proj_rad::
 rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
-                            vcl_vector<double>             const& k,
+                            std::vector<double>             const& k,
                             vnl_vector_fixed< double, 2 >  const& image_centre)
   : rgrl_est_proj_rad_func<2,2>( k.size(), true ),
     H_(H),
@@ -35,7 +35,7 @@ rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
 
 rgrl_trans_homo2d_proj_rad::
 rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
-                            vcl_vector<double>             const& k,
+                            std::vector<double>             const& k,
                             vnl_vector_fixed< double, 2 >  const& image_centre,
                             vnl_matrix<double> const& covar,
                             vnl_vector<double> const& from_centre,
@@ -50,7 +50,7 @@ rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
 }
 
 rgrl_trans_homo2d_proj_rad::
-rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const& norm_k,
+rgrl_trans_homo2d_proj_rad( std::vector<double>             const& norm_k,
                             vnl_matrix_fixed<double, 3, 3> const& H,
                             vnl_vector_fixed< double, 2 >  const& image_centre )
   : rgrl_est_proj_rad_func<2,2>( norm_k.size(), true ),
@@ -62,7 +62,7 @@ rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const& norm_k,
 }
 
 rgrl_trans_homo2d_proj_rad::
-rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const& norm_k,
+rgrl_trans_homo2d_proj_rad( std::vector<double>             const& norm_k,
                             vnl_matrix_fixed<double, 3, 3> const& H,
                             vnl_vector_fixed< double, 2 >  const& image_centre,
                             vnl_matrix<double> const& covar,
@@ -78,7 +78,7 @@ rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const& norm_k,
 
 void
 rgrl_trans_homo2d_proj_rad::
-set_up_rad_k(vcl_vector<double> const & rad_k)
+set_up_rad_k(std::vector<double> const & rad_k)
 {
   rad_k_.resize(rad_k.size());
   const double centre_mag_norm = centre_mag_norm_const();
@@ -147,7 +147,7 @@ scale_by( double scale ) const
   const vnl_vector_fixed<double,2> ic = image_centre_ * scale;
 
   // radial terms
-  vcl_vector<double> radk = radial_params();
+  std::vector<double> radk = radial_params();
   const double sq_scale = scale*scale;
 
   double base = 1;
@@ -197,12 +197,12 @@ jacobian_wrt_loc( vnl_matrix<double>& jacobian, vnl_vector<double> const& from_l
 // for output CENTERED transformation
 void
 rgrl_trans_homo2d_proj_rad::
-write(vcl_ostream& os ) const
+write(std::ostream& os ) const
 {
   // tag
   os << "HOMOGRAPHY2D+RADIAL\n"
   // parameters
-     << H_ << vcl_endl;
+     << H_ << std::endl;
 
   // radial terms
   os << rad_k_.size() << "  ";
@@ -211,7 +211,7 @@ write(vcl_ostream& os ) const
 
   os << '\n' << from_centre_ << "   " << to_centre_
      << '\n' << image_centre_ << "   " << centre_mag_norm_const_
-     << vcl_endl;
+     << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -220,13 +220,13 @@ write(vcl_ostream& os ) const
 // for input
 bool
 rgrl_trans_homo2d_proj_rad::
-read(vcl_istream& is )
+read(std::istream& is )
 {
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "HOMOGRAPHY2D+RADIAL" ) != 0 ) {
@@ -268,11 +268,11 @@ clone() const
 }
 
 //: return radial parameters
-vcl_vector<double>
+std::vector<double>
 rgrl_trans_homo2d_proj_rad::
 radial_params() const
 {
-  vcl_vector<double> ori_radk( rad_k_ );
+  std::vector<double> ori_radk( rad_k_ );
 
   const double centre_mag_norm = centre_mag_norm_const();
 

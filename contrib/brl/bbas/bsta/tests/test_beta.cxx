@@ -1,10 +1,11 @@
 //:
 // \file
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_histogram.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 //: Test bsta beta distribution
 void test_beta()
@@ -40,16 +41,16 @@ void test_beta()
 
   // read the samples from a txt file,
   // extract the parameters from a set of data
-  vcl_ifstream is("beta_distr_2_2.txt");
+  std::ifstream is("beta_distr_2_2.txt");
   double alpha=2, beta=2;
-  vcl_vector<double> samples;
+  std::vector<double> samples;
   while (!is.eof()) {
     double sample;
     is >> sample;
     samples.push_back(sample);
   }
 
-  bsta_beta<double> beta4(samples); vcl_cout << beta4;
+  bsta_beta<double> beta4(samples); std::cout << beta4;
   TEST_NEAR("extracting alpha and beta from samples (2,2) - alpha", beta4.alpha(), alpha ,1e-01);
   TEST_NEAR("extracting alpha and beta from samples (2,2) - beta ", beta4.beta(), beta ,1e-01);
 }

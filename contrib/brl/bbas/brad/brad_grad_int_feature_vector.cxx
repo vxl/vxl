@@ -18,7 +18,7 @@ operator()(vil_image_view<float> const& view) const
       dx += view(i+1, j-1) + 2.0f*view(i+1, j) + view(i+1, j+1);
       float dy = -(view(i-1, j-1) + 2.0f*view(i, j-1) + view(i+1, j-1));
       dy += view(i-1, j+1) + 2.0f*view(i, j+1) + view(i+1, j+1);
-      float mag = vcl_sqrt(dx*dx + dy*dy);
+      float mag = std::sqrt(dx*dx + dy*dy);
       mag/=6.0f;
       h_grad.upcount(mag, 1.0f);
       h_int.upcount(view(i,j), 1.0f);
@@ -30,7 +30,7 @@ operator()(vil_image_view<float> const& view) const
   }
   float l2e = static_cast<float>(vnl_math::log2e);
   float nb = static_cast<float>(nbins_);
-  float max_entropy = l2e*vcl_log(nb);
+  float max_entropy = l2e*std::log(nb);
   ret[nbins_]= h_int.entropy()/max_entropy;
   ret[2*nbins_+1]= h_grad.entropy()/max_entropy;
   return ret;
@@ -62,7 +62,7 @@ void vsl_b_read(vsl_b_istream &is, brad_grad_int_feature_vector& fv)
   fv.set_max_grad(max_grad);
 }
 
-void vsl_print_summary(vcl_ostream &os, brad_grad_int_feature_vector& fv)
+void vsl_print_summary(std::ostream &os, brad_grad_int_feature_vector& fv)
 {
   fv.print(os);
 }

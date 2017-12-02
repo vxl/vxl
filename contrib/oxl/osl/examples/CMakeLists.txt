@@ -1,11 +1,11 @@
 # oxl/osl/examples/CMakeLists.txt
 
-LINK_LIBRARIES( osl vul vil1 )
+link_libraries( osl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil1 )
 
 # Harris corner detector
-ADD_EXECUTABLE(run_osl_harris run_osl_harris.cxx)
+add_executable(run_osl_harris run_osl_harris.cxx)
 # Canny edge detector
-ADD_EXECUTABLE(run_osl_canny  run_osl_canny.cxx)
-ADD_EXECUTABLE(topology_edges topology_edges.cxx)
-ADD_EXECUTABLE(break_lines    break_lines.cxx)
-ADD_EXECUTABLE(fit_lines      fit_lines.cxx)
+add_executable(run_osl_canny  run_osl_canny.cxx)
+add_executable(topology_edges topology_edges.cxx)
+add_executable(break_lines    break_lines.cxx)
+add_executable(fit_lines      fit_lines.cxx)

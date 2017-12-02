@@ -27,16 +27,16 @@ bool vcsl_spatial::valid_time(double time) const
 //---------------------------------------------------------------------------
 // Set the list of parent coordinate system along the time
 //---------------------------------------------------------------------------
-void vcsl_spatial::set_parent(vcl_vector<vcsl_spatial_sptr> const& new_parent)
+void vcsl_spatial::set_parent(std::vector<vcsl_spatial_sptr> const& new_parent)
 {
-  vcl_vector<vcsl_spatial_sptr>::iterator i, j;
+  std::vector<vcsl_spatial_sptr>::iterator i, j;
 
   if (parent_!=new_parent)
   {
     // Erase 'this' from the list of the old parents' potential children
     for (i=parent_.begin();i!=parent_.end();++i)
     {
-      vcl_vector<vcsl_spatial_sptr> children=(*i)->potential_children_;
+      std::vector<vcsl_spatial_sptr> children=(*i)->potential_children_;
       for (j=children.begin(); j!=children.end()&&(*j).ptr()!=this; ++j)
         ;
       if ((*j).ptr()==this) children.erase(j);
@@ -58,7 +58,7 @@ vcsl_spatial::set_unique(const vcsl_spatial_sptr &new_parent,
                          const vcsl_spatial_transformation_sptr &new_motion)
 {
   motion_.clear(); motion_.push_back(new_motion);
-  vcl_vector<vcsl_spatial_sptr> temp_parent; temp_parent.push_back(new_parent);
+  std::vector<vcsl_spatial_sptr> temp_parent; temp_parent.push_back(new_parent);
   set_parent(temp_parent);
   beat_.clear();
 }
@@ -108,7 +108,7 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
 {
   bool result;
   int i = -1; // dummy initialisation to avoid compiler warning
-  vcl_vector<vcsl_spatial_sptr>::const_iterator child;
+  std::vector<vcsl_spatial_sptr>::const_iterator child;
   if (parent_.size()!=0) // If 'this' is not absolute
     i=matching_interval(time);
   set_reached(true);
@@ -164,7 +164,7 @@ bool vcsl_spatial::recursive_path_from_local_to_cs_exists(const vcsl_spatial_spt
 //---------------------------------------------------------------------------
 void vcsl_spatial::path_from_local_to_cs(const vcsl_spatial_sptr &other,
                                          double time,
-                                         vcl_vector<vcsl_spatial_transformation_sptr> &path,
+                                         std::vector<vcsl_spatial_transformation_sptr> &path,
                                          VCSL_SPATIAL_VECTOR_BOOL &sens)
 {
   // require
@@ -185,12 +185,12 @@ void vcsl_spatial::path_from_local_to_cs(const vcsl_spatial_sptr &other,
 bool
 vcsl_spatial::recursive_path_from_local_to_cs(const vcsl_spatial_sptr &other,
                                               double time,
-                                              vcl_vector<vcsl_spatial_transformation_sptr> &path,
+                                              std::vector<vcsl_spatial_transformation_sptr> &path,
                                               VCSL_SPATIAL_VECTOR_BOOL &sens)
 {
   bool result;
   int i = -1; // dummy initialisation to avoid compiler warning
-  vcl_vector<vcsl_spatial_sptr>::const_iterator child;
+  std::vector<vcsl_spatial_sptr>::const_iterator child;
 
   if (parent_.size()!=0)
     i=matching_interval(time);
@@ -294,10 +294,10 @@ vcsl_spatial::from_local_to_cs(const vnl_vector<double> &v,
   // require
   assert(path_from_local_to_cs_exists(other,time));
 
-  vcl_vector<vcsl_spatial_transformation_sptr> path;
+  std::vector<vcsl_spatial_transformation_sptr> path;
   VCSL_SPATIAL_VECTOR_BOOL sens;
 
-  vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
+  std::vector<vcsl_spatial_transformation_sptr>::const_iterator i;
   VCSL_SPATIAL_VECTOR_BOOL::const_iterator j;
 
   path_from_local_to_cs(other,time,path,sens);

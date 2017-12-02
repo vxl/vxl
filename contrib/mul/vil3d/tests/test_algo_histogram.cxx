@@ -10,7 +10,7 @@ static void test_histogram_byte()
       for (unsigned i=0;i<image.ni();++i)
         image(i,j,k) = vxl_byte(i+j+k);
 
-  vcl_vector<double> histo;
+  std::vector<double> histo;
   vil3d_histogram_byte(image,histo);
   TEST("Histo size", histo.size(), 256);
   TEST_NEAR("Histo element 0", histo[0], 1, 1e-6);
@@ -21,7 +21,7 @@ static void test_histogram_byte()
   TEST_NEAR("Histo element 5", histo[5], 18, 1e-6);
   TEST_NEAR("Histo element 13",histo[22],0, 1e-6);
 
-  vcl_vector<double> histo2;
+  std::vector<double> histo2;
   vil3d_histogram(image,histo2,0,20,20);
   TEST("Histo size", histo2.size(), 20);
   TEST_NEAR("Histo element 0", histo2[0], 1, 1e-6);
@@ -29,7 +29,7 @@ static void test_histogram_byte()
   TEST_NEAR("Histo element 5", histo2[5], 18, 1e-6);
   TEST_NEAR("Histo element 19",histo2[19],0, 1e-6);
 
-  vcl_vector<double> histo3;
+  std::vector<double> histo3;
   vil3d_histogram(image,histo3,0,20,10);
   TEST("Histo size", histo3.size(), 10);
   TEST_NEAR("Histo element 0", histo3[0], 4, 1e-6);

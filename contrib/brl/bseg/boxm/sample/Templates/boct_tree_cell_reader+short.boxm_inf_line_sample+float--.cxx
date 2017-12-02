@@ -1,4 +1,4 @@
-#include <boct/boct_tree_cell_reader.txx>
+#include <boct/boct_tree_cell_reader.hxx>
 #include <boxm/sample/boxm_inf_line_sample.h>
 
 typedef boxm_inf_line_sample<float> sample;

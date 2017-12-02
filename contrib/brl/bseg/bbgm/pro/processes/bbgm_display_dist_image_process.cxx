@@ -2,8 +2,9 @@
 
 //:
 // \file
+#include <iostream>
 #include <bprb/bprb_func_process.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_update.h>
@@ -59,7 +60,7 @@ void register_weight_viewers()
 bool bbgm_display_dist_image_process_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> in_types(4), out_types(1);
+  std::vector<std::string> in_types(4), out_types(1);
   in_types[0]= "bbgm_image_sptr"; //background image
   in_types[1]= "vcl_string"; //what to display, e.g. mean, variance etc.
   in_types[2]= "int"; //the component to display
@@ -77,7 +78,7 @@ bool bbgm_display_dist_image_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()){
-    vcl_cerr << "In bbgm_display_dist_image_process::execute() -"
+    std::cerr << "In bbgm_display_dist_image_process::execute() -"
              << " invalid inputs\n";
     return false;
   }
@@ -85,13 +86,13 @@ bool bbgm_display_dist_image_process(bprb_func_process& pro)
   // Retrieve background image
   bbgm_image_sptr bgm = pro.get_input<bbgm_image_sptr>(0);
   if (!bgm){
-    vcl_cerr << "In bbgm_display_dist_image_process::execute() -"
+    std::cerr << "In bbgm_display_dist_image_process::execute() -"
              << " null distribution image\n";
     return false;
   }
 
   //Retrieve attribute to display, e.g. mean
-  vcl_string attr = pro.get_input<vcl_string>(1);
+  std::string attr = pro.get_input<std::string>(1);
 
   //Retrieve component index
   int comp_index = pro.get_input<int>(2);
@@ -99,7 +100,7 @@ bool bbgm_display_dist_image_process(bprb_func_process& pro)
   //Retrieve scale switch
   bool scale = pro.get_input<bool>(3);
 
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0]= "vil_image_view_base_sptr";
   pro.set_output_types(output_types);
 
@@ -117,12 +118,12 @@ bool bbgm_display_dist_image_process(bprb_func_process& pro)
     register_weight_viewers();
   }
   else {
-    vcl_cout << "In bbgm_display_dist_image_process::execute() -"
+    std::cout << "In bbgm_display_dist_image_process::execute() -"
              << " display attribute not available\n";
     return false;
   }
   if (!viewer->probe(bgm)){
-    vcl_cout << "In bbgm_display_dist_image_process::execute() -"
+    std::cout << "In bbgm_display_dist_image_process::execute() -"
              << " displayer cannot process distribution image type\n"
              << bgm->is_a() << '\n';
     return false;
@@ -130,7 +131,7 @@ bool bbgm_display_dist_image_process(bprb_func_process& pro)
   viewer->set_active_component(comp_index);
   vil_image_view<double> d_image;
   if (!viewer->apply(bgm, d_image)){
-    vcl_cout << "In bbgm_display_dist_image_process::execute() -"
+    std::cout << "In bbgm_display_dist_image_process::execute() -"
              << " extract view (apply) failed\n";
     return false;
   }

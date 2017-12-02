@@ -55,18 +55,18 @@ vimt3d_transform_3d vimt3d_load_transform(const vil3d_image_resource_sptr &im, b
 //: Load 3D image and return pointer.  Caller responsible for deleting object
 //  Object will be of type matching pixel format in file, such as
 //  vimt3d_image_3d_of<vxl_byte>  or vimt3d_image_3d_of<float>
-vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
+vimt3d_image_3d* vimt3d_load(const std::string& path, bool use_mm)
 {
   vil3d_image_resource_sptr ir = vil3d_load_image_resource(path.c_str());
-  if (ir.ptr()==0)
+  if (ir.ptr()==VXL_NULLPTR)
   {
-    return 0;
+    return VXL_NULLPTR;
   }
 
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
     vimt3d_image_3d_of<vxl_byte>* image = new vimt3d_image_3d_of<vxl_byte>();
-    image->image() = vil3d_convert_cast(vxl_byte(), 
+    image->image() = vil3d_convert_cast(vxl_byte(),
                                       ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
     image->set_world2im(vimt3d_load_transform(ir,use_mm));
@@ -75,7 +75,7 @@ vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_INT_16)
   {
     vimt3d_image_3d_of<vxl_int_16>* image = new vimt3d_image_3d_of<vxl_int_16>();
-    image->image() = vil3d_convert_cast(vxl_int_16(), 
+    image->image() = vil3d_convert_cast(vxl_int_16(),
                                         ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
     image->set_world2im(vimt3d_load_transform(ir,use_mm));
@@ -84,7 +84,7 @@ vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_INT_32)
   {
     vimt3d_image_3d_of<vxl_int_32>* image = new vimt3d_image_3d_of<vxl_int_32>();
-    image->image() = vil3d_convert_cast(vxl_int_32(), 
+    image->image() = vil3d_convert_cast(vxl_int_32(),
                                         ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
     image->set_world2im(vimt3d_load_transform(ir,use_mm));
@@ -93,13 +93,13 @@ vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
   {
     vimt3d_image_3d_of<float>* image = new vimt3d_image_3d_of<float>();
-    image->image() = vil3d_convert_cast(float(), 
+    image->image() = vil3d_convert_cast(float(),
                                       ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
     image->set_world2im(vimt3d_load_transform(ir,use_mm));
     return image;
   }
 
-  vcl_cerr<<"vimt3d_load() Unknown pixel format: "<<ir->pixel_format()<<vcl_endl;
-  return 0;
+  std::cerr<<"vimt3d_load() Unknown pixel format: "<<ir->pixel_format()<<std::endl;
+  return VXL_NULLPTR;
 }

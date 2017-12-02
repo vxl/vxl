@@ -1,4 +1,6 @@
 // This is core/vul/vul_timer.cxx
+#include <ctime>
+#include <iostream>
 #include "vul_timer.h"
 //:
 // \file
@@ -30,12 +32,7 @@
 //    what you get from a stop watch timer.
 //
 
-#include <vcl_ctime.h>
-#if defined(como4301) && defined(__linux__)
-# include <sys/types.h>
-# include <sys/select.h>
-# define __USE_BSD
-#endif
+#include <vcl_compiler.h>
 #include <vcl_sys/time.h>
 # undef __USE_BSD
 
@@ -45,19 +42,12 @@ struct vul_timer_data
   tms usage0;                    // usage mark.
   struct timeval real0;          // wall clock mark.
 #else
- vcl_clock_t usage0;
-# if defined(VCL_BORLAND)
- struct timeb real0;
-# else
+ std::clock_t usage0;
  struct _timeb real0;
-# endif
 #endif
 };
 
-#include <vxl_config.h> // VXL_TWO_ARG_GETTIME
-
 #include <vcl_climits.h>   // for CLK_TCK
-#include <vcl_iostream.h>
 
 
 //#define CLK_TCK _sysconf(3) in <limits.h> has error
@@ -79,7 +69,7 @@ vul_timer::vul_timer()
 vul_timer::~vul_timer()
 {
   delete data;
-  data = 0;
+  data = VXL_NULLPTR;
 }
 
 //: Sets the reference time to now.
@@ -100,12 +90,8 @@ void vul_timer::mark()
 #endif
 #else
   // Win32 section
-  data->usage0 = vcl_clock();
-# if defined(VCL_BORLAND)
-  ftime(&data->real0);
-# else
+  data->usage0 = std::clock();
   _ftime(&data->real0);
-# endif
 #endif
 }
 
@@ -135,13 +121,8 @@ long vul_timer::real()
 
 #else
   // Win32 section
-# if defined(VCL_BORLAND)
-  struct timeb real_time;
-  ftime(&real_time);
-# else
   struct _timeb real_time;
   _ftime(&real_time);
-# endif
   s = long(real_time.time - data->real0.time);
   long ms = real_time.millitm - data->real0.millitm;
 
@@ -158,7 +139,7 @@ long vul_timer::user()
   times(&usage);  // new user/system time
   return (usage.tms_utime - data->usage0.tms_utime) * 1000 / CLK_TCK;
 #else
-  vcl_clock_t usage = vcl_clock();
+  std::clock_t usage = std::clock();
   return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
@@ -187,13 +168,13 @@ long vul_timer::all()
   return (usage.tms_utime + usage.tms_stime -
           data->usage0.tms_utime - data->usage0.tms_stime)  * 1000 / CLK_TCK;
 #else
-  vcl_clock_t usage = vcl_clock();
+  std::clock_t usage = std::clock();
   return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
 
 //: Display user and real time since the last mark.
-void vul_timer::print(vcl_ostream& s)
+void vul_timer::print(std::ostream& s)
 {
-  s << "Time: user " << user() / 1000.0 << ", real " << this->real() / 1000.0 << vcl_endl;
+  s << "Time: user " << user() / 1000.0 << ", real " << this->real() / 1000.0 << std::endl;
 }

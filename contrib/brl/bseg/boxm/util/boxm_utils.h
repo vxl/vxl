@@ -40,10 +40,10 @@ class boxm_utils
                          bool do_front_test = true);
 
   // returns the 8 corner points of a box
-  static vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> const& box);
+  static std::vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> const& box);
 
   //: returns the indices of the faces visible from the camera
-  static bool is_face_visible(vcl_vector<vgl_point_3d<double> > &face,
+  static bool is_face_visible(std::vector<vgl_point_3d<double> > &face,
                               vpgl_camera_double_sptr const& camera);
 
   //:
@@ -62,24 +62,24 @@ class boxm_utils
   static boct_face_idx visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera);
 
   static void faces_of_box_3d(vgl_box_3d<double> const& bbox,
-                              vcl_map<boct_face_idx, vcl_vector<vgl_point_3d<double> > > & faces);
+                              std::map<boct_face_idx, std::vector<vgl_point_3d<double> > > & faces);
 
-  static void project_corners(vcl_vector<vgl_point_3d<double> > const& corners,vpgl_camera_double_sptr camera,
+  static void project_corners(std::vector<vgl_point_3d<double> > const& corners,vpgl_camera_double_sptr camera,
                               double * xverts, double *yerts);
   static void project_point3d(vgl_point_3d<double> const& point,
                               vpgl_camera_double_sptr camera,
                               double & xvert, double &yert, double & vertdist);
 
-  static void project_corners(vcl_vector<vgl_point_3d<double> > const& corners,
+  static void project_corners(std::vector<vgl_point_3d<double> > const& corners,
                               vpgl_camera_double_sptr camera,
                               double* xverts, double* yverts,
                               float* vertdist);
   static void project_cube(vgl_box_3d<double> &bbox,
                            vpgl_camera_double_sptr camera,
-                           vcl_map<boct_face_idx, vcl_vector< vgl_point_3d<double> > > & faces,
+                           std::map<boct_face_idx, std::vector< vgl_point_3d<double> > > & faces,
                            boct_face_idx & vis_face_ids);
 
-  static vcl_vector<vgl_point_2d<double> >  project_face(vcl_vector<vgl_point_3d<double> > &face,
+  static std::vector<vgl_point_2d<double> >  project_face(std::vector<vgl_point_3d<double> > &face,
                                                          vpgl_camera_double_sptr const& camera);
 
   static void quad_interpolate(boxm_quad_scan_iterator &poly_it,
@@ -97,25 +97,25 @@ class boxm_utils
                         float val,
                         unsigned img_plane_num=0);
 
-  static bool project_cube_xyz(vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
+  static bool project_cube_xyz(std::map<boct_face_idx,std::vector< vgl_point_3d<double> > > & faces,
                                boct_face_idx & vis_face_ids,
                                vil_image_view<float> &front_xyz,
                                vil_image_view<float> &back_xyz,
                                vpgl_camera_double_sptr camera);
 
- static bool project_cube_xyz(vcl_vector< vgl_point_3d<double> >  & corners,
+ static bool project_cube_xyz(std::vector< vgl_point_3d<double> >  & corners,
                               boct_face_idx & vis_face_ids,
                               vil_image_view<float> &front_xyz,
                               vil_image_view<float> &back_xyz,
                               double *xverts,double * yerts);
  //: only for perspective camera
- static bool project_cube_xyz(vcl_vector< vgl_point_3d<double> > & corners,
+ static bool project_cube_xyz(std::vector< vgl_point_3d<double> > & corners,
                               boct_face_idx & vis_face_ids,
                               vil_image_view<float> &front_xyz,
                               vil_image_view<float> &back_xyz,
                               double *xverts,double * yverts,float * vertdist);
 
-  static bool project_cube_fill_val( vcl_map<boct_face_idx,vcl_vector< vgl_point_3d<double> > > & faces,
+  static bool project_cube_fill_val( std::map<boct_face_idx,std::vector< vgl_point_3d<double> > > & faces,
                                      boct_face_idx & vis_face_ids,
                                      vil_image_view<float> &fill_img,
                                      float val, vpgl_camera_double_sptr cam);

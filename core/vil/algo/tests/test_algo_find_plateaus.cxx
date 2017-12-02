@@ -1,12 +1,13 @@
 // This is core/vil/algo/tests/test_algo_find_plateaus.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_find_plateaus.h>
 
 static void test_find_plateaus_byte()
 {
-  vcl_cout << "***************************\n"
+  std::cout << "***************************\n"
            << " Testing vil_find_plateaus\n"
            << "***************************\n";
 
@@ -18,10 +19,10 @@ static void test_find_plateaus_byte()
   image0(4,3)=20;  // A plateau point
   image0(4,4)=20;  // A plateau point
 
-  vcl_vector<unsigned> pi, pj;
+  std::vector<unsigned> pi, pj;
   vil_find_plateaus_3x3(pi, pj, image0, vxl_byte(10)); // Ignore pixels below 10
 
-  const unsigned nplat = pi.size();
+  const size_t nplat = pi.size();
   TEST("Number of plateaus==4", nplat, 4);
 
   TEST("Plateau at (4,3)", pi[0]==4 && pj[0]==3, true);

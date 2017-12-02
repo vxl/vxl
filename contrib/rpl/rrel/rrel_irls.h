@@ -10,9 +10,11 @@
 //   2001-10-22 Amitha Perera. Reorganised and added comments.
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <rrel/rrel_export.h>
 
 class rrel_estimation_problem;
@@ -149,16 +151,16 @@ class rrel_irls
   int   iterations_used() const;
 
     //: \brief Print the residuals.  Used for debugging.
-  void  trace_residuals( const vcl_vector<double>& residuals ) const;
+  void  trace_residuals( const std::vector<double>& residuals ) const;
 
     //: \brief Print the IRLS weights.  Used for debugging.
-  void  trace_weights( const vcl_vector<double>& weights ) const;
+  void  trace_weights( const std::vector<double>& weights ) const;
 
     //: \brief Print the set of parameters.
   void  print_params() const;
 
  private:
-  bool has_converged( const vcl_vector<double>& residuals,
+  bool has_converged( const std::vector<double>& residuals,
                       const rrel_wls_obj* m_estimator,
                       const rrel_estimation_problem* problem,
                       vnl_vector<double>* params );

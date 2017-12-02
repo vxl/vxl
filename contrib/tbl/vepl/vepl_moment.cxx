@@ -1,6 +1,7 @@
 // This is tbl/vepl/vepl_moment.cxx
+#include <iostream>
 #include "vepl_moment.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_moment.h>
 #include <vil/vil_image_view.h>
@@ -14,7 +15,7 @@ vil_image_resource_sptr vepl_moment(vil_image_resource_sptr image, int order, in
 
   // byte rgb
   if (image->nplanes() > 1 || image->pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
-    vcl_cerr << __FILE__ ": vepl_moment() cannot be implemented for colour images\n";
+    std::cerr << __FILE__ ": vepl_moment() cannot be implemented for colour images\n";
   }
 
   // byte greyscale
@@ -74,7 +75,7 @@ vil_image_resource_sptr vepl_moment(vil_image_resource_sptr image, int order, in
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_moment() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_moment() not implemented for " << image << '\n';
 
   return img_out;
 }

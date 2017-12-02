@@ -18,8 +18,10 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //  \endverbatim
 
-#include <vcl_complex.h>
+#include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/algo/vnl_algo_export.h>
 
 class vnl_real_polynomial;
 
@@ -33,7 +35,7 @@ class vnl_real_polynomial;
 //  This class is not very const-correct as it is intended as a compute object
 //  rather than a data object.
 
-class vnl_rpoly_roots
+class VNL_ALGO_EXPORT vnl_rpoly_roots
 {
  public:
 // Constructors/Destructors--------------------------------------------------
@@ -54,10 +56,10 @@ class vnl_rpoly_roots
   // Operations----------------------------------------------------------------
 
   //: Return i'th complex root
-  vcl_complex<double> operator [] (int i) const { return vcl_complex<double>(r_[i], i_[i]); }
+  std::complex<double> operator [] (int i) const { return std::complex<double>(r_[i], i_[i]); }
 
   //: Complex vector of all roots.
-  vnl_vector<vcl_complex<double> > roots() const;
+  vnl_vector<std::complex<double> > roots() const;
 
   //: Real part of root I.
   const double& real(int i) const { return r_[i]; }

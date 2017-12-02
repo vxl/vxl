@@ -1,4 +1,4 @@
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 #include <rgrl/rgrl_initializer.h>
 #include <rgrl/rgrl_scale.h>
 

@@ -54,6 +54,7 @@
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
+#include <vnl/algo/vnl_algo_export.h>
 
 //: Find eigenvalues of a symmetric 3x3 matrix
 // Eigenvalues will be returned so that l1 <= l2 <= l3.
@@ -97,7 +98,7 @@ class vnl_symmetric_eigensystem
 
   //: Public eigenvalues.
   //  After construction,  D contains the eigenvalues, sorted as described above.
-  //  Note that D is a vnl_diag_matrix, and is therefore stored as a vcl_vector while behaving as a matrix.
+  //  Note that D is a vnl_diag_matrix, and is therefore stored as a std::vector while behaving as a matrix.
   vnl_diag_matrix<T> D;
 
   //: Recover specified eigenvector after computation.
@@ -140,6 +141,6 @@ class vnl_symmetric_eigensystem
 };
 
 #define VNL_SYMMETRIC_EIGENSYSTEM_INSTANTIATE(T) \
-extern "please include vnl/algo/vnl_symmetric_eigensystem.txx first"
+extern "please include vnl/algo/vnl_symmetric_eigensystem.hxx first"
 
 #endif // vnl_symmetric_eigensystem_h_

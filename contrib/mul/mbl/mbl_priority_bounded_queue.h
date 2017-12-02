@@ -6,12 +6,14 @@
 // \author Ian Scott
 // \date   Fri Oct  5  2001
 
-#include <vcl_vector.h>
-#include <vcl_functional.h>
-#include <vcl_algorithm.h> 
+#include <vector>
+#include <functional>
+#include <iostream>
+#include <algorithm>
+#include <vcl_compiler.h>
 
 //: A bounded priority queue
-// This is identical to a vcl_priority_queue, but
+// This is identical to a std::priority_queue, but
 // as more elements are added past the queue's bound size
 // the largest values are thrown out.
 // So this queue keeps the n smallest values that
@@ -21,7 +23,7 @@
 //
 // top() returns the value that is closest to being thrown out,
 // which is the largest value in the case of the default predicate.
-template <class T, class C= vcl_vector<T>, class O= vcl_less<
+template <class T, class C= std::vector<T>, class O= std::less<
 #ifndef VCL_VC
 typename
 #endif
@@ -31,21 +33,13 @@ class mbl_priority_bounded_queue
 public:
   typedef typename C::value_type value_type;
   typedef typename C::size_type size_type;
-#if defined(VCL_SGI_CC)
-  typedef vcl_alloc allocator_type; // there is no way to find out second template argument type
-#else
   typedef typename C::allocator_type allocator_type;
-#endif
 
   explicit
   mbl_priority_bounded_queue(unsigned bound_size = 10, const O& comp = O()):
     b_size_(bound_size), comp_(comp) { }
 
-#if 0 // #if VCL_HAS_MEMBER_TEMPLATES
- template <class ITER>
-#else
   typedef const value_type *ITER;
-#endif
   //: Construct a bounded priority queue from a controlled sequence.
   // The bounded size will be the length of the sequence.
   mbl_priority_bounded_queue(
@@ -79,12 +73,12 @@ public:
       else return;
     }
     c_.push_back(x);
-    vcl_push_heap(c_.begin(), c_.end(), comp_); } // ignore purify:UMR error here
+    std::push_heap(c_.begin(), c_.end(), comp_); } // ignore purify:UMR error here
   // It can be resolved by replacing a comparator object with a function pointer.
   // It seems that when using an object, some compilers put a small data marker in
   // to represent the object. But it contains no useful data.
   // Ignore purify:UMR error on next line as well - same cause.
-  void pop() {vcl_pop_heap(c_.begin(), c_.end(), comp_); c_.pop_back(); }
+  void pop() {std::pop_heap(c_.begin(), c_.end(), comp_); c_.pop_back(); }
 
 protected:
   size_type b_size_;

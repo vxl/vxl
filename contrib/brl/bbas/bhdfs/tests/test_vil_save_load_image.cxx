@@ -1,4 +1,8 @@
 // This is brl/bbas/bhdfs/tests/test_vil_save_load_image.cxx
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <fstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -10,10 +14,7 @@
 //
 // \endverbatim
 
-#include <vcl_cstring.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_config.h> // for HAS_JPEG
@@ -53,7 +54,7 @@ inline bool my_comparison(bool a, bool b, bool tol)
 template <>
 inline bool my_comparison(vxl_uint_32 a, vxl_uint_32 b, vxl_uint_32 tol)
 {
-  return vcl_abs((int)a-(int)b) <= tol;
+  return std::abs((int)a-(int)b) <= tol;
 }
 #endif
 
@@ -86,24 +87,24 @@ bool test_image_equal(char const* type_name,
   TEST("Loaded image can be viewed as same type as saved image", !image2, false);
   if (!image2)
   {
-    vcl_cout << "read back image type has pixel type " << pimage2->pixel_format()
-             << " instead of (as written) " << image.pixel_format() << vcl_endl;
+    std::cout << "read back image type has pixel type " << pimage2->pixel_format()
+             << " instead of (as written) " << image.pixel_format() << std::endl;
     return false;
   }
 
   TEST("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
   {
-    vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
-             << " instead of " << sizex << " x " << sizey << vcl_endl;
+    std::cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
+             << " instead of " << sizex << " x " << sizey << std::endl;
     return false;
   }
 
   TEST("Number of planes", planes, planes2);
   if (planes != planes2)
   {
-    vcl_cout << type_name << ": nplanes are " << planes2
-             << " instead of " << planes << vcl_endl;
+    std::cout << type_name << ": nplanes are " << planes2
+             << " instead of " << planes << std::endl;
     return false;
   }
 
@@ -114,20 +115,20 @@ bool test_image_equal(char const* type_name,
     return true;
   }
 #endif
-  vcl_cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
-           << ", planestep()=" << image2.planestep() << vcl_endl;
-  vcl_ptrdiff_t i = image2.istep(); if (i<0) i = -i;
+  std::cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
+           << ", planestep()=" << image2.planestep() << std::endl;
+  std::ptrdiff_t i = image2.istep(); if (i<0) i = -i;
   TEST("|istep| is either 1, or np or height or np*height", i==1||i==planes2||i==sizey2||i==planes2*sizey2, true);
-  vcl_ptrdiff_t j = image2.jstep(); if (j<0) j = -j;
+  std::ptrdiff_t j = image2.jstep(); if (j<0) j = -j;
   TEST("|jstep| is either 1, or np or width or np*width",
        j==1||j==planes2||j==sizex2||j==4*((sizex2+3)/4)||j==planes2*sizex2||j==4*((planes2*sizex2+3)/4), true);
   // The "+3" is there to allow for "row word alignment", e.g. with the BMP format.
-  vcl_ptrdiff_t p = image2.planestep(); if (p<0) p = -p;
+  std::ptrdiff_t p = image2.planestep(); if (p<0) p = -p;
   TEST("|planestep| is either 1 or width or height or width x height", p==1||p==sizex2||p==sizey2||p==sizex2*sizey2, true);
 
   if (100*sizex2+image2.jstep()<0 || 100*sizex2-image2.jstep()<0)
   {
-    vcl_cout << "*** Something is terribly wrong with image2's jstep() ***\n";
+    std::cout << "*** Something is terribly wrong with image2's jstep() ***\n";
     return false;
   }
   unsigned bad = 0;
@@ -142,14 +143,14 @@ bool test_image_equal(char const* type_name,
     #ifndef NDEBUG
           if (++bad < 20)
           {
-            vcl_cout << "pixel (" << i << ',' << j << ',' << p <<  ") differs:\t";
-            vil_print_value(vcl_cout, image(i,j,p));
-            vcl_cout << "---> ";
-            vil_print_value(vcl_cout,image2(i,j,p));
-            vcl_cout << '\n';
+            std::cout << "pixel (" << i << ',' << j << ',' << p <<  ") differs:\t";
+            vil_print_value(std::cout, image(i,j,p));
+            std::cout << "---> ";
+            vil_print_value(std::cout,image2(i,j,p));
+            std::cout << '\n';
           }
     #else
-          ++bad; vcl_cout << '.' << vcl_flush;
+          ++bad; std::cout << '.' << std::flush;
     #endif
         }
       }
@@ -157,14 +158,14 @@ bool test_image_equal(char const* type_name,
   }
 
 #ifdef NDEBUG
-  if (bad) vcl_cout << vcl_endl;
+  if (bad) std::cout << std::endl;
 #endif
   TEST_NEAR("pixelwise comparison", bad, 0, max_bad_pixels);
 
   if (bad > max_bad_pixels)
   {
-    vcl_cout << type_name << ": number of unequal pixels: "  << bad
-             << " out of " << planes *sizex * sizey << vcl_endl;
+    std::cout << type_name << ": number of unequal pixels: "  << bad
+             << " out of " << planes *sizex * sizey << std::endl;
     return false;
   }
   else
@@ -207,11 +208,11 @@ static bool create_colour_gif(const char* filename)
 #ifdef VCL_VC
 #pragma warning ( pop )
 #endif
-  //vcl_ofstream f(filename, vcl_ios_binary);
-  vcl_cout << "Creating color gif image!\n";
+  //std::ofstream f(filename, std::ios::binary);
+  std::cout << "Creating color gif image!\n";
   bhdfs_fstream_sptr f = new bhdfs_fstream(filename, "w");
   if (!f->ok()) return false;
-  vcl_string header = "GIF87a";
+  std::string header = "GIF87a";
   f->write(header.c_str(), header.length());
   f->write(a, 7);
   for (int i=0; i<256; ++i) {
@@ -248,11 +249,11 @@ static bool create_grey_gif(const char* filename)
 #ifdef VCL_VC
 #pragma warning ( pop )
 #endif
-  //vcl_ofstream f(filename, vcl_ios_binary);
-  vcl_cout << "Creating grey gif image!\n";
+  //std::ofstream f(filename, std::ios::binary);
+  std::cout << "Creating grey gif image!\n";
   bhdfs_fstream_sptr f = new bhdfs_fstream(filename, "w");
   if (!f->ok()) return false;
-  vcl_string header = "GIF87a";
+  std::string header = "GIF87a";
   f->write(header.c_str(), header.length());
   f->write(a,7);
   for (int i=0; i<256; ++i) {
@@ -274,29 +275,29 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
                          bool fail_save = false) // expect fail on save if true
 {
   int np = image.nplanes();
-  vcl_cout << "=== Start testing " << type_name << " (" << sizeof(T)
+  std::cout << "=== Start testing " << type_name << " (" << sizeof(T)
            << " bpp, " << np << " plane" << (np==1?"":"s") << ") ===\n"
-           << vcl_flush;
+           << std::flush;
 
   // Step 1) Write the image out to disk
   //
   // create a file name
   bhdfs_manager_sptr mins = bhdfs_manager::instance();
-  vcl_string cur_dir = mins->get_working_dir();
-  vcl_string fname = cur_dir + "/test_image.";
+  std::string cur_dir = mins->get_working_dir();
+  std::string fname = cur_dir + "/test_image.";
   if (type_name) fname += type_name;
 
-  vcl_cout << "vil_test_image_type: Save " << image.is_a() <<
-              " to [" << fname << "]\n" << vcl_flush;
+  std::cout << "vil_test_image_type: Save " << image.is_a() <<
+              " to [" << fname << "]\n" << std::flush;
 
   // Write image to disk
-  if (vcl_strcmp(type_name, "gif") == 0 &&
+  if (std::strcmp(type_name, "gif") == 0 &&
       vil_pixel_format_num_components( image.pixel_format() ) == 3)
   {
     if (!create_colour_gif(fname.c_str()))
       return; // fatal error
   }
-  else if (vcl_strcmp(type_name, "gif") == 0)
+  else if (std::strcmp(type_name, "gif") == 0)
   {
     if (!create_grey_gif(fname.c_str()))
       return; // fatal error
@@ -324,7 +325,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   TEST("get_property(\"offset\")", image3->get_property("offset"), false);
   unsigned int qd=0, depth = image2->pixel_format()==VIL_PIXEL_FORMAT_BOOL ? 1 : 8*sizeof(T);
   bool qdr = image3->get_property("quantisation_depth", &qd);
-  if (qdr) vcl_cout << "quantisation depth = " << qd << ", should be " << depth << '\n';
+  if (qdr) std::cout << "quantisation depth = " << qd << ", should be " << depth << '\n';
   else     depth = 0;
 
   // Set this sptr to 0 so that the object it points to is destructed
@@ -338,7 +339,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   //     images qd will be 11 but depth as calculated above will be (8 * 2) = 16.
   //     Therefore, only perform test if image type is not NITF or
   //     depth is other than 16.    MAL 6jan2004
-  if (vcl_strncmp (type_name, "NITF", 4) != 0 || (depth != 16)) {
+  if (std::strncmp (type_name, "NITF", 4) != 0 || (depth != 16)) {
     TEST("get_property(\"quantisation_depth\")", qd, depth);
   }
 
@@ -350,13 +351,13 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   vil_image_view<T> cropped_image = vil_crop(image, 5, 3, 5, 3);
 
   // Write cropped image to disk, overwriting the previous file
-  if (vcl_strcmp(type_name, "gif") == 0 &&
+  if (std::strcmp(type_name, "gif") == 0 &&
       vil_pixel_format_num_components( cropped_image.pixel_format() ) == 3)
   {
     if (!create_colour_gif(fname.c_str()))
       return; // fatal error
   }
-  else if (vcl_strcmp(type_name, "gif") == 0)
+  else if (std::strcmp(type_name, "gif") == 0)
   {
     if (!create_grey_gif(fname.c_str()))
       return; // fatal error
@@ -495,8 +496,8 @@ static void test_vil_save_image_resource()
   vil_image_resource_sptr mem = vil_new_image_resource_of_view(view);
 
   bhdfs_manager_sptr mins = bhdfs_manager::instance();
-  vcl_string cur_dir = mins->get_working_dir();
-  vcl_string fname = cur_dir + "/test_save_image_resource.pgm";
+  std::string cur_dir = mins->get_working_dir();
+  std::string fname = cur_dir + "/test_save_image_resource.pgm";
   TEST("Saving image resource",bhdfs_vil_save_image_resource(mem, fname.c_str()), true);
   vil_image_view<vxl_byte> loaded_view = bhdfs_vil_load(fname.c_str());
   TEST("Loaded correct image", vil_image_view_deep_equality(view, loaded_view),true);
@@ -508,7 +509,7 @@ static void test_vil_save_image_resource()
 static void test_vil_save_load_image()
 {
   if (!bhdfs_manager::exists())
-    bhdfs_manager::create(vcl_string("default"), 0);
+    bhdfs_manager::create(std::string("default"), 0);
 
   // create test images
   int sizex = 253;
@@ -590,14 +591,6 @@ static void test_vil_save_load_image()
   vil_test_image_type("gif", image3p, true, vxl_byte(40), 100);
 #endif
 
-
-  // SGI "iris" rgb
-#if 1
-  vil_test_image_type("iris", image8);
-  vil_test_image_type("iris", image16);
-  vil_test_image_type("iris", image3p);
-#endif
-
   // mit
 #if 0
 #ifdef BOOLEAN_MIT_WORKS // boolean doesn't work (yet)
@@ -639,11 +632,11 @@ static void test_vil_save_load_image()
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j) = vxl_byte((i+j)*4);
 #ifdef DEBUG
-    vil_print_all(vcl_cout, small_greyscale_image);
+    vil_print_all(std::cout, small_greyscale_image);
 #endif
     vil_test_image_type("jpeg", small_greyscale_image, true, vxl_byte(5));
     {
-      vcl_string out_path("test_save_load_jpeg.jpg");
+      std::string out_path("test_save_load_jpeg.jpg");
       TEST("Saving JPEG",bhdfs_vil_save(small_greyscale_image, out_path.c_str()),true);
 
       vil_image_view<vxl_byte> new_image = bhdfs_vil_load(out_path.c_str());

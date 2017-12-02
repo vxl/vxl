@@ -2,12 +2,13 @@
 // \file
 // \brief Convert a list of indices to a mask.
 
-#include <vcl_algorithm.h>
-#include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <vcl_stdexcept.h>
-#include <vcl_iterator.h>
-#include <vcl_iostream.h>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <fstream>
+#include <stdexcept>
+#include <iterator>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_mask.h>
@@ -27,13 +28,13 @@ static mbl_logger& logger()
 //=========================================================================
 // Load a vector of unsigned from named file
 //=========================================================================
-static void load_indices(vcl_vector<unsigned>& indices,
-                         const vcl_string& path)
+static void load_indices(std::vector<unsigned>& indices,
+                         const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
     mbl_exception_throw_os_error(path, "load_indices() could not open file");
-  indices.assign(vcl_istream_iterator<unsigned>(ifs), vcl_istream_iterator<unsigned>());
+  indices.assign(std::istream_iterator<unsigned>(ifs), std::istream_iterator<unsigned>());
 
   if (indices.empty())
     throw mbl_exception_parse_error("Could not parse indices file.");
@@ -56,12 +57,12 @@ int main2(int argc, char *argv[])
   );
 
   // Parse command line arguments
-  vul_arg<vcl_string> inds_file(0, "INPUT indices file");
+  vul_arg<std::string> inds_file(VXL_NULLPTR, "INPUT indices file");
   vul_arg<unsigned> n("-n", "Length of mask; default is to use highest index in indices file");
-  vul_arg<vcl_string> mask_file(0, "OUTPUT mask file");
+  vul_arg<std::string> mask_file(VXL_NULLPTR, "OUTPUT mask file");
   vul_arg_parse(argc, argv);
 
-  vcl_vector<unsigned> inds;
+  std::vector<unsigned> inds;
   load_indices(inds, inds_file());
 
   unsigned num=0;
@@ -71,7 +72,7 @@ int main2(int argc, char *argv[])
   }
   else
   {
-    num = 1 + *vcl_max_element(inds.begin(), inds.end());
+    num = 1 + *std::max_element(inds.begin(), inds.end());
   }
 
   mbl_mask mask;
@@ -95,23 +96,23 @@ int main(int argc, char *argv[])
     mbl_logger::root().load_log_config_file();
     retcode = main2(argc, argv);
   }
-  catch (const vcl_runtime_error &e)
+  catch (const std::runtime_error &e)
   {
-    vcl_cout << "\n";
-    vcl_cout << "====================================\n";
-    vcl_cout << "Caught vcl_runtime_error: " << e.what() << "\n";
-    vcl_cout << "Ending program.\n";
-    vcl_cout << "====================================\n" << vcl_endl;
+    std::cout << "\n";
+    std::cout << "====================================\n";
+    std::cout << "Caught std::runtime_error: " << e.what() << "\n";
+    std::cout << "Ending program.\n";
+    std::cout << "====================================\n" << std::endl;
     MBL_LOG(ERR, logger(), "Caught exception: " << e.what());
     retcode = 1;
   }
   catch (...)
   {
-    vcl_cout << "\n";
-    vcl_cout << "====================================\n";
-    vcl_cout << "Caught unknown exception.\n";
-    vcl_cout << "Ending program.\n";
-    vcl_cout << "====================================\n" << vcl_endl;
+    std::cout << "\n";
+    std::cout << "====================================\n";
+    std::cout << "Caught unknown exception.\n";
+    std::cout << "Ending program.\n";
+    std::cout << "====================================\n" << std::endl;
     MBL_LOG(ERR, logger(), "Caught unknown exception");
     retcode = 2;
   }

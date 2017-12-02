@@ -12,8 +12,9 @@
 //   17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 
 class  vgui_event;
 class  vgui_tableau;
@@ -139,11 +140,11 @@ struct vgui_parent_child_link
 
   //: Push all children of 'tab' onto the vector.
   static void get_children_of(vgui_tableau_sptr const &tab,
-                              vcl_vector<vgui_tableau_sptr> *);
+                              std::vector<vgui_tableau_sptr> *);
 
   //: Push all parents of 'tab' onto the vector.
   static void get_parents_of (vgui_tableau_sptr const &tab,
-                              vcl_vector<vgui_tableau_sptr> *);
+                              std::vector<vgui_tableau_sptr> *);
 
   //: In all parent_child_links, replace old_child with new_child.
   static void replace_child_everywhere (vgui_tableau_sptr const &old_child,
@@ -155,6 +156,6 @@ struct vgui_parent_child_link
   vgui_parent_child_link_impl *pimpl;
 };
 
-vcl_ostream & operator<<(vcl_ostream &, vgui_parent_child_link const &);
+std::ostream & operator<<(std::ostream &, vgui_parent_child_link const &);
 
 #endif // vgui_parent_child_link_h_

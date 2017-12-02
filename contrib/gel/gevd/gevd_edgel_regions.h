@@ -44,8 +44,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <vector>
+#include <iostream>
+#include <map>
+#include <vcl_compiler.h>
 
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -64,12 +66,12 @@ class gevd_edgel_regions
   ~gevd_edgel_regions();
   //Main process method
   bool compute_edgel_regions(vil1_image* image,
-                             vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vtol_intensity_face_sptr>& faces);
+                             std::vector<vtol_edge_2d_sptr>& sgrp,
+                             std::vector<vtol_intensity_face_sptr>& faces);
 
   bool compute_edgel_regions(gevd_bufferxy* buf,
-                             vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vtol_intensity_face_sptr>& faces);
+                             std::vector<vtol_edge_2d_sptr>& sgrp,
+                             std::vector<vtol_intensity_face_sptr>& faces);
   //Acessors
   void SetVerbose() {verbose_ = true;}
   void ClearVerbose() {verbose_ = false;}
@@ -82,7 +84,7 @@ class gevd_edgel_regions
   unsigned int** GetRegionArray(){return region_label_array_;}
   int GetXSize() const {return xend_ - xo_ + 1;}
   int GetYSize() const {return yend_ - yo_ + 1;}
-  vil1_image* GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& edgels);
+  vil1_image* GetEdgeImage(std::vector<vtol_edge_2d_sptr>& edgels);
 #if 0
   topo_debug_data_ref get_topo_debug_data() {return debug_data_;}
 #endif
@@ -99,8 +101,8 @@ class gevd_edgel_regions
   void print_intensity_data();
  protected:
   // Utilities
-  bool GroupContainsEdges(vcl_vector<vtol_edge_2d_sptr>& sg);
-  bool InitRegionArray(vcl_vector<vtol_edge_2d_sptr>& sg);
+  bool GroupContainsEdges(std::vector<vtol_edge_2d_sptr>& sg);
+  bool InitRegionArray(std::vector<vtol_edge_2d_sptr>& sg);
   unsigned char label_code(unsigned int label);
   bool add_to_forward(unsigned int key, unsigned int value);
   bool add_to_reverse(unsigned int key, unsigned int value);
@@ -124,28 +126,28 @@ class gevd_edgel_regions
   bool insert_edgel(float pre_x, float pre_y, float x, float y,
                     gevd_region_edge* e);
   void insert_equivalence(unsigned int ll, unsigned int ur, unsigned int& lr);
-  bool merge_equivalence(vcl_map<unsigned int, vcl_vector<unsigned int>* >& tab,
+  bool merge_equivalence(std::map<unsigned int, std::vector<unsigned int>* >& tab,
                          unsigned int cur_label,
                          unsigned int label);
-  bool get_next_label(vcl_vector<unsigned int>* labels,
+  bool get_next_label(std::vector<unsigned int>* labels,
                       unsigned int& label);
   void print_edge_colis(unsigned int x, unsigned int y,
                         gevd_region_edge* r1, gevd_region_edge* r2);
-  bool corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges,
-                        vcl_vector<vtol_vertex_sptr>& bad_verts);
-  bool remove_hairs(vcl_vector<vtol_edge_2d_sptr>& edges);
-  bool connect_ends(vcl_vector<vtol_edge_2d_sptr>& edges,
-                    vcl_vector<vtol_vertex_sptr>& bad_verts);
-  void repair_failed_insertions(vcl_vector<vtol_edge_2d_sptr>& edges,
-                                vcl_vector<vtol_vertex_sptr>& bad_verts);
+  bool corrupt_boundary(std::vector<vtol_edge_2d_sptr>& edges,
+                        std::vector<vtol_vertex_sptr>& bad_verts);
+  bool remove_hairs(std::vector<vtol_edge_2d_sptr>& edges);
+  bool connect_ends(std::vector<vtol_edge_2d_sptr>& edges,
+                    std::vector<vtol_vertex_sptr>& bad_verts);
+  void repair_failed_insertions(std::vector<vtol_edge_2d_sptr>& edges,
+                                std::vector<vtol_vertex_sptr>& bad_verts);
   void get_buffer_row(unsigned int row);
   void get_image_row(unsigned int row);
   unsigned short get_intensity(unsigned int x);
   int bytes_per_pix();
 
   //to be used after image or buf are set
-  bool compute_edgel_regions(vcl_vector<vtol_edge_2d_sptr>& sgrp,
-                             vcl_vector<vtol_intensity_face_sptr>& faces);
+  bool compute_edgel_regions(std::vector<vtol_edge_2d_sptr>& sgrp,
+                             std::vector<vtol_intensity_face_sptr>& faces);
   //members
   bool verbose_;
   bool debug_;
@@ -165,18 +167,18 @@ class gevd_edgel_regions
   unsigned int xend_;                  //X coor of ending x pixel
   unsigned int yend_;                  //Y coor of ending y pixel
   //Region label equivalency hash tables
-  vcl_map<unsigned int, vcl_vector<unsigned int>* > region_pairs_forward_;
-  vcl_map<unsigned int, vcl_vector<unsigned int>* > region_pairs_reverse_;
-  vcl_map<unsigned int, vcl_vector<unsigned int>* > equivalence_set_;
-  vcl_map<unsigned int, unsigned int > label_map_;
+  std::map<unsigned int, std::vector<unsigned int>* > region_pairs_forward_;
+  std::map<unsigned int, std::vector<unsigned int>* > region_pairs_reverse_;
+  std::map<unsigned int, std::vector<unsigned int>* > equivalence_set_;
+  std::map<unsigned int, unsigned int > label_map_;
   //hash table for Edge<->gevd_region_edge relationship
-  vcl_map<int, gevd_region_edge*> region_edges_;
-  vcl_map<unsigned int, vcl_vector<vtol_edge_2d_sptr>* > region_edge_adjacency_;
+  std::map<int, gevd_region_edge*> region_edges_;
+  std::map<unsigned int, std::vector<vtol_edge_2d_sptr>* > region_edge_adjacency_;
   //Final output vtol_intensity_face(s) and relation to corresponding region label
-  vcl_vector<vtol_intensity_face_sptr>* faces_;
+  std::vector<vtol_intensity_face_sptr>* faces_;
   vtol_intensity_face_sptr* intensity_face_index_;
-  vcl_vector<vtol_edge_2d_sptr>** face_edge_index_;
-  vcl_vector<vtol_edge_2d_sptr>* failed_insertions_; //Short edges that fail
+  std::vector<vtol_edge_2d_sptr>** face_edge_index_;
+  std::vector<vtol_edge_2d_sptr>* failed_insertions_; //Short edges that fail
 #if 0
   topo_debug_data_ref debug_data_;
 #endif

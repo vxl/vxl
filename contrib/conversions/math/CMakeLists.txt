@@ -1,13 +1,13 @@
 # conversions/math/CMakeLists.txt
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()
 
 # These are the source files in this directory.
 # Note that these are all header files, so no library is built here.
 
-SET(math_sources
+set(math_sources
  CoolMatrix_to_vnl_matrix.h
  CoolVector_to_vnl_vector.h
  IUE_matrix_to_vnl_matrix.h
@@ -22,4 +22,4 @@ SET(math_sources
  vnl_vector_to_vbl_array.h
 )
 
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/conversions/math ${math_sources})
+INSTALL_NOBASE_HEADER_FILES(include/vxl/contrib/conversions/math ${math_sources})

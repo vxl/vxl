@@ -12,9 +12,10 @@
 //   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
@@ -26,7 +27,7 @@ bool brec_prob_map_area_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
   input_types.push_back("unsigned"); // size of the inner-square to measure area (e.g. 5 means 5x5 area mask)
@@ -34,7 +35,7 @@ bool brec_prob_map_area_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
@@ -46,7 +47,7 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 3) {
-    vcl_cout << "brec_prob_map_area_process: The input number should be 3" << vcl_endl;
+    std::cout << "brec_prob_map_area_process: The input number should be 3" << std::endl;
     return false;
   }
 
@@ -70,8 +71,8 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
   vil_image_view<float> g_b(ni, nj, 1), g_bb(ni, nj, 1), g_ff(ni, nj, 1), g_fb(ni, nj, 1);
   g_b.fill(-1.0f); g_bb.fill(-1.0f); g_ff.fill(-1.0f); g_fb.fill(-1.0f);
 
-  vcl_vector<vcl_pair<int, int> > neighborhood;
-  vcl_vector<vcl_pair<int, int> > neighborhood_outer;
+  std::vector<std::pair<int, int> > neighborhood;
+  std::vector<std::pair<int, int> > neighborhood_outer;
   //: use square glitch to find a center of c_size x c_size
   brec_glitch::square_glitch(c_size, neighborhood, neighborhood_outer);
 
@@ -103,7 +104,7 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> out_byte(ni, nj, 1);
   float min, max;
   vil_math_value_range(out, min, max);
-  vcl_cout << "\t area map min: " << min << " max: " << max << vcl_endl;
+  std::cout << "\t area map min: " << min << " max: " << max << std::endl;
   vil_convert_stretch_range_limited(out, out_byte, 0.0f, max);
 
   //vil_image_view<float> dummy(ni, nj, 1), dummy2(ni, nj, 1);

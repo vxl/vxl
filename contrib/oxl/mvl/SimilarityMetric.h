@@ -22,10 +22,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_fwd.h>
 #include <mvl/ImageMetric.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 class Image;
 
 class SimilarityMetric : public ImageMetric
@@ -88,7 +90,7 @@ class SimilarityMetric : public ImageMetric
   // virtual bool can_invert_distance() const { return true; }
 
   // Data Control--------------------------------------------------------------
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
   void print() const;
   void print(char* msg) const;
 

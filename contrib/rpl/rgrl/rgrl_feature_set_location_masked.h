@@ -8,7 +8,7 @@
 //
 // \verbatim
 //  Modifications
-//   Peter Vanroose - 14 aug 2004 - moved all impl from .txx to .h to avoid VC60 internal compile error
+//   Peter Vanroose - 14 aug 2004 - moved all impl from .hxx to .h to avoid VC60 internal compile error
 //   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature
 //      based on point location alone
 // \endverbatim
@@ -43,7 +43,7 @@ class rgrl_feature_set_location_masked
 
   //:  Return the type of feature
   virtual
-  const vcl_type_info&
+  const std::type_info&
   type() const
   { return fea_set_sptr_->type(); }
 

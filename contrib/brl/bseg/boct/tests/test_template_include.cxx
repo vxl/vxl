@@ -1,7 +1,7 @@
-#include <boct/boct_loc_code.txx>
-#include <boct/boct_test_util.txx>
-#include <boct/boct_tree_cell_reader.txx>
-#include <boct/boct_tree_cell.txx>
-#include <boct/boct_tree.txx>
+#include <boct/boct_loc_code.hxx>
+#include <boct/boct_test_util.hxx>
+#include <boct/boct_tree_cell_reader.hxx>
+#include <boct/boct_tree_cell.hxx>
+#include <boct/boct_tree.hxx>
 
 int main() { return 0; }

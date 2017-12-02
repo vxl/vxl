@@ -1,50 +1,46 @@
 # bpgl/algo/CMakeLists.txt
 # Photogrammetry Algorithms Library.
 
-INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR} )
 
-SET( bpgl_algo_sources
+set( bpgl_algo_sources
   bpgl_construct_cameras.h         bpgl_construct_cameras.cxx
   bpgl_vsol_lens_warp.h            bpgl_vsol_lens_warp.cxx
-  bpgl_list.h                      bpgl_list.txx
+  bpgl_list.h                      bpgl_list.hxx
   bpgl_interpolate.h               bpgl_interpolate.cxx
   bpgl_camera_homographies.h       bpgl_camera_homographies.cxx
   bpgl_nitf_camera_coverage.h      bpgl_nitf_camera_coverage.cxx
   bpgl_camera_from_box.h           bpgl_camera_from_box.cxx
   bpgl_bundle_rolling_shutter_adjust.h  bpgl_bundle_rolling_shutter_adjust.cxx
   bpgl_project.h                   bpgl_project.cxx
-  bpgl_transform_camera.h		   bpgl_transform_camera.cxx
+  bpgl_transform_camera.h                   bpgl_transform_camera.cxx
 )
 
 # the ransac implementations use rpl/rrel
-IF(BUILD_RPL)
-  INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR})
-  SET(bpgl_algo_sources ${bpgl_algo_sources}
+if(BUILD_RPL)
+  include_directories(${RPL_INCLUDE_DIR})
+  set(bpgl_algo_sources ${bpgl_algo_sources}
       bpgl_fm_compute_ransac.h         bpgl_fm_compute_ransac.cxx
       bpgl_fm_compute_reg_ransac.h     bpgl_fm_compute_reg_ransac.cxx
       bpgl_fm_compute_affine_ransac.h  bpgl_fm_compute_affine_ransac.cxx
      )
-ENDIF(BUILD_RPL)
+endif()
 
 
-AUX_SOURCE_DIRECTORY(Templates bpgl_algo_sources)
+aux_source_directory(Templates bpgl_algo_sources)
 
-ADD_LIBRARY(bpgl_algo ${bpgl_algo_sources})
+vxl_add_library(LIBRARY_NAME bpgl_algo LIBRARY_SOURCES ${bpgl_algo_sources})
 
-TARGET_LINK_LIBRARIES(bpgl_algo bpgl vpgl vpgl_file_formats vsol vgl_algo vnl_algo vnl vgl vil vul vbl)
+target_link_libraries(bpgl_algo bpgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
-IF(BUILD_RPL)
-  TARGET_LINK_LIBRARIES(bpgl_algo rrel)
-ENDIF(BUILD_RPL)
+if(BUILD_RPL)
+  target_link_libraries(bpgl_algo rrel)
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
 #  add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
-
-INSTALL_TARGETS(/lib bpgl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bpgl/algo ${bpgl_algo_sources})
+endif()

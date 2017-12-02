@@ -39,23 +39,23 @@ June, 2000 issue.
 //==============================================================================
 typedef enum
 {
-	PGROUP_RATE,
-	PGROUP_DC_SHIFT,
-	PGROUP_MCT,
-	PGROUP_DWT,
-	PGROUP_T1,
-	PGROUP_T2,
-	PGROUP_LASTGROUP
+        PGROUP_RATE,
+        PGROUP_DC_SHIFT,
+        PGROUP_MCT,
+        PGROUP_DWT,
+        PGROUP_T1,
+        PGROUP_T2,
+        PGROUP_LASTGROUP
 } OPJ_PROFILE_GROUP;
 
 //==============================================================================
 typedef struct PROFILELIST
 {
-	OPJ_UINT32   start;
-	OPJ_UINT32   end;
+        OPJ_UINT32   start;
+        OPJ_UINT32   end;
     OPJ_UINT32   total_time;
     OPJ_UINT32   totalCalls;
-    OPJ_PROFILE_GROUP   section; 
+    OPJ_PROFILE_GROUP   section;
     const OPJ_CHAR     *sectionName; // string name of the profile group
 } OPJ_PROFILE_LIST;
 
@@ -76,7 +76,7 @@ void _ProfStop (OPJ_PROFILE_GROUP group);
 #define PROFSTART(group)
 #define PROFSTOP (group)
 #define PROFSAVE(file)
-#define PROFPRINT() 
+#define PROFPRINT()
 #endif // !_PROFILE
 
 //==============================================================================

@@ -8,12 +8,12 @@
 //
 // The direction gives the orientation and the length of the segment
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-05-03
 //
 // \verbatim
 //  Modifications
-//   2000-05-03 François BERTEL Creation
+//   2000-05-03 Francois BERTEL Creation
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001-07-03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 //   2004-05-14 Peter Vanroose  Added describe()
@@ -21,11 +21,13 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d, vgl_homg_line_3d_2_points
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class vsol_line_3d : public vsol_curve_3d
 {
@@ -191,18 +193,18 @@ class vsol_line_3d : public vsol_curve_3d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_line_3d"); }
+  virtual std::string is_a() const { return std::string("vsol_line_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(vcl_ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const;
 };
 
 //: Binary save vsol_line_3d* to stream.

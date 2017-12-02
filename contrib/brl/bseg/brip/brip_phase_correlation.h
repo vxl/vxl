@@ -17,7 +17,7 @@
 //       F1(wu, wv) = F0(wu,wv) exp(i(wu*tu + wv*tv))
 //
 // A Fourier transform can be represented by
-// 
+//
 //      F0 = mag(wu, wv)exp(i phi(wu, wv))   magnitude phase representation
 //
 // Intensity variations due to illumination and reflectance changes are mainly
@@ -46,9 +46,11 @@
 //          For the current setting of 0.5 a ratio of 3:1 corresponds to a
 //          confidence of 0.9.
 //
-//  
+//
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 // a struct for holding correlation peak info
 struct peak{
@@ -63,7 +65,7 @@ class brip_phase_correlation
  public:
   brip_phase_correlation(vil_image_view<float> const&img0, vil_image_view<float> const&img1,
                          float gauss_sigma= 1.0f, int peak_radius = 2, float alpha = 0.5f);
-  
+
   ~brip_phase_correlation(){}
   bool compute();
   bool translation(float& tu, float& tv, float& confidence) const;
@@ -116,7 +118,7 @@ class brip_phase_correlation
   // average of the Gauss smoothed correlation values
   float gauss_avg_;
   // the vector of local maxima
-  vcl_vector<peak> peaks_;
+  std::vector<peak> peaks_;
 };
 
 #endif // brip_phase_correlation_h

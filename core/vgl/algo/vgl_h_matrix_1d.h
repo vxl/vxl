@@ -19,16 +19,17 @@
 //   13 Jun 2004 - Peter Vanroose - added set_identity() and projective_basis()
 //   31 Jul 2010 - Peter Vanroose - made more similar to 2d and 3d variants
 //   24 Oct 2010 - Peter Vanroose - mutators and setters now return *this
-//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
+//   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .hxx to .h
 //   26 Jul 2011 - Peter Vanroose - added is_identity(),is_rotation(),is_euclidean(),
 //                                  correlation(),operator*(h_matrix),set(row,col,val),
 //                                  set_translation(),set_affine(), cf vgl_h_matrix_2d
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_1d.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //:
 // A class to hold a line-to-line projective transformation matrix
@@ -56,12 +57,12 @@ class vgl_h_matrix_1d
   //: Constructor from 2x2 C-array
   explicit vgl_h_matrix_1d(T const* M) : t12_matrix_(M) {}
   //: Constructor from istream
-  explicit vgl_h_matrix_1d(vcl_istream& s);
+  explicit vgl_h_matrix_1d(std::istream& s);
   //: Constructor from file
   explicit vgl_h_matrix_1d(char const* filename);
   //: Constructor - calculate homography between two sets of 1D points (minimum 3)
-  vgl_h_matrix_1d(vcl_vector<vgl_homg_point_1d<T> > const& points1,
-                  vcl_vector<vgl_homg_point_1d<T> > const& points2);
+  vgl_h_matrix_1d(std::vector<vgl_homg_point_1d<T> > const& points1,
+                  std::vector<vgl_homg_point_1d<T> > const& points2);
 
   // Operations----------------------------------------------------------------
 
@@ -110,7 +111,7 @@ class vgl_h_matrix_1d
   //     1   0   1
   //     0   1   1
   // \endverbatim
-  bool projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& three_points);
+  bool projective_basis(std::vector<vgl_homg_point_1d<T> > const& three_points);
 
   //: initialize the transformation to identity
   vgl_h_matrix_1d& set_identity();
@@ -142,17 +143,17 @@ class vgl_h_matrix_1d
 
   //: Read H from file
   bool read(char const* filename);
-  //: Read H from vcl_istream
-  bool read(vcl_istream& s);
+  //: Read H from std::istream
+  bool read(std::istream& s);
 };
 
-//: Print H on vcl_ostream
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_1d<T> const& H);
-//: Read H from vcl_istream
-template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_1d<T>&       H)
+//: Print H on std::ostream
+template <class T> std::ostream& operator<<(std::ostream& s, vgl_h_matrix_1d<T> const& H);
+//: Read H from std::istream
+template <class T> std::istream& operator>>(std::istream& s, vgl_h_matrix_1d<T>&       H)
 { H.read(s); return s; }
 
 
-#define VGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_1d.txx first"
+#define VGL_H_MATRIX_1D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_1d.hxx first"
 
 #endif // vgl_h_matrix_1d_h_

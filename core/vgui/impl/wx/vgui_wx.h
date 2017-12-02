@@ -30,14 +30,14 @@ public:
 
 private:
   //: Returns the name of the GUI toolkit ("wx").
-  virtual vcl_string name() const;
+  virtual std::string name() const;
 
   //: Constructor - default.
   vgui_wx();
 
   //: Destructor.
   virtual ~vgui_wx();
-  
+
   //: Initialize the wxWidgets GUI framework.
   virtual void init(int&, char**);
 
@@ -74,7 +74,7 @@ private:
   virtual vgui_dialog_impl* produce_dialog(const char* name);
 
   //: Handle to windows created that need deleting.
-  vcl_vector<vgui_window*> windows_to_delete_;
+  std::vector<vgui_window*> windows_to_delete_;
 
   //: True if we are embedding vgui_adaptor into wxWidgets app.
   bool adaptor_embedded_;

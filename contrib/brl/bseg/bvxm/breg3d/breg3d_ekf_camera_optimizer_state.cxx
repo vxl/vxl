@@ -24,11 +24,11 @@ void breg3d_ekf_camera_optimizer_state::set_error_covariance(double center_var, 
 
 
 //: output description of state to stream.
-vcl_ostream& operator << (vcl_ostream& os, breg3d_ekf_camera_optimizer_state const& ekf_state)
+std::ostream& operator << (std::ostream& os, breg3d_ekf_camera_optimizer_state const& ekf_state)
 {
   os << "k = " << ekf_state.k_ << '\n'
      << "Pk = " << ekf_state.Pk_ << '\n'
-     << "xk = " << ekf_state.xk_ << vcl_endl;
+     << "xk = " << ekf_state.xk_ << std::endl;
   return os;
 }
 

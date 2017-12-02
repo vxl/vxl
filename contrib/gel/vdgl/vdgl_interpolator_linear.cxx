@@ -5,11 +5,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "vdgl_interpolator_linear.h"
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
@@ -40,7 +42,7 @@ vsol_point_2d_sptr vdgl_interpolator_linear::closest_point_on_curve ( vsol_point
     }
   }
   if ( index == -1 )
-    return NULL;
+    return VXL_NULLPTR;
   else
     return new vsol_point_2d ( chain_->edgel(index).get_pt() );
 }
@@ -116,7 +118,7 @@ double vdgl_interpolator_linear::get_tangent_angle( const double index)
   assert(index >= 0 && index <= chain_->size() - 1);
   if (N==1)
   {
-    vcl_cout << " vdgl_interpolator_linear::get_theta(..) -"
+    std::cout << " vdgl_interpolator_linear::get_theta(..) -"
              << " can't compute angle for a chain with one edgel\n";
     return 0;
   }
@@ -126,7 +128,7 @@ double vdgl_interpolator_linear::get_tangent_angle( const double index)
   assert(a>=0 && a<N-1); // just in case... this should not happen.
   double xi = (*chain_)[a].x(), yi = (*chain_)[a].y();
   double xip = (*chain_)[a+1].x(), yip = (*chain_)[a+1].y();
-  double angle = vnl_math::deg_per_rad*vcl_atan2((yip-yi), (xip-xi));
+  double angle = vnl_math::deg_per_rad*std::atan2((yip-yi), (xip-xi));
   return angle;
 }
 

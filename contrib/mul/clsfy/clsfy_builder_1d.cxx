@@ -21,12 +21,12 @@ void vsl_add_to_binary_loader(const clsfy_builder_1d& b)
 
 //=======================================================================
 
-vcl_string clsfy_builder_1d::is_a() const
+std::string clsfy_builder_1d::is_a() const
 {
-  return vcl_string("clsfy_builder_1d");
+  return std::string("clsfy_builder_1d");
 }
 
-bool clsfy_builder_1d::is_class(vcl_string const& s) const
+bool clsfy_builder_1d::is_class(std::string const& s) const
 {
   return s == clsfy_builder_1d::is_a();
 }
@@ -34,10 +34,10 @@ bool clsfy_builder_1d::is_class(vcl_string const& s) const
 //=======================================================================
 //: Initialise the parameters from a text stream.
 // Default case accepts no parameters.
-void clsfy_builder_1d::config(vcl_istream &as)
+void clsfy_builder_1d::config(std::istream &as)
 {
   mbl_read_props_type props = mbl_read_props_ws(as);
-    
+
   // Check there are no unused properties
   mbl_read_props_look_for_unused_props("clsfy_builder_1d::config",
                                        props, mbl_read_props_type());
@@ -50,13 +50,13 @@ void clsfy_builder_1d::config(vcl_istream &as)
 // parameters for the builder. This function will construct
 // the appropriate clsfy_builder_1d derivative and return that.
 // \throws if the parse fails.
-vcl_auto_ptr<clsfy_builder_1d> clsfy_builder_1d::new_builder(
-  vcl_istream &as)
+std::auto_ptr<clsfy_builder_1d> clsfy_builder_1d::new_builder(
+  std::istream &as)
 {
-  vcl_string name;
+  std::string name;
   as >> name;
 
-  vcl_auto_ptr<clsfy_builder_1d> ps;
+  std::auto_ptr<clsfy_builder_1d> ps;
   try
   {
     ps = mbl_cloneables_factory<clsfy_builder_1d>::get_clone(name);
@@ -67,7 +67,7 @@ vcl_auto_ptr<clsfy_builder_1d> clsfy_builder_1d::new_builder(
   }
 
   ps->config(as);
-  
+
   return ps;
 }
 
@@ -87,7 +87,7 @@ void vsl_b_read(vsl_b_istream& bfs, clsfy_builder_1d& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d& b)
+std::ostream& operator<<(std::ostream& os,const clsfy_builder_1d& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -98,7 +98,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d* b)
+std::ostream& operator<<(std::ostream& os,const clsfy_builder_1d* b)
 {
   if (b)
     return os << *b;

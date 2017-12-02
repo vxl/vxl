@@ -16,7 +16,7 @@
 #include <msm/msm_no_limiter.h>
 
 //: Create set of rectangles
-void create_rectangles(vcl_vector<msm_points>& points)
+void create_rectangles(std::vector<msm_points>& points)
 {
   unsigned n=10;
   points.resize(n);
@@ -35,11 +35,11 @@ void create_rectangles(vcl_vector<msm_points>& points)
 
 void test_shape_model()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing msm_shape_model\n"
            << "***********************\n";
 
-  vcl_vector<msm_points> shapes;
+  std::vector<msm_points> shapes;
   create_rectangles(shapes);
 
   msm_shape_model_builder builder;
@@ -49,7 +49,7 @@ void test_shape_model()
 
   msm_shape_model shape_model;
   builder.build_model(shapes,shape_model);
-  vcl_cout<<shape_model<<vcl_endl;
+  std::cout<<shape_model<<std::endl;
 
   TEST("N.Points",shape_model.size(),4);
   TEST("N.Modes",shape_model.n_modes(),1);
@@ -57,7 +57,7 @@ void test_shape_model()
 
   msm_shape_instance instance(shape_model);
   instance.fit_to_points(shapes[2]);
-  vcl_cout<<"Points: "<<instance.points()<<vcl_endl;
+  std::cout<<"Points: "<<instance.points()<<std::endl;
   TEST("Fit is accurate",instance.points(),shapes[2]);
   TEST("N.Parameters",instance.params().size(),1);
   TEST("N.Pose",instance.pose().size(),4);
@@ -67,7 +67,7 @@ void test_shape_model()
   instance.fit_to_points_wt(shapes[3],wt);
   TEST("Wt.Fit is accurate",instance.points(),shapes[3]);
 
-  vcl_vector<msm_wt_mat_2d> wt_mat(4);
+  std::vector<msm_wt_mat_2d> wt_mat(4);
   for (unsigned i=0;i<4;++i) wt_mat[i]*=(1+i);
   instance.fit_to_points_wt_mat(shapes[4],wt_mat);
   TEST("Wt.Mat.Fit is accurate",instance.points(),shapes[4]);

@@ -26,7 +26,7 @@ bool bvpl_taylor_global_add_error_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_taylor_global_add_error_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvpl_global_taylor_sptr" ; //global taylor class
   input_types_[i++] = "int"; //scene id
@@ -35,7 +35,7 @@ bool bvpl_taylor_global_add_error_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int";
 
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -57,18 +57,18 @@ bool bvpl_taylor_global_add_error_process(bprb_func_process& pro)
 
   if (!global_taylor)
   {
-    vcl_cerr << "Global taylor is NULL\n";
+    std::cerr << "Global taylor is NULL\n";
     return false;
   }
 
   boxm_scene_base_sptr error_scene_base = global_taylor->load_error_scene(scene_id);
   if (!error_scene_base) {
-    vcl_cerr << "Error in bvpl_add_taylor_errors_process: Error scene is of incorrect type\n";
+    std::cerr << "Error in bvpl_add_taylor_errors_process: Error scene is of incorrect type\n";
     return false;
   }
 
   double error = bvpl_average_value(error_scene_base,block_i, block_j, block_k);
-  vcl_cout << "Error at block: (" << block_i << ", " << block_j << ", " << block_k << ") is: " << error << '\n';
+  std::cout << "Error at block: (" << block_i << ", " << block_j << ", " << block_k << ") is: " << error << '\n';
 
   //store output
     pro.set_output_val<double>(0, error);

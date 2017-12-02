@@ -1,16 +1,17 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vbl/vbl_disjoint_sets.h>
 #include <vbl/vbl_edge.h>
 #include <vbl/vbl_graph_partition.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 static void print_element_sets(const vbl_disjoint_sets & s)
 {
   for (int i = 0; i < s.num_elements(); ++i){
     int k = s.find_set(i);
-    vcl_cout << "[" << k << "]: " << s.size(k) << "  ";
+    std::cout << "[" << k << "]: " << s.size(k) << "  ";
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 }
 
 static void vbl_test_disjoint_sets()
@@ -27,14 +28,14 @@ static void vbl_test_disjoint_sets()
   s.set_union(s.find_set(7),s.find_set(11));
   print_element_sets(s);
   int n0 = s.size(0), n2 = s.size(2),n4 = s.size(4),
-    n5 = s.size(5), n6 = s.size(6); 
+    n5 = s.size(5), n6 = s.size(6);
   bool good = n0==1&&n2==1&&n4==1&&n5==3&&n6==7;
   good = good && s.num_sets() == 5;
   TEST("disjoint set operations", good, true);
 
   // test partitioning a graph
   int n_verts = 10;
-  vcl_vector<vbl_edge> edges;
+  std::vector<vbl_edge> edges;
   for(int i = 1; i<n_verts; ++i)
     edges.push_back(vbl_edge(i-1, i, 0.0f));
 

@@ -1,15 +1,18 @@
 // This is mul/vil3d/algo/vil3d_find_blobs.cxx
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "vil3d_find_blobs.h"
 //:
 // \file
 // \brief Identify and enumerate all disjoint blobs in a binary image.
 // \author Ian Scott, Kevin de Souza
 
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <vil3d/vil3d_image_view.h>
+#include <vil3d/vil3d_math.h>
 
 namespace
 {
@@ -25,7 +28,7 @@ namespace
       LABEL parent;
       LEN rank;
     };
-    vcl_vector<node> store_;
+    std::vector<node> store_;
   public:
     disjoint_sets(): store_(1u)
     { // renumber 0->0
@@ -93,7 +96,7 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
   dst.fill(0);
 
   disjoint_sets merge_list;
-  vcl_vector<unsigned> neighbouring_labels;
+  std::vector<unsigned> neighbouring_labels;
 
   unsigned n_neighbours;
   switch (conn)
@@ -114,7 +117,7 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
   int neighbourhood_jj[] = { 0, -1, 0, -1, -1, -1,  0,  0, +1, +1, +1, -1, -1};
   int neighbourhood_kk[] = { 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0,  0};
 
-  typedef vcl_vector<unsigned>::iterator ITER;
+  typedef std::vector<unsigned>::iterator ITER;
 
   for (unsigned k=0; k<nk; ++k)
     for (unsigned j=0; j<nj; ++j)
@@ -142,8 +145,8 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
         else
         {
           // See how many unique labels neighbouring labels we have
-          vcl_sort(neighbouring_labels.begin(), neighbouring_labels.end());
-          ITER end = vcl_unique(neighbouring_labels.begin(), neighbouring_labels.end());
+          std::sort(neighbouring_labels.begin(), neighbouring_labels.end());
+          ITER end = std::unique(neighbouring_labels.begin(), neighbouring_labels.end());
           // don't bother erasing unique suffix, just keeping the end iterator
           // will be enough.
           ITER it=neighbouring_labels.begin();
@@ -160,7 +163,7 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
       }
 
   unsigned n_merge=merge_list.size();
-  vcl_vector<unsigned> renumbering(n_merge, 0u);
+  std::vector<unsigned> renumbering(n_merge, 0u);
   // Convert the merge lsit into a simple renumbering array,
   // and change to root of each disjoint set to its lowest member.
   // The reinstates label order to the original raster order.
@@ -180,11 +183,11 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
 
   // Now due to the renumbering, the set of labels may not compactly occupy
   // the number line. So renumber the renumbering array.
-  vcl_vector<unsigned> labels(renumbering.begin(), renumbering.end());
-  vcl_sort(labels.begin(), labels.end());
-  labels.erase(vcl_unique(labels.begin(), labels.end()), labels.end());
+  std::vector<unsigned> labels(renumbering.begin(), renumbering.end());
+  std::sort(labels.begin(), labels.end());
+  labels.erase(std::unique(labels.begin(), labels.end()), labels.end());
   const unsigned dodgy = static_cast<unsigned>(-1);
-  vcl_vector<unsigned> renum_renum(renumbering.size(), dodgy);
+  std::vector<unsigned> renum_renum(renumbering.size(), dodgy);
   renum_renum[0]=0;
   for (unsigned l=0, n=labels.size(); l<n; ++l)
     renum_renum[labels[l]] = l;
@@ -193,7 +196,7 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
     *it=renum_renum[*it];
 
   // Check than no DODGY values got into the renumbering.
-  assert(vcl_find(renumbering.begin(), renumbering.end(), dodgy)
+  assert(std::find(renumbering.begin(), renumbering.end(), dodgy)
     == renumbering.end() );
 
   // Renumber the labels, to merge connected blobs, with a compact set of labels.
@@ -204,3 +207,37 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
         dst(i,j,k) = renumbering[dst(i,j,k)];
 }
 
+
+
+//: Convert a label image into a list of chorded regions.
+// A blob label value of n will be returned in dest_regions[n-1].
+void vil3d_blob_labels_to_regions(const vil3d_image_view<unsigned>& src_label,
+                                vcl_vector<vil3d_region>& regions)
+{
+  regions.clear();
+  unsigned ni=src_label.ni();
+  unsigned nj=src_label.nj();
+  unsigned nk=src_label.nk();
+  
+  unsigned min_v,max_v;
+  vil3d_math_value_range(src_label,min_v,max_v);
+  if (max_v==0) return;  // No blobs.
+  
+  regions.resize(max_v);
+
+  for (unsigned k=0; k<nk; ++k)
+   for (unsigned j=0; j<nj; ++j)
+    for (unsigned i=0; i<ni;) // don't auto increment i, since the loop body does it.
+    {
+      unsigned label = src_label(i,j,k);
+      if (!label)
+      { // if not a label - go to next pixel.
+        ++i;
+        continue;
+      }
+      unsigned i_start=i;
+      // Find end of chord.
+      while (++i < ni && src_label(i,j,k)==label);
+      regions[label-1].push_back(vil3d_chord(i_start, i-1, j,k));
+    }
+}

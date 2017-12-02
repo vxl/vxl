@@ -8,9 +8,11 @@
 // \date 12-Apr-2001
 // \brief Sampler class for Multi-Variate Gaussian classes.
 
+#include <iostream>
+#include <cmath>
 #include "vpdfl_gaussian_sampler.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vpdfl/vpdfl_gaussian.h>
 #include <mbl/mbl_matxvec.h>
 
@@ -36,16 +38,16 @@ vpdfl_gaussian_sampler::~vpdfl_gaussian_sampler()
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_gaussian_sampler::is_a() const
+std::string vpdfl_gaussian_sampler::is_a() const
 {
-  return vcl_string("vpdfl_gaussian_sampler");
+  return std::string("vpdfl_gaussian_sampler");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_gaussian_sampler::is_class(vcl_string const& s) const
+bool vpdfl_gaussian_sampler::is_class(std::string const& s) const
 {
   return vpdfl_sampler_base::is_class(s) || s==vpdfl_gaussian_sampler::is_a();
 }
@@ -83,7 +85,7 @@ void vpdfl_gaussian_sampler::sample(vnl_vector<double>& x)
 
   double* b_data = b_.data_block();
   for (int i=0;i<n;++i)
-    b_data[i] = vcl_sqrt(evals[i])*rng_.normal();
+    b_data[i] = std::sqrt(evals[i])*rng_.normal();
 
   // Transform sample into x space
   mbl_matxvec_prod_mv(gauss.eigenvecs(),b_,x);

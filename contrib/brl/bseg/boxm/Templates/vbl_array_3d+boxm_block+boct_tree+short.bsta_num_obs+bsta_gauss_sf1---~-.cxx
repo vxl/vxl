@@ -1,9 +1,9 @@
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf1.h>
-#include <boxm/boxm_block.txx>
-#include <vbl/vbl_array_3d.txx>
-#include <boxm/boxm_block.txx>
-#include <boct/boct_tree.txx>
+#include <boxm/boxm_block.hxx>
+#include <vbl/vbl_array_3d.hxx>
+#include <boxm/boxm_block.hxx>
+#include <boct/boct_tree.hxx>
 
 typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 typedef boct_tree<short,gauss_type> tree_type;

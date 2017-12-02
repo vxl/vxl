@@ -1,10 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_generate_3d_point_process_from_depth_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
@@ -21,14 +22,14 @@ bool vpgl_generate_3d_point_from_depth_process_cons(bprb_func_process& pro)
     using namespace vpgl_generate_3d_point_from_depth_process_globals;
 
     //process takes 4 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "vpgl_camera_double_sptr";
     input_types_[1] = "float";
     input_types_[2] = "float";
     input_types_[3] = "float";
 
     // process has 3 outputs
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     output_types_[0] = "float"; //X
     output_types_[1] = "float"; //Y
     output_types_[2] = "float"; //Z
@@ -42,7 +43,7 @@ bool vpgl_generate_3d_point_from_depth_process(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_generate_3d_point_from_depth_process: Invalid inputs\n";
+    std::cerr << "vpgl_generate_3d_point_from_depth_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -60,10 +61,10 @@ bool vpgl_generate_3d_point_from_depth_process(bprb_func_process& pro)
     ray = cam->ray(u,v);
   }
   else {
-    vcl_cerr << "vpgl_generate_3d_point_from_depth_process: couldn't cast camera\n";
+    std::cerr << "vpgl_generate_3d_point_from_depth_process: couldn't cast camera\n";
     return false;
   }
-  //vcl_cout<<ray.origin()<<vcl_endl;
+  //std::cout<<ray.origin()<<std::endl;
   vgl_point_3d<double> pt3d=ray.origin()+ray.direction()*t;
 
   pro.set_output_val<float>(0, (float)pt3d.x());

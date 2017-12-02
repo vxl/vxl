@@ -18,86 +18,86 @@ Why software environments?
 1. Research groups and their objectives
 
 Zurich:
-	Andreas Turina, Stephan Scholze, Dominique
+        Andreas Turina, Stephan Scholze, Dominique
 
-	Coming in mostly as users of vxl. Interests are in biomedical
-	modeling, using vxl for visualisation and for general
-	algorithmic support. Looking for simplicity--vxl is a tool,
-	and should therefore be easy to use. Concerns include
-	confusion with the different types of points, and the
-	inability to conveniently switch between them for different
-	algorithms.  The vxl group is currently 3. Some current TJr
-	users *may* switch, depending on the progress of vxl.
+        Coming in mostly as users of vxl. Interests are in biomedical
+        modeling, using vxl for visualisation and for general
+        algorithmic support. Looking for simplicity--vxl is a tool,
+        and should therefore be easy to use. Concerns include
+        confusion with the different types of points, and the
+        inability to conveniently switch between them for different
+        algorithms.  The vxl group is currently 3. Some current TJr
+        users *may* switch, depending on the progress of vxl.
 
 Leuven:
-	Peter Vanroose
+        Peter Vanroose
 
-	Leuven's 3D reconstruction people are using vxl the most
-	(mostly vnl/vil). vgl is not (yet) good enough for them - they
-	have their own. (They, however, removed vcl and use standard
-	C++ directly.) They work with SGIs (IRIX might be going out,
-	Linux coming in), Solaris, and a few Alphas. TJr/Parmesan
-	people shifting toward vxl. They are struggling with the
-	current GUI stuff. vtk being used by the 3D visualisation
-	people. Others will want a GUI. Peter guesses about 5 active
-	people, 15 maybes.
+        Leuven's 3D reconstruction people are using vxl the most
+        (mostly vnl/vil). vgl is not (yet) good enough for them - they
+        have their own. (They, however, removed vcl and use standard
+        C++ directly.) They work with SGIs (IRIX might be going out,
+        Linux coming in), Solaris, and a few Alphas. TJr/Parmesan
+        people shifting toward vxl. They are struggling with the
+        current GUI stuff. vtk being used by the 3D visualisation
+        people. Others will want a GUI. Peter guesses about 5 active
+        people, 15 maybes.
 
 RPI:
-	Chuck Stewart, Amitha Perera
+        Chuck Stewart, Amitha Perera
 
-	Chuck has taught vision and programming classes using
-	TJr. Successful because of "complicated" algorithms, and
-	unsuccessful because of learning ramp. vxl will hopefully
-	avoid the latter. Some research will need to be "real time",
-	so performance and lightweight is important. RPI has many
-	relatively naive users; vxl must cater for them. RPI is going
-	towards building a web interface for retina project
-	software. Simplicity in design and reliability of code are
-	paramount; completeness and generality is much less
-	important. Multi-platform build environment is essential. The
-	retina project may move to Insight (possibly for political
-	reasons). Problem with Insight is that it may grow very big
-	very quickly; it is very dynamic.
+        Chuck has taught vision and programming classes using
+        TJr. Successful because of "complicated" algorithms, and
+        unsuccessful because of learning ramp. vxl will hopefully
+        avoid the latter. Some research will need to be "real time",
+        so performance and lightweight is important. RPI has many
+        relatively naive users; vxl must cater for them. RPI is going
+        towards building a web interface for retina project
+        software. Simplicity in design and reliability of code are
+        paramount; completeness and generality is much less
+        important. Multi-platform build environment is essential. The
+        retina project may move to Insight (possibly for political
+        reasons). Problem with Insight is that it may grow very big
+        very quickly; it is very dynamic.
 
 Oxford:
-	Andrew Fitzgibbon, Frederik Schaffalitzky, Karen McGaul
+        Andrew Fitzgibbon, Frederik Schaffalitzky, Karen McGaul
 
-	Basic principles of vxl: not slow, not heavy (learning and
-	compiling), not weird. Outcomes: limited scope (e.g. image
-	library just loads many formats; doesn't do much else). vxl
-	will develop and harden through use--basic stuff written,
-	others add as the need arises. vcl is important, as there is
-	no standard compiler available. They use xcv, which is meant
-	to be a program that demonstrates everything in vxl.
+        Basic principles of vxl: not slow, not heavy (learning and
+        compiling), not weird. Outcomes: limited scope (e.g. image
+        library just loads many formats; doesn't do much else). vxl
+        will develop and harden through use--basic stuff written,
+        others add as the need arises. vcl is important, as there is
+        no standard compiler available. They use xcv, which is meant
+        to be a program that demonstrates everything in vxl.
 
 GE:
-	Geoff Cross, Joe Mundy, Peter Tu, Don Hamilton
+        Geoff Cross, Joe Mundy, Peter Tu, Don Hamilton
 
-	GE is working towards some kind of merger between vxl and
-	vtk. Not really combining, but some sort of "link" -- exchange
-	data, etc. Compute in vxl, display in vtk. GE is also working
-	on developing the topology libraries for vxl. They are
-	developing/porting, in collaboration with INRIA(?), some line
-	and curve fitting code.
+        GE is working towards some kind of merger between vxl and
+        vtk. Not really combining, but some sort of "link" -- exchange
+        data, etc. Compute in vxl, display in vtk. GE is also working
+        on developing the topology libraries for vxl. They are
+        developing/porting, in collaboration with INRIA(?), some line
+        and curve fitting code.
 
 Manchester:
-	Tim Cootes, Ian Scott
+        Tim Cootes, Ian Scott
 
-	Have about 20 people working with Radial, which is a
-	Manchester only library. Thinking about using a more general
-	and widely used library, so enable algorithm exchange,
-	etc. Research is mostly on medical and face modeling. Uses Qt
-	library for GUI. They are still evaluating vxl. Latest
-	contribution was fixing documentation, and adding the viol
-	library for binary output. If they make the switch, they would
-	contribute modeling software. Requirements: believable coding
-	standard, consistency, documentation, easy to learn (convince
-	others to use), 3D images, and possibly 4D images. Need to be
-	able to persuade people to use this and not Matlab.
+        Have about 20 people working with Radial, which is a
+        Manchester only library. Thinking about using a more general
+        and widely used library, so enable algorithm exchange,
+        etc. Research is mostly on medical and face modeling. Uses Qt
+        library for GUI. They are still evaluating vxl. Latest
+        contribution was fixing documentation, and adding the viol
+        library for binary output. If they make the switch, they would
+        contribute modeling software. Requirements: believable coding
+        standard, consistency, documentation, easy to learn (convince
+        others to use), 3D images, and possibly 4D images. Need to be
+        able to persuade people to use this and not Matlab.
 
 ANU:
-	Richard Hartley
-	Just have vxl up and running. Plan just to use it.
+        Richard Hartley
+        Just have vxl up and running. Plan just to use it.
 
 
 ----------------------------------------------------------------------
@@ -309,7 +309,7 @@ ANU:
   general, implicit templates should be turned on system wide.
   * Should it be just for STL or for all vxl? It should be for all
     vxl, since a half-measure would probably create more confusion.
-  * Implicit templates => including .txx. How does this affect the
+  * Implicit templates => including .hxx. How does this affect the
     compile time?
   * Decision delayed pending further (email) discussion.
 
@@ -317,8 +317,7 @@ ANU:
     freebsd with gcc 2.95.2
     windows with intel, VC 6.0
     linux with gcc 2.95.2, 3.0, egcs 2.91.66
-    SGI with MipsPro 7.2, 7.3
-    Solaris with Sunpro 5.0, gcc 2.95.2, egcs 2.91.66
+    Solaris with gcc 2.95.2, egcs 2.91.66
     HP with gcc 2.95.2
     Alpha with  gcc 2.95.2
 

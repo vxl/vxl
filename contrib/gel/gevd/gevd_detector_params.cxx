@@ -1,8 +1,9 @@
 //:
 // \file
+#include <sstream>
+#include <iostream>
 #include "gevd_detector_params.h"
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -122,7 +123,7 @@ void gevd_detector_params::set_close_borders(bool cb)
 //
 bool gevd_detector_params::SanityCheck()
 {
-  vcl_stringstream msg;
+  std::stringstream msg;
   bool valid = true;
 
   if (aggressive_junction_closure >0 )
@@ -236,7 +237,7 @@ bool gevd_detector_params::SanityCheck()
 #if 0 //not implemented in vxl
 void gevd_detector_params::Describe(ParamModifier& /*mod*/)
 {
-  vcl_cerr << "gevd_detector_params::Describe() not yet implemented\n";
+  std::cerr << "gevd_detector_params::Describe() not yet implemented\n";
 
   static UIChoice JunctionClosure[] =
   {

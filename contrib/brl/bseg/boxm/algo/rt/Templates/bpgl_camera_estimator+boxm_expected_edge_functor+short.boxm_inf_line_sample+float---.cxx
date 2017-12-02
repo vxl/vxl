@@ -1,4 +1,4 @@
-#include <bpgl/bpgl_camera_estimator.txx>
+#include <bpgl/bpgl_camera_estimator.hxx>
 #include <boxm/algo/rt/boxm_expected_edge_functor.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 

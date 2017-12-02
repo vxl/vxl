@@ -1,11 +1,12 @@
 // This is gel/vsol/vsol_polygon_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_polygon_2d.h"
 //:
 // \file
 #include <vsl/vsl_vector_io.h>
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
@@ -14,16 +15,16 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector (not a geometric vector but a list of points)
+//: Constructor from a std::vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=3
 //---------------------------------------------------------------------------
-vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
+vsol_polygon_2d::vsol_polygon_2d(const std::vector<vsol_point_2d_sptr> &new_vertices)
   : vsol_region_2d()
 {
   // require
   assert(new_vertices.size()>=3);
 
-  storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
+  storage_=new std::vector<vsol_point_2d_sptr>(new_vertices);
 }
 
 //---------------------------------------------------------------------------
@@ -33,7 +34,7 @@ vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
   : vsol_region_2d(other)
 {
   //vsol_point_2d_sptr p;
-  storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_point_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
 }
@@ -44,7 +45,7 @@ vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
 vsol_polygon_2d::~vsol_polygon_2d()
 {
   for (unsigned i = 0; i < storage_->size(); i++)
-   (*storage_)[i] = 0;
+   (*storage_)[i] = VXL_NULLPTR;
   delete storage_;
 }
 
@@ -66,7 +67,7 @@ vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void)
   if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void) const
@@ -74,19 +75,19 @@ const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void) const
   if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
-vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void){return 0;}
+vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void){return VXL_NULLPTR;}
 const vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void) const
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
-vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void){return 0;}
+vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void){return VXL_NULLPTR;}
 const vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void) const
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //***************************************************************************
@@ -174,29 +175,29 @@ double vsol_polygon_2d::area(void) const
   area += ((*storage_)[last]->x() * (*storage_)[0]->y())
         - ((*storage_)[0]->x() * (*storage_)[last]->y());
 
-  return vcl_abs(area / 2.0);
+  return std::abs(area / 2.0);
 }
 
 //---------------------------------------------------------------------------
 //: Return the centroid of `this'
 //---------------------------------------------------------------------------
-// The centroid is computed by using Green's theorem to compute the 
+// The centroid is computed by using Green's theorem to compute the
 // area-weighted 1st moments of the polygon.
 //  Green's theorem relates the surface integral to the line integral around
-//  the boundary as:  
+//  the boundary as:
 //     Int(surface) x dxdy = 0.5 * Int(boundary) x*x dy
 //     Int(surface) y dxdy = 0.5 * Int(boundary) y*y dx
 //  The centroid is given by
 //     xc = Int(surface) x dxdy / Int(surface) dxdy  = Int(surface) x dxdy/area
 //     yc = Int(surface) y dxdy / Int(surface) dxdy  = Int(surface) y dxdy/area
-// 
+//
 //  For a polygon: with vertices x[i], y[i]
-//   0.5 * Int(boundary) x*x dy = 
+//   0.5 * Int(boundary) x*x dy =
 //   1/6 * Sum(i)( x[i+1] + x[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
-// 
-//   0.5 * Int(boundary) y*y dx = 
+//
+//   0.5 * Int(boundary) y*y dx =
 //   1/6 * Sum(i)( y[i+1] + y[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
-// 
+//
 //  In the case of degenerate polygons, where area == 0, return the average of
 //  the vertex locations.
 //
@@ -232,14 +233,14 @@ vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
       xsum += xi; ysum += yi;
     }
   area /= 2.0;
-  if(vcl_fabs(area)!=0.0)
+  if(std::fabs(area)!=0.0)
     {
       double xc = sx/(6.0*area), yc = sy/(6.0*area);
       return new vsol_point_2d(xc, yc);
     }
   return new vsol_point_2d(xsum/nverts, ysum/nverts);
 }
-    
+
 //---------------------------------------------------------------------------
 //: Is `this' convex ?
 // A polygon is convex if the direction of "turning" at every vertex is
@@ -319,7 +320,7 @@ void vsol_polygon_2d::b_read(vsl_b_istream &is)
     vsol_spatial_object_2d::b_read(is);
 
     delete storage_;
-    storage_ = new vcl_vector<vsol_point_2d_sptr>();
+    storage_ = new std::vector<vsol_point_2d_sptr>();
     bool null_ptr;
     vsl_b_read(is, null_ptr);
     if (!null_ptr)
@@ -327,7 +328,7 @@ void vsol_polygon_2d::b_read(vsl_b_istream &is)
     vsl_b_read(is, *storage_);
     break;
    default:
-    vcl_cerr << "vsol_polygon_2d: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_polygon_2d: unknown I/O version " << ver << '\n';
   }
 }
 
@@ -338,7 +339,7 @@ short vsol_polygon_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_polygon_2d::print_summary(vcl_ostream &os) const
+void vsol_polygon_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -352,10 +353,10 @@ void vsol_polygon_2d::print_summary(vcl_ostream &os) const
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(void)
 {
-  storage_=new vcl_vector<vsol_point_2d_sptr>();
+  storage_=new std::vector<vsol_point_2d_sptr>();
 }
 
-bool vsol_polygon_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) const
+bool vsol_polygon_2d::valid_vertices(const std::vector<vsol_point_2d_sptr> ) const
 {
   return true;
 }
@@ -365,7 +366,7 @@ bool vsol_polygon_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) cons
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_polygon_2d* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -387,11 +388,11 @@ vsl_b_read(vsl_b_istream &is, vsol_polygon_2d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 
-inline void vsol_polygon_2d::describe(vcl_ostream &strm, int blanking) const
+inline void vsol_polygon_2d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   if (size() == 0)
@@ -403,5 +404,5 @@ inline void vsol_polygon_2d::describe(vcl_ostream &strm, int blanking) const
       strm << " p" << i << ':' << *(vertex(i));
     strm << ']';
   }
-  strm << vcl_endl;
+  strm << std::endl;
 }

@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_batch_probe_intensities_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Ozge C. Ozcanli
 // \date May 12, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -36,7 +38,7 @@ bool boxm2_cpp_batch_probe_intensities_process_cons(bprb_func_process& pro)
   // 0) scene
   // 2) cache
   // 3) stream cache
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
@@ -44,7 +46,7 @@ bool boxm2_cpp_batch_probe_intensities_process_cons(bprb_func_process& pro)
   input_types_[4] = "float";
   input_types_[5] = "float";
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   output_types_[0]="bbas_1d_array_float_sptr";
   output_types_[1]="bbas_1d_array_float_sptr";
@@ -58,7 +60,7 @@ bool boxm2_cpp_batch_probe_intensities_process(bprb_func_process& pro)
   using namespace boxm2_cpp_batch_probe_intensities_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -75,9 +77,9 @@ bool boxm2_cpp_batch_probe_intensities_process(bprb_func_process& pro)
   if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
     return false;
 
-  int index_x=(int)vcl_floor(local.x());
-  int index_y=(int)vcl_floor(local.y());
-  int index_z=(int)vcl_floor(local.z());
+  int index_x=(int)std::floor(local.x());
+  int index_y=(int)std::floor(local.y());
+  int index_z=(int)std::floor(local.z());
 
   boxm2_block * blk=cache->get_block(scene,id);
   boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
@@ -85,12 +87,12 @@ bool boxm2_cpp_batch_probe_intensities_process(bprb_func_process& pro)
   boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
   int bit_index=tree.traverse(local);
   int data_index=tree.get_data_index(bit_index,false);
-  vcl_cout<<"Index is "<<data_index<<vcl_endl;
+  std::cout<<"Index is "<<data_index<<std::endl;
 
-   vcl_vector<float> cum_len;
-   vcl_vector<float> cum_int;
-   vcl_vector<float> cum_vis;
-   vcl_vector<float> cum_pre;
+   std::vector<float> cum_len;
+   std::vector<float> cum_int;
+   std::vector<float> cum_vis;
+   std::vector<float> cum_pre;
   for (int k=0; k<=data_index; ++k)
   {
     cum_len=str_cache->get_next<BOXM2_AUX0>(id,k);
@@ -99,7 +101,7 @@ bool boxm2_cpp_batch_probe_intensities_process(bprb_func_process& pro)
     cum_pre=str_cache->get_next<BOXM2_AUX3>(id,k);
   }
 
-  vcl_cout<<"=================="<<vcl_endl;
+  std::cout<<"=================="<<std::endl;
   bbas_1d_array_float_sptr intensities  =new bbas_1d_array_float(cum_int.size());
   bbas_1d_array_float_sptr visibilites  =new bbas_1d_array_float(cum_int.size());
   bbas_1d_array_float_sptr pres  =new bbas_1d_array_float(cum_int.size());

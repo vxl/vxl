@@ -60,23 +60,23 @@ class bdgl_curve_algs
   // This is a recursive implementation for faster computation
   static bool intersect_line_fast(vdgl_digital_curve_sptr const& dc,
                                   vgl_line_2d<double> & line,
-                                  vcl_vector<double>& indices);
+                                  std::vector<double>& indices);
 
   //:Intersect the curve with an infinite line, return the points
   // This is a recursive implementation for faster computation
   static bool intersect_line_fast(vdgl_digital_curve_sptr const& dc,
                                   vgl_line_2d<double> & line,
-                                  vcl_vector<vgl_point_2d<double> >& pts);
+                                  std::vector<vgl_point_2d<double> >& pts);
 
   //:Intersect the curve with an infinite line, return the index values
   static bool intersect_line(vdgl_digital_curve_sptr const& dc,
                              vgl_line_2d<double> & line,
-                             vcl_vector<double>& indices);
+                             std::vector<double>& indices);
 
   //:Intersect the curve with an infinite line, return the points
   static bool intersect_line(vdgl_digital_curve_sptr const& dc,
                              vgl_line_2d<double> & line,
-                             vcl_vector<vgl_point_2d<double> >& pts);
+                             std::vector<vgl_point_2d<double> >& pts);
 
   //:Intersect a curve with a line and match the reference edgel point
   static bool match_intersection(vdgl_digital_curve_sptr const& dc,
@@ -96,10 +96,10 @@ class bdgl_curve_algs
                                  bool debug = false);
 
   static void
-    smooth_curve(vcl_vector<vgl_point_2d<double> >& curve,double sigma=1.0);
+    smooth_curve(std::vector<vgl_point_2d<double> >& curve,double sigma=1.0);
 
   static vdgl_digital_curve_sptr
-    create_digital_curves(vcl_vector<vgl_point_2d<double> > & curve);
+    create_digital_curves(std::vector<vgl_point_2d<double> > & curve);
 
  private:
   bdgl_curve_algs();

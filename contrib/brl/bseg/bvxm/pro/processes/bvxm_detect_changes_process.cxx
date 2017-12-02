@@ -33,7 +33,7 @@ bool bvxm_detect_changes_process_cons(bprb_func_process& pro)
   //          -apm_mog_mc_4_3
   //input[4]: The bin index to be updated
   //input[5]: The image scale index  detected
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
@@ -47,7 +47,7 @@ bool bvxm_detect_changes_process_cons(bprb_func_process& pro)
   //output[0] : The updated probability map
   //output[1] : The mask of image pixels used in update
   //output[2] : Thresholded image: Binary
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]= "vil_image_view_base_sptr";
   output_types_[1]= "vil_image_view_base_sptr";
   output_types_[2]= "vil_image_view_base_sptr";
@@ -61,7 +61,7 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -70,21 +70,21 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vcl_string voxel_type = pro.get_input<vcl_string>(i++);
+  std::string voxel_type = pro.get_input<std::string>(i++);
   unsigned bin_index = pro.get_input<unsigned>(i++);
   unsigned scale_index = pro.get_input<unsigned>(i++);
 
   //check input validity
   if (!img) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
   if (!camera) {
-    vcl_cout << pro.name() <<" :--  Input 1 is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 1 is not valid!\n";
     return false;
   }
   if (!world) {
-    vcl_cout << pro.name() <<" :--  Input 2 is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 2 is not valid!\n";
     return false;
   }
 
@@ -105,7 +105,7 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   {
     if (observation.img->nplanes()!= 2)
     {
-      vcl_cerr << "Error bvxm_detect_changes_process: appearance model type" << voxel_type << "does not support images with "
+      std::cerr << "Error bvxm_detect_changes_process: appearance model type" << voxel_type << "does not support images with "
                << observation.img->nplanes()<< " planes\n";
       return false;
     }
@@ -117,17 +117,17 @@ bool bvxm_detect_changes_process(bprb_func_process& pro)
   {
     if (observation.img->nplanes()!= 4)
     {
-      vcl_cerr << "Error bvxm_detect_changes_process: appearance model type" << voxel_type << "does not support images with "
+      std::cerr << "Error bvxm_detect_changes_process: appearance model type" << voxel_type << "does not support images with "
                << observation.img->nplanes()<< " planes\n";
       return false;
     }
     result = world->pixel_probability_density<APM_MOG_MC_4_3>(observation,prob_map, mask, bin_index,scale_index);
   }
   else
-    vcl_cerr << "Error in: bvxm_detect_changes_processor: Unsuppported appearance model\n";
+    std::cerr << "Error in: bvxm_detect_changes_processor: Unsuppported appearance model\n";
 
   if (!result) {
-    vcl_cerr << "Error bvxm_detect_changes_process: failed to detect changes\n";
+    std::cerr << "Error bvxm_detect_changes_process: failed to detect changes\n";
     return false;
   }
   // TODO: filtering / thresholding iset and f necessary (Thom?)

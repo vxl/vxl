@@ -7,9 +7,10 @@
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   16 Feb 00
 
+#include <cstring>
 #include "vil_new.h"
 
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vil/vil_save.h>
 #include <vil/vil_file_format.h>
@@ -83,20 +84,21 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
-  vil_image_resource_sptr outimage = 0;
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+  vil_image_resource_sptr outimage = VXL_NULLPTR;
+  vcl_list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
   {
     vil_file_format* fmt = *p;
-    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+    if (std::strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_output_image(os, ni, nj, nplanes, format);
       if (!outimage)
-        vcl_cerr << "vil_new: Cannot new to type [" << file_format << "]\n";
+        std::cerr << "vil_new: Cannot new to type [" << file_format << "]\n";
       return outimage;
     }
   }
 
-  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  std::cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  return VXL_NULLPTR;
 }
 
 //: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
@@ -161,21 +163,22 @@ vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
-  vil_blocked_image_resource_sptr outimage = 0;
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+  vil_blocked_image_resource_sptr outimage = VXL_NULLPTR;
+  vcl_list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
   {
     vil_file_format* fmt = *p;
-    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+    if (std::strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_blocked_output_image(os, ni, nj, nplanes,
                                                 size_block_i, size_block_j, format);
       if (!outimage)
-        vcl_cerr << "vil_new: Cannot new a blocked resource to type [" << file_format << "]\n";
+        std::cerr << "vil_new: Cannot new a blocked resource to type [" << file_format << "]\n";
       return outimage;
     }
   }
 
-  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  std::cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  return VXL_NULLPTR;
 }
 
 vil_blocked_image_resource_sptr
@@ -215,19 +218,20 @@ vil_new_pyramid_image_resource(char const* file_or_directory,
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
-  vil_pyramid_image_resource_sptr outimage = 0;
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+  vil_pyramid_image_resource_sptr outimage = VXL_NULLPTR;
+  vcl_list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
   {
     vil_file_format* fmt = *p;
-    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+    if (std::strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_pyramid_output_image(file_or_directory);
       if (!outimage)
-        vcl_cerr << "vil_new: Cannot new a pyramid resource to type [" << file_format << "]\n";
+        std::cerr << "vil_new: Cannot new a pyramid resource to type [" << file_format << "]\n";
       return outimage;
     }
   }
-  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  std::cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  return VXL_NULLPTR;
 }
 
 vil_pyramid_image_resource_sptr
@@ -239,22 +243,23 @@ vil_pyramid_image_resource_sptr
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
-  vil_pyramid_image_resource_sptr outimage = 0;
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+  vil_pyramid_image_resource_sptr outimage = VXL_NULLPTR;
+  vcl_list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
   {
     vil_file_format* fmt = *p;
-    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+    if (std::strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_pyramid_image_from_base(filename,
                                                    base_image,
                                                    nlevels,
                                                    temp_dir);
       if (!outimage)
-        vcl_cerr << "vil_new: Cannot new a pyramid resource to type [" << file_format << "]\n";
+        std::cerr << "vil_new: Cannot new a pyramid resource to type [" << file_format << "]\n";
       return outimage;
     }
   }
-  vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  std::cerr << "vil_new: Unknown file type [" << file_format << "]\n";
+  return VXL_NULLPTR;
 }
 
 //for now there is only one directory based pyramid format
@@ -287,7 +292,7 @@ vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&
     break; }
    macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
    macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64 && !defined(VCL_VC_6)
+#if VXL_HAS_INT_64
    macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
    macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
@@ -348,7 +353,7 @@ vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
   if ( !file_format )
   {
     char const* tag = prototype->file_format();
-    const int ret = MultiByteToWideChar(CP_ACP, 0, tag, vcl_strlen(tag), tag_buffer, size);
+    const int ret = MultiByteToWideChar(CP_ACP, 0, tag, std::strlen(tag), tag_buffer, size);
     assert(ret);
     file_format = tag_buffer;  // use the file format of the given resource
   }

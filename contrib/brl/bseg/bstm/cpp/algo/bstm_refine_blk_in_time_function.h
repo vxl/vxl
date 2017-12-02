@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include <iostream>
 #include <bstm/bstm_data_traits.h>
 #include <bstm/bstm_time_tree.h>
 #include <bstm/bstm_data_base.h>
@@ -10,7 +11,7 @@
 #include <boct/boct_bit_tree.h>
 
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <bstm/io/bstm_cache.h>
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
@@ -24,12 +25,12 @@ class bstm_refine_blk_in_time_function
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  bstm_refine_blk_in_time_function(bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t, float time);
+  bstm_refine_blk_in_time_function(bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float change_prob_t, float time);
 
   //: initialize generic data base pointers as their data type
-  bool init_data(bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_thresh, float local_time);
+  bool init_data(bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float change_prob_thresh, float local_time);
 
-  bool refine(vcl_vector<bstm_data_base*>& datas);
+  bool refine(std::vector<bstm_data_base*>& datas);
 
  private:
 

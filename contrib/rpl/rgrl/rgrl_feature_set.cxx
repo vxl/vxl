@@ -18,11 +18,11 @@ rgrl_feature_set::
 
 
 // ============================================================================
-//                                                      rgrl_feature_set_label 
+//                                                      rgrl_feature_set_label
 // ============================================================================
 
 rgrl_feature_set_label::
-rgrl_feature_set_label( const vcl_string& name )
+rgrl_feature_set_label( const std::string& name )
   : name_( name )
 {
 }

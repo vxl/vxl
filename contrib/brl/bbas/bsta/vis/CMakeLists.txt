@@ -1,16 +1,16 @@
 # This is contrib/brl/bbas/bsta/vis/CMakeLists.txt
 # The Brown Statistics Algorithms Library Visualization Tools
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-SET( bsta_vis_sources
+set( bsta_vis_sources
   bsta_svg_tools.h bsta_svg_tools.cxx
 )
 
-ADD_LIBRARY( bsta_vis  ${bsta_vis_sources} )
+vxl_add_library(LIBRARY_NAME bsta_vis LIBRARY_SOURCES  ${bsta_vis_sources} )
 
-TARGET_LINK_LIBRARIES( bsta_vis bsta bsvg vnl )
+target_link_libraries( bsta_vis bsta bsvg ${VXL_LIB_PREFIX}vnl )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

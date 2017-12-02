@@ -3,7 +3,8 @@
 // \brief Tool to compute an orientation histogram image from an input image
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -14,16 +15,16 @@
 
 void print_usage()
 {
-  vcl_cout<<"mipa_orient_histo  -i src_image -o out_image -c 4\n"
+  std::cout<<"mipa_orient_histo  -i src_image -o out_image -c 4\n"
           <<"Tool to compute an orientation histogram image from an input image.\n"
           <<"Uses 4 orientation bins, outputs 3-plane image with first three.\n"
-          <<"Each histogram is computed from pixels in square of size cell_size"<<vcl_endl;
+          <<"Each histogram is computed from pixels in square of size cell_size"<<std::endl;
 }
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> in_path("-i","Input image");
-  vul_arg<vcl_string> out_path("-o","Output path","output.jpg");
+  vul_arg<std::string> in_path("-i","Input image");
+  vul_arg<std::string> out_path("-o","Output path","output.jpg");
   vul_arg<unsigned> cell_size("-c","Cell size",4);
   vul_arg_parse(argc, argv);
 
@@ -36,7 +37,7 @@ int main(int argc, char** argv)
   vil_image_view<vxl_byte> src_im = vil_load(in_path().c_str());
   if (src_im.size()==0)
   {
-    vcl_cout<<"Unable to load source image from "<<in_path()<<vcl_endl;
+    std::cout<<"Unable to load source image from "<<in_path()<<std::endl;
     return 1;
   }
 
@@ -56,7 +57,7 @@ int main(int argc, char** argv)
   vil_convert_stretch_range(vil_planes(hog_image,0,1,3),dest_im);
   if (!vil_save(dest_im, out_path().c_str()))
   {
-    vcl_cerr<<"Unable to save result image to "<<out_path()<<vcl_endl;
+    std::cerr<<"Unable to save result image to "<<out_path()<<std::endl;
     return 1;
   }
 

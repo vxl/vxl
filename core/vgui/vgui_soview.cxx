@@ -12,10 +12,11 @@
 // map is used by default and added a destructor that removes the id
 // from the map and therefore prevents a memory leak.
 
+#include <iostream>
+#include <map>
 #include "vgui_soview.h"
 
-#include <vcl_iostream.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_observer.h>
@@ -33,10 +34,10 @@ static T& var () { \
 unsigned vgui_soview::current_id = 1;
 
 #if AWF_USE_MAP
-typedef vcl_map<unsigned, void*, vcl_less<unsigned> > Map_soview;
+typedef std::map<unsigned, void*, std::less<unsigned> > Map_soview;
 VGUI_STATIC_OBJECT(Map_soview, object_map);
 #else
-typedef vcl_vector<void* > Map_soview;
+typedef std::vector<void* > Map_soview;
 VGUI_STATIC_OBJECT(Map_soview, object_map);
 #endif
 
@@ -80,11 +81,11 @@ vgui_soview* vgui_soview::id_to_object(unsigned id)
   }
 #endif
 
-  return 0;
+  return VXL_NULLPTR;
 }
 
 
-vcl_ostream& vgui_soview::print(vcl_ostream& s) const
+std::ostream& vgui_soview::print(std::ostream& s) const
 {
   return s << "id " << id;
 }
@@ -163,7 +164,7 @@ const void * const vgui_soview::msg_unhighlight="unhighlight";
 
 //--------------------------------------------------------------------------------
 
-// Observers. Rather than storing a vcl_list/vcl_vector/whatever of observers on each
+// Observers. Rather than storing a std::list/std::vector/whatever of observers on each
 // soview, we maintain a static multimap from soviews to observers. This makes
 // the soviews smaller and optimizes the common case of soviews with no
 // observers.
@@ -171,10 +172,10 @@ const void * const vgui_soview::msg_unhighlight="unhighlight";
 
 // vc++ static data members have some peculiarities, so
 // we use this traditional work-around instead :
-typedef vcl_multimap<void *, void *, vcl_less<void *> > mmap_Pv_Pv;
+typedef std::multimap<void *, void *, std::less<void *> > mmap_Pv_Pv;
 static mmap_Pv_Pv &the_map()
 {
-  static mmap_Pv_Pv *ptr = 0;
+  static mmap_Pv_Pv *ptr = VXL_NULLPTR;
   if (!ptr)
     ptr = new mmap_Pv_Pv;
   return *ptr;
@@ -198,10 +199,10 @@ void vgui_soview::detach(vgui_observer* o)
     }
 
   // not found :
-  vcl_cerr << __FILE__ " : no such observer on this soview\n";
+  std::cerr << __FILE__ " : no such observer on this soview\n";
 }
 
-void vgui_soview::get_observers(vcl_vector<vgui_observer*>& vobs) const
+void vgui_soview::get_observers(std::vector<vgui_observer*>& vobs) const
 {
   mmap_Pv_Pv::const_iterator lo = the_map().lower_bound( const_cast<vgui_soview*>(this) );
   mmap_Pv_Pv::const_iterator hi = the_map().upper_bound( const_cast<vgui_soview*>(this) );
@@ -212,7 +213,7 @@ void vgui_soview::get_observers(vcl_vector<vgui_observer*>& vobs) const
 // These two method could be optimized a bit.
 void vgui_soview::notify() const
 {
-  vcl_vector<vgui_observer*> vobs;
+  std::vector<vgui_observer*> vobs;
   get_observers(vobs);
   for (unsigned i=0; i<vobs.size(); ++i)
     vobs[i]->update();
@@ -220,7 +221,7 @@ void vgui_soview::notify() const
 
 void vgui_soview::notify(vgui_message const &msg) const
 {
-  vcl_vector<vgui_observer*> vobs;
+  std::vector<vgui_observer*> vobs;
   get_observers(vobs);
   for (unsigned i=0; i<vobs.size(); ++i)
     vobs[i]->update(msg);

@@ -29,7 +29,7 @@ class imesh_vertex
   imesh_vertex() { for (unsigned i=0; i<d; ++i) coords_[i]=0.0; }
 
   //: Constructor from a vector
-  imesh_vertex(const vcl_vector<double>& coords)
+  imesh_vertex(const std::vector<double>& coords)
   {assert(coords.size()==d); for (unsigned i=0; i<d; ++i) coords_[i]=coords[i];}
 
   //: return the dimension of the vertex
@@ -45,7 +45,7 @@ class imesh_vertex
 
 
 //: A 2d vertex specialization with extra capabilities
-VCL_DEFINE_SPECIALIZATION
+template <>
 class imesh_vertex<2>
 {
  public:
@@ -73,7 +73,7 @@ class imesh_vertex<2>
   }
 
   //: Constructor from a vector
-  imesh_vertex(const vcl_vector<double>& coords)
+  imesh_vertex(const std::vector<double>& coords)
   {assert(coords.size()==2); coords_[0]=coords[0]; coords_[1]=coords[1];}
 
   //: return the dimension of the vertex
@@ -89,7 +89,7 @@ class imesh_vertex<2>
 
 
 //: A 3d vertex specialization with extra capabilities
-VCL_DEFINE_SPECIALIZATION
+template <>
 class imesh_vertex<3>
 {
  public:
@@ -113,7 +113,7 @@ class imesh_vertex<3>
   }
 
   //: Constructor from a vector
-  imesh_vertex(const vcl_vector<double>& coords)
+  imesh_vertex(const std::vector<double>& coords)
   {
     assert(coords.size()==3);
     coords_[0]=coords[0];
@@ -171,7 +171,7 @@ class imesh_vertex_array_base
   bool has_normals() const { return !normals_.empty(); }
 
   //: Set the vertex normals
-  void set_normals(const vcl_vector<vgl_vector_3d<double> >& n)
+  void set_normals(const std::vector<vgl_vector_3d<double> >& n)
   { assert(n.size() == this->size()); normals_ = n; }
 
   //: Access a vertex normal
@@ -179,10 +179,10 @@ class imesh_vertex_array_base
   const vgl_vector_3d<double>& normal(unsigned int v) const { return normals_[v]; }
 
   //: Access the normals
-  const vcl_vector<vgl_vector_3d<double> >& normals() const { return normals_; }
+  const std::vector<vgl_vector_3d<double> >& normals() const { return normals_; }
 
  protected:
-  vcl_vector<vgl_vector_3d<double> > normals_;
+  std::vector<vgl_vector_3d<double> > normals_;
 };
 
 
@@ -190,7 +190,7 @@ class imesh_vertex_array_base
 template <unsigned int d>
 class imesh_vertex_array : public imesh_vertex_array_base
 {
-  vcl_vector<imesh_vertex<d> > verts_;
+  std::vector<imesh_vertex<d> > verts_;
 
  public:
   //: Default Constructor
@@ -201,7 +201,7 @@ class imesh_vertex_array : public imesh_vertex_array_base
   : verts_(size) {}
 
   //: Constructor (from vector)
-  imesh_vertex_array<d>(const vcl_vector<imesh_vertex<d> >& verts)
+  imesh_vertex_array<d>(const std::vector<imesh_vertex<d> >& verts)
   : verts_(verts) {}
 
   //: Produce a clone of this object (dynamic copy)
@@ -237,8 +237,8 @@ class imesh_vertex_array : public imesh_vertex_array_base
 
   //=====================================================
   // Vertex Iterators
-  typedef typename vcl_vector<imesh_vertex<d> >::iterator iterator;
-  typedef typename vcl_vector<imesh_vertex<d> >::const_iterator const_iterator;
+  typedef typename std::vector<imesh_vertex<d> >::iterator iterator;
+  typedef typename std::vector<imesh_vertex<d> >::const_iterator const_iterator;
 
   iterator begin() { return verts_.begin(); }
   const_iterator begin() const { return verts_.begin(); }

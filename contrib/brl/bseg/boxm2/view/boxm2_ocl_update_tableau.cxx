@@ -1,10 +1,12 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_ocl_update_tableau.h"
 //:
 // \file
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>
@@ -30,7 +32,7 @@ boxm2_ocl_update_tableau::boxm2_ocl_update_tableau()
   DECLARE_FUNC_CONS(boxm2_ocl_refine_process);
   DECLARE_FUNC_CONS(boxm2_ocl_merge_process);
   DECLARE_FUNC_CONS(boxm2_ocl_filter_process);
-  DECLARE_FUNC_CONS(boxm2_write_cache_process); 
+  DECLARE_FUNC_CONS(boxm2_write_cache_process);
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_color_process, "boxm2OclUpdateColorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_process, "boxm2OclUpdateProcess");
@@ -54,8 +56,8 @@ bool boxm2_ocl_update_tableau::init_update (bocl_device_sptr device,
                                             unsigned ni,
                                             unsigned nj,
                                             vpgl_perspective_camera<double>* cam,
-                                            vcl_vector<vcl_string>& update_imgs,
-                                            vcl_vector<vcl_string>& update_cams)
+                                            std::vector<std::string>& update_imgs,
+                                            std::vector<std::string>& update_cams)
 {
   this->init(device, opencl_cache, scene, ni, nj, cam);
   cache_ = opencl_cache->get_cpu_cache();
@@ -71,22 +73,22 @@ bool boxm2_ocl_update_tableau::handle(vgui_event const &e)
 {
   //handle update command - keyboard press U
   if (e.type == vgui_KEY_PRESS && e.key == vgui_key('u')) {
-    do_update_ = true; 
+    do_update_ = true;
     this->post_idle_request();
   }
-  
+
   //handle refine command - keyboard press "d" (for divide)
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('d')) {
     this->refine(.3f);
   }
-  
+
   //handle refine command - keyboard press "d" (for divide)
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('s')) {
     this->save();
   }
-  
+
   else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('f')) {
-    this->filter(); 
+    this->filter();
   }
     else if (e.type == vgui_KEY_PRESS && e.key == vgui_key('m')) {
     this->merge(.2f);
@@ -97,27 +99,27 @@ bool boxm2_ocl_update_tableau::handle(vgui_event const &e)
   {
     if (do_update_) {
       int frame = random_.lrand32(0, imgs_.size()-1);
-      vcl_cout<<"updating with image: "<<imgs_[frame]<<" and "
-              <<" cam: "<<cams_[frame]<<vcl_endl;
+      std::cout<<"updating with image: "<<imgs_[frame]<<" and "
+              <<" cam: "<<cams_[frame]<<std::endl;
       //: Load an image resource object from a file.
-      vil_image_view_base_sptr inim = vil_load(imgs_[frame].c_str()); 
-      vpgl_camera_double_sptr incam = boxm2_util::camera_from_file(cams_[frame]); 
-      this->update_frame(inim, incam); 
+      vil_image_view_base_sptr inim = vil_load(imgs_[frame].c_str());
+      vpgl_camera_double_sptr incam = boxm2_util::camera_from_file(cams_[frame]);
+      this->update_frame(inim, incam);
       this->post_redraw();
-      return true; 
+      return true;
     }
     else {
-      vcl_cout<<"done idling"<<vcl_endl;
+      std::cout<<"done idling"<<std::endl;
       return false;
     }
   }
-  
+
   //if you click on the canvas, you wanna render, so turn off update
   else if (e.type == vgui_BUTTON_DOWN) {
     do_update_ = false;
   }
 
-  
+
   if (boxm2_ocl_render_tableau::handle(e)) {
     return true;
   }
@@ -133,8 +135,8 @@ float boxm2_ocl_update_tableau::update_frame(vil_image_view_base_sptr in_im, vpg
   brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache_);
   brdb_value_sptr brdb_cam          = new brdb_value_t<vpgl_camera_double_sptr>(in_cam);
   brdb_value_sptr brdb_img          = new brdb_value_t<vil_image_view_base_sptr>(in_im);
-  brdb_value_sptr identifier        = new brdb_value_t<vcl_string>("");
-  brdb_value_sptr brdb_mask_img     = new brdb_value_t<vcl_string>("");//f:/Tailwind/Towerorbit/mask3.png");
+  brdb_value_sptr identifier        = new brdb_value_t<std::string>("");
+  brdb_value_sptr brdb_mask_img     = new brdb_value_t<std::string>("");//f:/Tailwind/Towerorbit/mask3.png");
 
   //if scene has RGB data type, use color render process
   bool good =
@@ -166,7 +168,7 @@ float boxm2_ocl_update_tableau::refine(float thresh)
   brdb_value_sptr brdb_device       = new brdb_value_t<bocl_device_sptr>(device_);
   brdb_value_sptr brdb_scene        = new brdb_value_t<boxm2_scene_sptr>(scene_);
   brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache_);
-  brdb_value_sptr brdb_thresh       = new brdb_value_t<float>(thresh); 
+  brdb_value_sptr brdb_thresh       = new brdb_value_t<float>(thresh);
 
   //if scene has RGB data type, use color render process
   bool good = bprb_batch_process_manager::instance()->init_process("boxm2OclRefineProcess");
@@ -178,7 +180,7 @@ float boxm2_ocl_update_tableau::refine(float thresh)
       && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
       && bprb_batch_process_manager::instance()->set_input(3, brdb_thresh)    // camera
       && bprb_batch_process_manager::instance()->run_process();
-  
+
   if (good)
     return 0.0f;
   else
@@ -191,7 +193,7 @@ float boxm2_ocl_update_tableau::merge(float thresh)
   brdb_value_sptr brdb_device       = new brdb_value_t<bocl_device_sptr>(device_);
   brdb_value_sptr brdb_scene        = new brdb_value_t<boxm2_scene_sptr>(scene_);
   brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache_);
-  brdb_value_sptr brdb_thresh       = new brdb_value_t<float>(thresh); 
+  brdb_value_sptr brdb_thresh       = new brdb_value_t<float>(thresh);
 
   //if scene has RGB data type, use color render process
   bool good = bprb_batch_process_manager::instance()->init_process("boxm2OclMergeProcess");
@@ -203,7 +205,7 @@ float boxm2_ocl_update_tableau::merge(float thresh)
       && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
       && bprb_batch_process_manager::instance()->set_input(3, brdb_thresh)    // camera
       && bprb_batch_process_manager::instance()->run_process();
-  
+
   if (good)
     return 0.0f;
   else
@@ -229,7 +231,7 @@ float boxm2_ocl_update_tableau::filter()
   if (good)
     return 0.0f;
   else
-    return -1.0f;  
+    return -1.0f;
 }
 
 //:save scene
@@ -237,7 +239,7 @@ float boxm2_ocl_update_tableau::save()
 {
   //set up brdb_value_sptr arguments...
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
-  brdb_value_sptr brdb_cache = new brdb_value_t<boxm2_cache_sptr>(cache_); 
+  brdb_value_sptr brdb_cache = new brdb_value_t<boxm2_cache_sptr>(cache_);
 
   //if scene has RGB data type, use color render process
   bool good = bprb_batch_process_manager::instance()->init_process("boxm2WriteCacheProcess");

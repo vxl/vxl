@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/m23d
   DESCRIPTION "Manchester's 2D/3D Library"
 )
 
-SET(m23d_sources
+set(m23d_sources
   m23d_rotation_from_ortho_projection.cxx m23d_rotation_from_ortho_projection.h
   m23d_pure_ortho_projection.cxx          m23d_pure_ortho_projection.h
   m23d_set_q_constraint.cxx               m23d_set_q_constraint.h
@@ -18,13 +18,13 @@ SET(m23d_sources
   m23d_correction_matrix_error.cxx        m23d_correction_matrix_error.h
   m23d_select_basis_views.cxx             m23d_select_basis_views.h
 )
-AUX_SOURCE_DIRECTORY(Templates m23d_sources)
+aux_source_directory(Templates m23d_sources)
 
-ADD_LIBRARY(m23d ${m23d_sources})
-TARGET_LINK_LIBRARIES(m23d mbl)
+vxl_add_library(LIBRARY_NAME m23d LIBRARY_SOURCES ${m23d_sources})
+target_link_libraries(m23d mbl)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()
 
 #add_subdirectory(tools)

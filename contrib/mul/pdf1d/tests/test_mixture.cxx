@@ -4,15 +4,16 @@
 //  Copyright: (C) 2000 Victoria University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <string>
+#include <cmath>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test pdf1d_mixture, building, sampling, saving etc.
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <pdf1d/pdf1d_mixture.h>
 #include <pdf1d/pdf1d_mixture_builder.h>
@@ -28,7 +29,7 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_mixture()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing pdf1d_mixture\n"
            << "***********************\n";
 
@@ -51,7 +52,7 @@ void test_mixture()
   pdf.init(a_gaussian, n_comp);
 
   //n_comp = 5;
-  vcl_vector<double> mean(n_comp), var(n_comp);
+  std::vector<double> mean(n_comp), var(n_comp);
 
   for (int j=0;j<n_comp;++j)
   {
@@ -67,7 +68,7 @@ void test_mixture()
   p_sampler->reseed(9667566ul);
 
     // Generate lots of samples
-  vcl_vector<double> data(n_samples);
+  std::vector<double> data(n_samples);
   for (int i=0;i<n_samples;++i)
     data[i]= p_sampler->sample();
 
@@ -77,22 +78,22 @@ void test_mixture()
 
   builder.build(*p_pdf,data_array);
 
-  vcl_cout<<"Original PDF: "<<pdf<<vcl_endl
-          <<"Mean: "<< pdf.mean() <<vcl_endl
-          <<"Var:  "<<pdf.variance()<<vcl_endl
-          <<"New PDF: "<<p_pdf<<vcl_endl
-          <<"Mean: " << p_pdf->mean()<<vcl_endl
-          <<"Var:  " << p_pdf->variance()<<vcl_endl;
+  std::cout<<"Original PDF: "<<pdf<<std::endl
+          <<"Mean: "<< pdf.mean() <<std::endl
+          <<"Var:  "<<pdf.variance()<<std::endl
+          <<"New PDF: "<<p_pdf<<std::endl
+          <<"Mean: " << p_pdf->mean()<<std::endl
+          <<"Var:  " << p_pdf->variance()<<std::endl;
 
   pdf1d_mixture & gmm =  static_cast<pdf1d_mixture &>(*p_pdf);
 
-  vcl_vector<double> test_wts(n_comp, 1.0/n_comp);
+  std::vector<double> test_wts(n_comp, 1.0/n_comp);
   TEST_NEAR("Weights are about correct",
             vnl_c_vector<double>::euclid_dist_sq(&gmm.weights()[0], &test_wts[0], n_comp),
             0.0, 0.001);
 
-  if (vcl_fabs(gmm.component(0).mean()-mean[0]) <
-      vcl_fabs(gmm.component(0).mean()-mean[1]) )
+  if (std::fabs(gmm.component(0).mean()-mean[0]) <
+      std::fabs(gmm.component(0).mean()-mean[1]) )
   {
     TEST_NEAR("Means are about correct", gmm.component(0).mean(), mean[0], 0.05);
     TEST_NEAR("Means are about correct", gmm.component(1).mean(), mean[1], 0.05);
@@ -103,9 +104,9 @@ void test_mixture()
     TEST_NEAR("Means are about correct", gmm.component(1).mean(), mean[0], 0.05);
   }
 
-  vcl_string test_path = "test_mixture.bvl.tmp";
+  std::string test_path = "test_mixture.bvl.tmp";
 
-  vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
+  std::cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Created "+test_path+" for writing").c_str(), (!bfs_out), false);
 
@@ -115,7 +116,7 @@ void test_mixture()
   vsl_b_write(bfs_out,static_cast<pdf1d_pdf*>(0));
   bfs_out.close();
 
-  vcl_cout<<"Loading data...\n";
+  std::cout<<"Loading data...\n";
   pdf1d_mixture_builder builder2;
   pdf1d_builder*  p_builder2 = 0;
   pdf1d_pdf*         p_pdf2 = 0;
@@ -133,24 +134,24 @@ void test_mixture()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Original builder: "; vsl_print_summary(vcl_cout, builder); vcl_cout<<vcl_endl
-          <<"Loaded builder: "; vsl_print_summary(vcl_cout, p_builder2); vcl_cout<<vcl_endl
-          <<vcl_endl
+  std::cout<<"Original builder: "; vsl_print_summary(std::cout, builder); std::cout<<std::endl
+          <<"Loaded builder: "; vsl_print_summary(std::cout, p_builder2); std::cout<<std::endl
+          <<std::endl
 
-          <<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf); vcl_cout<<vcl_endl
-          <<"Mean: " << p_pdf->mean()<<vcl_endl
-          <<"Var:  " << p_pdf->variance()<<vcl_endl
-          <<"Loaded PDF: "; vsl_print_summary(vcl_cout, p_pdf2); vcl_cout<<vcl_endl
-          <<"Mean: " << p_pdf2->mean()<<vcl_endl
-          <<"Var:  " << p_pdf2->variance()<<vcl_endl
-          <<vcl_endl <<vcl_endl;
+          <<"Original PDF: "; vsl_print_summary(std::cout, p_pdf); std::cout<<std::endl
+          <<"Mean: " << p_pdf->mean()<<std::endl
+          <<"Var:  " << p_pdf->variance()<<std::endl
+          <<"Loaded PDF: "; vsl_print_summary(std::cout, p_pdf2); std::cout<<std::endl
+          <<"Mean: " << p_pdf2->mean()<<std::endl
+          <<"Var:  " << p_pdf2->variance()<<std::endl
+          <<std::endl <<std::endl;
 
 
-  vcl_cout << "=============Testing PDF==========";
+  std::cout << "=============Testing PDF==========";
   pdf1d_sampler *p_sampler2 = p_pdf->new_sampler();
   unsigned pass=0, fail=0;
   double thresh = p_pdf->log_prob_thresh(0.9);
-  vcl_cout << vcl_endl << "log density threshold for passing 90%: " << thresh << vcl_endl;
+  std::cout << std::endl << "log density threshold for passing 90%: " << thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -159,11 +160,11 @@ void test_mixture()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("820 < pass < 980", pass > 820 && pass < 980, true);
   pass=0; fail=0;
   thresh = p_pdf->log_prob_thresh(0.1);
-  vcl_cout << vcl_endl << vcl_endl << "log density threshold for passing 10%: " << thresh << vcl_endl;
+  std::cout << std::endl << std::endl << "log density threshold for passing 10%: " << thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -172,7 +173,7 @@ void test_mixture()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   delete p_pdf;

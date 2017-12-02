@@ -29,10 +29,11 @@
 // \date  August 2011
 // History: Originally written for double precision arithmetic (1996).
 
+#include <iostream>
+#include <string>
+#include <cstdlib>
 #include <vnl/vnl_decnum.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_cstdlib.h> // for std::exit()
+#include <vcl_compiler.h>
 
 const vnl_decnum zero("0");
 const vnl_decnum one("1");
@@ -62,18 +63,19 @@ class node
   fptr3 func3;
   void  *param1;
   void  *param2;
+  node(): func1(VXL_NULLPTR),func2(VXL_NULLPTR),func3(VXL_NULLPTR),param1(VXL_NULLPTR),param2(VXL_NULLPTR) {}
 };
 
-void ErrorExit(vcl_string const& expr, char const* t, unsigned long s)
+void ErrorExit(std::string const& expr, char const* t, unsigned long s)
 {
-  vcl_cerr << "Error parsing expression -- " << t << ":\n" << expr << '\n';
-  while (s--) vcl_cerr << ' ';
-  vcl_cerr << "^\n";
-  vcl_exit(1);
+  std::cerr << "Error parsing expression -- " << t << ":\n" << expr << '\n';
+  while (s--) std::cerr << ' ';
+  std::cerr << "^\n";
+  std::exit(1);
 }
 
 //: find end of argument, i.e., comma or ')'
-int arglength(vcl_string const& expr, unsigned long s, int l)
+int arglength(std::string const& expr, unsigned long s, int l)
 {
   int i = 0;
   int level = 0;
@@ -88,7 +90,7 @@ int arglength(vcl_string const& expr, unsigned long s, int l)
 }
 
 //: find matching bracket or other end of block
-int blocklength(vcl_string const& expr, unsigned long s, int l)
+int blocklength(std::string const& expr, unsigned long s, int l)
 {
   int i = 0;
   if (expr[s] == '-' || expr[s] == '+') // unary minus or plus
@@ -120,22 +122,22 @@ int blocklength(vcl_string const& expr, unsigned long s, int l)
     return i;
   }
   if (expr[s] == ')') {
-    vcl_cerr << "Warning: length of closing bracket!\n";
+    std::cerr << "Warning: length of closing bracket!\n";
     return 0;
   }
-  vcl_cerr << "Warning: length 1 returned on " << expr[s] << '\n'; return 1;
+  std::cerr << "Warning: length 1 returned on " << expr[s] << '\n'; return 1;
 }
 
 //: put one pair of brackets around expr[s]--expr[s+l-1], except if already bracketed
 // THIS IS THE ONLY ROUTINE THAT INSERTS SOMETING (namely a pair of brackets) INTO expr !!
-int enbracket(vcl_string& expr, unsigned long s, int l)
+int enbracket(std::string& expr, unsigned long s, int l)
 {
   if (l <= 0) return l;
   if (expr[s] == '(' && blocklength(expr,s,l) == l) return l;
   expr.insert(s+l,1,')');
   expr.insert(s,1,'(');
 #ifdef DEBUG
-  vcl_cerr << "--> " << expr << '\n';
+  std::cerr << "--> " << expr << '\n';
 #endif
   return l+2;
 }
@@ -146,7 +148,7 @@ int isoperator(char c) { // true if c is not a-z or 0-9.
 
 //: add all level brackets into expr[s]--expr[s+l-1]
 // REMARK: expr should not contain spaces or uppercase letters
-int put_brackets(vcl_string& expr, unsigned long s, int l)
+int put_brackets(std::string& expr, unsigned long s, int l)
 {
   int  k;
   if (l <= 0) return l; // do nothing on empty string
@@ -214,7 +216,7 @@ int put_brackets(vcl_string& expr, unsigned long s, int l)
 
 //: add operator hierarchy brackets into expr[s]--expr[s+l-1]
 // REMARK: expr should already been bracketed by put_brackets()
-int hierarchy_brackets(vcl_string& expr, unsigned long s, int l)
+int hierarchy_brackets(std::string& expr, unsigned long s, int l)
 {
   int  i, previ, bl, strength=0;
 
@@ -258,7 +260,7 @@ int hierarchy_brackets(vcl_string& expr, unsigned long s, int l)
   return l;
 }
 
-node build_tree(vcl_string const& expr, unsigned long s, int l)
+node build_tree(std::string const& expr, unsigned long s, int l)
 {
   int  i, j;
   node n;
@@ -273,31 +275,31 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
   if (expr[s] == ')') ErrorExit(expr, "empty ()",s);
   j = blocklength(expr,s,l);
   if (j==l && expr[s]>='0' && expr[s]<='9') { // number
-    n.func1 = 0; n.func2 = 0; n.func3 = 0; n.param2 = 0;
+    n.func1 = VXL_NULLPTR; n.func2 = VXL_NULLPTR; n.func3 = VXL_NULLPTR; n.param2 = VXL_NULLPTR;
     n.param1 = (void*)(new vnl_decnum(expr.substr(s,l)));
     return n;
   }
   if (j==l && expr[s]>='a' && expr[s]<='z') { // function
     for (j=0; j<l; ++j) if (expr[s+j] == '(') break; ++j;
     if (j >= l) ErrorExit(expr, "missing parameter list for function",s);
-    else if (expr.substr(s,j)=="abs(")  n.func1 = &vnl_math::abs, n.func2=0, n.func3=0;
-    else if (expr.substr(s,j)=="floor(")  n.func1 = &floor, n.func2=0, n.func3=0;
-    else if (expr.substr(s,j)=="ceil(")  n.func1 = &ceil, n.func2=0, n.func3=0;
-    else if (expr.substr(s,j)=="round(")  n.func1 = &round, n.func2=0, n.func3=0;
-    else if (expr.substr(s,j)=="min(")  n.func1=0, n.func2 = &min, n.func3=0;
-    else if (expr.substr(s,j)=="max(")  n.func1=0, n.func2 = &max, n.func3=0;
-    else if (expr.substr(s,j)=="binom(")  n.func1=0, n.func2 = &binom, n.func3=0;
-    else if (expr.substr(s,j)=="pow(")  n.func1=0, n.func2=0, n.func3 = &pow;
+    else if (expr.substr(s,j)=="abs(")  n.func1 = &vnl_math::abs, n.func2=VXL_NULLPTR, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="floor(")  n.func1 = &floor, n.func2=VXL_NULLPTR, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="ceil(")  n.func1 = &ceil, n.func2=VXL_NULLPTR, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="round(")  n.func1 = &round, n.func2=VXL_NULLPTR, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="min(")  n.func1=VXL_NULLPTR, n.func2 = &min, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="max(")  n.func1=VXL_NULLPTR, n.func2 = &max, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="binom(")  n.func1=VXL_NULLPTR, n.func2 = &binom, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="pow(")  n.func1=VXL_NULLPTR, n.func2=VXL_NULLPTR, n.func3 = &pow;
     else ErrorExit(expr, "unknown function call",s);
     n.param1 = new node();
-    n.param2 = 0;
+    n.param2 = VXL_NULLPTR;
     for (i=j; i<l-1; ++i) if (expr[s+i] == ',') break;
-    if (n.func2) {
+    if ( n.func2 ) {
       n.param2 = new node();
       if (i>l-2) ErrorExit(expr, "function needs two arguments",s);
     }
     *(node*)(n.param1)=build_tree(expr,s+j,i-j); j = i+1;
-    if (n.param2 == 0) {
+    if (n.param2 == VXL_NULLPTR) {
       if (j < l) ErrorExit(expr, "function needs only one argument",s);
       return n;
     }
@@ -309,7 +311,7 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
   if (expr[s]=='-') { // unary minus
     n.func1 = &unaryminus;
     n.param1 = new node(build_tree(expr,s+1,l-1));
-    n.param2 = 0;
+    n.param2 = VXL_NULLPTR;
     return n;
   }
 
@@ -317,19 +319,19 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
   n.param1 = new node(build_tree(expr,s,j));
   if (expr[s+j] == '!') { n.func1 = &fac; return n; }
   n.param2 = new node(build_tree(expr,s+j+1,l-j-1));
-       if (expr[s+j] == '*') n.func1=0, n.func2 = &prod, n.func3=0;
-  else if (expr[s+j] == '/') n.func1=0, n.func2 = &quot, n.func3=0;
-  else if (expr[s+j] == '%') n.func1=0, n.func2 = &modulo, n.func3=0;
-  else if (expr[s+j] == '+') n.func1=0, n.func2 = &sum, n.func3=0;
-  else if (expr[s+j] == '-') n.func1=0, n.func2 = &diff, n.func3=0;
+       if (expr[s+j] == '*') n.func1=VXL_NULLPTR, n.func2 = &prod, n.func3=VXL_NULLPTR;
+  else if (expr[s+j] == '/') n.func1=VXL_NULLPTR, n.func2 = &quot, n.func3=VXL_NULLPTR;
+  else if (expr[s+j] == '%') n.func1=VXL_NULLPTR, n.func2 = &modulo, n.func3=VXL_NULLPTR;
+  else if (expr[s+j] == '+') n.func1=VXL_NULLPTR, n.func2 = &sum, n.func3=VXL_NULLPTR;
+  else if (expr[s+j] == '-') n.func1=VXL_NULLPTR, n.func2 = &diff, n.func3=VXL_NULLPTR;
   else ErrorExit(expr, "unknown operator",s+j);
   return n;
 }
 
 //: Return str, but after removing spaces, making lowercase, and adding ()
-vcl_string simplify(char const* str)
+std::string simplify(char const* str)
 {
-  vcl_string expr = "";
+  std::string expr = "";
   // remove all spaces and tabs:
   for (int i=0; str[i]; ++i) if (str[i]!=' '&&str[i]!='\t') expr.push_back(str[i]);
   int l = expr.length();
@@ -342,7 +344,7 @@ vcl_string simplify(char const* str)
   // EXAMPLE:
   //     -2 * abs (32*pow(32,2)) + 7*32 -(8-32)
   // --> (-(2))*abs(32*pow(32,(2)))+(7)*32-((8)-32)
-  l = hierarchy_brackets(expr,0L,l); // put brackets according to o.p.
+  hierarchy_brackets(expr,0L,l); // put brackets according to o.p.
   // EXAMPLE:
   //     (-(2))*abs(32*pow(32,(2)))+(7)*32-((8)-32)
   // --> (((-(2))*abs(32*pow(32,(2))))+((7)*32))-((8)-32)
@@ -355,8 +357,8 @@ vnl_decnum calc(node *n)
   else if (!n->func1 && !n->func2 && !n->func3) return *(vnl_decnum*)(n->param1);
   else if (n->func3 && n->param1 && n->param2) return n->func3(calc((node*)n->param1),(unsigned long)calc((node*)n->param2));
   else if (n->param1 && n->param2) return n->func2(calc((node*)n->param1),calc((node*)n->param2));
-  else if (n->param1) return n->func1(calc((node*)n->param1));
-  else if (n->param2) return n->func1(calc((node*)n->param2));
+  else if (n->param1 && n->func1) return n->func1(calc((node*)n->param1));
+  else if (n->param2 && n->func1) return n->func1(calc((node*)n->param2));
   else ErrorExit("", "This should not happen!",0L);
   return vnl_decnum("0"); // never reached...
 }
@@ -364,38 +366,38 @@ vnl_decnum calc(node *n)
 int main(int argc, char* argv[])
 {
   if (argc>2) {
-    vcl_cerr << "Syntax:  calculate expression\n";
+    std::cerr << "Syntax:  calculate expression\n";
     return 1;
   }
   if (argc == 2) {
-    vcl_string  expression = simplify(argv[1]); // bracketed and cleaned up version of argv[1]
+    std::string  expression = simplify(argv[1]); // bracketed and cleaned up version of argv[1]
     node root = build_tree(expression, 0L, expression.length());
     vnl_decnum result = calc(&root);
-    vcl_cout << result;
+    std::cout << result;
     unsigned long len = result.data().length();
     result.compactify();
-    if (result.data().length() < len) vcl_cout << " = " << result;
+    if (result.data().length() < len) std::cout << " = " << result;
     result += 1L; result -= 1L;
-    if (result.data().length() > len) vcl_cout << " = " << result;
-    vcl_cout << vcl_endl;
+    if (result.data().length() > len) std::cout << " = " << result;
+    std::cout << std::endl;
   }
   else {
     char s[4000];
     while (true) {
       s[0]='\0';
-      vcl_cin.getline(s,4000);
+      std::cin.getline(s,4000);
       if (!s[0]) return 0; // empty line, or EOF
-      vcl_string  expression = simplify(s);
+      std::string  expression = simplify(s);
       node root = build_tree(expression, 0L, expression.length());
       vnl_decnum result = calc(&root);
-      vcl_cout << s << "\t=\t" << result;
+      std::cout << s << "\t=\t" << result;
       result.compactify();
       unsigned long len = result.data().length();
       result.compactify();
-      if (result.data().length() < len) vcl_cout << " = " << result;
+      if (result.data().length() < len) std::cout << " = " << result;
       result += 1L; result -= 1L;
-      if (result.data().length() > len) vcl_cout << " = " << result;
-      vcl_cout << vcl_endl;
+      if (result.data().length() > len) std::cout << " = " << result;
+      std::cout << std::endl;
     }
   }
 

@@ -1,4 +1,4 @@
-#ifndef bbas_1d_array_string_sptr_h_ 
+#ifndef bbas_1d_array_string_sptr_h_
 #define bbas_1d_array_string_sptr_h_
 
 #include <vbl/vbl_smart_ptr.h>

@@ -1,4 +1,5 @@
-#include <vcl_string.h>
-#include <vbl/vbl_array_3d.txx>
-VBL_ARRAY_3D_INSTANTIATE(vcl_string);
-VBL_ARRAY_3D_IO_INSTANTIATE(vcl_string);
+#include <string>
+#include <vcl_compiler.h>
+#include <vbl/vbl_array_3d.hxx>
+VBL_ARRAY_3D_INSTANTIATE(std::string);
+VBL_ARRAY_3D_IO_INSTANTIATE(std::string);

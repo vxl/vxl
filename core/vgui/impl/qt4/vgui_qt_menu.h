@@ -15,9 +15,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <map>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_command.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 #include <QMenu>
 #include <QObject>
@@ -36,7 +37,7 @@ class vgui_qt_menu : public QMenu
   void upon_trigger(QAction * action) const;
 
  private:
-  vcl_map<QAction*, vgui_command_sptr> commands_;
+  std::map<QAction*, vgui_command_sptr> commands_;
 };
 
 //: Convert a vgui keypress into a QT key press

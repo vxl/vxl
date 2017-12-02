@@ -1,5 +1,6 @@
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -33,7 +34,7 @@ static void test_similarity_from_matches()
 
   vnl_vector_fixed<double,2> from_loc;
   vnl_vector_fixed<double,2> to_loc;
-  vcl_vector< image_point_match > matches;
+  std::vector< image_point_match > matches;
 
   from_loc[0] = 10;  from_loc[1] = 20;
   to_loc = A*from_loc + t;
@@ -72,11 +73,11 @@ static void test_similarity_from_matches()
 
   TEST("num_unique_samples" , sim.num_unique_samples(), 3);
 
-  vcl_cout << " num = " << sim.num_samples() << vcl_endl;
+  std::cout << " num = " << sim.num_samples() << std::endl;
   TEST("num_samples" , sim.num_samples(), 6);
 
   vnl_vector<double> est_params(4);
-  vcl_vector<int> indices(2);  indices[0] = 4;  indices[1] = 3;
+  std::vector<int> indices(2);  indices[0] = 4;  indices[1] = 3;
   TEST("fit_from_minimal_sample -- degenerate" , !sim.fit_from_minimal_set( indices, est_params ), true);
 
   indices[0] = 0;  indices[1] = 3;
@@ -87,7 +88,7 @@ static void test_similarity_from_matches()
        && close( est_params[2], params[2] )
        && close( est_params[3], params[3] ), true);
 
-  vcl_vector<double> residuals;
+  std::vector<double> residuals;
   sim.compute_residuals( params.as_ref(), residuals );
   TEST("compute_residuals",
        residuals.size() == 6
@@ -98,8 +99,8 @@ static void test_similarity_from_matches()
        && close( residuals[4], 10 )
        && close( residuals[5],  0.5 ), true);
 
-  vcl_vector<double> temp_res(6);
-  vcl_vector<double> weights;
+  std::vector<double> temp_res(6);
+  std::vector<double> weights;
   null_m_est obj;
   temp_res[0] = 1;  temp_res[1] = 0.1;
   temp_res[2] = 0.02; temp_res[3] = 1; temp_res[4] = 0.12;

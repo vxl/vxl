@@ -1,4 +1,4 @@
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 #include <bwm/reg/bwm_reg_image.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_3d.h>

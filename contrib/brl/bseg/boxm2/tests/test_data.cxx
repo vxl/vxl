@@ -29,10 +29,10 @@ void test_data_sio()
     char * buffer = reinterpret_cast<char *>(farray);
     boxm2_data<BOXM2_ALPHA>* test_data = new boxm2_data<BOXM2_ALPHA>(buffer, array_size*sizeof(float), id);
     boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("", id, test_data);
-    delete test_data;  
+    delete test_data;
 
     ////file name
-    vcl_string filename = boxm2_data_traits<BOXM2_ALPHA>::prefix() + "_" + id.to_string() + ".bin";
+    std::string filename = boxm2_data_traits<BOXM2_ALPHA>::prefix() + "_" + id.to_string() + ".bin";
 
     unsigned long bytecount = vul_file::size(filename.c_str());
     TEST("Successful Synchronous Write ",bytecount,array_size*sizeof(float));
@@ -46,13 +46,13 @@ void test_data_sio()
         if (bufferread[i]!=buffer_bkup[i])
         {
             flag=false;
-            vcl_cout<<"Orig val "<<(int) buffer_bkup[i]<<" Read val "<< (int) bufferread[i]<<vcl_endl;
+            std::cout<<"Orig val "<<(int) buffer_bkup[i]<<" Read val "<< (int) bufferread[i]<<std::endl;
         }
 
     TEST("Successful Synchronous Read", true, flag);
-      
+
     //clean up read_data block
-    delete read_data; 
+    delete read_data;
 
     //clean up farray_bkup and buffer_bkup
     if(farray_bkup) delete[] farray_bkup;

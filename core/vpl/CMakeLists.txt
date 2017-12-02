@@ -5,28 +5,32 @@ doxygen_add_library(core/vpl
   DESCRIPTION "POSIX Compatability Library"
   )
 
-SET( vpl_sources
+set( vpl_sources
   vpl.h         vpl.cxx
   vpl_fdopen.h  vpl_fdopen.cxx
   vpl_fileno.h  vpl_fileno.cxx
   vpl_mutex.h
 )
 
-ADD_LIBRARY(vpl ${vpl_sources})
-IF(NOT WIN32)
-  SET_TARGET_PROPERTIES(vpl PROPERTIES COMPILE_FLAGS "-fPIC")
-ENDIF(NOT WIN32)
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpl LIBRARY_SOURCES ${vpl_sources})
+if(NOT WIN32)
+  set(fPIC_COMPILER_FLAGS "-fPIC")
+endif()
+set(CURR_LIB_NAME vpl)
+set_vxl_library_properties(
+     COMPILE_FLAGS "${fPIC_COMPILER_FLAGS}"
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     USE_HIDDEN_VISIBILITY
+)
 
-TARGET_LINK_LIBRARIES( vpl vcl )
+target_link_libraries( ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vcl )
+if(NOT UNIX)
+  target_link_libraries( ${VXL_LIB_PREFIX}vpl ws2_32 ${VXL_LIB_PREFIX}vcl )
+endif()
 
-
-IF (NOT UNIX)
-  TARGET_LINK_LIBRARIES( vpl ws2_32 vcl )
-ENDIF (NOT UNIX)
-
-INSTALL_TARGETS(/lib vpl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpl ${vpl_sources})
-
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

@@ -4,13 +4,13 @@
 //:
 // \file
 // \brief A coordinate transformation specified by a transformation matrix
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/07/19 François BERTEL Creation.
+//   2000/07/19 Francois BERTEL Creation.
 //   2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
-//   2002/01/28 Peter Vanroose - vcl_vector member matrix_ changed to non-ptr
+//   2002/01/28 Peter Vanroose - std::vector member matrix_ changed to non-ptr
 //   2002/12/30 Peter Vanroose - removed unused and commented out member _vector
 //   2004/09/17 Peter Vanroose - made matrix_list() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim

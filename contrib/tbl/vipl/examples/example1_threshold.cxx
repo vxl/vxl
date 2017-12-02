@@ -16,19 +16,20 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_image by vil_image_view<T>
 // \endverbatim
 //
+#include <iostream>
+#include <cstdlib>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_threshold.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for atoi()
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 
 int
 main(int argc, char** argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example1_threshold file_in file_out [threshold]\n"; return 1; }
+  if (argc < 3) { std::cerr << "Syntax: example1_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
@@ -40,7 +41,7 @@ main(int argc, char** argv)
   vil_image_view<vxl_byte>* dst = &out;
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(vcl_atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(std::atoi(argv[3]));
 
   // The filter:
   vipl_threshold<vil_image_view<vxl_byte>,vil_image_view<vxl_byte>,vxl_byte,vxl_byte> op(threshold,0);
@@ -50,6 +51,6 @@ main(int argc, char** argv)
   op.filter();
 
   vil_save(out, argv[2], "pnm");
-  vcl_cout << "Written thresholded image of type PGM to " << argv[2] << vcl_endl;
+  std::cout << "Written thresholded image of type PGM to " << argv[2] << std::endl;
   return 0;
 }

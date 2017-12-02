@@ -1,3 +1,7 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 #include "mfpf_mr_point_finder_builder.h"
 //:
 // \file
@@ -10,10 +14,8 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -69,7 +71,7 @@ void mfpf_mr_point_finder_builder::delete_all()
 
 //: Define point builders.  Clone of each taken
 void mfpf_mr_point_finder_builder::set(
-             const vcl_vector<mfpf_point_finder_builder*>& builders)
+             const std::vector<mfpf_point_finder_builder*>& builders)
 {
   delete_all();
   builders_.resize(builders.size());
@@ -100,10 +102,10 @@ void mfpf_mr_point_finder_builder::set(
   for (unsigned i=0;i<n;++i)
   {
     builders_[i]=builder0.clone();
-    builder(i).set_step_size(step0*vcl_pow(scale_step,int(i)));
+    builder(i).set_step_size(step0*std::pow(scale_step,int(i)));
   }
 
-  int dx = vcl_max(1,int(0.99+1.0/scale_step));
+  int dx = std::max(1,int(0.99+1.0/scale_step));
   double dA = builder0.search_dA();
   double ds = builder0.search_ds();
 
@@ -140,17 +142,17 @@ void mfpf_mr_point_finder_builder::set_size_and_levels(
                 double base_pixel_width)
 {
   // Max width in pixel units
-  double max_w = vcl_max(wi/base_pixel_width,wj/base_pixel_width);
+  double max_w = std::max(wi/base_pixel_width,wj/base_pixel_width);
 
-  double log_s = vcl_log(scale_step);
+  double log_s = std::log(scale_step);
 
   // Estimate level above which size falls below min_pixel_width pixels
-  int max_L = int(vcl_log(max_w/min_n_samples)/log_s);
+  int max_L = int(std::log(max_w/min_n_samples)/log_s);
   // Estimate level below which size is above max_pixel_width pixels
-  int min_L = vnl_math::rnd(0.5+vcl_log(max_w/max_n_samples)/log_s);
+  int min_L = vnl_math::rnd(0.5+std::log(max_w/max_n_samples)/log_s);
   if (min_L>max_L) max_L=min_L;
 
-  double step0 = base_pixel_width*vcl_pow(scale_step,min_L);
+  double step0 = base_pixel_width*std::pow(scale_step,min_L);
   int n_levels = 1+max_L-min_L;
 
   set(builder0,n_levels,step0,scale_step);
@@ -169,8 +171,8 @@ unsigned mfpf_mr_point_finder_builder::image_level(
   double model_pixel_size = builder(i).step_size()*u.length();
   double rel_size0 = model_pixel_size/im_pyr.base_pixel_width();
 
-  double log_step = vcl_log(im_pyr.scale_step());
-  int level = vnl_math::rnd(vcl_log(rel_size0)/log_step);
+  double log_step = std::log(im_pyr.scale_step());
+  int level = vnl_math::rnd(std::log(rel_size0)/log_step);
   if (level<im_pyr.lo()) return im_pyr.lo();
   if (level>im_pyr.hi()) return im_pyr.hi();
   return level;
@@ -207,7 +209,7 @@ void mfpf_mr_point_finder_builder::get_sample_vector(
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u,
                         unsigned L,
-                        vcl_vector<double>& v)
+                        std::vector<double>& v)
 {
   assert( L<size() );
 
@@ -215,15 +217,15 @@ void mfpf_mr_point_finder_builder::get_sample_vector(
 
   if (image_pyr(im_L).image_size()[0]==0)
   {
-    vcl_cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n"
+    std::cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n"
             <<"This is required for level "<<L<<" of the mfpf model.\n"
             <<"Check range for which pyramid is defined.\n";
 
     im_L=nearest_valid_level(image_pyr,im_L);
     if (image_pyr(im_L).image_size()[0]==0)
     {
-       vcl_cerr << "No image pyramid levels set up.\n";
-       vcl_abort();
+       std::cerr << "No image pyramid levels set up.\n";
+       std::abort();
     }
   }
 
@@ -246,15 +248,15 @@ void mfpf_mr_point_finder_builder::add_example(
 
     if (image_pyr(im_L).image_size()[0]==0)
     {
-      vcl_cerr << "Image at level "<<im_L<<" in pyramid has not been set up.\n"
+      std::cerr << "Image at level "<<im_L<<" in pyramid has not been set up.\n"
                << "This is required for level "<<L<<" of the mfpf model.\n"
                << "Check range for which pyramid is defined.\n";
 
       im_L=nearest_valid_level(image_pyr,im_L);
       if (image_pyr(im_L).image_size()[0]==0)
       {
-         vcl_cerr << "No image pyramid levels set up.\n";
-         vcl_abort();
+         std::cerr << "No image pyramid levels set up.\n";
+         std::abort();
       }
     }
 
@@ -269,7 +271,7 @@ void mfpf_mr_point_finder_builder::add_example(
 //: Build object from the data supplied in add_example()
 void mfpf_mr_point_finder_builder::build(mfpf_mr_point_finder& mr_pf)
 {
-  vcl_vector<mfpf_point_finder*> finders(size());
+  std::vector<mfpf_point_finder*> finders(size());
   for (unsigned i=0;i<size();++i)
   {
     finders[i] = builder(i).new_finder();
@@ -296,13 +298,13 @@ short mfpf_mr_point_finder_builder::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_mr_point_finder_builder::is_a() const
+std::string mfpf_mr_point_finder_builder::is_a() const
 {
-  return vcl_string("mfpf_mr_point_finder_builder");
+  return std::string("mfpf_mr_point_finder_builder");
 }
 
 //: Print class to os
-void mfpf_mr_point_finder_builder::print_summary(vcl_ostream& os) const
+void mfpf_mr_point_finder_builder::print_summary(std::ostream& os) const
 {
   os<<'\n';
   unsigned n=builders_.size();
@@ -350,14 +352,14 @@ void mfpf_mr_point_finder_builder::b_read(vsl_b_istream& bfs)
       builders_.resize(n);
       for (unsigned i=0;i<n;++i)
       {
-        builders_[i]=0;
+        builders_[i]=VXL_NULLPTR;
         vsl_b_read(bfs,builders_[i]);
       }
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -366,7 +368,7 @@ void mfpf_mr_point_finder_builder::b_read(vsl_b_istream& bfs)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_mr_point_finder_builder& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_mr_point_finder_builder& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);

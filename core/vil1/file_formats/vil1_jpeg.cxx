@@ -7,6 +7,8 @@
 // \author fsm
 // \date   17 Feb 2000
 
+#include <iostream>
+#include <cstring>
 #include "vil1_jpeg.h"
 #include "vil1_jpeg_source_mgr.h"
 #include "vil1_jpeg_decompressor.h"
@@ -15,8 +17,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_climits.h> // CHAR_BIT
-#include <vcl_iostream.h>
-#include <vcl_cstring.h> // memcpy()
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image.h>
@@ -30,7 +31,7 @@ bool vil1_jpeg_file_probe(vil1_stream *vs)
   int n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic)) {
-    vcl_cerr << __FILE__ << " : vil1_stream::read() failed\n";
+    std::cerr << __FILE__ << " : vil1_stream::read() failed\n";
     return false;
   }
 
@@ -52,7 +53,7 @@ char const* vil1_jpeg_file_format::tag() const
 //:
 vil1_image_impl *vil1_jpeg_file_format::make_input_image(vil1_stream *vs)
 {
-  return vil1_jpeg_file_probe(vs) ? new vil1_jpeg_generic_image(vs) : 0;
+  return vil1_jpeg_file_probe(vs) ? new vil1_jpeg_generic_image(vs) : VXL_NULLPTR;
 }
 
 vil1_image_impl *vil1_jpeg_file_format::make_output_image(vil1_stream *vs,
@@ -64,7 +65,7 @@ vil1_image_impl *vil1_jpeg_file_format::make_output_image(vil1_stream *vs,
                                                           vil1_component_format format)
 {
   if (format != VIL1_COMPONENT_FORMAT_UNSIGNED_INT)
-    return 0;
+    return VXL_NULLPTR;
   return new vil1_jpeg_generic_image(vs, planes, width, height, components, bits_per_component, format);
 }
 
@@ -73,7 +74,7 @@ vil1_image_impl *vil1_jpeg_file_format::make_output_image(vil1_stream *vs,
 // class vil1_jpeg_generic_image
 
 vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s)
-  : jc(0)
+  : jc(VXL_NULLPTR)
   , jd(new vil1_jpeg_decompressor(s))
   , stream(s)
 {
@@ -82,10 +83,10 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s)
 
 bool vil1_jpeg_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -99,13 +100,13 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s,
                                                  int bits_per_component,
                                                  vil1_component_format format)
   : jc(new vil1_jpeg_compressor(s))
-  , jd(0)
+  , jd(VXL_NULLPTR)
   , stream(s)
 {
   stream->ref();
   // warn
   if (planes != 1)
-    vcl_cerr << __FILE__ " : prototype has != 1 planes. ignored\n";
+    std::cerr << __FILE__ " : prototype has != 1 planes. ignored\n";
 
   // use same number of components as prototype, obviously.
   jc->jobj.input_components = components;
@@ -114,7 +115,7 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s,
   jc->jobj.image_width = width;
   jc->jobj.image_height = height;
 #ifdef DEBUG
-  vcl_cerr << "w h = " << width << ' ' << height << '\n';
+  std::cerr << "w h = " << width << ' ' << height << '\n';
 #endif
 
   assert(bits_per_component == CHAR_BIT); // FIXME.
@@ -127,12 +128,12 @@ vil1_jpeg_generic_image::~vil1_jpeg_generic_image()
   // free the vil1_jpeg_stream_source_mgr allocated in vil1_jpeg_stream_xxx_set()
   if (jd)
     delete jd;
-  jd = 0;
+  jd = VXL_NULLPTR;
   if (jc)
     delete jc;
-  jc = 0;
+  jc = VXL_NULLPTR;
   stream->unref();
-  stream = 0;
+  stream = VXL_NULLPTR;
 }
 
 //--------------------------------------------------------------------------------
@@ -141,11 +142,11 @@ vil1_jpeg_generic_image::~vil1_jpeg_generic_image()
 bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h) const
 {
   if (!jd) {
-    vcl_cerr << "attempted put_section() failed -- no jpeg decompressor\n";
+    std::cerr << "attempted put_section() failed -- no jpeg decompressor\n";
     return false;
   }
 #ifdef DEBUG
-  vcl_cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << '\n';
+  std::cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << '\n';
 #endif
 
   // number of bytes per pixel
@@ -156,7 +157,7 @@ bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int 
     JSAMPLE const *scanline = jd->read_scanline(y0+i);
     if (!scanline)
       return false; // failed
-    vcl_memcpy(static_cast<char*>(buf) + i*w*bpp, &scanline[x0*bpp], w*bpp);
+    std::memcpy(static_cast<char*>(buf) + i*w*bpp, &scanline[x0*bpp], w*bpp);
   }
 
   return true;
@@ -168,7 +169,7 @@ bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int 
 bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w, int h)
 {
   if (!jc) {
-    vcl_cerr << "attempted get_section() failed -- no jpeg compressor\n";
+    std::cerr << "attempted get_section() failed -- no jpeg compressor\n";
     return false;
   }
 
@@ -176,11 +177,11 @@ bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
   if (x0 != 0 || (unsigned int)w != jc->jobj.image_width) {
-    vcl_cerr << __FILE__ << " : Can only compress complete scanlines\n";
+    std::cerr << __FILE__ << " : Can only compress complete scanlines\n";
     return false;
   }
   if ((unsigned int)y0 != jc->jobj.next_scanline) {
-    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
+    std::cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
     return false;
   }
 

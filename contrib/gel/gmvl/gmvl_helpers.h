@@ -8,18 +8,20 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <gmvl/gmvl_node_sptr.h>
 
 //: to print out a lot of nodes
-vcl_ostream &operator<<( vcl_ostream &os, const vcl_vector<gmvl_node_sptr> &r);
+std::ostream &operator<<( std::ostream &os, const std::vector<gmvl_node_sptr> &r);
 
 // standard input and output
 
 // standard double, double list
-vcl_vector<gmvl_node_sptr> gmvl_load_raw_corners( const vcl_string filename);
-gmvl_node_sptr gmvl_load_image( const vcl_string filename);
+std::vector<gmvl_node_sptr> gmvl_load_raw_corners( const std::string filename);
+gmvl_node_sptr gmvl_load_image( const std::string filename);
 
 #endif // gmvl_helpers_h_

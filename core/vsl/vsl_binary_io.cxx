@@ -1,66 +1,130 @@
 // This is core/vsl/vsl_binary_io.cxx
+#include <cstddef>
+#include <map>
+#include <cstdlib>
 #include "vsl_binary_io.h"
 //:
 // \file
 // \brief Functions to perform consistent binary IO within vsl
 // \author Tim Cootes and Ian Scott
 
-#include <vcl_cstddef.h>
 #include <vcl_cassert.h>
-#include <vcl_map.txx>
-#include <vcl_cstdlib.h> // abort()
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
+template <typename TYPE>
+void  local_vsl_b_write(vsl_b_ostream& os, const TYPE n)
+{
+  const size_t MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
+  unsigned char buf[ MAX_INT_BUFFER_LENGTH ] = {0};
+  const std::size_t nbytes = (std::size_t)vsl_convert_to_arbitrary_length(&n, buf);
+  os.os().write((char*)buf, nbytes );
+}
 
+template <typename TYPE>
+void local_vsl_b_read(vsl_b_istream &is,TYPE & n)
+{
+  const size_t MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
+  unsigned char buf[MAX_INT_BUFFER_LENGTH] = {0};
+  unsigned char *ptr=buf;
+  do
+  {
+    vsl_b_read(is, *ptr);
+    const std::ptrdiff_t ptr_offset_from_begin = ptr-buf;
+    if (ptr_offset_from_begin >= (std::ptrdiff_t)MAX_INT_BUFFER_LENGTH)
+    {
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, int& )\n"
+               << "           Integer too big. Likely cause either file corruption, or\n"
+               << "           file was created on platform with larger integer sizes.\n"
+               << "ptr_offset_from_begin: " << ptr_offset_from_begin << " >= " << MAX_INT_BUFFER_LENGTH << std::endl;
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+      n = 0; //If failure occurs, then set n=0 for number of reads.
+      return;
+    }
+  }
+  while (!(*(ptr++) & 128));
+  vsl_convert_from_arbitrary_length(buf, &n);
+}
 
+#define MACRO_MAKE_INTEGER_READ_WRITE( TYPEIN ) \
+void vsl_b_write(vsl_b_ostream& os,TYPEIN n )   \
+{                                               \
+  local_vsl_b_write<TYPEIN>(os,n);              \
+}                                               \
+                                                \
+void vsl_b_read(vsl_b_istream &is,TYPEIN& n )   \
+{                                               \
+  local_vsl_b_read<TYPEIN>(is,n);               \
+}
 
+MACRO_MAKE_INTEGER_READ_WRITE(int);
+MACRO_MAKE_INTEGER_READ_WRITE(unsigned int);
+MACRO_MAKE_INTEGER_READ_WRITE(short);
+MACRO_MAKE_INTEGER_READ_WRITE(unsigned short);
+MACRO_MAKE_INTEGER_READ_WRITE(long);
+MACRO_MAKE_INTEGER_READ_WRITE(unsigned long);
+#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
+MACRO_MAKE_INTEGER_READ_WRITE(vxl_int_64);
+MACRO_MAKE_INTEGER_READ_WRITE(vxl_uint_64);
+#endif
+#if 0
+MACRO_MAKE_INTEGER_READ_WRITE(std::ptrdiff_t);
+// When the macro is ready, this test will be
+// #if ! VCL_SIZE_T_IS_A_STANDARD_TYPE
+MACRO_MAKE_INTEGER_READ_WRITE(std::size_t);
+// #endif
+#endif
 
+#undef MACRO_MAKE_INTEGER_READ_WRITE
 
 void vsl_b_write(vsl_b_ostream& os, char n )
 {
-  os.os().write( ( char* )&n, sizeof( n ) );
+  os.os().write( reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_read(vsl_b_istream &is, char& n )
 {
-  is.is().read( ( char* )&n, sizeof( n ) );
+  const int value = is.is().get();
+  n = static_cast<signed char>(value);
 }
 
 void vsl_b_write(vsl_b_ostream& os, signed char n )
 {
-  os.os().write( ( char* )&n, sizeof( n ) );
+  os.os().write( reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_read(vsl_b_istream &is, signed char& n )
 {
-  is.is().read( ( char* )&n, sizeof( n ) );
+  const int value = is.is().get();
+  n = static_cast<signed char>(value);
 }
 
 
 void vsl_b_write(vsl_b_ostream& os,unsigned char n )
 {
-  os.os().write( ( char* )&n, 1 );
+  os.os().write( reinterpret_cast<char *>(&n), 1 );
 }
 
 void vsl_b_read(vsl_b_istream &is,unsigned char& n )
 {
-  is.is().read( ( char* )&n, 1 );
+  const int value = is.is().get();
+  n = static_cast<unsigned char>(value);
 }
 
 
-void vsl_b_write(vsl_b_ostream& os, const vcl_string& str )
+void vsl_b_write(vsl_b_ostream& os, const std::string& str )
 {
-    vcl_string::const_iterator          it;
+    std::string::const_iterator          it;
 
     vsl_b_write(os,(short)str.length());
     for ( it = str.begin(); it != str.end(); ++it )
         vsl_b_write(os,*it);
 }
 
-void vsl_b_read(vsl_b_istream &is, vcl_string& str )
+void vsl_b_read(vsl_b_istream &is, std::string& str )
 {
-    vcl_string::iterator                it;
-    vcl_string::size_type               length;
+    std::string::iterator                it;
+    std::string::size_type               length;
 
     vsl_b_read(is,length);
     str.resize( length );
@@ -68,7 +132,7 @@ void vsl_b_read(vsl_b_istream &is, vcl_string& str )
         vsl_b_read(is,*it);
 }
 
-// deprecated in favour of vcl_string version.
+// deprecated in favour of std::string version.
 void vsl_b_write(vsl_b_ostream& os,const char *s )
 {
   int i = -1;
@@ -78,7 +142,7 @@ void vsl_b_write(vsl_b_ostream& os,const char *s )
   } while ( s[i] != 0 );
 }
 
-// deprecated in favour of vcl_string version.
+// deprecated in favour of std::string version.
 // note You must preallocate enough space at \p s for expected length of string.
 // This function is easy to crash mith a malformed data file.
 void vsl_b_read(vsl_b_istream &is,char *s )
@@ -106,337 +170,33 @@ void vsl_b_read(vsl_b_istream &is,bool& b)
   b = (c != 0);
 }
 
-
-void vsl_b_write(vsl_b_ostream& os,int n )
-{
-  unsigned char buf[ VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) ];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,int& n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, int& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-
-void vsl_b_write(vsl_b_ostream& os,unsigned int n )
-{
-  unsigned char
-    buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,unsigned int& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned int& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-
-void vsl_b_write(vsl_b_ostream& os,short n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,short& n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, short& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-void vsl_b_write(vsl_b_ostream& os, unsigned short n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is, unsigned short& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned short& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-
-void vsl_b_write(vsl_b_ostream& os,long n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,long& n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, long& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-void vsl_b_write(vsl_b_ostream& os,unsigned long n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,unsigned long& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, unsigned long& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
-
-void vsl_b_write(vsl_b_ostream& os, vxl_int_64 n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,vxl_int_64& n )
-{
-  unsigned char buf[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_int_64)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vxl_int_64& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-void vsl_b_write(vsl_b_ostream& os, vxl_uint_64 n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64))];
-  unsigned long nbytes = (unsigned long)vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is,vxl_uint_64& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vxl_uint_64)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vxl_uint_64& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-
-#endif // VXL_HAS_INT_64
-
-#if 0
-// When the macro is ready, this test will be
-// #if ! VCL_PTRDIFF_T_IS_A_STANDARD_TYPE
-
-void vsl_b_write(vsl_b_ostream& os, vcl_ptrdiff_t n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is, vcl_ptrdiff_t& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vcl_ptrdiff_t& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes\n"
-               << "           and represents a very large data structure.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-#endif // 0
-
-#if 0
-// When the macro is ready, this test will be
-// #if ! VCL_SIZE_T_IS_A_STANDARD_TYPE
-
-void vsl_b_write(vsl_b_ostream& os, vcl_size_t n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t))];
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(&n, buf);
-  os.os().write((char*)buf, nbytes );
-}
-
-void vsl_b_read(vsl_b_istream &is, vcl_size_t& n )
-{
-  unsigned char buf[
-    VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t))];
-  unsigned char *ptr=buf;
-  do
-  {
-    vsl_b_read(is, *ptr);
-    if (ptr-buf >= (vcl_ptrdiff_t)VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t)))
-    {
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream &, vcl_size_t& )\n"
-               << "           Integer too big. Likely cause either file corruption, or\n"
-               << "           file was created on platform with larger integer sizes\n"
-               << "           and represents a very large data structure.\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-      return;
-    }
-  }
-  while (!(*(ptr++) & 128));
-  vsl_convert_from_arbitrary_length(buf, &n);
-}
-#endif // 0
-
-
 void vsl_b_write(vsl_b_ostream& os,float n )
 {
-  vsl_swap_bytes(( char* )&n, sizeof( n ) );
-  os.os().write( ( char* )&n, sizeof( n ) );
+  vsl_swap_bytes(reinterpret_cast<char *>(&n), sizeof( n ) );
+  os.os().write( reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_read(vsl_b_istream &is,float& n )
 {
-  is.is().read( ( char* )&n, sizeof( n ) );
-  vsl_swap_bytes(( char* )&n, sizeof( n ) );
+  is.is().read( reinterpret_cast<char *>(&n), sizeof( n ) );
+  vsl_swap_bytes(reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_write(vsl_b_ostream& os,double n )
 {
-  vsl_swap_bytes(( char* )&n, sizeof( n ) );
-  os.os().write( ( char* )&n, sizeof( n ) );
+  vsl_swap_bytes(reinterpret_cast<char *>(&n), sizeof( n ) );
+  os.os().write( reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 void vsl_b_read(vsl_b_istream &is,double& n )
 {
-  is.is().read( ( char* )&n, sizeof( n ) );
-  vsl_swap_bytes(( char* )&n, sizeof( n ) );
+  is.is().read( reinterpret_cast<char *>(&n), sizeof( n ) );
+  vsl_swap_bytes(reinterpret_cast<char *>(&n), sizeof( n ) );
 }
 
 
 const unsigned short vsl_b_ostream::version_no_ = 1;
-const vcl_streamoff vsl_b_ostream::header_length = 6;
+const std::streamoff vsl_b_ostream::header_length = 6;
 static const unsigned short vsl_magic_number_part_1=0x2c4e;
 static const unsigned short vsl_magic_number_part_2=0x472b;
 
@@ -445,7 +205,7 @@ static const unsigned short vsl_magic_number_part_2=0x472b;
 // The stream (os) must be open (i.e. ready to be written to) so that the
 // IO version number can be written by this constructor.
 // User is responsible for deleting os after deleting the adaptor
-vsl_b_ostream::vsl_b_ostream(vcl_ostream *o_s): os_(o_s)
+vsl_b_ostream::vsl_b_ostream(std::ostream *o_s): os_(o_s)
 {
   assert(os_ != 0);
   vsl_b_write_uint_16(*this, version_no_);
@@ -454,7 +214,7 @@ vsl_b_ostream::vsl_b_ostream(vcl_ostream *o_s): os_(o_s)
 }
 
 //: A reference to the adaptor's stream
-vcl_ostream& vsl_b_ostream::os() const
+std::ostream& vsl_b_ostream::os() const
 {
   assert(os_ != 0);
   return *os_;
@@ -490,7 +250,7 @@ unsigned long vsl_b_ostream::add_serialisation_record
   assert(pointer != 0);
   assert(serialisation_records_.find(pointer) == serialisation_records_.end());
   unsigned long id = (unsigned long)serialisation_records_.size() + 1;
-  serialisation_records_[pointer] = vcl_make_pair(id, other_data);
+  serialisation_records_[pointer] = std::make_pair(id, other_data);
   return id;
 }
 
@@ -538,9 +298,9 @@ int vsl_b_ostream::set_serialisation_other_data
     serialisation_records_.find(pointer);
   if (entry == serialisation_records_.end())
   {
-    vcl_cerr << "vsl_b_ostream::set_serialisation_other_data():\n"
+    std::cerr << "vsl_b_ostream::set_serialisation_other_data():\n"
              << "No such value " << pointer << "in records.\n";
-    vcl_abort();
+    std::abort();
   }
   return (*entry).second.second;
 }
@@ -557,7 +317,7 @@ vsl_b_ofstream::~vsl_b_ofstream()
 void vsl_b_ofstream::close()
 {
   assert(os_ != 0);
-  ((vcl_ofstream *)os_)->close();
+  ((std::ofstream *)os_)->close();
   clear_serialisation_records();
 }
 
@@ -565,7 +325,7 @@ void vsl_b_ofstream::close()
 // The stream (is) must be open (i.e. ready to be read from) so that the
 // IO version number can be read by this constructor.
 // User is responsible for deleting is after deleting the adaptor
-vsl_b_istream::vsl_b_istream(vcl_istream *i_s): is_(i_s)
+vsl_b_istream::vsl_b_istream(std::istream *i_s): is_(i_s)
 {
   assert(is_ != 0);
   if (!(*is_)) return;
@@ -578,24 +338,24 @@ vsl_b_istream::vsl_b_istream(vcl_istream *i_s): is_(i_s)
   // Binary VXL file, or it is a corrupted Binary VXL file
   if (m2 != vsl_magic_number_part_2 || m1 != vsl_magic_number_part_1)
   {
-    vcl_cerr << "\nI/O ERROR: vsl_b_istream::vsl_b_istream(vcl_istream *is)\n"
+    std::cerr << "\nI/O ERROR: vsl_b_istream::vsl_b_istream(std::istream *is)\n"
              <<   "           The input stream does not appear to be a binary VXL stream.\n"
              <<   "           Can't find correct magic number.\n";
-    is_->clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is_->clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 
   if (v != 1)
   {
-    vcl_cerr << "\nI/O ERROR: vsl_b_istream::vsl_b_istream(vcl_istream *is)\n"
+    std::cerr << "\nI/O ERROR: vsl_b_istream::vsl_b_istream(std::istream *is)\n"
              << "             The stream's leading version number is "
              << v << ". Expected value 1.\n";
-    is_->clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is_->clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
   version_no_ = (unsigned short)v;
 }
 
 //: A reference to the adaptor's stream
-vcl_istream & vsl_b_istream::is() const
+std::istream & vsl_b_istream::is() const
 {
   assert(is_ != 0);
   return *is_;
@@ -636,7 +396,7 @@ void vsl_b_istream::add_serialisation_record(unsigned long serial_number,
 {
   assert(pointer != 0);
   assert(serialisation_records_.find(serial_number) == serialisation_records_.end());
-  serialisation_records_[serial_number] = vcl_make_pair(pointer, other_data);
+  serialisation_records_[serial_number] = std::make_pair(pointer, other_data);
 }
 
 //: Returns the pointer to the object identified by the unique serial number.
@@ -647,7 +407,7 @@ void* vsl_b_istream::get_serialisation_pointer(unsigned long serial_number) cons
         serialisation_records_.find(serial_number);
   if (entry == serialisation_records_.end())
   {
-    return 0;
+    return VXL_NULLPTR;
   }
   else
   {
@@ -681,9 +441,9 @@ int vsl_b_istream::set_serialisation_other_data
     serialisation_records_.find(serial_number);
   if (entry == serialisation_records_.end())
   {
-    vcl_cerr << "vsl_b_istream::set_serialisation_other_data():\n"
+    std::cerr << "vsl_b_istream::set_serialisation_other_data():\n"
              << "  No such value " << serial_number << "in records.\n";
-    vcl_abort();
+    std::abort();
   }
   return (*entry).second.second;
 }
@@ -699,7 +459,7 @@ vsl_b_ifstream::~vsl_b_ifstream()
 void vsl_b_ifstream::close()
 {
   assert(is_ != 0);
-  ((vcl_ifstream *)is_)->close();
+  ((std::ifstream *)is_)->close();
   clear_serialisation_records();
 }
 
@@ -708,7 +468,7 @@ void vsl_b_ifstream::close()
 //: Test to see if a stream really is a binary vsl file.
 // \return false if we can't find magic numbers and correct version number.
 // The file pointer is reset to the beginning on leaving this function.
-bool vsl_b_istream_test(vcl_istream &is)
+bool vsl_b_istream_test(std::istream &is)
 {
   if (!is) return false;
   is.seekg(0);
@@ -723,8 +483,8 @@ bool vsl_b_istream_test(vcl_istream &is)
   is.read( ( char* )&m1, 2 );
   vsl_swap_bytes(( char* )&m1, sizeof(long) );
   is.read( ( char* )&m2, 2 );
-  vsl_swap_bytes(( char* )&m2, sizeof(long) ); 
-  
+  vsl_swap_bytes(( char* )&m2, sizeof(long) );
+
   is.seekg(0);
 
   if (!is || m2 != vsl_magic_number_part_2 || m1 != vsl_magic_number_part_1 || v>1)

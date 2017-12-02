@@ -21,7 +21,8 @@
 //  Modifications
 //   none
 // \endverbatim
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 
@@ -31,9 +32,9 @@ class vgl_fit_lines_2d
   // Data Members--------------------------------------------------------------
  protected:
   bool verbose_;
-  vcl_vector<vgl_point_2d<T> > curve_;
-  vcl_vector<vgl_line_segment_2d<T> > segs_;
-  vcl_vector<int> curve_indices_;
+  std::vector<vgl_point_2d<T> > curve_;
+  std::vector<vgl_line_segment_2d<T> > segs_;
+  std::vector<int> curve_indices_;
   unsigned int min_length_;
   T tol_;
  public:
@@ -55,7 +56,7 @@ class vgl_fit_lines_2d
   void add_point(T x, T y);
 
   //: add an entire curve
-  void add_curve(vcl_vector<vgl_point_2d<T> > const & curve){curve_=curve;}
+  void add_curve(std::vector<vgl_point_2d<T> > const & curve){curve_=curve;}
 
   //: clear internal data
   void clear();
@@ -64,16 +65,16 @@ class vgl_fit_lines_2d
   bool fit();
 
   // Data Access---------------------------------------------------------------
-  vcl_vector<vgl_point_2d<T> >& get_points(){return curve_;}
-  vcl_vector<vgl_line_segment_2d<T> >& get_line_segs(){return segs_;}
+  std::vector<vgl_point_2d<T> >& get_points(){return curve_;}
+  std::vector<vgl_line_segment_2d<T> >& get_line_segs(){return segs_;}
   //: This vector provides an index mapping each curve point to the line it belongs to
   //  An index of -1 indicates the curve point was not used in any line estimate
-  vcl_vector<int>& get_indices() {return curve_indices_;}
+  std::vector<int>& get_indices() {return curve_indices_;}
  protected:
   //:output a line that fits from start to end
   void output(unsigned int start_index, unsigned int end_index);
 };
 
-#define VGL_FIT_LINES_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_lines_2d.txx instead"
+#define VGL_FIT_LINES_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_lines_2d.hxx instead"
 
 #endif // vgl_fit_lines_2d_h_

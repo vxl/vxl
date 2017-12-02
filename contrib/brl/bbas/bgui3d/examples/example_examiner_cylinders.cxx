@@ -1,6 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -44,7 +46,7 @@ void addCylinder(SoGroup *root, vgl_vector_3d<double> p)
   SoRotation *rot = new SoRotation;
   p /= p.length();
   SbVec3f axis(float(p.z()), 0.0f, -float(p.x()));
-  rot->rotation.setValue(axis, float(vcl_acos(p.y())));
+  rot->rotation.setValue(axis, float(std::acos(p.y())));
 
   SoMaterial *myMaterial = new SoMaterial;
 //  myMaterial->diffuseColor.setValue(p.x(), p.y(), p.z());

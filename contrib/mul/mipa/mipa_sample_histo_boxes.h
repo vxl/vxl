@@ -15,13 +15,13 @@
 //  This copies the individual histograms from a rectangular
 //  region of the image with corner (i0,j0).
 //
-//  It samples a grid of 2ni x 2nj histos, 
+//  It samples a grid of 2ni x 2nj histos,
 //  ie h_im([i0,i0+2ni),[j0,j0+2nj)).
 //
 //  The first 4*nA*ni*nj elements of v are copies of the
 //  histograms.  The next nA*ni*nj elements are a set of
 //  pooled histograms, adding the 4 histos in each 2 x 2 block.
-//  The final nA elements give a total histogram, adding 
+//  The final nA elements give a total histogram, adding
 //  all the histograms in the region together.
 template<class srcT, class vT>
 void mipa_sample_histo_boxes_3L(const vil_image_view<srcT>& h_im,

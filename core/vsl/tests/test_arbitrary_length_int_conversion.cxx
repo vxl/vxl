@@ -1,7 +1,8 @@
 // This is core/vsl/tests/test_arbitrary_length_int_conversion.cxx
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_ctime.h>
+#include <iostream>
+#include <sstream>
+#include <ctime>
+#include <vcl_compiler.h>
 #include <vcl_config_compiler.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <testlib/testlib_test.h>
@@ -9,7 +10,7 @@
 
 void test_arbitrary_length_int_conversion_int()
 {
-  vcl_cout << "*********************************************************\n"
+  std::cout << "*********************************************************\n"
            << "Testing arbitrary length int conversion for unsigned ints\n"
            << "*********************************************************\n";
 
@@ -25,27 +26,27 @@ void test_arbitrary_length_int_conversion_int()
 
   unsigned char * buf = new unsigned char[maxbuf];
 
-  vcl_clock_t t1, t2;
+  std::clock_t t1, t2;
 
-  vcl_cout << " Starting encode\n";
+  std::cout << " Starting encode\n";
 
-  t1 = vcl_clock();
+  t1 = std::clock();
   unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 25000000);
-  t2 = vcl_clock();
+  t2 = std::clock();
 
-  vcl_cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
+  std::cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
            << " seconds to encode 25M ints.\n"
 
            << " Max required buffer size is " << maxbuf << " bytes. Used "
-           << len << vcl_endl;
+           << len << std::endl;
 
   TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
-  vcl_cout << " Starting decode\n";
-  t1 = vcl_clock();
+  std::cout << " Starting decode\n";
+  t1 = std::clock();
   unsigned long len2 = vsl_convert_from_arbitrary_length(buf, b, 25000000);
-  t2 = vcl_clock();
-  vcl_cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
+  t2 = std::clock();
+  std::cout << " Required " << (double)(t2-t1) / CLOCKS_PER_SEC
            << " seconds to decode and test 25M ints.\n";
 
   TEST("Checking len == len2", len, len2);
@@ -55,16 +56,16 @@ void test_arbitrary_length_int_conversion_int()
 
   TEST("Checking that the results are correct", i, 25000000);
   if (i != 25000000)
-    vcl_cout << "Failed at number " << i <<vcl_endl;
-  delete a;
-  delete b;
-  delete buf;
+    std::cout << "Failed at number " << i <<std::endl;
+  delete[] a;
+  delete[] b;
+  delete[] buf;
 }
 
 
 void test_arbitrary_length_int_conversion_short()
 {
-  vcl_cout << "*********************************************************\n"
+  std::cout << "*********************************************************\n"
            << "Testing arbitrary length int conversion for signed shorts\n"
            << "*********************************************************\n";
 
@@ -84,8 +85,8 @@ void test_arbitrary_length_int_conversion_short()
 
   unsigned char * buf = new unsigned char[maxbuf];
   unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 65538);
-  vcl_cout << " Max required buffer size is " << maxbuf << ". Used " << len
-           << vcl_endl;
+  std::cout << " Max required buffer size is " << maxbuf << ". Used " << len
+           << std::endl;
 
   TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
@@ -102,7 +103,7 @@ void test_arbitrary_length_int_conversion_short()
     if (c[i] != i-32768) break;
   TEST("Checking that the results are correct", i, 65536);
   if (i != 65536)
-    vcl_cout << "Failed at number " << i <<vcl_endl;
+    std::cout << "Failed at number " << i <<std::endl;
 
   TEST("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
 
@@ -112,7 +113,7 @@ void test_arbitrary_length_int_conversion_short()
 
 void test_arbitrary_length_int_conversion_ushort()
 {
-  vcl_cout << "***********************************************************\n"
+  std::cout << "***********************************************************\n"
            << "Testing arbitrary length int conversion for unsigned shorts\n"
            << "***********************************************************\n";
 
@@ -132,8 +133,8 @@ void test_arbitrary_length_int_conversion_ushort()
 
   unsigned char * buf = new unsigned char[maxbuf];
   unsigned long len = vsl_convert_to_arbitrary_length(a, buf, 65538);
-  vcl_cout << " Max required buffer size is " << maxbuf << ". Used " << len
-           << vcl_endl;
+  std::cout << " Max required buffer size is " << maxbuf << ". Used " << len
+           << std::endl;
 
   TEST("Checking that the buffer didn't overflow", len < maxbuf, true);
 
@@ -149,7 +150,7 @@ void test_arbitrary_length_int_conversion_ushort()
     if (c[i] != i) break;
   TEST("Checking that the results are correct", i, 65536);
   if (i != 65536)
-    vcl_cout << "Failed at number " << i <<vcl_endl;
+    std::cout << "Failed at number " << i <<std::endl;
 
   TEST("Checking the end conditions", c[65536] == 0 && c[65537] == 1, true);
   delete[] buf;
@@ -158,15 +159,15 @@ void test_arbitrary_length_int_conversion_ushort()
 
 void test_explicit_int_io()
 {
-  vcl_cout << "**********************************\n"
+  std::cout << "**********************************\n"
            << "Testing explicit length integer io\n"
            << "**********************************\n";
 
   unsigned long i;
-  const vcl_size_t mult = 1ull << 48;
+  const std::size_t mult = 1ull << 48;
 
 
-  vcl_stringstream ss(vcl_ios_in | vcl_ios_out | vcl_ios_binary);
+  std::stringstream ss(std::ios::in | std::ios::out | std::ios::binary);
   const char *b= ss.str().c_str();
   TEST("stringstream buffer is available (and empty)", b[0], '\0');
   {
@@ -181,7 +182,7 @@ void test_explicit_int_io()
   // 6 bytes vsl_overhead
   TEST_NEAR("stringstream buffer is expected length", (double)ss.str().size(), 65536.0*10+6,0);
 
-  vcl_stringstream ss2(ss.str());
+  std::stringstream ss2(ss.str());
   {
     vsl_b_istream bss(&ss2);
     TEST("Opened stringstream for reading", (!bss), false);
@@ -190,7 +191,7 @@ void test_explicit_int_io()
       unsigned long n;
       vsl_b_read_uint_16(bss, n);
       if (n != i) break;
-      vcl_size_t n64;
+      std::size_t n64;
       vsl_b_read_uint_64(bss, n64);
       if (n64 != i*mult) break;
     }
@@ -199,19 +200,19 @@ void test_explicit_int_io()
 
   TEST("Checking that the results are correct", i, 65536);
   if (i != 65536)
-    vcl_cout << "Failed at number " << i <<vcl_endl;
+    std::cout << "Failed at number " << i <<std::endl;
 
 }
 
 
 void test_extreme_int_io()
 {
-  vcl_cout << "************************************\n"
+  std::cout << "************************************\n"
            << "Testing largest/smallest integer I/O\n"
            << "************************************\n";
 
   // Some fudges to get the max values
-  // vcl_numeric_limits doesn't seem to work yet
+  // std::numeric_limits doesn't seem to work yet
   long min_long = 1L<<(8*sizeof(long)-1);
   long max_long = ~min_long;
   unsigned long max_ulong = ~0;

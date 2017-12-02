@@ -8,14 +8,14 @@
 
 static void test_zero_chain()
 {
-  vcl_cout << "testing zero chain\n";
+  std::cout << "testing zero chain\n";
 
   vtol_vertex_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_sptr v2 = new vtol_vertex_2d(1.0,1.0);
   vtol_vertex_sptr v3 = new vtol_vertex_2d(2.0,2.0);
 
   vtol_zero_chain_sptr zc1 = new vtol_zero_chain(v1,v2);
-  zc1->describe(vcl_cout,8);
+  zc1->describe(std::cout,8);
   TEST("vtol_zero_chain equality", *zc1, *zc1);
   vtol_edge_sptr e1 = new vtol_edge_2d(v1, v2);
   TEST("edge's vtol_zero_chain equality", *zc1, *(e1->zero_chain()));

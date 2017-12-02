@@ -33,7 +33,7 @@
 
 class DcmInputStream;
 
-/** pure virtual abstract base class for producers, i.e. the initial node 
+/** pure virtual abstract base class for producers, i.e. the initial node
  *  of a filter chain in an input stream.
  */
 class DcmProducer
@@ -74,26 +74,26 @@ public:
   /** reads as many bytes as possible into the given block.
    *  @param buf pointer to memory block, must not be NULL
    *  @param buflen length of memory block
-   *  @return number of bytes actually read. 
+   *  @return number of bytes actually read.
    */
   virtual Uint32 read(void *buf, Uint32 buflen) = 0;
 
   /** skips over the given number of bytes (or less)
    *  @param skiplen number of bytes to skip
-   *  @return number of bytes actually skipped. 
+   *  @return number of bytes actually skipped.
    */
   virtual Uint32 skip(Uint32 skiplen) = 0;
 
   /** resets the stream to the position by the given number of bytes.
    *  @param num number of bytes to putback. If the putback operation
-   *    fails, the producer status becomes bad. 
+   *    fails, the producer status becomes bad.
    */
   virtual void putback(Uint32 num) = 0;
 
 };
 
 
-/** pure virtual abstract base class for input filters, i.e. 
+/** pure virtual abstract base class for input filters, i.e.
  *  intermediate nodes of a filter chain in an input stream.
  */
 class DcmInputFilter: public DcmProducer
@@ -106,7 +106,7 @@ public:
   }
 
   /** determines the producer from which the filter is supposed
-   *  to read it's input. Once a producer for the input filter has 
+   *  to read it's input. Once a producer for the input filter has
    *  been defined, it cannot be changed anymore during the lifetime
    *  of the object.
    *  @param producer reference to producer, must not be circular chain
@@ -176,13 +176,13 @@ public:
   /** reads as many bytes as possible into the given block.
    *  @param buf pointer to memory block, must not be NULL
    *  @param buflen length of memory block
-   *  @return number of bytes actually read. 
+   *  @return number of bytes actually read.
    */
   virtual Uint32 read(void *buf, Uint32 buflen);
 
   /** skips over the given number of bytes (or less)
    *  @param skiplen number of bytes to skip
-   *  @return number of bytes actually skipped. 
+   *  @return number of bytes actually skipped.
    */
   virtual Uint32 skip(Uint32 skiplen);
 
@@ -221,7 +221,7 @@ public:
   virtual void mark();
 
   /** resets the stream to the position previously marked with
-   *  setPutbackMark(). If the putback operation fails (no putback mark 
+   *  setPutbackMark(). If the putback operation fails (no putback mark
    *  set or putback buffer exceeded), status of the producer switches to bad.
    */
   virtual void putback();

@@ -1,7 +1,9 @@
 #ifndef boxm2_vecf_ocl_composite_head_model_h_
 #define boxm2_vecf_ocl_composite_head_model_h_
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 
 #include <boxm2/boxm2_scene.h>
 #include "../boxm2_vecf_orbit_scene.h"
@@ -20,9 +22,15 @@
 class boxm2_vecf_ocl_composite_head_model : public boxm2_vecf_ocl_head_model{
 friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor needs to signal a change to the original model when its apm is updated
 public:
-  boxm2_vecf_ocl_composite_head_model(vcl_string const& head_model_path, vcl_string const& eye_model_path,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache);
+  boxm2_vecf_ocl_composite_head_model(std::string const& head_model_path, std::string const& eye_model_path,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,bool optimize =false);
 
   void map_to_target(boxm2_scene_sptr target);
+
+  // virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts) ;
+  // virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) ;
+  // virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const;
+  // virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) ;
+
   void update_gpu_target(boxm2_scene_sptr target_scene);
   bool set_params(boxm2_vecf_articulated_params const& params);
   boxm2_vecf_composite_head_parameters const& get_params() const {return params_;}
@@ -35,13 +43,13 @@ public:
   void set_estimated_dt(double dt_left, double  dt_right)
    {left_orbit_.estimated_dt_ = dt_left; right_orbit_.estimated_dt_ = dt_right; }
 
-  bool optimize_;
+
 private:
   boxm2_vecf_composite_head_parameters params_;
 
   ORBIT right_orbit_;
   ORBIT left_orbit_;
-  vcl_string scene_path;
+  std::string scene_path;
 };
 
 #endif

@@ -20,7 +20,9 @@
 //--------------------------------------------------------------------------------
 
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <vmal/vmal_multi_view_data_vertex_sptr.h>
 #include <vmal/vmal_multi_view_data_edge_sptr.h>
@@ -44,9 +46,9 @@ class vmal_rectifier
                  vmal_multi_view_data_edge_sptr mvd_edge,
                  int ima_height, int ima_width);
 
-  vmal_rectifier(vcl_vector< vnl_vector<double> >* pts0,
-                 vcl_vector< vnl_vector<double> >* pts1,
-                 int ima_height, int ima_width);                 
+  vmal_rectifier(std::vector< vnl_vector<double> >* pts0,
+                 std::vector< vnl_vector<double> >* pts1,
+                 int ima_height, int ima_width);
 
   ~vmal_rectifier();
 
@@ -113,7 +115,7 @@ class vmal_rectifier
   void resample (vnl_double_3x3 H0, vnl_double_3x3 H1,
                  vil_image_view<vxl_byte> imgL,
                  vil_image_view<vxl_byte> imgR);
-  
+
   vil_image_view<vxl_byte>* GetRectifiedImageLeft() {return rectL;}
   vil_image_view<vxl_byte>* GetRectifiedImageRight() {return rectR;}
 
@@ -131,7 +133,7 @@ class vmal_rectifier
   int width_;
   TriTensor tritensor_;
   vnl_double_3x3 F12_;
-  vcl_vector<vnl_double_3> epipoles_;
+  std::vector<vnl_double_3> epipoles_;
   bool is_f_compute_;
   vnl_double_3x3 H0_,H1_;
 

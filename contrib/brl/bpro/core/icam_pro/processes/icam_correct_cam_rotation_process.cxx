@@ -2,8 +2,8 @@
 
 //:
 // \file
-// \brief A process for correcting a camera by registering two images, 
-//           e.g. an input image and an associated camera is given. the camera principal axis needs to be rotated 
+// \brief A process for correcting a camera by registering two images,
+//           e.g. an input image and an associated camera is given. the camera principal axis needs to be rotated
 //                by some amount so that the input image matches to the expected image (second input image of the process)
 //                given by a 3d model of the scene, rendered by the input camera
 //
@@ -41,7 +41,7 @@ bool icam_correct_cam_rotation_process_cons(bprb_func_process& pro)
 {
   using namespace icam_correct_cam_rotation_process_globals;
   unsigned i=0;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[i++] = "vil_image_view_base_sptr";  // input image, dest_image
   input_types_[i++] = "vpgl_camera_double_sptr";   // input camera, needs to be corrected
   input_types_[i++] = "vil_image_view_base_sptr";  // expected image given by input camera, needs to be larger than input image
@@ -49,8 +49,8 @@ bool icam_correct_cam_rotation_process_cons(bprb_func_process& pro)
   input_types_[i++] = "float";                     // cone half angle, in degrees
   input_types_[i++] = "unsigned";                  // n steps along the spiral that samples the cone
   input_types_[i++] = "bool";                      // if true refine using Powell, default is to refine
-  
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr"; // mapped image
   output_types_[1] = "vpgl_camera_double_sptr"; // corrected output camera
 
@@ -61,7 +61,7 @@ bool icam_correct_cam_rotation_process_cons(bprb_func_process& pro)
 bool icam_correct_cam_rotation_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs()) {
-    vcl_cout << pro.name() << "icam_correct_cam_rotation_process: invalid inputs" << vcl_endl;
+    std::cout << pro.name() << "icam_correct_cam_rotation_process: invalid inputs" << std::endl;
     return false;
   }
   using namespace icam_correct_cam_rotation_process_globals;
@@ -88,10 +88,10 @@ bool icam_correct_cam_rotation_process(bprb_func_process& pro)
   } else {
     source_img = vil_convert_cast(float(), source_img_sptr);
   }
-  
+
   if (!dest_img||!source_img)
     return false;
-  
+
   //also to get the calibration matrix, K
   vpgl_perspective_camera<double>* pers_cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.ptr());
   if (!pers_cam)
@@ -114,7 +114,7 @@ bool icam_correct_cam_rotation_process(bprb_func_process& pro)
   double min_cost, min_overlap;
   minimizer.rot_search(tr, rot, n_axis_steps, cone_half_angle, 0,
                        0.0, 0, 0.5, min_rot, min_cost, min_overlap);
-  
+
   vgl_rotation_3d<double> Rp = pers_cam->get_rotation();
   vgl_rotation_3d<double> Rrp = min_rot.inverse()*Rp;
   vpgl_perspective_camera<double>* out_cam1 = new vpgl_perspective_camera<double>();
@@ -123,7 +123,7 @@ bool icam_correct_cam_rotation_process(bprb_func_process& pro)
   out_cam1->set_rotation(Rrp);
   out_cam1->set_camera_center(pers_cam->get_camera_center());
   if (!refine) {
-    vcl_cout << "NOT REFINING!\n";
+    std::cout << "NOT REFINING!\n";
     vil_image_view<float> mapped_source = minimizer.view(min_rot, tr, 0);
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(mapped_source));
     pro.set_output_val<vpgl_camera_double_sptr>(1, out_cam1);
@@ -135,10 +135,10 @@ bool icam_correct_cam_rotation_process(bprb_func_process& pro)
   unsigned pyramid_level = 0;
   minimizer.minimize_rot(min_rot, tr, pyramid_level, min_allowed_overlap);
   vil_image_view<float> mapped_source = minimizer.view(min_rot, tr, 0);
-  vcl_cout << "min_cost: " << min_cost << " after powell error: " << minimizer.end_error() << "\n";
-  
+  std::cout << "min_cost: " << min_cost << " after powell error: " << minimizer.end_error() << "\n";
+
   Rrp = min_rot.inverse()*Rp;
- 
+
   out_cam->set_calibration(pers_cam->get_calibration());
   out_cam->set_rotation(Rrp);
   out_cam->set_camera_center(pers_cam->get_camera_center());

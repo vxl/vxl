@@ -8,11 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstddef>
+#include <cstdlib>
+#include <iostream>
+#include <string>
 #include "vul_sequence_filename_map.h"
-#include <vcl_cstddef.h> // for vcl_size_t
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <vul/vul_sprintf.h>
 #include <vul/vul_reg_exp.h>
@@ -43,13 +44,13 @@ vul_sequence_filename_map::vul_sequence_filename_map ()
 {
 }
 
-vul_sequence_filename_map::vul_sequence_filename_map (vcl_string const & seq_template, vcl_vector<int> const & indices)
+vul_sequence_filename_map::vul_sequence_filename_map (std::string const & seq_template, std::vector<int> const & indices)
   : seq_template_(seq_template), indices_(indices), start_(-1), step_(-1), end_(-1)
 {
   parse();
 }
 
-vul_sequence_filename_map::vul_sequence_filename_map (vcl_string const & seq_template, int start, int end, int step)
+vul_sequence_filename_map::vul_sequence_filename_map (std::string const & seq_template, int start, int end, int step)
   : seq_template_(seq_template), start_(start), step_(step), end_(end)
 {
   for (int i=start; i <= end; i+=step)
@@ -57,7 +58,7 @@ vul_sequence_filename_map::vul_sequence_filename_map (vcl_string const & seq_tem
   parse();
 }
 
-vul_sequence_filename_map::vul_sequence_filename_map (vcl_string const & seq_template, int step)
+vul_sequence_filename_map::vul_sequence_filename_map (std::string const & seq_template, int step)
   : seq_template_(seq_template), start_(-1), step_(step), end_(-1)
 {
   parse();
@@ -67,21 +68,21 @@ vul_sequence_filename_map::~vul_sequence_filename_map()
 {
 }
 
-vcl_string vul_sequence_filename_map::name(int frame)
+std::string vul_sequence_filename_map::name(int frame)
 {
-  vcl_string index_str = vul_sprintf(index_format_.c_str(), indices_[frame]);
+  std::string index_str = vul_sprintf(index_format_.c_str(), indices_[frame]);
   return basename_ + index_str;
 }
 
-vcl_string vul_sequence_filename_map::pair_name (int i, int j)
+std::string vul_sequence_filename_map::pair_name (int i, int j)
 {
-  vcl_string index_str = vul_sprintf((index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j]);
+  std::string index_str = vul_sprintf((index_format_ + "." + index_format_).c_str(), indices_[i], indices_[j]);
   return basename_ + index_str;
 }
 
-vcl_string vul_sequence_filename_map::triplet_name (int i, int j, int k)
+std::string vul_sequence_filename_map::triplet_name (int i, int j, int k)
 {
-  vcl_string index_str = vul_sprintf((index_format_ + "." +
+  std::string index_str = vul_sprintf((index_format_ + "." +
     index_format_ + "." + index_format_).c_str(), indices_[i],
     indices_[j], indices_[k]);
   return basename_ + index_str;
@@ -89,27 +90,27 @@ vcl_string vul_sequence_filename_map::triplet_name (int i, int j, int k)
 
 void vul_sequence_filename_map::parse()
 {
-  vcl_string temp = seq_template_;
+  std::string temp = seq_template_;
 
   // Search for trailing index spec -   "img.%03d.pgm,0:1:10" , "ppm/img*;:5:"
   {
     vul_reg_exp re("[,;]([0-9]+)?(:[0-9]+)?:([0-9]+)?$");
     if (re.find(temp.c_str()))
     {
-      vcl_string match_start = re.match(1);
-      vcl_string match_step = re.match(2);
-      vcl_string match_end = re.match(3);
+      std::string match_start = re.match(1);
+      std::string match_step = re.match(2);
+      std::string match_end = re.match(3);
 
       temp.erase(re.start(0));
 
       if (match_start.length() > 0)
-        start_ = vcl_atoi(match_start.c_str());
+        start_ = std::atoi(match_start.c_str());
 
       if (match_step.length() > 0)
-        step_ = vcl_atoi(match_step.c_str()+1);
+        step_ = std::atoi(match_step.c_str()+1);
 
       if (match_end.length() > 0)
-        end_ = vcl_atoi(match_end.c_str());
+        end_ = std::atoi(match_end.c_str());
     }
   }
   // Search for image extension
@@ -123,17 +124,17 @@ void vul_sequence_filename_map::parse()
   // Search for basename template
   {
     vul_reg_exp re("([a-zA-Z0-9_%#\\.]+)$");
-    vcl_string bt;
+    std::string bt;
     if (re.find(temp.c_str())) {
       bt = re.match(0);
       temp.erase(re.start(0));
     }
     // This should have the form "img.%03d" or "img.###". Split it into basename and index format
-    vcl_size_t pos;
-    if ( (pos = bt.find('%')) != vcl_string::npos)
+    std::size_t pos;
+    if ( (pos = bt.find('%')) != std::string::npos)
       index_format_ = bt.substr(pos);
-    else if ( (pos = bt.find('#')) != vcl_string::npos) {
-      vcl_size_t last_pos = bt.rfind('#');
+    else if ( (pos = bt.find('#')) != std::string::npos) {
+      std::size_t last_pos = bt.rfind('#');
       index_format_ = vul_sprintf("0%id",last_pos - pos + 1);
       index_format_ = "%" + index_format_;
     }
@@ -164,7 +165,7 @@ void vul_sequence_filename_map::parse()
     }
     if (!found_match)
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-        vcl_string glob(dir_ext_pairs[i].image_dir);
+        std::string glob(dir_ext_pairs[i].image_dir);
         glob += "/*";
         vul_file_iterator fn(glob);
         for (;!found_match && bool(fn);++fn)
@@ -175,9 +176,9 @@ void vul_sequence_filename_map::parse()
           }
       }
     if (!found_match) {
-      vcl_cerr << __FILE__ << " : Can't find files matching " << basename_
+      std::cerr << __FILE__ << " : Can't find files matching " << basename_
                << index_format_ << " in common locations with common format!\n";
-      vcl_abort();
+      std::abort();
     }
   }
 
@@ -198,8 +199,8 @@ void vul_sequence_filename_map::parse()
 
     if (!found_match) {
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
-        if (vcl_string(dir_ext_pairs[i].extension) == image_extension_) {
-          vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
+        if (std::string(dir_ext_pairs[i].extension) == image_extension_) {
+          std::string glob(dir_ext_pairs[i].image_dir); glob += "*";
           for (vul_file_iterator fn(glob); !found_match && bool(fn); ++fn)
             if (filter_dirent(fn.filename(), image_extension_)) {
               image_dir_ = dir_ext_pairs[i].image_dir;
@@ -210,7 +211,7 @@ void vul_sequence_filename_map::parse()
 
     if (!found_match) {
       for (int i=0; i < num_dir_ext_pairs && !found_match; ++i) {
-        vcl_string glob(dir_ext_pairs[i].image_dir); glob += "*";
+        std::string glob(dir_ext_pairs[i].image_dir); glob += "*";
         for (vul_file_iterator fn(glob); !found_match && bool(fn); ++fn)
           if (filter_dirent(fn.filename(), image_extension_)) {
             image_dir_ = dir_ext_pairs[i].image_dir;
@@ -220,9 +221,9 @@ void vul_sequence_filename_map::parse()
     }
 
     if (!found_match) {
-      vcl_cerr << __FILE__ << " : Can't find files matching " << basename_
+      std::cerr << __FILE__ << " : Can't find files matching " << basename_
                << index_format_<<image_extension_ << " in common locations!\n";
-      vcl_abort();
+      std::abort();
     }
   }
 
@@ -233,11 +234,11 @@ void vul_sequence_filename_map::parse()
   {
     bool found_match = false;
     {
-      vcl_string glob(image_dir_ + "*");
+      std::string glob(image_dir_ + "*");
       vul_file_iterator fn(glob);
       if (fn) {
         for (int i=0; i < num_dir_ext_pairs && !found_match; ++i)
-          if (vcl_string(dir_ext_pairs[i].image_dir) == image_dir_) {
+          if (std::string(dir_ext_pairs[i].image_dir) == image_dir_) {
             for (;!found_match && bool(fn);++fn)
               if (filter_dirent(fn.filename(), dir_ext_pairs[i].extension)) {
                 image_extension_ = dir_ext_pairs[i].extension;
@@ -261,9 +262,9 @@ void vul_sequence_filename_map::parse()
     }
 
     if (!found_match) {
-      vcl_cerr << __FILE__ << " : Can't find files matching " << image_dir_
+      std::cerr << __FILE__ << " : Can't find files matching " << image_dir_
                << basename_ << index_format_ << " with common extension!\n";
-      vcl_abort();
+      std::abort();
     }
   }
 
@@ -282,7 +283,7 @@ void vul_sequence_filename_map::parse()
           min = (index < min) ? index : min;
         }
       if (max < min) {
-        vcl_cerr << "vul_sequence_filename_map: WARNING: no files in " << image_dir_ << vcl_endl;
+        std::cerr << "vul_sequence_filename_map: WARNING: no files in " << image_dir_ << std::endl;
       }
 
       if (start_ == -1) start_ = min;
@@ -293,13 +294,13 @@ void vul_sequence_filename_map::parse()
   }
 
   if (debug)
-    vcl_cerr << seq_template_ << vcl_endl
-             << "    image dir : " << image_dir_ << vcl_endl
-             << "    basename  : " << basename_ << vcl_endl
-             << " index format : " << index_format_ << vcl_endl
-             << "    extension : " << image_extension_ << vcl_endl
+    std::cerr << seq_template_ << std::endl
+             << "    image dir : " << image_dir_ << std::endl
+             << "    basename  : " << basename_ << std::endl
+             << " index format : " << index_format_ << std::endl
+             << "    extension : " << image_extension_ << std::endl
              << "    indices   : " << start_ << ':' << step_ << ':' << end_
-             << vcl_endl << vcl_endl;
+             << std::endl << std::endl;
 }
 
 int vul_sequence_filename_map::get_mapped_index(int real) const
@@ -314,7 +315,7 @@ int vul_sequence_filename_map::get_mapped_index(int real) const
 }
 
 
-vcl_ostream& vul_sequence_filename_map::print (vcl_ostream& s) const
+std::ostream& vul_sequence_filename_map::print (std::ostream& s) const
 {
   s << "vul_sequence_filename_map : " << image_dir_ << basename_
     << index_format_ << image_extension_ << " [" << indices_[0] << ':'
@@ -328,28 +329,28 @@ vcl_ostream& vul_sequence_filename_map::print (vcl_ostream& s) const
   return s;
 }
 
-bool vul_sequence_filename_map::filter_dirent(char const* name_string, vcl_string const& extension)
+bool vul_sequence_filename_map::filter_dirent(char const* name_string, std::string const& extension)
 {
-  static vcl_size_t expected_length = 0L;
+  static std::size_t expected_length = 0L;
   if (expected_length == 0L)
     expected_length = basename_.size() +
-                      (vcl_string(vul_sprintf(index_format_.c_str(),0)) + extension).size();
+                      (std::string(vul_sprintf(index_format_.c_str(),0)) + extension).size();
 
-  vcl_string name_str(name_string);
+  std::string name_str(name_string);
 
   return name_str.size() == expected_length
       && name_str.substr(0,basename_.size()) == basename_
-      && name_str.substr(expected_length-extension.size(), vcl_string::npos) == extension;
+      && name_str.substr(expected_length-extension.size(), std::string::npos) == extension;
 }
 
 int vul_sequence_filename_map::extract_index(char const* name_string)
 {
-  vcl_string name_str(name_string);
-  vcl_string index_str = name_str.substr(basename_.size(), name_str.size() - image_extension_.size());
-  return vcl_atoi(index_str.c_str());
+  std::string name_str(name_string);
+  std::string index_str = name_str.substr(basename_.size(), name_str.size() - image_extension_.size());
+  return std::atoi(index_str.c_str());
 }
 
-vcl_ostream& operator<<(vcl_ostream &os, const vul_sequence_filename_map& s)
+std::ostream& operator<<(std::ostream &os, const vul_sequence_filename_map& s)
 {
   return s.print(os);
 }

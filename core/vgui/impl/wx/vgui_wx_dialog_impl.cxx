@@ -1,4 +1,9 @@
 // This is core/vgui/impl/wx/vgui_wx_dialog_impl.cxx
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <map>
+#include <utility>
 #include "vgui_wx_dialog_impl.h"
 //=========================================================================
 //:
@@ -37,11 +42,7 @@
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCommandEventFunction, &func)
 #endif
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //-------------------------------------------------------------------------
@@ -54,7 +55,7 @@ namespace
    public:
     void insert_handle(int id, wxTextCtrl* control)
     {
-      handles_.insert(vcl_pair<int,wxTextCtrl*>(id, control));
+      handles_.insert(std::pair<int,wxTextCtrl*>(id, control));
     }
 
     void file_browser(wxCommandEvent& e)
@@ -79,10 +80,10 @@ namespace
       wxString text = handles_[e.GetId()]->GetValue();
 
       wxColour color;
-      color.Set(int(red_value(vcl_string(text.mb_str()))   * 255.0),
-                int(green_value(vcl_string(text.mb_str())) * 255.0),
-                int(blue_value(vcl_string(text.mb_str()))  * 255.0));
-      vcl_cout << "current color: "<<int(color.Red())<<' '<<int(color.Green())<<' '<<int(color.Blue())<<vcl_endl;
+      color.Set(int(red_value(std::string(text.mb_str()))   * 255.0),
+                int(green_value(std::string(text.mb_str())) * 255.0),
+                int(blue_value(std::string(text.mb_str()))  * 255.0));
+      std::cout << "current color: "<<int(color.Red())<<' '<<int(color.Green())<<' '<<int(color.Blue())<<std::endl;
       wxColourData cdata;
       cdata.SetColour(color);
 
@@ -92,13 +93,13 @@ namespace
       {
         color = color_dialog.GetColourData().GetColour();
 
-        vcl_cout << "new color: "<<int(color.Red())<<' '<<int(color.Green())<<' '<<int(color.Blue())<<vcl_endl;
-        vcl_stringstream sstr;
+        std::cout << "new color: "<<int(color.Red())<<' '<<int(color.Green())<<' '<<int(color.Blue())<<std::endl;
+        std::stringstream sstr;
         //text.Clear();
         sstr << color.Red() / 255.0 << ' '
              << color.Green() / 255.0 << ' '
              << color.Blue() / 255.0;
-        vcl_cout << "new color text: "<< sstr.str() << vcl_endl;
+        std::cout << "new color text: "<< sstr.str() << std::endl;
 
         // update wxTextCtrl value
         handles_[e.GetId()]->SetValue(wxString(sstr.str().c_str(),wxConvUTF8));
@@ -106,7 +107,7 @@ namespace
     }
 
    private:
-    vcl_map<int,wxTextCtrl*> handles_;
+    std::map<int,wxTextCtrl*> handles_;
   };
 
   //: Used to transfer data between a vgui_dialog_field and wxTextControl.
@@ -154,7 +155,7 @@ namespace
       if (field_)
       {
         field_->update_value(
-          vcl_string(dynamic_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().mb_str()));
+          std::string(dynamic_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().mb_str()));
       }
       return true;
     }
@@ -240,14 +241,14 @@ bool vgui_wx_dialog_impl::ask(void)
 
 struct vgui_wx_dialog_choice
 {
-  vcl_vector<vcl_string> names;
+  std::vector<std::string> names;
   int index;
 };
 
 //: Create a choice widget.
 void* vgui_wx_dialog_impl::
 choice_field_widget(const char* WXUNUSED(txt),
-                    const vcl_vector<vcl_string>& labels,
+                    const std::vector<std::string>& labels,
                     int& val)
 {
   vgui_wx_dialog_choice* choice_data = new vgui_wx_dialog_choice;
@@ -311,7 +312,7 @@ void vgui_wx_dialog_impl::build_wx_dialog(void)
   wxSizerFlags flags(wxSizerFlags(0).Expand().Border(wxALL, 2));
 
   // process each element
-  for (vcl_vector<element>::const_iterator e = elements.begin();
+  for (std::vector<element>::const_iterator e = elements.begin();
        e != elements.end(); ++e)
   {
     switch (e->type)
@@ -405,7 +406,7 @@ void vgui_wx_dialog_impl::build_wx_dialog(void)
       break;
 
     default:
-      vcl_cerr << "Unknown type = " << e->type << vcl_endl;
+      std::cerr << "Unknown type = " << e->type << std::endl;
     }
   }
 
@@ -456,7 +457,7 @@ int vgui_wx_dialog_impl::probe_for_max_label_width(void)
 {
   wxStaticText temp(dialog_, wxID_ANY, wxString());
   int max_width = temp.GetSize().GetX();
-  for (vcl_vector<element>::const_iterator e = elements.begin();
+  for (std::vector<element>::const_iterator e = elements.begin();
        e != elements.end(); ++e)
   {
     switch (e->type)
@@ -468,7 +469,7 @@ int vgui_wx_dialog_impl::probe_for_max_label_width(void)
      case string_elem:
      case choice_elem:
       temp.SetLabel(wxString(e->field->label.c_str(),wxConvUTF8));
-      max_width = vcl_max(max_width, temp.GetSize().GetX());
+      max_width = std::max(max_width, temp.GetSize().GetX());
       break;
      default: // do nothing
       break;
@@ -521,7 +522,7 @@ wxSizer* vgui_wx_dialog_impl::choice_element(vgui_dialog_field* field,
   cell->Add(st, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 2);
 
   wxArrayString choice_labels;
-  for (vcl_vector<vcl_string>::const_iterator label = choices->names.begin();
+  for (std::vector<std::string>::const_iterator label = choices->names.begin();
        label != choices->names.end(); ++label)
   {
     choice_labels.Add(wxString(label->c_str(),wxConvUTF8));
@@ -571,7 +572,7 @@ wxSizer* vgui_wx_dialog_impl::text_element(vgui_dialog_field* field)
 wxSizer*
 vgui_wx_dialog_impl::text_with_button_element(vgui_dialog_field* field,
                                               wxTextCtrl*& text_control,
-                                              const vcl_string& button,
+                                              const std::string& button,
                                               int event_id)
 {
   assert(field);

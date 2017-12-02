@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_update_sky_sky.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_update_sky.h"
 //:
 // \file
@@ -7,8 +10,7 @@
 // \author Vishal Jain
 // \date Mar 25, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -26,7 +28,7 @@
 #include <vnl/vnl_numeric_traits.h>
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_sky::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_sky::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
@@ -37,12 +39,12 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
-    vcl_size_t local_threads[2]={8,8};
-    vcl_size_t global_threads[2]={8,8};
+    std::size_t local_threads[2]={8,8};
+    std::size_t global_threads[2]={8,8};
 
     //cache size sanity check
-    vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-    vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+    std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+    std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
     // create a command queue.
     int status=0;
@@ -53,7 +55,7 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
         return false;
 
     // compile the kernel if not already compiled
-    vcl_vector<bocl_kernel*>& kernels = get_kernels(device);
+    std::vector<bocl_kernel*>& kernels = get_kernels(device);
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
     vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(skyimg, true);
@@ -110,13 +112,13 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order;
+    std::vector<boxm2_block_id> vis_order;
     if(cam->type_name() == "vpgl_perspective_camera")
         vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),img_view->ni(),img_view->nj());
     else
         vis_order= scene->get_vis_blocks(cam);
 
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -169,25 +171,25 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
     opencl_cache->unref_mem(ray_o_buff.ptr());
     opencl_cache->unref_mem(ray_d_buff.ptr());
     opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     clReleaseCommandQueue(queue);
     return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr device, vcl_string opts, bool isRGB)
+std::vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr device, std::string opts, bool isRGB)
 {
     // compile kernels if not already compiled
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //otherwise compile the kernels
-    vcl_cout<<"=== boxm2_ocl_update_sky_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+    std::cout<<"=== boxm2_ocl_update_sky_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -196,25 +198,25 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr dev
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/update_sky_kernels.cl");
-    vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+    std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
 
 
     src_paths.push_back(source_dir + "update_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    vcl_string options = opts;
+    std::string options = opts;
 
     //populate vector of kernels
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
 
     //seg len pass
     bocl_kernel* update_sky_kernel = new bocl_kernel();
-    vcl_string seg_opts = options + " -D UPDATE_SKY  -D STEP_CELL=step_cell_update_sky(aux_args,data_ptr,llid,d)";
+    std::string seg_opts = options + " -D UPDATE_SKY  -D STEP_CELL=step_cell_update_sky(aux_args,data_ptr,llid,d)";
     update_sky_kernel->create_kernel(&device->context(), device->device_id(), src_paths, "update_sky_main", seg_opts, "update_sky_main");
     vec_kernels.push_back(update_sky_kernel);
 
-   
+
     //store and return
     kernels_[identifier] = vec_kernels;
     return kernels_[identifier];
@@ -222,7 +224,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr dev
 
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_sky2::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_sky2::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         scene,
@@ -233,12 +235,12 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
-    vcl_size_t local_threads[2]={8,8};
-    vcl_size_t global_threads[2]={8,8};
+    std::size_t local_threads[2]={8,8};
+    std::size_t global_threads[2]={8,8};
 
     //cache size sanity check
-    vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-    vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+    std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+    std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
     // create a command queue.
     int status=0;
@@ -249,7 +251,7 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
         return false;
 
     // compile the kernel if not already compiled
-    vcl_vector<bocl_kernel*>& kernels =  boxm2_ocl_update_sky2::get_kernels(device);
+    std::vector<bocl_kernel*>& kernels =  boxm2_ocl_update_sky2::get_kernels(device);
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
     vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(skyimg, true);
@@ -270,12 +272,12 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
 
   if(cam->type_name() == "vpgl_perspective_camera")
   {
-      
+
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       tnearfar[0] = f* scene->finest_resolution()/32 ;
       tnearfar[1] = f* scene->finest_resolution()/0.125 ;
 
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<std::endl;
   }
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -321,13 +323,13 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order;
+    std::vector<boxm2_block_id> vis_order;
     if(cam->type_name() == "vpgl_perspective_camera")
         vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),img_view->ni(),img_view->nj());
     else
         vis_order= scene->get_vis_blocks(cam);
 
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -381,8 +383,8 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
         kern = kernels[1];
         int numTrees = mdata.sub_block_num_.x() * mdata.sub_block_num_.y() * mdata.sub_block_num_.z();
 
-        vcl_size_t local_threads_2[] = {16};
-        vcl_size_t global_threads_2[] = {RoundUp(numTrees,local_threads_2[0])};
+        std::size_t local_threads_2[] = {16};
+        std::size_t global_threads_2[] = {RoundUp(numTrees,local_threads_2[0])};
 
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
         bocl_mem *aux0_cum   = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,false,"cum");
@@ -422,7 +424,7 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
     opencl_cache->unref_mem(ray_o_buff.ptr());
     opencl_cache->unref_mem(ray_d_buff.ptr());
     opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     clReleaseCommandQueue(queue);
     return true;
 }
@@ -434,8 +436,8 @@ bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
     float gpu_time=0.0f;
 
     //cache size sanity check
-    vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-    vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+    std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+    std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
     // create a command queue.
     int status=0;
@@ -445,7 +447,7 @@ bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
     if (status!=0)
         return false;
     // compile the kernel if not already compiled
-    vcl_vector<bocl_kernel*>& kernels = boxm2_ocl_update_sky2::get_kernels(device);
+    std::vector<bocl_kernel*>& kernels = boxm2_ocl_update_sky2::get_kernels(device);
     // bit lookup buffer
     cl_uchar lookup_arr[256];
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
@@ -456,8 +458,8 @@ bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
     bocl_mem_sptr chisqr_lookup=new bocl_mem(device->context(), chisqr_lookup_arr, sizeof(cl_float)*10000, "chisqr cdf lookup buffer");
     chisqr_lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -471,14 +473,21 @@ bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+            return false;
+        }
+
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
         bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,false,"cum");
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
         bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,false,"count");
         transfer_time += (float) transfer.all();
-        vcl_size_t lThreads[] = {16};
-        vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0])};
+        std::size_t lThreads[] = {16};
+        std::size_t gThreads[] = {RoundUp(numTrees,lThreads[0])};
 
         transfer_time += (float) transfer.all();
         kern->set_arg( blk_info );
@@ -504,24 +513,24 @@ bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
         alpha->read_to_buffer(queue);
         clFinish(queue);
     }
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     clReleaseCommandQueue(queue);
     return true;
 }
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr device, vcl_string opts, bool isRGB)
+std::vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr device, std::string opts, bool isRGB)
 {
     // compile kernels if not already compiled
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //otherwise compile the kernels
-    vcl_cout<<"=== boxm2_ocl_update_sky_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+    std::cout<<"=== boxm2_ocl_update_sky_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -532,34 +541,34 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr de
      src_paths.push_back(source_dir +"stat/chisqr_cdf.cl");
     src_paths.push_back(source_dir + "bit/update_sky_kernels.cl");
 
-    vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+    std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
     src_paths.push_back(source_dir + "update_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    vcl_string options = opts;
+    std::string options = opts;
 
     //populate vector of kernels
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
 
     //seg len pass
     bocl_kernel* update_sky_accum_ray_kernel = new bocl_kernel();
-    vcl_string accum_opts = options + " -D UPDATE_SKY2  -D STEP_CELL=step_cell_accumulate_evidence_per_ray(aux_args,data_ptr,llid,d)";
+    std::string accum_opts = options + " -D UPDATE_SKY2  -D STEP_CELL=step_cell_accumulate_evidence_per_ray(aux_args,data_ptr,llid,d)";
     update_sky_accum_ray_kernel->create_kernel(&device->context(), device->device_id(), src_paths, "accumulate_evidence_sky_ray_main", accum_opts, "accumulate_evidence_sky_ray_main");
     vec_kernels.push_back(update_sky_accum_ray_kernel);
 
     //: average per cell
     bocl_kernel* update_sky_accum_cell_kernel = new bocl_kernel();
-    vcl_string cell_accum_opts = options + " -D UPDATE_SKY2_MAIN";
+    std::string cell_accum_opts = options + " -D UPDATE_SKY2_MAIN";
     update_sky_accum_cell_kernel->create_kernel(&device->context(), device->device_id(), non_ray_src, "accumulate_evidence_sky_cell_main", cell_accum_opts, "accumulate_evidence_sky_cell_main");
     vec_kernels.push_back(update_sky_accum_cell_kernel);
 
 
     bocl_kernel* update_sky_main_kernel = new bocl_kernel();
-    vcl_string update_opts = options + " -D UPDATE_SKY2_MAIN  ";
+    std::string update_opts = options + " -D UPDATE_SKY2_MAIN  ";
     update_sky_main_kernel->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_sky_main", update_opts, "update_sky_main");
     vec_kernels.push_back(update_sky_main_kernel);
-   
+
     //store and return
     kernels_[identifier] = vec_kernels;
     return kernels_[identifier];

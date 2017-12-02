@@ -1,9 +1,11 @@
 // This is gel/vifa/vifa_line_cover.cxx
+#include <iostream>
+#include <algorithm>
 #include "vifa_line_cover.h"
 //:
 // \file
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
@@ -13,10 +15,10 @@
 vifa_line_cover::
 vifa_line_cover()
 {
-  line_ = NULL;
-  index_ = NULL;
-  max_extent_ = NULL;
-  min_extent_ = NULL;
+  line_ = VXL_NULLPTR;
+  index_ = VXL_NULLPTR;
+  max_extent_ = VXL_NULLPTR;
+  min_extent_ = VXL_NULLPTR;
   dim_ =0;
 }
 
@@ -97,8 +99,8 @@ InsertLine(imp_line_sptr  l)
     vgl_point_2d<double>  p = l->project_2d_pt(pos);
     double          d = this->get_signed_distance(p);
 
-    min_extent_[i] = vcl_min(min_extent_[i], d);
-    max_extent_[i] = vcl_max(max_extent_[i], d);
+    min_extent_[i] = std::min(min_extent_[i], d);
+    max_extent_[i] = std::max(max_extent_[i], d);
   }
 }
 
@@ -155,8 +157,8 @@ GetExtent(imp_line_sptr&  lmin,
 {
   if (!line_)
   {
-    lmin = NULL;
-    lmax = NULL;
+    lmin = VXL_NULLPTR;
+    lmax = VXL_NULLPTR;
     return;
   }
 
@@ -168,8 +170,8 @@ GetExtent(imp_line_sptr&  lmin,
   // Scan for the max and min lateral extents
   for (int i = st; i <= en; i++)
   {
-    min_ex = vcl_min(min_extent_[i], min_ex);
-    max_ex = vcl_max(max_extent_[i], max_ex);
+    min_ex = std::min(min_extent_[i], min_ex);
+    max_ex = std::max(max_extent_[i], max_ex);
   }
 
   // Construct min and max bounding lines

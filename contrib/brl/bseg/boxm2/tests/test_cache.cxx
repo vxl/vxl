@@ -2,6 +2,8 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <iostream>
+#include <cstdio>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/basic/boxm2_block_id.h>
@@ -14,7 +16,7 @@
 // for stats
 #include <vul/vul_timer.h>
 #include <vcl_sys/time.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 //#include <unistd.h>
 
 void test_cache()
@@ -25,11 +27,11 @@ void test_cache()
   boxm2_lru_cache::create(scene);
   boxm2_cache_sptr cache = boxm2_lru_cache::instance();
   //simulate a render
-  vcl_cout<<"loading initial BLOCK and ALPHA"<<vcl_endl;
-  vul_timer t; 
+  std::cout<<"loading initial BLOCK and ALPHA"<<std::endl;
+  vul_timer t;
   t.mark();
   boxm2_block* blk =  cache->get_block(scene, boxm2_block_id(0,0,0));
-  
+
 
   TEST("checking block id",blk->block_id(), boxm2_block_id(0,0,0) );
 }

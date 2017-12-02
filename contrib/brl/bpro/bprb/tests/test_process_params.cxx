@@ -1,3 +1,4 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_query.h>
@@ -5,7 +6,7 @@
 #include <brdb/brdb_selection.h>
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_value.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include "bprb_test_process.h"
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
@@ -19,7 +20,7 @@ void test_process_params()
   brdb_value_sptr v0 = new brdb_value_t<float>(1.0f);
   brdb_value_sptr v1 = new brdb_value_t<float>(2.0f);
   bool good = bprb_batch_process_manager::instance()->init_process("Process");
-  good = bprb_batch_process_manager::instance()->set_params("params.xml");
+  good &= bprb_batch_process_manager::instance()->set_params("params.xml");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->run_process();
@@ -33,13 +34,13 @@ void test_process_params()
 
   brdb_selection_sptr selec = DATABASE->select("float_data", Q);
   if (selec->size()!=1) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
   brdb_value_sptr value;
-  if (!selec->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!selec->get_value(std::string("value"), value)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
   brdb_value_t<float>* result =

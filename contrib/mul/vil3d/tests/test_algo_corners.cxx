@@ -1,6 +1,7 @@
 // This is mul/vil3d/tests/test_algo_corners.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vgl/vgl_point_3d.h>
 #include <vil3d/algo/vil3d_corners.h>
@@ -9,7 +10,7 @@
 
 static void test_algo_corners_byte()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil3d_corners\n"
            << "************************\n";
 
@@ -26,7 +27,7 @@ static void test_algo_corners_byte()
   vil3d_corners<vxl_byte,float> corners;
   corners.cornerness1(image,corner_im);
 
-  const vcl_ptrdiff_t istep = corner_im.istep(),
+  const std::ptrdiff_t istep = corner_im.istep(),
                       jstep=corner_im.jstep(),
                       kstep=corner_im.kstep();
 
@@ -36,12 +37,12 @@ static void test_algo_corners_byte()
   TEST("Corner at (6,6,11)",vil3d_is_peak26(&corner_im(6,6,11),istep,jstep,kstep),true);
   TEST("Corner at (6,11,11)",vil3d_is_peak26(&corner_im(6,11,11),istep,jstep,kstep),true);
 
-  vcl_vector<vgl_point_3d<int> > peaks;
+  std::vector<vgl_point_3d<int> > peaks;
   float min_thresh = 0.0;
   vil3d_find_peaks_26(peaks,corner_im,min_thresh,true);
-  vcl_cout<<"Peaks: "<<vcl_endl;
+  std::cout<<"Peaks: "<<std::endl;
   for (unsigned i=0;i<peaks.size();++i)
-    vcl_cout<<i<<") "<<peaks[i]<<vcl_endl;
+    std::cout<<i<<") "<<peaks[i]<<std::endl;
 }
 
 static void test_algo_corners()

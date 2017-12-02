@@ -1,4 +1,4 @@
-#include <boct/boct_tree_cell_reader.txx>
+#include <boct/boct_tree_cell_reader.hxx>
 #include <boxm/sample/boxm_edge_sample.h>
 
 typedef boxm_edge_sample<float> sample;

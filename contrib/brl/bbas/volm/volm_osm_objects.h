@@ -13,13 +13,15 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "volm_category_io.h"
 #include "volm_osm_parser.h"
 #include "volm_osm_object_point.h"
 #include "volm_osm_object_line.h"
 #include "volm_osm_object_polygon.h"
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
@@ -30,24 +32,24 @@ public:
   volm_osm_objects() {}
 
   //: create volm_osm_objects from open street map file
-  volm_osm_objects(vcl_string const& osm_file, vcl_string const& osm_to_volm_file);
+  volm_osm_objects(std::string const& osm_file, std::string const& osm_to_volm_file);
 
   //: create volm_osm_objects from binary file
-  volm_osm_objects(vcl_string const& bin_file_name);
+  volm_osm_objects(std::string const& bin_file_name);
 
   //: create volm_osm_objects from multiple volm_locs, lines and regions
-  volm_osm_objects(vcl_vector<volm_osm_object_point_sptr> const& loc_pts,
-                   vcl_vector<volm_osm_object_line_sptr> const& loc_lines,
-                   vcl_vector<volm_osm_object_polygon_sptr> const& loc_polys)
+  volm_osm_objects(std::vector<volm_osm_object_point_sptr> const& loc_pts,
+                   std::vector<volm_osm_object_line_sptr> const& loc_lines,
+                   std::vector<volm_osm_object_polygon_sptr> const& loc_polys)
     : loc_pts_(loc_pts), loc_lines_(loc_lines), loc_polys_(loc_polys) {}
 
   //: write all volm_osm_object into binary file
-  bool write_osm_objects(vcl_string const& bin_file);
+  bool write_osm_objects(std::string const& bin_file);
 
   //: asscessors
-  vcl_vector<volm_osm_object_point_sptr>&     loc_pts() { return loc_pts_;   }
-  vcl_vector<volm_osm_object_line_sptr>&    loc_lines() { return loc_lines_; }
-  vcl_vector<volm_osm_object_polygon_sptr>& loc_polys() { return loc_polys_; }
+  std::vector<volm_osm_object_point_sptr>&     loc_pts() { return loc_pts_;   }
+  std::vector<volm_osm_object_line_sptr>&    loc_lines() { return loc_lines_; }
+  std::vector<volm_osm_object_polygon_sptr>& loc_polys() { return loc_polys_; }
 
   //: number of location points
   unsigned num_locs()    const { return (unsigned)loc_pts_.size();   }
@@ -55,20 +57,20 @@ public:
   unsigned num_regions() const { return (unsigned)loc_polys_.size(); }
 
   //: write location points to kml
-  bool write_pts_to_kml(vcl_string const& kml_file);
+  bool write_pts_to_kml(std::string const& kml_file);
 
   //: write lines to kml
-  bool write_lines_to_kml(vcl_string const& kml_file);
+  bool write_lines_to_kml(std::string const& kml_file);
 
   //: write regions to kml
-  bool write_polys_to_kml(vcl_string const& kml_file);
+  bool write_polys_to_kml(std::string const& kml_file);
 
 
   // ===========  binary I/O ================
 
   //: version
   short version() const { return 1; }
-  
+
   //: binary IO write
   void b_write(vsl_b_ostream& os);
 
@@ -76,9 +78,9 @@ public:
   void b_read(vsl_b_istream& is);
 
 private:
-  vcl_vector<volm_osm_object_point_sptr>     loc_pts_;
-  vcl_vector<volm_osm_object_line_sptr>    loc_lines_;
-  vcl_vector<volm_osm_object_polygon_sptr> loc_polys_;
+  std::vector<volm_osm_object_point_sptr>     loc_pts_;
+  std::vector<volm_osm_object_line_sptr>    loc_lines_;
+  std::vector<volm_osm_object_polygon_sptr> loc_polys_;
 
 };
 
@@ -94,16 +96,16 @@ public:
   volm_osm_object_ids() {pt_ids_.clear(); line_ids_.clear(); region_ids_.clear(); }
 
   //: constuctor
-  volm_osm_object_ids(vcl_vector<unsigned> const& pt_ids, vcl_vector<unsigned> const& line_ids, vcl_vector<unsigned> const& region_ids)
+  volm_osm_object_ids(std::vector<unsigned> const& pt_ids, std::vector<unsigned> const& line_ids, std::vector<unsigned> const& region_ids)
     : pt_ids_(pt_ids), line_ids_(line_ids), region_ids_(region_ids) {}
 
   //: construct by reading from a binary file
-  volm_osm_object_ids(vcl_string const& bin_file);
+  volm_osm_object_ids(std::string const& bin_file);
 
   //: accessors
-  vcl_vector<unsigned>&     pt_ids() { return pt_ids_;     }
-  vcl_vector<unsigned>&   line_ids() { return line_ids_;   }
-  vcl_vector<unsigned>& region_ids() { return region_ids_; }
+  std::vector<unsigned>&     pt_ids() { return pt_ids_;     }
+  std::vector<unsigned>&   line_ids() { return line_ids_;   }
+  std::vector<unsigned>& region_ids() { return region_ids_; }
 
   unsigned num_pts()     { return (unsigned)pt_ids_.size(); }
   unsigned num_lines()   { return (unsigned)line_ids_.size(); }
@@ -120,7 +122,7 @@ public:
   }
 
   //: binary io
-  bool write_osm_ids(vcl_string const& bin_file);
+  bool write_osm_ids(std::string const& bin_file);
 
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;
@@ -132,9 +134,9 @@ public:
   short version() const { return 1; }
 
 private:
-  vcl_vector<unsigned> pt_ids_;
-  vcl_vector<unsigned> line_ids_;
-  vcl_vector<unsigned> region_ids_;
+  std::vector<unsigned> pt_ids_;
+  std::vector<unsigned> line_ids_;
+  std::vector<unsigned> region_ids_;
 };
 
 #endif // volm_osm_objects_h_

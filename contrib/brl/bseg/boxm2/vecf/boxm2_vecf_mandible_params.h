@@ -7,8 +7,9 @@
 // \author J.L. Mundy
 // \date   3 November 2015
 //
+#include <iostream>
 #include "boxm2_vecf_articulated_params.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 
 class boxm2_vecf_mandible_params : public boxm2_vecf_articulated_params{
@@ -27,7 +28,7 @@ class boxm2_vecf_mandible_params : public boxm2_vecf_articulated_params{
   double jaw_opening_angle_rad_;
   vgl_vector_3d<double> offset_;
 };
-vcl_ostream&  operator << (vcl_ostream& s, boxm2_vecf_mandible_params const& pr);
-vcl_istream&  operator >> (vcl_istream& s, boxm2_vecf_mandible_params& pr);
+std::ostream&  operator << (std::ostream& s, boxm2_vecf_mandible_params const& pr);
+std::istream&  operator >> (std::istream& s, boxm2_vecf_mandible_params& pr);
 
 #endif// boxm2_vecf_mandible_params

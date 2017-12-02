@@ -1,4 +1,8 @@
 // This is rpl/rrel/rrel_ran_sam_search.cxx
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <cstdlib>
 #include "rrel_ran_sam_search.h"
 #include <rrel/rrel_objective.h>
 #include <rrel/rrel_estimation_problem.h>
@@ -7,10 +11,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 // Random number generator. This will be shared by all ran_sam instances.
@@ -80,12 +81,12 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   //
   this->calc_num_samples( problem );
   if ( trace_level_ >= 1 )
-    vcl_cout << "\nSamples = " << samples_to_take_ << vcl_endl;
+    std::cout << "\nSamples = " << samples_to_take_ << std::endl;
 
   if ( obj_fcn->requires_prior_scale() &&
        problem->scale_type() == rrel_estimation_problem::NONE )
   {
-    vcl_cerr << "ran_sam::estimate: Objective function requires a prior scale,"
+    std::cerr << "ran_sam::estimate: Objective function requires a prior scale,"
              << " and the problem does not provide one.\n"
              << "                   Aborting estimation.\n";
     return false;
@@ -93,9 +94,9 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
 
   unsigned int points_per = problem->num_samples_to_instantiate();
   unsigned int num_points = problem->num_samples();
-  vcl_vector<int> point_indices( points_per );
+  std::vector<int> point_indices( points_per );
   vnl_vector<double> new_params;
-  vcl_vector<double> residuals( num_points );
+  std::vector<double> residuals( num_points );
   min_obj_ = 0.0;
   bool  obj_set=false;
 
@@ -118,7 +119,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
     if ( problem->fit_from_minimal_set( point_indices, new_params ))
     {
       if ( trace_level_ >= 1 )
-        vcl_cout << "Fit = " << new_params << vcl_endl;
+        std::cout << "Fit = " << new_params << std::endl;
       problem->compute_residuals( new_params, residuals );
       if ( trace_level_ >= 2)
         this->trace_residuals( residuals );
@@ -135,14 +136,14 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
         new_obj = obj_fcn->fcn( residuals.begin(), residuals.end(), problem->prior_multiple_scales().begin(), &new_params );
         break;
        default:
-        vcl_cerr << __FILE__ << ": unknown scale type\n";
-        vcl_abort();
+        std::cerr << __FILE__ << ": unknown scale type\n";
+        std::abort();
       }
       if ( trace_level_ >= 1)
-        vcl_cout << "Objective = " << new_obj << vcl_endl;
+        std::cout << "Objective = " << new_obj << std::endl;
       if ( !obj_set || new_obj<min_obj_ ) {
         if ( trace_level_ >= 2)
-          vcl_cout << "New best\n";
+          std::cout << "New best\n";
         obj_set = true;
         min_obj_ = new_obj;
         params_ = new_params;
@@ -151,7 +152,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
       }
     }
     else if (trace_level_ >= 1)
-      vcl_cout << "No fit to sample.\n";
+      std::cout << "No fit to sample.\n";
   }
 
   if ( ! obj_set ) {
@@ -163,7 +164,7 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
   //
   problem->compute_residuals( params_, residuals );
   if ( trace_level_ >= 1)
-    vcl_cout << "\nOptimum fit = " << params_ << vcl_endl;
+    std::cout << "\nOptimum fit = " << params_ << std::endl;
   if ( trace_level_ >= 2)
     this->trace_residuals( residuals );
   if ( obj_fcn->can_estimate_scale() )
@@ -172,11 +173,11 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
     scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end() );
   else {
     scale_ = 0;
-    vcl_cout << "Can't estimate scale from one residual!\n";
+    std::cout << "Can't estimate scale from one residual!\n";
     return false;
   }
   if ( trace_level_ >= 1)
-    vcl_cout << "Scale = " << scale_ << vcl_endl;
+    std::cout << "Scale = " << scale_ << std::endl;
   return true;
 }
 
@@ -207,9 +208,9 @@ rrel_ran_sam_search::calc_num_samples( const rrel_estimation_problem* problem )
     double prob_pt_inlier = (1 - max_outlier_frac_) * problem->num_unique_samples() / double(problem->num_samples());
     double prob_pt_good
       = max_populations_expected_
-        * vcl_pow( prob_pt_inlier / max_populations_expected_, (int)problem->num_samples_to_instantiate());
-    samples_to_take_ = int(vcl_ceil( vcl_log(1.0 - desired_prob_good_) /
-                                     vcl_log(1.0 - prob_pt_good) ));
+        * std::pow( prob_pt_inlier / max_populations_expected_, (int)problem->num_samples_to_instantiate());
+    samples_to_take_ = int(std::ceil( std::log(1.0 - desired_prob_good_) /
+                                     std::log(1.0 - prob_pt_good) ));
     if ( samples_to_take_ < min_samples_ )
       samples_to_take_ = min_samples_;
   }
@@ -219,7 +220,7 @@ rrel_ran_sam_search::calc_num_samples( const rrel_estimation_problem* problem )
 void
 rrel_ran_sam_search::next_sample( unsigned int taken,
                                   unsigned int num_points,
-                                  vcl_vector<int>& sample,
+                                  std::vector<int>& sample,
                                   unsigned int points_per_sample )
 {
   assert( sample.size() == points_per_sample );
@@ -230,7 +231,7 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
         sample[i] = i;
     }
     else if ( taken >= samples_to_take_ )
-      vcl_cerr << "rrel_ran_sam_search::next_sample -- ERROR: used all samples\n";
+      std::cerr << "rrel_ran_sam_search::next_sample -- ERROR: used all samples\n";
     else {
       //
       //  Generate the subsets in lexicographic order.
@@ -253,7 +254,7 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
       {
         int id = generator_->lrand32( 0, num_points-1 );
         if ( id >= int(num_points) ) {   //  safety check
-          vcl_cerr << "rrel_ran_sam_search::next_sample --- "
+          std::cerr << "rrel_ran_sam_search::next_sample --- "
                    << "WARNING: random value out of range\n";
         }
         else
@@ -266,7 +267,7 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
             sample[k++] = id, counter = 0;
           else if (counter > 100)
           {
-            vcl_cerr << "rrel_ran_sam_search::next_sample --- WARNING: "
+            std::cerr << "rrel_ran_sam_search::next_sample --- WARNING: "
                      << "lrand32() generated 100x the same value "<< id
                      << " from the range [0," << num_points-1 << "]\n";
             sample[k++] = id+1;
@@ -281,30 +282,30 @@ rrel_ran_sam_search::next_sample( unsigned int taken,
 void
 rrel_ran_sam_search::print_params() const
 {
-  vcl_cout << "  max_outlier_frac_ = " << max_outlier_frac_ << '\n'
+  std::cout << "  max_outlier_frac_ = " << max_outlier_frac_ << '\n'
            << "  desired_prob_good_ = " << desired_prob_good_ <<  '\n'
            << "  max_populations_expected_ = " << max_populations_expected_ << '\n'
            << "  min_samples_ = " << min_samples_ << '\n'
-           << "  generate_all_ = " << generate_all_ << vcl_endl;
+           << "  generate_all_ = " << generate_all_ << std::endl;
 }
 
 
 // ------------------------------------------------------------
 void
-rrel_ran_sam_search::trace_sample( const vcl_vector<int>& indices ) const
+rrel_ran_sam_search::trace_sample( const std::vector<int>& indices ) const
 {
-  vcl_cout << "\nNew sample: ";
+  std::cout << "\nNew sample: ";
   for ( unsigned int i=0; i<indices.size(); ++i)
-    vcl_cout << ' ' << indices[i];
-  vcl_cout << vcl_endl;
+    std::cout << ' ' << indices[i];
+  std::cout << std::endl;
 }
 
 // ------------------------------------------------------------
 void
-rrel_ran_sam_search::trace_residuals( const vcl_vector<double>& residuals ) const
+rrel_ran_sam_search::trace_residuals( const std::vector<double>& residuals ) const
 {
-  vcl_cout << "\nResiduals:\n";
+  std::cout << "\nResiduals:\n";
   for ( unsigned int i=0; i<residuals.size(); ++i )
-    vcl_cout << "  " << i << ":  " << residuals[i] << '\n';
-  vcl_cout << vcl_endl;
+    std::cout << "  " << i << ":  " << residuals[i] << '\n';
+  std::cout << std::endl;
 }

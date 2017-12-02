@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?> 
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <bvxmCreateSynthLidarDataProcess>
   <voxel_dim_x type="unsigned" value="100"></voxel_dim_x>
   <voxel_dim_y type="unsigned" value="100"></voxel_dim_y>

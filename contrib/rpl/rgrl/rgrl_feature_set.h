@@ -8,12 +8,14 @@
 //
 // \verbatim
 //  Modifications
-//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature 
-//      based on point location alone 
+//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature
+//      based on point location alone
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 
 #include "rgrl_feature.h"
 #include "rgrl_object.h"
@@ -34,12 +36,12 @@ class rgrl_feature_set_label
 {
  public:
   //:
-  rgrl_feature_set_label( const vcl_string& name = vcl_string() );
+  rgrl_feature_set_label( const std::string& name = std::string() );
 
   //: return name
-  vcl_string const& name() const
+  std::string const& name() const
   { return name_; }
-  
+
   //:
   bool operator==( rgrl_feature_set_label const& other ) const;
 
@@ -50,7 +52,7 @@ class rgrl_feature_set_label
   bool operator<( rgrl_feature_set_label const& other ) const;
 
  private:
-  vcl_string name_;
+  std::string name_;
 };
 
 //: Base class to represent and provide access in several ways to a set of registration features.
@@ -61,7 +63,7 @@ class rgrl_feature_set
   : public rgrl_object
 {
  public:
-  typedef vcl_vector<rgrl_feature_sptr>  feature_vector;
+  typedef std::vector<rgrl_feature_sptr>  feature_vector;
 
  public:
   rgrl_feature_set( feature_vector const& fea_vec, rgrl_feature_set_label const& label = rgrl_feature_set_label() );
@@ -71,11 +73,11 @@ class rgrl_feature_set
   //: set label
   void set_label( rgrl_feature_set_label const& label )
   { label_ = label; }
-  
+
   //: get label
   rgrl_feature_set_label const& label() const
   { return label_; }
-  
+
   //:  Return all the features
   //
   virtual
@@ -134,7 +136,7 @@ class rgrl_feature_set
   //:  Return the type of feature
   //
   virtual
-  const vcl_type_info&
+  const std::type_info&
   type() const = 0;
 
   // Defines type-related functions

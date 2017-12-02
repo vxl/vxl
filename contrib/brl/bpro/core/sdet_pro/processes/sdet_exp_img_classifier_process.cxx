@@ -12,7 +12,7 @@
 bool sdet_exp_img_classifier_process_cons(bprb_func_process& pro)
 {
   // process takes 5 inputs:
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); //classifier
   input_types.push_back("vcl_string"); //texton dictionary
   input_types.push_back("vil_image_view_base_sptr"); //input image path
@@ -23,7 +23,7 @@ bool sdet_exp_img_classifier_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: output texture color image
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   return pro.set_output_types(output_types);
 }
@@ -33,33 +33,33 @@ bool sdet_exp_img_classifier_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << "texture classifier process inputs are not valid"<< vcl_endl;
+    std::cout << pro.name() << "texture classifier process inputs are not valid"<< std::endl;
     return false;
   }
   // get inputs
-  sdet_texture_classifier_sptr tc_ptr = 
+  sdet_texture_classifier_sptr tc_ptr =
     pro.get_input<sdet_texture_classifier_sptr>(0);
   sdet_texture_classifier_params* tcp = static_cast<sdet_texture_classifier_params*>(tc_ptr.ptr());
   sdet_atmospheric_image_classifier tc(*tcp);
-  vcl_string texton_dict_path = pro.get_input<vcl_string>(1);
+  std::string texton_dict_path = pro.get_input<std::string>(1);
 
   //extract input image
-  vil_image_view_base_sptr view_ptr = 
+  vil_image_view_base_sptr view_ptr =
     pro.get_input<vil_image_view_base_sptr>(2);
   if (!view_ptr)
   {
-    vcl_cout << "null image in sdet_exp_img_classifier_process\n";
+    std::cout << "null image in sdet_exp_img_classifier_process\n";
     return false;
   }
   //assumes a float image on the range [0, 1];
   vil_image_view<float> fview(view_ptr);
 
   //extract expected image
-  vil_image_view_base_sptr exp_ptr = 
+  vil_image_view_base_sptr exp_ptr =
     pro.get_input<vil_image_view_base_sptr>(3);
   if (!exp_ptr)
   {
-    vcl_cout << "null expected image in sdet_exp_img_classifier_process\n";
+    std::cout << "null expected image in sdet_exp_img_classifier_process\n";
     return false;
   }
   //assumes a float image on the range [0, 1];

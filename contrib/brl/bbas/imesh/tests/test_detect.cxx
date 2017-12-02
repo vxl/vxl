@@ -14,16 +14,16 @@ static void test_detect()
 
   cube1.build_edge_graph();
 
-  vcl_vector<vcl_set<unsigned int> > components =
+  std::vector<std::set<unsigned int> > components =
      imesh_detect_connected_components(cube1.half_edges());
 
   TEST("Found all connected components", components.size(), 3);
 
-  vcl_set<unsigned int> group1 =
+  std::set<unsigned int> group1 =
       imesh_detect_connected_faces(cube1.half_edges(), 0);
-  vcl_set<unsigned int> group2 =
+  std::set<unsigned int> group2 =
       imesh_detect_connected_faces(cube1.half_edges(), 3);
-  vcl_set<unsigned int> group3 =
+  std::set<unsigned int> group3 =
       imesh_detect_connected_faces(cube1.half_edges(), 9);
 
   TEST("Connected faces have correct number", group1.size(), 6);

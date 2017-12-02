@@ -1,3 +1,6 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mfpf_grad_corr2d.h"
 //:
 // \file
@@ -5,8 +8,7 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vil/vil_resample_bilin.h>
@@ -72,7 +74,7 @@ void mfpf_grad_corr2d::set(const vil_image_view<double>& kx,
   ss_x-=(mean_x*mean_x*ni*nj);
   assert(ss_x>1e-6);  // If near zero, flat region - can't use correlation
   double s_x=1.0;
-  if (ss_x>0) s_x = vcl_sqrt(1.0/ss_x);
+  if (ss_x>0) s_x = std::sqrt(1.0/ss_x);
   vil_math_scale_and_offset_values(kernel_x_,s_x,-s_x*mean_x);
 
   // repeat for y-image
@@ -93,7 +95,7 @@ void mfpf_grad_corr2d::set(const vil_image_view<double>& kx,
   ss_y-=(mean_y*mean_y*ni*nj);
   assert(ss_y>1e-6);  // If near zero, flat region - can't use correlation
   double s_y=1.0;
-  if (ss_y>0) s_y = vcl_sqrt(1.0/ss_y);
+  if (ss_y>0) s_y = std::sqrt(1.0/ss_y);
   vil_math_scale_and_offset_values(kernel_y_,s_y,-s_y*mean_y);
 
   ref_x_ = ref_x;
@@ -108,7 +110,7 @@ void mfpf_grad_corr2d::set(const vil_image_view<double>& kx,
 }
 
 //: Define filter kernel to search with, expressed as a vector
-bool mfpf_grad_corr2d::set_model(const vcl_vector<double>& v)
+bool mfpf_grad_corr2d::set_model(const std::vector<double>& v)
 {
   // we assume that nplanes()==1
   assert( v.size() == model_dim() );
@@ -139,7 +141,7 @@ unsigned mfpf_grad_corr2d::model_dim()
 }
 
 //: Filter kernel to search with, expressed as a vector
-void mfpf_grad_corr2d::get_kernel_vector(vcl_vector<double>& v) const
+void mfpf_grad_corr2d::get_kernel_vector(std::vector<double>& v) const
 {
   // we assume that nplanes()==1
   v.resize( 2*kernel_x_.ni()*kernel_x_.nj() );
@@ -165,7 +167,7 @@ void mfpf_grad_corr2d::set_overlap_f(double f)
 // Assumes im2[i] has zero mean and unit length as a vector
 // Assumes element (i,j) is im1[i+j*jstep1] etc
 inline double norm_corr(const double* im1, const double* im2,
-                        vcl_ptrdiff_t jstep1, vcl_ptrdiff_t jstep2,
+                        std::ptrdiff_t jstep1, std::ptrdiff_t jstep2,
                         unsigned ni, unsigned nj)
 {
   double sum1=0.0,sum2=0.0,sum_sq=0.0;
@@ -178,8 +180,8 @@ inline double norm_corr(const double* im1, const double* im2,
     }
   unsigned n=ni*nj;
   double mean = sum2/n;
-  double ss = vcl_max(1e-6,sum_sq-n*mean*mean);
-  double s = vcl_sqrt(ss);
+  double ss = std::max(1e-6,sum_sq-n*mean*mean);
+  double s = std::sqrt(ss);
 
   return sum1/s;
 }
@@ -199,15 +201,15 @@ static void normalize(vil_image_view<double>& im)
 
   if (ss<1e-6)
   {
-    vcl_cerr<<"Warning: Almost flat region in mfpf_grad_corr2d_builder\n"
-            <<"         Size: "<<ni<<" x "<<nj<<vcl_endl;
+    std::cerr<<"Warning: Almost flat region in mfpf_grad_corr2d_builder\n"
+            <<"         Size: "<<ni<<" x "<<nj<<std::endl;
   }
 
   // Normalise so that im has zero mean and unit sum of squares.
   double mean=sum/(ni*nj);
   ss-=(mean*mean*ni*nj);
   double s=1.0;
-  if (ss>0) s = vcl_sqrt(1.0/ss);
+  if (ss>0) s = std::sqrt(1.0/ss);
   vil_math_scale_and_offset_values(im,s,-s*mean);
 }
 #endif // 0
@@ -249,10 +251,10 @@ void mfpf_grad_corr2d::diff_image(const vimt_image_2d_of<float>& image,
 
   const float* s1 = sample.top_left_ptr();
   const float* s2 = sample.top_left_ptr()+sample.istep();
-  vcl_ptrdiff_t s_jstep = sample.jstep();
+  std::ptrdiff_t s_jstep = sample.jstep();
 
   double* kx = grad_x.top_left_ptr();
-  vcl_ptrdiff_t kx_jstep = grad_x.jstep();
+  std::ptrdiff_t kx_jstep = grad_x.jstep();
 
   for (unsigned j=0;j<nsj;++j,kx+=kx_jstep,s1+=s_jstep,s2+=s_jstep)
     for (unsigned i=0;i<nsi;++i)
@@ -275,7 +277,7 @@ void mfpf_grad_corr2d::diff_image(const vimt_image_2d_of<float>& image,
   s_jstep = sample.jstep();
 
   double* ky = grad_y.top_left_ptr();
-  vcl_ptrdiff_t ky_jstep = grad_y.jstep();
+  std::ptrdiff_t ky_jstep = grad_y.jstep();
 
   for (unsigned j=0;j<nsj;++j,ky+=ky_jstep,s1+=s_jstep,s2+=s_jstep)
     for (unsigned i=0;i<nsi;++i)
@@ -286,7 +288,7 @@ void mfpf_grad_corr2d::diff_image(const vimt_image_2d_of<float>& image,
 void mfpf_grad_corr2d::get_sample_vector(const vimt_image_2d_of<float>& image,
                                          const vgl_point_2d<double>& p,
                                          const vgl_vector_2d<double>& u,
-                                         vcl_vector<double>& v)
+                                         std::vector<double>& v)
 {
   assert(image.image().size()>0);
 
@@ -310,12 +312,12 @@ double mfpf_grad_corr2d::radius() const
 {
   // Compute distance to each corner
   double wx = kernel_x_.ni()-1;
-  double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
+  double x2 = std::max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
   double wy = kernel_x_.nj()-1;
-  double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
+  double y2 = std::max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
   double r2 = x2+y2;
   if (r2<=1) return 1.0;
-  return vcl_sqrt(r2);
+  return std::sqrt(r2);
 }
 
 //: Evaluate match at p, using u to define scale and orientation
@@ -363,11 +365,11 @@ void mfpf_grad_corr2d::evaluate_region(
   const double* ky = kernel_y_.top_left_ptr();
   const double* sx = grad_x.top_left_ptr();
   const double* sy = grad_y.top_left_ptr();
-  vcl_ptrdiff_t r_jstep = response.image().jstep();
-  vcl_ptrdiff_t sx_jstep = grad_x.jstep();
-  vcl_ptrdiff_t sy_jstep = grad_y.jstep();
-  vcl_ptrdiff_t kx_jstep = kernel_x_.jstep();
-  vcl_ptrdiff_t ky_jstep = kernel_y_.jstep();
+  std::ptrdiff_t r_jstep = response.image().jstep();
+  std::ptrdiff_t sx_jstep = grad_x.jstep();
+  std::ptrdiff_t sy_jstep = grad_y.jstep();
+  std::ptrdiff_t kx_jstep = kernel_x_.jstep();
+  std::ptrdiff_t ky_jstep = kernel_y_.jstep();
 
   for (int j=0;j<nj;++j,r+=r_jstep,sx+=sx_jstep,sy+=sy_jstep)
   {
@@ -413,10 +415,10 @@ double mfpf_grad_corr2d::search_one_pose(
   const double* ky = kernel_y_.top_left_ptr();
   const double* sx = grad_x.top_left_ptr();
   const double* sy = grad_y.top_left_ptr();
-  vcl_ptrdiff_t sx_jstep = grad_x.jstep();
-  vcl_ptrdiff_t sy_jstep = grad_y.jstep();
-  vcl_ptrdiff_t kx_jstep = kernel_x_.jstep();
-  vcl_ptrdiff_t ky_jstep = kernel_y_.jstep();
+  std::ptrdiff_t sx_jstep = grad_x.jstep();
+  std::ptrdiff_t sy_jstep = grad_y.jstep();
+  std::ptrdiff_t kx_jstep = kernel_x_.jstep();
+  std::ptrdiff_t ky_jstep = kernel_y_.jstep();
 
   int ni=1+2*search_ni_;
   int nj=1+2*search_nj_;
@@ -473,7 +475,7 @@ bool mfpf_grad_corr2d::overlap(const mfpf_pose& pose1,
 //: Generate points in ref frame that represent boundary
 //  Points of a contour around the shape.
 //  Used for display purposes.
-void mfpf_grad_corr2d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+void mfpf_grad_corr2d::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(7);
   int roi_ni=kernel_x_.ni();
@@ -508,9 +510,9 @@ void mfpf_grad_corr2d::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) con
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_grad_corr2d::is_a() const
+std::string mfpf_grad_corr2d::is_a() const
 {
-  return vcl_string("mfpf_grad_corr2d");
+  return std::string("mfpf_grad_corr2d");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -523,7 +525,7 @@ mfpf_point_finder* mfpf_grad_corr2d::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_grad_corr2d::print_summary(vcl_ostream& os) const
+void mfpf_grad_corr2d::print_summary(std::ostream& os) const
 {
   os << "{  size: " << kernel_x_.ni() << " x " << kernel_x_.nj();
   mfpf_point_finder::print_summary(os);
@@ -568,9 +570,9 @@ void mfpf_grad_corr2d::b_read(vsl_b_istream& bfs)
       else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -583,8 +585,8 @@ bool mfpf_grad_corr2d::operator==(const mfpf_grad_corr2d& nc) const
   if (kernel_x_.nj()!=nc.kernel_x_.nj()) return false;
   if (kernel_y_.ni()!=nc.kernel_y_.ni()) return false;
   if (kernel_y_.nj()!=nc.kernel_y_.nj()) return false;
-  if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
-  if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
+  if (std::fabs(ref_x_-nc.ref_x_)>1e-6) return false;
+  if (std::fabs(ref_y_-nc.ref_y_)>1e-6) return false;
   if (kernel_x_.size()!=nc.kernel_x_.size()) return false;
   if (kernel_x_.size()==0) return true;  // ssd fails on empty
   if (kernel_y_.size()!=nc.kernel_y_.size()) return false;

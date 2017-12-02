@@ -1,6 +1,7 @@
 // This example creates a line or a circle with a rubberbanding event loop
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_image_tableau.h>
@@ -9,7 +10,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 //global pointer to the rubberband tableau
-static vgui_rubberband_tableau_sptr rubber = 0;
+static vgui_rubberband_tableau_sptr rubber = VXL_NULLPTR;
 
 //the meunu callback functions
 static void create_line()
@@ -38,7 +39,7 @@ int main(int argc, char ** argv)
   vgui::init(argc,argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line\n";
+    std::cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

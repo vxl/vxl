@@ -1,4 +1,4 @@
-#include <boxm/boxm_scene.txx>
+#include <boxm/boxm_scene.hxx>
 #include <boxm/sample/boxm_edge_sample.h>
 #include <boct/boct_tree.h>
 

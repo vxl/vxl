@@ -1,5 +1,6 @@
 // This is mul/mbl/tests/test_matrix_products.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matrix_products.h>
@@ -7,7 +8,7 @@
 
 void test_matrix_products()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing mbl_matrix_products\n"
            << "*****************************\n";
 

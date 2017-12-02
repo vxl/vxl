@@ -1,7 +1,7 @@
 // This is brl/bbas/volm/volm_category_io.h
 #ifndef volm_category_io_h_
 #define volm_category_io_h_
-//: 
+//:
 // \file
 // \brief A io to read the pre-defined available land types for volumetric matcher related
 // \author Yi Dong
@@ -13,11 +13,12 @@
 // \endverbatim
 //
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_utility.h>
-#include <vcl_map.h>
-#include <vcl_set.h>
+#include <string>
+#include <iostream>
+#include <utility>
+#include <map>
+#include <set>
+#include <vcl_compiler.h>
 #include <vil/vil_rgb.h>
 #include <vxl_config.h>
 #include <bvrml/bvrml_write.h>
@@ -30,29 +31,29 @@ public:
   //: default constructor creates an invalid land category
   volm_land_layer() : id_(0), name_("invalid"), level_(0), color_(vil_rgb<vxl_byte>(0,0,0)), width_(0.0) {}
   //: constructor
-  volm_land_layer(unsigned char const& id, vcl_string const& name,
+  volm_land_layer(unsigned char const& id, std::string const& name,
                   unsigned char const& level, double const& width, vil_rgb<vxl_byte> const& color)
                   : id_(id), name_(name), level_(level), color_(color), width_(width) {}
-  volm_land_layer(unsigned char const& id, vcl_string const& name, unsigned char const& level, double const& width)
+  volm_land_layer(unsigned char const& id, std::string const& name, unsigned char const& level, double const& width)
     : id_(id), name_(name), level_(level),
-      color_(bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2]), 
+      color_(bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2]),
       width_(width) {}
-                  
+
   //: destructor
   ~volm_land_layer() {}
 
   //: check the existence of certain land layer
-  bool contains(vcl_string name);
+  bool contains(std::string name);
   //: screen print
   void print() const
   {
-    vcl_cout << " (id: " << (int)id_ << ", name: " << name_ 
+    std::cout << " (id: " << (int)id_ << ", name: " << name_
              << ", level: " << (int)level_ <<  ", width: " << width_ << ", color: " << color_ << ')';
   }
   //: land id
   unsigned char id_;
   //: land name
-  vcl_string name_;
+  std::string name_;
   //: layer priority
   unsigned char level_;
   //: assigned color for this land
@@ -79,40 +80,40 @@ public:
                          GEO_AGRICULTURE_GENERAL = 7, GEO_AGRICULTURE_RICE = 8,
                          GEO_WETLAND = 9, GEO_MANGROVE = 10,
                          GEO_WATER = 11, GEO_ICE = 12, GEO_CLOUD = 13};
-  
+
   //: table to transfer open street map (osm) to volm available land table
-  static bool load_category_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>& land_category_table);
+  static bool load_category_table(std::string const& filename, std::map<std::pair<std::string, std::string>, volm_land_layer>& land_category_table);
 
   //: table of all defined road junctions loaded from text file
-  static volm_EXPORT_DATA vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table;
+  static volm_EXPORT_DATA std::map<std::pair<int, int>, volm_land_layer> road_junction_table;
 
   //: function to load road junction file
-  static bool load_road_junction_table(vcl_string const& filename, vcl_map<vcl_pair<int, int>, volm_land_layer>& road_junction_table);
+  static bool load_road_junction_table(std::string const& filename, std::map<std::pair<int, int>, volm_land_layer>& road_junction_table);
 
   //: table to define default width of road loaded from open street map
-  static bool load_road_width_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, float>& road_width_table);
+  static bool load_road_width_table(std::string const& filename, std::map<std::pair<std::string, std::string>, float>& road_width_table);
 
   //: table to transfer nlcd label to volm label
-  static volm_EXPORT_DATA vcl_map<int, volm_land_layer> nlcd_land_table;
+  static volm_EXPORT_DATA std::map<int, volm_land_layer> nlcd_land_table;
 
   //: table to transfer geo_cover
-  static volm_EXPORT_DATA vcl_map<int, volm_land_layer> geo_land_table;
+  static volm_EXPORT_DATA std::map<int, volm_land_layer> geo_land_table;
 
   //: table of all possible volm_object
-  static volm_EXPORT_DATA vcl_vector<vcl_string> volm_category_name_table;
+  static volm_EXPORT_DATA std::vector<std::string> volm_category_name_table;
 
   //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (key is the land_layer id)
-  static volm_EXPORT_DATA vcl_map<unsigned, volm_land_layer> volm_land_table;
+  static volm_EXPORT_DATA std::map<unsigned, volm_land_layer> volm_land_table;
 
   //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (key is the land_layer name, note that the land name is unique)
-  static volm_EXPORT_DATA vcl_map<vcl_string, volm_land_layer> volm_land_table_name;
+  static volm_EXPORT_DATA std::map<std::string, volm_land_layer> volm_land_table_name;
 
-  //: use the corresponding increment during hypotheses generation, 
+  //: use the corresponding increment during hypotheses generation,
   //  the unit of the increments is in meters (user of this table shall convert to degrees if necessary depending on lat, lon of the area)
-  static volm_EXPORT_DATA vcl_map<int, double> geo_land_hyp_increments;
+  static volm_EXPORT_DATA std::map<int, double> geo_land_hyp_increments;
 
   //: table to transfer land tags in xml file to volm land category
-  static volm_EXPORT_DATA vcl_map<vcl_string, volm_land_layer> tag_to_volm_land_table;
+  static volm_EXPORT_DATA std::map<std::string, volm_land_layer> tag_to_volm_land_table;
 
 };
 

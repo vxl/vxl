@@ -1,13 +1,14 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
 static void test_triangle_scan_iterator()
 {
-  vcl_cout << "Test triangle scan iterator\n";
+  std::cout << "Test triangle scan iterator\n";
 
   {
     float x[3] = { 10.23f, 20.12f, 30.73f };
@@ -54,7 +55,7 @@ static void test_triangle_scan_iterator()
     // ..X.   with two connected components!
     // ..X.
     // ....  <= this scan line has no pixels
-    // ...X 
+    // ...X
     int points[5][2] = { {1,1},{2,1},{2,2},{2,3},{3,5} };
 
     vgl_triangle_scan_iterator<float> ti;

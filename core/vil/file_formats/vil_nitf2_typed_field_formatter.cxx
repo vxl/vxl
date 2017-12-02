@@ -2,15 +2,16 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
+#include <utility>
+#include <cerrno>
 #include "vil_nitf2_typed_field_formatter.h"
 
-#include <vcl_algorithm.h>
-#include <vcl_iomanip.h>
-#include <vcl_iostream.h>
-#include <vcl_utility.h>
 #include <vcl_compiler.h> //for VCL_WIN32
 
-#include <vcl_cerrno.h>
+#include <vcl_compiler.h>
 
 //==============================================================================
 // Class vil_nitf2_date_time_formatter
@@ -24,12 +25,12 @@ vil_nitf2_field_formatter* vil_nitf2_date_time_formatter::copy() const
   return new vil_nitf2_date_time_formatter(field_width);
 }
 
-bool vil_nitf2_date_time_formatter::read_vcl_stream(vcl_istream& input, vil_nitf2_date_time& out_value, bool& out_blank)
+bool vil_nitf2_date_time_formatter::read_vcl_stream(std::istream& input, vil_nitf2_date_time& out_value, bool& out_blank)
 {
   return out_value.read(input, field_width, out_blank);
 }
 
-bool vil_nitf2_date_time_formatter::write_vcl_stream(vcl_ostream& output, const vil_nitf2_date_time& value)
+bool vil_nitf2_date_time_formatter::write_vcl_stream(std::ostream& output, const vil_nitf2_date_time& value)
 {
   return value.write(output, field_width);
 }
@@ -46,11 +47,11 @@ vil_nitf2_field_formatter* vil_nitf2_location_formatter::copy() const
   return new vil_nitf2_location_formatter(field_width);
 }
 
-bool vil_nitf2_location_formatter::read_vcl_stream(vcl_istream& input,
+bool vil_nitf2_location_formatter::read_vcl_stream(std::istream& input,
                                                    vil_nitf2_location*& out_value,
                                                    bool& out_blank)
 {
-  vcl_streampos tag_start_pos = input.tellg();
+  std::streampos tag_start_pos = input.tellg();
   vil_nitf2_location* location = new vil_nitf2_location_degrees(deg_precision(field_width));
   if (location->read(input, field_width, out_blank)) {
     out_value = location;
@@ -64,13 +65,13 @@ bool vil_nitf2_location_formatter::read_vcl_stream(vcl_istream& input,
       return true;
     } else {
       delete location;
-      out_value = 0;
+      out_value = VXL_NULLPTR;
       return false;
     }
   }
 }
 
-bool vil_nitf2_location_formatter::write_vcl_stream(vcl_ostream& output, vil_nitf2_location*const& value)
+bool vil_nitf2_location_formatter::write_vcl_stream(std::ostream& output, vil_nitf2_location*const& value)
 {
   return value->write(output, field_width);
 }
@@ -93,7 +94,7 @@ vil_nitf2_field_formatter* vil_nitf2_integer_formatter::copy() const
 }
 
 bool
-vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input,
+vil_nitf2_integer_formatter::read_vcl_stream(std::istream& input,
                                              int& out_value, bool& out_blank)
 {
   char* cstr;
@@ -112,13 +113,13 @@ vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input,
   return retVal;
 }
 
-bool vil_nitf2_integer_formatter::write_vcl_stream(vcl_ostream& output, const int& value)
+bool vil_nitf2_integer_formatter::write_vcl_stream(std::ostream& output, const int& value)
 {
-  output << vcl_setw(field_width) << vcl_right << vcl_setfill('0');
+  output << std::setw(field_width) << std::right << std::setfill('0');
   if (show_sign) {
-    output << vcl_showpos;
+    output << std::showpos;
   } else {
-    output << vcl_noshowpos;
+    output << std::noshowpos;
   }
   output << value;
   return !output.fail();
@@ -139,7 +140,7 @@ vil_nitf2_field_formatter* vil_nitf2_long_long_formatter::copy() const
 }
 
 bool vil_nitf2_long_long_formatter::
-read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
+read_vcl_stream(std::istream& input, vil_nitf2_long& out_value, bool& out_blank)
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
@@ -155,9 +156,6 @@ read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 #if defined VCL_VC
   out_value = _strtoi64(cstr, &endp, 10);
   conversion_ok = (endp-cstr)==field_width;   // processed all chars
-#elif defined VCL_BORLAND
-  out_value = _atoi64( cstr );
-  conversion_ok = true;                       //no error checking available
 #else
   out_value = ::strtoll(cstr, &endp, 10);     // in Standard C Library
   conversion_ok = (endp-cstr)==field_width;   // processed all chars
@@ -175,13 +173,13 @@ read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
          && sign_ok;              // sign shown as expected
 }
 
-bool vil_nitf2_long_long_formatter::write_vcl_stream(vcl_ostream& output, const vil_nitf2_long& value)
+bool vil_nitf2_long_long_formatter::write_vcl_stream(std::ostream& output, const vil_nitf2_long& value)
 {
-  output << vcl_setw(field_width) << vcl_right << vcl_setfill('0');
+  output << std::setw(field_width) << std::right << std::setfill('0');
   if (show_sign) {
-    output << vcl_showpos;
+    output << std::showpos;
   } else {
-    output << vcl_noshowpos;
+    output << std::noshowpos;
   }
   output << value;
   return !output.fail();
@@ -202,7 +200,7 @@ vil_nitf2_field_formatter* vil_nitf2_double_formatter::copy() const
   return new vil_nitf2_double_formatter(field_width, precision, show_sign);
 }
 
-bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input,
+bool vil_nitf2_double_formatter::read_vcl_stream(std::istream& input,
                                                  double& out_value, bool& out_blank)
 {
   char* cstr;
@@ -224,15 +222,15 @@ bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input,
   return retVal;
 }
 
-bool vil_nitf2_double_formatter::write_vcl_stream(vcl_ostream& output, const double& value)
+bool vil_nitf2_double_formatter::write_vcl_stream(std::ostream& output, const double& value)
 {
-  output << vcl_setw(field_width) << vcl_fixed;
+  output << std::setw(field_width) << std::fixed;
   if (show_sign) {
-    output << vcl_showpos;
+    output << std::showpos;
   } else {
-    output << vcl_noshowpos;
+    output << std::noshowpos;
   }
-  output << vcl_internal << vcl_setfill('0') << vcl_setprecision(precision)
+  output << std::internal << std::setfill('0') << std::setprecision(precision)
          << value;
   return !output.fail();
 }
@@ -253,7 +251,7 @@ vil_nitf2_field_formatter* vil_nitf2_exponential_formatter::copy() const
   return new vil_nitf2_exponential_formatter(mantissa_width, exponent_width);
 }
 
-bool vil_nitf2_exponential_formatter::read_vcl_stream(vcl_istream& input,
+bool vil_nitf2_exponential_formatter::read_vcl_stream(std::istream& input,
                                                       double& out_value, bool& out_blank)
 {
   char* cstr;
@@ -282,22 +280,22 @@ bool vil_nitf2_exponential_formatter::read_vcl_stream(vcl_istream& input,
   return retVal;
 }
 
-bool vil_nitf2_exponential_formatter::write_vcl_stream(vcl_ostream& output,
+bool vil_nitf2_exponential_formatter::write_vcl_stream(std::ostream& output,
                                                        const double& value)
 {
   // Can't control the width of exponent (it's 3) so write it to a buffer first
-  vcl_ostringstream buffer;
-  buffer << vcl_setw(field_width) << vcl_scientific
-         << vcl_showpos << vcl_uppercase
-         << vcl_internal << vcl_setfill('0') << vcl_setprecision(mantissa_width)
+  std::ostringstream buffer;
+  buffer << std::setw(field_width) << std::scientific
+         << std::showpos << std::uppercase
+         << std::internal << std::setfill('0') << std::setprecision(mantissa_width)
          << value;
-  vcl_string buffer_string = buffer.str();
+  std::string buffer_string = buffer.str();
   unsigned int length = (unsigned int)(buffer_string.length());
   // Write everything up to the exponent sign
   output << buffer_string.substr(0,length-3);
   // Write exponent digits, padding or unpadding them to desired width
-  output << vcl_setw(exponent_width) << vcl_setfill('0')
-         << buffer_string.substr(length-vcl_min(3,exponent_width), vcl_min(3,exponent_width));
+  output << std::setw(exponent_width) << std::setfill('0')
+         << buffer_string.substr(length-std::min(3,exponent_width), std::min(3,exponent_width));
   return !output.fail();
 }
 
@@ -338,7 +336,7 @@ vil_nitf2_field_formatter* vil_nitf2_char_formatter::copy() const
   return new vil_nitf2_char_formatter();
 }
 
-bool vil_nitf2_char_formatter::read_vcl_stream(vcl_istream& input, char& out_value, bool& out_blank)
+bool vil_nitf2_char_formatter::read_vcl_stream(std::istream& input, char& out_value, bool& out_blank)
 {
   input.get(out_value);
   //int numRead = input.read(&out_value, 1);
@@ -347,7 +345,7 @@ bool vil_nitf2_char_formatter::read_vcl_stream(vcl_istream& input, char& out_val
   //return numRead == 1;
 }
 
-bool vil_nitf2_char_formatter::write_vcl_stream(vcl_ostream& output, const char& value)
+bool vil_nitf2_char_formatter::write_vcl_stream(std::ostream& output, const char& value)
 {
   output << value;
   return !output.fail();
@@ -358,7 +356,7 @@ bool vil_nitf2_char_formatter::write_vcl_stream(vcl_ostream& output, const char&
 
 vil_nitf2_string_formatter::
 vil_nitf2_string_formatter(int field_width, enum_char_set char_set)
-  : vil_nitf2_typed_field_formatter<vcl_string>(vil_nitf2::type_string, field_width),
+  : vil_nitf2_typed_field_formatter<std::string>(vil_nitf2::type_string, field_width),
     char_set(char_set)
 {}
 
@@ -367,8 +365,8 @@ vil_nitf2_field_formatter* vil_nitf2_string_formatter::copy() const
   return new vil_nitf2_string_formatter(field_width, char_set);
 }
 
-bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input,
-                                                 vcl_string& out_value,
+bool vil_nitf2_string_formatter::read_vcl_stream(std::istream& input,
+                                                 std::string& out_value,
                                                  bool& out_blank)
 {
   char* cstr;
@@ -376,10 +374,10 @@ bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input,
     delete[] cstr;
     return false;
   }
-  vcl_string str = vcl_string(cstr);
+  std::string str = std::string(cstr);
   delete[] cstr;
-  vcl_string::size_type end_pos = str.find_last_not_of(" ")+1;
-  if (end_pos == vcl_string::npos) {
+  std::string::size_type end_pos = str.find_last_not_of(" ")+1;
+  if (end_pos == std::string::npos) {
     out_value = str;
   } else {
     out_value = str.substr(0, end_pos);
@@ -387,13 +385,13 @@ bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input,
   return is_valid(out_value);
 }
 
-bool vil_nitf2_string_formatter::write_vcl_stream(vcl_ostream& output, const vcl_string& value)
+bool vil_nitf2_string_formatter::write_vcl_stream(std::ostream& output, const std::string& value)
 {
-  output << vcl_setw(field_width) << vcl_left << vcl_setfill(' ') << value;
+  output << std::setw(field_width) << std::left << std::setfill(' ') << value;
   return !output.fail();
 }
 
-bool vil_nitf2_string_formatter::is_valid(vcl_string /*value*/) const
+bool vil_nitf2_string_formatter::is_valid(std::string /*value*/) const
 {
   // to do: check char set
   return true;
@@ -420,10 +418,10 @@ void vil_nitf2_enum_string_formatter::validate_value_map()
   for (vil_nitf2_enum_values::iterator entry = value_map.begin();
        entry != value_map.end(); ++entry)
   {
-    vcl_string token = entry->first;
+    std::string token = entry->first;
 #if 0  // disable the err message
     if (int(token.length()) > field_width) {
-      //vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring token "
+      //std::cerr << "vil_nitf2_enum_values: WARNING: Ignoring token "
       //         << token << "; length exceeds declared field width.\n";
       // Should probably remove it so that is_valid() doesn't match it.
       // On the other hand, this class will never read a token of this
@@ -433,7 +431,7 @@ void vil_nitf2_enum_string_formatter::validate_value_map()
   }
 }
 
-bool vil_nitf2_enum_string_formatter::is_valid_value(vcl_string token) const
+bool vil_nitf2_enum_string_formatter::is_valid_value(std::string token) const
 {
   return value_map.find(token) != value_map.end();
 }
@@ -441,10 +439,10 @@ bool vil_nitf2_enum_string_formatter::is_valid_value(vcl_string token) const
 //==============================================================================
 // Class vil_nitf2_enum_values
 
-vil_nitf2_enum_values& vil_nitf2_enum_values::value(vcl_string token, vcl_string pretty_name)
+vil_nitf2_enum_values& vil_nitf2_enum_values::value(std::string token, std::string pretty_name)
 {
-  if (!insert(vcl_make_pair(token, pretty_name)).second) {
-    vcl_cerr << "vil_nitf2_enum_values: WARNING: Ignoring definition "
+  if (!insert(std::make_pair(token, pretty_name)).second) {
+    std::cerr << "vil_nitf2_enum_values: WARNING: Ignoring definition "
              << token << "; token already defined for this enumeration.\n";
   }
   return *this;
@@ -486,7 +484,7 @@ read( vil_nitf2_istream& input,
     VIL_NITF2_LOG(log_info) << "\nSeeking to end of TRE sequence field.\n";
     input.seek(end);
     if (input.tell() != end) {
-      vcl_cerr << "\nSeek to end of TRE sequence field failed.\n";
+      std::cerr << "\nSeek to end of TRE sequence field failed.\n";
       error_reading_tre = true;
     }
   }

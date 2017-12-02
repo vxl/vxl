@@ -8,12 +8,12 @@
 //
 // The vertices are to be defined in counterclockwise order.
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-05-09
 //
 // \verbatim
 //  Modifications
-//   2000-05-09 François BERTEL Creation
+//   2000-05-09 Francois BERTEL Creation
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001-07-03 Peter Vanroose  Replaced vnl_double_3 by vgl_vector_3d
 //   2001-07-03 Peter Vanroose  Corrected the implementation of is_convex()
@@ -22,10 +22,12 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_region_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d
 #include <vgl/vgl_homg_plane_3d.h>
@@ -42,7 +44,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: List of vertices
   //---------------------------------------------------------------------------
-  vcl_vector<vsol_point_3d_sptr> *storage_;
+  std::vector<vsol_point_3d_sptr> *storage_;
 
   //***************************************************************************
   // Initialization
@@ -50,15 +52,15 @@ class vsol_polygon_3d : public vsol_region_3d
 
  public:
   //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. 
+  //: Default constructor. Do nothing.
   //---------------------------------------------------------------------------
   vsol_polygon_3d(void);
 
   //---------------------------------------------------------------------------
-  //: Constructor from a vcl_vector (not a geometric vector but a list of points)
+  //: Constructor from a std::vector (not a geometric vector but a list of points)
   //  REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
   //---------------------------------------------------------------------------
-  explicit vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr> const& new_vertices);
+  explicit vsol_polygon_3d(std::vector<vsol_point_3d_sptr> const& new_vertices);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -156,7 +158,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //: Are `new_vertices' valid vertices to build a polygon of the current type?
   //  That is: are all vertices in the same plane ?
   //---------------------------------------------------------------------------
-  virtual bool valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const;
+  virtual bool valid_vertices(const std::vector<vsol_point_3d_sptr> new_vertices) const;
 
   //***************************************************************************
   // Basic operations
@@ -190,19 +192,19 @@ class vsol_polygon_3d : public vsol_region_3d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_polygon_3d"); }
+  virtual std::string is_a() const { return std::string("vsol_polygon_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const
+  virtual bool is_class(std::string const& cls) const
   { return cls==is_a() || vsol_region_3d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(vcl_ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const;
 
  protected:
   void compute_plane();

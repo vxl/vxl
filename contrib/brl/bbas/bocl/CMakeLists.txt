@@ -1,19 +1,19 @@
 # basic open_cl library
 
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-IF(OPENCL_FOUND)
-  ADD_DEFINITIONS(-DHAS_OPENCL=1)
-  INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+if(OPENCL_FOUND)
+  add_definitions(-DHAS_OPENCL=1)
+  include_directories( ${OPENCL_INCLUDE_PATH} )
+  include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
   # some calls may be different for versions prior to 1.2 (e.g. clCreateImage2D)
-  OPTION(OPENCL_IS_PRE_V1.2 "OpenCL library version prior to 1.2" ON)
-  IF (OPENCL_IS_PRE_V1.2)
-    ADD_DEFINITIONS(-DOPENCL_IS_PRE_V12)
-  ENDIF(OPENCL_IS_PRE_V1.2)
+  CMAKE_DEPENDENT_OPTION(OPENCL_IS_PRE_V1.2 "OpenCL library version prior to 1.2" ON "BUILD_BRL;OPENCL_FOUND" OFF)
+  if(OPENCL_IS_PRE_V1.2)
+    add_definitions(-DOPENCL_IS_PRE_V12)
+  endif()
 
-  SET(bocl_sources
-      bocl_manager.h      bocl_manager.txx  bocl_manager.cxx
+  set(bocl_sources
+      bocl_manager.h      bocl_manager.hxx  bocl_manager.cxx
       bocl_cl.h
       bocl_cl_gl.h
       bocl_device_info.h  bocl_device_info.cxx
@@ -22,20 +22,18 @@ IF(OPENCL_FOUND)
       bocl_mem.h          bocl_mem.cxx
       bocl_kernel.h       bocl_kernel.cxx
   )
-  AUX_SOURCE_DIRECTORY(Templates bocl_sources)
-  ADD_LIBRARY(bocl ${bocl_sources} )
+  aux_source_directory(Templates bocl_sources)
+  vxl_add_library(LIBRARY_NAME bocl LIBRARY_SOURCES ${bocl_sources} )
 
-  TARGET_LINK_LIBRARIES(bocl brdb vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
+  target_link_libraries(bocl brdb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${OPENCL_LIBRARIES})
 
-  #install the .h .txx and libs
-  INSTALL_TARGETS(/lib bocl)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bocl/ ${bocl_sources})
+  #install the .h .hxx and libs
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 #pro
 add_subdirectory(pro)
-ENDIF(OPENCL_FOUND)
+endif()

@@ -14,14 +14,14 @@ bool vil_gaussian_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // input image
   input_types.push_back("float"); // gaussian standard deviation
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // gauss smoothed image(float)
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -33,7 +33,7 @@ bool vil_gaussian_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_gaussian_process: The input number should be 5" << vcl_endl;
+    std::cout << "vil_gaussian_process: The input number should be 5" << std::endl;
     return false;
   }
 

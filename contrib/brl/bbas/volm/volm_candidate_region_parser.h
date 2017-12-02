@@ -46,13 +46,15 @@
 #define KML_POLYOB_TAG "outerBoundaryIs"
 #define KML_POLYIB_TAG "innerBoundaryIs"
 
+#include <string>
+#include <vector>
+#include <utility>
+#include <iostream>
+#include <map>
 #include <expatpp.h>
 #include <vgl/vgl_polygon.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 class volm_candidate_region_parser : public expatpp
 {
@@ -62,16 +64,16 @@ class volm_candidate_region_parser : public expatpp
   ~volm_candidate_region_parser(void) {}
 
   //: parse all the points that have given name (will return empty vector if kml file does not have points with given name)
-  static vcl_vector<vgl_point_3d<double> > parse_points(vcl_string const& kml_file, vcl_string const& name);
+  static std::vector<vgl_point_3d<double> > parse_points(std::string const& kml_file, std::string const& name);
 
   //: parse all lines that have given name
-  static vcl_vector<vcl_vector<vgl_point_3d<double> > > parse_lines(vcl_string const& kml_file, vcl_string const& name);
+  static std::vector<std::vector<vgl_point_3d<double> > > parse_lines(std::string const& kml_file, std::string const& name);
 
   //: parse the exterior boundaries of polygons that have given name
-  static vgl_polygon<double> parse_polygon(vcl_string const& kml_file, vcl_string const& name);
+  static vgl_polygon<double> parse_polygon(std::string const& kml_file, std::string const& name);
 
   //: parse polygons that have given name
-  static vgl_polygon<double> parse_polygon_with_inner(vcl_string const& kml_file, vcl_string const& name,
+  static vgl_polygon<double> parse_polygon_with_inner(std::string const& kml_file, std::string const& name,
                                                       vgl_polygon<double>& outer, vgl_polygon<double>& inner,
                                                       unsigned& n_out, unsigned& n_in);
 
@@ -91,26 +93,26 @@ class volm_candidate_region_parser : public expatpp
   double right_fov_dev_;
   double top_fov_dev_;
   //: map of polygons based on the Placemark name
-  vcl_map<vcl_string, vcl_vector<vcl_vector<vgl_point_3d<double> > > > polyouter_;
-  vcl_map<vcl_string, vcl_vector<vcl_vector<vgl_point_3d<double> > > > polyinner_;
+  std::map<std::string, std::vector<std::vector<vgl_point_3d<double> > > > polyouter_;
+  std::map<std::string, std::vector<std::vector<vgl_point_3d<double> > > > polyinner_;
   //: map of lines based on the Placemark name
-  vcl_map<vcl_string, vcl_vector<vcl_vector<vgl_point_3d<double> > > > linecords_;
+  std::map<std::string, std::vector<std::vector<vgl_point_3d<double> > > > linecords_;
 
   //: map of points based on the Placemark name
-  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > points_;
+  std::map<std::string, std::vector<vgl_point_3d<double> > > points_;
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* name);
   virtual void charData(const XML_Char* s, int len);
   void handleAtts(const XML_Char** atts);
-  void cdataHandler(vcl_string name, vcl_string data);
+  void cdataHandler(std::string name, std::string data);
   void init_params();
 
-  vcl_string current_name_;
-  vcl_string region_name_;
-  vcl_string last_tag;
-  vcl_string cord_tag_;
+  std::string current_name_;
+  std::string region_name_;
+  std::string last_tag;
+  std::string cord_tag_;
 };
 
 #endif // volm_candidate_region_parser_h_

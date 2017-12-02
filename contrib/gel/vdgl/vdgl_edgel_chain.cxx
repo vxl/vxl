@@ -5,12 +5,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "vdgl_edgel_chain.h"
 #include <vgl/vgl_distance.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>   // for vcl_sqrt(float)
-#include <vcl_cstdlib.h> // for vcl_abs(int)
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
                                     const double x1, const double y1)
@@ -48,7 +49,7 @@ void vdgl_edgel_chain::notify_change()
   vul_timestamp::touch();
 }
 
-bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, int index)
+bool vdgl_edgel_chain::add_edgels( const std::vector<vdgl_edgel> &es, int index)
 {
   assert(index>=0);
   if ( (unsigned int)index> es_.size())
@@ -57,7 +58,7 @@ bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, int index)
     es_= es;
   else
   {
-    vcl_vector<vdgl_edgel> temp;
+    std::vector<vdgl_edgel> temp;
     for (int i=0; i< index; i++)
       temp.push_back( es_[i]);
 
@@ -76,7 +77,7 @@ bool vdgl_edgel_chain::add_edgels( const vcl_vector<vdgl_edgel> &es, int index)
   return true;
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p)
+std::ostream& operator<<(std::ostream& s, const vdgl_edgel_chain& p)
 {
   s << "<vdgl_edgel_chain (";
   if ( p.es_.size() > 0)
@@ -95,7 +96,7 @@ inline static double sq_dist(vdgl_edgel const& e, double x, double y)
 
 vdgl_edgel_chain_sptr vdgl_edgel_chain::extract_subchain(int start, int end)
 {
-  vcl_vector<vdgl_edgel> e;
+  std::vector<vdgl_edgel> e;
   ++end;
   if (end > (int)size()) end = size();
   if (start < 0) start = 0;
@@ -149,7 +150,7 @@ bool vdgl_edgel_chain::line_gen(double xs, double ys, double xe, double ye,
   if (done) return false;
   double dx = xe-xs;
   double dy = ye-ys;
-  double mag = vcl_sqrt(dx*dx + dy*dy);
+  double mag = std::sqrt(dx*dx + dy*dy);
   if (mag<pix_edge)//Can't reach the next pixel under any circumstances
   {                //so just output the target, xe, ye.
     x = (double)(unsigned int)xe;
@@ -177,10 +178,10 @@ bool vdgl_edgel_chain::line_gen(double xs, double ys, double xe, double ye,
     x = (xi/pix_edge);
     y = (yi/pix_edge);
     double dx1 = (double)(int(x)-xp), dy1 = (double)(int(y)-yp);
-    if (vcl_abs(dx1)>(.5*pix_edge)||vcl_abs(dy1)>(.5*pix_edge))
+    if (std::abs(dx1)>(.5*pix_edge)||std::abs(dy1)>(.5*pix_edge))
       return true;
   }
-  vcl_cout << "in vdgl_edgel_chain::line_gen(..) - shouldn't happen\n";
+  std::cout << "in vdgl_edgel_chain::line_gen(..) - shouldn't happen\n";
   return false;
 }
 
@@ -253,7 +254,7 @@ short vdgl_edgel_chain::version() const
 }
 
 //: Print an ascii summary to the stream
-void vdgl_edgel_chain::print_summary(vcl_ostream &os) const
+void vdgl_edgel_chain::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -283,12 +284,12 @@ vsl_b_read(vsl_b_istream &is, vdgl_edgel_chain* &ec)
     ec->b_read(is);
   }
   else
-    ec = 0;
+    ec = VXL_NULLPTR;
 }
 
 //: Print human readable summary of vdgl_edgel_chain* to a stream.
 void
-vsl_print_summary(vcl_ostream &os, const vdgl_edgel_chain* e)
+vsl_print_summary(std::ostream &os, const vdgl_edgel_chain* e)
 {
   os << *e;
 }

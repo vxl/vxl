@@ -13,8 +13,8 @@
 void vil_register::register_datatype()
 {
   REGISTER_DATATYPE(vil_image_view_base_sptr);
-  REGISTER_DATATYPE(bil_raw_image_istream_sptr); 
-  REGISTER_DATATYPE(bil_arf_image_istream_sptr); 
+  REGISTER_DATATYPE(bil_raw_image_istream_sptr);
+  REGISTER_DATATYPE(bil_arf_image_istream_sptr);
   REGISTER_DATATYPE(vil_image_resource_sptr);
 }
 
@@ -45,6 +45,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_filter_image_process, "vilImageFilterProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_blob_detection_process, "vilBlobDetectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_pixelwise_roc_process, "vilPixelwiseRocProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_pixelwise_roc_process2, "vilPixelwiseRocProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_rgb_to_grey_process, "vilRGBToGreyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_nitf_date_time_process, "vilNITFDateTimeProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_nitf_remove_margin_process, "vilNITFRemoveMarginProcess");
@@ -78,7 +79,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_EO_IR_combine_process, "vilEOIRCombineProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_truncate_image_process, "vilTruncateImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_grey_to_rgb_process, "vilGreyToRGBProcess");
-  
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_threshold_max_image_process, "vilThresholdMaxImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_threshold_image_region_process, "vilThresholdImageInsideProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_mask_image_using_ids_process, "vilMaskImageUsingIDsProcess");
@@ -94,5 +95,6 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_histogram_equalize_process, "vilHistogramEqualizeProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_invert_float_image_process, "vilInvertFloatImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_combine_palnes_8_bands_process, "vilCombinePlanes8BandsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_registration_process, "vilImageRegistrationProcess");
 }
 

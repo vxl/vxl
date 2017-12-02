@@ -19,13 +19,13 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
 void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene_sptr scene, float val1, float val2)
 {
-  //vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
-  vcl_string test_file =  "edge_test_scene.xml";
+  //std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
+  std::string test_file =  "edge_test_scene.xml";
 
   boxm2_lru_cache::create(scene);
 
   //create block metadata
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks;
 
   double big_block_side = 1.0;
 
@@ -94,7 +94,7 @@ void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene_sptr scene, float val1,
 }
 bool boxm2_ocl_test_utils::create_test_simple_scene(boxm2_scene_sptr & scene)
 {
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks;
   for (int i=0; i<1; i++) {
       for (int j=0; j<1; j++) {
           double big_block_side = 1;
@@ -128,12 +128,12 @@ bool boxm2_ocl_test_utils::create_test_simple_scene(boxm2_scene_sptr & scene)
 void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene_sptr scene)
 {
   //iterate through blocks
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_cout << "Printing results for block: " << id << vcl_endl;
+    std::cout << "Printing results for block: " << id << std::endl;
 
     boxm2_block *     blk     = boxm2_cache::instance()->get_block(scene,id);
     boxm2_data_base * alphas    = boxm2_cache::instance()->get_data_base(scene,id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -145,7 +145,7 @@ void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene_sptr scene)
 
     //iterate through each block, filtering the root level first
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-      vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_flush;
+      std::cout << '[' << x << '/' << trees.get_row1_count() << ']' << std::flush;
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
         for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
           //load current block/tree
@@ -153,15 +153,15 @@ void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene_sptr scene)
           boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
 
           //FOR ALL LEAVES IN CURRENT TREE
-          vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-          vcl_vector<int>::iterator iter;
+          std::vector<int> leafBits = bit_tree.get_leaf_bits();
+          std::vector<int>::iterator iter;
           for (iter = leafBits.begin(); iter != leafBits.end(); ++iter)
           {
             int currBitIndex = (*iter);
             int currIdx = bit_tree.get_data_index(currBitIndex);
             double side_len = 1.0 / (double) (1 << 3);
-            float prob = 1.0f - vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
-            //vcl_cout << "Leaf with index: " << currIdx << " has prob: " << prob << vcl_endl;
+            //float prob = 1.0f - std::exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
+            //std::cout << "Leaf with index: " << currIdx << " has prob: " << prob << std::endl;
           }
         }
       }
@@ -229,17 +229,17 @@ char* boxm2_ocl_test_utils::construct_block_test_stream(int numBuffers,
     curr_byte += sizeof(uchar16)*numTrees;
 
     if (curr_byte != size)
-      vcl_cerr<<"size "<<size<<" doesn't match offset "<<curr_byte<<'\n';
+      std::cerr<<"size "<<size<<" doesn't match offset "<<curr_byte<<'\n';
 
     return bsize;
 }
 
-vcl_string boxm2_ocl_test_utils::save_test_simple_scene(vcl_string filename )
+std::string boxm2_ocl_test_utils::save_test_simple_scene(std::string filename )
 {
-    vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/ocl/tests/";
-    vcl_string test_file = test_dir + filename;
+    std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/ocl/tests/";
+    std::string test_file = test_dir + filename;
 
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
+    std::map<boxm2_block_id, boxm2_block_metadata> blocks;
     for (int i=0; i<1; i++) {
         for (int j=0; j<1; j++) {
             double big_block_side = 1;
@@ -293,7 +293,7 @@ vcl_string boxm2_ocl_test_utils::save_test_simple_scene(vcl_string filename )
         boxm2_block_id id(i,j,k);
         boxm2_block b(id, stream);
 
-        vcl_cout<<"saving test block for "<<id<<vcl_endl;
+        std::cout<<"saving test block for "<<id<<std::endl;
         boxm2_sio_mgr::save_block(test_dir+"/", &b);
       }
     }
@@ -317,7 +317,7 @@ vcl_string boxm2_ocl_test_utils::save_test_simple_scene(vcl_string filename )
     for (int j=0; j<1; j++) {
       for (int k=0; k<1; k++) {
         boxm2_block_id id(boxm2_block_id(i,j,k));
-        vcl_cout<<"saving alpha and mog3 test data for "<<id<<vcl_endl;
+        std::cout<<"saving alpha and mog3 test data for "<<id<<std::endl;
         boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>(test_dir+"/", id, &test_data);
         boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>(test_dir+"/", id, &test_mog);
       }

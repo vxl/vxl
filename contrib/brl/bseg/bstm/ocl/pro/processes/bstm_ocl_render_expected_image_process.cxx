@@ -3,10 +3,12 @@
 // \file
 
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -27,15 +29,15 @@ namespace bstm_ocl_render_expected_image_process_globals
 {
   const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 4;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts, bool isViewDep,bool isColor)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts, bool isViewDep,bool isColor)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -54,7 +56,7 @@ namespace bstm_ocl_render_expected_image_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = opts;
+    std::string options = opts;
     if(!isViewDep)
       options += " -D RENDER_LAMBERT -D RENDER_MOG ";
     else
@@ -65,7 +67,7 @@ namespace bstm_ocl_render_expected_image_process_globals
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();
 
-    vcl_cout << "Compiling with options: " << options << vcl_endl;
+    std::cout << "Compiling with options: " << options << std::endl;
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
@@ -74,7 +76,7 @@ namespace bstm_ocl_render_expected_image_process_globals
                                      "bstm opencl render"); //kernel identifier (for error checking)
     vec_kernels.push_back(ray_trace_kernel);
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -103,7 +105,7 @@ bool bstm_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   using namespace bstm_ocl_render_expected_image_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "bstm_scene_sptr";
   input_types_[2] = "bstm_opencl_cache_sptr";
@@ -116,7 +118,7 @@ bool bstm_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   brdb_value_sptr render_label_val    = new brdb_value_t<bool>(false);
   pro.set_input(7, render_label_val);
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
   output_types_[2] = "float";
@@ -132,7 +134,7 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
 
   vul_timer rtime;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -147,16 +149,16 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
   bool render_label = pro.get_input<bool>(i++);
 
   //get scene data type and appTypeSize
-  vcl_string data_type,label_data_type;
+  std::string data_type,label_data_type;
   int apptypesize,label_apptypesize;
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
   if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-    vcl_cout<<"bstm_ocl_render_expected_image_process ERROR: scene doesn't have correct appearance model data type"<<vcl_endl;
+    std::cout<<"bstm_ocl_render_expected_image_process ERROR: scene doesn't have correct appearance model data type"<<std::endl;
     return false;
   }
 
@@ -168,17 +170,17 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
   bool isColor = ( data_type == bstm_data_traits<BSTM_GAUSS_RGB>::prefix() );
 
   //get initial options (MOG TYPE)
-  vcl_string options = bstm_ocl_util::mog_options(data_type);
+  std::string options = bstm_ocl_util::mog_options(data_type);
 
   //get scene label data type and appTypeSize if any.
-  vcl_vector<vcl_string> valid_label_types;
+  std::vector<std::string> valid_label_types;
   valid_label_types.push_back(bstm_data_traits<BSTM_LABEL>::prefix());
   bool foundLabelDataType = bstm_util::verify_appearance( *scene, valid_label_types, label_data_type, label_apptypesize );
 #ifdef DEBUG
   if ( !foundLabelDataType )
-    vcl_cout<<"Scene doesn't have BSTM_LABEL label type...rendering without it..."<<vcl_endl;
+    std::cout<<"Scene doesn't have BSTM_LABEL label type...rendering without it..."<<std::endl;
   else
-    vcl_cout<<"Scene has " << label_data_type << " type...rendering with it..."<<vcl_endl;
+    std::cout<<"Scene has " << label_data_type << " type...rendering with it..."<<std::endl;
 #endif
   //get options for teh label
   options += bstm_ocl_util::label_options(label_data_type);
@@ -190,13 +192,13 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
 
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options, isViewDep,isColor);
     kernels[identifier]=ks;
   }
@@ -205,7 +207,7 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
   float* buff = new float[4*cl_ni*cl_nj];
-  vcl_fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
+  std::fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr exp_image = new bocl_mem(device->context(), buff ,  4*cl_ni*cl_nj*sizeof(float), "exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -217,14 +219,14 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
 
   // run expected image function
   float render_time;
-  //vcl_cout << "Render label:" << render_label << " found label data type: " << foundLabelDataType << vcl_endl;
+  //std::cout << "Render label:" << render_label << " found label data type: " << foundLabelDataType << std::endl;
   if(!foundLabelDataType || !render_label)
     render_time = render_expected_image( scene, device, opencl_cache, queue,
                                       cam, exp_image, vis_image, exp_img_dim,
@@ -237,7 +239,7 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
 
 
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern= kernels[identifier][1];
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
@@ -252,7 +254,7 @@ bool bstm_ocl_render_expected_image_process(bprb_func_process& pro)
 
 
   float all_time = rtime.all();
-  vcl_cout<<"Total Render time: "<<render_time <<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<<render_time <<" ms"<<std::endl;
 
   vis_image->read_to_buffer(queue);
   exp_image->read_to_buffer(queue);

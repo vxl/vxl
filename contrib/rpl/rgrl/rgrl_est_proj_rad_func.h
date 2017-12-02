@@ -7,11 +7,13 @@
 // \date   March 2007
 // \brief  a generic class to estimate a homogeneous projection matrix with radial distortion parameter(s)  using L-M
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector_fixed.h>
 #include <rgrl/rgrl_fwd.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 #include <rgrl/rgrl_est_proj_func.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 template <unsigned int Tdim, unsigned int Fdim>
 class rgrl_est_proj_rad_func
@@ -32,7 +34,7 @@ class rgrl_est_proj_rad_func
   //: estimate the projective transformation and the associated covariance
   bool
   projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
-                       vcl_vector<double>& rad_dist,
+                       std::vector<double>& rad_dist,
                        vnl_matrix<double>& full_covar,
                        vnl_vector_fixed<double, Fdim>& from_centre,
                        vnl_vector_fixed<double, Tdim>& to_centre,
@@ -79,7 +81,7 @@ class rgrl_est_proj_rad_func
   void
   map_loc( vnl_vector_fixed<double, Tdim>& mapped,
            vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-           vcl_vector<double> const& rad_k,
+           std::vector<double> const& rad_k,
            vnl_vector_fixed<double, Fdim> const& from  ) const
   {
 
@@ -98,28 +100,28 @@ protected:
   void
   reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
                              vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                             vcl_vector<double>                       const& rad_k,
+                             std::vector<double>                       const& rad_k,
                              vnl_vector_fixed<double, Fdim>           const& from ) const;
 
   //: compute the full jacobian
   void
   full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
                           vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                          vcl_vector<double>                       const& rad_k,
+                          std::vector<double>                       const& rad_k,
                           vnl_vector_fixed<double, Fdim>           const& from ) const;
 
   //: compute jacobian w.r.t. location
   void
   proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
                     vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                    vcl_vector<double>                       const& rad_k,
+                    std::vector<double>                       const& rad_k,
                     vnl_vector_fixed<double, Fdim>           const& from ) const;
 
   //: convert parameters
   void
   convert_parameters( vnl_vector<double>& params,
                       vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj_matrix,
-                      vcl_vector<double>             const& rad_dist,
+                      std::vector<double>             const& rad_dist,
                       vnl_vector_fixed<double, Fdim> const& fc,
                       vnl_vector_fixed<double, Tdim> const& tc,
                       vnl_vector_fixed<double, Tdim> const& camera_centre );
@@ -127,7 +129,7 @@ protected:
   void
   apply_radial_distortion( vnl_vector_fixed<double, Tdim>      & mapped,
                            vnl_vector_fixed<double, Tdim> const& p,
-                           vcl_vector<double> const& rad_k ) const;
+                           std::vector<double> const& rad_k ) const;
 
   //: transfer parameters into the temp vector
   void
@@ -137,7 +139,7 @@ protected:
   unsigned int                    camera_dof_;
   vnl_vector_fixed<double, Tdim>  image_centre_;
   double                          centre_mag_norm_const_;
-  mutable vcl_vector<double>  temp_rad_k_;
+  mutable std::vector<double>  temp_rad_k_;
 };
 
 #endif //rgrl_est_proj_rad_func_h_

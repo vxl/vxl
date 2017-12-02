@@ -31,7 +31,7 @@ vpgl_camera_double_sptr generate_camera_top(vgl_box_3d<double>& world);
 vpgl_camera_double_sptr generate_camera_top_persp(vgl_box_3d<double>& world);
 
 //: create a trajectory of perspective cameras at the diagonal of world (inside)
-vcl_vector<vpgl_camera_double_sptr> generate_cameras_diagonal(vgl_box_3d<double>& world);
+std::vector<vpgl_camera_double_sptr> generate_cameras_diagonal(vgl_box_3d<double>& world);
 
-vcl_vector<vpgl_camera_double_sptr> generate_cameras_circular(vgl_box_3d<double>& world);
+std::vector<vpgl_camera_double_sptr> generate_cameras_circular(vgl_box_3d<double>& world);
 #endif // boxm_test_util_h

@@ -1,21 +1,21 @@
 # brl/bpro/core/brip_pro/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+include_directories(${GEL_INCLUDE_DIR})
 
-SET(brip_pro_sources
+set(brip_pro_sources
     brip_processes.h
     brip_register.h             brip_register.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates brip_pro_sources)
-AUX_SOURCE_DIRECTORY(processes brip_pro_sources)
+aux_source_directory(Templates brip_pro_sources)
+aux_source_directory(processes brip_pro_sources)
 
-ADD_LIBRARY(brip_pro ${brip_pro_sources})
-TARGET_LINK_LIBRARIES(brip_pro bprb brdb brip vil_pro vil vsl bil_algo)
+vxl_add_library(LIBRARY_NAME brip_pro LIBRARY_SOURCES ${brip_pro_sources})
+target_link_libraries(brip_pro bprb brdb brip vil_pro ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vsl bil_algo)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

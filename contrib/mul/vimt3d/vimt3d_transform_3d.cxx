@@ -1,4 +1,7 @@
 // This is mul/vimt3d/vimt3d_transform_3d.cxx
+#include <iostream>
+#include <cstdlib>
+#include <sstream>
 #include "vimt3d_transform_3d.h"
 //:
 // \file
@@ -6,8 +9,7 @@
 // \author Graham Vincent, Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector.h>
@@ -66,9 +68,9 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   // also won't work properly in rigid body case either!
   double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
 
-  double xlen = vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
-  double ylen = vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math::sgn(det);
-  double zlen = vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math::sgn(det);
+  double xlen = std::sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
+  double ylen = std::sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math::sgn(det);
+  double zlen = std::sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math::sgn(det);
 
   double xx3 = xx_ / xlen;
   double xy3 = xy_ / ylen;
@@ -76,9 +78,9 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   double yz3 = yz_ / zlen;
   double zz3 = zz_ / zlen;
 
-  phi_x = vcl_atan2(-yz3,zz3);
-  phi_y = vcl_atan2(-xz3*vcl_cos(phi_x),zz3);
-  phi_z=vcl_atan2(-xy3,xx3);
+  phi_x = std::atan2(-yz3,zz3);
+  phi_y = std::atan2(-xz3*std::cos(phi_x),zz3);
+  phi_z=std::atan2(-xy3,xx3);
 
   // nb the equation for phi_z doesn't work in affine case
   // because sy and sx aren't necessarily the same
@@ -88,19 +90,19 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   // assume s is always positive
   // to recover original angle
   double s;
-  if (vcl_sin(phi_y) < 1e-20)
+  if (std::sin(phi_y) < 1e-20)
     s = 1.0;
   else
-    s = vcl_fabs( xz3/ (-1*vcl_sin(phi_y) ) );
+    s = std::fabs( xz3/ (-1*std::sin(phi_y) ) );
 
 #ifdef DEBUG
-  vcl_cout<<"s= "<<s<<vcl_endl;
+  std::cout<<"s= "<<s<<std::endl;
 #endif
 
   // the angles may be wrong by +-vnl_math::pi - we can
   // only tell by checking against the signs
   // of the original entries in the rotation matrix
-  if (vcl_fabs(vcl_sin(phi_y)*s + xz3) > 1e-6)
+  if (std::fabs(std::sin(phi_y)*s + xz3) > 1e-6)
   {
     if (phi_y > 0)
       phi_y -= vnl_math::pi;
@@ -109,10 +111,10 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
     //phi_y *= -1;
   }
 
-  const double cos_y = vcl_cos(phi_y);
+  const double cos_y = std::cos(phi_y);
 
-  if (vcl_fabs(vcl_sin(phi_x)*cos_y*s + yz3) > 1e-6 ||
-      vcl_fabs(vcl_cos(phi_x)*cos_y*s - zz3) > 1e-6)
+  if (std::fabs(std::sin(phi_x)*cos_y*s + yz3) > 1e-6 ||
+      std::fabs(std::cos(phi_x)*cos_y*s - zz3) > 1e-6)
   {
     if (phi_x > 0)
       phi_x -= vnl_math::pi;
@@ -120,8 +122,8 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
       phi_x += vnl_math::pi;
   }
 
-  if (vcl_fabs(vcl_cos(phi_z)*cos_y*s - xx3) > 1e-6 ||
-      vcl_fabs(vcl_sin(phi_z)*cos_y*s + xy3) > 1e-6)
+  if (std::fabs(std::cos(phi_z)*cos_y*s - xx3) > 1e-6 ||
+      std::fabs(std::sin(phi_z)*cos_y*s + xy3) > 1e-6)
   {
     if (phi_z > 0)
       phi_z -= vnl_math::pi;
@@ -133,9 +135,9 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
   // (we can add +-vnl_math::pi to each angle and negate phi_y without changing
   // the rotation matrix)
   int count = 0;
-  if (vcl_fabs(phi_x) > vnl_math::pi/2) ++count;
-  if (vcl_fabs(phi_y) > vnl_math::pi/2) ++count;
-  if (vcl_fabs(phi_z) > vnl_math::pi/2) ++count;
+  if (std::fabs(phi_x) > vnl_math::pi/2) ++count;
+  if (std::fabs(phi_y) > vnl_math::pi/2) ++count;
+  if (std::fabs(phi_z) > vnl_math::pi/2) ++count;
 
   if (count > 1)
   {
@@ -185,7 +187,7 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
     if (v.size()!=7) v.set_size(7);
     angles(v[1],v[2],v[3]);
     // compute scaling factor
-    v[0]= xx_/ ( vcl_cos( v[2] ) *vcl_cos( v[3] ) );
+    v[0]= xx_/ ( std::cos( v[2] ) *std::cos( v[3] ) );
     v[4]=xt_; v[5]=yt_; v[6]=zt_;
     break;
    case (Affine):     // not sure this is right - kds
@@ -198,9 +200,9 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
       angles(v[3],v[4],v[5]);
       // try to compute scaling factors
       double det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
-      v[0]=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
-      v[1]=vcl_sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math::sgn(det);
-      v[2]=vcl_sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math::sgn(det);
+      v[0]=std::sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
+      v[1]=std::sqrt(xy_*xy_ + yy_*yy_ + zy_*zy_)* vnl_math::sgn(det);
+      v[2]=std::sqrt(xz_*xz_ + yz_*yz_ + zz_*zz_)* vnl_math::sgn(det);
       v[6]=xt_; v[7]=yt_; v[8]=zt_;
       break;
     }
@@ -234,9 +236,9 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
       // mirroring if det is negative;
       double mirror=vnl_math::sgn(vnl_determinant(X[0], X[1], X[2]));
 
-      sx = vcl_sqrt(vcl_abs(S2(0,0))) * mirror;
-      sy = vcl_sqrt(vcl_abs(S2(1,1))) * mirror;
-      sz = vcl_sqrt(vcl_abs(S2(2,2))) * mirror;
+      sx = std::sqrt(std::abs(S2(0,0))) * mirror;
+      sy = std::sqrt(std::abs(S2(1,1))) * mirror;
+      sz = std::sqrt(std::abs(S2(2,2))) * mirror;
       if (vnl_math::sqr(sx-sy) +  vnl_math::sqr(sx-sz) < tol*tol)
         this->set_similarity(sx, rx, ry, rz,
                              xt_, yt_, zt_ );
@@ -251,7 +253,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
    case Similarity:
     angles(rx, ry, rz);
     det=+xx_*yy_*zz_-xx_*zy_*yz_-yx_*xy_*zz_+yx_*zy_*xz_+zx_*xy_*yz_-zx_*yy_*xz_;
-    sx=vcl_sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
+    sx=std::sqrt(xx_*xx_ + yx_*yx_ + zx_*zx_)* vnl_math::sgn(det);
     if (rx*rx+ry*ry+rz*rz < tol*tol)
       this->set_zoom_only(sx, xt_, yt_, zt_);
     else if (vnl_math::sqr(sx-1.0) < tol*tol)
@@ -289,7 +291,7 @@ void vimt3d_transform_3d::simplify(double tol /*=1e-10*/)
 void vimt3d_transform_3d::setCheck(int n1,int n2,const char* str) const
 {
   if (n1==n2) return;
-  vcl_ostringstream ss;
+  std::ostringstream ss;
   ss << "vimt3d_transform_3d::set() " << n1 << " parameters required for "
      << str << ". Passed " << n2;
   mbl_exception_error(mbl_exception_abort(ss.str()));
@@ -348,12 +350,12 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
 // See also vnl_rotation_matrix(), vgl_rotation_3d, and vnl_quaternion
 void vimt3d_transform_3d::setRotMat( double r_x, double r_y, double r_z )
 {
-  double sinx=vcl_sin(r_x);
-  double siny=vcl_sin(r_y);
-  double sinz=vcl_sin(r_z);
-  double cosx=vcl_cos(r_x);
-  double cosy=vcl_cos(r_y);
-  double cosz=vcl_cos(r_z);
+  double sinx=std::sin(r_x);
+  double siny=std::sin(r_y);
+  double sinz=std::sin(r_z);
+  double cosx=std::cos(r_x);
+  double cosy=std::cos(r_y);
+  double cosz=std::cos(r_z);
 
   // set R_mat = Rx*Ry*Rz
   xx_ =  cosy*cosz;
@@ -545,12 +547,12 @@ void vimt3d_transform_3d::set_similarity(double s,
 #ifdef DEBUG // debug test
     double r_x1, r_y1, r_z1;
     angles( r_x1, r_y1, r_z1 );
-    vcl_cout << "r_x = " << r_x  << '\n'
+    std::cout << "r_x = " << r_x  << '\n'
              << "r_x1= " << r_x1 << '\n'
              << "r_y = " << r_y  << '\n'
              << "r_y1= " << r_y1 << '\n'
              << "r_z = " << r_z  << '\n'
-             << "r_z1= " << r_z1 << vcl_endl;
+             << "r_z1= " << r_z1 << std::endl;
 #endif
 
     // Account for scaling (this actually means that scaling was done BEFORE rotation)
@@ -645,12 +647,12 @@ void vimt3d_transform_3d::set_affine(const vgl_point_3d<double>& p,
   vgl_vector_3d<double> wh = normalized(w);
 
   // Test for orthogonality of input vectors
-  assert(vcl_fabs(dot_product(uh,vh))<tol);
-  assert(vcl_fabs(dot_product(vh,wh))<tol);
-  assert(vcl_fabs(dot_product(wh,uh))<tol);
+  assert(std::fabs(dot_product(uh,vh))<tol);
+  assert(std::fabs(dot_product(vh,wh))<tol);
+  assert(std::fabs(dot_product(wh,uh))<tol);
 
   // Test for right-handedness of input vectors
-  assert(vcl_fabs((cross_product(uh,vh)-wh).length())<tol);
+  assert(std::fabs((cross_product(uh,vh)-wh).length())<tol);
 #endif
 
   // Set rotation and scaling (this actually means that scaling was done BEFORE rotation)
@@ -738,8 +740,8 @@ void vimt3d_transform_3d::calcInverse() const
       double det=-xx_*yy_*zz_+xx_*zy_*yz_+yx_*xy_*zz_-yx_*zy_*xz_-zx_*xy_*yz_+zx_*yy_*xz_;
       if (det==0)
       {
-        vcl_cerr<<"vimt3d_transform_3d() : No inverse exists for this affine transform (det==0)\n";
-        vcl_abort();
+        std::cerr<<"vimt3d_transform_3d() : No inverse exists for this affine transform (det==0)\n";
+        std::abort();
       }
 
       xx2_=(-yy_*zz_+zy_*yz_)/det;
@@ -879,7 +881,7 @@ vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transfo
 }
 
 //=======================================================================
-void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
+void vimt3d_transform_3d::print_summary(std::ostream& o) const
 {
   o << vsl_indent()<< "Form: ";
   vsl_indent_inc(o);
@@ -943,7 +945,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
 
 //=======================================================================
 // Print class to os
-void vimt3d_transform_3d::print_all(vcl_ostream& os) const
+void vimt3d_transform_3d::print_all(std::ostream& os) const
 {
   os << vsl_indent() << "Form: ";
   switch (form_)
@@ -987,10 +989,10 @@ void vimt3d_transform_3d::print_all(vcl_ostream& os) const
 
 
 //=======================================================================
-void vimt3d_transform_3d::config(vcl_istream& is)
+void vimt3d_transform_3d::config(std::istream& is)
 {
   mbl_read_props_type props = mbl_read_props_ws(is);
-  vcl_string form = props.get_required_property("form");
+  std::string form = props.get_required_property("form");
   vul_string_downcase(form);
 
   bool done=false;
@@ -1013,13 +1015,13 @@ void vimt3d_transform_3d::config(vcl_istream& is)
   else
     throw mbl_exception_parse_error("Unknown transformation: \"" + form + "\"");
 
-  vcl_string vector = props.get_optional_property("vector");
+  std::string vector = props.get_optional_property("vector");
   if (!vector.empty())
   {
-    vcl_istringstream ss(vector);
+    std::istringstream ss(vector);
 
-    vcl_vector<double> vec1;
-    mbl_parse_sequence(ss, vcl_back_inserter(vec1), double());
+    std::vector<double> vec1;
+    mbl_parse_sequence(ss, std::back_inserter(vec1), double());
     if (vec1.empty())
       throw mbl_exception_parse_error("Could not find elements for transformation vector: \""+vector+"\"");
     vnl_vector<double> vec2(&vec1.front(), vec1.size());
@@ -1043,7 +1045,7 @@ void vimt3d_transform_3d::config(vcl_istream& is)
   }
   if (!done && form_==ZoomOnly)
   {
-    vcl_string s_str = props.get_optional_property("s");
+    std::string s_str = props.get_optional_property("s");
     if (!s_str.empty())
       this->set_zoom_only(
         vul_string_atof(s_str),
@@ -1123,8 +1125,8 @@ void vimt3d_transform_3d::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tz_); vsl_b_read(bfs,tt_);
     break;
    default:
-    vcl_cerr<<"vimt3d_transform_3d::load : Illegal version number "<<version<<'\n';
-    vcl_abort();
+    std::cerr<<"vimt3d_transform_3d::load : Illegal version number "<<version<<'\n';
+    std::abort();
   }
 
   inv_uptodate_ = 0;
@@ -1146,7 +1148,7 @@ void vsl_b_read(vsl_b_istream& bfs, vimt3d_transform_3d& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b)
+std::ostream& operator<<(std::ostream& os,const vimt3d_transform_3d& b)
 {
   vsl_indent_inc(os);
   b.print_summary(os);
@@ -1177,7 +1179,7 @@ bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf,
   {
     for (unsigned i=0; i<3; ++i)
     {
-      if (i!=j && vcl_fabs(M(i,j))>=zero_tol) return false;
+      if (i!=j && std::fabs(M(i,j))>=zero_tol) return false;
     }
   }
 

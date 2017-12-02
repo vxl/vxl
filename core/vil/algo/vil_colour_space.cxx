@@ -6,10 +6,11 @@
 // \file
 // \author fsm
 
+#include <cstdlib>
+#include <algorithm>
+#include <cmath>
 #include "vil_colour_space.h"
-#include <vcl_cstdlib.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 template <class T>
 void vil_colour_space_RGB_to_YIQ(T const in[3], T out[3])
@@ -40,8 +41,8 @@ void vil_colour_space_YIQ_to_RGB(T const in[3], T out[3])
 template <class T>
 void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
 {
-  T max = vcl_max(r, vcl_max(g, b));
-  T min = vcl_min(r, vcl_min(g, b));
+  T max = std::max(r, std::max(g, b));
+  T min = std::min(r, std::min(g, b));
 
   // The value v is just the maximum.
   *v = max;
@@ -64,7 +65,7 @@ void vil_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v)
     else if (b == max)
       *h = 4 + (r - g)/delta;
     else
-      vcl_abort();
+      std::abort();
 
     *h *= 60;
     if (*h < 0)
@@ -91,7 +92,7 @@ void vil_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b)
   if (h < 0) h += 360;
 
   xh = h / 60;                   // convert hue to be in [0,6)
-  i = (int)vcl_floor((double)xh);// i = greatest integer <= xh
+  i = (int)std::floor((double)xh);// i = greatest integer <= xh
   f = xh - i;                    // f = fractional part of xh
   p1 = v * (1 - s);
   p2 = v * (1 - (s * f));
@@ -191,9 +192,9 @@ void vil_colour_space_RGB_to_YPbPr_601(T const RGB[3], T YPbPr[3])
 template <class T>
 void vil_colour_space_YPbPr_601_to_RGB(T const YPbPr[3], T RGB[3])
 {
-  RGB[0] = vcl_max(T(0.0), vcl_min(T(1.0), (YPbPr[0]                          + T(1.402)    * YPbPr[2])));
-  RGB[1] = vcl_max(T(0.0), vcl_min(T(1.0), (YPbPr[0] - T(0.344136) * YPbPr[1] - T(0.714136) * YPbPr[2])));
-  RGB[2] = vcl_max(T(0.0), vcl_min(T(1.0), (YPbPr[0] + T(1.772)    * YPbPr[1]                         )));
+  RGB[0] = std::max(T(0.0), std::min(T(1.0), (YPbPr[0]                          + T(1.402)    * YPbPr[2])));
+  RGB[1] = std::max(T(0.0), std::min(T(1.0), (YPbPr[0] - T(0.344136) * YPbPr[1] - T(0.714136) * YPbPr[2])));
+  RGB[2] = std::max(T(0.0), std::min(T(1.0), (YPbPr[0] + T(1.772)    * YPbPr[1]                         )));
 }
 
 // YCbCr (601) from "digital 8-bit R'G'B'  "

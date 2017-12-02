@@ -15,10 +15,11 @@
 //    Amitha Perera  jan2003  fixed possible alignment issues.
 // \endverbatim
 
-#include <vcl_new.h>
+#include <new>
+#include <iosfwd>
+#include <cstddef>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
-#include <vcl_cstddef.h> // for ptrdiff_t and size_t
 
 //: A simple container.
 // This container stores its elements in contiguous
@@ -28,7 +29,7 @@ template <class T>
 class vbl_array_1d
 {
  public:
-  typedef vcl_size_t size_type;
+  typedef std::size_t size_type;
   typedef T element_type;
 
  private:
@@ -45,13 +46,13 @@ class vbl_array_1d
   vbl_array_1d() : begin_(0), end_(0), alloc_(0) { }
 
   vbl_array_1d(const_iterator b, const_iterator e) {
-    vcl_ptrdiff_t n = e - b;
+    std::ptrdiff_t n = e - b;
     assert(n>=0);
     // alignment guaranteed by 18.4.1.1
     begin_ = (T*) operator new( n * sizeof(T) );
     end_   = begin_ + n;
     alloc_ = begin_ + n;
-    for (vcl_ptrdiff_t i=0; i<n; ++i)
+    for (std::ptrdiff_t i=0; i<n; ++i)
       new (begin_ + i) T(b[i]);
   }
 
@@ -91,8 +92,8 @@ class vbl_array_1d
     }
   }
 
-  void reserve(vcl_ptrdiff_t new_n) {
-    vcl_ptrdiff_t n = end_ - begin_;
+  void reserve(std::ptrdiff_t new_n) {
+    std::ptrdiff_t n = end_ - begin_;
     assert(n>=0);
     if (new_n <= n)
       return;
@@ -102,7 +103,7 @@ class vbl_array_1d
     T *new_end_   = new_begin_ + n;
     T *new_alloc_ = new_begin_ + new_n;
 
-    for (vcl_ptrdiff_t i=0; i<n; ++i) {
+    for (std::ptrdiff_t i=0; i<n; ++i) {
       new (new_begin_ + i) T(begin_[i]);
       begin_[i].~T();
     }
@@ -150,7 +151,7 @@ class vbl_array_1d
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
-  reference       operator[](vcl_ptrdiff_t i)
+  reference       operator[](std::ptrdiff_t i)
   {
     assert (i >= 0 && i < end_ - begin_);
     return begin_[i];
@@ -158,7 +159,7 @@ class vbl_array_1d
 
   //: Get the ith element.
   // #define NDEBUG to turn bounds checking off.
-  const_reference operator[](vcl_ptrdiff_t i) const
+  const_reference operator[](std::ptrdiff_t i) const
   {
     assert (i >= 0 && i < end_ - begin_);
     return begin_[i];
@@ -166,6 +167,6 @@ class vbl_array_1d
 };
 
 VCL_TEMPLATE_EXPORT template <class T>
-vcl_ostream& operator<<(vcl_ostream &, vbl_array_1d<T> const &);
+std::ostream& operator<<(std::ostream &, vbl_array_1d<T> const &);
 
 #endif // vbl_array_1d_h_

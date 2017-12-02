@@ -9,10 +9,12 @@
 // \brief Reader/Writer for Meta Image format images.
 // \author Chris Wolstenholme - Imorphics
 
+#include <iostream>
+#include <iosfwd>
+#include <string>
 #include <vil3d/vil3d_file_format.h>
 #include <vil/vil_pixel_format.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 class vil3d_meta_image_header
 {
@@ -41,11 +43,11 @@ class vil3d_meta_image_header
   unsigned int nk(void) const;
   unsigned int nplanes(void) const;
 
-  void set_element_type(const vcl_string &elem_type);
-  const vcl_string &element_type(void) const;
+  void set_element_type(const std::string &elem_type);
+  const std::string &element_type(void) const;
 
-  void set_image_fname(const vcl_string &image_fname);
-  const vcl_string &image_fname(void) const;
+  void set_image_fname(const std::string &image_fname);
+  const std::string &image_fname(void) const;
 
   void set_pixel_format(const vil_pixel_format format);
   vil_pixel_format pixel_format(void) const;
@@ -53,11 +55,11 @@ class vil3d_meta_image_header
   void clear(void);
 
   // Functions to handle file
-  bool read_header(const vcl_string &header_fname);
-  bool write_header(const vcl_string &header_fname) const;
+  bool read_header(const std::string &header_fname);
+  bool write_header(const std::string &header_fname) const;
 
   // Display header details
-  void print_header(vcl_ostream &os) const;
+  void print_header(std::ostream &os) const;
 
   // Check if data needs to be swapped when reading/writing
   void check_need_swap(void);
@@ -66,11 +68,11 @@ class vil3d_meta_image_header
  private:
 
   // Functions to help with header reading/writing
-  bool check_next_header_line(const vcl_string &nxt_line);
-  vcl_string get_header_value(const vcl_string &nxt_line);
-  bool set_header_offset(const vcl_string &offs);
-  bool set_header_dim_size(const vcl_string &dims);
-  bool set_header_voxel_size(const vcl_string &vsize);
+  bool check_next_header_line(const std::string &nxt_line);
+  std::string get_header_value(const std::string &nxt_line);
+  bool set_header_offset(const std::string &offs);
+  bool set_header_dim_size(const std::string &dims);
+  bool set_header_voxel_size(const std::string &vsize);
 
   // Set to true if the header is valid
   bool header_valid_;
@@ -81,8 +83,8 @@ class vil3d_meta_image_header
   double vox_size_i_, vox_size_j_, vox_size_k_;
   unsigned int dim_size_i_, dim_size_j_, dim_size_k_;
   unsigned int nplanes_;
-  vcl_string elem_type_;
-  vcl_string im_file_;
+  std::string elem_type_;
+  std::string im_file_;
 
   // This is the pixel format of the image, which can differ from the
   // file element type
@@ -93,7 +95,7 @@ class vil3d_meta_image_header
 };
 
 //: Print out header
-vcl_ostream& operator<<(vcl_ostream &os, const vil3d_meta_image_header &header);
+std::ostream& operator<<(std::ostream &os, const vil3d_meta_image_header &header);
 
 //: Reader/Writer for Meta Image format images.
 class vil3d_meta_image_format : public vil3d_file_format
@@ -124,14 +126,14 @@ class vil3d_meta_image: public vil3d_image_resource
 {
  private:
   vil3d_meta_image_header header_;
-  vcl_string fpath_;
+  std::string fpath_;
 
   //: Methods for reading/writing image
   bool write_image();
 
  public:
    vil3d_meta_image(const vil3d_meta_image_header &header,
-                    const vcl_string &fname);
+                    const std::string &fname);
 
   virtual ~vil3d_meta_image();
 

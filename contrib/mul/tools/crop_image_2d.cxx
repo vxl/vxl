@@ -3,8 +3,9 @@
 //  \date 24 May 2010
 //  \brief Program to crop a 2D image down to a specified bounding box.
 
-#include <vcl_exception.h>
-#include <vcl_iostream.h>
+#include <iostream>
+#include <exception>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vimt/vimt_add_all_binary_loaders.h>
@@ -45,11 +46,11 @@ int main2(int argc, char*argv[])
   );
 
   // Parse the program arguments
-  vul_arg<vcl_string> img_src(0, "input image filename");
-  vul_arg<vcl_string> img_dst(0, "output image filename");
-  vul_arg<vcl_vector<unsigned> > bbi("-bbi", "bounding box in image coords (i0,j0,i1,j1)");
-  vul_arg<vcl_vector<double> > bbf("-bbf", "bounding box in image fraction e.g. 0.2,0.2,0.75,0.75");
-  vul_arg<vcl_vector<double> > bbw("-bbw", "bounding box in world coords (x0,y0,x1,y1)");
+  vul_arg<std::string> img_src(VXL_NULLPTR, "input image filename");
+  vul_arg<std::string> img_dst(VXL_NULLPTR, "output image filename");
+  vul_arg<std::vector<unsigned> > bbi("-bbi", "bounding box in image coords (i0,j0,i1,j1)");
+  vul_arg<std::vector<double> > bbf("-bbf", "bounding box in image fraction e.g. 0.2,0.2,0.75,0.75");
+  vul_arg<std::vector<double> > bbw("-bbw", "bounding box in world coords (x0,y0,x1,y1)");
   vul_arg<bool> use_mm("-mm", "World coords are in units of millimetres (default=metres)", false);
   vul_arg_parse(argc, argv);
 
@@ -62,21 +63,21 @@ int main2(int argc, char*argv[])
     MBL_LOG(INFO, logger(), "  use_mm: " << use_mm());
     if (bbi.set())
     {
-      vcl_ostream& log = logger().log(mbl_logger::INFO); // construct a new log message
+      std::ostream& log = logger().log(mbl_logger::INFO); // construct a new log message
       log << "  bbi: "; bbi.print_value(log);
-      log << vcl_endl; // terminate log message
+      log << std::endl; // terminate log message
     }
     if (bbf.set())
     {
-      vcl_ostream& log = logger().log(mbl_logger::INFO); // construct a new log message
+      std::ostream& log = logger().log(mbl_logger::INFO); // construct a new log message
       log << "  bbf: "; bbf.print_value(log);
-      log << vcl_endl; // terminate log message
+      log << std::endl; // terminate log message
     }
     if (bbw.set())
     {
-      vcl_ostream& log = logger().log(mbl_logger::INFO); // construct a new log message
+      std::ostream& log = logger().log(mbl_logger::INFO); // construct a new log message
       log << "  bbw: "; bbw.print_value(log);
-      log << vcl_endl; // terminate log message
+      log << std::endl; // terminate log message
     }
   }
 
@@ -87,7 +88,7 @@ int main2(int argc, char*argv[])
   if (bbw.set()) nbb++;
   if (nbb!=1)
   {
-    vcl_cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or -bbw options.\n";
+    std::cerr << "ERROR: specify exactly 1 of the -bbi, -bbf or -bbw options.\n";
     return 1;
   }
 
@@ -97,13 +98,13 @@ int main2(int argc, char*argv[])
   {
     if (bbi().size() != 4)
     {
-      vcl_cerr << "ERROR: -bbi argument should contain exactly 4 unsigneds\n";
+      std::cerr << "ERROR: -bbi argument should contain exactly 4 unsigneds\n";
       return 1;
     }
 
     if (bbi()[0] >= bbi()[2] || bbi()[1] >= bbi()[3])
     {
-      vcl_cerr << "ERROR: -bbi argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
+      std::cerr << "ERROR: -bbi argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
       return 1;
     }
 
@@ -117,13 +118,13 @@ int main2(int argc, char*argv[])
   {
     if (bbf().size() != 4)
     {
-      vcl_cerr << "ERROR: -bbf argument should contain exactly 4 floats\n";
+      std::cerr << "ERROR: -bbf argument should contain exactly 4 floats\n";
       return 1;
     }
 
     if (bbf()[0] >= bbf()[2] || bbf()[1] >= bbf()[3])
     {
-      vcl_cerr << "ERROR: -bbf argument should indicate the lower and upper corners of a 2D box with strictly positive width and height within [0,1]\n";
+      std::cerr << "ERROR: -bbf argument should indicate the lower and upper corners of a 2D box with strictly positive width and height within [0,1]\n";
       return 1;
     }
     fx0 = bbf()[0]; fy0 = bbf()[1];
@@ -136,13 +137,13 @@ int main2(int argc, char*argv[])
   {
     if (bbw().size() != 4)
     {
-      vcl_cerr << "ERROR: -bbw argument should contain exactly 4 floats\n";
+      std::cerr << "ERROR: -bbw argument should contain exactly 4 floats\n";
       return 1;
     }
 
     if (bbw()[0] >= bbw()[2] || bbw()[1] >= bbw()[3])
     {
-      vcl_cerr << "ERROR: -bbw argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
+      std::cerr << "ERROR: -bbw argument should indicate the lower and upper corners of a 2D box with strictly positive width and height.\n";
       return 1;
     }
     x0 = bbw()[0]; y0 = bbw()[1];
@@ -150,7 +151,7 @@ int main2(int argc, char*argv[])
   }
 
   // Determine the output filetype
-  vcl_string filetype = vul_file::extension(img_dst());
+  std::string filetype = vul_file::extension(img_dst());
   vul_string_left_trim(filetype, ".");
   if (filetype.empty()) filetype = "v2i";
 
@@ -159,7 +160,7 @@ int main2(int argc, char*argv[])
   vil_image_resource_sptr ir = vil_load_image_resource(img_src().c_str());
   if (!ir)
   {
-    vcl_cerr << "ERROR: Failed to load input image resource\n";
+    std::cerr << "ERROR: Failed to load input image resource\n";
     return 1;
   }
   MBL_LOG(INFO, logger(), "Loaded input image_resource");
@@ -178,11 +179,11 @@ int main2(int argc, char*argv[])
     // Convert image fraction values to voxel numbers
 
     // Round lower bounds down
-    i0 = static_cast<unsigned>(vcl_floor((ir->ni()-1)*fx0));
-    j0 = static_cast<unsigned>(vcl_floor((ir->nj()-1)*fy0));
+    i0 = static_cast<unsigned>(std::floor((ir->ni()-1)*fx0));
+    j0 = static_cast<unsigned>(std::floor((ir->nj()-1)*fy0));
     // Round upper bounds up
-    unsigned i1 = static_cast<unsigned>(vcl_ceil((ir->ni()-1)*fx1));
-    unsigned j1 = static_cast<unsigned>(vcl_ceil((ir->nj()-1)*fy1));
+    unsigned i1 = static_cast<unsigned>(std::ceil((ir->ni()-1)*fx1));
+    unsigned j1 = static_cast<unsigned>(std::ceil((ir->nj()-1)*fy1));
     ni = i1 - i0 + 1;
     nj = j1 - j0 + 1;
   }
@@ -192,11 +193,11 @@ int main2(int argc, char*argv[])
     vgl_point_2d<double> imlo = w2i(vgl_point_2d<double>(x0,y0));
     vgl_point_2d<double> imhi = w2i(vgl_point_2d<double>(x1,y1));
     // Round lower bounds down
-    i0 = static_cast<unsigned>(vcl_floor(imlo.x()));
-    j0 = static_cast<unsigned>(vcl_floor(imlo.y()));
+    i0 = static_cast<unsigned>(std::floor(imlo.x()));
+    j0 = static_cast<unsigned>(std::floor(imlo.y()));
     // Round upper bounds up
-    unsigned i1 = static_cast<unsigned>(vcl_ceil(imhi.x()));
-    unsigned j1 = static_cast<unsigned>(vcl_ceil(imhi.y()));
+    unsigned i1 = static_cast<unsigned>(std::ceil(imhi.x()));
+    unsigned j1 = static_cast<unsigned>(std::ceil(imhi.y()));
     ni = i1 - i0 + 1;
     nj = j1 - j0 + 1;
   }
@@ -210,19 +211,19 @@ int main2(int argc, char*argv[])
 
   if (i0 >= ir->ni() || j0 >= ir->nj())
   {
-    vcl_cerr << "ERROR: Crop region bbox lower corner is outside input image.\n";
+    std::cerr << "ERROR: Crop region bbox lower corner is outside input image.\n";
     return 2;
   }
   if (i0+ni > ir->ni())
   {
     MBL_LOG(WARN, logger(), "Crop region bbox upper corner i was outside input image; truncating to fit.");
-    vcl_cerr << "WARNING: Crop region bbox upper corner i was outside input image; truncating to fit.\n";
+    std::cerr << "WARNING: Crop region bbox upper corner i was outside input image; truncating to fit.\n";
     ni = ir->ni()-i0;
   }
   if (j0+nj > ir->nj())
   {
     MBL_LOG(WARN, logger(), "Crop region bbox upper corner j was outside input image; truncating to fit.");
-    vcl_cerr << "WARNING: Crop region bbox upper corner j was outside input image; truncating to fit.\n";
+    std::cerr << "WARNING: Crop region bbox upper corner j was outside input image; truncating to fit.\n";
     nj = ir->nj()-j0;
   }
 
@@ -235,7 +236,7 @@ int main2(int argc, char*argv[])
   if (!ir2)
   {
     MBL_LOG(ERR, logger(), "Failed to create output image resource");
-    vcl_cerr << "ERROR: Failed to create output image resource\n";
+    std::cerr << "ERROR: Failed to create output image resource\n";
     return 2;
   }
   MBL_LOG(INFO, logger(), "Created output image_resource");
@@ -257,7 +258,7 @@ int main2(int argc, char*argv[])
   if (!succ)
   {
     MBL_LOG(ERR, logger(), "Failed to put_view into output image resource");
-    vcl_cerr << "ERROR: Failed to put_view into output image resource\n";
+    std::cerr << "ERROR: Failed to put_view into output image resource\n";
     return 3;
   }
   MBL_LOG(INFO, logger(), "Copied cropped image to output image_resource");
@@ -282,14 +283,14 @@ int main(int argc, char*argv[])
   {
     main2(argc, argv);
   }
-  catch (vcl_exception& e)
+  catch (std::exception& e)
   {
-    vcl_cout << "Caught exception " << e.what() << vcl_endl;
+    std::cout << "Caught exception " << e.what() << std::endl;
     return 3;
   }
   catch (...)
   {
-    vcl_cout << "Caught unknown exception" << vcl_endl;
+    std::cout << "Caught unknown exception" << std::endl;
     return 3;
   }
 

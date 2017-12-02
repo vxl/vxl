@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <!DOCTYPE vxl [
 
-<!-- vxl 
+<!-- vxl
   -->
 
 <!ELEMENT vxl ANY>
@@ -64,8 +64,8 @@
          </vxl_zero_chain_2d>
   -->
 
-<!ELEMENT vxl_zero_chain_2d ( ( ( vxl_vertex_2d, vxl_flip? ) | 
-                               ( vxl_vertex_2d_sptr, vxl_flip? ) )+ )> 
+<!ELEMENT vxl_zero_chain_2d ( ( ( vxl_vertex_2d, vxl_flip? ) |
+                               ( vxl_vertex_2d_sptr, vxl_flip? ) )+ )>
   <!ATTLIST vxl_zero_chain_2d id ID #IMPLIED>
 
 <!ELEMENT vxl_zero_chain_2d_sptr EMPTY>
@@ -96,8 +96,8 @@
           Pointer (_sptr) exists.
   -->
 
-<!ELEMENT vxl_one_chain_2d ( ( ( vxl_edge_2d, vxl_flip? ) | 
-                              ( vxl_edge_2d_sptr, vxl_flip? ) | 
+<!ELEMENT vxl_one_chain_2d ( ( ( vxl_edge_2d, vxl_flip? ) |
+                              ( vxl_edge_2d_sptr, vxl_flip? ) |
                               vxl_one_chain_2d )+ )>
   <!ATTLIST vxl_one_chain_2d id ID #IMPLIED>
 
@@ -114,8 +114,8 @@
         Pointer (_sptr) exists.
   -->
 
-<!ELEMENT vxl_triangle_2d ( ( vxl_vertex_2d | vxl_vertex_2d_sptr ), 
-                            ( vxl_vertex_2d | vxl_vertex_2d_sptr ), 
+<!ELEMENT vxl_triangle_2d ( ( vxl_vertex_2d | vxl_vertex_2d_sptr ),
+                            ( vxl_vertex_2d | vxl_vertex_2d_sptr ),
                             ( vxl_vertex_2d | vxl_vertex_2d_sptr ))>
   <!ATTLIST vxl_triangle_2d id ID #IMPLIED>
 

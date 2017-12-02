@@ -1,4 +1,8 @@
 // This is brl/bbas/volm/pro/processes/volm_correct_rational_cameras_process.cxx
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,10 +12,7 @@
 //
 //
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vul/vul_file.h>
@@ -28,21 +29,21 @@
 #include <vgl/vgl_distance.h>
 #include <vpgl/algo/vpgl_rational_adjust_multipt.h>
 
-vpgl_rational_camera<double>* load_cam_from_nitf(vcl_string& nitf_image_path) {
+vpgl_rational_camera<double>* load_cam_from_nitf(std::string& nitf_image_path) {
   vil_image_resource_sptr image = vil_load_image_resource(nitf_image_path.c_str());
   if (!image)
   {
-    vcl_cout << "NITF image load failed from the file: " << nitf_image_path << '\n';
-    return 0;
+    std::cout << "NITF image load failed from the file: " << nitf_image_path << '\n';
+    return VXL_NULLPTR;
   }
 
-  vcl_string format = image->file_format();
-  vcl_string prefix = format.substr(0,4);
+  std::string format = image->file_format();
+  std::string prefix = format.substr(0,4);
 
   if (prefix != "nitf")
   {
-    vcl_cout << "source image is not NITF in load_cam_from_nitf\n";
-    return 0;
+    std::cout << "source image is not NITF in load_cam_from_nitf\n";
+    return VXL_NULLPTR;
   }
 
   //cast to an nitf2_image
@@ -58,7 +59,7 @@ vpgl_rational_camera<double>* load_cam_from_nitf(vcl_string& nitf_image_path) {
 //  project that point back to images and correct each camera by adjusting its 2D image offset so that they all project the 3D location to the same 2D location
 bool volm_correct_rational_cameras_ransac_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");  // a file that lists the name to a camera on each line and i and j coordinate of the 3D world point
                                     // format of the file:
                                     // n  # number of correspondences for each frame,
@@ -69,7 +70,7 @@ bool volm_correct_rational_cameras_ransac_process_cons(bprb_func_process& pro)
                                     // .
   input_types.push_back("vcl_string");  // output folder to write the corrected cams
   input_types.push_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -78,44 +79,44 @@ bool volm_correct_rational_cameras_ransac_process_cons(bprb_func_process& pro)
 bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
 {
     if (pro.n_inputs() < 3) {
-        vcl_cout << "volm_correct_rational_cameras_ransac_process: The number of inputs should be 3" << vcl_endl;
+        std::cout << "volm_correct_rational_cameras_ransac_process: The number of inputs should be 3" << std::endl;
         return false;
     }
 
     // get the inputs
-    vcl_string input_cams = pro.get_input<vcl_string>(0);
-    vcl_string output_path = pro.get_input<vcl_string>(1);
+    std::string input_cams = pro.get_input<std::string>(0);
+    std::string output_path = pro.get_input<std::string>(1);
     float pix_rad = pro.get_input<float>(2);
 
 
-    vcl_ifstream ifs(input_cams.c_str());
+    std::ifstream ifs(input_cams.c_str());
     if (!ifs) {
-        vcl_cerr << " cannot open file: " << input_cams << '\n';
+        std::cerr << " cannot open file: " << input_cams << '\n';
         return false;
     }
     unsigned int n; ifs >> n;
-    vcl_cout << "will read: " << n << " correspondences for each frame from " << input_cams << vcl_endl;
+    std::cout << "will read: " << n << " correspondences for each frame from " << input_cams << std::endl;
 
-    vcl_vector<vcl_string> cam_names;
-    vcl_vector<vcl_string> cam_sat_names;
-    vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs;
-    vcl_vector<vcl_string> out_cam_names;
+    std::vector<std::string> cam_names;
+    std::vector<std::string> cam_sat_names;
+    std::vector<std::vector<vgl_point_2d<double> > > corrs;
+    std::vector<std::string> out_cam_names;
 
     while (!ifs.eof())
     {
-        vcl_string cam_name;
+        std::string cam_name;
         ifs >> cam_name;
         if (cam_name.size() < 2) break;
-        vcl_cout << "reading cam: " << cam_name << vcl_endl;
+        std::cout << "reading cam: " << cam_name << std::endl;
 
-        //vcl_string out_cam_name = vul_file::strip_extension(cam_name) + "_corrected.rpb";
-        vcl_string out_cam_name = output_path + "/" + vul_file::strip_extension(vul_file::strip_directory(cam_name)) + "_corrected.rpb";
-        vcl_cout << "out cam name: " << out_cam_name << vcl_endl;
+        //std::string out_cam_name = vul_file::strip_extension(cam_name) + "_corrected.rpb";
+        std::string out_cam_name = output_path + "/" + vul_file::strip_extension(vul_file::strip_directory(cam_name)) + "_corrected.rpb";
+        std::cout << "out cam name: " << out_cam_name << std::endl;
 
         cam_names.push_back(cam_name);
         out_cam_names.push_back(out_cam_name);
 
-        vcl_vector<vgl_point_2d<double> > corrs_frame;
+        std::vector<vgl_point_2d<double> > corrs_frame;
         for (unsigned int ii = 0; ii < n; ++ii) {
             double i, j;
             ifs >> i; ifs >> j;
@@ -127,16 +128,16 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
     ifs.close();
 
     if (!n) {
-        vcl_cerr << "In vpgl_correct_rational_cameras_process2 - 0 correspondences in file: " << input_cams << "! returning without correcting any cams!\n";
+        std::cerr << "In vpgl_correct_rational_cameras_process2 - 0 correspondences in file: " << input_cams << "! returning without correcting any cams!\n";
         return false;
     }
 
-    vcl_vector<float> cam_weights;
-    vcl_vector<vpgl_rational_camera<double> > cams;
-    vcl_vector<vpgl_local_rational_camera<double> > lcams;
-    vcl_vector<vcl_string> new_out_names;
-    vcl_vector<vcl_string> new_sat_names;
-    vcl_vector<vcl_vector<vgl_point_2d<double> > > new_corrs;
+    std::vector<float> cam_weights;
+    std::vector<vpgl_rational_camera<double> > cams;
+    std::vector<vpgl_local_rational_camera<double> > lcams;
+    std::vector<std::string> new_out_names;
+    std::vector<std::string> new_sat_names;
+    std::vector<std::vector<vgl_point_2d<double> > > new_corrs;
 
     unsigned cnt_exists = 0;
 
@@ -149,7 +150,7 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
             // use the corrected camera
             vpgl_local_rational_camera<double> *ratcam = read_local_rational_camera<double>(out_cam_names[i]);
             if (!ratcam) {
-                vcl_cerr << "Failed to load rational camera from file" << out_cam_names[i] << '\n';
+                std::cerr << "Failed to load rational camera from file" << out_cam_names[i] << '\n';
                 return false;
             }
             cams.push_back(*ratcam);
@@ -163,7 +164,7 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
 
             vpgl_local_rational_camera<double> *ratcam = read_local_rational_camera<double>(cam_names[i]);
             if (!ratcam) {
-                vcl_cerr << "Failed to load rational camera from file" << cam_names[i] << '\n';
+                std::cerr << "Failed to load rational camera from file" << cam_names[i] << '\n';
                 return false;
             }
             cams.push_back(*ratcam);
@@ -179,18 +180,18 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
     if (cnt_exists == 0)
       cam_weights.assign(cam_weights.size(), 1.0f / cams.size());
     else if (cnt_exists == out_cam_names.size()) {
-      vcl_cerr << pro.name() << ": all cameras have been corrected, exit without any corrections!\n";
+      std::cerr << pro.name() << ": all cameras have been corrected, exit without any corrections!\n";
       return false;
     }
     else {
       if (cnt_exists < 2) { // enforce to have at least two existing
-          vcl_cerr << " If there a pre-existing cams, then there should be at least two!\n";
+          std::cerr << " If there a pre-existing cams, then there should be at least two!\n";
           return false;
       }
     }
 
     if (cams.size() == 1) {
-      vcl_cerr << pro.name() << ": only 1 cameras are found, exit without any corrections!\n";
+      std::cerr << pro.name() << ": only 1 cameras are found, exit without any corrections!\n";
       return false;
     }
     //if (cams.size() == 1) {
@@ -202,50 +203,50 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
     //        return false;
     //}
 
-    vcl_cout << " cam assigned weights: \n";
+    std::cout << " cam assigned weights: \n";
     for (unsigned i = 0; i < cams.size(); i++) {
-        vcl_cout << new_out_names[i] << " weight: " << cam_weights[i] << '\n';
+        std::cout << new_out_names[i] << " weight: " << cam_weights[i] << '\n';
     }
 
-    vcl_cout << "cams size: " << cams.size() << " corrs size: " << new_corrs.size() << vcl_endl;
-    vcl_cout.flush();
+    std::cout << "cams size: " << cams.size() << " corrs size: " << new_corrs.size() << std::endl;
+    std::cout.flush();
 
 
 
     // adjust using each correspondence and save the offsets
-    vcl_vector<vcl_vector<vgl_vector_2d<double> > > cam_trans;
-    vcl_vector<unsigned> corrs_ids;
+    std::vector<std::vector<vgl_vector_2d<double> > > cam_trans;
+    std::vector<unsigned> corrs_ids;
     for (unsigned i = 0; i < n; i++) {
-        vcl_vector<vgl_point_2d<double> > corrs_i;
+        std::vector<vgl_point_2d<double> > corrs_i;
         for (unsigned jj = 0; jj < new_corrs.size(); jj++) {
             corrs_i.push_back(new_corrs[jj][i]);
         }
-        //vcl_cout << "Executing adjust image offsets\n";
-        vcl_vector<vgl_vector_2d<double> > cam_trans_i;
+        //std::cout << "Executing adjust image offsets\n";
+        std::vector<vgl_vector_2d<double> > cam_trans_i;
         vgl_point_3d<double> intersection;
 
         if (!vpgl_rational_adjust_onept::adjust_with_weights(cams, cam_weights, corrs_i, cam_trans_i, intersection))
             continue;
-        //vcl_cout << "after adjustment 2d correspondence: " << i <<  " gives a 3D intersection point: " << intersection << vcl_endl;
+        //std::cout << "after adjustment 2d correspondence: " << i <<  " gives a 3D intersection point: " << intersection << std::endl;
         cam_trans.push_back(cam_trans_i);
         corrs_ids.push_back(i);
     }
-    vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections:";
+    std::cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections:";
     for (unsigned i = 0; i < corrs_ids.size(); i++) {
-      vcl_cout << " " << corrs_ids[i];
+      std::cout << " " << corrs_ids[i];
     }
-    vcl_cout << "\n";
+    std::cout << "\n";
     if (!cam_trans.size()) {
-        vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections! exit without any corrections!\n";
+        std::cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections! exit without any corrections!\n";
         return false;
     }
 
     // find the inliers
-    vcl_vector<unsigned> inlier_cnts(cam_trans.size(), 0);
-    vcl_vector<vcl_vector<unsigned> > inliers;
+    std::vector<unsigned> inlier_cnts(cam_trans.size(), 0);
+    std::vector<std::vector<unsigned> > inliers;
     for (unsigned i = 0; i < cam_trans.size(); i++) {  // for each correction find how many inliers are there for it
-        //vcl_cout << "offset_u: " << cam_trans[i][0].x() << " v: " << cam_trans[i][0].y() << vcl_endl;
-        vcl_vector<unsigned> inliers_i;
+        //std::cout << "offset_u: " << cam_trans[i][0].x() << " v: " << cam_trans[i][0].y() << std::endl;
+        std::vector<unsigned> inliers_i;
         inliers_i.push_back(corrs_ids[i]); // first push itself
         for (unsigned j = 0; j < cam_trans.size(); j++) {
             if (i == j) continue;
@@ -263,10 +264,10 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
         }
         inliers.push_back(inliers_i);
     }
-    vcl_cout << "out of " << n << " correspondences, inlier cnts using pixel radius: " << pix_rad << " : " << vcl_endl;
+    std::cout << "out of " << n << " correspondences, inlier cnts using pixel radius: " << pix_rad << " : " << std::endl;
     unsigned max = 0; unsigned max_i = 0;
     for (unsigned i = 0; i < cam_trans.size(); i++) {
-        vcl_cout << " " << inlier_cnts[i];
+        std::cout << " " << inlier_cnts[i];
         if (max < inlier_cnts[i]) {
             max = inlier_cnts[i];
             max_i = i;
@@ -281,20 +282,20 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
     }
 
     // refine the cameras using all the inliers of this correspondence
-    vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs_inliers;
+    std::vector<std::vector<vgl_point_2d<double> > > corrs_inliers;
 
     for (unsigned k = 0; k < new_corrs.size(); k++) {
-        vcl_vector<vgl_point_2d<double> > vec;
+        std::vector<vgl_point_2d<double> > vec;
         for (unsigned j = 0; j < inliers[max_i].size(); j++)
             vec.push_back(new_corrs[k][inliers[max_i][j]]);
         corrs_inliers.push_back(vec);
     }
 
-    vcl_vector<vgl_vector_2d<double> > cam_trans_inliers;
-    vcl_vector<vgl_point_3d<double> > intersections;
+    std::vector<vgl_vector_2d<double> > cam_trans_inliers;
+    std::vector<vgl_point_3d<double> > intersections;
     if (!vpgl_rational_adjust_multiple_pts::adjust_lev_marq(cams, cam_weights, corrs_inliers, cam_trans_inliers, intersections))
     {
-        vcl_cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";
+        std::cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";
         return false;
     }
 
@@ -320,7 +321,7 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
 //  if all cameras are available, quits without doing anything
 bool volm_correct_rational_cameras_ransac_process2_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("volm_satellite_resources_sptr");  // fetch the full path of the satellite image from the resource file
   input_types.push_back("vcl_string");  // a file that lists the name to a camera on each line and i and j coordinate of the 3D world point
                                     // format of the file:
@@ -333,7 +334,7 @@ bool volm_correct_rational_cameras_ransac_process2_cons(bprb_func_process& pro)
   input_types.push_back("vcl_string");  // output folder to write the corrected cams
   input_types.push_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
   input_types.push_back("int");  // option to enforce having 2 existing cameras
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -342,58 +343,58 @@ bool volm_correct_rational_cameras_ransac_process2_cons(bprb_func_process& pro)
 bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
 {
   if (pro.n_inputs() < 5) {
-    vcl_cout << "volm_correct_rational_cameras_ransac_process: The number of inputs should be 4" << vcl_endl;
+    std::cout << "volm_correct_rational_cameras_ransac_process: The number of inputs should be 4" << std::endl;
     return false;
   }
 
   // get the inputs
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
-  vcl_string input_cams = pro.get_input<vcl_string>(1);
-  vcl_string output_path  = pro.get_input<vcl_string>(2);
+  std::string input_cams = pro.get_input<std::string>(1);
+  std::string output_path  = pro.get_input<std::string>(2);
   float pix_rad = pro.get_input<float>(3);
   bool enforce_existing = pro.get_input<int>(4) == 1 ? true : false;
-  if (enforce_existing) 
-    vcl_cout << "!!!!!!! enforce to have at least 2 existing images!!\n";
-  else 
-    vcl_cout << "!!!!!!! DO NOT enforce to have at least 2 existing images!!\n";
+  if (enforce_existing)
+    std::cout << "!!!!!!! enforce to have at least 2 existing images!!\n";
+  else
+    std::cout << "!!!!!!! DO NOT enforce to have at least 2 existing images!!\n";
 
-  vcl_ifstream ifs(input_cams.c_str());
+  std::ifstream ifs(input_cams.c_str());
   if (!ifs) {
-    vcl_cerr<< " cannot open file: " << input_cams << '\n';
+    std::cerr<< " cannot open file: " << input_cams << '\n';
     return false;
   }
   unsigned int n; ifs >> n;
-  vcl_cout << "will read: " << n << " correspondences for each frame from "<< input_cams << vcl_endl;
+  std::cout << "will read: " << n << " correspondences for each frame from "<< input_cams << std::endl;
 
-  vcl_vector<vcl_string> cam_names;
-  vcl_vector<vcl_string> cam_sat_names;
-  vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs;
-  vcl_vector<vcl_string> out_cam_names;
+  std::vector<std::string> cam_names;
+  std::vector<std::string> cam_sat_names;
+  std::vector<std::vector<vgl_point_2d<double> > > corrs;
+  std::vector<std::string> out_cam_names;
 
-  while (!ifs.eof()) 
+  while (!ifs.eof())
   {
-    vcl_string cam_name;
+    std::string cam_name;
     ifs >> cam_name;
     if (cam_name.size() < 2) break;
-    vcl_cout << "reading cam: " << cam_name << vcl_endl;
-    
-    vcl_string out_cam_name = output_path + cam_name + "_corrected.rpb";
-    vcl_cout << "out cam name: " << out_cam_name << vcl_endl;
-    
+    std::cout << "reading cam: " << cam_name << std::endl;
+
+    std::string out_cam_name = output_path + cam_name + "_corrected.rpb";
+    std::cout << "out cam name: " << out_cam_name << std::endl;
+
     // locate the cam in the resources
-    //vcl_string img_path = res->full_path(cam_name);
-    vcl_pair<vcl_string, vcl_string> img_path = res->full_path(cam_name);
+    //std::string img_path = res->full_path(cam_name);
+    std::pair<std::string, std::string> img_path = res->full_path(cam_name);
     if (img_path.first.compare("") == 0) {
-      vcl_cerr << "Cannot locate: " << cam_name << " in satellite resources! exiting!\n";
+      std::cerr << "Cannot locate: " << cam_name << " in satellite resources! exiting!\n";
       return false;
     }
-    vcl_cout << img_path.first << vcl_endl;
-  
-    cam_names.push_back(img_path.first);  
+    std::cout << img_path.first << std::endl;
+
+    cam_names.push_back(img_path.first);
     cam_sat_names.push_back(img_path.second);
     out_cam_names.push_back(out_cam_name);
-    
-    vcl_vector<vgl_point_2d<double> > corrs_frame;
+
+    std::vector<vgl_point_2d<double> > corrs_frame;
     for (unsigned int ii = 0; ii < n; ++ii) {
       double i, j;
       ifs >> i; ifs >> j;
@@ -403,20 +404,20 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     corrs.push_back(corrs_frame);
   }
   ifs.close();
-  
+
   if (!n) {
-    vcl_cerr << "In vpgl_correct_rational_cameras_process2 - 0 correspondences in file: " << input_cams << "! returning without correcting any cams!\n";
+    std::cerr << "In vpgl_correct_rational_cameras_process2 - 0 correspondences in file: " << input_cams << "! returning without correcting any cams!\n";
     return false;
   }
 
-  vcl_vector<float> cam_weights;
-  vcl_vector<vpgl_rational_camera<double> > cams;
-  vcl_vector<vcl_string> new_out_names;
-  vcl_vector<vcl_string> new_sat_names;
-  vcl_vector<vcl_vector<vgl_point_2d<double> > > new_corrs;
-  
+  std::vector<float> cam_weights;
+  std::vector<vpgl_rational_camera<double> > cams;
+  std::vector<std::string> new_out_names;
+  std::vector<std::string> new_sat_names;
+  std::vector<std::vector<vgl_point_2d<double> > > new_corrs;
+
   unsigned cnt_exists = 0;
-  
+
   // now determine which cameras already exist
   for (unsigned i = 0; i < out_cam_names.size(); i++) {
 
@@ -426,7 +427,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
       // use the corrected camera
       vpgl_rational_camera<double> *ratcam = read_rational_camera<double>(out_cam_names[i]);
       if ( !ratcam ) {
-        vcl_cerr << "Failed to load rational camera from file" << out_cam_names[i] << '\n';
+        std::cerr << "Failed to load rational camera from file" << out_cam_names[i] << '\n';
         return false;
       }
       cams.push_back(*ratcam);
@@ -435,10 +436,10 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
       new_sat_names.push_back(cam_sat_names[i]);
       new_corrs.push_back(corrs[i]);
     } else {  // does not exist, then load the original camera and correct it
-      
+
       vpgl_rational_camera<double> *ratcam = load_cam_from_nitf(cam_names[i]);
       if ( !ratcam ) {
-        vcl_cerr << "Failed to load rational camera from file" << cam_names[i] << '\n';
+        std::cerr << "Failed to load rational camera from file" << cam_names[i] << '\n';
         return false;
       }
       cams.push_back(*ratcam);
@@ -449,16 +450,16 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     }
   }
   if (enforce_existing && cnt_exists < 2) {
-    vcl_cerr << " Enforcing condition to have 2 pre-existing corrected cameras! EXITING since there is: " << cnt_exists << " cameras.\n";
+    std::cerr << " Enforcing condition to have 2 pre-existing corrected cameras! EXITING since there is: " << cnt_exists << " cameras.\n";
     return false;
   }
 
   // distribute the weights
-  if (cnt_exists == 0) 
+  if (cnt_exists == 0)
     cam_weights.assign(cam_weights.size(), 1.0f/cams.size());
-  else { 
+  else {
     if (cnt_exists < 2) { // enforce to have at least two existing
-      vcl_cerr << " If there a pre-existing cams, then there should be at least two!\n";
+      std::cerr << " If there a pre-existing cams, then there should be at least two!\n";
       return false;
     }
   }
@@ -467,73 +468,73 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   //  if (new_sat_names[0] == "GeoEye-1") {
   //    cams[0].save(out_cam_names[0]);
   //    return true;
-  //  } else 
+  //  } else
   //    return false;
   //}
 
-  vcl_cout << " cam assigned weights: \n";
+  std::cout << " cam assigned weights: \n";
   for (unsigned i = 0; i < cams.size(); i++) {
-    vcl_cout << new_out_names[i] << " weight: " << cam_weights[i] << '\n';
+    std::cout << new_out_names[i] << " weight: " << cam_weights[i] << '\n';
   }
 
-  vcl_cout << "cams size: " << cams.size() << " corrs size: " << new_corrs.size() << vcl_endl;
-  vcl_cout.flush();
+  std::cout << "cams size: " << cams.size() << " corrs size: " << new_corrs.size() << std::endl;
+  std::cout.flush();
 
-  
-  
+
+
   // adjust using each correspondence and save the offsets
-  vcl_vector<vcl_vector<vgl_vector_2d<double> > > cam_trans;
-  vcl_vector<unsigned> corrs_ids;
+  std::vector<std::vector<vgl_vector_2d<double> > > cam_trans;
+  std::vector<unsigned> corrs_ids;
   for (unsigned i = 0; i < n; i++) {
-    vcl_vector<vgl_point_2d<double> > corrs_i;
+    std::vector<vgl_point_2d<double> > corrs_i;
     for (unsigned jj = 0; jj < new_corrs.size(); jj++) {
       corrs_i.push_back(new_corrs[jj][i]);
     }
 
-    //vcl_cout << "Executing adjust image offsets\n";
-    vcl_vector<vgl_vector_2d<double> > cam_trans_i;
+    //std::cout << "Executing adjust image offsets\n";
+    std::vector<vgl_vector_2d<double> > cam_trans_i;
     vgl_point_3d<double> intersection;
     //if (!vpgl_rational_adjust_onept::adjust(cams, corrs_i, cam_trans_i, intersection))
     if (!vpgl_rational_adjust_onept::adjust_with_weights(cams, cam_weights, corrs_i, cam_trans_i, intersection)) {
-      vcl_cout << "correspondence adjustment failed for correspondence: " << vcl_endl;
+      std::cout << "correspondence adjustment failed for correspondence: " << std::endl;
       for (unsigned i = 0; i < corrs_i.size(); i++) {
-        vcl_cout << "[" << corrs_i[i].x() << "," << corrs_i[i].y() << '\t';
+        std::cout << "[" << corrs_i[i].x() << "," << corrs_i[i].y() << '\t';
       }
-      vcl_cout << '\n';
+      std::cout << '\n';
       continue;
     }
-    vcl_cout << i << " --> correspondence: ";
+    std::cout << i << " --> correspondence: ";
     for (unsigned ii = 0; ii < corrs_i.size(); ii++) {
-        vcl_cout << "[" << corrs_i[ii].x() << "," << corrs_i[ii].y() << "]\t";
+        std::cout << "[" << corrs_i[ii].x() << "," << corrs_i[ii].y() << "]\t";
     }
-    vcl_cout << " --> project to 3D intersection point: [" << vcl_setprecision(12) << intersection.y() 
-                                                         << "," << vcl_setprecision(12) << intersection.x() 
-                                                         << "," << vcl_setprecision(12) << intersection.z()
+    std::cout << " --> project to 3D intersection point: [" << std::setprecision(12) << intersection.y()
+                                                         << "," << std::setprecision(12) << intersection.x()
+                                                         << "," << std::setprecision(12) << intersection.z()
                                                          << "], giving offset: ";
-    vcl_cout << " --> camera translation: ";
+    std::cout << " --> camera translation: ";
     for (unsigned ii = 0; ii < cam_trans_i.size(); ii++) {
-      vcl_cout << "[" << cam_trans_i[ii].x() << "," << cam_trans_i[ii].y() << "]\t";
+      std::cout << "[" << cam_trans_i[ii].x() << "," << cam_trans_i[ii].y() << "]\t";
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
     cam_trans.push_back(cam_trans_i);
     corrs_ids.push_back(i);
   }
-  vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections:";
+  std::cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections:";
   for (unsigned i = 0; i < corrs_ids.size(); i++) {
-      vcl_cout << " " << corrs_ids[i];
+      std::cout << " " << corrs_ids[i];
     }
-    vcl_cout << "\n";
+    std::cout << "\n";
   if (!cam_trans.size()) {
-    vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections! exit without any corrections!\n";
+    std::cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections! exit without any corrections!\n";
     return false;
   }
-  
+
   // find the inliers
-  vcl_vector<unsigned> inlier_cnts(cam_trans.size(), 0);
-  vcl_vector<vcl_vector<unsigned> > inliers;
+  std::vector<unsigned> inlier_cnts(cam_trans.size(), 0);
+  std::vector<std::vector<unsigned> > inliers;
   for (unsigned i = 0; i < cam_trans.size(); i++) {  // for each correction find how many inliers are there for it
-    //vcl_cout << "offset_u: " << cam_trans[i][0].x() << " v: " << cam_trans[i][0].y() << vcl_endl;
-    vcl_vector<unsigned> inliers_i;
+    //std::cout << "offset_u: " << cam_trans[i][0].x() << " v: " << cam_trans[i][0].y() << std::endl;
+    std::vector<unsigned> inliers_i;
     inliers_i.push_back(corrs_ids[i]); // first push itself
     for (unsigned j = 0; j < cam_trans.size(); j++) {
       if (i == j) continue;
@@ -551,25 +552,25 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     }
     inliers.push_back(inliers_i);
   }
-  vcl_cout << "out of " << n << " correspondences, inlier cnts using pixel radius: " << pix_rad << " : " << vcl_endl;
+  std::cout << "out of " << n << " correspondences, inlier cnts using pixel radius: " << pix_rad << " : " << std::endl;
   unsigned max = 0; unsigned max_i = 0;
   for (unsigned i = 0; i < cam_trans.size(); i++) {
-    vcl_cout << i << " --> " << inlier_cnts[i] << vcl_endl;
+    std::cout << i << " --> " << inlier_cnts[i] << std::endl;
     if (max < inlier_cnts[i]) {
       max = inlier_cnts[i];
       max_i = i;
     }
   }
-  vcl_cout << '\n';
-  vcl_cout << vcl_endl << " using translations of 1 pt with the most inliers: " << max_i << "\n";
+  std::cout << '\n';
+  std::cout << std::endl << " using translations of 1 pt with the most inliers: " << max_i << "\n";
   for (unsigned k = 0; k < cams.size(); k++) {
-    vcl_cout << "offset_u: " << cam_trans[max_i][k].x() << " offset_v: " << cam_trans[max_i][k].y() << '\n';
+    std::cout << "offset_u: " << cam_trans[max_i][k].x() << " offset_v: " << cam_trans[max_i][k].y() << '\n';
   }
-  vcl_cout << "correspondence that provides inliers:" << vcl_endl;
+  std::cout << "correspondence that provides inliers:" << std::endl;
   for (unsigned j = 0; j < inliers[max_i].size(); j++)
-    vcl_cout << inliers[max_i][j] << ' ';
-  vcl_cout << '\n';
-  
+    std::cout << inliers[max_i][j] << ' ';
+  std::cout << '\n';
+
   // use the correspondence with the most number of inliers to correct the cameras
   for (unsigned k = 0; k < cams.size(); k++) {
     double u_off,v_off;
@@ -579,32 +580,32 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   }
 
   // refine the cameras using all the inliers of this correspondence
-  vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs_inliers;
+  std::vector<std::vector<vgl_point_2d<double> > > corrs_inliers;
   for (unsigned k = 0; k < new_corrs.size(); k++) {
-    vcl_vector<vgl_point_2d<double> > vec;
+    std::vector<vgl_point_2d<double> > vec;
     for (unsigned j = 0; j < inliers[max_i].size(); j++)
       vec.push_back(new_corrs[k][inliers[max_i][j]]);
     corrs_inliers.push_back(vec);
   }
 
-  vcl_vector<vgl_vector_2d<double> > cam_trans_inliers;
-  vcl_vector<vgl_point_3d<double> > intersections;
-  //vcl_vector<float> cam_weights_equal(cams.size(), 1.0f/cams.size());
+  std::vector<vgl_vector_2d<double> > cam_trans_inliers;
+  std::vector<vgl_point_3d<double> > intersections;
+  //std::vector<float> cam_weights_equal(cams.size(), 1.0f/cams.size());
   //if (!vpgl_rational_adjust_multiple_pts::adjust_lev_marq(cams, cam_weights_equal, corrs_inliers, cam_trans_inliers, intersections))
   if (!vpgl_rational_adjust_multiple_pts::adjust_lev_marq(cams, cam_weights, corrs_inliers, cam_trans_inliers, intersections))
   {
-    vcl_cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";
+    std::cerr << "In vpgl_correct_rational_cameras_process - adjustment failed\n";
     return false;
   }
 
-  vcl_cout << " after refinement: \n";
+  std::cout << " after refinement: \n";
   for (unsigned i = 0; i < intersections.size(); i++)
-    vcl_cout << "after adjustment 3D intersection point: " << vcl_setprecision(12) << intersections[i].y() << "," << vcl_setprecision(12) << intersections[i].x() 
-                                                           << "," << vcl_setprecision(12) << intersections[i].z()
-                                                           << vcl_endl;
+    std::cout << "after adjustment 3D intersection point: " << std::setprecision(12) << intersections[i].y() << "," << std::setprecision(12) << intersections[i].x()
+                                                           << "," << std::setprecision(12) << intersections[i].z()
+                                                           << std::endl;
 
   for (unsigned i = 0; i < cam_trans_inliers.size(); i++)   // for each correction find how many inliers are there for it
-    vcl_cout << "offset_u: " << cam_trans_inliers[i].x() << " v: " << cam_trans_inliers[i].y() << vcl_endl;
+    std::cout << "offset_u: " << cam_trans_inliers[i].x() << " v: " << cam_trans_inliers[i].y() << std::endl;
 
   for (unsigned i = 0; i < cams.size(); i++) {
     double u_off,v_off;
@@ -612,7 +613,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     cams[i].set_image_offset(u_off + cam_trans_inliers[i].x(), v_off + cam_trans_inliers[i].y());
     cams[i].save(out_cam_names[i]);
   }
-  
+
   return true;
 }
 

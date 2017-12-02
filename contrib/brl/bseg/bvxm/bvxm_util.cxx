@@ -1,3 +1,8 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+#include <vector>
 #include "bvxm_util.h"
 #include "bvxm_world_params.h"
 
@@ -20,17 +25,13 @@
 
 #include "grid/bvxm_voxel_slab.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_cmath.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
-bool bvxm_util::read_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> &Ks, vcl_vector<vnl_double_3x3> &Rs, vcl_vector<vnl_double_3x1> &Ts)
+bool bvxm_util::read_cameras(const std::string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
 {
-  vcl_ifstream file_inp(filename.c_str());
+  std::ifstream file_inp(filename.c_str());
   if (!file_inp.good()) {
-    vcl_cerr << "error opening file "<< filename <<'\n';
+    std::cerr << "error opening file "<< filename <<'\n';
     return false;
   }
   unsigned ncameras;
@@ -52,21 +53,21 @@ bool bvxm_util::read_cameras(const vcl_string filename, vcl_vector<vnl_double_3x
 }
 
 
-bool bvxm_util::write_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> &Ks, vcl_vector<vnl_double_3x3> &Rs, vcl_vector<vnl_double_3x1> &Ts)
+bool bvxm_util::write_cameras(const std::string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
 {
-  vcl_ofstream file_out(filename.c_str());
+  std::ofstream file_out(filename.c_str());
   if (!file_out.good()) {
-    vcl_cerr << "error opening file "<< filename <<'\n';
+    std::cerr << "error opening file "<< filename <<'\n';
     return false;
   }
   unsigned ncameras = Ks.size();
 
-  file_out << ncameras << vcl_endl << vcl_endl;
+  file_out << ncameras << std::endl << std::endl;
   for (unsigned i=0; i < ncameras; i++) {
     file_out << Ks[i] << '\n'
              << Rs[i] << '\n'
              << Ts[i] << '\n'
-             << vcl_endl;
+             << std::endl;
   }
   file_out.close();
 
@@ -104,12 +105,12 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
     float pix_in_x = pix_in_homg[0][n] / pix_in_homg[2][n];
     float pix_in_y = pix_in_homg[1][n] / pix_in_homg[2][n];
     // calculate weights and pixel values
-    unsigned x0 = (unsigned)vcl_floor(pix_in_x);
-    unsigned x1 = (unsigned)vcl_ceil(pix_in_x);
+    unsigned x0 = (unsigned)std::floor(pix_in_x);
+    unsigned x1 = (unsigned)std::ceil(pix_in_x);
     float x0_weight = (float)x1 - pix_in_x;
     float x1_weight = 1.0f - (float)x0_weight;
-    unsigned y0 = (unsigned)vcl_floor(pix_in_y);
-    unsigned y1 = (unsigned)vcl_ceil(pix_in_y);
+    unsigned y0 = (unsigned)std::floor(pix_in_y);
+    unsigned y1 = (unsigned)std::ceil(pix_in_y);
     float y0_weight = (float)y1 - pix_in_y;
     float y1_weight = 1.0f - (float)y0_weight;
     xvals.set_column(n,vnl_vector_fixed<unsigned,4>(x0,x0,x1,x1).as_ref());
@@ -136,8 +137,8 @@ vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_
     img_view_float = dynamic_cast<vil_image_view<float>*>(image.ptr());
   }
 
-  vil_image_view<float> output((int)vcl_floor((float)img_view_float->ni()/2),
-                               (int)vcl_floor((float)img_view_float->nj()/2),
+  vil_image_view<float> output((int)std::floor((float)img_view_float->ni()/2),
+                               (int)std::floor((float)img_view_float->nj()/2),
                                img_view_float->nplanes());
 
 #if 0
@@ -163,7 +164,7 @@ vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_
         else
           (*img_view_out)(i,j,p)=static_cast<vxl_byte>(output(i,j)+0.5);
 
-        //vcl_cout<<(*img_view_out)(i,j);
+        //std::cout<<(*img_view_out)(i,j);
       }
   ////vil_convert_stretch_range_limited<float>(output,*img_view_out,min_b,max_b);
   vil_image_view_base_sptr return_img=img_view_out;
@@ -189,7 +190,7 @@ vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr cam
   }
   else
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
 }
 
@@ -214,7 +215,7 @@ vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sp
   }
   else
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
 }
 
@@ -224,7 +225,7 @@ void bvxm_util::logical_and(bvxm_voxel_slab<bool> const& s1, bvxm_voxel_slab<boo
   if ( (result.nx() != s1.nx()) || (result.nx() != s2.nx()) ||
        (result.ny() != s1.ny()) || (result.ny() != s2.ny()) ||
        (result.nz() != s1.nz()) || (result.nz() != s2.nz()) ) {
-    vcl_cerr << "error: sizes of slabs to AND do not match.\n";
+    std::cerr << "error: sizes of slabs to AND do not match.\n";
     return;
   }
 
@@ -240,7 +241,7 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl
 {
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
-  vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
+  std::vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
   vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
 
   for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
@@ -264,5 +265,5 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl
     roi_uncertainty->add(p2d_uncertainty);
   }
 
-  return vnl_math::ceil(0.5*vnl_math::max(roi_uncertainty->width(),roi_uncertainty->height()));
+  return vnl_math::ceil(0.5*std::max(roi_uncertainty->width(),roi_uncertainty->height()));
 }

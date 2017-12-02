@@ -7,7 +7,7 @@
 //
 // \verbatim
 //  Modifications
-//   Peter Vanroose - 14 aug 2004 - moved all impl from .txx to .h to avoid VC60 internal compile error
+//   Peter Vanroose - 14 aug 2004 - moved all impl from .hxx to .h to avoid VC60 internal compile error
 //   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature
 //      based on point location alone
 // \endverbatim
@@ -57,7 +57,7 @@ nearest_feature( rgrl_feature_sptr const& feature ) const
 {
   return mask_->inside(feature->location()) ?
          fea_set_sptr_->nearest_feature( feature ) :
-         (rgrl_feature_sptr)0;
+         (rgrl_feature_sptr)VXL_NULLPTR;
 }
 
 //: Nearest feature based on Euclidean distance
@@ -68,7 +68,7 @@ nearest_feature( const vnl_vector<double>& loc ) const
 {
   return mask_->inside(loc) ?
          fea_set_sptr_->nearest_feature( loc ) :
-         (rgrl_feature_sptr)0;
+         (rgrl_feature_sptr)VXL_NULLPTR;
 }
 
 //: Return all features within a given Euclidean distance

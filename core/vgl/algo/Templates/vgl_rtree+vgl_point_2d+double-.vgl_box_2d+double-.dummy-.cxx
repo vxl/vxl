@@ -3,7 +3,7 @@
 // testing the vgl_rtree implementation on potential compile errors or warnings.
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
-#include <vgl/algo/vgl_rtree.txx>
+#include <vgl/algo/vgl_rtree.hxx>
 
 typedef vgl_point_2d<double> V;
 typedef vgl_box_2d<double>   B;

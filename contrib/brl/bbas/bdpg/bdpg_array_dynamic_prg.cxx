@@ -1,8 +1,9 @@
+#include <iostream>
 #include "bdpg_array_dynamic_prg.h"
 //:
 // \file
 #include <vnl/vnl_numeric_traits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 bdpg_array_dynamic_prg::bdpg_array_dynamic_prg(const unsigned rows, const unsigned cols)
 {
@@ -40,11 +41,11 @@ void bdpg_array_dynamic_prg::print_path(unsigned row, unsigned col)
   bdpg_node_sptr n = array_[row][col];
   if (!n)
   {
-    vcl_cout << "NULL PATH\n";
+    std::cout << "NULL PATH\n";
     return;
   }
-  vcl_cout << "PATH\n";
-  vcl_cout << '(' << row << ' ' << col << ")\n";
+  std::cout << "PATH\n";
+  std::cout << '(' << row << ' ' << col << ")\n";
   int prow = n->previous_row();
   if (prow<0)
     return;
@@ -52,7 +53,7 @@ void bdpg_array_dynamic_prg::print_path(unsigned row, unsigned col)
   while (prow>=0)
   {
     int pcol = n->previous_col();
-    vcl_cout << '(' << prow << ' ' << pcol << ")\n";
+    std::cout << '(' << prow << ' ' << pcol << ")\n";
     n = array_[prow] [pcol];
     prow = n->previous_row();
   }
@@ -79,7 +80,7 @@ bool bdpg_array_dynamic_prg::maxp(unsigned row, unsigned col, int & best_col)
       best_col = c;
     }
   }
-  vcl_cout << '(' << row << ' ' << col << ")->(" << rm << ' '
+  std::cout << '(' << row << ' ' << col << ")->(" << rm << ' '
            << best_col << "): " << log_pmax << '\n';
   return true;
 }
@@ -133,10 +134,10 @@ unsigned bdpg_array_dynamic_prg::best_assign_col()
   return best_col;
 }
 
-vcl_vector<unsigned> bdpg_array_dynamic_prg::assignment()
+std::vector<unsigned> bdpg_array_dynamic_prg::assignment()
 {
   //each row must be assigned to some column.
-  vcl_vector<unsigned> path(num_rows_,0);
+  std::vector<unsigned> path(num_rows_,0);
   unsigned col = this->best_assign_col();
   path[num_rows_-1]=col;
   bdpg_node_sptr n = array_[num_rows_-1][col];
@@ -158,17 +159,17 @@ vcl_vector<unsigned> bdpg_array_dynamic_prg::assignment()
 
 void bdpg_array_dynamic_prg::print_array()
 {
-  vcl_cout << "Dynamic program array\n";
+  std::cout << "Dynamic program array\n";
   for (unsigned r=0; r<num_rows_; ++r)
   {
     for (unsigned c=0; c<num_cols_; ++c)
     {
       if (!array_[r][c])
-        vcl_cout << -1 << ' ';
+        std::cout << -1 << ' ';
       else
-        vcl_cout << array_[r][c]->log_p() << ' ';
+        std::cout << array_[r][c]->log_p() << ' ';
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
 }

@@ -19,7 +19,7 @@ inline void vil3d_scan_image(const vil3d_image_view<T >& im, Fn& f)
   unsigned nj = im.nj();
   unsigned nk = im.nk();
   unsigned np = im.nplanes();
-  vcl_ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
+  std::ptrdiff_t istep = im.istep(), jstep=im.jstep(), kstep=im.kstep();
 
   for (unsigned int p=0;p<np;++p, plane += im.planestep())
   {
@@ -40,7 +40,7 @@ inline void vil3d_scan_image(const vil3d_image_view<T >& im, Fn& f)
 
 //: Call f(im1(i,j,k,p),im2(i,j,k,p)) for every voxel in the images
 template <class T1, class T2, class Fn >
-inline void vil3d_scan_image(const vil3d_image_view<T1 >& im1, 
+inline void vil3d_scan_image(const vil3d_image_view<T1 >& im1,
                              const vil3d_image_view<T2 >& im2, Fn& f)
 {
   unsigned ni = im1.ni();
@@ -52,10 +52,10 @@ inline void vil3d_scan_image(const vil3d_image_view<T1 >& im1,
   const T1* plane1 = im1.origin_ptr();
   const T2* plane2 = im2.origin_ptr();
 
-  vcl_ptrdiff_t istep1 = im1.istep(), jstep1=im1.jstep(), kstep1=im1.kstep();
-  vcl_ptrdiff_t pstep1=im1.planestep();
-  vcl_ptrdiff_t istep2 = im2.istep(), jstep2=im2.jstep(), kstep2=im2.kstep();
-  vcl_ptrdiff_t pstep2=im2.planestep();
+  std::ptrdiff_t istep1 = im1.istep(), jstep1=im1.jstep(), kstep1=im1.kstep();
+  std::ptrdiff_t pstep1=im1.planestep();
+  std::ptrdiff_t istep2 = im2.istep(), jstep2=im2.jstep(), kstep2=im2.kstep();
+  std::ptrdiff_t pstep2=im2.planestep();
 
   for (unsigned int p=0;p<np;++p, plane1 += pstep1,plane2 += pstep2)
   {

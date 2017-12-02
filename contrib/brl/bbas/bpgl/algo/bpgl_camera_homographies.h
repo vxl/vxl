@@ -58,10 +58,10 @@ class bpgl_camera_homographies
                               vgl_plane_3d<double> const& plane);
 
   //: transform a point cloud so that its coordinate system has the specified plane as the world X-Y plane
-  static vcl_vector<vgl_point_3d<double> >
+  static std::vector<vgl_point_3d<double> >
   transform_points_to_plane(vgl_plane_3d<double> const& plane,
                             vgl_point_3d<double> const& ref_point,
-                            vcl_vector<vgl_point_3d<double> > const& pts );
+                            std::vector<vgl_point_3d<double> > const& pts );
  private:
   //: no public constructor - static methods only
   bpgl_camera_homographies() {}

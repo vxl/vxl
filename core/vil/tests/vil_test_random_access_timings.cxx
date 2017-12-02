@@ -5,12 +5,13 @@
 //        Useful to try it on different platforms to how different optimisers perform.
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <ctime>
+#include <vector>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
-#include <vcl_ctime.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_stats_1d.h>
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
 
 const unsigned NI=256;
@@ -23,15 +24,15 @@ template <class imT>
 double method1(vil_image_view<imT>& image,
                const int* x, const int* y, int n_pts, int n_loops)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   double sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
     for (int i=0;i<n_pts;++i)
       sum+=(double) image(x[i],y[i]);
   }
-  vcl_time_t t1=vcl_clock();
-  vcl_cout << sum;
+  std::time_t t1=std::clock();
+  std::cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -39,15 +40,15 @@ template <class imT>
 double method2(vil_image_view<imT>& image,
                const int* x, const int* y, int n_pts, int n_loops)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   double sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
     for (int i=0;i<n_pts;++i)
       sum+=(double) image.top_left_ptr()[x[i]*image.istep()+y[i]*image.jstep()];
   }
-  vcl_time_t t1=vcl_clock();
-  vcl_cout << sum;
+  std::time_t t1=std::clock();
+  std::cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -67,15 +68,15 @@ double method3(vil_image_view<imT>& image,
         (raster_ptrs)[j] = & image(0,j,0);
   }
 
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   double sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
     for (int i=0;i<n_pts;++i)
       sum+=(double) raster_ptrs[y[i]][x[i]];
   }
-  vcl_time_t t1=vcl_clock();
-  vcl_cout << sum;
+  std::time_t t1=std::clock();
+  std::cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -100,9 +101,9 @@ void compute_stats(int i, vil_image_view<imT>& image,
                    const int* x, const int* y, int n_pts, int n_loops)
 {
   mbl_stats_1d stats;
-  vcl_cout << "\t\t\t\t";
+  std::cout << "\t\t\t\t";
   for (int j=0;j<10;++j) stats.obs(method(i,image,x,y,n_pts,n_loops));
-  vcl_cout<<"\nMethod "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
+  std::cout<<"\nMethod "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
           <<"ns  +/-"<<0.1*int(5*(stats.max()-stats.min())+5)<<"ns\n";
 }
 
@@ -110,7 +111,7 @@ void compute_stats(int i, vil_image_view<imT>& image,
 // ================== Bilinear ========================
 
 template<class T>
-inline double bilin_interp1(double x, double y, const T* data, vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+inline double bilin_interp1(double x, double y, const T* data, std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   int p1x=int(x);
   double normx = x-p1x;
@@ -145,25 +146,25 @@ inline double bilin_interp2(double x, double y, const T** data)
 template <class imT>
 double bilin_method1(vil_image_view<imT>& image, int n_pts, int n_loops, double& sum)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
      double x = 1.3,y=1.7;
-     vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep();
+     std::ptrdiff_t istep=image.istep(),jstep=image.jstep();
      imT* plane = image.top_left_ptr();
      for (int i=0;i<n_pts;++i,x+=dx,y+=dy)
        sum+=(double) bilin_interp1(x,y,plane,istep,jstep);
   }
-  vcl_time_t t1=vcl_clock();
-  vcl_cout << sum;
+  std::time_t t1=std::clock();
+  std::cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
 template <class imT>
 double bilin_method2(vil_image_view<imT>& image, int n_pts, int n_loops, double& sum)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
@@ -171,8 +172,8 @@ double bilin_method2(vil_image_view<imT>& image, int n_pts, int n_loops, double&
     for (int i=0;i<n_pts;++i,x+=dx,y+=dy)
       sum+=(double) bilin_interp1(x,y,image.top_left_ptr(),image.istep(),image.jstep());
   }
-  vcl_time_t t1=vcl_clock();
-  vcl_cout << sum;
+  std::time_t t1=std::clock();
+  std::cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -190,7 +191,7 @@ double bilin_method3(vil_image_view<imT>& image, int n_pts, int n_loops, double&
       (raster_ptrs)[j] = & image(0,j,0);
   }
 
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   sum=0.0;
   for (int n=0;n<n_loops;++n)
   {
@@ -198,8 +199,8 @@ double bilin_method3(vil_image_view<imT>& image, int n_pts, int n_loops, double&
     for (int i=0;i<n_pts;++i,x+=dx,y+=dy)
       sum+=(double) bilin_interp2(x,y,raster_ptrs);
   }
-  vcl_time_t t1=vcl_clock();
-  vcl_cout << sum;
+  std::time_t t1=std::clock();
+  std::cout << sum;
   return 1e9*(double(t1)-double(t0))/(double(n_pts)*n_loops*CLOCKS_PER_SEC);
 }
 
@@ -221,9 +222,9 @@ template <class imT>
 void compute_bilin_stats(int i, vil_image_view<imT>& image,int n_pts, int n_loops)
 {
   mbl_stats_1d stats;
-  vcl_cout << "\t\t\t\t";
+  std::cout << "\t\t\t\t";
   for (int j=0;j<10;++j) stats.obs(bilin_method(i,image,n_pts,n_loops));
-  vcl_cout<<"\nBilin. Method "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
+  std::cout<<"\nBilin. Method "<<i<<") Mean: "<<0.1*int(10*stats.mean()+5)
           <<"ns  +/-"<<0.1*int(5*(stats.max()-stats.min())+5)<<"ns\n";
 }
 
@@ -233,7 +234,7 @@ int main(int argc, char** argv)
   vil_image_view<float>    float_image(NI,NJ,1); float_image.fill(17);
   int n_loops = 10000;
   int n_pts = 1000;
-  vcl_vector<int> x(n_pts),y(n_pts);
+  std::vector<int> x(n_pts),y(n_pts);
   for (int i=0;i<n_pts;++i)
   {
     x[i]=(i*7)%NI;
@@ -242,25 +243,25 @@ int main(int argc, char** argv)
 
   n_pts = 100;
   n_loops = 10000;
-  vcl_cout<<"Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]\n"
+  std::cout<<"Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]\n"
           <<"Images of BYTE\n";
   for (int i=1;i<=3;++i)
   {
     compute_stats(i,byte_image,&x[0],&y[0],n_pts,n_loops);
   }
-  vcl_cout<<"Images of FLOAT\n";
+  std::cout<<"Images of FLOAT\n";
   for (int i=1;i<=3;++i)
   {
     compute_stats(i,float_image,&x[0],&y[0],n_pts,n_loops);
   }
 
-  vcl_cout<<"Using Bilinear interpolation.\n"
+  std::cout<<"Using Bilinear interpolation.\n"
           <<"Images of BYTE\n";
   for (int i=1;i<=3;++i)
   {
     compute_bilin_stats(i,byte_image,n_pts,n_loops);
   }
-  vcl_cout<<"Images of FLOAT\n";
+  std::cout<<"Images of FLOAT\n";
   for (int i=1;i<=3;++i)
   {
     compute_bilin_stats(i,float_image,n_pts,n_loops);

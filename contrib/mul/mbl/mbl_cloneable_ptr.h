@@ -15,7 +15,7 @@
 //  suitable polymorphic I/O is invoked.
 //
 // \code
-// vcl_auto_ptr<T> inst = get_from_some_factory_function();
+// std::auto_ptr<T> inst = get_from_some_factory_function();
 // mbl_cloneable_ptr<T> long_term_store;
 // long_term_store = inst.release();
 // \endcode
@@ -132,9 +132,9 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr<BaseClass>& p)
 //  When written or read to/from binary streams,
 //  suitable polymorphic I/O is invoked.
 //
-// To take ownership of the contents of a vcl_auto_ptr<T> use
+// To take ownership of the contents of a std::auto_ptr<T> use
 // \code
-// vcl_auto_ptr<T> inst = get_from_some_factory_function();
+// std::auto_ptr<T> inst = get_from_some_factory_function();
 // mbl_cloneable_nzptr<T> long_term_store(inst.release());
 // \endcode
 template <class BaseClass>
@@ -249,12 +249,12 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr<BaseClass>& p)
 
 #define MBL_CLONEABLE_PTR_INSTANTIATE(T) /* nothing */
 #if 0 // was:
-VCL_DEFINE_SPECIALIZATION class mbl_cloneable_ptr<T >; \
-VCL_DEFINE_SPECIALIZATION void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_ptr<T >& p);\
-VCL_DEFINE_SPECIALIZATION void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr<T >& p);\
-VCL_DEFINE_SPECIALIZATION class mbl_cloneable_nzptr<T >; \
-VCL_DEFINE_SPECIALIZATION void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_nzptr<T >& p);\
-VCL_DEFINE_SPECIALIZATION void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr<T >& p)
+template <> class mbl_cloneable_ptr<T >; \
+template <> void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_ptr<T >& p);\
+template <> void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_ptr<T >& p);\
+template <> class mbl_cloneable_nzptr<T >; \
+template <> void vsl_b_write(vsl_b_ostream& bfs, const mbl_cloneable_nzptr<T >& p);\
+template <> void vsl_b_read(vsl_b_istream& bfs, mbl_cloneable_nzptr<T >& p)
 #endif // 0
 
 #endif  // mbl_cloneable_ptr_h

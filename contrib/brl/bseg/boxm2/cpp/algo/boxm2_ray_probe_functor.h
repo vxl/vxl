@@ -3,9 +3,10 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class boxm2_ray_probe_functor
 {
@@ -13,12 +14,12 @@ class boxm2_ray_probe_functor
   //: "default" constructor
   boxm2_ray_probe_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,
-                 vcl_vector<float> & seg_len,
-                 vcl_vector<float> & abs_depth,
-                 vcl_vector<float> & alpha,
-                 vcl_vector<float> & data_to_return,
-                 vcl_string prefix,
+  bool init_data(std::vector<boxm2_data_base*> & datas,
+                 std::vector<float> & seg_len,
+                 std::vector<float> & abs_depth,
+                 std::vector<float> & alpha,
+                 std::vector<float> & data_to_return,
+                 std::string prefix,
                  int & nelems)
   {
     alpha_data_        = new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
@@ -212,8 +213,8 @@ class boxm2_ray_probe_functor
       }
       default: // do nothing
           {
-              vcl_cout<<"Unknown data "<<vcl_endl;
-          
+              std::cout<<"Unknown data "<<std::endl;
+
         break;
           }
     }
@@ -226,11 +227,11 @@ class boxm2_ray_probe_functor
  private:
   boxm2_data<BOXM2_ALPHA> * alpha_data_;
   boxm2_data_base * data_ptr;
-  vcl_vector<float> * abs_depth_;
-  vcl_vector<float> * seg_len_;
-  vcl_vector<float> * alpha_;
-  vcl_vector<float> * data_to_return_;
-  vcl_string prefix_;
+  std::vector<float> * abs_depth_;
+  std::vector<float> * seg_len_;
+  std::vector<float> * alpha_;
+  std::vector<float> * data_to_return_;
+  std::string prefix_;
 };
 
 class boxm2_ray_app_density_functor
@@ -239,8 +240,8 @@ class boxm2_ray_app_density_functor
   //: "default" constructor
   boxm2_ray_app_density_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,
-                 vcl_vector<float> & app_density,
+  bool init_data(std::vector<boxm2_data_base*> & datas,
+                 std::vector<float> & app_density,
                  float intensity)
   {
     //alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
@@ -257,7 +258,7 @@ class boxm2_ray_app_density_functor
   }
  private:
   boxm2_data<BOXM2_MOG3_GREY> * mog3_data_;
-  vcl_vector<float> * app_density_;
+  std::vector<float> * app_density_;
   float intensity_;
 };
 

@@ -1,13 +1,14 @@
 // This is core/vil/algo/tests/test_median.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_median.h>
 #include <vil/vil_print.h>
 
 static void test_median_byte()
 {
-  vcl_cout << "********************\n"
+  std::cout << "********************\n"
            << " Testing vil_median\n"
            << "********************\n";
 
@@ -22,18 +23,18 @@ static void test_median_byte()
   image0(4,0)=6;  // Edge pixel
   image0(0,5)=5;  // Edge pixel
   image0(1,5)=6;  // Edge pixel
-  vcl_cout<<"Original image\n";
-  vil_print_all(vcl_cout,image0);
+  std::cout<<"Original image\n";
+  vil_print_all(std::cout,image0);
 
   vil_structuring_element element_i,element_j;
   element_i.set_to_line_i(-1,1);
   element_j.set_to_line_j(-1,1);
-  vcl_cout<<"Structuring element: "<<element_i<<'\n';
+  std::cout<<"Structuring element: "<<element_i<<'\n';
 
   vil_image_view<vxl_byte> image1;
   vil_median(image0,image1,element_i);
-  vcl_cout<<"Result of one median\n";
-  vil_print_all(vcl_cout,image1);
+  std::cout<<"Result of one median\n";
+  vil_print_all(std::cout,image1);
   TEST("image1(3,5)", image1(3,5), 0);
   TEST("image1(4,5)", image1(4,5), 4);
   TEST("image1(5,5)", image1(5,5), 5);
@@ -45,8 +46,8 @@ static void test_median_byte()
 
   vil_image_view<vxl_byte> image2;
   vil_median(image1,image2,element_j);
-  vcl_cout<<"Result of two medians\n";
-  vil_print_all(vcl_cout,image2);
+  std::cout<<"Result of two medians\n";
+  vil_print_all(std::cout,image2);
   TEST("image2(5,5)", image2(5,5), 0);
   TEST("image2(4,5)", image2(4,5), 0);
   TEST("image2(6,5)", image2(6,5), 0);

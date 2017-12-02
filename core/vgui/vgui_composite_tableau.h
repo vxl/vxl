@@ -19,7 +19,8 @@
 //   01-OCT-2002 K.Y.McGaul   - Moved vgui_composite to vgui_composite_tableau.
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_composite_tableau_sptr.h>
 #include <vgui/vgui_tableau.h>
@@ -60,7 +61,7 @@ class vgui_composite_tableau : public vgui_tableau
 
   //: Constructor - don't use this, use vgui_composite_tableau_new.
   //  Takes a vector of child tableaux.
-  vgui_composite_tableau(vcl_vector<vgui_tableau_sptr> const& children);
+  vgui_composite_tableau(std::vector<vgui_tableau_sptr> const& children);
 
   //: Handle all events sent to this tableau.
   //  All events (except key-presses '0'-'9' and draw events) are passed
@@ -74,13 +75,13 @@ class vgui_composite_tableau : public vgui_tableau
   virtual bool help();
 
   //: Returns the type of this tableau ('vgui_composite_tableau').
-  vcl_string type_name() const { return "vgui_composite_tableau"; }
+  std::string type_name() const { return "vgui_composite_tableau"; }
 
   //: There is no obvious filename, so this just returns the type.
-  vcl_string file_name() const { return type_name(); }
+  std::string file_name() const { return type_name(); }
 
   //: Returns a nice version of the name, including info on the children.
-  vcl_string pretty_name() const;
+  std::string pretty_name() const;
 
   //: Calls notify for the observers.
   virtual void notify() const;
@@ -133,10 +134,10 @@ class vgui_composite_tableau : public vgui_tableau
   // ----
 
   //: List of child tableaux.
-  vcl_vector<vgui_parent_child_link> children;
+  std::vector<vgui_parent_child_link> children;
 
   //: Whether each child is active or not (ie. using events).
-  vcl_vector<bool> active;
+  std::vector<bool> active;
 
   bool enable_key_bindings;
 };
@@ -162,7 +163,7 @@ struct vgui_composite_tableau_new : public vgui_composite_tableau_sptr
 
   //: Constructor - creates pointer to a composite with the given children.
   //  Takes a vector of child tableaux.
-  vgui_composite_tableau_new(vcl_vector<vgui_tableau_sptr> const& children)
+  vgui_composite_tableau_new(std::vector<vgui_tableau_sptr> const& children)
     : base(new vgui_composite_tableau(children)) {}
 };
 

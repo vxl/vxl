@@ -1,4 +1,5 @@
 // This is core/vil/algo/vil_structuring_element.cxx
+#include <iostream>
 #include "vil_structuring_element.h"
 //:
 // \file
@@ -6,10 +7,10 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Define elements { (p_i[k],p_j[k]) }
-void vil_structuring_element::set(const vcl_vector<int>& v_p_i,const vcl_vector<int>& v_p_j)
+void vil_structuring_element::set(const std::vector<int>& v_p_i,const std::vector<int>& v_p_j)
 {
   assert(v_p_i.size()==v_p_j.size());
   assert(v_p_i.size()>0);
@@ -32,7 +33,7 @@ void vil_structuring_element::set(const vcl_vector<int>& v_p_i,const vcl_vector<
 //  Select pixels in disk s.t. x^x+y^y<r^r
 void vil_structuring_element::set_to_disk(double r)
 {
-  vcl_vector<int> px,py;
+  std::vector<int> px,py;
   double r2 = r*r;
   int r0 = int(r+1);
   for (int j=-r0;j<=r0;++j)
@@ -70,7 +71,7 @@ void vil_structuring_element::set_to_line_j(int jlo, int jhi)
 }
 
 //: Write details to stream
-vcl_ostream& operator<<(vcl_ostream& os, const vil_structuring_element& element)
+std::ostream& operator<<(std::ostream& os, const vil_structuring_element& element)
 {
   os<<"Bounds ["
     <<element.min_i()<<','<<element.max_i()<<"]["
@@ -82,12 +83,12 @@ vcl_ostream& operator<<(vcl_ostream& os, const vil_structuring_element& element)
 
 //: Generate a list of offsets for use on image with istep,jstep
 //  Gives an efficient way of looping through all the pixels in the structuring element
-void vil_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset, const vil_structuring_element& element,
-                         vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep)
+void vil_compute_offsets(std::vector<std::ptrdiff_t>& offset, const vil_structuring_element& element,
+                         std::ptrdiff_t istep, std::ptrdiff_t jstep)
 {
   unsigned n = element.p_i().size();
   offset.resize(n);
   for (unsigned int k=0;k<n;++k)
-    offset[k] = static_cast<vcl_ptrdiff_t>(element.p_i()[k]*istep +  element.p_j()[k]*jstep);
+    offset[k] = static_cast<std::ptrdiff_t>(element.p_i()[k]*istep +  element.p_j()[k]*jstep);
 }
 

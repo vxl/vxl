@@ -4,13 +4,14 @@
 //  Copyright: (C) 2007 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test mfpf_dp_snake
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <mfpf/mfpf_dp_snake.h>
 #include <mfpf/mfpf_edge_finder.h>
 #include <vgl/vgl_point_2d.h>
@@ -18,7 +19,7 @@
 
 void test_dp_snake()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing mfpf_dp_snake\n"
            << "***********************\n";
 
@@ -47,19 +48,19 @@ void test_dp_snake()
   dp_snake.set_to_circle(edge_finder,
                          20, vgl_point_2d<double>(11,9),6);
 
-  vcl_cout<<"Initial Snake: "<<dp_snake<<vcl_endl;
+  std::cout<<"Initial Snake: "<<dp_snake<<std::endl;
 
   for (unsigned i=0;i<10;++i)
   {
     double move = dp_snake.update_step(image);
 
-    vcl_cout<<i<<") "<<dp_snake<<vcl_endl
-            <<"Mean move = "<<move<<vcl_endl;
+    std::cout<<i<<") "<<dp_snake<<std::endl
+            <<"Mean move = "<<move<<std::endl;
   }
 
 //  dp_snake.search(image);
 
-//  vcl_cout<<"After search. Snake: "<<dp_snake<<vcl_endl;
+//  std::cout<<"After search. Snake: "<<dp_snake<<std::endl;
 }
 
 TESTMAIN(test_dp_snake);

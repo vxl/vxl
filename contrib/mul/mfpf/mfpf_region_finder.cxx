@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "mfpf_region_finder.h"
 //:
 // \file
@@ -5,7 +7,7 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vil/vil_resample_bilin.h>
@@ -58,7 +60,7 @@ mfpf_region_finder::~mfpf_region_finder()
 }
 
 //: Define region and cost of region
-void mfpf_region_finder::set(const vcl_vector<mbl_chord>& roi,
+void mfpf_region_finder::set(const std::vector<mbl_chord>& roi,
                              double ref_x, double ref_y,
                              const mfpf_vec_cost& cost,
                              short norm_method)
@@ -110,12 +112,12 @@ double mfpf_region_finder::radius() const
 {
   // Compute distance to each corner
   double wx = roi_ni_-1;
-  double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
+  double x2 = std::max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
   double wy = roi_nj_-1;
-  double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
+  double y2 = std::max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
   double r2 = x2+y2;
   if (r2<=1) return 1.0;
-  return vcl_sqrt(r2);
+  return std::sqrt(r2);
 }
 
 
@@ -195,8 +197,8 @@ void mfpf_region_finder::evaluate_region(
   response.image().set_size(ni,nj);
   double* r = response.image().top_left_ptr();
   const float* s = sample.top_left_ptr();
-  vcl_ptrdiff_t r_jstep = response.image().jstep();
-  vcl_ptrdiff_t s_jstep = sample.jstep();
+  std::ptrdiff_t r_jstep = response.image().jstep();
+  std::ptrdiff_t s_jstep = sample.jstep();
 
   for (unsigned j=0;j<(unsigned)nj;++j,r+=r_jstep,s+=s_jstep)
   {
@@ -254,7 +256,7 @@ double mfpf_region_finder::search_one_pose(const vimt_image_2d_of<float>& image,
   vnl_vector<double> v(n_pixels_*np);
 
   const float* s = sample.top_left_ptr();
-  vcl_ptrdiff_t s_jstep = sample.jstep();
+  std::ptrdiff_t s_jstep = sample.jstep();
 
   double best_r=9.99e9;
   int best_i=0,best_j=0;
@@ -305,7 +307,7 @@ bool mfpf_region_finder::overlap(const mfpf_pose& pose1,
 //: Generate points in ref frame that represent boundary
 //  Points of a contour around the shape.
 //  Used for display purposes.
-void mfpf_region_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+void mfpf_region_finder::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(7);
   vgl_vector_2d<double> r(ref_x_,ref_y_);
@@ -344,8 +346,8 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
       while (pData != pDataEnd)
       {
           double z=*pData;
-          min1=vcl_min(z,min1);
-          max1=vcl_max(z,max1);
+          min1=std::min(z,min1);
+          max1=std::max(z,max1);
           pData += nplanes;
       }
   }
@@ -360,8 +362,8 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
       {
           double z = vnl_c_vector<double>::two_norm(pData, nplanes);
 
-          min1=vcl_min(z,min1);
-          max1=vcl_max(z,max1);
+          min1=std::min(z,min1);
+          max1=std::max(z,max1);
           meanL2[i++]=z;
           pData += nplanes;
       }
@@ -406,9 +408,9 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_region_finder::is_a() const
+std::string mfpf_region_finder::is_a() const
 {
-  return vcl_string("mfpf_region_finder");
+  return std::string("mfpf_region_finder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -421,7 +423,7 @@ mfpf_point_finder* mfpf_region_finder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_region_finder::print_summary(vcl_ostream& os) const
+void mfpf_region_finder::print_summary(std::ostream& os) const
 {
   os << "{  size: "<<roi_ni_<<" x "<<roi_nj_
      << " n_pixels: "<<n_pixels_
@@ -430,15 +432,15 @@ void mfpf_region_finder::print_summary(vcl_ostream& os) const
   if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<'\n';
   else                 os<<vsl_indent()<<"norm: linear"<<'\n';
   os <<vsl_indent()<< "cost: ";
-  if (cost_.ptr()==0) os << "--"<<vcl_endl; else os << cost_<<'\n';
+  if (cost_.ptr()==VXL_NULLPTR) os << "--"<<std::endl; else os << cost_<<'\n';
   os<<vsl_indent();
   mfpf_point_finder::print_summary(os);
-  os <<vcl_endl <<vsl_indent()<<"overlap_f: "<<overlap_f_<<'\n';
+  os <<std::endl <<vsl_indent()<<"overlap_f: "<<overlap_f_<<'\n';
   vsl_indent_dec(os);
   os<<vsl_indent()<<'}';
 }
 
-void mfpf_region_finder::print_shape(vcl_ostream& os) const
+void mfpf_region_finder::print_shape(std::ostream& os) const
 {
   vil_image_view<vxl_byte> im(roi_ni_,roi_nj_);
   im.fill(0);
@@ -501,9 +503,9 @@ void mfpf_region_finder::b_read(vsl_b_istream& bfs)
       else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -516,9 +518,9 @@ bool mfpf_region_finder::operator==(const mfpf_region_finder& nc) const
   if (roi_nj_!=nc.roi_nj_) return false;
   if (norm_method_!=nc.norm_method_) return false;
   if (n_pixels_!=nc.n_pixels_) return false;
-  if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
-  if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
-  if (vcl_fabs(overlap_f_-nc.overlap_f_)>1e-6) return false;
+  if (std::fabs(ref_x_-nc.ref_x_)>1e-6) return false;
+  if (std::fabs(ref_y_-nc.ref_y_)>1e-6) return false;
+  if (std::fabs(overlap_f_-nc.overlap_f_)>1e-6) return false;
   // Strictly should compare costs
   return true;
 }

@@ -1,4 +1,6 @@
-#include <vcl_cstring.h>
+#include <iostream>
+#include <cstring>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
@@ -6,6 +8,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_box_2d.h>
 
+#include <vil/vil_config.h>  // for HAS_GEOTIFF definition
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
 #include <vil/file_formats/vil_tiff.h>
@@ -21,9 +24,9 @@
 #include <bmdl/bmdl_classify.h>
 
 template<class T>
-vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box)
+std::vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box)
 {
-  vcl_vector<vgl_point_3d<T> > corners;
+  std::vector<vgl_point_3d<T> > corners;
 
   corners.push_back(box.min_point());
   corners.push_back(vgl_point_3d<T> (box.min_x()+box.width(), box.min_y(), box.min_z()));
@@ -41,7 +44,7 @@ bool compute_ground(vil_image_resource_sptr ground,
                     vil_image_view_base_sptr last_roi,
                     vil_image_view_base_sptr& ground_roi)
 {
-  if (ground == 0)
+  if (ground == VXL_NULLPTR)
   {
     if ((first_roi->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) &&
         (last_roi->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)) {
@@ -66,7 +69,7 @@ bool compute_ground(vil_image_resource_sptr ground,
       ground_roi = ground_view;
     }
     else {
-      vcl_cout << "input images have different bit depths" << vcl_endl;
+      std::cout << "input images have different bit depths" << std::endl;
       return false;
     }
   }
@@ -86,9 +89,9 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
                vpgl_geo_camera*& camera)
 {
   // the file should be at least a tiff (better, geotiff)
-  if (vcl_strcmp(lidar_first->file_format(), "tiff") != 0 &&
-      vcl_strcmp(lidar_last->file_format(),"tiff") != 0) {
-    vcl_cout << "bmdl_lidar_roi_process::lidar_roi -- The lidar images should be a TIFF!\n";
+  if (std::strcmp(lidar_first->file_format(), "tiff") != 0 &&
+      std::strcmp(lidar_last->file_format(),"tiff") != 0) {
+    std::cout << "bmdl_lidar_roi_process::lidar_roi -- The lidar images should be a TIFF!\n";
     return false;
   }
 
@@ -96,7 +99,7 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
   vil_tiff_image* tiff_first = static_cast<vil_tiff_image*> (lidar_first.ptr());
   vil_tiff_image* tiff_last  = static_cast<vil_tiff_image*> (lidar_last.ptr());
 
-  if (vpgl_geo_camera::init_geo_camera(tiff_first, 0, camera))
+  if (vpgl_geo_camera::init_geo_camera(tiff_first, VXL_NULLPTR, camera))
   {
     vgl_box_2d<double> roi_box;
 
@@ -106,7 +109,7 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
       vgl_point_3d<double> min_pos(min_lon, min_lat, 0);
       vgl_point_3d<double> max_pos(max_lon, max_lat, 30);
       vgl_box_3d<double> world(min_pos, max_pos);
-      vcl_vector<vgl_point_3d<double> > corners = corners_of_box_3d<double>(world);
+      std::vector<vgl_point_3d<double> > corners = corners_of_box_3d<double>(world);
       for (unsigned i=0; i<corners.size(); i++) {
         double x = corners[i].x();
         double y = corners[i].y();
@@ -130,8 +133,8 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
     bb->add_point(roi_box.max_x(), roi_box.max_y());
 
     bb = broi.clip_to_image_bounds(bb);
-    //vcl_cout << "Cut out area------>" << vcl_endl;
-    //vcl_cout << *bb << vcl_endl;
+    //std::cout << "Cut out area------>" << std::endl;
+    //std::cout << *bb << std::endl;
     first_roi = tiff_first->get_copy_view((unsigned int)bb->get_min_x(),
                                           (unsigned int)bb->width(),
                                           (unsigned int)bb->get_min_y(),
@@ -143,7 +146,7 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
                                         (unsigned int)bb->height());
 
     // if no ground input, create an estimated one
-    if (ground == 0) {
+    if (ground == VXL_NULLPTR) {
       compute_ground(ground, first_roi, last_roi, ground_roi);
     }
     else {   // crop the given one
@@ -168,18 +171,18 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
     camera->translate(ox, oy, elev);
 
     if (!first_roi) {
-      vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- clipping box is out of image boundaries\n";
+      std::cout << "bmdl_lidar_roi_process::lidar_init()-- clipping box is out of image boundaries\n";
       return false;
     }
   }
   else {
-    vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << vcl_endl;
+    std::cout << "bmdl_lidar_roi_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << std::endl;
     return false;
   }
 
   return true;
 #else // if !HAS_GEOTIFF
-  vcl_cout << "bmdl_lidar_roi_process::lidar_init()-- GEOTIFF lib is needed to run bmdl_lidar_roi_process--\n";
+  std::cout << "bmdl_lidar_roi_process::lidar_init()-- GEOTIFF lib is needed to run bmdl_lidar_roi_process--\n";
   return false;
 #endif // HAS_GEOTIFF
 
@@ -189,14 +192,14 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
 bool bmdl_lidar_roi_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 8) {
-    vcl_cout << "lidar_roi_process: The input number should be 8" << vcl_endl;
+    std::cout << "lidar_roi_process: The input number should be 8" << std::endl;
     return false;
   }
 
   unsigned int i=0;
-  vcl_string first = pro.get_input<vcl_string>(i++);
-  vcl_string last = pro.get_input<vcl_string>(i++);
-  vcl_string ground = pro.get_input<vcl_string>(i++);
+  std::string first = pro.get_input<std::string>(i++);
+  std::string last = pro.get_input<std::string>(i++);
+  std::string ground = pro.get_input<std::string>(i++);
   float min_lat = pro.get_input<float>(i++);
   float min_lon = pro.get_input<float>(i++);
   float max_lat = pro.get_input<float>(i++);
@@ -206,28 +209,28 @@ bool bmdl_lidar_roi_process(bprb_func_process& pro)
   // check first return's validity
   vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
   if (!first_ret) {
-    vcl_cout << "bmdl_lidar_roi_process -- First return image path is not valid!\n";
+    std::cout << "bmdl_lidar_roi_process -- First return image path is not valid!\n";
     return false;
   }
 
   // check last return's validity
   vil_image_resource_sptr last_ret = vil_load_image_resource(last.c_str());
   if (!last_ret) {
-    vcl_cout << "bmdl_lidar_roi_process -- Last return image path is not valid!\n";
+    std::cout << "bmdl_lidar_roi_process -- Last return image path is not valid!\n";
     return false;
   }
 
   // Ground image path can be invalid or empty, in that case an estimated ground will be computed
-  vil_image_resource_sptr ground_img =0;
+  vil_image_resource_sptr ground_img =VXL_NULLPTR;
   if (ground.size() > 0) {
     ground_img = vil_load_image_resource(ground.c_str());
   }
 
-  vil_image_view_base_sptr first_roi=0, last_roi=0, ground_roi;
-  vpgl_geo_camera* lidar_cam =0;
+  vil_image_view_base_sptr first_roi=VXL_NULLPTR, last_roi=VXL_NULLPTR, ground_roi;
+  vpgl_geo_camera* lidar_cam =VXL_NULLPTR;
   if (!lidar_roi(type, first_ret, last_ret, ground_img,
     min_lat, min_lon, max_lat, max_lon, first_roi, last_roi, ground_roi, lidar_cam)) {
-    vcl_cout << "bmdl_lidar_roi_process -- The process has failed!\n";
+    std::cout << "bmdl_lidar_roi_process -- The process has failed!\n";
     return false;
   }
 
@@ -250,7 +253,7 @@ bool bmdl_lidar_roi_process(bprb_func_process& pro)
 bool bmdl_lidar_roi_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
@@ -262,7 +265,7 @@ bool bmdl_lidar_roi_process_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // label image
   output_types.push_back("vil_image_view_base_sptr"); // height image
   output_types.push_back("vil_image_view_base_sptr"); // ground roi

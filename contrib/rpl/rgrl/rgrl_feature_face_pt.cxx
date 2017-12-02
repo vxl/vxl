@@ -150,7 +150,7 @@ transform_scale( rgrl_transformation const& xform ) const
 
     scale = 0.0;
     for ( unsigned i=0; i<normal_.size(); ++i )
-      scale += vcl_abs(normal_[i]) * scaling[i];
+      scale += std::abs(normal_[i]) * scaling[i];
     scale *= this->scale_;
   }
   else if ( this-> scale_ > 0.0 ) {
@@ -172,7 +172,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
 
   rgrl_feature_face_pt* face_ptr = rgrl_cast<rgrl_feature_face_pt*>(other);
   assert( face_ptr );
-  double dir_wgt = vcl_abs( dot_product( this->normal_, face_ptr->normal_ ) );
+  double dir_wgt = std::abs( dot_product( this->normal_, face_ptr->normal_ ) );
 
   double scale_wgt = 1;
   if ( this->scale_ && face_ptr->scale_ ) {
@@ -184,7 +184,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     // scale_wgt = scale_wgt * scale_wgt;
   }
 
-  return  dir_wgt* vcl_sqrt(scale_wgt);
+  return  dir_wgt* std::sqrt(scale_wgt);
 }
 
 //:  Compute the signature error vector between two features.
@@ -201,7 +201,7 @@ signature_error_vector( rgrl_feature const& other ) const
   // compute cos between normals
   const double dot = dot_product( this->normal_, other_face_pt.normal_ );
   const double half_pi = vnl_math::pi / 2.0;
-  double ang = vcl_acos( dot );
+  double ang = std::acos( dot );
 
   // make it between [-pi/2, pi/2]
   if ( ang > half_pi )  ang -= vnl_math::pi;
@@ -213,7 +213,7 @@ signature_error_vector( rgrl_feature const& other ) const
 //:  the dimensions of the signature error vector.
 unsigned
 rgrl_feature_face_pt::
-signature_error_dimension( const vcl_type_info& other_feature_type ) const
+signature_error_dimension( const std::type_info& other_feature_type ) const
 {
   if ( other_feature_type == rgrl_feature_face_pt::type_id() )
     return 1;
@@ -224,7 +224,7 @@ signature_error_dimension( const vcl_type_info& other_feature_type ) const
 //: write out feature
 void
 rgrl_feature_face_pt::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // tag
   os << "FACE\n"
@@ -232,21 +232,21 @@ write( vcl_ostream& os ) const
      << location_.size() << '\n'
   // atributes
      << location_ << "    " << scale_ << '\n'
-     << normal_  << vcl_endl;
+     << normal_  << std::endl;
 }
 
 //: read in feature
 bool
 rgrl_feature_face_pt::
-read( vcl_istream& is, bool skip_tag )
+read( std::istream& is, bool skip_tag )
 {
   if ( !skip_tag ) {
 
     // skip empty lines
     rgrl_util_skip_empty_lines( is );
 
-    vcl_string str;
-    vcl_getline( is, str );
+    std::string str;
+    std::getline( is, str );
 
     // The token should appear at the beginning of line
     if ( str.find( "FACE" ) != 0 ) {

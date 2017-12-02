@@ -1,12 +1,12 @@
 # v3p/jpeg/CMakeLists.txt
 
-PROJECT( jpeg C )
+project( jpeg C )
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindJPEG.cmake )
+include( ${VXL_CMAKE_DIR}/FindJPEG.cmake )
 
-IF(NOT VXL_USING_NATIVE_JPEG)
+if(NOT VXL_USING_NATIVE_JPEG)
 
-SET( jpeg_sources
+set( jpeg_sources
   jconfig.h
   jdct.h
   jinclude.h
@@ -64,7 +64,6 @@ SET( jpeg_sources
   jmemansi.c
 )
 
-ADD_LIBRARY( jpeg ${jpeg_sources} )
-INSTALL_TARGETS(/lib jpeg)
+vxl_add_library(LIBRARY_NAME jpeg LIBRARY_SOURCES ${jpeg_sources} )
 
-ENDIF(NOT VXL_USING_NATIVE_JPEG)
+endif()

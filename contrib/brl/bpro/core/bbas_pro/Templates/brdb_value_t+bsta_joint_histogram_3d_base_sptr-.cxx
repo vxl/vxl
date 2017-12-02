@@ -1,4 +1,4 @@
-#include <brdb/brdb_value.txx>
+#include <brdb/brdb_value.hxx>
 #include <bsta/bsta_joint_histogram_3d_sptr.h>
 #include <bsta/io/bsta_io_histogram.h>
 

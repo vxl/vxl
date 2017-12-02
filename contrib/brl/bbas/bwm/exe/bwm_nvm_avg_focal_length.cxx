@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/bwm_site_mgr.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
@@ -7,21 +10,19 @@
 
 #include <vul/vul_arg.h>
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
-bool NVMreplaceByAvgFocalLength(vcl_ifstream& in1,
-                                vcl_ifstream& in2,
-                                vcl_ofstream& out)
+bool NVMreplaceByAvgFocalLength(std::ifstream& in1,
+                                std::ifstream& in2,
+                                std::ofstream& out)
 {
   int rotation_parameter_num = 4;
-  vcl_string token;
+  std::string token;
   // bool format_r9t = false; // unused
   if (in1.peek() == 'N')
   {
     in1 >> token; //file header
-    if (vcl_strstr(token.c_str(), "R9T"))
+    if (std::strstr(token.c_str(), "R9T"))
     {
       rotation_parameter_num = 9;    //rotation as 3x3 matrix
       // format_r9t = true;
@@ -56,7 +57,7 @@ bool NVMreplaceByAvgFocalLength(vcl_ifstream& in1,
   if (in2.peek() == 'N')
   {
     in2 >> token; //file header
-    if (vcl_strstr(token.c_str(), "R9T"))
+    if (std::strstr(token.c_str(), "R9T"))
     {
       rotation_parameter_num = 9;    //rotation as 3x3 matrix
       // format_r9t = true;
@@ -116,28 +117,28 @@ int main(int argc, char** argv)
 {
   //Get Inputs
 
-  vul_arg<vcl_string> infile   ("-isfm", "Input file of bundler",  "");
-  vul_arg<vcl_string> outfile   ("-osfm", "Output file of bundler",  "");
+  vul_arg<std::string> infile   ("-isfm", "Input file of bundler",  "");
+  vul_arg<std::string> outfile   ("-osfm", "Output file of bundler",  "");
 
   vul_arg_parse(argc, argv);
 
   // open the bundler file
-  vcl_ifstream ifile1( infile().c_str() );
+  std::ifstream ifile1( infile().c_str() );
   if (!ifile1)
   {
-    vcl_cout<<"Error Opening NVM input file"<<vcl_endl;
+    std::cout<<"Error Opening NVM input file"<<std::endl;
     return -1;
   }
-  vcl_ifstream ifile2( infile().c_str() );
+  std::ifstream ifile2( infile().c_str() );
   if (!ifile2)
   {
-    vcl_cout<<"Error Opening NVM input file"<<vcl_endl;
+    std::cout<<"Error Opening NVM input file"<<std::endl;
     return -1;
   }
-  vcl_ofstream ofile( outfile().c_str() );
+  std::ofstream ofile( outfile().c_str() );
   if (!ofile)
   {
-    vcl_cout<<"Error Opening NVM output file"<<vcl_endl;
+    std::cout<<"Error Opening NVM output file"<<std::endl;
     return -1;
   }
 

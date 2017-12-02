@@ -18,8 +18,9 @@
 // unsigned area_of_first_blob = vil_area(regions[0]);
 // \endcode
 
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vector>
+#include <utility>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_chord.h>
 
@@ -45,20 +46,20 @@ void vil_blob_labels_to_edge_labels(const vil_image_view<unsigned>& src_label,
 
 
 //: A region is a vector of chords that came from a connected blob.
-typedef vcl_vector<vil_chord> vil_blob_region;
+typedef std::vector<vil_chord> vil_blob_region;
 
 //: Convert a label image into a list of chorded regions.
 // A blob label value of n will be returned in dest_regions[n-1].
 void vil_blob_labels_to_regions(const vil_image_view<unsigned>& src_label,
-                                vcl_vector<vil_blob_region>& dest_regions);
+                                std::vector<vil_blob_region>& dest_regions);
 
 
 //: A pixel list is a vector of <i,j> pixel positions.
-typedef vcl_vector<vcl_pair<unsigned, unsigned> > vil_blob_pixel_list;
+typedef std::vector<std::pair<unsigned, unsigned> > vil_blob_pixel_list;
 
 //: Convert a label image into a list of pixel lists.
 // A blob label value of n will be returned in dest_pixels_lists[n-1].
 void vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned>& src_label,
-                                    vcl_vector<vil_blob_pixel_list>& dest_pixel_lists);
+                                    std::vector<vil_blob_pixel_list>& dest_pixel_lists);
 
 #endif

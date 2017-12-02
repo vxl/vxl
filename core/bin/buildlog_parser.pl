@@ -97,25 +97,6 @@ $gmake_error = q/^g?make(\[\d+\])?: \*\*\* \[/;
 # gcc ... -o something.o
 # gcc ... -o something.so
 
-##############
-# SGI compiler
-# SunPro
-# CC ... -o something.o
-# cc ... -o something.o
-# CC ... -o something.so
-#  "rpoly.c", line 111: warning(1194): floating-point value does not fit in
-#  ld: WARNING 127:
-
-$compilingcpp   = q/^[cg]?[+cC][+cC]\s.*\s\-o\s(\S+\.o)\b/;
-$compilingc     = q/^g?cc\s.*\s\-o\s(\S+\.o)\b/;
-$linkingso      = q/^[cg]?[+Cc][+Cc]\s.*\s\-o\s(\S+\.s[ol])\b/;
-$compilewarning = q/^[^:]+:?(, line )?\d+: [Ww]arning\b/;
-$sgi_linkwarning= q/ld: WARNING \d+:/;
-#$sgi_compilewarning = q/^\".+?\", line \d+: warning/;
-$linkwarning    = $sgi_linkwarning;
-$testsummary    = q/ Test Summary: /;
-$iueroot = $ENV{"IUEROOT"};
-
 ###############
 # status flags
 

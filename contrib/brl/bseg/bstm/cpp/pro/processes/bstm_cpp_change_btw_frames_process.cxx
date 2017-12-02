@@ -1,4 +1,6 @@
 // This is brl/bseg/bstm/cpp/pro/processes/bstm_cpp_change_btw_frames_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Ali Osman Ulusoy
 // \date Mar 18, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <bstm/bstm_scene.h>
@@ -41,7 +43,7 @@ bool bstm_cpp_change_btw_frames_process_cons(bprb_func_process& pro)
   using namespace bstm_cpp_change_btw_frames_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
@@ -50,7 +52,7 @@ bool bstm_cpp_change_btw_frames_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   return good;
@@ -61,7 +63,7 @@ bool bstm_cpp_change_btw_frames_process(bprb_func_process& pro)
   using namespace bstm_cpp_change_btw_frames_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -75,8 +77,8 @@ bool bstm_cpp_change_btw_frames_process(bprb_func_process& pro)
 
 
   //iterate over each block/metadata to check if bbox intersects the input bbox
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
   for(; bstm_iter != blocks.end() ; bstm_iter++)
   {
     bstm_block_id bstm_id = bstm_iter->first;
@@ -85,7 +87,7 @@ bool bstm_cpp_change_btw_frames_process(bprb_func_process& pro)
     double local_time_0, local_time_1;
     if(bstm_metadata.contains_t (time_0, local_time_0) && bstm_metadata.contains_t (time_1, local_time_1)) //if the block box contains the given times
     {
-      vcl_cout << "Found intersecting bbox at block " << bstm_id << "..." << vcl_endl;
+      std::cout << "Found intersecting bbox at block " << bstm_id << "..." << std::endl;
 
       bstm_block* blk = cache->get_block(bstm_metadata.id_);
       bstm_time_block* blk_t = cache->get_time_block(bstm_metadata.id_);
@@ -106,8 +108,8 @@ bool bstm_cpp_change_btw_frames_process(bprb_func_process& pro)
            boct_bit_tree bit_tree((unsigned char*) tree.data_block());
 
            //iterate through leaves of the tree
-           vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-           vcl_vector<int>::iterator iter;
+           std::vector<int> leafBits = bit_tree.get_leaf_bits();
+           std::vector<int>::iterator iter;
            for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
              int curr_depth = bit_tree.depth_at((*iter));
              double side_len = 1.0 / (double) (1<<curr_depth);
@@ -119,16 +121,16 @@ bool bstm_cpp_change_btw_frames_process(bprb_func_process& pro)
                bstm_time_tree time_tree(time_treebits.data_block());
                int bit_index_t = time_tree.traverse(local_time_0 - blk_t->tree_index(local_time_0) );
                int data_offset_t = time_tree.get_data_index(bit_index_t);
-               prob_0 = 1.0f - (float)vcl_exp(-alpha_data[data_offset_t] * side_len * bstm_metadata.sub_block_dim_.x());
+               prob_0 = 1.0f - (float)std::exp(-alpha_data[data_offset_t] * side_len * bstm_metadata.sub_block_dim_.x());
              }
              {
                vnl_vector_fixed<unsigned char,8> time_treebits = blk_t->get_cell_tt(data_offset,local_time_1);
                bstm_time_tree time_tree(time_treebits.data_block());
                int bit_index_t = time_tree.traverse(local_time_1 - blk_t->tree_index(local_time_1) );
                int data_offset_t = time_tree.get_data_index(bit_index_t);
-               prob_1 = 1.0f - (float)vcl_exp(-alpha_data[data_offset_t] * side_len * bstm_metadata.sub_block_dim_.x());
+               prob_1 = 1.0f - (float)std::exp(-alpha_data[data_offset_t] * side_len * bstm_metadata.sub_block_dim_.x());
              }
-             change_array[data_offset] = vcl_fabs(prob_0 - prob_1);
+             change_array[data_offset] = std::fabs(prob_0 - prob_1);
            }
 
          }

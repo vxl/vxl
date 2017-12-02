@@ -1,3 +1,3 @@
 #include <vxl_config.h>
-#include <vil/algo/vil_median.txx>
+#include <vil/algo/vil_median.hxx>
 VIL_MEDIAN_INSTANTIATE(vxl_uint_16 );

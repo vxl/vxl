@@ -2,7 +2,8 @@
 // Images are loaded from the two filenames
 // on the command line.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
@@ -15,7 +16,7 @@ int main(int argc, char **argv)
   vgui::init(argc, argv);
   if (argc <= 2)
   {
-    vcl_cerr << "Please give two image filenames on the command line\n";
+    std::cerr << "Please give two image filenames on the command line\n";
     return 0;
   }
   // Load two images(given in the first command line param)
@@ -34,8 +35,8 @@ int main(int argc, char **argv)
   vgui_shell_tableau_new shell(viewer);
 
   // Create a window, add the tableau and show it on screen.
-  int width = vnl_math::max(image_tab1->width(), image_tab2->width());
-  int height = vnl_math::max(image_tab1->height(), image_tab2->height());
+  int width = std::max(image_tab1->width(), image_tab2->width());
+  int height = std::max(image_tab1->height(), image_tab2->height());
 
   //Add 50 to account for window borders
   return vgui::run(shell, width+50, height+50);

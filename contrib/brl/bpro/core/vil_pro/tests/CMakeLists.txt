@@ -1,20 +1,20 @@
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
+include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
 
- ADD_EXECUTABLE( vil_pro_test_all
+ add_executable( vil_pro_test_all
   test_driver.cxx
   test_vil_convert_to_n_planes_process.cxx
   test_vil_crop_image_process.cxx
  )
 
-TARGET_LINK_LIBRARIES(vil_pro_test_all testlib vil_pro bprb sdet vil expat expatpp)
+target_link_libraries(vil_pro_test_all ${VXL_LIB_PREFIX}testlib vil_pro bprb sdet ${VXL_LIB_PREFIX}vil expat expatpp)
 
-ADD_TEST( bpro_vil_test_convert_to_n_planes_process ${EXECUTABLE_OUTPUT_PATH}/vil_pro_test_all test_vil_convert_to_n_planes_process )
-ADD_TEST( bpro_vil_test_crop_image_process          ${EXECUTABLE_OUTPUT_PATH}/vil_pro_test_all test_vil_crop_image_process )
+add_test( NAME bpro_vil_test_convert_to_n_planes_process COMMAND $<TARGET_FILE:vil_pro_test_all> test_vil_convert_to_n_planes_process )
+add_test( NAME bpro_vil_test_crop_image_process COMMAND $<TARGET_FILE:vil_pro_test_all> test_vil_crop_image_process )
 
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+ endif()
+endif()
 
-ADD_EXECUTABLE( vil_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vil_pro_test_include vil_pro sdet )
+add_executable( vil_pro_test_include test_include.cxx )
+target_link_libraries( vil_pro_test_include vil_pro sdet )

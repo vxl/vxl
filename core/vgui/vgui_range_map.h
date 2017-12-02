@@ -164,6 +164,6 @@ class vgui_range_map : public vgui_range_map_params
   long double ratio_X_;    //!< scale for computed alpha or IR channel mapping
 };
 
-#define VGUI_RANGE_MAP_INSTANTIATE(T) extern "please include vgui/vgui_range_map.txx first"
+#define VGUI_RANGE_MAP_INSTANTIATE(T) extern "please include vgui/vgui_range_map.hxx first"
 
 #endif //vgui_range_map_h

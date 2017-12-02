@@ -1,10 +1,11 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "bvgl_articulated_poly.h"
 //:
 // \file
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -32,7 +33,7 @@ bvgl_articulated_poly::bvgl_articulated_poly(const unsigned n_joints)
 //link lengths are specified. For n joints there are n-1 links
 bvgl_articulated_poly::
 bvgl_articulated_poly(const unsigned n_joints,
-                      vcl_vector<double> const& link_lengths)
+                      std::vector<double> const& link_lengths)
 {
   assert(n_joints==link_lengths.size()+1);
 
@@ -95,7 +96,7 @@ void bvgl_articulated_poly::update()
 }
 
 void bvgl_articulated_poly::
-transform(vcl_vector<double > const& delta_joint_angle)
+transform(std::vector<double > const& delta_joint_angle)
 {
   unsigned n = delta_joint_angle.size();
   assert(n==joint_transforms_.size());
@@ -111,10 +112,10 @@ transform(vcl_vector<double > const& delta_joint_angle)
 
 void bvgl_articulated_poly::
 sub_manifold_transform(const double t,
-                       vcl_vector<double > const& basis_angles)
+                       std::vector<double > const& basis_angles)
 {
-  vcl_vector<double > angles;
-  for (vcl_vector<double >::const_iterator ait = basis_angles.begin();
+  std::vector<double > angles;
+  for (std::vector<double >::const_iterator ait = basis_angles.begin();
        ait != basis_angles.end(); ++ait)
     angles.push_back(t*(*ait));
   this->transform(angles);
@@ -126,7 +127,7 @@ static double angle_from_rotation_matrix(vgl_h_matrix_2d<double> const& r)
 {
   double c = r.get(0,0);
   double s = r.get(1,0);
-  double ang = vcl_atan2(s,c);
+  double ang = std::atan2(s,c);
   if (ang>vnl_math::pi)
     ang = vnl_math::twopi - ang;
   return ang;
@@ -144,7 +145,7 @@ double bvgl_articulated_poly::link_length(unsigned joint) const
     return 0;
   vgl_h_matrix_2d<double> T = this->joint_transform(joint+1);
   double tx = T.get(0,2), ty = T.get(1,2);
-  return vcl_sqrt(tx*tx + ty*ty);
+  return std::sqrt(tx*tx + ty*ty);
 }
 
 //The earlier joints in the chain are weighted more since they appear in more
@@ -166,7 +167,7 @@ lie_distance(bvgl_articulated_poly const& apa,
     double rb = angle_from_rotation_matrix(Tb);
     d += (na-i-1)*(ra-rb)*(ra-rb);
   }
-  return vcl_sqrt(d);
+  return std::sqrt(d);
 }
 
 void bvgl_articulated_poly::print()
@@ -174,7 +175,7 @@ void bvgl_articulated_poly::print()
   for (unsigned i = 0; i<joint_transforms_.size(); ++i)
   {
     vsol_point_2d_sptr p = this->joint_position(i);
-    vcl_cout << "Joint[" << i << "](" << p->x() << ' ' << p->y()
+    std::cout << "Joint[" << i << "](" << p->x() << ' ' << p->y()
              << ")| " << this->joint_angle(i) << "|\n";
   }
 }
@@ -183,16 +184,16 @@ void bvgl_articulated_poly::print()
 void bvgl_articulated_poly::print_xforms()
 {
   for (unsigned i = 0; i<joint_transforms_.size(); ++i)
-    vcl_cout << "T[" << i << "]=>\n" <<  joint_transforms_[i] << '\n';
+    std::cout << "T[" << i << "]=>\n" <<  joint_transforms_[i] << '\n';
 }
 
 bvgl_articulated_poly_sptr bvgl_articulated_poly::
 projection(bvgl_articulated_poly_sptr const& target,
-           vcl_vector<double > const& manifold_basis)
+           std::vector<double > const& manifold_basis)
 {
   //copy the target
   unsigned n = target->size();
-  vcl_vector<double> links(n-1);
+  std::vector<double> links(n-1);
   for (unsigned i = 0; i+1<n; ++i)
     links[i]=target->link_length(i);
   //search for the projection.

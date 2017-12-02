@@ -5,7 +5,8 @@
 // \date   2005-05-09
 //
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_image_tableau.h>
@@ -14,8 +15,8 @@
 #include <bgui/bgui_picker_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 //global pointer to the rubberband tableau
-static bgui_picker_tableau_sptr picker = 0;
-static vgui_easy2D_tableau_sptr easy = 0;
+static bgui_picker_tableau_sptr picker = VXL_NULLPTR;
+static vgui_easy2D_tableau_sptr easy = VXL_NULLPTR;
 
 //the meunu callback functions
 static void create_box()
@@ -25,7 +26,7 @@ static void create_box()
   picker->set_color(0, 1, 0);
   picker->pick_box(&x1, &y1, &x2, &y2);
 
-  vcl_cerr << "corner points are (" << x1 << ", " << y1 << ") and (" << x2 << ", " << y2 << ")\n";
+  std::cerr << "corner points are (" << x1 << ", " << y1 << ") and (" << x2 << ", " << y2 << ")\n";
 
   //: draw the box in easy2D tableau
   float x[4], y[4];
@@ -50,7 +51,7 @@ int main(int argc, char ** argv)
   vgui::init(argc,argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line\n";
+    std::cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

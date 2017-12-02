@@ -1,25 +1,26 @@
+#include <iostream>
+#include <string>
 #include "brad_atmospheric_parameters.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 // Write brad_atmospheric_parameters to stream
-vcl_ostream&  operator<<(vcl_ostream& s, brad_atmospheric_parameters const& atm)
+std::ostream&  operator<<(std::ostream& s, brad_atmospheric_parameters const& atm)
 {
-   s << "airlight = " << atm.airlight_ << vcl_endl;
-   s << "skylight = " << atm.skylight_ << vcl_endl;
-   s << "optical_depth = " << atm.optical_depth_ << vcl_endl;
-   //s << "predicted_lambertian_max = " << atm.predicted_lambertian_max_ << vcl_endl;
- 
+   s << "airlight = " << atm.airlight_ << std::endl;
+   s << "skylight = " << atm.skylight_ << std::endl;
+   s << "optical_depth = " << atm.optical_depth_ << std::endl;
+   //s << "predicted_lambertian_max = " << atm.predicted_lambertian_max_ << std::endl;
+
    return s;
 }
 
 // Read brad_atmospheric_parameters from stream
-vcl_istream&  operator>>(vcl_istream& s, brad_atmospheric_parameters& atm)
-{ 
-   vcl_string input;
+std::istream&  operator>>(std::istream& s, brad_atmospheric_parameters& atm)
+{
+   std::string input;
    while (!s.eof()) {
       s >> input;
       if (input=="airlight") {

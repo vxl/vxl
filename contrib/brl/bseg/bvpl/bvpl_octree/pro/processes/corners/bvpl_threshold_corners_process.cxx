@@ -24,7 +24,7 @@ bool bvpl_threshold_corners_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_threshold_corners_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvpl_global_taylor_sptr" ;
   input_types_[i++] = "bvpl_global_corners_sptr" ;
@@ -32,7 +32,7 @@ bool bvpl_threshold_corners_process_cons(bprb_func_process& pro)
   input_types_[i++] = "float"; //threshold
   input_types_[i++] = "vcl_string"; //output path for thresholded scenes
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -50,7 +50,7 @@ bool bvpl_threshold_corners_process(bprb_func_process& pro)
   bvpl_global_corners_sptr global_corners = pro.get_input<bvpl_global_corners_sptr>(i++);
   int scene_id = pro.get_input<int>(i++);
   float corner_thresh = pro.get_input<float>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
 
   if (!(global_taylor && global_corners))
     return false;

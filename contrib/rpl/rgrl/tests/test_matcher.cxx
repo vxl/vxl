@@ -1,8 +1,10 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
 #include <testlib/testlib_test.h>
 
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vul/vul_sprintf.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_2.h>
@@ -51,7 +53,7 @@ namespace
 
     // Create a vector of rgrl_features of the appropriate type.
     //
-    vcl_vector<rgrl_feature_sptr> from_pts, to_pts;
+    std::vector<rgrl_feature_sptr> from_pts, to_pts;
 
     from_pts.push_back(new rgrl_feature_trace_pt( vnl_double_2(10.0, 20.0).as_ref(),
                                                   vnl_double_2(0.0, 1.0).as_ref(),
@@ -77,9 +79,9 @@ namespace
                                                                *view, *trans, *scale);
     TEST( "Correct number of matches" , match_set->from_size(), 4);
 
-    vcl_vector<vnl_vector<double> > from_bd_locs;
-    vcl_vector<vnl_vector<double> > to_bd_locs;
-    vcl_vector<vnl_vector<double> > xformed_bd_locs;
+    std::vector<vnl_vector<double> > from_bd_locs;
+    std::vector<vnl_vector<double> > to_bd_locs;
+    std::vector<vnl_vector<double> > xformed_bd_locs;
 
     typedef rgrl_match_set::from_iterator FIter;
     typedef FIter::to_iterator TIter;
@@ -157,7 +159,7 @@ namespace
 
     // Create a vector of rgrl_features of the appropriate type.
     //
-    vcl_vector<rgrl_feature_sptr> from_pts, to_pts;
+    std::vector<rgrl_feature_sptr> from_pts, to_pts;
 
     from_pts.push_back( new rgrl_feature_point( vnl_double_2(4,4).as_ref() ) );
     from_pts.push_back( new rgrl_feature_point( vnl_double_2(25,4).as_ref() ) );
@@ -180,7 +182,7 @@ namespace
       for ( unsigned k=1; k<4; ++k )
       {
         rgrl_matcher_sptr matcher;
-        vcl_string str;
+        std::string str;
         switch (id)
         {
           case 0: matcher = new rgrl_matcher_k_nearest(k);
@@ -204,7 +206,7 @@ namespace
         typedef FIter::to_iterator TIter;
         bool neighbor_size_is_k = true;
         bool nearest_correct = true;
-        vcl_vector<dist_id> dist(4);
+        std::vector<dist_id> dist(4);
 
         for ( FIter fi = match_set->from_begin(); fi != match_set->from_end(); ++fi )
         {
@@ -214,7 +216,7 @@ namespace
           // build neighbor distance vector
           for ( unsigned i=0; i<to_pts.size(); ++i )
             dist[i] = dist_id( (to_pts[i]->location() - fi.mapped_from_feature()->location()).squared_magnitude(), i );
-          vcl_sort( dist.begin(), dist.end() );
+          std::sort( dist.begin(), dist.end() );
 
           unsigned j=0;
           for ( TIter ti = fi.begin(); ti != fi.end(); ++ti,++j )
@@ -260,7 +262,7 @@ namespace
 
     // Create a vector of rgrl_features of the appropriate type.
     //
-    vcl_vector<rgrl_feature_sptr> from_pts, to_pts(4);
+    std::vector<rgrl_feature_sptr> from_pts, to_pts(4);
 
     from_pts.push_back( new rgrl_feature_point( vnl_double_2(4,4).as_ref() ) );
     from_pts[0]->set_scale(1.0);
@@ -285,7 +287,7 @@ namespace
     for ( unsigned k=1; k<4; ++k )
     {
       rgrl_matcher_sptr matcher = new rgrl_matcher_k_nearest_pick_one(k);
-      vcl_string str = "rgrl_matcher_k_nearest_pick_one";
+      std::string str = "rgrl_matcher_k_nearest_pick_one";
       str += vul_sprintf( "(%1d)", k );
 
       // get the match_set
@@ -299,7 +301,7 @@ namespace
       typedef FIter::to_iterator TIter;
       bool neighbor_size_is_k = true;
       bool nearest_correct = true;
-      vcl_vector<dist_id> dist(4);
+      std::vector<dist_id> dist(4);
 
       for ( FIter fi = match_set->from_begin(); fi != match_set->from_end(); ++fi )
       {
@@ -309,7 +311,7 @@ namespace
         // build neighbor distance vector
         for ( unsigned i=0; i<to_pts.size(); ++i )
           dist[i] = dist_id( (to_pts[i]->location() - fi.mapped_from_feature()->location()).squared_magnitude(), i );
-        vcl_sort( dist.begin(), dist.end() );
+        std::sort( dist.begin(), dist.end() );
 
         nearest_correct =  nearest_correct && ( fi.begin().to_feature() == to_pts[ k-1 ] );
       }

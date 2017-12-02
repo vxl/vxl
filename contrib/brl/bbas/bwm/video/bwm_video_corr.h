@@ -12,8 +12,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_iosfwd.h>
-#include <vcl_map.h>
+#include <iostream>
+#include <iosfwd>
+#include <map>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -56,9 +58,9 @@ class bwm_video_corr : public vbl_ref_count
 
   //: is there a match for the specified frame
   bool match(unsigned frame);
-  
+
   //: return matches map
-  vcl_map<unsigned, vgl_point_2d<double> >& matches() { return matches_; }
+  std::map<unsigned, vgl_point_2d<double> >& matches() { return matches_; }
 
   //: add a match
   bool add(unsigned frame, vgl_point_2d<double> const& pt);
@@ -92,14 +94,14 @@ class bwm_video_corr : public vbl_ref_count
   vgl_point_3d<double> world_pt() const { return world_pt_; }
 
   bool world_pt_valid() const { return world_pt_valid_; }
-  
+
   //: set 3-d point intensity
   void set_intensity(vgl_vector_3d<int> const& intensity)
   { intensity_ = intensity; }
   vgl_vector_3d<int> intensity() { return intensity_; }
 
   //: Write the correspondence as xml
-  void x_write(vcl_ostream &os);
+  void x_write(std::ostream &os);
 
  protected:
 
@@ -110,10 +112,10 @@ class bwm_video_corr : public vbl_ref_count
  private:
   static bwm_video_EXPORT_DATA unsigned unique_id_;
   bwm_observer_video* observer_;
-  vcl_map<unsigned, vgl_point_2d<double> > matches_; // match in each frame
+  std::map<unsigned, vgl_point_2d<double> > matches_; // match in each frame
   bool world_pt_valid_;
   vgl_point_3d<double> world_pt_;
-  vgl_vector_3d<int>   intensity_; 
+  vgl_vector_3d<int>   intensity_;
 };
 
 #include <bwm/video/bwm_video_corr_sptr.h>

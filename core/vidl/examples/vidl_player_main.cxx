@@ -12,7 +12,7 @@ int main(int argc, char** argv)
   vgui_menu menubar = vidl_player_menus::get_menu();
   unsigned w = 640, h = 480;
 
-  vcl_string title = "VIDL Video Player";
+  std::string title = "VIDL Video Player";
   vgui_window* win = vgui::produce_window(w, h, menubar, title);
   win->get_adaptor()->set_tableau(vidl_player_manager::instance());
   win->set_statusbar(true);

@@ -1,5 +1,6 @@
 // This is brl/bbas/bdgl/tests/test_region_algs.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <bdgl/bdgl_region_algs.h>
 #include <testlib/testlib_test.h>
@@ -7,7 +8,7 @@
 static void test_region_algs()
 {
   // we want to test the methods on bdgl_region_algs
-  vcl_cout << "Testing region merge\n";
+  std::cout << "Testing region merge\n";
   const unsigned int n1 = 10, n2 = 20;
   float* X1 = new float[n1];
   float* Y1 = new float[n1];
@@ -41,7 +42,7 @@ static void test_region_algs()
   TEST("bdgl_region_algs::merge(): num points", rm->Npix(), n);
 
   for (rm->reset(); rm->next();)
-    vcl_cout << "P(" << rm->X() << ' ' << rm->Y() << ' ' << rm->I() << ")\n";
+    std::cout << "P(" << rm->X() << ' ' << rm->Y() << ' ' << rm->I() << ")\n";
 
   rm->reset(); rm->next();
   for (r1->reset(); r1->next(); rm->next())

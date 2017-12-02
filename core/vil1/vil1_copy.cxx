@@ -39,15 +39,15 @@ void vil1_copy(vil1_image const& in, vil1_image& out)
   // not just their product.  Hence the assert above.
   unsigned char* buf = new unsigned char[in.get_size_bytes()];
 #ifdef DEBUG
-  vcl_cerr << "...vil1_copy() doing get_section()\n";
+  std::cerr << "...vil1_copy() doing get_section()\n";
 #endif
   in.get_section(buf, 0, 0, width, height);
 #ifdef DEBUG
-  vcl_cerr << "...vil1_copy() doing put_section()\n";
+  std::cerr << "...vil1_copy() doing put_section()\n";
 #endif
   out.put_section(buf, 0, 0, width, height);
 #ifdef DEBUG
-  vcl_cerr << "...vil1_copy() done\n";
+  std::cerr << "...vil1_copy() done\n";
 #endif
   delete[] buf;
 }

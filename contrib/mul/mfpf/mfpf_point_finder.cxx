@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "mfpf_point_finder.h"
 //:
 // \file
@@ -7,7 +9,7 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vimt/algo/vimt_find_troughs.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vnl/vnl_cost_function.h>
@@ -27,7 +29,7 @@ inline double parabolic_min(double fa, double fb, double fc)
   double df1=fa-fb;
   double df2=fc-fb;
   double d=df1+df2;
-  if (vcl_fabs(d)<1e-6) return 0.0;
+  if (std::fabs(d)<1e-6) return 0.0;
   else                  return 0.5*(df1-df2)/d;
 }
 
@@ -81,9 +83,9 @@ void mfpf_pf_cost::get_pose(const vnl_vector<double>& v,
                             vgl_vector_2d<double>& u) const
 {
   p = p_+pf_->step_size()*(v[0]*u_+v[1]*v_);
-  double s = vcl_pow(ds_,v[2]);
+  double s = std::pow(ds_,v[2]);
   double A = dA_*v[3];
-  u = s*(u_*vcl_cos(A)+v_*vcl_sin(A));
+  u = s*(u_*std::cos(A)+v_*std::sin(A));
 }
 
 //: Checks if parameter index is at minima by displacing by +/-dx
@@ -162,7 +164,7 @@ void mfpf_point_finder::set_scale_range(unsigned ns, double ds)
 }
 
 //: Define model parameters (return false by default)
-bool mfpf_point_finder::set_model(const vcl_vector<double>& /*v*/)
+bool mfpf_point_finder::set_model(const std::vector<double>& /*v*/)
 {
   return false;
 }
@@ -177,7 +179,7 @@ unsigned mfpf_point_finder::model_dim()
 void mfpf_point_finder::get_sample_vector(const vimt_image_2d_of<float>& image,
                                           const vgl_point_2d<double>& p,
                                           const vgl_vector_2d<double>& u,
-                                          vcl_vector<double>& v)
+                                          std::vector<double>& v)
 {
   // Return empty vector
   v.resize(0);
@@ -258,11 +260,11 @@ double mfpf_point_finder::search(const vimt_image_2d_of<float>& image,
 
   for (int is=-int(ns_);is<=int(ns_);++is)
   {
-    double s = vcl_pow(ds_,is);
+    double s = std::pow(ds_,is);
     for (int iA=-int(nA_);iA<=int(nA_);++iA)
     {
       double A = iA*dA_;
-      vgl_vector_2d<double> uA = s*(u*vcl_cos(A)+v*vcl_sin(A));
+      vgl_vector_2d<double> uA = s*(u*std::cos(A)+v*std::sin(A));
 
       double f = search_one_pose(image,p,uA,p1);
       if (f<best_fit)
@@ -301,11 +303,11 @@ double mfpf_point_finder::search_with_opt(
 
   for (int is=-int(ns_);is<=int(ns_);++is)
   {
-    double s = vcl_pow(ds_,is);
+    double s = std::pow(ds_,is);
     for (int iA=-int(nA_);iA<=int(nA_);++iA)
     {
       double A = iA*dA_;
-      vgl_vector_2d<double> uA = s*(u*vcl_cos(A)+v*vcl_sin(A));
+      vgl_vector_2d<double> uA = s*(u*std::cos(A)+v*std::sin(A));
 
       double f = search_one_pose_with_opt(image,p,uA,p1);
       if (f<best_fit)
@@ -338,14 +340,14 @@ void mfpf_point_finder::grid_search_one_pose(
                            const vimt_image_2d_of<float>& image,
                            const vgl_point_2d<double>& p,
                            const vgl_vector_2d<double>& u,
-                           vcl_vector<mfpf_pose>& pts,
-                           vcl_vector<double>& fit)
+                           std::vector<mfpf_pose>& pts,
+                           std::vector<double>& fit)
 {
   vimt_image_2d_of<double> response_im;
   evaluate_region(image,p,u,response_im);
 
-  vcl_vector<vgl_point_2d<unsigned> > t_pts;
-  vcl_vector<double> t_value;
+  std::vector<vgl_point_2d<unsigned> > t_pts;
+  std::vector<double> t_value;
   vimt_find_image_troughs_3x3(t_pts,t_value,response_im.image());
   vimt_transform_2d im2w = response_im.world2im().inverse();
 
@@ -368,15 +370,15 @@ void mfpf_point_finder::multi_search_one_pose(
                           const vimt_image_2d_of<float>& image,
                           const vgl_point_2d<double>& p0,
                           const vgl_vector_2d<double>& u,
-                          vcl_vector<mfpf_pose>& pts,
-                          vcl_vector<double>& fit)
+                          std::vector<mfpf_pose>& pts,
+                          std::vector<double>& fit)
 {
   vimt_image_2d_of<double> response_im;
   evaluate_region(image,p0,u,response_im);
 
   const vil_image_view<double>& r_im =  response_im.image();
 
-  vcl_vector<vgl_point_2d<unsigned> > t_pts;
+  std::vector<vgl_point_2d<unsigned> > t_pts;
   vimt_find_image_troughs_3x3(t_pts,r_im);
   vimt_transform_2d im2w = response_im.world2im().inverse();
 
@@ -387,11 +389,11 @@ void mfpf_point_finder::multi_search_one_pose(
 
     if (vnl_math::isnan(f0))
     {
-      vcl_cerr<<"mfpf_point_finder::multi_search_one_pose()\n"
+      std::cerr<<"mfpf_point_finder::multi_search_one_pose()\n"
               <<"Response was a NaN at "<<x<<','<<y<<'\n'
               <<"Reponse image: "<<response_im.image()<<'\n';
-      vil_print_all(vcl_cout,response_im.image());
-      vcl_abort();
+      vil_print_all(std::cout,response_im.image());
+      std::abort();
     }
 
     // Perform local prediction of minima
@@ -414,7 +416,7 @@ void mfpf_point_finder::multi_search_one_pose(
     mfpf_pf_cost pf_cost(*this,image,p1,u1,ds_,dA_);
     vnl_vector<double> params(4,0.0);
     // Attempt to optimise scale
-    if (vcl_fabs(ds_-1.0)>1e-6)
+    if (std::fabs(ds_-1.0)>1e-6)
     {
       // Do parabolic fit if local minima
       pf_cost.check_and_refine_minima(params,f1,2,0.7);
@@ -452,8 +454,8 @@ void mfpf_point_finder::multi_search_one_pose(
 void mfpf_point_finder::grid_search(const vimt_image_2d_of<float>& image,
                                     const vgl_point_2d<double>& p,
                                     const vgl_vector_2d<double>& u,
-                                    vcl_vector<mfpf_pose>& pts,
-                                    vcl_vector<double>& fit)
+                                    std::vector<mfpf_pose>& pts,
+                                    std::vector<double>& fit)
 {
   pts.resize(0);
   fit.resize(0);
@@ -468,11 +470,11 @@ void mfpf_point_finder::grid_search(const vimt_image_2d_of<float>& image,
 
   for (int is=-int(ns_);is<=int(ns_);++is)
   {
-    double s = vcl_pow(ds_,is);
+    double s = std::pow(ds_,is);
     for (int iA=-int(nA_);iA<=int(nA_);++iA)
     {
       double A = iA*dA_;
-      vgl_vector_2d<double> uA = s*(u*vcl_cos(A)+v*vcl_sin(A));
+      vgl_vector_2d<double> uA = s*(u*std::cos(A)+v*std::sin(A));
 
       grid_search_one_pose(image,p,uA,pts,fit);
     }
@@ -493,8 +495,8 @@ void mfpf_point_finder::grid_search(const vimt_image_2d_of<float>& image,
 void mfpf_point_finder::multi_search(const vimt_image_2d_of<float>& image,
                                      const vgl_point_2d<double>& p,
                                      const vgl_vector_2d<double>& u,
-                                     vcl_vector<mfpf_pose>& poses,
-                                     vcl_vector<double>& fits)
+                                     std::vector<mfpf_pose>& poses,
+                                     std::vector<double>& fits)
 {
   poses.resize(0);
   fits.resize(0);
@@ -509,11 +511,11 @@ void mfpf_point_finder::multi_search(const vimt_image_2d_of<float>& image,
 
   for (int is=-int(ns_);is<=int(ns_);++is)
   {
-    double s = vcl_pow(ds_,is);
+    double s = std::pow(ds_,is);
     for (int iA=-int(nA_);iA<=int(nA_);++iA)
     {
       double A = iA*dA_;
-      vgl_vector_2d<double> uA = s*(u*vcl_cos(A)+v*vcl_sin(A));
+      vgl_vector_2d<double> uA = s*(u*std::cos(A)+v*std::sin(A));
 
       multi_search_one_pose(image,p,uA,poses,fits);
     }
@@ -578,10 +580,10 @@ unsigned mfpf_point_finder::image_level(const mfpf_pose& pose,
   double model_pixel_size = step_size()*pose.scale();
   double rel_size0 = model_pixel_size/im_pyr.base_pixel_width();
 
-  double log_step = vcl_log(im_pyr.scale_step());
+  double log_step = std::log(im_pyr.scale_step());
 
   // Round level down, to work with slightly higher res. image.
-  int level = int(vcl_log(rel_size0)/log_step);
+  int level = int(std::log(rel_size0)/log_step);
   if      (level<im_pyr.lo()) return im_pyr.lo();
   else if (level>im_pyr.hi()) return im_pyr.hi();
   else                        return level;
@@ -602,7 +604,7 @@ void mfpf_point_finder::aligned_bounding_box(const mfpf_pose& pose,
                                              double& wi, double& wj) const
 {
   // Compute the bounding box of the outline (in ref frame)
-  vcl_vector<vgl_point_2d<double> > pts;
+  std::vector<vgl_point_2d<double> > pts;
   get_outline(pts);
   double xlo=pts[0].x(), xhi=xlo;
   double ylo=pts[0].y(), yhi=ylo;
@@ -631,9 +633,9 @@ bool mfpf_point_finder::base_equality(const mfpf_point_finder& pf) const
     search_nj_==pf.search_nj_ &&
     nA_==pf.nA_ &&
     ns_==pf.ns_ &&
-    vcl_fabs(dA_-pf.dA_)<=1e-6 &&
-    vcl_fabs(ds_-pf.ds_)<=1e-6 &&
-    vcl_fabs(step_size_-pf.step_size_)<=1e-6;
+    std::fabs(dA_-pf.dA_)<=1e-6 &&
+    std::fabs(ds_-pf.ds_)<=1e-6 &&
+    std::fabs(step_size_-pf.step_size_)<=1e-6;
 }
 
 
@@ -641,7 +643,7 @@ bool mfpf_point_finder::base_equality(const mfpf_point_finder& pf) const
 // Method: print
 //=======================================================================
 
-void mfpf_point_finder::print_summary(vcl_ostream& os) const
+void mfpf_point_finder::print_summary(std::ostream& os) const
 {
   os<<" step_size: "<<step_size_
     <<" search_ni: "<<search_ni_
@@ -697,9 +699,9 @@ void mfpf_point_finder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,ds_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 }
@@ -708,9 +710,9 @@ void mfpf_point_finder::b_read(vsl_b_istream& bfs)
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_point_finder::is_a() const
+std::string mfpf_point_finder::is_a() const
 {
-  return vcl_string("mfpf_point_finder");
+  return std::string("mfpf_point_finder");
 }
 
 //: Allows derived class to be loaded by base-class pointer
@@ -741,7 +743,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_point_finder& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_point_finder& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -754,7 +756,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder* b)
+std::ostream& operator<<(std::ostream& os,const mfpf_point_finder* b)
 {
   if (b)
     return os << *b;

@@ -11,10 +11,10 @@ class boxm2_ocl_kernel_vector_filter
 {
   public:
     //: constructor
-    boxm2_ocl_kernel_vector_filter( bocl_device_sptr device);
+  boxm2_ocl_kernel_vector_filter( bocl_device_sptr device,bool optimize_transfers = false);
 
     //: run the given filters on the given scene
-    bool run(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache, bvpl_kernel_vector_sptr filter_vector);
+  bool run(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache, bvpl_kernel_vector_sptr filter_vector);
 
   private:
     bool compile_filter_kernel();
@@ -22,6 +22,8 @@ class boxm2_ocl_kernel_vector_filter
     bocl_device_sptr device_;
 
     bocl_kernel kernel_;
+
+    bool optimize_transfers_;
 };
 
 #endif

@@ -1,11 +1,12 @@
 // This is core/vil/algo/tests/test_algo_suppress_non_plateau.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_suppress_non_plateau.h>
 
 static void test_algo_suppress_non_plateau_byte()
 {
-  vcl_cout << "***************************************\n"
+  std::cout << "***************************************\n"
            << " Testing vil_algo_suppress_non_plateau\n"
            << "***************************************\n";
 

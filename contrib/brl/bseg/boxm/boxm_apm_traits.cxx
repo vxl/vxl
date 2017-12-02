@@ -6,7 +6,7 @@ const char* boxm_apm_types::app_model_strings[]  = { "apm_mog_grey",
                                                      "apm_simple_rgb",
                                                      "apm_mob_grey",
                                                      "float",
-                                                     "int", 
+                                                     "int",
                                                      "short",
                                                      "char",
                                                      "bool",
@@ -32,7 +32,7 @@ boxm_apm_type boxm_apm_types::str_to_enum(const char* s)
 {
   for (int i=0; i < int(BOXM_APM_UNKNOWN); i++)
   {
-    if (vcl_strcmp(s, boxm_apm_types::app_model_strings[i]) == 0)
+    if (std::strcmp(s, boxm_apm_types::app_model_strings[i]) == 0)
       return (boxm_apm_type) i;
   }
   return BOXM_APM_UNKNOWN;
@@ -67,9 +67,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_simple_grey &sample)
     //vsl_b_read(is, sample.gauss_weight_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
              << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
@@ -79,8 +79,8 @@ void vsl_b_read(vsl_b_istream & is, boxm_simple_grey *&sample)
   vsl_b_read(is, *sample);
 }
 
-vcl_ostream& operator<<(vcl_ostream &os, boxm_simple_grey const& apm)
+std::ostream& operator<<(std::ostream &os, boxm_simple_grey const& apm)
 {
-  os << "color: " << apm.color() << ", one_over_sigma: " << apm.one_over_sigma() << vcl_endl;
+  os << "color: " << apm.color() << ", one_over_sigma: " << apm.one_over_sigma() << std::endl;
   return os;
 }

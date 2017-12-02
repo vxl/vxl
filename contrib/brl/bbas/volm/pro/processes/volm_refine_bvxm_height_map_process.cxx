@@ -1,10 +1,11 @@
 // This is brl/bbas/volm/pro/processes/volm_refine_bvxm_height_map_process.cxx
 //:
 // \file
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vul/vul_file.h>
 #include <vil/algo/vil_region_finder.h>
@@ -24,7 +25,7 @@ namespace volm_refine_bvxm_height_map_process_globals
 {
   const unsigned int n_inputs_  = 3;
   const unsigned int n_outputs_ = 1;
-  float neighbor_min_height(vcl_vector<unsigned> const& ri, vcl_vector<unsigned> const& rj, vil_image_view<float> const& in_img)
+  float neighbor_min_height(std::vector<unsigned> const& ri, std::vector<unsigned> const& rj, vil_image_view<float> const& in_img)
   {
     // create a neighbor list
     static int const nbrs8_delta[8][2] = { { 1, 0}, { 1,-1}, { 0,-1}, {-1,-1},
@@ -51,13 +52,13 @@ bool volm_refine_bvxm_height_map_process_cons(bprb_func_process& pro)
 {
   using namespace volm_refine_bvxm_height_map_process_globals;
   // inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";          // original height map image
   input_types_[1] = "float";               // predominant height for sky mask
   input_types_[2] = "float";               // predominant height for ground mask
 
   // output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -68,7 +69,7 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
   using namespace volm_refine_bvxm_height_map_process_globals;
   // input check
   if (!pro.verify_inputs()) {
-    vcl_cout << pro.name() << ": invalid inputs" << vcl_endl;
+    std::cout << pro.name() << ": invalid inputs" << std::endl;
     return false;
   }
   // get input
@@ -79,7 +80,7 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
 
   vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(i_img_res.ptr());
   if (!in_img) {
-    vcl_cout << pro.name() << ": The image pixel format: " << i_img_res->pixel_format() << " is not supported" << vcl_endl;
+    std::cout << pro.name() << ": The image pixel format: " << i_img_res->pixel_format() << " is not supported" << std::endl;
     return false;
   }
   unsigned ni = in_img->ni();
@@ -107,8 +108,8 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
 
 #if 0
   // output for debug
-  vcl_string sky_fname = "d:/work/find/phase_1b/satellite_modeling/wr2/scene_11278_small/sky_mask.tif";
-  vcl_string grd_fname = "d:/work/find/phase_1b/satellite_modeling/wr2/scene_11278_small/grd_mask.tif";
+  std::string sky_fname = "d:/work/find/phase_1b/satellite_modeling/wr2/scene_11278_small/sky_mask.tif";
+  std::string grd_fname = "d:/work/find/phase_1b/satellite_modeling/wr2/scene_11278_small/grd_mask.tif";
   vil_save(sky_mask, sky_fname.c_str());
   vil_save(grd_mask, grd_fname.c_str());
 #endif
@@ -116,13 +117,13 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
   // refine sky/grd mask
   vil_region_finder<vxl_byte> sky_region_finder(sky_mask, vil_region_finder_8_conn);
   vil_region_finder<vxl_byte> grd_region_finder(grd_mask, vil_region_finder_8_conn);
-  vcl_map<unsigned, vcl_pair<float, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > > sky_regions;
-  vcl_map<unsigned, vcl_pair<float, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > > grd_regions;
+  std::map<unsigned, std::pair<float, std::pair<std::vector<unsigned>, std::vector<unsigned> > > > sky_regions;
+  std::map<unsigned, std::pair<float, std::pair<std::vector<unsigned>, std::vector<unsigned> > > > grd_regions;
   for (unsigned i = 0; i < ni; i++) {
     for (unsigned j = 0; j < nj; j++) {
       // refined sky mask
       if (sky_mask(i,j) != 0) {
-        vcl_vector<unsigned> ri;  vcl_vector<unsigned> rj;
+        std::vector<unsigned> ri;  std::vector<unsigned> rj;
         sky_region_finder.same_int_region(i, j, ri, rj);
         if (ri.empty())
           continue;
@@ -130,28 +131,28 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
         float min_h = neighbor_min_height(ri, rj, *in_img);
 
         unsigned key = (i+j)*(i+j+1)/2 + j;
-        vcl_pair<float, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >tmp_pair(min_h, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> >(ri, rj));
-        sky_regions.insert(vcl_pair<unsigned, vcl_pair<float, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > >(key, tmp_pair));
-        //vcl_cout << " for super pixel (" << i << " x " << j << "), sky mask has height value: " << min_h << vcl_endl;
+        std::pair<float, std::pair<std::vector<unsigned>, std::vector<unsigned> > >tmp_pair(min_h, std::pair<std::vector<unsigned>, std::vector<unsigned> >(ri, rj));
+        sky_regions.insert(std::pair<unsigned, std::pair<float, std::pair<std::vector<unsigned>, std::vector<unsigned> > > >(key, tmp_pair));
+        //std::cout << " for super pixel (" << i << " x " << j << "), sky mask has height value: " << min_h << std::endl;
       }
       if (grd_mask(i,j) != 0) {
-        vcl_vector<unsigned> ri;  vcl_vector<unsigned> rj;
+        std::vector<unsigned> ri;  std::vector<unsigned> rj;
         grd_region_finder.same_int_region(i, j, ri, rj);
         if (ri.empty())
           continue;
         float min_h = neighbor_min_height(ri, rj, *in_img);
         unsigned key = (i+j)*(i+j+1)/2 + j;
-        vcl_pair<float, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >tmp_pair(min_h, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> >(ri, rj));
-        grd_regions.insert(vcl_pair<unsigned, vcl_pair<float, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > >(key, tmp_pair));
-        //vcl_cout << " for super pixel (" << i << " x " << j << "), grd mask has height value: " << min_h << vcl_endl;
+        std::pair<float, std::pair<std::vector<unsigned>, std::vector<unsigned> > >tmp_pair(min_h, std::pair<std::vector<unsigned>, std::vector<unsigned> >(ri, rj));
+        grd_regions.insert(std::pair<unsigned, std::pair<float, std::pair<std::vector<unsigned>, std::vector<unsigned> > > >(key, tmp_pair));
+        //std::cout << " for super pixel (" << i << " x " << j << "), grd mask has height value: " << min_h << std::endl;
       }
     }
   }
-  
+
   // modify the output images with mask values
-  vcl_map<unsigned, vcl_pair<float, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > >::iterator mit;
+  std::map<unsigned, std::pair<float, std::pair<std::vector<unsigned>, std::vector<unsigned> > > >::iterator mit;
   for (mit = sky_regions.begin();  mit != sky_regions.end(); ++mit) {
-    vcl_vector<unsigned> ri;  vcl_vector<unsigned> rj;
+    std::vector<unsigned> ri;  std::vector<unsigned> rj;
     float min_h = mit->second.first;
     ri = mit->second.second.first;  rj = mit->second.second.second;
     for (unsigned k = 0; k < ri.size(); k++)
@@ -159,7 +160,7 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
   }
 
   for (mit = grd_regions.begin();  mit != grd_regions.end(); ++mit) {
-    vcl_vector<unsigned> ri;  vcl_vector<unsigned> rj;
+    std::vector<unsigned> ri;  std::vector<unsigned> rj;
     float min_h = mit->second.first;
     ri = mit->second.second.first;  rj = mit->second.second.second;
     for (unsigned k = 0; k < ri.size(); k++)
@@ -176,15 +177,15 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
 //    height, volume, area, confidence, cent_lon, cent_lat, lon_0, lat_0, ..., lon_i, lat_i, ..., lon_n, lat_n;
 bool volm_extract_building_outlines_process_cons(bprb_func_process& pro)
 {
- 
-  vcl_vector<vcl_string> input_types;
+
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // height map
   input_types.push_back("vil_image_view_base_sptr"); // classification map
   input_types.push_back("vpgl_camera_double_sptr"); // geo camera
   input_types.push_back("vcl_string"); // output building .csv filename
   input_types.push_back("vcl_string"); // output building kml filename
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // binary map
   output_types.push_back("vil_image_view_base_sptr"); // binary map
   output_types.push_back("vil_image_view_base_sptr"); // binary map
@@ -196,7 +197,7 @@ bool volm_extract_building_outlines_process_cons(bprb_func_process& pro)
 bool volm_extract_building_outlines_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 3) {
-    vcl_cout << "volm_extract_building_outlines_process: The number of inputs should be 3" << vcl_endl;
+    std::cout << "volm_extract_building_outlines_process: The number of inputs should be 3" << std::endl;
     return false;
   }
 
@@ -205,20 +206,20 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
   vil_image_view_base_sptr class_img_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
-  vcl_string csv_filename = pro.get_input<vcl_string>(i++);
-  vcl_string kml_filename = pro.get_input<vcl_string>(i++);
+  std::string csv_filename = pro.get_input<std::string>(i++);
+  std::string kml_filename = pro.get_input<std::string>(i++);
 
   // convert image to float
   vil_image_view<float> height(height_sptr);
   unsigned ni = height.ni(); unsigned nj = height.nj();
-  vcl_cout << "ni: " << ni << " nj: " << nj << vcl_endl;
+  std::cout << "ni: " << ni << " nj: " << nj << std::endl;
 
   vil_image_view<vxl_byte> class_img(class_img_sptr);
   if (class_img_sptr->ni() != ni || class_img_sptr->nj() != nj) {
-    vcl_cout << "volm_extract_building_outlines_process: The input image sizes are not compatible!" << vcl_endl;
+    std::cout << "volm_extract_building_outlines_process: The input image sizes are not compatible!" << std::endl;
     return false;
   }
-  
+
   // first make the class image binary
   vil_image_view<bool> class_img_binary(class_img.ni(), class_img.nj());
   vil_image_view<bool> class_img_binary_E(class_img.ni(), class_img.nj());
@@ -235,19 +236,19 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
       if ((class_img(i,j) == 34 || class_img(i,j) == 15) && height(i,j) > 5 && height(i,j) <= 10)
         class_img_binary(i,j) = true;
     }
-  
+
   vil_structuring_element se;
   se.set_to_disk(3);
   vil_binary_erode(class_img_binary,class_img_binary_E,se);
   vil_binary_dilate(class_img_binary_E,class_img_binary_D,se);
 
-  vcl_vector<int> bi,bj;
+  std::vector<int> bi,bj;
   bil_blob_finder finder(class_img_binary_D);
-  vcl_vector<vcl_vector<vgl_point_3d<double> > > bldgs;
+  std::vector<std::vector<vgl_point_3d<double> > > bldgs;
   while (finder.next_8con_region(bi,bj))
   {
-    vcl_cout<<"Blob boundary length: "<<bi.size()<<vcl_endl;
-    vcl_vector<vgl_point_3d<double> > poly;
+    std::cout<<"Blob boundary length: "<<bi.size()<<std::endl;
+    std::vector<vgl_point_3d<double> > poly;
     for (unsigned i = 0; i < bi.size(); i++) {
       double lon, lat;
       geocam->img_to_global(bi[i], bj[i], lon, lat);
@@ -258,11 +259,11 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
 
   // find blobs again to compute avg heights (need the region representation this time)
   bil_blob_finder finder2(class_img_binary_D);
-  vcl_vector<double> bldg_heights;
-  vcl_vector<vil_chord> region;
+  std::vector<double> bldg_heights;
+  std::vector<vil_chord> region;
   while (finder2.next_8con_region(region))
   {
-    vcl_cout<<"Blob region number of rows: "<<region.size()<<vcl_endl;
+    std::cout<<"Blob region number of rows: "<<region.size()<<std::endl;
     double avg_height = 0.0;
     unsigned cnt = 0;
     double area = 0.0;
@@ -276,14 +277,14 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
     avg_height /= cnt;
     bldg_heights.push_back(avg_height);
   }
-  vcl_cout << " there are: " << bldgs.size() << " buildings and " << bldg_heights.size() << " building heights.\n";
-  vcl_cout.flush();
+  std::cout << " there are: " << bldgs.size() << " buildings and " << bldg_heights.size() << " building heights.\n";
+  std::cout.flush();
 
-  vcl_ofstream ofs(kml_filename.c_str());
-  bkml_write::open_document(ofs);  
+  std::ofstream ofs(kml_filename.c_str());
+  bkml_write::open_document(ofs);
 
-  vcl_ofstream ofs_csv(csv_filename.c_str());
-  
+  std::ofstream ofs_csv(csv_filename.c_str());
+
   for (unsigned i = 0; i < bldgs.size(); i++) {
     vgl_polygon<double> poly(1);
     double cent_lon = 0.0, cent_lat = 0.0;
@@ -294,7 +295,7 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
     }
     cent_lon /= bldgs[i].size();
     cent_lat /= bldgs[i].size();
-    vcl_stringstream avg_height_str; avg_height_str << "h: " << bldg_heights[i] << " " << cent_lon << " " << cent_lat;
+    std::stringstream avg_height_str; avg_height_str << "h: " << bldg_heights[i] << " " << cent_lon << " " << cent_lat;
     bkml_write::write_polygon(ofs, poly, avg_height_str.str(),avg_height_str.str());
                             /*double const& scale = 1.0,
                             double const& line_width = 3.0,
@@ -302,10 +303,10 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
                             unsigned char const& r = 0,
                             unsigned char const& g = 255,
                             unsigned char const& b = 0);*/
-    
+
     // for csv each building is one line:   height, volume (=0.0 for now), area (=0.0 for now), confidence (=0.5 for now), cent_lon, cent_lat, lon_0, lat_0, ..., lon_i, lat_i, ..., lon_n, lat_n;
     ofs_csv << bldg_heights[i] << ",0.0,0.0,0.5," << cent_lon << ',' << cent_lat;
-    for (unsigned j = 0; j < bldgs[i].size(); j++) 
+    for (unsigned j = 0; j < bldgs[i].size(); j++)
       ofs_csv << ',' << bldgs[i][j].x() << ',' << bldgs[i][j].y();
     ofs_csv << '\n';
   }
@@ -330,10 +331,10 @@ namespace volm_stereo_height_fix_process_globals
 bool volm_stereo_height_fix_process_cons(bprb_func_process& pro)
 {
   using namespace volm_stereo_height_fix_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";       // original height map image
   input_types_[1] = "float";
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -341,7 +342,7 @@ bool volm_stereo_height_fix_process(bprb_func_process& pro)
 {
   using namespace volm_stereo_height_fix_process_globals;
   if (!pro.verify_inputs()) {
-    vcl_cout << pro.name() << ": invalid inputs" << vcl_endl;
+    std::cout << pro.name() << ": invalid inputs" << std::endl;
     return false;
   }
   // get inputs
@@ -350,7 +351,7 @@ bool volm_stereo_height_fix_process(bprb_func_process& pro)
   float h_fix = pro.get_input<float>(i++);
   vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(i_img_res.ptr());
   if (!in_img) {
-    vcl_cout << pro.name() << ": The image pixel format: " << i_img_res->pixel_format() << " is not supported" << vcl_endl;
+    std::cout << pro.name() << ": The image pixel format: " << i_img_res->pixel_format() << " is not supported" << std::endl;
     return false;
   }
   unsigned ni = in_img->ni();

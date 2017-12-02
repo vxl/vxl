@@ -12,14 +12,14 @@ bool vil_filter_image_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  //: original image
   input_types.push_back("vil_image_view_base_sptr");  //: filtering mask (will make all pixels with mask=false zero
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -31,7 +31,7 @@ bool vil_filter_image_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_filter_image_process: The input number should be 3" << vcl_endl;
+    std::cout << "vil_filter_image_process: The input number should be 3" << std::endl;
     return false;
   }
 
@@ -41,7 +41,7 @@ bool vil_filter_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr mask_inp = pro.get_input<vil_image_view_base_sptr>(i++);
 
   if (mask_inp->pixel_format() != VIL_PIXEL_FORMAT_BOOL) {
-    vcl_cout << "ERROR in vil_filter_image_process() -- input mask format is not BOOL!\n";
+    std::cout << "ERROR in vil_filter_image_process() -- input mask format is not BOOL!\n";
     return false;
   }
   vil_image_view<bool> mask(mask_inp);

@@ -5,10 +5,12 @@
 // \brief Builder for mfpf_sad_vec_cost objects.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Builder for mfpf_sad_vec_cost objects.
 class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
@@ -18,7 +20,7 @@ class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
   double min_mad_;
 
   //: Space to record examples
-  vcl_vector<vnl_vector<double> > data_;
+  std::vector<vnl_vector<double> > data_;
 
   //: If true recalculate min_mad_ based on median of training set
   bool impose_robust_min_mad_;
@@ -48,19 +50,19 @@ class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
   virtual void build(mfpf_vec_cost&);
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Set flag for robust min mad (based on training set)
   void set_impose_robust_min_mad(bool on) {impose_robust_min_mad_=on;}
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_vec_cost_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;

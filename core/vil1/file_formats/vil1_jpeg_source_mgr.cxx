@@ -6,20 +6,21 @@
 // \file
 // \author fsm
 
+#include <cstddef>
 #include "vil1_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h> // for vcl_size_t
+#include <vcl_compiler.h>
 #include <vil1/vil1_stream.h>
 
 #define STATIC /*static*/
 
-// In ANSI C, and indeed any rational implementation, vcl_size_t is also the
+// In ANSI C, and indeed any rational implementation, std::size_t is also the
 // type returned by sizeof().  However, it seems there are some irrational
 // implementations out there, in which sizeof() returns an int even though
-// vcl_size_t is defined as long or unsigned long.  To ensure consistent results
+// std::size_t is defined as long or unsigned long.  To ensure consistent results
 // we always use this SIZEOF() macro in place of using sizeof() directly.
 //
-#define SIZEOF(object) ((vcl_size_t) sizeof(object))
+#define SIZEOF(object) ((std::size_t) sizeof(object))
 
 // Implement a jpeg_source_manager for vil1_stream *.
 // Adapted by fsm from the FILE * version in jdatasrc.c
@@ -37,7 +38,7 @@ vil1_jpeg_init_source (j_decompress_ptr cinfo)
   vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
 
 #ifdef DEBUG
-  vcl_cerr << "vil1_jpeg_init_source() " << src << '\n';
+  std::cerr << "vil1_jpeg_init_source() " << src << '\n';
 #endif
 
   // We reset the empty-input-file flag for each image,
@@ -47,13 +48,13 @@ vil1_jpeg_init_source (j_decompress_ptr cinfo)
 }
 
 //: Fill the input buffer --- called whenever buffer is emptied.
-// 
+//
 //  In typical applications, this should read fresh data into the buffer
 //  (ignoring the current state of next_input_byte & bytes_in_buffer),
 //  reset the pointer & count to the start of the buffer, and return TRUE
 //  indicating that the buffer has been reloaded.  It is not necessary to
 //  fill the buffer entirely, only to obtain at least one more byte.
-// 
+//
 //  There is no such thing as an EOF return.  If the end of the file has been
 //  reached, the routine has a choice of ERREXIT() or inserting fake data into
 //  the buffer.  In most cases, generating a warning message and inserting a
@@ -61,7 +62,7 @@ vil1_jpeg_init_source (j_decompress_ptr cinfo)
 //  decompressor to output however much of the image is there.  However,
 //  the resulting error message is misleading if the real problem is an empty
 //  input file, so we handle that case specially.
-// 
+//
 //  In applications that need to be able to suspend compression due to input
 //  not being available yet, a FALSE return indicates that no more data can be
 //  obtained right now, but more may be forthcoming later.  In this situation,
@@ -70,7 +71,7 @@ vil1_jpeg_init_source (j_decompress_ptr cinfo)
 //  decompression after it has loaded more data into the input buffer.  Note
 //  that there are substantial restrictions on the use of suspension --- see
 //  the documentation.
-// 
+//
 //  When suspending, the decompressor will back up to a convenient restart point
 //  (typically the start of the current MCU). next_input_byte & bytes_in_buffer
 //  indicate where the restart point will be if the current call returns FALSE.
@@ -102,7 +103,7 @@ vil1_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
 }
 
 //: Skip data --- used to skip over a potentially large amount of uninteresting data (such as an APPn marker).
-// 
+//
 //  Writers of suspendable-input applications must note that skip_input_data
 //  is not granted the right to give a suspension return.  If the skip extends
 //  beyond the data currently in the buffer, the buffer can be marked empty so
@@ -126,14 +127,14 @@ vil1_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
       // note we assume that fill_input_buffer will never return FALSE,
       // so suspension need not be handled.
     }
-    src->base.next_input_byte += (vcl_size_t) num_bytes;
-    src->base.bytes_in_buffer -= (vcl_size_t) num_bytes;
+    src->base.next_input_byte += (std::size_t) num_bytes;
+    src->base.bytes_in_buffer -= (std::size_t) num_bytes;
   }
 }
 
 
 //: Terminate source --- called by jpeg_finish_decompress after all data has been read.  Often a no-op.
-// 
+//
 //  \note \e not called by jpeg_abort or jpeg_destroy; surrounding
 //  application must deal with any cleanup that should happen even
 //  for error exit.
@@ -158,7 +159,7 @@ vil1_jpeg_stream_src_set (j_decompress_ptr cinfo, vil1_stream *vs)
   { assert(!"this function must be called only once on each cinfo"); }
 
 #ifdef DEBUG
-  vcl_cerr << "vil1_jpeg_stream_src() : creating new data source\n";
+  std::cerr << "vil1_jpeg_stream_src() : creating new data source\n";
 #endif
 
   vil1_jpeg_srcptr src = (vil1_jpeg_srcptr) // allocate
@@ -198,7 +199,7 @@ vil1_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil1_stream *vs)
   }
 
   cinfo->src->bytes_in_buffer = 0; // forces fill_input_buffer on first read
-  cinfo->src->next_input_byte = 0; // until buffer loaded
+  cinfo->src->next_input_byte = VXL_NULLPTR; // until buffer loaded
 
   vs->seek(0L);
 }

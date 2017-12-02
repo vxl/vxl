@@ -19,7 +19,7 @@ test_feature_region()
   rgrl_feature_region* region_ptr = dynamic_cast<rgrl_feature_region*>( fea.as_pointer() );
   TEST("Valid pointer", (!region_ptr), 0 );
 
-  const vcl_vector< vnl_vector<int> >& pixels = region_ptr->pixel_coordinates();
+  const std::vector< vnl_vector<int> >& pixels = region_ptr->pixel_coordinates();
 
   vil_image_view<vxl_byte> test( 30, 30 );
   test.fill( vxl_byte(0) );

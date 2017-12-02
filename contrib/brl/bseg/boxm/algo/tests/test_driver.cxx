@@ -13,7 +13,7 @@ void register_tests()
   REGISTER( test_fill_in_mesh );
   REGISTER( test_save_scene_raw );
   REGISTER( test_upload_mesh );
-  REGISTER( test_boxm_fill_internal_cells );  
+  REGISTER( test_boxm_fill_internal_cells );
   REGISTER( test_boxm_scene_crop );
   REGISTER( test_linear_operations );
   REGISTER( test_remove_level0 );

@@ -4,6 +4,7 @@
 //  Copyright: (C) 2010 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -12,13 +13,13 @@
 
 #include <msm/msm_wt_mat_2d.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 
 void test_wt_mat_2d()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing msm_wt_mat_2d\n"
            << "***********************\n";
 
@@ -45,7 +46,7 @@ void test_wt_mat_2d()
   RtMR=R.transpose()*M*R;
   msm_wt_mat_2d W3=W2.transform_by(a,b);
   TEST("Rt*W*R",W3==msm_wt_mat_2d(RtMR(0,0),RtMR(0,1),RtMR(1,1)),true);
-  
+
 }
 
 TESTMAIN(test_wt_mat_2d);

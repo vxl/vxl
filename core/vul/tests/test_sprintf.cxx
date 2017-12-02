@@ -1,17 +1,18 @@
+#include <iostream>
 #include <vul/vul_sprintf.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 void test_sprintf(void)
 {
   vul_sprintf buf0("[%d]", 123);
-  vcl_cout << "buf0=" << buf0 << vcl_endl;
-  TEST("buf0 == 123", buf0, vcl_string("[123]"));
+  std::cout << "buf0=" << buf0 << std::endl;
+  TEST("buf0 == 123", buf0, std::string("[123]"));
 
-  vcl_string string_fmt = "[%s]";
+  std::string string_fmt = "[%s]";
 
   vul_sprintf buf1(string_fmt.c_str(), "awf");
-  vcl_cout << "buf1=" << buf1 << vcl_endl;
+  std::cout << "buf1=" << buf1 << std::endl;
   TEST("buf1 == [awf]", buf1, "[awf]");
 }
 

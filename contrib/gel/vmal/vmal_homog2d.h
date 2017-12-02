@@ -7,9 +7,11 @@
 //   L. Guichard
 //--------------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class vmal_homog2d
 {
@@ -32,8 +34,8 @@ public:
 // A point pima1[i] in the first image match with the point pima2[i]
 // in the second image.
 //---------------------------------------------------------------------------
-  void compute_homo(const vcl_vector<vnl_double_3 > & pima1,
-            const vcl_vector<vnl_double_3 > & pima2,
+  void compute_homo(const std::vector<vnl_double_3 > & pima1,
+            const std::vector<vnl_double_3 > & pima2,
             vnl_double_3x3 &hmatrix);
 };
 

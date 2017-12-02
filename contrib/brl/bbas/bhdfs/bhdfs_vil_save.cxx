@@ -2,6 +2,10 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <iostream>
+#include <cctype>
+#include <cstring>
+#include <string>
 #include "bhdfs_vil_save.h"
 //:
 // \file
@@ -11,10 +15,7 @@
 //
 // \endverbatim
 
-#include <vcl_cctype.h>
-#include <vcl_cstring.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 
 #include <vil/vil_open.h>
@@ -32,14 +33,14 @@ bool bhdfs_vil_save(const vil_image_view_base &im, char const* filename, char co
 {
   vil_stream* os = new bhdfs_vil_stream(filename, "w");
   if (!os || !os->ok()) {
-    vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
+    std::cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, im.ni(), im.nj(),
                                                        im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
                                                        vil_pixel_format_component_format(im.pixel_format()), file_format);
   if (!out) {
-    vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
+    std::cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
 
@@ -90,14 +91,14 @@ bool bhdfs_vil_save_image_resource(const vil_image_resource_sptr &ir, char const
   //vil_stream* os = vil_open(filename, "w");
   vil_stream* os = new bhdfs_vil_stream(filename, "w");
   if (!os || !os->ok()) {
-    vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
+    std::cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, ir->ni(), ir->nj(),
                                                        ir->nplanes(),
                                                        ir->pixel_format(), file_format);
   if (!out) {
-    vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
+    std::cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
   return vil_copy_deep(ir, out);

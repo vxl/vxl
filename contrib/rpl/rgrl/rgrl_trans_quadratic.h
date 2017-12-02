@@ -6,8 +6,10 @@
 // \author Charlene Tsai
 // \date Sep 2003
 
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_transformation.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class rgrl_trans_quadratic
   : public rgrl_transformation
@@ -101,10 +103,10 @@ class rgrl_trans_quadratic
   rgrl_type_macro( rgrl_trans_quadratic, rgrl_transformation );
 
   //: Output UNCENTERED transformation, with the origin as the center.
-  void write(vcl_ostream& os ) const;
+  void write(std::ostream& os ) const;
 
   // for input
-  bool read(vcl_istream& is );
+  bool read(std::istream& is );
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;

@@ -6,13 +6,14 @@
 // \file
 // \author fsm
 
+#include <string>
 #include "vil1_image_proxy.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vil1/vil1_load.h>
 
 struct vil1_image_proxy_impl : public vil1_image_impl
 {
-  vcl_string filename;
+  std::string filename;
 
   // cache this data:
   int planes_;
@@ -21,7 +22,7 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   int components_;
   int bits_per_component_;
   vil1_component_format component_format_;
-  vcl_string file_format_;
+  std::string file_format_;
 
   vil1_image_proxy_impl(char const *file) : filename(file) {
     // cache some stuff
@@ -60,10 +61,10 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   { return vil1_load(filename.c_str()).set_property(tag, property_value); }
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(std::string const&) const;
 };
 
 vil1_image_proxy::vil1_image_proxy(char const *file)
@@ -72,14 +73,14 @@ vil1_image_proxy::vil1_image_proxy(char const *file)
 }
 
 //: Return the name of the class;
-vcl_string vil1_image_proxy_impl::is_a() const
+std::string vil1_image_proxy_impl::is_a() const
 {
-  static const vcl_string class_name_="vil1_image_proxy_impl";
+  static const std::string class_name_="vil1_image_proxy_impl";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil1_image_proxy_impl::is_class(vcl_string const& s) const
+bool vil1_image_proxy_impl::is_class(std::string const& s) const
 {
   return s==vil1_image_proxy_impl::is_a() || vil1_image_impl::is_class(s);
 }

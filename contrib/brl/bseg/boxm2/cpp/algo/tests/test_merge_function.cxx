@@ -20,7 +20,7 @@ void test_merge_bit_tree()
 
       //setup alpha buffer
       float prob = .2f;
-      float alph = -vcl_log(1.0f-prob);
+      float alph = -std::log(1.0f-prob);
       float alpha[] = {alph,
                        alph/2.0f, alph/2.0f, alph/2.0f, alph/2.0f,   //second gen
                        alph/2.0f, alph/2.0f, alph/2.0f, alph/2.0f };
@@ -49,7 +49,7 @@ void test_merge_bit_tree()
 
       //setup alpha buffer
       float prob = .2f;
-      float alph = -vcl_log(1.0f-prob);
+      float alph = -std::log(1.0f-prob);
       float alpha[17];
       for (int i=0; i<17; ++i)
         alpha[i] = alph/4.0f;
@@ -82,7 +82,7 @@ void test_merge_bit_tree()
 
       //setup alpha buffer
       float prob = .2f;
-      float alph = -vcl_log(1.0f-prob);
+      float alph = -std::log(1.0f-prob);
       float alpha[17];
       for (int i=0; i<17; ++i) {
         alpha[i] = alph/4.0f;

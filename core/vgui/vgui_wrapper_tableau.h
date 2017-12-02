@@ -44,13 +44,13 @@ class vgui_wrapper_tableau : public vgui_tableau
   bool remove_child(vgui_tableau_sptr const&);
 
   //: Returns the child's file_name if it exists.
-  vcl_string file_name() const;
+  std::string file_name() const;
 
   //: Returns nice version of the name which also includes details of the child.
-  vcl_string pretty_name() const;
+  std::string pretty_name() const;
 
   //: Returns the type of tableau ('vgui_wrapper_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Handle all events sent to this tableau.
   //  It is pointless to derive from vgui_wrapper_tableau

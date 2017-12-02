@@ -1,7 +1,7 @@
 # mul/clsfy/tests/CMakeLists.txt
 
-LINK_LIBRARIES(vgl vul vpl vnl mbl clsfy testlib vpdfl pdf1d vimt vsl)
-ADD_EXECUTABLE (clsfy_test_all
+link_libraries(${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vnl mbl clsfy ${VXL_LIB_PREFIX}testlib vpdfl pdf1d vimt ${VXL_LIB_PREFIX}vsl)
+add_executable(clsfy_test_all
   test_driver.cxx
 
   test_binary_hyperplane.cxx
@@ -20,20 +20,20 @@ ADD_EXECUTABLE (clsfy_test_all
   test_random_forest.cxx
 )
 
-ADD_TEST (clsfy_test_binary_hyperplane        ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_hyperplane)
-ADD_TEST (clsfy_test_binary_pdf_classifier    ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_pdf_classifier)
-ADD_TEST (clsfy_test_k_nearest_neighbour      ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_k_nearest_neighbour)
-ADD_TEST (clsfy_test_smo_1                    ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_smo_1)
-ADD_TEST (clsfy_test_rbf_svm_smo              ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_rbf_svm_smo)
-ADD_TEST (clsfy_test_adaboost                 ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_adaboost)
-ADD_TEST (clsfy_test_direct_boost             ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_direct_boost)
-ADD_TEST (clsfy_test_binary_threshold_1d      ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_threshold_1d)
-ADD_TEST (clsfy_test_mean_square_1d           ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_mean_square_1d)
-ADD_TEST (clsfy_test_logit_loss_function      ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_logit_loss_function)
-ADD_TEST (clsfy_test_binary_hyperplane_logit  ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_hyperplane_logit)
-ADD_TEST (clsfy_test_binary_1d_wrapper        ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_1d_wrapper)
-ADD_TEST (clsfy_test_binary_tree              ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_binary_tree)
-ADD_TEST (clsfy_test_random_forest            ${EXECUTABLE_OUTPUT_PATH}/clsfy_test_all test_random_forest)
+add_test( NAME clsfy_test_binary_hyperplane COMMAND $<TARGET_FILE:clsfy_test_all> test_binary_hyperplane)
+add_test( NAME clsfy_test_binary_pdf_classifier COMMAND $<TARGET_FILE:clsfy_test_all> test_binary_pdf_classifier)
+add_test( NAME clsfy_test_k_nearest_neighbour COMMAND $<TARGET_FILE:clsfy_test_all> test_k_nearest_neighbour)
+add_test( NAME clsfy_test_smo_1 COMMAND $<TARGET_FILE:clsfy_test_all> test_smo_1)
+add_test( NAME clsfy_test_rbf_svm_smo COMMAND $<TARGET_FILE:clsfy_test_all> test_rbf_svm_smo)
+add_test( NAME clsfy_test_adaboost COMMAND $<TARGET_FILE:clsfy_test_all> test_adaboost)
+add_test( NAME clsfy_test_direct_boost COMMAND $<TARGET_FILE:clsfy_test_all> test_direct_boost)
+add_test( NAME clsfy_test_binary_threshold_1d COMMAND $<TARGET_FILE:clsfy_test_all> test_binary_threshold_1d)
+add_test( NAME clsfy_test_mean_square_1d COMMAND $<TARGET_FILE:clsfy_test_all> test_mean_square_1d)
+add_test( NAME clsfy_test_logit_loss_function COMMAND $<TARGET_FILE:clsfy_test_all> test_logit_loss_function)
+add_test( NAME clsfy_test_binary_hyperplane_logit COMMAND $<TARGET_FILE:clsfy_test_all> test_binary_hyperplane_logit)
+add_test( NAME clsfy_test_binary_1d_wrapper COMMAND $<TARGET_FILE:clsfy_test_all> test_binary_1d_wrapper)
+add_test( NAME clsfy_test_binary_tree COMMAND $<TARGET_FILE:clsfy_test_all> test_binary_tree)
+add_test( NAME clsfy_test_random_forest COMMAND $<TARGET_FILE:clsfy_test_all> test_random_forest)
 
-ADD_EXECUTABLE( clsfy_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( clsfy_test_include clsfy )
+add_executable( clsfy_test_include test_include.cxx )
+target_link_libraries( clsfy_test_include clsfy )

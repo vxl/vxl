@@ -1,6 +1,7 @@
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <brec/brec_part_base.h>
 #include <brec/brec_part_base_sptr.h>
@@ -22,8 +23,8 @@
 
 static void test_brec_hierarchy_builder()
 {
-  vcl_string file = "normalized0_cropped.png";
-  //vcl_string file = "digits_small.png";
+  std::string file = "normalized0_cropped.png";
+  //std::string file = "digits_small.png";
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
   TEST("test load img", !img, false);
 
@@ -32,27 +33,27 @@ static void test_brec_hierarchy_builder()
 
   unsigned ni = img->ni(); unsigned nj = img->nj();
 
-  vcl_cout << "image ni: " << ni << " nj: " << nj << vcl_endl;
+  std::cout << "image ni: " << ni << " nj: " << nj << std::endl;
 
   brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_detector_roi1_0();
   //brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_eight_detector();
 
   TEST("test hierarchy", !h, false);
-  vcl_cout << "constructed: " << h->number_of_vertices() << " vertices in the vehicle detector for roi1\n"
+  std::cout << "constructed: " << h->number_of_vertices() << " vertices in the vehicle detector for roi1\n"
            << "constructed: " << h->number_of_edges() << " edges in the vehicle detector for roi1\n";
 
-  vcl_vector<brec_part_instance_sptr> dumm_ins = h->get_dummy_primitive_instances();
+  std::vector<brec_part_instance_sptr> dumm_ins = h->get_dummy_primitive_instances();
 
-  vcl_vector<brec_part_instance_sptr> parts_prims;
+  std::vector<brec_part_instance_sptr> parts_prims;
   for (unsigned i = 0; i < dumm_ins.size(); i++) {
     if (dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
       brec_part_gaussian_sptr p = dumm_ins[i]->cast_to_gaussian();
       if (!extract_gaussian_primitives(img, p->lambda0_, p->lambda1_, p->theta_, p->bright_, p->cutoff_percentage_, 0.1f, p->type_, parts_prims))
-        vcl_cout << "problems in extracting gaussian primitives!!\n";
+        std::cout << "problems in extracting gaussian primitives!!\n";
     }
   }
 
-  vcl_cout << "\textracted " << parts_prims.size() << " primitives\n";
+  std::cout << "\textracted " << parts_prims.size() << " primitives\n";
   unsigned ii = 0;
   for (unsigned i = 0; i < parts_prims.size(); i++) {
     if (parts_prims[i]->x_ == 391 && parts_prims[i]->y_ == 196) {
@@ -62,22 +63,22 @@ static void test_brec_hierarchy_builder()
   }
 
   unsigned highest = h->highest_layer_id();
-  vcl_vector<brec_part_instance_sptr> parts_upper_most(parts_prims);
+  std::vector<brec_part_instance_sptr> parts_upper_most(parts_prims);
   for (unsigned l = 1; l <= highest; l++) {
-    vcl_vector<brec_part_instance_sptr> parts_current;
+    std::vector<brec_part_instance_sptr> parts_current;
     h->extract_upper_layer(parts_upper_most, ni, nj, parts_current);
-    vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << vcl_endl;
+    std::cout << "extracted " << parts_current.size() << " parts of layer " << l << std::endl;
     parts_upper_most.clear();
     parts_upper_most = parts_current;
   }
 
-  vcl_cout << "\textracted " << parts_upper_most.size() << " of highest layer: " << highest << " parts\n";
+  std::cout << "\textracted " << parts_upper_most.size() << " of highest layer: " << highest << " parts\n";
 
   vil_image_view<float> output_map_float(ni, nj);
   brec_part_hierarchy::generate_output_map(parts_upper_most, output_map_float);
   float min, max;
   vil_math_value_range(output_map_float, min, max);
-  vcl_cout << "\toutput map float value range, min: " << min << " max: " << max << vcl_endl;
+  std::cout << "\toutput map float value range, min: " << min << " max: " << max << std::endl;
 
   vil_image_view<vxl_byte> output_map_byte(ni, nj);
   vil_convert_stretch_range_limited(output_map_float, output_map_byte, 0.0f, 1.0f);

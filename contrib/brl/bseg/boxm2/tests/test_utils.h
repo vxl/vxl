@@ -3,7 +3,8 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <testlib/testlib_test.h>
@@ -23,11 +24,11 @@ class boxm2_test_utils
                                               int max_mb );
 
     static void   save_test_scene_to_disk();
-    static void   delete_test_scene_from_disk(vcl_string dir="");
+    static void   delete_test_scene_from_disk(std::string dir="");
 
-    static vcl_string   save_test_simple_scene(vcl_string filename= "test.xml");
-    static   vcl_map<boxm2_block_id,boxm2_block_metadata> generate_simple_metadata();
-    static vcl_string   save_test_empty_scene();
+    static std::string   save_test_simple_scene(std::string filename= "test.xml");
+    static   std::map<boxm2_block_id,boxm2_block_metadata> generate_simple_metadata();
+    static std::string   save_test_empty_scene();
     static bool create_test_simple_scene(boxm2_scene_sptr & scene);
     static void  test_block_equivalence(boxm2_block& a, boxm2_block& b);
 
@@ -55,8 +56,8 @@ void boxm2_test_utils::test_data_equivalence(boxm2_data<data_type>& a, boxm2_dat
   typedef typename boxm2_data<data_type>::datatype dtype;
   boxm2_array_1d<dtype> adat = a.data();
   boxm2_array_1d<dtype> bdat = b.data();
-  vcl_cout<<"Adat size: "<<adat.size()<<'\n'
-          <<"Bdat size: "<<bdat.size()<<vcl_endl;
+  std::cout<<"Adat size: "<<adat.size()<<'\n'
+          <<"Bdat size: "<<bdat.size()<<std::endl;
   TEST("Data array size matches", adat.size(), bdat.size());
 
   // make sure buffers match

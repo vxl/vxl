@@ -24,9 +24,9 @@ void ihog_transform_2d::b_read(vsl_b_istream& bfs)
         vsl_b_read(bfs, (vgl_h_matrix_2d<double>&)(*this));
         break;
     default:
-        vcl_cerr << "I/O ERROR: ihog_transform_2d::b_read(vsl_b_istream&)\n"
+        std::cerr << "I/O ERROR: ihog_transform_2d::b_read(vsl_b_istream&)\n"
                  << "           Unknown version number "<< version << '\n';
-        bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
         return;
     }
 }
@@ -78,7 +78,7 @@ void ihog_transform_2d::params_of(vnl_vector<double>& v, Form form) const
             break;
         case (RigidBody):
             v.set_size(3);
-            v(0)=vcl_atan2(-t12_matrix_[0][1],t12_matrix_[0][0]); // Angle
+            v(0)=std::atan2(-t12_matrix_[0][1],t12_matrix_[0][0]); // Angle
             v(1)=t12_matrix_[0][2]; v(2)=t12_matrix_[1][2];
             break;
         case (Affine):
@@ -95,7 +95,7 @@ void ihog_transform_2d::params_of(vnl_vector<double>& v, Form form) const
             v_data[6]=t12_matrix_[2][0]; v_data[7]=t12_matrix_[2][1]; v_data[8]=t12_matrix_[2][2];
             break;
         default:
-            vcl_cerr<<"ihog_transform_2d::params() Unexpected form: "<<int(form)<<'\n';
+            std::cerr<<"ihog_transform_2d::params() Unexpected form: "<<int(form)<<'\n';
     }
 }
 
@@ -143,7 +143,7 @@ void ihog_transform_2d::set(const vnl_vector<double>& v, Form form)
             form_ = Projective;
             break;
         default:
-            vcl_cerr<<"ihog_transform_2d::set() Unexpected form: "<<int(form)<<'\n';
+            std::cerr<<"ihog_transform_2d::set() Unexpected form: "<<int(form)<<'\n';
     }
 }
 
@@ -176,12 +176,12 @@ void ihog_transform_2d::set_affine(const vgl_point_2d<double> & p,
 void ihog_transform_2d::set_affine(const vnl_double_2x3& M23)
 {
   if ((M23.rows()!=2) || (M23.columns()!=3)) {
-    vcl_cerr<<"vimt_transform_2d::affine : Expect 2x3 matrix, got "<<M23.rows()<<" x "<<M23.columns()<<'\n';
+    std::cerr<<"vimt_transform_2d::affine : Expect 2x3 matrix, got "<<M23.rows()<<" x "<<M23.columns()<<'\n';
     return;
   }
 
   if (M23[0][0]*M23[1][1] < M23[0][1]*M23[1][0]) {
-    vcl_cerr << "vimt_transform_2d::affine :\n"
+    std::cerr << "vimt_transform_2d::affine :\n"
              << "sub (2x2) matrix should have positive determinant\n";
   }
 
@@ -207,7 +207,7 @@ ihog_transform_2d::delta(const vgl_point_2d<double>& p, const vgl_vector_2d<doub
         case Projective :
             return operator()(p+dp)-operator()(p);
         default:
-            vcl_cerr<<"ihog_transform_2d::delta() : Unrecognised form: "<<int(form_)<<'\n';
+            std::cerr<<"ihog_transform_2d::delta() : Unrecognised form: "<<int(form_)<<'\n';
     }
 
     return vgl_vector_2d<double> (); // To keep over-zealous compilers happy
@@ -238,7 +238,7 @@ vgl_point_2d<double> ihog_transform_2d::operator()(double x, double y) const
             else  return vgl_point_2d<double> ((x*t12_matrix_[0][0]+y*t12_matrix_[0][1]+t12_matrix_[0][2])/z,
                                                (x*t12_matrix_[1][0]+y*t12_matrix_[1][1]+t12_matrix_[1][2])/z);
         default:
-            vcl_cerr<<"vimt_transform_2d::operator() : Unrecognised form: "<<int(form_)<<'\n';
+            std::cerr<<"vimt_transform_2d::operator() : Unrecognised form: "<<int(form_)<<'\n';
     }
 
     return vgl_point_2d<double> (); // To keep over-zealous compilers happy

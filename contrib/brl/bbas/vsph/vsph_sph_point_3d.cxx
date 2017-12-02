@@ -1,12 +1,14 @@
 // This is bbas/vsph/vsph_sph_point_3d.cxx
+#include <complex>
+#include <iostream>
+#include <cmath>
 #include "vsph_sph_point_3d.h"
 //
-#include <vcl_complex.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #define RADIUS_THRESH 0.0001
 
-void vsph_sph_point_3d::print(vcl_ostream& os) const
+void vsph_sph_point_3d::print(std::ostream& os) const
 {
   os << " vsph_sph_point_3d:[radius=" <<radius_ << ",theta=" << theta_ << ",phi=" << phi_ << "] ";
 }
@@ -31,7 +33,7 @@ void vsph_sph_point_3d::b_write(vsl_b_ostream& os)
   vsl_b_write(os,phi_);
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_3d const& p)
+std::ostream& operator<<(std::ostream& os, vsph_sph_point_3d const& p)
 {
   p.print(os);
   return os;

@@ -16,8 +16,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vsol/vsol_line_2d_sptr.h>
 
 class bsol_distance_histogram
@@ -26,16 +28,16 @@ class bsol_distance_histogram
   bsol_distance_histogram();
   bsol_distance_histogram(int nbins, double max_val);
   bsol_distance_histogram(int nbins,
-                          vcl_vector<vsol_line_2d_sptr> const& lines);
+                          std::vector<vsol_line_2d_sptr> const& lines);
   ~bsol_distance_histogram();
   // === accessors ===
   int n_bins() const {return bin_counts_.size();}
-  vcl_vector<double>& counts() {return bin_counts_;}
-  vcl_vector<double>& values() {return bin_values_;}
-  vcl_vector<double>& weights() {return weights_;}
-  vcl_vector<double> const& counts() const {return bin_counts_;}
-  vcl_vector<double> const& values() const {return bin_values_;}
-  vcl_vector<double> const& weights() const {return weights_;}
+  std::vector<double>& counts() {return bin_counts_;}
+  std::vector<double>& values() {return bin_values_;}
+  std::vector<double>& weights() {return weights_;}
+  std::vector<double> const& counts() const {return bin_counts_;}
+  std::vector<double> const& values() const {return bin_values_;}
+  std::vector<double> const& weights() const {return weights_;}
 
   //: update the histogram
   void up_count(const double value, const double count, const double weight = 1.0);
@@ -52,7 +54,7 @@ class bsol_distance_histogram
   double max_count() const;
 
   friend
-    vcl_ostream& operator<<(vcl_ostream& os, const bsol_distance_histogram& h);
+    std::ostream& operator<<(std::ostream& os, const bsol_distance_histogram& h);
 
  private:
   //: normalize the distance values which were weighted by the line length
@@ -60,9 +62,9 @@ class bsol_distance_histogram
   //: perform a parabolic interpolation using adjacent bins.
   double interpolate_peak(int initial_peak);
   double delta_; //!< bin value interval
-  vcl_vector<double> bin_counts_;//!< histogram counts
-  vcl_vector<double> bin_values_;//!< histogram values
-  vcl_vector<double> weights_;//!< value weights
+  std::vector<double> bin_counts_;//!< histogram counts
+  std::vector<double> bin_values_;//!< histogram values
+  std::vector<double> weights_;//!< value weights
 };
 
 #endif

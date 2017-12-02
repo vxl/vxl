@@ -14,7 +14,7 @@ void test_convergence()
   //   bool converged = false;
   //   if (prev_status && current_view.regions_converged(prev_view) ) {
   //     ...
-  //     converged = vcl_abs( (new_error-old_error) / new_error ) < 1e-3;
+  //     converged = std::abs( (new_error-old_error) / new_error ) < 1e-3;
   //     ... }
   // \endcode
   // one problem that I see is: converged will always be false after the first iteration
@@ -26,7 +26,7 @@ void test_convergence()
   //   if (new_error < tolerance_/200) converged = true;
   //   else if (prev_status && current_view.regions_converged(prev_view) ) {
   //     ...
-  //     converged = vcl_abs( (new_error-old_error) / new_error ) < 1e-3;
+  //     converged = std::abs( (new_error-old_error) / new_error ) < 1e-3;
   //     ... }
   // \endcode
   // however; i'm not sure that tolerance_/200 is a good measure of convergence

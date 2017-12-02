@@ -1,4 +1,4 @@
-#include <bsta/algo/bsta_adaptive_updater.txx>
+#include <bsta/algo/bsta_adaptive_updater.hxx>
 #include <bsta/bsta_gauss_if4.h>
 
 typedef bsta_mixture_fixed<bsta_num_obs<bsta_gauss_if4>,3> mix_fix_gauss_if4_3;

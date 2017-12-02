@@ -25,7 +25,7 @@ bool bvpl_block_avg_value_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_block_avg_value_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr";
   input_types_[i++] = "double";  ////fraction [0,1] of cells used in the computation
@@ -33,7 +33,7 @@ bool bvpl_block_avg_value_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int" ; //block index in y-dimension
   input_types_[i++] = "int" ; //block index in z-dimension
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -54,12 +54,12 @@ bool bvpl_block_avg_value_process(bprb_func_process& pro)
   int block_k = pro.get_input<int>(i++);
 
   if (!scene_base){
-    vcl_cerr << "Error in bvpl_block_avg_value_process: Null error scene\n";
+    std::cerr << "Error in bvpl_block_avg_value_process: Null error scene\n";
     return false;
   }
   boxm_scene<boct_tree<short, float> >* scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (scene_base.as_pointer());
   if (!scene){
-    vcl_cerr << "Error in bvpl_block_avg_value_process: Error scene is of incorrect type\n";
+    std::cerr << "Error in bvpl_block_avg_value_process: Error scene is of incorrect type\n";
     return false;
   }
   //sum errors within block
@@ -70,8 +70,8 @@ bool bvpl_block_avg_value_process(bprb_func_process& pro)
 
   //number of samples - 10% of total number of leaf-cells
   unsigned long tree_nsamples = (unsigned long)((tree_ncells/scene_ncells)*nsamples);
-  vcl_cout << "Number of samples in  the scene " << scene_ncells << '\n'
-           << "Adding errors from " << tree_nsamples << " samples in block: " << block_i << ',' << block_j << ',' << block_k << vcl_endl;
+  std::cout << "Number of samples in  the scene " << scene_ncells << '\n'
+           << "Adding errors from " << tree_nsamples << " samples in block: " << block_i << ',' << block_j << ',' << block_k << std::endl;
   double avg_value = bvpl_average_value(scene,block_i, block_j, block_k, tree_nsamples);
 
   //store output

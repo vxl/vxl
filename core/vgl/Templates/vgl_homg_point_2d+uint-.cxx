@@ -6,5 +6,5 @@
 #endif //VCL_VC_DOTNET
 
 // Instantiation of vgl_homg_point_2d<unsigned>
-#include <vgl/vgl_homg_point_2d.txx>
+#include <vgl/vgl_homg_point_2d.hxx>
 VGL_HOMG_POINT_2D_INSTANTIATE(unsigned);

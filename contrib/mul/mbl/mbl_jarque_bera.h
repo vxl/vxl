@@ -33,7 +33,7 @@ double mbl_jarque_bera(InIt start, InIt finish)
 
   const double n = count;
   mean /= n;
-  stddev = vcl_sqrt((stddev - mean*mean*n)/(n-1));
+  stddev = std::sqrt((stddev - mean*mean*n)/(n-1));
 
 
   double S=0.0, K=0.0;

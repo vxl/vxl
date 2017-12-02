@@ -29,7 +29,7 @@ bool sdet_detect_edge_tangent_process_cons(bprb_func_process& pro)
   // process takes 2 inputs
   //input[0]: input grayscale image
   //input[1]: string indicating the output format
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
 
@@ -49,7 +49,7 @@ bool sdet_detect_edge_tangent_process_cons(bprb_func_process& pro)
   //
   // plane 2 - line coefficient c
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
@@ -62,7 +62,7 @@ bool sdet_detect_edge_tangent_process(bprb_func_process& pro)
 
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs" << std::endl;
     return false;
   }
 
@@ -72,14 +72,14 @@ bool sdet_detect_edge_tangent_process(bprb_func_process& pro)
 
   //check input validity
   if (!input_image_sptr) {
-    vcl_cout << pro.name() <<" :-- null input image\n";
+    std::cout << pro.name() <<" :-- null input image\n";
     return false;
   }
 
   vil_image_view<vxl_byte> input_image =
     *vil_convert_cast(vxl_byte(), input_image_sptr);
 
-  vcl_string out_type = pro.get_input<vcl_string>(1);
+  std::string out_type = pro.get_input<std::string>(1);
   // get parameters
   double noise_multiplier=1.5, smooth=1.5;
   bool automatic_threshold=false, junctionp=false, aggressive_junction_closure=false;
@@ -90,8 +90,8 @@ bool sdet_detect_edge_tangent_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_junctionp_, junctionp);
   pro.parameters()->get_value(param_aggressive_junction_closure_, aggressive_junction_closure);
 #if 0
-  vcl_cout << "Edge detection parameters\n";
-  pro.parameters()->print_all(vcl_cout);
+  std::cout << "Edge detection parameters\n";
+  pro.parameters()->print_all(std::cout);
 #endif
   vil_image_view<float> edge_image =
     sdet_img_edge::detect_edge_tangent(input_image,

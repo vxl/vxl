@@ -18,7 +18,9 @@
 //
 // \author Markus Meyer (meyer@mesw.de)
 
-#include <vcl_list.h>
+#include <iostream>
+#include <list>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <osl/osl_edgel_chain.h>
 
@@ -26,7 +28,7 @@ class osl_fit_circle
 {
  public:
     //: Construct from list of 2d points of double
-    osl_fit_circle(const vcl_list<vgl_point_2d<double> > &points);
+    osl_fit_circle(const std::list<vgl_point_2d<double> > &points);
 
     //: Construct from edgel chain (use only raw edge coordinates)
     osl_fit_circle(const osl_edgel_chain& chain);
@@ -52,7 +54,7 @@ class osl_fit_circle
     double avg_diff() const { return avg_diff_; }
 
  protected:
-    void calculate(const vcl_list<vgl_point_2d<double> > &points);
+    void calculate(const std::list<vgl_point_2d<double> > &points);
 
     bool error_; // error flag
     double max_diff_, avg_diff_;

@@ -221,7 +221,7 @@ public:
      *  @param inStream      The stream which contains the information.
      *  @param ixfer         The transfer syntax which was used to encode the
      *                       information in inStream.
-     *  @param glenc         Encoding type for group length; specifies what 
+     *  @param glenc         Encoding type for group length; specifies what
      *                       will be done with group length tags.
      *  @param maxReadLength Maximum read length for reading an attribute value.
      *  @return status, EC_Normal if successful, an error code otherwise
@@ -253,8 +253,8 @@ public:
      */
     virtual OFCondition writeSignatureFormat(
         DcmOutputStream & outStream,
-	const E_TransferSyntax oxfer,
-	const E_EncodingType enctype = EET_UndefinedLength);
+        const E_TransferSyntax oxfer,
+        const E_EncodingType enctype = EET_UndefinedLength);
 
     virtual OFCondition loadAllDataIntoMemory(void);
 

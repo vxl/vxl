@@ -1,4 +1,8 @@
 // This is mul/pdf1d/pdf1d_epanech_kernel_pdf_sampler.cxx
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <complex>
 #include "pdf1d_epanech_kernel_pdf_sampler.h"
 //:
 // \file
@@ -7,9 +11,7 @@
 
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_cmath.h>
-#include <vcl_complex.h>
+#include <vcl_compiler.h>
 #include <pdf1d/pdf1d_sampler.h>
 
 //=======================================================================
@@ -48,15 +50,15 @@ static const double root3 = 1.73205080756887729353;
 double pdf1d_epanech_kernel_pdf_sampler::epan_transform(double x)
 {
   // The Matlab code for the differential equation is
-  // d = dsolve('1=vcl_abs(Dy) * (3 * vcl_sqrt(5) / 20) *(1-0.2*y*y)')
+  // d = dsolve('1=std::abs(Dy) * (3 * std::sqrt(5) / 20) *(1-0.2*y*y)')
   x -= 0.5;
-  const vcl_complex<double> z(10.0 * root5 * x, 5 * vcl_sqrt(5-20*x*x));
-  const vcl_complex<double> cuberoot_z = vcl_pow(z,(1.0/3.0));
-  const vcl_complex<double> recip_cuberoot_z = 1.0/cuberoot_z;
-  const vcl_complex<double> im(0,1);
+  const std::complex<double> z(10.0 * root5 * x, 5 * std::sqrt(5-20*x*x));
+  const std::complex<double> cuberoot_z = std::pow(z,(1.0/3.0));
+  const std::complex<double> recip_cuberoot_z = 1.0/cuberoot_z;
+  const std::complex<double> im(0,1);
 
 // The imaginary terms cancel out in theory, but not necessarily numerically - strip them.
-  return vcl_real(-0.5 * cuberoot_z - 2.5 * recip_cuberoot_z -
+  return std::real(-0.5 * cuberoot_z - 2.5 * recip_cuberoot_z -
                   im * root3 / 2.0 * ( cuberoot_z - 5.0 * recip_cuberoot_z));
 }
 
@@ -124,14 +126,14 @@ void pdf1d_epanech_kernel_pdf_sampler::reseed(unsigned long seed)
 
 //=======================================================================
 
-vcl_string pdf1d_epanech_kernel_pdf_sampler::is_a() const
+std::string pdf1d_epanech_kernel_pdf_sampler::is_a() const
 {
-  return vcl_string("pdf1d_epanech_kernel_pdf_sampler");
+  return std::string("pdf1d_epanech_kernel_pdf_sampler");
 }
 
 //=======================================================================
 
-bool pdf1d_epanech_kernel_pdf_sampler::is_class(vcl_string const& s) const
+bool pdf1d_epanech_kernel_pdf_sampler::is_class(std::string const& s) const
 {
   return pdf1d_sampler::is_class(s) || s==pdf1d_epanech_kernel_pdf_sampler::is_a();
 }

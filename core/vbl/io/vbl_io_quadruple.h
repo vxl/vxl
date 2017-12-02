@@ -6,9 +6,10 @@
 // \brief   binary IO functions for vbl_quadruple<S, T, U>
 // \author  Ian Scott
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_quadruple.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Write pair to binary stream
 template <class S, class T, class U, class V>
@@ -20,6 +21,6 @@ void vsl_b_read(vsl_b_istream& s, vbl_quadruple<S, T, U, V>& v);
 
 //: Print human readable summary of object to a stream
 template <class S, class T, class U, class V>
-void vsl_print_summary(vcl_ostream & os,const vbl_quadruple<S, T, U, V> &v);
+void vsl_print_summary(std::ostream & os,const vbl_quadruple<S, T, U, V> &v);
 
 #endif // vbl_io_quadruple_h_

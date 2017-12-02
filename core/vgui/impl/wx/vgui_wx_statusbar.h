@@ -13,12 +13,13 @@
 // \endverbatim
 //=========================================================================
 
+#include <string>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 
 class wxStatusBar;
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 //: wxWidgets implementation of vgui_statusbar.
@@ -49,7 +50,7 @@ private:
   wxStatusBar*     widget_;
 
   vgui_statusbuf*  statusbuf_;
-  vcl_string       linebuffer_;
+  std::string       linebuffer_;
 };
 
 #endif // vgui_wx_statusbar_h_

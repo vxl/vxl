@@ -1,4 +1,4 @@
-#include "rgtl_sqt_base.hxx"
+#include "rgtl_sqt_base.h"
 //:
 // \file
 // Copyright 2006-2009 Brad King, Chuck Stewart
@@ -55,29 +55,29 @@
 static void ParametersToDirectionNegativeX(double u, double v, double d[3])
 {
   d[0] = -1;
-  d[1] = +vcl_tan(u * RGTL_SQT_PI_OVER_FOUR);
-  d[2] = +vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
+  d[1] = +std::tan(u * RGTL_SQT_PI_OVER_FOUR);
+  d[2] = +std::tan(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 static void DirectionToParametersNegativeX(double const d[3],
                                            double& u, double& v)
 {
-  u = vcl_atan(+d[1]/-d[0]) * RGTL_SQT_FOUR_OVER_PI;
-  v = vcl_atan(+d[2]/-d[0]) * RGTL_SQT_FOUR_OVER_PI;
+  u = std::atan(+d[1]/-d[0]) * RGTL_SQT_FOUR_OVER_PI;
+  v = std::atan(+d[2]/-d[0]) * RGTL_SQT_FOUR_OVER_PI;
 }
 
 static void PlaneNormalUNegativeX(double u, double n[3])
 {
-  n[0] = +vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
-  n[1] = +vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
+  n[0] = +std::sin(u * RGTL_SQT_PI_OVER_FOUR);
+  n[1] = +std::cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[2] = 0;
 }
 
 static void PlaneNormalVNegativeX(double v, double n[3])
 {
-  n[0] = +vcl_sin(v * RGTL_SQT_PI_OVER_FOUR);
+  n[0] = +std::sin(v * RGTL_SQT_PI_OVER_FOUR);
   n[1] = 0;
-  n[2] = +vcl_cos(v * RGTL_SQT_PI_OVER_FOUR);
+  n[2] = +std::cos(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 //----------------------------------------------------------------------------
@@ -95,29 +95,29 @@ static void PlaneNormalVNegativeX(double v, double n[3])
 static void ParametersToDirectionPositiveX(double u, double v, double d[3])
 {
   d[0] = +1;
-  d[1] = -vcl_tan(u * RGTL_SQT_PI_OVER_FOUR);
-  d[2] = vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
+  d[1] = -std::tan(u * RGTL_SQT_PI_OVER_FOUR);
+  d[2] = std::tan(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 static void DirectionToParametersPositiveX(double const d[3],
                                            double& u, double& v)
 {
-  u = vcl_atan(-d[1]/+d[0]) * RGTL_SQT_FOUR_OVER_PI;
-  v = vcl_atan(+d[2]/+d[0]) * RGTL_SQT_FOUR_OVER_PI;
+  u = std::atan(-d[1]/+d[0]) * RGTL_SQT_FOUR_OVER_PI;
+  v = std::atan(+d[2]/+d[0]) * RGTL_SQT_FOUR_OVER_PI;
 }
 
 static void PlaneNormalUPositiveX(double u, double n[3])
 {
-  n[0] = -vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
-  n[1] = -vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
+  n[0] = -std::sin(u * RGTL_SQT_PI_OVER_FOUR);
+  n[1] = -std::cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[2] = 0;
 }
 
 static void PlaneNormalVPositiveX(double v, double n[3])
 {
-  n[0] = -vcl_sin(v * RGTL_SQT_PI_OVER_FOUR);
+  n[0] = -std::sin(v * RGTL_SQT_PI_OVER_FOUR);
   n[1] = 0;
-  n[2] = +vcl_cos(v * RGTL_SQT_PI_OVER_FOUR);
+  n[2] = +std::cos(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 //----------------------------------------------------------------------------
@@ -134,30 +134,30 @@ static void PlaneNormalVPositiveX(double v, double n[3])
 //        /             \              y
 static void ParametersToDirectionNegativeY(double u, double v, double d[3])
 {
-  d[0] = -vcl_tan(u * RGTL_SQT_PI_OVER_FOUR);
+  d[0] = -std::tan(u * RGTL_SQT_PI_OVER_FOUR);
   d[1] = -1;
-  d[2] = vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
+  d[2] = std::tan(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 static void DirectionToParametersNegativeY(double const d[3],
                                            double& u, double& v)
 {
-  u = vcl_atan(-d[0]/-d[1]) * RGTL_SQT_FOUR_OVER_PI;
-  v = vcl_atan(+d[2]/-d[1]) * RGTL_SQT_FOUR_OVER_PI;
+  u = std::atan(-d[0]/-d[1]) * RGTL_SQT_FOUR_OVER_PI;
+  v = std::atan(+d[2]/-d[1]) * RGTL_SQT_FOUR_OVER_PI;
 }
 
 static void PlaneNormalUNegativeY(double u, double n[3])
 {
-  n[0] = -vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
-  n[1] = +vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
+  n[0] = -std::cos(u * RGTL_SQT_PI_OVER_FOUR);
+  n[1] = +std::sin(u * RGTL_SQT_PI_OVER_FOUR);
   n[2] = 0;
 }
 
 static void PlaneNormalVNegativeY(double v, double n[3])
 {
   n[0] = 0;
-  n[1] = +vcl_sin(v * RGTL_SQT_PI_OVER_FOUR);
-  n[2] = +vcl_cos(v * RGTL_SQT_PI_OVER_FOUR);
+  n[1] = +std::sin(v * RGTL_SQT_PI_OVER_FOUR);
+  n[2] = +std::cos(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 //----------------------------------------------------------------------------
@@ -174,30 +174,30 @@ static void PlaneNormalVNegativeY(double v, double n[3])
 //        /             \             -y
 static void ParametersToDirectionPositiveY(double u, double v, double d[3])
 {
-  d[0] = vcl_tan(u * RGTL_SQT_PI_OVER_FOUR);
+  d[0] = std::tan(u * RGTL_SQT_PI_OVER_FOUR);
   d[1] = +1;
-  d[2] = vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
+  d[2] = std::tan(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 static void DirectionToParametersPositiveY(double const d[3],
                                            double& u, double& v)
 {
-  u = vcl_atan(+d[0]/+d[1]) * RGTL_SQT_FOUR_OVER_PI;
-  v = vcl_atan(+d[2]/+d[1]) * RGTL_SQT_FOUR_OVER_PI;
+  u = std::atan(+d[0]/+d[1]) * RGTL_SQT_FOUR_OVER_PI;
+  v = std::atan(+d[2]/+d[1]) * RGTL_SQT_FOUR_OVER_PI;
 }
 
 static void PlaneNormalUPositiveY(double u, double n[3])
 {
-  n[0] = +vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
-  n[1] = -vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
+  n[0] = +std::cos(u * RGTL_SQT_PI_OVER_FOUR);
+  n[1] = -std::sin(u * RGTL_SQT_PI_OVER_FOUR);
   n[2] = 0;
 }
 
 static void PlaneNormalVPositiveY(double v, double n[3])
 {
   n[0] = 0;
-  n[1] = -vcl_sin(v * RGTL_SQT_PI_OVER_FOUR);
-  n[2] = +vcl_cos(v * RGTL_SQT_PI_OVER_FOUR);
+  n[1] = -std::sin(v * RGTL_SQT_PI_OVER_FOUR);
+  n[2] = +std::cos(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 //----------------------------------------------------------------------------
@@ -214,30 +214,30 @@ static void PlaneNormalVPositiveY(double v, double n[3])
 //        /             \              z
 static void ParametersToDirectionNegativeZ(double u, double v, double d[3])
 {
-  d[0] = vcl_tan(u * RGTL_SQT_PI_OVER_FOUR);
-  d[1] = vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
+  d[0] = std::tan(u * RGTL_SQT_PI_OVER_FOUR);
+  d[1] = std::tan(v * RGTL_SQT_PI_OVER_FOUR);
   d[2] = -1;
 }
 
 static void DirectionToParametersNegativeZ(double const d[3],
                                            double& u, double& v)
 {
-  u = vcl_atan(+d[0]/-d[2]) * RGTL_SQT_FOUR_OVER_PI;
-  v = vcl_atan(+d[1]/-d[2]) * RGTL_SQT_FOUR_OVER_PI;
+  u = std::atan(+d[0]/-d[2]) * RGTL_SQT_FOUR_OVER_PI;
+  v = std::atan(+d[1]/-d[2]) * RGTL_SQT_FOUR_OVER_PI;
 }
 
 static void PlaneNormalUNegativeZ(double u, double n[3])
 {
-  n[0] = +vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
+  n[0] = +std::cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[1] = 0;
-  n[2] = +vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
+  n[2] = +std::sin(u * RGTL_SQT_PI_OVER_FOUR);
 }
 
 static void PlaneNormalVNegativeZ(double v, double n[3])
 {
   n[0] = 0;
-  n[1] = +vcl_cos(v * RGTL_SQT_PI_OVER_FOUR);
-  n[2] = +vcl_sin(v * RGTL_SQT_PI_OVER_FOUR);
+  n[1] = +std::cos(v * RGTL_SQT_PI_OVER_FOUR);
+  n[2] = +std::sin(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 //----------------------------------------------------------------------------
@@ -254,30 +254,30 @@ static void PlaneNormalVNegativeZ(double v, double n[3])
 //        /      y      \                                    y
 static void ParametersToDirectionPositiveZ(double u, double v, double d[3])
 {
-  d[0] = vcl_tan(u * RGTL_SQT_PI_OVER_FOUR);
-  d[1] = -vcl_tan(v * RGTL_SQT_PI_OVER_FOUR);
+  d[0] = std::tan(u * RGTL_SQT_PI_OVER_FOUR);
+  d[1] = -std::tan(v * RGTL_SQT_PI_OVER_FOUR);
   d[2] = +1;
 }
 
 static void DirectionToParametersPositiveZ(double const d[3],
                                            double& u, double& v)
 {
-  u = vcl_atan(+d[0]/+d[2]) * RGTL_SQT_FOUR_OVER_PI;
-  v = vcl_atan(-d[1]/+d[2]) * RGTL_SQT_FOUR_OVER_PI;
+  u = std::atan(+d[0]/+d[2]) * RGTL_SQT_FOUR_OVER_PI;
+  v = std::atan(-d[1]/+d[2]) * RGTL_SQT_FOUR_OVER_PI;
 }
 
 static void PlaneNormalUPositiveZ(double u, double n[3])
 {
-  n[0] = +vcl_cos(u * RGTL_SQT_PI_OVER_FOUR);
+  n[0] = +std::cos(u * RGTL_SQT_PI_OVER_FOUR);
   n[1] = 0;
-  n[2] = -vcl_sin(u * RGTL_SQT_PI_OVER_FOUR);
+  n[2] = -std::sin(u * RGTL_SQT_PI_OVER_FOUR);
 }
 
 static void PlaneNormalVPositiveZ(double v, double n[3])
 {
   n[0] = 0;
-  n[1] = -vcl_cos(v * RGTL_SQT_PI_OVER_FOUR);
-  n[2] = -vcl_sin(v * RGTL_SQT_PI_OVER_FOUR);
+  n[1] = -std::cos(v * RGTL_SQT_PI_OVER_FOUR);
+  n[2] = -std::sin(v * RGTL_SQT_PI_OVER_FOUR);
 }
 
 //----------------------------------------------------------------------------
@@ -285,7 +285,7 @@ rgtl_sqt_base::face_index_type
 rgtl_sqt_base::direction_to_face(double const d[3])
 {
   unsigned int max_a = 0;
-  double mag_d[3] = {vcl_fabs(d[0]), vcl_fabs(d[1]), vcl_fabs(d[2])};
+  double mag_d[3] = {std::fabs(d[0]), std::fabs(d[1]), std::fabs(d[2])};
   if (mag_d[1] > mag_d[max_a]) { max_a = 1; }
   if (mag_d[2] > mag_d[max_a]) { max_a = 2; }
   return face_index_type((max_a<<1) | (d[max_a] >= 0? 1:0));

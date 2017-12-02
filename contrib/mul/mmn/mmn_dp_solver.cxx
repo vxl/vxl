@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cstdlib>
+#include <sstream>
 #include "mmn_dp_solver.h"
 //:
 // \file
@@ -7,8 +10,7 @@
 #include <mmn/mmn_order_cost.h>
 #include <mmn/mmn_graph_rep1.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -20,10 +22,10 @@ mmn_dp_solver::mmn_dp_solver()
 
 //: Input the arcs that define the graph
 void mmn_dp_solver::set_arcs(unsigned num_nodes,
-                             const vcl_vector<mmn_arc>& arcs)
+                             const std::vector<mmn_arc>& arcs)
 {
   // Copy in arcs, and ensure ordering v1<v2
-  vcl_vector<mmn_arc> ordered_arcs(arcs.size());
+  std::vector<mmn_arc> ordered_arcs(arcs.size());
   for (unsigned i=0;i<arcs.size();++i)
   {
     if (arcs[i].v1<arcs[i].v2)
@@ -34,14 +36,14 @@ void mmn_dp_solver::set_arcs(unsigned num_nodes,
 
   mmn_graph_rep1 graph;
   graph.build(num_nodes,ordered_arcs);
-  vcl_vector<mmn_dependancy> deps;
+  std::vector<mmn_dependancy> deps;
   if (!graph.compute_dependancies(deps,0))
   {
-    vcl_cerr<<"Graph cannot be decomposed - too complex.\n"
+    std::cerr<<"Graph cannot be decomposed - too complex.\n"
             <<"Arc list: ";
-    for (unsigned i=0;i<arcs.size();++i) vcl_cout<<arcs[i];
-    vcl_cerr<<'\n';
-    vcl_abort();
+    for (unsigned i=0;i<arcs.size();++i) std::cout<<arcs[i];
+    std::cerr<<'\n';
+    std::abort();
   }
 
   set_dependancies(deps,num_nodes,graph.max_n_arcs());
@@ -56,7 +58,7 @@ unsigned mmn_dp_solver::root() const
 }
 
 //: Define dependencies
-void mmn_dp_solver::set_dependancies(const vcl_vector<mmn_dependancy>& deps,
+void mmn_dp_solver::set_dependancies(const std::vector<mmn_dependancy>& deps,
                                      unsigned n_nodes, unsigned max_n_arcs)
 {
   deps_ = deps;
@@ -72,7 +74,7 @@ void mmn_dp_solver::process_dep1(const mmn_dependancy& dep)
   const vnl_vector<double>& nc0 = nc_[dep.v0];
   vnl_vector<double>& nc1 = nc_[dep.v1];
   vnl_matrix<double>& p = pc_[dep.arc1];
-  vcl_vector<unsigned>& i0 = index1_[dep.v0];
+  std::vector<unsigned>& i0 = index1_[dep.v0];
 
   // Check sizes of matrices
   if (dep.v0<dep.v1)
@@ -84,10 +86,10 @@ void mmn_dp_solver::process_dep1(const mmn_dependancy& dep)
   {
     if (p.rows()!=nc1.size())
     {
-      vcl_cerr<<"p.rows()="<<p.rows()<<"p.cols()="<<p.cols()
+      std::cerr<<"p.rows()="<<p.rows()<<"p.cols()="<<p.cols()
               <<" nc0.size()="<<nc0.size()
-              <<" nc1.size()="<<nc1.size()<<vcl_endl
-              <<"dep: "<<dep<<vcl_endl;
+              <<" nc1.size()="<<nc1.size()<<std::endl
+              <<"dep: "<<dep<<std::endl;
     }
     assert(p.rows()==nc1.size());
     assert(p.cols()==nc0.size());
@@ -198,7 +200,7 @@ void mmn_dp_solver::process_dep2t(const mmn_dependancy& dep,
   // Create a re-ordered view of tri_cost, so we can use tc(i1,i2,i3)
   vil_image_view<double> tc=mmn_unorder_cost(tri_cost,
                                              dep.v0,dep.v1,dep.v2);
-  vcl_ptrdiff_t tc_step0=tc.istep();
+  std::ptrdiff_t tc_step0=tc.istep();
 
   if (pa12.size()==0)
   {
@@ -247,9 +249,9 @@ void mmn_dp_solver::process_dep2t(const mmn_dependancy& dep,
 
 
 double mmn_dp_solver::solve(
-                 const vcl_vector<vnl_vector<double> >& node_cost,
-                 const vcl_vector<vnl_matrix<double> >& pair_cost,
-                 vcl_vector<unsigned>& x)
+                 const std::vector<vnl_vector<double> >& node_cost,
+                 const std::vector<vnl_matrix<double> >& pair_cost,
+                 std::vector<unsigned>& x)
 {
   nc_ = node_cost;
   for (unsigned i=0;i<pair_cost.size();++i) pc_[i]=pair_cost[i];
@@ -257,12 +259,12 @@ double mmn_dp_solver::solve(
 
   if (deps_.size()==0)
   {
-    vcl_cerr<<"No dependencies.\n";
+    std::cerr<<"No dependencies.\n";
     return 999.99;
   }
 
   // Process dependencies in given order
-  vcl_vector<mmn_dependancy>::const_iterator dep=deps_.begin();
+  std::vector<mmn_dependancy>::const_iterator dep=deps_.begin();
   for (;dep!=deps_.end();dep++)
   {
     if (dep->n_dep==1) process_dep1(*dep);
@@ -280,10 +282,10 @@ double mmn_dp_solver::solve(
 }
 
 double mmn_dp_solver::solve(
-                 const vcl_vector<vnl_vector<double> >& node_cost,
-                 const vcl_vector<vnl_matrix<double> >& pair_cost,
-                 const vcl_vector<vil_image_view<double> >& tri_cost,
-                 vcl_vector<unsigned>& x)
+                 const std::vector<vnl_vector<double> >& node_cost,
+                 const std::vector<vnl_matrix<double> >& pair_cost,
+                 const std::vector<vil_image_view<double> >& tri_cost,
+                 std::vector<unsigned>& x)
 {
   nc_ = node_cost;
   for (unsigned i=0;i<pair_cost.size();++i) pc_[i]=pair_cost[i];
@@ -291,12 +293,12 @@ double mmn_dp_solver::solve(
 
   if (deps_.size()==0)
   {
-    vcl_cerr<<"No dependencies.\n";
+    std::cerr<<"No dependencies.\n";
     return 999.99;
   }
 
   // Process dependencies in given order
-  vcl_vector<mmn_dependancy>::const_iterator dep=deps_.begin();
+  std::vector<mmn_dependancy>::const_iterator dep=deps_.begin();
   for (;dep!=deps_.end();dep++)
   {
     if (dep->n_dep==1) process_dep1(*dep);
@@ -325,7 +327,7 @@ double mmn_dp_solver::solve(
 
 //: Compute optimal values for x[i] given that root node is root_value
 //  Assumes that solve() has been already called.
-void mmn_dp_solver::backtrace(unsigned root_value,vcl_vector<unsigned>& x)
+void mmn_dp_solver::backtrace(unsigned root_value,std::vector<unsigned>& x)
 {
   x.resize(nc_.size());
   x[root()]=root_value;
@@ -349,11 +351,11 @@ void mmn_dp_solver::backtrace(unsigned root_value,vcl_vector<unsigned>& x)
 // Method: set_from_stream
 //=======================================================================
 //: Initialise from a string stream
-bool mmn_dp_solver::set_from_stream(vcl_istream &is)
+bool mmn_dp_solver::set_from_stream(std::istream &is)
 {
   // Cycle through stream and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   // No properties expected.
@@ -378,9 +380,9 @@ short mmn_dp_solver::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mmn_dp_solver::is_a() const
+std::string mmn_dp_solver::is_a() const
 {
-  return vcl_string("mmn_dp_solver");
+  return std::string("mmn_dp_solver");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -393,7 +395,7 @@ mmn_solver* mmn_dp_solver::clone() const
 // Method: print
 //=======================================================================
 
-void mmn_dp_solver::print_summary(vcl_ostream& /*os*/) const
+void mmn_dp_solver::print_summary(std::ostream& /*os*/) const
 {
 }
 
@@ -427,9 +429,9 @@ void mmn_dp_solver::b_read(vsl_b_istream& bfs)
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,deps_[i]);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

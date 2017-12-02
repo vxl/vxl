@@ -1,15 +1,16 @@
+#include <string>
+#include <vector>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdt/vpdt_update_gaussian.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class T>
-void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
+void test_update_gaussian_type(T epsilon, const std::string& type_name)
 {
   // an arbitrary collection of data points
-  vcl_vector<vnl_vector_fixed<T,3> > data;
+  std::vector<vnl_vector_fixed<T,3> > data;
   data.push_back(vnl_vector_fixed<T,3>(1,1,1));
   data.push_back(vnl_vector_fixed<T,3>(2,2,2));
   data.push_back(vnl_vector_fixed<T,3>(3,1,4));
@@ -17,14 +18,14 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
   data.push_back(vnl_vector_fixed<T,3>(-10,5,0));
 
   // compute the incremental means
-  vcl_vector<vnl_vector_fixed<T,3> > means(data.size());
+  std::vector<vnl_vector_fixed<T,3> > means(data.size());
   vnl_vector_fixed<T,3> sum(T(0));
   // compute the incremental variances/covariances
-  vcl_vector<T > vars(data.size());
+  std::vector<T > vars(data.size());
   T vsum = T(0);
-  vcl_vector<vnl_vector_fixed<T,3> > diagvars(data.size());
+  std::vector<vnl_vector_fixed<T,3> > diagvars(data.size());
   vnl_vector_fixed<T,3> dvsum(T(0));
-  vcl_vector<vnl_matrix_fixed<T,3,3> > covars(data.size());
+  std::vector<vnl_matrix_fixed<T,3,3> > covars(data.size());
   vnl_matrix_fixed<T,3,3> cvsum(T(0));
   for (unsigned int i=0; i<data.size(); ++i){
     sum += data[i];
@@ -43,7 +44,7 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
   const T min_var = T(0.01);
 
   // test the spherical gaussian updating
-  vcl_cout <<"================= vpdt_gaussian (spherical) =================\n";
+  std::cout <<"================= vpdt_gaussian (spherical) =================\n";
   {
     vpdt_gaussian<vnl_vector_fixed<T,3>, T> gauss3;
     bool test_mean = true;
@@ -54,13 +55,13 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
       T mean_diff = (gauss3.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if (mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<vcl_endl;
+        std::cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<std::endl;
 
       T var_diff = gauss3.covar - vars[i];
       test_vars = test_vars && (var_diff < epsilon);
       if (var_diff >= epsilon)
-        vcl_cout << "variance should be "<<vars[i]
-                 <<" is "<<gauss3.covar<<" difference is "<<var_diff<<vcl_endl;
+        std::cout << "variance should be "<<vars[i]
+                 <<" is "<<gauss3.covar<<" difference is "<<var_diff<<std::endl;
     }
     TEST(("sphere mean update <"+type_name+"> fixed").c_str(), test_mean, true);
     TEST(("sphere variance update <"+type_name+"> fixed").c_str(), test_vars, true);
@@ -80,13 +81,13 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
       T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if (mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<vcl_endl;
+        std::cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<std::endl;
 
       T var_diff = gauss.covar - vars[i];
       test_vars = test_vars && (var_diff < epsilon);
       if (var_diff >= epsilon)
-        vcl_cout << "variance should be "<<vars[i]
-                 <<" is "<<gauss.covar<<" difference is "<<var_diff<<vcl_endl;
+        std::cout << "variance should be "<<vars[i]
+                 <<" is "<<gauss.covar<<" difference is "<<var_diff<<std::endl;
     }
     TEST(("sphere mean update <"+type_name+"> variable").c_str(), test_mean, true);
     TEST(("sphere variance update <"+type_name+"> variable").c_str(), test_vars, true);
@@ -99,7 +100,7 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
   }
 
   // test the independent gaussian updating
-  vcl_cout <<"================ vpdt_gaussian (independent) ================\n";
+  std::cout <<"================ vpdt_gaussian (independent) ================\n";
   {
     vpdt_gaussian<vnl_vector_fixed<T,3>, vnl_vector_fixed<T,3> > gauss3;
     bool test_mean = true;
@@ -110,13 +111,13 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
       T mean_diff = (gauss3.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if (mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<vcl_endl;
+        std::cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<std::endl;
 
       T var_diff = (gauss3.covar - diagvars[i]).inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
       if (var_diff >= epsilon)
-        vcl_cout << "variance should be "<<diagvars[i]
-                 <<" is "<<gauss3.covar<<" difference is "<<var_diff<<vcl_endl;
+        std::cout << "variance should be "<<diagvars[i]
+                 <<" is "<<gauss3.covar<<" difference is "<<var_diff<<std::endl;
     }
     TEST(("independent mean update <"+type_name+"> fixed").c_str(), test_mean, true);
     TEST(("independent variance update <"+type_name+"> fixed").c_str(), test_vars, true);
@@ -137,13 +138,13 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
       T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if (mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<vcl_endl;
+        std::cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<std::endl;
 
       T var_diff = (gauss.covar - diagvars[i]).inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
       if (var_diff >= epsilon)
-        vcl_cout << "variance should be "<<diagvars[i]
-                 <<" is "<<gauss.covar<<" difference is "<<var_diff<<vcl_endl;
+        std::cout << "variance should be "<<diagvars[i]
+                 <<" is "<<gauss.covar<<" difference is "<<var_diff<<std::endl;
     }
     TEST(("independent mean update <"+type_name+"> variable").c_str(), test_mean, true);
     TEST(("independent variance update <"+type_name+"> variable").c_str(), test_vars, true);
@@ -156,7 +157,7 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
   }
 
   // test the full generality gaussian updating
-  vcl_cout <<"================= vpdt_gaussian (general) =================\n";
+  std::cout <<"================= vpdt_gaussian (general) =================\n";
   {
     vpdt_gaussian<vnl_vector_fixed<T,3> > gauss3;
     bool test_mean = true;
@@ -167,16 +168,16 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
       T mean_diff = (gauss3.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if (mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<vcl_endl;
+        std::cout << "mean should be "<<means[i]<<" is "<<gauss3.mean<<std::endl;
 
       vnl_matrix_fixed<T,3,3> covariance;
       gauss3.compute_covar(covariance);
       T var_diff = (covariance - covars[i]).array_inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
       if (var_diff >= epsilon)
-        vcl_cout << "covariance should be\n"<<covars[i]
+        std::cout << "covariance should be\n"<<covars[i]
                  <<"covariance is\n"<<covariance
-                 <<"difference is "<<var_diff<<vcl_endl;
+                 <<"difference is "<<var_diff<<std::endl;
     }
     TEST(("general mean update <"+type_name+"> fixed").c_str(), test_mean, true);
     TEST(("general covariance update <"+type_name+"> fixed").c_str(), test_vars, true);
@@ -197,16 +198,16 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
       T mean_diff = (gauss.mean - means[i]).inf_norm();
       test_mean = test_mean && (mean_diff < epsilon);
       if (mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<vcl_endl;
+        std::cout << "mean should be "<<means[i]<<" is "<<gauss.mean<<std::endl;
 
       vnl_matrix_fixed<T,3,3> covariance;
       gauss.compute_covar(covariance);
       T var_diff = (covariance - covars[i]).array_inf_norm();
       test_vars = test_vars && (var_diff < epsilon);
       if (var_diff >= epsilon)
-        vcl_cout << "covariance should be\n"<<covars[i]
+        std::cout << "covariance should be\n"<<covars[i]
                  <<"covariance is\n"<<covariance
-                 <<"difference is "<<var_diff<<vcl_endl;
+                 <<"difference is "<<var_diff<<std::endl;
     }
     TEST(("general mean update <"+type_name+"> variable").c_str(), test_mean, true);
     TEST(("general covariance update <"+type_name+"> variable").c_str(), test_vars, true);
@@ -219,7 +220,7 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
   }
 
   // test scalar gaussian updating
-  vcl_cout <<"================= vpdt_gaussian (scalar) =================\n";
+  std::cout <<"================= vpdt_gaussian (scalar) =================\n";
   {
     vpdt_gaussian<T> gauss1;
     bool test_mean = true;
@@ -230,12 +231,12 @@ void test_update_gaussian_type(T epsilon, const vcl_string& type_name)
       T mean_diff = gauss1.mean - means[i][0];
       test_mean = test_mean && (mean_diff < epsilon);
       if (mean_diff >= epsilon)
-        vcl_cout << "mean should be "<<means[i][0]<<" is "<<gauss1.mean<<vcl_endl;
+        std::cout << "mean should be "<<means[i][0]<<" is "<<gauss1.mean<<std::endl;
 
       T var_diff = gauss1.covar - diagvars[i][0];
       test_vars = test_vars && (var_diff < epsilon);
       if (var_diff >= epsilon)
-        vcl_cout << "covariance should be "<<diagvars[i][0]<<" is "<<gauss1.covar<<vcl_endl;
+        std::cout << "covariance should be "<<diagvars[i][0]<<" is "<<gauss1.covar<<std::endl;
     }
     TEST(("scalar mean update <"+type_name+">").c_str(), test_mean, true);
     TEST(("scalar covariance update <"+type_name+">").c_str(), test_vars, true);

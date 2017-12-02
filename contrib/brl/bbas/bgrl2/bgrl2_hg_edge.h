@@ -11,9 +11,11 @@
 //   Ozge C. Ozcanli 11/15/08  Moved up to vxl
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "bgrl2_edge.h"
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 class bgrl2_hg_vertex;
@@ -26,7 +28,7 @@ class bgrl2_hg_edge // : public bgrl2_edge
   //: connecting_vertices_[0] is the starting vertex, [1] the ending vertex.
   bgrl2_hg_vertex*                connecting_vertices_[2];
 
-  vcl_vector<bgrl2_hg_hyperedge*> connecting_hyperedges_;
+  std::vector<bgrl2_hg_hyperedge*> connecting_hyperedges_;
 
  public:
   int id() const {
@@ -63,7 +65,7 @@ class bgrl2_hg_edge // : public bgrl2_edge
     assert (i<connecting_hyperedges_.size());
     return connecting_hyperedges_[i];
   }
-  vcl_vector<bgrl2_hg_hyperedge*>& connecting_hyperedges() {
+  std::vector<bgrl2_hg_hyperedge*>& connecting_hyperedges() {
     return connecting_hyperedges_;
   }
 
@@ -75,14 +77,14 @@ class bgrl2_hg_edge // : public bgrl2_edge
   }
   void disconnect_vertex (int i) {
     assert (i==0 || i==1);
-    connecting_vertices_[i] = NULL;
+    connecting_vertices_[i] = VXL_NULLPTR;
   }
 
   void connect_hyperedge (bgrl2_hg_hyperedge* hyperedge) {
     connecting_hyperedges_.push_back (hyperedge);
   }
   bool disconnect_hyperedge (bgrl2_hg_hyperedge* hyperedge) {
-    vcl_vector<bgrl2_hg_hyperedge*>::iterator it = connecting_hyperedges_.begin();
+    std::vector<bgrl2_hg_hyperedge*>::iterator it = connecting_hyperedges_.begin();
     for (; it != connecting_hyperedges_.end(); it++) {
       bgrl2_hg_hyperedge* he = (*it);
       if (he == hyperedge) { //found it
@@ -98,8 +100,8 @@ class bgrl2_hg_edge // : public bgrl2_edge
 
   bgrl2_hg_edge ()
   {
-    connecting_vertices_[0] = NULL;
-    connecting_vertices_[1] = NULL;
+    connecting_vertices_[0] = VXL_NULLPTR;
+    connecting_vertices_[1] = VXL_NULLPTR;
   }
 
   ~bgrl2_hg_edge ()

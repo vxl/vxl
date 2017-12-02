@@ -6,8 +6,10 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include <vcl_vector.h>
-#include <vcl_cstddef.h>
+#include <vector>
+#include <iostream>
+#include <cstddef>
+#include <vcl_compiler.h>
 
 //: A collection of objects
 //
@@ -29,7 +31,7 @@ public:
   push_back( T const& item );
 
   //: The number of match sets in the collection.
-  vcl_size_t
+  std::size_t
   size() const;
 
   //:
@@ -42,18 +44,18 @@ public:
   void
   clear();
 
-  //: fill current set 
+  //: fill current set
   void fill( T const& item );
-  
+
   //: Same idea as std::vector::resize()
   void
   resize( unsigned n );
 
   //: is it an empty set?
   bool empty() const;
-  
+
 private:
-  vcl_vector< T > data_;
+  std::vector< T > data_;
 };
 
 #endif // rgrl_set_of_h_

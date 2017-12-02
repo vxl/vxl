@@ -3,11 +3,11 @@ option(BUILD_DOCUMENTATION
 
 # Dummy stubs to avoid BUILD_DOCUMENTATION ocnditionals around calls.
 function(doxygen_add_book)
-endfunction(doxygen_add_book)
+endfunction()
 function(doxygen_add_package)
-endfunction(doxygen_add_package)
+endfunction()
 function(doxygen_add_library)
-endfunction(doxygen_add_library)
+endfunction()
 
 if(BUILD_DOCUMENTATION)
   #-------------------------------------------------------------------
@@ -32,7 +32,7 @@ if(BUILD_DOCUMENTATION)
         "    \"${_description}\")\n"
         )
     endif()
-  endfunction(doxygen_add_book)
+  endfunction()
 
   # doxygen_add_package(<package> <description>)
   #
@@ -50,7 +50,7 @@ if(BUILD_DOCUMENTATION)
       "set(DOXYGEN_PACKAGE_LIST \${DOXYGEN_PACKAGE_LIST} ${_package})\n"
       "set(DOXYGEN_${packname}_DESCRIPTION \"${_description}\")\n"
       )
-  endfunction(doxygen_add_package)
+  endfunction()
 
   # doxygen_add_library(<lib>
   #                     [DEPENDS <dep1> <dep2> ...]
@@ -117,7 +117,7 @@ if(BUILD_DOCUMENTATION)
       "set(DOXYGEN_${packname}_LIBRARY_LIST\n"
       "  \${DOXYGEN_${packname}_LIBRARY_LIST} ${library})\n"
       )
-  endfunction(doxygen_add_library)
+  endfunction()
 
   #-------------------------------------------------------------------
   # find packages needed
@@ -156,7 +156,7 @@ if(BUILD_DOCUMENTATION)
   get_filename_component(DOXYGEN_SCRIPT_DIR
     "${CMAKE_CURRENT_LIST_FILE}" PATH
     )
-  set(DOXYGEN_SOURCE_DIR   "${CMAKE_SOURCE_DIR}")
+  set(DOXYGEN_SOURCE_DIR   "${VXL_ROOT_SOURCE_DIR}")
   set(DOXYGEN_INPUT_FILTER "${DOXYGEN_SCRIPT_DIR}/vxl_doxy.pl")
   set(DOXYGEN_STYLESHEET) # FIXME: This is not really used so far...
   if(DOXYGEN_DOT_FOUND)
@@ -164,10 +164,10 @@ if(BUILD_DOCUMENTATION)
       "Use graphviz to generate class diagrams" ON)
     if(DOXYGEN_USE_GRAPHVIZ)
       set(DOXYGEN_USE_DOT YES)
-    else(DOXYGEN_USE_GRAPHVIZ)
+    else()
       set(DOXYGEN_USE_DOT NO)
-    endif(DOXYGEN_USE_GRAPHVIZ)
-  endif(DOXYGEN_DOT_FOUND)
+    endif()
+  endif()
 
   # make configuration loadable when running build_doxygen_doc target
   file(WRITE "${CMAKE_BINARY_DIR}/doxygen_configuration.cmake"
@@ -242,7 +242,7 @@ if(BUILD_DOCUMENTATION)
         "${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake"
         "${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake"
      )
-  endif(CMAKE_MINIMUM_REQUIRED_VERSION GREATER 2.6.3)
+  endif()
 
   add_custom_target(build_doxygen_doc
     ${CMAKE_COMMAND} -P "${DOXYGEN_SCRIPT_DIR}/doxygen_makeall.cmake"
@@ -252,4 +252,4 @@ if(BUILD_DOCUMENTATION)
     ${doxygen_sources}
     )
 
-endif(BUILD_DOCUMENTATION)
+endif()

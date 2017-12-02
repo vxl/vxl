@@ -23,27 +23,27 @@
 class volm_conf_2d_indexer : public volm_conf_indexer
 {
 public:
-  static vcl_string name_;
+  static std::string name_;
   // ==================== constructor =======================
 
   //: default constructor
   volm_conf_2d_indexer() : radius_(0.0), land_map_root_(0) { land_map_leaves_.clear(); }
   //: constructor by giving out_put folder, land map index folder and radius
-  volm_conf_2d_indexer(double const& radius, vcl_string const& out_folder, vcl_string const& land_map_folder, unsigned const& tile_id);
-  
+  volm_conf_2d_indexer(double const& radius, std::string const& out_folder, std::string const& land_map_folder, unsigned const& tile_id);
+
   ~volm_conf_2d_indexer() {}
 
   // ======================= access =========================
   double radius()                                      const { return radius_; }
   double radius_in_degree()                            const { return radius_in_degree_; }
-  vcl_string land_map_folder()                         const { return land_map_folder_; }
+  std::string land_map_folder()                         const { return land_map_folder_; }
   bvgl_2d_geo_index_node_sptr land_map_root()          const { return land_map_root_; }
-  vcl_vector<bvgl_2d_geo_index_node_sptr>& land_map_leaves() { return land_map_leaves_; }
+  std::vector<bvgl_2d_geo_index_node_sptr>& land_map_leaves() { return land_map_leaves_; }
 
   // ======================= method =========================
 
   //: return the name of the indexer
-  virtual vcl_string get_index_name() const { return name_; }
+  virtual std::string get_index_name() const { return name_; }
 
   //: generate parameter files for different indexer
   virtual bool write_params_file();
@@ -53,7 +53,7 @@ public:
   virtual bool get_next();
 
   //: function to create index for a location
-  virtual bool extract(double const& lon, double const& lat, double const& elev, vcl_vector<volm_conf_object>& values);
+  virtual bool extract(double const& lon, double const& lat, double const& elev, std::vector<volm_conf_object>& values);
 
 private:
   //: search radius
@@ -63,10 +63,10 @@ private:
   //: square value of radius
   double square_radius_;
   //: land map folder
-  vcl_string land_map_folder_;
+  std::string land_map_folder_;
   //: land map indexer
   bvgl_2d_geo_index_node_sptr land_map_root_;
-  vcl_vector<bvgl_2d_geo_index_node_sptr> land_map_leaves_;
+  std::vector<bvgl_2d_geo_index_node_sptr> land_map_leaves_;
   //: function to calculate the minimum distance form a rectangular region to a points
   double min_dist_from_box_to_pt(vpgl_lvcs lvcs, vgl_box_2d<double> const& box, double const& lon, double const& lat);
 

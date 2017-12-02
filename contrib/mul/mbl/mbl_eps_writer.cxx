@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "mbl_eps_writer.h"
 //:
 // \file
@@ -6,7 +8,7 @@
 
 #include <vil/vil_plane.h>
 #include <vil/vil_crop.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -52,7 +54,7 @@ void mbl_eps_writer::set_rgb(double r, double g, double b)
 //  Valid options include black,white,grey,red,green,blue,
 //  cyan,yellow.  Note: Probably need a tidy map thing to
 //  do this properly.  Sets to grey if colour not known.
-void mbl_eps_writer::set_colour(const vcl_string& colour_name)
+void mbl_eps_writer::set_colour(const std::string& colour_name)
 {
   if (colour_name=="black") { set_grey_shade(0.0); return; }
   if (colour_name=="white") { set_grey_shade(1.0); return; }
@@ -85,7 +87,7 @@ void mbl_eps_writer::set_scaling(double sx, double sy)
 //: Open file and write header
 bool mbl_eps_writer::open(const char* path, double nx, double ny)
 {
-  ofs_.open(path,vcl_ios_out);
+  ofs_.open(path,std::ios::out);
   if (!ofs_) return false;
 
   ofs_<<"%!PS-Adobe-1.0\n"
@@ -139,7 +141,7 @@ void mbl_eps_writer::draw_circle(const vgl_point_2d<double>& p, double r)
 {
   ofs_<<"newpath\n\n"
       <<sx_*p.x()<<' '<<ny_-sy_*p.y()<<' '<<sx_*r<<" 0 360 arc CP\n\n"
-      <<"stroke"<<vcl_endl;
+      <<"stroke"<<std::endl;
 }
 
 //: Draws disk of radius r around p
@@ -147,7 +149,7 @@ void mbl_eps_writer::draw_disk(const vgl_point_2d<double>& p, double r)
 {
   ofs_<<"newpath\n"
       <<sx_*p.x()<<' '<<ny_-sy_*p.y()<<' '<<sx_*r<<" 0 360 arc CP fill\n"
-      <<"stroke"<<vcl_endl;
+      <<"stroke"<<std::endl;
 }
 
 //: Draws line segment from p1 to p2
@@ -187,7 +189,7 @@ void mbl_eps_writer::draw_box(double x, double y, double w, double h, bool fille
 //: Draws polygon connecting points.
 //  If closed, then adds line joining last to first point.
 //  If filled, then fills with current colour/greyshade.
-void mbl_eps_writer::draw_polygon(const vcl_vector<vgl_point_2d<double> >& pts,
+void mbl_eps_writer::draw_polygon(const std::vector<vgl_point_2d<double> >& pts,
                                   bool closed, bool filled)
 {
   if (pts.size()<2) return;
@@ -205,7 +207,7 @@ void mbl_eps_writer::draw_polygon(const vcl_vector<vgl_point_2d<double> >& pts,
 
 
 //: Writes first plane of image in hex format to os
-void mbl_eps_writer::write_image_data(vcl_ostream& os,
+void mbl_eps_writer::write_image_data(std::ostream& os,
                                       const vil_image_view<vxl_byte>& image)
 {
   unsigned ni=image.ni(),nj=image.nj();
@@ -215,12 +217,12 @@ void mbl_eps_writer::write_image_data(vcl_ostream& os,
     // Write each row
     for (unsigned i=0;i<ni;++i)
     {
-      os<<vcl_hex<<int(image(i,j))/16<<int(image(i,j))%16;
+      os<<std::hex<<int(image(i,j))/16<<int(image(i,j))%16;
     }
-    os<<vcl_endl;
+    os<<std::endl;
   }
   os<<">}\n"
-    <<vcl_dec;  // Ensure returns to decimal
+    <<std::dec;  // Ensure returns to decimal
 }
 
 void mbl_eps_writer::draw_image(const vil_image_view<vxl_byte>& image,
@@ -242,8 +244,8 @@ void mbl_eps_writer::draw_image(const vil_image_view<vxl_byte>& image,
   for (unsigned j=0;j<nj_blocks;++j)
     for (unsigned i=0;i<ni_blocks;++i)
     {
-      unsigned wi=vcl_min(max_w,ni-(i*max_w));
-      unsigned wj=vcl_min(max_w,nj-(j*max_w));
+      unsigned wi=std::min(max_w,ni-(i*max_w));
+      unsigned wj=std::min(max_w,nj-(j*max_w));
       vil_image_view<vxl_byte> cropped=vil_crop(image,i*max_w,wi,j*max_w,wj);
       double tx1=tx+i*max_w*pixel_width_x;
       double ty1=ty+j*max_w*pixel_width_y;
@@ -314,5 +316,5 @@ void mbl_eps_writer::draw_image_block(const vil_image_view<vxl_byte>& image,
   if (image.nplanes()==3)
     draw_rgb_image_block(image,tx,ty,pixel_width_x,pixel_width_y);
   else
-    vcl_cerr<<"mbl_eps_writer::draw_image_block() Can't cope with image."<<vcl_endl;
+    std::cerr<<"mbl_eps_writer::draw_image_block() Can't cope with image."<<std::endl;
 }

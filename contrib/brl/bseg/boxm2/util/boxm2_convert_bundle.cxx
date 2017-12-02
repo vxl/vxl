@@ -13,9 +13,9 @@
 
 //: Main boxm2_convert_bundle function
 //  Takes in bundle.out file and image directory that created img_dir
-void boxm2_util_convert_bundle (vcl_string bundle_file,
-                                vcl_string img_dir,
-                                vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams,
+void boxm2_util_convert_bundle (std::string bundle_file,
+                                std::string img_dir,
+                                std::map<std::string, vpgl_perspective_camera<double>* >& cams,
                                 vgl_box_3d<double>& bbox,
                                 double& resolution)
 {
@@ -26,27 +26,27 @@ void boxm2_util_convert_bundle (vcl_string bundle_file,
 }
 
 // reads bundler file and populates list of cameras, and a scene bounding box
-boxm2_convert_bundle::boxm2_convert_bundle(vcl_string bundle_file, vcl_string img_dir)
+boxm2_convert_bundle::boxm2_convert_bundle(std::string bundle_file, std::string img_dir)
 {
   img_dir_ = img_dir;
   bundle_file_ = bundle_file;
 
   // open the bundler file
-  vcl_ifstream bfile( bundle_file.c_str() );
+  std::ifstream bfile( bundle_file.c_str() );
   if (!bfile) {
-    vcl_cout<<"boxm2_convert_bundle::Error Opening Bundler output file"<<vcl_endl;
+    std::cout<<"boxm2_convert_bundle::Error Opening Bundler output file"<<std::endl;
     return;
   }
   // verify image dir
   if (!vul_file::is_directory(img_dir.c_str()))
   {
-    vcl_cout<<"boxm2_convert_bundle::Image directory does not exist"<<vcl_endl;
+    std::cout<<"boxm2_convert_bundle::Image directory does not exist"<<std::endl;
     return;
   }
   //image list istream
   vidl_image_list_istream imgstream(img_dir_+"/*");
   if (!imgstream.is_open()) {
-    vcl_cout<<"Invalid image stream"<<vcl_endl;
+    std::cout<<"Invalid image stream"<<std::endl;
     return;
   }
   // get image size/principal point
@@ -78,17 +78,17 @@ boxm2_convert_bundle::boxm2_convert_bundle(vcl_string bundle_file, vcl_string im
   for (unsigned i = 0; i < num_cams; ++i) {
     if ( !bad_cams_.count(i) ) {
       imgstream.seek_frame(i);
-      vcl_string path = imgstream.current_path();
+      std::string path = imgstream.current_path();
       CamType* cam = new CamType(cams_[i]);
       final_cams_[path] = cam;
-      //vcl_cout<<"Final cam: "<<path<<vcl_endl;
+      //std::cout<<"Final cam: "<<path<<std::endl;
     }
   }//end camera write
 
   //------------------------------------------------------------------------
   // Save calc bounding box
   //------------------------------------------------------------------------
-  vcl_vector<vgl_point_3d<double> > pts_3d;
+  std::vector<vgl_point_3d<double> > pts_3d;
   vgl_box_3d<double> bounding_box;
   for (unsigned i=0; i<corrs_.size(); ++i)
   {
@@ -97,11 +97,11 @@ boxm2_convert_bundle::boxm2_convert_bundle(vcl_string bundle_file, vcl_string im
   }
 
   // Dimensions of the World
-  vcl_cout<<"Full Point Bounding Box "<<bounding_box<<vcl_endl;
+  std::cout<<"Full Point Bounding Box "<<bounding_box<<std::endl;
   vgl_point_3d<double> c = centre(pts_3d);
-  vcl_cout<<"Center of Gravity "<<c<<vcl_endl;
+  std::cout<<"Center of Gravity "<<c<<std::endl;
   vnl_double_3 sigma = boxm2_point_util::stddev(pts_3d);
-  vcl_cout<<"Point stddev "<< sigma <<vcl_endl;
+  std::cout<<"Point stddev "<< sigma <<std::endl;
 
   //--------------------------------------------------------------------------
   // Define dimensions to be used for a boxm scene
@@ -117,25 +117,25 @@ boxm2_convert_bundle::boxm2_convert_bundle(vcl_string bundle_file, vcl_string im
   //--------------------------------------------------------------------------
   int good_cam = 0;
   while ( bad_cams_.count(good_cam) > 0 ) good_cam++;
-  vcl_cout<<"Determining resolution of cells with cam: "<< good_cam << vcl_endl;
+  std::cout<<"Determining resolution of cells with cam: "<< good_cam << std::endl;
 
   vgl_ray_3d<double> cone_axis;
   double cone_half_angle, solid_angle;
   vsph_camera_bounds::pixel_solid_angle(cams_[good_cam], ni/4, nj/4,cone_axis,cone_half_angle,solid_angle);
   vgl_point_3d<double> cc = cams_[good_cam].camera_center();
   resolution_ = 2*(cc-centre(pts_3d)).length()*cone_half_angle;
-  vcl_cout<<"Resolution     "<<resolution_<<vcl_endl;
+  std::cout<<"Resolution     "<<resolution_<<std::endl;
 }
 //------------------------------------------------------------------------
 // reading the num cams and num points from bundler
 //------------------------------------------------------------------------
-bool boxm2_convert_bundle::read_nums(vcl_ifstream& bfile, unsigned& num_cams, unsigned& num_pts)
+bool boxm2_convert_bundle::read_nums(std::ifstream& bfile, unsigned& num_cams, unsigned& num_pts)
 {
   //read bundler file header
   char buffer[1024];
   bfile.getline(buffer,1024);
   if (bfile.eof()) {
-    vcl_cout<<"File Missing data"<<vcl_endl;
+    std::cout<<"File Missing data"<<std::endl;
     return false;
   }
   // reading number of cameras and number of 3-d pts
@@ -146,11 +146,11 @@ bool boxm2_convert_bundle::read_nums(vcl_ifstream& bfile, unsigned& num_cams, un
 //------------------------------------------------------------------------
 // reading the cameras from bundler
 //------------------------------------------------------------------------
-bool boxm2_convert_bundle::read_cameras(vcl_ifstream& bfile, unsigned num_cams, vgl_point_2d<double> ppoint)
+bool boxm2_convert_bundle::read_cameras(std::ifstream& bfile, unsigned num_cams, vgl_point_2d<double> ppoint)
 {
   // read the cams from bundler and write it to a directory
-  vcl_vector<vnl_matrix_fixed<double,3,3> > Rs;
-  vcl_vector<vnl_vector_fixed<double,3> > Ts;
+  std::vector<vnl_matrix_fixed<double,3,3> > Rs;
+  std::vector<vnl_vector_fixed<double,3> > Ts;
 
   double f,k1,k2;
   for (unsigned i=0;i<num_cams;++i)
@@ -191,7 +191,7 @@ bool boxm2_convert_bundle::read_cameras(vcl_ifstream& bfile, unsigned num_cams, 
 //------------------------------------------------------------------------
 // Read points into vector of bwm_video_corr_sptrs
 //------------------------------------------------------------------------
-bool boxm2_convert_bundle::read_points(vcl_ifstream& bfile, unsigned num_pts, vgl_point_2d<double> ppoint)
+bool boxm2_convert_bundle::read_points(std::ifstream& bfile, unsigned num_pts, vgl_point_2d<double> ppoint)
 {
   for (unsigned i=0;i<num_pts;++i)
   {

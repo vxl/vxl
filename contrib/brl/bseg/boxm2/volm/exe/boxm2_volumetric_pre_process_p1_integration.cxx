@@ -18,12 +18,12 @@
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> cam_kml("-cam", "camera space binary", "");
-  vul_arg<vcl_string> params_file("-params", "camera incremental param and parameters for depth interval", "");
-  vul_arg<vcl_string> label_xml("-label", "labelme kml file", "");
-  vul_arg<vcl_string> category_file("-cat", "category file for transferring labled type to land id", "");
-  vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary file", "");
-  vul_arg<vcl_string> out_folder("-out", "output folder where the generate query binary, camspace binary and weight parameter stored", "");
+  vul_arg<std::string> cam_kml("-cam", "camera space binary", "");
+  vul_arg<std::string> params_file("-params", "camera incremental param and parameters for depth interval", "");
+  vul_arg<std::string> label_xml("-label", "labelme kml file", "");
+  vul_arg<std::string> category_file("-cat", "category file for transferring labled type to land id", "");
+  vul_arg<std::string> sph_bin("-sph", "spherical shell binary file", "");
+  vul_arg<std::string> out_folder("-out", "output folder where the generate query binary, camspace binary and weight parameter stored", "");
   vul_arg<unsigned> id("-id", "job id", 100);
   vul_arg_parse(argc, argv);
 
@@ -31,36 +31,36 @@ int main(int argc, char** argv)
       label_xml().compare("") == 0 || category_file().compare("") == 0 ||
       sph_bin().compare("") == 0 || out_folder().compare("") == 0)
   {
-    vcl_cerr << " ERROR: input file/folders can not be empty!\n";
+    std::cerr << " ERROR: input file/folders can not be empty!\n";
     volm_io::write_status(out_folder(), volm_io::PRE_PROCESS_FAILED, 0);
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   // create depth_map_scene from label me file
   if (!vul_file::exists(label_xml()) || !vul_file::exists(category_file())) {
-    vcl_cerr << "problem opening labelme xml file or category file --> " << label_xml() << vcl_endl;
+    std::cerr << "problem opening labelme xml file or category file --> " << label_xml() << std::endl;
     volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR, 0);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
   depth_map_scene_sptr dm = new depth_map_scene;
-  vcl_string img_category;
+  std::string img_category;
   if (!volm_io::read_labelme(label_xml(), category_file(), dm, img_category) ) {
-    vcl_cerr << "problem parsing labelme xml file --> " << label_xml() << vcl_endl;
+    std::cerr << "problem parsing labelme xml file --> " << label_xml() << std::endl;
     volm_io::write_status(out_folder(), volm_io::LABELME_FILE_IO_ERROR, 0);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
   // save depth_map_scene as a binary
-  vcl_string dms_bin_file = out_folder() + "/depth_map_scene.bin";
+  std::string dms_bin_file = out_folder() + "/depth_map_scene.bin";
   vsl_b_ofstream ofs_dms(dms_bin_file);
   dm->b_write(ofs_dms);
   ofs_dms.close();
 
   // read the params
   if (!vul_file::exists(params_file())) {
-    vcl_cerr << "problem opening camera incremental file --> " << params_file() << '\n';
+    std::cerr << "problem opening camera incremental file --> " << params_file() << '\n';
     volm_io::write_status(out_folder(), volm_io::PRE_PROCESS_FAILED, 0);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -71,18 +71,18 @@ int main(int argc, char** argv)
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
   double tfov, top_fov_dev, altitude, lat, lon;
   if (!volm_io::read_camera(cam_kml(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, tfov, top_fov_dev, altitude, lat, lon)) {
-    vcl_cerr << "problem parsing camera kml file --> " << cam_kml() << '\n';
+    std::cerr << "problem parsing camera kml file --> " << cam_kml() << '\n';
     volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR, 0);
     return volm_io::CAM_FILE_IO_ERROR;
   }
-  vcl_cout << " create camera space from " << cam_kml() << vcl_endl;
-  if ( vcl_abs(heading-0) < 1E-10) heading = 180.0;
-  vcl_cout << "cam params:"
+  std::cout << " create camera space from " << cam_kml() << std::endl;
+  if ( std::abs(heading-0) < 1E-10) heading = 180.0;
+  std::cout << "cam params:"
            << "\n head: " << heading << " dev: " << heading_dev
            << "\n tilt: " << tilt << " dev: " << tilt_dev << " inc: " << params.head_inc
            << "\n roll: " << roll << " dev: " << roll_dev << " inc: " << params.roll_inc
            << "\n  fov: " << tfov << " dev: " << top_fov_dev << " inc: " << params.fov_inc
-           << "\n  alt: " << altitude << vcl_endl;
+           << "\n  alt: " << altitude << std::endl;
 
   // construct camera space
   volm_camera_space_sptr cam_space = new volm_camera_space(tfov, top_fov_dev, params.fov_inc, altitude, dm->ni(), dm->nj(),
@@ -107,7 +107,7 @@ int main(int argc, char** argv)
     cam_space->generate_full_camera_index_space();
 
   //cam_space.print_valid_cams();
-  vcl_string cam_bin_file = out_folder() + "/camera_space.bin";
+  std::string cam_bin_file = out_folder() + "/camera_space.bin";
   vsl_b_ofstream ofs_cam(cam_bin_file);
   cam_space->b_write(ofs_cam);
   ofs_cam.close();
@@ -117,7 +117,7 @@ int main(int argc, char** argv)
 
   // load the spherical shell container
   if (!vul_file::exists(sph_bin())) {
-    vcl_cerr << " ERROR: can not find spherical shell binary --> " << sph_bin() << vcl_endl;
+    std::cerr << " ERROR: can not find spherical shell binary --> " << sph_bin() << std::endl;
     volm_io::write_status(out_folder(), volm_io::PRE_PROCESS_FAILED);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -129,8 +129,8 @@ int main(int argc, char** argv)
   // create volm_query
   volm_query_sptr query = new volm_query(cam_space, dms_bin_file, sph_shell, sph);
 
-  // save the volm_query 
-  vcl_string query_bin_file = out_folder() + "/volm_query.bin";
+  // save the volm_query
+  std::string query_bin_file = out_folder() + "/volm_query.bin";
   vsl_b_ofstream ofs(query_bin_file);
   query->write_data(ofs);
   ofs.close();
@@ -138,47 +138,47 @@ int main(int argc, char** argv)
   // screen output
   // sky
   depth_map_scene_sptr dmq = query->depth_scene();
-  vcl_cout << " The " << dmq->ni() << " x " << dmq->nj() << " query image has following defined depth region" << vcl_endl;
+  std::cout << " The " << dmq->ni() << " x " << dmq->nj() << " query image has following defined depth region" << std::endl;
   if (!dmq->sky().empty()) {
-    vcl_cout << " -------------- SKYs --------------" << vcl_endl;
+    std::cout << " -------------- SKYs --------------" << std::endl;
     for (unsigned i = 0; i < dmq->sky().size(); i++) {
-      vcl_cout << "\t name = " << (dmq->sky()[i]->name())
+      std::cout << "\t name = " << (dmq->sky()[i]->name())
                << ", depth = " << 254
                << ", orient = " << (int)query->sky_orient()
                << ", land_id = " << dmq->sky()[i]->land_id()
                << ", land_name = " << volm_label_table::land_string(dmq->sky()[i]->land_id())
                << ", land_fallback_category = ";
       volm_fallback_label::print_id(dmq->sky()[i]->land_id());
-      vcl_cout << ", land_fallback_weight = " ;
+      std::cout << ", land_fallback_weight = " ;
       volm_fallback_label::print_wgt(dmq->sky()[i]->land_id());
-      vcl_cout << vcl_endl;
+      std::cout << std::endl;
     }
   }
 
   // ground
   if (!dmq->ground_plane().empty()) {
-    vcl_cout << " -------------- GROUND PLANE --------------" << vcl_endl;
+    std::cout << " -------------- GROUND PLANE --------------" << std::endl;
     for (unsigned i = 0; i < dmq->ground_plane().size(); i++) {
-      vcl_cout << "\t name = " << dmq->ground_plane()[i]->name()
+      std::cout << "\t name = " << dmq->ground_plane()[i]->name()
                 << ", depth = " << dmq->ground_plane()[i]->min_depth()
                 << ", orient = " << dmq->ground_plane()[i]->orient_type()
                 << ", land_id = " << dmq->ground_plane()[i]->land_id()
                 << ", land_name = " << volm_label_table::land_string(dmq->ground_plane()[i]->land_id())
                 << ", land_fallback = ";
       volm_fallback_label::print_id(dmq->ground_plane()[i]->land_id());
-      vcl_cout << ", land_fallback_wgt = ";
+      std::cout << ", land_fallback_wgt = ";
       volm_fallback_label::print_wgt(dmq->ground_plane()[i]->land_id());
-      vcl_cout << vcl_endl;
+      std::cout << std::endl;
     }
   }
 
-  vcl_vector<depth_map_region_sptr> drs = query->depth_regions();
-  vcl_vector<vcl_vector<unsigned char> >& obj_land = query->obj_land_id();
-  vcl_vector<vcl_vector<float> >& obj_land_wgt = query->obj_land_wgt();
+  std::vector<depth_map_region_sptr> drs = query->depth_regions();
+  std::vector<std::vector<unsigned char> >& obj_land = query->obj_land_id();
+  std::vector<std::vector<float> >& obj_land_wgt = query->obj_land_wgt();
   if (!drs.empty()) {
-    vcl_cout << " -------------- NON GROUND/SKY OBJECTS --------------" << vcl_endl;
+    std::cout << " -------------- NON GROUND/SKY OBJECTS --------------" << std::endl;
     for (unsigned i = 0; i < drs.size(); i++) {
-      vcl_cout << "\t " <<  drs[i]->name()
+      std::cout << "\t " <<  drs[i]->name()
                << " region,\t min_depth = " << drs[i]->min_depth()
                << ",\t max_depth = " << drs[i]->max_depth()
                << ",\t order = " << drs[i]->order()
@@ -187,18 +187,18 @@ int main(int argc, char** argv)
                << ",\t land_name = " << volm_label_table::land_string( drs[i]->land_id() )
                << ",\t fallback_category = ";
       volm_fallback_label::print_id(drs[i]->land_id());
-      vcl_cout << " (";
+      std::cout << " (";
       for (unsigned jj =0; jj < obj_land[i].size(); jj++)
-        vcl_cout << volm_label_table::land_string(obj_land[i][jj]) << ", ";
-      vcl_cout << " ),\t fallback_wgt = ";
+        std::cout << volm_label_table::land_string(obj_land[i][jj]) << ", ";
+      std::cout << " ),\t fallback_wgt = ";
       volm_fallback_label::print_wgt(drs[i]->land_id());
-      vcl_cout << " (";
+      std::cout << " (";
       for (unsigned jj = 0; jj < obj_land_wgt[i].size(); jj++)
-        vcl_cout << obj_land_wgt[i][jj] << ' ';
-      vcl_cout << ')' << vcl_endl;
+        std::cout << obj_land_wgt[i][jj] << ' ';
+      std::cout << ')' << std::endl;
     }
   }
-  
+
   volm_io::write_status(out_folder(), volm_io::PRE_PROCESS_FINISHED, 30);
   return volm_io::PRE_PROCESS_FINISHED;
 }

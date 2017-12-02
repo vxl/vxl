@@ -1,11 +1,12 @@
 // This is core/vgui/impl/qt4/vgui_qt_dialog_impl.cxx
+#include <vector>
+#include <sstream>
+#include <iostream>
+#include <limits>
 #include "vgui_qt_dialog_impl.h"
 #include "vgui_qt_adaptor.h"
 
-#include <vcl_vector.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <vgui/internals/vgui_simple_field.h>
@@ -50,7 +51,7 @@ bool vgui_qt_dialog_impl::ask()
      total->addLayout(lower);
      lower->addStretch(1);
 
-     QPushButton *ok = 0;
+     QPushButton *ok = VXL_NULLPTR;
      if (use_ok_button)
      {
        ok = new QPushButton( ok_button_text_.c_str(), this );
@@ -72,12 +73,12 @@ bool vgui_qt_dialog_impl::ask()
      }
    }
 
-   for (vcl_vector<element>::iterator ei = elements.begin();
+   for (std::vector<element>::iterator ei = elements.begin();
         ei != elements.end(); ++ei)
    {
       element l = (*ei);
       QWidget* widget = static_cast<QWidget*>(l.widget);
-      if (!widget) vcl_cerr << "No QWidget defined for element type " << l.type << vcl_endl;
+      if (!widget) std::cerr << "No QWidget defined for element type " << l.type << std::endl;
       else
       {
          if (l.type == int_elem    ||
@@ -126,7 +127,7 @@ bool vgui_qt_dialog_impl::ask()
 
    if (result)
    {
-      for (vcl_vector<element>::iterator ei = elements.begin();
+      for (std::vector<element>::iterator ei = elements.begin();
            ei != elements.end(); ++ei)
       {
          element l = (*ei);
@@ -186,8 +187,8 @@ void* vgui_qt_dialog_impl::bool_field_widget(const char* txt, bool& v)
 void* vgui_qt_dialog_impl::int_field_widget(const char* txt, int& v)
 {
    QSpinBox* widget = new QSpinBox(this);
-   widget->setRange(-vcl_numeric_limits<int>::max(),
-                     vcl_numeric_limits<int>::max());
+   widget->setRange(-std::numeric_limits<int>::max(),
+                     std::numeric_limits<int>::max());
    widget->setValue(v);
    return widget;
 }
@@ -224,7 +225,7 @@ void* vgui_qt_dialog_impl::double_field_widget(const char* txt, double& v)
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::string_field_widget(const char* txt, vcl_string& v)
+void* vgui_qt_dialog_impl::string_field_widget(const char* txt, std::string& v)
 {
    QLineEdit* widget = new QLineEdit(v.c_str(), this);
    return widget;
@@ -232,7 +233,7 @@ void* vgui_qt_dialog_impl::string_field_widget(const char* txt, vcl_string& v)
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::choice_field_widget(const char* txt, const vcl_vector<vcl_string>& labels, int& v)
+void* vgui_qt_dialog_impl::choice_field_widget(const char* txt, const std::vector<std::string>& labels, int& v)
 {
    QComboBox* widget = new QComboBox(this);
    for (unsigned int i=0; i<labels.size(); ++i)
@@ -252,7 +253,7 @@ void* vgui_qt_dialog_impl::text_message_widget(const char* txt)
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::file_browser_widget(const char* txt, vcl_string& v, vcl_string& s)
+void* vgui_qt_dialog_impl::file_browser_widget(const char* txt, std::string& v, std::string& s)
 {
    vgui_qt_filebrowser_impl* widget = new vgui_qt_filebrowser_impl(this, txt, v, s);
    return widget;
@@ -260,7 +261,7 @@ void* vgui_qt_dialog_impl::file_browser_widget(const char* txt, vcl_string& v, v
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::inline_file_browser_widget(const char * txt,vcl_string& v, vcl_string& s)
+void* vgui_qt_dialog_impl::inline_file_browser_widget(const char * txt,std::string& v, std::string& s)
 {
    vgui_qt_filebrowser_impl* widget = new vgui_qt_filebrowser_impl(this, txt, v, s);
    return widget;
@@ -268,7 +269,7 @@ void* vgui_qt_dialog_impl::inline_file_browser_widget(const char * txt,vcl_strin
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::color_chooser_widget(const char * txt,vcl_string& val)//, vcl_string& s)
+void* vgui_qt_dialog_impl::color_chooser_widget(const char * txt,std::string& val)//, std::string& s)
 {
    vgui_qt_colorchooser_impl* widget = new vgui_qt_colorchooser_impl(this, txt, val);
    return widget;
@@ -285,7 +286,7 @@ void* vgui_qt_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::inline_color_chooser_widget(const char * txt,vcl_string& val)//, vcl_string& s)
+void* vgui_qt_dialog_impl::inline_color_chooser_widget(const char * txt,std::string& val)//, std::string& s)
 {
    vgui_qt_colorchooser_impl* widget = new vgui_qt_colorchooser_impl(this, txt, val);
    return widget;
@@ -293,7 +294,7 @@ void* vgui_qt_dialog_impl::inline_color_chooser_widget(const char * txt,vcl_stri
 
 
 //-----------------------------------------------------------------------------
-vgui_qt_filebrowser_impl::vgui_qt_filebrowser_impl(QWidget* parent, const vcl_string& t, const vcl_string& v, const vcl_string& s)
+vgui_qt_filebrowser_impl::vgui_qt_filebrowser_impl(QWidget* parent, const std::string& t, const std::string& v, const std::string& s)
 : QGroupBox(t.c_str(), parent), title_(t), filter_(v)
 {
   edit_ = new QLineEdit(s.c_str());
@@ -319,7 +320,7 @@ void vgui_qt_filebrowser_impl::get_a_file()
 
 
 //-----------------------------------------------------------------------------
-vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char* txt, vcl_string& val)
+vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char* txt, std::string& val)
 : QGroupBox(txt, parent), value_(val)
 {
   frame_ = new QFrame;
@@ -327,7 +328,7 @@ vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char
   frame_->setMinimumSize( 32, 32 );
   frame_->setMaximumSize( 32, 32 );
   frame_->setAutoFillBackground(true);
-  vcl_stringstream sval(val);
+  std::stringstream sval(val);
   float r,g,b,a=1.0;
   sval >> r >> g >> b;
   if (sval.good())
@@ -379,7 +380,7 @@ void vgui_qt_colorchooser_impl::update_color_string()
   if (color_.isValid()) {
     int r,g,b,a;
     color_.getRgb(&r,&g,&b,&a);
-    vcl_stringstream sval;
+    std::stringstream sval;
     sval << r/255.0 << ' ' << g/255.0 << ' ' << b/255.0 << ' ' << a/255.0;
     value_ = sval.str();
 

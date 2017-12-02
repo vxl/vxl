@@ -1,13 +1,13 @@
 /* dlaev2.f -- translated by f2c (version 20060506).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -16,8 +16,8 @@ extern "C" {
 #include "v3p_netlib.h"
 
 /*<       SUBROUTINE DLAEV2( A, B, C, RT1, RT2, CS1, SN1 ) >*/
-/* Subroutine */ int dlaev2_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *rt1, doublereal *rt2, doublereal *cs1, doublereal *sn1)
+/* Subroutine */ int dlaev2_(doublereal *a, doublereal *b, doublereal *c__,
+        doublereal *rt1, doublereal *rt2, doublereal *cs1, doublereal *sn1)
 {
     /* System generated locals */
     doublereal d__1;
@@ -128,75 +128,75 @@ extern "C" {
 /*<       IF( ABS( A ).GT.ABS( C ) ) THEN >*/
     if (abs(*a) > abs(*c__)) {
 /*<          ACMX = A >*/
-	acmx = *a;
+        acmx = *a;
 /*<          ACMN = C >*/
-	acmn = *c__;
+        acmn = *c__;
 /*<       ELSE >*/
     } else {
 /*<          ACMX = C >*/
-	acmx = *c__;
+        acmx = *c__;
 /*<          ACMN = A >*/
-	acmn = *a;
+        acmn = *a;
 /*<       END IF >*/
     }
 /*<       IF( ADF.GT.AB ) THEN >*/
     if (adf > ab) {
 /*<          RT = ADF*SQRT( ONE+( AB / ADF )**2 ) >*/
 /* Computing 2nd power */
-	d__1 = ab / adf;
-	rt = adf * sqrt(d__1 * d__1 + 1.);
+        d__1 = ab / adf;
+        rt = adf * sqrt(d__1 * d__1 + 1.);
 /*<       ELSE IF( ADF.LT.AB ) THEN >*/
     } else if (adf < ab) {
 /*<          RT = AB*SQRT( ONE+( ADF / AB )**2 ) >*/
 /* Computing 2nd power */
-	d__1 = adf / ab;
-	rt = ab * sqrt(d__1 * d__1 + 1.);
+        d__1 = adf / ab;
+        rt = ab * sqrt(d__1 * d__1 + 1.);
 /*<       ELSE >*/
     } else {
 
 /*        Includes case AB=ADF=0 */
 
 /*<          RT = AB*SQRT( TWO ) >*/
-	rt = ab * sqrt(2.);
+        rt = ab * sqrt(2.);
 /*<       END IF >*/
     }
 /*<       IF( SM.LT.ZERO ) THEN >*/
     if (sm < 0.) {
 /*<          RT1 = HALF*( SM-RT ) >*/
-	*rt1 = (sm - rt) * .5;
+        *rt1 = (sm - rt) * .5;
 /*<          SGN1 = -1 >*/
-	sgn1 = -1;
+        sgn1 = -1;
 
 /*        Order of execution important. */
 /*        To get fully accurate smaller eigenvalue, */
 /*        next line needs to be executed in higher precision. */
 
 /*<          RT2 = ( ACMX / RT1 )*ACMN - ( B / RT1 )*B >*/
-	*rt2 = acmx / *rt1 * acmn - *b / *rt1 * *b;
+        *rt2 = acmx / *rt1 * acmn - *b / *rt1 * *b;
 /*<       ELSE IF( SM.GT.ZERO ) THEN >*/
     } else if (sm > 0.) {
 /*<          RT1 = HALF*( SM+RT ) >*/
-	*rt1 = (sm + rt) * .5;
+        *rt1 = (sm + rt) * .5;
 /*<          SGN1 = 1 >*/
-	sgn1 = 1;
+        sgn1 = 1;
 
 /*        Order of execution important. */
 /*        To get fully accurate smaller eigenvalue, */
 /*        next line needs to be executed in higher precision. */
 
 /*<          RT2 = ( ACMX / RT1 )*ACMN - ( B / RT1 )*B >*/
-	*rt2 = acmx / *rt1 * acmn - *b / *rt1 * *b;
+        *rt2 = acmx / *rt1 * acmn - *b / *rt1 * *b;
 /*<       ELSE >*/
     } else {
 
 /*        Includes case RT1 = RT2 = 0 */
 
 /*<          RT1 = HALF*RT >*/
-	*rt1 = rt * .5;
+        *rt1 = rt * .5;
 /*<          RT2 = -HALF*RT >*/
-	*rt2 = rt * -.5;
+        *rt2 = rt * -.5;
 /*<          SGN1 = 1 >*/
-	sgn1 = 1;
+        sgn1 = 1;
 /*<       END IF >*/
     }
 
@@ -205,15 +205,15 @@ extern "C" {
 /*<       IF( DF.GE.ZERO ) THEN >*/
     if (df >= 0.) {
 /*<          CS = DF + RT >*/
-	cs = df + rt;
+        cs = df + rt;
 /*<          SGN2 = 1 >*/
-	sgn2 = 1;
+        sgn2 = 1;
 /*<       ELSE >*/
     } else {
 /*<          CS = DF - RT >*/
-	cs = df - rt;
+        cs = df - rt;
 /*<          SGN2 = -1 >*/
-	sgn2 = -1;
+        sgn2 = -1;
 /*<       END IF >*/
     }
 /*<       ACS = ABS( CS ) >*/
@@ -221,39 +221,39 @@ extern "C" {
 /*<       IF( ACS.GT.AB ) THEN >*/
     if (acs > ab) {
 /*<          CT = -TB / CS >*/
-	ct = -tb / cs;
+        ct = -tb / cs;
 /*<          SN1 = ONE / SQRT( ONE+CT*CT ) >*/
-	*sn1 = 1. / sqrt(ct * ct + 1.);
+        *sn1 = 1. / sqrt(ct * ct + 1.);
 /*<          CS1 = CT*SN1 >*/
-	*cs1 = ct * *sn1;
+        *cs1 = ct * *sn1;
 /*<       ELSE >*/
     } else {
 /*<          IF( AB.EQ.ZERO ) THEN >*/
-	if (ab == 0.) {
+        if (ab == 0.) {
 /*<             CS1 = ONE >*/
-	    *cs1 = 1.;
+            *cs1 = 1.;
 /*<             SN1 = ZERO >*/
-	    *sn1 = 0.;
+            *sn1 = 0.;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             TN = -CS / TB >*/
-	    tn = -cs / tb;
+            tn = -cs / tb;
 /*<             CS1 = ONE / SQRT( ONE+TN*TN ) >*/
-	    *cs1 = 1. / sqrt(tn * tn + 1.);
+            *cs1 = 1. / sqrt(tn * tn + 1.);
 /*<             SN1 = TN*CS1 >*/
-	    *sn1 = tn * *cs1;
+            *sn1 = tn * *cs1;
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       IF( SGN1.EQ.SGN2 ) THEN >*/
     if (sgn1 == sgn2) {
 /*<          TN = CS1 >*/
-	tn = *cs1;
+        tn = *cs1;
 /*<          CS1 = -SN1 >*/
-	*cs1 = -(*sn1);
+        *cs1 = -(*sn1);
 /*<          SN1 = TN >*/
-	*sn1 = tn;
+        *sn1 = tn;
 /*<       END IF >*/
     }
 /*<       RETURN >*/
@@ -265,5 +265,5 @@ extern "C" {
 } /* dlaev2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,10 +1,11 @@
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 #include <brip/brip_quadtree_node.h>
 #include <brip/brip_quadtree_utils.h>
 #include <brip/brip_quadtree_node_base_sptr.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 static void test_quadtree()
 {
@@ -48,8 +49,8 @@ static void test_quadtree()
   for (unsigned j = 0; j<8; ++j)
   {
     for (unsigned i = 0; i<8; ++i)
-      vcl_cout << vcl_fixed << img(i,j) << ' ';
-    vcl_cout << '\n' << vcl_endl;
+      std::cout << std::fixed << img(i,j) << ' ';
+    std::cout << '\n' << std::endl;
   }
   TEST("quadtree fill", img(5,3), 30.0f);
   vil_image_view<float> null_img;
@@ -68,7 +69,7 @@ static void test_quadtree()
                                                        null_mask,
                                                        scale,
                                                        nodes2);
-  vcl_cout << "level 2\n";
+  std::cout << "level 2\n";
   brip_quadtree_utils<float>::print_node(nodes2[0][0]);
 
   vil_image_view<float> level1(4,4);
@@ -85,10 +86,10 @@ static void test_quadtree()
                                                        null_mask,
                                                        scale,
                                                        nodes1);
-  vcl_cout << "\n\nlevel 1\n";
+  std::cout << "\n\nlevel 1\n";
   for (unsigned r = 0; r<2; ++r)
     for (unsigned c = 0; c<2; ++c){
-      vcl_cout << "node_adr[" << r << "][" << c << "] = "<< nodes1[r][c] << '\n';
+      std::cout << "node_adr[" << r << "][" << c << "] = "<< nodes1[r][c] << '\n';
       if (nodes1[r][c])
         brip_quadtree_utils<float>::print_node(nodes1[r][c]);
     }
@@ -108,19 +109,19 @@ static void test_quadtree()
                                                        scale,
                                                        nodes0);
 
-  vcl_cout << "\n\nlevel 0\n";
+  std::cout << "\n\nlevel 0\n";
   for (unsigned r = 0; r<4; ++r)
     for (unsigned c = 0; c<4; ++c){
-      vcl_cout << "node_adr[" << r << "][" << c << "] = "<< nodes0[r][c] << '\n';
+      std::cout << "node_adr[" << r << "][" << c << "] = "<< nodes0[r][c] << '\n';
       if (nodes0[r][c])
         brip_quadtree_utils<float>::print_node(nodes0[r][c]);
     }
 
-  vcl_vector<vil_image_view<float> > levels;
+  std::vector<vil_image_view<float> > levels;
   levels.push_back(level0); levels.push_back(level1);
   levels.push_back(level2);
 
-  vcl_vector<vil_image_view<bool> > masks;
+  std::vector<vil_image_view<bool> > masks;
   masks.push_back(mask0);   masks.push_back(mask1);
   masks.push_back(mask2);
 
@@ -137,12 +138,12 @@ static void test_quadtree()
   vil_image_view<float> imgt(8,8);
   imgt.fill(-1.0f); //invalid value
   brip_quadtree_utils<float>::fill_image_from_node(root2[0][0], imgt);
-  vcl_cout <<"Reconstructed image from tree\n";
+  std::cout <<"Reconstructed image from tree\n";
   for (unsigned j = 0; j<8; ++j)
   {
     for (unsigned i = 0; i<8; ++i)
-      vcl_cout << vcl_fixed << imgt(i,j) << ' ';
-    vcl_cout << '\n' << vcl_endl;
+      std::cout << std::fixed << imgt(i,j) << ' ';
+    std::cout << '\n' << std::endl;
   }
   TEST("reconstruction from tree from image", imgt(5,3), 30.0f);
 }

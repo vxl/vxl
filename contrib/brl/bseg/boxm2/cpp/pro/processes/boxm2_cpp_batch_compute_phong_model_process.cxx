@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_batch_compute_phong_model_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Ozge C. Ozcanli
 // \date May 12, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -37,7 +39,7 @@ bool boxm2_cpp_batch_compute_phong_model_process_cons(bprb_func_process& pro)
   // 2) stream cache
   // 3) the sun elevation
   // 4) the sun azimuth
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
@@ -45,7 +47,7 @@ bool boxm2_cpp_batch_compute_phong_model_process_cons(bprb_func_process& pro)
   input_types_[4] = "float"; // sun_azim
   input_types_[5] = "bsta_sigma_normalizer_sptr";
   // process has 0 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -55,7 +57,7 @@ bool boxm2_cpp_batch_compute_phong_model_process(bprb_func_process& pro)
   using namespace boxm2_cpp_batch_compute_phong_model_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-      vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+      std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
       return false;
   }
   //get the inputs
@@ -68,8 +70,8 @@ bool boxm2_cpp_batch_compute_phong_model_process(bprb_func_process& pro)
   bsta_sigma_normalizer_sptr n_table = pro.get_input<bsta_sigma_normalizer_sptr>(i++);
 
   // iterate the scene block by block and write to output
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
     boxm2_block *     blk     = cache->get_block(scene,*id);

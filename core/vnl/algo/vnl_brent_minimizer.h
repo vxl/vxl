@@ -16,6 +16,8 @@
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 
+#include <vnl/algo/vnl_algo_export.h>
+
 struct vnl_brent_data;
 
 //: Brent 1D minimizer
@@ -47,7 +49,7 @@ struct vnl_brent_data;
 //   double x = brent.minimize(initial_x);
 //   double min_f = brent.f_at_last_minimum();
 // \endverbatim
-class vnl_brent_minimizer : public vnl_nonlinear_minimizer
+class VNL_ALGO_EXPORT vnl_brent_minimizer : public vnl_nonlinear_minimizer
 {
  protected:
   vnl_cost_function* f_;
@@ -64,14 +66,6 @@ class vnl_brent_minimizer : public vnl_nonlinear_minimizer
 
    //: Function evaluation at value returned by minimize(x)
   double f_at_last_minimum() const { return f_at_last_minimum_; }
-
-  //: Find the minimum x of f(x) within a<= x <= c using pure golden section
-  // \retval The position,x, of the minimum x.
-  // You need to provide a bracket for the minimum (a<b<c s.t. f(a)>f(b)<f(c).
-  // The tolerance can be set using prior call to set_x_tolerance(tol).
-  // Use f_at_last_minimum() to get function evaluation at the returned minima.
-  double minimize_golden(double ax, double bx, double cx,
-                         double fa, double fb, double fc);
 
   //: Find the minimum value of f(x) within a<= x <= c.
   // \retval The position,x, of the minimum x.

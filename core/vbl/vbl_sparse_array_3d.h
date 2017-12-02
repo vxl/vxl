@@ -23,7 +23,8 @@
 //---------------------------------------------------------------------------
 
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vbl/vbl_sparse_array_base.h>
 #include <vbl/vbl_triple.h>
 
@@ -78,13 +79,13 @@ class vbl_sparse_array_3d : public vbl_sparse_array_base<T, vbl_triple<unsigned,
   }
 
   //: Print the Array to a stream in "(i,j,k): value" format.
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 };
 
 //: Stream operator - print the Array to a stream in "(i,j,k): value" format.
 template <class T>
-inline vcl_ostream& operator <<
-(vcl_ostream& s, const vbl_sparse_array_3d<T>& a)
+inline std::ostream& operator <<
+(std::ostream& s, const vbl_sparse_array_3d<T>& a)
 {
   return a.print(s);
 }
@@ -92,9 +93,9 @@ inline vcl_ostream& operator <<
 
 #ifndef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_base.txx instead"
+extern "please include vbl/vbl_sparse_array_base.hxx instead"
 #endif // VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_3D_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_3d.txx instead"
+extern "please include vbl/vbl_sparse_array_3d.hxx instead"
 
 #endif // vbl_sparse_array_3d_h_

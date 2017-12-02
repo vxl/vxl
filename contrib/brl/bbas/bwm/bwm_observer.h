@@ -18,7 +18,7 @@ class bwm_observer : public vgui_observer
 
   virtual ~bwm_observer() {}
 
-  virtual vcl_string type_name() const { return "bwm_observer"; }
+  virtual std::string type_name() const { return "bwm_observer"; }
 
   virtual void update(vgui_message const& msg);
 

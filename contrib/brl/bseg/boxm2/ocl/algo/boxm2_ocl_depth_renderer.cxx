@@ -5,10 +5,12 @@
 //
 // \author Daniel Crispell, adapted from process version
 // \date 4 Nov 2014
+#include <iostream>
+#include <algorithm>
+#include <stdexcept>
 #include "boxm2_ocl_depth_renderer.h"
 
-#include <vcl_algorithm.h>
-#include <vcl_stdexcept.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -25,15 +27,22 @@
 #include "boxm2_ocl_render_expected_image_function.h"
 #include <vul/vul_timer.h>
 
-
-boxm2_ocl_depth_renderer::boxm2_ocl_depth_renderer(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, vcl_string ident)
-  : scene_(scene), opencl_cache_(ocl_cache), render_success_(false), buffers_allocated_(false)
+boxm2_ocl_depth_renderer
+::boxm2_ocl_depth_renderer(boxm2_scene_sptr scene,
+                           boxm2_opencl_cache_sptr ocl_cache,
+                           std::string ident) :
+  scene_(scene),
+  opencl_cache_(ocl_cache),
+  buffers_allocated_(false),
+  render_success_(false)
 {
   device_ = ocl_cache->get_device();
   compile_kernels(device_);
 }
 
-bool boxm2_ocl_depth_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
+bool
+boxm2_ocl_depth_renderer
+::allocate_render_buffers(int cl_ni, int cl_nj)
 {
   if ( buffers_allocated_ && (prev_ni_ == cl_ni) && (prev_nj_ == cl_nj) ) {
     // can reuse old buffers
@@ -51,8 +60,6 @@ bool boxm2_ocl_depth_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
 
   ray_origins_buff_ = new cl_float[4*cl_ni*cl_nj];
   ray_directions_buff_ = new cl_float[4*cl_ni*cl_nj];
-
-
 
   depth_image_ = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float), depth_buff_,"depth image buffer");
   depth_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
@@ -97,7 +104,9 @@ bool boxm2_ocl_depth_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
   return true;
 }
 
-bool boxm2_ocl_depth_renderer::cleanup_render_buffers()
+bool
+boxm2_ocl_depth_renderer
+::cleanup_render_buffers()
 {
   if(!buffers_allocated_) {
     return false;
@@ -112,41 +121,44 @@ bool boxm2_ocl_depth_renderer::cleanup_render_buffers()
   delete[] ray_directions_buff_;
 
   opencl_cache_->unref_mem(depth_image_.ptr());
-  depth_image_ = bocl_mem_sptr(0);
+  depth_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(vis_image_.ptr());
-  vis_image_ = bocl_mem_sptr(0);
+  vis_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(prob_image_.ptr());
-  prob_image_ = bocl_mem_sptr(0);
+  prob_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(var_image_.ptr());
-  var_image_ = bocl_mem_sptr(0);
+  var_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(t_infinity_image_.ptr());
-  t_infinity_image_ = bocl_mem_sptr(0);
+  t_infinity_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(ray_origins_image_.ptr());
-  ray_origins_image_ = bocl_mem_sptr(0);
+  ray_origins_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(ray_directions_image_.ptr());
-  ray_directions_image_ = bocl_mem_sptr(0);
+  ray_directions_image_ = bocl_mem_sptr(VXL_NULLPTR);
 
   opencl_cache_->unref_mem(tnearfar_.ptr());
-  tnearfar_ = bocl_mem_sptr(0);
+  tnearfar_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(img_dim_.ptr());
-  img_dim_ = bocl_mem_sptr(0);
+  img_dim_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(cl_output_.ptr());
-  cl_output_ = bocl_mem_sptr(0);
+  cl_output_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(cl_subblk_dim_.ptr());
-  cl_subblk_dim_ = bocl_mem_sptr(0);
+  cl_subblk_dim_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(lookup_.ptr());
-  lookup_ = bocl_mem_sptr(0);
+  lookup_ = bocl_mem_sptr(VXL_NULLPTR);
 
   buffers_allocated_ = false;
   return true;
 }
 
-boxm2_ocl_depth_renderer::~boxm2_ocl_depth_renderer()
+boxm2_ocl_depth_renderer
+::~boxm2_ocl_depth_renderer()
 {
   cleanup_render_buffers();
 }
 
-bool boxm2_ocl_depth_renderer::get_last_rendered(vil_image_view<float> &img)
+bool
+boxm2_ocl_depth_renderer
+::get_last_rendered(vil_image_view<float> &img)
 {
   if (render_success_) {
     img.deep_copy(depth_img_);
@@ -155,7 +167,9 @@ bool boxm2_ocl_depth_renderer::get_last_rendered(vil_image_view<float> &img)
   return false;
 }
 
-bool boxm2_ocl_depth_renderer::get_last_vis(vil_image_view<float> &vis_img)
+bool
+boxm2_ocl_depth_renderer
+::get_last_vis(vil_image_view<float> &vis_img)
 {
   if (render_success_) {
     vis_img.deep_copy( vis_img_ );
@@ -164,13 +178,15 @@ bool boxm2_ocl_depth_renderer::get_last_vis(vil_image_view<float> &vis_img)
   return false;
 }
 
-bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor, float farfactor)
+bool
+boxm2_ocl_depth_renderer
+::render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor, float farfactor)
 {
   render_success_ = false;
 
   vul_timer rtime;
 
-  vcl_size_t local_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
 
   //: create a command queue.
   int status=0;
@@ -184,16 +200,16 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
 
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
-  vcl_size_t global_threads[] = {cl_ni,cl_nj};
+  std::size_t global_threads[] = {cl_ni,cl_nj};
 
   allocate_render_buffers(cl_ni, cl_nj);
 
   // intialize the render image planes
-  vcl_fill(depth_buff_, depth_buff_ + cl_ni*cl_nj, 0.0f);
-  vcl_fill(vis_buff_, vis_buff_ + cl_ni*cl_nj, 1.0f);
-  vcl_fill(var_buff_, var_buff_ + cl_ni*cl_nj, 0.0f);
-  vcl_fill(prob_buff_, prob_buff_ + cl_ni*cl_nj, 0.0f);
-  vcl_fill(t_infinity_buff_, t_infinity_buff_ + cl_ni*cl_nj, 0.0f);
+  std::fill(depth_buff_, depth_buff_ + cl_ni*cl_nj, 0.0f);
+  std::fill(vis_buff_, vis_buff_ + cl_ni*cl_nj, 1.0f);
+  std::fill(var_buff_, var_buff_ + cl_ni*cl_nj, 0.0f);
+  std::fill(prob_buff_, prob_buff_ + cl_ni*cl_nj, 0.0f);
+  std::fill(t_infinity_buff_, t_infinity_buff_ + cl_ni*cl_nj, 0.0f);
 
   img_dim_buff_[0] = 0;
   img_dim_buff_[1] = 0;
@@ -216,7 +232,7 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
     return false;
   }
 
-  vcl_vector<boxm2_block_id> vis_order;
+  std::vector<boxm2_block_id> vis_order;
   if(camera->type_name() == "vpgl_perspective_camera") {
       vis_order = scene_->get_vis_blocks_opt(dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr()),ni,nj);
   }
@@ -225,8 +241,8 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
   }
 
   subblk_dim_ = 0.0f; // in case there are no visible blocks;
-  
-  for (vcl_vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id) {
+
+  for (std::vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id) {
 
     boxm2_block_metadata mdata = scene_->get_block_metadata(*id);
 
@@ -301,18 +317,20 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
     }
   }
 
-  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<<rtime.all()<<" ms"<<std::endl;
   clReleaseCommandQueue(queue);
 
   render_success_ = true;
   return true;
 }
 
-bool boxm2_ocl_depth_renderer::compile_kernels(bocl_device_sptr device)
+bool
+boxm2_ocl_depth_renderer
+::compile_kernels(bocl_device_sptr device)
 {
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -324,7 +342,7 @@ bool boxm2_ocl_depth_renderer::compile_kernels(bocl_device_sptr device)
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = " -D RENDER_DEPTH ";
+    std::string options = " -D RENDER_DEPTH ";
     options +=  "-D DETERMINISTIC";
     options += " -D STEP_CELL=step_cell_render_depth2(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
 
@@ -336,19 +354,19 @@ bool boxm2_ocl_depth_renderer::compile_kernels(bocl_device_sptr device)
                                            options,              //options
                                            "boxm2 opencl render depth image"); //kernel identifier (for error checking)
     if (!good) {
-      vcl_cerr << "ERROR: boxm2_ocl_depth_renderer: error compiling depth kernel" << vcl_endl;
+      std::cerr << "ERROR: boxm2_ocl_depth_renderer: error compiling depth kernel" << std::endl;
       return false;
     }
   }
   {
-    vcl_vector<vcl_string> norm_src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> norm_src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     norm_src_paths.push_back(source_dir + "scene_info.cl");
 
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
 
-    vcl_string options = " -D RENDER_DEPTH ";
+    std::string options = " -D RENDER_DEPTH ";
 
     bool good = depth_norm_kern_.create_kernel( &device_->context(),
                                                 device_->device_id(),
@@ -358,7 +376,7 @@ bool boxm2_ocl_depth_renderer::compile_kernels(bocl_device_sptr device)
                                                 "normalize render depth kernel"); //kernel identifier (for error checking)
 
     if (!good) {
-      vcl_cerr << "ERROR: boxm2_ocl_depth_renderer: error compiling depth normalization kernel" << vcl_endl;
+      std::cerr << "ERROR: boxm2_ocl_depth_renderer: error compiling depth normalization kernel" << std::endl;
       return false;
     }
   }

@@ -12,7 +12,7 @@
 #include <vcl_cassert.h>
 
 #include <rsdl/rsdl_bins.h>
-#include <rsdl/rsdl_bins.txx> // to avoid explicit instantiation
+#include <rsdl/rsdl_bins.hxx> // to avoid explicit instantiation
 #include <rsdl/rsdl_kd_tree.h>
 
 #include <rgrl/rgrl_mask.h>
@@ -143,7 +143,7 @@ bounding_box() const
   return bounding_box_;
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_feature_set_bins_2d::
 type() const
 {

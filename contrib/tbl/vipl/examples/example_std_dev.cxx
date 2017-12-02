@@ -19,6 +19,8 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_image by vil_image_view<T>
 // \endverbatim
 //
+#include <iostream>
+#include <cmath>
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vil/vil_image_view.h>
 #include <vipl/vipl_moment.h>
@@ -29,22 +31,21 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h> // for vcl_sqrt()
+#include <vcl_compiler.h>
 
 #include <vxl_config.h> // for vxl_byte
 float square(float const& x) { return x*x; }
 void is_minus(float& x, float const& y) { x-=y; }
-float squareroot(float const& x) { return vcl_sqrt(x); }
+float squareroot(float const& x) { return std::sqrt(x); }
 
 int
 main(int argc, char** argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example_vipl_moment file_in file_out\n"; return 1; }
+  if (argc < 3) { std::cerr << "Syntax: example_vipl_moment file_in file_out\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
   vil_image_view<float> out(in.ni(),in.nj(),in.nplanes());
@@ -89,7 +90,7 @@ main(int argc, char** argv)
   op.put_out_data_ptr(&pgm);
   op.filter();
   vil_save(pgm, argv[2], "pnm");
-  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
+  std::cout << "Written image of type PGM to " << argv[2] << std::endl;
 
   return 0;
 }

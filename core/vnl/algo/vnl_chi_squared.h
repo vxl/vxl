@@ -4,6 +4,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
+#include "vnl/vnl_export.h"
+#include <vnl/algo/vnl_algo_export.h>
 //:
 // \file
 // \brief Name space for various (mostly templated) chi-squared distribution functions.
@@ -63,6 +65,6 @@ double vnl_chi_squared_statistic_12(T const *A, T const *B,
                                     int n, bool normalize);
 
 #define VNL_CHI_SQUARED_INSTANTIATE(T) \
-extern "please include vnl/algo/vnl_chi_squared.txx first"
+extern "please include vnl/algo/vnl_chi_squared.hxx first"
 
 #endif // vnl_chi_squared_h_

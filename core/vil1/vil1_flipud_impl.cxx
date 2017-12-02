@@ -31,14 +31,14 @@ bool vil1_flipud_impl::put_section(void const *buf, int x0, int y0, int w, int h
 }
 
 //: Return the name of the class;
-vcl_string vil1_flipud_impl::is_a() const
+std::string vil1_flipud_impl::is_a() const
 {
-  static const vcl_string class_name_="vil1_flipud_impl";
+  static const std::string class_name_="vil1_flipud_impl";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil1_flipud_impl::is_class(vcl_string const& s) const
+bool vil1_flipud_impl::is_class(std::string const& s) const
 {
   return s==vil1_flipud_impl::is_a() || vil1_image_impl::is_class(s);
 }

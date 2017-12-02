@@ -10,10 +10,11 @@
 //     11 Oct 2002 Ian Scott - converted to vil
 //\endverbatim
 
+#include <iostream>
 #include "vil_jpeg_compressor.h"
 #include "vil_jpeg_destination_mgr.h"
 #include <vil/vil_stream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
 vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
@@ -31,8 +32,8 @@ vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
   // construct the compression object :
   jpeg_create_compress(&jobj);
 
-  // Increase the amount of memory that can be used. 
-  // Default (1Mb) was too small.  
+  // Increase the amount of memory that can be used.
+  // Default (1Mb) was too small.
 #if defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 32
   jobj.mem->max_memory_to_use = 300 * 1024 * 1024;
 #elif defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 64
@@ -63,7 +64,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
       jobj.in_color_space = JCS_RGB;
       break;
      default:
-      vcl_cerr << __FILE__ " : urgh!\n";
+      std::cerr << __FILE__ " : urgh!\n";
       return false;
     }
 
@@ -71,7 +72,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
     jpeg_set_quality(&jobj, quality, TRUE);
 
     // start compression
-    bool write_all_tables = true;
+    jpeg_boolean write_all_tables = TRUE;
     jpeg_start_compress (&jobj, write_all_tables);
 
     //
@@ -80,7 +81,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
 
   //
   if (line != jobj.next_scanline) {
-    vcl_cerr << "scanlines must be written in order\n";
+    std::cerr << "scanlines must be written in order\n";
     return false;
   }
 
@@ -108,7 +109,7 @@ vil_jpeg_compressor::~vil_jpeg_compressor()
 
   //
   stream->unref();
-  stream = 0;
+  stream = VXL_NULLPTR;
 }
 
 void vil_jpeg_compressor::set_quality(int q)

@@ -1,47 +1,48 @@
-PROJECT(expat C)
-#INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(expat C)
+#include_regular_expression("^.*$")
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(NOT VXL_USING_NATIVE_EXPAT)
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(NOT VXL_USING_NATIVE_EXPAT)
 
-SET(expat_sources
-    xmlparse.c
-    xmltok.c        xmltok.h
-    xmlrole.c       xmlrole.h
-    xmltok_impl.h
-    ascii.h
-    asciitab.h
-    iasciitab.h
-    nametab.h
-    latin1tab.h
-    utf8tab.h
-    expat.h
-    cm_expat_mangle.h
-    expatConfig.h.in
-    expatDllConfig.h.in
-   )
+  if(WIN32)
+    if(NOT VXL_BUILD_SHARED_LIBS)
+      set(CM_EXPAT_STATIC 1)
+    endif()
+  endif()
 
-INCLUDE(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
-TEST_BIG_ENDIAN(expat_BIGENDIAN)
+vxl_configure_file(${expat_SOURCE_DIR}/expatConfig.h.in
+                  ${expat_BINARY_DIR}/expatConfig.h include/vxl/contrib/brl/b3p/expat)
+vxl_configure_file(${expat_SOURCE_DIR}/expatDllConfig.h.in
+                  ${expat_BINARY_DIR}/expatDllConfig.h include/vxl/contrib/brl/b3p/expat)
+vxl_configure_file_copyonly(${expat_SOURCE_DIR}/expat.h
+                  ${expat_BINARY_DIR}/expat.h include/vxl/contrib/brl/b3p/expat)
 
-INCLUDE_DIRECTORIES(${expat_BINARY_DIR})
+configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
 
-IF(WIN32)
-  IF(NOT BUILD_SHARED_LIBS)
-    SET (CM_EXPAT_STATIC 1)
-  ENDIF(NOT BUILD_SHARED_LIBS)
-ENDIF(WIN32)
+  set(expat_sources
+      xmlparse.c
+      xmltok.c        xmltok.h
+      xmlrole.c       xmlrole.h
+      xmltok_impl.h
+      ascii.h
+      asciitab.h
+      iasciitab.h
+      nametab.h
+      latin1tab.h
+      utf8tab.h
+      expat.h
+      cm_expat_mangle.h
+    )
 
-CONFIGURE_FILE(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_BINARY_DIR}/expatConfig.h)
-CONFIGURE_FILE(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expatDllConfig.h)
-CONFIGURE_FILE(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
-CONFIGURE_FILE(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
+  include(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+  TEST_BIG_ENDIAN(expat_BIGENDIAN)
 
-ADD_LIBRARY(expat ${expat_sources})
-INSTALL_TARGETS(/lib expat)
+  include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-IF( BUILD_TESTING )
-  add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+  vxl_add_library(LIBRARY_NAME expat LIBRARY_SOURCES ${expat_sources})
 
-ENDIF(NOT VXL_USING_NATIVE_EXPAT)
+  if( BUILD_TESTING )
+    add_subdirectory(tests)
+  endif()
+
+endif()

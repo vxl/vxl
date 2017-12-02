@@ -2,9 +2,10 @@
 #define boxm2_block_id_h_
 //:
 // \file
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 //smart pointer stuff
@@ -55,13 +56,13 @@ class boxm2_block_id : public vbl_ref_count
     inline bool operator>=(boxm2_block_id const& v) const { return !operator<(v); }
 
     //: to string
-    vcl_string to_string() const;
+    std::string to_string() const;
 };
 
 typedef vbl_smart_ptr<boxm2_block_id> boxm2_block_id_sptr;
 
 //: scene output stream operator
-vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id const& id);
+std::ostream& operator <<(std::ostream &s, boxm2_block_id const& id);
 
 
 //------IO Necessary for smart pointer linking ---------------------------------

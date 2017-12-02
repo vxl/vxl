@@ -125,16 +125,16 @@ class brec_part_hierarchy_detector : public vbl_ref_count
   brec_part_instance_sptr exists_using_hierarchies(brec_part_base_sptr upper_p, brec_part_instance_sptr central_p, Rtree_type* lower_rtree, double radius);
 
   //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
-  void extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts, unsigned ni, unsigned nj, Rtree_type* extracted_parts_rtree,
-                           vcl_vector<brec_part_instance_sptr>& extracted_upper_parts);
+  void extract_upper_layer(std::vector<brec_part_instance_sptr>& extracted_parts, unsigned ni, unsigned nj, Rtree_type* extracted_parts_rtree,
+                           std::vector<brec_part_instance_sptr>& extracted_upper_parts);
 
   //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
   //  No thresholding, \return a probabilistic score
   //  rho_calculation_method = 0 if probabilistic score
   //  rho_calculation_method = 1 if training
   //  rho_calculation_method = 2 if using other hierarchies to compute a posterior
-  void extract_upper_layer(vcl_vector<brec_part_instance_sptr>& extracted_parts, Rtree_type* extracted_parts_rtree,
-                           vcl_vector<brec_part_instance_sptr>& extracted_upper_parts, unsigned rho_calculation_method = 0, double radius = 10.0);
+  void extract_upper_layer(std::vector<brec_part_instance_sptr>& extracted_parts, Rtree_type* extracted_parts_rtree,
+                           std::vector<brec_part_instance_sptr>& extracted_upper_parts, unsigned rho_calculation_method = 0, double radius = 10.0);
 
   //: extracts instances of each layer in the given image
   bool detect(vil_image_resource_sptr img);
@@ -152,7 +152,7 @@ class brec_part_hierarchy_detector : public vbl_ref_count
   //  Sets rho parameter of the primitives differently during training
   bool detect_primitives_for_training(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, float angle);
 
-  vcl_vector<brec_part_instance_sptr>& get_parts(unsigned layer) { return map_instance_[layer]; }
+  std::vector<brec_part_instance_sptr>& get_parts(unsigned layer) { return map_instance_[layer]; }
   Rtree_type* get_tree(unsigned layer) { return map_rtree_[layer]; }
 
   brec_part_hierarchy_sptr get_hierarchy() { return h_; }
@@ -163,14 +163,14 @@ class brec_part_hierarchy_detector : public vbl_ref_count
   brec_part_hierarchy_sptr h_;
 
   //: map each layer to a vector of instances of it
-  vcl_map<unsigned, vcl_vector<brec_part_instance_sptr> > map_instance_;
+  std::map<unsigned, std::vector<brec_part_instance_sptr> > map_instance_;
 
   //: map each layer to an rtree of its instances
-  vcl_map<unsigned, Rtree_type*> map_rtree_;
+  std::map<unsigned, Rtree_type*> map_rtree_;
 
   //: hierarchies of other classes if any
   //  Required for posterior computation for compositions during testing
-  vcl_vector<brec_part_hierarchy_sptr> class_hierarchies_;
+  std::vector<brec_part_hierarchy_sptr> class_hierarchies_;
 
   double radius_;
 

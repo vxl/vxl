@@ -1,9 +1,11 @@
 // This is gel/vifa/vifa_group_pgram.cxx
+#include <iostream>
+#include <cmath>
 #include "vifa_group_pgram.h"
 //:
 // \file
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -21,7 +23,7 @@ vifa_group_pgram(imp_line_list&                  lg,
   : vifa_group_pgram_params(old_params)
 {
   angle_range_ = angle_range;
-  th_dim_ = (int)vcl_ceil(angle_range_/angle_increment());
+  th_dim_ = (int)std::ceil(angle_range_/angle_increment());
   th_dim_++; //Include both 0 and angle_range_
   bb_ = new vifa_bbox;
 
@@ -44,7 +46,7 @@ vifa_group_pgram::
     imp_line_list*  illp = (*ilti);
     for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
     {
-      (*ili) = 0;
+      (*ili) = VXL_NULLPTR;
     }
 
     delete illp;
@@ -81,7 +83,7 @@ Clear()
   {
     imp_line_list*  illp = (*ilti);
     for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
-      (*ili) = 0;
+      (*ili) = VXL_NULLPTR;
 
     delete illp;
     (*ilti) = new imp_line_list;
@@ -118,7 +120,7 @@ GetLineCover(int  angle_bin)
 
   if (!lg.size())
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   // Construct a bounding box from the ROI and clip
@@ -133,8 +135,8 @@ GetLineCover(int  angle_bin)
                             bb_->max_x(), bb_->max_y(),
                             bx, by, ex, ey))
   {
-    vcl_cerr << "In vifa_group_pgram::GetLineCover(): No intersection found\n";
-    return NULL;
+    std::cerr << "In vifa_group_pgram::GetLineCover(): No intersection found\n";
+    return VXL_NULLPTR;
   }
 
   // Here we set the clipping bounds.
@@ -146,7 +148,7 @@ GetLineCover(int  angle_bin)
   int len = int(il->length());
   if (!len)
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   vifa_line_cover_sptr  cov = new vifa_line_cover(il, len);
@@ -209,7 +211,7 @@ CollectAdjacentLines(int             angle_bin,
     }
   }
   else
-    vcl_cerr << "vifa_group_pgram::CollectAdjacentLines(): bad angle_bin\n";
+    std::cerr << "vifa_group_pgram::CollectAdjacentLines(): bad angle_bin\n";
 }
 
 //------------------------------------------------------------------
@@ -245,15 +247,15 @@ norm_parallel_line_length(void)
 
   double max_cover = 0.0;
   int    max_dir = 0;
-  vcl_vector<int>::iterator  iit = dominant_dirs_.begin();
+  std::vector<int>::iterator  iit = dominant_dirs_.begin();
   for (; iit != dominant_dirs_.end(); iit++)
   {
     int            dir = (*iit);
     vifa_line_cover_sptr  lc = this->GetLineCover(dir);
     if (!(lc.ptr()))
     {
-//      vcl_cout << "vgg::norm_parallel_line_length(): "
-//               << "No line cover found for dir " << dir << vcl_endl;
+//      std::cout << "vgg::norm_parallel_line_length(): "
+//               << "No line cover found for dir " << dir << std::endl;
 
       // Is this right?  What about other dominant directions?
       // return 0.0;
@@ -271,8 +273,8 @@ norm_parallel_line_length(void)
 
   double  per = this->GetAdjacentPerimeter(max_dir);
 
-//  vcl_cout << "vgg::norm_parallel_line_length(): per = " << per
-//           << ", tmp1_ = " << tmp1_ << vcl_endl;
+//  std::cout << "vgg::norm_parallel_line_length(): per = " << per
+//           << ", tmp1_ = " << tmp1_ << std::endl;
 
   return 1.5 * per / tmp1_;
 }
@@ -283,18 +285,18 @@ int vifa_group_pgram::
 AngleLoc(imp_line_sptr  il)
 {
   // Compute angle index
-  double  angle = vcl_fmod(il->slope_degrees(), 180.0);
+  double  angle = std::fmod(il->slope_degrees(), 180.0);
   if (angle < 0.0)
     angle += 180.0;
 
   if (angle > angle_range_)
   {
-    vcl_cerr << "In vifa_group_pgram::AngleLoc(): angle " << angle
-             << " was outside the angle range " << angle_range_ << vcl_endl;
+    std::cerr << "In vifa_group_pgram::AngleLoc(): angle " << angle
+             << " was outside the angle range " << angle_range_ << std::endl;
     return 0;
   }
 
-  return (int)(vcl_floor(angle / angle_increment()));
+  return (int)(std::floor(angle / angle_increment()));
 }
 
 //--------------------------------------------------------------
@@ -304,7 +306,7 @@ LineAtAngle(int  angle_bin)
 {
   // Get the new line's direction unit vector
   double          ang_rad = DEGTORAD * angle_bin * angle_increment();
-  vgl_vector_2d<double>  d(vcl_cos(ang_rad), vcl_sin(ang_rad));
+  vgl_vector_2d<double>  d(std::cos(ang_rad), std::sin(ang_rad));
 
   // Get the new line's midpoint (bounding box centroid)
   this->CheckUpdateBoundingBox();
@@ -361,6 +363,6 @@ ComputeDominantDirs(void)
     if (cnts[i] > 0)
       dominant_dirs_.push_back(i);
 
-//  vcl_cout << "vgg::ComputeDominantDirs(): max_idx = " << max_idx << ", "
+//  std::cout << "vgg::ComputeDominantDirs(): max_idx = " << max_idx << ", "
 //           << dominant_dirs_.size() << " dominant directions found\n";
 }

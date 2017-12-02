@@ -1,5 +1,7 @@
 // This is mul/mbl/tests/test_exception.cxx
-#include <vcl_typeinfo.h>
+#include <iostream>
+#include <typeinfo>
+#include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>
@@ -7,7 +9,7 @@
 
 void test_exception()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << "  Testing mbl_exception\n"
            << "*************************\n";
 
@@ -22,7 +24,7 @@ void test_exception()
     }
     catch (const mbl_exception_abort &e)
     {
-      vcl_cout << e.what() << vcl_endl;
+      std::cout << e.what() << std::endl;
       caught_error = true;
     }
     TEST("Caught Exception 1", caught_error && !returned, true);
@@ -37,7 +39,7 @@ void test_exception()
     }
     catch (const mbl_exception_abort &e)
     {
-      vcl_cout << e.what() << vcl_endl;
+      std::cout << e.what() << std::endl;
       caught_error = true;
     }
     TEST("Caught Exception 2", caught_error && !returned, true);
@@ -55,7 +57,7 @@ void test_exception()
     }
     catch (const mbl_exception_os_error &e)
     {
-      vcl_cout << e.what() << vcl_endl;
+      std::cout << e.what() << std::endl;
       caught_error = true;
       TEST ("Caught expected exception", typeid(e),
             typeid(mbl_exception_os_no_such_file_or_directory));

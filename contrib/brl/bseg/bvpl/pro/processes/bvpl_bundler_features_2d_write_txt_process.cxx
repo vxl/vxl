@@ -25,7 +25,7 @@ bool bvpl_bundler_features_2d_write_txt_process_cons( bprb_func_process& pro )
 {
   using namespace bvpl_bundler_features_2d_write_txt_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   unsigned i = 0;
   input_types_[i++] = "bvpl_bundler_features_2d_sptr";
@@ -33,10 +33,10 @@ bool bvpl_bundler_features_2d_write_txt_process_cons( bprb_func_process& pro )
 
   if ( !pro.set_input_types(input_types_) )
   {
-    vcl_cerr << "----ERROR---- bvpl_bundler_features_2d_write_txt_process_cons\n"
+    std::cerr << "----ERROR---- bvpl_bundler_features_2d_write_txt_process_cons\n"
              << "\tCOULD NOT SET INPUT TYPES.\n"
              << __FILE__ << '\n'
-             << __LINE__ << '\n' << vcl_flush;
+             << __LINE__ << '\n' << std::flush;
     return false;
   }
 
@@ -49,16 +49,16 @@ bool bvpl_bundler_features_2d_write_txt_process( bprb_func_process& pro )
 
   if ( pro.n_inputs() != n_inputs_ )
   {
-    vcl_cerr << pro.name()
+    std::cerr << pro.name()
              << " bvpl_bundler_features_2d_write_txt_process: NUMBER OF INPUTS SHOULD BE: "
-             << n_inputs_ << vcl_endl;
+             << n_inputs_ << std::endl;
     return false;
   }
 
   //get inputs
   unsigned i = 0;
   bvpl_bundler_features_2d_sptr bundler_features_sptr    = pro.get_input<bvpl_bundler_features_2d_sptr>(i++);
-  vcl_string filename                    = pro.get_input<vcl_string>(i++);
+  std::string filename                    = pro.get_input<std::string>(i++);
 
   bundler_features_sptr->write_txt(filename);
 

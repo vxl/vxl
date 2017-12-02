@@ -42,7 +42,7 @@ void measure(bbgm_image_of<dist_>& dimg,
 
   result.set_size(ni,nj,1);
 
-  const vcl_ptrdiff_t pstep = image.planestep();
+  const std::ptrdiff_t pstep = image.planestep();
 
   vector_ del(delta);
   typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
@@ -87,7 +87,7 @@ void measure_bkground(bbgm_image_of<dist_>& dimg,
 
   result.set_size(ni,nj,1);
 
-  const vcl_ptrdiff_t pstep = image.planestep();
+  const std::ptrdiff_t pstep = image.planestep();
 
   typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
   for ( unsigned j=0; j<nj; ++j)
@@ -129,7 +129,7 @@ void measure(bbgm_image_of<dist_>& dimg,
 
   result.set_size(ni,nj,1);
 
-  const vcl_ptrdiff_t pstep = image.planestep();
+  const std::ptrdiff_t pstep = image.planestep();
 
   vector_ sample;
   typename bbgm_image_of<dist_>::iterator itr = dimg.begin();
@@ -173,7 +173,7 @@ void measure(bbgm_image_of<dist_>& dimg,
 
   result.set_size(ni,nj,1);
 
-  const vcl_ptrdiff_t pstep = image.planestep();
+  const std::ptrdiff_t pstep = image.planestep();
 
   vector_ sample;
   vector_ del(delta);

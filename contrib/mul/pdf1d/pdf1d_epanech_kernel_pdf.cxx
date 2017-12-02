@@ -5,11 +5,13 @@
 // \brief Univariate Epanechnikov kernel PDF
 // \author Tim Cootes
 
+#include <cstdlib>
+#include <string>
+#include <iostream>
+#include <cmath>
 #include "pdf1d_epanech_kernel_pdf.h"
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include <pdf1d/pdf1d_epanech_kernel_pdf_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
@@ -45,7 +47,7 @@ pdf1d_sampler* pdf1d_epanech_kernel_pdf::new_sampler() const
   return i;
 }
 
-static const double root5 = 2.23606797749978970; //vcl_sqrt(5);
+static const double root5 = 2.23606797749978970; //std::sqrt(5);
 
 //=======================================================================
 //: Probability density at x
@@ -73,7 +75,7 @@ double pdf1d_epanech_kernel_pdf::operator()(double x0) const
   // Probability densities:
 double pdf1d_epanech_kernel_pdf::log_p(double x) const
 {
-  return vcl_log(pdf1d_epanech_kernel_pdf::operator()(x));
+  return std::log(pdf1d_epanech_kernel_pdf::operator()(x));
 }
 
 //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
@@ -140,8 +142,8 @@ double pdf1d_epanech_kernel_pdf::gradient(double x0,
 
 double pdf1d_epanech_kernel_pdf::nearest_plausible(double /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr<<"pdf1d_epanech_kernel_pdf::nearest_plausible() not yet implemented.\n";
-  vcl_abort();
+  std::cerr<<"pdf1d_epanech_kernel_pdf::nearest_plausible() not yet implemented.\n";
+  std::abort();
   return 0.0;
 }
 
@@ -149,9 +151,9 @@ double pdf1d_epanech_kernel_pdf::nearest_plausible(double /*x*/, double /*log_p_
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_epanech_kernel_pdf::is_a() const
+std::string pdf1d_epanech_kernel_pdf::is_a() const
 {
-  static vcl_string class_name_ = "pdf1d_epanech_kernel_pdf";
+  static std::string class_name_ = "pdf1d_epanech_kernel_pdf";
   return class_name_;
 }
 
@@ -159,7 +161,7 @@ vcl_string pdf1d_epanech_kernel_pdf::is_a() const
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_epanech_kernel_pdf::is_class(vcl_string const& s) const
+bool pdf1d_epanech_kernel_pdf::is_class(std::string const& s) const
 {
   return pdf1d_kernel_pdf::is_class(s) || s==pdf1d_epanech_kernel_pdf::is_a();
 }
@@ -187,7 +189,7 @@ pdf1d_pdf* pdf1d_epanech_kernel_pdf::clone() const
 //=======================================================================
 
 
-void pdf1d_epanech_kernel_pdf::print_summary(vcl_ostream& os) const
+void pdf1d_epanech_kernel_pdf::print_summary(std::ostream& os) const
 {
   pdf1d_pdf::print_summary(os);
   os << '\n';
@@ -212,14 +214,14 @@ void pdf1d_epanech_kernel_pdf::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_epanech_kernel_pdf &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_epanech_kernel_pdf &)\n"
              << "           Attempted to load object of type "
-             << name <<" into object of type " << is_a() << vcl_endl;
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+             << name <<" into object of type " << is_a() << std::endl;
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -231,9 +233,9 @@ void pdf1d_epanech_kernel_pdf::b_read(vsl_b_istream& bfs)
       pdf1d_kernel_pdf::b_read(bfs);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_epanech_kernel_pdf &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_epanech_kernel_pdf &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

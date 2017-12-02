@@ -49,6 +49,9 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_compute_normal_albedo_process, "boxm2CppBatchComputeNormalAlbedoProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_query_cell_brdf_process, "boxm2CppQueryCellBrdfProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_query_cell_process, "boxm2CppQueryCellProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_get_index_from_3d_point_process, "boxm2CppGetIndexFrom3dPointProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_get_3d_point_from_index_process, "boxm2CppGet3dPointFromIndexProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_pre_infinity_opt2_phongs_process, "boxm2CppPreInfinityOpt2PhongsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_update_opt2_phongs_process, "boxm2CppBatchUpdateOpt2PhongsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_update_nonray_process, "boxm2CppBatchUpdateNonrayProcess");
@@ -77,5 +80,7 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_batch_compute_3d_points_process, "boxm2CppBatchCompute3dPoints");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_cast_3d_point_hypothesis_process, "boxm2CppCast3dPointHypothesisProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_cast_3d_point_hypothesis_process2, "boxm2CppCast3dPointHypothesisProcess2");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_compute_3d_points_and_covs_process, "boxm2CppCompute3dPointsAndCovsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_compute_3d_points_and_covs_normalize_process, "boxm2CppCompute3dPointsAndCovsNormalizeProcess");
 
 }

@@ -1,4 +1,5 @@
 // This is brl/bpro/core/vil_pro/processes/vil_blob_detection_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,19 +8,19 @@
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 //: Constructor
 bool vil_blob_detection_process_cons(bprb_func_process& pro)
 {
   //this process takes 3 inputs
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("unsigned"); // max size of the blob in pixels
   input_types.push_back("unsigned"); // min size of the blob in pixels
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image
 
   return pro.set_input_types(input_types)
@@ -31,7 +32,7 @@ bool vil_blob_detection_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 3) {
-    vcl_cout << "vil_blob_detection_process: The number of inputs should be 3" << vcl_endl;
+    std::cout << "vil_blob_detection_process: The number of inputs should be 3" << std::endl;
     return false;
   }
 
@@ -50,7 +51,7 @@ bool vil_blob_detection_process(bprb_func_process& pro)
     vil_binary_closing(*view,view_closed,selem);
 
     // Find the blobs
-    vcl_vector<vil_blob_region> blob_regions;
+    std::vector<vil_blob_region> blob_regions;
     {
       vil_image_view<unsigned> blob_labels;
       vil_blob_labels(*view, vil_blob_4_conn, blob_labels);//view_closed);
@@ -61,10 +62,10 @@ bool vil_blob_detection_process(bprb_func_process& pro)
     view_blobs.fill(false);
 
     // Threshold the blobs.
-    for (vcl_vector<vil_blob_region>::const_iterator it= blob_regions.begin(),
+    for (std::vector<vil_blob_region>::const_iterator it= blob_regions.begin(),
          end=blob_regions.end(); it!=end; ++it)
     {
-      vcl_size_t sizecount= vil_area(*it);
+      std::size_t sizecount= vil_area(*it);
       if (sizecount>min_size && sizecount<max_size)
       for (vil_blob_region::const_iterator chords_it=it->begin(),
            chords_end=it->end(); chords_it!=chords_end; ++chords_it)
@@ -81,6 +82,6 @@ bool vil_blob_detection_process(bprb_func_process& pro)
     return true;
   }
 
-  vcl_cerr<<"Error! Require a boolean image\n";
+  std::cerr<<"Error! Require a boolean image\n";
   return false;
 }

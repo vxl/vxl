@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
  * All rights reserved.
  *
@@ -37,32 +37,32 @@ The functions in EVENT.C have for goal to send output messages (errors, warnings
 */
 /**
 Message handler object
-used for 
+used for
 <ul>
 <li>Error messages
 <li>Warning messages
 <li>Debugging messages
 </ul>
 */
-typedef struct opj_event_mgr 
+typedef struct opj_event_mgr
 {
-	/** Data to call the event manager upon */
-	void *			m_error_data;
-	/** Data to call the event manager upon */
-	void *			m_warning_data;
-	/** Data to call the event manager upon */
-	void *			m_info_data;
-	/** Error message callback if available, NULL otherwise */
-	opj_msg_callback error_handler;
-	/** Warning message callback if available, NULL otherwise */
-	opj_msg_callback warning_handler;
-	/** Debug message callback if available, NULL otherwise */
-	opj_msg_callback info_handler;
+        /** Data to call the event manager upon */
+        void *                        m_error_data;
+        /** Data to call the event manager upon */
+        void *                        m_warning_data;
+        /** Data to call the event manager upon */
+        void *                        m_info_data;
+        /** Error message callback if available, NULL otherwise */
+        opj_msg_callback error_handler;
+        /** Warning message callback if available, NULL otherwise */
+        opj_msg_callback warning_handler;
+        /** Debug message callback if available, NULL otherwise */
+        opj_msg_callback info_handler;
 } opj_event_mgr_t;
 
-#define EVT_ERROR	1	/**< Error event type */
-#define EVT_WARNING	2	/**< Warning event type */
-#define EVT_INFO	4	/**< Debug event type */
+#define EVT_ERROR        1        /**< Error event type */
+#define EVT_WARNING        2        /**< Warning event type */
+#define EVT_INFO        4        /**< Debug event type */
 
 /** @defgroup EVENT EVENT - Implementation of a event callback system */
 /*@{*/
@@ -71,7 +71,7 @@ typedef struct opj_event_mgr
 /*@{*/
 /* ----------------------------------------------------------------------- */
 /**
- * Writes formatted data to a string and send the string to a user callback. 
+ * Writes formatted data to a string and send the string to a user callback.
  * @param p_event_mgr the event manager to display messages.
  * @param event_type Event type of the message
  * @param fmt Format-control string (plus optionnal arguments)

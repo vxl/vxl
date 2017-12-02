@@ -25,11 +25,11 @@ bool bvpl_compute_pca_test_error_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compute_pca_test_error_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string" ;
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
-  output_types_[0] = " vcl_string";
+  std::vector<std::string> output_types_(n_outputs_);
+  output_types_[0] = " std::string";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -41,19 +41,19 @@ bool bvpl_compute_pca_test_error_process(bprb_func_process& pro)
   using namespace bvpl_compute_pca_test_error_process_globals;
 
   //get inputs
-  vcl_string pca_dir = pro.get_input<vcl_string>(0);
+  std::string pca_dir = pro.get_input<std::string>(0);
 
   bvpl_discover_pca_kernels pca_extractor(pca_dir);
 
   vnl_vector<double> t_error;
   pca_extractor.compute_testing_error(t_error);
-  vcl_ofstream error_ofs((pca_dir+ "/test_error.txt").c_str());
+  std::ofstream error_ofs((pca_dir+ "/test_error.txt").c_str());
 
   if (error_ofs)
     error_ofs << t_error;
 
   //store output
-  pro.set_output_val<vcl_string>(0, pca_dir+ "/test_error.txt");
+  pro.set_output_val<std::string>(0, pca_dir+ "/test_error.txt");
 
   return true;
 }

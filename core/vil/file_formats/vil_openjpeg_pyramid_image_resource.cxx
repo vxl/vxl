@@ -1,3 +1,4 @@
+#include <cmath>
 #include "vil_openjpeg_pyramid_image_resource.h"
 //:
 // \file
@@ -5,14 +6,14 @@
 // Approved for public Release, distribution unlimited
 // DISTAR Case 14074
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 // By definition, each level is a factor of 2 reduced in scale
 static float scale_at_level(unsigned level)
 {
   if (level == 0)
     return 1.0f;
-  float s = vcl_pow(2.0f, -static_cast<float>(level));
+  float s = std::pow(2.0f, -static_cast<float>(level));
   return s;
 }
 
@@ -20,7 +21,7 @@ vil_openjpeg_pyramid_image_resource::
 vil_openjpeg_pyramid_image_resource(vil_image_resource_sptr const &openjpeg)
 : openjpeg_sptr_(openjpeg)
 {
-  ptr_ = 0;
+  ptr_ = VXL_NULLPTR;
   if (!openjpeg_sptr_)
     return;
   ptr_ = dynamic_cast<vil_openjpeg_image*>(openjpeg_sptr_.ptr());
@@ -89,7 +90,7 @@ vil_openjpeg_pyramid_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                                    unsigned level) const
 {
   if (!ptr_||!(ptr_->is_valid()))
-     return 0;
+     return VXL_NULLPTR;
   if (level >= this->nlevels())
     level = this->nlevels() - 1;
   return ptr_->get_copy_view_reduced(i0, ni, j0, nj, level);
@@ -109,7 +110,7 @@ vil_openjpeg_pyramid_image_resource::get_copy_view(unsigned i0, unsigned ni,
     actual_scale = 1.0f;
     return this->get_copy_view(i0, ni, j0, nj, 0);
   }
-  float f_lev = -vcl_log(scale) / vcl_log(2.0f);
+  float f_lev = -std::log(scale) / std::log(2.0f);
   unsigned level = static_cast<unsigned>(f_lev);
   if (level >= this->nlevels())
     level = this->nlevels()-1;
@@ -123,7 +124,7 @@ vil_openjpeg_pyramid_image_resource::get_resource(const unsigned level) const
 {
   if (level == 0)
     return openjpeg_sptr_;
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: for debug purposes

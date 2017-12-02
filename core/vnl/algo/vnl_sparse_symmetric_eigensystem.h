@@ -17,8 +17,10 @@
 //                                solver (see 2nd CalculateNPairs() method)
 // \endverbatim
 
+#include <vector>
 #include <vnl/vnl_sparse_matrix.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vnl/algo/vnl_algo_export.h>
 
 //: Find the eigenvalues of a sparse symmetric matrix
 //  Solve the standard eigenproblem $A x = \lambda x$, or the
@@ -33,7 +35,7 @@
 //  Uses the dsaupd routine from the ARPACK package of netlib for
 //  solving the generalized case.
 
-class vnl_sparse_symmetric_eigensystem
+class VNL_ALGO_EXPORT vnl_sparse_symmetric_eigensystem
 {
  public:
   vnl_sparse_symmetric_eigensystem();
@@ -77,7 +79,7 @@ class vnl_sparse_symmetric_eigensystem
   // Matrix B of A*x = lambda*B*x
   vnl_sparse_matrix<double> * Bmat;
 
-  vcl_vector<double*> temp_store;
+  std::vector<double*> temp_store;
 };
 
 #endif // vnl_sparse_symmetric_eigensystem_h_

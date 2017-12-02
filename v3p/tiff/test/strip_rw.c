@@ -42,116 +42,116 @@
 
 extern int
 create_image_striped(const char *, uint32, uint32, uint32, uint16, uint16,
-             uint16, uint16, uint16, uint16, const tdata_t,
-             const tsize_t);
+		     uint16, uint16, uint16, uint16, const tdata_t,
+		     const tsize_t);
 extern int
 read_image_striped(const char *, uint32, uint32, uint32, uint16, uint16,
-           uint16, uint16, uint16, uint16, const tdata_t,
-           const tsize_t);
+		   uint16, uint16, uint16, uint16, const tdata_t,
+		   const tsize_t);
 
 const char	*filename = "strip_test.tiff";
 
 int
 main(int argc, char **argv)
 {
-    uint32		rowsperstrip;
-    uint16		compression;
-    uint16		spp, bps, photometric, sampleformat, planarconfig;
+	uint32		rowsperstrip;
+	uint16		compression;
+	uint16		spp, bps, photometric, sampleformat, planarconfig;
         (void) argc;
         (void) argv;
 
-    /* 
-     * Test two special cases: image consisting from single line and image
-     * consisting from single column.
-     */
-    rowsperstrip = 1;
-    compression = COMPRESSION_NONE;
-    spp = 1;
-    bps = 8;
+	/* 
+	 * Test two special cases: image consisting from single line and image
+	 * consisting from single column.
+	 */
+	rowsperstrip = 1;
+	compression = COMPRESSION_NONE;
+	spp = 1;
+	bps = 8;
         photometric = PHOTOMETRIC_MINISBLACK;
-    sampleformat = SAMPLEFORMAT_UINT;
-    planarconfig = PLANARCONFIG_CONTIG;
+	sampleformat = SAMPLEFORMAT_UINT;
+	planarconfig = PLANARCONFIG_CONTIG;
 
-    if (create_image_striped(filename, XSIZE * YSIZE, 1, rowsperstrip,
-                  compression, spp, bps, photometric,
-                  sampleformat, planarconfig,
-                  (const tdata_t) byte_array1, byte_array1_size) < 0) {
-        fprintf (stderr, "Can't create TIFF file %s.\n", filename);
-        goto failure;
-    }
-    if (read_image_striped(filename, XSIZE * YSIZE, 1, rowsperstrip,
-                compression, spp, bps, photometric,
-                sampleformat, planarconfig,
-                (const tdata_t) byte_array1, byte_array1_size) < 0) {
-        fprintf (stderr, "Can't read TIFF file %s.\n", filename);
-        goto failure;
-    }
-    unlink(filename);
-        
-    if (create_image_striped(filename, 1, XSIZE * YSIZE, rowsperstrip,
-                  compression, spp, bps, photometric,
-                  sampleformat, planarconfig,
-                  (const tdata_t) byte_array1, byte_array1_size) < 0) {
-        fprintf (stderr, "Can't create TIFF file %s.\n", filename);
-        goto failure;
-    }
-    if (read_image_striped(filename, 1, XSIZE * YSIZE, rowsperstrip,
-                compression, spp, bps, photometric,
-                sampleformat, planarconfig,
-                (const tdata_t) byte_array1, byte_array1_size) < 0) {
-        fprintf (stderr, "Can't read TIFF file %s.\n", filename);
-        goto failure;
-    }
-    unlink(filename);
-        
-    /* 
-     * Test one-channel image with different parameters.
-     */
-    rowsperstrip = 1;
-    spp = 1;
-    bps = 8;
+	if (create_image_striped(filename, XSIZE * YSIZE, 1, rowsperstrip,
+				  compression, spp, bps, photometric,
+				  sampleformat, planarconfig,
+				  (const tdata_t) byte_array1, byte_array1_size) < 0) {
+		fprintf (stderr, "Can't create TIFF file %s.\n", filename);
+		goto failure;
+	}
+	if (read_image_striped(filename, XSIZE * YSIZE, 1, rowsperstrip,
+				compression, spp, bps, photometric,
+				sampleformat, planarconfig,
+				(const tdata_t) byte_array1, byte_array1_size) < 0) {
+		fprintf (stderr, "Can't read TIFF file %s.\n", filename);
+		goto failure;
+	}
+	unlink(filename);
+		
+	if (create_image_striped(filename, 1, XSIZE * YSIZE, rowsperstrip,
+				  compression, spp, bps, photometric,
+				  sampleformat, planarconfig,
+				  (const tdata_t) byte_array1, byte_array1_size) < 0) {
+		fprintf (stderr, "Can't create TIFF file %s.\n", filename);
+		goto failure;
+	}
+	if (read_image_striped(filename, 1, XSIZE * YSIZE, rowsperstrip,
+				compression, spp, bps, photometric,
+				sampleformat, planarconfig,
+				(const tdata_t) byte_array1, byte_array1_size) < 0) {
+		fprintf (stderr, "Can't read TIFF file %s.\n", filename);
+		goto failure;
+	}
+	unlink(filename);
+		
+	/* 
+	 * Test one-channel image with different parameters.
+	 */
+	rowsperstrip = 1;
+	spp = 1;
+	bps = 8;
         photometric = PHOTOMETRIC_MINISBLACK;
-    sampleformat = SAMPLEFORMAT_UINT;
-    planarconfig = PLANARCONFIG_CONTIG;
+	sampleformat = SAMPLEFORMAT_UINT;
+	planarconfig = PLANARCONFIG_CONTIG;
 
-    if (create_image_striped(filename, XSIZE, YSIZE, rowsperstrip,
-                  compression, spp, bps, photometric,
-                  sampleformat, planarconfig,
-                  (const tdata_t) byte_array1, byte_array1_size) < 0) {
-        fprintf (stderr, "Can't create TIFF file %s.\n", filename);
-        goto failure;
-    }
-    if (read_image_striped(filename, XSIZE, YSIZE, rowsperstrip,
-                compression, spp, bps, photometric,
-                sampleformat, planarconfig,
-                (const tdata_t) byte_array1, byte_array1_size) < 0) {
-        fprintf (stderr, "Can't read TIFF file %s.\n", filename);
-        goto failure;
-    }
-    unlink(filename);
-    
-    rowsperstrip = YSIZE;
-    if (create_image_striped(filename, XSIZE, YSIZE, rowsperstrip,
-                  compression, spp, bps, photometric,
-                  sampleformat, planarconfig,
-                  (const tdata_t) byte_array1, byte_array1_size) < 0) {
-        fprintf (stderr, "Can't create TIFF file %s.\n", filename);
-        goto failure;
-    }
-    if (read_image_striped(filename, XSIZE, YSIZE, rowsperstrip,
-                compression, spp, bps, photometric,
-                sampleformat, planarconfig,
-                (const tdata_t) byte_array1, byte_array1_size) < 0) {
-        fprintf (stderr, "Can't read TIFF file %s.\n", filename);
-        goto failure;
-    }
-    unlink(filename);
+	if (create_image_striped(filename, XSIZE, YSIZE, rowsperstrip,
+				  compression, spp, bps, photometric,
+				  sampleformat, planarconfig,
+				  (const tdata_t) byte_array1, byte_array1_size) < 0) {
+		fprintf (stderr, "Can't create TIFF file %s.\n", filename);
+		goto failure;
+	}
+	if (read_image_striped(filename, XSIZE, YSIZE, rowsperstrip,
+				compression, spp, bps, photometric,
+				sampleformat, planarconfig,
+				(const tdata_t) byte_array1, byte_array1_size) < 0) {
+		fprintf (stderr, "Can't read TIFF file %s.\n", filename);
+		goto failure;
+	}
+	unlink(filename);
+	
+	rowsperstrip = YSIZE;
+	if (create_image_striped(filename, XSIZE, YSIZE, rowsperstrip,
+				  compression, spp, bps, photometric,
+				  sampleformat, planarconfig,
+				  (const tdata_t) byte_array1, byte_array1_size) < 0) {
+		fprintf (stderr, "Can't create TIFF file %s.\n", filename);
+		goto failure;
+	}
+	if (read_image_striped(filename, XSIZE, YSIZE, rowsperstrip,
+				compression, spp, bps, photometric,
+				sampleformat, planarconfig,
+				(const tdata_t) byte_array1, byte_array1_size) < 0) {
+		fprintf (stderr, "Can't read TIFF file %s.\n", filename);
+		goto failure;
+	}
+	unlink(filename);
 
-    return 0;
+	return 0;
 
 failure:
-    unlink(filename);
-    return 1;
+	unlink(filename);
+	return 1;
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */

@@ -7,7 +7,7 @@
 // \author Tim Cootes
 // \brief Sampler class for Univariate exponential distributions
 
-#include <vcl_string.h>
+#include <string>
 #include <vnl/vnl_random.h>
 #include <pdf1d/pdf1d_sampler.h>
 
@@ -43,9 +43,11 @@ class pdf1d_exponential_sampler :public pdf1d_sampler
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
   // \code
-  // #include <vcl_ctime.h>
+  // #include <vcl_compiler.h>
+  // #include <iostream>
+  // #include <ctime>
   // ..
-  // sampler.reseed(vcl_time(0));
+  // sampler.reseed(std::time(0));
   // \endcode
   virtual void reseed(unsigned long);
 
@@ -55,10 +57,10 @@ class pdf1d_exponential_sampler :public pdf1d_sampler
   const pdf1d_exponential& exponential() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_sampler* clone() const;

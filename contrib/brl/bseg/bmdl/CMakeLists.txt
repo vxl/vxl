@@ -1,27 +1,33 @@
 # This is brl/seg/bmdl/CMakeLists.txt
 
+if(HAS_GEOTIFF)
+  include_directories( ${GEOTIFF_INCLUDE_DIR} )
+
 doxygen_add_library(contrib/brl/bseg/bmdl
   DEPENDS contrib/brl/bbas/imesh core/vil
   PACKAGE contrib/brl
   DESCRIPTION "Brown Lidar Mesh Modeling Library"
   )
 
-ADD_DEFINITIONS(-DDEBUG_MEMORY=1)
+add_definitions(-DDEBUG_MEMORY=1)
 
-SET( bmdl_sources
-  bmdl_classify.txx    bmdl_classify.h
+set( bmdl_sources
+  bmdl_classify.hxx    bmdl_classify.h
   bmdl_mesh.cxx        bmdl_mesh.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates bmdl_sources)
+aux_source_directory(Templates bmdl_sources)
 
-ADD_LIBRARY(bmdl  ${bmdl_sources})
+vxl_add_library(LIBRARY_NAME bmdl LIBRARY_SOURCES  ${bmdl_sources})
 
-TARGET_LINK_LIBRARIES(bmdl vil_algo imesh vgl_algo vgl vnl vil)
+target_link_libraries(bmdl ${VXL_LIB_PREFIX}vil_algo imesh ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil)
 
 #process lib
 add_subdirectory(pro)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
+else()
+  message(STATUS "Skipping contrib/brl/bseg/bmdl: requires geotiff")
+endif()

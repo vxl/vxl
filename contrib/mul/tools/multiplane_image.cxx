@@ -3,8 +3,9 @@
 //  \date 30 October 2008
 //  \brief Combine 2 images into a single image with multiple planes
 
-#include <vcl_exception.h>
-#include <vcl_iostream.h>
+#include <iostream>
+#include <exception>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vil/vil_pixel_format.h>
@@ -26,7 +27,7 @@ static mbl_logger& logger()
 
 //========================================================================
 //========================================================================
-static bool load_image_resource_info(const vcl_string& filename,
+static bool load_image_resource_info(const std::string& filename,
                                      const bool use_mm,
                                      vil3d_image_resource_sptr& ir,
                                      vimt3d_transform_3d& w2i)
@@ -34,7 +35,7 @@ static bool load_image_resource_info(const vcl_string& filename,
   ir = vil3d_load_image_resource(filename.c_str());
   if (!ir)
   {
-    vcl_cerr << "ERROR: failed to load image resource for " << filename << '\n';
+    std::cerr << "ERROR: failed to load image resource for " << filename << '\n';
     return false;
   }
   w2i = vimt3d_load_transform(ir, use_mm);
@@ -50,16 +51,16 @@ int main2(int argc, char*argv[])
   vimt3d_add_all_loaders();
 
   // Parse the program arguments
-  vul_arg<vcl_string> img1(0, "input image1 filename");
-  vul_arg<vcl_string> img2(0, "input image2 filename");
-  vul_arg<vcl_string> img_out(0, "output image filename");
+  vul_arg<std::string> img1(VXL_NULLPTR, "input image1 filename");
+  vul_arg<std::string> img2(VXL_NULLPTR, "input image2 filename");
+  vul_arg<std::string> img_out(VXL_NULLPTR, "output image filename");
   vul_arg<bool> use_mm("-mm", "Image transform in millimetres (default=metres)", false);
   vul_arg<float> s1("-s1", "Scaling factor to multiply voxels in image1", 1.0f);
   vul_arg<float> s2("-s2", "Scaling factor to multiply voxels in image2", 1.0f);
   vul_arg_parse(argc, argv);
 
   // Load first image
-  vil3d_image_resource_sptr ir1 = 0;
+  vil3d_image_resource_sptr ir1 = VXL_NULLPTR;
   vimt3d_transform_3d w2i;
   if (!load_image_resource_info(img1(), use_mm(), ir1, w2i))
     return 1;
@@ -77,7 +78,7 @@ int main2(int argc, char*argv[])
   MBL_LOG(INFO, logger(), "scaling: " << s1());
 
   // Second image must have the same dimensions, transform and pixel type
-  vil3d_image_resource_sptr ir2 = 0;
+  vil3d_image_resource_sptr ir2 = VXL_NULLPTR;
   vimt3d_transform_3d w2i2;
   if (!load_image_resource_info(img2(), use_mm(), ir2, w2i2))
     return 1;
@@ -96,7 +97,7 @@ int main2(int argc, char*argv[])
 
   if (!(w2i2==w2i) || ni2!=ni || nj2!=nj || nk2!=nk || fmt2!=fmt)
   {
-    vcl_cerr << "ERROR: input images must have same dimensions, transform and pixel type" << '\n';
+    std::cerr << "ERROR: input images must have same dimensions, transform and pixel type" << '\n';
     return 2;
   }
 
@@ -149,7 +150,7 @@ int main2(int argc, char*argv[])
 
   // Write the combined image to disk
   vimt3d_save(img_out(), img, use_mm());
-  vcl_cout << "Wrote combined image to file: " << img_out() << vcl_endl;
+  std::cout << "Wrote combined image to file: " << img_out() << std::endl;
 
   return 0;
 }
@@ -166,14 +167,14 @@ int main(int argc, char*argv[])
     mbl_logger::root().load_log_config_file();
     main2(argc, argv);
   }
-  catch (vcl_exception& e)
+  catch (std::exception& e)
   {
-    vcl_cout << "caught exception " << e.what() << vcl_endl;
+    std::cout << "caught exception " << e.what() << std::endl;
     return 3;
   }
   catch (...)
   {
-    vcl_cout << "caught unknown exception " << vcl_endl;
+    std::cout << "caught unknown exception " << std::endl;
     return 3;
   }
 

@@ -1,10 +1,12 @@
 // This is brl/bseg/bapl/bapl_keypoint_extractor.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "bapl_keypoint_extractor.h"
 //:
 // \file
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vil/vil_image_resource.h>
 #include <bapl/bapl_lowe_keypoint.h>
@@ -20,22 +22,22 @@
 
 //: Extract the lowe keypoints from an image
 bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
-                              vcl_vector<bapl_keypoint_sptr> & keypoints,
+                              std::vector<bapl_keypoint_sptr> & keypoints,
                               float curve_ratio, bool verbose)
 {
   // Create the group of image pyramids
   bapl_lowe_pyramid_set_sptr pyramid_set = new bapl_lowe_pyramid_set(image,3,6,verbose);
 
   if(verbose){
-    vcl_cout << "Detecting Peaks" << vcl_endl;
+    std::cout << "Detecting Peaks" << std::endl;
   }
 
   // detect the peaks
-  vcl_vector<vgl_point_3d<float> > peak_pts;
+  std::vector<vgl_point_3d<float> > peak_pts;
   bapl_dog_peaks(peak_pts, pyramid_set, curve_ratio);
 
   if(verbose){
-    vcl_cout << "Peak count: " << peak_pts.size() <<vcl_endl;
+    std::cout << "Peak count: " << peak_pts.size() <<std::endl;
   }
 
   bapl_lowe_orientation orientor(3.0, 36);
@@ -49,9 +51,9 @@ bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
     key_x /= actual_scale;  key_y /= actual_scale;
 
     // Add a keypoint for each possible orientation
-    vcl_vector<float> orientations;
+    std::vector<float> orientations;
     orientor.orient_at(key_x, key_y, peak_pts[i].z(), orient_img, mag_img, orientations);
-    for ( vcl_vector<float>::iterator itr = orientations.begin(); itr != orientations.end(); ++itr) {
+    for ( std::vector<float>::iterator itr = orientations.begin(); itr != orientations.end(); ++itr) {
       bapl_lowe_keypoint_sptr kp = bapl_lowe_keypoint_new( pyramid_set, peak_pts[i].x(), peak_pts[i].y(),
                                                            peak_pts[i].z(), *itr );
       keypoints.push_back( kp );
@@ -63,7 +65,7 @@ bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
   }
 
   if(verbose){
-    vcl_cout<<"Found "<<keypoints.size()<<" keypoints."<<vcl_endl;
+    std::cout<<"Found "<<keypoints.size()<<" keypoints."<<std::endl;
   }
 
   return true;
@@ -72,7 +74,7 @@ bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
 
 // compute (r+1)^2/r where r is the ratio of principal curvatures
 inline float
-curvature_ratio(const float *center, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+curvature_ratio(const float *center, std::ptrdiff_t i_step, std::ptrdiff_t j_step)
 {
   float n_m1_m1 = center[-i_step-j_step];
   float n_m1_0  = center[-i_step];
@@ -155,7 +157,7 @@ bapl_refine_peak( const vil_image_view<float> & neighbors, vnl_double_3& delta)
 
 //: DoG Peak finding helper function
 inline bool
-bapl_is_max_3x3(const float* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+bapl_is_max_3x3(const float* im, std::ptrdiff_t i_step, std::ptrdiff_t j_step)
 {
    if (*im <= im[i_step]) return false;
    if (*im <= im[-i_step]) return false;
@@ -171,7 +173,7 @@ bapl_is_max_3x3(const float* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 
 //: DoG Peak finding helper function
 inline bool
-bapl_is_min_3x3(const float* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+bapl_is_min_3x3(const float* im, std::ptrdiff_t i_step, std::ptrdiff_t j_step)
 {
    if (*im >= im[i_step]) return false;
    if (*im >= im[-i_step]) return false;
@@ -187,7 +189,7 @@ bapl_is_min_3x3(const float* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
 
 //: DoG Peak finding helper function
 inline bool
-bapl_is_more_3x3(const float value, const float* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+bapl_is_more_3x3(const float value, const float* im, std::ptrdiff_t i_step, std::ptrdiff_t j_step)
 {
    if (value <= im[0]) return false;
    if (value <= im[i_step]) return false;
@@ -204,7 +206,7 @@ bapl_is_more_3x3(const float value, const float* im, vcl_ptrdiff_t i_step, vcl_p
 
 //: DoG Peak finding helper function
 inline bool
-bapl_is_less_3x3(const float value, const float* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+bapl_is_less_3x3(const float value, const float* im, std::ptrdiff_t i_step, std::ptrdiff_t j_step)
 {
    if (value >= im[0]) return false;
    if (value >= im[i_step]) return false;
@@ -221,7 +223,7 @@ bapl_is_less_3x3(const float value, const float* im, vcl_ptrdiff_t i_step, vcl_p
 
 
 //: Find the peaks in the DoG pyramid
-void bapl_dog_peaks( vcl_vector<vgl_point_3d<float> >& peak_pts,
+void bapl_dog_peaks( std::vector<vgl_point_3d<float> >& peak_pts,
                      bapl_lowe_pyramid_set_sptr pyramid_set,
                      float curve_ratio )
 {
@@ -238,10 +240,10 @@ void bapl_dog_peaks( vcl_vector<vgl_point_3d<float> >& peak_pts,
     const vil_image_view<float> & below = pyramid_set->dog_pyramid((index-1)/oct_size, (index-1)%oct_size);
 
 
-    float ps = vcl_pow(2.0f,float((index/oct_size)-1));  // TODO: CHECK OUT CASTING
+    float ps = std::pow(2.0f,float((index/oct_size)-1));  // TODO: CHECK OUT CASTING
 
     unsigned ni = image.ni(), nj = image.nj();
-    vcl_ptrdiff_t istep=image.istep(), jstep=image.jstep();
+    std::ptrdiff_t istep=image.istep(), jstep=image.jstep();
     const float* row = image.top_left_ptr() + 2*istep + 2*jstep;
     for (unsigned j=2;j<(nj/2-1)*2;++j,row += jstep)
     {
@@ -273,7 +275,7 @@ void bapl_dog_peaks( vcl_vector<vgl_point_3d<float> >& peak_pts,
 
         // offset is more than one pixel away, reestimate
         bool peak_valid = true;
-        if (vcl_fabs(offset(0)) >= 0.5 || vcl_fabs(offset(1)) >= 0.5 || vcl_fabs(offset(2)) >= 0.5) {
+        if (std::fabs(offset(0)) >= 0.5 || std::fabs(offset(1)) >= 0.5 || std::fabs(offset(2)) >= 0.5) {
           ri = int(double(ri)+offset(0)+0.5);
           rj = int(double(rj)+offset(1)+0.5);
           rindex = int(double(rindex)+offset(2)+0.5);
@@ -291,9 +293,9 @@ void bapl_dog_peaks( vcl_vector<vgl_point_3d<float> >& peak_pts,
           else
             peak_valid = false;
 
-          peak_valid = peak_valid && vcl_fabs(offset(0)) < 0.5 &&
-                                     vcl_fabs(offset(1)) < 0.5 &&
-                                     vcl_fabs(offset(2)) < 0.5 ;
+          peak_valid = peak_valid && std::fabs(offset(0)) < 0.5 &&
+                                     std::fabs(offset(1)) < 0.5 &&
+                                     std::fabs(offset(2)) < 0.5 ;
         }
 
         if ( !peak_valid ) continue;
@@ -307,7 +309,7 @@ void bapl_dog_peaks( vcl_vector<vgl_point_3d<float> >& peak_pts,
         if ( curv_rat > max_curve || curv_rat < min_curve ) continue;
 
         peak_pts.push_back(vgl_point_3d<float>((float)(ri+offset(0))*ps, (float)(rj+offset(1))*ps,
-                                                (float)vcl_pow(2.0,((rindex+offset(2))/oct_size)-1) ));
+                                                (float)std::pow(2.0,((rindex+offset(2))/oct_size)-1) ));
       }
     }
   }
@@ -323,7 +325,7 @@ bapl_lowe_orientation::bapl_lowe_orientation(float sigma, unsigned num_bins)
 
 inline float gaussian( float x, float y, float sigma)
 {
-  return vcl_exp(-((x*x)+(y*y))/(2.0f*sigma*sigma));
+  return std::exp(-((x*x)+(y*y))/(2.0f*sigma*sigma));
 }
 
 //: Compute the orientation at (x,y) using the gradient orientation and magnitude images
@@ -331,11 +333,11 @@ void
 bapl_lowe_orientation::orient_at( float x, float y, float scale,
                                   const vil_image_view<float> & grad_orient,
                                   const vil_image_view<float> & grad_mag,
-                                  vcl_vector<float> & orientations )
+                                  std::vector<float> & orientations )
 {
-  vcl_vector<float> histogram(num_bins_, 0.0);
-  float log_scale = vcl_log(scale)/vcl_log(2.0f);
-  float rel_scale = vcl_pow(2.0f, log_scale - vcl_floor(log_scale));
+  std::vector<float> histogram(num_bins_, 0.0);
+  float log_scale = std::log(scale)/std::log(2.0f);
+  float rel_scale = std::pow(2.0f, log_scale - std::floor(log_scale));
   float sigma = 3.0f * rel_scale;
 
   int size = int(3.0*sigma)+1;
@@ -357,7 +359,7 @@ bapl_lowe_orientation::orient_at( float x, float y, float scale,
     }
   }
   float max = 0.0;
-  vcl_vector<int> peaks;
+  std::vector<int> peaks;
   // find the maximum peak
   for (unsigned int i=0; i<num_bins_; ++i) {
     if ( histogram[i] > histogram[(i-1)%num_bins_] &&
@@ -372,6 +374,11 @@ bapl_lowe_orientation::orient_at( float x, float y, float scale,
   max *= 0.8f;
   for (unsigned int i=0; i<peaks.size(); ++i) {
     if (histogram[ peaks[i] ] > max) {
+      //check for zivide by zero condition
+      if (num_bins_ == 0) {
+        std::cerr << "ERROR: Division by 0" << std::endl;
+        throw 0;
+      }
       //parabolic interpolation
       float ypos = histogram[ (peaks[i]+1)%num_bins_ ];
       float yneg = histogram[ (peaks[i]-1)%num_bins_ ];

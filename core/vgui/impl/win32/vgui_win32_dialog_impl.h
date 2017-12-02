@@ -46,7 +46,7 @@ class vgui_win32_dialog_impl : public vgui_dialog_impl
   // Overloaded virtual functions that return all kinds of widget that Win32
   // supports.
   void* pushbutton_field_widget(const char*, const void*);
-  void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+  void* choice_field_widget(const char*, const std::vector<std::string>&, int&);
   void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
   void modal(bool m) { is_modal = m; }
   bool ask();
@@ -103,14 +103,14 @@ class vgui_win32_dialog_impl : public vgui_dialog_impl
   vgui_win32_adaptor* find_adaptor(unsigned short ctrl_id);
 
   // Save information of all inline tableaus added in the dialog box.
-  vcl_vector<inline_tab_data> inline_tableaus;
+  std::vector<inline_tab_data> inline_tableaus;
 
   // Save identifiers of file-browser/color-chooser buttons so that
   // OnBrowse/OnColor are called when these buttons are clicked.
-  vcl_vector<unsigned short> fb_ids, cc_ids;
+  std::vector<unsigned short> fb_ids, cc_ids;
 
   // Save identifiers of all controls that connect to a callback function.
-  vcl_vector<callback_control_data> callback_controls;
+  std::vector<callback_control_data> callback_controls;
 };
 
 

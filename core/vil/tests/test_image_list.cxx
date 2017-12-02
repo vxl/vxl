@@ -1,7 +1,8 @@
 // This is core/vil/tests/test_image_list.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
@@ -14,7 +15,7 @@
 
 static void test_image_list()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil_image_list\n"
            << "************************\n";
   // Test image list by saving three resource files and then
@@ -44,36 +45,36 @@ static void test_image_list()
       image3(i,j) = (unsigned short)(i + ni3*j);
   bool good;
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
-  vcl_string dir = "image_list_dir";
+  std::string dir = "image_list_dir";
   {
     bool mkdir = vul_file::make_directory(dir.c_str());
     if (mkdir)
-      vcl_cout << "vul make directory worked\n";
+      std::cout << "vul make directory worked\n";
     else
-      vcl_cout << "vul make directory failed\n";
+      std::cout << "vul make directory failed\n";
     TEST("vil_is_directory",vil_image_list::vil_is_directory(dir.c_str()),true);
     int chd = vpl_chdir(dir.c_str());
-    vcl_cout << "return code for chdir(" << dir << "): " << chd << vcl_endl;
+    std::cout << "return code for chdir(" << dir << "): " << chd << std::endl;
     good = vil_save_image_resource(ir, "R0.tif", "tiff");
     TEST("vil_save_image_resource R0", good, true);
-    vcl_cout << "Saved R0\n";
+    std::cout << "Saved R0\n";
 #if 0
     good = vil_save_image_resource(ir2, "R1.tif", "tiff");
     TEST("vil_save_image_resource R1", good, true);
-    vcl_cout << "Saved R1\n";
+    std::cout << "Saved R1\n";
 #endif
     good = vil_save_image_resource(ir3, "R2.tif", "tiff");
     TEST("vil_save_image_resource R2", good, true);
-    vcl_cout << "Saved R2\n";
+    std::cout << "Saved R2\n";
     chd = vpl_chdir("..");
-    vcl_cout << "return code for chdir(..): " << chd << vcl_endl;
+    std::cout << "return code for chdir(..): " << chd << std::endl;
     vil_image_list il(dir.c_str());
-    vcl_vector<vil_image_resource_sptr> rescs = il.resources();
-    vcl_cout << "Size = " << rescs.size() << vcl_endl;
+    std::vector<vil_image_resource_sptr> rescs = il.resources();
+    std::cout << "Size = " << rescs.size() << std::endl;
     TEST("size()", rescs.size(), 2);
     if (rescs.size() == 2 && rescs[0] && rescs[1])
     {
-      vcl_cout << "Successfully read the resource list\n"
+      std::cout << "Successfully read the resource list\n"
                << "0->ni() = " << rescs[0]->ni() << '\n'
                << "1->ni() = " << rescs[1]->ni() << '\n';
       if (rescs[0]->ni() == 73) // no guarantee that files are returned in order
@@ -88,15 +89,15 @@ static void test_image_list()
       }
     }
     else
-      vcl_cout << "The resource list is corrupt\n";
+      std::cout << "The resource list is corrupt\n";
   } // close open resource files
   // Cleanup resource files
-  vcl_cout << "Cleaning up directory " << dir << '\n';;
+  std::cout << "Cleaning up directory " << dir << '\n';;
   vpl_chdir(dir.c_str());
-  vcl_string s =  "*.*";
+  std::string s =  "*.*";
   for (vul_file_iterator fit = s;fit; ++fit)
     vpl_unlink(fit());
-  vcl_cout << "Removing the directory\n";
+  std::cout << "Removing the directory\n";
   vpl_chdir("..");
   vpl_rmdir(dir.c_str());
 }

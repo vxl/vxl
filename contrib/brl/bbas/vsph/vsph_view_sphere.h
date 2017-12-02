@@ -11,6 +11,10 @@
 //   2010/09/10 Initial version
 // \endverbatim
 
+#include <vector>
+#include <map>
+#include <iostream>
+#include <iosfwd>
 #include "vsph_spherical_coord_sptr.h"
 #include "vsph_sph_point_3d.h"
 
@@ -18,9 +22,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class vsph_view_sphere
@@ -84,22 +86,22 @@ class vsph_view_sphere
   T find_closest(vgl_point_3d<double> p, int &uid, double& dist);
 
   //: finds the closest neighbors of the view point \a uid and returns them in the second argument
-  void find_neighbors(unsigned uid, vcl_vector<T>& neighbors);
+  void find_neighbors(unsigned uid, std::vector<T>& neighbors);
 
   //: assignment operator
   vsph_view_sphere<T>& operator=(vsph_view_sphere<T> const& rhs);
 
   //: Iterator
-  typedef typename vcl_map<unsigned, T>::iterator iterator;
+  typedef typename std::map<unsigned, T>::iterator iterator;
   iterator begin() { return views_.begin(); }
   iterator end() { return views_.end(); }
 
   //: Const Iterator
-  typedef typename vcl_map<unsigned, T>::const_iterator const_iterator;
+  typedef typename std::map<unsigned, T>::const_iterator const_iterator;
   const_iterator begin() const { const_iterator it=views_.begin(); return it; }
   const_iterator end() const   { const_iterator it=views_.end();   return it; }
 
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
   //: for debug purposes
   void print_relative_cams(vpgl_camera_double_sptr const& target_cam,
@@ -118,7 +120,7 @@ class vsph_view_sphere
   vsph_spherical_coord_sptr coord_sys_;
 
   //: views are associated with an id, all the view centers are on the sphere (r) of the coordinate system
-  vcl_map<unsigned, T> views_;
+  std::map<unsigned, T> views_;
 
  private:
   //: unique id for the map
@@ -127,7 +129,7 @@ class vsph_view_sphere
   unsigned next_id() { return uid_++; }
 
   //: returns true if all the angles between vertices of a triangle are smaller than \a angle.
-  bool min_angle(vcl_vector<vgl_point_3d<double> > list, double angle);
+  bool min_angle(std::vector<vgl_point_3d<double> > list, double angle);
 };
 
 template <class T>
@@ -137,6 +139,6 @@ template <class T>
 void vsl_b_write(vsl_b_ostream& os, vsph_view_sphere<T> const& vs);
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs);
+std::ostream& operator<<(std::ostream& os, vsph_view_sphere<T> const& vs);
 
 #endif

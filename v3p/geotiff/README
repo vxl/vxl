@@ -11,7 +11,7 @@ specifications, projection codes and use, see the WWW web page at:
 or at:
 
    http://www.geotiff.org/
-   
+
 or the FTP archive at:
 
    ftp://ftp.remotesensing.org/pub/geotiff
@@ -26,11 +26,11 @@ Use of LIBTIFF
 
 The default configuration assumes that the public-domain LIBTIFF
 package for reading and writing TIFF files has been installed, with
-the development kit (include files).  The latest version of libtiff may 
+the development kit (include files).  The latest version of libtiff may
 be found at:
 
    http://www.libtiff.org/
-   
+
 For this build to work you must use libtiff version v3.6.0 alpha or newer.
 
 
@@ -42,35 +42,35 @@ may now build the rest of the geotiff library with:
 
    % cd libgeotiff
    % ./configure
-   % make 
+   % make
 
 Common Configuration Issues:
 
  o If you want to alter the compiler used, set the CC environment variable
-   before running configure.  
+   before running configure.
 
    % setenv CC cc
    % rm config.status
    % ./configure
-   % make clean 
-   % make 
+   % make clean
+   % make
 
- o If you want to control the compiler files, set the CFLAGS environment 
+ o If you want to control the compiler files, set the CFLAGS environment
    variable.  This can be used to override the default optimization/debug
    flags for instance.
 
    % setenv CFLAGS -O4
    % rm config.status
    % ./configure
-   % make clean 
+   % make clean
    % make
 
- o If you want to force use of a locally built libtiff that was never 
+ o If you want to force use of a locally built libtiff that was never
    "installed" you can point to the directory like this:
 
    % rm config.status
    % ./configure --with-libtiff=/u/contrib/libtiff-3.6.0/libtiff
-   % make clean 
+   % make clean
    % make
 
  o If you have installed libtiff in a location other than /usr, then you can
@@ -78,13 +78,13 @@ Common Configuration Issues:
 
    % rm config.status
    % ./configure --with-libtiff=/usr/local
-   % make clean 
+   % make clean
    % make
 
  o If you want to use EPSG tables compiled into the code, use the
    --with-incode-epsg configure switch.  It will make the library and
-   resulting executables substantially larger (~600K), but will avoid any 
-   configuration issues with finding the .csv files. 
+   resulting executables substantially larger (~600K), but will avoid any
+   configuration issues with finding the .csv files.
 
    % rm config.status
    % ./configure --with-incode-epsg
@@ -92,9 +92,9 @@ Common Configuration Issues:
    % make
 
  o If you want to build in support for the PROJ.4 library, so that listgeo
-   can report corner coordinates in lat/long, it may be necessary to 
+   can report corner coordinates in lat/long, it may be necessary to
    specify the directory containing the libproj include files, and library.
-   (PROJ.4 can also be disabled by passing --without-proj).  PROJ.4 info 
+   (PROJ.4 can also be disabled by passing --without-proj).  PROJ.4 info
    can be found at http://www.remotesensing.org/proj .
 
    % rm config.status
@@ -103,19 +103,19 @@ Common Configuration Issues:
    % make
 
  o The logic to build shared libraries is pretty weak, and is likely to
-   only work on systems with the GNU tool chain (gcc, and ld) installed. 
+   only work on systems with the GNU tool chain (gcc, and ld) installed.
    On other systems you can try hacking on Makefile after running configure.
    It may be necessary to set the GEOTIFF_SO macro to "libgeotiff.1.2.x"
-   as it is made empty by default on systems configure doesn't think can 
+   as it is made empty by default on systems configure doesn't think can
    build shared libraries.
 
 
 Test Programs:
 
 There are two demonstration test programs "makegeo" and "listgeo"
-that create and list-out the GeoTIFF tags and keys associated 
+that create and list-out the GeoTIFF tags and keys associated
 with a small TIFF file, as well as a full-featured utility called
-"geotifcp". These will all be built in the bin/ directory as a matter of 
+"geotifcp". These will all be built in the bin/ directory as a matter of
 course, though may require modification if you are not using LIBTIFF, as they
 make explicit calls to LIBTIFF for opening the files and setting the
 tags. To run them simply call:
@@ -127,18 +127,18 @@ to generate and list an example GeoTIFF file. To see the
 "geotifcp" utility in action, first call:
 
   %  bin/listgeo newgeo.tif > metadata.txt
- 
+
 to create a GeoTIFF metadata file "metadata.txt", and then
 
   %  bin/geotifcp  -g  metadata.txt  newgeo.tif  newer.tif
- 
+
 to copy the TIFF file newgeo.tif to newer.tif, using the
 GeoTIFF metadata as stored in "metadata.txt". See "docs/manual.txt"
 for further uses of geotifcp.
 
 To use the new normalization capability of listgeo, the program needs
-to be able to find the CSV files.  Use something like the following, 
-but indicating the correct path to the CSV directory (libgeotiff/csv). 
+to be able to find the CSV files.  Use something like the following,
+but indicating the correct path to the CSV directory (libgeotiff/csv).
 
   % bin/listgeo -t csv -norm newgeo.tif
 
@@ -148,21 +148,21 @@ into a GeoTIFF file do something like the following:
   % bin/tiffcp -g metadata.txt -e abc.tfw abc.tif geo_abc.tif
 
 
- 
+
 Non-Standard Configuration:
 ---------------------------
 
 If you are using a TIFF software package other than libtiff, then you
-must override the TIFF file methods used in LIBGEOTIFF. To do this, 
+must override the TIFF file methods used in LIBGEOTIFF. To do this,
 go into directory libgeotiff and edit the files:
 
     "geo_tiffp.h"
     "geo_tiffp.c"
-    
+
 which contain all of the TIFF externals. You will need to define your
 own versions of the TIFF tag reading, writing, and memory allocation
 calls. See the comments of those two files to see what needs to be
-changed. Also, whatever software package you use will have to 
+changed. Also, whatever software package you use will have to
 recognize the GeoTIFF tags listed in the include files, and permit
 variable-length arrays to be passed in to those tags.
 
@@ -171,19 +171,19 @@ Credits
 -------
 
  o This library was originally written by Niles Ritter (also the primary
-   author of the GeoTIFF specification).  
+   author of the GeoTIFF specification).
 
  o It is currently being maintained by Frank Warmerdam (warmerdam@pobox.com),
-   who also added the "normalization" capability of GTIFGetDefn() using 
-   EPSG CSV files. 
+   who also added the "normalization" capability of GTIFGetDefn() using
+   EPSG CSV files.
 
- o Support for "incode" CSV files was submitted by Derrick J Brashear 
-   <shadow@dementia.org>. 
+ o Support for "incode" CSV files was submitted by Derrick J Brashear
+   <shadow@dementia.org>.
 
- o Eric Brown of Universal Systems, who contributed a bug fix to 
+ o Eric Brown of Universal Systems, who contributed a bug fix to
    GTIFPCSToImage().
 
- o Safe Software (www.safe.com) who supported by upgrade to use the 
+ o Safe Software (www.safe.com) who supported by upgrade to use the
    EPSG 6.2.2 database for libgeotiff 1.2.0.
 
  o Many others who contributed before it occured to me to maintain credits.

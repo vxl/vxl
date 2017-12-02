@@ -14,7 +14,7 @@
 //
 //-------------------------------------------------------------------------------
 
-#include<vcl_list.h>
+#include<std::list.h>
 class pop_edge;
 
 //: A parameter that can be optimized
@@ -32,7 +32,7 @@ class pop_vertex
 
   //: find a path to another vertex
   // \todo should be protected and accessed by friend edge
-  bool search(pop_vertex *destination, vcl_list<pop_edge*> &path);
+  bool search(pop_vertex *destination, std::list<pop_edge*> &path);
 
   //: set all vertex to untouched
   void clear();
@@ -41,11 +41,11 @@ class pop_vertex
   bool touched_;
 
   //: find a path of edges to the following vertex
-  bool find_path(pop_vertex *destination, vcl_list<pop_edge*> &path);
+  bool find_path(pop_vertex *destination, std::list<pop_edge*> &path);
 
  private:
   //: a list of edges that can lead out of this vertex
-  vcl_list<pop_edge*> edges_;
+  std::list<pop_edge*> edges_;
 };
 
 #endif // pop_vertex_h_

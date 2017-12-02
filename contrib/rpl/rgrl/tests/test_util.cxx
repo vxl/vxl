@@ -1,6 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include "test_util.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_determinant.h>
 
@@ -35,7 +37,7 @@ close_det( vnl_matrix<double> const& a,
            vnl_matrix<double> const& b,
            double tol )
 {
-  return vcl_abs( vnl_determinant(a) - vnl_determinant(b) ) < tol;
+  return std::abs( vnl_determinant(a) - vnl_determinant(b) ) < tol;
 }
 
 

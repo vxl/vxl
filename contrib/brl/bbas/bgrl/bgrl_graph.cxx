@@ -1,4 +1,5 @@
 // This is brl/bbas/bgrl/bgrl_graph.cxx
+#include <iostream>
 #include "bgrl_graph.h"
 //:
 // \file
@@ -6,7 +7,7 @@
 #include "bgrl_edge.h"
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_set_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Constructor
 bgrl_graph::bgrl_graph()
@@ -18,10 +19,10 @@ bgrl_graph::bgrl_graph()
 bgrl_graph::bgrl_graph(const bgrl_graph& graph)
   : vbl_ref_count()
 {
-  vcl_map<bgrl_vertex_sptr, bgrl_vertex_sptr> old_to_new;
+  std::map<bgrl_vertex_sptr, bgrl_vertex_sptr> old_to_new;
 
   // copy vertices and outgoing edges
-  for ( vcl_set<bgrl_vertex_sptr>::const_iterator itr = graph.vertices_.begin();
+  for ( std::set<bgrl_vertex_sptr>::const_iterator itr = graph.vertices_.begin();
         itr != graph.vertices_.end();  ++itr )
   {
     bgrl_vertex_sptr vertex_copy((*itr)->clone());
@@ -30,19 +31,19 @@ bgrl_graph::bgrl_graph(const bgrl_graph& graph)
   }
 
   // link up new edges to new vertices
-  for ( vcl_set<bgrl_vertex_sptr>::const_iterator v_itr = vertices_.begin();
+  for ( std::set<bgrl_vertex_sptr>::const_iterator v_itr = vertices_.begin();
         v_itr != vertices_.end();  ++v_itr )
   {
-    for ( vcl_set<bgrl_edge_sptr>::const_iterator e_itr = (*v_itr)->out_edges_.begin();
+    for ( std::set<bgrl_edge_sptr>::const_iterator e_itr = (*v_itr)->out_edges_.begin();
           e_itr != (*v_itr)->out_edges_.end();  ++e_itr )
     {
-      vcl_map<bgrl_vertex_sptr, bgrl_vertex_sptr>::iterator find_new = old_to_new.find((*e_itr)->to_);
+      std::map<bgrl_vertex_sptr, bgrl_vertex_sptr>::iterator find_new = old_to_new.find((*e_itr)->to_);
       if ( find_new != old_to_new.end() ){
         (*e_itr)->to_ = find_new->second.ptr();
         find_new->second->in_edges_.insert(*e_itr);
       }
       else
-        vcl_cerr << "Error copying graph: vertex not found in graph\n";
+        std::cerr << "Error copying graph: vertex not found in graph\n";
     }
   }
 }
@@ -79,11 +80,11 @@ bgrl_graph::add_edge( const bgrl_vertex_sptr& v1,
                       const bgrl_edge_sptr& model_edge )
 {
   if (!v1 || !v2)
-    return 0;
+    return VXL_NULLPTR;
   if ( vertices_.count(v1) == 0 && !this->add_vertex(v1) )
-    return 0;
+    return VXL_NULLPTR;
   if ( vertices_.count(v2) == 0 && !this->add_vertex(v2) )
-    return 0;
+    return VXL_NULLPTR;
 
   return v1->add_edge_to(v2, model_edge);
 }
@@ -142,7 +143,7 @@ bgrl_graph::size() const
 
 
 //: Return a platform independent string identifying the class
-vcl_string
+std::string
 bgrl_graph::is_a() const
 {
   return "bgrl_graph";
@@ -183,15 +184,15 @@ bgrl_graph::b_read( vsl_b_istream& is )
     vsl_b_read(is, vertices_);
 
     if (this->purge())
-      vcl_cerr << "I/O WARNING: bgrl_graph::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O WARNING: bgrl_graph::b_read(vsl_b_istream&)\n"
                << "             It is likely that the graph object is corrupt.\n"
                << "             Invalid edges have been purged.\n";
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: bgrl_graph::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: bgrl_graph::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -199,7 +200,7 @@ bgrl_graph::b_read( vsl_b_istream& is )
 
 //: Print an ascii summary to the stream
 void
-bgrl_graph::print_summary( vcl_ostream& os ) const
+bgrl_graph::print_summary( std::ostream& os ) const
 {
   os << this->size() << " vertices";
 }
@@ -229,7 +230,7 @@ bgrl_graph::iterator::iterator( bgrl_graph* graph, bgrl_search_func_sptr func )
 
 //: Constructor - for end iterator
 bgrl_graph::iterator::iterator( bgrl_graph* graph )
- : graph_(graph),  search_func_(NULL),
+ : graph_(graph),  search_func_(VXL_NULLPTR),
    use_internal_(true), internal_(graph->vertices_.end())
 {
 }
@@ -271,7 +272,7 @@ bgrl_graph::iterator::operator * () const
 {
   if (use_internal_)
     if (internal_ == this->graph_->vertices_.end())
-      return NULL;
+      return VXL_NULLPTR;
     else
       return *internal_;
   else
@@ -325,13 +326,13 @@ vsl_b_read(vsl_b_istream &is, bgrl_graph* &g)
     g->b_read(is);
   }
   else
-    g = 0;
+    g = VXL_NULLPTR;
 }
 
 
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, const bgrl_graph* g)
+vsl_print_summary(std::ostream &os, const bgrl_graph* g)
 {
   os << "bgrl_graph{";
   g->print_summary(os);

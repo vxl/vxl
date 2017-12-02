@@ -22,7 +22,7 @@ void vsl_b_read(vsl_b_istream & is, bvxm_voxel_world &world)
   params->b_read(is);
 }
 
-void vsl_print_summary(vcl_ostream &os, const bvxm_voxel_world &world)
+void vsl_print_summary(std::ostream &os, const bvxm_voxel_world &world)
 {
   bvxm_world_params_sptr params = world.get_params();
   os << *params;
@@ -39,12 +39,12 @@ void vsl_b_read(vsl_b_istream& is, bvxm_voxel_world* p)
     vsl_b_read(is, *p);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const bvxm_voxel_world* &p)
 {
-  if (p==0)
+  if (p==VXL_NULLPTR)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
@@ -55,9 +55,9 @@ void vsl_b_write(vsl_b_ostream& os, const bvxm_voxel_world* &p)
   }
 }
 
-void vsl_print_summary(vcl_ostream& os, const bvxm_voxel_world* &p)
+void vsl_print_summary(std::ostream& os, const bvxm_voxel_world* &p)
 {
-  if (p==0)
+  if (p==VXL_NULLPTR)
     os << "NULL PTR";
   else {
     os << "T: ";

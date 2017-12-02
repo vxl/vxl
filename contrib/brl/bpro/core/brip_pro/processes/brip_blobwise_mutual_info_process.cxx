@@ -26,7 +26,7 @@ namespace brip_blobwise_mutual_info_process_globals
     //then it's an RGB image (assumes byte image...)
     if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
     {
-      vcl_cout<<"preparing rgb as input to grey scale float image"<<vcl_endl;
+      std::cout<<"preparing rgb as input to grey scale float image"<<std::endl;
 
       //load image from file and format it into grey
       vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
@@ -42,7 +42,7 @@ namespace brip_blobwise_mutual_info_process_globals
     //else if loaded planes is just one...
     if (loaded_image->nplanes() == 1)
     {
-      vcl_cout<<"Preparing grey scale image"<<vcl_endl;
+      std::cout<<"Preparing grey scale image"<<std::endl;
 
       //preapre floatimg for stretched img
       vil_image_view<float>* floatimg;
@@ -61,14 +61,14 @@ namespace brip_blobwise_mutual_info_process_globals
         return img_float;
       }
       else {
-        vcl_cerr << "Failed to load image\n";
-        return 0;
+        std::cerr << "Failed to load image\n";
+        return VXL_NULLPTR;
       }
       return floatimg;
     }
     //otherwise it's messed up, return a null pointer
-    vcl_cerr<<"Failed to recognize input image type\n";
-    return 0;
+    std::cerr<<"Failed to recognize input image type\n";
+    return VXL_NULLPTR;
   }
 };
 
@@ -76,13 +76,13 @@ namespace brip_blobwise_mutual_info_process_globals
 bool brip_blobwise_mutual_info_process_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // input image
   input_types.push_back("vil_image_view_base_sptr"); // expected image
   input_types.push_back("vil_image_view_base_sptr"); // weight image
   input_types.push_back("vil_image_view_base_sptr"); // blob/mask image
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // visualize image (mutual information differs by color
 
   return pro.set_input_types(input_types)
@@ -97,7 +97,7 @@ bool brip_blobwise_mutual_info_process(bprb_func_process& pro)
 
   // Sanity check
   if (pro.n_inputs() < n_inputs_) {
-    vcl_cout << "brip_blobwise_mutual_info_process: The input number should be " << n_inputs_ << vcl_endl;
+    std::cout << "brip_blobwise_mutual_info_process: The input number should be " << n_inputs_ << std::endl;
     return false;
   }
 

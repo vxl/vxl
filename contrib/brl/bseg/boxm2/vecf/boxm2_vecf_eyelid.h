@@ -38,14 +38,14 @@ class boxm2_vecf_eyelid : public boxm2_vecf_lid_base{
   double t(double xp, double y) const;
 
   //: distance to closest point on closed eyelid surface
-  double surface_distance(vgl_point_3d<double> const& p) const;
+  double distance(vgl_point_3d<double> const& p) const;
 
 
   //: return 2nd order coefficients weighted by t
   void blended_2nd_order_coefs(double t, double& a0, double& a1, double& a2) const;
 
 
-  // ct is blending parameter for the crease 
+  // ct is blending parameter for the crease
   double ct_min_; // min value of ct parameter (closest to eyebrow)
   double ct_max_; // max value of ct parameter (closest to cheek)
   // is this an inferior or superior eyelid

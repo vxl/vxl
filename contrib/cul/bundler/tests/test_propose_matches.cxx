@@ -9,7 +9,7 @@ static int factorial(int n){
     for(int i = 2; i <= n; i++){
         ret *= i;
     }
-    
+
     return ret;
 }
 
@@ -26,16 +26,16 @@ static bundler_inters_image_sptr create_dummy_fs(int fl){
 }
 
 static bool paired(int i, int j, bundler_inters_image_pair const& p){
-    return 
-        (p.f1->focal_length == i && p.f2->focal_length == j) || 
+    return
+        (p.f1->focal_length == i && p.f2->focal_length == j) ||
         (p.f1->focal_length == j && p.f2->focal_length == i);
 }
 
 static bool check_for_match(
-    const vcl_vector<bundler_inters_image_pair> &matches,
+    const std::vector<bundler_inters_image_pair> &matches,
     int fl1, int fl2){
 
-    vcl_vector<bundler_inters_image_pair>::const_iterator i;
+    std::vector<bundler_inters_image_pair>::const_iterator i;
     for(i = matches.begin(); i != matches.end(); i++){
         if(paired(fl1, fl2, *i)){
             return true;
@@ -46,10 +46,10 @@ static bool check_for_match(
 }
 
 static bool check_no_self_match(
-    const vcl_vector<bundler_inters_image_pair> &matches, 
+    const std::vector<bundler_inters_image_pair> &matches,
     int fl){
 
-    vcl_vector<bundler_inters_image_pair>::const_iterator i;
+    std::vector<bundler_inters_image_pair>::const_iterator i;
     for(i = matches.begin(); i != matches.end(); i++){
         if(paired(fl, fl, *i)){
             return false;
@@ -60,38 +60,38 @@ static bool check_no_self_match(
 }
 
 static void test_propose_matches(){
-    //------------------ Create the "feature set" list. Use the focal 
+    //------------------ Create the "feature set" list. Use the focal
     // length as an identifier.
-    vcl_vector<bundler_inters_image_sptr> feature_sets;
+    std::vector<bundler_inters_image_sptr> feature_sets;
 
     for(int i = 1; i <= NUM_FS; i++){
         feature_sets.push_back(create_dummy_fs(i));
     }
 
     //------------------ Do the matching.
-    vcl_vector<bundler_inters_image_pair> matches;
-    
+    std::vector<bundler_inters_image_pair> matches;
+
     bundler_tracks_impl_propose_matches_all propose;
     propose(feature_sets, matches);
-    
+
 
     //------------------ Perform consistency checks.
     TEST_EQUAL("Right number of matches",
         matches.size(),
         combination(NUM_FS, 2));
-    
+
 
     // Check that i is matched with every other set but itself.
     for(int i = 1; i <= NUM_FS; i++){
         for(int j = 1; j <= NUM_FS; j++){
 
             if(i != j){
-                vcl_stringstream str;
+                std::stringstream str;
                 str<< "Check that " << i << " is matched with " << j << ".";
                 Assert(str.str(), check_for_match(matches, i, j));
 
             } else {
-                vcl_stringstream str;
+                std::stringstream str;
                 str<< "Check that " << i << " is not matched with itself.";
                 Assert(str.str(), check_no_self_match(matches, i));
             }

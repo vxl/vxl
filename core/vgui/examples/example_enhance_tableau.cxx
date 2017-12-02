@@ -1,11 +1,11 @@
 // Example of using vgui_enhance_tableau.
 //
-// If you run this executable with two image filenames as parameters on the 
-// command line, when you move the mouse over the image with the left mouse 
+// If you run this executable with two image filenames as parameters on the
+// command line, when you move the mouse over the image with the left mouse
 // button held down you will see the second image in a region around the mouse
 // pointer.
 //
-// If only one image tableau is given then that image will be magnified in a 
+// If only one image tableau is given then that image will be magnified in a
 // region around the mouse pointer.
 
 #include <vgui/vgui.h>

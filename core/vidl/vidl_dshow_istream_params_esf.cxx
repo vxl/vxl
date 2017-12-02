@@ -1,5 +1,9 @@
 // This is core/vidl/vidl_dshow_istream_params_esf.cxx
 //=========================================================================
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <utility>
 #include "vidl_dshow_istream_params_esf.h"
 //:
 // \file
@@ -11,10 +15,7 @@
 
 #include <vidl/vidl_dshow.h>
 
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_sstream.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_triple.h>
 
@@ -43,23 +44,23 @@ namespace
   const int w1 = 25;
   const int w2 = 8;
 
-  inline void print_4_column_row(const vcl_string& str,
+  inline void print_4_column_row(const std::string& str,
                                  long val, long min, long max)
   {
-    vcl_cout << vcl_setw(w1) << str
-             << vcl_setw(w2) << val
-             << vcl_setw(w2) << min
-             << vcl_setw(w2) << max << '\n';
+    std::cout << std::setw(w1) << str
+             << std::setw(w2) << val
+             << std::setw(w2) << min
+             << std::setw(w2) << max << '\n';
   }
 
-  inline void print_5_column_row(const vcl_string& str,
+  inline void print_5_column_row(const std::string& str,
                                  long val, long min, long max, long def)
   {
-    vcl_cout << vcl_setw(w1) << str
-             << vcl_setw(w2) << val
-             << vcl_setw(w2) << min
-             << vcl_setw(w2) << max
-             << vcl_setw(w2) << def << '\n';
+    std::cout << std::setw(w1) << str
+             << std::setw(w2) << val
+             << std::setw(w2) << min
+             << std::setw(w2) << max
+             << std::setw(w2) << def << '\n';
   }
 
   void print_video_standard_help(const CComPtr<IESFProperties>& props)
@@ -68,19 +69,19 @@ namespace
     bool mono;
 
     props->GetVideoStandard(&val, &mono);
-    vcl_cout << vcl_setw(w1) << "video_standard"
+    std::cout << std::setw(w1) << "video_standard"
              << ' ' << esf_video_standards[val] << '\n';
 
-    vcl_cout << vcl_string(w1, ' ') << " Supported video standards\n"
-             << vcl_string(w1, ' ') << " -------------------------\n";
+    std::cout << std::string(w1, ' ') << " Supported video standards\n"
+             << std::string(w1, ' ') << " -------------------------\n";
     for (int i = 0; i < sizeof(esf_video_standards) / sizeof(char*); i++)
     {
-      vcl_cout << vcl_setw(w1) << i
+      std::cout << std::setw(w1) << i
                << ' ' << esf_video_standards[i] << '\n';
     }
 
-    vcl_cout << vcl_setw(w1) << "is_monochrome"
-             << vcl_setw(w2) << (mono ? "true" : "false") << '\n';
+    std::cout << std::setw(w1) << "is_monochrome"
+             << std::setw(w2) << (mono ? "true" : "false") << '\n';
   }
 
   void print_resolution_help(const CComPtr<IESFProperties>& props)
@@ -89,22 +90,22 @@ namespace
     long width, height;
 
     props->GetResolution(&val, &width, &height);
-    vcl_cout << vcl_setw(w1) << "resolution"
+    std::cout << std::setw(w1) << "resolution"
              << ' ' << esf_resolutions[val]
              << " (" << width << 'x' << height << ")\n";
 
     // print options
-    vcl_cout << vcl_string(w1, ' ') << " Supported resolutions\n"
-             << vcl_string(w1, ' ') << " ---------------------\n";
+    std::cout << std::string(w1, ' ') << " Supported resolutions\n"
+             << std::string(w1, ' ') << " ---------------------\n";
     for (int i = 0; i < sizeof(esf_resolutions) / sizeof(char*); i++)
     {
-      vcl_cout << vcl_setw(w1) << i
+      std::cout << std::setw(w1) << i
                << ' ' << esf_resolutions[i] << '\n';
     }
 
     long min_x, max_x, min_y, max_y;
     props->GetCustomResolutionRange(&min_x, &max_x, &min_y, &max_y);
-    vcl_cout << vcl_string(w1, ' ')
+    std::cout << std::string(w1, ' ')
              << "    custom range ("
              << min_x << 'x' << min_y << ") -> ("
              << max_x << 'x' << max_y << ")\n";
@@ -115,7 +116,7 @@ namespace
     GUID val;
 
     props->GetOutputFormat(&val);
-    vcl_cout << vcl_setw(w1) << "output_format"
+    std::cout << std::setw(w1) << "output_format"
              << ' ' << vidl_dshow::get_guid_name(val) << '\n';
 
     GUID *table = 0;
@@ -123,13 +124,13 @@ namespace
     if (SUCCEEDED(props->GetOutputFormatsList(&count, &table)))
     {
       // Process list
-      vcl_cout << vcl_string(w1, ' ') << " Supported output formats\n"
-               << vcl_string(w1, ' ') << " ------------------------\n"
-               << vcl_setw(w1) << '0' << " GUID_NULL (AUTO)\n";
+      std::cout << std::string(w1, ' ') << " Supported output formats\n"
+               << std::string(w1, ' ') << " ------------------------\n"
+               << std::setw(w1) << '0' << " GUID_NULL (AUTO)\n";
 
       for (unsigned int i = 0; i < count; i++)
       {
-        vcl_cout << vcl_setw(w1) << i+1
+        std::cout << std::setw(w1) << i+1
                  << ' ' << vidl_dshow::get_guid_name(table[i]) << '\n';
       }
 
@@ -162,11 +163,11 @@ namespace
     double val, min, max, def;
     props->GetCaptureRate(&val);
     props->GetCaptureRateRange(&min, &max, &def);
-    vcl_cout << vcl_setw(w1) << "capture_rate"
-             << vcl_setw(w2) << val
-             << vcl_setw(w2) << min
-             << vcl_setw(w2) << max
-             << vcl_setw(w2) << def << '\n';
+    std::cout << std::setw(w1) << "capture_rate"
+             << std::setw(w2) << val
+             << std::setw(w2) << min
+             << std::setw(w2) << max
+             << std::setw(w2) << def << '\n';
   }
 
   void print_brightness_help(const CComPtr<IESFProperties>& props)
@@ -215,26 +216,26 @@ namespace
     bool val;
 
     props->GetIndividualControl(&val);
-    vcl_cout << vcl_setw(w1) << "(N/S) individual_control"
-             << vcl_setw(w2) << (val ? "true" : "false") << '\n';
+    std::cout << std::setw(w1) << "(N/S) individual_control"
+             << std::setw(w2) << (val ? "true" : "false") << '\n';
   }
 
   void print_bitrate_control_help(const CComPtr<IESFCompression>& props)
   {
     ESF_BITRATECONTROL val;
 
-    vcl_cout << vcl_setw(w1) << "bitrate_control";
+    std::cout << std::setw(w1) << "bitrate_control";
     if (SUCCEEDED(props->GetBitrateControl(&val)))
     {
-      vcl_cout << ' ' << esf_bitratecontrols[val];
+      std::cout << ' ' << esf_bitratecontrols[val];
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
 
-    vcl_cout << vcl_string(w1, ' ') << " Supported bitrate controls\n"
-             << vcl_string(w1, ' ') << " --------------------------\n";
+    std::cout << std::string(w1, ' ') << " Supported bitrate controls\n"
+             << std::string(w1, ' ') << " --------------------------\n";
     for (int i = 0; i < sizeof(esf_bitratecontrols) / sizeof(char*); i++)
     {
-      vcl_cout << vcl_setw(w1) << i
+      std::cout << std::setw(w1) << i
                << ' ' << esf_bitratecontrols[i] << '\n';
     }
   }
@@ -247,7 +248,7 @@ namespace
     {
       print_5_column_row("average_bitrate", val, min, max, def);
     }
-    else { vcl_cout << vcl_setw(w1) << "average_bitrate\n"; }
+    else { std::cout << std::setw(w1) << "average_bitrate\n"; }
   }
 
   void print_video_quality_help(const CComPtr<IESFCompression>& props)
@@ -258,7 +259,7 @@ namespace
     {
       print_5_column_row("video_quality", val, min, max, def);
     }
-    else { vcl_cout << vcl_setw(w1) << "video_quality\n"; }
+    else { std::cout << std::setw(w1) << "video_quality\n"; }
   }
 
   void print_gop_size_help(const CComPtr<IESFCompression>& props)
@@ -269,36 +270,36 @@ namespace
     {
       print_5_column_row("gop_size", val, min, max, def);
     }
-    else { vcl_cout << vcl_setw(w1) << "gop_size\n"; }
+    else { std::cout << std::setw(w1) << "gop_size\n"; }
   }
 
   void print_gop_structure_help(const CComPtr<IESFCompression>& props)
   {
     ESF_GOPSTRUCTURE val;
 
-    vcl_cout << vcl_setw(w1) << "gop_structure ";
+    std::cout << std::setw(w1) << "gop_structure ";
     if (SUCCEEDED(props->GetGopStructure(&val)))
     {
-      vcl_cout << esf_gopstructures[val];
+      std::cout << esf_gopstructures[val];
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
 
-    vcl_cout << vcl_string(w1, ' ') << " Supported GOP structures\n"
-             << vcl_string(w1, ' ') << " ------------------------\n";
+    std::cout << std::string(w1, ' ') << " Supported GOP structures\n"
+             << std::string(w1, ' ') << " ------------------------\n";
     for (int i = 0; i < sizeof(esf_gopstructures) / sizeof(char*); i++)
     {
-      vcl_cout << vcl_setw(w1) << i
+      std::cout << std::setw(w1) << i
                << ' ' << esf_gopstructures[i] << '\n';
     }
   }
 
   template <typename T> struct from_string_to
   {
-    T operator()(const vcl_string& str) const
+    T operator()(const std::string& str) const
     {
       T val;
 
-      vcl_istringstream iss(str);
+      std::istringstream iss(str);
       iss >> val;
 
       return val;
@@ -307,7 +308,7 @@ namespace
 
   template <> struct from_string_to<bool>
   {
-    bool operator()(const vcl_string& str) const
+    bool operator()(const std::string& str) const
     {
       if      (str == "t" || str == "true"  || str == "1")
       {
@@ -330,7 +331,7 @@ namespace
 
   template <> struct from_string_to<ESF_RESOLUTION>
   {
-    ESF_RESOLUTION operator()(const vcl_string& str) const
+    ESF_RESOLUTION operator()(const std::string& str) const
     {
       if      (str == "ESF_RESOLUTION_FRAME")
       {
@@ -365,7 +366,7 @@ namespace
 
   template <> struct from_string_to<ESF_VIDEO_STANDARD>
   {
-    ESF_VIDEO_STANDARD operator()(const vcl_string& str) const
+    ESF_VIDEO_STANDARD operator()(const std::string& str) const
     {
       if      (str == "ESF_STANDARD_PAL" || str == "PAL")
       {
@@ -388,7 +389,7 @@ namespace
 
   template <> struct from_string_to<ESF_BITRATECONTROL>
   {
-    ESF_BITRATECONTROL operator()(const vcl_string& str) const
+    ESF_BITRATECONTROL operator()(const std::string& str) const
     {
       if      (str == "ESF_BITRATECONTROL_CBR" || str == "CBR")
       {
@@ -411,7 +412,7 @@ namespace
 
   template <> struct from_string_to<ESF_GOPSTRUCTURE>
   {
-    ESF_GOPSTRUCTURE operator()(const vcl_string& str) const
+    ESF_GOPSTRUCTURE operator()(const std::string& str) const
     {
       if      (str == "ESF_GOPSTRUCTURE_IONLY" || str == "IONLY")
       {
@@ -438,7 +439,7 @@ namespace
 
   template <> struct from_string_to<GUID>
   {
-    GUID operator()(const vcl_string& str) const
+    GUID operator()(const std::string& str) const
     {
       if      (str == "MEDIASUBTYPE_DX50" || str == "DX50")
       {
@@ -510,12 +511,12 @@ namespace
   template <typename T1, typename T2>
   struct from_string_to_pair
   {
-    vcl_pair<T1,T2> operator()(const vcl_string& str) const
+    std::pair<T1,T2> operator()(const std::string& str) const
     {
-      vcl_string buf;
-      vcl_istringstream iss(str);
+      std::string buf;
+      std::istringstream iss(str);
 
-      vcl_pair<T1,T2> pair;
+      std::pair<T1,T2> pair;
 
       iss >> buf;
       pair.first = from_string_to<T1>()(buf);
@@ -530,10 +531,10 @@ namespace
   template <typename T1, typename T2, typename T3>
   struct from_string_to_triple
   {
-    vbl_triple<T1,T2,T3> operator()(const vcl_string& str) const
+    vbl_triple<T1,T2,T3> operator()(const std::string& str) const
     {
-      vcl_string buf;
-      vcl_istringstream iss(str);
+      std::string buf;
+      std::istringstream iss(str);
 
       vbl_triple<T1,T2,T3> triple;
 
@@ -584,7 +585,7 @@ void vidl_dshow_istream_params_esf
   //if (is_property_changed("resolution"))
   if (is_property_changed_.test(esf_property_resolution))
   {
-    vcl_cout << resolution_ << width_ << height_ << vcl_endl;
+    std::cout << resolution_ << width_ << height_ << std::endl;
     DSHOW_ERROR_IF_FAILED(
       esf_properties->SetResolution(resolution_, width_, height_));
   }
@@ -656,7 +657,7 @@ void vidl_dshow_istream_params_esf
 }
 
 void vidl_dshow_istream_params_esf
-::print_parameter_help(const vcl_string& name)
+::print_parameter_help(const std::string& name)
 {
   vidl_dshow::initialize_com();
 
@@ -672,7 +673,7 @@ void vidl_dshow_istream_params_esf
 void vidl_dshow_istream_params_esf
 ::print_parameter_help(const CComPtr<IBaseFilter>& filter)
 {
-  vcl_cout << "\n\nEuresys MultiCam DirectShow (IESFilter) Parameters\n"
+  std::cout << "\n\nEuresys MultiCam DirectShow (IESFilter) Parameters\n"
            << "--------------------------------------------------\n"
            << "1. IESFProperties interface:\n\n";
 
@@ -682,23 +683,23 @@ void vidl_dshow_istream_params_esf
     IID_IESFProperties, reinterpret_cast<void**>(&esf_properties));
 
   print_video_standard_help     (esf_properties);
-  vcl_cout << '\n';
+  std::cout << '\n';
 
   print_resolution_help         (esf_properties);
-  vcl_cout << '\n';
+  std::cout << '\n';
 
   print_output_format_help      (esf_properties);
-  vcl_cout << '\n';
+  std::cout << '\n';
 
   // 5 column row header
-  vcl_cout << vcl_string(w1, ' ')
-           << vcl_setw(w2) << "curr"
-           << vcl_setw(w2) << "min"
-           << vcl_setw(w2) << "max"
-           << vcl_setw(w2) << "default"
+  std::cout << std::string(w1, ' ')
+           << std::setw(w2) << "curr"
+           << std::setw(w2) << "min"
+           << std::setw(w2) << "max"
+           << std::setw(w2) << "default"
            << '\n'
-           << vcl_string(w1, ' ')
-           << vcl_string(4*w2, '-') << '\n';
+           << std::string(w1, ' ')
+           << std::string(4*w2, '-') << '\n';
 
   print_capture_region_size_help(esf_properties);
   print_capture_region_pos_help (esf_properties);
@@ -709,44 +710,44 @@ void vidl_dshow_istream_params_esf
   print_board_help              (esf_properties);
   print_connector_help          (esf_properties);
   print_individual_control_help (esf_properties);
-  vcl_cout << '\n';
+  std::cout << '\n';
 
   // IESFCompression interface.
   CComPtr<IESFCompression> esf_compression;
   filter->QueryInterface(
     IID_IESFCompression, reinterpret_cast<void**>(&esf_compression));
 
-  vcl_cout << "2. IESFCompression interface:\n\n";
+  std::cout << "2. IESFCompression interface:\n\n";
 
   print_bitrate_control_help(esf_compression);
-  vcl_cout << '\n';
+  std::cout << '\n';
 
   // 5 column row header
-  vcl_cout << vcl_string(w1, ' ')
-           << vcl_setw(w2) << "curr"
-           << vcl_setw(w2) << "min"
-           << vcl_setw(w2) << "max"
-           << vcl_setw(w2) << "default"
+  std::cout << std::string(w1, ' ')
+           << std::setw(w2) << "curr"
+           << std::setw(w2) << "min"
+           << std::setw(w2) << "max"
+           << std::setw(w2) << "default"
            << '\n'
-           << vcl_string(w1, ' ')
-           << vcl_string(4*w2, '-') << '\n';
+           << std::string(w1, ' ')
+           << std::string(4*w2, '-') << '\n';
 
   print_average_bitrate_help(esf_compression);
   print_video_quality_help  (esf_compression);
   print_gop_size_help       (esf_compression);
-  vcl_cout << '\n';
+  std::cout << '\n';
 
   print_gop_structure_help  (esf_compression);
-  vcl_cout << '\n' << vcl_endl;
+  std::cout << '\n' << std::endl;
 }
 
 //: Set properties from a map(string,value).
 // \sa mul/mbl/mbl_read_props.h
 vidl_dshow_istream_params_esf&
 vidl_dshow_istream_params_esf
-::set_properties(const vcl_map<vcl_string,vcl_string>& props)
+::set_properties(const std::map<std::string,std::string>& props)
 {
-  vcl_map<vcl_string,vcl_string>::const_iterator iter;
+  std::map<std::string,std::string>::const_iterator iter;
   for (iter = props.begin(); iter != props.end(); iter++)
   {
     if      (iter->first == "register_in_rot")
@@ -775,7 +776,7 @@ vidl_dshow_istream_params_esf
     }
     else if (iter->first == "video_standard")
     {
-      vcl_pair<ESF_VIDEO_STANDARD,bool> vs
+      std::pair<ESF_VIDEO_STANDARD,bool> vs
         = from_string_to_pair<ESF_VIDEO_STANDARD,bool>()(iter->second);
       set_video_standard(vs.first, vs.second);
     }
@@ -787,13 +788,13 @@ vidl_dshow_istream_params_esf
     }
     else if (iter->first == "capture_region_size")
     {
-      vcl_pair<long,long> size
+      std::pair<long,long> size
         = from_string_to_pair<long,long>()(iter->second);
       set_capture_region_size(size.first, size.second);
     }
     else if (iter->first == "capture_region_pos")
     {
-      vcl_pair<long,long> pos
+      std::pair<long,long> pos
         = from_string_to_pair<long,long>()(iter->second);
       set_capture_region_pos(pos.first, pos.second);
     }
@@ -839,8 +840,8 @@ vidl_dshow_istream_params_esf
     }
     else
     {
-      vcl_cerr << "DSHOW: vidl_dshow_istream_params_esf param not valid: "
-               << iter->first << vcl_endl;
+      std::cerr << "DSHOW: vidl_dshow_istream_params_esf param not valid: "
+               << iter->first << std::endl;
     }
   }
 
@@ -869,21 +870,21 @@ vidl_dshow_istream_params_esf::set_run_when_ready(bool val)
 }
 
 /* inline */ vidl_dshow_istream_params_esf&
-vidl_dshow_istream_params_esf::set_save_graph_to(const vcl_string& name)
+vidl_dshow_istream_params_esf::set_save_graph_to(const std::string& name)
 {
   save_graph_to_ = name;
   return *this;
 }
 
 /* inline */ vidl_dshow_istream_params_esf&
-vidl_dshow_istream_params_esf::set_device_name(const vcl_string& name)
+vidl_dshow_istream_params_esf::set_device_name(const std::string& name)
 {
   device_name_ = name;
   return *this;
 }
 
 /* inline */ vidl_dshow_istream_params_esf&
-vidl_dshow_istream_params_esf::set_output_filename(const vcl_string& name)
+vidl_dshow_istream_params_esf::set_output_filename(const std::string& name)
 {
   output_filename_ = name;
   return *this;

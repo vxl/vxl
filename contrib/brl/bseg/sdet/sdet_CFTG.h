@@ -10,14 +10,16 @@
 //\verbatim
 //  Modifications
 //
-//    Amir Tamrakar  
+//    Amir Tamrakar
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_edgemap.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_edgemap.h>
 
 class sdet_CFTG_link
 {
@@ -37,19 +39,19 @@ public:
 
 };
 
-typedef vcl_list<sdet_CFTG_link*> sdet_CFTG_link_list;
-typedef vcl_list<sdet_CFTG_link*>::iterator sdet_CFTG_link_list_iter;
+typedef std::list<sdet_CFTG_link*> sdet_CFTG_link_list;
+typedef std::list<sdet_CFTG_link*>::iterator sdet_CFTG_link_list_iter;
 
 //: This class represents the curve fragment topology graph formed from the contour fragments
 //  The links are equivalence classes of curve fragments represented by sets of edgel chains
 class sdet_CFTG
 {
 public:
-  vcl_vector<sdet_CFTG_link_list> cLinks; ///< child links
-  vcl_vector<sdet_CFTG_link_list> pLinks; ///< parent links
+  std::vector<sdet_CFTG_link_list> cLinks; ///< child links
+  std::vector<sdet_CFTG_link_list> pLinks; ///< parent links
 
   sdet_CFTG_link_list Links; ///< redundant single list of all links
-  
+
   //: constructor
   sdet_CFTG(int size=0): cLinks(size), pLinks(size){}
 
@@ -64,7 +66,7 @@ public:
 
   //: resize the graph
   void resize(unsigned size)
-  { 
+  {
     if (size!=cLinks.size())
       clear();
 
@@ -107,7 +109,7 @@ public:
     if (cur_Link){
       cur_Link->add_fragment(chain);
     }
-    else //otherwise create a new link and add it to it 
+    else //otherwise create a new link and add it to it
     {
       cur_Link = new sdet_CFTG_link(e1, e2);
       cur_Link->add_fragment(chain);

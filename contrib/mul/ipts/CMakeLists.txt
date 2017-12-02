@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/ipts
   DESCRIPTION "Interesting Points - Find interesting/salient image points"
   )
 
-SET(ipts_sources
+set(ipts_sources
     ipts_scale_space_peaks.h
     ipts_draw.h
     ipts_local_entropy.cxx ipts_local_entropy.h
@@ -15,16 +15,14 @@ SET(ipts_sources
     ipts_orientation_pyramid.cxx ipts_orientation_pyramid.h
 )
 
-ADD_LIBRARY(ipts ${ipts_sources})
-INSTALL_TARGETS(/lib ipts)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/ipts ${ipts_sources})
-TARGET_LINK_LIBRARIES(ipts vimt_algo vimt vgl vil_algo vil)
+vxl_add_library(LIBRARY_NAME ipts LIBRARY_SOURCES ${ipts_sources})
+target_link_libraries(ipts vimt_algo vimt ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil)
 
-IF(BUILD_MUL_TOOLS)
+if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
-ENDIF(BUILD_MUL_TOOLS)
+endif()
 
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

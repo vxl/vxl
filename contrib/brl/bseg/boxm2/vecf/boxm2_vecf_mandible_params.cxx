@@ -1,3 +1,4 @@
-#include "boxm2_vecf_cranium_params.h"
-vcl_ostream&  operator << (vcl_ostream& s, boxm2_vecf_cranium_params const& pr){return s;}
-vcl_istream&  operator >> (vcl_istream& s, boxm2_vecf_cranium_params& pr){return s;}
+
+#include "boxm2_vecf_mandible_params.h"
+std::ostream&  operator << (std::ostream& s, boxm2_vecf_mandible_params const& pr){return s;}
+std::istream&  operator >> (std::istream& s, boxm2_vecf_mandible_params& pr){return s;}

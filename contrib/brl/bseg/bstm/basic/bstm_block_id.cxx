@@ -1,18 +1,20 @@
+#include <iostream>
+#include <sstream>
 #include "bstm_block_id.h"
 //:
 // \file
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 //: scene output stream operator
-vcl_ostream& operator <<(vcl_ostream &s, bstm_block_id const& id)
+std::ostream& operator <<(std::ostream &s, bstm_block_id const& id)
 {
   s << "id_" << id.i() << '_' << id.j() << '_' << id.k() << '_' << id.t();
   return s;
 }
 
-vcl_string bstm_block_id::to_string() const
+std::string bstm_block_id::to_string() const
 {
-  vcl_ostringstream s1;
+  std::ostringstream s1;
   s1 << (*this);
   return s1.str();
 }

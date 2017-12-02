@@ -6,7 +6,8 @@
 // \author Ian Scott
 // \date 11-Apr-2001
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_sparse_array_base.h>
 
@@ -20,6 +21,6 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & v);
 
 //: Print human readable summary of object to a stream
 template <class T, class Index>
-void vsl_print_summary(vcl_ostream& os,const vbl_sparse_array_base<T, Index> & b);
+void vsl_print_summary(std::ostream& os,const vbl_sparse_array_base<T, Index> & b);
 
 #endif // vbl_io_sparse_array_base_h

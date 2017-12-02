@@ -7,10 +7,11 @@
 // \author iscott
 // \date  Dec 2003
 
-#include <vcl_sstream.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <sstream>
+#include <string>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vul/vul_reg_exp.h>
 
 //: Test if the summaries of two objects are the same.
@@ -35,11 +36,11 @@
 template <class S>
 bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exceptions=0 )
 {
-  vcl_stringstream ssa, ssb;
-  vcl_string sa, sb;
+  std::stringstream ssa, ssb;
+  std::string sa, sb;
   vsl_print_summary(ssa, a);
   vsl_print_summary(ssb, b);
-  vcl_vector<vul_reg_exp> exceptions_re;
+  std::vector<vul_reg_exp> exceptions_re;
   while (exceptions && *exceptions)
   {
     exceptions_re.push_back(vul_reg_exp(*exceptions));
@@ -48,19 +49,19 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
 
   while (!ssa.eof() || !ssb.eof())
   {
-    vcl_getline(ssa, sa);
-    vcl_getline(ssb, sb);
+    std::getline(ssa, sa);
+    std::getline(ssb, sb);
     if (sa != sb && exceptions_re.empty())
     {
-      vcl_cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<vcl_endl;
+      std::cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<std::endl;
       return false;
     }
     else if (sa != sb)
     {
       bool exception_found = false;
 //      for (const char **it = exceptions; *it!=0; ++it)
-//        if (sa.find(*it)!=vcl_string::npos && sb.find(*it)!=vcl_string::npos)
-      for (vcl_vector<vul_reg_exp>::iterator it=exceptions_re.begin(), end=exceptions_re.end();
+//        if (sa.find(*it)!=std::string::npos && sb.find(*it)!=std::string::npos)
+      for (std::vector<vul_reg_exp>::iterator it=exceptions_re.begin(), end=exceptions_re.end();
         it != end; ++it)
         if (it->find(sa) && it->find(sb))
         {
@@ -69,7 +70,7 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
         }
       if (!exception_found)
       {
-        vcl_cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<vcl_endl;
+        std::cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<std::endl;
         return false;
       }
     }
@@ -85,11 +86,11 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
 // picked up by CTest and Dart.
 // We suggest formatting the measurement path as follows
 // "path/from/code/root/to/test_source_filename_minus_extension/MEASUREMENT_DESCRIPTION",
-// e.g. in the file "$CODE_SRC/algo/krr/tests/test_krr_optimise_model_parameters.cxx" 
+// e.g. in the file "$CODE_SRC/algo/krr/tests/test_krr_optimise_model_parameters.cxx"
 // \verbatim
 // mbl_test_save_measurement("algo/krr/tests/test_krr_optimise_model_parameters/Point_To_Point_RMS_Error",value);
 // \endverbatim
-void mbl_test_save_measurement( const vcl_string &measurement_path, double value);
+void mbl_test_save_measurement( const std::string &measurement_path, double value);
 
 
 #endif // mbl_test_h_

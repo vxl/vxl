@@ -5,9 +5,11 @@
 // \author Tim Cootes
 // \brief Force param.s to lie in ellipsoid defined by variances.
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Force param.s to lie in ellipsoid defined by variances.
 //  An axis aligned ellipsoid is defined by the variances along
@@ -62,13 +64,13 @@ class msm_ellipsoid_limiter : public msm_param_limiter
                       const vnl_vector<double>& y) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual msm_param_limiter* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -79,7 +81,7 @@ class msm_ellipsoid_limiter : public msm_param_limiter
   //: Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,
   // and throws if it finds any data in the stream.
-  virtual void config_from_stream(vcl_istream &is);
+  virtual void config_from_stream(std::istream &is);
 };
 
 #endif // msm_ellipsoid_limiter_h_

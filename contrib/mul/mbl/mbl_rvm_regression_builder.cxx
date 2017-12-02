@@ -1,16 +1,17 @@
 // This is mul/mbl/mbl_rvm_regression_builder.cxx
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mbl_rvm_regression_builder.h"
 //:
 // \file
 // \brief Object to train Relevance Vector Machines for regression
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -36,7 +37,7 @@ mbl_rvm_regression_builder::~mbl_rvm_regression_builder()
 
 //: Compute design matrix F from subset of elements in kernel matrix
 void mbl_rvm_regression_builder::design_matrix(const vnl_matrix<double>& K,
-                                               const vcl_vector<int>& index,
+                                               const std::vector<int>& index,
                                                vnl_matrix<double>& F)
 {
   unsigned n=index.size();
@@ -62,7 +63,7 @@ void mbl_rvm_regression_builder::design_matrix(const vnl_matrix<double>& K,
 void mbl_rvm_regression_builder::gauss_build(
              mbl_data_wrapper<vnl_vector<double> >& data,
              double var, const vnl_vector<double>& targets,
-             vcl_vector<int>& index,
+             std::vector<int>& index,
              vnl_vector<double>& weights,
              double &error_var)
 {
@@ -78,7 +79,7 @@ void mbl_rvm_regression_builder::gauss_build(
     for (unsigned j=0;j<i;++j)
     {
       data.set_index(j);
-      double d = vcl_exp(k*vnl_vector_ssd(vi,data.current()));
+      double d = std::exp(k*vnl_vector_ssd(vi,data.current()));
       K(i,j)=d; K(j,i)=d;
     }
   }
@@ -90,11 +91,11 @@ void mbl_rvm_regression_builder::gauss_build(
 //: Perform one iteration of optimisation
 bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
                                              const vnl_vector<double>& targets,
-                                             const vcl_vector<int>& index0,
-                                             const vcl_vector<double>& alpha0,
+                                             const std::vector<int>& index0,
+                                             const std::vector<double>& alpha0,
                                              double error_var0,
-                                             vcl_vector<int>& index,
-                                             vcl_vector<double>& alpha,
+                                             std::vector<int>& index,
+                                             std::vector<double>& alpha,
                                              double &error_var)
 {
   unsigned n0 = alpha0.size();
@@ -128,7 +129,7 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
   vnl_vector<double> Xt=FAFinv*targets;
   double M = dot_product(Xt,targets);
   double det=FAFsvd.determinant_magnitude();
-  vcl_cout<<"M="<<M<<"  -log(p)="<<M+vcl_log(det)<<vcl_endl;
+  std::cout<<"M="<<M<<"  -log(p)="<<M+std::log(det)<<std::endl;
   // ---------------------
 #endif // 0
 
@@ -139,9 +140,9 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
   double change=0.0;
   for (unsigned i=0;i<n0;++i)
   {
-    double a=vcl_max(0.0,1.0-alpha0[i]*S_(i+1,i+1));
+    double a=std::max(0.0,1.0-alpha0[i]*S_(i+1,i+1));
     sum+=a;
-    if (vcl_fabs(mean_wts_[i+1])<1e-4) continue;
+    if (std::fabs(mean_wts_[i+1])<1e-4) continue;
     double mi2 = mean_wts_[i+1]*mean_wts_[i+1];
     a/=mi2;
 
@@ -149,15 +150,15 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
 
     alpha.push_back(a);
     index.push_back(index0[i]);
-    change+=vcl_fabs(a-alpha0[i]);
+    change+=std::fabs(a-alpha0[i]);
   }
   // Update estimate of error_var
   vnl_vector<double> Fm;
   mbl_matxvec_prod_mv(F,mean_wts_,Fm);     // Fm=F*mean
   double sum_sqr_error=vnl_vector_ssd(targets,Fm);
   error_var = sum_sqr_error/(targets.size()-sum);
-// vcl_cout<<"Sum sqr error = "<<sum_sqr_error<<vcl_endl;
-  change+=vcl_fabs(error_var-error_var0);
+// std::cout<<"Sum sqr error = "<<sum_sqr_error<<std::endl;
+  change+=std::fabs(error_var-error_var0);
 
   // Decide if optimisation completed
   if (alpha.size()!=alpha0.size()) return true;
@@ -173,7 +174,7 @@ bool mbl_rvm_regression_builder::update_step(const vnl_matrix<double>& F,
 void mbl_rvm_regression_builder::build(
              const vnl_matrix<double>& kernel_matrix,
              const vnl_vector<double>& targets,
-             vcl_vector<int>& index,
+             std::vector<int>& index,
              vnl_vector<double>& weights,
              double &error_var)
 {
@@ -183,8 +184,8 @@ void mbl_rvm_regression_builder::build(
 
   // Initialise to use all n0 samples with equal weights
   index.resize(n0);
-  vcl_vector<double> alpha(n0),new_alpha;
-  vcl_vector<int> new_index;
+  std::vector<double> alpha(n0),new_alpha;
+  std::vector<int> new_index;
   for (unsigned i=0;i<n0;++i)  { index[i]=i; alpha[i]=1e-4; }
   error_var = 0.01;
   double new_error_var;
@@ -204,7 +205,7 @@ void mbl_rvm_regression_builder::build(
   }
 
   if (n_its>=max_its)
-    vcl_cerr<<"mbl_rvm_regression_builder::build() Too many iterations. Convergence failure.\n";
+    std::cerr<<"mbl_rvm_regression_builder::build() Too many iterations. Convergence failure.\n";
 
   weights=mean_wts_;
 }

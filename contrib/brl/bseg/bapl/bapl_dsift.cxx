@@ -31,10 +31,10 @@ bool bapl_dsift::set_img( vil_image_view<float> const& img )
   return this->grad_valid_;
 }
 
-vcl_vector<float> bapl_dsift::dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient )
+std::vector<float> bapl_dsift::dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient )
 {
   assert(this->grad_valid_);
-  vcl_vector<float> histogram(128,0.0f);
+  std::vector<float> histogram(128,0.0f);
 
   for (int hi=0; hi<4; ++hi)
   {
@@ -44,10 +44,10 @@ vcl_vector<float> bapl_dsift::dsift( unsigned const& key_x, unsigned const& key_
       {
         for (int j=4*hj; j<4*(hj+1); ++j)
         {
-          double x = ( (i-7.5)*vcl_cos(key_orient)
-                      -(j-7.5)*vcl_sin(key_orient));
-          double y = ( (i-7.5)*vcl_sin(key_orient)
-                      +(j-7.5)*vcl_cos(key_orient));
+          double x = ( (i-7.5)*std::cos(key_orient)
+                      -(j-7.5)*std::sin(key_orient));
+          double y = ( (i-7.5)*std::sin(key_orient)
+                      +(j-7.5)*std::cos(key_orient));
 
           for (int c=0; c<4; ++c)
           {
@@ -57,8 +57,8 @@ vcl_vector<float> bapl_dsift::dsift( unsigned const& key_x, unsigned const& key_
             if ( xc>=0 && xc<int(this->grad_orient_.ni()) &&
                  yc>=0 && yc<int(this->grad_orient_.nj()) )
             {
-              float interp_x = 1.0f - vcl_fabs( key_x + float(x-xc) );
-              float interp_y = 1.0f - vcl_fabs( key_y + float(y-yc) );
+              float interp_x = 1.0f - std::fabs( key_x + float(x-xc) );
+              float interp_y = 1.0f - std::fabs( key_y + float(y-yc) );
 
               float weight = this->grad_mag_(xc,yc) * interp_x * interp_y * bapl_dsift::gaussian(float(xc-key_x), float(yc-key_y));
 
@@ -90,23 +90,23 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
       {
         for (int j=4*hj; j<4*(hj+1); ++j)
         {
-          double x = ( (i-7.5)*vcl_cos(key_orient)
-                      -(j-7.5)*vcl_sin(key_orient));
-          double y = ( (i-7.5)*vcl_sin(key_orient)
-                      +(j-7.5)*vcl_cos(key_orient));
+          double x = ( (i-7.5)*std::cos(key_orient)
+                      -(j-7.5)*std::sin(key_orient));
+          double y = ( (i-7.5)*std::sin(key_orient)
+                      +(j-7.5)*std::cos(key_orient));
 
           for (int c=0; c<4; ++c)
           {
             int xc = int(x+key_x) + c/2;
             int yc = int(y+key_y) + c%2;
 
-            //vcl_cout << "(xc,yc) = " << xc << ", " << yc << ';' << vcl_endl;
+            //std::cout << "(xc,yc) = " << xc << ", " << yc << ';' << std::endl;
 
             if ( xc>=0 && xc<int(this->grad_orient_.ni()) &&
                  yc>=0 && yc<int(this->grad_orient_.nj()) )
             {
-              float interp_x = 1.0f - vcl_fabs( key_x + float(x-xc) );
-              float interp_y = 1.0f - vcl_fabs( key_y + float(y-yc) );
+              float interp_x = 1.0f - std::fabs( key_x + float(x-xc) );
+              float interp_y = 1.0f - std::fabs( key_y + float(y-yc) );
 
               //int diff_x = xc-int(key_x);
               //int diff_y = yc-int(key_y);
@@ -157,9 +157,9 @@ void bapl_dsift::b_read(vsl_b_istream& is)
     }
     break;
    default:
-    vcl_cerr << "----I/O ERROR: bapl_dsift::b_read ----\n"
+    std::cerr << "----I/O ERROR: bapl_dsift::b_read ----\n"
              << "   UNKNOWN VERSION NUMBER " << v << '\n';
-    is.is().clear(vcl_ios::badbit); //set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); //set an unrecoverable IO error on stream
     return;
   }//end switch
 }//end bapl_dsift::b_read

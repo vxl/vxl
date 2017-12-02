@@ -44,12 +44,12 @@ class osl_canny_rothwell : public osl_canny_base
   osl_canny_rothwell(osl_canny_rothwell_params const &);
   ~osl_canny_rothwell();
 
-  void detect_edges(vil1_image const &image, vcl_list<osl_edge*>*, bool adaptive = false);
+  void detect_edges(vil1_image const &image, std::list<osl_edge*>*, bool adaptive = false);
 
  protected:
   void Non_maximal_suppression();
   void Initial_hysteresis();
-  void Final_hysteresis(vcl_list<osl_edge*>*);
+  void Final_hysteresis(std::list<osl_edge*>*);
   void Jump_gap(int,int,int,int,int*,int*);
   void Thin_edges();
   void Jump_single_breaks();
@@ -63,7 +63,7 @@ class osl_canny_rothwell : public osl_canny_base
   void Find_junction_clusters();
 
   int **dangling_;     // Binary image true only at dangling ends, and relevant lists
-  vcl_list<int> *xdang_,*ydang_;
+  std::list<int> *xdang_,*ydang_;
   float range_;       // The maximal region of effect of the smallest smoothing kernel
 
   // Parameters for the adaptive smoothing

@@ -1,15 +1,12 @@
 # ./vxl/vul/io/CMakeLists.txt
 
-SET(vul_io_sources
+set(vul_io_sources
   vul_io_user_info.h   vul_io_user_info.cxx
 )
 
-ADD_LIBRARY(vul_io ${vul_io_sources})
-TARGET_LINK_LIBRARIES(vul_io vul vsl)
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul_io LIBRARY_SOURCES ${vul_io_sources})
+target_link_libraries(${VXL_LIB_PREFIX}vul_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl)
 
-INSTALL_TARGETS(/lib vul_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vul/io ${vul_io_sources})
-
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

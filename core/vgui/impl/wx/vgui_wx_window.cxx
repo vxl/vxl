@@ -166,7 +166,7 @@ void vgui_wx_window::reposition(int x, int y)
 }
 
 //: Use the given text as the window title (if the window has a title).
-void vgui_wx_window::set_title(vcl_string const& title)
+void vgui_wx_window::set_title(std::string const& title)
 {
   frame_->SetTitle( wxString(title.c_str(), wxConvUTF8) );
 }

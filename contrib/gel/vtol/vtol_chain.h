@@ -16,9 +16,11 @@
 //     Patricia A. Vrobel
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <vtol/vtol_chain_sptr.h>
 #include <vtol/vtol_topology_object.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Base class of vtol_two_chain and vtol_one_chain (representation of holes)
 //
@@ -44,10 +46,10 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: array of the superiors
   //---------------------------------------------------------------------------
-  vcl_list<vtol_chain*> chain_superiors_;
+  std::list<vtol_chain*> chain_superiors_;
 
   bool is_cycle_; // True if `this' is a connected chain
-  vcl_vector<signed char> directions_;
+  std::vector<signed char> directions_;
 
  public:
    //***************************************************************************
@@ -168,12 +170,12 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return the directions
   //---------------------------------------------------------------------------
-  const vcl_vector<signed char> *directions() const { return &directions_; }
+  const std::vector<signed char> *directions() const { return &directions_; }
 
   //---------------------------------------------------------------------------
   //: Return the directions
   //---------------------------------------------------------------------------
-  vcl_vector<signed char> *directions() { return &directions_; }
+  std::vector<signed char> *directions() { return &directions_; }
 
   //---------------------------------------------------------------------------
   //: Return the direction `i'
@@ -191,10 +193,10 @@ class vtol_chain : public vtol_topology_object
   virtual void clear();
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_chain"); }
+  virtual std::string is_a() const { return std::string("vtol_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 };
 
 #endif // vtol_chain_h_

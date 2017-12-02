@@ -96,11 +96,11 @@ class bvpl_corner_pairs: public vbl_ref_count
   bvpl_corner_pairs() {}
 
   //: Constructor from a vector
-  bvpl_corner_pairs(vcl_vector<vcl_vector<vgl_line_segment_3d<int> > >& all_lines) { pairs_ = all_lines; }
+  bvpl_corner_pairs(std::vector<std::vector<vgl_line_segment_3d<int> > >& all_lines) { pairs_ = all_lines; }
 
   //: Constructor from  2 vectors
-  bvpl_corner_pairs(vcl_vector<vcl_vector<vgl_line_segment_3d<int> > >& all_lines,
-                    vcl_vector<vcl_vector<vgl_box_3d<int> > > all_boxes)
+  bvpl_corner_pairs(std::vector<std::vector<vgl_line_segment_3d<int> > >& all_lines,
+                    std::vector<std::vector<vgl_box_3d<int> > > all_boxes)
   {
     pairs_ = all_lines;
     boxes_ =all_boxes;
@@ -109,10 +109,10 @@ class bvpl_corner_pairs: public vbl_ref_count
   int size() const { return pairs_.size(); }
 
   //: vector of pairs
-  vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > pairs_;
+  std::vector<std::vector<vgl_line_segment_3d<int> > > pairs_;
 
   // a vector of kernel coverage at certain points
-  vcl_vector<vcl_vector<vgl_box_3d<int> > > boxes_;
+  std::vector<std::vector<vgl_box_3d<int> > > boxes_;
 };
 
 typedef vbl_smart_ptr<bvpl_corner_pairs> bvpl_corner_pairs_sptr;
@@ -163,7 +163,7 @@ class bvpl_corner_pair_finder
 
 void bvpl_convert_pair_grid_to_hsv_grid(bvxm_voxel_grid<bvpl_pair> *pair_grid,
                                         bvxm_voxel_grid<vnl_float_4> *out_grid,
-                                        vcl_vector<float> colors);
+                                        std::vector<float> colors);
 
 void bvpl_convert_pair_grid_to_float_grid(bvxm_voxel_grid<bvpl_pair> *pair_grid,
                                           bvxm_voxel_grid<float> *out_grid );

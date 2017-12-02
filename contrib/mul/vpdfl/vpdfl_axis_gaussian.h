@@ -16,8 +16,10 @@
 //   20 April 2001 IMS - Implemented log_p_min in nearest_plausible
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vpdfl/vpdfl_pdf_base.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Multi-variate Gaussian PDF, with a diagonal covariance matrix
 class vpdfl_axis_gaussian : public vpdfl_pdf_base
@@ -81,17 +83,17 @@ class vpdfl_axis_gaussian : public vpdfl_pdf_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer.
   // Caller is responsible for deletion
   virtual vpdfl_pdf_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

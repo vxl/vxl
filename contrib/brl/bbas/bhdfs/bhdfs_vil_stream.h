@@ -3,7 +3,7 @@
 #define bhdfs_vil_stream_h_
 //:
 // \file
-// \brief A vil_stream implementation using vcl_fstream
+// \brief A vil_stream implementation using std::fstream
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 

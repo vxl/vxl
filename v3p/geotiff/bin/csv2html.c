@@ -49,16 +49,16 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns, char**,
 int main( int nArgc, char ** papszArgv )
 
 {
-    int		nColumns = 0;
-    int		*panColumnList = NULL;
+    int                nColumns = 0;
+    int                *panColumnList = NULL;
     const char *pszTable = "horiz_cs";
     const char *pszTablePath = "/usr/local/share/epsg_csv";
-    char	**papszOptions = NULL;
-    char	szFilename[1024];
-    int		i, bSingletons = FALSE;
+    char        **papszOptions = NULL;
+    char        szFilename[1024];
+    int                i, bSingletons = FALSE;
 
     printf( "Content-type: text/html\n\n" );
-    
+
 /* -------------------------------------------------------------------- */
 /*      Parse the PATH_INFO.                                            */
 /* -------------------------------------------------------------------- */
@@ -81,8 +81,8 @@ int main( int nArgc, char ** papszArgv )
     {
         if( EQUALN(papszOptions[i],"FIELDS=",7) )
         {
-            char	**papszList;
-            int		j;
+            char        **papszList;
+            int                j;
 
             papszList = CSLTokenizeStringComplex( papszOptions[i]+7, ",",
                                                 TRUE, TRUE );
@@ -137,9 +137,9 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns,
           char ** papszOptions, int bSingletons )
 
 {
-    FILE	*fp;
-    char	**papszFields, **papszFieldNames;
-    int		iCol, nColCount;
+    FILE        *fp;
+    char        **papszFields, **papszFieldNames;
+    int                iCol, nColCount;
 
 /* -------------------------------------------------------------------- */
 /*      Open the source file.                                           */
@@ -185,8 +185,8 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns,
 /* -------------------------------------------------------------------- */
     while( (papszFields = CSVReadParseLine( fp )) != NULL )
     {
-        int	bDisplay=TRUE, i;
-        
+        int        bDisplay=TRUE, i;
+
         nColCount = CSLCount( papszFields );
 
         for( i = 0; papszOptions != NULL && papszOptions[i] != NULL; i++ )
@@ -217,20 +217,20 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns,
         {
             for( iCol = 0; iCol < nColumns; iCol++ )
             {
-                const char	*pszSubTable = NULL;
+                const char        *pszSubTable = NULL;
                 const char  *pszFieldName;
-                
+
                 if( panColumns[iCol] < 0
                     || panColumns[iCol] >= nColCount )
                     continue;
-                
+
                 pszFieldName = papszFieldNames[panColumns[iCol]];
 
                 if( bSingletons )
                 {
                     printf( "<td>%s\n", pszFieldName );
                 }
-                
+
 
                 if( EQUAL(pszFieldName,"PRIME_MERIDIAN_CODE") )
                     pszSubTable = "p_meridian";
@@ -248,7 +248,7 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns,
                     pszSubTable = "ellipsoid";
                 else if( EQUAL(pszFieldName,"COORD_TRF_METHOD_CODE") )
                     pszSubTable = "trf_method";
-                
+
                 if( pszSubTable != NULL )
                     printf( "<td><a href="
                             "\"/cgi-bin/csv2html/TABLE=%s/CODE=%s/\">"

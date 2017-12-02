@@ -12,9 +12,10 @@
 //   <None yet>
 // \endverbatim
 
+#include <limits>
 #include <vpdl/vpdl_gaussian_base.h>
 #include <vnl/vnl_erf.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vpdl/vpdt/vpdt_gaussian.h>
@@ -112,7 +113,7 @@ class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
   {
     const unsigned int dim = this->dimension();
 
-    double s2 = 1/vcl_sqrt(2*impl_.covar);
+    double s2 = 1/std::sqrt(2*impl_.covar);
     // return zero for ill-defined box
     double prob = T(1);
     for (unsigned int i=0; i<dim; ++i) {

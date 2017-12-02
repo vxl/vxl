@@ -9,7 +9,7 @@
 //
 // \verbatim
 // Modifications
-// 2000.05.15 François BERTEL Added some missing <T>
+// 2000.05.15 Francois BERTEL Added some missing <T>
 // 2000.05.16 Peter Vanroose  Operators > < >= <= made const
 // 2000.09.13 fsm      Added rationale for unprotect().
 // PDA (Manchester) 23/03/2001: Tidied up the documentation
@@ -17,7 +17,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 //: A templated smart pointer class
 // This class requires that the class being templated over has
@@ -61,7 +62,11 @@ class vbl_smart_ptr
   VCL_SAFE_BOOL_DEFINE;
  public:
   vbl_smart_ptr ()
-    : protected_(true), ptr_(0) { }
+    : protected_(true), ptr_(VXL_NULLPTR) { }
+
+  template<class Y>
+  vbl_smart_ptr (vbl_smart_ptr<Y> const &p)
+    : protected_(true), ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
 
   vbl_smart_ptr (vbl_smart_ptr<T> const &p)
     : protected_(true), ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
@@ -76,12 +81,12 @@ class vbl_smart_ptr
     if (protected_)
     {
       T *old_ptr = ptr_;
-      ptr_ = 0;
+      ptr_ = VXL_NULLPTR;
       if (old_ptr)
         unref(old_ptr);
     }
     else
-      ptr_ = 0;
+      ptr_ = VXL_NULLPTR;
   }
 
   //: Assignment
@@ -113,7 +118,7 @@ class vbl_smart_ptr
   }
 
   //: Cast to bool
-   operator safe_bool () const { return ptr_? VCL_SAFE_BOOL_TRUE : 0; }
+   operator safe_bool () const { return ptr_? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
 
   //: Inverse boolean value
   bool operator!() const { return ptr_? false : true; }
@@ -202,13 +207,13 @@ inline bool operator!= (T const* p, vbl_smart_ptr<T> const& a)
   return a.as_pointer() != p;
 }
 
-// Sunpro and GCC need a vcl_ostream operator. It need not be inline
+// GCC need a std::ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the
 // cost of a function call.
 template <class T>
-vcl_ostream& operator<< (vcl_ostream&, vbl_smart_ptr<T> const&);
+std::ostream& operator<< (std::ostream&, vbl_smart_ptr<T> const&);
 
 #define VBL_SMART_PTR_INSTANTIATE(T) \
-extern "please include vbl/vbl_smart_ptr.txx instead"
+extern "please include vbl/vbl_smart_ptr.hxx instead"
 
 #endif // vbl_smart_ptr_h_

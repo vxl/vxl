@@ -137,7 +137,7 @@ Release 3.5.2 (Public Release - 2002-12-23)
 
 - Activated file padding options
   Affects: dcmimage/apps/dcmscale.cc
-          
+
 - Removed const from decodeBase64() return code, needed on MIPSpro
   Affects: ofstd/include/ofstd.h
            ofstd/libsrc/ofstd.cc

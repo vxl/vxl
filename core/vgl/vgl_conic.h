@@ -9,8 +9,8 @@
 //  and prints the equation in readable form:
 // \code
 //   vgl_conic<double> c(1, 0, 2, 0, 0, -3);
-//   vcl_cout << c.real_type() << '\n'; // prints "real ellipse"
-//   vcl_cout << c << '\n'; // prints the equation: X^2 + 2 Y^2 - 3 = 0
+//   std::cout << c.real_type() << '\n'; // prints "real ellipse"
+//   std::cout << c << '\n'; // prints the equation: X^2 + 2 Y^2 - 3 = 0
 // \endcode
 //
 // \verbatim
@@ -31,9 +31,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_list.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <list>
+#include <string>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -105,14 +106,14 @@ class vgl_conic
   // "real intersecting lines", "complex intersecting lines",
   // "real parallel lines", "complex parallel lines", "coincident lines".
   // The default constructor sets the type to "invalid conic".
-  vcl_string real_type() const;
+  std::string real_type() const;
 
   //: Returns the internal enum value corresponding to the string argument.
   // Useful for comparison purposes, or for use in "case" statements.
-  static vgl_conic_type type_by_name(vcl_string const& name);
+  static vgl_conic_type type_by_name(std::string const& name);
 
   //: Converts the conic type from enum (internal representation) to string.
-  static vcl_string type_by_number(vgl_conic_type type);
+  static std::string type_by_number(vgl_conic_type type);
 
   //: Returns the coefficient of \f$X^2\f$
   inline T a() const { return  a_; }
@@ -205,7 +206,7 @@ class vgl_conic
   //  Otherwise returns an empty list.
   //  If two coinciding lines, the list contains two identical elements.
   //  Hence this list always has length 0 or 2.
-  vcl_list<vgl_homg_line_2d<T> > components() const;
+  std::list<vgl_homg_line_2d<T> > components() const;
 
   // Elementary geometric functions ----------------------------------
 
@@ -276,13 +277,13 @@ class vgl_conic
 //: Write "<vgl_conic aX^2+bXY+cY^2+dXW+eYW+fW^2>" to stream
 // \relatesalso vgl_conic
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_conic<T> const& c);
+std::ostream&  operator<<(std::ostream& s, vgl_conic<T> const& c);
 
 //: Read a b c d e f from stream
 // \relatesalso vgl_conic
 template <class T>
-vcl_istream&  operator>>(vcl_istream& s, vgl_conic<T>& c);
+std::istream&  operator>>(std::istream& s, vgl_conic<T>& c);
 
-#define VGL_CONIC_INSTANTIATE(T) extern "please include vgl/vgl_conic.txx first"
+#define VGL_CONIC_INSTANTIATE(T) extern "please include vgl/vgl_conic.hxx first"
 
 #endif // vgl_conic_h_

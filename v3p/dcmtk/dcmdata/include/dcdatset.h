@@ -140,7 +140,7 @@ class DcmDataset
      *  @param subPadlen      For sequences (ie sub elements), the length up to which
      *                        item shall be padded, if padding is desired.
      *  @param instanceLength Number of extra bytes added to the item/dataset length
-     *                        used when computing the padding; this parameter is for 
+     *                        used when computing the padding; this parameter is for
      *                        instance used to pass the length of the file meta header
      *                        from the DcmFileFormat to the DcmDataset object.
      *  @return status, EC_Normal if successful, an error code otherwise

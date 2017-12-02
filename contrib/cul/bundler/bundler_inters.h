@@ -3,14 +3,16 @@
 
 #define BUNDLER_DEBUG
 
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vector>
+#include <iostream>
+#include <utility>
+#include <vcl_compiler.h>
 
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 #include <vbl/vbl_ref_count.h>
 
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_sparse_matrix.txx>
+#include <vnl/vnl_sparse_matrix.hxx>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -83,9 +85,9 @@ struct bundler_inters_image : public vbl_ref_count
     unsigned int nj;
     double focal_length;
     int img_id ;
-    vcl_string img_name ;
+    std::string img_name ;
     // All the features in this image. They will be in different tracks.
-    vcl_vector<bundler_inters_feature_sptr> features;
+    std::vector<bundler_inters_feature_sptr> features;
 
     // True if at least one feature in the set is
     // been used to triangulate a track.
@@ -114,7 +116,7 @@ struct bundler_inters_image_pair
 
 /*-----------------------------------------------------------------------*/
 typedef
-    vcl_pair<bundler_inters_feature_sptr, bundler_inters_feature_sptr>
+    std::pair<bundler_inters_feature_sptr, bundler_inters_feature_sptr>
     bundler_inters_feature_pair;
 
 // A set of matched features between two images.
@@ -122,7 +124,7 @@ struct bundler_inters_match_set
 {
     //--------------Public Fields
     bundler_inters_image_sptr image1, image2;
-    vcl_vector< bundler_inters_feature_pair > matches;
+    std::vector< bundler_inters_feature_pair > matches;
 
 
     //--------------Public Functions
@@ -165,8 +167,8 @@ struct bundler_inters_match_set
 struct bundler_inters_track : public vbl_ref_count
 {
     // All these points will be from different images.
-    vcl_vector<bundler_inters_feature_sptr> points;
-    vcl_vector<bool> contributing_points;
+    std::vector<bundler_inters_feature_sptr> points;
+    std::vector<bool> contributing_points;
 
     vgl_point_3d<double> world_point;
 
@@ -191,10 +193,10 @@ struct bundler_inters_track : public vbl_ref_count
 // A list of feature sets, match sets, and tracks
 struct bundler_inters_reconstruction
 {
-    vcl_vector<bundler_inters_image_sptr> feature_sets;
-    vcl_vector<bundler_inters_track_sptr> tracks;
+    std::vector<bundler_inters_image_sptr> feature_sets;
+    std::vector<bundler_inters_track_sptr> tracks;
 
-    vcl_vector<bundler_inters_match_set> match_sets;
+    std::vector<bundler_inters_match_set> match_sets;
 
     vnl_sparse_matrix<bool> visibility_matrix;
 };

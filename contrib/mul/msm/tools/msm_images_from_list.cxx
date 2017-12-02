@@ -5,13 +5,15 @@
 // Outputs new list just containing image names.
 // \author Tim Cootes
 
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
 #include <msm/msm_shape_model.h>
 #include <msm/msm_shape_instance.h>
@@ -41,10 +43,10 @@ eg1/image2.jpg
 
 void print_usage()
 {
-  vcl_cout << "msm_images_from_list -i image_list.txt -o new_list.txt\n"
+  std::cout << "msm_images_from_list -i image_list.txt -o new_list.txt\n"
            << "Loads images and point file names, and directory strings from input file.\n"
            << "Outputs new list containing only the image names\n"
-           << vcl_endl;
+           << std::endl;
 
   vul_arg_display_usage_and_exit();
 }
@@ -53,30 +55,30 @@ void print_usage()
 struct tool_params
 {
   //: Directory containing images
-  vcl_string image_dir;
+  std::string image_dir;
 
   //: Directory containing points
-  vcl_string points_dir;
+  std::string points_dir;
 
   //: List of image names
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
 
   //: List of points file names
-  vcl_vector<vcl_string> points_names;
+  std::vector<std::string> points_names;
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void tool_params::read_from_file(const vcl_string& path)
+void tool_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -93,8 +95,8 @@ void tool_params::read_from_file(const vcl_string& path)
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> in_path("-i","Input image + points file");
-  vul_arg<vcl_string> out_path("-o","Output path");
+  vul_arg<std::string> in_path("-i","Input image + points file");
+  vul_arg<std::string> out_path("-o","Output path");
   vul_arg_parse(argc,argv);
 
   if (in_path()=="" || out_path()=="")
@@ -110,29 +112,29 @@ int main(int argc, char** argv)
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<'\n';
+    std::cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
 
   // Open the text file for output
-  vcl_ofstream ofs(out_path().c_str());
+  std::ofstream ofs(out_path().c_str());
   if (!ofs)
   {
-    vcl_cerr<<"Failed to open "<<out_path() <<" for output.\n";
+    std::cerr<<"Failed to open "<<out_path() <<" for output.\n";
     return 1;
   }
-  
-  ofs<<"images: {"<<vcl_endl;
+
+  ofs<<"images: {"<<std::endl;
 
   for (unsigned i=0;i<params.image_names.size();++i)
   {
-    ofs<<params.image_names[i]<<vcl_endl;
+    ofs<<params.image_names[i]<<std::endl;
   }
-  ofs<<"}"<<vcl_endl;
+  ofs<<"}"<<std::endl;
   ofs.close();
 
-  vcl_cout<<"Wrote image names to "<<out_path()<<vcl_endl;
+  std::cout<<"Wrote image names to "<<out_path()<<std::endl;
 
   return 0;
 }

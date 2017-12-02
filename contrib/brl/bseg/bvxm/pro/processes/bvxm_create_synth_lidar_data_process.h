@@ -14,8 +14,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: global variables
 namespace bvxm_create_synth_lidar_data_process_globals
@@ -23,17 +25,17 @@ namespace bvxm_create_synth_lidar_data_process_globals
   // this process takes no inputs
   const unsigned n_outputs_ = 2;
   // Define parameters here
-  const vcl_string param_input_directory_ =  "input_directory";
-  const vcl_string param_voxel_dim_x_ = "voxel_dim_x";
-  const vcl_string param_voxel_dim_y_ = "voxel_dim_y";
-  const vcl_string param_voxel_dim_z_ = "voxel_dim_z";
-  const vcl_string param_box_min_x_ = "box_min_x";
-  const vcl_string param_box_min_y_ = "box_min_y";
-  const vcl_string param_box_min_z_ = "box_min_z";
-  const vcl_string param_box_dim_x_ = "box_dim_x";
-  const vcl_string param_box_dim_y_ = "box_dim_y";
-  const vcl_string param_box_dim_z_ = "box_dim_z";
-  const vcl_string param_lvcs_ = "lvcs";
+  const std::string param_input_directory_ =  "input_directory";
+  const std::string param_voxel_dim_x_ = "voxel_dim_x";
+  const std::string param_voxel_dim_y_ = "voxel_dim_y";
+  const std::string param_voxel_dim_z_ = "voxel_dim_z";
+  const std::string param_box_min_x_ = "box_min_x";
+  const std::string param_box_min_y_ = "box_min_y";
+  const std::string param_box_min_z_ = "box_min_z";
+  const std::string param_box_dim_x_ = "box_dim_x";
+  const std::string param_box_dim_y_ = "box_dim_y";
+  const std::string param_box_dim_z_ = "box_dim_z";
+  const std::string param_lvcs_ = "lvcs";
 }
 
 //: creates the synthetic lidar data

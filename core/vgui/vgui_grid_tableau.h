@@ -15,7 +15,8 @@
 //   K.Y.McGaul 21-FEB-2002 Added comments and documentation.
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include "vgui_grid_tableau_sptr.h"
 #include <vgui/vgui_poly_tableau.h>
@@ -74,7 +75,7 @@ class vgui_grid_tableau : public vgui_poly_tableau
   typedef vgui_grid_tableau_data grid_data;
 
   //: Returns the type name of the tableau ("vgui_grid_tableau" in this case).
-  vcl_string type_name() const { return "vgui_grid_tableau"; }
+  std::string type_name() const { return "vgui_grid_tableau"; }
 
   //: Constructor - don't use this, use vgui_grid_tableau_new.
   //  Takes the initial number of columns and rows.
@@ -124,7 +125,7 @@ class vgui_grid_tableau : public vgui_poly_tableau
   vgui_tableau_sptr get_tableau_at(unsigned col_pos, unsigned row_pos);
 
   //: Returns the list of tableaux.
-  vcl_vector<vgui_tableau_sptr> get_tableau_list() { return tabs; }
+  std::vector<vgui_tableau_sptr> get_tableau_list() { return tabs; }
 
   //: Returns the active tableau, this is the tableau with the mouse in.
   void get_active_position(unsigned* col_pos, unsigned* row_pos);
@@ -133,8 +134,8 @@ class vgui_grid_tableau : public vgui_poly_tableau
   void get_last_selected_position(unsigned* col_pos, unsigned* row_pos);
 
   //: Gets the positions and times of selection of the selected tableaux.
-  int get_selected_positions(vcl_vector<int>* col_pos, vcl_vector<int>* row_pos,
-                             vcl_vector<int>* times);
+  int get_selected_positions(std::vector<int>* col_pos, std::vector<int>* row_pos,
+                             std::vector<int>* times);
 
   //: Select a certain tableau
   void set_selected(int r, int c, bool onoff = true);
@@ -234,14 +235,14 @@ class vgui_grid_tableau : public vgui_poly_tableau
   bool unique_selected_;
   vgui_tableau_sptr default_tab;
 
-  vcl_vector<vgui_tableau_sptr> tabs;
+  std::vector<vgui_tableau_sptr> tabs;
   vbl_array_2d<grid_data> grid_pos;
 
   //: Initialisation called by all constructors.
   void init(unsigned initial_cols, unsigned initial_rows);
 
   //: Adds the default tableau to the given space in the grid.
-  //  (but not to the vcl_list of tableaux).
+  //  (but not to the std::list of tableaux).
   void add_default(unsigned col_pos, unsigned row_pos);
 
   //: Make the current tableau selected by saving the current time.

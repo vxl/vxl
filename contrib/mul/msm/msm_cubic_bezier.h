@@ -5,12 +5,14 @@
 // \brief Basic implementation of a cubic poly-bezier
 // \author Tim Cootes
 
+#include <iostream>
+#include <cstddef>
+#include <iosfwd>
+#include <string>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
-#include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
 
 //: Store start point and two control points for Bezier poly-curve
@@ -22,19 +24,19 @@ struct msm_cubic_bezier_node
 
   // Control points
   vgl_point_2d<double> c1,c2;
-  
+
   //: Return position at t (in [0,1]) given end point q
   vgl_point_2d<double> point(double t, const vgl_point_2d<double>& q) const;
-  
+
   //: Return tangent to curve at t (in [0,1]) given end point q
   vgl_vector_2d<double> tangent(double t, const vgl_point_2d<double>& q) const;
-  
+
   //: Estimate approximate length of curve by piece-wise linear curve with k extra points
   double approx_length(const vgl_point_2d<double>& q, unsigned k=3) const;
-  
+
   //: True if sufficiently straight, assuming q is end point.
   bool is_straight(const vgl_point_2d<double>& q, double thresh=0.01) const;
-  
+
   //: Set to a straight line from p to q
   void set_to_line(const vgl_point_2d<double>& q);
 
@@ -43,21 +45,21 @@ struct msm_cubic_bezier_node
 //: Basic implementation of a cubic poly-bezier
 //  Allows generation of a smooth curve through a set of points
 //  Implemented as a set of bezier nodes.
-//  Can either be open (so has n points, and n-1 bezier segments), 
+//  Can either be open (so has n points, and n-1 bezier segments),
 //  or closed (n points, n segments, with point n-1 linked to point 0).
-//  
+//
 class msm_cubic_bezier
 {
  private:
   //: List of nodes making up the curve
-  vcl_vector<msm_cubic_bezier_node> bnode_;
-  
+  std::vector<msm_cubic_bezier_node> bnode_;
+
   //: Compute control points so as to generate a smooth open curve
   void smooth_open();
-  
+
   //: Compute control points so as to generate a smooth closed curve
   void smooth_closed();
-  
+
   //: True for closed curves
   bool closed_;
  public:
@@ -65,17 +67,17 @@ class msm_cubic_bezier
   msm_cubic_bezier();
 
   //: Construct from set of points. Curve will pass through these.
-  msm_cubic_bezier(const vcl_vector<vgl_point_2d<double> >&pts, bool closed=false);
+  msm_cubic_bezier(const std::vector<vgl_point_2d<double> >&pts, bool closed=false);
 
   //: Construct from set of points. Curve will pass through these.
-  void set_points(const vcl_vector<vgl_point_2d<double> >&pts, bool closed=false);
+  void set_points(const std::vector<vgl_point_2d<double> >&pts, bool closed=false);
 
   // Destructor
   ~msm_cubic_bezier() {}
 
   //: Number of points defining the curve
-  vcl_size_t size() const { return bnode_.size(); }
-  
+  std::size_t size() const { return bnode_.size(); }
+
     //: True for closed curves
   bool is_closed() const { return closed_; }
 
@@ -83,16 +85,16 @@ class msm_cubic_bezier
   //: Return point for node i
   const vgl_point_2d<double>& point(unsigned i) const
   { return bnode_[i].p; }
-  
+
   //: Return i-th curve segment description
   const msm_cubic_bezier_node& segment(unsigned i) const { return bnode_[i]; }
 
   //: Return position at t (in [0,1]) in segment i of curve
   vgl_point_2d<double> point(unsigned i, double t) const;
-  
+
   //: Return tangent to curve at t (in [0,1]) in segment i of curve
   vgl_vector_2d<double> tangent(unsigned i, double t) const;
-  
+
   //: Return normal to curve at t (in [0,1]) in segment i of curve
   //  tangent(i,t) rotated by 90 degrees, using (-t.y(),t.x());
   vgl_vector_2d<double> normal(unsigned i, double t) const
@@ -106,19 +108,19 @@ class msm_cubic_bezier
   //  For closed curves, use wrap-around (so if end<=start, assume it wraps round)
   //  To do the integration, each curve approximated by pieces of length no more than ~min_len
   void equal_space(unsigned start, unsigned end, unsigned n_pts, double min_len,
-                   vcl_vector<vgl_point_2d<double> >& new_pts) const;
-                   
+                   std::vector<vgl_point_2d<double> >& new_pts) const;
+
   //: Generate set of points along the curve, retaining control points.
   //  Creates sufficient intermediate points so that their spacing is approx_sep.
   // \param new_normals[i] the normal to the curve at new_pts[i]
   // \param control_pt_index[i] gives element of new_pts for control point i
-  void get_extra_points(double approx_sep, 
-                        vcl_vector<vgl_point_2d<double> >& new_pts,
-                        vcl_vector<vgl_vector_2d<double> >& new_normals,
-                        vcl_vector<unsigned>& control_pt_index) const;
+  void get_extra_points(double approx_sep,
+                        std::vector<vgl_point_2d<double> >& new_pts,
+                        std::vector<vgl_vector_2d<double> >& new_normals,
+                        std::vector<unsigned>& control_pt_index) const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -136,10 +138,10 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_cubic_bezier& c);
 void vsl_b_read(vsl_b_istream& bfs, msm_cubic_bezier& c);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_cubic_bezier& c);
+std::ostream& operator<<(std::ostream& os,const msm_cubic_bezier& c);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_cubic_bezier& c);
+void vsl_print_summary(std::ostream& os,const msm_cubic_bezier& c);
 
 
 #endif // msm_cubic_bezier_h_

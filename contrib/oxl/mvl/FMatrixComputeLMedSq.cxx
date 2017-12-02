@@ -1,9 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "FMatrixComputeLMedSq.h"
 #include <mvl/HomgOperator2D.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 FMatrixComputeLMedSq::FMatrixComputeLMedSq(bool rank2_truncate, int size)
 {
@@ -15,7 +17,7 @@ FMatrixComputeLMedSq::FMatrixComputeLMedSq(bool rank2_truncate, int size)
 
 FMatrixComputeLMedSq::~FMatrixComputeLMedSq() {}
 
-double FMatrixComputeLMedSq::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count)
+double FMatrixComputeLMedSq::calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count)
 {
   double M = median(residuals);
   double thresh = inthresh_;
@@ -49,9 +51,9 @@ double FMatrixComputeLMedSq::calculate_residual(HomgPoint2D& one, HomgPoint2D& t
        + HomgOperator2D::perp_dist_squared(one, l2);
 }
 
-double FMatrixComputeLMedSq::median(vcl_vector<double> residuals)
+double FMatrixComputeLMedSq::median(std::vector<double> residuals)
 {
-  vcl_sort(residuals.begin(), residuals.end());
+  std::sort(residuals.begin(), residuals.end());
   int size = residuals.size();
   int s2 = size / 2;
   return size == 0 ? 0.0 : size%2 ? residuals[s2] :

@@ -11,12 +11,14 @@
 //  Modifications
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vcl_set.h>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <set>
+#include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_curvelet.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_curvelet.h>
 
 
 //: a node in the hypothesis tree
@@ -27,7 +29,7 @@ public:
   bool dir;   //direction of the tree (forward or reverse)
   sdet_curvelet* cvlet;
   sdet_hyp_tree_node* parent; //parent node (needed for tree traversal)
-  vcl_list<sdet_hyp_tree_node*> children;
+  std::list<sdet_hyp_tree_node*> children;
 
   //: constructors
   sdet_hyp_tree_node(int id=-1, bool newdir=true): tree_id(id), dir(newdir), cvlet(0), parent(0){}
@@ -35,17 +37,17 @@ public:
 
   //: destructor
   ~sdet_hyp_tree_node()
-  { 
+  {
     //cvlets are cloned from the CM to assign to the HTs so delete them
     delete cvlet;
-    cvlet = 0; 
+    cvlet = 0;
 
     //first remove this node from the parent's list (if it has a parent)
     if (parent)
       parent->children.remove(this);
-    
+
     parent = 0; //remove pointer to the parent
-    
+
     //delete all children
     while (children.size()>0)
       delete children.front();
@@ -73,14 +75,14 @@ public:
   int tree_id;
   sdet_hyp_tree_node* root;
   bool resolved;
-  sdet_hyp_tree_node* best_path; 
+  sdet_hyp_tree_node* best_path;
   double least_cost;
 
   //: default constructor
   sdet_hyp_tree(int id=-1): tree_id(id), root(0), resolved(false), best_path(0), least_cost(1000)  {}
 
   //: constructor given a root node
-  sdet_hyp_tree(sdet_hyp_tree_node* new_root, int id=-1) : 
+  sdet_hyp_tree(sdet_hyp_tree_node* new_root, int id=-1) :
     tree_id(id), root(new_root), resolved(false), best_path(0), least_cost(1000) {}
 
   //: destructor
@@ -94,7 +96,7 @@ public:
       iterator(sdet_hyp_tree_node* ptr) : ptr_(ptr) { if (ptr) cur_path_.push_back(ptr->cvlet); }
       //: copy constructor
       iterator(const iterator& other) : ptr_(other.ptr_), cur_path_(other.cur_path_) {}
-      
+
       //operators
       sdet_hyp_tree_node* operator*(){ return ptr_; }
       bool operator==(const iterator& other) { return ptr_ == other.ptr_; }
@@ -144,11 +146,11 @@ public:
           }
 
           //next valid one can be set (find the current child on the parents list and set it to the next)
-          vcl_list<sdet_hyp_tree_node*>::iterator nit = parent->children.begin();
+          std::list<sdet_hyp_tree_node*>::iterator nit = parent->children.begin();
           for (; nit != parent->children.end(); nit++){
             if ((*nit)==cur){
               nit++;
-              
+
               //assert(cur->cvlet == cur_path_.back());
               cur_path_.pop_back(); //first remove the current cvlet from the path
 
@@ -165,11 +167,11 @@ public:
       }
 
       //: return the current path
-      vcl_vector<sdet_curvelet*>& get_cur_path() { return cur_path_; }
+      std::vector<sdet_curvelet*>& get_cur_path() { return cur_path_; }
 
     protected:
       sdet_hyp_tree_node* ptr_;             //this is the node that the iterator is currently pointing to
-      vcl_vector<sdet_curvelet*> cur_path_; // this is the path from point where the iterator was initialized to the current node
+      std::vector<sdet_curvelet*> cur_path_; // this is the path from point where the iterator was initialized to the current node
   };
 
   //: Return an iterator to the first element
@@ -199,10 +201,10 @@ public:
   void print_all_paths()
   {
     //print all the paths and costs
-    vcl_cout << "Current Hypothesis tree: TREE ID = " << this->tree_id << "----------------------------------------------------------" << vcl_endl;
-    
+    std::cout << "Current Hypothesis tree: TREE ID = " << this->tree_id << "----------------------------------------------------------" << std::endl;
+
     //old implementation (with recursion)
-    //vcl_list<sdet_curvelet*> CF;
+    //std::list<sdet_curvelet*> CF;
     //next_node(root, CF);
 
     //new implementation; using iterators
@@ -210,23 +212,23 @@ public:
     for ( ; pit != end(); pit++){
       if ((*pit)->is_leaf()){
         //print out the current CF list
-        vcl_vector<sdet_curvelet*> CF_list = pit.get_cur_path();
+        std::vector<sdet_curvelet*> CF_list = pit.get_cur_path();
 
-        vcl_cout << ":: ";
+        std::cout << ":: ";
         for (unsigned i=0; i<CF_list.size(); i++){
           for (unsigned j=0; j<CF_list[i]->edgel_chain.size(); j++)
-            vcl_cout << CF_list[i]->edgel_chain[j]->id << " ";
-          vcl_cout << "* ";
+            std::cout << CF_list[i]->edgel_chain[j]->id << " ";
+          std::cout << "* ";
         }
-        
+
         //also write out the cost
-        vcl_cout << vcl_endl;
+        std::cout << std::endl;
       }
     }
   }
 
   //: recursively traverse the hyp. tree and print out list every time a leaf node is reached
-  void next_node(sdet_hyp_tree_node* cur_node, vcl_list<sdet_curvelet*> &CF)
+  void next_node(sdet_hyp_tree_node* cur_node, std::list<sdet_curvelet*> &CF)
   {
     //add current curvelet to the CF list
     CF.push_back(cur_node->cvlet);
@@ -234,23 +236,23 @@ public:
     //check to see if this is a leaf node
     if (cur_node->children.size()==0){
       //print out the current CF list
-      vcl_cout << ":: ";
-      vcl_list<sdet_curvelet*>::iterator cvit = CF.begin();
+      std::cout << ":: ";
+      std::list<sdet_curvelet*>::iterator cvit = CF.begin();
       for (; cvit!=CF.end(); cvit++){
         for (unsigned i=0; i<(*cvit)->edgel_chain.size(); i++)
-          vcl_cout << (*cvit)->edgel_chain[i]->id << " ";
-        vcl_cout << "* ";
+          std::cout << (*cvit)->edgel_chain[i]->id << " ";
+        std::cout << "* ";
       }
-      
+
       //also write out the cost
-      vcl_cout << vcl_endl;
+      std::cout << std::endl;
 
       CF.pop_back();
       return;
     }
 
     //go to its children
-    vcl_list<sdet_hyp_tree_node*>::iterator nit = cur_node->children.begin();
+    std::list<sdet_hyp_tree_node*>::iterator nit = cur_node->children.begin();
     for (; nit!=cur_node->children.end(); nit++)
       next_node((*nit), CF);
 
@@ -262,9 +264,9 @@ public:
 class sdet_HT_graph
 {
 public:
-  vcl_vector<sdet_hyp_tree*> nodes;
-  vcl_vector<vcl_set<int> > CPL_links; //various links to other HT nodes (completion type)
-  vcl_vector<vcl_set<int> > CPT_links; //various links to other HT nodes (competition type)
+  std::vector<sdet_hyp_tree*> nodes;
+  std::vector<std::set<int> > CPL_links; //various links to other HT nodes (completion type)
+  std::vector<std::set<int> > CPT_links; //various links to other HT nodes (competition type)
 
   sdet_HT_graph():nodes(0), CPL_links(0), CPT_links(0){}
   ~sdet_HT_graph(){ clear(); }
@@ -272,15 +274,15 @@ public:
   void clear()
   {
     for (unsigned i=0; i<nodes.size(); i++){
-      nodes[i]->delete_tree(); 
+      nodes[i]->delete_tree();
     }
-    nodes.clear(); 
+    nodes.clear();
     CPL_links.clear();
     CPT_links.clear();
   }
 
   void insert_node(sdet_hyp_tree* new_node){nodes.push_back(new_node);  }
-  void insert_CPL_link(int HT1, int HT2) { CPL_links[HT1].insert(HT2); CPL_links[HT2].insert(HT1); } 
+  void insert_CPL_link(int HT1, int HT2) { CPL_links[HT1].insert(HT2); CPL_links[HT2].insert(HT1); }
   void remove_CPL_link(int HT1, int HT2) { CPL_links[HT1].erase(HT2); CPL_links[HT2].erase(HT1); }
 
   void insert_CPT_link(int HT1, int HT2) { CPT_links[HT1].insert(HT2); CPT_links[HT2].insert(HT1); }
@@ -296,15 +298,15 @@ public:
 class sdet_edgel_labels
 {
 public:
-  vcl_vector<vcl_set<sdet_hyp_tree_node*> > labels; //contains the hyp tree nodes
-  vcl_vector<bool> claimed;                          //flags to mark edgels that ahve been claimed already
+  std::vector<std::set<sdet_hyp_tree_node*> > labels; //contains the hyp tree nodes
+  std::vector<bool> claimed;                          //flags to mark edgels that ahve been claimed already
 
   sdet_edgel_labels(): labels(0), claimed(0){}
   ~sdet_edgel_labels(){ labels.clear(); claimed.clear(); }
 
-  void resize(unsigned size){ 
-    if (labels.size()!= size){ 
-      labels.resize(size); 
+  void resize(unsigned size){
+    if (labels.size()!= size){
+      labels.resize(size);
       claimed.resize(size);
     }
   }
@@ -327,7 +329,7 @@ public:
   sdet_hyp_tree* src;
   sdet_hyp_tree* tgt;
   double cost;
-  vcl_vector<sdet_curvelet*> cvlets;
+  std::vector<sdet_curvelet*> cvlets;
 
   sdet_HTG_link_path(sdet_hyp_tree* sHT=0, sdet_hyp_tree* tHT=0): src(sHT), tgt(tHT), cost(0.0), cvlets(0) {}
 

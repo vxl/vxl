@@ -1,20 +1,20 @@
 # boxm opencl opengl display
-INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-SET(boxm2_view_pro_sources
+include_directories(${GLEW_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${GEL_INCLUDE_DIR}/mrc/vpgl )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
+set(boxm2_view_pro_sources
     boxm2_view_register.h      boxm2_view_register.cxx
     boxm2_view_processes.h
    )
-AUX_SOURCE_DIRECTORY(processes boxm2_view_pro_sources)
-ADD_LIBRARY(boxm2_view_pro ${boxm2_view_pro_sources} )
+aux_source_directory(processes boxm2_view_pro_sources)
+vxl_add_library(LIBRARY_NAME boxm2_view_pro LIBRARY_SOURCES ${boxm2_view_pro_sources} )
 
-TARGET_LINK_LIBRARIES(boxm2_view_pro boxm2_view vgui)
+target_link_libraries(boxm2_view_pro boxm2_view ${VXL_LIB_PREFIX}vgui)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 

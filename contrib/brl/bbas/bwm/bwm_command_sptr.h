@@ -1,4 +1,4 @@
-#ifndef bwm_command_sptr_h_ 
+#ifndef bwm_command_sptr_h_
 #define bwm_command_sptr_h_
 
 #include <vbl/vbl_smart_ptr.h>

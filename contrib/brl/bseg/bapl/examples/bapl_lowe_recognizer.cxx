@@ -3,6 +3,8 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_new.h>
@@ -17,7 +19,7 @@
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_muset_obj.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <ipts/ipts_draw.h>
 
 #include <bapl/bapl_bbf_tree.h>
@@ -25,15 +27,15 @@
 #if 0
 void print_usage()
 {
-  vcl_cout<<"find_dog_peaks -i input_image -o out_image -d dog_image"<<vcl_endl;
+  std::cout<<"find_dog_peaks -i input_image -o out_image -d dog_image"<<std::endl;
 }
 #endif
 
 int main( int argc, char* argv[] )
 {
-  vul_arg<vcl_string> in_path1("-i1","Input image path 1");
-  vul_arg<vcl_string> in_path2("-i2","Input image path 2");
-  //vul_arg<vcl_string> out_path("-o","Output image file (peaks)");
+  vul_arg<std::string> in_path1("-i1","Input image path 1");
+  vul_arg<std::string> in_path2("-i2","Input image path 2");
+  //vul_arg<std::string> out_path("-o","Output image file (peaks)");
   vul_arg_parse(argc, argv);
 
   if (!in_path1.set() || !in_path2.set() )
@@ -47,24 +49,24 @@ int main( int argc, char* argv[] )
   vil_image_view<vxl_byte> image1 = vil_convert_to_grey_using_rgb_weighting (vil_load(in_path1().c_str()));
   if (image1.ni()==0)
   {
-    vcl_cout<<"Failed to load image1."<<vcl_endl;
+    std::cout<<"Failed to load image1."<<std::endl;
     return 1;
   }
 
   vil_image_view<vxl_byte> image2 = vil_convert_to_grey_using_rgb_weighting (vil_load(in_path2().c_str()));
   if (image2.ni()==0)
   {
-    vcl_cout<<"Failed to load image2."<<vcl_endl;
+    std::cout<<"Failed to load image2."<<std::endl;
     return 1;
   }
 
-  vcl_cout << "Finding Keypoints" << vcl_endl;
+  std::cout << "Finding Keypoints" << std::endl;
 
-  vcl_vector< bapl_keypoint_sptr > keypoints1;
+  std::vector< bapl_keypoint_sptr > keypoints1;
   vil_image_resource_sptr image1_sptr = vil_new_image_resource_of_view(image1);
   bapl_keypoint_extractor( image1_sptr, keypoints1);
 
-  vcl_vector< bapl_keypoint_sptr > keypoints2;
+  std::vector< bapl_keypoint_sptr > keypoints2;
   vil_image_resource_sptr image2_sptr = vil_new_image_resource_of_view(image2);
   bapl_keypoint_extractor( image2_sptr, keypoints2);
 
@@ -76,11 +78,11 @@ int main( int argc, char* argv[] )
 
   for (unsigned i=0; i<keypoints2.size(); ++i){
     bapl_keypoint_sptr query = keypoints2[i];
-    vcl_vector<bapl_keypoint_sptr> matches;
+    std::vector<bapl_keypoint_sptr> matches;
     bbf.n_nearest(query, matches, 2, 50);
     if ( vnl_vector_ssd(query->descriptor(),matches[0]->descriptor()) <
         vnl_vector_ssd(query->descriptor(),matches[1]->descriptor())*.8){
-      vcl_cout << "Matched!" << vcl_endl;
+      std::cout << "Matched!" << std::endl;
       bapl_lowe_keypoint_sptr kp1, kp2;
       kp1.vertical_cast(matches[0]);
       kp2.vertical_cast(query);
@@ -91,17 +93,17 @@ int main( int argc, char* argv[] )
       ipts_draw_cross(image2, int(kp2->location_i()+0.5), int(kp2->location_j()+0.5),
                       unsigned(kp2->scale()+0.5), (vxl_byte)255);
       for ( int i = 0; i<matches.size(); ++i)
-        vcl_cout << "sq_dist: "<< vnl_vector_ssd(query->descriptor(),matches[i]->descriptor()) << vcl_endl;
+        std::cout << "sq_dist: "<< vnl_vector_ssd(query->descriptor(),matches[i]->descriptor()) << std::endl;
 #endif
     }
   }
 
-  vcl_vector< vcl_vector < bapl_keypoint_match > > clusters = clusterer.get_sorted_clusters();
+  std::vector< std::vector < bapl_keypoint_match > > clusters = clusterer.get_sorted_clusters();
 #ifdef DEBUG
-  vcl_cout <<  "size:" <<cluster.size() <<vcl_endl;
+  std::cout <<  "size:" <<cluster.size() <<std::endl;
   for ( int i=0; i<clusters.size(); ++i){
     if ( clusters[i].size() > 2 )
-      vcl_cout << "count: "<<clusters[i].size() << vcl_endl;
+      std::cout << "count: "<<clusters[i].size() << std::endl;
   }
 #endif
 
@@ -123,13 +125,13 @@ int main( int argc, char* argv[] )
                                max_pops);
 
   if ( !ransam->estimate( est, muset ) )
-    vcl_cout << "MUSE failed!!\n";
+    std::cout << "MUSE failed!!\n";
   else {
-    vcl_cout << "MUSE succeeded.\n"
+    std::cout << "MUSE succeeded.\n"
              << "estimate = " << ransam->params() << '\n'
-             << "scale = " << ransam->scale() << vcl_endl;
+             << "scale = " << ransam->scale() << std::endl;
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   delete muset;
   delete ransam;
 
@@ -142,13 +144,13 @@ int main( int argc, char* argv[] )
   ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
   if ( !ransam->estimate( est, lms ) )
-    vcl_cout << "LMS failed!!\n";
+    std::cout << "LMS failed!!\n";
   else {
-    vcl_cout << "LMS succeeded.\n"
+    std::cout << "LMS succeeded.\n"
              << "estimate = " << ransam->params() << '\n'
-             << "scale = " << ransam->scale() << vcl_endl;
+             << "scale = " << ransam->scale() << std::endl;
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   delete lms;
   delete ransam;
 #endif
@@ -157,17 +159,17 @@ int main( int argc, char* argv[] )
 #if 0
   vil_save(image1, "/home/mleotta/vision/out1.png");
   vil_save(image2, "/home/mleotta/vision/out2.png");
-  vcl_vector<bapl_keypoint_sptr> matches;
+  std::vector<bapl_keypoint_sptr> matches;
   bbf.n_nearest(query, matches, 10);
 
-  for ( vcl_vector< bapl_keypoint_sptr >::iterator itr = keypoints.begin();
+  for ( std::vector< bapl_keypoint_sptr >::iterator itr = keypoints.begin();
         itr != keypoints.end();  ++itr ) {
-    (*itr)->print_summary(vcl_cout);
-    vcl_cout << (*itr)->descriptor() << vcl_endl;
+    (*itr)->print_summary(std::cout);
+    std::cout << (*itr)->descriptor() << std::endl;
   }
 #endif
 
-  vcl_cout <<  "done!" <<vcl_endl;
+  std::cout <<  "done!" <<std::endl;
   return 0;
 }
 

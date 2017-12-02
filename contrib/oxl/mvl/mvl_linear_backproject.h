@@ -1,9 +1,11 @@
 #ifndef mvl_linear_backproject_h_
 #define mvl_linear_backproject_h_
 
-// not used? #include <vcl_iostream.h>
-// not used? #include <vcl_cmath.h>
-#include <vcl_vector.h>
+// not used? #include <iostream>
+// not used? #include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
 
 #include <mvl/PMatrix.h>
 #include <mvl/HomgPoint2D.h>
@@ -20,7 +22,7 @@
 
 vnl_vector<double> mvl_linear_backproject(
           // camera matrices:
-          vcl_vector<PMatrix> Ps,
+          std::vector<PMatrix> Ps,
           // image coordinates:
           HomgPoint2D const *imgcoords,
           // world point:

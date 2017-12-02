@@ -6,15 +6,17 @@
 //
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/09| François BERTEL          |Creation
+// 1.0     |2000/05/09| Francois BERTEL          |Creation
 // 1.1     |2001/07/03| Peter Vanroose           |Thorough check of is_convex
 // 1.2     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -23,7 +25,7 @@
 
 void test_vsol_polygon_3d()
 {
-  vcl_vector<vsol_point_3d_sptr> vertices(5);
+  std::vector<vsol_point_3d_sptr> vertices(5);
   vertices[0]=new vsol_point_3d(0,0,5);
   vertices[1]=new vsol_point_3d(3,1,5);
   vertices[2]=new vsol_point_3d(5,3,5);

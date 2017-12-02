@@ -6,9 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil1_pyramid.h"
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil1/vil1_resample.h>
 #include <vil1/vil1_memory_image.h>
 
@@ -25,7 +26,7 @@ vil1_pyramid::~vil1_pyramid()
 vil1_image vil1_pyramid::operator[](unsigned i)
 {
   while (i >= levels.size()) {
-    vcl_cerr << "making pyramid level " << levels.size() << vcl_endl;
+    std::cerr << "making pyramid level " << levels.size() << std::endl;
     vil1_image I = levels.back();
     I = vil1_resample(I, I.width()/2, I.height()/2);
     switch (cs) {

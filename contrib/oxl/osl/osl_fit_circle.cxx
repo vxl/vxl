@@ -3,15 +3,17 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <cmath>
 #include "osl_fit_circle.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/algo/vnl_svd.h>
 
 // The well-known square function
 static inline double square(double x) { return x * x; }
 
-osl_fit_circle::osl_fit_circle(const vcl_list<vgl_point_2d<double> > &points)
+osl_fit_circle::osl_fit_circle(const std::list<vgl_point_2d<double> > &points)
 {
     calculate(points);
 }
@@ -20,7 +22,7 @@ osl_fit_circle::osl_fit_circle(const osl_edgel_chain &chain)
 {
     // Extract points from edgel chain. I agree that this
     // may cause overhead.
-    vcl_list<vgl_point_2d<double> > points;
+    std::list<vgl_point_2d<double> > points;
 
     for (unsigned int i = 0; i < chain.size(); i++)
     {
@@ -31,7 +33,7 @@ osl_fit_circle::osl_fit_circle(const osl_edgel_chain &chain)
     calculate(points);
 }
 
-void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
+void osl_fit_circle::calculate(const std::list<vgl_point_2d<double> > &points)
 {
     int rows = points.size();
 
@@ -49,7 +51,7 @@ void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
     vnl_vector<double> col3(rows);
     vnl_vector<double> col4(rows);
 
-    vcl_list<vgl_point_2d<double> >::const_iterator it = points.begin();
+    std::list<vgl_point_2d<double> >::const_iterator it = points.begin();
     for (int i = 0; it != points.end(); ++it, ++i)
     {
         col2.put(i, (*it).y());
@@ -81,7 +83,7 @@ void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
     double c = u(3);
 
     center_.set(-b(1) / 2 / a, -b(0) / 2 / a);
-    radius_ = vcl_sqrt(square(center_.x()) + square(center_.y()) - c / a);
+    radius_ = std::sqrt(square(center_.x()) + square(center_.y()) - c / a);
 
     max_diff_ = avg_diff_ = 0;
 
@@ -89,7 +91,7 @@ void osl_fit_circle::calculate(const vcl_list<vgl_point_2d<double> > &points)
     // to the original routine, which calculates an error sum
     for (it = points.begin(); it != points.end(); it++)
     {
-        double cur_diff= vcl_fabs(vcl_sqrt(square((*it).x() - center_.x()) +
+        double cur_diff= std::fabs(std::sqrt(square((*it).x() - center_.x()) +
                                            square((*it).y() - center_.y())) - radius_);
 
         if (cur_diff > max_diff_)

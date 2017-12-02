@@ -50,7 +50,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_sptr const& new_v1,
 //: Pseudo copy constructor. Deep copy.
 //---------------------------------------------------------------------------
 vtol_edge_2d::vtol_edge_2d(vtol_edge_2d_sptr const& other)
-  : curve_(0)
+  : curve_(VXL_NULLPTR)
 {
   topology_list::const_iterator i;
   for (i=other->inferiors()->begin();i!=other->inferiors()->end();++i)
@@ -105,7 +105,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain_sptr const& new_zero_chain)
     // User must set the type of curve needed.
     // Since guessing could get confusing.
     // So NULL indicates an edge of unknown type.
-    curve_=0;
+    curve_=VXL_NULLPTR;
   touch();
 }
 
@@ -126,7 +126,7 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list const& newchains)
   // 2) Set v1_ and v2_;
 
   set_vertices_from_zero_chains();
-  curve_=0;
+  curve_=VXL_NULLPTR;
 }
 
 //: Constructor for a linear vtol_edge_2d.
@@ -233,9 +233,9 @@ bool vtol_edge_2d::operator==(const vsol_spatial_object_2d& obj) const
 //
 
 //:
-// This method outputs all edge information to the vcl_ostream, strm.  It
+// This method outputs all edge information to the std::ostream, strm.  It
 // indents various levels of output by the number given in blanking.
-void vtol_edge_2d::describe(vcl_ostream &strm,
+void vtol_edge_2d::describe(std::ostream &strm,
                             int blanking) const
 {
   for (int i1=0; i1<blanking; ++i1) strm << ' ';
@@ -258,7 +258,7 @@ void vtol_edge_2d::describe(vcl_ostream &strm,
 
 //:
 // This method outputs a brief vtol_edge_2d info with vtol_edge_2d object address.
-void vtol_edge_2d::print(vcl_ostream &strm) const
+void vtol_edge_2d::print(std::ostream &strm) const
 {
    strm<<"<vtol_edge_2d "<<(void const *)this <<"> with id "<<get_id()<<'\n';
 }

@@ -8,23 +8,24 @@
 //
 // All the functions return true if successful.
 // The functions will also output a success or failure message to stderr by
-// default, although you may substitute any vcl_ostream, or \c (vcl_ostream*)0 to avoid the
+// default, although you may substitute any std::ostream, or \c (std::ostream*)0 to avoid the
 // message.
 //
 // For these templated functions to work, the object must have vsl_b_read and
 // vsl_b_write functions defined for them
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_cerrno.h>
+#include <string>
+#include <iostream>
+#include <cerrno>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 
 //: Load something from a file
 template <class T>
 inline bool vsl_quick_file_load(T &data,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ifstream bfs(path);
   if ( !(!bfs))
@@ -54,8 +55,8 @@ inline bool vsl_quick_file_load(T &data,
 //: Save something to a file
 template <class T>
 inline bool vsl_quick_file_save(const T &data,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ofstream bfs(path);
   if (!(!bfs))
@@ -79,8 +80,8 @@ inline bool vsl_quick_file_save(const T &data,
 template <class T, class S>
 inline bool vsl_quick_file_load(T &data1,
                                 S &data2,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ifstream bfs(path);
   int reason = errno;
@@ -113,8 +114,8 @@ inline bool vsl_quick_file_load(T &data1,
 template <class T, class S>
 inline bool vsl_quick_file_save(const T &data1,
                                 const S &data2,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ofstream bfs(path);
   if (!(!bfs))
@@ -139,8 +140,8 @@ inline bool vsl_quick_file_save(const T &data1,
 template <class T, class S, class U>
 inline bool vsl_quick_file_load(T &data1,
                                 S &data2, U &data3,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ifstream bfs(path);
   if ( !(!bfs))
@@ -172,8 +173,8 @@ inline bool vsl_quick_file_load(T &data1,
 template <class T, class S, class U>
 inline bool vsl_quick_file_save(const T &data1,
                                 const S &data2, const U &data3,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ofstream bfs(path);
   if (!(!bfs))
@@ -199,8 +200,8 @@ inline bool vsl_quick_file_save(const T &data1,
 template <class T, class S, class U, class V>
 inline bool vsl_quick_file_load(T &data1,
                                 S &data2, U &data3, V &data4,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ifstream bfs(path);
   if ( !(!bfs))
@@ -233,8 +234,8 @@ inline bool vsl_quick_file_load(T &data1,
 template <class T, class S, class U, class V>
 inline bool vsl_quick_file_save(const T &data1, const S &data2,
                                 const U &data3, const V &data4,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ofstream bfs(path);
   if (!(!bfs))
@@ -261,8 +262,8 @@ inline bool vsl_quick_file_save(const T &data1, const S &data2,
 template <class T, class S, class U, class V, class W>
 inline bool vsl_quick_file_load(T &data1,
                                 S &data2, U &data3, V &data4, W &data5,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ifstream bfs(path);
   if ( !(!bfs))
@@ -296,8 +297,8 @@ inline bool vsl_quick_file_load(T &data1,
 template <class T, class S, class U, class V, class W>
 inline bool vsl_quick_file_save(const T &data1, const S &data2, const U &data3,
                                 const V &data4, const W &data5,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ofstream bfs(path);
   if (!(!bfs))
@@ -326,8 +327,8 @@ inline bool vsl_quick_file_save(const T &data1, const S &data2, const U &data3,
 template <class T, class S, class U, class V, class W, class X>
 inline bool vsl_quick_file_load(T &data1, S &data2, U &data3,
                                 V &data4, W &data5, X &data6,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ifstream bfs(path);
   if ( !(!bfs))
@@ -362,8 +363,8 @@ inline bool vsl_quick_file_load(T &data1, S &data2, U &data3,
 template <class T, class S, class U, class V, class W, class X>
 inline bool vsl_quick_file_save(const T &data1, const S &data2, const U &data3,
                                 const V &data4, const W &data5, const X &data6,
-                                const vcl_string& path,
-                                vcl_ostream* errorStream = &vcl_cerr)
+                                const std::string& path,
+                                std::ostream* errorStream = &std::cerr)
 {
   vsl_b_ofstream bfs(path);
   if (!(!bfs))

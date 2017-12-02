@@ -2,12 +2,14 @@
 #define boxm2_cone_update_image_functor_h
 //:
 // \file
+#include <vector>
+#include <limits>
+#include <iostream>
+#include <cmath>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 class boxm2_cone_update_pass0_functor
 {
@@ -15,7 +17,7 @@ class boxm2_cone_update_pass0_functor
   //: "default" constructor
   boxm2_cone_update_pass0_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,
+  bool init_data(std::vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
                  vil_image_view<float> * vis_img,
                  vil_image_view<float> * input_img)
@@ -40,7 +42,7 @@ class boxm2_cone_update_pass0_functor
     aux[1]+=ray_vol*(*input_img_)(i,j);
     float PI=boxm2_processor_type<BOXM2_MOG3_GREY>::type::prob_density(mog3_data_->data()[index],(*input_img_)(i,j));
     boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
-    float temp=vcl_exp(-ray_vol*gamma);
+    float temp=std::exp(-ray_vol*gamma);
     PI_cum+=PI*ray_vol;
     vol_cum+=ray_vol;
     vis_cum*=temp;
@@ -87,7 +89,7 @@ class boxm2_cone_update_pass1_functor
   //: "default" constructor
   boxm2_cone_update_pass1_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,
+  bool init_data(std::vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
                  vil_image_view<float> * vis_img,
                  vil_image_view<float> * input_img)
@@ -112,7 +114,7 @@ class boxm2_cone_update_pass1_functor
 
     float PI=boxm2_processor_type<BOXM2_MOG3_GREY>::type::prob_density(mog3_data_->data()[index],(*input_img_)(i,j));
     boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
-    float temp=vcl_exp(-ray_vol*gamma);
+    float temp=std::exp(-ray_vol*gamma);
     PI_cum+=PI*ray_vol;
     vol_cum+=ray_vol;
     vis_cum*=temp;
@@ -162,7 +164,7 @@ class boxm2_cone_update_pass2_functor
   //: "default" constructor
   boxm2_cone_update_pass2_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,
+  bool init_data(std::vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
                  vil_image_view<float> * vis_img,
                  vil_image_view<float> * norm_img,
@@ -193,7 +195,7 @@ class boxm2_cone_update_pass2_functor
     float vis=(*vis_img_)(i,j);
     boxm2_data<BOXM2_GAMMA>::datatype gamma=alpha_data_->data()[index];
     aux[3]+=vis*ray_vol;
-    float temp=vcl_exp(-ray_vol*gamma);
+    float temp=std::exp(-ray_vol*gamma);
     PI_cum+=PI*ray_vol;
     vol_cum+=ray_vol;
     vis_cum*=temp;
@@ -251,13 +253,13 @@ class boxm2_cone_update_data_functor
   //: "default" constructor
   boxm2_cone_update_data_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, float block_len, int max_levels)
+  bool init_data(std::vector<boxm2_data_base*> & datas, float block_len, int max_levels)
   {
     aux_data_=new boxm2_data<BOXM2_AUX>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     alpha_data_=new boxm2_data<BOXM2_GAMMA>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
     mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
     nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(datas[3]->data_buffer(),datas[3]->buffer_length(),datas[3]->block_id());
-    alpha_min_ = -vcl_log(1.f-0.0001f)/float(vcl_pow(block_len/max_levels,3));
+    alpha_min_ = -std::log(1.f-0.0001f)/float(std::pow(block_len/max_levels,3));
     return true;
   }
 

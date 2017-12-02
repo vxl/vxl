@@ -87,7 +87,7 @@ sub update_library
   }
 
   chdir $vxlsrc || die "Unable to chdir to $vxlsrc\n";
-  
+
   if (! -e $package)
   {
     print "$package does not exist.  There may be a mistake in the library list file.\n";

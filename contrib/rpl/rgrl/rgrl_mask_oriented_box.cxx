@@ -1,9 +1,11 @@
+#include <iostream>
+#include <limits>
 #include "rgrl_mask_oriented_box.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_transpose.h>
 
 //******************** mask using an oriented box ***********************
@@ -157,7 +159,7 @@ rgrl_mask_oriented_box::
 average_vertices_dist( const rgrl_mask_oriented_box& other ) const
 {
   if ( omin_.size() != other.omin_.size() )
-    return vcl_numeric_limits<double>::infinity();
+    return std::numeric_limits<double>::infinity();
 
   const unsigned int dim = omin_.size();
   double cum_dist = 0.0;
@@ -197,7 +199,7 @@ operator==( const rgrl_mask_oriented_box& other ) const
   vnl_matrix<double> eye( omin_.size(), omin_.size() );
   eye.set_identity();
   if ( (prod - eye).fro_norm() > 1e-4 ) {
-    WarningMacro( "Incompatible axes. oriented boxes cannot be compared. " << vcl_endl );
+    WarningMacro( "Incompatible axes. oriented boxes cannot be compared. " << std::endl );
     return false;
   }
 
@@ -214,17 +216,17 @@ operator!=( const rgrl_mask_oriented_box& other ) const
   return !( *this == other );
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_oriented_box& box)
+std::ostream& operator<<(std::ostream& os, const rgrl_mask_oriented_box& box)
 {
   os<< box.oriented_x0().size() << "  ";
   if ( box.oriented_x0().size() ) {
     os << box.oriented_x0()<<"  "<<box.oriented_x1() << '\n'
-       << box.axes() << vcl_endl;
+       << box.axes() << std::endl;
   }
   return os;
 }
 
-vcl_istream& operator>>(vcl_istream& is, rgrl_mask_oriented_box& box)
+std::istream& operator>>(std::istream& is, rgrl_mask_oriented_box& box)
 {
   int m = -1;
   is >> m;

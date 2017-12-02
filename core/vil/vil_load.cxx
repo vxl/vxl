@@ -5,8 +5,9 @@
 //:
 // \file
 
+#include <iostream>
 #include "vil_load.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_open.h>
 #include <vil/vil_new.h>
 #include <vil/vil_file_format.h>
@@ -19,9 +20,10 @@
 vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
                                                     bool verbose)
 {
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+  std::list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
 #if 0 // debugging
-    vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
+    std::cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 #endif
     is->seek(0);
     vil_image_resource_sptr im = (*p)->make_input_image(is);
@@ -31,22 +33,22 @@ vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
 
   // failed.
   if (verbose) {
-    vcl_cerr << __FILE__ ": Unable to load image;\ntried";
-    for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+    std::cerr << __FILE__ ": Unable to load image;\ntried";
+    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
       // 'flush' in case of segfault next time through loop. Else, we
       // will not see those printed tags still in the stream buffer.
-      vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
-    vcl_cerr << vcl_endl;
+      std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
+    std::cerr << std::endl;
   }
 
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vil_image_resource_sptr vil_load_image_resource_raw(char const* filename,
                                                     bool verbose)
 {
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
-  vil_image_resource_sptr isp = 0;
+  vil_image_resource_sptr isp = VXL_NULLPTR;
   if (is)
   {
 #ifdef VCL_HAS_EXCEPTIONS
@@ -64,7 +66,7 @@ vil_image_resource_sptr vil_load_image_resource_raw(char const* filename,
   }
 
   if (!isp && verbose)
-    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
+    std::cerr << __FILE__ ": Failed to load [" << filename << "]\n";
   return isp;
 }
 
@@ -75,7 +77,7 @@ vil_image_resource_sptr vil_load_image_resource(char const* filename,
   if (!im)
     im=vil_load_image_resource_raw(filename, verbose);
   if (!im && verbose)
-    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
+    std::cerr << __FILE__ ": Failed to load [" << filename << "]\n";
   return im;
 }
 
@@ -96,18 +98,19 @@ vil_image_resource_sptr vil_load_image_resource_plugin(char const* filename)
         return im;
     }
   }
-  return vil_image_resource_sptr(0);
+  return vil_image_resource_sptr(VXL_NULLPTR);
 }
 
 vil_pyramid_image_resource_sptr
 vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
 {
-  for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
+  std::list<vil_file_format*>& l = vil_file_format::all();
+  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
 #if 0 // debugging
-    vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
+    std::cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 
 
-    vcl_cerr << "make_input_pyramid_image(" << directory_or_file << ")\n";
+    std::cerr << "make_input_pyramid_image(" << directory_or_file << ")\n";
 #endif
     vil_pyramid_image_resource_sptr pir =
       (*p)->make_input_pyramid_image(directory_or_file);
@@ -116,21 +119,21 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
   }
   // failed.
   if (verbose) {
-    vcl_cerr << __FILE__ ": Unable to load pyramid image;\ntried";
-    for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+    std::cerr << __FILE__ ": Unable to load pyramid image;\ntried";
+    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
       // 'flush' in case of segfault next time through loop. Else, we
       // will not see those printed tags still in the stream buffer.
-      vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
-    vcl_cerr << vcl_endl;
+      std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
+    std::cerr << std::endl;
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: Convenience function for loading an image into an image view.
 vil_image_view_base_sptr vil_load(const char *file, bool verbose)
 {
   vil_image_resource_sptr data = vil_load_image_resource(file, verbose);
-  if (!data) return 0;
+  if (!data) return VXL_NULLPTR;
   return data -> get_view();
 }
 

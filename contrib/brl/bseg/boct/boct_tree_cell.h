@@ -12,10 +12,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include "boct_loc_code.h"
 #include <vgl/vgl_box_3d.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #undef DEBUG_LEAKS
 
@@ -121,7 +122,7 @@ class boct_tree_cell
 
 
   void set_parent(boct_tree_cell<T_loc,T_data>* p) { parent_ = p; }
-  void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) { if (children_) children_[i] = *p; else vcl_cout << "Children should be allocated first" << vcl_endl; }
+  void set_children(unsigned i, boct_tree_cell<T_loc,T_data>* p) { if (children_) children_[i] = *p; else std::cout << "Children should be allocated first" << std::endl; }
   void set_children_null() { children_=0; }
   bool is_leaf();
 
@@ -129,16 +130,16 @@ class boct_tree_cell
   vgl_box_3d<double> local_bounding_box(short root_level);
 
   //: adds a pointer for each leaf children to v
-  void leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
+  void leaf_children(std::vector<boct_tree_cell<T_loc,T_data>*>& v);
 
   //: adds a pointer to vector v, for each leaf children at a particular level
-  void leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
+  void leaf_children_at_level(std::vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
 
   //: adds a pointer to vector v, for each children at a particular level
-  void children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
+  void children_at_level(std::vector<boct_tree_cell<T_loc,T_data>*>& v, short level);
 
   //: adds a pointer to vector v, for each children in a recursive fashion
-  void all_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v);
+  void all_children(std::vector<boct_tree_cell<T_loc,T_data>*>& v);
 
   //: Fills a cells with the average value of the 8 children in a dynamic programming manner
   void set_data_to_avg_children();
@@ -160,7 +161,7 @@ class boct_tree_cell
   boct_tree_cell<T_loc,T_data>* children() { return children_; }
   boct_tree_cell<T_loc,T_data>* parent() { return parent_; }
 
-  void  find_neighbors(boct_face_idx face,vcl_vector<boct_tree_cell<T_loc,T_data>*> & neighbors,short root_level);
+  void  find_neighbors(boct_face_idx face,std::vector<boct_tree_cell<T_loc,T_data>*> & neighbors,short root_level);
   //: at the same level or coarser level
   bool  find_neighbor(boct_face_idx face, boct_tree_cell<T_loc,T_data>* &neighbor,short root_level);
 
@@ -206,7 +207,7 @@ class boct_tree_cell
     if (n_created_ >= n_destroyed_)
       return n_created_-n_destroyed_;
     else {
-      vcl_cout << "n_destroyed="<<n_destroyed_<<" is greater than n_created=" << n_created_ << vcl_endl;
+      std::cout << "n_destroyed="<<n_destroyed_<<" is greater than n_created=" << n_created_ << std::endl;
       return n_destroyed_-n_created_;
     }
   }
@@ -227,7 +228,7 @@ class boct_tree_cell
 };
 
 template<class T_loc,class T_data>
-vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data>& cell);
+std::ostream& operator <<(std::ostream &s, boct_tree_cell<T_loc,T_data>& cell);
 
 template <class T_loc,class T_data>
 void vsl_b_write(vsl_b_ostream & os, boct_tree_cell<T_loc,T_data>& cell);
@@ -246,7 +247,7 @@ class boct_cell_vis_graph_node
       outgoing_links[i]=0;
   }
   unsigned int incoming_count;
-  vcl_vector<boct_tree_cell<T_loc,T_data> * > outgoing_links;
+  std::vector<boct_tree_cell<T_loc,T_data> * > outgoing_links;
   bool visible;
 };
 

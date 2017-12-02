@@ -2,12 +2,12 @@
 @code{vidl} is a library for managing video streams.
 
 The purpose of this library is to provide a unified interface for
-reading and writing video data in VXL. 
-Unlike the previous vidl library, this library treats 
-video as a data stream.  
-The input streams are derived from @code{vidl_istream} and can 
+reading and writing video data in VXL.
+Unlike the previous vidl library, this library treats
+video as a data stream.
+The input streams are derived from @code{vidl_istream} and can
 provide data from disk or from a live capture (a camera, for example).
-The output streams are derived from @code{vidl_ostream} 
+The output streams are derived from @code{vidl_ostream}
 and can write data to disk.
 Potentially, output streams could also display on a screen
 or transmit an internet video stream, but these capabilities
@@ -16,7 +16,7 @@ are not implemented yet.
 
 @section Introduction
 
-An example of simple, compact video transcoding with 
+An example of simple, compact video transcoding with
 @code{vidl} is given below.
 @example
 #include <vidl/vidl_image_list_istream.h>
@@ -44,7 +44,7 @@ transfer the data.
 The streams are opened by constructing a stream instance.
 The constructor arguments are different for each stream type.
 
-In the example, the @code{vidl_image_list_istream} is 
+In the example, the @code{vidl_image_list_istream} is
 constructed with a file glob string (See @code{vul_file_iterator}
 for details).
 The input video will consist all PNG files in the current directory
@@ -56,7 +56,7 @@ The @code{vidl_ffmpeg_ostream} is constructed with
 the name of the output video file and a parameters class
 that specifies all the encoding parameters.
 The @code{vidl_ffmpeg_ostream_params} class uses a
-design that allows the parameters to be set on an 
+design that allows the parameters to be set on an
 anonymous instance by chaining together function calls
 that each return a reference to the instance to the next function.
 Here the encoder @code{enum} is set to @code{DVVIDEO} and
@@ -64,18 +64,18 @@ the frame rate is set to 29.95 frames per second.
 All other parameters take default values.
 
 In the transcoding loop, all frames are read from the
-input stream one at a time. 
+input stream one at a time.
 Each frame is written to the output stream until an invalid
 frame is detected indicating the end of the input stream.
 All of this processing is done within the loop condition test,
-and the body of the loop is empty 
+and the body of the loop is empty
 (there are, of course, several other ways to structure this code).
 The @code{read_frame()} member function advances to the
 next frame in the input sequence and then returns that frame.
 It returns a null smart pointer when no more frames are available.
 The cast to @code{bool} causes the loop to terminate when
 the end of input is reached (i.e. a null pointer evaluates to false).
-Because of lazy evaluation, @code{write_frame()} is only 
+Because of lazy evaluation, @code{write_frame()} is only
 called on the output stream when the frame is valid.
 This member function writes the frame to the output and
 returns true on a successful write.
@@ -84,7 +84,7 @@ The streams are closed when the stream instances go out
 of scope and are destroyed.
 
 @subsection Comparison with Previous Video Library
-This design has the following advantages over the old VXL video 
+This design has the following advantages over the old VXL video
 library (now called @code{vidl1}) that treated videos as container objects.
 @itemize @bullet
 @item Better support for large video files
@@ -96,27 +96,27 @@ library (now called @code{vidl1}) that treated videos as container objects.
 
 @subheading Streams vs. Codecs
 
-Various stream subclasses are used to interface with different types 
-of video streams. 
-Note that these are no longer called @emph{codecs}. 
-The codec in the old @code{vidl1} library was somewhat of a misnomer. 
+Various stream subclasses are used to interface with different types
+of video streams.
+Note that these are no longer called @emph{codecs}.
+The codec in the old @code{vidl1} library was somewhat of a misnomer.
 A codec (COder/DECoder) provides encoding and decoding algorithms for
 a specific video compression format (e.g. MPEG2, DV, H.264, etc.).
 @code{vidl} (and its predecessor) provided wrappers to other APIs
 (like DirectShow and FFMPEG) which may encode or decode with a variety
-of codecs. 
-Each @code{vidl_istream} and @code{vidl_ostream} subclass is a wrapper 
-for another video API that may or may not provide encoding, and may 
+of codecs.
+Each @code{vidl_istream} and @code{vidl_ostream} subclass is a wrapper
+for another video API that may or may not provide encoding, and may
 support many different codecs. For example,
 @code{vidl_ffmpeg_istream} provides a input using the FFMPEG
 library. The FFMPEG library can open a large variety of video file
 formats (avi, mpeg, etc.) and decode using an even larger variety of
-codecs (MPEG2, MPEG4, MJPEG, H.264, Cinepak, etc.).  
+codecs (MPEG2, MPEG4, MJPEG, H.264, Cinepak, etc.).
 
 The video stream design also allows for streams that receive images
-from live video feeds. 
-This could be from a camera, network video feed, or other source. 
-Thus, video capture and video transcoding are both accomplished by 
+from live video feeds.
+This could be from a camera, network video feed, or other source.
+Thus, video capture and video transcoding are both accomplished by
 directing an input stream into an output stream.
 
 Several APIs that @code{vidl} interfaces allow for both input
@@ -126,7 +126,7 @@ For these there are both a corresponding @code{vidl_istream} and
 Other APIs are designed only for one or the other.
 For example, video capture APIs (like libdc1394) only provide an
 interface for input, so only a @code{vidl_istream} is needed.
-The separation of input and output was not allowed by the previous 
+The separation of input and output was not allowed by the previous
 @code{vidl} library design.
 
 
@@ -138,7 +138,7 @@ Likewise all output streams are derived from @code{vidl_ostream}.
 Once a stream is created, all critical operations are controlled by
 invoking base class virtual functions.
 This polymorphic design allows video processing algorithms
-to operate on any combination of input and output streams 
+to operate on any combination of input and output streams
 configurable at run time.
 
 The following subsections give an overview of the input and
@@ -148,11 +148,11 @@ different derived stream types.
 @subsection Input Streams
 
 The @code{vidl_istream} API defines several methods to access
-properties of the stream, control the stream state, and access 
-frame data.  
-The functionality of most methods is obvious from the name.  
-@code{width()} and @code{height()} return the video resolution in pixels, 
-and @code{frame_rate()} returns the video frame rate in frames per second.  
+properties of the stream, control the stream state, and access
+frame data.
+The functionality of most methods is obvious from the name.
+@code{width()} and @code{height()} return the video resolution in pixels,
+and @code{frame_rate()} returns the video frame rate in frames per second.
 Frame rate may not be define in some streams,
 like a sequence of image files, and 0 is returned in this case.
 @code{format()} returns the @code{vidl_pixel_format} of the frames.
@@ -160,69 +160,69 @@ like a sequence of image files, and 0 is returned in this case.
 a finite length video clip or -1 in a live video stream.
 Note that some video files do not store an accurate count of all
 video frames.
-In this case, @code{num_frames()} must scan the entire video to 
+In this case, @code{num_frames()} must scan the entire video to
 count the number of frames.
 Accessing the entire video can be costly, so use this function
 only when you really need an accurate frame count.
 @code{frame_number()} returns the current frame number in
 the sequence of video frames (starting at 0 for the first frame).
 
-The method @code{is_open()} returns true when a video stream 
-has been opened successfully and has not been closed by 
+The method @code{is_open()} returns true when a video stream
+has been opened successfully and has not been closed by
 calling @code{close()}.
 The method @code{is_valid()} has a slight different meaning.
 A video stream is valid when its frame counter refers to a valid
 video frame.
-Video streams should open in an @emph{invalid} state, referring 
+Video streams should open in an @emph{invalid} state, referring
 to the position @emph{before} the first valid frame.
-When first opened, @code{frame_number()} should return 
+When first opened, @code{frame_number()} should return
 @code{static_cast<unsigned int>(-1)} to indicate the invalid
 frame before frame 0.
 The stream is also invalid when it advances past the last valid frame.
 The @code{advance()} method advances the frame counter and may
-invalidate the previously release frame, but does not necessarily 
+invalidate the previously release frame, but does not necessarily
 acquire or decode the next frame.
 If the advance was successful it returns true.
-The @code{current_frame()} method returns a smart pointer to 
-the current frame, acquiring or decoding it 
-the first time this method is called.  
+The @code{current_frame()} method returns a smart pointer to
+the current frame, acquiring or decoding it
+the first time this method is called.
 The @code{read_frame()} method advances the frame counter
 and returns the resulting current frame in one function call.
 
-Live streams only support advancing through frames 
+Live streams only support advancing through frames
 sequentially, but most other streams allow traversal forward
 or backward through the video to find a particular frame.
 This operation is called @emph{seeking}.
-If an input stream supports seeking, the method 
+If an input stream supports seeking, the method
 @code{is_seekable()} will return true.
-If supported, the method @code{seek_frame(frame_number)} 
-will seek forward or backward to set the current frame 
+If supported, the method @code{seek_frame(frame_number)}
+will seek forward or backward to set the current frame
 number to @code{frame_number}.
 Keep in mind that, even when supported, seeking is almost
 always much slower than advancing.
 For some video decoders it may even be error prone.
-Try to avoid seeking when possible. 
+Try to avoid seeking when possible.
 
 @subheading Input Stream Types
-At the time of this writing, the following input stream classes 
+At the time of this writing, the following input stream classes
 have been implemented.
 
 @table @code
 @item vidl_image_list_istream
-Treats an ordered list of image file paths as a video stream. 
+Treats an ordered list of image file paths as a video stream.
 @item vidl_ffmpeg_istream
-Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to 
+Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} library to
 decode many common video file formats.
 @item vidl_v4l_istream
 Use a video for Linux input stream.
-@item vidl_dshow_live_istream 
-Use the DirectShow API to stream video directly from camera and 
+@item vidl_dshow_live_istream
+Use the DirectShow API to stream video directly from camera and
 frame-grabber devices in Windows using native Windows codecs.
-@item vidl_dshow_file_istream 
-Use the DirectShow API to encode video files in Windows using 
+@item vidl_dshow_file_istream
+Use the DirectShow API to encode video files in Windows using
 native Windows codecs
 @item vidl_dc1394_istream
-Use libdc1394 v2 to stream video directly from IEEE 1394 (firewire) 
+Use libdc1394 v2 to stream video directly from IEEE 1394 (firewire)
 based cameras (Windows not supported yet)
 @end table
 
@@ -233,36 +233,36 @@ The interface for output streams is much simpler than for input
 streams.
 Once an output video stream is open, its sole job is to accept
 frames and append them to the output video.
-The key method is @code{write_frame(frame)} which takes a 
-frame smart pointer and 
+The key method is @code{write_frame(frame)} which takes a
+frame smart pointer and
 tries to write it to the end of the output stream.
 It returns true if successful.
 The other methods are @code{is_open()} which returns true
 if the stream is open for writing, and @code{close()}
 which closes the stream.
 
-The most complicated part of using output streams is 
+The most complicated part of using output streams is
 typically their construction.
 The constructors for output streams differ depending on
-the particular stream type, but tend to involve many 
+the particular stream type, but tend to involve many
 parameters especially when video encoding and compression
-are involved. 
+are involved.
 When the number of parameters is very large,
 a special parameters struct may be used to encapsulate the
 parameter collection.
 For example, @code{vidl_ffmpeg_ostream_params}.
 
 @subheading Output Stream Types
-At the time of this writing, the following output stream classes 
+At the time of this writing, the following output stream classes
 have been implemented.
 
 @table @code
-@item vidl_image_list_ostream 
-Writes a video to disk as a sequence of numbered image files using 
+@item vidl_image_list_ostream
+Writes a video to disk as a sequence of numbered image files using
 any image file format supported by vil.
-@item vidl_ffmpeg_ostream 
-Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} libraries to 
-encode to many common video file formats with many encoding options 
+@item vidl_ffmpeg_ostream
+Uses the @uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} libraries to
+encode to many common video file formats with many encoding options
 for video quality and compression.
 @end table
 
@@ -280,17 +280,17 @@ When the stream is ``opened'', each file path is tested to see if
 @code{vil} can open it as an image (image data is not read yet).
 The first frame defines the video resolution.
 Any frame that does not open in @code{vil} as a @code{vidl}
-compatible format or does not match the video resolution is 
+compatible format or does not match the video resolution is
 ignored.
 
 The @code{vidl_image_list_ostream} works in the opposite way.
 Opening a stream requires an output directory, a name format,
 a file format, and an initial index.
 For each frame that is written to the stream, @code{vil} is used
-to write an image file to the specified directory in the specified 
+to write an image file to the specified directory in the specified
 image file format.
 The name of the files is produced by applying the frame number,
-starting at the specified initial index, to the name format 
+starting at the specified initial index, to the name format
 using @code{printf} syntax.
 For example
 @example
@@ -307,8 +307,8 @@ video/frame010.tiff
 
 @subsection FFMPEG Streams
 
-@uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} is a collection of 
-cross-platform, open source, C libraries for encoding and 
+@uref{http://ffmpeg.mplayerhq.hu/,FFMPEG} is a collection of
+cross-platform, open source, C libraries for encoding and
 decoding video.
 It is primarily used on Linux and Mac OS X, but it can be compiled
 for Windows too.
@@ -316,20 +316,20 @@ It requires GCC and will not compile with Microsoft's compiler.
 The primary libraries are libavcodec and libavformat.
 Newer versions of FFMPEG also use libavutil and libswscale.
 For several years prior to the version 0.5 release, FFMPEG
-evolved continually with an ever-changing API 
+evolved continually with an ever-changing API
 but no formal releases.
 @code{vidl} has tried to support several ``versions'' of the
 API by supplying multiple stream implementations.
-The selection of implementation and its interface 
+The selection of implementation and its interface
 with FFMPEG is encapsulated and hidden
 from the public @code{vidl} stream interfaces.
-Going forward, @code{vidl} will try to support any official 
+Going forward, @code{vidl} will try to support any official
 release versions of FFMPEG.
 If official release versions continue to be few and far between,
 a subversion snapshot of FFMPEG may also be supported
 and updated only when the need arises for new features.
-In the future, a version of FFMPEG may also be added to 
-@code{v3p} to make a common version easily accessible 
+In the future, a version of FFMPEG may also be added to
+@code{v3p} to make a common version easily accessible
 to all VXL users.
 
 Using the @code{vidl_ffmpeg_istream} is trivial.
@@ -339,9 +339,9 @@ any video codec that is thrown at it.
 Be warned that some malformed files will still open
 but may produce errors during seeking.
 
-Using the @code{vidl_ffmpeg_ostream} is also 
+Using the @code{vidl_ffmpeg_ostream} is also
 straightforward.
-The constructor requires the path to the output 
+The constructor requires the path to the output
 video file and a @code{vidl_ffmpeg_ostream_params}
 struct to specify the encoding parameters.
 The @code{vidl_ffmpeg_ostream_params} is a struct that
@@ -355,30 +355,30 @@ The most important parameters to set are
 encoder, frame rate, and bit rate.
 The encoder is the selection of codec to use from those
 supported by FFMPEG.
-An @code{enum} specifies a list of codecs allowed by 
+An @code{enum} specifies a list of codecs allowed by
 @code{vidl}.
-This list needs to be expanded and should ultimately 
+This list needs to be expanded and should ultimately
 vary depending on the FFMPEG configuration since some
-codecs are optionally enabled during FFMPEG compilation. 
-The frame rate is a @code{double} specifying the number 
+codecs are optionally enabled during FFMPEG compilation.
+The frame rate is a @code{double} specifying the number
 of frames per second in the output video.
-The bit rate is an @code{unsigned int} specifying the 
+The bit rate is an @code{unsigned int} specifying the
 target compression level in number of bits per second
 of video.
 Another set of important parameters is the frame size,
 the width (@code{ni}) and height (@code{nj}) of each image.
-However, @code{vidl_ffmpeg_ostream} does not require 
+However, @code{vidl_ffmpeg_ostream} does not require
 that you specify the frame size directly.
 Instead, it uses a delayed stream opening scheme.
-The constructor stores the parameters but does not 
+The constructor stores the parameters but does not
 immediately open the stream.
 When the first frame is written, the size of this frame
 is used to specify the size of the output video and
 the output stream is opened at this point.
 If necessary, one can force the stream to open without
-writing a frame by calling the @code{open()} method on 
+writing a frame by calling the @code{open()} method on
 the stream.
- 
+
 
 @subsection DirectShow Streams
 
@@ -388,16 +388,16 @@ the stream.
 
 There are several cameras that capture and transmit video over
 the 1394 (aka Firewire) interface.
-Many of these cameras conform to a standard of camera 
+Many of these cameras conform to a standard of camera
 configuration and streaming parameters.
 This standard is known as the IIDC or DCAM Specifications.
-Note that this refers to live capture 1394 cameras and 
+Note that this refers to live capture 1394 cameras and
 does not generally include camcorders that transfer
 saved video using the 1394 interface.
 
 There are several driver packages that implement the
 IIDC Specifications.
-@code{vidl} supports an open source package called 
+@code{vidl} supports an open source package called
 @uref{http://damien.douxchamps.net/ieee1394/libdc1394/,libdc1394}.
 The @code{vidl_dc1394_istream} uses the libdc1394 version 2
 API to capture live video from 1394 cameras.
@@ -405,7 +405,7 @@ libdc1394 currently runs on linux and Mac OS X.
 It may also run on Windows in the future.
 Other examples of IIDC camera APIs are the
 @uref{http://www.cs.cmu.edu/~iwan/1394/,CMU 1394 Driver}
-for Windows and the Point Grey 
+for Windows and the Point Grey
 @uref{http://www.ptgrey.com/products/pgrflycapture/index.asp,FlyCapture SDK}
 for Windows.
 Point Grey adds additional features beyond the standard
@@ -414,10 +414,10 @@ Separate @code{vidl_istream} classes could be written for
 these in the future.
 
 This @code{vidl_dc1394_istream} is opened with a parameters
- struct called @code{vidl_iidc1394_params} that specifies 
+ struct called @code{vidl_iidc1394_params} that specifies
 all the IIDC parameters needed to configure the camera.
 Since the parameters are standard and not specific to libdc1394,
-the @code{vidl_iidc1394_params} struct is intended to be 
+the @code{vidl_iidc1394_params} struct is intended to be
 shared with any other IIDC 1394 stream classes written in the future.
 Additional parameters that are specific to libdc1394 are
 kept out of @code{vidl_iidc1394_params}.
@@ -437,7 +437,7 @@ and their parameters found by probing the 1394 bus.
 The @code{vidl_dc1394_istream} class has a static
 member function called @code{valid_params} that
 can be used to probe the bus and populate this struct.
-  
+
 
 @subsection Video 4 Linux Streams
 
@@ -447,23 +447,23 @@ can be used to probe the bus and populate this struct.
 @section Video Frames
 
 The @code{vidl_frame_sptr} is a data structure used to transport video
-frame data from a @code{vidl_istream} to a @code{vidl_ostream}. 
-The @code{vidl_frame} contains a pointer to the frame buffer, 
-the image resolution, the pixel format, and may eventually contain 
-a time stamp. 
-A @code{vidl_frame} is more restrictive than a @code{vil_image_view} 
-since it requires contiguous memory and is limited in pixel data types. 
-However, it also handles many pixels formats not supported by 
-@code{vil}, such as those with sub-sampled chrominance 
+frame data from a @code{vidl_istream} to a @code{vidl_ostream}.
+The @code{vidl_frame} contains a pointer to the frame buffer,
+the image resolution, the pixel format, and may eventually contain
+a time stamp.
+A @code{vidl_frame} is more restrictive than a @code{vil_image_view}
+since it requires contiguous memory and is limited in pixel data types.
+However, it also handles many pixels formats not supported by
+@code{vil}, such as those with sub-sampled chrominance
 (i.e. YUV 4:2:2).
 
 In some cases the @code{vidl_frame} data can be wrapped by a
-@code{vil_image_view}, but usually this is not a good idea. 
-The @code{vidl_frame} should be considered a volatile data structure. 
+@code{vil_image_view}, but usually this is not a good idea.
+The @code{vidl_frame} should be considered a volatile data structure.
 The image buffer is only guaranteed to be valid until the next call of
-@code{vidl_istream::advance()}. 
-The istream will keep a pointer to the released frame and then 
-invalidate it before reusing memory. 
+@code{vidl_istream::advance()}.
+The istream will keep a pointer to the released frame and then
+invalidate it before reusing memory.
 Use the functions in @code{vidl_convert.h} to obtain a non-volatile
 @code{vil_image_view}.
 More details are given below in the section on conversions.
@@ -471,23 +471,23 @@ More details are given below in the section on conversions.
 @section Pixel Formats
 
 The supported pixel formats are enumerated in
-@code{vidl_pixel_format} enum.  
-The naming convention is @code{VIDL_PIXEL_FORMAT_color_num[P]}, 
+@code{vidl_pixel_format} enum.
+The naming convention is @code{VIDL_PIXEL_FORMAT_color_num[P]},
 where @emph{color} is the color encoding,
- @emph{num} is the bit number, 
-and the @code{P} character is optionally appended to indicate 
-a planar encoding.  
-There are also two special formats.  
+ @emph{num} is the bit number,
+and the @code{P} character is optionally appended to indicate
+a planar encoding.
+There are also two special formats.
 @code{VIDL_PIXEL_FORMAT_UNKNOWN} is used when
 the pixel format is not known or does not matter.
 @code{VIDL_PIXEL_FORMAT_ENUM_END} is an end of enum marker and
-should never be used in a @code{vidl_frame}.  
+should never be used in a @code{vidl_frame}.
 This marker is used to count the number of pixel formats.
 All new formats should be added before the end marker in the enum.
 
-The @emph{color} of a pixel format specifies the color encoding.  
-A separate enum named @code{vidl_pixel_color} enumerates the 
-available color modes.  
+The @emph{color} of a pixel format specifies the color encoding.
+A separate enum named @code{vidl_pixel_color} enumerates the
+available color modes.
 These are
 @table @code
 @item VIDL_PIXEL_COLOR_MONO
@@ -500,25 +500,25 @@ Red Green Blue Alpha (4 color channels)
 Luma Chroma-Blue Chroma-Red, aka YCrCb (3 color channels)
 @end table
 The multichannel color formats are not always encoded in the order
-given above.  
-The characters are permuted in the @code{vidl_pixel_format} 
-names to indicate the actual ordering.  
+given above.
+The characters are permuted in the @code{vidl_pixel_format}
+names to indicate the actual ordering.
 For example, @code{BGR} indicates RGB color stored in reverse order.
 
-The @emph{bit number} indicates how the bits are laid out.  
-This is most important in packed color frames where a group 
-of 2 or 4 pixels is encoded together and differing numbers of bits are 
-added to different color channels.  
-When no packing occurs, the number in the @code{vidl_pixel_format} 
+The @emph{bit number} indicates how the bits are laid out.
+This is most important in packed color frames where a group
+of 2 or 4 pixels is encoded together and differing numbers of bits are
+added to different color channels.
+When no packing occurs, the number in the @code{vidl_pixel_format}
 name is the total number of bits
-(i.e. @code{RGB_24} is RGB with 8 bits for each channel).  
-When the number of bits per channel is different, the standard 
-chroma sub-sampling numbering is used (i.e. @code{422} for 4:2:2).  
-See 
-@uref{http://en.wikipedia.org/wiki/Chroma_subsampling, Wikipedia} 
-for more details. 
+(i.e. @code{RGB_24} is RGB with 8 bits for each channel).
+When the number of bits per channel is different, the standard
+chroma sub-sampling numbering is used (i.e. @code{422} for 4:2:2).
+See
+@uref{http://en.wikipedia.org/wiki/Chroma_subsampling, Wikipedia}
+for more details.
 A separate enum named @code{vidl_pixel_arrangement}
-enumerates the available arrangements.  
+enumerates the available arrangements.
 These are
 @table @code
 @item VIDL_PIXEL_ARRANGE_SINGLE
@@ -529,23 +529,23 @@ Small blocks of data represent a group of pixels and bit allocation
 generally differs between channels
 @item VIDL_PIXEL_ARRANGE_PLANAR
 All data from one channel is provided before providing all data from
-the next channel (e.g. RRRR... GGGG... BBBB...).  
+the next channel (e.g. RRRR... GGGG... BBBB...).
 Chroma sub-sampling may still apply.
 @item VIDL_PIXEL_ARRANGE_PALETTE
-(Not currently used) 
+(Not currently used)
 Each pixel is an index into a look-up table of colors.
-@end table 
+@end table
 
 @subsection The Pixel Traits Table
 
 To determine properties of each pixel type, @code{vidl} relies
-heavily on template specialization and meta-programming.  
-The template @code{vidl_pixel_traits_of<FMT>} is specialized for 
-each pixel format @code{FMT}.  
-The traits class provides several static members that describe the 
-properties of each format.  
-The trait specializations are created using the macro @code{vidl_pt_mac}.  
-This macro lets all the properties appear in a nice table.  
+heavily on template specialization and meta-programming.
+The template @code{vidl_pixel_traits_of<FMT>} is specialized for
+each pixel format @code{FMT}.
+The traits class provides several static members that describe the
+properties of each format.
+The trait specializations are created using the macro @code{vidl_pt_mac}.
+This macro lets all the properties appear in a nice table.
 It also makes it easy to add a new pixel format.
 
 The following is a subset of the pixel traits table found in
@@ -572,7 +572,7 @@ vidl_pt_mac( MONO_16,  "Mono 16", vxl_uint_16, 16, MONO,   SINGLE,  0, 0 );
 The meaning of each column in the pixel traits table are as follows.
 @table @code
 @item format
-The format identifier symbol.  
+The format identifier symbol.
 Appended to @code{VIDL_PIXEL_FORMAT_},
 this should match the @code{vidl_pixel_format} enum value.
 @item name
@@ -580,33 +580,33 @@ The string name of the format for human readability.
 @item type
 The data type to be used when converting to a @code{vil_image_view}.
 @item bpp
-The number of bits per pixel. 
-Not always an even multiple of @code{sizeof(type)} because pixels 
-may be packed or sub-sampled in some planes 
+The number of bits per pixel.
+Not always an even multiple of @code{sizeof(type)} because pixels
+may be packed or sub-sampled in some planes
 (see @code{xcs} and @code{ycs}).
 @item color
 The color format.  Appended to @code{VIDL_PIXEL_COLOR_} this
 determines the @code{vidl_pixel_color}.
 @item arrange
-The pixel arrangement.  Appended to @code{VIDL_PIXEL_ARRANGE_} 
+The pixel arrangement.  Appended to @code{VIDL_PIXEL_ARRANGE_}
 this determines the @code{vidl_pixel_arrangement}.
 @item xcs
 The X color sub-sampling factor.  In YUV color space, the U and V
-channels have a horizontal resolution (@code{ni}) that is 
+channels have a horizontal resolution (@code{ni}) that is
 @math{2^@{-xcs@}} times that of the Y channel.
 @item ycs
 The Y color sub-sampling factor.  In YUV color space, the U and V
-channels have a vertical resolution (@code{nj}) that is 
+channels have a vertical resolution (@code{nj}) that is
 @math{2^@{-ycs@}} times that of the Y channel.
 @end table
 
 A new pixel format may be introduced by simply adding an entry in this
-table and a corresponding @code{enum} addition to 
-@code{vidl_pixel_format}. 
-The traits of a pixel format are used in the automatic generation of 
-conversion routines.  
-The ultimate goal of the @code{vidl} pixel format framework is that 
-new formats added to the table should automatically work (possibly slowly) 
+table and a corresponding @code{enum} addition to
+@code{vidl_pixel_format}.
+The traits of a pixel format are used in the automatic generation of
+conversion routines.
+The ultimate goal of the @code{vidl} pixel format framework is that
+new formats added to the table should automatically work (possibly slowly)
 without writing any additional conversion routines.
 
 
@@ -614,9 +614,9 @@ without writing any additional conversion routines.
 
 The template specializations used to define traits are very useful at
 compile-time, but less useful given a pixel format that is not known
-until run-time.  
-A second (non-templated) struct named @code{vidl_pixel_traits} 
-is available to dynamically hold traits at run-time.  
+until run-time.
+A second (non-templated) struct named @code{vidl_pixel_traits}
+is available to dynamically hold traits at run-time.
 The function @code{vidl_pixel_format_traits} provides
 dynamic look-up of traits from a @code{vidl_pixel_format} variable.
 
@@ -635,9 +635,9 @@ vcl_cout << "The frame has format " << pt.name
 
 To simplify this process there are several convenience functions, such
 as @code{vidl_pixel_format_bpp}, to directly look up a pixel trait
-given the format without the need for the traits struct. 
-There is also a @code{vcl_ostream} operator for @code{vidl_pixel_format} 
-so that the human readable string name is printed.  
+given the format without the need for the traits struct.
+There is also a @code{vcl_ostream} operator for @code{vidl_pixel_format}
+so that the human readable string name is printed.
 The following example
 @example
 vidl_pixel_format format = VIDL_PIXEL_FORMAT_RGB_24;
@@ -649,8 +649,8 @@ pixel format is RGB 24
 @end example
 
 There is also a function that provides a look up of a pixel format
-from its string name.  
-Use @code{vidl_pixel_format_from_string} for this purpose.  
+from its string name.
+Use @code{vidl_pixel_format_from_string} for this purpose.
 The expression
 @example
 vidl_pixel_format_from_string("RGB 24") == VIDL_PIXEL_FORMAT_RGB_24
@@ -660,7 +660,7 @@ should evaluate to true.
 @section Pixel Format Conversion
 
 When passing a frame from an input stream to an output stream,
-pixel format conversion is generally not something the user needs 
+pixel format conversion is generally not something the user needs
 to worry about.
 The @code{vidl_istream} should provide a @code{vidl_frame_sptr}
 that uses whatever pixel format is native to the video data.
@@ -669,19 +669,19 @@ then it performs the required conversion automatically.
 
 If for some reason manual conversion is required, the appropriate
 functions are found in @code{vidl_convert.h}.
-The function is called @code{vidl_convert_frame}, 
+The function is called @code{vidl_convert_frame},
 and it comes in two forms.
 The first
 @example
 bool vidl_convert_frame(const vidl_frame& in_frame,
                                vidl_frame& out_frame);
 @end example
-takes an input frame and an output frame. 
+takes an input frame and an output frame.
 The output frame must have the appropriate size and pixel format
 for the output.
 If the size is not appropriate then the function returns false.
-This version is useful when you want to store the converted data 
-into an existing memory buffer; 
+This version is useful when you want to store the converted data
+into an existing memory buffer;
 for example, reusing the same output frame for each new input frame.
 The second form of the function
 @example
@@ -692,8 +692,8 @@ takes a smart pointer to an input frame and allocates new memory
 for the output frame using the specified pixel format.
 If the conversion is possible, a smart pointer to the new frame
 is returned.
-Otherwise, a null smart pointer is returned. 
-This version requires less preparation by the user, 
+Otherwise, a null smart pointer is returned.
+This version requires less preparation by the user,
 but does not allow for the reuse of frame memory.
 
 @subsection Conversion Between Frames and Image Views
@@ -703,23 +703,23 @@ is conversion to and from a @code{vil_image_view}.
 This type of conversion is needed to do any image processing
 on the data.
 There is more than one way to do such a conversion.
-The fastest way, if possible, is to share the memory and 
+The fastest way, if possible, is to share the memory and
 wrap the @code{vidl_frame} in a @code{vil_image_view} or vice versa.
 Wrapping is only possible when the memory layout of the @code{vil}
 memory format is compatible with a @code{vidl} pixel format.
 
 For writing to output streams, wrapping is usually safe
 because the data is immediately used and then no longer needed.
-The function @code{vidl_convert_to_frame} takes a 
-@code{vil_image_view_base_sptr} and always tries first to wrap 
-the memory. 
+The function @code{vidl_convert_to_frame} takes a
+@code{vil_image_view_base_sptr} and always tries first to wrap
+the memory.
 If wrapping fails, new memory is allocated and the image data is
 copied (and converted if necessary) into that memory.
 The result is returned as a @code{vidl_frame_sptr}.
 
 When reading frames from video, wrapping can be more dangerous.
 Processing images from video often involves multiple frames.
-To reduce repeated reallocation of memory, most input streams 
+To reduce repeated reallocation of memory, most input streams
 will reuse the same memory.
 A member function on the @code{vidl_frame} allows an input
 stream to @emph{invalidate} the frame object it previously
@@ -727,11 +727,11 @@ released in order to reclaim the memory for the next frame.
 The invalidated frame will now have a null pointer to image data,
 but any @code{vil_image_view} that was sharing the memory
 will not be notified.
-The image sharing the memory will be overwritten when the next 
+The image sharing the memory will be overwritten when the next
 frame is read from the video stream.
 It is safer to copy memory when converting a frame to an image,
 but it is potentially much slower than wrapping.
-Functions are provided for both copy conversion and 
+Functions are provided for both copy conversion and
 wrapping conversion.
 The appropriate conversion depends on the situation.
 
@@ -758,10 +758,10 @@ The @code{require_color} is used to force that conversion.
 is successful.
 
 The fastest way to obtain a @code{vil_image_view} is by wrapping.
-The function @code{vidl_convert_wrap_in_view} takes a 
-@code{vidl_frame} and tries to wrap its memory with an 
+The function @code{vidl_convert_wrap_in_view} takes a
+@code{vidl_frame} and tries to wrap its memory with an
 appropriate image view.
-If the wrapping is possible, the function returns a 
+If the wrapping is possible, the function returns a
 @code{vil_image_view_base_sptr} to the view.
 Otherwise, it returns a null smart pointer.
 
@@ -778,12 +778,12 @@ is copied directly to the output with @code{vcl_memcpy}.
 The second, and most general, is applied when the pixel
 formats do not match and an actual conversion is needed.
 In this case, the function uses a @code{vidl_pixel_iterator}
-for the input and output frames to step through 
+for the input and output frames to step through
 each pixel and convert it.
-A @code{vidl_pixel_iterator} uses virtual functions to 
-provide a standard interface for accessing or setting the pixel 
-data as an array of bytes, even when multiple pixels are packed 
-together.  
+A @code{vidl_pixel_iterator} uses virtual functions to
+provide a standard interface for accessing or setting the pixel
+data as an array of bytes, even when multiple pixels are packed
+together.
 The data at each pixel is also passed through a color conversion
 function to convert the pixel data type and color representation
 when necessary.
@@ -793,14 +793,14 @@ For each pixel, multiple virtual functions are called, and the
 pixel data is copied through multiple intermediate variables.
 Pixel iterators introduce additional overhead in packed formats
 where data shared across pixels is accessed multiple times.
-Since fast pixel format conversions are required in many 
+Since fast pixel format conversions are required in many
 applications, the generic routine is not acceptable.
 Unfortunately, it is intractable to write an optimized conversion
 routine for all pairs of pixel formats.
 That would require hundreds of specialized functions.
 Yet, not every conversion combination needs optimal performance.
-Only a small subset of conversions are commonly used in 
-practice. 
+Only a small subset of conversions are commonly used in
+practice.
 @code{vidl} allows the default, generic conversion routine
 to be overridden by an optimized implementation for the
 most common format pairs.
@@ -808,9 +808,9 @@ most common format pairs.
 Optimized conversion routines are added by creating a template
 specialization within the designated area in
 @code{vidl_convert.cxx}.
-The specialization should follow the example below. 
+The specialization should follow the example below.
 @example
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct convert<IN_FMT, OUT_FMT>
 @{
   enum @{ defined = true @};
@@ -821,7 +821,7 @@ struct convert<IN_FMT, OUT_FMT>
     assert(out_frame.pixel_format()==OUT_FMT);
 
     // convert the data here
- 
+
     return true;
   @}
 @};
@@ -829,7 +829,7 @@ struct convert<IN_FMT, OUT_FMT>
 In this example, @code{IN_FMT} should be replaced by the
 input pixel format @code{enum} value
 (e.g. @code{VIDL_PIXEL_FORMAT_RGB_24}).
-Likewise, @code{OUT_FMT} should be replaced with the 
+Likewise, @code{OUT_FMT} should be replaced with the
 output pixel format @code{enum} value.
 Several optimized conversion routines are already provided.
 The existing functions can be used as an example when

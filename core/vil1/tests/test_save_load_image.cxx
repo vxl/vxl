@@ -1,4 +1,9 @@
 // This is core/vil1/tests/test_save_load_image.cxx
+#include <string>
+#include <cstring>
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -14,18 +19,14 @@
 // 26 Aug 2000 - .bmp loader works (again) on solaris + linux
 // 28 Aug 2000 - Peter Vanroose - bmp write of colour images fixed
 //  6 Dec 2000 - vil1_rgb_byte deprecated
-// 21 Jan 2001 - deprecated vil1_buffer<> - use vcl_vector<> instead
+// 21 Jan 2001 - deprecated vil1_buffer<> - use std::vector<> instead
 //  1 May 2001 - Peter Vanroose - now using vil1_test.h
 // 7 June 2001 - Peter Vanroose - test added for pbm images
 // 14 Apr 2002 - Amitha Perera - switched from vil1_test to testlib
 //  6 Jan 2003 - Peter Vanroose - test added for ras images
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vul/vul_temp_filename.h>
@@ -66,32 +67,32 @@ bool test_image_equal(char const* type_name,
   TEST ("Image dimensions", sizex == sizex2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
   {
-    vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
-             << " instead of " << sizex << " x " << sizey << vcl_endl << vcl_flush;
+    std::cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
+             << " instead of " << sizex << " x " << sizey << std::endl << std::flush;
     return false;
   }
 
   TEST ("Image pixel sizes", cell_bits, cell_bits2);
   if (cell_bits != cell_bits2)
   {
-    vcl_cout << type_name << ": pixel size is " << cell_bits2
-             << " instead of " << cell_bits << vcl_endl << vcl_flush;
+    std::cout << type_name << ": pixel size is " << cell_bits2
+             << " instead of " << cell_bits << std::endl << std::flush;
     return false;
   }
 
   TEST ("Pixel format", vil1_pixel_format(image), vil1_pixel_format(image2));
   if (vil1_pixel_format(image) != vil1_pixel_format(image2))
   {
-    vcl_cout << type_name << ": pixel format is " << vil1_print(vil1_pixel_format(image2))
-             << " instead of " << vil1_print(vil1_pixel_format(image)) << vcl_endl << vcl_flush;
+    std::cout << type_name << ": pixel format is " << vil1_print(vil1_pixel_format(image2))
+             << " instead of " << vil1_print(vil1_pixel_format(image)) << std::endl << std::flush;
     return false;
   }
 
   TEST ("Image format", image.component_format(), image2.component_format());
   if (image.component_format() != image2.component_format())
   {
-    vcl_cout << type_name << ": component format is " << vil1_print(image2.component_format())
-             << " instead of " << vil1_print(image.component_format()) << vcl_endl << vcl_flush;
+    std::cout << type_name << ": component format is " << vil1_print(image2.component_format())
+             << " instead of " << vil1_print(image.component_format()) << std::endl << std::flush;
     return false;
   }
 
@@ -104,19 +105,19 @@ bool test_image_equal(char const* type_name,
       image.get_size_bytes() != num_bytes ||
       image2.get_size_bytes() != num_bytes2 )
   {
-    vcl_cout << type_name << " in:  " << sizex << 'x' << sizey << ", " << components
+    std::cout << type_name << " in:  " << sizex << 'x' << sizey << ", " << components
              << " components, " << planes << " planes, " << cell_bits << " cell bits.\n"
              << type_name << " out: " << sizex2 << 'x' << sizey2 << ", " << components2
              << " components, " << planes2 << " planes, " << cell_bits2 << " cell bits.\n"
              << type_name << ": " << num_bits << " bits in, " << num_bits2 << " bits out, "
-             << image2.get_size_bytes() << " bytes\n" << vcl_flush;
+             << image2.get_size_bytes() << " bytes\n" << std::flush;
     return false;
   }
 
-  vcl_vector<unsigned char> image_buf(image.get_size_bytes());
+  std::vector<unsigned char> image_buf(image.get_size_bytes());
   TEST ("get_section() on first image", ! image.get_section(&image_buf[0], 0, 0, sizex, sizey), false);
 
-  vcl_vector<unsigned char> image_buf2(image2.get_size_bytes());
+  std::vector<unsigned char> image_buf2(image2.get_size_bytes());
   TEST ("get_section() on second image", ! image2.get_section(&image_buf2[0], 0, 0, sizex2, sizey2), false);
 
   if (!exact) // no exact pixel match wanted
@@ -132,10 +133,10 @@ bool test_image_equal(char const* type_name,
     {
 #ifdef DEBUG
       if (++bad < 20)
-        vcl_cout << "\n byte " << i <<  " differs: " << (int)image_buf[i] << " --> "
-                 << (int) image_buf2[i] << vcl_flush;
+        std::cout << "\n byte " << i <<  " differs: " << (int)image_buf[i] << " --> "
+                 << (int) image_buf2[i] << std::flush;
 #else
-      ++bad; vcl_cout << '.' << vcl_flush;
+      ++bad; std::cout << '.' << std::flush;
 #endif
     }
   }
@@ -143,7 +144,7 @@ bool test_image_equal(char const* type_name,
   TEST ("pixelwise comparison", bad, 0);
   if (bad)
   {
-    vcl_cout << type_name << ": number of unequal pixels: "  << bad << vcl_endl << vcl_flush;
+    std::cout << type_name << ": number of unequal pixels: "  << bad << std::endl << std::flush;
     return false;
   }
   else
@@ -161,16 +162,16 @@ void vil1_test_image_type_raw(char const* type_name, //!< type for image to read
 {
   assert(type_name);
   int n = image.bits_per_component() * image.components();
-  vcl_cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << vcl_flush;
+  std::cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << std::flush;
 
   // Step 1) Write the image out to disk
   //
   // create a file name
-  vcl_string fname = vul_temp_filename();
+  std::string fname = vul_temp_filename();
   fname += ".";
   fname += type_name;
 
-  vcl_cout << "vil1_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
+  std::cout << "vil1_test_image_type: Save to [" << fname << "]\n" << std::flush;
 
   {
     // Check non-raw saving and loading actually don't fail obviously.
@@ -191,11 +192,11 @@ void vil1_test_image_type_raw(char const* type_name, //!< type for image to read
     if (!image2) return; // fatal error
 
     // make sure saved image has the same pixels as the original image
-    tst = !(vcl_strcmp(type_name,image2.file_format())); // NOTE: the analyzer notes it's invalid to pass null to strcmp, and since 'type_name' was tested above against null, it assumes this could occur. From the looks of it, this test function is meant to never be passed null, so I added an assert and removed the test.
+    tst = !(std::strcmp(type_name,image2.file_format())); // NOTE: the analyzer notes it's invalid to pass null to strcmp, and since 'type_name' was tested above against null, it assumes this could occur. From the looks of it, this test function is meant to never be passed null, so I added an assert and removed the test.
     TEST ("compare image file formats", tst, true);
     if (!tst)
-      vcl_cout << "read back image type is " << image2.file_format()
-               << " instead of written " << type_name << vcl_endl << vcl_flush;
+      std::cout << "read back image type is " << image2.file_format()
+               << " instead of written " << type_name << std::endl << std::flush;
     else
       test_image_equal(type_name, image, image2, exact);
   }
@@ -240,7 +241,7 @@ static bool create_colour_gif(const char* filename)
 #ifdef VCL_VC
 #pragma warning ( pop )
 #endif
-  vcl_ofstream f(filename, vcl_ios_out | vcl_ios_binary);
+  std::ofstream f(filename, std::ios::out | std::ios::binary);
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
@@ -275,7 +276,7 @@ static bool create_grey_gif(const char* filename)
 #ifdef VCL_VC
 #pragma warning ( pop )
 #endif
-  vcl_ofstream f(filename, vcl_ios_out | vcl_ios_binary);
+  std::ofstream f(filename, std::ios::out | std::ios::binary);
   if (!f) return false;
   f << "GIF87a";
   for (int i=0; i<7; ++i) f << a[i];
@@ -291,24 +292,24 @@ void vil1_test_image_type(char const* type_name, // type for image to read and w
 {
   assert(type_name);
   int n = image.bits_per_component() * image.components();
-  vcl_cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << vcl_flush;
+  std::cout << "=== Start testing " << type_name << " (" << n << " bpp) ===\n" << std::flush;
 
   // Step 1) Write the image out to disk
   //
   // create a file name
-  vcl_string fname = vul_temp_filename();
+  std::string fname = vul_temp_filename();
   fname += ".";
   fname += type_name;
 
-  vcl_cout << "vil1_test_image_type: Save to [" << fname << "]\n" << vcl_flush;
+  std::cout << "vil1_test_image_type: Save to [" << fname << "]\n" << std::flush;
 
   // Write image to disk
-  if (vcl_strcmp(type_name, "gif") == 0 && image.components() == 3)
+  if (std::strcmp(type_name, "gif") == 0 && image.components() == 3)
   {
     if (!create_colour_gif(fname.c_str()))
       return; // fatal error
   }
-  else if (vcl_strcmp(type_name, "gif") == 0)
+  else if (std::strcmp(type_name, "gif") == 0)
   {
     if (!create_grey_gif(fname.c_str()))
       return; // fatal error
@@ -330,11 +331,11 @@ void vil1_test_image_type(char const* type_name, // type for image to read and w
     }
 
     // make sure saved image has the same pixels as the original image
-    bool tst = !(vcl_strcmp(type_name,image2.file_format()));
+    bool tst = !(std::strcmp(type_name,image2.file_format()));
     TEST ("compare image file formats", tst, true);
     if (!tst)
-      vcl_cout << "read back image type is " << image2.file_format()
-               << " instead of written " << type_name << vcl_endl << vcl_flush;
+      std::cout << "read back image type is " << image2.file_format()
+               << " instead of written " << type_name << std::endl << std::flush;
     else
       test_image_equal(type_name, image, image2, exact);
   }
@@ -520,14 +521,6 @@ static void test_save_load_image()
   vil1_test_image_type("png", image8);
   vil1_test_image_type("png", image24);
 #endif
-
-  // SGI "iris" rgb
-#if 1
-  vil1_test_image_type("iris", image8);
-  vil1_test_image_type("iris", image16);
-  vil1_test_image_type("iris", image3p);
-#endif
-
 
   // mit
 #if 1

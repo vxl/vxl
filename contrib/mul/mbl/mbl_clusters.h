@@ -5,8 +5,9 @@
 // \brief  Class to record clusters of data, for faster neighbour finding
 // \author Tim Cootes
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 
 //:  Class to record clusters of data, for faster neighbour finding
@@ -29,19 +30,19 @@ class mbl_clusters
 {
  private:
   //: Pointer to external list of objects
-  const vcl_vector<T>* data_;
+  const std::vector<T>* data_;
 
   //: Cluster key point
-  vcl_vector<T> p_;
+  std::vector<T> p_;
 
   //: Maximum radius for any cluster
   double max_r_;
 
   //: Indices of objects associated with each cluster
-  vcl_vector<vcl_vector<unsigned> > index_;
+  std::vector<std::vector<unsigned> > index_;
 
   //: Furthest distance of a cluster object from key point for cluster
-  vcl_vector<double> r_;
+  std::vector<double> r_;
 
  public:
   mbl_clusters();
@@ -55,31 +56,31 @@ class mbl_clusters
   //: Define external data array (pointer retained)
   //  Empty existing clusters, then process every element of data
   //  to create clusters, by calling add_object()
-  void set_data(const vcl_vector<T>& data);
+  void set_data(const std::vector<T>& data);
 
   //: Define external data array (pointer retained)
   //  Use carefully! This sets the internal pointer to
   //  point to data.  Really only to be used after loading
   //  internals using b_read(bfs).
-  void set_data_ptr(const vcl_vector<T>& data);
+  void set_data_ptr(const std::vector<T>& data);
 
   //: External list of objects
-  const vcl_vector<T>& data() const { return *data_; }
+  const std::vector<T>& data() const { return *data_; }
 
   //: Maximum radius for any cluster
   double max_r() const { return max_r_; }
 
   //: Cluster key points
-  const vcl_vector<T>& p() const { return p_; }
+  const std::vector<T>& p() const { return p_; }
 
   //: Number of clusters
   unsigned n_clusters() const { return p_.size(); }
 
   //: Furthest distance of a cluster object from key point for cluster
-  const vcl_vector<double>& r() const { return r_; }
+  const std::vector<double>& r() const { return r_; }
 
   //: Indices of objects associated with each cluster
-  const vcl_vector<vcl_vector<unsigned> >& index() const
+  const std::vector<std::vector<unsigned> >& index() const
    { return index_; }
 
   //: Set given radius
@@ -95,7 +96,7 @@ class mbl_clusters
   //  Nearest object in data() to t is given by data()[nearest(t,d)];
   //  The distance to the point is d
   unsigned nearest(const T& t, double& d,
-                   const vcl_vector<unsigned>& c_list) const;
+                   const std::vector<unsigned>& c_list) const;
 
   //: Return index of nearest cluster in data() to t
   //  Finds nearest cluster key point to t
@@ -105,15 +106,15 @@ class mbl_clusters
   //: Return indices of clusters which may contain nearest point to t
   //  Searches through all the clusters, returning list in near_c
   void nearest_clusters(const T& t, double& max_d,
-                        vcl_vector<unsigned>& near_c) const;
+                        std::vector<unsigned>& near_c) const;
 
   //: Return indices of clusters which may contain nearest point to t
   //  Searches through clusters listed in c_list.
   //  On input, max_d gives initial limit on distance.
   //  On exit, max_d gives the revised limit on the distance
   void nearest_clusters(const T& t, double& max_d,
-                        const vcl_vector<unsigned>& c_list,
-                        vcl_vector<unsigned>& near_c) const;
+                        const std::vector<unsigned>& c_list,
+                        std::vector<unsigned>& near_c) const;
 
   //: Append new object with index i and assign to a cluster
   //  Assumes that new object data()[i] is available.
@@ -138,7 +139,7 @@ class mbl_clusters
   //  Returns number of such clusters. If >0, then nearest_c
   //  gives index of cluster with centre nearest to t
   unsigned clusters_within_d(const T& t, double d,
-                             vcl_vector<unsigned>& c_list,
+                             std::vector<unsigned>& c_list,
                              unsigned& nearest_c,
                              double& min_d);
 
@@ -146,7 +147,7 @@ class mbl_clusters
   //  Returns number of such clusters. If >0, then nearest_c
   //  gives index of cluster with centre nearest to t
   unsigned clusters_within_max_r(const T& t,
-                                 vcl_vector<unsigned>& c_list,
+                                 std::vector<unsigned>& c_list,
                                  unsigned& nearest_c,
                                  double& min_d);
 
@@ -155,8 +156,8 @@ class mbl_clusters
   //  Returns number of such clusters. If >0, then nearest_c
   //  gives index of cluster with centre nearest to t
   unsigned clusters_within_d(const T& t, double d,
-                             const vcl_vector<unsigned>& in_list,
-                             vcl_vector<unsigned>& c_list,
+                             const std::vector<unsigned>& in_list,
+                             std::vector<unsigned>& c_list,
                              unsigned& nearest_c,
                              double& min_d);
 
@@ -165,24 +166,24 @@ class mbl_clusters
   //  Returns number of such clusters. If >0, then nearest_c
   //  gives index of cluster with centre nearest to t
   unsigned clusters_within_max_r(const T& t,
-                             const vcl_vector<unsigned>& in_list,
-                             vcl_vector<unsigned>& c_list,
+                             const std::vector<unsigned>& in_list,
+                             std::vector<unsigned>& c_list,
                              unsigned& nearest_c,
                              double& min_d);
 
   //: Create list of object indices in listed clusters
   //  Concatenates lists of indices for each cluster in c_list
-  void in_clusters(const vcl_vector<unsigned>& c_list,
-                   vcl_vector<unsigned>& o_list) const;
+  void in_clusters(const std::vector<unsigned>& c_list,
+                   std::vector<unsigned>& o_list) const;
 
   //: Write out list of elements in each cluster
-  void print_cluster_sets(vcl_ostream& os) const;
+  void print_cluster_sets(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream.
   //  Warning: Does not save external data - that must
@@ -205,6 +206,6 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_clusters<T,D>& c);
 
 //: Stream output operator for class reference
 template<class T, class D>
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_clusters<T,D>& c);
+std::ostream& operator<<(std::ostream& os,const mbl_clusters<T,D>& c);
 
 #endif // mbl_clusters_h_

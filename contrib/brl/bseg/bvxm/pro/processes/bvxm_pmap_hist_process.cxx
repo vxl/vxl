@@ -19,7 +19,7 @@ bool bvxm_pmap_hist_process_cons(bprb_func_process& pro)
 // This process has 2 inputs:
   //input[0]: The voxel world
   //input[1]: The path for the output file
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   int i=0;
   input_types_[i++] = "vcl_string";    // path to the prob. map image
   input_types_[i++] = "vcl_string";    // output path
@@ -33,23 +33,23 @@ bool bvxm_pmap_hist_process(bprb_func_process& pro)
   //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   // get the inputs:
 
   //path to the prob. map image
   unsigned i = 0;
-  vcl_string pmap = pro.get_input<vcl_string>(i++);
+  std::string pmap = pro.get_input<std::string>(i++);
   //path for the output
-  vcl_string path = pro.get_input<vcl_string>(i++);
+  std::string path = pro.get_input<std::string>(i++);
 
   compute(pmap, path);
 
   return true;
 }
 
-bool bvxm_pmap_hist_process_globals::compute(vcl_string pmap,  vcl_string path)
+bool bvxm_pmap_hist_process_globals::compute(std::string pmap,  std::string path)
 {
   vil_image_view_base_sptr img = vil_load(pmap.c_str());
   bsta_histogram<double> hist(0.0, 20.0, 60);
@@ -70,7 +70,7 @@ bool bvxm_pmap_hist_process_globals::compute(vcl_string pmap,  vcl_string path)
     }
   }
 
-  vcl_ofstream f(path.c_str());
+  std::ofstream f(path.c_str());
   hist.print(f);
   return true;
 }

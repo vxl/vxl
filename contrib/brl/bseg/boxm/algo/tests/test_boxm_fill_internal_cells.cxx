@@ -11,12 +11,12 @@ const bool debug = false;
 
 void build_tree(boct_tree<short,float>* tree)
 {
-  vcl_cout << "Creating Octree" << vcl_endl;
+  std::cout << "Creating Octree" << std::endl;
 
   // Create tree
   tree->split();
   {
-    vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
+    std::vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
     leaves[1]->set_data(0.1f);
     leaves[1]->split();
     for (unsigned i=0; i<leaves.size(); i++)
@@ -25,14 +25,14 @@ void build_tree(boct_tree<short,float>* tree)
 
   if (debug)
   {
-    vcl_cout << "All Levels" << vcl_endl;
-    vcl_vector<boct_tree_cell<short,float>*> leaves = tree->all_cells();
+    std::cout << "All Levels" << std::endl;
+    std::vector<boct_tree_cell<short,float>*> leaves = tree->all_cells();
     for (unsigned i=0; i<leaves.size(); i++) {
-      vcl_cout<< leaves[i]->get_code().x_loc_ << ','
+      std::cout<< leaves[i]->get_code().x_loc_ << ','
               << leaves[i]->get_code().y_loc_ << ','
               << leaves[i]->get_code().z_loc_ << ','
               << leaves[i]->get_code().level << ','
-              << leaves[i]->data() << vcl_endl;
+              << leaves[i]->data() << std::endl;
     }
   }
 }
@@ -54,7 +54,7 @@ static void test_boxm_fill_internal_cells()
   vgl_vector_3d<unsigned> world_dim(1,1,1);
 
   boxm_scene<tree_type> *scene= new boxm_scene<tree_type>(lvcs, origin, block_dim, world_dim,true);
-  vcl_string scene_path=".";
+  std::string scene_path=".";
   scene->set_paths(scene_path, "in_block");
   scene->set_appearance_model(BOXM_FLOAT);
   scene->clean_scene();
@@ -77,7 +77,7 @@ static void test_boxm_fill_internal_cells()
   scene_out->load_block(iter_out.index());
   boxm_block<tree_type> *block_out = scene_out->get_active_block();
   boct_tree<short, float>  *tree_out= block_out->get_tree();
-  vcl_vector<boct_tree_cell<short,float>*> cells = tree_out->all_cells();
+  std::vector<boct_tree_cell<short,float>*> cells = tree_out->all_cells();
   bool result = true;
   for (unsigned i=0; i<cells.size(); i++)
   {
@@ -95,13 +95,13 @@ static void test_boxm_fill_internal_cells()
   TEST("Valid average cells", result, true);
 
   if (debug) {
-    vcl_cout << "Printing Output Tree" << vcl_endl;
+    std::cout << "Printing Output Tree" << std::endl;
     for (unsigned i=0; i<cells.size(); i++) {
-      vcl_cout<< cells[i]->get_code().x_loc_ << ','
+      std::cout<< cells[i]->get_code().x_loc_ << ','
               << cells[i]->get_code().y_loc_ << ','
               << cells[i]->get_code().z_loc_ << ','
               << cells[i]->get_code().level << ','
-              << cells[i]->data() << vcl_endl;
+              << cells[i]->data() << std::endl;
     }
   }
 

@@ -2,6 +2,7 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <utility>
 #include "vil_nitf2_field_sequence.h"
 #include "vil_nitf2_index_vector.h"
 #include "vil_nitf2_field_formatter.h"
@@ -10,7 +11,7 @@
 #include "vil_nitf2_array_field.h"
 #include "vil_nitf2_compound_field_value.h"
 
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 vil_nitf2_field::field_tree*
 vil_nitf2_field_sequence::get_tree( vil_nitf2_field::field_tree* tr ) const
@@ -22,9 +23,9 @@ vil_nitf2_field_sequence::get_tree( vil_nitf2_field::field_tree* tr ) const
   return t;
 }
 
-void vil_nitf2_field_sequence::insert_field( const vcl_string& str, vil_nitf2_field* field )
+void vil_nitf2_field_sequence::insert_field( const std::string& str, vil_nitf2_field* field )
 {
-  fields.insert(vcl_make_pair(str, field));
+  fields.insert(std::make_pair(str, field));
   fields_vector.push_back(field);
 }
 
@@ -41,7 +42,7 @@ create_array_fields(const vil_nitf2_field_definitions* field_defs,
       if (field) {
         insert_field(field_def->tag, field);
       } else {
-        vcl_cerr << "vil_nitf2_field_sequence:create_array_fields(): Error created required vcl_vector field "
+        std::cerr << "vil_nitf2_field_sequence:create_array_fields(): Error created required std::vector field "
                  << field_def->tag << "; bailing out.\n";
         return false;
       }
@@ -52,7 +53,7 @@ create_array_fields(const vil_nitf2_field_definitions* field_defs,
         return false;
       }
     } else {
-      vcl_cerr << "vil_nitf2_field_sequence::create_array_fields(): unsupported node type!\n";
+      std::cerr << "vil_nitf2_field_sequence::create_array_fields(): unsupported node type!\n";
       return false;
     }
   }
@@ -71,10 +72,10 @@ void vil_nitf2_field_sequence::set_array_fields_dimension(
       vil_nitf2_array_field* field = get_field(field_def->tag)->array_field();
       if (field) {
         VIL_NITF2_LOG(log_debug) << "  (Setting tag " << field_def->tag << " dimension "
-                                 << index << " to " << repeat_count << ".)" << vcl_endl;
+                                 << index << " to " << repeat_count << ".)" << std::endl;
         field->set_next_dimension(index, repeat_count);
       } else {
-        vcl_cerr << "vil_nitf2_field_sequence:set_array_field_dimension(): array field "
+        std::cerr << "vil_nitf2_field_sequence:set_array_field_dimension(): array field "
                  << field_def->tag << " not found!\n";
       }
     } else if ((*node) && (*node)->is_repeat_node()) {
@@ -82,7 +83,7 @@ void vil_nitf2_field_sequence::set_array_fields_dimension(
       vil_nitf2_field_definition_repeat_node* repeat_node = (*node)->repeat_node();
       set_array_fields_dimension(repeat_node->field_definitions, index, repeat_count);
     } else {
-      vcl_cerr << "vil_nitf2_field_sequence::set_array_fields_dimension(): unsupported node type!\n";
+      std::cerr << "vil_nitf2_field_sequence::set_array_fields_dimension(): unsupported node type!\n";
     }
   }
 }
@@ -94,7 +95,7 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
   if (!field_defs)
     field_defs = m_field_definitions;
   if (!field_defs)
-    vcl_cerr << "vil_nitf2_field_sequence::read() missing field definitions!\n";
+    std::cerr << "vil_nitf2_field_sequence::read() missing field definitions!\n";
   bool error = false;
   for (vil_nitf2_field_definitions::const_iterator node = field_defs->begin();
        node != field_defs->end(); ++node)
@@ -115,7 +116,7 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
         } else {
           // Cannot evaluate condition; therefore I don't know whether this
           // field exists and cannot reliably parse the rest of the record
-          vcl_cerr << "vil_nitf2_field_sequence::read(): Cannot evaluate condition for tag " << field_def->tag << '\n';
+          std::cerr << "vil_nitf2_field_sequence::read(): Cannot evaluate condition for tag " << field_def->tag << '\n';
           error = true;
           break;
         }
@@ -124,18 +125,18 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
       {
         // Evaluate its width functor, if any.
         int variable_width = -1;
-        if (field_def->width_functor != 0) {
+        if (field_def->width_functor != VXL_NULLPTR) {
           bool computed_width = (*(field_def->width_functor))(this, indexes, variable_width);
           if (!computed_width) {
             // Cannot evaluate width functor; therefore I don't know the length
             // of this field and cannot reliably parse the rest of the record
-            vcl_cerr << "vil_nitf2_field_sequence::read(): Cannot evaluate width functor for tag " << field_def->tag << '\n';
+            std::cerr << "vil_nitf2_field_sequence::read(): Cannot evaluate width functor for tag " << field_def->tag << '\n';
             error = true;
             break;
           }
         }
         if (variable_width == 0) {
-          VIL_NITF2_LOG(log_debug) << "Skipping field " << field_def->tag << ", whose length = 0." << vcl_endl;
+          VIL_NITF2_LOG(log_debug) << "Skipping field " << field_def->tag << ", whose length = 0." << std::endl;
         }
         else
         {
@@ -166,7 +167,7 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
               }
             }
             if (read_error) {
-              vcl_cerr << "vil_nitf2_field_sequence::read(): Couldn't find vcl_vector field!\n";
+              std::cerr << "vil_nitf2_field_sequence::read(): Couldn't find std::vector field!\n";
               return false;
             }
           }
@@ -182,13 +183,13 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
       // Compute how many times it repeats
       int repeat_count = 0;
       bool computed_repeat = false;
-      if (repeat_node->repeat_functor != 0) {
+      if (repeat_node->repeat_functor != VXL_NULLPTR) {
         computed_repeat = (*(repeat_node->repeat_functor))(this, indexes, repeat_count);
       }
       if (!computed_repeat) {
         // Cannot evaluate repeat count; therefore I don't know the length
         // of this field and cannot reliably parse the rest of the record
-        vcl_cerr << "Cannot evaluate repeat count for repeat node\n";
+        std::cerr << "Cannot evaluate repeat count for repeat node\n";
         error = true;
         break;
       }
@@ -211,9 +212,9 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
         }
       }
       // Loop repeat_count times over fields to read the elements
-      vcl_string nesting_level_indicator((indexes.size()+1)*2, '-');
+      std::string nesting_level_indicator((indexes.size()+1)*2, '-');
       VIL_NITF2_LOG(log_debug) << nesting_level_indicator
-                               << "Repeating fields " << repeat_count << " times:" << vcl_endl;
+                               << "Repeating fields " << repeat_count << " times:" << std::endl;
       for (int i=0; i<repeat_count; ++i)
       {
         // The first time through the repeat loop, set the dimension
@@ -239,10 +240,10 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
           return false;
         }
       }
-      VIL_NITF2_LOG(log_debug) << nesting_level_indicator << "End repeating fields." << vcl_endl;
+      VIL_NITF2_LOG(log_debug) << nesting_level_indicator << "End repeating fields." << std::endl;
     }
     else {
-      vcl_cerr << "vil_nitf2_tagged_record::read(): unsupported node.\n";
+      std::cerr << "vil_nitf2_tagged_record::read(): unsupported node.\n";
     }
   }
   return !error;
@@ -255,7 +256,7 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
   if (!field_defs)
     field_defs = m_field_definitions;
   if (!field_defs)
-    vcl_cerr << "vil_nitf2_field_sequence::write(): Missing field definitions!\n";
+    std::cerr << "vil_nitf2_field_sequence::write(): Missing field definitions!\n";
   for (vil_nitf2_field_definitions::const_iterator node = field_defs->begin();
        node != field_defs->end(); ++node)
   {
@@ -263,7 +264,7 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
     {
       vil_nitf2_field_definition* field_def = (*node)->field_definition();
       if (!field_def) {
-        vcl_cerr << "vil_nitf2_field_sequence::write(): Missing field definition!\n";
+        std::cerr << "vil_nitf2_field_sequence::write(): Missing field definition!\n";
         return false;
       }
       vil_nitf2_field* field = get_field(field_def->tag);
@@ -276,38 +277,38 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
         if ((*field_def->condition_functor)(this, indexes, condition)) {
           expected |= condition;
         } else {
-          vcl_cerr << "vil_nitf2_field_sequence::write(): Cound not evaluate condition for field "
-                   << field_def->tag << vcl_endl;
+          std::cerr << "vil_nitf2_field_sequence::write(): Cound not evaluate condition for field "
+                   << field_def->tag << std::endl;
           // Cannot evaluate condition, therefore I can't tell whether this
           // field should exist.
           return false;
         }
       }
       if (field && !expected) {
-        vcl_cerr << "vil_nitf2_field_sequence::write(): Field " << field_def->tag
+        std::cerr << "vil_nitf2_field_sequence::write(): Field " << field_def->tag
                  << " is being ignored because its condition is not satisfied.\n";
       }
       else
       {
         // Will emit field. Evaluate its width functor, if any.
         int variable_width = -1;
-        if (field_def->width_functor != 0) {
+        if (field_def->width_functor != VXL_NULLPTR) {
           bool computed_width = (*(field_def->width_functor))(this, indexes, variable_width);
           if (!computed_width) {
             // Cannot evaluate width functor; therefore I don't know the length
             // of this field and cannot reliably parse the rest of the record
-            vcl_cerr << "vil_nitf2_field_sequence::write(): Cannot evaluate width functor for tag " << field_def->tag << vcl_endl;
+            std::cerr << "vil_nitf2_field_sequence::write(): Cannot evaluate width functor for tag " << field_def->tag << std::endl;
             return false;
           }
         }
         if (variable_width == 0) {
-          VIL_NITF2_LOG(log_debug) << "Skipping field " << field_def->tag << ", whose length = 0." << vcl_endl;
+          VIL_NITF2_LOG(log_debug) << "Skipping field " << field_def->tag << ", whose length = 0." << std::endl;
         } else {
           // Either there is no width functor, in which case variable_width = -1 and will be ignored,
           // or there is a width functor, and the resulting positive variable_width will be applied.
           if (!field && expected) {
             if (!field_def->blanks_ok) {
-              vcl_cerr << "vil_nitf2_field_sequence::write(): Field " << field_def->tag
+              std::cerr << "vil_nitf2_field_sequence::write(): Field " << field_def->tag
                        << " is unspecified; writing blanks.\n";
             }
             if (variable_width > 0)
@@ -329,13 +330,13 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
       // Compute how many times it repeats
       int repeat_count = 0;
       bool computed_repeat = false;
-      if (repeat_node->repeat_functor != 0) {
+      if (repeat_node->repeat_functor != VXL_NULLPTR) {
         computed_repeat = (*(repeat_node->repeat_functor))(this, indexes, repeat_count);
       }
       if (!computed_repeat) {
         // Cannot evaluate repeat count; therefore I don't know the length
         // of this field.
-        vcl_cerr << "vil_nitf2_field_sequence::write(): Cannot evaluate repeat count for repeat node\n";
+        std::cerr << "vil_nitf2_field_sequence::write(): Cannot evaluate repeat count for repeat node\n";
         return false;
       }
       if (repeat_node->field_definitions) {
@@ -346,7 +347,7 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
         }
       }
     } else {
-      vcl_cerr << "vil_nitf2_field_sequence::write(): Ignoring unsupported node.\n";
+      std::cerr << "vil_nitf2_field_sequence::write(): Ignoring unsupported node.\n";
     }
   }
   return true;
@@ -363,25 +364,25 @@ vil_nitf2_field_sequence::~vil_nitf2_field_sequence()
   }
 }
 
-vil_nitf2_field* vil_nitf2_field_sequence::get_field(vcl_string tag) const
+vil_nitf2_field* vil_nitf2_field_sequence::get_field(std::string tag) const
 {
-  vcl_map<vcl_string, vil_nitf2_field*>::const_iterator field_map_entry = fields.find(tag);
+  std::map<std::string, vil_nitf2_field*>::const_iterator field_map_entry = fields.find(tag);
   if (field_map_entry == fields.end())
-    return 0;
+    return VXL_NULLPTR;
   return field_map_entry->second;
 }
 
 // Who needs templated functions when we have macros!
 #define NITF_FIELD_SEQ_GET_VALUE(T) \
-bool vil_nitf2_field_sequence::get_value(vcl_string tag, T& out_value) const { \
+bool vil_nitf2_field_sequence::get_value(std::string tag, T& out_value) const { \
   vil_nitf2_field* field = get_field(tag); \
   vil_nitf2_scalar_field* scalar_field = field ? field->scalar_field() : 0; \
   if (!scalar_field) { \
-    /*vcl_cerr << "vil_nitf2_field_sequence::get_value(" << tag << "): scalar field not found.\n";*/ \
+    /*std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << "): scalar field not found.\n";*/ \
     return false; \
   } \
   if (!scalar_field->value(out_value)) { \
-    vcl_cerr << "vil_nitf2_field_sequence::get_value(" << tag << ") called with wrong type.\n"; \
+    std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << ") called with wrong type.\n"; \
     return false; \
   } \
   return true; \
@@ -391,19 +392,19 @@ NITF_FIELD_SEQ_GET_VALUE(int)
 NITF_FIELD_SEQ_GET_VALUE(double)
 NITF_FIELD_SEQ_GET_VALUE(char)
 NITF_FIELD_SEQ_GET_VALUE(void*)
-NITF_FIELD_SEQ_GET_VALUE(vcl_string)
+NITF_FIELD_SEQ_GET_VALUE(std::string)
 NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_location*)
 NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_date_time)
 NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_tagged_record_sequence)
 
 #define NITF_FIELD_SEQ_GET_ARRAY_VALUE(T) \
-bool vil_nitf2_field_sequence::get_value(vcl_string tag, \
+bool vil_nitf2_field_sequence::get_value(std::string tag, \
                                          const vil_nitf2_index_vector& indexes, \
                                          T& out_value, \
                                          bool ignore_extra_indexes) const { \
   vil_nitf2_field* field = get_field(tag); \
   if (!field) { \
-    /*vcl_cerr << "vil_nitf2_field_sequence::get_value(" << tag << ", const vil_nitf2_index_vector&): tag not found.\n"; */\
+    /*std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << ", const vil_nitf2_index_vector&): tag not found.\n"; */\
     return false; \
   } \
   vil_nitf2_index_vector trimmed_indexes(indexes); \
@@ -421,7 +422,7 @@ NITF_FIELD_SEQ_GET_ARRAY_VALUE(int) // expanded below for debugging
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(double)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(char)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(void*)
-NITF_FIELD_SEQ_GET_ARRAY_VALUE(vcl_string)
+NITF_FIELD_SEQ_GET_ARRAY_VALUE(std::string)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(vil_nitf2_location*)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(vil_nitf2_date_time)
 
@@ -429,14 +430,14 @@ NITF_FIELD_SEQ_GET_ARRAY_VALUE(vil_nitf2_date_time)
 // standards forbid using templated member functions.
 //
 #define NITF_FIELD_SEQ_GET_VALUES(T) \
-bool vil_nitf2_field_sequence::get_values(vcl_string tag, \
+bool vil_nitf2_field_sequence::get_values(std::string tag, \
                                           const vil_nitf2_index_vector& indexes, \
-                                          vcl_vector<T>& out_values, \
+                                          std::vector<T>& out_values, \
                                           bool clear_out_values) const \
 { \
   vil_nitf2_field* field = get_field(tag); \
   if (!field) { \
-    /*vcl_cerr << "vil_nitf2_field_sequence::get_value(" << tag << ", const vil_nitf2_index_vector&): tag not found.\n"; */\
+    /*std::cerr << "vil_nitf2_field_sequence::get_value(" << tag << ", const vil_nitf2_index_vector&): tag not found.\n"; */\
     return false; \
   } \
   if (clear_out_values) { \
@@ -471,7 +472,7 @@ bool vil_nitf2_field_sequence::get_values(vcl_string tag, \
   } \
 } \
 \
-bool vil_nitf2_field_sequence::get_values(vcl_string tag, vcl_vector<T>& out_values) const \
+bool vil_nitf2_field_sequence::get_values(std::string tag, std::vector<T>& out_values) const \
 { \
   return get_values(tag, vil_nitf2_index_vector(), out_values, true); \
 }
@@ -480,7 +481,7 @@ NITF_FIELD_SEQ_GET_VALUES(int)
 NITF_FIELD_SEQ_GET_VALUES(double)
 NITF_FIELD_SEQ_GET_VALUES(char)
 NITF_FIELD_SEQ_GET_VALUES(void*)
-NITF_FIELD_SEQ_GET_VALUES(vcl_string)
+NITF_FIELD_SEQ_GET_VALUES(std::string)
 NITF_FIELD_SEQ_GET_VALUES(vil_nitf2_location*)
 NITF_FIELD_SEQ_GET_VALUES(vil_nitf2_date_time)
 

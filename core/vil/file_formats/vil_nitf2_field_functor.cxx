@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_field_functor.h"
@@ -8,20 +8,20 @@
 #include "vil_nitf2_index_vector.h"
 
 bool vil_nitf2_field_specified::
-operator() (vil_nitf2_field_sequence* record, 
-            const vil_nitf2_index_vector& indexes, bool& result) 
+operator() (vil_nitf2_field_sequence* record,
+            const vil_nitf2_index_vector& indexes, bool& result)
 {
   if (!record->find_field_definition(tag)) {
     // Invalid tag
     return false;
-  } 
+  }
   vil_nitf2_field* field = record->get_field(tag);
-  if (field != 0) {
-    vcl_string value;
+  if (field != VXL_NULLPTR) {
+    std::string value;
     bool is_string_value = record->get_value(tag, indexes, value, true);
     if (is_string_value) {
-      // a blank vcl_string field actually yields a valid field value (an empty 
-      // vcl_string) so test the value
+      // a blank std::string field actually yields a valid field value (an empty
+      // std::string) so test the value
       result = !value.empty();
     } else {
       // other types of blank fields do not yield a field; since it
@@ -36,8 +36,8 @@ operator() (vil_nitf2_field_sequence* record,
 }
 
 bool vil_nitf2_max_field_value_plus_offset_and_threshold::
-operator() (vil_nitf2_field_sequence* record, 
-            const vil_nitf2_index_vector& indexes, int& value) 
+operator() (vil_nitf2_field_sequence* record,
+            const vil_nitf2_index_vector& indexes, int& value)
 {
   int value1 = 0;
   bool found = record->get_value(tag, indexes, value1, true);
@@ -48,7 +48,7 @@ operator() (vil_nitf2_field_sequence* record,
 }
 
 bool vil_nitf2_multiply_field_values::
-operator() (vil_nitf2_field_sequence* record, 
+operator() (vil_nitf2_field_sequence* record,
             const vil_nitf2_index_vector& indexes, int& value) {
   int value1, value2;
   bool found = record->get_value(tag_1, indexes, value1, true);

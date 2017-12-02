@@ -21,7 +21,7 @@
 bool vpgl_compute_affine_from_rat_process_cons(bprb_func_process& pro)
 {
   //set output types
-  vcl_vector<vcl_string> input_types_(8);
+  std::vector<std::string> input_types_(8);
   int i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";  // camera  -- pass local rational camera
   input_types_[i++] = "double";    // min point x (e.g. lower left corner of a scene bbox)
@@ -33,7 +33,7 @@ bool vpgl_compute_affine_from_rat_process_cons(bprb_func_process& pro)
   input_types_[i++] = "unsigned";    // n_points -- randomly sample this many points form the voxel volume, e.g. 100
   if (!pro.set_input_types(input_types_))
     return false;
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "vpgl_camera_double_sptr";  // output affine camera
   return pro.set_output_types(output_types_);
 }
@@ -51,26 +51,26 @@ bool vpgl_compute_affine_from_rat_process(bprb_func_process& pro)
   unsigned n_points = pro.get_input<unsigned>(i++);
   if (n_points <= 3)
     n_points = 10;   // make it minimum 10 points
-  
+
   if (!camera) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
   vpgl_local_rational_camera<double>* rat_camera = dynamic_cast<vpgl_local_rational_camera<double>*> (camera.as_pointer());
   if (!rat_camera) {
-    vcl_cout << pro.name() <<" :--  Input camera is not a local rational camera!\n";
+    std::cout << pro.name() <<" :--  Input camera is not a local rational camera!\n";
     return false;
   }
-  
+
   double width = max_x - min_x;
   double depth = max_y - min_y;
   double height = max_z - min_z;
 
-  vcl_cout << " Using: " << n_points << " to find the affine camera!\n";
-  vcl_cout << " w: " << width << " d: " << depth << " h: " << height << '\n';
-  vcl_vector< vgl_point_2d<double> > image_pts;
-  vcl_vector< vgl_point_3d<double> > world_pts;
-  
+  std::cout << " Using: " << n_points << " to find the affine camera!\n";
+  std::cout << " w: " << width << " d: " << depth << " h: " << height << '\n';
+  std::vector< vgl_point_2d<double> > image_pts;
+  std::vector< vgl_point_3d<double> > world_pts;
+
   vnl_random rng;
   for (unsigned i = 0; i < n_points; i++) {
     vgl_point_3d<float> corner_world;
@@ -82,7 +82,7 @@ bool vpgl_compute_affine_from_rat_process(bprb_func_process& pro)
     camera->project(x,y,z,u,v);  // local rational camera has an lvcs, so it handles, local coord to global to image point projection internally
     image_pts.push_back(vgl_point_2d<double>(u,v));
   }
-  
+
   vpgl_affine_camera<double>* out_camera = vpgl_affine_rectification::compute_affine_cam(image_pts, world_pts);
   pro.set_output_val<vpgl_camera_double_sptr>(0, out_camera);
   return true;

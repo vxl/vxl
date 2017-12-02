@@ -1,2 +1,2 @@
-ADD_EXECUTABLE(gtrl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( gtrl_test_include gtrl )
+add_executable(gtrl_test_include test_include.cxx )
+target_link_libraries( gtrl_test_include gtrl )

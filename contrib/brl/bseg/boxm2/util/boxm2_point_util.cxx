@@ -1,30 +1,32 @@
+#include <iostream>
+#include <cstdlib>
 #include "boxm2_point_util.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
-#include <vcl_cstdlib.h> // for std::rand()
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
-bool boxm2_point_util::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
+bool boxm2_point_util::fit_plane_ransac(std::vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
 {
   unsigned int nchoose=3;
   unsigned int nsize=points.size();
   unsigned int max_its = 1000;
   double err=10.0;
   double inlier_dist = 0.1;
-  vcl_vector<int> best_inliers;
+  std::vector<int> best_inliers;
   for (unsigned i=0;i<max_its;++i)
   {
-    vcl_cout << '.' << vcl_flush;
-    vcl_vector<vgl_homg_point_3d<double> > subset;
-    vcl_vector<int> inliers;
+    std::cout << '.' << std::flush;
+    std::vector<vgl_homg_point_3d<double> > subset;
+    std::vector<int> inliers;
     for (unsigned j=0;j<nchoose;++j)
-      subset.push_back(points[vcl_rand()%nsize]);
-    vcl_cout<<subset.size();vcl_cout.flush();
+      subset.push_back(points[std::rand()%nsize]);
+    std::cout<<subset.size();std::cout.flush();
     vgl_fit_plane_3d<double> fit_plane(subset);
-    if (fit_plane.fit(err, &vcl_cerr))
+    if (fit_plane.fit(err, &std::cerr))
     {
       vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
       for (unsigned j=0;j<nsize;++j)
@@ -45,8 +47,8 @@ bool boxm2_point_util::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > &
   {
     fit_plane_inliers.add_point(points[best_inliers[i]]);
   }
-  vcl_cout<<"Inliers "<<best_inliers.size()<<vcl_endl;
-  if (fit_plane_inliers.fit(23.0, &vcl_cerr))
+  std::cout<<"Inliers "<<best_inliers.size()<<std::endl;
+  if (fit_plane_inliers.fit(23.0, &std::cerr))
   {
     plane=fit_plane_inliers.get_plane();
     return true;
@@ -55,10 +57,10 @@ bool boxm2_point_util::fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > &
     return false;
 }
 
-bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
-                                        vcl_vector<vpgl_perspective_camera<double> > & cams)
+bool boxm2_point_util::axis_align_scene(std::vector<bwm_video_corr_sptr> & corrs,
+                                        std::vector<vpgl_perspective_camera<double> > & cams)
 {
-  vcl_vector<vgl_homg_point_3d<double> > points;
+  std::vector<vgl_homg_point_3d<double> > points;
   for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_homg_point_3d<double> homg_world_pt(corrs[i]->world_pt());
@@ -80,7 +82,7 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
 #else
   // fit the plane
   vgl_fit_plane_3d<double> fit_plane(points);
-  if (!fit_plane.fit(1e6, &vcl_cerr))
+  if (!fit_plane.fit(1e6, &std::cerr))
     return false;
   vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
 #endif
@@ -102,14 +104,14 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   }
   vgl_point_3d<double> center(sumx/corrs.size(),sumy/corrs.size(),sumz/corrs.size());
   vnl_vector_fixed<double,3> tr(center.x(),center.y(),center.z());
-  vcl_vector<vgl_homg_point_3d<double> > xformed_points;
+  std::vector<vgl_homg_point_3d<double> > xformed_points;
   for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_point_3d<double> p(corrs[i]->world_pt());
     corrs[i]->set_world_pt(vgl_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
     xformed_points.push_back(vgl_homg_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
   }
-  vcl_vector<vpgl_perspective_camera<double> > new_cams;
+  std::vector<vpgl_perspective_camera<double> > new_cams;
   unsigned int up=0;
   for (unsigned i=0;i<cams.size();++i)
   {
@@ -152,7 +154,7 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     cams[i]=new_cams[i];
 
   //vgl_fit_plane_3d<double> fit_plane1(xformed_points);
-  //if (!fit_plane1.fit(1e6, &vcl_cerr))
+  //if (!fit_plane1.fit(1e6, &std::cerr))
       //return false;
 
   //vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();
@@ -160,7 +162,7 @@ bool boxm2_point_util::axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   return true;
 }
 
-vnl_double_3 boxm2_point_util::stddev( vcl_vector<vgl_point_3d<double> > const& v)
+vnl_double_3 boxm2_point_util::stddev( std::vector<vgl_point_3d<double> > const& v)
 {
   unsigned n = v.size();
   assert(n>0);
@@ -183,7 +185,7 @@ vnl_double_3 boxm2_point_util::stddev( vcl_vector<vgl_point_3d<double> > const& 
   }
 
   for (unsigned i = 0; i < 3; ++i)
-    stddev[i] = vcl_sqrt(stddev[i]/(n-1));
+    stddev[i] = std::sqrt(stddev[i]/(n-1));
 
   return stddev;
 }
@@ -193,11 +195,11 @@ vnl_double_3 boxm2_point_util::stddev( vcl_vector<vgl_point_3d<double> > const& 
 // Calc projection error
 // read the correspondence and 3-d points
 //------------------------------------------------------------------------
-void boxm2_point_util::calc_projection_error(vcl_vector<vpgl_perspective_camera<double> >& cams,
-                                             vcl_set<int>&                    bad_cams,
-                                             vcl_vector<bwm_video_corr_sptr>& corrs,
-                                             vcl_map<unsigned,double>&        view_error_map,
-                                             vcl_map<unsigned,unsigned>&      view_count_map )
+void boxm2_point_util::calc_projection_error(std::vector<vpgl_perspective_camera<double> >& cams,
+                                             std::set<int>&                    bad_cams,
+                                             std::vector<bwm_video_corr_sptr>& corrs,
+                                             std::map<unsigned,double>&        view_error_map,
+                                             std::map<unsigned,unsigned>&      view_count_map )
 {
   double err=0;
   double cnt=0;
@@ -207,8 +209,8 @@ void boxm2_point_util::calc_projection_error(vcl_vector<vpgl_perspective_camera<
     vgl_homg_point_3d<double> wpt(corr->world_pt());
 
     //grab number of views that see this point
-    vcl_map<unsigned, vgl_point_2d<double> >& matches = corr->matches();
-    vcl_map<unsigned, vgl_point_2d<double> >::iterator iter;
+    std::map<unsigned, vgl_point_2d<double> >& matches = corr->matches();
+    std::map<unsigned, vgl_point_2d<double> >::iterator iter;
     for (iter = matches.begin(); iter != matches.end(); ++iter)
     {
       unsigned view_number = iter->first;
@@ -217,7 +219,7 @@ void boxm2_point_util::calc_projection_error(vcl_vector<vpgl_perspective_camera<
 
       //calc error for this point
       if (cams[view_number].is_behind_camera(wpt)) {
-        vcl_cout<<"Bad camera "<<view_number<<" is behind world point"<<vcl_endl;
+        std::cout<<"Bad camera "<<view_number<<" is behind world point"<<std::endl;
         bad_cams.insert(view_number);
       }
       else
@@ -225,11 +227,11 @@ void boxm2_point_util::calc_projection_error(vcl_vector<vpgl_perspective_camera<
         //project x,y,z onto image plane, calc rms error
         double u=0,v=0;
         cams[view_number].project(wpt.x(), wpt.y(), wpt.z(),u,v);
-        double rms=vcl_sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
+        double rms=std::sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
         err+=rms;++cnt;
 
         //store view error and counts in a map
-        vcl_map<unsigned,double>::iterator ve_itr = view_error_map.find(view_number);
+        std::map<unsigned,double>::iterator ve_itr = view_error_map.find(view_number);
         if (ve_itr == view_error_map.end())
         {
           view_error_map[view_number]=rms;
@@ -245,26 +247,26 @@ void boxm2_point_util::calc_projection_error(vcl_vector<vpgl_perspective_camera<
   }
 }
 
-void boxm2_point_util::report_error(vcl_map<unsigned,double>&   view_error_map,
-                                    vcl_map<unsigned,unsigned>& view_count_map,
-                                    vcl_set<int>&               bad_cams,
+void boxm2_point_util::report_error(std::map<unsigned,double>&   view_error_map,
+                                    std::map<unsigned,unsigned>& view_count_map,
+                                    std::set<int>&               bad_cams,
                                     float                       filter_thresh)
 {
-  vcl_cout<<"Projection error per camera:"<<vcl_endl;
+  std::cout<<"Projection error per camera:"<<std::endl;
   float error  = 0.0;
   float counts = 0.0;
-  vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(),
+  std::map<unsigned,double>::iterator ve_itr = view_error_map.begin(),
                                      ve_end = view_error_map.end();
   for (;ve_itr!=ve_end;++ve_itr) {
 //#ifdef DEBUG
     unsigned cam=ve_itr->first;
     double   err=ve_itr->second;
     unsigned cnt=view_count_map[cam];
-    vcl_cout<<"   error for camera_"<<cam<<": "<<err/cnt<<vcl_endl;
+    std::cout<<"   error for camera_"<<cam<<": "<<err/cnt<<std::endl;
 //#endif
     double terror = ve_itr->second/view_count_map[ve_itr->first];
     if (terror > filter_thresh) {
-      vcl_cout<<"Bad camera "<<ve_itr->first<<" has error "<<terror<<vcl_endl;
+      std::cout<<"Bad camera "<<ve_itr->first<<" has error "<<terror<<std::endl;
       bad_cams.insert(ve_itr->first);
     }
     else {
@@ -272,5 +274,5 @@ void boxm2_point_util::report_error(vcl_map<unsigned,double>&   view_error_map,
       counts += view_count_map[ve_itr->first];
     }
   }
-  vcl_cout<<"Filtered Avg Projection Error "<<error/(float)counts<<vcl_endl;
+  std::cout<<"Filtered Avg Projection Error "<<error/(float)counts<<std::endl;
 }

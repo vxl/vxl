@@ -28,15 +28,17 @@
 //   Oct.2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
-#include <vcl_cstring.h> // memcpy()
+#include <cstring>
+#include <iosfwd>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_matrix.h> // outerproduct
 #include <vnl/vnl_config.h> // for VNL_CONFIG_CHECK_BOUNDS
 #include <vnl/vnl_error.h>
+#include "vnl/vnl_export.h"
 
 VCL_TEMPLATE_EXPORT template <class T, unsigned int n> class vnl_vector_fixed;
 VCL_TEMPLATE_EXPORT template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
@@ -83,14 +85,14 @@ VCL_TEMPLATE_EXPORT template <class T, unsigned int num_rows, unsigned int num_c
 // vnl_vector_fixed and vnl_vector, however, you will probably get a
 // vnl_vector result, with the corresponding malloc cost.
 template <class T, unsigned int n>
-class vnl_vector_fixed
+class VNL_TEMPLATE_EXPORT vnl_vector_fixed
 {
  protected:
   T data_[n];
 
  public:
   typedef vnl_vector_fixed<T,n> self;
-  typedef unsigned int size_type;
+  typedef size_t size_type;
   // Compile-time accessible attribute to get the dimensionality of the vector.
   enum { SIZE = n };
 
@@ -105,7 +107,7 @@ class vnl_vector_fixed
   //  The dimensions must match.
   vnl_vector_fixed( const vnl_vector_fixed<T,n>& rhs )
   {
-    vcl_memcpy( data_, rhs.data_, sizeof data_ );
+    std::memcpy( data_, rhs.data_, sizeof data_ );
   }
 
   //: Construct a fixed-n-vector copy of \a rhs.
@@ -113,7 +115,7 @@ class vnl_vector_fixed
   vnl_vector_fixed( const vnl_vector<T>& rhs )
   {
     assert( n == rhs.size() );
-    vcl_memcpy( data_, rhs.data_block(), sizeof data_ );
+    std::memcpy( data_, rhs.data_block(), sizeof data_ );
   }
 
   //: Constructs n-vector with all elements initialised to \a v
@@ -123,7 +125,7 @@ class vnl_vector_fixed
   //  The data \e must have enough data. No checks performed.
   explicit vnl_vector_fixed( const T* datablck )
   {
-    vcl_memcpy( data_, datablck, sizeof data_ );
+    std::memcpy( data_, datablck, sizeof data_ );
   }
 
   //: Convenience constructor for 2-D vectors
@@ -138,7 +140,7 @@ class vnl_vector_fixed
       #endif
       return;
     }
-    
+
     data_[0] = x0; data_[1] = x1;
   }
 
@@ -172,7 +174,7 @@ class vnl_vector_fixed
 
   //: Copy operator
   vnl_vector_fixed<T,n>& operator=( const vnl_vector_fixed<T,n>& rhs ) {
-    vcl_memcpy( data_, rhs.data_, sizeof data_ );
+    std::memcpy( data_, rhs.data_, sizeof data_ );
     return *this;
   }
 
@@ -180,25 +182,39 @@ class vnl_vector_fixed
   // The dimensions must match.
   vnl_vector_fixed<T,n>& operator=( const vnl_vector<T>& rhs) {
     assert( n == rhs.size() );
-    vcl_memcpy( data_, rhs.data_block(), sizeof data_ );
+    std::memcpy( data_, rhs.data_block(), sizeof data_ );
     return *this;
   }
 
   //: Length of the vector.
   // This is always \a n.
-  unsigned size() const { return n; }
+  unsigned int size() const { return n; }
 
   //: Put value at given position in vector.
-  void put (unsigned int i, T const& v) { data_[i] = v; }
+  inline void put (unsigned int i, T const& v)
+  {
+#if VNL_CONFIG_CHECK_BOUNDS
+    if (i >= this->size())           // If invalid index specified
+      vnl_error_vector_index("put", i); // Raise exception
+#endif
+    this->data_[i] = v;
+  }
 
   //: Get value at element i
-  T get (unsigned int i) const { return data_[i]; }
+  inline T get (unsigned int i) const
+  {
+#if VNL_CONFIG_CHECK_BOUNDS
+    if (i >= this->size())            // If invalid index specified
+      vnl_error_vector_index("get", i);  // Raise exception
+#endif
+    return this->data_[i];
+  }
 
   //: Set all values to v
   vnl_vector_fixed& fill( T const& v )
   {
     for ( size_type i = 0; i < n; ++i )
-      data_[i] = v;
+      this->data_[i] = v;
     return *this;
   }
 
@@ -244,10 +260,10 @@ class vnl_vector_fixed
   }
 
   //: Return the i-th element
-  T& operator[] ( unsigned int i ) { return data_[i]; }
+  T& operator[] ( const size_t i ) { return data_[i]; }
 
   //: Return the i-th element
-  const T& operator[] ( unsigned int i ) const { return data_[i]; }
+  const T& operator[] ( const size_t i ) const { return data_[i]; }
 
   //: Access the contiguous block storing the elements in the vector.
   //  O(1).
@@ -356,13 +372,17 @@ class vnl_vector_fixed
   }
 
   //: Returns a subvector specified by the start index and length. O(n).
-  vnl_vector<T> extract (unsigned int len, unsigned int start=0) const;
+  vnl_vector<T> extract (unsigned int len, unsigned int start=0) const
+  {
+  assert( start < n && start + len <= n );
+  return vnl_vector<T>( data_ + start, len );
+  }
 
   //: Convert to a vnl_vector.
   vnl_vector<T> as_vector() const { return extract(n); }
 
   //: Replaces elements with index beginning at start, by values of v. O(n).
-  vnl_vector_fixed& update (vnl_vector<T> const&, unsigned int start=0);
+  vnl_vector_fixed& update(vnl_vector<T> const&, unsigned int start=0);
 
   // norms etc
   typedef typename vnl_c_vector<T>::abs_t abs_t;
@@ -456,11 +476,11 @@ class vnl_vector_fixed
 
 
   //: Read from text stream
-  bool read_ascii(vcl_istream& s);
+  bool read_ascii(std::istream& s);
 
   //: Display the vector
   // Output each element separated by a single space.
-  void print( vcl_ostream& s ) const;
+  void print( std::ostream& s ) const;
 
  public:
   // Helper routines for arithmetic. n is the size, and is the
@@ -890,7 +910,7 @@ inline bool operator!=( vnl_vector<T> const& a, vnl_vector_fixed<T,n> const& b )
 // \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline
-vcl_ostream& operator<< ( vcl_ostream& ostr, const vnl_vector_fixed<T,n>& v )
+std::ostream& operator<< ( std::ostream& ostr, const vnl_vector_fixed<T,n>& v )
 {
   v.print( ostr );
   return ostr;
@@ -900,7 +920,7 @@ vcl_ostream& operator<< ( vcl_ostream& ostr, const vnl_vector_fixed<T,n>& v )
 // \relatesalso vnl_vector_fixed
 template<class T, unsigned int n>
 inline
-vcl_istream& operator>> ( vcl_istream& ostr, vnl_vector_fixed<T,n>& v )
+std::istream& operator>> ( std::istream& ostr, vnl_vector_fixed<T,n>& v )
 {
   v.read_ascii( ostr );
   return ostr;

@@ -6,9 +6,11 @@
 //  \brief Create windows into vimt_images.
 //  \author Tim Cootes, Ian Scott
 
+#include <iostream>
+#include <cmath>
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_crop.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Create windowed view of given image
@@ -48,8 +50,8 @@ vimt_image_2d_of<T> vimt_crop(const vimt_image_2d_of<T>& im,
   // Get the lower and upper corner points, rounding down and up respectively.
   pi = bbox_img.min_point();
   qi = bbox_img.max_point();
-  pi.set(vcl_floor(pi.x()), vcl_floor(pi.y()));
-  qi.set(vcl_ceil(qi.x()),  vcl_ceil(qi.y()));
+  pi.set(std::floor(pi.x()), std::floor(pi.y()));
+  qi.set(std::ceil(qi.x()),  std::ceil(qi.y()));
 
   // Restrict to image bounds - perhaps we could use vgl_box intersection instead?
   unsigned ni = im.image().ni();

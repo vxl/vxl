@@ -1,6 +1,8 @@
 //This is brl/bpro/core/brad_pro/processes/brad_estimate_radiance_values_process.cxx
 //:
 // \file
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_histogram.h>
@@ -8,9 +10,8 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
-#include <vcl_string.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 #include <brdb/brdb_value.h>
@@ -28,7 +29,7 @@ bool brad_estimate_radiance_values_process_cons(bprb_func_process& pro)
   //5: downwelled irradiance (W m^-2 um-2) (default = 0 provided)
   //6: atmosphere optical depth (default provided)
 
-  vcl_vector<vcl_string> input_types_(7);
+  std::vector<std::string> input_types_(7);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "float";
   input_types_[2] = "float";
@@ -44,7 +45,7 @@ bool brad_estimate_radiance_values_process_cons(bprb_func_process& pro)
   //0: surface with reflectance = 0 (i.e. airlight value)
   //1: horizontal lambertian surface with reflectance = 1
   //2: sun-facing lambertian surface with reflectance = 1
-  vcl_vector<vcl_string> output_types_(3);
+  std::vector<std::string> output_types_(3);
   output_types_[0] = "float";
   output_types_[1] = "float";
   output_types_[2] = "float";
@@ -68,7 +69,7 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
   //check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs" << std::endl;
     return false;
   }
 
@@ -85,7 +86,7 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
 
   //check inputs validity
   if (!input_img) {
-    vcl_cout << pro.name() <<" :--  image  is null!\n";
+    std::cout << pro.name() <<" :--  image  is null!\n";
     return false;
   }
 
@@ -93,12 +94,12 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
   unsigned nj_ = input_img->nj();
 
   if (input_img->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-     vcl_cerr << "ERROR: brad_estimate_radiance_values: expecting floating point image\n";
+     std::cerr << "ERROR: brad_estimate_radiance_values: expecting floating point image\n";
      return false;
   }
   vil_image_view<float>* image = dynamic_cast<vil_image_view<float>*>(input_img.ptr());
   if (!image) {
-     vcl_cerr << "ERROR: brad_estimate_radiance_values: error casting to float image\n";
+     std::cerr << "ERROR: brad_estimate_radiance_values: error casting to float image\n";
      return false;
   }
   // find min and max values in image
@@ -114,26 +115,26 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
   float frac = 0.0001f;
   double airlight = h.value_with_area_below(frac);
 
-  vcl_cout << "min = " << minval << ", airlight = " << airlight << vcl_endl;
+  std::cout << "min = " << minval << ", airlight = " << airlight << std::endl;
 
   // calculate atmosphere transmittance value
   double sun_el_rads = sun_el * vnl_math::pi_over_180;
   double sat_el_rads = sensor_el * vnl_math::pi_over_180;
 
-  double T_sun = vcl_exp(-optical_depth / vcl_sin(sun_el_rads));
-  double T_view = vcl_exp(-optical_depth / vcl_sin(sat_el_rads));
+  double T_sun = std::exp(-optical_depth / std::sin(sun_el_rads));
+  double T_view = std::exp(-optical_depth / std::sin(sat_el_rads));
 
   double E_sun = solar_irrad/(sun_dist*sun_dist);
 
   // ideal Lambertian reflector, surface normal = [0 0 1]
-  double sun_dot_norm = vcl_sin(sun_el_rads);
+  double sun_dot_norm = std::sin(sun_el_rads);
   double Lsat_horizontal = T_view*(E_sun*sun_dot_norm*T_sun + E_down)/vnl_math::pi + airlight;
   // ideal Lambertian reflector facing the sun
   // compute shape factor L for surface facing direction of sun
-  double L = 1.0 - 0.5*vcl_cos(vnl_math::pi_over_2 - sun_el_rads);
+  double L = 1.0 - 0.5*std::cos(vnl_math::pi_over_2 - sun_el_rads);
   double Lsat_sun_facing = T_view*(E_sun*T_sun + E_down*L)/vnl_math::pi + airlight;
 
-  vcl_cout << "max = " << maxval << " Lhoriz = " << Lsat_horizontal << " Lsun = " << Lsat_sun_facing << vcl_endl;
+  std::cout << "max = " << maxval << " Lhoriz = " << Lsat_horizontal << " Lsun = " << Lsat_sun_facing << std::endl;
 
   pro.set_output_val<float>(0, (float)airlight);
   pro.set_output_val<float>(1, (float)Lsat_horizontal);

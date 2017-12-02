@@ -6,8 +6,10 @@
 // \brief Region centred on line segment between two points
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_region_definer.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Region centred on a line between two points.
 //  Region defined by two points, p0=pts[i0], p1=pts[i1]
@@ -40,7 +42,7 @@ private:
   double wj_;
 
   //: Name of form of shape ("box","ellipse")
-  vcl_string form_;
+  std::string form_;
 
 public:
 
@@ -62,7 +64,7 @@ public:
   //: Replace each point index i with new_index[i]
   //  Allows for re-numbering of the points used.
   //  Returns true if successful.
-  virtual bool replace_index(const vcl_vector<unsigned>& new_index);
+  virtual bool replace_index(const std::vector<unsigned>& new_index);
 
   //: Index of first point defining reference frame
   unsigned i0() const { return i0_; }
@@ -83,36 +85,36 @@ public:
   double wj() const { return wj_; }
 
   //: Name of form of shape ("box","ellipse")
-  vcl_string form() const { return form_; }
+  std::string form() const { return form_; }
 
   //: Returns reference point for region, mid_point(pts[i0],pts[i1])
   virtual vgl_point_2d<double> get_ref_point(
-             const vcl_vector<vgl_point_2d<double> >& pts) const;
+             const std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Defines a region centred on the line between pts[i0] and pts[i1]
   virtual mfpf_region_form set_up(
-             const vcl_vector<vgl_point_2d<double> >& pts);
+             const std::vector<vgl_point_2d<double> >& pts);
 
   //: Defines a region centred on the line between pts[i0] and pts[i1]
   //  The aspect ratio of the region will be the same as that
   //  from the last call to set_up.
   virtual mfpf_region_form get_region(
-                const vcl_vector<vgl_point_2d<double> >& pts) const;
+                const std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Initialise from a stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_region_definer* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

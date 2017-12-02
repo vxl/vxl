@@ -1,5 +1,5 @@
-#include <boxm/basic/boxm_block_vis_graph_iterator.txx>
-#include <boct/boct_tree.txx>
+#include <boxm/basic/boxm_block_vis_graph_iterator.hxx>
+#include <boct/boct_tree.hxx>
 #include <boxm/sample/boxm_edge_tangent_sample.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 

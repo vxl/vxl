@@ -5,8 +5,10 @@
 // \brief Function to trace 4-connected boundary around region in bool image
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Trace 4-connected boundary around region in boolean image
 //  Assumes that (i0,j0) is a boundary point.
@@ -19,7 +21,7 @@
 // to the other side of the blob.
 // \sa bil_trace_8con_boundary
 // \relatesalso vil_image_view
-void bil_trace_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
+void bil_trace_4con_boundary(std::vector<int>& bi, std::vector<int>& bj,
                              const vil_image_view<bool>& image,
                              int i0, int j0);
 

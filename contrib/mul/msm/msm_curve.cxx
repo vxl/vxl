@@ -1,11 +1,13 @@
+#include <iostream>
+#include <sstream>
+#include <iterator>
 #include "msm_curve.h"
 //:
 // \file
 // \brief List of points making a curve - for defining boundaries
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -14,7 +16,6 @@
 #include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_keyword_list.h>
 #include <vul/vul_string.h>
-#include <vcl_iterator.h> // For vcl_back_inserter
 #include <vcl_cassert.h>
 
 // Default Constructor
@@ -24,13 +25,13 @@ msm_curve::msm_curve()
 
 //: Define as range of indices [lo,hi]
 msm_curve::msm_curve(unsigned lo, unsigned hi,
-                     bool open, vcl_string name)
+                     bool open, std::string name)
 {
   set(lo,hi,open,name);
 }
 
-void msm_curve::set(const vcl_vector<unsigned>& index,
-                    bool open, vcl_string name)
+void msm_curve::set(const std::vector<unsigned>& index,
+                    bool open, std::string name)
 {
   index_ = index;
   open_=open;
@@ -39,7 +40,7 @@ void msm_curve::set(const vcl_vector<unsigned>& index,
 
 //: Define as range of indices [lo,hi]
 void msm_curve::set(unsigned lo, unsigned hi,
-                    bool open, vcl_string name)
+                    bool open, std::string name)
 {
   assert(hi>lo);
   index_.resize(1+hi-lo);
@@ -81,19 +82,19 @@ bool msm_curve::operator==(const msm_curve& c) const
 // \verbatim
 // { name: Chin open: true indices: { 0 1 2 3 4 5 6 } }
 // \endverbatim
-void msm_curve::config_from_stream(vcl_istream& is)
+void msm_curve::config_from_stream(std::istream& is)
 {
   // Cycle through stream and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   name_= props.get_optional_property("name","");
   open_=vul_string_to_bool(props.get_optional_property("open","true"));
 
   index_.empty();
-  vcl_istringstream ss1(props.get_required_property("indices"));
-  mbl_parse_int_list(ss1, vcl_back_inserter(index_), unsigned());
+  std::istringstream ss1(props.get_required_property("indices"));
+  mbl_parse_int_list(ss1, std::back_inserter(index_), unsigned());
 
   // Check for unused props
   mbl_read_props_look_for_unused_props(
@@ -104,12 +105,48 @@ void msm_curve::config_from_stream(vcl_istream& is)
 // Method: print
 //=======================================================================
 
-void msm_curve::print_summary(vcl_ostream& os) const
+//: If indices starting at index[i] ascend, write them out as first:last 
+bool write_stepped_list(std::ostream& os, const std::vector<unsigned>& index,
+                          unsigned& i, int step)
+{
+  if (i>=index.size()-2) return false;
+  if (index[i+1]!=index[i]+step) return false;
+  if (index[i+2]!=index[i]+2*step) return false;
+  // i,i+1,i+2 are in sequence.
+  // Find end of sequence
+  unsigned j=i+2;
+  while (j+1<index.size() && (index[j+1]==unsigned(index[j]+step))) ++j;
+  
+  // Sequence runs from index i to index j
+  os<<index[i]<<":"<<index[j]<<" ";
+  i=j+1;
+  return true;
+}
+
+//: Write index values to a stream, using X:Y format for ascending or descending sequences
+inline void write_indices(std::ostream& os, const std::vector<unsigned>& index)
+{
+  unsigned i=0;
+  while (i<index.size())
+  {
+    if (!write_stepped_list(os,index,i,+1))
+    {
+      if (!write_stepped_list(os,index,i,-1))
+      {
+        os<<index[i]<<" ";
+        ++i;
+      }
+    }
+  }
+}
+
+void msm_curve::print_summary(std::ostream& os) const
 {
   os<<" { name: "<<name_<<" open: ";
   if (open_) os<<"true"; else os<<"false";
   os<<" indices: { ";
-  for (unsigned i=0;i<index_.size();++i) os<<index_[i]<<' ';
+  write_indices(os,index_);
+//  for (unsigned i=0;i<index_.size();++i) os<<index_[i]<<' ';
   os<<"} } ";
 }
 
@@ -139,9 +176,9 @@ void msm_curve::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,index_);
       break;
     default:
-      vcl_cerr << "msm_curve::b_read() :\n"
+      std::cerr << "msm_curve::b_read() :\n"
                << "Unexpected version number " << version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -169,14 +206,14 @@ void vsl_b_read(vsl_b_istream& bfs, msm_curve& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_curve& b)
+std::ostream& operator<<(std::ostream& os,const msm_curve& b)
 {
   b.print_summary(os);
   return os;
 }
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_curve& b)
+void vsl_print_summary(std::ostream& os,const msm_curve& b)
 {
  os << b;
 }
@@ -190,14 +227,14 @@ msm_curves::msm_curves()
 
 //: Construct as a single curve
 msm_curves::msm_curves(unsigned lo, unsigned hi,
-                       bool open, vcl_string name)
+                       bool open, std::string name)
 {
   resize(1);
   operator[](0)=msm_curve(lo,hi,open,name);
 }
 
 //: Return index of first curve with given name, or -1
-int msm_curves::which_curve(const vcl_string& name) const
+int msm_curves::which_curve(const std::string& name) const
 {
   for (unsigned i=0;i<size();++i)
     if (operator[](i).name()==name) return i;
@@ -222,33 +259,33 @@ unsigned msm_curves::max_index() const
 //   curve: { name: Nose open: false indices: { 11 : 15 } }
 // }
 // \endverbatim
-void msm_curves::config_from_stream(vcl_istream& is)
+void msm_curves::config_from_stream(std::istream& is)
 {
-  vcl_vector<vcl_string> curve_params;
+  std::vector<std::string> curve_params;
   mbl_parse_keyword_list(is,"curve:",curve_params);
   resize(curve_params.size());
   for (unsigned i=0;i<size();++i)
   {
-    vcl_istringstream ss(curve_params[i]);
+    std::istringstream ss(curve_params[i]);
     operator[](i).config_from_stream(ss);
   }
 }
 
 //: Save to text file
-bool msm_curves::write_text_file(const vcl_string& path)
+bool msm_curves::write_text_file(const std::string& path)
 {
-  vcl_ofstream ofs(path.c_str());
+  std::ofstream ofs(path.c_str());
   if (!ofs) return false;
   ofs<<(*this);
   return true;
 }
 
 //: Read from text file
-bool msm_curves::read_text_file(const vcl_string& path)
+bool msm_curves::read_text_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs) return false;
-  vcl_string label;
+  std::string label;
   ifs>>label;
   if (label!="curves:")
   {
@@ -260,14 +297,14 @@ bool msm_curves::read_text_file(const vcl_string& path)
 }
 
 //: Stream output operator
-vcl_ostream& operator<<(vcl_ostream& os,const msm_curves& c)
+std::ostream& operator<<(std::ostream& os,const msm_curves& c)
 {
   os<<"curves: {\n";
   for (unsigned i=0;i<c.size();++i)
   {
-    os<<"  curve: "<<c[i]<<vcl_endl;
+    os<<"  curve: "<<c[i]<<std::endl;
   }
-  os<<'}'<<vcl_endl;
+  os<<'}'<<std::endl;
   return os;
 }
 
@@ -295,11 +332,30 @@ void vsl_b_read(vsl_b_istream& bfs, msm_curves& c)
         vsl_b_read(bfs,c[i]);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,msm_curves) :\n"
+      std::cerr << "vsl_b_read(bfs,msm_curves) :\n"
                << "Unexpected version number " << version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
 
+//: If curve_data starts with { then parse, else assume it is a filename and load.
+// If curves_data="-" return empty curves
+void msm_curves::parse_or_load(const vcl_string& curves_data)
+{
+  if (curves_data=="-")
+    resize(0);
+  else
+  if (curves_data[0]=='{')
+  {
+    vcl_istringstream crv_ss(curves_data);
+    config_from_stream(crv_ss);
+  }
+  else
+  if (!read_text_file(curves_data))
+  {
+    vcl_string err_msg="Failed to load curves from "+curves_data;
+    throw mbl_exception_parse_error(err_msg);
+  }
+}
 

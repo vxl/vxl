@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( vnl_calc vnl_calc.cxx )
-TARGET_LINK_LIBRARIES( vnl_calc vnl_algo vnl vcl )
+add_executable( vnl_calc vnl_calc.cxx )
+target_link_libraries( vnl_calc ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl )

@@ -1,23 +1,24 @@
 // This is core/vil/algo/tests/test_algo_exp_filter_1d.cxx
+#include <vector>
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_exp_filter_1d.h>
 
 static void test_algo_exp_filter_1d_byte_float()
 {
-  vcl_cout << "*******************************************\n"
+  std::cout << "*******************************************\n"
            << " Testing vil_algo_exp_filter_1d byte-float\n"
            << "*******************************************\n";
 
   const int n = 100;
-  vcl_vector<vxl_byte> src(n);
+  std::vector<vxl_byte> src(n);
   for (int i=0;i<n;++i) src[i]=0;
   src[50] = 100;
 
   double k = 0.25;
-  vcl_vector<float> dest(n);
+  std::vector<float> dest(n);
   vil_exp_filter_1d(&src[0],1,&dest[0],1,n,float(k));
 
   double r0 = 100*(1-k)/(1+k);
@@ -66,17 +67,17 @@ static void test_algo_exp_filter_1d_byte_float()
 
 static void test_algo_exp_filter_1d_float_float()
 {
-  vcl_cout << "********************************************\n"
+  std::cout << "********************************************\n"
            << " Testing vil_algo_exp_filter_1d float-float\n"
            << "********************************************\n";
 
   int n = 100;
-  vcl_vector<float> src(n);
+  std::vector<float> src(n);
   for (int i=0;i<n;++i) src[i]=0;
   src[50] = 100;
 
   double k = 0.25;
-  vcl_vector<float> dest(n);
+  std::vector<float> dest(n);
   vil_exp_filter_1d(&src[0],1,&dest[0],1,n,float(k));
 
   double r0 = 100*(1-k)/(1+k);

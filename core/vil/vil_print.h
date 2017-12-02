@@ -8,14 +8,15 @@
 // \file
 // \author Ian Scott, Tim Cootes.
 
+#include <iomanip>
+#include <iostream>
 #include <vil/vil_image_view.h>
-#include <vcl_iomanip.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: How to print value in vil_print_all(image_view)
 // \relatesalso vil_image_view
 template<class T>
-void vil_print_value(vcl_ostream& s, const T& value, unsigned=0);
+void vil_print_value(std::ostream& s, const T& value, unsigned=0);
 
 // Specializations must be declared before use, so they need to be
 // declared here.
@@ -23,8 +24,8 @@ void vil_print_value(vcl_ostream& s, const T& value, unsigned=0);
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 #define vil_print_declare_specialization( T ) \
-  VCL_DEFINE_SPECIALIZATION \
-  void vil_print_value(vcl_ostream& os, const T & value, unsigned)
+  template <> \
+  void vil_print_value(std::ostream& os, const T & value, unsigned)
 
 vil_print_declare_specialization( bool );
 vil_print_declare_specialization( vxl_byte );
@@ -39,8 +40,8 @@ vil_print_declare_specialization( vxl_uint_64 );
 #endif
 vil_print_declare_specialization( float );
 vil_print_declare_specialization( double );
-vil_print_declare_specialization( vcl_complex<float> );
-vil_print_declare_specialization( vcl_complex<double> );
+vil_print_declare_specialization( std::complex<float> );
+vil_print_declare_specialization( std::complex<double> );
 vil_print_declare_specialization( vil_rgb<vxl_byte> );
 vil_print_declare_specialization( vil_rgb<vxl_sbyte> );
 vil_print_declare_specialization( vil_rgb<vxl_int_16> );
@@ -74,30 +75,30 @@ vil_print_declare_specialization( vil_rgba<double> );
 //: Print all image data to os in a grid (rounds output to int)
 // \relatesalso vil_image_view
 template<class T>
-inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view, unsigned width=0)
+inline void vil_print_all(std::ostream& os,const vil_image_view<T>& view, unsigned width=0)
 {
   if (!width) width = static_cast<unsigned>(os.width());
   os<<view.is_a()<<' '<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj()
     <<" istep: "<<(int)view.istep()<<' '
     <<" jstep: "<<(int)view.jstep()<<' '
-    <<" planestep: "<<(int)view.planestep()<<'\n' << vcl_flush;
+    <<" planestep: "<<(int)view.planestep()<<'\n' << std::flush;
   for (unsigned int p=0;p<view.nplanes();++p)
   {
-    if (view.nplanes()>1) os<<"Plane "<<p<<":\n" << vcl_flush;
+    if (view.nplanes()>1) os<<"Plane "<<p<<":\n" << std::flush;
     for (unsigned int j=0;j<view.nj();++j)
     {
       for (unsigned int i=0;i<view.ni();++i)
       {
-        os<<' '<<vcl_setw(width);
+        os<<' '<<std::setw(width);
         vil_print_value(os,view(i,j,p), width);
       }
-      os<<'\n'<<vcl_flush;
+      os<<'\n'<<std::flush;
     }
   }
 }
 
 //: Print all image data to os in a grid
 // \relatesalso vil_image_view
-void vil_print_all(vcl_ostream& os, vil_image_view_base_sptr const& view);
+void vil_print_all(std::ostream& os, vil_image_view_base_sptr const& view);
 
 #endif // vil_print_h_

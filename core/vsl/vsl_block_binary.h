@@ -14,22 +14,22 @@ void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is, bool specia
 
 //: Write a block of values to a vsl_b_ostream, potentially very efficiently for fundamental types.
 template <class T>
-inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, vcl_size_t nelems);
+inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, std::size_t nelems);
 
 //: Read a block of values from a vsl_b_ostream, potentially very efficiently for fundamental types.
 template <class T>
-inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, vcl_size_t nelems);
+inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, std::size_t nelems);
 
 
 /////////////////////////////////////////////////////////////////////////
 
 // Internal implementation
 template <class T>
-  void vsl_block_binary_write_float_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems);
+  void vsl_block_binary_write_float_impl(vsl_b_ostream &os, const T* begin, std::size_t nelems);
 
 // Internal implementation
 template <class T>
-  void vsl_block_binary_read_float_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems);
+  void vsl_block_binary_read_float_impl(vsl_b_istream &is, T* begin, std::size_t nelems);
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -37,16 +37,16 @@ template <class T>
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the
 // block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const double* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const double* begin, std::size_t nelems)
 {
   vsl_block_binary_write_float_impl(os, begin, nelems);
 }
 
 //: Read a block of doubles from a vsl_b_istream
 // This function is very speed efficient.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, double* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, double* begin, std::size_t nelems)
 {
   vsl_block_binary_read_float_impl(is, begin, nelems);
 }
@@ -57,16 +57,16 @@ inline void vsl_block_binary_read(vsl_b_istream &is, double* begin, vcl_size_t n
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the size of the
 // block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const float* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const float* begin, std::size_t nelems)
 {
   vsl_block_binary_write_float_impl(os, begin, nelems);
 }
 
 //: Read a block of floats from a vsl_b_istream
 // This function is very speed efficient.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, float* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, float* begin, std::size_t nelems)
 {
   vsl_block_binary_read_float_impl(is, begin, nelems);
 }
@@ -75,20 +75,20 @@ inline void vsl_block_binary_read(vsl_b_istream &is, float* begin, vcl_size_t ne
 
 // Internal implementation
 template <class T>
-  void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems);
+  void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, std::size_t nelems);
 
 // Internal implementation
 template <class T>
-  void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems);
-  
+  void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, std::size_t nelems);
+
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of signed ints to a vsl_b_ostream
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const int* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const int* begin, std::size_t nelems)
 {
   vsl_block_binary_write_int_impl(os, begin, nelems);
 }
@@ -97,8 +97,8 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const int* begin, vcl_size
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, int* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, int* begin, std::size_t nelems)
 {
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
@@ -109,8 +109,8 @@ inline void vsl_block_binary_read(vsl_b_istream &is, int* begin, vcl_size_t nele
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned int* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned int* begin, std::size_t nelems)
 {
   vsl_block_binary_write_int_impl(os, begin, nelems);
 }
@@ -119,8 +119,8 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned int* begin,
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, unsigned int* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, unsigned int* begin, std::size_t nelems)
 {
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
@@ -132,8 +132,8 @@ inline void vsl_block_binary_read(vsl_b_istream &is, unsigned int* begin, vcl_si
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const short* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const short* begin, std::size_t nelems)
 {
   vsl_block_binary_write_int_impl(os, begin, nelems);
 }
@@ -142,8 +142,8 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const short* begin, vcl_si
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, short* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, short* begin, std::size_t nelems)
 {
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
@@ -155,8 +155,8 @@ inline void vsl_block_binary_read(vsl_b_istream &is, short* begin, vcl_size_t ne
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned short* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned short* begin, std::size_t nelems)
 {
   vsl_block_binary_write_int_impl(os, begin, nelems);
 }
@@ -165,8 +165,8 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned short* begi
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, unsigned short* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, unsigned short* begin, std::size_t nelems)
 {
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
@@ -178,8 +178,8 @@ inline void vsl_block_binary_read(vsl_b_istream &is, unsigned short* begin, vcl_
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const long* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const long* begin, std::size_t nelems)
 {
   vsl_block_binary_write_int_impl(os, begin, nelems);
 }
@@ -188,8 +188,8 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const long* begin, vcl_siz
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, long* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, long* begin, std::size_t nelems)
 {
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
@@ -201,8 +201,8 @@ inline void vsl_block_binary_read(vsl_b_istream &is, long* begin, vcl_size_t nel
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned long* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned long* begin, std::size_t nelems)
 {
   vsl_block_binary_write_int_impl(os, begin, nelems);
 }
@@ -211,8 +211,8 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned long* begin
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, unsigned long* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, unsigned long* begin, std::size_t nelems)
 {
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
@@ -224,8 +224,8 @@ inline void vsl_block_binary_read(vsl_b_istream &is, unsigned long* begin, vcl_s
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const vxl_int_64* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const vxl_int_64* begin, std::size_t nelems)
 {
   vsl_block_binary_write_int_impl(os, begin, nelems);
 }
@@ -234,8 +234,8 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const vxl_int_64* begin, v
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, vxl_int_64* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, vxl_int_64* begin, std::size_t nelems)
 {
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
@@ -247,8 +247,8 @@ inline void vsl_block_binary_read(vsl_b_istream &is, vxl_int_64* begin, vcl_size
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const vxl_uint_64* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const vxl_uint_64* begin, std::size_t nelems)
 {
   vsl_block_binary_write_int_impl(os, begin, nelems);
 }
@@ -257,8 +257,8 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const vxl_uint_64* begin, 
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, vxl_uint_64* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, vxl_uint_64* begin, std::size_t nelems)
 {
   vsl_block_binary_read_int_impl(is, begin, nelems);
 }
@@ -268,26 +268,26 @@ inline void vsl_block_binary_read(vsl_b_istream &is, vxl_uint_64* begin, vcl_siz
 
 // Internal implementation
 template <class T>
-  void vsl_block_binary_write_byte_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems);
+  void vsl_block_binary_write_byte_impl(vsl_b_ostream &os, const T* begin, std::size_t nelems);
 
 // Internal implementation
 template <class T>
-  void vsl_block_binary_read_byte_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems);
+  void vsl_block_binary_read_byte_impl(vsl_b_istream &is, T* begin, std::size_t nelems);
 
   /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of unsigned chars to a vsl_b_ostream
 // This function is very speed and space efficient.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned char* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned char* begin, std::size_t nelems)
 {
   vsl_block_binary_write_byte_impl(os, begin, nelems);
 }
 
 //: Read a block of unsigned chars from a vsl_b_istream
 // This function is very speed and space efficient.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, unsigned char* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, unsigned char* begin, std::size_t nelems)
 {
   vsl_block_binary_read_byte_impl(is, begin, nelems);
 }
@@ -296,16 +296,16 @@ inline void vsl_block_binary_read(vsl_b_istream &is, unsigned char* begin, vcl_s
 
 //: Write a block of signed chars to a vsl_b_ostream
 // This function is very speed and space efficient.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_write(vsl_b_ostream &os, const signed char* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_write(vsl_b_ostream &os, const signed char* begin, std::size_t nelems)
 {
   vsl_block_binary_write_byte_impl(os, begin, nelems);
 }
 
 //: Read a block of signed chars from a vsl_b_istream
 // This function is very speed and space efficient.
-VCL_DEFINE_SPECIALIZATION
-inline void vsl_block_binary_read(vsl_b_istream &is, signed char* begin, vcl_size_t nelems)
+template <>
+inline void vsl_block_binary_read(vsl_b_istream &is, signed char* begin, std::size_t nelems)
 {
   vsl_block_binary_read_byte_impl(is, begin, nelems);
 }
@@ -317,7 +317,7 @@ inline void vsl_block_binary_read(vsl_b_istream &is, signed char* begin, vcl_siz
 // If you want to output a block of fundamental data types very efficiently,
 // then just #include <vsl_binary_explicit_io.h>
 template <class T>
-inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, vcl_size_t nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, std::size_t nelems)
 {
   vsl_b_write(os, false); // Error check that this is a specialised version
   while (nelems--)
@@ -328,7 +328,7 @@ inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, vcl_size_t
 // If you want to output a block of fundamental data types very efficiently,
 // then just #include <vsl_binary_explicit_io.h>
 template <class T>
-inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, vcl_size_t nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, std::size_t nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, false);
   if (!is) return;

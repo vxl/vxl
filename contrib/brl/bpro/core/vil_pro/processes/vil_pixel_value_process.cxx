@@ -1,11 +1,12 @@
 // This is brl/bpro/core/vil_pro/processes/vil_pixel_value_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief Compute mean value in an image
 
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_rgb.h>
 
 
@@ -13,12 +14,12 @@
 bool vil_pixel_value_process_cons(bprb_func_process& pro)
 {
   //this process takes 3 inputs and returns 1 output
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("int");
   input_types.push_back("int");
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float");  // pixel value
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);
@@ -29,7 +30,7 @@ bool vil_pixel_value_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()<3) {
-    vcl_cout << "vil_pixel_value_process: The input number should be 3" << vcl_endl;
+    std::cout << "vil_pixel_value_process: The input number should be 3" << std::endl;
     return false;
   }
 
@@ -98,8 +99,8 @@ bool vil_pixel_value_process(bprb_func_process& pro)
     return true;
   }
   //otherwise it's messed up, return a null pointer
-  vcl_cerr<<"Failed to recognize input image type\n";
-  
+  std::cerr<<"Failed to recognize input image type\n";
+
   pro.set_output_val<float>(0, -1.0f);
   return true;
 }

@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <bbgm/bbgm_image_of.h>
 #include <bsta/bsta_attributes.h>
@@ -59,12 +60,12 @@ static void test_measure()
   vul_timer time;
   update(model,img,updater);
   double up_time = time.real() / 1000.0;
-  vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
+  std::cout << " updated in " << up_time << " sec" <<std::endl;
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i) {
       obs_mix_gauss_type& om = model(i, j);
       gauss_type g =  om.distribution(0);
-      vcl_cout << "weight:"<< om.weight(0) << " mean(" << g.mean() << ") dcvar(" << g.diag_covar() <<")\n";
+      std::cout << "weight:"<< om.weight(0) << " mean(" << g.mean() << ") dcvar(" << g.diag_covar() <<")\n";
     }
   bsta_probability_functor<mix_gauss_type> functor_;
   vil_image_view<float> result;
@@ -73,8 +74,8 @@ static void test_measure()
   for (unsigned j = 0; j<nj; ++j)
   {
     for (unsigned i = 0; i<ni; ++i)
-      vcl_cout << result(i,j) << ' ';
-    vcl_cout << vcl_endl;
+      std::cout << result(i,j) << ' ';
+    std::cout << std::endl;
   }
   TEST_NEAR("measure probability", 1.60547e-005, result(0,0), 1.60547e-008);
 }

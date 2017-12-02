@@ -35,7 +35,7 @@
 
 int main(int argc, char ** argv)
 {
-     
+
   // initialize vgui
   // Ming: force option "--mfc-use-gl" to use gl
   //       so that it is MUCH faster if running on a
@@ -47,7 +47,7 @@ int main(int argc, char ** argv)
   for (int i=0; i<argc; i++)
     my_argv[i] = argv[i];
   my_argv[argc] = new char[13];
-  vcl_strcpy(my_argv[argc], "--mfc-use-gl");
+  std::strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);
   //delete[] my_argv[argc];
   //delete[] my_argv;
@@ -55,11 +55,11 @@ int main(int argc, char ** argv)
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
 #endif
-    vul_arg<vcl_string> scene_file("-scene", "scene filename", vul_arg<vcl_string>::is_required);
+    vul_arg<std::string> scene_file("-scene", "scene filename", vul_arg<std::string>::is_required);
     vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
     vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
-    vul_arg<vcl_string> identifier("-ident", "identifier of the appearance data to be displayed, e.g. illum_bin_0", "");
-    vul_arg<vcl_string> device_name("-device", "GPU or cpu", "");
+    vul_arg<std::string> identifier("-ident", "identifier of the appearance data to be displayed, e.g. illum_bin_0", "");
+    vul_arg<std::string> device_name("-device", "GPU or cpu", "");
     vul_arg<unsigned>   device_id("-device_idx", "GPU index for multi GPU set up", 0);
 
     // need this on some toolkit implementations to get the window up.
@@ -70,15 +70,15 @@ int main(int argc, char ** argv)
     bocl_manager_child &mgr =bocl_manager_child::instance();
     if(device_name()=="gpu" || device_name()=="")
     {
-        vcl_vector<bocl_device_sptr> devices;
+        std::vector<bocl_device_sptr> devices;
         for(unsigned i = 0; i < mgr.gpus_.size(); i++)
           devices.push_back( mgr.gpus_[i] );
         if(device_id() >= devices.size()){
-            vcl_cout << "GPU index out of bounds" << vcl_endl;
+            std::cout << "GPU index out of bounds" << std::endl;
             return -1;
         }
-        vcl_string device_ident = devices[device_id()]->device_identifier();
-        if(device_ident.find("NVIDIA") != vcl_string::npos)
+        std::string device_ident = devices[device_id()]->device_identifier();
+        if(device_ident.find("NVIDIA") != std::string::npos)
           device = devices[device_id()];
         else
           return -1;
@@ -86,17 +86,17 @@ int main(int argc, char ** argv)
     else if(device_name()=="cpu")
     {
     if (device_id() >= mgr.cpus_.size()){
-      vcl_cout << "CPU index out of bounds" << vcl_endl;
+      std::cout << "CPU index out of bounds" << std::endl;
       return -1;
     }
     device = mgr.cpus_[device_id()];
 
     }else
     {
-        vcl_cout<<"unknow device "<<vcl_endl;
+        std::cout<<"unknow device "<<std::endl;
         return -1;
     }
-    vcl_cout << "Using: " << *device;
+    std::cout << "Using: " << *device;
     boxm2_scene_sptr scene = new boxm2_scene(scene_file());
 
     //create initial cam
@@ -109,7 +109,7 @@ int main(int argc, char ** argv)
 
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);
-    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device); 
+    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device);
 
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
       boxm2_ocl_render_tableau_new bit_tableau;
@@ -124,8 +124,8 @@ int main(int argc, char ** argv)
 
     //set vgui off
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-    vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
-         
+    std::cout << "GLEW is supported= " << bGLEW << std::endl;
+
     return vgui::run();
 
 }

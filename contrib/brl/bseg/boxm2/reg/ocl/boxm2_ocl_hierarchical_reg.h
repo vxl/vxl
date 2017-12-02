@@ -1,4 +1,4 @@
-//PUBLIC RELEASE APPROVAL FROM AFRL 
+//PUBLIC RELEASE APPROVAL FROM AFRL
 //Case Number: RY-14-0126
 //PA Approval Number: 88ABW-2014-1143
 #ifndef boxm2_ocl_hierarchical_reg_h_
@@ -25,7 +25,7 @@ class boxm2_ocl_hierarchical_reg : public boxm2_ocl_reg_mutual_info
  public:
   //: Constructor. The source image is mapped to the destination frame by dt. nbins is the number of histogram bins used to compute entropies.
   boxm2_ocl_hierarchical_reg( boxm2_opencl_cache_sptr  & cache,
-                               boxm2_scene_sptr sceneA, 
+                               boxm2_scene_sptr sceneA,
                                boxm2_scene_sptr sceneB,
                                bocl_device_sptr device, int nbins,
                                bool do_vary_scale);
@@ -38,17 +38,17 @@ class boxm2_ocl_hierarchical_reg : public boxm2_ocl_reg_mutual_info
   vnl_vector<double> max_sample();
 
  // void convert_to_xform(vnl_vector<double> & x);
- 
+
 protected:
   bool generate_samples(int samplenum = 100);
   int numsamples_;
   vnl_vector<double> mu_;
   vnl_vector<double> cov_;
-  vcl_vector< vnl_vector<double> > samples_;
-  vcl_vector< vnl_vector<double> > parent_samples_;
-  vcl_vector< double > mis;
-  vcl_vector<vcl_pair<int, double> > pdf_;
-  vcl_vector<vcl_pair<int, double> > cdf_;
+  std::vector< vnl_vector<double> > samples_;
+  std::vector< vnl_vector<double> > parent_samples_;
+  std::vector< double > mis;
+  std::vector<std::pair<int, double> > pdf_;
+  std::vector<std::pair<int, double> > cdf_;
 
   bool do_vary_scale_;
 

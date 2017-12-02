@@ -22,10 +22,12 @@
 //       0 - + - 0 0 0
 //       0 - - 0 0 0 0
 //
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <iostream>
+#include <iosfwd>
+#include <map>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_map.h>
 
 class brip_rect_mask
 {
@@ -43,7 +45,7 @@ class brip_rect_mask
   static void init();
 
   //: string name of angle id
-  static vcl_string name(ang_id aid);
+  static std::string name(ang_id aid);
 
   //: floating point angle from id
   static float angle(ang_id aid);
@@ -52,14 +54,14 @@ class brip_rect_mask
   static float ang_diff(ang_id aid0,ang_id aid1);
 
   //: Intersect '+' symbols of two masks of the same type
-  static bool intersect(mask_id mid, 
-                        ang_id aid0, 
+  static bool intersect(mask_id mid,
+                        ang_id aid0,
                         unsigned short i0, unsigned short j0,
                         ang_id aid1,
                         unsigned short i1, unsigned short j1);
   //: Intersect full domain of two masks of the same type (0, ni, 0-nj)
-  static bool intersect_domain(mask_id mid, 
-                               ang_id aid0, 
+  static bool intersect_domain(mask_id mid,
+                               ang_id aid0,
                                unsigned short i0, unsigned short j0,
                                ang_id aid1,
                                unsigned short i1, unsigned short j1);
@@ -94,16 +96,16 @@ class brip_rect_mask
   void print(ang_id aid);
  protected:
   bool find_ait(ang_id aid,
-                vcl_map<ang_id, vnl_matrix<int> >::const_iterator& ait) const;
+                std::map<ang_id, vnl_matrix<int> >::const_iterator& ait) const;
   brip_rect_mask();
   vnl_matrix<int> current_mask_;
   int ru_, rv_;
-  vcl_map<ang_id, vnl_matrix<int> > masks_;
-  static vcl_map<ang_id, vcl_string > names_;
-  static vcl_map<ang_id, float > angles_;
+  std::map<ang_id, vnl_matrix<int> > masks_;
+  static std::map<ang_id, std::string > names_;
+  static std::map<ang_id, float > angles_;
   static bool is_init_;
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, brip_rect_mask const& m);
+std::ostream& operator<<(std::ostream& s, brip_rect_mask const& m);
 
 #endif // brip_rect_mask_h_

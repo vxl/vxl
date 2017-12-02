@@ -9,10 +9,10 @@
 // \file
 // \brief Contains some stuff for testing smart ptr IO
 
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 VBL_SMART_PTR_INSTANTIATE(impl);
 
-#include <vbl/io/vbl_io_smart_ptr.txx>
+#include <vbl/io/vbl_io_smart_ptr.hxx>
 VBL_IO_SMART_PTR_INSTANTIATE(impl);
 
 
@@ -28,21 +28,21 @@ int impl::reftotal = 0;
 impl::impl(int nn) : n(nn)
 {
   reftotal++;
-  vcl_cout <<  "impl ctor : this=" << (void*)this << vcl_endl;
+  std::cout <<  "impl ctor : this=" << (void*)this << std::endl;
 }
 
 impl::impl() : n(7)
 {
   reftotal++;
-  vcl_cout <<  "impl ctor : this=" << (void*)this << vcl_endl;
+  std::cout <<  "impl ctor : this=" << (void*)this << std::endl;
 }
 
 impl::~impl() {
   reftotal--;
-  vcl_cout <<  "impl dtor : this=" << (void*)this << vcl_endl;
+  std::cout <<  "impl dtor : this=" << (void*)this << std::endl;
 }
 
-void impl::Print (vcl_ostream &str)
+void impl::Print (std::ostream &str)
 {
   str << "impl(" << n << ") ";
 }
@@ -50,9 +50,9 @@ void impl::Print (vcl_ostream &str)
 void impl::checkcount ()
 {
   if (reftotal == 0)
-    vcl_cout << "impl : PASSED\n";
+    std::cout << "impl : PASSED\n";
   else
-    vcl_cout << "impl : FAILED : count = " << reftotal << vcl_endl;
+    std::cout << "impl : FAILED : count = " << reftotal << std::endl;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const impl &p)
@@ -76,14 +76,14 @@ void vsl_b_read(vsl_b_istream& is, impl &p)
     vsl_b_read(is, p.n);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, impl&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
-void vsl_print_summary(vcl_ostream& os, const impl &p)
+void vsl_print_summary(std::ostream& os, const impl &p)
 {
   os << p.n;
 }
@@ -99,12 +99,12 @@ void vsl_b_read(vsl_b_istream& is, impl * &p)
     vsl_b_read(is, *p);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const impl *p)
 {
-  if (p==0)
+  if (p==VXL_NULLPTR)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
@@ -115,9 +115,9 @@ void vsl_b_write(vsl_b_ostream& os, const impl *p)
   }
 }
 
-void vsl_print_summary(vcl_ostream& os, const impl *p)
+void vsl_print_summary(std::ostream& os, const impl *p)
 {
-  if (p==0)
+  if (p==VXL_NULLPTR)
     os << "NULL PTR";
   else
   {

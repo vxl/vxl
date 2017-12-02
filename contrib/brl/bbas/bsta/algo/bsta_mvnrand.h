@@ -44,11 +44,11 @@ public:
 
   bsta_mvnrand(const bsta_gaussian_full<T,n>& gauss):
     mean_(gauss.mean()){this->factor_covar(gauss.covar());}
-    
+
 
   bsta_mvnrand(const vector_type& mean, const covar_type& covar):
     mean_(mean){this->factor_covar(covar);}
-    
+
   //get copy of mean
   vector_type mean() const {return this->mean_;}
 
@@ -62,7 +62,7 @@ public:
   //reset covar (L)
   void set_covar(const covar_type& covar)
     {this->factor_covar(covar);}
-  
+
   //will return samples in 2D matrix of size nsamples x n
   void operator()(const unsigned nsamples, vnl_matrix<T>& samples)
   {
@@ -76,7 +76,7 @@ public:
         samples[r][c] = this->mean_[c] + static_cast<T>(row[c]);
     }
   }
-  
+
 private:
   void factor_covar(const covar_type& covar)
   {
@@ -107,14 +107,14 @@ public:
   bsta_mvnrand(){}
 
   bsta_mvnrand(const bsta_gaussian_indep<T,n>& gauss):mean_(gauss.mean()){
-    covar_type covar = gauss.covar(); 
+    covar_type covar = gauss.covar();
     for(unsigned i = 0; i < n; ++i){
-      diag_std_[i] = vcl_sqrt(covar[i]);}
+      diag_std_[i] = std::sqrt(covar[i]);}
   }
-   
+
   bsta_mvnrand(const vector_type& mean, const covar_type& covar):mean_(mean){
     for(unsigned i = 0; i < n; ++i){
-      diag_std_[i] = vcl_sqrt(covar[i]);}
+      diag_std_[i] = std::sqrt(covar[i]);}
   }
 
   ~bsta_mvnrand(){}
@@ -133,7 +133,7 @@ public:
       for(unsigned c = 0; c < n; ++c)
         samples[r][c] = this->mean_[c] + vrand_.normal()*this->diag_std_[c];
   }
-    
+
 private:
   vector_type mean_;
   covar_type diag_std_;
@@ -151,7 +151,7 @@ public:
   bsta_mvnrand(){}
 
   bsta_mvnrand(const bsta_gaussian_sphere<T, n>& gauss):
-    mean_(gauss.mean()), std_(vcl_sqrt(gauss.var())){}
+    mean_(gauss.mean()), std_(std::sqrt(gauss.var())){}
 
   bsta_mvnrand(const vector_type& mean, const covar_type& std):
     mean_(mean), std_(std){}
@@ -172,7 +172,7 @@ public:
       for(unsigned c = 0; c < n; ++c)
         samples[r][c] = this->mean_[c] + vrand_.normal()*this->std_;
   }
-  
+
 private:
   vector_type mean_;
   covar_type std_;

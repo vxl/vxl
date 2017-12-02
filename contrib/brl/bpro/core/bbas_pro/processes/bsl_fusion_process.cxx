@@ -1,4 +1,6 @@
 // This is brl/bpro/core/bbas_pro/processes/bsl_fusion_process.cxx
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -6,9 +8,8 @@
 
 #include <bprb/bprb_parameters.h>
 
-#include <vcl_string.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 #include <brdb/brdb_value.h>
@@ -19,13 +20,13 @@
 bool bsl_fusion_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(3);
+  std::vector<std::string> input_types_(3);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vil_image_view_base_sptr";
   input_types_[2] = "float"; // atomicity - same for all pixels
 
   //output
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) &&
@@ -37,7 +38,7 @@ bool bsl_fusion_process(bprb_func_process& pro)
   // check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << ": Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << ": Invalid inputs" << std::endl;
     return false;
   }
 
@@ -52,7 +53,7 @@ bool bsl_fusion_process(bprb_func_process& pro)
   unsigned nj = inp_img1.nj();
   unsigned np = inp_img1.nplanes();
   if (ni != inp_img2.ni() || nj != inp_img2.nj() || np != inp_img2.nplanes()) {
-    vcl_cout << "In bsl_fusion_process: mismatch in input image dimensions!\n";
+    std::cout << "In bsl_fusion_process: mismatch in input image dimensions!\n";
     return false;
   }
 

@@ -4,7 +4,7 @@
 #endif
 
 #include "vil1_warp.h"
-#include "vil1_warp.txx"
+#include "vil1_warp.hxx"
 
 #include <vcl_cassert.h>
 

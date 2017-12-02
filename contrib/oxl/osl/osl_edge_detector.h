@@ -68,7 +68,7 @@ struct osl_edge_detector : public osl_edge_detector_params
   ~osl_edge_detector();
 
   void detect_edges(vil1_image const &image,
-                    vcl_list<osl_edge*> *edges,
+                    std::list<osl_edge*> *edges,
                     bool maintain_topology = true);
 
  private:
@@ -77,13 +77,13 @@ struct osl_edge_detector : public osl_edge_detector_params
   void Set_thresholds();
   void Fill_holes();
   void Thin_edges();
-  void Follow_curves(vcl_list<osl_edge*>*);
-  void Follow(int,int,vcl_list<int>*,vcl_list<int>*,vcl_list<float>*,int);
+  void Follow_curves(std::list<osl_edge*>*);
+  void Follow(int,int,std::list<int>*,std::list<int>*,std::list<float>*,int);
 
   void Find_junctions();
   void Find_junction_clusters();
-  void Follow_junctions(int,int,vcl_list<int>*,vcl_list<int>*);
-  void Cluster_centre(vcl_list<int>&,vcl_list<int>&,int&,int&);
+  void Follow_junctions(int,int,std::list<int>*,std::list<int>*);
+  void Cluster_centre(std::list<int>&,std::list<int>&,int&,int&);
 
  private:
   unsigned int width_;  // The smoothing kernel width
@@ -106,8 +106,8 @@ struct osl_edge_detector : public osl_edge_detector_params
   int **dist_;         // Distance transform image
   int **junction_;     // Image true only at junctions ends, and relevant lists
   int **jx_,**jy_;     // Images of (x,y) coordinates of nearest cluster centre
-  vcl_list<int> *xjunc_,*yjunc_;
-  vcl_list<osl_Vertex*> *vlist_;   // The junction cluster centres
+  std::list<int> *xjunc_,*yjunc_;
+  std::list<osl_Vertex*> *vlist_;   // The junction cluster centres
 
   float jval_;        // A dummy junction intensity step value
   int chain_no_;      // A dummy variable used in following

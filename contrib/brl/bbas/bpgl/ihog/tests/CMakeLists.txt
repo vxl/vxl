@@ -1,12 +1,12 @@
 # vpgl/ihog/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( ihog_test_all
+add_executable( ihog_test_all
   test_driver.cxx
   test_minimizer.cxx
 )
 
-TARGET_LINK_LIBRARIES( ihog_test_all ihog testlib vul vnl vgl vil)
-ADD_TEST( ihog_test_minimizer         ihog_test_all test_minimizer )
+target_link_libraries( ihog_test_all ihog ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil)
+add_test( NAME ihog_test_minimizer COMMAND $<TARGET_FILE:ihog_test_all> test_minimizer )
 
-ADD_EXECUTABLE( ihog_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( ihog_test_include ihog)
+add_executable( ihog_test_include test_include.cxx )
+target_link_libraries( ihog_test_include ihog)

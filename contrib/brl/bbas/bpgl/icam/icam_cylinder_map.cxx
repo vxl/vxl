@@ -7,13 +7,12 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 bool icam_cylinder_map::closest_camera(vgl_ray_3d<double> const& cyl_ray,
-				       vgl_point_3d<double> const& p,
-				       unsigned& cam_index,
-				       double& u, double& v) const{
+                                       vgl_point_3d<double> const& p,
+                                       unsigned& cam_index,
+                                       double& u, double& v) const{
   cam_index = 0;
   vgl_point_3d<double> co = cyl_ray.origin();
   vgl_vector_3d<double> dir = cyl_ray.direction();
-  double x = co.x(), y = co.y(), z = co.z();
   int imin = -1;
   unsigned i = 0;
   double dmin = vnl_numeric_traits<double>::maxval;
@@ -71,7 +70,7 @@ bool icam_cylinder_map::map_cylinder(){
     for(unsigned ith = 0; ith<n_theta_; ++ith){
       //determine point on cylinder
       double th = ith*dth;
-      double x = radius_*vcl_cos(th), y = radius_*vcl_sin(th);
+      double x = radius_*std::cos(th), y = radius_*std::sin(th);
       x+=ox; y+=oy;
       vgl_point_3d<double> pc(x, y, z);
       vgl_vector_3d<double> dir = pc-orig;
@@ -80,23 +79,23 @@ bool icam_cylinder_map::map_cylinder(){
       unsigned cam_index = 0;
       double u=0.0, v=0.0;
       if(!closest_camera(ray, pc, cam_index, u, v))
-	continue;
+        continue;
       int ui = static_cast<int>(u), vi = static_cast<int>(v);
       for(int p = 0; p<3; ++p)
-	cyl_map_(ith, iz, p) = images_[cam_index](ui, vi, p);
+        cyl_map_(ith, iz, p) = images_[cam_index](ui, vi, p);
     }
-      vcl_cout << '.';
+      std::cout << '.';
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
   return true;
 }
 
 bool icam_cylinder_map::
 render_map(vil_image_view<vxl_byte>const& backgnd,
-	   vpgl_camera_double_sptr const& cam,
-	   double theta, vil_image_view<vxl_byte>& img,
-	   double scale,
-	   float back_r, float back_g, float back_b)
+           vpgl_camera_double_sptr const& cam,
+           double theta, vil_image_view<vxl_byte>& img,
+           double scale,
+           float back_r, float back_g, float back_b)
 {
   double twopi = 2.0*vnl_math::pi;
   //requires perspective camera with calibration matrix
@@ -115,74 +114,82 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
     nj = static_cast<unsigned>(2.0*pv*scale);
   img.set_size(ni, nj, 3);
   bool use_backgnd = backgnd.ni()>0;
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i)
-      if(use_backgnd)
-	for(unsigned p = 0; p<3; ++p)
-	img(i, j, p)= backgnd(i,j,p);
-      else{
-	img(i,j,0) = back_r;
-	img(i,j,1) = back_g;
-	img(i,j,2) = back_b;
-      }
+  for (unsigned int j = 0; j<nj; ++j)
+    for (unsigned int i = 0; i<ni; ++i)
+      if (use_backgnd)
+        for (unsigned int p = 0; p<3; ++p)
+          img(i, j, p)= backgnd(i,j,p);
+      else
+        {
+        img(i,j,0) = back_r;
+        img(i,j,1) = back_g;
+        img(i,j,2) = back_b;
+        }
   //scan the cylinder
   double height = upper_height_ + lower_height_;
   double ox=origin_.x(), oy=origin_.y(), oz = origin_.z();
   double dz = height/nz_;
   double dth = twopi/n_theta_;
-  for(int iz = 0; iz<nz_; ++iz){
+  for (unsigned int iz = 0; iz<nz_; ++iz)
+    {
     // determine ray origin
     double z = -lower_height_ + dz*iz + oz;
     vgl_point_3d<double> orig(ox, oy, z);
-    for(unsigned ith = 0; ith<n_theta_; ++ith){
+    for (unsigned ith = 0; ith<n_theta_; ++ith)
+      {
       //determine point on cylinder
       double th = ith*dth;
       double tth = th +theta;
       if(tth>=twopi)
-	tth -= twopi;
+        tth -= twopi;
       if(tth<0.0)
-	tth += twopi;
+        tth += twopi;
       int kth = static_cast<int>(tth/dth);
-      double x = radius_*vcl_cos(th), y = radius_*vcl_sin(th);
+      double x = radius_*std::cos(th), y = radius_*std::sin(th);
       x+=ox; y+=oy;
       vgl_point_3d<double> pc(x, y, z);
       vgl_vector_3d<double> dir = pc-orig;
       dir = normalize(dir);
       double dp = dot_product(dir, pvec);
       if(dp>0.0)
-	continue;
+        continue;
       double ud, vd;
-      cam->project(x, y, z, ud, vd);      
+      cam->project(x, y, z, ud, vd);
       ud -= pu; vd -= pv;
       ud *= scale;       vd *= scale;
       ud += pu*scale; vd += pv*scale;
-      if(ud<0.0||vd<0.0||ud>=ni||vd>=nj)
-	continue;
+      if (ud<0.0||vd<0.0||ud>=ni||vd>=nj)
+        continue;
       unsigned u = static_cast<unsigned>(ud+0.5), v = static_cast<unsigned>(vd+0.5);
       // interpolate in a 2x2 neighborhood
-      for(unsigned p = 0; p<3; ++p){
-	double sum = 0.0;
-	sum += cyl_map_(kth, iz, p);
-	double w = 1.0;
-	if((kth+1)<n_theta_){
-	  sum += 0.25*cyl_map_(kth+1, iz,p);
-	  w+=0.25;
-	}
-	if((kth-1)>=0){
-	  sum += 0.25*cyl_map_(kth-1, iz,p);
-	  w+=0.25;
-	}
-	if((iz+1)<nz_){
-	  sum += 0.25*cyl_map_(kth, iz+1,p);
-	  w+=0.25;
-	}
-	if((iz-1)>=0){
-	  sum += 0.25*cyl_map_(kth, iz-1,p);
-	  w+=0.25;
-	}
-	img(u, v, p) = static_cast<vxl_byte>(sum/w); 
+      for(unsigned int p = 0; p<3; ++p)
+        {
+        double sum = 0.0;
+        sum += cyl_map_(kth, iz, p);
+        double w = 1.0;
+        if((kth+1)<n_theta_)
+          {
+          sum += 0.25*cyl_map_(kth+1, iz,p);
+          w+=0.25;
+          }
+        if((kth-1)>=0)
+          {
+          sum += 0.25*cyl_map_(kth-1, iz,p);
+          w+=0.25;
+          }
+        if(iz < (nz_-1))
+          {
+          sum += 0.25*cyl_map_(kth, iz+1,p);
+          w+=0.25;
+          }
+        if(iz != 0)
+          {
+          sum += 0.25*cyl_map_(kth, iz-1,p);
+          w+=0.25;
+          }
+        img(u, v, p) = static_cast<vxl_byte>(sum/w);
+        }
       }
     }
-  }
  return true;
 }

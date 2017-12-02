@@ -10,19 +10,22 @@
 // \author Ian Scott (Manchester ISBE)
 // \date   6 Dec 2001
 
+#include <iosfwd>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_c_vector.h>
+#include "vnl/vnl_export.h"
+
+VCL_TEMPLATE_EXPORT template <class T> class vnl_sym_matrix;
 
 //: stores a symmetric matrix as just the diagonal and lower triangular part
 //  vnl_sym_matrix stores a symmetric matrix for time and space efficiency.
 //  Specifically, only the diagonal and lower triangular elements are stored.
 
-VCL_TEMPLATE_EXPORT
 template <class T>
-class vnl_sym_matrix
+class VNL_TEMPLATE_EXPORT vnl_sym_matrix
 {
  public:
   //: Construct an empty symmetric matrix.
@@ -49,45 +52,43 @@ class vnl_sym_matrix
   //: Copy constructor
   inline vnl_sym_matrix(vnl_sym_matrix<T> const& that);
 
-  ~vnl_sym_matrix()
-  { vnl_c_vector<T>::deallocate(data_, size());
-    vnl_c_vector<T>::deallocate(index_, nn_);}
+  ~vnl_sym_matrix();
 
   vnl_sym_matrix<T>& operator=(vnl_sym_matrix<T> const& that);
 
   // Operations----------------------------------------------------------------
 
   //: In-place arithmetic operations
-  vnl_sym_matrix<T>& operator*=(T v) { vnl_c_vector<T>::scale(data_, data_, size(), v); return *this; }
+  inline vnl_sym_matrix<T>& operator*=(T v) { vnl_c_vector<T>::scale(data_, data_, size(), v); return *this; }
   //: In-place arithmetic operations
-  vnl_sym_matrix<T>& operator/=(T v) { vnl_c_vector<T>::scale(data_, data_, size(), ((T)1)/v); return *this; }
+  inline vnl_sym_matrix<T>& operator/=(T v) { vnl_c_vector<T>::scale(data_, data_, size(), ((T)1)/v); return *this; }
 
 
   // Data Access---------------------------------------------------------------
 
-  T operator () (unsigned i, unsigned j) const {
+  inline T operator () (unsigned i, unsigned j) const {
     return (i > j) ? index_[i][j] : index_[j][i];
   }
 
-  T& operator () (unsigned i, unsigned j) {
+  inline T& operator () (unsigned i, unsigned j) {
     return (i > j) ? index_[i][j] : index_[j][i];
   }
 
   //: Access a half-row of data.
   // Only the first i+1 values from this pointer are valid.
-  const T* operator [] (unsigned i) const {
+  inline const T* operator [] (unsigned i) const {
     assert (i < nn_);
     return index_[i];
   }
 
   //: fast access, however i >= j
-  T fast (unsigned i, unsigned j) const {
+  inline T fast (unsigned i, unsigned j) const {
     assert (i >= j);
     return index_[i][j];
   }
 
   //: fast access, however i >= j
-  T& fast (unsigned i, unsigned j) {
+  inline T& fast (unsigned i, unsigned j) {
     assert (i >= j);
     return index_[i][j];
   }
@@ -101,10 +102,46 @@ class vnl_sym_matrix
   inline const_iterator begin() const { return data_; }
   inline const_iterator end() const { return data_ + size(); }
 
-  unsigned long size() const { return nn_ * (nn_ + 1) / 2; }
-  unsigned rows() const { return nn_; }
-  unsigned cols() const { return nn_; }
-  unsigned columns() const { return nn_; }
+  //: Return the total number of elements stored by the matrix.
+  // Since vnl_sym_matrix only stores the diagonal and lower
+  // triangular elements and must be square, this returns
+  // n*(n+1)/2, where n == rows() == cols().
+  inline unsigned int size() const { return nn_ * (nn_ + 1) / 2; }
+
+  //: Return the number of rows.
+  inline unsigned int rows() const { return nn_; }
+
+  //: Return the number of columns.
+  // A synonym for columns().
+  inline unsigned int cols() const { return nn_; }
+
+  //: Return the number of columns.
+  // A synonym for cols().
+  inline unsigned int columns() const { return nn_; }
+
+  //: set element
+  inline void put (unsigned r, unsigned c, T const& v)
+  {
+#if VNL_CONFIG_CHECK_BOUNDS
+    if (r >= this->nn_)                // If invalid size specified
+      vnl_error_matrix_row_index("put", r); // Raise exception
+    if (c >= this->nn_)                // If invalid size specified
+      vnl_error_matrix_col_index("put", c); // Raise exception
+#endif
+    (r > c) ? index_[r][c] = v : index_[c][r] = v;
+  }
+
+  //: get element
+  inline T get (unsigned r, unsigned c) const
+  {
+#if VNL_CONFIG_CHECK_BOUNDS
+    if (r >= this->nn_)                // If invalid size specified
+      vnl_error_matrix_row_index("get", r); // Raise exception
+    if (c >= this->nn_)                // If invalid size specified
+      vnl_error_matrix_col_index("get", c); // Raise exception
+#endif
+    return (r > c) ? index_[r][c] : index_[c][r];
+  }
 
   // Need this until we add a vnl_sym_matrix ctor to vnl_matrix;
   inline vnl_matrix<T> as_matrix() const;
@@ -132,10 +169,7 @@ class vnl_sym_matrix
 
  protected:
 //: Set up the index array
-  inline void setup_index() {
-    T * data = data_;
-    for (unsigned i=0; i< nn_; ++i) { index_[i] = data; data += i+1; }
-  }
+  void setup_index();
 
   T* data_;
   T** index_;
@@ -144,7 +178,7 @@ class vnl_sym_matrix
 
 //:
 // \relatesalso vnl_sym_matrix
-template <class T> vcl_ostream& operator<< (vcl_ostream&, vnl_sym_matrix<T> const&);
+template <class T> VNL_TEMPLATE_EXPORT std::ostream& operator<< (std::ostream&, vnl_sym_matrix<T> const&);
 
 
 template <class T>
@@ -211,8 +245,8 @@ inline void vnl_sym_matrix<T>::set_size(int n)
 {
   if (n == (int)nn_) return;
 
-  vnl_c_vector<T>::deallocate(data_, size());
-  vnl_c_vector<T>::deallocate(index_, nn_);
+  vnl_c_vector<T>::deallocate(data_, static_cast<std::size_t>(size()));
+  vnl_c_vector<T>::deallocate(index_, static_cast<std::size_t>( nn_));
 
   nn_ = n;
   data_ = vnl_c_vector<T>::allocate_T(size());
@@ -221,20 +255,19 @@ inline void vnl_sym_matrix<T>::set_size(int n)
   setup_index();
 }
 
-template <class T>
+template <class T> VNL_TEMPLATE_EXPORT
 bool operator==(const vnl_sym_matrix<T> &a, const vnl_sym_matrix<T> &b);
 
-template <class T>
+template <class T> VNL_TEMPLATE_EXPORT
 bool operator==(const vnl_sym_matrix<T> &a, const vnl_matrix<T> &b);
 
-template <class T>
+template <class T> VNL_TEMPLATE_EXPORT
 bool operator==(const vnl_matrix<T> &a, const vnl_sym_matrix<T> &b);
 
 //: Swap the contents of a and b.
 // \relatesalso vnl_sym_matrix
-template <class T>
+template <class T> VNL_TEMPLATE_EXPORT
 void swap(vnl_sym_matrix<T> &a, vnl_sym_matrix<T> &b)
 { a.swap(b); }
-
 
 #endif // vnl_sym_matrix_h_

@@ -21,7 +21,8 @@
 //   Peter Vanroose 21 May  2009: istream operator>> re-implemented
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d, vgl_point_3d
 #include <vgl/vgl_vector_3d.h>
@@ -148,7 +149,7 @@ bool is_ideal(vgl_plane_3d<T> const&, T tol=(T)0) { return false; }
 //: Write to stream
 // \relatesalso vgl_plane_3d
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, const vgl_plane_3d<T>& p);
+std::ostream& operator<<(std::ostream& s, const vgl_plane_3d<T>& p);
 
 //: Read in four plane parameters from stream
 //  Either just reads four blank-separated numbers,
@@ -157,8 +158,8 @@ vcl_ostream& operator<<(vcl_ostream& s, const vgl_plane_3d<T>& p);
 //  or reads a formatted line equation "123x+321y-456z+777=0"
 // \relatesalso vgl_plane_3d
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p);
+std::istream& operator>>(std::istream& is, vgl_plane_3d<T>& p);
 
-#define VGL_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_plane_3d.txx first"
+#define VGL_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_plane_3d.hxx first"
 
 #endif // vgl_plane_3d_h

@@ -22,12 +22,13 @@
 //   23 Oct 2002 Peter Vanroose - using fixed 3x4 matrices throughout
 //   25 May 2003 J.L.M. converted to pure vgl infrastructure and made templated
 //   25 May 2003 J.L.M. made the interface more consistent with plane projective transformations
-//   27 Jun 2003 Peter Vanroose - moved doc from .txx to .h
+//   27 Jun 2003 Peter Vanroose - moved doc from .hxx to .h
 //   27 Jun 2003 Peter Vanroose - implemented 3 NYI methods (get, set, set_rows)
 //   24 Oct 2010 Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_algo_fwd.h> // for vnl_svd
 #include <vnl/vnl_matrix.h>
@@ -52,11 +53,11 @@ class vgl_p_matrix
 
   //: Constructor. Set up a canonical P matrix.
   vgl_p_matrix();
-  //: Construct by loading from vcl_istream.
+  //: Construct by loading from std::istream.
   // \code
   //   vgl_p_matrix P(cin);
   // \endcode
-  vgl_p_matrix(vcl_istream&);
+  vgl_p_matrix(std::istream&);
   //: Construct from row-stored C-array of 12 elements
   vgl_p_matrix(const T *c_matrix);
   //: Construct from 3x4 matrix
@@ -77,8 +78,8 @@ class vgl_p_matrix
   // vgl_p_matrix P = vgl_p_matrix::read("file.P");
   // \endcode
   static vgl_p_matrix read(const char* filename);
-  //: Load from vcl_istream
-  static vgl_p_matrix read(vcl_istream&);
+  //: Load from std::istream
+  static vgl_p_matrix read(std::istream&);
 
   // Operations----------------------------------------------------------------
 
@@ -192,7 +193,7 @@ class vgl_p_matrix
   // \code
   // P.read_ascii("file.P");
   // \endcode
-  bool read_ascii(vcl_istream& f);
+  bool read_ascii(std::istream& f);
 
   // Data Members--------------------------------------------------------------
  protected:
@@ -205,10 +206,10 @@ template <class T>
 vgl_p_matrix<T> operator*(const vgl_p_matrix<T>& P, const vgl_h_matrix_3d<T>& H);
 
 //: Print p on an ostream
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, const vgl_p_matrix<T>& p);
+template <class T> std::ostream& operator<<(std::ostream& s, const vgl_p_matrix<T>& p);
 //: Load p from an ascii istream
-template <class T> vcl_istream& operator>>(vcl_istream& i, vgl_p_matrix<T>& p);
+template <class T> std::istream& operator>>(std::istream& i, vgl_p_matrix<T>& p);
 
-#define VGL_P_MATRIX_INSTANTIATE(T) extern "please include vgl/algo/vgl_p_matrix.txx first"
+#define VGL_P_MATRIX_INSTANTIATE(T) extern "please include vgl/algo/vgl_p_matrix.hxx first"
 
 #endif // vgl_p_matrix_h_

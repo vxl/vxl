@@ -1,6 +1,6 @@
 # vxl/vil1/CMakeLists.txt
 
-SET( vil1_sources
+set( vil1_sources
   vil1_fwd.h
 
   # basic things
@@ -12,8 +12,8 @@ SET( vil1_sources
   vil1_byte_swap.cxx                         vil1_byte_swap.h
   vil1_16bit.cxx                             vil1_16bit.h
   vil1_32bit.cxx                             vil1_32bit.h
-  vil1_rgb.txx                               vil1_rgb.h
-  vil1_rgba.txx                              vil1_rgba.h
+  vil1_rgb.hxx                               vil1_rgb.h
+  vil1_rgba.hxx                              vil1_rgba.h
   vil1_rgb_byte.h
   vil1_property.h
 
@@ -29,8 +29,8 @@ SET( vil1_sources
   vil1_file_image.cxx                        vil1_file_image.h
   vil1_memory_image.cxx                      vil1_memory_image.h
   vil1_image_proxy.cxx                       vil1_image_proxy.h
-  vil1_memory_image_of.txx                   vil1_memory_image_of.h
-  vil1_memory_image_of_format.txx
+  vil1_memory_image_of.hxx                   vil1_memory_image_of.h
+  vil1_memory_image_of_format.hxx
 
   # image adaptors
   vil1_memory_image_impl.cxx                 vil1_memory_image_impl.h
@@ -73,21 +73,21 @@ SET( vil1_sources
   vil1_crop.cxx                              vil1_crop.h
   vil1_skip.cxx                              vil1_skip.h
   vil1_resample.cxx                          vil1_resample.h
-  vil1_warp.txx  vil1_warp.cxx               vil1_warp.h
+  vil1_warp.hxx  vil1_warp.cxx               vil1_warp.h
   vil1_flipud.cxx                            vil1_flipud.h
   vil1_flip_components.cxx                   vil1_flip_components.h
   vil1_smooth.cxx                            vil1_smooth.h
   vil1_clamp.cxx                             vil1_clamp.h
   vil1_scale_intensities.cxx                 vil1_scale_intensities.h
-  vil1_convolve.txx                          vil1_convolve.h
-  vil1_convolve_1d.txx
-  vil1_convolve_1d_x.txx
-  vil1_convolve_1d_y.txx
-  vil1_convolve_simple.txx                   vil1_convolve_simple.h
-  vil1_interpolate.txx                       vil1_interpolate.h
-  vil1_ncc.txx                               vil1_ncc.h
-  vil1_resample_image.txx                    vil1_resample_image.h
-  vil1_ssd.txx                               vil1_ssd.h
+  vil1_convolve.hxx                          vil1_convolve.h
+  vil1_convolve_1d.hxx
+  vil1_convolve_1d_x.hxx
+  vil1_convolve_1d_y.hxx
+  vil1_convolve_simple.hxx                   vil1_convolve_simple.h
+  vil1_interpolate.hxx                       vil1_interpolate.h
+  vil1_ncc.hxx                               vil1_ncc.h
+  vil1_resample_image.hxx                    vil1_resample_image.h
+  vil1_ssd.hxx                               vil1_ssd.h
 
   # Stuff
   vil1_pyramid.cxx                           vil1_pyramid.h
@@ -105,42 +105,40 @@ SET( vil1_sources
 # only, of course). We can then control the dependencies of vil1 to
 # link nsl before this vil1_network.
 #
-SET( vil1_network_sources
+set( vil1_network_sources
   # load image from URL
   vil1_stream_url.cxx                        vil1_stream_url.h
 )
 
 # vil1_stream_url not working on Apple MacOSX
-IF(NOT APPLE)
+if(NOT APPLE)
 # vil1_stream_url in separate library on Solaris
-  IF(SOLARIS)
-    ADD_LIBRARY(vil1_network ${vil1_network_sources})
-    INSTALL_TARGETS(lib/ vil1_network)
-    INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil1 ${vil1_network_sources})
-  ELSE(SOLARIS)
-    SET(vil1_sources ${vil1_sources} ${vil1_network_sources})
-  ENDIF(SOLARIS)
-ENDIF(NOT APPLE)
+  if(SOLARIS)
+    vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil1_network LIBRARY_SOURCES ${vil1_network_sources})
+  else()
+    set(vil1_sources ${vil1_sources} ${vil1_network_sources})
+  endif()
+endif()
 
 # vil1_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
-INCLUDE(${VXL_CMAKE_DIR}/FindJPEG.cmake)
-INCLUDE(${VXL_CMAKE_DIR}/FindPNG.cmake)
-INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+include(${VXL_CMAKE_DIR}/FindJPEG.cmake)
+include(${VXL_CMAKE_DIR}/FindPNG.cmake)
+include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 
-IF(PNG_FOUND)
-  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
-  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG=1 )
-  SET( vil1_sources ${vil1_sources}
+if(PNG_FOUND)
+  include_directories( ${PNG_INCLUDE_DIR})
+  add_definitions( ${PNG_DEFINITIONS}  -DHAS_PNG=1 )
+  set( vil1_sources ${vil1_sources}
     file_formats/vil1_png.cxx                  file_formats/vil1_png.h
   )
-ELSE(PNG_FOUND)
-  ADD_DEFINITIONS( -DHAS_PNG=0 )
-ENDIF(PNG_FOUND)
+else()
+  add_definitions( -DHAS_PNG=0 )
+endif()
 
-IF(JPEG_FOUND)
-  INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG=1 )
-  SET( vil1_sources ${vil1_sources}
+if(JPEG_FOUND)
+  include_directories( ${JPEG_INCLUDE_DIR} )
+  add_definitions( ${JPEG_DEFINITIONS} -DHAS_JPEG=1 )
+  set( vil1_sources ${vil1_sources}
     vil1_jpeglib.h
     file_formats/vil1_jpeg.cxx                  file_formats/vil1_jpeg.h
     file_formats/vil1_jpeg_source_mgr.cxx       file_formats/vil1_jpeg_source_mgr.h
@@ -148,54 +146,52 @@ IF(JPEG_FOUND)
     file_formats/vil1_jpeg_destination_mgr.cxx  file_formats/vil1_jpeg_destination_mgr.h
     file_formats/vil1_jpeg_compressor.cxx       file_formats/vil1_jpeg_compressor.h
   )
-ELSE(JPEG_FOUND)
-  ADD_DEFINITIONS( -DHAS_JPEG=0 )
-ENDIF(JPEG_FOUND)
+else()
+  add_definitions( -DHAS_JPEG=0 )
+endif()
 
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF=1 )
-  SET( vil1_sources ${vil1_sources}
+if(TIFF_FOUND)
+  include_directories( ${TIFF_INCLUDE_DIR} )
+  add_definitions( ${TIFF_DEFINITIONS} -DHAS_TIFF=1 )
+  set( vil1_sources ${vil1_sources}
     file_formats/vil1_tiff.cxx                  file_formats/vil1_tiff.h
   )
-ELSE(TIFF_FOUND)
-  ADD_DEFINITIONS( -DHAS_TIFF=0 )
-ENDIF(TIFF_FOUND)
+else()
+  add_definitions( -DHAS_TIFF=0 )
+endif()
 
-AUX_SOURCE_DIRECTORY(Templates vil1_sources)
+aux_source_directory(Templates vil1_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(vil1_image_as.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(vil1_image_as.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif()
 
-ADD_LIBRARY(vil1 ${vil1_sources})
-INSTALL_TARGETS(/lib vil1)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil1 ${vil1_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil1 LIBRARY_SOURCES ${vil1_sources})
 
-IF(JPEG_FOUND)
-  TARGET_LINK_LIBRARIES( vil1 ${JPEG_LIBRARIES} )
-ENDIF(JPEG_FOUND)
-IF(TIFF_FOUND)
-  TARGET_LINK_LIBRARIES( vil1 ${TIFF_LIBRARIES} )
-ENDIF(TIFF_FOUND)
-IF(PNG_FOUND)
-  TARGET_LINK_LIBRARIES( vil1 ${PNG_LIBRARIES} )
-ENDIF(PNG_FOUND)
+if(JPEG_FOUND)
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${JPEG_LIBRARIES} )
+endif()
+if(TIFF_FOUND)
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${TIFF_LIBRARIES} )
+endif()
+if(PNG_FOUND)
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${PNG_LIBRARIES} )
+endif()
 
-TARGET_LINK_LIBRARIES( vil1 vcl )
+target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vcl )
 
-IF (NOT UNIX)
-  TARGET_LINK_LIBRARIES( vil1 ws2_32 )
-ENDIF (NOT UNIX)
+if(NOT UNIX)
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 ws2_32 )
+endif()
 
-IF(SOLARIS)
-  TARGET_LINK_LIBRARIES( vil1 nsl vil1_network socket )
-ENDIF(SOLARIS)
+if(SOLARIS)
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 nsl ${VXL_LIB_PREFIX}vil1_network socket )
+endif()
 
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
-IF( BUILD_TESTING )
+endif()
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

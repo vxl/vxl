@@ -1,12 +1,13 @@
 // This is mul/mbl/tests/test_cluster_tree.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_cluster_tree.h>
 
-#include <mbl/mbl_clusters.txx>
-#include <mbl/mbl_cluster_tree.txx>
+#include <mbl/mbl_clusters.hxx>
+#include <mbl/mbl_cluster_tree.hxx>
 
 //: Distance class
 class mbl_scalar_distance
@@ -21,7 +22,7 @@ MBL_CLUSTER_TREE_INSTANTIATE(double,mbl_scalar_distance);
 
 void test_cluster_tree()
 {
-  vcl_cout << "*******************\n"
+  std::cout << "*******************\n"
            << " Testing mbl_cluster_tree\n"
            << "*******************\n";
 
@@ -29,24 +30,24 @@ void test_cluster_tree()
 
   unsigned n=15;
   unsigned nL = 3;
-  vcl_vector<double> max_r(nL);
+  std::vector<double> max_r(nL);
   double r0 = 2.001;
-  for (unsigned L=0;L<nL;++L) 
+  for (unsigned L=0;L<nL;++L)
   {
     max_r[L]=r0;  r0*=2.0;
-    vcl_cout<<"L="<<L<<" max_r: "<<max_r[L]<<vcl_endl;
+    std::cout<<"L="<<L<<" max_r: "<<max_r[L]<<std::endl;
   }
 
   clusters.set_max_r(max_r);
 
-  vcl_vector<double> data(n);
+  std::vector<double> data(n);
   for (unsigned i=0;i<n;++i) data[i]=i;
 
   clusters.set_data(data);
 
-  clusters.print_summary(vcl_cout);
-  vcl_cout<<"Tree:"<<vcl_endl;
-  clusters.print_tree(vcl_cout);
+  clusters.print_summary(std::cout);
+  std::cout<<"Tree:"<<std::endl;
+  clusters.print_tree(std::cout);
 
 
   double d;

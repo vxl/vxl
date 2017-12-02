@@ -1,12 +1,13 @@
+#include <iostream>
+#include <vector>
+#include <string>
 #include <rsdl/rsdl_borgefors.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <testlib/testlib_test.h>
 
 static inline
-void TEST_NEAR_vec(vcl_string msg,
+void TEST_NEAR_vec(std::string msg,
                    const vnl_vector_fixed<double,2>& v1,
                    const vnl_vector_fixed<double,2>& v2,
                    double tol)
@@ -19,13 +20,13 @@ static void test_borgefors()
 {
   //Create one vertical and one horizontal lines to be stored
   int range = 250;
-  vcl_vector<vnl_vector_fixed<double,2> > data;
+  std::vector<vnl_vector_fixed<double,2> > data;
   for (int i = -range ; i< range; i++)
     data.push_back(vnl_vector_fixed<double,2>(i,0.0));
   for (int j = -range; j< range; j++)
     data.push_back(vnl_vector_fixed<double,2>(0.0,j));
 
-  vcl_cout << "Tests a borgefors map without a mask.\n";
+  std::cout << "Tests a borgefors map without a mask.\n";
   rsdl_borgefors<vnl_vector_fixed<double,2> >
     bg_map1(-range+50, -range+50, 2*range-100, 2*range-100, data.begin(), data.end());
   TEST("in_map (out of boundary)", bg_map1.in_map(-range+49,0), false);

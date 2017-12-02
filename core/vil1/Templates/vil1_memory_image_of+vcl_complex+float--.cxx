@@ -1,4 +1,5 @@
-#include <vil1/vil1_memory_image_of.txx>
-#include <vcl_complex.h>
+#include <complex>
+#include <vil1/vil1_memory_image_of.hxx>
+#include <vcl_compiler.h>
 
-VIL1_MEMORY_IMAGE_OF_INSTANTIATE(vcl_complex<float>);
+VIL1_MEMORY_IMAGE_OF_INSTANTIATE(std::complex<float>);

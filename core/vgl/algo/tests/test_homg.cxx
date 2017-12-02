@@ -3,9 +3,10 @@
 // \author Peter Vanroose, ESAT, KULeuven.
 // \date  4 July, 2001
 
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_homg_point_1d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -56,7 +57,7 @@ static void test_homg_point_1d()
   m = centre(p1,p2);
   vgl_homg_point_1d<float> cc(3); // constructor with one argument
   TEST("centre", m, cc);
-  vcl_vector<vgl_homg_point_1d<float> > v1;
+  std::vector<vgl_homg_point_1d<float> > v1;
   v1.push_back(p1); v1.push_back(p2); v1.push_back(m);
   cc = centre(v1); // assignment
   TEST("centre", m, cc);
@@ -102,7 +103,7 @@ static void test_homg_point_1d()
   r = vgl_distance(p1,p2);
   TEST("distance", r, 2);
 
-  vcl_stringstream is; is << "4.25 -5 7e1";
+  std::stringstream is; is << "4.25 -5 7e1";
   vgl_homg_point_1d<double> p; is >> p;
   TEST("istream", p, vgl_homg_point_1d<double>(4.25,-5));
 }
@@ -148,11 +149,11 @@ static void test_homg_point_2d()
   m = centre(p1,p3); // assignment
   vgl_homg_point_2d<int> cc(5,3,1);
   TEST("centre", m, cc);
-  vcl_vector<vgl_homg_point_2d<int> > v1;
+  std::vector<vgl_homg_point_2d<int> > v1;
   v1.push_back(p1); v1.push_back(p2); v1.push_back(m);
   m = centre(v1);
   TEST("centre", m, p2);
-  vcl_vector<vgl_homg_point_2d<int> > v2;
+  std::vector<vgl_homg_point_2d<int> > v2;
   v2.push_back(p2); v2.push_back(p3); v2.push_back(cc); v2.push_back(p2);
   m = centre(v2);
   TEST("centre", m, cc);
@@ -223,7 +224,7 @@ static void test_homg_point_2d()
   r = vgl_homg_operators_2d<double>::abs_angle(l3,l2);
   TEST_NEAR("vgl_homg_operators_2d<double>::abs_angle", r, pi_4, 1e-12);
 
-  vcl_stringstream is; is << "4.25 -5 7e1";
+  std::stringstream is; is << "4.25 -5 7e1";
   vgl_homg_point_2d<float> p; is >> p;
   TEST("istream", p, vgl_homg_point_2d<float>(4.25f,-5,70));
 }
@@ -293,11 +294,11 @@ static void test_homg_point_3d()
   m = centre(p1,p3); // assignment
   vgl_homg_point_3d<int> cc(5,3,5,1);
   TEST("centre", m, cc);
-  vcl_vector<vgl_homg_point_3d<int> > v1;
+  std::vector<vgl_homg_point_3d<int> > v1;
   v1.push_back(p1); v1.push_back(p2); v1.push_back(m);
   m = centre(v1);
   TEST("centre", m, p2);
-  vcl_vector<vgl_homg_point_3d<int> > v2;
+  std::vector<vgl_homg_point_3d<int> > v2;
   v2.push_back(p2); v2.push_back(p3); v2.push_back(cc); v2.push_back(p2);
   m = centre(v2);
   TEST("centre", m, cc);
@@ -343,7 +344,7 @@ static void test_homg_point_3d()
   r = vgl_homg_operators_3d<double>::perp_dist_squared(q1,pl3);
   TEST_NEAR("vgl_homg_operators_3d<double>::perp_dist_squared", r, 49, 1e-12);
 
-  vcl_stringstream is; is << "4 -5 6 0";
+  std::stringstream is; is << "4 -5 6 0";
   vgl_homg_point_3d<int> p; is >> p;
   TEST("istream", p, vgl_homg_point_3d<int>(4,-5,6,0));
 }
@@ -388,7 +389,7 @@ static void test_homg_line_2d()
   l2.normalize();
   TEST("normalize", l2.a() == 0.6 && l2.b() == 0.8 && l2.c() == 0.0, true);
 
-  vcl_vector<vgl_homg_line_2d<double> > lst;
+  std::vector<vgl_homg_line_2d<double> > lst;
   lst.push_back(l1); lst.push_back(l2); lst.push_back(l3);
   p = vgl_homg_operators_2d<double>::lines_to_point(lst);
   TEST("lines_to_point", p, vgl_homg_point_2d<double>(0,0,1));
@@ -423,7 +424,7 @@ static void test_homg_line_2d()
   pp = vgl_homg_operators_2d<double>::closest_point(li,p);
   TEST("closest_point to point on line", pp, p);
 
-  vcl_stringstream is; is << "4.25 -5 7e1";
+  std::stringstream is; is << "4.25 -5 7e1";
   vgl_homg_line_2d<float> h_l; is >> h_l;
   TEST("istream", h_l, vgl_homg_line_2d<float>(4.25f,-5,70));
 }
@@ -442,9 +443,9 @@ static void test_homg_line_3d()
   TEST("matrix*plane", l, vgl_homg_plane_3d<double>(1,6,21,14));
 
   vgl_homg_point_3d<double> p4(1,0,3);
-  TEST_NEAR("vgl_distance(line,point)", vgl_distance(l3,p4), vcl_sqrt(72.0/11), 1e-9);
-  TEST_NEAR("vgl_distance(line,point)", vgl_distance(l2,p4), vcl_sqrt(14.0/3), 1e-9);
-  TEST_NEAR("vgl_distance(point,line)", vgl_distance(p4,l2), vcl_sqrt(14.0/3), 1e-9);
+  TEST_NEAR("vgl_distance(line,point)", vgl_distance(l3,p4), std::sqrt(72.0/11), 1e-9);
+  TEST_NEAR("vgl_distance(line,point)", vgl_distance(l2,p4), std::sqrt(14.0/3), 1e-9);
+  TEST_NEAR("vgl_distance(point,line)", vgl_distance(p4,l2), std::sqrt(14.0/3), 1e-9);
 
   TEST("ideal", l1.point_finite().ideal(), false);
   TEST("ideal", l3.point_finite().ideal(), false);
@@ -496,12 +497,12 @@ static void test_homg_plane_3d()
   TEST("join", pl, pp);
 
   vgl_homg_plane_3d<double> pln(pl.normal(),p1);
-  TEST("Plane constructed with normal",pln,pl); 
+  TEST("Plane constructed with normal",pln,pl);
 
-  TEST_NEAR("vgl_distance(plane,point)", vgl_distance(pl2,p2), vcl_sqrt(4.5/13), 1e-9);
-  TEST_NEAR("vgl_distance(point,plane)", vgl_distance(p2,pl2), vcl_sqrt(4.5/13), 1e-9);
+  TEST_NEAR("vgl_distance(plane,point)", vgl_distance(pl2,p2), std::sqrt(4.5/13), 1e-9);
+  TEST_NEAR("vgl_distance(point,plane)", vgl_distance(p2,pl2), std::sqrt(4.5/13), 1e-9);
 
-  vcl_vector<vgl_homg_plane_3d<double> > lst;
+  std::vector<vgl_homg_plane_3d<double> > lst;
   lst.push_back(pl1); lst.push_back(pl2); lst.push_back(pl3);
   vgl_homg_point_3d<double> p = vgl_homg_operators_3d<double>::planes_to_point(lst);
   TEST_NEAR("planes_to_point", (p-vgl_homg_point_3d<double>(-31,5,4,62)).sqr_length(), 0.0, 1e-12);
@@ -521,7 +522,7 @@ static void test_homg_plane_3d()
   pl2.normalize();
   TEST("normalize", pl2.a() == -0.36 && pl2.b() == -0.48 && pl2.c() == 0.8 && pl2.d() == 0.6, true);
 
-  vcl_stringstream is; is << "4.25 -5 7e1 5e-1";
+  std::stringstream is; is << "4.25 -5 7e1 5e-1";
   vgl_homg_plane_3d<double> l; is >> l;
   TEST("istream", l, vgl_homg_plane_3d<double>(4.25f,-5,70,0.5));
 }
@@ -559,7 +560,7 @@ inline double cross_ratio(vgl_homg_line_2d<int>const& l1, vgl_homg_line_2d<int>c
 
 static void test_1d_basis()
 {
-  vcl_cout << "  TEST OF PROJECTIVE BASIS WITH 1D POINTS\n";
+  std::cout << "  TEST OF PROJECTIVE BASIS WITH 1D POINTS\n";
 
   vgl_homg_point_1d<float> p11(0.f), p12(1.f), p13(1.f,0.f);
   vgl_1d_basis<vgl_homg_point_1d<float> >  b_1_p(p11,p12,p13);
@@ -574,7 +575,7 @@ static void test_1d_basis()
   p = b_1_p.project(vgl_homg_point_1d<float>(-3.f));
   TEST("point at -3", p, vgl_homg_point_1d<double>(-3.0));
 
-  vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
+  std::cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
 
   vgl_homg_point_2d<int> p21(0,1), p22(1,3), p23(2,5); // On the line 2x-y+w=0
   vgl_1d_basis<vgl_homg_point_2d<int> >  b_2_p(p21,p22,p23);
@@ -587,7 +588,7 @@ static void test_1d_basis()
   p = b_2_p.project(vgl_homg_point_2d<int>(1,2,0));
   TEST("point at -1", p, vgl_homg_point_1d<double>(-1.0));
 
-  vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 3D LINE\n";
+  std::cout << "  TEST OF PROJECTIVE BASIS ON A 3D LINE\n";
 
   vgl_homg_point_3d<double> p31(0,1,3), p32(1,3,2), p33(2,5,1); // On the line 2x-y+w=0,x+z=3w
   vgl_1d_basis<vgl_homg_point_3d<double> >  b_3_p(p31,p32,p33);
@@ -600,7 +601,7 @@ static void test_1d_basis()
   p = b_3_p.project(vgl_homg_point_3d<double>(1,2,-1,0));
   TEST("point at -1", p, vgl_homg_point_1d<double>(-1.0));
 
-  vcl_cout << "  TEST OF PROJECTIVE BASIS OF CONCURRENT 2D LINES\n";
+  std::cout << "  TEST OF PROJECTIVE BASIS OF CONCURRENT 2D LINES\n";
 
   vgl_homg_line_2d<int> l21(0,1,1), l22(1,3,1), l23(2,5,1); // Through the point (2,-1,1)
   vgl_1d_basis<vgl_homg_line_2d<int> >  b_2_l(l21,l22,l23);
@@ -616,25 +617,25 @@ static void test_1d_basis()
 
 static void test_homg()
 {
-  vcl_cout << "-- Testing vgl_homg_point_1d --\n";
+  std::cout << "-- Testing vgl_homg_point_1d --\n";
   test_homg_point_1d();
-  vcl_cout << "-- Testing vgl_homg_point_2d --\n";
+  std::cout << "-- Testing vgl_homg_point_2d --\n";
   test_homg_point_2d();
-  vcl_cout << "-- Testing vgl_homg_point_3d --\n";
+  std::cout << "-- Testing vgl_homg_point_3d --\n";
   test_homg_point_3d();
-  vcl_cout << "-- Testing vgl_homg_line_2d --\n";
+  std::cout << "-- Testing vgl_homg_line_2d --\n";
   test_homg_line_2d();
-  vcl_cout << "-- Testing vgl_homg_line_3d --\n";
+  std::cout << "-- Testing vgl_homg_line_3d --\n";
   test_homg_line_3d();
-  vcl_cout << "-- Testing vgl_homg_plane_3d --\n";
+  std::cout << "-- Testing vgl_homg_plane_3d --\n";
   test_homg_plane_3d();
-  vcl_cout << "-- Testing vgl_1d_basis --\n";
+  std::cout << "-- Testing vgl_1d_basis --\n";
   test_1d_basis();
 }
 
 TESTMAIN(test_homg);
 
-#include <vgl/vgl_1d_basis.txx>
+#include <vgl/vgl_1d_basis.hxx>
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_1d<float>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_2d<int>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_line_2d<int>);

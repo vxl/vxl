@@ -36,11 +36,11 @@ unsigned int vil_blocked_image_resource::n_block_j() const
 bool vil_blocked_image_resource::
 get_blocks(unsigned int start_block_i, unsigned int end_block_i,
            unsigned int start_block_j, unsigned int end_block_j,
-           vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const
+           std::vector< std::vector< vil_image_view_base_sptr > >& blocks ) const
 {
   for (unsigned int bi = start_block_i; bi<=end_block_i; ++bi)
   {
-    vcl_vector< vil_image_view_base_sptr > jblocks;
+    std::vector< vil_image_view_base_sptr > jblocks;
 
     for (unsigned int bj = start_block_j; bj<=end_block_j; ++bj)
     {
@@ -59,7 +59,7 @@ bool vil_blocked_image_resource::put_blocks( unsigned int start_block_i,
                                              unsigned int end_block_i,
                                              unsigned int start_block_j,
                                              unsigned int end_block_j,
-                                             vcl_vector< vcl_vector< vil_image_view_base_sptr > > const& blocks )
+                                             std::vector< std::vector< vil_image_view_base_sptr > > const& blocks )
 {
   for (unsigned int bi = start_block_i; bi<=end_block_i; ++bi)
     for (unsigned int bj = start_block_j; bj<=end_block_j; ++bj)
@@ -69,7 +69,7 @@ bool vil_blocked_image_resource::put_blocks( unsigned int start_block_i,
 }
 
 vil_image_view_base_sptr vil_blocked_image_resource::
-glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const
+glue_blocks_together(const std::vector< std::vector< vil_image_view_base_sptr > >& blocks) const
 {
   vil_image_view_base_sptr result;
   if (blocks.size()==0)
@@ -169,7 +169,7 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned int i0, unsigned in
                                                     unsigned int j0, unsigned int nj,
                                                     unsigned int start_block_i,
                                                     unsigned int start_block_j,
-                                                    vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const
+                                                    std::vector< std::vector< vil_image_view_base_sptr > >& blocks) const
 {
   // loop through all the boxes and trim the boxes around the border if necessary.
   for (unsigned int bi = 0 ; bi < blocks.size() ; bi++) {
@@ -239,7 +239,7 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned int i0, unsigned in
 vil_image_view_base_sptr vil_blocked_image_resource::
 get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n_j) const
 {
-  vil_image_view_base_sptr view = 0;
+  vil_image_view_base_sptr view = VXL_NULLPTR;
 
   unsigned int tw = size_block_i(), tl = size_block_j();
   if (tw==0||tl==0)
@@ -255,7 +255,7 @@ get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n
     return view;
 
   //Get set of blocks covering the view
-  vcl_vector<vcl_vector< vil_image_view_base_sptr > > blocks;
+  std::vector<std::vector< vil_image_view_base_sptr > > blocks;
 
   this->get_blocks(bi_start, bi_end, bj_start, bj_end, blocks);
   if (!blocks.size())
@@ -268,7 +268,7 @@ get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n
 #ifdef DEBUG
   unsigned int nblocks = (bi_end-bi_start+1)*(bj_end-bj_start+1);
   if (nblocks>1)
-    vcl_cout << "Get copy view of " << nblocks << " blocks in "
+    std::cout << "Get copy view of " << nblocks << " blocks in "
              << t.real() << "msecs\n";
 #endif
   return view;
@@ -277,11 +277,11 @@ get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n
 vil_blocked_image_resource_sptr blocked_image_resource(const vil_image_resource_sptr& ir)
 {
   if (!ir)
-    return 0;
+    return VXL_NULLPTR;
   unsigned int sbi=0, sbj=0;
   if (ir->get_property(vil_property_size_block_i, &sbi)&&
       ir->get_property(vil_property_size_block_j, &sbj))
     return (vil_blocked_image_resource*)ir.ptr();
   else
-    return 0;
+    return VXL_NULLPTR;
 }

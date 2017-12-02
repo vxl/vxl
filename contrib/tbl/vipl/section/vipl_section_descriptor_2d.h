@@ -25,11 +25,11 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType >
   // pointer to the real data
   DataType* hsi_data_ptr;
   // "pointer offsets" to move 1 unit in any dimen
-  vcl_vector< int > hsi_data_offsets;
+  std::vector< int > hsi_data_offsets;
   // describe the start,end and size of the section
-  vcl_vector< int > hsi_curr_sec_start;
-  vcl_vector< int > hsi_curr_sec_end;
-  vcl_vector< int > hsi_curr_sec_size;
+  std::vector< int > hsi_curr_sec_start;
+  std::vector< int > hsi_curr_sec_end;
+  std::vector< int > hsi_curr_sec_size;
  public:
   //: Ctor useful to define 2D section descriptors for ROA's. If you.
   //  Once constructed there is no way to change the data in the section descriptor.
@@ -105,22 +105,22 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType >
  public: DataType* i_data_ptr() const { return hsi_data_ptr; }
  public: DataType* & ref_i_data_ptr() { return hsi_data_ptr; }
  public: void put_i_data_ptr( DataType* v) { hsi_data_ptr = v; }
- public: vcl_vector< int > const & i_data_offsets() const { return hsi_data_offsets; }
- public: vcl_vector< int > & ref_i_data_offsets() { return hsi_data_offsets; }
- public: void put_i_data_offsets( vcl_vector< int > const & v) { hsi_data_offsets = v; }
- public: vcl_vector< int > const & i_curr_sec_start() const { return hsi_curr_sec_start; }
- public: vcl_vector< int > & ref_i_curr_sec_start() { return hsi_curr_sec_start; }
- public: void put_i_curr_sec_start( vcl_vector< int > const & v) { hsi_curr_sec_start = v; }
- public: vcl_vector< int > const & i_curr_sec_end() const { return hsi_curr_sec_end; }
- public: vcl_vector< int > & ref_i_curr_sec_end() { return hsi_curr_sec_end; }
- public: void put_i_curr_sec_end( vcl_vector< int > const & v) { hsi_curr_sec_end = v; }
- public: vcl_vector< int > const & i_curr_sec_size() const { return hsi_curr_sec_size; }
- public: vcl_vector< int > & ref_i_curr_sec_size() { return hsi_curr_sec_size; }
- public: void put_i_curr_sec_size( vcl_vector< int > const & v) { hsi_curr_sec_size = v; }
+ public: std::vector< int > const & i_data_offsets() const { return hsi_data_offsets; }
+ public: std::vector< int > & ref_i_data_offsets() { return hsi_data_offsets; }
+ public: void put_i_data_offsets( std::vector< int > const & v) { hsi_data_offsets = v; }
+ public: std::vector< int > const & i_curr_sec_start() const { return hsi_curr_sec_start; }
+ public: std::vector< int > & ref_i_curr_sec_start() { return hsi_curr_sec_start; }
+ public: void put_i_curr_sec_start( std::vector< int > const & v) { hsi_curr_sec_start = v; }
+ public: std::vector< int > const & i_curr_sec_end() const { return hsi_curr_sec_end; }
+ public: std::vector< int > & ref_i_curr_sec_end() { return hsi_curr_sec_end; }
+ public: void put_i_curr_sec_end( std::vector< int > const & v) { hsi_curr_sec_end = v; }
+ public: std::vector< int > const & i_curr_sec_size() const { return hsi_curr_sec_size; }
+ public: std::vector< int > & ref_i_curr_sec_size() { return hsi_curr_sec_size; }
+ public: void put_i_curr_sec_size( std::vector< int > const & v) { hsi_curr_sec_size = v; }
 }; // end of class definition
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_section_descriptor_2d.txx"
+#include "vipl_section_descriptor_2d.hxx"
 #endif
 
 #endif // vipl_section_descriptor_2d_h_

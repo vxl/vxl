@@ -1,16 +1,17 @@
 // Some tests for vgl_fit_sphere_3d
 // J.L. Mundy, June 8, 2015.
+#include <iostream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for rand()
+#include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 // creates points on the unit sphere
 static void test_linear_fit_unit_sphere()
 {
-  vcl_vector<vgl_point_3d<double> > pts;
+  std::vector<vgl_point_3d<double> > pts;
   vgl_point_3d<double> p0(1.0, 0.0, 0.0);
   vgl_point_3d<double> p1(0.0, 1.0, 0.0);
   vgl_point_3d<double> p2(0.0, 0.0, 1.0);
@@ -22,16 +23,16 @@ static void test_linear_fit_unit_sphere()
   vgl_point_3d<double> p7(-r, -r, -r);
   pts.push_back(p0);  pts.push_back(p1);  pts.push_back(p2);
   pts.push_back(p3);  pts.push_back(p4);  pts.push_back(p5);
-  pts.push_back(p6);  pts.push_back(p7); 
+  pts.push_back(p6);  pts.push_back(p7);
   vgl_fit_sphere_3d<double> fit_sph(pts);
-  double error = fit_sph.fit_linear(&vcl_cout);
+  double error = fit_sph.fit_linear(&std::cout);
   TEST_NEAR("linear fit perfect unit sphere", error, 0.0, 1e-6);
-  double non_lin_error = fit_sph.fit(&vcl_cout, true);
-  TEST_NEAR("nonlinear fit perfect unit sphere", error, 0.0, 1e-6);
+  double non_lin_error = fit_sph.fit(&std::cout, true);
+  TEST_NEAR("nonlinear fit perfect unit sphere", non_lin_error, 0.0, 1e-6);
 }
 static void test_linear_fit_unit_sphere_rand_error()
 {
-  vcl_vector<vgl_point_3d<double> > pts;
+  std::vector<vgl_point_3d<double> > pts;
   vgl_point_3d<double> p0(1.0, 0.0, 0.0);
   vgl_point_3d<double> p1(0.0, 1.0, 0.0);
   vgl_point_3d<double> p2(0.0, 0.0, 1.0);
@@ -43,24 +44,24 @@ static void test_linear_fit_unit_sphere_rand_error()
   vgl_point_3d<double> p7(-r, -r, -r);
   pts.push_back(p0);  pts.push_back(p1);  pts.push_back(p2);
   pts.push_back(p3);  pts.push_back(p4);  pts.push_back(p5);
-  pts.push_back(p6);  pts.push_back(p7); 
+  pts.push_back(p6);  pts.push_back(p7);
   // add random error (+-10%) to the points
   vnl_random ran;
   double e = 0.1;
-  for(vcl_vector<vgl_point_3d<double> >::iterator pit = pts.begin();
+  for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit){
     vgl_vector_3d<double> er(ran.drand32(-e, e), ran.drand32(-e, e), ran.drand32(-e, e));
     (*pit) = (*pit) + er;
   }
   vgl_fit_sphere_3d<double> fit_sph(pts);
-  double error = fit_sph.fit_linear(&vcl_cout);
+  double error = fit_sph.fit_linear(&std::cout);
   TEST_NEAR("linear fit unit sphere with error", error, 0.0, 0.1);
-  double non_lin_error = fit_sph.fit(&vcl_cout, true);
-  TEST_NEAR("nonlinear fit unit sphere with error", error, 0.0, 0.1);
+  double non_lin_error = fit_sph.fit(&std::cout, true);
+  TEST_NEAR("nonlinear fit unit sphere with error", non_lin_error, 0.0, 0.1);
 }
 static void test_linear_fit_actual_pts()
 {
-  vcl_vector<vgl_point_3d<double> > pts;
+  std::vector<vgl_point_3d<double> > pts;
   vgl_point_3d<double> p0(-10.356499671936,68.164497375488,48.227199554443);
   vgl_point_3d<double> p1(-12.030300140381,68.351600646973,46.570499420166);
   vgl_point_3d<double> p2(-12.924599647522,70.128097534180,46.037700653076);
@@ -94,10 +95,10 @@ static void test_linear_fit_actual_pts()
   pts.push_back(p20); pts.push_back(p21); pts.push_back(p22); pts.push_back(p23);
   pts.push_back(p24);
   vgl_fit_sphere_3d<double> fit_sph(pts);
-  double lin_error = fit_sph.fit_linear(&vcl_cout);
+  double lin_error = fit_sph.fit_linear(&std::cout);
   TEST_NEAR("linear fit actual sphere data", lin_error, 0.0, 0.25);
-  double non_lin_error = fit_sph.fit(&vcl_cout, true);
-  TEST_NEAR("nonlinear fit actual sphere data", lin_error, 0.0, 0.25);
+  double non_lin_error = fit_sph.fit(&std::cout, true);
+  TEST_NEAR("nonlinear fit actual sphere data", non_lin_error, 0.0, 0.25);
 }
 static void test_fit_sphere_3d()
 {

@@ -29,8 +29,8 @@ class vpgl_fm_compute_8_point
   // Put the resulting matrix into fm, return true if successful.
   // Points pr are associated with the RHS of the fundamental matrix
   // while the points pl are associated with the LHS.
-  bool compute( const vcl_vector< vgl_homg_point_2d<double> >& pr,
-                const vcl_vector< vgl_homg_point_2d<double> >& pl,
+  bool compute( const std::vector< vgl_homg_point_2d<double> >& pr,
+                const std::vector< vgl_homg_point_2d<double> >& pl,
                 vpgl_fundamental_matrix<double>& fm );
 
  protected:

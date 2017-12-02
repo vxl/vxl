@@ -16,11 +16,12 @@
 //   21 May  2009 Peter Vanroose istream operator>> re-implemented
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // declare vgl_homg_point_2d and vgl_line_2d
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
 
 //: Represents a cartesian 2D point
 template <class Type>
@@ -89,7 +90,7 @@ class vgl_point_2d
   //  Either just reads two blank-separated numbers,
   //  or reads two comma-separated numbers,
   //  or reads two numbers in parenthesized form "(123, 321)"
-  vcl_istream& read(vcl_istream& is);
+  std::istream& read(std::istream& is);
 };
 
 //  +-+-+ point_2d simple I/O +-+-+
@@ -97,7 +98,7 @@ class vgl_point_2d
 //: Write "<vgl_point_2d x,y>" to stream
 // \relatesalso vgl_point_2d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, vgl_point_2d<Type> const& p);
 
 //: Read from stream, possibly with formatting
 //  Either just reads two blank-separated numbers,
@@ -105,7 +106,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p);
 //  or reads two numbers in parenthesized form "(123, 321)"
 // \relatesalso vgl_point_2d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, vgl_point_2d<Type>& p);
+std::istream&  operator>>(std::istream& s, vgl_point_2d<Type>& p);
 
 //  +-+-+ point_2d arithmetic +-+-+
 
@@ -250,7 +251,7 @@ vgl_point_2d<Type> centre(vgl_point_2d<Type> const& p1,
 // Beware of possible rounding errors when Type is e.g. int.
 // \relatesalso vgl_point_2d
 template <class Type> inline
-vgl_point_2d<Type> centre(vcl_vector<vgl_point_2d<Type> > const& v)
+vgl_point_2d<Type> centre(std::vector<vgl_point_2d<Type> > const& v)
 {
   int n=v.size();
   assert(n>0); // it is *not* correct to return the point (0,0) when n==0.
@@ -259,6 +260,6 @@ vgl_point_2d<Type> centre(vcl_vector<vgl_point_2d<Type> > const& v)
   return vgl_point_2d<Type>(x/n,y/n);
 }
 
-#define VGL_POINT_2D_INSTANTIATE(T) extern "please include vgl/vgl_point_2d.txx first"
+#define VGL_POINT_2D_INSTANTIATE(T) extern "please include vgl/vgl_point_2d.hxx first"
 
 #endif // vgl_point_2d_h

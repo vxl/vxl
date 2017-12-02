@@ -6,9 +6,11 @@
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \date March 2001
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class rrel_objective;
 class rrel_estimation_problem;
@@ -81,10 +83,10 @@ class rrel_ran_sam_search
   const vnl_vector<double>& params() const { return params_; }
 
   //:  Get the indices of best data sample
-  const vcl_vector<int>& index() const { return indices_; }
+  const std::vector<int>& index() const { return indices_; }
 
   //:  Get the residuals for best sample
-  const vcl_vector<double>& residuals() const { return residuals_; }
+  const std::vector<double>& residuals() const { return residuals_; }
 
   //:  Get the cost for best sample returned by rrel_objective function
   double cost() const { return min_obj_; }
@@ -109,13 +111,13 @@ class rrel_ran_sam_search
 
   //: Determine the next random sample, filling in the "sample" vector.
   virtual void
-  next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
+  next_sample( unsigned int taken, unsigned int num_points, std::vector<int>& sample,
                unsigned int points_per_sample );
 
  private:
 
-  void trace_sample( const vcl_vector<int>& point_indices ) const;
-  void trace_residuals( const vcl_vector<double>& residuals ) const;
+  void trace_sample( const std::vector<int>& point_indices ) const;
+  void trace_residuals( const std::vector<double>& residuals ) const;
 
  protected:
   //
@@ -138,8 +140,8 @@ class rrel_ran_sam_search
   //
   vnl_vector<double> params_;
   double scale_;
-  vcl_vector<int> indices_;
-  vcl_vector<double> residuals_;
+  std::vector<int> indices_;
+  std::vector<double> residuals_;
 
   double min_obj_;
   //

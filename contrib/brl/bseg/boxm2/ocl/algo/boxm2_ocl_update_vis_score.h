@@ -2,7 +2,9 @@
 #define boxm2_ocl_update_vis_score_h_included_
 //:
 // \file
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
@@ -21,18 +23,19 @@ class boxm2_ocl_update_vis_score
     boxm2_ocl_update_vis_score(boxm2_scene_sptr scene,
                                bocl_device_sptr device,
                                boxm2_opencl_cache_sptr ocl_cache,
-                               bool use_surface_normals);
+                               bool use_surface_normals,
+                               bool optimize_transfers_ = false);
 
     bool run( vpgl_camera_double_sptr camera,
               unsigned ni, unsigned nj,
-              vcl_string apm_id="");
+              std::string apm_id="");
 
-  void reset(vcl_string prefix_name);
+  void reset(std::string prefix_name);
   private:
     bool compile_kernels();
 
     bool use_surface_normals_;
-
+    bool optimize_transfers_;
     boxm2_scene_sptr scene_;
     bocl_device_sptr device_;
     boxm2_opencl_cache_sptr ocl_cache_;

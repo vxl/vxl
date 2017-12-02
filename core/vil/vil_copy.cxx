@@ -1,14 +1,16 @@
 // This is core/vil/vil_copy.cxx
+#include <algorithm>
 #include "vil_copy.h"
 //:
 // \file
 // \author Ian Scott, ISBE, Manchester
 // \date   21 Aug 2003
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource.h>
+#include <vil/vil_new.h>
 
 //: Copy images in blocks of roughly this size
 static const unsigned long large_image_limit_ = 1024ul * 1024ul * 8ul; //8M Pixels
@@ -68,17 +70,29 @@ bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &
   else
   {
     unsigned got_to_line =0;
-    unsigned block_size = vcl_max(static_cast<unsigned>(large_image_limit_ / src->ni()),1u);
+    unsigned block_size = std::max(static_cast<unsigned>(large_image_limit_ / src->ni()),1u);
 
     while (got_to_line < src->nj())
     {
       vil_image_view_base_sptr view_ref = src->get_view(0, src->ni(), got_to_line,
-                                                        vcl_min(block_size, src->nj()-got_to_line));
+                                                        std::min(block_size, src->nj()-got_to_line));
       if (!view_ref) return false;
       if (!dest->put_view(*view_ref,0,got_to_line)) return false;
       got_to_line += block_size;
     }
     return true;
   }
+}
+
+vil_image_resource_sptr vil_copy_deep( const vil_image_resource_sptr &src )
+{
+  if(src == NULL) return NULL;
+  vil_image_resource_sptr result = vil_new_image_resource(src->ni(), src->nj(), src);
+  bool copy_r = vil_copy_deep(src, result);
+  if(!copy_r)
+  {
+    return NULL;
+  }
+  return result;
 }
 

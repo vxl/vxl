@@ -8,11 +8,12 @@
 // \date   21 Oct 1999
 // \brief  See vgui_listmanager2D_tableau.h for a description of this file.
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "vgui_listmanager2D_tableau.h"
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_parent_child_link.h>
@@ -30,7 +31,7 @@ vgui_listmanager2D_tableau::vgui_listmanager2D_tableau():
 #if 0
   highlight_list(0),
 #endif // 0
-  highlight_so(0)
+  highlight_so(VXL_NULLPTR)
 {
 }
 
@@ -38,12 +39,12 @@ vgui_listmanager2D_tableau::~vgui_listmanager2D_tableau()
 {
 }
 
-vcl_string vgui_listmanager2D_tableau::type_name() const
+std::string vgui_listmanager2D_tableau::type_name() const
 {
   return "vgui_listmanager2D_tableau";
 }
 
-//: Add a child to the end of the vcl_list
+//: Add a child to the end of the std::list
 void vgui_listmanager2D_tableau::add(vgui_displaylist2D_tableau_sptr const& dl)
 {
   children.push_back( vgui_parent_child_link(this,dl) );
@@ -52,12 +53,12 @@ void vgui_listmanager2D_tableau::add(vgui_displaylist2D_tableau_sptr const& dl)
   observers.notify();
 }
 
-//: Remove the given child from the vcl_list.
+//: Remove the given child from the std::list.
 void vgui_listmanager2D_tableau::remove(vgui_displaylist2D_tableau_sptr const& t)
 {
-  vcl_vector<bool>::iterator ia = active.begin();
-  vcl_vector<bool>::iterator iv = visible.begin();
-  for (vcl_vector<vgui_parent_child_link>::iterator i=children.begin() ; i!=children.end() ; ++i, ++ia, ++iv)
+  std::vector<bool>::iterator ia = active.begin();
+  std::vector<bool>::iterator iv = visible.begin();
+  for (std::vector<vgui_parent_child_link>::iterator i=children.begin() ; i!=children.end() ; ++i, ++ia, ++iv)
     if ( *i == t )
     {
       children.erase(i);
@@ -99,7 +100,7 @@ bool vgui_listmanager2D_tableau::index_ok(int v)
 
 bool vgui_listmanager2D_tableau::help()
 {
-  vcl_cerr << '\n'
+  std::cerr << '\n'
            << "+- vgui_listmanager2D_tableau keys -+\n"
            << "|                                   |\n"
            << "| `1' to `9'  toggle child `n'      |\n"
@@ -107,17 +108,17 @@ bool vgui_listmanager2D_tableau::help()
   return false;
 }
 
-vgui_displaylist2D_tableau_sptr vgui_listmanager2D_tableau::contains_hit(vcl_vector<unsigned> const& names)
+vgui_displaylist2D_tableau_sptr vgui_listmanager2D_tableau::contains_hit(std::vector<unsigned> const& names)
 {
-  for (vcl_vector<vgui_parent_child_link>::iterator i=this->children.begin() ;
+  for (std::vector<vgui_parent_child_link>::iterator i=this->children.begin() ;
        i!=this->children.end() ; ++i)
   {
-    // get id of vcl_list
+    // get id of std::list
     vgui_displaylist2D_tableau_sptr list;
     list.vgui_tableau_sptr::operator=(i->child());
     unsigned list_id = list->get_id();
 
-    vcl_vector<unsigned>::const_iterator ni = vcl_find(names.begin(), names.end(), list_id);
+    std::vector<unsigned>::const_iterator ni = std::find(names.begin(), names.end(), list_id);
     if (ni != names.end())
       return list;
   }
@@ -125,12 +126,12 @@ vgui_displaylist2D_tableau_sptr vgui_listmanager2D_tableau::contains_hit(vcl_vec
   return vgui_displaylist2D_tableau_sptr();
 }
 
-void vgui_listmanager2D_tableau::get_hits(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits)
+void vgui_listmanager2D_tableau::get_hits(float x, float y, std::vector<std::vector<unsigned> >* hits)
 {
   GLuint *ptr = vgui_utils::enter_pick_mode(x,y,100);
 
   int count=0;
-  for (vcl_vector<vgui_parent_child_link>::iterator i=this->children.begin() ;
+  for (std::vector<vgui_parent_child_link>::iterator i=this->children.begin() ;
        i!=this->children.end() ; ++i, ++count)
   {
     vgui_displaylist2D_tableau_sptr display;
@@ -150,24 +151,24 @@ void vgui_listmanager2D_tableau::get_hits(float x, float y, vcl_vector<vcl_vecto
   vgui_utils::process_hits(num_hits, ptr, *hits);
 }
 
-void vgui_listmanager2D_tableau::find_closest(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits,
+void vgui_listmanager2D_tableau::find_closest(float x, float y, std::vector<std::vector<unsigned> >* hits,
                                               vgui_soview2D** closest_so, vgui_displaylist2D_tableau_sptr* closest_display)
 {
   float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
-  vcl_vector<unsigned> closest_hit;
+  std::vector<unsigned> closest_hit;
   vgui_displaylist2D_tableau_sptr display;
-  closest_display = 0;
-  closest_so = 0;
+  closest_display = VXL_NULLPTR;
+  closest_so = VXL_NULLPTR;
 
 #ifdef DEBUG
-  vcl_cerr << "vgui_listmanager2D_tableau::find_closest: hits->size() = " << hits->size() << '\n';
+  std::cerr << "vgui_listmanager2D_tableau::find_closest: hits->size() = " << hits->size() << '\n';
 #endif
-  for (vcl_vector<vcl_vector<unsigned> >::iterator h_iter = hits->begin();
+  for (std::vector<std::vector<unsigned> >::iterator h_iter = hits->begin();
        h_iter != hits->end(); ++h_iter)
   {
-    vcl_vector<unsigned> names = *h_iter;
+    std::vector<unsigned> names = *h_iter;
 #ifdef DEBUG
-    vcl_cerr << "vgui_listmanager2D_tableau::find_closest: names.size() " << names.size() << '\n';
+    std::cerr << "vgui_listmanager2D_tableau::find_closest: names.size() " << names.size() << '\n';
 #endif
 
     // first see if this hit is in a displaylist managed by this listmanager2D
@@ -175,7 +176,7 @@ void vgui_listmanager2D_tableau::find_closest(float x, float y, vcl_vector<vcl_v
     if (display)
     {
 #ifdef DEBUG
-      vcl_cerr << "vgui_listmanager2D_tableau::find_closest: hit in display " << display->get_id() << '\n';
+      std::cerr << "vgui_listmanager2D_tableau::find_closest: hit in display " << display->get_id() << '\n';
 #endif
       vgui_soview2D *so = static_cast<vgui_soview2D*>(display->contains_hit(names));
       if (so)
@@ -188,12 +189,12 @@ void vgui_listmanager2D_tableau::find_closest(float x, float y, vcl_vector<vcl_v
           closest_hit = *h_iter;
         }
       }
-    }// end if vcl_list valid
+    }// end if std::list valid
   }// end for hits
 
   if (*closest_display)
   {
-    // get the soview out of the closest_hit name vcl_list
+    // get the soview out of the closest_hit name std::list
     *closest_so = static_cast<vgui_soview2D*>((*closest_display)->contains_hit(closest_hit));
   }
 }
@@ -211,7 +212,7 @@ bool vgui_listmanager2D_tableau::handle(const vgui_event& event)
     bool retv = true;
 
     int ia = 0;
-    for ( vcl_vector<vgui_parent_child_link>::iterator i = children.begin(); i != children.end(); ++i, ++ia)
+    for ( std::vector<vgui_parent_child_link>::iterator i = children.begin(); i != children.end(); ++i, ++ia)
     {
       PM.restore();
 
@@ -234,7 +235,7 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
   float ix, iy;
   pi.window_to_image_coordinates(int(x),int(y), ix,iy);
 
-  vcl_vector<vcl_vector<unsigned> > hits;
+  std::vector<std::vector<unsigned> > hits;
   get_hits(x,y,&hits);
 
   vgui_soview2D* closest_so;
@@ -243,8 +244,8 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
 
 #ifdef DEBUG
   if (closest_so && closest_display)
-    vcl_cerr << "vgui_listmanager2D_tableau::motion: hit " << closest_so->get_id()
-             << " in vcl_list " << closest_display->get_id() << vcl_endl;
+    std::cerr << "vgui_listmanager2D_tableau::motion: hit " << closest_so->get_id()
+             << " in std::list " << closest_display->get_id() << std::endl;
 #endif
 
   vgui_utils::begin_sw_overlay();
@@ -268,7 +269,7 @@ bool vgui_listmanager2D_tableau::motion(int x, int y)
   if (closest_so)
   {
 #ifdef DEBUG
-    vcl_cerr << "vgui_listmanager2D_tableau::motion highlighting : " << closest_id << '\n';
+    std::cerr << "vgui_listmanager2D_tableau::motion highlighting : " << closest_id << '\n';
 #endif
     vgui_soview* so = closest_so;
     vgui_style_sptr style = so->get_style();
@@ -292,7 +293,7 @@ bool vgui_listmanager2D_tableau::mouse_down(int x, int y, vgui_button button, vg
   if (button == vgui_MIDDLE && (modifier & vgui_SHIFT))
   {
     int count=0;
-    for (vcl_vector<vgui_parent_child_link>::iterator i=this->children.begin() ;
+    for (std::vector<vgui_parent_child_link>::iterator i=this->children.begin() ;
          i!=this->children.end() ; ++i, ++count)
     {
       vgui_displaylist2D_tableau_sptr display;
@@ -308,7 +309,7 @@ bool vgui_listmanager2D_tableau::mouse_down(int x, int y, vgui_button button, vg
   float ix, iy;
   pi.window_to_image_coordinates(int(x),int(y), ix,iy);
 
-  vcl_vector<vcl_vector<unsigned> > hits;
+  std::vector<std::vector<unsigned> > hits;
   get_hits(x,y,&hits);
 
   vgui_soview2D* closest_so;
@@ -321,7 +322,7 @@ bool vgui_listmanager2D_tableau::mouse_down(int x, int y, vgui_button button, vg
 bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, vgui_modifier)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_listmanager2D_tableau_handler::key_press " << key << '\n';
+  std::cerr << "vgui_listmanager2D_tableau_handler::key_press " << key << '\n';
 #endif
 
   if (key >= '1' && key <= '9')
@@ -342,7 +343,7 @@ bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, v
       if (highlight_list == list)
       {
         highlight_list = vgui_displaylist2D_tableau_sptr();
-        highlight_so = 0;
+        highlight_so = VXL_NULLPTR;
       }
     }
     else if (isvisible)
@@ -360,7 +361,7 @@ bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, v
       if (highlight_list == list)
       {
         highlight_list = vgui_displaylist2D_tableau_sptr();
-        highlight_so = 0;
+        highlight_so = VXL_NULLPTR;
       }
     }
 

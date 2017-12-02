@@ -644,16 +644,6 @@ static long gethostid(void)
 
 #include <snmp.h>
 
-// Visual C++ prior to version 6 declared different type names
-// in <snmp.h>, so we need to define a mapping
-#if defined(__MSC_VER__) && _MSC_VER < 1200
-typedef RFC1157VarBind     SnmpVarBind;
-typedef RFC1157VarBindList SnmpVarBindList;
-typedef AsnInteger         AsnInteger32;
-#define SNMP_PDU_GETNEXT   ASN_RFC1157_GETNEXTREQUEST
-#endif
-
-
 typedef int(WINAPI *pSnmpUtilOidCpy) (
         OUT AsnObjectIdentifier *pOidDst,
         IN AsnObjectIdentifier *pOidSrc);

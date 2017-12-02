@@ -1,6 +1,7 @@
 // This is core/vil/algo/tests/test_algo_flood_fill.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_flood_fill.h>
 
 // Checks that every pixel in im1 with value v1 has value v2 in image v2
@@ -22,7 +23,7 @@ bool compare(const vil_image_view<vxl_byte>& im1,
 
 static void test_flood_fill4_byte()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing vil_flood_fill4\n"
            << "*************************\n";
 
@@ -67,7 +68,7 @@ static void test_flood_fill4_byte()
 
 static void test_flood_fill8_byte()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing vil_flood_fill8\n"
            << "*************************\n";
 

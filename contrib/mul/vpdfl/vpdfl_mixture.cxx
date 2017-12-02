@@ -1,5 +1,9 @@
 // This is mul/vpdfl/vpdfl_mixture.cxx
 // Copyright: (C) 1998 Victoria University of Manchester
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <string>
 #include "vpdfl_mixture.h"
 //:
 // \file
@@ -14,9 +18,7 @@
 
 //=======================================================================
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vpdfl/vpdfl_mixture_sampler.h>
@@ -128,7 +130,7 @@ static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double
 //=======================================================================
 //: Set the contents of the mixture model.
 // Clones are taken of all the data, and the class will be responsible for their deletion.
-void vpdfl_mixture::set(const vcl_vector<vpdfl_pdf_base*> components, const vcl_vector<double> & weights)
+void vpdfl_mixture::set(const std::vector<vpdfl_pdf_base*> components, const std::vector<double> & weights)
 {
   unsigned n = components.size();
   assert (weights.size() == n);
@@ -163,8 +165,8 @@ void vpdfl_mixture::set(const vcl_vector<vpdfl_pdf_base*> components, const vcl_
 
 void vpdfl_mixture::add_component(const vpdfl_pdf_base& comp)
 {
-  vcl_vector<vpdfl_pdf_base*> old_comps = component_;
-  vcl_vector<double> old_wts = weight_;
+  std::vector<vpdfl_pdf_base*> old_comps = component_;
+  std::vector<double> old_wts = weight_;
   unsigned n = component_.size();
   assert(n == weight_.size());
 
@@ -201,7 +203,7 @@ bool vpdfl_mixture::is_valid_pdf() const
   if (weight_.size() != n || component_.size() != n || n < 1) return false;
     // weights should sum to 1.
   double sum =vnl_c_vector<double>::sum(&weight_[0]/*.begin()*/, n);
-  if (vcl_fabs(1.0 - sum) > 1e-10 ) return false;
+  if (std::fabs(1.0 - sum) > 1e-10 ) return false;
     // the number of dimensions should be consistent
   for (unsigned i=0; i<n; ++i)
   {
@@ -222,14 +224,14 @@ void vpdfl_mixture::set_mean_and_variance(vnl_vector<double>&m, vnl_vector<doubl
 
 //=======================================================================
 
-vcl_string vpdfl_mixture::is_a() const
+std::string vpdfl_mixture::is_a() const
 {
-  return vcl_string("vpdfl_mixture");
+  return std::string("vpdfl_mixture");
 }
 
 //=======================================================================
 
-bool vpdfl_mixture::is_class(vcl_string const& s) const
+bool vpdfl_mixture::is_class(std::string const& s) const
 {
   return vpdfl_pdf_base::is_class(s) || s==vpdfl_mixture::is_a();
 }
@@ -250,7 +252,7 @@ vpdfl_pdf_base* vpdfl_mixture::clone() const
 
 //=======================================================================
 
-void vpdfl_mixture::print_summary(vcl_ostream& os) const
+void vpdfl_mixture::print_summary(std::ostream& os) const
 {
   os<<'\n'<<vsl_indent();
   vpdfl_pdf_base::print_summary(os);
@@ -279,14 +281,14 @@ void vpdfl_mixture::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -302,9 +304,9 @@ void vpdfl_mixture::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs, weight_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_mixture &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -313,7 +315,7 @@ void vpdfl_mixture::b_read(vsl_b_istream& bfs)
 
 double vpdfl_mixture::operator()(const vnl_vector<double>& x) const
 {
-  return vcl_exp(log_p(x));
+  return std::exp(log_p(x));
 }
 
 //=======================================================================
@@ -340,10 +342,10 @@ double vpdfl_mixture::log_p(const vnl_vector<double>& x) const
   for (int i=0;i<n;i++)
   {
     if (weight_[i]>0.0)
-    sum += weight_[i] * vcl_exp(log_ps[i]-max_log_p);
+    sum += weight_[i] * std::exp(log_ps[i]-max_log_p);
   }
 
-  return vcl_log(sum) + max_log_p;
+  return std::log(sum) + max_log_p;
 }
 
 //=======================================================================
@@ -401,8 +403,8 @@ unsigned vpdfl_mixture::nearest_comp(const vnl_vector<double>& x) const
 // \param x This may be modified to the nearest plausible position.
 void vpdfl_mixture::nearest_plausible(vnl_vector<double>& /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr << "ERROR: vpdfl_mixture::nearest_plausible NYI\n";
-  vcl_abort();
+  std::cerr << "ERROR: vpdfl_mixture::nearest_plausible NYI\n";
+  std::abort();
 }
 
 //==================< end of file: vpdfl_mixture.cxx >====================

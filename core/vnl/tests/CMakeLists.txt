@@ -1,6 +1,6 @@
 # This is core/vnl/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( vnl_test_all
+add_executable( vnl_test_all
   # Driver source and utilities
   test_driver.cxx
 
@@ -8,6 +8,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_bignum.cxx
   test_decnum.cxx
   test_complex.cxx
+  test_complexify.cxx
   test_inverse.cxx
   test_diag_matrix.cxx
   test_diag_matrix_fixed.cxx
@@ -15,8 +16,8 @@ ADD_EXECUTABLE( vnl_test_all
   test_finite.cxx
   test_math.cxx
   test_na.cxx
-  test_matlab.cxx
   test_matrix.cxx
+  test_container_interface.cxx
   test_matrix_exp.cxx
   test_matrix_fixed.cxx
   test_vector_fixed_ref.cxx
@@ -30,7 +31,6 @@ ADD_EXECUTABLE( vnl_test_all
   test_real_npolynomial.cxx
   test_resize.cxx
   test_rotation_matrix.cxx
-  test_sample.cxx
   test_sym_matrix.cxx
   test_transpose.cxx
   test_fastops.cxx
@@ -49,61 +49,73 @@ ADD_EXECUTABLE( vnl_test_all
   test_vnl_index_sort.cxx
 )
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
- SET_SOURCE_FILES_PROPERTIES(test_rational.cxx PROPERTIES COMPILE_FLAGS -O1)
- SET_SOURCE_FILES_PROPERTIES(test_bignum.cxx PROPERTIES COMPILE_FLAGS -O3)
- SET_SOURCE_FILES_PROPERTIES(test_finite.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+ set_source_files_properties(test_rational.cxx PROPERTIES COMPILE_FLAGS -O1)
+ set_source_files_properties(test_bignum.cxx PROPERTIES COMPILE_FLAGS -O3)
+ set_source_files_properties(test_finite.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif()
 
-TARGET_LINK_LIBRARIES(vnl_test_all vnl vpl vul testlib ${CMAKE_THREAD_LIBS})
+target_link_libraries(vnl_test_all ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib ${CMAKE_THREAD_LIBS})
 
-ADD_EXECUTABLE(vnl_basic_operation_timings basic_operation_timings.cxx)
-TARGET_LINK_LIBRARIES(vnl_basic_operation_timings vnl)
+if(BUILD_CORE_UTILITIES)
+  add_executable( vnl_test_with_core_utils
+    test_driver_with_core_utils.cxx
+    test_matlab.cxx
+    test_sample.cxx
+  )
+  target_link_libraries(vnl_test_with_core_utils ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib ${CMAKE_THREAD_LIBS})
+  add_test( NAME vnl_test_matlab COMMAND vnl_test_with_core_utils test_matlab                 )
+  add_test( NAME vnl_test_sample COMMAND vnl_test_with_core_utils test_sample                 )
+endif()
 
-ADD_TEST( vnl_test_bignum                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_bignum                 )
-ADD_TEST( vnl_test_decnum                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_decnum                 )
-ADD_TEST( vnl_test_complex                ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_complex                )
-ADD_TEST( vnl_test_diag_matrix            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_diag_matrix            )
-ADD_TEST( vnl_test_diag_matrix_fixed      ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_diag_matrix_fixed      )
-ADD_TEST( vnl_test_file_matrix            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_file_matrix            )
-ADD_TEST( vnl_test_finite                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_finite                 )
-ADD_TEST( vnl_test_inverse                ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_inverse                )
-ADD_TEST( vnl_test_math                   ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_math                   )
-ADD_TEST( vnl_test_matlab                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_matlab                 )
-ADD_TEST( vnl_test_matrix                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_matrix                 )
-ADD_TEST( vnl_test_matrix_exp             ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_matrix_exp             )
-ADD_TEST( vnl_test_matrix_fixed           ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_matrix_fixed           )
-ADD_TEST( vnl_test_vector_fixed_ref       ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_vector_fixed_ref       )
-ADD_TEST( vnl_test_matrix_fixed_ref       ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_matrix_fixed_ref       )
-ADD_TEST( vnl_test_numeric_traits         ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_numeric_traits         )
-ADD_TEST( vnl_test_na                     ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_na                     )
-ADD_TEST( vnl_test_random                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_random                 )
-ADD_TEST( vnl_test_rational               ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_rational               )
-ADD_TEST( vnl_test_polynomial             ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_polynomial             )
-ADD_TEST( vnl_test_real_polynomial        ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_real_polynomial        )
-ADD_TEST( vnl_test_real_npolynomial       ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_real_npolynomial       )
-ADD_TEST( vnl_test_resize                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_resize                 )
-ADD_TEST( vnl_test_rotation_matrix        ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_rotation_matrix        )
-ADD_TEST( vnl_test_sample                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sample                 )
-ADD_TEST( vnl_test_sym_matrix             ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sym_matrix             )
-ADD_TEST( vnl_test_transpose              ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_transpose              )
-ADD_TEST( vnl_test_fastops                ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_fastops                )
-ADD_TEST( vnl_test_vector                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_vector                 )
-ADD_TEST( vnl_test_gamma                  ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_gamma                  )
-ADD_TEST( vnl_test_arithmetic             ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_arithmetic             )
-ADD_TEST( vnl_test_alignment              ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_alignment              )
-ADD_TEST( vnl_test_hungarian_algorithm    ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_hungarian_algorithm    )
-ADD_TEST( vnl_test_integrant              ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_integrant              )
-ADD_TEST( vnl_test_bessel                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_bessel                 )
-ADD_TEST( vnl_test_quaternion             ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_quaternion             )
-ADD_TEST( vnl_test_crs_index              ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_crs_index              )
-ADD_TEST(vnl_test_sparse_lst_sqr_function ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sparse_lst_sqr_function)
-ADD_TEST( vnl_test_power                  ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_power                  )
-ADD_TEST( vnl_test_sparse_matrix          ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sparse_matrix          )
-ADD_TEST(test_pow_log                     ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_pow_log                )
-ADD_TEST(test_vnl_index_sort              ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_vnl_index_sort         )
+add_executable(vnl_basic_operation_timings basic_operation_timings.cxx)
+target_link_libraries(vnl_basic_operation_timings ${VXL_LIB_PREFIX}vnl)
+add_test( NAME vnl_basic_operation_timings COMMAND vnl_basic_operation_timings   )
 
-ADD_EXECUTABLE(vnl_test_include test_include.cxx)
-TARGET_LINK_LIBRARIES(vnl_test_include vnl)
-ADD_EXECUTABLE(vnl_test_template_include test_template_include.cxx)
-TARGET_LINK_LIBRARIES(vnl_test_template_include vnl)
+add_test( NAME vnl_test_bignum COMMAND vnl_test_all test_bignum                 )
+add_test( NAME vnl_test_decnum COMMAND vnl_test_all test_decnum                 )
+add_test( NAME vnl_test_complex COMMAND vnl_test_all test_complex                )
+add_test( NAME vnl_test_complexify COMMAND vnl_test_all test_complexify             )
+add_test( NAME vnl_test_diag_matrix COMMAND vnl_test_all test_diag_matrix            )
+add_test( NAME vnl_test_diag_matrix_fixed COMMAND vnl_test_all test_diag_matrix_fixed      )
+add_test( NAME vnl_test_file_matrix COMMAND vnl_test_all test_file_matrix            )
+add_test( NAME vnl_test_finite COMMAND vnl_test_all test_finite                 )
+add_test( NAME vnl_test_inverse COMMAND vnl_test_all test_inverse                )
+add_test( NAME vnl_test_math COMMAND vnl_test_all test_math                   )
+add_test( NAME vnl_test_matrix COMMAND vnl_test_all test_matrix                 )
+add_test( NAME vnl_test_container_interface COMMAND vnl_test_all test_container_interface )
+add_test( NAME vnl_test_matrix_exp COMMAND vnl_test_all test_matrix_exp             )
+add_test( NAME vnl_test_matrix_fixed COMMAND vnl_test_all test_matrix_fixed           )
+add_test( NAME vnl_test_vector_fixed_ref COMMAND vnl_test_all test_vector_fixed_ref       )
+add_test( NAME vnl_test_matrix_fixed_ref COMMAND vnl_test_all test_matrix_fixed_ref       )
+add_test( NAME vnl_test_numeric_traits COMMAND vnl_test_all test_numeric_traits         )
+add_test( NAME vnl_test_na COMMAND vnl_test_all test_na                     )
+add_test( NAME vnl_test_random COMMAND vnl_test_all test_random                 )
+add_test( NAME vnl_test_rational COMMAND vnl_test_all test_rational               )
+add_test( NAME vnl_test_polynomial COMMAND vnl_test_all test_polynomial             )
+add_test( NAME vnl_test_real_polynomial COMMAND vnl_test_all test_real_polynomial        )
+add_test( NAME vnl_test_real_npolynomial COMMAND vnl_test_all test_real_npolynomial       )
+add_test( NAME vnl_test_resize COMMAND vnl_test_all test_resize                 )
+add_test( NAME vnl_test_rotation_matrix COMMAND vnl_test_all test_rotation_matrix        )
+add_test( NAME vnl_test_sym_matrix COMMAND vnl_test_all test_sym_matrix             )
+add_test( NAME vnl_test_transpose COMMAND vnl_test_all test_transpose              )
+add_test( NAME vnl_test_fastops COMMAND vnl_test_all test_fastops                )
+add_test( NAME vnl_test_vector COMMAND vnl_test_all test_vector                 )
+add_test( NAME vnl_test_gamma COMMAND vnl_test_all test_gamma                  )
+add_test( NAME vnl_test_arithmetic COMMAND vnl_test_all test_arithmetic             )
+add_test( NAME vnl_test_alignment COMMAND vnl_test_all test_alignment              )
+add_test( NAME vnl_test_hungarian_algorithm COMMAND vnl_test_all test_hungarian_algorithm    )
+add_test( NAME vnl_test_integrant COMMAND vnl_test_all test_integrant              )
+add_test( NAME vnl_test_bessel COMMAND vnl_test_all test_bessel                 )
+add_test( NAME vnl_test_quaternion COMMAND vnl_test_all test_quaternion             )
+add_test( NAME vnl_test_crs_index COMMAND vnl_test_all test_crs_index              )
+add_test( NAME vnl_test_sparse_lst_sqr_function COMMAND vnl_test_all test_sparse_lst_sqr_function)
+add_test( NAME vnl_test_power COMMAND vnl_test_all test_power                  )
+add_test( NAME vnl_test_sparse_matrix COMMAND vnl_test_all test_sparse_matrix          )
+add_test( NAME test_pow_log COMMAND vnl_test_all test_pow_log                )
+add_test( NAME test_vnl_index_sort COMMAND vnl_test_all test_vnl_index_sort         )
+
+add_executable(vnl_test_include test_include.cxx)
+target_link_libraries(vnl_test_include ${VXL_LIB_PREFIX}vnl)
+add_executable(vnl_test_template_include test_template_include.cxx)
+target_link_libraries(vnl_test_template_include ${VXL_LIB_PREFIX}vnl)

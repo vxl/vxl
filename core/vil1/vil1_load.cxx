@@ -3,9 +3,10 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vil1_load.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_open.h>
 #include <vil1/vil1_file_format.h>
@@ -17,30 +18,30 @@
 vil1_image vil1_load_raw(vil1_stream *is)
 {
 #ifdef DEBUG
-  vcl_cout << __FILE__ " : trying" << vcl_flush;
+  std::cout << __FILE__ " : trying" << std::flush;
 #endif
   for (vil1_file_format** p = vil1_file_format::all(); *p; ++p) {
 #ifdef DEBUG
-    vcl_cout << " \'" << (*p)->tag() << "\'" << vcl_flush;
+    std::cout << " \'" << (*p)->tag() << "\'" << std::flush;
 #endif
     is->seek(0);
     vil1_image i = (*p)->make_input_image(is);
     if (i && i.width()>=0 && i.height()>=0 && i.planes()>0 && i.components()>0 && i.bits_per_component()>0)
     {
 #ifdef DEBUG
-      vcl_cout << ": succeeded\n" << vcl_flush;
+      std::cout << ": succeeded\n" << std::flush;
 #endif
       return i;
     }
   }
 
   // failed.
-  vcl_cerr << __FILE__ ": Tried";
+  std::cerr << __FILE__ ": Tried";
   for (vil1_file_format** p = vil1_file_format::all(); *p; ++p)
-    vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
-  vcl_cerr << ": none succeeded\n";
+    std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
+  std::cerr << ": none succeeded\n";
 
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vil1_image vil1_load_raw(char const* filename)
@@ -55,7 +56,7 @@ vil1_image vil1_load_raw(char const* filename)
     return im;
   }
   else {
-    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
+    std::cerr << __FILE__ ": Failed to load [" << filename << "]\n";
     return vil1_image();
   }
 }

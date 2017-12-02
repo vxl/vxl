@@ -12,8 +12,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 
 
@@ -27,7 +28,7 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_kernel const &kernel);
 void vsl_b_read(vsl_b_istream & is, bvpl_kernel &k);
 
 
-void vsl_print_summary(vcl_ostream &os, const bvpl_kernel &k);
+void vsl_print_summary(std::ostream &os, const bvpl_kernel &k);
 
 
 void vsl_b_read(vsl_b_istream& is, bvpl_kernel* k);
@@ -35,7 +36,7 @@ void vsl_b_read(vsl_b_istream& is, bvpl_kernel* k);
 
 void vsl_b_write(vsl_b_ostream& os, const bvpl_kernel* &k);
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_kernel* &k);
+void vsl_print_summary(std::ostream& os, const bvpl_kernel* &k);
 
 
 /******************bvpl_kernel_vector**************************/
@@ -48,7 +49,7 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_kernel_vector const &kernel);
 void vsl_b_read(vsl_b_istream & is, bvpl_kernel_vector &k);
 
 
-void vsl_print_summary(vcl_ostream &os, const bvpl_kernel_vector &k);
+void vsl_print_summary(std::ostream &os, const bvpl_kernel_vector &k);
 
 
 void vsl_b_read(vsl_b_istream& is, bvpl_kernel_vector* k);
@@ -56,6 +57,6 @@ void vsl_b_read(vsl_b_istream& is, bvpl_kernel_vector* k);
 
 void vsl_b_write(vsl_b_ostream& os, const bvpl_kernel_vector* &k);
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_kernel_vector* &k);
+void vsl_print_summary(std::ostream& os, const bvpl_kernel_vector* &k);
 
 #endif

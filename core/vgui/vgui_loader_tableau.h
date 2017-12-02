@@ -42,7 +42,7 @@ class vgui_loader_tableau : public vgui_wrapper_tableau
   vgui_loader_tableau(vgui_tableau_sptr const& child);
 
   //: Returns the type of this tableau ('vgui_loader_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Set the projection matrix to the given matrix.
   void set_projection(vnl_matrix_fixed<double,4,4> const &m);

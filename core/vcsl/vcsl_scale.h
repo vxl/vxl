@@ -4,14 +4,14 @@
 //:
 // \file
 // \brief Scale transformation
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/07/19 François BERTEL Creation.
+//   2000/07/19 Francois BERTEL Creation.
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
-//   2002/01/28 Peter Vanroose - vcl_vector member scale_ changed to non-ptr
+//   2002/01/28 Peter Vanroose - std::vector member scale_ changed to non-ptr
 //   2004/09/17 Peter Vanroose - made scale() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
@@ -57,10 +57,10 @@ class vcsl_scale
   void set_static(double new_scale);
 
   //: Set the scale variation along the time
-  void set_scale(vcl_vector<double> const& new_scale) { scale_=new_scale; }
+  void set_scale(std::vector<double> const& new_scale) { scale_=new_scale; }
 
   //: Return the scale variation along the time
-  vcl_vector<double> scale() const { return scale_; }
+  std::vector<double> scale() const { return scale_; }
 
   //***************************************************************************
   // Basic operations
@@ -85,7 +85,7 @@ class vcsl_scale
   double scale_value(double time) const;
 
   //: Scale variation along the time
-  vcl_vector<double> scale_;
+  std::vector<double> scale_;
 };
 
 #endif // vcsl_scale_h_

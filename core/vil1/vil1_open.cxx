@@ -6,9 +6,11 @@
 // \file
 // \author fsm
 
+#include <cstring>
+#include <iostream>
 #include "vil1_open.h"
 
-#include <vcl_cstring.h>  // strncmp()
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_stream_fstream.h>
 #include <vil1/vil1_stream_core.h>
@@ -18,7 +20,7 @@ vil1_stream *vil1_open(char const* what, char const* how)
 {
   // check for null pointer or empty strings.
   if (!what || !*what)
-    return 0;
+    return VXL_NULLPTR;
 
   // try to open as file first.
   vil1_stream *is = new vil1_stream_fstream(what, how);
@@ -38,21 +40,21 @@ vil1_stream *vil1_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = 0;
+    is = VXL_NULLPTR;
   }
 
   if (!is) {
     // hacked check for filenames beginning "gen:".
-    int l = (int)vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "gen:", 4) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    int l = (int)std::strlen(what);
+    if (l > 4 && std::strncmp(what, "gen:", 4) == 0) {
+      if (std::strcmp(how, "r") == 0) {
         // Make an in-core stream...
         vil1_stream_core *cis = new vil1_stream_core();
         cis->write(what, l+1);
         is = cis;
       }
       else {
-        vcl_cerr << __FILE__ ": cannot open gen:* for writing\n";
+        std::cerr << __FILE__ ": cannot open gen:* for writing\n";
       }
     }
   }
@@ -60,20 +62,20 @@ vil1_stream *vil1_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = 0;
+    is = VXL_NULLPTR;
   }
 
   if (!is) {
     // maybe it's a URL?
-    int l = (int)vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
+    int l = (int)std::strlen(what);
+    if (l > 4 && std::strncmp(what, "http://", 7) == 0) {
 #ifdef __APPLE__
-      vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+      std::cerr << __FILE__ ": cannot open URL for writing (yet)\n";
 #else
-      if (vcl_strcmp(how, "r") == 0) {
+      if (std::strcmp(how, "r") == 0) {
         is = new vil1_stream_url(what);
       }
-      else vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+      else std::cerr << __FILE__ ": cannot open URL for writing (yet)\n";
 #endif
     }
   }
@@ -81,7 +83,7 @@ vil1_stream *vil1_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = 0;
+    is = VXL_NULLPTR;
   }
 
   return is;

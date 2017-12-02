@@ -6,24 +6,22 @@ doxygen_add_library(contrib/oul/ouml
   DESCRIPTION "Miscellaneous things"
   )
 
-SET(ouml_sources
+set(ouml_sources
   eigenfaces.h       eigenfaces.cxx
   image_database.h   image_database.cxx
   polygon_mesh.h     polygon_mesh.cxx
   CardinalSpline.h   CardinalSpline.cxx
 
-  image_convert.h    image_convert.txx
-  image_ops.h        image_ops.txx
-  io.h               io.txx
+  image_convert.h    image_convert.hxx
+  image_ops.h        image_ops.hxx
+  io.h               io.hxx
 
   inlines.h
 )
 
-ADD_LIBRARY(ouml ${ouml_sources})
-INSTALL_TARGETS(/lib ouml)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/ouml ${ouml_sources})
-TARGET_LINK_LIBRARIES( ouml vgl vnl_algo vnl_io vnl vil1 vsl vpl )
+vxl_add_library(LIBRARY_NAME ouml LIBRARY_SOURCES ${ouml_sources})
+target_link_libraries( ouml ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpl )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

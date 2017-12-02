@@ -6,9 +6,11 @@
 // \author Ali Osman Ulusoy
 // \date Sep 08, 2011
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -37,18 +39,18 @@ namespace boxm2_ocl_create_aux_process_globals
     UPDATE_CONVERT_AUX    = 2
   };
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    vcl_vector<vcl_string> second_pass_src = vcl_vector<vcl_string>(src_paths);
+    std::vector<std::string> second_pass_src = std::vector<std::string>(src_paths);
 
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
     src_paths.push_back(source_dir + "update_functors.cl");
@@ -63,18 +65,18 @@ namespace boxm2_ocl_create_aux_process_globals
     second_pass_src.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    vcl_string options = opts + " -D INTENSITY  ";
+    std::string options = opts + " -D INTENSITY  ";
     options += " -D DETERMINISTIC ";
 
     //create all passes
     bocl_kernel* pre_inf = new bocl_kernel();
-    vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
+    std::string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
     pre_inf->create_kernel(&device->context(),device->device_id(), src_paths, "pre_inf_main", pre_opts, "batch_update::pre_inf");
     vec_kernels.push_back(pre_inf);
 
     //push back cast_ray_bit
     bocl_kernel* aux_pre_vis = new bocl_kernel();
-    vcl_string bayes_opt = options + " -D AUX_PREVISPOST -D STEP_CELL=step_cell_aux_previspost(aux_args,data_ptr,llid,d) ";
+    std::string bayes_opt = options + " -D AUX_PREVISPOST -D STEP_CELL=step_cell_aux_previspost(aux_args,data_ptr,llid,d) ";
     aux_pre_vis->create_kernel(&device->context(),device->device_id(), second_pass_src, "aux_previspost_main", bayes_opt, "batch_update::aux_previspost_main");
     vec_kernels.push_back(aux_pre_vis);
 
@@ -84,7 +86,7 @@ namespace boxm2_ocl_create_aux_process_globals
     return ;
   }
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_create_aux_process_cons(bprb_func_process& pro)
@@ -92,7 +94,7 @@ bool boxm2_ocl_create_aux_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_create_aux_process_globals;
 
   //process takes 7 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -101,11 +103,11 @@ bool boxm2_ocl_create_aux_process_cons(bprb_func_process& pro)
   input_types_[5] = "vil_image_view_base_sptr";
   input_types_[6] = "vcl_string";
   // in case the 7th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   pro.set_input(6, idx);
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
@@ -114,11 +116,11 @@ bool boxm2_ocl_create_aux_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_create_aux_process_globals;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -131,14 +133,14 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
   boxm2_cache_sptr          cache       = pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string ident                      = pro.get_input<vcl_string>(i++);
+  std::string ident                      = pro.get_input<std::string>(i++);
 
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   bool foundDataType = false;
-  vcl_string data_type,num_obs_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type,num_obs_type,options;
+  std::vector<std::string> apps = scene->appearances();
   int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -161,7 +163,7 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_UPDATE_AUX_PER_VIEW_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OCL_UPDATE_AUX_PER_VIEW_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
@@ -171,12 +173,12 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
     CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
   // compile the kernel if not already compiled
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
@@ -260,8 +262,8 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels[identifier].size(); ++i)
   {
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -283,7 +285,6 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
       //read aux0 and aux1 from cache. They should have been generated by boxm2OclCreateNormIntensities process
       int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
       bocl_mem *aux0  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),0,false);
-      auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
       bocl_mem *aux1  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),0,false);
 
       //grab appearance model.
@@ -430,7 +431,7 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
         float * aux4_f=static_cast<float*> (aux4->cpu_buffer());
 
         for (unsigned k=0;k<100;k++) {
-          vcl_cout << aux0_f[k] <<' '<< aux1_f[k]<< ' ' << aux2_f[k] <<' '<< aux3_f[k] <<' '<< aux4_f[k] <<vcl_endl;
+          std::cout << aux0_f[k] <<' '<< aux1_f[k]<< ' ' << aux2_f[k] <<' '<< aux3_f[k] <<' '<< aux4_f[k] <<std::endl;
         }
 #endif
       }
@@ -447,7 +448,7 @@ bool boxm2_ocl_create_aux_process(bprb_func_process& pro)
   delete [] ray_origins;
   delete [] ray_directions;
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }

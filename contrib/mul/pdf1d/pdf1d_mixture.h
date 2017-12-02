@@ -8,17 +8,19 @@
 
 //=======================================================================
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <pdf1d/pdf1d_pdf.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 
 //: Represents a mixture model (a set of individual pdfs + weights)
 class pdf1d_mixture : public pdf1d_pdf
 {
-  vcl_vector<pdf1d_pdf*> component_;
-  vcl_vector<double>     weight_;
+  std::vector<pdf1d_pdf*> component_;
+  std::vector<double>     weight_;
 
   void init();
   void delete_stuff();
@@ -75,12 +77,12 @@ class pdf1d_mixture : public pdf1d_pdf
 
   //: Array of weights
   // Use weight(i) where possible
-  const vcl_vector<double>& weights() const { return weight_; }
+  const std::vector<double>& weights() const { return weight_; }
 
   //: Array of weights
   // Warning care must be taken to ensure consistency when modifying weights
   // Warning. Use weight(i) where possible
-  vcl_vector<double>& weights() { return weight_; }
+  std::vector<double>& weights() { return weight_; }
 
   //: Return index of component nearest to x
   unsigned nearest_comp(double x) const;
@@ -98,11 +100,11 @@ class pdf1d_mixture : public pdf1d_pdf
   //: Access to components - for use by builders
   //  Care must be taken to ensure consistency when modifying
   // Use component(i) where possible
-  vcl_vector<pdf1d_pdf*>& components() { return component_; }
+  std::vector<pdf1d_pdf*>& components() { return component_; }
 
   //: Access to components - for use by builders
   // Use component(i) where possible
-  const vcl_vector<pdf1d_pdf*>& components() const { return component_; }
+  const std::vector<pdf1d_pdf*>& components() const { return component_; }
 
   //: Set the whole pdf mean and variance values.
   // Components and Weights should already be correct so that
@@ -119,16 +121,16 @@ class pdf1d_mixture : public pdf1d_pdf
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_pdf* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

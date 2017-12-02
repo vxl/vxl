@@ -1,7 +1,7 @@
 //:
 // \file
 // \author Andrew Miller
-// \brief A copy of vcl_where_root_dir for boxm2/ocl.  
+// \brief A copy of vcl_where_root_dir for boxm2/ocl.
 
 // Note: The make system (eg cmake) should generate a file, boxm2_ocl_where_root_dir.h, from
 // this, in which the macro is set correctly.
@@ -11,5 +11,5 @@
 // may get checked back into the repository by accident.
 
 #ifndef BOXM2_OPENCL_SOURCE_DIR // file guard
-#define BOXM2_OPENCL_SOURCE_DIR "${BOXM2_OPENCL_SRC_DIR}"
+#define BOXM2_OPENCL_SOURCE_DIR "@BOXM2_OPENCL_SRC_DIR@"
 #endif

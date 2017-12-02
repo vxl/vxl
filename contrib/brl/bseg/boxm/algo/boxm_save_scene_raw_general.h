@@ -16,6 +16,10 @@
 //                                      Double, float values are not converted to byte, nor assumptions are made. Values are saves as they are
 // \endverbatim
 
+#include <vector>
+#include <new>
+#include <iostream>
+#include <sstream>
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/sample/boxm_sample.h>
@@ -25,14 +29,11 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/algo/boxm_compute_scene_statistics.h>
 #include <bsta/bsta_histogram.h>
-#include <vbl/vbl_array_3d.txx>
+#include <vbl/vbl_array_3d.hxx>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
 
-#include <vcl_vector.h>
-#include <vcl_new.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vul/vul_file.h>
@@ -98,7 +99,7 @@ class boxm_dristhi_traits<bsta_num_obs<bsta_gauss_sf1> >
 
 template <class T_loc>
 void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
-                                 vcl_string filename,
+                                 std::string filename,
                                  unsigned int resolution_level)
 {
   unsigned long n_zeros = 0;
@@ -144,11 +145,11 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
 
     int data_size = ncells*ncells*ncells;
     unsigned char *data = 0;
-    vcl_cout << "Data Size=" << data_size << vcl_endl;
+    std::cout << "Data Size=" << data_size << std::endl;
     data = new (std::nothrow)unsigned char[data_size];
 
     if (data == 0) {
-      vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
+      std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
       return;
     }
 
@@ -160,7 +161,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
     double out_cell_norm_volume = (tree->number_levels() - (int)resolution_level + 1);
     out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
-    vcl_vector<boct_tree_cell<T_loc, bool > *> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc, bool > *> cells = tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++)
     {
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
@@ -183,7 +184,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
         int out_index=static_cast<int>(ncells-1-(node.z()/step_len) + (node.y()/step_len)*ncells + (node.x()/step_len)*ncells*ncells);
 
         if (out_index >= data_size)
-          vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+          std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
         else
           data[out_index] = cell_val;
       }
@@ -199,7 +200,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
               int out_index=ncells-1-z + y*ncells + x*ncells*ncells;
 
               if (out_index >= data_size)
-                vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+                std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
               else
                 data[out_index] = cell_val;
             }
@@ -220,12 +221,12 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
     }
 
     // write the data into a bin file, generate a file name
-    vcl_stringstream strm;
+    std::stringstream strm;
     strm << filename<< idx.x() << '_' << idx.y() << '_' << idx.z() << ".bin";
-    vcl_string fn(strm.str());
-    vsl_b_ofstream os(fn.c_str(),vcl_ios::binary);
+    std::string fn(strm.str());
+    vsl_b_ofstream os(fn.c_str(),std::ios::binary);
     if (!os.os().good()) {
-      vcl_cerr << "error opening " << filename << " for write!\n";
+      std::cerr << "error opening " << filename << " for write!\n";
       return;
     }
 
@@ -256,7 +257,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
   int row_data_size = ncells;
   unsigned char* read_data = new (std::nothrow) unsigned char[row_data_size];
   if (read_data == 0) {
-    vcl_cout << "boxm_save_block_raw: Could not allocate read data!" << vcl_endl;
+    std::cout << "boxm_save_block_raw: Could not allocate read data!" << std::endl;
     return;
   }
 
@@ -267,10 +268,10 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
     for (unsigned y=0; y<dim.y(); y++) {
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
-        vcl_stringstream strm;
+        std::stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
-        vcl_string fn(strm.str());
-        s = new vsl_b_ifstream(fn.c_str(),vcl_ios::binary);
+        std::string fn(strm.str());
+        s = new vsl_b_ifstream(fn.c_str(),std::ios::binary);
         vsl_b_read(*s, nx);
         vsl_b_read(*s, ny);
         vsl_b_read(*s, nz);
@@ -283,9 +284,9 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
   vxl_uint_32 nx_uint = dimx;
   vxl_uint_32 ny_uint = dimy;
   vxl_uint_32 nz_uint = dimz;
-  vcl_ofstream os(filename.c_str(),vcl_ios::binary);
+  std::ofstream os(filename.c_str(),std::ios::binary);
   if (!os.good()) {
-    vcl_cerr << "error opening " << filename << " for write!\n";
+    std::cerr << "error opening " << filename << " for write!\n";
     return;
   }
 
@@ -322,18 +323,18 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
         s->close();
-        vcl_stringstream strm;
+        std::stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
-        vcl_string fn(strm.str());
-        vcl_cout << "Deleting " << fn << vcl_endl;
+        std::string fn(strm.str());
+        std::cout << "Deleting " << fn << std::endl;
         vpl_unlink(fn.data());
         delete s;
       }
     }
   }
 
-  vcl_cout << "Number of true cells : " << n_ones << "\n Number of false cells: " << n_zeros << vcl_endl;
-  vcl_cout << "Number of true cells at level 0 : " << n_ones_level0 << "\n Number of false cells at level 0: " << n_zeros_level0 << vcl_endl;
+  std::cout << "Number of true cells : " << n_ones << "\n Number of false cells: " << n_zeros << std::endl;
+  std::cout << "Number of true cells at level 0 : " << n_ones_level0 << "\n Number of false cells at level 0: " << n_zeros_level0 << std::endl;
 
   return;
 }
@@ -341,17 +342,17 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
 
 template <class T_loc, class T_data>
 void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                 vcl_string filename,
+                                 std::string filename,
                                  unsigned int resolution_level)
 {
-  vcl_cout << " Using boxm_save_scene_raw_general\n";
+  std::cout << " Using boxm_save_scene_raw_general\n";
   bsta_histogram<float> hist;
   boxm_compute_scene_statistics(&scene, hist);
   hist.pretty_print();
 
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss << vul_file::strip_extension(filename) << "_hist_plot.txt" ;
-  vcl_ofstream hist_arrays_ofs((ss.str()).c_str());
+  std::ofstream hist_arrays_ofs((ss.str()).c_str());
   hist.print_to_arrays(hist_arrays_ofs);
   hist_arrays_ofs.close();
 
@@ -393,11 +394,11 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
     int data_size = ncells*ncells*ncells;
     T_data *data = 0;
-    vcl_cout << "Data Size=" << data_size << vcl_endl;
+    std::cout << "Data Size=" << data_size << std::endl;
     data = new (std::nothrow)T_data[data_size];
 
     if (data == 0) {
-      vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
+      std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
       return;
     }
 
@@ -409,7 +410,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     double out_cell_norm_volume = (tree->number_levels() - (int)resolution_level + 1);
     out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
-    vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++)
     {
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
@@ -422,7 +423,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         int out_index=static_cast<int>(ncells-1-(node.z()/step_len) + (node.y()/step_len)*ncells + (node.x()/step_len)*ncells*ncells);
 
         if (out_index >= data_size)
-          vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+          std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
         else
           data[out_index] = cell_val;
       }
@@ -438,7 +439,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
               int out_index=ncells-1-z + y*ncells + x*ncells*ncells;
 
               if (out_index >= data_size)
-                vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+                std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
               else
                 data[out_index] = cell_val;
             }
@@ -459,12 +460,12 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     }
 
     // write the data into a bin file, generate a file name
-    vcl_stringstream strm;
+    std::stringstream strm;
     strm << filename<< idx.x() << '_' << idx.y() << '_' << idx.z() << ".bin";
-    vcl_string fn(strm.str());
-    vsl_b_ofstream os(fn.c_str(),vcl_ios::binary);
+    std::string fn(strm.str());
+    vsl_b_ofstream os(fn.c_str(),std::ios::binary);
     if (!os.os().good()) {
-      vcl_cerr << "error opening " << filename << " for write!\n";
+      std::cerr << "error opening " << filename << " for write!\n";
       return;
     }
 
@@ -476,10 +477,10 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     for (; dp < data + data_size; ++dp) {
       T_data v = *dp;
       if (v > 19 || v < -1)
-        vcl_cerr << "Error, v: " << v << '\n';
+        std::cerr << "Error, v: " << v << '\n';
       vsl_b_write(os, (T_data)v);
     }
-    vcl_cerr << " Data Correct ? " << '\n';
+    std::cerr << " Data Correct ? " << '\n';
 
     delete[] data;
     os.close();
@@ -499,7 +500,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   int row_data_size = ncells;
   T_data* read_data = new (std::nothrow) T_data[row_data_size];
   if (read_data == 0) {
-    vcl_cout << "boxm_save_block_raw: Could not allocate read data!" << vcl_endl;
+    std::cout << "boxm_save_block_raw: Could not allocate read data!" << std::endl;
     return;
   }
 
@@ -510,10 +511,10 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     for (unsigned y=0; y<dim.y(); y++) {
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
-        vcl_stringstream strm;
+        std::stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
-        vcl_string fn(strm.str());
-        s = new vsl_b_ifstream(fn.c_str(),vcl_ios::binary);
+        std::string fn(strm.str());
+        s = new vsl_b_ifstream(fn.c_str(),std::ios::binary);
         vsl_b_read(*s, nx);
         vsl_b_read(*s, ny);
         vsl_b_read(*s, nz);
@@ -526,9 +527,9 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vxl_uint_32 nx_uint = dimx;
   vxl_uint_32 ny_uint = dimy;
   vxl_uint_32 nz_uint = dimz;
-  vcl_ofstream os(filename.c_str(),vcl_ios::binary);
+  std::ofstream os(filename.c_str(),std::ios::binary);
   if (!os.good()) {
-    vcl_cerr << "error opening " << filename << " for write!\n";
+    std::cerr << "error opening " << filename << " for write!\n";
     return;
   }
 
@@ -565,10 +566,10 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
         s->close();
-        vcl_stringstream strm;
+        std::stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
-        vcl_string fn(strm.str());
-        vcl_cout << "Deleting " << fn << vcl_endl;
+        std::string fn(strm.str());
+        std::cout << "Deleting " << fn << std::endl;
         vpl_unlink(fn.data());
         delete s;
       }
@@ -580,12 +581,12 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
 template <class T_loc, class T_data>
 void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                         vcl_string filename,
+                                         std::string filename,
                                          unsigned int resolution_level)
 {
   typedef boct_tree<T_loc, T_data > tree_type;
 
-  vcl_cout << " Using boxm_save_scene_raw_general_to_byte\n";
+  std::cout << " Using boxm_save_scene_raw_general_to_byte\n";
 
   bsta_histogram<float> hist;
   boxm_compute_scene_statistics(&scene, hist);
@@ -626,11 +627,11 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
 
     int data_size = ncells*ncells*ncells;
     float *data = 0;
-    vcl_cout << "Data Size=" << data_size << vcl_endl;
+    std::cout << "Data Size=" << data_size << std::endl;
     data = new (std::nothrow)float[data_size];
 
     if (data == 0) {
-      vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
+      std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
       return;
     }
     // init to zero
@@ -641,7 +642,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     double out_cell_norm_volume = (tree->number_levels() - (int)resolution_level + 1);
     out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
-    vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++)
     {
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
@@ -657,7 +658,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
         //////int out_index=static_cast<int>(ncells-(node.z()/step_len)-1 + (node.x()/step_len)*ncells + (node.y()/step_len)*ncells*ncells);
 
         if (out_index >= data_size)
-          vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+          std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
         else
           data[out_index] = cell_val;
       }
@@ -676,7 +677,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
               //////int out_index=ncells-1-z + x*ncells + y*ncells*ncells;
 
               if (out_index >= data_size)
-                vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+                std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
               else
                 data[out_index] = cell_val;
             }
@@ -700,12 +701,12 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     }
 
     // write the data into a bin file, generate a file name
-    vcl_stringstream strm;
+    std::stringstream strm;
     strm << filename<< idx.x() << '_' << idx.y() << '_' << idx.z() << ".bin";
-    vcl_string fn(strm.str());
-    vsl_b_ofstream os(fn.c_str(),vcl_ios::binary);
+    std::string fn(strm.str());
+    vsl_b_ofstream os(fn.c_str(),std::ios::binary);
     if (!os.os().good()) {
-      vcl_cerr << "error opening " << filename << " for write!\n";
+      std::cerr << "error opening " << filename << " for write!\n";
       return;
     }
 
@@ -719,7 +720,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
 
     float* dp = data;
     for (; dp < data + data_size; ++dp) {
-      unsigned char c = (unsigned char)(vcl_floor((255.0f * float((*dp)-minv)/float(rangev)) + 0.5f));
+      unsigned char c = (unsigned char)(std::floor((255.0f * float((*dp)-minv)/float(rangev)) + 0.5f));
       vsl_b_write(os, (char) c);
     }
     delete[] data;
@@ -739,7 +740,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
   int row_data_size = ncells;
   char* byte_data = new (std::nothrow) char[row_data_size];
   if (byte_data == 0) {
-    vcl_cout << "boxm_save_block_raw: Could not allocate byte data!" << vcl_endl;
+    std::cout << "boxm_save_block_raw: Could not allocate byte data!" << std::endl;
     return;
   }
 
@@ -750,10 +751,10 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     for (unsigned y=0; y<dim.y(); y++) {
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
-        vcl_stringstream strm;
+        std::stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
-        vcl_string fn(strm.str());
-        s = new vsl_b_ifstream(fn.c_str(),vcl_ios::binary);
+        std::string fn(strm.str());
+        s = new vsl_b_ifstream(fn.c_str(),std::ios::binary);
         vsl_b_read(*s, nx);
         vsl_b_read(*s, ny);
         vsl_b_read(*s, nz);
@@ -766,9 +767,9 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
   vxl_uint_32 nx_uint = dimx;
   vxl_uint_32 ny_uint = dimy;
   vxl_uint_32 nz_uint = dimz;
-  vcl_ofstream os(filename.c_str(),vcl_ios::binary);
+  std::ofstream os(filename.c_str(),std::ios::binary);
   if (!os.good()) {
-    vcl_cerr << "error opening " << filename << " for write!\n";
+    std::cerr << "error opening " << filename << " for write!\n";
     return;
   }
 
@@ -805,16 +806,16 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
         s->close();
-        vcl_stringstream strm;
+        std::stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
-        vcl_string fn(strm.str());
-        vcl_cout << "Deleting " << fn << vcl_endl;
+        std::string fn(strm.str());
+        std::cout << "Deleting " << fn << std::endl;
         vpl_unlink(fn.data());
         delete s;
       }
     }
   }
-  vcl_cout << "Volume Histogram\n";
+  std::cout << "Volume Histogram\n";
   hist.pretty_print();
   return;
 }

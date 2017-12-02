@@ -1,9 +1,9 @@
 # gel/vifa/tests/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
+include_directories(${GEL_INCLUDE_DIR})
+include_directories(${BRL_INCLUDE_DIR})
 
-ADD_EXECUTABLE( vifa_test_all
+add_executable( vifa_test_all
   test_ifa_factory.h
   test_ifa_factory.cxx
   test_driver.cxx
@@ -18,20 +18,20 @@ ADD_EXECUTABLE( vifa_test_all
   test_int_faces_attr.cxx
   test_int_faces_adj_attr.cxx
 )
-TARGET_LINK_LIBRARIES( vifa_test_all vifa sdet vtol vdgl vil vil1 vgl testlib )
+target_link_libraries( vifa_test_all vifa sdet vtol vdgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}testlib )
 
-ADD_TEST(vifa_test_coll_lines_params  ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_coll_lines_params)
-ADD_TEST(vifa_test_group_pgram_params ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_group_pgram_params)
-ADD_TEST(vifa_test_norm_params        ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_norm_params)
-ADD_TEST(vifa_test_parallel_params    ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_parallel_params)
-ADD_TEST(vifa_test_int_face_attr_common_params ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_int_face_attr_common_params)
-ADD_TEST(vifa_test_image_histogram    ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_image_histogram ${CMAKE_CURRENT_SOURCE_DIR}/cam0013.tif)
-ADD_TEST(vifa_test_region_proc        ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/testimg.tif)
-ADD_TEST(vifa_test_int_face_attr      ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_int_face_attr ${CMAKE_CURRENT_SOURCE_DIR}/testimg.tif)
-ADD_TEST(vifa_test_int_faces_attr     ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_int_faces_attr ${CMAKE_CURRENT_SOURCE_DIR}/testimg.tif)
-ADD_TEST(vifa_test_int_faces_adj_attr ${EXECUTABLE_OUTPUT_PATH}/vifa_test_all test_int_faces_adj_attr ${CMAKE_CURRENT_SOURCE_DIR}/testimg.tif)
+add_test( NAME vifa_test_coll_lines_params COMMAND $<TARGET_FILE:vifa_test_all> test_coll_lines_params)
+add_test( NAME vifa_test_group_pgram_params COMMAND $<TARGET_FILE:vifa_test_all> test_group_pgram_params)
+add_test( NAME vifa_test_norm_params COMMAND $<TARGET_FILE:vifa_test_all> test_norm_params)
+add_test( NAME vifa_test_parallel_params COMMAND $<TARGET_FILE:vifa_test_all> test_parallel_params)
+add_test( NAME vifa_test_int_face_attr_common_params COMMAND $<TARGET_FILE:vifa_test_all> test_int_face_attr_common_params)
+add_test( NAME vifa_test_image_histogram COMMAND $<TARGET_FILE:vifa_test_all> test_image_histogram ${CMAKE_CURRENT_SOURCE_DIR}/cam0013.tif)
+add_test( NAME vifa_test_region_proc COMMAND $<TARGET_FILE:vifa_test_all> test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/testimg.tif)
+add_test( NAME vifa_test_int_face_attr COMMAND $<TARGET_FILE:vifa_test_all> test_int_face_attr ${CMAKE_CURRENT_SOURCE_DIR}/testimg.tif)
+add_test( NAME vifa_test_int_faces_attr COMMAND $<TARGET_FILE:vifa_test_all> test_int_faces_attr ${CMAKE_CURRENT_SOURCE_DIR}/testimg.tif)
+add_test( NAME vifa_test_int_faces_adj_attr COMMAND $<TARGET_FILE:vifa_test_all> test_int_faces_adj_attr ${CMAKE_CURRENT_SOURCE_DIR}/testimg.tif)
 
-ADD_EXECUTABLE( vifa_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vifa_test_include vifa )
-ADD_EXECUTABLE( vifa_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( vifa_test_template_include vifa )
+add_executable( vifa_test_include test_include.cxx )
+target_link_libraries( vifa_test_include vifa )
+add_executable( vifa_test_template_include test_template_include.cxx )
+target_link_libraries( vifa_test_template_include vifa )

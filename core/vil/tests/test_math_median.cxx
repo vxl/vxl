@@ -1,14 +1,15 @@
 // This is core/vil/tests/test_math_median.cxx
 
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 
 
 static void test_math_median()
 {
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << " Testing vil_math_median\n"
            << "******************************\n";
 

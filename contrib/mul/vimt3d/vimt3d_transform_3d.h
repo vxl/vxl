@@ -5,11 +5,13 @@
 // \brief A class to define and apply a 3D transformation up to affine.
 // \author Graham Vincent, Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_quaternion.h>
 
 //=======================================================================
@@ -137,7 +139,7 @@ class vimt3d_transform_3d
   // \param t_z  Translation in z
   void set_rigid_body(double r_x, double r_y, double r_z,
                       double t_x, double t_y, double t_z);
-  
+
   //: Sets the transformation to be rotation, followed by translation.
   // The transformation is separable affine.
   // \param unit_q  Unit quaternion defining rotation
@@ -157,7 +159,7 @@ class vimt3d_transform_3d
                       double r_x, double r_y, double r_z,
                       double t_x, double t_y, double t_z);
 
-  
+
   //: Sets the transformation to be similarity: scale, rotation, followed by translation.
   // The transformation is separable affine.
   // \param unit_q  Unit quaternion defining rotation
@@ -297,11 +299,11 @@ class vimt3d_transform_3d
   // This function prints the extracted params.
   // \sa params()
   // \sa set()
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Print class to os
   // This function prints the actual parameters xx_,xy_,xz_,xt_, yx_,yy_,yz_,yt_, zx_,zy_,zz_,zt_, tx_,ty_,tz_,tt_
-  void print_all(vcl_ostream& os) const;
+  void print_all(std::ostream& os) const;
 
   //: Set transformation from stream;
   // You can specify the vector as used in the set() operation.
@@ -319,7 +321,7 @@ class vimt3d_transform_3d
   // t_y: 2
   // t_z: 2
   // \endverbatim
-  void config(vcl_istream& is);
+  void config(std::istream& is);
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -367,10 +369,10 @@ void vsl_b_write(vsl_b_ostream& bfs, const vimt3d_transform_3d& b);
 void vsl_b_read(vsl_b_istream& bfs, vimt3d_transform_3d& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b);
+std::ostream& operator<<(std::ostream& os,const vimt3d_transform_3d& b);
 
 //: Stream output operator for class reference
-inline void vsl_print_summary(vcl_ostream& afs, const vimt3d_transform_3d& b)
+inline void vsl_print_summary(std::ostream& afs, const vimt3d_transform_3d& b)
 {
   b.print_summary(afs);
 }

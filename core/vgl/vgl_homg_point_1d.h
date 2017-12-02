@@ -14,9 +14,10 @@
 // Modifications
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
 
 //: Represents a homogeneous 1-D point, i.e., a homogeneous pair \a (x,w)
 template <class T>
@@ -76,12 +77,12 @@ class vgl_homg_point_1d
 //: Write "<vgl_homg_point_1d (x,w) > " to stream
 // \relatesalso vgl_homg_point_1d
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_1d<T> const& p);
+std::ostream& operator<<(std::ostream& s, vgl_homg_point_1d<T> const& p);
 
 //: Read x w from stream
 // \relatesalso vgl_homg_point_1d
 template <class T>
-vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_1d<T>& p);
+std::istream& operator>>(std::istream& s, vgl_homg_point_1d<T>& p);
 
 //  +-+-+ homg_point_1d arithmetic +-+-+
 
@@ -201,7 +202,7 @@ vgl_homg_point_1d<T> centre(vgl_homg_point_1d<T> const& p1,
 // There are no rounding errors when T is e.g. int, if all w() are 1.
 // \relatesalso vgl_homg_point_1d
 template <class T> inline
-vgl_homg_point_1d<T> centre(vcl_vector<vgl_homg_point_1d<T> > const& v)
+vgl_homg_point_1d<T> centre(std::vector<vgl_homg_point_1d<T> > const& v)
 {
   int n=v.size();
   assert(n>0); // it is *not* correct to return the point (0,1) when n==0.
@@ -210,6 +211,6 @@ vgl_homg_point_1d<T> centre(vcl_vector<vgl_homg_point_1d<T> > const& v)
   return vgl_homg_point_1d<T>(x,T(n));
 }
 
-#define VGL_HOMG_POINT_1D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_1d.txx first"
+#define VGL_HOMG_POINT_1D_INSTANTIATE(T) extern "please include vgl/vgl_homg_point_1d.hxx first"
 
 #endif // vgl_homg_point_1d_h_

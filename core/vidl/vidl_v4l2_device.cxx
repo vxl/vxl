@@ -1,3 +1,8 @@
+#include <cerrno>
+#include <cstring>
+#include <cstdlib>
+#include <sstream>
+#include <iostream>
 #include "vidl_v4l2_device.h"
 //:
 // \file
@@ -16,15 +21,11 @@ extern "C" {
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
-#include <vcl_cerrno.h>
+#include <vcl_compiler.h>
 #include <fcntl.h>
 #include <unistd.h>
 };
 
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
 
 // ----------------- local functions ---------------
 namespace {
@@ -112,11 +113,11 @@ vidl_v4l2_device::vidl_v4l2_device(const char *file)
   last_error="";
 
   if (!open()) {
-    vcl_cerr << "Error creating device: " << last_error << vcl_endl;
+    std::cerr << "Error creating device: " << last_error << std::endl;
     return;
   }
   if (!initialize_device()) {
-    vcl_cerr << "Error initializing device: " << last_error << vcl_endl;
+    std::cerr << "Error initializing device: " << last_error << std::endl;
     close();
     return;
   }
@@ -125,11 +126,11 @@ vidl_v4l2_device::vidl_v4l2_device(const char *file)
   struct v4l2_input inp;
 
 #ifdef DEBUG
-  vcl_cerr << "Looking for inputs..." << fd << vcl_endl;
+  std::cerr << "Looking for inputs..." << fd << std::endl;
 #endif
   for (inp.index=0;-1!=xioctl(fd,VIDIOC_ENUMINPUT,&inp); inp.index++) {
 #ifdef DEBUG
-    vcl_cerr << "Inserting input..." << vcl_endl;
+    std::cerr << "Inserting input..." << std::endl;
 #endif
     inputs_.push_back(vidl_v4l2_input(inp));
   }
@@ -171,11 +172,11 @@ void vidl_v4l2_device::reset()
   close();
   last_error="";
   if (!open()) {
-    vcl_cerr << "Error creating device: " << last_error << '\n';
+    std::cerr << "Error creating device: " << last_error << '\n';
     return;
   }
   if (!initialize_device()) {
-    vcl_cerr << "Error initializing device: " << last_error << '\n';
+    std::cerr << "Error initializing device: " << last_error << '\n';
     close();
     return;
   }
@@ -198,15 +199,15 @@ bool vidl_v4l2_device::open()
   struct stat st;
 
   if (-1 == stat(dev_name_.c_str(), &st)) {
-    vcl_ostringstream f;
-    f << "Cannot identify " << dev_name_ << ": " << vcl_strerror(errno);
+    std::ostringstream f;
+    f << "Cannot identify " << dev_name_ << ": " << std::strerror(errno);
     last_error=f.str();
 
     return false; //exit (EXIT_FAILURE);
   }
 
   if (!S_ISCHR(st.st_mode)) {
-    vcl_ostringstream f;
+    std::ostringstream f;
     f << dev_name_ << "is not a valid video device";
     last_error=f.str();
     return false; // exit(EXIT_FAILURE);
@@ -215,8 +216,8 @@ bool vidl_v4l2_device::open()
   fd = ::open(dev_name_.c_str(), O_RDWR /* required */ | O_NONBLOCK, 0);
 
   if (-1 == fd) {
-    vcl_ostringstream f;
-    f << "Cannot open " << dev_name_ << ": "<< vcl_strerror(errno);
+    std::ostringstream f;
+    f << "Cannot open " << dev_name_ << ": "<< std::strerror(errno);
     last_error=f.str();
     return false; // exit(EXIT_FAILURE);
   }
@@ -228,7 +229,7 @@ bool vidl_v4l2_device::initialize_device()
   struct v4l2_capability cap;
 
   if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &cap)) {
-    vcl_ostringstream f;
+    std::ostringstream f;
 
     if (EINVAL == errno) {
       f << dev_name_ << " is not a valid V4L2 video device";
@@ -241,7 +242,7 @@ bool vidl_v4l2_device::initialize_device()
   }
 
   if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
-    vcl_ostringstream f;
+    std::ostringstream f;
     f << dev_name_ << " is not a valid video capture device";
     close();
     last_error=f.str();
@@ -249,7 +250,7 @@ bool vidl_v4l2_device::initialize_device()
   }
 
   if (!(cap.capabilities & V4L2_CAP_STREAMING)) { // Right now, only MMAP method
-    vcl_ostringstream f;
+    std::ostringstream f;
     f << dev_name_ << " does not support streaming i/o";
     close();
     last_error=f.str();
@@ -303,7 +304,7 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
       stop_capturing();
     if (buffers)
       uninit_mmap();
-    vcl_memset(&fmt, 0, sizeof(fmt));
+    std::memset(&fmt, 0, sizeof(fmt));
 
     fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     fmt.fmt.pix.width       = width;
@@ -333,7 +334,7 @@ bool vidl_v4l2_device::set_v4l2_format(unsigned int fourcode, int width, int hei
     // Now we can set frame rate
     if (fps!=0.0) {
       struct v4l2_streamparm sfrate;
-      vcl_memset(&sfrate, 0, sizeof(sfrate));
+      std::memset(&sfrate, 0, sizeof(sfrate));
       sfrate.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
       // Convert the frame rate into a fraction for V4L2
@@ -369,7 +370,7 @@ bool vidl_v4l2_device::init_mmap(int reqbuf)
 
   struct v4l2_requestbuffers req;
 
-  vcl_memset(&req, 0, sizeof(req));
+  std::memset(&req, 0, sizeof(req));
 
   req.count               = reqbuf;
   req.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -377,7 +378,7 @@ bool vidl_v4l2_device::init_mmap(int reqbuf)
 
   if (-1 == xioctl(fd, VIDIOC_REQBUFS, &req)) {
     if (EINVAL == errno) {
-      vcl_ostringstream f;
+      std::ostringstream f;
       f << dev_name_ << " does not support memory mapping";
       last_error=f.str();
       return false;
@@ -389,13 +390,13 @@ bool vidl_v4l2_device::init_mmap(int reqbuf)
   }
 
   if (req.count < 1) {
-    vcl_ostringstream f;
+    std::ostringstream f;
     f<< "Insufficient buffer memory on " << dev_name_ ;
     last_error=f.str();
     return false;
   }
 
-  buffers = (struct buffer*)vcl_calloc(req.count, sizeof(*buffers));
+  buffers = (struct buffer*)std::calloc(req.count, sizeof(*buffers));
 
   if (!buffers) {
     last_error= "Out of memory reserving buffers";
@@ -404,9 +405,9 @@ bool vidl_v4l2_device::init_mmap(int reqbuf)
 
   for (n_buffers = 0; n_buffers < req.count; ++n_buffers) { // n_buffers is member
 #if 0
-    struct v4l2_buffer buf; vcl_memset(&buf, 0, sizeof(buf));
+    struct v4l2_buffer buf; std::memset(&buf, 0, sizeof(buf));
 #endif
-    vcl_memset(&(buffers[n_buffers].buf), 0, sizeof(struct v4l2_buffer) );
+    std::memset(&(buffers[n_buffers].buf), 0, sizeof(struct v4l2_buffer) );
 
     buffers[n_buffers].buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buffers[n_buffers].buf.memory      = V4L2_MEMORY_MMAP;
@@ -414,7 +415,7 @@ bool vidl_v4l2_device::init_mmap(int reqbuf)
 
     if (-1 == xioctl(fd, VIDIOC_QUERYBUF, /*&buf*/&buffers[n_buffers].buf)) {
       last_error= "v4l2_device -> VIDIOC_QUERYBUF";
-      vcl_free(buffers); buffers=NULL;
+      std::free(buffers); buffers=NULL;
       return false;
     }
 
@@ -430,7 +431,7 @@ bool vidl_v4l2_device::init_mmap(int reqbuf)
 
     if (MAP_FAILED == buffers[n_buffers].start) {
       last_error= "v4l2_device -> mmap";
-      vcl_free(buffers); buffers=NULL;
+      std::free(buffers); buffers=NULL;
       return false;
     }
   }
@@ -463,7 +464,7 @@ bool vidl_v4l2_device::start_capturing()
 
   for (unsigned int i = 0; i < n_buffers; ++i) {
     struct v4l2_buffer buf;
-    vcl_memset(&buf, 0, sizeof(buf));
+    std::memset(&buf, 0, sizeof(buf));
 
     buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory      = V4L2_MEMORY_MMAP;
@@ -524,7 +525,7 @@ bool vidl_v4l2_device::read_frame()
       return false;
     }
 
-    vcl_memset(&buf, 0, sizeof(buf));
+    std::memset(&buf, 0, sizeof(buf));
 
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
@@ -570,7 +571,7 @@ bool vidl_v4l2_device::uninit_mmap()
       last_error= "v4l2_device -> munmap";
       return false;
     }
-  vcl_free(buffers);
+  std::free(buffers);
   buffers= NULL;
   n_buffers=0;
   return true;
@@ -583,7 +584,7 @@ bool vidl_v4l2_device::close()
       stop_capturing();
     if (buffers)
       uninit_mmap();
-    for (unsigned int i=0;i<controls_.size();++i) delete controls_[i]; 
+    for (unsigned int i=0;i<controls_.size();++i) delete controls_[i];
     controls_.clear();
 
     last_error="";
@@ -614,7 +615,7 @@ unsigned int vidl_v4l2_device::current_input() const
 bool vidl_v4l2_device::set_input(unsigned int i)
 {
   if (current_input()==i)
-    return true; 
+    return true;
 
   if (!is_open()) reset();
   if (!is_open() || i>=n_inputs())
@@ -638,21 +639,21 @@ bool vidl_v4l2_device::set_input(unsigned int i)
 }
 
 
-vcl_ostream &
-operator<<(vcl_ostream &os, const vidl_v4l2_device & dev)
+std::ostream &
+operator<<(std::ostream &os, const vidl_v4l2_device & dev)
 {
-  os << dev.device_file() << " -> " <<  dev.card_name()<< vcl_endl
-     << "  " << dev.n_inputs() << " inputs:"<< vcl_endl;
+  os << dev.device_file() << " -> " <<  dev.card_name()<< std::endl
+     << "  " << dev.n_inputs() << " inputs:"<< std::endl;
   for (unsigned int j=0;j<dev.n_inputs();++j){
     os << "    " <<  j << ": " << dev.input(j).name();
     if (dev.input(j).is_tuner())
-      os << " is tuner" << vcl_endl;
+      os << " is tuner" << std::endl;
     else
-      os << " is camera" << vcl_endl;
+      os << " is camera" << std::endl;
   }
-  os << "      Current input: " << dev.current_input() << vcl_endl
+  os << "      Current input: " << dev.current_input() << std::endl
      << "      Current format: " << v4l2_to_vidl(dev.get_v4l2_format())
-     << " width: "<< dev.get_width()<< " height: " << dev.get_height() << vcl_endl;
+     << " width: "<< dev.get_width()<< " height: " << dev.get_height() << std::endl;
   return os;
 }
 

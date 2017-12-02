@@ -19,7 +19,7 @@
 //
 // input a scene block and output an augmented block with neigborhood information
 // current information is:
-// 1) the existence of each of the six neighbors       
+// 1) the existence of each of the six neighbors
 //     (x0 +- side_len, y0 +- side_len, z0 +-side_len)                   (uchar8)
 // 2) the expected intensity of each of the neighbors                    (uchar8)
 // 3) the probability derived from alpha stored in each of the neighbors (float8)
@@ -29,7 +29,7 @@
 class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
 {
  public:
-  //: Constructor. 
+  //: Constructor.
   boxm2_vecf_ocl_store_nbrs(boxm2_scene_sptr& source_scene,
                             boxm2_opencl_cache_sptr ocl_cache);
 
@@ -45,14 +45,14 @@ class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
   bool compile_kernel();
   bool init_ocl_store();
   bool get_scene_appearance(boxm2_scene_sptr scene,
-                            vcl_string&      options);
+                            std::string&      options);
 
   boxm2_opencl_cache_sptr  opencl_cache_;
   boxm2_scene_sptr source_scene_;
   bocl_device_sptr device_;
   int status;
   int apptypesize_;//size of the appearance model
-  vcl_string app_type_;
+  std::string app_type_;
   bocl_kernel * kern;
   bocl_mem_sptr centerX;
   bocl_mem_sptr centerY;

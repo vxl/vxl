@@ -9,9 +9,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vil1_new.h"
 
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vil1/vil1_file_format.h>
@@ -26,7 +28,7 @@ vil1_image vil1_new(int width, int height, vil1_image const& prototype)
   case VIL1_BYTE: return vil1_memory_image_of<unsigned char>(width, height);
   default:
     assert(!"vil1_new");
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -45,16 +47,16 @@ vil1_image vil1_new(vil1_stream* os,
 
   for (vil1_file_format** p = vil1_file_format::all(); *p; ++p) {
     vil1_file_format* fmt = *p;
-    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+    if (std::strcmp(fmt->tag(), file_format) == 0) {
       vil1_image_impl* outimage = fmt->make_output_image(os, planes, width, height, components, bits_per_component, format);
-      if (outimage == 0)
-        vcl_cerr << "vil1_new: Unknown cannot new to type [" << file_format << "]\n";
+      if (outimage == VXL_NULLPTR)
+        std::cerr << "vil1_new: Unknown cannot new to type [" << file_format << "]\n";
       return outimage;
     }
   }
 
-  vcl_cerr << "vil1_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  std::cerr << "vil1_new: Unknown file type [" << file_format << "]\n";
+  return VXL_NULLPTR;
 }
 
 //: Make a new vil1_image_impl, writing to stream "os", size "w" x "h", copying pixel format etc from "prototype".

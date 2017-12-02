@@ -1,7 +1,7 @@
 # bbas/vsph/tests/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-ADD_EXECUTABLE( vsph_test_all
+add_executable( vsph_test_all
   test_driver.cxx
   test_view_sphere.cxx
   test_spherical_coord.cxx
@@ -14,18 +14,18 @@ ADD_EXECUTABLE( vsph_test_all
   test_sph_cover.cxx
 )
 
-TARGET_LINK_LIBRARIES( vsph_test_all vsph testlib vgl bpgl vpgl vcl vnl vpl)
+target_link_libraries( vsph_test_all vsph ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vgl bpgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpl)
 
-ADD_TEST( vsph_test_view_sphere      ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_view_sphere )
-ADD_TEST( vsph_test_spherical_coord  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_spherical_coord )
-ADD_TEST( vsph_test_camera_bounds  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_camera_bounds )
-ADD_TEST( vsph_test_sph_geom  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_sph_geom )
-ADD_TEST( vsph_test_unit_sphere  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_unit_sphere )
-ADD_TEST( vsph_test_sph_segment  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_sph_segment )
-ADD_TEST( vsph_test_utils  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_utils )
-ADD_TEST( vsph_test_grid_index  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_grid_index)
-ADD_TEST( vsph_test_sph_cover  ${EXECUTABLE_OUTPUT_PATH}/vsph_test_all test_sph_cover)
-ADD_EXECUTABLE( vsph_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vsph_test_include vsph )
-ADD_EXECUTABLE( vsph_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( vsph_test_template_include vsph)
+add_test( NAME vsph_test_view_sphere COMMAND $<TARGET_FILE:vsph_test_all> test_view_sphere )
+add_test( NAME vsph_test_spherical_coord COMMAND $<TARGET_FILE:vsph_test_all> test_spherical_coord )
+add_test( NAME vsph_test_camera_bounds COMMAND $<TARGET_FILE:vsph_test_all> test_camera_bounds )
+add_test( NAME vsph_test_sph_geom COMMAND $<TARGET_FILE:vsph_test_all> test_sph_geom )
+add_test( NAME vsph_test_unit_sphere COMMAND $<TARGET_FILE:vsph_test_all> test_unit_sphere )
+add_test( NAME vsph_test_sph_segment COMMAND $<TARGET_FILE:vsph_test_all> test_sph_segment )
+add_test( NAME vsph_test_utils COMMAND $<TARGET_FILE:vsph_test_all> test_utils )
+add_test( NAME vsph_test_grid_index COMMAND $<TARGET_FILE:vsph_test_all> test_grid_index)
+add_test( NAME vsph_test_sph_cover COMMAND $<TARGET_FILE:vsph_test_all> test_sph_cover)
+add_executable( vsph_test_include test_include.cxx )
+target_link_libraries( vsph_test_include vsph )
+add_executable( vsph_test_template_include test_template_include.cxx )
+target_link_libraries( vsph_test_template_include vsph)

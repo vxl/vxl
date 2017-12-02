@@ -1,27 +1,24 @@
 # vxl/vbl/io/CMakeLists.txt
 
-SET(vbl_io_sources
-  vbl_io_smart_ptr.txx vbl_io_smart_ptr.h
-  vbl_io_array_1d.txx vbl_io_array_1d.h
-  vbl_io_array_2d.txx vbl_io_array_2d.h
-  vbl_io_array_3d.txx vbl_io_array_3d.h
-  vbl_io_sparse_array_base.txx vbl_io_sparse_array_base.h
+set(vbl_io_sources
+  vbl_io_smart_ptr.hxx vbl_io_smart_ptr.h
+  vbl_io_array_1d.hxx vbl_io_array_1d.h
+  vbl_io_array_2d.hxx vbl_io_array_2d.h
+  vbl_io_array_3d.hxx vbl_io_array_3d.h
+  vbl_io_sparse_array_base.hxx vbl_io_sparse_array_base.h
   vbl_io_sparse_array_1d.h
   vbl_io_sparse_array_2d.h
   vbl_io_sparse_array_3d.h
-  vbl_io_bounding_box.txx vbl_io_bounding_box.h
-  vbl_io_triple.txx vbl_io_triple.h
-  vbl_io_quadruple.txx vbl_io_quadruple.h
+  vbl_io_bounding_box.hxx vbl_io_bounding_box.h
+  vbl_io_triple.hxx vbl_io_triple.h
+  vbl_io_quadruple.hxx vbl_io_quadruple.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vbl_io_sources)
+aux_source_directory(Templates vbl_io_sources)
 
-ADD_LIBRARY(vbl_io ${vbl_io_sources})
-TARGET_LINK_LIBRARIES( vbl_io vbl vsl )
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vbl_io LIBRARY_SOURCES ${vbl_io_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl )
 
-INSTALL_TARGETS(/lib vbl_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vbl/io ${vbl_io_sources})
-
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

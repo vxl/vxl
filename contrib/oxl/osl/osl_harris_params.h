@@ -29,19 +29,19 @@ public:
   bool pab_emulate;
 
   //------------------------------------------------------------
-  
+
   //  max no of corners wanted.
   int corner_count_max;
 
-  //  smoothing in the corner detector. 
+  //  smoothing in the corner detector.
   float gauss_sigma;
 
-  //  used to set the lowest acceptable corner strength, relative to the measured maximum. 
+  //  used to set the lowest acceptable corner strength, relative to the measured maximum.
   float relative_minimum;
-  
-  //  the Harris auto-correlation formula. 
+
+  //  the Harris auto-correlation formula.
   float scale_factor;
-  
+
   // Adaptive parameters
   bool adaptive;
   int adaptive_window_size;
@@ -49,7 +49,7 @@ public:
   float density_thresh; // Accept corners between low and max if the local density is less than this.
   // "density" means number of corners in a 10x10 window.
 
-private:  
+private:
   void set_defaults();
 };
 

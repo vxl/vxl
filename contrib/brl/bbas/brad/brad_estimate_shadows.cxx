@@ -1,6 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include "brad_image_metadata.h"
 #include "brad_atmospheric_parameters.h"
@@ -20,16 +22,16 @@ bool brad_estimate_shadow_prob_density(vil_image_view<float> const& radiance_ima
 
    double shadow_rad = brad_expected_radiance_chavez(mean_reflectance, vgl_vector_3d<double>(0,0,1), mdata_nosun, atm_params);
    double radiance_var = brad_radiance_variance_chavez(0.2,vgl_vector_3d<double>(0,0,1), mdata_nosun, atm_params, reflectance_sigma*reflectance_sigma, optical_depth_sigma*optical_depth_sigma, skylight_sigma*skylight_sigma, airlight_sigma*airlight_sigma);
-   double radiance_sigma = vcl_sqrt(radiance_var);
+   double radiance_sigma = std::sqrt(radiance_var);
    double shadow_pdf_norm = vnl_math::one_over_sqrt2pi / radiance_sigma;
 
-   vcl_cout << "estimated shadow radiance: " << shadow_rad << ", sigma = " << radiance_sigma << vcl_endl;
+   std::cout << "estimated shadow radiance: " << shadow_rad << ", sigma = " << radiance_sigma << std::endl;
 
    shadow_prob_density.set_size(radiance_image.ni(), radiance_image.nj());
    for (unsigned int j=0; j<radiance_image.nj(); ++j) {
       for (unsigned int i=0; i<radiance_image.ni(); ++i) {
          double diff = radiance_image(i,j) - shadow_rad;
-         shadow_prob_density(i,j) = float(shadow_pdf_norm * vcl_exp(-diff*diff/(2*radiance_var)));
+         shadow_prob_density(i,j) = float(shadow_pdf_norm * std::exp(-diff*diff/(2*radiance_var)));
       }
    }
    return true;
@@ -48,7 +50,7 @@ bool brad_estimate_shadow_prob(vil_image_view<float> const& radiance_image, brad
 
   float uniform_pd = 1.0f / float(uniform_max - uniform_min);
   if (!(uniform_max > uniform_min)) {
-    vcl_cerr << "ERROR: brad_estimate_shadows: max radiance less than min radiance\n";
+    std::cerr << "ERROR: brad_estimate_shadows: max radiance less than min radiance\n";
     return false;
   }
 

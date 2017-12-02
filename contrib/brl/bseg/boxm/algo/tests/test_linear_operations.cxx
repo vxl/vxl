@@ -54,14 +54,14 @@ void test_linear_operations()
     boct_tree_cell<short,float > *cell1 = *it1;
     boct_tree_cell<short,float > *cell2 = *it2;
 
-    if (vcl_abs(cell1->data()- 4.0f) > 1.0e-7){
-      vcl_cerr << "Data1 is incorrect: "<< cell1->data()  <<"Error: " << vcl_abs(cell1->data()- 4.0f) << '\n';
+    if (std::abs(cell1->data()- 4.0f) > 1.0e-7){
+      std::cerr << "Data1 is incorrect: "<< cell1->data()  <<"Error: " << std::abs(cell1->data()- 4.0f) << '\n';
       result = false;
       break;
     }
 
-    if (vcl_abs(cell2->data()- 0.8f) > 1.0e-7){
-      vcl_cerr << "Data2 is incorrect: " << cell2->data()<<'\n';
+    if (std::abs(cell2->data()- 0.8f) > 1.0e-7){
+      std::cerr << "Data2 is incorrect: " << cell2->data()<<'\n';
       result = false;
       break;
     }
@@ -71,9 +71,9 @@ void test_linear_operations()
   }
 
 #ifdef DEBUG_LEAKS
-  vcl_cerr << "Leaks at test_linear_operations " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+  std::cerr << "Leaks at test_linear_operations " << boct_tree_cell<short, float >::nleaks() << std::endl;
 #endif
-  
+
   TEST("Output data is correct", result, true);
   clean_up();
 }

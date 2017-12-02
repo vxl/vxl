@@ -1,11 +1,12 @@
 // This is core/vidl/gui/vidl_gui_param_dialog.cxx
+#include <iostream>
+#include <sstream>
 #include "vidl_gui_param_dialog.h"
 //:
 // \file
 // \author Matt Leotta
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_file_format.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_dialog.h>
@@ -36,8 +37,8 @@ vidl_istream* vidl_gui_open_istream_dialog()
   enum stream_type {IMAGE_LIST, FFMPEG, DC1394, V4L2};
   vgui_dialog dlg("Select an Input Stream Type");
 
-  vcl_vector<vcl_string> choices;
-  vcl_vector<int> choice_codes;
+  std::vector<std::string> choices;
+  std::vector<int> choice_codes;
   choices.push_back( "Image List" ); choice_codes.push_back(IMAGE_LIST);
 #if VIDL_HAS_FFMPEG
   choices.push_back( "FFMPEG" ); choice_codes.push_back(FFMPEG);
@@ -85,8 +86,8 @@ vidl_ostream* vidl_gui_open_ostream_dialog()
   enum stream_type {IMAGE_LIST, FFMPEG};
   vgui_dialog dlg("Select an Output Stream Type");
 
-  vcl_vector<vcl_string> choices;
-  vcl_vector<int> choice_codes;
+  std::vector<std::string> choices;
+  std::vector<int> choice_codes;
   choices.push_back( "Image List" ); choice_codes.push_back(IMAGE_LIST);
 #if VIDL_HAS_FFMPEG
   choices.push_back( "FFMPEG" ); choice_codes.push_back(FFMPEG);
@@ -122,8 +123,8 @@ namespace vidl_gui_param_dialog
  vidl_image_list_istream* image_list_istream()
  {
   vgui_dialog dlg("Open Image List Input Stream");
-  static vcl_string image_filename = "*";
-  static vcl_string ext = "*";
+  static std::string image_filename = "*";
+  static std::string ext = "*";
 
   dlg.message("Specify the images using a file glob");
   dlg.file("Filename:", ext, image_filename);
@@ -146,21 +147,23 @@ namespace vidl_gui_param_dialog
  vidl_image_list_ostream* image_list_ostream()
  {
   vgui_dialog dlg("Open Output Image List Stream");
-  static vcl_string directory = "";
-  static vcl_string name_format = "%05u";
-  static vcl_string ext = "*";
+  static std::string directory = "";
+  static std::string name_format = "%05u";
+  static std::string ext = "*";
 
   dlg.file("Directory", ext, directory);
-  vcl_string info = "Use a \'printf\' style format string to insert\n";
+  std::string info = "Use a \'printf\' style format string to insert\n";
   info += "the unsigned integer file index into the file name";
   dlg.message(info.c_str());
   dlg.field("Filename Format", name_format);
 
   // provide a list of choices for valid file formats
-  static vcl_vector<vcl_string> fmt_choices;
+  static std::vector<std::string> fmt_choices;
   if (fmt_choices.empty()) {
-    for (vil_file_format** p = vil_file_format::all(); *p; ++p)
+    std::list<vil_file_format*>& l = vil_file_format::all();
+    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
       fmt_choices.push_back((*p)->tag());
+    }
   }
   static int fmt_idx = 0;
   dlg.choice("Image File Format",fmt_choices,fmt_idx);
@@ -192,8 +195,8 @@ namespace vidl_gui_param_dialog
  {
  #if VIDL_HAS_FFMPEG
   vgui_dialog dlg("Open FFMPEG Input Stream");
-  static vcl_string image_filename = "";
-  static vcl_string ext = "*";
+  static std::string image_filename = "";
+  static std::string ext = "*";
 
   dlg.file("Filename:", ext, image_filename);
   if (!dlg.ask())
@@ -220,13 +223,13 @@ namespace vidl_gui_param_dialog
  {
  #if VIDL_HAS_FFMPEG
   vgui_dialog dlg("Open FFMPEG Output Stream");
-  static vcl_string file = "";
-  static vcl_string ext = "avi";
+  static std::string file = "";
+  static std::string ext = "avi";
   dlg.file("File", ext, file);
 
   static vidl_ffmpeg_ostream_params params;
 
-  vcl_vector<vcl_string> enc_choices(8);
+  std::vector<std::string> enc_choices(8);
   enc_choices[0] = "-- Default --";
   enc_choices[1] = "MPEG4";
   enc_choices[2] = "MS MPEG4 v2";
@@ -278,9 +281,9 @@ namespace vidl_gui_param_dialog
   }
   else if (devs.size() > 1) {
     vgui_dialog dlg("Select a video device");
-    vcl_vector<vcl_string> video_names;
+    std::vector<std::string> video_names;
     for (unsigned int i=0; i<devs.size(); ++i) {
-      vcl_stringstream ss;
+      std::stringstream ss;
       ss << devs(i).card_name()
          << " (" << devs(i).device_file() << ')';
       video_names.push_back(ss.str());
@@ -293,7 +296,7 @@ namespace vidl_gui_param_dialog
   int input_id=0;
   if (devs(device_id).n_inputs()>1) {
     vgui_dialog dlg("Select input");
-    vcl_vector<vcl_string> input_names;
+    std::vector<std::string> input_names;
     for (unsigned int i=0; i<devs(device_id).n_inputs(); ++i) {
       input_names.push_back(devs(device_id).card_name()+"->"+
                             devs(device_id).input(i).name());
@@ -357,22 +360,22 @@ namespace vidl_gui_param_dialog
   }
 
  #ifndef NDEBUG
-  vcl_cout << "Detected " << options.cameras.size() << " cameras\n";
+  std::cout << "Detected " << options.cameras.size() << " cameras\n";
   for (unsigned int i=0; i<options.cameras.size(); ++i) {
     const vidl_iidc1394_params::valid_options::camera& cam = options.cameras[i];
-    vcl_cout << "Camera "<<i<<": "<< cam.vendor << " : " << cam.model
-             << " : guid "<< vcl_hex << cam.guid << '\n';
+    std::cout << "Camera "<<i<<": "<< cam.vendor << " : " << cam.model
+             << " : guid "<< std::hex << cam.guid << '\n';
     for (unsigned int j=0; j<cam.modes.size(); ++j) {
       const vidl_iidc1394_params::valid_options::valid_mode& m = cam.modes[j];
-      vcl_cout << "\tmode "<<j<<" : "
+      std::cout << "\tmode "<<j<<" : "
                << vidl_iidc1394_params::video_mode_string(m.mode) << '\n';
       for (unsigned int k=0; k<m.frame_rates.size(); ++k) {
-        vcl_cout << "\t\tframe rate : "
+        std::cout << "\t\tframe rate : "
                  << vidl_iidc1394_params::frame_rate_val(m.frame_rates[k]) << '\n';
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
  #endif
 
   vidl_iidc1394_params params;
@@ -385,12 +388,12 @@ namespace vidl_gui_param_dialog
 
   if (options.cameras.size() > 1) {
     vgui_dialog dlg("Select an IIDC 1394 camera");
-    vcl_vector<vcl_string> camera_names;
+    std::vector<std::string> camera_names;
     for (unsigned int i=0; i<options.cameras.size(); ++i) {
-      vcl_stringstream ss;
+      std::stringstream ss;
       ss << options.cameras[i].vendor << ' '
          << options.cameras[i].model
-         << " (guid "<< vcl_hex << options.cameras[i].guid << ')';
+         << " (guid "<< std::hex << options.cameras[i].guid << ')';
       camera_names.push_back(ss.str());
     }
     dlg.choice("Camera",camera_names,camera_id);
@@ -411,7 +414,7 @@ namespace vidl_gui_param_dialog
   bool use_1394b = cam.b_mode;
   if (cam.modes.size() > 1) {
     vgui_dialog dlg("Select a capture mode");
-    vcl_vector<vcl_string> mode_names;
+    std::vector<std::string> mode_names;
     for (unsigned int i=0; i<cam.modes.size(); ++i) {
       if (cam.modes[i].mode ==  cam.curr_mode)
         mode_id = i;
@@ -439,11 +442,11 @@ namespace vidl_gui_param_dialog
     static unsigned int fr_id = 0;
     if (m.frame_rates.size() > 1) {
       vgui_dialog dlg("Select a frame rate");
-      vcl_vector<vcl_string> rate_names;
+      std::vector<std::string> rate_names;
       for (unsigned int i=0; i<m.frame_rates.size(); ++i) {
         if (m.frame_rates[i] == cam.curr_frame_rate)
           fr_id = i;
-        vcl_stringstream name;
+        std::stringstream name;
         name << vidl_iidc1394_params::frame_rate_val(m.frame_rates[i]) << " fps";
         rate_names.push_back(name.str());
       }
@@ -491,16 +494,16 @@ namespace vidl_gui_param_dialog
  //-----------------------------------------------------------------------------
  //: Use a vgui dialog to update iidc1394 camera parameters
  //-----------------------------------------------------------------------------
- bool update_iidc1394_params(vcl_vector<vidl_iidc1394_params::
+ bool update_iidc1394_params(std::vector<vidl_iidc1394_params::
                             feature_options>& features)
  {
   vgui_dialog dlg("Set feature values");
-  vcl_vector<unsigned> choices(features.size(),0);
+  std::vector<unsigned> choices(features.size(),0);
   for (unsigned int i=0; i<features.size(); ++i) {
     vidl_iidc1394_params::feature_options& f = features[i];
-    vcl_stringstream ss;
+    std::stringstream ss;
 
-    vcl_vector<vcl_string> modes;
+    std::vector<std::string> modes;
     for (unsigned int j=0; j<f.available_modes.size(); ++j) {
       modes.push_back(vidl_iidc1394_params::feature_mode_string(f.available_modes[j]));
       if (f.active_mode == f.available_modes[j])
@@ -563,7 +566,7 @@ namespace vidl_gui_param_dialog
     if (f.available_modes.empty())
       continue;
 
-    vcl_vector<vidl_iidc1394_params::feature_mode_t> modes;
+    std::vector<vidl_iidc1394_params::feature_mode_t> modes;
     for (unsigned int j=0; j<f.available_modes.size(); ++j) {
       modes.push_back(static_cast<vidl_iidc1394_params::feature_mode_t>
                       (f.available_modes[j]) );

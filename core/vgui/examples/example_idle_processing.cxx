@@ -1,4 +1,5 @@
-#include <vcl_sstream.h>
+#include <sstream>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
@@ -36,7 +37,7 @@ class idle_tableau : public vgui_tableau
     }
     else
     {
-      vcl_ostringstream ostr;
+      std::ostringstream ostr;
       ostr << "idle count: " << idle_count_;
       text_tab_->change( handle_, ostr.str() );
       ++idle_count_;

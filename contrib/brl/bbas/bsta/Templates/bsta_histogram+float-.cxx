@@ -1,2 +1,2 @@
-#include <bsta/bsta_histogram.txx>
+#include <bsta/bsta_histogram.hxx>
 BSTA_HISTOGRAM_INSTANTIATE(float);

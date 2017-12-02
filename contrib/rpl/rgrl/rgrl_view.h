@@ -31,12 +31,12 @@ class rgrl_view
   : public rgrl_object
 {
  public:
-  
-  typedef vcl_vector< rgrl_feature_sptr > feature_vector;
-  
+
+  typedef std::vector< rgrl_feature_sptr > feature_vector;
+
   //: ctor
   rgrl_view();
-  
+
   //:  Build a view for registration estimation problem.
   rgrl_view( rgrl_mask_sptr      const& from_image_roi,
              rgrl_mask_sptr      const& to_image_roi,
@@ -53,7 +53,7 @@ class rgrl_view
   virtual
   rgrl_view_sptr
   self_copy() const;
-  
+
   //:  Access "from" image region of interest
   rgrl_mask_sptr const& from_image_roi() const
   { return from_image_roi_; }
@@ -61,7 +61,7 @@ class rgrl_view
   //: set "from" image region of interest
   void set_from_image_roi(rgrl_mask_sptr const& roi)
   { from_image_roi_ = roi; }
-    
+
   //:  Access "to" image region of interest
   rgrl_mask_sptr const& to_image_roi() const
   { return to_image_roi_; }
@@ -73,7 +73,7 @@ class rgrl_view
   //:  Access current transformation region in "from" image coords
   rgrl_mask_box const& region() const
   { return current_region_; }
-  
+
   //: set current region in "from" image coords
   void set_region( rgrl_mask_box const& box )
   { current_region_ = box; }
@@ -85,11 +85,11 @@ class rgrl_view
   //: set the approximated overlap region in "from" image coords
   void set_global_region( rgrl_mask_box const& global_region )
   { global_region_ = global_region; }
-  
+
   //:  Access current transform estimator
   rgrl_estimator_sptr xform_estimator() const
   { return xform_estimator_; }
-  
+
   //: set current transform estimator
   void set_xform_estimator( rgrl_estimator_sptr const& est)
   { xform_estimator_ = est; }
@@ -97,7 +97,7 @@ class rgrl_view
   //:  Access current transform estimate
   rgrl_transformation_sptr xform_estimate() const
   { return xform_estimate_; }
-  
+
   //: set current transform estimate
   void set_xform_estimate( rgrl_transformation_sptr const& xform )
   { xform_estimate_ = xform; }
@@ -105,7 +105,7 @@ class rgrl_view
   //:  Access current REVERSE transform estimate
   rgrl_transformation_sptr inverse_xform_estimate() const
   { return inverse_estimate_; }
-  
+
   //:  Set REVERSE transform estimate
   void set_inverse_xform_estimate(rgrl_transformation_sptr const& inverse)
   { inverse_estimate_ = inverse; }
@@ -113,7 +113,7 @@ class rgrl_view
   //:  Access the current resolution at which registration is working
   unsigned resolution() const
   { return current_resolution_; }
-  
+
   //:  Set current resolution
   void set_resolution( unsigned res )
   { current_resolution_ = res; }
@@ -124,7 +124,7 @@ class rgrl_view
   //: get number of updates on global region
   int num_updates_global_region() const
   { return num_updates_global_region_; }
-  
+
   //: set number of updates on global region
   //  shall be done inside view generator
   void set_num_updates_global_region(int num)
@@ -135,9 +135,9 @@ class rgrl_view
   virtual
   bool
   features_in_region( feature_vector& features, rgrl_feature_set const& fea_set ) const;
-  
+
   //:  Return true if the current_region_ reached the global_region_
-  virtual 
+  virtual
   bool current_region_converged() const;
 
   //:  Return true if all components except the xform_estimate_ are the same
@@ -156,7 +156,7 @@ class rgrl_view
   virtual
   bool
   inside_current_region( vnl_vector<double> const& loc );
-  
+
 #if 0
   //: True iff all the components are equal.
   bool operator==( const rgrl_view& other ) const;
@@ -180,7 +180,7 @@ class rgrl_view
   rgrl_estimator_sptr        xform_estimator_;
   rgrl_transformation_sptr   xform_estimate_;
   rgrl_transformation_sptr   inverse_estimate_;
-  
+
   unsigned                   current_resolution_;
   int                        num_updates_global_region_;
 };

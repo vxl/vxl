@@ -1,17 +1,18 @@
 // This is core/vil/algo/tests/test_algo_suppress_non_max_edges.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \date   15 June 2005
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_suppress_non_max_edges.h>
 #include <vil/algo/vil_sobel_3x3.h>
 
 static void test_algo_suppress_non_max_edges()
 {
-  vcl_cout << "************************************\n"
+  std::cout << "************************************\n"
            << " Testing vil_suppress_non_max_edges\n"
            << "************************************\n";
 

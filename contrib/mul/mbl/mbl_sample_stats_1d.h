@@ -5,9 +5,10 @@
 // \brief Provides simple statistics on a 1D variable and stores the samples
 // \author Graham Vincent
 
-#include <vcl_stdexcept.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <stdexcept>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_fwd.h>
 #include <mbl/mbl_stats_1d.h>
@@ -15,7 +16,7 @@
 //: Provides simple statistics on a 1D variable and stores the samples
 class mbl_sample_stats_1d
 {
-  vcl_vector<double> samples_;
+  std::vector<double> samples_;
   mbl_stats_1d stats_1d_;
   bool use_mvue_;
 
@@ -24,8 +25,8 @@ class mbl_sample_stats_1d
   //! Default ctor
   mbl_sample_stats_1d();
 
-  //! ctor with a vcl_vector of samples
-  mbl_sample_stats_1d(const vcl_vector<double> &samples);
+  //! ctor with a std::vector of samples
+  mbl_sample_stats_1d(const std::vector<double> &samples);
 
   //! ctor with a vnl_vector of samples
   mbl_sample_stats_1d(const vnl_vector<double> &samples);
@@ -47,7 +48,7 @@ class mbl_sample_stats_1d
   unsigned n_samples() const;
 
   //! vector of samples
-  const vcl_vector<double>& samples() const { return samples_; }
+  const std::vector<double>& samples() const { return samples_; }
 
   //: Mean of current samples
   double mean() const ;
@@ -108,12 +109,12 @@ class mbl_sample_stats_1d
   mbl_sample_stats_1d& operator+=(const mbl_sample_stats_1d& s1);
 
   //: Print summary of data
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Print all data.
   // \param delim Separate each value with this character/string.
-  void print_all(vcl_ostream& os,
-                 const vcl_string& delim="\n") const;
+  void print_all(std::ostream& os,
+                 const std::string& delim="\n") const;
 
   //: Version number for I/O
   short version_no() const;
@@ -134,13 +135,13 @@ class mbl_sample_stats_1d
 // Create a vector of doubles from the values in sample where the
 // corresponding value in mask is greater than zero
 template <class S, class M>
-vcl_vector<double> mbl_apply_mask(const S &sample, const M &mask)
+std::vector<double> mbl_apply_mask(const S &sample, const M &mask)
 {
-  if (sample.size()==0 || sample.size()!=mask.size()) throw vcl_runtime_error("Mask should be the same size as the sample and not empty\n");
+  if (sample.size()==0 || sample.size()!=mask.size()) throw std::runtime_error("Mask should be the same size as the sample and not empty\n");
   mbl_sample_stats_1d stats;
   typename S::const_iterator sit=sample.begin();
   typename M::const_iterator mit=mask.begin();
-  vcl_vector<double> ret;
+  std::vector<double> ret;
   for ( ; sit!=sample.end(); ++sit, ++mit)
   {
     if ((*mit))
@@ -158,12 +159,12 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_sample_stats_1d& b);
 void vsl_b_read(vsl_b_istream& bfs, mbl_sample_stats_1d& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_sample_stats_1d& stats);
+std::ostream& operator<<(std::ostream& os,const mbl_sample_stats_1d& stats);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mbl_sample_stats_1d& stats);
+void vsl_print_summary(std::ostream& os,const mbl_sample_stats_1d& stats);
 
 //: Print all data
-void vsl_print_all(vcl_ostream& os, const mbl_sample_stats_1d& stats);
+void vsl_print_all(std::ostream& os, const mbl_sample_stats_1d& stats);
 
 #endif // mbl_sample_stats_1d_h_

@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_extract_point_cloud_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,7 +10,7 @@
 // \author Ali Osman Ulusoy
 // \date Mar 21, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 
@@ -25,8 +27,8 @@ bool boxm2_extract_point_cloud_process_cons (bprb_func_process& pro)
   using namespace boxm2_extract_point_cloud_process_globals;
 
   //process takes 3 inputs, no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "float"; //prob. threshold
@@ -47,7 +49,7 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
   using namespace boxm2_extract_point_cloud_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 

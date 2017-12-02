@@ -9,11 +9,12 @@
 #ifndef brad_image_metadata_h_
 #define brad_image_metadata_h_
 
+#include <string>
+#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_3d.h>
@@ -27,10 +28,15 @@ class brad_image_metadata : public vbl_ref_count
 {
  public:
   //: Constructor extracts information from NITF header and vendor-specific metadata file
-  brad_image_metadata(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
+  brad_image_metadata(std::string const& nitf_filename, std::string const& meta_folder = "");
 
   //: Default constructor
-  brad_image_metadata() : n_bands_(0), gsd_(-1.0), gain_(1.0), offset_(0.0) {}
+  brad_image_metadata() :
+    gain_(1.0),
+    offset_(0.0),
+    n_bands_(0),
+    gsd_(-1.0)
+  {}
 
   // position of sun relative to imaged location
   double sun_elevation_; // degrees above horizon
@@ -46,12 +52,12 @@ class brad_image_metadata : public vbl_ref_count
 
   // band-averaged sun irradiance (includes term accounting for Earth-Sun distance)
   double sun_irradiance_; // units W m^-2
-  vcl_vector<double> sun_irradiance_values_;  // for multi-spectral imagery, there are multiple values
+  std::vector<double> sun_irradiance_values_;  // for multi-spectral imagery, there are multiple values
 
   image_time t_;
   unsigned number_of_bits_;
 
-  vcl_string satellite_name_;
+  std::string satellite_name_;
   double cloud_coverage_percentage_;
   //vnl_double_2 upper_left_;  // warning: upper_left_[0] is latitude, upper_left_[1] is longitude, similarly for the other corners
   //vnl_double_2 upper_right_;
@@ -59,26 +65,26 @@ class brad_image_metadata : public vbl_ref_count
   //vnl_double_2 lower_right_;
   vgl_polygon<double> footprint_;  // the (lon,lat) corner coordinates of the image. there is no 2.5D vgl_polygon, so ignore the height...
   vgl_point_3d<double> lower_left_;  // x is lon, y is lat  // lower_left corner of the 'extent' of the satellite image (not necessarily lower left corner of the image, since the image may be rotated in plane)
-  vgl_point_3d<double> upper_right_; 
+  vgl_point_3d<double> upper_right_;
   vgl_point_3d<double> cam_offset_;  // these are the lat, lon, elev coords of upper left corner of the image read from the RPC camera
-  vcl_string band_;  // PAN or MULTI
+  std::string band_;  // PAN or MULTI
   unsigned n_bands_;  // 1 for PAN, 4 or 8 for MULTI
-  vcl_vector<vcl_pair<double, double> > gains_;  // calibrating multispectral imagery requires a different gain, offset for each band
+  std::vector<std::pair<double, double> > gains_;  // calibrating multispectral imagery requires a different gain, offset for each band
   double gsd_; // ground sampling distance of the image - parse from imd or pvl file
 
   //: parse header in nitf image, assumes that metadata files are in the same folder with the image
   //  If meta_folder is not empty, they are searched in that folder as well
-  bool parse(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
+  bool parse(std::string const& nitf_filename, std::string const& meta_folder = "");
   //: parse metadata file only
-  bool parse_from_meta_file(vcl_string const& meta_filename);
+  bool parse_from_meta_file(std::string const& meta_filename);
 
   bool same_time(brad_image_metadata& other);
   bool same_day(brad_image_metadata& other);
   // return the time difference in collection times in hour and minutes
   unsigned time_minute_dif(brad_image_metadata& other);
 
-  void print_time() { vcl_cout << "Year: " << t_.year << " Month: " << t_.month << " Day: " << t_.day << " hour: " << t_.hour << " min: " << t_.min << " sec: " << t_.sec << "; "; }
-  
+  void print_time() { std::cout << "Year: " << t_.year << " Month: " << t_.month << " Day: " << t_.day << " hour: " << t_.hour << " min: " << t_.min << " sec: " << t_.sec << "; "; }
+
   //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
   bool same_extent(brad_image_metadata& other);
 
@@ -89,28 +95,28 @@ class brad_image_metadata : public vbl_ref_count
 
  protected:
   //: Parse Quickbird IMD file
-  bool parse_from_imd(vcl_string const& filename);
+  bool parse_from_imd(std::string const& filename);
 
   //: Parse QuickBird, WorldView IMD file to obtain all metadata without using image header
-  bool parse_from_imd_only(vcl_string const& filename);
-  
+  bool parse_from_imd_only(std::string const& filename);
+
   //: Parse GeoEye PVL file
-  bool parse_from_pvl(vcl_string const& filename);
+  bool parse_from_pvl(std::string const& filename);
 
   //: Parse GeoEye PVL file to obtain all metadata without using image header
-  bool parse_from_pvl_only(vcl_string const& filename);
-  
-  //: Parse the required params for normalization from a text file with a known format, 
+  bool parse_from_pvl_only(std::string const& filename);
+
+  //: Parse the required params for normalization from a text file with a known format,
   //  it can be used to calibrate images from any satellite if such files are created for each image of the satellite
-  bool parse_from_txt(vcl_string const& filename, vcl_vector<double>& solar_irrads);
+  bool parse_from_txt(std::string const& filename, std::vector<double>& solar_irrads);
 };
 
 typedef vbl_smart_ptr<brad_image_metadata> brad_image_metadata_sptr;
 
 //: Write brad_image_metadata to stream
-vcl_ostream&  operator<<(vcl_ostream& s, brad_image_metadata const& md);
+std::ostream&  operator<<(std::ostream& s, brad_image_metadata const& md);
 
 //: Read brad_image_metadata from stream
-vcl_istream&  operator>>(vcl_istream& s, brad_image_metadata& md);
+std::istream&  operator>>(std::istream& s, brad_image_metadata& md);
 
 #endif

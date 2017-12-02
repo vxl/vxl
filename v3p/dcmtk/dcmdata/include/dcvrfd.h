@@ -85,9 +85,9 @@ class DcmFloatingPointDouble
      */
     virtual void print(ostream &out,
                        const size_t flags = 0,
-		               const int level = 0,
-		               const char *pixelFileName = NULL,
-		               size_t *pixelCounter = NULL);
+                               const int level = 0,
+                               const char *pixelFileName = NULL,
+                               size_t *pixelCounter = NULL);
 
     /** get particular double value
      *  @param doubleVal reference to result variable (cleared in case of error)
@@ -95,7 +95,7 @@ class DcmFloatingPointDouble
      *  @return status, EC_Normal if successful, an error code otherwise
      */
     virtual OFCondition getFloat64(Float64 &doubleVal,
-                				   const unsigned long pos = 0);
+                                                   const unsigned long pos = 0);
 
     /** get reference to stored double data
      *  @param doubleVals reference to result variable
@@ -121,7 +121,7 @@ class DcmFloatingPointDouble
      *  @return status, EC_Normal if successful, an error code otherwise
      */
     virtual OFCondition putFloat64(const Float64 doubleval,
-				                   const unsigned long pos = 0);
+                                                   const unsigned long pos = 0);
 
     /** set element value to given double array data
      *  @param doubleVals double precision floating point data to be set
@@ -129,7 +129,7 @@ class DcmFloatingPointDouble
      *  @return status, EC_Normal if successful, an error code otherwise
      */
     virtual OFCondition putFloat64Array(const Float64 *doubleVals,
-                    					const unsigned long numDoubles);
+                                                            const unsigned long numDoubles);
 
     /** set element value from the given character string.
      *  The input string is expected to be a backslash separated sequence of

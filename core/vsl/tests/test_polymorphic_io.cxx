@@ -1,13 +1,14 @@
 // This is core/vsl/tests/test_polymorphic_io.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_binary_loader.txx>
+#include <vsl/vsl_binary_loader.hxx>
 #include <vpl/vpl.h>
 
 //: Base class to test polymorphic loading
@@ -26,20 +27,20 @@ class test_base_class
   virtual void b_read(vsl_b_istream & /*is*/) { assert(false); } //= 0;
 
   //: Clone this
-  virtual test_base_class* clone() const { assert(false); return 0; } //= 0;
+  virtual test_base_class* clone() const { assert(false); return VXL_NULLPTR; } //= 0;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const
+  virtual std::string is_a() const
   { return "test_base_class"; }
 
   //: Return true if the argument matches this class' identifying string
-  virtual bool is_class(vcl_string const& s) const
+  virtual bool is_class(std::string const& s) const
   { return s == "test_base_class"; }
 
   //: Print summary
-  virtual void print_summary(vcl_ostream& os) const
+  virtual void print_summary(std::ostream& os) const
   {
-    os<<is_a()<<vcl_endl;
+    os<<is_a()<<std::endl;
   };
 };
 
@@ -62,13 +63,13 @@ inline void vsl_b_write(vsl_b_ostream &os, const test_base_class & v)
 //: Binary save to stream.
 inline void vsl_b_write(vsl_b_ostream &os, const test_base_class* v)
 {
-  if (v!=0)
+  if (v!=VXL_NULLPTR)
   {
     vsl_b_write(os,v->is_a());
     v->b_write(os);
   }
   else
-    vsl_b_write(os, vcl_string("VSL_NULL_PTR"));
+    vsl_b_write(os, std::string("VSL_NULL_PTR"));
 }
 
 //: Binary load from stream.
@@ -99,13 +100,13 @@ class test_derived_class : public test_base_class
   virtual test_base_class* clone() const;
 
   //: Print summary
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Return true if the argument matches this class' or the parent's identifier
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 };
 
 //: Binary save self to stream.
@@ -127,26 +128,26 @@ test_base_class* test_derived_class::clone() const
 }
 
 //: Return a platform independent string identifying the class
-vcl_string test_derived_class::is_a() const
+std::string test_derived_class::is_a() const
 {
   return "test_derived_class";
 }
 
 //: Return true if the argument matches this class' or the parent's identifier
-bool test_derived_class::is_class(vcl_string const& s) const
+bool test_derived_class::is_class(std::string const& s) const
 {
   return s == "test_derived_class" || test_base_class::is_class(s);
 }
 
 //: Print summary
-void test_derived_class::print_summary(vcl_ostream& os) const
+void test_derived_class::print_summary(std::ostream& os) const
 {
-  os<<is_a()<<" Data="<<data_<<vcl_endl;
+  os<<is_a()<<" Data="<<data_<<std::endl;
 }
 
 void test_polymorphic_io()
 {
-  vcl_cout << "*********************************\n"
+  std::cout << "*********************************\n"
            << "Testing vsl polymorphic binary io\n"
            << "*********************************\n";
 
@@ -155,7 +156,7 @@ void test_polymorphic_io()
 
   test_derived_class d1_out(1234);
   test_base_class *b1_out = &d1_out;
-  test_base_class *b2_out = 0;
+  test_base_class *b2_out = VXL_NULLPTR;
 
   vsl_b_ofstream bfs_out("vsl_polymorphic_io_test.bvl.tmp");
   TEST("Opened vsl_polymorphic_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -165,7 +166,7 @@ void test_polymorphic_io()
   bfs_out.close();
 
   test_derived_class d1_in(0);
-  test_base_class *b1_in = 0;
+  test_base_class *b1_in = VXL_NULLPTR;
   test_base_class *b2_in = new test_derived_class(7);
 
   vsl_b_ifstream bfs_in("vsl_polymorphic_io_test.bvl.tmp");
@@ -193,4 +194,3 @@ TESTMAIN(test_polymorphic_io);
 
 // Explicitly instantiate loader
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(test_base_class);
-VCL_VECTOR_INSTANTIATE(test_base_class*);

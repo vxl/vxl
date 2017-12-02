@@ -1,10 +1,11 @@
+#include <iostream>
+#include <iomanip>
+#include <ios>
+#include <string>
+#include <vector>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_ios.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_box_3d.h>
 
@@ -31,9 +32,9 @@
 #define image_nj 720
 
 template <class T>
-bool load_image(vcl_string const& path, vil_image_view<T>*& image)
+bool load_image(std::string const& path, vil_image_view<T>*& image)
 {
-  vcl_cout << path.c_str() << vcl_endl;
+  std::cout << path.c_str() << std::endl;
   vil_image_view_base_sptr base_img = vil_load(path.c_str(),true);
   if (!base_img)
     return false;
@@ -53,9 +54,9 @@ void create_view_sphere(icam_view_sphere_sptr& view_sphere)
 static void test_minimizer()
 {
 #if 0 // need actual data (TO DO add test that doesn't)
-  vcl_string root_dir = testlib_root_dir();
-  vcl_map<unsigned int, vcl_string> images, depth_images;
-  vcl_vector<vcl_string> camera_f;
+  std::string root_dir = testlib_root_dir();
+  std::map<unsigned int, std::string> images, depth_images;
+  std::vector<std::string> camera_f;
 
   // view 0
   images[0] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/expected142.tiff";
@@ -78,14 +79,14 @@ static void test_minimizer()
   camera_f.push_back(root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/camera_00142.txt");
 
   // source image
-  vcl_string source_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_145.png";
+  std::string source_file = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_145.png";
 
   icam_view_sphere_sptr view_sphere;
   create_view_sphere(view_sphere);
   // set cameras
-  vcl_map<unsigned, vpgl_camera_double_sptr> cam_map;
+  std::map<unsigned, vpgl_camera_double_sptr> cam_map;
   for (unsigned i=0; i<camera_f.size(); i++) {
-    vcl_ifstream ifs(camera_f[i].c_str());
+    std::ifstream ifs(camera_f[i].c_str());
     vpgl_perspective_camera<double>* cam=new vpgl_perspective_camera<double>();
     ifs >> *cam;
     cam_map[i] = cam;

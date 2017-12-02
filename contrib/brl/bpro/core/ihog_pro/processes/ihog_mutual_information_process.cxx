@@ -1,10 +1,11 @@
 // This is brl/bpro/core/ihog_pro/processes/ihog_mutual_information_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process for computing mutual information between two images
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <ihog/ihog_minimizer.h>
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_minfo_cost_func.h>
@@ -19,11 +20,11 @@ bool ihog_mutual_information_process_cons(bprb_func_process& pro)
   //  1) image 1
   //  2) mask
 
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float");
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -33,7 +34,7 @@ bool ihog_mutual_information_process_cons(bprb_func_process& pro)
 bool ihog_mutual_information_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= pro.input_types().size()) {
-    vcl_cout << "ihog_mutual_information_process: The input number should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "ihog_mutual_information_process: The input number should be " << pro.input_types().size() << std::endl;
     return false;
   }
   // get the inputs
@@ -47,14 +48,14 @@ bool ihog_mutual_information_process(bprb_func_process& pro)
   vil_convert_cast(img0_in,img0);
 
   if ((img1_in.ni() != ni) || (img1_in.nj() != nj)) {
-    vcl_cerr << "ERROR: Images should have same dimensions\n";
+    std::cerr << "ERROR: Images should have same dimensions\n";
     return false;
   }
   vil_image_view<float> img1(ni,nj);
   vil_convert_cast(img1_in, img1);
 
   if ((mask_in->ni() != ni) || (mask_in->nj() != nj)) {
-    vcl_cerr << "ERROR: Mask should have same dimensions as images\n";
+    std::cerr << "ERROR: Mask should have same dimensions as images\n";
     return false;
   }
 
@@ -66,7 +67,7 @@ bool ihog_mutual_information_process(bprb_func_process& pro)
     vil_convert_cast(*mask_bool, mask);
   }
   else {
-    vcl_cerr << "ERROR: unsupported mask type\n";
+    std::cerr << "ERROR: unsupported mask type\n";
     return false;
   }
 

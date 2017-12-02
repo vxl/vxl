@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_update_max_vis.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_update_max_vis.h"
 //:
 // \file
@@ -7,8 +10,7 @@
 // \author Vishal Jain
 // \date Nov 11, 2013
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -29,7 +31,7 @@
 #include <vil/vil_save.h>
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_max_vis::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_max_vis::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
@@ -48,12 +50,12 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
   };
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   // create a command queue.
   int status=0;
@@ -62,23 +64,23 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
                                                  CL_QUEUE_PROFILING_ENABLE,
                                                  &status);
   bool use_mask = false;
-  vil_image_view<unsigned char >* mask_map = 0;
+  vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
 
   if ( mask_sptr->ni() == ni && mask_sptr->nj() == nj ) {
-      vcl_cout<<"Update using mask."<<vcl_endl;
+      std::cout<<"Update using mask."<<std::endl;
       use_mask = true;
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
-          vcl_cout<<"boxm2_update_process:: mask map is not an unsigned char map"<<vcl_endl;
+          std::cout<<"boxm2_update_process:: mask map is not an unsigned char map"<<std::endl;
           return false;
       }
   }
 
   if (status!=0)
     return false;
-  vcl_string options = "";
+  std::string options = "";
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
   unsigned cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
@@ -100,20 +102,20 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
       vgl_box_3d<double> scene_bbox = scene->bounding_box();
       vgl_box_2d<double> proj_bbox;
       double u,v;
-      
+
       geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
       proj_bbox.add(vgl_point_2d<double>(u,v));
       geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
       proj_bbox.add(vgl_point_2d<double>(u,v));
 
-      vcl_cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<vcl_endl;
-      int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
-      int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
-      int max_i = int(vcl_min(ni-1.0, vcl_ceil(proj_bbox.max_x())));
-      int max_j = int(vcl_min(nj-1.0, vcl_ceil(proj_bbox.max_y())));
+      std::cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<std::endl;
+      int min_i = int(std::max(0.0, std::floor(proj_bbox.min_x())));
+      int min_j = int(std::max(0.0, std::floor(proj_bbox.min_y())));
+      int max_i = int(std::min(ni-1.0, std::ceil(proj_bbox.max_x())));
+      int max_j = int(std::min(nj-1.0, std::ceil(proj_bbox.max_y())));
 
       if ((min_i > max_i) || (min_j > max_j)) {
-          vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
+          std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
           return false;
       }
       // initialize ray origin buffer, first and last return buffers
@@ -157,7 +159,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       tnearfar[0] = f* scene->finest_resolution()/resnearfactor ;
       tnearfar[1] = f* scene->finest_resolution()/resfarfactor ;
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<std::endl;
   }
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -187,7 +189,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order;
+  std::vector<boxm2_block_id> vis_order;
   if(cam->type_name() == "vpgl_geo_camera" )
   {
       vis_order= scene->get_block_ids();
@@ -207,7 +209,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
       for (unsigned int j=0;j<cl_nj;++j) {
           for (unsigned int i=0;i<cl_ni;++i) {
               if ( i<mask_map->ni() && j<mask_map->nj() ) {
-                  if ( (*mask_map)(i,j)==0 ) 
+                  if ( (*mask_map)(i,j)==0 )
                       mask_buff[count] = 0;
                   else
                       mask_buff[count] = 1;
@@ -221,13 +223,13 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
   mask_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
 
-  
+
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
-    for (vcl_vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
+    for (std::vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       //choose correct render kernel
-      vcl_cout<<"Block id "<<*id<<vcl_endl;
+      std::cout<<"Block id "<<*id<<std::endl;
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
       bocl_kernel* kern = kernels[i];
       //write the image values to the buffer
@@ -328,25 +330,25 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
   opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_update_max_vis_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== boxm2_ocl_update_max_vis_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -355,25 +357,25 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_sptr
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/update_kernels.cl");
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
   src_paths.push_back(source_dir + "update_functors.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D VIS_SEGLEN  -D STEP_CELL=step_cell_vis_seglen(aux_args,data_ptr,llid,d)";
+  std::string seg_opts = options + " -D VIS_SEGLEN  -D STEP_CELL=step_cell_vis_seglen(aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "vis_seg_len_main", seg_opts, "fusion::vis_seg_len_main");
   vec_kernels.push_back(seg_len);
 
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* update = new bocl_kernel();
-  vcl_string update_opts = options + " -D UPDATE_MAX_VIS_SCORE";
+  std::string update_opts = options + " -D UPDATE_MAX_VIS_SCORE";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_max_vis_score", update_opts, "fusion::update_max_vis_score");
   vec_kernels.push_back(update);
 
@@ -385,7 +387,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_sptr
 
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_cosine_angle::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_cosine_angle::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
@@ -404,12 +406,12 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
   };
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   // create a command queue.
   int status=0;
@@ -418,23 +420,23 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
                                                  CL_QUEUE_PROFILING_ENABLE,
                                                  &status);
   bool use_mask = false;
-  vil_image_view<unsigned char >* mask_map = 0;
+  vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
 
   if ( mask_sptr->ni() == ni && mask_sptr->nj() == nj ) {
-      vcl_cout<<"Update using mask."<<vcl_endl;
+      std::cout<<"Update using mask."<<std::endl;
       use_mask = true;
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
-          vcl_cout<<"boxm2_update_process:: mask map is not an unsigned char map"<<vcl_endl;
+          std::cout<<"boxm2_update_process:: mask map is not an unsigned char map"<<std::endl;
           return false;
       }
   }
 
   if (status!=0)
     return false;
-  vcl_string options = "";
+  std::string options = "";
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
   unsigned cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
@@ -456,20 +458,20 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
       vgl_box_3d<double> scene_bbox = scene->bounding_box();
       vgl_box_2d<double> proj_bbox;
       double u,v;
-      
+
       geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
       proj_bbox.add(vgl_point_2d<double>(u,v));
       geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
       proj_bbox.add(vgl_point_2d<double>(u,v));
 
-      vcl_cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<vcl_endl;
-      int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
-      int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
-      int max_i = int(vcl_min(ni-1.0, vcl_ceil(proj_bbox.max_x())));
-      int max_j = int(vcl_min(nj-1.0, vcl_ceil(proj_bbox.max_y())));
+      std::cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<std::endl;
+      int min_i = int(std::max(0.0, std::floor(proj_bbox.min_x())));
+      int min_j = int(std::max(0.0, std::floor(proj_bbox.min_y())));
+      int max_i = int(std::min(ni-1.0, std::ceil(proj_bbox.max_x())));
+      int max_j = int(std::min(nj-1.0, std::ceil(proj_bbox.max_y())));
 
       if ((min_i > max_i) || (min_j > max_j)) {
-          vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
+          std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
           return false;
       }
 
@@ -486,7 +488,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
                   double el_first = 0;
                   geocam->img_to_global(full_i, full_j,  lon, lat);
                   lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
-    
+
                   // start rays slightly above maximum height of model
                   float z_origin = float(scene_bbox.max_z()) + 1.0f;
                   ray_origins[count4+0] = float(x);
@@ -517,7 +519,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       tnearfar[0] = f* scene->finest_resolution()/resnearfactor ;
       tnearfar[1] = f* scene->finest_resolution()/resfarfactor ;
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<std::endl;
   }
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -547,7 +549,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order;
+  std::vector<boxm2_block_id> vis_order;
   if(cam->type_name() == "vpgl_geo_camera" )
       vis_order= scene->get_block_ids();
   else if(cam->type_name() == "vpgl_perspective_camera")
@@ -565,7 +567,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
       for (unsigned int j=0;j<cl_nj;++j) {
           for (unsigned int i=0;i<cl_ni;++i) {
               if ( i<mask_map->ni() && j<mask_map->nj() ) {
-                  if ( (*mask_map)(i,j)==0 ) 
+                  if ( (*mask_map)(i,j)==0 )
                       mask_buff[count] = 0;
                   else
                       mask_buff[count] = 1;
@@ -579,10 +581,10 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
   mask_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
-    for (vcl_vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
+    for (std::vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       //choose correct render kernel
-      vcl_cout<<"Block id "<<*id<<vcl_endl;
+      std::cout<<"Block id "<<*id<<std::endl;
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
       bocl_kernel* kern = kernels[i];
       //write the image values to the buffer
@@ -701,25 +703,25 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
   opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_update_cosine_angle::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== boxm2_ocl_update_cosine_angle::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -728,24 +730,24 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_device
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/update_kernels.cl");
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D VIEW_NORMAL_DOT  -D STEP_CELL=step_cell_view_normal_dot(aux_args,data_ptr,llid,d)";
+  std::string seg_opts = options + " -D VIEW_NORMAL_DOT  -D STEP_CELL=step_cell_view_normal_dot(aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "view_normal_dot_main", seg_opts, "fusion::vis_seg_len_main");
   vec_kernels.push_back(seg_len);
 
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* update = new bocl_kernel();
-  vcl_string update_opts = options + " -D UPDATE_AVG_VIEW_NORMAL_DOT";
+  std::string update_opts = options + " -D UPDATE_AVG_VIEW_NORMAL_DOT";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_avg_view_normal_dot", update_opts, "fusion::update_avg_view_normal_dot");
   vec_kernels.push_back(update);
 
@@ -755,7 +757,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_device
 }
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_surface_density::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_surface_density::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr scene,
@@ -775,12 +777,12 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   };
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   // create a command queue.
   int status=0;
@@ -791,9 +793,9 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
 
   if (status!=0)
     return false;
-  vcl_string options = "";
+  std::string options = "";
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
   unsigned cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
@@ -818,13 +820,13 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
       proj_bbox.add(vgl_point_2d<double>(u,v));
       geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
       proj_bbox.add(vgl_point_2d<double>(u,v));
-      vcl_cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<vcl_endl;
-      int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
-      int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
-      int max_i = int(vcl_min(ni-1.0, vcl_ceil(proj_bbox.max_x())));
-      int max_j = int(vcl_min(nj-1.0, vcl_ceil(proj_bbox.max_y())));
+      std::cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<std::endl;
+      int min_i = int(std::max(0.0, std::floor(proj_bbox.min_x())));
+      int min_j = int(std::max(0.0, std::floor(proj_bbox.min_y())));
+      int max_i = int(std::min(ni-1.0, std::ceil(proj_bbox.max_x())));
+      int max_j = int(std::min(nj-1.0, std::ceil(proj_bbox.max_y())));
       if ((min_i > max_i) || (min_j > max_j)) {
-          vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
+          std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
           return false;
       }
       // initialize ray origin buffer, first and last return buffers
@@ -867,7 +869,7 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       tnearfar[0] = f* scene->finest_resolution()/resnearfactor ;
       tnearfar[1] = f* scene->finest_resolution()/resfarfactor ;
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<std::endl;
   }
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -877,8 +879,8 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   float* exp_depth_buf = new float[cl_ni*cl_nj];
   float* std_depth_buf = new float[cl_ni*cl_nj];
   int count  = 0;
-  for (unsigned int j=0;j<cl_nj;++j) 
-      for (unsigned int i=0;i<cl_ni;++i) 
+  for (unsigned int j=0;j<cl_nj;++j)
+      for (unsigned int i=0;i<cl_ni;++i)
           if ( i<exp_depth_img.ni() && j<exp_depth_img.nj() )
           {
               exp_depth_buf[count] = exp_depth_img(i,j);
@@ -912,8 +914,8 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order;
-  if(cam->type_name() == "vpgl_geo_camera" ) 
+  std::vector<boxm2_block_id> vis_order;
+  if(cam->type_name() == "vpgl_geo_camera" )
   {
       vis_order= scene->get_block_ids(); // order does not matter for a top down orthographic camera  and axis aligned blocks
   }
@@ -924,10 +926,10 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
 
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
-    for (vcl_vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
+    for (std::vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       //choose correct render kernel
-      vcl_cout<<"Block id "<<*id<<vcl_endl;
+      std::cout<<"Block id "<<*id<<std::endl;
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
       bocl_kernel* kern = kernels[i];
       //write the image values to the buffer
@@ -1046,25 +1048,25 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
   opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_update_surface_density::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_surface_density::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_update_cosine_angle::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== boxm2_ocl_update_cosine_angle::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -1073,24 +1075,24 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_surface_density::get_kernels(bocl_dev
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/update_kernels.cl");
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D ACCUMULATE_SURFACE_DENSITY  -D STEP_CELL=step_cell_surface_density(tblock,aux_args,data_ptr,llid,d)";
+  std::string seg_opts = options + " -D ACCUMULATE_SURFACE_DENSITY  -D STEP_CELL=step_cell_surface_density(tblock,aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "accumulate_surface_density_main", seg_opts, "fusion::accumulate_surface_density_main");
   vec_kernels.push_back(seg_len);
 
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* update = new bocl_kernel();
-  vcl_string update_opts = options + " -D UPDATE_AVG_SURFACE_DENSITY";
+  std::string update_opts = options + " -D UPDATE_AVG_SURFACE_DENSITY";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_avg_surface_density", update_opts, "fusion::update_avg_surface_density");
   vec_kernels.push_back(update);
 

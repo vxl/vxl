@@ -16,8 +16,9 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
+#include <iostream>
 #include <vbl/vbl_sparse_array_base.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Sparse array allowing space efficient access of the form s[3000] = 2;
 template <class T>
@@ -27,26 +28,26 @@ class vbl_sparse_array_1d: public vbl_sparse_array_base<T, unsigned>
   typedef typename vbl_sparse_array_base<T,unsigned>::const_iterator const_iterator;
 
   //: Print the Array to a stream in "(i,j): value" format.
-  vcl_ostream& print(vcl_ostream& out) const
+  std::ostream& print(std::ostream& out) const
   {
     for (const_iterator p = this->begin(); p != this->end(); ++p)
-      out << '(' << (*p).first << "): " << (*p).second << vcl_endl;
+      out << '(' << (*p).first << "): " << (*p).second << std::endl;
     return out;
   }
 };
 
 //: Stream operator - print the Array to a stream in "(i,j): value" format.
 template <class T>
-inline vcl_ostream& operator<< (vcl_ostream& s, const vbl_sparse_array_1d<T>& a)
+inline std::ostream& operator<< (std::ostream& s, const vbl_sparse_array_1d<T>& a)
 {
   return a.print(s);
 }
 
 #ifndef VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_BASE_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_base.txx instead"
+extern "please include vbl/vbl_sparse_array_base.hxx instead"
 #endif // VBL_SPARSE_ARRAY_BASE_INSTANTIATE
 #define VBL_SPARSE_ARRAY_1D_INSTANTIATE(T) \
-extern "please include vbl/vbl_sparse_array_1d.txx instead"
+extern "please include vbl/vbl_sparse_array_1d.hxx instead"
 
 #endif // vbl_sparse_array_1d_h_

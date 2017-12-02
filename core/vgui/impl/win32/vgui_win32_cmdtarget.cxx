@@ -5,7 +5,7 @@
 BOOL vgui_win32_cmdtarget::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
 {
 #ifdef DEBUG
-  vcl_cout << "vgui_win32_cmdtarget::OnCmdMsg()" << vcl_endl;
+  std::cout << "vgui_win32_cmdtarget::OnCmdMsg()" << std::endl;
 #endif
 
   // Look through message map to see if it applies to us

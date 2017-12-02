@@ -31,15 +31,15 @@ class sdet_third_order_edge_det : public sdet_third_order_edge_det_params
     : sdet_third_order_edge_det_params(params), view_i(0), view_j(0) {}
   void apply(vil_image_view<vxl_byte> const& image);
   bool apply_color(vil_image_view<vxl_byte> const& image);
-  vcl_vector<vdgl_edgel>& edgels()  { return edgels_; }
-  void line_segs(vcl_vector<vsol_line_2d_sptr>& lines);
+  std::vector<vdgl_edgel>& edgels()  { return edgels_; }
+  void line_segs(std::vector<vsol_line_2d_sptr>& lines);
   sdet_edgemap_sptr edgemap();
 
   //: save edgels in the edge map file FORMAT, output files have .edg extension
-  static bool save_edg_ascii(const vcl_string& filename, unsigned ni, unsigned nj, const vcl_vector<vdgl_edgel>& edgels);
+  static bool save_edg_ascii(const std::string& filename, unsigned ni, unsigned nj, const std::vector<vdgl_edgel>& edgels);
 
  private:
-  vcl_vector<vdgl_edgel> edgels_;
+  std::vector<vdgl_edgel> edgels_;
   unsigned int view_i, view_j;
 };
 

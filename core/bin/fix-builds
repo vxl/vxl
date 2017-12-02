@@ -24,7 +24,7 @@ BUILD_DIR=../Linux-i386
 BUILD_DIR=`cd $BUILD_DIR;pwd` # absolute path
 
 for f in `svn st | grep ^M | fgrep CMakeLists.txt | sed -e 's/M *//'`
-do 
+do
    libs=`svn diff $f | \
          fgrep TARGET_LINK_LIBRARIES | \
          grep -v '^ ' | \

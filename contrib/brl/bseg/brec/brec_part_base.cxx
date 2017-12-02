@@ -13,7 +13,7 @@
 brec_part_base_sptr
 brec_part_base::central_part()
 {
-  if (out_edges().size() == 0) return 0;
+  if (out_edges().size() == 0) return VXL_NULLPTR;
   else return (*out_edges_begin())->target();
 }
 
@@ -21,14 +21,14 @@ brec_part_base::central_part()
 brec_hierarchy_edge_sptr
 brec_part_base::edge_to_central_part()
 {
-  if (out_edges().size() == 0) return 0;
+  if (out_edges().size() == 0) return VXL_NULLPTR;
   else return *out_edges_begin();
 }
 
 brec_hierarchy_edge_sptr
 brec_part_base::edge_to_second_part()
 {
-  if (out_edges().size() < 2) return 0;
+  if (out_edges().size() < 2) return VXL_NULLPTR;
   edge_iterator eit = out_edges_begin();
   eit++;
   return *eit;
@@ -83,18 +83,18 @@ brec_part_base* brec_part_base::cast_to_base(void)
 
 brec_part_gaussian* brec_part_base::cast_to_gaussian(void)
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
 brec_part_instance* brec_part_base::cast_to_instance(void)
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
 
 brec_part_gaussian* brec_part_instance::cast_to_gaussian(void)
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
 brec_part_instance* brec_part_instance::cast_to_instance(void)
@@ -147,8 +147,8 @@ bool brec_part_instance::mark_center(vil_image_view<vxl_byte>& img, unsigned pla
   int ni = (int)img.ni();
   int nj = (int)img.nj();
 
-  int ic = (int)vcl_floor(x_ + 0.5f);
-  int jc = (int)vcl_floor(y_ + 0.5f);
+  int ic = (int)std::floor(x_ + 0.5f);
+  int jc = (int)std::floor(y_ + 0.5f);
   if (ic >= 0 && jc >= 0 && ic < ni && jc < nj)
     img(ic, jc, plane) = (vxl_byte)(strength_*255);
 
@@ -212,7 +212,7 @@ bool brec_part_instance::xml_parse_element(bxml_data_sptr data)
 vgl_box_2d<float>
 brec_part_instance::get_probe_box(float radius)
 {
-  float b_r = radius/float(vcl_sqrt(2.0)); // we want maximal distance in the box to be radius
+  float b_r = radius/float(std::sqrt(2.0)); // we want maximal distance in the box to be radius
   vgl_point_2d<float> pr0(x_-b_r, y_-b_r), pr1(x_+b_r, y_+b_r);
   vgl_box_2d<float> probe;
   probe.add(pr0); probe.add(pr1);

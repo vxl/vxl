@@ -7,10 +7,12 @@
 // \brief Describe a classifier based on a single pdf.
 // \author Ian Scott
 
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_classifier_base.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //:  Decisions are based on an explicit multivariate probability distribution
 class clsfy_binary_pdf_classifier : public clsfy_classifier_base
@@ -43,7 +45,7 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
 
   //: Return the probability the input being in class 0.
   // output(0) contains the probability that the input is in class 1
-  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in class 0, i.e. const + log(P(class=0|data)).
   // The constant is chosen such that the decision boundary is at logL ==0;
@@ -99,13 +101,13 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to a binary File Stream
   virtual void b_write(vsl_b_ostream& bfs) const;

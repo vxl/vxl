@@ -9,7 +9,7 @@ doxygen_add_library(contrib/mul/msm
   DESCRIPTION "Manchester's SM Library"
 )
 
-SET(msm_sources
+set(msm_sources
   msm_add_all_loaders.h       msm_add_all_loaders.cxx
   msm_points.h                msm_points.cxx
   msm_ref_shape_model.h       msm_ref_shape_model.cxx
@@ -25,6 +25,7 @@ SET(msm_sources
   msm_zoom_aligner.h          msm_zoom_aligner.cxx
   msm_similarity_aligner.h    msm_similarity_aligner.cxx
   msm_rigid_aligner.h         msm_rigid_aligner.cxx
+  msm_affine_aligner.h        msm_affine_aligner.cxx
 
   msm_curve.h                 msm_curve.cxx
 
@@ -37,18 +38,19 @@ SET(msm_sources
   msm_pose_maker.h            msm_pose_maker.cxx
 
   msm_cubic_bezier.h          msm_cubic_bezier.cxx
+  msm_equally_space.h         msm_equally_space.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates msm_sources)
-ADD_LIBRARY(msm ${msm_sources} )
-TARGET_LINK_LIBRARIES(msm mcal vimt)
+aux_source_directory(Templates msm_sources)
+vxl_add_library(LIBRARY_NAME msm LIBRARY_SOURCES ${msm_sources} )
+target_link_libraries(msm mcal vimt)
 
 add_subdirectory(utils)
 
-IF (BUILD_MUL_TOOLS)
+if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
-ENDIF (BUILD_MUL_TOOLS)
+endif()
 
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

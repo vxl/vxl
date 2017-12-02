@@ -1,5 +1,6 @@
 // This is core/vidl/vidl_dshow_live_istream.cxx
 //=========================================================================
+#include <cstring>
 #include "vidl_dshow_live_istream.h"
 //:
 // \file
@@ -12,7 +13,7 @@
 #include <vidl/vidl_config.h>
 #include <vidl/vidl_dshow.h>
 #include <vcl_cassert.h>
-#include <vcl_cstring.h> // for memcpy
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -65,7 +66,7 @@ sample_grabber_cb::BufferCB(double time, BYTE* buffer, long buffer_size)
   buffer_time_[i] = time;
 
   // copy buffer
-  vcl_memcpy(&buffer_[i][0], buffer, buffer_size);
+  std::memcpy(&buffer_[i][0], buffer, buffer_size);
 
   // reset flags to reflect new state
   WaitForSingleObject(mutex_, INFINITE);
@@ -113,7 +114,7 @@ vidl_dshow_live_istream<ParamsObject>::vidl_dshow_live_istream(void)
   , register_(0)
 {
   // connect to the first available device
-  vcl_vector<vcl_string> names = vidl_dshow::get_capture_device_names();
+  std::vector<std::string> names = vidl_dshow::get_capture_device_names();
   if (names.size() > 0)
   {
     params_.set_device_name(names[0]);
@@ -129,7 +130,7 @@ vidl_dshow_live_istream<ParamsObject>::vidl_dshow_live_istream(void)
 //: Constructor - from a string containing a device name.
 template <class ParamsObject>
 vidl_dshow_live_istream<ParamsObject>
-::vidl_dshow_live_istream(const vcl_string& device_name)
+::vidl_dshow_live_istream(const std::string& device_name)
   : params_(ParamsObject().set_device_name(device_name))
   , register_(0)
 {
@@ -409,9 +410,9 @@ inline void vidl_dshow_live_istream<ParamsObject>::stop(void)
   wait_for_state_change(media_control_->Stop());
 }
 
-// ***** make these with the usual *.txx macros? *****
+// ***** make these with the usual *.hxx macros? *****
 // verify these steps with vil library before attempting
-// 1. put this file into vidl_dshow_istream.txx
+// 1. put this file into vidl_dshow_istream.hxx
 // 2. put the macros in vidl_dshow_istream.h
 // 3. put the templates in:
 //      templates/vidl_dshow_istream+vidl_dshow_istream_params-.cxx

@@ -1,14 +1,51 @@
 // This is core/vil/tests/test_image_view_maths.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_copy.h>
 #include <vil/vil_math.h>
 #include <vil/vil_print.h>
 
+template<class T>
+static void test_image_abs_diff(unsigned ni, unsigned nj, T min, T max, T tol)
+{
+  vil_image_view<vxl_byte> bdiff_A(ni, nj);
+  vil_image_view<vxl_byte> bdiff_B(ni, nj);
+  vil_image_view<vxl_byte> bdiff_D(ni, nj);
+  T diff = vcl_abs(max-min);
+
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      bdiff_A(i,j) = min + i + j + i%3;
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      bdiff_B(i,j) = max + i + j;
+
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_A, bdiff_D);
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      TEST_NEAR("|A-A|", bdiff_D(i,j), 0, tol);
+
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_A, bdiff_B, bdiff_D);
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      TEST_NEAR("|A-B|(i,j)", bdiff_D(i,j), diff - i%3, tol);
+
+  bdiff_D.fill(30);
+  vil_math_image_abs_difference(bdiff_B, bdiff_A, bdiff_D);
+  for (unsigned j = 0; j < nj; ++j)
+    for (unsigned i = 0; i < ni; ++i)
+      TEST_NEAR("|B-A|(i,j)", bdiff_D(i,j), diff - i%3, tol);
+}
+
 static void test_image_view_maths_byte()
 {
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << " Testing vil_image_view_maths\n"
            << "******************************\n";
 
@@ -70,7 +107,7 @@ static void test_image_view_maths_byte()
             im_ratio(5,7),float(imA(5,7))/float(imB(5,7)),1e-6);
 
   {
-    vcl_cout<<"=== vil_math_rms (1 plane) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_rms (1 plane) ==="<<std::endl;
     vil_image_view<float> im1(5,6,1),im_rms;
     im1.fill(1.7f);
     im1(2,3,0)=-2.0;
@@ -78,16 +115,16 @@ static void test_image_view_maths_byte()
     TEST_NEAR("im_rms(1,1)",im_rms(1,1),1.7,1e-6);
     TEST_NEAR("im_rms(2,3)",im_rms(2,3),2.0,1e-6);
 
-    vcl_cout<<"=== vil_math_rms (2 planes) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_rms (2 planes) ==="<<std::endl;
     vil_image_view<float> im2(5,6,2);
     im2.fill(1.7f);
     im2(2,3,0)=2.0;
     im2(2,3,1)=3.0;
     vil_math_rms(im2,im_rms);
     TEST_NEAR("im_rms(1,1)",im_rms(1,1),1.7,1e-6);
-    TEST_NEAR("im_rms(2,3)",im_rms(2,3),vcl_sqrt(13.0/2.0),1e-6);
+    TEST_NEAR("im_rms(2,3)",im_rms(2,3),std::sqrt(13.0/2.0),1e-6);
 
-    vcl_cout<<"=== vil_math_rms (3 planes) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_rms (3 planes) ==="<<std::endl;
     vil_image_view<float> im3(5,6,3);
     im3.fill(1.7f);
     im3(2,3,0)=2.0;
@@ -95,11 +132,11 @@ static void test_image_view_maths_byte()
     im3(2,3,2)=4.0;
     vil_math_rms(im3,im_rms);
     TEST_NEAR("im_rms(1,1)",im_rms(1,1),1.7,1e-6);
-    TEST_NEAR("im_rms(2,3)",im_rms(2,3),vcl_sqrt(29.0/3.0),1e-6);
+    TEST_NEAR("im_rms(2,3)",im_rms(2,3),std::sqrt(29.0/3.0),1e-6);
   }
 
   {
-    vcl_cout<<"=== vil_math_rss (1 plane) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_rss (1 plane) ==="<<std::endl;
     vil_image_view<float> im1(5,6,1),im_rss;
     im1.fill(1.7f);
     im1(2,3,0)=-2.0;
@@ -107,28 +144,28 @@ static void test_image_view_maths_byte()
     TEST_NEAR("im_rss(1,1)",im_rss(1,1),1.7,1e-6);
     TEST_NEAR("im_rss(2,3)",im_rss(2,3),2.0,1e-6);
 
-    vcl_cout<<"=== vil_math_rss (2 planes) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_rss (2 planes) ==="<<std::endl;
     vil_image_view<float> im2(5,6,2);
     im2.fill(1.5f);
     im2(2,3,0)=2.0;
     im2(2,3,1)=3.0;
     vil_math_rss(im2,im_rss);
-    TEST_NEAR("im_rss(1,1)",im_rss(1,1),vcl_sqrt(4.5),1e-6);
-    TEST_NEAR("im_rss(2,3)",im_rss(2,3),vcl_sqrt(13.0),1e-6);
+    TEST_NEAR("im_rss(1,1)",im_rss(1,1),std::sqrt(4.5),1e-6);
+    TEST_NEAR("im_rss(2,3)",im_rss(2,3),std::sqrt(13.0),1e-6);
 
-    vcl_cout<<"=== vil_math_rss (3 planes) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_rss (3 planes) ==="<<std::endl;
     vil_image_view<float> im3(5,6,3);
     im3.fill(1.5f);
     im3(2,3,0)=2.0;
     im3(2,3,1)=3.0;
     im3(2,3,2)=4.0;
     vil_math_rss(im3,im_rss);
-    TEST_NEAR("im_rss(1,1)",im_rss(1,1),vcl_sqrt(6.75),1e-6);
-    TEST_NEAR("im_rss(2,3)",im_rss(2,3),vcl_sqrt(29.0),1e-6);
+    TEST_NEAR("im_rss(1,1)",im_rss(1,1),std::sqrt(6.75),1e-6);
+    TEST_NEAR("im_rss(2,3)",im_rss(2,3),std::sqrt(29.0),1e-6);
   }
 
   {
-    vcl_cout<<"=== vil_math_sum_sqr (1 plane) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_sum_sqr (1 plane) ==="<<std::endl;
     vil_image_view<float> im1(5,6,1),im_ss;
     im1.fill(2.0f);
     im1(2,3,0)=3.0f;
@@ -136,7 +173,7 @@ static void test_image_view_maths_byte()
     TEST_NEAR("im_ss(1,1)",im_ss(1,1),4.0f,1e-6);
     TEST_NEAR("im_ss(2,3)",im_ss(2,3),9.0f,1e-6);
 
-    vcl_cout<<"=== vil_math_sum_sqr (2 planes) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_sum_sqr (2 planes) ==="<<std::endl;
     vil_image_view<float> im2(5,6,2);
     im2.fill(2.0f);
     im2(2,3,1)=3.0f;
@@ -144,7 +181,7 @@ static void test_image_view_maths_byte()
     TEST_NEAR("im_ss(1,1)",im_ss(1,1),8.0f,1e-6);
     TEST_NEAR("im_ss(2,3)",im_ss(2,3),13.0f,1e-6);
 
-    vcl_cout<<"=== vil_math_sum_sqr (3 planes) ==="<<vcl_endl;
+    std::cout<<"=== vil_math_sum_sqr (3 planes) ==="<<std::endl;
     vil_image_view<float> im3(5,6,3);
     im3.fill(2.0f);
     im3(2,3,1)=3.0f;
@@ -160,7 +197,7 @@ static void test_image_view_maths_byte()
 
   vil_image_view<float> im_abs_diff;
   vil_math_image_abs_difference(imA,im_sum,im_abs_diff);
-  TEST_NEAR("im_abs_diff(3,7)",im_abs_diff(3,7),vcl_fabs(float(imA(3,7))-float(im_sum(3,7))),1e-6);
+  TEST_NEAR("im_abs_diff(3,7)",im_abs_diff(3,7),std::fabs(float(imA(3,7))-float(im_sum(3,7))),1e-6);
 
   float is45 = im_sum(4,5);
   vil_math_add_image_fraction(im_sum,0.77,imA,0.23);
@@ -170,7 +207,7 @@ static void test_image_view_maths_byte()
   vil_image_view<float> im_mag(n, m, 1);
   vil_math_image_vector_mag(imA, imB, im_mag);
   unsigned n2 = n/2, m2 = m/2;
-  vcl_cout << "vector mag at (" << n2 << ' ' << m2 << ")(" << static_cast<float>(imA(n2, m2))
+  std::cout << "vector mag at (" << n2 << ' ' << m2 << ")(" << static_cast<float>(imA(n2, m2))
            << ' ' << static_cast<float>(imB(n2, m2)) << ")= " << im_mag(n2, m2) << '\n';
   TEST_NEAR("vector magnitude", im_mag(n2, m2),71.7008,1e-4);
 
@@ -186,7 +223,7 @@ static void test_image_view_maths_byte()
   vil_image_view<float> f_image(5,5);
   f_image.fill(1.0);
   f_image(3,3)=17;
-  vcl_cout<<"Testing vil_math_normalise\n";
+  std::cout<<"Testing vil_math_normalise\n";
   vil_math_normalise(f_image);
   double f_mean,f_var;
   vil_math_mean_and_variance(f_mean,f_var,f_image,0);
@@ -215,22 +252,22 @@ static void test_image_view_maths_byte()
     for (int x=0;x<nx;++x)
       orig_image(x,y)=1.25f*float(x);
 
-  vil_print_all( vcl_cout, orig_image );
+  vil_print_all( std::cout, orig_image );
 
   var_norm_image=vil_copy_deep(orig_image);
   vil_math_normalise( var_norm_image);
 
-  vil_print_all( vcl_cout, var_norm_image );
+  vil_print_all( std::cout, var_norm_image );
 
   // create correct variance norm image
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      correct_var_norm_image(x,y)=float(x-2)/(float)vcl_sqrt(2.0f);
+      correct_var_norm_image(x,y)=float(x-2)/(float)std::sqrt(2.0f);
 
   double diff2=0;
   for (int y=0;y<ny;++y)
     for (int x=0;x<nx;++x)
-      diff2+=vcl_fabs( var_norm_image(x,y)-
+      diff2+=std::fabs( var_norm_image(x,y)-
                        correct_var_norm_image(x,y) );
 
   TEST_NEAR("test variance normalisation",diff2,0,1e-6);
@@ -321,11 +358,40 @@ static void test_image_view_maths_byte()
   TEST_NEAR("vil_math_image_min (d)",fim_min_out(1,2),4.2f,1e-6);
   TEST_NEAR("vil_math_image_min (e)",fim_min_out(2,2),4.2f,1e-6);
   TEST_NEAR("vil_math_image_min (f)",fim_min_out(2,3),-3.f,1e-6);
+
+  // dim > nxblock_size, n > 1
+  test_image_abs_diff<vxl_byte>(35, 53, 100, 113, 0);
+
+  // dim = nxblock_size, n > 1
+  test_image_abs_diff<vxl_byte>(32, 48, 100, 113, 0);
+
+  // dim = nxblock_size, n = 1
+  test_image_abs_diff<vxl_byte>(16, 16, 100, 113, 0);
+
+  // dim r< nxblock_size, n = 1
+  test_image_abs_diff<vxl_byte>(11, 13, 100, 113, 0);
+}
+
+
+static void test_image_view_maths_float()
+{
+  // dim > nxblock_size, n > 1
+  test_image_abs_diff<vxl_byte>(11, 13, 100.0f, 113.0f, 1e-8);
+
+  // dim = nxblock_size, n > 1
+  test_image_abs_diff<vxl_byte>(8, 12, 100.0f, 113.0f, 1e-8);
+
+  // dim = nxblock_size, n = 1
+  test_image_abs_diff<vxl_byte>(4, 4, 100.0f, 113.0f, 1e-8);
+
+  // dim r< nxblock_size, n = 1
+  test_image_abs_diff<vxl_byte>(2, 3, 100.0f, 113.0f, 1e-8);
 }
 
 static void test_image_view_maths()
 {
   test_image_view_maths_byte();
+  test_image_view_maths_float();
 }
 
 TESTMAIN(test_image_view_maths);

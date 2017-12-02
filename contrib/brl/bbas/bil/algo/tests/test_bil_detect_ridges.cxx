@@ -1,7 +1,9 @@
+#include <iostream>
+#include <cmath>
+#include <string>
 #include <testlib/testlib_test.h>
 
-#include <vcl_cmath.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <bil/algo/bil_detect_ridges.h>
@@ -37,14 +39,14 @@ class vil_math_abs_functor
   unsigned operator()(unsigned x) const { return x; }
   int operator()(int x)           const { return x<0 ? -x : x; }
   short operator()(short x)       const { return x<0 ? -x : x; }
-  float operator()(float x)       const { return vcl_fabs(x); }
-  double operator()(double x)     const { return vcl_fabs(x); }
+  float operator()(float x)       const { return std::fabs(x); }
+  double operator()(double x)     const { return std::fabs(x); }
 };
 
 static void test_bil_detect_ridges(int argc, char* argv[])
 {
   assert(argc > 1);
-  vil_image_resource_sptr res = vil_load_image_resource((vcl_string(argv[1]) + "/c.20.tif").c_str());
+  vil_image_resource_sptr res = vil_load_image_resource((std::string(argv[1]) + "/c.20.tif").c_str());
   TEST("File loading", !res, false);
   vil_image_view<vxl_uint_16> view_uint16 = res->get_view();
   vil_image_view<float> view_float;

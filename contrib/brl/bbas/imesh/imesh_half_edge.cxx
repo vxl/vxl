@@ -1,15 +1,17 @@
 // This is brl/bbas/imesh/imesh_half_edge.cxx
+#include <iostream>
+#include <map>
+#include <utility>
 #include "imesh_half_edge.h"
 //:
 // \file
 
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 
 //: Construct from a face index list
-imesh_half_edge_set::imesh_half_edge_set(const vcl_vector<vcl_vector<unsigned int> >& face_list)
+imesh_half_edge_set::imesh_half_edge_set(const std::vector<std::vector<unsigned int> >& face_list)
 {
   build_from_ifs(face_list);
 }
@@ -17,11 +19,11 @@ imesh_half_edge_set::imesh_half_edge_set(const vcl_vector<vcl_vector<unsigned in
 
 //: Build the half edges from an indexed face set
 void
-imesh_half_edge_set::build_from_ifs(const vcl_vector<vcl_vector<unsigned int> >& face_list)
+imesh_half_edge_set::build_from_ifs(const std::vector<std::vector<unsigned int> >& face_list)
 {
   half_edges_.clear();
-  typedef vcl_pair<unsigned int, unsigned int> vert_pair;
-  vcl_map<vert_pair, unsigned int> edge_map;
+  typedef std::pair<unsigned int, unsigned int> vert_pair;
+  std::map<vert_pair, unsigned int> edge_map;
 
   face_to_he_.resize(face_list.size(), imesh_invalid_idx);
 
@@ -29,7 +31,7 @@ imesh_half_edge_set::build_from_ifs(const vcl_vector<vcl_vector<unsigned int> >&
 
   const unsigned int num_faces = face_list.size();
   for (unsigned int f=0; f<num_faces; ++f) {
-    const vcl_vector<unsigned int>& verts = face_list[f];
+    const std::vector<unsigned int>& verts = face_list[f];
     const unsigned int num_verts = verts.size();
     unsigned int first_e = imesh_invalid_idx; // first edge index
     unsigned int prev_e = imesh_invalid_idx; // previous edge index
@@ -41,11 +43,11 @@ imesh_half_edge_set::build_from_ifs(const vcl_vector<vcl_vector<unsigned int> >&
 
       vert_pair vp(v,nv);
       if (v > nv) vp = vert_pair(nv,v);
-      vcl_map<vert_pair, unsigned int>::iterator m = edge_map.find(vp);
+      std::map<vert_pair, unsigned int>::iterator m = edge_map.find(vp);
       unsigned int curr_e;
       if (m == edge_map.end()) {
         curr_e = half_edges_.size();
-        edge_map.insert(vcl_pair<vert_pair,unsigned int>(vp,curr_e));
+        edge_map.insert(std::pair<vert_pair,unsigned int>(vp,curr_e));
         half_edges_.push_back(imesh_half_edge(curr_e,imesh_invalid_idx,v,f));
         half_edges_.push_back(imesh_half_edge(curr_e+1,imesh_invalid_idx,nv,imesh_invalid_idx));
       }

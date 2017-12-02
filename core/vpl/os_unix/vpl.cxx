@@ -1,7 +1,7 @@
 // This is core/vpl/os_unix/vpl.cxx
 // Include system headers for UNIX-like operating system :
 #undef _XOPEN_SOURCE
-#define _XOPEN_SOURCE 1 // necessary on alpha and on SGI since otherwise
+#define _XOPEN_SOURCE 1 // necessary on alpha
 #undef _XOPEN_SOURCE_EXTENDED
 #define _XOPEN_SOURCE_EXTENDED 1 // usleep is not declared
 extern "C" {
@@ -14,7 +14,7 @@ extern "C" {
 #include <vxl_config.h> // for VXL_UNISTD_*
 
 char *
-vpl_getcwd( char *buf, vcl_size_t buf_size )
+vpl_getcwd( char *buf, std::size_t buf_size )
 {
   return getcwd( buf, buf_size );
 }

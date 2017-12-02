@@ -1,4 +1,4 @@
-#include <boct/boct_tree.txx>
+#include <boct/boct_tree.hxx>
 #include <bsta/io/bsta_io_mixture_fixed.h>
 #include <bsta/io/bsta_io_gaussian_sphere.h>
 #include <boxm/boxm_apm_traits.h>

@@ -1,7 +1,8 @@
+#include <cmath>
+#include <limits>
 #include "vpgl_rational_adjust_onept.h"
 //:
 // \file
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -10,7 +11,7 @@
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 
 //#define TRANS_ONE_DEBUG
 
@@ -18,8 +19,8 @@ static const double vpgl_trans_z_step = 2.0;//meters
 
 #if 0  // replace with weighted version
 static double
-scatter_var(vcl_vector<vpgl_rational_camera<double> > const& cams,
-            vcl_vector<vgl_point_2d<double> > const& image_pts,
+scatter_var(std::vector<vpgl_rational_camera<double> > const& cams,
+            std::vector<vgl_point_2d<double> > const& image_pts,
             vgl_point_3d<double> const& initial_pt,
             double elevation, double& xm, double& ym)
 {
@@ -42,15 +43,15 @@ scatter_var(vcl_vector<vpgl_rational_camera<double> > const& cams,
   double xvar = xsq-(n*xm*xm);
   double yvar = ysq-(n*ym*ym);
   xvar/=n; yvar/=n;
-  double var = vcl_sqrt(xvar*xvar + yvar*yvar);
+  double var = std::sqrt(xvar*xvar + yvar*yvar);
   return var;
 }
 #endif
 // do not use weights in calculating scatter, cause we want to minimize the scatter of all observations around a 'weighted' mean
 static double
-scatter_var(vcl_vector<vpgl_rational_camera<double> > const& cams,
-            vcl_vector<float> const& cam_weights,
-            vcl_vector<vgl_point_2d<double> > const& image_pts,
+scatter_var(std::vector<vpgl_rational_camera<double> > const& cams,
+            std::vector<float> const& cam_weights,
+            std::vector<vgl_point_2d<double> > const& image_pts,
             vgl_point_3d<double> const& initial_pt,
             double elevation, double& xm, double& ym,
             double const& relative_diameter = 1.0)
@@ -59,7 +60,7 @@ scatter_var(vcl_vector<vpgl_rational_camera<double> > const& cams,
   vgl_plane_3d<double> pl(0, 0, 1, -elevation);
   double xsq = 0, ysq = 0;
   xm = 0; ym = 0;
-  vcl_vector<vgl_point_3d<double> > pb_pts;
+  std::vector<vgl_point_3d<double> > pb_pts;
   for (unsigned int i = 0; i<n; ++i)
   {
     // no need to perform back-projection for zero weight camera
@@ -76,7 +77,7 @@ scatter_var(vcl_vector<vpgl_rational_camera<double> > const& cams,
     pb_pts.push_back(pb_pt);
   }
   double weight_sum = 0.0;
-  for (unsigned i = 0; i < n; i++) 
+  for (unsigned i = 0; i < n; i++)
   {
     double x = pb_pts[i].x(), y = pb_pts[i].y();
     xm+=cam_weights[i]*x; ym +=cam_weights[i]*y;
@@ -91,16 +92,16 @@ scatter_var(vcl_vector<vpgl_rational_camera<double> > const& cams,
   }
   //xsq/=n; ysq/=n;
   xsq /= weight_sum; ysq /= weight_sum;
-  double var = vcl_sqrt(xsq*xsq + ysq*ysq);
+  double var = std::sqrt(xsq*xsq + ysq*ysq);
   return var;
 }
 
 
 
 vpgl_z_search_lsqr::
-vpgl_z_search_lsqr(vcl_vector<vpgl_rational_camera<double> > const& cams,
-                   vcl_vector<float> const& cam_weights,
-                   vcl_vector<vgl_point_2d<double> > const& image_pts,
+vpgl_z_search_lsqr(std::vector<vpgl_rational_camera<double> > const& cams,
+                   std::vector<float> const& cam_weights,
+                   std::vector<vgl_point_2d<double> > const& image_pts,
                    vgl_point_3d<double> const& initial_pt,
                    double const& relative_diameter)
   :  vnl_least_squares_function(1, 1,
@@ -120,9 +121,9 @@ void vpgl_z_search_lsqr::f(vnl_vector<double> const& elevation,
 }
 
 bool vpgl_rational_adjust_onept::
-find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
-                        vcl_vector<float> const& cam_weights,
-                        vcl_vector<vgl_point_2d<double> > const& corrs,
+find_intersection_point(std::vector<vpgl_rational_camera<double> > const& cams,
+                        std::vector<float> const& cam_weights,
+                        std::vector<vgl_point_2d<double> > const& corrs,
                         vgl_point_3d<double>& p_3d)
 {
   unsigned int n = cams.size();
@@ -132,7 +133,7 @@ find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
   double x0=0, y0=0;
   // Get the lower bound on elevation range from the cameras
   double zmax = vnl_numeric_traits<double>::maxval, zmin = -zmax;
-  for (vcl_vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin(); cit != cams.end(); ++cit)
+  for (std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin(); cit != cams.end(); ++cit)
   {
     x0+=(*cit).offset(vpgl_rational_camera<double>::X_INDX);
     y0+=(*cit).offset(vpgl_rational_camera<double>::Y_INDX);
@@ -164,7 +165,7 @@ find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
     }
     initial_point.set(xm, ym, z);
 #ifdef TRANS_ONE_DEBUG
-    vcl_cout << z << '\t' << var << '\n';
+    std::cout << z << '\t' << var << '\n';
 #endif
   }
   // at this point the best common intersection point is known.
@@ -176,9 +177,9 @@ find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
 }
 
 bool vpgl_rational_adjust_onept::
-find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
-                        vcl_vector<float> const& cam_weights,
-                        vcl_vector<vgl_point_2d<double> > const& corrs,
+find_intersection_point(std::vector<vpgl_rational_camera<double> > const& cams,
+                        std::vector<float> const& cam_weights,
+                        std::vector<vgl_point_2d<double> > const& corrs,
                         vgl_point_3d<double> const& initial_pt,
                         double const& zmin,
                         double const& zmax,
@@ -210,7 +211,7 @@ find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
     }
     initial_point.set(xm, ym, z);
 #ifdef TRANS_ONE_DEBUG
-    vcl_cout << z << '\t' << var << '\t' << initial_point << '\n';
+    std::cout << z << '\t' << var << '\t' << initial_point << '\n';
 #endif
   }
   // at this point the bset common intersection point is known
@@ -222,9 +223,9 @@ find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
 }
 
 bool vpgl_rational_adjust_onept::
-refine_intersection_pt(vcl_vector<vpgl_rational_camera<double> > const& cams,
-                       vcl_vector<float> const& cam_weights,
-                       vcl_vector<vgl_point_2d<double> > const& image_pts,
+refine_intersection_pt(std::vector<vpgl_rational_camera<double> > const& cams,
+                       std::vector<float> const& cam_weights,
+                       std::vector<vgl_point_2d<double> > const& image_pts,
                        vgl_point_3d<double> const& initial_pt,
                        vgl_point_3d<double>& final_pt,
                        double const& relative_diameter)
@@ -261,21 +262,21 @@ refine_intersection_pt(vcl_vector<vpgl_rational_camera<double> > const& cams,
 }
 
 bool vpgl_rational_adjust_onept::
-adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
-       vcl_vector<vgl_point_2d<double> > const& corrs,
-       vcl_vector<vgl_vector_2d<double> >& cam_translations,
+adjust(std::vector<vpgl_rational_camera<double> > const& cams,
+       std::vector<vgl_point_2d<double> > const& corrs,
+       std::vector<vgl_vector_2d<double> >& cam_translations,
        vgl_point_3d<double>& final)
 {
   cam_translations.clear();
   vgl_point_3d<double> intersection;
-  vcl_vector<float> cam_weights(cams.size(), 1.0f/cams.size());
+  std::vector<float> cam_weights(cams.size(), 1.0f/cams.size());
   if (!find_intersection_point(cams, cam_weights, corrs,intersection))
     return false;
 
   if (!refine_intersection_pt(cams, cam_weights, corrs,intersection, final))
     return false;
-  vcl_vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  vcl_vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
+  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
+  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
   for (; cit!=cams.end() && rit!=corrs.end(); ++cit, ++rit)
   {
     vgl_point_2d<double> uvp = (*cit).project(final);
@@ -287,26 +288,26 @@ adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
 }
 
 bool vpgl_rational_adjust_onept::
-adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
-       vcl_vector<vgl_point_2d<double> > const& corrs,
+adjust(std::vector<vpgl_rational_camera<double> > const& cams,
+       std::vector<vgl_point_2d<double> > const& corrs,
        vgl_point_3d<double> const& initial_pt,
        double const& zmin,
        double const& zmax,
-       vcl_vector<vgl_vector_2d<double> >& cam_translations,
+       std::vector<vgl_vector_2d<double> >& cam_translations,
        vgl_point_3d<double>& final,
        double const& relative_diameter)
 {
   cam_translations.clear();
   vgl_point_3d<double> intersection;
-  vcl_vector<float> cam_weights(cams.size(), 1.0f/cams.size());
+  std::vector<float> cam_weights(cams.size(), 1.0f/cams.size());
   if (!find_intersection_point(cams, cam_weights, corrs, initial_pt, zmin, zmax, intersection, relative_diameter))
     return false;
 
   if (!refine_intersection_pt(cams, cam_weights, corrs, intersection, final))
     return false;
 
-  vcl_vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  vcl_vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
+  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
+  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
   for (; cit != cams.end() && rit != corrs.end(); ++cit, ++rit)
   {
     vgl_point_2d<double> uvp = (*cit).project(final);
@@ -319,10 +320,10 @@ adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
 
 // pass a weight for each camera, the weights should add up to 1.0
 bool vpgl_rational_adjust_onept::
-  adjust_with_weights(vcl_vector<vpgl_rational_camera<double> > const& cams, 
-                      vcl_vector<float> weights,
-                      vcl_vector<vgl_point_2d<double> > const& corrs,
-                      vcl_vector<vgl_vector_2d<double> >& cam_translations,
+  adjust_with_weights(std::vector<vpgl_rational_camera<double> > const& cams,
+                      std::vector<float> weights,
+                      std::vector<vgl_point_2d<double> > const& corrs,
+                      std::vector<vgl_vector_2d<double> >& cam_translations,
                       vgl_point_3d<double>& final)
 {
   cam_translations.clear();
@@ -331,9 +332,9 @@ bool vpgl_rational_adjust_onept::
     return false;
   if (!refine_intersection_pt(cams, weights, corrs,intersection, final))
     return false;
-  vcl_vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  vcl_vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
-  vcl_vector<float>::const_iterator wit = weights.begin();
+  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
+  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
+  std::vector<float>::const_iterator wit = weights.begin();
   for (; cit!=cams.end() && rit!=corrs.end(); ++cit, ++rit, ++wit)
   {
     // if weight is 1, it's a special case, do not change it at all (the projection still yields a tiny translation so just ignore that)
@@ -351,12 +352,12 @@ bool vpgl_rational_adjust_onept::
 }
 
 bool vpgl_rational_adjust_onept::
-adjust_with_weights(vcl_vector<vpgl_rational_camera<double> > const& cams, vcl_vector<float> const& weights,
-                    vcl_vector<vgl_point_2d<double> > const& corrs,
+adjust_with_weights(std::vector<vpgl_rational_camera<double> > const& cams, std::vector<float> const& weights,
+                    std::vector<vgl_point_2d<double> > const& corrs,
                     vgl_point_3d<double> const& initial_pt,
                     double const& zmin,
                     double const& zmax,
-                    vcl_vector<vgl_vector_2d<double> >& cam_translations,
+                    std::vector<vgl_vector_2d<double> >& cam_translations,
                     vgl_point_3d<double>& final,
                     double const& relative_diameter)
 {
@@ -366,9 +367,9 @@ adjust_with_weights(vcl_vector<vpgl_rational_camera<double> > const& cams, vcl_v
     return false;
   if (!refine_intersection_pt(cams, weights, corrs, intersection, final))
     return false;
-  vcl_vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  vcl_vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
-  vcl_vector<float>::const_iterator wit = weights.begin();
+  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
+  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
+  std::vector<float>::const_iterator wit = weights.begin();
   for (; cit != cams.end() && rit != corrs.end(); ++cit, ++rit, ++wit)
   {
     // if weight is 1, it's a special case, do not change it at all (the projection still yields a tiny translation so just ignore that)

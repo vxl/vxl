@@ -80,7 +80,7 @@ class vgui_wx_window : public vgui_window
   virtual void reposition(int, int);
 
   //: Use the given text as the window title (if the window has a title).
-  virtual void set_title(vcl_string const&);
+  virtual void set_title(std::string const&);
 
   //: Set the position of the horizontal scrollbar, returns old position.
   virtual int set_hscrollbar(int pos);
@@ -105,7 +105,7 @@ class vgui_wx_window : public vgui_window
   vgui_wx_menu* menu_;
 
   //: Title of the window.
-  vcl_string title_;
+  std::string title_;
 };
 
 #endif // vgui_wx_window_h_

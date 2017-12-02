@@ -25,18 +25,13 @@
 //   050598 PVr added several operators ( + += - -= (T) ).
 //   290798 AWF Member templates for fancy compilers
 //   140898 David Capel added clamping functions to ensure 0-255 range on bytes and vil1_rgb<byte>
-//   090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .txx file.
+//   090600 David Capel made clamping functions inline and removed all that partial specialization nonsense from the .hxx file.
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_clamp.h>
-
-#ifdef VCL_SUNPRO_CC
-# define InLine inline
-#else
-# define InLine
-#endif
 
 //: This is the appropriate pixel type for 24-bit colour images.
 //
@@ -91,14 +86,6 @@ struct vil1_rgb
   inline vil1_rgb<T>& operator*= (T A) { r*=A,g*=A,b*=A; return *this; }
   inline vil1_rgb<T>& operator/= (T A) { r/=A,g/=A,b/=A; return *this; }
 
-#define vil1_rgb_call(m) \
-m(unsigned char) \
-m(int) \
-m(long) \
-m(double)
-
-// VC50 bombs with INTERNAL COMPILER ERROR on template member functions.
-#if VCL_HAS_MEMBER_TEMPLATES
   template <class S> inline
   vil1_rgb(vil1_rgb<S> const& that):
     r(T(that.r)),
@@ -111,41 +98,7 @@ m(double)
     b=T(that.b);
     return *this;
   }
-#else
-  // For dumb compilers, just special-case the commonly used types.
-# define macro(S) \
-  inline vil1_rgb(vil1_rgb<S > const& that) : \
-  r(T(that.r)), \
-  g(T(that.g)), \
-  b(T(that.b)) {}
-vil1_rgb_call(macro)
-# undef macro
-
-# define macro(S) \
-  InLine vil1_rgb<T>& operator=(vil1_rgb<S > const& that);
-vil1_rgb_call(macro)
-# undef macro
-#endif
 };
-
-// see above
-#if VCL_HAS_MEMBER_TEMPLATES
-#else
-# define macro(S) \
-vil1_rgb<S > vil1_rgb_gcc_272_pump_prime(S const *); \
-template <class T> inline \
-vil1_rgb<T>& vil1_rgb<T>::operator=(vil1_rgb<S > const& that) { \
-  r=T(that.r); \
-  g=T(that.g); \
-  b=T(that.b); \
-  return *this; \
-}
-
-vil1_rgb_call(macro)
-# undef macro
-#endif
-
-#undef vil1_rgb_call
 
 
 // Assorted hackery for busted compilers
@@ -158,7 +111,7 @@ extern vil1_rgb<double> tickle_mi_fancy;
 
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil1_rgb<T> const& rgb)
+std::ostream& operator<<(std::ostream& s, vil1_rgb<T> const& rgb)
 {
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }
@@ -261,8 +214,8 @@ vil1_rgb<unsigned char> vil1_clamp(vil1_rgb<float> const& d, vil1_rgb<unsigned c
 #endif
 
 #define VIL1_RGB_INSTANTIATE(T) \
-extern "you must include vil1/vil1_rgb.txx first."
+extern "you must include vil1/vil1_rgb.hxx first."
 #define VIL1_RGB_INSTANTIATE_LS(T) \
-extern "you must include vil1/vil1_rgb.txx first."
+extern "you must include vil1/vil1_rgb.hxx first."
 
 #endif // vil1_rgb_h_

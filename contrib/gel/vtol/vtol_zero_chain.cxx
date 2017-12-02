@@ -105,50 +105,50 @@ vtol_vertex_sptr vtol_zero_chain::v0() const
   if (numinf()>0)
     return inferiors()->front()->cast_to_vertex();
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 //: get list of vertices
-vcl_vector<vtol_vertex*>* vtol_zero_chain::compute_vertices()
+std::vector<vtol_vertex*>* vtol_zero_chain::compute_vertices()
 {
   COPY_INF(vertex);
 }
 
 //: get list of zero chains
-vcl_vector<vtol_zero_chain*>* vtol_zero_chain::compute_zero_chains()
+std::vector<vtol_zero_chain*>* vtol_zero_chain::compute_zero_chains()
 {
   LIST_SELF(vtol_zero_chain);
 }
 
 //: get list of edges
-vcl_vector<vtol_edge*>* vtol_zero_chain::compute_edges()
+std::vector<vtol_edge*>* vtol_zero_chain::compute_edges()
 {
   SEL_SUP(vtol_edge,compute_edges);
 }
 
 //: get list of one chains
 
-vcl_vector<vtol_one_chain*>* vtol_zero_chain::compute_one_chains()
+std::vector<vtol_one_chain*>* vtol_zero_chain::compute_one_chains()
 {
   SEL_SUP(vtol_one_chain, compute_one_chains);
 }
 
 //: get list of faces
 
-vcl_vector<vtol_face*> *vtol_zero_chain::compute_faces()
+std::vector<vtol_face*> *vtol_zero_chain::compute_faces()
 {
   SEL_SUP(vtol_face, compute_faces);
 }
 
 //: get list of two chain
 
-vcl_vector<vtol_two_chain*>* vtol_zero_chain::compute_two_chains()
+std::vector<vtol_two_chain*>* vtol_zero_chain::compute_two_chains()
 {
   SEL_SUP(vtol_two_chain, compute_two_chains);
 }
 
 //: get list of blocks
-vcl_vector<vtol_block*>* vtol_zero_chain::compute_blocks()
+std::vector<vtol_block*>* vtol_zero_chain::compute_blocks()
 {
    SEL_SUP(vtol_block, compute_blocks);
 }
@@ -190,12 +190,12 @@ bool vtol_zero_chain::operator==(const vsol_spatial_object_2d& obj) const
 
 //: print the object
 
-void vtol_zero_chain::print(vcl_ostream &strm) const
+void vtol_zero_chain::print(std::ostream &strm) const
 {
   strm << "<vtol_zero_chain " << inferiors()->size() << ' ' << (void const*)this << ">\n";
 }
 
-void vtol_zero_chain::describe(vcl_ostream &strm,
+void vtol_zero_chain::describe(std::ostream &strm,
                                int blanking) const
 {
   for (int j=0; j<blanking; ++j)

@@ -17,25 +17,27 @@
 //                   So I've switched to maps instead.
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_edgemap.h"
-#include "sdet_CFTG.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_edgemap.h>
+#include <sdet/sdet_CFTG.h>
 
 //: This class represents the curve fragment graph formed from the edgels
 //  The links are curve fragments represented by edgel chains.
 class sdet_curve_fragment_graph
 {
 public:
-  vcl_vector<sdet_edgel_chain_list> cFrags; ///< child curve fragments
-  vcl_vector<sdet_edgel_chain_list> pFrags; ///< parent curve fragments
+  std::vector<sdet_edgel_chain_list> cFrags; ///< child curve fragments
+  std::vector<sdet_edgel_chain_list> pFrags; ///< parent curve fragments
 
   sdet_edgel_chain_list frags; ///< redundant single list of all fragments
-  
+
   //this is a hack (need to move this out of here into the storage class)
-  sdet_CFTG CFTG; ///< The Curve Fragment Topology Graph (CFTG) 
+  sdet_CFTG CFTG; ///< The Curve Fragment Topology Graph (CFTG)
 
   //: constructor
   sdet_curve_fragment_graph(int size=0): cFrags(size), pFrags(size){}
@@ -52,7 +54,7 @@ public:
 
   //: resize the graph
   void resize(unsigned size)
-  { 
+  {
     if (size!=cFrags.size()){
       clear();
       CFTG.clear();

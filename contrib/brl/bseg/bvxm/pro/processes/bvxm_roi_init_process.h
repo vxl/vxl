@@ -24,8 +24,10 @@
 //   Yi Dong        - Mar 22, 2014 - add new method to output a unsigned short image with all 11 bits of the input NITF image kept
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <bvxm/bvxm_world_params.h>
 #include <vil/vil_image_view.h>
@@ -42,7 +44,7 @@ namespace bvxm_roi_init_process_globals
   // functions
 
   //: roi_init function (the most significant 5 bits and less significant 3 bits of the input 16 bits NITF image pixels will be ignored)
-  bool roi_init(vcl_string const& image_path,
+  bool roi_init(std::string const& image_path,
                 vpgl_rational_camera<double>* camera,
                 bvxm_world_params_sptr world_params,
                 float uncertainty,
@@ -50,7 +52,7 @@ namespace bvxm_roi_init_process_globals
                 vpgl_local_rational_camera<double>& local_camera);
 
   //: roi init function to output a short image (the most significant 5 bits of the input 16 bits NITF image pixels will be ignored and all other 11 bits are kept)
-  bool roi_init(vcl_string const& image_path,
+  bool roi_init(std::string const& image_path,
                 vpgl_rational_camera<double>* camera,
                 bvxm_world_params_sptr world_params,
                 float uncertainty,

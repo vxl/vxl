@@ -24,8 +24,9 @@
 //   04 Jul 2000 Marko Bacic - Fixed vgui_soview2D_circle
 // \endverbatim
 
+#include <iosfwd>
 #include "vgui_soview.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 #include "vgui_gl.h"
 
@@ -72,13 +73,13 @@ class vgui_soview2D_point : public vgui_soview2D
   virtual void draw_select() const;
 
   //: Print details about this 2D-point to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Distance of this 2D-point from the given position.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_point').
-  virtual vcl_string type_name() const { return "vgui_soview2D_point"; }
+  virtual std::string type_name() const { return "vgui_soview2D_point"; }
 
   //: Returns the centroid of this 2D-point.
   void get_centroid(float* x, float* y) const;
@@ -111,13 +112,13 @@ class vgui_soview2D_lineseg : public vgui_soview2D
   virtual void draw() const;
 
   //: Print details about this 2D line segment to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the distance squared to this 2D line segment.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_lineseg').
-  vcl_string type_name() const { return "vgui_soview2D_lineseg"; }
+  std::string type_name() const { return "vgui_soview2D_lineseg"; }
 
   //: Returns the centroid of this 2D line segment.
   void get_centroid(float* x, float* y) const;
@@ -144,7 +145,7 @@ class vgui_soview2D_group : public vgui_soview2D
   vgui_soview2D_group() {}
 
   //: Constructor - creates a 2D soview group containing the given 2D soviews.
-  vgui_soview2D_group( vcl_vector<vgui_soview2D *> ls_) : ls(ls_) {}
+  vgui_soview2D_group( std::vector<vgui_soview2D *> ls_) : ls(ls_) {}
 
   //: Destructor - responsible for deleting 2D soview objects
   //  In current design, Easy2D tableau is responsible for cleaning up
@@ -165,13 +166,13 @@ class vgui_soview2D_group : public vgui_soview2D
   virtual void draw_select() const;
 
   //: Print details about this 2D soview group to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns distance squared of this 2D soview group from the given position.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_group').
-  vcl_string type_name() const { return "vgui_soview2D_group"; }
+  std::string type_name() const { return "vgui_soview2D_group"; }
 
   //: Returns the centroid of this 2D soview group.
   void get_centroid(float* x, float* y) const;
@@ -180,7 +181,7 @@ class vgui_soview2D_group : public vgui_soview2D
   void translate(float x, float y);
 
   //: List of 2D soviews in this group.
-  vcl_vector<vgui_soview2D *> ls;
+  std::vector<vgui_soview2D *> ls;
 };
 
 //-----------------------------------------------------------------------------
@@ -199,13 +200,13 @@ class vgui_soview2D_infinite_line : public vgui_soview2D
   virtual void draw() const;
 
   //: Print details about this 2D infinite line to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns distance squared of this 2D infinite line from the given position.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_infinite_line').
-  vcl_string type_name() const { return "vgui_soview2D_infinite_line"; }
+  std::string type_name() const { return "vgui_soview2D_infinite_line"; }
 
   //: Returns (0,0) - centroid does not make sense for 2D infinite line.
   void get_centroid(float* x, float* y) const;
@@ -234,13 +235,13 @@ class vgui_soview2D_circle : public vgui_soview2D
   virtual void draw() const;
 
   //: Print details about this 2D circle to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the distance squared of this 2D circle from the given position.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_circle').
-  vcl_string type_name() const { return "vgui_soview2D_circle"; }
+  std::string type_name() const { return "vgui_soview2D_circle"; }
 
   //: Returns the centroid of this 2D circle (same as centre).
   void get_centroid(float* x, float* y) const;
@@ -255,7 +256,7 @@ class vgui_soview2D_circle : public vgui_soview2D
   //: y-coordinate of the centre of the circle.
   float y;
 
-  //: Compile the vcl_list
+  //: Compile the std::list
   static void compile();
 };
 
@@ -272,13 +273,13 @@ class vgui_soview2D_ellipse : public vgui_soview2D
   virtual void draw() const;
 
   //: Print details about this 2D ellipse to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the distance squared of this 2D ellipse from the given position.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_ellipse').
-  vcl_string type_name() const {return "vgui_soview2D_ellipse"; }
+  std::string type_name() const {return "vgui_soview2D_ellipse"; }
 
   //: Returns the centroid of this 2D ellipse.
   void get_centroid(float* x, float* y) const;
@@ -289,7 +290,7 @@ class vgui_soview2D_ellipse : public vgui_soview2D
   //: Centre, width, height and angle of this 2D ellipse.
   float x, y, w, h, phi;
 
-  //: Compile the vcl_list
+  //: Compile the std::list
   static void compile();
 };
 
@@ -312,13 +313,13 @@ class vgui_soview2D_linestrip : public vgui_soview2D
   virtual void draw() const;
 
   //: Print information about this 2D linestrip to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the distance squared from this 2D linestrip to the given position.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_linestrip').
-  vcl_string type_name() const { return "vgui_soview2D_linestrip"; }
+  std::string type_name() const { return "vgui_soview2D_linestrip"; }
 
   //: Returns the centroid of this 2D linestrip.
   void get_centroid(float* x, float* y) const;
@@ -352,13 +353,13 @@ class vgui_soview2D_polygon : public vgui_soview2D
   virtual void draw() const;
 
   //: Print details about this 2D polygon to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the distance squared from this 2D polygon to the given position.
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_polygon').
-  vcl_string type_name() const { return "vgui_soview2D_polygon"; }
+  std::string type_name() const { return "vgui_soview2D_polygon"; }
 
   //: Returns the centroid of this 2D polygon.
   void get_centroid(float* x, float* y) const;
@@ -420,13 +421,13 @@ class vgui_soview2D_image : public vgui_soview2D
   virtual void draw() const;
 
   //: Print details about this image to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the distance squared from the centroid
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_image').
-  vcl_string type_name() const { return "vgui_soview2D_image"; }
+  std::string type_name() const { return "vgui_soview2D_image"; }
 
   //: Returns the centroid of this 2D image.
   void get_centroid(float* x, float* y) const;

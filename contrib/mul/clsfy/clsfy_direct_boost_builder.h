@@ -8,10 +8,12 @@
 // \author dac
 // \date 2000-05-10
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_builder_base.h> // parent class
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 class clsfy_builder_1d;
@@ -51,11 +53,11 @@ class clsfy_direct_boost_builder : public clsfy_builder_base
   //: Calc threshold for current version of strong classifier
   double calc_threshold(clsfy_direct_boost& strong_classifier,
                         mbl_data_wrapper<vnl_vector<double> >& inputs,
-                        const vcl_vector<unsigned>& outputs) const;
+                        const std::vector<unsigned>& outputs) const;
 
   //: Calc similarity between two 1d input vectors
-  double calc_prop_same(const vcl_vector<bool>& vec1,
-                        const vcl_vector<bool>& vec2) const;
+  double calc_prop_same(const std::vector<bool>& vec1,
+                        const std::vector<bool>& vec2) const;
 
  public:
 
@@ -92,19 +94,19 @@ class clsfy_direct_boost_builder : public clsfy_builder_base
   virtual double build(clsfy_classifier_base& model,
                        mbl_data_wrapper<vnl_vector<double> >& inputs,
                        unsigned nClasses,
-                       const vcl_vector<unsigned> &outputs) const;
+                       const std::vector<unsigned> &outputs) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_builder_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -123,15 +125,15 @@ void vsl_b_write(vsl_b_ostream& bfs, const clsfy_direct_boost_builder& b);
 void vsl_b_read(vsl_b_istream& bfs, clsfy_direct_boost_builder& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const clsfy_direct_boost_builder& b);
+void vsl_print_summary(std::ostream& os,const clsfy_direct_boost_builder& b);
 
 //: Stream output operator for class pointer
-void vsl_print_summary(vcl_ostream& os,const clsfy_direct_boost_builder* b);
+void vsl_print_summary(std::ostream& os,const clsfy_direct_boost_builder* b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_direct_boost_builder& b);
+std::ostream& operator<<(std::ostream& os,const clsfy_direct_boost_builder& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_direct_boost_builder* b);
+std::ostream& operator<<(std::ostream& os,const clsfy_direct_boost_builder* b);
 
 #endif // clsfy_direct_boost_builder_h_

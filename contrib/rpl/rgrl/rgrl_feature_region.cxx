@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include "rgrl_feature_region.h"
 //:
 // \file
@@ -7,9 +9,9 @@
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
-const vcl_vector< vnl_vector<int> >&
+const std::vector< vnl_vector<int> >&
 rgrl_feature_region::
 pixel_coordinates()
 {
@@ -28,7 +30,7 @@ pixel_coordinates()
 }
 
 // Return region(neighboring) pixels in "pixel" coordinates.
-vcl_vector< vnl_vector<int> > const&
+std::vector< vnl_vector<int> > const&
 rgrl_feature_region ::
 pixel_coordinates_ratio( vnl_vector< double > const& spacing_ratio )
 {

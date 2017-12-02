@@ -1,4 +1,4 @@
-/* $Id: tif_swab.c,v 1.13 2010-03-10 18:56:49 bfriesen Exp $ */
+/* $Id: tif_swab.c,v 1.14 2016-09-04 21:32:56 erouault Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -35,10 +35,10 @@
 void
 TIFFSwabShort(uint16* wp)
 {
-  register unsigned char* cp = (unsigned char*) wp;
-  unsigned char t;
-  assert(sizeof(uint16)==2);
-  t = cp[1]; cp[1] = cp[0]; cp[0] = t;
+	register unsigned char* cp = (unsigned char*) wp;
+	unsigned char t;
+	assert(sizeof(uint16)==2);
+	t = cp[1]; cp[1] = cp[0]; cp[0] = t;
 }
 #endif
 
@@ -46,11 +46,11 @@ TIFFSwabShort(uint16* wp)
 void
 TIFFSwabLong(uint32* lp)
 {
-  register unsigned char* cp = (unsigned char*) lp;
-  unsigned char t;
-  assert(sizeof(uint32)==4);
-  t = cp[3]; cp[3] = cp[0]; cp[0] = t;
-  t = cp[2]; cp[2] = cp[1]; cp[1] = t;
+	register unsigned char* cp = (unsigned char*) lp;
+	unsigned char t;
+	assert(sizeof(uint32)==4);
+	t = cp[3]; cp[3] = cp[0]; cp[0] = t;
+	t = cp[2]; cp[2] = cp[1]; cp[1] = t;
 }
 #endif
 
@@ -58,13 +58,13 @@ TIFFSwabLong(uint32* lp)
 void
 TIFFSwabLong8(uint64* lp)
 {
-  register unsigned char* cp = (unsigned char*) lp;
-  unsigned char t;
-  assert(sizeof(uint64)==8);
-  t = cp[7]; cp[7] = cp[0]; cp[0] = t;
-  t = cp[6]; cp[6] = cp[1]; cp[1] = t;
-  t = cp[5]; cp[5] = cp[2]; cp[2] = t;
-  t = cp[4]; cp[4] = cp[3]; cp[3] = t;
+	register unsigned char* cp = (unsigned char*) lp;
+	unsigned char t;
+	assert(sizeof(uint64)==8);
+	t = cp[7]; cp[7] = cp[0]; cp[0] = t;
+	t = cp[6]; cp[6] = cp[1]; cp[1] = t;
+	t = cp[5]; cp[5] = cp[2]; cp[2] = t;
+	t = cp[4]; cp[4] = cp[3]; cp[3] = t;
 }
 #endif
 
@@ -72,15 +72,15 @@ TIFFSwabLong8(uint64* lp)
 void
 TIFFSwabArrayOfShort(register uint16* wp, tmsize_t n)
 {
-  register unsigned char* cp;
-  register unsigned char t;
-  assert(sizeof(uint16)==2);
-  /* XXX unroll loop some */
-  while (n-- > 0) {
-    cp = (unsigned char*) wp;
-    t = cp[1]; cp[1] = cp[0]; cp[0] = t;
-    wp++;
-  }
+	register unsigned char* cp;
+	register unsigned char t;
+	assert(sizeof(uint16)==2);
+	/* XXX unroll loop some */
+	while (n-- > 0) {
+		cp = (unsigned char*) wp;
+		t = cp[1]; cp[1] = cp[0]; cp[0] = t;
+		wp++;
+	}
 }
 #endif
 
@@ -88,15 +88,15 @@ TIFFSwabArrayOfShort(register uint16* wp, tmsize_t n)
 void
 TIFFSwabArrayOfTriples(register uint8* tp, tmsize_t n)
 {
-  unsigned char* cp;
-  unsigned char t;
+	unsigned char* cp;
+	unsigned char t;
 
-  /* XXX unroll loop some */
-  while (n-- > 0) {
-    cp = (unsigned char*) tp;
-    t = cp[2]; cp[2] = cp[0]; cp[0] = t;
-    tp += 3;
-  }
+	/* XXX unroll loop some */
+	while (n-- > 0) {
+		cp = (unsigned char*) tp;
+		t = cp[2]; cp[2] = cp[0]; cp[0] = t;
+		tp += 3;
+	}
 }
 #endif
 
@@ -104,16 +104,16 @@ TIFFSwabArrayOfTriples(register uint8* tp, tmsize_t n)
 void
 TIFFSwabArrayOfLong(register uint32* lp, tmsize_t n)
 {
-  register unsigned char *cp;
-  register unsigned char t;
-  assert(sizeof(uint32)==4);
-  /* XXX unroll loop some */
-  while (n-- > 0) {
-    cp = (unsigned char *)lp;
-    t = cp[3]; cp[3] = cp[0]; cp[0] = t;
-    t = cp[2]; cp[2] = cp[1]; cp[1] = t;
-    lp++;
-  }
+	register unsigned char *cp;
+	register unsigned char t;
+	assert(sizeof(uint32)==4);
+	/* XXX unroll loop some */
+	while (n-- > 0) {
+		cp = (unsigned char *)lp;
+		t = cp[3]; cp[3] = cp[0]; cp[0] = t;
+		t = cp[2]; cp[2] = cp[1]; cp[1] = t;
+		lp++;
+	}
 }
 #endif
 
@@ -121,18 +121,18 @@ TIFFSwabArrayOfLong(register uint32* lp, tmsize_t n)
 void
 TIFFSwabArrayOfLong8(register uint64* lp, tmsize_t n)
 {
-  register unsigned char *cp;
-  register unsigned char t;
-  assert(sizeof(uint64)==8);
-  /* XXX unroll loop some */
-  while (n-- > 0) {
-    cp = (unsigned char *)lp;
-    t = cp[7]; cp[7] = cp[0]; cp[0] = t;
-    t = cp[6]; cp[6] = cp[1]; cp[1] = t;
-    t = cp[5]; cp[5] = cp[2]; cp[2] = t;
-    t = cp[4]; cp[4] = cp[3]; cp[3] = t;
-    lp++;
-  }
+	register unsigned char *cp;
+	register unsigned char t;
+	assert(sizeof(uint64)==8);
+	/* XXX unroll loop some */
+	while (n-- > 0) {
+		cp = (unsigned char *)lp;
+		t = cp[7]; cp[7] = cp[0]; cp[0] = t;
+		t = cp[6]; cp[6] = cp[1]; cp[1] = t;
+		t = cp[5]; cp[5] = cp[2]; cp[2] = t;
+		t = cp[4]; cp[4] = cp[3]; cp[3] = t;
+		lp++;
+	}
 }
 #endif
 
@@ -140,11 +140,11 @@ TIFFSwabArrayOfLong8(register uint64* lp, tmsize_t n)
 void
 TIFFSwabFloat(float* fp)
 {
-  register unsigned char* cp = (unsigned char*) fp;
-  unsigned char t;
-  assert(sizeof(float)==4);
-  t = cp[3]; cp[3] = cp[0]; cp[0] = t;
-  t = cp[2]; cp[2] = cp[1]; cp[1] = t;
+	register unsigned char* cp = (unsigned char*) fp;
+	unsigned char t;
+	assert(sizeof(float)==4);
+	t = cp[3]; cp[3] = cp[0]; cp[0] = t;
+	t = cp[2]; cp[2] = cp[1]; cp[1] = t;
 }
 #endif
 
@@ -152,16 +152,16 @@ TIFFSwabFloat(float* fp)
 void
 TIFFSwabArrayOfFloat(register float* fp, tmsize_t n)
 {
-  register unsigned char *cp;
-  register unsigned char t;
-  assert(sizeof(float)==4);
-  /* XXX unroll loop some */
-  while (n-- > 0) {
-    cp = (unsigned char *)fp;
-    t = cp[3]; cp[3] = cp[0]; cp[0] = t;
-    t = cp[2]; cp[2] = cp[1]; cp[1] = t;
-    fp++;
-  }
+	register unsigned char *cp;
+	register unsigned char t;
+	assert(sizeof(float)==4);
+	/* XXX unroll loop some */
+	while (n-- > 0) {
+		cp = (unsigned char *)fp;
+		t = cp[3]; cp[3] = cp[0]; cp[0] = t;
+		t = cp[2]; cp[2] = cp[1]; cp[1] = t;
+		fp++;
+	}
 }
 #endif
 
@@ -169,13 +169,13 @@ TIFFSwabArrayOfFloat(register float* fp, tmsize_t n)
 void
 TIFFSwabDouble(double *dp)
 {
-  register unsigned char* cp = (unsigned char*) dp;
-  unsigned char t;
-  assert(sizeof(double)==8);
-  t = cp[7]; cp[7] = cp[0]; cp[0] = t;
-  t = cp[6]; cp[6] = cp[1]; cp[1] = t;
-  t = cp[5]; cp[5] = cp[2]; cp[2] = t;
-  t = cp[4]; cp[4] = cp[3]; cp[3] = t;
+	register unsigned char* cp = (unsigned char*) dp;
+	unsigned char t;
+	assert(sizeof(double)==8);
+	t = cp[7]; cp[7] = cp[0]; cp[0] = t;
+	t = cp[6]; cp[6] = cp[1]; cp[1] = t;
+	t = cp[5]; cp[5] = cp[2]; cp[2] = t;
+	t = cp[4]; cp[4] = cp[3]; cp[3] = t;
 }
 #endif
 
@@ -183,18 +183,18 @@ TIFFSwabDouble(double *dp)
 void
 TIFFSwabArrayOfDouble(double* dp, tmsize_t n)
 {
-  register unsigned char *cp;
-  register unsigned char t;
-  assert(sizeof(double)==8);
-  /* XXX unroll loop some */
-  while (n-- > 0) {
-    cp = (unsigned char *)dp;
-    t = cp[7]; cp[7] = cp[0]; cp[0] = t;
-    t = cp[6]; cp[6] = cp[1]; cp[1] = t;
-    t = cp[5]; cp[5] = cp[2]; cp[2] = t;
-    t = cp[4]; cp[4] = cp[3]; cp[3] = t;
-    dp++;
-  }
+	register unsigned char *cp;
+	register unsigned char t;
+	assert(sizeof(double)==8);
+	/* XXX unroll loop some */
+	while (n-- > 0) {
+		cp = (unsigned char *)dp;
+		t = cp[7]; cp[7] = cp[0]; cp[0] = t;
+		t = cp[6]; cp[6] = cp[1]; cp[1] = t;
+		t = cp[5]; cp[5] = cp[2]; cp[2] = t;
+		t = cp[4]; cp[4] = cp[3]; cp[3] = t;
+		dp++;
+	}
 }
 #endif
 
@@ -279,25 +279,27 @@ static const unsigned char TIFFNoBitRevTable[256] = {
 const unsigned char*
 TIFFGetBitRevTable(int reversed)
 {
-  return (reversed ? TIFFBitRevTable : TIFFNoBitRevTable);
+	return (reversed ? TIFFBitRevTable : TIFFNoBitRevTable);
 }
 
 void
 TIFFReverseBits(uint8* cp, tmsize_t n)  
 {
-  for (; n > 8; n -= 8) {
-    cp[0] = TIFFBitRevTable[cp[0]];
-    cp[1] = TIFFBitRevTable[cp[1]];
-    cp[2] = TIFFBitRevTable[cp[2]];
-    cp[3] = TIFFBitRevTable[cp[3]];
-    cp[4] = TIFFBitRevTable[cp[4]];
-    cp[5] = TIFFBitRevTable[cp[5]];
-    cp[6] = TIFFBitRevTable[cp[6]];
-    cp[7] = TIFFBitRevTable[cp[7]];
-    cp += 8;
-  }
-  while (n-- > 0)
-    *cp = TIFFBitRevTable[*cp], cp++;
+	for (; n > 8; n -= 8) {
+		cp[0] = TIFFBitRevTable[cp[0]];
+		cp[1] = TIFFBitRevTable[cp[1]];
+		cp[2] = TIFFBitRevTable[cp[2]];
+		cp[3] = TIFFBitRevTable[cp[3]];
+		cp[4] = TIFFBitRevTable[cp[4]];
+		cp[5] = TIFFBitRevTable[cp[5]];
+		cp[6] = TIFFBitRevTable[cp[6]];
+		cp[7] = TIFFBitRevTable[cp[7]];
+		cp += 8;
+	}
+	while (n-- > 0) {
+		*cp = TIFFBitRevTable[*cp];
+		cp++;
+	}
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bvpl_direction_to_color_map.h"
 //:
 // \file
@@ -8,12 +10,12 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vil/algo/vil_colour_space.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 //: project a unit radius sphere onto the cube circumscribing it using gnomonic projection
-void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(vcl_vector<vgl_point_3d<double> > & proj_on_cube)
+void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(std::vector<vgl_point_3d<double> > & proj_on_cube)
 {
-  vcl_vector<vgl_vector_3d<double> > normals;
+  std::vector<vgl_vector_3d<double> > normals;
   normals.push_back(vgl_vector_3d<double>(1,0,0));  // X high
   normals.push_back(vgl_vector_3d<double>(0,1,0));  // Y high
   normals.push_back(vgl_vector_3d<double>(0,0,1));  // Z high
@@ -67,13 +69,13 @@ void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(vcl_vector
 }
 
 
-vcl_vector< float>
-bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_vector<vgl_point_3d<double> > peano_curve,
-                                                                          vcl_vector<vgl_point_3d<double> > proj_on_cube)
+std::vector< float>
+bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(std::vector<vgl_point_3d<double> > peano_curve,
+                                                                          std::vector<vgl_point_3d<double> > proj_on_cube)
 {
   // store indices of the directions in (0,1) range
-  vcl_vector<float> indices_of_cube_projs;
-  vcl_map<int,float> index_to_length;
+  std::vector<float> indices_of_cube_projs;
+  std::map<int,float> index_to_length;
   for (unsigned j=0;j<peano_curve.size();++j)
   {
     if (j==0)
@@ -121,7 +123,7 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
       double t1=vgl_closest_point_t(l1,proj_on_cube[i]);
       double t2=vgl_closest_point_t(l2,proj_on_cube[i]);
 
-      if (vcl_fabs(t1)<vcl_fabs(t2))
+      if (std::fabs(t1)<std::fabs(t2))
       {
         //if (t1<0)t1=0;
         double length=(peano_curve[indexj+1]-peano_curve[indexj]).length();
@@ -138,7 +140,7 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
 
   for (unsigned j=0;j<indices_of_cube_projs.size();++j)
   {
-      vcl_cout<<indices_of_cube_projs[j]<<' ';
+      std::cout<<indices_of_cube_projs[j]<<' ';
       indices_of_cube_projs[j]/=index_to_length[index_to_length.size()-1];
   }
 
@@ -146,31 +148,31 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(vcl_ve
 }
 
 
-void bvpl_direction_to_color_map::make_svg_color_map(vcl_string outfile)
+void bvpl_direction_to_color_map::make_svg_color_map(std::string outfile)
 {
   bsvg_document doc(400, 400);
 
-  vcl_map<vgl_point_3d<double>,float,point_3d_cmp>::iterator iter=colors_.begin();
-  vcl_map<float,vgl_point_3d<double> > colors_ordered_by_index;
+  std::map<vgl_point_3d<double>,float,point_3d_cmp>::iterator iter=colors_.begin();
+  std::map<float,vgl_point_3d<double> > colors_ordered_by_index;
   for (;iter!=colors_.end();iter++)
   {
     colors_ordered_by_index[iter->second]=iter->first;
   }
   int i=0;  float r,g,b;
-  vcl_map<float,vgl_point_3d<double> >::iterator iter1=colors_ordered_by_index.begin();
+  std::map<float,vgl_point_3d<double> >::iterator iter1=colors_ordered_by_index.begin();
   for (;iter1!=colors_ordered_by_index.end();iter1++,i++)
   {
     float col=iter1->first*360;
     vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
 
-    vcl_ostringstream os;
-    os<<'#'<<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)r
-      <<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)g
-      <<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)b;
+    std::ostringstream os;
+    os<<'#'<<std::setw(2)<<std::setfill('0')<<std::hex<<(int)r
+      <<std::setw(2)<<std::setfill('0')<<std::hex<<(int)g
+      <<std::setw(2)<<std::setfill('0')<<std::hex<<(int)b;
 
-    vcl_ostringstream os_dir;
+    std::ostringstream os_dir;
     os_dir.precision(2);
-    os_dir<<'['<<vcl_setw(5)<<iter1->second.x()<<','<<vcl_setw(5)<<iter1->second.y()<<','<<vcl_setw(5)<<iter1->second.z()<<']';
+    os_dir<<'['<<std::setw(5)<<iter1->second.x()<<','<<std::setw(5)<<iter1->second.y()<<','<<std::setw(5)<<iter1->second.z()<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
     t->set_location(10.0f, 15.0f*float(i+1));
@@ -186,16 +188,16 @@ void bvpl_direction_to_color_map::make_svg_color_map(vcl_string outfile)
 }
 
 
-bvpl_direction_to_color_map::bvpl_direction_to_color_map(vcl_vector<vgl_point_3d<double> > samples, vcl_string type)
+bvpl_direction_to_color_map::bvpl_direction_to_color_map(std::vector<vgl_point_3d<double> > samples, std::string type)
 {
   samples_=samples;
-  vcl_vector<float> oneparam;
+  std::vector<float> oneparam;
   if (type=="peano")
   {
-    vcl_vector<vgl_point_3d<double> >  proj_on_cube;
+    std::vector<vgl_point_3d<double> >  proj_on_cube;
     project_sphereical_samples_to_cubes(proj_on_cube);
     // level 2 peano curve
-    vcl_vector<vgl_point_3d<double> > peano_curve=peano_curve_on_cube(2);
+    std::vector<vgl_point_3d<double> > peano_curve=peano_curve_on_cube(2);
     // mapping of samples to 1-d curve between 0-1
     oneparam=find_closest_points_from_cube_to_peano_curve(peano_curve,proj_on_cube);
   }
@@ -212,9 +214,9 @@ bvpl_direction_to_color_map::bvpl_direction_to_color_map(vcl_vector<vgl_point_3d
 
 
 void bvpl_generate_direction_samples_from_kernels(bvpl_kernel_vector_sptr kernel_vector,
-                                                  vcl_vector<vgl_point_3d<double> > & samples)
+                                                  std::vector<vgl_point_3d<double> > & samples)
 {
-  vcl_vector< bvpl_kernel_sptr >::iterator iter;
+  std::vector< bvpl_kernel_sptr >::iterator iter;
   for (iter=kernel_vector->begin();iter!=kernel_vector->end();++iter)
     samples.push_back(vgl_point_3d<double>((*iter)->axis()[0], (*iter)->axis()[1], (*iter)->axis()[2]));
 }
@@ -228,8 +230,8 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4> *grid,
   bvxm_voxel_grid<vnl_float_4>::iterator grid2_it = out_grid->begin();
 
   //calculate max response and normalize the range from 0-1
-  float min = vcl_numeric_limits<float>::max();
-  float max = vcl_numeric_limits<float>::min();
+  float min = std::numeric_limits<float>::max();
+  float max = std::numeric_limits<float>::min();
   for (; grid1_it != grid->end(); ++grid1_it)
   {
     bvxm_voxel_slab<vnl_float_4>::iterator slab1_it = (*grid1_it).begin();
@@ -242,7 +244,7 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4> *grid,
     }
   }
 
-  vcl_cout << "Maximum response: " << max << " Minimum response: " << min << vcl_endl;
+  std::cout << "Maximum response: " << max << " Minimum response: " << min << std::endl;
 
   //reset iterator
   grid1_it = grid->begin();
@@ -269,7 +271,7 @@ void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4> *grid,
 void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
                                       bvxm_voxel_grid<float> *response_grid,
                                       bvxm_voxel_grid<vnl_float_4> *out_grid,
-                                      vcl_vector<float> colors)
+                                      std::vector<float> colors)
 {
   bvxm_voxel_grid<float>::iterator response_grid_it = response_grid->begin();
    //calculate max response and normalize the range from 0-1
@@ -287,7 +289,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
     }
   }
 
-  vcl_cout << "Maximum response: " << max << " Minimum response: " << min << vcl_endl;
+  std::cout << "Maximum response: " << max << " Minimum response: " << min << std::endl;
 
   //reset iterator
   bvxm_voxel_grid<vnl_float_4>::iterator out_grid_it = out_grid->begin();
@@ -327,7 +329,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
                                       bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *response_grid,
                                       bvxm_voxel_grid<vnl_float_4> *out_grid,
-                                      vcl_vector<float> colors)
+                                      std::vector<float> colors)
 {
   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator response_grid_it = response_grid->begin();
    //calculate max response and normalize the range from 0-1
@@ -345,7 +347,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
     }
   }
 
-  vcl_cout << "Maximum response: " << max << " Minimum response: " << min << vcl_endl;
+  std::cout << "Maximum response: " << max << " Minimum response: " << min << std::endl;
 
   //reset iterator
   bvxm_voxel_grid<vnl_float_4>::iterator out_grid_it = out_grid->begin();
@@ -364,20 +366,20 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
     {
       col=colors[*id_slab_it]*360.0f;
       vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
-      //float alpha = vcl_abs((*response_slab_it).mean())>1e-15 ? 255.0f:0.0f;
+      //float alpha = std::abs((*response_slab_it).mean())>1e-15 ? 255.0f:0.0f;
       vnl_float_4 this_feature(r,g,b,255.0);
-      //vnl_float_4 this_feature(r,g,b,((vcl_abs((*response_slab_it).mean())-min)/(max - min))*500.0f);
+      //vnl_float_4 this_feature(r,g,b,((std::abs((*response_slab_it).mean())-min)/(max - min))*500.0f);
       (*out_slab_it)=this_feature;
     }
   }
 }
 
 
-void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<float> hue_vector, vcl_string outfile)
+void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, std::vector<float> hue_vector, std::string outfile)
 {
   bsvg_document doc(600.f, float(hue_vector.size())*20.f);
 
-  vcl_vector<float>::iterator iter = hue_vector.begin();
+  std::vector<float>::iterator iter = hue_vector.begin();
 
   int i=0;  float r,g,b;
   for (;iter!=hue_vector.end();iter++,i++)
@@ -385,14 +387,14 @@ void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, vcl_vector<
     float col=(*iter)*360.0f;
     vil_colour_space_HSV_to_RGB<float>(col,1.0f,255.0f,&r,&g,&b);
 
-    vcl_ostringstream os;
-    os<<'#'<<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)r
-      <<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)g
-      <<vcl_setw(2)<<vcl_setfill('0')<<vcl_hex<<(int)b;
+    std::ostringstream os;
+    os<<'#'<<std::setw(2)<<std::setfill('0')<<std::hex<<(int)r
+      <<std::setw(2)<<std::setfill('0')<<std::hex<<(int)g
+      <<std::setw(2)<<std::setfill('0')<<std::hex<<(int)b;
 
-    vcl_ostringstream os_dir;
+    std::ostringstream os_dir;
     os_dir.precision(2);
-    os_dir<<'['<<i<<']'<< '['<<vcl_setw(2)<<kernel_vector->kernels_[i]->axis()<<']'<<'['<<vcl_setw(2)<<kernel_vector->kernels_[i]->angle()<<']' ;//<< '['<<(int)r << ',' << (int)g<< ',' << (int)b<<']';
+    os_dir<<'['<<i<<']'<< '['<<std::setw(2)<<kernel_vector->kernels_[i]->axis()<<']'<<'['<<std::setw(2)<<kernel_vector->kernels_[i]->angle()<<']' ;//<< '['<<(int)r << ',' << (int)g<< ',' << (int)b<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
     t->set_location(10.0f, 15.0f*float(i+1));

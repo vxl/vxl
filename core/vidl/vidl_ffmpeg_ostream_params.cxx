@@ -13,7 +13,7 @@
 #include <vidl/vidl_config.h>
 
 #if VIDL_HAS_FFMPEG
-// some versions of FFMPEG require this definition before including 
+// some versions of FFMPEG require this definition before including
 // the headers for C++ compatibility
 #define __STDC_CONSTANT_MACROS
 #endif // VIDL_HAS_FFMPEG
@@ -100,8 +100,6 @@ vidl_ffmpeg_ostream_params::vidl_ffmpeg_ostream_params()
     video_inter_quant_bias_( FF_DEFAULT_QUANT_BIAS ),
     dct_algo_( FF_DCT_FASTINT ),
     idct_algo_( FF_DCT_AUTO ),
-    me_threshold_( 0 ),
-    mb_threshold_( 0 ),
     intra_dc_precision_( 8 ),
     strict_( 0 ),
     error_rate_( 0 ),

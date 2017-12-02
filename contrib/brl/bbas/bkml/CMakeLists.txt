@@ -1,41 +1,38 @@
 # brl/bbas/bkml/CMakeLists.txt
 # KML utilities for Brown University Libraries
 
-SET(bkml_sources
+set(bkml_sources
   bkml_write.h bkml_write.cxx
 )
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-  INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
-  SET(bkml_sources ${bkml_sources}
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  include_directories(${EXPAT_INCLUDE_DIRS} )
+  include_directories(${EXPATPP_INCLUDE_DIRS} )
+  set(bkml_sources ${bkml_sources}
      bkml_parser.cxx    bkml_parser.h
   )
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+ endif()
+endif()
 
-ADD_LIBRARY(bkml  ${bkml_sources})
+vxl_add_library(LIBRARY_NAME bkml LIBRARY_SOURCES  ${bkml_sources})
 
-TARGET_LINK_LIBRARIES(bkml vgl)
+target_link_libraries(bkml ${VXL_LIB_PREFIX}vgl)
 
-IF(EXPAT_FOUND)
-  TARGET_LINK_LIBRARIES(bkml ${EXPAT_LIBRARIES})
-  IF(APPLE)
-    TARGET_LINK_LIBRARIES(bkml expat)
-  ENDIF(APPLE)
-  IF(EXPATPP_FOUND)
-    TARGET_LINK_LIBRARIES(bkml ${EXPATPP_LIBRARIES})
-  ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+if(EXPAT_FOUND)
+  target_link_libraries(bkml ${EXPAT_LIBRARIES})
+  if(APPLE)
+    target_link_libraries(bkml expat)
+  endif()
+  if(EXPATPP_FOUND)
+    target_link_libraries(bkml ${EXPATPP_LIBRARIES})
+  endif()
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 #add_subdirectory(pro)
-
-INSTALL_TARGETS(/lib bkml)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bkml ${bkml_sources})

@@ -19,14 +19,14 @@
 int main(int argc, char ** argv)
 {
   //init vgui (should choose/determine toolkit)
-  vul_arg<vcl_string> inimg("-i", "input grayscale image", "");
-  vul_arg<vcl_string> outimg("-o", "output RGB image", "");
-  vul_arg<vcl_string> ftype("-f", "Filter type ( currently supports BGGR & GRBG )", "BGGR");
+  vul_arg<std::string> inimg("-i", "input grayscale image", "");
+  vul_arg<std::string> outimg("-o", "output RGB image", "");
+  vul_arg<std::string> ftype("-f", "Filter type ( currently supports BGGR & GRBG )", "BGGR");
   vul_arg_parse(argc, argv);
   vil_image_view_base_sptr inimg_resc = vil_load(inimg().c_str());
-  if(inimg_resc->pixel_format() != VIL_PIXEL_FORMAT_BYTE) 
+  if(inimg_resc->pixel_format() != VIL_PIXEL_FORMAT_BYTE)
   {
-      vcl_cout<<"Error: Image is not grayscale "<<vcl_endl;
+      std::cout<<"Error: Image is not grayscale "<<std::endl;
       return -1;
   }
   vil_image_view<vil_rgb<vxl_byte> > debayer_img(inimg_resc->ni(),inimg_resc->nj());
@@ -40,7 +40,7 @@ int main(int argc, char ** argv)
   }
   else
   {
-      vcl_cout<<"Not implement for the specified filter"<<vcl_endl;
+      std::cout<<"Not implement for the specified filter"<<std::endl;
       return -1;
   }
   vil_save(debayer_img,outimg().c_str());

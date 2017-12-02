@@ -12,9 +12,11 @@
 //   Yi Dong   Feb-2013   added the creation of an empty weight parameter text file
 // \endverbatim
 //
-#include <vcl_ios.h>        // for vcl_ios_fixed etc.
-#include <vcl_iomanip.h>    // for vcl_fixed etc.
-#include <vcl_algorithm.h>  // for vcl_sort
+#include <ios>
+#include <iomanip>
+#include <iostream>
+#include <algorithm>
+#include <vcl_compiler.h>
 #include <volm/volm_io.h>
 #include <vul/vul_file.h>
 #include <volm/volm_camera_space.h>
@@ -27,19 +29,19 @@
 int main(int argc, char** argv)
 {
   // input
-  vul_arg<vcl_string> cam_file("-cam", "cam kml filename", "");                                                        // query camera kml
-  vul_arg<vcl_string> params_file("-params", "text file with the incremental params to construct camera space", "");   // query camera incremental file
-  vul_arg<vcl_string> dms_file("-dms", "binary file with depth map scene", "");                                        // query label binary
-  vul_arg<vcl_string> local_out_folder("-loc_out", "local output folder where the intermediate files are stored", ""); // output folder where camera binary will be stored
+  vul_arg<std::string> cam_file("-cam", "cam kml filename", "");                                                        // query camera kml
+  vul_arg<std::string> params_file("-params", "text file with the incremental params to construct camera space", "");   // query camera incremental file
+  vul_arg<std::string> dms_file("-dms", "binary file with depth map scene", "");                                        // query label binary
+  vul_arg<std::string> local_out_folder("-loc_out", "local output folder where the intermediate files are stored", ""); // output folder where camera binary will be stored
   vul_arg_parse(argc, argv);
 
-  vcl_stringstream log;
+  std::stringstream log;
 
   // check the input parameters
   if (cam_file().compare("") == 0 || dms_file().compare("") == 0 ||
       local_out_folder().compare("") == 0 || params_file().compare("") == 0)
   {
-    vcl_cerr << " ERROR: input file/folders can not be empty!\n";
+    std::cerr << " ERROR: input file/folders can not be empty!\n";
     volm_io::write_status(local_out_folder(), volm_io::EXE_ARGUMENT_ERROR);
     vul_arg_display_usage_and_exit();
     volm_io::write_status(local_out_folder(), volm_io::EXE_ARGUMENT_ERROR, 0, log.str());
@@ -50,7 +52,7 @@ int main(int argc, char** argv)
   // load the depth_map_scene
   if (!vul_file::exists(dms_file())) {
     log << "problem opening depth_map_scene binary file: " << dms_file() << '\n';
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     volm_io::write_status(local_out_folder(), volm_io::DEPTH_SCENE_FILE_IO_ERROR, 0, log.str());
     return volm_io::DEPTH_SCENE_FILE_IO_ERROR;
   }
@@ -62,32 +64,32 @@ int main(int argc, char** argv)
 
 #if 0
   // screen output
-  vcl_cout << " Loaded depth_map_scene info\n"
+  std::cout << " Loaded depth_map_scene info\n"
            << " image path = " << dm->image_path() << '\n'
            << " ----------------  SKY --------------------------\n";
-  vcl_vector<depth_map_region_sptr> sky_reg = dm->sky();
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = sky_reg.begin(); rit != sky_reg.end(); ++rit)
-    vcl_cout << "\tname = " <<  (*rit)->name() << "\t orient = " << (*rit)->orient_type() << "\t NLCD = " << (*rit)->land_id()
-             << "\t order = " << (*rit)->order() << vcl_endl;
-  vcl_cout << " ----------------  GROUND -----------------------\n";
-  vcl_vector<depth_map_region_sptr> grd_reg = dm->ground_plane();
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = grd_reg.begin(); rit != grd_reg.end(); ++rit)
-    vcl_cout << "\tname = " << (*rit)->name() << "\t orient_id = " << (*rit)->orient_type() << " orient = " << (*rit)->orient_string( (unsigned char)(*rit)->orient_type())
+  std::vector<depth_map_region_sptr> sky_reg = dm->sky();
+  for (std::vector<depth_map_region_sptr>::iterator rit = sky_reg.begin(); rit != sky_reg.end(); ++rit)
+    std::cout << "\tname = " <<  (*rit)->name() << "\t orient = " << (*rit)->orient_type() << "\t NLCD = " << (*rit)->land_id()
+             << "\t order = " << (*rit)->order() << std::endl;
+  std::cout << " ----------------  GROUND -----------------------\n";
+  std::vector<depth_map_region_sptr> grd_reg = dm->ground_plane();
+  for (std::vector<depth_map_region_sptr>::iterator rit = grd_reg.begin(); rit != grd_reg.end(); ++rit)
+    std::cout << "\tname = " << (*rit)->name() << "\t orient_id = " << (*rit)->orient_type() << " orient = " << (*rit)->orient_string( (unsigned char)(*rit)->orient_type())
              << "\t land_id = " << (*rit)->land_id() << "\t land_name = " << volm_label_table::land_string( (unsigned char)(*rit)->land_id())
-             << "\t order = " << (*rit)->order() << vcl_endl;
-  vcl_cout << " ----------------- OBJECTS ----------------------\n";
-  vcl_vector<depth_map_region_sptr> regs = dm->scene_regions();
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = regs.begin(); rit !=regs.end();++rit)
-    vcl_cout << "name = " << (*rit)->name() << ",\t orient = " << (*rit)->orient_type() << "\t orient_string = " << (*rit)->orient_string( (unsigned char)(*rit)->orient_type())
+             << "\t order = " << (*rit)->order() << std::endl;
+  std::cout << " ----------------- OBJECTS ----------------------\n";
+  std::vector<depth_map_region_sptr> regs = dm->scene_regions();
+  for (std::vector<depth_map_region_sptr>::iterator rit = regs.begin(); rit !=regs.end();++rit)
+    std::cout << "name = " << (*rit)->name() << ",\t orient = " << (*rit)->orient_type() << "\t orient_string = " << (*rit)->orient_string( (unsigned char)(*rit)->orient_type())
              << "\t min_depth = " << (*rit)->min_depth() << ",\t order = " << (*rit)->order()
              << "\t land_id = " << (*rit)->land_id() << "\t land_name = " << volm_label_table::land_string( (unsigned char)(*rit)->land_id())
-             << vcl_endl;
+             << std::endl;
 #endif
 
   // read the params
   if (!vul_file::exists(params_file())) {
     log << "problem opening camera incremental file: " << params_file() << '\n';
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     volm_io::write_status(local_out_folder(), volm_io::EXE_ARGUMENT_ERROR, 0, log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -98,18 +100,18 @@ int main(int argc, char** argv)
   double tfov, top_fov_dev, altitude, lat, lon;
   if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, tfov, top_fov_dev, altitude, lat, lon)) {
     log << "problem parsing camera kml file: " << cam_file() << '\n';
-    vcl_cerr << log.str() << vcl_endl;
+    std::cerr << log.str() << std::endl;
     volm_io::write_status(local_out_folder(), volm_io::CAM_FILE_IO_ERROR, 0, log.str());
     return volm_io::CAM_FILE_IO_ERROR;
   }
-  vcl_cout << " create camera space from " << cam_file() << vcl_endl;
-  if ( vcl_abs(heading-0) < 1E-10) heading = 180.0;
-  vcl_cout << "cam params:"
+  std::cout << " create camera space from " << cam_file() << std::endl;
+  if ( std::abs(heading-0) < 1E-10) heading = 180.0;
+  std::cout << "cam params:"
            << "\n head: " << heading << " dev: " << heading_dev
            << "\n tilt: " << tilt << " dev: " << tilt_dev << " inc: " << params.head_inc
            << "\n roll: " << roll << " dev: " << roll_dev << " inc: " << params.roll_inc
            << "\n  fov: " << tfov << " dev: " << top_fov_dev << " inc: " << params.fov_inc
-           << "\n  alt: " << altitude << vcl_endl;
+           << "\n  alt: " << altitude << std::endl;
 
   // construct camera space
   volm_camera_space cam_space(tfov, top_fov_dev, params.fov_inc, altitude, dm->ni(), dm->nj(),

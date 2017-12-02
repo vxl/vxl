@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_compute_visibility_process.cxx
+#include <fstream>
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +10,6 @@
 // \author Vishal Jain
 // \date Sept 15, 2012
 
-#include <vcl_fstream.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -24,7 +26,7 @@
 #include <vul/vul_timer.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <boxm2/boxm2_util.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 #include <vil/vil_save.h>
 #include <vil/vil_resample_nearest.h>
 
@@ -35,12 +37,12 @@ namespace boxm2_ocl_compute_visibility_process_globals
 {
     const unsigned n_inputs_ = 10;
     const unsigned n_outputs_ = 0;
-    vcl_size_t lthreads[2]={8,8};
-    void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+    std::size_t lthreads[2]={8,8};
+    void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
     {
         //gather all render sources... seems like a lot for rendering...
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+        std::vector<std::string> src_paths;
+        std::string source_dir = boxm2_ocl_util::ocl_src_root();
         src_paths.push_back(source_dir + "scene_info.cl");
         src_paths.push_back(source_dir + "pixel_conversion.cl");
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -52,7 +54,7 @@ namespace boxm2_ocl_compute_visibility_process_globals
         src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
         //set kernel options
-        vcl_string options = " -D RENDER_VISIBILITY ";
+        std::string options = " -D RENDER_VISIBILITY ";
         options += " -D STEP_CELL=step_cell_vis(aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis)";
 
         //have kernel construct itself using the context and device
@@ -66,7 +68,7 @@ namespace boxm2_ocl_compute_visibility_process_globals
                                          "boxm2 opencl render visibility"); //kernel identifier (for error checking)
         vec_kernels.push_back(ray_trace_kernel);
     }
-    static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+    static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_compute_visibility_process_cons(bprb_func_process& pro)
@@ -74,7 +76,7 @@ bool boxm2_ocl_compute_visibility_process_cons(bprb_func_process& pro)
     using namespace boxm2_ocl_compute_visibility_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "bocl_device_sptr";
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -87,7 +89,7 @@ bool boxm2_ocl_compute_visibility_process_cons(bprb_func_process& pro)
     input_types_[9] = "int"; // scale parameter for increasing speed, should be a power of 2.
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -97,7 +99,7 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     vul_timer t;
     t.mark();
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     float transfer_time=0.0f;
@@ -107,15 +109,15 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
     boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    vcl_string camsfile= pro.get_input<vcl_string>(i++);
-    vcl_string indir= pro.get_input<vcl_string>(i++);
+    std::string camsfile= pro.get_input<std::string>(i++);
+    std::string indir= pro.get_input<std::string>(i++);
     float x = pro.get_input<float>(i++);
     float y = pro.get_input<float>(i++);
     float z = pro.get_input<float>(i++);
-    vcl_string outdir= pro.get_input<vcl_string>(i++);
+    std::string outdir= pro.get_input<std::string>(i++);
     int scale = pro.get_input<int>(i++);
 
-    vcl_string identifier=device->device_identifier();
+    std::string identifier=device->device_identifier();
 
     // create a command queue.
     int status=0;
@@ -128,13 +130,13 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     // compile the kernel
     if (kernels.find(identifier)==kernels.end())
     {
-        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-        vcl_vector<bocl_kernel*> ks;
+        std::cout<<"===========Compiling kernels==========="<<std::endl;
+        std::vector<bocl_kernel*> ks;
         compile_kernel(device,ks);
         kernels[identifier]=ks;
     }
-    vcl_vector<vil_image_view<float>*>  raydirs;
-    vcl_vector<vil_image_view<float>*>  tfinals;
+    std::vector<vil_image_view<float>*>  raydirs;
+    std::vector<vil_image_view<float>*>  tfinals;
     float rayo_buff[4];
     rayo_buff[0] = x;
     rayo_buff[1] = y;
@@ -145,17 +147,17 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
 
 
     boxm2_util::get_raydirs_tfinal(indir,camsfile,vgl_point_3d<double>(x,y,z),raydirs,tfinals,scale );
-    vcl_cout<<"Read Depth Images in "<<t.all()<<" ms"<<vcl_endl;
+    std::cout<<"Read Depth Images in "<<t.all()<<" ms"<<std::endl;
     t.mark();
     unsigned cl_ni =0;
     unsigned cl_nj =0;
-    vcl_vector<bocl_mem_sptr> bocl_raydirs;
-    vcl_vector<bocl_mem_sptr> bocl_vis;
+    std::vector<bocl_mem_sptr> bocl_raydirs;
+    std::vector<bocl_mem_sptr> bocl_vis;
 
-    vcl_vector<float*> rayd_buffs;
-    vcl_vector<float*> vis_buffs;
+    std::vector<float*> rayd_buffs;
+    std::vector<float*> vis_buffs;
     int img_dim_buff[4];
-    vcl_size_t gThreads[]={8,8};
+    std::size_t gThreads[]={8,8};
     for (unsigned int count = 0 ; count < tfinals.size(); count ++)
     {
         cl_ni=RoundUp(tfinals[count]->ni(),lthreads[0]);
@@ -213,12 +215,12 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     vgl_point_3d<double> local_coords;
     scene->contains(vgl_point_3d<double>(x,y,z),pt_id,local_coords);
 
-    vcl_vector<boxm2_block_id> vis_order = boxm2_util::order_about_a_block(scene,pt_id);
-    vcl_vector<boxm2_block_id>::iterator id;
-    bocl_mem * ray_image = opencl_cache->alloc_mem(4*cl_ni*cl_nj*sizeof(float),NULL,"ray direction buffer");
+    std::vector<boxm2_block_id> vis_order = boxm2_util::order_about_a_block(scene,pt_id);
+    std::vector<boxm2_block_id>::iterator id;
+    bocl_mem * ray_image = opencl_cache->alloc_mem(4*cl_ni*cl_nj*sizeof(float),VXL_NULLPTR,"ray direction buffer");
     ray_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR);
 
-    bocl_mem * vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), NULL,"ray direction buffer");
+    bocl_mem * vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), VXL_NULLPTR,"ray direction buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR);
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -229,7 +231,7 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
         bocl_mem * blk_info     = opencl_cache->loaded_block_info();
         transfer_time          += (float) transfer.all();
 
-        //vcl_cout<<"bytes in cache "<<opencl_cache->bytes_in_cache()<<vcl_endl;
+        //std::cout<<"bytes in cache "<<opencl_cache->bytes_in_cache()<<std::endl;
         for (unsigned int frame = 0 ; frame < rayd_buffs.size(); frame ++)
         {
             //choose correct render kernel
@@ -255,7 +257,7 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
             clFinish(queue);
 
             gpu_time += kern->exec_time();
-            vcl_cout.flush();
+            std::cout.flush();
             vis_image->read_from_gpu_mem(queue,vis_buffs[frame],cl_ni*cl_nj*sizeof(float));
              clFinish(queue);
             // clear render kernel args so it can reset em on next execution
@@ -272,9 +274,9 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     opencl_cache->unref_mem(ray_o_buff.ptr());
     //opencl_cache->free_mem_pool();
     clReleaseCommandQueue(queue);
-    vcl_cout<<"GPU TIME "<<gpu_time<<" and total time "<<t.all()<<vcl_endl;
+    std::cout<<"GPU TIME "<<gpu_time<<" and total time "<<t.all()<<std::endl;
     t.mark();
-    vcl_cout<<"Writing Vis Images"<<vcl_endl;
+    std::cout<<"Writing Vis Images"<<std::endl;
     for (unsigned int count = 0 ; count < tfinals.size(); count ++)
     {
         float * vis_buf = (float*)vis_buffs[count];
@@ -303,17 +305,17 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
        vil_resample_nearest<unsigned char,unsigned char>(visout, visout_rescaled, rescaled_ni, rescaled_nj);
 
        char filename[1000];
-       vcl_sprintf(filename,"vis_%d.jpg",count);
-       vcl_string outfile = outdir +"/" + filename;
-       vcl_cout<<"filename"<<outfile<<vcl_endl;
+       std::sprintf(filename,"vis_%d.jpg",count);
+       std::string outfile = outdir +"/" + filename;
+       std::cout<<"filename"<<outfile<<std::endl;
        vil_save(visout_rescaled,outfile.c_str());
     }
-    vcl_cout<<"it took "<<t.all()<<vcl_endl;
+    std::cout<<"it took "<<t.all()<<std::endl;
     for (unsigned int count = 0 ; count < tfinals.size(); count ++)
     {
        delete [] rayd_buffs[count];
        delete [] vis_buffs[count];
     }
-    vcl_cout<<"Time taken is "<<t.all()<<vcl_endl;
+    std::cout<<"Time taken is "<<t.all()<<std::endl;
     return true;
 }

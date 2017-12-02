@@ -1,12 +1,13 @@
 // This is brl/bseg/sdet/sdet_harris_detector_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_harris_detector_params.h"
 //:
 // \file
 // See sdet_harris_detector_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -58,10 +59,10 @@ void sdet_harris_detector_params::InitParams(float sigma,
 //:   Checks that parameters are within acceptable bounds
 //    Note that msg << ends seems to restart the string and erase the
 //    previous string. We should only use it as the last call, use
-//    vcl_endl otherwise.
+//    std::endl otherwise.
 bool sdet_harris_detector_params::SanityCheck()
 {
-  vcl_stringstream msg;
+  std::stringstream msg;
   bool valid = true;
 
   if (sigma_<0.5)
@@ -89,21 +90,21 @@ bool sdet_harris_detector_params::SanityCheck()
     msg << "ERROR: scale factor out of range";
     valid = false;
   }
-  msg << vcl_ends;
+  msg << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator<< (vcl_ostream& os, const sdet_harris_detector_params& hdp)
+std::ostream& operator<< (std::ostream& os, const sdet_harris_detector_params& hdp)
 {
   return
   os << "sdet_harris_detector_params:\n[---\n"
-     << "sigma " << hdp.sigma_ << vcl_endl
-     << "thresh " << hdp.thresh_ << vcl_endl
-     << "n " << hdp.n_ << vcl_endl
-     << "max_no_corners(percent) " << hdp.percent_corners_ << vcl_endl
-     << "scale_factor " << hdp.scale_factor_ << vcl_endl
-     << "vil_harris?" << hdp.use_vil_harris_ << vcl_endl
-     << "---]" << vcl_endl;
+     << "sigma " << hdp.sigma_ << std::endl
+     << "thresh " << hdp.thresh_ << std::endl
+     << "n " << hdp.n_ << std::endl
+     << "max_no_corners(percent) " << hdp.percent_corners_ << std::endl
+     << "scale_factor " << hdp.scale_factor_ << std::endl
+     << "vil_harris?" << hdp.use_vil_harris_ << std::endl
+     << "---]" << std::endl;
 }

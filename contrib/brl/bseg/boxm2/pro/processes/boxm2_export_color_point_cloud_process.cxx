@@ -1,20 +1,22 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_export_color_point_cloud_process.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief  A process for exporting the scene as a point cloud in XYZ or PLY format along with color or grayscale information. The process expects datatypes BOXM2_POINT and BOXM2_NORMAL.
-//         The process can take as input a bounding box, specified as two points in a ply file. 
+//         The process can take as input a bounding box, specified as two points in a ply file.
 //
 // \author Vishal Jain
 // \date Aug 15, 2014
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_data_traits.h>
 #include "boxm2/cpp/algo/boxm2_export_oriented_point_cloud_function.h"
-#include <vcl_sstream.h>
 #include <vgl/vgl_intersection.h>
 
 
@@ -28,8 +30,8 @@ bool boxm2_export_color_point_cloud_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_export_color_point_cloud_process_globals;
   //process takes 8 inputs (3 required ones), no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string"; //filename
@@ -39,7 +41,7 @@ bool boxm2_export_color_point_cloud_process_cons(bprb_func_process& pro)
   brdb_value_sptr prob_t = new brdb_value_t<float>(0.3);
   pro.set_input(3, prob_t);
 
-  brdb_value_sptr identifier = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr identifier = new brdb_value_t<std::string>("");
   pro.set_input(4, identifier);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -49,19 +51,19 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
 {
   using namespace boxm2_export_color_point_cloud_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_string output_filename = pro.get_input<vcl_string>(i++);
+  std::string output_filename = pro.get_input<std::string>(i++);
   float prob_t = pro.get_input<float>(i++);
-  vcl_string identifier = pro.get_input<vcl_string>(i++);
+  std::string identifier = pro.get_input<std::string>(i++);
 
-  vcl_vector<vcl_string> apps = scene->appearances();
-  vcl_string data_type = "";
+  std::vector<std::string> apps = scene->appearances();
+  std::string data_type = "";
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
       data_type = apps[i];
@@ -70,15 +72,15 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
   }
   if(    data_type=="")
   {
-      vcl_cout<<"COLOR Model not recognizable"<<vcl_endl;
+      std::cout<<"COLOR Model not recognizable"<<std::endl;
       return false;
   }
   unsigned num_vertices = 0;
-  vcl_ofstream myfile;
+  std::ofstream myfile;
   myfile.open(output_filename.c_str());
   //zip through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
       boxm2_block_id id = blk_iter->first;
@@ -88,13 +90,13 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
       vgl_box_3d<double> bb_expanded = original_bb;
       if (vgl_intersection(bb_expanded, blk_info.bbox()).is_empty())
           continue;
-      vcl_cout << "Processing Block: "<<id<< " with prob t: " << prob_t << "Color Model "  << " finest cell length: " << finest_cell_length << vcl_endl;
+      std::cout << "Processing Block: "<<id<< " with prob t: " << prob_t << "Color Model "  << " finest cell length: " << finest_cell_length << std::endl;
       boxm2_block *     blk     = cache->get_block(scene,id);
       //get data sizes
-      vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+      std::size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      std::size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
       int mogSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
-      vcl_size_t expTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_EXPECTATION>::prefix());
+      std::size_t expTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_EXPECTATION>::prefix());
       boxm2_data_base * alpha =        cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
       int data_buff_length    = (int) (alpha->buffer_length()/alphaTypeSize);
       //specify size to make sure data is right size.
@@ -102,7 +104,7 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
       boxm2_data_base * mog;
       if( data_type == "boxm2_gauss_rgb")
          mog = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(identifier), data_buff_length * mogSize);
-      else 
+      else
           mog= cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier), data_buff_length * mogSize);
       boxm2_block_metadata data = blk_iter->second;
       if (output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")
@@ -110,15 +112,15 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
       else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
           boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(scene, data, blk, mog, alpha,data_type,  points, myfile,  prob_t,  bb_expanded, num_vertices);
       else
-          vcl_cout << "UNKNOWN FILE FORMAT..." << vcl_endl;
+          std::cout << "UNKNOWN FILE FORMAT..." << std::endl;
   }
   myfile.flush();
   myfile.close();
   //if ply, have to write annoying header at the beginning
   if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply") {
-    vcl_ifstream myfile_input;
+    std::ifstream myfile_input;
     myfile_input.open(output_filename.c_str());
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss << myfile_input.rdbuf();
     myfile_input.close();
     myfile.open(output_filename.c_str());

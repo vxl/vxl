@@ -6,7 +6,7 @@
 # pragma warning(disable:4146)
 #endif //VCL_VC_DOTNET
 
-#include <vnl/vnl_matrix.txx>
+#include <vnl/vnl_matrix.hxx>
 VNL_MATRIX_INSTANTIATE(unsigned long long);
 #else
 void vnl_matrix_ulonglong_dummy(void) {}

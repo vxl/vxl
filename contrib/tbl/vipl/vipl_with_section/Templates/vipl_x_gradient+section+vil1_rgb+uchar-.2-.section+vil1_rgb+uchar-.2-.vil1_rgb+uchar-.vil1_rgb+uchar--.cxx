@@ -1,8 +1,8 @@
 #ifndef INSTANTIATE_TEMPLATES
 // for vipl_dilate_disk<...> instantiation:
-#include "../vipl_filterable_section_container_generator_section.txx"
+#include "../vipl_filterable_section_container_generator_section.hxx"
 #include "../accessors/vipl_accessors_section.h"
-#include <vipl/vipl_x_gradient.txx>
+#include <vipl/vipl_x_gradient.hxx>
 
 #include <vil/vil_rgb.h>
 typedef vil_rgb<unsigned char> rgbcell;

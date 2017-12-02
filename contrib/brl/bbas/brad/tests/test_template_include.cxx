@@ -1,3 +1,3 @@
-#include <brad/brad_eigenspace.txx>
+#include <brad/brad_eigenspace.hxx>
 
 int main() { return 0; }

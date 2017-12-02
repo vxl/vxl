@@ -4,52 +4,49 @@
 # (See accompanying file rtvl_license_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-SET(rtvl_sources
-  rtvl_intpow.hxx
-  rtvl_terms.hxx
-  rtvl_tokens.hxx
-  rtvl_vote.hxx                         rtvl_vote.txx
-  rtvl_votee.hxx                        rtvl_votee.txx
-  rtvl_votee_d.hxx                      rtvl_votee_d.txx
-  rtvl_voter.hxx                        rtvl_voter.txx
-  rtvl_refine.hxx                       rtvl_refine.txx
-  rtvl_tensor.hxx                       rtvl_tensor.txx
-  rtvl_tensor_d.hxx                     rtvl_tensor_d.txx
-  rtvl_weight.hxx
-  rtvl_weight_original.hxx              rtvl_weight_original.txx
-  rtvl_weight_smooth.hxx                rtvl_weight_smooth.txx
+set(rtvl_sources
+  rtvl_intpow.h
+  rtvl_terms.h
+  rtvl_tokens.h
+  rtvl_vote.h                         rtvl_vote.hxx
+  rtvl_votee.h                        rtvl_votee.hxx
+  rtvl_votee_d.h                      rtvl_votee_d.hxx
+  rtvl_voter.h                        rtvl_voter.hxx
+  rtvl_refine.h                       rtvl_refine.hxx
+  rtvl_tensor.h                       rtvl_tensor.hxx
+  rtvl_tensor_d.h                     rtvl_tensor_d.hxx
+  rtvl_weight.h
+  rtvl_weight_original.h              rtvl_weight_original.hxx
+  rtvl_weight_smooth.h                rtvl_weight_smooth.hxx
 
-  Templates/rtvl_vote+2-.cxx
-  Templates/rtvl_votee+2-.cxx
-  Templates/rtvl_votee_d+2-.cxx
-  Templates/rtvl_voter+2-.cxx
-  Templates/rtvl_refine+2-.cxx
-  Templates/rtvl_tensor+2-.cxx
-  Templates/rtvl_tensor_d+2-.cxx
-  Templates/rtvl_weight_original+2-.cxx
-  Templates/rtvl_weight_smooth+2-.cxx
+   Templates/rtvl_vote+2-.cxx
+   Templates/rtvl_votee+2-.cxx
+   Templates/rtvl_votee_d+2-.cxx
+   Templates/rtvl_voter+2-.cxx
+   Templates/rtvl_refine+2-.cxx
+   Templates/rtvl_tensor+2-.cxx
+   Templates/rtvl_tensor_d+2-.cxx
+   Templates/rtvl_weight_original+2-.cxx
+   Templates/rtvl_weight_smooth+2-.cxx
 
-  Templates/rtvl_vote+3-.cxx
-  Templates/rtvl_votee+3-.cxx
-  Templates/rtvl_votee_d+3-.cxx
-  Templates/rtvl_voter+3-.cxx
-  Templates/rtvl_refine+3-.cxx
-  Templates/rtvl_tensor+3-.cxx
-  Templates/rtvl_tensor_d+3-.cxx
-  Templates/rtvl_weight_original+3-.cxx
-  Templates/rtvl_weight_smooth+3-.cxx
+   Templates/rtvl_vote+3-.cxx
+   Templates/rtvl_votee+3-.cxx
+   Templates/rtvl_votee_d+3-.cxx
+   Templates/rtvl_voter+3-.cxx
+  # Templates/rtvl_refine+3-.cxx
+   Templates/rtvl_tensor+3-.cxx
+   Templates/rtvl_tensor_d+3-.cxx
+   Templates/rtvl_weight_original+3-.cxx
+   Templates/rtvl_weight_smooth+3-.cxx
   )
 
-ADD_LIBRARY(rtvl ${rtvl_sources})
-TARGET_LINK_LIBRARIES(rtvl rgtl vnl_algo vnl)
+vxl_add_library(LIBRARY_NAME rtvl LIBRARY_SOURCES ${rtvl_sources})
+target_link_libraries(rtvl rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl)
 
-INSTALL_TARGETS(/lib rtvl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rtvl ${rtvl_sources})
-
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()

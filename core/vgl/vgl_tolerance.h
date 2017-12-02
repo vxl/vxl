@@ -4,8 +4,9 @@
 //! \file
 //  \author Kieran O'Mahony
 //  \date 21 August 2007
-//  \brief Tolerances used throughout vgl when performing comparisons 
+//  \brief Tolerances used throughout vgl when performing comparisons
 #include <vgl/vgl_export.h>
+#include <vcl_compiler_detection.h>
 
 template <typename T>
 class vgl_tolerance
@@ -17,5 +18,10 @@ class vgl_tolerance
     //! Tolerance for judging positions to be equal
     static VGL_EXPORT const T position;
 };
+
+extern template class vgl_tolerance<double>;
+extern template class vgl_tolerance<float>;
+extern template class vgl_tolerance<int>;
+extern template class vgl_tolerance<unsigned int>;
 
 #endif

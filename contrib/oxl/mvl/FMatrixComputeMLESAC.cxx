@@ -16,7 +16,7 @@ FMatrixComputeMLESAC::FMatrixComputeMLESAC(bool rank2_truncate, double std)
 FMatrixComputeMLESAC::~FMatrixComputeMLESAC() {}
 
 // The robust Huber cost function
-double FMatrixComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count)
+double FMatrixComputeMLESAC::calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count)
 {
   double sse = 0.0;
   for (unsigned int i = 0; i < residuals.size(); i++) {

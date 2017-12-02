@@ -6,10 +6,12 @@
 // \author Daniel Crispell
 // \date November 11, 2011
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -32,14 +34,14 @@ namespace boxm2_ocl_render_expected_z_image_process_globals
 {
   const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 2;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -51,7 +53,7 @@ namespace boxm2_ocl_render_expected_z_image_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = " -D RENDER_Z_IMAGE ";
+    std::string options = " -D RENDER_Z_IMAGE ";
     options += " -D DETERMINISTIC ";
     options += " -D STEP_CELL=step_cell_render_z(cell_minz*linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.exp_z,aux_args.exp_z_sqr,aux_args.probsum)";
 
@@ -73,7 +75,7 @@ bool boxm2_ocl_render_expected_z_image_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_render_expected_z_image_process_globals;
 
   //process takes 6 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -85,7 +87,7 @@ bool boxm2_ocl_render_expected_z_image_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
 
@@ -97,7 +99,7 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   using namespace boxm2_ocl_render_expected_z_image_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -113,7 +115,7 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   unsigned nj=pro.get_input<unsigned>(5);
   bool normalize_z_values = pro.get_input<bool>(6);
 
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
 
   // create a command queue.
   int status=0;
@@ -127,8 +129,8 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
     kernels[identifier]=ks;
   }
@@ -141,7 +143,7 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   persp_cam->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 #endif
 
-  vcl_size_t local_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
 
@@ -195,12 +197,12 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //2. set workgroup size
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {cl_ni,cl_nj};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {cl_ni,cl_nj};
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     //choose correct render kernel
@@ -285,7 +287,7 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   float max_z = -vnl_numeric_traits<float>::maxval;
   float min_z = vnl_numeric_traits<float>::maxval;
 
-  vcl_vector<float> zval_vector; // for sorting and normalization
+  std::vector<float> zval_vector; // for sorting and normalization
 
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)
@@ -298,19 +300,19 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
         z = buff[c*cl_ni+r] / (1.0f - vis);
         good_z = true;
         zval_vector.push_back(z);
-        max_z = vcl_max(max_z,z);
-        min_z = vcl_min(min_z,z);
+        max_z = std::max(max_z,z);
+        min_z = std::min(min_z,z);
       }
       (*z_image)(r,c) = z;
       (*mask)(r,c) = good_z ? vxl_byte(255) : vxl_byte(0);
     }
-    vcl_cout << " min_z = " << min_z << "  max_z = " << max_z << vcl_endl;
+    std::cout << " min_z = " << min_z << "  max_z = " << max_z << std::endl;
   if (normalize_z_values) {
-    vcl_sort(zval_vector.begin(),zval_vector.end());
+    std::sort(zval_vector.begin(),zval_vector.end());
     unsigned int ngood = zval_vector.size();
     float min_z = zval_vector[(ngood-1)*0.01];
     float max_z = zval_vector[(ngood-1)*0.99];
-    vcl_cout << " min_z (pcent) = " << min_z << "  max_z (pcent) = " << max_z << vcl_endl;
+    std::cout << " min_z (pcent) = " << min_z << "  max_z (pcent) = " << max_z << std::endl;
     double scale = 255.0 / (max_z - min_z);
     double offset = -scale * min_z;
 
@@ -319,7 +321,7 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
       for (unsigned int r=0; r<ni; ++r) {
         if ((*mask)(r,c)) {
           float zval = (*z_image)(r,c);
-          float zval_byte = vcl_max(0.0f,vcl_min(255.0f,float(zval*scale + offset)));
+          float zval_byte = std::max(0.0f,std::min(255.0f,float(zval*scale + offset)));
           (*z_image_byte)(r,c) = vxl_byte(zval_byte);
         }
         else {

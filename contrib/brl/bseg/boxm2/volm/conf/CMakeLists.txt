@@ -1,19 +1,19 @@
 #This is boxm2/volm/conf/CMakeLists.txt
 # volumetric configurational matcher library
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/volm )
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/volm )
 
-SET(boxm2_volm_conf_sources
+set(boxm2_volm_conf_sources
   boxm2_volm_conf_matcher.h       boxm2_volm_conf_matcher.cxx
 )
 
-ADD_LIBRARY(boxm2_volm_conf ${boxm2_volm_conf_sources})
+vxl_add_library(LIBRARY_NAME boxm2_volm_conf LIBRARY_SOURCES ${boxm2_volm_conf_sources})
 
-TARGET_LINK_LIBRARIES(boxm2_volm_conf boxm2_volm boxm2 boxm2_io volm volm_conf vul vgl vcl)
+target_link_libraries(boxm2_volm_conf boxm2_volm boxm2 boxm2_io volm volm_conf ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()
 
 add_subdirectory(exe)

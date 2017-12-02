@@ -36,7 +36,7 @@ class pop_projective:public pop_transform
   //
   // the params are a b s u0 v0
 
-  pop_projective(vcl_vector<pop_parameter*> params,
+  pop_projective(std::vector<pop_parameter*> params,
                  pop_vertex *cs1, pop_vertex *cs2);
 
   //: destructor

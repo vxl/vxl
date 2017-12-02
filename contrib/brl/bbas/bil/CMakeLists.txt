@@ -2,26 +2,23 @@
 # Brown Image Library
 
 
-SET(bil_sources
+set(bil_sources
     bil_math.h
-    bil_bounded_image_view.h    bil_bounded_image_view.txx
+    bil_bounded_image_view.h    bil_bounded_image_view.hxx
     bil_raw_image_istream.h     bil_raw_image_istream.cxx
-	bil_arf_image_istream.h     bil_arf_image_istream.cxx
+        bil_arf_image_istream.h     bil_arf_image_istream.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates bil_sources)
+aux_source_directory(Templates bil_sources)
 
-ADD_LIBRARY(bil  ${bil_sources})
+vxl_add_library(LIBRARY_NAME bil LIBRARY_SOURCES  ${bil_sources})
 
-TARGET_LINK_LIBRARIES(bil vil vil_io vsl)
+target_link_libraries(bil ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vsl)
 
 add_subdirectory(algo)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 add_subdirectory(exe)
-
-INSTALL_TARGETS(/lib bil)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bil ${bil_sources})

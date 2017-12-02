@@ -12,9 +12,10 @@
 // \date 23 Jan 2006
 //
 
+#include <cstring>
+#include <typeinfo>
 #include "vidl_pixel_format.h"
-#include <vcl_cstring.h>
-#include <vcl_typeinfo.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 
@@ -220,15 +221,15 @@ typedef void (*vidl_color_conv_fptr)(const vxl_byte* in, vxl_byte* out);
 // may actually reinterpret the data as other types (i.e. bool* or
 // vxl_uint_16*) via reinterpret_cast
 vidl_color_conv_fptr
-vidl_color_converter_func( vidl_pixel_color in_C, const vcl_type_info& in_type,
-                           vidl_pixel_color out_C, const vcl_type_info& out_type);
+vidl_color_converter_func( vidl_pixel_color in_C, const std::type_info& in_type,
+                           vidl_pixel_color out_C, const std::type_info& out_type);
 
 
 template <vidl_pixel_color in_C, vidl_pixel_color out_C>
 struct vidl_color_converter;
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_MONO>
 {
   template <class T>
@@ -245,13 +246,13 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_MONO>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_RGB>
 {
   template <class T>
   static inline void convert(const T in[3], T out[3])
   {
-    vcl_memcpy(out, in, sizeof(T)*3);
+    std::memcpy(out, in, sizeof(T)*3);
   }
 
   template <class inT, class outT>
@@ -264,13 +265,13 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_RGB>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_RGBA>
 {
   template <class T>
   static inline void convert(const T in[4], T out[4])
   {
-    vcl_memcpy(out, in, sizeof(T)*4);
+    std::memcpy(out, in, sizeof(T)*4);
   }
 
   template <class inT, class outT>
@@ -284,13 +285,13 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_RGBA>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_RGB>
 {
   template <class T>
   static inline void convert(const T in[4], T out[3])
   {
-    vcl_memcpy(out, in, sizeof(T)*3);
+    std::memcpy(out, in, sizeof(T)*3);
   }
 
   template <class inT, class outT>
@@ -303,13 +304,13 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_RGB>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_RGBA>
 {
   template <class T>
   static inline void convert(const T in[3], T out[4])
   {
-    vcl_memcpy(out, in, sizeof(T)*3);
+    std::memcpy(out, in, sizeof(T)*3);
     out[3] = vidl_pixel_limits<T>::max();
   }
 
@@ -324,13 +325,13 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_RGBA>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_YUV>
 {
   template <class T>
   static inline void convert(const T in[3], T out[3])
   {
-    vcl_memcpy(out, in, sizeof(T)*3);
+    std::memcpy(out, in, sizeof(T)*3);
   }
 
   template <class inT, class outT>
@@ -343,7 +344,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_YUV>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_YUV>
 {
   template <class inT, class outT>
@@ -379,7 +380,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_YUV>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_YUV>
 {
   template <class outT>
@@ -391,7 +392,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_YUV>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGB>
 {
   template <class inT, class outT>
@@ -427,7 +428,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGB>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGBA>
 {
   template <class outT>
@@ -440,7 +441,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_RGBA>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_MONO>
 {
   template <class T>
@@ -459,7 +460,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_YUV,VIDL_PIXEL_COLOR_MONO>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_YUV>
 {
   template <class T>
@@ -481,7 +482,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_YUV>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_MONO>
 {
   template <class inT, class outT>
@@ -504,7 +505,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGB,VIDL_PIXEL_COLOR_MONO>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_MONO>
 {
   template <class inT, class outT>
@@ -527,7 +528,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_RGBA,VIDL_PIXEL_COLOR_MONO>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_RGB>
 {
   template <class inT, class outT>
@@ -539,7 +540,7 @@ struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_RGB>
   }
 };
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_converter<VIDL_PIXEL_COLOR_MONO,VIDL_PIXEL_COLOR_RGBA>
 {
   template <class inT, class outT>
@@ -576,7 +577,7 @@ struct vidl_color_component
   static inline
   void get_all(const cmp_type * ptr, cmp_type * data)
   {
-    vcl_memcpy(data, ptr, sizeof(cmp_type)*vidl_pixel_traits_of<FMT>::num_channels);
+    std::memcpy(data, ptr, sizeof(cmp_type)*vidl_pixel_traits_of<FMT>::num_channels);
   }
 
   static inline
@@ -589,12 +590,12 @@ struct vidl_color_component
   static inline
   void set_all(cmp_type * ptr, const cmp_type * data)
   {
-    vcl_memcpy(ptr, data, sizeof(cmp_type)*vidl_pixel_traits_of<FMT>::num_channels);
+    std::memcpy(ptr, data, sizeof(cmp_type)*vidl_pixel_traits_of<FMT>::num_channels);
   }
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_component<VIDL_PIXEL_FORMAT_BGR_24>
 {
   // 0 -> 2
@@ -630,7 +631,7 @@ struct vidl_color_component<VIDL_PIXEL_FORMAT_BGR_24>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_555>
 {
   static inline
@@ -667,7 +668,7 @@ struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_555>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_565>
 {
   static inline
@@ -714,7 +715,7 @@ struct vidl_color_component<VIDL_PIXEL_FORMAT_RGB_565>
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 struct vidl_color_component<VIDL_PIXEL_FORMAT_UYV_444>
 {
   // 0 -> 1

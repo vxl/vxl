@@ -15,9 +15,11 @@
 // \author Ozge C. Ozcanli
 // \date Jan 10, 2013
 
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include "volm_tile.h"
 #include "volm_geo_index_sptr.h"
@@ -31,18 +33,18 @@ class volm_geo_index_node : public vbl_ref_count
    volm_geo_index_node(vgl_box_2d<double> const& extent, volm_geo_index_node_sptr& parent) : extent_(extent), parent_(parent) {}
    volm_geo_index_node(vgl_box_2d<double> const& extent) : extent_(extent), parent_(0) {}
    ~volm_geo_index_node();
-   vcl_string get_string();
-   vcl_string get_hyp_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + ".bin"; }
-   vcl_string get_index_name(vcl_string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + "_index.bin"; }
-   vcl_string get_label_index_name(vcl_string const& geo_index_name_pre, vcl_string const& identifier); 
-   
+   std::string get_string();
+   std::string get_hyp_name(std::string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + ".bin"; }
+   std::string get_index_name(std::string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + "_index.bin"; }
+   std::string get_label_index_name(std::string const& geo_index_name_pre, std::string const& identifier);
+
  public:
    // mini tile
    vgl_box_2d<double> extent_;   // min point of this box is lower left corner of the mini tile of this node
                                  // max point of this box is used as upper bound if pixels in the mini tile are iterated
 
    volm_geo_index_node_sptr parent_;
-   vcl_vector<volm_geo_index_node_sptr> children_;
+   std::vector<volm_geo_index_node_sptr> children_;
 
    // other data, e.g. keywords of geographic attributes that this tile contains, a set of hypotheses
    //
@@ -69,24 +71,24 @@ class volm_geo_index
   static unsigned depth(volm_geo_index_node_sptr node);
 
   //: write the bboxes of the nodes at the given depth to kml file
-  static void write_to_kml(volm_geo_index_node_sptr root, unsigned depth, vcl_string const& file_name);
-  static void write_to_kml_node(vcl_ofstream& ofs, volm_geo_index_node_sptr n, unsigned current_depth, unsigned depth, vcl_string explanation = "location");
+  static void write_to_kml(volm_geo_index_node_sptr root, unsigned depth, std::string const& file_name);
+  static void write_to_kml_node(std::ofstream& ofs, volm_geo_index_node_sptr n, unsigned current_depth, unsigned depth, std::string explanation = "location");
 
   //: write index quadtree in a text file, only the tree structure and not the leaf data
-  static void write(volm_geo_index_node_sptr root, vcl_string const& file_name, float min_size);
+  static void write(volm_geo_index_node_sptr root, std::string const& file_name, float min_size);
 
   //: even if a child has zero pointer, it's order in the children_ array is the same, this is to make sure that the children have consistent geographic meaning
-  static volm_geo_index_node_sptr read_and_construct(vcl_string const& file_name, float& min_size);
+  static volm_geo_index_node_sptr read_and_construct(std::string const& file_name, float& min_size);
 
-  static void get_leaves(volm_geo_index_node_sptr root, vcl_vector<volm_geo_index_node_sptr>& leaves);
+  static void get_leaves(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves);
 
   //: return all the leaves that intersect a given rectangular area
-  static void get_leaves(volm_geo_index_node_sptr root, vcl_vector<volm_geo_index_node_sptr>& leaves, vgl_box_2d<double>& area);
+  static void get_leaves(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves, vgl_box_2d<double>& area);
 
-  static void get_leaves_with_hyps(volm_geo_index_node_sptr root, vcl_vector<volm_geo_index_node_sptr>& leaves);
+  static void get_leaves_with_hyps(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves);
   //: write the geo index hyps
-  static void write_hyps(volm_geo_index_node_sptr root, vcl_string const& file_name_pre);
-  static void read_hyps(volm_geo_index_node_sptr root, vcl_string const& file_name_pre);
+  static void write_hyps(volm_geo_index_node_sptr root, std::string const& file_name_pre);
+  static void read_hyps(volm_geo_index_node_sptr root, std::string const& file_name_pre);
 
   static unsigned hypo_size(volm_geo_index_node_sptr root);
 

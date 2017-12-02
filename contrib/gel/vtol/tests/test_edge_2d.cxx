@@ -9,7 +9,7 @@
 
 static void test_edge_2d()
 {
-  vcl_cout << "testing edge 2d\n";
+  std::cout << "testing edge 2d\n";
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -18,13 +18,13 @@ static void test_edge_2d()
 
   vtol_edge_2d_sptr e1= new vtol_edge_2d(v1,v2);
   vtol_edge_2d_sptr e1a = new vtol_edge_2d(e1);
-  e1a->describe(vcl_cout,8);
+  e1a->describe(std::cout,8);
 
   TEST("vtol_edge_2d equality", *e1, *e1a);
-  TEST("vtol_edge_2d::cast_to_edge()", e1->cast_to_edge()==0, false);
+  TEST("vtol_edge_2d::cast_to_edge()", e1->cast_to_edge()==VXL_NULLPTR, false);
 
   vtol_zero_chain_sptr zc2 = new vtol_zero_chain(v2,v3);
-  zc2->describe(vcl_cout,8);
+  zc2->describe(std::cout,8);
 
   vtol_edge_2d_sptr e2 = new vtol_edge_2d(zc2);
   TEST("vtol_edge_2d inequality", *e2==*e1, false);
@@ -42,9 +42,9 @@ static void test_edge_2d()
 
   vtol_edge_2d_sptr e4 = new vtol_edge_2d(3.0,3.0,4.0,4.0);
   vsol_spatial_object_2d_sptr so_clone = e4->clone();
-  so_clone->describe(vcl_cout,8);
+  so_clone->describe(std::cout,8);
   vtol_topology_object_sptr to_clone = so_clone->cast_to_topology_object();
-  to_clone->describe(vcl_cout,8);
+  to_clone->describe(std::cout,8);
   vtol_edge_2d_sptr e4_clone = to_clone->cast_to_edge()->cast_to_edge_2d();
 
   TEST("vtol_edge_2d::clone()", *e4, *e4_clone);
@@ -52,7 +52,7 @@ static void test_edge_2d()
   TEST("vtol_edge_2d inequality", *e4==*e2, false);
   TEST("vtol_edge_2d inequality", *e4==*e3, false);
   TEST("vtol_edge_2d::clone()", *e4, *(e4_clone->cast_to_topology_object()));
-  TEST("vtol_edge_2d::cast_to_edge_2d()", e4->cast_to_edge_2d()==0, false);
+  TEST("vtol_edge_2d::cast_to_edge_2d()", e4->cast_to_edge_2d()==VXL_NULLPTR, false);
 
   vtol_vertex_sptr e1v1 = e1->v1();
   vtol_vertex_sptr e1v2 = e1->v2();
@@ -74,7 +74,7 @@ static void test_edge_2d()
   e1->replace_end_point(*current,*(v1));
 
   TEST("vtol_edge_2d::v1()", *(e1->v1()), *v1);
-  TEST("vtol_edge_2d::cast_to_edge()", e1->cast_to_edge()==0, false);
+  TEST("vtol_edge_2d::cast_to_edge()", e1->cast_to_edge()==VXL_NULLPTR, false);
 
   TEST("vtol_edge_2d::valid_inferior_type()",e1->valid_inferior_type(zc2),true);
   TEST("vtol_zero_chain::valid_superior_type()",zc2->valid_superior_type(e1),true);

@@ -1,13 +1,14 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_gaussian_full.h>
-#include <vcl_string.h>
-#include <vcl_limits.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_inverse.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class T>
-void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
+void test_gaussian_full_type(T epsilon, const std::string& type_name)
 {
   bsta_gaussian_full<T,3> df_gauss;
 
@@ -39,20 +40,20 @@ void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
             gauss.sqr_mahalanobis_dist(test_pt), sqr_mah_dist, epsilon);
 
   T two_pi = T(vnl_math::twopi);
-  T prob = T(1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2));
+  T prob = T(1.0/std::sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * std::exp(-sqr_mah_dist/2));
   TEST_NEAR(("probability density <"+type_name+">").c_str(),
             gauss.prob_density(test_pt), prob, epsilon);
 
   bsta_gaussian_full<T,3> zero_var_gauss;
   TEST(("zero var Mahalanobis dist <"+type_name+">").c_str(),
        zero_var_gauss.sqr_mahalanobis_dist(test_pt),
-       vcl_numeric_limits<T>::infinity());
+       std::numeric_limits<T>::infinity());
 
   TEST(("zero var probability density <"+type_name+">").c_str(),
        zero_var_gauss.prob_density(test_pt), T(0));
 
   // test stream
-  vcl_cout << "testing stream operator\n"
+  std::cout << "testing stream operator\n"
            << gauss << '\n';
 }
 

@@ -29,8 +29,10 @@
 //            d
 //          (c,p)
 //
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 class sdet_mrf_site_bp : public vbl_ref_count
 {
  public:
@@ -69,10 +71,10 @@ class sdet_mrf_site_bp : public vbl_ref_count
   float prior_message(unsigned nq, unsigned fp) const { return msg_[prior_][nq][fp]; }
 
   //:entire prior message
-  vcl_vector<float> prior_message(unsigned nq);
+  std::vector<float> prior_message(unsigned nq);
 
   //:set prior message
-  void set_prior_message(unsigned nq, vcl_vector<float>const& msg);
+  void set_prior_message(unsigned nq, std::vector<float>const& msg);
 
   //:clear messages
   void clear();
@@ -103,12 +105,12 @@ class sdet_mrf_site_bp : public vbl_ref_count
 
   //: a set of 2 message buffers, prior and current, one for each neighbor
   // (p, c)     n_ngbh_    n_labels_
-  vcl_vector< vcl_vector<vcl_vector<short> > > msg_;
+  std::vector< std::vector<std::vector<short> > > msg_;
   // cut down storage using short (for byte images should be adequate)
 
   //: the label represented by the data
   float obs_label_;
 };
 
-#include "sdet_mrf_site_bp_sptr.h"
+#include <sdet/sdet_mrf_site_bp_sptr.h>
 #endif // sdet_mrf_site_bp_h_

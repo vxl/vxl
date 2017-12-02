@@ -1,22 +1,22 @@
 # Brown view sphere directory
 # brl/bbas/bpgl/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${GEL_INCLUDE_DIR} )
 
-SET(bpgl_sources
-bpgl_comp_rational_camera.h         bpgl_comp_rational_camera.txx
-bpgl_reg_fundamental_matrix.h       bpgl_reg_fundamental_matrix.txx
+set(bpgl_sources
+bpgl_comp_rational_camera.h         bpgl_comp_rational_camera.hxx
+bpgl_reg_fundamental_matrix.h       bpgl_reg_fundamental_matrix.hxx
 bpgl_rolling_shutter_camera.h
-bpgl_segmented_rolling_shutter_camera.h bpgl_segmented_rolling_shutter_camera.txx
-bpgl_camera_estimator.h bpgl_camera_estimator.txx bpgl_camera_estimator_amoeba.h
+bpgl_segmented_rolling_shutter_camera.h bpgl_segmented_rolling_shutter_camera.hxx
+bpgl_camera_estimator.h bpgl_camera_estimator.hxx bpgl_camera_estimator_amoeba.h
 bpgl_camera_utils.h bpgl_camera_utils.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates bpgl_sources)
+aux_source_directory(Templates bpgl_sources)
 
-ADD_LIBRARY(bpgl ${bpgl_sources})
-TARGET_LINK_LIBRARIES(bpgl brip vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl)
+vxl_add_library(LIBRARY_NAME bpgl LIBRARY_SOURCES ${bpgl_sources})
+target_link_libraries(bpgl brip ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl)
 
 # algorithms involving cameras
 add_subdirectory(algo)
@@ -30,9 +30,6 @@ add_subdirectory(ihog)
 # reasoning about scenes from a single image
 add_subdirectory(depth_map)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
-
-INSTALL_TARGETS(/lib bpgl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bpgl ${bpgl_sources})
+endif()

@@ -16,15 +16,18 @@
 // \endverbatim
 //
 
-#include <vcl_complex.h>
+#include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
+
+#include <vnl/algo/vnl_algo_export.h>
 
 //: Extract eigensystem of asymmetric matrix M, using the EISPACK routine
 //  vnl_eigensystem is a full-bore real eigensystem.  If your matrix
 //  is symmetric, it is \e much better to use \sa vnl_symmetric_eigensystem.
 
-class vnl_real_eigensystem
+class VNL_ALGO_EXPORT vnl_real_eigensystem
 {
  public:
   vnl_real_eigensystem(vnl_matrix<double> const& M);
@@ -33,10 +36,10 @@ class vnl_real_eigensystem
   vnl_matrix<double> Vreal;
 
   //: Output matrix of eigenvectors, which will in general be complex.
-  vnl_matrix<vcl_complex<double> > V;
+  vnl_matrix<std::complex<double> > V;
 
   //: Output diagonal matrix of eigenvalues.
-  vnl_diag_matrix<vcl_complex<double> > D;
+  vnl_diag_matrix<std::complex<double> > D;
 };
 
 #endif // vnl_real_eigensystem_h_

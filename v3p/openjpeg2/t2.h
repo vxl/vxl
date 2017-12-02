@@ -47,13 +47,13 @@ struct opj_codestream_info;
 /** @defgroup T2 T2 - Implementation of a tier-2 coding */
 /*@{*/
 
-/** 
-T2 encoding mode 
+/**
+T2 encoding mode
 */
-typedef enum T2_MODE 
+typedef enum T2_MODE
 {
-	THRESH_CALC = 0,	/** Function called in Rate allocation process*/
-	FINAL_PASS = 1		/** Function called in Tier 2 process*/
+        THRESH_CALC = 0,        /** Function called in Rate allocation process*/
+        FINAL_PASS = 1                /** Function called in Tier 2 process*/
 }
 J2K_T2_MODE;
 
@@ -62,10 +62,10 @@ Tier-2 coding
 */
 
 typedef struct opj_t2 {
-	/** Encoding: pointer to the src image. Decoding: pointer to the dst image. */
-	struct opj_image *image;
-	/** pointer to the image coding parameters */
-	struct opj_cp *cp;
+        /** Encoding: pointer to the src image. Decoding: pointer to the dst image. */
+        struct opj_image *image;
+        /** pointer to the image coding parameters */
+        struct opj_cp *cp;
 } opj_t2_t;
 
 /** @name Exported functions */
@@ -80,7 +80,7 @@ Encode the packets of a tile to a destination buffer
 @param maxlayers maximum number of layers
 @param dest the destination buffer
 @param len the length of the destination buffer
-@param cstr_info Codestream information structure 
+@param cstr_info Codestream information structure
 @param tpnum Tile part number of the current tile
 @param tppos The position of the tile part flag in the progression order
 @param t2_mode If == 0 In Threshold calculation ,If == 1 Final pass
@@ -98,17 +98,17 @@ bool t2_decode_packets(opj_t2_t *t2, OPJ_UINT32 tileno,struct opj_tcd_tile *tile
 
 /**
  * Creates a Tier 2 handle
- * 
- * @param	p_image		Source or destination image
- * @param	p_cp		Image coding parameters.
- * @return		a new T2 handle if successful, NULL otherwise.
+ *
+ * @param        p_image                Source or destination image
+ * @param        p_cp                Image coding parameters.
+ * @return                a new T2 handle if successful, NULL otherwise.
 */
 opj_t2_t* t2_create(struct opj_image *p_image, struct opj_cp *p_cp);
 
 /**
  * Destroys a Tier 2 handle.
- * 
- * @param	p_t2	the Tier 2 handle to destroy
+ *
+ * @param        p_t2        the Tier 2 handle to destroy
 */
 void t2_destroy(opj_t2_t *t2);
 

@@ -432,7 +432,7 @@ int data_index_world_point(__global RenderSceneInfo * linfo,__global int4 * tree
       ( blk_dims.z) +s_sub_blk_y * (blk_dims.z)+s_sub_blk_z;
 
     local_tree_array[lid] = as_uchar16(tree_array[s_tree_index]);
-    __local uchar * curr_tree_ptr = &local_tree_array[lid];
+    __local uchar * curr_tree_ptr = &(local_tree_array[lid]);
 
     float source_lx = clamp((world_point.x - origin.x)/linfo->block_len - s_sub_blk_x,0.0f,1.0f);
     float source_ly = clamp((world_point.y - origin.y)/linfo->block_len - s_sub_blk_y,0.0f,1.0f);

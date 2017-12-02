@@ -16,8 +16,10 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <mvl/HomgPoint3D.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class HomgLine3D
 {
@@ -47,6 +49,6 @@ class HomgLine3D
   }
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& );
+std::ostream& operator<<(std::ostream& s, const HomgLine3D& );
 
 #endif // HomgLine3D_h_

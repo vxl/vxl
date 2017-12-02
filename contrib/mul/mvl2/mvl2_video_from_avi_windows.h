@@ -5,7 +5,9 @@
 // \brief A class to get video input from file
 // \author Franck Bettinger
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 // If we must use windows.h, we should at least sanitise it first
 #ifndef NOMINMAX
 # define NOMINMAX
@@ -29,7 +31,7 @@ class mvl2_video_from_avi: public mvl2_video_reader
 
   //: Initialize the file (format can by Grey, RGB, or more complex)
   virtual bool initialize( int width, int height,
-                           vcl_string format, vcl_string file_name);
+                           std::string format, std::string file_name);
 
   //: Tidy up
   virtual void uninitialize();
@@ -60,7 +62,7 @@ class mvl2_video_from_avi: public mvl2_video_reader
   virtual bool get_frame(vil_image_view<vxl_byte>& image);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mvl2_video_reader* clone() const;

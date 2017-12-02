@@ -1,7 +1,8 @@
 // This is core/vul/tests/test_file_iterator.cxx
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_map.h>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
 
@@ -12,7 +13,7 @@
 
 static void touch(char const* fn)
 {
-  vcl_ofstream f(fn); f << '.';
+  std::ofstream f(fn); f << '.';
 }
 
 void test_file_iterator_unix()
@@ -35,7 +36,7 @@ void test_file_iterator_unix()
     vul_file_iterator f("/tmp/vxltest/a/*");
 
     // test for files - don't care about order?
-    vcl_map<vcl_string, int> found;
+    std::map<std::string, int> found;
     TEST("test_file_iterator 1", found[f()], 0); ++found[f()];
     ++f;
     TEST("test_file_iterator 2", found[f()], 0); ++found[f()];
@@ -57,10 +58,10 @@ void test_file_iterator_unix()
 
   // 1. Check file.*
   {
-    vcl_cout << "Testing /tmp/vxltest/a/123.*" << vcl_endl;
+    std::cout << "Testing /tmp/vxltest/a/123.*" << std::endl;
     vul_file_iterator f("/tmp/vxltest/a/123.*");
     // test for files - don't care about order?
-    vcl_map<vcl_string, int> found;
+    std::map<std::string, int> found;
     TEST("test_file_iterator 6", found[f()], 0); ++found[f()];
     ++f;
     TEST("test_file_iterator 7", found[f()], 0); ++found[f()];
@@ -73,10 +74,10 @@ void test_file_iterator_unix()
 
   // 2. Check *.ext
   {
-    vcl_cout << "Testing /tmp/vxltest/a/*.dat" << vcl_endl;
+    std::cout << "Testing /tmp/vxltest/a/*.dat" << std::endl;
     vul_file_iterator f("/tmp/vxltest/a/*.dat");
     // test for files - don't care about order?
-    vcl_map<vcl_string, int> found;
+    std::map<std::string, int> found;
     TEST("test_file_iterator 8", found[f()], 0); ++found[f()];
     ++f;
     TEST("test_file_iterator 9", found[f()], 0); ++found[f()];
@@ -89,10 +90,10 @@ void test_file_iterator_unix()
 
   // 3. Check ?.*
   {
-    vcl_cout << "Testing /tmp/vxltest/a/1?3.???" << vcl_endl;
+    std::cout << "Testing /tmp/vxltest/a/1?3.???" << std::endl;
     vul_file_iterator f("/tmp/vxltest/a/1?3.???");
     // test for files - don't care about order?
-    vcl_map<vcl_string, int> found;
+    std::map<std::string, int> found;
     TEST("test_file_iterator 10", found[f()], 0); ++found[f()];
     ++f;
     TEST("test_file_iterator 11", found[f()], 0); ++found[f()];
@@ -106,10 +107,10 @@ void test_file_iterator_unix()
 
   // 4. Check 1[23]*.dat
   {
-    vcl_cout << "Testing /tmp/vxltest/a/1[23]*.dat" << vcl_endl;
+    std::cout << "Testing /tmp/vxltest/a/1[23]*.dat" << std::endl;
     vul_file_iterator f("/tmp/vxltest/a/1[23]*.dat");
     // Assume semantics are such that files appear in order of creation?
-    vcl_map<vcl_string, int> found;
+    std::map<std::string, int> found;
     TEST("test_file_iterator 12", found[f()], 0); ++found[f()];
     ++f;
     TEST("test_file_iterator 13", found[f()], 0); ++found[f()];
@@ -140,10 +141,10 @@ void test_file_iterator_unix()
   vpl_unlink("/tmp/vxltest/b/123.txt");
   vpl_unlink("/tmp/vxltest/b/123.dat");
   {
-    vcl_cout << "Testing /tmp/vxltest/b/*" << vcl_endl;
+    std::cout << "Testing /tmp/vxltest/b/*" << std::endl;
     vul_file_iterator f("/tmp/vxltest/b/*");
     // test for files - don't care about order?
-    vcl_map<vcl_string, int> found;
+    std::map<std::string, int> found;
     TEST("test_file_iterator 16", found[f()], 0); ++found[f()];
     ++f;
     TEST("test_file_iterator 17", found[f()], 0); ++found[f()];
@@ -160,10 +161,10 @@ void test_file_iterator_unix()
   vpl_unlink("/tmp/vxltest/a/123.dat");
   vpl_rmdir("/tmp/vxltest/a");
   {
-    vcl_cout << "Testing /tmp/vxltest/*" << vcl_endl;
+    std::cout << "Testing /tmp/vxltest/*" << std::endl;
     vul_file_iterator f("/tmp/vxltest/*");
     // test for files - don't care about order?
-    vcl_map<vcl_string, int> found;
+    std::map<std::string, int> found;
     TEST("test_file_iterator 18", found[f()], 0); ++found[f()];
     ++f;
     TEST("test_file_iterator 19", found[f()], 0); ++found[f()];
@@ -180,7 +181,7 @@ void test_file_iterator_unix()
 void test_file_iterator_dos()
 {
   // Make a directory structure
-  vcl_string tempdir = vul_temp_filename();
+  std::string tempdir = vul_temp_filename();
   vpl_mkdir( tempdir.c_str(), 0777);
 
   vpl_mkdir( (tempdir+"\\a").c_str(), 0777);
@@ -195,66 +196,66 @@ void test_file_iterator_dos()
 
   // 0. Check "*"
   {
-    vcl_cout << "tempdir\\a\\*" << vcl_endl;
+    std::cout << "tempdir\\a\\*" << std::endl;
     vul_file_iterator f( (tempdir+"\\a\\*").c_str() );
     // Assume semantics are such that files appear in order of creation?
-    TEST("test_file_iterator 1", f(), vcl_string(tempdir+"\\a\\."));
+    TEST("test_file_iterator 1", f(), std::string(tempdir+"\\a\\."));
     ++f;
-    TEST("test_file_iterator 2", f(), vcl_string(tempdir+"\\a\\.."));
+    TEST("test_file_iterator 2", f(), std::string(tempdir+"\\a\\.."));
     ++f;
-    TEST("test_file_iterator 3", f(), vcl_string(tempdir+"\\a\\123.dat"));
+    TEST("test_file_iterator 3", f(), std::string(tempdir+"\\a\\123.dat"));
     ++f;
-    TEST("test_file_iterator 4", f(), vcl_string(tempdir+"\\a\\123.txt"));
+    TEST("test_file_iterator 4", f(), std::string(tempdir+"\\a\\123.txt"));
     ++f;
-    TEST("test_file_iterator 5", f(), vcl_string(tempdir+"\\a\\13.dat"));
+    TEST("test_file_iterator 5", f(), std::string(tempdir+"\\a\\13.dat"));
     ++f;
     TEST("F ran out 1", !f, true);
   }
 
   // 1. Check file.*
   {
-    vcl_cout << "tempdir\\a\\123.*" << vcl_endl;
+    std::cout << "tempdir\\a\\123.*" << std::endl;
     vul_file_iterator f( (tempdir+"\\a\\123.*").c_str() );
     // Assume semantics are such that files appear in order of creation?
-    TEST("test_file_iterator 6", f(), vcl_string(tempdir+"\\a\\123.dat"));
+    TEST("test_file_iterator 6", f(), std::string(tempdir+"\\a\\123.dat"));
     ++f;
-    TEST("test_file_iterator 7", f(), vcl_string(tempdir+"\\a\\123.txt"));
+    TEST("test_file_iterator 7", f(), std::string(tempdir+"\\a\\123.txt"));
     ++f;
     TEST("F ran out 2", !f, true);
   }
 
   // 2. Check *.ext
   {
-    vcl_cout << "tempdir\\a\\*.dat" << vcl_endl;
+    std::cout << "tempdir\\a\\*.dat" << std::endl;
     vul_file_iterator f( (tempdir+"\\a\\*.dat").c_str() );
     // Assume semantics are such that files appear in order of creation?
-    TEST("test_file_iterator 8", f(), vcl_string(tempdir+"\\a\\123.dat"));
+    TEST("test_file_iterator 8", f(), std::string(tempdir+"\\a\\123.dat"));
     ++f;
-    TEST("test_file_iterator 9", f(), vcl_string(tempdir+"\\a\\13.dat"));
+    TEST("test_file_iterator 9", f(), std::string(tempdir+"\\a\\13.dat"));
     ++f;
     TEST("F ran out 3", !f, true);
   }
 
   // 3. Check ?.*
   {
-    vcl_cout << "tempdir\\a\\1?3.???" << vcl_endl;
+    std::cout << "tempdir\\a\\1?3.???" << std::endl;
     vul_file_iterator f( (tempdir+"\\a\\1?3.???").c_str() );
     // Assume semantics are such that files appear in order of creation?
-    TEST("test_file_iterator 10", f(), vcl_string(tempdir+"\\a\\123.dat"));
+    TEST("test_file_iterator 10", f(), std::string(tempdir+"\\a\\123.dat"));
     ++f;
-    TEST("test_file_iterator 11", f(), vcl_string(tempdir+"\\a\\123.txt"));
+    TEST("test_file_iterator 11", f(), std::string(tempdir+"\\a\\123.txt"));
     ++f;
     TEST("F ran out 4", !f, true);
   }
 
   // 4. Check 1[23]*.dat
   {
-    vcl_cout << "tempdir\\a\\1[23]*.dat" << vcl_endl;
+    std::cout << "tempdir\\a\\1[23]*.dat" << std::endl;
     vul_file_iterator f( (tempdir+"\\a\\1[23]*.dat").c_str() );
     // Assume semantics are such that files appear in order of creation?
-    TEST("test_file_iterator 12", f(), vcl_string(tempdir+"\\a\\123.dat"));
+    TEST("test_file_iterator 12", f(), std::string(tempdir+"\\a\\123.dat"));
     ++f;
-    TEST("test_file_iterator 13", f(), vcl_string(tempdir+"\\a\\13.dat"));
+    TEST("test_file_iterator 13", f(), std::string(tempdir+"\\a\\13.dat"));
     ++f;
     TEST("F ran out 5", !f, true);
   }
@@ -262,7 +263,7 @@ void test_file_iterator_dos()
 
 #if 0 // "*/..." does not work (yet).  See note in vul_file_iterator.cxx
   {
-    vcl_cout << "tempdir\\*\\123.dat" << vcl_endl;
+    std::cout << "tempdir\\*\\123.dat" << std::endl;
     vul_file_iterator f( (tempdir+"\\*\\123.dat").c_str() );
     TEST("test_file_iterator 14", f(), (tempdir+"\\a\\123.dat").c_str() );
     ++f;
@@ -273,15 +274,15 @@ void test_file_iterator_dos()
 #endif
 
   // 5. Remove and check removal
-  vcl_cout << "tempdir\\b\\*" << vcl_endl;
+  std::cout << "tempdir\\b\\*" << std::endl;
   vpl_unlink( (tempdir+"\\b\\13.dat").c_str() );
   vpl_unlink( (tempdir+"\\b\\123.txt").c_str() );
   vpl_unlink( (tempdir+"\\b\\123.dat").c_str() );
   {
     vul_file_iterator f( (tempdir+"\\b\\*").c_str() );
-    TEST("test_file_iterator 16", f(), vcl_string(tempdir+"\\b\\."));
+    TEST("test_file_iterator 16", f(), std::string(tempdir+"\\b\\."));
     ++f;
-    TEST("test_file_iterator 17", f(), vcl_string(tempdir+"\\b\\.."));
+    TEST("test_file_iterator 17", f(), std::string(tempdir+"\\b\\.."));
     ++f;
     TEST("F ran out 7", !f, true);
   }
@@ -292,11 +293,11 @@ void test_file_iterator_dos()
   vpl_unlink( (tempdir+"\\a\\123.dat").c_str() );
   vpl_rmdir( (tempdir+"\\a").c_str() );
   {
-  vcl_cout << "tempdir\\*" << vcl_endl;
+  std::cout << "tempdir\\*" << std::endl;
     vul_file_iterator f( (tempdir+"\\*").c_str() );
-    TEST("test_file_iterator 18", f(), vcl_string(tempdir+"\\."));
+    TEST("test_file_iterator 18", f(), std::string(tempdir+"\\."));
     ++f;
-    TEST("test_file_iterator 19", f(), vcl_string(tempdir+"\\.."));
+    TEST("test_file_iterator 19", f(), std::string(tempdir+"\\.."));
     ++f;
     TEST("F ran out 8", !f, true);
   }
@@ -312,7 +313,7 @@ static void test_file_iterator()
   test_file_iterator_dos();
 #endif
 
-  vcl_cout << "Testing non-existent directory" << vcl_endl;
+  std::cout << "Testing non-existent directory" << std::endl;
   vul_file_iterator f("/some/directory/that/does/not/exist/*.blah");
   TEST( "Iterator is empty", bool(f), false );
 }

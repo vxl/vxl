@@ -1,25 +1,26 @@
 #ifndef boxm_shadow_appearance_estimator_h_
 #define boxm_shadow_appearance_estimator_h_
 
-#include <vcl_vector.h>
+#include <vector>
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #if 1
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 template <boxm_apm_type APM>
-void boxm_compute_shadow_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_datatype> const& obs, 
-                                    vcl_vector<float> const& pre, 
-                                    vcl_vector<float> const& vis,
-                                    typename boxm_apm_traits<APM>::apm_datatype &model, 
+void boxm_compute_shadow_appearance(std::vector<typename boxm_apm_traits<APM>::obs_datatype> const& obs,
+                                    std::vector<float> const& pre,
+                                    std::vector<float> const& vis,
+                                    typename boxm_apm_traits<APM>::apm_datatype &model,
                                     float min_app_sigma,
                                     float shadow_prior,
                                     float shadow_mean, float shadow_sigma,
                                     bool verbose = false)
-{ 
-  vcl_vector<float> obs_weights(vis.size(), 0.0f);
-  vcl_vector<float> sh_density(vis.size(), 0.0f);
+{
+  std::vector<float> obs_weights(vis.size(), 0.0f);
+  std::vector<float> sh_density(vis.size(), 0.0f);
   //assume that the initial appearance distribution is uniform on [0 1]
   //thus a reasonable initialization for weights is
   //
@@ -32,14 +33,14 @@ void boxm_compute_shadow_appearance(vcl_vector<typename boxm_apm_traits<APM>::ob
   for(unsigned n = 0; n<obs.size(); ++n)
     {
       //2.0 x density since centered on zero
-      sh_density[n] = 
+      sh_density[n] =
         2.0f*boxm_simple_grey_processor::prob_density(shadow_dist, obs[n]);
       float neu = vis[n]*(1-shadow_prior);
-      float weight = 
+      float weight =
         neu/(neu + sh_density[n]*shadow_prior);
       obs_weights[n]=weight;
     }
-  vcl_vector<float> initial_weights = obs_weights;
+  std::vector<float> initial_weights = obs_weights;
   // initial estimate for the illuminated appearance model
   boxm_apm_traits<APM>::apm_processor::compute_appearance(obs,obs_weights,model,min_app_sigma);
   double initial_mean = model.color();
@@ -68,7 +69,7 @@ void boxm_compute_shadow_appearance(vcl_vector<typename boxm_apm_traits<APM>::ob
         new_obs_weight = neu / den;
       }
       // compute delta weight for convergence check
-      float weight_delta = vcl_fabs(obs_weights[n] - new_obs_weight);
+      float weight_delta = std::fabs(obs_weights[n] - new_obs_weight);
       if (weight_delta > max_weight_change) {
         max_weight_change = weight_delta;
       }
@@ -85,21 +86,21 @@ void boxm_compute_shadow_appearance(vcl_vector<typename boxm_apm_traits<APM>::ob
     for(unsigned n = 0; n<obs.size(); ++n)
       if(obs[n]>0) print = true;
       if(i<max_its&&print){
-        vcl_cout << "converged after " << i << " iterations.\n";
-        vcl_cout << " initial mean = " << initial_mean << " final mean = " 
+        std::cout << "converged after " << i << " iterations.\n";
+        std::cout << " initial mean = " << initial_mean << " final mean = "
                  << model.color() << '\n';
-        vcl_cout << " initial sigma = " << initial_sigma << " final sigma = " 
+        std::cout << " initial sigma = " << initial_sigma << " final sigma = "
                  << model.sigma() << '\n';
-      }else{ vcl_cout << "failed to converge\n";}
+      }else{ std::cout << "failed to converge\n";}
 
-      vcl_cout << "Initial (Observations, Weights):\n";
+      std::cout << "Initial (Observations, Weights):\n";
       for(unsigned n=0; n<obs.size(); ++n)
-        vcl_cout << '('<< obs[n] << ' ' << initial_weights[n] << ") ";
-      vcl_cout << '\n';
-      vcl_cout << "Final (Observations, Weights):\n";
+        std::cout << '('<< obs[n] << ' ' << initial_weights[n] << ") ";
+      std::cout << '\n';
+      std::cout << "Final (Observations, Weights):\n";
       for(unsigned n=0; n<obs.size(); ++n)
-        vcl_cout << '('<< obs[n] << ' ' << obs_weights[n] << ") ";
-      vcl_cout << '\n';
+        std::cout << '('<< obs[n] << ' ' << obs_weights[n] << ") ";
+      std::cout << '\n';
   }
 
   // adjust model to account for small sample sizes.

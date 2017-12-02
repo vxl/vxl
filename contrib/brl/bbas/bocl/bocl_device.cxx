@@ -1,31 +1,32 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdio>
+#include <cstring>
 #include "bocl_device.h"
 #include "bocl_utils.h"
 //:
 // \file
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 
 
 bocl_device::bocl_device(cl_device_id& device) : device_(device)
 {
   info_ = bocl_device_info(&device_);
 
-  //vcl_cout<<"Device specs: "<<info_<<vcl_endl;
+  //std::cout<<"Device specs: "<<info_<<std::endl;
 
   //Create a context from the device ID
   int status = 1;
-  context_ = clCreateContext(0, 1, &device_, NULL, NULL, &status);
+  context_ = clCreateContext(VXL_NULLPTR, 1, &device_, VXL_NULLPTR, VXL_NULLPTR, &status);
   if (!check_val(status,CL_SUCCESS,"clCreateContextFromType failed: " + error_to_string(status))) {
     return;
   }
 }
 
-vcl_string bocl_device::device_identifier()
+std::string bocl_device::device_identifier()
 {
-    vcl_stringstream outstr;
+    std::stringstream outstr;
     outstr<<(long)(device_);
     return info_.device_vendor_+info_.device_name_+outstr.str();
 }
@@ -36,9 +37,9 @@ bocl_device::~bocl_device()
 }
 
 
-vcl_ostream& operator <<(vcl_ostream &s, bocl_device& dev)
+std::ostream& operator <<(std::ostream &s, bocl_device& dev)
 {
-  s << dev.info() << vcl_endl;
+  s << dev.info() << std::endl;
   return s;
 }
 

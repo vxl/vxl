@@ -94,7 +94,7 @@ static integer c__1 = 1;
 /*     **************** */
 
 /*<       SUBROUTINE LBFGS(N,M,X,F,G,DIAGCO,DIAG,IPRINT,EPS,XTOL,W,IFLAG) >*/
-/* Subroutine */ int lbfgs_(integer *n, integer *m, doublereal *x, doublereal 
+/* Subroutine */ int lbfgs_(integer *n, integer *m, doublereal *x, doublereal
         *f, doublereal *g, logical *diagco, doublereal *diag, integer *iprint,
          doublereal *eps, doublereal *xtol, doublereal *w, integer *iflag,
          v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg)
@@ -117,9 +117,9 @@ static integer c__1 = 1;
     extern /* Subroutine */ int lb1_(
       integer *iprint, integer *n, integer *m, doublereal *x, doublereal *f,
       doublereal *g, v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg);
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
+    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *,
             integer *);
-    extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *,
             integer *, doublereal *, integer *);
     extern /* Subroutine */ int mcsrch_(integer *, doublereal *, doublereal *,
                                         doublereal *, doublereal *,
@@ -1162,7 +1162,7 @@ static void write50(double* v, int n)
 
 /*     CHECK THE INPUT PARAMETERS FOR ERRORS. */
 
-/*<    >*/ if (*n <= 0 || stp <= zero || ftol < zero || lb3_1.gtol < zero || *xtol 
+/*<    >*/ if (*n <= 0 || stp <= zero || ftol < zero || lb3_1.gtol < zero || *xtol
             < zero || lb3_1.stpmin < zero || lb3_1.stpmax < lb3_1.stpmin ||
         maxfev <= 0) {
         return 0;
@@ -1271,7 +1271,7 @@ L30:
 /*        STP BE THE LOWEST POINT OBTAINED SO FAR. */
 
 /*<    >*/
-    if ((brackt && (stp <= stmin || stp >= stmax)) || nfev >= maxfev - 1 || 
+    if ((brackt && (stp <= stmin || stp >= stmax)) || nfev >= maxfev - 1 ||
             infoc == 0 || (brackt && stmax - stmin <= *xtol * stmax)) {
         stp = stx;
     }
@@ -1562,7 +1562,7 @@ L45:
 /*<          STPC = STX + R*(STP - STX) >*/
         stpc = stx + r__ * (stp - stx);
 /*<          STPQ = STX + ((DX/((FX-FP)/(STP-STX)+DX))/2)*(STP - STX) >*/
-        stpq = stx + *dx / ((fx - *fp) / (stp - stx) + *dx) / 2 * (stp - 
+        stpq = stx + *dx / ((fx - *fp) / (stp - stx) + *dx) / 2 * (stp -
                 stx);
 /*<          IF (ABS(STPC-STX) .LT. ABS(STPQ-STX)) THEN >*/
         if ((d__1 = stpc - stx, abs(d__1)) < (d__2 = stpq - stx, abs(d__2)))
@@ -1732,7 +1732,7 @@ L45:
             theta = (*fp - fy) * 3 / (sty - stp) + *dy + *dp;
 /*<             S = MAX(ABS(THETA),ABS(DY),ABS(DP)) >*/
 /* Computing MAX */
-            d__1 = abs(theta), d__2 = abs(*dy), d__1 = max(d__1,d__2), d__2 = 
+            d__1 = abs(theta), d__2 = abs(*dy), d__1 = max(d__1,d__2), d__2 =
                     abs(*dp);
             s = max(d__1,d__2);
 /*<             GAMMA = S*SQRT((THETA/S)**2 - (DY/S)*(DP/S)) >*/

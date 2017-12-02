@@ -16,6 +16,7 @@
 
 #include <vnl/vnl_config.h> // is SSE enabled
 #include <vnl/vnl_alloc.h>  // is SSE enabled
+#include "vnl/vnl_export.h"
 
 // some caveats...
 // - Due to the way vnl_matrix is represented in memory cannot guarantee 16-byte alignment,
@@ -42,12 +43,12 @@
 #if defined(VCL_GCC)
 // With attribute always_inline, gcc can give an error if a function
 // cannot be inlined, so it is disabled.  Problem seen on 64 bit
-// platforms with vcl_vector<vnl_rational>.
+// platforms with std::vector<vnl_rational>.
 # define VNL_SSE_FORCE_INLINE /* __attribute__((always_inline)) */ inline
-# define VNL_SSE_STACK_ALIGNED(x)  __attribute__((aligned(x)))
-#elif defined VCL_VC || defined VCL_ICC
+# define VNL_SSE_STACK_ALIGNED(x)  __attribute__((aligned(x))) VNL_EXPORT
+#elif defined VCL_VC
 # define VNL_SSE_FORCE_INLINE __forceinline
-# define VNL_SSE_STACK_ALIGNED(x)  __declspec(align(x))
+# define VNL_SSE_STACK_ALIGNED(x)  __declspec(align(x)) VNL_EXPORT
 #else
 # define VNL_SSE_FORCE_INLINE inline
 # define VNL_SSE_STACK_ALIGNED(x)
@@ -71,7 +72,7 @@
 #elif VNL_CONFIG_ENABLE_SSE2 && VXL_HAS_POSIX_MEMALIGN
 # include <vcl_cstdlib.h>
 # define VNL_SSE_ALLOC(n,s,a) memalign(a,n*s)
-# define VNL_SSE_FREE(v,n,s) vcl_free(v)
+# define VNL_SSE_FREE(v,n,s) std::free(v)
 #else // sse2 disabled or could not get memory alignment support, use slower unaligned based intrinsics
 # define VNL_SSE_HEAP_STORE(pf) _mm_storeu_##pf
 # define VNL_SSE_HEAP_LOAD(pf) _mm_loadu_##pf
@@ -97,14 +98,17 @@
 #endif
 
 //: Custom memory allocation function to force 16 byte alignment of data
-VNL_SSE_FORCE_INLINE void* vnl_sse_alloc(vcl_size_t n, unsigned size)
+VNL_SSE_FORCE_INLINE void* vnl_sse_alloc(std::size_t n, unsigned size)
 {
   return VNL_SSE_ALLOC(n,size,16);
 }
 
 //: Custom memory deallocation function to free 16 byte aligned of data
-VNL_SSE_FORCE_INLINE void vnl_sse_dealloc(void* mem, vcl_size_t n, unsigned size)
+VNL_SSE_FORCE_INLINE void vnl_sse_dealloc(void* mem, std::size_t n, unsigned size)
 {
+  // Variables n and size are not used in all versions of the VNL_SSE_FREE macro.
+  // Cast to void here to avoid unused variable warnings.
+  (void)n,(void)size;
   VNL_SSE_FREE(mem,n,size);
 }
 
@@ -115,7 +119,7 @@ VNL_SSE_FORCE_INLINE void vnl_sse_dealloc(void* mem, vcl_size_t n, unsigned size
 #endif
 
 #if VNL_CONFIG_ENABLE_SSE2
-class vnl_sse_supplement
+class VNL_EXPORT vnl_sse_supplement
 {
 public:
   // SSE2 does not have a native _mm_min_epi32 or _mm_max_epi32 (le sigh-- SSE4.1
@@ -147,7 +151,7 @@ public:
 
 //: Bog standard (no sse) implementation for non sse enabled hardware and any type which doesn't have a template specialisation.
 template <class T>
-class vnl_sse
+class VNL_EXPORT vnl_sse
 {
  public:
   static VNL_SSE_FORCE_INLINE void element_product(const T* x, const T* y, T* r, unsigned n)
@@ -168,13 +172,6 @@ class vnl_sse
   {
     // IMS: Unable to optimise this any further for MSVC compiler
     T sum(0);
-  #ifdef VCL_VC_6
-    for (unsigned i=0; i<n; ++i)
-    {
-      const T diff = x[i] - y[i];
-      sum += diff*diff;
-    }
-  #else
     --x;
     --y;
     while (n!=0)
@@ -183,7 +180,6 @@ class vnl_sse
       sum += diff*diff;
       --n;
     }
-  #endif
     return sum;
   }
 
@@ -261,8 +257,8 @@ class vnl_sse
 #if VNL_CONFIG_ENABLE_SSE2
 
 //: SSE2 implementation for double precision floating point (64 bit)
-VCL_DEFINE_SPECIALIZATION
-class vnl_sse<double>
+template <>
+class VNL_EXPORT vnl_sse<double>
 {
  public:
   static VNL_SSE_FORCE_INLINE void element_product(const double* x, const double* y, double* r, unsigned n)
@@ -278,7 +274,7 @@ class vnl_sse<double>
 
     // load, multiply and store two doubles at a time
     // loop unroll to handle 4
-    if (vcl_ptrdiff_t(x)%16 || vcl_ptrdiff_t(y)%16  || vcl_ptrdiff_t(r)%16)
+    if (std::ptrdiff_t(x)%16 || std::ptrdiff_t(y)%16  || std::ptrdiff_t(r)%16)
           // unaligned case
       for (int i = n-4; i >= 0; i-=4)
       {
@@ -305,7 +301,7 @@ class vnl_sse<double>
     else
       sum = _mm_setzero_pd();
 
-    if (vcl_ptrdiff_t(x)%16 || vcl_ptrdiff_t(y)%16)
+    if (std::ptrdiff_t(x)%16 || std::ptrdiff_t(y)%16)
          // unaligned case
       for (int i = n-2; i >= 0; i-=2)
         sum = _mm_add_pd(_mm_mul_pd(_mm_loadu_pd(x+i), _mm_loadu_pd(y+i)),sum);
@@ -333,7 +329,7 @@ class vnl_sse<double>
     else
       sum = _mm_setzero_pd();
 
-    if (vcl_ptrdiff_t(x)%16 || vcl_ptrdiff_t(y)%16)
+    if (std::ptrdiff_t(x)%16 || std::ptrdiff_t(y)%16)
          // unaligned case
       for ( int i = n-2; i >= 0; i-=2 )
       {
@@ -656,8 +652,8 @@ class vnl_sse<double>
 };
 
 //: SSE2 implementation for single precision floating point (32 bit)
-VCL_DEFINE_SPECIALIZATION
-class vnl_sse<float>
+template <>
+class VNL_EXPORT vnl_sse<float>
 {
  public:
   static VNL_SSE_FORCE_INLINE void element_product(const float* x, const float* y, float* r, unsigned n)

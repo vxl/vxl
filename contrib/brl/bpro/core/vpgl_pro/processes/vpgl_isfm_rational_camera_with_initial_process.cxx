@@ -1,11 +1,17 @@
 // This is contrib/brl/bpro/core/vpgl_pro/processes
+#include <vil/vil_config.h>
+#if HAS_GEOTIFF
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 //       Take a list of rational caemras and a list of 2-d image correspondences
 //       some of the correspondences may be very poor/wrong but a majority is of good quality (i.e. corresponds to the same 3D point)
 //       Use a RANSAC scheme to find offsets for each camera using "inlier" correspondences
-//       To improve back-projection accuracy, each correspondence will have its own initial guessing and search space 
+//       To improve back-projection accuracy, each correspondence will have its own initial guessing and search space
 //
 //       This code was developed under contract #FA8650-13-C-1613 and is approved for public release.
 //       The case number for the approval is 88ABW-2014-1143.
@@ -16,10 +22,7 @@
 // \endverbatim
 //
 #include <bprb/bprb_parameters.h>
-#include <vcl_iomanip.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vgl/vgl_point_2d.h>
@@ -43,14 +46,14 @@ namespace vpgl_isfm_rational_camera_with_initial_process_globals
 
   //: find the min and max height in a given region from height map resources
   bool find_min_max_height(double const& ll_lon, double const& ll_lat, double const& ur_lon, double const& ur_lat,
-                           vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
+                           std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
                            double& min, double& max);
-  void crop_and_find_min_max(vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
+  void crop_and_find_min_max(std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
                              unsigned const& img_id, int const& i0, int const& j0, int const& crop_ni, int const& crop_nj,
                              double& min, double& max);
 
   //: return the overlapped region of multiple 2-d bounding box
-  vgl_box_2d<double> intersection(vcl_vector<vgl_box_2d<double> > const& boxes);
+  vgl_box_2d<double> intersection(std::vector<vgl_box_2d<double> > const& boxes);
 
   //: calculate the relative diameter used in back-projection
   //  Relative diameter is used to define the initial search range in Amoeba algorithm (check vnl/algo/vnl_amoeba.h for more details)
@@ -60,7 +63,7 @@ namespace vpgl_isfm_rational_camera_with_initial_process_globals
 
   //: calculate the 3-d initial point from the overlapped region of satellite images
   bool initial_point_by_overlap_region(double const& ll_lon, double const& ll_lat, double const& ur_lon, double const& ur_lat,
-                                       vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& dem_infos,
+                                       std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& dem_infos,
                                        vgl_point_3d<double>& init_pt,
                                        double& zmin, double& zmax,
                                        double const& height_diff = 20.0);
@@ -69,7 +72,7 @@ namespace vpgl_isfm_rational_camera_with_initial_process_globals
 bool vpgl_isfm_rational_camera_with_initial_process_cons(bprb_func_process& pro)
 {
   using namespace vpgl_isfm_rational_camera_with_initial_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";  // track file
   input_types_[1] = "vcl_string";  // ASTER DEM height map folder
   input_types_[2] = "double";      // lower left longitude
@@ -78,7 +81,7 @@ bool vpgl_isfm_rational_camera_with_initial_process_cons(bprb_func_process& pro)
   input_types_[5] = "double";      // upper right latitude
   input_types_[6] = "double";      // extra elevation value added onto height search space
   input_types_[7] = "float";       // radius in pixels for the disagreement among inliers, e.g. 2 pixels
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr";  // corrected camera
   output_types_[1] = "float";                    // projection error
   output_types_[2] = "float";                    // inlier in percentage
@@ -92,13 +95,13 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
 
   // verify inputs
   if (!pro.verify_inputs()) {
-    vcl_cerr << pro.name() << ": Wrong inputs" << vcl_endl;
+    std::cerr << pro.name() << ": Wrong inputs" << std::endl;
     return false;
   }
   // get the inputs
   unsigned in_i = 0;
-  vcl_string trackfile   = pro.get_input<vcl_string>(in_i++);
-  vcl_string dem_folder  = pro.get_input<vcl_string>(in_i++);
+  std::string trackfile   = pro.get_input<std::string>(in_i++);
+  std::string dem_folder  = pro.get_input<std::string>(in_i++);
   double lower_left_lon  = pro.get_input<double>(in_i++);
   double lower_left_lat  = pro.get_input<double>(in_i++);
   double upper_right_lon = pro.get_input<double>(in_i++);
@@ -107,37 +110,37 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
   float pixel_radius     = pro.get_input<float>(in_i++);
 
   // read the track file
-  vcl_ifstream ifs(trackfile.c_str());
+  std::ifstream ifs(trackfile.c_str());
   if (!ifs) {
-    vcl_cerr << pro.name() << ": can not open track input file: " << trackfile << "!!\n";
+    std::cerr << pro.name() << ": can not open track input file: " << trackfile << "!!\n";
     return false;
   }
-  vcl_string uncorrectedcam;
+  std::string uncorrectedcam;
   unsigned n_track;
   unsigned n_seeds;
   ifs >> uncorrectedcam >> n_track >> n_seeds;
   vpgl_local_rational_camera<double> *cam = read_local_rational_camera<double>(uncorrectedcam);
   if (!cam) {
-    vcl_cerr << pro.name() << ": failed to load local rational camera from file " << uncorrectedcam << "!!\n";
+    std::cerr << pro.name() << ": failed to load local rational camera from file " << uncorrectedcam << "!!\n";
     return false;
   }
 
   // read seed camera/image files
-  vcl_vector<vcl_string> seed_cam_files;
+  std::vector<std::string> seed_cam_files;
   for (unsigned i = 0; i < n_seeds; i++) {
     unsigned id;
-    vcl_string seed_cam_file;
+    std::string seed_cam_file;
     ifs >> id >> seed_cam_file;
     seed_cam_files.push_back(seed_cam_file);
     if (!vul_file::exists(seed_cam_file)) {
-      vcl_cerr << pro.name() << ": can not find seed camera file: " << seed_cam_file << "!!\n";
+      std::cerr << pro.name() << ": can not find seed camera file: " << seed_cam_file << "!!\n";
       return false;
     }
   }
   // read tracks
-  vcl_vector<vcl_vector<vgl_point_2d<double> > > tracks;
-  vcl_vector<vcl_vector<int> > trackimgids;
-  vcl_vector<vgl_point_2d<double> > currpts;
+  std::vector<std::vector<vgl_point_2d<double> > > tracks;
+  std::vector<std::vector<int> > trackimgids;
+  std::vector<vgl_point_2d<double> > currpts;
   for (unsigned i = 0; i < n_track; i++)
   {
     int numfeatures = 0;
@@ -145,8 +148,8 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     int id; float u, v;
     ifs >> id >> u >> v;  // id is always -1 for uncorrected camera
     currpts.push_back(vgl_point_2d<double>(u,v));
-    vcl_vector<int> ids;
-    vcl_vector<vgl_point_2d<double> > pts;
+    std::vector<int> ids;
+    std::vector<vgl_point_2d<double> > pts;
     for (unsigned int j = 1; j < numfeatures; j++) {
       int id; float u, v;
       ifs >> id >> u >> v;
@@ -156,62 +159,62 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     trackimgids.push_back(ids);
     tracks.push_back(pts);
   }
-  
-  vcl_cout << "correcting camera: " << uncorrectedcam << vcl_endl;
-  vcl_cout << "number of tracks: " << n_track << vcl_endl;
-  vcl_cout << "number of seed cameras: " << n_seeds << vcl_endl;
+
+  std::cout << "correcting camera: " << uncorrectedcam << std::endl;
+  std::cout << "number of tracks: " << n_track << std::endl;
+  std::cout << "number of seed cameras: " << n_seeds << std::endl;
 
   // load all seed cameras
-  vcl_vector<vpgl_local_rational_camera<double>*> lcams;
+  std::vector<vpgl_local_rational_camera<double>*> lcams;
   for (unsigned i = 0; i < n_seeds; i++) {
     vpgl_local_rational_camera<double> *ratcam = read_local_rational_camera<double>(seed_cam_files[i]);
     if (!ratcam) {
-      vcl_cerr << pro.name() << ": failed to load local seed rational camera " << i << " from file: "<< seed_cam_files[i] << "!!\n";
+      std::cerr << pro.name() << ": failed to load local seed rational camera " << i << " from file: "<< seed_cam_files[i] << "!!\n";
       return false;
     }
     lcams.push_back(ratcam);
   }
 
   // load aster dem resource
-  vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> > dem_infos;
-  vcl_string file_glob = dem_folder + "/*.tif";
+  std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> > dem_infos;
+  std::string file_glob = dem_folder + "/*.tif";
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn)
   {
-    vcl_string filename = fn();
+    std::string filename = fn();
     vil_image_view_base_sptr img_r = vil_load(filename.c_str());
     vpgl_geo_camera* cam;
     vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
     vil_image_resource_sptr img_res = vil_load_image_resource(filename.c_str());
     if (!vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam)) {
-      vcl_cerr << pro.name() << ": Given height map " << filename << " is NOT a GeoTiff!\n";
+      std::cerr << pro.name() << ": Given height map " << filename << " is NOT a GeoTiff!\n";
       return false;
     }
-    dem_infos.push_back(vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*>(img_r, cam));
+    dem_infos.push_back(std::pair<vil_image_view_base_sptr, vpgl_geo_camera*>(img_r, cam));
   }
   if (dem_infos.empty()) {
-    vcl_cerr << pro.name() << ": No image in the folder: " << dem_folder << vcl_endl;
+    std::cerr << pro.name() << ": No image in the folder: " << dem_folder << std::endl;
     return false;
   }
 
   // define overlap region by input coordinates
   vgl_box_2d<double> overlap_region(lower_left_lon, upper_right_lon, lower_left_lat, upper_right_lat);
   if (overlap_region.is_empty()) {
-    vcl_cerr << pro.name() << ": Missing input search region!\n";
+    std::cerr << pro.name() << ": Missing input search region!\n";
     return false;
   }
   // compute translations
-  vcl_vector<vgl_vector_2d<double> > cam_trans;
-  vcl_vector<vgl_point_3d<double> > reconstructed_pts;
-  vcl_vector<vgl_point_2d<double> > img_points;
-  vcl_vector<vgl_point_3d<double> > init_pts;
-  vcl_vector<double> zmin_list;
-  vcl_vector<double> zmax_list;
+  std::vector<vgl_vector_2d<double> > cam_trans;
+  std::vector<vgl_point_3d<double> > reconstructed_pts;
+  std::vector<vgl_point_2d<double> > img_points;
+  std::vector<vgl_point_3d<double> > init_pts;
+  std::vector<double> zmin_list;
+  std::vector<double> zmax_list;
   for (unsigned i = 0; i < n_track; i++)
   {
-    vcl_vector<vgl_vector_2d<double> > cam_trans_i;
-    vcl_vector<vgl_point_2d<double> > corrs;
-    vcl_vector<float> weights;
-    vcl_vector<vpgl_rational_camera<double> > cams;
+    std::vector<vgl_vector_2d<double> > cam_trans_i;
+    std::vector<vgl_point_2d<double> > corrs;
+    std::vector<float> weights;
+    std::vector<vpgl_rational_camera<double> > cams;
     cams.push_back(*cam);
     weights.push_back(0.0f);  // the back-projection from un-corrected camera is ignored due to zero weight
     corrs.push_back(currpts[i]);
@@ -225,13 +228,13 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     vgl_point_3d<double> initial_pt;
     double zmin, zmax;
     if (!initial_point_by_overlap_region(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, dem_infos, initial_pt, zmin, zmax, height_diff)) {
-      vcl_cerr << pro.name() << ": Evaluating initial point for correspondence " << i << " failed!\n";
+      std::cerr << pro.name() << ": Evaluating initial point for correspondence " << i << " failed!\n";
       return false;
     }
     // find the searching diameter
     double relative_diameter;
     if (!obtain_relative_diameter(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, relative_diameter)) {
-      vcl_cerr << pro.name() << ": Evaluating relative diameter for correspondence " << i << " failed!\n";
+      std::cerr << pro.name() << ": Evaluating relative diameter for correspondence " << i << " failed!\n";
       return false;
     }
     // search for 3-d intersection
@@ -239,10 +242,10 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     if (!vpgl_rational_adjust_onept::adjust_with_weights(cams, weights, corrs, initial_pt, zmin, zmax, cam_trans_i, intersection, relative_diameter)) {
       continue;
 #if 1
-      vcl_cout << "correspondence adjustment failed for: " << vcl_endl;
+      std::cout << "correspondence adjustment failed for: " << std::endl;
       for (unsigned ii = 0; ii < corrs.size(); ii++)
-        vcl_cout << "[" << corrs[ii].x() << "," << corrs[ii].y() << "]\t";
-      vcl_cout << '\n';
+        std::cout << "[" << corrs[ii].x() << "," << corrs[ii].y() << "]\t";
+      std::cout << '\n';
 #endif
     }
     img_points.push_back(currpts[i]);
@@ -254,35 +257,35 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
   }
 
 #if 0
-  vcl_cout << " ================== back-projection ======================= " << vcl_endl;
+  std::cout << " ================== back-projection ======================= " << std::endl;
   for (unsigned k = 0; k < cam_trans.size(); k++) {
-    vcl_cout << "image point: [" << img_points[k].x() << ',' << img_points[k].y() 
+    std::cout << "image point: [" << img_points[k].x() << ',' << img_points[k].y()
              << "], initial pt: [" << init_pts[k].x() << ',' << init_pts[k].y() << ',' << init_pts[k].z()
              << "], height range: [" << zmin_list[k] << ',' << zmax_list[k]
-             << "], world point: [" << vcl_setprecision(10) << reconstructed_pts[k].x() << ',' << vcl_setprecision(10) << reconstructed_pts[k].y() << ','
-             << vcl_setprecision(10) << reconstructed_pts[k].z()
-             << "], camera translations: " << cam_trans[k].x() << ',' << cam_trans[k].y() << ']' << vcl_endl;
+             << "], world point: [" << std::setprecision(10) << reconstructed_pts[k].x() << ',' << std::setprecision(10) << reconstructed_pts[k].y() << ','
+             << std::setprecision(10) << reconstructed_pts[k].z()
+             << "], camera translations: " << cam_trans[k].x() << ',' << cam_trans[k].y() << ']' << std::endl;
   }
 #endif
 
   // remove unrealistic trans
-  vcl_vector<vgl_vector_2d<double> > cam_trans_new;
+  std::vector<vgl_vector_2d<double> > cam_trans_new;
   for (unsigned i = 0; i < cam_trans.size(); i++)
     if (cam_trans[i].x() >= -1000 && cam_trans[i].y() >= -1000)
       cam_trans_new.push_back(cam_trans[i]);
   if (cam_trans_new.empty()) {
-    vcl_cerr << pro.name() << ": can not find any valid translations, exit without correction!\n";
+    std::cerr << pro.name() << ": can not find any valid translations, exit without correction!\n";
     return false;
   }
 
   // find the inliers from valid camera translations
-  vcl_vector<unsigned> inlier_cnts(cam_trans_new.size(), 0);
-  vcl_vector<vcl_vector<unsigned> > inliers;
-  vcl_vector<vcl_vector<unsigned> > inlier_track_ids;
+  std::vector<unsigned> inlier_cnts(cam_trans_new.size(), 0);
+  std::vector<std::vector<unsigned> > inliers;
+  std::vector<std::vector<unsigned> > inlier_track_ids;
   for (unsigned i = 0; i < cam_trans_new.size(); i++)
   {
-    vcl_vector<unsigned> inliers_i;
-    vcl_vector<unsigned> inlier_track_id;
+    std::vector<unsigned> inliers_i;
+    std::vector<unsigned> inlier_track_id;
     // first push itself
     inliers_i.push_back(i);
     inlier_cnts[i]++;
@@ -311,12 +314,12 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     sum += cam_trans_new[inliers[max_i][k]];
   sum /= (double)inliers[max_i].size();
 
-  vcl_cout << "camera: " << uncorrectedcam
+  std::cout << "camera: " << uncorrectedcam
            << " out of " << n_track << " correspondences, inlier cnts using pixel radius: " << pixel_radius << ", "
            << " number of valid translation: " << cam_trans_new.size()
            << " inliers size: " << inliers[max_i].size() << "(" << max << ")"
-           << " average offset: " << sum 
-           << vcl_endl;
+           << " average offset: " << sum
+           << std::endl;
 
   // evaluate the correction error and inlier percentage
   double error = 0.0;
@@ -325,13 +328,13 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     vgl_point_2d<double> uvp = rcam.project(reconstructed_pts[inliers[max_i][k]]);
     error += ((img_points[inliers[max_i][k]] - uvp) = sum).sqr_length();
   }
-  error = vcl_sqrt(error) / (double)inliers[max_i].size();
+  error = std::sqrt(error) / (double)inliers[max_i].size();
   double inlierpercent = (double)max / (double)cam_trans_new.size() * 100;
 
   double u, v;
   cam->image_offset(u, v);
   cam->set_image_offset(u+sum.x(), v+sum.y());
-  vcl_cout << "Final Translation is: " << sum << vcl_endl;
+  std::cout << "Final Translation is: " << sum << std::endl;
 
   // generate output
   pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
@@ -341,12 +344,12 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
 }
 
 bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height(double const& ll_lon, double const& ll_lat, double const& ur_lon, double const& ur_lat,
-                                                                                 vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
+                                                                                 std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
                                                                                  double& min, double& max)
 {
   // find the corner points
-  vcl_vector<vcl_pair<unsigned, vcl_pair<int, int> > > corners;
-  vcl_vector<vgl_point_2d<double> > pts;
+  std::vector<std::pair<unsigned, std::pair<int, int> > > corners;
+  std::vector<vgl_point_2d<double> > pts;
   pts.push_back(vgl_point_2d<double>(ll_lon, ur_lat));
   pts.push_back(vgl_point_2d<double>(ur_lon, ll_lat));
   pts.push_back(vgl_point_2d<double>(ll_lon, ll_lat));
@@ -358,17 +361,17 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
     {
       double u, v;
       infos[j].second->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
-      int uu = (int)vcl_floor(u+0.5);
-      int vv = (int)vcl_floor(v+0.5);
+      int uu = (int)std::floor(u+0.5);
+      int vv = (int)std::floor(v+0.5);
       if (uu < 0 || vv < 0 || uu >= (int)infos[j].first->ni() || vv >= (int)infos[j].first->nj())
         continue;
-      vcl_pair<unsigned, vcl_pair<int, int> > pp(j, vcl_pair<int, int>(uu, vv));
+      std::pair<unsigned, std::pair<int, int> > pp(j, std::pair<int, int>(uu, vv));
       corners.push_back(pp);
       break;
     }
   }
   if (corners.size() != 4) {
-    vcl_cerr << "Cannot locate all 4 corners among given DEM tiles!\n";
+    std::cerr << "Cannot locate all 4 corners among given DEM tiles!\n";
     return false;
   }
   // case 1 all corners are in the same image
@@ -389,7 +392,7 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
     int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
     int crop_nj = corners[2].second.second-corners[0].second.second+1;
     vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = 0;
     j0 = corners[3].second.second;
@@ -404,12 +407,12 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
     int i0 = corners[0].second.first;
     int j0 = corners[0].second.second;
     int crop_ni = corners[3].second.first - corners[0].second.first + 1;
-    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second; 
+    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
     vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = corners[2].second.first;
-    j0 = 0; 
+    j0 = 0;
     crop_ni = corners[1].second.first - corners[2].second.first + 1;
     crop_nj = corners[2].second.second + 1;
     vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
@@ -422,21 +425,21 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
   int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
   int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
   vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the second image, image of corner 1
   i0 = 0;
   j0 = 0;
   crop_ni = corners[1].second.first + 1;
   crop_nj = corners[1].second.second + 1;
   vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the third image, image of corner 2
   i0 = corners[2].second.first;
   j0 = 0;
   crop_ni = infos[corners[2].first].first->ni() - corners[2].second.first;
   crop_nj = corners[2].second.second + 1;
   vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[2].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the fourth image, image of corner 3
   i0 = 0;
   j0 = corners[3].second.second;
@@ -446,7 +449,7 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
   return true;
 }
 
-void vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
+void vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
                                                                                    unsigned const& img_id, int const& i0, int const& j0, int const& crop_ni, int const& crop_nj,
                                                                                    double& min, double& max)
 {
@@ -474,7 +477,7 @@ void vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_m
 }
 
 bool vpgl_isfm_rational_camera_with_initial_process_globals::initial_point_by_overlap_region(double const& ll_lon, double const& ll_lat, double const& ur_lon, double const& ur_lat,
-                                                                                             vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& dem_infos,
+                                                                                             std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& dem_infos,
                                                                                              vgl_point_3d<double>& init_pt,
                                                                                              double& zmin, double& zmax,
                                                                                              double const& height_diff)
@@ -503,7 +506,7 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::obtain_relative_dia
   double width  = overlap_region.width();
   double height = overlap_region.height();
   // calculate the diameter by the diagonal
-  double diagonal = vcl_sqrt(width*width + height*height);
+  double diagonal = std::sqrt(width*width + height*height);
   if (overlap_region.centroid_x() > overlap_region.centroid_y())
     relative_diameter = 0.5*diagonal/overlap_region.centroid_y();
   else
@@ -511,12 +514,12 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::obtain_relative_dia
   return true;
 }
 
-vgl_box_2d<double> vpgl_isfm_rational_camera_with_initial_process_globals::intersection(vcl_vector<vgl_box_2d<double> > const& boxes)
+vgl_box_2d<double> vpgl_isfm_rational_camera_with_initial_process_globals::intersection(std::vector<vgl_box_2d<double> > const& boxes)
 {
   if (boxes.size() == 2) {
     return vgl_intersection(boxes[0], boxes[1]);
   }
-  vcl_vector<vgl_box_2d<double> > new_boxes;
+  std::vector<vgl_box_2d<double> > new_boxes;
   vgl_box_2d<double> box = vgl_intersection(boxes[0], boxes[1]);
   if (box.is_empty())
     return box;
@@ -525,3 +528,4 @@ vgl_box_2d<double> vpgl_isfm_rational_camera_with_initial_process_globals::inter
     new_boxes.push_back(boxes[i]);
   return vpgl_isfm_rational_camera_with_initial_process_globals::intersection(new_boxes);
 }
+#endif

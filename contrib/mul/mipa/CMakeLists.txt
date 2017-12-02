@@ -10,9 +10,9 @@ doxygen_add_library(contrib/mul/mipa
   DESCRIPTION "Manchester's Image Processing Library"
 )
 
-SET(mipa_sources
-  mipa_orientation_histogram.h     mipa_orientation_histogram.txx
-  mipa_sample_histo_boxes.h        mipa_sample_histo_boxes.txx
+set(mipa_sources
+  mipa_orientation_histogram.h     mipa_orientation_histogram.hxx
+  mipa_sample_histo_boxes.h        mipa_sample_histo_boxes.hxx
   mipa_vector_normaliser.h         mipa_vector_normaliser.cxx
   mipa_l2norm_vector_normaliser.h  mipa_l2norm_vector_normaliser.cxx
   mipa_identity_normaliser.h       mipa_identity_normaliser.cxx
@@ -21,14 +21,14 @@ SET(mipa_sources
   mipa_add_all_loaders.h           mipa_add_all_loaders.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates mipa_sources)
-ADD_LIBRARY(mipa ${mipa_sources} )
-TARGET_LINK_LIBRARIES(mipa vimt vpdfl)
+aux_source_directory(Templates mipa_sources)
+vxl_add_library(LIBRARY_NAME mipa LIBRARY_SOURCES ${mipa_sources} )
+target_link_libraries(mipa vimt vpdfl)
 
-IF (BUILD_MUL_TOOLS)
+if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
-ENDIF (BUILD_MUL_TOOLS)
+endif()
 
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

@@ -5,15 +5,17 @@
 // \brief Run loopy belief propagation over the graph
 // \author Martin Roberts
 
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_deque.h>
+#include <vector>
+#include <map>
+#include <iostream>
+#include <deque>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_graph_rep1.h>
 #include <mmn/mmn_solver.h>
-#include <vcl_iosfwd.h>
 
 //: Run loopy belief to estimate overall marginal probabilities of all node states
 //  Then use converged LBP messages to also estimate overall most likely configuration
@@ -31,41 +33,41 @@ class mmn_lbp_solver: public mmn_solver
     //: in below the map is indexed by the neighbour's node id
 
     //: Inner vector indexed by target node state ID
-    typedef vcl_map<unsigned,vnl_vector<double > > message_set_t;
+    typedef std::map<unsigned,vnl_vector<double > > message_set_t;
 
     //: Matrix referenced by [source node state ID][target node state ID]
     // Map ID is target node ID
-    typedef vcl_map<unsigned, vnl_matrix<double > > neigh_arc_cost_t;
+    typedef std::map<unsigned, vnl_matrix<double > > neigh_arc_cost_t;
 
     //:Store in graph form (so each node's neighbours are conveniently to hand)
     mmn_graph_rep1 graph_;
 
     //: The arcs from which the graph was generated
-    vcl_vector<mmn_arc> arcs_;
+    std::vector<mmn_arc> arcs_;
 
     //: Total number of nodes
     unsigned nnodes_;
 
     //: Workspace for costs of each arc
-    vcl_vector<neigh_arc_cost_t > arc_costs_;
+    std::vector<neigh_arc_cost_t > arc_costs_;
 
     //: All the messages at previous iteration (vector index is source node)
-    vcl_vector<message_set_t > messages_;
+    std::vector<message_set_t > messages_;
     //: Update messages calculated during this iteration (vector index is source node)
-    vcl_vector<message_set_t > messages_upd_;
+    std::vector<message_set_t > messages_upd_;
 
     //: Node costs (outer vector is node ID, inner vnl_vector is by state value)
-    vcl_vector<vnl_vector<double> > node_costs_;
+    std::vector<vnl_vector<double> > node_costs_;
 
     //: belief prob for each state of each node
     // Assumes input node costs are well-normalised for these to be proper probabilities
-    vcl_vector<vnl_vector<double> > belief_;
+    std::vector<vnl_vector<double> > belief_;
 
     //: previous N solutions (used to trap cycling)
-    vcl_deque<vcl_vector<unsigned  > > soln_history_;
+    std::deque<std::vector<unsigned  > > soln_history_;
 
     //: previous max_delta values(used to check still descending)
-    vcl_deque<double  > max_delta_history_;
+    std::deque<double  > max_delta_history_;
 
     //: Current iteration count
     unsigned count_;
@@ -115,7 +117,7 @@ class mmn_lbp_solver: public mmn_solver
     static const unsigned NCYCLE_DETECT_;
 
     //: Check if we carry on
-    bool continue_propagation(vcl_vector<unsigned>& x);
+    bool continue_propagation(std::vector<unsigned>& x);
 
     //: Update all messages from input node to its neighbours
     void update_messages_to_neighbours(unsigned inode,
@@ -127,21 +129,21 @@ class mmn_lbp_solver: public mmn_solver
     //: Reset iteration counters
     void init();
     //: Calculate final sum of node and arc values
-    double solution_cost(vcl_vector<unsigned>& x);
+    double solution_cost(std::vector<unsigned>& x);
 
-    double best_solution_cost_in_history(vcl_vector<unsigned>& x);
+    double best_solution_cost_in_history(std::vector<unsigned>& x);
 
     //: update beliefs and calculate changes therein
-    void calculate_beliefs(vcl_vector<unsigned>& x);
+    void calculate_beliefs(std::vector<unsigned>& x);
  public:
     //: Default constructor
     mmn_lbp_solver();
 
     //: Construct with arcs
-    mmn_lbp_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs);
+    mmn_lbp_solver(unsigned num_nodes,const std::vector<mmn_arc>& arcs);
 
     //: Input the arcs that define the graph
-    virtual void set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs);
+    virtual void set_arcs(unsigned num_nodes,const std::vector<mmn_arc>& arcs);
 
     //: Find values for each node with minimise the total cost
     //  \param node_cost: node_cost[i][j] is cost of selecting value j for node i
@@ -159,18 +161,18 @@ class mmn_lbp_solver: public mmn_solver
     // but the meaning of the belief_ objects is not really then well-defined.
     // As it is marginal "belief" that is maximised, inputting non-normalised data may not give quite the
     // expected answer - there may be some biases, in effect implicit weightings to particular nodes
-    double operator()(const vcl_vector<vnl_vector<double> >& node_cost,
-                      const vcl_vector<vnl_matrix<double> >& arc_cost,
-                      vcl_vector<unsigned>& x);
+    double operator()(const std::vector<vnl_vector<double> >& node_cost,
+                      const std::vector<vnl_matrix<double> >& arc_cost,
+                      std::vector<unsigned>& x);
 
     //: return the beliefs, i.e. the marginal probabilities of each node's states
     //
     virtual double solve(
-                 const vcl_vector<vnl_vector<double> >& node_cost,
-                 const vcl_vector<vnl_matrix<double> >& pair_cost,
-                 vcl_vector<unsigned>& x);
+                 const std::vector<vnl_vector<double> >& node_cost,
+                 const std::vector<vnl_matrix<double> >& pair_cost,
+                 std::vector<unsigned>& x);
 
-    const vcl_vector<vnl_vector<double>  >&  belief() const {return belief_;}
+    const std::vector<vnl_vector<double>  >&  belief() const {return belief_;}
 
     //: final iteration count
     unsigned count() const {return count_;}
@@ -187,19 +189,19 @@ class mmn_lbp_solver: public mmn_solver
     void set_msg_upd_mode(msg_update_t msg_upd_mode) {msg_upd_mode_ = msg_upd_mode;}
 
     //: Initialise from a text stream
-    virtual bool set_from_stream(vcl_istream &is);
+    virtual bool set_from_stream(std::istream &is);
 
     //: Version number for I/O
     short version_no() const;
 
     //: Name of the class
-    virtual vcl_string is_a() const;
+    virtual std::string is_a() const;
 
     //: Create a copy on the heap and return base class pointer
     virtual mmn_solver* clone() const;
 
     //: Print class to os
-    virtual void print_summary(vcl_ostream& os) const;
+    virtual void print_summary(std::ostream& os) const;
 
     //: Save class to binary file stream
     virtual void b_write(vsl_b_ostream& bfs) const;

@@ -1,4 +1,6 @@
 // This is tbl/vepl/tests/vepl_test_dyadic.cxx
+#include <iostream>
+#include <string>
 #include "test_driver.h"
 //:
 // \file
@@ -8,13 +10,12 @@
 // \date   7 October 2002, from vepl1/tests
 
 #include <vepl/vepl_dyadic.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 
 int vepl_test_dyadic()
 {
-  vcl_cout << "Starting vepl_dyadic tests\n"
+  std::cout << "Starting vepl_dyadic tests\n"
            << "Creating test and output images ...";
   vil_image_resource_sptr byte_img = CreateTest8bitImage(32,32),  byte_ori = CreateTest8bitImage(32,32);
   vil_image_resource_sptr shrt_img = CreateTest16bitImage(32,32), shrt_ori = CreateTest16bitImage(32,32);
@@ -23,11 +24,11 @@ int vepl_test_dyadic()
   vil_image_resource_sptr dble_img = CreateTestdoubleImage(32,32),dble_ori = CreateTestdoubleImage(32,32);
   vil_image_resource_sptr colr_img = CreateTest24bitImage(32,32), colr_ori = CreateTest24bitImage(32,32);
   vil_image_resource_sptr colp_img = CreateTest3planeImage(32,32),colp_ori = CreateTest3planeImage(32,32);
-  vcl_cout << " done\n";
+  std::cout << " done\n";
 
-  vcl_string m = "vepl_dyadic";
+  std::string m = "vepl_dyadic";
 #undef ONE_TEST
-#define ONE_TEST(x,i,r,T,v,m) { vcl_cout << "Starting "<<m<<" test\n"; x(r,i); difference(i,r,v,m); }
+#define ONE_TEST(x,i,r,T,v,m) { std::cout << "Starting "<<m<<" test\n"; x(r,i); difference(i,r,v,m); }
 #define args
   ONE_TEST(vepl_dyadic_sum,byte_img,byte_ori,vxl_byte,2778,m+"_sum_byte");
   ONE_TEST(vepl_dyadic_sum,shrt_img,shrt_ori,vxl_uint_16,2778,m+"_sum_short");

@@ -1,92 +1,166 @@
-/* Copyright 2006-2009 Brad King, Chuck Stewart
-   Distributed under the Boost Software License, Version 1.0.
-   (See accompanying file rgtl_license_1_0.txt or copy at
-   http://www.boost.org/LICENSE_1_0.txt) */
+// Copyright 2006-2009 Brad King, Chuck Stewart
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file rgtl_license_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 #ifndef rgtl_object_array_points_hxx
 #define rgtl_object_array_points_hxx
 
-//:
-// \file
-// \brief Hold a set of points for storage in spatial data structures.
-// \author Brad King
-// \date March 2007
+#include <iostream>
+#include <limits>
+#include "rgtl_object_array_points.h"
 
-#include "rgtl_object_array.hxx"
-#include "rgtl_serialize_access.hxx"
-#include "rgtl_serialize_base.hxx"
-#include "rgtl_serialize_stl_vector.hxx"
-
-#include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
-class rgtl_object_array_points: public rgtl_object_array<D>
+rgtl_object_array_points<D>::rgtl_object_array_points(int n): points_(n)
 {
-  typedef vnl_vector_fixed<double, D> point_type;
-public:
-  typedef rgtl_object_array<D> derived;
+}
 
-  //: Construct to hold a given number of points.
-  rgtl_object_array_points(int n = 0);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+rgtl_object_array_points<D>
+::rgtl_object_array_points(std::vector<point_type> const& points):
+  points_(points)
+{
+}
 
-  //: Construct to hold the points given.
-  rgtl_object_array_points(vcl_vector<point_type> const& points);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_object_array_points<D>::set_number_of_points(int n)
+{
+  this->points_.resize(n);
+}
 
-  //: Set the number of points stored.
-  void set_number_of_points(int n);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+int rgtl_object_array_points<D>::get_number_of_points() const
+{
+  return static_cast<int>(this->points_.size());
+}
 
-  //: Get the number of points stored.
-  int get_number_of_points() const;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_object_array_points<D>::get_point(int id, double x[D]) const
+{
+  this->points_[id].copy_out(x);
+}
 
-  //: Get a point location in space.
-  void get_point(int id, double x[D]) const;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_object_array_points<D>::set_point(int id, double const x[D])
+{
+  this->points_[id].copy_in(x);
+}
 
-  //: Set a point location in space.
-  void set_point(int id, double const x[D]);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+int rgtl_object_array_points<D>::add_point(double const x[D])
+{
+  point_type p(x);
+  int id = this->number_of_objects();
+  this->points_.push_back(p);
+  return id;
+}
 
-  //: Add a point location in space.  Returns the id of the point.
-  int add_point(double const x[D]);
+//----------------------------------------------------------------------------
+template <unsigned int D>
+int rgtl_object_array_points<D>::number_of_objects() const
+{
+  return this->get_number_of_points();
+}
 
-  //: Get the number of objects in the array.
-  virtual int number_of_objects() const;
+//----------------------------------------------------------------------------
+template <unsigned int D>
+bool
+rgtl_object_array_points<D>
+::object_intersects_object(int idA, int idB) const
+{
+  return this->points_[idA] == this->points_[idB];
+}
 
-  //: Check whether one object intersects another.
-  virtual bool object_intersects_object(int idA, int idB) const;
-
-  //: Check whether an object intersects an axis-aligned bounding box.
-  virtual bool object_intersects_box(int id,
-                                     double const center[D],
-                                     double const radius,
-                                     double const lower[D],
-                                     double const upper[D],
-                                     double const corners[1<<D][D]) const;
-
-  //: Compute the closest point on an object to the point given.
-  virtual bool object_closest_point(int id,
-                                    double const x[D],
-                                    double y[D],
-                                    double bound_squared) const;
-
-  //: Compute the intersection of an object with a ray.
-  virtual bool object_intersects_ray(int id,
-                                     double const origin[D],
-                                     double const direction[D],
-                                     double y[D], double* s) const;
-
-  //: Compute an axis-aligned bounding box around the objects.
-  virtual void compute_bounds(double bounds[D][2]) const;
-private:
-  vcl_vector<point_type> points_;
-
-  friend class rgtl_serialize_access;
-  template <class Serializer>
-  void serialize(Serializer& sr)
+//----------------------------------------------------------------------------
+template <unsigned int D>
+bool
+rgtl_object_array_points<D>
+::object_intersects_box(int id,
+                        double const [D],
+                        double const,
+                        double const lower[D],
+                        double const upper[D],
+                        double const [1<<D][D]) const
+{
+  point_type const& x = this->points_[id];
+  for (unsigned int a=0; a < D; ++a)
+  {
+    // Use an asymmetric test so that points on the boundary between
+    // adjacent boxes are given to only one box.
+    if (x[a] < lower[a] || x[a] >= upper[a])
     {
-    sr & rgtl_serialize_base<derived>(*this);
-    sr & points_;
+      return false;
     }
-};
+  }
+  return true;
+}
 
+//----------------------------------------------------------------------------
+template <unsigned int D>
+bool
+rgtl_object_array_points<D>
+::object_closest_point(int id,
+                       double const[D],
+                       double y[D],
+                       double) const
+{
+  this->points_[id].copy_out(y);
+  return true;
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int D>
+bool
+rgtl_object_array_points<D>
+::object_intersects_ray(int,
+                        double const[D],
+                        double const[D],
+                        double [D],
+                        double*) const
+{
+  return false;
+}
+
+//----------------------------------------------------------------------------
+template <unsigned int D>
+void rgtl_object_array_points<D>::compute_bounds(double bounds[D][2]) const
+{
+  // Initialize bounds to empty.
+  for (unsigned int a=0; a < D; ++a)
+  {
+    bounds[a][0] = +std::numeric_limits<double>::max();
+    bounds[a][1] = -std::numeric_limits<double>::max();
+  }
+
+  // Update the bounds for each point.
+  int n = this->get_number_of_points();
+  for (int i=0; i < n; ++i)
+  {
+    point_type const& p = this->points_[i];
+    for (unsigned int a=0; a < D; ++a)
+    {
+      if (p[a] < bounds[a][0])
+      {
+        bounds[a][0] = p[a];
+      }
+      if (p[a] > bounds[a][1])
+      {
+        bounds[a][1] = p[a];
+      }
+    }
+  }
+}
+
+#undef RGTL_OBJECT_ARRAY_POINTS_INSTANTIATE
+#define RGTL_OBJECT_ARRAY_POINTS_INSTANTIATE( D ) \
+  template class rgtl_object_array_points<D >
 
 #endif

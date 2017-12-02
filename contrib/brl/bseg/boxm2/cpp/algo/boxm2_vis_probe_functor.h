@@ -12,7 +12,7 @@ class boxm2_vis_probe_functor
   //: "default" constructor
   boxm2_vis_probe_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, float * vis)
+  bool init_data(std::vector<boxm2_data_base*> & datas, float * vis)
   {
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     vis_ = vis;
@@ -22,7 +22,7 @@ class boxm2_vis_probe_functor
   inline bool step_cell(float seg_len,int index,unsigned i, unsigned j, float abs_depth = 0.0)
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-    (*vis_)*=vcl_exp(-alpha*seg_len);
+    (*vis_)*=std::exp(-alpha*seg_len);
     return true;
   }
  private:

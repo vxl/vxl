@@ -1,8 +1,9 @@
 //:
 // \file
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_intersection.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: Test changes
 static void test_bvgl_intersection()

@@ -5,10 +5,12 @@
 //
 // \author Daniel Crispell, adapted from process version
 // \date 4 Nov 2014
+#include <iostream>
+#include <algorithm>
+#include <stdexcept>
 #include "boxm2_ocl_vis_score_renderer.h"
 
-#include <vcl_algorithm.h>
-#include <vcl_stdexcept.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -25,16 +27,23 @@
 #include "boxm2_ocl_render_expected_image_function.h"
 #include <vul/vul_timer.h>
 
-
-boxm2_ocl_vis_score_renderer::boxm2_ocl_vis_score_renderer(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, vcl_string ident)
-  : scene_(scene), opencl_cache_(ocl_cache), ident_(ident),
-  render_success_(false), buffers_allocated_(false)
+boxm2_ocl_vis_score_renderer
+::boxm2_ocl_vis_score_renderer(boxm2_scene_sptr scene,
+                               boxm2_opencl_cache_sptr ocl_cache,
+                               std::string ident) :
+  scene_(scene),
+  opencl_cache_(ocl_cache),
+  ident_(ident),
+  buffers_allocated_(false),
+  render_success_(false)
 {
   device_ = ocl_cache->get_device();
   compile_kernels(device_);
 }
 
-bool boxm2_ocl_vis_score_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
+bool
+boxm2_ocl_vis_score_renderer
+::allocate_render_buffers(int cl_ni, int cl_nj)
 {
   if ( buffers_allocated_ && (prev_ni_ == cl_ni) && (prev_nj_ == cl_nj) ) {
     // can reuse old buffers
@@ -69,7 +78,9 @@ bool boxm2_ocl_vis_score_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
   return true;
 }
 
-bool boxm2_ocl_vis_score_renderer::cleanup_render_buffers()
+bool
+boxm2_ocl_vis_score_renderer
+::cleanup_render_buffers()
 {
   if(!buffers_allocated_) {
     return false;
@@ -80,26 +91,29 @@ bool boxm2_ocl_vis_score_renderer::cleanup_render_buffers()
   delete[] max_omega_buff_;
 
   opencl_cache_->unref_mem(exp_vis_score_image_.ptr());
-  exp_vis_score_image_ = bocl_mem_sptr(0);
+  exp_vis_score_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(vis_image_.ptr());
-  vis_image_ = bocl_mem_sptr(0);
+  vis_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(max_omega_image_.ptr());
-  max_omega_image_ = bocl_mem_sptr(0);
+  max_omega_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(img_dim_.ptr());
-  img_dim_ = bocl_mem_sptr(0);
+  img_dim_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(tnearfar_.ptr());
-  tnearfar_ = bocl_mem_sptr(0);
+  tnearfar_ = bocl_mem_sptr(VXL_NULLPTR);
 
   buffers_allocated_ = false;
   return true;
 }
 
-boxm2_ocl_vis_score_renderer::~boxm2_ocl_vis_score_renderer()
+boxm2_ocl_vis_score_renderer
+::~boxm2_ocl_vis_score_renderer()
 {
   cleanup_render_buffers();
 }
 
-bool boxm2_ocl_vis_score_renderer::get_last_rendered(vil_image_view<float> &img)
+bool
+boxm2_ocl_vis_score_renderer
+::get_last_rendered(vil_image_view<float> &img)
 {
   if (render_success_) {
     img.deep_copy( expected_vis_score_image_ );
@@ -108,7 +122,9 @@ bool boxm2_ocl_vis_score_renderer::get_last_rendered(vil_image_view<float> &img)
   return false;
 }
 
-bool boxm2_ocl_vis_score_renderer::get_last_vis(vil_image_view<float> &vis_img)
+bool
+boxm2_ocl_vis_score_renderer
+::get_last_vis(vil_image_view<float> &vis_img)
 {
   if (render_success_) {
     vis_img.deep_copy( vis_img_ );
@@ -117,13 +133,15 @@ bool boxm2_ocl_vis_score_renderer::get_last_vis(vil_image_view<float> &vis_img)
   return false;
 }
 
-bool boxm2_ocl_vis_score_renderer::render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor, float farfactor)
+bool
+boxm2_ocl_vis_score_renderer
+::render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor, float farfactor)
 {
   render_success_ = false;
 
   vul_timer rtime;
 
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
   //: create a command queue.
   int status=0;
@@ -156,15 +174,15 @@ bool boxm2_ocl_vis_score_renderer::render(vpgl_camera_double_sptr camera, unsign
   if(camera->type_name() == "vpgl_perspective_camera")
   {
       float f  = ((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().x_scale();
-      vcl_cout<<"Focal Length " << f<<vcl_endl;
+      std::cout<<"Focal Length " << f<<std::endl;
       tnearfar_buff_[0] = f* scene_->finest_resolution()/nearfactor ;
       tnearfar_buff_[1] = f* scene_->finest_resolution()*farfactor ;
 
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<std::endl;
   }
   tnearfar_->write_to_buffer(queue, true);
 
-  vcl_string vis_score_type = boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(ident_);
+  std::string vis_score_type = boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(ident_);
   int vis_score_size = boxm2_data_traits<BOXM2_VIS_SCORE>::datasize();
 
   // run expected image function
@@ -175,7 +193,7 @@ bool boxm2_ocl_vis_score_renderer::render(vpgl_camera_double_sptr camera, unsign
   // normalize
   if (kernels_.size()>1)
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels_[1];
     normalize_kern->set_arg( exp_image_.ptr() );
     normalize_kern->set_arg( vis_image_.ptr() );
@@ -202,18 +220,20 @@ bool boxm2_ocl_vis_score_renderer::render(vpgl_camera_double_sptr camera, unsign
     }
   }
 
-  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<<rtime.all()<<" ms"<<std::endl;
   clReleaseCommandQueue(queue);
 
   render_success_ = true;
   return render_success_;
 }
 
-bool boxm2_ocl_vis_score_renderer::compile_kernels(bocl_device_sptr device)
+bool
+boxm2_ocl_vis_score_renderer
+::compile_kernels(bocl_device_sptr device)
 {
 
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
@@ -224,7 +244,7 @@ bool boxm2_ocl_vis_score_renderer::compile_kernels(bocl_device_sptr device)
     src_paths.push_back(source_dir + "bit/vis_score_kernel.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_string options = "-D RENDER_VIS_SCORE -D STEP_CELL=step_cell_render_vis_score(aux_args,data_ptr,d*linfo->block_len)";
+    std::string options = "-D RENDER_VIS_SCORE -D STEP_CELL=step_cell_render_vis_score(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
     ray_trace_kernel_.create_kernel( &device->context(),
@@ -236,7 +256,7 @@ bool boxm2_ocl_vis_score_renderer::compile_kernels(bocl_device_sptr device)
 
 #if 0
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
 

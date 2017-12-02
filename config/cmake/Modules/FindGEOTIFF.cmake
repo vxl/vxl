@@ -12,37 +12,37 @@
 # Additionally
 # VXL_USING_NATIVE_GEOTIFF  - True if we are using a GEOTIFF library provided outside vxl (or v3p)
 
-IF ( NOT GEOTIFF_FOUND )
+if (${VXL_USE_GEOTIFF})
 
-  # If this FORCE variable is unset or is FALSE, try to find a native library.
-  IF( NOT VXL_FORCE_V3P_GEOTIFF )
-    INCLUDE( ${MODULE_PATH}/NewCMake/FindGEOTIFF.cmake )
-    IF( GEOTIFF_FOUND )
-      SET(VXL_USING_NATIVE_GEOTIFF "YES")
-    ENDIF( GEOTIFF_FOUND )
-  ENDIF( NOT VXL_FORCE_V3P_GEOTIFF )
+  if( NOT GEOTIFF_FOUND )
 
-  
-  #
-  # At some point, in a "release" version, it is possible that someone
-  # will not have the v3p geotiff library, so make sure the headers
-  # exist.
-  #
-    
-  IF( NOT GEOTIFF_FOUND )
-    IF(EXISTS ${vxl_SOURCE_DIR}/v3p/geotiff/geotiff.h)
-      # Use FIND_PATH here to allow the user to set the path to IGNORE
-      # to disable geotiff support.
-      FIND_PATH(GEOTIFF_INCLUDE_DIR geotiff.h
-        ${vxl_SOURCE_DIR}/v3p/geotiff
-      )
-      IF( GEOTIFF_INCLUDE_DIR )
-        SET( GEOTIFF_FOUND "YES" )
-        SET( GEOTIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/geotiff)
-        SET( GEOTIFF_LIBRARIES geotiff )
-      ENDIF( GEOTIFF_INCLUDE_DIR )
+    # If this FORCE variable is unset or is FALSE, try to find a native library.
+    if( NOT VXL_FORCE_V3P_GEOTIFF )
+      include( ${MODULE_PATH}/NewCMake/FindGEOTIFF.cmake )
+      if( GEOTIFF_FOUND )
+        set(VXL_USING_NATIVE_GEOTIFF "YES")
+      endif()
+    endif()
 
-    ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/geotiff/geotiff.h)
-  ENDIF( NOT GEOTIFF_FOUND )
-  
-ENDIF( NOT GEOTIFF_FOUND )
+    #
+    # At some point, in a "release" version, it is possible that someone
+    # will not have the v3p geotiff library, so make sure the headers
+    # exist.
+    #
+    if( NOT GEOTIFF_FOUND )
+      if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/geotiff/geotiff.h)
+        # Use FIND_PATH here to allow the user to set the path to IGNORE
+        # to disable geotiff support.
+        find_path(GEOTIFF_INCLUDE_DIR geotiff.h
+          ${VXL_ROOT_SOURCE_DIR}/v3p/geotiff
+        )
+        if( GEOTIFF_INCLUDE_DIR )
+          set( GEOTIFF_FOUND "YES" )
+          set( GEOTIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/geotiff)
+          set( GEOTIFF_LIBRARIES geotiff )
+        endif()
+
+      endif()
+    endif()
+  endif()
+endif()

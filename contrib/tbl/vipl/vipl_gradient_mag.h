@@ -50,7 +50,7 @@ class vipl_gradient_mag : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,Pixe
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_gradient_mag.txx"
+#include "vipl_gradient_mag.hxx"
 #endif
 
 #endif // vipl_gradient_mag_h_

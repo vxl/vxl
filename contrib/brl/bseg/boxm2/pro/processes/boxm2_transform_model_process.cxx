@@ -6,9 +6,11 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
+#include <map>
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
-#include <vcl_map.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/boxm2_data_traits.h>
@@ -29,7 +31,7 @@ bool boxm2_transform_model_process_cons(bprb_func_process& pro)
   using namespace boxm2_transform_model_process_globals;
 
   //process takes 8 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "float"; // translation X
   input_types_[2] = "float"; // translation Y
@@ -40,7 +42,7 @@ bool boxm2_transform_model_process_cons(bprb_func_process& pro)
   input_types_[7] = "float"; // scaling
 
   // process has 0 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
@@ -51,13 +53,13 @@ bool boxm2_transform_model_process(bprb_func_process& pro)
   using namespace boxm2_transform_model_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   if (!scene) {
-    vcl_cout << " null scene in boxm2_transform_model_process\n";
+    std::cout << " null scene in boxm2_transform_model_process\n";
     return false;
   }
   double translation_x = pro.get_input<float>(1);
@@ -86,8 +88,8 @@ bool boxm2_transform_model_process(bprb_func_process& pro)
 
   scene->set_lvcs(lvcs);
 #else
-  vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bit = blocks.begin();
+  std::map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator bit = blocks.begin();
   for (; bit != blocks.end(); ++bit) {
     vgl_point_3d<double> old_origin = bit->second.local_origin_;
     bit->second.local_origin_ = old_origin + trans_vec;

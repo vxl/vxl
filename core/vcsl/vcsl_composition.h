@@ -4,19 +4,20 @@
 //:
 // \file
 // \brief Composition of transformations
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
-//   2002/01/28 Peter Vanroose - vcl_vector member transformations_ changed to non-ptr
+//   2002/01/28 Peter Vanroose - std::vector member transformations_ changed to non-ptr
 //   2004/09/17 Peter Vanroose - made composition() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcsl/vcsl_composition_sptr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Composition of transformations
 // This transformation handles a composition of transformations, that is,
@@ -49,7 +50,7 @@ class vcsl_composition
   virtual bool is_valid() const;
 
   //: Return the list of transformations
-  vcl_vector<vcsl_spatial_transformation_sptr> composition() const { return transformations_; }
+  std::vector<vcsl_spatial_transformation_sptr> composition() const { return transformations_; }
 
   //***************************************************************************
   // Status setting
@@ -57,7 +58,7 @@ class vcsl_composition
 
   //: Set the list of transformations of the composition
   //  The transformations are performed in the order of the list
-  void set_composition(vcl_vector<vcsl_spatial_transformation_sptr> const& t) { transformations_=t; }
+  void set_composition(std::vector<vcsl_spatial_transformation_sptr> const& t) { transformations_=t; }
 
   //***************************************************************************
   // Basic operations
@@ -76,7 +77,7 @@ class vcsl_composition
   virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
                                      double time) const;
  protected:
-  vcl_vector<vcsl_spatial_transformation_sptr> transformations_;
+  std::vector<vcsl_spatial_transformation_sptr> transformations_;
 };
 
 #endif // vcsl_composition_h_

@@ -5,11 +5,13 @@
 // \brief Functions to draw shapes into an image (may get moved to vil in time)
 // \author Tim Cootes
 
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 //: Draws value along line between p1 and p2
 //  Effective, but not terribly efficient.
@@ -20,7 +22,7 @@ inline void mbl_draw_line(vil_image_view<T>& image,
                           T value, unsigned width=1)
 {
   vgl_vector_2d<double> dp = p2-p1;
-  unsigned n = unsigned(1.5+vcl_max(vcl_fabs(dp.x()),vcl_fabs(dp.y())));
+  unsigned n = unsigned(1.5+std::max(std::fabs(dp.x()),std::fabs(dp.y())));
   dp/=n;
   unsigned ni=image.ni(), nj=image.nj();
   if (width==1)
@@ -59,12 +61,12 @@ inline void mbl_draw_line(vil_image_view<T>& image,
                           T r, T g, T b)
 {
   vgl_vector_2d<double> dp = p2-p1;
-  unsigned n = unsigned(1.5+vcl_max(vcl_fabs(dp.x()),vcl_fabs(dp.y())));
+  unsigned n = unsigned(1.5+std::max(std::fabs(dp.x()),std::fabs(dp.y())));
   dp/=n;
   unsigned ni=image.ni(), nj=image.nj();
-  const vcl_ptrdiff_t rstep = 0;
-  const vcl_ptrdiff_t gstep = image.planestep();
-  const vcl_ptrdiff_t bstep =2*gstep;
+  const std::ptrdiff_t rstep = 0;
+  const std::ptrdiff_t gstep = image.planestep();
+  const std::ptrdiff_t bstep =2*gstep;
   for (unsigned i=0;i<=n;++i,p1+=dp)
   {
     unsigned pi=unsigned(p1.x()+0.5); if (pi>=ni) continue;

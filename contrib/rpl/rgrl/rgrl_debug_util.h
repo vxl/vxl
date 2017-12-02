@@ -6,9 +6,11 @@
 // \author Gehua Yang
 // \date Aug 2004
 
+#include <iostream>
+#include <string>
 #include <rgrl/rgrl_command.h>
 #include <rgrl/rgrl_mask_sptr.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: observer to view transformations at each iteration of feature-based registration engine
 class rgrl_debug_feature_iteration_print: public rgrl_command
@@ -27,15 +29,15 @@ class rgrl_debug_feature_iteration_print: public rgrl_command
 class rgrl_debug_feature_iteration_save_matches: public rgrl_command
 {
  protected:
-  vcl_string path_;
-  vcl_string file_prefix_;
+  std::string path_;
+  std::string file_prefix_;
   rgrl_mask_sptr from_roi_sptr_;
 
  public:
 
   //: constructor
-  rgrl_debug_feature_iteration_save_matches( const vcl_string& path,
-                                             const vcl_string& prefix,
+  rgrl_debug_feature_iteration_save_matches( const std::string& path,
+                                             const std::string& prefix,
                                              const rgrl_mask_sptr& from_roi = 0 );
 
   void execute(rgrl_object* caller, const rgrl_event & event )

@@ -1,7 +1,9 @@
+#include <iostream>
+#include <sstream>
 #include "bvxm_synth_world_generator.h"
 //
 #include <vul/vul_file.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 // Default constructor
@@ -97,7 +99,7 @@ vpgl_rational_camera<double>
 bvxm_synth_world_generator::perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 {
   vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
-  vcl_vector<double> neu_u,den_u,neu_v,den_v;
+  std::vector<double> neu_u,den_u,neu_v,den_v;
   double x_scale = 1.0, x_off = 0.0,
          y_scale = 1.0, y_off = 0.0,
          z_scale = 1.0, z_off = 0.0,
@@ -127,7 +129,7 @@ bvxm_synth_world_generator::perspective_to_rational(vpgl_perspective_camera<doub
 }
 
 
-vcl_vector<vpgl_camera_double_sptr >
+std::vector<vpgl_camera_double_sptr >
 bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
 {
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
@@ -136,17 +138,17 @@ bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
   double x,z;
   double alpha = (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/40.;
-  vcl_vector<vgl_point_3d<double> > centers;
+  std::vector<vgl_point_3d<double> > centers;
   for (unsigned i=0; i<11; i++) {
-    x = camera_dist*vcl_cos(alpha);
-    z = camera_dist*vcl_sin(alpha);
+    x = camera_dist*std::cos(alpha);
+    z = camera_dist*std::sin(alpha);
     centers.push_back(vgl_point_3d<double> (centroid.x()+x, centroid.y(), centroid.z()+z));
-    vcl_cout << centers[i] << vcl_endl;
+    std::cout << centers[i] << std::endl;
     alpha += delta_alpha;
   }
 
   vgl_box_2d<double> bb;
-  vcl_vector<vpgl_camera_double_sptr> rat_cameras;
+  std::vector<vpgl_camera_double_sptr> rat_cameras;
   for (unsigned i=0; i<centers.size(); i++)
   {
     vgl_point_3d<double> camera_center  = centers[i];
@@ -156,7 +158,7 @@ bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
     vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
     rat_cameras.push_back(rat_cam);
 
-    vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d(world);
+    std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d(world);
     for (unsigned i=0; i<corners.size(); i++) {
       vgl_point_3d<double> c = corners[i];
       double u,v, u2, v2;
@@ -166,39 +168,39 @@ bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
 
       if (verbose)
       {
-        vcl_cout << "Perspective [" << u << ',' << v << "]\n"
+        std::cout << "Perspective [" << u << ',' << v << "]\n"
                  << "Rational [" << u2 << ',' << v2 << "]\n\n";
       }
     }
-    vcl_cout << bb << vcl_endl;
+    std::cout << bb << std::endl;
   }
   return rat_cameras;
 }
 
-vcl_vector<vpgl_camera_double_sptr >
+std::vector<vpgl_camera_double_sptr >
 bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
 {
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
   vgl_point_3d<double> centroid = world.centroid();
-  vcl_cout << "centroid: " << centroid << vcl_endl;
+  std::cout << "centroid: " << centroid << std::endl;
   double x,y;
   double alpha = (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/40.;
-  vcl_vector<vgl_point_3d<double> > centers;
+  std::vector<vgl_point_3d<double> > centers;
 
   for (unsigned i=0; i<num_train_images_; i++) {
-    x = camera_dist*vcl_cos(alpha);
-    y = camera_dist*vcl_sin(alpha);
+    x = camera_dist*std::cos(alpha);
+    y = camera_dist*std::sin(alpha);
     centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
   if (verbose)
-    vcl_cout << centers[i] << vcl_endl;
+    std::cout << centers[i] << std::endl;
 
     alpha += delta_alpha;
   }
 
   vgl_box_2d<double> bb;
-  vcl_vector<vpgl_camera_double_sptr> persp_cameras;
+  std::vector<vpgl_camera_double_sptr> persp_cameras;
   for (unsigned i=0; i<centers.size(); i++)
   {
     vgl_point_3d<double> camera_center  = centers[i];
@@ -208,22 +210,22 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
     persp_cameras.push_back(new vpgl_perspective_camera<double>(persp_cam));
 
     //save the camera to file
-    vcl_stringstream cam_file;
+    std::stringstream cam_file;
     vul_file::make_directory("./cams");
     cam_file <<world_dir_ << "/cam_" << i << ".txt";
-    vcl_ofstream cam_out(cam_file.str().c_str());
+    std::ofstream cam_out(cam_file.str().c_str());
     cam_out << persp_cam;
 
     if (verbose) {
-      vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
+      std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
       for (unsigned i=0; i<corners.size(); i++) {
         vgl_point_3d<double> c = corners[i];
         double u,v;
         persp_cam.project(c.x(), c.y() ,c.z(), u, v);
         bb.add(vgl_point_2d<double> (u,v));
-        vcl_cout << "Perspective [" << u << ',' << v << "]\n"<< vcl_endl;
+        std::cout << "Perspective [" << u << ',' << v << "]\n"<< std::endl;
       }
-      vcl_cout << bb << vcl_endl;
+      std::cout << bb << std::endl;
     }
   }
   return persp_cameras;
@@ -234,8 +236,8 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
                                         bvxm_voxel_grid<float>* intensity_grid,
                                         bvxm_voxel_grid<float>* ocp_grid, // FIXME - unused parameter
                                         bvxm_voxel_grid<apm_datatype>* apm_grid,
-                                        vcl_vector<vpgl_camera_double_sptr>& cameras,
-                                        vcl_vector <vil_image_view_base_sptr>& image_set,
+                                        std::vector<vpgl_camera_double_sptr>& cameras,
+                                        std::vector <vil_image_view_base_sptr>& image_set,
                                         unsigned int bin_num)
 {
   apm_datatype sample;
@@ -252,7 +254,7 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
     /* bool update_status = */ processor.update(*apm_slab_it, *obs_it, *weight);
   }
 
-  vcl_string path = world_dir_ + "/test_img";
+  std::string path = world_dir_ + "/test_img";
 
   if (gen_images_) {
     for (unsigned i=0; i<cameras.size(); i++) {
@@ -262,7 +264,7 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
       bvxm_image_metadata camera(img_arg, cameras[i]);
 
       world->expected_image<APM_MOG_GREY>(camera, expected, *mask, bin_num);
-      vcl_stringstream s;
+      std::stringstream s;
       s << path << i << ".tif";
       vil_save(*expected, s.str().c_str());
       image_set.push_back(expected);
@@ -273,22 +275,22 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
 
 
 void bvxm_synth_world_generator::gen_texture_map(vgl_box_3d<double> box,
-                                                 vcl_vector<vcl_vector<float> >& intens_map_bt,
-                                                 vcl_vector<vcl_vector<float> >& intens_map_side1,
-                                                 vcl_vector<vcl_vector<float> >& intens_map_side2,
+                                                 std::vector<std::vector<float> >& intens_map_bt,
+                                                 std::vector<std::vector<float> >& intens_map_side1,
+                                                 std::vector<std::vector<float> >& intens_map_side2,
                                                  bool gen_rand, float app_val)
 {
   // generate intensity maps
-  unsigned upw = (unsigned)vcl_ceil(box.width()/8)+1;
-  unsigned uph = (unsigned)vcl_ceil(box.height()/8)+1;
-  unsigned upd = (unsigned)vcl_ceil(box.depth()/8)+1;
+  unsigned upw = (unsigned)std::ceil(box.width()/8)+1;
+  unsigned uph = (unsigned)std::ceil(box.height()/8)+1;
+  unsigned upd = (unsigned)std::ceil(box.depth()/8)+1;
 
   intens_map_bt.resize(upw);
   intens_map_side1.resize(upw);
   intens_map_side2.resize(upw);
 
   if (verbose)
-    vcl_cout << box.width() << ' ' << box.depth() << ' ' << box.height() << vcl_endl;
+    std::cout << box.width() << ' ' << box.depth() << ' ' << box.height() << std::endl;
 
   if (gen_rand) {
     for (unsigned i=0; i<upw;i++) {
@@ -362,7 +364,7 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> /*
   //object (essentially two boxes) placed in the voxel world
   bvxm_util::generate_test_boxes<double>(minx,miny,minz,dimx,dimy,dimz,nx,ny,nz,boxes_vector,gen_2box);
 
-  vcl_ofstream is((world_dir_ + "/intensity_grid.txt").c_str());
+  std::ofstream is((world_dir_ + "/intensity_grid.txt").c_str());
 
   assert(boxes_vector.size() == 2);
 
@@ -371,26 +373,26 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> /*
   bool rand1=rand1_, rand2=rand2_; float app_val=app_val_;
 
   // generate intensity maps
-  vcl_vector<vcl_vector<float> > intens_map_bt;
-  vcl_vector<vcl_vector<float> > intens_map_side1;
-  vcl_vector<vcl_vector<float> > intens_map_side2;
+  std::vector<std::vector<float> > intens_map_bt;
+  std::vector<std::vector<float> > intens_map_side1;
+  std::vector<std::vector<float> > intens_map_side2;
 
   gen_texture_map(box, intens_map_bt, intens_map_side1, intens_map_side2, rand1, app_val);
 
-  vcl_vector<vcl_vector<float> > top_intens_map_bt;
-  vcl_vector<vcl_vector<float> > top_intens_map_side1;
-  vcl_vector<vcl_vector<float> > top_intens_map_side2;
+  std::vector<std::vector<float> > top_intens_map_bt;
+  std::vector<std::vector<float> > top_intens_map_side1;
+  std::vector<std::vector<float> > top_intens_map_side2;
   gen_texture_map(top_box, top_intens_map_bt, top_intens_map_side1, top_intens_map_side2, rand2, app_val);
 
   unsigned z=nz;
   for (ocp_slab_it = ocp_grid->begin();ocp_slab_it != ocp_grid->end();++ocp_slab_it,++intensity_slab_it)
   {
     --z;
-    is << z << "--->" << vcl_endl;
+    is << z << "--->" << std::endl;
 
     for (unsigned i=0; i<nx; i++)
     {
-      is << vcl_endl;
+      is << std::endl;
       for (unsigned j=0; j<ny; j++)
       {
         int face1 = on_box_surface(box, vgl_point_3d<double>(i,j,z));
@@ -447,7 +449,7 @@ void bvxm_synth_world_generator::gen_voxel_world_2box(vgl_vector_3d<unsigned> /*
       }
     }
   }
-  vcl_cout << "grid done." << vcl_endl;
+  std::cout << "grid done." << std::endl;
 }
 
 void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> /*grid_size*/,
@@ -467,7 +469,7 @@ void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> /
   vgl_box_3d<double> plane_box(vgl_point_3d<double> (20,20,24),
                                vgl_point_3d<double> (80, 80, 25));
 
-  vcl_ofstream is((world_dir_ + "/intensity_grid.txt").c_str());
+  std::ofstream is((world_dir_ + "/intensity_grid.txt").c_str());
 
   unsigned z=nz;
   for (ocp_slab_it = ocp_grid->begin();
@@ -475,10 +477,10 @@ void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> /
        ++ocp_slab_it,++intensity_slab_it)
   {
     z--;
-    is << z << "--->" << vcl_endl;
+    is << z << "--->" << std::endl;
 
     for (unsigned i=0; i<nx; i++) {
-      is << vcl_endl;
+      is << std::endl;
       for (unsigned j=0; j<ny; j++) {
         int face1 = on_box_surface(plane_box, vgl_point_3d<double>(i,j,z));
         if (face1 != -1) {
@@ -491,7 +493,7 @@ void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> /
       }
     }
   }
-  vcl_cout << "grid done." << vcl_endl;
+  std::cout << "grid done." << std::endl;
 }
 
 bool
@@ -517,9 +519,9 @@ bvxm_synth_world_generator::gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
       }
   }
 
-  vcl_string path = world_dir_ + "/lidar";
+  std::string path = world_dir_ + "/lidar";
   vul_file::make_directory(world_dir_);
-  vcl_stringstream s;
+  std::stringstream s;
   s << path << ".tif";
   vil_save(lidar, s.str().c_str());
 
@@ -558,9 +560,9 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
       (world_dir_ + "/intensity.vox",grid_size);
 
   gen_voxel_world_2box(grid_size, voxel_world, ocp_grid, intensity_grid, minx_, miny_, minz_, dimx_, dimy_, dimz_, nx_, ny_, nz_, gen2_box_);
-  vcl_vector<vpgl_camera_double_sptr> cameras = generate_cameras_yz(voxel_world);
+  std::vector<vpgl_camera_double_sptr> cameras = generate_cameras_yz(voxel_world);
 
-  vcl_vector <vil_image_view_base_sptr> image_set_1;
+  std::vector <vil_image_view_base_sptr> image_set_1;
 
   update(grid_size, world, intensity_grid, ocp_grid, apm_grid,
          cameras, image_set_1, bin);

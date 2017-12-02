@@ -17,11 +17,13 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_list.h>
+#include <iostream>
+#include <list>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 
 template <class T>
-inline T fsm_pop(vcl_list<T> *l)
+inline T fsm_pop(std::list<T> *l)
 {
   T tmp = l->front();
   l->pop_front();

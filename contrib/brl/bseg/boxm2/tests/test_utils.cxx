@@ -52,15 +52,15 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
     curr_byte += sizeof(uchar16)*numTrees;
 
     if (curr_byte != size)
-      vcl_cerr<<"size "<<size<<" doesn't match offset "<<curr_byte<<'\n';
+      std::cerr<<"size "<<size<<" doesn't match offset "<<curr_byte<<'\n';
 
     return bsize;
 }
 
-vcl_map<boxm2_block_id,boxm2_block_metadata> boxm2_test_utils::generate_simple_metadata(){
+std::map<boxm2_block_id,boxm2_block_metadata> boxm2_test_utils::generate_simple_metadata(){
 
   vnl_random rand;
-  vcl_map<boxm2_block_id, boxm2_block_metadata> mdata;
+  std::map<boxm2_block_id, boxm2_block_metadata> mdata;
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
@@ -84,7 +84,7 @@ vcl_map<boxm2_block_id,boxm2_block_metadata> boxm2_test_utils::generate_simple_m
 void boxm2_test_utils::save_test_scene_to_disk()
 {
   // ensure 8 test blocks and 8 data blocks are saved to disk
-  vcl_map<boxm2_block_id,boxm2_block_metadata> mdata = generate_simple_metadata();
+  std::map<boxm2_block_id,boxm2_block_metadata> mdata = generate_simple_metadata();
   vnl_random rand;
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
@@ -102,7 +102,7 @@ void boxm2_test_utils::save_test_scene_to_disk()
 
         boxm2_block b(id,mdata[id], stream);
 
-        vcl_cout<<"saving test block for "<<id<<vcl_endl;
+        std::cout<<"saving test block for "<<id<<std::endl;
         boxm2_sio_mgr::save_block("", &b);
       }
     }
@@ -126,7 +126,7 @@ void boxm2_test_utils::save_test_scene_to_disk()
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
         boxm2_block_id id(boxm2_block_id(i,j,k));
-        vcl_cout<<"saving alpha and mog3 test data for "<<id<<vcl_endl;
+        std::cout<<"saving alpha and mog3 test data for "<<id<<std::endl;
         boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>("", id, &test_data);
         boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>("", id, &test_mog);
       }
@@ -134,7 +134,7 @@ void boxm2_test_utils::save_test_scene_to_disk()
   }
 }
 
-void boxm2_test_utils::delete_test_scene_from_disk(vcl_string dir)
+void boxm2_test_utils::delete_test_scene_from_disk(std::string dir)
 {
   //use vul_file to
   vul_file::delete_file_glob(dir+"/"+"*id_*.bin");
@@ -189,12 +189,12 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
     TEST("boxm2_block: trees initialized properly", true, true);
 }
 
-vcl_string boxm2_test_utils::save_test_empty_scene()
+std::string boxm2_test_utils::save_test_empty_scene()
 {
-    vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
-    vcl_string test_file = test_dir + "test.xml";
+    std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
+    std::string test_file = test_dir + "test.xml";
 
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
+    std::map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
   //create scene
   boxm2_scene scene;
   scene.set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
@@ -210,12 +210,12 @@ vcl_string boxm2_test_utils::save_test_empty_scene()
 }
 
 
-vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
+std::string boxm2_test_utils::save_test_simple_scene(std::string filename )
 {
-    vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
-    vcl_string test_file = test_dir + filename;
+    std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
+    std::string test_file = test_dir + filename;
 
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
+    std::map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
 
   //create scene
   boxm2_scene scene;
@@ -244,7 +244,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
                                                                       blocks[id].max_mb_ );
         boxm2_block b(id, stream);
 
-        vcl_cout<<"saving test block for "<<id<<vcl_endl;
+        std::cout<<"saving test block for "<<id<<std::endl;
         boxm2_sio_mgr::save_block(test_dir+"/", &b);
       }
     }
@@ -268,7 +268,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
         boxm2_block_id id(boxm2_block_id(i,j,k));
-        vcl_cout<<"saving alpha and mog3 test data for "<<id<<vcl_endl;
+        std::cout<<"saving alpha and mog3 test data for "<<id<<std::endl;
         boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>(test_dir+"/", id, &test_data);
         boxm2_sio_mgr::save_block_data<BOXM2_MOG3_GREY>(test_dir+"/", id, &test_mog);
       }
@@ -279,7 +279,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
 }
 bool boxm2_test_utils::create_test_simple_scene(boxm2_scene_sptr & scene)
 {
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
   scene = new boxm2_scene();
   scene->set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
   scene->set_rpc_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
@@ -303,7 +303,7 @@ vpgl_camera_double_sptr boxm2_test_utils::test_camera()
   vgl_rotation_3d<double> R(mr);
   vgl_point_3d<double> t(0.5,0.5,100);
 
-  vcl_cout<<mk<<mr<<t;
+  std::cout<<mk<<mr<<t;
   vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(K,t,R);
   return cam;
 }

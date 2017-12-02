@@ -1,8 +1,9 @@
 // This is core/vil/tests/test_stream.cxx
+#include <string>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
 #include <vil/vil_stream_fstream.h>
@@ -15,12 +16,12 @@
 static void
 test_stream( int argc, char* argv[] )
 {
-  vcl_string dir;
+  std::string dir;
   // Test if path not passed in to argv by CMake
   if ( argc >= 2 ) {
     dir = argv[1];
   }else{
-    vcl_string root = testlib_root_dir();
+    std::string root = testlib_root_dir();
     dir = root + "/core/vil/tests/file_read_data";
   }
   bool exists = vul_file::is_directory(dir);

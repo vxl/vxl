@@ -13,6 +13,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <vector>
+#include <new>
+#include <iostream>
+#include <sstream>
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/sample/boxm_sample.h>
@@ -22,19 +26,16 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 
 #include <bsta/bsta_histogram.h>
-#include <vbl/vbl_array_3d.txx>
+#include <vbl/vbl_array_3d.hxx>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
 
-#include <vcl_vector.h>
-#include <vcl_new.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 template <class T_loc, class T_data>
 void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                         vcl_string filename,
+                         std::string filename,
                          unsigned int resolution_level)
 {
   float minv = 1.0e10, maxv = 0.0;
@@ -76,11 +77,11 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
     int data_size = ncells*ncells*ncells;
     float *data = 0;
-    vcl_cout << "Data Size=" << data_size << vcl_endl;
+    std::cout << "Data Size=" << data_size << std::endl;
     data = new (std::nothrow)float[data_size];
 
     if (data == 0) {
-      vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
+      std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
       return;
     }
     // init to zero
@@ -91,7 +92,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     double out_cell_norm_volume = (tree->number_levels() - (int)resolution_level + 1);
     out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
-    vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++)
     {
       vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
@@ -107,7 +108,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         //////int out_index=static_cast<int>(ncells-(node.z()/step_len)-1 + (node.x()/step_len)*ncells + (node.y()/step_len)*ncells*ncells);
 
         if (out_index >= data_size)
-          vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+          std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
         else
           data[out_index] = cell_val;
       }
@@ -126,7 +127,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
               //////int out_index=ncells-1-z + x*ncells + y*ncells*ncells;
 
               if (out_index >= data_size)
-                vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+                std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
               else
                 data[out_index] = cell_val;
             }
@@ -150,12 +151,12 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     }
 
     // write the data into a bin file, generate a file name
-    vcl_stringstream strm;
+    std::stringstream strm;
     strm << filename<< idx.x() << '_' << idx.y() << '_' << idx.z() << ".bin";
-    vcl_string fn(strm.str());
-    vsl_b_ofstream os(fn.c_str(),vcl_ios::binary);
+    std::string fn(strm.str());
+    vsl_b_ofstream os(fn.c_str(),std::ios::binary);
     if (!os.os().good()) {
-      vcl_cerr << "error opening " << fn << " for write!\n";
+      std::cerr << "error opening " << fn << " for write!\n";
       return;
     }
 
@@ -165,13 +166,13 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
     float* dp = data;
     for (; dp < data + data_size; ++dp) {
-      //double P = 1.0 - vcl_exp(-*dp*step_len);
+      //double P = 1.0 - std::exp(-*dp*step_len);
       // always positive so this is an ok way to round
       float fv = *dp;
       h.upcount(fv, 1.0f);
       if (fv<minv) minv = fv;
       if (fv>maxv) maxv = fv;
-      unsigned char c = (unsigned char)(vcl_floor((255.0 * (*dp)) + 0.5));
+      unsigned char c = (unsigned char)(std::floor((255.0 * (*dp)) + 0.5));
       vsl_b_write(os, (char) c);
     }
     delete[] data;
@@ -191,7 +192,7 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   int row_data_size = ncells;
   char* byte_data = new (std::nothrow) char[row_data_size];
   if (byte_data == 0) {
-    vcl_cout << "boxm_save_block_raw: Could not allocate byte data!" << vcl_endl;
+    std::cout << "boxm_save_block_raw: Could not allocate byte data!" << std::endl;
     return;
   }
 
@@ -202,10 +203,10 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     for (unsigned y=0; y<dim.y(); y++) {
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
-        vcl_stringstream strm;
+        std::stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
-        vcl_string fn(strm.str());
-        s = new vsl_b_ifstream(fn.c_str(),vcl_ios::binary);
+        std::string fn(strm.str());
+        s = new vsl_b_ifstream(fn.c_str(),std::ios::binary);
         vsl_b_read(*s, nx);
         vsl_b_read(*s, ny);
         vsl_b_read(*s, nz);
@@ -218,9 +219,9 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vxl_uint_32 nx_uint = dimx;
   vxl_uint_32 ny_uint = dimy;
   vxl_uint_32 nz_uint = dimz;
-  vcl_ofstream os(filename.c_str(),vcl_ios::binary);
+  std::ofstream os(filename.c_str(),std::ios::binary);
   if (!os.good()) {
-    vcl_cerr << "error opening " << filename << " for write!\n";
+    std::cerr << "error opening " << filename << " for write!\n";
     return;
   }
 
@@ -257,16 +258,16 @@ void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       for (unsigned x=0; x<dim.x(); x++) {
         vsl_b_ifstream*& s = streams(x,y,z);
         s->close();
-        vcl_stringstream strm;
+        std::stringstream strm;
         strm << filename << x << '_' << y << '_' << z << ".bin";
-        vcl_string fn(strm.str());
-        vcl_cout << "Deleting " << fn << vcl_endl;
+        std::string fn(strm.str());
+        std::cout << "Deleting " << fn << std::endl;
         vpl_unlink(fn.data());
         delete s;
       }
     }
   }
-  vcl_cout << "Volume Histogram(" << minv << ' ' << maxv << "):[0->1]20bins\n";
+  std::cout << "Volume Histogram(" << minv << ' ' << maxv << "):[0->1]20bins\n";
   h.print();
   return;
 }

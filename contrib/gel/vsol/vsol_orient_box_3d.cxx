@@ -12,7 +12,7 @@ vsol_orient_box_3d::vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_b
  : orient_box_(orient_box)
 {
   //create a bounding box from the 8 corner points of the oriented box
-  vcl_vector<vgl_point_3d<double> > corners = orient_box_.corners();
+  std::vector<vgl_point_3d<double> > corners = orient_box_.corners();
   assert (corners.size() == 8);
 
   for (unsigned int i=0; i < corners.size(); i++) {

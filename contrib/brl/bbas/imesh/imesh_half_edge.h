@@ -8,8 +8,10 @@
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date May 2, 2008
 
-#include <vcl_iterator.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #define imesh_invalid_idx (static_cast<unsigned int>(-1))
@@ -54,10 +56,10 @@ class imesh_half_edge_set
     //: Default Constructor
     imesh_half_edge_set() {}
     //: Construct from a face index list
-    imesh_half_edge_set(const vcl_vector<vcl_vector<unsigned int> >& face_list);
+    imesh_half_edge_set(const std::vector<std::vector<unsigned int> >& face_list);
 
     //: Build the half edges from an indexed face set
-    void build_from_ifs(const vcl_vector<vcl_vector<unsigned int> >& face_list);
+    void build_from_ifs(const std::vector<std::vector<unsigned int> >& face_list);
 
     //: Access by index
     const imesh_half_edge& operator [] (unsigned int i) const { return half_edges_[i]; }
@@ -85,7 +87,7 @@ class imesh_half_edge_set
     // Mesh Face Iterators - each half edge touches the same face
 
     //: An iterator of half edges adjacent to a face
-    class f_iterator : public vcl_iterator<vcl_forward_iterator_tag,imesh_half_edge>
+    class f_iterator : public std::iterator<std::forward_iterator_tag,imesh_half_edge>
     {
       friend class f_const_iterator;
       friend class v_iterator;
@@ -151,7 +153,7 @@ class imesh_half_edge_set
     };
 
     //: A const iterator of half edges adjacent to a face
-    class f_const_iterator : public vcl_iterator<vcl_forward_iterator_tag,imesh_half_edge>
+    class f_const_iterator : public std::iterator<std::forward_iterator_tag,imesh_half_edge>
     {
         friend class f_iterator;
         friend class v_const_iterator;
@@ -214,7 +216,7 @@ class imesh_half_edge_set
     // Mesh Vertex Iterators - each half edge touches the same vertex
 
     //: An iterator of half edges adjacent to a vertex
-    class v_iterator : public vcl_iterator<vcl_forward_iterator_tag,imesh_half_edge>
+    class v_iterator : public std::iterator<std::forward_iterator_tag,imesh_half_edge>
     {
         friend class v_const_iterator;
         friend class f_iterator;
@@ -281,7 +283,7 @@ class imesh_half_edge_set
     };
 
     //: A const iterator of half edges adjacent to a vertex
-    class v_const_iterator : public vcl_iterator<vcl_forward_iterator_tag,imesh_half_edge>
+    class v_const_iterator : public std::iterator<std::forward_iterator_tag,imesh_half_edge>
     {
         friend class v_iterator;
         friend class f_const_iterator;
@@ -355,9 +357,9 @@ class imesh_half_edge_set
     unsigned int num_faces() const;
 
   private:
-    vcl_vector<imesh_half_edge> half_edges_;
-    vcl_vector<unsigned int> vert_to_he_;
-    vcl_vector<unsigned int> face_to_he_;
+    std::vector<imesh_half_edge> half_edges_;
+    std::vector<unsigned int> vert_to_he_;
+    std::vector<unsigned int> face_to_he_;
 };
 
 

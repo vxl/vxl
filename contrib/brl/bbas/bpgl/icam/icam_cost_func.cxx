@@ -28,14 +28,14 @@ icam_cost_func::icam_cost_func( const vil_image_view<float>& source_img,
     for (unsigned i = 1; i<=ni; ++i)
       dest_samples_[index++]=dest_image_(i,j);
 #if 0
-  vcl_cout << "dest samples\n";
+  std::cout << "dest samples\n";
 
 
   int cent = dest_samples_.size()/2-(dest_image_.ni()-2)/2;
   for (int i = -10; i<=10; ++i)
-    vcl_cout << dest_samples_[i+cent] << '\n';
+    std::cout << dest_samples_[i+cent] << '\n';
 
-  vcl_cout << '\n';
+  std::cout << '\n';
 #endif
   use_gradient_ = false;
   vnl_least_squares_function::init(dt_.n_params(), dest_samples_.size());
@@ -68,7 +68,7 @@ double icam_cost_func::error(vnl_vector_fixed<double,3> rodrigues,
   double mag = 0;
   for (unsigned i = 0; i<from_samples.size(); ++i)
     if (from_mask[i]>0.0)
-      mag += vcl_fabs(from_samples[i]-dest_samples_[i]);
+      mag += std::fabs(from_samples[i]-dest_samples_[i]);
   if (this->frac_samples()>min_allowed_overlap) {
     mag/= n_samples_;
     return mag;
@@ -92,11 +92,11 @@ void icam_cost_func::samples(vnl_vector_fixed<double, 3> rodrigues,
   dest = dest_samples_;
 }
 
-vcl_vector<double> icam_cost_func::error(vnl_vector<double> const& x,
+std::vector<double> icam_cost_func::error(vnl_vector<double> const& x,
                                          unsigned param_index, double pmin,
                                          double pmax, double pinc)
 {
-  vcl_vector<double> ret;
+  std::vector<double> ret;
   vnl_vector<double> pr(x);
   vnl_vector<double> res;
   for (double p = pmin; p<=pmax; p+=pinc)
@@ -129,8 +129,8 @@ joint_probability(vnl_vector<double> const& samples, vnl_vector<double> const& m
         is = static_cast<unsigned>(samples[i]*scl + 0.5);
 #endif
       //match the gpu implementation, which does a floor operation
-      unsigned id = static_cast<unsigned>(vcl_floor(dest_samples_[i]*scl)),
-        is = static_cast<unsigned>(vcl_floor(samples[i]*scl));
+      unsigned id = static_cast<unsigned>(std::floor(dest_samples_[i]*scl)),
+        is = static_cast<unsigned>(std::floor(samples[i]*scl));
 
       if (id>nbins_-1 || is> nbins_-1)
         continue;
@@ -158,11 +158,11 @@ joint_probability(vnl_vector_fixed<double, 3> rodrigues,
                       dt_, from_samples, from_mask, n_samples_);
 
   #if 0
-  vcl_cout << "Native produced ";
-  vcl_cout << "mapped/dest/mask samples\n";
+  std::cout << "Native produced ";
+  std::cout << "mapped/dest/mask samples\n";
   int cent = dest_samples_.size()/2-(dest_image_.ni()-2)/2;
   for (int i = -10; i<=10; ++i) {
-    vcl_cout << from_samples[i+cent] << ' '
+    std::cout << from_samples[i+cent] << ' '
              << dest_samples_[i+cent] << ' '
              << 50.0f*from_mask[i+cent] << '\n';
   }
@@ -178,11 +178,11 @@ icam_cost_func::joint_probability(vil_image_view<float> const& map_dest,
   icam_sample::sample(map_dest, map_mask,from_samples, from_mask, n_samples_);
 
 #if 0
-  vcl_cout << "GPU produced ";
-  vcl_cout << "mapped/dest/mask samples\n";
+  std::cout << "GPU produced ";
+  std::cout << "mapped/dest/mask samples\n";
   int cent = dest_samples_.size()/2-(dest_image_.ni()-2)/2;
   for (int i = -10; i<=10; ++i) {
-    vcl_cout << from_samples[i+cent] << ' '
+    std::cout << from_samples[i+cent] << ' '
              << dest_samples_[i+cent] << ' '
              << 50.0f*from_mask[i+cent] << '\n';
   }
@@ -210,10 +210,10 @@ double icam_cost_func::minfo(vbl_array_2d<double>& joint_prob)
       double prc = joint_prob[r][c];
       double pr = pmr[c];
       if (prc>0&&pr>0)
-        sum+= prc*vcl_log(prc/(pr*pc));
+        sum+= prc*std::log(prc/(pr*pc));
     }
   }
-  return sum/vcl_log(2.0);
+  return sum/std::log(2.0);
 }
 
 double icam_cost_func::mutual_info(vnl_vector_fixed<double, 3> rodrigues,
@@ -251,19 +251,19 @@ double icam_cost_func::entropy_diff(vbl_array_2d<double>& joint_prob)
   {
     double pr = pmr[c];
 #ifdef DEBUG
-    vcl_cout << pr << '\n';
+    std::cout << pr << '\n';
 #endif
     if (pr>0)
-      msum += pr*vcl_log(pr);
+      msum += pr*std::log(pr);
   }
   for (unsigned r = 0; r<nr; ++r)
     for (unsigned c = 0; c<nc; ++c) {
         double prc = joint_prob[r][c];
         if (prc>0)
-          jsum+= prc*vcl_log(prc);
+          jsum+= prc*std::log(prc);
     }
   double ent_dif = jsum - msum;
-  return -ent_dif/vcl_log(2.0);
+  return -ent_dif/std::log(2.0);
 }
 
 double icam_cost_func::entropy_diff(vnl_vector_fixed<double, 3> rodrigues,

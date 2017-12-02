@@ -36,7 +36,7 @@ void bil_blob_finder::set_work_image(vil_image_view<bool>& image)
 
 //: Delete region in image with boundary (bi,bj)
 void delete_blob(vil_image_view<bool>& image,
-                 const vcl_vector<int>& bi, const vcl_vector<int>& bj)
+                 const std::vector<int>& bi, const std::vector<int>& bj)
 {
   const unsigned n = bi.size();
   const unsigned ni = image.ni();
@@ -57,7 +57,7 @@ void delete_blob(vil_image_view<bool>& image,
 //: Get boundary pixels of next blob in current image.
 // Uses four connected boundary representation.
 // Return false if no more regions
-bool bil_blob_finder::next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
+bool bil_blob_finder::next_4con_region(std::vector<int>& bi, std::vector<int>& bj)
 {
   // Start from current pixel (i_,j_), run over rows until matching pixel found
   for (; j_<image_.nj(); ++j_,i_=0)
@@ -80,7 +80,7 @@ bool bil_blob_finder::next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
 //: Get pixels of next blob in current image.
 // Uses four connected boundary representation.
 // Return false if no more regions
-bool bil_blob_finder::next_4con_region(vcl_vector<vil_chord>& region)
+bool bil_blob_finder::next_4con_region(std::vector<vil_chord>& region)
 {
   region.resize(0);
   // Start from current pixel (i_,j_), run over rows until matching pixel found
@@ -103,7 +103,7 @@ bool bil_blob_finder::next_4con_region(vcl_vector<vil_chord>& region)
 //: Get pixels of next blob in current image.
 // Uses 8 connected boundary representation.
 // Return false if no more regions
-bool bil_blob_finder::next_8con_region(vcl_vector<vil_chord>& region)
+bool bil_blob_finder::next_8con_region(std::vector<vil_chord>& region)
 {
   region.resize(0);
   // Start from current pixel (i_,j_), run over rows until matching pixel found
@@ -127,16 +127,16 @@ bool bil_blob_finder::next_8con_region(vcl_vector<vil_chord>& region)
 //  Assumes image has been initialised, and that next_4con_region not
 //  yet called.  Erases internal image during this call, so any
 //  subsequent calls will not work.
-void bil_blob_finder::longest_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj)
+void bil_blob_finder::longest_4con_boundary(std::vector<int>& bi, std::vector<int>& bj)
 {
   bi.resize(0); bj.resize(0);
-  vcl_vector<int> tmp_bi,tmp_bj;
+  std::vector<int> tmp_bi,tmp_bj;
   while (next_4con_region(tmp_bi,tmp_bj))
   {
     if (tmp_bi.size()>bi.size())
     {
-      vcl_swap(bi,tmp_bi);
-      vcl_swap(bj,tmp_bj);
+      std::swap(bi,tmp_bi);
+      std::swap(bj,tmp_bj);
     }
   }
 }
@@ -146,7 +146,7 @@ unsigned bil_blob_finder::n_4con_regions(const vil_image_view<bool>& image)
 {
   set_image(image);
   unsigned n=0;
-  vcl_vector<int> tmp_bi,tmp_bj;
+  std::vector<int> tmp_bi,tmp_bj;
   while (next_4con_region(tmp_bi,tmp_bj)) n++;
   return n;
 }
@@ -157,7 +157,7 @@ unsigned bil_blob_finder::n_4con_regions(const vil_image_view<bool>& image)
 //: Get boundary pixels of next blob in current image.
 // Uses four connected boundary representation.
 // Return false if no more regions
-bool bil_blob_finder::next_8con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
+bool bil_blob_finder::next_8con_region(std::vector<int>& bi, std::vector<int>& bj)
 {
   // Start from current pixel (i_,j_), run over rows until matching pixel found
   for (; j_<image_.nj(); ++j_,i_=0)
@@ -181,32 +181,32 @@ bool bil_blob_finder::next_8con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
 //  Assumes image has been initialised, and that next_8con_region not
 //  yet called.  Erases internal image during this call, so any
 //  subsequent calls will not work.
-void bil_blob_finder::longest_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj)
+void bil_blob_finder::longest_8con_boundary(std::vector<int>& bi, std::vector<int>& bj)
 {
   bi.resize(0); bj.resize(0);
-  vcl_vector<int> tmp_bi,tmp_bj;
+  std::vector<int> tmp_bi,tmp_bj;
   while (next_8con_region(tmp_bi,tmp_bj))
   {
     if (tmp_bi.size()>bi.size())
     {
-      vcl_swap(bi,tmp_bi);
-      vcl_swap(bj,tmp_bj);
+      std::swap(bi,tmp_bi);
+      std::swap(bj,tmp_bj);
     }
   }
 }
 
 //: Get largest blob region in current image
-unsigned bil_blob_finder::largest_8con_region(vcl_vector<vil_chord>& region)
+unsigned bil_blob_finder::largest_8con_region(std::vector<vil_chord>& region)
 {
-  region.resize(0); 
-  vcl_vector<vil_chord> tmp_region;
+  region.resize(0);
+  std::vector<vil_chord> tmp_region;
   unsigned max_area=0;
   while (next_8con_region(tmp_region))
   {
     unsigned area = vil_area(tmp_region);
     if (area>max_area)
     {
-      vcl_swap(region,tmp_region);
+      std::swap(region,tmp_region);
       max_area=area;
     }
   }
@@ -214,17 +214,17 @@ unsigned bil_blob_finder::largest_8con_region(vcl_vector<vil_chord>& region)
 }
 
 //: Get largest blob region in current image
-unsigned bil_blob_finder::largest_4con_region(vcl_vector<vil_chord>& region)
+unsigned bil_blob_finder::largest_4con_region(std::vector<vil_chord>& region)
 {
-  region.resize(0); 
-  vcl_vector<vil_chord> tmp_region;
+  region.resize(0);
+  std::vector<vil_chord> tmp_region;
   unsigned max_area=0;
   while (next_4con_region(tmp_region))
   {
     unsigned area = vil_area(tmp_region);
     if (area>max_area)
     {
-      vcl_swap(region,tmp_region);
+      std::swap(region,tmp_region);
       max_area=area;
     }
   }
@@ -236,7 +236,7 @@ unsigned bil_blob_finder::n_8con_regions(const vil_image_view<bool>& image)
 {
   set_image(image);
   unsigned n=0;
-  vcl_vector<int> tmp_bi,tmp_bj;
+  std::vector<int> tmp_bi,tmp_bj;
   while (next_8con_region(tmp_bi,tmp_bj)) n++;
   return n;
 }

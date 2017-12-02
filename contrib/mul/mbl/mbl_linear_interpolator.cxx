@@ -1,7 +1,9 @@
 // This is mul/mbl/mbl_linear_interpolator.cxx
+#include <iostream>
+#include <limits>
 #include "mbl_linear_interpolator.h"
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_index_sort.h>
 
 
@@ -16,7 +18,7 @@ void mbl_linear_interpolator::clear()
   y_.resize(0);
 }
 
-bool mbl_linear_interpolator::set(const vcl_vector<double> &x, const vcl_vector<double> &y)
+bool mbl_linear_interpolator::set(const std::vector<double> &x, const std::vector<double> &y)
 {
   bool ret=false;
   clear();
@@ -34,10 +36,10 @@ bool mbl_linear_interpolator::set(const vcl_vector<double> &x, const vcl_vector<
 
 void mbl_linear_interpolator::sort()
 {
-   vcl_vector<int> index;
+   std::vector<int> index;
    mbl_index_sort(x_,index);
-   vcl_vector<double> tmp_x=x_;
-   vcl_vector<double> tmp_y=y_;
+   std::vector<double> tmp_x=x_;
+   std::vector<double> tmp_y=y_;
 
    for (unsigned i=0;i<index.size();++i)
    {
@@ -50,7 +52,7 @@ void mbl_linear_interpolator::sort()
 
 double mbl_linear_interpolator::y(double x) const
 {
-  double yval=vcl_numeric_limits<double>::quiet_NaN();
+  double yval=std::numeric_limits<double>::quiet_NaN();
 
   if (x_.size()>0)
   {

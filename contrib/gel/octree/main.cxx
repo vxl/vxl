@@ -6,13 +6,14 @@
 // \date   11 May 99
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <fstream>
+#include <list>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for sqrt()
-#include <vcl_cstdlib.h> // for exit()
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_list.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
 #include <vbl/vbl_array_2d.h>
@@ -76,7 +77,7 @@ void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &dis
 
   if (r <= 2 || c <= 2) return; // the iterations below are empty in that case
 
-  distance.fill( short(1+vcl_sqrt((double)r*r + c*c)));
+  distance.fill( short(1+std::sqrt((double)r*r + c*c)));
 
   for (unsigned int i=1; i+1<r; ++i)
     for (unsigned int j=1; j+1<c; ++j)
@@ -146,7 +147,7 @@ double computevoxelradius( VoxmapImagePoints const& voxmap, Voxel &voxel, int im
   double d7  = (c7-centre).squared_magnitude(); if (d7> dist) dist= d7;
   double d8  = (c8-centre).squared_magnitude(); if (d8> dist) dist= d8;
 
-  return vcl_sqrt(dist);
+  return std::sqrt(dist);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -172,7 +173,7 @@ cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex
   cv.set_point( 7, c8[0], c8[1]);
   cv.compute();
 
-  vcl_vector<vgl_point_2d<float> > points;
+  std::vector<vgl_point_2d<float> > points;
   // vgl_polygon_scan_iterator<float>::Point2 points[cv.get_npoints()];
   vgl_box_2d<float> box( 0.f, imagestore[imageindex]->width()-1.f, 0.f, imagestore[imageindex]->height()-1.f);
 
@@ -225,15 +226,15 @@ cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex
 ////////////////////////////////
 int main(int argc, char ** argv)
 {
-  vul_arg<const char*> colorimagefilename( "-c", "Color image filenames (only for pipe)", 0);
+  vul_arg<const char*> colorimagefilename( "-c", "Color image filenames (only for pipe)", VXL_NULLPTR);
   vul_arg<const char*> imagefilename( "-i", "Thresholded images", "/home/crossge/images/dino/full/thresh.%03d.pgm");
   vul_arg<const char*> pmatrixfilename( "-p", "PMatrix basename", "/home/crossge/images/dino/full/viff.%03d.sa.P");
-  vul_arg<const char*> outputfilename( "-o", "Piped output filename", 0);
+  vul_arg<const char*> outputfilename( "-o", "Piped output filename", VXL_NULLPTR);
   vul_arg<const char*> outputvrml( "-v", "Output VRML filename", "/tmp/out.wrl");
   vul_arg<int>         iterations( "-s", "Number of iterations", 5);
   vul_arg<int>         startiteration( "-start", "Starting iteration", 0);
   vul_arg<double>      fiddlefactor( "-fiddle", "Fiddle factor for cube radii", 1.5);
-  vul_arg<const char*> voxmapfilename( "-vf", "Voxmap filename", 0);
+  vul_arg<const char*> voxmapfilename( "-vf", "Voxmap filename", VXL_NULLPTR);
 
   vul_arg<double>      sx( "-sx", "Starting x position" , -0.0044); // was: -0.0011
   vul_arg<double>      sy( "-sy", "Starting y position" , -0.0136); // was: -0.0226
@@ -241,7 +242,7 @@ int main(int argc, char ** argv)
 
   vul_arg<double>      ss( "-ss", "Starting size" , 0.2); // was: 0.4
 
-  vul_arg<vcl_list<int> > imagenumbersarg( "-n", "Image numbers");
+  vul_arg<std::list<int> > imagenumbersarg( "-n", "Image numbers");
 
   vul_arg_parse( argc, argv);
 
@@ -250,40 +251,40 @@ int main(int argc, char ** argv)
 
   ///////////////////////////////////////////////////////////////////
 
-  vcl_ofstream *fout= NULL;
+  std::ofstream *fout= VXL_NULLPTR;
 
   if ((const char *)outputfilename())
   {
-    vcl_cerr << "Opening pipe...";
-    fout= new vcl_ofstream(outputfilename());
-    vcl_cerr << " done.\n";
+    std::cerr << "Opening pipe...";
+    fout= new std::ofstream(outputfilename());
+    std::cerr << " done.\n";
   }
   else
   {
-    vcl_cerr << "Not opening pipe.\n";
+    std::cerr << "Not opening pipe.\n";
   }
 
   ///////////////////////////////////////////////////////////////////
 
   // useful otherwise we have to cast every time we want to use it
-  vcl_list<int> imagenumbers( imagenumbersarg());
+  std::list<int> imagenumbers( imagenumbersarg());
 
   // all the pre-computation setup
-  for (vcl_list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
+  for (std::list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
   {
-    vcl_cerr << "Loading image : " << *it << vcl_endl;
+    std::cerr << "Loading image : " << *it << std::endl;
 
     // load all images and pmatrices
     vil1_image image= vil1_load( vul_sprintf((const char *)imagefilename(), *it));
     imagestore[*it]= new vil1_memory_image_of<vxl_byte>( image);
     assert( *imagestore[*it]);
 
-    vcl_ifstream pmatrixin( vul_sprintf((const char *)pmatrixfilename(), *it));
+    std::ifstream pmatrixin( vul_sprintf((const char *)pmatrixfilename(), *it));
     assert( pmatrixin.good());
     pmatrixstore[*it]= new PMatrix;
     pmatrixstore[*it]->read_ascii( pmatrixin);
 
-    vcl_cerr << "Computing borgefors transform ...";
+    std::cerr << "Computing borgefors transform ...";
 
     // compute borgefors transform
     vbl_array_2d<bool> edges( imagestore[*it]->width(),
@@ -294,7 +295,7 @@ int main(int argc, char ** argv)
     computeborgefors( edges,
                       *distancestore[*it]);
 
-    vcl_cerr << " done\n";
+    std::cerr << " done\n";
 
     // setup voxmap projection cache
     voxmap.SetPMatrix( *pmatrixstore[*it], *it);
@@ -302,8 +303,8 @@ int main(int argc, char ** argv)
 
   ///////////////////////////////////////////////////////////////////
 
-  vcl_vector<Voxel> voxels;
-  vcl_vector<Voxel> insidevoxels;
+  std::vector<Voxel> voxels;
+  std::vector<Voxel> insidevoxels;
 
   {
     unsigned int d= 1<< int(startiteration());
@@ -316,14 +317,14 @@ int main(int argc, char ** argv)
 
   for (int count=int(startiteration()); count< int(iterations()); count++)
   {
-    vcl_cerr << "Iterations to do: " << (int(iterations())-count) << vcl_endl;
+    std::cerr << "Iterations to do: " << (int(iterations())-count) << std::endl;
 
     if (fout)
     {
       (*fout) << "c\n";
 
       for (unsigned int i=0; i< voxels.size(); i++)
-        (*fout) << 'a' << voxels[i] << vcl_endl;
+        (*fout) << 'a' << voxels[i] << std::endl;
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -331,7 +332,7 @@ int main(int argc, char ** argv)
     bool* insideimage   = new bool [voxels.size()];
     bool* insideobject  = new bool [voxels.size()];
 
-    vcl_cerr << "Setting up variables... ";
+    std::cerr << "Setting up variables... ";
 
     // note: this assumes that the radius of each voxel in each image is
     //       approximately the same.  Not true in general, but for the turntable
@@ -350,11 +351,11 @@ int main(int argc, char ** argv)
       insideobject [i]= true;
     }
 
-    vcl_cerr << "Done.\n";
+    std::cerr << "Done.\n";
 
-    for (vcl_list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
+    for (std::list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
     {
-      vcl_cerr << *it << ' ';
+      std::cerr << *it << ' ';
 
       if (fout)
       {
@@ -383,7 +384,7 @@ int main(int argc, char ** argv)
             double disttoim= vnl_double_2( double(xsize)/2-centre[0], double(ysize)/2-centre[1]).magnitude();
 
             // cube does actually look 'close' to the image
-            if (disttoim< (radius+(vcl_sqrt((double)xsize*xsize/4+ysize*ysize/4))))
+            if (disttoim< (radius+(std::sqrt((double)xsize*xsize/4+ysize*ysize/4))))
             {
               cubetest_t t= DoScan( voxmap, voxels[i], *it);
 
@@ -393,7 +394,7 @@ int main(int argc, char ** argv)
               // outsideimage, surface, inside, outside
               if (t== outside)
               {
-                if (fout) (*fout) << "d " << i << vcl_endl;
+                if (fout) (*fout) << "d " << i << std::endl;
 
                 outsideobject[i]= true;
               }
@@ -413,7 +414,7 @@ int main(int argc, char ** argv)
               {
                 if (fout)
                 {
-                  (*fout) << "d " << i << vcl_endl;
+                  (*fout) << "d " << i << std::endl;
                   if (updatecounter++>= (2<<count))
                   {
                     (*fout) << "u\n";
@@ -433,7 +434,7 @@ int main(int argc, char ** argv)
 
                 if (t== outside)
                 {
-                  if (fout) (*fout) << "d " << i << vcl_endl;
+                  if (fout) (*fout) << "d " << i << std::endl;
 
                   outsideobject[i]= true;
                 }
@@ -450,11 +451,11 @@ int main(int argc, char ** argv)
       } // for (int i=0; i< voxels.length(); i++)
     } // for (imagenumbers.reset(); imagenumbers.next(); )
 
-    vcl_cerr << vcl_endl;
+    std::cerr << std::endl;
 
-    vcl_vector<Voxel> newvoxels;
+    std::vector<Voxel> newvoxels;
 
-    vcl_cerr << "No voxels = " << voxels.size()
+    std::cerr << "No voxels = " << voxels.size()
              << "\nMaking new level...\n";
 
     for (unsigned int i=0; i< voxels.size(); i++)
@@ -482,11 +483,11 @@ int main(int argc, char ** argv)
         if ((insideobject[i]) && ( !outsideobject[i]) && ( insideimage[i]))
           insidevoxels.push_back( voxels[i]);
 
-        if (fout) (*fout) << "d " << i << vcl_endl;
+        if (fout) (*fout) << "d " << i << std::endl;
       }
     }
 
-    vcl_cerr << "Copying...\n";
+    std::cerr << "Copying...\n";
 
     voxels= newvoxels;
     delete[] outsideobject;
@@ -494,11 +495,11 @@ int main(int argc, char ** argv)
     delete[] insideobject;
   } // for (int i=0; i< int(iterators); i++)
 
-  vcl_cerr << "Deleting images and pmatrices...\n";
+  std::cerr << "Deleting images and pmatrices...\n";
 
   ///////////////////////////////////////////////////////////////////
   // delete all images and pmatrices
-  for (vcl_list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
+  for (std::list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
   {
     delete imagestore[*it];
     delete pmatrixstore[*it];
@@ -533,22 +534,22 @@ int main(int argc, char ** argv)
             v.flip( x,y,z);
     }
 
-    vcl_ofstream fout((const char *)voxmapfilename());
-    fout << double(ss()) << ' ' << double(sx()) << ' ' << double(sy()) << ' ' << double(sz()) << vcl_endl
-         << size << vcl_endl;
+    std::ofstream fout((const char *)voxmapfilename());
+    fout << double(ss()) << ' ' << double(sx()) << ' ' << double(sy()) << ' ' << double(sz()) << std::endl
+         << size << std::endl;
 
     for (int x=0; x< size; x++)
       for (int y=0; y< size; y++)
         for (int z=0; z< size; z++)
           fout << v(x,y,z);
 
-    vcl_exit(0);
+    std::exit(0);
   }
 
   ///////////////////////////////////////////////////////////////////
   // make VRML
 
-  vcl_cerr << "Making VRML...\n";
+  std::cerr << "Making VRML...\n";
 
   int size= 1<<(int(iterations())-1);
   vbl_bit_array_3d edges1( size,   size,   size+1, false);
@@ -556,7 +557,7 @@ int main(int argc, char ** argv)
   vbl_bit_array_3d edges3( size+1, size,   size,   false);
   vbl_bit_array_3d voxint( size,   size,   size,   false);
 
-  vcl_cerr << "Surface voxels...\n";
+  std::cerr << "Surface voxels...\n";
   for (unsigned int i=0; i< voxels.size(); i++)
   {
     voxint.set( voxels[i].x, voxels[i].y, voxels[i].z);
@@ -571,7 +572,7 @@ int main(int argc, char ** argv)
     edges3.flip( voxels[i].x+1, voxels[i].y,   voxels[i].z);
   }
 
-  vcl_cerr << "Interior voxels...\n";
+  std::cerr << "Interior voxels...\n";
   for (unsigned int i=0; i< insidevoxels.size(); i++)
   {
     int depth= 1<<((int(iterations())-1)-insidevoxels[i].depth);
@@ -601,17 +602,17 @@ int main(int argc, char ** argv)
         }
   }
 
-  vcl_cerr << "Clearing up...\n";
+  std::cerr << "Clearing up...\n";
   voxels.clear();
   insidevoxels.clear();
 
-  vcl_cerr << "Output VRML...\n";
+  std::cerr << "Output VRML...\n";
 
   vbl_sparse_array_1d<int> indexlist;
-  vcl_vector<vnl_double_3> points;
-  vcl_vector<vnl_int_3> faces;
+  std::vector<vnl_double_3> points;
+  std::vector<vnl_int_3> faces;
 
-  vcl_cerr << "z - direction\n";
+  std::cerr << "z - direction\n";
 
   // z direction
   for (int x=0; x< size; x++)
@@ -665,7 +666,7 @@ int main(int argc, char ** argv)
     }
   }
 
-  vcl_cerr << "y - direction\n";
+  std::cerr << "y - direction\n";
 
   // y direction
   for (int x=0; x< size; x++)
@@ -719,7 +720,7 @@ int main(int argc, char ** argv)
     }
   }
 
-  vcl_cerr << "x - direction\n";
+  std::cerr << "x - direction\n";
 
   // x direction
   for (int x=1; x< size; x++)
@@ -775,7 +776,7 @@ int main(int argc, char ** argv)
 
   ///////////////////////////////////////////////////////////////////////////
 
-  vcl_ofstream vfout((const char *)outputvrml());
+  std::ofstream vfout((const char *)outputvrml());
   assert( vfout.good());
 
   vfout << "#VRML V1.0 ascii\n\nSeparator {\nCoordinate3 { point [\n";

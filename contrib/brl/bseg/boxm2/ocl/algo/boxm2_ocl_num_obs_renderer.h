@@ -10,7 +10,9 @@
 class boxm2_ocl_num_obs_renderer
 {
   public:
-    boxm2_ocl_num_obs_renderer(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, vcl_string ident="");
+    boxm2_ocl_num_obs_renderer(boxm2_scene_sptr scene,
+                               boxm2_opencl_cache_sptr ocl_cache,
+                               std::string ident="");
     ~boxm2_ocl_num_obs_renderer();
 
     bool render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor=0.0f, float farfactor=1000000.0f);
@@ -22,11 +24,11 @@ class boxm2_ocl_num_obs_renderer
     boxm2_scene_sptr scene_;
     bocl_device_sptr device_;
     boxm2_opencl_cache_sptr opencl_cache_;
-    vcl_string nobs_type_;
+    std::string nobs_type_;
     bool buffers_allocated_;
     int nobs_type_size_;
-    vcl_vector<bocl_kernel*> kernels_;
-    bool compile_kernels(bocl_device_sptr device, vcl_vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type);
+    std::vector<bocl_kernel*> kernels_;
+    bool compile_kernels(bocl_device_sptr device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type);
     bool cleanup_render_buffers();
     bool allocate_render_buffers(int cl_ni, int cl_nj);
 
@@ -37,7 +39,7 @@ class boxm2_ocl_num_obs_renderer
     // persistant ocl and host buffers for efficiency
     cl_int img_dim_buff_[4];
     cl_float tnearfar_buff_[2];
-    
+
     cl_int prev_ni_;
     cl_int prev_nj_;
     cl_float* img_buff_;

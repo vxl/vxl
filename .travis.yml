@@ -8,21 +8,33 @@ compiler:
   - gcc
   - clang
 
-cache:
-  directories:
-  - $HOME/deps
+# https://docs.travis-ci.com/user/customizing-the-build/
+git:
+  depth: 3
 
+#cache: false
+#  directories:
+#  - $HOME/deps
+
+# Need to install cmake 2.8.9 because default 2.8.7 bugs fail to build
 before_script:
   - bash .travis/install-deps.sh
 
 script:
-  - export PATH=$HOME/deps/bin:$PATH
-  - mkdir build
-  - mkdir $HOME/install
-  - cd build
-  - cmake -DCMAKE_INSTALL_PREFIX=$HOME/install
-          -DCMAKE_CXX_STANDARD=98
+  - export PATH=${HOME}/deps/bin:$PATH
+  - export HERE=$(pwd)
+  - ${HOME}/deps/bin/cmake --version
+  - mkdir -p ${HERE}/build
+  - mkdir -p ${HERE}/install
+  - cd ${HERE}/build
+  - ${HOME}/deps/bin/cmake
+          -DCMAKE_INSTALL_PREFIX:PATH=${HERE}/install
+          -DCMAKE_CXX_STANDARD:STRING=98
+          -DBUILD_BRL:BOOL=OFF
           ../
-  - make -j2
-  - ctest
+  - ${HOME}/deps/bin/ctest -D ExperimentalStart
+  - ${HOME}/deps/bin/ctest -D ExperimentalConfigure
+  - ${HOME}/deps/bin/ctest -D ExperimentalBuild -j2
+  - ${HOME}/deps/bin/ctest -D ExperimentalTest --schedule-random -j2
+  - ${HOME}/deps/bin/ctest -D ExperimentalSubmit
   - make install

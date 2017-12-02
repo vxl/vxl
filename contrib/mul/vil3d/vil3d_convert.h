@@ -55,8 +55,10 @@
 // It may be a good idea to provide vil3d_image_resource_sptr based
 // vil3d_converts as well.
 
+#include <iostream>
+#include <limits>
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vil/vil_convert.h>
 #include <vil3d/vil3d_transform.h>
 #include <vil3d/vil3d_math.h>
@@ -390,10 +392,10 @@ inline vil3d_image_view_base_sptr vil3d_convert_stretch_range(
 
   double hi,lo;
 
-  if (vcl_numeric_limits<outP>::is_integer)
+  if (std::numeric_limits<outP>::is_integer)
   {
-    hi = vcl_numeric_limits<outP>::max()+0.999;
-    lo = vcl_numeric_limits<outP>::min();
+    hi = std::numeric_limits<outP>::max()+0.999;
+    lo = std::numeric_limits<outP>::min();
   }
   else
   {

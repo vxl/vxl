@@ -1,7 +1,8 @@
 // Some tests for vgl_plane_3d
 // J.L. Mundy Sept. 17, 2010
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -9,7 +10,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_closest_point.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 static void test_constructor()
 {
   double a = 0.0, b = 10.0, c = 0.0, d = 0.0;
@@ -18,20 +19,20 @@ static void test_constructor()
   vgl_point_3d<double> p0(0.0,0.0,0.0);
   vgl_plane_3d<double> plane_ptn(n, p0);
   vgl_vector_3d<double> nabcd = plane_abcd.normal(), nptn = plane_ptn.normal();
-  double dist = vcl_fabs(1.0-dot_product(nabcd, nptn));
+  double dist = std::fabs(1.0-dot_product(nabcd, nptn));
   TEST_NEAR("Constructors and Normal", dist ,0.0, 1e-5);
   // case I coincident
   vgl_vector_3d<double> dir0(-1.0, 0.0, 0.0), dir1(0.0, 0.0, 1.0);
   vgl_ray_3d<double> r0(p0, dir0), r1(p0, dir1);
   vgl_plane_3d<double> plane_coin_rays(r0, r1);
   vgl_vector_3d<double> ncoin = plane_coin_rays.normal();
-  dist = vcl_fabs(1.0-dot_product(ncoin, nptn));
+  dist = std::fabs(1.0-dot_product(ncoin, nptn));
   TEST_NEAR("Coincident ray constructor", dist ,0.0, 1e-5);
   vgl_point_3d<double> p0p(-1.0,0.0,0.0);
   vgl_ray_3d<double> r0p(p0p, dir1);
   vgl_plane_3d<double> plane_para_rays(r0p, r1);
   vgl_vector_3d<double> npara = plane_para_rays.normal();
-  dist = vcl_fabs(1.0-dot_product(npara, nptn));
+  dist = std::fabs(1.0-dot_product(npara, nptn));
   TEST_NEAR("Parallel ray constructor", dist ,0.0, 1e-5);
 }
 
@@ -44,20 +45,20 @@ static void test_operations()
   vgl_point_3d<double> p3d(1.0, 1.0, -1.0);
   vgl_point_2d<double> p2d, p2dy, p2dys;
   bool good = plane.plane_coords(p3d, p2d, 1e-5);
-  double er = vcl_fabs(p2d.x()-vcl_sqrt(2.0));
+  double er = std::fabs(p2d.x()-std::sqrt(2.0));
 
   // a plane with the Y axis as its normal
   a = 0.0, b = 1.0, c = 0.0;
   vgl_plane_3d<double> plane1(a, b, c, d);
   vgl_point_3d<double> p3dy(1.0, 0.0, 1.0);
   good = good && plane1.plane_coords(p3dy, p2dy, 1e-5);
-  er +=  vcl_fabs(p2dy.x()-1.0)+vcl_fabs(p2dy.y()-1.0);
+  er +=  std::fabs(p2dy.x()-1.0)+std::fabs(p2dy.y()-1.0);
   // shift the plane along the y axis
   d = -10.0;
   vgl_plane_3d<double> plane1s(a, b, c, d);
   vgl_point_3d<double> p3dys(1.0, 10.0, 1.0);
   good = good && plane1s.plane_coords(p3dys, p2dys, 1e-5);
-  er +=  vcl_fabs(p2dys.x()-1.0)+vcl_fabs(p2dys.y()-1.0);
+  er +=  std::fabs(p2dys.x()-1.0)+std::fabs(p2dys.y()-1.0);
   good = good && (er < 1e-5);
   TEST("Plane Coordinate System: world -> plane", good, true);
 
@@ -84,7 +85,7 @@ static void test_operations()
 
 void test_plane_3d()
 {
-  vcl_cout << "**********************\n"
+  std::cout << "**********************\n"
            << " Testing vgl_plane_3d\n"
            << "**********************\n\n";
 

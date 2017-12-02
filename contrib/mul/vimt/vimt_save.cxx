@@ -52,7 +52,7 @@ void vimt_save_transform(vil_image_resource_sptr &ir,
 }
 
 
-bool vimt_save(const vcl_string& path,
+bool vimt_save(const std::string& path,
                const vimt_image_2d& image,
                bool use_millimetres /*=false*/)
 {

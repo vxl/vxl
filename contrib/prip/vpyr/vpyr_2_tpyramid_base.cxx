@@ -38,7 +38,7 @@ void vpyr_2_tpyramid_base_dart::set_sequence_index(vmap_dart_index arg)
   vpyr_2_pyramid_base_dart::set_sequence_index(arg) ;
 
   vmap_2_tmap_dart_iterator it ;
-  if (edge_!=NULL)
+  if (edge_!=VXL_NULLPTR)
   {
     it = edge_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)
@@ -46,7 +46,7 @@ void vpyr_2_tpyramid_base_dart::set_sequence_index(vmap_dart_index arg)
       edge_->set_begin(it) ;
     }
   }
-  if (vertex_!=NULL)
+  if (vertex_!=VXL_NULLPTR)
   {
     it = vertex_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)
@@ -54,7 +54,7 @@ void vpyr_2_tpyramid_base_dart::set_sequence_index(vmap_dart_index arg)
       vertex_->set_begin(it) ;
     }
   }
-  if (face_!=NULL)
+  if (face_!=VXL_NULLPTR)
   {
     it = face_->begin()+offset ;
     if (&*it==(vmap_2_tmap_dart*)this)

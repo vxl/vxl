@@ -9,11 +9,12 @@
 // \brief  See vgui_composite_tableau.h for a description of this file.
 
 
+#include <iostream>
+#include <sstream>
+#include <vector>
 #include "vgui_composite_tableau.h"
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
@@ -26,7 +27,7 @@ static vgui_event_condition default_c_enable_key_bindings(vgui_key_CTRL('c'));
 //: Prints info about this tableau - called when '?' is pressed.
 bool vgui_composite_tableau::help()
 {
-  vcl_cerr << "\n+- vgui_composite_tableau -----+\n"
+  std::cerr << "\n+- vgui_composite_tableau -----+\n"
            << "|     keys                     |\n"
            << "| `1' to `9'  toggle child `n' |\n"
            << "+------------------------------+\n\n";
@@ -71,7 +72,7 @@ vgui_composite_tableau::vgui_composite_tableau(vgui_tableau_sptr const& child0,
 //----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_composite_tableau_new.
 // Many children, top to bottom.
-vgui_composite_tableau::vgui_composite_tableau(vcl_vector<vgui_tableau_sptr> const& the_children)
+vgui_composite_tableau::vgui_composite_tableau(std::vector<vgui_tableau_sptr> const& the_children)
   : c_enable_key_bindings(default_c_enable_key_bindings)
 {
   for (unsigned int i = 0; i < the_children.size(); ++i)
@@ -81,9 +82,9 @@ vgui_composite_tableau::vgui_composite_tableau(vcl_vector<vgui_tableau_sptr> con
 
 //----------------------------------------------------------------------------
 //: Returns a nice version of the name, including info on the children.
-vcl_string vgui_composite_tableau::pretty_name() const
+std::string vgui_composite_tableau::pretty_name() const
 {
-  vcl_stringstream s; s << type_name() << "[#kids=" << children.size() << ']';
+  std::stringstream s; s << type_name() << "[#kids=" << children.size() << ']';
   return s.str();
 }
 
@@ -121,7 +122,7 @@ bool vgui_composite_tableau::handle(const vgui_event& event)
   // "normal" events :
   // Alt-C enables / disables key bindings
   if (c_enable_key_bindings(event)) {
-    vcl_cerr << "Toggle keybindings\n";
+    std::cerr << "Toggle keybindings\n";
     vgui::out << "Toggle keybindings";
     enable_key_bindings = !enable_key_bindings;
   }
@@ -202,7 +203,7 @@ bool vgui_composite_tableau::add_child(vgui_tableau_sptr const& t)
 void vgui_composite_tableau::remove(vgui_tableau_sptr const& t)
 {
   if (!remove_child(t))
-    vcl_cerr << __FILE__ " : no such child tableau\n";
+    std::cerr << __FILE__ " : no such child tableau\n";
 }
 
 //----------------------------------------------------------------------------
@@ -217,8 +218,8 @@ void vgui_composite_tableau::clear()
 // virtual
 bool vgui_composite_tableau::remove_child(vgui_tableau_sptr const &t)
 {
-  vcl_vector<bool>::iterator ia = active.begin();
-  for (vcl_vector<vgui_parent_child_link>::iterator i=children.begin() ; i!=children.end() ; ++i, ++ia)
+  std::vector<bool>::iterator ia = active.begin();
+  for (std::vector<vgui_parent_child_link>::iterator i=children.begin() ; i!=children.end() ; ++i, ++ia)
     if ( (*i) == t ) {
       children.erase(i);
       active.erase(ia);

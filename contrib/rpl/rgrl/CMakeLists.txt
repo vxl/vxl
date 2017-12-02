@@ -4,13 +4,13 @@ doxygen_add_library(contrib/rpl/rgrl
   DESCRIPTION "Rensselaer (Generalized) Registration Library"
   )
 
-IF(vxl_SOURCE_DIR)
-  SET(VXL_MUL_INCLUDE_DIR ${MUL_INCLUDE_DIR})
-ENDIF(vxl_SOURCE_DIR)
+if(CMAKE_SOURCE_DIR)
+  set(VXL_MUL_INCLUDE_DIR ${MUL_INCLUDE_DIR})
+endif()
 
-INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/rpl )
-SET( rgrl_sources
+include_directories( ${VXL_MUL_INCLUDE_DIR} )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/rpl )
+set( rgrl_sources
   rgrl_export.h
   rgrl_fwd.h
   rgrl_object.h                        rgrl_object.cxx
@@ -22,7 +22,7 @@ SET( rgrl_sources
   rgrl_mask_sptr.h
 
   rgrl_cast.h
-  rgrl_set_of.h                        rgrl_set_of.txx
+  rgrl_set_of.h                        rgrl_set_of.hxx
   rgrl_rotation.h                      rgrl_rotation.cxx
 
   rgrl_feature.h                       rgrl_feature.cxx
@@ -40,8 +40,8 @@ SET( rgrl_sources
 
   rgrl_feature_set.h                   rgrl_feature_set.cxx
   rgrl_feature_set_sptr.h
-  rgrl_feature_set_location.h          rgrl_feature_set_location.txx
-  rgrl_feature_set_bins.h              rgrl_feature_set_bins.txx
+  rgrl_feature_set_location.h          rgrl_feature_set_location.hxx
+  rgrl_feature_set_bins.h              rgrl_feature_set_bins.hxx
   rgrl_feature_set_bins_2d.h           rgrl_feature_set_bins_2d.cxx
   rgrl_feature_set_location_masked.h   rgrl_feature_set_location_masked.cxx
 
@@ -56,9 +56,9 @@ SET( rgrl_sources
   rgrl_matcher_k_nearest_pick_one.h    rgrl_matcher_k_nearest_pick_one.cxx
   rgrl_matcher_k_nearest_random.h      rgrl_matcher_k_nearest_random.cxx
   rgrl_matcher_k_nearest_boundary.h    rgrl_matcher_k_nearest_boundary.cxx
-  rgrl_matcher_pseudo.h                rgrl_matcher_pseudo.txx
-  rgrl_matcher_pseudo_3d.h             rgrl_matcher_pseudo_3d.txx
-  rgrl_matcher_pseudo_int_3d.h         rgrl_matcher_pseudo_int_3d.txx
+  rgrl_matcher_pseudo.h                rgrl_matcher_pseudo.hxx
+  rgrl_matcher_pseudo_3d.h             rgrl_matcher_pseudo_3d.hxx
+  rgrl_matcher_pseudo_int_3d.h         rgrl_matcher_pseudo_int_3d.hxx
 
   rgrl_evaluator_sptr.h
   rgrl_evaluator.h
@@ -97,9 +97,9 @@ SET( rgrl_sources
   rgrl_est_dis_homo2d_lm.h             rgrl_est_dis_homo2d_lm.cxx
 
   #generic estimator for homogeneous projection matrix
-  rgrl_est_proj_func.h                 rgrl_est_proj_func.txx
+  rgrl_est_proj_func.h                 rgrl_est_proj_func.hxx
   #generic estimator for homogeneous projection matrix w/ radial lens distortion
-  rgrl_est_proj_rad_func.h             rgrl_est_proj_rad_func.txx
+  rgrl_est_proj_rad_func.h             rgrl_est_proj_rad_func.hxx
 
   rgrl_est_homo2d_proj.h               rgrl_est_homo2d_proj.cxx
   rgrl_est_homo2d_proj_rad.h           rgrl_est_homo2d_proj_rad.cxx
@@ -160,22 +160,19 @@ SET( rgrl_sources
   rgrl_copyright.h
 )
 
-AUX_SOURCE_DIRECTORY( Templates rgrl_sources )
+aux_source_directory( Templates rgrl_sources )
 
-ADD_LIBRARY( rgrl ${rgrl_sources} )
+vxl_add_library(LIBRARY_NAME rgrl LIBRARY_SOURCES ${rgrl_sources} )
+target_link_libraries( rgrl rrel rsdl vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
+#find_package( ITK )
+#if( ITK_FOUND )
+#    target_link_libraries( rgrl ITKCommon )
+#endif()
 
-INSTALL_TARGETS(/lib rgrl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgrl ${rgrl_sources})
-TARGET_LINK_LIBRARIES( rgrl rrel rsdl vil3d vil vnl_algo vnl vbl vul)
-#FIND_PACKAGE( ITK )
-#IF( ITK_FOUND )
-#    TARGET_LINK_LIBRARIES( rgrl ITKCommon )
-#ENDIF( ITK_FOUND )
-
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()

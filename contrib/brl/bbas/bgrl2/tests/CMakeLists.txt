@@ -1,8 +1,8 @@
 # This bbas/bgrl2/tests/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+include_directories(${BRL_INCLUDE_DIR}/bbas )
 
-SET( bgrl2_test_sources
+set( bgrl2_test_sources
   test_driver.cxx
 
   test_node.h    test_node_sptr.h
@@ -12,14 +12,14 @@ SET( bgrl2_test_sources
   graph_test.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates bgrl2_test_sources)
+aux_source_directory(Templates bgrl2_test_sources)
 
-ADD_EXECUTABLE ( bgrl2_test_all ${bgrl2_test_sources})
-TARGET_LINK_LIBRARIES( bgrl2_test_all bgrl2 testlib vbl )
+add_executable( bgrl2_test_all ${bgrl2_test_sources})
+target_link_libraries( bgrl2_test_all bgrl2 ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vbl )
 
-ADD_TEST( bgrl2_test_graph   ${EXECUTABLE_OUTPUT_PATH}/bgrl2_test_all graph_test )
+add_test( NAME bgrl2_test_graph COMMAND $<TARGET_FILE:bgrl2_test_all> graph_test )
 
-ADD_EXECUTABLE( bgrl2_test_include test_include.cxx)
-TARGET_LINK_LIBRARIES( bgrl2_test_include bgrl2)
-ADD_EXECUTABLE( bgrl2_test_template_include test_template_include.cxx)
-TARGET_LINK_LIBRARIES( bgrl2_test_template_include bgrl2)
+add_executable( bgrl2_test_include test_include.cxx)
+target_link_libraries( bgrl2_test_include bgrl2)
+add_executable( bgrl2_test_template_include test_template_include.cxx)
+target_link_libraries( bgrl2_test_template_include bgrl2)

@@ -51,7 +51,7 @@ bmsh3d_vertex* incident_V_of_Es (const bmsh3d_halfedge* HE0,
 void add_HE_to_circular_chain_end (bmsh3d_halfedge* headHE, bmsh3d_halfedge* inputHE)
 {
   assert (headHE != NULL);
-  if (headHE->next() == NULL) {
+  if (headHE->next() == VXL_NULLPTR) {
     headHE->set_next (inputHE);
     inputHE->set_next (headHE);
   }

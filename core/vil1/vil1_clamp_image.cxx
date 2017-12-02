@@ -35,7 +35,7 @@ template bool vil1_clamp_image(vil1_image const& base, double low, double high, 
 
 #undef VIL1_SPECIALIZE_CLAMP_IMAGE_RGB
 #define VIL1_SPECIALIZE_CLAMP_IMAGE_RGB(T) \
-VCL_DEFINE_SPECIALIZATION \
+template <> \
 bool vil1_clamp_image(vil1_image const& base, double low, double high, \
                       vil1_rgb<T> *buf, int x0, int y0, int w, int h) \
 { \

@@ -1,8 +1,9 @@
+#include <iostream>
 #include "bsta_histogram.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <>
-void bsta_histogram<char>::pretty_print(vcl_ostream& os) const
+void bsta_histogram<char>::pretty_print(std::ostream& os) const
 {
   os << "area valid: " << area_valid_ << "\n"
   << "area: " << (int)area_ << "\n"
@@ -11,10 +12,10 @@ void bsta_histogram<char>::pretty_print(vcl_ostream& os) const
   << "delta: " << (int)delta_ << "\n"
   << "min_prob: " << (int)min_prob_ << "\n"
   << "min: " << (int)min_ << "\n"
-  << "max: " << (int)max_ << "\n" 
+  << "max: " << (int)max_ << "\n"
   << "counts: ";
   for (unsigned i = 0; i < counts_.size() ; i++)
     os << (int)counts_[i] << ' ';
-  
+
 }
 

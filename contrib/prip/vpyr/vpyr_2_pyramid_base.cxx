@@ -90,7 +90,7 @@ void vpyr_2_pyramid_base_dart::set_last_level(vmap_level_index arg)
   else
   {
 #ifdef DEBUG
-    vcl_cout<<arg<<'/'<<last_level_<<vcl_endl ;
+    std::cout<<arg<<'/'<<last_level_<<std::endl ;
 #endif
     vmap_2_map_alpha(this)->last_level_=(last_level_+1);
   }

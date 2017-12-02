@@ -44,7 +44,8 @@
 // \endlatexonly
 //
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
@@ -70,7 +71,7 @@ void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 // vector. vnl_vector_fixed defines most of the operators defined by
 // vnl_vector, and does so efficiently.
 typedef vnl_vector_fixed<double,2>              vector_2d;
-typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
+typedef std::vector< rgrl_feature_sptr >         feature_vector;
 
 // using command/observer pattern
 class command_iteration_update: public rgrl_command
@@ -87,7 +88,7 @@ class command_iteration_update: public rgrl_command
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
     rgrl_trans_affine* xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"Xform A = "<<xform->A()<<"\n t= "<<xform->t()<<vcl_endl;
+    std::cout<<"Xform A = "<<xform->A()<<"\n t= "<<xform->t()<<std::endl;
   }
 };
 
@@ -204,10 +205,10 @@ generate_data( feature_vector& feature_points )
     vector_2d pt,tangent_dir;
     double angle = ci*2*vnl_math::pi_over_180;
     double next_angle = (ci+1)*2*vnl_math::pi_over_180;
-    pt[0] = center_x + radius*vcl_cos(angle);
-    pt[1] = center_y + radius*vcl_sin(angle);
-    tangent_dir[0] = vcl_cos(next_angle) - vcl_cos(angle) ;
-    tangent_dir[1] = vcl_sin(next_angle) - vcl_sin(angle) ;
+    pt[0] = center_x + radius*std::cos(angle);
+    pt[1] = center_y + radius*std::sin(angle);
+    tangent_dir[0] = std::cos(next_angle) - std::cos(angle) ;
+    tangent_dir[1] = std::sin(next_angle) - std::sin(angle) ;
     tangent_dir.normalize(); //make the tangent a unit vector
     feature_points.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
   }
@@ -369,12 +370,12 @@ main()
   // EndCodeSnippet
 
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+    std::cout<<"Final xform:"<<std::endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"A = "<<a_xform->A()<<vcl_endl
-            <<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    std::cout<<"A = "<<a_xform->A()<<std::endl
+            <<"t = "<<a_xform->t()<<std::endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<std::endl;
   }
 
   // Perform testing

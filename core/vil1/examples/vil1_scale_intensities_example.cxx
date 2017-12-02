@@ -1,5 +1,6 @@
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
+#include <cstdlib>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
@@ -12,12 +13,12 @@
 int main (int argc, char** argv)
 {
   if (argc != 5) {
-    vcl_cerr << __FILE__ " : scale shift in_image out_image\n";
-    vcl_abort();
+    std::cerr << __FILE__ " : scale shift in_image out_image\n";
+    std::abort();
   }
 
-  double scale = vcl_atof(argv[1]);
-  double shift = vcl_atof(argv[2]);
+  double scale = std::atof(argv[1]);
+  double shift = std::atof(argv[2]);
 
   vil1_image in = vil1_load(argv[3]);
 

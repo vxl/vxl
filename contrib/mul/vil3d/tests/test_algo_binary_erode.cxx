@@ -1,6 +1,7 @@
 // This is mul/vil3d/tests/test_algo_binary_erode.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil3d/algo/vil3d_binary_erode.h>
 
 inline void print_binary_image(const vil3d_image_view<bool>& im)
@@ -11,17 +12,17 @@ inline void print_binary_image(const vil3d_image_view<bool>& im)
     {
       // Concatenate rows
       for (unsigned i=0;i<im.ni();++i)
-        if (im(i,j,k)) vcl_cout<<'X';
-        else           vcl_cout<<'.';
-      vcl_cout<<"     ";
+        if (im(i,j,k)) std::cout<<'X';
+        else           std::cout<<'.';
+      std::cout<<"     ";
     }
-    vcl_cout<<vcl_endl;
+    std::cout<<std::endl;
   }
 }
 
 static void test_algo_binary_erode()
 {
-  vcl_cout << "****************************\n"
+  std::cout << "****************************\n"
            << " Testing vil3d_binary_erode\n"
            << "****************************\n";
 
@@ -35,18 +36,18 @@ static void test_algo_binary_erode()
   image0(3,0,1)=true;  // Edge pixel
   image0(4,0,1)=true;  // Edge pixel
   image0(5,0,1)=true;  // Edge pixel
-  vcl_cout<<"Original image\n";
+  std::cout<<"Original image\n";
   print_binary_image(image0);
 
   vil3d_structuring_element element_i,element_j,element_k;
   element_i.set_to_line_i(-1,1);
   element_j.set_to_line_j(-1,1);
   element_k.set_to_line_k(-1,1);
-  vcl_cout<<"Structuring element: "<<element_i<<vcl_endl;
+  std::cout<<"Structuring element: "<<element_i<<std::endl;
 
   vil3d_image_view<bool> image1;
   vil3d_binary_erode(image0,image1,element_i);
-  vcl_cout<<"Result of one erosion in i\n";
+  std::cout<<"Result of one erosion in i\n";
   print_binary_image(image1);
 
   TEST("image1(5,4,1)",image1(5,4,1),false);
@@ -58,7 +59,7 @@ static void test_algo_binary_erode()
 
   image1.fill(true);
   vil3d_binary_erode(image0,image1,element_j);
-  vcl_cout<<"Result of one erosion in j\n";
+  std::cout<<"Result of one erosion in j\n";
   print_binary_image(image1);
 
   TEST("image1(5,4,1)",image1(5,4,1),false);
@@ -70,7 +71,7 @@ static void test_algo_binary_erode()
 
   image1.fill(true);
   vil3d_binary_erode(image0,image1,element_k);
-  vcl_cout<<"Result of one erosion in k\n";
+  std::cout<<"Result of one erosion in k\n";
   print_binary_image(image1);
 
 

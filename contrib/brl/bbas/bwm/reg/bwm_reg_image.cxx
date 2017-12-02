@@ -24,7 +24,7 @@ double bwm_reg_image::diagonal_gsd()
   //get the image diagonal
   double ni = static_cast<double>(image_->ni()),
     nj = static_cast<double>(image_->nj());
-  double image_diag = vcl_sqrt(ni*ni + nj*nj);
+  double image_diag = std::sqrt(ni*ni + nj*nj);
   if(image_diag == 0)
     return -1;
   //get rough diagonal in world coordinates
@@ -55,7 +55,7 @@ double bwm_reg_image::diagonal_gsd()
                        xlr,ylr,zlr,
                        vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
-  double world_diag = vcl_sqrt((xlr-xul)*(xlr-xul)+(ylr-yul)*(ylr-yul));
+  double world_diag = std::sqrt((xlr-xul)*(xlr-xul)+(ylr-yul)*(ylr-yul));
   //shouldn't happen
   if(world_diag==0)
     return -1;
@@ -67,7 +67,7 @@ void bwm_reg_image::compute_region_of_interest(float sigma)
 {
     // project world point into the image as the center of the region of interest
   vgl_point_2d<double> center_point =  camera_.project(world_point_);
-  
+
   // convert to local coordinates since projection error is in meters
   double lx, ly, lz;
   lvcs_.global_to_local(world_point_.x(),world_point_.y(),
@@ -76,12 +76,12 @@ void bwm_reg_image::compute_region_of_interest(float sigma)
                         vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
   lx+=radius_; //deviation is roughly isotropic so x is as good as any
-  
+
   // convert back to geographic coordinates
   double lon, lat, elev;
   lvcs_.local_to_global(lx, ly, lz,vpgl_lvcs::wgs84, lon, lat ,elev,
                         vpgl_lvcs::DEG,vpgl_lvcs::METERS);
-  
+
   vgl_point_3d<double> radius_point_3d(lon, lat, elev);
 
   // get the deviated point in image space
@@ -91,15 +91,15 @@ void bwm_reg_image::compute_region_of_interest(float sigma)
   // the error in image coordinates
   double error_radius =
     vgl_distance<double>(radius_image_point, center_point);
-  
+
   // convert to an image roi
   unsigned ni = image_->ni(), nj = image_->nj();
   roi_ = brip_roi(ni, nj);
   double sigma_3 = 3.0*sigma;//account for smoothing kernel
   double xmin = center_point.x() -  error_radius - sigma_3;
-  double ymin = center_point.y() -  error_radius - sigma_3; 
-  double xmax = center_point.x() +  error_radius + sigma_3; 
-  double ymax = center_point.y() +  error_radius + sigma_3; 
+  double ymin = center_point.y() -  error_radius - sigma_3;
+  double xmax = center_point.x() +  error_radius + sigma_3;
+  double ymax = center_point.y() +  error_radius + sigma_3;
   // clip if outside image bounds
   if(xmin<0) xmin = 0;
   if(ymin<0) ymin = 0;
@@ -118,7 +118,7 @@ bool bwm_reg_image::compute_edges(float sigma, float noise_thresh,
   edges_valid_ = false;
   edges_back_projected_ = false;
   if(!image_||!image_->ni()||!image_->nj()){
-    vcl_cerr << "In bwm_reg_image::compute_edges() -"
+    std::cerr << "In bwm_reg_image::compute_edges() -"
              << " no image data\n";
     return false;
     }
@@ -135,7 +135,7 @@ bool bwm_reg_image::compute_edges(float sigma, float noise_thresh,
   edges_2d_.clear();
   if(!det.get_vsol_edges(edges_2d_))
     {
-    vcl_cerr << "In bwm_reg_image::compute_edges() -"
+    std::cerr << "In bwm_reg_image::compute_edges() -"
              << " edge detection failed\n";
     return false;
     }
@@ -143,7 +143,7 @@ bool bwm_reg_image::compute_edges(float sigma, float noise_thresh,
   return true;
 }
 
-bool bwm_reg_image::edges_2d(vcl_vector<vsol_digital_curve_2d_sptr>& edges)
+bool bwm_reg_image::edges_2d(std::vector<vsol_digital_curve_2d_sptr>& edges)
 {
   if(!edges_valid_)
     {
@@ -154,11 +154,11 @@ bool bwm_reg_image::edges_2d(vcl_vector<vsol_digital_curve_2d_sptr>& edges)
   return true;
 }
 
-bool bwm_reg_image::edges_3d(vcl_vector<vsol_digital_curve_3d_sptr>& edges)
+bool bwm_reg_image::edges_3d(std::vector<vsol_digital_curve_3d_sptr>& edges)
 {
   if(!edges_valid_)
     {
-    vcl_cerr << "In bwm_reg_image::compute_edges() -"
+    std::cerr << "In bwm_reg_image::compute_edges() -"
              << " no 2-d edges to back-project\n";
 
       edges.clear();
@@ -173,7 +173,7 @@ if(!edges_back_projected_)
                                                             edges_3d_);
  if(!edges_back_projected_)
    {
-    vcl_cerr << "In bwm_reg_image::compute_edges() -"
+    std::cerr << "In bwm_reg_image::compute_edges() -"
              << " back-projection of edges failed\n";
      edges.clear();
      return false;
@@ -181,4 +181,4 @@ if(!edges_back_projected_)
  edges = edges_3d_;
  return true;
 }
-  
+

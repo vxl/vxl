@@ -3,9 +3,10 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vdgl_edgel.h"
 #include <vgl/vgl_point_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 vdgl_edgel::vdgl_edgel( const double x, const double y, const double grad, const double theta )
   : p_( x, y), grad_( grad), theta_( theta)
@@ -30,7 +31,7 @@ bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2)
           ( e2.theta_== e2.theta_));
 }
 
-vcl_ostream&  operator<<(vcl_ostream& s, const vdgl_edgel& p)
+std::ostream&  operator<<(std::ostream& s, const vdgl_edgel& p)
 {
   return s << "<vdgl_edgel (" << p.p_.x() << ", " << p.p_.y() << "),("
            << p.grad_ << ", " << p.theta_ <<  ")>";

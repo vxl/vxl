@@ -1,10 +1,10 @@
 # This is bbas/bmsh3d/algo/CMakeLists.txt
 # Brown 3D Mesh Algorithm Library
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
 
-SET( bmsh3d_algo_sources
+set( bmsh3d_algo_sources
   bmsh3d_fileio.cxx           bmsh3d_fileio.h
   bmsh3d_fileio_ply.cxx
   bmsh3d_mesh_triangulate.cxx bmsh3d_mesh_triangulate.h
@@ -12,13 +12,11 @@ SET( bmsh3d_algo_sources
   bmsh3d_mesh_bnd.cxx         bmsh3d_mesh_bnd.h
 )
 
-ADD_LIBRARY( bmsh3d_algo  ${bmsh3d_algo_sources})
-TARGET_LINK_LIBRARIES( bmsh3d_algo bmsh3d rply vgl vnl vul)
+vxl_add_library(LIBRARY_NAME bmsh3d_algo LIBRARY_SOURCES  ${bmsh3d_algo_sources})
+target_link_libraries( bmsh3d_algo bmsh3d rply ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-#install the .h .txx and libs
-INSTALL_TARGETS(/lib bmsh3d_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bmsh3d/algo/ ${bmsh3d_algo_sources})
+#install the .h .hxx and libs

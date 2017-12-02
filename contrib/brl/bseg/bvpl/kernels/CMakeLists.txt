@@ -1,15 +1,14 @@
 # This is contrib/brl/bseg/bvpl/kernels/CMakeLists.txt
 # The kernel-related files for Brown Voxel Processing Library (BVPL)
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
 
-INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvpl )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+include_directories( ${EXPAT_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bseg/bvpl )
+include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
 
-SET(bvpl_kernels_sources
+set(bvpl_kernels_sources
     bvpl_kernel.h                         bvpl_kernel.cxx
     bvpl_kernel_iterator.h
     bvpl_create_directions.h              bvpl_create_directions.cxx
@@ -25,21 +24,17 @@ SET(bvpl_kernels_sources
     bvpl_neighborhood_kernel_factory.h    bvpl_neighborhood_kernel_factory.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates bvpl_kernels_sources)
+aux_source_directory(Templates bvpl_kernels_sources)
 
-ADD_LIBRARY(bvpl_kernels ${bvpl_kernels_sources})
-TARGET_LINK_LIBRARIES(bvpl_kernels bxml bsvg bsta vgl_algo vgl vnl vbl)
+vxl_add_library(LIBRARY_NAME bvpl_kernels LIBRARY_SOURCES ${bvpl_kernels_sources})
+target_link_libraries(bvpl_kernels bxml bsvg bsta ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 #Directory with python/c++ processes
 add_subdirectory(io)
 add_subdirectory(pro)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-ENDIF(EXPAT_FOUND)
-
-
-INSTALL_TARGETS(/lib bvpl_kernels)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bvpl/kernels/ ${bvpl_kernels_sources})
+endif()

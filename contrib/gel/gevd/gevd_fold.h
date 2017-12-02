@@ -60,7 +60,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 class gevd_bufferxy;
 
 class gevd_fold
@@ -161,8 +163,8 @@ class gevd_fold
                                      float smoothSigma,
                                      float filterFactor);
 
-  friend vcl_ostream& operator<<(vcl_ostream& os, const gevd_fold& st);
-  friend vcl_ostream& operator<<(vcl_ostream& os, gevd_fold& st);
+  friend std::ostream& operator<<(std::ostream& os, const gevd_fold& st);
+  friend std::ostream& operator<<(std::ostream& os, gevd_fold& st);
 
  protected:
   float smoothSigma;                   //!< spatial smoothing

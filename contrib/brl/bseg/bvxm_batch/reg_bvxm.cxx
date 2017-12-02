@@ -29,7 +29,7 @@ register_processes(PyObject *self, PyObject *args)
   volm_register::register_process();
   brip_register::register_process();
   bapl_register::register_process();
-  
+
   Py_INCREF(Py_None);
   return Py_None;
 }

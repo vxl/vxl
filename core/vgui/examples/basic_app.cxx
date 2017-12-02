@@ -9,7 +9,7 @@ int main(int argc, char** argv)
   vgui::init(argc, argv);
   vgui_menu menubar = basic_menus::get_menu();
   unsigned w = 512, h = 512;
-  vcl_string title = "REALLY BASIC";
+  std::string title = "REALLY BASIC";
   vgui_window* win = vgui::produce_window(w, h, menubar, title);
   basic_manager* bas = basic_manager::instance();
   win->get_adaptor()->set_tableau(bas);

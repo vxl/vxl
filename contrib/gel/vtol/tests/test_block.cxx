@@ -11,7 +11,7 @@
 
 static void test_block()
 {
-  vcl_cout << "testing block\n";
+  std::cout << "testing block\n";
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -48,13 +48,13 @@ static void test_block()
 
   vtol_two_chain_sptr tc1 = new vtol_two_chain(f_list1);
   vtol_two_chain_sptr tc1_copy = new vtol_two_chain(f_list1);
-  tc1->describe(vcl_cout,8);
+  tc1->describe(std::cout,8);
 
   TEST("vtol_two_chain equality", *tc1, *tc1_copy);
   vtol_block_sptr b1 = new vtol_block(tc1);
-  b1->describe(vcl_cout,8);
+  b1->describe(std::cout,8);
 
-  vcl_vector<signed char> dirs;
+  std::vector<signed char> dirs;
 
   dirs.push_back(1);
   dirs.push_back(1);
@@ -63,7 +63,7 @@ static void test_block()
 
   vtol_block_sptr b3 = new vtol_block(f_list1);
   TEST("vtol_block equality", *b3, *b1);
-  b3->describe(vcl_cout,8);
+  b3->describe(std::cout,8);
 
   TEST("vtol_block::get_boundary_cycle() is not null", b1->get_boundary_cycle()?true:false, true);
   TEST("vtol_block::get_boundary_cycle()", b1->get_boundary_cycle(), tc1);
@@ -71,7 +71,7 @@ static void test_block()
 
   vtol_block_sptr b1_copy = new vtol_block(b1);
   TEST("vtol_block deep copy (pseudo copy constructor)", *b1, *b1_copy);
-  b1_copy->describe(vcl_cout,8);
+  b1_copy->describe(std::cout,8);
 
   TEST("vtol_block::get_boundary_cycle() is not null", b1->get_boundary_cycle()?true:false, true);
   TEST("vtol_block::get_boundary_cycle() is not null", b1_copy->get_boundary_cycle()?true:false, true);
@@ -95,7 +95,7 @@ static void test_block()
   vsol_spatial_object_2d_sptr b2_clone = b2->clone();
   TEST("vtol_block::clone()", *b2, *b2_clone);
 
-  TEST("vtol_block::cast_to_block()", b2->cast_to_block()==0, false);
+  TEST("vtol_block::cast_to_block()", b2->cast_to_block()==VXL_NULLPTR, false);
   TEST("vtol_block::valid_inferior_type()",b1->valid_inferior_type(tc1),true);
   TEST("vtol_block::valid_superior_type()",b1->valid_superior_type(b1->cast_to_topology_object()),false);
   TEST("vtol_two_chain::valid_superior_type()",tc1->valid_superior_type(b1),true);

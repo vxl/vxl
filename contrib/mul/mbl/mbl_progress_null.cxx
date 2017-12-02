@@ -18,21 +18,21 @@ mbl_progress_null::~mbl_progress_null()
 {}
 
 //: Name of the class
-vcl_string mbl_progress_null::is_a() const
+std::string mbl_progress_null::is_a() const
 { return "mbl_progress_null"; }
 
 
-void mbl_progress_null::on_set_estimated_iterations(const vcl_string& ,const int )
+void mbl_progress_null::on_set_estimated_iterations(const std::string& ,const int )
 {
 }
 
 
-void mbl_progress_null::on_set_progress(const vcl_string&,const int )
+void mbl_progress_null::on_set_progress(const std::string&,const int )
 {
 }
 
 
-void mbl_progress_null::on_end_progress(const vcl_string &)
+void mbl_progress_null::on_end_progress(const std::string &)
 {
 }
 

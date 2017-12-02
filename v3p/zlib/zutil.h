@@ -73,7 +73,7 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 
 #ifdef MSDOS
 #  define OS_CODE  0x00
-#  if defined(__TURBOC__) || defined(__BORLANDC__)
+#  if defined(__TURBOC__)
 #    if(__STDC__ == 1) && (defined(__LARGE__) || defined(__COMPACT__))
        /* Allow compilation with ANSI keywords only enabled */
        void _Cdecl farfree( void *block );
@@ -110,12 +110,8 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 
 #if defined(MACOS) || defined(TARGET_OS_MAC)
 #  define OS_CODE  0x07
-#  if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
-#    include <unix.h> /* for fdopen */
-#  else
-#    ifndef fdopen
-#      define fdopen(fd,mode) NULL /* No fdopen() */
-#    endif
+#  ifndef fdopen
+#    define fdopen(fd,mode) NULL /* No fdopen() */
 #  endif
 #endif
 

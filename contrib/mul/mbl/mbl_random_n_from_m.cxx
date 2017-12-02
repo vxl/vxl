@@ -3,9 +3,10 @@
 // \brief Randomly select n from m integers without replacement
 // \author Tim Cootes
 
+#include <iostream>
+#include <cstdlib>
 #include "mbl_random_n_from_m.h"
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 mbl_random_n_from_m::mbl_random_n_from_m()
 {
@@ -17,14 +18,14 @@ void mbl_random_n_from_m::reseed(long new_seed)
 }
 
 //: Select n integers from range [0,m-1], without replacement
-void mbl_random_n_from_m::choose_n_from_m(vcl_vector<unsigned>& choice,
+void mbl_random_n_from_m::choose_n_from_m(std::vector<unsigned>& choice,
                                           unsigned int n, unsigned int m)
 {
   if (n>m)
   {
-    vcl_cerr<<"mbl_random_n_from_m::choose_n_from_m() : Can't choose "<<n
-            <<" different integers from "<<m<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mbl_random_n_from_m::choose_n_from_m() : Can't choose "<<n
+            <<" different integers from "<<m<<std::endl;
+    std::abort();
   }
 
   if (choice.size()!=n) choice.resize(n);
@@ -53,8 +54,8 @@ void mbl_random_n_from_m::choose_n_from_m(vcl_vector<unsigned>& choice,
 }
 
 //: Select n integers from range [0,m-1], without replacement
-void mbl_random_n_from_m::choose_n_from_m(vcl_vector<unsigned>& chosen,
-                                          vcl_vector<unsigned>& not_chosen,
+void mbl_random_n_from_m::choose_n_from_m(std::vector<unsigned>& chosen,
+                                          std::vector<unsigned>& not_chosen,
                                           unsigned int n, unsigned int m)
 {
   choose_n_from_m(chosen,n,m);
@@ -69,14 +70,14 @@ void mbl_random_n_from_m::choose_n_from_m(vcl_vector<unsigned>& chosen,
 }
 
 //: Select n integers from range [0,m-1], without replacement
-void mbl_random_n_from_m::choose_n_from_m(vcl_vector<int>& choice,
+void mbl_random_n_from_m::choose_n_from_m(std::vector<int>& choice,
                                           unsigned int n, unsigned int m)
 {
   if (n>m)
   {
-    vcl_cerr<<"mbl_random_n_from_m::choose_n_from_m() : Can't choose "<<n
-            <<" different integers from "<<m<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mbl_random_n_from_m::choose_n_from_m() : Can't choose "<<n
+            <<" different integers from "<<m<<std::endl;
+    std::abort();
   }
 
   if (choice.size()!=n) choice.resize(n);
@@ -105,8 +106,8 @@ void mbl_random_n_from_m::choose_n_from_m(vcl_vector<int>& choice,
 }
 
 //: Select n integers from range [0,m-1], without replacement
-void mbl_random_n_from_m::choose_n_from_m(vcl_vector<int>& chosen,
-                                          vcl_vector<int>& not_chosen,
+void mbl_random_n_from_m::choose_n_from_m(std::vector<int>& chosen,
+                                          std::vector<int>& not_chosen,
                                           unsigned int n, unsigned int m)
 {
   choose_n_from_m(chosen,n,m);

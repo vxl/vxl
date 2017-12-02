@@ -23,11 +23,11 @@ class msm_shape_mode_view {
 private:
   const msm_ref_shape_model* shape_model_;
   msm_ref_shape_instance sm_inst_;
- 
+
   vnl_vector<double> b_sd_;
   vnl_vector<double> b_;
 
-  vcl_vector<msm_points> points_;
+  std::vector<msm_points> points_;
 
     //: Number of shapes for each mode
   unsigned n_per_mode_;
@@ -65,10 +65,10 @@ public:
 
     //: When true, overlap all the shapes
   void set_overlap_shapes(bool b);
- 
+
     //: Current array of sets of points
     //  These are the shapes to be displayed
-  const vcl_vector<msm_points>& points() const { return points_; }
+  const std::vector<msm_points>& points() const { return points_; }
 
   //: Compute the shapes so they fit into current window
   // \param n_shapes  Number of shapes to display
@@ -78,7 +78,7 @@ public:
 
     //: Compute the shapes so they fit into current window
   void compute_shapes();
-  
+
     //: Define current display window size
   void set_display_window(const vgl_box_2d<int> & win);
 
@@ -89,7 +89,7 @@ public:
   void set_display_width(double);
 
     //: Current display window
-  const vgl_box_2d<int> & display_window() const 
+  const vgl_box_2d<int> & display_window() const
   { return display_win_; }
 
     //: Define current mode to use.
@@ -101,16 +101,16 @@ public:
 
     //: Define number of shapes per mode
   void set_n_per_mode(unsigned n);
-  
+
     //: Current number of shapes per mode
   unsigned n_per_mode() const { return n_per_mode_; }
 
     //: Maximum number of shape modes available
   unsigned max_modes() const;
-  
+
     //: Set range (in units of SD)
   void set_range(double r);
-  
+
     //: Get range (in units of SD)
   double range() const { return sd_range_; }
 };

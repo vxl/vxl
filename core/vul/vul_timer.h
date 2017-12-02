@@ -51,7 +51,8 @@
 //: struct containing timer data
 struct vul_timer_data;
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 //: The Timer class provides timing code for performance evaluation.
 class vul_timer
@@ -74,7 +75,7 @@ class vul_timer
   long all();
 
   //: Display user and real time since the last mark.
-  void print(vcl_ostream& s);
+  void print(std::ostream& s);
 
  private:
   // disallow assigning to objects of this class:

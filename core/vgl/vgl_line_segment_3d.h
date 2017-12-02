@@ -16,7 +16,8 @@
 // Kieran O'Mahony - 13 Aug 2007 - Added contains()
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h> // data member of this class
 
 //: Represents a 3D line segment using two points.
@@ -56,7 +57,7 @@ class vgl_line_segment_3d
 
   //: Return the direction vector of this line (not normalised - but perhaps it should be, like other line classes?)
   inline vgl_vector_3d<Type> direction() const { return point2()-point1(); }
-  
+
   //: Return a point on the line defined by a scalar parameter \a t.
   // \a t=0.0 corresponds to point1 and \a t=1.0 to point2.
   // 0<t<1 for points on the segment between point1 and point2.
@@ -64,11 +65,11 @@ class vgl_line_segment_3d
   // t>1 for points on the (infinite) line, outside the segment, and closer to point2 than to point1.
   //\note Assumes that direction() is not normalized.
   inline vgl_point_3d<Type> point_t(const double t) const { return point1() + t*direction(); }
-  
+
   //: Check if point \a p is on the line segment
   inline bool contains(const vgl_point_3d<Type>& p ) const
   {
-    double r = (point1_ - point2_).length() - ( (point1_ - p).length() + (point2_ - p).length() );    
+    double r = (point1_ - point2_).length() - ( (point1_ - p).length() + (point2_ - p).length() );
     return r < 1e-8 && r > -1e-8;
   }
 };
@@ -76,12 +77,12 @@ class vgl_line_segment_3d
 //: Write to stream
 // \relatesalso vgl_line_segment_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_3d<Type>& p);
+std::ostream&  operator<<(std::ostream& s, const vgl_line_segment_3d<Type>& p);
 
 //: Read from stream
 // \relatesalso vgl_line_segment_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_3d<Type>& p);
-#define VGL_LINE_SEGMENT_3D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_3d.txx first"
+std::istream&  operator>>(std::istream& is,  vgl_line_segment_3d<Type>& p);
+#define VGL_LINE_SEGMENT_3D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_3d.hxx first"
 
 #endif // vgl_line_segment_3d_h_

@@ -11,15 +11,17 @@
 // \author Vishal Jain
 // \date 31 Aug 2012
 
+#include <vector>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_image_view_base.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //: A video input stream from a list of images on disk
 // This istream will try to open and validate (but not read image data from)
@@ -36,14 +38,14 @@ class bil_arf_image_istream : public vbl_ref_count
   bil_arf_image_istream();
 
   //: Constructor - from a file glob string
-  bil_arf_image_istream(const vcl_string& rawFile);
+  bil_arf_image_istream(const std::string& rawFile);
 
   //: Destructor
   virtual ~bil_arf_image_istream() { close(); }
 
   //: Open a new stream using a file glob (see vul_file_iterator)
   // \note files are loaded in alphanumeric order by path name
-  virtual bool open(const vcl_string& rawFile);
+  virtual bool open(const std::string& rawFile);
 
   //: Close the stream
   virtual void close();
@@ -90,7 +92,7 @@ class bil_arf_image_istream : public vbl_ref_count
   virtual vil_image_view_base_sptr current_frame();
 
   //: Return the path to the current image in the stream
-  vcl_string current_path() const;
+  std::string current_path() const;
 
   //: Seek to the given frame number (but do not load the image)
   // \returns true if successful
@@ -102,8 +104,8 @@ class bil_arf_image_istream : public vbl_ref_count
  private:
 
   //: raw file path
-  vcl_string   raw_file_;
-  vcl_ifstream raw_;
+  std::string   raw_file_;
+  std::ifstream raw_;
 
   //: The current index
   unsigned int index_;

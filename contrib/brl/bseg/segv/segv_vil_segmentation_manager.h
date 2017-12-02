@@ -13,7 +13,9 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_conic_2d_sptr.h>
@@ -112,7 +114,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void convert_to_grey();
   void clear_mask();
   void add_poly_to_mask();
-  void load_image_nomenu(vcl_string const& path);
+  void load_image_nomenu(std::string const& path);
   void crop_image();
   //: drawing
   void create_polygon();
@@ -124,17 +126,17 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void set_window(vgui_window* win){win_=win;}
 
  protected:
-  void draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
-  void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs,
+  void draw_edges(std::vector<vtol_edge_2d_sptr>& edges, bool verts=false);
+  void draw_lines(std::vector<vsol_line_2d_sptr> const & line_segs,
                   const vgui_style_sptr& style = NULL);
 
-  void draw_conics(vcl_vector<vsol_conic_2d_sptr> const & conic_segs,
+  void draw_conics(std::vector<vsol_conic_2d_sptr> const & conic_segs,
                    const vgui_style_sptr& style = NULL);
 
-  void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys);
-  void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
+  void draw_polylines(std::vector<vsol_polyline_2d_sptr> const & polys);
+  void draw_regions(std::vector<vtol_intensity_face_sptr>& regions,
                     bool verts=false);
-  void draw_points(vcl_vector<vsol_point_2d_sptr> const & points,
+  void draw_points(std::vector<vsol_point_2d_sptr> const & points,
                    const vgui_style_sptr& style);
 
   void set_selected_grid_image(vil_image_resource_sptr const& image,
@@ -165,7 +167,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr foreground_face_;
   vtol_face_2d_sptr background_face_;
   bgui_bargraph_clipon_tableau_sptr bargraph_;
-  vcl_vector<vsol_polygon_2d_sptr> mask_;
+  std::vector<vsol_polygon_2d_sptr> mask_;
   brip_roi_sptr roi_;
   static segv_vil_segmentation_manager *instance_;
 };

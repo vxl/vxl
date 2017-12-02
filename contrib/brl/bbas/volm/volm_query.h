@@ -21,6 +21,8 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <set>
 #include <vbl/vbl_ref_count.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_scene.h>
@@ -30,7 +32,7 @@
 #include <volm/volm_spherical_shell_container.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
-#include <vcl_set.h>
+#include <vcl_compiler.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_camera_space.h>
@@ -44,49 +46,49 @@ class volm_query : public vbl_ref_count
   volm_query() {}
   //: constructor from files
   volm_query(volm_camera_space_sptr cam_space,
-             vcl_string const& label_xml_file,
-             vcl_string const& category_file,
+             std::string const& label_xml_file,
+             std::string const& category_file,
              volm_spherical_container_sptr const& sph,
              volm_spherical_shell_container_sptr const& sph_shell);
 
   //: constructor from depth map scene
   volm_query(volm_camera_space_sptr cam_space,
-             vcl_string const& depth_map_scene_file,
+             std::string const& depth_map_scene_file,
              volm_spherical_shell_container_sptr const& sph_shell,
              volm_spherical_container_sptr const& sph);
 
   //: constructor from a binary file of data members
-  volm_query(vcl_string const& query_file, volm_camera_space_sptr cam_space,
-             vcl_string const& depth_map_scene_file,
+  volm_query(std::string const& query_file, volm_camera_space_sptr cam_space,
+             std::string const& depth_map_scene_file,
              volm_spherical_shell_container_sptr const& sph_shell,
              volm_spherical_container_sptr const& sph);
 
 
   // === accessors ===
-  vcl_vector<vcl_vector<unsigned char> >& min_dist()                         { return min_dist_;}
-  vcl_vector<vcl_vector<unsigned char> >& max_dist()                         { return max_dist_;}
-  vcl_vector<vcl_vector<unsigned char> >& order()                            { return order_; }
-  vcl_set<unsigned>& order_set()                                             { return order_set_; }
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > >& order_index()              { return order_index_; }
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id()                  { return dist_id_; }
-  vcl_vector<unsigned>& dist_offset()                                        { return dist_offset_; }
-  vcl_vector<unsigned char>& max_obj_dist()                                  { return max_obj_dist_; }
-  vcl_vector<unsigned char>& min_obj_dist()                                  { return min_obj_dist_; }
-  vcl_vector<unsigned char>& obj_orient()                                    { return obj_orient_; }
-  vcl_vector<vcl_vector<unsigned char> >& obj_land_id()                      { return obj_land_id_; }
-  vcl_vector<vcl_vector<float> >& obj_land_wgt()                             { return obj_land_wgt_; }
-  vcl_vector<unsigned char>& order_obj()                                     { return order_obj_; }
-  vcl_vector<vcl_vector<unsigned> >& ground_id()                             { return ground_id_; }
-  vcl_vector<vcl_vector<unsigned char> >& ground_dist()                      { return ground_dist_; }
-  vcl_vector<unsigned>& ground_offset()                                      { return ground_offset_; }
-  vcl_vector<vcl_vector<vcl_vector<unsigned char> > >& ground_land_id()      { return ground_land_id_; }
-  vcl_vector<vcl_vector<vcl_vector<float> > >& ground_land_wgt()             { return ground_land_wgt_; }
+  std::vector<std::vector<unsigned char> >& min_dist()                         { return min_dist_;}
+  std::vector<std::vector<unsigned char> >& max_dist()                         { return max_dist_;}
+  std::vector<std::vector<unsigned char> >& order()                            { return order_; }
+  std::set<unsigned>& order_set()                                             { return order_set_; }
+  std::vector<std::vector<std::vector<unsigned> > >& order_index()              { return order_index_; }
+  std::vector<std::vector<std::vector<unsigned> > >& dist_id()                  { return dist_id_; }
+  std::vector<unsigned>& dist_offset()                                        { return dist_offset_; }
+  std::vector<unsigned char>& max_obj_dist()                                  { return max_obj_dist_; }
+  std::vector<unsigned char>& min_obj_dist()                                  { return min_obj_dist_; }
+  std::vector<unsigned char>& obj_orient()                                    { return obj_orient_; }
+  std::vector<std::vector<unsigned char> >& obj_land_id()                      { return obj_land_id_; }
+  std::vector<std::vector<float> >& obj_land_wgt()                             { return obj_land_wgt_; }
+  std::vector<unsigned char>& order_obj()                                     { return order_obj_; }
+  std::vector<std::vector<unsigned> >& ground_id()                             { return ground_id_; }
+  std::vector<std::vector<unsigned char> >& ground_dist()                      { return ground_dist_; }
+  std::vector<unsigned>& ground_offset()                                      { return ground_offset_; }
+  std::vector<std::vector<std::vector<unsigned char> > >& ground_land_id()      { return ground_land_id_; }
+  std::vector<std::vector<std::vector<float> > >& ground_land_wgt()             { return ground_land_wgt_; }
   unsigned char ground_orient()                                              { return ground_orient_; }
-  vcl_vector<vcl_vector<unsigned> >& sky_id()                                { return sky_id_; }
-  vcl_vector<unsigned>& sky_offset()                                         { return sky_offset_; }
+  std::vector<std::vector<unsigned> >& sky_id()                                { return sky_id_; }
+  std::vector<unsigned>& sky_offset()                                         { return sky_offset_; }
   unsigned char sky_orient()                                                 { return sky_orient_; }
   depth_map_scene_sptr depth_scene() const                                   { return dm_; }
-  vcl_vector<depth_map_region_sptr>& depth_regions()                         { return depth_regions_; }
+  std::vector<depth_map_region_sptr>& depth_regions()                         { return depth_regions_; }
   volm_spherical_shell_container_sptr sph_shell() const                      { return sph_; }
   unsigned get_cam_num() const                                               { return (unsigned)cam_space_->valid_indices().size(); }
   unsigned get_obj_order_num() const                                         { return (unsigned)order_index_[0].size(); }
@@ -111,14 +113,14 @@ class volm_query : public vbl_ref_count
   unsigned obj_based_query_size_byte() const;
 
   //: write vrml for spherical container and camera hypothesis
-  void draw_template(vcl_string const& vrml_fname);
+  void draw_template(std::string const& vrml_fname);
 
   //: write query image showing the depth map geometry and the penetrating ray
-  void draw_query_images(vcl_string const& out_dir);
-  void draw_query_image(unsigned i, vcl_string const& out_name);
+  void draw_query_images(std::string const& out_dir);
+  void draw_query_image(unsigned i, std::string const& out_name);
 
   //: get camera string
-  vcl_string get_cam_string(unsigned i) const
+  std::string get_cam_string(unsigned i) const
   {
     return cam_space_->camera_angles(i).get_string();
     //return cam_space_->get_string(cam_space_->valid_indices()[i]);
@@ -131,17 +133,17 @@ class volm_query : public vbl_ref_count
   double get_top_fov(unsigned const& i) const;
 
   //: return valid top_fov from camera vector
-  vcl_vector<double> get_valid_top_fov() const;
+  std::vector<double> get_valid_top_fov() const;
 
   //: visualized the query camera using the spherical shell geometry
-  void visualize_query(vcl_string const& prefix);
+  void visualize_query(std::string const& prefix);
 
   //: generate rgb depth image for given camera id and given depth value
-  void depth_rgb_image(vcl_vector<unsigned char> const& values, unsigned const& cam_id, vil_image_view<vil_rgb<vxl_byte> >& out_img, vcl_string value_type = "depth");
+  void depth_rgb_image(std::vector<unsigned char> const& values, unsigned const& cam_id, vil_image_view<vil_rgb<vxl_byte> >& out_img, std::string value_type = "depth");
 
   //: draw the polygons of regions on top of an rgb image
   void draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img);
-  void draw_query_regions(vcl_string const& out_name);
+  void draw_query_regions(std::string const& out_name);
 
   // ===========  binary I/O ================
 
@@ -191,56 +193,56 @@ class volm_query : public vbl_ref_count
   //: upper bound on depth
   double d_threshold_;
   //: vector of depth_map_region sorted by depth order
-  vcl_vector<depth_map_region_sptr>   depth_regions_;
+  std::vector<depth_map_region_sptr>   depth_regions_;
 
   // === camera parameters --- use even number later to ensure the init_value and init_value +/- conf_value is covered ===
 
 #if 0
   //: vectors store the space of camera hypotheses
-  vcl_vector<double>  top_fov_;
-  vcl_vector<double> headings_;
-  vcl_vector<double>    tilts_;
-  vcl_vector<double>    rolls_;
+  std::vector<double>  top_fov_;
+  std::vector<double> headings_;
+  std::vector<double>    tilts_;
+  std::vector<double>    rolls_;
 #endif
-  vcl_vector<vpgl_perspective_camera<double> > cameras_;
-  vcl_vector<vcl_string> camera_strings_;
+  std::vector<vpgl_perspective_camera<double> > cameras_;
+  std::vector<std::string> camera_strings_;
   //: ingested query information
-  vcl_vector<vcl_vector<unsigned char> > min_dist_;
-  vcl_vector<vcl_vector<unsigned char> > max_dist_;
-  vcl_vector<vcl_vector<unsigned char> >    order_;
+  std::vector<std::vector<unsigned char> > min_dist_;
+  std::vector<std::vector<unsigned char> > max_dist_;
+  std::vector<std::vector<unsigned char> >    order_;
   //: number of spherical shell rays
   unsigned query_size_;
   //: the order index assigned to sky
   unsigned order_sky_;
   //: the set of Cartesian points on the unit sphere
-  vcl_vector<vgl_point_3d<double> > query_points_;
+  std::vector<vgl_point_3d<double> > query_points_;
   //: order vector to store the index id associated with object order
-  vcl_set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > > order_index_;
+  std::set<unsigned> order_set_;  // store the non-ground order, using set to ensure objects having same order are put together
+  std::vector<std::vector<std::vector<unsigned> > > order_index_;
   //: ground plane distance, id, and fallback land category
-  vcl_vector<vcl_vector<unsigned> >                             ground_id_;
-  vcl_vector<vcl_vector<unsigned char> >                      ground_dist_;
-  vcl_vector<vcl_vector<vcl_vector<unsigned char> > >      ground_land_id_;
-  vcl_vector<vcl_vector<vcl_vector<float> > >             ground_land_wgt_;
-  vcl_vector<unsigned>                                      ground_offset_;
+  std::vector<std::vector<unsigned> >                             ground_id_;
+  std::vector<std::vector<unsigned char> >                      ground_dist_;
+  std::vector<std::vector<std::vector<unsigned char> > >      ground_land_id_;
+  std::vector<std::vector<std::vector<float> > >             ground_land_wgt_;
+  std::vector<unsigned>                                      ground_offset_;
   unsigned char                                             ground_orient_;  // always horizontal
   //: sky distance
-  vcl_vector<vcl_vector<unsigned> >                                sky_id_;
-  vcl_vector<unsigned>                                         sky_offset_;
+  std::vector<std::vector<unsigned> >                                sky_id_;
+  std::vector<unsigned>                                         sky_offset_;
   unsigned char                                                sky_orient_;  // always 100 (100 is the label for uncertain or ambiguous cells)
   //: object id based on min_dist (since objects may have different min_dist but same order)
-  vcl_vector<vcl_vector<vcl_vector<unsigned> > >                  dist_id_;
-  vcl_vector<unsigned>                                        dist_offset_;
+  std::vector<std::vector<std::vector<unsigned> > >                  dist_id_;
+  std::vector<unsigned>                                        dist_offset_;
   //: min and max distance, object orders, orientation and land clarifications for different objects, based on object orders
-  vcl_vector<unsigned char>                                  min_obj_dist_;
-  vcl_vector<unsigned char>                                  max_obj_dist_;
-  vcl_vector<unsigned char>                                     order_obj_;
-  vcl_vector<unsigned char>                                    obj_orient_;
-  vcl_vector<vcl_vector<unsigned char> >                      obj_land_id_;
-  vcl_vector<vcl_vector<float> >                             obj_land_wgt_;
+  std::vector<unsigned char>                                  min_obj_dist_;
+  std::vector<unsigned char>                                  max_obj_dist_;
+  std::vector<unsigned char>                                     order_obj_;
+  std::vector<unsigned char>                                    obj_orient_;
+  std::vector<std::vector<unsigned char> >                      obj_land_id_;
+  std::vector<std::vector<float> >                             obj_land_wgt_;
 #if 0
   //: weight parameters
-  vcl_vector<float> weight_obj_;
+  std::vector<float> weight_obj_;
   float             weight_grd_;
   float             weight_sky_;
 #endif
@@ -254,20 +256,20 @@ class volm_query : public vbl_ref_count
                             unsigned char& order,
                             unsigned char& max_dist,
                             unsigned& object_id,
-                            vcl_vector<unsigned char>& grd_fallback_id,
-                            vcl_vector<float>& grd_fallback_wgt,
+                            std::vector<unsigned char>& grd_fallback_id,
+                            std::vector<float>& grd_fallback_wgt,
                             bool& is_ground,
                             bool& is_sky,
                             bool& is_object,
                             vil_image_view<float> const& depth_img);
   void create_cameras();
   void generate_regions();
-  void draw_viewing_volume(vcl_string const& fname,
+  void draw_viewing_volume(std::string const& fname,
                            vpgl_perspective_camera<double> cam,
                            float r,
                            float g,
                            float b);
-  void draw_rays(vcl_string const& fname);
+  void draw_rays(std::string const& fname);
 
   void draw_dot(vil_image_view<vil_rgb<vxl_byte> >& img,
                 vgl_point_3d<double> const& world_point,

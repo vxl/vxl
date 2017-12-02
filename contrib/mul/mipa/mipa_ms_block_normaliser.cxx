@@ -1,11 +1,12 @@
+#include <iostream>
+#include <sstream>
 #include "mipa_ms_block_normaliser.h"
 //:
 // \file
 // \brief Class to independently normalise sub-blocks with a region at several (SIFT-like) scales
 // \author Martin Roberts
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_vector_ref.h>
@@ -59,9 +60,9 @@ void mipa_ms_block_normaliser::normalise(vnl_vector<double>& v) const
 
 //=======================================================================
 
-vcl_string mipa_ms_block_normaliser::is_a() const
+std::string mipa_ms_block_normaliser::is_a() const
 {
-    return vcl_string("mipa_ms_block_normaliser");
+    return std::string("mipa_ms_block_normaliser");
 }
 
 //=======================================================================
@@ -74,7 +75,7 @@ mipa_vector_normaliser* mipa_ms_block_normaliser::clone() const
 //=======================================================================
 
 // required if data is present in this base class
-void mipa_ms_block_normaliser::print_summary(vcl_ostream& os) const
+void mipa_ms_block_normaliser::print_summary(std::ostream& os) const
 {
     os<<"mipa_ms_block_normaliser:\n"
       <<"\tnscales:\t"<<nscales_
@@ -114,9 +115,9 @@ void mipa_ms_block_normaliser::b_read(vsl_b_istream& bfs)
             mipa_block_normaliser::b_read(bfs);
         break;
         default:
-            vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mipa_ms_block_normaliser&)\n"
+            std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mipa_ms_block_normaliser&)\n"
                      << "           Unknown version number "<< version << '\n';
-            bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+            bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
             return;
         }
     }
@@ -138,25 +139,25 @@ void mipa_ms_block_normaliser::b_read(vsl_b_istream& bfs)
 // \endverbatim
 
 void mipa_ms_block_normaliser::config_from_stream(
-    vcl_istream &is, const mbl_read_props_type &extra_props)
+    std::istream &is, const mbl_read_props_type &extra_props)
 {
-    vcl_string s = mbl_parse_block(is);
+    std::string s = mbl_parse_block(is);
 
 
-    vcl_istringstream ss(s);
+    std::istringstream ss(s);
     mbl_read_props_type props = mbl_read_props(ss);
 
     props = mbl_read_props_merge(props, extra_props, true);
 
     if (!(props["nscales"].empty()))
     {
-        vcl_string sfi=props["nscales"];
-        vcl_istringstream ssInner(sfi);
+        std::string sfi=props["nscales"];
+        std::istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
         if (ssInner.bad() || n<=0)
         {
-            mbl_exception_parse_error x(vcl_string("mipa_ms_block_normaliser - string stream read error of nscales property"));
+            mbl_exception_parse_error x(std::string("mipa_ms_block_normaliser - string stream read error of nscales property"));
             mbl_exception_error(x);
         }
 
@@ -166,7 +167,7 @@ void mipa_ms_block_normaliser::config_from_stream(
 
     if (!(props["include_overall_histogram"].empty()))
     {
-        vcl_string strBool=props["include_overall_histogram"];
+        std::string strBool=props["include_overall_histogram"];
         if (strBool=="true" || strBool=="TRUE" || strBool=="t" || strBool=="T" )
         {
             include_overall_histogram_ = true;
@@ -178,8 +179,8 @@ void mipa_ms_block_normaliser::config_from_stream(
     }
     props.erase("include_overall_histogram");
 
-    vcl_string dummy;
-    vcl_istringstream ssDummy(dummy);
+    std::string dummy;
+    std::istringstream ssDummy(dummy);
     mipa_block_normaliser::config_from_stream(ssDummy,props);
 }
 

@@ -6,9 +6,10 @@
 // \brief   See vgui_matrix_state.h for a description of this file.
 
 
+#include <cstdlib>
+#include <iostream>
 #include "vgui_matrix_state.h"
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vgui/vgui_gl.h>
@@ -43,13 +44,13 @@ void vgui_matrix_state::restore() const
 }
 
 
-void vgui_matrix_state::print(vcl_ostream &s)
+void vgui_matrix_state::print(std::ostream &s)
 {
   vnl_matlab_print_format_push(vnl_matlab_print_format_long);
   vnl_matlab_print(s, projection_matrix(), "GL_PROJECTION_MATRIX");
   vnl_matlab_print(s, modelview_matrix (), "GL_MODELVIEW_MATRIX" );
   vnl_matlab_print_format_pop();
-  s << vcl_endl;
+  s << std::endl;
 }
 
 
@@ -121,7 +122,7 @@ void vgui_matrix_state::premultiply(vnl_matrix_fixed<double,4,4> const& M,GLenum
   else if (matrix==GL_MODELVIEW  || matrix==GL_MODELVIEW_MATRIX )
     glGetDoublev(GL_MODELVIEW_MATRIX,P.data_block());
   else
-    vcl_abort();
+    std::abort();
   P.inplace_transpose();
 
   // set the matrix :

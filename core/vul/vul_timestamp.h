@@ -16,7 +16,7 @@
 class vul_timestamp
 {
   //: mark is incremented to give a unique timestamp
-  static vul_EXPORT unsigned long mark;
+  static VUL_EXPORT unsigned long mark;
 
  public:
 

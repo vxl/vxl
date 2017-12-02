@@ -1,4 +1,5 @@
-// not used? #include <vcl_iostream.h>
+// not used? #include <vcl_compiler.h>
+#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_menu.h>
@@ -7,12 +8,12 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-static vgui_text_tableau_sptr text = 0;
+static vgui_text_tableau_sptr text = VXL_NULLPTR;
 
 //Create a popup text display
 static void draw_text()
 {
-  static vcl_string junk = "s";
+  static std::string junk = "s";
   text->clear();
   text->set_colour(1,1,1);
   text->add(100,100,junk);

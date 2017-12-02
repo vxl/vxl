@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #include "vsph_unit_sphere.h"
 //
 #include "vsph_sph_point_2d.h"
@@ -5,10 +8,9 @@
 #include "vsph_utils.h"
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_line_segment_3d.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <bvrml/bvrml_write.h>
-#include <vcl_limits.h>
 #include <vcl_cassert.h>
 
 #define DEBUG
@@ -23,9 +25,9 @@ bool operator < (vsph_edge const& a, vsph_edge const& b)
 // an edge exists if either vertex is a neighbor of the other
 bool vsph_unit_sphere::find_edge(vsph_edge const&  e)
 {
-  vcl_set<int>& ss = neighbors_[e.vs_];
-  vcl_set<int>::iterator sit;
-  sit = vcl_find(ss.begin(), ss.end(), e.ve_);
+  std::set<int>& ss = neighbors_[e.vs_];
+  std::set<int>::iterator sit;
+  sit = std::find(ss.begin(), ss.end(), e.ve_);
   return sit != ss.end();
 }
 
@@ -42,11 +44,11 @@ vsph_unit_sphere::vsph_unit_sphere(double point_angle,
 : neighbors_valid_(false), point_angle_(point_angle),
   min_theta_(min_theta), max_theta_(max_theta)
 {
-  vcl_cout << "Start construction" << vcl_endl;
+  std::cout << "Start construction" << std::endl;
   add_uniform_views();
   remove_top_and_bottom();
-  vcl_cout << "Unit sphere complete with " << sph_pts_.size() << " verts and "
-           <<  edges_.size() << " edges\n"<< vcl_endl;
+  std::cout << "Unit sphere complete with " << sph_pts_.size() << " verts and "
+           <<  edges_.size() << " edges\n"<< std::endl;
   this->set_cart_points();
 }
 
@@ -57,9 +59,9 @@ vgl_vector_3d<double> vsph_unit_sphere::cart_coord(vsph_sph_point_2d const& sp)
     th /= vnl_math::deg_per_rad;
     ph /= vnl_math::deg_per_rad;
   }
-  double x = vcl_sin(th)*vcl_cos(ph);
-  double y = vcl_sin(th)*vcl_sin(ph);
-  double z = vcl_cos(sp.theta_);
+  double x = std::sin(th)*std::cos(ph);
+  double y = std::sin(th)*std::sin(ph);
+  double z = std::cos(sp.theta_);
   return vgl_vector_3d<double>(x, y, z);
 }
 
@@ -68,8 +70,8 @@ vsph_sph_point_2d vsph_unit_sphere::spher_coord(vgl_vector_3d<double> const& cp,
                                                 bool in_radians)
 {
   double x = cp.x(), y = cp.y(), z = cp.z();
-  double phi = vcl_atan2(y,x);
-  double theta = vcl_acos(z);
+  double phi = std::atan2(y,x);
+  double theta = std::acos(z);
   if (!in_radians) {
     theta *= vnl_math::deg_per_rad;
     phi *= vnl_math::deg_per_rad;
@@ -83,7 +85,7 @@ void vsph_unit_sphere::add_uniform_views()
   double cap_angle_rad = vnl_math::pi; //historical reasons (fix me)
 
   // create a octahedron on the sphere, define 6 points for the vertices of the triangles
-  vcl_vector<vgl_vector_3d<double> >* verts = new vcl_vector<vgl_vector_3d<double> >();
+  std::vector<vgl_vector_3d<double> >* verts = new std::vector<vgl_vector_3d<double> >();
   vgl_vector_3d<double> v1(0.0,0.0, 1.0); (*verts).push_back(v1);
   vgl_vector_3d<double> v2(0.0,0.0,-1.0); (*verts).push_back(v2);
   vgl_vector_3d<double> v3( 1.0,0.0,0.0); (*verts).push_back(v3);
@@ -92,32 +94,32 @@ void vsph_unit_sphere::add_uniform_views()
   vgl_vector_3d<double> v6(0.0,-1.0,0.0); (*verts).push_back(v6);
 
   // vector of triangles (vector of 3 points, only indices of the vertices kept)
-  vcl_vector<vcl_vector<int> > triangles;
+  std::vector<std::vector<int> > triangles;
 
-  vcl_vector<int> tri1;
+  std::vector<int> tri1;
   tri1.push_back(0); tri1.push_back(2); tri1.push_back(4); triangles.push_back(tri1);
 
-  vcl_vector<int> tri2;
+  std::vector<int> tri2;
   tri2.push_back(0); tri2.push_back(4); tri2.push_back(3); triangles.push_back(tri2);
 
-  vcl_vector<int> tri3;
+  std::vector<int> tri3;
   tri3.push_back(0); tri3.push_back(3); tri3.push_back(5); triangles.push_back(tri3);
 
-  vcl_vector<int> tri4;
+  std::vector<int> tri4;
   tri4.push_back(0); tri4.push_back(5); tri4.push_back(2); triangles.push_back(tri4);
 
-  vcl_vector<int> tri5;
+  std::vector<int> tri5;
   tri5.push_back(1); tri5.push_back(2); tri5.push_back(4); triangles.push_back(tri5);
 
-  vcl_vector<int> tri6;
+  std::vector<int> tri6;
   tri6.push_back(1); tri6.push_back(3); tri6.push_back(4); triangles.push_back(tri6);
 
-  vcl_vector<int> tri7;
+  std::vector<int> tri7;
   tri7.push_back(1); tri7.push_back(5); tri7.push_back(3); triangles.push_back(tri7);
 
-  vcl_vector<int> tri8;
+  std::vector<int> tri8;
   tri8.push_back(1); tri8.push_back(2); tri8.push_back(5); triangles.push_back(tri8);
-  vcl_cout << "formed octahedron--" << vcl_endl;
+  std::cout << "formed octahedron--" << std::endl;
   // iteratively refine the triangles
   // check the angle between two vertices (of the same triangle),
   // use the center of the spherical coordinate system
@@ -126,11 +128,11 @@ void vsph_unit_sphere::add_uniform_views()
 
   bool done=false;
   while (!done) {
-    vcl_vector<vcl_vector<int> >  new_triangles;
+    std::vector<std::vector<int> >  new_triangles;
     int ntri=triangles.size();
-    vcl_cout << "subdivide " << ntri << " triangles" << vcl_endl;
+    std::cout << "subdivide " << ntri << " triangles" << std::endl;
     for (int i=0; i<ntri; i++) {
-      vcl_vector<int> points;
+      std::vector<int> points;
       for (int j=0; j<3; j++) {
         // find the mid points of edges
         int next=j+1; if (next == 3) next=0;
@@ -138,7 +140,7 @@ void vsph_unit_sphere::add_uniform_views()
         int i0 = triangles[i][j], inx = triangles[i][next];
         int nv = (*verts).size();
         if (i0<0||i0>=nv||inx<0||inx>=nv) {
-          vcl_cout << "address error (" << i0 << ' ' << inx << ")["
+          std::cout << "address error (" << i0 << ' ' << inx << ")["
                    << nv << "]\n";
             assert(false);
         }
@@ -173,10 +175,10 @@ void vsph_unit_sphere::add_uniform_views()
            -------------------
       *******************************/
       done=true;
-      vcl_vector<int> list(3); list[0]=points[0]; list[1]=points[5]; list[2]=points[1];
+      std::vector<int> list(3); list[0]=points[0]; list[1]=points[5]; list[2]=points[1];
       new_triangles.push_back(list);
       // check for point_angles
-      vcl_vector<vgl_vector_3d<double> > triangle;
+      std::vector<vgl_vector_3d<double> > triangle;
       triangle.push_back((*verts)[list[0]]); triangle.push_back((*verts)[list[1]]); triangle.push_back((*verts)[list[2]]);
       if (!min_angle(triangle, pt_angle_rad)) done=false;
 
@@ -204,15 +206,15 @@ void vsph_unit_sphere::add_uniform_views()
     triangles.clear();
     triangles=new_triangles;
 #ifdef DEBUG
-    vcl_cout << "found " << triangles.size() << " trianges\n"
-             << "found " << (*verts).size() << " vertices" << vcl_endl;
+    std::cout << "found " << triangles.size() << " trianges\n"
+             << "found " << (*verts).size() << " vertices" << std::endl;
 #endif
   }
   // refine the vertices to points, eliminate duplicate ones and also eliminate the ones below given elevation
   // note that the relationship between vertex id and the id of the
   // cart and sphere containers is changed by this filter
   int nv = (*verts).size();
-  vcl_cout << "Start finding equivalent vertices n = " << nv << '\n' << vcl_flush;
+  std::cout << "Start finding equivalent vertices n = " << nv << '\n' << std::flush;
   equivalent_ids_.resize(nv, -1);
   int ntri = triangles.size();
   sph_pts_.reserve(nv);
@@ -227,7 +229,7 @@ void vsph_unit_sphere::add_uniform_views()
       bool equal = index_.find(sv, th_idx, ph_idx, id);//new
       if (equal) {
         if (id<0||id>=nv) {
-          vcl_cout << "address error (" << id << ")["
+          std::cout << "address error (" << id << ")["
                    << nv << "]\n";
             assert(false);
         }
@@ -242,14 +244,14 @@ void vsph_unit_sphere::add_uniform_views()
     }
 #ifdef DEBUG
     if (i%1000 ==0)
-      vcl_cout << '.' << vcl_flush;
+      std::cout << '.' << std::flush;
 #endif
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
 #ifdef DEBUG
-  vcl_cout << "finished refine\n"
+  std::cout << "finished refine\n"
            << "start constructing edges from " << ntri << " triangles"
-           << vcl_endl;
+           << std::endl;
 #endif
   delete verts;
   neighbors_.clear();
@@ -258,19 +260,19 @@ void vsph_unit_sphere::add_uniform_views()
   // step through the triangles and construct unique edges
   // two edges are equal if their end points are equal regardless
   // of order.
-  vcl_vector<vsph_edge>::iterator eit;
+  std::vector<vsph_edge>::iterator eit;
   for (int i=0; i<ntri; i++) {
     int v[3];// triangle vertices
     int ti0 = triangles[i][0], ti1 = triangles[i][1], ti2 = triangles[i][2];
     if (!(ti0>=0 && ti0<neq &&ti1>=0 && ti1<neq &&ti2>=0 && ti2<neq)) {
-      vcl_cout << "Bad Tri[" << ti0 << ',' << ti1 << ',' << ti2 << "]\n";
+      std::cout << "Bad Tri[" << ti0 << ',' << ti1 << ',' << ti2 << "]\n";
       continue;
     }
     v[0] = equivalent_ids_[ti0];//construct edges with current
     v[1] = equivalent_ids_[ti1];//cart and sphere vertex ids
     v[2] = equivalent_ids_[ti2];//updated from initial "verts" id
     if (v[0]<0||v[1]<0||v[2]<0) {
-      vcl_cout << "Bad Equivalent Tri[" << v[0]<< ','
+      std::cout << "Bad Equivalent Tri[" << v[0]<< ','
                << v[1] << ',' << v[2] << "]\n";
       continue;
     }
@@ -278,7 +280,7 @@ void vsph_unit_sphere::add_uniform_views()
     for (int j = 0; j<3; ++j) {
       vsph_edge e(v[j],v[(j+1)%3]);//wrap around to 0
 #if 0 // original n^2 find
-      eit = vcl_find(edges_.begin(), edges_.end(), e);
+      eit = std::find(edges_.begin(), edges_.end(), e);
       if (eit == edges_.end())
         edges_.push_back(e);
 #endif
@@ -286,11 +288,11 @@ void vsph_unit_sphere::add_uniform_views()
         this->insert_edge(e);
     }
     if (i%1000 ==0)
-      vcl_cout << '+' << vcl_flush;
+      std::cout << '+' << std::flush;
   }
 #ifdef DEBUG
-  vcl_cout << "\nfinished find edges "<< edges_.size()
-           << " edges found\n" << vcl_flush;
+  std::cout << "\nfinished find edges "<< edges_.size()
+           << " edges found\n" << std::flush;
 #endif
   neighbors_valid_ = true;
 }
@@ -299,16 +301,16 @@ void vsph_unit_sphere::remove_top_and_bottom()
 {
   int nsph = sph_pts_.size();
 #ifdef DEBUG
-  vcl_cout << "entering top and bottom with " << nsph << " rays\n" << vcl_flush;
+  std::cout << "entering top and bottom with " << nsph << " rays\n" << std::flush;
 #endif
   equivalent_ids_.clear();
   equivalent_ids_.resize(nsph, -1);
   neighbors_valid_ = false;
   double min_theta_rad = min_theta_/vnl_math::deg_per_rad;
   double max_theta_rad = max_theta_/vnl_math::deg_per_rad;
-  vcl_vector<vgl_vector_3d<double> > cart_pts_new;
-  vcl_vector<vsph_sph_point_2d> sph_pts_new;
-  vcl_vector<vsph_sph_point_2d>::iterator pit = sph_pts_.begin();
+  std::vector<vgl_vector_3d<double> > cart_pts_new;
+  std::vector<vsph_sph_point_2d> sph_pts_new;
+  std::vector<vsph_sph_point_2d>::iterator pit = sph_pts_.begin();
   int indx = 0;
   for (; pit!=sph_pts_.end();++pit, ++indx) {
     vsph_sph_point_2d& sp = (*pit);
@@ -324,10 +326,10 @@ void vsph_unit_sphere::remove_top_and_bottom()
   sph_pts_.clear();
   sph_pts_ = sph_pts_new;
 #ifdef DEBUG
-  vcl_cout << "starting to remap " << edges_.size() <<  "edges\n" << vcl_flush;
+  std::cout << "starting to remap " << edges_.size() <<  "edges\n" << std::flush;
 #endif
-  vcl_vector<vsph_edge> new_edges;
-  for (vcl_vector<vsph_edge>::iterator eit = edges_.begin();
+  std::vector<vsph_edge> new_edges;
+  for (std::vector<vsph_edge>::iterator eit = edges_.begin();
        eit != edges_.end(); ++eit) {
     int is = equivalent_ids_[(*eit).vs_],
         ie = equivalent_ids_[(*eit).ve_];
@@ -336,7 +338,7 @@ void vsph_unit_sphere::remove_top_and_bottom()
     new_edges.push_back(vsph_edge(is, ie));
   }
 #ifdef DEBUG
-  vcl_cout << "finished remap edges in remove top and bottom\n" << vcl_flush;
+  std::cout << "finished remap edges in remove top and bottom\n" << std::flush;
 #endif
   edges_.clear();
   edges_ = new_edges;
@@ -360,7 +362,7 @@ void vsph_unit_sphere::find_neighbors()
 bool vsph_unit_sphere::
 find_near_equal(vgl_vector_3d<double>const& p, int& id, double tol)
 {
-  vcl_vector<vgl_vector_3d<double> >::iterator it = cart_pts_.begin();
+  std::vector<vgl_vector_3d<double> >::iterator it = cart_pts_.begin();
   id = 0;
   for (;it != cart_pts_.end(); it++, ++id) {
     vgl_vector_3d<double>& cp = *it;
@@ -377,25 +379,25 @@ find_near_equal(vgl_vector_3d<double>const& p, int& id, double tol)
 // construct Cartesian vectors from spherical points
 void vsph_unit_sphere::set_cart_points()
 {
-  for (vcl_vector<vsph_sph_point_2d>::iterator sit = sph_pts_.begin();
+  for (std::vector<vsph_sph_point_2d>::iterator sit = sph_pts_.begin();
        sit != sph_pts_.end(); ++sit)
     cart_pts_.push_back(cart_coord(*sit));
 }
 
 
-void vsph_unit_sphere::print(vcl_ostream& os) const
+void vsph_unit_sphere::print(std::ostream& os) const
 {
-  os << "vsph_unit_sphere: " << size() << vcl_endl;
+  os << "vsph_unit_sphere: " << size() << std::endl;
   unsigned idx = 0;
-  for (vcl_vector<vsph_sph_point_2d>::const_iterator sit = sph_pts_.begin();
+  for (std::vector<vsph_sph_point_2d>::const_iterator sit = sph_pts_.begin();
        sit != sph_pts_.end(); ++sit, ++idx)
-    os << '(' << idx << ") " << *sit << vcl_endl;
-  os << vcl_endl;
+    os << '(' << idx << ") " << *sit << std::endl;
+  os << std::endl;
 }
 
 
 // point_angle must be in radians
-bool vsph_unit_sphere::min_angle(vcl_vector<vgl_vector_3d<double> > list,
+bool vsph_unit_sphere::min_angle(std::vector<vgl_vector_3d<double> > list,
                                  double angle_rad)
 {
   if (list.size() < 2)
@@ -420,9 +422,9 @@ tangent_plane(vsph_sph_point_2d const& sp)
   return vgl_plane_3d<double>(cv, p);
 }
 
-void vsph_unit_sphere::display_vertices(vcl_string const & path) const
+void vsph_unit_sphere::display_vertices(std::string const & path) const
 {
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open())
     return;
   os << "VRML V2.0 utf8\n"
@@ -437,7 +439,7 @@ void vsph_unit_sphere::display_vertices(vcl_string const & path) const
      << "      point [\n";
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for (vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+  for (std::vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
        cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
@@ -450,9 +452,9 @@ void vsph_unit_sphere::display_vertices(vcl_string const & path) const
      <<"}\n";
 }
 
-void vsph_unit_sphere::display_edges(vcl_string const & path) const
+void vsph_unit_sphere::display_edges(std::string const & path) const
 {
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open())
     return;
   os << "VRML V2.0 utf8\n"
@@ -467,7 +469,7 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
      << "      point [\n";
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for (vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+  for (std::vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
        cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
@@ -480,7 +482,7 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
 
   cnt = 0;
   int ne = edges_.size()-1;
-  for (vcl_vector<vsph_edge>::const_iterator eit = edges_.begin();
+  for (std::vector<vsph_edge>::const_iterator eit = edges_.begin();
        eit != edges_.end(); ++eit, ++cnt) {
     const vsph_edge& e = *eit;
     os << e.vs_ << ',' << e.ve_;
@@ -495,16 +497,16 @@ void vsph_unit_sphere::display_edges(vcl_string const & path) const
 }
 
 
-void vsph_unit_sphere::display_data(vcl_string const & path,
-                                    vcl_vector<double> const& data,
+void vsph_unit_sphere::display_data(std::string const & path,
+                                    std::vector<double> const& data,
                                     vsph_sph_box_2d const& mask ) const
 {
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open())
     return;
   // find range of data
-  double minv = vcl_numeric_limits<double>::max();
-  double maxv = -vcl_numeric_limits<double>::max();
+  double minv = std::numeric_limits<double>::max();
+  double maxv = -std::numeric_limits<double>::max();
   int nd = data.size();
   for (int i=0; i<nd; ++i) {
     double d = data[i];
@@ -545,7 +547,7 @@ void vsph_unit_sphere::display_data(vcl_string const & path,
 
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for (vcl_vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+  for (std::vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
        cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
@@ -559,12 +561,12 @@ void vsph_unit_sphere::display_data(vcl_string const & path,
 }
 
 
-void vsph_unit_sphere::display_color(vcl_string const & path,
-                                     vcl_vector<vcl_vector<float> > const& cdata,
-                                     vcl_vector<float> const& skip_color,
+void vsph_unit_sphere::display_color(std::string const & path,
+                                     std::vector<std::vector<float> > const& cdata,
+                                     std::vector<float> const& skip_color,
                                      vsph_sph_box_2d const& mask) const
 {
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open())
     return;
   bvrml_write::write_vrml_header(os);
@@ -590,7 +592,7 @@ void vsph_unit_sphere::display_color(vcl_string const & path,
     vgl_vector_3d<double> ray = cart_pts_[i];
     vsph_sph_point_2d sp = sph_pts_[i];
     if (!mask.is_empty()&&mask.defined()&&!mask.contains(sp)) continue;
-    const vcl_vector<float>& cl = cdata[i];
+    const std::vector<float>& cl = cdata[i];
     if (cl[0]==skip_color[0]&&cl[1]==skip_color[1]&&cl[2]==skip_color[2])
       continue;
     bvrml_write::write_vrml_disk(os, orig+ray, ray, disc_radius,
@@ -599,8 +601,8 @@ void vsph_unit_sphere::display_color(vcl_string const & path,
   os.close();
 }
 
-void vsph_unit_sphere::display_boxes(vcl_string const & path,
-                                     vcl_vector<vsph_sph_box_2d> const& boxes)
+void vsph_unit_sphere::display_boxes(std::string const & path,
+                                     std::vector<vsph_sph_box_2d> const& boxes)
 {
   //need to break each region into smaller planar pieces
 }
@@ -612,7 +614,7 @@ bool vsph_unit_sphere::operator==(const vsph_unit_sphere &other) const
       max_theta_   != other.max_theta() ||
       this->size() != other.size())
     return false;
-  const vcl_vector<vsph_sph_point_2d>& osph_pts = other.sph_points();
+  const std::vector<vsph_sph_point_2d>& osph_pts = other.sph_points();
   for (unsigned i = 0; i < sph_pts_.size(); ++i) {
     if (!(sph_pts_[i]==osph_pts[i]))
       return false;
@@ -637,9 +639,9 @@ void vsph_unit_sphere::b_read(vsl_b_istream& is)
     this->find_neighbors();
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_unit_sphere&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_unit_sphere&)\n"
              << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
@@ -674,9 +676,9 @@ void vsph_edge::b_read(vsl_b_istream& is)
     vsl_b_read(is, ve_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_edge&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_edge&)\n"
              << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
@@ -688,7 +690,7 @@ void vsph_edge::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, ve_);
 }
 
-void vsl_print_summary(vcl_ostream& os, vsph_edge const& e)
+void vsl_print_summary(std::ostream& os, vsph_edge const& e)
 {
   e.print(os);
 }
@@ -703,7 +705,7 @@ void vsl_b_write(vsl_b_ostream& os, vsph_edge const& e)
   e.b_write(os);
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_unit_sphere const& vs)
+std::ostream& operator<<(std::ostream& os, vsph_unit_sphere const& vs)
 {
   vs.print(os);
   return os;
@@ -711,7 +713,7 @@ vcl_ostream& operator<<(vcl_ostream& os, vsph_unit_sphere const& vs)
 
 void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere const* usph_ptr)
 {
-  if (usph_ptr==0)
+  if (usph_ptr==VXL_NULLPTR)
     vsl_b_write(os, false);
   else {
     vsl_b_write(os, true);
@@ -721,7 +723,7 @@ void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere const* usph_ptr)
 
 void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere*& usph_ptr)
 {
-  delete usph_ptr; usph_ptr = 0;
+  delete usph_ptr; usph_ptr = VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -738,7 +740,7 @@ void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere_sptr const&  usph_sptr)
 
 void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere_sptr& usph_sptr)
 {
-  vsph_unit_sphere* usph_ptr = 0;
+  vsph_unit_sphere* usph_ptr = VXL_NULLPTR;
   vsl_b_read(is, usph_ptr);
   usph_sptr = usph_ptr;
 }

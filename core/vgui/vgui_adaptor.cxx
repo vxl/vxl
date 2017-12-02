@@ -1,4 +1,5 @@
 // This is core/vgui/vgui_adaptor.cxx
+#include <iostream>
 #include "vgui_adaptor.h"
 //:
 // \file
@@ -6,7 +7,7 @@
 // \brief  See vgui_adaptor.h for a description of this file.
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 
@@ -23,7 +24,7 @@
 #include <vgui/internals/vgui_adaptor_tableau.h>
 
 
-vgui_adaptor *vgui_adaptor::current = 0;
+vgui_adaptor *vgui_adaptor::current = VXL_NULLPTR;
 static int adaptor_count = 0;
 
 //-----------------------------------------------------------------------------
@@ -32,7 +33,7 @@ vgui_adaptor::vgui_adaptor()
   : nested_popups(false)
   , default_items(true)
   , use_double_buffering(true)
-  , the_tableau(0)
+  , the_tableau(VXL_NULLPTR)
 {
   ++adaptor_count;
 
@@ -48,13 +49,13 @@ vgui_adaptor::vgui_adaptor()
 //: Destructor - quits application if all adaptors have been deleted.
 vgui_adaptor::~vgui_adaptor()
 {
-  set_tableau(0);
+  set_tableau(VXL_NULLPTR);
   the_tableau->unref();
 
   --adaptor_count;
 
   if (adaptor_count == 0) {
-    vcl_cerr << "All adaptors have been deleted -- calling vgui::quit()\n";
+    std::cerr << "All adaptors have been deleted -- calling vgui::quit()\n";
     vgui::quit();
   }
 }
@@ -131,20 +132,20 @@ void vgui_adaptor::config_dialog()
   vgui_button popup_button_;
   get_popup_bindings(popup_modifier_, popup_button_);
 
-  // make choice vcl_list, using the ordering in the table,
+  // make choice std::list, using the ordering in the table,
   // and set the initial value of the modifier index.
   unsigned mod_index = 0;
-  vcl_vector<vcl_string> mod_labels;
+  std::vector<std::string> mod_labels;
   for (unsigned i=0; i<num_mods; ++i) {
     if (mod_table[i].mod == popup_modifier_)
       mod_index = i;
     mod_labels.push_back(mod_table[i].str);
   }
 
-  // make choice vcl_list, using the ordering in the table,
+  // make choice std::list, using the ordering in the table,
   // and set the initial value of the button index.
   unsigned but_index = 0;
-  vcl_vector<vcl_string> but_labels;
+  std::vector<std::string> but_labels;
   for (unsigned i=0; i<num_buts; ++i) {
     if (but_table[i].but == popup_button_)
       but_index = i;
@@ -152,8 +153,8 @@ void vgui_adaptor::config_dialog()
   }
 
 #ifdef DEBUG
-  vcl_cerr << "mod_index " << mod_index << vcl_endl
-           << "button_index " << but_index << vcl_endl;
+  std::cerr << "mod_index " << mod_index << std::endl
+           << "button_index " << but_index << std::endl;
 #endif
 
   bool nested_popups_val = nested_popups;
@@ -198,7 +199,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
   vgui_macro_report_errors;
 
   // sanity check the 'origin' field :
-  if (e.origin == 0)
+  if (e.origin == VXL_NULLPTR)
     const_cast<vgui_event&>(e).origin = this;
   else
     assert(e.origin == this);
@@ -216,7 +217,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
 vgui_window *vgui_adaptor::get_window() const
 {
   vgui_macro_warning << "get_window() not implemented\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //-----------------------------------------------------------------------------

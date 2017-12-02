@@ -38,7 +38,7 @@ class vipl_sobel : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_sobel.txx"
+#include "vipl_sobel.hxx"
 #endif
 
 #endif // vipl_sobel_h_

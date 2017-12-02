@@ -6,7 +6,7 @@
 //
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/02| François BERTEL          |Creation
+// 1.0     |2000/05/02| Francois BERTEL          |Creation
 // 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
 #include <testlib/testlib_test.h>

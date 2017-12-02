@@ -1,12 +1,12 @@
 # vxl/vnl/algo/CMakeLists.txt
 
-PROJECT(vnl_algo)
+project(vnl_algo)
 
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
+include( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
 
 # most of vnl_algo is simply a wrapper around netlib, so we must have netlib.
-IF(NETLIB_FOUND)
+if(NETLIB_FOUND)
 
 # Direct netlib dependencies are:
 # vnl_chi_squared                  dchscdf_
@@ -31,26 +31,28 @@ IF(NETLIB_FOUND)
 # vnl_svd_fixed                    csvdc_ dsvdc_ ssvdc_ zsvdc_
 # vnl_symmetric_eigensystem        rs_
 
-  INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
+  include_directories(
+    ${NETLIB_INCLUDE_DIR}
+    ${NETLIB_INCLUDE_DIR}/linalg
+    )
 
-  SET( vnl_algo_sources
-    vnl_algo_export.h
+  set( vnl_algo_sources
     vnl_algo_fwd.h
     vnl_netlib.h
 
     # matrix decompositions
-    vnl_svd.txx vnl_svd.h
-    vnl_svd_economy.txx vnl_svd_economy.h
-    vnl_svd_fixed.txx vnl_svd_fixed.h
-    vnl_matrix_inverse.txx vnl_matrix_inverse.h
-    vnl_qr.txx vnl_qr.h
-    vnl_scatter_3x3.txx vnl_scatter_3x3.h
+    vnl_svd.hxx vnl_svd.h
+    vnl_svd_economy.hxx vnl_svd_economy.h
+    vnl_svd_fixed.hxx vnl_svd_fixed.h
+    vnl_matrix_inverse.hxx vnl_matrix_inverse.h
+    vnl_qr.hxx vnl_qr.h
+    vnl_scatter_3x3.hxx vnl_scatter_3x3.h
     vnl_cholesky.cxx vnl_cholesky.h
     vnl_ldl_cholesky.cxx vnl_ldl_cholesky.h
     vnl_sparse_lu.cxx vnl_sparse_lu.h
     vnl_real_eigensystem.cxx vnl_real_eigensystem.h
     vnl_complex_eigensystem.cxx vnl_complex_eigensystem.h
-    vnl_symmetric_eigensystem.txx vnl_symmetric_eigensystem.h
+    vnl_symmetric_eigensystem.hxx vnl_symmetric_eigensystem.h
     vnl_generalized_eigensystem.cxx vnl_generalized_eigensystem.h
     vnl_sparse_symmetric_eigensystem.cxx vnl_sparse_symmetric_eigensystem.h
     vnl_generalized_schur.cxx vnl_generalized_schur.h
@@ -79,18 +81,18 @@ IF(NETLIB_FOUND)
 
     # fft
     vnl_fft.cxx vnl_fft.h
-    vnl_fft_base.txx vnl_fft_base.h
-    vnl_fft_1d.txx vnl_fft_1d.h
-    vnl_fft_2d.txx vnl_fft_2d.h
-    vnl_fft_prime_factors.txx vnl_fft_prime_factors.h
+    vnl_fft_base.hxx vnl_fft_base.h
+    vnl_fft_1d.hxx vnl_fft_1d.h
+    vnl_fft_2d.hxx vnl_fft_2d.h
+    vnl_fft_prime_factors.hxx vnl_fft_prime_factors.h
 
     # stuff
-    vnl_convolve.txx vnl_convolve.h
-    vnl_determinant.cxx vnl_determinant.txx vnl_determinant.h
-    vnl_chi_squared.txx vnl_chi_squared.h
+    vnl_convolve.hxx vnl_convolve.h
+    vnl_determinant.cxx vnl_determinant.hxx vnl_determinant.h
+    vnl_chi_squared.hxx vnl_chi_squared.h
     vnl_gaussian_kernel_1d.cxx vnl_gaussian_kernel_1d.h
-    vnl_adjugate.txx vnl_adjugate.h
-    vnl_orthogonal_complement.txx vnl_orthogonal_complement.h
+    vnl_adjugate.hxx vnl_adjugate.h
+    vnl_orthogonal_complement.hxx vnl_orthogonal_complement.h
     vnl_matrix_update.h
 
     # integral
@@ -98,19 +100,28 @@ IF(NETLIB_FOUND)
     vnl_adaptsimpson_integral.cxx vnl_adaptsimpson_integral.h
   )
 
-  AUX_SOURCE_DIRECTORY(Templates vnl_algo_sources)
+  aux_source_directory(Templates vnl_algo_sources)
 
-  ADD_LIBRARY( vnl_algo ${vnl_algo_sources})
-  TARGET_LINK_LIBRARIES( vnl_algo ${NETLIB_LIBRARIES} vnl )
-  include(GenerateExportHeader)
-  generate_export_header(vnl_algo)
+  # If VXL_INSTALL_INCLUDE_DIR is the default value
+  if("${VXL_INSTALL_INCLUDE_DIR}" STREQUAL "include/vxl")
+    set(_algo_install_dir ${VXL_INSTALL_INCLUDE_DIR}/core/vnl/algo)
+  else()
+    set(_algo_install_dir ${VXL_INSTALL_INCLUDE_DIR}/vnl/algo)
+  endif()
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vnl_algo
+    LIBRARY_SOURCES ${vnl_algo_sources}
+    HEADER_INSTALL_DIR vnl/algo)
+  target_link_libraries( ${VXL_LIB_PREFIX}vnl_algo ${NETLIB_LIBRARIES} ${VXL_LIB_PREFIX}vnl )
+  set(CURR_LIB_NAME vnl_algo)
+  set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/vnl/algo/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${_algo_install_dir}
+     USE_HIDDEN_VISIBILITY
+  )
 
-  INSTALL_TARGETS(/lib vnl_algo)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/algo ${vnl_algo_sources})
-
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
-
-
-ENDIF(NETLIB_FOUND)
+  endif()
+endif()

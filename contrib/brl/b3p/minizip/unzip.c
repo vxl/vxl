@@ -706,19 +706,16 @@ local int unzlocal_GetCurrentFileInfoInternal(file,
             uSizeRead = commentBufferSize;
 
         if (lSeek!=0) {
-            if (ZSEEK(s->z_filefunc, s->filestream,lSeek,ZLIB_FILEFUNC_SEEK_CUR)==0)
-                lSeek=0;
-            else
+            if (ZSEEK(s->z_filefunc, s->filestream,lSeek,ZLIB_FILEFUNC_SEEK_CUR)!=0) {
                 err=UNZ_ERRNO;
+            }
         }
-        if ((file_info.size_file_comment>0) && (commentBufferSize>0))
-            if (ZREAD(s->z_filefunc, s->filestream,szComment,uSizeRead)!=uSizeRead)
+        if ((file_info.size_file_comment>0) && (commentBufferSize>0)) {
+            if (ZREAD(s->z_filefunc, s->filestream,szComment,uSizeRead)!=uSizeRead) {
                 err=UNZ_ERRNO;
-        lSeek+=file_info.size_file_comment - uSizeRead;
+            }
+        }
     }
-    else
-        lSeek+=file_info.size_file_comment;
-
     if ((err==UNZ_OK) && (pfile_info!=NULL))
         *pfile_info=file_info;
 
@@ -1099,10 +1096,6 @@ extern int ZEXPORT unzOpenCurrentFile3 (file, method, level, raw, password)
           default: *level = 6; break;
         }
     }
-
-    if ((s->cur_file_info.compression_method!=0) &&
-        (s->cur_file_info.compression_method!=Z_DEFLATED))
-        err=UNZ_BADZIPFILE;
 
     pfile_in_zip_read_info->crc32_wait=s->cur_file_info.crc;
     pfile_in_zip_read_info->crc32=0;

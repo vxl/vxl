@@ -1,9 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "bvpl_weighted_cube_kernel_factory.h"
 //:
 // \file
 
 #include <vnl/vnl_math.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 // Default Constructor
 bvpl_weighted_cube_kernel_factory::bvpl_weighted_cube_kernel_factory()
@@ -41,7 +43,7 @@ void bvpl_weighted_cube_kernel_factory::create_canonical()
   //the user should subsample the image/grid
   if ( (length_ > max_size_) || (width_ > max_size_) || (thickness_ > max_size_) )
   {
-    vcl_cerr<< "Warning, kernel is too large. You should subsample world. Processing may take a long time.\n";
+    std::cerr<< "Warning, kernel is too large. You should subsample world. Processing may take a long time.\n";
   }
 
   typedef vgl_point_3d<float> point_3d;
@@ -60,7 +62,7 @@ void bvpl_weighted_cube_kernel_factory::create_canonical()
     {
       for (int y=min_y; y<=max_y; y++)
       {
-        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f)));
+        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f)));
       }
     }
   }

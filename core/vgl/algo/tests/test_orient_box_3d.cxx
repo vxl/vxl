@@ -1,8 +1,9 @@
 // Test vgl_orient_box_3d
 // JLM
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_math.h> // for pi
@@ -20,12 +21,12 @@ static void test_contains()
   vnl_double_3 v(1.0, 0,0);
   vnl_quaternion<double> q(v, 0.25*vnl_math::pi);
   vgl_orient_box_3d<double> obox(abox, q);
-  vcl_cout << "oriented box\n " << obox << '\n'
+  std::cout << "oriented box\n " << obox << '\n'
            << "Corners\n";
-  vcl_vector<vgl_point_3d<double> > c = obox.corners();
-  for (vcl_vector<vgl_point_3d<double> >::iterator pit = c.begin();
+  std::vector<vgl_point_3d<double> > c = obox.corners();
+  for (std::vector<vgl_point_3d<double> >::iterator pit = c.begin();
        pit != c.end(); ++pit)
-    vcl_cout << *pit << '\n';
+    std::cout << *pit << '\n';
   vgl_point_3d<double> tp(0.5, 0.4, -0.1);
   bool inside = obox.contains(tp);
   bool outside = !(obox.contains(1.0, 1.0, 1.0));
@@ -43,9 +44,9 @@ static void test_construct()
   TEST_NEAR("width",  obox.width(),  5, 1e-12);
   TEST_NEAR("height", obox.height(), 5, 1e-12);
   TEST_NEAR("depth",  obox.depth(),  7, 1e-12);
-  
-  vcl_vector<vgl_point_3d<double> > c = obox.corners();
-  vcl_vector<vgl_point_3d<double> >::iterator pit = c.begin();
+
+  std::vector<vgl_point_3d<double> > c = obox.corners();
+  std::vector<vgl_point_3d<double> >::iterator pit = c.begin();
   TEST_NEAR("corner 1", (*pit - vgl_point_3d<double>(1,2,3)).length(), 0.0, 1e-12);
   ++pit;
   TEST_NEAR("corner 2", (*pit - vgl_point_3d<double>(1,6,0)).length(), 0.0, 1e-12);
@@ -65,7 +66,7 @@ static void test_construct()
 
 void test_orient_box_3d()
 {
-  vcl_cout << "***************************\n"
+  std::cout << "***************************\n"
            << " Testing vgl_orient_box_3d\n"
            << "***************************\n\n";
 

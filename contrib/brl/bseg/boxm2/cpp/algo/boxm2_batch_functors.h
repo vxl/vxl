@@ -2,12 +2,13 @@
 #define boxm2_batch_functors_h_
 //:
 // \file
+#include <iostream>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: accumulate seg_lengths and intensities over all rays that pass through a cell to compute normalized intensity later
 class boxm2_batch_update_pass0_functor
@@ -16,7 +17,7 @@ class boxm2_batch_update_pass0_functor
   //: "default" constructor (does nothing)
   boxm2_batch_update_pass0_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float> * input_img)
+  bool init_data(std::vector<boxm2_data_base*> & datas, vil_image_view<float> * input_img)
   {
     aux0_data_=new boxm2_data<BOXM2_AUX0>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     aux1_data_=new boxm2_data<BOXM2_AUX1>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
@@ -52,7 +53,7 @@ class boxm2_batch_update_pass1_functor
   //: "default" constructor
   boxm2_batch_update_pass1_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float>* pre_img, vil_image_view<float>* vis_img)
+  bool init_data(std::vector<boxm2_data_base*> & datas, vil_image_view<float>* pre_img, vil_image_view<float>* vis_img)
   {
     aux0_data_=new boxm2_data<BOXM2_AUX0>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     aux1_data_=new boxm2_data<BOXM2_AUX1>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
@@ -85,7 +86,7 @@ class boxm2_batch_update_pass1_functor
     // update alpha integral
     alpha_integral_(i,j) += alpha * seg_len;
     // compute new visibility probability with updated alpha_integral
-    const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
+    const float vis_prob_end = std::exp(-alpha_integral_(i,j));
     // compute weight for this cell
     const float Omega = vis - vis_prob_end;
     // and update pre
@@ -97,12 +98,12 @@ class boxm2_batch_update_pass1_functor
     float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-    float temp=vcl_exp(-seg_len*alpha);
+    float temp=std::exp(-seg_len*alpha);
     pre+=vis*(1-temp)*PI;
     vis*=temp;
 #if 0
     if (vis*(1-temp) < 0)
-      vcl_cout << "ERROR" << vcl_endl;
+      std::cout << "ERROR" << std::endl;
 #endif
     (*pre_img_)(i,j)=pre;
     (*vis_img_)(i,j)=vis;
@@ -129,7 +130,7 @@ class boxm2_batch_update_pass2_functor
   //: "default" constructor
   boxm2_batch_update_pass2_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float> * pre_img, vil_image_view<float> * vis_img,
+  bool init_data(std::vector<boxm2_data_base*> & datas, vil_image_view<float> * pre_img, vil_image_view<float> * vis_img,
                  vil_image_view<float> * pre_inf,vil_image_view<float> * vis_inf)
   {
     aux0_data_=new boxm2_data<BOXM2_AUX0>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
@@ -167,7 +168,7 @@ class boxm2_batch_update_pass2_functor
     alpha_integral_(i,j) += alpha * seg_len;
 
     // compute new visibility probability with updated alpha_integral
-    float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
+    float vis_prob_end = std::exp(-alpha_integral_(i,j));
 
     // grab this cell's pre and vis value
     float pre = pre_img_(i,j);
@@ -179,7 +180,7 @@ class boxm2_batch_update_pass2_functor
     float cell_value = PI*Omega;
     float post = (*pre_inf_)(i,j)-pre-cell_value;
     // now correct post
-    post /= vcl_exp(-alpha*seg_len);
+    post /= std::exp(-alpha*seg_len);
 
     // update vis and pre
     pre_img_(i,j) +=  cell_value;
@@ -189,7 +190,7 @@ class boxm2_batch_update_pass2_functor
     float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-    float temp=vcl_exp(-seg_len*alpha);
+    float temp=std::exp(-seg_len*alpha);
 
     float post = (*pre_inf_)(i,j) - pre - vis*(1-temp)*PI;
     // now correct post
@@ -261,14 +262,14 @@ class boxm2_batch_update_functor
     boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
     typename boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
 
-    vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-    vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-    vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
-    vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
+    std::vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+    std::vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+    std::vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
+    std::vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
 
-    vcl_vector<aux0_datatype> obs;
-    vcl_vector<float> vis;
-    vcl_vector<float> pre;
+    std::vector<aux0_datatype> obs;
+    std::vector<float> vis;
+    std::vector<float> pre;
     float term1 = 0.0f;  // product of the likelihoods that cell is a surface
     float term2 = 0.0f;  // product of the likelihoods that cell is not a surface
     unsigned nimgs = (unsigned)out0.size();
@@ -290,25 +291,25 @@ class boxm2_batch_update_functor
         vis.push_back(vis_i);
         float post_i = out[m][2]/obs_seg_len; // mean post
 
-        term1 += vcl_log(pre_i + vis_i*PI);
-        term2 += vcl_log(pre_i + post_i);    // no infinity term for now
+        term1 += std::log(pre_i + vis_i*PI);
+        term2 += std::log(pre_i + post_i);    // no infinity term for now
       }
     }
 
     // update alpha and mog if ray hit the cell significantly
     if (max_obs_seg_len>1e-8f) {
-      float p_q = 1.0f-vcl_exp(-alpha*max_obs_seg_len);
+      float p_q = 1.0f-std::exp(-alpha*max_obs_seg_len);
 
       //correct term1 and term2
-      term1 = vcl_exp(term1);
-      term2 = vcl_exp(term2);
+      term1 = std::exp(term1);
+      term2 = std::exp(term2);
 
       // compute new alpha value
       float p_q_new = p_q*term1 / (p_q*term1 + (1.0f-p_q)*term2);
-      alpha = -vcl_log(1.0f-p_q_new)/max_obs_seg_len; //alpha *= p_q_new;
+      alpha = -std::log(1.0f-p_q_new)/max_obs_seg_len; //alpha *= p_q_new;
 
-      float alpha_min = -vcl_log(1.f-0.0001f)/max_obs_seg_len;
-      float alpha_max = -vcl_log(1.f-0.995f)/max_obs_seg_len;
+      float alpha_min = -std::log(1.f-0.0001f)/max_obs_seg_len;
+      float alpha_max = -std::log(1.f-0.995f)/max_obs_seg_len;
       if (alpha < alpha_min)
         alpha = alpha_min;
       if (alpha > alpha_max)
@@ -357,19 +358,19 @@ class boxm2_batch_update_app_functor
   {
     typename boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
 
-    vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-    vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-    vcl_vector<aux2_datatype> out2 = str_cache_->get_next<BOXM2_AUX2>(id_, index);
+    std::vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+    std::vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+    std::vector<aux2_datatype> out2 = str_cache_->get_next<BOXM2_AUX2>(id_, index);
 #if 0
-    vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
-    vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
+    std::vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
+    std::vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
 
     const int cell_no = 2000000;
 #endif
 
-    vcl_vector<aux0_datatype> obs;
-    vcl_vector<float> vis;
-    vcl_vector<float> pre;
+    std::vector<aux0_datatype> obs;
+    std::vector<float> vis;
+    std::vector<float> pre;
     unsigned nimgs = (unsigned)out0.size();
 
     for (unsigned m = 0; m < nimgs; m++) {
@@ -383,8 +384,8 @@ class boxm2_batch_update_app_functor
         vis.push_back(vis_i);
 #if 0
         if (index == cell_no) {
-          vcl_cout << "\t m: " << m << " pre_i: " << pre_i << " vis_i: " << vis_i << '\n'
-                   << "obs_seg_len: " << obs_seg_len << " mean_obs: " << mean_obs << vcl_endl;
+          std::cout << "\t m: " << m << " pre_i: " << pre_i << " vis_i: " << vis_i << '\n'
+                   << "obs_seg_len: " << obs_seg_len << " mean_obs: " << mean_obs << std::endl;
         }
 #endif
       }
@@ -433,16 +434,16 @@ class boxm2_batch_update_alpha_functor
     boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_data_->data()[index];
     typename boxm2_data<APM_TYPE>::datatype & mog=mog_data_->data()[index];
 
-    vcl_vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-    vcl_vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-    vcl_vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
-    vcl_vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
+    std::vector<aux0_datatype> out0 = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+    std::vector<aux1_datatype> out1 = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+    std::vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
+    std::vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
 
     int cell_no = 2000000;
 
-    vcl_vector<aux0_datatype> obs;
-    vcl_vector<float> vis;
-    vcl_vector<float> pre;
+    std::vector<aux0_datatype> obs;
+    std::vector<float> vis;
+    std::vector<float> pre;
     float term1 = 1.0f;  // product of the likelihoods that cell is a surface
     float term2 = 1.0f;  // product of the likelihoods that cell is not a surface
     unsigned nimgs = (unsigned)out0.size();
@@ -466,32 +467,32 @@ class boxm2_batch_update_alpha_functor
       term2 *= pre_i + post_i;    // no infinity term for now
 
       if (index == cell_no) {
-        vcl_cout << "\t m: " << m << " pre_i: " << pre_i << " vis_i: " << vis_i << " post_i: " << post_i << '\n'
+        std::cout << "\t m: " << m << " pre_i: " << pre_i << " vis_i: " << vis_i << " post_i: " << post_i << '\n'
                  << "obs_seg_len: " << obs_seg_len << " PI: " << PI << " mean_obs: " << mean_obs << '\n'
-                 << "current term1: " << term1 << " term2: " << term2 << vcl_endl;
+                 << "current term1: " << term1 << " term2: " << term2 << std::endl;
       }
     }
-    float p_q = 1.0f-vcl_exp(-alpha*max_obs_seg_len);
+    float p_q = 1.0f-std::exp(-alpha*max_obs_seg_len);
     if (index == cell_no) {
-      vcl_cout << "current alpha: " << alpha << " p_q: " << p_q << '\n';
+      std::cout << "current alpha: " << alpha << " p_q: " << p_q << '\n';
     }
 
     // compute new alpha value
     float p_q_new = p_q*term1 / (p_q*term1 + (1.0f-p_q)*term2);
-    alpha = -vcl_log(1.0f-p_q_new)/max_obs_seg_len; // was: alpha *= p_q_new;
+    alpha = -std::log(1.0f-p_q_new)/max_obs_seg_len; // was: alpha *= p_q_new;
 
     if (index == cell_no) {
-      vcl_cout << "after update alpha: " << alpha << '\n';
+      std::cout << "after update alpha: " << alpha << '\n';
     }
 
-    float alpha_min = -vcl_log(1.f-0.0001f)/max_obs_seg_len;
-    float alpha_max = -vcl_log(1.f-0.995f)/max_obs_seg_len;
+    float alpha_min = -std::log(1.f-0.0001f)/max_obs_seg_len;
+    float alpha_max = -std::log(1.f-0.995f)/max_obs_seg_len;
 
     if (alpha < alpha_min)
       alpha = alpha_min;
 #if 0
     float max_cell_P = 0.995f;
-    float max_alpha = -vcl_log(1.0f - max_cell_P)/mean_len;
+    float max_alpha = -std::log(1.0f - max_cell_P)/mean_len;
     if (alpha > max_alpha)
       alpha = max_alpha;
 #endif
@@ -499,9 +500,9 @@ class boxm2_batch_update_alpha_functor
      alpha = alpha_max;
 
     if (index == cell_no) {
-      vcl_cout << " alpha_min: " << alpha_min << " alpha_max: " << alpha_max << '\n'
+      std::cout << " alpha_min: " << alpha_min << " alpha_max: " << alpha_max << '\n'
                << " p_q_new: " << p_q_new << '\n'
-               << "term1: " << term1 << " term2: " << term2 << vcl_endl;
+               << "term1: " << term1 << " term2: " << term2 << std::endl;
     }
 
     return true;

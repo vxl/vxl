@@ -1,5 +1,6 @@
 // This is mul/vimt3d/tests/test_save.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <mbl/mbl_test.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_new.h>
@@ -12,7 +13,7 @@
 
 static void test_save()
 {
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << " Testing vimt3d_save_transform\n"
            << "******************************\n";
 
@@ -34,8 +35,8 @@ static void test_save()
   vimt3d_transform_3d tr_in1 = vimt3d_load_transform(im_in1, true);
 
 
-  vcl_cout << "Golden transform: " << tr_gold1
-           << "\nLoaded transform: " << tr_in1 << vcl_endl;
+  std::cout << "Golden transform: " << tr_gold1
+           << "\nLoaded transform: " << tr_in1 << std::endl;
 
   TEST("v3i image round-trip has same zoom transform",
        mbl_test_summaries_are_equal(tr_in1, tr_gold1 ), true);
@@ -51,13 +52,13 @@ static void test_save()
   vimt3d_transform_3d tr_in2 = vimt3d_load_transform(im_in2, true);
 
 
-  vcl_cout << "Golden transform: " << tr_gold1
-           << "\nLoaded transform: " << tr_in2 << vcl_endl;
+  std::cout << "Golden transform: " << tr_gold1
+           << "\nLoaded transform: " << tr_in2 << std::endl;
 
   TEST("v3m image round-trip has same zoom transform",
        mbl_test_summaries_are_equal(tr_in2, tr_gold1 ), true);
 
-  vcl_cout << "*********************\n"
+  std::cout << "*********************\n"
            << " Testing vimt3d_save\n"
            << "*********************\n";
 
@@ -65,7 +66,7 @@ static void test_save()
   image.image().set_size(2,3,4);
   image.set_world2im(tr_gold1);
   bool use_mm=true;
-  
+
   vimt3d_save("test_save2.v3i",image,use_mm);
   {
     vimt3d_image_3d_of<vxl_byte> loaded_image;
@@ -73,7 +74,7 @@ static void test_save()
     TEST("v3i image round-trip has same zoom transform",
          mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
   }
-  
+
   vimt3d_save("test_save2.v3m",image,use_mm);
   {
     vimt3d_image_3d_of<vxl_byte> loaded_image;
@@ -90,14 +91,14 @@ static void test_save()
     TEST("hdr image round-trip has same zoom transform",
          mbl_test_summaries_are_equal(loaded_image.world2im(), image.world2im() ), true);
   }
- 
+
 // There is an inconsistency in the way that gipl deals with the origin
-  image.set_world2im(tr_gold2);  
+  image.set_world2im(tr_gold2);
   vimt3d_save("test_save2.gipl",image,use_mm);
   {
     vimt3d_image_3d_of<vxl_byte> loaded_image;
     vimt3d_load("test_save2.gipl",loaded_image,use_mm);
-    vcl_cout<<"gipl loaded: "<<loaded_image<<vcl_endl;
+    std::cout<<"gipl loaded: "<<loaded_image<<std::endl;
     TEST("gipl image round-trip has same zoom transform",
          mbl_test_summaries_are_equal(loaded_image.world2im(), image.world2im() ), true);
   }

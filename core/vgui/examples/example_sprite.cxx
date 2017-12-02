@@ -57,8 +57,8 @@ struct move_sprite_tableau_new
 int
 main( int argc, char ** argv )
 {
-  vul_arg<char*> background( "-bg", "Background image", 0 );
-  vul_arg<char*> sprite( "-fg", "Foreground sprite image", 0 );
+  vul_arg<char*> background( "-bg", "Background image", VXL_NULLPTR );
+  vul_arg<char*> sprite( "-fg", "Foreground sprite image", VXL_NULLPTR );
 
   vgui::init( argc, argv );
   vul_arg_parse( argc, argv );
@@ -70,7 +70,7 @@ main( int argc, char ** argv )
   {
     back_img = vil_load( background() );
     if ( !back_img )
-      vcl_cerr << "Couldn't load background image " << background() << '\n';
+      std::cerr << "Couldn't load background image " << background() << '\n';
   }
   if ( !back_img )
   {
@@ -85,7 +85,7 @@ main( int argc, char ** argv )
   {
     sprite_img = vil_load( sprite() );
     if ( !sprite_img )
-      vcl_cerr << "Couldn't load foreground sprite image " << sprite() << '\n';
+      std::cerr << "Couldn't load foreground sprite image " << sprite() << '\n';
   }
   if ( !sprite_img )
   {
@@ -101,11 +101,11 @@ main( int argc, char ** argv )
     sprite_img = img;
   }
 
-  vcl_cout << "Move sprite around with\n"
+  std::cout << "Move sprite around with\n"
            << " left:  " << left_event.as_string() << '\n'
            << " right: " << right_event.as_string() << '\n'
            << " up:    " << up_event.as_string() << '\n'
-           << " down:  " << down_event.as_string() << vcl_endl;
+           << " down:  " << down_event.as_string() << std::endl;
 
   vgui_image_tableau_new    back_img_tab( *back_img );
   vgui_easy2D_tableau_new   easy2d_tab( back_img_tab );
@@ -118,7 +118,7 @@ main( int argc, char ** argv )
   // After a soview2D has been created for the sprite image (which
   // happens in add_image), we don't need the sprite data any more.
   //
-  sprite_img = 0;
+  sprite_img = VXL_NULLPTR;
 
   move_sprite_tableau_new move_tab( viewer_tab, sprite_soview );
   vgui_shell_tableau_new    shell_tab( move_tab );

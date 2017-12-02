@@ -1,11 +1,13 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_ocp_compare_process.cxx
+#include <iostream>
+#include <string>
 #include "bvxm_ocp_compare_process.h"
 //:
 // \file
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <bprb/bprb_process.h>
 
 #include <bvxm/bvxm_world_params.h>
@@ -17,7 +19,7 @@ bool bvxm_ocp_compare_process_cons(bprb_func_process& pro)
   using namespace bvxm_ocp_compare_process_gloabals;
 
   // This process has 4 inputs:
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   int i=0;
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for LIDAR ONLY update
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
@@ -27,7 +29,7 @@ bool bvxm_ocp_compare_process_cons(bprb_func_process& pro)
     return false;
 
   // This process has 1 output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]= "double";  // the sum of ocp prob product
   return pro.set_output_types(output_types_);
 }
@@ -43,7 +45,7 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
   //input[3]: Scale of the voxel world
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -58,11 +60,11 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
 
    //check inputs validity
   if (!voxel_world1) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
   if (!voxel_world2) {
-    vcl_cout << pro.name() <<" :--  Input 1  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 1  is not valid!\n";
     return false;
   }
 
@@ -75,11 +77,11 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
 }
 
 
-bool bvxm_ocp_compare_process_gloabals::save_raw(char *ocp_array, int x, int y, int z, vcl_string filename)
+bool bvxm_ocp_compare_process_gloabals::save_raw(char *ocp_array, int x, int y, int z, std::string filename)
 {
-  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening file " << filename << " for write!\n";
+    std::cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
   // write header
@@ -126,7 +128,7 @@ double bvxm_ocp_compare_process_gloabals::compare(bvxm_voxel_world_sptr w1,
   char *comp_array = new char[dim*dim*dim];
   for (int k=-m; k<=m; ++k)
   {
-    vcl_cout << k << vcl_endl;
+    std::cout << k << std::endl;
     for (int j1=-m; j1<=m; ++j1)
     {
       for (int i1=-m; i1<=m; ++i1)
@@ -137,14 +139,14 @@ double bvxm_ocp_compare_process_gloabals::compare(bvxm_voxel_world_sptr w1,
         ocp_slab_it1 = ocp_grid1->begin();
         for (int kdx=0; kdx<size_z; ++kdx, ++ocp_slab_it1)
         {
-          //vcl_cout << kdx;
+          //std::cout << kdx;
           if (kdx >= k && kdx < k + size_z) {
             bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it2 = ocp_grid2->slab_iterator(kdx);
             bvxm_voxel_slab<float> slab1 = *ocp_slab_it1;
             bvxm_voxel_slab<float> slab2 = *ocp_slab_it2;
             for (int i=0; i<size_x; ++i) {
               for (int j=0; j<size_y; ++j) {
-                //vcl_cout << '[' << i << ',' << j << ']' << vcl_endl;
+                //std::cout << '[' << i << ',' << j << ']' << std::endl;
                 int idx = i+i1;
                 int jdx = j+j1;
                 if (idx<size_x && idx>=0 &&
@@ -163,13 +165,13 @@ double bvxm_ocp_compare_process_gloabals::compare(bvxm_voxel_world_sptr w1,
           }
         }
         N = (N/num)*size_x*size_y*size_z;
-        vcl_cout << "k=" << k << "  j=" << j1 << "  i=" << i1 << "-->" << N << vcl_endl;
+        std::cout << "k=" << k << "  j=" << j1 << "  i=" << i1 << "-->" << N << std::endl;
         comp_array[(i1+m)*dim*dim + (j1+m)*dim + k+m] = char((N/14927.35)*255);
       }
     }
   }
-  vcl_cout << "Maximum -->\n"
-           << "k=" << kmax << "  j=" << jmax << "  i=" << imax << "-->" << maxN << vcl_endl;
+  std::cout << "Maximum -->\n"
+           << "k=" << kmax << "  j=" << jmax << "  i=" << imax << "-->" << maxN << std::endl;
   save_raw(comp_array,dim,dim,dim,"data_comp.raw");
   return maxN;
 }

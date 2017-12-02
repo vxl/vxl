@@ -194,8 +194,8 @@ class DcmObject
      *  @return status, EC_Normal if successful, an error code otherwise
      */
     virtual OFCondition writeSignatureFormat(DcmOutputStream &outStream,
-					                         const E_TransferSyntax oxfer,
-					                         const E_EncodingType enctype = EET_UndefinedLength) = 0;
+                                                                 const E_TransferSyntax oxfer,
+                                                                 const E_EncodingType enctype = EET_UndefinedLength) = 0;
 
     /** returns true if the current object may be included in a digital signature
      *  @return true if signable, false otherwise

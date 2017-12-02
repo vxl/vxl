@@ -3,7 +3,7 @@
 // own personal vil1_memory_image_of<T>
 
 #include <vil1/vil1_rgb.h>
-#include <vil1/vil1_memory_image_of.txx>
+#include <vil1/vil1_memory_image_of.hxx>
 
 typedef unsigned char byte;
 

@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 // The following test is to determine if there are platform differences in
 // roc calculations. The reference counts are obtained on
 // a Dell XPS M1710 Centro Duo running Windows XP
@@ -13,7 +14,7 @@ static void test_platform_computations()
 
 // double test
   bool faild = false;
-  vcl_cout << "Threshold test for double\n";
+  std::cout << "Threshold test for double\n";
   double t = 0.0;
   for (unsigned  k=0; k<100; t+=0.01, k++)
   {
@@ -22,18 +23,18 @@ static void test_platform_computations()
       if (rnums[i]>t)
         c++;
 #if 0
-    vcl_cout << c << ' ';
+    std::cout << c << ' ';
 #endif
     if (c!=counts[k]){
-      vcl_cout << "count[" << k << "]= " << c << " should be "
+      std::cout << "count[" << k << "]= " << c << " should be "
                << counts[k] << '\n';
       faild = true;
     }
   }
-  vcl_cout << "\n\n";
+  std::cout << "\n\n";
   TEST("double threshold", faild, false);
   bool failf = false;
-  vcl_cout << "Threshold test for float\n";
+  std::cout << "Threshold test for float\n";
   float tf = 0.0f;
   for (unsigned k=0; k<100; tf+=0.01f, k++)
   {
@@ -42,15 +43,15 @@ static void test_platform_computations()
       if (static_cast<float>(rnums[i])>tf)
         c++;
 #if 0
-    vcl_cout << c << ' ';
+    std::cout << c << ' ';
 #endif
     if (c!=counts[k]){
-      vcl_cout << "count[" << k << "]= " << c << " should be "
+      std::cout << "count[" << k << "]= " << c << " should be "
                << counts[k] << '\n';
       failf = true;
     }
   }
-  vcl_cout << "\n\n";
+  std::cout << "\n\n";
   TEST("float threshold", failf, false);
 }
 

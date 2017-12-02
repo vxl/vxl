@@ -23,9 +23,12 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_linear_system.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+
+#include <vnl/algo/vnl_algo_export.h>
 
 //: Linear least squares
 //  vnl_lsqr implements an algorithm for large, sparse linear systems and
@@ -33,7 +36,7 @@
 //  of Paige and Saunders (ACM TOMS 583). The sparse system is encapsulated
 //  by a vnl_linear_system.
 
-class vnl_lsqr
+class VNL_ALGO_EXPORT vnl_lsqr
 {
  public:
   vnl_lsqr(vnl_linear_system& ls) :
@@ -51,9 +54,9 @@ class vnl_lsqr
   long get_number_of_iterations() const { return num_iter_; }
 
   //: Pontificate about the outcome of the last minimization.
-  void diagnose_outcome(vcl_ostream& os) const;
+  void diagnose_outcome(std::ostream& os) const;
 
-  static void translate_return_code(vcl_ostream& os, int return_code);
+  static void translate_return_code(std::ostream& os, int return_code);
 
   //: Return the residual norm estimate:
   double get_resid_norm_estimate() const { return resid_norm_estimate_; }

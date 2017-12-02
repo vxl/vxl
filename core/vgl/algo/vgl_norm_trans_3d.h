@@ -15,9 +15,10 @@
 //   Created August 14, 2004 - J.L. Mundy
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
 template <class T>
@@ -31,24 +32,24 @@ class vgl_norm_trans_3d: public vgl_h_matrix_3d<T>
   vgl_norm_trans_3d(const vgl_norm_trans_3d<T>& M);
   vgl_norm_trans_3d(vnl_matrix_fixed<T,4,4> const& M);
   vgl_norm_trans_3d(const T* t_matrix);
-  vgl_norm_trans_3d(vcl_istream& s);
+  vgl_norm_trans_3d(std::istream& s);
   vgl_norm_trans_3d(char const* filename);
  ~vgl_norm_trans_3d();
 
   // Operations----------------------------------------------------------------
 
   //: compute the normalizing transform
-  bool compute_from_points(vcl_vector<vgl_homg_point_3d<T> > const& points);
+  bool compute_from_points(std::vector<vgl_homg_point_3d<T> > const& points);
 
  protected : // --- Utility functions -----------------------------------------
 
-  static bool scale_xyzroot2(vcl_vector<vgl_homg_point_3d<T> > const& in,
+  static bool scale_xyzroot2(std::vector<vgl_homg_point_3d<T> > const& in,
                              T& radius);
 
-  static void center_of_mass(vcl_vector<vgl_homg_point_3d<T> > const& points,
+  static void center_of_mass(std::vector<vgl_homg_point_3d<T> > const& points,
                              T& cx, T& cy, T& cz);
 };
 
-#define VGL_NORM_TRANS_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_norm_trans_3d.txx first"
+#define VGL_NORM_TRANS_3D_INSTANTIATE(T) extern "please include vgl/algo/vgl_norm_trans_3d.hxx first"
 
 #endif // vgl_norm_trans_3d_h_

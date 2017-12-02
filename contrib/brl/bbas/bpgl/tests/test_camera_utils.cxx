@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <bpgl/bpgl_camera_utils.h>
 #include <vgl/vgl_vector_3d.h>
@@ -21,8 +22,8 @@ static void test_camera_utils()
   vgl_vector_3d<double> pray = cam.principal_axis();
   //s,c == sin,cos(head), st == sin(tilt)
   double s = 0.1625, c = -0.9867, st = 0.9803;
-  double dif = vcl_fabs(pray.x()-(s*st));
-  dif += vcl_fabs(pray.y()-(c*st));
+  double dif = std::fabs(pray.x()-(s*st));
+  dif += std::fabs(pray.y()-(c*st));
   TEST_NEAR("principal ray (KML)", dif, 0.0, 0.0001);
 }
 

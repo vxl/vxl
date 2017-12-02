@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_binary_edge_detection_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,9 +10,8 @@
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
-#include <vcl_iostream.h>
 #include <vil/vil_save.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 namespace vil_binary_edge_detection_process_globals
 {
@@ -23,13 +24,13 @@ bool vil_binary_edge_detection_process_cons(bprb_func_process& pro)
 {
   using namespace vil_binary_edge_detection_process_globals;
   // process takes 3 inputs
-  vcl_vector<vcl_string> input_types(n_inputs_);
+  std::vector<std::string> input_types(n_inputs_);
   input_types[0] = "vil_image_view_base_sptr";          // input image
   input_types[1] = "unsigned";                          // max size of the blob in pixels
   input_types[2] = "unsigned";                          // min size of the blob in pixels
   input_types[3] = "unsigned";                          // threshold id to transfer from byte image to boolean image
   // process takes 1 output
-  vcl_vector<vcl_string> output_types(n_outputs_);
+  std::vector<std::string> output_types(n_outputs_);
   output_types[0] = "vil_image_view_base_sptr";         // edge image
 
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
@@ -55,7 +56,7 @@ bool vil_binary_edge_detection_process(bprb_func_process& pro)
     temp.fill(false);
     vil_image_view<vxl_byte>* view_temp = dynamic_cast<vil_image_view<vxl_byte>*>(img_ptr.ptr());
     if (!view_temp) {
-      vcl_cerr << pro.name() << " input image pixel " << img_ptr->pixel_format() << " is not supported!\n";
+      std::cerr << pro.name() << " input image pixel " << img_ptr->pixel_format() << " is not supported!\n";
       return false;
     }
     // transfer byte image
@@ -76,14 +77,14 @@ bool vil_binary_edge_detection_process(bprb_func_process& pro)
   // Find the blob
   vil_image_view<unsigned> blob_labels;
   vil_image_view<unsigned> edge_labels;
-  vcl_vector<vil_blob_pixel_list> edge_pixel_list;
+  std::vector<vil_blob_pixel_list> edge_pixel_list;
   vil_blob_labels(*view, vil_blob_8_conn, blob_labels);
   vil_blob_labels_to_edge_labels(blob_labels, vil_blob_8_conn, edge_labels);
   vil_blob_labels_to_pixel_lists(edge_labels, edge_pixel_list);
 
   // remove the edges that do not satisfy the desired size
-  vcl_vector<unsigned> valid_edge_labels;
-  for (vcl_vector<vil_blob_pixel_list>::iterator vit = edge_pixel_list.begin(); vit != edge_pixel_list.end(); ++vit) {
+  std::vector<unsigned> valid_edge_labels;
+  for (std::vector<vil_blob_pixel_list>::iterator vit = edge_pixel_list.begin(); vit != edge_pixel_list.end(); ++vit) {
     if ( (*vit).size() > max_size || (*vit).size() < min_size )
       continue;
     unsigned label = edge_labels((*vit).begin()->first, (*vit).begin()->second);
@@ -96,10 +97,10 @@ bool vil_binary_edge_detection_process(bprb_func_process& pro)
   for (unsigned i = 0; i < edge_labels.ni(); i++)
     for (unsigned j = 0; j < edge_labels.nj(); j++)
       for (unsigned k = 0; k < edge_labels.nplanes(); k++)
-        if ( vcl_find(valid_edge_labels.begin(), valid_edge_labels.end(), edge_labels(i,j,k)) != valid_edge_labels.end())
+        if ( std::find(valid_edge_labels.begin(), valid_edge_labels.end(), edge_labels(i,j,k)) != valid_edge_labels.end())
           view_blobs(i,j,k) = 255;
 
-  // output 
+  // output
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(view_blobs));
 
   return true;

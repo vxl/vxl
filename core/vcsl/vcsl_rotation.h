@@ -4,14 +4,14 @@
 //:
 // \file
 // \brief Rotation transformation (either 2D or 3D)
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/22 Peter Vanroose - return type of quaternion(), execute() and inverse() changed to non-ptr
-//   2002/01/28 Peter Vanroose - vcl_vector members angle_ and axis_ changed to non-ptr
+//   2002/01/28 Peter Vanroose - std::vector members angle_ and axis_ changed to non-ptr
 //   2004/09/17 Peter Vanroose - made angle() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 

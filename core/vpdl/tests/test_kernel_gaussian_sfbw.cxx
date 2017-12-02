@@ -1,16 +1,17 @@
+#include <string>
+#include <limits>
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_kernel_gaussian_sfbw.h>
 #include <vpdl/vpdl_gaussian_sphere.h>
-#include <vcl_string.h>
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 template <class T>
-void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
+void test_kernel_gaussian_sfbw_type(T epsilon, const std::string& type_name)
 {
   // an arbitrary collection of sample points
-  vcl_vector<vnl_vector_fixed<T,3> > samples;
+  std::vector<vnl_vector_fixed<T,3> > samples;
   samples.push_back(vnl_vector_fixed<T,3>(1,1,1));
   samples.push_back(vnl_vector_fixed<T,3>(2,2,2));
   samples.push_back(vnl_vector_fixed<T,3>(3,1,4));
@@ -47,7 +48,7 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
   cum_prob /= samples.size();
   box_prob /= samples.size();
 
-  vcl_cout << "=================== fixed<3> ======================="<<vcl_endl;
+  std::cout << "=================== fixed<3> ======================="<<std::endl;
   {
     vpdl_kernel_gaussian_sfbw<T,3> kernel_g3(samples, bandwidth);
 
@@ -67,7 +68,7 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T,3> g3;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = kernel_g3.density(pt1);
     T den_x = kernel_g3.density(pt1+vnl_vector_fixed<T,3>(dp,0,0));
     T den_y = kernel_g3.density(pt1+vnl_vector_fixed<T,3>(0,dp,0));
@@ -95,9 +96,9 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
          kernel_g3.bandwidth(), T(2.1));
   }
 
-  vcl_cout << "=================== variable ======================="<<vcl_endl;
+  std::cout << "=================== variable ======================="<<std::endl;
   {
-    vcl_vector<vnl_vector<T> > vsamples;
+    std::vector<vnl_vector<T> > vsamples;
     vsamples.push_back(samples[0].as_ref());
     vpdl_kernel_gaussian_sfbw<T> kernel_g, kernel_g1(vsamples,bandwidth);
 
@@ -132,7 +133,7 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector<T> g;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = kernel_g.density(pt1.as_ref());
     T den_x = kernel_g.density((pt1+vnl_vector_fixed<T,3>(dp,0,0)).as_ref());
     T den_y = kernel_g.density((pt1+vnl_vector_fixed<T,3>(0,dp,0)).as_ref());
@@ -156,7 +157,7 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
               (c-covar).array_inf_norm(), T(0), epsilon);
   }
 
-  vcl_cout << "=================== scalar ======================="<<vcl_endl;
+  std::cout << "=================== scalar ======================="<<std::endl;
   {
     vpdl_kernel_gaussian_sfbw<T,1> kernel_g1;
     kernel_g1.set_bandwidth(bandwidth);
@@ -194,7 +195,7 @@ void test_kernel_gaussian_sfbw_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     T g;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = kernel_g1.density(pt1);
     T den_x = kernel_g1.density(pt1+dp);
     T grad = (den_x-den)/dp;

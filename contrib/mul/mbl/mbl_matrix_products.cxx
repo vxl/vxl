@@ -4,12 +4,13 @@
 // \date 25-Apr-2001
 // \brief Various specialised versions of matrix product operations
 
+#include <iostream>
+#include <cstdlib>
 #include "mbl_matrix_products.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 //: Compute product AB = A * B
@@ -24,8 +25,8 @@ void mbl_matrix_product(vnl_matrix<double>& AB, const vnl_matrix<double>& A,
 
    if ( nr2 != nc1 )
    {
-      vcl_cerr<<"Product : B.rows != A.cols\n";
-      vcl_abort() ;
+      std::cerr<<"Product : B.rows != A.cols\n";
+      std::abort() ;
    }
 
    if ( (AB.rows()!=nr1) || (AB.cols()!= nc2) )
@@ -69,8 +70,8 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
   int nc2 = B.columns();
   if ( nc2 != nc1 )
   {
-    vcl_cerr<<"mbl_matrix_product_a_bt : B.columns != A.columns\n";
-    vcl_abort();
+    std::cerr<<"mbl_matrix_product_a_bt : B.columns != A.columns\n";
+    std::abort();
   }
 #endif //!NDEBUG
 
@@ -180,8 +181,8 @@ void mbl_matrix_product_at_b(vnl_matrix<double>& AtB,
 
   if ( nr2 != nr1 )
   {
-    vcl_cerr<<"TC_ProductAtB : B.rows != A.rows\n";
-    vcl_abort();
+    std::cerr<<"TC_ProductAtB : B.rows != A.rows\n";
+    std::abort();
   }
 
   if ( (AtB.rows()!=(unsigned int)nc_a) || (AtB.columns()!= nc2) )

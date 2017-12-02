@@ -28,9 +28,9 @@ vil_flip_lr_image_resource::vil_flip_lr_image_resource(vil_image_resource_sptr c
 vil_image_view_base_sptr vil_flip_lr_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                                                    unsigned j0, unsigned nj) const
 {
-  if (i0 + ni > src_->ni()) return 0;
+  if (i0 + ni > src_->ni()) return VXL_NULLPTR;
   vil_image_view_base_sptr vs = src_->get_copy_view(src_->ni()- i0-ni, ni, j0, nj);
-  if (!vs) return 0;
+  if (!vs) return VXL_NULLPTR;
 
   switch (vs->pixel_format())
   {
@@ -50,20 +50,20 @@ vil_image_view_base_sptr vil_flip_lr_image_resource::get_copy_view(unsigned i0, 
     macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
     macro(VIL_PIXEL_FORMAT_FLOAT, float)
     macro(VIL_PIXEL_FORMAT_DOUBLE, double)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
 vil_image_view_base_sptr vil_flip_lr_image_resource::get_view(unsigned i0, unsigned ni,
                                                               unsigned j0, unsigned nj) const
 {
-  if (i0 + ni > src_->ni()) return 0;
+  if (i0 + ni > src_->ni()) return VXL_NULLPTR;
   vil_image_view_base_sptr vs = src_->get_view(src_->ni()- i0-ni, ni, j0, nj);
-  if (!vs) return 0;
+  if (!vs) return VXL_NULLPTR;
 
   switch (vs->pixel_format())
   {
@@ -83,11 +83,11 @@ vil_image_view_base_sptr vil_flip_lr_image_resource::get_view(unsigned i0, unsig
     macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
     macro(VIL_PIXEL_FORMAT_FLOAT, float)
     macro(VIL_PIXEL_FORMAT_DOUBLE, double)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -114,8 +114,8 @@ bool vil_flip_lr_image_resource::put_view(const vil_image_view_base& im, unsigne
     macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
     macro(VIL_PIXEL_FORMAT_FLOAT, float)
     macro(VIL_PIXEL_FORMAT_DOUBLE, double)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
     return false;
@@ -136,9 +136,9 @@ vil_flip_ud_image_resource::vil_flip_ud_image_resource(vil_image_resource_sptr c
 vil_image_view_base_sptr vil_flip_ud_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                                                    unsigned j0, unsigned nj) const
 {
-  if (j0 + nj > src_->nj()) return 0;
+  if (j0 + nj > src_->nj()) return VXL_NULLPTR;
   vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, src_->nj()- j0-nj, nj);
-  if (!vs) return 0;
+  if (!vs) return VXL_NULLPTR;
 
   switch (vs->pixel_format())
   {
@@ -158,20 +158,20 @@ vil_image_view_base_sptr vil_flip_ud_image_resource::get_copy_view(unsigned i0, 
     macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
     macro(VIL_PIXEL_FORMAT_FLOAT, float)
     macro(VIL_PIXEL_FORMAT_DOUBLE, double)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
 vil_image_view_base_sptr vil_flip_ud_image_resource::get_view(unsigned i0, unsigned ni,
                                                               unsigned j0, unsigned nj) const
 {
-  if (i0 + ni > src_->ni()) return 0;
+  if (i0 + ni > src_->ni()) return VXL_NULLPTR;
   vil_image_view_base_sptr vs = src_->get_view(i0, ni, src_->nj()-j0-nj, nj);
-  if (!vs) return 0;
+  if (!vs) return VXL_NULLPTR;
 
   switch (vs->pixel_format())
   {
@@ -191,11 +191,11 @@ vil_image_view_base_sptr vil_flip_ud_image_resource::get_view(unsigned i0, unsig
     macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
     macro(VIL_PIXEL_FORMAT_FLOAT, float)
     macro(VIL_PIXEL_FORMAT_DOUBLE, double)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -222,8 +222,8 @@ bool vil_flip_ud_image_resource::put_view(const vil_image_view_base& im, unsigne
     macro(VIL_PIXEL_FORMAT_INT_16, vxl_int_16)
     macro(VIL_PIXEL_FORMAT_FLOAT, float)
     macro(VIL_PIXEL_FORMAT_DOUBLE, double)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
     return false;

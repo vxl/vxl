@@ -1,17 +1,19 @@
+#include <cstdlib>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "mcal_general_ca.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Class to perform general Component Analysis
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
 
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_matxvec.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -72,8 +74,8 @@ class mcal_pair_cost1 : public vnl_cost_function
 
 double mcal_pair_cost1::f(const vnl_vector<double>& x)
 {
-  double sinA = vcl_sin(x[0]);
-  double cosA = vcl_cos(x[0]);
+  double sinA = std::sin(x[0]);
+  double cosA = std::cos(x[0]);
 
   // Rotate axes by A=x[0]
   m1 = cosA*mode1_ + sinA*mode2_;
@@ -130,8 +132,8 @@ mcal_pair_cost2::mcal_pair_cost2(const vnl_vector<double>& proj1,
 
 double mcal_pair_cost2::f(const vnl_vector<double>& x)
 {
-  double sinA = vcl_sin(x[0]);
-  double cosA = vcl_cos(x[0]);
+  double sinA = std::sin(x[0]);
+  double cosA = std::cos(x[0]);
 
   // Rotate axes by A=x[0]
   m1 = cosA*mode1_ + sinA*mode2_;
@@ -193,8 +195,8 @@ double mcal_general_ca::optimise_mode_pair(vnl_vector<double>& proj1,
   if (A==0.0) return 0.0;
 
   // Apply rotation
-  double sinA = vcl_sin(A);
-  double cosA = vcl_cos(A);
+  double sinA = std::sin(A);
+  double cosA = std::cos(A);
 
   vnl_vector<double> m1=mode1,m2=mode2;
   vnl_vector<double> p1=proj1,p2=proj2;
@@ -207,11 +209,11 @@ double mcal_general_ca::optimise_mode_pair(vnl_vector<double>& proj1,
   proj1 = cosA*p1 + sinA*p2;
   proj2 = cosA*p2 - sinA*p1;
 
-  return vcl_fabs(A);
+  return std::fabs(A);
 }
 
 //: Optimise the mode vectors so as to minimise the cost function
-double mcal_general_ca::optimise_one_pass(vcl_vector<vnl_vector<double> >& proj,
+double mcal_general_ca::optimise_one_pass(std::vector<vnl_vector<double> >& proj,
                                           vnl_matrix<double>& modes)
 {
   unsigned n_modes = modes.cols();
@@ -235,7 +237,7 @@ double mcal_general_ca::optimise_one_pass(vcl_vector<vnl_vector<double> >& proj,
 void mcal_general_ca::compute_projections(mbl_data_wrapper<vnl_vector<double> >& data,
                                           const vnl_vector<double>& mean,
                                           vnl_matrix<double>& modes,
-                                          vcl_vector<vnl_vector<double> >& proj)
+                                          std::vector<vnl_vector<double> >& proj)
 {
   // Compute projection of data onto each mode
   unsigned n_modes = modes.cols();
@@ -262,7 +264,7 @@ void mcal_general_ca::optimise_about_mean(mbl_data_wrapper<vnl_vector<double> >&
   // Compute projection of data onto each mode
   unsigned n_modes = mode_var.size();
   unsigned n_egs   = data.size();
-  vcl_vector<vnl_vector<double> > proj(n_modes);
+  std::vector<vnl_vector<double> > proj(n_modes);
   compute_projections(data,mean,modes,proj);
 
   // Perform multiple passes
@@ -288,15 +290,15 @@ void mcal_general_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& da
 {
   if (data.size()==0)
   {
-    vcl_cerr<<"mcal_general_ca::build_about_mean() No samples supplied.\n";
-    vcl_abort();
+    std::cerr<<"mcal_general_ca::build_about_mean() No samples supplied.\n";
+    std::abort();
   }
 
   data.reset();
 
   if (data.current().size()==0)
   {
-    vcl_cerr<<"mcal_general_ca::build_about_mean()\n"
+    std::cerr<<"mcal_general_ca::build_about_mean()\n"
             <<"Warning: Samples claim to have zero dimensions.\n"
             <<"Constructing empty model.\n";
 
@@ -317,9 +319,9 @@ void mcal_general_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& da
 // Method: is_a
 //=======================================================================
 
-vcl_string  mcal_general_ca::is_a() const
+std::string  mcal_general_ca::is_a() const
 {
-  return vcl_string("mcal_general_ca");
+  return std::string("mcal_general_ca");
 }
 
 //=======================================================================
@@ -344,7 +346,7 @@ mcal_component_analyzer* mcal_general_ca::clone() const
 // Method: print
 //=======================================================================
 
-void mcal_general_ca::print_summary(vcl_ostream& os) const
+void mcal_general_ca::print_summary(std::ostream& os) const
 {
   vsl_indent_inc(os);
   os<<"{\n"
@@ -384,9 +386,9 @@ void mcal_general_ca::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,move_thresh_);
       break;
     default:
-      vcl_cerr << "mcal_general_ca::b_read()\n"
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "mcal_general_ca::b_read()\n"
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 
@@ -400,19 +402,19 @@ void mcal_general_ca::b_read(vsl_b_istream& bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void mcal_general_ca::config_from_stream(vcl_istream & is)
+void mcal_general_ca::config_from_stream(std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   set_defaults();
 
   if (props.find("initial_ca")!=props.end())
   {
-    vcl_istringstream ss(props["initial_ca"]);
-    vcl_auto_ptr<mcal_component_analyzer> ca;
+    std::istringstream ss(props["initial_ca"]);
+    std::auto_ptr<mcal_component_analyzer> ca;
     ca=mcal_component_analyzer::create_from_stream(ss);
     initial_ca_ = *ca;
 
@@ -421,8 +423,8 @@ void mcal_general_ca::config_from_stream(vcl_istream & is)
 
   if (props.find("basis_cost")!=props.end())
   {
-    vcl_istringstream ss(props["basis_cost"]);
-    vcl_auto_ptr<mcal_single_basis_cost> bc;
+    std::istringstream ss(props["basis_cost"]);
+    std::auto_ptr<mcal_single_basis_cost> bc;
     bc=mcal_single_basis_cost::create_from_stream(ss);
     basis_cost_ = *bc;
 

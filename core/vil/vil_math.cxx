@@ -1,4 +1,6 @@
 // This is core/vil/vil_math.cxx
+#include <iostream>
+#include <cstdlib>
 #include "vil_math.h"
 //:
 // \file
@@ -8,16 +10,15 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 void vil_math_median_unimplemented()
 {
-  vcl_cerr << "vil_math_median is currently not implemented for this data type\n";
-  vcl_abort();
+  std::cerr << "vil_math_median is currently not implemented for this data type\n";
+  std::abort();
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsigned p)
 {
   unsigned ni = im.ni();

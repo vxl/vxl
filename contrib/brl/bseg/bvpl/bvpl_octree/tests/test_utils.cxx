@@ -11,16 +11,16 @@
 void init_tree(boct_tree<short,float> *tree, unsigned i, float init_val)
 {
   tree-> split(); //now we have 8 cells
-  vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
+  std::vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
   leaves[i]->set_data(init_val);
   leaves[i]->split();
 
   boct_loc_code<short> code = leaves[i]->get_code() ;
-  vcl_cerr<< "Create Scene Code: " << code << vcl_endl;
+  std::cerr<< "Create Scene Code: " << code << std::endl;
 }
 
 boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned world_dimy,unsigned world_dimz,
-                                                   bool uniform, float val, vcl_string scene_prefix)
+                                                   bool uniform, float val, std::string scene_prefix)
 {
   float init_val = 0.5f;
 
@@ -38,7 +38,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   vgl_vector_3d<unsigned> world_dim(world_dimx,world_dimy,world_dimz); //number of blocks in a scene
 
   boxm_scene<boct_tree<short, float> > *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim, max_tree_level, init_level );
-  vcl_string scene_path(vul_file::get_cwd());
+  std::string scene_path(vul_file::get_cwd());
   scene->set_paths(scene_path, scene_prefix);
   scene->set_appearance_model(BOXM_FLOAT);
   scene->write_scene(scene_prefix + ".xml");
@@ -65,7 +65,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
   }
 
 #ifdef DEBUG_LEAKS
-  vcl_cerr << "Leaks Created by create_scene() : " << boct_tree_cell<short,float>::nleaks() << vcl_endl;
+  std::cerr << "Leaks Created by create_scene() : " << boct_tree_cell<short,float>::nleaks() << std::endl;
 #endif
   return scene;
 }
@@ -77,12 +77,12 @@ void clean_up()
   vul_file_iterator file_it("./*.bin");
   for (; file_it; ++file_it)
   {
-    vpl_unlink(file_it());// this deletes the file at file_it() 
+    vpl_unlink(file_it());// this deletes the file at file_it()
     //    vul_file::delete_file_glob(file_it());
   }
 }
 
-void clean_up(vcl_string dir, vcl_string ext)
+void clean_up(std::string dir, std::string ext)
 {
   //clean temporary files
   vul_file_iterator file_it(dir+"/"+ext);

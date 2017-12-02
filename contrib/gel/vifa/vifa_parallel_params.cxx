@@ -1,9 +1,10 @@
 // This is gel/vifa/vifa_parallel_params.cxx
+#include <iostream>
 #include "vifa_parallel_params.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 vifa_parallel_params::
 vifa_parallel_params(float  angle_min,
@@ -44,8 +45,8 @@ vifa_parallel_params(vifa_parallel_params* np)
 void vifa_parallel_params::
 print_info(void)
 {
-  vcl_cout << "vifa_parallel_params:\n"
-           << "  min angle    = " << min_angle << vcl_endl
-           << "  max angle    = " << max_angle << vcl_endl
-           << "  # of buckets = " << nbuckets << vcl_endl;
+  std::cout << "vifa_parallel_params:\n"
+           << "  min angle    = " << min_angle << std::endl
+           << "  max angle    = " << max_angle << std::endl
+           << "  # of buckets = " << nbuckets << std::endl;
 }

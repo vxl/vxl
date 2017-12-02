@@ -1,20 +1,21 @@
 // This is mul/mbl/mbl_read_multi_props.cxx
+#include <sstream>
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <utility>
+#include <iterator>
 #include "mbl_read_multi_props.h"
 //:
 // \file
 
 #include <vsl/vsl_indent.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_cctype.h>
-#include <vcl_utility.h>
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
 
-void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type props)
+void mbl_read_multi_props_print(std::ostream &afs, mbl_read_multi_props_type props)
 {
   typedef mbl_read_multi_props_type::iterator ITER;
   afs << vsl_indent() << "{\n";
@@ -25,7 +26,7 @@ void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type prop
   afs << vsl_indent() << "}\n";
 }
 
-void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type props, unsigned max_chars)
+void mbl_read_multi_props_print(std::ostream &afs, mbl_read_multi_props_type props, unsigned max_chars)
 {
   typedef mbl_read_multi_props_type::iterator ITER;
   afs << vsl_indent() << "{\n";
@@ -39,10 +40,10 @@ void mbl_read_multi_props_print(vcl_ostream &afs, mbl_read_multi_props_type prop
   afs << vsl_indent() << "}\n";
 }
 
-static void strip_trailing_ws(vcl_string &s)
+static void strip_trailing_ws(std::string &s)
 {
   int p=s.length()-1;
-  while (p>0 && vcl_isspace(s[p])) --p;
+  while (p>0 && std::isspace(s[p])) --p;
   s.erase(p+1);
 }
 
@@ -62,19 +63,19 @@ static void strip_trailing_ws(vcl_string &s)
 // braces is included in the property value.
 // Each property label should not contain
 // any whitespace.
-mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs)
+mbl_read_multi_props_type mbl_read_multi_props_ws(std::istream &afs)
 {
   if (!afs) return mbl_read_multi_props_type();
 
-  vcl_string label, str1;
+  std::string label, str1;
 
-  while ( afs>>vcl_ws, !afs.eof() )
+  while ( afs>>std::ws, !afs.eof() )
   {
     afs >> label;
     if (label.substr(0,2) =="//")
     {
       // Comment line, so read to end
-      vcl_getline( afs, str1 );
+      std::getline( afs, str1 );
     }
     else break;
   }
@@ -91,7 +92,7 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs)
 
   if ( label.empty() )
   {
-    afs >> vcl_ws;
+    afs >> std::ws;
 
     // Several tests with Borland 5.5.1 fail because this next
     // statement 'afs >> label;' moves past the '\n' char when the
@@ -102,12 +103,12 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs)
 
     afs >> label;
 
-    // vcl_cout << "debug label " << label << vcl_endl
-    //          << "debug peek() " << afs.peek() << vcl_endl;
+    // std::cout << "debug label " << label << std::endl
+    //          << "debug peek() " << afs.peek() << std::endl;
   }
 
   typedef mbl_read_multi_props_type::iterator ITER;
-  vcl_string last_label( label );
+  std::string last_label( label );
   ITER last_label_iter = props.end();
 
   do
@@ -115,7 +116,7 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs)
     if ( label.substr(0,2) =="//" )
     {
       // Comment line, so read to end
-      vcl_getline(afs, str1);
+      std::getline(afs, str1);
     }
     else if ( need_closing_brace && label[0] == '}' )
     {
@@ -128,24 +129,24 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs)
            label[label.size() -1] == ':' )
       {
         label.erase( label.size() -1, 1 );
-        afs >> vcl_ws >> str1;
+        afs >> std::ws >> str1;
 
         if ( str1.substr(0,1) == "{" )
           str1 = mbl_parse_block(afs, true);
 
         strip_trailing_ws(str1);
-        last_label_iter = props.insert(vcl_make_pair(label, str1));
+        last_label_iter = props.insert(std::make_pair(label, str1));
         last_label = label;
       }
       else if ( label.substr(0,1) == "{" )
       {
-        vcl_string block = mbl_parse_block( afs, true );
+        std::string block = mbl_parse_block( afs, true );
         if ( block.substr(0,2) != "{}" )
         {
           if (last_label_iter == props.end())
           {
-            props.insert(vcl_make_pair(last_label, str1));
-            last_label_iter = props.insert(vcl_make_pair(last_label, vcl_string(" ")+block));
+            props.insert(std::make_pair(last_label, str1));
+            last_label_iter = props.insert(std::make_pair(last_label, std::string(" ")+block));
           }
           else
           {
@@ -157,33 +158,33 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs)
       else
       {
         char c;
-        afs >> vcl_ws;
+        afs >> std::ws;
         afs >> c;
 
         if (c != ':')
         {
-          vcl_getline(afs, str1);
+          std::getline(afs, str1);
           // The next loop replaces any characters outside the ASCII range
           // 32-126 with their XML equivalent, e.g. a TAB with &#9;
           // This is necessary for the tests dashboard since otherwise the
           // the Dart server gives up on interpreting the XML file sent. - PVr
           for (int i=-1; i<256; ++i)
           {
-            char c= i<0 ? '&' : char(i); vcl_string s(1,c); // first do '&'
+            char c= i<0 ? '&' : char(i); std::string s(1,c); // first do '&'
             if (i>=32 && i<127 && c!='<')
               continue; // keep "normal" chars
 
-            vcl_ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
-            vcl_string::size_type pos;
+            std::ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
+            std::string::size_type pos;
 
-            while ((pos=str1.find(s)) != vcl_string::npos)
+            while ((pos=str1.find(s)) != std::string::npos)
               str1.replace(pos,1,os.str());
 
-            while ((pos=label.find(s)) != vcl_string::npos)
+            while ((pos=label.find(s)) != std::string::npos)
               label.replace(pos,1,os.str());
           }
           mbl_exception_warning(
-            mbl_exception_read_props_parse_error( vcl_string(
+            mbl_exception_read_props_parse_error( std::string(
               "Could not find colon ':' separator while reading line ")
               + label + " " + str1) );
           return props;
@@ -191,14 +192,14 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs)
       }
     }
 
-    afs >> vcl_ws >> label;
+    afs >> std::ws >> label;
   }
 
   while ( !afs.eof() );
 
   if ( need_closing_brace && label != "}" )
     mbl_exception_warning(
-      mbl_exception_read_props_parse_error( vcl_string(
+      mbl_exception_read_props_parse_error( std::string(
         "Unexpected end of file while "
         "looking for '}'. Last read string = \"")
         + label + '"') );
@@ -245,7 +246,7 @@ mbl_read_multi_props_type mbl_read_multi_props_merge(const mbl_read_multi_props_
 //: Throw error if there are any keys in props that aren't in ignore.
 // \throw mbl_exception_unused_props
 void mbl_read_multi_props_look_for_unused_props(
-  const vcl_string & function_name,
+  const std::string & function_name,
   const mbl_read_multi_props_type &props,
   const mbl_read_multi_props_type &ignore)
 {
@@ -258,7 +259,7 @@ void mbl_read_multi_props_look_for_unused_props(
 
   if (!p2.empty())
   {
-    vcl_ostringstream ss;
+    std::ostringstream ss;
     mbl_read_multi_props_print(ss, p2, 1000);
     mbl_exception_error(mbl_exception_unused_props(function_name, ss.str()));
   }
@@ -269,17 +270,17 @@ void mbl_read_multi_props_look_for_unused_props(
 // The matching entry is removed from the property list.
 // \throws mbl_exception_missing_property if \a label doesn't exist.
 // \throws mbl_exception_read_props_parse_error if there are two or more values of \a label.
-vcl_string mbl_read_multi_props_type::get_required_property(const vcl_string& label)
+std::string mbl_read_multi_props_type::get_required_property(const std::string& label)
 {
-  vcl_pair<mbl_read_multi_props_type::iterator, mbl_read_multi_props_type::iterator>
+  std::pair<mbl_read_multi_props_type::iterator, mbl_read_multi_props_type::iterator>
     its = this->equal_range(label);
   if (its.first==its.second)
     mbl_exception_error(mbl_exception_missing_property(label));
-  else if (vcl_distance(its.first, its.second) > 1)
+  else if (std::distance(its.first, its.second) > 1)
     mbl_exception_error(mbl_exception_read_props_parse_error(
-      vcl_string("Property label \"") + label + "\" occurs more than once.") );
+      std::string("Property label \"") + label + "\" occurs more than once.") );
 
-  vcl_string s = its.first->second;
+  std::string s = its.first->second;
   this->erase(its.first);
   return s;
 }
@@ -289,17 +290,17 @@ vcl_string mbl_read_multi_props_type::get_required_property(const vcl_string& la
 // The matching entry is removed from the property list.
 // returns empty string or \a default_prop if \a label doesn't exist.
 // \throws mbl_exception_read_props_parse_error if there are two or more values of \a label.
-vcl_string mbl_read_multi_props_type::get_optional_property(
-  const vcl_string& label, const vcl_string& default_prop /*=""*/)
+std::string mbl_read_multi_props_type::get_optional_property(
+  const std::string& label, const std::string& default_prop /*=""*/)
 {
-  vcl_pair<mbl_read_multi_props_type::iterator, mbl_read_multi_props_type::iterator>
+  std::pair<mbl_read_multi_props_type::iterator, mbl_read_multi_props_type::iterator>
     its = this->equal_range(label);
   if (its.first==its.second) return default_prop;
-  else if (vcl_distance(its.first, its.second) > 1)
+  else if (std::distance(its.first, its.second) > 1)
     mbl_exception_error(mbl_exception_read_props_parse_error(
-      vcl_string("Property label \"") + label + "\" occurs more than once.") );
+      std::string("Property label \"") + label + "\" occurs more than once.") );
 
-  vcl_string s = its.first->second;
+  std::string s = its.first->second;
   this->erase(its.first);
   return s;
 }
@@ -308,8 +309,8 @@ vcl_string mbl_read_multi_props_type::get_optional_property(
 // Return a vector of all values for a given property label.
 // Throw exception if label doesn't occur at least once.
 void mbl_read_multi_props_type::get_required_properties(
-  const vcl_string& label,
-  vcl_vector<vcl_string>& values,
+  const std::string& label,
+  std::vector<std::string>& values,
   const unsigned nmax/*=-1*/, //=max<unsigned>
   const unsigned nmin/*=1*/)
 {
@@ -327,12 +328,12 @@ void mbl_read_multi_props_type::get_required_properties(
   const unsigned nval = values.size();
   if (nval<nmin)
   {
-    const vcl_string msg = "property label \"" + label + "\" occurs too few times.";
+    const std::string msg = "property label \"" + label + "\" occurs too few times.";
     mbl_exception_error(mbl_exception_read_props_parse_error(msg));
   }
   if (nval>nmax)
   {
-    const vcl_string msg = "property label \"" + label + "\" occurs too many times.";
+    const std::string msg = "property label \"" + label + "\" occurs too many times.";
     mbl_exception_error(mbl_exception_read_props_parse_error(msg));
   }
 
@@ -343,8 +344,8 @@ void mbl_read_multi_props_type::get_required_properties(
 // Return a vector of all values for a given property label.
 // Vector is empty if label doesn't occur at least once.
 void mbl_read_multi_props_type::get_optional_properties(
-  const vcl_string& label,
-  vcl_vector<vcl_string>& values,
+  const std::string& label,
+  std::vector<std::string>& values,
   const unsigned nmax/*=-1*/) //=max<unsigned>
 {
   values.clear();
@@ -360,7 +361,7 @@ void mbl_read_multi_props_type::get_optional_properties(
   const unsigned nval = values.size();
   if (nval>nmax)
   {
-    const vcl_string msg = "property label \"" + label + "\" occurs too many times.";
+    const std::string msg = "property label \"" + label + "\" occurs too many times.";
     mbl_exception_error(mbl_exception_read_props_parse_error(msg));
   }
 

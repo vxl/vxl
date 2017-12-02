@@ -1,5 +1,7 @@
+#include <iostream>
+#include <cmath>
 #include "rrel_misc.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 // Chebychev approximation to erfc --- the complement of the error
@@ -10,9 +12,9 @@ rrel_misc_erfcc( double x )
 {
     double t,z,ans;
 
-    z=vcl_fabs(x);
+    z=std::fabs(x);
     t=1.0/(1.0+0.5*z);
-    ans=t*vcl_exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
+    ans=t*std::exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
            t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+
                  t*(-0.82215223+t*0.17087277)))))))));
     return  x >= 0.0 ? ans : 2.0-ans;
@@ -70,7 +72,7 @@ rrel_misc_gaussian_cdf_inv( double p )
 
    //  Step 1:  use 26.2.23 from Abramowitz and Stegun
 
-   dt = vcl_sqrt( -2.0 * vcl_log(dp) ) ;
+   dt = std::sqrt( -2.0 * std::log(dp) ) ;
    dx = dt
      - ((.010328e+0*dt + .802853e+0)*dt + 2.515517e+0)
      /(((.001308e+0*dt + .189269e+0)*dt + 1.432788e+0)*dt + 1.e+0) ;
@@ -79,7 +81,7 @@ rrel_misc_gaussian_cdf_inv( double p )
 
    for ( newt=0 ; newt < 3 ; newt++ ){
      dq  = 0.5e+0 * rrel_misc_erfcc( dx / 1.414213562373095e+0 ) - dp ;
-     ddq = vcl_exp( -0.5e+0 * dx * dx ) / 2.506628274631000e+0 ;
+     ddq = std::exp( -0.5e+0 * dx * dx ) / 2.506628274631000e+0 ;
      dx  = dx + dq / ddq ;
    }
 

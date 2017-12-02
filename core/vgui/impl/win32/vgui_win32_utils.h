@@ -40,12 +40,12 @@ class vgui_win32_utils
 
   // Convert a vgui_menu to a Win32 menu
   HMENU vgui_menu_to_win32(vgui_menu const &vguimenu,
-                           vcl_vector<vgui_command_sptr> &callbacks, HACCEL *hAccel,
+                           std::vector<vgui_command_sptr> &callbacks, HACCEL *hAccel,
                            bool isPopup = false);
 
   // Convert a vgui_menu to an extended Win32 menu
   HMENU vgui_menu_to_win32ex(vgui_menu const &vguimenu,
-                             vcl_vector<vgui_command_sptr> &callbacks, HACCEL *hAccel,
+                             std::vector<vgui_command_sptr> &callbacks, HACCEL *hAccel,
                              bool isPopup = false);
 
  protected:
@@ -55,8 +55,8 @@ class vgui_win32_utils
  private:
   int addMenuItems(vgui_menu const &vguimenu, int offset, bool is_popup);
   int addMenuItemsEx(vgui_menu const &vguimenu, int offset, bool is_popup);
-  void addAccelerator(vcl_string&, vgui_menu_item const&, int);
-  vcl_string vgui_key_to_string(vgui_key);
+  void addAccelerator(std::string&, vgui_menu_item const&, int);
+  std::string vgui_key_to_string(vgui_key);
   UINT vgui_key_to_virt_key(vgui_key);
 
   // Show explainary message for GetLastError().
@@ -64,7 +64,7 @@ class vgui_win32_utils
 
   unsigned char *pMenu; // menu template buffer
   int menu_capacity; // menu template length
-  vcl_vector<vgui_command_sptr> callbacks; // commands called by menu items
+  std::vector<vgui_command_sptr> callbacks; // commands called by menu items
   int item_count; // count of menu items
 
   ACCEL *pAccel; // pointer to accelerator table, varying length;

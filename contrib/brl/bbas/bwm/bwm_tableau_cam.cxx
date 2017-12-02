@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "bwm_tableau_cam.h"
 #include "bwm_site_mgr.h"
 //:
@@ -25,9 +28,8 @@
 
 
 #include <volm/volm_category_io.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
-#include <vcl_sstream.h>
 
 #define NUM_CIRCL_SEC 12
 
@@ -49,18 +51,18 @@ void bwm_tableau_cam::create_polygon_mesh()
   set_color(1, 0, 0);
   pick_polygon(poly2d);
   if (! poly2d) {
-    vcl_cerr << "In bwm_tableau_cam::create_polygon_mesh - pick_polygon failed\n";
+    std::cerr << "In bwm_tableau_cam::create_polygon_mesh - pick_polygon failed\n";
     return ;
   }
   vsol_polygon_3d_sptr poly3d;
-  
+
   //vgl_homg_plane_3d<double> plane(0,0,1,-740);
   //my_observer_->set_proj_plane(plane);
-  //vcl_cout << "setting proj plane: " << plane << vcl_endl;
+  //std::cout << "setting proj plane: " << plane << std::endl;
 
   my_observer_->backproj_poly(poly2d, poly3d);
   if (!poly3d) {
-    vcl_cout << "in bwm_tableau_cam::create_polygon_mesh - backprojection failed\n";
+    std::cout << "in bwm_tableau_cam::create_polygon_mesh - backprojection failed\n";
     return;
   }
   bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh(bwm_observable_mesh::BWM_MESH_FEATURE);
@@ -83,11 +85,11 @@ void bwm_tableau_cam::create_circular_polygon()
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
 
-  vcl_vector< vsol_point_2d_sptr > ps_list;
+  std::vector< vsol_point_2d_sptr > ps_list;
   unsigned max = 10;
   pick_point_set(ps_list, max);
   if (ps_list.size() == 0) {
-    vcl_cerr << "In bwm_tableau_cam::create_circle - pick_points failed\n";
+    std::cerr << "In bwm_tableau_cam::create_circle - pick_points failed\n";
     return ;
   }
   vsol_polygon_3d_sptr poly3d;
@@ -121,12 +123,12 @@ void bwm_tableau_cam::move_obj_by_vertex()
 {
   // first check if master tableau is set
   bwm_observer_cam* mt = bwm_observer_mgr::BWM_MASTER_OBSERVER;
-  if (mt == 0) {
-    vcl_cerr << "Master Tableau is not selected, please select one different than the current one!\n";
+  if (mt == VXL_NULLPTR) {
+    std::cerr << "Master Tableau is not selected, please select one different than the current one!\n";
     return;
   }
   else if (mt == this->my_observer_) {
-    vcl_cerr << "Please select a tableau different than the current one!\n";
+    std::cerr << "Please select a tableau different than the current one!\n";
     return;
   }
 
@@ -156,7 +158,7 @@ void bwm_tableau_cam::divide_face()
     my_observer_->divide_face(obj, face_id, x1, y1, x2, y2);
   }
   else
-    vcl_cerr << "Please first select the face to be divided\n";
+    std::cerr << "Please first select the face to be divided\n";
 }
 
 void bwm_tableau_cam::create_inner_face()
@@ -199,7 +201,7 @@ void bwm_tableau_cam::define_proj_plane()
   // pick the ground truth line
   float x1, y1, x2, y2;
   pick_line(&x1, &y1, &x2, &y2);
-  vcl_cout << '(' << x1 << ',' << y1 << ')' << '(' << x2 << ',' << y2 << ')' << vcl_endl;
+  std::cout << '(' << x1 << ',' << y1 << ')' << '(' << x2 << ',' << y2 << ')' << std::endl;
   my_observer_->set_ground_plane(x1, y1, x2, y2);
 }
 
@@ -249,7 +251,7 @@ void bwm_tableau_cam::label_wall()
 void bwm_tableau_cam::load_mesh()
 {
   // get the file name for the mesh
-  vcl_string file = bwm_utils::select_file();
+  std::string file = bwm_utils::select_file();
 
   // load the mesh from the given file
   bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
@@ -267,16 +269,16 @@ void bwm_tableau_cam::load_mesh()
 void bwm_tableau_cam::load_mesh_multiple()
 {
   // read txt file
-  vcl_string master_filename = bwm_utils::select_file();
-  vcl_ifstream file_inp(master_filename.data());
+  std::string master_filename = bwm_utils::select_file();
+  std::ifstream file_inp(master_filename.data());
   if (!file_inp.good()) {
-    vcl_cerr << "error opening file "<< master_filename << '\n';
+    std::cerr << "error opening file "<< master_filename << '\n';
     return;
   }
 
   while (!file_inp.eof()) {
-    vcl_ostringstream fullpath;
-    vcl_string mesh_fname;
+    std::ostringstream fullpath;
+    std::string mesh_fname;
     file_inp >> mesh_fname;
     if (!mesh_fname.empty() && (mesh_fname[0] != '#')) {
       fullpath << master_filename << '.' << mesh_fname;
@@ -306,7 +308,7 @@ void bwm_tableau_cam::save()
   my_observer_->save();
 }
 
-void bwm_tableau_cam::save(vcl_string path)
+void bwm_tableau_cam::save(std::string path)
 {
   my_observer_->save(path);
 }
@@ -316,7 +318,7 @@ void bwm_tableau_cam::save_all()
   my_observer_->save();
 }
 
-void bwm_tableau_cam::save_all(vcl_string path)
+void bwm_tableau_cam::save_all(std::string path)
 {
   my_observer_->save();
 }
@@ -373,7 +375,7 @@ void bwm_tableau_cam::help_pop()
 #if 0
   text->set_text("C:/lems/lemsvxlsrc/lemsvxlsrc/contrib/bwm/doc/doc/HELP_cam.txt");
 #endif
-  vcl_string h("SHIFT p = create 3-d polygon\nSHIFT t = triangulate_mesh\nSHIFT m = move object by vertex\nSHIFT e = extrude face\nSHIFT s = save a selected 3-d polygon\nSHIFT h = key help documentation\n");
+  std::string h("SHIFT p = create 3-d polygon\nSHIFT t = triangulate_mesh\nSHIFT m = move object by vertex\nSHIFT e = extrude face\nSHIFT s = save a selected 3-d polygon\nSHIFT h = key help documentation\n");
   text_tab->set_string(h);
   vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text_tab);
   vgui_tableau_sptr s = vgui_shell_tableau_new(v);
@@ -385,7 +387,7 @@ void bwm_tableau_cam::help_pop()
 
 bool bwm_tableau_cam::handle(const vgui_event& e)
 {
-  //vcl_cout << "Key:" << e.key << " modif: " << e.modifier << vcl_endl;
+  //std::cout << "Key:" << e.key << " modif: " << e.modifier << std::endl;
   if (e.key == 'p' && e.modifier == vgui_SHIFT && e.type == vgui_KEY_PRESS) {
     create_polygon_mesh();
     return true;
@@ -451,16 +453,16 @@ void bwm_tableau_cam::set_cam_height()
 void bwm_tableau_cam::add_ground_plane()
 {
   // allowed land class
-  vcl_vector<vcl_string> land_types = this->set_land_types();
+  std::vector<std::string> land_types = this->set_land_types();
 
-  static vcl_string name = "ground_plane";
+  static std::string name = "ground_plane";
   static unsigned order = 0;
   static unsigned land_vec_id = 0;
   vgui_dialog vdval("Ground Plane Region");
   vdval.field("Name ", name);
   vdval.choice("Land Class ", land_types, land_vec_id);
   // obtain actual land id
-  vcl_string land_name = land_types[land_vec_id];
+  std::string land_name = land_types[land_vec_id];
   unsigned char land_id = volm_osm_category_io::volm_land_table_name[land_name].id_;
   if (!vdval.ask())
     return;
@@ -469,7 +471,7 @@ void bwm_tableau_cam::add_ground_plane()
 
 void bwm_tableau_cam::add_sky()
 {
-  static vcl_string name = "sky";
+  static std::string name = "sky";
   static unsigned  order = 255;
   vgui_dialog vdval("Sky Region");
   vdval.field("Name ", name);
@@ -483,7 +485,7 @@ void bwm_tableau_cam::add_vertical_depth_region()
 {
   static double min_depth = 0.0;
   static double max_depth = 100.0;
-  static vcl_string name = "";
+  static std::string name = "";
   vgui_dialog vdval("Vertical Region");
   vdval.field("Min Depth (m)", min_depth);
   vdval.field("Max Depth (m)", max_depth);
@@ -497,13 +499,13 @@ void bwm_tableau_cam::add_vertical_depth_region()
 void bwm_tableau_cam::add_region()
 {
   // allowed orientation
-  vcl_vector<vcl_string> orient_types;
+  std::vector<std::string> orient_types;
   orient_types = this->set_orient_types();
   // allowed land class
-  vcl_vector<vcl_string> land_types;
+  std::vector<std::string> land_types;
   land_types = this->set_land_types();
 
-  static vcl_string name = "";
+  static std::string name = "";
   static double     min_depth = 0.0;
   static double     max_depth = 100.0;
   static unsigned   order = 0;
@@ -522,7 +524,7 @@ void bwm_tableau_cam::add_region()
   if (!vdval.ask())
     return;
   // obtain the actual land id
-  vcl_string land_name = land_types[land_vec_id];
+  std::string land_name = land_types[land_vec_id];
   unsigned char land_id = volm_osm_category_io::volm_land_table_name[land_name].id_;
   // create associated depth_map_region
   my_observer_->add_region(name, min_depth, max_depth, order, orientation, (unsigned)land_id, height);
@@ -531,27 +533,27 @@ void bwm_tableau_cam::add_region()
 void bwm_tableau_cam::edit_region_props()
 {
   // allowed orientation
-  vcl_vector<vcl_string> orient_types;
+  std::vector<std::string> orient_types;
   orient_types = this->set_orient_types();
   // allowed land class
-  vcl_vector<vcl_string> land_types;
+  std::vector<std::string> land_types;
   land_types = this->set_land_types();
   // fetch all regions in depth_map_scene, including all sky regions, ground regions and objects
-  vcl_vector<depth_map_region_sptr> regions = my_observer_->scene_regions();
+  std::vector<depth_map_region_sptr> regions = my_observer_->scene_regions();
   // initialize region properties
-  static vcl_map<vcl_string, unsigned> depth_order;
-  static vcl_map<vcl_string, double> min_depth;
-  static vcl_map<vcl_string, double> max_depth;
-  static vcl_map<vcl_string, double> height;
-  static vcl_map<vcl_string, unsigned> orient;
-  static vcl_map<vcl_string, unsigned> land_id;
-  static vcl_map<vcl_string, bool> active;
-  static vcl_map<vcl_string, bool> is_reference;
+  static std::map<std::string, unsigned> depth_order;
+  static std::map<std::string, double> min_depth;
+  static std::map<std::string, double> max_depth;
+  static std::map<std::string, double> height;
+  static std::map<std::string, unsigned> orient;
+  static std::map<std::string, unsigned> land_id;
+  static std::map<std::string, bool> active;
+  static std::map<std::string, bool> is_reference;
   // for padding to align fields
   unsigned max_string_size = 0;
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin();
+  for (std::vector<depth_map_region_sptr>::iterator rit = regions.begin();
        rit != regions.end(); ++rit) {
-    vcl_string name  = (*rit)->name();
+    std::string name  = (*rit)->name();
     if (name.size()>max_string_size)
       max_string_size  = name.size();
     depth_order[name]  = (*rit)->order();
@@ -565,19 +567,19 @@ void bwm_tableau_cam::edit_region_props()
     is_reference[name] = (*rit)->is_ref();
   }
   vgui_dialog_extensions reg_dialog("Scene Region Editor");
-  vcl_vector<depth_map_region_sptr>::iterator gpit;
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
-    vcl_string temp = (*rit)->name();
+  std::vector<depth_map_region_sptr>::iterator gpit;
+  for (std::vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
+    std::string temp = (*rit)->name();
     // compute padding
     int pad_cnt = max_string_size-temp.size();
     for (int k = 0; k<pad_cnt; ++k)
       temp += ' ';
     reg_dialog.message(temp.c_str()) ;
-    if ( ((*rit)->name()).find("sky") != vcl_string::npos ) {
+    if ( ((*rit)->name()).find("sky") != std::string::npos ) {
       reg_dialog.line_break();
       continue;
     }
-    //if ( ((*rit)->name()).find("ground_plane") != vcl_string::npos ) {
+    //if ( ((*rit)->name()).find("ground_plane") != std::string::npos ) {
     //  reg_dialog.choice("Land Class", land_types, land_id[(*rit)->name()]);
     //  reg_dialog.line_break();
     //  continue;
@@ -596,8 +598,8 @@ void bwm_tableau_cam::edit_region_props()
   if (!reg_dialog.ask())
     return;
   // update region properties
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
-    vcl_string name = (*rit)->name();
+  for (std::vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
+    std::string name = (*rit)->name();
     (*rit)->set_order(depth_order[name]);
     (*rit)->set_min_depth(min_depth[name]);
     (*rit)->set_max_depth(max_depth[name]);
@@ -612,14 +614,14 @@ void bwm_tableau_cam::edit_region_props()
 
 void bwm_tableau_cam::edit_region_weights()
 {
-  vcl_vector<volm_weight> weights;
+  std::vector<volm_weight> weights;
   // get the depth_map_scene
   depth_map_scene dms = my_observer_->scene();
 
   // weight vector follows the order defined in depth_map_scene
-  vcl_vector<depth_map_region_sptr> objs = dms.scene_regions();
+  std::vector<depth_map_region_sptr> objs = dms.scene_regions();
   unsigned n_obj = (unsigned)objs.size();
-  vcl_sort(objs.begin(), objs.end(), compare_order());
+  std::sort(objs.begin(), objs.end(), compare_order());
 
   if (my_observer_->weights().empty()) {
     // calculate average weight as default
@@ -655,21 +657,21 @@ void bwm_tableau_cam::edit_region_weights()
     weights = my_observer_->weights();
   }
   // arrange the menu by order
-  vcl_vector<depth_map_region_sptr> regions;
+  std::vector<depth_map_region_sptr> regions;
   if (!dms.sky().empty())
     regions.push_back(dms.sky()[0]);
   if (!dms.ground_plane().empty())
     regions.push_back(dms.ground_plane()[0]);
   for (unsigned i = 0; i < objs.size(); i++)
     regions.push_back(objs[i]);
-  
+
   // for padding to align fields
   unsigned max_string_size = 0;
-  for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
-    vcl_string tmp;
-    if ( ((*rit)->name()).find("sky") != vcl_string::npos)
+  for (std::vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
+    std::string tmp;
+    if ( ((*rit)->name()).find("sky") != std::string::npos)
       tmp = "sky";
-    else if ( ((*rit)->name()).find("ground_plane") != vcl_string::npos)
+    else if ( ((*rit)->name()).find("ground_plane") != std::string::npos)
       tmp = "ground_plane";
     else
       tmp = (*rit)->name();
@@ -679,10 +681,10 @@ void bwm_tableau_cam::edit_region_weights()
 
   vgui_dialog_extensions reg_dialog("Scene Region Weight Editor");
   for (unsigned i = 0; i < regions.size(); i++) {
-    vcl_string tmp;
-    if (regions[i]->name().find("sky") != vcl_string::npos)
+    std::string tmp;
+    if (regions[i]->name().find("sky") != std::string::npos)
       tmp = "sky";
-    else if (regions[i]->name().find("ground_plane") != vcl_string::npos)
+    else if (regions[i]->name().find("ground_plane") != std::string::npos)
       tmp = "ground_plane";
     else
       tmp = regions[i]->name();
@@ -711,63 +713,63 @@ void bwm_tableau_cam::save_depth_map_scene()
   // before save, put the image path into depth_map_scene
   my_observer_->set_image_path(this->img_path());
   // save depth_map_scene
-  vcl_string path = bwm_utils::select_file();
+  std::string path = bwm_utils::select_file();
   my_observer_->save_depth_map_scene(path);
-  
+
   // save associated weight parameters
-  vcl_string dir = vul_file::dirname(path);
-  vcl_string weight_file = dir + "/weight_param.txt";
+  std::string dir = vul_file::dirname(path);
+  std::string weight_file = dir + "/weight_param.txt";
   my_observer_->save_weight_params(weight_file);
 }
 
-vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
+std::vector<std::string> bwm_tableau_cam::set_land_types()
 {
 #if 1
   return volm_osm_category_io::volm_category_name_table;
 #endif
 #if 0
-  vcl_map<unsigned, volm_land_layer> m;
-  vcl_map<int, volm_land_layer> nlcd_table = volm_osm_category_io::nlcd_land_table;
-  vcl_map<int, volm_land_layer> geo_table = volm_osm_category_io::geo_land_table;
-  vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
-  vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table;
-  vcl_string osm_to_volm_txt = "./osm_to_volm_labels.txt";
+  std::map<unsigned, volm_land_layer> m;
+  std::map<int, volm_land_layer> nlcd_table = volm_osm_category_io::nlcd_land_table;
+  std::map<int, volm_land_layer> geo_table = volm_osm_category_io::geo_land_table;
+  std::map<std::pair<std::string, std::string>, volm_land_layer> osm_land_table;
+  std::map<std::pair<int, int>, volm_land_layer> road_junction_table;
+  std::string osm_to_volm_txt = "./osm_to_volm_labels.txt";
   volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
-  vcl_string road_junction_txt = "./road_junction_category.txt";
+  std::string road_junction_txt = "./road_junction_category.txt";
   volm_osm_category_io::load_road_junction_table(road_junction_txt, road_junction_table);
-  
-  for (vcl_map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
-    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
 
-  for (vcl_map<int, volm_land_layer>::iterator mit = geo_table.begin(); mit != geo_table.end(); mit++)
-    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+  for (std::map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
+    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
 
-  for (vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>::iterator mit = osm_land_table.begin();
+  for (std::map<int, volm_land_layer>::iterator mit = geo_table.begin(); mit != geo_table.end(); mit++)
+    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+
+  for (std::map<std::pair<std::string, std::string>, volm_land_layer>::iterator mit = osm_land_table.begin();
        mit != osm_land_table.end(); ++mit)
-    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
 
-  for (vcl_map<vcl_pair<int, int>, volm_land_layer>::iterator mit = road_junction_table.begin();
+  for (std::map<std::pair<int, int>, volm_land_layer>::iterator mit = road_junction_table.begin();
        mit != road_junction_table.end(); ++mit)
-    m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
 
-  vcl_vector<vcl_string> out;
-  for (vcl_map<unsigned, volm_land_layer>::iterator mit = m.begin(); mit != m.end(); ++mit)
+  std::vector<std::string> out;
+  for (std::map<unsigned, volm_land_layer>::iterator mit = m.begin(); mit != m.end(); ++mit)
     out.push_back(mit->second.name_);
   return out;
 #endif
 
 #if 0
-  vcl_vector<vcl_string> land_types;
-  vcl_map<unsigned char, vcl_vector<vcl_string> > temp;
-  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  std::vector<std::string> land_types;
+  std::map<unsigned char, std::vector<std::string> > temp;
+  std::map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
   unsigned cnt = 0;
   for (; mit != volm_label_table::land_id.end(); ++mit) {
     temp[mit->second.id_].push_back(mit->second.name_);
   }
-  vcl_map<unsigned char, vcl_vector<vcl_string> >::iterator it = temp.begin();
+  std::map<unsigned char, std::vector<std::string> >::iterator it = temp.begin();
   for (; it != temp.end(); ++it) {
-    vcl_string land_name;
-    for ( vcl_vector<vcl_string>::iterator vit = it->second.begin(); vit != it->second.end(); ++vit) {
+    std::string land_name;
+    for ( std::vector<std::string>::iterator vit = it->second.begin(); vit != it->second.end(); ++vit) {
       land_name += (*vit);
       if (vit != it->second.end()-1) land_name += " OR ";
     }
@@ -777,14 +779,14 @@ vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
 #endif
 }
 
-vcl_vector<vcl_string> bwm_tableau_cam::set_orient_types()
+std::vector<std::string> bwm_tableau_cam::set_orient_types()
 {
-  vcl_vector<vcl_string> orient_types;
-  vcl_map<depth_map_region::orientation, vcl_string> orient_string;
-  vcl_map<vcl_string, depth_map_region::orientation>::iterator mit = volm_orient_table::ori_id.begin();
+  std::vector<std::string> orient_types;
+  std::map<depth_map_region::orientation, std::string> orient_string;
+  std::map<std::string, depth_map_region::orientation>::iterator mit = volm_orient_table::ori_id.begin();
   for (; mit != volm_orient_table::ori_id.end(); ++mit)
     orient_string[mit->second] = mit->first;
-  vcl_map<depth_map_region::orientation, vcl_string>::iterator it = orient_string.begin();
+  std::map<depth_map_region::orientation, std::string>::iterator it = orient_string.begin();
   for (; it != orient_string.end(); ++it)
     orient_types.push_back(it->second);
   return orient_types;

@@ -52,7 +52,7 @@ int main(int argc, char ** argv)
   for (int i=0; i<argc; i++)
     my_argv[i] = argv[i];
   my_argv[argc] = new char[13];
-  vcl_strcpy(my_argv[argc], "--mfc-use-gl");
+  std::strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);
   delete[] my_argv[argc];
   delete[] my_argv;
@@ -60,7 +60,7 @@ int main(int argc, char ** argv)
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
 #endif
-    vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
+    vul_arg<std::string> scene_file("-scene", "scene filename", "");
     vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
     vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
     vul_arg<unsigned>   gpu_idx("-gpu_idx", "GPU index for multi GPU set up", 0);
@@ -71,11 +71,11 @@ int main(int argc, char ** argv)
     //make bocl manager
     bocl_manager_child* mgr =bocl_manager_child::instance();
     if (gpu_idx() >= mgr->gpus_.size()){
-      vcl_cout << "GPU index out of bounds" << vcl_endl;
+      std::cout << "GPU index out of bounds" << std::endl;
       return -1;
     }
     bocl_device_sptr device = mgr->gpus_[gpu_idx()];
-    vcl_cout << "Using: " << *device;
+    std::cout << "Using: " << *device;
     bstm_scene_sptr scene = new bstm_scene(scene_file());
 
 
@@ -119,6 +119,6 @@ int main(int argc, char ** argv)
 
     //set vgui off
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-    vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
+    std::cout << "GLEW is supported= " << bGLEW << std::endl;
     return vgui::run();
 }

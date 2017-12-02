@@ -11,8 +11,8 @@
 typedef struct
 {
   __global int* seg_len;
-  __global uint* nobs;  
-  
+  __global uint* nobs;
+
   __constant RenderSceneInfo * linfo;
 } AuxArgs;
 
@@ -35,7 +35,7 @@ seg_len_nobs_main(__constant  RenderSceneInfo    * linfo,
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __local     uchar              * cumsum )          // cumulative sum for calculating data pointer
 {
-    
+
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -118,12 +118,12 @@ exp_sum_main(__constant  RenderSceneInfo    * linfo,
              __global    uint4              * imgdims,           // dimensions of the input image
              __global    float              * in_image,         // the input image
              __global    float              * vis_image,        // visibility image
-             __global    float              * exp_denom_img,    // the denominator of expectation image   
+             __global    float              * exp_denom_img,    // the denominator of expectation image
              __global    float              * output,
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __local     uchar              * cumsum )          // cumulative sum for calculating data pointer
 {
-      
+
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -141,11 +141,11 @@ exp_sum_main(__constant  RenderSceneInfo    * linfo,
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-    
+
 
   float vis_inf = vis_image[j*get_global_size(0) + i];
   float exp_denom = exp_denom_img[j*get_global_size(0) + i];
-  
+
   if (vis_inf <0.0)
     return;
   //vis for cast_ray, never gets decremented so no cutoff occurs
@@ -175,15 +175,15 @@ exp_sum_main(__constant  RenderSceneInfo    * linfo,
   aux_args.exp_denom = &exp_denom;
   aux_args.obs = obs;
 
-  
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);    //utility info
-    
+
   vis_image[j*get_global_size(0)+i] = vis_inf;
-  exp_denom_img[j*get_global_size(0)+i] = exp_denom; 
+  exp_denom_img[j*get_global_size(0)+i] = exp_denom;
 }
 #endif // EXPSUM
 
@@ -192,7 +192,7 @@ __kernel
 void
 reinit_vis_image (  __global    uint4               * imgdims,          // dimensions of the input image
                     __global    float               * in_image,         // the input image
-                    __global    float               * vis_image, 
+                    __global    float               * vis_image,
                     __global    float               * exp_denom_img,
                     __global    float               * pi_sum_img,
                     __global    float4              * app_density )
@@ -200,13 +200,13 @@ reinit_vis_image (  __global    uint4               * imgdims,          // dimen
   // linear global id of the normalization image
   int i=get_global_id(0);
   int j=get_global_id(1);
-  
+
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-    
-  float vis = vis_image[j*get_global_size(0) + i];  
-  exp_denom_img[j*get_global_size(0)+i] += vis * gauss_prob_density(in_image[j*get_global_size(0) + i] , app_density[0].y,app_density[0].z); 
-  pi_sum_img[j*get_global_size(0)+i] = vis * gauss_prob_density(in_image[j*get_global_size(0) + i] , app_density[0].y,app_density[0].z); 
+
+  float vis = vis_image[j*get_global_size(0) + i];
+  exp_denom_img[j*get_global_size(0)+i] += vis * gauss_prob_density(in_image[j*get_global_size(0) + i] , app_density[0].y,app_density[0].z);
+  pi_sum_img[j*get_global_size(0)+i] = vis * gauss_prob_density(in_image[j*get_global_size(0) + i] , app_density[0].y,app_density[0].z);
   vis_image[j*get_global_size(0) + i] = 1.0f; // initial vis = 1.0f
 }
 #endif // REINIT_VIS
@@ -221,11 +221,11 @@ typedef struct
   __global MOG_TYPE * mog;
   __global int* seg_len;
   __global float* all_seglen;
-  __global float* all_preexp; 
+  __global float* all_preexp;
   __global int* all_exp;
   __global uchar* all_obs;
-  __global uint* currIdx;  
-  __global uint* nobs;  
+  __global uint* currIdx;
+  __global uint* nobs;
            float* vis_inf;
            float* pre_exp_num;
            float  exp_denom;
@@ -259,12 +259,12 @@ expectation_main(__constant  RenderSceneInfo * linfo,
              __global    float              * vis_image,        // visibility image
              __global    float              * exp_denom_img,    // exp sum image
              __global    float              * pre_exp_num_image,// pre exp image
-             __global    float              * pi_inf_image,     // pi inf image    
+             __global    float              * pi_inf_image,     // pi inf image
              __global    float              * output,
              __local     uchar16            * local_tree,       // cache current tree into local memory
              __local     uchar              * cumsum )          // cumulative sum for calculating data pointer
 {
-      
+
   //get local id (0-63 for an 8x8) of this patch
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
 
@@ -275,17 +275,17 @@ expectation_main(__constant  RenderSceneInfo * linfo,
   int i=0,j=0;
   i=get_global_id(0);
   j=get_global_id(1);
-  
+
 
   float obs = in_image[j*get_global_size(0) + i];
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
   if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y)
     return;
-    
+
   float vis_inf = vis_image[j*get_global_size(0) + i];
   float pre_exp_num = pre_exp_num_image[j*get_global_size(0) + i];
-  
+
   if (vis_inf < 0.0)
     return;
   //vis for cast_ray, never gets decremented so no cutoff occurs
@@ -301,7 +301,7 @@ expectation_main(__constant  RenderSceneInfo * linfo,
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
-  
+
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
@@ -314,21 +314,21 @@ expectation_main(__constant  RenderSceneInfo * linfo,
   aux_args.all_preexp   = aux_array2;
   aux_args.all_seglen  = aux_array3;
   aux_args.all_obs  = aux_array4;
-  aux_args.all_exp  = aux_array5;  
+  aux_args.all_exp  = aux_array5;
   aux_args.currIdx = currIdx;
   aux_args.nobs = nobs;
   aux_args.vis_inf  = &vis_inf;
   aux_args.pre_exp_num = &pre_exp_num;
-  aux_args.pi_inf = pi_inf_image[j*get_global_size(0) + i];  
+  aux_args.pi_inf = pi_inf_image[j*get_global_size(0) + i];
   aux_args.exp_denom = exp_denom_img[j*get_global_size(0) + i];
   aux_args.obs = obs;
-    
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                  //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);    //utility info
-  
+
   vis_image[j*get_global_size(0)+i] = vis_inf;
   pre_exp_num_image[j*get_global_size(0)+i] = pre_exp_num;
 }
@@ -349,10 +349,10 @@ convert_aux_int_to_float(__constant  RenderSceneInfo    * linfo,
     int obs0= as_int(aux_array0[gid]);
     int obs2= as_int(aux_array2[gid]);
     int obs3= as_int(aux_array3[gid]);
-    
+
     aux_array0[gid] =  (convert_float(obs0) / SEGLEN_FACTOR) * linfo->block_len;
-    aux_array2[gid] =  (convert_float(obs2) / SEGLEN_FACTOR) * linfo->block_len; 
-    aux_array3[gid] =  (convert_float(obs3) / SEGLEN_FACTOR) * linfo->block_len; 
+    aux_array2[gid] =  (convert_float(obs2) / SEGLEN_FACTOR) * linfo->block_len;
+    aux_array3[gid] =  (convert_float(obs3) / SEGLEN_FACTOR) * linfo->block_len;
    }
 }
 #endif //CONVERT_AUX
@@ -367,7 +367,7 @@ convert_exp_to_float(__global int  * datasize,
   {
     int int_exp = as_int(all_exp[gid]);
     if(int_exp  >= 0)
-        all_exp[gid] =  convert_float( int_exp ) / SEGLEN_FACTOR; 
+        all_exp[gid] =  convert_float( int_exp ) / SEGLEN_FACTOR;
     else
         all_exp[gid] = -1;
   }
@@ -389,30 +389,30 @@ void batch_update_alpha (   __global RenderSceneInfo  * info,
                             __global uint * sampleIndex,
                             __global uint * totalNumSamples
                            )
-{    
+{
     unsigned gid = get_global_id(0);
     if (gid<(*datasize))
     {
 
         float  cell_min = info->block_len/(float)(1<<info->root_level);
         float  alphamin = -log(1.0f-0.0001f)/cell_min;
-            
+
         //calculate the number of samples for this cell
-        uint start = sampleIndex[gid]; 
-        uint end   = (gid==(*datasize)-1) ? (*totalNumSamples) : sampleIndex[gid+1]; 
-        int numSamples = (int) (end-start); 
+        uint start = sampleIndex[gid];
+        uint end   = (gid==(*datasize)-1) ? (*totalNumSamples) : sampleIndex[gid+1];
+        int numSamples = (int) (end-start);
         if(numSamples <= 0)
         {
           alpha[gid] = alphamin;
-          return; 
+          return;
         }
-        
-        
+
+
         const short max_iterations  = 500;
         const float TOL = 1e-2f;
         short i = 0;
 
-        float curr_alpha =  alpha[gid]; 
+        float curr_alpha =  alpha[gid];
         if( seglen_sum[gid] > 0 && pre_exp_sum[gid] > 0)
             curr_alpha = (numSamples / seglen_sum[gid]) * ( log( pre_exp_sum[gid] + exp_sum[gid]) - log( pre_exp_sum[gid]) );
 
@@ -421,7 +421,7 @@ void batch_update_alpha (   __global RenderSceneInfo  * info,
             alpha[gid] = alphamin;
             return;
         }
-        
+
         float grad,grad2;
         for(; i < max_iterations;i++)
         {
@@ -433,18 +433,18 @@ void batch_update_alpha (   __global RenderSceneInfo  * info,
                 float inc = seglen * expectations[start+s]  / ( exponent-1 );
                 if( isfinite(inc) && !isnan(inc))
                     grad +=  inc;
-                    
+
                 float inc2 = (-seglen*seglen) * expectations[start+s] / (exponent - 2 +   exp(-curr_alpha*seglen) );
                 if( isfinite(inc2) && !isnan(inc2) )
                     grad2 +=  inc2;
-                
+
             }
-            
-            if(!isnan(grad / grad2) && isfinite(grad / grad2) )    
+
+            if(!isnan(grad / grad2) && isfinite(grad / grad2) )
             {
                 if(fabs(grad / grad2) < TOL && grad2 < 0) //local maxima
                     break;
-                    
+
                 if(grad2 < 0)
                     curr_alpha -= grad / grad2;
                 else
@@ -457,7 +457,7 @@ void batch_update_alpha (   __global RenderSceneInfo  * info,
         weighted_pre_exp_sum[gid] = grad;
 
     }
-    
+
 }
 #endif // COMPUTE_ALPHA
 
@@ -476,54 +476,54 @@ void batch_update_mog          (__global RenderSceneInfo  * info,
                                 __global uint * sampleIndex,
                                 __global uint * totalNumSamples
                                )
-{    
+{
     unsigned gid = get_global_id(0);
     if (gid<(*datasize))
     {
-        
+
         //calculate the number of samples for this cell
-        uint start = sampleIndex[gid]; 
-        uint end   = (gid==(*datasize)-1) ? (*totalNumSamples) : sampleIndex[gid+1]; 
-        int numSamples = (int) (end-start); 
+        uint start = sampleIndex[gid];
+        uint end   = (gid==(*datasize)-1) ? (*totalNumSamples) : sampleIndex[gid+1];
+        int numSamples = (int) (end-start);
         if(numSamples <= 0)
         {
           mog[gid] = (MOG_TYPE)(0);
-          return; 
+          return;
         }
-        
+
         if(numSamples > MAX_SAMPLES)
             numSamples = MAX_SAMPLES;
-            
-        //create local arrays 
+
+        //create local arrays
         uchar intensities[MAX_SAMPLES] = {0};
         float expectations[MAX_SAMPLES] = {0};
 
-        //copy from global mem.        
+        //copy from global mem.
         for(unsigned s = 0; s < numSamples; s++) {
-            intensities[s] = aux0[start+s]; 
+            intensities[s] = aux0[start+s];
         }
-        
+
         float weights_normalizer = 0.0f;
         for(unsigned s = 0; s < numSamples; s++) {
-            expectations[s] = aux2[start+s]; 
+            expectations[s] = aux2[start+s];
             weights_normalizer += expectations[s];
         }
-        
+
         //update mog
-        float min_sigma = .01; 
+        float min_sigma = .01;
         float8 new_mog = weighted_mog3_em( intensities, expectations, numSamples, min_sigma, weights_normalizer, &(num_iter[gid]));
-        new_mog *= (float) NORM; 
-        CONVERT_FUNC_SAT_RTE(mog[gid], new_mog);  
-              
+        new_mog *= (float) NORM;
+        CONVERT_FUNC_SAT_RTE(mog[gid], new_mog);
+
         num_iter[gid].y = numSamples;
     }
-    
+
 }
 #endif // COMPUTE_MOG_CPU
 
 
 //unused old code.
-#if 0 
+#if 0
 #ifdef COMPUTE_MOG_EXPERIMENTAL
 __kernel
 void batch_update_mog          (__global RenderSceneInfo  * info,
@@ -533,12 +533,12 @@ void batch_update_mog          (__global RenderSceneInfo  * info,
                                 __constant int * datasize,
                                 __global MOG_TYPE * mog,
                                 __global ushort4* num_iter,
-                                __local uchar16 * intensities,   
+                                __local uchar16 * intensities,
                                 __local float16 * expectations,
-                                __local uint * counter     
+                                __local uint * counter
                                )
-{    
-    
+{
+
     unsigned gid = get_group_id(0);
     short llid = get_local_id(0) + get_local_size(0)*get_local_id(1);
     if (gid<(*datasize))
@@ -546,41 +546,41 @@ void batch_update_mog          (__global RenderSceneInfo  * info,
         if(llid == 0)
             (*counter) = 0;
         barrier(CLK_LOCAL_MEM_FENCE);
-          
+
         //copy observations and expectations to local mem
         if (llid < (*num_imgs) )
         {
-            __global float * curr_exp = &(aux2[(*datasize)*llid+gid]);  
-            __global uchar * curr_int = &(aux0[(*datasize)*llid+gid]);  
+            __global float * curr_exp = &(aux2[(*datasize)*llid+gid]);
+            __global uchar * curr_int = &(aux0[(*datasize)*llid+gid]);
 
             for (short s = 0; s < 16 && curr_exp[s] >= 0; s++)
             {
                 uint my_counter = atomic_inc(counter);
                 //intensities[50] = curr_int[s];
                 expectations[my_counter] = curr_exp[s];
-                
+
             }
         }
         barrier(CLK_LOCAL_MEM_FENCE);
-        
+
       /*
         int no_samples = counter[0];
         no_samples = min(no_samples, MAX_SAMPLES);
-        
+
         //update mog
         CONVERT_FUNC_FLOAT8(mixture,mog[gid])/NORM;
-            
-        float min_sigma = .025; 
+
+        float min_sigma = .025;
         unsigned short iter;
         float8 new_mog = weighted_mog3_em( intensities, expectations, no_samples, min_sigma, &mixture, &(num_iter[gid]));
         //float8 new_mog = weighted_gaussian( intensities, expectations, counter, min_sigma);
-        new_mog *= (float) NORM; 
-        CONVERT_FUNC_SAT_RTE(mog[gid], new_mog);        
+        new_mog *= (float) NORM;
+        CONVERT_FUNC_SAT_RTE(mog[gid], new_mog);
          * */
         num_iter[gid].y = counter;
-       
+
     }
-    
+
 }
 #endif // COMPUTE_MOG
 
@@ -595,15 +595,15 @@ void batch_update_mog          (__global RenderSceneInfo  * info,
                                 __constant int * datasize,
                                 __global MOG_TYPE * mog,
                                 __global ushort4* num_iter,
-                                __local uchar16 * intensities,   
+                                __local uchar16 * intensities,
                                 __local float16 * expectations,
-                                __local float * mode1_probs,     
-                                __local float * mode2_probs,     
+                                __local float * mode1_probs,
+                                __local float * mode2_probs,
                                 __local float * mode3_probs,
-                                __local uint * counter     
+                                __local uint * counter
                                )
-{    
-    
+{
+
     unsigned gid = get_group_id(0);
     short llid = get_local_id(0) + get_local_size(0)*get_local_id(1);
     if (gid<(*datasize))
@@ -615,18 +615,18 @@ void batch_update_mog          (__global RenderSceneInfo  * info,
             expectations[llid]   = aux2[(*datasize)*llid+gid];
         }
         barrier(CLK_LOCAL_MEM_FENCE);
-            
+
         //leader thread sets alpha
         if (llid == 0) {
             uint counter = 0;
-        
+
             __local float * exp_all = expectations;
             __local uchar * int_all = intensities;
-            
+
             for (short k = 0; k<(*num_imgs); k++) {
-                __local float * curr_exp = &(expectations[llid]);  
-                __local uchar * curr_int = &(intensities[llid]);  
-                
+                __local float * curr_exp = &(expectations[llid]);
+                __local uchar * curr_int = &(intensities[llid]);
+
                 for (short s = 0; s < 16 && curr_exp[s] >= 0; s++)
                 {
                     exp_all[counter] = curr_exp[s];
@@ -634,25 +634,25 @@ void batch_update_mog          (__global RenderSceneInfo  * info,
                     counter++;
                 }
             }
-            
+
             counter = min(counter, MAX_SAMPLES);
-            
+
             //update mog
             CONVERT_FUNC_FLOAT8(mixture,mog[gid])/NORM;
-            
-            float min_sigma = .025; 
+
+            float min_sigma = .025;
             unsigned short iter;
-            float8 new_mog = weighted_mog3_em( int_all, exp_all, counter, min_sigma, 
+            float8 new_mog = weighted_mog3_em( int_all, exp_all, counter, min_sigma,
                                                 &mixture, &(num_iter[gid]), mode1_probs, mode2_probs, mode3_probs);
             //float8 new_mog = weighted_gaussian( intensities, expectations, counter, min_sigma);
-            new_mog *= (float) NORM; 
-            CONVERT_FUNC_SAT_RTE(mog[gid], new_mog);        
-            
+            new_mog *= (float) NORM;
+            CONVERT_FUNC_SAT_RTE(mog[gid], new_mog);
+
             num_iter[gid].y = counter;
-            
+
         }
     }
-    
+
 }
 #endif // COMPUTE_MOG
 

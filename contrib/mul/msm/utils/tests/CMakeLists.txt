@@ -1,13 +1,13 @@
 # mul/msm/utils/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( msm_utils_test_all
+add_executable( msm_utils_test_all
   test_driver.cxx
   test_dist_to_curves.cxx
 )
-TARGET_LINK_LIBRARIES( msm_utils_test_all msm_utils testlib )
+target_link_libraries( msm_utils_test_all msm_utils ${VXL_LIB_PREFIX}testlib )
 
-ADD_TEST( msm_test_dist_to_curves ${EXECUTABLE_OUTPUT_PATH}/msm_utils_test_all test_dist_to_curves)
+add_test( NAME msm_test_dist_to_curves COMMAND $<TARGET_FILE:msm_utils_test_all> test_dist_to_curves)
 
 
-ADD_EXECUTABLE( msm_utils_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( msm_utils_test_include msm_utils)
+add_executable( msm_utils_test_include test_include.cxx )
+target_link_libraries( msm_utils_test_include msm_utils)

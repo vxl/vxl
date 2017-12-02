@@ -83,7 +83,7 @@ static void graph_test()
   TEST("Testing remove_edge()",
        the_graph->remove_edge(v4, v5) &&
        !the_graph->remove_edge(v3, v5) && // can't remove an edge not in the graph
-       !the_graph->remove_edge(v2, NULL), // can't remove an invalid edge
+       !the_graph->remove_edge(v2, VXL_NULLPTR), // can't remove an invalid edge
        true);
 
 
@@ -93,7 +93,7 @@ static void graph_test()
        e_itr != the_graph->edges_end(); ++e_itr)
   {
     num_edges++;
-    //(*e_itr)->print_summary(vcl_cout);
+    //(*e_itr)->print_summary(std::cout);
   }
 
   TEST("Testing edge_iterator()",
@@ -105,7 +105,7 @@ static void graph_test()
        v_itr != the_graph->vertices_end(); ++v_itr)
   {
     num_vertices++;
-    //(*v_itr)->print_summary(vcl_cout);
+    //(*v_itr)->print_summary(std::cout);
   }
 
   TEST("Testing vertex_iterator()",

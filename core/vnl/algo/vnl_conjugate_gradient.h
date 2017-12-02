@@ -19,16 +19,18 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
+#include <vnl/algo/vnl_algo_export.h>
 
 class vnl_cost_function;
 
 //: real function minimization
 
-class vnl_conjugate_gradient : public vnl_nonlinear_minimizer
+class VNL_ALGO_EXPORT vnl_conjugate_gradient : public vnl_nonlinear_minimizer
 {
  public:
   // Constructors/Destructors--------------------------------------------------
@@ -50,8 +52,8 @@ class vnl_conjugate_gradient : public vnl_nonlinear_minimizer
 
   // Operations----------------------------------------------------------------
 
-  void diagnose_outcome(vcl_ostream&) const;
-  void diagnose_outcome(/*vcl_ostream& = vcl_cout*/) const;
+  void diagnose_outcome(std::ostream&) const;
+  void diagnose_outcome(/*std::ostream& = std::cout*/) const;
 
   // Computations--------------------------------------------------------------
 
@@ -68,21 +70,11 @@ class vnl_conjugate_gradient : public vnl_nonlinear_minimizer
 
   // Helpers-------------------------------------------------------------------
 
-#ifdef VCL_SUNPRO_CC
- public:
-#endif
   static double valuecomputer_( double *x, void* userdata);
   static void gradientcomputer_( double *g, double *x, void* userdata);
   static void valueandgradientcomputer_( double *v, double *g, double *x, void* userdata);
   static void preconditioner_( double *out, double *in, void* userdata);
 
-#if 0
- protected:
-  void approximate_gradient( const vnl_vector<double> &x,
-                             vnl_vector<double> &g, const double step);
-  void approximate_hessian( const vnl_vector<double> &x,
-                            vnl_matrix<double> &h, const double step);
-#endif
 };
 
 #endif // vnl_conjugate_gradient_h_

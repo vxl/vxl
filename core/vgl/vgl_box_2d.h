@@ -28,7 +28,8 @@
 //   Peter Vanroose  22 Jul 2009: Moved vgl_intersection() to vgl_intersection.h
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d
 
 //: Represents a cartesian 2D box
@@ -227,13 +228,13 @@ class vgl_box_2d
   // I/O-----------------------------------------------------------------------
 
   //: Write "<vgl_box_2d x0,y0 to x1,y1>" to stream
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 
   //: Write "x0 y0 x1 y1(endl)" to stream
-  vcl_ostream& write(vcl_ostream&) const;
+  std::ostream& write(std::ostream&) const;
 
   //: Read x0,y0,x1,y1 from stream
-  vcl_istream& read(vcl_istream&);
+  std::istream& read(std::istream&);
 
   // INTERNALS-----------------------------------------------------------------
  protected:
@@ -245,12 +246,12 @@ class vgl_box_2d
 //: Write box to stream
 // \relatesalso vgl_box_2d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_2d<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, vgl_box_2d<Type> const& p);
 
 //: Read box from stream
 // \relatesalso vgl_box_2d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p);
+std::istream&  operator>>(std::istream& is,  vgl_box_2d<Type>& p);
 
 //: Calculate the bounding box of a sequence of points or boxes.
 template <class T, class ITER>
@@ -260,6 +261,6 @@ void vgl_box_2d_bounds(ITER begin, ITER end, vgl_box_2d<T>& bounding_box)
     bounding_box.add(*begin);
 }
 
-#define VGL_BOX_2D_INSTANTIATE(T) extern "please include vgl/vgl_box_2d.txx first"
+#define VGL_BOX_2D_INSTANTIATE(T) extern "please include vgl/vgl_box_2d.hxx first"
 
 #endif // vgl_box_2d_h

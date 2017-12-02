@@ -19,10 +19,10 @@ class volm_desc_land : public volm_desc
 {
 public:
   // Constructor
-  volm_desc_land(int land_type_id, vcl_string const& id_type = "NLCD");
+  volm_desc_land(int land_type_id, std::string const& id_type = "NLCD");
 
   // Constructor for the query
-  volm_desc_land(vcl_string& filename);
+  volm_desc_land(std::string& filename);
 
   //: genera similarity metric for two land descriptor
   virtual float similarity(volm_desc_sptr other);

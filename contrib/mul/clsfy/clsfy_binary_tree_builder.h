@@ -9,12 +9,14 @@
 // \brief Build a binary tree classifier
 // \author Martin Roberts
 
+#include <vector>
+#include <set>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_builder_base.h>
 #include <clsfy/clsfy_binary_tree.h>
-#include <vcl_vector.h>
-#include <vcl_set.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
@@ -24,8 +26,8 @@ class clsfy_binary_tree_bnode :public  clsfy_binary_tree_node
 {
     //Similar to classifiers tree node but the builder also needs
     //to keep track of relevant data subsets at each node
-    vcl_set<unsigned> subIndicesL;
-    vcl_set<unsigned> subIndicesR;
+    std::set<unsigned> subIndicesL;
+    std::set<unsigned> subIndicesR;
 
 
   clsfy_binary_tree_bnode(clsfy_binary_tree_node* parent,
@@ -67,7 +69,7 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     int nbranch_params_;
 
     //: Work space for randomising params (NB not thread safe)
-    mutable vcl_vector<unsigned > base_indices_;
+    mutable std::vector<unsigned > base_indices_;
 
   public:
     // Dflt ctor
@@ -82,13 +84,13 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     virtual double build(clsfy_classifier_base& classifier,
                          mbl_data_wrapper<vnl_vector<double> >& inputs,
                          unsigned nClasses,
-                         const vcl_vector<unsigned> &outputs) const;
+                         const std::vector<unsigned> &outputs) const;
 
     //: Name of the class
-    virtual vcl_string is_a() const;
+    virtual std::string is_a() const;
 
     //: Name of the class
-    virtual bool is_class(vcl_string const& s) const;
+    virtual bool is_class(std::string const& s) const;
 
     //: IO Version number
     short version_no() const;
@@ -97,7 +99,7 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     virtual clsfy_builder_base* clone() const;
 
     //: Print class to os
-    virtual void print_summary(vcl_ostream& os) const;
+    virtual void print_summary(std::ostream& os) const;
 
     //: Save class to binary file stream
     virtual void b_write(vsl_b_ostream& bfs) const;
@@ -139,15 +141,15 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
     // Return indices of selected parameters
     // Best of these is then chosen as the branch
     virtual void randomise_parameters(unsigned ndimsUsed,
-                                      vcl_vector<unsigned  >& param_indices) const;
+                                      std::vector<unsigned  >& param_indices) const;
 
     mutable  vnl_random random_sampler_;
 
 
   private:
     void build_children(
-        const vcl_vector<vnl_vector<double> >& vin,
-        const vcl_vector<unsigned>& outputs,
+        const std::vector<vnl_vector<double> >& vin,
+        const std::vector<unsigned>& outputs,
         clsfy_binary_tree_bnode* parent, bool to_left) const;
 
     void copy_children(clsfy_binary_tree_bnode* pBuilderNode,clsfy_binary_tree_node* pNode) const;
@@ -156,17 +158,17 @@ class clsfy_binary_tree_builder : public clsfy_builder_base
                        clsfy_binary_tree_bnode* pBuilderNode) const ;
 
     void build_a_node(
-        const vcl_vector<vnl_vector<double> >& vin,
-        const vcl_vector<unsigned>& outputs,
-        const vcl_set<unsigned >& subIndices,
+        const std::vector<vnl_vector<double> >& vin,
+        const std::vector<unsigned>& outputs,
+        const std::set<unsigned >& subIndices,
         clsfy_binary_tree_bnode* pNode) const;
 
-    bool isNodePure(const vcl_set<unsigned >& subIndices,
-                    const vcl_vector<unsigned>& outputs) const;
+    bool isNodePure(const std::set<unsigned >& subIndices,
+                    const std::vector<unsigned>& outputs) const;
 
     void add_terminator(
-        const vcl_vector<vnl_vector<double> >& vin,
-        const vcl_vector<unsigned>& outputs,
+        const std::vector<vnl_vector<double> >& vin,
+        const std::vector<unsigned>& outputs,
         clsfy_binary_tree_bnode* parent,
         bool to_left, bool pure) const;
 

@@ -1,8 +1,9 @@
 // This is core/vil/tests/test_image_view.cxx
+#include <iostream>
+#include <sstream>
+#include <functional>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_functional.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_crop.h>
 #include <vil/vil_copy.h>
@@ -22,7 +23,7 @@ void test_image_view_rgba(vil_image_view<S> & /*image2*/, vil_image_view<T> & /*
   // do nothing in general case
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float> &image7)
 {
   image2.set_size(10,10,2);
@@ -36,7 +37,7 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
   catch (const vil_exception_pixel_formats_incompatible &e)
   {
     caught_exception = true;
-    vcl_cout << "Exception: " << e.what() << vcl_endl;
+    std::cout << "Exception: " << e.what() << std::endl;
   }
   TEST("Can't assign a 3 plane images to rgba view", caught_exception, true);
 #else
@@ -49,13 +50,13 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
 
   image6 = vil_convert_cast(vil_rgba<vxl_byte>(), vil_new_image_view_base_sptr(image7));
   TEST("vil_convert_cast(vil_rgba<vxl_byte>, sptr)", image6?true:false, true);
-  vil_print_all(vcl_cout, image6);
+  vil_print_all(std::cout, image6);
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
-                vcl_bind2nd(vcl_plus<vxl_byte>(),1));
+                std::bind2nd(std::plus<vxl_byte>(),1));
 
-  vil_print_all(vcl_cout, image6);
+  vil_print_all(std::cout, image6);
   image7.clear();
   vil_convert_rgb_to_grey(image6, image7);
   TEST("vil_convert_rgb_to_grey(vil_rgba)", image7?true:false, true);
@@ -64,10 +65,10 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
 
   TEST_NEAR("Conversion rgba to grey", image7(2,1),  33.7154, 1e-5);
 
-  vil_print_all(vcl_cout, image7);
+  vil_print_all(std::cout, image7);
 }
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> &image7)
 {
   image2.set_size(10,10,2);
@@ -82,7 +83,7 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
   catch (const vil_exception_pixel_formats_incompatible &e)
   {
     caught_exception = true;
-    vcl_cout << "Exception: " << e.what() << vcl_endl;
+    std::cout << "Exception: " << e.what() << std::endl;
   }
   TEST("Can't assign a 3 plane images to rgba view", caught_exception, true);
 #else
@@ -96,12 +97,12 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
-                vcl_bind2nd(vcl_plus<float>(),1));
+                std::bind2nd(std::plus<float>(),1));
 
-  vil_print_all(vcl_cout, image6);
+  vil_print_all(std::cout, image6);
   image7.clear();
   vil_convert_rgb_to_grey(image6, image7);
-  vil_print_all(vcl_cout, image7);
+  vil_print_all(std::cout, image7);
   TEST("vil_convert_rgb_to_grey(vil_rgba)", image7?true:false, true);
 
   TEST_NEAR("Conversion rgba to grey wibble", image7(0,0),  1.3154, 1e-5);
@@ -111,11 +112,11 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
 
 
 template <class S, class T>
-void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
+void test_image_view(S /*d1*/, std::string s_name, T /*d2*/)
 {
   vil_image_view<S> image0;
   image0.set_size(10,8);
-  vcl_cout<<"image0: "<<image0<<vcl_endl;
+  std::cout<<"image0: "<<image0<<std::endl;
 
   TEST("N.Planes", image0.nplanes(), 1);
   TEST("set_size i", image0.ni(), 10);
@@ -125,7 +126,7 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
      for (unsigned int i=0;i<image0.ni();++i)
        image0(i,j) = S(i+j);
 
-  vil_print_all(vcl_cout, image0);
+  vil_print_all(std::cout, image0);
 
   {
     // Test the shallow copy
@@ -158,7 +159,7 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   TEST("Data still in scope", image2(3,3), 111);
   TEST("Data still in scope", image2(1,1), 17);
 
-  vcl_cout<<image2<<vcl_endl;
+  std::cout<<image2<<std::endl;
 
   {
     // Test the deep copy
@@ -183,7 +184,7 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   image0(2,3)=222;
   TEST("vil_crop is shallow copy", image_win(0,0), 222);
 
-  vcl_cout<<image0.is_a()<<vcl_endl;
+  std::cout<<image0.is_a()<<std::endl;
   TEST("is_a() specialisation for S", image0.is_a(), "vil_image_view<"+s_name+">");
 
   vil_image_view<vil_rgb<S> > image5;
@@ -210,7 +211,7 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   TEST("Comparison", image2 < image7, true);
   TEST("Comparison", image2 > image7, false);
 
-  vcl_cout << "**********************************\n"
+  std::cout << "**********************************\n"
            << " Testing vil_image_view functions\n"
            << "**********************************\n";
 
@@ -225,7 +226,7 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   image0 = image5;
 
   vil_copy_reformat(image0, image_win);
-  vil_print_all(vcl_cout, image2);
+  vil_print_all(std::cout, image2);
   vil_image_view<S> test_image(5,4,3);
   test_image.fill(0);
   test_image(2,1,0) = test_image(2,2,0) = 25;
@@ -237,13 +238,13 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   TEST("!vil_deep_equality", vil_image_view_deep_equality(test_image,image2), false);
   test_image.set_size(5,4,4);
   TEST("!vil_deep_equality", vil_image_view_deep_equality(test_image,image2), false);
-  vil_print_all(vcl_cout, image2);
+  vil_print_all(std::cout, image2);
 
   vil_convert_cast(image2, image7);
-  vil_print_all(vcl_cout, image7);
-  vil_transform(image7, image7, vcl_bind2nd(vcl_plus<T>(), 0.6f));
+  vil_print_all(std::cout, image7);
+  vil_transform(image7, image7, std::bind2nd(std::plus<T>(), 0.6f));
   vil_convert_cast(image7, image2);
-  vil_print_all(vcl_cout, image2);
+  vil_print_all(std::cout, image2);
 
   const vil_pixel_format format = vil_pixel_format_of(S());
   if (format == VIL_PIXEL_FORMAT_FLOAT || format == VIL_PIXEL_FORMAT_DOUBLE)
@@ -258,7 +259,7 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
 
   image7.clear();
   vil_convert_rgb_to_grey(vil_view_as_rgb(image2), image7);
-  vil_print_all(vcl_cout, image7);
+  vil_print_all(std::cout, image7);
   TEST("vil_convert_rgb_to_grey(vil_rgb)", image7?true:false, true);
 
   if (format == VIL_PIXEL_FORMAT_FLOAT || format == VIL_PIXEL_FORMAT_DOUBLE)
@@ -280,12 +281,12 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
 
   vil_convert_cast(image7, image5);
   TEST("vil_convert_cast<T,S>", image5?true:false, true);
-  vil_print_all(vcl_cout, image5);
+  vil_print_all(std::cout, image5);
 
   vil_image_view<T> image10 =
     vil_convert_to_n_planes(3, vil_new_image_view_base_sptr(image7));
   TEST("vil_convert_round(image10<T>, sptr)", image10?true:false, true);
-  vil_print_all(vcl_cout, image10);
+  vil_print_all(std::cout, image10);
 
 
   // Only test rgba conversion for float and byte.
@@ -316,11 +317,11 @@ static void test_contiguous()
       for ( unsigned d3 = 0; d3 < 3; ++d3 )
       {
         if ( d3==d1 || d3==d2 ) continue;
-        vcl_ptrdiff_t step[3];
+        std::ptrdiff_t step[3];
         step[d1] = 1;
         step[d2] = 3;
         step[d3] = 15;
-        vcl_ostringstream str;
+        std::ostringstream str;
         str << "external memory: " << step[0] << 'x'<<step[1]<<'x'<<step[2]<<" step contiguous";
         vil_image_view<vxl_byte> im( memory, 3, 5, 7, step[d1], step[d2], step[d3] );
         TEST( str.str().c_str(), im.is_contiguous(), true );
@@ -336,11 +337,11 @@ static void test_contiguous()
       for ( unsigned d3 = 0; d3 < 3; ++d3 )
       {
         if ( d3==d1 || d3==d2 ) continue;
-        vcl_ptrdiff_t step[3];
+        std::ptrdiff_t step[3];
         step[d1] = 2;
         step[d2] = 3;
         step[d3] = 15;
-        vcl_ostringstream str;
+        std::ostringstream str;
         str << "external memory: " << step[0] << 'x'<<step[1]<<'x'<<step[2]<<" step not contiguous";
         vil_image_view<vxl_byte> im( memory, 3, 5, 7, step[d1], step[d2], step[d3] );
         TEST( str.str().c_str(), im.is_contiguous(), false );
@@ -392,7 +393,7 @@ static void test_image_view_fill()
     }
   TEST("fill line, expected number of pixels",n_pix, 10);
   TEST("fill line, correct places",n_wrong_pix, 0);
-  vil_print_all(vcl_cout , image);
+  vil_print_all(std::cout , image);
 
   image.fill(vxl_byte(11));
   vil_fill_line<vxl_byte>(image, 0, 0, 4, 9, 25);
@@ -408,19 +409,19 @@ static void test_image_view_fill()
     }
   TEST("fill line, expected number of pixels",n_pix, 10);
   TEST("fill line, correct places",n_wrong_pix, 0);
-  vil_print_all(vcl_cout , image);
+  vil_print_all(std::cout , image);
 }
 
 static void test_complex_image_view()
 {
-  vcl_cout << "************************************************\n"
+  std::cout << "************************************************\n"
            << " Testing vil_image_view complex image functions\n"
            << "************************************************\n";
 
-  vil_image_view<vcl_complex<float> > image_cf (10,7,1);
-  image_cf.fill (vcl_complex<float> (1.1f, 2.2f));
+  vil_image_view<std::complex<float> > image_cf (10,7,1);
+  image_cf.fill (std::complex<float> (1.1f, 2.2f));
 
-  vil_image_view<vcl_complex<double> > image_cd;
+  vil_image_view<std::complex<double> > image_cd;
   vil_convert_cast(image_cf, image_cd);
   TEST("vil_convert_cast<complex<float>, complex<double> >", image_cd?true:false, true);
 
@@ -441,7 +442,7 @@ static void test_complex_image_view()
   image_pf = vil_view_as_planes (image_cf);
   TEST("vil_view_as_planes<float>", image_pf?true:false, true);
 
-  vil_image_view<vcl_complex<float> > image_cf2;
+  vil_image_view<std::complex<float> > image_cf2;
   image_cf2 = vil_view_as_complex (image_pf);
   TEST("vil_view_as_complex<float>", image_cf2?true:false, true);
 
@@ -488,7 +489,7 @@ static void test_image_view_assignment_operator()
   catch (const vil_exception_pixel_formats_incompatible &e)
   {
     caught_exception = true;
-    vcl_cout << "Exception: " << e.what() << vcl_endl;
+    std::cout << "Exception: " << e.what() << std::endl;
   }
   TEST ("Successfully caught expected exception", caught_exception, true);
 #else
@@ -502,24 +503,24 @@ static void test_non_standard_type();
 static void test_image_view()
 {
   test_non_standard_type();
-  vcl_cout << "****************************************\n"
+  std::cout << "****************************************\n"
            << " Testing vil_image_view<byte and float>\n"
            << "****************************************\n";
   test_image_view(vxl_byte(), "vxl_byte", float());
-  vcl_cout << "******************************************\n"
+  std::cout << "******************************************\n"
            << " Testing vil_image_view<float and double>\n"
            << "******************************************\n";
   test_image_view(float(), "float", double());
-  vcl_cout << "******************************************\n"
+  std::cout << "******************************************\n"
            << " Testing vil_image_view<int_16 and float>\n"
            << "******************************************\n";
   test_image_view(vxl_int_16(), "vxl_int_16", float());
-  vcl_cout << "*******************************************\n"
+  std::cout << "*******************************************\n"
            << " Testing vil_image_view<uint_32 and float>\n"
            << "*******************************************\n";
   test_image_view(vxl_uint_32(), "vxl_uint_32", float());
 #if VXL_HAS_INT_64
-  vcl_cout << "*******************************************\n"
+  std::cout << "*******************************************\n"
            << " Testing vil_image_view<uint_64 and float>\n"
            << "*******************************************\n";
   test_image_view(vxl_uint_64(), "vxl_uint_64", float());
@@ -533,7 +534,7 @@ static void test_image_view()
 TESTMAIN(test_image_view);
 
 
-#include <vil/vil_image_view.txx>
+#include <vil/vil_image_view.hxx>
 
 class my_int
 {
@@ -574,13 +575,13 @@ class my_int
 };
 
 
-VCL_DEFINE_SPECIALIZATION
+template <>
 inline bool convert_components_from_planes(vil_image_view<my_int> &,
                                            const vil_image_view_base &)
 { return false; }  // when lhs has scalar pixels, don't attempt conversion
 
-VCL_DEFINE_SPECIALIZATION
-void vil_print_value(vcl_ostream& os, const my_int& v, unsigned)
+template <>
+void vil_print_value(std::ostream& os, const my_int& v, unsigned)
 { os<<double(v); }
 
 VIL_IMAGE_VIEW_INSTANTIATE( my_int );
@@ -588,7 +589,7 @@ VIL_IMAGE_VIEW_INSTANTIATE( my_int );
 
 static void test_non_standard_type()
 {
-  vcl_cout << "********************************\n"
+  std::cout << "********************************\n"
            << " Testing vil_image_view<my_int>\n"
            << "********************************\n";
 
@@ -602,6 +603,6 @@ static void test_non_standard_type()
   my_int_image(2,3) = my_int(100);
 
   vil_math_scale_values(my_int_image, 2.0);
-  vil_print_all(vcl_cout, my_int_image);
+  vil_print_all(std::cout, my_int_image);
 }
 

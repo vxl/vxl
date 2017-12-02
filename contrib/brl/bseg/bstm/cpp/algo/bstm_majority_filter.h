@@ -19,7 +19,7 @@ class bstm_majority_filter
 
  private:
   //: returns a list of 3d points of neighboring blocks
-  vcl_vector<vgl_point_3d<double> > neighbor_points( vgl_point_3d<double>& cellCenter, double side_len, boxm2_array_3d<uchar16>& trees );
+  std::vector<vgl_point_3d<double> > neighbor_points( vgl_point_3d<double>& cellCenter, double side_len, boxm2_array_3d<uchar16>& trees );
 
 };
 

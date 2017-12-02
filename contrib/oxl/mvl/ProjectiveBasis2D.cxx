@@ -5,9 +5,10 @@
 //:
 //  \file
 
+#include <iostream>
+#include <vector>
 #include "ProjectiveBasis2D.h"
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
@@ -25,7 +26,7 @@ ProjectiveBasis2D::ProjectiveBasis2D(const HomgPoint2D& p1, const HomgPoint2D& p
 }
 
 //: Compute projective basis for first 4 points in given array.
-ProjectiveBasis2D::ProjectiveBasis2D(const vcl_vector<HomgPoint2D>& points)
+ProjectiveBasis2D::ProjectiveBasis2D(const std::vector<HomgPoint2D>& points)
 {
   assert(points.size() >= 4);
   compute(points[0], points[1], points[2], points[3]);
@@ -64,7 +65,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
     full_matrix.set_column(3, p4.get_vector());
 
     if (! full_matrix.is_finite() || full_matrix.has_nans()) {
-      vcl_cerr << "Error (ProjectiveBasis2D): given matrix has infinite or NaN values\n";
+      std::cerr << "Error (ProjectiveBasis2D): given matrix has infinite or NaN values\n";
       T_.set_identity(); collinear_ = true; return;
     }
 
@@ -72,7 +73,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
     collinear_ = (s.rank() < 3);
 
     if (collinear_ && warn_)
-      vcl_cerr << "Warning (ProjectiveBasis2D): Three out of the four points are nearly collinear\n";
+      std::cerr << "Warning (ProjectiveBasis2D): Three out of the four points are nearly collinear\n";
   }
   else {
     collinear_ = false;
@@ -91,7 +92,7 @@ void ProjectiveBasis2D::compute(const HomgPoint2D& p1, const HomgPoint2D& p2, co
   back_matrix.set_column(2, scales_vector[2] * p3.get_vector());
 
   if (! back_matrix.is_finite() || back_matrix.has_nans()) {
-    vcl_cerr << "Error (ProjectiveBasis2D): back matrix has infinite or NaN values\n";
+    std::cerr << "Error (ProjectiveBasis2D): back matrix has infinite or NaN values\n";
     T_.set_identity(); collinear_ = true; return;
   }
 

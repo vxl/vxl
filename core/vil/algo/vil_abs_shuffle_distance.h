@@ -11,7 +11,7 @@
 //: Return minimum value of |im[offset[k]]-v0| k=0..n-1
 template <class T1, class T2>
 inline double vil_abs_shuffle_distance(T1 v0, const T2* im,
-                                       const vcl_ptrdiff_t* offset, unsigned n)
+                                       const std::ptrdiff_t* offset, unsigned n)
 {
   double min_v = im[offset[0]]<v0?(v0-im[offset[0]]):(im[offset[0]]-v0);
   for (unsigned i=1;i<n;++i)

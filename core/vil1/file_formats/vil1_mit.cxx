@@ -8,11 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <cstring>
 #include "vil1_mit.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -70,22 +71,22 @@ vil1_image_impl* vil1_mit_file_format::make_input_image(vil1_stream* is)
         type == MIT_SIGNED   ||
         type == MIT_FLOAT    ||
         type == MIT_EDGE      ))
-    return 0;
+    return VXL_NULLPTR;
 
   int bits_per_pixel = vil1_16bit_read_little_endian(is);
   if (bits_per_pixel > 32) {
-    vcl_cerr << "vil1_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << vcl_endl;
-    return 0;
+    std::cerr << "vil1_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << std::endl;
+    return VXL_NULLPTR;
   }
 
   /*int width =*/ vil1_16bit_read_little_endian(is);
   /*int height=*/ vil1_16bit_read_little_endian(is);
 #if 0
-  vcl_cerr << __FILE__ " : here we go:\n"
-           << __FILE__ " : type_ = " << type << vcl_endl
-           << __FILE__ " : bits_per_pixel_ = " << bits_per_pixel << vcl_endl
-           << __FILE__ " : width_ = " << width << vcl_endl
-           << __FILE__ " : height_ = " << height << vcl_endl;
+  std::cerr << __FILE__ " : here we go:\n"
+           << __FILE__ " : type_ = " << type << std::endl
+           << __FILE__ " : bits_per_pixel_ = " << bits_per_pixel << std::endl
+           << __FILE__ " : width_ = " << width << std::endl
+           << __FILE__ " : height_ = " << height << std::endl;
 #endif
   return new vil1_mit_generic_image(is);
 }
@@ -116,10 +117,10 @@ vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream* is):
 
 bool vil1_mit_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -150,13 +151,13 @@ vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream* is, int planes,
   {
     if (components_ == 3) type_ = 2;
     else if (components_ == 1) type_ = 1;
-    else vcl_cerr << __FILE__ " : Can only write RGB or grayscale\n";
+    else std::cerr << __FILE__ " : Can only write RGB or grayscale\n";
   }
   else
   {
     if (components_ == 1) type_ = 6;
     else
-      vcl_cerr << __FILE__ " : Ah can only write 8 or 16 bit images\n";
+      std::cerr << __FILE__ " : Ah can only write 8 or 16 bit images\n";
   }
 
   write_header();

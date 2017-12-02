@@ -36,7 +36,7 @@ sdet_fit_lines::~sdet_fit_lines()
 //-------------------------------------------------------------------------
 //: Set the edges to be processed
 //
-void sdet_fit_lines::set_edges(vcl_vector<vtol_edge_2d_sptr> const& edges)
+void sdet_fit_lines::set_edges(std::vector<vtol_edge_2d_sptr> const& edges)
 {
   segs_valid_ = false;
   edges_=edges;
@@ -59,7 +59,7 @@ bool sdet_fit_lines::fit_lines()
   line_segs_.clear();
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
        eit != edges_.end(); eit++)
   {
     vsol_curve_2d_sptr c = (*eit)->curve();
@@ -78,8 +78,8 @@ bool sdet_fit_lines::fit_lines()
 
     fitter_.fit();
 
-    vcl_vector<vgl_line_segment_2d<double> >& segs = fitter_.get_line_segs();
-    for (vcl_vector<vgl_line_segment_2d<double> >::iterator sit=segs.begin();
+    std::vector<vgl_line_segment_2d<double> >& segs = fitter_.get_line_segs();
+    for (std::vector<vgl_line_segment_2d<double> >::iterator sit=segs.begin();
          sit != segs.end(); sit++)
       line_segs_.push_back(*sit);
   }
@@ -90,12 +90,12 @@ bool sdet_fit_lines::fit_lines()
 //-------------------------------------------------------------------------
 //: Get the line segments
 //
-vcl_vector<vsol_line_2d_sptr> sdet_fit_lines::get_line_segs()
+std::vector<vsol_line_2d_sptr> sdet_fit_lines::get_line_segs()
 {
-  vcl_vector<vsol_line_2d_sptr> ret;
+  std::vector<vsol_line_2d_sptr> ret;
   if(!segs_valid_)
     this->fit_lines();
-  for (vcl_vector<vgl_line_segment_2d<double> >::iterator sit=line_segs_.begin();
+  for (std::vector<vgl_line_segment_2d<double> >::iterator sit=line_segs_.begin();
          sit != line_segs_.end(); sit++)
     {
       vsol_line_2d_sptr line = new vsol_line_2d(*sit);
@@ -105,12 +105,12 @@ vcl_vector<vsol_line_2d_sptr> sdet_fit_lines::get_line_segs()
     }
   return ret;
 }
-void sdet_fit_lines::get_line_segs(vcl_vector<vsol_line_2d_sptr>& lines)
+void sdet_fit_lines::get_line_segs(std::vector<vsol_line_2d_sptr>& lines)
 {
   lines = this->get_line_segs();
 }
 void sdet_fit_lines::
-get_line_segs(vcl_vector<vgl_line_segment_2d<double> >& lines)
+get_line_segs(std::vector<vgl_line_segment_2d<double> >& lines)
 {
   lines = line_segs_;
 }

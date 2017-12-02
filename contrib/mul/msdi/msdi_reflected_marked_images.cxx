@@ -4,8 +4,10 @@
 // \author Tim Cootes
 // \brief Adaptor which generates reflected versions of images/points
 
+#include <iostream>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include "msdi_reflected_marked_images.h"
 #include <vimt/vimt_image_2d_of.h>
@@ -15,7 +17,7 @@
 //: Construct with external vectors of images and points
 msdi_reflected_marked_images::msdi_reflected_marked_images(
                         msdi_marked_images& raw_data,
-                        const vcl_vector<unsigned>& sym_pts,
+                        const std::vector<unsigned>& sym_pts,
                         bool only_reflect)
   : marked_images_(raw_data),
     sym_pts_(sym_pts),
@@ -86,7 +88,7 @@ bool msdi_reflected_marked_images::next()
 {
   if (!marked_images_.next())
   {
-    if (first_pass_ && !only_reflect_) 
+    if (first_pass_ && !only_reflect_)
     {
       first_pass_=false;
       marked_images_.reset();
@@ -132,14 +134,19 @@ void msdi_reflected_marked_images::get_points()
 
   // First pass through, so reflect the points about image midline.
   double ax = 0.5*(image().image_base().ni()-1);
-  msm_reflect_shape_along_x(marked_images_.points(),
+
+  // Project points into image frame, reflect, then project back into world frame.
+  msm_points im_points=marked_images_.points();
+  im_points.transform_by(image().world2im());
+  msm_reflect_shape_along_x(im_points,
                             sym_pts_,points_,ax);
+  points_.transform_by(image().world2im().inverse());  // Map back to world co-ords
   points_ok_=true;
 }
 
 
 //: Return current image file name
-vcl_string msdi_reflected_marked_images::image_name() const
+std::string msdi_reflected_marked_images::image_name() const
 {
   if (!first_pass_) return marked_images_.image_name();
 
@@ -147,7 +154,7 @@ vcl_string msdi_reflected_marked_images::image_name() const
 }
 
 //: Return current points file name
-vcl_string msdi_reflected_marked_images::points_name() const
+std::string msdi_reflected_marked_images::points_name() const
 {
   if (!first_pass_) return marked_images_.points_name();
 

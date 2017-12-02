@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
  * All rights reserved.
  *
@@ -46,9 +46,9 @@ struct opj_image* opj_image_create0(void);
 
 /**
  * Updates the components of the image from the coding parameters.
- * 
- * @param p_image		the image to update.
- * @param p_cp			the coding parameters from which to update the image.
+ *
+ * @param p_image                the image to update.
+ * @param p_cp                        the coding parameters from which to update the image.
  */
 void opj_image_comp_update(struct opj_image * p_image,const struct opj_cp * p_cp);
 

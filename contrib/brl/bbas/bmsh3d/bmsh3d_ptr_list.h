@@ -6,7 +6,9 @@
 #ifndef bmsh3d_ptr_list_h_
 #define bmsh3d_ptr_list_h_
 
-#include <vcl_set.h>
+#include <iostream>
+#include <set>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 class bmsh3d_ptr_node
@@ -46,7 +48,7 @@ class bmsh3d_ptr_node
 };
 
 //: return size of the list.
-inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, vcl_set<const void*>& ptrs)
+inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, std::set<const void*>& ptrs)
 {
   unsigned int count = 0;
   bmsh3d_ptr_node const* curr = head;
@@ -62,7 +64,7 @@ inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, vcl_set<const void
 #if 0 // DEPRECATED! -- use the above "const" version instead
 //: return size of the list.
 //  \deprecated
-inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, vcl_set<void*>& ptrs)
+inline unsigned int get_all_ptrs(const bmsh3d_ptr_node* head, std::set<void*>& ptrs)
 {
   unsigned int count = 0;
   bmsh3d_ptr_node const* curr = head;

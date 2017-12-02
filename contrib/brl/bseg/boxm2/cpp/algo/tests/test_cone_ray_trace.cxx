@@ -31,7 +31,7 @@ vpgl_camera_double_sptr test_camera()
   vgl_rotation_3d<double> R(mr);
   vgl_point_3d<double> t(0.5,0.5,100);
 
-  vcl_cout<<mk<<mr<<t;
+  std::cout<<mk<<mr<<t;
   vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(K,t,R);
   return cam;
 }
@@ -44,7 +44,7 @@ void test_cone_ray_trace()
   scene->set_local_origin( vgl_point_3d<double>(0,0,0) );
 
   //set scene block information
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks;
   boxm2_block_id id(0,0,0);
   boxm2_block_metadata data(id,
                            vgl_point_3d<double>(0,0,0),
@@ -55,7 +55,7 @@ void test_cone_ray_trace()
   scene->set_blocks(blocks);
 
   //: list of appearance models/observation models used by this scene
-  vcl_vector<vcl_string> appearances;
+  std::vector<std::string> appearances;
   appearances.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   scene->set_appearances(appearances);
 
@@ -97,7 +97,7 @@ void test_cone_ray_trace()
 
   //change up the valeus
 
-  vcl_vector<boxm2_data_base*> datas;
+  std::vector<boxm2_data_base*> datas;
   datas.push_back(alph); datas.push_back(mog);
 
   //generate test camera

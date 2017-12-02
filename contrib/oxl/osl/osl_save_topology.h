@@ -9,13 +9,15 @@
 // .FILE osl_save_topology.cxx
 // \author fsm
 
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <osl/osl_edge.h>
 
-void osl_save_topology(char const *, vcl_list<osl_edge*> const &, vcl_list<osl_vertex*> const &);
-void osl_save_topology(char const *, vcl_list<osl_edge*> const &);
+void osl_save_topology(char const *, std::list<osl_edge*> const &, std::list<osl_vertex*> const &);
+void osl_save_topology(char const *, std::list<osl_edge*> const &);
 
-void osl_save_topology(vcl_ostream &   , vcl_list<osl_edge*> const &, vcl_list<osl_vertex*> const &);
-void osl_save_topology(vcl_ostream &   , vcl_list<osl_edge*> const &);
+void osl_save_topology(std::ostream &   , std::list<osl_edge*> const &, std::list<osl_vertex*> const &);
+void osl_save_topology(std::ostream &   , std::list<osl_edge*> const &);
 
 #endif // osl_save_topology_h_

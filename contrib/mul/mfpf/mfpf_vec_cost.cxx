@@ -36,9 +36,9 @@ short mfpf_vec_cost::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_vec_cost::is_a() const
+std::string mfpf_vec_cost::is_a() const
 {
-  return vcl_string("mfpf_vec_cost");
+  return std::string("mfpf_vec_cost");
 }
 
 //: Allows derived class to be loaded by base-class pointer
@@ -69,7 +69,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_vec_cost& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_vec_cost& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -82,7 +82,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost* b)
+std::ostream& operator<<(std::ostream& os,const mfpf_vec_cost* b)
 {
   if (b)
     return os << *b;

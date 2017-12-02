@@ -38,10 +38,14 @@
 //   Peter Vanroose -15 Nov 2012 - the deprecated vnl_math_* #defines are now only available when VNL_CONFIG_LEGACY_METHODS==1
 // \endverbatim
 
-#include <vcl_cmath.h>
+#include <cmath>
+#include <algorithm>
+#include <vcl_compiler.h>
 #include "dll.h"
 #include <vxl_config.h>
 #include <vnl/vnl_config.h> // for VNL_CONFIG_ENABLE_SSE2_ROUNDING
+#include <vcl_config_compiler.h> //for VXL_CONSTEXPR_VAR definition
+#include "vnl/vnl_export.h"
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
 # include <vcl_cassert.h>
 #endif
@@ -61,10 +65,8 @@
 # define USE_SSE2_IMPL 0
 #endif
 
-#define DEFINED_INTEL  ((defined(__i386__) || defined(__i386) || defined(__x86_64__) || defined(__x86_64)))
 // Turn on fast impl when using GCC on Intel-based machines with the following exception:
-//   GCCXML
-#if defined(__GNUC__) && DEFINED_INTEL
+#if defined(__GNUC__) && ((defined(__i386__) || defined(__i386) || defined(__x86_64__) || defined(__x86_64)))
 # define GCC_USE_FAST_IMPL 1
 #else
 # define GCC_USE_FAST_IMPL 0
@@ -77,14 +79,16 @@
 #endif
 
 
+
 //: Type-accessible infinities for use in templates.
-template <class T> T vnl_huge_val(T);
-double   vnl_huge_val(double);
-float    vnl_huge_val(float);
-long int vnl_huge_val(long int);
-int      vnl_huge_val(int);
-short    vnl_huge_val(short);
-char     vnl_huge_val(char);
+template <class T> VNL_TEMPLATE_EXPORT T vnl_huge_val(T);
+extern VNL_EXPORT long double   vnl_huge_val(long double);
+extern VNL_EXPORT double   vnl_huge_val(double);
+extern VNL_EXPORT float    vnl_huge_val(float);
+extern VNL_EXPORT long int vnl_huge_val(long int);
+extern VNL_EXPORT int      vnl_huge_val(int);
+extern VNL_EXPORT short    vnl_huge_val(short);
+extern VNL_EXPORT char     vnl_huge_val(char);
 
 //: real numerical constants
 // Strictly speaking, the static declaration of the constant variables is
@@ -98,38 +102,38 @@ char     vnl_huge_val(char);
 namespace vnl_math
 {
   //: pi, e and all that
-  static const double e                = 2.71828182845904523536;
-  static const double log2e            = 1.44269504088896340736;
-  static const double log10e           = 0.43429448190325182765;
-  static const double ln2              = 0.69314718055994530942;
-  static const double ln10             = 2.30258509299404568402;
-  static const double pi               = 3.14159265358979323846;
-  static const double twopi            = 6.28318530717958647692;
-  static const double pi_over_2        = 1.57079632679489661923;
-  static const double pi_over_4        = 0.78539816339744830962;
-  static const double pi_over_180      = 0.01745329251994329577;
-  static const double one_over_pi      = 0.31830988618379067154;
-  static const double two_over_pi      = 0.63661977236758134308;
-  static const double deg_per_rad      = 57.2957795130823208772;
-  static const double sqrt2pi          = 2.50662827463100024161;
-  static const double two_over_sqrtpi  = 1.12837916709551257390;
-  static const double one_over_sqrt2pi = 0.39894228040143267794;
-  static const double sqrt2            = 1.41421356237309504880;
-  static const double sqrt1_2          = 0.70710678118654752440;
-  static const double sqrt1_3          = 0.57735026918962573106;
-  static const double euler            = 0.57721566490153286061;
+  static VXL_CONSTEXPR_VAR double e                = 2.71828182845904523536;
+  static VXL_CONSTEXPR_VAR double log2e            = 1.44269504088896340736;
+  static VXL_CONSTEXPR_VAR double log10e           = 0.43429448190325182765;
+  static VXL_CONSTEXPR_VAR double ln2              = 0.69314718055994530942;
+  static VXL_CONSTEXPR_VAR double ln10             = 2.30258509299404568402;
+  static VXL_CONSTEXPR_VAR double pi               = 3.14159265358979323846;
+  static VXL_CONSTEXPR_VAR double twopi            = 6.28318530717958647692;
+  static VXL_CONSTEXPR_VAR double pi_over_2        = 1.57079632679489661923;
+  static VXL_CONSTEXPR_VAR double pi_over_4        = 0.78539816339744830962;
+  static VXL_CONSTEXPR_VAR double pi_over_180      = 0.01745329251994329577;
+  static VXL_CONSTEXPR_VAR double one_over_pi      = 0.31830988618379067154;
+  static VXL_CONSTEXPR_VAR double two_over_pi      = 0.63661977236758134308;
+  static VXL_CONSTEXPR_VAR double deg_per_rad      = 57.2957795130823208772;
+  static VXL_CONSTEXPR_VAR double sqrt2pi          = 2.50662827463100024161;
+  static VXL_CONSTEXPR_VAR double two_over_sqrtpi  = 1.12837916709551257390;
+  static VXL_CONSTEXPR_VAR double one_over_sqrt2pi = 0.39894228040143267794;
+  static VXL_CONSTEXPR_VAR double sqrt2            = 1.41421356237309504880;
+  static VXL_CONSTEXPR_VAR double sqrt1_2          = 0.70710678118654752440;
+  static VXL_CONSTEXPR_VAR double sqrt1_3          = 0.57735026918962573106;
+  static VXL_CONSTEXPR_VAR double euler            = 0.57721566490153286061;
 
   //: IEEE double machine precision
-  static const double eps              = 2.2204460492503131e-16;
-  static const double sqrteps          = 1.490116119384766e-08;
+  static VXL_CONSTEXPR_VAR double eps              = 2.2204460492503131e-16;
+  static VXL_CONSTEXPR_VAR double sqrteps          = 1.490116119384766e-08;
   //: IEEE single machine precision
-  static const float  float_eps        = 1.192092896e-07f;
-  static const float  float_sqrteps    = 3.4526698307e-4f;
+  static VXL_CONSTEXPR_VAR float  float_eps        = 1.192092896e-07f;
+  static VXL_CONSTEXPR_VAR float  float_sqrteps    = 3.4526698307e-4f;
 
   //: Convert an angle to [0, 2Pi) range
-  double angle_0_to_2pi(double angle);
+  VNL_EXPORT double angle_0_to_2pi(double angle);
   //: Convert an angle to [-Pi, Pi) range
-  double angle_minuspi_to_pi(double angle);
+  VNL_EXPORT double angle_minuspi_to_pi(double angle);
 }
 
 // We do not want to make assumptions about unknown types that happen
@@ -148,6 +152,43 @@ namespace vnl_math
 
 namespace vnl_math
 {
+#if VXL_FULLCXX11SUPPORT
+  // Prefer to use perfect forwarding to the std library if C++11 features are available.
+  //http://stackoverflow.com/questions/9864125/c11-how-to-alias-a-function
+  template <typename... Args>
+    auto isnan(Args&&... args) -> decltype(std::isnan(std::forward<Args>(args)...)) {
+      return std::isnan(std::forward<Args>(args)...);
+    }
+  template <typename... Args>
+    auto isinf(Args&&... args) -> decltype(std::isinf(std::forward<Args>(args)...)) {
+      return std::isinf(std::forward<Args>(args)...);
+    }
+  template <typename... Args>
+    auto isfinite(Args&&... args) -> decltype(std::isfinite(std::forward<Args>(args)...)) {
+      return std::isfinite(std::forward<Args>(args)...);
+    }
+  template <typename... Args>
+    auto isnormal(Args&&... args) -> decltype(std::isnormal(std::forward<Args>(args)...)) {
+      return std::isnormal(std::forward<Args>(args)...);
+    }
+  template <typename... Args>
+    auto max(Args&&... args) -> decltype(std::max(std::forward<Args>(args)...)) {
+      return std::max(std::forward<Args>(args)...);
+    }
+  template <typename... Args>
+    auto min(Args&&... args) -> decltype(std::min(std::forward<Args>(args)...)) {
+      return std::min(std::forward<Args>(args)...);
+    }
+  //cbrt is defined in C++11
+  template <typename... Args>
+    auto cuberoot(Args&&... args) -> decltype(std::cbrt(std::forward<Args>(args)...)) {
+      return std::cbrt(std::forward<Args>(args)...);
+    }
+  template <typename... Args>
+    auto hypot(Args&&... args) -> decltype(std::hypot(std::forward<Args>(args)...)) {
+      return std::hypot(std::forward<Args>(args)...);
+    }
+#else
  // isnan
  inline bool isnan(char)               { return false; }
  inline bool isnan(short)              { return false; }
@@ -162,11 +203,11 @@ namespace vnl_math
  inline bool isnan(long long)          { return false; }
  inline bool isnan(unsigned long long) { return false; }
 #endif
- bool isnan(float);
- bool isnan(double);
- bool isnan(long double);
+ VNL_EXPORT bool isnan(float);
+ VNL_EXPORT bool isnan(double);
+ VNL_EXPORT bool isnan(long double);
 #if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
- template <class T> bool isnan(T);
+ template <class T> VNL_TEMPLATE_EXPORT bool isnan(T);
 #endif
 
 
@@ -184,11 +225,11 @@ namespace vnl_math
  inline bool isinf(long long)          { return false; }
  inline bool isinf(unsigned long long) { return false; }
 #endif
- bool isinf(float);
- bool isinf(double);
- bool isinf(long double);
+ VNL_EXPORT bool isinf(float);
+ VNL_EXPORT bool isinf(double);
+ VNL_EXPORT bool isinf(long double);
 #if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
- template <class T> bool isinf(T);
+ template <class T> VNL_TEMPLATE_EXPORT bool isinf(T);
 #endif
 
  // isfinite
@@ -205,12 +246,43 @@ namespace vnl_math
  inline bool isfinite(long long)          { return true; }
  inline bool isfinite(unsigned long long) { return true; }
 #endif
- bool isfinite(float);
- bool isfinite(double);
- bool isfinite(long double);
+ VNL_EXPORT bool isfinite(float);
+ VNL_EXPORT bool isfinite(double);
+ VNL_EXPORT bool isfinite(long double);
 #if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
- template <class T> bool isfinite(T);
+ template <class T> VNL_TEMPLATE_EXPORT bool isfinite(T);
 #endif
+
+// If we must use windows.h, we should at least sanitise it first
+#ifndef NOMINMAX
+  #define NOMINMAX
+#endif
+#ifdef max
+  #undef max
+#endif
+
+#ifdef min
+  #undef min
+#endif
+
+// max
+template<class T> VNL_TEMPLATE_EXPORT
+const T& max( const T& x, const T& y) { return std::max(x,y); }
+
+template<class T> VNL_TEMPLATE_EXPORT
+const T& min( const T& x, const T& y) { return std::min(x,y); }
+
+// cuberoot
+inline float  cuberoot(const float  &a) { return float((a<0) ? -std::exp(std::log(-a)/3) : std::exp(std::log(a)/3)); }
+inline double cuberoot(const double &a) { return       (a<0) ? -std::exp(std::log(-a)/3) : std::exp(std::log(a)/3); }
+
+// hypotenuse
+extern VNL_EXPORT int         hypot(int         x, int         y);
+extern VNL_EXPORT float       hypot(float       x, float       y);
+extern VNL_EXPORT double      hypot(double      x, double      y);
+extern VNL_EXPORT long double hypot(long double x, long double y);
+
+#endif //If not C++11 features
 
 #if USE_SSE2_IMPL // Fast sse2 implementation
 
@@ -569,44 +641,6 @@ inline float              abs(float x)              { return x < 0.0f ? -x : x; 
 inline double             abs(double x)             { return x < 0.0 ? -x : x; }
 inline long double        abs(long double x)        { return x < 0.0 ? -x : x; }
 
-// If we must use windows.h, we should at least sanitise it first
-#ifndef NOMINMAX
-  #define NOMINMAX
-#endif
-#ifdef max
-  #undef max
-#endif
-
-#ifdef min
-  #undef min
-#endif
-
-// max
-inline int                max(int x, int y)                               { return (x > y) ? x : y; }
-inline unsigned int       max(unsigned int x, unsigned int y)             { return (x > y) ? x : y; }
-inline long               max(long x, long y)                             { return (x > y) ? x : y; }
-inline unsigned long      max(unsigned long x, unsigned long y)           { return (x > y) ? x : y; }
-#if VCL_HAS_LONG_LONG
-inline long long          max(long long x, long long y)                   { return (x > y) ? x : y; }
-inline unsigned long long max(unsigned long long x, unsigned long long y) { return (x > y) ? x : y; }
-#endif
-inline float              max(float x, float y)                           { return (x < y) ? y : x; }
-inline double             max(double x, double y)                         { return (x < y) ? y : x; }
-inline long double        max(long double x, long double y)               { return (x < y) ? y : x; }
-
-// min
-inline int                min(int x, int y)                               { return (x < y) ? x : y; }
-inline unsigned int       min(unsigned int x, unsigned int y)             { return (x < y) ? x : y; }
-inline long               min(long x, long y)                             { return (x < y) ? x : y; }
-inline unsigned long      min(unsigned long x, unsigned long y)           { return (x < y) ? x : y; }
-#if VCL_HAS_LONG_LONG
-inline long long          min(long long x, long long y)                   { return (x < y) ? x : y; }
-inline unsigned long long min(unsigned long long x, unsigned long long y) { return (x < y) ? x : y; }
-#endif
-inline float              min(float x, float y)                           { return (x > y) ? y : x; }
-inline double             min(double x, double y)                         { return (x > y) ? y : x; }
-inline long double        min(long double x, long double y)               { return (x > y) ? y : x; }
-
 // sqr (square)
 inline bool               sqr(bool x)               { return x; }
 inline int                sqr(int x)                { return x*x; }
@@ -666,15 +700,6 @@ inline float              squared_magnitude(float              x) { return x*x; 
 inline double             squared_magnitude(double             x) { return x*x; }
 inline long double        squared_magnitude(long double        x) { return x*x; }
 
-// cuberoot
-inline float  cuberoot(float  a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
-inline double cuberoot(double a) { return       (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
-
-// hypotenuse
-extern int         hypot(int         x, int         y);
-extern float       hypot(float       x, float       y);
-extern double      hypot(double      x, double      y);
-extern long double hypot(long double x, long double y);
 
 // truncated remainder
 inline int                remainder_truncated(int x, int y)                               { return x % y; }

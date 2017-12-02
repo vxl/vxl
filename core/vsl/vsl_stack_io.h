@@ -3,25 +3,26 @@
 #define vsl_stack_io_h_
 //:
 // \file
-// \brief binary IO functions for vcl_stack<T>
+// \brief binary IO functions for std::stack<T>
 // \author K.Y.McGaul
 
-#include <vcl_iosfwd.h>
-#include <vcl_stack.h>
+#include <iosfwd>
+#include <stack>
+#include <vcl_compiler.h>
 
 class vsl_b_ostream;
 class vsl_b_istream;
 
 //: Write stack to binary stream
 template <class T>
-void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T>& v);
+void vsl_b_write(vsl_b_ostream& s, const std::stack<T>& v);
 
 //: Read stack from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& s, vcl_stack<T>& v);
+void vsl_b_read(vsl_b_istream& s, std::stack<T>& v);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream & os,const vcl_stack<T> &v);
+void vsl_print_summary(std::ostream & os,const std::stack<T> &v);
 
 #endif // vsl_stack_io_h_

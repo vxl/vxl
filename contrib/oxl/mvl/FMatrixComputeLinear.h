@@ -58,27 +58,27 @@ class FMatrixComputeLinear : public FMatrixCompute
 
   //: Interface to above using arrays of HomgPoint2D.
   //  Makes a PairMatchSetCorner, and then calls the compute method above.
-  bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
+  bool compute(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, FMatrix* F);
 
   //: Interface to above using arrays of vgl_homg_point_2d.
   //  Makes a PairMatchSetCorner, and then calls the compute method above.
-  bool compute(vcl_vector<vgl_homg_point_2d<double> >&,
-               vcl_vector<vgl_homg_point_2d<double> >&,
+  bool compute(std::vector<vgl_homg_point_2d<double> >&,
+               std::vector<vgl_homg_point_2d<double> >&,
                FMatrix& F);
 
   //: Interface to above using preconditioned points
-  bool compute_preconditioned(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
+  bool compute_preconditioned(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, FMatrix* F);
 
   //: Interface to above using preconditioned points
-  bool compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> >&,
-                              vcl_vector<vgl_homg_point_2d<double> >&,
+  bool compute_preconditioned(std::vector<vgl_homg_point_2d<double> >&,
+                              std::vector<vgl_homg_point_2d<double> >&,
                               FMatrix& F);
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
-  inline FMatrix compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2)
+  inline FMatrix compute(std::vector<HomgPoint2D>& p1, std::vector<HomgPoint2D>& p2)
   { return FMatrixCompute::compute(p1,p2); }
-  inline FMatrix compute(vcl_vector<vgl_homg_point_2d<double> >& p1,
-                         vcl_vector<vgl_homg_point_2d<double> >& p2)
+  inline FMatrix compute(std::vector<vgl_homg_point_2d<double> >& p1,
+                         std::vector<vgl_homg_point_2d<double> >& p2)
   { return FMatrixCompute::compute(p1,p2); }
 };
 

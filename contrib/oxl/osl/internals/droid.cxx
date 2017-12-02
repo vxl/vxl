@@ -1,8 +1,10 @@
 // This is oxl/osl/internals/droid.cxx
+#include <iostream>
+#include <cmath>
+#include <cstring>
 #include "droid.h"
 
-#include <vcl_cmath.h>   // pow()
-#include <vcl_cstring.h> // memset()
+#include <vcl_compiler.h>
 
 #include <osl/osl_roi_window.h>
 
@@ -264,13 +266,13 @@ float droid::compute_corner_min (float /*corner_min*/,
     bin_index,
     corner_count;
 
-  vcl_memset (bin_array, 0, sizeof (bin_array));
-  corner_max_4throot = (float)vcl_pow ((double) corner_max, 0.25);
+  std::memset (bin_array, 0, sizeof (bin_array));
+  corner_max_4throot = (float)std::pow ((double) corner_max, 0.25);
 
   for (int row = window_str->row_start_index; row < window_str->row_end_index; row++) {
     for (int col = window_str->col_start_index; col < window_str->col_end_index; col++) {
       if ((*image_corner_max_ptr) [row][col]) {
-        corner_4throot = (float)vcl_pow ((double) (*pixel_cornerness) [row][col], 0.25);
+        corner_4throot = (float)std::pow ((double) (*pixel_cornerness) [row][col], 0.25);
         bin_index = (int) ((DR_BIN_COUNT-1) * corner_4throot / corner_max_4throot);
         bin_array [bin_index]++;
       }
@@ -289,7 +291,7 @@ float droid::compute_corner_min (float /*corner_min*/,
 
   bin_index += 2;
 
-  return (float)vcl_pow ((double) bin_index / (double) (DR_BIN_COUNT-1) * corner_max_4throot, 4.0);
+  return (float)std::pow ((double) bin_index / (double) (DR_BIN_COUNT-1) * corner_max_4throot, 4.0);
 
 #undef DR_BIN_COUNT
 }
@@ -397,7 +399,7 @@ bool droid::compute_subpixel_max (vil1_memory_image_of<float> *pixel_cornerness,
     float off_y = (b*e - c*d) / det;
 
     // more than one pixel away
-    if (vcl_fabs (off_x) > 1.0 || vcl_fabs (off_y) > 1.0)
+    if (std::fabs (off_x) > 1.0 || std::fabs (off_y) > 1.0)
       return false;
     else {
       x = col+off_x;

@@ -1,4 +1,6 @@
 // This is brl/bbas/volm/pro/processes/volm_registration_error_process.cxx
+#include <iostream>
+#include <ios>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,8 +14,7 @@
 // \endverbatim
 //
 
-#include <vcl_iostream.h>
-#include <vcl_ios.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -36,25 +37,25 @@ namespace volm_registration_error_process_globals
   const unsigned n_outputs_ = 4;
 
   //: return the closest, along with the normal components, from a point to a line segment
-  double closest_distance(vsol_point_2d_sptr const& p, vcl_vector<vsol_point_2d_sptr> const& point_set,
+  double closest_distance(vsol_point_2d_sptr const& p, std::vector<vsol_point_2d_sptr> const& point_set,
                           double& vec_x, double& vec_y);
-  
-  double closest_distance(vcl_vector<vsol_point_2d_sptr> const& p_set1, vcl_vector<vsol_point_2d_sptr> const& p_set2,
-                          vcl_vector<vcl_vector<double> >& vec_dist);
+
+  double closest_distance(std::vector<vsol_point_2d_sptr> const& p_set1, std::vector<vsol_point_2d_sptr> const& p_set2,
+                          std::vector<std::vector<double> >& vec_dist);
 }
 
 bool volm_registration_error_process_cons(bprb_func_process& pro)
 {
   using namespace volm_registration_error_process_globals;
 
-  vcl_vector<vcl_string> input_types(n_inputs_);
+  std::vector<std::string> input_types(n_inputs_);
   input_types[0] = "vcl_string";    // ground truth file
   input_types[1] = "vcl_string";    // projection file using geo-registered camera
   input_types[2] = "vcl_string";    // projection file using original camera
   input_types[3] = "double";;       // image gsd
   input_types[4] = "vcl_string";    // output file to store the shift vectors from geo-registered camera
   input_types[5] = "vcl_string";    // output file to store the shift vectors from original camera
-  vcl_vector<vcl_string> output_types(n_outputs_);
+  std::vector<std::string> output_types(n_outputs_);
   output_types[0] = "double";      // average shift of geo-registered camera
   output_types[1] = "double";      // standard deviation of shift using geo-registered camera
   output_types[2] = "double";      // average shift of original camera
@@ -67,36 +68,36 @@ bool volm_registration_error_process(bprb_func_process& pro)
   using namespace volm_registration_error_process_globals;
 
   if (!pro.verify_inputs()) {
-    vcl_cerr << pro.name() << ": Wrong Inputs!!!\n";
+    std::cerr << pro.name() << ": Wrong Inputs!!!\n";
     return false;
   }
   vsl_add_to_binary_loader(vsol_polyline_2d());
-  
+
   // get the inputs
   unsigned in_i = 0;
-  vcl_string gt_file = pro.get_input<vcl_string>(in_i++);
-  vcl_string cor_file = pro.get_input<vcl_string>(in_i++);
-  vcl_string ori_file = pro.get_input<vcl_string>(in_i++);
+  std::string gt_file = pro.get_input<std::string>(in_i++);
+  std::string cor_file = pro.get_input<std::string>(in_i++);
+  std::string ori_file = pro.get_input<std::string>(in_i++);
   double res = pro.get_input<double>(in_i++);
-  vcl_string cor_out_file = pro.get_input<vcl_string>(in_i++);
-  vcl_string ori_out_file = pro.get_input<vcl_string>(in_i++);
+  std::string cor_out_file = pro.get_input<std::string>(in_i++);
+  std::string ori_out_file = pro.get_input<std::string>(in_i++);
 
   // load the geometry
   if (!vul_file::exists(gt_file)) {
-    vcl_cerr << pro.name() << ": can not find file: " << gt_file << vcl_endl;
+    std::cerr << pro.name() << ": can not find file: " << gt_file << std::endl;
     return false;
   }
   if (!vul_file::exists(cor_file)) {
-    vcl_cerr << pro.name() << ": can not find file: " << cor_file << vcl_endl;
+    std::cerr << pro.name() << ": can not find file: " << cor_file << std::endl;
     return false;
   }
   if (!vul_file::exists(ori_file)) {
-    vcl_cerr << pro.name() << ": can not find file: " << ori_file << vcl_endl;
+    std::cerr << pro.name() << ": can not find file: " << ori_file << std::endl;
     return false;
   }
-  vcl_vector<vsol_spatial_object_2d_sptr> gt_sos_in;
-  vcl_vector<vsol_spatial_object_2d_sptr> cor_sos_in;
-  vcl_vector<vsol_spatial_object_2d_sptr> ori_sos_in;
+  std::vector<vsol_spatial_object_2d_sptr> gt_sos_in;
+  std::vector<vsol_spatial_object_2d_sptr> cor_sos_in;
+  std::vector<vsol_spatial_object_2d_sptr> ori_sos_in;
   vsl_b_ifstream istr_gt(gt_file);
   if (! !istr_gt) {
     vsl_b_read(istr_gt, gt_sos_in);
@@ -115,15 +116,15 @@ bool volm_registration_error_process(bprb_func_process& pro)
   //gt_sos_in.erase(gt_sos_in.begin()+148);
   //cor_sos_in.erase(cor_sos_in.begin()+148);
   if ( gt_sos_in.size() != cor_sos_in.size() || gt_sos_in.size() != ori_sos_in.size() || cor_sos_in.size() != ori_sos_in.size()) {
-    vcl_cerr << pro.name() << ": inconsistency in between loaded projection geometries!!!\n";
+    std::cerr << pro.name() << ": inconsistency in between loaded projection geometries!!!\n";
     return false;
   }
 
   // cast to poly line
-  vcl_vector<vsol_polyline_2d_sptr> gt_lines;
-  vcl_vector<vsol_polyline_2d_sptr> cor_lines;
-  vcl_vector<vsol_polyline_2d_sptr> ori_lines;
-  vcl_vector<vsol_spatial_object_2d_sptr>::iterator vit;
+  std::vector<vsol_polyline_2d_sptr> gt_lines;
+  std::vector<vsol_polyline_2d_sptr> cor_lines;
+  std::vector<vsol_polyline_2d_sptr> ori_lines;
+  std::vector<vsol_spatial_object_2d_sptr>::iterator vit;
   for (vit = gt_sos_in.begin(); vit != gt_sos_in.end(); ++vit)
     gt_lines.push_back((*vit)->cast_to_curve()->cast_to_polyline());
   for (vit = cor_sos_in.begin(); vit != cor_sos_in.end(); ++vit)
@@ -133,18 +134,18 @@ bool volm_registration_error_process(bprb_func_process& pro)
 
   // calculate the distance for each line
   unsigned n_lines = gt_lines.size();
-  vcl_vector<vcl_vector<vcl_vector<double> > > cor_vectors;
-  vcl_vector<vcl_vector<vcl_vector<double> > > ori_vectors;
-  vcl_vector<double> cor_distance;
-  vcl_vector<double> ori_distance;
+  std::vector<std::vector<std::vector<double> > > cor_vectors;
+  std::vector<std::vector<std::vector<double> > > ori_vectors;
+  std::vector<double> cor_distance;
+  std::vector<double> ori_distance;
   for (unsigned i = 0; i < n_lines; i++)
   {
-    vcl_vector<vcl_vector<double> > cor_line_vector;
-    vcl_vector<vcl_vector<double> > ori_line_vector;
+    std::vector<std::vector<double> > cor_line_vector;
+    std::vector<std::vector<double> > ori_line_vector;
 
-    vcl_vector<vsol_point_2d_sptr> cor_points;
-    vcl_vector<vsol_point_2d_sptr> ori_points;
-    vcl_vector<vsol_point_2d_sptr> gt_points;
+    std::vector<vsol_point_2d_sptr> cor_points;
+    std::vector<vsol_point_2d_sptr> ori_points;
+    std::vector<vsol_point_2d_sptr> gt_points;
     for (unsigned gp = 0; gp < gt_lines[i]->size(); gp++) {
       gt_points.push_back(gt_lines[i]->vertex(gp));
       cor_points.push_back(cor_lines[i]->vertex(gp));
@@ -154,9 +155,9 @@ bool volm_registration_error_process(bprb_func_process& pro)
     double od = closest_distance(ori_points, gt_points, ori_line_vector);
     cd *= res;
     od *= res;
-    vcl_cout << "line " << i << " has " << cor_line_vector.size() << " points and average distance is " << cd << " (correction) and "
-             << od << " (original) " << vcl_endl;
-    
+    std::cout << "line " << i << " has " << cor_line_vector.size() << " points and average distance is " << cd << " (correction) and "
+             << od << " (original) " << std::endl;
+
 #if 0
     vsol_polyline_2d_sptr cor_line = cor_lines[i];
     vsol_polyline_2d_sptr ori_line = ori_lines[i];
@@ -169,7 +170,7 @@ bool volm_registration_error_process(bprb_func_process& pro)
       double dist = 0, vec_x = 0, vec_y = 0;
       dist = closest_distance(cor_line->vertex(cp), gt_points, vec_x, vec_y);
       cd += dist;
-      vcl_vector<double> pt_vect;
+      std::vector<double> pt_vect;
       pt_vect.push_back(vec_x);  pt_vect.push_back(vec_y);  pt_vect.push_back(dist);
       cor_line_vector.push_back(pt_vect);
     }
@@ -182,7 +183,7 @@ bool volm_registration_error_process(bprb_func_process& pro)
       double dist = 0, vec_x = 0, vec_y = 0;
       dist = closest_distance(ori_line->vertex(op), gt_points, vec_x, vec_y);
       od += dist;
-      vcl_vector<double> pt_vect;
+      std::vector<double> pt_vect;
       pt_vect.push_back(vec_x);  pt_vect.push_back(vec_y), pt_vect.push_back(dist);
       ori_line_vector.push_back(pt_vect);
     }
@@ -200,7 +201,7 @@ bool volm_registration_error_process(bprb_func_process& pro)
   double sum_ori = 0.0, sumsq_ori = 0.0;
   for (unsigned i = 0; i < n_lines; i++)
   {
-    vcl_cout << "line: " << i << ", cor_d = " << cor_distance[i] << " meter, ori_di = " << ori_distance[i] << " meter" << vcl_endl;
+    std::cout << "line: " << i << ", cor_d = " << cor_distance[i] << " meter, ori_di = " << ori_distance[i] << " meter" << std::endl;
     sum_cor += cor_distance[i];
     sumsq_cor += cor_distance[i]*cor_distance[i];
     sum_ori += ori_distance[i];
@@ -209,20 +210,20 @@ bool volm_registration_error_process(bprb_func_process& pro)
   double cor_mean, cor_std, ori_mean, ori_std;
   cor_mean = sum_cor / n_lines;
   ori_mean = sum_ori / n_lines;
-  
-  cor_std = vcl_sqrt((sumsq_cor - cor_mean*cor_mean*n_lines) / (n_lines-1));
-  ori_std = vcl_sqrt((sumsq_ori - ori_mean*ori_mean*n_lines) / (n_lines-1));
+
+  cor_std = std::sqrt((sumsq_cor - cor_mean*cor_mean*n_lines) / (n_lines-1));
+  ori_std = std::sqrt((sumsq_ori - ori_mean*ori_mean*n_lines) / (n_lines-1));
 
   // write out the distance vectors
-  
+
   if (cor_out_file.compare("") != 0)
   {
-    vcl_cout << "write correction result into " << cor_out_file << vcl_endl;
-    vcl_ofstream ofs(cor_out_file.c_str());
+    std::cout << "write correction result into " << cor_out_file << std::endl;
+    std::ofstream ofs(cor_out_file.c_str());
     ofs << "line_id    x    y    distance\n";
-    ofs.setf(vcl_ios_left);
+    ofs.setf(std::ios::left);
     ofs.precision(5);
-    ofs.setf(vcl_ios::showpoint);
+    ofs.setf(std::ios::showpoint);
     for (unsigned i = 0; i < n_lines; i++)
       for (unsigned p = 0; p < cor_vectors[i].size(); p++)
         ofs << i << ' ' << cor_vectors[i][p][0] << ' ' << cor_vectors[i][p][1] << ' ' << cor_vectors[i][p][2] << '\n';
@@ -230,10 +231,10 @@ bool volm_registration_error_process(bprb_func_process& pro)
   }
   if (ori_out_file.compare("") != 0)
   {
-    vcl_cout << "write original result into " << cor_out_file << vcl_endl;
-    vcl_ofstream ofs(ori_out_file.c_str());
+    std::cout << "write original result into " << cor_out_file << std::endl;
+    std::ofstream ofs(ori_out_file.c_str());
     ofs << "line_id    x    y    distance\n";
-    ofs.setf(vcl_ios_left);
+    ofs.setf(std::ios::left);
     ofs.precision(5);
     for (unsigned i = 0; i < n_lines; i++)
       for (unsigned p = 0; p < ori_vectors[i].size(); p++)
@@ -250,7 +251,7 @@ bool volm_registration_error_process(bprb_func_process& pro)
 }
 
 // return the closest, along with the normal components, from a point to a line segment
-double volm_registration_error_process_globals::closest_distance(vsol_point_2d_sptr const& p, vcl_vector<vsol_point_2d_sptr> const& point_set,
+double volm_registration_error_process_globals::closest_distance(vsol_point_2d_sptr const& p, std::vector<vsol_point_2d_sptr> const& point_set,
                                                                  double& vec_x, double& vec_y)
 {
   double d = 0.0;
@@ -309,8 +310,8 @@ double volm_registration_error_process_globals::closest_distance(vsol_point_2d_s
   return d;
 }
 
-double volm_registration_error_process_globals::closest_distance(vcl_vector<vsol_point_2d_sptr> const& p_set1, vcl_vector<vsol_point_2d_sptr> const& p_set2,
-                                                                 vcl_vector<vcl_vector<double> >& vec_dist)
+double volm_registration_error_process_globals::closest_distance(std::vector<vsol_point_2d_sptr> const& p_set1, std::vector<vsol_point_2d_sptr> const& p_set2,
+                                                                 std::vector<std::vector<double> >& vec_dist)
 {
   double average_dist = 0;
   vec_dist.clear();
@@ -321,8 +322,8 @@ double volm_registration_error_process_globals::closest_distance(vcl_vector<vsol
   for (unsigned i = 0; i < n_pts; i++) {
     double dx = p_set1[i]->x() - p_set2[i]->x();
     double dy = p_set1[i]->y() - p_set2[i]->y();
-    double dist = vcl_sqrt( dx*dx + dy*dy);
-    vcl_vector<double> pt_vec;
+    double dist = std::sqrt( dx*dx + dy*dy);
+    std::vector<double> pt_vec;
     pt_vec.push_back(dx);
     pt_vec.push_back(dy);
     pt_vec.push_back(dist);

@@ -88,7 +88,7 @@ set_prior_geometric_scale( double scale )
     use_prior_scale_from_match_ = true;
   } else if ( scale == 0.0 ) {
     use_prior_scale_from_match_ = false;
-    prior_scale_ = 0;
+    prior_scale_ = VXL_NULLPTR;
   } else {
     use_prior_scale_from_match_ = false;
     prior_scale_ = new rgrl_scale;

@@ -12,11 +12,12 @@
 //  for azimuth  -180 < v < -180+inc and 180-inc <= v <= p180
 //  where a point with phi = -180 is put in the bin bounded by +180
 //
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vector>
+#include <map>
+#include <vcl_compiler.h>
 #include "vsph_sph_point_2d.h"
 #include "vsph_defs.h"//DIST_TOL
-#include <vcl_vector.h>
-#include <vcl_map.h>
 
 class vsph_grid_index_2d
 {
@@ -46,7 +47,7 @@ class vsph_grid_index_2d
   unsigned n_bins_phi_;
   bool in_radians_;
   //  theta           phi
-  vcl_vector<vcl_vector<vcl_vector<vcl_pair<vsph_sph_point_2d, int> > > > index_;
+  std::vector<std::vector<std::vector<std::pair<vsph_sph_point_2d, int> > > > index_;
   double theta_inc_;//elevation angle
   double phi_inc_;  //azimuth angle
 };

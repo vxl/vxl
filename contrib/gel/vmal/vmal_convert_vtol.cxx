@@ -9,7 +9,7 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_image_as.h>
 
-void convert_lines_double_3(vcl_vector<vtol_edge_2d_sptr> in,
+void convert_lines_double_3(std::vector<vtol_edge_2d_sptr> in,
                             vnl_double_3 * &outp,
                             vnl_double_3 * &outq)
 {
@@ -29,7 +29,7 @@ void convert_lines_double_3(vcl_vector<vtol_edge_2d_sptr> in,
   }
 }
 
-void convert_points_double_3(vcl_vector<vtol_vertex_2d_sptr> in,
+void convert_points_double_3(std::vector<vtol_vertex_2d_sptr> in,
                              vnl_double_3 * &out)
 {
   int numpoints=in.size();
@@ -43,8 +43,8 @@ void convert_points_double_3(vcl_vector<vtol_vertex_2d_sptr> in,
   }
 }
 
-void convert_points_vect_double_3(vcl_vector<vtol_vertex_2d_sptr> & in,
-                                  vcl_vector<vnl_double_3> & out)
+void convert_points_vect_double_3(std::vector<vtol_vertex_2d_sptr> & in,
+                                  std::vector<vnl_double_3> & out)
 {
   int numpoints=in.size();
   for (int i=0;i<numpoints;i++)

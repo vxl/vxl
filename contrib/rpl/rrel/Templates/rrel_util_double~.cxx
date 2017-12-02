@@ -1,4 +1,4 @@
-#include <rrel/rrel_util.txx>
+#include <rrel/rrel_util.hxx>
 
 typedef double* double_ptr;
 

@@ -34,7 +34,7 @@ class bgui_histogram_tableau : public vgui_tableau
   void update(vil1_memory_image_of< vil1_rgb<unsigned char> >& img);
   void update(vil_image_view< vxl_byte >& img);
   //: Return the name of this tableau.
-  vcl_string type_name() const { return "bgui_histogram_tableau";}
+  std::string type_name() const { return "bgui_histogram_tableau";}
   //: Handles all events for this tableau.
   bool handle(const vgui_event&);
   //: Clear the data
@@ -45,10 +45,10 @@ class bgui_histogram_tableau : public vgui_tableau
   int graph_width_;
   int graph_height_;
   //: List of points.
-  vcl_vector<float> xpoints_, ypoints_;
+  std::vector<float> xpoints_, ypoints_;
   vgui_easy2D_tableau_sptr easy_;
   vgui_soview2D_linestrip* plot_;
-  vcl_vector<double> data_;
+  std::vector<double> data_;
 };
 
 

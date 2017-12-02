@@ -40,8 +40,10 @@
 //   27 Sep.2004, Peter Vanroose -is_endpoint() now accepts smart pointer argument
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_one_chain.h>
@@ -173,13 +175,13 @@ class vtol_edge : public vtol_topology_object
   // Inferior/Superior Accessor Methods
  protected:
   // \warning should not be used by clients
-  virtual vcl_vector<vtol_vertex*> *compute_vertices();
-  virtual vcl_vector<vtol_edge*> *compute_edges();
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
-  virtual vcl_vector<vtol_face*> *compute_faces();
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
-  virtual vcl_vector<vtol_block*> *compute_blocks();
+  virtual std::vector<vtol_vertex*> *compute_vertices();
+  virtual std::vector<vtol_edge*> *compute_edges();
+  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual std::vector<vtol_one_chain*> *compute_one_chains();
+  virtual std::vector<vtol_face*> *compute_faces();
+  virtual std::vector<vtol_two_chain*> *compute_two_chains();
+  virtual std::vector<vtol_block*> *compute_blocks();
  public:
 
   //: get a list of endpoints
@@ -197,8 +199,8 @@ class vtol_edge : public vtol_topology_object
 
   virtual vtol_vertex_sptr other_endpoint(const vtol_vertex &) const;
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout,
+  virtual void print(std::ostream &strm=std::cout) const;
+  virtual void describe(std::ostream &strm=std::cout,
                         int blanking=0) const;
 
   //: have the inherited classes copy the geometry
@@ -208,10 +210,10 @@ class vtol_edge : public vtol_topology_object
   virtual bool compare_geometry(const vtol_edge &other) const =0;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_edge"); }
+  virtual std::string is_a() const { return std::string("vtol_edge"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 };
 
 #endif // vtol_edge_h_

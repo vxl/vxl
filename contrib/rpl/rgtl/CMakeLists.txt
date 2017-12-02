@@ -3,58 +3,58 @@
 # (See accompanying file rgtl_license_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-SET(rgtl_sources
-  rgtl_compact_tree.hxx                 rgtl_compact_tree.txx
-  rgtl_compact_tree_data_fixed.hxx
-  rgtl_compact_tree_index.hxx
-  rgtl_compact_tree_link.hxx
-  rgtl_compact_tree_node_data.hxx
-  rgtl_compact_tree_policy.hxx
-  rgtl_config.hxx
-  rgtl_meta.hxx
-  rgtl_object_array.hxx
-  rgtl_object_array_points.hxx          rgtl_object_array_points.txx
-  rgtl_object_array_triangles_3d.hxx    rgtl_object_array_triangles_3d.cxx
-  rgtl_object_closest_polygon_3d.hxx
-  rgtl_object_once.hxx                  rgtl_object_once.cxx
-  rgtl_octree_cell_bounds.hxx           rgtl_octree_cell_bounds.txx
-  rgtl_octree_cell_location.hxx         rgtl_octree_cell_location.txx
-  rgtl_octree_data_fixed.hxx            rgtl_octree_data_fixed.txx
-  rgtl_octree_dual.hxx
-  rgtl_octree_dual_element.hxx
-  rgtl_octree_dual_index.hxx
-  rgtl_octree_dual_location.hxx
-  rgtl_octree_dual_visit.hxx
-  rgtl_octree_objects.hxx               rgtl_octree_objects.txx
-  rgtl_octree_point_location.hxx        rgtl_octree_point_location.txx
-  rgtl_separating_axis.hxx
-  rgtl_separating_axis_projection.hxx
-  rgtl_static_assert.hxx
-  rgtl_tagged_index.hxx
-  rgtl_tagged_vector.hxx
+set(rgtl_sources
+  rgtl_compact_tree.h                 rgtl_compact_tree.hxx
+  rgtl_compact_tree_data_fixed.h
+  rgtl_compact_tree_index.h
+  rgtl_compact_tree_link.h
+  rgtl_compact_tree_node_data.h
+  rgtl_compact_tree_policy.h
+  rgtl_config.h
+  rgtl_meta.h
+  rgtl_object_array.h
+  rgtl_object_array_points.h          rgtl_object_array_points.hxx
+  rgtl_object_array_triangles_3d.h    rgtl_object_array_triangles_3d.cxx
+  rgtl_object_closest_polygon_3d.h
+  rgtl_object_once.h                  rgtl_object_once.cxx
+  rgtl_octree_cell_bounds.h           rgtl_octree_cell_bounds.hxx
+  rgtl_octree_cell_location.h         rgtl_octree_cell_location.hxx
+  rgtl_octree_data_fixed.h            rgtl_octree_data_fixed.hxx
+  rgtl_octree_dual.h
+  rgtl_octree_dual_element.h
+  rgtl_octree_dual_index.h
+  rgtl_octree_dual_location.h
+  rgtl_octree_dual_visit.h
+  rgtl_octree_objects.h               rgtl_octree_objects.hxx
+  rgtl_octree_point_location.h        rgtl_octree_point_location.hxx
+  rgtl_separating_axis.h
+  rgtl_separating_axis_projection.h
+  rgtl_static_assert.h
+  rgtl_tagged_index.h
+  rgtl_tagged_vector.h
 
   # Serialization
 # rgtl_serialize.txt
-  rgtl_serialize_access.hxx
-  rgtl_serialize_base.hxx
-  rgtl_serialize_direction.hxx
-  rgtl_serialize_istream.hxx            rgtl_serialize_istream.cxx
-  rgtl_serialize_ostream.hxx            rgtl_serialize_ostream.cxx
-  rgtl_serialize_split.hxx
-  rgtl_serialize_stl_vector.hxx
-  rgtl_serialize_vnl_double_3.hxx
-  rgtl_serialize_vnl_vector_fixed.hxx
+  rgtl_serialize_access.h
+  rgtl_serialize_base.h
+  rgtl_serialize_direction.h
+  rgtl_serialize_istream.h            rgtl_serialize_istream.cxx
+  rgtl_serialize_ostream.h            rgtl_serialize_ostream.cxx
+  rgtl_serialize_split.h
+  rgtl_serialize_stl_vector.h
+  rgtl_serialize_vnl_double_3.h
+  rgtl_serialize_vnl_vector_fixed.h
 
   # Spherical Quad-Tree
-  rgtl_sqt_base.hxx                     rgtl_sqt_base.cxx
-  rgtl_sqt_cell_bounds.hxx              rgtl_sqt_cell_bounds.txx
-  rgtl_sqt_cell_geometry.hxx            rgtl_sqt_cell_geometry.txx
-  rgtl_sqt_cell_location.hxx            rgtl_sqt_cell_location.txx
-  rgtl_sqt_object_array.hxx
+  rgtl_sqt_base.h                     rgtl_sqt_base.cxx
+  rgtl_sqt_cell_bounds.h              rgtl_sqt_cell_bounds.hxx
+  rgtl_sqt_cell_geometry.h            rgtl_sqt_cell_geometry.hxx
+  rgtl_sqt_cell_location.h            rgtl_sqt_cell_location.hxx
+  rgtl_sqt_object_array.h
   rgtl_sqt_object_array_triangles_3d.cxx
-  rgtl_sqt_object_array_triangles_3d.hxx
-  rgtl_sqt_objects.hxx                  rgtl_sqt_objects.txx
-  rgtl_sqt_space.hxx                    rgtl_sqt_space.txx
+  rgtl_sqt_object_array_triangles_3d.h
+  rgtl_sqt_objects.h                  rgtl_sqt_objects.hxx
+  rgtl_sqt_space.h                    rgtl_sqt_space.hxx
 
   # Explicit instantiations
   Templates/rgtl_object_array_points+2-.cxx
@@ -83,12 +83,9 @@ SET(rgtl_sources
   Templates/rgtl_sqt_space+3._-.cxx
   )
 
-ADD_LIBRARY(rgtl ${rgtl_sources})
-TARGET_LINK_LIBRARIES(rgtl vnl_algo vnl vcl)
+vxl_add_library(LIBRARY_NAME rgtl LIBRARY_SOURCES ${rgtl_sources})
+target_link_libraries(rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl)
 
-INSTALL_TARGETS(/lib rgtl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgtl ${rgtl_sources})
-
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

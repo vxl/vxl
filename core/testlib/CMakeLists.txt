@@ -5,15 +5,15 @@ doxygen_add_library(core/testlib
   DESCRIPTION "Testing Library"
   )
 
-FIND_FILE(TESTLIB_VCL_WHERE_ROOT_DIR_H
+find_file(TESTLIB_VCL_WHERE_ROOT_DIR_H
           vcl_where_root_dir.h
-          ${vxl_BINARY_DIR}/vcl )
+          ${PROJECT_BINARY_DIR} )
 
-IF (TESTLIB_VCL_WHERE_ROOT_DIR_H)
-  ADD_DEFINITIONS(-DVCL_WHERE_ROOT_DIR_H_EXISTS)
-ENDIF(TESTLIB_VCL_WHERE_ROOT_DIR_H)
+if(TESTLIB_VCL_WHERE_ROOT_DIR_H)
+  add_definitions(-DVCL_WHERE_ROOT_DIR_H_EXISTS)
+endif()
 
-SET( testlib_sources
+set(testlib_sources
 
   # Useful utilities for the tests
   testlib_test.h                testlib_test.cxx
@@ -28,11 +28,11 @@ SET( testlib_sources
   testlib_root_dir.h            testlib_root_dir.cxx
 )
 
-ADD_LIBRARY( testlib ${testlib_sources} )
-TARGET_LINK_LIBRARIES( testlib vcl )
-INSTALL_TARGETS( /lib testlib)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/testlib ${testlib_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}testlib
+  LIBRARY_SOURCES ${testlib_sources}
+  HEADER_INSTALL_DIR core/testlib)
+target_link_libraries(${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

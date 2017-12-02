@@ -3,9 +3,10 @@
  * using a general 'truth table' rule
  */
 
-#include <vcl_string.h>
-#include <vcl_exception.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <iostream>
+#include <exception>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_mask.h>
 
@@ -39,10 +40,10 @@ int main(int argc, char **argv)
     "\n"
   );
 
-  vul_arg<vcl_string> maskA_filename(0,"Filename of mask A");
-  vul_arg<vcl_string> maskB_filename(0,"Filename of mask B");
-  vul_arg<vcl_string> operation(0,"Operation to apply - see help text for explanation");
-  vul_arg<vcl_string> maskout_filename(0,"Filename of the output mask");
+  vul_arg<std::string> maskA_filename(VXL_NULLPTR,"Filename of mask A");
+  vul_arg<std::string> maskB_filename(VXL_NULLPTR,"Filename of mask B");
+  vul_arg<std::string> operation(VXL_NULLPTR,"Operation to apply - see help text for explanation");
+  vul_arg<std::string> maskout_filename(VXL_NULLPTR,"Filename of the output mask");
   vul_arg_parse(argc, argv);
 
   mbl_mask maskA, maskB;
@@ -50,16 +51,16 @@ int main(int argc, char **argv)
   mbl_load_mask(maskB, maskB_filename().c_str());
 
   try { mbl_mask_logic(maskA, maskB, operation()); }
-  catch (vcl_exception & e)
+  catch (std::exception & e)
   {
-    vcl_cout << "An error occurred while carrying out the logic operation.\n" << e.what() << vcl_endl;
+    std::cout << "An error occurred while carrying out the logic operation.\n" << e.what() << std::endl;
     return 1;
   }
   catch (...)
   {
-    vcl_cout << "An unknown error occurred while carrying out the logic operation." << vcl_endl;
+    std::cout << "An unknown error occurred while carrying out the logic operation." << std::endl;
     return 1;
   }
-  
+
   mbl_save_mask(maskB, maskout_filename().c_str());
 }

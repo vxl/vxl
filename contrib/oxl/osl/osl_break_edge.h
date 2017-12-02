@@ -9,8 +9,10 @@
 // \author fsm
 
 class osl_edge;
-#include <vcl_list.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <list>
+#include <vector>
+#include <vcl_compiler.h>
 
 //: Break the given edge at the positions indicated.
 //
@@ -26,8 +28,8 @@ class osl_edge;
 // endpoints will obviously have the reference counts
 // increased.
 void osl_break_edge(osl_edge const *in,
-                    vcl_vector<unsigned> const &where,
-                    vcl_list<osl_edge*> *broken);
+                    std::vector<unsigned> const &where,
+                    std::list<osl_edge*> *broken);
 
 //: Break the given edge at points of "high curvature".
 //
@@ -36,10 +38,10 @@ void osl_break_edge(osl_edge const *in,
 //
 // For a neighbourhood size of k,the number of edgels used in
 // each line fit is 2*k+1 (so the default is 5 edgels). The new
-// edges are pushed onto the end of the given vcl_list in the
+// edges are pushed onto the end of the given std::list in the
 // obvious order.
 void osl_break_edge(osl_edge const *in,
-                    vcl_list<osl_edge*> *broken,
+                    std::list<osl_edge*> *broken,
                     double threshold = 0.2,
                     unsigned nbhd_size = 2);
 

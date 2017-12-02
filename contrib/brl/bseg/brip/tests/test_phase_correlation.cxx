@@ -1,4 +1,7 @@
 // This is brl/bseg/brip/tests/test_fourier.cxx
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vil/vil_image_view.h>
 //#define DEBUG
 #ifdef DEBUG
@@ -7,9 +10,7 @@
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_phase_correlation.h>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
 #include <vnl/algo/vnl_fft.h>
@@ -25,14 +26,14 @@ static void test_phase_correlation_ortho()
   std::string path2 = base_path + "orth2.jpg";
   std::string path3 = base_path + "orth3.jpg";
   std::string path4 = base_path + "orth4.jpg";
-  
+
   std::string orth_corr_path_01 = base_path + "ortho_corr_01.tiff";
   std::string orth_corr_path_02 = base_path + "ortho_corr_02.tiff";
   std::string orth_corr_path_03 = base_path + "ortho_corr_03.tiff";
   std::string orth_corr_path_04 = base_path + "ortho_corr_04.tiff";
   bool good;
 
-  vcl_vector<vcl_string> img_paths, out_paths;
+  std::vector<std::string> img_paths, out_paths;
   img_paths.push_back(path1);
   img_paths.push_back(path2);
   img_paths.push_back(path3);
@@ -53,9 +54,9 @@ static void test_phase_correlation_ortho()
       vil_save(ortho_corr,out_paths[i].c_str());
       float tu , tv, conf;
       if(bpco.translation(tu, tv, conf))
-        vcl_cout << "t[" << i << "](" << tu << ' ' << tv << "): " << conf << '\n';
+        std::cout << "t[" << i << "](" << tu << ' ' << tv << "): " << conf << '\n';
       else
-        vcl_cout << "registration failed\n";
+        std::cout << "registration failed\n";
       }
     }
 #endif
@@ -73,7 +74,7 @@ static void test_phase_correlation_homography(){
         vgl_homg_point_2d<double> mar03_p8(1742.859009,548.979309);
         vgl_homg_point_2d<double> mar03_p9(1777.024414,152.905304);
         vgl_homg_point_2d<double> mar03_p10(1796.042969,1019.816528);
-        vcl_vector<vgl_homg_point_2d<double> > to_pts;
+        std::vector<vgl_homg_point_2d<double> > to_pts;
         to_pts.push_back(mar03_p0);to_pts.push_back(mar03_p1);to_pts.push_back(mar03_p2);
         to_pts.push_back(mar03_p3);to_pts.push_back(mar03_p4);to_pts.push_back(mar03_p5);
         to_pts.push_back(mar03_p6);to_pts.push_back(mar03_p7);to_pts.push_back(mar03_p8);
@@ -89,7 +90,7 @@ static void test_phase_correlation_homography(){
         vgl_homg_point_2d<double> oct04_p8(2237.742188,677.563232);
         vgl_homg_point_2d<double> oct04_p9(2277.867188,226.158157);
         vgl_homg_point_2d<double> oct04_p10(2305.153564,1216.641846);
-        vcl_vector<vgl_homg_point_2d<double> > frm_pts;
+        std::vector<vgl_homg_point_2d<double> > frm_pts;
         frm_pts.push_back(oct04_p0);frm_pts.push_back(oct04_p1);frm_pts.push_back(oct04_p2);
         frm_pts.push_back(oct04_p3);frm_pts.push_back(oct04_p4);frm_pts.push_back(oct04_p5);
         frm_pts.push_back(oct04_p6);frm_pts.push_back(oct04_p7);frm_pts.push_back(oct04_p8);
@@ -105,7 +106,7 @@ static void test_phase_correlation_homography(){
           vgl_homg_point_2d<double>& pto = to_pts[i];//mar03
           vgl_homg_point_2d<double> t_frm  = H*pfrm;//oct04->mar03
           double d = vgl_distance(pto, t_frm);
-          vcl_cout << i << ' ' << d << '\n';
+          std::cout << i << ' ' << d << '\n';
         }
         std::string base_path = "c:/Users/mundy/VisionSystems/Finder/PhaseCorr/TestHomg/";
         std::string mar03 = base_path + "MAR03Pc.tiff";
@@ -130,19 +131,19 @@ static void test_phase_correlation_homography(){
         vil_save(ortho_corr, corr_array.c_str());
         float tu , tv, conf;
         if(bpco.translation(tu, tv, conf))
-          vcl_cout << "t(" << tu << ' ' << tv << "): " << conf << '\n';
+          std::cout << "t(" << tu << ' ' << tv << "): " << conf << '\n';
         vgl_point_2d<double> rmar03_p0(166.434158,89.906898);
     vgl_point_2d<double> rmar03_p1(465.086426, 615.901733);
     vgl_point_2d<double> rmar03_p2(1596.039063,896.974426);
     vgl_point_2d<double> rmar03_p3(1383.876709,198.216309);
-        vcl_vector<vgl_point_2d<double> > rmar03_pts;
+        std::vector<vgl_point_2d<double> > rmar03_pts;
         rmar03_pts.push_back(rmar03_p0);rmar03_pts.push_back(rmar03_p1);rmar03_pts.push_back(rmar03_p2);
         rmar03_pts.push_back(rmar03_p3);
         vgl_point_2d<double> to_mar03_p0(172.311478,96.282639);
     vgl_point_2d<double> to_mar03_p1(469.937897,623.132629);
     vgl_point_2d<double> to_mar03_p2(1602.076172,905.014099);
     vgl_point_2d<double> to_mar03_p3(1389.970215,206.118942);
-        vcl_vector<vgl_point_2d<double> > to_mar03_pts;
+        std::vector<vgl_point_2d<double> > to_mar03_pts;
         to_mar03_pts.push_back(to_mar03_p0);to_mar03_pts.push_back(to_mar03_p1);to_mar03_pts.push_back(to_mar03_p2);
         to_mar03_pts.push_back(to_mar03_p3);
         double sumu=0.0, sumv = 0.0;
@@ -151,11 +152,11 @@ static void test_phase_correlation_homography(){
                 vgl_point_2d<double>& tp = to_mar03_pts[i];
                 double du = tp.x()-rp.x();
                 double dv = tp.y()-rp.y();
-                vcl_cout << "act_t(" << du << ' ' << dv << '\n';
+                std::cout << "act_t(" << du << ' ' << dv << '\n';
                 sumu += du; sumv += dv;
         }
         double act_tu = sumu/4.0, act_tv = sumv/4.0;
-        vcl_cout << "act_t_avg(" << act_tu<< ' ' << act_tv << '\n';
+        std::cout << "act_t_avg(" << act_tu<< ' ' << act_tv << '\n';
 #endif
 }
 static void test_phase_correlation(){

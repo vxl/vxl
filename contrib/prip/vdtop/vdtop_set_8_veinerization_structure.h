@@ -36,6 +36,6 @@ inline void vdtop_set_8_veinerization_structure(TMap & arg, vil_image_view<T> & 
   vdtop_set_structure_from_digital_graph(arg, mask, nb_vertices,nb_edges, TMap::tag ) ;
 }
 
-#include "vdtop_set_8_veinerization_structure.txx"
+#include "vdtop_set_8_veinerization_structure.hxx"
 
 #endif

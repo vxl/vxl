@@ -1,9 +1,11 @@
 // This is rpl/rrel/rrel_muse_table.cxx
+#include <iostream>
+#include <cmath>
 #include "rrel_muse_table.h"
 #include <rrel/rrel_misc.h>
 #include <vnl/vnl_math.h>
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 bool operator< ( rrel_muse_key_type const& left_t, rrel_muse_key_type const& right_t )
@@ -88,7 +90,7 @@ rrel_muse_table::calculate_standard_dev( unsigned int k, unsigned int n,
   Qk = expected_kth;  // ak(k, N);   // inverse cdf of absolute residuals
 
   // density of absolute residual evaluated at Qk
-  pQk = vcl_exp( -0.5 * Qk*Qk) * vcl_sqrt(2.0 / vnl_math::pi);
+  pQk = std::exp( -0.5 * Qk*Qk) * std::sqrt(2.0 / vnl_math::pi);
 
   // first derivative of Qk
   Qk_prime = 1.0/pQk;
@@ -109,7 +111,7 @@ rrel_muse_table::calculate_standard_dev( unsigned int k, unsigned int n,
         + (pk*qk/((double)((n+2)*(n+2)))) * ( 2.0*(qk - pk)*Qk_prime*Qk_dprime
         + pk*qk*(Qk_prime*Qk_tprime + 0.5*Qk_dprime*Qk_dprime));
 
-  return vcl_sqrt(vrk);
+  return std::sqrt(vrk);
 }
 
 
@@ -117,14 +119,14 @@ double
 rrel_muse_table::calculate_divisor( unsigned int /* k */, unsigned int n,
                                     double expected_kth ) const
 {
-  return (n+1)*vcl_sqrt(2/vnl_math::pi)*(1.0-vcl_exp(-vnl_math::sqr(expected_kth)/2.0));
+  return (n+1)*std::sqrt(2/vnl_math::pi)*(1.0-std::exp(-vnl_math::sqr(expected_kth)/2.0));
 }
 
 double
 rrel_muse_table::calculate_sq_divisor( unsigned int k, unsigned int n,
                                        double expected_kth ) const
 {
-  return k - (n+1) * expected_kth * vcl_sqrt(2/vnl_math::pi)
-    * vcl_exp(-vnl_math::sqr(expected_kth)/2.0);
+  return k - (n+1) * expected_kth * std::sqrt(2/vnl_math::pi)
+    * std::exp(-vnl_math::sqr(expected_kth)/2.0);
 }
 

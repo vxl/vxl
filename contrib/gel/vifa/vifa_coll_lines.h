@@ -15,7 +15,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_edge.h>
@@ -53,8 +55,8 @@ class vifa_coll_lines : public vifa_coll_lines_params
   // Caller must delete returned face_list when done
   face_list*    get_contributor_faces(void);
 
-  static void  lms_fit(const vcl_vector<double>&  x,
-                       const vcl_vector<double>&  y,
+  static void  lms_fit(const std::vector<double>&  x,
+                       const std::vector<double>&  y,
                        double&            A,
                        double&            B,
                        double&            C
@@ -86,8 +88,8 @@ class vifa_coll_lines : public vifa_coll_lines_params
 
 typedef vbl_smart_ptr<vifa_coll_lines>  vifa_coll_lines_sptr;
 
-typedef vcl_vector<vifa_coll_lines_sptr>      coll_list;
-typedef vcl_vector<vifa_coll_lines_sptr>::iterator  coll_iterator;
+typedef std::vector<vifa_coll_lines_sptr>      coll_list;
+typedef std::vector<vifa_coll_lines_sptr>::iterator  coll_iterator;
 
 
 #endif  // VIFA_COLL_LINES

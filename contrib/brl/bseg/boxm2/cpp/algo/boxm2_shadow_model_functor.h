@@ -18,7 +18,7 @@ public:
     //: "default" constructor
     boxm2_compute_ambient_functor() {}
 
-    bool init_data(boxm2_data_base *sunvis, 
+    bool init_data(boxm2_data_base *sunvis,
         boxm2_stream_cache_sptr str_cache,
         float & sunvis_weights,
         float & weighted_sunvis_intensities,
@@ -37,11 +37,11 @@ public:
     {
         boxm2_data<BOXM2_ALPHA>::datatype & sunvis=sunvis_data_->data()[index];
 
-        vcl_vector<aux0_datatype>  out0   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-        vcl_vector<aux1_datatype>  out1   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-        vcl_vector<aux1_datatype>  out2   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
+        std::vector<aux0_datatype>  out0   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+        std::vector<aux1_datatype>  out1   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+        std::vector<aux1_datatype>  out2   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
 
-        vcl_vector<aux0_datatype> obs; vcl_vector<float> vis;
+        std::vector<aux0_datatype> obs; std::vector<float> vis;
 
         float sumobs=0.0f;
         float weight=0.0f;

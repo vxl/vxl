@@ -13,9 +13,10 @@
 // Local Vertical Coordinate System (LVCS) to convert local coordinates
 // to geographic coordinates to input to the native geographic RPC model.
 
+#include <iostream>
+#include <string>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>
 //
@@ -39,7 +40,7 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
 
   virtual ~vpgl_local_rational_camera() {}
 
-  virtual vcl_string type_name() const { return "vpgl_local_rational_camera"; }
+  virtual std::string type_name() const { return "vpgl_local_rational_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -74,10 +75,10 @@ virtual vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
 
 
 //: print the camera parameters
-virtual void print(vcl_ostream& s = vcl_cout) const;
+virtual void print(std::ostream& s = std::cout) const;
 
 //: save to file (the lvcs is after the global rational camera parameters)
-virtual bool save(vcl_string cam_path);
+virtual bool save(std::string cam_path);
 
 
 protected:
@@ -87,24 +88,24 @@ vpgl_lvcs lvcs_;
 //: Creates a local rational camera from a file
 // \relatesalso vpgl_local_rational_camera
 template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_string cam_path);
+vpgl_local_rational_camera<T>* read_local_rational_camera(std::string cam_path);
 
 //: Creates a local rational camera from a file
 // \relatesalso vpgl_local_rational_camera
 template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_istream& istr);
+vpgl_local_rational_camera<T>* read_local_rational_camera(std::istream& istr);
 
 //: Write to stream
 // \relatesalso vpgl_local_rational_camera
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, const vpgl_local_rational_camera<T>& p);
+std::ostream& operator<<(std::ostream& s, const vpgl_local_rational_camera<T>& p);
 
 //: Read from stream
 // \relatesalso vpgl_local_rational_camera
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, vpgl_local_rational_camera<T>& p);
+std::istream& operator>>(std::istream& is, vpgl_local_rational_camera<T>& p);
 
-#define VPGL_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_local_rational_camera.txx first"
+#define VPGL_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_local_rational_camera.hxx first"
 
 
 #endif // vpgl_local_rational_camera_h_

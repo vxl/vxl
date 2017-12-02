@@ -1,9 +1,15 @@
 /*
   fsm
 */
+#include <cstdlib>
+#include <cstring>
+#include <csetjmp>
+#include <iostream>
+#include <list>
+#include <utility>
 #include "vgui_glut_impl.h"
 #include "vgui_glut_window.h"
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgui/vgui_glut.h>
 
@@ -39,9 +45,9 @@ extern bool glut_was_initialized;
 void vgui_glut_impl::init(int &argc, char **argv)
 {
 #ifdef DEBUG
-  vcl_cerr << __FILE__ " init() :\n";
+  std::cerr << __FILE__ " init() :\n";
   for (unsigned i=0; i<argc; ++i)
-    vcl_cerr << i << ' ' << (void*)argv[i] << ' ' << argv[i] << vcl_endl;
+    std::cerr << i << ' ' << (void*)argv[i] << ' ' << argv[i] << std::endl;
 #endif
   if( ! glut_was_initialized ) {
     glut_was_initialized = true;
@@ -49,7 +55,7 @@ void vgui_glut_impl::init(int &argc, char **argv)
   }
 }
 
-vcl_string vgui_glut_impl::name() const
+std::string vgui_glut_impl::name() const
 {
   return "glut";
 }
@@ -71,9 +77,6 @@ vgui_window *vgui_glut_impl::produce_window(int width, int height,
 
 //----------------------------------------------------------------------
 
-#include <vcl_cstring.h> // memcpy()
-#include <vcl_csetjmp.h>
-#include <vcl_iostream.h>
 #include <vgui/vgui_macro.h>
 
 // Use setjmp()/longjmp() to circumvent GLUT event loop restrictions.
@@ -94,21 +97,21 @@ vgui_window *vgui_glut_impl::produce_window(int width, int height,
 //     goto idle;
 //  next_statement:
 //     glutMainLoop()
-//     vcl_exit(); // [gets here only on close of window.]
+//     std::exit(); // [gets here only on close of window.]
 //
 //  idle:
 //       [user code]
 //       ...
 
 static int const   internal_label = 1234;
-static vcl_jmp_buf internal_buf;
+static std::jmp_buf internal_buf;
 
 // This function is the idle callback used
 // to longjmp() out of the GLUT event loop.
 static
 void internal_longjmp_idler()
 {
-  vcl_longjmp(internal_buf, internal_label);
+  std::longjmp(internal_buf, internal_label);
   assert(false);
 }
 
@@ -119,8 +122,8 @@ static
 void internal_run_till_idle()
 {
   // save the current jmp_buf;
-  vcl_jmp_buf saved_buf;
-  vcl_memcpy(&saved_buf, &internal_buf, sizeof internal_buf);
+  std::jmp_buf saved_buf;
+  std::memcpy(&saved_buf, &internal_buf, sizeof internal_buf);
 
   // record current state/accept control after longjmp().
   int t = setjmp(internal_buf);
@@ -130,7 +133,7 @@ void internal_run_till_idle()
   // the previous jmp_buf and return to the caller now.
   if (t != 0) {
     assert(t == internal_label);
-    vcl_memcpy(&internal_buf, &saved_buf, sizeof internal_buf);
+    std::memcpy(&internal_buf, &saved_buf, sizeof internal_buf);
     return;
   }
 
@@ -146,23 +149,21 @@ void internal_run_till_idle()
   // returned, which it should never do.
   vgui_macro_warning << "internal error in internal_run_till_idle_wrapped()\n"
                      << "please report to fsm\n";
-  vcl_abort();
+  std::abort();
 }
 
 //--------------------------------------------------------------------------------
 
-#include <vcl_list.h>
-#include <vcl_utility.h>
 #include <vgui/vgui_command.h>
 #include "vgui_glut_adaptor.h"
 
 static
-vcl_list<vcl_pair<void *, void *> > vgui_glut_impl_command_queue;
+std::list<std::pair<void *, void *> > vgui_glut_impl_command_queue;
 
 void vgui_glut_impl_queue_command(vgui_glut_adaptor *a, vgui_command *c)
 {
   c->ref(); // matched by unref() in process_command_queue();
-  vgui_glut_impl_command_queue.push_back(vcl_pair<void *, void *>(a, c));
+  vgui_glut_impl_command_queue.push_back(std::pair<void *, void *>(a, c));
 }
 
 static
@@ -170,7 +171,7 @@ void vgui_glut_impl_process_command_queue()
 {
   while (! vgui_glut_impl_command_queue.empty()) {
     // remove from front of queue.
-    vcl_pair<void *, void *> p = vgui_glut_impl_command_queue.front();
+    std::pair<void *, void *> p = vgui_glut_impl_command_queue.front();
     vgui_glut_impl_command_queue.pop_front();
 
     // a bit of casting.
@@ -184,11 +185,11 @@ void vgui_glut_impl_process_command_queue()
 
     // execute the command.
 #ifdef DEBUG
-    vcl_cerr << "cmnd = " << (void*)vgui_glut_impl_adaptor_menu_command << vcl_endl;
+    std::cerr << "cmnd = " << (void*)vgui_glut_impl_adaptor_menu_command << std::endl;
 #endif
     c->execute();
 #ifdef DEBUG
-    vcl_cerr << "returned successfully\n";
+    std::cerr << "returned successfully\n";
 #endif
 
     // this matches ref() in vgui_glut_impl_queue_command()

@@ -6,7 +6,7 @@ doxygen_add_library(contrib/rpl/rrel
   DESCRIPTION "Robust Estimation Library"
   )
 
-SET(rrel_sources
+set(rrel_sources
  rrel_export.h                  rrel_fwd.h
  rrel_mlesac_obj.cxx            rrel_mlesac_obj.h
  rrel_ransac_obj.cxx            rrel_ransac_obj.h
@@ -35,26 +35,22 @@ SET(rrel_sources
  rrel_ran_sam_search.cxx        rrel_ran_sam_search.h
  rrel_wgted_ran_sam_search.cxx  rrel_wgted_ran_sam_search.h
 
- rrel_util.txx                  rrel_util.h
+ rrel_util.hxx                  rrel_util.h
 
  rrel_objective.h
  rrel_wls_obj.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates rrel_sources)
+aux_source_directory(Templates rrel_sources)
 
-ADD_LIBRARY(rrel ${rrel_sources})
+vxl_add_library(LIBRARY_NAME rrel LIBRARY_SOURCES ${rrel_sources})
+target_link_libraries(rrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
 
-INSTALL_TARGETS(/lib rrel)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rrel ${rrel_sources})
-TARGET_LINK_LIBRARIES(rrel vnl_algo vnl vgl)
-
-INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
-IF (BUILD_EXAMPLES)
+include_directories(${MUL_INCLUDE_DIR})
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

@@ -49,7 +49,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ++ms;
   if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
-    return 0; // no data!
+    return VXL_NULLPTR; // no data!
   }
   const unsigned int m = matches[ms]->from_begin().from_feature()->location().size();
   assert ( m==3 || m==2 ); // currently only 2D and 3D estimation is implemented
@@ -106,7 +106,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // if the weight is too small or zero,
   // that means there is no good match
   if ( sum_wgt < 1e-13 ) {
-    return 0;
+    return VXL_NULLPTR;
   }
 
 
@@ -206,20 +206,20 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double factor0, factor1, factor2;
   vnl_vector<double> s(p_size*m, 1);
   if (m == 2) {
-    factor0 = vnl_math::max(XtWX(5,5), XtWX(11,11));
-    factor1 = vnl_math::max(vnl_math::max(XtWX(3,3), XtWX(4,4)),
-                           vnl_math::max(XtWX(10,10), XtWX(9,9)));
-    factor2 = vnl_math::max(vnl_math::max(XtWX(0,0), XtWX(1,1)),
-                           vnl_math::max(XtWX(6,6), XtWX(7,7)));
+    factor0 = std::max(XtWX(5,5), XtWX(11,11));
+    factor1 = std::max(std::max(XtWX(3,3), XtWX(4,4)),
+                           std::max(XtWX(10,10), XtWX(9,9)));
+    factor2 = std::max(std::max(XtWX(0,0), XtWX(1,1)),
+                           std::max(XtWX(6,6), XtWX(7,7)));
 
-    double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
-    double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
+    double scale0 = std::sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
+    double scale1 = std::sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
 
     s(3) = s(4) = s(9) = s(10) = scale1;
     s(5) = s(11) = scale0;
   }
   else { // m == 3
-    factor0 = vnl_math::max( vnl_math::max(XtWX(9,9), XtWX(19,19)),
+    factor0 = std::max( std::max(XtWX(9,9), XtWX(19,19)),
                             XtWX(29,29));
     factor1 = max_of_9_elements( XtWX(6,6), XtWX(7,7), XtWX(8,8),
                                  XtWX(16,16), XtWX(17,17), XtWX(18,18),
@@ -228,8 +228,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                                  XtWX(10,10), XtWX(11,11), XtWX(12,12),
                                  XtWX(20,20), XtWX(21,21), XtWX(22,22) );
 
-    double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
-    double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
+    double scale0 = std::sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
+    double scale1 = std::sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
 
     s(6) = s(7) = s(8) = s(16) = s(17) = s(18) = s(26) = s(27) = s(28) = scale1;
     s(9) = s(19) = s(29) = scale0;
@@ -254,12 +254,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   if ( (unsigned)svd.rank() < p_size*m ) {
     DebugMacro(1, "rank ("<<svd.rank()<<") < "<<p_size*m<<"; no solution." );
     DebugMacro_abv(1,"(used " << count << " correspondences)\n" );
-    return 0; // no solution
+    return VXL_NULLPTR; // no solution
   }
   double cond_num = svd.well_condition();
   if ( condition_num_thrd_ > cond_num ) {
     DebugMacro(1, "Unstable xform with condition number = "<<cond_num<<'\n' );
-    return 0; //no solution
+    return VXL_NULLPTR; //no solution
   }
 
   // Compute the solution into XtWy
@@ -316,7 +316,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_quadratic::
 transformation_type() const
 {
@@ -329,8 +329,8 @@ max_of_9_elements(double elt1, double elt2, double elt3,
                   double elt4, double elt5, double elt6,
                   double elt7, double elt8, double elt9 ) const
 {
-  double max = vnl_math::max( elt1, vnl_math::max( elt2, elt3 ) );
-  max  = vnl_math::max ( max, vnl_math::max( elt4, elt5 ) );
-  max  = vnl_math::max ( max, vnl_math::max( elt6, elt7 ) );
-  return vnl_math::max ( max, vnl_math::max( elt8, elt9 ) );
+  double max = std::max( elt1, std::max( elt2, elt3 ) );
+  max  = std::max ( max, std::max( elt4, elt5 ) );
+  max  = std::max ( max, std::max( elt6, elt7 ) );
+  return std::max ( max, std::max( elt8, elt9 ) );
 }

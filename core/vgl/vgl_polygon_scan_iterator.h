@@ -114,7 +114,7 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
   //: Returns current scan line (floating point value)
   inline T fscany() const { return fy; }
 
-  // returns the vertices related to 
+  // returns the vertices related to
   void get_crossedge_vertices(int * &chainnum, int * &vertnum, int & numcrossedges);
   //: Vertex index - uniquely identifies a vertex in the array chains
   struct vertind {
@@ -132,10 +132,10 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
 // Internals ---------------------------------------------------------------
 
  private:
-  // avoid copy constructor a operator= 
+  // avoid copy constructor a operator=
   vgl_polygon_scan_iterator(const vgl_polygon_scan_iterator& );
   vgl_polygon_scan_iterator& operator= (const vgl_polygon_scan_iterator& );
-  
+
   vertind * yverts;       //!< array of all vertices ordered by y coordinate
   crossedge * crossedges; //!< array of edges crossing current scan line
   int numcrossedges;      //!< number of edges currently crossing scan line
@@ -170,6 +170,6 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
   void display_crossedges();
 };
 
-#define VGL_POLYGON_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_polygon_scan_iterator.txx> instead"
+#define VGL_POLYGON_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_polygon_scan_iterator.hxx> instead"
 
 #endif // vgl_polygon_scan_iterator_h

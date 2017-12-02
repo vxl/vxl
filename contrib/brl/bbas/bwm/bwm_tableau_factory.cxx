@@ -23,8 +23,8 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
 {
   if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0) {
     bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img*> (t);
-    vcl_string name = img_tab->name;
-    vcl_string path = img_tab->img_path;
+    std::string name = img_tab->name;
+    std::string path = img_tab->img_path;
     if (t->name == "") t->name = path;
     bgui_image_tableau_sptr img = bgui_image_tableau_new();
     bwm_observer_img* obs = new bwm_observer_img(img, name, path, false);
@@ -82,19 +82,19 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
       return tab;
     }
     else {
-      vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!\n";
-      return 0;
+      std::cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!\n";
+      return VXL_NULLPTR;
     }
   }
 
   else if (t->type_name.compare(VIDEO_TABLEAU_TAG) == 0) {
     bwm_io_tab_config_video* tab = static_cast<bwm_io_tab_config_video* > (t);
-    vcl_string name = tab->name;
-    vcl_string video_path = tab->video_path;
-    vcl_string camera_glob = tab->camera_glob;
+    std::string name = tab->name;
+    std::string video_path = tab->video_path;
+    std::string camera_glob = tab->camera_glob;
 
     if (video_path == "")
-      return 0;
+      return VXL_NULLPTR;
 
     bgui_image_tableau_sptr img = bgui_image_tableau_new();
     img->set_file_name(video_path);
@@ -121,5 +121,5 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
   }
 
   else
-    return 0;
+    return VXL_NULLPTR;
 }

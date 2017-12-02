@@ -2,19 +2,23 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_function_with_labels.h>
 #include <vcl_where_root_dir.h>
-bool boxm2_ocl_refine_scene_around_geometry::compile_kernel(){
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  vcl_string reg_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/reg/ocl/cl/";
+
+bool
+boxm2_ocl_refine_scene_around_geometry
+::compile_kernel()
+{
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::string reg_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/reg/ocl/cl/";
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
   src_paths.push_back(source_dir     + "label_cells_to_refine.cl");
 
-  vcl_string opts = boxm2_ocl_util::mog_options(app_type_);
+  std::string opts = boxm2_ocl_util::mog_options(app_type_);
   if(p_thresh_<0){
           opts+= " -D REFINE_ALL ";
-          vcl_cout<<"probability threshold is negative -- refining all cells"<<vcl_endl;
+          std::cout<<"probability threshold is negative -- refining all cells"<<std::endl;
   }
 
   bocl_kernel * label_k = new bocl_kernel();
@@ -25,25 +29,31 @@ bool boxm2_ocl_refine_scene_around_geometry::compile_kernel(){
 
 }
 
-bool boxm2_ocl_refine_scene_around_geometry::refine(){
+bool
+boxm2_ocl_refine_scene_around_geometry
+::refine()
+{
 
         if (!refine_gpu_)
                 for (unsigned i=0;i<num_times_;i++){
                         this->label_cells_for_refinement();
                         if (!this->refine_cpp()){
-                                vcl_cout<<"refinement failed in pass "<<i<<vcl_endl;
+                                std::cout<<"refinement failed in pass "<<i<<std::endl;
                                 return false;
                         }
-                        vcl_cout<<"finished pass "<<i<<vcl_endl;
+                        std::cout<<"finished pass "<<i<<std::endl;
                 }else{
                         return this->refine_gpu();
         }
         return true;
-  }
+}
 
-bool boxm2_ocl_refine_scene_around_geometry::refine_cpp(){
-        vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
-        vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+bool
+boxm2_ocl_refine_scene_around_geometry
+::refine_cpp()
+{
+        std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
+        std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
         boxm2_refine_block_function_with_labels<int16> refiner_rgb;
         boxm2_refine_block_function_with_labels<uchar16> refiner_vdp_gray;
@@ -52,7 +62,7 @@ bool boxm2_ocl_refine_scene_around_geometry::refine_cpp(){
         for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
         {
                 boxm2_block_id id = blk_iter->first;
-                vcl_cout<<"Refining Block: "<<id<<vcl_endl;
+                std::cout<<"Refining Block: "<<id<<std::endl;
 
                 boxm2_block     * blk     = cache_->get_cpu_cache()->get_block(scene_,id);
                 boxm2_data_base * alph    = cache_->get_cpu_cache()->get_data_base(scene_,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -62,7 +72,7 @@ bool boxm2_ocl_refine_scene_around_geometry::refine_cpp(){
                 short* label_buf = (short *) labels->data_buffer();
 
 
-                vcl_vector<boxm2_data_base*> datas;
+                std::vector<boxm2_data_base*> datas;
                 datas.push_back(alph);
                 datas.push_back(mog);
                 datas.push_back(labels);
@@ -87,11 +97,17 @@ bool boxm2_ocl_refine_scene_around_geometry::refine_cpp(){
         return true;
 }
 
-bool boxm2_ocl_refine_scene_around_geometry::refine_gpu(){
-
-        return false;
+bool
+boxm2_ocl_refine_scene_around_geometry
+::refine_gpu()
+{
+  return false;
 }
-bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
+
+bool
+boxm2_ocl_refine_scene_around_geometry
+::label_cells_for_refinement()
+{
 
         int status;
         float gpu_time=0.0f;
@@ -117,15 +133,15 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
         centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
         bocl_kernel* kern = kerns_[0];
         boxm2_scene_sptr sceneA = cache_->get_cpu_cache()->get_scenes()[0];
-        vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = sceneA->blocks();
-        vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+        std::map<boxm2_block_id, boxm2_block_metadata>& blocks = sceneA->blocks();
+        std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
 
 
         long binCache = cache_.ptr()->bytes_in_cache();
         //cache_->clear_cache();
 
-        vcl_string identifier = device_->device_identifier();
+        std::string identifier = device_->device_identifier();
 
         //zero GPU grad buffer
 
@@ -133,14 +149,14 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
         {
                 bvpl_kernel_sptr filter = filter_vector_->kernels_[k];
 
-                vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
+                std::stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
 
                 //filter->print();
 
                 //set up the filter, filter buffer and other related filter variables
 
 
-                vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
+                std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
                 unsigned ci=0;
                 cl_float4* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
                 for (; kit!= filter->float_kernel_.end(); kit++, ci++)
@@ -178,9 +194,16 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
 
 
                         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-                        vcl_size_t data_size = data_in->num_bytes()/alphaTypeSize;
+                        // check for invalid parameters
+                        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+                        {
+                                std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
+                                return false;
+                        }
+
+                        std::size_t data_size = data_in->num_bytes()/alphaTypeSize;
                         data_in->write_to_buffer(queue);
-                        vcl_size_t labelTypeSize =  boxm2_data_info::datasize(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix());;
+                        std::size_t labelTypeSize =  boxm2_data_info::datasize(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix());;
 
                         bocl_mem * to_refine = cache_->get_data_new(scene_,id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("refine"), data_size * labelTypeSize,false);
 
@@ -188,18 +211,18 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
                         bocl_mem_sptr output_f = cache_->alloc_mem(data_size *sizeof(float), output_buff, "output" );
                         output_f->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-                        vcl_cout<<"Bytes in block "<<id<<" = "<<data_size<<vcl_endl;
+                        std::cout<<"Bytes in block "<<id<<" = "<<data_size<<std::endl;
 
                         //grab the block out of the cache as well
                         bocl_mem* blk = cache_->get_block(scene_,id);
                         blk->write_to_buffer(queue);
                         bocl_mem* blk_info = cache_->loaded_block_info();
                         boxm2_scene_info* info_buffer = scene_->get_blk_metadata(id);
-                        vcl_cout<<"root level is for block id "<<id <<" : "<<info_buffer->root_level<<vcl_endl;
+                        std::cout<<"root level is for block id "<<id <<" : "<<info_buffer->root_level<<std::endl;
 
                         //set workspace
-                        vcl_size_t lThreads[] = {4, 4, 4};
-                        vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
+                        std::size_t lThreads[] = {4, 4, 4};
+                        std::size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
                                         RoundUp(data.sub_block_num_.y(), lThreads[1]),
                                         RoundUp(data.sub_block_num_.z(), lThreads[2]) };
 
@@ -240,8 +263,8 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
                         short * refine_buf = (short*)to_refine->cpu_buffer();
                         /*for (unsigned i=0;i<data_size;i++)
                                 if(refine_buf[i]!=0)
-                                vcl_cout<<refine_buf[i];
-                        vcl_cout<<vcl_endl;
+                                std::cout<<refine_buf[i];
+                        std::cout<<std::endl;
 */
                         status = clFinish(queue);
                         delete [] output_buff;

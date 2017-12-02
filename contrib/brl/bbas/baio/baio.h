@@ -1,7 +1,9 @@
 // This is brl/bbas/baio/baio.h
 #ifndef baio_h
 #define baio_h
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -39,7 +41,7 @@ enum baio_status
 {
   BAIO_IN_PROGRESS = 0, // baio object is either reading or writing
   BAIO_FINISHED    = 1, // baio object is done and idle
-  BAIO_ERROR       = 2, // baio object has hit an error
+  BAIO_ERROR       = 2  // baio object has hit an error
 };
 
 class baio
@@ -49,9 +51,9 @@ class baio
     ~baio();
 
     //: read bytes from file
-    bool read(vcl_string filename, char* buff, long BUFSIZE);
+    bool read(std::string filename, char* buff, long BUFSIZE);
 
-    bool write(vcl_string filename, char* buff, long BUFSIZE);
+    bool write(std::string filename, char* buff, long BUFSIZE);
 
     void close_file();
 
