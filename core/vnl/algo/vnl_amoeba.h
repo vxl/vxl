@@ -23,8 +23,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_algo_export.h>
 
-#include <vnl/algo/vnl_algo_export.h>
-
 class vnl_cost_function;
 class vnl_least_squares_function;
 
