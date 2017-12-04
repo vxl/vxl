@@ -3,6 +3,7 @@
 #define vgl_fit_orient_box_2d_h_
 
 #include <iostream>
+#include <limits>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
