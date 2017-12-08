@@ -87,10 +87,10 @@ public:
   sdet_curvelet_params params_;
 
   //: The curvelet map, indexed by edgel IDs
-  std::vector<cvlet_list > map_;
+  std::vector<sdet_curvelet_list > map_;
 
   //: The curvelet map for the other direction (only for DHT mode)
-  std::vector<cvlet_list > map2_;
+  std::vector<sdet_curvelet_list > map2_;
 
   //: constructor
   sdet_curvelet_map(sdet_edgemap_sptr EM=0, sdet_curvelet_params params=sdet_curvelet_params());
@@ -108,10 +108,10 @@ public:
   void set_parameters(sdet_curvelet_params params) { params_ = params; }
 
   //: access the curvelets for an edge using its id
-  const cvlet_list& curvelets(unsigned id) const { return map_[id]; }
-  cvlet_list& curvelets(unsigned id) { return map_[id]; }
+  const sdet_curvelet_list& curvelets(unsigned id) const { return map_[id]; }
+  sdet_curvelet_list& curvelets(unsigned id) { return map_[id]; }
 
-  cvlet_list& Rcurvelets(unsigned id) { return map2_[id]; }
+  sdet_curvelet_list& Rcurvelets(unsigned id) { return map2_[id]; }
 
   //: resize the graph
   void resize(unsigned size);
