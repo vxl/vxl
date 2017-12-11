@@ -167,11 +167,12 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
                            std::vector<vgl_point_2d<T> >& ip);
 
 //these function is used to determine if a polygon is oriented counter clockwise it does this by comparing 
+//the dot product of vertices in the ordered list
 template <class T>
-vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T> const &p);
+vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T> const &p);
 
 template <class T>
-bool vgl_ploygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts);
+bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts);
 
 
 // \relatesalso vgl_polygon
