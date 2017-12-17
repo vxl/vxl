@@ -139,27 +139,8 @@ static void test_region_classifier(int argc, char * argv[])
       float a = vgl_area(obox);
       if(a<amin || a>amax)
         continue;
-      obox.write(os);
-	  filtered_regions[lab]=r;
-#if 0
-      vgl_point_2d<float> cent = obox.center();
-      std::cout << lab << ' ' << cent << std::endl; 
-
-      float Io = r->Io();
-      if(false&&Io < 120.0){
-        std::cout << "\n====>Histograms[" << lab << "] at ("<< r->Xo() << ' ' << r->Yo() << ")" << std::endl; 
-        std::map<unsigned, bsta_histogram<float> >::const_iterator hit = diverse_hists.find(lab);
-        std::map<unsigned, bsta_histogram<float> >::const_iterator nit = neighbors_hists.find(lab);
-        if( hit!=diverse_hists.end()&& nit!=neighbors_hists.end()){
-          const bsta_histogram<float>& hr = hit->second;
-          const bsta_histogram<float>& hn = nit->second;
-          std::cout << "Region Hist " << std::endl;
-          hr.print(std::cout);
-          std::cout << "/nNeighbor Hist " << std::endl;
-          hn.print(std::cout);
-        }
-      }
-#endif
+      os << obox;
+      filtered_regions[lab]=r;
     }
   }
   os.close();
@@ -173,8 +154,8 @@ static void test_region_classifier(int argc, char * argv[])
     if(rit == regions.end())
       continue;
     vgl_oriented_box_2d<float> obox = (rit->second)->obox();    
-    std::cout << iit->first << ' ' << obox.center() << std::endl;
-    obox.write(bos);
+    std::cout << iit->first << ' ' << obox.centroid() << std::endl;
+    box << obox;
   }
   bos.close();
   clasf.compute_iou_cluster_similarity();

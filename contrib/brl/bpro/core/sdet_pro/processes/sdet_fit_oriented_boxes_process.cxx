@@ -107,14 +107,14 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
     std::cout << "color: " << iter->first << ", corners: " << std::endl;
     for (std::vector<vgl_point_2d<float> >::iterator vit = cc.begin(); vit != cc.end(); ++vit)
       std::cout << "  " << *vit << std::endl;
-    std::cout << "axis length: " << box.length_width() << std::endl;
+    std::cout << "axis width: " << box.width() << std::endl;
 #endif
     for (unsigned i = 0; i < cc.size(); i++) {
        corners->data_array[8*cnt+2*i] = cc[i].x();
        corners->data_array[8*cnt+2*i+1] = cc[i].y();
     }
-    box_dim->data_array[2*cnt]   = box.length_width().x();
-    box_dim->data_array[2*cnt+1] = box.length_width().y();
+    box_dim->data_array[2*cnt]   = box.width();
+    box_dim->data_array[2*cnt+1] = box.height();
     cnt++;
     delete [] xp;
     delete [] yp;

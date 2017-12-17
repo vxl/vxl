@@ -112,8 +112,8 @@ T vgl_area( const vgl_box_2d<T>& box ){
 
 template <class T>
 T vgl_area( const vgl_oriented_box_2d<T>& obox ){
-  vgl_point_2d<T> lw = obox.length_width();
-    return lw.x()*lw.y();
+  std::pair<T,T> wh = obox.width_height();
+    return wh.first * wh.second;
 }
 
 #undef VGL_AREA_INSTANTIATE

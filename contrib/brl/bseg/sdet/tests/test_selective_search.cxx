@@ -141,7 +141,7 @@ static void test_selective_search(int argc, char * argv[])
       float a = vgl_area(obox);
       if(a<amin || a>amax)
         continue;
-      obox.write(os);
+      os << obox;
     }
 
   

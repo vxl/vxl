@@ -33,7 +33,6 @@ void sdet_region_classifier::find_iou_clusters(const std::map<unsigned, sdet_reg
         iou_index[lab]=1.0f;
         continue;
       }
-      //float iou = (*iit)->int_over_union(bb);
       float iou = (*iit)->int_over_min_area(bb); //JLM
       if(iou>iou_thresh)
         iou_index[(*iit)->label()]=iou;
@@ -80,7 +79,6 @@ void sdet_region_classifier::find_iou_clusters(const std::map<unsigned, sdet_reg
       ait = already_clustered.find(labi);
       if(ait != already_clustered.end())
         continue;
-      //float iou = (*iit)->int_over_union(bb);
       float iou = (*iit)->int_over_min_area(bb); //JLM
       if(iou>iou_thresh){
         iou_index[labi]=iou;

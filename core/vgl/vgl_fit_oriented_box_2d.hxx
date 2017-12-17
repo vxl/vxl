@@ -1,9 +1,9 @@
-#include "vgl_fit_orient_box_2d.h"
+#include "vgl_fit_oriented_box_2d.h"
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_area.h>
 template <class T>
-vgl_fit_orient_box_2d<T>::vgl_fit_orient_box_2d(vgl_polygon<T> const& poly, double dtheta):dtheta_(dtheta), fit_valid_(false){
+vgl_fit_oriented_box_2d<T>::vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta):dtheta_(dtheta), fit_valid_(false){
   // extract points
   pts_.clear();
   size_t ns = poly.num_sheets();
@@ -12,9 +12,9 @@ vgl_fit_orient_box_2d<T>::vgl_fit_orient_box_2d(vgl_polygon<T> const& poly, doub
       pts_.push_back(poly[is][i]);
 }
 template <class T>
-void vgl_fit_orient_box_2d<T>::fit_obox(){
+void vgl_fit_oriented_box_2d<T>::fit_obox(){
 
-  vgl_orient_box_2d<T> min_area_obox;
+  vgl_oriented_box_2d<T> min_area_obox;
   T min_area = std::numeric_limits<T>::max();
   size_t n = pts_.size();
   if(n<2){
@@ -53,20 +53,20 @@ void vgl_fit_orient_box_2d<T>::fit_obox(){
     // add back rotation center
     vgl_vector_2d<T> offset(vs.x(), vs.y());
     pmaj0r += offset; pmaj1r += offset;
-    min_area_obox = vgl_orient_box_2d<T>(pmaj0r, pmaj1r, height);
+    min_area_obox = vgl_oriented_box_2d<T>(pmaj0r, pmaj1r, height);
     }
   }
   obox_ = min_area_obox;
 }
 
 template <class T>
-vgl_orient_box_2d<T> vgl_fit_orient_box_2d<T>::fitted_box(){
+vgl_oriented_box_2d<T> vgl_fit_oriented_box_2d<T>::fitted_box(){
   if(!fit_valid_){
     fit_obox();
     fit_valid_ = true;
   }
   return obox_;
 }
-#undef VGL_FIT_ORIENT_BOX_2D_INSTANTIATE
-#define VGL_FIT_ORIENT_BOX_2D_INSTANTIATE(T) \
-template class vgl_fit_orient_box_2d<T >
+#undef VGL_FIT_ORIENTED_BOX_2D_INSTANTIATE
+#define VGL_FIT_ORIENTED_BOX_2D_INSTANTIATE(T) \
+template class vgl_fit_oriented_box_2d<T >

@@ -18,7 +18,7 @@
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
-#include <vgl/algo/vgl_orient_box_2d.h>
+#include <vgl/vgl_oriented_box_2d.h>
 template <class T>
 class vgl_convex_hull_2d
 {
@@ -27,7 +27,7 @@ class vgl_convex_hull_2d
   ~vgl_convex_hull_2d () {}
   vgl_polygon<T>  hull();
   //: the oriented box enclosing the hull with minimum area
-  vgl_orient_box_2d<T> min_area_enclosing_rectangle();
+  vgl_oriented_box_2d<T> min_area_enclosing_rectangle();
  private:
   vgl_convex_hull_2d();
   bool hull_valid_;

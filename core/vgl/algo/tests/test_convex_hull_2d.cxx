@@ -9,7 +9,8 @@
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
-#include <vgl/algo/vgl_orient_box_2d.h>
+#include <vgl/vgl_area.h>
+#include <vgl/vgl_oriented_box_2d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 
 static void test_4_point_hull()
@@ -36,10 +37,10 @@ static void test_4_point_hull()
        poly.contains(p3) && poly.contains(p4) && poly.contains(p5), true);
 
   // test the minimum area bounding rectangle
-  vgl_orient_box_2d<double> obox = ch.min_area_enclosing_rectangle();
+  vgl_oriented_box_2d<double> obox = ch.min_area_enclosing_rectangle();
   std::cout << obox << std::endl;
   vgl_point_2d<double> c =  obox.centroid();
-  double a = obox.area();
+  double a = vgl_area(obox);
   bool good = a == 4.0;
   good = good && c.x()==1.0 && c.y() == 1.0;
   TEST("enclosing rectangle", good, true);
@@ -58,7 +59,7 @@ static void test_5_point_hull()
   vgl_polygon<double> poly = ch.hull();
   std::cout << poly << '\n';
   // test the minimum area bounding rectangle
-  vgl_orient_box_2d<double> obox = ch.min_area_enclosing_rectangle();
+  vgl_oriented_box_2d<double> obox = ch.min_area_enclosing_rectangle();
   vgl_point_2d<double> c = obox.centroid();
   double h = obox.height();
   bool good = c.x()== 1.0 && c.y()==2.0;
@@ -115,7 +116,7 @@ static void test_obox_large_hull()
       good = good && hverts[i]==pts[i];
   TEST("cv_hull forms a cv_hull", good , true);
   good =true;
-  vgl_orient_box_2d<double> obox = ch.min_area_enclosing_rectangle();
+  vgl_oriented_box_2d<double> obox = ch.min_area_enclosing_rectangle();
   for(size_t i = 0; i<n; ++i)
     good = good && obox.contains(pts[i]);
   TEST("cv_hull is contained in obox", good , true);

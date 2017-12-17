@@ -156,7 +156,7 @@ bool sdet_selective_search_process(bprb_func_process& pro)
   for(;rit != sregions.end(); ++rit){
     //vgl_box_2d<float> bb =(*rit).second->obox();
     vgl_oriented_box_2d<float> bb = (*rit).second->obox();  
-    vgl_point_2d<float> lw = bb.length_width();
+    vgl_point_2d<float> lw(bb.width(), bb.height()); 
     //tr.add(rit->second);
     if (bb.aspect_ratio() > aspect_ratio_t && lw.x() < length_t) {
       cout << rit->first << ' ' << bb << " " << lw.y() << " " << lw.x() << endl;
