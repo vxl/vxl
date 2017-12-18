@@ -45,7 +45,7 @@ vil_nitf2_field_definition(std::string tag,
     description(description)
 {
   assert(!tag.empty() && "vil_nitf2_field_definition:: null tag");
-  assert(formatter != 0 && "vil_nitf2_field_definition:: null formatter");
+  assert(formatter != VXL_NULLPTR && "vil_nitf2_field_definition:: null formatter");
 }
 
 vil_nitf2_field_definition_node* vil_nitf2_field_definition::copy() const

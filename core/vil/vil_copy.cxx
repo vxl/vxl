@@ -86,12 +86,12 @@ bool vil_copy_deep(const vil_image_resource_sptr &src, vil_image_resource_sptr &
 
 vil_image_resource_sptr vil_copy_deep( const vil_image_resource_sptr &src )
 {
-  if(src == NULL) return NULL;
+  if(src == VXL_NULLPTR) return VXL_NULLPTR;
   vil_image_resource_sptr result = vil_new_image_resource(src->ni(), src->nj(), src);
   bool copy_r = vil_copy_deep(src, result);
   if(!copy_r)
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
   return result;
 }

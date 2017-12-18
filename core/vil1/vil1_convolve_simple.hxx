@@ -124,12 +124,12 @@ void vil1_convolve_simple(vil1_memory_image_of<I1> const &input1,    // input 1
   static void (*f)(I1 const * const *, unsigned, unsigned,
                    I2 const * const *, unsigned, unsigned,
                    AC *,
-                   O        * const *) = 0;
+                   O        * const *) = VXL_NULLPTR;
   if (!f)
     f = vil1_convolve_simple;
   (*f)(const_cast<I1 const * const *>(/* xxx */&in1[0]), w1, h1,
        const_cast<I2 const * const *>(/* xxx */&in2[0]), w2, h2,
-       (AC*)0,
+       (AC*)VXL_NULLPTR,
        const_cast<O        * const *>(/* xxx */&out[0]));
 }
 
@@ -155,12 +155,12 @@ void vil1_convolve_simple(vil1_memory_image_of<I1> const &in1,
   static void (*f)(I1 const * const *, unsigned, unsigned,
                    I2 const * const *, unsigned, unsigned,
                    AC *,
-                   O        * const *) = 0;
+                   O        * const *) = VXL_NULLPTR;
   if (!f)
     f = vil1_convolve_simple;
   (*f)(in1.row_array(), in1.width(), in1.height(),
        in2.row_array(), in2.width(), in2.height(),
-       (AC*)0,
+       (AC*)VXL_NULLPTR,
        out.row_array());
 }
 

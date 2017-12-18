@@ -68,7 +68,7 @@ class vil_clamp_image_resource : public vil_image_resource
   virtual bool put_view(const vil_image_view_base& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = 0) const;
+  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const;
 
  protected:
   //: Reference to underlying image source

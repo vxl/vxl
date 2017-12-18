@@ -757,7 +757,7 @@ inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
     default:
       vil_exception_warning(vil_exception_unsupported_pixel_format(
         src->pixel_format(), "vil_convert_cast") );
-      dest = 0;
+      dest = VXL_NULLPTR;
   }
   return dest;
 }
@@ -863,7 +863,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
   default:
     vil_exception_warning(vil_exception_unsupported_pixel_format(
       src->pixel_format(), "vil_convert_round") );
-    dest=0;
+    dest=VXL_NULLPTR;
   }
   return dest;
 }

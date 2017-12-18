@@ -29,7 +29,7 @@
 //---------------------------------
 template <class T>
 vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix()
-  : cached_svd_(NULL)
+  : cached_svd_(VXL_NULLPTR)
 {
   vnl_matrix_fixed<T,3,3> default_matrix( (T)0 );
   default_matrix(0,0) = default_matrix(1,1) = (T)1;
@@ -41,7 +41,7 @@ vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix()
 template <class T>
 vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
   const vpgl_fundamental_matrix<T>& other)
-  : cached_svd_(NULL)
+  : cached_svd_(VXL_NULLPTR)
 {
   set_matrix( other.F_ );
 }
@@ -54,7 +54,7 @@ vpgl_fundamental_matrix<T>::vpgl_fundamental_matrix(
     const vpgl_calibration_matrix<T> &kr,
     const vpgl_calibration_matrix<T> &kl,
     const vpgl_essential_matrix<T>   &em)
-  : cached_svd_(NULL)
+  : cached_svd_(VXL_NULLPTR)
 {
   vnl_matrix_fixed<T, 3, 3> kl_tinv = vnl_inverse(kl.get_matrix().transpose());
   vnl_matrix_fixed<T, 3, 3> kr_inv = vnl_inverse(kr.get_matrix());
@@ -248,7 +248,7 @@ template <class T>
 void vpgl_fundamental_matrix<T>::set_matrix( const vnl_matrix_fixed<T,3,3>& F )
 {
   F_ = vnl_svd<T>( F.as_ref() ).recompose(2);
-  if ( cached_svd_ != NULL ) delete cached_svd_;
+  if ( cached_svd_ != VXL_NULLPTR ) delete cached_svd_;
   cached_svd_ = new vnl_svd<T>( F_.as_ref() );
 }
 

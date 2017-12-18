@@ -59,7 +59,7 @@ class vcsl_coordinate_system
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
-  virtual const vcsl_spatial *cast_to_spatial() const { return 0; }
+  virtual const vcsl_spatial *cast_to_spatial() const { return VXL_NULLPTR; }
 
   //***************************************************************************
   // Conversion

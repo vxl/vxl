@@ -45,7 +45,7 @@ vil_pyramid_image_view<T>::vil_pyramid_image_view(vil_image_view_base_sptr image
     // scale down the image
     scale/=2.0;
     img = static_cast<vil_image_view<T>*>(images_[l-1].ptr());
-    vil_image_view_base_sptr new_img=0;
+    vil_image_view_base_sptr new_img=VXL_NULLPTR;
     scale_down(*img, new_img);
     images_[l] = new_img;
     scales_[l] = scale;

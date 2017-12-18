@@ -22,14 +22,14 @@ void vil1_convolve_separable(I1 const kernel[], unsigned N,
   std::cerr << "convolve x..." << std::flush;
   vil1_convolve_1d_x(K,
                      vil1_convolve_signal_2d<I2 const>(bufc.row_array(), 0, 0, w,  0, 0, h),
-                     (AC*)0,
+                     (AC*)VXL_NULLPTR,
                      vil1_convolve_signal_2d<AC     >(tmp.row_array(), 0, 0, w,  0, 0, h),
                      vil1_convolve_trim, vil1_convolve_trim);
   std::cerr << "done\n"
            << "convolve y...";
   vil1_convolve_1d_y(K,
                      vil1_convolve_signal_2d<AC const>(tmpc.row_array(), 0, 0, w,  0, 0, h),
-                     (AC*)0,
+                     (AC*)VXL_NULLPTR,
                      vil1_convolve_signal_2d<O       >(out.row_array(), 0, 0, w,  0, 0, h),
                      vil1_convolve_trim, vil1_convolve_trim);
   std::cerr << "done\n";

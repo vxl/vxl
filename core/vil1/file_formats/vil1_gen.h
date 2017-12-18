@@ -34,7 +34,7 @@ class vil1_gen_file_format : public vil1_file_format
                                              int /*height*/,
                                              int /*components*/,
                                              int /*bits_per_component*/,
-                                             vil1_component_format /*format*/) { return 0; }
+                                             vil1_component_format /*format*/) { return VXL_NULLPTR; }
 };
 
 enum vil1_gen_type
@@ -82,7 +82,7 @@ class vil1_gen_generic_image : public vil1_image_impl
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
   char const* file_format() const;
-  bool get_property(char const *tag, void *prop = 0) const;
+  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
   vil1_image get_plane(unsigned int p) const;
 };
 

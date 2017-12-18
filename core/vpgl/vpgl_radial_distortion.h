@@ -40,7 +40,7 @@ class vpgl_radial_distortion : public vpgl_lens_distortion<T>
   // if \p init is NULL then \p point is used as the initial guess
   // calls the radial undistortion function
   virtual vgl_homg_point_2d<T> undistort( const vgl_homg_point_2d<T>& point,
-                                          const vgl_homg_point_2d<T>* init=0) const;
+                                          const vgl_homg_point_2d<T>* init=VXL_NULLPTR) const;
 
   //: Distort a radial length
   // \retval a scale factor such that
@@ -52,7 +52,7 @@ class vpgl_radial_distortion : public vpgl_lens_distortion<T>
   //: Return the inverse of distort function
   // \param init is an initial guess at the solution for the iterative solver
   // if \p init is NULL then \p radius is used as the initial guess
-  virtual T undistort_radius( T radius, const T* init=0) const;
+  virtual T undistort_radius( T radius, const T* init=VXL_NULLPTR) const;
 
   //: Compute the derivative of the distort_radius function
   // \note implementing this function is optional but it may improve the convergence
