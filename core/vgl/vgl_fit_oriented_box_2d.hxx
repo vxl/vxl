@@ -32,8 +32,10 @@ void vgl_fit_oriented_box_2d<T>::fit_obox(){
       vgl_point_2d<T> rpp((c*vp.x()-s*vp.y()),(s*vp.x() + c*vp.y()));
       box.add(rpp);
     }
-    if(vgl_area(box) < min_area){
-    T w = box.width(), h = box.height();
+    T area = vgl_area(box);
+    if(area < min_area){
+      min_area = area;
+      T w = box.width(), h = box.height();
     vgl_point_2d<T> cent = box.centroid();
     //select major axis such that width > height
     T width = w, height = h;

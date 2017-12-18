@@ -24,9 +24,10 @@ class vgl_fit_oriented_box_2d {
   //:default constructor
  vgl_fit_oriented_box_2d():dtheta_(default_dtheta),fit_valid_(false){}
 
-  //: constructors with points
+  //: constructor with polygon
   vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta = default_dtheta);
 
+  //: constructor with points
  vgl_fit_oriented_box_2d(std::vector<vgl_point_2d<T> > const& pts, double dtheta = default_dtheta):
   pts_(pts), dtheta_(dtheta), fit_valid_(false){}
 
