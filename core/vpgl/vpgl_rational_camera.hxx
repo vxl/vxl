@@ -437,7 +437,7 @@ vpgl_rational_camera<T>* read_rational_camera(std::string cam_path)
   file_inp.open(cam_path.c_str());
   if (!file_inp.good()) {
     std::cout << "error: bad filename: " << cam_path << std::endl;
-    return 0;
+    return VXL_NULLPTR;
   }
   vpgl_rational_camera<T>* rcam = read_rational_camera<T>(file_inp);
   file_inp.close();
@@ -548,16 +548,16 @@ vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
   }
   istr >> input;
   if (input!="END_GROUP")
-    return 0;
+    return VXL_NULLPTR;
   istr >> input;
   if (input!="=")
-    return 0;
+    return VXL_NULLPTR;
   istr >> input;
   if (input!="IMAGE")
-    return 0;
+    return VXL_NULLPTR;
   istr >> input;
   if (input!="END;")
-    return 0;
+    return VXL_NULLPTR;
   int map[20];
   map[0]=19;
   map[1]=9;
@@ -582,7 +582,7 @@ vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
 
   if ((neu_u.size() != 20) || (den_u.size() != 20)) {
     std::cerr << "the input is not a valid rational camera\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
   T temp_vector[20];
@@ -626,7 +626,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
   istr.open(cam_path.c_str());
   if (!istr.good()) {
     std::cout << "error: bad filename: " << cam_path << std::endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   std::vector<T> neu_u;
@@ -765,7 +765,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
 
   if ((neu_u.size() != 20) || (den_u.size() != 20)) {
     std::cerr << "the input is not a valid rational camera\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
   T temp_vector[20];

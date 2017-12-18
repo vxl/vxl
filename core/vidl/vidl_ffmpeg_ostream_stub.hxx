@@ -21,7 +21,7 @@ struct vidl_ffmpeg_ostream::pimpl
 
 vidl_ffmpeg_ostream
 ::vidl_ffmpeg_ostream()
-  : os_( 0 )
+  : os_( VXL_NULLPTR )
 {
   std::cerr << "vidl_ffmpeg_ostream: warning: ffmpeg support is not compiled in\n";
 }
@@ -29,7 +29,7 @@ vidl_ffmpeg_ostream
 vidl_ffmpeg_ostream
 ::vidl_ffmpeg_ostream(const std::string&,
                       const vidl_ffmpeg_ostream_params&)
-  : os_( 0 )
+  : os_( VXL_NULLPTR )
 {
   std::cerr << "vidl_ffmpeg_ostream: warning: ffmpeg support is not compiled in\n";
 }

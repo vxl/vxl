@@ -78,7 +78,7 @@ class vil1_bmp_generic_image : public vil1_image_impl
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
   char const* file_format() const;
-  bool get_property(char const *tag, void *prop = 0) const;
+  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
 
  private:
   vil1_stream* is_;

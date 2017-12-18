@@ -77,7 +77,7 @@ class vil_plane_image_resource : public vil_image_resource
                         unsigned j0);
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = 0) const {
+  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const {
     return src_->get_property(tag, property_value); }
 
  protected:

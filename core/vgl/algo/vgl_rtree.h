@@ -122,7 +122,7 @@ class vgl_rtree_iterator_base
   unsigned int i;
 
   vgl_rtree_iterator_base(node *root) : current(root), i(0) { }
-  vgl_rtree_iterator_base() : current(0), i(0) { }
+  vgl_rtree_iterator_base() : current(VXL_NULLPTR), i(0) { }
 
   void operator_pp();
   void operator_mm();
@@ -244,11 +244,11 @@ template <class V, class B, class C>
 class vgl_rtree
 {
  public:
-  vgl_rtree() : root(0) { }
+  vgl_rtree() : root(VXL_NULLPTR) { }
   ~vgl_rtree() {
     if (root)
       delete root;
-    root = 0;
+    root = VXL_NULLPTR;
   }
 
   //
@@ -269,7 +269,7 @@ class vgl_rtree
     if (root)
       root->add(v);
     else
-      root = new node(0/*parent*/, v);
+      root = new node(VXL_NULLPTR/*parent*/, v);
   }
 
   //: remove one element from the rtree.
@@ -284,7 +284,7 @@ class vgl_rtree
 
       if (root->total_vts == 0) {
         delete root;
-        root = 0;
+        root = VXL_NULLPTR;
       }
     }
   }
@@ -306,7 +306,7 @@ class vgl_rtree
     i.current->erase(i.i);
     if (root->total_vts == 0) {
       delete root;
-      root = 0;
+      root = VXL_NULLPTR;
     }
   }
 

@@ -64,10 +64,10 @@ class vgl_p_matrix
   explicit vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& P);
   //: Construct from 3x3 matrix A and vector a. P = [A a].
   vgl_p_matrix(const vnl_matrix_fixed<T,3,3>& A, const vnl_vector_fixed<T,3>& a)
-  : svd_(0) { set(A,a); }
+  : svd_(VXL_NULLPTR) { set(A,a); }
   //: Deprecated; use the vnl_matrix_fixed variant instead
   vgl_p_matrix(const vnl_matrix<T>& A, const vnl_vector<T>& a)
-  : svd_(0) { set(A,a); }
+  : svd_(VXL_NULLPTR) { set(A,a); }
 
   vgl_p_matrix(const vgl_p_matrix& P);
  ~vgl_p_matrix();

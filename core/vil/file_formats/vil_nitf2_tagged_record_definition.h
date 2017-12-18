@@ -47,10 +47,10 @@ class vil_nitf2_tagged_record_definition
     // whether this field may be unspecified (all blank)
     bool blanks_ok = false,
     // function, when specified, that overrides formatter's width
-    vil_nitf2_field_functor<int>* width_functor = 0,
+    vil_nitf2_field_functor<int>* width_functor = VXL_NULLPTR,
     // predicate that returns whether this conditional field is present;
     // 0 for required fields
-    vil_nitf2_field_functor<bool>* condition_functor = 0,
+    vil_nitf2_field_functor<bool>* condition_functor = VXL_NULLPTR,
     std::string units = "",
     std::string description = "");
 
@@ -105,7 +105,7 @@ class vil_nitf2_tagged_record_definition
 
   // Constructor
   vil_nitf2_tagged_record_definition(std::string name, std::string pretty_name,
-                                     vil_nitf2_field_definitions* defs = 0);
+                                     vil_nitf2_field_definitions* defs = VXL_NULLPTR);
 
 #if 0
   // to implement

@@ -97,9 +97,9 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
     // whether this field may be unspecified (all blanks)
     bool blanks_ok = false,
     // function, when specified, that overrides formatter's field width.
-    vil_nitf2_field_functor<int>* width_functor = 0,
+    vil_nitf2_field_functor<int>* width_functor = VXL_NULLPTR,
     // conditional field predicate; 0 for required fields
-    vil_nitf2_field_functor<bool>* condition_functor = 0,
+    vil_nitf2_field_functor<bool>* condition_functor = VXL_NULLPTR,
     // additional documentation fields
     std::string units = "",
     std::string description = "");
@@ -129,10 +129,10 @@ class vil_nitf2_field_definitions : public std::list<vil_nitf2_field_definition_
     // whether this field may be unspecified (all blank)
     bool blanks_ok = false,
     // function, when specified, that overrides formatter's field width
-    vil_nitf2_field_functor<int>* width_functor = 0,
+    vil_nitf2_field_functor<int>* width_functor = VXL_NULLPTR,
     // predicate that returns whether this conditional field is present;
     // 0 for required fields
-    vil_nitf2_field_functor<bool>* condition_functor = 0,
+    vil_nitf2_field_functor<bool>* condition_functor = VXL_NULLPTR,
     std::string units = "",
     std::string description = "");
 

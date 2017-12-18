@@ -207,7 +207,7 @@ static const unsigned short vsl_magic_number_part_2=0x472b;
 // User is responsible for deleting os after deleting the adaptor
 vsl_b_ostream::vsl_b_ostream(std::ostream *o_s): os_(o_s)
 {
-  assert(os_ != 0);
+  assert(os_ != VXL_NULLPTR);
   vsl_b_write_uint_16(*this, version_no_);
   vsl_b_write_uint_16(*this, vsl_magic_number_part_1);
   vsl_b_write_uint_16(*this, vsl_magic_number_part_2);
@@ -216,7 +216,7 @@ vsl_b_ostream::vsl_b_ostream(std::ostream *o_s): os_(o_s)
 //: A reference to the adaptor's stream
 std::ostream& vsl_b_ostream::os() const
 {
-  assert(os_ != 0);
+  assert(os_ != VXL_NULLPTR);
   return *os_;
 }
 
@@ -247,7 +247,7 @@ void vsl_b_ostream::clear_serialisation_records()
 unsigned long vsl_b_ostream::add_serialisation_record
                     (void *pointer, int other_data /*= 0*/)
 {
-  assert(pointer != 0);
+  assert(pointer != VXL_NULLPTR);
   assert(serialisation_records_.find(pointer) == serialisation_records_.end());
   unsigned long id = (unsigned long)serialisation_records_.size() + 1;
   serialisation_records_[pointer] = std::make_pair(id, other_data);
@@ -316,7 +316,7 @@ vsl_b_ofstream::~vsl_b_ofstream()
 //: Close the stream
 void vsl_b_ofstream::close()
 {
-  assert(os_ != 0);
+  assert(os_ != VXL_NULLPTR);
   ((std::ofstream *)os_)->close();
   clear_serialisation_records();
 }
@@ -327,7 +327,7 @@ void vsl_b_ofstream::close()
 // User is responsible for deleting is after deleting the adaptor
 vsl_b_istream::vsl_b_istream(std::istream *i_s): is_(i_s)
 {
-  assert(is_ != 0);
+  assert(is_ != VXL_NULLPTR);
   if (!(*is_)) return;
   unsigned long v=0, m1=0, m2=0;
   vsl_b_read_uint_16(*this, v);
@@ -357,7 +357,7 @@ vsl_b_istream::vsl_b_istream(std::istream *i_s): is_(i_s)
 //: A reference to the adaptor's stream
 std::istream & vsl_b_istream::is() const
 {
-  assert(is_ != 0);
+  assert(is_ != VXL_NULLPTR);
   return *is_;
 }
 
@@ -394,7 +394,7 @@ void vsl_b_istream::clear_serialisation_records()
 void vsl_b_istream::add_serialisation_record(unsigned long serial_number,
                                              void *pointer, int other_data /*= 0*/)
 {
-  assert(pointer != 0);
+  assert(pointer != VXL_NULLPTR);
   assert(serialisation_records_.find(serial_number) == serialisation_records_.end());
   serialisation_records_[serial_number] = std::make_pair(pointer, other_data);
 }
@@ -458,7 +458,7 @@ vsl_b_ifstream::~vsl_b_ifstream()
 //: Close the stream
 void vsl_b_ifstream::close()
 {
-  assert(is_ != 0);
+  assert(is_ != VXL_NULLPTR);
   ((std::ifstream *)is_)->close();
   clear_serialisation_records();
 }

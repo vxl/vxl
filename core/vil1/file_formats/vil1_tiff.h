@@ -77,8 +77,8 @@ class vil1_tiff_generic_image : public vil1_image_impl
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
   char const* file_format() const;
-  bool get_property(char const *tag, void *prop = 0) const;
-  bool set_property(char const *tag, const void *prop = 0) const;
+  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
+  bool set_property(char const *tag, const void *prop = VXL_NULLPTR) const;
 
   vil1_image get_plane(unsigned int p) const;
 };

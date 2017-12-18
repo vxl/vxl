@@ -64,11 +64,11 @@ class vil1_image
   { vil1_image_delegate(put_section, (buf, x0, y0, wd, ht), false); }
 
   //: Getting property information
-  bool get_property(char const *tag, void *property_value = 0) const
+  bool get_property(char const *tag, void *property_value = VXL_NULLPTR) const
   { vil1_image_delegate(get_property, (tag, property_value), false); }
 
   //: Setting property information
-  bool set_property(char const *tag, void const *property_value = 0)
+  bool set_property(char const *tag, void const *property_value = VXL_NULLPTR)
   { vil1_image_delegate(set_property, (tag, property_value), false); }
 
   //: Return a string describing the file format.
@@ -91,7 +91,7 @@ class vil1_image
 
   //------------ smart-pointer logic --------
 
-  vil1_image(vil1_image_impl *p = 0) : ptr(p)
+  vil1_image(vil1_image_impl *p = VXL_NULLPTR) : ptr(p)
   {
     if (ptr)
       ptr->up_ref();
@@ -106,7 +106,7 @@ class vil1_image
   ~vil1_image() {
     if (ptr)
       ptr->down_ref();
-    ptr = 0; // don't dangle
+    ptr = VXL_NULLPTR; // don't dangle
   }
 
   vil1_image& operator=(vil1_image const &that) {
@@ -141,11 +141,11 @@ class vil1_image
 
   //: conversion to bool
   operator safe_bool () const
-    { return (ptr != 0)? VCL_SAFE_BOOL_TRUE : 0; }
+    { return (ptr != VXL_NULLPTR)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
 
   //: inverse conversion to bool
   bool operator!() const
-    { return (ptr != 0)? false : true; }
+    { return (ptr != VXL_NULLPTR)? false : true; }
 
   //: use "sptr.impl()" to get a pointer to the impl object.
   vil1_image_impl *impl() const {

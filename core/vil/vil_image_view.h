@@ -61,7 +61,7 @@ class vil_image_view : public vil_image_view_base
  public:
   //: Dflt ctor
   //  Creates an empty one-plane image.
-  vil_image_view(): top_left_(0),istep_(0),jstep_(0),planestep_(0) {}
+  vil_image_view(): top_left_(VXL_NULLPTR),istep_(0),jstep_(0),planestep_(0) {}
 
   //: Create an image of ni x nj pixels in (n_planes * n_interleaved_planes) planes
   //  If n_interleaved_planes > 1, the planes are interleaved.

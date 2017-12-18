@@ -43,7 +43,7 @@ class vbl_array_1d
   typedef T const &const_reference;
  public:
 
-  vbl_array_1d() : begin_(0), end_(0), alloc_(0) { }
+  vbl_array_1d() : begin_(VXL_NULLPTR), end_(VXL_NULLPTR), alloc_(VXL_NULLPTR) { }
 
   vbl_array_1d(const_iterator b, const_iterator e) {
     std::ptrdiff_t n = e - b;
