@@ -228,7 +228,7 @@ struct vil1_png_structures
       }
     }
     else {
-      assert(rows != 0);
+      assert(rows != VXL_NULLPTR);
     }
 
     return rows;

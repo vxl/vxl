@@ -22,7 +22,7 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin)
   , end_((vil_streampos)(-1L))
   , current_(begin)
 {
-  assert(underlying != 0);
+  assert(underlying != VXL_NULLPTR);
   assert(begin >= 0);
   underlying_->ref();
 }
@@ -33,7 +33,7 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin, int en
   , end_(end)
   , current_(begin)
 {
-  assert(underlying != 0);
+  assert(underlying != VXL_NULLPTR);
   assert(begin >= 0);
   assert(begin <= end);
   underlying->ref();

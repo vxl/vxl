@@ -48,7 +48,7 @@ bool vil1_resample_image_impl::get_property(char const *, void *) const
 
 bool vil1_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const
 {
-  assert(buf!=0);
+  assert(buf!=VXL_NULLPTR);
 #ifdef DEBUG
   std::cerr << "get_section() x0 y0 w h = " << x0 << ' ' << y0 << ' ' << w << ' ' << h << '\n';
 #endif

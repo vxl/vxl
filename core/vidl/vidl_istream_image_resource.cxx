@@ -118,10 +118,10 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                            unsigned j0, unsigned nj) const
 {
   if (!istream_)
-    return NULL;
+    return VXL_NULLPTR;
 
   int curr_frame = istream_->frame_number();
-  vidl_frame_sptr frame = NULL;
+  vidl_frame_sptr frame = VXL_NULLPTR;
   if (curr_frame == frame_number_)
     frame = istream_->current_frame();
   if (curr_frame + 1 == frame_number_) {
@@ -134,7 +134,7 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
   }
 
   if (!frame)
-    return NULL;
+    return VXL_NULLPTR;
 
   // try the wrap the frame in an image view
   vil_image_view_base_sptr view = vidl_convert_wrap_in_view(*frame);
@@ -145,12 +145,12 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
     vidl_convert_to_view(*frame,*view);
   }
   if (!view)
-    return NULL;
+    return VXL_NULLPTR;
 
   if (i0 == 0 && j0 == 0 && ni == view->ni() && nj == view->nj())
     return view;
 
-  if (i0 + ni > view->ni() || j0 + nj > view->nj()) return NULL;
+  if (i0 + ni > view->ni() || j0 + nj > view->nj()) return VXL_NULLPTR;
 
   switch (view->pixel_format())
   {
@@ -180,7 +180,7 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
     break;
   }
 
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 
@@ -221,6 +221,6 @@ vidl_istream_image_resource::create_empty_view() const
    default:
     break;
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 

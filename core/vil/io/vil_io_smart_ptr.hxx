@@ -20,7 +20,7 @@ void vsl_b_write(vsl_b_ostream & os, const vil_smart_ptr<T> &p)
   const short io_version_no = 2;
   vsl_b_write(os, io_version_no);
 
-  if (p.ptr() == 0)  // Deal with Null pointers first.
+  if (p.ptr() == VXL_NULLPTR)  // Deal with Null pointers first.
   {
     vsl_b_write(os, true);
     vsl_b_write(os, 0ul); // Use 0 to indicate a null pointer.
@@ -82,12 +82,12 @@ void vsl_b_read(vsl_b_istream &is, vil_smart_ptr<T> &p)
 
     if (id == 0) // Deal with Null pointers first.
     {
-      p = 0;
+      p = VXL_NULLPTR;
       return;
     }
 
     T * pointer = static_cast<T *>( is.get_serialisation_pointer(id));
-    if (first_time != (pointer == 0))
+    if (first_time != (pointer == VXL_NULLPTR))
     {
       // This checks that the saving stream and reading stream
       // both agree on whether or not this is the first time they
@@ -98,7 +98,7 @@ void vsl_b_read(vsl_b_istream &is, vil_smart_ptr<T> &p)
       return;
     }
 
-    if (pointer == 0)
+    if (pointer == VXL_NULLPTR)
     {
       // If you get an error in the next line, it could be because your type T
       // has no vsl_b_read(vsl_b_ostream&,T*&)  defined on it.

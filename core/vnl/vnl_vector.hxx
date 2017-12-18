@@ -288,7 +288,7 @@ void vnl_vector<T>::clear()
   if (data) {
     destroy();
     num_elmts = 0;
-    data = 0;
+    data = VXL_NULLPTR;
   }
 }
 
