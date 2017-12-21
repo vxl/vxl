@@ -322,7 +322,7 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
 
 //turn all sheets into counterclockwise polygons
 template <class T>
-vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T> const &p)
+vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T> const &p)
 {
   vgl_polygon<T> outPolygon;
   //std::vector<std::vector<vgl_point_2d<T> > > outPolySheets;
@@ -391,7 +391,7 @@ template void vgl_selfintersections(vgl_polygon<T > const& p, \
                                     std::vector<std::pair<unsigned int,unsigned int> >& e1, \
                                     std::vector<std::pair<unsigned int,unsigned int> >& e2, \
                                     std::vector<vgl_point_2d<T > >& ip); \
-template vgl_polygon<T> vgl_reorientPolygon(vgl_polygon<T > const &p); \
+template vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T > const &p); \
 template bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T > > verts)
 
 #endif // vgl_polygon_hxx_

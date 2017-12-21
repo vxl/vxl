@@ -42,7 +42,8 @@ void test_site_obj_reader()
   vul_file::make_directory(dir_path);
   bs.convert_object_groups_obj_to_multiple_ply(obj_path);
   // test first file
-  std::ifstream tistr(dir_path + "mesh_1.ply");
+  std::string out_file = dir_path + "mets_1.ply";
+  std::ifstream tistr(out_file.c_str());
   std::string temp;
   while(tistr >> temp >>std::ws && temp!="vertex")
     ;
