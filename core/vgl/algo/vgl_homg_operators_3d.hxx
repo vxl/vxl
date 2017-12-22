@@ -477,7 +477,7 @@ vgl_homg_operators_3d<T>::perp_dist_squared(const vgl_homg_point_3d<T>& point,
     return 1e38;
   }
 
-#define dot(p,q) p.a()*q.x()+p.b()*q.y()+p.c()*q.z()+p.d()*q.w()
+#define dot(p,q) ((p).a()*(q).x()+(p).b()*(q).y()+(p).c()*(q).z()+(p).d()*(q).w())
   double numerator = dot(plane,point) / point.w();
 #undef dot
   if (numerator == 0) return 0.0;

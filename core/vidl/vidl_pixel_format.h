@@ -200,7 +200,7 @@ template <vidl_pixel_color color_type>
 template <> \
 struct vidl_color_traits_of<VIDL_PIXEL_COLOR_##COL> \
 {\
-  enum { num_channels = NC }; \
+  enum { num_channels = (NC) }; \
 }
 
 vidl_ct_mac( UNKNOWN,  0 );
@@ -226,14 +226,14 @@ struct vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT> \
 {\
   static inline std::string name() { return NAME; }\
   typedef T type;\
-  enum { bits_per_pixel = BPP };\
+  enum { bits_per_pixel = (BPP) };\
   enum { num_channels = vidl_color_traits_of<VIDL_PIXEL_COLOR_##CLR>::num_channels };\
   static inline vidl_pixel_color color() { return VIDL_PIXEL_COLOR_##CLR; }\
   enum { color_idx = VIDL_PIXEL_COLOR_##CLR };\
   static inline vidl_pixel_arrangement arrangement() { return VIDL_PIXEL_ARRANGE_##ARNG; }\
   enum { arrangement_idx = VIDL_PIXEL_ARRANGE_##ARNG };\
-  enum { chroma_shift_x = XCS };\
-  enum { chroma_shift_y = YCS };\
+  enum { chroma_shift_x = (XCS) };\
+  enum { chroma_shift_y = (YCS) };\
 }
 
 //            format    name             type         bpp  color    arrange  xcs  ycs

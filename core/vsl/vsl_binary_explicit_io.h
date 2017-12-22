@@ -159,7 +159,7 @@ macro(std::size_t);
 // If you are converting several integers at once, multiply the value by
 // the number of integers.
 #define VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(size_of_type) \
-  (((size_of_type * 8)/7) + ((((size_of_type * 8) % 7) == 0) ? 0: 1))
+  ((((size_of_type) * 8)/7) + (((((size_of_type) * 8) % 7) == 0) ? 0: 1))
 
 
 //: Implement arbitrary length conversion for unsigned integers.

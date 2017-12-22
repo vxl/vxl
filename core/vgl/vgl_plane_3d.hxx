@@ -108,10 +108,10 @@ bool vgl_plane_3d<T>::operator==(vgl_plane_3d<T> const& p) const
           && (c()*p.d()==p.c()*d()) );
 }
 
-#define vp(os,v,s) { os<<' '; if ((v)>0) os<<'+'; if ((v)&&!s[0]) os<<(v); else { \
-                     if ((v)==-1) os<<'-';\
-                     else if ((v)!=0&&(v)!=1) os<<(v);\
-                     if ((v)!=0) os<<' '<<s; } }
+#define vp(os,v,s) { (os)<<' '; if ((v)>0) (os)<<'+'; if ((v)&&!(s)[0]) (os)<<(v); else { \
+                     if ((v)==-1) (os)<<'-';\
+                     else if ((v)!=0&&(v)!=1) (os)<<(v);\
+                     if ((v)!=0) (os)<<' '<<(s); } }
 
 template <class T>
 std::ostream& operator<<(std::ostream& os, const vgl_plane_3d<T>& p)

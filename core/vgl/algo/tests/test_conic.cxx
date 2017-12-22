@@ -63,7 +63,7 @@ conic_distance(vgl_conic<double> const& c1, vgl_conic<double> const& c2)
   else if ( c1.f() != 0 && c2.f() != 0 )  k = c1.f() / c2.f();
   else                                    k = 1.0;
 
-#define DO_MAX(x,a) if ((a)>(x)) x=a
+#define DO_MAX(x,a) if ((a)>(x)) (x)=a
   double expr = std::abs( c1.a() - c2.a() * k );
   DO_MAX(expr,  std::abs( c1.b() - c2.b() * k ));
   DO_MAX(expr,  std::abs( c1.c() - c2.c() * k ));

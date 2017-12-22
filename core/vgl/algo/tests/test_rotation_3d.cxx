@@ -186,7 +186,7 @@ void test_rotation_3d()
   TEST_NEAR("constructor from two vgl vectors", errorf, 0.0f, 1e-6f);
   vnl_vector_fixed<vnl_rational,3> ai(1L, 1L, 0L), bi(1L, -1L, 0L);
   vgl_rotation_3d<vnl_rational> r_abi(ai, bi);
-#define sqr(x) (x)*(x)
+#define sqr(x) ((x)*(x))
   error1 = sqr(double(r_abi.as_quaternion()[0]))
          + sqr(double(r_abi.as_quaternion()[1]))
          + sqr(double(r_abi.as_quaternion()[2]) + vnl_math::sqrt1_2)

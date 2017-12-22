@@ -52,7 +52,7 @@ static int ccw(double **P, int i, int j, int k)
 
 
 #define CMPM(c,A,B) \
-  v = (*(double*const*)A)[c] - (*(double*const*)B)[c];\
+  v = (*(double*const*)(A))[c] - (*(double*const*)(B))[c];\
   if (v>0) return 1;\
   if (v<0) return -1
 

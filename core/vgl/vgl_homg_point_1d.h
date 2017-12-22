@@ -66,7 +66,7 @@ class vgl_homg_point_1d
   //: Return true iff the point is at infinity (an ideal point).
   // The method checks whether |w| <= tol * |x|
   inline bool ideal(T tol = T(0)) const {
-#define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
+#define vgl_Abs(x) ((x)<0?-(x):(x)) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(w()) <= tol * vgl_Abs(x());
 #undef vgl_Abs
   }
