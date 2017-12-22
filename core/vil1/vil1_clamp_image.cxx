@@ -10,8 +10,8 @@
 
 #undef VIL1_CLAMP_IMAGE_THRESHOLD
 #define VIL1_CLAMP_IMAGE_THRESHOLD(V, L, H) \
-  if (V > H) V = H; \
-  else if (V < L) V = L
+  if ((V) > (H)) (V) = H; \
+  else if ((V) < (L)) (V) = L
 
 template <class T>
 bool vil1_clamp_image(vil1_image const& base, double low, double high,

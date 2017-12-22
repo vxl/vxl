@@ -88,10 +88,10 @@ bool vgl_line_2d<Type>::normalize()
   return mag>0.99 && mag<1.01;
 }
 
-#define vp(os,v,s) { os<<' '; if ((v)>0) os<<'+'; if ((v)&&!s[0]) os<<(v); else { \
-                     if ((v)==-1) os<<'-';\
-                     else if ((v)!=0&&(v)!=1) os<<(v);\
-                     if ((v)!=0) os<<' '<<s; } }
+#define vp(os,v,s) { (os)<<' '; if ((v)>0) (os)<<'+'; if ((v)&&!(s)[0]) (os)<<(v); else { \
+                     if ((v)==-1) (os)<<'-';\
+                     else if ((v)!=0&&(v)!=1) (os)<<(v);\
+                     if ((v)!=0) (os)<<' '<<(s); } }
 
 //: Write line description to stream: "<vgl_line_2d ax+by+c=0>"
 template <class Type>

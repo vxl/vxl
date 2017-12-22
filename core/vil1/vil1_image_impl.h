@@ -159,7 +159,7 @@ class vil1_image_impl
 };
 
 #define VIL1_DISPATCH_AUX(VTYPE, uchar, Template, Args) \
-case VTYPE: Template<uchar > Args; break;
+case VTYPE: (Template)<uchar > (Args); break;
 
 #define VIL1_DISPATCH_IMAGE_OP(f, Template, Args) \
 switch (f) {\

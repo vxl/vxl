@@ -102,7 +102,7 @@ class vgl_homg_line_2d
   //  This version checks (max(|a|,|b|) <= tol * |c|
   inline bool ideal(T tol = (T)0) const
   {
-#define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
+#define vgl_Abs(x) ((x)<0?-(x):(x)) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(a()) <= tol*vgl_Abs(c()) && vgl_Abs(b()) <= tol*vgl_Abs(c());
 #undef vgl_Abs
   }
