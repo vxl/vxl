@@ -3,7 +3,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_area.h>
 template <class T>
-vgl_fit_oriented_box_2d<T>::vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta):dtheta_(dtheta), fit_valid_(false){
+vgl_fit_oriented_box_2d<T>::vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta):dtheta_(dtheta), fit_valid_(false), fixed_theta_(false){
   // extract points
   pts_.clear();
   size_t ns = poly.num_sheets();
@@ -12,7 +12,7 @@ vgl_fit_oriented_box_2d<T>::vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, 
       pts_.push_back(poly[is][i]);
 }
 template <class T>
-void vgl_fit_oriented_box_2d<T>::fit_obox(){
+void vgl_fit_oriented_box_2d<T>::fit_obox(T theta_rad){
 
   vgl_oriented_box_2d<T> min_area_obox;
   T min_area = std::numeric_limits<T>::max();
@@ -24,7 +24,15 @@ void vgl_fit_oriented_box_2d<T>::fit_obox(){
   vgl_point_2d<T>& vs = pts_[0];
   // +- 90 degrees
   T T_pi_2 = static_cast<T>(vnl_math::pi_over_2);
-  for(T theta = -T_pi_2; theta <= T_pi_2; theta += dtheta_){
+  T low_theta = -T_pi_2, high_theta = T_pi_2;
+  if(fixed_theta_){
+    //theta rotates the poly edge to align with the x axis
+    //thus theta is negative the orientation of the box
+    low_theta = -theta_rad;
+    high_theta = -theta_rad;
+  }
+  T min_theta = T(0);
+  for(T theta = low_theta; theta <= high_theta; theta += dtheta_){
     T c = cos(theta), s = sin(theta);
     vgl_box_2d<T> box;
     for(size_t j = 0; j<n; ++j){
@@ -35,6 +43,7 @@ void vgl_fit_oriented_box_2d<T>::fit_obox(){
     T area = vgl_area(box);
     if(area < min_area){
       min_area = area;
+      min_theta = theta;
       T w = box.width(), h = box.height();
     vgl_point_2d<T> cent = box.centroid();
     //select major axis such that width > height
@@ -63,6 +72,7 @@ void vgl_fit_oriented_box_2d<T>::fit_obox(){
 
 template <class T>
 vgl_oriented_box_2d<T> vgl_fit_oriented_box_2d<T>::fitted_box(){
+  fixed_theta_ = false;
   if(!fit_valid_){
     fit_obox();
     fit_valid_ = true;

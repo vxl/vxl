@@ -22,18 +22,32 @@ template <class T>
 class vgl_fit_oriented_box_2d {
  public:
   //:default constructor
- vgl_fit_oriented_box_2d():dtheta_(default_dtheta),fit_valid_(false){}
+ vgl_fit_oriented_box_2d():dtheta_(default_dtheta),fit_valid_(false), fixed_theta_(false){}
 
   //: constructor with polygon
   vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta = default_dtheta);
 
   //: constructor with points
  vgl_fit_oriented_box_2d(std::vector<vgl_point_2d<T> > const& pts, double dtheta = default_dtheta):
-  pts_(pts), dtheta_(dtheta), fit_valid_(false){}
+  pts_(pts), dtheta_(dtheta), fit_valid_(false), fixed_theta_(false){}
 
+  //: brute force search
   vgl_oriented_box_2d<T> fitted_box();
+
+  //: fit box with specified oriention
+  // theta is defined ccw with respect to the x-axis
+  vgl_oriented_box_2d<T> fitted_box(double theta_rad){
+    if(!fit_valid_){
+      fixed_theta_ = true;
+      fit_obox(theta_rad);
+      fit_valid_ = true;
+    }
+    return obox_;
+  }
+
  private:
-  void fit_obox();
+  bool fixed_theta_;
+  void fit_obox(T theta_rad = T(0));
   bool fit_valid_;
   double dtheta_;
   std::vector<vgl_point_2d<T> > pts_;
