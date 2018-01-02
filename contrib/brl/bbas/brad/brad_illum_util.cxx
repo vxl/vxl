@@ -823,8 +823,8 @@ double brad_expected_reflectance_chavez(double toa_radiance,
 
    double T_sun = std::exp(-atm.optical_depth_ / sun_dir.z());
    double T_view = std::exp(-atm.optical_depth_ / std::sin(view_el));
-
-   return brad_expected_reflectance_chavez(toa_radiance, normal, sun_dir, T_sun, T_view, md.sun_irradiance_, atm.skylight_, atm.airlight_);
+   double sun_irradiance = md.sun_irradiance_;
+   return brad_expected_reflectance_chavez(toa_radiance, normal, sun_dir, T_sun, T_view, sun_irradiance, atm.skylight_, atm.airlight_);
 }
 
 double brad_expected_reflectance_chavez(double toa_radiance,
@@ -898,11 +898,11 @@ double brad_radiance_variance_chavez(double reflectance,
    double F = 1.0 - 0.5*std::sqrt(1.0 - normal.z()*normal.z());
    double dL_dskylight = F*reflectance*T_view/vnl_math::pi;
    double dL_dairlight = 1.0;
+   double sun_irradiance = md.sun_irradiance_;
+   double dL_doptical_depth = sun_irradiance*reflectance*sun_dot_norm*T_sun*T_view/(vnl_math::pi * sun_dir.z());
+   dL_doptical_depth += (sun_irradiance*sun_dot_norm*T_sun + atm.skylight_*F) * reflectance * T_view / (vnl_math::pi * std::sin(view_el));
 
-   double dL_doptical_depth = md.sun_irradiance_*reflectance*sun_dot_norm*T_sun*T_view/(vnl_math::pi * sun_dir.z());
-   dL_doptical_depth += (md.sun_irradiance_*sun_dot_norm*T_sun + atm.skylight_*F) * reflectance * T_view / (vnl_math::pi * std::sin(view_el));
-
-   double dL_dreflectance = (md.sun_irradiance_ * sun_dot_norm * T_sun + atm.skylight_ * F * T_view) / vnl_math::pi;
+   double dL_dreflectance = (sun_irradiance * sun_dot_norm * T_sun + atm.skylight_ * F * T_view) / vnl_math::pi;
 
    double radiance_var = dL_dskylight*dL_dskylight*skylight_var;
    radiance_var += dL_dairlight*dL_dairlight*airlight_var;
