@@ -10,6 +10,9 @@
     vxl_configure_file_copyonly( ${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_calibration_table.txt
       ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/brad_sat_img_calibration_table.txt include/vxl/bbas/brad
     )
+    vxl_configure_file_copyonly( ${CMAKE_CURRENT_SOURCE_DIR}/brad_sat_img_sun_irradiance_table.txt
+      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/brad_sat_img_sun_irradiance_table.txt include/vxl/bbas/brad
+    )
   endif()
 
   add_definitions(-DBRAD_WHERE_BRL_LIB_DIR_H_EXISTS)

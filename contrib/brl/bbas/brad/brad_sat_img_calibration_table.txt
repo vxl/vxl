@@ -1,8 +1,9 @@
-## Digital Image calibration adjustment factor (Values are from http://www.digitalglobe.com/resources/technical-information, check updates accordingly)
+## DigitalGlobe Image calibration adjustment factor (Values are from http://www.digitalglobe.com/resources/technical-information, check updates accordingly)
 ## Each satellite factors are arranged as
 ## Satellite_name
 ## Band Gain Offset (PAN has 1 band, MULTI has 8 bands, SWIR has 8 bands.  invalid value gain==1.000, offset=1.000)
 ## Band sequence follows the image band sequence
+Num_Sat 6
 IKNOOS
 PAN 0.907 -4.461
 BLUE 1.073 -9.699
@@ -44,7 +45,7 @@ PAN 0.970 -1.926
 BLUE 1.053 -4.537
 GREEN 0.994 -4.175
 RED 0.998 -3.754
-NIR1 0.994 -.3.870
+NIR1 0.994 -3.870
 COASTAL 1.000 0.000
 YELLOW 1.000 0.000
 REDEDGE 1.000 0.000

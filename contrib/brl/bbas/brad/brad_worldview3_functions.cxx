@@ -253,11 +253,11 @@ bool brad_calibrate_wv3_img(
 
   // Convert from digital numbers to top-of-atmosphere radiance
   for (int b = 0; b < 8; b++) {
+    double abs_cal_factor = meta.abscal_[b] / meta.effect_band_width_[b];
     vil_image_view<vxl_uint_16> wv3_raw_plane = vil_plane(wv3_raw, b);
     vil_image_view<float> wv3_cal_plane = vil_plane(wv3_cal, b);
     vil_convert_cast(wv3_raw_plane, wv3_cal_plane);
-    vil_math_scale_and_offset_values(wv3_cal_plane,
-      meta.gains_[b + 1].first, meta.gains_[b + 1].second);
+    vil_math_scale_and_offset_values(wv3_cal_plane, abs_cal_factor, 0.0);
   }
 
   // Apply fixed gain/offset from params
