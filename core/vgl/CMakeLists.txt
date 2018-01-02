@@ -61,6 +61,7 @@ set( vgl_sources
   vgl_intersection.h             vgl_intersection.hxx
   vgl_bounding_box.h             vgl_bounding_box.hxx
   vgl_oriented_box_2d.h          vgl_oriented_box_2d.hxx
+  vgl_fit_oriented_box_2d.h      vgl_fit_oriented_box_2d.hxx
   vgl_lineseg_test.h             vgl_lineseg_test.hxx
   vgl_triangle_test.h            vgl_triangle_test.hxx
   vgl_polygon_test.h             vgl_polygon_test.hxx

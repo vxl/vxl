@@ -6,7 +6,6 @@ project(vgl_algo)
 set( vgl_algo_sources
   vgl_algo_fwd.h
   vgl_rtree.hxx                            vgl_rtree.h
-  vgl_orient_box_2d.hxx                    vgl_orient_box_2d.h
   vgl_orient_box_3d.hxx                    vgl_orient_box_3d.h
 #  vgl_ellipsoid_3d.hxx                     vgl_ellipsoid_3d.h
   vgl_homg_operators_1d.hxx                vgl_homg_operators_1d.h
@@ -37,7 +36,6 @@ set( vgl_algo_sources
   vgl_fit_conics_2d.hxx                    vgl_fit_conics_2d.h
   vgl_fit_plane_3d.hxx                     vgl_fit_plane_3d.h
   vgl_fit_sphere_3d.hxx                    vgl_fit_sphere_3d.h
-  vgl_fit_orient_box_2d.hxx                vgl_fit_orient_box_2d.h
   vgl_intersection.hxx                     vgl_intersection.h
                                            vgl_rotation_3d.h
                                            vgl_rtree_c.h
