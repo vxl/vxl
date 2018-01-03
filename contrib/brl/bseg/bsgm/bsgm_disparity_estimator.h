@@ -48,6 +48,10 @@ struct bsgm_disparity_estimator_params
   // 2 bad pixels interpolated over
   int error_check_mode;
 
+  //: When set > 0, pixels below this threshold will be flagged as invalid
+  // when error_check_mode > 0
+  vxl_byte shadow_thresh;
+
   //: Appearance costs computed by different algorithms are statically fused
   // using these weights. Set any to <= 0 to prevent computation.
   float census_weight;
@@ -74,6 +78,7 @@ struct bsgm_disparity_estimator_params
     max_grad(32.0f),
     perform_quadratic_interp(true),
     error_check_mode(1),
+    shadow_thresh(0),
     census_weight(0.3f),
     xgrad_weight(0.7f),
     census_tol(2),
@@ -218,6 +223,7 @@ class bsgm_disparity_estimator
   void flag_nonunique(
     vil_image_view<float>& disp_img,
     const vil_image_view<unsigned short>& disp_cost,
+    const vil_image_view<vxl_byte>& img,
     float invalid_disparity,
     int disp_thresh = 1 );
 
@@ -226,6 +232,7 @@ class bsgm_disparity_estimator
   void interpolate_errors(
     vil_image_view<float>& disp_img,
     const vil_image_view<bool>& invalid,
+    const vil_image_view<vxl_byte>& img,
     float invalid_disparity );
 
 

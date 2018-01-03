@@ -741,7 +741,7 @@ def invert_float_image(img):
 # remote the invalid pixel region existed in satellite imagery
 
 
-def remote_nitf_margin():
+def remove_nitf_margin():
   batch.init_process("vilNITFRemoveMarginProcess")
   batch.set_input_from_db(0, img_res)
   status = batch.run_process()

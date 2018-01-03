@@ -11,6 +11,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
+#include <vnl/vnl_math.h>
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>
 #include <brad/brad_image_atmospherics_est.h>
@@ -21,16 +22,18 @@ bool brad_convert_reflectance_to_digital_count_process_cons(bprb_func_process& p
   //inputs
   //0: image with pixel values corresponding to reflectance values
   //1: image metadata
-  //2: estimated atmospheric parameters
+  //2: mean_reflectance value
   //3: normalize values? If TRUE, output image will floating point with input[4] mapped to 1.0
   //4: maximum digital count value (default 2047)
+  //5: average airlight? If TRUE, will use all visible band to compute an average airlight value
 
-  std::vector<std::string> input_types_(5);
+  std::vector<std::string> input_types_(6);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "brad_image_metadata_sptr";
-  input_types_[2] = "brad_atmospheric_parameters_sptr";
+  input_types_[2] = "float";
   input_types_[3] = "bool";
   input_types_[4] = "unsigned";
+  input_types_[5] = "bool";
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -60,9 +63,10 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
   //get the inputs
   vil_image_view_base_sptr reflectance_img_base = pro.get_input<vil_image_view_base_sptr>(0);
   brad_image_metadata_sptr mdata = pro.get_input<brad_image_metadata_sptr>(1);
-  brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(2);
+  float mean_reflectance = pro.get_input<float>(2);
   bool do_normalization = pro.get_input<bool>(3);
   unsigned int max_digital_count = pro.get_input<unsigned>(4);
+  bool average_airlight = pro.get_input<bool>(5);
 
   //check inputs validity
   if (!reflectance_img_base) {
@@ -82,12 +86,56 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
 
   unsigned int ni = reflectance_img->ni();
   unsigned int nj = reflectance_img->nj();
+  unsigned int np = reflectance_img->nplanes();
 
-  vil_image_view<float> toa_radiance_img(ni,nj);
+  vil_image_view<float> toa_radiance_img(ni, nj, np);
+  toa_radiance_img.fill(0.0f);
+  bool is_normalization = true;
+  if (mean_reflectance <= 0.0)
+    is_normalization = false;
 
-  brad_undo_reflectance_estimate(*reflectance_img, *mdata, *atm_params, toa_radiance_img);
+  // convert surface reflectance to ToA reflectance
+  brad_undo_reflectance_estimate(*reflectance_img, *mdata, mean_reflectance, toa_radiance_img, average_airlight, is_normalization);
 
-  vil_math_scale_and_offset_values(toa_radiance_img, (1.0/mdata->gain_), -(mdata->offset_/mdata->gain_) );
+  // convert ToA reflecatance to ToA radiance
+  std::vector<double> solar_irradiance_val = mdata->normal_sun_irradiance_values_;
+  if (np != solar_irradiance_val.size()) {
+    std::cerr << pro.name() << "ERROR: Mismatch of image plane numebr to the length of solar irradiance.  "
+                            << "Image plane number: " << np
+                            << ", solar irradiance value length: " << solar_irradiance_val.size() << "!!!\n";
+    return false;
+  }
+  double sun_dot_norm = std::sin(mdata->sun_elevation_ * vnl_math::pi_over_180) / vnl_math::pi;
+  for (unsigned ii = 0; ii < np; ii++)
+  {
+    double band_norm = solar_irradiance_val[ii] * sun_dot_norm;
+    vil_image_view<float> band = vil_plane(toa_radiance_img, ii);
+    vil_math_scale_values(band, band_norm);
+  }
+  // convert ToA radiance to DG
+  std::vector<double> gain = mdata->gains_;
+  std::vector<double> offset = mdata->offsets_;
+  std::vector<double> abscal = mdata->abscal_;
+  std::vector<double> effect_band = mdata->effect_band_width_;
+  if (np != abscal.size() || np != effect_band.size() ) {
+    std::cerr << pro.name() << "ERROR: Mismatch of image plane number to the length of band dependent AbsCalFactor/EffectBandWidth.  "
+                            << "Image plane numebr: " << np
+                            << ", gain length: " << abscal.size() << ", offset length: " << effect_band.size() << "!!!\n";
+    return false;
+  }
+  if (np != gain.size() || np != offset.size()) {
+    std::cerr << pro.name() << "ERROR: Mismatch of image plane number to the length of band dependent gain/offset.  "
+                            << "Image plane numebr: " << np
+                            << ", gain length: " << gain.size() << ", offset length: " << offset.size() << "!!!\n";
+    return false;
+  }
+  for (unsigned ii = 0; ii < np; ii++)
+  {
+    double abs_cal_factor = abscal[ii] / effect_band[ii];
+    double band_norm = 1.0 / (gain[ii] * abs_cal_factor);
+    vil_image_view<float> band = vil_plane(toa_radiance_img, ii);
+    vil_math_scale_and_offset_values(band, band_norm, -offset[ii]);
+  }
 
   vil_image_view_base_sptr output_img = VXL_NULLPTR;
   if (do_normalization) {

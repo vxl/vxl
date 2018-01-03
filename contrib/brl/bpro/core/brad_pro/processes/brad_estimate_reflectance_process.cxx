@@ -19,12 +19,16 @@ bool brad_estimate_reflectance_process_cons(bprb_func_process& pro)
   //inputs
   //0: The normalized image (pixel values are band-averaged radiance with units W m^-2 sr^-1 um-1
   //1: image metadata
-  //2: estimated atmospheric parameters
+  //2: mean scene reflectance
+  //3: (optional) compute average airlight from all visible bands (boollean).
+  //4: (optional) normalize the returned reflectance by average radiance.
 
-  std::vector<std::string> input_types_(3);
+  std::vector<std::string> input_types_(5);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "brad_image_metadata_sptr";
-  input_types_[2] = "brad_atmospheric_parameters_sptr";
+  input_types_[2] = "float";
+  input_types_[3] = "bool";
+  input_types_[4] = "bool";
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -34,7 +38,7 @@ bool brad_estimate_reflectance_process_cons(bprb_func_process& pro)
   output_types_[0] = "vil_image_view_base_sptr";
 
   if (!pro.set_output_types(output_types_))
-     return false;
+    return false;
 
   return true;
 }
@@ -51,7 +55,9 @@ bool brad_estimate_reflectance_process(bprb_func_process& pro)
   //get the inputs
   vil_image_view_base_sptr radiance_img_base = pro.get_input<vil_image_view_base_sptr>(0);
   brad_image_metadata_sptr mdata = pro.get_input<brad_image_metadata_sptr>(1);
-  brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(2);
+  float mean_reflectance = pro.get_input<float>(2);
+  bool average_airlight = pro.get_input<bool>(3);
+  bool is_normalize = pro.get_input<bool>(4);
 
   //check inputs validity
   if (!radiance_img_base) {
@@ -71,21 +77,17 @@ bool brad_estimate_reflectance_process(bprb_func_process& pro)
 
   unsigned int ni = radiance_img->ni();
   unsigned int nj = radiance_img->nj();
+  unsigned int np = radiance_img->nplanes();
+  if (mean_reflectance <= 0.0)
+    is_normalize = false;
 
-  if (radiance_img->nplanes() == 1) {
-    vil_image_view<float> *reflectance_img = new vil_image_view<float>(ni,nj);
-    brad_estimate_reflectance_image(*radiance_img, *mdata, *atm_params, *reflectance_img);
-    vil_image_view_base_sptr output_img(reflectance_img);
-    pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
-  } else {
-    vil_image_view<float> *reflectance_img = new vil_image_view<float>(ni,nj,radiance_img->nplanes());
-    brad_estimate_reflectance_image_multi(*radiance_img, *mdata, *atm_params, *reflectance_img);
-    vil_image_view_base_sptr output_img(reflectance_img);
-    pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
-  }
+  vil_image_view<float> *reflectance_img = new vil_image_view<float>(ni, nj, np);
+  bool success = brad_estimate_reflectance_image(*radiance_img, *mdata, mean_reflectance, *reflectance_img, average_airlight, is_normalize);
 
-
-
+  if (!success)
+    return false;
+  vil_image_view_base_sptr output_img(reflectance_img);
+  pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
   return true;
 }
 

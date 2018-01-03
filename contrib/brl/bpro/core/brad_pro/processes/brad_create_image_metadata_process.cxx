@@ -14,8 +14,8 @@ bool brad_create_image_metadata_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("float"); // input 0: gain
-  input_types.push_back("float"); // input 1: offset
+  input_types.push_back("float"); // input 0: absolute calibration parameter
+  input_types.push_back("float"); // input 1: effect band width
   input_types.push_back("float"); // input 2: view azimuth
   input_types.push_back("float"); // input 3: view elevation
   input_types.push_back("float"); // input 4: sun azimuth
@@ -45,8 +45,8 @@ bool brad_create_image_metadata_process(bprb_func_process& pro)
   }
 
   // get the inputs
-  float gain = pro.get_input<float>(0);
-  float offset = pro.get_input<float>(1);
+  float abscal = pro.get_input<float>(0);
+  float effect_band_width = pro.get_input<float>(1);
   float view_azimuth = pro.get_input<float>(2);
   float view_elevation = pro.get_input<float>(3);
   float sun_azimuth = pro.get_input<float>(4);
@@ -54,13 +54,17 @@ bool brad_create_image_metadata_process(bprb_func_process& pro)
   float sun_irradiance = pro.get_input<float>(6);
 
   brad_image_metadata_sptr metadata = new brad_image_metadata();
-  metadata->gain_ = gain;
-  metadata->offset_ = offset;
+  metadata->n_bands_ = 1;
+  metadata->abscal_.push_back(abscal);
+  metadata->effect_band_width_.push_back(effect_band_width);
   metadata->view_azimuth_ = view_azimuth;
   metadata->view_elevation_ = view_elevation;
   metadata->sun_azimuth_ = sun_azimuth;
   metadata->sun_elevation_ = sun_elevation;
   metadata->sun_irradiance_ = sun_irradiance;
+
+  metadata->read_band_dependent_gain_offset();
+  metadata->read_band_dependent_solar_irradiance();
 
   pro.set_output_val<brad_image_metadata_sptr>(0,metadata);
 
