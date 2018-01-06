@@ -8,7 +8,7 @@
   #include <cstring> // for std::strlen() & strcmp()
   #include <string>
   using namespace std;
-  #include <assert.h>
+  #include <cassert>
 #endif
 #include "expatpp.h"
 

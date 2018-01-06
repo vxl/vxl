@@ -9,7 +9,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_tolerance.h>
 #include <cassert>
-#include <math.h>
+#include <cmath>
 // Points are all coplanar. The first three points in pts are the basis, pts[0] is the origin
 template <class T>
 void vgl_affine_coordinates_2d(std::vector<vgl_point_2d<T> > const& pts, std::vector<vgl_point_2d<T> >& affine_pts)

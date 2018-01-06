@@ -1,6 +1,6 @@
 #include <iostream>
 #include "volm_utils.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include <vcl_compiler.h>
 #include <vcl_where_root_dir.h>
 

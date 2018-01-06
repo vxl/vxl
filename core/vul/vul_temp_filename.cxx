@@ -16,7 +16,7 @@
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
   // Helper functions for Unix
 
-  #include <stdio.h>  // for P_tmpdir
+  #include <cstdio>  // for P_tmpdir
   #include <unistd.h> // for unlink
   #include <fcntl.h>  // for O_CREATE,...
 
