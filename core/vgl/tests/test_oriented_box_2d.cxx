@@ -8,6 +8,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vcl_compiler.h>
 #include <vgl/vgl_fit_oriented_box_2d.h>
+#include <math.h>
 
 static void test_oriented_box_2d()
 {
@@ -91,7 +92,7 @@ static void test_oriented_box_2d()
   vgl_fit_oriented_box_2d<double> fob(poly);
   vgl_oriented_box_2d<double> obf = fob.fitted_box();
   double angf = obf.angle_in_rad(), wth = obf.width(), hht = obf.height();
-  double er = fabs(angf) + fabs(wth-2), fabs(hht-1);
+  double er = fabs(sin(angf)) + fabs(wth-2)+ fabs(hht-1);
   TEST_NEAR("fit oriented box to pts", er, 0.0, 0.001);
 
   // test a real data case
@@ -144,6 +145,43 @@ static void test_oriented_box_2d()
 	  std::cout << cns[i].x() << ' ' << cns[i].y() << std::endl;
   double arear = vgl_area(obf30);
   TEST_NEAR("real obox fit" , arear, 78.59471308, 1e-04);
+  // second real fit
+  vgl_point_2d<double> q0(-6.70591,-2.28258);
+  vgl_point_2d<double> q1(-4.14291,-4.83427);
+vgl_point_2d<double> q2(-0.631689,-4.85021);
+vgl_point_2d<double> q3(0.176725,-6.1546);
+vgl_point_2d<double> q4(-2.24703,-7.55325);
+vgl_point_2d<double> q5(-0.0691315,-7.62193);
+vgl_point_2d<double> q6(1.51102,-6.03368);
+vgl_point_2d<double> q7(4.84672,-5.64279);
+vgl_point_2d<double> q8(4.60103,-4.56791);
+vgl_point_2d<double> q9(5.79494,-3.12394);
+vgl_point_2d<double> q10(5.9711,4.3438);
+vgl_point_2d<double> q11(3.47803,3.64558);
+vgl_point_2d<double> q12(1.61627,4.71676);
+vgl_point_2d<double> q13(1.65141,5.66017);
+vgl_point_2d<double> q14(-0.59568,6.50897);
+vgl_point_2d<double> q15(-2.24605,5.52854);
+vgl_point_2d<double> q16(-3.1589,6.50555);
+vgl_point_2d<double> q17(-4.70391,5.78521);
+vgl_point_2d<double> q18(-4.77425,3.85846);
+vgl_point_2d<double> q19(-5.54678,3.45917);
+vgl_point_2d<double> q20(-4.77448,1.23897);
+ std::vector<vgl_point_2d<double> > qpts;
+ qpts.push_back(q0); qpts.push_back(q1); qpts.push_back(q2); qpts.push_back(q3);
+ qpts.push_back(q4); qpts.push_back(q5); qpts.push_back(q6); qpts.push_back(q7);
+ qpts.push_back(q8); qpts.push_back(q9); qpts.push_back(q10); qpts.push_back(q11);
+ qpts.push_back(q12); qpts.push_back(q13); qpts.push_back(q14); qpts.push_back(q15);
+ qpts.push_back(q16); qpts.push_back(q17); qpts.push_back(q18); qpts.push_back(q19);
+ qpts.push_back(q20);
+ vgl_fit_oriented_box_2d<double> q44(qpts);
+ double ang_rad = 1.378819939;
+ vgl_oriented_box_2d<double> ob44 = q44.fitted_box(ang_rad);
+ double angq = ob44.angle_in_rad();
+ double w44 = ob44.width();
+ double gtw = 14.11896874;
+ double er44 =  fabs(w44-gtw)+ fabs(angq-ang_rad);
+ TEST_NEAR("specify_angle", er44, 0.0, 0.0001);
 }
 
 TESTMAIN(test_oriented_box_2d);
