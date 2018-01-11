@@ -26,8 +26,8 @@ static void test_image_metadata()
    md.satellite_name_ = "WorldView3";
    md.band_ = "MULTI";
    md.n_bands_ = 8;
-   std::vector<double> abscal(8);
-   std::vector<double> effect_band(8);
+   std::vector<double> abscal;
+   std::vector<double> effect_band;
    for (unsigned i = 0; i < md.n_bands_; i++) {
      abscal.push_back(rnd.drand32());
      effect_band.push_back(rnd.drand32());
@@ -37,6 +37,8 @@ static void test_image_metadata()
 
    std::stringstream ss;
    ss << md;
+
+   std::cout << md;
 
    brad_image_metadata md2;
    ss >> md2;

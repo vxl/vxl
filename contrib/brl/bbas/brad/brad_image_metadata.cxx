@@ -70,8 +70,18 @@ std::ostream&  operator<<(std::ostream& s, brad_image_metadata const& md)
      << "view_azimuth = " << md.view_azimuth_ << '\n'
      << "satellite_name = " << md.satellite_name_ << '\n'
      << "band_type = " << md.band_ << '\n'
-     << "number_of_bits = " << md.number_of_bits_ << std::endl;
-
+     << "band_number = " << md.n_bands_ << '\n'
+     << "abscal = ";
+   for (unsigned i = 0; i < md.abscal_.size(); i++) {
+     s << md.abscal_[i] << ", ";
+   }
+   s << '\n';
+   s << "effect_band_width = ";
+   for (unsigned i = 0; i < md.effect_band_width_.size(); i++) {
+     s << md.effect_band_width_[i] << ", ";
+   }
+   s << '\n';
+   s << "number_of_bits = " << md.number_of_bits_ << std::endl;
    return s;
 }
 
@@ -105,6 +115,10 @@ std::istream&  operator>>(std::istream& s, brad_image_metadata& md)
          s >> input;
          s >> md.band_;
       }
+      if (input=="band_number") {
+        s >> input;
+        s >> md.n_bands_;
+      }
       if (input=="view_azimuth") {
          s >> input;
          s >> md.view_azimuth_;
@@ -112,6 +126,22 @@ std::istream&  operator>>(std::istream& s, brad_image_metadata& md)
       if (input == "number_of_bits") {
          s >> input;
          s >> md.number_of_bits_;
+      }
+      if (input == "abscal") {
+        double tmp_val;
+        for (unsigned i = 0; i < md.n_bands_; i++) {
+          s >> input;
+          s >> tmp_val;
+          md.abscal_.push_back(tmp_val);
+        }
+      }
+      if (input == "effect_band_width") {
+        double tmp_val;
+        for (unsigned i = 0; i < md.n_bands_; i++) {
+          s >> input;
+          s >> tmp_val;
+          md.effect_band_width_.push_back(tmp_val);
+        }
       }
    }
    return s;
@@ -1112,7 +1142,7 @@ bool brad_image_metadata::parse_from_txt(std::string const& filename)
           gain_vec.push_back(gain);
           offset_vec.push_back(offset);
       }
-      parsed_sun_irradiance = true;
+      parsed_gain_offset = true;
       continue;
     }
   }
