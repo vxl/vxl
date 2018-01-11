@@ -2,6 +2,8 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_area.h>
+#include <limits>
+
 template <class T>
 vgl_fit_oriented_box_2d<T>::vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta):dtheta_(dtheta), fit_valid_(false){
   // extract points
