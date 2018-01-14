@@ -105,7 +105,7 @@ void mbl_index_sort(const std::vector<T>& data, std::vector<unsigned>& index)
 // \endcode
 template <class T, class INDEX=unsigned, class CONT = std::vector<T>,
   class CMP=std::less<T> >
-  struct mbl_index_sort_cmp: public std::binary_function<INDEX, INDEX, bool>
+  struct mbl_index_sort_cmp
 {
   explicit mbl_index_sort_cmp(const CONT &data, const CMP &c = CMP()):
     data_(data), cmp_(c) {}
