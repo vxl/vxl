@@ -41,7 +41,6 @@ public:
 
 
   class value_compare_t
-  : public std::binary_function<value_type, value_type, bool>
   {
   //  friend class vbl_batch_multimap<key_type, mapped_type, key_compare>;
   // protected:
