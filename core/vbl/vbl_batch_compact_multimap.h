@@ -45,7 +45,6 @@ class vbl_batch_compact_multimap
  public:
   //: A comparator to sort input data, by ignoring the value in pair<key, value>
   class input_compare
-  : public std::binary_function<input_type, input_type, bool>
   {
    public:
     friend class vbl_batch_compact_multimap<key_type, value_type, key_compare>;
