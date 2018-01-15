@@ -1,6 +1,7 @@
 #Travis CI configuration for VXL
 # See http://travis-ci.org/vxl/vxl
 
+#dist: trusty # This is the default as of August 2017
 sudo: false
 
 language: cpp
@@ -12,29 +13,20 @@ compiler:
 git:
   depth: 3
 
-#cache: false
-#  directories:
-#  - $HOME/deps
-
-# Need to install cmake 2.8.9 because default 2.8.7 bugs fail to build
-before_script:
-  - bash .travis/install-deps.sh
-
 script:
-  - export PATH=${HOME}/deps/bin:$PATH
   - export HERE=$(pwd)
-  - ${HOME}/deps/bin/cmake --version
+  - cmake --version
   - mkdir -p ${HERE}/build
   - mkdir -p ${HERE}/install
   - cd ${HERE}/build
-  - ${HOME}/deps/bin/cmake
+  - cmake
           -DCMAKE_INSTALL_PREFIX:PATH=${HERE}/install
           -DCMAKE_CXX_STANDARD:STRING=98
           -DBUILD_BRL:BOOL=OFF
           ../
-  - ${HOME}/deps/bin/ctest -D ExperimentalStart
-  - ${HOME}/deps/bin/ctest -D ExperimentalConfigure
-  - ${HOME}/deps/bin/ctest -D ExperimentalBuild -j2
-  - ${HOME}/deps/bin/ctest -D ExperimentalTest --schedule-random -j2
-  - ${HOME}/deps/bin/ctest -D ExperimentalSubmit
+  - ctest -D ExperimentalStart
+  - ctest -D ExperimentalConfigure
+  - ctest -D ExperimentalBuild -j2
+  - ctest -D ExperimentalTest --schedule-random -j2
+  - ctest -D ExperimentalSubmit
   - make install
