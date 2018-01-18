@@ -47,7 +47,7 @@ static void test_image_tableau(int argc, char* argv[])
     TEST( "Contents are correct", okay, true);
 
     delete [] img1_buf;
-    delete img2_buf;
+    delete [] img2_buf;
   }
 }
 
