@@ -229,14 +229,27 @@ bool brad_image_metadata::read_band_dependent_gain_offset()
               << ", only PAN/MULTI/SWIR are supported when reading band calibration factor from file !!!\n";
     return false;
   }
-  if (std::find(sat_names.begin(), sat_names.end(), this->satellite_name_) == sat_names.end())
-    this->gains_ = default_gain[this->band_];
-  else
-    this->gains_ = gains_map[this->satellite_name_][this->band_];
-  if (std::find(sat_names.begin(), sat_names.end(), this->satellite_name_) == sat_names.end())
-    this->offsets_ = default_offset[this->band_];
-  else
-    this->offsets_ = offset_map[this->satellite_name_][this->band_];
+  if (std::find(sat_names.begin(), sat_names.end(), this->satellite_name_) == sat_names.end()) {
+    for (unsigned i = 0; i < this->n_bands_; i++) {
+      this->gains_.push_back(default_gain[this->band_][i]);
+    }
+  }
+  else {
+    for (unsigned i = 0; i < this->n_bands_; i++) {
+      this->gains_.push_back(gains_map[this->satellite_name_][this->band_][i]);
+    }
+  }
+
+  if (std::find(sat_names.begin(), sat_names.end(), this->satellite_name_) == sat_names.end()) {
+    for (unsigned i = 0; i < this->n_bands_; i++) {
+      this->offsets_.push_back(default_offset[this->band_][i]);
+    }
+  }
+  else {
+    for (unsigned i = 0; i < this->n_bands_; i++) {
+      this->offsets_.push_back(offset_map[this->satellite_name_][this->band_][i]);
+    }
+  }
   return true;
 }
 
@@ -298,7 +311,9 @@ bool brad_image_metadata::read_band_dependent_solar_irradiance()
   }
   if (std::find(sat_names.begin(), sat_names.end(), this->satellite_name_) == sat_names.end())
     return false;
-  this->normal_sun_irradiance_values_ = sun_irrad_map[this->satellite_name_][this->band_];
+  for (unsigned i = 0; i < this->n_bands_; i++) {
+    this->normal_sun_irradiance_values_.push_back(sun_irrad_map[this->satellite_name_][this->band_][i]);
+  }
   return true;
 }
 
