@@ -53,6 +53,13 @@ def load_dictionary(dictionary_name):
   tclsf = dbvalue(tclsf_id, tclsf_type)
   return tclsf
 
+def print_texton_dict(tclsf, dictionary_bin, print_mode = 'histograms'):
+  batch.init_process("sdetPrintTextonDictProcess")
+  batch.set_input_from_db(0, tclsf)          # classifier instance
+  batch.set_input_string(1, dictionary_bin)  # trained texton dictionary
+  batch.set_input_string(2, print_mode)      # can be 'histogram', 'textons', 'inter_probs' or 'inter_dist'
+  batch.run_process()
+  return
 
 def extract_filter_bank(tclsf, img_name, filter_folder):
   batch.init_process("sdetExtractFilterBankProcess")
