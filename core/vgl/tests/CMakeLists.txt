@@ -26,6 +26,7 @@ add_executable( vgl_test_all
   test_intersection.cxx
   test_spline.cxx
   test_pointset.cxx
+  test_quadric.cxx
   test_oriented_box_2d.cxx
   test_affine_coordinates.cxx
 )
@@ -54,6 +55,7 @@ add_test( NAME vgl_test_frustum_3d COMMAND $<TARGET_FILE:vgl_test_all> test_frus
 add_test( NAME vgl_test_intersection COMMAND $<TARGET_FILE:vgl_test_all> test_intersection)
 add_test( NAME vgl_test_spline COMMAND $<TARGET_FILE:vgl_test_all> test_spline)
 add_test( NAME vgl_test_pointset COMMAND $<TARGET_FILE:vgl_test_all> test_pointset)
+add_test( NAME vgl_test_quadric COMMAND $<TARGET_FILE:vgl_test_all> test_quadric)
 add_test( NAME vgl_test_oriented_box_2d COMMAND $<TARGET_FILE:vgl_test_all> test_oriented_box_2d)
 add_test( NAME vgl_test_affine_coordinates COMMAND $<TARGET_FILE:vgl_test_all> test_affine_coordinates)
 add_executable( vgl_test_include test_include.cxx )

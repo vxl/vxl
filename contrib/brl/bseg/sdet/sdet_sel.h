@@ -27,8 +27,8 @@
 #include <fstream>
 #include <deque>
 #include <algorithm>
-#include "sdet_sel_utils.h"
-#include "sdet_sel_base.h"
+#include <sdet/sdet_sel_utils.h>
+#include <sdet/sdet_sel_base.h>
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>

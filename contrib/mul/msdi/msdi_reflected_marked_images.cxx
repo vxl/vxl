@@ -134,8 +134,13 @@ void msdi_reflected_marked_images::get_points()
 
   // First pass through, so reflect the points about image midline.
   double ax = 0.5*(image().image_base().ni()-1);
-  msm_reflect_shape_along_x(marked_images_.points(),
+
+  // Project points into image frame, reflect, then project back into world frame.
+  msm_points im_points=marked_images_.points();
+  im_points.transform_by(image().world2im());
+  msm_reflect_shape_along_x(im_points,
                             sym_pts_,points_,ax);
+  points_.transform_by(image().world2im().inverse());  // Map back to world co-ords
   points_ok_=true;
 }
 

@@ -26,10 +26,10 @@ int main(int argc,char * argv[])
   params.print_timing = true;
 
   // Usage information
-  if( argc != 7 && argc != 8 ){
+  if( argc != 8 && argc != 9 ){
     std::cout << "Usage : bsgm_app.exe target_img ref_img disp_img "
       << "min_disparity num_disparities num_active_disparities "
-      << "error_check_mode\n";
+      << "multi_scale_mode error_check_mode\n";
     return -1;
   }
 
@@ -42,6 +42,7 @@ int main(int argc,char * argv[])
   int num_active_disparities = atoi(argv[6]);
   int multi_scale_mode = atoi(argv[7]);
   params.error_check_mode = (argc==8) ? 1 : atoi(argv[8]);
+  params.shadow_thresh = 20;
 
   // Load images
   vil_image_view<vxl_byte> img_right =

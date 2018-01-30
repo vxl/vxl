@@ -12,12 +12,13 @@ batch = brl_init.DummyBatch()
 
 # parse metadata of a sat image, reads sat image, nitf2 header and a
 # metadata file in the same folder as the image if found
-def read_nitf_metadata(nitf_filename, imd_folder=""):
+def read_nitf_metadata(nitf_filename, imd_folder="", verbose = False):
   batch.init_process("bradNITFReadMetadataProcess")
   # requires full path and name
   batch.set_input_string(0, nitf_filename)
   # pass empty if meta is in img folder
   batch.set_input_string(1, imd_folder)
+  batch.set_input_bool(2, verbose)
   status = batch.run_process()
   meta = None
   if status:
@@ -42,14 +43,13 @@ def radiometrically_calibrate(cropped_image, meta):
 # estimate atmospheric parameters
 
 
-def estimate_atmospheric_parameters(image, metadata, mean_reflectance=None, constrain_parameters=None):
+def estimate_atmospheric_parameters(image, metadata, mean_reflectance=0.0, constrain_parameters = True, average_airlight = True):
   batch.init_process("bradEstimateAtmosphericParametersProcess")
   batch.set_input_from_db(0, image)
   batch.set_input_from_db(1, metadata)
-  if mean_reflectance != None:
-    batch.set_input_float(2, mean_reflectance)
-  if constrain_parameters != None:
-    batch.set_input_bool(3, constrain_parameters)
+  batch.set_input_float(2, mean_reflectance)
+  batch.set_input_bool(3, constrain_parameters)
+  batch.set_input_bool(4, average_airlight)
   status = batch.run_process()
   atm_params = None
   if status:
@@ -60,11 +60,13 @@ def estimate_atmospheric_parameters(image, metadata, mean_reflectance=None, cons
 # convert radiance values to estimated reflectances
 
 
-def estimate_reflectance(image, metadata, atmospheric_params):
+def estimate_reflectance(image, metadata, mean_reflectance = 0.0, average_airlight = True, is_normalize = True):
   batch.init_process("bradEstimateReflectanceProcess")
   batch.set_input_from_db(0, image)
   batch.set_input_from_db(1, metadata)
-  batch.set_input_from_db(2, atmospheric_params)
+  batch.set_input_float(2, mean_reflectance)
+  batch.set_input_bool(3, average_airlight)
+  batch.set_input_bool(4, is_normalize)
   status = batch.run_process()
   reflectance_img = None
   if status:
@@ -75,13 +77,14 @@ def estimate_reflectance(image, metadata, atmospheric_params):
 # convert reflectance image back to digital count
 
 
-def convert_reflectance_to_digital_count(reflectance_image, metadata, atmospheric_params, normalize_0_1=False, max_digital_count=2047):
+def convert_reflectance_to_digital_count(reflectance_image, metadata, mean_reflectance = 0.0, normalize_0_1=False, max_digital_count=2047, average_airlight = True):
   batch.init_process("bradConvertReflectanceToDigitalCountProcess")
   batch.set_input_from_db(0, reflectance_image)
   batch.set_input_from_db(1, metadata)
-  batch.set_input_from_db(2, atmospheric_params)
+  batch.set_input_float(2, mean_reflectance)
   batch.set_input_bool(3, normalize_0_1)
   batch.set_input_unsigned(4, max_digital_count)
+  batch.set_input_bool(5, average_airlight)
   batch.run_process()
   (id, type) = batch.commit_output(0)
   output_img = dbvalue(id, type)

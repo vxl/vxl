@@ -5,7 +5,7 @@
 #
 #
 # As per the standard scheme the following definitions are used
-# CLIPPER_INCLUDE_DIR - where to find clipper.hpp
+# CLIPPER_INCLUDE_DIR - where to find clipper.hxx
 # CLIPPER_LIBRARIES   - the set of libraries to include to use CLIPPER.
 # CLIPPER_FOUND       - TRUE, if available somewhere on the system.
 
@@ -30,7 +30,7 @@ if( NOT CLIPPER_FOUND )
   # exist.
   #
   if( NOT CLIPPER_FOUND )
-    if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/clipper/clipper.hpp)
+    if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/clipper/clipper.h)
       set( CLIPPER_FOUND "YES" )
       set( CLIPPER_INCLUDE_DIR ${clipper_BINARY_DIR} ${clipper_SOURCE_DIR})
       set( CLIPPER_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/clipper)

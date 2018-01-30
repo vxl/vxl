@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <vcl_compiler.h>
 
-//#include "sdet_BS.h"
+//#include <sdet/sdet_BS.h>
 
 //for grayscale
 #define NBINS 8

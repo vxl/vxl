@@ -2,6 +2,7 @@
 // J.L. Mundy July 2009
 
 #include <iostream>
+#include <sstream>
 #include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_infinite_line_3d.h>
@@ -105,8 +106,18 @@ static void test_operations()
   bool con = inf_l.contains(x);
   TEST("Contains ", con, true);
   }
+  {
+	vgl_vector_3d<double> t(0,1,0);
+  vgl_point_3d<double> p(1,2,3), p0;
+  vgl_infinite_line_3d<double> inf_l(p, t), in_inf_l;
+  std::stringstream ss;
+  ss << inf_l;
+  std::cout << " infl as writen to stream " << inf_l << std::endl;
+  ss >> in_inf_l;
+  std::cout << "infl members as read from stream " << in_inf_l.x0() << ' ' << in_inf_l.direction() << std::endl;
+  TEST("stream read " , inf_l == in_inf_l , true);
+  }
 }
-
 void test_infinite_line_3d()
 {
   std::cout << "*****************************\n"

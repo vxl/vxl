@@ -420,9 +420,9 @@ void bwm_tableau_img::load_oriented_boxes_2d_ascii()
   }
   while(!istr.eof()){
     vgl_oriented_box_2d<float> obox;
-    obox.read(istr);
-	if(istr.eof())
-		continue;
+    istr >> obox;
+    if(istr.eof())
+      continue;
     std::vector<vgl_point_2d<float> > corns = obox.corners();
     if(!corns.size())
       continue;

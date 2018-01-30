@@ -11,6 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
+#include <vgl/vgl_vector_2d.h>
 
 //: Represents 2x2 symmetric matrix, used as weight matrix
 //  Stores the 3 unique elements and contains various utility
@@ -50,6 +51,10 @@ class msm_wt_mat_2d
 
   //: Calculate eigenvalues
   void eigen_values(double& EV1, double& EV2);
+
+  //: Calculate eigenvector associated with largest eigenvalue.
+  //  Other evec given by (-evec1.y(),evec1.x())
+  void eigen_vector(vgl_vector_2d<double>& evec1, double& eval1, double& eval2);
 
   //: Calculates W2=T'WT where T is 2x2 matrix (a,-b;b,a)
   msm_wt_mat_2d transform_by(double a, double b) const;

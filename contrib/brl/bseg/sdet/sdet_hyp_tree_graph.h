@@ -17,8 +17,8 @@
 #include <set>
 #include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_curvelet.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_curvelet.h>
 
 
 //: a node in the hypothesis tree

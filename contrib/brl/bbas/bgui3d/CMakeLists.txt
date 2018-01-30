@@ -19,8 +19,9 @@ if(BUILD_BGUI3D)
   find_package(Coin3D)
 
   if(COIN3D_FOUND)
-    include_directories( ${COIN3D_INCLUDE_DIR} )
+    include_directories( ${COIN3D_INCLUDE_DIRS} )
     set( HAS_BGUI3D "YES" )
+    set(COIN3D_FOUND "YES")
     add_definitions( -DHAS_BGUI3D )
   endif()
 
@@ -55,7 +56,7 @@ set(bgui3d_sources
 
 vxl_add_library(LIBRARY_NAME bgui3d LIBRARY_SOURCES  ${bgui3d_sources})
 set(BGUI3D_FOUND "YES" CACHE INTERNAL "Was bgui3d successfully built?" )
-target_link_libraries(bgui3d ${COIN3D_LIBRARY} ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul)
+target_link_libraries(bgui3d ${COIN3D_LIBRARIES} ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul)
 
 if(SIMVOLEON_FOUND)
   target_link_libraries(bgui3d ${SIMVOLEON_LIBRARY})

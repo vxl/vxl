@@ -941,6 +941,7 @@ void segv_vil_segmentation_manager::vd_edges()
   vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
   vd_dialog.checkbox("Aggressive Closure", agr);
   vd_dialog.checkbox("Compute Junctions", dp.junctionp);
+  vd_dialog.checkbox("DetectPeaks", dp.peaks_only);
   if (!vd_dialog.ask())
     return;
   dp.noise_multiplier=nm;

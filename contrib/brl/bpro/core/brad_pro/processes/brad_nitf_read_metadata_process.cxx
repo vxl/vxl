@@ -17,6 +17,7 @@ bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
   std::vector<std::string> input_types;
   input_types.push_back("vcl_string"); // image name
   input_types.push_back("vcl_string"); // meta folder if exists
+  input_types.push_back("bool");       // option to print out extra information
 
   if (!pro.set_input_types(input_types))
     return false;
@@ -32,7 +33,7 @@ bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
 
 bool brad_nitf_read_metadata_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs()<1)
+  if (!pro.verify_inputs())
   {
     std::cout << pro.name() << " The input number should be " << 1 << std::endl;
     return false;
@@ -41,9 +42,10 @@ bool brad_nitf_read_metadata_process(bprb_func_process& pro)
   //get the inputs
   std::string nitf_img_name = pro.get_input<std::string>(0);
   std::string meta_folder = pro.get_input<std::string>(1);
+  bool verbose = pro.get_input<bool>(2);
 
   brad_image_metadata_sptr md = new brad_image_metadata;
-
+  md->verbose_ = verbose;
   std::string ext = vul_file::extension(nitf_img_name);
   if (ext.compare(".NTF") == 0 || ext.compare(".ntf") == 0) {
     std::cout << "parse from metadata and image header: " << nitf_img_name << std::endl;

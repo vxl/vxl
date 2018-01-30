@@ -3,11 +3,11 @@
    (See accompanying file rtvl_license_1_0.txt or copy at
    http://www.boost.org/LICENSE_1_0.txt) */
 #include <iostream>
-#include <rtvl/rtvl_tensor.hxx>
-#include <rtvl/rtvl_vote.hxx>
-#include <rtvl/rtvl_votee.hxx>
-#include <rtvl/rtvl_voter.hxx>
-#include <rtvl/rtvl_weight_smooth.hxx>
+#include <rtvl/rtvl_tensor.h>
+#include <rtvl/rtvl_vote.h>
+#include <rtvl/rtvl_votee.h>
+#include <rtvl/rtvl_voter.h>
+#include <rtvl/rtvl_weight_smooth.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>

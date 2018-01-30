@@ -8,7 +8,7 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vcl_cassert.h>
-
+#include <vgl/vgl_box_3d.h>
 
 //: Create a view that is a window onto an existing image.
 // O(1).
@@ -25,6 +25,16 @@ vil3d_image_view<T> vil3d_crop(const vil3d_image_view<T>& im,
   return vil3d_image_view<T>(im.memory_chunk(), &im(i0,j0,k0),
                              ni, nj, nk, im.nplanes(),
                              im.istep(), im.jstep(), im.kstep(), im.planestep());
+}
+
+//: Create a view that is a window onto an existing image.
+// O(1).
+template <class T>
+vil3d_image_view<T> vil3d_crop(const vil3d_image_view<T>& im, const vgl_box_3d<int>& b)
+{
+  return vil3d_crop(im,b.min_x(),1+b.max_x()-b.min_x(),
+                       b.min_y(),1+b.max_y()-b.min_y(),
+                       b.min_z(),1+b.max_z()-b.min_z());
 }
 
 //: Crop to a region of src.

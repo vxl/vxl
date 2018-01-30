@@ -9,9 +9,9 @@
 #include <cmath>
 #include <testlib/testlib_test.h>
 
-#include <rgtl/rgtl_octree_objects.hxx>
-#include <rgtl/rgtl_object_array_points.hxx>
-#include <rgtl/rgtl_octree_cell_bounds.hxx>
+#include <rgtl/rgtl_octree_objects.h>
+#include <rgtl/rgtl_object_array_points.h>
+#include <rgtl/rgtl_octree_cell_bounds.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>

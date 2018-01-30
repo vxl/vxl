@@ -16,6 +16,7 @@
 #include <msm/msm_zoom_aligner.h>
 #include <msm/msm_rigid_aligner.h>
 #include <msm/msm_similarity_aligner.h>
+#include <msm/msm_affine_aligner.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
 
@@ -316,6 +317,40 @@ void test_similarity_aligner()
 }
 
 //=======================================================================
+void test_affine_aligner()
+{
+  msm_affine_aligner aligner;
+  test_generic_aligner(aligner);
+  
+  // Set up unit square points
+  msm_points points0(4);
+  points0.set_point(0, 0,0);
+  points0.set_point(1, 1,0);
+  points0.set_point(2, 1,1);
+  points0.set_point(3, 0,1);
+
+  msm_points points1(4);
+  points1.set_point(0, 1,1);
+  points1.set_point(1, 2,1);
+  points1.set_point(2, 3,0.5);
+  points1.set_point(3, 1,2);
+
+  std::vector<msm_wt_mat_2d> wt_mat(4);
+  wt_mat[1].set_axes(1,0, 0, 10);   // Constrain along (1,0)
+  wt_mat[2].set_axes(0,1, 0, 10);   // Constrain along (0,1)
+
+  vcl_cout<<"Testing calc_transform_wt_mat"<<vcl_endl;
+  vnl_vector<double> pose1;
+  aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
+  msm_points points2;
+  aligner.apply_transform(points0,pose1,points2);
+  vcl_cout<<points2<<vcl_endl;
+  
+  TEST_NEAR("Pt0: ",(points2[0]-vgl_point_2d<double>(1,1)).length(),0,1e-6);
+  TEST_NEAR("Pt1: ",(points2[1]-vgl_point_2d<double>(3,1)).length(),0,1e-6);
+  TEST_NEAR("Pt2: ",(points2[2]-vgl_point_2d<double>(3,2)).length(),0,1e-6);
+}
+//=======================================================================
 
 void test_aligners()
 {
@@ -327,6 +362,7 @@ void test_aligners()
   test_zoom_aligner();
   test_similarity_aligner();
   test_rigid_aligner();
+  test_affine_aligner();
 }
 
 TESTMAIN(test_aligners);

@@ -19,8 +19,8 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_point_2d.h>
-#include "sdet_edgel.h"
-#include "sdet_sel_utils.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_sel_utils.h>
 
 //: very light class to store edgels
 class sdet_edge

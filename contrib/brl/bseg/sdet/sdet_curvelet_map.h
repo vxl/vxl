@@ -22,9 +22,9 @@
 #include <list>
 #include <vcl_compiler.h>
 
-#include "sdet_edgel.h"
-#include "sdet_curvelet.h"
-#include "sdet_edgemap_sptr.h"
+#include <sdet/sdet_edgel.h>
+#include <sdet/sdet_curvelet.h>
+#include <sdet/sdet_edgemap_sptr.h>
 
 //: curvelet formation parameters
 class sdet_curvelet_params

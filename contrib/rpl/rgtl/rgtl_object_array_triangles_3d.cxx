@@ -9,18 +9,18 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
-#include "rgtl_object_array_triangles_3d.hxx"
+#include "rgtl_object_array_triangles_3d.h"
 
-#include "rgtl_object_closest_polygon_3d.hxx"
-#include "rgtl_separating_axis.hxx"
-#include "rgtl_serialize_access.hxx"
-#include "rgtl_serialize_base.hxx"
-#include "rgtl_serialize_stl_vector.hxx"
-#include "rgtl_serialize_vnl_vector_fixed.hxx"
-#include "rgtl_serialize_vnl_double_3.hxx"
-#include "rgtl_serialize_split.hxx"
-#include "rgtl_serialize_istream.hxx"
-#include "rgtl_serialize_ostream.hxx"
+#include "rgtl_object_closest_polygon_3d.h"
+#include "rgtl_separating_axis.h"
+#include "rgtl_serialize_access.h"
+#include "rgtl_serialize_base.h"
+#include "rgtl_serialize_stl_vector.h"
+#include "rgtl_serialize_vnl_vector_fixed.h"
+#include "rgtl_serialize_vnl_double_3.h"
+#include "rgtl_serialize_split.h"
+#include "rgtl_serialize_istream.h"
+#include "rgtl_serialize_ostream.h"
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_double_3.h>

@@ -197,6 +197,7 @@ int main(int argc, char** argv)
 
   for (unsigned i=0;i<shapes.size();++i)
   {
+    if (shapes[i].size()==0) continue;
     sm_instance.fit_to_points(shapes[i]);
 
     if (use_pts_name()) ofs<<params.points_names[i]<<' ';

@@ -132,6 +132,10 @@ class vpgl_orientation_position_focal_lsqr : public vnl_least_squares_function
   //  where w is the Rodrigues vector of the rotation and t is the translation.
   virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
+  //: Gradients of the cost-function w.r.t. to the 7 free parameters of x
+  //  The seven parameters are rotation(wx, wy, wz), translation(tx, ty, tz) and focal length (Fx)
+  virtual void gradf(vnl_vector<double> const&x, vnl_matrix<double>& jacobian);
+
 #if 0
   //: Called after each LM iteration to print debugging etc.
   virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);

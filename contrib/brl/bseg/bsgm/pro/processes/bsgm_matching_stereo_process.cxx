@@ -20,7 +20,7 @@
 //: Take two rectified images, generate their disparity map calculated using semi-global matching stereo algorithm
 namespace bsgm_matching_stereo_process_globals
 {
-  const unsigned n_inputs_ = 8;
+  const unsigned n_inputs_ = 9;
   const unsigned n_outputs_ = 2;
 }
 
@@ -40,6 +40,7 @@ bool bsgm_matching_stereo_process_cons(bprb_func_process& pro)
   input_types_[6] = "int";                       // the mode parameter to specify how to use disparity estimate from coarse scale.  0 -- single median;
                                                  // 1 -- block wise disparity;  2 -- entire disparity image from coarse scale
   input_types_[7] = "vcl_string";                // output text file to store the matched disparities per pixel
+  input_types_[8] = "unsigned";                       // threshold that treats pixel as shadow pixels
 
   // process takes 2 outputs
   std::vector<std::string> output_types_(n_outputs_);
@@ -65,6 +66,7 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   int error_check_mode                  = pro.get_input<int>(in_i++);
   int multi_scale_mode                  = pro.get_input<int>(in_i++);
   std::string out_disparity_txt         = pro.get_input<std::string>(in_i++);
+  unsigned shadow_thresh                = pro.get_input<unsigned>(in_i++);
 
   // load image
   vil_image_view<vxl_byte>* img_ref = dynamic_cast<vil_image_view<vxl_byte>*>(img_ref_sptr.ptr());
@@ -90,6 +92,7 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   params.census_rad = 2;
   params.print_timing = true;
   params.error_check_mode = error_check_mode;
+  params.shadow_thresh = static_cast<vxl_byte>(shadow_thresh);
 
   // compute invalid map
   vil_image_view<bool> invalid_right;

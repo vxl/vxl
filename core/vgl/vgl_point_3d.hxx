@@ -5,6 +5,7 @@
 // \file
 
 #include <iostream>
+#include <string>
 #include <iomanip>
 #include <cmath>
 #include "vgl_point_3d.h"
@@ -98,6 +99,12 @@ std::istream& vgl_point_3d<Type>::read(std::istream& is)
   bool paren = false;
   Type tx, ty, tz;
   is >> std::ws; // jump over any leading whitespace
+  char c;
+  c=is.peek();
+  if(c == '<'){
+	  std::string temp;
+	  is >> temp;
+  }
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
   is >> std::ws >> tx >> std::ws;
@@ -112,6 +119,8 @@ std::istream& vgl_point_3d<Type>::read(std::istream& is)
     if (is.peek() == ')') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
   }
+  is >> std::ws;
+  if (is.peek() == '>') is.ignore();
   set(tx,ty,tz);
   return is;
 }

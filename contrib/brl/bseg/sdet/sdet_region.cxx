@@ -112,7 +112,7 @@ bool sdet_region::compute_obox(){
   vmin /= this->AspectRatio();
   vgl_point_2d<float> minp1(center-vmin), minp2(center+vmin);
   vgl_line_segment_2d<float> majs(majp1, majp2), mins(minp1, minp2);
-  obox_.set(majs, mins);
+  obox_=vgl_oriented_box_2d<float>(majs, mins);
   obox_valid_ = true;
   return true;
 }

@@ -15,12 +15,46 @@
 #include <vimt/vimt_load.h>
 #include <vimt/vimt_convert.h>
 
+#include <mbl/mbl_parse_colon_pairs_list.h>
+
+
+//: Return string (e.g. "Raw") for given state
+vcl_string msdi_string_from_state(msdi_reflection_state s)
+{
+  switch (s)
+  {
+    case Raw: return vcl_string("Raw");
+    case ReflectOnly: return vcl_string("ReflectOnly");
+    case OnlyReflectIm: return vcl_string("OnlyReflectIm");
+    case ReflectSym: return vcl_string("ReflectSym");
+    case ReflectAsymRawPts: return vcl_string("ReflectAsymRawPts");
+    case ReflectAsymRefPts: return vcl_string("ReflectAsymRefPts");
+  }
+  return vcl_string("Invalid");
+}
+
+//: Convert string to state, returning true if valid string supplied.
+bool msdi_state_from_string(const vcl_string& str, msdi_reflection_state& state)
+{
+  if (str=="Raw")          { state=Raw; return true; }
+  if (str=="ReflectOnly")  { state=ReflectOnly; return true; }
+  if (str=="OnlyReflectIm"){ state=OnlyReflectIm; return true; }
+  if (str=="ReflectSym")   { state=ReflectSym; return true; }
+  if (str=="ReflectAsymRawPts")  { state=ReflectAsymRawPts; return true; }
+  if (str=="ReflectAsymRefPts")  { state=ReflectAsymRefPts; return true; }
+  
+  state=Raw;
+  // No valid string available
+  return false; 
+}
 
 msdi_marked_images_from_files::msdi_marked_images_from_files()
-  : grey_only_(true),image_ok_(false),image_pyr_ok_(false),
-    points_ok_(false),load_as_float_(false),unit_scaling_(1000.0f),index_(0)
+  : ref_state_(Raw),grey_only_(true),unit_scaling_(1000.0f),
+    image_ok_(false),image_pyr_ok_(false),
+    points_ok_(false),load_as_float_(false),index_(0)
 {
   pyr_builder_.set_min_size(24,24);
+  points_are_reflected_=false;
 }
 
 //: Construct to use the external images and points of given type
@@ -47,17 +81,16 @@ void msdi_marked_images_from_files::set(const std::string& image_dir,
   points_dir_  = points_dir;
   points_name_ = points_names;
 
-  index_ = 0;
-  image_ok_=false;
-  image_pyr_ok_=false;
-  points_ok_=false;
   grey_only_=true;
   load_as_float_ = load_as_float;
+  ref_state_=Raw;
+  reset();
 }
 //: Initialise with directories and filenames
 void msdi_marked_images_from_files::set(const std::string& image_dir,
                                         const std::vector<std::string>& image_names,
-                                        const std::string& points_dir)
+                                        const std::string& points_dir,
+                                        bool load_as_float)
 {
   unsigned n=image_names.size();
   std::vector<std::string> points_names(n);
@@ -67,7 +100,7 @@ void msdi_marked_images_from_files::set(const std::string& image_dir,
     points_names[i]=image_names[i]+".pts";
   }
 
-  set(image_dir,image_names, points_dir, points_names);
+  set(image_dir,image_names, points_dir, points_names, load_as_float);
 }
 
 //=======================================================================
@@ -77,6 +110,36 @@ void msdi_marked_images_from_files::set(const std::string& image_dir,
 msdi_marked_images_from_files::~msdi_marked_images_from_files()
 {
 }
+
+//: Reflect current points
+void msdi_marked_images_from_files::reflect_points()
+{
+  if (points_.size()==0) return;
+  
+  // Need image to calculate reflection plane
+  if (!image_ok_) get_image();  
+  
+  // Image voxels will be reflected about line x=0.5(ni-1).
+  double ax=0.5*(image().image_size()[0]-1);
+  
+  if (ref_point_index_.size()==0)
+  {
+    // Set 1-1 matching
+    ref_point_index_.resize(points_.size());
+    for (unsigned i=0;i<points_.size();++i)
+      ref_point_index_[i]=i;
+  }
+  
+  // Project points to image frame, reflect, then project back.
+  points_.transform_by(image().world2im());  // Transform to image
+  msm_points ref_points;
+  msm_reflect_shape_along_x(points_,ref_point_index_,ref_points,ax);
+  points_=ref_points;
+  points_.transform_by(image().world2im().inverse()); // Map back to world.
+  
+  points_are_reflected_=true;
+}
+
 
 //: When true, all images converted to greyscale (1 plane) on loading
 void msdi_marked_images_from_files::set_convert_to_greyscale(bool b)
@@ -92,10 +155,13 @@ void msdi_marked_images_from_files::set_unit_scaling(float s)
   unit_scaling_=s;
 }
 
-
 unsigned msdi_marked_images_from_files::size() const
 {
-  return image_name_.size();
+  // Number of images returned for each image listed:
+  unsigned s=1;
+  if (ref_state_==ReflectSym || ref_state_==ReflectAsymRawPts || ref_state_==ReflectAsymRefPts) s=2;
+  
+  return s*image_name_.size();
 }
 
 //: Return current image
@@ -152,6 +218,8 @@ void msdi_marked_images_from_files::reset()
   image_ok_=false;
   image_pyr_ok_=false;
   points_ok_=false;
+  image_is_reflected_=(ref_state_==ReflectOnly || ref_state_==OnlyReflectIm );
+  points_are_reflected_=false;
 }
 
 //=======================================================================
@@ -159,15 +227,72 @@ void msdi_marked_images_from_files::reset()
 //=======================================================================
 bool msdi_marked_images_from_files::next()
 {
-  if (index_+1>=(int)size()) return false;
-  ++index_;
+  if (ref_state_==ReflectAsymRawPts && !image_is_reflected_)
+  {
+    // Current image is valid, so next is reflected version.
+    if (!image_ok_) get_image();
+    reflect_image();
+    
+    points_ok_=false;  // Force loading in of reflected set
+    return true;
+  }
+  
+  if (ref_state_==ReflectAsymRefPts && !image_is_reflected_)
+  {
+    // Current image is valid, so next is reflected version.
+    if (!image_ok_) get_image();
+    reflect_image();
+    
+    points_ok_=false;  // Force loading in of reflected set
+    reflect_points();  
+    return true;
+  }
+  
+  if (ref_state_==ReflectSym && !image_is_reflected_)
+  {
+    // Current image is valid, so next is reflected version.
+    if (!image_ok_) get_image();
+    
+    // Reflect the current image.
+    reflect_image();
+    
+    reflect_points();  // Reflect and re-number points
+    return true;
+  }
+  
+  if (index_+1>=(int)image_name_.size()) return false;
+  
+  ++index_;  // Move to next image
+  if (ref_state_==ReflectOnly || 
+      ref_state_==ReflectSym  || 
+      ref_state_==ReflectAsymRawPts || 
+      ref_state_==ReflectAsymRefPts) 
+    image_is_reflected_=false;
+  
   image_ok_=false;
   image_pyr_ok_=false;
   points_ok_=false;
+  points_are_reflected_=false;
 
   return true;
 }
 
+    
+void msdi_marked_images_from_files::reflect_image()
+{
+  if (load_as_float_)
+  {
+    vil_image_view<float> ref_im = vil_flip_lr(float_image_.image());
+    float_image_.image()=ref_im;
+  }
+  else
+  {
+    vil_image_view<vxl_byte> ref_im = vil_flip_lr(image_.image());
+    image_.image()=ref_im;
+  }
+  image_is_reflected_=true;
+  image_pyr_ok_=false;
+}
 
 //: Load in current image and generate suitable pyramid
 void msdi_marked_images_from_files::get_image()
@@ -208,13 +333,27 @@ void msdi_marked_images_from_files::get_image()
     }
   }
 
+  image_is_reflected_=false;
+  
+  if (ref_state_==OnlyReflectIm || ref_state_==ReflectOnly)
+  {
+    reflect_image();
+  }
+  
   image_ok_=true;
+
 }
 
 void msdi_marked_images_from_files::get_points()
 {
+  vcl_string ref_prefix;
+
+  // ReflectAsymRawPts state uses separate points files for reflected points:
+  if (ref_state_==ReflectAsymRawPts && image_is_reflected_) ref_prefix=ref_prefix_;
+  if (ref_state_==ReflectAsymRefPts && image_is_reflected_) ref_prefix=ref_prefix_;
+
   // Read in the points
-  std::string points_path = points_dir_ + "/" + points_name_[index_];
+  std::string points_path = points_dir_ + "/" + ref_prefix + points_name_[index_];
   if (!points_.read_text_file(points_path))
   {
     std::cerr<<"msdi_marked_images_from_files::get_points()"
@@ -222,19 +361,133 @@ void msdi_marked_images_from_files::get_points()
   }
   else
     points_ok_=true;
+  
+  points_are_reflected_=false;
+  
+  if (ref_state_==ReflectOnly) reflect_points();
+  if (ref_state_==ReflectAsymRefPts && image_is_reflected_) reflect_points();
 }
 
 //: Return current image file name
 std::string msdi_marked_images_from_files::image_name() const
 {
-  assert(index_ < (int)size());
+  assert(index_ < (int)image_name_.size());
   return image_name_[index_];
 }
 
 //: Return current points file name
 std::string msdi_marked_images_from_files::points_name() const
 {
-  assert(index_ < (int)size());
+  if (index_>=(int)points_name_.size())
+  {
+    vcl_cerr<<"Attempt to read beyond end of name array."<<vcl_endl;
+    abort();
+  }
+  
+  if (image_is_reflected_)
+  {
+    if (ref_state_==ReflectAsymRawPts ||
+        ref_state_==ReflectAsymRefPts ||
+        ref_state_==ReflectSym) 
+    return ref_prefix_+points_name_[index_];
+  }
   return points_name_[index_];
 }
 
+void msdi_marked_images_from_files::set_state(msdi_reflection_state s)
+{
+  ref_state_=s;
+  reset();
+}
+
+//: Define prefix to be used for reflected points. 
+// Default is "ref_".  Only used for ReflectAsymRawPts state.
+void msdi_marked_images_from_files::set_ref_prefix(const vcl_string& ref_prefix)
+{
+  ref_prefix_=ref_prefix;
+}
+
+//: Define point mapping for reflected points
+//  rpi[i] is index in old list of reflected point i
+//  Only used for ReflectSym state.
+void msdi_marked_images_from_files::set_ref_point_index(const vcl_vector<unsigned>& rpi)
+{
+  ref_point_index_ = rpi;
+}
+
+//: Set up from information in props object
+// Expects to find parameters for reflection_symmetry, reflection_state and ref_prefix.
+void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_props_type& props)
+{
+  vcl_string ref_sym_str=props.get_optional_property("reflection_symmetry","");
+  ref_point_index_.resize(0);
+  if (ref_sym_str!="" && ref_sym_str!="-")
+  {
+    vcl_stringstream ss(ref_sym_str);
+    mbl_parse_int_list(ss, vcl_back_inserter(ref_point_index_),
+                       unsigned());
+  }
+  
+  // For backwards compatability
+  bool only_reflect=vul_string_to_bool(props.get_optional_property("only_reflect","false"));
+  
+  ref_prefix_=props.get_optional_property("ref_prefix","ref-");
+  if (ref_prefix_=="-") ref_prefix_="";  // Use "-" to mean empty string.
+
+  vcl_string ref_state_str=props.get_optional_property("reflection_state","Undefined");
+  if (ref_state_str=="Undefined")
+  {
+    // For backwards compatability.
+    if (ref_point_index_.size()>0) 
+    {
+      if (only_reflect) ref_state_=ReflectOnly;
+      else              ref_state_=ReflectSym;
+    }
+    else
+    {
+      if (only_reflect) ref_state_=ReflectOnly;
+      else              ref_state_=Raw;
+    }
+  }
+  else
+  {
+    if (!msdi_state_from_string(ref_state_str,ref_state_))
+    {
+      throw (mbl_exception_parse_error("Unknown reflection_state: "+ref_state_str));     
+    }
+  }
+
+}
+
+//: Set up from information in props object
+// Expects to find parameters for images, image_dir, points_dir, and optionally
+// reflection_symmetry, reflection_state and ref_prefix.
+void msdi_marked_images_from_files::set_from_props(mbl_read_props_type& props)
+{
+  image_dir_=props.get_optional_property("image_dir","./");
+  points_dir_=props.get_optional_property("points_dir","./");
+
+  mbl_parse_colon_pairs_list(props.get_required_property("images"),
+                             points_name_,image_name_);
+  
+  unsigned max_im_pyr_levels=vul_string_atoi(props.get_optional_property("max_im_pyr_levels","5"));
+  pyr_builder().set_max_levels(max_im_pyr_levels);
+  
+  set_reflection_state_from_props(props);
+}
+
+//: Parse named text file to read in data
+//  Throws a mbl_exception_parse_error if fails
+void msdi_marked_images_from_files::read_from_file(const vcl_string& path)
+{
+  vcl_ifstream ifs(path.c_str());
+  if (!ifs)
+  {
+    vcl_string error_msg = "Failed to open file: "+path;
+    throw (mbl_exception_parse_error(error_msg));
+  }
+
+  mbl_read_props_type props = mbl_read_props_ws(ifs);
+
+  set_from_props(props);
+}

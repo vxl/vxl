@@ -116,7 +116,8 @@ expatpp::parseFile(FILE* inFile)
   // hack here
   // Sep, 2012, Yi Dong: hack to not use BUFSIZ for large file
   //char buf[BUFSIZ];
-  long lSize = 1024*1024*1000;
+  //long lSize = 1024*1024*1000;
+  long lSize = 1024*1024*750;//JLM Jul 2017 reduce lSize due to segfault in new
   char* buf = new char[lSize];
   int done;
   if (!inFile)
@@ -126,7 +127,7 @@ expatpp::parseFile(FILE* inFile)
     /*size_t len = fread(buf, 1, sizeof(buf), inFile);
     done = len < sizeof(buf);*/
     size_t len = fread(buf, 1, lSize, inFile);
-    done = len < lSize;
+    done = len < static_cast<size_t>(lSize);
     enum XML_Status parseStatus;
     if ((parseStatus = XML_Parse(buf, len, done))!=XML_STATUS_OK) {
       return parseStatus;

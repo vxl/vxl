@@ -8,7 +8,7 @@
 #include <cmath>
 #include <testlib/testlib_test.h>
 
-#include <rgtl/rgtl_sqt_base.hxx>
+#include <rgtl/rgtl_sqt_base.h>
 #include <vcl_compiler.h>
 
 static double const test_directions[100][3] =

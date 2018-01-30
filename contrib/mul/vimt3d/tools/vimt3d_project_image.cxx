@@ -46,6 +46,25 @@ void i_axis_projection(const vil3d_image_view<T>& im3d,
   vil_convert_stretch_range(sum_image,byte_image);
 }
 
+// Generate a projection along the i axis, finding maximum across all the i-planes
+template<class T>
+void i_axis_max_projection(const vil3d_image_view<T>& im3d,
+                       vil_image_view<vxl_byte>& byte_image)
+{
+  unsigned ni=im3d.ni();
+  unsigned nj=im3d.nj();
+  unsigned nk=im3d.nk();
+
+  vil_image_view<float> max_image;
+  max_image.deep_copy(vil3d_slice_jk(im3d,0));
+  for (unsigned i=1;i<ni;++i)
+    vil_math_image_max(max_image,vil3d_slice_jk(im3d,i),max_image);
+
+  vil_convert_stretch_range(max_image,byte_image);
+}
+
+
+
 // Generate a projection along the j axis by summing all the j-planes
 template<class T>
 void j_axis_projection(const vil3d_image_view<T>& im3d,
@@ -196,6 +215,7 @@ int main(int argc, char** argv)
     vil_image_view<vxl_byte> image2d;
 
     if (projection_dir()=="x")
+//      i_axis_max_projection(resampled_image,image2d);
       i_axis_projection(resampled_image,image2d);
     else
     if (projection_dir()=="y")

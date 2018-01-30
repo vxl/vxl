@@ -81,97 +81,91 @@ const unsigned MAX_FILE_FORMATS=256;
 // Clears list on deletion.
 struct vil_file_format_storage
 {
-  vil_file_format** l;
-  vil_file_format_storage(): l(new vil_file_format*[MAX_FILE_FORMATS])
+  std::list<vil_file_format*> l;
+  vil_file_format_storage()
   {
-    unsigned c=0;
 #if HAS_JPEG
-    l[c++] = new vil_jpeg_file_format;
+    l.push_back(new vil_jpeg_file_format);
 #endif
 #if HAS_PNG
-    l[c++] = new vil_png_file_format;
+    l.push_back(new vil_png_file_format);
 #endif
 #if HAS_PNM
-    l[c++] = new vil_pnm_file_format;
-    l[c++] = new vil_pbm_file_format;
-    l[c++] = new vil_pgm_file_format;
-    l[c++] = new vil_ppm_file_format;
+    l.push_back(new vil_pnm_file_format);
+    l.push_back(new vil_pbm_file_format);
+    l.push_back(new vil_pgm_file_format);
+    l.push_back(new vil_ppm_file_format);
 #endif
 #if HAS_IRIS
-    l[c++] = new vil_iris_file_format;
+    l.push_back(new vil_iris_file_format);
 #endif
 #if HAS_MIT
-    l[c++] = new vil_mit_file_format;
+    l.push_back(new vil_mit_file_format);
 #endif
 #if HAS_VIFF
-    l[c++] = new vil_viff_file_format;
+    l.push_back(new vil_viff_file_format);
 #endif
 #if HAS_BMP
-    l[c++] = new vil_bmp_file_format;
+    l.push_back(new vil_bmp_file_format);
 #endif
 #if HAS_GIF
-    l[c++] = new vil_gif_file_format;
+    l.push_back(new vil_gif_file_format);
 #endif
 #if HAS_RAS
-    l[c++] = new vil_ras_file_format;
+    l.push_back(new vil_ras_file_format);
 #endif
 #if HAS_GEN
-    l[c++] = new vil_gen_file_format;
+    l.push_back(new vil_gen_file_format);
 #endif
 // the DCMTK based reader is more complete, so use try that
 // before the vil implementation
 #if HAS_DCMTK
-    l[c++] = new vil_dicom_file_format;
+    l.push_back(new vil_dicom_file_format);
 #endif
 
 #if HAS_NITF
-  l[c++] = new vil_nitf2_file_format;
+  l.push_back(new vil_nitf2_file_format);
 #endif
 
 #if HAS_J2K
-  l[c++] = new vil_j2k_file_format;
+  l.push_back(new vil_j2k_file_format);
 #endif
 
 #if HAS_OPENJPEG2
-  l[c++] = new vil_openjpeg_jp2_file_format;
-  //l[c++] = new vil_openjpeg_jpt_file_format;
-  l[c++] = new vil_openjpeg_j2k_file_format;
+  l.push_back(new vil_openjpeg_jp2_file_format);
+  l.push_back(new vil_openjpeg_j2k_file_format);
 #endif
 
 #if HAS_TIFF
-    l[c++] = new vil_tiff_file_format;
-    l[c++] = new vil_pyramid_image_list_format;
+    l.push_back(new vil_tiff_file_format);
+    l.push_back(new vil_pyramid_image_list_format);
 #endif
-    l[c++] = VXL_NULLPTR;
   }
 
   ~vil_file_format_storage()
   {
-    unsigned c=0;
-    while (l[c]!=VXL_NULLPTR)
-      delete l[c++];
-    delete [] l;
-    l=VXL_NULLPTR;
+    for(std::list<vil_file_format*>::iterator i = l.begin(); i != l.end(); ++i)
+    {
+      if(*i)
+      {
+        delete *i;
+      }
+    }
   }
 };
 
 //: The function will take ownership of ff;
 void vil_file_format::add_file_format(vil_file_format* ff)
 {
-  vil_file_format** l=all();
-  unsigned c=0;
-  while (c<MAX_FILE_FORMATS-1u && l[c]!=VXL_NULLPTR) ++c;
-  if (l[c]!=VXL_NULLPTR)
-  {
-    std::cerr << "ERROR vil_file_format::add_file_format Unable to add any more file formats\n";
-    std::abort();
-  }
-  l[c] = ff;
-  l[c+1] = VXL_NULLPTR;
+  std::list<vil_file_format*>& l = all();
+
+  // Always add runtime-loaded formats to the front to allow them to replace
+  // built-in formats
+  l.push_front(ff);
 }
 
 
-vil_file_format** vil_file_format::all()
+std::list<vil_file_format*>& vil_file_format::all()
 {
   static vil_file_format_storage storage;
   return storage.l;
