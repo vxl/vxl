@@ -26,7 +26,11 @@ class bil_convert_resource_to_grey{
     std::string fmt(file_fmt);
     is_tiff = (fmt == "tiff");
   }
-  if(is_tiff && resc->pixel_format() == VIL_PIXEL_FORMAT_RGBA_UINT_16){
+  if(is_tiff && 
+     (resc->pixel_format() == VIL_PIXEL_FORMAT_RGBA_UINT_16 || 
+      (resc->pixel_format() == VIL_PIXEL_FORMAT_UINT_16 && resc->nplanes() >= 3)
+     )
+    ) {
     vil_image_view<vxl_uint_16> view = resc->get_view();
     vil_image_view<vxl_uint_16> out(view.ni(), view.nj());
     for(unsigned j = 0; j<view.nj(); j++)

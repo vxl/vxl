@@ -30,7 +30,7 @@ bool betr_pixelwise_change_detection::process() {
   int bb_width = evt_bb->width(), bb_height = evt_bb->height();
   if (bb_minx < 0 || bb_minx + bb_width >= static_cast<int>(evt_imgr_->ni()) ||
     bb_miny < 0 || bb_miny + bb_height >= static_cast<int>(evt_imgr_->nj())) {
-    std::cout << "WARNING: invalid bounding box\n";
+    std::cout << "WARNING: betr_pixelwise_change_detection invalid bounding box\n";
     avg_prob_ = -1.0;
     return true;
   }
@@ -110,7 +110,7 @@ bool betr_pixelwise_change_detection::process() {
     cd_success = cd.multi_image_detect(evt_img, ref_cropped, valid, evt_change_prob);
   }
   if(! cd_success ){
-    std::cout << "WARNING: change detection failure\n";
+    std::cout << "WARNING: betr_pixelwise_change_detection unsuccessful change detection\n";
     avg_prob_ = -1.0;
     return true;
   }
@@ -118,7 +118,7 @@ bool betr_pixelwise_change_detection::process() {
   // Convert to byte and save as prob map
   vil_image_view<vxl_byte> vis;
   vil_convert_stretch_range_limited( evt_change_prob, vis, 0.0f, 1.0f );
-  change_img_ = vil_new_image_resource_of_view(vis);
+ 
   i_offset_ = bb_minx; j_offset_ = bb_miny;
 
   vil_save(vis, (save_dir + "change_prob.tif").c_str());
@@ -135,21 +135,25 @@ bool betr_pixelwise_change_detection::process() {
   //create vgl_polygon so that we can check if each pixel is in the polygon using with vgl contains function
   vgl_polygon<double> evt_vgl_poly = bsol_algs::vgl_from_poly(evt_evt_poly_);
 
+  vil_image_view<float> temp;
 
+  int num_in_poly = 0;
   // create integral images
   for( int y = 0; y < bb_height; y++ ){
     for (int x = 0; x < bb_width; x++) {
       if (!evt_vgl_poly.contains(x + bb_minx, y + bb_miny)) {
+        vis(x, y) = static_cast<vxl_byte>(0);
         integral_im_poly(x + 1, y + 1) = 0 + integral_im_poly(x, y + 1) + integral_im_poly(x + 1, y) - integral_im_poly(x, y);
         evt_change_prob(x, y) = 0; // outside of the polygon there should be 0 probability of change
       }
       else {
+        num_in_poly++;
         integral_im_poly(x + 1, y + 1) = 1 + integral_im_poly(x, y + 1) + integral_im_poly(x + 1, y) - integral_im_poly(x, y);
       }
       integral_im( x + 1, y + 1 ) = evt_change_prob(x, y) + integral_im(x, y + 1) + integral_im(x + 1, y) - integral_im(x, y);
     }
   }
-
+  change_img_ = vil_new_image_resource_of_view(vis);
   // find region of highest probability
   int eventHeight = cd_params->pw_params_.event_height;
   int eventWidth = cd_params->pw_params_.event_width;

@@ -72,6 +72,12 @@ def add_event_trigger(site, event_trigger):
     raise BetrException("failed to add event trigger")
 
 # add an event trigger object to the event trigger
+def add_event_trigger_event_object(event_trigger, name, lon, lat, elev, geom_path):
+  add_event_trigger_object(event_trigger, name, lon, lat, elev, geom_path, False)
+
+def add_event_trigger_reference_object(event_trigger, name, lon, lat, elev, geom_path):
+  add_event_trigger_object(event_trigger, name, lon, lat, elev, geom_path, True)
+
 def add_event_trigger_object(event_trigger, name, lon, lat, elev, geom_path, is_reference):
   batch.init_process("betrAddEventTriggerObjectProcess")
   batch.set_input_from_db(0, event_trigger)
@@ -101,8 +107,6 @@ def add_gridded_event_poly(event_trigger, name, lon, lat, elev, geom_path, grid_
 
 
 # set image and camera data on an event trigger
-
-
 def set_event_trigger_data(event_trigger, ref_imgr, ref_camera, event_imgr, event_camera):
   batch.init_process("betrSetEventTriggerDataProcess")
   batch.set_input_from_db(0, event_trigger)
@@ -113,6 +117,27 @@ def set_event_trigger_data(event_trigger, ref_imgr, ref_camera, event_imgr, even
   status = batch.run_process()
   if(not status):
     raise BetrException("failed to set event trigger data")
+
+# set event OR reference image & camera data on an event trigger
+def set_event_trigger_event_data(event_trigger, imgr, camera):
+  set_event_trigger_partial_data(event_trigger, imgr, camera, False, False)
+
+def set_event_trigger_reference_data(event_trigger, imgr, camera):
+  set_event_trigger_partial_data(event_trigger, imgr, camera, True, False)
+
+def add_event_trigger_reference_data(event_trigger, imgr, camera):
+  set_event_trigger_partial_data(event_trigger, imgr, camera, True, True)
+
+def set_event_trigger_partial_data(event_trigger, imgr, camera, is_reference, keep_data):
+  batch.init_process("betrSetEventTriggerPartialDataProcess")
+  batch.set_input_from_db(0, event_trigger)
+  batch.set_input_from_db(1, imgr)
+  batch.set_input_from_db(2, camera)
+  batch.set_input_bool(3, is_reference)
+  batch.set_input_bool(4, keep_data)
+  status = batch.run_process()
+  if(not status):
+    raise BetrException("failed to set event trigger data")   
 
 # set event trigger data with multiple reference images - image/camera paths are given not resources but as string arrays
 # inputs are all paths for consistency. Compare to previous adaptor, which passes pointers to images and cameras
@@ -161,7 +186,7 @@ def execute_event_trigger_multi(event_trigger, algorithm_name, algorithm_params_
         evt_names = batch.get_bbas_1d_array_string(name_id);
         return (prob_change, evt_names)
     else:
-        raise BetrException("failed to add execute trigger with multiple event regions")
+        raise BetrException("failed to execute trigger with multiple event regions")
         return (prob_change, evt_names)
     
 # execute change detection with a multiple event regions

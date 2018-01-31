@@ -52,6 +52,7 @@ DECLARE_FUNC_CONS(vpgl_load_geo_camera_process);
 DECLARE_FUNC_CONS(vpgl_find_connected_component_process);
 DECLARE_FUNC_CONS(vpgl_create_dem_manager_process);
 DECLARE_FUNC_CONS(vpgl_backproject_dem_process);
+DECLARE_FUNC_CONS(vpgl_dem_image_projection_process);
 #endif
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process3);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process4);

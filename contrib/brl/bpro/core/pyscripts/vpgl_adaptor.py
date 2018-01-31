@@ -814,16 +814,6 @@ def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance=1000.0):
   batch.remove_data(lvcs.id)
   return gsd_i, gsd_j
 
-
-def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename, init_finish=True):
-  batch.init_process('vpglGeoFootprintProcess')
-  batch.set_input_from_db(0, geocam)
-  batch.set_input_string(1, geotiff_filename)
-  batch.set_input_string(2, out_kml_filename)
-  batch.set_input_bool(3, init_finish)
-  batch.run_process()
-
-
 def get_geocam_footprint_with_value(geocam, geotiff_filename, out_kml_filename="", write_kml=False):
   batch.init_process("vpglGeoFootprintProcess2")
   batch.set_input_from_db(0, geocam)
@@ -1637,42 +1627,42 @@ def rational_camera_get_up_vector(in_cam):
 # create a DEM manager to support DEM utility functions
 # note if zmin > zmax, these values will be calculated from the DEM
 def create_DEM_manager(dem_img_resc,zmin=0.0,zmax=-1.0):
-    batch.init_process("vpglCreateDemManagerProcess")
-    batch.set_input_from_db(0, dem_img_resc)
-    batch.set_input_double(1, zmin)
-    batch.set_input_double(2, zmax)   
-    status = batch.run_process()
-    if status:
-        (id0, type) = batch.commit_output(0)
-        dem_mgr = dbvalue(id0, type)
-        (id1, type) = batch.commit_output(1)
-        zmin = batch.get_output_double(id1)
-        (id2, type) = batch.commit_output(2)
-        zmax = batch.get_output_double(id2)
-        return (dem_mgr,zmin,zmax)
-    raise VpglException("failed to create a DEM manager")
+  batch.init_process("vpglCreateDemManagerProcess")
+  batch.set_input_from_db(0, dem_img_resc)
+  batch.set_input_double(1, zmin)
+  batch.set_input_double(2, zmax)
+  status = batch.run_process()
+  if status:
+    (id0, type) = batch.commit_output(0)
+    dem_mgr = dbvalue(id0, type)
+    (id1, type) = batch.commit_output(1)
+    zmin = batch.get_output_double(id1)
+    (id2, type) = batch.commit_output(2)
+    zmax = batch.get_output_double(id2)
+    return (dem_mgr,zmin,zmax)
+  raise VpglException("failed to create a DEM manager")
 
 # Backproject an image point onto the DEM and return a 3-d point
 def DEM_backproj(dem_mgr, cam, u, v, err_tol = 1.0):
-    batch.init_process("vpglBackprojectDemProcess")
-    batch.set_input_from_db(0, dem_mgr)
-    batch.set_input_from_db(1, cam)
-    batch.set_input_double(2, u)
-    batch.set_input_double(3, v)
-    batch.set_input_double(4, err_tol)
-    status = batch.run_process()
-    if status:
-        (id0, type) = batch.commit_output(0)
-        x = batch.get_output_double(id0)
-        (id1, type) = batch.commit_output(1)
-        y = batch.get_output_double(id1)
-        (id2, type) = batch.commit_output(2)
-        z = batch.get_output_double(id2)
-        batch.remove_data(id0)
-        batch.remove_data(id1)
-        batch.remove_data(id2)
-        return (x, y, z)
-    raise VpglException("failed to backproject onto the DEM")
+  batch.init_process("vpglBackprojectDemProcess")
+  batch.set_input_from_db(0, dem_mgr)
+  batch.set_input_from_db(1, cam)
+  batch.set_input_double(2, u)
+  batch.set_input_double(3, v)
+  batch.set_input_double(4, err_tol)
+  status = batch.run_process()
+  if status:
+    (id0, type) = batch.commit_output(0)
+    x = batch.get_output_double(id0)
+    (id1, type) = batch.commit_output(1)
+    y = batch.get_output_double(id1)
+    (id2, type) = batch.commit_output(2)
+    z = batch.get_output_double(id2)
+    batch.remove_data(id0)
+    batch.remove_data(id1)
+    batch.remove_data(id2)
+    return (x, y, z)
+  raise VpglException("failed to backproject onto the DEM")
 
 # convert a geotiff image to a ASCII xyz point cloud file via a LVCS conversion
 def dem_to_pts_lvcs(img, cam, lvcs, out_file, is_convert_z = True):
@@ -1688,3 +1678,24 @@ def dem_to_pts_lvcs(img, cam, lvcs, out_file, is_convert_z = True):
     n_pts = batch.get_output_unsigned(id)
     return n_pts
   raise VpglException("failed to convert geotiff to point clouds")
+
+# Project a reference image that controled by a rational camera onto target image domain using DEM
+def DEM_project_img(dem_mgr, ref_img, ref_cam, tgr_cam, tgr_i0, tgr_j0, tgr_ni, tgr_nj, err_tol = 1.0):
+  batch.init_process("vpglDemImageProjectionProcess")
+  batch.set_input_from_db(0, ref_img)
+  batch.set_input_from_db(1, ref_cam)
+  batch.set_input_from_db(2, dem_mgr)
+  batch.set_input_from_db(3, tgr_cam)
+  batch.set_input_unsigned(4, tgr_i0)
+  batch.set_input_unsigned(5, tgr_j0)
+  batch.set_input_unsigned(6, tgr_ni)
+  batch.set_input_unsigned(7, tgr_nj)
+  batch.set_input_double(8, err_tol)
+  status = batch.run_process()
+  if status:
+    (id0, type0) = batch.commit_output(0)
+    out_img = dbvalue(id0, type0)
+    (id1, type1) = batch.commit_output(1)
+    err_cnt = batch.get_output_unsigned(id1)
+    return out_img, err_cnt
+  raise VpglException("failed to project reference image to target image using DEM manager")

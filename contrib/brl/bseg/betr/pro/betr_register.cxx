@@ -23,6 +23,7 @@ void betr_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_add_event_trigger_object_process, "betrAddEventTriggerObjectProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_add_gridded_event_trigger_object_process, "betrAddGriddedEventTriggerObjectProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_set_event_trigger_data_process, "betrSetEventTriggerDataProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_set_event_trigger_partial_data_process, "betrSetEventTriggerPartialDataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_set_event_trigger_data_multi_ref_process, "betrSetEventTriggerDataMultiRefProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_execute_event_trigger_process, "betrExecuteEventTriggerProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, betr_execute_event_trigger_multi_process, "betrExecuteEventTriggerMultiProcess");

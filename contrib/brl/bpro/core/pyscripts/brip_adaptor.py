@@ -126,22 +126,50 @@ def image_mutual_info(image1, image2, min_val, max_val, n_bins):
   else:
     return -1.0
 
-def extrema_operator(image, lambda0, lambda1, theta, theta_init=0, theta_end=180, bright=True, use_fast_algo=True):
-  batch.init_process("bripExtremaProcess")
-  batch.set_input_from_db(0, image)
-  batch.set_input_float(1, lambda0)
-  batch.set_input_float(2, lambda1)
-  batch.set_input_float(3, theta)
-  batch.set_input_float(4, theta_init)
-  batch.set_input_float(5, theta_end)
-  batch.set_input_bool(6, bright)
-  batch.set_input_bool(7, use_fast_algo)
+##################################################################
+# Find the translation between two images using phase correlation
+##################################################################
+def image_phase_correlation(ref_img, tgr_img, gauss_sigma = 1.0, peak_radius = 2.0, alpha = 0.5):
+  batch.init_process("bripPhaseCorrelationProcess")
+  batch.set_input_from_db(0, ref_img)
+  batch.set_input_from_db(1, tgr_img)
+  batch.set_input_float(2, gauss_sigma)
+  batch.set_input_float(3, peak_radius)
+  batch.set_input_float(4, alpha)
   status = batch.run_process()
   if status:
     (id, type) = batch.commit_output(0)
-    point_img = dbvalue(id, type)
+    tu = batch.get_output_float(id)
     (id, type) = batch.commit_output(1)
-    mask_img = dbvalue(id, type)
-    return point_img, mask_img
+    tv = batch.get_output_float(id)
+    (id, type) = batch.commit_output(2)
+    confidence = batch.get_output_float(id)
+    (id, type) = batch.commit_output(3)
+    corr_img = dbvalue(id, type)
+    return tu, tv, confidence, corr_img
   else:
-    return None, None 
+    return None, None, None, None
+
+##################################################################
+# Find the translation between two images using phase correlation
+##################################################################
+def image_phase_correlation(ref_img, tgr_img, gauss_sigma = 1.0, peak_radius = 2.0, alpha = 0.5):
+  batch.init_process("bripPhaseCorrelationProcess")
+  batch.set_input_from_db(0, ref_img)
+  batch.set_input_from_db(1, tgr_img)
+  batch.set_input_float(2, gauss_sigma)
+  batch.set_input_float(3, peak_radius)
+  batch.set_input_float(4, alpha)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    tu = batch.get_output_float(id)
+    (id, type) = batch.commit_output(1)
+    tv = batch.get_output_float(id)
+    (id, type) = batch.commit_output(2)
+    confidence = batch.get_output_float(id)
+    (id, type) = batch.commit_output(3)
+    corr_img = dbvalue(id, type)
+    return tu, tv, confidence, corr_img
+  else:
+    return None, None, None, None

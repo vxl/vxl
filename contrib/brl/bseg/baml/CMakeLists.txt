@@ -16,6 +16,6 @@ target_link_libraries( baml ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${
 
 add_subdirectory( app )
 
-#if( BUILD_TESTING )
-#  add_subdirectory(tests)
-#endif()
+if( BUILD_TESTING )
+  add_subdirectory(tests)
+endif()

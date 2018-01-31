@@ -79,7 +79,75 @@ void baml_warp_perspective(
   } //y
 
 }
+void baml_warp_perspective(
+  const vil_image_view<float>& img1,
+  const vgl_h_matrix_2d<double>& img1_to_img2,
+  int img2_width,
+  int img2_height,
+  vil_image_view<float>& img2,
+  bool inverse_homography){
+  double tol = 0.0000001;
+  float border_val = 0.0f; 
 
+  int num_planes = img1.nplanes();
+  int img1_width_safe = img1.ni()-2;
+  int img1_height_safe = img1.nj()-2;
+
+  // Invert homography unless already inverted
+  vnl_matrix_fixed<double,3,3> img2_to_img1;
+  if( inverse_homography == true ) 
+    img2_to_img1 = img1_to_img2.get_matrix();
+  else 
+    img2_to_img1 = vnl_inverse( img1_to_img2.get_matrix() );
+
+  // Allocate image 2 and set to border_val
+  img2.set_size( img2_width, img2_height, num_planes );
+  img2.fill( border_val );
+
+  for( int y = 0; y < img2_height; y++ ){
+
+    // Speed up coordinate transform by pre-computing last two column 
+    // multiplications since they don't change with x.
+    vnl_vector_fixed<double,3> col23 = 
+      img2_to_img1*vnl_vector_fixed<double,3>(0.0,(double)y,1.0);
+    vnl_vector_fixed<double,3> col1( 
+      img2_to_img1(0,0), img2_to_img1(1,0), img2_to_img1(2,0) );
+
+    for( int x = 0; x < img2_width; x++ ){
+        
+      // Compute the back-projection of pixel x,y in image 1
+      vnl_vector_fixed<double,3> wxy = (double)x*col1 + col23;
+
+      // Convert homogeneous coords, do not warp if at infinity
+      if( std::fabs(wxy[2]) < tol ) continue;
+      double wx = wxy[0]/wxy[2];
+      double wy = wxy[1]/wxy[2];
+
+      // Check coordinates are safe for interpolation
+      if( wx < 0.0 || wx > img1_width_safe || 
+          wy < 0.0 || wy > img1_height_safe ) continue;
+
+      // Interpolate
+      for( int p = 0; p < num_planes; p++ ){
+        // The below is code from vil_bilin_interp_safe
+        int p1x=int(wx);
+        double normx = wx-p1x;
+        int p1y=int(wy);
+        double normy = wy-p1y;
+
+        double i1 = img1(p1x,p1y) + 
+          ( img1(p1x,p1y+1) - (double)img1(p1x,p1y) )*normy;
+        double i2 = img1(p1x+1,p1y) + 
+          ( img1(p1x+1,p1y+1) - (double)img1(p1x+1,p1y) )*normy;
+
+        img2(x,y,p) = (float)( i1+(i2-i1)*normx );
+
+        //img2(x,y,p) = vil_bilin_interp_safe<float>( img1, wx, wy, p );
+      }
+    } //x
+  } //y
+
+}
 
 //---------------------------------------------------------------------
 bool baml_warp_via_ground_plane(

@@ -28,11 +28,13 @@
 #include <bil/bil_convert_to_grey.h>
 unsigned betr_event_trigger::process_counter_ = 0;
 
-void betr_event_trigger::set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask){
+void betr_event_trigger::set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask, bool keep_data){
   vil_image_resource_sptr temp;
   bil_convert_resource_to_grey cnv;
   cnv(ref_imgr, temp, apply_mask);
-  ref_rescs_.clear();
+  if (!keep_data) {
+    ref_rescs_.clear();
+  }
   ref_rescs_.push_back(temp);
 }
 void betr_event_trigger::set_ref_images(std::vector<vil_image_resource_sptr> const& ref_rescs, bool apply_mask){
@@ -71,8 +73,10 @@ vpgl_camera_double_sptr betr_event_trigger::cast_camera(vpgl_camera_double_sptr 
   }
   return ret_cam;
 }
-void betr_event_trigger::set_ref_camera(vpgl_camera_double_sptr const& camera){
-  ref_cameras_.clear();
+void betr_event_trigger::set_ref_camera(vpgl_camera_double_sptr const& camera, bool keep_data){
+  if (!keep_data) {
+    ref_cameras_.clear();
+  }
   vpgl_camera_double_sptr temp = cast_camera(camera);  
   if(temp)
     ref_cameras_.push_back(temp);
@@ -393,6 +397,9 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     std::cout << "Bad parse of json parameter string " << params_json << std::endl;
     return false;
   }
+
+  std::cout << "Number of Reference Images:  " << ref_rescs_.size() << std::endl;
+  std::cout << "Number of Reference Cameras: " << ref_cameras_.size() << std::endl;
   if(verbose_){
     std::cout << "Reference Image: " << ref_path_ << std::endl;
     std::cout << "Event Image: " << evt_path_ << std::endl;
