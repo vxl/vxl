@@ -7,6 +7,6 @@
 project( clipper CXX )
 
 set( clipper_sources
- clipper.cpp clipper.h
+ clipper.cpp clipper.hxx
 )
 vxl_add_library(LIBRARY_NAME clipper LIBRARY_SOURCES ${clipper_sources} )
