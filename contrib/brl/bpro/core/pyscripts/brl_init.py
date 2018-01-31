@@ -26,7 +26,7 @@ class MetaFinder(object):
       code = file.read()
       file.close()
       pathname = os.path.join(os.path.split(pathname)[0], fullname + '.py')
-      
+
     except:
       return None
 

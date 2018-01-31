@@ -137,7 +137,7 @@ def set_event_trigger_partial_data(event_trigger, imgr, camera, is_reference, ke
   batch.set_input_bool(4, keep_data)
   status = batch.run_process()
   if(not status):
-    raise BetrException("failed to set event trigger data")   
+    raise BetrException("failed to set event trigger data")
 
 # set event trigger data with multiple reference images - image/camera paths are given not resources but as string arrays
 # inputs are all paths for consistency. Compare to previous adaptor, which passes pointers to images and cameras
@@ -172,152 +172,152 @@ def execute_event_trigger(event_trigger, algorithm_name, algorithm_params_json =
 
 
 def execute_event_trigger_multi(event_trigger, algorithm_name, algorithm_params_json = '{}'):
-    batch.init_process("betrExecuteEventTriggerMultiProcess")
-    batch.set_input_from_db(0, event_trigger)
-    batch.set_input_string(1, algorithm_name);
-    batch.set_input_string(2, algorithm_params_json);
-    status = batch.run_process()
-    prob_change = None
-    evt_names = None
-    if status:
-        (pc_id, pc_type) = batch.commit_output(0);
-        prob_change = batch.get_output_double_array(pc_id);
-        (name_id, name_type) = batch.commit_output(1);
-        evt_names = batch.get_bbas_1d_array_string(name_id);
-        return (prob_change, evt_names)
-    else:
-        raise BetrException("failed to execute trigger with multiple event regions")
-        return (prob_change, evt_names)
-    
+  batch.init_process("betrExecuteEventTriggerMultiProcess")
+  batch.set_input_from_db(0, event_trigger)
+  batch.set_input_string(1, algorithm_name);
+  batch.set_input_string(2, algorithm_params_json);
+  status = batch.run_process()
+  prob_change = None
+  evt_names = None
+  if status:
+    (pc_id, pc_type) = batch.commit_output(0);
+    prob_change = batch.get_output_double_array(pc_id);
+    (name_id, name_type) = batch.commit_output(1);
+    evt_names = batch.get_bbas_1d_array_string(name_id);
+    return (prob_change, evt_names)
+  else:
+    raise BetrException("failed to execute trigger with multiple event regions")
+    return (prob_change, evt_names)
+
 # execute change detection with a multiple event regions
 def execute_event_trigger_multi_with_change_imgs(event_trigger, algorithm_name, algorithm_params_json = '{}'):
-    batch.init_process("betrExecuteEventTriggerMultiWithChImgProcess")
-    batch.set_input_from_db(0, event_trigger)
-    batch.set_input_string(1, algorithm_name);
-    batch.set_input_string(2, algorithm_params_json);
-    status = batch.run_process()
-    prob_change = None
-    evt_names = None
-    offsets = None
-    images = None
-    if status:
-        # the change score not really a probability
-        (pc_id, pc_type) = batch.commit_output(0);
-        prob_change = batch.get_output_double_array(pc_id);
+  batch.init_process("betrExecuteEventTriggerMultiWithChImgProcess")
+  batch.set_input_from_db(0, event_trigger)
+  batch.set_input_string(1, algorithm_name);
+  batch.set_input_string(2, algorithm_params_json);
+  status = batch.run_process()
+  prob_change = None
+  evt_names = None
+  offsets = None
+  images = None
+  if status:
+    # the change score not really a probability
+    (pc_id, pc_type) = batch.commit_output(0);
+    prob_change = batch.get_output_double_array(pc_id);
 
-        # the name of the event region being processed
-        (name_id, name_type) = batch.commit_output(1);
-        evt_names = batch.get_bbas_1d_array_string(name_id);
+    # the name of the event region being processed
+    (name_id, name_type) = batch.commit_output(1);
+    evt_names = batch.get_bbas_1d_array_string(name_id);
 
-        # the dimensions (num_columns, num_rows,) and offset (column offset, row offset) of the change images
-        # stored as [ [nc, nr, off_c, off_r], ...]
-        (dims_off_id, dims_off_type) = batch.commit_output(2);
-        dims_off = batch.get_bbas_1d_array_int(dims_off_id);
+    # the dimensions (num_columns, num_rows,) and offset (column offset, row offset) of the change images
+    # stored as [ [nc, nr, off_c, off_r], ...]
+    (dims_off_id, dims_off_type) = batch.commit_output(2);
+    dims_off = batch.get_bbas_1d_array_int(dims_off_id);
 
-        # one dimensional pixel array stored in column sequence
-        (pix_id, pix_type) = batch.commit_output(3);
-        pix = batch.get_bbas_1d_array_byte(pix_id)
+    # one dimensional pixel array stored in column sequence
+    (pix_id, pix_type) = batch.commit_output(3);
+    pix = batch.get_bbas_1d_array_byte(pix_id)
 
-        # unpack images
-        n = len(prob_change)
-        k = 0
-        img_index = 0
-        offsets = [[0. for i in range(2)] for j in range(n)]
-        images = []
-        for q in range(0, n):
-            ni = dims_off[k]
-            nj = dims_off[k+1]
-            area = ni*nj
-            offsets[q][0]= dims_off[k+2]
-            offsets[q][1]= dims_off[k+3]
-            k += 4
-            image = [[0. for i in range(ni)] for j in range(nj)]
-            for j in range(0,nj):
-                for i in range(0,ni):
-                    image[j][i]=pix[img_index]
-                    img_index += 1
-            images.append(image)
-        return (prob_change, evt_names, offsets, images)
-    else:
-        raise BetrException("failed to add execute trigger with multiple event regions and change images")
-        return (prob_change, evt_names, offsets, images)
+    # unpack images
+    n = len(prob_change)
+    k = 0
+    img_index = 0
+    offsets = [[0. for i in range(2)] for j in range(n)]
+    images = []
+    for q in range(0, n):
+      ni = dims_off[k]
+      nj = dims_off[k+1]
+      area = ni*nj
+      offsets[q][0]= dims_off[k+2]
+      offsets[q][1]= dims_off[k+3]
+      k += 4
+      image = [[0. for i in range(ni)] for j in range(nj)]
+      for j in range(0,nj):
+        for i in range(0,ni):
+          image[j][i]=pix[img_index]
+          img_index += 1
+      images.append(image)
+    return (prob_change, evt_names, offsets, images)
+  else:
+    raise BetrException("failed to add execute trigger with multiple event regions and change images")
+    return (prob_change, evt_names, offsets, images)
 
 # execute change detection with a multiple event regions and return event polygons (useful for gridded event cells)
 def execute_event_trigger_multi_with_change_imgs_polys(event_trigger, algorithm_name, algorithm_params_json = '{}'):
-    batch.init_process("betrExecuteEtrMultiChImgEvtPolyProcess")
-    batch.set_input_from_db(0, event_trigger)
-    batch.set_input_string(1, algorithm_name);
-    batch.set_input_string(2, algorithm_params_json);
-    status = batch.run_process()
-    prob_change = None
-    evt_names = None
-    offsets = None
-    images = None
-    nverts = None
-    verts = None
-    if status:
-        # the change score not really a probability
-        (pc_id, pc_type) = batch.commit_output(0);
-        prob_change = batch.get_output_double_array(pc_id);
+  batch.init_process("betrExecuteEtrMultiChImgEvtPolyProcess")
+  batch.set_input_from_db(0, event_trigger)
+  batch.set_input_string(1, algorithm_name);
+  batch.set_input_string(2, algorithm_params_json);
+  status = batch.run_process()
+  prob_change = None
+  evt_names = None
+  offsets = None
+  images = None
+  nverts = None
+  verts = None
+  if status:
+    # the change score not really a probability
+    (pc_id, pc_type) = batch.commit_output(0);
+    prob_change = batch.get_output_double_array(pc_id);
 
-        # the name of the event region being processed
-        (name_id, name_type) = batch.commit_output(1);
-        evt_names = batch.get_bbas_1d_array_string(name_id);
+    # the name of the event region being processed
+    (name_id, name_type) = batch.commit_output(1);
+    evt_names = batch.get_bbas_1d_array_string(name_id);
 
-        # the dimensions (num_columns, num_rows,) and offset (column offset, row offset) of the change images
-        # stored as [ [nc, nr, off_c, off_r], ...]
-        (dims_off_id, dims_off_type) = batch.commit_output(2);
-        dims_off = batch.get_bbas_1d_array_int(dims_off_id);
+    # the dimensions (num_columns, num_rows,) and offset (column offset, row offset) of the change images
+    # stored as [ [nc, nr, off_c, off_r], ...]
+    (dims_off_id, dims_off_type) = batch.commit_output(2);
+    dims_off = batch.get_bbas_1d_array_int(dims_off_id);
 
-        # one dimensional pixel array stored in column sequence
-        (pix_id, pix_type) = batch.commit_output(3);
-        pix = batch.get_bbas_1d_array_byte(pix_id)
+    # one dimensional pixel array stored in column sequence
+    (pix_id, pix_type) = batch.commit_output(3);
+    pix = batch.get_bbas_1d_array_byte(pix_id)
 
-        # one dimensional pixel array stored in column sequence
-        (nverts_id, nverts_type) = batch.commit_output(4);
-        nverts = batch.get_bbas_1d_array_int(nverts_id)
+    # one dimensional pixel array stored in column sequence
+    (nverts_id, nverts_type) = batch.commit_output(4);
+    nverts = batch.get_bbas_1d_array_int(nverts_id)
 
-        # the polygon vertex array
-        (verts_id, verts_type) = batch.commit_output(5);
-        verts = batch.get_output_double_array(verts_id);
+    # the polygon vertex array
+    (verts_id, verts_type) = batch.commit_output(5);
+    verts = batch.get_output_double_array(verts_id);
 
-        # unpack images
-        n = len(prob_change)
-        k = 0
-        img_index = 0
-        offsets = [[0. for i in range(2)] for j in range(n)]
-        images = []
-        for q in range(0, n):
-            ni = dims_off[k]
-            nj = dims_off[k+1]
-            area = ni*nj
-            offsets[q][0]= dims_off[k+2]
-            offsets[q][1]= dims_off[k+3]
-            k += 4
-            image = [[0. for i in range(ni)] for j in range(nj)]
-            for j in range(0,nj):
-                for i in range(0,ni):
-                    image[j][i]=pix[img_index]
-                    img_index += 1
-            images.append(image)
+    # unpack images
+    n = len(prob_change)
+    k = 0
+    img_index = 0
+    offsets = [[0. for i in range(2)] for j in range(n)]
+    images = []
+    for q in range(0, n):
+      ni = dims_off[k]
+      nj = dims_off[k+1]
+      area = ni*nj
+      offsets[q][0]= dims_off[k+2]
+      offsets[q][1]= dims_off[k+3]
+      k += 4
+      image = [[0. for i in range(ni)] for j in range(nj)]
+      for j in range(0,nj):
+        for i in range(0,ni):
+          image[j][i]=pix[img_index]
+          img_index += 1
+      images.append(image)
 # extract the polygons as a list of lists
-        polys = []
-        origin = 0;
-        for nv_index in range(0,n):
-          nv = nverts[nv_index]
-          vert_array = []
-          for vert_index in range(0,3*nv, 3):
-            pt_array = []
-            pt_index = origin+vert_index;
-            pt_array.append(verts[pt_index]);
-            pt_index += 1;
-            pt_array.append(verts[pt_index]);
-            pt_index += 1;
-            pt_array.append(verts[pt_index]);
-            vert_array.append(pt_array);
-          polys.append(vert_array)
-          origin += 3*nv;
-        return (prob_change, evt_names, offsets, images, polys)
-    else:
-        raise BetrException("failed to add execute trigger with multiple event regions, change images and event polys")
-        return (prob_change, evt_names, offsets, images, polys)
+    polys = []
+    origin = 0;
+    for nv_index in range(0,n):
+      nv = nverts[nv_index]
+      vert_array = []
+      for vert_index in range(0,3*nv, 3):
+        pt_array = []
+        pt_index = origin+vert_index;
+        pt_array.append(verts[pt_index]);
+        pt_index += 1;
+        pt_array.append(verts[pt_index]);
+        pt_index += 1;
+        pt_array.append(verts[pt_index]);
+        vert_array.append(pt_array);
+      polys.append(vert_array)
+      origin += 3*nv;
+    return (prob_change, evt_names, offsets, images, polys)
+  else:
+    raise BetrException("failed to add execute trigger with multiple event regions, change images and event polys")
+    return (prob_change, evt_names, offsets, images, polys)

@@ -1612,17 +1612,17 @@ def rational_camera_rotate_to_north(in_cam):
 
 
 def rational_camera_get_up_vector(in_cam):
-    batch.init_process("vpglRationalCamRotationToUpVectorProcess")
-    batch.set_input_from_db(0, in_cam)
-    status = batch.run_process()
-    if status:
-      (id, type) = batch.commit_output(0)
-      u = batch.get_output_double(id)
-      (id, type) = batch.commit_output(1)
-      v = batch.get_output_double(id)
-      return u,v
-    else:
-      raise VpglException("Failed to get north angle from rational camera")
+  batch.init_process("vpglRationalCamRotationToUpVectorProcess")
+  batch.set_input_from_db(0, in_cam)
+  status = batch.run_process()
+  if status:
+    (id, type) = batch.commit_output(0)
+    u = batch.get_output_double(id)
+    (id, type) = batch.commit_output(1)
+    v = batch.get_output_double(id)
+    return u,v
+  else:
+    raise VpglException("Failed to get north angle from rational camera")
 
 # create a DEM manager to support DEM utility functions
 # note if zmin > zmax, these values will be calculated from the DEM
