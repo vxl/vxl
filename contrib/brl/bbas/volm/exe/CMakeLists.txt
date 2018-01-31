@@ -58,6 +58,10 @@ add_executable( volm_create_osm_2d_map
                 volm_create_osm_2d_map.cxx
               )
 
+add_executable( volm_create_osm_2d_mask_for_geotiff
+                volm_create_osm_2d_mask_for_geotiff.cxx
+              )
+
 add_executable( volm_refine_height_map
                 volm_refine_height_map.cxx
               )
@@ -86,6 +90,7 @@ target_link_libraries( volm_prepare_landclass_images volm depth_map sdet bvrml b
 target_link_libraries( volm_create_osm_objects volm ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl bkml )
 target_link_libraries( volm_generate_osm volm ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl )
 target_link_libraries( volm_create_osm_2d_map ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl volm )
+target_link_libraries( volm_create_osm_2d_mask_for_geotiff ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl volm )
 target_link_libraries( volm_create_bvxm_scenes volm ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl bkml ${VXL_LIB_PREFIX}vpgl bvxm )
 target_link_libraries( volm_sort_bvxm_scene_urban volm ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpgl )
 target_link_libraries( volm_refine_height_map volm ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl )

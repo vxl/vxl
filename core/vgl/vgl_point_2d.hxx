@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include "vgl_point_2d.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_line_2d.h>
@@ -48,7 +49,7 @@ double cross_ratio(vgl_point_2d<T>const& p1, vgl_point_2d<T>const& p2,
 template <class Type>
 std::ostream&  operator<<(std::ostream& s, vgl_point_2d<Type> const& p)
 {
-  return s << "<vgl_point_2d "<< p.x() << ',' << p.y() << "> ";
+  return s << "<vgl_point_2d "<< p.x() << ',' << p.y() << " > ";
 }
 
 //: Read from stream, possibly with formatting
@@ -62,6 +63,12 @@ std::istream& vgl_point_2d<Type>::read(std::istream& is)
   bool paren = false;
   Type tx, ty;
   is >> std::ws; // jump over any leading whitespace
+  char c;
+  c=is.peek();
+  if(c == '<'){
+	  std::string temp;
+	  is >> temp;
+  }
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
   is >> std::ws >> tx >> std::ws;
@@ -73,6 +80,8 @@ std::istream& vgl_point_2d<Type>::read(std::istream& is)
     if (is.peek() == ')') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
   }
+  is >> std::ws;
+  if (is.peek() == '>') is.ignore();
   set(tx,ty);
   return is;
 }

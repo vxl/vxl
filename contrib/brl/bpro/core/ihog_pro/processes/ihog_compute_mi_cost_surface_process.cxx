@@ -72,8 +72,9 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
   ihog_image<float> mask1_img(mask1, ihog_transform_2d());
   ihog_image<float> mask0_img(mask0, ihog_transform_2d());
 
-  ihog_minfo_cost_func cost_fun(to_img, from_img, mask0_img, mask1_img, roi, init_xform);
+  //ihog_minfo_cost_func cost_fun(to_img, from_img, mask0_img, mask1_img, roi, init_xform);
   //ihog_minfo_cost_func cost_fun(to_img, from_img, roi, init_xform);
+  ihog_minfo_cost_func cost_fun(to_img, from_img, mask0_img, roi, init_xform);
 
   float step = 1.0f;
   int half_n_steps = radius;
@@ -93,7 +94,7 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
       //std::cout << "x = " << x << std::endl;
       float minfo = float(cost_fun.f(x));
       (*cost_map)(i,j) = minfo;
-      std::cout << "minfo(" << offset_x << ", " << offset_y << ") = " << minfo << std::endl;
+      std::cout << "minfo(" << offset_x << ", " << offset_y << ") = " << minfo << " (" << i << ", " << j << ')' << std::endl;
     }
   }
 

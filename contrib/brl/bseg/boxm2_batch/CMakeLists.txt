@@ -40,7 +40,7 @@ if( PYTHON_FOUND )
       endif()
       set_target_properties(boxm2_batch PROPERTIES PREFIX "")
 
-      target_link_libraries(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro bvgl_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
+      target_link_libraries(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro bvgl_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro bsgm_pro)
       if(BOXM2_USE_VOLM)
         add_definitions(-DUSE_VOLM=1)
         target_link_libraries(boxm2_batch volm_pro)

@@ -14,7 +14,14 @@ double vsph_utils::azimuth_diff(double a, double b,
   diff = (diff<-pye)?(diff+two_pye):diff;
   return diff;
 }
-
+double vsph_utils::azimuth_sum(double a, double b, bool in_radians){
+  double pye = in_radians?vnl_math::pi:180.0;
+  double two_pye = 2.0*pye;
+  double sum = a + b;
+  sum = (sum>pye)?(sum-two_pye):sum;
+  sum = (sum<-pye)?(sum+two_pye):sum;
+  return sum;
+}
 void vsph_utils::half_angle(double phi_a, double phi_b, double& ang_1,
                             double& ang_2, bool in_radians)
 {

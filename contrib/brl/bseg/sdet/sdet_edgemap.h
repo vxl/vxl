@@ -107,12 +107,12 @@ public:
   void insert(sdet_edgel* e)
   {
     //determine appropriate cell to put this token into
-    int xx = sdet_round(e->pt.x());
+    unsigned xx = sdet_round(e->pt.x());
     if(xx==0)
         xx++;
     if(xx>=width())
         xx=width()-1;
-    int yy = sdet_round(e->pt.y());
+    unsigned yy = sdet_round(e->pt.y());
     if(yy==0)
         yy++;
     if(yy>=height())

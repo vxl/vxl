@@ -75,7 +75,9 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
            points_data[currIdx][0] = float(cellCenter.x()*data.sub_block_dim_.x() + data.local_origin_.x());
            points_data[currIdx][1] = float(cellCenter.y()*data.sub_block_dim_.y() + data.local_origin_.y());
            points_data[currIdx][2] = float(cellCenter.z()*data.sub_block_dim_.z() + data.local_origin_.z());
-           points_data[currIdx][3] = 0.0f;
+           //points_data[currIdx][3] = 0.0f;
+           // saving the prob here to avoid very costly prob calculation during exportPointCloudPLY, invalid points are marked with -1.0 in this field
+           points_data[currIdx][3] = prob;
          }
 
        }

@@ -1,7 +1,6 @@
 #include <vgl/algo/vgl_compute_similarity_3d.hxx>
 #include <vgl/algo/vgl_conic_2d_regression.hxx>
 #include <vgl/algo/vgl_convex_hull_2d.hxx>
-#include <vgl/algo/vgl_ellipsoid_3d.hxx>
 #include <vgl/algo/vgl_fit_conics_2d.hxx>
 #include <vgl/algo/vgl_fit_lines_2d.hxx>
 #include <vgl/algo/vgl_fit_plane_3d.hxx>

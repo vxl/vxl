@@ -18,6 +18,8 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#include <vsol/vsol_digital_curve_2d.h>
+#include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_point_2d.h>
@@ -29,6 +31,7 @@ int main(int argc, char** argv)
   vsl_add_to_binary_loader(vsol_polygon_2d());
   vsl_add_to_binary_loader(vsol_polyline_2d());
   vsl_add_to_binary_loader(vsol_point_2d());
+  vsl_add_to_binary_loader(vsol_digital_curve_2d());
   //  _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
   // initialize vgui

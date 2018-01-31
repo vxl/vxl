@@ -6,8 +6,10 @@
 #include <set>
 #include <cmath>
 #include <algorithm>
+#include <numeric>    
 #include <string>
 #include "vgl_polygon.h"
+#include <vnl/vnl_math.h>
 //:
 // \file
 
@@ -111,7 +113,7 @@ bool vgl_polygon<T>::contains(T x, T y) const
   }
   return c;
 }
-
+ 
 template <class T>
 std::ostream& vgl_polygon<T>::print(std::ostream& os) const
 {
@@ -318,6 +320,66 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
   }
 }
 
+//turn all sheets into counterclockwise polygons
+template <class T>
+vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T> const &p)
+{
+  vgl_polygon<T> outPolygon;
+  //std::vector<std::vector<vgl_point_2d<T> > > outPolySheets;
+  std::vector<std::pair<unsigned,unsigned> > e1, e2;
+  std::vector<vgl_point_2d<T> > ip;
+  vgl_selfintersections(p, e1, e2, ip);
+  if(!e1.empty() && !e2.empty() && !ip.empty())
+  {
+    //Self intersecting/non simple polygons cannot be said to be clockwise or not
+    //hence they are not added and we get an empty polygon.
+    std::cout<< "WARNING - self intersecting polygon"<<std::endl;
+    return p;
+  }
+  else
+  {
+    for(size_t i = 0; i < p.num_sheets();i++)
+    {
+      std::vector<vgl_point_2d<T> > verts = p[i];
+      if(vgl_polygon_sheet_is_counter_clockwise(verts))
+      {
+        outPolygon.push_back(verts);
+      }
+      else
+      {
+        if(i == 0)
+        {std::reverse(verts.begin(), verts.end());}
+        outPolygon.push_back(verts);
+      }
+    }
+  }
+  return outPolygon;
+}
+
+template <class T>
+bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts)
+{
+  double sum = 0.0;
+  vgl_point_2d<T> v1;
+  vgl_point_2d<T> v2;
+  double term1, term2;
+  for(size_t x = 1; x <verts.size(); x++)
+  {
+    v1 = verts.at(x-1);
+    v2 = verts.at(x);
+    term1 = double(v2.x())-double(v1.x());
+    term2 = double(v2.y())+double(v1.y());
+    sum += term1*term2;
+  }
+  v1 = verts.at(verts.size()-1);
+  v2 = verts.at(0);
+  term1 = double(v2.x())-double(v1.x());
+  term2 = double(v2.y())+double(v1.y());
+  sum += term1*term2;
+  return sum < 0.0;
+ 
+}
+
 
 #undef VGL_POLYGON_INSTANTIATE
 #define VGL_POLYGON_INSTANTIATE(T) \
@@ -328,6 +390,8 @@ template std::istream& operator>>(std::istream&,vgl_polygon<T >&); \
 template void vgl_selfintersections(vgl_polygon<T > const& p, \
                                     std::vector<std::pair<unsigned int,unsigned int> >& e1, \
                                     std::vector<std::pair<unsigned int,unsigned int> >& e2, \
-                                    std::vector<vgl_point_2d<T > >& ip)
+                                    std::vector<vgl_point_2d<T > >& ip); \
+template vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T > const &p); \
+template bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T > > verts)
 
 #endif // vgl_polygon_hxx_

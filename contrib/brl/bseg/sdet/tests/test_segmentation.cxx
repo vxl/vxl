@@ -1,11 +1,14 @@
 // This is brl/bseg/sdet/tests/test_segmentation.cxx
 #include <sdet/sdet_graph_img_seg.h>
-#include <sdet/sdet_texture_classifier_sptr.h>
+#include <sdet/sdet_region.h>
+#include <sdet/sdet_region_sptr.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
 #include <testlib/testlib_test.h>
-
+#include <string>
+#include <map>
+#include <fstream>
 static void test_segmentation(int argc, char * argv[])
 {
   vil_image_view<vxl_byte> img(4,4);
@@ -23,7 +26,6 @@ static void test_segmentation(int argc, char * argv[])
   vil_image_view<vxl_byte> img_grey;
   //vil_convert_rgb_to_grey(img, img_grey);
   vil_convert_planes_to_grey(imgi,img_grey);
-
   vil_image_view<vil_rgb<vxl_byte> > out_imgi;
   sdet_segment_img<vxl_byte>(img_grey, 10, 8, 50, 1, 50, out_imgi);
   vil_save(out_imgi, ".\\beach_out.tif");

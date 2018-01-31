@@ -2,6 +2,7 @@
 // J.L. Mundy Sept. 17, 2010
 
 #include <iostream>
+#include <sstream>
 #include <cmath>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
@@ -81,6 +82,15 @@ static void test_operations()
   vgl_point_3d<double> prec_3d = plane_real.world_coords(pt2d);
   er = (prec_3d-pt3d_on).length();
   TEST_NEAR("Realistic plane test", er, 0.0, 1e-5);
+
+  // test stream operators
+  double as = 0.1, bs = 0.5, cs=0.86, ds=-1.0;
+  vgl_plane_3d<double> pstr(as, bs, cs, ds);
+  std::stringstream ss;
+  ss << pstr;
+  vgl_plane_3d<double> prec;
+  ss >> prec;
+  TEST("plane stream ops", pstr == prec, true);
 }
 
 void test_plane_3d()

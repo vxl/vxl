@@ -141,7 +141,7 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
     sbj_dec = dec_resc->size_block_j();
   if (sbi_src!=sbi_dec||sbj_src!=sbj_dec)
     return false;
-  vil_pixel_format fmt = brsc->pixel_format();
+  vil_pixel_format fmt = vil_pixel_format_component_format(brsc->pixel_format());
 
   //Set up the block buffer, a 2xnbi set of blocks needed to support 2x2
   //pixel decimation.  The buffer is updated as the next two rows of blocks is
@@ -303,7 +303,7 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
 {
   if (!resc)
     return VXL_NULLPTR;
-  vil_pixel_format fmt = resc->pixel_format();
+  vil_pixel_format fmt = vil_pixel_format_component_format(resc->pixel_format());
   switch (fmt)
   {
     case VIL_PIXEL_FORMAT_BYTE:

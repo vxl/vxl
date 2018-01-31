@@ -30,6 +30,8 @@
 //   for (unsigned int p = 0; p < polygon[s].size(); ++p)
 //     do_something(polygon[s][p].x(), polygon[s][p].y());
 //
+//  Note: area is not defined on the polygon class to keep a clean interface
+//  see vgl_area<T> 
 template <class T>
 class vgl_polygon
 {
@@ -116,7 +118,6 @@ class vgl_polygon
     for (unsigned int i=0;i<num_sheets();++i) c += (unsigned int)(sheets_[i].size());
     return c;
   }
-
   //: Get the ith sheet
   inline sheet_t& operator[](int i) { return sheets_[i]; }
 
@@ -164,6 +165,15 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
                            std::vector<std::pair<unsigned,unsigned> >& e1,
                            std::vector<std::pair<unsigned,unsigned> >& e2,
                            std::vector<vgl_point_2d<T> >& ip);
+
+//these function is used to determine if a polygon is oriented counter clockwise it does this by comparing 
+//the dot product of vertices in the ordered list
+template <class T>
+vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T> const &p);
+
+template <class T>
+bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts);
+
 
 // \relatesalso vgl_polygon
 template <class T>

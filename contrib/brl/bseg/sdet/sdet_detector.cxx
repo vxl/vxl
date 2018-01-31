@@ -491,15 +491,9 @@ get_vdgl_edges(std::vector<vdgl_digital_curve_sptr>& vd_edges )
     return false;
   return true;
 }
-
-bool
-sdet_detector::get_vsol_edges(std::vector<vsol_digital_curve_2d_sptr>& edges )
-{
-  std::vector<vdgl_digital_curve_sptr> vd_edges;
-  if (!this->get_vdgl_edges(vd_edges))
-    return false;
-  edges.clear();
-  for (std::vector<vdgl_digital_curve_sptr>::iterator eit = vd_edges.begin();
+std::vector<vsol_digital_curve_2d_sptr> sdet_detector::convert_vdgl_to_vsol(std::vector<vdgl_digital_curve_sptr> const& vd_edges){
+  std::vector<vsol_digital_curve_2d_sptr> edges;
+  for (std::vector<vdgl_digital_curve_sptr>::const_iterator eit = vd_edges.begin();
        eit != vd_edges.end(); ++eit)
   {
       //get the edgel chain
@@ -517,5 +511,14 @@ sdet_detector::get_vsol_edges(std::vector<vsol_digital_curve_2d_sptr>& edges )
 
    edges.push_back(vsdc);
   }
+  return edges;
+}
+bool
+sdet_detector::get_vsol_edges(std::vector<vsol_digital_curve_2d_sptr>& edges )
+{
+  std::vector<vdgl_digital_curve_sptr> vd_edges;
+  if (!this->get_vdgl_edges(vd_edges))
+    return false;
+  edges = sdet_detector::convert_vdgl_to_vsol(vd_edges);
   return true;
 }

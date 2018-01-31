@@ -44,7 +44,7 @@ bool vil_threshold_image_process(bprb_func_process& pro)
 
     float thres = pro.get_input<float>(i++);
     bool thres_above = pro.get_input<bool>(i++);
-    unsigned positive_id = pro.get_input<unsigned>(i++);
+    unsigned positive_id = pro.get_input<unsigned>(i++);  // if passed as zero, return the bool image!
 
     // retrieve float image
     vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
@@ -58,6 +58,10 @@ bool vil_threshold_image_process(bprb_func_process& pro)
     else {
         //: Apply threshold such that dest(i,j,p)=true if src(i,j,p)<=t
         vil_threshold_below(fimg, *temp, thres);
+    }
+    if (!positive_id) {
+        pro.set_output_val<vil_image_view_base_sptr>(0, temp);
+        return true;    
     }
     vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(temp->ni(),temp->nj());
     for (unsigned k = 0 ; k < out->ni(); k++)

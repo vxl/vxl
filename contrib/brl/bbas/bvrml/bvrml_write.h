@@ -1,4 +1,4 @@
-// This is//projects/vxl/src/contrib/brl/bseg/bvxm/grid/io/bvrml_write.h
+// This is//projects/vxl/src/contrib/brl/bbas/bvrml/bvrml_write.h
 #ifndef bvrml_write_h
 #define bvrml_write_h
 

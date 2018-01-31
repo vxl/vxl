@@ -1,0 +1,16 @@
+//:
+// \file
+// \author Yi Dong
+// \brief copied after the way VXL's vcl does
+// Allows cmake to set up macro giving name of VXL root dir is
+
+// Note: The make system (eg cmake) should generate a file, brad_where_brl_lib_dir.h in the library folder, from
+// this, in which the macro is set correctly.
+// For non-cmake systems this might cause a problem.  In particular if there is
+// no brad_where_brl_lib_dir.h, some other stuff might not compile.
+// If we supply a default brad_where_brl_lib_dir.h, it would be changed by cmake, and
+// may get checked back into the repository by accident.
+
+#ifndef BRL_LIB_DIR // file guard
+#define BRL_LIB_DIR "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@"
+#endif
