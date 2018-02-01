@@ -91,6 +91,10 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
     num_obs_type += "_" + ident;
   }
 
+  // Add option for whether or not we are using a mask
+  if (use_mask) {
+    options += " -D WITH_MASK ";
+  }
 
   // create a command queue.
   int status=0;

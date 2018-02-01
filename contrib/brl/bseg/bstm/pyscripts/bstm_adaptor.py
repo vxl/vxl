@@ -7,11 +7,94 @@ import os
 # code more readable/refactored
 #############################################################################
 
+
+# small enum for type names
+T_DOUBLE = "double"
+T_FLOAT = "float"
+T_INT = "int"
+T_LONG = "long"
+T_UNSIGNED = "unsigned"
+
+
+def get_input_types(inputs, float_name=T_DOUBLE, int_name=T_INT):
+    """Converts a list of values to a list of tuples (type_name, value).
+    It is designed so that each value can be passed in to a process
+    using batch.set_input_<type_name>(index, value).
+    e.g. if typename is "double", batch.set_input_double() is called.
+
+    NOTE: This function is not able to distinguish between float and
+    double, or between types of integers. As such, float_name and
+    int_name must be specified to choose what type_name to give to
+    numeric variables. This also means that it may not always be
+    possible to use this function for a process, for instance if it
+    accepts some variables as doubles and some as ints.
+
+    :returns: A list of tuples (type_name, value) that can be passed
+    in to execute_process.
+
+    """
+    def get_type(var):
+        if isinstance(var, str):
+            return "string"
+        elif isinstance(var, int):
+            return int_name
+        elif isinstance(var, float):
+            return float_name
+        elif isinstance(var, bool):
+            return "bool"
+        elif isinstance(var, bstm_register.dbvalue):
+            return "from_db"
+        elif isinstance(var, list):
+            return get_type(var[0]) + "_array"
+        else:
+            raise ValueError(
+                "Could not convert argument of type: " +
+                type(var))
+    return map(lambda v: (get_type(v), v), inputs)
+
+
+def execute_process(name, n_outputs, inputs):
+    """Convenience function for running a process with the given name and
+    inputs.  Initializes the process, sets the inputs, runs the
+    process, and returns the given number of outputs.
+    Raises an exception of process fails to run.
+
+    NOTE: Only returns dbvalue's. Caller might need to use
+    batch.get_output_float(id) or similar afterwards.
+
+    :param name: The name of the process to run
+    :param n_outputs: The number of outputs to recover
+    :param inputs: A list of tuples (type_name, value) representing
+    inputs to the process. The type_name determines which "set_input"
+    function is called: e.g. if the type name is "string",
+    batch.set_input_string will be called. If the typename is
+    "from_db", batch.set_input_from_db is called. It is important
+    that the names exactly match what is required by the corresponding
+    process's C++ code. To automatically generate this list when
+    possible, see `get_input_types`.
+    :returns: A list of the outputs, of length n_outputs. If there are no outputs, returns None.
+
+    """
+    batch.init_process(name)
+    for i, (t, v) in enumerate(inputs):
+        method_name = "set_input_" + t
+        getattr(bstm_batch, method_name)(i, v)
+
+    if not batch.run_process():
+        raise Exception("Failed to run " + name)
+
+    outputs = []
+    for i in range(n_outputs):
+        (out_id, out_type) = batch.commit_output(i)
+        outputs.append(bstm_register.dbvalue(out_id, out_type))
+    if len(outputs) > 0:
+        return outputs
+    return
+
+
 # Print ocl info for all devices
-
-
 def ocl_info():
-  #print("Init Manager");
+  # print("Init Manager");
   batch.init_process("boclInitManagerProcess")
   batch.run_process()
   (id, type) = batch.commit_output(0)
@@ -24,7 +107,7 @@ def ocl_info():
 
 
 def load_scene(scene_str):
-  #print("Loading a Scene from file: ", scene_str);
+  # print("Loading a Scene from file: ", scene_str);
   batch.init_process("bstmLoadSceneProcess")
   batch.set_input_string(0, scene_str)
   batch.run_process()
@@ -40,7 +123,7 @@ def load_opencl(scene_str, device_string="gpu"):
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
   ###############################################################
-  #print("Create Main Cache");
+  # print("Create Main Cache");
   batch.init_process("bstmCreateCacheProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_string(1, "lru")
@@ -48,13 +131,13 @@ def load_opencl(scene_str, device_string="gpu"):
   (id, type) = batch.commit_output(0)
   cache = dbvalue(id, type)
 
-  #print("Init Manager");
+  # print("Init Manager");
   batch.init_process("boclInitManagerProcess")
   batch.run_process()
   (id, type) = batch.commit_output(0)
   mgr = dbvalue(id, type)
 
-  #print("Get Gpu Device");
+  # print("Get Gpu Device");
   batch.init_process("boclGetDeviceProcess")
   batch.set_input_string(0, device_string)
   batch.set_input_from_db(1, mgr)
@@ -62,7 +145,7 @@ def load_opencl(scene_str, device_string="gpu"):
   (id, type) = batch.commit_output(0)
   device = dbvalue(id, type)
 
-  #print("Create Gpu Cache");
+  # print("Create Gpu Cache");
   batch.init_process("bstmOclCreateCacheProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -72,13 +155,46 @@ def load_opencl(scene_str, device_string="gpu"):
 
   return scene, cache, mgr, device, openclcache
 
+
+# Just loads up CPP cache
+def load_cpp(scene_str):
+    scene = load_scene(scene_str)
+    batch.init_process("bstmCreateCacheProcess")
+    batch.set_input_from_db(0, scene)
+    batch.set_input_string(1, "lru")
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    cache = bstm_register.dbvalue(id, type)
+    return scene, cache
+
+
+def describe_scene(scene):
+    batch.init_process("bstmDescribeSceneProcess")
+    batch.set_input_from_db(0, scene)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
+    dataPath = batch.get_output_string(id)
+    batch.remove_data(id)
+    (id, type) = batch.commit_output(1)
+    appType = batch.get_output_string(id)
+    batch.remove_data(id)
+    (id, type) = batch.commit_output(2)
+    voxel_size = batch.get_output_double(id)
+    batch.remove_data(id)
+    description = {'voxelLength': voxel_size,
+                   'dataPath': dataPath,
+                   'appType': appType}
+    return description
+
+
 #####################################################################
 # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 #####################################################################
 
 
-def render(scene, device, cache, cam, time=0, ni=1624, nj=1224, render_label=False):
+def render(scene, device, cache, cam, time=0,
+           ni=1624, nj=1224, render_label=False):
   if cache.type == "bstm_cache_sptr":
     print "bstm_batch CPU render grey and vis not yet implemented"
     return
@@ -189,7 +305,8 @@ def trajectory_size(trajectory):
 
 
 # detect change wrapper,
-def change_detect(scene, device, cache, cam, img, time, mask_img=None, raybelief="", max_mode=False):
+def change_detect(scene, device, cache, cam, img, time,
+                  mask_img=None, raybelief="", max_mode=False):
   batch.init_process("bstmOclChangeDetectionProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -222,7 +339,8 @@ def label_change(scene, device, cache, cam, change_img, change_t, label, time):
 # detect change wrapper,
 
 
-def update(scene, device, cache, cam, img, time, mog_var=-1, mask_img=None, update_alpha=True, update_changes_only=False):
+def update(scene, device, cache, cam, img, time, mog_var=-1,
+           mask_img=None, update_alpha=True, update_changes_only=False):
   batch.init_process("bstmOclUpdateProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -240,7 +358,8 @@ def update(scene, device, cache, cam, img, time, mog_var=-1, mask_img=None, upda
 # detect change wrapper,
 
 
-def update_color(scene, device, cache, cam, img, time, mog_var=-1, mask_img=None, update_alpha=True, update_changes_only=False):
+def update_color(scene, device, cache, cam, img, time, mog_var=-1,
+                 mask_img=None, update_alpha=True, update_changes_only=False):
   batch.init_process("bstmOclUpdateColorProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -335,6 +454,27 @@ def change_btw_frames(scene, cpu_cache, time0, time1):
   batch.run_process()
 
 
+def scene_bbox(scene):
+    batch.init_process("bstmSceneBboxProcess")
+    batch.set_input_from_db(0, scene)
+    batch.run_process()
+    out = []
+    for outIdx in range(6):
+        (id, type) = batch.commit_output(outIdx)
+        pt = batch.get_output_double(id)
+        batch.remove_data(id)
+        out.append(pt)
+    minPt = (out[0], out[1], out[2])
+    maxPt = (out[3], out[4], out[5])
+    return (minPt, maxPt)
+
+
+def scene_lvcs(scene):
+    outputs = execute_process("bstmSceneLVCSProcess", 1,
+                              get_input_types([scene]))
+    return outputs[0]
+
+
 def scene_statistics(scene, cache):
   batch.init_process("bstmSceneStatisticsProcess")
   batch.set_input_from_db(0, scene)
@@ -375,7 +515,8 @@ def export_pt_cloud(scene, cache, output_filename, prob_t, time, output_aux=True
   return
 
 
-def bundle2scene(bundle_file, img_dir, app_model="bstm_mog3_grey", isalign=True, out_dir="", timeSteps=32):
+def bundle2scene(bundle_file, img_dir, app_model="bstm_mog3_grey",
+                 isalign=True, out_dir="", timeSteps=32):
   if app_model == "bstm_mog3_grey":
     nobs_model = "bstm_num_obs"
   else:
@@ -403,3 +544,20 @@ def boxm22scene(boxm2_filename, bstm_datapath, timeSteps=32):
   batch.set_input_string(1, bstm_datapath)
   batch.set_input_unsigned(2, timeSteps)
   batch.run_process()
+
+def ingest_boxm2_scene(bstm_scene, bstm_cache, boxm2_scene,
+                       boxm2_cache, time, p_threshold, app_threshold):
+    execute_process("bstmCppIngestBoxm2SceneProcess", 0,
+                    get_input_types([bstm_scene, bstm_cache, boxm2_scene,
+                                     boxm2_cache, float(time), p_threshold, app_threshold], float_name=T_DOUBLE))
+
+
+def analyze_coherency(bstm_scene, bstm_cpu_cache, center, lengths,
+                      initial_time, end_time, p_threshold, output_filename):
+    process_name = "bstmCppAnalyzeCoherencyProcess"
+    inputs = [bstm_scene, bstm_cpu_cache]
+    inputs += map(float, center + lengths +
+                  [initial_time, end_time, p_threshold])
+    inputs += [output_filename]
+    inputs = get_input_types(inputs, float_name=T_FLOAT)
+    execute_process(process_name, 0, inputs)

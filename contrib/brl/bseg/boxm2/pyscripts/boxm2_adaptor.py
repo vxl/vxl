@@ -3,7 +3,7 @@ import boxm2_batch as batch
 dbvalue = brl_init.register_batch(batch)
 
 import os
-
+from xml.etree.ElementTree import ElementTree
 #############################################################################
 # PROVIDES higher level python functions to make boxm2_batch
 # code more readable/refactored
@@ -13,7 +13,7 @@ import os
 
 
 def ocl_info():
-  #print("Init Manager");
+  # print("Init Manager");
   batch.init_process("boclInitManagerProcess")
   init_result = batch.run_process()
 
@@ -25,7 +25,7 @@ def ocl_info():
 
 
 def load_scene(scene_str):
-  #print("Loading aw Scene from file: ", scene_str);
+  # print("Loading a Scene from file: ", scene_str);
   batch.init_process("boxm2LoadSceneProcess")
   batch.set_input_string(0, scene_str)
   status = batch.run_process()
@@ -36,16 +36,15 @@ def load_scene(scene_str):
   else:
     raise Exception('Could not load scene file')
 
+
 # does the opencl prep work on an input scene
-
-
 def load_opencl(scene_str, device_string="gpu"):
   scene = load_scene(scene_str)
 
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
   ###############################################################
-  #print("Create Main Cache");
+  # print("Create Main Cache");
   batch.init_process("boxm2CreateCacheProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_string(1, "lru")
@@ -55,13 +54,13 @@ def load_opencl(scene_str, device_string="gpu"):
   (id, type) = batch.commit_output(0)
   cache = dbvalue(id, type)
 
-  #print("Init Manager");
+  # print("Init Manager");
   batch.init_process("boclInitManagerProcess")
   result = batch.run_process()
   if not result:
     raise Exception('boxm2InitManagerProcess returned false')
 
-  #print("Get Gpu Device");
+  # print("Get Gpu Device");
   batch.init_process("boclGetDeviceProcess")
   batch.set_input_string(0, device_string)
   result = batch.run_process()
@@ -70,7 +69,7 @@ def load_opencl(scene_str, device_string="gpu"):
   (id, type) = batch.commit_output(0)
   device = dbvalue(id, type)
 
-  #print("Create Gpu Cache");
+  # print("Create Gpu Cache");
   batch.init_process("boxm2CreateOpenclCacheProcess")
   batch.set_input_from_db(0, device)
   result = batch.run_process()
@@ -89,7 +88,7 @@ def load_cpp(scene_str):
   ###############################################################
   # Create cache, opencl manager, device, and gpu cache
   ###############################################################
-  #print("Create Main Cache");
+  # print("Create Main Cache");
   batch.init_process("boxm2CreateCacheProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_string(1, "lru")
@@ -106,9 +105,8 @@ def load_cpp2(scene_str):
     # just a passthrough now.
   return load_cpp(scene_str)
 
-  # does the opencl prep work on an input scene
 
-
+# does the opencl prep work on an input scene
 def load_opencl_2(scene_str, device_string="gpu"):
   # boxm2_opencl_cache has been replaced by boxm2_opencl_cache2, so this
   # function is just a passthrough now.
@@ -205,11 +203,12 @@ def init_alpha(scene, cache, device, pinit=0.01, thresh=1.0):
 ###############################################
 # Model building stuff
 ###############################################
+
 # Generic update - will use GPU if device/openclcache are passed in
 
 
-# Generic update - will use GPU if device/openclcache are passed in
-def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0, update_app=True, tnear=100000.0, tfar=100000.0):
+def update_grey(scene, cache, cam, img, device=None, ident="", mask=None,
+                update_alpha=True, var=-1.0, update_app=True, tnear=100000.0, tfar=100000.0):
   # If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_batch CPU update"
@@ -240,10 +239,28 @@ def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update
     print "ERROR: Cache type not recognized: ", cache.type
     return False
 
+
+# Updates with view-dependent grayscale appearance model.
+def update_grey_view_dep(scene, cache, cam, img, device=None, ident="",
+                         mask=None, update_alpha=True, var=-1.0):
+    print "boxm2_batch GPU update (greyscale, view dependent)"
+    batch.init_process("boxm2OclUpdateViewDepAppProcess")
+    batch.set_input_from_db(0, device)
+    batch.set_input_from_db(1, scene)
+    batch.set_input_from_db(2, cache)
+    batch.set_input_from_db(3, cam)
+    batch.set_input_from_db(4, img)
+    batch.set_input_string(5, ident)
+    if mask:
+        batch.set_input_from_db(6, mask)
+    batch.set_input_bool(7, update_alpha)
+    batch.set_input_float(8, var)
+    return batch.run_process()
+
+
 # Update with alternate possible pixel explanation - uses GPU
-
-
-def update_grey_with_alt(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0, alt_prior=None, alt_density=None):
+def update_grey_with_alt(scene, cache, cam, img, device=None, ident="",
+                         mask=None, update_alpha=True, var=-1.0, alt_prior=None, alt_density=None):
   # If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr":
     print "ERROR: CPU update not implemented for update_with_alt"
@@ -314,6 +331,24 @@ def update_rgb(scene, cache, cam, img, device=None, mask="", updateAlpha=True):
     print "ERROR: Cache type not recognized: ", cache.type
 
 
+# Updates with view-dependent rgb appearance model.
+def update_rgb_view_dep(scene, cache, cam, img, device=None, ident="",
+                        mask=None, update_alpha=False, var=-1.0):
+    print "boxm2_batch GPU update (rgb, view dependent)"
+    batch.init_process("boxm2OclUpdateViewDepAppColorProcess")
+    batch.set_input_from_db(0, device)
+    batch.set_input_from_db(1, scene)
+    batch.set_input_from_db(2, cache)
+    batch.set_input_from_db(3, cam)
+    batch.set_input_from_db(4, img)
+    batch.set_input_string(5, ident)
+    if mask:
+        batch.set_input_from_db(6, mask)
+    batch.set_input_bool(7, update_alpha)
+    batch.set_input_float(8, var)
+    return batch.run_process()
+
+
 def update_with_quality(scene, cache, cam, img, q_img, identifier=""):
   batch.init_process("boxm2CppUpdateUsingQualityProcess")
   batch.set_input_from_db(0, scene)
@@ -359,6 +394,7 @@ def update_sky2(scene, cache, cam, img, step, device):
     batch.set_input_from_db(4, img)
   batch.set_input_int(5, step)
   batch.run_process()
+
   # Generic render, returns a dbvalue expected image
 # Cache can be either an OPENCL cache or a CPU cache
 
@@ -405,7 +441,8 @@ def render_height_map(scene, cache, device=None):
 # Cache can be either an OPENCL cache or a CPU cache
 
 
-def ingest_height_map(scene, cache, x_img, y_img, z_img, zero_out_alpha=True, device=None):
+def ingest_height_map(scene, cache, x_img, y_img, z_img,
+                      zero_out_alpha=True, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_adaptor, render height map cpp process not implemented"
 
@@ -424,7 +461,8 @@ def ingest_height_map(scene, cache, x_img, y_img, z_img, zero_out_alpha=True, de
     print "ERROR: Cache type not recognized: ", cache.type
 
 
-def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, ident, device=None):
+def ingest_label_map(scene, cache, x_img, y_img, z_img,
+                     label_img, ident, device=None):
   # def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img,
   # device=None) :
   if cache.type == "boxm2_cache_sptr":
@@ -449,7 +487,8 @@ def ingest_label_map(scene, cache, x_img, y_img, z_img, label_img, ident, device
 # satellite cam to compute ray origins and directions
 
 
-def ingest_label_map_with_cam(scene, cache, cam, label_img, ident, device=None):
+def ingest_label_map_with_cam(
+        scene, cache, cam, label_img, ident, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_adaptor, ingest label map cpp process not implemented"
 
@@ -467,7 +506,8 @@ def ingest_label_map_with_cam(scene, cache, cam, label_img, ident, device=None):
     print "ERROR: Cache type not recognized: ", cache.type
 
 
-def ingest_osm_label_map(scene, cache, x_img, y_img, z_img, label_img, ident, device=None):
+def ingest_osm_label_map(scene, cache, x_img, y_img,
+                         z_img, label_img, ident, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_adaptor, ingest osm label map cpp process not implemented"
   elif cache.type == "boxm2_opencl_cache_sptr" and device:
@@ -496,7 +536,8 @@ def ingest_mesh(scene, cache, plyfile, label_id, category):
   batch.run_process()
 
 
-def ingest_height_map_space(scene, cache, x_img, y_img, z_img, crust_thickness, device=None):
+def ingest_height_map_space(
+        scene, cache, x_img, y_img, z_img, crust_thickness, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_adaptor, render height map cpp process not implemented"
 
@@ -536,7 +577,8 @@ def ingest_to_zero_out_alpha(scene, cache, x_img, y_img, z_img, device=None):
 
 
 # refine count should not exceed 3 for scenes with max_octree_level=4
-def initialize_surface_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=2, ingest_space=1, zero_out_alpha=True):
+def initialize_surface_with_height_img(
+        scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=2, ingest_space=1, zero_out_alpha=True):
   if zero_out_alpha:
     scene.ingest_height_map(x_img, y_img, z_img)
   else:
@@ -584,7 +626,8 @@ def initialize_ground(scene, global_ground_z, refine_cnt=2):
   scene.write_cache()
 
 
-def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=1):
+def refine_and_ingest_with_height_img(
+        scene, x_img, y_img, z_img, crust_thickness=20.0, refine_cnt=1):
   for i in range(0, refine_cnt, 1):
     scene.refine()
     scene.ingest_height_map(x_img, y_img, z_img)
@@ -598,7 +641,8 @@ def refine_and_ingest_with_height_img(scene, x_img, y_img, z_img, crust_thicknes
 # Ingest a Buckeye-Style DEM, i.e. first return and last return image pair
 
 
-def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoid_height, geocam, device=None):
+def ingest_buckeye_dem(scene, cache, first_return_fname,
+                       last_return_fname, geoid_height, geocam, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_adaptor, ingest_buckeye cpp process not implemented"
 
@@ -621,7 +665,8 @@ def ingest_buckeye_dem(scene, cache, first_return_fname, last_return_fname, geoi
 #####################################################################
 
 
-def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string="", tnear=100000.0, tfar=100000.0):
+def render_grey(scene, cache, cam, ni=1280, nj=720, device=None,
+                ident_string="", tnear=100000.0, tfar=100000.0):
   if cache.type == "boxm2_cache_sptr":
     batch.init_process("boxm2CppRenderExpectedImageProcess")
     batch.set_input_from_db(0, scene)
@@ -653,7 +698,28 @@ def render_grey(scene, cache, cam, ni=1280, nj=720, device=None, ident_string=""
     print "ERROR: Cache type not recognized: ", cache.type
 
 
-def render_scene_uncertainty(scene, cache, ni=1280, nj=720, device=None, ident_string=""):
+# boxm2_ocl_render_view_dep_expected_image_process.cxx
+def render_grey_view_dep(scene, cache, cam, ni=1280, nj=720, device=None,
+                         ident_string=""):
+    if cache.type == "boxm2_opencl_cache_sptr" and device:
+        batch.init_process("boxm2OclRenderViewDepExpectedImageProcess")
+        batch.set_input_from_db(0, device)
+        batch.set_input_from_db(1, scene)
+        batch.set_input_from_db(2, cache)
+        batch.set_input_from_db(3, cam)
+        batch.set_input_unsigned(4, ni)
+        batch.set_input_unsigned(5, nj)
+        batch.set_input_string(6, ident_string)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
+        exp_image = dbvalue(id, type)
+        return exp_image
+    else:
+        print "ERROR: Cache type not recognized: ", cache.type
+
+
+def render_scene_uncertainty(
+        scene, cache, ni=1280, nj=720, device=None, ident_string=""):
   if cache.type == "boxm2_opencl_cache_sptr" and device:
     batch.init_process("boxm2OclRenderSceneUncertaintyMapProcess")
     batch.set_input_from_db(0, device)
@@ -674,7 +740,8 @@ def render_scene_uncertainty(scene, cache, ni=1280, nj=720, device=None, ident_s
 #####################################################################
 
 
-def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None, ident=""):
+def render_grey_and_vis(scene, cache, cam, ni=1280,
+                        nj=720, device=None, ident=""):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_batch CPU render grey and vis not yet implemented"
     return
@@ -701,7 +768,8 @@ def render_grey_and_vis(scene, cache, cam, ni=1280, nj=720, device=None, ident="
 #####################################################################
 
 
-def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None, tnear=100000.0, tfar=100000.0):
+def render_rgb(scene, cache, cam, ni=1280, nj=720,
+               device=None, tnear=100000.0, tfar=100000.0):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_batch CPU render rgb not yet implemented"
   elif cache.type == "boxm2_opencl_cache_sptr" and device:
@@ -722,6 +790,25 @@ def render_rgb(scene, cache, cam, ni=1280, nj=720, device=None, tnear=100000.0, 
     return exp_image, vis_image, status
   else:
     print "ERROR: Cache type not recognized: ", cache.type
+
+
+def render_rgb_view_dep(scene, cache, cam, ni=1280, nj=720, device=None,
+                        ident_string=""):
+    if cache.type == "boxm2_opencl_cache_sptr" and device:
+        batch.init_process("boxm2OclRenderViewDepExpectedColorProcess")
+        batch.set_input_from_db(0, device)
+        batch.set_input_from_db(1, scene)
+        batch.set_input_from_db(2, cache)
+        batch.set_input_from_db(3, cam)
+        batch.set_input_unsigned(4, ni)
+        batch.set_input_unsigned(5, nj)
+        batch.set_input_string(6, ident_string)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
+        exp_image = dbvalue(id, type)
+        return exp_image
+    else:
+        print "ERROR: Cache type not recognized: ", cache.type
 
 #####################################################################
 # render depth map
@@ -764,7 +851,8 @@ def render_depth(scene, cache, cam, ni=1280, nj=720, device=None):
 # visible and occupied surface along the ray
 
 
-def render_depth_of_max_prob_surface(scene, cache, cam, ni=1280, nj=720, device=None):
+def render_depth_of_max_prob_surface(
+        scene, cache, cam, ni=1280, nj=720, device=None):
   if cache.type == "boxm2_cache_sptr":
     # print "boxm2_batch CPU render depth not yet implemented";
     batch.init_process("boxm2CppRenderDepthofMaxProbProcess")
@@ -791,7 +879,8 @@ def render_depth_of_max_prob_surface(scene, cache, cam, ni=1280, nj=720, device=
 #####################################################################
 # render depth map by loading block inside certain region
 #####################################################################
-def render_depth_region(scene, cache, cam, lat, lon, elev, radius, ni=1280, nj=720, device=None):
+def render_depth_region(scene, cache, cam, lat, lon,
+                        elev, radius, ni=1280, nj=720, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_batch CPU render depth not yet implemented"
   elif cache.type == "boxm2_opencl_cache_sptr" and device:
@@ -822,7 +911,8 @@ def render_depth_region(scene, cache, cam, lat, lon, elev, radius, ni=1280, nj=7
 #####################################################################
 
 
-def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize=False, device=None):
+def render_z_image(scene, cache, cam, ni=1280, nj=720,
+                   normalize=False, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_batch CPU render depth not yet implemented"
   elif cache.type == "boxm2_opencl_cache_sptr" and device:
@@ -847,7 +937,8 @@ def render_z_image(scene, cache, cam, ni=1280, nj=720, normalize=False, device=N
 #####################################################################
 
 
-def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, raybelief="", max_mode=False, ident=""):
+def change_detect(scene, cache, cam, img, exp_img, device=None,
+                  rgb=False, n=1, raybelief="", max_mode=False, ident=""):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_batch CPU change detection"
     batch.init_process("boxm2CppChangeDetectionProcess")
@@ -885,7 +976,8 @@ def change_detect(scene, cache, cam, img, exp_img, device=None, rgb=False, n=1, 
     print "ERROR: Cache type not recognized: ", cache.type
 
 
-def change_detect2(scene, cache, cam, img, identifier="", maxmode=False, tnear=100000, tfar=0.00001, device=None):
+def change_detect2(scene, cache, cam, img, identifier="",
+                   maxmode=False, tnear=100000, tfar=0.00001, device=None):
   print "boxm2_batch GPU change detection"
   batch.init_process("boxm2OclChangeDetectionProcess2")
   batch.set_input_from_db(0, device)
@@ -1073,7 +1165,8 @@ def trajectory_direct(trajectory, index):
   return cam
 
 
-def init_trajectory_regular(ni, nj, right_fov, top_fov, altitude, heading, tilt, roll, x_start, y_start, x_end, y_end, x_inc, y_inc, heading_inc):
+def init_trajectory_regular(ni, nj, right_fov, top_fov, altitude, heading,
+                            tilt, roll, x_start, y_start, x_end, y_end, x_inc, y_inc, heading_inc):
   batch.init_process("boxm2ViewInitRegularTrajectoryProcess")
   batch.set_input_unsigned(0, ni)
   batch.set_input_unsigned(1, nj)
@@ -1098,7 +1191,8 @@ def init_trajectory_regular(ni, nj, right_fov, top_fov, altitude, heading, tilt,
 # heading is incremented from 0 to 360 with heading_increment
 
 
-def init_trajectory_height_map(scene, x_img, y_img, z_img, ni, nj, right_fov, top_fov, altitude, tilt, roll, margin, i_start, j_start, i_inc, j_inc, heading_start, heading_inc):
+def init_trajectory_height_map(scene, x_img, y_img, z_img, ni, nj, right_fov, top_fov,
+                               altitude, tilt, roll, margin, i_start, j_start, i_inc, j_inc, heading_start, heading_inc):
   batch.init_process("boxm2ViewInitHeightMapTrajectoryProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, x_img)
@@ -1128,7 +1222,8 @@ def init_trajectory_height_map(scene, x_img, y_img, z_img, ni, nj, right_fov, to
 #####################################################################
 
 
-def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", nblks=8, isalign=True, out_dir="nvm_out", ply_file="", scenecenter=[0, 0, 0]):
+def bundle2scene(bundle_file, img_dir, app_model="boxm2_mog3_grey", nblks=8,
+                 isalign=True, out_dir="nvm_out", ply_file="", scenecenter=[0, 0, 0]):
   if app_model == "boxm2_mog3_grey" or app_model == "boxm2_mog3_grey_16":
     nobs_model = "boxm2_num_obs"
   elif app_model == "boxm2_gauss_rgb":
@@ -1176,7 +1271,8 @@ def scale_scene(scene, scale):
 # (in meters) at the finest scale, elev values are also in meters
 
 
-def create_scene_and_blocks(scene_dir, app_model, obs_model, origin_lon, origin_lat, origin_elev, lon1, lat1, elev1, lon2, lat2, elev2, vox_size, block_len_xy, block_len_z, local_cs_name, num_bins=0, xml_name="scene"):
+def create_scene_and_blocks(scene_dir, app_model, obs_model, origin_lon, origin_lat, origin_elev, lon1, lat1,
+                            elev1, lon2, lat2, elev2, vox_size, block_len_xy, block_len_z, local_cs_name, num_bins=0, xml_name="scene"):
   batch.init_process("boxm2CreateSceneAndBlocksProcess")
   batch.set_input_string(0, scene_dir)
   batch.set_input_string(1, app_model)
@@ -1208,7 +1304,8 @@ def create_scene_and_blocks(scene_dir, app_model, obs_model, origin_lon, origin_
 # Create a scene from a given polygon structure in kml file
 
 
-def create_scene_poly_and_blocks(scene_dir, app_model, obs_model, poly_kml, origin_lon, origin_lat, origin_elev, scene_height, vox_size, block_len_xy, block_len_z, local_cs_name, num_bins=0, xml_name="scene"):
+def create_scene_poly_and_blocks(scene_dir, app_model, obs_model, poly_kml, origin_lon, origin_lat, origin_elev,
+                                 scene_height, vox_size, block_len_xy, block_len_z, local_cs_name, num_bins=0, xml_name="scene"):
   # get the inpus
   batch.init_process("boxm2CreatePolySceneAndBlocksProcess")
   batch.set_input_string(0, scene_dir)
@@ -1240,7 +1337,8 @@ def create_scene_poly_and_blocks(scene_dir, app_model, obs_model, poly_kml, orig
 # with a given dimension
 
 
-def distribute_scene_blocks(scene, small_scene_dim, xml_output_path, xml_name_prefix):
+def distribute_scene_blocks(scene, small_scene_dim,
+                            xml_output_path, xml_name_prefix):
   batch.init_process("boxm2DistributeSceneBlocksProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_double(1, small_scene_dim)
@@ -1402,7 +1500,8 @@ def save_multi_block_scene(params):
   batch.run_process()
 
 
-def roi_init(NITF_path, camera, scene, convert_to_8bit, params_fname, margin=0, clip_width=-1, clip_height=-1):
+def roi_init(NITF_path, camera, scene, convert_to_8bit,
+             params_fname, margin=0, clip_width=-1, clip_height=-1):
   def fail():
     local_cam = 0
     cropped_image = 0
@@ -1487,7 +1586,8 @@ def blob_precision_recall(cd_img, gt_img, mask_img=None):
 #########################################################################
 # Batch update process
 #########################################################################
-def update_aux_per_view(scene, cache, img, cam, imgString, device=None, mask=None):
+def update_aux_per_view(scene, cache, img, cam,
+                        imgString, device=None, mask=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_batch CPU update aux per view not yet implemented"
   elif cache.type == "boxm2_opencl_cache_sptr" and device:
@@ -1507,7 +1607,8 @@ def update_aux_per_view(scene, cache, img, cam, imgString, device=None, mask=Non
 # Update Aux for normal-albedo-array appearance model
 
 
-def update_aux_per_view_naa(scene, cache, img, cam, metadata, atm_params, imgString, alt_prior, alt_density, device=None):
+def update_aux_per_view_naa(scene, cache, img, cam, metadata,
+                            atm_params, imgString, alt_prior, alt_density, device=None):
   if cache.type == "boxm2_cache_sptr":
     print "boxm2_batch CPU update aux per view_naa not yet implemented"
   elif cache.type == "boxm2_opencl_cache_sptr" and device:
@@ -1552,7 +1653,8 @@ def compute_sun_affine_camera(scene, sun_az, sun_el, astro_coords=True):
 
 #######################################################
 # update sun visibility probabilities
-def update_sun_visibilities(scene, device, ocl_cache, cache, sun_camera, ni, nj, prefix_name):
+def update_sun_visibilities(
+        scene, device, ocl_cache, cache, sun_camera, ni, nj, prefix_name):
   batch.init_process("boxm2OclUpdateSunVisibilitiesProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -1568,7 +1670,8 @@ def update_sun_visibilities(scene, device, ocl_cache, cache, sun_camera, ni, nj,
 # render shadow map
 
 
-def render_shadow_map(scene, device, ocl_cache, camera, ni, nj, prefix_name=''):
+def render_shadow_map(scene, device, ocl_cache,
+                      camera, ni, nj, prefix_name=''):
   batch.init_process("boxm2OclRenderExpectedShadowMapProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -1654,7 +1757,8 @@ def ortho_geo_cam_from_scene(scene):
 # Create x y z images from a DEM at the resolution of the scene
 
 
-def generate_xyz_from_dem(scene, geotiff_dem, geoid_height, geocam=None, fill_in_value=-1.0):
+def generate_xyz_from_dem(scene, geotiff_dem, geoid_height,
+                          geocam=None, fill_in_value=-1.0):
   batch.init_process("boxm2DemToXYZProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_string(1, geotiff_dem)
@@ -1679,7 +1783,8 @@ def generate_xyz_from_dem(scene, geotiff_dem, geoid_height, geocam=None, fill_in
 # Create x y z images from a DEM at the resolution of the input DEM images
 
 
-def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=None, fill_in_value=-1.0):
+def generate_xyz_from_dem2(
+        scene, geotiff_dem, geoid_height, geocam=None, fill_in_value=-1.0):
   batch.init_process("boxm2DemToXYZProcess2")
   batch.set_input_from_db(0, scene)
   batch.set_input_string(1, geotiff_dem)
@@ -1849,7 +1954,8 @@ def generate_xyz_from_label_img2(scene, label_tiff, geocam=0):
 # generate the local x,y,z images using this kind of an ortho height map
 
 
-def generate_xyz_from_ortho_height_map(scene, height_map, height_map_mask, thres):
+def generate_xyz_from_ortho_height_map(
+        scene, height_map, height_map_mask, thres):
   batch.init_process("boxm2HeightMapToXYZProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, height_map)
@@ -1906,7 +2012,8 @@ def extract_surface_features(scene, cache, type, index):
   batch.run_process()
 
 
-def block_similarity(scene, cache, i, j, k, vrml_filename, feature_sim_variance, entropy_range_min, entropy_range_max):
+def block_similarity(scene, cache, i, j, k, vrml_filename,
+                     feature_sim_variance, entropy_range_min, entropy_range_max):
   batch.init_process("boxm2BlockSimilarityProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, cache)
@@ -1920,7 +2027,8 @@ def block_similarity(scene, cache, i, j, k, vrml_filename, feature_sim_variance,
   batch.run_process()
 
 
-def compute_derivatives_process(scene, cache, prob_threshold, normal_threshold, kernel_x_file_name, kernel_y_file_name, kernel_z_file_name, i=-1, j=-1, k=-1):
+def compute_derivatives_process(scene, cache, prob_threshold, normal_threshold,
+                                kernel_x_file_name, kernel_y_file_name, kernel_z_file_name, i=-1, j=-1, k=-1):
   batch.init_process("boxm2CppComputeDerivativeProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, cache)
@@ -1953,7 +2061,8 @@ def compute_probability_of_image(device, scene, cache, cam, img):
   return outimg
 
 
-def cubic_compute_probabiltiy_of_image(device, scene, cache, cam, img, model_ident, img_ident):
+def cubic_compute_probabiltiy_of_image(
+        device, scene, cache, cam, img, model_ident, img_ident):
   batch.init_process("boxm2OclProbabilityOfImageWcubicProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -1970,7 +2079,8 @@ def cubic_compute_probabiltiy_of_image(device, scene, cache, cam, img, model_ide
   return outimg
 
 
-def compute_visibility(device, scene, cache, camsfile, depthdir, x, y, z, outputdir, scale):
+def compute_visibility(device, scene, cache, camsfile,
+                       depthdir, x, y, z, outputdir, scale):
 
   batch.init_process("boxm2OclComputeVisibilityProcess")
   batch.set_input_from_db(0, device)
@@ -1999,7 +2109,7 @@ def compute_los_visibility(scene, cache, x0, y0, z0, x1, y1, z1, t=5):
   batch.set_input_float(6, y1)
   batch.set_input_float(7, z1)
   batch.set_input_float(8, t)
-  result = batch.run_process()
+  batch.run_process()
   (id, type) = batch.commit_output(0)
   vis = batch.get_output_float(id)
   batch.remove_data(id)
@@ -2032,7 +2142,8 @@ def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir,
 ####################################
 
 
-def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_hyp_id, elev_dif, vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity):
+def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_hyp_id, elev_dif,
+                     vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity):
   batch.init_process("boxm2IndexHypothesesProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -2053,7 +2164,8 @@ def index_hypotheses(device, scene, opencl_cache, hyp_file, start_hyp_id, skip_h
 # pass leaf_id = -1 to index all the leaves in the given tile
 
 
-def index_hypotheses2(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity, leaf_id=-1):
+def index_hypotheses2(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax,
+                      solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity, leaf_id=-1):
   batch.init_process("boxm2IndexHypothesesProcess2")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -2074,7 +2186,8 @@ def index_hypotheses2(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_d
 # pass leaf_id = -1 to index all the leaves in the given tile
 
 
-def index_label_data(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity, identifier, leaf_id=-1):
+def index_label_data(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle,
+                     ray_file, out_name, visibility_threshold, index_buffer_capacity, identifier, leaf_id=-1):
   batch.init_process("boxm2IndexLabelDataProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -2096,7 +2209,8 @@ def index_label_data(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_di
 # pass leaf_id = -1 to index all the leaves in the given tile
 
 
-def index_label_data_combined(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax, solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity, identifier, leaf_id=-1):
+def index_label_data_combined(device, scene, opencl_cache, geo_hyp_file, tile_id, elev_dif, vmin, dmax,
+                              solid_angle, ray_file, out_name, visibility_threshold, index_buffer_capacity, identifier, leaf_id=-1):
   batch.init_process("boxm2IndexLabelCombinedDataProcess")
   batch.set_input_from_db(0, device)
   batch.set_input_from_db(1, scene)
@@ -2116,7 +2230,8 @@ def index_label_data_combined(device, scene, opencl_cache, geo_hyp_file, tile_id
   batch.run_process()
 
 
-def visualize_indices(index_file, buffer_capacity, start_i, end_i, out_prefix, ray_file):
+def visualize_indices(index_file, buffer_capacity,
+                      start_i, end_i, out_prefix, ray_file):
   batch.init_process("boxm2VisualizeIndicesProcess")
   batch.set_input_string(0, index_file)
   batch.set_input_float(1, buffer_capacity)
@@ -2131,7 +2246,8 @@ def visualize_indices(index_file, buffer_capacity, start_i, end_i, out_prefix, r
 # = 2 --> visualize orientation label index
 
 
-def visualize_hyp_index(geo_hyp_file, geo_index_file, ray_file, tile_id, lat, lon, index_type):
+def visualize_hyp_index(geo_hyp_file, geo_index_file,
+                        ray_file, tile_id, lat, lon, index_type):
   batch.init_process("boxm2VisualizeHypIndexProcess")
   batch.set_input_string(0, geo_hyp_file)
   batch.set_input_string(1, geo_index_file)
@@ -2145,7 +2261,8 @@ def visualize_hyp_index(geo_hyp_file, geo_index_file, ray_file, tile_id, lat, lo
 # load the score binary file generated by matcher
 
 
-def load_score_binary(geo_hypo_folder, score_file, out_text, tile_id, candidate_list=""):
+def load_score_binary(geo_hypo_folder, score_file,
+                      out_text, tile_id, candidate_list=""):
   batch.init_process("boxm2LoadScoreBinary")
   batch.set_input_string(0, geo_hypo_folder)
   batch.set_input_string(1, candidate_list)
@@ -2197,12 +2314,14 @@ def cast_3d_point_pass2(scene, cache, generic_camera, appearance_model_name,
   batch.run_process()
 
 
+
 def accumulate_3d_point_and_cov(scene, cache, appearance_model_name):
   batch.init_process("boxm2CppCompute3dPointsAndCovsProcess")
   batch.set_input_from_db(0, scene)
   batch.set_input_from_db(1, cache)
   batch.set_input_string(2, appearance_model_name)
   batch.run_process()
+
 
 
 def normalize_3d_point_and_cov(scene, cache):
@@ -2233,7 +2352,8 @@ def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
     return 0.0, 0.0
 
 
-def boxm2_compute_pre_post(scene, device, cache, cam, img, view_identifier, tnear=100000.0, tfar=100000.0):
+def boxm2_compute_pre_post(scene, device, cache, cam,
+                           img, view_identifier, tnear=100000.0, tfar=100000.0):
   # If no device is passed in, do cpu update
   print("boxm2_batch GPU update")
   batch.init_process("boxm2OclComputePrePostProcess")
@@ -2316,3 +2436,15 @@ def boxm2_remove_low_nobs(scene, device, cache, nobs_thresh_multiplier):
   batch.set_input_from_db(2, cache)
   batch.set_input_float(3, nobs_thresh_multiplier)
   return batch.run_process()
+
+
+def compactify_mog6_view(scene, cache):
+    """Converts a MOG6_VIEW scene to a compactified representation, in
+    which each gaussian's mean and variance are stored with one byte
+    of precision.
+
+    """
+    batch.init_process("boxm2CompactifyMog6ViewProcess")
+    batch.set_input_from_db(0, scene)
+    batch.set_input_from_db(1, cache)
+    batch.run_process()

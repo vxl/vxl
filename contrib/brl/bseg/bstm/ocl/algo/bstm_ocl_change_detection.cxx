@@ -1448,5 +1448,3 @@ std::vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr 
     kernels_[identifier] = vec_kernels;
     return kernels_[identifier];
 }
-
-

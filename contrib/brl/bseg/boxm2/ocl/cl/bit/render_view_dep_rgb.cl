@@ -142,9 +142,9 @@ void step_cell_render(AuxArgs    aux_args,
 #else
       // RGB
 #ifdef MOG_VIEW_DEP_COLOR_COMPACT
-      float4 tmp_mu = convert_float4(unpack_uchar4(mixture_array[i])) / 255.0;
+      float4 tmp_mu = convert_float4(unpack_uchar4(mixture_array[i])) / 255.0f;
 #else
-      float4 tmp_mu = convert_float4(unpack_uchar4(mixture_array[2*i])) / 255.0;
+      float4 tmp_mu = convert_float4(unpack_uchar4(mixture_array[2*i])) / 255.0f;
 #endif
 #endif
       bool viewpoint_has_data = tmp_mu.s3 > 0.0f;
