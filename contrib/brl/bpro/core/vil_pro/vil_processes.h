@@ -71,6 +71,7 @@ DECLARE_FUNC_CONS(vil_get_plane_process);
 DECLARE_FUNC_CONS(vil_combine_planes_process);
 DECLARE_FUNC_CONS(vil_block_entropy_process);
 DECLARE_FUNC_CONS(vil_load_image_resource_process);
+DECLARE_FUNC_CONS(vil_save_image_resource_process);
 DECLARE_FUNC_CONS(vil_get_number_of_planes_process);
 DECLARE_FUNC_CONS(vil_edge_detection_process);
 DECLARE_FUNC_CONS(vil_binary_edge_detection_process);
@@ -80,4 +81,7 @@ DECLARE_FUNC_CONS(vil_histogram_equalize_process);
 DECLARE_FUNC_CONS(vil_invert_float_image_process);
 DECLARE_FUNC_CONS(vil_combine_palnes_8_bands_process);
 DECLARE_FUNC_CONS(vil_image_registration_process);
+DECLARE_FUNC_CONS(vil_multi_plane_view_to_grey_process);
+DECLARE_FUNC_CONS(vil_binarize_otsu_process);
+
 #endif

@@ -54,5 +54,6 @@ void brad_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_get_meta_data_info_process, "bradGetMetaDataInfoProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_get_cloud_coverage_process, "bradGetCloudCoverageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_get_image_coverage_process, "bradGetImageCoverageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, brad_compute_appearance_index_process, "bradComputeAppearanceIndexProcess");
 }
 

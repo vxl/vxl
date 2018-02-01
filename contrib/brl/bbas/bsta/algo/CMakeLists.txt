@@ -18,7 +18,8 @@ set( bsta_algo_sources
    bsta_sigma_normalizer.h    bsta_sigma_normalizer.cxx
    bsta_display_vrml.h
    bsta_mvnrand.h
-   )
+   bsta_mog3_grey.h           bsta_mog3_grey.cxx
+)
 
 aux_source_directory(Templates bsta_algo_sources)
 

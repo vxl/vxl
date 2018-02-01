@@ -10,6 +10,7 @@
 #include <vgl/vgl_intersection.h>
 #include <volm/volm_loc_hyp.h>
 #include <vcl_compiler.h>
+#include <vgl/vgl_area.h>
 
 volm_geo_index_node::~volm_geo_index_node()
 {
@@ -303,7 +304,7 @@ void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, std::vector<volm_
   if (!root)
     return;
 
-  if (vgl_intersection(root->extent_, area).area() == 0.0f)
+  if (vgl_area(vgl_intersection(root->extent_, area)) == 0.0f)
     return;
 
   if (!root->children_.size())

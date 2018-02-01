@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "vgui_vil_image_renderer.h"
+#include <vil/vil_new.h>
 //:
 // \file
 // \author Amitha Perera
@@ -91,12 +92,14 @@ create_buffer(vgui_range_map_params_sptr const& rmp)
              << "Rendering only the top left "<< dims << 'x' << dims << " corner\n";
     unsigned dims =
       static_cast<unsigned>(std::sqrt(static_cast<double>(buf_limit)));
-    if (ni<dims)
-      nj = (buf_limit/ni) -1 ;
-    else {ni=dims; nj = dims;}
-    if (nj<dims)
-      ni = (buf_limit/nj) -1 ;
-    else {ni=dims; nj = dims;}
+	unsigned nid = dims, njd = dims;
+    if(ni<dims){
+		nid = ni; dims = buf_limit/ni;
+	}
+	if(nj<dims)
+		njd = nj;
+	
+	ni = nid; nj = njd;
   }
   buffer_ = new vgui_section_buffer( 0, 0, ni, nj, GL_NONE, GL_NONE );
   buffer_->apply( the_image_, rmp );
@@ -195,7 +198,16 @@ render_directly(vgui_range_map_params_sptr const& rmp)
   //float values in the range [0,1]. If the map is defined, then OpenGL
   //can read the image pixels directly from the image.
 
-  vil_pixel_format format = the_image_->pixel_format();
+  //note: forces RGBA images to render as four band images
+  vil_pixel_format format = vil_pixel_format_component_format(the_image_->pixel_format());
+#if 0
+  // this nonsense is needed to force RGBA images to render as four band images
+  // probably best for examination purposes.
+  if(format == VIL_PIXEL_FORMAT_RGBA_UINT_16)
+    format = VIL_PIXEL_FORMAT_UINT_16;
+  if(format == VIL_PIXEL_FORMAT_RGBA_BYTE)
+    format = VIL_PIXEL_FORMAT_BYTE;
+#endif
   switch ( format )
   {
     case VIL_PIXEL_FORMAT_BYTE:

@@ -7,6 +7,7 @@
 #include "vgl_infinite_line_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
+#include <string>
 template <class Type>
 vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
                                                  vgl_point_3d<Type> const& p2)
@@ -112,15 +113,23 @@ bool vgl_infinite_line_3d<Type>::contains(const vgl_point_3d<Type>& p ) const
 template <class Type>
 std::ostream& operator<<(std::ostream& s, vgl_infinite_line_3d<Type> const & p)
 {
-  return s << "<vgl_infinite_line_3d: origin" << p.x0() << " dir " << p.direction() << " >";
+  return s << "<vgl_infinite_line_3d: origin " << p.x0() << " dir " << p.direction() << " >";
 }
 
 template <class Type>
 std::istream& operator>>(std::istream& s, vgl_infinite_line_3d<Type>& p)
 {
+  s >> std::ws; // skip leading whitespace
+  std::string temp;
+  s >> temp >> temp; // skip "<vgl_infinite_line_3d: origin"
+  s >> std::ws; // skip whitespace
   vgl_vector_2d<Type> x_0;
+  s >> x_0;
+  s >> std::ws; // skip whitespace
+  s >> temp;// skip "dir "
+  s >> std::ws; // skip whitespace
   vgl_vector_3d<Type> dir;
-  s >> x_0 >> dir;
+  s >> dir >> std::ws >> temp; // trailing " >"
   p.set(x_0, dir);
   return s;
 }

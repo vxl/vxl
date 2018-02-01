@@ -45,9 +45,10 @@ class boxm2_export_oriented_point_cloud_function
   static void readBBFromPLY(const std::string& filename, vgl_box_3d<double>& box);
 
   //: Use covariance estimate to export a point cloud
+  //  return points for which prob is greater than prob_t and LE is less than LE_t and CE is less than LE_t
   static void exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                   boxm2_data_base* mog, boxm2_data_base* alpha, boxm2_data_base* points, boxm2_data_base* covariances, std::ofstream& file,
-                                  float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype);
+                                  float prob_t, float LE_t, float CE_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype);
 
   static bool calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
                                    const vnl_vector_fixed<float, 4>& point,
@@ -55,6 +56,7 @@ class boxm2_export_oriented_point_cloud_function
                                    const float& alpha,
                                    float& prob, double& color,
                                    vnl_vector_fixed<double, 3>& axes, double& LE, double& CE);
+  static bool calculateLECEofPoint(const vnl_vector_fixed<float, 9>& cov,vnl_vector_fixed<double, 3>&axes, double& LE, double& CE);
 
 };
 

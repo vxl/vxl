@@ -5,6 +5,12 @@ include_directories( ${BRL_INCLUDE_DIR}/bpro )
 include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
 include_directories(${GEL_INCLUDE_DIR})
 include_directories(${VTHREEP_INCLUDE_DIR})
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  include_directories(${EXPAT_INCLUDE_DIRS} )
+  include_directories(${EXPATPP_INCLUDE_DIRS} )
+ endif()
+endif()
 
 set(sdet_pro_sources
     sdet_processes.h
@@ -20,7 +26,7 @@ aux_source_directory(Templates sdet_pro_sources)
 aux_source_directory(processes sdet_pro_sources)
 
 vxl_add_library(LIBRARY_NAME sdet_pro LIBRARY_SOURCES ${sdet_pro_sources})
-target_link_libraries(sdet_pro bprb brdb sdet vil_pro ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl)
+target_link_libraries(sdet_pro bprb brdb sdet volm vil_pro ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpgl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

@@ -29,7 +29,7 @@ if( PYTHON_FOUND )
       endif()
       set_target_properties(bvxm_batch PROPERTIES PREFIX "")
 
-      target_link_libraries(bvxm_batch bprb brdb bpro_batch ${VXL_LIB_PREFIX}vbl bvxm bvxm_pro bvxm_io bvxm_grid_io bvxm_grid_pro ${VXL_LIB_PREFIX}vpgl_io vpgl_pro ${VXL_LIB_PREFIX}vil_io vil_pro sdet_pro brad_pro brad_io bvrml_pro volm_pro brip_pro bapl_pro bvgl_pro)
+      target_link_libraries(bvxm_batch bprb brdb bpro_batch ${VXL_LIB_PREFIX}vbl bvxm bvxm_pro bvxm_io bvxm_grid_io bvxm_grid_pro ${VXL_LIB_PREFIX}vpgl_io vpgl_pro ${VXL_LIB_PREFIX}vil_io vil_pro sdet_pro brad_pro brad_io bvrml_pro volm_pro brip_pro bapl_pro bvgl_pro bsgm_pro vcon_pro ihog_pro)
 
       if(PYTHON_DEBUG_LIBRARIES)
         target_link_libraries( bvxm_batch debug ${PYTHON_DEBUG_LIBRARY})

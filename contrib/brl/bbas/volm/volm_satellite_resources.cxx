@@ -151,7 +151,7 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
       vgl_box_2d<double> sat_box;
       sat_box.add(vgl_point_2d<double>(resources_[res_id].meta_->lower_left_.x(), resources_[res_id].meta_->lower_left_.y()));
       sat_box.add(vgl_point_2d<double>(resources_[res_id].meta_->upper_right_.x(), resources_[res_id].meta_->upper_right_.y()));
-      if (resources_[res_id].meta_->band_.compare(band_str) == 0 && vgl_intersection(sat_box, area).area() > 0)
+      if (resources_[res_id].meta_->band_.compare(band_str) == 0 && vgl_area(vgl_intersection(sat_box, area)) > 0)
         temp_ids_init.push_back(res_id);
     }
   }

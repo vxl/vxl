@@ -7,6 +7,8 @@
 // \file
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_oriented_box_2d.h>
 
 template <class T>
 T vgl_area_signed(vgl_polygon<T> const& poly)
@@ -104,12 +106,22 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
 
   return area/2;
 }
+template <class T>
+T vgl_area( const vgl_box_2d<T>& box ){
+  return box.width()*box.height(); }
+
+template <class T>
+T vgl_area( const vgl_oriented_box_2d<T>& obox ){
+  std::pair<T,T> wh = obox.width_height();
+    return wh.first * wh.second;
+}
 
 #undef VGL_AREA_INSTANTIATE
 #define VGL_AREA_INSTANTIATE(T) \
 template T vgl_area(vgl_polygon<T > const&); \
 template T vgl_area_signed(vgl_polygon<T > const&); \
 template T vgl_area_enforce_orientation(vgl_polygon<T > const&); \
-template vgl_point_2d<T > vgl_centroid(vgl_polygon<T > const&)
-
+template vgl_point_2d<T > vgl_centroid(vgl_polygon<T > const&); \
+template T vgl_area( const vgl_box_2d<T>& box ); \
+template T vgl_area( const vgl_oriented_box_2d<T>& obox )
 #endif // vgl_area_hxx_

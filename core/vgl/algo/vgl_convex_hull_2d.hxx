@@ -2,8 +2,13 @@
 #define vgl_convex_hull_2d_hxx_
 #include <cstdlib>
 #include "vgl_convex_hull_2d.h"
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_area.h>
 
 #include <vcl_compiler.h>
+
+#include <vnl/vnl_math.h>
+#include <limits>
 
 //:
 // \file
@@ -146,7 +151,61 @@ vgl_polygon<T> vgl_convex_hull_2d<T>::hull()
     this->compute_hull();
   return hull_;
 }
+template <class T>
+vgl_oriented_box_2d<T>  vgl_convex_hull_2d<T>::min_area_enclosing_rectangle(){
+  if (!hull_valid_)
+    this->compute_hull();
+  // the algorithm uses the fact that the smallest enclosing rectangle 
+  // has a side in common with and edge of the convex hull
+  std::vector<vgl_point_2d<T> > verts = hull_[0];
+  size_t n = verts.size();
+  vgl_box_2d<T> min_box;
+  T min_angle = T(0);
+  T min_area = std::numeric_limits<T>::max();
+  vgl_vector_2d<T> min_offset(T(0),T(0));
+  for(size_t i = 1; i<=n; ++i){
+    vgl_point_2d<T>& vm1 = verts[i-1];
+    vgl_vector_2d<T> dir = verts[i%n]-vm1;
+    T theta = atan2(dir.y(), dir.x());
+    T c = cos(-theta), s=sin(-theta);
+    vgl_box_2d<T> rbox;
+      // rotate the vertices about v_i-1
+      // the resulting box needs to be shifted by v_i-1
+    for(size_t j = 0; j<n; ++j){
+      vgl_vector_2d<T> vp = verts[j]-vm1;
+      vgl_point_2d<T> rpp((c*vp.x()-s*vp.y()),(s*vp.x() + c*vp.y()));
+      rbox.add(rpp);
+    }
+    T area = vgl_area(rbox);
+    if(area<min_area){
+      min_offset.set(vm1.x(), vm1.y());
+      min_area = vgl_area(rbox);
+      min_box = rbox;
+      min_angle = theta;
+    }
+  }
+  T w = min_box.width(), h = min_box.height();
+  vgl_point_2d<T> c = min_box.centroid();
+  //select major axis such that width > height
+  T width = w, height = h;
+  vgl_point_2d<T> pmaj0(c.x()-width/T(2), c.y()), pmaj1(c.x()+width/T(2), c.y());
+  if(w<h){
+    width = h;
+    height = w;
+    pmaj0.set(c.x(), c.y()-width/T(2)); pmaj1.set(c.x(), c.y()+width/T(2));
+  }
 
+  // rotate major axis about v_i-1
+  T cs = cos(min_angle), s = sin(min_angle);
+  T pmaj0x = pmaj0.x(), pmaj0y = pmaj0.y();
+  T pmaj1x = pmaj1.x(), pmaj1y = pmaj1.y();
+  vgl_point_2d<T> pmaj0r(cs*pmaj0x - s*pmaj0y, s*pmaj0x + cs*pmaj0y);
+  vgl_point_2d<T> pmaj1r(cs*pmaj1x - s*pmaj1y, s*pmaj1x + cs*pmaj1y);
+  
+  // add back rotation center
+  pmaj0r += min_offset; pmaj1r += min_offset;
+  return vgl_oriented_box_2d<T>(pmaj0r, pmaj1r, height);
+}
 //----------------------------------------------------------------------------
 #undef VGL_CONVEX_HULL_2D_INSTANTIATE
 #define VGL_CONVEX_HULL_2D_INSTANTIATE(T) \

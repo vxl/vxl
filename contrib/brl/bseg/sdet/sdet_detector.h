@@ -147,7 +147,7 @@ class sdet_detector : public sdet_detector_params
   void SetImage(vil_image_resource_sptr const& img, brip_roi const& roi);
 
   void print(std::ostream &strm=std::cout) const;
-
+  static std::vector<vsol_digital_curve_2d_sptr> convert_vdgl_to_vsol(std::vector<vdgl_digital_curve_sptr> const& vd_edges);
  protected:
   void ClearData(); //!< clear buffer
 

@@ -136,7 +136,7 @@ public:
   void append(sdet_edgel_list& n_chain)
   {
     int sizeofchain=n_chain.size();
-    for (unsigned i=1; i<sizeofchain; i++)
+    for (int i=1; i<sizeofchain; i++)
       edgels.push_back(n_chain[i]);
   }
 

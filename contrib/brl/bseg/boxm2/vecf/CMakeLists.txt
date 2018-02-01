@@ -65,6 +65,7 @@ set(boxm2_vecf_sources
     boxm2_vecf_orbicularis_oris_params.h    boxm2_vecf_orbicularis_oris_params.cxx
     boxm2_vecf_geometry_base.h
     boxm2_vecf_fit_fat_pocket.h             boxm2_vecf_fit_fat_pocket.cxx
+    boxm2_vecf_shuttle_scene.h              boxm2_vecf_shuttle_scene.cxx
 )
 
 aux_source_directory(Templates boxm2_vecf_sources)

@@ -406,6 +406,8 @@ apply( vil_image_resource_sptr const& image_in,
     case T:                                                                   \
     {                                                                         \
       typedef vil_pixel_format_type_of<T>::type Type;                         \
+	  int ni = image_in->ni(), nj = image_in->nj();							  \
+	  if(w_>(ni-x_)) w_ = (ni-x_); if(h_>(nj-y_)) h_ = (nj-y_);				  \
       vil_image_view<Type> img = image_in->get_view( x_, w_, y_, h_ );        \
       assert( img );                                                          \
       conversion_okay = convert_image(img,rmp,buffer_,allocw_,format_,type_); \

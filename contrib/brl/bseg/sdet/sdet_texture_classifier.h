@@ -228,6 +228,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   //: concatanates the texton dictionaries of all the categories, so we can read the total number of textons in the dictionary
   void compute_texton_index();
+  unsigned texton_index_size() { return texton_index_.size(); }
 
   float laplace_response(unsigned i, unsigned j) { return laplace_(i,j); }
   float gauss_response(unsigned i, unsigned j) { return gauss_(i,j); }

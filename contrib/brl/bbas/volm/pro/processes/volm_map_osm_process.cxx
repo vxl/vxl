@@ -695,14 +695,15 @@ bool volm_map_osm_onto_image_process2_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // satellite image
-  input_types.push_back("vpgl_camera_double_sptr");  // local rational camera
+  input_types.push_back("vpgl_camera_double_sptr");   // local rational camera
   input_types.push_back("vil_image_view_base_sptr");  // ortho image - float values: absolute heights
-  input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
-  input_types.push_back("vcl_string");   // bin file with osm object list // if it exists things are appended to this file!
-  input_types.push_back("vcl_string");         // OSM category name
-  input_types.push_back("vcl_string");   // output a binary file with the mapped objects in image coordinates saved as a vector of vsol_spatial_object_2d_sptr
+  input_types.push_back("vpgl_camera_double_sptr");   // ortho camera
+  input_types.push_back("vcl_string");                // bin file with osm object list // if it exists things are appended to this file!
+  input_types.push_back("vcl_string");                // OSM category name
+  input_types.push_back("vcl_string");                // output a binary file with the mapped objects saved as a vector of vsol_spatial_object_2d_sptr
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // a binary image patch that labels the OSM category
+  output_types.push_back("vil_image_view_base_sptr"); // a RBG image patch that labels the OSM category
+  output_types.push_back("vil_image_view_base_sptr"); // a binary mask patch that contains all ables from OSM category
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -845,7 +846,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
       }
     }
     if (img_line.size() > 1) {
-      std::cout << "road " << i << " has " << img_line.size() << " points" << std::endl;
+      //std::cout << "road " << i << " has " << img_line.size() << " points" << std::endl;
       // expend the line to a polygon
       double width = loc_lines[i]->prop().width_;
       if (width == 0)  width = 3.0;
@@ -866,7 +867,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
           if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj())
             line_img.push_back(vgl_point_2d<double>(uu,vv));
           cnt++;
-          ds -= 1;
+          ds -= 3;
         }
       }
       if (line_img.empty())
@@ -935,7 +936,8 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
   if (!ostr)
     std::cerr << "Failed to open output stream " << bin_filename << std::endl;
   else {
-    std::cout << "there are " << sos.size() << " vsol objects, appending to binary file: " << bin_filename << " which currently has: " << sos_in.size() << " objects" << std::endl;
+    std::cout << "there are " << sos.size() << " vsol objects, appending to binary file: " << bin_filename
+              << " which currently has: " << sos_in.size() << " objects" << std::endl;
     for (unsigned ii = 0; ii < sos_in.size(); ii++)
       sos.push_back(sos_in[ii]);
     vsl_b_write(ostr, sos);
@@ -950,6 +952,8 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
       out_img(i, j).g = bimg(i,j);
       out_img(i, j).b = bimg(i,j);
     }
+  vil_image_view<vxl_byte> out_mask(sat_img_sptr->ni(), sat_img_sptr->nj(), 1);
+  out_mask.fill(0);
   std::vector<vgl_polygon<double> > sos_poly;
   for (unsigned i = 0; i < sos.size(); i++) {
     vsol_polygon_2d* poly = static_cast<vsol_polygon_2d*>(sos[i].ptr());
@@ -973,6 +977,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         for (int x = it.startx(); x <= it.endx(); ++x)
           if ( x >= 0 && y >= 0 && x < (int)out_img.ni() && y < (int)out_img.nj()) {
             out_img(x,y).r = 255;
+            out_mask(x, y) = 255;
           }
       }
     }
@@ -994,9 +999,10 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
     ofs << '\n';
   }
   ofs.close();
-  vil_image_view_base_sptr out_img_sptr = new vil_image_view<vxl_byte>(out_img);
+  vil_image_view_base_sptr out_img_sptr  = new vil_image_view<vil_rgb<vxl_byte> >(out_img);
+  vil_image_view_base_sptr out_mask_sptr = new vil_image_view<vxl_byte>(out_mask);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
-
+  pro.set_output_val<vil_image_view_base_sptr>(1, out_mask_sptr);
   return true;
 }
 

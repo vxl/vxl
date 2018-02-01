@@ -87,6 +87,17 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   //: access by value
   T p(T a, T b) const;
 
+  //: conditional probabilities
+  T p_a_given_b(unsigned a, unsigned b) const;
+  T p_a_given_b(T a, T b) const;
+
+  T p_b_given_a(unsigned a, unsigned b) const;
+  T p_b_given_a(T a, T b) const;
+  
+  //: bin index for a value
+  bool index_a(T a, unsigned& indx) const;
+  bool index_b(T b, unsigned& indx) const;
+
   T volume() const;
   T entropy() const;
   T mutual_information() const;
@@ -115,16 +126,25 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   //:access by value
   T get_count(T a, T b) const;
 
+  //: green box indicates the a-b origin
+  // the red bar designates the a axis of the histogram, cyan the b axis.
   void print_to_vrml(std::ostream& os) const;
+
   void print_to_m(std::ostream& os) const;
   void print_to_text(std::ostream& os) const;
+  
+  //: green box indicates the a-b origin
+  // the red bar designates the a axis of the histogram, cyan the b axis.
+  void print_cond_prob_to_vrml(std::ostream& os, bool a_given_b = true/*else b_given_a*/) const;
 
   //:restore to default constructor state
   void clear();
 
  private:
   void compute_volume() const; // mutable const
+  void compute_cond_counts() const;
   mutable bool volume_valid_;
+  mutable bool cond_counts_valid_;
   mutable T volume_;
   unsigned int nbins_a_, nbins_b_;
   T range_a_, range_b_;
@@ -133,6 +153,8 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   T min_b_, max_b_;
   T min_prob_;
   vbl_array_2d<T> counts_;
+  std::vector<T> sum_counts_of_a_given_b_;
+  std::vector<T> sum_counts_of_b_given_a_;
 };
 #include <bsta/bsta_joint_histogram_sptr.h>
 #define BSTA_JOINT_HISTOGRAM_INSTANTIATE(T) extern "Please #include <bsta/bsta_joint_histogram.hxx>"
