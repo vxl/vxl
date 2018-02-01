@@ -16,6 +16,7 @@
 #include <vul/vul_file_iterator.h>
 #include <vpgl/vpgl_utm.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_distance.h>
@@ -56,7 +57,7 @@ int main(int argc,  char** argv)
   std::vector<volm_img_info> nlcd_img_infos;
   volm_io_tools::load_nlcd_imgs(nlcd_folder(), nlcd_img_infos);
   for (unsigned i = 0; i < nlcd_img_infos.size(); i++) {
-    if (vgl_intersection(lidar_img_info.bbox, nlcd_img_infos[i].bbox).area() > 0) {
+    if (vgl_area(vgl_intersection(lidar_img_info.bbox, nlcd_img_infos[i].bbox)) > 0) {
 
       if (nlcd_img_infos[i].img_r->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
         std::cout << "NLCD Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";

@@ -108,9 +108,19 @@ bool vil_get_plane_process(bprb_func_process& pro)
     vil_image_view<vxl_uint_16> band = vil_plane(img_f, plane_id);
     vil_image_view_base_sptr out_img_ptr = new vil_image_view<vxl_uint_16>(band);
     pro.set_output_val<vil_image_view_base_sptr>(0, out_img_ptr);
+  } else if (img->pixel_format() == VIL_PIXEL_FORMAT_RGBA_UINT_16) {
+    vil_image_view<vil_rgba<vxl_uint_16> > img_f(img);
+    vil_image_view<vxl_uint_16> band = vil_plane(img_f, plane_id);
+    vil_image_view_base_sptr out_img_ptr = new vil_image_view<vxl_uint_16>(band);
+    pro.set_output_val<vil_image_view_base_sptr>(0, out_img_ptr);
+  } else if (img->pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
+    vil_image_view<vil_rgb<vxl_byte> > img_f(img);
+    vil_image_view<vxl_byte> band = vil_plane(img_f, plane_id);
+    vil_image_view_base_sptr out_img_ptr = new vil_image_view<vxl_byte>(band);
+    pro.set_output_val<vil_image_view_base_sptr>(0, out_img_ptr);
   }
   else {
-    std::cerr << "In vil_get_plane_process() - for now only supports FLOAT format!\n";
+    std::cerr << "In vil_get_plane_process() - unsupport image pixel format: " << img->pixel_format() << "!\n";
     return false;
   }
 
@@ -207,8 +217,21 @@ bool vil_combine_planes_process(bprb_func_process& pro)
       }
 
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(img_out));
+  } else if (img_r->pixel_format() == VIL_PIXEL_FORMAT_UINT_16) {
+    vil_image_view<vxl_uint_16> img_out(img_r->ni(), img_r->nj(), 3);
+    vil_image_view<vxl_uint_16> img_rr(img_r);
+    vil_image_view<vxl_uint_16> img_gg(img_g);
+    vil_image_view<vxl_uint_16> img_bb(img_b);
+    for (unsigned i = 0; i < img_r->ni(); i++)
+      for (unsigned j = 0; j < img_r->nj(); j++) {
+        img_out(i,j,0) = img_rr(i,j);
+        img_out(i,j,1) = img_gg(i,j);
+        img_out(i,j,2) = img_bb(i,j);
+      }
+
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_uint_16>(img_out));
   } else {
-    std::cerr << "In vil_get_plane_process() - for now only supports FLOAT format!\n";
+    std::cerr << "In vil_combine_planes_process() - for now only supports FLOAT format!\n";
     return false;
   }
 
@@ -266,7 +289,6 @@ bool vil_combine_planes_process2(bprb_func_process& pro)
         img_out(i,j,2) = img_rr(i,j);
         img_out(i,j,3) = img_nirr(i,j);
       }
-
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img_out));
   } else if (img_r->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
     vil_image_view<vxl_byte> img_out(img_r->ni(), img_r->nj(), 4);
@@ -281,10 +303,23 @@ bool vil_combine_planes_process2(bprb_func_process& pro)
         img_out(i,j,2) = img_rr(i,j);
         img_out(i,j,3) = img_nirr(i,j);
       }
-
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(img_out));
+  } else if (img_r->pixel_format() == VIL_PIXEL_FORMAT_UINT_16) {
+    vil_image_view<vxl_uint_16> img_out(img_r->ni(), img_r->nj(), 4);
+    vil_image_view<vxl_uint_16> img_rr(img_r);
+    vil_image_view<vxl_uint_16> img_gg(img_g);
+    vil_image_view<vxl_uint_16> img_bb(img_b);
+    vil_image_view<vxl_uint_16> img_nirr(img_nir);
+    for (unsigned i = 0; i < img_r->ni(); i++)
+      for (unsigned j = 0; j < img_r->nj(); j++) {
+        img_out(i,j,0) = img_bb(i,j);
+        img_out(i,j,1) = img_gg(i,j);
+        img_out(i,j,2) = img_rr(i,j);
+        img_out(i,j,3) = img_nirr(i,j);
+      }
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_uint_16>(img_out));
   } else {
-    std::cerr << "In vil_get_plane_process() - for now only supports FLOAT format!\n";
+    std::cerr << pro.name() << " -- unsupport image pixel format: " << img_r->pixel_format() << "!\n";
     return false;
   }
 

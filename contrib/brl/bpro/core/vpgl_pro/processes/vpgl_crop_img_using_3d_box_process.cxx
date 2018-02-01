@@ -1,4 +1,4 @@
-// This is brl/bbas/volm/pro/processes/vpgl_crop_img_using_geo_coords.cxx
+// This is brl/brpo/core/vpgl_pro/processes/vpgl_crop_img_using_3d_box_process.cxx
 //:
 // \file
 //        Take a cam, an uncertainty value in meter unit and a 3D bounding box in wgs84 coordinates to generate a cropped image
@@ -37,7 +37,7 @@
 // global variables and functions
 namespace vpgl_crop_img_using_3d_box_process_globals
 {
-  const unsigned n_inputs_ = 10;
+  const unsigned n_inputs_ = 11;
   const unsigned n_outputs_ = 5;
 }
 
@@ -56,16 +56,18 @@ bool vpgl_crop_img_using_3d_box_process_cons(bprb_func_process& pro)
   using namespace vpgl_crop_img_using_3d_box_process_globals;
   // process takes 10 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0] = "vil_image_resource_sptr";  // image resource
-  input_types_[1] = "vpgl_camera_double_sptr";  // rational camera
-  input_types_[2] = "double";                   // lower_left_lon
-  input_types_[3] = "double";                   // lower_left_lat
-  input_types_[4] = "double";                   // lower_left_elev
-  input_types_[5] = "double";                   // upper_right_lon
-  input_types_[6] = "double";                   // upper_right_lat
-  input_types_[7] = "double";                   // upper_right_elev
-  input_types_[8] = "double";                   // uncertainty value (in meter units)
-  input_types_[9] = "vpgl_lvcs_sptr";           // lvcs
+  //input_types_[0] = "vil_image_resource_sptr";  // image resource
+  input_types_[0] = "unsigned";  // image resource ni
+  input_types_[1] = "unsigned";  // image resource nj
+  input_types_[2] = "vpgl_camera_double_sptr";  // rational camera
+  input_types_[3] = "double";                   // lower_left_lon
+  input_types_[4] = "double";                   // lower_left_lat
+  input_types_[5] = "double";                   // lower_left_elev
+  input_types_[6] = "double";                   // upper_right_lon
+  input_types_[7] = "double";                   // upper_right_lat
+  input_types_[8] = "double";                   // upper_right_elev
+  input_types_[9] = "double";                   // uncertainty value (in meter units)
+  input_types_[10] = "vpgl_lvcs_sptr";           // lvcs
 
   // process takes 5 outputs
   std::vector<std::string> output_types_(n_outputs_);
@@ -79,7 +81,7 @@ bool vpgl_crop_img_using_3d_box_process_cons(bprb_func_process& pro)
 
   // set input defaults
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
-  pro.set_input(9, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
+  pro.set_input(10, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
 
   return good;
 }
@@ -101,7 +103,9 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
 
   // get the input
   unsigned i = 0;
-  vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(i++);  // image resource
+  //vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(i++);  // image resource
+  unsigned img_res_ni = pro.get_input<unsigned>(i++);
+  unsigned img_res_nj = pro.get_input<unsigned>(i++);
   vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(i++);      // rational camera
   double lower_left_lon   = pro.get_input<double>(i++);
   double lower_left_lat   = pro.get_input<double>(i++);
@@ -136,7 +140,8 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   std::cout << pro.name() << ": projected 2d roi box: " << roi_box_2d << " given uncertainty " << uncertainty << " meters." << std::endl;
 
   // crop the image
-  brip_roi broi(img_res_sptr->ni(), img_res_sptr->nj());
+  //brip_roi broi(img_res_sptr->ni(), img_res_sptr->nj());
+  brip_roi broi(img_res_ni, img_res_nj);
   vsol_box_2d_sptr bb = new vsol_box_2d();
   bb->add_point(roi_box_2d.min_x(), roi_box_2d.min_y());
   bb->add_point(roi_box_2d.max_x(), roi_box_2d.max_y());
@@ -151,7 +156,7 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   if (ni <= 0 || nj <= 0)
   {
     std::cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << std::endl;
-    return false;
+    return true;
   }
 
   // create the local camera

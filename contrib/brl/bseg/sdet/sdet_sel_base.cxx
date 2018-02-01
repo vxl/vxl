@@ -8,11 +8,28 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <pdf1d/pdf1d_calc_mean_var.h>
-#include <mbl/mbl_stats_1d.h>
+//#include <mbl/mbl_stats_1d.h>
 
 #include "sdet_edgemap.h"
-
+// remove dependency on mul
+#include <vnl/vnl_vector.h>
+static void calc_mean_var(double& mean, double& var,
+                          const double* d, int n){
+    double sum=0;
+    double sum2 = 0;
+    for (int i=0;i<n;++i)
+      {
+        sum+=d[i];
+        sum2+=d[i]*d[i];
+      }
+    
+    mean = sum/n;
+    var  = (sum2 - n*mean*mean)/(n-1);
+}
+static void calc_mean_var(double& mean, double& var,
+                          const vnl_vector<double>& d){
+  calc_mean_var(mean,var,d.data_block(),d.size());
+}
 //: Constructor
 sdet_sel_base
 ::sdet_sel_base(sdet_edgemap_sptr edgemap,
@@ -1777,14 +1794,14 @@ sdet_sel_base
   double gamma_mean, gamma_std, gamma_error_mean, gamma_error_std;
 
   //calculate the meaan and variance of the measurements
-  pdf1d_calc_mean_var(theta_mean, theta_std, theta_est);
-  pdf1d_calc_mean_var(k_mean, k_std, k_est);
-  pdf1d_calc_mean_var(gamma_mean, gamma_std, gamma_est);
+  calc_mean_var(theta_mean, theta_std, theta_est);
+  calc_mean_var(k_mean, k_std, k_est);
+  calc_mean_var(gamma_mean, gamma_std, gamma_est);
 
   //calculate mean and variance of the errors
-  pdf1d_calc_mean_var(theta_error_mean, theta_error_std, theta_error);
-  pdf1d_calc_mean_var(k_error_mean, k_error_std, k_error);
-  pdf1d_calc_mean_var(gamma_error_mean, gamma_error_std, gamma_error);
+  calc_mean_var(theta_error_mean, theta_error_std, theta_error);
+  calc_mean_var(k_error_mean, k_error_std, k_error);
+  calc_mean_var(gamma_error_mean, gamma_error_std, gamma_error);
 
   std::cout << "======================================" << std::endl;
   std::cout << "Derivative estimate accuracy Report"    << std::endl;
@@ -2894,7 +2911,7 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                 {
                 m8=0;
                 m9=5;
-                if (m9>c11->edgels.size())
+                if (m9>static_cast<int>(c11->edgels.size()))
                   m9=c11->edgels.size();
                 }
               // Finding the closest unused edge
@@ -3090,7 +3107,7 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                   {
                   p8=0;
                   p9=5;
-                  if (p9>chain1->edgels.size()) p9=chain1->edgels.size();
+                  if (p9>static_cast<int>(chain1->edgels.size())) p9=chain1->edgels.size();
                   }
                 while (1)
                   {

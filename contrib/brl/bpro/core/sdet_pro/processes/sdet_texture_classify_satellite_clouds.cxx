@@ -20,6 +20,7 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_crop.h>
+#include <vil/vil_pixel_format.h>
 
 // pass the handle to the nitf image resource as a vil_image_resource_sptr
 // also pass the image location (i,j) and (width, height) as the ROI portion in the image to classify
@@ -29,18 +30,19 @@
 //: initialize input and output types
 bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
 {
-  // process takes 5 inputs:
+  // process takes 11 inputs:
   std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); //texton classifier
   input_types.push_back("vcl_string"); // path to dictionary
   input_types.push_back("vil_image_resource_sptr"); //input image resouce
   input_types.push_back("unsigned");   // i
   input_types.push_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
-  input_types.push_back("unsigned");   // width
-  input_types.push_back("unsigned");   // height (widht, height) is the size of the ROI in terms of pixels
+  input_types.push_back("unsigned");   // ni
+  input_types.push_back("unsigned");   // nj (ni, nj) is the size of the ROI in terms of pixels
   input_types.push_back("unsigned");   //texture block size
   input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
   input_types.push_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
+  input_types.push_back("float"); // scale_factor  (pixel_graylevel*scale_factor should be on the range [0,1])
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -57,7 +59,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())
   {
-    std::cout << pro.name() << "texture classifier process2 inputs are not valid"<< std::endl;
+    std::cout << pro.name() << "texture classifier process inputs are not valid"<< std::endl;
     return false;
   }
   // get inputs
@@ -80,12 +82,16 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   vil_image_resource_sptr image = pro.get_input<vil_image_resource_sptr>(2);
   unsigned i = pro.get_input<unsigned>(3);
   unsigned j = pro.get_input<unsigned>(4);
-  unsigned width = pro.get_input<unsigned>(5);
-  unsigned height = pro.get_input<unsigned>(6);
+  unsigned ni = pro.get_input<unsigned>(5);
+  unsigned nj = pro.get_input<unsigned>(6);
 
   tc.block_size_ = pro.get_input<unsigned>(7);
   std::string cat_ids_file = pro.get_input<std::string>(8);
   std::string first_category = pro.get_input<std::string>(9);
+
+  // input maximum graylevel
+  float scale_factor  = pro.get_input<float>(10);
+  std::cout << "Scale Factor = " << scale_factor << std::endl;
 
   int invalid = tc.max_filter_radius();
 
@@ -132,39 +138,58 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
     std::cout << "problems with the input image resource handle!\n";
     return false;
   }
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
-  std::cout << " image size: ni: " << image->ni() << " nj: " << image->nj() << std::endl;
+  
+  // report resource info
+  std::cout << " image: ni=" << image->ni() << ", nj=" << image->nj() << ", nplanes=" << image->nplanes() 
+    << " file_format=" << image->file_format() << ", pixel_format=" << image->pixel_format() << std::endl;
 
-  std::vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
-  vil_nitf2_image_subheader* hdr = headers[0];
-  unsigned number_of_bits = hdr->get_number_of_bits_per_pixel();
-  std::cout << "number of bits per pixel: " << number_of_bits << std::endl;
-  if (number_of_bits != 11) {
-    std::cerr << "This process only works with images having 11 bits!\n";
-    return false;
-  }
-
-  vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
-
-  unsigned large_crop_size_w = width+2*invalid;
-  unsigned large_crop_size_h = height+2*invalid;
+  // crop info
+  unsigned nii = ni+2*invalid;
+  unsigned njj = nj+2*invalid;
   int ii = i-invalid; int jj = j-invalid;
 
-  vil_image_view_base_sptr roi = bir->get_copy_view(ii, large_crop_size_w, jj, large_crop_size_h);
+  // crop via get_copy_view (try blocked_image_resource for speed)
+  vil_image_view_base_sptr roi;
+  vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
+  if (!bir) {
+    roi = image->get_copy_view(ii, nii, jj, njj);
+  } else {
+    roi = bir->get_copy_view(ii, nii, jj, njj);
+  }
+
+  // check for valid roi
   if (!roi) {
-    std::cerr << "cannot crop from image with size: " << image->ni() << " " << image->nj() << " at position (" << i << ", " << j << ") of size (" << width << ", " << height << ") with margin: " << invalid << std::endl;
+    std::cerr << "Could not crop from image with size (" << image->ni() << "," << image->nj()
+      << ") at position (" << i << "," << j << ") of size (" << ni << ", " << nj << ") with margin: " << invalid << std::endl;
     return false;
   }
-  vil_image_view<vxl_uint_16> img(roi);
 
-  vil_image_view<float> imgf(img.ni(), img.nj());
-  vil_convert_cast(img, imgf);
-  vil_math_scale_values(imgf, 1.0f/2048.0f);
+  // report roi info
+  std::cout << " roi: ni=" << roi->ni() << ", nj=" << roi->nj() << ", nplanes=" << roi->nplanes()
+      << ", pixel_format=" << roi->pixel_format() << std::endl;
 
-  vil_image_view<float> outf = vil_crop(imgf, invalid, width, invalid, height);
+  // cast to float
+  vil_image_view<float> roi_float = *vil_convert_cast(float(), roi);
+
+  // convert to grey (if necessary)
+  vil_image_view<float> roi_float_grey;
+  if (roi->nplanes() > 1) {
+    vil_convert_planes_to_grey(roi_float, roi_float_grey);
+  } else {
+    roi_float_grey = roi_float;
+  }
+
+  // scale  
+  vil_math_scale_values(roi_float_grey, scale_factor);
+
+  // report roi float info
+  std::cout << " roi_float_grey:  ni=" << roi_float_grey.ni() << ", nj=" << roi_float_grey.nj() << ", nplanes=" << roi_float_grey.nplanes()
+      << ", pixel_format=" << roi_float_grey.pixel_format() << std::endl;
+
+  vil_image_view<float> outf = vil_crop(roi_float_grey, invalid, ni, invalid, nj);
   std::map<std::string, float> cat_percentage_map;
-  vil_image_view<vxl_byte> class_img = tc.classify_image_blocks_qual2(imgf, cat_id_map,cat_percentage_map);
-  vil_image_view<vxl_byte> out_class_img = vil_crop(class_img, invalid, width, invalid, height);
+  vil_image_view<vxl_byte> class_img = tc.classify_image_blocks_qual2(roi_float_grey, cat_id_map, cat_percentage_map);
+  vil_image_view<vxl_byte> out_class_img = vil_crop(class_img, invalid, ni, invalid, nj);
 
   // transfer id map to color map
   vil_image_view<vil_rgb<vxl_byte> > out_rgb_img(out_class_img.ni(), out_class_img.nj());

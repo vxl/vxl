@@ -65,13 +65,13 @@ bool bvxm_orthorectify_process(bprb_func_process& pro)
   unsigned ni = ortho_height_img_sptr->ni();
   unsigned nj = ortho_height_img_sptr->nj();
 
-  if (input_img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
-    std::cout << pro.name() << " -- only input images of type BYTE are supported for now! (easy to add support for others)\n";
-    return false;
-  }
+  //if (input_img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
+  //  std::cout << pro.name() << " -- only input images of type BYTE are supported for now! (easy to add support for others)\n";
+  //  return false;
+  //}
   // out image will be the ortho version of input image, it will have the same size as the ortho height map
-  vil_image_view<vxl_byte> outimg(ni, nj, 1);
-  vil_image_view<vxl_byte> input_img(input_img_sptr);
+  //vil_image_view<vxl_byte> outimg(ni, nj, 1);
+  //vil_image_view<vxl_byte> input_img(input_img_sptr);
 
   vil_image_view<float> ortho_height_img(ortho_height_img_sptr);
 
@@ -94,11 +94,25 @@ bool bvxm_orthorectify_process(bprb_func_process& pro)
       ortho_depth_img(i,j) = h-(ortho_height_img(i,j)-base_elev);
 
   vil_image_view_base_sptr ortho_depth_sptr = new vil_image_view<float>(ortho_depth_img);
-  world->orthorectify<vxl_byte>(ortho_depth_sptr, ortho_height_cam, input_img, input_img_cam, outimg);
+  if (input_img_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
+    vil_image_view<vxl_byte> input_img(input_img_sptr);
+    vil_image_view<vxl_byte> outimg(ni, nj, 1);
+    world->orthorectify<vxl_byte>(ortho_depth_sptr, ortho_height_cam, input_img, input_img_cam, outimg);
+    vil_image_view_base_sptr outimg_sptr = new vil_image_view<vxl_byte>(outimg);
+    pro.set_output_val<vil_image_view_base_sptr>(0, outimg_sptr);
+    return true;
+  }
+  else if (input_img_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+    vil_image_view<float> input_img(input_img_sptr);
+    vil_image_view<float> outimg(ni, nj, 1);
+    world->orthorectify<float>(ortho_depth_sptr, ortho_height_cam, input_img, input_img_cam, outimg);
+    vil_image_view_base_sptr outimg_sptr = new vil_image_view<float>(outimg);
+    pro.set_output_val<vil_image_view_base_sptr>(0, outimg_sptr);
+    return true;
+  }
+  else {
+    std::cout << pro.name() << " -- only input images of type BYTE and FLOAT are supported for now! (easy to add support for others)\n";
+    return false;
+  }
 
-  //store output
-  vil_image_view_base_sptr outimg_sptr = new vil_image_view<vxl_byte>(outimg);
-  pro.set_output_val<vil_image_view_base_sptr>(0, outimg_sptr);
-
-  return true;
 }

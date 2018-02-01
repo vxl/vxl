@@ -9,8 +9,10 @@
 //  analog of EdgelChain. So far the class is a very simple group of 1-d
 //  arrays for holding the x and y pixel locations and the intensity.
 //  The class maintains 2d pixels in the style of TargetJr and could be
-//  used to represent 2-d intensity points
-//
+//  used to represent 2-d intensity points. To create a region with 
+//  a given number of pixel data , SetNpts(n); for(i = 0; i<n; ++i){
+//                                         IncrementMeans(X[i],Y[i],I[i]);
+//                                         InsertInPixelArrays(X[i],Y[i],I[i]);}
 // \author
 //   Joe Mundy November 27, 1999
 //   GE Corporate Research and Development.
@@ -44,7 +46,7 @@ class vdgl_digital_region : public vsol_region_2d
   // Constructors/Initializers/Destructors---------------------------------
   vdgl_digital_region()
   : vsol_region_2d(),
-    npts_(0), pixel_size_(1.f), xp_(0), yp_(0), pix_(0),
+    npts_(0), npts_given_(false), pixel_size_(1.f), xp_(0), yp_(0), pix_(0),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -59,6 +61,7 @@ class vdgl_digital_region : public vsol_region_2d
   void ResetPixelData();
   void IncrementMeans(float x, float y, unsigned short pix);
   void InitPixelArrays();
+  void SetNpts(int npts);
   void InsertInPixelArrays(float x, float y, unsigned short pix);
 
   //: The region pixel coordinates and intensities
@@ -125,7 +128,7 @@ class vdgl_digital_region : public vsol_region_2d
   //: Return true if this region is convex
   virtual bool is_convex() const { return false; } // virtual of vsol_region_2d
 
-  void PrincipalOrientation(vnl_float_2& major_axis);
+  bool PrincipalOrientation(vnl_float_2& major_axis);
 
   //Get Fitted Plane Coefficients
   double Ix() const;  //!< First derivative of intensity wrt x
@@ -144,6 +147,7 @@ class vdgl_digital_region : public vsol_region_2d
 
  protected:
   // Members
+  bool npts_given_;         //!< Creating a region with specified npts
   unsigned int npts_;       //!< Number of pixels in the region
   float pixel_size_;        //!< Image pixel size in fractions of a pixel
   float *xp_, *yp_;         //!< The location of each pixel
@@ -165,5 +169,12 @@ class vdgl_digital_region : public vsol_region_2d
   mutable double error_, sigma_sq_;  //!< fitting errors
   mutable vnl_double_3x3 Si_;        //!< scatter matrix
 };
+#include "vdgl_digital_region_sptr.h"
+//: merge regions - set the pixel arrays no statistics computed
+//: pointer interface useful for merging subclasses of vdgl_digital_region. User must create r12.
+//  
+void merge(vdgl_digital_region* r1, vdgl_digital_region * r2, vdgl_digital_region*& r12);
 
+// smart pointer interface - avoids copying return region. The return value is constructed internally
+vdgl_digital_region_sptr merge(vdgl_digital_region_sptr const& r1, vdgl_digital_region_sptr const& r2);
 #endif // vdgl_digital_region_h_

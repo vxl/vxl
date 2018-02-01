@@ -9,6 +9,7 @@
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
 #include <vcl_compiler.h>
+#include <vnl/vnl_random.h>
 
 
 //: Constructor
@@ -22,6 +23,8 @@ bool vil_blob_detection_process_cons(bprb_func_process& pro)
 
   std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image
+  output_types.push_back("vil_image_view_base_sptr");  // randomly colored output image
+  output_types.push_back("unsigned");  // also return the number of blobs
 
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -60,25 +63,31 @@ bool vil_blob_detection_process(bprb_func_process& pro)
     vil_image_view<bool> view_blobs(view->ni(),view->nj());
 
     view_blobs.fill(false);
+    
+    vil_image_view<vil_rgb<vxl_byte> >* colored_blobs = new vil_image_view<vil_rgb<vxl_byte> >(view_blobs.ni(),view_blobs.nj());
+    colored_blobs->fill(vil_rgb<vxl_byte>(0,0,0));
+    vnl_random rng;
+    unsigned cnt_blobs = 0;
 
     // Threshold the blobs.
     for (std::vector<vil_blob_region>::const_iterator it= blob_regions.begin(),
          end=blob_regions.end(); it!=end; ++it)
     {
       std::size_t sizecount= vil_area(*it);
-      if (sizecount>min_size && sizecount<max_size)
-      for (vil_blob_region::const_iterator chords_it=it->begin(),
-           chords_end=it->end(); chords_it!=chords_end; ++chords_it)
-        for (unsigned i=chords_it->ilo; i<=chords_it->ihi; i++)
-          view_blobs(i,chords_it->j)=true;
+      if (sizecount>min_size && sizecount<max_size) {
+        vil_rgb<vxl_byte> random_color = vil_rgb<vxl_byte>((char)rng.lrand32(0,255), (char)rng.lrand32(0,255), (char)rng.lrand32(0,255));
+        for (vil_blob_region::const_iterator chords_it=it->begin(), chords_end=it->end(); chords_it!=chords_end; ++chords_it)
+          for (unsigned i=chords_it->ilo; i<=chords_it->ihi; i++) {
+            view_blobs(i,chords_it->j)=true;
+            (*colored_blobs)(i,chords_it->j) = random_color;
+          }
+        cnt_blobs++;
+      }
     }
-    vil_image_view<unsigned char>* temp_out = new vil_image_view<unsigned char>(view_blobs.ni(),view_blobs.nj());
-
-    for (unsigned i=0;i<view_blobs.ni();i++)
-        for (unsigned j=0;j<view_blobs.nj();j++)
-            (*temp_out)(i,j)=view_blobs(i,j)?255:0;
 
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<bool>(view_blobs));
+    pro.set_output_val<vil_image_view_base_sptr>(1, colored_blobs);
+    pro.set_output_val<unsigned>(2, cnt_blobs);
     return true;
   }
 
