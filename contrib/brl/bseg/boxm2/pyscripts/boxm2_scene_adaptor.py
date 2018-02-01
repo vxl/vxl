@@ -9,8 +9,6 @@ import sys
 from xml.etree.ElementTree import ElementTree
 from os.path import basename, splitext
 
-from prompt_toolkit import cache
-
 import boxm2_adaptor
 import boxm2_tools_adaptor
 import boxm2_filtering_adaptor
@@ -28,8 +26,8 @@ import vpgl_adaptor_boxm2_batch as vpgl_adaptor
 class boxm2_scene_adaptor(object):
 
   # scene adaptor init
-    def __init__(self, scene_str, device_string="gpu",
-                 opencl_multi_scene_cache=False):
+  def __init__(self, scene_str, device_string="gpu",
+               opencl_multi_scene_cache=False):
 
     # init (list) self vars
     self.scene = None
@@ -155,15 +153,6 @@ class boxm2_scene_adaptor(object):
   def update(self, cam, img, update_alpha=True, update_app=True, mask=None,
              device_string="", var=-1.0, ident_string="", tnear=100000.0, tfar=100000.0):
         dev, cache = self._get_device_cache(device_string)
-        cache = self.active_cache
-        dev = self.device
-
-        # check if force gpu or cpu
-        if device_string == "gpu":
-            cache = self.opencl_cache
-        elif device_string == "cpp":
-            cache = self.cpu_cache
-            dev = None
 
         # run update grey or RGB
         if self.rgb:
@@ -257,6 +246,7 @@ class boxm2_scene_adaptor(object):
   # first visible and occupied surface along the rays
   def render_depth_of_max_prob_surface(
         self, cam, ni=1280, nj=720, device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     expimg, probimg, visimg = boxm2_adaptor.render_depth_of_max_prob_surface(
         self.scene, cache, cam, ni, nj, dev)
     return expimg, probimg, visimg
@@ -264,6 +254,7 @@ class boxm2_scene_adaptor(object):
   # render depth image with loading given region wrapper
   def render_depth_region(self, cam, lat, lon, elev,
                           radius, ni=1280, nj=720, device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     expimg, varimg, visimg = boxm2_adaptor.render_depth_region(
         self.scene, cache, cam, lat, lon, elev, radius, ni, nj, dev)
     return expimg, varimg, visimg
@@ -271,6 +262,7 @@ class boxm2_scene_adaptor(object):
   # render z image wrapper
   def render_z_image(self, cam, ni=1280, nj=720,
                      normalize=False, device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     z_exp_img, z_var_img = boxm2_adaptor.render_z_image(
         self.scene, cache, cam, ni, nj, normalize, dev)
     return z_exp_img, z_var_img
@@ -285,6 +277,7 @@ class boxm2_scene_adaptor(object):
   # ingest heigh map
   def ingest_height_map(self, x_img, y_img, z_img,
                         zero_out_alpha=True, device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     boxm2_adaptor.ingest_height_map(self.scene, cache, x_img, y_img,
                                     z_img, zero_out_alpha, dev)
     return
@@ -292,6 +285,7 @@ class boxm2_scene_adaptor(object):
   # ingest heigh map
   def ingest_height_map_space(
           self, x_img, y_img, z_img, crust_thickness, device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     boxm2_adaptor.ingest_height_map_space(self.scene, cache, x_img,
                                           y_img, z_img, crust_thickness, dev)
     return
@@ -307,6 +301,7 @@ class boxm2_scene_adaptor(object):
   # def ingest_label_map(self,x_img,y_img,z_img,label_img,device_string="") :
   def ingest_label_map(self, x_img, y_img, z_img,
                        label_img, ident, device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     # ingest_label_map(self.scene, cache, x_img, y_img, z_img, label_img, dev);
     boxm2_adaptor.ingest_label_map(self.scene, cache, x_img, y_img,
                                    z_img, label_img, ident, dev)
@@ -315,6 +310,7 @@ class boxm2_scene_adaptor(object):
   # ingest label map
   def ingest_osm_label_map(self, x_img, y_img, z_img,
                            label_img, ident="land", device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     boxm2_adaptor.ingest_osm_label_map(self.scene, cache, x_img,
                                        y_img, z_img, label_img, ident, dev)
     return
@@ -322,6 +318,7 @@ class boxm2_scene_adaptor(object):
   # ingest buckeye-style dem
   def ingest_buckeye_dem(self, first_ret_fname, last_ret_fname,
                          geoid_height, geocam, device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     boxm2_adaptor.ingest_buckeye_dem(self.scene, cache, first_ret_fname,
                                      last_ret_fname, geoid_height, geocam,
                                      dev)
@@ -344,6 +341,7 @@ class boxm2_scene_adaptor(object):
   # detect change wrapper,
   def change_detect(self, cam, img, exp_img, n=1, raybelief="",
                     max_mode=False, rgb=False, device_string="", ident=""):
+    dev, cache = self._get_device_cache(device_string)
     cd_img = boxm2_adaptor.change_detect(self.scene, cache, cam, img,
                                          exp_img, dev, rgb, n, raybelief, max_mode, ident)
     return cd_img
@@ -351,6 +349,7 @@ class boxm2_scene_adaptor(object):
   # detect change wrapper,
   def change_detect2(self, cam, img, identifier="", max_mode=False,
                      tnear=10000000, tfar=0.00001, device_string=""):
+    dev, cache = self._get_device_cache(device_string)
     cd_img, vis_img = boxm2_adaptor.change_detect2(
         self.scene, cache, cam, img, identifier, max_mode, tnear, tfar, dev)
     return cd_img, vis_img
@@ -736,7 +735,7 @@ class boxm2_scene_adaptor(object):
       batch.set_input_bool(6, use_gpu)
       return batch.run_process()
     else:
-      print "ERROR: Cache type not recognized: ", cache.type
+      print "ERROR: Cache type not recognized: ", self.opencl_cache.type
       return False
 
   def compute_pre_post(self, cam, img, view_identifier="",

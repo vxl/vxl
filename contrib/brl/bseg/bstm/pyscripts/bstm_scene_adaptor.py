@@ -1,15 +1,16 @@
 """
 Wrapper around bstm_adaptor functions. Creates "Scene" class to manage scene, caches, etc.
 """
+import brl_init
+import bstm_batch as batch
+dbvalue = brl_init.register_batch(batch)
+
 import sys
 from os.path import basename, splitext
 
-from prompt_toolkit import cache
-
 import bstm_adaptor
-import bstm_batch
-import bstm_vil_adaptor as vil
-import bstm_vpgl_adaptor as vpgl
+import vil_adaptor_bstm_batch as vil
+import vpgl_adaptor_bstm_batch as vpgl
 
 
 class bstm_scene_adaptor(object):
@@ -54,15 +55,15 @@ class bstm_scene_adaptor(object):
 
     def __del__(self):
         if self.scene is not None:
-            bstm_batch.remove_data(self.scene.id)
+            batch.remove_data(self.scene.id)
         if self.cpu_cache is not None:
-            bstm_batch.remove_data(self.cpu_cache.id)
+            batch.remove_data(self.cpu_cache.id)
         if self.device is not None:
-            bstm_batch.remove_data(self.device.id)
+            batch.remove_data(self.device.id)
         if self.opencl_cache is not None:
-            bstm_batch.remove_data(self.opencl_cache.id)
+            batch.remove_data(self.opencl_cache.id)
         if self.lvcs is not None:
-            bstm_batch.remove_data(self.lvcs.id)
+            batch.remove_data(self.lvcs.id)
 
     # describe scene (returns data path)
     def describe(self):
@@ -78,27 +79,27 @@ class bstm_scene_adaptor(object):
     def transform_to_scene(self, to_scene, trans, rot, scale):
         if self.opencl_cache.type == "bstm_opencl_cache_sptr":
             print("transforming scene")
-            bstm_batch.init_process("bstmVecfOclTransformSceneProcess")
-            bstm_batch.set_input_from_db(0, self.scene)
-            bstm_batch.set_input_from_db(1, to_scene)
-            bstm_batch.set_input_from_db(2, self.opencl_cache)
-            bstm_batch.set_input_double(3, trans[0])
-            bstm_batch.set_input_double(4, trans[1])
-            bstm_batch.set_input_double(5, trans[2])
-            bstm_batch.set_input_double(6, rot[0][0])
-            bstm_batch.set_input_double(7, rot[0][1])
-            bstm_batch.set_input_double(8, rot[0][2])
-            bstm_batch.set_input_double(9, rot[1][0])
-            bstm_batch.set_input_double(10, rot[1][1])
-            bstm_batch.set_input_double(11, rot[1][2])
-            bstm_batch.set_input_double(12, rot[2][0])
-            bstm_batch.set_input_double(13, rot[2][1])
-            bstm_batch.set_input_double(14, rot[2][2])
-            bstm_batch.set_input_double(15, scale[0])
-            bstm_batch.set_input_double(16, scale[1])
-            bstm_batch.set_input_double(17, scale[2])
+            batch.init_process("bstmVecfOclTransformSceneProcess")
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, to_scene)
+            batch.set_input_from_db(2, self.opencl_cache)
+            batch.set_input_double(3, trans[0])
+            batch.set_input_double(4, trans[1])
+            batch.set_input_double(5, trans[2])
+            batch.set_input_double(6, rot[0][0])
+            batch.set_input_double(7, rot[0][1])
+            batch.set_input_double(8, rot[0][2])
+            batch.set_input_double(9, rot[1][0])
+            batch.set_input_double(10, rot[1][1])
+            batch.set_input_double(11, rot[1][2])
+            batch.set_input_double(12, rot[2][0])
+            batch.set_input_double(13, rot[2][1])
+            batch.set_input_double(14, rot[2][2])
+            batch.set_input_double(15, scale[0])
+            batch.set_input_double(16, scale[1])
+            batch.set_input_double(17, scale[2])
 
-            return bstm_batch.run_process()
+            return batch.run_process()
         else:
             print "ERROR: Cache type not recognized: ", self.opencl_cache.type
             return False
@@ -264,19 +265,19 @@ class bstm_scene_adaptor(object):
         fd2.close()
 
         # open the stream cache, this is a read-only cache
-        bstm_batch.init_process("bstmCreateStreamCacheProcess")
-        bstm_batch.set_input_from_db(0, self.scene)
-        bstm_batch.set_input_string(1, type_id_fname)
-        bstm_batch.set_input_string(2, image_id_fname)
-        bstm_batch.set_input_float(3, max_gb)
-        bstm_batch.run_process()
-        (cache_id, cache_type) = bstm_batch.commit_output(0)
-        self.str_cache = bstm_batch.dbvalue(cache_id, cache_type)
+        batch.init_process("bstmCreateStreamCacheProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_string(1, type_id_fname)
+        batch.set_input_string(2, image_id_fname)
+        batch.set_input_float(3, max_gb)
+        batch.run_process()
+        (cache_id, cache_type) = batch.commit_output(0)
+        self.str_cache = batch.dbvalue(cache_id, cache_type)
 
     # remove stream cache object from database
     def destroy_stream_cache(self):
         if self.str_cache:
-            bstm_batch.remove_data(self.str_cache.id)
+            batch.remove_data(self.str_cache.id)
             self.str_cache = None
 
     # writes aux data for each image in imgs array
@@ -304,28 +305,28 @@ class bstm_scene_adaptor(object):
 
         # sigma norm table?
         under_estimation_probability = 0.2
-        bstm_batch.init_process("bstaSigmaNormTableProcess")
-        bstm_batch.set_input_float(0, under_estimation_probability)
-        bstm_batch.run_process()
-        (id, type) = bstm_batch.commit_output(0)
-        n_table = bstm_batch.dvalue(id, type)
+        batch.init_process("bstaSigmaNormTableProcess")
+        batch.set_input_float(0, under_estimation_probability)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
+        n_table = batch.dvalue(id, type)
 
         # call batch paint process
         if device_string == "":
-            bstm_batch.init_process("bstmOclPaintBatchProcess")
-            bstm_batch.set_input_from_db(0, self.device)
-            bstm_batch.set_input_from_db(1, self.scene)
-            bstm_batch.set_input_from_db(2, self.opencl_cache)
-            bstm_batch.set_input_from_db(3, self.str_cache)
-            bstm_batch.set_input_from_db(4, n_table)
-            bstm_batch.run_process()
+            batch.init_process("bstmOclPaintBatchProcess")
+            batch.set_input_from_db(0, self.device)
+            batch.set_input_from_db(1, self.scene)
+            batch.set_input_from_db(2, self.opencl_cache)
+            batch.set_input_from_db(3, self.str_cache)
+            batch.set_input_from_db(4, n_table)
+            batch.run_process()
         elif device_string == "cpu":
             print "Can't use CPU for Paint Batch Process."
 
         # close the files so that they can be reloaded after the next iteration
-        bstm_batch.init_process("bstmStreamCacheCloseFilesProcess")
-        bstm_batch.set_input_from_db(0, self.str_cache)
-        bstm_batch.run_process()
+        batch.init_process("bstmStreamCacheCloseFilesProcess")
+        batch.set_input_from_db(0, self.str_cache)
+        batch.run_process()
 
         # write out afterwards
         self.write_cache()
@@ -336,11 +337,11 @@ class bstm_scene_adaptor(object):
 
         # sigma norm table?
         under_estimation_probability = 0.2
-        bstm_batch.init_process("bstaSigmaNormTableProcess")
-        bstm_batch.set_input_float(0, under_estimation_probability)
-        bstm_batch.run_process()
-        (id, type) = bstm_batch.commit_output(0)
-        n_table = bstm_batch.dvalue(id, type)
+        batch.init_process("bstaSigmaNormTableProcess")
+        batch.set_input_float(0, under_estimation_probability)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
+        n_table = batch.dvalue(id, type)
 
         # loop over images creating aux data
         for idx in range(0, len(imgs)):
@@ -351,150 +352,150 @@ class bstm_scene_adaptor(object):
             gcam = vpgl.persp2gen(pcam, ni, nj)
 
             # create norm intensity (num rays...)
-            bstm_batch.init_process("bstmCppCreateNormIntensitiesProcess")
-            bstm_batch.set_input_from_db(0, self.scene)
-            bstm_batch.set_input_from_db(1, self.cpu_cache)
-            bstm_batch.set_input_from_db(2, gcam)
-            bstm_batch.set_input_from_db(3, img)
-            bstm_batch.set_input_string(4, "img_" + "%05d" % idx)
-            bstm_batch.run_process()
+            batch.init_process("bstmCppCreateNormIntensitiesProcess")
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, self.cpu_cache)
+            batch.set_input_from_db(2, gcam)
+            batch.set_input_from_db(3, img)
+            batch.set_input_string(4, "img_" + "%05d" % idx)
+            batch.run_process()
 
             # create aux
-            bstm_batch.init_process("bstmCppCreateAuxDataOPT2Process")
-            bstm_batch.set_input_from_db(0, self.scene)
-            bstm_batch.set_input_from_db(1, self.cpu_cache)
-            bstm_batch.set_input_from_db(2, gcam)
-            bstm_batch.set_input_from_db(3, img)
-            bstm_batch.set_input_string(4, "img_" + "%05d" % idx)
-            bstm_batch.run_process()
+            batch.init_process("bstmCppCreateAuxDataOPT2Process")
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, self.cpu_cache)
+            batch.set_input_from_db(2, gcam)
+            batch.set_input_from_db(3, img)
+            batch.set_input_string(4, "img_" + "%05d" % idx)
+            batch.run_process()
             self.write_cache(True)
 
-        bstm_batch.init_process("bstmCppBatchUpdateOPT2Process")
-        bstm_batch.set_input_from_db(0, self.scene)
-        bstm_batch.set_input_from_db(1, self.cpu_cache)
-        bstm_batch.set_input_from_db(2, self.str_cache)
-        bstm_batch.set_input_from_db(3, n_table)
-        bstm_batch.run_process()
+        batch.init_process("bstmCppBatchUpdateOPT2Process")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_from_db(1, self.cpu_cache)
+        batch.set_input_from_db(2, self.str_cache)
+        batch.set_input_from_db(3, n_table)
+        batch.run_process()
 
         # close the files so that they can be reloaded after the next iteration
-        bstm_batch.init_process("bstmStreamCacheCloseFilesProcess")
-        bstm_batch.set_input_from_db(0, self.str_cache)
-        bstm_batch.run_process()
+        batch.init_process("bstmStreamCacheCloseFilesProcess")
+        batch.set_input_from_db(0, self.str_cache)
+        batch.run_process()
 
         self.write_cache()
 
     def cpu_batch_compute_normal_albedo(
             self, metadata_filename_list, atmospheric_params_filename_list):
-        bstm_batch.init_process("bstmCppBatchComputeNormalAlbedoProcess")
-        bstm_batch.set_input_from_db(0, self.scene)
-        bstm_batch.set_input_from_db(1, self.cpu_cache)
-        bstm_batch.set_input_from_db(2, self.str_cache)
-        bstm_batch.set_input_string(3, metadata_filename_list)
-        bstm_batch.set_input_string(4, atmospheric_params_filename_list)
-        bstm_batch.run_process()
+        batch.init_process("bstmCppBatchComputeNormalAlbedoProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_from_db(1, self.cpu_cache)
+        batch.set_input_from_db(2, self.str_cache)
+        batch.set_input_string(3, metadata_filename_list)
+        batch.set_input_string(4, atmospheric_params_filename_list)
+        batch.run_process()
 
         # close the files so that they can be reloaded after the next iteration
-        bstm_batch.init_process("bstmStreamCacheCloseFilesProcess")
-        bstm_batch.set_input_from_db(0, self.str_cache)
-        bstm_batch.run_process()
+        batch.init_process("bstmStreamCacheCloseFilesProcess")
+        batch.set_input_from_db(0, self.str_cache)
+        batch.run_process()
 
     def ocl_batch_compute_normal_albedo(
             self, img_id_list, metadata_filename_list, atmospheric_params_filename_list):
-        bstm_batch.init_process(
+        batch.init_process(
             "bstmOclBatchComputeNormalAlbedoArrayProcess")
-        bstm_batch.set_input_from_db(0, self.device)
-        bstm_batch.set_input_from_db(1, self.scene)
-        bstm_batch.set_input_from_db(2, self.opencl_cache)
-        bstm_batch.set_input_string(3, img_id_list)
-        bstm_batch.set_input_string(4, metadata_filename_list)
-        bstm_batch.set_input_string(5, atmospheric_params_filename_list)
-        bstm_batch.run_process()
+        batch.set_input_from_db(0, self.device)
+        batch.set_input_from_db(1, self.scene)
+        batch.set_input_from_db(2, self.opencl_cache)
+        batch.set_input_string(3, img_id_list)
+        batch.set_input_string(4, metadata_filename_list)
+        batch.set_input_string(5, atmospheric_params_filename_list)
+        batch.run_process()
 
     def render_expected_image_naa(
             self, camera, ni, nj, metadata, atmospheric_params):
-        bstm_batch.init_process("bstmOclRenderExpectedImageNAAProcess")
-        bstm_batch.set_input_from_db(0, self.device)
-        bstm_batch.set_input_from_db(1, self.scene)
-        bstm_batch.set_input_from_db(2, self.opencl_cache)
-        bstm_batch.set_input_from_db(3, camera)
-        bstm_batch.set_input_unsigned(4, ni)
-        bstm_batch.set_input_unsigned(5, nj)
-        bstm_batch.set_input_from_db(6, metadata)
-        bstm_batch.set_input_from_db(7, atmospheric_params)
-        bstm_batch.run_process()
-        (id, type) = bstm_batch.commit_output(0)
-        exp_image = bstm_batch.dvalue(id, type)
-        (id, type) = bstm_batch.commit_output(1)
-        mask_image = bstm_batch.dvalue(id, type)
+        batch.init_process("bstmOclRenderExpectedImageNAAProcess")
+        batch.set_input_from_db(0, self.device)
+        batch.set_input_from_db(1, self.scene)
+        batch.set_input_from_db(2, self.opencl_cache)
+        batch.set_input_from_db(3, camera)
+        batch.set_input_unsigned(4, ni)
+        batch.set_input_unsigned(5, nj)
+        batch.set_input_from_db(6, metadata)
+        batch.set_input_from_db(7, atmospheric_params)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
+        exp_image = batch.dvalue(id, type)
+        (id, type) = batch.commit_output(1)
+        mask_image = batch.dvalue(id, type)
         return(exp_image, mask_image)
 
     def update_alpha_naa(self, image, camera, metadata,
                          atmospheric_params, alt_prior, alt_density):
-        bstm_batch.init_process("bstmOclUpdateAlphaNAAProcess")
-        bstm_batch.set_input_from_db(0, self.device)
-        bstm_batch.set_input_from_db(1, self.scene)
-        bstm_batch.set_input_from_db(2, self.opencl_cache)
-        bstm_batch.set_input_from_db(3, camera)
-        bstm_batch.set_input_from_db(4, image)
-        bstm_batch.set_input_from_db(5, metadata)
-        bstm_batch.set_input_from_db(6, atmospheric_params)
-        bstm_batch.set_input_from_db(7, alt_prior)
-        bstm_batch.set_input_from_db(8, alt_density)
-        if not (bstm_batch.run_process()):
+        batch.init_process("bstmOclUpdateAlphaNAAProcess")
+        batch.set_input_from_db(0, self.device)
+        batch.set_input_from_db(1, self.scene)
+        batch.set_input_from_db(2, self.opencl_cache)
+        batch.set_input_from_db(3, camera)
+        batch.set_input_from_db(4, image)
+        batch.set_input_from_db(5, metadata)
+        batch.set_input_from_db(6, atmospheric_params)
+        batch.set_input_from_db(7, alt_prior)
+        batch.set_input_from_db(8, alt_density)
+        if not (batch.run_process()):
             print("ERROR: run_process() returned False")
         return
 
     def render_expected_albedo_normal(self, camera, ni, nj):
-        bstm_batch.init_process("bstmOclRenderExpectedAlbedoNormalProcess")
-        bstm_batch.set_input_from_db(0, self.device)
-        bstm_batch.set_input_from_db(1, self.scene)
-        bstm_batch.set_input_from_db(2, self.opencl_cache)
-        bstm_batch.set_input_from_db(3, camera)
-        bstm_batch.set_input_unsigned(4, ni)
-        bstm_batch.set_input_unsigned(5, nj)
-        bstm_batch.run_process()
-        (id, type) = bstm_batch.commit_output(0)
-        exp_albedo = bstm_batch.dvalue(id, type)
-        (id, type) = bstm_batch.commit_output(1)
-        exp_normal = bstm_batch.dvalue(id, type)
-        (id, type) = bstm_batch.commit_output(2)
-        mask_image = bstm_batch.dvalue(id, type)
+        batch.init_process("bstmOclRenderExpectedAlbedoNormalProcess")
+        batch.set_input_from_db(0, self.device)
+        batch.set_input_from_db(1, self.scene)
+        batch.set_input_from_db(2, self.opencl_cache)
+        batch.set_input_from_db(3, camera)
+        batch.set_input_unsigned(4, ni)
+        batch.set_input_unsigned(5, nj)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
+        exp_albedo = batch.dvalue(id, type)
+        (id, type) = batch.commit_output(1)
+        exp_normal = batch.dvalue(id, type)
+        (id, type) = batch.commit_output(2)
+        mask_image = batch.dvalue(id, type)
         return(exp_albedo, exp_normal, mask_image)
 
     def transform(self, tx, ty, tz, rx, ry, rz, scale):
-        bstm_batch.init_process("bstmTransformModelProcess")
-        bstm_batch.set_input_from_db(0, self.scene)
-        bstm_batch.set_input_float(1, tx)
-        bstm_batch.set_input_float(2, ty)
-        bstm_batch.set_input_float(3, tz)
-        bstm_batch.set_input_float(4, rx)
-        bstm_batch.set_input_float(5, ry)
-        bstm_batch.set_input_float(6, rz)
-        bstm_batch.set_input_float(7, scale)
-        bstm_batch.run_process()
+        batch.init_process("bstmTransformModelProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_float(1, tx)
+        batch.set_input_float(2, ty)
+        batch.set_input_float(3, tz)
+        batch.set_input_float(4, rx)
+        batch.set_input_float(5, ry)
+        batch.set_input_float(6, rz)
+        batch.set_input_float(7, scale)
+        batch.run_process()
         return
 
     def cache_neighbor_info(self):
-        bstm_batch.init_process("bstmVecfOclCacheNeighborInfoProcess")
-        bstm_batch.set_input_from_db(0, self.scene)
-        bstm_batch.set_input_from_db(1, self.opencl_cache)
-        return bstm_batch.run_process()
+        batch.init_process("bstmVecfOclCacheNeighborInfoProcess")
+        batch.set_input_from_db(0, self.scene)
+        batch.set_input_from_db(1, self.opencl_cache)
+        return batch.run_process()
 
     def refine_scene_around_geometry(
             self, filter_v, n_times, p_thresh, use_gpu):
         if self.opencl_cache.type == "bstm_opencl_cache_sptr":
             print("Refining around surface geometry")
-            bstm_batch.init_process(
+            batch.init_process(
                 "bstm_ocl_refine_scene_around_geometry_process")
-            bstm_batch.set_input_from_db(0, self.scene)
-            bstm_batch.set_input_from_db(1, self.opencl_cache)
-            bstm_batch.set_input_from_db(2, self.device)
-            bstm_batch.set_input_from_db(3, filter_v)
-            bstm_batch.set_input_int(4, n_times)
+            batch.set_input_from_db(0, self.scene)
+            batch.set_input_from_db(1, self.opencl_cache)
+            batch.set_input_from_db(2, self.device)
+            batch.set_input_from_db(3, filter_v)
+            batch.set_input_int(4, n_times)
             # use negative value to refine all
-            bstm_batch.set_input_float(5, p_thresh)
-            bstm_batch.set_input_bool(6, use_gpu)
-            return bstm_batch.run_process()
+            batch.set_input_float(5, p_thresh)
+            batch.set_input_bool(6, use_gpu)
+            return batch.run_process()
         else:
             print "ERROR: Cache type not recognized: ", cache.type
             return False

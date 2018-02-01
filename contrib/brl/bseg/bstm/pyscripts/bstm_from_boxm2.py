@@ -1,3 +1,7 @@
+import brl_init
+import bstm_batch as batch
+dbvalue = brl_init.register_batch(batch)
+
 import glob
 import os
 import argparse
@@ -5,11 +9,8 @@ import math
 
 from bstm_scene_adaptor import bstm_scene_adaptor
 import bstm_adaptor as bstm
-import bstm_batch
-import bstm_register
-
-import bstm_vil_adaptor as vil
-import bstm_vpgl_adaptor as vpgl
+import vil_adaptor_bstm_batch as vil
+import vpgl_adaptor_bstm_batch as vpgl
 
 # These functions are copies of those found in /boxm2/pyscripts/..., but
 # they use bstm_batch instead, so that resulting dbvalues can be found by
@@ -20,19 +21,19 @@ def remove_from_db(dbvals):
     if not isinstance(dbvals, (list, tuple)):
         dbvals = [dbvals]
     for dbval in dbvals:
-        bstm_batch.init_process("bbasRemoveFromDbProcess")
-        bstm_batch.set_input_unsigned(0, dbval.id)
-        bstm_batch.run_process()
+        batch.init_process("bbasRemoveFromDbProcess")
+        batch.set_input_unsigned(0, dbval.id)
+        batch.run_process()
 
 
 def boxm2_load_scene(scene_str):
     # print("Loading a Scene from file: ", scene_str);
-    bstm_batch.init_process("boxm2LoadSceneProcess")
-    bstm_batch.set_input_string(0, scene_str)
-    status = bstm_batch.run_process()
+    batch.init_process("boxm2LoadSceneProcess")
+    batch.set_input_string(0, scene_str)
+    status = batch.run_process()
     if status:
-        (scene_id, scene_type) = bstm_batch.commit_output(0)
-        scene = bstm_register.dbvalue(scene_id, scene_type)
+        (scene_id, scene_type) = batch.commit_output(0)
+        scene = dbvalue(scene_id, scene_type)
         return scene
     else:
         raise Exception('Could not load scene file')
@@ -46,51 +47,51 @@ def boxm2_load_opencl(scene_str, device_string="gpu"):
     # Create cache, opencl manager, device, and gpu cache
     ###############################################################
     # print("Create Main Cache");
-    bstm_batch.init_process("boxm2CreateCacheProcess")
-    bstm_batch.set_input_from_db(0, scene)
-    bstm_batch.set_input_string(1, "lru")
-    result = bstm_batch.run_process()
+    batch.init_process("boxm2CreateCacheProcess")
+    batch.set_input_from_db(0, scene)
+    batch.set_input_string(1, "lru")
+    result = batch.run_process()
     if not result:
         raise Exception('boxm2CreateCacheProcess returned false')
-    (id, type) = bstm_batch.commit_output(0)
-    cache = bstm_register.dbvalue(id, type)
+    (id, type) = batch.commit_output(0)
+    cache = dbvalue(id, type)
 
     # print("Init Manager");
-    bstm_batch.init_process("boclInitManagerProcess")
-    result = bstm_batch.run_process()
+    batch.init_process("boclInitManagerProcess")
+    result = batch.run_process()
     if not result:
         raise Exception('boxm2InitManagerProcess returned false')
 
     # print("Get Gpu Device");
-    bstm_batch.init_process("boclGetDeviceProcess")
-    bstm_batch.set_input_string(0, device_string)
-    result = bstm_batch.run_process()
+    batch.init_process("boclGetDeviceProcess")
+    batch.set_input_string(0, device_string)
+    result = batch.run_process()
     if not result:
         raise Exception('boclGetDeviceProcess returned false')
-    (id, type) = bstm_batch.commit_output(0)
-    device = bstm_register.dbvalue(id, type)
+    (id, type) = batch.commit_output(0)
+    device = dbvalue(id, type)
 
     # print("Create Gpu Cache");
-    bstm_batch.init_process("boxm2CreateOpenclCacheProcess")
-    bstm_batch.set_input_from_db(0, device)
-    result = bstm_batch.run_process()
+    batch.init_process("boxm2CreateOpenclCacheProcess")
+    batch.set_input_from_db(0, device)
+    result = batch.run_process()
     if not result:
         raise Exception('boxm2CreateOpenclCacheProcess returned false')
-    (id, type) = bstm_batch.commit_output(0)
-    openclcache = bstm_register.dbvalue(id, type)
+    (id, type) = batch.commit_output(0)
+    openclcache = dbvalue(id, type)
 
     return scene, cache, device, openclcache
 
 
 def boxm2_clear_cache(cache):
     if cache.type == "boxm2_cache_sptr":
-        bstm_batch.init_process("boxm2ClearCacheProcess")
-        bstm_batch.set_input_from_db(0, cache)
-        bstm_batch.run_process()
+        batch.init_process("boxm2ClearCacheProcess")
+        batch.set_input_from_db(0, cache)
+        batch.run_process()
     elif cache.type == "boxm2_opencl_cache_sptr":
-        bstm_batch.init_process("boxm2ClearOpenclCacheProcess")
-        bstm_batch.set_input_from_db(0, cache)
-        bstm_batch.run_process()
+        batch.init_process("boxm2ClearOpenclCacheProcess")
+        batch.set_input_from_db(0, cache)
+        batch.run_process()
     else:
         print "ERROR: Cache type needs to be boxm2_cache_sptr, not ", cache.type
 
@@ -98,17 +99,17 @@ def boxm2_clear_cache(cache):
 def boxm2_render_grey_view_dep(scene, cache, cam, ni=1280, nj=720, device=None,
                                ident_string=""):
     if cache.type == "boxm2_opencl_cache_sptr" and device:
-        bstm_batch.init_process("boxm2OclRenderViewDepExpectedImageProcess")
-        bstm_batch.set_input_from_db(0, device)
-        bstm_batch.set_input_from_db(1, scene)
-        bstm_batch.set_input_from_db(2, cache)
-        bstm_batch.set_input_from_db(3, cam)
-        bstm_batch.set_input_unsigned(4, ni)
-        bstm_batch.set_input_unsigned(5, nj)
-        bstm_batch.set_input_string(6, ident_string)
-        bstm_batch.run_process()
-        (id, type) = bstm_batch.commit_output(0)
-        exp_image = bstm_register.dbvalue(id, type)
+        batch.init_process("boxm2OclRenderViewDepExpectedImageProcess")
+        batch.set_input_from_db(0, device)
+        batch.set_input_from_db(1, scene)
+        batch.set_input_from_db(2, cache)
+        batch.set_input_from_db(3, cam)
+        batch.set_input_unsigned(4, ni)
+        batch.set_input_unsigned(5, nj)
+        batch.set_input_string(6, ident_string)
+        batch.run_process()
+        (id, type) = batch.commit_output(0)
+        exp_image = dbvalue(id, type)
         return exp_image
     else:
         print "ERROR: Cache type not recognized: ", cache.type
