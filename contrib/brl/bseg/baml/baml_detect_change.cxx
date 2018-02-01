@@ -612,9 +612,9 @@ bool baml_change_detection::detect_difference(
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       score(x, y) = fabs((float)img_tar(x, y) - (float)img_ref(x, y));
-      if (!vnl_math::isfinite(tar_lh(x, y))) {
-        tar_lh(x, y) = lfg - log(1e-10);
-      }
+      // if (!vnl_math::isfinite(tar_lh(x, y))) {
+      //   tar_lh(x, y) = lfg - log(1e-10);
+      // }
     }
   }
 
