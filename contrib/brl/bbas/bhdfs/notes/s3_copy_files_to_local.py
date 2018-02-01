@@ -31,5 +31,5 @@ batch.set_input_string(1, sys.argv[2])  # name ending
 batch.set_input_string(2, sys.argv[3])  # local path
 statuscode = batch.run_process()
 if statuscode != 1:
-  print "Unable to copy files to local folder: " + sys.argv[3] + "!\n"
-  sys.exit(0)
+    print "Unable to copy files to local folder: " + sys.argv[3] + "!\n"
+    sys.exit(0)

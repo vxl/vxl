@@ -31,12 +31,12 @@ batch.init_process("bhdfsCreateDirProcess")
 batch.set_input_string(0, sys.argv[3])
 statuscode = batch.run_process()
 if statuscode != 1:
-  print "Unable to create folder: " + sys.argv[3] + " on HDFS, exiting!\n"
-  sys.exit(0)
+    print "Unable to create folder: " + sys.argv[3] + " on HDFS, exiting!\n"
+    sys.exit(0)
 
 for fname in file_list:
-  print fname
-  batch.init_process("bhdfsCopyFileProcess")
-  batch.set_input_string(0, fname)
-  batch.set_input_string(1, sys.argv[3])
-  batch.run_process()
+    print fname
+    batch.init_process("bhdfsCopyFileProcess")
+    batch.set_input_string(0, fname)
+    batch.set_input_string(1, sys.argv[3])
+    batch.run_process()
