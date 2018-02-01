@@ -57,7 +57,10 @@ bool boxm2_describe_scene_process(bprb_func_process& pro)
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
+  valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
+  valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix());
+  valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_UV_VIEW>::prefix());
   std::string data_type;
   int appTypeSize;
   boxm2_util::verify_appearance(*scene, valid_types, data_type, appTypeSize);

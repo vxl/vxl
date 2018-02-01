@@ -5,7 +5,7 @@
 //:
 // \file
 
-void helper(bstm_block_metadata& data, long& num_cells, double& side_len)
+void helper(const bstm_block_metadata& data, long& num_cells, double& side_len)
 {
   //determine number of cells to allocate - based on init_level
   long init_cells_per_tree;

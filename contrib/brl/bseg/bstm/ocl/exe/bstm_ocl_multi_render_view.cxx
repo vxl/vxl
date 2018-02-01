@@ -69,7 +69,7 @@ int main(int argc, char ** argv)
     vul_arg_parse(argc, argv);
 
     //make bocl manager
-    bocl_manager_child* mgr =bocl_manager_child::instance();
+    bocl_manager_child* mgr = &bocl_manager_child::instance();
     std::vector<bocl_device_sptr> gpus(mgr->gpus_.size());
 
     for(int i = 0; i < mgr->gpus_.size(); i++)

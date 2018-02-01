@@ -128,13 +128,9 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   float* vis_buff = new float[cl_ni*cl_nj];
   float* pre_buff = new float[cl_ni*cl_nj];
   float* norm_buff = new float[cl_ni*cl_nj];
-
-  for (unsigned i=0;i<cl_ni*cl_nj;i++)
-  {
-    vis_buff[i]=1.0f;
-    pre_buff[i]=0.0f;
-    norm_buff[i]=0.0f;
-  }
+  std::fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
+  std::fill(pre_buff, pre_buff+cl_ni*cl_nj, 0.0f);
+  std::fill(norm_buff, norm_buff+cl_ni*cl_nj, 0.0f);
 
   //copy input vals into image
   int numFloats = 4;
@@ -152,7 +148,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
         input_buff[numFloats*count + 0] = (float) rgba.R() / 255.0f;
         input_buff[numFloats*count + 1] = (float) rgba.G() / 255.0f;
         input_buff[numFloats*count + 2] = (float) rgba.B() / 255.0f;
-        input_buff[numFloats*count + 3] = (float) mask(i,j);
+        input_buff[numFloats*count + 3] = (float) 1.0f; //mask(i,j);
       }
       ++count;
     }
@@ -175,12 +171,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   norm_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
-  int img_dim_buff[4];
-  img_dim_buff[0] = 0;
-  img_dim_buff[1] = 0;
-  img_dim_buff[2] = img_view->ni();
-  img_dim_buff[3] = img_view->nj();
-
+  int img_dim_buff[4] = {0, 0, img_view->ni(), img_view->nj() };
   bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -199,7 +190,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   // app density used for proc_norm_image
   //Set app_buffer.x = 1.0, if you want uniform background model
   //Set app_buffer.x = 0, app_buffer.y and app_buffer.z to the mean and sigma of the gaussian for the background model
-  float app_buffer[4]={1.0,0.0,0.00,0.0};
+  float app_buffer[4]={1.0,0.0,0.0,0.0};
   bocl_mem_sptr app_density = new bocl_mem(device->context(), app_buffer, sizeof(cl_float4), "app density buffer");
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -238,12 +229,13 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
       for (unsigned int j=0;j<cl_nj;++j) {
         for (unsigned int i=0;i<cl_ni;++i) {
           if ( i<mask.ni() && j<mask.nj() ) {
-            vis_buff[count] = mask(i,j);
             if (mask(i,j) == 0) {
-              input_buff[count+0] = -1.0f;
-              input_buff[count+1] = -1.0f;
-              input_buff[count+2] = -1.0f;
-              input_buff[count+3] = -1.0f;
+              // input_buff[count+0] = -1.0f;
+              // input_buff[count+1] = -1.0f;
+              // input_buff[count+2] = -1.0f;
+              // input_buff[count+3] = -1.0f;
+              input_buff[numFloats*count+0]=-1.0f;
+              vis_buff[count] = 0.0f;
             }
           }
           ++count;
@@ -272,10 +264,12 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
       blk_info->write_to_buffer((queue));
 
 
-      int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix());
       // data type string may contain an identifier so determine the buffer size
-      bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
-      bocl_mem* num_obs   = opencl_cache->get_data(scene,*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
+      int nobsTypeSize = (int)boxm2_data_info::datasize(num_obs_type);
+      // alpha->num_bytes()/alphaTypeSize*appTypeSize
+      bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type,info_buffer->data_buffer_length*appTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
+      // alpha->num_bytes()/alphaTypeSize*nobsTypeSize
+      bocl_mem* num_obs   = opencl_cache->get_data(scene,*id,num_obs_type,info_buffer->data_buffer_length*nobsTypeSize,false);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
 
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
@@ -517,6 +511,12 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
 
+  //reset local threads to 8/8 (default);
+  local_threads[0] = 8;
+  local_threads[1] = 8;
+  global_threads[0]=cl_ni;
+  global_threads[1]=cl_nj;
+
   std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
@@ -530,6 +530,12 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl
   std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
+
+  bool UV_only = false;
+  if (opts ==" -D MOG_VIEW_DEP_UV " ){
+	  UV_only = true;
+	  vcl_cout<<"updating UV only"<<vcl_endl;
+  }
 
 
   //otherwise compile the kernels
@@ -551,9 +557,11 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl
   src_paths.push_back(source_dir + "view_dep_app_update_color_functors.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-  std::string options="";
-  options = " -D DETERMINISTIC -D YUV" + opts;
-  //options = " -D DETERMINISTIC" + opts;
+  //compilation options
+  vcl_string options = opts;
+  if (UV_only){
+    options += " -D YUV ";
+  }
 
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;

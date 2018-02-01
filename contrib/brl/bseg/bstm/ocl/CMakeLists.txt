@@ -32,6 +32,6 @@ add_subdirectory(pro)
 add_subdirectory(algo)
 
 #exe
-#add_subdirectory(exe)
+add_subdirectory(exe)
 
 endif()

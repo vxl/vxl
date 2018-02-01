@@ -48,6 +48,7 @@ namespace boxm2_ocl_render_view_dep_expected_image_process_globals
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "view_dep_app_common_functions.cl");
     src_paths.push_back(source_dir + "view_dep_app_helper_functions.cl");
     src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
     src_paths.push_back(source_dir + "expected_functor.cl");

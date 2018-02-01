@@ -52,38 +52,38 @@ typedef vnl_vector_fixed<float, 16> vnl_vector_fixed_float_16;
 #define BOXM2_DATATYPE_TABLE \
   X(BOXM2_ALPHA, "alpha", float) \
   X(BOXM2_GAMMA, "gamma", float) \
-  X(BOXM2_MOG3_GREY, "boxm2_mog3_grey", vnl_vector_fixed_unsigned_char_8) \
   X(BOXM2_MOG3_GREY_16, "boxm2_mog3_grey16", vnl_vector_fixed_unsigned_short_8) \
-  X(BOXM2_MOG6_VIEW, "boxm2_mog6_view", vnl_vector_fixed_float_16) \
+  X(BOXM2_MOG3_GREY, "boxm2_mog3_grey", vnl_vector_fixed_unsigned_char_8) \
   X(BOXM2_MOG6_VIEW_COMPACT, "boxm2_mog6_view_compact", vnl_vector_fixed_unsigned_char_16) \
+  X(BOXM2_MOG6_VIEW, "boxm2_mog6_view", vnl_vector_fixed_float_16) \
   X(BOXM2_BATCH_HISTOGRAM, "boxm2_batch_histogram", vnl_vector_fixed_float_8) \
-  X(BOXM2_GAUSS_RGB, "boxm2_gauss_rgb", vnl_vector_fixed_unsigned_char_8) \
-  X(BOXM2_GAUSS_RGB_VIEW, "boxm2_gauss_rgb_view", vnl_vector_fixed_int_16) \
   X(BOXM2_GAUSS_RGB_VIEW_COMPACT, "boxm2_gauss_rgb_view_compact", vnl_vector_fixed_int_8) \
+  X(BOXM2_GAUSS_RGB_VIEW, "boxm2_gauss_rgb_view", vnl_vector_fixed_int_16) \
+  X(BOXM2_GAUSS_RGB, "boxm2_gauss_rgb", vnl_vector_fixed_unsigned_char_8) \
   X(BOXM2_GAUSS_UV_VIEW, "boxm2_gauss_uv_view", vnl_vector_fixed_int_4) \
   X(BOXM2_MOG2_RGB,"boxm2_mog2_rgb", vnl_vector_fixed_unsigned_char_16) \
-  X(BOXM2_NUM_OBS, "boxm2_num_obs", vnl_vector_fixed_unsigned_short_4) \
-  X(BOXM2_NUM_OBS_SINGLE, "boxm2_num_obs_single", unsigned short) \
-  X(BOXM2_NUM_OBS_SINGLE_INT, "boxm2_num_obs_single_int", unsigned) \
-  X(BOXM2_NUM_OBS_VIEW, "boxm2_num_obs_view", vnl_vector_fixed_float_8) \
   X(BOXM2_NUM_OBS_VIEW_COMPACT, "boxm2_num_obs_view_compact", vnl_vector_fixed_short_8) \
+  X(BOXM2_NUM_OBS_VIEW, "boxm2_num_obs_view", vnl_vector_fixed_float_8) \
+  X(BOXM2_NUM_OBS_SINGLE_INT, "boxm2_num_obs_single_int", unsigned) \
+  X(BOXM2_NUM_OBS_SINGLE, "boxm2_num_obs_single", unsigned short) \
+  X(BOXM2_NUM_OBS, "boxm2_num_obs", vnl_vector_fixed_unsigned_short_4) \
   X(BOXM2_LABEL_SHORT, "boxm2_label_short", short) \
-  X(BOXM2_AUX, "aux", vnl_vector_fixed_float_4) \
   X(BOXM2_INTENSITY, "boxm2_intensity", float) \
   X(BOXM2_AUX0, "aux0", float) \
   X(BOXM2_AUX1, "aux1", float) \
   X(BOXM2_AUX2, "aux2", float) \
   X(BOXM2_AUX3, "aux3", float) \
   X(BOXM2_AUX4, "aux4", float) \
-  X(BOXM2_FLOAT, "float", float) \
-  X(BOXM2_FLOAT8, "float8", vnl_vector_fixed_float_8) \
+  X(BOXM2_AUX, "aux", vnl_vector_fixed_float_4) \
   X(BOXM2_FLOAT16, "float16", vnl_vector_fixed_float_16) \
+  X(BOXM2_FLOAT8, "float8", vnl_vector_fixed_float_8) \
+  X(BOXM2_FLOAT, "float", float) \
   X(BOXM2_VIS_SPHERE, "boxm2_vis_sphere", vnl_vector_fixed_float_16) \
-  X(BOXM2_NORMAL, "boxm2_normal", vnl_vector_fixed_float_4) \
   X(BOXM2_POINT, "boxm2_point", vnl_vector_fixed_float_4) \
   X(BOXM2_VIS_SCORE, "boxm2_vis_score", float) \
   X(BOXM2_GAUSS_GREY, "boxm2_gauss_grey", vnl_vector_fixed_unsigned_char_2) \
   X(BOXM2_NORMAL_ALBEDO_ARRAY, "boxm2_normal_albedo_array", boxm2_normal_albedo_array) \
+  X(BOXM2_NORMAL, "boxm2_normal", vnl_vector_fixed_float_4) \
   X(BOXM2_COVARIANCE, "boxm2_covariance", vnl_vector_fixed_float_9) \
   X(BOXM2_FEATURE_VECTOR, "boxm2_feature_vector", boxm2_feature_vector) \
   X(BOXM2_PIXEL, "boxm2_pixel", unsigned char) \
@@ -136,7 +136,7 @@ static boxm2_data_type data_type(std::string const& prefix) {
   boxm2_data_type retval = BOXM2_UNKNOWN;
 #define X(enum_val, string_val, datatype_val) \
   if (prefix.find(boxm2_data_traits<enum_val>::prefix()) == 0) {\
-    retval = enum_val; \
+    return enum_val; \
   }
   BOXM2_DATATYPE_TABLE
 #undef X
