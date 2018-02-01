@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief Fits a plane to a set of 3D points
+// \brief Fits a sphere to a set of 3D points
 // \author Joseph L. Mundy
 // \date June 8, 2015
 //
@@ -89,7 +89,7 @@ class vgl_fit_sphere_3d
   T fit(std::ostream* outstream=VXL_NULLPTR, bool verbose = false);
 
   //:fits a sphere nonlinearly to the stored points using Levenberg Marquardt
-  bool fit_(const T error_marg, std::ostream* outstream=VXL_NULLPTR, bool verbose = false);
+  bool fit(const T error_marg, std::ostream* outstream=VXL_NULLPTR, bool verbose = false);
 
 // Data Access---------------------------------------------------------------
 

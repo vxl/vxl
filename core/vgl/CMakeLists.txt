@@ -1,8 +1,8 @@
 # core/vgl/CMakeLists.txt
 
 if( NOT BUILD_NONCOMMERCIAL )
-  include(${VXL_CMAKE_DIR}/FindClipper.cmake)
-  if(CLIPPER_FOUND)
+ include(${VXL_CMAKE_DIR}/FindClipper.cmake)
+ if(CLIPPER_FOUND)
     add_definitions( ${CLIPPER_DEFINITIONS} )
     add_definitions( -DHAS_CLIPPER )
     include_directories( ${CLIPPER_INCLUDE_DIR} )
@@ -60,6 +60,8 @@ set( vgl_sources
   vgl_convex.h                   vgl_convex.hxx
   vgl_intersection.h             vgl_intersection.hxx
   vgl_bounding_box.h             vgl_bounding_box.hxx
+  vgl_oriented_box_2d.h          vgl_oriented_box_2d.hxx
+  vgl_fit_oriented_box_2d.h      vgl_fit_oriented_box_2d.hxx
   vgl_lineseg_test.h             vgl_lineseg_test.hxx
   vgl_triangle_test.h            vgl_triangle_test.hxx
   vgl_polygon_test.h             vgl_polygon_test.hxx

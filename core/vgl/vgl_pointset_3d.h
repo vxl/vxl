@@ -26,51 +26,86 @@ class vgl_pointset_3d
 {
   //: members
   bool has_normals_;
+  bool has_scalars_;
   std::vector<vgl_point_3d<Type> > points_;
   std::vector<vgl_vector_3d<Type> > normals_;
+  std::vector< Type > scalars_;
  public:
   //: Default constructor
- vgl_pointset_3d(): has_normals_(false){}
+ vgl_pointset_3d(): has_normals_(false), has_scalars_(false){}
 
   //: Construct from a list
- vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points): has_normals_(false),points_(points){}
- vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points, std::vector<vgl_vector_3d<Type> > const& normals):
-  has_normals_(true),points_(points), normals_(normals){}
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points): has_normals_(false), has_scalars_(false), points_(points){}
 
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points, std::vector<vgl_vector_3d<Type> > const& normals):
+  has_normals_(true), has_scalars_(false), points_(points), normals_(normals){}
+
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points,  std::vector< Type > const& scalars):
+  has_normals_(false), has_scalars_(true), points_(points), scalars_(scalars){}
+
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points,
+                 std::vector<vgl_vector_3d<Type> > const& normals,
+                 std::vector< Type > const& scalars):
+  has_normals_(true), has_scalars_(true), points_(points), normals_(normals), scalars_(scalars){}
+  
   //: incrementally grow points, duplicate points are allowed
   void add_point(vgl_point_3d<Type> const& p){
-    points_.push_back(p); has_normals_=false;
+    points_.push_back(p); has_normals_=false; has_scalars_ = false;
   }
   //: incrementally grow points and normals duplicate pairs are allowed
   void add_point_with_normal(vgl_point_3d<Type> const& p, vgl_vector_3d<Type> const& normal){
-    points_.push_back(p); normals_.push_back(normal); has_normals_ = true;
+    points_.push_back(p); normals_.push_back(normal); has_normals_ = true, has_scalars_ = false;
+  }
+  void add_point_with_scalar(vgl_point_3d<Type> const& p, Type sc){
+    points_.push_back(p); scalars_.push_back(sc); has_scalars_ = true;
+  }
+  void add_point_with_normal_and_scalar(vgl_point_3d<Type> const& p, vgl_vector_3d<Type> const& normal, Type sc){
+    points_.push_back(p); normals_.push_back(normal), scalars_.push_back(sc); has_normals_ = true; has_scalars_ = true;
   }
   //: accessors
   bool has_normals() const {return has_normals_;}
-  unsigned npts() const {return static_cast<unsigned>(points_.size());}
+  bool has_scalars() const {return has_scalars_;}
+  size_t npts() const {return points_.size();}
+  size_t size() const {return points_.size();}
   vgl_point_3d<Type> p(unsigned i) const {return points_[i];}
   vgl_vector_3d<Type> n(unsigned i) const
   {if(has_normals_) return normals_[i]; return vgl_vector_3d<Type>();}
+  Type sc(unsigned i) const {if(has_scalars_) return scalars_[i]; return Type(0);}
 
   std::vector<vgl_point_3d<Type> > points() const {return points_;}
   std::vector<vgl_vector_3d<Type> > normals() const {return normals_;}
-
+  std::vector< Type > scalars() const {return scalars_;}
+  void clear(){points_.clear(); normals_.clear();}
   void set_points(std::vector<vgl_point_3d<Type> > const& points)
-  { points_ = points; has_normals_=false;}
+  { points_ = points; has_normals_=false; has_scalars_ = false;}
 
   void set_points_with_normals(std::vector<vgl_point_3d<Type> > const& points,
                                std::vector<vgl_vector_3d<Type> > const& normals)
-  { points_ = points; normals_ = normals; has_normals_=true;}
+  { points_ = points; normals_ = normals; has_normals_=true; has_scalars_ = false;}
+
+  void set_points_with_scalars(std::vector<vgl_point_3d<Type> > const& points,
+                               std::vector< Type > const& scalars)
+  { points_ = points; scalars_ = scalars; has_scalars_=true; }
+
+  void set_points_with_normals_and_scalars(std::vector<vgl_point_3d<Type> > const& points,
+                                           std::vector<vgl_vector_3d<Type> > const& normals,
+                                           std::vector< Type > const& scalars)
+  { points_ = points; normals_ = normals; scalars_ = scalars; has_normals_=true; has_scalars_ = true;}
+
 
   void append_pointset(vgl_pointset_3d<Type> const& ptset){
     if(this->has_normals_ != ptset.has_normals())
       return; // can't be done
     unsigned npts = ptset.npts();
     for(unsigned i = 0; i<npts; ++i){
-      if(!this->has_normals_)
+      if(!this->has_normals_&& !this->has_scalars_)
         this->add_point(ptset.p(i));
-      else
+      else if(!this->has_scalars_)
         this->add_point_with_normal(ptset.p(i), ptset.n(i));
+      else if(!this->has_normals_)
+        this->add_point_with_scalar(ptset.p(i), ptset.sc(i));
+      else
+        this->add_point_with_normal_and_scalar(ptset.p(i), ptset.n(i), ptset.sc(i));
     }
   }
 
@@ -81,6 +116,11 @@ class vgl_pointset_3d
   bool set_normal(unsigned i, vgl_vector_3d<Type> const& n){
     if(has_normals_&& i<static_cast<unsigned>(normals_.size())){
                 normals_[i].set(n.x(), n.y(), n.z()); return true;}
+    else return false;}
+
+  bool set_scalar(unsigned i, Type sc){
+    if(has_scalars_&& i<static_cast<unsigned>(scalars_.size())){
+      scalars_[i] = sc; return true;}
     else return false;}
 
   //: Equality operator
@@ -99,12 +139,24 @@ template <class Type>
   for(unsigned i =0; i<n; ++i)
     if(pts[i] != points_[i])
       return false;
+  if(has_normals() && !pointset.has_normals() || !has_normals() && pointset.has_normals())
+    return false;
   if(has_normals_){
     if(static_cast<unsigned>(normals_.size()) != n)
       return false;
     std::vector<vgl_vector_3d<Type> > normals = pointset.normals();
     for(unsigned i =0; i<n; ++i)
       if(normals[i] != normals_[i])
+        return false;
+  }
+  if(has_scalars() && !pointset.has_scalars() || !has_scalars() && pointset.has_scalars())
+    return false;
+  if(has_scalars_){
+    if(static_cast<unsigned>(scalars_.size()) != n)
+      return false;
+    std::vector< Type > scalars = pointset.scalars();
+    for(unsigned i =0; i<n; ++i)
+      if(scalars[i] != scalars_[i])
         return false;
   }
   return true;
@@ -117,17 +169,33 @@ std::ostream&  operator<<(std::ostream& ostr, vgl_pointset_3d<Type> const& ptset
     return ostr;
   }
   std::vector<vgl_point_3d<Type> > pts = ptset.points();
-  if(!ptset.has_normals()){
+  if(!ptset.has_normals()&&!ptset.has_scalars()){
     for(unsigned i =0; i<static_cast<unsigned>(pts.size()); i++){
     const vgl_point_3d<Type>& p = pts[i];
     ostr << p.x() << ',' << p.y() << ',' << p.z() << '\n';
     }
-  }else{
+  }else if(!ptset.has_normals()&&ptset.has_scalars()){
+    std::vector< Type > scalars = ptset.scalars();
+    for(unsigned i =0; i<static_cast<unsigned>(pts.size()); i++){
+    const vgl_point_3d<Type>& p = pts[i];
+    Type sc = scalars[i];
+    ostr << p.x() << ',' << p.y() << ',' << p.z()<< ',' << sc << '\n';
+    }
+  }else if(ptset.has_normals()&& !ptset.has_scalars()){
     std::vector<vgl_vector_3d<Type> > normals = ptset.normals();
     for(unsigned i =0; i<static_cast<unsigned>(pts.size()); i++){
     const vgl_point_3d<Type>& p = pts[i];
     const vgl_vector_3d<Type>& n = normals[i];
     ostr << p.x() << ',' << p.y() << ',' << p.z()<< ',' << n.x() << ',' << n.y() << ',' << n.z() << '\n';
+    }
+  }else if(ptset.has_normals()&& ptset.has_scalars()){
+    std::vector< Type > scalars = ptset.scalars();
+    std::vector<vgl_vector_3d<Type> > normals = ptset.normals();
+    for(unsigned i =0; i<static_cast<unsigned>(pts.size()); i++){
+      const vgl_point_3d<Type>& p = pts[i];
+      const vgl_vector_3d<Type>& n = normals[i];
+      Type sc = scalars[i];
+      ostr << p.x() << ',' << p.y() << ',' << p.z()<< ',' << n.x() << ',' << n.y() << ',' << n.z() << ',' << sc << '\n';
     }
   }
   return ostr;
@@ -141,9 +209,15 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
   }
   std::vector<vgl_point_3d<Type> > pts;
   std::vector<vgl_vector_3d<Type> > normals;
+  std::vector<Type > scalars;
   char buf[100];
   bool has_normals = false;
-  //determine if file has three comma-separated double values or six
+  bool has_scalars = false;
+  //determine the number of comma or space separators
+  // 2: points
+  // 3: points and scalars
+  // 5: points and normals
+  // 6: points, normals and scalars
   bool first_line = true;
   while(istr.getline(buf,100)){
       std::string buf_str;
@@ -157,14 +231,15 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
             continue;
           }else{
             buf_str.push_back(c);
-            if(c == ',')
+            if(c == ','||c==' ')
               comma_count++;
           }
         }
-        // three values have two separating commas
-        has_normals = comma_count > 2;
+        has_scalars = (comma_count == 3 || comma_count == 6) ;
+        has_normals = (comma_count == 5 || comma_count == 6) ;
         first_line = false;
       }else{
+        // scan in the file line by line
         bool done = false;
         for(unsigned i =0; i<100&&!done; ++i){
           char c = buf[i];
@@ -175,40 +250,62 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
           buf_str.push_back(c);
         }
       }
+      // create a stream from the valid line characters
       std::stringstream isstr(buf_str);
-      Type x, y, z, nx, ny, nz;
+      isstr >>std::noskipws;//accept spaces as separators
+      // parse the line for point and normal values
+      Type x, y, z, nx, ny, nz, sc;
       unsigned char c;
       isstr >> x >> c;
-      if(c!=','){
+      if(!(c==','||c==' ')){
         std::cout << "stream parse error\n";
         return istr;
       }
       isstr >> y >> c;
-      if(c!=','){
+      if(!(c==','||c==' ')){
         std::cout << "stream parse error\n";
         return istr;
       }
-      if(!has_normals)
+      if(!has_normals&&!has_scalars)
         isstr >> z;
-      else{
+      else if(has_normals || has_scalars){
         isstr >> z >> c;
-        if(c!=','){
+        if(!(c==','||c==' ')){
           std::cout << "stream parse error\n";
           return istr;
         }
       }
-      if(has_normals){
+	  if(has_normals&&!has_scalars){
         isstr >> nx >> c;
-        if(c!=','){
+        if(!(c==','||c==' ')){
           std::cout << "stream parse error\n";
           return istr;
         }
         isstr >> ny >> c;
-        if(c!=','){
+        if(!(c==','||c==' ')){
           std::cout << "stream parse error\n";
           return istr;
         }
         isstr >> nz;
+      }else if(has_scalars&& !has_normals)
+        isstr >> sc;
+      else if( has_scalars && has_normals){
+        isstr >> nx >> c;
+        if(!(c==','||c==' ')){
+          std::cout << "stream parse error\n";
+          return istr;
+        }
+        isstr >> ny >> c;
+        if(!(c==','||c==' ')){
+          std::cout << "stream parse error\n";
+          return istr;
+        }
+        isstr >> nz >> c;
+        if(!(c==','||c==' ')){
+          std::cout << "stream parse error\n";
+          return istr;
+        }
+        isstr >> sc;
       }
       vgl_point_3d<Type> p(x,y,z);
       pts.push_back(p);
@@ -216,9 +313,17 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
         vgl_vector_3d<Type> n(nx, ny, nz);
         normals.push_back(n);
       }
+      if(has_scalars)
+        scalars.push_back(sc);
   }
-  if(has_normals){
+  if(!has_normals&&has_scalars){
+    ptset = vgl_pointset_3d<Type>(pts, scalars);
+    return istr;
+  }else if(has_normals&&!has_scalars){
     ptset = vgl_pointset_3d<Type>(pts, normals);
+    return istr;
+  }else if(has_scalars&&has_normals){
+    ptset = vgl_pointset_3d<Type>(pts, normals, scalars);
     return istr;
   }
   ptset = vgl_pointset_3d<Type>(pts);
