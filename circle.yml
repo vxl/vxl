@@ -1,7 +1,7 @@
 version: 2
 executorType: docker
 containerInfo:
-  - image: vsiri/voxel_globe:vxl
+  - image: vsiri/vxl:latest
 #  - image: alpine
     cmd: ["bash"]
 stages:
@@ -25,7 +25,7 @@ stages:
 
 
       - type: cache-restore
-        keys: 
+        keys:
           - vxl_bin-{{ .Branch }}
           - vxl_bin
       - type: shell
@@ -65,7 +65,7 @@ stages:
         name: Build
         pwd: /build
         command: |
-          ctest -D ExperimentalBuild -j `nproc` -V
+          ninja
       - type: shell
         name: Test
         pwd: /build
