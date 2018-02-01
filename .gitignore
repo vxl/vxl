@@ -40,3 +40,6 @@ CMakeLists.txt.user*
 
 # Clion editor internal project information
 .idea
+
+# Exclude to keep j2k implementation separate from vxl
+v3p/j2k/*
