@@ -53,6 +53,10 @@ set(sdet_sources
     sdet_atmospheric_image_classifier.cxx
     sdet_atmospheric_image_classifier.h
     sdet_graph_img_seg.cxx               sdet_graph_img_seg.h sdet_graph_img_seg_sptr.h
+    sdet_selective_search.h              sdet_selective_search.cxx
+    sdet_selective_search_params.h       sdet_selective_search_params.cxx
+    sdet_region_classifier.h             sdet_region_classifier.cxx
+    sdet_region_classifier_params.h      sdet_region_classifier_params.cxx
 # SEL Class
     sdet_sel.cxx                         sdet_sel.h
     sdet_sel_base.cxx                    sdet_sel_base.h
@@ -71,7 +75,7 @@ aux_source_directory(Templates sdet_sources)
 
 vxl_add_library(LIBRARY_NAME sdet LIBRARY_SOURCES ${sdet_sources})
 
-target_link_libraries(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl bvgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io bil_algo ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl_io pdf1d)
+target_link_libraries(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl bvgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io bil_algo ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl_io)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

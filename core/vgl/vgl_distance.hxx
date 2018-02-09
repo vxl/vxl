@@ -22,6 +22,7 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
@@ -341,6 +342,34 @@ double vgl_distance(vgl_ray_3d<T> const& r, vgl_point_3d<T> const& p)
   vgl_point_3d<T> q = vgl_closest_point(r, p);
   return vgl_distance(p,q);
 }
+//: return the closest distance from a point to an infinite line
+template <class T>
+double vgl_distance(vgl_infinite_line_3d<T> const& l,
+                    vgl_point_3d<T> const& p){
+  vgl_point_3d<T> q = vgl_closest_point(l, p);
+  return vgl_distance(p,q);
+}
+
+template <class T>
+double vgl_distance(vgl_point_2d<T> const& p, vgl_box_2d<T> const& b){
+  //create line segments for the box boundary
+  vgl_point_2d<T> p0 = b.min_point();
+  vgl_point_2d<T> p2 = b.max_point();
+  vgl_point_2d<T> p1(p2.x(), p0.y());
+  vgl_point_2d<T> p3(p0.x(), p2.y());
+  // find distance to each line segment and return minimum
+  vgl_line_segment_2d<T> l0(p0, p1), l1(p1, p2), l2(p2,p3), l3(p3,p0);
+  T min_d = std::numeric_limits<T>::max();
+  double d = vgl_distance(p,l0);
+  if(d < min_d) min_d = d;
+  d = vgl_distance(p,l1);
+  if(d < min_d) min_d = d;
+  d = vgl_distance(p,l2);
+  if(d < min_d) min_d = d;
+  d = vgl_distance(p,l3);
+  if(d < min_d) min_d = d;
+  return min_d;
+}
 
 #undef VGL_DISTANCE_INSTANTIATE
 #define VGL_DISTANCE_INSTANTIATE(T) \
@@ -377,8 +406,9 @@ template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \
 template double vgl_distance(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template double vgl_distance(vgl_ray_3d<T > const& r, vgl_point_3d<T > const& p); \
+template double vgl_distance(vgl_infinite_line_3d<T > const& l, vgl_point_3d<T > const& p); \
 template double vgl_distance(vgl_homg_point_3d<T > const&,vgl_homg_line_3d_2_points<T > const&); \
 template double vgl_distance(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
-template double vgl_distance(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&)
-
+template double vgl_distance(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&); \
+template double vgl_distance(vgl_point_2d<T> const& p, vgl_box_2d<T> const& b)
 #endif // vgl_distance_hxx_

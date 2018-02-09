@@ -142,7 +142,7 @@ namespace {
 
 #elif HAS_CLIPPER
 
-#include <clipper.hpp> // this is actually just a .h file
+#include <clipper.h> 
 
 namespace {
   //: Creates a Clipper polygon from a vgl_polygon.
@@ -260,7 +260,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   gpc_free_polygon( &p3 );
 
 #elif HAS_CLIPPER
-
+  ClipperLib::Clipper clpr;
   // Clipper operates in fixed point space (because it is more robust), so we need
   // to compute a scale factor to preserve precision.
   // per Angus Johnson, "if any coordinate value exceeds +/-3.0e+9, large integer
@@ -296,7 +296,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
     default:                         break;
   }
 
-  ClipperLib::Clipper clpr;
+  
   clpr.AddPaths(p1, ClipperLib::ptSubject, true);
   clpr.AddPaths(p2, ClipperLib::ptClip, true);
   int retval = clpr.Execute(g_op, p3, ClipperLib::pftEvenOdd, ClipperLib::pftEvenOdd);

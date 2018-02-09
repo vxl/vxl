@@ -87,6 +87,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_combine_planes_process, "vilCombinePlanesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_block_entropy_process, "vilBlockEntropyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_load_image_resource_process, "vilLoadImageResourceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_save_image_resource_process, "vilSaveImageResourceProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_get_number_of_planes_process, "vilGetNumberOfPlanesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_edge_detection_process, "vilEdgeDetectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_binary_edge_detection_process, "vilBinaryEdgeDetectionProcess");
@@ -96,5 +97,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_invert_float_image_process, "vilInvertFloatImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_combine_palnes_8_bands_process, "vilCombinePlanes8BandsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_registration_process, "vilImageRegistrationProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_multi_plane_view_to_grey_process, "vilMultiPlaneViewToGreyProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_binarize_otsu_process, "vilBinarizeOtsuProcess");
 }
 

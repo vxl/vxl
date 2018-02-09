@@ -8,19 +8,15 @@ Compuets Taylor reconstruction error. Each block is processed in a separate thre
 This script assumes that the taylor kernels have been run on the data scene as done in run_taylor_kernels.py
 """
 import os
-import bvpl_octree_batch
 import multiprocessing
 import Queue
 import time
 import random
 import optparse
 
-
-class dbvalue:
-
-    def __init__(self, index, type):
-        self.id = index   # unsigned integer
-        self.type = type  # string
+import brl_init
+import bvpl_octree_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
 
 class taylor_error_job():
@@ -57,7 +53,7 @@ class taylor_error_worker(multiprocessing.Process):
 
     def run(self):
         while not self.kill_received:
-             # get a task
+           # get a task
             try:
                 job = self.work_queue.get_nowait()
             except Queue.Empty:
@@ -66,21 +62,21 @@ class taylor_error_worker(multiprocessing.Process):
             start_time = time.time()
 
             print("Computing Error Scene")
-            bvpl_octree_batch.init_process("bvplComputeTaylorErrorProcess")
-            bvpl_octree_batch.set_input_from_db(0, job.data_scene)
-            bvpl_octree_batch.set_input_from_db(1, job.taylor_scenes)
-            bvpl_octree_batch.set_input_int(2, job.block_i)
-            bvpl_octree_batch.set_input_int(3, job.block_j)
-            bvpl_octree_batch.set_input_int(4, job.block_k)
-            bvpl_octree_batch.run_process()
+            batch.init_process("bvplComputeTaylorErrorProcess")
+            batch.set_input_from_db(0, job.data_scene)
+            batch.set_input_from_db(1, job.taylor_scenes)
+            batch.set_input_int(2, job.block_i)
+            batch.set_input_int(3, job.block_j)
+            batch.set_input_int(4, job.block_k)
+            batch.run_process()
 
             print("Runing time for worker:", self.name)
             print(time.time() - start_time)
 
 #*******************The Main Algorithm ************************#
 if __name__ == "__main__":
-    bvpl_octree_batch.register_processes()
-    bvpl_octree_batch.register_datatypes()
+    batch.register_processes()
+    batch.register_datatypes()
 
     # Parse inputs
     parser = optparse.OptionParser(description='Compute Taylor Error Scene')
@@ -114,24 +110,24 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     print("Loading Data Scene")
-    bvpl_octree_batch.init_process("boxmCreateSceneProcess")
-    bvpl_octree_batch.set_input_string(0,  model_dir + "/mean_color_scene.xml")
-    bvpl_octree_batch.run_process()
-    (scene_id, scene_type) = bvpl_octree_batch.commit_output(0)
+    batch.init_process("boxmCreateSceneProcess")
+    batch.set_input_string(0,  model_dir + "/mean_color_scene.xml")
+    batch.run_process()
+    (scene_id, scene_type) = batch.commit_output(0)
     data_scene = dbvalue(scene_id, scene_type)
 
     # Load taylor scenes
     print("Loading Taylor Scenes")
-    bvpl_octree_batch.init_process("bvplLoadTaylorScenesProcess")
-    bvpl_octree_batch.set_input_string(0, taylor_dir)
-    bvpl_octree_batch.set_input_int(1, -2)  # min and max points of the kernel
-    bvpl_octree_batch.set_input_int(2, -2)
-    bvpl_octree_batch.set_input_int(3, -2)
-    bvpl_octree_batch.set_input_int(4, 2)
-    bvpl_octree_batch.set_input_int(5, 2)
-    bvpl_octree_batch.set_input_int(6, 2)
-    bvpl_octree_batch.run_process()
-    (id, type) = bvpl_octree_batch.commit_output(0)
+    batch.init_process("bvplLoadTaylorScenesProcess")
+    batch.set_input_string(0, taylor_dir)
+    batch.set_input_int(1, -2)  # min and max points of the kernel
+    batch.set_input_int(2, -2)
+    batch.set_input_int(3, -2)
+    batch.set_input_int(4, 2)
+    batch.set_input_int(5, 2)
+    batch.set_input_int(6, 2)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
     taylor_scenes = dbvalue(id, type)
 
     # Begin multiprocessing

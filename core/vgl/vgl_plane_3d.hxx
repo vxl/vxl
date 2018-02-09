@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <string>
 #include "vgl_plane_3d.h"
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -108,10 +109,7 @@ bool vgl_plane_3d<T>::operator==(vgl_plane_3d<T> const& p) const
           && (c()*p.d()==p.c()*d()) );
 }
 
-#define vp(os,v,s) { (os)<<' '; if ((v)>0) (os)<<'+'; if ((v)&&!(s)[0]) (os)<<(v); else { \
-                     if ((v)==-1) (os)<<'-';\
-                     else if ((v)!=0&&(v)!=1) (os)<<(v);\
-                     if ((v)!=0) (os)<<' '<<(s); } }
+#define vp(os,v,s)  os<<' '<< v << ' ' <<s;
 
 template <class T>
 std::ostream& operator<<(std::ostream& os, const vgl_plane_3d<T>& p)
@@ -128,8 +126,16 @@ std::istream& operator>>(std::istream& is, vgl_plane_3d<T>& p)
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
   bool formatted = false;
-  T a, b, c, d;
   is >> std::ws; // jump over any leading whitespace
+  char ch;
+  ch = is.peek();
+  if(ch == '<'){
+  std::string temp;
+    is >> temp;
+    formatted = true;
+  }
+  is >> std::ws;
+  T a, b, c, d;
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
   is >> std::ws >> a >> std::ws;
@@ -161,10 +167,13 @@ std::istream& operator>>(std::istream& is, vgl_plane_3d<T>& p)
   if (formatted) {
     if (is.eof()) return is;
     if (is.peek() == '=') is.ignore();
-    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+    else                  return is; //  = 0  is missing (TODO: throw an exception)
     is >> std::ws;
     if (is.peek() == '0') is.ignore();
-    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+    else                  return is; // = 0 is missing (TODO: throw an exception)
+	is >> std::ws;
+	if (!paren && is.peek() == '>') is.ignore();
+	 else                  return is; // closing > is missing (TODO: throw an exception)
   }
   p.set(a,b,c,d);
   return is;

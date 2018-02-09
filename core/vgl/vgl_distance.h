@@ -225,6 +225,14 @@ template <class T> inline
 double vgl_distance(vgl_point_3d<T> const& p,
                     vgl_ray_3d<T> const& r) { return vgl_distance(r,p); }
 
+//: return the closest distance from a point to an infinite line
+template <class T>
+double vgl_distance(vgl_infinite_line_3d<T> const& l,
+                    vgl_point_3d<T> const& p);
+
+template <class T> inline
+double vgl_distance(vgl_point_3d<T> const& p,
+                    vgl_infinite_line_3d<T> const& l) { return vgl_distance(l,p); }
 //: Closest distance from a point \a p to a line segment \a l in 2D
 // \relatesalso vgl_point_2d
 // \relatesalso vgl_line_segment_2d
@@ -249,6 +257,12 @@ double vgl_distance(vgl_line_segment_3d<T> const& l,
 template <class T> inline
 double vgl_distance(vgl_point_3d<T> const& p,
                     vgl_line_segment_3d<T> const& l) { return vgl_distance(l,p); }
+
+//: closest distance from a point to a box (2d)
+template <class T>
+double vgl_distance(vgl_point_2d<T> const& p, vgl_box_2d<T> const& b);
+template <class T>
+double vgl_distance(vgl_box_2d<T> const& b, vgl_point_2d<T> const& p){return vgl_distance(p,b);}
 
 
 #endif // vgl_distance_h_

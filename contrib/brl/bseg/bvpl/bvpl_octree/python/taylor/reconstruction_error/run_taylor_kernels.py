@@ -2,23 +2,14 @@ import os
 from multiprocessing import Queue
 from taylor_kernel_threads import taylor_kernel_job, execute_jobs
 import time
-import bvpl_octree_batch
 import optparse
 import random
 
-
-class dbvalue:
-
-    def __init__(self, index, type):
-        self.id = index   # unsigned integer
-        self.type = type  # string
-
+import brl_init
+import bvpl_octree_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
 if __name__ == "__main__":
-
-    bvpl_octree_batch.register_processes()
-    bvpl_octree_batch.register_datatypes()
-
     parser = optparse.OptionParser(description='Run Taylor Kernels')
 
     parser.add_option('--model_dir', action="store", dest="model_dir")
@@ -68,10 +59,10 @@ if __name__ == "__main__":
     kernel_list.append("Iyz")
 
     print("Creating a Scene")
-    bvpl_octree_batch.init_process("boxmCreateSceneProcess")
-    bvpl_octree_batch.set_input_string(0,  model_dir + "/mean_color_scene.xml")
-    bvpl_octree_batch.run_process()
-    (scene_id, scene_type) = bvpl_octree_batch.commit_output(0)
+    batch.init_process("boxmCreateSceneProcess")
+    batch.set_input_string(0,  model_dir + "/mean_color_scene.xml")
+    batch.run_process()
+    (scene_id, scene_type) = batch.commit_output(0)
     scene = dbvalue(scene_id, scene_type)
 
     # Begin multiprocessing

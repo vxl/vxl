@@ -46,5 +46,10 @@ void sdet_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_classify_satellite_clouds_process2, "sdetTextureClassifySatelliteCloudsProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_dump_vsol_binary_data_process, "sdetDumpVsolBinaryDataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_add_responses_to_filter_bank_process, "sdetAddResponsestoFilterBankProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_extract_filter_bank_img_process, "sdetExtractFilterBankImgProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_selective_search_process, "sdetSelectiveSearchProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_fit_oriented_boxes_process, "sdetFitOrientedBoxesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_fit_oriented_boxes_from_geotiff_process, "sdetFitOrientedBoxesFromGeotiffProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_unsupervised_classifier_process, "sdetTextureUnsupervisedClassifierProcess");
 
 }

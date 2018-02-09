@@ -1,4 +1,4 @@
-// Some tests for vgl_spline_*d
+
 // J.L. Mundy August, 2015
 #include <iostream>
 #include <fstream>
@@ -51,6 +51,48 @@ static void test_pointset()
   istr >> io_ptset;
   good = io_ptset == ptset;
   TEST("pointset_ I/O", good, true);
+  istr.close();
+  vpl_unlink(path.c_str());
+  //test space separated pointset IO
+  std::ofstream sostr(path.c_str());
+  sostr << p0.x() << ' ' << p0.y() << ' ' << p0.z() << std::endl;
+  sostr << p1.x() << ' ' << p1.y() << ' ' << p1.z() << std::endl;
+  sostr << p2.x() << ' ' << p2.y() << ' ' << p2.z() << std::endl;
+  sostr.close();
+  vgl_pointset_3d<double> spset;
+  std::ifstream sistr(path.c_str());
+  sistr>>spset;
+  good = spset.npts() == 3;
+  good = good && spset.p(0) == p0;
+  TEST("spaced pointset_ I/O", good, true);
+  sistr.close();
+  vpl_unlink(path.c_str());
+  // test poinset with scalars
+  std::vector<double > sclrs;
+  sclrs.push_back(1.0);   sclrs.push_back(1.5);   sclrs.push_back(2.0);
+  vgl_pointset_3d<double> ptset_sc(pts, sclrs), ptset_sc_in;
+  good = ptset_sc.has_scalars() && !ptset_sc.has_normals();
+  good = good && ptset_sc.sc(1) == 1.5;
+  std::ofstream scostr(path.c_str());
+  scostr << ptset_sc;
+  scostr.close();
+  std::ifstream scistr(path.c_str());
+  scistr >> ptset_sc_in;
+  good == good && (ptset_sc_in == ptset_sc);
+  TEST("pointset with scalars", good, true);
+  scistr.close();
+  vpl_unlink(path.c_str());
+  vgl_pointset_3d<double> ptset_nsc(pts, normals,sclrs), ptset_nsc_in;
+  good = ptset_nsc.has_scalars() && ptset_nsc.has_normals();
+  good = good && ptset_nsc.sc(2) == 2.0;
+  std::ofstream nscostr(path.c_str());
+  nscostr << ptset_nsc;
+  nscostr.close();
+  std::ifstream nscistr(path.c_str());
+  nscistr >> ptset_nsc_in;
+  good == good && (ptset_nsc_in == ptset_nsc);
+  nscistr.close();
+  TEST("pointset with scalars and normals", good, true);
   vpl_unlink(path.c_str());
 }
 

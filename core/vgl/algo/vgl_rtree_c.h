@@ -19,6 +19,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_area.h>
 template <class V, class B, class C> class vgl_rtree_probe;
 
 //: vgl_rtree Class C for V=vgl_point_2d<T>, B = vgl_box_2d<T>
@@ -47,21 +48,12 @@ class vgl_rtree_point_box_2d
   { return b.contains(p); }
 
   static bool  meet(vgl_box_2d<T> const& b0, vgl_box_2d<T> const& b1) {
-    vgl_point_2d<T> b0min = b0.min_point();
-    vgl_point_2d<T> b1min = b1.min_point();
-    vgl_point_2d<T> b0max = b0.max_point();
-    vgl_point_2d<T> b1max = b1.max_point();
-    vgl_point_2d<T> max_of_mins(b0min.x() > b1min.x() ? b0min.x() : b1min.x(), b0min.y() > b1min.y() ? b0min.y() : b1min.y());
-    vgl_point_2d<T> min_of_maxs(b0min.x() < b1min.x() ? b0min.x() : b1min.x(), b0min.y() < b1min.y() ? b0min.y() : b1min.y());
-
-    return ( b0.contains(b1min) || b0.contains(b1max) ||
-             b1.contains(b0min) || b1.contains(b0max) ||
-             ( (b0.contains(max_of_mins) || b0.contains(min_of_maxs)) &&
-               (b1.contains(max_of_mins) || b1.contains(min_of_maxs)) ) );
+    vgl_box_2d<T> bint = vgl_intersection<T>(b0, b1);
+    return !bint.is_empty();
   }
 
   static float volume(vgl_box_2d<T> const& b)
-  { return static_cast<float>(b.area()); }
+  { return static_cast<float>(vgl_area(b)); }
 
   // point meets for a polygon, used by generic rtree probe
   static bool meets(vgl_point_2d<T> const& v, vgl_polygon<T> poly)
@@ -140,7 +132,7 @@ class vgl_rtree_box_box_2d
   }
 
   static float volume(vgl_box_2d<T> const& b)
-  { return static_cast<float>(b.area()); }
+  { return static_cast<float>(vgl_area(b)); }
 
   // box_2d meets for a polygon, used by generic rtree probe
   static bool meets(vgl_box_2d<T> const& b, vgl_polygon<T> poly)

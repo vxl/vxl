@@ -1,8 +1,8 @@
-from boxm2_scene_adaptor import *
-from boxm2_adaptor import *
-from vil_adaptor import *
-from vpgl_adaptor import *
-from bbas_adaptor import *
+import brl_init
+import vpgl_adaptor_boxm2_batch as vpgl
+import vil_adaptor_boxm2_batch as vil
+import bbas_adaptor_boxm2_batch as bbas
+import boxm2_adaptor
 import os
 import shutil
 from os.path import basename, splitext
@@ -30,8 +30,8 @@ def render_changes(scene, img_glob, cam_glob, outdir, n=1, raybelief="", max_mod
 
         # grab image number of ground truth image
         imgnum, ext = os.path.splitext(basename(img))
-        pcam = load_perspective_camera(cam_glob[idx])
-        rimg, ni, nj = load_image(img)
+        pcam = vpgl.load_perspective_camera(cam_glob[idx])
+        rimg, ni, nj = vil.load_image(img)
 
         # render exp
         expimg = scene.render(pcam, ni, nj)
@@ -40,10 +40,10 @@ def render_changes(scene, img_glob, cam_glob, outdir, n=1, raybelief="", max_mod
         cd_fname = outdir + "/cd_" + imgnum + ".tiff"
         cd_img = scene.change_detect(
             pcam, rimg, expimg, n, raybelief, max_mode)
-        save_image(cd_img, cd_fname)
+        vil.save_image(cd_img, cd_fname)
 
         # clean up
-        remove_from_db([rimg, expimg, cd_img])
+        bbas.remove_from_db([rimg, expimg, cd_img])
 
 
 # renders a collection (or single) of thresholded images
@@ -66,13 +66,13 @@ def render_vis_changes(change_glob, img_glob, thresh, outdir):
 
         # grab image number of ground truth image
         imgnum, ext = os.path.splitext(basename(img))
-        cimg, ni, nj = load_image(change_glob[idx])
-        rimg, ni, nj = load_image(img)
+        cimg, ni, nj = vil.load_image(change_glob[idx])
+        rimg, ni, nj = vil.load_image(img)
 
         # render visualize image
-        vis_img = visualize_change(cimg, rimg, thresh)
+        vis_img = boxm2_adaptor.visualize_change(cimg, rimg, thresh)
         vis_name = outdir + "/thresh_" + str(thresh) + "_" + imgnum + ".png"
-        save_image(vis_img, vis_name)
+        vil.save_image(vis_img, vis_name)
 
 
 # helper function grabs the *mog* .bin files and hides them in a

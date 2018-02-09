@@ -1,4 +1,5 @@
-from vil_adaptor import *
+import vil_adaptor_boxm2_batch as vil
+
 import random
 import os
 import sys
@@ -11,7 +12,7 @@ import pylab
 def calc_roc(cd_img, gt_img, plot=False, mask_img=None):
 
     # run vil process
-    (tp_temp, tn_temp, fp_temp, fn_temp) = pixel_wise_roc(cd_img, gt_img, mask_img)
+    (tp_temp, tn_temp, fp_temp, fn_temp) = vil.pixel_wise_roc(cd_img, gt_img, mask_img)
 
     # convert to numpy arrays
     tps = array(tp_temp, float)

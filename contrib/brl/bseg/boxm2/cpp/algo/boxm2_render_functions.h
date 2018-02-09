@@ -42,6 +42,17 @@ void boxm2_render_expected_depth( boxm2_scene_info * linfo,
                                   unsigned int roi_ni0=0,
                                   unsigned int roi_nj0=0);
 
+void boxm2_render_silhouette( boxm2_scene_info * linfo,
+                              boxm2_block * blk_sptr,
+                              boxm2_data_base * alpha,
+                              vpgl_camera_double_sptr cam ,
+                              vil_image_view<float> *silhouette,
+                              vil_image_view<float> * vis,
+                              unsigned int roi_ni,
+                              unsigned int roi_nj,
+                              unsigned int roi_ni0=0,
+                              unsigned int roi_nj0=0);
+
 void boxm2_render_depth_of_max_prob( boxm2_scene_info * linfo,
                                      boxm2_block * blk_sptr,
                                      boxm2_data_base * data,

@@ -1,0 +1,66 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: vsiri/vxl:latest
+    working_directory: /vxl
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - vxl_bin-{{ .Branch }}
+            - vxl_bin
+      - run:
+          name: Fix times on source
+          command: |
+            export OLDEST_DATE=$(find /build -type f -printf '%TD %TT\n' | sort | head -n 1)
+            if [ -f /build/vxl.md5 ]; then
+              (md5sum -c /build/vxl.md5 2>/dev/null || :) | awk '{if ($NF == "OK") print substr($0, 1, length($0)-4)}' | xargs touch -d "${OLDEST_DATE}"
+            fi
+            mkdir -p /build
+            find /vxl \( -type d -name .git \) -prune -o -type f -print0 | xargs -0 md5sum > /build/vxl.md5
+      - run:
+          name: Configure
+          command: |
+            set -e
+            mkdir -p /build
+            mkdir -p /install
+            cd /build
+            echo 'set(CTEST_BUILD_CONFIGURATION Release)
+            set(CTEST_CMAKE_GENERATOR "Ninja")
+            set(CTEST_SOURCE_DIRECTORY "/vxl")
+            set(CTEST_BINARY_DIRECTORY "/build")
+            set(CTEST_COMMAND "/usr/bin/ctest")
+            set(CTEST_CONFIGURE_COMMAND "${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE:STRING=\"${CTEST_BUILD_CONFIGURATION}\"")
+            set(CTEST_CONFIGURE_COMMAND "${CMAKE_COMMAND} -DBUILD_BRL_PYTHON=1 -DBUILD_VGUI=1 -DCMAKE_INSTALL_PREFIX=/install -DCMAKE_CXX_STANDARD=98")
+            set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} ${CTEST_BUILD_OPTIONS}")
+            set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"-G${CTEST_CMAKE_GENERATOR}\"")
+            set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"${CTEST_SOURCE_DIRECTORY}\"")
+            ctest_start(Experimental)
+            ctest_configure()' > ctest_start_configure.ctest
+            ctest -S ctest_start_configure.ctest -VV
+            sed -ir "s|^Site: .*|Site: CircleCI ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}|" DartConfiguration.tcl
+            sed -ir "s|^BuildName: .*|BuildName: Linux-c++ Build ${CIRCLE_BUILD_NUM}|" DartConfiguration.tcl
+      - run:
+          name: Build
+          working_directory: /build
+          command: ninja
+      - save_cache:
+          key: vxl_bin-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /build
+      - run:
+          name: Test
+          working_directory: /build
+          command: ctest -D ExperimentalTest --schedule-random -j `nproc` -V
+      - run:
+          name: Submitting to open.cdash.org
+          working_directory: /build
+          command: |
+            env | grep ^CIRCLE > circleci.env
+            ctest -A circleci.env -D ExperimentalSubmit -V
+      - run:
+          name: Install
+          working_directory: /build
+          command: ninja install

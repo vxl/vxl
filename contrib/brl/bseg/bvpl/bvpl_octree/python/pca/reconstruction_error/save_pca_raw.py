@@ -1,16 +1,12 @@
-import bvpl_octree_batch
 import multiprocessing
 import Queue
 import time
 import os
 import optparse
 
-
-class dbvalue:
-
-    def __init__(self, index, type):
-        self.id = index    # unsigned integer
-        self.type = type   # string
+import brl_init
+import bvpl_octree_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
 
 class save_scene_job():
@@ -44,7 +40,7 @@ class save_scene_worker(multiprocessing.Process):
 
     def run(self):
         while not self.kill_received:
-             # get a task
+           # get a task
             try:
                 job = self.work_queue.get_nowait()
             except Queue.Empty:
@@ -53,19 +49,19 @@ class save_scene_worker(multiprocessing.Process):
             start_time = time.time()
 
             print("Creating a Scene")
-            bvpl_octree_batch.init_process("boxmCreateSceneProcess")
-            bvpl_octree_batch.set_input_string(0, job.input_scene_path)
-            bvpl_octree_batch.run_process()
-            (scene_id, scene_type) = bvpl_octree_batch.commit_output(0)
+            batch.init_process("boxmCreateSceneProcess")
+            batch.set_input_string(0, job.input_scene_path)
+            batch.run_process()
+            (scene_id, scene_type) = batch.commit_output(0)
             scene = dbvalue(scene_id, scene_type)
 
             print("Save Scene")
-            bvpl_octree_batch.init_process("boxmSaveSceneRawProcess")
-            bvpl_octree_batch.set_input_from_db(0, scene)
-            bvpl_octree_batch.set_input_string(1, job.output_scene_path)
-            bvpl_octree_batch.set_input_unsigned(2, 0)
-            bvpl_octree_batch.set_input_unsigned(3, 1)
-            bvpl_octree_batch.run_process()
+            batch.init_process("boxmSaveSceneRawProcess")
+            batch.set_input_from_db(0, scene)
+            batch.set_input_string(1, job.output_scene_path)
+            batch.set_input_unsigned(2, 0)
+            batch.set_input_unsigned(3, 1)
+            batch.run_process()
 
             print ("Runing time for worker:", self.name)
             print(time.time() - start_time)
@@ -74,8 +70,8 @@ class save_scene_worker(multiprocessing.Process):
 #*********************The Main Algorithm ****************************#
 if __name__ == "__main__":
 
-    bvpl_octree_batch.register_processes()
-    bvpl_octree_batch.register_datatypes()
+    batch.register_processes()
+    batch.register_datatypes()
 
     parser = optparse.OptionParser(
         description='Save taylor responses to raw file')

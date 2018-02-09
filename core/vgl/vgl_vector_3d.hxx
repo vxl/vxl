@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <string>
 #include "vgl_vector_3d.h"
 #include "vgl_tolerance.h"
 
@@ -136,18 +137,50 @@ std::istream& vgl_vector_3d<T>::read(std::istream& is)
   T tx, ty, tz;
   is >> std::ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
-  if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> std::ws >> tx >> std::ws;
-  if (is.eof()) return is;
-  if (is.peek() == ',') is.ignore();
-  is >> std::ws >> ty >> std::ws;
-  if (is.eof()) return is;
-  if (is.peek() == ',') is.ignore();
-  is >> std::ws >> tz >> std::ws;
-  if (paren) {
+  char c = is.peek();
+  if (c == '(') { is.ignore(); paren=true; }
+  if(paren){
+    is >> std::ws >> tx >> std::ws;
+    if (is.eof()) return is;
+    if (is.peek() == ',') is.ignore();
+    is >> std::ws >> ty >> std::ws;
+    if (is.eof()) return is;
+    if (is.peek() == ',') is.ignore();
+    is >> std::ws >> tz >> std::ws;
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
-    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+    else return is; // closing parenthesis is missing (TODO: throw an exception)
+  }else if( c == '<'){
+    std::string temp;
+    is >> temp >> std::ws; // read <vgl_vector_3d
+    is >> tx >>  std::ws;
+    c = is.peek();
+    if(c != ','){
+      std::cout << "Invalid syntax: >> vgl_vector_3d" << std::endl;
+      set(0.0, 0.0, 0.0);
+      return is;
+    }else is.ignore();
+    is >> ty >> std::ws;
+    c = is.peek();
+    if(c != ','){
+      std::cout << "Invalid syntax: >> vgl_vector_3d" << std::endl;
+      set(0.0, 0.0, 0.0);
+      return is;
+    }else is.ignore();
+    is >> tz >> std::ws;
+    if(is.peek() != '>'){
+      std::cout << "Invalid syntax: >> vgl_vector_3d" << std::endl;
+      set(0.0, 0.0,0.0);
+      return is;
+    }else is.ignore();
+  }else{
+	  is >> tx >> std::ws;
+	c = is.peek();
+	if(c == ',') is.ignore();
+	is >> std::ws >> ty >> std::ws;
+	c = is.peek();
+	if(c == ',') is.ignore();
+    is >> std::ws >> tz >> std::ws;
   }
   set(tx,ty,tz);
   return is;

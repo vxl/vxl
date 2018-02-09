@@ -48,4 +48,5 @@ DECLARE_FUNC_CONS(brad_estimate_shadows_process);
 DECLARE_FUNC_CONS(brad_get_meta_data_info_process);
 DECLARE_FUNC_CONS(brad_get_cloud_coverage_process);
 DECLARE_FUNC_CONS(brad_get_image_coverage_process);
+DECLARE_FUNC_CONS(brad_compute_appearance_index_process);
 #endif

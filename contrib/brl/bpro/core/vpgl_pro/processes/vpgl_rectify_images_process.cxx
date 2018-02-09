@@ -616,3 +616,167 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<float>(img1_disp));
   return true;
 }
+
+#include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_local_rational_camera.h>
+
+// input a height map for an ortho scene with min, max 3D points, construct a disparity map for image1 
+// output an ortograhic height map using the input bounding box
+bool vpgl_construct_disparity_map_process_cons(bprb_func_process& pro)
+{
+  std::vector<std::string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");  // camera1 local rational
+  input_types.push_back("vpgl_camera_double_sptr");  // camera2 local rational
+  input_types.push_back("vil_image_view_base_sptr");  // ortho height map (should be created for this scene with 3D corner points supplied as input)
+  input_types.push_back("vpgl_camera_double_sptr"); // camera for ortho height map
+  input_types.push_back("unsigned");  // ni for rectified version of image 1
+  input_types.push_back("unsigned");  // nj for rectified version of image 1
+  input_types.push_back("double"); // GSD of DEM
+  input_types.push_back("double"); // rough GSD for rectified version of image 1 , a downsampling factor will be computed from the two GSDs
+  input_types.push_back("vcl_string"); // input path to read H1 : should change these to vectors passed from python instead of read from files
+  input_types.push_back("vcl_string"); // input path to read H2
+  std::vector<std::string> output_types;
+  output_types.push_back("vil_image_view_base_sptr"); // disparity map for image1 at the resolution of DEM, this needs to be resized accordingly
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+
+//: Execute the process
+bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() < 8) {
+    std::cout << "vpgl_construct_disparity_map_process: The number of inputs should be 14" << std::endl;
+    return false;
+  }
+
+  // get the inputs
+  unsigned i = 0;
+  vpgl_camera_double_sptr cam1_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_camera_double_sptr cam2_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr coarse_DEM_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  vpgl_local_rational_camera<double> *cam1 = dynamic_cast<vpgl_local_rational_camera<double>*>(cam1_rational.as_pointer());  // these are actually local rational cameras but we want to bypass lvcs
+                                                                                                                 //  and directly work in global (lat, lon) coordinate system
+  vpgl_local_rational_camera<double> *cam2 = dynamic_cast<vpgl_local_rational_camera<double>*>(cam2_rational.as_pointer());  // these are actually local rational cameras but we want to bypass lvcs
+                                                                                                                 //  and directly work in global (lat, lon) coordinate system
+  // somehow casting to vpgl_rational_camera doesn't work, try creating new rational_camera objects
+  vpgl_rational_camera<double> cam1_global(*cam1);
+  vpgl_rational_camera<double> cam2_global(*cam2);
+
+  unsigned int out_ni = pro.get_input<unsigned>(i++);
+  unsigned int out_nj = pro.get_input<unsigned>(i++);
+  double GSD_DEM = pro.get_input<double>(i++);
+  double GSD_img = pro.get_input<double>(i++);
+  std::string path_H1 = pro.get_input<std::string>(i++);
+  std::string path_H2 = pro.get_input<std::string>(i++);
+
+  double factor = GSD_DEM/GSD_img;
+  int out_ni2 = (int) vcl_floor(((double)out_ni / factor) + 0.5);
+  int out_nj2 = (int) vcl_floor(((double)out_nj / factor) + 0.5);
+  std::cout << "ni, nj: " << out_ni << ", " << out_nj << '\n';
+  std::cout << "new ni, nj: " << out_ni2 << ", " << out_nj2 << '\n';
+
+  //out_ni2 = out_ni;
+  //out_nj2 = out_nj;
+  //int nn_size = 60;
+  int nn_size = 2;
+
+  vil_image_view<float> out_disparity_map(out_ni2, out_nj2);
+  out_disparity_map.fill(std::numeric_limits<float>::quiet_NaN());
+  vil_image_view<bool> out_disparity_map_filled(out_ni2, out_nj2);
+  out_disparity_map_filled.fill(false);
+
+  vnl_matrix_fixed<double, 3, 3> H1, H2;
+  std::ifstream ifs(path_H1.c_str());
+  ifs >> H1;
+  ifs.close();
+  std::ifstream ifs2(path_H2.c_str());
+  ifs2 >> H2;
+  ifs2.close();
+  std::cout << "read H1:\n " << H1 << "\n H2:\n " << H2 << "\n";
+
+  vil_image_view<float> DEM_img = *vil_convert_cast(float(), coarse_DEM_sptr);
+
+  for (unsigned xx = 0; xx < DEM_img.ni(); xx++)
+    for (unsigned yy = 0; yy < DEM_img.nj(); yy++) {
+      
+      double lon, lat;
+      geocam->img_to_global(xx, yy, lon, lat);
+      double z = DEM_img(xx,yy);
+      
+      // project this x,y,z using the camera onto the images
+      double u1,v1,u2,v2;
+      //cam1_rational->project(x, y, z, u1, v1);
+      //cam2_rational->project(x, y, z, u2, v2);
+      cam1_global.project(lon, lat, z, u1, v1);
+      cam2_global.project(lon, lat, z, u2, v2);
+
+      // warp this point with H1, H2
+      vnl_vector_fixed<double,3> p1(u1, v1, 1);
+      vnl_vector_fixed<double,3> p1w = H1*p1;
+      int u1w = (int)std::floor((p1w[0]/p1w[2])+0.5);
+      int v1w = (int)std::floor((p1w[1]/p1w[2])+0.5);
+
+      if (u1w >= out_ni || v1w >= out_nj || u1w < 0 || v1w < 0)
+        continue;
+
+      vnl_vector_fixed<double,3> p2(u2, v2, 1);
+      vnl_vector_fixed<double,3> p2w = H2*p2;
+      int u2w = (int)std::floor((p2w[0]/p2w[2])+0.5);
+      int v2w = (int)std::floor((p2w[1]/p2w[2])+0.5);
+
+      // now the disparity equation is u1w-d = u2w --> d = u1w - u2w
+      int disp = u1w - u2w;
+      
+      int down_u1w = vcl_floor(double(u1w)/factor);
+      int down_v1w = vcl_floor(double(v1w)/factor);
+      if (down_u1w < 0 || down_v1w < 0 || down_u1w >= out_ni2 || down_v1w >= out_nj2)
+        continue;
+      out_disparity_map(down_u1w, down_v1w) = (float)disp;
+      out_disparity_map_filled(down_u1w, down_v1w) = true;
+      
+      //out_disparity_map(u1w, v1w) = (float)disp;
+      //out_disparity_map_filled(u1w, v1w) = true;
+      
+    }
+    
+  // interpolate the intensities 
+  for (int i = 0; i < out_ni2; i++)
+    for (int j = 0; j < out_nj2; j++) {
+      if (out_disparity_map_filled(i,j) == false) {
+        // locate the 4 nearest neighbors of this pixel with some value
+        std::map<double, double > nns;
+        vgl_point_2d<int> this_p(i,j);
+        for (int ii = i-nn_size; ii < i+nn_size; ii++)
+          for (int jj = j - nn_size; jj < j+nn_size; jj++) {
+            if (ii < 0 || jj < 0 || ii >= out_ni2 || jj >= out_nj2 || !out_disparity_map_filled(ii,jj))
+              continue;
+            vgl_point_2d<int> p(ii,jj);
+            double d = (this_p-p).length();
+            nns[d] = out_disparity_map(ii,jj);
+          }
+        if (nns.size() > 1) {
+          double total_weight = 0.0;
+          double disp = 0.0;
+          // turn distances into weights: inverse distance weighting
+          for (std::map<double, double>::iterator iter = nns.begin(); iter != nns.end(); iter++) {
+            total_weight += (1.0/iter->first);
+            disp += (1.0/iter->first)*iter->second;
+          }
+          disp = disp/total_weight;
+          out_disparity_map(i,j) = disp;
+        }
+        
+      }
+    }
+    
+  vil_image_view_base_sptr out_sptr = new vil_image_view<float>(out_disparity_map);
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_sptr);
+  return true;
+}
+
+

@@ -8,19 +8,15 @@ Adds the error of a portion of voxels. Each block is processed in a separate thr
 This script assumes that the reconstruction error at each voxel has been computed
 """
 import os
-import bvpl_octree_batch
 import multiprocessing
 import Queue
 import time
 import random
 import optparse
 
-
-class dbvalue:
-
-    def __init__(self, index, type):
-        self.id = index    # unsigned integer
-        self.type = type   # string
+import brl_init
+import bvpl_octree_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
 
 class pca_error_job():
@@ -49,7 +45,7 @@ def execute_jobs(jobs, num_procs=4):
         worker.start()
         print("worker with name ", worker.name, " started!")
 
-     # collect the results off the queue
+       # collect the results off the queue
     # all_results=[];
 #    results = []
 #    while len(results) < len(jobs):
@@ -80,7 +76,7 @@ class pca_error_worker(multiprocessing.Process):
 
     def run(self):
         while not self.kill_received:
-             # get a task
+           # get a task
             try:
                 job = self.work_queue.get_nowait()
             except Queue.Empty:
@@ -89,17 +85,17 @@ class pca_error_worker(multiprocessing.Process):
             start_time = time.time()
 
             print("Adding Errors")
-            bvpl_octree_batch.init_process("bvplAddPCAErrorsProcess")
-            bvpl_octree_batch.set_input_from_db(0, job.pca_scenes)
-            bvpl_octree_batch.set_input_unsigned(1, job.dim)
-            bvpl_octree_batch.set_input_double(2, job.fraction)
-            bvpl_octree_batch.set_input_int(3, job.block_i)
-            bvpl_octree_batch.set_input_int(4, job.block_j)
-            bvpl_octree_batch.set_input_int(5, job.block_k)
-            bvpl_octree_batch.run_process()
-            (id, type) = bvpl_octree_batch.commit_output(0)
+            batch.init_process("bvplAddPCAErrorsProcess")
+            batch.set_input_from_db(0, job.pca_scenes)
+            batch.set_input_unsigned(1, job.dim)
+            batch.set_input_double(2, job.fraction)
+            batch.set_input_int(3, job.block_i)
+            batch.set_input_int(4, job.block_j)
+            batch.set_input_int(5, job.block_k)
+            batch.run_process()
+            (id, type) = batch.commit_output(0)
             error_val = dbvalue(id, type)
-            error = bvpl_octree_batch.get_output_double(id)
+            error = batch.get_output_double(id)
 
             self.result_queue.put(error)
 
@@ -111,8 +107,8 @@ class pca_error_worker(multiprocessing.Process):
 
 if __name__ == "__main__":
 
-    bvpl_octree_batch.register_processes()
-    bvpl_octree_batch.register_datatypes()
+    batch.register_processes()
+    batch.register_datatypes()
 
     # Parse inputs
     parser = optparse.OptionParser(description='Compute PCA Error Scene')
@@ -152,22 +148,22 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     print("Loading Data Scene")
-    bvpl_octree_batch.init_process("boxmCreateSceneProcess")
-    bvpl_octree_batch.set_input_string(0,  model_dir + "/mean_color_scene.xml")
-    bvpl_octree_batch.run_process()
-    (scene_id, scene_type) = bvpl_octree_batch.commit_output(0)
+    batch.init_process("boxmCreateSceneProcess")
+    batch.set_input_string(0,  model_dir + "/mean_color_scene.xml")
+    batch.run_process()
+    (scene_id, scene_type) = batch.commit_output(0)
     data_scene = dbvalue(scene_id, scene_type)
 
     # Load PCA scenes
     pca_feature_dim = 125
     print("Loading PCA Error Scenes")
-    bvpl_octree_batch.init_process("bvplLoadPCAErrorSceneProcess")
-    bvpl_octree_batch.set_input_from_db(0, data_scene)
-    bvpl_octree_batch.set_input_string(1, pca_dir)
-    bvpl_octree_batch.set_input_unsigned(
+    batch.init_process("bvplLoadPCAErrorSceneProcess")
+    batch.set_input_from_db(0, data_scene)
+    batch.set_input_string(1, pca_dir)
+    batch.set_input_unsigned(
         2, pca_feature_dim)  # dimension pca feature
-    bvpl_octree_batch.run_process()
-    (id, type) = bvpl_octree_batch.commit_output(0)
+    batch.run_process()
+    (id, type) = batch.commit_output(0)
     pca_scenes = dbvalue(id, type)
 
     # Begin multiprocessing
