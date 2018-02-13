@@ -61,27 +61,57 @@ std::istream& vgl_point_2d<Type>::read(std::istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
+  bool angle = false;
   Type tx, ty;
   is >> std::ws; // jump over any leading whitespace
   char c;
-  c=is.peek();
-  if(c == '<'){
-	  std::string temp;
-	  is >> temp;
+  c = is.peek();
+  std::cerr << "C: " << c << std::endl;
+  if(c == '<')
+  {
+    is.ignore();
+    angle = true;
   }
-  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
-  if (is.peek() == '(') { is.ignore(); paren=true; }
+
+  if (is.eof())
+    return is; // nothing to be set because of EOF (TODO: should throw an exception)
+
+  if (is.peek() == '(')
+  {
+    is.ignore();
+    paren=true;
+  }
+
   is >> std::ws >> tx >> std::ws;
-  if (is.eof()) return is;
-  if (is.peek() == ',') is.ignore();
+  if (is.eof())
+    return is;
+
+  if (is.peek() == ',')
+    is.ignore();
+
   is >> std::ws >> ty >> std::ws;
-  if (paren) {
-    if (is.eof()) return is;
-    if (is.peek() == ')') is.ignore();
-    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  if (paren)
+  {
+    if (is.eof())
+      return is;
+    if (is.peek() == ')')
+      is.ignore();
+    else
+      return is; // closing parenthesis is missing (TODO: throw an exception)
   }
+
   is >> std::ws;
-  if (is.peek() == '>') is.ignore();
+
+  if (angle)
+  {
+    if (is.eof())
+      return is;
+    if (is.peek() == '>')
+      is.ignore();
+    else
+      return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+
   set(tx,ty);
   return is;
 }
