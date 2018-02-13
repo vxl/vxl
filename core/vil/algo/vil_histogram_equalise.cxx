@@ -61,7 +61,9 @@ void vil_histogram_equalise(vil_image_view<float>& image)
   for (unsigned i=0; i<n_bins; ++i) { sum+=histo[i]; histo[i]=sum; }
 
   // Get mapping parameters and generate lookup tables
-  double x0 = histo[min_v];
+  int lo = 0;
+  while (histo[lo]==0) lo++;
+  double x0 = histo[lo];
   // To map bins to 256 output value range (smallest values gets mapped to zero)
   double s_b2o =255.1/(sum-x0);
   std::vector<unsigned> lookup_b2o(n_bins);
