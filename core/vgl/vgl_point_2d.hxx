@@ -66,7 +66,6 @@ std::istream& vgl_point_2d<Type>::read(std::istream& is)
   is >> std::ws; // jump over any leading whitespace
   char c;
   c = is.peek();
-  std::cerr << "C: " << c << std::endl;
   if(c == '<')
   {
     is.ignore();
