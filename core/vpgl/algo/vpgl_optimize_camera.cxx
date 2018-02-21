@@ -176,6 +176,15 @@ vpgl_orientation_position_focal_lsqr::f(vnl_vector<double> const& x, vnl_vector<
   vgl_rotation_3d<double> R(q);
   vgl_vector_3d<double> t(x[4], x[5], x[6]);
 
+  // Check that it is a valid focal length
+  if (x[7]<=0) {
+    for (unsigned int i=0; i<world_points_.size(); ++i) {
+      fx[2*i]   = 100000000;
+      fx[2*i+1] = 100000000;
+    }
+    return;
+  }
+
   vpgl_calibration_matrix<double> K(K_init_);
   K.set_focal_length(x[7]);
   vpgl_perspective_camera<double> cam(K, R, t);
