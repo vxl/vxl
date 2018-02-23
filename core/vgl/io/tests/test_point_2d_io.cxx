@@ -16,14 +16,16 @@ void test_point_2d_double_io()
 
   // Test reading in a space delimited point.
   std::string point_with_spaces = "vgl_point_2d_test_spaces.tmp";
-  std::ofstream t_out(point_with_spaces);
+  std::ofstream t_out(point_with_spaces.c_str());
+  vgl_point_2d<double> truth(1.2, 3.4);
   t_out << "1.2 3.4";
   t_out.close();
-  std::ifstream t_in(point_with_spaces);
+  std::ifstream t_in(point_with_spaces.c_str());
   vgl_point_2d<double> tmp;
   t_in >> tmp;
   vpl_unlink (point_with_spaces.c_str());
   TEST ("Finished reading space delimited point file successfully", (!t_in.fail()), true);
+  TEST("point successfully read from space delimited file", tmp == truth, true);
 
   //// test constructors, accessors
   vgl_point_2d<double> p_out(1.2,3.4), p_in;
