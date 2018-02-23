@@ -139,7 +139,7 @@ template <class Type>
   for(unsigned i =0; i<n; ++i)
     if(pts[i] != points_[i])
       return false;
-  if(has_normals() && !pointset.has_normals() || !has_normals() && pointset.has_normals())
+  if((has_normals() && !pointset.has_normals()) || (!has_normals() && pointset.has_normals()))
     return false;
   if(has_normals_){
     if(static_cast<unsigned>(normals_.size()) != n)
@@ -149,7 +149,7 @@ template <class Type>
       if(normals[i] != normals_[i])
         return false;
   }
-  if(has_scalars() && !pointset.has_scalars() || !has_scalars() && pointset.has_scalars())
+  if((has_scalars() && !pointset.has_scalars()) || (!has_scalars() && pointset.has_scalars()))
     return false;
   if(has_scalars_){
     if(static_cast<unsigned>(scalars_.size()) != n)
