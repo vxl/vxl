@@ -727,7 +727,6 @@ vimt_transform_2d operator*(const vimt_transform_2d& L, const vimt_transform_2d&
 
 void vimt_transform_2d::print_summary(std::ostream& o) const
 {
-    o << vsl_indent()<< "Form: ";
     vsl_indent_inc(o);
     switch (form_)
     {
@@ -740,15 +739,17 @@ void vimt_transform_2d::print_summary(std::ostream& o) const
             break;
 
         case ZoomOnly:
-            o << "ZoomOnly\n"
-              << vsl_indent()<< "scale factor = (" << xx_ << ',' << yy_ << ")\n"
-              << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
+            o << "ZoomOnly { ";
+            if (xx_==yy_)
+              o<<"s="<<xx_;
+            else
+              o<<"sx="<<xx_<<" sy="<<yy_;
+            o<<" t=("<<xt_<<','<< yt_<<") }";
             break;
 
         case RigidBody:
-            o << "RigidBody\n"
-              << vsl_indent()<< "angle = " << std::atan2(yx_,xx_) << '\n'
-              << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
+            o << "RigidBody { A="<< std::atan2(yx_,xx_)
+              << "t= (" << xt_ << ',' << yt_ <<") }";
             break;
 
         case Similarity:
@@ -786,7 +787,6 @@ void vimt_transform_2d::print_summary(std::ostream& o) const
 
 std::ostream& operator<<( std::ostream& os, const vimt_transform_2d& t )
 {
-    os << "vimt_transform_2d:\n";
     vsl_indent_inc(os);
     t.print_summary(os);
     vsl_indent_dec(os);
