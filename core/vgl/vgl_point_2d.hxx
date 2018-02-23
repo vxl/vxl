@@ -88,9 +88,10 @@ std::istream& vgl_point_2d<Type>::read(std::istream& is)
   if (is.peek() == ',')
     is.ignore();
 
-  is >> std::ws >> ty >> std::ws;
+  is >> std::ws >> ty;
   if (paren)
   {
+    is >> std::ws;
     if (is.eof())
       return is;
     if (is.peek() == ')')
@@ -99,10 +100,9 @@ std::istream& vgl_point_2d<Type>::read(std::istream& is)
       return is; // closing parenthesis is missing (TODO: throw an exception)
   }
 
-  is >> std::ws;
-
   if (angle)
   {
+    is >> std::ws;
     if (is.eof())
       return is;
     if (is.peek() == '>')
