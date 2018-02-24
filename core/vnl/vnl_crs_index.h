@@ -57,7 +57,7 @@ class VNL_EXPORT vnl_crs_index
 
   //: return the index at location (i,j)
   //  returns -1 if the entry is 0
-  int operator() (int i, int j) const;
+  int operator() (vxl::operatorbrctsize_t i, vxl::operatorbrctsize_t j) const;
 
  private:
   //: The number of columns in the matrix

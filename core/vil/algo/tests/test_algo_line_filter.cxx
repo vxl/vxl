@@ -7,7 +7,7 @@
 
 static unsigned char black = 0, white = 10;
 
-static void print_out(unsigned int n,
+static void print_out(vxl::indexsize_t n,
                       const char* s1, vil_image_view<unsigned char> a,
                       const char* s2, vil_image_view<unsigned char> b,
                       const char* s3, vil_image_view<float> c)
@@ -41,7 +41,7 @@ static void test_line_filter_byte()
   vil_line_filter<unsigned char> filter;
 
   // Create test image
-  unsigned int n = 10;
+  vxl::indexsize_t n = 10;
   vil_image_view<unsigned char> image(n,n);
   image.fill(black);
   for (unsigned int i=0;i<n;++i) image(i,5)= white;

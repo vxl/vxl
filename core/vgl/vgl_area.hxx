@@ -85,7 +85,7 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
         continue;
 
       typename vgl_polygon<T>::sheet_t const& pgon = poly[s];
-      unsigned int n = (unsigned int)(pgon.size());
+      vxl::indexsize_t n = (unsigned int)(pgon.size());
       bool c = false;
       for (unsigned int i = 0, j = n-1; i < n; j = i++)
         // invert c for each edge crossing

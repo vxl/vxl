@@ -23,7 +23,7 @@
 // has the same weight and takes the same form.  Essentially, a copy of a single
 // distribution is translated (and possibly scaled) to each point in a collection
 // of samples
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
 {
  public:
@@ -100,7 +100,7 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
 
 //: A base class for fixed bandwidth kernel distributions
 // This class assumes that the bandwidth is fixed for all kernels
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdl_kernel_fbw_base : public vpdl_kernel_base<T,n>
 {
  public:
@@ -142,7 +142,7 @@ class vpdl_kernel_fbw_base : public vpdl_kernel_base<T,n>
 
 //: A base class for variable bandwidth kernel distributions
 // This class assumes that each sample has its own bandwidth
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
 {
  public:

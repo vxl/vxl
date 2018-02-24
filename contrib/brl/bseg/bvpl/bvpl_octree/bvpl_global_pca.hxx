@@ -27,7 +27,7 @@
 //#define DEBUG_PROJ
 
 //: Create from xml_file
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 bvpl_global_pca<feature_dim>::bvpl_global_pca(const std::string &path)
 {
   std::cout << "Loading pca info from xml-file" << std::endl;
@@ -214,7 +214,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const std::string &path)
 }
 
 //: Init auxiliary scenes and smallest cell length values
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 void bvpl_global_pca<feature_dim>::init(unsigned scene_id)
 {
   boxm_scene_base_sptr data_scene_base = load_scene(scene_id);
@@ -281,7 +281,7 @@ void bvpl_global_pca<feature_dim>::init(unsigned scene_id)
 //  Ramndom samples according to octree structure.
 //  Sampling is achieved by generating uniform random cell samples.
 //  Since there are more cells where the resolution is finer, then these regions get sampled more often
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i, int block_j, int block_k,
                                                       vnl_matrix_fixed<double, feature_dim, feature_dim> &S,
                                                       vnl_vector_fixed<double, feature_dim> &mean,
@@ -429,7 +429,7 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
 
 //: Update mean and scatter, given the mean and scatter of two sets.
 //  Calculation is done according to Chan et al. Updating Formulae and a Pairwise Algorithm for Computing Sample Variances
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 void bvpl_global_pca<feature_dim>::combine_pairwise_statistics( const vnl_vector_fixed<double,feature_dim> &mean1,
                                                                 const vnl_matrix_fixed<double,feature_dim,feature_dim> &scatter1,
                                                                 double const n1,
@@ -447,7 +447,7 @@ void bvpl_global_pca<feature_dim>::combine_pairwise_statistics( const vnl_vector
 }
 
 //: Set total scatter matrix, mean, sample, principal components and weights for this class
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 void bvpl_global_pca<feature_dim>::set_up_pca_evd(const vnl_matrix_fixed<double, feature_dim, feature_dim> &S,
                                                   const vnl_vector_fixed<double, feature_dim> &mean,
                                                   const double total_nsamples)
@@ -470,7 +470,7 @@ void bvpl_global_pca<feature_dim>::set_up_pca_evd(const vnl_matrix_fixed<double,
 }
 
 //: Computes 10-dimensional pca projection at each voxel on the block and saves it
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_j, int block_k)
 {
   typedef boct_tree<short,float> float_tree_type;
@@ -605,7 +605,7 @@ void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_
 }
 
 //: Computes the projection error (as square magniture) given 10-dimensional pca projection at each voxel on the block
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, int block_j, int block_k)
 {
   if (training_scenes_[scene_id]) {
@@ -729,7 +729,7 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
 
 
 //: Load scene info
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
@@ -757,7 +757,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_scene (int scene_id)
 }
 
 //: Load auxiliary scene indicating if a cell is valid. e.g border cells are not valid
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_valid_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
@@ -787,7 +787,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_valid_scene (int scene_i
 }
 
 //: Load auxiliary scene indicating if a cell is should be used for training
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_train_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
@@ -818,7 +818,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_train_scene (int scene_i
 
 
 //: Load auxiliary scene info
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 
 boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_projection_scene (int scene_id)
 {
@@ -851,7 +851,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_projection_scene (int sc
 
 
 //: Load auxiliary scene info
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
@@ -902,7 +902,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
 
 
 //: Write this class to xml file
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 void bvpl_global_pca<feature_dim>::xml_write()
 {
   bxml_document doc;
@@ -985,7 +985,7 @@ void bvpl_global_pca<feature_dim>::xml_write()
 }
 
 //: Write a PCA file
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 void bvpl_global_pca<feature_dim>::write_pca_matrices()
 {
   std::ofstream pc_ofs(pc_path().c_str());

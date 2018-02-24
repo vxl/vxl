@@ -42,7 +42,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_ref : public vnl_matrix<T>
 
  public:
   // Constructors/Destructors--------------------------------------------------
-  vnl_matrix_ref(unsigned int m, unsigned int n, T *datablck) {
+  vnl_matrix_ref(vxl::indexsize_t m, vxl::indexsize_t n, T *datablck) {
     Base::data = vnl_c_vector<T>::allocate_Tptr(m);
     for (unsigned int i = 0; i < m; ++i)
       Base::data[i] = datablck + i * n;

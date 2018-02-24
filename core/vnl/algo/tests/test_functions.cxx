@@ -71,7 +71,7 @@ double cdf_baseline[] =
 int test_functions()
 {
   int idx = 0;
-  for (unsigned int n=1; n<100; n+=5)
+  for (vxl::indexsize_t n=1; n<100; n+=5)
   {
     for (unsigned int chisq_int = 0; chisq_int < 200; chisq_int += 20)
     {

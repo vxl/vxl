@@ -16,7 +16,7 @@
 #include <cstddef>
 #include <vcl_compiler.h>
 
-template <class T1, class T2, unsigned n>
+template <class T1, class T2,  vxl::indexsize_t n>
 struct bbgm_planes_to_sample
 {
   static void apply(const T1* data, T2& sample, std::ptrdiff_t step){

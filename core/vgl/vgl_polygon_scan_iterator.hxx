@@ -422,7 +422,7 @@ void vgl_polygon_scan_iterator<T>::display_chains()
 {
     std::cout << "Number of Chains: " << poly_.num_sheets() << std::endl
              << "Number of Vertices: " << numverts << std::endl;
-    for (unsigned int c = 0; c < poly_.num_sheets(); ++c )
+    for (vxl::indexsize_t c = 0; c < poly_.num_sheets(); ++c )
     {
         std::cout << "---- Chain # " << c << " ----\n"
                  << "  Length: " << poly_[ c ].size() << std::endl;

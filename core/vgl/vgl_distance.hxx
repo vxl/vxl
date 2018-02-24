@@ -105,7 +105,7 @@ double vgl_distance2_to_linesegment(T x1, T y1, T z1,
 }
 
 template <class T>
-double vgl_distance_to_non_closed_polygon(T const px[], T const py[], unsigned n,
+double vgl_distance_to_non_closed_polygon(T const px[], T const py[], vxl::indexsize_t n,
                                           T x, T y)
 {
   double dd = -1;
@@ -120,7 +120,7 @@ double vgl_distance_to_non_closed_polygon(T const px[], T const py[], unsigned n
 }
 
 template <class T>
-double vgl_distance_to_closed_polygon(T const px[], T const py[], unsigned n,
+double vgl_distance_to_closed_polygon(T const px[], T const py[], vxl::indexsize_t n,
                                       T x, T y)
 {
   double dd = vgl_distance_to_linesegment(px[n-1], py[n-1],
@@ -138,7 +138,7 @@ double vgl_distance_to_closed_polygon(T const px[], T const py[], unsigned n,
 }
 
 template <class T>
-double vgl_distance_to_non_closed_polygon(T const px[], T const py[], T const pz[], unsigned int n,
+double vgl_distance_to_non_closed_polygon(T const px[], T const py[], T const pz[], vxl::indexsize_t n,
                                           T x, T y, T z)
 {
   double dd = -1;
@@ -153,7 +153,7 @@ double vgl_distance_to_non_closed_polygon(T const px[], T const py[], T const pz
 }
 
 template <class T>
-double vgl_distance_to_closed_polygon(T const px[], T const py[], T const pz[], unsigned int n,
+double vgl_distance_to_closed_polygon(T const px[], T const py[], T const pz[], vxl::indexsize_t n,
                                       T x, T y, T z)
 {
   double dd = vgl_distance_to_linesegment(px[n-1], py[n-1], pz[n-1],
@@ -263,10 +263,10 @@ template <class T>
 double vgl_distance(vgl_polygon<T> const& poly, vgl_point_2d<T> const& point, bool closed)
 {
   double dist = -1;
-  for ( unsigned int s=0; s < poly.num_sheets(); ++s )
+  for ( vxl::indexsize_t s=0; s < poly.num_sheets(); ++s )
   {
     const std::vector<vgl_point_2d<T> > &sheet = poly[s];
-    unsigned int n = (unsigned int)(sheet.size());
+    vxl::indexsize_t n = (vxl::indexsize_t)(sheet.size());
     assert( n > 1 );
     double dd = closed ?
                 vgl_distance_to_linesegment(sheet[n-1].x(), sheet[n-1].y(),
@@ -275,7 +275,7 @@ double vgl_distance(vgl_polygon<T> const& poly, vgl_point_2d<T> const& point, bo
                 vgl_distance_to_linesegment(sheet[0  ].x(), sheet[0  ].y(),
                                             sheet[1  ].x(), sheet[1  ].y(),
                                             point.x(), point.y());
-    for ( unsigned int i=0; i+1 < n; ++i )
+    for ( vxl::indexsize_t i=0; i+1 < n; ++i )
     {
       double nd = vgl_distance_to_linesegment(sheet[i  ].x(), sheet[i  ].y(),
                                               sheet[i+1].x(), sheet[i+1].y(),
@@ -377,10 +377,10 @@ template double vgl_distance2_to_linesegment(T,T,T,T,T,T); \
 template double vgl_distance_to_linesegment(T,T,T,T,T,T); \
 template double vgl_distance2_to_linesegment(T,T,T,T,T,T,T,T,T); \
 template double vgl_distance_to_linesegment(T,T,T,T,T,T,T,T,T); \
-template double vgl_distance_to_non_closed_polygon(T const[],T const[],unsigned int,T,T); \
-template double vgl_distance_to_non_closed_polygon(T const[],T const[],T const[],unsigned int,T,T,T); \
-template double vgl_distance_to_closed_polygon(T const[],T const[],unsigned int,T,T); \
-template double vgl_distance_to_closed_polygon(T const[],T const[],T const[],unsigned int,T,T,T); \
+template double vgl_distance_to_non_closed_polygon(T const[],T const[],vxl::indexsize_t,T,T); \
+template double vgl_distance_to_non_closed_polygon(T const[],T const[],T const[],vxl::indexsize_t,T,T,T); \
+template double vgl_distance_to_closed_polygon(T const[],T const[],vxl::indexsize_t,T,T); \
+template double vgl_distance_to_closed_polygon(T const[],T const[],T const[],vxl::indexsize_t,T,T,T); \
 template double vgl_distance_origin(vgl_line_2d<T >const& l); \
 template double vgl_distance_origin(vgl_homg_line_2d<T >const& l); \
 template double vgl_distance_origin(vgl_plane_3d<T > const& pl); \

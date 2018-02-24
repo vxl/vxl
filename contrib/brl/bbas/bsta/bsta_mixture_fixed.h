@@ -23,7 +23,7 @@
 #include <vnl/vnl_random.h>
 
 //: A mixture of distributions with a fixed size of s components
-template <class dist_, unsigned s>
+template <class dist_,  vxl::indexsize_t s>
 class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
                                                              dist_::dimension>
 {
@@ -241,7 +241,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
   }
 };
 
-template <class dist_, unsigned s>
+template <class dist_,  vxl::indexsize_t s>
 inline std::ostream& operator<< (std::ostream& os,
                                 bsta_mixture_fixed<dist_,s> const& no)
 {
@@ -251,7 +251,7 @@ inline std::ostream& operator<< (std::ostream& os,
 }
 
 //: for compatibility with vpdl/vpdt
-template <class dist, unsigned s>
+template <class dist,  vxl::indexsize_t s>
 struct vpdt_is_mixture<bsta_mixture_fixed<dist,s> >
 {
   static const bool value = true;

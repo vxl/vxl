@@ -16,7 +16,7 @@ void vsl_b_write(vsl_b_ostream& s, const std::vector<bool>& v)
 {
   const short version_no = 1;
   vsl_b_write(s, version_no);
-  unsigned int n = (unsigned int)(v.size());
+  vxl::indexsize_t n = (unsigned int)(v.size());
   vsl_b_write(s,n);
   for (unsigned int i=0; i<n; ++i)
     vsl_b_write(s, v[i]);
@@ -29,7 +29,7 @@ void vsl_b_read(vsl_b_istream& is, std::vector<bool>& v)
 {
   if (!is) return;
 
-  unsigned int n;
+  vxl::indexsize_t n;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)

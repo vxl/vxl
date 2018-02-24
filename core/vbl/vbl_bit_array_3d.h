@@ -28,14 +28,14 @@ class vbl_bit_array_3d
   // Constructors/Destructor---------------------------------------------------
 
   //: Create a bitarray of the specified size, without initialising elements
-  vbl_bit_array_3d(unsigned int sizex, unsigned int sizey, unsigned int sizez)
+  vbl_bit_array_3d(vxl::indexsize_t sizex, vxl::indexsize_t sizey, vxl::indexsize_t sizez)
   { construct(sizex, sizey, sizez); }
 
   //: Create a bitarray of the specified size, with initialisation of elements
-  vbl_bit_array_3d(unsigned int sizex, unsigned int sizey, unsigned int sizez, bool v)
+  vbl_bit_array_3d(vxl::indexsize_t sizex, vxl::indexsize_t sizey, vxl::indexsize_t sizez, bool v)
   { construct(sizex, sizey, sizez); fill(v); }
   //: Create a bitarray of the specified size, with initialisation of elements
-  vbl_bit_array_3d(unsigned int sizex, unsigned int sizey, unsigned int sizez, bool v[]);
+  vbl_bit_array_3d(vxl::indexsize_t sizex, vxl::indexsize_t sizey, vxl::indexsize_t sizez, bool v[]);
   //: Copy constructor
   vbl_bit_array_3d(vbl_bit_array_3d const &);
   // Destructor
@@ -55,7 +55,7 @@ class vbl_bit_array_3d
   void fill(bool v);
 
   //: Delete contents and resize to m rows x n cols x p layers
-  void resize(unsigned int m, unsigned int n, unsigned int p) { destruct(); construct(m,n,p); }
+  void resize(vxl::indexsize_t m, vxl::indexsize_t n, vxl::indexsize_t p) { destruct(); construct(m,n,p); }
 
   //: make as if default-constructed.
   void clear() { if (data_) { destruct(); row1_count_=row2_count_=row3_count_=0; } }
@@ -93,7 +93,7 @@ class vbl_bit_array_3d
   // Helpers-------------------------------------------------------------------
 
   void destruct() { delete[] data_; data_=VXL_NULLPTR; }
-  void construct(unsigned int m, unsigned int n, unsigned int p);
+  void construct(vxl::indexsize_t m, vxl::indexsize_t n, vxl::indexsize_t p);
 
   void index(unsigned int x, unsigned int y, unsigned int z,
              unsigned long &byteindex, unsigned char &bitindex) const;

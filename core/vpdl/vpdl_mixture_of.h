@@ -39,7 +39,7 @@ class vpdl_mixture_of
   typedef dist_t component_type;
 
   //: define the fixed dimension (normally specified by template parameter n)
-  static const unsigned int n = vpdt_field_traits<field_type>::dimension;
+  static const vxl::indexsize_t n = vpdt_field_traits<field_type>::dimension;
   //: the data type to represent a point in the field
   typedef typename dist_t::field_type F;
   //: define the scalar type (normally specified by template parameter T)

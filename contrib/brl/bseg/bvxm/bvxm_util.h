@@ -78,7 +78,7 @@ class bvxm_util
                                          vgl_h_matrix_2d<double> invH,
                                          bvxm_voxel_slab<T> &slab_out);
 
-  template <class T, unsigned N>
+  template <class T,  vxl::indexsize_t N>
   static bool img_to_slab(vil_image_view_base_sptr image,
                           bvxm_voxel_slab<vnl_vector_fixed<T,N> > &slab);
 
@@ -86,7 +86,7 @@ class bvxm_util
   static bool img_to_slab(vil_image_view_base_sptr image,
                           bvxm_voxel_slab<T> &slab);
 
-  template <class T, unsigned N>
+  template <class T,  vxl::indexsize_t N>
   static bool slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab,
                           vil_image_view_base_sptr image);
 
@@ -116,7 +116,7 @@ class bvxm_util
   template <class T>
   static void write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,std::string filename);
 
-  template <class T, unsigned N>
+  template <class T,  vxl::indexsize_t N>
   static void write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,std::string filename);
 
   template <class T>
@@ -302,7 +302,7 @@ void bvxm_util::warp_slab_nearest_neighbor(bvxm_voxel_slab<T> const& slab_in,
 
 //: img_to_slab for a multi-band (eg color) image.
 //  if input image is a float image, assumes that it is already scaled to [0,1] range
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_slab<vnl_vector_fixed<T,N> > &slab)
 {
   // check slab is preallocated to correct size
@@ -528,7 +528,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
   return true;
 }
 
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 bool bvxm_util::slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab, vil_image_view_base_sptr image)
 {
   // check image is preallocated to correct size
@@ -901,7 +901,7 @@ void bvxm_util::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,std::strin
 }
 
 // used for debugging
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 void bvxm_util::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,std::string filename)
 {
   vil_image_view<T> img(slab_in.nx(),slab_in.ny(),N);

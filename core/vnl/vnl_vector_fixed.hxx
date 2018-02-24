@@ -13,7 +13,7 @@
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>  // for vnl_math::isfinite
 
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 vnl_vector_fixed<T,n>
 vnl_vector_fixed<T,n>::apply( T (*f)(T) )
 {
@@ -23,7 +23,7 @@ vnl_vector_fixed<T,n>::apply( T (*f)(T) )
   return ret;
 }
 
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 vnl_vector_fixed<T,n>
 vnl_vector_fixed<T,n>::apply( T (*f)(const T&) )
 {
@@ -33,7 +33,7 @@ vnl_vector_fixed<T,n>::apply( T (*f)(const T&) )
   return ret;
 }
 
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 vnl_vector_fixed<T,n>&
 vnl_vector_fixed<T,n>::update( const vnl_vector<T>& v, unsigned int start )
 {
@@ -44,7 +44,7 @@ vnl_vector_fixed<T,n>::update( const vnl_vector<T>& v, unsigned int start )
   return *this;
 }
 
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 vnl_vector_fixed<T,n>&
 vnl_vector_fixed<T,n>::flip()
 {
@@ -53,7 +53,7 @@ vnl_vector_fixed<T,n>::flip()
   return *this;
 }
 
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 bool
 vnl_vector_fixed<T,n>::is_finite() const
 {
@@ -65,7 +65,7 @@ vnl_vector_fixed<T,n>::is_finite() const
 }
 
 
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 bool
 vnl_vector_fixed<T,n>::is_zero() const
 {
@@ -78,7 +78,7 @@ vnl_vector_fixed<T,n>::is_zero() const
 }
 
 
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 bool
 vnl_vector_fixed<T,n>::read_ascii(std::istream& s)
 {
@@ -88,7 +88,7 @@ vnl_vector_fixed<T,n>::read_ascii(std::istream& s)
   return s.good() || s.eof();
 }
 
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 void
 vnl_vector_fixed<T,n>::assert_finite_internal() const
 {
@@ -99,7 +99,7 @@ vnl_vector_fixed<T,n>::assert_finite_internal() const
   std::abort();
 }
 
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 void
 vnl_vector_fixed<T,n>::print(std::ostream& s) const
 {

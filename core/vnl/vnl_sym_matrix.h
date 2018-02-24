@@ -76,19 +76,19 @@ class VNL_TEMPLATE_EXPORT vnl_sym_matrix
 
   //: Access a half-row of data.
   // Only the first i+1 values from this pointer are valid.
-  inline const T* operator [] (unsigned i) const {
+  inline const T* operator [] (vxl::operatorbrctsize_t i) const {
     assert (i < nn_);
     return index_[i];
   }
 
   //: fast access, however i >= j
-  inline T fast (unsigned i, unsigned j) const {
+  inline T fast (vxl::indexsize_t i, vxl::indexsize_t j) const {
     assert (i >= j);
     return index_[i][j];
   }
 
   //: fast access, however i >= j
-  inline T& fast (unsigned i, unsigned j) {
+  inline T& fast (vxl::indexsize_t i, vxl::indexsize_t j) {
     assert (i >= j);
     return index_[i][j];
   }
@@ -120,7 +120,7 @@ class VNL_TEMPLATE_EXPORT vnl_sym_matrix
   inline unsigned int columns() const { return nn_; }
 
   //: set element
-  inline void put (unsigned r, unsigned c, T const& v)
+  inline void put (vxl::indexsize_t r, vxl::indexsize_t c, T const& v)
   {
 #if VNL_CONFIG_CHECK_BOUNDS
     if (r >= this->nn_)                // If invalid size specified
@@ -132,7 +132,7 @@ class VNL_TEMPLATE_EXPORT vnl_sym_matrix
   }
 
   //: get element
-  inline T get (unsigned r, unsigned c) const
+  inline T get (vxl::indexsize_t r, vxl::indexsize_t c) const
   {
 #if VNL_CONFIG_CHECK_BOUNDS
     if (r >= this->nn_)                // If invalid size specified

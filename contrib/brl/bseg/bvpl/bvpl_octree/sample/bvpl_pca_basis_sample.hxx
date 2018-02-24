@@ -11,7 +11,7 @@
 #include <vsl/vsl_binary_io.h>
 
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 std::ostream& operator << (std::ostream& os, const bvpl_pca_basis_sample<dim>& sample)
 {
   os << "PCA projection = " << sample.pca_projections_ << std::endl;
@@ -19,14 +19,14 @@ std::ostream& operator << (std::ostream& os, const bvpl_pca_basis_sample<dim>& s
 }
 
 //I/O
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const &sample)
 {
   vsl_b_write(os, sample.version_no());
   vsl_b_write(os, sample.pca_projections_);
 }
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const * &sample)
 {
   if (sample) {
@@ -34,7 +34,7 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const * &sample)
   }
 }
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> &sample)
 {
   if (!is) return;
@@ -54,7 +54,7 @@ void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> &sample)
   }
 }
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> *&sample)
 {
   vsl_b_read(is, *sample);

@@ -20,7 +20,7 @@ void vsl_b_read_vec_vec_bool_old(vsl_b_istream& is, std::vector<std::vector<bool
 {
   if (!is) return;
 
-  unsigned int n, m;
+  vxl::indexsize_t n, m;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)

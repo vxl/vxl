@@ -18,6 +18,10 @@
 #include <vnl/vnl_float_2x2.h>
 #include <vnl/vnl_int_2x2.h>
 
+
+#include <vnl/vnl_rational.h>
+#include <vnl/vnl_rational_traits.h>
+
 #include <testlib/testlib_test.h>
 
 #undef printf // to work around a bug in libintl.h
@@ -35,7 +39,7 @@ int malloc_count = 0;
 #endif
 
 // This function is used in testing later.
-template< typename T, unsigned int n >
+template< typename T, vxl::indexsize_t n >
 T sum_vector(const vnl_vector_fixed<T,n> &v) { return v.sum(); }
 
 static
@@ -493,6 +497,121 @@ void test_double()
   TEST("normalize_columns()", d8[0][0]==0 && d8[1][0]==1, true);
 }
 
+static
+void test_rational()
+{
+  typedef vnl_matrix_fixed<vnl_rational,2,2> vnl_rational_2x2;
+  std::cout << "************************************\n"
+           << "Testing vnl_matrix_fixed<rational,x,x>\n"
+           << "************************************" << std::endl;
+
+  vnl_matrix_fixed<vnl_rational,2,2> d0;
+  TEST("vnl_matrix_fixed<vnl_rational,2,2> d0", (d0.rows()==2 && d0.columns()==2), true);
+  vnl_matrix_fixed<vnl_rational,3,4> d1;
+  TEST("vnl_matrix_fixed<vnl_rational,3,4> d1", (d1.rows()==3 && d1.columns()==4), true);
+  vnl_rational_2x2 d2(2.0);
+  vnl_rational is1(1.0);
+  vnl_rational is2(2.0);
+  vnl_rational is3(3.0);
+  vnl_rational is4(4.0);
+  vnl_rational is5(5.0);
+  vnl_rational is10(10.0);
+  vnl_rational is15(15.0);
+
+  TEST("vnl_rational_2x2 d2(2.0)",
+       (d2.get(0,0)==is2 && d2.get(0,1)==is2 && d2.get(1,0)==is2 && d2.get(1,1)==is2), true);
+  TEST("d0=2.0", (d0=2.0,
+                  (d0.get(0,0)==is2 && d0.get(0,1)==is2 && d0.get(1,0)==is2 && d0.get(1,1)==is2)), true);
+  TEST("d0 == d2", (d0 == d2), true);
+  TEST("(d0 == d2)", (d0==d2), true);
+  TEST("d2.put(1,1,3.0)", (d2.put(1,1,is3),d2.get(1,1)), is3);
+  TEST("d2.get(1,1)", d2.get(1,1), is3);
+  vnl_rational v2_data[] = {2.0,3.0};
+  TEST("d2.get_diagonal()", d2.get_diagonal(), vnl_vector<vnl_rational>(2,2,v2_data));
+  TEST("d0 == d2", (d0 == d2), false);
+  TEST("d0 != d2", (d0 != d2), true);
+  TEST("d1.fill(3.0)",
+       (d1.fill(3.0),
+        (d1.get(0,0)==is3 && d1.get(1,1)==is3 && d1.get(2,2)==is3 && d1.get(2,3)==is3)), true);
+  TEST("d2.fill(3.0)",
+       (d2.fill(2.0),
+        (d2.get(0,0)==is2 && d2.get(0,1)==is2 && d2.get(1,0)==is2 && d2.get(1,1)==is2)), true);
+  TEST("d0=d2", (d0=d2,  (d0==d2)), true);
+
+  // test additions and subtractions
+  TEST("d0=d2+3.0",
+       ((d0=d2+is3),
+        (d0.get(0,0)==is5 && d0.get(0,1)==is5 && d0.get(1,0)==is5 && d0.get(1,1)==is5)), true);
+  TEST("d0+=(-3.0)",
+       (d0+=(-is3),
+        (d0.get(0,0)==is2 && d0.get(0,1)==is2 && d0.get(1,0)==is2 && d0.get(1,1)==is2)), true);
+  vnl_rational_2x2 d5;
+  TEST("d5=d0+d2",
+       ((d5=d0+d2),
+        (d5.get(0,0)==is4 && d5.get(0,1)==is4 && d5.get(1,0)==is4 && d5.get(1,1)==is4)), true);
+  TEST("d0+=d2",
+       ((d0+=d2),
+        (d0.get(0,0)==is4 && d0.get(0,1)==is4 && d0.get(1,0)==is4 && d0.get(1,1)==is4)), true);
+
+  // test multiplications and divisions
+  d2(0,0) = 1; d2(0,1) = 2; d2(1,0) = 3;
+  TEST("d0=d2*5.0",
+       ((d0=d2*is5),
+        (d0.get(0,0)==is5 && d0.get(0,1)==is10 && d0.get(1,0)==is15)), true);
+  TEST("d0=5.0*d2",
+       ((d0=is5*d2),
+        (d0.get(0,0)==is5 && d0.get(0,1)==is10 && d0.get(1,0)==is15)), true);
+  TEST("d2*=5.0",((d2*=is5), (d2== d0)), true);
+  TEST("d0=d2/5.0",
+       ((d0=d2/is5),
+        (d0.get(0,0)==is1 && d0.get(0,1)==is2 && d0.get(1,0)==is3)), true);
+  TEST("d2/=5.0", ((d2/=is5), (d2==d0)), true);
+  vnl_rational d6values [] = {1.0,2.0,
+                        3.0,4.0};
+  vnl_rational_2x2 d6(d6values);
+  TEST("vnl_rational_2x2 d6({1.0,2.0,3.0,4.0})", d6.get(1,1), is4);
+  vnl_rational d7values [] = {5.0,6.0,
+                        7.0,8.0};
+  vnl_rational_2x2 d7(d7values);
+  TEST("vnl_rational_2x2 d7({5.0,6.0,7.0,8.0})", d7.get(1,1), vnl_rational(8.0));
+  vnl_rational is19(19.0);
+  vnl_rational is22(22.0);
+  vnl_rational is43(43.0);
+  vnl_rational is50(50.0);
+  TEST("d5=d6*d7", ((d5=d6*d7),
+                    (d5.get(0,0)==is19 && d5.get(0,1)==is22 && d5.get(1,0)==is43 && d5.get(1,1)==is50)), true);
+  TEST("d6*=d7", ((d6*=d7),
+                  (d6.get(0,0)==is19 && d6.get(0,1)==is22 && d6.get(1,0)==is43 && d6.get(1,1)==is50)), true);
+
+  // apply sqrt to every element
+  vnl_rational d8values [] = {0.0, 1.0, 9.0, 16.0};
+  vnl_rational_2x2 d8(d8values);
+  // no sqrt for rationals d8 = d8.apply(std::sqrt);
+  // no sqrt for rationals TEST("apply(sqrt)", d8[0][0]==is0 && d8[0][1]==is1 && d8[1][0]==is3 && d8[1][1]==is4, true);
+
+  {
+  vnl_matrix_fixed<vnl_rational,4,20> m(1.);
+  vnl_vector_fixed<vnl_rational,4> vr = m.apply_rowwise(sum_vector);
+  vnl_rational is20(20.0);
+  for (unsigned int i = 0; i < vr.size(); ++i)
+    TEST("vr.apply_rowwise(sum_vector)", vr.get(i), is20);
+  vnl_vector_fixed<vnl_rational,20> vc = m.apply_columnwise(sum_vector);
+  for (unsigned int i = 0; i < vc.size(); ++i)
+    TEST("vc.apply_columnwise(sum_vector)", vc.get(i), is4);
+  }
+
+#if 0
+  vnl_rational is0(0);
+  // normalizations
+  d8.normalize_rows();
+  TEST("normalize_rows()", d8[0][0]==is0 && d8[0][1]==is1, true);
+  TEST_NEAR("normalize_rows()", d8[1][0], 0.6, 1e-12);
+  TEST_NEAR("normalize_rows()", d8[1][1], 0.8, 1e-12);
+  d8.normalize_columns();
+  TEST("normalize_columns()", d8[0][0]==is0 && d8[1][0]==is1, true);
+#endif
+}
+
 namespace {
 
 template<class T>
@@ -571,6 +690,8 @@ void test_matrix_fixed()
   test_int();
   test_float();
   test_double();
+
+  test_rational();
 
   test_extract( (double*)VXL_NULLPTR );
 }

@@ -52,7 +52,7 @@ void save_grid()
 }
 
 
-template<class T, unsigned N>
+template<class T,  vxl::indexsize_t N>
 void save_grid()
 {
   std::string dir = "test_grid_to_stack";

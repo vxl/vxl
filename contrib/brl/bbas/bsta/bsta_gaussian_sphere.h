@@ -20,7 +20,7 @@
 
 //: A (hyper-)spherical Gaussian distribution
 // Thus, the covariance matrix is the identity times a scalar variance
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_gaussian_sphere : public bsta_gaussian<T,n>
 {
  public:
@@ -88,7 +88,7 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
   void compute_det();
 };
 
-template <class T , unsigned n>
+template <class T ,  vxl::indexsize_t n>
 inline std::ostream& operator<< (std::ostream& os,
                                 bsta_gaussian_sphere<T, n> const& g)
 {

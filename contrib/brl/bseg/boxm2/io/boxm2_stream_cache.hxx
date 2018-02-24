@@ -42,7 +42,7 @@ int boxm2_stream_cache::exists(boxm2_block_id bid)
   int files_exist = 0;
   struct stat buffer;
 
-  for (unsigned i = 0; i < identifier_list_.size(); i++) 
+  for (unsigned i = 0; i < identifier_list_.size(); i++)
   {
     std::string key = boxm2_data_traits<T>::prefix(identifier_list_[i]);
     std::string filename = scene_->data_path() + key + "_" + bid.to_string() + ".bin";
@@ -98,7 +98,7 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_nex
   }
 
   if (streams[0]->index_ < 0) {  // read the first chunks into the bufs
-    for (unsigned i = 0; i < streams.size(); i++) 
+    for (unsigned i = 0; i < streams.size(); i++)
     {
       streams[i]->index_ = 0;
 
@@ -109,7 +109,7 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_nex
   }
 
   //: read the next cell
-  for (unsigned i = 0; i < streams.size(); i++) 
+  for (unsigned i = 0; i < streams.size(); i++)
   {
     if(!streams[i]->ifs_.is_open()) continue; //Skip streams that failed to open
 

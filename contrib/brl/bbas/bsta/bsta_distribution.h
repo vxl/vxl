@@ -15,7 +15,7 @@
 #include <vnl/vnl_vector_fixed.h>
 
 //: A base class for probability distributions
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_distribution
 {
   public:

@@ -19,6 +19,7 @@
 #define LSQR_lsqr_h
 
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 /** \class lsqrBase
  *
@@ -92,7 +93,7 @@ public:
    * The size of the vector x is n.
    * The size of the vector y is m.
    */
-  virtual void Aprod1(unsigned int m, unsigned int n, const double * x, double * y ) const = 0;
+  virtual void Aprod1(vxl::indexsize_t m, vxl::indexsize_t n, const double * x, double * y ) const = 0;
 
   /**
    * computes x = x + A'*y without altering y,
@@ -100,7 +101,7 @@ public:
    * The size of the vector x is n.
    * The size of the vector y is m.
    */
-  virtual void Aprod2(unsigned int m, unsigned int n, double * x, const double * y ) const = 0;
+  virtual void Aprod2(vxl::indexsize_t m, vxl::indexsize_t n, double * x, const double * y ) const = 0;
 
   /**
    * returns sqrt( a**2 + b**2 )
@@ -112,12 +113,12 @@ public:
    * returns sqrt( x' * x )
    * with precautions to avoid overflow.
    */
-  double Dnrm2( unsigned int n, const double *x ) const;
+  double Dnrm2( vxl::indexsize_t n, const double *x ) const;
 
   /**
    * Scale a vector by multiplying with a constant
    */
-  void Scale( unsigned int n, double factor, double *x ) const;
+  void Scale( vxl::indexsize_t n, double factor, double *x ) const;
 
   /**  A logical variable to say if the array se(*) of standard error estimates
    * should be computed.  If m > n  or  damp > 0,  the system is overdetermined
@@ -295,7 +296,7 @@ public:
    *    m is the size of the input  vector b
    *    n is the size of the output vector x
    */
-  void Solve( unsigned int m, unsigned int n, const double * b, double * x );
+  void Solve( vxl::indexsize_t m, vxl::indexsize_t n, const double * b, double * x );
 
 private:
 

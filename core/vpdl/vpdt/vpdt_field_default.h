@@ -26,7 +26,7 @@
 
 
 //: Generate the default field type for scalar type T and dimension n
-template <class T, unsigned int n=0>
+template <class T, vxl::indexsize_t n=0>
 struct vpdt_field_default
 {
   //: The default field type

@@ -98,13 +98,13 @@
 #endif
 
 //: Custom memory allocation function to force 16 byte alignment of data
-VNL_SSE_FORCE_INLINE void* vnl_sse_alloc(std::size_t n, unsigned size)
+VNL_SSE_FORCE_INLINE void* vnl_sse_alloc(vxl::size_t n, vxl::indexsize_t size)
 {
   return VNL_SSE_ALLOC(n,size,16);
 }
 
 //: Custom memory deallocation function to free 16 byte aligned of data
-VNL_SSE_FORCE_INLINE void vnl_sse_dealloc(void* mem, std::size_t n, unsigned size)
+VNL_SSE_FORCE_INLINE void vnl_sse_dealloc(void* mem, vxl::size_t n, vxl::indexsize_t size)
 {
   // Variables n and size are not used in all versions of the VNL_SSE_FREE macro.
   // Cast to void here to avoid unused variable warnings.
@@ -154,21 +154,21 @@ template <class T>
 class VNL_EXPORT vnl_sse
 {
  public:
-  static VNL_SSE_FORCE_INLINE void element_product(const T* x, const T* y, T* r, unsigned n)
+  static VNL_SSE_FORCE_INLINE void element_product(const T* x, const T* y, T* r, vxl::indexsize_t n)
   {
-    for (unsigned i = 0; i < n; ++i)
+    for (vxl::indexsize_t i = 0; i < n; ++i)
       r[i] = x[i] * y[i];
   }
 
-  static VNL_SSE_FORCE_INLINE T dot_product(const T* x, const T* y, unsigned n)
+  static VNL_SSE_FORCE_INLINE T dot_product(const T* x, const T* y, vxl::indexsize_t n)
   {
     T sum(0);
-    for (unsigned i = 0; i < n; ++i)
+    for (vxl::indexsize_t i = 0; i < n; ++i)
       sum += x[i] * y[i];
     return sum;
   }
 
-  static VNL_SSE_FORCE_INLINE T euclid_dist_sq(const T* x, const T* y, unsigned n)
+  static VNL_SSE_FORCE_INLINE T euclid_dist_sq(const T* x, const T* y, vxl::indexsize_t n)
   {
     // IMS: Unable to optimise this any further for MSVC compiler
     T sum(0);
@@ -183,7 +183,7 @@ class VNL_EXPORT vnl_sse
     return sum;
   }
 
-  static VNL_SSE_FORCE_INLINE void vector_x_matrix(const T* v, const T* m, T* r, unsigned rows, unsigned cols)
+  static VNL_SSE_FORCE_INLINE void vector_x_matrix(const T* v, const T* m, T* r, vxl::indexsize_t rows, vxl::indexsize_t cols)
   {
     for (unsigned int j=0; j<cols; ++j) {
       T som(0);
@@ -193,25 +193,25 @@ class VNL_EXPORT vnl_sse
     }
   }
 
-  static VNL_SSE_FORCE_INLINE void matrix_x_vector(const T* m, const T* v, T* r, unsigned rows, unsigned cols)
+  static VNL_SSE_FORCE_INLINE void matrix_x_vector(const T* m, const T* v, T* r, vxl::indexsize_t rows, vxl::indexsize_t cols)
   {
-    for (unsigned int i=0; i<rows; ++i) {
+    for (vxl::indexsize_t i=0; i<rows; ++i) {
       T som(0);
-      for (unsigned int j=0; j<cols; ++j)
+      for (vxl::indexsize_t j=0; j<cols; ++j)
         som += (m+i*cols)[j] * v[j];
       r[i] = som;
     }
   }
 
-  static VNL_SSE_FORCE_INLINE T sum(const T* v, unsigned n)
+  static VNL_SSE_FORCE_INLINE T sum(const T* v, vxl::indexsize_t n)
   {
     T tot(0);
-    for (unsigned i = 0; i < n; ++i)
+    for (vxl::indexsize_t i = 0; i < n; ++i)
       tot += *v++;
     return tot;
   }
 
-  static VNL_SSE_FORCE_INLINE T max(const T* v, unsigned n)
+  static VNL_SSE_FORCE_INLINE T max(const T* v, vxl::indexsize_t n)
   {
     if (n==0) return T(0); // the maximum of an empty set is undefined
     T tmp = *v;
@@ -221,7 +221,7 @@ class VNL_EXPORT vnl_sse
     return tmp;
   }
 
-  static VNL_SSE_FORCE_INLINE T min(const T* v, unsigned n)
+  static VNL_SSE_FORCE_INLINE T min(const T* v, vxl::indexsize_t n)
   {
     if (n==0) return T(0); // the minimum of an empty set is undefined
     T tmp = *v;
@@ -231,7 +231,7 @@ class VNL_EXPORT vnl_sse
     return tmp;
   }
 
-  static VNL_SSE_FORCE_INLINE unsigned arg_max(const T* v, unsigned n)
+  static VNL_SSE_FORCE_INLINE vxl::argminmaxreturnsize_t arg_max(const T* v, vxl::indexsize_t n)
   {
     if (n==0) return unsigned(-1); // the maximum of an empty set is undefined
     T tmp = *v;
@@ -242,12 +242,12 @@ class VNL_EXPORT vnl_sse
     return idx;
   }
 
-  static VNL_SSE_FORCE_INLINE unsigned arg_min(const T* v, unsigned n)
+  static VNL_SSE_FORCE_INLINE vxl::argminmaxreturnsize_t arg_min(const T* v, vxl::indexsize_t n)
   {
     if (n==0) return unsigned(-1); // the minimum of an empty set is undefined
     T tmp = *v;
-    unsigned idx = 0;
-    for (unsigned i=1; i<n; ++i)
+    vxl::indexsize_t idx = 0;
+    for (vxl::indexsize_t i=1; i<n; ++i)
       if (*++v < tmp)
         tmp = *v, idx = i;
     return idx;
@@ -510,7 +510,7 @@ class VNL_EXPORT vnl_sse<double>
     return ret;
   }
 
-  static VNL_SSE_FORCE_INLINE unsigned arg_max(const double* x, unsigned n)
+  static VNL_SSE_FORCE_INLINE vxl::argminmaxreturnsize_t arg_max(const double* x, unsigned n)
   {
     if (n == 1)
       return 0;
@@ -556,11 +556,11 @@ class VNL_EXPORT vnl_sse<double>
     is_max.m128d = _mm_cmpeq_pd(is_max.m128d, max);
     arg_max = _mm_and_si128(is_max.m128i, arg_max);
     arg_max = VNL_MM_MAX_EPI32(arg_max, _mm_unpackhi_epi32(arg_max, _mm_set1_epi32(0)));
-    unsigned ret = _mm_cvtsi128_si32(arg_max);
+    vxl::argminmaxreturnsize_t ret = _mm_cvtsi128_si32(arg_max);
     return ret;
   }
 
-  static VNL_SSE_FORCE_INLINE unsigned arg_min(const double* x, unsigned n)
+  static VNL_SSE_FORCE_INLINE vxl::argminmaxreturnsize_t arg_min(const double* x, unsigned n)
   {
     if (n == 1)
       return 0;
@@ -606,7 +606,7 @@ class VNL_EXPORT vnl_sse<double>
     is_min.m128d = _mm_cmpeq_pd(is_min.m128d, min);
     arg_min = _mm_and_si128(is_min.m128i, arg_min);
     arg_min = VNL_MM_MAX_EPI32(arg_min, _mm_unpackhi_epi32(arg_min, _mm_set1_epi32(0)));
-    unsigned ret = _mm_cvtsi128_si32(arg_min);
+    vxl::argminmaxreturnsize_t ret = _mm_cvtsi128_si32(arg_min);
     return ret;
   }
 
@@ -989,7 +989,7 @@ class VNL_EXPORT vnl_sse<float>
     return ret;
   }
 
-  static VNL_SSE_FORCE_INLINE unsigned arg_max(const float* x, unsigned n)
+  static VNL_SSE_FORCE_INLINE vxl::argminmaxreturnsize_t arg_max(const float* x, unsigned n)
   {
     __m128  max = _mm_set1_ps(- FLT_MAX);
     __m128  input;
@@ -1039,11 +1039,11 @@ class VNL_EXPORT vnl_sse<float>
     arg_max = _mm_and_si128(is_max.m128i, arg_max);
     arg_max = VNL_MM_MAX_EPI32(arg_max, _mm_unpackhi_epi32(arg_max, _mm_set1_epi32(0)));
     arg_max = VNL_MM_MAX_EPI32(arg_max, _mm_srli_si128(arg_max, 4));
-    unsigned ret = _mm_cvtsi128_si32(arg_max);
+    vxl::argminmaxreturnsize_t ret = _mm_cvtsi128_si32(arg_max);
     return ret;
   }
 
-  static VNL_SSE_FORCE_INLINE unsigned arg_min(const float* x, unsigned n)
+  static VNL_SSE_FORCE_INLINE vxl::argminmaxreturnsize_t arg_min(const float* x, unsigned n)
   {
     __m128  min = _mm_set1_ps(FLT_MAX);
     __m128  input;
@@ -1093,7 +1093,7 @@ class VNL_EXPORT vnl_sse<float>
     arg_min = _mm_and_si128(is_min.m128i, arg_min);
     arg_min = VNL_MM_MAX_EPI32(arg_min, _mm_unpackhi_epi32(arg_min, _mm_set1_epi32(0)));
     arg_min = VNL_MM_MAX_EPI32(arg_min, _mm_srli_si128(arg_min, 4));
-    unsigned ret = _mm_cvtsi128_si32(arg_min);
+    vxl::argminmaxreturnsize_t ret = _mm_cvtsi128_si32(arg_min);
     return ret;
   }
 };

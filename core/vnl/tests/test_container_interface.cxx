@@ -73,7 +73,7 @@ void test_common_interface()
   m.set_column(0, 0);
   m.set_column(0, v);
   m.set_row(0, data);
-  
+
   m.set_row(0, 0);
   m.set_row(0, v);
   m.extract(2,2);
@@ -88,8 +88,8 @@ void test_common_interface()
   ///////////////////////////////////////////////
   {
     typename TContainer::element_type data[4] = {1, 2, 3, 4};
-    unsigned int indices[2] = {1, 0};
-    vnl_vector<unsigned int> i(indices, 2);
+    vxl::indexsize_t indices[2] = {1, 0};
+    vnl_vector<vxl::indexsize_t> i(indices, 2);
     TContainer matrix(2, 2);
     matrix.copy_in(data);
 #if ! defined(_MSC_VER)  //This code is failing on VS15 in Release mode for vnl_matrix_fixed
@@ -100,7 +100,7 @@ void test_common_interface()
     matrix_ud.flipud();
     TEST("get_rows", matrix_lr.is_equal(matrix.get_columns(i), 10e-6), true);
     TEST("get_columns", matrix_ud.is_equal(matrix.get_rows(i), 10e-6), true);
-#endif  
+#endif
   }
   m.get_n_rows(0,1);
   m.get_n_columns(0,1);

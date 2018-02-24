@@ -27,7 +27,7 @@ class bvxm_slab_to_image
 {
  public:
   //:Converts slab to a vil_image. Datatype is a vnl_vector_fixed
-  template<class T, unsigned N>
+  template<class T,  vxl::indexsize_t N>
   static bool slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab, vil_image_view_base_sptr image);
 
   //Converts slab to a vil_image. Datatype is a scalar
@@ -39,13 +39,13 @@ class bvxm_slab_to_image
   static void write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,std::string filename);
 
   //: Simple function to save a slab into an image. Used for debugging where the type of output image is not so important
-  template<class T, unsigned N>
+  template<class T,  vxl::indexsize_t N>
   static void write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,std::string filename);
 };
 
 
 //:Saves slab to a vil_image. Datatype is a vnl_vector_fixed
-template<class T, unsigned N>
+template<class T,  vxl::indexsize_t N>
 bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab, vil_image_view_base_sptr image)
 {
   // check image is preallocated to correct size
@@ -278,7 +278,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<T> const& slab, vil_image
 }
 
 // used for debugging
-template<class T, unsigned N>
+template<class T,  vxl::indexsize_t N>
 void bvxm_slab_to_image::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,std::string filename)
 {
   vil_image_view<T> img(slab_in.nx(),slab_in.ny(),N);

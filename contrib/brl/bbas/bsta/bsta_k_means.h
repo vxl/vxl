@@ -40,7 +40,7 @@ unsigned bsta_k_means(std::vector<vnl_vector<T> > &data, unsigned& k,
                 std::vector<vnl_vector<T> >* cluster_centres,
                 std::vector<unsigned> * partition =0 );
 
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
   unsigned bsta_k_means(std::vector<vnl_vector_fixed<T, n> > &data, unsigned& k,
                std::vector<vnl_vector_fixed<T, n> >* cluster_centres,
                std::vector<unsigned> * partition =0 );
@@ -71,7 +71,7 @@ unsigned bsta_k_means_weighted(std::vector<vnl_vector<T> > &data,
                                std::vector<vnl_vector<T> >* cluster_centres,
                                std::vector<unsigned> * partition =0);
 
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
   unsigned bsta_k_means_weighted(std::vector<vnl_vector_fixed<T,n> > &data,
                                  unsigned& k, const std::vector<T>& wts,
                                  std::vector<vnl_vector_fixed<T,n> >* cluster_centres, std::vector<unsigned> * partition =0);

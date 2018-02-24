@@ -18,7 +18,7 @@
 #include <vcl_compiler.h>
 
 //: Binary save bsta_mixture_fixed to stream.
-template <class comp_, unsigned s>
+template <class comp_,  vxl::indexsize_t s>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_mixture_fixed<comp_,s>& m)
 {
@@ -31,7 +31,7 @@ vsl_b_write(vsl_b_ostream &os, const bsta_mixture_fixed<comp_,s>& m)
 }
 
 //: Binary load bsta_mixture_fixed from stream.
-template <class comp_, unsigned s>
+template <class comp_,  vxl::indexsize_t s>
 void
 vsl_b_read(vsl_b_istream &is, bsta_mixture_fixed<comp_,s>& m)
 {
@@ -50,7 +50,7 @@ vsl_b_read(vsl_b_istream &is, bsta_mixture_fixed<comp_,s>& m)
 }
 
 //: Print summary
-template <class comp_, unsigned s>
+template <class comp_,  vxl::indexsize_t s>
 void
 vsl_print_summary(std::ostream &os, const bsta_mixture_fixed<comp_,s>& m)
 {

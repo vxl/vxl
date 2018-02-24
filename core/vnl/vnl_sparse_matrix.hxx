@@ -31,7 +31,7 @@ vnl_sparse_matrix<T>::vnl_sparse_matrix()
 //------------------------------------------------------------
 //: Construct an empty m*n matrix.  There are m rows and n columns.
 template <class T>
-vnl_sparse_matrix<T>::vnl_sparse_matrix(unsigned int m, unsigned int n)
+vnl_sparse_matrix<T>::vnl_sparse_matrix(vxl::indexsize_t m, vxl::indexsize_t n)
   : elements(m), rs_(m), cs_(n)
 {
 }
@@ -67,8 +67,8 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
   assert(rhs.rows() == columns());
   assert(this != &result); // make sure not to overwrite *this
   assert(&rhs != &result); // make sure not to overwrite rhs
-  unsigned int result_rows = rows();
-  unsigned int result_cols = rhs.columns();
+  vxl::indexsize_t result_rows = rows();
+  vxl::indexsize_t result_cols = rhs.columns();
 
   // Early return: empty result matrix
   if (result_rows <= 0 || result_cols <= 0) return;
@@ -122,7 +122,7 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
            ++rhs_col_iter)
       {
         const vnl_sparse_matrix_pair<T>& rhs_entry = *rhs_col_iter;
-        unsigned int const dest_col = rhs_entry.first;
+        vxl::indexsize_t const dest_col = rhs_entry.first;
 
         // Calculate the product.
         T prod = entry.second * rhs_entry.second;
@@ -152,7 +152,7 @@ void vnl_sparse_matrix<T>::mult(vnl_sparse_matrix<T> const& rhs, vnl_sparse_matr
 //: Multiply this*p, a fortran order matrix.
 //  The matrix p has n rows and m columns, and is in fortran order, ie. columns first.
 template <class T>
-void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
+void vnl_sparse_matrix<T>::mult(vxl::indexsize_t prows, vxl::indexsize_t pcols,
                                 T const* p, T* q) const
 {
   assert(prows == columns());
@@ -208,7 +208,7 @@ void vnl_sparse_matrix<T>::mult(unsigned int prows, unsigned int pcols,
       //
 
       // Iterate over p's row.
-      for (unsigned int p_col_id = 0; p_col_id < pcols; p_col_id++) {
+      for (vxl::indexsize_t p_col_id = 0; p_col_id < pcols; p_col_id++) {
         // Get the correct position from p.
         T pval = p[col_id + p_col_id*prows];
 
@@ -315,7 +315,7 @@ void vnl_sparse_matrix<T>::add(const vnl_sparse_matrix<T>& rhs,
   result.cs_ = columns();
 
   // Now, iterate over non-zero rows of this.
-  unsigned int row_id = 0;
+  vxl::indexsize_t row_id = 0;
   for (typename std::vector<row>::const_iterator row_iter = elements.begin();
        row_iter != elements.end();
        ++row_iter, ++row_id)
@@ -368,7 +368,7 @@ void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
   result.cs_ = columns();
 
   // Now, iterate over non-zero rows of this.
-  unsigned int row_id = 0;
+  vxl::indexsize_t row_id = 0;
   for (typename std::vector<row>::const_iterator row_iter = elements.begin();
        row_iter != elements.end();
        ++row_iter, ++row_id)
@@ -407,7 +407,7 @@ void vnl_sparse_matrix<T>::subtract(const vnl_sparse_matrix<T>& rhs,
 //------------------------------------------------------------
 //: Get a reference to an entry in the matrix.
 template <class T>
-T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
+T& vnl_sparse_matrix<T>::operator()(vxl::operatorbrctsize_t r, vxl::operatorbrctsize_t c)
 {
   assert((r < rows()) && (c < columns()));
   row& rw = elements[r];
@@ -426,7 +426,7 @@ T& vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c)
 //------------------------------------------------------------
 //: Get the value of an entry in the matrix.
 template <class T>
-T vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c) const
+T vnl_sparse_matrix<T>::operator()(vxl::operatorbrctsize_t r, vxl::operatorbrctsize_t c) const
 {
   assert((r < rows()) && (c < columns()));
   row const& rw = elements[r];
@@ -443,7 +443,7 @@ T vnl_sparse_matrix<T>::operator()(unsigned int r, unsigned int c) const
 //: Get an entry in the matrix.
 //  This is the "const" version of operator().
 template <class T>
-T vnl_sparse_matrix<T>::get(unsigned int r, unsigned int c) const
+T vnl_sparse_matrix<T>::get(vxl::indexsize_t r, vxl::indexsize_t c) const
 {
   assert((r < rows()) && (c < columns()));
   row const& rw = elements[r];
@@ -459,7 +459,7 @@ T vnl_sparse_matrix<T>::get(unsigned int r, unsigned int c) const
 //------------------------------------------------------------
 //: Put (i.e., add or overwrite) an entry into the matrix.
 template <class T>
-void vnl_sparse_matrix<T>::put(unsigned int r, unsigned int c, T v)
+void vnl_sparse_matrix<T>::put(vxl::indexsize_t r, vxl::indexsize_t c, T v)
 {
   assert((r < rows()) && (c < columns()));
   row& rw = elements[r];
@@ -498,7 +498,7 @@ void vnl_sparse_matrix<T>::diag_AtA(vnl_vector<T> & result) const
 
 template <class T>
 vnl_sparse_matrix<T>&
-vnl_sparse_matrix<T>::set_row(unsigned int r,
+vnl_sparse_matrix<T>::set_row(vxl::indexsize_t r,
                               std::vector<int> const& colz,
                               std::vector<T> const& vals)
 {
@@ -507,7 +507,7 @@ vnl_sparse_matrix<T>::set_row(unsigned int r,
 
   row& rw = elements[r];
   if (rw.size() != colz.size()) rw = row(colz.size());
-  for (unsigned int i=0; i < colz.size(); ++i)
+  for (vxl::indexsize_t i=0; i < colz.size(); ++i)
     rw[i] = vnl_sparse_matrix_pair<T>(colz[i], vals[i]);
   typedef typename vnl_sparse_matrix_pair<T>::less less;
   std::sort(rw.begin(), rw.end(), less());
@@ -535,7 +535,7 @@ vnl_sparse_matrix<T>::vcat(vnl_sparse_matrix<T> const& A)
 //------------------------------------------------------------
 //: This is occasionally useful.  Sums a row of the matrix efficiently.
 template <class T>
-T vnl_sparse_matrix<T>::sum_row(unsigned int r)
+T vnl_sparse_matrix<T>::sum_row(vxl::indexsize_t r)
 {
   assert(r < rows());
   row & rw = elements[r];
@@ -548,7 +548,7 @@ T vnl_sparse_matrix<T>::sum_row(unsigned int r)
 
 template <class T>
 vnl_sparse_matrix<T>&
-vnl_sparse_matrix<T>::scale_row(unsigned int r, T scale)
+vnl_sparse_matrix<T>::scale_row(vxl::indexsize_t r, T scale)
 {
   assert(r < rows());
   row& rw = elements[r];
@@ -582,7 +582,7 @@ void vnl_sparse_matrix<T>::set_size( int r, int c)
 template <class T>
 void vnl_sparse_matrix<T>::resize( int r, int c)
 {
-  unsigned int oldCs = cs_;
+  vxl::indexsize_t oldCs = cs_;
 
   rs_ = r;
   cs_ = c;
@@ -590,7 +590,7 @@ void vnl_sparse_matrix<T>::resize( int r, int c)
 
   // If the array has fewer columns now, we also need to cut them out
   if (oldCs > cs_) {
-    for (unsigned int i = 0; i < elements.size(); ++i) {
+    for (vxl::indexsize_t i = 0; i < elements.size(); ++i) {
       row& rw = elements[i];
       typename row::iterator iter;
       for (iter = rw.begin(); iter != rw.end() && (*iter).first<cs_ ; ++iter)
@@ -691,7 +691,7 @@ bool vnl_sparse_matrix<T>::operator==(vnl_sparse_matrix<T> const& rhs) const
   }
 
   // Now, iterate over non-zero rows of this and of rhs.
-  unsigned int row_id = 0;
+  vxl::indexsize_t row_id = 0;
   for (typename std::vector<row>::const_iterator row_iter = elements.begin();
        row_iter != elements.end();
        ++row_iter, ++row_id)
@@ -732,7 +732,7 @@ vnl_sparse_matrix<T> vnl_sparse_matrix<T>::operator-() const
   vnl_sparse_matrix<T> result(rows(), columns());
 
   // Iterate over non-zero rows of this matrix.
-  unsigned int row_id = 0;
+  vxl::indexsize_t row_id = 0;
   for (typename std::vector<row>::const_iterator row_iter = elements.begin();
        row_iter != elements.end();
        ++row_iter, ++row_id)
@@ -912,7 +912,7 @@ template<class T>
 vnl_sparse_matrix<T>& vnl_sparse_matrix<T>::set_identity()
 {
   // Iterate through the matrix rows, and set one at a time:
-  unsigned int rownum = 0;
+  vxl::indexsize_t rownum = 0;
   for (typename std::vector<row>::iterator row_iter = elements.begin();
        row_iter != elements.end() && rownum < cols();
        ++row_iter, ++rownum)
@@ -929,7 +929,7 @@ template<class T>
 vnl_sparse_matrix<T> vnl_sparse_matrix<T>::transpose() const
 {
   vnl_sparse_matrix<T> result(cols(), rows());
-  unsigned int rownum = 0; // row number in this matrix
+  vxl::indexsize_t rownum = 0; // row number in this matrix
   // iterate through the rows of this matrix,
   // and add every element thus found to the new result matrix
   for (typename std::vector<row>::const_iterator row_iter = elements.begin();

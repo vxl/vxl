@@ -41,11 +41,11 @@ inline unsigned int vpdt_size(const vnl_matrix<T>& m)
 }
 
 //: Access the size of a vnl_vector_fixed
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline unsigned int vpdt_size(const vnl_vector_fixed<T,n>& /*v*/) { return n; }
 
 //: Access the size of a square vnl_matrix_fixed
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline unsigned int vpdt_size(const vnl_matrix_fixed<T,n,n>& /*m*/) { return n; }
 
 //: Access the size of a scalar
@@ -79,11 +79,11 @@ template <class T>
 inline void vpdt_fill(vnl_matrix<T>& m, const T& val) { m.fill(val); }
 
 //: Fill a vnl_vector_fixed
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline void vpdt_fill(vnl_vector_fixed<T,n>& v, const T& val) { v.fill(val); }
 
 //: Fill a square vnl_matrix_fixed
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline void vpdt_fill(vnl_matrix_fixed<T,n,n>& m, const T& val) { m.fill(val); }
 
 //: Default case, assignment
@@ -101,10 +101,10 @@ template <class T>
 inline const T& vpdt_index(const vnl_vector<T>& v, unsigned int i) { assert(i < v.size()); return v[i]; }
 
 //: Index into a vnl_vector_fixed
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline T& vpdt_index(vnl_vector_fixed<T,n>& v, unsigned int i) { assert(i < n); return v[i]; }
 //: Index into a vnl_vector_fixed (const)
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline const T& vpdt_index(const vnl_vector_fixed<T,n>& v, unsigned int i) { assert(i < n); return v[i]; }
 
 //: Index into a scalar
@@ -125,10 +125,10 @@ template <class T>
 inline const T& vpdt_index(const vnl_matrix<T>& v, unsigned int i, unsigned int j) { assert(i < v.rows() && j < v.columns()); return v(i,j); }
 
 //: Index into a vnl_matrix_fixed
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline T& vpdt_index(vnl_matrix_fixed<T,n,n>& v, unsigned int i, unsigned int j) { assert(i < n && j < n); return v(i,j); }
 //: Index into a vnl_matrix_fixed (const)
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline const T& vpdt_index(const vnl_matrix_fixed<T,n,n>& v, unsigned int i, unsigned int j) { assert(i < n && j < n); return v(i,j); }
 
 //: Index into a scalar

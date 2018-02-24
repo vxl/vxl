@@ -406,7 +406,7 @@ vnl_sparse_lst_sqr_function::fd_jac_Aij(int i, int j,
                                         double stepsize)
 {
   const unsigned int dim = ai.size();
-  const unsigned int n = Aij.rows();
+  const vxl::indexsize_t n = Aij.rows();
   assert(dim == number_of_params_a(i));
   assert(n == number_of_residuals(i,j));
   assert(dim == Aij.columns());
@@ -446,7 +446,7 @@ vnl_sparse_lst_sqr_function::fd_jac_Bij(int i, int j,
                                         double stepsize)
 {
   const unsigned int dim = bj.size();
-  const unsigned int n = Bij.rows();
+  const vxl::indexsize_t n = Bij.rows();
   assert(dim == number_of_params_b(j));
   assert(n == number_of_residuals(i,j));
   assert(dim == Bij.columns());
@@ -491,7 +491,7 @@ vnl_sparse_lst_sqr_function::fd_jac_Cij(int i, int j,
   if(dim == 0)
     return;
 
-  const unsigned int n = Cij.rows();
+  const vxl::indexsize_t n = Cij.rows();
   assert(n == number_of_residuals(i,j));
   assert(dim == Cij.columns());
 

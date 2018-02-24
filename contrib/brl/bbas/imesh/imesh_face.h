@@ -27,7 +27,7 @@
 
 
 //: A mesh face with a fixed number of vertices
-template <unsigned s>
+template < vxl::indexsize_t s>
 class imesh_regular_face
 {
  public:
@@ -218,7 +218,7 @@ class imesh_face_array : public imesh_face_array_base
   void push_back(const std::vector<unsigned int>& f) { faces_.push_back(f); }
 
   //: Add a face to the array
-  template <unsigned int s>
+  template < vxl::indexsize_t s>
   void push_back(const imesh_regular_face<s>& f)
   {
     std::vector<unsigned int> f2(s);
@@ -234,7 +234,7 @@ class imesh_face_array : public imesh_face_array_base
 
 
 //: An array of mesh faces of arbitrary size
-template <unsigned int s>
+template < vxl::indexsize_t s>
 class imesh_regular_face_array : public imesh_face_array_base
 {
   std::vector<imesh_regular_face<s> > faces_;

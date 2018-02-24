@@ -16,7 +16,7 @@
 //these functions work for any dimension
 namespace
 {
-  template <class T, unsigned int n>
+  template <class T,  vxl::indexsize_t n>
   typename bsta_distribution<T,n>::vector_type
   compute_mean(std::vector<typename bsta_distribution<T,n>::vector_type > const& samples)
   {
@@ -32,7 +32,7 @@ namespace
   }
 
 
-  template <class T , unsigned int n >
+  template <class T ,  vxl::indexsize_t n >
   T compute_prob_density(typename bsta_distribution<T,n>::vector_type const& pt,
                          std::vector<typename bsta_distribution<T,n>::vector_type > const& samples, T var)
   {
@@ -55,7 +55,7 @@ namespace
     return density;
   }
 
-  template <class T, unsigned int n>
+  template <class T,  vxl::indexsize_t n>
   T compute_probability(typename bsta_distribution<T,n>::vector_type const& min_pt, typename bsta_distribution<T,n>::vector_type const& max_pt, std::vector<typename bsta_distribution<T,n>::vector_type > const& samples, T var)
   {
     typedef typename bsta_distribution<T,n>::vector_type vect_t;
@@ -79,7 +79,7 @@ namespace
 }; // end namespace
 
 // general case
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 vnl_vector_fixed<T,n> bsta_parzen_sphere<T,n>::mean() const
 {
   return compute_mean<T,n>(bsta_parzen<T,n>::samples_);
@@ -93,7 +93,7 @@ T bsta_parzen_sphere<T,1>::mean() const
 }
 
 //: the covariance matrix for a Parzen distribution, general case
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 typename bsta_parzen_sphere<T,n>::covar_type bsta_parzen_sphere<T,n>::covar() const
 {
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
@@ -158,7 +158,7 @@ T bsta_parzen_sphere<T,1>::covar() const
 }
 
 //: The probability density at sample pt, the general case
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 T bsta_parzen_sphere<T,n>::prob_density(typename bsta_distribution<T,n>::vector_type const& pt) const
 {
   return compute_prob_density<T,n>(pt, bsta_parzen<T,n>::samples_,
@@ -176,7 +176,7 @@ prob_density(typename bsta_distribution<T,1>::vector_type const& pt) const
 
 //: The probability density integrated over a box, general case
 // \returns a probability
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 T bsta_parzen_sphere<T,n>::probability(typename bsta_distribution<T,n>::vector_type const& min_pt,
                                        typename bsta_distribution<T,n>::vector_type const& max_pt) const
 {
@@ -196,7 +196,7 @@ probability(typename bsta_distribution<T,1>::vector_type const& min_pt,
 }
 
 //: general case for distance and index of nearest sample
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 T bsta_parzen_sphere<T,n>::nearest_sample(const typename bsta_distribution<T,n>::vector_type& pt, unsigned & index) const
 {
   typedef typename bsta_distribution<T,n>::vector_type vect_t;

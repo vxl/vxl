@@ -21,7 +21,7 @@
 
 
 //: A mesh face with a fixed number of vertices
-template <unsigned d>
+template < vxl::indexsize_t d>
 class imesh_vertex
 {
  public:
@@ -187,7 +187,7 @@ class imesh_vertex_array_base
 
 
 //: An array of vertices of dimension d
-template <unsigned int d>
+template < vxl::indexsize_t d>
 class imesh_vertex_array : public imesh_vertex_array_base
 {
   std::vector<imesh_vertex<d> > verts_;

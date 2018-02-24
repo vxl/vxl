@@ -10,7 +10,7 @@
 #include <vcl_cassert.h>
 
 //: Return probability density of observing pixel values
-template <unsigned int dim, unsigned int modes>
+template < vxl::indexsize_t dim,  vxl::indexsize_t modes>
 bvxm_voxel_slab<float>
 bvxm_mog_mc_processor<dim,modes>::prob_density(bvxm_voxel_slab<apm_datatype> const& appear,
                   bvxm_voxel_slab<obs_datatype> const& obs)
@@ -35,7 +35,7 @@ bvxm_mog_mc_processor<dim,modes>::prob_density(bvxm_voxel_slab<apm_datatype> con
 }
 
 //: Return probabilities that pixels are in range [min,max]
-template <unsigned int dim, unsigned int modes>
+template < vxl::indexsize_t dim,  vxl::indexsize_t modes>
 bvxm_voxel_slab<float>
 bvxm_mog_mc_processor<dim, modes>::prob_range(bvxm_voxel_slab<apm_datatype> const& appear,
                                     bvxm_voxel_slab<obs_datatype> const& obs_min,
@@ -63,7 +63,7 @@ bvxm_mog_mc_processor<dim, modes>::prob_range(bvxm_voxel_slab<apm_datatype> cons
 
 
 //: Update with a new sample image
-template <unsigned int dim, unsigned int modes>
+template < vxl::indexsize_t dim,  vxl::indexsize_t modes>
 bool bvxm_mog_mc_processor<dim, modes>::update( bvxm_voxel_slab<apm_datatype> &appear,
             bvxm_voxel_slab<obs_datatype> obs,
             bvxm_voxel_slab<float> weight)
@@ -99,7 +99,7 @@ bool bvxm_mog_mc_processor<dim, modes>::update( bvxm_voxel_slab<apm_datatype> &a
 
 
 //: Expected value
-template <unsigned int dim, unsigned int modes>
+template < vxl::indexsize_t dim,  vxl::indexsize_t modes>
 bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim, modes>::obs_datatype>
 bvxm_mog_mc_processor<dim, modes>::expected_color(bvxm_voxel_slab<mix_gauss_type > const& appear)
 {
@@ -131,7 +131,7 @@ bvxm_mog_mc_processor<dim, modes>::expected_color(bvxm_voxel_slab<mix_gauss_type
 }
 
 //: Color of the most probable mode in the mixtures in the slab
-template <unsigned int dim, unsigned int modes>
+template < vxl::indexsize_t dim,  vxl::indexsize_t modes>
 bvxm_voxel_slab<typename bvxm_mog_mc_processor<dim, modes>::obs_datatype>
 bvxm_mog_mc_processor<dim, modes>::most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear)
 {

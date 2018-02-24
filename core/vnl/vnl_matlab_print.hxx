@@ -106,7 +106,7 @@ std::ostream& vnl_matlab_print(std::ostream& s,
   return s;
 }
 
-template <class T, unsigned int n, unsigned int m>
+template <class T, vxl::indexsize_t n, vxl::indexsize_t m>
 std::ostream& vnl_matlab_print(std::ostream& s,
                               vnl_matrix_fixed<T,n,m> const& M,
                               char const* variable_name,
@@ -155,7 +155,7 @@ std::ostream& vnl_matlab_print(std::ostream& s,
   return s;
 }
 
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 std::ostream& vnl_matlab_print(std::ostream& s,
                               vnl_vector_fixed<T,n> const & v,
                               char const* variable_name,

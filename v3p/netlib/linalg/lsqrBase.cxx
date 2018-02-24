@@ -187,7 +187,7 @@ lsqrBase::D2Norm( double a, double b ) const
 
 /** Simplified for this use from the BLAS version. */
 void
-lsqrBase::Scale( unsigned int n, double factor, double *x ) const
+lsqrBase::Scale( vxl::indexsize_t n, double factor, double *x ) const
 {
   double * xend = x + n;
   while( x != xend )
@@ -199,13 +199,13 @@ lsqrBase::Scale( unsigned int n, double factor, double *x ) const
 
 /** Simplified for this use from the BLAS version. */
 double
-lsqrBase::Dnrm2( unsigned int n, const double *x ) const
+lsqrBase::Dnrm2( vxl::indexsize_t n, const double *x ) const
 {
   double magnitudeOfLargestElement = 0.0;
 
   double sumOfSquaresScaled = 1.0;
 
-  for ( unsigned int i = 0; i < n; i++ )
+  for ( vxl::indexsize_t i = 0; i < n; i++ )
     {
     if ( x[i] != 0.0 )
       {
@@ -240,7 +240,7 @@ lsqrBase::Dnrm2( unsigned int n, const double *x ) const
  *
  */
 void lsqrBase::
-Solve( unsigned int m, unsigned int n, const double * b, double * x )
+Solve( vxl::indexsize_t m, vxl::indexsize_t n, const double * b, double * x )
 {
   const double zero = 0.0;
   const double one = 1.0;
@@ -458,7 +458,7 @@ Solve( unsigned int m, unsigned int n, const double * b, double * x )
 
     if ( this->wantse )
       {
-      for ( unsigned int i = 0; i < n; i++ )
+      for ( vxl::indexsize_t i = 0; i < n; i++ )
         {
         double t = w[i];
         x[i]   = t1 * t +  x[i];
@@ -470,7 +470,7 @@ Solve( unsigned int m, unsigned int n, const double * b, double * x )
       }
     else
       {
-      for ( unsigned int i = 0; i < n; i++ )
+      for ( vxl::indexsize_t i = 0; i < n; i++ )
         {
         double t = w[i];
         x[i]   = t1 * t + x[i];
@@ -640,7 +640,7 @@ Solve( unsigned int m, unsigned int n, const double * b, double * x )
 
     t = this->rnorm / sqrt(t);
 
-    for ( unsigned int i = 0; i < n; i++ )
+    for ( vxl::indexsize_t i = 0; i < n; i++ )
       {
       se[i] = t * sqrt( se[i] );
       }

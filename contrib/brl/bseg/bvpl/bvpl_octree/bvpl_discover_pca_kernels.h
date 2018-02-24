@@ -113,7 +113,7 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
 #endif
 
   //: Computes pca projection at each voxel on the block and it save the specified number of dimensions (dim)
-  template <unsigned DIM>
+  template < vxl::indexsize_t DIM>
   void project(boxm_scene<boct_tree<short, bvpl_pca_basis_sample<DIM> > > *proj_scene,
                int block_i, int block_j, int block_k);
 
@@ -203,7 +203,7 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
 
 
 //: Computes pca projection at each voxel on the block and it saves the specified number of coefficientes
-template <unsigned DIM>
+template < vxl::indexsize_t DIM>
 void bvpl_discover_pca_kernels::project(boxm_scene<boct_tree<short, bvpl_pca_basis_sample<DIM> > > *proj_scene,
                                         int block_i, int block_j, int block_k)
 {

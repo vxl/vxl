@@ -144,9 +144,9 @@ class VNL_TEMPLATE_EXPORT vnl_polynomial
   int     degree() const { return int(coeffs_.size()) - 1; }
 
   //: Access to the polynomial coefficient of $X^i$
-  T& operator [] (unsigned int i)       { assert(int(i)<=degree()); return coeffs_[i]; }
+  T& operator [] (vxl::operatorbrctsize_t i)       { assert(int(i)<=degree()); return coeffs_[i]; }
   //: Access to the polynomial coefficient of $X^i$
-  T  operator [] (unsigned int i) const { assert(int(i)<=degree()); return coeffs_[i]; }
+  T  operator [] (vxl::operatorbrctsize_t i) const { assert(int(i)<=degree()); return coeffs_[i]; }
 
   //: Return the vector of coefficients
   const std::vector<T>& coefficients() const { return coeffs_; }

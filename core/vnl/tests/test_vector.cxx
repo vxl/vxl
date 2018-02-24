@@ -40,7 +40,7 @@ void vnl_vector_test_int()
   vnl_vector<int> vc(2,2,vcvalues);
   TEST("vnl_vector<int> vc(2,2,int[])", (vc(0)==1 && vc(1)==0), true);
 
-  //  vnl_vector(T const* data_block,unsigned int n);
+  //  vnl_vector(T const* data_block,vxl::indexsize_t n);
   vnl_vector<int> vb(vcvalues,2);
   TEST("vnl_vector<int> vb(int[],2)", (vb(0)==1 && vb(1)==0), true);
 

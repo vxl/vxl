@@ -24,7 +24,7 @@
 //: Return array I of imaginary parts of complex array C.
 template <class T> VNL_TEMPLATE_EXPORT
 void
-vnl_imag(std::complex<T> const* C, T* I, unsigned int n);
+vnl_imag(std::complex<T> const* C, T* I, vxl::indexsize_t n);
 
 // - vnl_vector
 // - vnl_vector_fixed
@@ -42,7 +42,7 @@ vnl_imag(vnl_vector<std::complex<T> > const& C);
 
 //: Vector of imaginary parts of vnl_vector_fixed<std::complex<T>, N >.
 // \relatesalso vnl_vector_fixed
-template <class T, unsigned int N> VNL_TEMPLATE_EXPORT
+template <class T, vxl::indexsize_t N> VNL_TEMPLATE_EXPORT
 vnl_vector_fixed<T,N>
 vnl_imag(vnl_vector_fixed<std::complex<T>, N > const& C)
 {
@@ -62,7 +62,7 @@ vnl_imag(vnl_matrix<std::complex<T> > const& C);
 
 //: Matrix of imaginary parts of vnl_matrix_fixed<std::complex<T>,NRow,NCol >.
 // \relatesalso vnl_matrix_fixed
-template <class T, unsigned int NRow, unsigned int NCol> VNL_TEMPLATE_EXPORT
+template <class T, vxl::indexsize_t NRow, vxl::indexsize_t NCol> VNL_TEMPLATE_EXPORT
 vnl_matrix_fixed<T,NRow,NCol>
 vnl_imag(vnl_matrix_fixed<std::complex<T>,NRow,NCol > const& C)
 {
@@ -82,7 +82,7 @@ vnl_imag(vnl_diag_matrix<std::complex<T> > const& C);
 
 //: Matrix of imaginary parts of vnl_diag_matrix_fixed<std::complex<T> >.
 // \relatesalso vnl_diag_matrix_fixed
-template <class T, unsigned int N> VNL_TEMPLATE_EXPORT
+template <class T, vxl::indexsize_t N> VNL_TEMPLATE_EXPORT
 vnl_diag_matrix_fixed<T,N>
 vnl_imag(vnl_diag_matrix_fixed<std::complex<T>,N > const& C)
 {

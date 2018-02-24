@@ -54,7 +54,7 @@ class VNL_EXPORT vnl_fastops
 
  private:
   // BLAS-like operations
-  static double dot(const double* a, const double* b, unsigned int n);
+  static double dot(const double* a, const double* b, vxl::indexsize_t n);
 };
 
 #endif // vnl_fastops_h_

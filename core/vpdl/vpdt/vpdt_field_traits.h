@@ -46,7 +46,7 @@ struct vpdt_field_traits
 
 //: The field traits class (vnl_vector_fixed)
 //  This specialization is for fixed length vnl vectors
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 struct vpdt_field_traits<vnl_vector_fixed<T,n> >
 {
   //: The compile time dimension of the field

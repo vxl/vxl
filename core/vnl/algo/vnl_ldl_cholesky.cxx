@@ -258,7 +258,7 @@ vnl_matrix<double> vnl_ldl_cholesky::inverse() const
     return vnl_matrix<double>();
   }
 
-  unsigned int n = d_.size();
+  vxl::indexsize_t n = d_.size();
   vnl_matrix<double> R(n,n);
   R.set_identity();
 

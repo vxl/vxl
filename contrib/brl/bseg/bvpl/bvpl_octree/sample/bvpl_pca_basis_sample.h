@@ -18,7 +18,7 @@
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 class bvpl_pca_basis_sample{
 
 public:
@@ -37,19 +37,19 @@ public:
 };
 
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 std::ostream& operator << (std::ostream& os, const bvpl_pca_basis_sample<dim>& sample);
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const &sample);
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const * &sample);
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> &sample);
 
-template <unsigned dim>
+template < vxl::indexsize_t dim>
 void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> *&sample);
 
 #endif

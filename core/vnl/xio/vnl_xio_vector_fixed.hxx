@@ -6,23 +6,23 @@
 #include <vsl/vsl_basic_xml_element.h>
 
 //=================================================================================
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 void x_write(std::ostream & os, vnl_vector_fixed<T,n> const& v, std::string name)
 {
   vsl_basic_xml_element element(name);
   element.add_attribute("size", (int) n);
-  for (unsigned i=0; i<n; i++)
+  for (vxl::indexsize_t i=0; i<n; i++)
     element.append_cdata(v.get(i));
   element.x_write(os);
 }
 
 //=================================================================================
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 void x_write_tree(std::ostream & os, vnl_vector_fixed<T,n> const& v, std::string name)
 {
   vsl_basic_xml_element element(name);
   element.add_attribute("size", (int) n);
-  for (unsigned i=0; i<n; i++) {
+  for (vxl::indexsize_t i=0; i<n; i++) {
     element.append_cdata("<element>");
     element.append_cdata(v.get(i));
     element.append_cdata("</element>");

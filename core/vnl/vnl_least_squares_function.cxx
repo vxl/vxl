@@ -33,7 +33,7 @@ void vnl_least_squares_function::fdgradf(vnl_vector<double> const& x,
                                          double stepsize)
 {
   unsigned int dim = x.size();
-  unsigned int n = jacobian.rows();
+  vxl::indexsize_t n = jacobian.rows();
   assert(dim == get_number_of_unknowns());
   assert(n == get_number_of_residuals());
   assert(dim == jacobian.columns());
@@ -67,7 +67,7 @@ void vnl_least_squares_function::ffdgradf(vnl_vector<double> const& x,
                                           double stepsize)
 {
   unsigned int dim = x.size();
-  unsigned int n = jacobian.rows();
+  vxl::indexsize_t n = jacobian.rows();
   assert(dim == get_number_of_unknowns());
   assert(n == get_number_of_residuals());
   assert(dim == jacobian.columns());

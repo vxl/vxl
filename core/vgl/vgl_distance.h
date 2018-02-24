@@ -23,6 +23,7 @@
 // \endverbatim
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
+#include <vcl_compiler.h>
 
 //: Squared distance between point \a (x,y) and closest point on line segment \a (x1,y1)-(x2,y2)
 template <class T>
@@ -50,22 +51,22 @@ double vgl_distance_to_linesegment(T x1, T y1, T z1,
 
 //: Distance between point \a (x,y) and closest point on open polygon \a (px[i],py[i])
 template <class T>
-double vgl_distance_to_non_closed_polygon(T const px[], T const py[], unsigned int n,
+double vgl_distance_to_non_closed_polygon(T const px[], T const py[], vxl::indexsize_t n,
                                           T x, T y);
 
 //: Distance between point \a (x,y,z) and closest point on open polygon \a (px[i],py[i],pz[i])
 template <class T>
-double vgl_distance_to_non_closed_polygon(T const px[], T const py[], T const pz[], unsigned int n,
+double vgl_distance_to_non_closed_polygon(T const px[], T const py[], T const pz[], vxl::indexsize_t n,
                                           T x, T y, T z);
 
 //: Distance between point \a (x,y) and closest point on closed polygon \a (px[i],py[i])
 template <class T>
-double vgl_distance_to_closed_polygon(T const px[], T const py[], unsigned int n,
+double vgl_distance_to_closed_polygon(T const px[], T const py[], vxl::indexsize_t n,
                                       T x, T y);
 
 //: Distance between point \a (x,y,z) and closest point on closed polygon \a (px[i],py[i]),pz[i]
 template <class T>
-double vgl_distance_to_closed_polygon(T const px[], T const py[], T const pz[], unsigned int n,
+double vgl_distance_to_closed_polygon(T const px[], T const py[], T const pz[], vxl::indexsize_t n,
                                       T x, T y, T z);
 
 //: find the shortest distance of the line to the origin

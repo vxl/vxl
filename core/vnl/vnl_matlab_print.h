@@ -59,7 +59,7 @@ std::ostream &vnl_matlab_print(std::ostream &,
 
 //: print a vnl_matrix_fixed<T>.
 //  \relatesalso vnl_matrix_fixed
-template <class T, unsigned int n, unsigned int m> VNL_TEMPLATE_EXPORT
+template <class T, vxl::indexsize_t n, vxl::indexsize_t m> VNL_TEMPLATE_EXPORT
 std::ostream &vnl_matlab_print(std::ostream &,
                               vnl_matrix_fixed<T,n,m> const&,
                               char const *variable_name =VXL_NULLPTR,
@@ -83,7 +83,7 @@ std::ostream &vnl_matlab_print(std::ostream &,
 
 //: print a vnl_vector_fixed<T>.
 //  \relatesalso vnl_vector_fixed
-template <class T, unsigned int n> VNL_TEMPLATE_EXPORT
+template <class T, vxl::indexsize_t n> VNL_TEMPLATE_EXPORT
 std::ostream &vnl_matlab_print(std::ostream &,
                               vnl_vector_fixed<T,n> const &,
                               char const *variable_name =VXL_NULLPTR,

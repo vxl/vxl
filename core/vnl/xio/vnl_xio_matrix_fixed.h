@@ -28,13 +28,13 @@
 
 //: XML save vnl_matrix_fixed to stream.
 // \relatesalso vnl_matrix_fixed
-template <class T, unsigned m, unsigned n>
+template <class T, vxl::indexsize_t m, vxl::indexsize_t n>
 void x_write(std::ostream & os, vnl_matrix_fixed<T,m,n> const& v,
              std::string name="vnl_matrix_fixed");
 
 //: XML save vnl_matrix_fixed as a 3-level tree to stream.
 // \relatesalso vnl_matrix_fixed
-template <class T, unsigned m, unsigned n>
+template <class T, vxl::indexsize_t m, vxl::indexsize_t n>
 void x_write_tree(std::ostream & os, vnl_matrix_fixed<T,m,n> const& v,
                   std::string name="vnl_matrix_fixed");
 

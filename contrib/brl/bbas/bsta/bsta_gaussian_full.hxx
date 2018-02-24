@@ -20,7 +20,7 @@
 namespace {
 
 //: Unroll the mahalanobis distance off diagonal terms
-template <class T, unsigned n, unsigned i, unsigned j>
+template <class T,  vxl::indexsize_t n,  vxl::indexsize_t i,  vxl::indexsize_t j>
 struct compute_sqr_mahalanobis_helper
 {
   static inline T value(const vnl_vector_fixed<T,n>& d,
@@ -33,7 +33,7 @@ struct compute_sqr_mahalanobis_helper
 
 //: base case
 // this is partial specialization
-template <class T, unsigned n, unsigned i>
+template <class T,  vxl::indexsize_t n,  vxl::indexsize_t i>
 struct compute_sqr_mahalanobis_helper<T,n,i,0>
 {
   static inline T value(const vnl_vector_fixed<T,n>& /*d*/,
@@ -42,7 +42,7 @@ struct compute_sqr_mahalanobis_helper<T,n,i,0>
 };
 
 //: Unroll the mahalanobis distance calculation
-template <class T, unsigned n, unsigned i>
+template <class T,  vxl::indexsize_t n,  vxl::indexsize_t i>
 struct bsta_gaussian_full_compute_sqr_mahalanobis
 {
 static inline T value(const vnl_vector_fixed<T,n>& d,
@@ -56,7 +56,7 @@ static inline T value(const vnl_vector_fixed<T,n>& d,
 
 //: base case
 // this is partial specialization
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 struct bsta_gaussian_full_compute_sqr_mahalanobis<T,n,0>
 {
   static inline T value(const vnl_vector_fixed<T,n>& /*d*/,
@@ -66,7 +66,7 @@ struct bsta_gaussian_full_compute_sqr_mahalanobis<T,n,0>
 
 
 //: compute the inverse
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 inline vnl_matrix_fixed<T,n,n>* make_inverse(const vnl_matrix_fixed<T,n,n>& M)
 { return new vnl_matrix_fixed<T,n,n>(vnl_svd_inverse(M.as_ref())); }
 
@@ -90,7 +90,7 @@ inline vnl_matrix_fixed<T,1,1>* make_inverse(const vnl_matrix_fixed<T,1,1>& M)
 
 
 //: The squared Mahalanobis distance to this point
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 T
 bsta_gaussian_full<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const
 {
@@ -105,7 +105,7 @@ bsta_gaussian_full<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) c
 
 
 //: The squared Mahalanobis distance to this point
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 void
 bsta_gaussian_full<T,n>::compute_det()
 {
@@ -114,7 +114,7 @@ bsta_gaussian_full<T,n>::compute_det()
 
 
 //: Update the covariance (and clear cached values)
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 void
 bsta_gaussian_full<T,n>::set_covar(const vnl_matrix_fixed<T,n,n>& covar)
 {
@@ -127,7 +127,7 @@ bsta_gaussian_full<T,n>::set_covar(const vnl_matrix_fixed<T,n,n>& covar)
 
 //: Return the inverse of the covariance matrix
 // \note this matrix is cached and updated only when needed
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 const vnl_matrix_fixed<T,n,n>&
 bsta_gaussian_full<T,n>::inv_covar() const
 {

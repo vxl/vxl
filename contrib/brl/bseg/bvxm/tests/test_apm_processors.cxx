@@ -90,7 +90,7 @@ void test_mog_rgb_processor()
   }
 }
 
-template <unsigned dim, unsigned modes>
+template < vxl::indexsize_t dim,  vxl::indexsize_t modes>
 void test_mog_mc_processor()
 {
   typedef bsta_num_obs<bsta_gaussian_indep<float,dim> > gauss_type;

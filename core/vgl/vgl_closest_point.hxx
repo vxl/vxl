@@ -108,7 +108,7 @@ void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y, T& ret_z,
 
 template <class T>
 int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
-                                            T const px[], T const py[], unsigned int n,
+                                            T const px[], T const py[], vxl::indexsize_t n,
                                             T x, T y)
 {
   assert(n>1);
@@ -125,7 +125,7 @@ int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y,
 
 template <class T>
 int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
-                                            T const px[], T const py[], T const pz[], unsigned int n,
+                                            T const px[], T const py[], T const pz[], vxl::indexsize_t n,
                                             T x, T y, T z)
 {
   assert(n>1);
@@ -143,7 +143,7 @@ int vgl_closest_point_to_non_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
 
 template <class T>
 int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
-                                        T const px[], T const py[], unsigned int n,
+                                        T const px[], T const py[], vxl::indexsize_t n,
                                         T x, T y)
 {
   assert(n>1);
@@ -163,7 +163,7 @@ int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y,
 
 template <class T>
 int vgl_closest_point_to_closed_polygon(T& ret_x, T& ret_y, T& ret_z,
-                                        T const px[], T const py[], T const pz[], unsigned int n,
+                                        T const px[], T const py[], T const pz[], vxl::indexsize_t n,
                                         T x, T y, T z)
 {
   assert(n>1);
@@ -291,9 +291,9 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
   T x=point.x(), y=point.y();
   double dd = DIST_SQR_TO_LINE_SEG_2D(T,poly[0][0].x(),poly[0][0].y(), poly[0][1].x(),poly[0][1].y(), x,y);
   int si = 0, di = 0;
-  for ( unsigned int s=0; s < poly.num_sheets(); ++s )
+  for ( vxl::indexsize_t s=0; s < poly.num_sheets(); ++s )
   {
-    unsigned int n = (unsigned int)(poly[s].size());
+    vxl::indexsize_t n = (vxl::indexsize_t)(poly[s].size());
     assert( n > 1 );
     for (unsigned i=0; i+1<n; ++i)
     {
@@ -307,7 +307,7 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
     }
   }
   T ret_x, ret_y;
-  unsigned int n = (unsigned int)(poly[si].size());
+  vxl::indexsize_t n = (vxl::indexsize_t)(poly[si].size());
   if (di == -1)
     vgl_closest_point_to_linesegment(ret_x,ret_y, poly[si][0].x(),poly[si][0].y(), poly[si][n-1].x(),poly[si][n-1].y(), x,y);
   else
@@ -774,10 +774,10 @@ vgl_point_3d<T> vgl_closest_point(vgl_cubic_spline_3d<T> const& cspl, vgl_point_
 #define VGL_CLOSEST_POINT_INSTANTIATE(T) \
 template void vgl_closest_point_to_linesegment(T&,T&,T,T,T,T,T,T); \
 template void vgl_closest_point_to_linesegment(T&,T&,T&,T,T,T,T,T,T,T,T,T); \
-template int vgl_closest_point_to_non_closed_polygon(T&,T&,T const[],T const[],unsigned int,T,T); \
-template int vgl_closest_point_to_non_closed_polygon(T&,T&,T&,T const[],T const[],T const[],unsigned int,T,T,T); \
-template int vgl_closest_point_to_closed_polygon(T&,T&,T const[],T const[],unsigned int,T,T); \
-template int vgl_closest_point_to_closed_polygon(T&,T&,T&,T const[],T const[],T const[],unsigned int,T,T,T); \
+template int vgl_closest_point_to_non_closed_polygon(T&,T&,T const[],T const[],vxl::indexsize_t,T,T); \
+template int vgl_closest_point_to_non_closed_polygon(T&,T&,T&,T const[],T const[],T const[],vxl::indexsize_t,T,T,T); \
+template int vgl_closest_point_to_closed_polygon(T&,T&,T const[],T const[],vxl::indexsize_t,T,T); \
+template int vgl_closest_point_to_closed_polygon(T&,T&,T&,T const[],T const[],T const[],vxl::indexsize_t,T,T,T); \
 template vgl_point_2d<T > vgl_closest_point_origin(vgl_line_2d<T >const& l); \
 template vgl_point_3d<T > vgl_closest_point_origin(vgl_plane_3d<T > const& pl); \
 template vgl_point_3d<T > vgl_closest_point_origin(vgl_line_3d_2_points<T > const& l); \

@@ -20,7 +20,7 @@
 #include <vcl_compiler.h>
 
 //: A Gaussian distribution with a full covariance matrix
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_gaussian_full : public bsta_gaussian<T,n>
 {
  public:
@@ -93,7 +93,7 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
   mutable vnl_matrix_fixed<T,n,n>* inv_covar_;
 };
 
-template <class T , unsigned n>
+template <class T ,  vxl::indexsize_t n>
 inline std::ostream& operator<< (std::ostream& os,
                                 bsta_gaussian_full<T, n> const& g)
 {

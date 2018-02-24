@@ -11,7 +11,7 @@
 
 //: Compute the mean in a window around the given pt, the window size is the bandwidth
 //  If there are no points within bandwidth of the input \a pt, return false
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool
 bsta_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_type const& pt, typename bsta_parzen_sphere<T,n>::vector_type& out)
 {
@@ -42,7 +42,7 @@ bsta_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_type const& 
 }
 
 //: compute the mean of a particular assignment/mode/cluster
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool
 bsta_sample_set<T,n>::mode_mean(int mode, vector_& out) const
 {
@@ -79,7 +79,7 @@ bsta_sample_set<T,n>::mode_mean(int mode, vector_& out) const
 }
 
 //: return number of assignments to this mode
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 int
 bsta_sample_set<T,n>::mode_size(int mode) const
 {
@@ -95,7 +95,7 @@ bsta_sample_set<T,n>::mode_size(int mode) const
 }
 
 //: return total weight of assignments to this mode
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 T
 bsta_sample_set<T,n>::mode_weight(int mode) const
 {
@@ -115,7 +115,7 @@ bsta_sample_set<T,n>::mode_weight(int mode) const
 }
 
 //: return total weight of all assignments
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 T
 bsta_sample_set<T,n>::total_weight() const
 {
@@ -132,7 +132,7 @@ bsta_sample_set<T,n>::total_weight() const
 }
 
 //: return number of modes in the current assignment vector
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 unsigned
 bsta_sample_set<T,n>::mode_cnt() const
 {
@@ -149,7 +149,7 @@ bsta_sample_set<T,n>::mode_cnt() const
 }
 
 //: Insert a weighted sample into the distribution
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 bsta_sample_set<T,n>::insert_sample(typename bsta_parzen_sphere<T,n>::vector_type const& sample, T weight)
 {
@@ -158,7 +158,7 @@ bsta_sample_set<T,n>::insert_sample(typename bsta_parzen_sphere<T,n>::vector_typ
 }
 
 //: one may need to normalize the weights after the insertion is over
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 bsta_sample_set<T,n>::normalize_weights()
 {
@@ -175,7 +175,7 @@ bsta_sample_set<T,n>::normalize_weights()
 }
 
 //: must call this method before using the assignment vector
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 bsta_sample_set<T,n>::initialize_assignments()
 {

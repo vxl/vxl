@@ -19,12 +19,12 @@
 //: Compute $A^\top A$.
 void vnl_fastops::AtA(vnl_matrix<double>& out, const vnl_matrix<double>& A)
 {
-  const unsigned int n = A.columns();
+  const vxl::indexsize_t n = A.columns();
   // Verify output is the right size
   if (out.rows() != n || out.columns() != n)
     out.set_size(n,n);
 
-  const unsigned int m = A.rows();
+  const vxl::indexsize_t m = A.rows();
 
   double const* const* a = A.data_array();
   double** ata = out.data_array();
@@ -121,7 +121,7 @@ void vnl_fastops::AtB(vnl_matrix<double>& out, const vnl_matrix<double>& A, cons
 //: Compute $A^\top b$ for vector b. out may not be b.
 void vnl_fastops::AtB(vnl_vector<double>& out, const vnl_matrix<double>& A, const vnl_vector<double>& B)
 {
-  const unsigned int m = A.rows();
+  const vxl::indexsize_t m = A.rows();
   const unsigned int l = B.size();
 
   // Verify matrices compatible
@@ -130,7 +130,7 @@ void vnl_fastops::AtB(vnl_vector<double>& out, const vnl_matrix<double>& A, cons
     std::abort();
   }
 
-  const unsigned int n = A.columns();
+  const vxl::indexsize_t n = A.columns();
 
   // Verify output is the right size
   if (out.size() != n)
@@ -151,7 +151,7 @@ void vnl_fastops::AtB(vnl_vector<double>& out, const vnl_matrix<double>& A, cons
 //: Compute $A b$ for vector b. out may not be b.
 void vnl_fastops::Ab(vnl_vector<double>& out, const vnl_matrix<double>& A, const vnl_vector<double>& b)
 {
-  const unsigned int m = A.cols();
+  const vxl::indexsize_t m = A.cols();
   const unsigned int l = b.size();
 
   // Verify matrices compatible
@@ -160,7 +160,7 @@ void vnl_fastops::Ab(vnl_vector<double>& out, const vnl_matrix<double>& A, const
     std::abort();
   }
 
-  const unsigned int n = A.rows();
+  const vxl::indexsize_t n = A.rows();
 
   // Verify output is the right size
   if (out.size() != n)
@@ -258,8 +258,8 @@ void vnl_fastops::ABAt(vnl_matrix<double>& out, const vnl_matrix<double>& A, con
 //: Compute $b^\top A b$ for vector b and matrix A
 double vnl_fastops::btAb(const vnl_matrix<double>& A, const vnl_vector<double>& b)
 {
-  const unsigned int m = A.rows();
-  const unsigned int n = A.cols();
+  const vxl::indexsize_t m = A.rows();
+  const vxl::indexsize_t n = A.cols();
   const unsigned int l = b.size();
 
   // Verify matrices compatible
@@ -287,8 +287,8 @@ double vnl_fastops::btAb(const vnl_matrix<double>& A, const vnl_vector<double>& 
 //: Compute $ X += A^\top A$
 void vnl_fastops::inc_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& A)
 {
-  const unsigned int m = X.rows();
-  const unsigned int n = X.columns();
+  const vxl::indexsize_t m = X.rows();
+  const vxl::indexsize_t n = X.columns();
 
   // Verify output is the right size
   if (m != n || m != A.columns()) {
@@ -530,8 +530,8 @@ void vnl_fastops::dec_X_by_AtB(vnl_vector<double>& X, const vnl_matrix<double>& 
 //: Compute $ X -= A^\top A$
 void vnl_fastops::dec_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& A)
 {
-  const unsigned int m = X.rows();
-  const unsigned int n = X.columns();
+  const vxl::indexsize_t m = X.rows();
+  const vxl::indexsize_t n = X.columns();
 
   // Verify output is the right size
   if (m != n || m != A.columns()) {
@@ -567,7 +567,7 @@ void vnl_fastops::dec_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& 
 }
 
 //: Compute dot product of a and b
-double vnl_fastops::dot(const double* a, const double* b, unsigned int n)
+double vnl_fastops::dot(const double* a, const double* b, vxl::indexsize_t n)
 {
 #define METHOD 3  // Method 2 is fastest on the u170 -- weird.
   double accum = 0;

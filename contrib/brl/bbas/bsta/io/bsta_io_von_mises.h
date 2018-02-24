@@ -21,7 +21,7 @@
 #include <vcl_compiler.h>
 
 //: Binary save bsta_von_mises to stream.
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_von_mises<T,n>& vm)
 {
@@ -31,7 +31,7 @@ vsl_b_write(vsl_b_ostream &os, const bsta_von_mises<T,n>& vm)
 }
 
 //: Binary load bsta_von_mises from stream.
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 vsl_b_read(vsl_b_istream &is, bsta_von_mises<T,n>& vm)
 {
@@ -44,7 +44,7 @@ vsl_b_read(vsl_b_istream &is, bsta_von_mises<T,n>& vm)
 }
 
 //: Print summary
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 vsl_print_summary(std::ostream &os, const bsta_von_mises<T,n>& vm)
 {

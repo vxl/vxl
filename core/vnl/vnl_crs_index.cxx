@@ -31,7 +31,7 @@ vnl_crs_index::vnl_crs_index(const std::vector<std::vector<bool> >& mask)
 //: return the index at location (i,j)
 //  returns -1 if the entry is 0
 int
-vnl_crs_index::operator() (int i, int j) const
+vnl_crs_index::operator() ( vxl::operatorbrctsize_t i, vxl::operatorbrctsize_t j) const
 {
   int low = row_ptr_[i];
   int high = row_ptr_[i+1]-1;

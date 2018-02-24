@@ -74,7 +74,7 @@ T vnl_block_max_value(T const *x, unsigned n)
 
 //: return index of smallest value.
 template <class T> inline
-unsigned vnl_block_arg_min(T const x[], unsigned n)
+vxl::argminmaxreturnsize_t vnl_block_arg_min(T const x[], unsigned n)
 {
   if (n == 0)
     vnl_block_raise_exception(__FILE__, __LINE__, "n is 0");
@@ -88,7 +88,7 @@ unsigned vnl_block_arg_min(T const x[], unsigned n)
 
 //: return index of largest value.
 template <class T> inline
-unsigned vnl_block_arg_max(T const x[], unsigned n)
+vxl::argminmaxreturnsize_t vnl_block_arg_max(T const x[], unsigned n)
 {
   if (n == 0)
     vnl_block_raise_exception(__FILE__, __LINE__, "n is 0");

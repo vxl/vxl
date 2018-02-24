@@ -22,7 +22,7 @@
 #include <vcl_compiler.h>
 
 //: A Von_Mises distribution
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_von_mises : public bsta_distribution<T,n>
 {
  public:
@@ -123,7 +123,7 @@ class bsta_von_mises<T,2>
 
 #endif //VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
-template <class T , unsigned n>
+template <class T ,  vxl::indexsize_t n>
 inline std::ostream& operator<< (std::ostream& os,
                                 bsta_von_mises<T, n> const& vm)
 {

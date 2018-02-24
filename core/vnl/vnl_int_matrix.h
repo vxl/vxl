@@ -29,8 +29,8 @@ class VNL_EXPORT vnl_int_matrix : public vnl_matrix<int>
 
   vnl_int_matrix() {}
   vnl_int_matrix(char const* filename);
-  vnl_int_matrix(unsigned r, unsigned c): Base(r, c) {}
-  vnl_int_matrix(unsigned r, unsigned c, int fillvalue): Base(r, c, fillvalue) {}
+  vnl_int_matrix(vxl::indexsize_t r, vxl::indexsize_t c): Base(r, c) {}
+  vnl_int_matrix(vxl::indexsize_t r, vxl::indexsize_t c, int fillvalue): Base(r, c, fillvalue) {}
   vnl_int_matrix(const vnl_matrix<double>& d);
   vnl_int_matrix(const vnl_matrix<int>& d):Base(d) {}
   vnl_int_matrix& operator=(const vnl_matrix<int>& d) { Base::operator=(d); return *this; }

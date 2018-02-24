@@ -70,7 +70,7 @@ void bsta_fit_gaussian(std::vector<T> const& samples, std::vector<T> const& samp
 }
 
 //: fit a N-D spherical Gaussian distribution to a set of weighted samples
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void bsta_fit_gaussian(std::vector<vnl_vector_fixed<T,n> > const& samples, std::vector<T> const& sample_weights,
                        bsta_gaussian_sphere<T,n>& gaussian )
 {
@@ -116,7 +116,7 @@ void bsta_fit_gaussian(std::vector<vnl_vector_fixed<T,n> > const& samples, std::
 
 
 //: fit a N-D independent Gaussian distribution to a set of weighted samples
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void bsta_fit_gaussian(std::vector<vnl_vector_fixed<T,n> > const& samples, std::vector<T> const& sample_weights,
                        bsta_gaussian_indep<T,n>& gaussian)
 {
@@ -161,7 +161,7 @@ void bsta_fit_gaussian(std::vector<vnl_vector_fixed<T,n> > const& samples, std::
 
 
 //: fit a N-D Gaussian distribution with full covariance to a set of weighted samples
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void bsta_fit_gaussian(std::vector<vnl_vector_fixed<T,n> > const& samples, std::vector<T> const& sample_weights,
                        bsta_gaussian_full<T,n>& gaussian)
 {
@@ -210,7 +210,7 @@ T clip_covar(T var, T min_var)
 { return std::max(var,min_var); }
 
 // Helper function for clipping covariance matrix
-template<class T, unsigned n>
+template<class T,  vxl::indexsize_t n>
 vnl_vector_fixed<T,n> clip_covar(vnl_vector_fixed<T,n> covar, vnl_vector_fixed<T,n> min_covar)
 {
   vnl_vector_fixed<T,n> maxval;
@@ -221,7 +221,7 @@ vnl_vector_fixed<T,n> clip_covar(vnl_vector_fixed<T,n> covar, vnl_vector_fixed<T
 }
 
 // Helper function for clipping covariance matrix
-template<class T, unsigned n>
+template<class T,  vxl::indexsize_t n>
 vnl_matrix_fixed<T,n,n> clip_covar(vnl_matrix_fixed<T,n,n> covar, vnl_matrix_fixed<T,n,n> min_covar)
 {
   vnl_matrix_fixed<T,n,n> maxval;

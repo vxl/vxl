@@ -90,7 +90,7 @@ std::ostream &operator<<(std::ostream& os, vbl_bit_array_3d const& bitarray)
   return os;
 }
 
-void vbl_bit_array_3d::construct(unsigned int m, unsigned int n, unsigned int p)
+void vbl_bit_array_3d::construct(vxl::indexsize_t m, vxl::indexsize_t n, vxl::indexsize_t p)
 {
   // quick return if possible
   if (m==0 || n==0 || p==0) { row1_count_=row2_count_=row3_count_=0; data_ = VXL_NULLPTR; return; }
@@ -110,7 +110,7 @@ vbl_bit_array_3d::vbl_bit_array_3d(vbl_bit_array_3d const& that)
   }
 }
 
-vbl_bit_array_3d::vbl_bit_array_3d(unsigned int m, unsigned int n, unsigned int p, bool v[])
+vbl_bit_array_3d::vbl_bit_array_3d(vxl::indexsize_t m, vxl::indexsize_t n, vxl::indexsize_t p, bool v[])
 {
   construct(m,n,p);
   for (unsigned int x=0; x<m; ++x)

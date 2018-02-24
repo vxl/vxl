@@ -28,8 +28,8 @@
 #include "vnl/vnl_export.h"
 
 // forward declarations
-template <class T, unsigned int N> class vnl_diag_matrix_fixed;
-template <class T, unsigned int N> VNL_TEMPLATE_EXPORT vnl_vector_fixed<T,N> operator*(vnl_diag_matrix_fixed<T,N> const&, vnl_vector_fixed<T,N> const&);
+template <class T, vxl::indexsize_t N> class vnl_diag_matrix_fixed;
+template <class T, vxl::indexsize_t N> VNL_TEMPLATE_EXPORT vnl_vector_fixed<T,N> operator*(vnl_diag_matrix_fixed<T,N> const&, vnl_vector_fixed<T,N> const&);
 
 //: stores a diagonal matrix as a single vector.
 //  vnl_diag_matrix_fixed stores a diagonal matrix for time and space efficiency.
@@ -38,7 +38,7 @@ template <class T, unsigned int N> VNL_TEMPLATE_EXPORT vnl_vector_fixed<T,N> ope
 //  algorithms.
 
 VCL_TEMPLATE_EXPORT
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 class VNL_TEMPLATE_EXPORT vnl_diag_matrix_fixed
 {
   vnl_vector_fixed<T,N> diagonal_;
@@ -87,8 +87,8 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix_fixed
   inline T& operator() (unsigned i) { return diagonal_[i]; }
   inline T const& operator() (unsigned i) const { return diagonal_[i]; }
 
-  inline T& operator[] (unsigned i) { return diagonal_[i]; }
-  inline T const& operator[] (unsigned i) const { return diagonal_[i]; }
+  inline T& operator[] (vxl::operatorbrctsize_t i) { return diagonal_[i]; }
+  inline T const& operator[] (vxl::operatorbrctsize_t i) const { return diagonal_[i]; }
 
   //: Return a vector (copy) with the content of the (main) diagonal
   inline vnl_vector_fixed<T,N> get_diagonal() const { return diagonal_; }
@@ -114,21 +114,21 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix_fixed
   //: Return the total number of elements stored by the matrix.
   // Since vnl_diag_matrix_fixed only stores values on the diagonal
   // and must be square, size() == rows() == cols().
-  inline unsigned int size() const { return diagonal_.size(); }
+  inline vxl::indexsize_t size() const { return diagonal_.size(); }
 
   //: Return the number of rows.
-  inline unsigned int rows() const { return diagonal_.size(); }
+  inline vxl::indexsize_t rows() const { return diagonal_.size(); }
 
   //: Return the number of columns.
   // A synonym for columns().
-  inline unsigned int cols() const { return diagonal_.size(); }
+  inline vxl::indexsize_t cols() const { return diagonal_.size(); }
 
   //: Return the number of columns.
   // A synonym for cols().
-  inline unsigned int columns() const { return diagonal_.size(); }
+  inline vxl::indexsize_t columns() const { return diagonal_.size(); }
 
   //: set element with boundary checks.
-  inline void put (unsigned r, unsigned c, T const& v)
+  inline void put (vxl::indexsize_t r, vxl::indexsize_t c, T const& v)
   {
     assert(r == c);
     (void)c;
@@ -140,7 +140,7 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix_fixed
   }
 
   //: get element with boundary checks.
-  inline T get (unsigned r, unsigned c) const
+  inline T get (vxl::indexsize_t r, vxl::indexsize_t c) const
   {
     assert(r == c);
     (void)c;
@@ -173,11 +173,11 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix_fixed
 
 //:
 // \relatesalso vnl_diag_matrix_fixed
-template <class T, unsigned int N> VNL_TEMPLATE_EXPORT
+template <class T, vxl::indexsize_t N> VNL_TEMPLATE_EXPORT
 std::ostream& operator<< (std::ostream&, vnl_diag_matrix_fixed<T,N> const&);
 
 //: Convert a vnl_diag_matrix_fixed to a Matrix.
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_matrix_fixed<T,N,N> vnl_diag_matrix_fixed<T,N>::as_matrix_fixed() const
 {
   vnl_matrix_fixed<T,N,N> ret;
@@ -195,7 +195,7 @@ inline vnl_matrix_fixed<T,N,N> vnl_diag_matrix_fixed<T,N>::as_matrix_fixed() con
 
 //: Invert a vnl_diag_matrix_fixed in-situ, then returns *this.
 // Just replaces each element with its reciprocal.
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_diag_matrix_fixed<T,N>& vnl_diag_matrix_fixed<T,N>::invert_in_place()
 {
   T* d = data_block();
@@ -206,7 +206,7 @@ inline vnl_diag_matrix_fixed<T,N>& vnl_diag_matrix_fixed<T,N>::invert_in_place()
 }
 
 //: Return determinant as product of diagonal values.
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline T vnl_diag_matrix_fixed<T,N>::determinant() const
 {
   T det = T(1);
@@ -218,7 +218,7 @@ inline T vnl_diag_matrix_fixed<T,N>::determinant() const
 
 //: Multiply two vnl_diag_matrices.  Just multiply the diag elements - n flops
 // \relatesalso vnl_diag_matrix_fixed
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_diag_matrix_fixed<T,N> operator* (vnl_diag_matrix_fixed<T,N> const& A, vnl_diag_matrix_fixed<T,N> const& B)
 {
   vnl_diag_matrix_fixed<T,N> ret = A;
@@ -230,7 +230,7 @@ inline vnl_diag_matrix_fixed<T,N> operator* (vnl_diag_matrix_fixed<T,N> const& A
 //: Multiply a vnl_matrix by a vnl_diag_matrix_fixed.  Just scales the columns - mn flops
 // \relatesalso vnl_diag_matrix_fixed
 // \relatesalso vnl_matrix
-template <class T, unsigned int R, unsigned int C>
+template <class T, vxl::indexsize_t R, vxl::indexsize_t C>
 inline vnl_matrix_fixed<T,R,C> operator* (vnl_matrix_fixed<T,R,C> const& A, vnl_diag_matrix_fixed<T,C> const& D)
 {
   vnl_matrix_fixed<T,R,C> ret;
@@ -243,7 +243,7 @@ inline vnl_matrix_fixed<T,R,C> operator* (vnl_matrix_fixed<T,R,C> const& A, vnl_
 //: Multiply a vnl_diag_matrix_fixed by a vnl_matrix.  Just scales the rows - mn flops
 // \relatesalso vnl_diag_matrix_fixed
 // \relatesalso vnl_matrix
-template <class T, unsigned int R, unsigned int C>
+template <class T, vxl::indexsize_t R, vxl::indexsize_t C>
 inline vnl_matrix_fixed<T,R,C> operator* (vnl_diag_matrix_fixed<T,R> const& D, vnl_matrix_fixed<T,R,C> const& A)
 {
   vnl_matrix_fixed<T,R,C> ret;
@@ -256,7 +256,7 @@ inline vnl_matrix_fixed<T,R,C> operator* (vnl_diag_matrix_fixed<T,R> const& D, v
 
 //: Add two vnl_diag_matrices.  Just add the diag elements - n flops
 // \relatesalso vnl_diag_matrix_fixed
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_diag_matrix_fixed<T,N> operator+ (vnl_diag_matrix_fixed<T,N> const& A, vnl_diag_matrix_fixed<T,N> const& B)
 {
   vnl_diag_matrix_fixed<T,N> ret = A;
@@ -268,7 +268,7 @@ inline vnl_diag_matrix_fixed<T,N> operator+ (vnl_diag_matrix_fixed<T,N> const& A
 //: Add a vnl_diag_matrix_fixed to a vnl_matrix.  n adds, mn copies.
 // \relatesalso vnl_diag_matrix_fixed
 // \relatesalso vnl_matrix
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_matrix_fixed<T,N,N> operator+ (vnl_matrix_fixed<T,N,N> const& A, vnl_diag_matrix_fixed<T,N> const& D)
 {
   vnl_matrix_fixed<T,N,N> ret(A);
@@ -281,7 +281,7 @@ inline vnl_matrix_fixed<T,N,N> operator+ (vnl_matrix_fixed<T,N,N> const& A, vnl_
 //: Add a vnl_matrix to a vnl_diag_matrix_fixed.  n adds, mn copies.
 // \relatesalso vnl_diag_matrix_fixed
 // \relatesalso vnl_matrix
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_matrix_fixed<T,N,N> operator+ (vnl_diag_matrix_fixed<T,N> const& D, vnl_matrix_fixed<T,N,N> const& A)
 {
   return A + D;
@@ -289,7 +289,7 @@ inline vnl_matrix_fixed<T,N,N> operator+ (vnl_diag_matrix_fixed<T,N> const& D, v
 
 //: Subtract two vnl_diag_matrices.  Just subtract the diag elements - n flops
 // \relatesalso vnl_diag_matrix_fixed
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_diag_matrix_fixed<T,N> operator- (vnl_diag_matrix_fixed<T,N> const& A, vnl_diag_matrix_fixed<T,N> const& B)
 {
   vnl_diag_matrix_fixed<T,N> ret(A);
@@ -301,7 +301,7 @@ inline vnl_diag_matrix_fixed<T,N> operator- (vnl_diag_matrix_fixed<T,N> const& A
 //: Subtract a vnl_diag_matrix_fixed from a vnl_matrix.  n adds, mn copies.
 // \relatesalso vnl_diag_matrix_fixed
 // \relatesalso vnl_matrix
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_matrix_fixed<T,N,N> operator- (vnl_matrix_fixed<T,N,N> const& A, vnl_diag_matrix_fixed<T,N> const& D)
 {
   vnl_matrix_fixed<T,N,N> ret(A);
@@ -314,7 +314,7 @@ inline vnl_matrix_fixed<T,N,N> operator- (vnl_matrix_fixed<T,N,N> const& A, vnl_
 //: Subtract a vnl_matrix from a vnl_diag_matrix_fixed.  n adds, mn copies.
 // \relatesalso vnl_diag_matrix_fixed
 // \relatesalso vnl_matrix
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_matrix_fixed<T,N,N> operator- (vnl_diag_matrix_fixed<T,N> const& D, vnl_matrix_fixed<T,N,N> const& A)
 {
   vnl_matrix_fixed<T,N,N> ret;
@@ -333,7 +333,7 @@ inline vnl_matrix_fixed<T,N,N> operator- (vnl_diag_matrix_fixed<T,N> const& D, v
 //: Multiply a vnl_diag_matrix_fixed by a vnl_vector_fixed.  n flops.
 // \relatesalso vnl_diag_matrix_fixed
 // \relatesalso vnl_vector_fixed
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_vector_fixed<T,N> operator* (vnl_diag_matrix_fixed<T,N> const& D, vnl_vector_fixed<T,N> const& A)
 {
   return element_product(D.diagonal(), A);
@@ -342,7 +342,7 @@ inline vnl_vector_fixed<T,N> operator* (vnl_diag_matrix_fixed<T,N> const& D, vnl
 //: Multiply a vnl_vector_fixed by a vnl_diag_matrix_fixed.  n flops.
 // \relatesalso vnl_diag_matrix_fixed
 // \relatesalso vnl_vector_fixed
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 inline vnl_vector_fixed<T,N> operator* (vnl_vector_fixed<T,N> const& A, vnl_diag_matrix_fixed<T,N> const& D)
 {
   return element_product(D.diagonal(), A);

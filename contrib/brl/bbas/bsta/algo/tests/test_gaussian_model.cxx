@@ -14,7 +14,7 @@
 // and 4 dimensions. More cases can be added when needed.
 
 // Test the update of independent Gaussian distributions
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void test_gauss_indep_update()
 {
   //A tri-mixture of n-dimensional independent gaussian

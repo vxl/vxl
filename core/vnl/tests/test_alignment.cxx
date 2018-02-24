@@ -182,7 +182,7 @@ inline bool test_min(const vnl_vector<float> &vec)
 
 inline bool test_arg_max(const vnl_vector<float> &vec)
 {
-  unsigned idx = vec.arg_max();
+  vxl::argminmaxreturnsize_t idx = vec.arg_max();
   unsigned n = vec.size();
   float correct_val(-std::numeric_limits<float>::max());
   unsigned correct_idx = 0;
@@ -201,7 +201,7 @@ inline bool test_arg_max(const vnl_vector<float> &vec)
 
 inline bool test_arg_min(const vnl_vector<float> &vec)
 {
-  unsigned idx = vec.arg_min();
+  vxl::argminmaxreturnsize_t idx = vec.arg_min();
   unsigned n = vec.size();
   float correct_val(std::numeric_limits<float>::max());
   unsigned correct_idx = 0;

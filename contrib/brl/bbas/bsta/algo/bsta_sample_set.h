@@ -29,7 +29,7 @@
 
 //: A class to hold samples, the window width parameter, weights for each sample, assignments of each sample to modes/cluster centers/classes
 //  This class is used by mean-shift and EM algorithms
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_sample_set : public bsta_parzen_sphere<T,n>
 {
  public:
@@ -134,7 +134,7 @@ bool bsta_sample_set_variance(const bsta_sample_set<T,1>& set, int mode, T min_v
 }
 
 //: compute the variance of a particular assignment in a bsta_sample_set
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool bsta_sample_set_variance(const bsta_sample_set<T,n>& set, int mode, vnl_matrix_fixed<T,n,n>& out)
 {
   typedef typename std::vector<vnl_vector_fixed<T,n> >::const_iterator sit_t;
@@ -172,7 +172,7 @@ bool bsta_sample_set_variance(const bsta_sample_set<T,n>& set, int mode, vnl_mat
 }
 
 //: compute the marginalized 1D sample set distribution from nD set
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool bsta_sample_set_marginalize(const bsta_sample_set<T,n>& set, unsigned component, bsta_sample_set<T,1>& out_set)
 {
   typedef typename std::vector<vnl_vector_fixed<T,n> >::const_iterator sit_t;
@@ -223,7 +223,7 @@ bool bsta_sample_set_fit_distribution(const bsta_sample_set<T,1>& set, bsta_mixt
   return true;
 }
 
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool bsta_sample_set_fit_distribution(const bsta_sample_set<T,n>& set, bsta_mixture<bsta_num_obs<bsta_gaussian_full<T,n> > >& out)
 {
   if (!set.check_initializations()) {
@@ -283,7 +283,7 @@ T bsta_sample_set_log_likelihood(const bsta_sample_set<T,1>& set, bsta_num_obs<b
 //:
 //  Total weight is used to normalize the weight of the distribution
 //  (bsta_num_obs class contains total weight of samples assigned to this distribution)
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 T bsta_sample_set_log_likelihood(const bsta_sample_set<T,n>& set, bsta_num_obs<bsta_gaussian_full<T,n> >& dist, T total_weight)
 {
   if (!set.size()) {

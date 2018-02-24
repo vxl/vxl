@@ -22,7 +22,7 @@
 #include <vcl_compiler.h>
 
 //: Binary save bsta_parzen_sphere to stream.
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_parzen_sphere<T,n>& g)
 {
@@ -36,7 +36,7 @@ vsl_b_write(vsl_b_ostream &os, const bsta_parzen_sphere<T,n>& g)
 }
 
 //: Binary load bsta_parzen_sphere from stream.
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 vsl_b_read(vsl_b_istream &is, bsta_parzen_sphere<T,n>& g)
 {
@@ -50,7 +50,7 @@ vsl_b_read(vsl_b_istream &is, bsta_parzen_sphere<T,n>& g)
 }
 
 //: Print summary
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void
 vsl_print_summary(std::ostream &os, const bsta_parzen_sphere<T,n>& g)
 {

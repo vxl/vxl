@@ -251,7 +251,7 @@ vil_image_view_base_sptr vil_viff_image::get_copy_view(unsigned int x0, unsigned
   vxl_uint_32 tbytes = rowsize*ys*nplanes_;
   vil_memory_chunk_sptr buf = new vil_memory_chunk(tbytes,format_);
   vxl_byte* ib = reinterpret_cast<vxl_byte*>(buf->data());
-  for (unsigned int p = 0; p<nplanes_; ++p) {
+  for (vxl::indexsize_t p = 0; p<nplanes_; ++p) {
     for (unsigned int y = y0; y < y0+ys; ++y) {
       is_->seek(start_of_data_ + p*nj_*((ni_*pix_size+7)/8)
                                + y*((ni_*pix_size+7)/8)
@@ -315,7 +315,7 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
 
   vxl_uint_32 rowsize = (pix_size*ni+7)/8;
   if (endian_consistent_ || pix_size <= 8)
-    for (unsigned int p = 0; p<nplanes_; ++p)
+    for (vxl::indexsize_t p = 0; p<nplanes_; ++p)
       for (unsigned int y = y0; y < y0+nj; ++y) {
         is_->seek(start_of_data_ + p*nj_*((ni_*pix_size+7)/8)
                                  + y*((ni_*pix_size+7)/8)
@@ -332,7 +332,7 @@ bool vil_viff_image::put_view(vil_image_view_base const& buf, unsigned int x0, u
       }
   else { // !endian_consistent_ ==> must swap bytes
     vxl_byte* tempbuf = new vxl_byte[rowsize];
-    for (unsigned int p = 0; p<nplanes_; ++p)
+    for (vxl::indexsize_t p = 0; p<nplanes_; ++p)
       for (unsigned int y = y0; y < y0+nj; ++y) {
         std::memcpy(tempbuf, ob, rowsize);
         for (unsigned int i=0; i<rowsize; i+=pix_size/8)

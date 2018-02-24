@@ -1,6 +1,7 @@
 // This is core/vnl/vnl_rotation_matrix.h
 #ifndef vnl_rotation_matrix_h_
 #define vnl_rotation_matrix_h_
+#include <vcl_compiler.h>
 #include "vnl/vnl_export.h"
 
 //:
@@ -17,8 +18,8 @@
 
 template <class T> class vnl_vector;
 template <class T> class vnl_matrix;
-template <class T, unsigned int n> class vnl_vector_fixed;
-template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
+template <class T, vxl::indexsize_t n> class vnl_vector_fixed;
+template <class T, vxl::indexsize_t num_rows, vxl::indexsize_t num_cols> class vnl_matrix_fixed;
 
 VNL_EXPORT bool vnl_rotation_matrix(double const axis[3], double** R);
 VNL_EXPORT bool vnl_rotation_matrix(double const axis[3], double* R0, double* R1, double* R2);

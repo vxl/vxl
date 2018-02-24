@@ -23,7 +23,7 @@
 #include <vpdl/vpdt/vpdt_log_probability.h>
 
 //: A Gaussian with (hyper-)spherical covariance
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdl_gaussian_sphere : public vpdl_gaussian_base<T,n>
 {
  public:

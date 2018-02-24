@@ -22,7 +22,7 @@
 
 //: A fixed bandwidth spherical Gaussian kernel distribution
 // The bandwidth is the standard deviation of the Gaussian kernel.
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdl_kernel_gaussian_sfbw : public vpdl_kernel_fbw_base<T,n>
 {
  public:

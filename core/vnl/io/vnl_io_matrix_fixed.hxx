@@ -12,7 +12,7 @@
 
 //=================================================================================
 //: Binary save self to stream.
-template<class T, unsigned m, unsigned n>
+template<class T, vxl::indexsize_t m, vxl::indexsize_t n>
 void vsl_b_write(vsl_b_ostream & os, const vnl_matrix_fixed<T,m,n> & p)
 {
   const short version_no = 2;
@@ -27,7 +27,7 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_matrix_fixed<T,m,n> & p)
 
 //=================================================================================
 //: Binary load self from stream.
-template<class T, unsigned m, unsigned n>
+template<class T, vxl::indexsize_t m, vxl::indexsize_t n>
 void vsl_b_read(vsl_b_istream &is, vnl_matrix_fixed<T,m,n> & p)
 {
   if (!is) return;
@@ -75,23 +75,23 @@ void vsl_b_read(vsl_b_istream &is, vnl_matrix_fixed<T,m,n> & p)
 
 //====================================================================================
 //: Output a human readable summary to the stream
-template<class T, unsigned nrows, unsigned ncols>
+template<class T, vxl::indexsize_t nrows, vxl::indexsize_t ncols>
 void vsl_print_summary(std::ostream & os,const vnl_matrix_fixed<T,nrows,ncols> & p)
 {
   os<<"Size: "<<p.rows()<<" x "<<p.cols()<<std::endl;
 
-  unsigned int m = 5; unsigned int n = 5;
+  vxl::indexsize_t m = 5; vxl::indexsize_t n = 5;
 
 
   if (m>p.rows()) m=p.rows();
   if (n>p.cols()) n=p.cols();
 
   vsl_indent_inc(os);
-  for (unsigned int i=0;i<m;i++)
+  for (vxl::indexsize_t i=0;i<m;i++)
   {
      os<<vsl_indent()<<" (";
 
-     for ( unsigned int j=0; j<n; j++)
+     for ( vxl::indexsize_t j=0; j<n; j++)
         os<<p(i,j)<<' ';
       if (p.cols()>n) os<<"...";
         os<<")\n";

@@ -20,7 +20,7 @@
 #include <vcl_compiler.h>
 
 //: A Gaussian with variance independent in each dimension
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdl_gaussian : public vpdl_gaussian_base<T,n>
 {
  public:

@@ -5,7 +5,7 @@
 bool bwm_shape_file::load(std::string filename)
 {
   std::string ext = vul_file::extension(filename);
-  if (!ext.compare(".shp") == 0) {
+  if ((! ext.compare(".shp") ) == 0) {
     std::cerr << filename << "is not a .shp file\n";
     return false;
   }

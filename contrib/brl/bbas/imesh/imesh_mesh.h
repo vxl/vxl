@@ -63,13 +63,13 @@ class imesh_mesh : public vbl_ref_count
   imesh_vertex_array_base& vertices() { return *verts_; }
 
   //: Access the vector of vertices cast to a dimension
-  template <unsigned int d>
+  template < vxl::indexsize_t d>
   const imesh_vertex_array<d>& vertices() const
   {
     assert(dynamic_cast<imesh_vertex_array<d>*>(verts_.get()));
     return static_cast<const imesh_vertex_array<d>&>(*verts_);
   }
-  template <unsigned int d>
+  template < vxl::indexsize_t d>
   imesh_vertex_array<d>& vertices()
   {
     assert(dynamic_cast<imesh_vertex_array<d>*>(verts_.get()));

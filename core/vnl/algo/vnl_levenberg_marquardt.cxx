@@ -46,8 +46,8 @@ void vnl_levenberg_marquardt::init(vnl_least_squares_function* f)
   gtol = 1e-5;           // Termination tolerance on Grad(F)' * F = 0
   epsfcn = xtol * 0.001; // Step length for FD Jacobian
 
-  unsigned int m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
-  unsigned int n = f_->get_number_of_unknowns();  // I  Number of unknowns
+  vxl::indexsize_t m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
+  vxl::indexsize_t n = f_->get_number_of_unknowns();  // I  Number of unknowns
 
   set_covariance_ = false;
   fdjac_.set_size(n,m);
@@ -413,7 +413,7 @@ void vnl_levenberg_marquardt::diagnose_outcome(std::ostream& s) const
     s << (whoami ": OIOIOI: unkown info code from lmder.\n");
     break;
   }
-  unsigned int m = f_->get_number_of_residuals();
+  vxl::indexsize_t m = f_->get_number_of_residuals();
   s << whoami ": " << num_iterations_ << " iterations, "
     << num_evaluations_ << " evaluations, "<< m <<" residuals.  RMS error start/end "
     << get_start_error() << '/' << get_end_error() << std::endl;
@@ -442,7 +442,7 @@ vnl_matrix<double> const& vnl_levenberg_marquardt::get_JtJ()
   if (!set_covariance_)
   {
     std::cerr << __FILE__ ": get_covariance() not confirmed tested  yet\n";
-    unsigned int n = fdjac_.rows();
+    vxl::indexsize_t n = fdjac_.rows();
 
     // matrix in FORTRAN is column-wise.
     // transpose it to get C style order

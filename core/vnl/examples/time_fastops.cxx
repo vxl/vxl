@@ -5,7 +5,7 @@
 #include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 
-double vnl_fastops_dot(const double* a, const double* b, unsigned int n);
+double vnl_fastops_dot(const double* a, const double* b, vxl::indexsize_t n);
 
 #ifdef OPTIMIZED
 #undef OPTIMIZED
@@ -33,7 +33,7 @@ int main()
   return 0;
 }
 
-double vnl_fastops_dot(const double* a, const double* b, unsigned int n)
+double vnl_fastops_dot(const double* a, const double* b, vxl::indexsize_t n)
 {
   // Method 2 is fastest on the u170 -- weird.
   double accum = 0;

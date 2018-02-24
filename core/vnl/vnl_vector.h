@@ -190,9 +190,9 @@ class VNL_TEMPLATE_EXPORT vnl_vector
   }
 
   //: Return reference to the element at specified index. No range checking.
-  T       & operator[](size_t i) { return data[i]; }
+  T       & operator[](vxl::operatorbrctsize_t i) { return data[i]; }
   //: Return reference to the element at specified index. No range checking.
-  T const & operator[](size_t i) const { return data[i]; }
+  T const & operator[](vxl::operatorbrctsize_t i) const { return data[i]; }
 
   //: Set all elements to value v
   vnl_vector<T>& operator=(T const&v) { fill(v); return *this; }

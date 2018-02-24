@@ -158,7 +158,7 @@ void print_pointers(const std::vector<vnl_vector<T> >&va, const std::vector<vnl_
 }
 
 template <class T>
-void run_for_size(unsigned m, unsigned n, T /*dummy*/, const char * type, const char *size,
+void run_for_size(vxl::indexsize_t m, vxl::indexsize_t n, T /*dummy*/, const char * type, const char *size,
                   vnl_random &rng)
 {
   const unsigned n_data = 10;

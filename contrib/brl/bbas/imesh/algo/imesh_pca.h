@@ -80,13 +80,13 @@ class imesh_pca_mesh : public imesh_mesh
   imesh_vertex_array_base& mean_vertices() { return *mean_verts_; }
 
   //: Access the vector of mean vertices cast to a dimension
-  template <unsigned int d>
+  template < vxl::indexsize_t d>
   const imesh_vertex_array<d>& mean_vertices() const
   {
     assert(dynamic_cast<imesh_vertex_array<d>*>(mean_verts_.get()));
     return static_cast<const imesh_vertex_array<d>&>(*mean_verts_);
   }
-  template <unsigned int d>
+  template < vxl::indexsize_t d>
   imesh_vertex_array<d>& mean_vertices()
   {
     assert(dynamic_cast<imesh_vertex_array<d>*>(mean_verts_.get()));
