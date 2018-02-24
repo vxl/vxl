@@ -51,6 +51,12 @@ project(vxl)
 
 include(CMakeDependentOption)
 
+#Disable overzealous compiler warning.  If the definition is truely missing a link error will be created.
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG(-Wno-undefined-var-template HAS_NO_UNDEFINED_VAR_TEMPLATE)
+if( HAS_NO_UNDEFINED_VAR_TEMPLATE )
+  add_definitions( -Wno-undefined-var-template )
+endif()
 
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)

@@ -47,7 +47,7 @@ class vgl_pointset_3d
                  std::vector<vgl_vector_3d<Type> > const& normals,
                  std::vector< Type > const& scalars):
   has_normals_(true), has_scalars_(true), points_(points), normals_(normals), scalars_(scalars){}
-  
+
   //: incrementally grow points, duplicate points are allowed
   void add_point(vgl_point_3d<Type> const& p){
     points_.push_back(p); has_normals_=false; has_scalars_ = false;

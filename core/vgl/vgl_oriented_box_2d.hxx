@@ -139,7 +139,7 @@ std::ostream&  operator<<(std::ostream& os, const vgl_oriented_box_2d<T>& obox){
 }
 template <class T>
 std::istream&  operator>>(std::istream& is,  vgl_oriented_box_2d<T>& obox){
-  is.skipws;
+  //is.skipws;
   vgl_line_segment_2d<T> maj;
   T half_height = T(0);
   std::string temp;
@@ -181,9 +181,9 @@ bool vgl_oriented_box_2d<T>::near_equal(vgl_oriented_box_2d<T> const& ob, T tol)
     return false;
   const vgl_line_segment_2d<T>& ma = ob.major_axis();
   const vgl_point_2d<T>& obp1 = ma.point1();
-  const vgl_point_2d<T>& obp2 = ma.point2(); 
+  const vgl_point_2d<T>& obp2 = ma.point2();
   const vgl_point_2d<T>& tp1 = major_axis_.point1();
-  const vgl_point_2d<T>& tp2 = major_axis_.point2(); 
+  const vgl_point_2d<T>& tp2 = major_axis_.point2();
   vgl_vector_2d<T> p1p1 = obp1-tp1;
   vgl_vector_2d<T> p2p2 = obp2-tp2;
   if(p1p1.length()<tol && p2p2.length()<tol)

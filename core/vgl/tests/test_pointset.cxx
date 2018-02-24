@@ -78,7 +78,7 @@ static void test_pointset()
   scostr.close();
   std::ifstream scistr(path.c_str());
   scistr >> ptset_sc_in;
-  good == good && (ptset_sc_in == ptset_sc);
+  good = good && (ptset_sc_in == ptset_sc);
   TEST("pointset with scalars", good, true);
   scistr.close();
   vpl_unlink(path.c_str());
@@ -90,7 +90,7 @@ static void test_pointset()
   nscostr.close();
   std::ifstream nscistr(path.c_str());
   nscistr >> ptset_nsc_in;
-  good == good && (ptset_nsc_in == ptset_nsc);
+  good = good && (ptset_nsc_in == ptset_nsc);
   nscistr.close();
   TEST("pointset with scalars and normals", good, true);
   vpl_unlink(path.c_str());
