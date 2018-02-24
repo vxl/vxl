@@ -56,6 +56,7 @@ std::ostream&  operator<<(std::ostream& s, vgl_point_2d<Type> const& p)
 //  Either just reads two blank-separated numbers,
 //  or reads two comma-separated numbers,
 //  or reads two numbers in parenthesized form "(123, 321)"
+//  or reads form written by <<, "<vgl_point_2d 123, 321 >"
 template <class Type>
 std::istream& vgl_point_2d<Type>::read(std::istream& is)
 {
@@ -68,7 +69,9 @@ std::istream& vgl_point_2d<Type>::read(std::istream& is)
   c = is.peek();
   if(c == '<')
   {
-    is.ignore();
+    // read the <vgl_point_2d string
+    std::string temp;
+    is >> temp;
     angle = true;
   }
 
