@@ -73,7 +73,7 @@ add_test( NAME vpgl_algo_test_ray_intersect COMMAND $<TARGET_FILE:vpgl_algo_test
 add_test( NAME vpgl_algo_test_ortho_procrustes COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_ortho_procrustes )
 add_test( NAME vpgl_algo_test_em_compute_5_point COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_em_compute_5_point )
 add_test( NAME vpgl_algo_test_triangulate COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_triangulate )
-add_test( NAME vpgl_algo_test_bundle_adjust COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_bundle_adjust )
+## DISABLE REALLY LONG RUNNING TEST HACK add_test( NAME vpgl_algo_test_bundle_adjust COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_bundle_adjust )
 add_test( NAME vpgl_algo_test_ba_fixed_k_lsqr COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_ba_fixed_k_lsqr )
 add_test( NAME vpgl_algo_test_ba_shared_k_lsqr COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_ba_shared_k_lsqr )
 add_test( NAME vpgl_algo_test_affine_rect COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_affine_rect )
