@@ -28,6 +28,24 @@
 # define VXL_BIG_ENDIAN    @VXL_BIG_ENDIAN@
 #endif
 
+namespace vxl {
+/*
+  Typedefs for VXL sizes to differentiate between intended uses
+  of integer types used for variables that represent
+  indexing into arrays or returning memory offsets. In standard
+  libraries these are std::size_t and std::ptrdiff_t
+
+  The OSX -Wshorten-64-to-32 compiler warnings help to identify
+  implicit conversions that are hypothesized to be silently
+  blocking the compiler from identifying potential performance
+  improvments.
+*/
+  typedef unsigned int  smallsize_t ;  // <-- Just std::size_t
+  typedef unsigned long normalsize_t;  // <-- Just std::size_t
+  typedef int           signedsmallsize_t;   // <-- Just std::ptrdiff_t
+  typedef long          signednormalsize_t;  // <-- Just std::ptrdiff_t
+}
+
 /* we can't just use typedefs, because on systems where there are   */
 /* no 64bit integers we have to #define vxl_int_64 to `void' in     */
 /* order to catch illegitimate uses. However, typedefs are superior */
