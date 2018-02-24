@@ -18,8 +18,7 @@ template <class Type>
 std::istream& operator>>(std::istream& s, vgl_line_segment_2d<Type>& p)
 {
   std::string temp;
-  s.skipws;
-  s >> std::ws;
+  s >> std::skipws >> std::ws;
   char c = s.peek();
   if(c=='<')
     s >> temp;
