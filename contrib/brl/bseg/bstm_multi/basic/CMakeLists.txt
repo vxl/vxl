@@ -4,9 +4,10 @@ include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
 set(bstm_multi_basic_sources
     array_4d.h
+    array_4d.cxx
    )
 
-aux_source_directory(Templates bstm_multi_basic_sources)
+## This does not exist aux_source_directory(Templates bstm_multi_basic_sources)
 
 vxl_add_library(LIBRARY_NAME bstm_multi_basic LIBRARY_SOURCES  ${bstm_multi_basic_sources})
 set_target_properties(bstm_multi_basic PROPERTIES LINKER_LANGUAGE CXX)

@@ -1158,10 +1158,10 @@ fly_scene_generate(const index_4d &coords) {
   if (coords[0] == coords[1] && coords[1] == coords[2]) {
     if (coords[3] % 16 == 0 && coords[3] / 16 == coords[0]) {
       vcl_cout << coords << vcl_endl;
-      return vcl_make_pair(1, (unsigned char)128);
+      return vcl_make_pair(bstm_data_traits<BSTM_ALPHA>::datatype(1), bstm_data_traits<BSTM_MOG3_GREY>::datatype((unsigned char)128));
     }
   }
-  return vcl_make_pair(0, (unsigned char)0);
+  return vcl_make_pair(bstm_data_traits<BSTM_ALPHA>::datatype(0), bstm_data_traits<BSTM_MOG3_GREY>::datatype((unsigned char)0));
 }
 
 void test_fly_problem2() {
