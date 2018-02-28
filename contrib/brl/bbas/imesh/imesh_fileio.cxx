@@ -42,8 +42,8 @@ bool imesh_read_ply2(std::istream& is, imesh_mesh& mesh)
 {
   unsigned int num_verts, num_faces;
   is >> num_verts >> num_faces;
-  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
-  std::auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  vcl_unique_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
+  vcl_unique_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   for (unsigned int v=0; v<num_verts; ++v) {
     imesh_vertex<3>& vert = (*verts)[v];
     is >> vert[0] >> vert[1] >> vert[2];
@@ -57,8 +57,8 @@ bool imesh_read_ply2(std::istream& is, imesh_mesh& mesh)
       is >> face[v];
   }
 
-  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(vcl_unique_ptr<imesh_vertex_array_base>(vcl_move(verts)));
+  mesh.set_faces(vcl_unique_ptr<imesh_face_array_base>(vcl_move(faces)));
   return true;
 }
 
@@ -94,8 +94,8 @@ bool imesh_read_ply(std::istream& is, imesh_mesh& mesh)
       done = true;
     }
   }
-  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
-  std::auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  vcl_unique_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(num_verts));
+  vcl_unique_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   for (unsigned int v=0; v<num_verts; ++v) {
     imesh_vertex<3>& vert = (*verts)[v];
     is >> vert[0] >> vert[1] >> vert[2];
@@ -109,8 +109,8 @@ bool imesh_read_ply(std::istream& is, imesh_mesh& mesh)
       is >> face[v];
   }
 
-  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(vcl_unique_ptr<imesh_vertex_array_base>(vcl_move(verts)));
+  mesh.set_faces(vcl_unique_ptr<imesh_face_array_base>(vcl_move(faces)));
   return true;
 }
 
@@ -186,8 +186,8 @@ bool imesh_read_obj(const std::string& filename, imesh_mesh& mesh)
 //: Read a mesh from a wavefront OBJ stream
 bool imesh_read_obj(std::istream& is, imesh_mesh& mesh)
 {
-  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>);
-  std::auto_ptr<imesh_face_array> faces(new imesh_face_array);
+  vcl_unique_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>);
+  vcl_unique_ptr<imesh_face_array> faces(new imesh_face_array);
   std::vector<vgl_vector_3d<double> > normals;
   std::vector<vgl_point_2d<double> > tex;
   std::string last_group = "ungrouped";
@@ -290,8 +290,8 @@ bool imesh_read_obj(std::istream& is, imesh_mesh& mesh)
   if (normals.size() == verts->size())
     verts->set_normals(normals);
 
-  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(vcl_unique_ptr<imesh_vertex_array_base>(vcl_move(verts)));
+  mesh.set_faces(vcl_unique_ptr<imesh_face_array_base>(vcl_move(faces)));
   mesh.set_tex_coords(tex);
 
   return true;

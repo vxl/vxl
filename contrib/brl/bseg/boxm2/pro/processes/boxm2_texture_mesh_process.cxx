@@ -297,9 +297,9 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::strin
     }
 
     //create the submesh using the auto ptrs
-    std::auto_ptr<imesh_vertex_array_base> v3(verts3);
-    std::auto_ptr<imesh_face_array_base> f3(flist);
-    imesh_mesh subMesh(v3, f3);
+    vcl_unique_ptr<imesh_vertex_array_base> v3(verts3);
+    vcl_unique_ptr<imesh_face_array_base> f3(flist);
+    imesh_mesh subMesh(vcl_move(v3), vcl_move(f3));
 
     std::cout<<"Setting tex source: "<<apps->first<<std::endl;
     meshes[apps->first] = subMesh;

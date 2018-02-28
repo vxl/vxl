@@ -244,7 +244,7 @@ brdb_database::select(const std::string& relation_name, brdb_query_aptr q) const
 
   brdb_relation_sptr relation = this->get_relation(relation_name);
 
-  return new brdb_selection(relation, q);
+  return new brdb_selection(relation, vcl_move(q) );
 }
 
 

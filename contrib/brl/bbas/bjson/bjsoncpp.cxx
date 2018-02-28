@@ -232,7 +232,7 @@ static inline void fixNumericLocaleInput(char* begin, char* end) {
 #include <cstring>
 #include <istream>
 #include <sstream>
-#include <memory>
+#include <vcl_memory.h>
 #include <set>
 #include <limits>
 
@@ -266,11 +266,7 @@ static int       stackDepth_g = 0;  // see readValue()
 
 namespace Json {
 
-#if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
-typedef std::unique_ptr<CharReader> CharReaderPtr;
-#else
-typedef std::auto_ptr<CharReader>   CharReaderPtr;
-#endif
+typedef vcl_unique_ptr<CharReader>   CharReaderPtr;
 
 // Implementation of class Features
 // ////////////////////////////////
@@ -4077,7 +4073,7 @@ Value& Path::make(Value& root) const {
 #include "json_tool.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <iomanip>
-#include <memory>
+#include <vcl_memory.h>
 #include <sstream>
 #include <utility>
 #include <set>
@@ -4144,11 +4140,7 @@ Value& Path::make(Value& root) const {
 
 namespace Json {
 
-#if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
-typedef std::unique_ptr<StreamWriter> StreamWriterPtr;
-#else
-typedef std::auto_ptr<StreamWriter>   StreamWriterPtr;
-#endif
+typedef vcl_unique_ptr<StreamWriter>   StreamWriterPtr;
 
 static bool containsControlCharacter(const char* str) {
   while (*str) {

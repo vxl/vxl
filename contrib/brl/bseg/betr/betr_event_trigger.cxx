@@ -268,7 +268,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
   } 
   vsol_region_3d* reg_ptr = VXL_NULLPTR;
   vsol_volume_3d* vol_ptr = VXL_NULLPTR;
-  if(reg_ptr = so_ptr->cast_to_region())
+  if( ( reg_ptr = so_ptr->cast_to_region() ) )
     {
       vsol_polygon_3d* poly_3d = reg_ptr->cast_to_polygon();
       if(!poly_3d){
@@ -277,7 +277,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
       } 
       poly_2d = project_poly(cam, poly_3d, transl);
       return true;
-    }else if(vol_ptr = so_ptr->cast_to_volume()){
+    }else if( ( vol_ptr = so_ptr->cast_to_volume() ) ){
       vsol_mesh_3d* mesh_3d = vol_ptr->cast_to_mesh();
       if(!mesh_3d){
         std::cout << "only handle vsol_mesh_3d for now " << obj_name << " is not a vsol_mesh_3d\n";

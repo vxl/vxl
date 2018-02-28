@@ -678,7 +678,7 @@ void vpdfl_mixture_builder::config_from_stream(std::istream & is)
   if (props.find("basis_pdf")!=props.end())
   {
     std::istringstream pdf_ss(props["basis_pdf"]);
-    std::auto_ptr<vpdfl_builder_base>
+    vcl_unique_ptr<vpdfl_builder_base>
             b = vpdfl_builder_base::new_pdf_builder_from_stream(pdf_ss);
     init(*b,n_pdfs);
     props.erase("basis_pdf");

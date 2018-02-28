@@ -81,12 +81,12 @@ void msm_aligner::config_from_stream(std::istream &is)
 
 //=======================================================================
 //: Create a concrete msm_aligner-derived object, from a text specification.
-std::auto_ptr<msm_aligner> msm_aligner::create_from_stream(std::istream &is)
+vcl_unique_ptr<msm_aligner> msm_aligner::create_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
 
-  std::auto_ptr<msm_aligner> ps =
+  vcl_unique_ptr<msm_aligner> ps =
     mbl_cloneables_factory<msm_aligner>::get_clone(name);
 
   ps -> config_from_stream(is);

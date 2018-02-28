@@ -329,8 +329,8 @@ test_on_matches(rgrl_transformation_sptr xform, rgrl_match_set_sptr matches, uns
   rgrl_mask_sptr to_roi = from_roi;
   rgrl_estimator_sptr est = new rgrl_est_affine(2);
   rgrl_view_sptr  view = new rgrl_view( from_roi, to_roi, from_roi->bounding_box(), from_roi->bounding_box(), est, xform, 0 );
-  std::auto_ptr<rrel_objective> obj( new rrel_muset_obj(matches->from_size()) );
-  rgrl_scale_estimator_unwgted_sptr scale_est = new rgrl_scale_est_closest( obj );
+  vcl_unique_ptr<rrel_objective> obj( new rrel_muset_obj(matches->from_size()) );
+  rgrl_scale_estimator_unwgted_sptr scale_est = new rgrl_scale_est_closest( vcl_move(obj) );
 
   rgrl_initializer_ran_sam* init = new rgrl_initializer_ran_sam();
   init->set_sampling_params();

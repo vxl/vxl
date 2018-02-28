@@ -82,13 +82,13 @@ std::string  mcal_component_analyzer::is_a() const
 
 
 //: Create a concrete mcal_component_analyzer object, from a text specification.
-std::auto_ptr<mcal_component_analyzer>
+vcl_unique_ptr<mcal_component_analyzer>
   mcal_component_analyzer::create_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
 
-  std::auto_ptr<mcal_component_analyzer> mca;
+  vcl_unique_ptr<mcal_component_analyzer> mca;
   try
   {
     mca = mbl_cloneables_factory<mcal_component_analyzer>::get_clone(name);

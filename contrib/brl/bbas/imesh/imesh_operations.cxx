@@ -12,10 +12,10 @@
 #include <vgl/vgl_vector_3d.h>
 
 //: Subdivide mesh faces into triangle
-std::auto_ptr<imesh_regular_face_array<3> >
+vcl_unique_ptr<imesh_regular_face_array<3> >
 imesh_triangulate(const imesh_face_array_base& faces)
 {
-  std::auto_ptr<imesh_regular_face_array<3> > tris(new imesh_regular_face_array<3>);
+  vcl_unique_ptr<imesh_regular_face_array<3> > tris(new imesh_regular_face_array<3>);
   int group = -1;
   if (faces.has_groups())
     group = 0;
@@ -31,10 +31,10 @@ imesh_triangulate(const imesh_face_array_base& faces)
 
 
 //: Subdivide quadrilaterals into triangle
-std::auto_ptr<imesh_regular_face_array<3> >
+vcl_unique_ptr<imesh_regular_face_array<3> >
 imesh_triangulate(const imesh_regular_face_array<4>& faces)
 {
-  std::auto_ptr<imesh_regular_face_array<3> > tris(new imesh_regular_face_array<3>);
+  vcl_unique_ptr<imesh_regular_face_array<3> > tris(new imesh_regular_face_array<3>);
   int group = -1;
   if (faces.has_groups())
     group = 0;
@@ -59,15 +59,15 @@ imesh_triangulate(imesh_mesh& mesh)
     case 3: break;
     case 4:
     {
-      std::auto_ptr<imesh_face_array_base> tris(
+      vcl_unique_ptr<imesh_face_array_base> tris(
           imesh_triangulate(static_cast<const imesh_regular_face_array<4>&>(mesh.faces())));
-      mesh.set_faces(tris);
+      mesh.set_faces(vcl_move(tris));
       break;
     }
     default:
     {
-      std::auto_ptr<imesh_face_array_base> tris(imesh_triangulate(mesh.faces()));
-      mesh.set_faces(tris);
+      vcl_unique_ptr<imesh_face_array_base> tris(imesh_triangulate(mesh.faces()));
+      mesh.set_faces(vcl_move(tris));
       break;
     }
   }
@@ -190,7 +190,7 @@ imesh_quad_subdivide(imesh_mesh& mesh)
   }
 
   // construct the new quad faces
-  std::auto_ptr<imesh_regular_face_array<4> > new_faces(new imesh_regular_face_array<4>);
+  vcl_unique_ptr<imesh_regular_face_array<4> > new_faces(new imesh_regular_face_array<4>);
   std::vector<vgl_point_2d<double> > tex_coords;
   unsigned int f_vert_base = num_o_verts+num_e_verts;
   for (unsigned int he=0; he<half_edges.size(); ++he) {
@@ -210,7 +210,12 @@ imesh_quad_subdivide(imesh_mesh& mesh)
   }
 
 
+#if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
+  vcl_unique_ptr<imesh_face_array_base> temp( vcl_move(new_faces) );
+  mesh.set_faces(vcl_move(temp));
+#else
   mesh.set_faces(std::auto_ptr<imesh_face_array_base>(new_faces));
+#endif
   mesh.remove_edge_graph();
   if (had_edges)
     mesh.build_edge_graph();
@@ -296,7 +301,7 @@ imesh_quad_subdivide(imesh_mesh& mesh, const std::set<unsigned int>& sel_faces)
   // construct the new faces
   typedef std::map<unsigned int,unsigned int>::const_iterator map_itr;
   typedef imesh_half_edge_set::f_const_iterator face_itr;
-  std::auto_ptr<imesh_face_array> new_faces(new imesh_face_array);
+  vcl_unique_ptr<imesh_face_array> new_faces(new imesh_face_array);
   int group = -1;
   if (faces.has_groups())
     group = 0;
@@ -335,7 +340,12 @@ imesh_quad_subdivide(imesh_mesh& mesh, const std::set<unsigned int>& sel_faces)
   }
 
 
+#if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
+  vcl_unique_ptr<imesh_face_array_base> temp = vcl_move(new_faces);
+  mesh.set_faces(vcl_move(temp));
+#else
   mesh.set_faces(std::auto_ptr<imesh_face_array_base>(new_faces));
+#endif
   mesh.remove_edge_graph();
   if (had_edges)
     mesh.build_edge_graph();
@@ -348,8 +358,8 @@ imesh_submesh_from_faces(const imesh_mesh& mesh, const std::set<unsigned int>& s
 {
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
 
-  std::auto_ptr<imesh_face_array> new_faces(new imesh_face_array);
-  std::auto_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
+  vcl_unique_ptr<imesh_face_array> new_faces(new imesh_face_array);
+  vcl_unique_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
   std::vector<int> vert_map(mesh.num_verts(),-1);
 
   unsigned int new_count = 0;
@@ -393,9 +403,9 @@ imesh_submesh_from_faces(const imesh_mesh& mesh, const std::set<unsigned int>& s
     new_verts->set_normals(vnormals);
 
 
-  std::auto_ptr<imesh_vertex_array_base> nverts(new_verts);
-  std::auto_ptr<imesh_face_array_base> nfaces(new_faces);
-  imesh_mesh submesh(nverts,nfaces);
+  vcl_unique_ptr<imesh_vertex_array_base> nverts(vcl_move(new_verts));
+  vcl_unique_ptr<imesh_face_array_base> nfaces(vcl_move(new_faces));
+  imesh_mesh submesh(vcl_move(nverts),vcl_move(nfaces));
 
   if (mesh.has_tex_coords())
     submesh.set_tex_coords(tex_coords);
@@ -433,8 +443,8 @@ imesh_mesh dual_mesh(const imesh_mesh& mesh)
   const unsigned int num_verts = mesh.num_verts();
   const unsigned int num_faces = mesh.num_faces();
 
-  std::auto_ptr<imesh_face_array> new_faces(new imesh_face_array);
-  std::auto_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
+  vcl_unique_ptr<imesh_face_array> new_faces(new imesh_face_array);
+  vcl_unique_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
 
   for (unsigned int i=0; i<num_faces; ++i)
   {
@@ -464,16 +474,16 @@ imesh_mesh dual_mesh(const imesh_mesh& mesh)
   if (mesh.vertices().has_normals())
     new_faces->set_normals(mesh.vertices().normals());
 
-  std::auto_ptr<imesh_face_array_base> nf(new_faces);
-  std::auto_ptr<imesh_vertex_array_base > nv(new_verts);
-  return imesh_mesh(nv,nf);
+  vcl_unique_ptr<imesh_face_array_base> nf(vcl_move(new_faces));
+  vcl_unique_ptr<imesh_vertex_array_base > nv(vcl_move(new_verts));
+  return imesh_mesh(vcl_move(nv),vcl_move(nf));
 }
 
 //: Contains a 3d point in convex polygon
 bool contains_point(const imesh_mesh& mesh,vgl_point_3d<double> p)
 {
-  std::auto_ptr<imesh_face_array> new_faces(new imesh_face_array);
-  std::auto_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
+  vcl_unique_ptr<imesh_face_array> new_faces(new imesh_face_array);
+  vcl_unique_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
 
   for (unsigned int i=0; i<mesh.num_faces(); ++i)
   {

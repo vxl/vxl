@@ -46,13 +46,13 @@ std::string  mcal_single_basis_cost::is_a() const
 
 
 //: Create a concrete mcal_single_basis_cost object, from a text specification.
-std::auto_ptr<mcal_single_basis_cost>
+vcl_unique_ptr<mcal_single_basis_cost>
   mcal_single_basis_cost::create_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
 
-  std::auto_ptr<mcal_single_basis_cost> pvmb;
+  vcl_unique_ptr<mcal_single_basis_cost> pvmb;
   try
   {
     pvmb = mbl_cloneables_factory<mcal_single_basis_cost>::get_clone(name);

@@ -99,7 +99,7 @@ static void test_bvpl_plane_propagation_process()
 
   // check if the results are in DB
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr S = DATABASE->select("boxm_scene_base_sptr_data", Q);
+  brdb_selection_sptr S = DATABASE->select("boxm_scene_base_sptr_data", vcl_move(Q));
   if (S->size()!=1){
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";

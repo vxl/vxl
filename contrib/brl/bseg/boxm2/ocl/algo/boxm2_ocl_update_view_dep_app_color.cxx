@@ -171,7 +171,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   norm_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // Image Dimensions
-  int img_dim_buff[4] = {0, 0, img_view->ni(), img_view->nj() };
+  int img_dim_buff[4] = {0, 0, (int)img_view->ni(), (int) img_view->nj() };
   bocl_mem_sptr img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 

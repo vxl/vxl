@@ -13,7 +13,7 @@
 
 class rsdl_kd_tree;
 #include <iostream>
-#include <memory>
+#include <vcl_memory.h>
 #include <vbl/vbl_smart_ptr.h>
 typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 #include <rsdl/rsdl_point.h>

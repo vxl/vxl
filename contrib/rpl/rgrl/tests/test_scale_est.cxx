@@ -1,5 +1,5 @@
 #include <vector>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <cmath>
 #include <testlib/testlib_test.h>
@@ -61,8 +61,8 @@ static void test_scale_est()
   }
   var /= num_pts;
 
-  std::auto_ptr<rrel_objective> obj( new rrel_muset_obj( num_pts ) );
-  rgrl_scale_est_closest closest_est( obj );
+  vcl_unique_ptr<rrel_objective> obj( new rrel_muset_obj( num_pts ) );
+  rgrl_scale_est_closest closest_est( vcl_move(obj) );
 
   // Simple, one-to-one errors
   double one_to_one_scale = 0.0;

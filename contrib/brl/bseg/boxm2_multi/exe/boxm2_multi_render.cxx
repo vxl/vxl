@@ -96,7 +96,7 @@ void test_render_expected_images(boxm2_scene_sptr scene,
     }
 
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, out_img);
-    brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+    brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q));
     if (S->size()!=1) {
       std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " no selections\n";

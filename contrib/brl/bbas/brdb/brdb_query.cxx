@@ -41,7 +41,7 @@ brdb_query_aptr operator &(brdb_query_aptr q1, brdb_query_aptr q2)
   else if (!q2.get())
     return q1;
 
-  return brdb_query_aptr(new brdb_query_and(q1,q2));
+  return brdb_query_aptr(new brdb_query_and(vcl_move(q1),vcl_move(q2)));
 }
 
 
@@ -57,13 +57,13 @@ brdb_query_aptr operator |(brdb_query_aptr q1, brdb_query_aptr q2)
   else if (!q2.get())
     return q1;
 
-  return brdb_query_aptr(new brdb_query_or(q1,q2));
+  return brdb_query_aptr(new brdb_query_or(vcl_move(q1),vcl_move(q2)));
 }
 
 //============================= brdb_query_branch =============================
 
 brdb_query_branch::brdb_query_branch(brdb_query_aptr q1, brdb_query_aptr q2)
-  : first_(q1), second_(q2) // assumes ownership of these two queries
+  : first_(vcl_move(q1)), second_(vcl_move(q2)) // assumes ownership of these two queries
 {
   assert(first_.get() && second_.get());
 }
@@ -92,7 +92,7 @@ brdb_query_branch::operator = (const brdb_query_branch& rhs)
 
 //: Constructor from two auto pointers (takes ownership)
 brdb_query_and::brdb_query_and(brdb_query_aptr q1, brdb_query_aptr q2)
-  : brdb_query_branch(q1,q2)
+  : brdb_query_branch(vcl_move(q1),vcl_move(q2))
 {
 }
 
@@ -115,14 +115,14 @@ brdb_query_and::complement() const
 {
   brdb_query_aptr q1c = first_->complement();
   brdb_query_aptr q2c = second_->complement();
-  return brdb_query_aptr(new brdb_query_or(q1c,q2c));
+  return brdb_query_aptr(new brdb_query_or(vcl_move(q1c),vcl_move(q2c)));
 }
 
 //============================== brdb_query_or ================================
 
 //: Constructor from two auto pointers (takes ownership)
 brdb_query_or::brdb_query_or(brdb_query_aptr q1, brdb_query_aptr q2)
-  : brdb_query_branch(q1,q2)
+  : brdb_query_branch(vcl_move(q1),vcl_move(q2))
 {
 }
 
@@ -145,7 +145,7 @@ brdb_query_or::complement() const
 {
   brdb_query_aptr q1c = first_->complement();
   brdb_query_aptr q2c = second_->complement();
-  return brdb_query_aptr(new brdb_query_and(q1c,q2c));
+  return brdb_query_aptr(new brdb_query_and(vcl_move(q1c),vcl_move(q2c)));
 }
 
 
@@ -155,10 +155,10 @@ brdb_query_or::complement() const
 //: make a query on a certain attribute, with a certain type of comparison to a value
 brdb_query_comp::brdb_query_comp(const std::string& attribute_name,
                                  const brdb_query::comp_type& type,
-                                 std::auto_ptr<brdb_value> value)
+                                 vcl_unique_ptr<brdb_value> value)
   : attribute_name_(attribute_name),
     comparison_type_(type),
-    value_(value)
+    value_(vcl_move(value))
 {
 }
 
@@ -177,7 +177,7 @@ brdb_query_aptr
 brdb_query_comp::complement() const
 {
   return brdb_query_aptr(new brdb_query_comp(attribute_name_, ~comparison_type_,
-                                             std::auto_ptr<brdb_value>(value_->clone())));
+                                             vcl_unique_ptr<brdb_value>(value_->clone())));
 }
 
 
@@ -194,7 +194,7 @@ brdb_query_comp::operator = (const brdb_query_comp& rhs)
 {
   this->attribute_name_ = rhs.attribute_name_;
   this->comparison_type_ = rhs.comparison_type_;
-  this->value_ = std::auto_ptr<brdb_value>(rhs.value_->clone());
+  this->value_ = vcl_unique_ptr<brdb_value>(rhs.value_->clone());
   return *this;
 }
 

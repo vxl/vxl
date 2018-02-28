@@ -1,8 +1,9 @@
 // This is core/vidl/tests/test_pixel_iterator.cxx
 #include <iostream>
-#include <memory>
+#include <vcl_memory.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#include <vcl_memory.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_pixel_iterator.h>
@@ -34,7 +35,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,3,1,VIDL_PIXEL_FORMAT_RGB_24);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGB_24> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<3; ++i, ++itr, ++(*pitr)) {
@@ -61,7 +62,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,3,1,VIDL_PIXEL_FORMAT_RGB_24P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGB_24P> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<3; ++i, ++itr, ++(*pitr)) {
@@ -88,7 +89,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,3,1,VIDL_PIXEL_FORMAT_BGR_24);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_BGR_24> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<3; ++i, ++itr, ++(*pitr)) {
@@ -115,7 +116,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,3,1,VIDL_PIXEL_FORMAT_RGBA_32);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGBA_32> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<3; ++i, ++itr, ++(*pitr)) {
@@ -146,7 +147,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,3,1,VIDL_PIXEL_FORMAT_RGBA_32P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGBA_32P> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<3; ++i, ++itr, ++(*pitr)) {
@@ -177,7 +178,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,2,1,VIDL_PIXEL_FORMAT_RGB_555);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGB_555> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<2; ++i, ++itr, ++(*pitr)) {
@@ -204,7 +205,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,2,1,VIDL_PIXEL_FORMAT_RGB_565);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_RGB_565> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<2; ++i, ++itr, ++(*pitr)) {
@@ -231,7 +232,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,2,2,VIDL_PIXEL_FORMAT_YUV_444P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUV_444P> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<4; ++i, ++itr, ++(*pitr)) {
@@ -258,7 +259,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,2,2,VIDL_PIXEL_FORMAT_UYV_444);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_UYV_444> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<4; ++i, ++itr, ++(*pitr)) {
@@ -287,7 +288,7 @@ static void test_pixel_iterator()
       vidl_frame_sptr frame = new vidl_shared_frame(buffer,4,4,VIDL_PIXEL_FORMAT_YUV_422P);
       vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUV_422P> itr(*frame);
     // polymorphic pixel iterator
-      std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+      vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
       bool success = true, psuccess = true;
       for (unsigned int i=0; i<16; ++i, ++itr, ++(*pitr)) {
@@ -314,7 +315,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,2,2,VIDL_PIXEL_FORMAT_UYVY_422);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_UYVY_422> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<4; ++i, ++itr, ++(*pitr)) {
@@ -341,7 +342,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,2,2,VIDL_PIXEL_FORMAT_YUYV_422);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUYV_422> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<4; ++i, ++itr, ++(*pitr)) {
@@ -368,7 +369,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,4,2,VIDL_PIXEL_FORMAT_YUV_411P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUV_411P> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<8; ++i, ++itr, ++(*pitr)) {
@@ -395,7 +396,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,4,2,VIDL_PIXEL_FORMAT_UYVY_411);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_UYVY_411> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<8; ++i, ++itr, ++(*pitr)) {
@@ -423,7 +424,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,4,4,VIDL_PIXEL_FORMAT_YUV_420P);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUV_420P> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<16; ++i, ++itr, ++(*pitr)) {
@@ -451,7 +452,7 @@ static void test_pixel_iterator()
       vidl_frame_sptr frame = new vidl_shared_frame(buffer,4,4,VIDL_PIXEL_FORMAT_YUV_410P);
       vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_YUV_410P> itr(*frame);
       // polymorphic pixel iterator
-      std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+      vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
       bool success = true, psuccess = true;
       for (unsigned int i=0; i<16; ++i, ++itr, ++(*pitr)) {
@@ -477,7 +478,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,2,2,VIDL_PIXEL_FORMAT_MONO_16);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_16> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<4; ++i, ++itr, ++(*pitr)) {
@@ -499,7 +500,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,2,2,VIDL_PIXEL_FORMAT_MONO_8);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_8> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<4; ++i, ++itr, ++(*pitr)) {
@@ -521,7 +522,7 @@ static void test_pixel_iterator()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer,4,4,VIDL_PIXEL_FORMAT_MONO_1);
     vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1> itr(*frame);
     // polymorphic pixel iterator
-    std::auto_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
+    vcl_unique_ptr<vidl_pixel_iterator> pitr(vidl_make_pixel_iterator(*frame));
 
     bool success = true, psuccess = true;
     for (unsigned int i=0; i<16; ++i, ++itr, ++(*pitr)) {

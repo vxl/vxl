@@ -29,7 +29,7 @@ static void test_process()
     // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
 
-  brdb_selection_sptr selec = DATABASE->select("float_data", Q);
+  brdb_selection_sptr selec = DATABASE->select("float_data", vcl_move(Q));
   if (selec->size()!=1) {
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
   }

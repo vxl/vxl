@@ -60,8 +60,8 @@ vidl_player_manager::vidl_player_manager()
     time_interval_(0.0f),
     width_(640),
     height_(480),
-    istream_(NULL),
-    ostream_(NULL),
+    istream_(static_cast<vidl_istream *>(NULL)),
+    ostream_(static_cast<vidl_ostream *>(NULL)),
     win_(0)
 {
 }

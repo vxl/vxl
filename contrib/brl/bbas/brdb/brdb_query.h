@@ -22,8 +22,12 @@ class brdb_query
 {
  protected:
   //: Destructor - private to prevent allocation on the heap
+#if __cplusplus >= 201103L
+  friend vcl_unique_ptr<brdb_query>;
+#else
   virtual ~brdb_query() {}
-  friend class std::auto_ptr<brdb_query>;
+  friend class vcl_unique_ptr<brdb_query>;
+#endif
 
  public:
   virtual brdb_query_aptr clone() const = 0;
@@ -128,7 +132,7 @@ class brdb_query_comp : public brdb_query
   //: make a query on a certain attribute, with a certain type of comparison to a value
   brdb_query_comp(const std::string& attribute_name,
                   const brdb_query::comp_type& type,
-                  std::auto_ptr<brdb_value> value);
+                  vcl_unique_ptr<brdb_value> value);
 
   //: Copy Constructor
   brdb_query_comp(const brdb_query_comp& other);
@@ -167,7 +171,7 @@ class brdb_query_comp : public brdb_query
   brdb_query::comp_type comparison_type_;
 
   //: the value which will be used by the constraints
-  std::auto_ptr<brdb_value> value_;
+  vcl_unique_ptr<brdb_value> value_;
 };
 
 
@@ -178,7 +182,7 @@ brdb_query_aptr
                         const T& value)
 {
   return brdb_query_aptr(new brdb_query_comp(attribute_name, type,
-                            std::auto_ptr<brdb_value>(new brdb_value_t<T>(value))));
+                            vcl_unique_ptr<brdb_value>(new brdb_value_t<T>(value))));
 }
 
 

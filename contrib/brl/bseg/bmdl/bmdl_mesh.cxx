@@ -554,10 +554,10 @@ void bmdl_mesh::mesh_lidar(const std::vector<vgl_polygon<double> >& boundaries,
     faces->push_back(roof);
   }
 
-  std::auto_ptr<imesh_vertex_array_base> vb(verts);
-  std::auto_ptr<imesh_face_array_base> fb(faces);
-  mesh.set_vertices(vb);
-  mesh.set_faces(fb);
+  vcl_unique_ptr<imesh_vertex_array_base> vb(verts);
+  vcl_unique_ptr<imesh_face_array_base> fb(faces);
+  mesh.set_vertices(vcl_move(vb));
+  mesh.set_faces(vcl_move(fb));
 }
 
 
@@ -898,10 +898,10 @@ void bmdl_mesh::mesh_lidar(const std::vector<bmdl_edge>& edges,
     }
   }
 
-  std::auto_ptr<imesh_vertex_array_base> vb(verts);
-  std::auto_ptr<imesh_face_array_base> fb(faces);
-  mesh.set_vertices(vb);
-  mesh.set_faces(fb);
+  vcl_unique_ptr<imesh_vertex_array_base> vb(verts);
+  vcl_unique_ptr<imesh_face_array_base> fb(faces);
+  mesh.set_vertices(vcl_move(vb));
+  mesh.set_faces(vcl_move(fb));
 }
 
 

@@ -259,15 +259,15 @@ generate_defaults(  rgrl_matcher_sptr                  &matcher,
   //
   // weighter:
   if ( !weighter ) {
-    std::auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
-    weighter = new rgrl_weighter_m_est(m_est_obj, false, false);
+    vcl_unique_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+    weighter = new rgrl_weighter_m_est(vcl_move(m_est_obj), false, false);
     DebugMacro( 1, "Default weighter set to rgrl_weighter_m_est\n");
   }
 
   // unweighted scale estimator:
   if ( !unwgted_scale_est ) {
-    std::auto_ptr<rrel_objective> lms_obj( new rrel_lms_obj(1) );
-    unwgted_scale_est = new rgrl_scale_est_closest( lms_obj );
+    vcl_unique_ptr<rrel_objective> lms_obj( new rrel_lms_obj(1) );
+    unwgted_scale_est = new rgrl_scale_est_closest( vcl_move(lms_obj) );
     DebugMacro( 1, "Default unwgted scale estimator set to rgrl_scale_est_closest\n");
   }
 }
