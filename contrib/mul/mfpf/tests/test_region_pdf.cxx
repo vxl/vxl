@@ -124,7 +124,7 @@ void test_region_pdf()
           "  search_nj: 15\n"
           "}\n");
 
-    std::auto_ptr<mfpf_point_finder_builder>
+    vcl_unique_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_pdf_builder");
@@ -152,7 +152,7 @@ void test_region_pdf()
           "  step_size: 1.01\n"
           "}\n");
 
-    std::auto_ptr<mfpf_point_finder_builder>
+    vcl_unique_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_pdf_builder");

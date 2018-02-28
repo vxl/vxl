@@ -59,7 +59,7 @@ struct tool_params
   unsigned pt_index;
 
   //: Object to build patch model
-  std::auto_ptr<mfpf_point_finder_builder> patch_builder;
+  vcl_unique_ptr<mfpf_point_finder_builder> patch_builder;
 
   //: Image directory
   std::string image_dir;

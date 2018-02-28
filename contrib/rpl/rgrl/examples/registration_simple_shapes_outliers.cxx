@@ -248,8 +248,8 @@ main()
   // \endlatexonly
 
   // BeginCodeSnippet
-  std::auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
-  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(m_est_obj, false, false);
+  vcl_unique_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(vcl_move(m_est_obj), false, false);
   // EndCodeSnippet
 
   // \latexonly
@@ -291,10 +291,10 @@ main()
   // \endlatexonly
 
   // BeginCodeSnippet
-  std::auto_ptr<rrel_objective> muset_obj( new rrel_muset_obj(0, false) );
+  vcl_unique_ptr<rrel_objective> muset_obj( new rrel_muset_obj(0, false) );
 
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est =
-    new rgrl_scale_est_closest( muset_obj );
+    new rgrl_scale_est_closest( vcl_move(muset_obj) );
   rgrl_scale_estimator_wgted_sptr wgted_scale_est =
     new rgrl_scale_est_all_weights();
   // EndCodeSnippet

@@ -383,7 +383,7 @@ void msm_shape_model_builder::config_from_stream(std::istream &is)
 
   std::string aligner_str = props.get_required_property("aligner");
   std::stringstream aligner_ss(aligner_str);
-  std::auto_ptr<msm_aligner> aligner=msm_aligner::create_from_stream(aligner_ss);
+  vcl_unique_ptr<msm_aligner> aligner=msm_aligner::create_from_stream(aligner_ss);
   aligner_=aligner->clone();
 
   std::string param_limiter_str
@@ -393,7 +393,7 @@ void msm_shape_model_builder::config_from_stream(std::istream &is)
   {
     std::stringstream ss(param_limiter_str);
 
-    std::auto_ptr<msm_param_limiter> param_limiter;
+    vcl_unique_ptr<msm_param_limiter> param_limiter;
     param_limiter = msm_param_limiter::create_from_stream(ss);
     param_limiter_ = param_limiter->clone();
   }

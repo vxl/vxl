@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <string>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <iosfwd>
 #include <mmn/mmn_arc.h>
@@ -69,7 +69,7 @@ public:
     //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs) =0;
 
-  static std::auto_ptr<mmn_solver>
+  static vcl_unique_ptr<mmn_solver>
     create_from_stream(std::istream &is);
 };
 

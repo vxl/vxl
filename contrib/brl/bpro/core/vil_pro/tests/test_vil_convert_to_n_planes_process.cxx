@@ -40,7 +40,7 @@ vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img)
   TEST("run vil_convert_to_n_planes_process", good ,true);
 
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
-  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
+  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q_img) );
   TEST("output image is in db", S_img->size(), 1);
 
   brdb_value_sptr value_img;

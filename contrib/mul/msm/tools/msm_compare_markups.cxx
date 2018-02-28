@@ -70,7 +70,7 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  vcl_auto_ptr<msm_aligner> aligner;
+  vcl_unique_ptr<msm_aligner> aligner;
   
   //: Radius of points to display 
   double point_radius;

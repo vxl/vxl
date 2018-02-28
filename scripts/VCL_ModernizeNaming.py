@@ -582,7 +582,7 @@ vcl_map.h,vcl_map,std::map
 vcl_map.h,vcl_multimap,std::multimap
 vcl_map.h,vcl_swap,std::swap
 vcl_memory.h,vcl_allocator,std::allocator
-vcl_memory.h,vcl_auto_ptr,std::auto_ptr
+vcl_memory.h,vcl_unique_ptr,vcl_unique_ptr
 vcl_memory.h,vcl_get_temporary_buffer,std::get_temporary_buffer
 vcl_memory.h,vcl_raw_storage_iterator,std::raw_storage_iterator
 vcl_memory.h,vcl_return_temporary_buffer,std::return_temporary_buffer

@@ -224,18 +224,18 @@ main( int argc, char* argv[] )
 
   //Weighter
   //
-  std::auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
-  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(m_est_obj, false, false);
+  vcl_unique_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(vcl_move(m_est_obj), false, false);
 
   //Scale estimator
   //
   int max_set_size = 1000;  //maximum expected number of features
-  std::auto_ptr<rrel_objective> muset_obj( new rrel_muset_obj( max_set_size , false) );
+  vcl_unique_ptr<rrel_objective> muset_obj( new rrel_muset_obj( max_set_size , false) );
 
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est;
   rgrl_scale_estimator_wgted_sptr wgted_scale_est;
 
-  unwgted_scale_est = new rgrl_scale_est_closest( muset_obj );
+  unwgted_scale_est = new rgrl_scale_est_closest( vcl_move(muset_obj));
   wgted_scale_est = new rgrl_scale_est_all_weights();
 
   //convergence tester

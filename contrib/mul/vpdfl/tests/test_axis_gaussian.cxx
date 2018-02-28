@@ -196,7 +196,7 @@ void test_axis_gaussian()
           "  min_var: 0.1234e-5\n"
           "}\n");
 
-    std::auto_ptr<vpdfl_builder_base>
+    vcl_unique_ptr<vpdfl_builder_base>
             builder = vpdfl_builder_base::new_pdf_builder_from_stream(ss);
 
     TEST("Correct builder",builder->is_a(),"vpdfl_axis_gaussian_builder");

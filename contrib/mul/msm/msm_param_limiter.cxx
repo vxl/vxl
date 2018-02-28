@@ -44,12 +44,12 @@ void msm_param_limiter::config_from_stream(std::istream &is)
 
 //=======================================================================
 //: Create a concrete msm_param_limiter-derived object, from a text specification.
-std::auto_ptr<msm_param_limiter> msm_param_limiter::create_from_stream(std::istream &is)
+vcl_unique_ptr<msm_param_limiter> msm_param_limiter::create_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
 
-  std::auto_ptr<msm_param_limiter> ps =
+  vcl_unique_ptr<msm_param_limiter> ps =
     mbl_cloneables_factory<msm_param_limiter>::get_clone(name);
 
   ps -> config_from_stream(is);

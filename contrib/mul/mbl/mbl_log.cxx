@@ -11,7 +11,7 @@
 
 #include <cstddef>
 #include <fstream>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <algorithm>
 #include <sstream>
@@ -404,10 +404,10 @@ void mbl_logger::mtstop()
 
 mbl_logger_root &mbl_logger::root()
 {
-  static std::auto_ptr<mbl_logger_root> root_;
+  static vcl_unique_ptr<mbl_logger_root> root_;
 
   if (!root_.get())
-    root_ = std::auto_ptr<mbl_logger_root>(new mbl_logger_root());
+    root_ = vcl_unique_ptr<mbl_logger_root>(new mbl_logger_root());
   return *root_;
 }
 

@@ -17,7 +17,7 @@
 
 //: Constructor
 brdb_selection::brdb_selection(const brdb_relation_sptr& relation, brdb_query_aptr query)
-  : relation_(relation), query_(query)
+  : relation_(relation), query_(vcl_move(query))
 {
   this->time_stamp_ = relation->get_timestamp();
   produce(query_, selected_set_);
@@ -32,7 +32,7 @@ brdb_selection::brdb_selection(const brdb_selection_sptr& selection, brdb_query_
     selection->check_and_update();
     this->selected_set_ = selection->selected_set_;
     refine(query, selected_set_);
-    this->query_ = brdb_query_aptr(new brdb_query_and(selection->query_->clone(), query));
+    this->query_ = brdb_query_aptr(new brdb_query_and(selection->query_->clone(), vcl_move(query)));
   }
 }
 

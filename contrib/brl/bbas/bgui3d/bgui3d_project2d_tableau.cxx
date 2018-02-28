@@ -160,7 +160,7 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
 
 //: Get the scene camera
 // creates a vpgl camera (either perspective or affine) from the graphics camera
-std::auto_ptr<vpgl_proj_camera<double> >
+vcl_unique_ptr<vpgl_proj_camera<double> >
 bgui3d_project2d_tableau::camera() const
 {
   vnl_matrix<double> mm(4,4,16,model_matrix_);
@@ -169,12 +169,12 @@ bgui3d_project2d_tableau::camera() const
   t = R.inverse()*t;
   if (camera_z_[2][2] != 0) {
     vpgl_calibration_matrix<double> K(camera_z_.extract(3,3));
-    return std::auto_ptr<vpgl_proj_camera<double> >
+    return vcl_unique_ptr<vpgl_proj_camera<double> >
         ( new vpgl_perspective_camera<double>(K,t,R) );
   }
   else
     // FIXME - construct a vpgl_affine_camera
-    return std::auto_ptr<vpgl_proj_camera<double> >
+    return vcl_unique_ptr<vpgl_proj_camera<double> >
       ( new vpgl_proj_camera<double>(camera_z_*mm.transpose()) );
 }
 

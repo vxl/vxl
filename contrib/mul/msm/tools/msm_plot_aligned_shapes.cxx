@@ -64,7 +64,7 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  std::auto_ptr<msm_aligner> aligner;
+  vcl_unique_ptr<msm_aligner> aligner;
 
   std::string curves_path;
 

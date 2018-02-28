@@ -9,6 +9,7 @@ bool write_params_json(std::string& json_str, betr_params_sptr const& params){
   params->serialize(serialize_root);
   Json::StyledWriter writer;
   json_str = writer.write(serialize_root);
+  return true;
 }
 bool read_params_json(std::string const& json_str, betr_params_sptr& params){
   Json::Value deserialize_root;

@@ -111,7 +111,7 @@ void test_profile_pdf()
           "  pdf_builder: vpdfl_axis_gaussian_builder { }\n"
           "}\n");
 
-    std::auto_ptr<mfpf_point_finder_builder>
+    vcl_unique_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_profile_pdf_builder");

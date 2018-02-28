@@ -6,7 +6,7 @@
 // \author Tim Cootes
 
 #include <string>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <iosfwd>
 #include <mfpf/mfpf_vec_cost.h>
@@ -62,7 +62,7 @@ class mfpf_vec_cost_builder
   virtual void b_read(vsl_b_istream& bfs)=0;
 
   //: Create a concrete object, from a text specification.
-  static std::auto_ptr<mfpf_vec_cost_builder> create_from_stream(std::istream &is);
+  static vcl_unique_ptr<mfpf_vec_cost_builder> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer

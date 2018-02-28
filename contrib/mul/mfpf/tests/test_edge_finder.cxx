@@ -104,7 +104,7 @@ void test_edge_finder()
           "  search_ni: 17\n"
           "}\n");
 
-    std::auto_ptr<mfpf_point_finder_builder>
+    vcl_unique_ptr<mfpf_point_finder_builder>
             pfb = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Builder",pfb->is_a(),"mfpf_edge_finder_builder");

@@ -28,7 +28,7 @@ clsfy_binary_1d_wrapper_builder::clsfy_binary_1d_wrapper_builder():
 //: Create a new untrained linear classifier with binary output
   clsfy_classifier_base* clsfy_binary_1d_wrapper_builder::new_classifier() const
 {
-  std::auto_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
+  vcl_unique_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
 
   clsfy_binary_1d_wrapper classifier;
   classifier.set_classifier_1d(*c_1d);
@@ -71,7 +71,7 @@ double clsfy_binary_1d_wrapper_builder::build(
 
   clsfy_binary_1d_wrapper &c_wrap = (clsfy_binary_1d_wrapper &) classifier;
 
-  std::auto_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
+  vcl_unique_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
 
   vnl_vector<double> inputs_1d(inputs.size());
   unsigned i=0;
@@ -152,7 +152,7 @@ void clsfy_binary_1d_wrapper_builder::config(std::istream &as)
 
   {
     std::stringstream ss2(props.get_required_property("builder_1d"));
-    std::auto_ptr<clsfy_builder_1d> b_1d =
+    vcl_unique_ptr<clsfy_builder_1d> b_1d =
       clsfy_builder_1d::new_builder(ss2);
   }
 

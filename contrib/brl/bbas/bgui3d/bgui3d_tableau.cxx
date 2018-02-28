@@ -290,10 +290,10 @@ bgui3d_tableau::set_camera(const vpgl_proj_camera<double>& /*camera*/)
 
 //: Get the scene camera
 // creates a vpgl camera (either perspective or affine) from the graphics camera
-std::auto_ptr<vpgl_proj_camera<double> >
+vcl_unique_ptr<vpgl_proj_camera<double> >
 bgui3d_tableau::camera() const
 {
-  return std::auto_ptr<vpgl_proj_camera<double> >(NULL);
+  return vcl_unique_ptr<vpgl_proj_camera<double> >(NULL);
 }
 
 

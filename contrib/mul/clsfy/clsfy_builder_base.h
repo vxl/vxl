@@ -13,7 +13,7 @@
 
 #include <vector>
 #include <string>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <iosfwd>
 #include <mbl/mbl_data_wrapper.h>
@@ -61,7 +61,7 @@ class clsfy_builder_base
   virtual void b_read(vsl_b_istream& bfs) = 0;
 
   //: Load description from a text stream
-  static std::auto_ptr<clsfy_builder_base> new_builder(
+  static vcl_unique_ptr<clsfy_builder_base> new_builder(
     std::istream &as);
 
   //: Initialise the parameters from a text stream.

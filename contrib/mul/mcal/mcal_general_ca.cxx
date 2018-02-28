@@ -414,7 +414,7 @@ void mcal_general_ca::config_from_stream(std::istream & is)
   if (props.find("initial_ca")!=props.end())
   {
     std::istringstream ss(props["initial_ca"]);
-    std::auto_ptr<mcal_component_analyzer> ca;
+    vcl_unique_ptr<mcal_component_analyzer> ca;
     ca=mcal_component_analyzer::create_from_stream(ss);
     initial_ca_ = *ca;
 
@@ -424,7 +424,7 @@ void mcal_general_ca::config_from_stream(std::istream & is)
   if (props.find("basis_cost")!=props.end())
   {
     std::istringstream ss(props["basis_cost"]);
-    std::auto_ptr<mcal_single_basis_cost> bc;
+    vcl_unique_ptr<mcal_single_basis_cost> bc;
     bc=mcal_single_basis_cost::create_from_stream(ss);
     basis_cost_ = *bc;
 

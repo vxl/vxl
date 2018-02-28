@@ -61,7 +61,7 @@ static void test_bvxm_illum_index_process()
     if (good)
     {
       brdb_query_aptr bin_idx_Q = brdb_query_comp_new("id", brdb_query::EQ, id_bin_idx);
-      brdb_selection_sptr bin_idx_S = DATABASE->select("unsigned_data", bin_idx_Q);
+      brdb_selection_sptr bin_idx_S = DATABASE->select("unsigned_data", vcl_move(bin_idx_Q));
       if (bin_idx_S->size()!=1){
         std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                  << " no selections\n";

@@ -8,7 +8,7 @@
 
 #include <string>
 #include <vector>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <vbl/vbl_triple.h>
 #include <vsl/vsl_binary_io.h>
@@ -86,7 +86,7 @@ class clsfy_builder_1d
   virtual void config(std::istream &as);
 
   //: Load description from a text stream
-  static std::auto_ptr<clsfy_builder_1d> new_builder(
+  static vcl_unique_ptr<clsfy_builder_1d> new_builder(
     std::istream &as);
 };
 

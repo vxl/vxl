@@ -6,7 +6,7 @@
 // \brief Base for objects with apply limits to parameters
 
 #include <string>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
@@ -51,7 +51,7 @@ class msm_param_limiter
   virtual void b_read(vsl_b_istream& bfs) = 0;
 
   //: Create a concrete msm_param_limiter-derived object, from a text specification.
-  static std::auto_ptr<msm_param_limiter> create_from_stream(std::istream &is);
+  static vcl_unique_ptr<msm_param_limiter> create_from_stream(std::istream &is);
 
   //: Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,

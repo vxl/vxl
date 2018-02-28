@@ -6,7 +6,7 @@
 // \author Tim Cootes
 
 #include <string>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <iosfwd>
 #include <mfpf/mfpf_region_form.h>
@@ -97,7 +97,7 @@ class mfpf_region_definer
   virtual void b_read(vsl_b_istream& bfs) =0;
 
   //: Create a concrete object, from a text specification.
-  static std::auto_ptr<mfpf_region_definer> create_from_stream(std::istream &is);
+  static vcl_unique_ptr<mfpf_region_definer> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer

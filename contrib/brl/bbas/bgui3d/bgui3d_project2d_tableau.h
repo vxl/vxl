@@ -44,7 +44,7 @@ class bgui3d_project2d_tableau : public bgui3d_tableau
 
   //: Get the scene camera
   // creates a vpgl camera (either perspective or affine) from the graphics camera
-  virtual std::auto_ptr<vpgl_proj_camera<double> > camera() const;
+  virtual vcl_unique_ptr<vpgl_proj_camera<double> > camera() const;
 
   //: Activate a headlight
   void set_headlight(bool enable) { draw_headlight_ = enable; this->post_redraw(); }

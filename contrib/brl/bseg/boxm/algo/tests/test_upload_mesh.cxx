@@ -46,8 +46,8 @@ static void test_upload_mesh()
 
   // create a mesh
   unsigned int num_faces=1;
-  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(3));
-  std::auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  vcl_unique_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(3));
+  vcl_unique_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   imesh_vertex<3>& vert0 = (*verts)[0];
   vert0[0]=2;
   vert0[1]=2;
@@ -69,8 +69,15 @@ static void test_upload_mesh()
       face[v]=v;
   }
   imesh_mesh mesh;
-  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
+#if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
+  vcl_unique_ptr<imesh_vertex_array_base> tempv(vcl_move(verts));
+  mesh.set_vertices(vcl_move(tempv));
+  vcl_unique_ptr<imesh_face_array_base> tempf(vcl_move(faces));
+  mesh.set_faces(vcl_move(tempf));
+#else
+  mesh.set_vertices(vcl_unique_ptr<imesh_vertex_array_base>(verts));
+  mesh.set_faces(vcl_unique_ptr<imesh_face_array_base>(faces));
+#endif
 
   typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
