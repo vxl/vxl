@@ -329,10 +329,10 @@ bool brad_undo_reflectance_estimate(vil_image_view<float> const& reflectance,
 // should work for panchromatic or multispectral images
 //---------------------------------------------------------------------------
 bool brad_estimate_reflectance_image_multi(
-  vil_image_view<float> const& radiance, 
-  float mean_reflectance, 
-  vil_image_view<float> &cal_img, 
-  int min_norm_band, 
+  vil_image_view<float> const& radiance,
+  float mean_reflectance,
+  vil_image_view<float> &cal_img,
+  int min_norm_band,
   int max_norm_band)
 {
   // set default min/max normalization and dark pixel bands

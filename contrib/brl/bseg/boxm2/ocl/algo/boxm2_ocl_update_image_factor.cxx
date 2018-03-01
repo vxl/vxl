@@ -41,7 +41,7 @@ compute_image_term(boxm2_scene_sptr         scene,
                    float resnearfactor,
                    float resfarfactor)
 {
-    enum { 
+    enum {
         UPDATE_SEGLEN = 0,
         COMPUTE_IMAGEDEN = 1,
     };
@@ -193,7 +193,7 @@ compute_image_term(boxm2_scene_sptr         scene,
             {
                 blk_info->write_to_buffer((queue));
                 vcl_size_t lt[1], gt[1];
-                lt[0] = 64; 
+                lt[0] = 64;
                 gt[0] = RoundUp(info_buffer->data_buffer_length, lt[0]);
                 kern->set_arg(blk_info);
                 kern->set_arg(mog);
@@ -337,7 +337,7 @@ bool boxm2_ocl_compute_pre_post::update_pre(boxm2_scene_sptr         scene,
     //Visibility, Preinf, Norm, and input image buffers
     float* vis_buff = new float[cl_ni*cl_nj];
     float* pre_buff = new float[cl_ni*cl_nj];
-   
+
     for (unsigned i = 0; i < cl_ni*cl_nj; i++)
     {
         vis_buff[i] = 1.0f;
@@ -385,7 +385,7 @@ bool boxm2_ocl_compute_pre_post::update_pre(boxm2_scene_sptr         scene,
             bocl_kernel* kern = kernels[i];
             //write the image values to the buffer
             vul_timer transfer;
-            bocl_mem* blk = opencl_cache->get_block(scene, *id);    
+            bocl_mem* blk = opencl_cache->get_block(scene, *id);
             bocl_mem* blk_info = opencl_cache->loaded_block_info();
             bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id, 0, false);
             boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
@@ -403,13 +403,13 @@ bool boxm2_ocl_compute_pre_post::update_pre(boxm2_scene_sptr         scene,
                 aux0->zero_gpu_buffer(queue);
                 aux1->zero_gpu_buffer(queue);
                 aux2->zero_gpu_buffer(queue);
-                
+
                 kern->set_arg(blk_info);
                 kern->set_arg(blk);
                 kern->set_arg(alpha);
                 kern->set_arg(aux0); //seg len
-                kern->set_arg(aux1); //pre 
-                kern->set_arg(aux2); //vis 
+                kern->set_arg(aux1); //pre
+                kern->set_arg(aux2); //vis
                 kern->set_arg(aux3); //datadensity
                 kern->set_arg(lookup.ptr());
                 kern->set_arg(ray_o_buff.ptr());
@@ -517,7 +517,7 @@ bool boxm2_ocl_compute_pre_post::update_post(boxm2_scene_sptr         scene,
     vcl_vector<bocl_kernel*>& kernels = get_post_kernels(device, options);
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-    
+
     unsigned cl_ni = (unsigned)RoundUp(ni, (int)local_threads[0]);
     unsigned cl_nj = (unsigned)RoundUp(nj, (int)local_threads[1]);
     global_threads[0] = cl_ni;
@@ -545,7 +545,7 @@ bool boxm2_ocl_compute_pre_post::update_post(boxm2_scene_sptr         scene,
     //Visibility, Preinf, Norm, and input image buffers
     float* vis_buff = new float[cl_ni*cl_nj];
     float* post_buff = new float[cl_ni*cl_nj];
-   
+
 
     vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0);
     vcl_fill(post_buff, post_buff + cl_ni*cl_nj, 0.0);
@@ -643,7 +643,7 @@ bool boxm2_ocl_compute_pre_post::update_post(boxm2_scene_sptr         scene,
 
                 kern->set_arg(blk_info);
                 kern->set_arg(aux0);
-     
+
                 kern->set_arg(aux2);
                 kern->execute(queue, 1, lt, gt);
                 int status = clFinish(queue);
@@ -820,7 +820,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_pre_kernels(bocl_devic
     vcl_string pre_opts = options + " -D PRE_CELL  -D STEP_CELL=step_cell_pre(aux_args,data_ptr,llid,d)";
     pre->create_kernel(&device->context(), device->device_id(), src_paths, "pre_cell_main", pre_opts, "update::pre_inf");
     vec_kernels.push_back(pre);
-    
+
     bocl_kernel* normalize_pre = new bocl_kernel();
     vcl_string normalize_pre_opts = options + " -D PRE_CELL  ";
     normalize_pre->create_kernel(&device->context(), device->device_id(), src_paths, "normalize_pre_cell", pre_opts, "update::normalize_pre_cell");

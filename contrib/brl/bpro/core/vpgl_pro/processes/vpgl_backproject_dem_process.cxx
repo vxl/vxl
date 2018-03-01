@@ -52,7 +52,7 @@ bool vpgl_backproject_dem_process(bprb_func_process& pro)
   if(!dem_mgr || !cam){
    std::cout << "vpgl_backproject_dem_process: Null input dem_mgr or camera" << std::endl;
     return false;
-  } 
+  }
   double x, y, z;
   // if err_tol = -1, use default
   bool good = true;

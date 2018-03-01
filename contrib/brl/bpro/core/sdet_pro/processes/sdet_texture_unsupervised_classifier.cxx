@@ -58,13 +58,13 @@ bool sdet_texture_unsupervised_classifier_process(bprb_func_process& pro)
   std::cout << "filter bank already computed at the dictionary, ni: " << ni << " nj: " << nj << std::endl;
 
   vil_image_view<vil_rgb<vxl_byte> > out_rgb(ni, nj);
-  out_rgb.fill(vil_rgb<vxl_byte>(0,0,0)); 
-  
+  out_rgb.fill(vil_rgb<vxl_byte>(0,0,0));
+
   vil_image_view<int> texton_img(ni, nj);
   texton_img.fill(-1);
   dict->compute_textons_of_pixels(texton_img);
   std::cout << " computed textons of pixels..!\n"; std::cout.flush();
-  
+
   for (int i = invalid; i < (int)ni-invalid; i++) {
     for (int j = invalid; j < (int)nj-invalid; j++) {
       int indx = texton_img(i, j);

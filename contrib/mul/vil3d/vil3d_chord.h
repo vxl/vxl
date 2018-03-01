@@ -144,7 +144,7 @@ public:
       v+=unsigned(operator[](i).length());
     return v;
   }
-  
+
   //: Bounding box of this region
   vgl_box_3d<int> bounds() const
   {
@@ -155,10 +155,10 @@ public:
       box.add(vgl_point_3d<int>(c.start_x(),c.y(),c.z()));
       box.add(vgl_point_3d<int>(c.end_x(),c.y(),c.z()));
     }
-    
+
     return box;
   }
-  
+
   //: Translate region by given amount
   void translate_by(int x, int y, int z)
   {
@@ -190,6 +190,6 @@ inline void vil3d_fill_region(vil3d_image_view<T>& image, const vil3d_region& r,
     vil3d_fill_chord(image,r[i],v);
 }
 
-  
+
 
 #endif // vil3d_chord_h_

@@ -15,7 +15,7 @@ void sdet_region_classifier::find_iou_clusters(const std::map<unsigned, sdet_reg
     vgl_box_2d<float> bb =(*rit).second->bbox();
     if(!bb.is_empty())
       tr.add(rit->second);
-  }    
+  }
   std::cout << "insert in rtree in " << t.real() << " msec" << std::endl;
   t.mark();
   // find sets of high int over union regions
@@ -52,7 +52,7 @@ void sdet_region_classifier::find_iou_clusters(const std::map<unsigned, sdet_reg
     vgl_box_2d<float> bb =(*rit).second->bbox();
     if(!bb.is_empty())
       tr.add(rit->second);
-  }    
+  }
   std::cout << "insert in rtree in " << t.real() << " msec" << std::endl;
   t.mark();
   // find sets of high int over union regions
@@ -106,7 +106,7 @@ void sdet_region_classifier::compute_iou_cluster_similarity(){
       std::map<unsigned, float>::const_iterator iit = iou_index1.find(lab0);
       if(iit != iou_index1.end())
         continue;
-      // see if clusters intersect 
+      // see if clusters intersect
       bool intersect = false;
       for(std::map<unsigned, float>::const_iterator iit0 = iou_index0.begin();
           iit0 != iou_index0.end()&&!intersect; ++iit0){
@@ -144,10 +144,10 @@ void sdet_region_classifier::compute_iou_cluster_similarity(){
       }
       sim_map[lab1]=max_rsim;
     }
-	 region_sim self_rsim;
-	 self_rsim.ri_ = lab0;
-	 self_rsim.rj_ = lab0;
-	 self_rsim.s_ = 2.0f;
+         region_sim self_rsim;
+         self_rsim.ri_ = lab0;
+         self_rsim.rj_ = lab0;
+         self_rsim.s_ = 2.0f;
     sim_map[lab0]=self_rsim;
     cluster_similarity_[lab0]=sim_map;
   }
@@ -254,15 +254,15 @@ bool sdet_region_classifier::merge_similarity_map(std::map< unsigned, std::map<u
           simi[labr] = itr->second;
       }
     }else{
-      
+
         for(std::map<unsigned, region_sim>::const_iterator itr = rsim.begin();
             itr != rsim.end(); ++itr){
           unsigned labr = itr->first;
-	  if(labr == labi)
+          if(labr == labi)
             simi[lab] = itr->second;
-	  if(labr == labj)
+          if(labr == labj)
             simj[lab] = itr->second;
-	}
+        }
       }
     }
   //fill out the similarity table except for the merged rows and cols
@@ -285,7 +285,7 @@ bool sdet_region_classifier::merge_similarity_map(std::map< unsigned, std::map<u
     }
     sim_after[lab]=temp;
   }
-  
+
   // fill in the  last row (new_label)
   std::map<unsigned, region_sim> temp;
   region_sim& rsimi = simj[labi];
@@ -303,7 +303,7 @@ bool sdet_region_classifier::merge_similarity_map(std::map< unsigned, std::map<u
       continue;
     for(std::map<unsigned, region_sim>::iterator ritj = simj.begin();
         ritj != simj.end(); ++ritj){
-	  unsigned labrj = ritj->first;
+          unsigned labrj = ritj->first;
       if(labrj == labj)
         continue;
       if(labri == labrj){

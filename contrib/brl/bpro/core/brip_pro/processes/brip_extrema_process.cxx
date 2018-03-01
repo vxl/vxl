@@ -65,7 +65,7 @@ bool brip_extrema_process(bprb_func_process& pro)
   if (image_ptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(fimage,1.0/255.0);
   unsigned ni = fimage.ni(), nj = fimage.nj(), np = fimage.nplanes();
-  
+
   vil_image_view<float> gimage;
   if (np>1){
 
@@ -91,12 +91,12 @@ bool brip_extrema_process(bprb_func_process& pro)
   if (fast)
     //out = brip_vil_float_ops::fast_extrema(gimage, lambda0, lambda1,
     //                                       theta, bright, false, true);
-    out = brip_vil_float_ops::fast_extrema_rotational(gimage, lambda0, lambda1, theta_interval, bright, 
+    out = brip_vil_float_ops::fast_extrema_rotational(gimage, lambda0, lambda1, theta_interval, bright,
                                                       mag_only, signed_response, scale_invariant, non_max_suppress, cutoff, theta_init, theta_end);
   else
     //out = brip_vil_float_ops::extrema(gimage, lambda0, lambda1,
     //                                  theta, bright, true);
-    out = brip_vil_float_ops::extrema_rotational(gimage, lambda0, lambda1, theta_interval, bright, 
+    out = brip_vil_float_ops::extrema_rotational(gimage, lambda0, lambda1, theta_interval, bright,
                                                  mag_only, signed_response, scale_invariant, non_max_suppress, cutoff);
   vil_image_view<float>* point = new vil_image_view<float>(ni, nj);
   vil_image_view<float>* mask = new vil_image_view<float>(ni, nj);

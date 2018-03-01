@@ -79,7 +79,7 @@ bool brad_compose_16band_wv3_img(
   // Construct an LVCS at the center of the MUL image
   vpgl_lvcs lvcs(avg_lat, avg_lon, avg_el);
 
-  // Convert cameras 
+  // Convert cameras
   vpgl_local_rational_camera<double> mul_cam(lvcs, mul_rpc);
   vpgl_local_rational_camera<double> swir_cam(lvcs, swir_rpc);
 
@@ -154,7 +154,7 @@ bool brad_compose_16band_wv3_img(
 
     for (int y = 0; y < comp_height; y++) {
 
-      // Speed up coordinate transform by pre-computing last two column 
+      // Speed up coordinate transform by pre-computing last two column
       // multiplications since they don't change with x.
       vnl_vector_fixed<double, 3> col23 =
         comp_to_swir*vnl_vector_fixed<double, 3>(0.0, (double)y, 1.0);
@@ -215,7 +215,7 @@ bool brad_compose_16band_wv3_img(
   // Load cameras
   std::ifstream mul_ifs((vul_file::strip_extension(mul_file) + ".RPB").c_str());
   std::ifstream swir_ifs((vul_file::strip_extension(swir_file) + ".RPB").c_str());
-  vpgl_rational_camera<double>* mul_rpc = 
+  vpgl_rational_camera<double>* mul_rpc =
     read_rational_camera<double>(mul_ifs);
   vpgl_rational_camera<double>* swir_rpc =
     read_rational_camera<double>(swir_ifs);
@@ -338,7 +338,7 @@ void brad_wv3_bands(
 };
 
 void save_corrected_wv3(
-  const vil_image_view<float> corr_img, 
+  const vil_image_view<float> corr_img,
   const std::string save_dir)
 {
   int np = corr_img.nplanes();

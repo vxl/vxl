@@ -36,7 +36,7 @@ public:
       i_offset = i_offset_; j_offset = j_offset_; return change_img_;}
 
 private:
-  
+
    //:results
   double avg_prob_;
 

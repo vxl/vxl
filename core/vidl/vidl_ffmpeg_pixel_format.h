@@ -22,7 +22,7 @@ extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
 # if LIBAVCODEC_VERSION_MAJOR >= 56
 #   include <libavutil/pixfmt.h>
-# else 
+# else
 #   ifndef __STDC_CONSTANT_MACROS
 #     define __STDC_CONSTANT_MACROS
 #   endif
@@ -34,7 +34,7 @@ extern "C" {
 }
 
 #if LIBAVCODEC_VERSION_MAJOR < 56
-//  The pixel format was named PixelFormat in old versions of FFMPeg.  
+//  The pixel format was named PixelFormat in old versions of FFMPeg.
 //  Use a typedef to maintain backward compatibility
 typedef PixelFormat AVPixelFormat;
 #endif

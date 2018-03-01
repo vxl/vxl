@@ -42,10 +42,10 @@ bool msdi_state_from_string(const vcl_string& str, msdi_reflection_state& state)
   if (str=="ReflectSym")   { state=ReflectSym; return true; }
   if (str=="ReflectAsymRawPts")  { state=ReflectAsymRawPts; return true; }
   if (str=="ReflectAsymRefPts")  { state=ReflectAsymRefPts; return true; }
-  
+
   state=Raw;
   // No valid string available
-  return false; 
+  return false;
 }
 
 msdi_marked_images_from_files::msdi_marked_images_from_files()
@@ -115,13 +115,13 @@ msdi_marked_images_from_files::~msdi_marked_images_from_files()
 void msdi_marked_images_from_files::reflect_points()
 {
   if (points_.size()==0) return;
-  
+
   // Need image to calculate reflection plane
-  if (!image_ok_) get_image();  
-  
+  if (!image_ok_) get_image();
+
   // Image voxels will be reflected about line x=0.5(ni-1).
   double ax=0.5*(image().image_size()[0]-1);
-  
+
   if (ref_point_index_.size()==0)
   {
     // Set 1-1 matching
@@ -129,14 +129,14 @@ void msdi_marked_images_from_files::reflect_points()
     for (unsigned i=0;i<points_.size();++i)
       ref_point_index_[i]=i;
   }
-  
+
   // Project points to image frame, reflect, then project back.
   points_.transform_by(image().world2im());  // Transform to image
   msm_points ref_points;
   msm_reflect_shape_along_x(points_,ref_point_index_,ref_points,ax);
   points_=ref_points;
   points_.transform_by(image().world2im().inverse()); // Map back to world.
-  
+
   points_are_reflected_=true;
 }
 
@@ -160,7 +160,7 @@ unsigned msdi_marked_images_from_files::size() const
   // Number of images returned for each image listed:
   unsigned s=1;
   if (ref_state_==ReflectSym || ref_state_==ReflectAsymRawPts || ref_state_==ReflectAsymRefPts) s=2;
-  
+
   return s*image_name_.size();
 }
 
@@ -232,43 +232,43 @@ bool msdi_marked_images_from_files::next()
     // Current image is valid, so next is reflected version.
     if (!image_ok_) get_image();
     reflect_image();
-    
+
     points_ok_=false;  // Force loading in of reflected set
     return true;
   }
-  
+
   if (ref_state_==ReflectAsymRefPts && !image_is_reflected_)
   {
     // Current image is valid, so next is reflected version.
     if (!image_ok_) get_image();
     reflect_image();
-    
+
     points_ok_=false;  // Force loading in of reflected set
-    reflect_points();  
+    reflect_points();
     return true;
   }
-  
+
   if (ref_state_==ReflectSym && !image_is_reflected_)
   {
     // Current image is valid, so next is reflected version.
     if (!image_ok_) get_image();
-    
+
     // Reflect the current image.
     reflect_image();
-    
+
     reflect_points();  // Reflect and re-number points
     return true;
   }
-  
+
   if (index_+1>=(int)image_name_.size()) return false;
-  
+
   ++index_;  // Move to next image
-  if (ref_state_==ReflectOnly || 
-      ref_state_==ReflectSym  || 
-      ref_state_==ReflectAsymRawPts || 
-      ref_state_==ReflectAsymRefPts) 
+  if (ref_state_==ReflectOnly ||
+      ref_state_==ReflectSym  ||
+      ref_state_==ReflectAsymRawPts ||
+      ref_state_==ReflectAsymRefPts)
     image_is_reflected_=false;
-  
+
   image_ok_=false;
   image_pyr_ok_=false;
   points_ok_=false;
@@ -277,7 +277,7 @@ bool msdi_marked_images_from_files::next()
   return true;
 }
 
-    
+
 void msdi_marked_images_from_files::reflect_image()
 {
   if (load_as_float_)
@@ -334,12 +334,12 @@ void msdi_marked_images_from_files::get_image()
   }
 
   image_is_reflected_=false;
-  
+
   if (ref_state_==OnlyReflectIm || ref_state_==ReflectOnly)
   {
     reflect_image();
   }
-  
+
   image_ok_=true;
 
 }
@@ -361,9 +361,9 @@ void msdi_marked_images_from_files::get_points()
   }
   else
     points_ok_=true;
-  
+
   points_are_reflected_=false;
-  
+
   if (ref_state_==ReflectOnly) reflect_points();
   if (ref_state_==ReflectAsymRefPts && image_is_reflected_) reflect_points();
 }
@@ -383,12 +383,12 @@ std::string msdi_marked_images_from_files::points_name() const
     vcl_cerr<<"Attempt to read beyond end of name array."<<vcl_endl;
     abort();
   }
-  
+
   if (image_is_reflected_)
   {
     if (ref_state_==ReflectAsymRawPts ||
         ref_state_==ReflectAsymRefPts ||
-        ref_state_==ReflectSym) 
+        ref_state_==ReflectSym)
     return ref_prefix_+points_name_[index_];
   }
   return points_name_[index_];
@@ -400,7 +400,7 @@ void msdi_marked_images_from_files::set_state(msdi_reflection_state s)
   reset();
 }
 
-//: Define prefix to be used for reflected points. 
+//: Define prefix to be used for reflected points.
 // Default is "ref_".  Only used for ReflectAsymRawPts state.
 void msdi_marked_images_from_files::set_ref_prefix(const vcl_string& ref_prefix)
 {
@@ -427,10 +427,10 @@ void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_pro
     mbl_parse_int_list(ss, vcl_back_inserter(ref_point_index_),
                        unsigned());
   }
-  
+
   // For backwards compatability
   bool only_reflect=vul_string_to_bool(props.get_optional_property("only_reflect","false"));
-  
+
   ref_prefix_=props.get_optional_property("ref_prefix","ref-");
   if (ref_prefix_=="-") ref_prefix_="";  // Use "-" to mean empty string.
 
@@ -438,7 +438,7 @@ void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_pro
   if (ref_state_str=="Undefined")
   {
     // For backwards compatability.
-    if (ref_point_index_.size()>0) 
+    if (ref_point_index_.size()>0)
     {
       if (only_reflect) ref_state_=ReflectOnly;
       else              ref_state_=ReflectSym;
@@ -453,7 +453,7 @@ void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_pro
   {
     if (!msdi_state_from_string(ref_state_str,ref_state_))
     {
-      throw (mbl_exception_parse_error("Unknown reflection_state: "+ref_state_str));     
+      throw (mbl_exception_parse_error("Unknown reflection_state: "+ref_state_str));
     }
   }
 
@@ -469,10 +469,10 @@ void msdi_marked_images_from_files::set_from_props(mbl_read_props_type& props)
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_name_,image_name_);
-  
+
   unsigned max_im_pyr_levels=vul_string_atoi(props.get_optional_property("max_im_pyr_levels","5"));
   pyr_builder().set_max_levels(max_im_pyr_levels);
-  
+
   set_reflection_state_from_props(props);
 }
 

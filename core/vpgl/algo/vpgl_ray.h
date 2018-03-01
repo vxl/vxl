@@ -54,7 +54,7 @@ class vpgl_ray
                   vgl_point_2d<double> const& inital_guess,
                   double origin_z, double dz,
                   vgl_ray_3d<double>& ray);
-  
+
   // +++ concrete rational camera interfaces +++
 
        // === vnl interface ===

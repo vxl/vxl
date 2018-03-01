@@ -50,16 +50,16 @@ static float min_diff(vil_image_view<float> const & view0, float v1, size_t i1, 
   }
   return min_v;
 }
-static void update_hist_dem(vil_image_resource_sptr img0, vpgl_rational_camera<double>* cam0, 
+static void update_hist_dem(vil_image_resource_sptr img0, vpgl_rational_camera<double>* cam0,
                             vil_image_resource_sptr img1, vpgl_rational_camera<double>* cam1,
                             vil_image_resource_sptr dem_resc,
                             bsta_joint_histogram<float>& h, bool use_inten = true/* vs x_grad*/){
     if(!img0||!img1||!cam0||!cam1||!dem_resc)
       return;
-    
+
     vil_image_view<float> view0_int = img0->get_view();
     vil_image_view<float> view1_int = img1->get_view();
-    
+
 
     vil_image_view<float> view0 = view0_int, view1 = view1_int;
     if(!use_inten){
@@ -85,9 +85,9 @@ static void update_hist_dem(vil_image_resource_sptr img0, vpgl_rational_camera<d
       for(size_t j = 0; j<nj1; ++j)
         for(size_t i = 0; i<ni1; ++i)
           grad_mag_view1(i, j)= sqrt(grad_x_view1(i,j)*grad_x_view1(i,j) + grad_y_view1(i,j)*grad_y_view1(i,j));
-    
+
       view0 = grad_mag_view0; view1 = grad_mag_view1;
-#endif 
+#endif
       //      view0 = filt0; view1 = filt1;
     }
     vpgl_backproject_dem bdem(dem_resc);
@@ -127,7 +127,7 @@ static void update_hist_dem(vil_image_resource_sptr img0, vpgl_rational_camera<d
         if(!bdem.bproj_dem(cam1, image_pt, max_z, min_z, gc, world_pt))
           continue;
         double u0d, v0d;
-	cam0->project(world_pt.x(), world_pt.y(), world_pt.z(), u0d, v0d);
+        cam0->project(world_pt.x(), world_pt.y(), world_pt.z(), u0d, v0d);
         size_t u0 = vnl_math::rnd(u0d), v0 = vnl_math::rnd(v0d);
         float v1 = view1(i,j);
         float minv = min_diff(view0, v1, u0, v0);
@@ -202,7 +202,7 @@ static void test_dem_appear()
   vil_image_view<float> grad_x_view01, grad_y_view01, grad_x_view1, grad_y_view1;
   vil_sobel_3x3<float,float>( view01, grad_x_view01, grad_y_view01 );
   vil_sobel_3x3<float,float>( view1, grad_x_view1, grad_y_view1 );
- 
+
   for (size_t j = 0; j < nj1; ++j)
     for (size_t i = 0; i < ni1; ++i){
       double x = i+ bb1.min_x(), y = j+bb1.min_y();
@@ -213,11 +213,11 @@ static void test_dem_appear()
       std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << view1(i,j) << ' ' << fabs(view1(i,j)-minv) << std::endl;
 #elif  grad_x
       float minv = min_diff(grad_x_view01, grad_x_view1(i,j), i, j, 2);
-      std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << grad_x_view1(i,j) << ' ' << fabs(grad_x_view1(i,j)-minv) << std::endl; 
+      std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << grad_x_view1(i,j) << ' ' << fabs(grad_x_view1(i,j)-minv) << std::endl;
 #elif condp
       float minv = min_diff(view01, view1(i,j), i, j, 1);
       float pcond = h.p_b_given_a(minv, view1(i,j));
-      std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << view1(i,j) << ' ' << fabs(view1(i,j)-minv) << ' '<< pcond << std::endl; 
+      std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << view1(i,j) << ' ' << fabs(view1(i,j)-minv) << ' '<< pcond << std::endl;
 #endif
     }
 }

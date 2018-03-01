@@ -93,13 +93,13 @@ std::istream& vgl_vector_2d<T>::read(std::istream& is)
     std::string temp;
     is >> temp >> std::ws; // read <vgl_vector_2d
     is >> tx >>  std::ws;
-	c = is.peek();
-	if(c != ','){
-		std::cout << "Invalid syntax: >> vgl_vector_2d" << std::endl;
+        c = is.peek();
+        if(c != ','){
+                std::cout << "Invalid syntax: >> vgl_vector_2d" << std::endl;
       set(0.0, 0.0);
       return is;
     }else is.ignore();
-	is >> ty>>std::ws;
+        is >> ty>>std::ws;
     if(is.peek() != '>'){
       std::cout << "Invalid syntax: >> vgl_vector_2d" << std::endl;
       set(0.0, 0.0);
@@ -107,9 +107,9 @@ std::istream& vgl_vector_2d<T>::read(std::istream& is)
     }else is.ignore();
   }else{
     is >> tx >> std::ws;
-	c = is.peek();
-	if(c == ',') is.ignore();
-	is >> std::ws >> ty; 
+        c = is.peek();
+        if(c == ',') is.ignore();
+        is >> std::ws >> ty;
   }
   set(tx,ty);
   return is;

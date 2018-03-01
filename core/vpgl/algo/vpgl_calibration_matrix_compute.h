@@ -17,7 +17,7 @@
 //:Various methods for computing the intrinsic matrix of a perspective camera
 class vpgl_calibration_matrix_compute
 {
-  public:    
+  public:
   //: Computes the calibration matrix for a natural camera (zero skew, square pixels)
   // from a ground plane to image plane homography. A value for the
   // principal point is needed for the computation.

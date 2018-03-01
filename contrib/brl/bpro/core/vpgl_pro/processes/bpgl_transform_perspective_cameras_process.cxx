@@ -206,16 +206,16 @@ bool vpgl_transform_space_process(bprb_func_process& pro)
   bbas_1d_array_double_sptr pts1_xs = pro.get_input<bbas_1d_array_double_sptr>(3);
   bbas_1d_array_double_sptr pts1_ys = pro.get_input<bbas_1d_array_double_sptr>(4);
   bbas_1d_array_double_sptr pts1_zs = pro.get_input<bbas_1d_array_double_sptr>(5);
- 
+
   std::string input_cam_path = pro.get_input<std::string>(6);
   std::string output_cam_path = pro.get_input<std::string>(7);
 
   std::cout << pts0_xs->data_array;
-  
+
   vnl_matrix<double> pts0, pts1;
   unsigned n = (unsigned)(pts0_xs->data_array.size());
 
-  pts0.set_size(3,n); 
+  pts0.set_size(3,n);
   pts1.set_size(3,n);
   for (unsigned i = 0; i<n; ++i) {
     pts0[0][i] = pts0_xs->data_array[i];  pts1[0][i] = pts1_xs->data_array[i];
@@ -238,7 +238,7 @@ bool vpgl_transform_space_process(bprb_func_process& pro)
   }
 
   std::cout << "Copmuted similarity matrix! Ortho procrustes error " << std::sqrt(op.residual_mean_sq_error()) << std::endl;
-  
+
   // read each camera and save the output camera in the output folder
   std::string in_dir = input_cam_path + "/*.txt";
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
@@ -257,17 +257,17 @@ bool vpgl_transform_space_process(bprb_func_process& pro)
     std::ofstream os(out_file.c_str());
     os << tcam;
     os.close();
-  } 
+  }
 
   // prepare the output matrix, we need the matrix that takes a point in the space of pts0 to the space of pts1,
   // this is actually the inverse of the transformation computed above!!
   vnl_matrix_fixed<double, 4, 4> S(0.0), outM(0.0);
   S[0][0] = S[1][1] = S[2][2] = 1.0/scale; S[3][3] = 1.0;
   // inverse of t is a little more complicated
-  vnl_vector_fixed<double, 3> t_inverse = -R.inverse().as_matrix()*t;   
+  vnl_vector_fixed<double, 3> t_inverse = -R.inverse().as_matrix()*t;
   vgl_h_matrix_3d<double> RotT(R.inverse().as_matrix(), t_inverse);
   outM = RotT.get_matrix()*S;
-  
+
   // copy to the output array
   out->data_array[0]  = outM[0][0]; out->data_array[1]  = outM[0][1]; out->data_array[2]  = outM[0][2]; out->data_array[3]  = outM[0][3];
   out->data_array[4]  = outM[1][0]; out->data_array[5]  = outM[1][1]; out->data_array[6]  = outM[1][2]; out->data_array[7]  = outM[1][3];
@@ -279,7 +279,7 @@ bool vpgl_transform_space_process(bprb_func_process& pro)
   return true;
 }
 
-// a process to take min and max points of a box in the space of pts0 then transform 8 corner points to the space of pts1 
+// a process to take min and max points of a box in the space of pts0 then transform 8 corner points to the space of pts1
 // in the transformed space, compute a new axis aligned bounding box and return its min and max points
 
 //: sets input and output types
@@ -295,8 +295,8 @@ bool vpgl_transform_box_process_cons(bprb_func_process& pro)
                                                   // 4  5  6  7
                                                   // 8  9  10 11
                                                   // 12 13 14 15
-  
-  
+
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -319,7 +319,7 @@ bool vpgl_transform_box_process(bprb_func_process& pro)
   bbas_1d_array_double_sptr min_pt_a = pro.get_input<bbas_1d_array_double_sptr>(0);
   bbas_1d_array_double_sptr max_pt_a = pro.get_input<bbas_1d_array_double_sptr>(1);
   bbas_1d_array_double_sptr matrix = pro.get_input<bbas_1d_array_double_sptr>(2);
-  
+
   // construct the similarity matrix
   vnl_matrix_fixed<double, 4, 4> SM;
   SM[0][0] = matrix->data_array[0];  SM[0][1] = matrix->data_array[1];  SM[0][2] = matrix->data_array[2];  SM[0][3] = matrix->data_array[3];
@@ -346,7 +346,7 @@ bool vpgl_transform_box_process(bprb_func_process& pro)
   bbas_1d_array_double_sptr outmin = new bbas_1d_array_double(3), outmax = new bbas_1d_array_double(3);
   outmin->data_array[0]  = out_min_pt.x(); outmin->data_array[1] = out_min_pt.y(); outmin->data_array[2] = out_min_pt.z();
   outmax->data_array[0]  = out_max_pt.x(); outmax->data_array[1] = out_max_pt.y(); outmax->data_array[2] = out_max_pt.z();
-  
+
   pro.set_output_val<bbas_1d_array_double_sptr>(0, outmin);
   pro.set_output_val<bbas_1d_array_double_sptr>(1, outmax);
   return true;

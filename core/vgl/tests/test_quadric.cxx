@@ -35,26 +35,26 @@ static std::vector<std::vector<double> > transform_quadric(std::vector<std::vect
 static void test_quadric()
 {
  /*
-  coincident_planes              x^2=0                                  
-  imaginary_ellipsoid           (x^2)/(a^2)+(y^2)/(b^2)+(z^2)/(c^2)=-1  
-  real_ellipsoid                (x^2)/(a^2)+(y^2)/(b^2)+(z^2)/(c^2)=1   
-  imaginary_elliptic_cone       (x^2)/(a^2)+(y^2)/(b^2)+(z^2)/(c^2)=0   
-  real_elliptic_cone            (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=0   
-  imaginary_elliptic_cylinder   (x^2)/(a^2)+(y^2)/(b^2)=-1              
-  real_elliptic_cylinder        (x^2)/(a^2)+(y^2)/(b^2)=1               
-  elliptic_paraboloid           z=(x^2)/(a^2)+(y^2)/(b^2)               
-  hyperbolic_cylinder           (x^2)/(a^2)-(y^2)/(b^2)=-1              
-  hyperbolic_paraboloid         z=(y^2)/(b^2)-(x^2)/(a^2)               
-  hyperboloid_of_one_sheet      (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=1   
-  hyperboloid_of_two_sheets     (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=-1  
-  imaginary_intersecting_planes (x^2)/(a^2)+(y^2)/(b^2)=0               
-  real_intersecting_planes      (x^2)/(a^2)-(y^2)/(b^2)=0               
-  parabolic_cylinder             x^2+2rz=0                              
-  imaginary_parallel_planes      x^2=-a^2                               
-  real_parallel planes           x^2=a^2                                
+  coincident_planes              x^2=0
+  imaginary_ellipsoid           (x^2)/(a^2)+(y^2)/(b^2)+(z^2)/(c^2)=-1
+  real_ellipsoid                (x^2)/(a^2)+(y^2)/(b^2)+(z^2)/(c^2)=1
+  imaginary_elliptic_cone       (x^2)/(a^2)+(y^2)/(b^2)+(z^2)/(c^2)=0
+  real_elliptic_cone            (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=0
+  imaginary_elliptic_cylinder   (x^2)/(a^2)+(y^2)/(b^2)=-1
+  real_elliptic_cylinder        (x^2)/(a^2)+(y^2)/(b^2)=1
+  elliptic_paraboloid           z=(x^2)/(a^2)+(y^2)/(b^2)
+  hyperbolic_cylinder           (x^2)/(a^2)-(y^2)/(b^2)=-1
+  hyperbolic_paraboloid         z=(y^2)/(b^2)-(x^2)/(a^2)
+  hyperboloid_of_one_sheet      (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=1
+  hyperboloid_of_two_sheets     (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=-1
+  imaginary_intersecting_planes (x^2)/(a^2)+(y^2)/(b^2)=0
+  real_intersecting_planes      (x^2)/(a^2)-(y^2)/(b^2)=0
+  parabolic_cylinder             x^2+2rz=0
+  imaginary_parallel_planes      x^2=-a^2
+  real_parallel planes           x^2=a^2
 */
   vgl_quadric_3d<double> coincident_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  vgl_quadric_3d<double> imaginary_ellipsoid(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0); 
+  vgl_quadric_3d<double> imaginary_ellipsoid(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
   vgl_quadric_3d<double> real_ellipsoid(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
   vgl_quadric_3d<double> imaginary_elliptic_cone(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   vgl_quadric_3d<double> real_elliptic_cone(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -63,10 +63,10 @@ static void test_quadric()
   vgl_quadric_3d<double> elliptic_paraboloid(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
   vgl_quadric_3d<double> hyperbolic_cylinder(1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
   vgl_quadric_3d<double> hyperbolic_paraboloid(-1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
-  vgl_quadric_3d<double> hyperboloid_of_one_sheet(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0); 
+  vgl_quadric_3d<double> hyperboloid_of_one_sheet(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
   vgl_quadric_3d<double> hyperboloid_of_two_sheets(1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
   vgl_quadric_3d<double> imaginary_intersecting_planes(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  vgl_quadric_3d<double> real_intersecting_planes(1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);               
+  vgl_quadric_3d<double> real_intersecting_planes(1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   vgl_quadric_3d<double> parabolic_cylinder(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
   vgl_quadric_3d<double> imaginary_parallel_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
   vgl_quadric_3d<double> real_parallel_planes(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
@@ -110,7 +110,7 @@ static void test_quadric()
   good = good && test2.type() == vgl_quadric_3d<double>::real_elliptic_cone;
   TEST("Transformed quadric classification", good, true);
   std::string name = test2.type_by_number(test2.type());
-  good = (name == "real_elliptic_cone"); 
+  good = (name == "real_elliptic_cone");
   TEST("type_by_number", good, true);
   vgl_quadric_3d<double>::vgl_quadric_type typ = test2.type_by_name("real_elliptic_cone");
   good = typ == test2.type();
@@ -142,7 +142,7 @@ static void test_quadric()
   vgl_quadric_3d<double> tran_quad(Qet);
   vgl_point_3d<double> cent, true_cent(tx, ty, tz);
   good = tran_quad.center(cent) && cent == true_cent;
-  // full eccentric ellipsoid 
+  // full eccentric ellipsoid
   vgl_quadric_3d<double> eccentric_ellipsoid(0.5, 0.25, 0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
    QeE = eccentric_ellipsoid.coef_matrix();
    QeET = transform_quadric(T,QeE);
@@ -153,7 +153,7 @@ static void test_quadric()
    // and show that the translation dependent terms of the quadric vanish.
    Te[0][3]=rot_cent.x(); Te[1][3] = rot_cent.y(); Te[2][3] = rot_cent.z();
    // note again the tranform quadric function requires the inverse of the desired translation,
-   // which is just the center itself. 
+   // which is just the center itself.
    QeETT = transform_quadric(Te,QeET);//should have g = h = i == 0
    double sum_ghi = fabs(QeETT[0][3])+ fabs(QeETT[1][3])+ fabs(QeETT[2][3]);
    good = good && sum_ghi < 1.0e-8;

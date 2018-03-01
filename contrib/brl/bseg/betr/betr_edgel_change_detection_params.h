@@ -19,7 +19,7 @@
 //   - upsample the image resolution using bilinear interpolation.
 //     Allows more resolved discrete pixel locations for gradient masks.
 //     A value of 2.0 means the image resolution is increased by 2X.
-//                                          
+//
 #include <string>
 #include <iostream>
 #include <vcl_compiler.h>

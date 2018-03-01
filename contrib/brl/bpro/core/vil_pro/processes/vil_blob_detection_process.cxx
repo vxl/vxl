@@ -63,7 +63,7 @@ bool vil_blob_detection_process(bprb_func_process& pro)
     vil_image_view<bool> view_blobs(view->ni(),view->nj());
 
     view_blobs.fill(false);
-    
+
     vil_image_view<vil_rgb<vxl_byte> >* colored_blobs = new vil_image_view<vil_rgb<vxl_byte> >(view_blobs.ni(),view_blobs.nj());
     colored_blobs->fill(vil_rgb<vxl_byte>(0,0,0));
     vnl_random rng;

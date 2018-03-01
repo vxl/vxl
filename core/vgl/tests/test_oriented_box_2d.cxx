@@ -24,7 +24,7 @@ static void test_oriented_box_2d()
   vgl_point_2d<double> pmin11(100.0, 75.0), pmin21(100.0, 25.0);
   vgl_oriented_box_2d<double> ob1(pmaj11,pmaj21, pmin11, pmin21);
   std::vector<vgl_point_2d<double> > corns1 = ob1.corners();
-  
+
   vgl_oriented_box_2d<double> tbox1 = ob1.translate(200.0, 50.0);
   std::vector<vgl_point_2d<double> > trans_corns1 = tbox1.corners();
   TEST("translate obox", trans_corns1[2].x()+trans_corns1[2].y(), 475.0);
@@ -46,7 +46,7 @@ static void test_oriented_box_2d()
   bool eq = ibox == ob;
   TEST("read/write equal", eq, true);
   vgl_point_2d<float> pmaj1a(0.0f, 100.0f), pmaj2a(200.0f, 100.0f);
-  
+
   vgl_oriented_box_2d<float> ob0(pmaj1a,pmaj2a, 150.0f);
   std::vector<vgl_point_2d<float> > corns = ob0.corners();
   std::cout << "Corners" << std::endl;
@@ -63,11 +63,11 @@ static void test_oriented_box_2d()
   TEST("box size", width == 200.0f && height == 150.0f, true);
   TEST("corners ", corns[2]==vgl_point_2d<float>(200.0f, 175.0f), true);
   TEST("uv ",  uv == vgl_point_2d<float>(-75.0f/200.0f, -0.5f), true);
-  // test contains 
+  // test contains
   vgl_point_2d<float> pin(199.0, 140.0);
   vgl_point_2d<float> pout(175.0, 180.0);
   bool good = ob0.contains(pin) && !ob0.contains(pout);
-  TEST("contains " , good , true); 
+  TEST("contains " , good , true);
   vgl_point_2d<float> p0(0.0f, 25.0f), p1(200.0f, 25.0f), p2(0.0f, 175.0);
   vgl_oriented_box_2d<float> ob1a(p0, p1, p2);
   TEST("construct from 3 pts", ob1a == ob0, true);
@@ -142,7 +142,7 @@ static void test_oriented_box_2d()
   vgl_oriented_box_2d<double> obf30 = fob30.fitted_box();
   std::vector<vgl_point_2d<double> > cns = obf30.corners();
   for(size_t i = 0; i<cns.size(); ++i)
-	  std::cout << cns[i].x() << ' ' << cns[i].y() << std::endl;
+          std::cout << cns[i].x() << ' ' << cns[i].y() << std::endl;
   double arear = vgl_area(obf30);
   TEST_NEAR("real obox fit" , arear, 78.59471308, 1e-04);
   // second real fit

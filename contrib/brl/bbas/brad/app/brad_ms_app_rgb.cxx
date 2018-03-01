@@ -32,21 +32,21 @@ int main(int argc, char * argv[])
     //"C:/Users/sca0161/Documents/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
     ////"D:/data/core3d/sevastopol2/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
     //"/home/ozge/Dropbox_VSI/projects/GeoMetriX/sevastopol/sevastopol_WV03_imgs/2016_07_21_WV03/104001001E0AA000_P005_MUL/16JUL21091539-M1BS-056339611010_01_P005.NTF");
-    "/home/ozge/Dropbox_VSI/projects/GeoMetriX/sevastopol/sevastopol_WV03_imgs/2016_08_15_WV03/056247235010_01_003/056247235010_01/056247235010_01_P001_MUL/16AUG15092138-M1BS-056247235010_01_P001.NTF"); 
+    "/home/ozge/Dropbox_VSI/projects/GeoMetriX/sevastopol/sevastopol_WV03_imgs/2016_08_15_WV03/056247235010_01_003/056247235010_01/056247235010_01_P001_MUL/16AUG15092138-M1BS-056247235010_01_P001.NTF");
 
   std::string out_dir(
     //"C:/Users/sca0161/Documents/sevastopol2/cpp result/");
     ////"D:/results/ms/");
     //"/home/ozge/projects/GeoMetriX/sevastopol/DG_normalized/2016_07_21_WV03/");
     "/home/ozge/projects/GeoMetriX/sevastopol/DG_normalized/2016_08_15_WV03/");
-  
+
 
   brad_image_metadata mul_meta(vul_file::strip_extension(mul_file) + ".IMD");
   vil_image_resource_sptr mul_rsc = vil_load_image_resource(mul_file.c_str());
   vil_image_view<vxl_uint_16> raw = mul_rsc->get_view();
   vil_image_view<float> mul_img;
   brad_calibrate_wv3_img(mul_meta, raw, mul_img, false);
-  
+
   // Correct for atmospherics
   float mean_albedo = 0.3;
   vil_image_view<float> cal_img;

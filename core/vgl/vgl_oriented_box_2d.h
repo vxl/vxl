@@ -46,7 +46,7 @@ class vgl_oriented_box_2d {
     //: construct from an axis aligned box
   vgl_oriented_box_2d(const vgl_box_2d<T>& box);
 
-  //: construct from an axis aligned box with orientedation 
+  //: construct from an axis aligned box with orientedation
   // the major axis of the box is rotated by angle_in_rad around the centroid
   vgl_oriented_box_2d(const vgl_box_2d<T>& box, T angle_in_rad);
 
@@ -69,7 +69,7 @@ class vgl_oriented_box_2d {
 
   //: height - length of minor axis
   T height() const {std::pair<T, T> p = this->width_height(); return p.second;}
-  
+
   //: aspsect ratio width/height
   T aspect_ratio() const {return width()/height();}
 

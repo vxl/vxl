@@ -4,7 +4,7 @@
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-// \brief  Two processes to compute a point hypothesis and a covariance for each voxel 
+// \brief  Two processes to compute a point hypothesis and a covariance for each voxel
 //         First process accumulates a running sum of the point hypothesis and covariance given by the process boxm2_cpp_cast_3d_point_hypothesis_process
 //         Second process normalizes the point and the covariance after all the images are processed
 //
@@ -80,7 +80,7 @@ bool boxm2_cpp_compute_3d_points_and_covs_process(bprb_func_process& pro)
 
     boxm2_data_base *  img_pts = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(identifier),buf_len/alphaTypeSize*ptsTypeSize,false);
     boxm2_data_base *  img_covs = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(identifier),buf_len/alphaTypeSize*covTypeSize,false);
-    
+
     boxm2_3d_point_estimator_functor data_functor;
     data_functor.init_data(output_pts, output_covs, img_pts, img_covs);
 
@@ -148,7 +148,7 @@ bool boxm2_cpp_compute_3d_points_and_covs_normalize_process(bprb_func_process& p
     std::cout << "\nin blk: " << *id << " data buf len: " << buf_len/alphaTypeSize << "\n";
     boxm2_data_base * output_pts = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_POINT>::prefix(),buf_len/alphaTypeSize*ptsTypeSize,false);
     boxm2_data_base * output_covs = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(),buf_len/alphaTypeSize*covTypeSize,false);
-    
+
     boxm2_3d_point_estimator_functor2 data_functor;
     data_functor.init_data(output_pts, output_covs);
 

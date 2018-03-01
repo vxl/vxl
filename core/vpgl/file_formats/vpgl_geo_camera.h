@@ -51,7 +51,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
     vpgl_lvcs_sptr lvcs = VXL_NULLPTR;
     return init_geo_camera(geotiff_img, lvcs, camera);
   }
-    
+
   //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise
   //  for 'S' use -lat and for 'W' -lon
   //  TODO: generalize geo_camera so that img_to_global method makes this adjustment internally if camera is created using this method

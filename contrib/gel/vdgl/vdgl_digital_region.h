@@ -9,7 +9,7 @@
 //  analog of EdgelChain. So far the class is a very simple group of 1-d
 //  arrays for holding the x and y pixel locations and the intensity.
 //  The class maintains 2d pixels in the style of TargetJr and could be
-//  used to represent 2-d intensity points. To create a region with 
+//  used to represent 2-d intensity points. To create a region with
 //  a given number of pixel data , SetNpts(n); for(i = 0; i<n; ++i){
 //                                         IncrementMeans(X[i],Y[i],I[i]);
 //                                         InsertInPixelArrays(X[i],Y[i],I[i]);}
@@ -172,7 +172,7 @@ class vdgl_digital_region : public vsol_region_2d
 #include "vdgl_digital_region_sptr.h"
 //: merge regions - set the pixel arrays no statistics computed
 //: pointer interface useful for merging subclasses of vdgl_digital_region. User must create r12.
-//  
+//
 void merge(vdgl_digital_region* r1, vdgl_digital_region * r2, vdgl_digital_region*& r12);
 
 // smart pointer interface - avoids copying return region. The return value is constructed internally

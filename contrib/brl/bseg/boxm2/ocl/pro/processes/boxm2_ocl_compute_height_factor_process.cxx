@@ -30,7 +30,7 @@ namespace boxm2_ocl_compute_height_factor_process_globals
 {
     const unsigned n_inputs_ = 8;
     const unsigned n_outputs_ = 0;
- 
+
 
 }
 

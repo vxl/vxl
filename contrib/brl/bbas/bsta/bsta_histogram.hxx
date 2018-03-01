@@ -118,7 +118,7 @@ template <class T>
 void bsta_histogram<T>::compute_area() const
 {
   area_ = 0;
-  for (unsigned int i = 0; i < nbins_; ++i) 
+  for (unsigned int i = 0; i < nbins_; ++i)
     area_ += counts_[i];
   area_valid_ = true;
 }
@@ -632,7 +632,7 @@ T minimum_js_divergence_scale(bsta_histogram<T> const& h_from, bsta_histogram<T>
 
 template <class T>
 bool merge_hists(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb, bsta_histogram<T>& h_merged){
-  // ha and hb must have the same number of bins and min max values 
+  // ha and hb must have the same number of bins and min max values
   if(ha.nbins() != hb.nbins()){
     std::cout << "Can't merge histogams with different numbers of bins" << std::endl;
     return false;

@@ -457,7 +457,7 @@ advance()
     {
        int err = avcodec_decode_video2( is_->video_enc_,
                                        is_->frame_, &got_picture,
-                                       &is_->packet_); 
+                                       &is_->packet_);
        if (err == AVERROR_INVALIDDATA)
        {// Ignore the frame and move to the next
          av_free_packet(&is_->packet_);

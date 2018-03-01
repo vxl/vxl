@@ -26,8 +26,8 @@ class bil_convert_resource_to_grey{
     std::string fmt(file_fmt);
     is_tiff = (fmt == "tiff");
   }
-  if(is_tiff && 
-     (resc->pixel_format() == VIL_PIXEL_FORMAT_RGBA_UINT_16 || 
+  if(is_tiff &&
+     (resc->pixel_format() == VIL_PIXEL_FORMAT_RGBA_UINT_16 ||
       (resc->pixel_format() == VIL_PIXEL_FORMAT_UINT_16 && resc->nplanes() >= 3)
      )
     ) {
@@ -52,28 +52,28 @@ class bil_convert_resource_to_grey{
 #define macro(F, T)                              \
   case F: this->convert<T>(resc, grey_resc); break
 #if VXL_HAS_INT_64
-    macro( VIL_PIXEL_FORMAT_RGB_UINT_64, vxl_uint_64 );                
-    macro( VIL_PIXEL_FORMAT_RGB_INT_64, vxl_int_64 );                  
+    macro( VIL_PIXEL_FORMAT_RGB_UINT_64, vxl_uint_64 );
+    macro( VIL_PIXEL_FORMAT_RGB_INT_64, vxl_int_64 );
 #endif
     macro( VIL_PIXEL_FORMAT_RGB_UINT_32, vxl_uint_32 );
-    macro( VIL_PIXEL_FORMAT_RGB_INT_32, vxl_int_32 );  
+    macro( VIL_PIXEL_FORMAT_RGB_INT_32, vxl_int_32 );
     macro( VIL_PIXEL_FORMAT_RGB_UINT_16, vxl_uint_16 );
-    macro( VIL_PIXEL_FORMAT_RGB_INT_16, vxl_int_16 );  
-    macro( VIL_PIXEL_FORMAT_RGB_BYTE, vxl_byte );      
-    macro( VIL_PIXEL_FORMAT_RGB_SBYTE, vxl_sbyte );    
-    macro( VIL_PIXEL_FORMAT_RGB_FLOAT, float );        
+    macro( VIL_PIXEL_FORMAT_RGB_INT_16, vxl_int_16 );
+    macro( VIL_PIXEL_FORMAT_RGB_BYTE, vxl_byte );
+    macro( VIL_PIXEL_FORMAT_RGB_SBYTE, vxl_sbyte );
+    macro( VIL_PIXEL_FORMAT_RGB_FLOAT, float );
     macro( VIL_PIXEL_FORMAT_RGB_DOUBLE, double );
 #if VXL_HAS_INT_64
-    macro( VIL_PIXEL_FORMAT_RGBA_UINT_64, vxl_uint_64 );                
-    macro( VIL_PIXEL_FORMAT_RGBA_INT_64, vxl_int_64 );                  
+    macro( VIL_PIXEL_FORMAT_RGBA_UINT_64, vxl_uint_64 );
+    macro( VIL_PIXEL_FORMAT_RGBA_INT_64, vxl_int_64 );
 #endif
     macro( VIL_PIXEL_FORMAT_RGBA_UINT_32, vxl_uint_32 );
-    macro( VIL_PIXEL_FORMAT_RGBA_INT_32, vxl_int_32 );  
+    macro( VIL_PIXEL_FORMAT_RGBA_INT_32, vxl_int_32 );
     macro( VIL_PIXEL_FORMAT_RGBA_UINT_16, vxl_uint_16 );
-    macro( VIL_PIXEL_FORMAT_RGBA_INT_16, vxl_int_16 );  
-    macro( VIL_PIXEL_FORMAT_RGBA_BYTE, vxl_byte );      
-    macro( VIL_PIXEL_FORMAT_RGBA_SBYTE, vxl_sbyte );    
-    macro( VIL_PIXEL_FORMAT_RGBA_FLOAT, float );        
+    macro( VIL_PIXEL_FORMAT_RGBA_INT_16, vxl_int_16 );
+    macro( VIL_PIXEL_FORMAT_RGBA_BYTE, vxl_byte );
+    macro( VIL_PIXEL_FORMAT_RGBA_SBYTE, vxl_sbyte );
+    macro( VIL_PIXEL_FORMAT_RGBA_FLOAT, float );
     macro( VIL_PIXEL_FORMAT_RGBA_DOUBLE, double );
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
@@ -81,7 +81,7 @@ class bil_convert_resource_to_grey{
     // if the image is already grey scale with a recognized format don't do anything
     vil_pixel_format fmt = resc->pixel_format();
     if(
-#if VXL_HAS_INT_64       
+#if VXL_HAS_INT_64
        fmt == VIL_PIXEL_FORMAT_UINT_64 ||
        fmt == VIL_PIXEL_FORMAT_INT_64 ||
 #endif
@@ -101,10 +101,10 @@ class bil_convert_resource_to_grey{
   }
   }
   }
-  template <class T> 
+  template <class T>
   void convert(vil_image_resource_sptr const& resc, vil_image_resource_sptr& grey_resc);
 };
-template <class T> 
+template <class T>
 void bil_convert_resource_to_grey::convert(vil_image_resource_sptr const& resc, vil_image_resource_sptr& grey_resc){
   vil_image_view<T> view = resc->get_view();
   vil_image_view<T> out(view.ni(), view.nj());

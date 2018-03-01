@@ -45,7 +45,7 @@ void test_shuttle()
   boxm2_lru_cache::create(sts_scene);
   std::vector<boxm2_block_id> blocks = sts_scene->get_block_ids();
   std::vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
- 
+
   boxm2_block* blk_;
   blk_ = boxm2_cache::instance()->get_block(sts_scene, *iter_blk);
   boxm2_data<BOXM2_ALPHA>* alpha_data_;
@@ -99,7 +99,7 @@ void test_shuttle()
   if(good){
     vpgl_camera_double_sptr cam = (vpgl_camera<double>*)gcam;
     vil_image_view<float>* silhouette= new vil_image_view<float>(ni, nj);
-    silhouette->fill(1.0f); 
+    silhouette->fill(1.0f);
     vil_image_view<float>* vis= new vil_image_view<float>(ni, nj);
     vis->fill(1.0f);
     boxm2_render_silhouette(linfo, blk_, alpha_base, cam, silhouette, vis, ni, nj);

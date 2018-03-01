@@ -92,7 +92,7 @@ bool boxm2_ocl_remove_low_nobs::remove_low_nobs(boxm2_scene_sptr         scene,
     float sum = 0.0f;
     for(unsigned i = 0; i< nbins; ++i)
       sum += hist[i];
-    
+
     // find mean, but could be a more complex function of P(Nobs).
     float mean = 0.0f;
     for(unsigned i = 0; i< nbins; ++i){
@@ -104,7 +104,7 @@ bool boxm2_ocl_remove_low_nobs::remove_low_nobs(boxm2_scene_sptr         scene,
     // nobs_threshold is multiple of mean
     float nobs_threshold = mean*nobs_threshold_multiplier;
 
-    // display the histogram 
+    // display the histogram
     vcl_cout << "Histogram of nobs: mean = " << mean << " nobs threshold = " << nobs_threshold << '\n';
     vcl_cout << "Nobs  p(Nobs) \n";
     for(unsigned i = 0; i< nbins; ++i)
@@ -129,7 +129,7 @@ bool boxm2_ocl_remove_low_nobs::remove_low_nobs(boxm2_scene_sptr         scene,
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
         bocl_mem* nobs  = opencl_cache->get_data<BOXM2_NUM_OBS>(scene, *id);
-    
+
         boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int)(alpha->num_bytes() / alphaTypeSize);
@@ -183,7 +183,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_remove_low_nobs::get_remove_low_nobs_kernels
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
-    
+
     //populate vector of kernels
     vcl_vector<bocl_kernel*> vec_kernels;
     vcl_string options = "-D REMOVE_LOW_NOBS";

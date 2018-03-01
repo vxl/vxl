@@ -34,11 +34,11 @@ static void test_perspective_camera_decomposition()
     vnl_matrix<double> R(3,3);
     R[0][0] = 0.41380;  R[0][1] = 0.90915;  R[0][2] = 0.04708;
     R[1][0] = -0.57338; R[1][1] = 0.22011;  R[1][2] = 0.78917;
-    R[2][0] = 0.70711;  R[2][1] = -0.35355; R[2][2] = 0.61237;	
+    R[2][0] = 0.70711;  R[2][1] = -0.35355; R[2][2] = 0.61237;
 
     is_correct = std::abs((K-camera.get_calibration().get_matrix()).frobenius_norm()) < 0.1 &&
                  std::abs((R-camera.get_rotation().as_matrix()).frobenius_norm() ) < 0.0001;
-  }	
+  }
   TEST( "Hartley & Zisserman p. 163", did_decompose && is_correct, true);
 }
 

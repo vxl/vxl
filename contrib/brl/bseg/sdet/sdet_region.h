@@ -10,7 +10,7 @@
 // \verbatim
 //  Modifications
 //   Initial version July 11, 2004
-//   Upgraded to support graph-based segmentation and neigboring regions 
+//   Upgraded to support graph-based segmentation and neigboring regions
 //   JLM December 11, 2016
 // \endverbatim
 //
@@ -71,7 +71,7 @@ class sdet_region : public vdgl_digital_region
 
     //: old style cast
   vdgl_digital_region* cast_to_digital_region(){return (vdgl_digital_region*) this;}
-  
+
   //:utilities
   bool compute_boundary();
   bool boundary_valid() const{ return boundary_valid_;}
@@ -94,7 +94,7 @@ class sdet_region : public vdgl_digital_region
       return l->Npix() < r->Npix();//Large areas are favored
     }
   };
-  
+
  protected:
   unsigned int region_label_;
   bool bbox_valid_;
@@ -113,7 +113,7 @@ sdet_region_sptr merge(sdet_region_sptr const& r1,sdet_region_sptr const& r2, un
 float similarity(sdet_region_sptr const& r1, bsta_histogram<float> const& h1,
                  sdet_region_sptr const& r2, bsta_histogram<float> const& h2);
 //; similarity based on Uijlings et al
-//  merges small, similarly sized regions before large regions 
+//  merges small, similarly sized regions before large regions
 //  that have similar intensity distributions
 float similarity(sdet_region_sptr const& r1, bsta_histogram<float> const& h1,
                  sdet_region_sptr const& r2, bsta_histogram<float> const& h2,

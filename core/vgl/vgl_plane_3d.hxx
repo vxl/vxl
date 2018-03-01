@@ -171,9 +171,9 @@ std::istream& operator>>(std::istream& is, vgl_plane_3d<T>& p)
     is >> std::ws;
     if (is.peek() == '0') is.ignore();
     else                  return is; // = 0 is missing (TODO: throw an exception)
-	is >> std::ws;
-	if (!paren && is.peek() == '>') is.ignore();
-	 else                  return is; // closing > is missing (TODO: throw an exception)
+        is >> std::ws;
+        if (!paren && is.peek() == '>') is.ignore();
+         else                  return is; // closing > is missing (TODO: throw an exception)
   }
   p.set(a,b,c,d);
   return is;

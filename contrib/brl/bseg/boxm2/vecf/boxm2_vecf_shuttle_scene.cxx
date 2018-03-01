@@ -68,7 +68,7 @@ vil_image_view<float> boxm2_vecf_shuttle_scene::silhouette(vpgl_camera_double_sp
   }
   vpgl_affine_camera<double>* acam = dynamic_cast<vpgl_affine_camera<double>* >(cam.ptr());
   if(!acam){
-	  std::cout << "currently only support affine cameras" << std::endl;
+          std::cout << "currently only support affine cameras" << std::endl;
     return ret;
   }
   boxm2_scene_info* linfo = base_model_->get_blk_metadata(blk_->block_id());
@@ -98,7 +98,7 @@ void boxm2_vecf_shuttle_scene::generate_particles(vpgl_camera_double_sptr cam, d
   if(cam->type_name() != "vpgl_affine_camera"){
     std::cout << "currently only support affine cameras" << std::endl;
     return;
-  }  
+  }
   particles_.clear();
   vpgl_affine_camera<double>* acam = dynamic_cast<vpgl_affine_camera<double>*>(cam.ptr());
   vnl_matrix_fixed<double,3,4> cam_mat = (*acam).get_matrix();
@@ -118,7 +118,7 @@ void boxm2_vecf_shuttle_scene::generate_particles_txry(vpgl_camera_double_sptr c
 if(cam->type_name() != "vpgl_affine_camera"){
     std::cout << "currently only support affine cameras" << std::endl;
     return;
-  }  
+  }
   particles_.clear();
   vpgl_affine_camera<double>* acam = dynamic_cast<vpgl_affine_camera<double>*>(cam.ptr());
   vnl_matrix_fixed<double,3,4> cam_mat = (*acam).get_matrix();
@@ -130,7 +130,7 @@ if(cam->type_name() != "vpgl_affine_camera"){
       vnl_matrix<double> R(3,3,0.0);
       R[0][0]=1.0;  R[0][1]=0.0; R[0][2]= -ry;
       R[1][0]=0.0;  R[1][1]=1.0; R[1][2]= 0.0;
-      R[2][0]=ry;   R[2][1]=0.0; R[2][2]= 1.0; 
+      R[2][0]=ry;   R[2][1]=0.0; R[2][2]= 1.0;
 #if 1
       vnl_matrix<double> m = temp.extract (3, 3);
       m*=R;
@@ -151,7 +151,7 @@ void boxm2_vecf_shuttle_scene::generate_particles_txrz(vpgl_camera_double_sptr c
 if(cam->type_name() != "vpgl_affine_camera"){
     std::cout << "currently only support affine cameras" << std::endl;
     return;
-  }  
+  }
   particles_.clear();
   vpgl_affine_camera<double>* acam = dynamic_cast<vpgl_affine_camera<double>*>(cam.ptr());
   vnl_matrix_fixed<double,3,4> cam_mat = (*acam).get_matrix();
@@ -163,7 +163,7 @@ if(cam->type_name() != "vpgl_affine_camera"){
       vnl_matrix<double> R(3,3,0.0);
       R[0][0]=1.0;  R[0][1]=-rz; R[0][2]= 0.0;
       R[1][0]=rz;   R[1][1]=1.0; R[1][2]= 0.0;
-      R[2][0]=0.0;  R[2][1]=0.0; R[2][2]= 1.0; 
+      R[2][0]=0.0;  R[2][1]=0.0; R[2][2]= 1.0;
 #if 1
       vnl_matrix<double> m = temp.extract (3, 3);
       m*=R;
@@ -184,7 +184,7 @@ void boxm2_vecf_shuttle_scene::generate_particles_txy(vpgl_camera_double_sptr ca
   if(cam->type_name() != "vpgl_affine_camera"){
     std::cout << "currently only support affine cameras" << std::endl;
     return;
-  }  
+  }
   particles_.clear();
   vpgl_affine_camera<double>* acam = dynamic_cast<vpgl_affine_camera<double>*>(cam.ptr());
   vnl_matrix_fixed<double,3,4> cam_mat = (*acam).get_matrix();

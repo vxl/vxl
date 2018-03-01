@@ -20,7 +20,7 @@ public:
     static bool fuse_factors(boxm2_scene_sptr         scene,
                                        bocl_device_sptr         device,
                                        boxm2_opencl_cache_sptr  opencl_cache,
-                                       vcl_vector<vcl_string> factors_ident, 
+                                       vcl_vector<vcl_string> factors_ident,
                                        vcl_vector<float>   weights);
 private:
 

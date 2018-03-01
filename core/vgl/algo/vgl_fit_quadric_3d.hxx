@@ -94,7 +94,7 @@ T vgl_fit_quadric_3d<T>::fit_linear_Taubin(std::ostream* errstream)
     N += (dx*(dx.transpose()) + dy*(dy.transpose()) + dz*(dz.transpose()));
   }
   M/=n; N/=n;
-  
+
   // add a small offset to make N positive definite
   double tol =  100.0*vgl_tolerance<double>::position;
   N[9][9] = tol;
@@ -108,11 +108,11 @@ T vgl_fit_quadric_3d<T>::fit_linear_Taubin(std::ostream* errstream)
   // minimum eigenvalue (index = 0);
   for(size_t r = 0; r<10; ++r)
     q[r] = static_cast<T>((gev.V)[r][0]);
-  
+
 
   if(debug) std::cout << "q\n" << q << std::endl;
 
-  // Transform the quadric back to the original coordinate frame  
+  // Transform the quadric back to the original coordinate frame
   quadric_Taubin_.set(q[0],q[1],q[2],q[3],q[4],q[5],q[6],q[7],q[8],q[9]);
   std::vector<std::vector<T> > qq = quadric_Taubin_.coef_matrix();
   vnl_matrix<T> Q(4,4);
@@ -185,7 +185,7 @@ T vgl_fit_quadric_3d<T>::fit_ellipsoid_linear_Allaire(std::ostream* errstream){
   // and the sum of pairwise eigenvalue products by  SU2x2 = U2x2_0 + U2x2_1 + U2x2_2
   // where U2x2_i are the principal minors of U.
   //
-  // Allaire et al show that the constraint 4*SU2x2 - Tr(U) = 1 
+  // Allaire et al show that the constraint 4*SU2x2 - Tr(U) = 1
   // guarantees that one of the solutions below corresponds to an ellipsoid.
 
   // this constraint is equivalent to q^t N q = 1 where,
@@ -197,7 +197,7 @@ T vgl_fit_quadric_3d<T>::fit_ellipsoid_linear_Allaire(std::ostream* errstream){
   // N has eigenvalues [-1 -1 -1 -1 -1 0 0 0 0 0 1], i.e singular
   // The eigenvalues of the solution eigenvectors will have the same signs
 
-  // since N is singular it is necessary to solve the 
+  // since N is singular it is necessary to solve the
   // generalized eigensystem (N - lambda M)q = 0
   // in this case the solution is the eigenvector which corresponds to an ellipsoid
   // and has the least normalized error, q^t M q / q^t N q .
@@ -216,7 +216,7 @@ T vgl_fit_quadric_3d<T>::fit_ellipsoid_linear_Allaire(std::ostream* errstream){
     if(quadric_Allaire_.type() != vgl_quadric_3d<T>::real_ellipsoid)
       continue;
     vnl_matrix<double> neu =  q.transpose() * M * q;
-	vnl_matrix<double> den  = q.transpose() * N * q;
+        vnl_matrix<double> den  = q.transpose() * N * q;
     double e = fabs(neu[0][0])/fabs(den[0][0]);
    if(debug)  std::cout << "Error =" << e << "for q[" << i << "]\n" << q << std::endl;
     if(e<min_error){
@@ -246,7 +246,7 @@ T vgl_fit_quadric_3d<T>::fit_ellipsoid_linear_Allaire(std::ostream* errstream){
   for(size_t r = 0; r<10; ++r)
     q[r][0] = static_cast<T>((geign.V)[r][min_index])/sqrt(fabs(D[min_index]));
 
-  // Transform the quadric back to the original coordinate frame  
+  // Transform the quadric back to the original coordinate frame
   quadric_Allaire_.set(q[0][0],q[1][0],q[2][0],q[3][0],q[4][0],q[5][0],q[6][0],q[7][0],q[8][0],q[9][0]);
   std::vector<std::vector<T> > qq = quadric_Allaire_.coef_matrix();
   vnl_matrix<T> Q(4,4);
@@ -332,9 +332,9 @@ T vgl_fit_quadric_3d<T>::fit_saddle_shaped_quadric_linear_Allaire(std::ostream* 
     // N has eigenvalues [-0.5 -0.5 -0.25 -0.25 -0.25 0 0 0 0 1], i.e singular
   // The eigenvalues of the generalized eigensystem will have the same signs
 
-  // since N is singular it is necessary to solve the 
+  // since N is singular it is necessary to solve the
   // generalized eigensystem (N - lambda M)q = 0
-  // in this case the solution is the eigenvector with a 
+  // in this case the solution is the eigenvector with a
   // negative eigenvalue and with the least error q^t M q / q^t N q .
   vnl_generalized_eigensystem geign(N, M);
   if(debug) std::cout << geign.D << std::endl;
@@ -368,7 +368,7 @@ T vgl_fit_quadric_3d<T>::fit_saddle_shaped_quadric_linear_Allaire(std::ostream* 
   for(size_t r = 0; r<10; ++r)
     q[r][0] =(geign.V)[r][min_index]/sqrt(fabs(D[min_index]));
 
-  // Transform the quadric back to the original coordinate frame  
+  // Transform the quadric back to the original coordinate frame
   quadric_Allaire_.set(q[0][0],q[1][0],q[2][0],q[3][0],q[4][0],q[5][0],q[6][0],q[7][0],q[8][0],q[9][0]);
   std::vector<std::vector<T> > qq = quadric_Allaire_.coef_matrix();
   vnl_matrix<T> Q(4,4);

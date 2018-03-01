@@ -21,19 +21,19 @@ void test_event_trigger()
 {
   //create vsol_spatial_object_3d directly from polygon vertices
   vsol_point_3d_sptr p0 = new vsol_point_3d(235.8696284389948200, 406.1228461892747500, 9.6798152424242456);
-  vsol_point_3d_sptr p1 = new vsol_point_3d(223.5715434156161300, 450.5470718703127800, 9.6798152424242456); 
-  vsol_point_3d_sptr p2 = new vsol_point_3d(191.7069643406025800, 444.0498655036974500, 9.6798152424242456); 
-  vsol_point_3d_sptr p3 = new vsol_point_3d(196.8278478137980300, 421.6872655445207600, 9.6798152424242456); 
+  vsol_point_3d_sptr p1 = new vsol_point_3d(223.5715434156161300, 450.5470718703127800, 9.6798152424242456);
+  vsol_point_3d_sptr p2 = new vsol_point_3d(191.7069643406025800, 444.0498655036974500, 9.6798152424242456);
+  vsol_point_3d_sptr p3 = new vsol_point_3d(196.8278478137980300, 421.6872655445207600, 9.6798152424242456);
   vsol_point_3d_sptr p4 = new vsol_point_3d(202.9746837489035700, 396.9806647746743200, 9.6798152424242456);
   std::vector<vsol_point_3d_sptr> verts_ref;
   verts_ref.push_back(p0);   verts_ref.push_back(p1);   verts_ref.push_back(p2);
   verts_ref.push_back(p3);   verts_ref.push_back(p4);
   vsol_polygon_3d* poly_3d_ref = new vsol_polygon_3d(verts_ref);
   vsol_spatial_object_3d_sptr so_3d_ref = poly_3d_ref;
-  vsol_point_3d_sptr pe0 = new vsol_point_3d(146.1171943827043800, 429.1333838455852300, 3.8836995690295124); 
-  vsol_point_3d_sptr pe1 = new vsol_point_3d(139.2825252680649700, 449.8591446870622100, 3.8836995690295124); 
-    vsol_point_3d_sptr pe2 = new vsol_point_3d(91.3167515951369780, 440.2827566788528800, 3.8836995690295115); 
-  vsol_point_3d_sptr pe3 = new vsol_point_3d(108.0650610929029900, 394.7929440913377400, 3.8836995690295120); 
+  vsol_point_3d_sptr pe0 = new vsol_point_3d(146.1171943827043800, 429.1333838455852300, 3.8836995690295124);
+  vsol_point_3d_sptr pe1 = new vsol_point_3d(139.2825252680649700, 449.8591446870622100, 3.8836995690295124);
+    vsol_point_3d_sptr pe2 = new vsol_point_3d(91.3167515951369780, 440.2827566788528800, 3.8836995690295115);
+  vsol_point_3d_sptr pe3 = new vsol_point_3d(108.0650610929029900, 394.7929440913377400, 3.8836995690295120);
   vsol_point_3d_sptr pe4 = new vsol_point_3d(146.7831158857193000, 405.1760185076439000, 3.8836995690295115);
 
   std::vector<vsol_point_3d_sptr> verts_evt;

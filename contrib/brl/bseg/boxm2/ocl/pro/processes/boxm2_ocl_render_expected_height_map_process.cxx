@@ -77,7 +77,7 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
                                        "boxm2 opencl render depth image"); //kernel identifier (for error checking)
       vec_kernels.push_back(ray_trace_kernel);
 
-      
+
 
 
       vec_kernels.push_back(normalize_render_kernel);
@@ -85,7 +85,7 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
 
       return kernels_[identifier];
   }
-  
+
 }
 
 bool boxm2_ocl_render_expected_height_map_process_cons(bprb_func_process& pro)
@@ -129,7 +129,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vgl_box_3d<double> bbox=scene->bounding_box();
 
- 
+
   //get x and y size from scene
   std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
   std::vector<boxm2_block_id>::iterator id;
@@ -183,7 +183,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
           ray_directions[count4 + 1] = 0.0;
           ray_directions[count4 + 2] = -1.0;
           ray_directions[count4 + 3] = 0.0;
-   
+
           ++count;
       }
   }

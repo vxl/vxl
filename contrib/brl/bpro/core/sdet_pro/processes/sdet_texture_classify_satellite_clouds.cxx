@@ -138,9 +138,9 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
     std::cout << "problems with the input image resource handle!\n";
     return false;
   }
-  
+
   // report resource info
-  std::cout << " image: ni=" << image->ni() << ", nj=" << image->nj() << ", nplanes=" << image->nplanes() 
+  std::cout << " image: ni=" << image->ni() << ", nj=" << image->nj() << ", nplanes=" << image->nplanes()
     << " file_format=" << image->file_format() << ", pixel_format=" << image->pixel_format() << std::endl;
 
   // crop info
@@ -179,7 +179,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
     roi_float_grey = roi_float;
   }
 
-  // scale  
+  // scale
   vil_math_scale_values(roi_float_grey, scale_factor);
 
   // report roi float info

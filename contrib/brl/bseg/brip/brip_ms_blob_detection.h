@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //:
 // This is: brl/bseg/brip/brip_ms_blob_detection.h
-// \file 
+// \file
 // \brief Functions for blob detection on multispectral imagery
 // \author Selene Chew
 // \date June 07, 2017
@@ -17,13 +17,13 @@
 // Connected Components Bounding Box
 // Computes bounding boxes for blobs detected by performing
 // blob detection on the spectral angle map (SAM) computed using
-// the masked pixels in mask_material as material samples. 
+// the masked pixels in mask_material as material samples.
 // Thresholds blob image, finds connected components and prunes
 // components of inadequate size.
 //
 // valid_mask contains the pixels in the region of interest.
 // If you don't have a specific region on interest, a mask of
-// all true will use whole region. Bounding box given by the 
+// all true will use whole region. Bounding box given by the
 // min/max i/j values in the vectors (equivalently returned
 // as vector of vgl_polygon)
 //
@@ -44,14 +44,14 @@ void brip_blob_connect_comp_bb(
 );
 
 // Local Maximum Bounding Box
-// Computes bounding boxes for local maximums of blob detection 
+// Computes bounding boxes for local maximums of blob detection
 // on the spectral angle map computed using
-// the masked pixels in mask_material as material samples. 
-// 
-// conf is a vector of confidences corresponding to the boudning boxes 
+// the masked pixels in mask_material as material samples.
+//
+// conf is a vector of confidences corresponding to the boudning boxes
 // valid_mask contains the pixels in the region of interest.
 // If you don't have a specific region on interest, a mask of
-// all true will use whole region. Bounding box given by the 
+// all true will use whole region. Bounding box given by the
 // min/max i/j values in the vectors (equivalently returned
 // as vector of vgl_polygon)
 //

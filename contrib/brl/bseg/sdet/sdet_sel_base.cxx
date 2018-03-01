@@ -22,7 +22,7 @@ static void calc_mean_var(double& mean, double& var,
         sum+=d[i];
         sum2+=d[i]*d[i];
       }
-    
+
     mean = sum/n;
     var  = (sum2 - n*mean*mean)/(n-1);
 }

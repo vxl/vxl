@@ -57,13 +57,13 @@ bool baml_change_detection::detect(
 
 
 //--------------------------MULTI IMAGE CHANGE DETECTION----------------------------------
-bool 
+bool
 baml_change_detection::multi_image_detect(
   const vil_image_view<vxl_uint_16>& img_target,
   const std::vector<vil_image_view<vxl_uint_16> >& img_ref,
   const std::vector<vil_image_view<bool> >& valid,
-  vil_image_view<float>& change_prob_target) 
-{  
+  vil_image_view<float>& change_prob_target)
+{
   std::vector<vil_image_view<float> > bg_probs;
   std::vector<float> fg_probs;
   int max_x_off = 0;
@@ -73,28 +73,28 @@ baml_change_detection::multi_image_detect(
 
   // Use internal change detection function to align/obtain probabilities
   bool cd_success = detect_multi_internal(
-    img_target, img_ref, valid, bg_probs, 
+    img_target, img_ref, valid, bg_probs,
     fg_probs, max_x_off, crop_width, max_y_off, crop_height);
   if (!cd_success) return false;
 
-  // Create a change probability map that is the same size as the input 
+  // Create a change probability map that is the same size as the input
   // target image and a cropped view of the map
-  vil_image_view<float> change_prob_target_big; 
+  vil_image_view<float> change_prob_target_big;
   change_prob_target_big.set_size(img_target.ni(), img_target.nj());
   change_prob_target_big.fill(0.0);
   vil_image_view<float> change_prob_target_crop = vil_crop(
-    change_prob_target_big, max_x_off, crop_width, max_y_off, crop_height); 
+    change_prob_target_big, max_x_off, crop_width, max_y_off, crop_height);
 
   // Use configured combination method
-  if (strcmp((params_.multi_method).c_str(), "product") == 0) { 
+  if (strcmp((params_.multi_method).c_str(), "product") == 0) {
     baml_change_detection::multi_product(
       bg_probs, fg_probs, change_prob_target_crop);
   }
-  else if (strcmp((params_.multi_method).c_str(), "sum") == 0) { 
+  else if (strcmp((params_.multi_method).c_str(), "sum") == 0) {
     baml_change_detection::multi_sum(
       bg_probs, fg_probs, change_prob_target_crop);
   }
-  else if (strcmp((params_.multi_method).c_str(), "maximum") == 0) { 
+  else if (strcmp((params_.multi_method).c_str(), "maximum") == 0) {
     baml_change_detection::multi_max_prob(
       bg_probs, fg_probs, change_prob_target_crop);
   }
@@ -103,7 +103,7 @@ baml_change_detection::multi_image_detect(
     return false;
   }
 
-  // Return a probability map that is the same size as the target input. Any 
+  // Return a probability map that is the same size as the target input. Any
   // pixels that were cropped for image alignment refinement are 0 probability
   change_prob_target.deep_copy(change_prob_target_big);
   return true;
@@ -126,20 +126,20 @@ bool baml_change_detection::expected_time_change(
   int crop_width = 0;
   int max_y_off = 0;
   int crop_height = 0;
-  detect_multi_internal(img_target, img_ref, valid, bg_probs, 
+  detect_multi_internal(img_target, img_ref, valid, bg_probs,
     fg_probs, max_x_off, crop_width, max_y_off, crop_height);
 
   change_time.set_size(crop_width, crop_height);
   change_time.fill(0.0);
 
   // Temp visualizations to look at for debugging purposes
-  //vil_image_view<float> sum_num_im, sum_denom_im; 
+  //vil_image_view<float> sum_num_im, sum_denom_im;
   //sum_num_im.set_size(width, height); // temp
   //sum_num_im.fill(0.0); // temp
   //sum_denom_im.set_size(width, height); // temp
   //sum_denom_im.fill(0.0); // temp
 
-  /*/ Method 1: Expect time of change 
+  /*/ Method 1: Expect time of change
   for (int x = 0; x < crop_width; x++) {
     for (int y = 0; y < crop_height; y++) {
       float sum_numerator = 0.0f;
@@ -164,7 +164,7 @@ bool baml_change_detection::expected_time_change(
     for (int y = 0; y < crop_height; y++) {
       float arg_max_prob = FLT_MIN;// -FLT_MAX;
       float best_t = 0.0f;
-      for (int t = -1; t < (int)bg_probs.size(); t++) { 
+      for (int t = -1; t < (int)bg_probs.size(); t++) {
         float product = 0.0f;
         for (int s = t + 1; s < (int)bg_probs.size(); s++) {
           product += log(bg_probs[s](x, y)*alpha + fg_probs[s] * (1.0f - alpha));
@@ -210,9 +210,9 @@ bool baml_change_detection::detect_internal(
   vil_image_view<float> cur_bg_prob;
   vil_image_view<float> cur_bg_prob_crop;
   cur_bg_prob.set_size(img_ref.ni(), img_ref.nj());
-  
-  int tar_x_off; // target x (width) offset 
-  int tar_y_off; // target y (height) offset 
+
+  int tar_x_off; // target x (width) offset
+  int tar_y_off; // target y (height) offset
   int ref_x_off; // reference x (width) offset
   int ref_y_off; // reference x (height) offset
   int crop_n_i; // cropped width
@@ -277,7 +277,7 @@ bool baml_change_detection::detect_internal(
           img_tar_crop, img_ref_crop, valid_crop, cur_bg_prob_crop, fg_prob);
       if (!dc_success) return false;
 
-      // Save the bg_prob image if it improved the results 
+      // Save the bg_prob image if it improved the results
       float mean_bg_prob = 0;
       vil_math_mean(mean_bg_prob, cur_bg_prob_crop, 0);
       if (mean_bg_prob > max_mean) {
@@ -303,7 +303,7 @@ bool baml_change_detection::detect_multi_internal(
   int& crop_height)
 {
   // Cap the registration search if bad input
-  int reg_rad = std::min(20, std::max(0, 
+  int reg_rad = std::min(20, std::max(0,
     params_.registration_refinement_rad));
 
   // Align all the images together by finding pairwise alignments
@@ -327,16 +327,16 @@ bool baml_change_detection::detect_multi_internal(
     best_x = 100; best_y = 100;
     max_mean = 0;
 
-    baml_correct_gain_offset_tiled(img_target, img_ref[img_num], 
+    baml_correct_gain_offset_tiled(img_target, img_ref[img_num],
       valid[img_num], params_.num_tiles, corr_ref);
 
-    // Try all offsets within the selected translational radius for this 
+    // Try all offsets within the selected translational radius for this
     // image pair
     for (int x_off = -reg_rad; x_off <= reg_rad; x_off++) {
       for (int y_off = -reg_rad; y_off <= reg_rad; y_off++) {
 
-        int tar_x_off; // target x (width) offset 
-        int tar_y_off; // target y (height) offset 
+        int tar_x_off; // target x (width) offset
+        int tar_y_off; // target y (height) offset
         int ref_x_off; // reference x (width) offset
         int ref_y_off; // reference x (height) offset
         int crop_n_i; // cropped width
@@ -364,23 +364,23 @@ bool baml_change_detection::detect_multi_internal(
           crop_n_j = img_target.nj() - y_off;
         }
         cur_bg_prob.fill(0.0);
-        img_tar_crop = vil_crop(img_target, 
+        img_tar_crop = vil_crop(img_target,
           tar_x_off, crop_n_i, tar_y_off, crop_n_j);
-        img_ref_crop = vil_crop(corr_ref, 
+        img_ref_crop = vil_crop(corr_ref,
           ref_x_off, crop_n_i, ref_y_off, crop_n_j);
-        valid_crop = vil_crop(valid[img_num], 
+        valid_crop = vil_crop(valid[img_num],
           tar_x_off, crop_n_i, tar_y_off, crop_n_j);
         cur_bg_prob_crop = vil_crop(cur_bg_prob,
           tar_x_off, crop_n_i, tar_y_off, crop_n_j);
 
-        // Detect change using difference because it is the simplest/fastest 
+        // Detect change using difference because it is the simplest/fastest
         // method so we use it for alignment
         float fg = 0;//don't actual need here
         dc_success = detect_difference(
           img_tar_crop, img_ref_crop, valid_crop, cur_bg_prob_crop, fg);
         if (!dc_success) return false;
 
-        // Save the offset if it improved the results 
+        // Save the offset if it improved the results
         float mean_bg_prob = 0;
         vil_math_mean(mean_bg_prob, cur_bg_prob_crop, 0);
         if (mean_bg_prob > max_mean) {
@@ -409,29 +409,29 @@ bool baml_change_detection::detect_multi_internal(
     if (y_offsets[i] < min_y_off) min_y_off = y_offsets[i];
   }
 
-  // Crop all images based on their pairwise best offsets and the overall 
+  // Crop all images based on their pairwise best offsets and the overall
   // min/max offsets
   crop_width = img_target.ni() - max_x_off + min_x_off;
   crop_height = img_target.nj() - max_y_off + min_y_off;
-  img_tar_crop = vil_crop(img_target, 
+  img_tar_crop = vil_crop(img_target,
     max_x_off, crop_width, max_y_off, crop_height);
   std::vector<vil_image_view<vxl_uint_16> > img_ref_crop_vec;
   std::vector<vil_image_view<bool> > valid_crop_vec;
   for (int i = 0; i < static_cast<int>(img_ref.size()); i++) {
     vil_image_view<vxl_uint_16> cur_crop = vil_crop(img_ref[i],
-      max_x_off - x_offsets[i], crop_width, 
+      max_x_off - x_offsets[i], crop_width,
       max_y_off - y_offsets[i], crop_height);
-    vil_image_view<bool> cur_valid_crop = vil_crop(valid[i], 
-      max_x_off - x_offsets[i], crop_width, 
+    vil_image_view<bool> cur_valid_crop = vil_crop(valid[i],
+      max_x_off - x_offsets[i], crop_width,
       max_y_off - y_offsets[i], crop_height);
     img_ref_crop_vec.push_back(cur_crop);
     valid_crop_vec.push_back(cur_valid_crop);
   }
-  
+
   // Temporarily set the registration refinement radius to 0 since we've
   // already aligned our images
   int temp_rrr = params_.registration_refinement_rad;
-  params_.registration_refinement_rad = 0; 
+  params_.registration_refinement_rad = 0;
 
   // Perform pairwise change detect on each reference image and store
   vil_image_view<vxl_byte> change_vis;
@@ -534,7 +534,7 @@ baml_change_detection::detect_census(
   baml_generate_bit_set_lut(lut);
   bool only_32_bits = (census_diam <= 5);
 
-  // Compute foreground likelihood assuming uniform distribution 
+  // Compute foreground likelihood assuming uniform distribution
   fg_prob = 1.0 / (census_diam*census_diam);
 
   // Compute both census images
@@ -664,7 +664,7 @@ baml_change_detection::detect_gradient(
   vil_image_view<float> score;
   score.set_size(width, height);
   score.fill(0.0);
-  
+
   // Compute scores between images
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
@@ -676,7 +676,7 @@ baml_change_detection::detect_gradient(
       //  grad_x_ref(x, y)*grad_x_ref(x, y) + grad_y_ref(x, y)*grad_y_ref(x, y));
       //float grad_ip = grad_x_tar(x, y)*grad_x_ref(x, y) + grad_y_tar(x, y)*grad_y_ref(x, y);
 
-      // If the magnitudes are large enough compute their angle 
+      // If the magnitudes are large enough compute their angle
       // difference, otherwise leave at default 90 degrees
       //float angle_diff = 3.14159 / 2.0;
       //if (grad_mag_tar > mag_tol && grad_mag_ref > mag_tol)
@@ -684,7 +684,7 @@ baml_change_detection::detect_gradient(
 
       //score(x,y) = pow( grad_mag_tar - grad_mag_ref, 2 );
 
-      score(x,y) = sqrt( pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) + 
+      score(x,y) = sqrt( pow( grad_x_tar(x,y)-grad_x_ref(x,y), 2 ) +
         pow( grad_y_tar(x,y)-grad_y_ref(x,y), 2 ) );
 
       //score(x, y) = grad_mag_tar*grad_mag_ref - grad_ip;
@@ -693,7 +693,7 @@ baml_change_detection::detect_gradient(
       //score(x,y) = pow( 0.5f*( grad_mag_tar+grad_mag_ref )*fabs( sin(angle_diff) ), 2 );
     }
   }
-  
+
   // Convert to probability
   float sigma = baml_sigma(score);
   baml_gaussian(score, bg_prob, sigma);
@@ -745,7 +745,7 @@ baml_change_detection::detect_nonparam(
       int ty = (int)(img_ref(x, y) / img_bit_ds);
       if (tx >= hist_range || ty >= hist_range) {
         std::cerr << "ERROR: baml_detect_change_nonparam, observed intensity "
-          << img_tar(x, y) << ' ' << img_ref(x, y) 
+          << img_tar(x, y) << ' ' << img_ref(x, y)
           << " larger than expected bit range, aborting\n";
         return false;
       }
@@ -791,7 +791,7 @@ baml_change_detection::detect_nonparam(
       bg_prob(x, y) = bg(tx, ty);
     } //x
   } //y
-  
+
   return true;
 }
 
@@ -809,13 +809,13 @@ baml_change_detection::detect_histcmp(
   if (img_ref.ni() != width || img_ref.nj() != height ||
     valid_ref.ni() != width || valid_ref.nj() != height)
     return false;
-  
+
   vil_image_view<float> target, ref;
   target.set_size(width, height);
   ref.set_size(width, height);
 
   // If using the gradient magnitude compute gradient images
-  if (params_.grad_mag_on) { 
+  if (params_.grad_mag_on) {
     vil_image_view<float> grad_x_tar, grad_y_tar, grad_x_ref, grad_y_ref;
     vil_sobel_3x3<vxl_uint_16, float>(img_tar, grad_x_tar, grad_y_tar);
     vil_sobel_3x3<vxl_uint_16, float>(img_ref, grad_x_ref, grad_y_ref);
@@ -828,7 +828,7 @@ baml_change_detection::detect_histcmp(
     }
 
   // Otherwise make float versions of the input target and reference images
-  } else { 
+  } else {
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         target(x, y) = (float)img_tar(x, y);
@@ -837,13 +837,13 @@ baml_change_detection::detect_histcmp(
     }
   }
 
-  // Compute min and max observed intensities in either image and in just 
+  // Compute min and max observed intensities in either image and in just
   // target image
   vxl_uint_16 min_int_tar = (vxl_uint_16)(pow(2, 16) - 1);
   vxl_uint_16 max_int_tar = (vxl_uint_16)0;
   float max_int = 0;
   float min_int = (pow(2, 16) - 1);
- 
+
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
@@ -907,12 +907,12 @@ baml_change_detection::detect_histcmp(
 
   int nbhd_rad = (params_.neighborhood_size - 1) / 2;
 
-  for (int y = nbhd_rad; y < height - nbhd_rad; y++) {   
-    for (int x = nbhd_rad; x < width - nbhd_rad; x++) {  
+  for (int y = nbhd_rad; y < height - nbhd_rad; y++) {
+    for (int x = nbhd_rad; x < width - nbhd_rad; x++) {
 
-      // Reset histogram every 10 columns to prevent floating point error 
-      // from becoming too high  
-      if ((x- nbhd_rad) % 10 == 0) { 
+      // Reset histogram every 10 columns to prevent floating point error
+      // from becoming too high
+      if ((x- nbhd_rad) % 10 == 0) {
         for (int n = 0; n < params_.num_bins; n++) {
           hist_ref[n] = 0;
           hist_tar[n] = 0;
@@ -939,7 +939,7 @@ baml_change_detection::detect_histcmp(
       // Create histogram objects
       bsta_histogram<float> hist_t(min_int, max_int, hist_tar, 0);
       bsta_histogram<float> hist_r(min_int, max_int, hist_ref, 0);
-      
+
       // Select appropriate histogram comparison method
       if (strcmp((params_.hist_method).c_str(), "intersection") == 0) {
         score(x, y) = -log(hist_intersect(hist_r, hist_t));
@@ -1075,7 +1075,7 @@ baml_change_detection::build_hist( // adds or removes pixel specified in by (x1,
 bool baml_change_detection::multi_product(
   const std::vector<vil_image_view<float> >& bg_probs,
   const std::vector<float>& fb_probs,
-  vil_image_view<float>& change_prob) 
+  vil_image_view<float>& change_prob)
 {
   int num_ref = bg_probs.size();
   int width = bg_probs[0].ni();
@@ -1090,7 +1090,7 @@ bool baml_change_detection::multi_product(
     for (int y = 0; y < height; y++) {
       float prod = 1;
       for (int t = 0; t < num_ref; t++) {
-        prod *= bg_probs[t](x, y) / fb_probs[t]*params_.pGoodness 
+        prod *= bg_probs[t](x, y) / fb_probs[t]*params_.pGoodness
           + (1.0f - params_.pGoodness);
       }
       change_prob(x, y) = 1.0f /
@@ -1104,7 +1104,7 @@ bool baml_change_detection::multi_product(
 bool baml_change_detection::multi_sum(
   const std::vector<vil_image_view<float> >& bg_probs,
   const std::vector<float>& fg_probs,
-  vil_image_view<float>& change_prob) 
+  vil_image_view<float>& change_prob)
 {
   int num_ref = bg_probs.size();
   int width = bg_probs[0].ni();
@@ -1121,7 +1121,7 @@ bool baml_change_detection::multi_sum(
       for (int t = 0; t < num_ref; t++) {
         sum += bg_probs[t](x, y) / fg_probs[t]*(1 / (float)num_ref);
       }
-      change_prob(x, y) = 1.0f / 
+      change_prob(x, y) = 1.0f /
         (1.0f + (1.0f - params_.pChange)*sum / params_.pChange);
     }
   }
@@ -1132,7 +1132,7 @@ bool baml_change_detection::multi_sum(
 bool baml_change_detection::multi_max_prob(
   const std::vector<vil_image_view<float> >& bg_prob,
   const std::vector<float>& fg_prob,
-  vil_image_view<float>& change_prob) 
+  vil_image_view<float>& change_prob)
 {
   int num_ref = bg_prob.size();
   int width = bg_prob[0].ni();
@@ -1141,7 +1141,7 @@ bool baml_change_detection::multi_max_prob(
   // Initialize output image
   change_prob.set_size(width, height);
   change_prob.fill(0.0f);
-  
+
   // Main loop over pixels
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
@@ -1149,7 +1149,7 @@ bool baml_change_detection::multi_max_prob(
       for (int t = 0; t < num_ref; t++) {
         m = std::max(m, bg_prob[t](x, y)/fg_prob[t]);
       }
-      change_prob(x, y) = 1.0f / 
+      change_prob(x, y) = 1.0f /
         (1.0f + (1.0f - params_.pChange)*m / params_.pChange);
     }
   }

@@ -43,7 +43,7 @@ void baml_warp_perspective(
 bool baml_warp_via_ground_plane(
   const vil_image_view<vxl_uint_16>& img1,
   const vpgl_camera<double>& cam1,
-  const vgl_box_2d<int>& img2_region, 
+  const vgl_box_2d<int>& img2_region,
   const vpgl_camera<double>& cam2,
   float z_world,
   vil_image_view<vxl_uint_16>& img2 );
@@ -55,7 +55,7 @@ bool baml_warp_via_dem(
   int img2_width,
   int img2_height,
   const vpgl_camera<double>& cam2,
-  const vgl_box_2d<double>& bounding_box_world, 
+  const vgl_box_2d<double>& bounding_box_world,
   const vil_image_view<float>& dem,
   const vgl_h_matrix_2d<double>& dem_to_world,
   vil_image_view<vxl_uint_16>& img2,

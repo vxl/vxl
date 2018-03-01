@@ -93,7 +93,7 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 
   T p_b_given_a(unsigned a, unsigned b) const;
   T p_b_given_a(T a, T b) const;
-  
+
   //: bin index for a value
   bool index_a(T a, unsigned& indx) const;
   bool index_b(T b, unsigned& indx) const;
@@ -132,7 +132,7 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 
   void print_to_m(std::ostream& os) const;
   void print_to_text(std::ostream& os) const;
-  
+
   //: green box indicates the a-b origin
   // the red bar designates the a axis of the histogram, cyan the b axis.
   void print_cond_prob_to_vrml(std::ostream& os, bool a_given_b = true/*else b_given_a*/) const;

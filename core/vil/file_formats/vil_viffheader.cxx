@@ -55,7 +55,7 @@ vil_viff_xvimage::vil_viff_xvimage(
   fspare2 = 0;
 
   unsigned long image_data_n_bytes=0L; // dummy initialisation to avoid compiler warning
-  
+
   imagedata = VXL_NULLPTR;
 }
 

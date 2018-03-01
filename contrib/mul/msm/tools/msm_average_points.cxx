@@ -1,7 +1,7 @@
 //:
 // \file
 // \brief Load in two or more sets of points, write out a file containing averaged points over all sets.
-//  All point sets need to have the same number of points.  
+//  All point sets need to have the same number of points.
 // \author Claudia Lindner
 
 #include <msm/msm_points.h>
@@ -43,14 +43,14 @@ int main(int argc, char** argv)
     }
     vcl_cout<<"Loaded "<<points.size()<<" points from "<<path<<vcl_endl;
 
-    if (i==1) 
-    { 
-      n_pts = points.size(); 
-	
+    if (i==1)
+    {
+      n_pts = points.size();
+
       // Initialise/add points to sum_all_pts
       points.get_points(pts);
       for (unsigned j=0;j<pts.size();++j) { all_pts.push_back(pts[j]); }
-    }	
+    }
     else if (n_pts != points.size())
     {
       vcl_cerr<<"Error: Point set "<<path<<" has a different number of points than the first set."<<vcl_endl;
@@ -60,15 +60,15 @@ int main(int argc, char** argv)
    {
       // Add points to all_pts
       points.get_points(pts);
-      for (unsigned j=0;j<all_pts.size();++j) 
+      for (unsigned j=0;j<all_pts.size();++j)
         { all_pts[j].set(all_pts[j].x()+ pts[j].x(), all_pts[j].y()+ pts[j].y()); }
    }
   }
-  
+
   // Update all_pts with the average over all sets
-  for (unsigned j=0;j<all_pts.size();++j) 
+  for (unsigned j=0;j<all_pts.size();++j)
     { all_pts[j].set(all_pts[j].x()/n_sets, all_pts[j].y()/n_sets); }
- 
+
   points.set_points(all_pts);
 
   vcl_string out_path = vcl_string(argv[argc-1]);

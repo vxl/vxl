@@ -15,7 +15,7 @@ public:
 class TestClassA : public IJsonSerializable
 {
 public:
-	TestClassA( void ){}
+        TestClassA( void ){}
    virtual ~TestClassA( void ){}
    virtual void Serialize( Json::Value& root ){
        // serialize primitives
@@ -53,27 +53,27 @@ public:
   static bool Serialize( IJsonSerializable* pObj, std::string& output ){
     if (pObj == NULL)
       return false;
- 
+
     Json::Value serializeRoot;
     pObj->Serialize(serializeRoot);
- 
+
     Json::StyledWriter writer;
     output = writer.write( serializeRoot );
- 
+
     return true;
   }
   static bool Deserialize( IJsonSerializable* pObj, std::string& input ){
     if (pObj == NULL)
       return false;
- 
+
     Json::Value deserializeRoot;
     Json::Reader reader;
- 
+
     if ( !reader.parse(input, deserializeRoot) )
       return false;
- 
+
     pObj->Deserialize(deserializeRoot);
- 
+
     return true;
   }
 private:

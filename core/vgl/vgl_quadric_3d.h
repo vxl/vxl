@@ -26,7 +26,7 @@
 // w is the homogeneous scale factor.
 // there are 17 classes of quadrics depending on the signs of curvature
 // and degrees of degeneracy
-// 
+//
 template <class T>
 class vgl_quadric_3d
 {
@@ -123,21 +123,21 @@ class vgl_quadric_3d
 
   //: return a matrix of quadric coefficients of the form:
   //       _                  _
-  //      |  a   d/2  e/2  g/2 |   
-  //      | d/2   b   f/2  h/2 |  
+  //      |  a   d/2  e/2  g/2 |
+  //      | d/2   b   f/2  h/2 |
   // Q =  | e/2  f/2   c   i/2 |
   //      | g/2  h/2  i/2   j  |
   //       -                  -
   //  Note that X^t Q X = 0 , where X^t =[x y z w] is the same as implicit equation 1) above.
-  // 
+  //
   std::vector<std::vector<T> > coef_matrix() const;
 
-  //: constructor from a canonical 4x4 quadric coefficient matrix and a 4x4 homogeneous matrix, H 
+  //: constructor from a canonical 4x4 quadric coefficient matrix and a 4x4 homogeneous matrix, H
   // representing the Euclidean transformation from the canonical frame to the global frame
   //                  _    _
-  //                 |R    t|  where t is a 3x1 translation vector and R is a rotation matrix 
+  //                 |R    t|  where t is a 3x1 translation vector and R is a rotation matrix
   //             H = |      |  0^t is a 1x3 zero vector.
-  //                 |0^t  1|  
+  //                 |0^t  1|
   //                  -    -
   vgl_quadric_3d(std::vector<std::vector<T> > const& canonical_quadric, std::vector<std::vector<T> > const& H);
 
@@ -174,7 +174,7 @@ class vgl_quadric_3d
   // otherwise the center is not defined for degenerate quadrics
   bool center(vgl_point_3d<T>& center) const;
 
-  //:: eigenvalues and eigenvectors of the upper 3x3 quadric matrix 
+  //:: eigenvalues and eigenvectors of the upper 3x3 quadric matrix
   void upper_3x3_eigensystem(std::vector<T>& eigenvalues, std::vector<std::vector<T> >& eigenvectors) const;
 
   //:: The quadric in its canonical frame if the center is defined, i.e. the upper 3x3 quadric matrix is full rank
@@ -203,11 +203,11 @@ std::ostream&  operator<<(std::ostream& s, vgl_quadric_3d<T> const& c);
 template <class T>
 std::istream&  operator>>(std::istream& s, vgl_quadric_3d<T>& c);
 
-//: Computes the eigensystem for real symmetric matrices. Used to classify quadrics. 
+//: Computes the eigensystem for real symmetric matrices. Used to classify quadrics.
 template <class T, size_t n>
 void eigen(T m[n][n], T l[n], T vc[n][n]);
 
-//: Auxillary function used by eigen 
+//: Auxillary function used by eigen
 template <class T, size_t n>
 void twst(T m[n][n], T c, T s, int i, int j);
 

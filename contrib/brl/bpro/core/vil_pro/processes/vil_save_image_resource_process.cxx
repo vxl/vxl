@@ -49,7 +49,7 @@ bool vil_save_image_resource_process(bprb_func_process& pro)
   if(!vil_save_image_resource(resc, image_filename.c_str())){
     std::cout << " save image resource failed " << std::endl;
     return false;
-  } 
+  }
   return true;
 }
 

@@ -9,8 +9,8 @@ brad_appearance_neighborhood_index::brad_appearance_neighborhood_index(std::vect
 {
     std::vector<vgl_vector_3d<double > > local_view_dirs;
     std::vector<vgl_vector_3d<double > > local_illum_dirs;
-	
-	for(std::vector<brad_image_metadata_sptr>::const_iterator mit = metadata.begin(); mit !=metadata.end(); ++mit){  
+
+        for(std::vector<brad_image_metadata_sptr>::const_iterator mit = metadata.begin(); mit !=metadata.end(); ++mit){
     //convert to sun illumination to standard spherical coordinates
     double sun_sphere_az = 90.0 - (*mit)->sun_azimuth_ + 360.0;
     if (sun_sphere_az>=360.0) sun_sphere_az -= 360.0;
@@ -122,7 +122,7 @@ void brad_appearance_neighborhood_index::fill_near_illum_dir_map(){
       // determine if j is a view neighbor
       nit = std::find(view_nbrs.begin(), view_nbrs.end(), j);
       if(nit == view_nbrs.end())
-        continue; // if not then don't bother testing illumination 
+        continue; // if not then don't bother testing illumination
       double dp = dot_product(illumination_dirs_[i], illumination_dirs_[j]);
       double sang = std::sqrt(1.0-(dp*dp));
       if(sang<illum_dir_thresh_ && full_overlap)
@@ -134,7 +134,7 @@ void brad_appearance_neighborhood_index::fill_near_illum_dir_map(){
 }
 
 void brad_appearance_neighborhood_index::compute_index(){
-  // full overlap can occur in the case of cropped satellite images of 
+  // full overlap can occur in the case of cropped satellite images of
   // a scene where every view provides full coverage of scene surfaces
   // modulo occlusion
   valid_view_dir_map_.clear();
@@ -183,7 +183,7 @@ void brad_appearance_neighborhood_index::compute_index(){
       continue;
     }
     targets.push_back(img_idx);
-	ptr++;
+        ptr++;
   }
   // the set of targets is determined
   unsigned ntarg = static_cast<unsigned>(targets.size());
@@ -226,7 +226,7 @@ unsigned brad_appearance_neighborhood_index::most_nadir_view() const{
       max_dot = dp;
       ret = i;
     }
-  } 
+  }
   return ret;
 }
 //predicate functor operator for sorting
@@ -311,7 +311,7 @@ void brad_appearance_neighborhood_index::print_view_neighbors() const{
       std::cout << *nit << ' ';
     std::cout << "]\n";
   }
-}    
+}
 
 void brad_appearance_neighborhood_index::print_illum_neighbors() const{
   std::cout << "Illumination neighbors\n";

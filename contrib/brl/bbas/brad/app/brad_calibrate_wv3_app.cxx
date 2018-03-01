@@ -47,7 +47,7 @@ int main(int argc, char * argv[])
   vil_image_view<float> mul_img;
   vil_image_view<vxl_uint_16> raw = mul_rsc->get_view();
   brad_calibrate_wv3_img(mul_meta, raw, mul_img, false);
-   
+
    // Correct for atmospherics
    float mean_albedo = 0.3;
    vil_image_view<float> cal_img;
@@ -55,6 +55,6 @@ int main(int argc, char * argv[])
 
    // save
    save_corrected_wv3(cal_img, out_dir);
-   
+
    return 0;
 };

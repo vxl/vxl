@@ -22,14 +22,14 @@ bool baml_compute_birchfield_tomasi(
 
   if( img_ref.ni() != width || img_ref.nj() != height )
     return false;
-   
+
   // Initialize output image
   score.set_size( width, height );
   score.fill( (T)0 );
 
   // Compute neighborhood min and max
   vil_image_view<T> nbhd_min, nbhd_max;
-  vil_structuring_element se; 
+  vil_structuring_element se;
   se.set_to_disk( rad + 0.01 );
   //static const int v_p_i0[] = { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
   //static const int v_p_j0[] = { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
@@ -42,9 +42,9 @@ bool baml_compute_birchfield_tomasi(
   for( int y = rad; y < height-rad; y++ ){
     for( int x = rad; x < width-rad; x++ ){
 
-      if( img_tar(x,y) < nbhd_min(x,y) ) 
+      if( img_tar(x,y) < nbhd_min(x,y) )
         score(x,y) = (T)( nbhd_min(x,y) - img_tar(x,y) );
-      else if( img_tar(x,y) > nbhd_max(x,y) ) 
+      else if( img_tar(x,y) > nbhd_max(x,y) )
         score(x,y) = (T)( img_tar(x,y) - nbhd_max(x,y) );
     }
   }
@@ -58,4 +58,4 @@ template bool baml_compute_birchfield_tomasi( \
   const vil_image_view<T>& img_tar, \
   const vil_image_view<T>& img_ref, \
   vil_image_view<T>& score, \
-  int rad ); 
+  int rad );

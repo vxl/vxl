@@ -22,7 +22,7 @@ bool read_params_json(std::string const& json_str, betr_params_sptr& params){
 }
 bool write_params_json(std::ostream& ostr, betr_params_sptr const& params){
   if(!ostr)
-	  return false;
+          return false;
   std::string json_string;
   bool good = write_params_json(json_string, params);
   if(!good)
@@ -33,7 +33,7 @@ bool write_params_json(std::ostream& ostr, betr_params_sptr const& params){
 bool read_params_json(std::istream& istr, betr_params_sptr& params){
   if(!istr || !params)
     return false;
-  
+
   std::string json_string;
   std::stringstream sstr;
   std::string temp;

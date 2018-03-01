@@ -34,8 +34,8 @@ class boxm2_export_oriented_point_cloud_function
                                        boxm2_data_base* mog, boxm2_data_base* alpha,std::string datatype,
                                        boxm2_data_base* points,std::ofstream& file,float prob_t,vgl_box_3d<double> bb, unsigned& num_vertices);
 
-  static bool calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk, 
-                                   const vnl_vector_fixed<float, 4>& point, 
+  static bool calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
+                                   const vnl_vector_fixed<float, 4>& point,
                                    const float& alpha, float& prob);
 
   static void writePLYHeader(std::ofstream& file, unsigned num_vertices, std::stringstream& ss, bool output_aux);

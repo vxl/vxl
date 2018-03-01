@@ -33,7 +33,7 @@ class  bsta_mog3_grey
      static void update_app_model(vnl_vector_fixed<unsigned char, 8> & mog3,
                                         vnl_vector_fixed<float, 4> & nobs,
                                         float x, float w, float init_sigma,float min_sigma)
-     { 
+     {
        update_gauss_mixture_3(mog3,nobs,x,w,init_sigma,min_sigma);
      }
      static void  sort_mix_3(float & mu0, float& sigma0, float& w0, float& Nobs0,
@@ -55,19 +55,19 @@ class  bsta_mog3_grey
                                  vnl_vector_fixed<unsigned char, 8> & mog3_3);
 
      static void compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
-                                         vcl_vector<float> const& obs, 
-                                         vcl_vector<float> const& obs_weights, 
-                                         bsta_sigma_normalizer_sptr n_table, 
-                                         float min_sigma = 0.01f); 
+                                         vcl_vector<float> const& obs,
+                                         vcl_vector<float> const& obs_weights,
+                                         bsta_sigma_normalizer_sptr n_table,
+                                         float min_sigma = 0.01f);
      static void compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
-                                   vcl_vector<float> const& obs, 
-                                   vcl_vector<float> const& pre, 
-                                   vcl_vector<float> const& vis, 
+                                   vcl_vector<float> const& obs,
+                                   vcl_vector<float> const& pre,
+                                   vcl_vector<float> const& vis,
                                    bsta_sigma_normalizer_sptr n_table,
                                    float min_sigma=0.01f);
 
      static void force_mog3_sigmas_to_value(vnl_vector_fixed<unsigned char, 8> & mog3,float sigma);
-     
+
 };
 
 #endif // bsta_mog3_grey_h_

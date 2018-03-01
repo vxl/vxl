@@ -107,7 +107,7 @@ static void test_operations()
   TEST("Contains ", con, true);
   }
   {
-	vgl_vector_3d<double> t(0,1,0);
+        vgl_vector_3d<double> t(0,1,0);
   vgl_point_3d<double> p(1,2,3), p0;
   vgl_infinite_line_3d<double> inf_l(p, t), in_inf_l;
   std::stringstream ss;

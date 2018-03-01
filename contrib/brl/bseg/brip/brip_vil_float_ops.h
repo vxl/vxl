@@ -263,7 +263,7 @@ class brip_vil_float_ops
                             bool scale_invariant = true,
                             bool non_max_suppress = false,
                             float cutoff=0.01f,
-                            float theta_init = 0.0f, 
+                            float theta_init = 0.0f,
                             float theta_end = 180.0f);
 
   //: Ix.Ix-transpose gradient matrix elements for an NxN region ($N = 2n+1$)

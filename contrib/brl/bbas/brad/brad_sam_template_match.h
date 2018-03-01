@@ -8,7 +8,7 @@
 
 //:
 // \file
-// \brief 
+// \brief
 // \author Tom Pollard and Selene Chew
 // \date May 10, 2017
 

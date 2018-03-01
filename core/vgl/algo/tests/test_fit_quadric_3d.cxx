@@ -97,7 +97,7 @@ static void test_linear_fit_Taubin_parabolid()
   P[0][9]= -1.0;  P[1][9]=1.0;   P[2][9]=2.0;
   P[0][10]= -2.0; P[1][10]=2.0; P[2][10]=8.0;
   P[0][11]= -3.0; P[1][11]=3.0; P[2][11]=18.0;
- 
+
   double th = 1.047197551;
   //double th = 0.0;
   vgl_vector_3d<double> off(0.1, 0.2, 0.3);
@@ -145,7 +145,7 @@ static void test_linear_fit_Taubin_parabolid()
   double qdiff = 0.0;
   for(size_t r = 0; r<4; ++r)
    for(size_t c = 0; c<4; ++c)
-	   qdiff += fabs(Qi[r][c]-Qo[r][c]);
+           qdiff += fabs(Qi[r][c]-Qo[r][c]);
   qdiff /= 16.0;
   TEST_NEAR("transform canonical frame paraboloid", qdiff, 0.0, 1.0e-6);
 }
@@ -198,7 +198,7 @@ static void test_linear_fit_parabolic_cylinder_Taubin(){
   P[0][9]=-2.0;  P[1][9]=-5.0;   P[2][9]=4.0;
   P[0][10]=-2.5; P[1][10]=-0.5; P[2][10]=6.25;
   P[0][11]=-3.0; P[1][11]=0.5; P[2][11]=9.0;
- 
+
   double th = 1.047197551;
   //double th = 0.0;
   vgl_vector_3d<double> off(0.1, 0.2, 0.3);
@@ -249,7 +249,7 @@ static void test_linear_fit_parabolic_cylinder_Taubin(){
   double qdiff = 0.0;
   for(size_t r = 0; r<4; ++r)
    for(size_t c = 0; c<4; ++c)
-	   qdiff += fabs(Qi[r][c]-Qo[r][c]);
+           qdiff += fabs(Qi[r][c]-Qo[r][c]);
   qdiff /= 16.0;
   TEST_NEAR("transform canonical frame parabolic cylinder", qdiff, 0.0, 1.0e-6);
 }
@@ -378,7 +378,7 @@ static void test_linear_fit_Allaire_thin_ellipsoid_rand_error()
   P[0][11]=sx*r; P[1][11]= sy*r; P[2][11]=-sz*r;
   P[0][12]=sx*r; P[1][12]= -sy*r; P[2][12]=sz*r;
   P[0][13]=-sx*r; P[1][13]= sy*r; P[2][13]=sz*r;
-  
+
   double th = 1.047197551;
   vgl_vector_3d<double> off(1.0, 2.0, 3.0);
   double c = cos(th), s = sin(th);
@@ -419,14 +419,14 @@ static void test_linear_fit_Allaire_thin_ellipsoid_rand_error()
   for(size_t r = 0; r<4; ++r){
     for(size_t c=0; c<4; ++c){
       Hf[r][c] = H[r][c];
-	}
-	D[r][r] = diag[r];
+        }
+        D[r][r] = diag[r];
   }
   vnl_svd<double> svd(Hf);
   vnl_matrix<double> Hr = svd.inverse();
 
   vnl_matrix<double> Qr = Hr.transpose() * D * Hr;
-  
+
   std::vector<std::vector<double> > Qo = q.coef_matrix();
   double dif = 0.0;
   for(size_t r = 0; r<4; ++r)

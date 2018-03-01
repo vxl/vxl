@@ -87,11 +87,11 @@ class betr_event_trigger : public vbl_ref_count{
   const std::map<std::string, betr_geo_object_3d_sptr>& evt_objects() const {return evt_trigger_objects_;}
   vpgl_lvcs lvcs() const {return lvcs_;}
   std::vector<std::string> algorithms() const;
-  
+
   //utilities
   //: projected 2-d polygon for the 3-d trigger object
   bool project_object(vpgl_camera_double_sptr cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly);
-  bool save_projected_polys(std::string const& path, std::vector<vsol_polygon_2d_sptr> const& polys);  
+  bool save_projected_polys(std::string const& path, std::vector<vsol_polygon_2d_sptr> const& polys);
   // debug
   void set_verbose(bool verbose){verbose_ = verbose;}
   void set_ref_path(std::string path){ref_path_ = path;}

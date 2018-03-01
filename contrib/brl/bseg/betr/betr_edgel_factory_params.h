@@ -15,7 +15,7 @@
 //  borderp = false - Don't enclose the image with a connected edge chain border.
 //                    Required in algorithms that attempt to form a complete image topology
 //  smooth  -  the standard deviation of the Gaussian smoothing kernel normally 1 pixel
-//  noise_multiplier - factor to determine the gradient threshold normally 2.0. Smaller 
+//  noise_multiplier - factor to determine the gradient threshold normally 2.0. Smaller
 //                     means lower gradient threshold
 //  edgel_factor parameters:
 //   gradient_range_         - the maximum value for the gradient histogram bin range

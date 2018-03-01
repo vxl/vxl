@@ -123,7 +123,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   vil_save_image_resource(clip_resc, fname.c_str());
 #endif
   sdet_detector det(params_.det_params_);
-    
+
   det.SetImage(clip_resc);
 
   if(!det.DoContour()){
@@ -135,7 +135,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
     std::cout << "Detection worked but returned no edgels\n";
     return false;
   }
- 
+
   edgels_[iname][region_name] = vd_edges;
 
   unsigned region_index = regions_[iname][region_name];
@@ -150,7 +150,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   for( std::vector<double>::iterator git = gmags.begin();
        git != gmags.end();++git)
     h.upcount(*git, (1.0 + (*git)));//increase weight to favor high gradient values (small objects)
-  
+
   if(h.area()<3.0*params_.nbins_){
     std::cout << "insufficient edges in region " << region_name << " - fatal" << std::endl;
     return false;
@@ -183,7 +183,7 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, s
 bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, vsol_polygon_2d_sptr const& poly,
                                    std::vector<double>& mags){
   vgl_polygon<double>  vpoly = bsol_algs::vgl_from_poly(poly); // THIS IS WHERE YOU CAN CHECK IF IT IS INSIDE POLY
-  brip_roi_sptr broi = rois_[iname]; 
+  brip_roi_sptr broi = rois_[iname];
   if(!broi){
     std::cout << "no roi for " << iname << '\n';
     return false;
@@ -221,7 +221,7 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
 bool betr_edgel_factory::save_edgels(std::string const& dir) const {
   std::map<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >::const_iterator iit = edgels_.begin();
   for(; iit != edgels_.end(); ++iit){
-	  const std::pair<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >& emap = *iit;
+          const std::pair<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >& emap = *iit;
     for(std::map<std::string, std::vector< vdgl_digital_curve_sptr > >::const_iterator eit = emap.second.begin();
         eit != emap.second.end(); ++eit){
       std::string region_name = eit->first;
@@ -331,7 +331,7 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
       if(!vpoly.contains(x+i_offset, y+j_offset))
         continue;
       unsigned i = static_cast<unsigned>(x), j = static_cast<unsigned>(y);
-	  // clean away border hash due to convolving and upsampling
+          // clean away border hash due to convolving and upsampling
       if(i < bdr || j < bdr  || i > (ni-bdr-1) || j > (nj-bdr-1))
         continue;
       double g = e.get_grad();

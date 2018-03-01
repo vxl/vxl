@@ -143,10 +143,10 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
         //float prob = 0.0f;
         float prob = points_data[currIdx][3]; // during extractPointCloud process the prob of this point should be saved in this field
                                               // that process actually also checks whether the prob is below threshold and marks this field as -1.0
-        
+
         if (prob >= prob_t)
-        {  
-        
+        {
+
           vnl_vector_fixed<double, 3> axes;
           //vnl_vector_fixed<double, 3> eval;
           double LE, CE, exp_color;
@@ -154,10 +154,10 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
           //  continue;
           if (!calculateLECEofPoint(covs_data[currIdx], axes, LE, CE))
             continue;
-          
+
           if (LE >= LE_t || CE >= CE_t)
             continue;
-        
+
           file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
 
           if(datatype == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -211,7 +211,7 @@ void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const 
     for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
         float prob = points_data[currIdx][3]; // during extractPointCloud process the prob of this point should be saved in this field
                                               // that process also checks whether the prob is below threshold and marks this field as -1.0
-        // the probability check should have already been done by ExtractPointCloud processes  
+        // the probability check should have already been done by ExtractPointCloud processes
         //if (!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
         //    continue;
         if (prob >= prob_t)
@@ -264,11 +264,11 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   boxm2_block_id id;
 
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
-  
+
   //the following method checks whether the scene contains the point or not
   if (!calculateProbOfPoint(scene, blk, point, alpha, prob))
     return false;
-  
+
   if (!calculateLECEofPoint(cov, axes, LE, CE))
     return false;
 
@@ -335,9 +335,9 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   boxm2_block_id id;
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
   //boxm2_block_id id = blk->block_id();
-  //if (!scene->block_contains(vgl_point, id, local)) 
+  //if (!scene->block_contains(vgl_point, id, local))
   //  return false;
-  
+
   //if the scene doesn't contain point,
   if (!scene->contains(vgl_point, id, local)) {
     return false;

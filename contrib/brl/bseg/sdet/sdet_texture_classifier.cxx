@@ -475,7 +475,7 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category,
   unsigned dim_total = other_responses_.size() + dim + 2;
   std::cout << " texton dimension: " << dim_total  << '\n' << std::flush;
 
-  // collect all pixels, then we'll shuffle and pick n_samples_ pixels from it to ensure we don't collect a pixel more than once 
+  // collect all pixels, then we'll shuffle and pick n_samples_ pixels from it to ensure we don't collect a pixel more than once
   std::vector<std::pair<int, int> > pixels;
   vgl_polygon_scan_iterator<double> psi(texture_region);
   for (psi.reset(); psi.next(); ) {

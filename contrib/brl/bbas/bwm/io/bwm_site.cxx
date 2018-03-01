@@ -227,7 +227,7 @@ void bwm_site::convert_object_groups_obj_to_multiple_ply(std::string const& obj_
         fit != faces.end(); ++fit){
       std::vector<size_t>& vs = (*fit);
       size_t n = vs.size();
-      ostr << n << ' '; 
+      ostr << n << ' ';
       for(size_t i =0; i<n-1; ++i)
         ostr << vs[i] << ' ';
 
@@ -236,4 +236,4 @@ void bwm_site::convert_object_groups_obj_to_multiple_ply(std::string const& obj_
     ostr.close();
   }
 }
-    
+

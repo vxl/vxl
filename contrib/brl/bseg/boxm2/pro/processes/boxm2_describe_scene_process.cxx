@@ -68,7 +68,7 @@ bool boxm2_describe_scene_process(bprb_func_process& pro)
 
   // compute voxel size using local bounding box
   vgl_box_3d<double> bbox = scene->bounding_box();
-  
+
   // obtain the scene finest resolution
   // note that the sub block size is truncated to integer here
   std::map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();

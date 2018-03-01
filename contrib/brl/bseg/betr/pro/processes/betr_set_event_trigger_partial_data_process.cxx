@@ -54,7 +54,7 @@ bool betr_set_event_trigger_partial_data_process(bprb_func_process& pro)
   // "cam" Assumed to be a global rational camera, projecting lon, lat, elv to (u,v)
   unsigned i = 0;
   betr_event_trigger_sptr event_trigger = pro.get_input<betr_event_trigger_sptr>(i++);
-  vil_image_resource_sptr imgr = pro.get_input<vil_image_resource_sptr>(i++);  
+  vil_image_resource_sptr imgr = pro.get_input<vil_image_resource_sptr>(i++);
   vpgl_camera_double_sptr cam  = pro.get_input<vpgl_camera_double_sptr>(i++);
   bool is_reference = pro.get_input<bool>(i++);
   bool keep_data = pro.get_input<bool>(i++);

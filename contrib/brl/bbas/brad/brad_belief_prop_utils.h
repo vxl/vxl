@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief Utilities to study probabilistic volumetric modeling based on belief propagation 
+// \brief Utilities to study probabilistic volumetric modeling based on belief propagation
 //
 //
 // \author J. L. Mundy
@@ -60,8 +60,8 @@ brad_ray(): dim_(1.0), min_z_(0.0), max_z_(10.0){}
     unsigned n = static_cast<unsigned>((max_z_-min_z_)/dim_);
     std::cout << "Zray (" << min_z_ << " --> " << max_z_ << "):dim = " << dim_ << '\n';
     for(unsigned i=n; i>=1; i--){
-      std::cout << "cell[" << i << "]:"; 
-	 ray_data_[i-1].print();}
+      std::cout << "cell[" << i << "]:";
+         ray_data_[i-1].print();}
   }
 };
   class brad_belief_prop_utils
@@ -97,7 +97,7 @@ brad_ray(): dim_(1.0), min_z_(0.0), max_z_(10.0){}
   void print_zray() const {zray_.print();}
   void print_zray(unsigned ni) const;
   bool force_single_index(unsigned indx);
-  
+
  private:
   brad_ray zray_;
   std::vector<vil_image_view<float> > imgs_;

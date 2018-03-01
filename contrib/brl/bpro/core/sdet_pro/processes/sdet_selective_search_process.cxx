@@ -61,13 +61,13 @@ bool expand_line(std::vector<vgl_point_2d<T> > line, double const& w, vgl_polygo
 
 bool draw_box(vil_image_view<vil_rgb<vxl_byte> >& output_img, vgl_oriented_box_2d<float>& bb, vil_rgb<vxl_byte> color) {
     vector<vgl_point_2d<float> > line = bb.corners();
-    
+
     vgl_polygon<float> img_poly;
     double width = 2;
     if (!expand_line<float>(line, width, img_poly)) {
-      cout << " expending osm line failed!" << endl; 
+      cout << " expending osm line failed!" << endl;
       return false;
-    } 
+    }
 
     //vgl_polygon_scan_iterator<double> it(img_poly, true);
     vgl_polygon_scan_iterator<float> it(img_poly, false);
@@ -118,8 +118,8 @@ bool sdet_selective_search_process(bprb_func_process& pro)
   // get inputs
   // image
   vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(0);
-  float weight_thres = pro.get_input<float>(1); 
-  
+  float weight_thres = pro.get_input<float>(1);
+
   //check input validity
   if (!input_image_sptr) {
     std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
@@ -139,7 +139,7 @@ bool sdet_selective_search_process(bprb_func_process& pro)
   bool ss_use_vd_edges = false;
 
   sdet_selective_search_params params(ss_use_vd_edges, ss_sigma, ss_vd_noise_mul, ss_four_or_eight_conn, ss_margin,
-  ss_weight_thresh, ss_min_region_size, ss_nbins, ss_verbose, ss_debug); 
+  ss_weight_thresh, ss_min_region_size, ss_nbins, ss_verbose, ss_debug);
 
   sdet_selective_search sproc(params);
   sproc.set_byte_image_view(input_image);
@@ -155,14 +155,14 @@ bool sdet_selective_search_process(bprb_func_process& pro)
   std::map<unsigned, sdet_region_sptr>::const_iterator rit = sregions.begin();
   for(;rit != sregions.end(); ++rit){
     //vgl_box_2d<float> bb =(*rit).second->obox();
-    vgl_oriented_box_2d<float> bb = (*rit).second->obox();  
-    vgl_point_2d<float> lw(bb.width(), bb.height()); 
+    vgl_oriented_box_2d<float> bb = (*rit).second->obox();
+    vgl_point_2d<float> lw(bb.width(), bb.height());
     //tr.add(rit->second);
     if (bb.aspect_ratio() > aspect_ratio_t && lw.x() < length_t) {
       cout << rit->first << ' ' << bb << " " << lw.y() << " " << lw.x() << endl;
       draw_box(bb_img, bb, color);
     }
-    
+
   }
 
   // return the output color image

@@ -23,7 +23,7 @@ void brad_polygon2mask(const vil_image_view<float>& image,
   const vgl_polygon<double>& poly,
   vil_image_view<bool>& mask);
 
-//: Compute a normalized index image, used in remote sensing literature 
+//: Compute a normalized index image, used in remote sensing literature
 // to classify materials, given two bands.  Examples include:
 // Normalized Difference Vegitation Index, b1=red, b2=NIR2
 // WorldView Water Index, b1=coastal, b2=NIR2

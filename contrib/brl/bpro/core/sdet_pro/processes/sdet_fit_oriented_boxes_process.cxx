@@ -10,15 +10,15 @@
 #include <sdet/sdet_region.h>
 
 // assume the object holds reusable storage, such as a heap-allocated buffer mArray
-bool operator<(const vil_rgb<vxl_byte>& l, const vil_rgb<vxl_byte>& r) 
+bool operator<(const vil_rgb<vxl_byte>& l, const vil_rgb<vxl_byte>& r)
 {
    unsigned r1 = l.R();
    unsigned r2 = r.R();
    unsigned g1 = l.G();
-   unsigned g2 = r.G(); 
+   unsigned g2 = r.G();
    unsigned b1 = l.B();
    unsigned b2 = r.B();
-   
+
    if (r1 < r2)
      return true;
    else if (g1 < g2)
@@ -35,7 +35,7 @@ bool sdet_fit_oriented_boxes_process_cons(bprb_func_process& pro)
   //this process takes 3 inputs
   std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // randomly colored blob image
-  
+
   std::vector<std::string> output_types;
   output_types.push_back("unsigned");  // return the number of blobs, N
   output_types.push_back("bbas_1d_array_float_sptr");  // an array of size N*8, four points with (u,v) image coordinates for each corner of each oriented box
@@ -57,7 +57,7 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
   unsigned i=0;
   vil_image_view_base_sptr img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<vil_rgb<vxl_byte> > color_img(img_ptr);
-  
+
   unsigned ni = color_img.ni();
   unsigned nj = color_img.nj();
 
@@ -81,8 +81,8 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
 
   std::map<vil_rgb<vxl_byte>, std::vector<vgl_point_2d<float> > >::iterator iter = color_map.begin();
   int cnt = 0;
-  for ( ; iter != color_map.end(); iter++) 
-    cnt++;  
+  for ( ; iter != color_map.end(); iter++)
+    cnt++;
 
   std::cout << "Found " << cnt << " blobs!" << std::endl;
   bbas_1d_array_float * corners = new bbas_1d_array_float(cnt*8);
@@ -93,7 +93,7 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
     std::vector<vgl_point_2d<float> > v = iter->second;
     float* xp = new float[v.size()];
     float* yp = new float[v.size()];
-    unsigned short* Ip = new unsigned short[v.size()];  // supposed to be grey values for the blob but here we don't care so just fill with same color 
+    unsigned short* Ip = new unsigned short[v.size()];  // supposed to be grey values for the blob but here we don't care so just fill with same color
 
     for (unsigned i = 0; i < v.size(); i++) {
       xp[i] = v[i].x();

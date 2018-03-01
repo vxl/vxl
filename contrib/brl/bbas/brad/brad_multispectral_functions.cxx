@@ -47,7 +47,7 @@ void brad_normalize_spectra(
 //---------------------------------------------------------------------------
 //: Convert so vgl_polygon to mask
 //---------------------------------------------------------------------------
-void brad_polygon2mask(const vil_image_view<float>& image, 
+void brad_polygon2mask(const vil_image_view<float>& image,
   const vgl_polygon<double>& poly,
   vil_image_view<bool>& mask) {
   mask.set_size(image.ni(), image.nj());
@@ -56,11 +56,11 @@ void brad_polygon2mask(const vil_image_view<float>& image,
     for (int x = 0; x < image.ni(); x++) {
       if (poly.contains(x, y)) mask(x, y) = true;
     }
-  } 
+  }
 }
 
 //---------------------------------------------------------------------------
-//: Compute a normalized index image, used in remote sensing literature 
+//: Compute a normalized index image, used in remote sensing literature
 // to classify materials, given two bands.  Examples include:
 // Normalized Difference Vegitation Index, b1=red, b2=NIR2
 // WorldView Water Index, b1=coastal, b2=NIR2

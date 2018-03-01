@@ -129,9 +129,9 @@ void bwm_tableau_img::create_vsol_spatial_object(vsol_spatial_object_2d_sptr sos
     if (sos->cast_to_curve()->cast_to_digital_curve())
     {
       //std::cerr << "bwm_observer does not have support to add digital curve!! skipping this object!\n";
-		// just for display purposes, maybe later actually "create" an interactive view (JLM)
-		vsol_digital_curve_2d_sptr dc = sos->cast_to_curve()->cast_to_digital_curve();
-		my_observer_->add_digital_curve(dc);
+                // just for display purposes, maybe later actually "create" an interactive view (JLM)
+                vsol_digital_curve_2d_sptr dc = sos->cast_to_curve()->cast_to_digital_curve();
+                my_observer_->add_digital_curve(dc);
     }
     else if (sos->cast_to_curve()->cast_to_vdgl_digital_curve())
     {
@@ -382,8 +382,8 @@ void bwm_tableau_img::load_bounding_boxes_2d_ascii()
   while(!istr.eof()){
     vgl_box_2d<double> bbox;
     bbox.read(istr);
-	if(istr.eof())
-	  continue;
+        if(istr.eof())
+          continue;
     if(bbox.is_empty())
       continue;
     vgl_point_2d<double> pmin = bbox.min_point();

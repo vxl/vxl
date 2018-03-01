@@ -9,11 +9,11 @@
 // method - an integer specifying the algorithm used, defined below and in
 //          baml_detect_change.h
 //
-//  0 Census       
-//  1 Birchfield-Tomasi      
+//  0 Census
+//  1 Birchfield-Tomasi
 //  2 Gradient difference
 //  3 Non-parametric transfer function learning
-//                                          
+//
 #include <string>
 #include <iostream>
 #include <vcl_compiler.h>

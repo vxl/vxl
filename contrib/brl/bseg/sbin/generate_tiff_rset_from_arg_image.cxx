@@ -83,7 +83,7 @@ static bool generate_rset(std::string const& base_image_path,
   if (!base_image)
     return false;
   if(!vul_file::is_directory(pyramids_dir))
-	if(!vul_file::make_directory(pyramids_dir)){
+        if(!vul_file::make_directory(pyramids_dir)){
     std::cout << "Can't make pyramids containing directory "<< pyramids_dir << '\n';
     return false;
   }

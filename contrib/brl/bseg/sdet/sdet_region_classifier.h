@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief A classifier for regions found by selective search
-// 
+//
 //
 // \author
 //  J.L. Mundy - December 26, 2016

@@ -29,7 +29,7 @@ bool baml_correct_gain_offset(
   vil_image_view<vxl_uint_16>& corrected_ref );
 
 //: Compute the gain/offset that minimizes the least square distance between
-// target and reference images and then correct the reference image using tiled 
+// target and reference images and then correct the reference image using tiled
 // image regression.
 bool baml_correct_gain_offset_tiled(
   const vil_image_view<vxl_uint_16>& img_target,

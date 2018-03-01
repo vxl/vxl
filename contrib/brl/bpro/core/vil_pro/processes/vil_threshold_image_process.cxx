@@ -61,7 +61,7 @@ bool vil_threshold_image_process(bprb_func_process& pro)
     }
     if (!positive_id) {
         pro.set_output_val<vil_image_view_base_sptr>(0, temp);
-        return true;    
+        return true;
     }
     vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(temp->ni(),temp->nj());
     for (unsigned k = 0 ; k < out->ni(); k++)

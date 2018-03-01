@@ -63,7 +63,7 @@ bool sdet_extract_filter_bank_img_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
-  input_types.push_back("vil_image_view_base_sptr"); // input image 
+  input_types.push_back("vil_image_view_base_sptr"); // input image
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -82,7 +82,7 @@ bool sdet_extract_filter_bank_img_process(bprb_func_process& pro)
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
   vil_image_view_base_sptr img_ptr = pro.get_input<vil_image_view_base_sptr>(1);
   vil_image_view<float> img(img_ptr);
-  
+
   // assumes to load a float image in [0,1] using the name, name should be full path to the image
   if (!tc_ptr->compute_filter_bank(img))
   {
