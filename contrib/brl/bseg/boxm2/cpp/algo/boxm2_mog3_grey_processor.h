@@ -62,7 +62,7 @@ class  boxm2_mog3_grey_processor
                                    mu1,  sigma1,  w1,  Nobs1,
                                    mu2,  sigma2,  w2,  Nobs2);
   }
-  
+
   static float clamp(float x, float a, float b) { return x < a ? a : (x > b ? b : x); }
 
   static bool merge_gauss(float mu1,float var1, float w1,
@@ -76,11 +76,11 @@ class  boxm2_mog3_grey_processor
                               vnl_vector_fixed<unsigned char, 8> & mog3_3){
     bsta_mog3_grey::merge_mixtures(mog3_1, w1, mog3_2, w2, mog3_3);
   }
-  
+
   static void compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
                                 std::vector<float> const& obs,
                                 std::vector<float> const& obs_weights,
-                                bsta_sigma_normalizer_sptr n_table, 
+                                bsta_sigma_normalizer_sptr n_table,
                                 float min_sigma = 0.01f){
     bsta_mog3_grey::compute_app_model(apm, obs, obs_weights, n_table, min_sigma);
   }

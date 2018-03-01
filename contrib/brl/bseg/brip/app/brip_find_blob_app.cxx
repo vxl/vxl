@@ -107,7 +107,7 @@ int main(int argc, char * argv[])
   // draw bounding boxes in hsv
   float h_color; // changes based on confidence
   float s_color = 1;
-  float v_color = 10; 
+  float v_color = 10;
   float min_conf = 100;
   float max_conf = 0;
   for (int i = 0; i < conf.size(); i++) {

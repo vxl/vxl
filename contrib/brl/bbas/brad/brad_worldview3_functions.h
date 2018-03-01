@@ -19,16 +19,16 @@
 
 
 //: Construct a 16-band composite image from a 8-band MUL image and an 8-band
-// SWIR image.  In our test data the MUL and SWIR images are not pre-aligned 
+// SWIR image.  In our test data the MUL and SWIR images are not pre-aligned
 // and are in fact very different, which we expect will be the case in general.
-// This function creates an image in the MUL image's coordinate system and 
-// warps the SWIR bands into it.  The composite image may be scaled or a 
+// This function creates an image in the MUL image's coordinate system and
+// warps the SWIR bands into it.  The composite image may be scaled or a
 // sub-region extracted from it by setting the relevant optional variables.
-// 
-// Setting the scale=0.335 will yield a composite image of approximate 
+//
+// Setting the scale=0.335 will yield a composite image of approximate
 // resolution as the lower resolution SWIR band, which may be desirable.
 //
-// WARNING: as all images including the 16-band float image are stored in 
+// WARNING: as all images including the 16-band float image are stored in
 // memory, this function may use many gigabytes of memory.
 bool brad_compose_16band_wv3_img(
   const vil_image_view<float>& mul_img,
@@ -44,7 +44,7 @@ bool brad_compose_16band_wv3_img(
 
 //: A convenience wrapper function for dealing directly with filenames.
 // When calibrate = true this function also performs the calibration defined
-// in brad_calibrate_wv3_img 
+// in brad_calibrate_wv3_img
 bool brad_compose_16band_wv3_img(
   const std::string& mul_file,
   const std::string& swir_file,
@@ -54,7 +54,7 @@ bool brad_compose_16band_wv3_img(
   bool calibrate = true );
 
 
-//: Convert raw WV3 image from digital numbers to top-of-atmopshere 
+//: Convert raw WV3 image from digital numbers to top-of-atmopshere
 // reflectance using equations in Digital Globe's reference:
 //   Radiometric_Use_of_WorldView-3_v2.pdf
 bool brad_calibrate_wv3_img(

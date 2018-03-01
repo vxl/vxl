@@ -20,7 +20,7 @@ bool betr_io::read_so_ply(std::string ply_path, vsol_spatial_object_3d_sptr& obj
     bmsh3d_face* face = fmap[0];
     std::vector<vsol_point_3d_sptr> v_list;
     const std::vector<bmsh3d_vertex*>& verts = face->vertices();
-	unsigned n = verts.size();
+        unsigned n = verts.size();
     for(unsigned i = 0; i<n; ++i){
       vgl_point_3d<double> p = verts[i]->get_pt();
       v_list.push_back(new vsol_point_3d (p.x(), p.y(), p.z()));

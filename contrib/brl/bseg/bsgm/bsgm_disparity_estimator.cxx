@@ -951,7 +951,7 @@ bsgm_disparity_estimator::interpolate_errors(
       // Choose a sample index depending on whether pixel is shadow or not
       if (img(x, y) < params_.shadow_thresh)
         interp_idx = (int)(shadow_sample_percentile*sample_count(x, y));
-      else 
+      else
         interp_idx = (int)(sample_percentile*sample_count(x, y));
 
       disp_img(x,y) = *( sample_itr + interp_idx );

@@ -14,12 +14,12 @@
 
 //:
 // \file
-// \brief 
+// \brief
 // \author Thomas Pollard
 // \date October 10, 2016
 
 
-//: Compute the difference between two images using the Birchfield-Tomasi 
+//: Compute the difference between two images using the Birchfield-Tomasi
 // metric
 template <class T>
 bool baml_compute_birchfield_tomasi(

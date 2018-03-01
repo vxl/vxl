@@ -101,7 +101,7 @@ bool betr_set_event_trigger_data_multi_ref_process(bprb_func_process& pro)
     std::cout << "Invalid event image path " << evt_img_path << std::endl;
     return false;
   }
-  //load event camera 
+  //load event camera
   vpgl_rational_camera<double>* ecam_ptr = read_rational_camera_from_txt<double>(evt_cam_path);
   if(!ecam_ptr){
     std::cout << "can't read event camera from txt file " << evt_cam_path << std::endl;

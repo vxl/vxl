@@ -75,7 +75,7 @@
 // \endverbatim
 // \sa vgl_box_3d
 //  Note: area is not defined on the box class to keep a clean interface
-//  see vgl_area<T> 
+//  see vgl_area<T>
 template <class Type>
 class vgl_box_2d
 {

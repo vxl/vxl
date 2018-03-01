@@ -321,7 +321,7 @@ void test_affine_aligner()
 {
   msm_affine_aligner aligner;
   test_generic_aligner(aligner);
-  
+
   // Set up unit square points
   msm_points points0(4);
   points0.set_point(0, 0,0);
@@ -345,7 +345,7 @@ void test_affine_aligner()
   msm_points points2;
   aligner.apply_transform(points0,pose1,points2);
   vcl_cout<<points2<<vcl_endl;
-  
+
   TEST_NEAR("Pt0: ",(points2[0]-vgl_point_2d<double>(1,1)).length(),0,1e-6);
   TEST_NEAR("Pt1: ",(points2[1]-vgl_point_2d<double>(3,1)).length(),0,1e-6);
   TEST_NEAR("Pt2: ",(points2[2]-vgl_point_2d<double>(3,2)).length(),0,1e-6);

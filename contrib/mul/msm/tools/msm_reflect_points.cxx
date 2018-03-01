@@ -42,7 +42,7 @@ int main(int argc, char** argv)
   for (unsigned i=0;i<sym_pts.size();++i) sym_pts[i]=i;
 
   msm_reflect_shape_along_x(points,sym_pts,new_points,x());
-  
+
   if (!new_points.write_text_file(out_path()))
   {
     std::cerr<<"Failed to write points to "<<out_path()<<std::endl;

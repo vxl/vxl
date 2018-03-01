@@ -144,7 +144,7 @@ bool boxm2_ocl_init_prob_uniform_process(bprb_func_process& pro)
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
     ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     ray_d_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-   
+
     // Image Dimensions
     int img_dim_buff[4];
     img_dim_buff[0] = 0;

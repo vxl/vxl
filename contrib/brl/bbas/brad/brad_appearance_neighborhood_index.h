@@ -10,7 +10,7 @@
 // with other images in the input set based on similar surface appearance.
 // The appearance similarity model is based on a
 // bidirectional reflectance distribution function (BRDF) and surface geometry
-// distribution assumed to hold for the scene. For example the BRDF could be 
+// distribution assumed to hold for the scene. For example the BRDF could be
 // the Lambertian model with an assumption of purely horizontal surfaces.
 //
 // \author J. L. Mundy
@@ -34,7 +34,7 @@ class brad_appearance_neighborhood_index
  public:
  brad_appearance_neighborhood_index(): min_view_dir_thresh_(BRAD_VTHR_LOW), max_view_dir_thresh_(BRAD_VTHR_HIGH), illum_dir_thresh_(BRAD_ITHR), min_overlap_thresh_(0.5), num_illum_neighbors_thresh_(2){};
 
-  //: the inputs are are a set of illumination and view dirs on the same index domain as the 
+  //: the inputs are are a set of illumination and view dirs on the same index domain as the
   //  image set. That is, illumination_dir[i] corresponds to the direction for image[i]
  brad_appearance_neighborhood_index(std::vector<vgl_vector_3d<double > > const& illumination_dirs,
                                     std::vector<vgl_vector_3d<double > > const& view_dirs): illumination_dirs_(illumination_dirs),
@@ -73,7 +73,7 @@ class brad_appearance_neighborhood_index
   unsigned most_nadir_view() const;
   std::vector<unsigned> views_in_nadir_order() const;
   vgl_vector_3d<double> view_dir(unsigned indx) const{return view_dirs_[indx];}
-  //: display contents of index  
+  //: display contents of index
   void print_index() const;
   void print_index_angles() const;
   void print_view_neighbors() const;
@@ -93,7 +93,7 @@ class brad_appearance_neighborhood_index
   std::map<unsigned, std::vector<unsigned> > valid_view_dir_map_;//view directions in valid range
   std::map<unsigned, std::vector<unsigned> > close_view_dir_map_;//close view directions
   std::map<unsigned, std::vector<unsigned> > close_target_dir_map_;//close view directions
-  std::map<unsigned, std::vector<unsigned> > near_illum_dir_map_; //close illumination directions 
+  std::map<unsigned, std::vector<unsigned> > near_illum_dir_map_; //close illumination directions
 
   void fill_view_dir_maps();
   // note! the view direction neighbors must be computed before calling this method

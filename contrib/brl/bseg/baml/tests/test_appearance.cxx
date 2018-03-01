@@ -88,7 +88,7 @@ static void read_meshes( std::vector<std::string> const& mesh_paths,
     region_verts.push_back(temp);
   }
 }
-static void update_hist_multi_regions(vil_image_resource_sptr img0, vpgl_camera<double>* cam0, 
+static void update_hist_multi_regions(vil_image_resource_sptr img0, vpgl_camera<double>* cam0,
                                       vil_image_resource_sptr img1, vpgl_camera<double>* cam1,
                                       std::vector<std::vector<vgl_point_3d<double> > > const& region_verts,
                                       bsta_joint_histogram<float>& h){
@@ -102,14 +102,14 @@ static void update_hist_multi_regions(vil_image_resource_sptr img0, vpgl_camera<
       vgl_box_2d<double> bb0, bb1;
       size_t nverts = verts.size();
       for (size_t i = 0; i < nverts; ++i) {
-	double u0, v0, u1, v1;
-	cam0->project(verts[i].x(),verts[i].y(),verts[i].z(), u0, v0);
-	vgl_point_2d<double> p2d0(u0, v0);
-	verts_2d_0.push_back(p2d0); bb0.add(p2d0);
+        double u0, v0, u1, v1;
+        cam0->project(verts[i].x(),verts[i].y(),verts[i].z(), u0, v0);
+        vgl_point_2d<double> p2d0(u0, v0);
+        verts_2d_0.push_back(p2d0); bb0.add(p2d0);
         hverts_2d_0.push_back(vgl_homg_point_2d<double>(p2d0));
-	 cam1->project(verts[i].x(),verts[i].y(),verts[i].z(), u1, v1);
-	 vgl_point_2d<double> p2d1(u1, v1);
-	verts_2d_1.push_back(p2d1); bb1.add(p2d1);
+         cam1->project(verts[i].x(),verts[i].y(),verts[i].z(), u1, v1);
+         vgl_point_2d<double> p2d1(u1, v1);
+        verts_2d_1.push_back(p2d1); bb1.add(p2d1);
         hverts_2d_1.push_back(vgl_homg_point_2d<double>(p2d1));
       }
       vgl_polygon<double> poly0(verts_2d_0), poly1(verts_2d_1);
@@ -199,7 +199,7 @@ static void test_appearance()
   vil_image_view<float> grad_x_view01, grad_y_view01, grad_x_view1, grad_y_view1;
   vil_sobel_3x3<float,float>( view01, grad_x_view01, grad_y_view01 );
   vil_sobel_3x3<float,float>( view1, grad_x_view1, grad_y_view1 );
- 
+
   std::vector<float> pa = prob_a(h);
   for (size_t j = 0; j < nj1; ++j)
     for (size_t i = 0; i < ni1; ++i){
@@ -211,7 +211,7 @@ static void test_appearance()
       std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << view1(i,j) << ' ' << fabs(view1(i,j)-minv) << std::endl;
 #elif  grad_x
       float minv = min_diff(grad_x_view01, grad_x_view1(i,j), i, j, 2);
-      std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << grad_x_view1(i,j) << ' ' << fabs(grad_x_view1(i,j)-minv) << std::endl; 
+      std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << grad_x_view1(i,j) << ' ' << fabs(grad_x_view1(i,j)-minv) << std::endl;
 #elif condp
       float minv = min_diff(view01, view1(i,j), i, j, 1);
       unsigned ia;
@@ -220,7 +220,7 @@ static void test_appearance()
       if(pa[ia]==0.0f)
         continue;
       float pcond = h.p(minv, view1(i,j))/pa[ia];
-      std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << view1(i,j) << ' ' << fabs(view1(i,j)-minv) << ' '<< pcond << std::endl; 
+      std::cout << "("<< x << ' ' << y << ") " << minv << ' ' << view1(i,j) << ' ' << fabs(view1(i,j)-minv) << ' '<< pcond << std::endl;
 #endif
     }
 }

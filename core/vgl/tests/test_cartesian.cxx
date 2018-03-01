@@ -538,7 +538,7 @@ static void test_line_2d()
 
   std::stringstream is1;
   vgl_point_2d<double> pf0(1.0, 2.0), pf1(3.0,4.0);
-  vgl_line_segment_2d<double> lf(pf0, pf1), lfr; 
+  vgl_line_segment_2d<double> lf(pf0, pf1), lfr;
   is1<<lf;
   is1>>lfr;
   TEST("istream native out stream line_segment_2d", lfr == lf,true);

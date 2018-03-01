@@ -37,11 +37,11 @@ public:
     double z = (*dview_)(u,v);
     return (elev-z)*(elev-z);
   }
-  
+
 private:
   vgl_ray_3d<double> ray_;
   vpgl_geo_camera* geo_cam_;
-  const vil_image_view<float>* dview_; 
+  const vil_image_view<float>* dview_;
   bool verbose_;
 };
 vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, double zmin, double zmax):dem_(dem), min_samples_(5000.0), tail_fract_(0.025), verbose_(false)
@@ -75,11 +75,11 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
   geo_cam_->img_to_global(ni-1, nj-1, lon, lat);
   elev = dem_view_(ni-1, nj-1);
   dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
-  
+
   geo_cam_->img_to_global(0, nj-1, lon, lat);
   elev = dem_view_(0, nj-1);
   dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
-  
+
   // check for appropriate zmin/zmax inputs
   if (zmax > zmin) {
     z_min_ = zmin;
@@ -115,7 +115,7 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
     }
     //the final elevation bounds
     z_min_ = zmin_calc;
-    z_max_ = zmax_calc;    
+    z_max_ = zmax_calc;
   }
 
   if(verbose_) std::cout << "[ZMIN,ZMAX]=[" << z_min_ << "," << z_max_ << "]" << std::endl;
@@ -156,7 +156,7 @@ if(verbose_) std::cout << "vpgl_backproj_dem " << image_point << " max_z " << ma
   double lon = guess_point.x(), lat = guess_point.y(),elev = guess_point.z();
   double ud, vd;
   //Note that elevation has no effect in the project function - just required to meet the interface of an abstract camera
-  geo_cam_->project(lon, lat, elev, ud, vd); 
+  geo_cam_->project(lon, lat, elev, ud, vd);
   int u = static_cast<int>(ud+0.5), v = static_cast<int>(vd+0.5);
   int ni = dem_view_.ni(), nj = dem_view_.nj();
   if(u<0||u>=ni||v<0||v>=nj){
@@ -172,7 +172,7 @@ if(verbose_) std::cout << "vpgl_backproj_dem " << image_point << " max_z " << ma
   double error = brm.f_at_last_minimum();
   if(error>error_tol)
     return false;
-  
+
   world_point = origin + tmin*dir;
 
   if(verbose_) std::cout << "success! ray/dem intersection " << world_point  << std::endl;
@@ -188,7 +188,7 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam, vnl_double_
   img_pt.set(image_point[0], image_point[1]);
   init_guess.set(initial_guess[0],initial_guess[1],initial_guess[2]);
   bool good = this->bproj_dem(cam, img_pt, max_z, min_z, init_guess, wrld_pt, error_tol);
-  
+
   if(!good){
     return false;
   }
@@ -205,7 +205,7 @@ bool vpgl_backproject_dem::bproj_dem(vpgl_rational_camera<double> const& rcam, v
 
 bool vpgl_backproject_dem::bproj_dem(vpgl_rational_camera<double> const& rcam, vgl_point_2d<double> const& image_point, double max_z, double min_z,
                                      vgl_point_3d<double> const& initial_guess, vgl_point_3d<double>& world_point, double error_tol){
-  
+
   const vpgl_camera<double>* cam = dynamic_cast<const vpgl_camera<double>* >(&rcam);
   return this->bproj_dem(cam, image_point, max_z, min_z, initial_guess, world_point, error_tol);
 }

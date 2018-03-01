@@ -31,7 +31,7 @@
 //     do_something(polygon[s][p].x(), polygon[s][p].y());
 //
 //  Note: area is not defined on the polygon class to keep a clean interface
-//  see vgl_area<T> 
+//  see vgl_area<T>
 template <class T>
 class vgl_polygon
 {
@@ -166,7 +166,7 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
                            std::vector<std::pair<unsigned,unsigned> >& e2,
                            std::vector<vgl_point_2d<T> >& ip);
 
-//these function is used to determine if a polygon is oriented counter clockwise it does this by comparing 
+//these function is used to determine if a polygon is oriented counter clockwise it does this by comparing
 //the dot product of vertices in the ordered list
 template <class T>
 vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T> const &p);

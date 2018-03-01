@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------
 //: Constructor
 //---------------------------------------------------------------------------
-brad_spectral_angle_mapper::brad_spectral_angle_mapper(std::vector<float>& bands_min, 
+brad_spectral_angle_mapper::brad_spectral_angle_mapper(std::vector<float>& bands_min,
   std::vector<float>& bands_max) {
   bands_min_ = bands_min;
   bands_max_ = bands_max;
@@ -33,7 +33,7 @@ brad_spectral_angle_mapper::brad_spectral_angle_mapper(std::vector<float>& bands
 //: Create Spectral Angle Map
 //---------------------------------------------------------------------------
 bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& image,
-  const std::string keyword, 
+  const std::string keyword,
   vil_image_view<float>& spectral_angle)
 {
   // Ensure our library has at least one material
@@ -67,7 +67,7 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
   // make sure at least one relevant spectra was found
   if (!found_keyword) {
     std::cerr << "keyword (" + keyword + ") not found in spectral library\n";
-    return false; 
+    return false;
   }
 
   // find the best spectral angle
@@ -88,8 +88,8 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
 //---------------------------------------------------------------------------
 /*/: Compute Spectral Angle Difference
 //---------------------------------------------------------------------------
-bool brad_spectral_angle_mapper::compute_sdm_img(const vil_image_view<float>& image, 
-  std::string keyword, 
+bool brad_spectral_angle_mapper::compute_sdm_img(const vil_image_view<float>& image,
+  std::string keyword,
   vil_image_view<float>& spectral_diff)
 {
 
@@ -234,7 +234,7 @@ bool brad_spectral_angle_mapper::aster_classify_material(
       for (int c = 0; c < num_categories; c++) {
         if (angle_volume(x, y, c) < max_angle) continue;
         max_angle = angle_volume(x, y, c);
-        if (max_angle > threshold) max_idx = c; // class -1: no category had high enough angle measurement 
+        if (max_angle > threshold) max_idx = c; // class -1: no category had high enough angle measurement
       }
       class_img(x, y) = max_idx;
       if (max_idx != -1) conf_img(x, y) = max_angle;
@@ -265,7 +265,7 @@ bool brad_spectral_angle_mapper::add_material(const std::string type,
   // new spectra to be added to the library
   std::vector<float> new_spectrum;
   new_spectrum.resize(num_bands);
-  
+
   //std::vector<std::vector<float> > img_spectra;
   //std::vector<float> cur_spectrum;
   //cur_spectrum.resize(num_bands);
@@ -382,7 +382,7 @@ void brad_spectral_angle_mapper::clear_library() {
 }
 
 //---------------------------------------------------------------------------
-//: Parse a single ASTER file to retrieve wavelength/spectra data and 
+//: Parse a single ASTER file to retrieve wavelength/spectra data and
 // interpolate spectra for the given bands.
 //---------------------------------------------------------------------------
 bool brad_spectral_angle_mapper::parse_aster_file(
@@ -485,15 +485,15 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
   brad_normalize_spectra(img_norm.data(), img_norm.size());
 
   // Loop over categories
-  for (int c = 0; c < num_categories; c++) { 
+  for (int c = 0; c < num_categories; c++) {
     float angle = vnl_math::pi;
     int num_samples = normalized_spectra_samples[c].size();
 
     // For each category, compute max angle
-    for (int s = 0; s < num_samples; s++) { 
+    for (int s = 0; s < num_samples; s++) {
       angle = std::min(angle, brad_compute_spectral_angle(
         img_norm.data(), normalized_spectra_samples[c][s].data(), num_channels));
-      /*/ Dot product 
+      /*/ Dot product
       float sum = 0.0f;
       for (int b = 0; b < num_bands; b++) {
         if (normalized_spectra_samples[c][s][b] == -1.0) continue;
@@ -508,7 +508,7 @@ void brad_spectral_angle_mapper::compute_spectral_angles(
 };
 
 /*/---------------------------------------------------------------------------
-//: Compute spectral difference (sum of squared difference) between two vectors 
+//: Compute spectral difference (sum of squared difference) between two vectors
 //  of multi-spectral values
 //---------------------------------------------------------------------------
 void brad_spectral_angle_mapper::compute_spectral_diffs(
@@ -529,7 +529,7 @@ void brad_spectral_angle_mapper::compute_spectral_diffs(
     int num_samples = normalized_spectra_samples[c].size();
 
     for (int s = 0; s < num_samples; s++) { // loop over sample
-      // Sum of Squared Difference 
+      // Sum of Squared Difference
       float sum = 0.0f;
       for (int b = 0; b < num_bands; b++)
         sum += pow(normalized_spectra_samples[c][s][b] - img_norm[b],2);

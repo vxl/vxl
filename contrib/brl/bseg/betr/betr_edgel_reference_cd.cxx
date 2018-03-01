@@ -13,7 +13,7 @@ bool betr_edgel_reference_cd::process(){
   ef.add_region("evt_image", "evt_ref_poly", evt_ref_poly_);
   ef.add_region("evt_image", "evt_evt_poly", evt_evt_poly_);
   bool good = ef.process("evt_image","evt_ref_poly");
-  good = good && ef.process("evt_image","evt_evt_poly"); 
+  good = good && ef.process("evt_image","evt_evt_poly");
   if(!good){
     js_div_ = -1.0;
     return true;
@@ -26,7 +26,7 @@ bool betr_edgel_reference_cd::process(){
   // end debug
   const bsta_histogram<double>& h_evt_ref = ef.hist("evt_image","evt_ref_poly");
   const bsta_histogram<double>& h_evt_evt = ef.hist("evt_image","evt_evt_poly");
-  if(verbose_){ 
+  if(verbose_){
     std::cout << "h_evt_ref\n";
     h_evt_ref.print();
     std::cout << "\nh_evt_evt\n";

@@ -226,7 +226,7 @@ T bsta_joint_histogram<T>::p_a_given_b(unsigned a, unsigned b) const{
   if (b>=nbins_b_)
     return T(0);
   if (!cond_counts_valid_)
-    compute_cond_counts(); 
+    compute_cond_counts();
   if(sum_counts_of_a_given_b_[b] == T(0))
     return T(0);
   return counts_[a][b]/sum_counts_of_a_given_b_[b];
@@ -248,7 +248,7 @@ T bsta_joint_histogram<T>::p_b_given_a(unsigned a, unsigned b) const{
   if (b>=nbins_b_)
     return T(0);
   if (!cond_counts_valid_)
-    compute_cond_counts(); 
+    compute_cond_counts();
   if(sum_counts_of_b_given_a_[a] == T(0))
     return T(0);
   return counts_[a][b]/sum_counts_of_b_given_a_[a];
@@ -393,7 +393,7 @@ void bsta_joint_histogram<T>::parzen(const T sigma)
   for (unsigned int row = 0; row<nbins_a_; row++)
     for (unsigned int col = 0; col<nbins_b_; col++)
       counts_[row][col] = (T)out[row][col];
-  
+
   volume_valid_ = false;
 }
 

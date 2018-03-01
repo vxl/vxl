@@ -33,7 +33,7 @@ bool brad_sam_template_match(
 
   // Initialize the output image
   sam.set_size(img_width, img_height);
-  sam.fill(0.0); 
+  sam.fill(0.0);
 
   // Setup a normalized channel-aligned image
   vil_image_view<float> norm_img(img_width, img_height, 1, num_channels);
@@ -116,10 +116,10 @@ bool brad_sam_template_match(
 //------------------------------------------------------------
 // bounding box
 //------------------------------------------------------------
-void brad_template_bb(const vil_image_view<vxl_byte>& mask, 
-  int& crop_x, 
-  int& crop_y, 
-  int& crop_width, 
+void brad_template_bb(const vil_image_view<vxl_byte>& mask,
+  int& crop_x,
+  int& crop_y,
+  int& crop_width,
   int& crop_height)
 {
   int maxx = 0;

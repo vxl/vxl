@@ -6,7 +6,7 @@
 #include <set>
 #include <cmath>
 #include <algorithm>
-#include <numeric>    
+#include <numeric>
 #include <string>
 #include "vgl_polygon.h"
 #include <vnl/vnl_math.h>
@@ -113,7 +113,7 @@ bool vgl_polygon<T>::contains(T x, T y) const
   }
   return c;
 }
- 
+
 template <class T>
 std::ostream& vgl_polygon<T>::print(std::ostream& os) const
 {
@@ -377,7 +377,7 @@ bool vgl_polygon_sheet_is_counter_clockwise(std::vector<vgl_point_2d<T> > verts)
   term2 = double(v2.y())+double(v1.y());
   sum += term1*term2;
   return sum < 0.0;
- 
+
 }
 
 

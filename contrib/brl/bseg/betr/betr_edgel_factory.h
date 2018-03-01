@@ -22,7 +22,7 @@ class betr_edgel_factory{
   betr_edgel_factory(){}
   //: set parameters (same for all images and rois)
   void set_params(betr_edgel_factory_params const& params){
-    params_ = params; 
+    params_ = params;
   }
   //: modify parameters
   betr_edgel_factory_params& params(){return params_;}
@@ -36,7 +36,7 @@ class betr_edgel_factory{
   bool add_region_from_bounds(std::string const& iname, std::string const& region_name,
                               unsigned imin, unsigned jmin, unsigned imax, unsigned jmax);
   //: remove all images and regions
-  void clear(); 
+  void clear();
   //: remove all regions on a given image roi
   void clear(std::string iname);
   //: remove a region on a given image roi

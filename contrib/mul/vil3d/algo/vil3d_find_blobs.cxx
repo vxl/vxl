@@ -218,11 +218,11 @@ void vil3d_blob_labels_to_regions(const vil3d_image_view<unsigned>& src_label,
   unsigned ni=src_label.ni();
   unsigned nj=src_label.nj();
   unsigned nk=src_label.nk();
-  
+
   unsigned min_v,max_v;
   vil3d_math_value_range(src_label,min_v,max_v);
   if (max_v==0) return;  // No blobs.
-  
+
   regions.resize(max_v);
 
   for (unsigned k=0; k<nk; ++k)

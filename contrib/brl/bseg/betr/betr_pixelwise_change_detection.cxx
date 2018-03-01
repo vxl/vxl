@@ -71,13 +71,13 @@ bool betr_pixelwise_change_detection::process() {
     vgl_h_matrix_2d<double> ref_to_evt_cropped(evt_to_cropped.get_matrix()*ref_to_evt.get_matrix());
     vgl_h_matrix_2d<double> ref_to_evt_cropped2 = evt_to_cropped*ref_to_evt;
 
-    
+
     if (!multiple_ref_) { // single image
       if (ref_rescs_.size() != 1) {
         std::cout << "not exactly one reference image\n";
         return false;
       }
-      ref_img[0] = ref_rescs_[0]->get_view(); 
+      ref_img[0] = ref_rescs_[0]->get_view();
       baml_warp_perspective(ref_img[0], ref_to_evt_cropped, bb_width, bb_height, ref_cropped[0]);
     }
     else { // multiple images
@@ -85,7 +85,7 @@ bool betr_pixelwise_change_detection::process() {
       baml_warp_perspective(ref_img[i], ref_to_evt_cropped, bb_width, bb_height, ref_cropped[i]);
     }
   }
-  
+
   // TODO: GET REFERENCE REGIONS FOR BT
 
   // Setup pixel-wise probability buffers
@@ -104,7 +104,7 @@ bool betr_pixelwise_change_detection::process() {
   baml_change_detection cd( cd_params->pw_params_ );
   bool cd_success;
   if (!multiple_ref_) {
-    cd_success = cd.detect(evt_img, ref_cropped[0], valid[0], evt_change_prob); 
+    cd_success = cd.detect(evt_img, ref_cropped[0], valid[0], evt_change_prob);
   }
   else {
     cd_success = cd.multi_image_detect(evt_img, ref_cropped, valid, evt_change_prob);
@@ -118,7 +118,7 @@ bool betr_pixelwise_change_detection::process() {
   // Convert to byte and save as prob map
   vil_image_view<vxl_byte> vis;
   vil_convert_stretch_range_limited( evt_change_prob, vis, 0.0f, 1.0f );
- 
+
   i_offset_ = bb_minx; j_offset_ = bb_miny;
 
   vil_save(vis, (save_dir + "change_prob.tif").c_str());
@@ -191,5 +191,5 @@ bool betr_pixelwise_change_detection::process() {
   //    }
   //  }
   //}
-  //return true; 
+  //return true;
 }

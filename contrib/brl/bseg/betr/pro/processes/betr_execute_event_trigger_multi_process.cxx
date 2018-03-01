@@ -40,7 +40,7 @@ bool betr_execute_event_trigger_multi_process_cons(bprb_func_process& pro)
 bool betr_execute_event_trigger_multi_process(bprb_func_process& pro)
 {
   using namespace betr_execute_event_trigger_multi_process_globals;
-  
+
   if ( pro.n_inputs() < n_inputs_ ) {
     std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;

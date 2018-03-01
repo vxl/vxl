@@ -35,7 +35,7 @@ bool boxm2_cpp_get_index_from_3d_point_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_get_index_from_3d_point_process_globals;
 
   bool ok=false;
- 
+
   //process takes 7 inputs
   std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
@@ -47,13 +47,13 @@ bool boxm2_cpp_get_index_from_3d_point_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   std::vector<std::string>  output_types_(n_outputs_);
-  output_types_[0]="int"; 
-  output_types_[1]="int"; 
-  output_types_[2]="int"; 
-  output_types_[3]="int"; 
+  output_types_[0]="int";
+  output_types_[1]="int";
+  output_types_[2]="int";
+  output_types_[3]="int";
   ok = pro.set_output_types(output_types_);
   if (!ok) return ok;
-  
+
   return true;
 }
 
@@ -62,7 +62,7 @@ bool boxm2_cpp_get_3d_point_from_index_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_get_3d_point_from_index_process_globals;
 
   bool ok=false;
- 
+
   //process takes 7 inputs
   std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
@@ -77,14 +77,14 @@ bool boxm2_cpp_get_3d_point_from_index_process_cons(bprb_func_process& pro)
   std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0]="float";
   output_types_[1]="float";
-  output_types_[2]="float"; 
+  output_types_[2]="float";
   output_types_[3]="float";
   output_types_[4]="float";
   output_types_[5]="float";
   output_types_[6]="int";
   ok = pro.set_output_types(output_types_);
   if (!ok) return ok;
-  
+
   return true;
 }
 
@@ -118,7 +118,7 @@ bool  boxm2_cpp_get_index_from_3d_point_process(bprb_func_process& pro)
   boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
   int bit_index=tree.traverse(local);
   int index=tree.get_data_index(bit_index,false);
-  
+
   pro.set_output_val<int>(0, id.i());
   pro.set_output_val<int>(1, id.j());
   pro.set_output_val<int>(2, id.k());
@@ -215,7 +215,7 @@ bool  boxm2_cpp_get_3d_point_from_index_process(bprb_func_process& pro)
       }
     }
   }
-  
+
   return false;
 }
 

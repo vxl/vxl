@@ -129,7 +129,7 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
             aux0_cum->read_to_buffer(queue);
             kern->clear_args();
         }
-  
+
     }
     cl_uchar lookup_arr[256];
     boxm2_ocl_util::set_bit_lookup(lookup_arr);

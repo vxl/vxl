@@ -155,7 +155,7 @@ template <class T>
 vgl_oriented_box_2d<T>  vgl_convex_hull_2d<T>::min_area_enclosing_rectangle(){
   if (!hull_valid_)
     this->compute_hull();
-  // the algorithm uses the fact that the smallest enclosing rectangle 
+  // the algorithm uses the fact that the smallest enclosing rectangle
   // has a side in common with and edge of the convex hull
   std::vector<vgl_point_2d<T> > verts = hull_[0];
   size_t n = verts.size();
@@ -201,7 +201,7 @@ vgl_oriented_box_2d<T>  vgl_convex_hull_2d<T>::min_area_enclosing_rectangle(){
   T pmaj1x = pmaj1.x(), pmaj1y = pmaj1.y();
   vgl_point_2d<T> pmaj0r(cs*pmaj0x - s*pmaj0y, s*pmaj0x + cs*pmaj0y);
   vgl_point_2d<T> pmaj1r(cs*pmaj1x - s*pmaj1y, s*pmaj1x + cs*pmaj1y);
-  
+
   // add back rotation center
   pmaj0r += min_offset; pmaj1r += min_offset;
   return vgl_oriented_box_2d<T>(pmaj0r, pmaj1r, height);

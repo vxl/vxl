@@ -156,7 +156,7 @@ int main( int argc, char* argv[] )
     writer.set_colour(line_colour());
     msm_draw_shape_to_eps(writer,points,curves);
   }
-  
+
   if (num_colour()!="none")
   {
     // Write point numbers beside each point
@@ -170,7 +170,7 @@ int main( int argc, char* argv[] )
                   <<" M ("<<i<<") show"<<std::endl;
     }
   }
-  
+
   writer.close();
 
   std::cout<<"Graphics saved to "<<out_path()<<std::endl;

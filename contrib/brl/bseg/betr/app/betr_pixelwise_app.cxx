@@ -77,18 +77,18 @@ int main(int argc, char * argv[])
   //std::string ref_cam_path = dir + ref_name + ".tif_RPC.txt";
   //std::string evt_obj_path = "C:/Users/sca0161/Documents/data/hamadan/hamadan_objects/event_big.ply";
   //std::string ref_obj_path = "C:/Users/sca0161/Documents/data/hamadan/hamadan_objects/ref_full.ply";
-  std::string evt_obj_path = "C:/Users/sca0161/Documents/hamadan_test/event_new.ply"; 
-  std::string ref_obj_path = "C:/Users/sca0161/Documents/hamadan_test/event_new.ply"; 
+  std::string evt_obj_path = "C:/Users/sca0161/Documents/hamadan_test/event_new.ply";
+  std::string ref_obj_path = "C:/Users/sca0161/Documents/hamadan_test/event_new.ply";
   betr_event_trigger etr("hamadan", lvcs);
   etr.set_verbose(true);
-  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true); 
-  etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false); 
+  etr.add_geo_object("tarmac_ref", lon, lat, elev, ref_obj_path, true);
+  etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
 
   //----------------------------------------------------------------------
   // experiment 1
   //----------------------------------------------------------------------
   //// use first image as reference
-  ////std::string ref_name = img_names[0]; std::string corruption_type = "";// first image in the directory will be our reference; compare all other img_names 
+  ////std::string ref_name = img_names[0]; std::string corruption_type = "";// first image in the directory will be our reference; compare all other img_names
   ////std::string ref_name = "20161008_114613_0d05"; std::string corruption_type = "blurry_";
   ////std::string ref_name = "20161028_035612_0c65"; std::string corruption_type = "cloudy_";
   //std::string ref_name = "20170218_064426_0e2f"; std::string corruption_type = "weird_";
@@ -194,7 +194,7 @@ int main(int argc, char * argv[])
   // experiment 2
   //----------------------------------------------------------------------
   //// use first image as reference
-  //std::string ref_name = img_names[0]; // first image in the directory will be our reference; compare all other img_names 
+  //std::string ref_name = img_names[0]; // first image in the directory will be our reference; compare all other img_names
   //// set up reference (pretend it is our first event image because that makes looping easier)
   //std::vector<vpgl_camera_double_sptr> ref_cams;
   //std::vector<vil_image_resource_sptr> ref_imgrs;
@@ -298,7 +298,7 @@ int main(int argc, char * argv[])
   // experiment 1: Edgel
   //----------------------------------------------------------------------
   // use first image as reference
-  std::string ref_name = img_names[0]; std::string corruption_type = "";// first image in the directory will be our reference; compare all other img_names 
+  std::string ref_name = img_names[0]; std::string corruption_type = "";// first image in the directory will be our reference; compare all other img_names
   //std::string ref_name = "20161008_114613_0d05"; std::string corruption_type = "blurry_";
   //std::string ref_name = "20161028_035612_0c65"; std::string corruption_type = "cloudy_";
   //std::string ref_name = "20170218_064426_0e2f"; std::string corruption_type = "weird_";
@@ -357,7 +357,7 @@ int main(int argc, char * argv[])
     std::string cd_json = "{\"edgel_factory_params\" : {\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0   },\"noise_mul\" : 0.75,\"sigma\" : 1.0}";
     etr.process("edgel_change_detection", pchange, rescs, offsets, cd_json);
     cd_score_edgel << pchange[0] << "\n";
-    
+
   }
   cd_score_edgel.close();
   //----------------------------------------------------------------------

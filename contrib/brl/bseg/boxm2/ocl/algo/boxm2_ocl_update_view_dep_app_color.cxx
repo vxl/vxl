@@ -533,8 +533,8 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl
 
   bool UV_only = false;
   if (opts ==" -D MOG_VIEW_DEP_UV " ){
-	  UV_only = true;
-	  vcl_cout<<"updating UV only"<<vcl_endl;
+          UV_only = true;
+          vcl_cout<<"updating UV only"<<vcl_endl;
   }
 
 

@@ -31,7 +31,7 @@ class vpgl_backproject_dem
 
   //: turn on/off messages (default not verbose)
   void set_verbose(bool verbose){verbose_ = verbose;}
-  
+
   //center of the DEM - useful for initializing non-linear search
   vgl_point_3d<double> geo_center() const {return geo_center_;}
 
@@ -62,7 +62,7 @@ class vpgl_backproject_dem
                  vgl_point_3d<double> const& initial_guess,
                  vgl_point_3d<double>& world_point,
                  double error_tol = 1.0);
-                 
+
 
 // +++ concrete rational camera interfaces +++
 

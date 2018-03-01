@@ -46,7 +46,7 @@ bool betr_execute_event_trigger_multi_with_chimg_process_cons(bprb_func_process&
 bool betr_execute_event_trigger_multi_with_chimg_process(bprb_func_process& pro)
 {
   using namespace betr_execute_event_trigger_multi_with_chimg_process_globals;
-  
+
   if ( pro.n_inputs() < n_inputs_ ) {
     std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
@@ -74,7 +74,7 @@ bool betr_execute_event_trigger_multi_with_chimg_process(bprb_func_process& pro)
   bool good = event_trigger->process(algorithm_name, prob_change, change_imgs, offsets, algorithm_params);
   if(!good)
     return good;
-  // get offset and size 
+  // get offset and size
   unsigned area_total = 0;
   unsigned k = 0;
   for(unsigned i = 0; i<n; ++i, k+=4){

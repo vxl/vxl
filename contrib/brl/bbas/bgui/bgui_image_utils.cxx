@@ -69,10 +69,10 @@ bool bgui_image_utils::range(double& min_value, double& max_value,
   max_value = this->compute_upper_bound(plane);
   // handle the case where range is degenerate
   if(min_value == max_value){
-	  if(min_value > 0.0)
-		  min_value = 0.0;
-	  if(max_value==0.0)
-		  max_value = 1.0;
+          if(min_value > 0.0)
+                  min_value = 0.0;
+          if(max_value==0.0)
+                  max_value = 1.0;
   }
   return min_value < max_value;
 }
@@ -145,27 +145,27 @@ bool bgui_image_utils::init_histogram_from_data()
       }
       unsigned short smin = static_cast<unsigned short>(minr[p]);
       unsigned short smax = static_cast<unsigned short>(maxr[p]);
-	  // handle case where data is all the same
-	  if(smin == smax){
-		  if(smin == 0)
-			  smax = static_cast<unsigned short>(10);
-		  else if(smax == max_val)
-			  smin = static_cast<unsigned short>(max_val);
-		  else
-			  smin = 0;
-	  }
+          // handle case where data is all the same
+          if(smin == smax){
+                  if(smin == 0)
+                          smax = static_cast<unsigned short>(10);
+                  else if(smax == max_val)
+                          smin = static_cast<unsigned short>(max_val);
+                  else
+                          smin = 0;
+          }
       unsigned short nbins = static_cast<unsigned short>(smax-smin);
-	   // determine if the number of bins exceeds the limit
+           // determine if the number of bins exceeds the limit
       if (nbins>bin_limit_) {
         nbins = bin_limit_;
         // increase max value to make bin delta an integer
         double range = smax-smin;
         unsigned short del = static_cast<unsigned short>(std::ceil(range/nbins));
-		unsigned idel = del;
-		idel*=nbins;
-		if(idel>max_val)
-			smax = max_val;
-		else
+                unsigned idel = del;
+                idel*=nbins;
+                if(idel>max_val)
+                        smax = max_val;
+                else
           smax = static_cast<unsigned short>(smin + nbins*del);
       }
       hist_[p] = bsta_histogram<double>(static_cast<double>(smin),

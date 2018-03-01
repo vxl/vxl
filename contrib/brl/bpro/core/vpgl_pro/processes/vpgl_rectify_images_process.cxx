@@ -621,7 +621,7 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-// input a height map for an ortho scene with min, max 3D points, construct a disparity map for image1 
+// input a height map for an ortho scene with min, max 3D points, construct a disparity map for image1
 // output an ortograhic height map using the input bounding box
 bool vpgl_construct_disparity_map_process_cons(bprb_func_process& pro)
 {
@@ -703,11 +703,11 @@ bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
 
   for (unsigned xx = 0; xx < DEM_img.ni(); xx++)
     for (unsigned yy = 0; yy < DEM_img.nj(); yy++) {
-      
+
       double lon, lat;
       geocam->img_to_global(xx, yy, lon, lat);
       double z = DEM_img(xx,yy);
-      
+
       // project this x,y,z using the camera onto the images
       double u1,v1,u2,v2;
       //cam1_rational->project(x, y, z, u1, v1);
@@ -731,20 +731,20 @@ bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
 
       // now the disparity equation is u1w-d = u2w --> d = u1w - u2w
       int disp = u1w - u2w;
-      
+
       int down_u1w = vcl_floor(double(u1w)/factor);
       int down_v1w = vcl_floor(double(v1w)/factor);
       if (down_u1w < 0 || down_v1w < 0 || down_u1w >= out_ni2 || down_v1w >= out_nj2)
         continue;
       out_disparity_map(down_u1w, down_v1w) = (float)disp;
       out_disparity_map_filled(down_u1w, down_v1w) = true;
-      
+
       //out_disparity_map(u1w, v1w) = (float)disp;
       //out_disparity_map_filled(u1w, v1w) = true;
-      
+
     }
-    
-  // interpolate the intensities 
+
+  // interpolate the intensities
   for (int i = 0; i < out_ni2; i++)
     for (int j = 0; j < out_nj2; j++) {
       if (out_disparity_map_filled(i,j) == false) {
@@ -770,10 +770,10 @@ bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
           disp = disp/total_weight;
           out_disparity_map(i,j) = disp;
         }
-        
+
       }
     }
-    
+
   vil_image_view_base_sptr out_sptr = new vil_image_view<float>(out_disparity_map);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_sptr);
   return true;

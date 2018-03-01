@@ -487,7 +487,7 @@ std::vector<double> bgui_image_tableau::get_color_pixel_value(const unsigned c, 
       if (!v)
         return val;
       for (unsigned p = 0; p<n_p; ++p)
-	    val[p]=static_cast<double>(v(0,0,p));
+            val[p]=static_cast<double>(v(0,0,p));
       return val;
     }
     default:

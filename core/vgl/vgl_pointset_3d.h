@@ -275,7 +275,7 @@ std::istream&  operator>>(std::istream& istr, vgl_pointset_3d<Type>& ptset){
           return istr;
         }
       }
-	  if(has_normals&&!has_scalars){
+          if(has_normals&&!has_scalars){
         isstr >> nx >> c;
         if(!(c==','||c==' ')){
           std::cout << "stream parse error\n";

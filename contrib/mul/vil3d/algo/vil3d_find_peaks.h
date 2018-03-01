@@ -73,13 +73,13 @@ template <class T>
 inline vgl_point_3d<int> vil3d_find_max(const vil3d_image_view<T>& image)
 {
   if (image.size()==0) return vgl_point_3d<int>();
-  
+
   const unsigned ni=image.ni(),nj=image.nj(),nk=image.nk();
   const std::ptrdiff_t istep = image.istep(),jstep=image.jstep(),kstep=image.kstep();
   const T* plane = image.origin_ptr();
   vgl_point_3d<int> best_p(0,0,0);
   T best_v=image(0,0,0);
-  
+
   for (unsigned k=0;k<nk;++k,plane+=kstep)
   {
     const T* row = plane;

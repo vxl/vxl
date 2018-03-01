@@ -122,10 +122,10 @@ void brip_blob_connect_comp_bb(
     }
   }
 
-  // prune bounding box list to only include boxes that fit the approximate 
+  // prune bounding box list to only include boxes that fit the approximate
   // size we are looking for as determined by lambda0 and lambda1, and
-  // prune bounding box list to only include boxes that contain blobs with a 
-  // limited range of best angles 
+  // prune bounding box list to only include boxes that contain blobs with a
+  // limited range of best angles
   for (unsigned lab = 0; lab < max_label; lab++) {
     float dist = sqrt(pow(i_max_full[lab] - i_min_full[lab], 2) + pow(j_max_full[lab] - j_min_full[lab], 2));
     if (dist > 6 * std::max(lambda0, lambda1) || dist < 3 * std::max(lambda0, lambda1)) continue; // this bounding box does not fit our size constraint
@@ -201,7 +201,7 @@ void brip_blob_local_max_bb(
     false,/*non_max_suppress*/
     cutoff_ratio);
 
-  // compare to all pixels in an n_size x n_size radius neighborhood 
+  // compare to all pixels in an n_size x n_size radius neighborhood
   // if largest in neighborhood add polygon to poly
   float blob_conf;
   float blob_thresh = -0.02f;
@@ -217,10 +217,10 @@ void brip_blob_local_max_bb(
         } // filter_i
       } // filter_j
       if (is_max && valid_mask(i,j)) {
-        i_min.push_back(i - n_size); 
+        i_min.push_back(i - n_size);
         i_max.push_back(i + n_size);
-        j_min.push_back(j - n_size); 
-        j_max.push_back(j + n_size); 
+        j_min.push_back(j - n_size);
+        j_max.push_back(j + n_size);
         conf.push_back(blob_conf);
       }
     } // i

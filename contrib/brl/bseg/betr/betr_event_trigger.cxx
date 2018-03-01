@@ -77,7 +77,7 @@ void betr_event_trigger::set_ref_camera(vpgl_camera_double_sptr const& camera, b
   if (!keep_data) {
     ref_cameras_.clear();
   }
-  vpgl_camera_double_sptr temp = cast_camera(camera);  
+  vpgl_camera_double_sptr temp = cast_camera(camera);
   if(temp)
     ref_cameras_.push_back(temp);
 }
@@ -85,7 +85,7 @@ void betr_event_trigger::set_ref_cameras(std::vector<vpgl_camera_double_sptr> co
   ref_cameras_.clear();
   for(std::vector<vpgl_camera_double_sptr>::const_iterator cit = cameras.begin();
   cit !=cameras.end(); ++cit){
-    vpgl_camera_double_sptr temp = cast_camera(*cit);  
+    vpgl_camera_double_sptr temp = cast_camera(*cit);
     if(temp)
       ref_cameras_.push_back(temp);
     else{
@@ -127,7 +127,7 @@ void betr_event_trigger::register_algorithms(){
   algorithms_[alg1->name()] = alg1;
   betr_algorithm_sptr alg2 = new betr_pixelwise_change_detection();
   algorithms_[alg2->name()] = alg2;
-}  
+}
 void betr_event_trigger::update_local_bounding_box(){
   if(global_bbox_.is_empty())
     return;
@@ -187,7 +187,7 @@ bool betr_event_trigger::add_gridded_event_poly(std::string const& name, double 
   if(vmesh->num_faces() != 1){
    std::cout << "Mesh is not a single polygon - can't be gridded" << geom_path << std::endl;
     return false;
-  } 
+  }
   // convert mesh to a vsol_polygon_3d
   std::vector<vsol_point_3d_sptr> verts = vmesh->vertices();
   vsol_polygon_3d* poly = new vsol_polygon_3d(verts);
@@ -265,7 +265,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
   if(!so_ptr){
    std::cout << "null spatial object on  " << obj_name << '\n';
     return false;
-  } 
+  }
   vsol_region_3d* reg_ptr = VXL_NULLPTR;
   vsol_volume_3d* vol_ptr = VXL_NULLPTR;
   if( ( reg_ptr = so_ptr->cast_to_region() ) )
@@ -274,7 +274,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
       if(!poly_3d){
         std::cout << "only handle polygonal regions for now " << obj_name << " is not a vsol_polygon_3d\n";
         return false;
-      } 
+      }
       poly_2d = project_poly(cam, poly_3d, transl);
       return true;
     }else if( ( vol_ptr = so_ptr->cast_to_volume() ) ){
@@ -282,9 +282,9 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
       if(!mesh_3d){
         std::cout << "only handle vsol_mesh_3d for now " << obj_name << " is not a vsol_mesh_3d\n";
         return false;
-      } 
+      }
       std::vector<vsol_point_3d_sptr> verts = mesh_3d->vertices();
-      
+
       std::vector<vgl_point_2d<double> > pts_2d;
       for(std::vector<vsol_point_3d_sptr>::iterator vit = verts.begin();
           vit != verts.end(); ++vit){
@@ -375,7 +375,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
                                  std::vector<std::string>& event_region_names,
                                  std::vector<vil_image_resource_sptr>& change_images,
                                  std::vector<vgl_point_2d<unsigned> >& offsets, std::string const& params_json){
-  
+
   betr_algorithm_sptr alg = algorithms_[alg_name];
   if(!alg){
     std::cout <<"algorithm " << alg_name << " does not exist" << std::endl;
@@ -389,7 +389,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
   if(evt_trigger_objects_.size() < 1 || ref_trigger_objects_.size() != 1 ){
     std::cout << "for now only one ref object and one or more evt object"<< std::endl;
     return false;
-  } 
+  }
   // extract algorithm parameters
   betr_params_sptr params = alg->params();
   bool success = read_params_json(params_json, params);
@@ -422,16 +422,16 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
   }
   // iterate through the event objects and project them onto both reference and event images
   for(std::map<std::string, betr_geo_object_3d_sptr>::iterator oit = evt_trigger_objects_.begin();
-	  oit != evt_trigger_objects_.end(); ++oit){
-    // clear the algorithm data, since only one event region at a time is processed 
+          oit != evt_trigger_objects_.end(); ++oit){
+    // clear the algorithm data, since only one event region at a time is processed
     alg->clear();
     // reset the image resources
-    
+
     if (alg->requires_multiple_ref_images()){
       alg->set_reference_images(ref_rescs_);
      }else{
       alg->set_reference_image(ref_rescs_[0]);
-     } 
+     }
     alg->set_event_image(evt_imgr_);
     std::string evt_obj_name = oit->first;
     std::stringstream ss;
@@ -471,7 +471,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     unsigned ioff, joff;
     vil_image_resource_sptr resc = alg->change_image(ioff, joff);
     vgl_point_2d<unsigned> offset(ioff, joff);
-    change_images.push_back(resc);    
+    change_images.push_back(resc);
     offsets.push_back(offset);
     std::cout << "Size of offsets is " << offsets.size() << "\n";
   }

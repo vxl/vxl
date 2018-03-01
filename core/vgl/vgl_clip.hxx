@@ -142,7 +142,7 @@ namespace {
 
 #elif HAS_CLIPPER
 
-#include <clipper.h> 
+#include <clipper.h>
 
 namespace {
   //: Creates a Clipper polygon from a vgl_polygon.
@@ -296,7 +296,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
     default:                         break;
   }
 
-  
+
   clpr.AddPaths(p1, ClipperLib::ptSubject, true);
   clpr.AddPaths(p2, ClipperLib::ptClip, true);
   int retval = clpr.Execute(g_op, p3, ClipperLib::pftEvenOdd, ClipperLib::pftEvenOdd);

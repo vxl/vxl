@@ -32,7 +32,7 @@ void sdet_selective_search::find_max_label(){
       rit != regions_.end(); ++rit)
     if((*rit).second->label() >max_label_)
       max_label_ = (*rit).second->label();
-}  
+}
 
 void sdet_selective_search::extract_initial_regions(){
   if(byte_view_.ni()==0 || byte_view_.nj()==0){
@@ -72,7 +72,7 @@ void sdet_selective_search::compute_initial_similarity(){
       //float npix_j = static_cast<float>(rnbr->Npix());
       bsta_histogram<float>& histj = hists[*nit];
       // This computation of similarity is based on Uijlings et al
-      // and merges small, similarly sized regions before large regions 
+      // and merges small, similarly sized regions before large regions
       // that have similar intensity distributions
       float st = similarity(ri, histi, rnbr, histj, image_area_);
       sim_.push(region_sim(labi, *nit, st));//max similarity always at top of queue
@@ -86,7 +86,7 @@ void sdet_selective_search::insert_similarities(sdet_region_sptr newr, std::set<
   //float npix_n = static_cast<float>(newr->Npix());
   bsta_histogram<float>& hr = hists_[lab];
   for(std::set<unsigned>::const_iterator nit =  nbrs.begin();
-      nit != nbrs.end(); ++nit){  
+      nit != nbrs.end(); ++nit){
     //check if neighbor is already removed
     std::set<unsigned>::iterator rit = removed_labels.find(*nit);
     if(rit != removed_labels.end())
@@ -99,7 +99,7 @@ void sdet_selective_search::insert_similarities(sdet_region_sptr newr, std::set<
       continue;//hist not found
     bsta_histogram<float>& hn = hitn->second;
     // This computation of similarity is based on Uijlings et al
-    // and merges small, similarly sized regions before large regions 
+    // and merges small, similarly sized regions before large regions
     // that have similar intensity distributions
     //float sim_hist = hist_intersect(hr, hn);//min probability
     //float sim_size = 1.0f - (npix_n + npix_nb)/image_area_;//small regions first
@@ -116,12 +116,12 @@ void sdet_selective_search::merge_regions(){
   while(!sim_.empty()){
     region_sim sim = sim_.top();
     //check if similarity is irrelevant since is with respect to already removed labels
-    std::set<unsigned>::iterator rlit = removed_labels.find(sim.ri_); 
+    std::set<unsigned>::iterator rlit = removed_labels.find(sim.ri_);
     if(rlit != removed_labels.end()){//found the label ri
       sim_.pop();
       continue;
     }else{
-      rlit = removed_labels.find(sim.rj_); 
+      rlit = removed_labels.find(sim.rj_);
       if(rlit != removed_labels.end()){//found the label rj
         sim_.pop();
         continue;
@@ -206,14 +206,14 @@ void sdet_selective_search::create_color_region_view(unsigned min_region_area,
   vil_image_view<vil_rgb<vxl_byte> > color_view(byte_view_.ni(), byte_view_.nj());
   vil_rgb<vxl_byte> black((vxl_byte)0, (vxl_byte)0, (vxl_byte)0);
   color_view.fill(black);
-  unsigned k = 0; 
+  unsigned k = 0;
   for(std::map<unsigned, sdet_region_sptr>::iterator rit = regions_.begin();
       rit != regions_.end(); ++rit, ++k){
     sdet_region_sptr& ri = (*rit).second;
     if(ri->Npix()<min_region_area || ri->Npix()>max_region_area)
       continue;
     vil_rgb<vxl_byte> c = colors[k];
-	std::cout << "label " << ri->label() << " " << c << std::endl;
+        std::cout << "label " << ri->label() << " " << c << std::endl;
     for(ri->reset(); ri->next();){
       unsigned u = static_cast<unsigned>(ri->X()), v = static_cast<unsigned>(ri->Y());
       color_view(u, v) = c;

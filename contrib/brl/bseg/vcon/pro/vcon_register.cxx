@@ -7,7 +7,7 @@
 
 void vcon_register::register_datatype()
 {
-  
+
 }
 
 void vcon_register::register_process()

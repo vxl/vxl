@@ -175,7 +175,7 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
   //vpgl_camera_double_sptr  dem_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
   bbas_1d_array_float x_coords = *pro.get_input<bbas_1d_array_float_sptr>(in_i++);
   bbas_1d_array_float y_coords = *pro.get_input<bbas_1d_array_float_sptr>(in_i++);
-  
+
   if (x_coords.data_array.size() != y_coords.data_array.size()){
       std::cout << pro.name() << ": there should be the same number of x values as y values" << std::endl;
       return false;
@@ -200,11 +200,11 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
     std::cout << pro.name() << ": the geocam of dem image can not be initialized" << std::endl;
     return false;
   }
-  
+
   std::cout << "geotiff camera matrix" << std::flush << std::endl;
   std::cout << dem_cam->trans_matrix() << std::endl;
-  
-  
+
+
   int dem_ni, dem_nj;
   dem_ni = dem_res->ni();  dem_nj = dem_res->nj();
 
@@ -227,21 +227,21 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
       vil_convert_cast(*dem_view_int, temp);
       dem_view = new vil_image_view<float>(temp); //TODO Investigate possible memory leak
   }
-  
+
   std::cout << "image loading done -- img size: " << dem_view->ni() << ',' << dem_view->nj() << std::endl;
-  
+
   // note the sat_cam can either be rational_camera or local_rational_camera
   bool rational_cam = true;
-   
+
   double road_width = pro.get_input<double>(in_i++);// The road width We may need to feed this into the the function at a later time.
-  
-  
+
+
   std::vector<vgl_point_2d<float> > polygon_vec(x_coords.data_array.size() * 2);
   //TODO Move this into a function
-  for(int i = 0, poly_size = x_coords.data_array.size() * 2 - 1; i + 1 < x_coords.data_array.size(); i++){ 
+  for(int i = 0, poly_size = x_coords.data_array.size() * 2 - 1; i + 1 < x_coords.data_array.size(); i++){
     vgl_point_2d<float> p_1 = vgl_point_2d<float>(x_coords.data_array[i], y_coords.data_array[i]); //Gets the first point of the road
     vgl_point_2d<float> p_2 = vgl_point_2d<float>(x_coords.data_array[i + 1], y_coords.data_array[i + 1]); //Gets the next point of the road
-    vgl_line_segment_2d<float> road_center = vgl_line_segment_2d<float>(p_1, p_2); 
+    vgl_line_segment_2d<float> road_center = vgl_line_segment_2d<float>(p_1, p_2);
     vgl_vector_2d<float> road_normal = road_center.normal() * road_width; //This is actually twice the road width
     polygon_vec[i] = p_1 + road_normal;
     //std::cout << p_1 + road_normal;
@@ -252,44 +252,44 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
       polygon_vec[poly_size - i] = p_2 - road_normal;
     }
   }
-   
+
   vgl_polygon<float> polygon_obj = vgl_polygon<float>(polygon_vec);
-  
+
   //std::cout << polygon_obj;
-  
+
   vgl_polygon_scan_iterator<float> it(polygon_obj);
-  
+
   /*std::cout << "BEGINNING THE FRAY! Max values " << std::endl;
   std::cout << dem_ni;
   std::cout << " ";
   std::cout << dem_nj;
-  */  
+  */
   float roughness = 0;
   int pixel_num = 0;
   //Fetches the polygon iterator
   for (it.reset(); it.next();) {
     int y = it.scany();
-    
+
     if(y < 0){
       continue;
     }
     if(y >= dem_nj){
-      break;  
+      break;
     }
-    
+
     int start_x = it.startx();
-    start_x = start_x < 0 ? 0 : start_x; 
+    start_x = start_x < 0 ? 0 : start_x;
     int end_x = it.endx();
     //std::cout << y;
     for(int x = start_x; x < end_x && x < dem_nj; x++){
       if(x < 0 || x >= dem_ni || y < 0 || y >= dem_nj){
-	//std::cout << "FAIL x: " << x << "y: " << y << std::endl;
+        //std::cout << "FAIL x: " << x << "y: " << y << std::endl;
       } else {
-	assert(x < dem_ni);
-	assert(y < dem_nj);
-	//std::cout << "x: " << x << "y: " << y;
-	roughness += (*dem_view)(x, y);
-	pixel_num++;
+        assert(x < dem_ni);
+        assert(y < dem_nj);
+        //std::cout << "x: " << x << "y: " << y;
+        roughness += (*dem_view)(x, y);
+        pixel_num++;
       }
     }
     //pixel_num += end_x - start_x;
@@ -304,7 +304,7 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
   pro.set_output_val<double>(0, roughness);
   pro.set_output_val<int>(1, pixel_num);
   //std::cout << "MISSION COMPLETE" << std::endl;
-  
+
   return true;
 }
 #endif

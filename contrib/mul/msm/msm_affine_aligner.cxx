@@ -2,7 +2,7 @@
 // \file
 // \author Tim Cootes
 // \brief Calculate and apply 2D affine transformations
-  
+
 #include <iostream>
 #include <cstddef>
 #include "msm_affine_aligner.h"
@@ -22,7 +22,7 @@ vnl_vector<double> msm_affine_aligner::inverse(const vnl_vector<double>& t) cons
   double a = t[0]+1, b = t[1],   tx = t[2];
   double c = t[3],   d = t[4]+1, ty = t[5];
   vnl_vector<double> q(6);
-  
+
   double det = a*d-b*c;
   if (det==0) det=1;
   q[0] = d/det -1;
@@ -63,7 +63,7 @@ double msm_affine_aligner::scale(const vnl_vector<double>& t) const
   double c = t[3],   d = t[4]+1;
   double s2 = vcl_fabs(a*d - b*c);
   if (s2>0) return vcl_sqrt(s2);
-  
+
   return 0.0;
 }
 
@@ -107,7 +107,7 @@ void msm_calc_affine_trans(vnl_vector<double>& trans,
     tx = svd.solve(rhs_x);
     ty = svd.solve(rhs_y);
   }
-  
+
   trans.set_size(6);
   trans[0]=tx[0]-1; trans[1]=tx[1]  ; trans[2]=tx[2];
   trans[3]=ty[0];   trans[4]=ty[1]-1; trans[5]=ty[2];
@@ -128,7 +128,7 @@ void msm_affine_aligner::calc_transform(const msm_points& pts1,
   vnl_matrix<double> S(3,3);
   vnl_vector<double> rhs_x(3),rhs_y(3);
   S.fill(0.0); rhs_x.fill(0); rhs_y.fill(0);
-  
+
   for (;p1!=p1_end;p1+=2,p2+=2)
   {
     double px = p1[0];
@@ -141,11 +141,11 @@ void msm_affine_aligner::calc_transform(const msm_points& pts1,
     S(0,2) += px;
     S(1,1) += py*py;
     S(1,2) += py;
-    
+
     rhs_x[0] += px*tx;
     rhs_x[1] += py*tx;
     rhs_x[2] += tx;
-    
+
     rhs_y[0] += px*ty;
     rhs_y[1] += py*ty;
     rhs_y[2] += ty;
@@ -154,7 +154,7 @@ void msm_affine_aligner::calc_transform(const msm_points& pts1,
   S(2,0) = S(0,2);
   S(2,1) = S(1,2);
   S(2,2) = n;
-  
+
   msm_calc_affine_trans(trans,S,rhs_x,rhs_y);
 }
 
@@ -189,11 +189,11 @@ void msm_affine_aligner::calc_transform_wt(const msm_points& pts1,
     S(1,1) += (*w)*py*py;
     S(1,2) += (*w)*py;
     S(2,2) += (*w);
-    
+
     rhs_x[0] += (*w)*px*tx;
     rhs_x[1] += (*w)*py*tx;
     rhs_x[2] += (*w)*tx;
-    
+
     rhs_y[0] += (*w)*px*ty;
     rhs_y[1] += (*w)*py*ty;
     rhs_y[2] += (*w)*ty;
@@ -201,7 +201,7 @@ void msm_affine_aligner::calc_transform_wt(const msm_points& pts1,
   S(1,0) = S(0,1);
   S(2,0) = S(0,2);
   S(2,1) = S(1,2);
-  
+
   msm_calc_affine_trans(trans,S,rhs_x,rhs_y);
 }
 
@@ -216,7 +216,7 @@ void msm_affine_aligner::calc_transform_wt_mat(
 {
   assert(pts2.size()==pts1.size());
   assert(wt_mat.size()==pts1.size());
-    
+
   const double* p1 = pts1.vector().begin();
   const double* p2 = pts2.vector().begin();
   const msm_wt_mat_2d* w = &wt_mat[0];
@@ -239,21 +239,21 @@ void msm_affine_aligner::calc_transform_wt_mat(
     S(0,3) += px*py*w->m12();
     S(0,4) += px*w->m11();
     S(0,5) += px*w->m12();
-    
+
 //  S(1,0) += py*px*w->m11();   Symmetric
     S(1,1) += py*py*w->m11();
     S(1,2) += py*px*w->m12();
     S(1,3) += py*py*w->m12();
     S(1,4) += py*w->m11();
     S(1,5) += py*w->m12();
-    
+
 //  S(2,0) += px*px*w->m12();   Symmetric
 //  S(2,1) += px*py*w->m12();   Symmetric
     S(2,2) += px*px*w->m22();
     S(2,3) += px*py*w->m22();
     S(2,4) += px*w->m12();
     S(2,5) += px*w->m22();
-    
+
 //  S(3,0) += py*px*w->m12();   Symmetric
 //  S(3,1) += py*py*w->m12();   Symmetric
 //  S(3,2) += py*px*w->m22();   Symmetric
@@ -264,7 +264,7 @@ void msm_affine_aligner::calc_transform_wt_mat(
     S(4,4) += w->m11();
     S(4,5) += w->m12();
     S(5,5) += w->m22();
-    
+
     rhs[0] += px*qx*w->m11() + px*qy*w->m12();
     rhs[1] += py*qx*w->m11() + py*qy*w->m12();
     rhs[2] += px*qx*w->m12() + px*qy*w->m22();
@@ -290,7 +290,7 @@ void msm_affine_aligner::calc_transform_wt_mat(
     vnl_svd<double> svd(S);
     t = svd.solve(rhs);
   }
-  
+
   trans.set_size(6);
   trans[0]=t[0]-1; trans[1]=t[1]  ; trans[2]=t[4];
   trans[3]=t[2];   trans[4]=t[3]-1; trans[5]=t[5];
@@ -314,7 +314,7 @@ void msm_affine_aligner::transform_wt_mat(
                                 a*b*w1+(a*d+b*c)*w2+c*d*w3,
                                 b*b*w1+    2*b*d*w2+d*d*w3);
   }
-  
+
 }
 
 //: Returns params of pose such that pose(x) = pose1(pose2(x))

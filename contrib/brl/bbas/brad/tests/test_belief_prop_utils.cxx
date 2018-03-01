@@ -174,16 +174,16 @@ static void test_belief_prop_utils()
     std::string cam_file = imgcam_dir + files[i] + post + ".rpb";
     vil_image_view<float> img = vil_load(img_file.c_str());
     vpgl_camera_double_sptr ratcam = read_local_rational_camera<double>(cam_file);
-	if(!img || !ratcam){
-		std::cout << "null img or cam" << files[i] << '\n';
-		continue;
-	}
-	imgs.push_back(img);
+        if(!img || !ratcam){
+                std::cout << "null img or cam" << files[i] << '\n';
+                continue;
+        }
+        imgs.push_back(img);
     cams.push_back(ratcam);
   }
   utils.set_images(imgs);
   utils.set_cams(cams);
- 
+
 #if 0
   vgl_point_3d<double>  p0(257.2, 107.9, 19.0);
   vgl_point_3d<double>  p1(334.3,244.5 , 13.6);

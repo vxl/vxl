@@ -20,8 +20,8 @@ bool brad_compute_appearance_index_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types; 
-  output_types.push_back("bbas_1d_array_int_sptr"); 
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("bbas_1d_array_int_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -46,7 +46,7 @@ bool brad_compute_appearance_index_process(bprb_func_process& pro)
       continue;
     metadata.push_back(meta_ptr);
   }
-  // create the index 
+  // create the index
   brad_appearance_neighborhood_index idx(metadata);
 #if 0
   // debug jlm ====================

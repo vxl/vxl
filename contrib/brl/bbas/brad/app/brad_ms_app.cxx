@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
      //"C:/Users/sca0161/Documents/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
      //"D:/data/core3d/sevastopol2/104A01001E0AA000_P001_SWR/16JUL21091536-A1BS-056339460010_01_P001.NTF");
 
-   
+
    std::cerr << "Composing 16-band image\n";
    vil_image_view<float> comp_img;
    brad_compose_16band_wv3_img(
@@ -48,7 +48,7 @@ int main(int argc, char * argv[])
    brad_estimate_reflectance_image_multi(comp_img, mean_albedo, cal_img);
    std::cerr << "done with image corrections\n";
    save_corrected_wv3(cal_img, "C:/Users/sca0161/Documents/data/sevastopol/2015_08_21_WV03/tif band float P002_MUL P001_SWR/");
-   
+
    return 0;
    std::string out_dir(
      "C:/Users/sca0161/Documents/sevastopol2/cpp result/template matching/");
@@ -115,7 +115,7 @@ int main(int argc, char * argv[])
  // std::string out_dir(
  //   "C:/Users/sca0161/Documents/sevastopol2/cpp result/");
  //   //"D:/results/ms/");
- // 
+ //
  // std::cerr << "Composing 16-band image\n";
  // vil_image_view<float> comp_img;
  // brad_compose_16band_wv3_img(
@@ -130,7 +130,7 @@ int main(int argc, char * argv[])
  // // save image
  // save_corrected_wv3(cal_img, "C:/Users/sca0161/Documents/sevastopol2/cpp result/tif band float");
 
- // // load image 
+ // // load image
  //// vil_image_view<float> cal_img;
  // load_corrected_wv3("C:/Users/sca0161/Documents/sevastopol2/cpp result/tif band float", cal_img);
  // return 0;
@@ -212,7 +212,7 @@ int main(int argc, char * argv[])
  // //aster.add_material("dock", cal_img, dock_mask);
  // //std::cerr << "Adding material military (ship) to aster\n";
  // //aster.add_material("military", cal_img, military_mask);
- // 
+ //
  // std::cerr << "Done loading ASTER directory\n";
 
 

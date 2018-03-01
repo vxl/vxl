@@ -8,7 +8,7 @@
 #include <functional>
 #define RANK_FACTOR 100000
 #define DET_FACTOR 100
-static const char* quadric_class_name[] = 
+static const char* quadric_class_name[] =
 {
   "invalid_quadric",
   "real_ellipsoid",
@@ -50,8 +50,8 @@ vgl_quadric_3d<T>::vgl_quadric_3d(T const coeff[]):det_zero_(false){
   this->set(coeff[0],coeff[1],coeff[2],coeff[3],coeff[4],coeff[5],coeff[6],coeff[7],coeff[8],coeff[9]);
 }
   //       _                  _
-  //      |  a   d/2  e/2  g/2 |   
-  //      | d/2   b   f/2  h/2 |  
+  //      |  a   d/2  e/2  g/2 |
+  //      | d/2   b   f/2  h/2 |
   // Q =  | e/2  f/2   c   i/2 |
   //      | g/2  h/2  i/2   j  |
   //       -                  -
@@ -98,7 +98,7 @@ vgl_quadric_3d<T>::vgl_quadric_3d(std::vector<std::vector<T> > const& canonical_
   RqRt[0] = (qr[0][0]*t[0] + qr[0][1]*t[1] + qr[0][2]*t[2]);
   RqRt[1] = (qr[1][0]*t[0] + qr[1][1]*t[1] + qr[1][2]*t[2]);
   RqRt[2] = (qr[2][0]*t[0] + qr[2][1]*t[1] + qr[2][2]*t[2]);
-  
+
   T tRqRt = t[0]*RqRt[0] + t[1]*RqRt[1] + t[2]*RqRt[2];
   T tRc = t[0]*Rc[0] + t[1]*Rc[1] + t[2]*Rc[2];
   T ctrRtrt = c[0]*Rtrt[0] + c[1]*Rtrt[1] + c[2]*Rtrt[2];
@@ -141,7 +141,7 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::coef_matrix() const{
   Q[0][0]=a_;Q[1][1]=b_; Q[2][2]=c_; Q[3][3]=j_;
   Q[0][1]= Q[1][0]=d_/T(2); Q[0][2]= Q[2][0]=e_/T(2);
   Q[0][3]= Q[3][0]=g_/T(2); Q[1][2]= Q[2][1]=f_/T(2);
-  Q[1][3]= Q[3][1]=h_/T(2); Q[3][2]=Q[2][3] =i_/T(2); 
+  Q[1][3]= Q[3][1]=h_/T(2); Q[3][2]=Q[2][3] =i_/T(2);
   return Q;
 }
 template <class T>
@@ -170,8 +170,8 @@ bool vgl_quadric_3d<T>::center(vgl_point_3d<T>& center) const{
     return false;
   T h = T(1)/T(2);
   //              _            _
-  //             |  a   d/2  e/2|   
-  // upper3x3 =  | d/2   b   f/2|  
+  //             |  a   d/2  e/2|
+  // upper3x3 =  | d/2   b   f/2|
   //             | e/2  f/2   c |
   //              -            -
   T upper_det = a_*b_*c_ - a_*h*f_*h*f_ - h*d_*h*d_*c_ + d_*h*f_*h*e_*h + e_*h*d_*h*f_*h - e_*h*b_*e_*h;
@@ -179,7 +179,7 @@ bool vgl_quadric_3d<T>::center(vgl_point_3d<T>& center) const{
     return false;
   }
   T det_inv = T(1)/upper_det;
- 
+
   T d[9];// inverse of upper 3x3
   d[0] = (b_*c_ -f_*f_*h*h)*det_inv;
   d[1] = (f_*h*e_*h -c_*d_*h)*det_inv;
@@ -190,9 +190,9 @@ bool vgl_quadric_3d<T>::center(vgl_point_3d<T>& center) const{
   d[6] = (d_*h*f_*h -b_*e_*h)*det_inv;
   d[7] = (d_*h*e_*h -a_*f_*h)*det_inv;
   d[8] = (a_*b_ -d_*h*d_*h)*det_inv;
-  
+
   // tx   1  d0  d1  d2   g_
-  // ty = -  d3  d4  d5   h_ 
+  // ty = -  d3  d4  d5   h_
   // tz   2  d6  d7  d8   i_
 
   T tx = h*(d[0]*g_ + d[1]*h_ + d[2]*i_);
@@ -224,7 +224,7 @@ std::vector<T> lv;
   std::vector<T> eig_vals;
   for(size_t i =0; i<4; ++i){
     eig_vals.push_back(fabs(l[i]));
-	lv.push_back(l[i]);
+        lv.push_back(l[i]);
 }
 
   std::sort(eig_vals.begin(), eig_vals.end(), std::greater<T>());
@@ -316,7 +316,7 @@ T det =  Q[0][0]*Q[1][1]*Q[2][2]*Q[3][3]
     - Q[3][0]*Q[1][1]*Q[2][2]*Q[0][3]
     - Q[3][0]*Q[2][1]*Q[0][2]*Q[1][3]
     + Q[3][0]*Q[2][1]*Q[1][2]*Q[0][3];
- 
+
  if(fabs(det)<T(DET_FACTOR)*tol)
    det_zero_ = true;
  bool gt_0 = det>z;
@@ -328,13 +328,13 @@ real_ellipsoid                (x^2)/(a^2)+(y^2)/(b^2)+(z^2)/(c^2)=1   3  4   fal
 imaginary_elliptic_cone       (x^2)/(a^2)+(y^2)/(b^2)+(z^2)/(c^2)=0   3  3           true
 real_elliptic_cone            (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=0   3  3           false
 imaginary_elliptic_cylinder   (x^2)/(a^2)+(y^2)/(b^2)=-1              2  3           true  true
-real_elliptic_cylinder        (x^2)/(a^2)+(y^2)/(b^2)=1               2  3           true  false 
-elliptic_paraboloid           z=(x^2)/(a^2)+(y^2)/(b^2)               2  4   false   true 
+real_elliptic_cylinder        (x^2)/(a^2)+(y^2)/(b^2)=1               2  3           true  false
+elliptic_paraboloid           z=(x^2)/(a^2)+(y^2)/(b^2)               2  4   false   true
 hyperbolic_cylinder           (x^2)/(a^2)-(y^2)/(b^2)=-1              2  3           false
 hyperbolic_paraboloid         z=(y^2)/(b^2)-(x^2)/(a^2)               2  4   true    false
 hyperboloid_of_one_sheet      (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=1   3  4   true    false
 hyperboloid_of_two_sheets     (x^2)/(a^2)+(y^2)/(b^2)-(z^2)/(c^2)=-1  3  4   false   flase
-imaginary_intersecting_planes (x^2)/(a^2)+(y^2)/(b^2)=0               2  2           true 
+imaginary_intersecting_planes (x^2)/(a^2)+(y^2)/(b^2)=0               2  2           true
 real_intersecting_planes      (x^2)/(a^2)-(y^2)/(b^2)=0               2  2           false
 parabolic_cylinder             x^2+2rz=0                              1  3
 imaginary_parallel_planes      x^2=-a^2                               1  2                 true
@@ -364,7 +364,7 @@ bool vgl_quadric_3d<T>::operator==(vgl_quadric_3d<T> const& that) const
 {
   if ( type() != that.type() ) return false;
   T mag_coefs = (fabs(a_)+fabs(b_)+fabs(c_)+fabs(d_)+fabs(e_)+fabs(f_)+fabs(g_)+fabs(h_)+fabs(i_)+fabs(j_))/T(10);
-  T mag_coefs_that = (fabs(that.a())+fabs(that.b())+fabs(that.c())+fabs(that.d())+fabs(that.e())+fabs(that.f())+fabs(that.g())+fabs(that.h())+fabs(that.i())+fabs(that.j()))/T(10);  
+  T mag_coefs_that = (fabs(that.a())+fabs(that.b())+fabs(that.c())+fabs(that.d())+fabs(that.e())+fabs(that.f())+fabs(that.g())+fabs(that.h())+fabs(that.i())+fabs(that.j()))/T(10);
   T tol = vgl_tolerance<T>::position;
   return fabs(a_*mag_coefs_that - that.a()*mag_coefs)<tol &&
     fabs(b_*mag_coefs_that - that.b()*mag_coefs)<tol &&
@@ -379,7 +379,7 @@ bool vgl_quadric_3d<T>::operator==(vgl_quadric_3d<T> const& that) const
 }
 template <class T>
 void vgl_quadric_3d<T>::upper_3x3_eigensystem(std::vector<T>& eigenvalues, std::vector<std::vector<T> >& eigenvectors) const{
-  std::vector<std::vector<T> > Q = this->coef_matrix();  
+  std::vector<std::vector<T> > Q = this->coef_matrix();
   T mu[3][3]; T lu[3]; T vcu[3][3];
   for(size_t r = 0; r<3; ++r)
     for(size_t c = 0; c<3; ++c)
@@ -447,7 +447,7 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::canonical_quadric(std::vector<st
   // not a central quadric get the eigensystem for the upper 3x3
   std::vector<T> lambda, sorted_eigenvalues(3,T(0));
   std::vector<std::vector<T> > E;
-  this->upper_3x3_eigensystem(lambda, E);  
+  this->upper_3x3_eigensystem(lambda, E);
 
   // to rotate the canonical form back to the original frame
   for(size_t r = 0; r<3; ++r)
@@ -476,7 +476,7 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::canonical_quadric(std::vector<st
   //compute transformed quadric matrix g, h, i coefficients gp, hp, ip
   // where,
   //    gp         g
-  //    hp = 1/2 E h 
+  //    hp = 1/2 E h
   //    ip         i
 
  T gp = (E[0][0]*g_ + E[0][1]*h_ + E[0][2]*i_)/T(2);
@@ -510,7 +510,7 @@ std::vector<std::vector<T> > vgl_quadric_3d<T>::canonical_quadric(std::vector<st
     ret[3][2] = ip;
   }
   // for rank == 2, determine the one remaining
-  // unknown translation component to set j' = 0 
+  // unknown translation component to set j' = 0
   // consider the possibility that g,h,i, coefficients
   // are too small to be used (i.e. < rtol)
   if(rank == 2){

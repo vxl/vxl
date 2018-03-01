@@ -45,8 +45,8 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
   int margin = pro.get_input<int>(i++);
   double invalid_pix = pro.get_input<double>(i++);
 
-  //double range = 0.1;  
-  //int bins = 10000;  
+  //double range = 0.1;
+  //int bins = 10000;
 
   // for now assume input is a float image
   vil_image_view<float> view = *(vil_convert_cast(float(), img_ptr_a));
@@ -62,7 +62,7 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
     }
   }
   std::cout << "Otsu Thresholding process, range: " << range << '\n';
-  // binarize using otsu thresholding 
+  // binarize using otsu thresholding
   bsta_histogram<double> h(range, bins);
   for (unsigned j = margin; j < nj-margin; ++j) {
     for (unsigned i = margin; i < ni-margin; ++i) {
@@ -73,7 +73,7 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
   bsta_otsu_threshold<double> ot(h);
   double dt = ot.threshold();
   std::cout << "Otsu Threshold " << dt << '\n';
-  
+
   vil_image_view<vil_rgb<vxl_byte> >* out_bin_img = new vil_image_view<vil_rgb<vxl_byte> >(ni, nj);
   out_bin_img->fill(vil_rgb<vxl_byte>(0,0,0));
   for (unsigned j = 0; j < nj; ++j) {
@@ -82,7 +82,7 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
         (*out_bin_img)(i,j) = vil_rgb<vxl_byte>(255,255,255);
     }
   }
-  
+
   pro.set_output_val<vil_image_view_base_sptr>(0, out_bin_img);
   pro.set_output_val<double>(1, dt);
   return true;

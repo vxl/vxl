@@ -589,7 +589,7 @@ void merge(vdgl_digital_region* r1, vdgl_digital_region* r2, vdgl_digital_region
   int n = n1 + n2;
   r12->SetNpts(n);
   r12->InitPixelArrays();
-  
+
   float const* X1 = r1->Xj();
   float const* Y1 = r1->Yj();
   unsigned short const* I1 = r1->Ij();

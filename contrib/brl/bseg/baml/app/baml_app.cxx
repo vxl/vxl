@@ -89,7 +89,7 @@ int main(int argc, char * argv[])
   //std::string ref_img_file("C:/Users/sca0161/Documents/iran port/" + ref_name + ".tif");
   //std::string ref_cam_file("C:/Users/sca0161/Documents/iran port/Camera Matrices/" + ref_name + "_RPC.TXT");
   //std::string output_namebase("C:/Users/sca0161/Documents/iran port/output/out");
-  //vgl_box_2d<int> region(36, 421, 2660, 2885); 
+  //vgl_box_2d<int> region(36, 421, 2660, 2885);
   //double z_ground = 0.0;
 
   //-----------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ int main(int argc, char * argv[])
   //// wide area of hamadan city
   std::string tar_name("20160619_064848_0c72");
   std::string ref_name;
-  vpgl_lvcs lvcs(35.2080385626545, 48.70485305698821, 1675); 
+  vpgl_lvcs lvcs(35.2080385626545, 48.70485305698821, 1675);
   //std::string img_dir = "C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/containCity/";
   std::string img_dir("D:/data/sattel/hamadan/");
   //std::string cam_dir = "C:/Users/sca0161/Documents/hamadan/updated images 2016.11.4/Camera Matrices/";
@@ -204,7 +204,7 @@ int main(int argc, char * argv[])
       return 1;
     }
 
-    // Convert cameras 
+    // Convert cameras
     vpgl_local_rational_camera<double> target_cam(lvcs, *target_rpc);
     vpgl_local_rational_camera<double> ref_cam(lvcs, *ref_rpc);
     delete target_rpc; delete ref_rpc;
@@ -249,7 +249,7 @@ int main(int argc, char * argv[])
 
     //float tar_max = 0;
     //// Visualize and save
-    //for (int x = 0; x < tar_prob.ni(); x++) { 
+    //for (int x = 0; x < tar_prob.ni(); x++) {
     //  for (int y = 0; y < tar_prob.nj(); y++) {
     //    //std::cout << tar_prob(x, y) << "\n";
     //    if (tar_max < tar_prob(x, y))
@@ -259,7 +259,7 @@ int main(int argc, char * argv[])
     vil_image_view<vxl_byte> change_vis;
     vil_convert_stretch_range_limited(tar_prob, change_vis, 0.0f, 1.0f);// tar_max);
     vil_save(change_vis, (output_namebase  + ref_name + "_change.tif").c_str());
-  } 
+  }
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -454,7 +454,7 @@ int main(int argc, char * argv[])
   //    vil_image_view<vxl_uint_16> bad_ref;
   //    bad_ref.set_size(tar.ni(), tar.nj());
   //    bad_ref.fill(2000);
-  //    ref.push_back(bad_ref); 
+  //    ref.push_back(bad_ref);
   //    i++;
   //  }
   //  //for (vul_file_iterator fn = (img_dir + "20*.tif").c_str(); fn; ++fn) {
@@ -555,7 +555,7 @@ int main(int argc, char * argv[])
   //    //    }
   //    //  }
   //    //}
-  //    
+  //
 
   //    // Census with various gain/offset tiles numbers, radius size, and fusion method
   //    params.method = CENSUS;

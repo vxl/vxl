@@ -72,7 +72,7 @@ bool baml_correct_gain_offset(
   for( int y = 0; y < height; y++ ){
     for( int x = 0; x < width; x++ ){
       if( !valid_ref(x,y) ) continue;
-       
+
       double r = std::max( 0.0, img_ref(x,y)*gain + offset );
       corrected_ref(x,y) = (vxl_uint_16)r;
     }
@@ -209,7 +209,7 @@ bool baml_correct_gain_offset_tiled(
   }
 
   // use padded versions to resize the images
-  double f = 1.0; 
+  double f = 1.0;
   double x0 = double(pad_size)-0.5;
   double y0 = double(pad_size)-0.5;
   double dx1 = f*(gain.ni())*1.0 / (width - 1);
@@ -218,7 +218,7 @@ bool baml_correct_gain_offset_tiled(
   double dy2 = f*(gain.nj())*1.0 / (height - 1);
   vil_resample_bilin(gain_pad, gain_resized, x0, y0, dx1, dy1, dx2, dy2, width, height);
   vil_resample_bilin(offset_pad, offset_resized, x0, y0, dx1, dy1, dx2, dy2, width, height);
- 
+
   // Apply the gain offset
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
@@ -257,7 +257,7 @@ void baml_sigmoid(
 void baml_gaussian(
   const vil_image_view<float>& scores,
   vil_image_view<float>& prob,
-  float sigma ) 
+  float sigma )
 {
   int width = scores.ni();
   int height = scores.nj();
@@ -274,7 +274,7 @@ void baml_gaussian(
 //------------------------------------------------------------------
 // estimate sigma for use in gaussian assuming data is zero mean
 float baml_sigma(
-  const vil_image_view<float>& scores ) 
+  const vil_image_view<float>& scores )
 {
   int width = scores.ni(); int height = scores.nj();
   float sigma_sum = 0;
@@ -318,15 +318,15 @@ bool baml_overlay_red(
   vis_img.set_size( map.ni(), map.nj(), 3 );
 
   float map_norm = 1.0f/(red_map_val-(float)clear_map_val);
-  
+
   for( unsigned y = 0; y < map.nj(); y++ ){
     for( unsigned x = 0; x < map.ni(); x++ ){
-      float relativeVal = std::min( 1.0f, std::max( 0.0f, 
+      float relativeVal = std::min( 1.0f, std::max( 0.0f,
         map_norm*((float)map(x,y)) - (float)clear_map_val ));
 
-      vis_img(x,y,1) = vis_img(x,y,2) = (vxl_byte)( 
+      vis_img(x,y,1) = vis_img(x,y,2) = (vxl_byte)(
         img(x,y)*(1.0-relativeVal) );
-      vis_img(x,y,0) = (vxl_byte)( 
+      vis_img(x,y,0) = (vxl_byte)(
         img(x,y)*(1.0-relativeVal) + 255*relativeVal );
     }
   }

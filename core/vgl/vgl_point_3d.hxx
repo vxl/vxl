@@ -102,8 +102,8 @@ std::istream& vgl_point_3d<Type>::read(std::istream& is)
   char c;
   c=is.peek();
   if(c == '<'){
-	  std::string temp;
-	  is >> temp;
+          std::string temp;
+          is >> temp;
   }
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }

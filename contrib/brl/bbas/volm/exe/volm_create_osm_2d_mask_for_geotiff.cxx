@@ -1,6 +1,6 @@
 //:
 // \file
-// \brief  executable to create a mask in the size of a given ortho tiff by projecting specified osm objects 
+// \brief  executable to create a mask in the size of a given ortho tiff by projecting specified osm objects
 //
 // \author Ozge C. Whiting
 // \date Feb 6, 2017
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
   vul_arg<std::string> key("-key", "the key of desired osm category, write \"all\" (default) to parse all categories","all");
   vul_arg<std::string> value("-value", "the value of desired osm category, write \"all\" (default) to parse all categories","all");
   vul_arg<std::string> geometry("-geo","the geometry of desired osm category, can be point/line/poly, write \"all\" (default) to parse all geometries","all");
-  
+
   vul_arg<std::string> input_geotiff("-geotiff", "name of input geotiff file, the camera will be parsed from the header of this image", "");
   vul_arg<std::string> output_image("-out", "name of output image", "");
   vul_arg<unsigned> margin("-margin", "optionally put a margin as masked around the image", 0);
@@ -130,12 +130,12 @@ int main(int argc, char** argv)
           double lon = vit->x(); double lat = vit->y();
           double u,v;
           cam->global_to_img(lon, lat, 0.0, u, v);
-          
+
           if (u >= 0 && u < ni && v >= 0 && v < nj) {
             line.push_back(vgl_point_2d<double>(u,v));
             cout << u << " " << v << " " << endl;
           }
-        }      
+        }
         if (line.size() == 0)
           continue;
         /*
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
         if (!volm_io_tools::expend_line(line, width, img_poly)) {
           cout << " expending osm line failed for " << name << endl; cout.flush();
           return false;
-        } 
+        }
         cout << "line size: " << line.size() << endl;
 
         //vgl_polygon_scan_iterator<double> it(img_poly, true);
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
         }
         */
 
-       
+
         vgl_polygon<double> img_poly;
         vector<vgl_point_2d<double> > sheet;
         vgl_point_2d<double> s = line[0];
@@ -168,7 +168,7 @@ int main(int argc, char** argv)
         for (int kk = 0; kk < line.size()-1; kk++) {
           vgl_point_2d<double> s, e;
           s = line[kk];  e = line[kk+1];
-          
+
           bool init = true;
           float xs = static_cast<float>(s.x()), ys = static_cast<float>(s.y());
           float xe = static_cast<float>(e.x()), ye = static_cast<float>(e.y());
@@ -180,10 +180,10 @@ int main(int argc, char** argv)
             sheet.push_back(vgl_point_2d<double>(x,y));
             if ( u >= 0 && v >= 0 && u < output_img.ni() && v < output_img.nj()) {
               output_img(u,v) = vil_rgb<vxl_byte>(255,255,255);
-            }  
+            }
           }
         }
-        
+
         vgl_point_2d<double> e = line[line.size()-1];
         sheet.push_back(vgl_point_2d<double>(e.x(),0));
         //sheet.push_back(vgl_point_2d<double>(0,e.y()));
@@ -202,29 +202,29 @@ int main(int argc, char** argv)
         }
         }
 
-        
+
       }
     }
   }
   if (margin() > 0) {  // mark the margin as "not water"
     for (int i = 0; i < margin(); i++)
-      for (int j = 0; j < output_img2.nj(); j++) 
+      for (int j = 0; j < output_img2.nj(); j++)
         output_img2(i,j) = vil_rgb<vxl_byte>(0,0,0);
-    
+
     for (int i = output_img2.ni()-margin(); i < output_img2.ni(); i++)
-      for (int j = 0; j < output_img2.nj(); j++) 
+      for (int j = 0; j < output_img2.nj(); j++)
         output_img2(i,j) = vil_rgb<vxl_byte>(0,0,0);
-    
+
     for (int j = 0; j < margin(); j++)
-      for (int i = 0; i < output_img2.ni(); i++) 
+      for (int i = 0; i < output_img2.ni(); i++)
         output_img2(i,j) = vil_rgb<vxl_byte>(0,0,0);
-    
+
     for (int j = output_img2.nj()-margin(); j < output_img2.nj(); j++)
-      for (int i = 0; i < output_img2.ni(); i++) 
+      for (int i = 0; i < output_img2.ni(); i++)
         output_img2(i,j) = vil_rgb<vxl_byte>(0,0,0);
-     
+
   }
-  
+
   // save the images
   vil_save(output_img, output_image().c_str());
   string name = output_image() + "_water_filled.png";

@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief An implementation of the selective search algorithm
-// 
+//
 //
 // \author
 //  J.L. Mundy - December 13, 2016
@@ -86,7 +86,7 @@ class sdet_selective_search : public sdet_selective_search_params
   //  proc.four_or_eight_conn_ = 4;
   //  proc.use_vd_edges_ = false;
   //  proc.process();
-  // 
+  //
   void process(){
     clear_regions();
     extract_initial_regions();

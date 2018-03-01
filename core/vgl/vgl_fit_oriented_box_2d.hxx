@@ -20,8 +20,8 @@ void vgl_fit_oriented_box_2d<T>::fit_obox(T theta_rad){
   T min_area = std::numeric_limits<T>::max();
   size_t n = pts_.size();
   if(n<2){
-	std::cout << "insufficient number of points to fit obox " << n << std::endl;
-	return;
+        std::cout << "insufficient number of points to fit obox " << n << std::endl;
+        return;
   }
   vgl_point_2d<T>& vs = pts_[0];
   // +- 90 degrees

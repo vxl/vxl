@@ -36,11 +36,11 @@ static void test_image_bounds_from_histogram()
   high3[0]=120; high3[1]=140; high3[2] = 150;
   for(unsigned j = 0; j<nj; ++j)
     for(unsigned i = 0; i<ni; ++i)
-	for(unsigned p = 0; p<np; ++p){
+        for(unsigned p = 0; p<np; ++p){
       int v = rand.lrand32(low3[p], high3[p]);
       view3(i, j,p) = static_cast<vxl_byte>(v);
     }
-	 vil_image_resource_sptr imgr3 = vil_new_image_resource_of_view(view3);
+         vil_image_resource_sptr imgr3 = vil_new_image_resource_of_view(view3);
   bil_image_bounds_from_histogram ibh3(imgr3);
   good = ibh3.construct_histogram();
   double lbsum = 0.0, ubsum = 0.0;
@@ -48,7 +48,7 @@ static void test_image_bounds_from_histogram()
     double lb = ibh3.lower_bound(p, per_lim);
     double ub = ibh3.upper_bound(p, per_lim);
     std::cout << "bounds(" << lb << ' ' << ub <<")\n";
-	lbsum += lb;  ubsum += ub;
+        lbsum += lb;  ubsum += ub;
    }
    TEST("test_image_bounds_color", (lbsum == 110)&&(ubsum == 410), true);
 

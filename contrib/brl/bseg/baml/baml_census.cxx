@@ -66,6 +66,6 @@ template bool baml_compute_census_img( \
   int nbhd_diam, \
   vil_image_view<vxl_uint_64>& census, \
   vil_image_view<vxl_uint_64>& census_sal, \
-  int tol ) 
+  int tol )
 
 

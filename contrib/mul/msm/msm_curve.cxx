@@ -105,7 +105,7 @@ void msm_curve::config_from_stream(std::istream& is)
 // Method: print
 //=======================================================================
 
-//: If indices starting at index[i] ascend, write them out as first:last 
+//: If indices starting at index[i] ascend, write them out as first:last
 bool write_stepped_list(std::ostream& os, const std::vector<unsigned>& index,
                           unsigned& i, int step)
 {
@@ -116,7 +116,7 @@ bool write_stepped_list(std::ostream& os, const std::vector<unsigned>& index,
   // Find end of sequence
   unsigned j=i+2;
   while (j+1<index.size() && (index[j+1]==unsigned(index[j]+step))) ++j;
-  
+
   // Sequence runs from index i to index j
   os<<index[i]<<":"<<index[j]<<" ";
   i=j+1;

@@ -17,7 +17,7 @@
 // the process handles multiple event objects and returns the base polygon
 // for each object. For a polygonal object the base is the polygon itself.
 // For a 3-d mesh object the base is the lowest face of the mesh.
-// 
+//
 #include <vcl_compiler.h>
 #include <betr/betr_event_trigger.h>
 #include <vgl/vgl_point_3d.h>
@@ -51,7 +51,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process_cons(bprb_func_process& pro)
 bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
 {
   using namespace betr_execute_etr_multi_chimg_evt_poly_process_globals;
-  
+
   if ( pro.n_inputs() < n_inputs_ ) {
     std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
@@ -114,7 +114,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
   // fill out event object names and extract the polygon vertex array
   std::vector<unsigned> nverts;
   std::vector<double> verts;
-  
+
   for(unsigned j = 0; j<n; ++j){
     std::string enam = event_region_names[j];
     //look up the geo object by name

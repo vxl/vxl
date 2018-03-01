@@ -14,7 +14,7 @@
 #include <vul/vul_file.h>
 //:
 // \file
-// \brief 
+// \brief
 // \author Thomas Pollard & Selene Chew
 // \date January 10, 2017
 
@@ -43,7 +43,7 @@ struct baml_change_detection_params {
   bool correct_gain_offset;
   int num_tiles;
 
-  //: If > 0, do a brute-force translational search in x and y with this radius 
+  //: If > 0, do a brute-force translational search in x and y with this radius
   // to find the alignment which minimizes average change probability in the
   // region.
   int registration_refinement_rad;
@@ -62,12 +62,12 @@ struct baml_change_detection_params {
 
   // Census parameters
   // census_tol: pixel differences less than this magnitude are not considered
-  //   in the census computation.  Increase to prevent errors from sensor noise. 
+  //   in the census computation.  Increase to prevent errors from sensor noise.
   //   Set to 0 for textbook census implementation.
-  // census_rad: length of the census kernal will be 2*census_rad+1. Must be 
+  // census_rad: length of the census kernal will be 2*census_rad+1. Must be
   //    1,2,or 3.
   int census_tol;
-  int census_rad; 
+  int census_rad;
 
 
   // Non-parametric parameters
@@ -80,7 +80,7 @@ struct baml_change_detection_params {
   // num_bins: number of bins in the histogram
   // grad_mag_on: can compute histogram distance based on the intensity values (false) or
   //    the gradient magnitude (true)
-  // hist_method: "bhattacharyya", "jensen shannon" or "intersection" - specifies the 
+  // hist_method: "bhattacharyya", "jensen shannon" or "intersection" - specifies the
   //    desired comparison method
   int neighborhood_size;
   int num_bins;
@@ -109,7 +109,7 @@ struct baml_change_detection_params {
     img_bit_depth(12),
     hist_bit_depth(10),
     neighborhood_size(11),
-    num_bins(25), 
+    num_bins(25),
     grad_mag_on(false),
     hist_method("bhattacharyya"),
     multiple_ref(true),
@@ -143,7 +143,7 @@ public:
     vil_image_view<float>& change_prob_target);
 
   //: Experimental: computes an image with each value corresponding to the
-  // expected time of change at that pixel. (time is based on index of 
+  // expected time of change at that pixel. (time is based on index of
   // reference image NOT on actual time)
   bool expected_time_change(
     const vil_image_view<vxl_uint_16>& img_target,
@@ -155,7 +155,7 @@ protected:
 
   baml_change_detection_params params_;
 
-  //: Pairwise probability calculation 
+  //: Pairwise probability calculation
   // Used by both detect and multi_image_detect
   bool detect_internal(
     const vil_image_view<vxl_uint_16>& img_target,
@@ -164,7 +164,7 @@ protected:
     vil_image_view<float>& bg_prob,
     float& fg_prob);
 
-  //: Multi-image alignment and pairwise probability calculation 
+  //: Multi-image alignment and pairwise probability calculation
   // Used by both multi_image_detect and expected_time_change
   bool detect_multi_internal(
     const vil_image_view<vxl_uint_16>& img_target,
@@ -177,7 +177,7 @@ protected:
     int& max_y_off,
     int& crop_height);
 
-  
+
   // ----------------------------Pairwise methods----------------------------
   //: All detect_<method> use the same paramerters
   //  img_target: target image (width x height)
@@ -227,7 +227,7 @@ protected:
     vil_image_view<float>& bg_prob,
     float& fg_prob );
 
-  //: Detect change using a distance measure between histograms of the 
+  //: Detect change using a distance measure between histograms of the
   // pixel values in the target and reference images
   bool detect_histcmp(
     const vil_image_view<vxl_uint_16>& img_target,
@@ -241,7 +241,7 @@ protected:
 
   //: Fuse probability images using product method
   bool multi_product(
-    const std::vector<vil_image_view<float> >& bg_probs, 
+    const std::vector<vil_image_view<float> >& bg_probs,
     const std::vector<float>& fg_probs,
     vil_image_view<float>& change_prob);
 

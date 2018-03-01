@@ -37,7 +37,7 @@ vsol_polygon_3d_sptr betr_geo_object_3d::base_polygon() {
       if(!poly_3d){
         std::cout << "only handle polygonal regions for now. Geo object is not a vsol_polygon_3d" << std::endl;
         return VXL_NULLPTR;
-      } 
+      }
       local_base_poly = poly_3d;
   }else if( ( vol_ptr = so_->cast_to_volume() ) ){
     vsol_mesh_3d* mesh = vol_ptr->cast_to_mesh();

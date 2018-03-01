@@ -16,8 +16,8 @@
 //      (G. Taubin, Estimation of Planar Curves, Surfaces,
 //      and Nonplanar Space Curves,Defined by Implicit Equations with Applications
 //      to Edge and Range Image Segmentation IEEE PAMI, v13, No. 11, 1991.)
-// 
-// 
+//
+//
 //  2) Alliare method - the normalizing constraint is a quadratic form that restricts the quadric class
 //     in terms of the invariants of the upper 3x3 matrix of the quadratic form.
 //     Formulation as generalized Eigensystem.
@@ -41,7 +41,7 @@ class vgl_fit_quadric_3d
 {
   // Data Members--------------------------------------------------------------
  protected:
-  //: fit an ellipsoid  using the linear Allaire method 
+  //: fit an ellipsoid  using the linear Allaire method
   // returns the average distance from the points to the quadric
   std::vector<vgl_homg_point_3d<T> > points_;
   vgl_quadric_3d<T> quadric_Taubin_;
@@ -66,13 +66,13 @@ class vgl_fit_quadric_3d
   //: clear internal data
   void clear();
 
-  //: fit a general quadric to the stored points using the linear Taubin method. 
+  //: fit a general quadric to the stored points using the linear Taubin method.
   // No restriction on type.
-  // returns the average distance from the points to the quadric. 
+  // returns the average distance from the points to the quadric.
   // error conditions are reported on outstream, if defined.
   T fit_linear_Taubin(std::ostream* outstream=0);
 
-  //: fit an ellipsoid using the linear Allaire method 
+  //: fit an ellipsoid using the linear Allaire method
   // returns the average distance from the points to the ellipsoid
   // error conditions are reported on outstream, if defined.
   T fit_ellipsoid_linear_Allaire(std::ostream* outstream=0);
@@ -87,7 +87,7 @@ class vgl_fit_quadric_3d
   // Data Access---------------------------------------------------------------
 
   std::vector<vgl_point_3d<T> > get_points() const;
-  
+
   //: The fit computed by the Taubin method
   vgl_quadric_3d<T>& quadric_Taubin_fit() {return quadric_Taubin_;}
   //: The fit computed by the Allaire method

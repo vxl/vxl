@@ -21,7 +21,7 @@ class betr_algorithm : public vbl_ref_count
  betr_algorithm(std::string const& name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false), params_(VXL_NULLPTR){}
  betr_algorithm(std::string const& name, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(VXL_NULLPTR), multiple_ref_(false) {}
  betr_algorithm(std::string const& name, betr_params_sptr const& params, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(params), multiple_ref_(false) {}
-  
+
   //: sigmoid performance parameters - may be specialized for each algorithm
   void set_offset(double offset){offset_ = offset;}
   void set_alpha(double alpha){alpha_ = alpha;}
@@ -32,7 +32,7 @@ class betr_algorithm : public vbl_ref_count
   //: data inputs
   //: reference image(s)
   void set_reference_image(vil_image_resource_sptr const& ref_imgr){ref_rescs_.clear(); ref_rescs_.push_back(ref_imgr);}
-  void set_reference_images(std::vector<vil_image_resource_sptr> const& ref_rescs){ref_rescs_ = ref_rescs;} 
+  void set_reference_images(std::vector<vil_image_resource_sptr> const& ref_rescs){ref_rescs_ = ref_rescs;}
   //: event image - an algorithm processes one event region per event image at a time
   void set_event_image(vil_image_resource_sptr const& evt_imgr){evt_imgr_ = evt_imgr;}
 
@@ -74,7 +74,7 @@ class betr_algorithm : public vbl_ref_count
     evt_ref_poly_ = VXL_NULLPTR;
     evt_evt_poly_ = VXL_NULLPTR;
   }
-    //: debug 
+    //: debug
   //======================
   void set_verbose(bool verbose){verbose_ = verbose;}
   //: an identifier for a particular execution run

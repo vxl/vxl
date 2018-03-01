@@ -584,7 +584,7 @@ void vsol_mesh_3d::set_mesh(vsol_polygon_3d_sptr poly, double z)
 {
   if (mesh_ != VXL_NULLPTR)
     delete mesh_;
- 
+
   mesh_ = new bmsh3d_mesh_mc;
   std::map<int, vsol_polygon_3d_sptr> inner_faces;
   create_mesh_HE(poly, z, inner_faces);
@@ -597,7 +597,7 @@ void vsol_mesh_3d::set_mesh(vsol_polygon_3d_sptr poly)
 
   if (mesh_ != VXL_NULLPTR)
     delete mesh_;
-  
+
   mesh_ = new bmsh3d_mesh_mc;
   bmsh3d_face_mc* face = create_face(poly);
   mesh_->_add_face (face);

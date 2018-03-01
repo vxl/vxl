@@ -297,7 +297,7 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
         (*out_ndsm)(i,j) = 254;
       else if (v < 0.0f)
         (*out_ndsm)(i,j) = 0;
-      else 
+      else
         (*out_ndsm)(i,j) = (unsigned char)std::floor(v+0.5f);
     }
   }

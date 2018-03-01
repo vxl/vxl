@@ -189,7 +189,7 @@ T hist_intersect(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb);
 template <class T>
 T bhatt_distance(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb);
 
-// Jensen-Shannon divergence 
+// Jensen-Shannon divergence
 // 1/2 sum_i ( pa_i*log(2*pa_i/(pa_i+pb_i)+ pb_i*log(2*pb_i/(pa_i+pb_i)) )
 template <class T>
 T js_divergence(bsta_histogram<T> const& ha, bsta_histogram<T> const& hb);
