@@ -138,6 +138,7 @@ option(VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than e
 if(VXL_LEGACY_ERROR_REPORTING)
   add_definitions( -DVXL_LEGACY_ERROR_REPORTING )
 endif()
+option(VXL_RUN_FAILING_TESTS "Enable long-time failing tests. If tests are failing for a long time, turn them off by default." OFF)
 
 # Option to build Windows Unicode support, the string
 # type of which is wchar_t, each character is a 16-bit unsigned integer.
