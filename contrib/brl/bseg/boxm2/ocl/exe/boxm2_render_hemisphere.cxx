@@ -177,7 +177,7 @@ int main(int argc,  char** argv)
     vsl_b_ofstream sphere_os(sphere_path);
     if (!sphere_os) {
       std::cout<<"cannot open "<<sphere_path<<" for writing\n";
-      return false;
+      return -1;
     }
     vsl_b_write(sphere_os, sphere);
     sphere_os.close();
